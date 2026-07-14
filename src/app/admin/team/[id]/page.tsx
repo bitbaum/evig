@@ -12,6 +12,8 @@ import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { TeamProfileDetailClient } from './TeamProfileDetailClient'
+import MemberTeamsCard from '@/components/admin/team/MemberTeamsCard'
+import { getMembershipsForUser, listTeams } from '@/lib/services/teams'
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -137,10 +139,26 @@ export default async function TeamProfilePage({ params }: PageProps) {
     notFound()
   }
 
+  // Teammate view: which teams this person is on (with join/leave).
+  const [memberships, teams] = await Promise.all([
+    getMembershipsForUser(profile.user_id).catch((error) => {
+      logger.error('Failed to load member teams', { error, userId: profile.user_id })
+      return []
+    }),
+    listTeams().catch(() => []),
+  ])
+
   return (
-    <TeamProfileDetailClient
-      profile={profile}
-      isSuperAdmin={currentUserIsSuperAdmin}
-    />
+    <div className="space-y-5">
+      <TeamProfileDetailClient
+        profile={profile}
+        isSuperAdmin={currentUserIsSuperAdmin}
+      />
+      <MemberTeamsCard
+        person={{ userId: profile.user_id, name: profile.user_name, avatarUrl: null }}
+        memberships={memberships}
+        allTeams={teams.map((t) => ({ id: t.id, name: t.name, slug: t.slug, accent: t.accent }))}
+      />
+    </div>
   )
 }

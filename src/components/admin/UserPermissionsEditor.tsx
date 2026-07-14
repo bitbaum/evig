@@ -20,8 +20,7 @@ interface UserPermissionsEditorProps {
   onSaved: () => void
 }
 
-// Editable sections — labels resolved at render time from admin.sectionLabels,
-// with the section-config SSOT label as a fallback.
+// Editable sections — labels come from the section-config SSOT (ui.label).
 const SECTION_IDS: { id: string; sensitive: boolean }[] = [
   { id: 'dashboard', sensitive: false },
   { id: 'products', sensitive: false },
@@ -49,12 +48,9 @@ export function UserPermissionsEditor({
   onSaved,
 }: UserPermissionsEditorProps) {
   const t = useTranslations('admin.permissions.editor')
-  const tLabels = useTranslations('admin.sectionLabels')
   const tForms = useTranslations('admin.forms')
-  const sectionLabelFor = (id: string): string => {
-    const fallback = getSection(id)?.ui.label ?? id
-    try { return tLabels(id as never) || fallback } catch { return fallback }
-  }
+  // Labels come straight from the config SSOT (admin nav is DE-only).
+  const sectionLabelFor = (id: string): string => getSection(id)?.ui.label ?? id
   const hasFullAccess = currentPermissions.includes('*')
 
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>(

@@ -775,8 +775,10 @@ export const SECTIONS = {
       emoji: '💬',
       color: 'info',
     },
-    // Non-sensitive; visible to every staff member (matches the page guard).
-    visibility: { admin: true, dashboard: false, requiresStaff: true, alwaysForStaff: true },
+    // NOT in the sidebar (admin:false): this is the presentation SLICE of the
+    // unified «Rückmeldungen» inbox (feedbackOverview), reachable as a drill-down
+    // from there. Page + permission stay live (guard is requireAnySection).
+    visibility: { admin: false, dashboard: false, requiresStaff: true, alwaysForStaff: true },
     priority: 105.72,
     category: 'content',
     sidebarGroup: 'inhalte',
@@ -792,7 +794,9 @@ export const SECTIONS = {
       emoji: '💬',
       color: 'info',
     },
-    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    // NOT in the sidebar (admin:false): the website SLICE of «Rückmeldungen»
+    // (feedbackOverview), reachable as a drill-down. Page + permission stay live.
+    visibility: { admin: false, dashboard: false, requiresStaff: true },
     priority: 105.8,
     category: 'content',
     sidebarGroup: 'inhalte',
@@ -847,6 +851,25 @@ export const SECTIONS = {
     priority: 107,
     category: 'management',
     sidebarGroup: 'personen',
+  },
+
+  teams: {
+    id: 'teams',
+    path: '/admin/teams',
+    ui: {
+      label: 'Teams',
+      description: 'Teams, Zuständigkeiten und Mitglieder',
+      icon: Users,
+      emoji: '👥',
+      color: 'info',
+    },
+    // Non-sensitive AND open to every staff member — knowing who's on which
+    // team is the whole point. Team create/delete is guarded to super admins
+    // in the route handler; membership edits are open (low-stakes, transparent).
+    visibility: { admin: true, dashboard: false, requiresStaff: true, alwaysForStaff: true },
+    priority: 128,
+    category: 'management',
+    sidebarGroup: 'betrieb',
   },
 
   'team-board': {

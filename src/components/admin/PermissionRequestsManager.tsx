@@ -23,13 +23,9 @@ interface PermissionRequest {
 
 export function PermissionRequestsManager() {
   const t = useTranslations('admin.permissions.manager')
-  const tLabels = useTranslations('admin.sectionLabels')
   const tForms = useTranslations('admin.forms')
-  // Same fallback pattern as AdminSidebar — i18n label, then SSOT DE fallback.
-  const sectionLabelFor = (id: string): string => {
-    const fallback = getSection(id)?.ui.label ?? id
-    try { return tLabels(id as never) || fallback } catch { return fallback }
-  }
+  // Labels come straight from the config SSOT (admin nav is DE-only).
+  const sectionLabelFor = (id: string): string => getSection(id)?.ui.label ?? id
   const [requests, setRequests] = useState<PermissionRequest[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')

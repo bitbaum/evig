@@ -46,13 +46,9 @@ export function AdminSidebar({
   pathname,
 }: AdminSidebarProps) {
   const t = useTranslations('admin.sidebar')
-  const tLabels = useTranslations('admin.sectionLabels')
-  // Helper: prefer the i18n label, fall back to the SSOT DE label when
-  // a section hasn't been translated yet. next-intl throws on missing
-  // keys, so we have to catch.
-  const labelFor = (id: string, fallback: string): string => {
-    try { return tLabels(id as never) || fallback } catch { return fallback }
-  }
+  // Section + group labels come straight from the config SSOT (`ui.label` /
+  // `group.label`). Admin nav is DE-only, so there is no separate translation
+  // layer to drift out of sync (that caused raw `admin.sectionLabels.*` keys).
   // Static config — compute once, not every render.
   const groupedSections = useMemo(() => getSidebarGroupsWithSections(), [])
   const hirnSection = getHirnSection()
@@ -67,18 +63,12 @@ export function AdminSidebar({
     return groupedSections.flatMap(({ group, sections }) =>
       sections
         .filter(s => accessibleSections.includes(s.id))
-        .filter(s => {
-          const label = labelFor(s.id, s.ui.label).toLowerCase()
-          return (
-            label.includes(normalizedQuery) ||
-            s.ui.label.toLowerCase().includes(normalizedQuery) ||
-            group.label.toLowerCase().includes(normalizedQuery)
-          )
-        })
-        .map(s => ({ section: s, groupLabel: labelFor(group.id, group.label) })),
+        .filter(s => (
+          s.ui.label.toLowerCase().includes(normalizedQuery) ||
+          group.label.toLowerCase().includes(normalizedQuery)
+        ))
+        .map(s => ({ section: s, groupLabel: group.label })),
     )
-    // labelFor is stable per render (next-intl); query + config drive the result.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [normalizedQuery, groupedSections, accessibleSections])
 
   const isActive = (href: string) => {
@@ -214,7 +204,7 @@ export function AdminSidebar({
                 >
                   <Icon className="h-4 w-4 shrink-0 text-text-muted dark:text-text-secondary" />
                   <span className="flex-1 text-sm font-medium">
-                    {labelFor(section.id, section.ui.label)}
+                    {section.ui.label}
                   </span>
                   <span className="text-[10px] uppercase tracking-wider text-text-muted">{groupLabel}</span>
                 </Link>
@@ -243,7 +233,7 @@ export function AdminSidebar({
                       : 'text-text-muted dark:text-text-secondary hover:text-text-secondary dark:hover:text-text-muted'
                   }`}
                 >
-                  <span>{labelFor(group.id, group.label)}</span>
+                  <span>{group.label}</span>
                   <ChevronDown
                     className={`w-3.5 h-3.5 transition-transform ${isExpanded ? '' : '-rotate-90'}`}
                   />
@@ -270,13 +260,13 @@ export function AdminSidebar({
                             ? adminInteractive.navActive
                             : `text-text-tertiary ${adminInteractive.rowHoverSubtle} hover:text-text-primary`
                         }`}
-                        title={sidebarCollapsed ? `${labelFor(section.id, section.ui.label)}${sensitive ? ` (${t('sensitiveLabel')})` : ''}` : sensitivityReason}
+                        title={sidebarCollapsed ? `${section.ui.label}${sensitive ? ` (${t('sensitiveLabel')})` : ''}` : sensitivityReason}
                       >
                         {/* Larger icon when collapsed so it's easier to tap and recognise at a glance */}
                         <Icon className={`shrink-0 ${sidebarCollapsed ? 'h-5 w-5' : 'h-4 w-4'} ${active ? 'text-action' : 'text-text-muted dark:text-text-secondary'}`} />
                         {!sidebarCollapsed && (
                           <span className="flex-1 text-sm font-medium flex items-center gap-1.5">
-                            {labelFor(section.id, section.ui.label)}
+                            {section.ui.label}
                             {sensitive && (
                               <span title={sensitivityReason}>
                                 <Shield className="w-3 h-3 text-warning-400" />

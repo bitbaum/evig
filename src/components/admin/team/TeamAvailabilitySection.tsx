@@ -87,9 +87,9 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
             return (
               <div
                 key={day}
-                className="grid grid-cols-[44px_minmax(0,1fr)] gap-2 rounded-lg border border bg-surface-base p-2 md:grid-cols-[44px_92px_92px_92px_minmax(140px,1fr)]"
+                className="grid grid-cols-2 gap-2 rounded-lg border border bg-surface-base p-2 md:grid-cols-[44px_92px_92px_92px_minmax(140px,1fr)] md:items-center"
               >
-                <label className="flex items-center gap-2 text-sm font-medium text-text-primary">
+                <label className="col-span-2 flex items-center gap-2 text-sm font-medium text-text-primary md:col-span-1">
                   <input
                     type="checkbox"
                     checked={daySchedule.enabled}

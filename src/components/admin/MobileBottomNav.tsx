@@ -24,11 +24,6 @@ export function MobileBottomNav({ accessibleSections, onMenuClick }: MobileBotto
   const pathname = usePathname()
   const items = getMobileBottomNavSections(accessibleSections)
   const t = useTranslations('admin.sidebar')
-  const tLabels = useTranslations('admin.sectionLabels')
-  // Same fallback pattern as AdminSidebar — i18n label, then SSOT DE fallback.
-  const labelFor = (id: string, fallback: string): string => {
-    try { return tLabels(id as never) || fallback } catch { return fallback }
-  }
 
   return (
     <nav
@@ -41,7 +36,7 @@ export function MobileBottomNav({ accessibleSections, onMenuClick }: MobileBotto
         const exact = section.path === '/admin'
         const active = exact ? pathname === section.path : pathname.startsWith(section.path)
         const Icon = section.ui.icon
-        const label = section.ui.mobileBottomNavLabel ?? labelFor(section.id, section.ui.label)
+        const label = section.ui.mobileBottomNavLabel ?? section.ui.label
         return (
           <Link
             key={section.id}
