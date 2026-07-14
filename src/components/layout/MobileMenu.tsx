@@ -12,7 +12,6 @@ import { ORG } from '@/config/org'
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/ui/Logo'
 import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher'
-import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { useSession } from 'next-auth/react'
 import { cn } from '@/lib/utils'
 import { ROUTES } from '@/config/routes'
@@ -309,14 +308,12 @@ export function MobileMenu({
           )}
         </nav>
 
-        {/* Footer - Language pills (one-tap) + Theme Toggle + Auth Actions */}
+        {/* Footer - Language pills (one-tap) + Auth Actions. The theme toggle
+            lives on the top bar itself (one-tap, always visible) — not here. */}
         <div className="border-t border-subtle dark:border-white/6 px-6 pt-3 pb-1 space-y-3">
           <div>
             <p className="text-xs font-medium text-text-tertiary mb-2">{t('language')}</p>
             <LocaleSwitcher inline />
-          </div>
-          <div className="flex items-center">
-            <ThemeToggle />
           </div>
         </div>
         <div className="px-6 pb-4">

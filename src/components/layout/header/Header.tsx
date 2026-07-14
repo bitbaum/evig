@@ -180,6 +180,9 @@ export function Header() {
             {/* Compact Right Side — phones, tablets and laptops below xl. Account
                 actions (bell + avatar / login) stay visible; full nav is in the menu. */}
             <div className="xl:hidden flex shrink-0 items-center gap-1.5 ml-auto">
+              {/* One-tap theme toggle — visible for everyone (incl. logged-out)
+                  on every screen, not buried in the hamburger menu. */}
+              <ThemeToggle />
               <CommandPaletteTrigger />
               <UserMenu />
               {/* Mobile Menu Button */}
