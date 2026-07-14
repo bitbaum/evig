@@ -186,13 +186,23 @@ body.exporting .progress, body.exporting .counter, body.exporting .nav-arrow, bo
 
 <div class="deck" id="deck">
 
-  <!-- V2 · GLEICHE INHALTE WIE DAS TEAM-DECK (Folien 1-8, 15-17), nur neu gestaltet
-       + mit Euren Fotos. Abweichung ggü. Original: die vier unfertigen Vorlagen-
-       Folien (2 Beispiel-Diagramme, leeres Baumdiagramm, «Lorem Ipsum»-Budget)
-       und die leeren Jahres-Sechsecke 2016/2020 sind weggelassen — sie enthalten
-       im Original keinen Inhalt. Sonst Wortlaut wie im Team-Deck. -->
+  <!-- V2 · GLEICHE INHALTE WIE DAS TEAM-DECK (Wortlaut Folien 1-8, 15-17), nur neu
+       gestaltet + mit grossen Fotos. Abweichung ggü. Original: die vier unfertigen
+       Vorlagen-Folien (2 Beispiel-Diagramme, leeres Baumdiagramm, «Lorem Ipsum»-
+       Budget) und die leeren Jahres-Sechsecke 2016/2020 sind weggelassen — sie
+       enthalten im Original keinen Inhalt. Sonst Wortlaut wie im Team-Deck. -->
+  <style>
+    /* Foto-Panel: grosses Foto rechts, Inhalt links auf ruhiger Fläche */
+    .pv2{position:absolute;inset:0;display:grid;grid-template-columns:0.9fr 1fr}
+    .pv2-text{padding:clamp(1.6rem,4.5vw,4.2rem);display:flex;flex-direction:column;justify-content:center;min-width:0}
+    .pv2-text h2{font-size:clamp(1.7rem,4vmin,3rem);margin-bottom:clamp(.8rem,2.4vmin,1.5rem)}
+    .pv2-text .facts{max-width:none}
+    .pv2-text .facts li{font-size:clamp(.92rem,1.7vmin,1.32rem);margin-bottom:.72em}
+    .pv2-img{width:100%;height:100%;object-fit:cover;min-width:0}
+    @media (max-width:820px){.pv2{grid-template-columns:1fr;grid-template-rows:1.1fr 1fr}}
+  </style>
 
-  <!-- 01 · TITEL (Foto: Laden) -->
+  <!-- 01 · TITEL (Foto: Laden, vollflächig) -->
   <div class="slide slide--bleed statement" data-no-watermark data-notes="Titelfolie. Gleiche Aussage wie das Team-Deck, neu gestaltet. Foto: unser Laden.">
     <img class="bleed-img" style="object-position:50% 55%" src="/presentations/_assets/revampit/shopfront-front.jpg" alt="Ladenfront revamp-it an der Birmensdorferstrasse">
     <div class="bleed-scrim"></div>
@@ -202,31 +212,38 @@ body.exporting .progress, body.exporting .counter, body.exporting .nav-arrow, bo
     </div>
   </div>
 
-  <!-- 02 · WIR SIND (Wortlaut Team-Deck) -->
-  <div class="slide" data-notes="Wortlaut wie im Team-Deck, Folie «Wir sind».">
-    <p class="eyebrow">Wir sind …</p>
-    <h2>Wir <span class="accent">sind</span>:</h2>
-    <ul class="facts">
-      <li>… ein gemeinnütziger sozialer Verein</li>
-      <li>… seit über 20 Jahren im Einsatz</li>
-      <li>… engagiert für einen nachhaltigen und verantwortungsvollen Umgang mit Informationstechnologien</li>
-      <li>… ein Team aus fest angestellten Mitarbeitenden, engagierten Pensionierten sowie Freiwilligen aus dem 2. Arbeitsmarkt oder aus schwierigen Lebenssituationen</li>
-      <li>… ein selbstverwalteter Betrieb, bei dem alle wichtigen Entscheidungen an den 14-täglichen Team-Sitzungen gemeinsam gefällt werden</li>
-      <li>… vorfinanziert durch das Förderprogramm KLIMUP der Stadt Zürich</li>
-    </ul>
+  <!-- 02 · WIR SIND (Wortlaut Team-Deck) + grosses Foto -->
+  <div class="slide" style="padding:0" data-notes="Wortlaut wie im Team-Deck, Folie «Wir sind». Foto: das Team an der Hardware.">
+    <div class="pv2">
+      <div class="pv2-text">
+        <p class="eyebrow">Wir sind …</p>
+        <h2>Wir <span class="accent">sind</span>:</h2>
+        <ul class="facts">
+          <li>… ein gemeinnütziger sozialer Verein</li>
+          <li>… seit über 20 Jahren im Einsatz</li>
+          <li>… engagiert für einen nachhaltigen und verantwortungsvollen Umgang mit IT</li>
+          <li>… ein Team aus fest Angestellten, engagierten Pensionierten sowie Freiwilligen aus dem 2. Arbeitsmarkt oder aus schwierigen Lebenssituationen</li>
+          <li>… ein selbstverwalteter Betrieb — Entscheide fallen an den 14-täglichen Team-Sitzungen gemeinsam</li>
+          <li>… vorfinanziert durch das Förderprogramm KLIMUP der Stadt Zürich</li>
+        </ul>
+      </div>
+      <img class="pv2-img" style="object-position:50% 30%" src="/presentations/_assets/revampit/werkstatt-team.jpg" alt="Zwei Personen prüfen gemeinsam eine Hauptplatine">
+    </div>
   </div>
 
-  <!-- 03 · MISSION (Wortlaut Team-Deck) + Foto -->
-  <div class="slide" data-notes="Wortlaut wie im Team-Deck, Folie «Unsere Mission». Foto aus dem Team-Deck: Arbeiten an der Hardware.">
-    <p class="eyebrow">Unsere Mission: ökologisches Engagement & sozialer Mehrwert</p>
-    <h2>Ökologisches Engagement &<br>sozialer <span class="accent">Mehrwert</span></h2>
-    <div class="split">
-      <ul class="facts">
-        <li>Die aktive Förderung von Kreislaufwirtschaft im IT-Bereich durch das Sammeln ausrangierter Geräte wie Computer, Laptops und Drucker, die Reparatur dieser bei Bedarf und den Second-Hand-Verkauf</li>
-        <li>Der Einsatz freier Software-Lösungen und Open-Source-Betriebssysteme, um auch auf der Ebene der Software nachhaltige Strukturen zu schaffen</li>
-        <li>Die Vermittlung von Wissen und Kompetenzen über Workshops und Schulungen, die ökologische, technische und soziale Themen miteinander verbinden</li>
-      </ul>
-      <figure class="ph"><img src="/presentations/_assets/revampit/werkstatt-team.jpg" alt="Zwei Personen prüfen gemeinsam eine Hauptplatine"></figure>
+  <!-- 03 · MISSION (Wortlaut Team-Deck) + grosses Foto -->
+  <div class="slide" style="padding:0" data-notes="Wortlaut wie im Team-Deck, Folie «Unsere Mission». Foto: aufbereitete Geräte.">
+    <div class="pv2">
+      <div class="pv2-text">
+        <p class="eyebrow">Unsere Mission: ökologisches Engagement & sozialer Mehrwert</p>
+        <h2>Ökologisches Engagement & sozialer <span class="accent">Mehrwert</span></h2>
+        <ul class="facts">
+          <li>Die aktive Förderung von Kreislaufwirtschaft im IT-Bereich: Sammeln ausrangierter Geräte, Reparatur bei Bedarf und Second-Hand-Verkauf</li>
+          <li>Der Einsatz freier Software-Lösungen und Open-Source-Betriebssysteme für nachhaltige Strukturen auch auf der Software-Ebene</li>
+          <li>Die Vermittlung von Wissen und Kompetenzen über Workshops und Schulungen, die ökologische, technische und soziale Themen verbinden</li>
+        </ul>
+      </div>
+      <img class="pv2-img" style="object-position:50% 60%" src="/presentations/_assets/revampit/refurbished.jpg" alt="Aufbereitete Laptops auf einem warmen Holztisch">
     </div>
   </div>
 
@@ -241,32 +258,36 @@ body.exporting .progress, body.exporting .counter, body.exporting .nav-arrow, bo
     </ul>
   </div>
 
-  <!-- 05 · WAS WIR ANBIETEN (Wortlaut Team-Deck) + Foto -->
-  <div class="slide" data-notes="Wortlaut wie im Team-Deck, Folie «Was wir anbieten». Foto: Reparatur an einem Gerät.">
-    <p class="eyebrow">Was wir anbieten</p>
-    <h2>Was wir <span class="accent">anbieten</span>:</h2>
-    <div class="split">
-      <ul class="facts">
-        <li>Reparatur, Aufbereitung und Verkauf von Computern, Druckern und Laptops</li>
-        <li>Wissensvermittlung, Support, Beratung und Entwicklung im Bereich Linux und nachhaltiger Software</li>
-        <li>Sinnvolle Beschäftigung und soziale Integration bei unseren Arbeitsplätzen</li>
-        <li>Konzeption und Durchführung von Upcycling-Projekten und Workshops</li>
-      </ul>
-      <figure class="ph"><img src="/presentations/_assets/revampit/reparatur.jpg" alt="Teammitglied repariert konzentriert ein Gerät"></figure>
+  <!-- 05 · WAS WIR ANBIETEN (Wortlaut Team-Deck) + grosses Foto -->
+  <div class="slide" style="padding:0" data-notes="Wortlaut wie im Team-Deck, Folie «Was wir anbieten». Foto: Reparatur an einem Gerät.">
+    <div class="pv2">
+      <div class="pv2-text">
+        <p class="eyebrow">Was wir anbieten</p>
+        <h2>Was wir <span class="accent">anbieten</span>:</h2>
+        <ul class="facts">
+          <li>Reparatur, Aufbereitung und Verkauf von Computern, Druckern und Laptops</li>
+          <li>Wissensvermittlung, Support, Beratung und Entwicklung im Bereich Linux und nachhaltiger Software</li>
+          <li>Sinnvolle Beschäftigung und soziale Integration bei unseren Arbeitsplätzen</li>
+          <li>Konzeption und Durchführung von Upcycling-Projekten und Workshops</li>
+        </ul>
+      </div>
+      <img class="pv2-img" style="object-position:50% 40%" src="/presentations/_assets/revampit/reparatur.jpg" alt="Teammitglied repariert konzentriert ein Gerät">
     </div>
   </div>
 
-  <!-- 06 · KUNDSCHAFT (Wortlaut Team-Deck) + Foto -->
-  <div class="slide" data-notes="Wortlaut wie im Team-Deck, Folie «Unsere Kundschaft». Foto aus dem Team-Deck: der Support-Desk.">
-    <p class="eyebrow">Unsere Kundschaft</p>
-    <h2>Unsere <span class="accent">Kundschaft</span></h2>
-    <div class="split">
-      <ul class="facts">
-        <li>Privatpersonen, Kleinfirmen und Organisationen</li>
-        <li>KMUs</li>
-        <li>Öffentliche Verwaltungen, wie die OIZ (Organisation Informatik der Stadt Zürich)</li>
-      </ul>
-      <figure class="ph"><img src="/presentations/_assets/revampit/support-desk.jpg" alt="Support-Desk bei revamp-it: zwei Personen im Gespräch"></figure>
+  <!-- 06 · KUNDSCHAFT (Wortlaut Team-Deck) + grosses Foto -->
+  <div class="slide" style="padding:0" data-notes="Wortlaut wie im Team-Deck, Folie «Unsere Kundschaft». Foto: der Support-Desk.">
+    <div class="pv2">
+      <div class="pv2-text">
+        <p class="eyebrow">Unsere Kundschaft</p>
+        <h2>Unsere <span class="accent">Kundschaft</span></h2>
+        <ul class="facts">
+          <li>Privatpersonen, Kleinfirmen und Organisationen</li>
+          <li>KMUs</li>
+          <li>Öffentliche Verwaltungen, wie die OIZ (Organisation Informatik der Stadt Zürich)</li>
+        </ul>
+      </div>
+      <img class="pv2-img" style="object-position:50% 50%" src="/presentations/_assets/revampit/support-desk.jpg" alt="Support-Desk bei revamp-it: zwei Personen im Gespräch">
     </div>
   </div>
 
@@ -294,27 +315,36 @@ body.exporting .progress, body.exporting .counter, body.exporting .nav-arrow, bo
     </ul>
   </div>
 
-  <!-- 09 · NUTZUNG DER RÄUMLICHKEITEN (Wortlaut Team-Deck) -->
-  <div class="slide" data-notes="Wortlaut wie im Team-Deck, Folie «Unsere Nutzung der Räumlichkeiten».">
-    <p class="eyebrow">Unsere Nutzung der Räumlichkeiten</p>
-    <h2>Unsere Nutzung der <span class="accent">Räumlichkeiten</span></h2>
-    <ul class="facts">
-      <li>Schaufenster und Ladengestelle für den Verkauf und die Vermietung von SecondHand-IT-Geräten</li>
-      <li>Reparaturarbeitsplätze</li>
-      <li>Büroarbeitsplätze</li>
-      <li>Kundenbereich für Software-Support</li>
-    </ul>
+  <!-- 09 · NUTZUNG DER RÄUMLICHKEITEN (Wortlaut Team-Deck) + grosses Foto -->
+  <div class="slide" style="padding:0" data-notes="Wortlaut wie im Team-Deck, Folie «Unsere Nutzung der Räumlichkeiten». Foto: aufbereitete Geräte im Laden.">
+    <div class="pv2">
+      <div class="pv2-text">
+        <p class="eyebrow">Unsere Nutzung der Räumlichkeiten</p>
+        <h2>Nutzung der <span class="accent">Räumlichkeiten</span></h2>
+        <ul class="facts">
+          <li>Schaufenster und Ladengestelle für den Verkauf und die Vermietung von SecondHand-IT-Geräten</li>
+          <li>Reparaturarbeitsplätze</li>
+          <li>Büroarbeitsplätze</li>
+          <li>Kundenbereich für Software-Support</li>
+        </ul>
+      </div>
+      <img class="pv2-img" style="object-position:50% 50%" src="/presentations/_assets/revampit/geraete.jpg" alt="Aufbereitete Geräte auf einem Tisch">
+    </div>
   </div>
 
-  <!-- 10 · UNSER VERSPRECHEN (Wortlaut Team-Deck) -->
-  <div class="slide statement" data-notes="Wortlaut wie im Team-Deck, Folie «Unser Versprechen».">
-    <p class="eyebrow">Unser Versprechen</p>
-    <h1>Unser <span class="accent">Versprechen</span></h1>
-    <hr class="hairline" style="max-width:8rem">
-    <p class="subtitle">Als selbstverwaltete Organisation seit der Gründung bringen wir langjährige Erfahrung mit Community-Strukturen mit: Unser Engagement für die Genossenschaft gehört für uns selbstverständlich dazu.</p>
+  <!-- 10 · UNSER VERSPRECHEN (Wortlaut Team-Deck), vollflächiges Foto -->
+  <div class="slide slide--bleed statement" data-notes="Wortlaut wie im Team-Deck, Folie «Unser Versprechen». Foto: warmes Detail.">
+    <img class="bleed-img" style="object-position:50% 55%" src="/presentations/_assets/revampit/kabel.jpg" alt="Netzwerkkabel und Orchidee auf einem Holztisch">
+    <div class="bleed-scrim"></div>
+    <div class="bleed-content">
+      <p class="eyebrow">Unser Versprechen</p>
+      <h1>Unser <span class="accent">Versprechen</span></h1>
+      <hr class="hairline" style="max-width:8rem">
+      <p class="subtitle">Als selbstverwaltete Organisation seit der Gründung bringen wir langjährige Erfahrung mit Community-Strukturen mit: Unser Engagement für die Genossenschaft gehört für uns selbstverständlich dazu.</p>
+    </div>
   </div>
 
-  <!-- 11 · DANKE (Foto: Pinguine) -->
+  <!-- 11 · DANKE (Foto: Pinguine, vollflächig) -->
   <div class="slide slide--bleed statement" data-no-watermark data-notes="Wortlaut wie im Team-Deck, Dankesfolie. Foto: die Linux-Pinguine.">
     <img class="bleed-img" style="object-position:50% 42%" src="/presentations/_assets/revampit/pinguine.jpg" alt="Linux-Pinguin-Plüschtiere im Laden revamp-it">
     <div class="bleed-scrim"></div>
