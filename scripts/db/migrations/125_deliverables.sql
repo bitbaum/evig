@@ -70,7 +70,7 @@ INSERT INTO deliverables (owner_user_id, title, description, type, url, source_p
 SELECT
     u.id,
     'Kivitendo Auftragserfassung — schöneres UI',
-    'Tablet-taugliches, gut leserliches Mockup für die Kivitendo-Auftragsmaske (Positions-Tabelle #row_table_id) plus die produktive CSS-Datei zum Herunterladen. Nur Aussehen, keine Struktur-Änderung.',
+    E'**Was ist das?** Ein Vorschlag, wie die Kivitendo-Auftragserfassung schöner und besser lesbar wird — grössere Schrift, ruhige Kontraste, gut bedienbar auf Desktop, Tablet und Handy. Die Kivitendo-Struktur bleibt unverändert; nur das Aussehen wird verbessert (reines CSS).\n\n**So nutzt du diese Seite:**\n\n- **Vorschau ansehen** — unten das Ziel-Aussehen direkt im Browser.\n- **Dateien herunterladen** — `kivitendo-intake.css` ist die produktive Datei; den Code kannst du auch direkt ansehen.\n- **Einbinden** — die CSS-Datei nach der `main.css` laden (z.B. als eigene Datei unter `css/kivitendo/`), damit sie Kivitendo-Updates übersteht.\n- **Fragen stellen** — «Hirn fragen» beantwortet Fragen zum Code anhand der echten Dateien.\n- **Feedback geben** — schreib unten, was geändert werden soll; es kommt direkt an.\n\nKein Login nötig — einfach den Link öffnen und teilen.',
     'mockup',
     '/presentations/kivitendo-intake',
     'deliverables/2026-07-13-kivitendo-intake-ui/',

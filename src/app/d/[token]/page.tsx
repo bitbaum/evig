@@ -20,6 +20,7 @@ import {
 } from '@/config/deliverables'
 import DeliverableFiles from '@/components/deliverables/DeliverableFiles'
 import DeliverableChat from '@/components/deliverables/DeliverableChat'
+import Markdown from '@/components/deliverables/Markdown'
 import SharedFeedbackForm from './SharedFeedbackForm'
 
 export async function generateMetadata({
@@ -58,7 +59,9 @@ export default async function SharedDeliverablePage({
           </p>
           <h1 className="text-2xl font-bold text-text-primary">{deliverable.title}</h1>
           {deliverable.description && (
-            <p className="text-text-secondary mt-2 whitespace-pre-wrap">{deliverable.description}</p>
+            <div className="mt-3 bg-surface-base rounded-lg border p-5">
+              <Markdown>{deliverable.description}</Markdown>
+            </div>
           )}
         </header>
 
