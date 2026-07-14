@@ -91,6 +91,20 @@ export const updateMetricSchema = createMetricSchema.partial()
 export type CreateMetricInput = z.infer<typeof createMetricSchema>
 export type UpdateMetricInput = z.infer<typeof updateMetricSchema>
 
+// ---- Placeholder claim ------------------------------------------------------
+// Password strength is enforced separately via validatePasswordStrength (auth
+// SSOT); zod only checks shape + a floor so a trivially-short value is rejected
+// before hashing.
+
+export const claimAccountSchema = z.object({
+  token: z.string().min(1),
+  name: z.string().min(1, 'Name erforderlich').max(120, 'Name zu lang'),
+  email: z.string().email('Ungültige E-Mail-Adresse').max(200),
+  password: z.string().min(1, 'Passwort erforderlich').max(200),
+})
+
+export type ClaimAccountInput = z.infer<typeof claimAccountSchema>
+
 // ---- Coordination row shapes ------------------------------------------------
 
 export interface TeamGoalRow {

@@ -7,12 +7,14 @@ import { Avatar } from '@/components/ui/Avatar'
 import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import MoveMemberModal, { type MoveTeamRef } from '@/components/admin/teams/MoveMemberModal'
+import PlaceholderInviteButton from '@/components/admin/teams/PlaceholderInviteButton'
 import { apiFetch } from '@/lib/api/client'
 import {
   TEAM_ROLES,
   TEAM_ROLE_OPTIONS,
   TEAM_ROLE_LABELS,
   getTeamRoleColor,
+  isPlaceholderEmail,
   type TeamRole,
 } from '@/config/teams'
 import { WORK_STATE_LABELS, WORK_STATE_COLORS, type WorkState } from '@/config/team'
@@ -33,9 +35,11 @@ interface Props {
   candidates: StaffCandidate[]
   /** All active teams (incl. this one), for the Move modal. */
   allTeams: MoveTeamRef[]
+  /** Super admins can invite a placeholder member to claim their account. */
+  isSuperAdmin?: boolean
 }
 
-export default function MembershipManager({ teamId, teamName, teamAccent, members, candidates, allTeams }: Props) {
+export default function MembershipManager({ teamId, teamName, teamAccent, members, candidates, allTeams, isSuperAdmin }: Props) {
   const router = useRouter()
   const [busy, setBusy] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -170,6 +174,11 @@ export default function MembershipManager({ teamId, teamName, teamAccent, member
               <span className={`hidden md:inline-block px-2 py-0.5 rounded-full text-xs font-medium ${getTeamRoleColor(m.role)}`}>
                 {TEAM_ROLE_LABELS[m.role as TeamRole] ?? m.role}
               </span>
+
+              {/* Invite a placeholder to claim their account (super admin) */}
+              {isSuperAdmin && isPlaceholderEmail(m.email) && (
+                <PlaceholderInviteButton userId={m.user_id} />
+              )}
 
               {/* Move to another team */}
               {canMove && (

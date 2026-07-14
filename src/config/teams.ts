@@ -125,6 +125,17 @@ export function getAccentClasses(accent: string | null | undefined): string {
   return TEAM_ACCENT_CLASSES[accent as SectionColor] ?? TEAM_ACCENT_CLASSES.info
 }
 
+// ---- Placeholder accounts ---------------------------------------------------
+// A placeholder is a locked stand-in user (password_hash NULL) that a real
+// person claims later via an invite link. The email domain is the SINGLE marker
+// (SSOT) — never hardcode this string anywhere else; use isPlaceholderEmail().
+
+export const PLACEHOLDER_EMAIL_DOMAIN = 'placeholder.revamp-it.ch'
+
+export function isPlaceholderEmail(email: string | null | undefined): boolean {
+  return !!email && email.toLowerCase().endsWith(`@${PLACEHOLDER_EMAIL_DOMAIN}`)
+}
+
 /** URL-safe ASCII slug from a team name (no umlauts — slugs are path segments). */
 export function slugifyTeamName(name: string): string {
   return name

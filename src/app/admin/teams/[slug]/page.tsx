@@ -158,6 +158,7 @@ export default async function TeamDetailPage({ params }: PageProps) {
             members={members}
             candidates={candidates}
             allTeams={teamRefs}
+            isSuperAdmin={session.user.isSuperAdmin}
           />
         </div>
       </div>
