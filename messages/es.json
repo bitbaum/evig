@@ -10896,7 +10896,11 @@
       "seller-onboarding": "Hacerse vendedor",
       "presentations": "Presentaciones",
       "hr-vacancies": "Vacantes",
-      "hr-applications": "Candidaturas"
+      "hr-applications": "Candidaturas",
+      "deliverables": "Entregables",
+      "feedbackOverview": "Comentarios",
+      "presentationFeedback": "Comentarios de presentación",
+      "team-board": "Quién hace qué"
     },
     "errorPage": {
       "title": "Algo salió mal",

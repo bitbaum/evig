@@ -10896,7 +10896,11 @@
       "seller-onboarding": "판매자 되기",
       "presentations": "프레젠테이션",
       "hr-vacancies": "채용 공고",
-      "hr-applications": "지원서"
+      "hr-applications": "지원서",
+      "deliverables": "산출물",
+      "feedbackOverview": "피드백",
+      "presentationFeedback": "프레젠테이션 피드백",
+      "team-board": "담당 현황"
     },
     "errorPage": {
       "title": "문제가 발생했습니다",

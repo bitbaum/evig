@@ -10849,7 +10849,11 @@
       "analyse-hub": "Aperçu des analyses",
       "presentations": "Présentations",
       "hr-vacancies": "Postes ouverts",
-      "hr-applications": "Candidatures"
+      "hr-applications": "Candidatures",
+      "deliverables": "Livrables",
+      "feedbackOverview": "Retours",
+      "presentationFeedback": "Retours présentations",
+      "team-board": "Qui fait quoi"
     },
     "errorPage": {
       "title": "Quelque chose a mal tourné",

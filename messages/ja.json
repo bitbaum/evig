@@ -10896,7 +10896,11 @@
       "seller-onboarding": "出品者になる",
       "presentations": "プレゼンテーション",
       "hr-vacancies": "求人",
-      "hr-applications": "応募"
+      "hr-applications": "応募",
+      "deliverables": "成果物",
+      "feedbackOverview": "フィードバック",
+      "presentationFeedback": "プレゼンのフィードバック",
+      "team-board": "担当状況"
     },
     "errorPage": {
       "title": "問題が発生しました",

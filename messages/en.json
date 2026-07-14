@@ -10848,7 +10848,11 @@
       "seller-onboarding": "Become a seller",
       "presentations": "Presentations",
       "hr-vacancies": "Open positions",
-      "hr-applications": "Applications"
+      "hr-applications": "Applications",
+      "deliverables": "Deliverables",
+      "feedbackOverview": "Feedback",
+      "presentationFeedback": "Presentation feedback",
+      "team-board": "Who does what"
     },
     "errorPage": {
       "title": "Something went wrong",

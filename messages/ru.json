@@ -10890,7 +10890,11 @@
       "seller-onboarding": "Стать продавцом",
       "presentations": "Презентации",
       "hr-vacancies": "Вакансии",
-      "hr-applications": "Заявки"
+      "hr-applications": "Заявки",
+      "deliverables": "Результаты",
+      "feedbackOverview": "Отзывы",
+      "presentationFeedback": "Отзывы о презентациях",
+      "team-board": "Кто чем занят"
     },
     "errorPage": {
       "title": "Что-то пошло не так",

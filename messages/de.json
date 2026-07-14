@@ -10963,7 +10963,11 @@
       "sensitive": "Sensibel",
       "system": "System",
       "analyse": "Analyse",
-      "seller-onboarding": "Verkäufer werden"
+      "seller-onboarding": "Verkäufer werden",
+      "deliverables": "Liefergegenstände",
+      "feedbackOverview": "Rückmeldungen",
+      "presentationFeedback": "Präsentations-Feedback",
+      "team-board": "Wer macht was"
     },
     "errorPage": {
       "title": "Etwas ist schiefgelaufen",

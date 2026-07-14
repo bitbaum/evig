@@ -10896,7 +10896,11 @@
       "seller-onboarding": "Diventa venditore",
       "presentations": "Presentazioni",
       "hr-vacancies": "Posizioni aperte",
-      "hr-applications": "Candidature"
+      "hr-applications": "Candidature",
+      "deliverables": "Consegne",
+      "feedbackOverview": "Riscontri",
+      "presentationFeedback": "Feedback presentazioni",
+      "team-board": "Chi fa cosa"
     },
     "errorPage": {
       "title": "Qualcosa è andato storto",
