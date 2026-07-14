@@ -9,11 +9,14 @@
      - css/kivitendo/  eine eigene Datei und im Layout nach main.css laden
    So bleibt ein Kivitendo-Update unberührt (kein Überschreiben von main.css).
 
-   WICHTIG — SELEKTOREN PRÜFEN:
-   Ich sehe deine Live-DOM nicht. Die mit  /* ⚠ PRÜFEN */  markierten Selektoren
-   sind sichere Annahmen für Kivitendo 3.9.x. Die Positions-Tabelle #row_table_id
-   ist von dir bestätigt. Falls ein Block nicht greift: mit F12 den echten
-   Klassen-/ID-Namen ablesen und hier ersetzen. Nichts geht dabei kaputt.
+   SELEKTOREN — STATUS:
+   Auf der Live-Maske (kivitendo 3.9.2-beta) VERIFIZIERT: #row_table_id,
+   #input_row_table_id, table.tbl-horizontal (Kopf-Panels in float-Spalten
+   div.col), .numeric und .horizontal-scroll-wrapper. Responsiv: nebeneinander
+   auf Desktop, gestapelt ab 1100px/640px — für jedes Gerät.
+   Nur noch /* ⚠ PRÜFEN */ sind die Zeilen-Steuerelemente (Ziehen/Löschen/
+   Aufklappen) — bei leerer Tabelle nicht prüfbar; F12 an einer echten Zeile
+   bestätigt sie. Nichts geht dabei kaputt.
    ============================================================================ */
 
 /* ---------------------------------------------------------------------------
@@ -113,21 +116,20 @@ input:disabled {
 }
 
 /* ---------------------------------------------------------------------------
-   4) Kopfbereich (Kunde, Auftragsnr., Datum …) — auf Tablet sauber umbrechen
-   Kivitendo baut den Kopf oft als Tabelle. Wir lösen die starre Tabelle für
-   schmale Screens auf, damit nichts abgeschnitten wird.
+   4) Kopf-Panels (Kunde/Bemerkungen/Nummern)
+   VERIFIZIERT auf 3.9.2-beta: die Panels sind `table.tbl-horizontal`, in drei
+   float-Spalten `div.col` nebeneinander. Auf grossen Screens bleiben sie
+   nebeneinander (wir erzwingen KEINE 100%-Breite mehr) — das Stapeln für
+   kleinere Geräte passiert responsiv in Abschnitt 9.
    --------------------------------------------------------------------------- */
-.form-header,                 /* ⚠ PRÜFEN — Container der Kopffelder */
-table.tbl-horizontal {        /* ⚠ PRÜFEN — häufige Kivitendo-Formulartabelle */
-  width: 100%;
+table.tbl-horizontal {        /* verifiziert */
   background: var(--ri-panel);
   border: 1px solid var(--ri-line-color);
   border-radius: var(--ri-radius);
-  padding: var(--ri-gap);
   margin-bottom: var(--ri-gap);
+  max-width: 100%;
 }
 
-.form-header td,
 table.tbl-horizontal td,
 table.tbl-horizontal th {
   padding: 6px 10px;
@@ -136,19 +138,19 @@ table.tbl-horizontal th {
 
 /* ---------------------------------------------------------------------------
    5) POSITIONS-TABELLE  #row_table_id  (von Kivitendo befüllt)
-   Struktur bleibt — wir machen sie nur gross, ruhig und tablet-tauglich.
+   VERIFIZIERT: tbl-list.ui-sortable, bereits in `.horizontal-scroll-wrapper`.
+   Wir verstärken nur das waagrechte Scrollen und lassen der Tabelle ihre
+   natürliche Breite — so wird auf schmalen Geräten gescrollt statt abgeschnitten.
    --------------------------------------------------------------------------- */
-
-/* Waagrechtes Scrollen auf schmalen Geräten statt Abschneiden.
-   Falls #row_table_id KEINEN eigenen Wrapper hat, greift der Fallback am table. */
-#row_table_id {
-  width: 100%;
+.horizontal-scroll-wrapper {  /* verifiziert */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+#row_table_id {               /* verifiziert */
   border-collapse: separate;
   border-spacing: 0;
   font-size: var(--ri-text);
-  display: block;               /* erlaubt eigenes horizontales Scrollen … */
-  overflow-x: auto;             /* … ohne die ganze Seite zu verschieben     */
-  -webkit-overflow-scrolling: touch;
 }
 
 /* Kopfzeile hervorheben und beim Scrollen oben halten */
@@ -189,7 +191,7 @@ table.tbl-horizontal th {
 
 /* Zahlen rechtsbündig (Menge, Preis, Rabatt, Betrag) — leichter zu prüfen.
    Kivitendo nutzt dafür meist .numeric; sonst über die Spalten steuern. */
-#row_table_id td.numeric,     /* ⚠ PRÜFEN — Kivitendo-Klasse für Zahlen */
+#row_table_id td.numeric,     /* verifiziert — Kivitendo-Klasse für Zahlen */
 #row_table_id input.numeric {
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -310,7 +312,7 @@ button[type="submit"]:hover { filter: brightness(0.94); }
 }
 
 /* Zentrale Eingabezeile ÜBER der Liste (neuer Artikel) — ebenfalls gross & leserlich */
-#input_row_table_id td,               /* ⚠ PRÜFEN */
+#input_row_table_id td,               /* verifiziert */
 #input_row_table_id input,
 #input_row_table_id select {
   font-size: var(--ri-text);
@@ -318,32 +320,35 @@ button[type="submit"]:hover { filter: brightness(0.94); }
 }
 
 /* ---------------------------------------------------------------------------
-   9) Tablet-Feinschliff
+   9) Responsiv — für JEDES Gerät (Desktop nebeneinander → Tablet/Handy gestapelt)
+   Die Kopf-Panels liegen in float-Spalten `div.col`. Auf grossen Screens bleiben
+   sie nebeneinander; ab hier stapeln wir sie sauber untereinander — nichts wird
+   abgeschnitten, alles bleibt bedienbar.
    --------------------------------------------------------------------------- */
-@media (max-width: 1024px) {
+@media (max-width: 1100px) {
   :root { --ri-text: 18px; --ri-text-lg: 20px; }
 
-  /* Kopf-Formular stapeln statt zwängen (löst starre Tabellenzellen auf) */
-  .form-header,               /* ⚠ PRÜFEN */
-  table.tbl-horizontal,
-  .form-header tbody,
-  table.tbl-horizontal tbody { display: block; width: 100%; }
-
-  .form-header tr,
-  table.tbl-horizontal tr {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px 16px;
-    align-items: center;
-    margin-bottom: 8px;
+  div.col {                    /* verifiziert: Kopf-Spalten sind float:left */
+    float: none;
+    width: 100%;
+    margin-right: 0;
   }
-  .form-header td,
-  table.tbl-horizontal td { display: block; padding: 2px 0; }
+  table.tbl-horizontal { width: 100%; }
 
-  input[type="text"],
-  input[type="number"],
-  input[type="date"],
-  select { width: 100%; }
+  #content input[type="text"],
+  #content input[type="number"],
+  #content input[type="date"],
+  #content select,
+  #content textarea { width: 100%; max-width: 100%; }
+}
+
+/* Handy: einspaltig, kompaktere Abstände */
+@media (max-width: 640px) {
+  :root { --ri-text: 17px; --ri-text-lg: 19px; --ri-gap: 10px; }
+  table.tbl-horizontal td,
+  table.tbl-horizontal th { padding: 4px 6px; }
+  #row_table_id td,
+  #row_table_id thead th { padding: 8px 6px; }
 }
 
 /* Sehr grosse Schrift optional: Body-Klasse `ri-xl` setzen für +2px überall */
