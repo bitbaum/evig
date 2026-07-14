@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
-import { metricProgress } from '@/lib/services/team-coordination'
+import { metricProgress } from '@/lib/team/metric-progress'
 import type { TeamMetricRow } from '@/lib/schemas/teams'
 
 interface Props {
