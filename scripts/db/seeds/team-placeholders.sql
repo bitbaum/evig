@@ -7,11 +7,13 @@
 --
 -- WHY placeholders: the real people are not registered yet. Each is a LOCKED
 -- stand-in — password_hash NULL (cannot log in by any means) — so the org
--- structure is visible in /admin now. Markers that make them findable + claimable:
---   • email  @placeholder.revamp-it.ch   → queryable + the address a claim replaces
---   • surname "Platzhalter"              → obvious in every admin list/board
+-- structure is visible in /admin now. The SINGLE marker that makes them findable
+-- + claimable is the email domain @placeholder.revamp-it.ch (queryable, and the
+-- address a claim replaces). Names are recognizable pseudonyms (real teammate's
+-- first-letter kept, gender kept, real rock-legend surname), NOT a marker.
 -- To onboard a real person later: send them a registration link that claims the
--- row (sets their real email + password_hash), then remove the placeholder marker.
+-- row (sets their real name + email + password_hash) — memberships survive
+-- because they key on user_id, which never changes.
 --
 -- Georgy is the ONLY real account here (georgy.butaev@revamp-it.ch, resolved by
 -- its real email below) — never pseudonymised.
@@ -31,7 +33,7 @@ BEGIN;
 INSERT INTO users (name, email, is_staff, is_super_admin, password_hash, role)
 VALUES
   ('Vera Hendrix',      'vera@placeholder.revamp-it.ch',   TRUE, FALSE, NULL, 'user'),
-  ('Dana Jagger',       'dana@placeholder.revamp-it.ch',   TRUE, FALSE, NULL, 'user'),
+  ('David Jagger',       'david@placeholder.revamp-it.ch',   TRUE, FALSE, NULL, 'user'),
   ('Andres Bowie',      'andres@placeholder.revamp-it.ch', TRUE, FALSE, NULL, 'user'),
   ('Cemo Mercury',      'cemo@placeholder.revamp-it.ch',   TRUE, FALSE, NULL, 'user'),
   ('Sila Lennon',       'sila@placeholder.revamp-it.ch',   TRUE, FALSE, NULL, 'user'),
@@ -57,10 +59,10 @@ SELECT t.id, u.id, seed.role
 FROM (VALUES
   -- orga (no lead marked on source)
   ('orga',        'vera@placeholder.revamp-it.ch',    'member'),
-  ('orga',        'dana@placeholder.revamp-it.ch',    'member'),
+  ('orga',        'david@placeholder.revamp-it.ch',    'member'),
   ('orga',        'andres@placeholder.revamp-it.ch',  'member'),
   -- it-admin
-  ('it-admin',    'dana@placeholder.revamp-it.ch',    'lead'),
+  ('it-admin',    'david@placeholder.revamp-it.ch',    'lead'),
   ('it-admin',    'cemo@placeholder.revamp-it.ch',    'member'),
   ('it-admin',    'sila@placeholder.revamp-it.ch',    'member'),
   ('it-admin',    'robyn@placeholder.revamp-it.ch',   'member'),

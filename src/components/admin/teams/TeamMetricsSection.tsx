@@ -1,12 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { Gauge, Plus, Pencil, Trash2, Check, X, Loader2, ArrowUp, ArrowDown } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
+import { useAsyncAction } from '@/hooks/useAsyncAction'
 import { metricProgress } from '@/lib/team/metric-progress'
 import type { TeamMetricRow } from '@/lib/schemas/teams'
 
@@ -121,25 +121,10 @@ function MetricDraftForm({
 
 /** Manual KPI cards for a team, with a progress bar toward target. */
 export default function TeamMetricsSection({ teamId, metrics }: Props) {
-  const router = useRouter()
+  const { busy, error, run } = useAsyncAction()
   const [editingId, setEditingId] = useState<string | null>(null)
   const [adding, setAdding] = useState(false)
   const [draft, setDraft] = useState<Draft>(emptyDraft)
-  const [busy, setBusy] = useState<string | null>(null)
-  const [error, setError] = useState<string | null>(null)
-
-  async function run(key: string, fn: () => Promise<{ success: boolean; error?: string }>) {
-    setBusy(key)
-    setError(null)
-    const res = await fn()
-    setBusy(null)
-    if (!res.success) {
-      setError(res.error || 'Aktion fehlgeschlagen')
-      return false
-    }
-    router.refresh()
-    return true
-  }
 
   async function create() {
     if (!draft.label.trim()) return
