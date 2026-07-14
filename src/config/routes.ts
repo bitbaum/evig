@@ -68,6 +68,7 @@ export const ROUTES = {
     contentSubmissions: '/admin/content/submissions',
     contentBlog:        '/admin/content/blog',
     contentBlogNew:     '/admin/content/blog/new',
+    contentBlogComments: '/admin/content/blog/comments',
     categories:         '/admin/content/categories',
     categoryNew:        '/admin/content/categories/new',
     contentPages:       '/admin/content/pages',

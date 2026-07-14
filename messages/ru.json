@@ -3567,6 +3567,21 @@
       "delete": "Удалить",
       "error": "Что-то пошло не так. Попробуйте ещё раз.",
       "anon": "Пользователь"
+    },
+    "search": {
+      "placeholder": "Поиск статей…"
+    },
+    "filter": {
+      "resultsFor": "Результаты поиска по запросу «{query}»",
+      "tagged": "Статьи с тегом «{tag}»",
+      "count": "{count, plural, one {# статья} few {# статьи} many {# статей} other {# статьи}}",
+      "clear": "Сбросить"
+    },
+    "rss": "Подписаться на RSS",
+    "prevNext": {
+      "label": "Другие статьи",
+      "newer": "Более новая статья",
+      "older": "Более старая статья"
     }
   },
   "auth": {
@@ -9254,7 +9269,10 @@
       "shareX": "Поделиться в X",
       "shareLinkedin": "Поделиться в LinkedIn",
       "shareFacebook": "Поделиться в Facebook",
-      "mastodonHint": "Для Mastodon: после нажатия выберите ваш инстанс"
+      "mastodonHint": "Для Mastodon: после нажатия выберите ваш инстанс",
+      "copyLink": "Скопировать ссылку",
+      "copied": "Скопировано!",
+      "nativeShare": "Поделиться"
     },
     "serviceCta": {
       "heading": "Готовы начать?",

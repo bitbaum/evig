@@ -1,3 +1,4 @@
+import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { RichTextEditor } from './RichTextEditor'
@@ -28,7 +29,7 @@ export function BlogPostEditor({ isBase, locale, doc, slug, onDocChange, onTitle
       )}
 
       {/* Title & Slug */}
-      <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
+      <Card className="p-6">
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-text-secondary mb-2">
@@ -62,10 +63,10 @@ export function BlogPostEditor({ isBase, locale, doc, slug, onDocChange, onTitle
             </div>
           )}
         </div>
-      </div>
+      </Card>
 
       {/* Excerpt */}
-      <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
+      <Card className="p-6">
         <label className="block text-sm font-medium text-text-secondary mb-2">
           Kurzbeschreibung
         </label>
@@ -77,10 +78,10 @@ export function BlogPostEditor({ isBase, locale, doc, slug, onDocChange, onTitle
           maxLength={160}
         />
         <p className="text-xs text-text-tertiary mt-1">{doc.excerpt.length}/160 Zeichen</p>
-      </div>
+      </Card>
 
       {/* Content — WYSIWYG (author sees real formatting; stored as Markdown) */}
-      <div className="bg-surface-base rounded-xl p-6 shadow-xs border border-subtle">
+      <Card className="p-6">
         <label className="block text-sm font-medium text-text-secondary mb-2">
           Inhalt *
         </label>
@@ -89,7 +90,7 @@ export function BlogPostEditor({ isBase, locale, doc, slug, onDocChange, onTitle
           onChange={(content) => onDocChange({ content })}
           placeholder="Schreibe hier deinen Artikel…"
         />
-      </div>
+      </Card>
     </div>
   )
 }

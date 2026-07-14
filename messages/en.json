@@ -3571,6 +3571,21 @@
       "selectPrompt": "Select a submission to view details",
       "tipText": "💡 {strong}Tip:{/strong} Download the Markdown file and copy it to the {code}content/posts/{/code} folder. Then edit and publish it in TinaCMS!",
       "submittedBy": "Submitted by: {name} ({email})"
+    },
+    "search": {
+      "placeholder": "Search posts…"
+    },
+    "filter": {
+      "resultsFor": "Search results for “{query}”",
+      "tagged": "Posts tagged “{tag}”",
+      "count": "{count, plural, one {# post} other {# posts}}",
+      "clear": "Clear"
+    },
+    "rss": "Subscribe via RSS",
+    "prevNext": {
+      "label": "More posts",
+      "newer": "Newer post",
+      "older": "Older post"
     }
   },
   "auth": {
@@ -9258,7 +9273,10 @@
       "shareX": "Share on X",
       "shareLinkedin": "Share on LinkedIn",
       "shareFacebook": "Share on Facebook",
-      "mastodonHint": "For Mastodon: choose your instance after clicking"
+      "mastodonHint": "For Mastodon: choose your instance after clicking",
+      "copyLink": "Copy link",
+      "copied": "Copied!",
+      "nativeShare": "Share"
     },
     "serviceCta": {
       "heading": "Ready to get started?",

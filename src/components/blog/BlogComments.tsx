@@ -142,7 +142,7 @@ export default function BlogComments({ slug }: { slug: string }) {
                         variant="ghost"
                         size="icon"
                         onClick={() => remove(c.id)}
-                        className="ml-auto h-7 w-7 text-text-tertiary hover:text-error-600"
+                        className="ml-auto h-11 w-11 sm:h-8 sm:w-8 text-text-tertiary hover:text-error-600"
                         aria-label={t('delete')}
                         title={t('delete')}
                       >

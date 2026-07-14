@@ -1294,6 +1294,21 @@
       "delete": "Elimina",
       "error": "Qualcosa è andato storto. Riprova.",
       "anon": "Utente"
+    },
+    "search": {
+      "placeholder": "Cerca articoli…"
+    },
+    "filter": {
+      "resultsFor": "Risultati per «{query}»",
+      "tagged": "Articoli con tag «{tag}»",
+      "count": "{count, plural, one {# articolo} other {# articoli}}",
+      "clear": "Reimposta"
+    },
+    "rss": "Abbonati al feed RSS",
+    "prevNext": {
+      "label": "Altri articoli",
+      "newer": "Articolo più recente",
+      "older": "Articolo precedente"
     }
   },
   "contact": {
@@ -9259,7 +9274,10 @@
       "shareX": "Condividi su X",
       "shareLinkedin": "Condividi su LinkedIn",
       "shareFacebook": "Condividi su Facebook",
-      "mastodonHint": "Per Mastodon: scegli la tua istanza dopo il clic"
+      "mastodonHint": "Per Mastodon: scegli la tua istanza dopo il clic",
+      "copyLink": "Copia link",
+      "copied": "Copiato!",
+      "nativeShare": "Condividi"
     },
     "serviceCta": {
       "heading": "Pronto per iniziare?",

@@ -47,7 +47,7 @@ export const GET = withAdmin('content', async (request, session) => {
 export const POST = withAdmin('content', async (request, session) => {
   try {
     const body = await request.json()
-    const { title, slug, excerpt, content, featuredImage, categoryId, tags, isPublished, translations, autoTranslate, visibility } = body
+    const { title, slug, excerpt, content, featuredImage, categoryId, tags, isPublished, seoTitle, seoDescription, translations, autoTranslate, visibility } = body
     const cleanVisibility = ['public', 'unlisted', 'link'].includes(visibility) ? visibility : 'public'
 
     if (!title || !content) {
@@ -84,6 +84,8 @@ export const POST = withAdmin('content', async (request, session) => {
         featuredImage: featuredImage || null,
         categoryId: categoryId || null,
         tags: tags || [],
+        seoTitle: seoTitle || null,
+        seoDescription: seoDescription || null,
         visibility: cleanVisibility,
         isPublished: isPublished || false,
         publishedAt: isPublished ? new Date().toISOString() : null,

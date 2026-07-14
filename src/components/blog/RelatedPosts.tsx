@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { BlogPost } from '@/lib/blog'
 import { formatDate } from '@/lib/date-formats'
+import { Card } from '@/components/ui/card'
 import Heading from '@/components/ui/Heading'
 import { getTranslations } from 'next-intl/server'
 
@@ -23,7 +24,7 @@ export default async function RelatedPosts({ posts }: RelatedPostsProps) {
               href={`/blog/${post.slug}`}
               className="group"
             >
-              <article className="bg-surface-base rounded-lg border overflow-hidden hover:border-strong transition-all">
+              <Card className="overflow-hidden transition-all hover:border-strong">
                 {post.featuredImage && (
                   <div className="aspect-video overflow-hidden bg-surface-overlay relative">
                     <Image
@@ -50,7 +51,7 @@ export default async function RelatedPosts({ posts }: RelatedPostsProps) {
                     <time>{formatDate(post.publishedAt || post.createdAt)}</time>
                   </div>
                 </div>
-              </article>
+              </Card>
             </Link>
           ))}
         </div>

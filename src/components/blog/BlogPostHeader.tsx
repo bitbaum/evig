@@ -9,9 +9,11 @@ import UnlistedBadge from './UnlistedBadge'
 
 interface BlogPostHeaderProps {
   post: BlogPost
+  /** Resolved category slug — makes the eyebrow link to the filtered index. */
+  categorySlug?: string
 }
 
-export default async function BlogPostHeader({ post }: BlogPostHeaderProps) {
+export default async function BlogPostHeader({ post, categorySlug }: BlogPostHeaderProps) {
   const t = await getTranslations('blog')
   const readingTime = getReadingTime(post.body)
 
@@ -26,9 +28,20 @@ export default async function BlogPostHeader({ post }: BlogPostHeaderProps) {
         {t('back')}
       </Link>
 
-      {/* Eyebrow: category + unlisted marker */}
+      {/* Eyebrow: category (links to the filtered index) + unlisted marker */}
       <div className="mt-10 flex flex-wrap items-center gap-3">
-        {post.category && <span className="ui-public-eyebrow">{post.category}</span>}
+        {post.category && (
+          categorySlug ? (
+            <Link
+              href={`/blog?categories=${encodeURIComponent(categorySlug)}`}
+              className="ui-public-eyebrow transition-colors hover:text-action"
+            >
+              {post.category}
+            </Link>
+          ) : (
+            <span className="ui-public-eyebrow">{post.category}</span>
+          )
+        )}
         {post.visibility === 'unlisted' && <UnlistedBadge />}
       </div>
 

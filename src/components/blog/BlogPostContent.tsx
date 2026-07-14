@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import { Link } from '@/i18n/navigation'
 import { BlogPost } from '@/lib/blog'
 import { ORG } from '@/config/org'
 import { extractHeadings, slugifyHeading } from '@/lib/blog-toc'
@@ -141,17 +142,18 @@ export default function BlogPostContent({ post }: BlogPostContentProps) {
           </ReactMarkdown>
         </div>
 
-        {/* Tags */}
+        {/* Tags — each links to the index filtered on that tag */}
         {post.tags && post.tags.length > 0 && (
           <div className="border-t border-subtle py-8">
             <div className="flex flex-wrap gap-2">
               {post.tags.map((tag, index) => (
-                <span
+                <Link
                   key={index}
-                  className="rounded-full border border-subtle px-3 py-1 font-mono text-xs text-text-tertiary"
+                  href={`/blog?tag=${encodeURIComponent(tag)}`}
+                  className="inline-flex min-h-11 items-center rounded-full border border-subtle px-4 font-mono text-xs text-text-tertiary transition-colors hover:border-strong hover:text-text-primary"
                 >
                   {tag}
-                </span>
+                </Link>
               ))}
             </div>
           </div>

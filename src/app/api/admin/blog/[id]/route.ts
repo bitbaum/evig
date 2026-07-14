@@ -78,6 +78,15 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
       visibility,
     } = body
 
+    // Required fields, when explicitly provided, must not be blanked out —
+    // an accidental empty title/body would break a live post's rendering + SEO.
+    if (title !== undefined && !String(title).trim()) {
+      return apiBadRequest('Titel darf nicht leer sein')
+    }
+    if (content !== undefined && !String(content).trim()) {
+      return apiBadRequest('Inhalt darf nicht leer sein')
+    }
+
     // Check if post exists
     const [existing] = await db
       .select({

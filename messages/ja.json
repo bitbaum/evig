@@ -1294,6 +1294,21 @@
       "delete": "削除",
       "error": "問題が発生しました。もう一度お試しください。",
       "anon": "ユーザー"
+    },
+    "search": {
+      "placeholder": "記事を検索…"
+    },
+    "filter": {
+      "resultsFor": "「{query}」の検索結果",
+      "tagged": "タグ「{tag}」の記事",
+      "count": "{count, plural, other {#件の記事}}",
+      "clear": "リセット"
+    },
+    "rss": "RSSフィードを購読",
+    "prevNext": {
+      "label": "その他の記事",
+      "newer": "新しい記事",
+      "older": "古い記事"
     }
   },
   "contact": {
@@ -9259,7 +9274,10 @@
       "shareX": "Xでシェア",
       "shareLinkedin": "LinkedInでシェア",
       "shareFacebook": "Facebookでシェア",
-      "mastodonHint": "Mastodonの場合：クリック後にインスタンスを選択してください"
+      "mastodonHint": "Mastodonの場合：クリック後にインスタンスを選択してください",
+      "copyLink": "リンクをコピー",
+      "copied": "コピーしました",
+      "nativeShare": "共有"
     },
     "serviceCta": {
       "heading": "始める準備はできましたか？",

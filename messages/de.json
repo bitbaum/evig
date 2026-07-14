@@ -3567,6 +3567,21 @@
       "selectPrompt": "Wähle eine Einreichung aus, um Details anzuzeigen",
       "tipText": "💡 {strong}Tipp:{/strong} Lade die Markdown-Datei herunter und kopiere sie in den {code}content/posts/{/code} Ordner. Dann kannst du sie in TinaCMS bearbeiten und veröffentlichen!",
       "submittedBy": "Eingereicht von: {name} ({email})"
+    },
+    "search": {
+      "placeholder": "Beiträge durchsuchen…"
+    },
+    "filter": {
+      "resultsFor": "Suchergebnisse für „{query}“",
+      "tagged": "Beiträge mit Tag „{tag}“",
+      "count": "{count, plural, one {# Beitrag} other {# Beiträge}}",
+      "clear": "Zurücksetzen"
+    },
+    "rss": "RSS-Feed abonnieren",
+    "prevNext": {
+      "label": "Weitere Beiträge",
+      "newer": "Neuerer Beitrag",
+      "older": "Älterer Beitrag"
     }
   },
   "auth": {
@@ -9306,7 +9321,10 @@
       "shareX": "Auf X teilen",
       "shareLinkedin": "Auf LinkedIn teilen",
       "shareFacebook": "Auf Facebook teilen",
-      "mastodonHint": "Für Mastodon: Wähle nach dem Klick deine Instanz aus"
+      "mastodonHint": "Für Mastodon: Wähle nach dem Klick deine Instanz aus",
+      "copyLink": "Link kopieren",
+      "copied": "Kopiert!",
+      "nativeShare": "Teilen"
     },
     "serviceCta": {
       "heading": "Bereit loszulegen?",

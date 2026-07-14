@@ -4,16 +4,20 @@ export const dynamic = 'force-dynamic'
 import type { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
 import { Suspense } from 'react'
-import { BookOpen } from 'lucide-react'
+import { BookOpen, X } from 'lucide-react'
 import { getAllCategories, type BlogCategory } from '@/lib/blog-db'
 import { isListedPost } from '@/lib/blog'
 import { getMergedPosts } from '@/lib/blog-merge'
+import { paginateBlogIndex, slugifyCategory } from '@/lib/blog-utils'
+import { BLOG_PAGE_SIZE } from '@/config/blog'
 import { auth } from '@/auth'
 import BlogHero from '@/components/blog/BlogHero'
 import BlogFeaturedGrid from '@/components/blog/BlogFeaturedGrid'
 import BlogLatestList from '@/components/blog/BlogLatestList'
 import BlogNavigationClient from '@/components/blog/BlogNavigationClient'
+import NewsletterSignup from '@/components/blog/NewsletterSignup'
 import Heading from '@/components/ui/Heading'
+import { Pagination } from '@/components/ui/Pagination'
 import { buttonClass } from '@/components/ui/button-class'
 import { PageHero } from '@/components/layout/PageHero'
 import { getTranslations, getLocale } from 'next-intl/server'
@@ -27,6 +31,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     title,
     description,
     openGraph: { title, description, type: 'website' },
+    // Make the (already-working) RSS feed discoverable to feed readers.
+    alternates: {
+      types: { 'application/rss+xml': '/feed.xml' },
+    },
   }
 }
 
@@ -34,12 +42,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export const revalidate = 60
 
 interface BlogPageProps {
-  searchParams: Promise<{ categories?: string }>
+  searchParams: Promise<{ categories?: string; q?: string; tag?: string; page?: string }>
 }
 
 export default async function BlogPage({ searchParams }: BlogPageProps) {
   const t = await getTranslations('blog')
-  const { categories } = await searchParams
+  const { categories, q, tag, page } = await searchParams
 
   // Unified read layer: DB posts (admin UI) + git file posts (locale-aware),
   // deduped by slug. Everything shows regardless of where it was authored.
@@ -80,7 +88,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     if (!dbCategoryMap.has(catName)) {
       allCategories.push({
         id: catName,
-        slug: catName.toLowerCase().replace(/\s+/g, '-'),
+        slug: slugifyCategory(catName),
         name: catName,
         description: null,
         color: null,
@@ -101,13 +109,72 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     .map(slug => allCategories.find(c => c.slug === slug)?.name)
     .filter(Boolean) as string[]
 
-  const filteredPosts = selectedCategoryNames.length > 0
+  let filteredPosts = selectedCategoryNames.length > 0
     ? allPosts.filter((post) => post.category && selectedCategoryNames.includes(post.category))
     : allPosts
 
-  const [heroPost, ...restPosts] = filteredPosts
-  const featuredPosts = restPosts.slice(0, 3)
-  const latestPosts = restPosts.slice(3)
+  // Tag filter (post tag pills link here) — exact, case-insensitive match.
+  const activeTag = (tag || '').trim()
+  if (activeTag) {
+    const needle = activeTag.toLowerCase()
+    filteredPosts = filteredPosts.filter((post) =>
+      post.tags?.some((tg) => tg.toLowerCase() === needle)
+    )
+  }
+
+  // Search — simple server-side match over title/excerpt/tags. With the current
+  // post volume this beats wiring a search engine (YAGNI); revisit at ~100+ posts.
+  const query = (q || '').trim()
+  if (query) {
+    const needle = query.toLowerCase()
+    filteredPosts = filteredPosts.filter((post) =>
+      post.title.toLowerCase().includes(needle) ||
+      (post.excerpt || '').toLowerCase().includes(needle) ||
+      post.tags?.some((tg) => tg.toLowerCase().includes(needle))
+    )
+  }
+
+  // Search/tag results read as a flat list; the magazine layout (hero +
+  // featured) only makes sense for browsing, not for "show me what matched".
+  const flatMode = Boolean(query || activeTag)
+  const requestedPage = Number.parseInt(page || '1', 10) || 1
+
+  let heroPost = null
+  let featuredPosts: typeof filteredPosts = []
+  let latestPosts: typeof filteredPosts = []
+  let currentPage = 1
+  let totalPages = 1
+  let totalItems = 0
+
+  if (flatMode) {
+    totalItems = filteredPosts.length
+    totalPages = Math.max(1, Math.ceil(totalItems / BLOG_PAGE_SIZE))
+    currentPage = Math.min(Math.max(1, requestedPage), totalPages)
+    latestPosts = filteredPosts.slice((currentPage - 1) * BLOG_PAGE_SIZE, currentPage * BLOG_PAGE_SIZE)
+  } else {
+    const paged = paginateBlogIndex(filteredPosts, requestedPage, BLOG_PAGE_SIZE)
+    heroPost = paged.heroPost
+    featuredPosts = paged.featuredPosts
+    latestPosts = paged.latestPosts
+    currentPage = paged.currentPage
+    totalPages = paged.totalPages
+    totalItems = paged.latestTotal
+  }
+
+  // Pagination links must preserve the active filters.
+  const hrefParams = new URLSearchParams()
+  if (categories) hrefParams.set('categories', categories)
+  if (query) hrefParams.set('q', query)
+  if (activeTag) hrefParams.set('tag', activeTag)
+  const hrefQs = hrefParams.toString()
+  const hrefBase = hrefQs ? `/blog?${hrefQs}` : '/blog'
+
+  // "Clear this filter" target keeps the other filters intact.
+  const clearParams = new URLSearchParams(hrefParams)
+  clearParams.delete('q')
+  clearParams.delete('tag')
+  const clearQs = clearParams.toString()
+  const clearHref = clearQs ? `/blog?${clearQs}` : '/blog'
 
   return (
     <main>
@@ -131,11 +198,33 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         <BlogNavigationClient
           categories={allCategories}
           selectedCategorySlugs={selectedCategorySlugs}
+          searchQuery={query}
         />
       </Suspense>
 
       {/* Content */}
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Active search / tag filter feedback */}
+        {flatMode && (
+          <div className="flex flex-wrap items-center gap-3 pt-6 sm:pt-8">
+            <Heading level={2} className="text-text-primary">
+              {query
+                ? t('filter.resultsFor', { query })
+                : t('filter.tagged', { tag: activeTag })}
+            </Heading>
+            <span className="font-mono text-sm text-text-tertiary">
+              {t('filter.count', { count: totalItems })}
+            </span>
+            <Link
+              href={clearHref}
+              className="inline-flex min-h-11 items-center gap-1 rounded-full border border-subtle px-3 text-sm text-text-secondary transition-colors hover:border-strong hover:text-text-primary"
+            >
+              <X className="h-3.5 w-3.5" aria-hidden="true" />
+              {t('filter.clear')}
+            </Link>
+          </div>
+        )}
+
         {filteredPosts.length === 0 ? (
           <div className="text-center py-12 sm:py-16 md:py-20">
             <Heading level={2} className="text-text-primary mb-4">
@@ -167,16 +256,34 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
 
             {/* Latest Posts */}
             {latestPosts.length > 0 && (
-              <div className="py-6 sm:py-8 border-t border">
-                <div className="flex items-center justify-between mb-4 sm:mb-6">
-                  <Heading level={2} className="text-text-primary">{t('sections.latest')}</Heading>
-                </div>
+              <div className={flatMode ? 'py-6 sm:py-8' : 'py-6 sm:py-8 border-t border'}>
+                {!flatMode && (
+                  <div className="flex items-center justify-between mb-4 sm:mb-6">
+                    <Heading level={2} className="text-text-primary">{t('sections.latest')}</Heading>
+                  </div>
+                )}
                 <BlogLatestList posts={latestPosts} />
+              </div>
+            )}
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="pb-8 pt-2">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  totalItems={totalItems}
+                  pageSize={BLOG_PAGE_SIZE}
+                  hrefBase={hrefBase}
+                />
               </div>
             )}
           </>
         )}
       </div>
+
+      {/* Newsletter */}
+      <NewsletterSignup />
 
       {/* Footer CTA */}
       <div className="ui-public-band mt-12 sm:mt-16">

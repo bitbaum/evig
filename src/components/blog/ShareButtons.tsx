@@ -1,16 +1,52 @@
 'use client'
 
+import { useState, useSyncExternalStore } from 'react'
 import { useTranslations } from 'next-intl'
+import { Link2, Check, Share2 } from 'lucide-react'
+import { logger } from '@/lib/logger'
 import Heading from '@/components/ui/Heading'
+import { Button } from '@/components/ui/button'
 
 interface ShareButtonsProps {
   url: string
   title: string
 }
 
+// navigator.share only exists on (mostly mobile) browsers. useSyncExternalStore
+// gives an SSR-safe read: server snapshot is false, the client snapshot flips it
+// after hydration without a setState-in-effect.
+const noopSubscribe = () => () => {}
+function useCanNativeShare(): boolean {
+  return useSyncExternalStore(
+    noopSubscribe,
+    () => typeof navigator.share === 'function',
+    () => false,
+  )
+}
+
 export default function ShareButtons({ url, title }: ShareButtonsProps) {
   const t = useTranslations('components.shareButtons')
   const shareText = encodeURIComponent(`${title} - ${url}`)
+  const [copied, setCopied] = useState(false)
+  const canNativeShare = useCanNativeShare()
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(url)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch (error) {
+      logger.warn('Clipboard write failed', { error })
+    }
+  }
+
+  const handleNativeShare = async () => {
+    try {
+      await navigator.share({ title, url })
+    } catch {
+      // User dismissed the share sheet — not an error.
+    }
+  }
 
   const shareLinks = {
     mastodon: `https://mastodon.social/share?text=${shareText}`,
@@ -23,6 +59,32 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
     <div>
       <Heading level={3} className="text-lg font-semibold text-text-primary mb-4">{t('title')}</Heading>
       <div className="flex flex-wrap gap-3">
+        {/* Copy link — the most-used share action */}
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={handleCopy}
+          className="min-h-11 gap-2"
+          title={t('copyLink')}
+        >
+          {copied ? <Check className="w-4 h-4 text-action" aria-hidden="true" /> : <Link2 className="w-4 h-4" aria-hidden="true" />}
+          {copied ? t('copied') : t('copyLink')}
+        </Button>
+
+        {/* Native share sheet (mobile) */}
+        {canNativeShare && (
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={handleNativeShare}
+            className="min-h-11 gap-2"
+            title={t('nativeShare')}
+          >
+            <Share2 className="w-4 h-4" aria-hidden="true" />
+            {t('nativeShare')}
+          </Button>
+        )}
+
         {/* Mastodon */}
         <a
           href={shareLinks.mastodon}

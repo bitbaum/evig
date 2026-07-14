@@ -2,10 +2,11 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { getLocale } from 'next-intl/server'
-import { getPostBySlug, getHiddenSlugs, getDbPostLocales, getDbPostForPreview } from '@/lib/blog-db'
+import { getPostBySlug, getHiddenSlugs, getDbPostLocales, getDbPostForPreview, getAllCategories } from '@/lib/blog-db'
 import { auth } from '@/auth'
 import { getPostBySlug as getFilePost, isListedPost, getPostLocales } from '@/lib/blog'
 import { getMergedPosts } from '@/lib/blog-merge'
+import { slugifyCategory } from '@/lib/blog-utils'
 import { APP_URL } from '@/config/urls'
 import { ORG } from '@/config/org'
 import { defaultLocale } from '@/i18n/routing'
@@ -14,6 +15,7 @@ import BlogPasswordGate from './BlogPasswordGate'
 import BlogUnavailable from './BlogUnavailable'
 import BlogPostHeader from '@/components/blog/BlogPostHeader'
 import BlogPostContent from '@/components/blog/BlogPostContent'
+import BlogPrevNext from '@/components/blog/BlogPrevNext'
 import BlogComments from '@/components/blog/BlogComments'
 import RelatedPosts from '@/components/blog/RelatedPosts'
 
@@ -135,6 +137,21 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     .filter((p) => p.slug !== post.slug && p.category === post.category && isListedPost(p))
     .slice(0, 3);
 
+  // Sequential prev/next over the public listing (date-desc, same order as the
+  // index). Unlisted/draft posts have no position in that sequence.
+  const listedPosts = allPosts.filter(isListedPost);
+  const postIndex = listedPosts.findIndex((p) => p.slug === post.slug);
+  const newerPost = postIndex > 0 ? listedPosts[postIndex - 1] : null;
+  const olderPost = postIndex >= 0 && postIndex < listedPosts.length - 1 ? listedPosts[postIndex + 1] : null;
+
+  // Category link target: the DB category slug when one exists, otherwise the
+  // same fallback slug the index generates (SSOT via slugifyCategory).
+  let categorySlug: string | undefined;
+  if (post.category) {
+    const dbCategories = await getAllCategories();
+    categorySlug = dbCategories.find((c) => c.name === post.category)?.slug || slugifyCategory(post.category);
+  }
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -170,7 +187,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </div>
         </div>
       )}
-      <BlogPostHeader post={post} />
+      <BlogPostHeader post={post} categorySlug={categorySlug} />
       {post.featuredImage && (
         <figure className="mx-auto max-w-[960px] px-4 sm:px-6">
           <div className="relative aspect-[1200/630] overflow-hidden rounded-xl border border-subtle bg-surface-raised">
@@ -186,6 +203,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </figure>
       )}
       <BlogPostContent post={post} />
+      <BlogPrevNext newer={newerPost} older={olderPost} />
       <BlogComments slug={post.slug} />
       {relatedPosts.length > 0 && <RelatedPosts posts={relatedPosts} />}
     </main>
