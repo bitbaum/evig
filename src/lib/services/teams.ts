@@ -28,10 +28,16 @@ import type {
 // Person display name: prefer the profile display_name, fall back to the account name.
 const memberName = sql<string | null>`COALESCE(${userProfiles.displayName}, ${users.name})`
 
+// Correlated-subquery reference to the OUTER teams row. Must be written as the
+// qualified `teams.id` (via sql.raw) — Drizzle renders ${teams.id} unqualified
+// here, and since team_memberships (m) also has an `id`, a bare "id" is
+// "column reference ambiguous". Qualifying to teams.id resolves to the outer row.
+const outerTeamId = sql.raw(`${TABLE_NAMES.TEAMS}.id`)
+
 /** Live-membership count for a team (the "Aktive Mitglieder" badge). */
 const liveMemberCount = sql<number>`(
   SELECT COUNT(*)::int FROM ${sql.raw(TABLE_NAMES.TEAM_MEMBERSHIPS)} m
-  WHERE m.team_id = ${teams.id} AND m.left_at IS NULL
+  WHERE m.team_id = ${outerTeamId} AND m.left_at IS NULL
 )`
 
 /** Names of the current lead + deputy, if assigned (for the directory card). */
@@ -40,7 +46,7 @@ const leadNames = sql<string[]>`(
   FROM ${sql.raw(TABLE_NAMES.TEAM_MEMBERSHIPS)} m
   JOIN ${sql.raw(TABLE_NAMES.USERS)} u ON u.id = m.user_id
   LEFT JOIN ${sql.raw(TABLE_NAMES.USER_PROFILES)} up ON up.user_id = u.id
-  WHERE m.team_id = ${teams.id} AND m.left_at IS NULL AND m.role IN ('lead','deputy')
+  WHERE m.team_id = ${outerTeamId} AND m.left_at IS NULL AND m.role IN ('lead','deputy')
 )`
 
 // ---- Teams ------------------------------------------------------------------
