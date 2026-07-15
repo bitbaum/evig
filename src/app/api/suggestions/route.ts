@@ -8,6 +8,9 @@
  * notification, and finally the team email is sent AND its result is checked
  * (sendCustomEmail resolves { success:false } instead of throwing, so the old
  * fire-and-forget `.catch` never noticed failed delivery).
+ *
+ * After a successful persist the suggestion is also forwarded (fire-and-forget)
+ * to the FleetCrown per-project feedback inbox — see lib/fleetcrown/forward.ts.
  */
 
 import { NextRequest } from 'next/server'
@@ -26,6 +29,7 @@ import { db } from '@/db'
 import { siteSuggestions, users } from '@/db/schema'
 import { createNotification } from '@/lib/services/notifications'
 import { SUPER_ADMIN_EMAILS } from '@/lib/permissions'
+import { forwardSuggestionInBackground } from '@/lib/fleetcrown/forward'
 
 const SuggestionSchema = z.object({
   suggestion: z.string().min(1).max(5000),
@@ -64,7 +68,7 @@ export async function POST(request: NextRequest) {
     // 1) PERSIST — the reliable channel. Never silently lost.
     let stored = false
     try {
-      await db.insert(siteSuggestions).values({
+      const [inserted] = await db.insert(siteSuggestions).values({
         suggestion: data.suggestion,
         contact: data.contact ?? null,
         page: data.page ?? null,
@@ -74,8 +78,24 @@ export async function POST(request: NextRequest) {
         scope,
         selectedElements: data.selectedElements ?? null,
         authorUserId,
-      })
+      }).returning({ id: siteSuggestions.id })
       stored = true
+
+      // 1b) FORWARD to the FleetCrown per-project feedback inbox — fire-and-forget,
+      // silently skipped when not configured; the row id de-duplicates retries.
+      if (inserted) {
+        forwardSuggestionInBackground({
+          id: inserted.id,
+          suggestion: data.suggestion,
+          contact: data.contact,
+          scope,
+          url: data.url,
+          page: data.page,
+          pageTitle: data.pageTitle,
+          pageSection: data.pageSection,
+          selectedElements: data.selectedElements,
+        })
+      }
     } catch (e) {
       logger.error('Failed to persist site suggestion', { error: e })
     }
