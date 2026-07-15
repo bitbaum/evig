@@ -27,7 +27,7 @@ export function MobileBottomNav({ accessibleSections, onMenuClick }: MobileBotto
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-50 flex border-t border bg-surface-base lg:hidden"
+      className="fixed bottom-0 left-0 right-0 z-50 flex border-t border bg-surface-base safe-area-inset-bottom lg:hidden"
       aria-label={t('navAria')}
     >
       {items.map(section => {

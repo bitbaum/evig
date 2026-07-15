@@ -1006,7 +1006,9 @@
         "city": "Город",
         "namePlaceholder": "Иван Иванов",
         "streetPlaceholder": "Musterstrasse 1",
-        "cityPlaceholder": "Цюрих"
+        "cityPlaceholder": "Цюрих",
+        "prefilledFromProfile": "Адрес взят из вашего профиля",
+        "saveToProfile": "Сохранить адрес в профиле – будет заполнен при следующей покупке"
       },
       "payment": {
         "redirect": "Переход к оплате...",

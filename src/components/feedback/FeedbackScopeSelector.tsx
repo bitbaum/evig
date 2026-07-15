@@ -47,7 +47,7 @@ export function FeedbackScopeSelector({
                 }
               }}
               className={cn(
-                "w-full px-3 py-2.5 text-xs rounded-lg border-2 transition-all duration-200",
+                "w-full h-auto whitespace-normal px-3 py-2.5 text-xs rounded-lg border-2 transition-all duration-200",
                 isActive
                   ? `${config.bgColor} ${config.borderColor} ${config.textColor} transform scale-[1.02]`
                   : "bg-surface-base border text-text-secondary hover:bg-surface-raised hover:border-strong"

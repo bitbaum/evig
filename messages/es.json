@@ -3293,7 +3293,9 @@
         "city": "Ciudad",
         "namePlaceholder": "Juan García",
         "streetPlaceholder": "Calle Ejemplo 1",
-        "cityPlaceholder": "Zúrich"
+        "cityPlaceholder": "Zúrich",
+        "prefilledFromProfile": "Dirección tomada de tu perfil",
+        "saveToProfile": "Guardar la dirección en tu perfil – se rellenará en tu próxima compra"
       },
       "payment": {
         "redirect": "Redirigiendo al pago...",

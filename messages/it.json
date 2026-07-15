@@ -3293,7 +3293,9 @@
         "city": "Città",
         "namePlaceholder": "Mario Rossi",
         "streetPlaceholder": "Via Esempio 1",
-        "cityPlaceholder": "Zurigo"
+        "cityPlaceholder": "Zurigo",
+        "prefilledFromProfile": "Indirizzo ripreso dal tuo profilo",
+        "saveToProfile": "Salva l'indirizzo nel profilo – precompilato al prossimo acquisto"
       },
       "payment": {
         "redirect": "Reindirizzamento al pagamento...",

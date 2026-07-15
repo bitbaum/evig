@@ -35,6 +35,8 @@ export const ORG = {
   description: 'Wir machen Technologie nachhaltig und für alle zugänglich.',
   /** Current production app URL. revamp-it.ch still serves the legacy Joomla site. */
   website: 'https://revampit.orangecat.ch',
+  /** Legacy public site (Joomla) — target of the "zur aktuellen Site" banner link. */
+  websiteLegacy: 'https://revamp-it.ch',
   /** Email domain */
   emailDomain: 'revamp-it.ch',
   /**

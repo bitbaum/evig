@@ -4,6 +4,9 @@ import { useState } from 'react'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
 import { COMMISSION_RATE } from '@/config/marketplace'
+import { useShippingAddress, type ShippingAddress } from '@/hooks/useShippingAddress'
+
+export type { ShippingAddress }
 
 export interface ListingForCheckout {
   id: string
@@ -17,14 +20,6 @@ export interface ListingForCheckout {
   seller_name: string
   seller_id: string
   is_revampit: boolean
-}
-
-export interface ShippingAddress {
-  name: string
-  street: string
-  city: string
-  postal_code: string
-  country: string
 }
 
 interface CheckoutErrors {
@@ -41,13 +36,19 @@ export function useCheckout(
   const [deliveryMethod, setDeliveryMethod] = useState<'pickup' | 'shipping'>(() =>
     initialListing.delivery_options === 'shipping' ? 'shipping' : 'pickup',
   )
-  const [shippingAddress, setShippingAddress] = useState<ShippingAddress>({
-    name: '',
-    street: '',
-    city: '',
-    postal_code: '',
-    country: 'CH',
-  })
+  // Shared address state — prefilled from the buyer's saved profile address
+  // and optionally written back on order creation (see useShippingAddress).
+  const {
+    shippingAddress,
+    setShippingAddress,
+    prefilled: addressPrefilled,
+    postalCodeValid,
+    addressComplete,
+    canOfferSave,
+    saveToProfile,
+    setSaveToProfile,
+    persistAddressIfRequested,
+  } = useShippingAddress()
   const [creatingOrder, setCreatingOrder] = useState(false)
 
   const handleCreateOrder = async () => {
@@ -56,6 +57,9 @@ export function useCheckout(
     setError(null)
 
     try {
+      if (deliveryMethod === 'shipping') {
+        await persistAddressIfRequested()
+      }
       const result = await apiFetch<{ paymentUrl?: string }>('/api/marketplace/orders', {
         method: 'POST',
         body: {
@@ -83,13 +87,7 @@ export function useCheckout(
   const totalAmount = listing.price_chf + shippingCost
   const commission = Math.round(totalAmount * COMMISSION_RATE * 100) / 100
   const canSelectDelivery = listing.delivery_options === 'both'
-  const postalCodeValid = /^\d{4}$/.test(shippingAddress.postal_code)
-  const shippingFormValid = deliveryMethod !== 'shipping' || (
-    shippingAddress.name.trim() !== '' &&
-    shippingAddress.street.trim() !== '' &&
-    shippingAddress.city.trim() !== '' &&
-    postalCodeValid
-  )
+  const shippingFormValid = deliveryMethod !== 'shipping' || addressComplete
 
   return {
     listing,
@@ -103,6 +101,10 @@ export function useCheckout(
     canSelectDelivery,
     postalCodeValid,
     shippingFormValid,
+    addressPrefilled,
+    canOfferSave,
+    saveToProfile,
+    setSaveToProfile,
     setDeliveryMethod,
     setShippingAddress,
     handleCreateOrder,

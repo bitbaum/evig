@@ -88,6 +88,9 @@ export const POST = withAdmin('products', async (request, session) => {
 
   } catch (error) {
     logger.error('Erfassung failed', { error })
-    return apiError(error, 'Fehler beim Erfassen des Produkts')
+    // Staff-only endpoint: include the underlying cause so the team can act
+    // on failures directly instead of guessing from a blanket message.
+    const detail = error instanceof Error && error.message ? ` – ${error.message}` : ''
+    return apiError(error, `Fehler beim Erfassen des Produkts${detail}`)
   }
 })

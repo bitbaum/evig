@@ -35,7 +35,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
       onClick={() => setTheme(next)}
       suppressHydrationWarning
       className={cn(
-        'inline-flex h-9 w-9 items-center justify-center rounded-md border border-subtle bg-surface-raised text-text-tertiary transition-colors hover:border-strong hover:text-text-primary',
+        'inline-flex h-9 w-9 items-center justify-center rounded-lg border border-subtle bg-surface-raised text-text-tertiary transition-colors hover:border-strong hover:text-text-primary',
         className,
       )}
     >

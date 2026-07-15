@@ -47,8 +47,9 @@ export default function ITHilfeAdminClient() {
       {/* Hero status — single clear next action per state */}
       {stats && <HeroStatus stats={stats} onJumpToRequests={() => switchTab('requests')} t={t} />}
 
-      {/* Tab Navigation + per-tab primary CTA */}
-      <div className="flex items-center justify-between gap-4 border-b border">
+      {/* Tab Navigation + per-tab primary CTA. flex-wrap: on phones the CTA
+          drops onto its own line instead of overlapping the tabs. */}
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border">
         <div className="flex gap-1">
           {TABS.map(tabDef => (
             <Button

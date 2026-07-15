@@ -162,11 +162,10 @@ export default function SuggestionButton() {
           </div>
         )}
 
-        {/* Side Panel */}
-        <div
-          className="fixed z-[70] sm:right-4 sm:top-20 bottom-4 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:bottom-auto"
-          style={{ maxHeight: 'calc(100vh - 5rem)' }}
-        >
+        {/* Panel — bottom sheet on phones, side panel from sm up. The former
+            centered-translate wrapper had no width of its own, so the panel's
+            percentage width collapsed into a broken narrow column on mobile. */}
+        <div className="fixed z-[70] inset-x-0 bottom-0 sm:inset-x-auto sm:bottom-auto sm:right-4 sm:top-20">
           <div
             ref={panelRef}
             role="dialog"
@@ -174,8 +173,10 @@ export default function SuggestionButton() {
             aria-labelledby="suggestion-panel-title"
             data-suggestion-panel
             className={cn(
-              "card-shell rounded-2xl sm:rounded-l-2xl overflow-hidden flex flex-col max-h-[calc(100vh-8rem)] sm:max-h-[70vh] h-auto",
-              "w-[calc(100%-2rem)] max-w-sm sm:w-80 md:w-96",
+              "card-shell overflow-hidden flex flex-col h-auto",
+              "w-full max-h-[85dvh] rounded-t-2xl rounded-b-none",
+              "sm:w-96 sm:max-h-[70vh] sm:rounded-2xl",
+              "pb-[env(safe-area-inset-bottom)] sm:pb-0",
               isElementSelectionMode && "ring-2 ring-action ring-opacity-50 pointer-events-auto"
             )}
             style={{ pointerEvents: 'auto' }}
@@ -315,18 +316,18 @@ export default function SuggestionButton() {
               </div>
             </div>
 
-            {/* Footer */}
-            <div className="border-t border-subtle px-4 py-3 bg-surface-raised flex-shrink-0">
-            </div>
           </div>
         </div>
       </>
     )
   }
 
-  // Floating Button (collapsed state)
+  // Floating Button (collapsed state) — on phones it stacks above the Hirn
+  // FAB in the bottom-right corner so the bottom-left of the screen (and any
+  // full-width primary CTA there) stays uncovered. From sm up it sits at the
+  // right edge, vertically centered.
   return (
-    <div className="fixed z-40 left-4 bottom-4 sm:left-auto sm:bottom-auto sm:right-4 sm:top-1/2 sm:-translate-y-1/2">
+    <div className="fixed z-40 right-4 bottom-[4.5rem] sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2">
       <Button
         variant="primary"
         size="icon"

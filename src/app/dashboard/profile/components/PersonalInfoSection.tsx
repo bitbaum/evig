@@ -1,6 +1,6 @@
 'use client'
 
-import { User, Building2 } from 'lucide-react'
+import { User, Building2, MapPin } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { Input } from '@/components/ui/input'
@@ -64,6 +64,62 @@ export function PersonalInfoSection({ profile, handleChange }: PersonalInfoSecti
               onChange={(e) => handleChange('company_name', e.target.value)}
               className="pl-11"
               placeholder="Firma AG"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Address — the saved address prefills the marketplace checkout, so
+          buyers only ever type it once. */}
+      <div className="mt-8 border-t border-subtle pt-6">
+        <div className="mb-4 flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-raised">
+            <MapPin className="h-5 w-5 text-text-secondary" />
+          </div>
+          <div>
+            <Heading level={3} className="text-base font-semibold text-text-primary">
+              {tAddr('heading')}
+            </Heading>
+            <p className="text-sm text-text-tertiary">{tAddr('subtitle')}</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="md:col-span-3">
+            <label className="block text-sm font-medium text-text-secondary mb-1">
+              {tAddr('streetLabel')}
+            </label>
+            <Input
+              type="text"
+              autoComplete="street-address"
+              value={profile.address_line1}
+              onChange={(e) => handleChange('address_line1', e.target.value)}
+              placeholder={tAddr('streetPlaceholder')}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-text-secondary mb-1">
+              {tAddr('plzLabel')}
+            </label>
+            <Input
+              type="text"
+              inputMode="numeric"
+              autoComplete="postal-code"
+              maxLength={4}
+              value={profile.postal_code}
+              onChange={(e) => handleChange('postal_code', e.target.value.replace(/\D/g, '').slice(0, 4))}
+              placeholder="8000"
+            />
+          </div>
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-text-secondary mb-1">
+              {tAddr('cityLabel')}
+            </label>
+            <Input
+              type="text"
+              autoComplete="address-level2"
+              value={profile.city}
+              onChange={(e) => handleChange('city', e.target.value)}
+              placeholder={tAddr('cityPlaceholder')}
             />
           </div>
         </div>

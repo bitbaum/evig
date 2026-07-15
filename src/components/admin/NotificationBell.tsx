@@ -52,6 +52,10 @@ export function NotificationBell() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [markingAll, setMarkingAll] = useState(false)
+  // How far (px) the panel must shift right of the bell so it stays inside
+  // the viewport. The bell sits mid-cluster in both headers, so a plain
+  // `right-0` panel runs off the left edge of narrow phone screens.
+  const [panelShift, setPanelShift] = useState(0)
   const panelRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
 
@@ -96,6 +100,15 @@ export function NotificationBell() {
   }, [open])
 
   const handleOpen = () => {
+    if (!open && panelRef.current) {
+      const rect = panelRef.current.getBoundingClientRect()
+      const margin = 8
+      const width = Math.min(320, window.innerWidth - 2 * margin)
+      const overhang = margin - (rect.right - width)
+      setPanelShift(overhang > 0
+        ? Math.min(overhang, window.innerWidth - margin - rect.right)
+        : 0)
+    }
     setOpen(o => !o)
     if (!open) void fetchNotifications()
   }
@@ -149,7 +162,10 @@ export function NotificationBell() {
       </Button>
 
       {open && (
-        <div className="absolute right-0 top-full z-50 mt-2 w-80 overflow-hidden rounded-xl border border bg-surface-base shadow-xs">
+        <div
+          className="absolute top-full z-50 mt-2 w-80 max-w-[calc(100vw-1rem)] overflow-hidden rounded-xl border border bg-surface-base shadow-xs"
+          style={{ right: -panelShift }}
+        >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-subtle px-4 py-3 dark:border-white/6">
             <span className="font-semibold text-sm text-text-primary">

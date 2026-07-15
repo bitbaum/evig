@@ -3293,7 +3293,9 @@
         "city": "市区町村",
         "namePlaceholder": "山田 太郎",
         "streetPlaceholder": "例通り1番地",
-        "cityPlaceholder": "チューリッヒ"
+        "cityPlaceholder": "チューリッヒ",
+        "prefilledFromProfile": "プロフィールの住所を自動入力しました",
+        "saveToProfile": "住所をプロフィールに保存する（次回の購入時に自動入力されます）"
       },
       "payment": {
         "redirect": "支払いページに移動中...",

@@ -12,6 +12,11 @@ import { adminTable, adminSurface, adminInteractive } from '@/lib/admin-ui'
  * structure once; callers supply columns (render-prop cells for full freedom:
  * links, badges, action selects) + a stable row key.
  *
+ * Below md each row renders as a stacked card instead of a table row — a
+ * seven-column table on a phone was a blind horizontal scroll. The first
+ * column is treated as the row's identity (card title); the rest render as
+ * label/value lines.
+ *
  * Pure render (no hooks) → usable from both Server and Client components.
  */
 export interface AdminTableColumn<T> {
@@ -39,9 +44,34 @@ const alignClass = (align?: 'left' | 'right' | 'center') =>
   align === 'right' ? 'text-right' : align === 'center' ? 'text-center' : ''
 
 export function AdminTable<T>({ columns, rows, rowKey, isSelected, className }: AdminTableProps<T>) {
+  const [identityColumn, ...detailColumns] = columns
+
   return (
     <div className={cn(adminSurface.table, className)}>
-      <div className="overflow-x-auto">
+      {/* Phones/small tablets: stacked cards, no horizontal scrolling. */}
+      <ul className="divide-y divide-subtle md:hidden">
+        {rows.map((row) => (
+          <li
+            key={rowKey(row)}
+            className={cn('space-y-2 p-4', isSelected?.(row) && adminInteractive.rowSelected)}
+          >
+            <div className="text-sm font-medium text-text-primary">
+              {identityColumn.cell(row)}
+            </div>
+            <dl className="space-y-1.5">
+              {detailColumns.map((col, i) => (
+                <div key={i} className="flex items-start justify-between gap-3 text-sm">
+                  <dt className="shrink-0 text-text-tertiary">{col.header}</dt>
+                  <dd className="min-w-0 text-right text-text-secondary">{col.cell(row)}</dd>
+                </div>
+              ))}
+            </dl>
+          </li>
+        ))}
+      </ul>
+
+      {/* md and up: the classic table. */}
+      <div className="hidden overflow-x-auto md:block">
         <table className="w-full text-sm">
           <thead className={adminTable.thead}>
             <tr>

@@ -211,6 +211,21 @@
   min-width: 44px;
 }
 
+@utility safe-area-inset-bottom {
+  /* iOS/Android gesture-bar clearance for fixed bottom bars. */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@utility scrollbar-hide {
+  /* Hide the scrollbar of horizontal chip/tab rows (content still scrolls).
+     Used by AboutSubNav and other edge-bleed scroll rows. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 @utility grid-cols-responsive {
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }

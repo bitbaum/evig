@@ -20,7 +20,9 @@ export function QuickSuggestions({ feedbackScope, selectedElements, onSuggestion
       <label className="block text-xs font-medium text-text-secondary">
         Schnellvorschläge
       </label>
-      <div className="grid grid-cols-2 gap-1">
+      {/* Wrapping pills — a fixed 2-column grid clipped/overlapped the long
+          German labels on narrow screens; pills size to their text instead. */}
+      <div className="flex flex-wrap gap-1.5">
         {suggestions.map((suggestion, index) => (
           <Button
             key={index}
@@ -29,7 +31,7 @@ export function QuickSuggestions({ feedbackScope, selectedElements, onSuggestion
             size="sm"
             onClick={() => onSuggestionClick(suggestion)}
             className={cn(
-              "px-2 py-1 text-xs rounded border transition-colors text-left",
+              "h-auto whitespace-normal px-2.5 py-1.5 text-xs rounded-full border transition-colors text-left",
               `${config.hoverBg} ${config.borderColor} hover:${config.textColor}`
             )}
             disabled={feedbackScope === 'element' && selectedElements.length === 0 && suggestion !== "Element auswählen"}

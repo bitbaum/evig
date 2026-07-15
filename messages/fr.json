@@ -990,7 +990,9 @@
         "city": "Ville",
         "namePlaceholder": "Jean Dupont",
         "streetPlaceholder": "Rue Exemple 1",
-        "cityPlaceholder": "Zurich"
+        "cityPlaceholder": "Zurich",
+        "prefilledFromProfile": "Adresse reprise de votre profil",
+        "saveToProfile": "Enregistrer l'adresse dans votre profil – préremplie lors du prochain achat"
       },
       "payment": {
         "redirect": "Redirection vers le paiement...",

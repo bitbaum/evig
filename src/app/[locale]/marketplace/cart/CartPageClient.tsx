@@ -6,12 +6,13 @@ import { useTranslations } from 'next-intl'
 import { Trash2, ShoppingCart, Loader2, MapPin, ArrowLeft, ShieldCheck, LockKeyhole, Store, Truck } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Link, useRouter } from '@/i18n/navigation'
 import Heading from '@/components/ui/Heading'
 import { ListingImage } from '@/components/marketplace/ListingImage'
 import { PaymentReturnBanner } from '@/components/payments/PaymentReturnBanner'
+import { ShippingAddressFields } from '@/components/marketplace/checkout/ShippingAddressFields'
 import { useCart } from '@/components/marketplace/cart/CartProvider'
+import { useShippingAddress } from '@/hooks/useShippingAddress'
 import { apiFetch } from '@/lib/api/client'
 import { formatCHF, REVAMPIT_LISTING_DELIVERY } from '@/config/marketplace'
 import { LOCATIONS, OPENING_HOURS } from '@/config/org'
@@ -25,25 +26,25 @@ export function CartPageClient() {
   const [checkingOut, setCheckingOut] = useState(false)
   const [reviewing, setReviewing] = useState(false)
   const [deliveryMethod, setDeliveryMethod] = useState<'pickup' | 'shipping'>('pickup')
-  const [shippingAddress, setShippingAddress] = useState({
-    name: '',
-    street: '',
-    postal_code: '',
-    city: '',
-    country: 'CH',
-  })
+  // Shared address state — prefilled from the buyer's saved profile address
+  // and optionally written back on order creation (see useShippingAddress).
+  const {
+    shippingAddress,
+    setShippingAddress,
+    prefilled: addressPrefilled,
+    postalCodeValid,
+    addressComplete,
+    canOfferSave,
+    saveToProfile,
+    setSaveToProfile,
+    persistAddressIfRequested,
+  } = useShippingAddress()
 
   const shippingCost = deliveryMethod === 'shipping' && REVAMPIT_LISTING_DELIVERY.shippingCostChf
     ? Number(REVAMPIT_LISTING_DELIVERY.shippingCostChf)
     : 0
   const orderTotal = total + shippingCost
-  const postalCodeValid = /^\d{4}$/.test(shippingAddress.postal_code)
-  const shippingFormValid = deliveryMethod !== 'shipping' || (
-    shippingAddress.name.trim() !== '' &&
-    shippingAddress.street.trim() !== '' &&
-    shippingAddress.city.trim() !== '' &&
-    postalCodeValid
-  )
+  const shippingFormValid = deliveryMethod !== 'shipping' || addressComplete
 
   if (!hydrated) {
     return (
@@ -64,6 +65,9 @@ export function CartPageClient() {
       return
     }
     setCheckingOut(true)
+    if (deliveryMethod === 'shipping') {
+      await persistAddressIfRequested()
+    }
     const res = await apiFetch<{ orderId: string; paymentUrl: string }>('/api/marketplace/cart/checkout', {
       method: 'POST',
       body: {
@@ -198,45 +202,16 @@ export function CartPageClient() {
                 </div>
 
                 {deliveryMethod === 'shipping' && (
-                  <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                    <div className="sm:col-span-2">
-                      <label className="mb-1 block text-sm font-medium text-text-secondary">{tCheckout('address.name')}</label>
-                      <Input
-                        value={shippingAddress.name}
-                        onChange={(e) => setShippingAddress(prev => ({ ...prev, name: e.target.value }))}
-                        autoComplete="name"
-                        placeholder={tCheckout('address.namePlaceholder')}
-                      />
-                    </div>
-                    <div className="sm:col-span-2">
-                      <label className="mb-1 block text-sm font-medium text-text-secondary">{tCheckout('address.street')}</label>
-                      <Input
-                        value={shippingAddress.street}
-                        onChange={(e) => setShippingAddress(prev => ({ ...prev, street: e.target.value }))}
-                        autoComplete="street-address"
-                        placeholder={tCheckout('address.streetPlaceholder')}
-                      />
-                    </div>
-                    <div>
-                      <label className="mb-1 block text-sm font-medium text-text-secondary">{tCheckout('address.postalCode')}</label>
-                      <Input
-                        value={shippingAddress.postal_code}
-                        onChange={(e) => setShippingAddress(prev => ({ ...prev, postal_code: e.target.value.replace(/\D/g, '').slice(0, 4) }))}
-                        inputMode="numeric"
-                        autoComplete="postal-code"
-                        placeholder="8000"
-                        className={shippingAddress.postal_code && !postalCodeValid ? 'border-error-500' : ''}
-                      />
-                    </div>
-                    <div>
-                      <label className="mb-1 block text-sm font-medium text-text-secondary">{tCheckout('address.city')}</label>
-                      <Input
-                        value={shippingAddress.city}
-                        onChange={(e) => setShippingAddress(prev => ({ ...prev, city: e.target.value }))}
-                        autoComplete="address-level2"
-                        placeholder={tCheckout('address.cityPlaceholder')}
-                      />
-                    </div>
+                  <div className="mt-5">
+                    <ShippingAddressFields
+                      address={shippingAddress}
+                      onChange={setShippingAddress}
+                      postalCodeValid={postalCodeValid}
+                      prefilled={addressPrefilled}
+                      canOfferSave={canOfferSave}
+                      saveToProfile={saveToProfile}
+                      onSaveToggle={setSaveToProfile}
+                    />
                   </div>
                 )}
               </section>

@@ -136,11 +136,12 @@ export function UserMenu() {
         variant="ghost"
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "flex items-center gap-2 p-1.5 rounded-full h-auto",
-          "ring-2 ring-primary-100 dark:ring-action/20",
+          // No always-on ring halo — on phones the pale ring read as a large
+          // green blob next to the compact icon buttons. Feedback on hover/open.
+          "flex items-center gap-2 p-1 rounded-full h-auto",
           isOpen
-            ? "bg-action-muted/10 ring-action/20 dark:ring-action/30"
-            : "hover:bg-action-muted/10 hover:ring-action/20 dark:hover:ring-action/30"
+            ? "bg-action-muted/10 ring-2 ring-action/20 dark:ring-action/30"
+            : "hover:bg-action-muted/10 hover:ring-2 hover:ring-action/20 dark:hover:ring-action/30"
         )}
         aria-expanded={isOpen}
         aria-haspopup="true"
@@ -172,7 +173,7 @@ export function UserMenu() {
       {/* Dropdown Menu */}
       <div
         className={cn(
-          "absolute right-0 mt-2 w-72",
+          "absolute right-0 mt-2 w-72 max-w-[calc(100vw-1rem)]",
           "transition-all duration-200 ease-out origin-top-right",
           isOpen 
             ? "opacity-100 scale-100 pointer-events-auto" 

@@ -12,6 +12,7 @@ import { ORG } from '@/config/org'
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/ui/Logo'
 import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher'
+import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { useSession } from 'next-auth/react'
 import { cn } from '@/lib/utils'
 import { ROUTES } from '@/config/routes'
@@ -38,6 +39,7 @@ export function MobileMenu({
   const t = useTranslations('nav')
   const tBadge = useTranslations('nav.badge')
   const tAccessibility = useTranslations('accessibility')
+  const tTheme = useTranslations('accessibility.theme')
 
   // navigation config uses `badge: 'new'` (i18n key, not literal). Map
   // here so consumers below stay simple.
@@ -146,7 +148,7 @@ export function MobileMenu({
             <span>
               {t('experimentalBanner')} –
               <a
-                href={ORG.website}
+                href={ORG.websiteLegacy}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-medium text-warning-800 dark:text-warning-300 hover:text-warning-900 dark:hover:text-warning-200 underline ml-1"
@@ -308,12 +310,19 @@ export function MobileMenu({
           )}
         </nav>
 
-        {/* Footer - Language pills (one-tap) + Auth Actions. The theme toggle
-            lives on the top bar itself (one-tap, always visible) — not here. */}
+        {/* Footer - Language pills (one-tap) + theme toggle + Auth Actions.
+            On phones the theme toggle lives here (the top bar hides it below
+            sm to keep the scarce header width for account actions). */}
         <div className="border-t border-subtle dark:border-white/6 px-6 pt-3 pb-1 space-y-3">
-          <div>
-            <p className="text-xs font-medium text-text-tertiary mb-2">{t('language')}</p>
-            <LocaleSwitcher inline />
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <p className="text-xs font-medium text-text-tertiary mb-2">{t('language')}</p>
+              <LocaleSwitcher inline />
+            </div>
+            <div className="sm:hidden">
+              <p className="text-xs font-medium text-text-tertiary mb-2">{tTheme('label')}</p>
+              <ThemeToggle />
+            </div>
           </div>
         </div>
         <div className="px-6 pb-4">

@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 import { ListingImage } from '@/components/marketplace/ListingImage'
 import Heading from '@/components/ui/Heading'
-import { Input } from '@/components/ui/input'
+import { ShippingAddressFields } from '@/components/marketplace/checkout/ShippingAddressFields'
 import { formatCHF, COMMISSION_RATE } from '@/config/marketplace'
 import { useTranslations } from 'next-intl'
 import { useCheckout, type ListingForCheckout } from '@/hooks/useCheckout'
@@ -42,6 +42,10 @@ export function CheckoutPageClient({
     canSelectDelivery,
     postalCodeValid,
     shippingFormValid,
+    addressPrefilled,
+    canOfferSave,
+    saveToProfile,
+    setSaveToProfile,
     setDeliveryMethod,
     setShippingAddress,
     handleCreateOrder,
@@ -148,57 +152,15 @@ export function CheckoutPageClient({
           {deliveryMethod === 'shipping' && (
             <div className="card-shell p-6">
               <Heading level={2} className="text-lg text-text-primary mb-4">{t('address.title')}</Heading>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-text-secondary mb-1">{t('address.name')}</label>
-                  <Input
-                    type="text"
-                    autoComplete="name"
-                    value={shippingAddress.name}
-                    onChange={(e) => setShippingAddress(prev => ({ ...prev, name: e.target.value }))}
-                    placeholder={t('address.namePlaceholder')}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-text-secondary mb-1">{t('address.street')}</label>
-                  <Input
-                    type="text"
-                    autoComplete="street-address"
-                    value={shippingAddress.street}
-                    onChange={(e) => setShippingAddress(prev => ({ ...prev, street: e.target.value }))}
-                    placeholder={t('address.streetPlaceholder')}
-                  />
-                </div>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                  <div>
-                    <label className="block text-sm font-medium text-text-secondary mb-1">{t('address.postalCode')}</label>
-                    <Input
-                      type="text"
-                      inputMode="numeric"
-                      autoComplete="postal-code"
-                      pattern="[0-9]{4}"
-                      value={shippingAddress.postal_code}
-                      onChange={(e) => setShippingAddress(prev => ({ ...prev, postal_code: e.target.value }))}
-                      maxLength={4}
-                      className={shippingAddress.postal_code && !postalCodeValid ? 'border-error-500' : ''}
-                      placeholder="8000"
-                    />
-                    {shippingAddress.postal_code && !postalCodeValid && (
-                      <p className="text-xs text-error-500 mt-1">{t('address.postalCodeError')}</p>
-                    )}
-                  </div>
-                  <div className="sm:col-span-2">
-                    <label className="block text-sm font-medium text-text-secondary mb-1">{t('address.city')}</label>
-                    <Input
-                      type="text"
-                      autoComplete="address-level2"
-                      value={shippingAddress.city}
-                      onChange={(e) => setShippingAddress(prev => ({ ...prev, city: e.target.value }))}
-                      placeholder={t('address.cityPlaceholder')}
-                    />
-                  </div>
-                </div>
-              </div>
+              <ShippingAddressFields
+                address={shippingAddress}
+                onChange={setShippingAddress}
+                postalCodeValid={postalCodeValid}
+                prefilled={addressPrefilled}
+                canOfferSave={canOfferSave}
+                saveToProfile={saveToProfile}
+                onSaveToggle={setSaveToProfile}
+              />
             </div>
           )}
 

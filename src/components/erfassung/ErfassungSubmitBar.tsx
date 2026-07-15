@@ -81,8 +81,11 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
         </div>
       </div>
 
-      {/* Mobile Sticky Bottom Bar */}
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 bg-surface-base border-t border p-4 z-50 safe-area-inset-bottom">
+      {/* Mobile Sticky Bottom Bar — sits ABOVE the admin bottom nav (h-14 +
+          safe area), which is also fixed at bottom-0 with the same z-index;
+          anchored at 0 the two bars stacked on top of each other and the
+          submit buttons were half-covered. */}
+      <div className="sm:hidden fixed bottom-[calc(3.5rem+env(safe-area-inset-bottom))] left-0 right-0 bg-surface-base border-t border p-4 z-40">
         {isEditMode ? (
           <Button
             type="button"

@@ -177,7 +177,9 @@ function ErfassungContent() {
   const isBulkSaving = bulkProducts.some(p => p._status === 'processing')
 
   return (
-    <div className="space-y-4 sm:space-y-6 max-w-5xl mx-auto pb-24 sm:pb-6">
+    // pb-44 clears the fixed mobile submit bar (~84px) stacked above the
+    // admin bottom nav (56px + safe area).
+    <div className="space-y-4 sm:space-y-6 max-w-5xl mx-auto pb-44 sm:pb-6">
       {/* Pipeline progress — shown when entering from Geräte-Eingang */}
       {isIntakePipeline && (
         <div className="bg-surface-base border border-default rounded-lg px-4 py-3">

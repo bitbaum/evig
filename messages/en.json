@@ -993,7 +993,9 @@
         "city": "City",
         "namePlaceholder": "John Smith",
         "streetPlaceholder": "Example Street 1",
-        "cityPlaceholder": "Zurich"
+        "cityPlaceholder": "Zurich",
+        "prefilledFromProfile": "Address filled in from your profile",
+        "saveToProfile": "Save address to your profile – prefilled on your next purchase"
       },
       "payment": {
         "redirect": "Redirecting to payment...",

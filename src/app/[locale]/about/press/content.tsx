@@ -137,25 +137,27 @@ export default function PressPageContent() {
       {/* Stats Bar */}
       <section className="py-12 bg-surface-raised">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          {/* Each stat deep-links to the section it counts — numbers are
+              computed from MEDIA_COVERAGE (getMediaStats), never hardcoded. */}
           <div className="flex flex-wrap justify-center gap-8 sm:gap-16">
-            <div className="text-center">
-              <p className="text-3xl sm:text-4xl font-bold text-action">{stats.totalMentions}</p>
-              <p className="text-sm text-text-tertiary mt-1">{t('stats.mediaMentions')}</p>
-            </div>
-            <div className="text-center">
-              <p className="text-3xl sm:text-4xl font-bold text-action">{stats.uniqueSources}</p>
-              <p className="text-sm text-text-tertiary mt-1">{t('stats.uniqueSources')}</p>
-            </div>
-            <div className="text-center">
-              <p className="text-3xl sm:text-4xl font-bold text-action">{stats.partnerships}</p>
-              <p className="text-sm text-text-tertiary mt-1">{t('stats.partnerships')}</p>
-            </div>
+            <a href="#medienbeitraege" className="group text-center">
+              <p className="text-3xl sm:text-4xl font-bold text-action group-hover:underline">{stats.totalMentions}</p>
+              <p className="text-sm text-text-tertiary group-hover:text-text-secondary mt-1">{t('stats.mediaMentions')}</p>
+            </a>
+            <a href="#quellen" className="group text-center">
+              <p className="text-3xl sm:text-4xl font-bold text-action group-hover:underline">{stats.uniqueSources}</p>
+              <p className="text-sm text-text-tertiary group-hover:text-text-secondary mt-1">{t('stats.uniqueSources')}</p>
+            </a>
+            <a href="#partnerschaften" className="group text-center">
+              <p className="text-3xl sm:text-4xl font-bold text-action group-hover:underline">{stats.partnerships}</p>
+              <p className="text-sm text-text-tertiary group-hover:text-text-secondary mt-1">{t('stats.partnerships')}</p>
+            </a>
           </div>
         </div>
       </section>
 
       {/* National Media Highlight */}
-      <section className="py-16 bg-surface-base">
+      <section id="quellen" className="scroll-mt-24 py-16 bg-surface-base">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-center gap-2 mb-8">
             <Star className="h-5 w-5 text-warning-500" />
@@ -163,7 +165,7 @@ export default function PressPageContent() {
             <Star className="h-5 w-5 text-warning-500" />
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto mb-12">
             {tier1Sources.map((mention) => (
               <FeaturedSourceBadge key={mention.id} mention={mention} />
             ))}
@@ -172,13 +174,13 @@ export default function PressPageContent() {
       </section>
 
       {/* Featured Articles */}
-      <section className="py-16 bg-surface-raised">
+      <section id="medienbeitraege" className="scroll-mt-24 py-16 bg-surface-raised">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <Heading level={2} className="text-text-primary mb-8 text-center">
             {t('featuredArticles')}
           </Heading>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredMedia.map((mention) => (
               <MediaCard key={mention.id} mention={mention} readArticleLabel={t('readArticle')} />
             ))}
@@ -187,14 +189,18 @@ export default function PressPageContent() {
       </section>
 
       {/* Other Mentions */}
-      <section className="py-16 bg-surface-base">
+      <section id="partnerschaften" className="scroll-mt-24 py-16 bg-surface-base">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <Heading level={2} className="text-text-primary mb-8 text-center">
             {t('otherMentions')}
           </Heading>
 
           <div className="bg-surface-raised rounded-2xl border p-8">
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {/* grid-cols-1 is load-bearing: without an explicit minmax(0,1fr)
+                base track, the nowrap `truncate` titles blow the implicit
+                auto column out past the viewport and the whole page scrolls
+                horizontally on phones. */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {otherMedia.map((mention) => (
                 <a
                   key={mention.id}

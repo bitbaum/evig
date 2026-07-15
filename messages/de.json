@@ -999,7 +999,9 @@
         "city": "Ort",
         "namePlaceholder": "Max Muster",
         "streetPlaceholder": "Musterstrasse 1",
-        "cityPlaceholder": "Zürich"
+        "cityPlaceholder": "Zürich",
+        "prefilledFromProfile": "Adresse aus deinem Profil übernommen",
+        "saveToProfile": "Adresse im Profil speichern – beim nächsten Einkauf vorausgefüllt"
       },
       "payment": {
         "redirect": "Weiterleitung zur Zahlung...",

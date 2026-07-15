@@ -47,9 +47,18 @@ export async function apiFetch<T = unknown>(
     const data = await response.json().catch(() => ({}))
 
     if (!response.ok || !data.success) {
+      // Validation failures (apiBadRequest) carry per-field messages in
+      // `errors` — surface them, otherwise users only see the generic
+      // "Ungültige Eingabedaten" with no clue which field is wrong.
+      const fieldMessages = data.errors && typeof data.errors === 'object'
+        ? Object.values(data.errors as Record<string, string[]>).flat().filter(Boolean)
+        : []
+      const baseError = data.error || `Anfrage fehlgeschlagen (${response.status})`
       return {
         success: false,
-        error: data.error || `Anfrage fehlgeschlagen (${response.status})`,
+        error: fieldMessages.length > 0
+          ? `${baseError}: ${fieldMessages.join(' · ')}`
+          : baseError,
       }
     }
 

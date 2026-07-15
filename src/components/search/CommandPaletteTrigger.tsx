@@ -22,7 +22,7 @@ export function CommandPaletteTrigger({ className }: { className?: string }) {
       onClick={openCommandPalette}
       aria-label="Suche öffnen (⌘K)"
       className={cn(
-        'flex h-9 w-9 items-center justify-center rounded-md p-0 text-text-tertiary hover:bg-surface-raised sm:w-auto sm:gap-2 sm:px-3',
+        'flex h-9 w-9 items-center justify-center rounded-lg p-0 text-text-tertiary hover:bg-surface-raised sm:w-auto sm:gap-2 sm:px-3',
         className,
       )}
     >

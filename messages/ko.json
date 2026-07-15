@@ -3293,7 +3293,9 @@
         "city": "도시",
         "namePlaceholder": "홍 길동",
         "streetPlaceholder": "예시길 1",
-        "cityPlaceholder": "취리히"
+        "cityPlaceholder": "취리히",
+        "prefilledFromProfile": "프로필의 주소를 자동으로 입력했습니다",
+        "saveToProfile": "주소를 프로필에 저장 – 다음 구매 시 자동 입력됩니다"
       },
       "payment": {
         "redirect": "결제 페이지로 이동 중...",

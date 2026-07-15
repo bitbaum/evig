@@ -16,6 +16,7 @@ import { ADMIN_CONTENT } from '@/config/admin-content'
 import {
   BOOKING_STATUS,
   BOOKING_STATUS_BADGES,
+  CANONICAL_BOOKING_STATUSES,
   getBookingStatusBadge,
   getUrgencyBadge,
 } from '@/config/booking-status'
@@ -32,7 +33,10 @@ export const metadata: Metadata = {
 
 const FILTER_OPTIONS: { value: string; label: string }[] = [
   { value: '', label: 'Alle' },
-  ...Object.entries(BOOKING_STATUS_BADGES).map(([value, { label }]) => ({ value, label })),
+  ...CANONICAL_BOOKING_STATUSES.map((value) => ({
+    value,
+    label: BOOKING_STATUS_BADGES[value].label,
+  })),
 ]
 
 interface PageProps {

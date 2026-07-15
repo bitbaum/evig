@@ -277,15 +277,34 @@ export default function AdminWorkshopsPage() {
             <div className="px-6 py-12 text-center">
               <GraduationCap className="w-12 h-12 text-text-muted mx-auto mb-4" />
               <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
-                Keine Workshop-Vorschläge gefunden
+                {filters.status === PROPOSAL_STATUS.PENDING && !searchTerm.trim()
+                  ? 'Alles erledigt'
+                  : 'Keine Workshop-Vorschläge gefunden'}
               </Heading>
-              <p className="text-text-secondary mb-4">
+              <p className="text-text-secondary mb-6">
                 {searchTerm.trim()
                   ? STRINGS.EMPTY_SEARCH(searchTerm)
                   : filters.status === PROPOSAL_STATUS.PENDING
                   ? STRINGS.EMPTY_PENDING
                   : STRINGS.EMPTY_STATUS(filters.status)}
               </p>
+              {/* Never a dead end: offer the two next actions that make
+                  sense from here instead of a blank wall. */}
+              <div className="flex flex-wrap justify-center gap-3">
+                {filters.status !== 'all' && !searchTerm.trim() && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setFilters(prev => ({ ...prev, status: 'all' }))}
+                  >
+                    Alle Vorschläge anzeigen
+                  </Button>
+                )}
+                <Button as={Link} href={ROUTES.admin.workshopsInstances} variant="primary" size="sm">
+                  <Calendar className="w-4 h-4 mr-2" />
+                  Termine verwalten
+                </Button>
+              </div>
             </div>
           )}
         </div>

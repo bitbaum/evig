@@ -82,14 +82,21 @@ export function Header() {
   // Publish the current header offset as a CSS custom property on the
   // document root so any sub-nav (sticky strip below the header) can
   // follow the smart-hide state. When the header is visible the offset
-  // is its own height (h-16 → 4rem). When hidden the offset is 0, which
-  // lets sticky sub-navs slide up into the freed space instead of leaving
-  // a 64-px gap above themselves. CSS transition on the consumer side
+  // is its measured height (h-14 on phones, h-16 from sm up — measured,
+  // not hardcoded, so the two stay in sync). When hidden the offset is 0,
+  // which lets sticky sub-navs slide up into the freed space instead of
+  // leaving a gap above themselves. CSS transition on the consumer side
   // animates the change smoothly.
   useEffect(() => {
     const root = document.documentElement
-    root.style.setProperty('--header-offset', effectivelyHidden ? '0px' : '4rem')
+    const publish = () => {
+      const height = headerRef.current?.offsetHeight ?? 64
+      root.style.setProperty('--header-offset', effectivelyHidden ? '0px' : `${height}px`)
+    }
+    publish()
+    window.addEventListener('resize', publish)
     return () => {
+      window.removeEventListener('resize', publish)
       // Reset on unmount so downstream consumers don't see a stale offset.
       root.style.removeProperty('--header-offset')
     }
@@ -128,12 +135,12 @@ export function Header() {
         )}
       >
         <div className="max-w-7xl mx-auto">
-          <nav className="flex items-center justify-between gap-3 sm:gap-6 h-16 px-3 sm:px-6 lg:px-8">
+          <nav className="flex items-center justify-between gap-3 sm:gap-6 h-14 sm:h-16 px-3 sm:px-6 lg:px-8">
             {/* Logo — the ONE flexible item in the row (min-w-0, no shrink-0).
                 On narrow phones it scales down so the action cluster — most
                 importantly the menu button — is never pushed off-screen. */}
             <div className="min-w-0">
-              <Logo className="h-10" />
+              <Logo className="h-9 sm:h-10" />
             </div>
 
             {/* Primary Navigation — inline only at xl+ (below xl the hamburger menu
@@ -182,9 +189,10 @@ export function Header() {
             {/* Compact Right Side — phones, tablets and laptops below xl. Account
                 actions (bell + avatar / login) stay visible; full nav is in the menu. */}
             <div className="xl:hidden flex shrink-0 items-center gap-1.5 ml-auto">
-              {/* One-tap theme toggle — visible for everyone (incl. logged-out)
-                  on every screen, not buried in the hamburger menu. */}
-              <ThemeToggle />
+              {/* One-tap theme toggle from sm up. On phones the top bar is the
+                  scarcest surface on the site — the toggle lives in the mobile
+                  menu footer instead (next to the language switcher). */}
+              <ThemeToggle className="hidden sm:inline-flex" />
               <CommandPaletteTrigger />
               <UserMenu />
               {/* Mobile Menu Button */}
@@ -196,7 +204,8 @@ export function Header() {
                 className={cn(
                   // Boxed like the theme toggle — the bare ghost icon was easy
                   // to miss on phones (thin faint lines at the screen edge).
-                  "relative rounded-lg border border-subtle bg-surface-raised",
+                  // h-9 w-9 matches every other icon control in the bar.
+                  "relative h-9 w-9 rounded-lg border border-subtle bg-surface-raised",
                   "text-text-primary hover:border-strong hover:bg-surface-raised"
                 )}
                 onClick={() => setMobileMenuOpen(true)}
@@ -215,8 +224,8 @@ export function Header() {
         </div>
       </header>
 
-      {/* Spacer for fixed header */}
-      <div className="h-16" />
+      {/* Spacer for fixed header — must mirror the nav's responsive height */}
+      <div className="h-14 sm:h-16" />
 
       <MobileMenu
         isOpen={mobileMenuOpen}

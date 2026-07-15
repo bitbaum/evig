@@ -34,6 +34,24 @@ export const BOOKING_STATUS = {
 
 export type BookingStatus = typeof BOOKING_STATUS[keyof typeof BOOKING_STATUS]
 
+/**
+ * Lifecycle statuses an appointment row can actually carry in the DB.
+ * Excludes the repairer-view aliases (pending/confirmed) — those are
+ * display-only synonyms; offering them as filters produced duplicate
+ * "Bestätigt"/"Ausstehend" chips that never matched any row.
+ */
+export const CANONICAL_BOOKING_STATUSES: readonly BookingStatus[] = [
+  BOOKING_STATUS.REQUESTED,
+  BOOKING_STATUS.ACCEPTED,
+  BOOKING_STATUS.QUOTED,
+  BOOKING_STATUS.QUOTE_APPROVED,
+  BOOKING_STATUS.QUOTE_REJECTED,
+  BOOKING_STATUS.IN_PROGRESS,
+  BOOKING_STATUS.COMPLETED,
+  BOOKING_STATUS.REJECTED,
+  BOOKING_STATUS.CANCELLED,
+]
+
 // ============================================================================
 // Appointment Transitions (SSOT) — who can do what, from which state
 // ============================================================================
