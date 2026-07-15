@@ -40,7 +40,7 @@ jobs:
 
       - name: Checkout code
         if: steps.secrets.outputs.configured == 'true'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup Node.js
         if: steps.secrets.outputs.configured == 'true'
@@ -109,7 +109,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       # Read-only: public pages render + DB-backed public APIs return success.
       # No login, no prod mutation. The heavier authenticated dual-persona
