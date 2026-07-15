@@ -10248,7 +10248,13 @@
           "applying": "Changing…",
           "apply": "Change tier"
         },
-        "timelineHeading": "History"
+        "timelineHeading": "History",
+        "device": {
+          "condition": "Condition",
+          "category": "Category",
+          "price": "Price",
+          "captured": "Captured"
+        }
       },
       "pipeline": {
         "newDevice": "New device",

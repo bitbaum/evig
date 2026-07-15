@@ -10296,7 +10296,13 @@
           "applying": "Modifica…",
           "apply": "Cambia livello"
         },
-        "timelineHeading": "Cronologia"
+        "timelineHeading": "Cronologia",
+        "device": {
+          "condition": "Condizione",
+          "category": "Categoria",
+          "price": "Prezzo",
+          "captured": "Registrato"
+        }
       },
       "pipeline": {
         "newDevice": "Nuovo dispositivo",

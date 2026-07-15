@@ -59,6 +59,7 @@ export interface DetailData {
   short_description: string | null
   condition: string
   category: string | null
+  image_url: string | null
   /** NULL for quick-captured devices (Schnellerfassung — no checklist). */
   intake_tier: IntakeTier | null
   marketplace_status: string

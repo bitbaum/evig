@@ -10296,7 +10296,13 @@
           "applying": "変更中…",
           "apply": "段階を変更"
         },
-        "timelineHeading": "履歴"
+        "timelineHeading": "履歴",
+        "device": {
+          "condition": "状態",
+          "category": "カテゴリ",
+          "price": "価格",
+          "captured": "登録日"
+        }
       },
       "pipeline": {
         "newDevice": "新しいデバイス",

@@ -10290,7 +10290,13 @@
           "applying": "Изменение…",
           "apply": "Изменить этап"
         },
-        "timelineHeading": "История"
+        "timelineHeading": "История",
+        "device": {
+          "condition": "Состояние",
+          "category": "Категория",
+          "price": "Цена",
+          "captured": "Зарегистрировано"
+        }
       },
       "pipeline": {
         "newDevice": "Новое устройство",

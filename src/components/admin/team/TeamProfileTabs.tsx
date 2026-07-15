@@ -177,7 +177,7 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
 
       {/* Tab bar */}
       <div className="flex items-center justify-between gap-3 border-b border">
-        <nav className="flex -mb-px overflow-x-auto" role="tablist" aria-label="Profilbereiche">
+        <nav className="flex -mb-px overflow-x-auto scrollbar-hide" role="tablist" aria-label="Profilbereiche">
           {TAB_KEYS.map((key) => {
             const meta = tabMeta[key]
             const Icon = meta.icon

@@ -10249,7 +10249,13 @@
           "applying": "Changement…",
           "apply": "Changer le niveau"
         },
-        "timelineHeading": "Historique"
+        "timelineHeading": "Historique",
+        "device": {
+          "condition": "État",
+          "category": "Catégorie",
+          "price": "Prix",
+          "captured": "Saisi"
+        }
       },
       "pipeline": {
         "newDevice": "Nouvel appareil",

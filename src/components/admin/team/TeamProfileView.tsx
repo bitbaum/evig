@@ -28,6 +28,7 @@ import {
   type EmergencyRelation,
 } from '@/config/team'
 import { CurrentFocusInput } from './activity/CurrentFocusInput'
+import { WorkingHoursDisplay } from './WorkingHoursDisplay'
 import { formatDateShort } from '@/lib/date-formats'
 import type { TeamProfileViewProps } from './types'
 import { ROUTES } from '@/config/routes'
@@ -179,12 +180,10 @@ export function TeamProfileView({
             <div className="space-y-3">
               {profile.working_hours && (
                 <div>
-                  <Heading level={3} className="text-sm text-text-secondary">
+                  <Heading level={3} className="text-sm text-text-secondary mb-1">
                     {t('workingHours')}
                   </Heading>
-                  <p className="text-text-secondary text-sm">
-                    {profile.working_hours}
-                  </p>
+                  <WorkingHoursDisplay value={profile.working_hours} />
                 </div>
               )}
 

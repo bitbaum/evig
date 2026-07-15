@@ -10362,7 +10362,13 @@
           "applying": "Ändern…",
           "apply": "Stufe ändern"
         },
-        "timelineHeading": "Verlauf"
+        "timelineHeading": "Verlauf",
+        "device": {
+          "condition": "Zustand",
+          "category": "Kategorie",
+          "price": "Preis",
+          "captured": "Erfasst"
+        }
       },
       "pipeline": {
         "newDevice": "Neues Gerät",

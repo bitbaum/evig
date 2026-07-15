@@ -10296,7 +10296,13 @@
           "applying": "변경 중…",
           "apply": "등급 변경"
         },
-        "timelineHeading": "이력"
+        "timelineHeading": "이력",
+        "device": {
+          "condition": "상태",
+          "category": "카테고리",
+          "price": "가격",
+          "captured": "등록일"
+        }
       },
       "pipeline": {
         "newDevice": "새 기기",

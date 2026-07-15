@@ -7,8 +7,8 @@
 
 import { withAdmin } from '@/lib/api/middleware'
 import { db } from '@/db'
-import { inventoryItems, aiExtractedProducts, users, donations } from '@/db/schema'
-import { eq, and, isNotNull, sql } from 'drizzle-orm'
+import { inventoryItems, aiExtractedProducts, users, donations, productImages } from '@/db/schema'
+import { eq, and, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { validateBody } from '@/lib/schemas'
@@ -72,6 +72,18 @@ export const GET = withAdmin<{ id: string }>('intake', async (_request, _session
     }
 
     const row = rows[0]
+
+    // Primary product image — the detail page shows the device, not just text.
+    let imageUrl: string | null = null
+    if (row.ai_product_id) {
+      const [img] = await db
+        .select({ filePath: productImages.filePath })
+        .from(productImages)
+        .where(and(eq(productImages.productId, row.ai_product_id), eq(productImages.isPrimary, true)))
+        .limit(1)
+      imageUrl = img?.filePath ?? null
+    }
+
     const tier = row.intake_tier as IntakeTier | null
     const checklist = (row.intake_checklist || {}) as ChecklistState
     const cat = row.category
@@ -99,6 +111,7 @@ export const GET = withAdmin<{ id: string }>('intake', async (_request, _session
 
     return apiSuccess({
       ...row,
+      image_url: imageUrl,
       checklist_complete: complete,
       checklist_progress: progress,
       checklist_items: checklistWithState,
@@ -125,11 +138,11 @@ export const PATCH = withAdmin<{ id: string }>('intake', async (request, session
     if (!validation.success) return validation.error
     const data = validation.data
 
-    // Check exists
+    // Check exists — quick-captured devices (tier NULL) are editable too.
     const [existing] = await db
       .select({ id: inventoryItems.id, aiProductId: inventoryItems.aiProductId })
       .from(inventoryItems)
-      .where(and(eq(inventoryItems.id, id), isNotNull(inventoryItems.intakeTier)))
+      .where(eq(inventoryItems.id, id))
 
     if (!existing) {
       return apiNotFound(ERROR_MESSAGES.INTAKE_ITEM_NOT_FOUND)

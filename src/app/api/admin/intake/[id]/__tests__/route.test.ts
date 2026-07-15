@@ -49,6 +49,7 @@ const mockFrom = jest.fn()
 const mockInnerJoin = jest.fn()
 const mockLeftJoin = jest.fn()
 const mockWhere = jest.fn()
+const mockLimit = jest.fn()
 
 // Drizzle update chain
 const mockUpdate = jest.fn()
@@ -67,6 +68,7 @@ jest.mock('@/db/schema', () => ({
   aiExtractedProducts: { id: 'aep_id', itemUuid: 'aep_itemUuid', productName: 'aep_name', brand: 'aep_brand', shortDescription: 'aep_shortDesc', condition: 'aep_condition', category: 'aep_category', subcategory: 'aep_subcategory', estimatedPriceChf: 'aep_price', createdBy: 'aep_createdBy', updatedAt: 'aep_updatedAt' },
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
   donations: { id: 'd_id', donorName: 'd_donorName', donorEmail: 'd_donorEmail', notes: 'd_notes', status: 'd_status' },
+  productImages: { productId: 'pi_productId', isPrimary: 'pi_isPrimary', filePath: 'pi_filePath' },
 }))
 
 jest.mock('drizzle-orm', () => ({
@@ -185,11 +187,17 @@ beforeEach(() => {
   mockAuth.mockResolvedValue(MOCK_SESSION)
 
   // GET: select().from().innerJoin().leftJoin().leftJoin().where()
+  //      + image lookup: select().from(productImages).where().limit(1)
   // PATCH existence check: select().from(inventoryItems).where() (no joins)
   mockFrom.mockReturnValue({ innerJoin: mockInnerJoin, where: mockWhere })
   mockInnerJoin.mockReturnValue({ leftJoin: mockLeftJoin })
   mockLeftJoin.mockReturnValue({ leftJoin: mockLeftJoin, where: mockWhere })
-  mockWhere.mockResolvedValue([MOCK_ROW])
+  // The where() result is awaited directly (detail row) OR chained with
+  // .limit(1) (image lookup) — return a promise that also carries .limit.
+  mockWhere.mockImplementation(() =>
+    Object.assign(Promise.resolve([MOCK_ROW]), { limit: mockLimit })
+  )
+  mockLimit.mockResolvedValue([])
 
   // PATCH: select().from().where() for existence check
   // (uses same mockFrom chain, but different terminal)
