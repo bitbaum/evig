@@ -3,17 +3,18 @@ import { ScanLine, PackageCheck } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 /**
- * Mode switcher for the single "Produkt aufnehmen" entry point.
+ * Mode switcher on the single "Produkt aufnehmen" form (/admin/erfassung).
  *
- * The admin sidebar used to list "Geräte-Eingang" and "Inventar-Erfassung" as
- * two separate doors whose descriptions BOTH said "erfassen" — so staff never
- * knew which to click. They are the same job (get a product into inventory) at
- * two levels of ceremony, so they are now one nav entry with two modes:
- *   - Physische Annahme  → /admin/intake     (checklist + donation/provenance)
- *   - Schnellerfassung   → /admin/erfassung  (product data straight in)
+ * One capture form, two levels of ceremony:
+ *   - Physische Annahme  → ?annahme=1 (adds Verarbeitungsstufe + Spende;
+ *                          saves into the checklist-gated pipeline)
+ *   - Schnellerfassung   → default (product data straight in; publishable
+ *                          immediately)
+ * The pipeline/list of captured devices lives at /admin/intake — a separate
+ * page, not a capture mode.
  */
 const MODES = [
-  { id: 'annahme', label: 'Physische Annahme', hint: 'Checkliste & Spende', href: '/admin/intake', icon: PackageCheck },
+  { id: 'annahme', label: 'Physische Annahme', hint: 'Checkliste & Spende', href: '/admin/erfassung?annahme=1', icon: PackageCheck },
   { id: 'schnell', label: 'Schnellerfassung', hint: 'Produktdaten direkt', href: '/admin/erfassung', icon: ScanLine },
 ] as const
 

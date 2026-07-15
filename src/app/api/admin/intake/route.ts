@@ -17,7 +17,7 @@ import { validateBody, validateQuery } from '@/lib/schemas'
 import { IntakeCreateSchema, IntakeQuerySchema } from '@/lib/schemas/intake'
 import { INTAKE_STATUS } from '@/config/intake-status'
 import { MARKETPLACE_STATUS, PRODUCT_STATUS } from '@/config/marketplace-status'
-import { isChecklistComplete, getChecklistProgress } from '@/config/intake-checklist'
+import { isChecklistComplete, getChecklistProgress, QUICK_CAPTURE_TIER } from '@/config/intake-checklist'
 import type { ChecklistState } from '@/config/intake-checklist'
 import { createErfassungProduct } from '@/lib/erfassung/create-product'
 import { logger } from '@/lib/logger'
@@ -111,19 +111,33 @@ export const GET = withAdmin('intake', async (request) => {
     const uTable = getTableName(users)
     const dTable = getTableName(donations)
 
-    // Build dynamic conditions
-    const conditions: SQL[] = [sql`ii.intake_tier IS NOT NULL`]
+    // The pipeline is the SSOT list of ALL captured devices — Physische
+    // Annahme (intake_tier set, checklist-gated) AND Schnellerfassung
+    // (intake_tier NULL, no checklist). The old base filter
+    // `intake_tier IS NOT NULL` made quick-captured devices invisible in
+    // every list, which read as "erfasst, aber verschwunden".
+    //
+    // Status buckets:
+    //   in_progress — draft with an OPEN checklist (annahme items only)
+    //   ready       — draft that is publishable (checklist done, or none)
+    //   published   — live in the shop
+    const STATUS_PREDICATES: Record<string, SQL> = {
+      [INTAKE_STATUS.IN_PROGRESS]: sql`(ii.marketplace_status = ${MARKETPLACE_STATUS.DRAFT} AND ii.intake_tier IS NOT NULL AND ii.checklist_complete = false)`,
+      [INTAKE_STATUS.READY]: sql`(ii.marketplace_status = ${MARKETPLACE_STATUS.DRAFT} AND (ii.intake_tier IS NULL OR ii.checklist_complete = true))`,
+      [INTAKE_STATUS.PUBLISHED]: sql`(ii.marketplace_status = ${MARKETPLACE_STATUS.PUBLISHED})`,
+    }
 
-    if (tier) {
+    // Build dynamic conditions
+    const conditions: SQL[] = []
+
+    if (tier === QUICK_CAPTURE_TIER) {
+      conditions.push(sql`ii.intake_tier IS NULL`)
+    } else if (tier) {
       conditions.push(sql`ii.intake_tier = ${tier}`)
     }
 
-    if (status === INTAKE_STATUS.IN_PROGRESS) {
-      conditions.push(sql`ii.checklist_complete = false AND ii.marketplace_status = ${MARKETPLACE_STATUS.DRAFT}`)
-    } else if (status === INTAKE_STATUS.READY) {
-      conditions.push(sql`ii.checklist_complete = true AND ii.marketplace_status = ${MARKETPLACE_STATUS.DRAFT}`)
-    } else if (status === INTAKE_STATUS.PUBLISHED) {
-      conditions.push(sql`ii.marketplace_status = ${INTAKE_STATUS.PUBLISHED}`)
+    if (status && STATUS_PREDICATES[status]) {
+      conditions.push(STATUS_PREDICATES[status])
     }
 
     if (category) {
@@ -135,18 +149,26 @@ export const GET = withAdmin('intake', async (request) => {
       conditions.push(sql`(ap.brand ILIKE ${pattern} OR ap.product_name ILIKE ${pattern})`)
     }
 
-    const whereClause = sql`WHERE ${sql.join(conditions, sql` AND `)}`
+    const whereClause = conditions.length > 0
+      ? sql`WHERE ${sql.join(conditions, sql` AND `)}`
+      : sql``
 
     // Aggregate counts use base conditions only (no status filter) so stats
     // always reflect the full filtered set regardless of selected status tab.
-    const baseConditions: SQL[] = [sql`ii.intake_tier IS NOT NULL`]
-    if (tier) baseConditions.push(sql`ii.intake_tier = ${tier}`)
+    const baseConditions: SQL[] = []
+    if (tier === QUICK_CAPTURE_TIER) {
+      baseConditions.push(sql`ii.intake_tier IS NULL`)
+    } else if (tier) {
+      baseConditions.push(sql`ii.intake_tier = ${tier}`)
+    }
     if (category) baseConditions.push(sql`ap.category = ${category}`)
     if (search) {
       const pattern = `%${search}%`
       baseConditions.push(sql`(ap.brand ILIKE ${pattern} OR ap.product_name ILIKE ${pattern})`)
     }
-    const baseWhere = sql`WHERE ${sql.join(baseConditions, sql` AND `)}`
+    const baseWhere = baseConditions.length > 0
+      ? sql`WHERE ${sql.join(baseConditions, sql` AND `)}`
+      : sql``
 
     // Items + filtered count + aggregate status counts — run in parallel
     const [itemsResult, countResult, statusCountsResult] = await Promise.all([
@@ -176,9 +198,9 @@ export const GET = withAdmin('intake', async (request) => {
       `),
       db.execute(sql`
         SELECT
-          COUNT(*) FILTER (WHERE ii.checklist_complete = false AND ii.marketplace_status = ${MARKETPLACE_STATUS.DRAFT}) AS in_progress,
-          COUNT(*) FILTER (WHERE ii.checklist_complete = true AND ii.marketplace_status = ${MARKETPLACE_STATUS.DRAFT}) AS ready,
-          COUNT(*) FILTER (WHERE ii.marketplace_status = ${INTAKE_STATUS.PUBLISHED}) AS published,
+          COUNT(*) FILTER (WHERE ${STATUS_PREDICATES[INTAKE_STATUS.IN_PROGRESS]}) AS in_progress,
+          COUNT(*) FILTER (WHERE ${STATUS_PREDICATES[INTAKE_STATUS.READY]}) AS ready,
+          COUNT(*) FILTER (WHERE ${STATUS_PREDICATES[INTAKE_STATUS.PUBLISHED]}) AS published,
           COUNT(*) AS total_unfiltered
         FROM ${sql.raw(iiTable)} ii
         JOIN ${sql.raw(apTable)} ap ON ii.ai_product_id = ap.id
@@ -187,14 +209,21 @@ export const GET = withAdmin('intake', async (request) => {
       `),
     ])
 
-    // Compute progress for each item
+    // Compute progress for each item. Quick-captured devices (tier NULL)
+    // have no checklist — they count as complete/publishable immediately.
     interface IntakeRow {
       intake_checklist: ChecklistState | null
-      intake_tier: string
+      intake_tier: string | null
       category: string | null
       [key: string]: unknown
     }
+    const NO_CHECKLIST_PROGRESS = {
+      completed: 0, total: 0, requiredCompleted: 0, requiredTotal: 0, percentage: 100,
+    }
     const items = (itemsResult.rows as IntakeRow[]).map((row) => {
+      if (!row.intake_tier) {
+        return { ...row, checklist_progress: NO_CHECKLIST_PROGRESS, checklist_complete: true }
+      }
       const checklist = (row.intake_checklist || {}) as ChecklistState
       const tierVal = row.intake_tier as 'refurbish' | 'parts' | 'recycle'
       const cat = row.category

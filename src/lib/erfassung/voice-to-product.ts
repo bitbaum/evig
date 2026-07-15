@@ -8,10 +8,9 @@ import type { ValidSession } from '@/lib/api/middleware'
 
 /**
  * Shared voice→product pipeline: audio blob → Whisper transcription → AI product
- * extraction → structured form data. Used verbatim by BOTH admin voice routes
- * (`erfassung/voice` and `intake/extract-voice`), which previously duplicated it
- * line-for-line and differed only in the `withAdmin()` section they wrap it with.
- * One pipeline, two thin routes.
+ * extraction → structured form data. Used by the `erfassung/voice` route (the
+ * former duplicate `intake/extract-voice` route was removed together with the
+ * intake page's duplicate capture form — capture now lives on /admin/erfassung).
  */
 export async function voiceToProductResponse(request: NextRequest, session: ValidSession) {
   try {

@@ -15,6 +15,8 @@ import {
   INTAKE_TIER_LABELS,
   INTAKE_TIER_ICONS,
   getIntakeTierOptions,
+  QUICK_CAPTURE_LABEL,
+  QUICK_CAPTURE_ICON,
 } from '@/config/intake-checklist'
 import type { IntakeTier } from '@/config/intake-checklist'
 import { INTAKE_STATUS } from '@/config/intake-status'
@@ -104,7 +106,11 @@ export function IntakeDetailView({
           <Heading level={2} className="text-lg font-semibold">{detail.brand} {detail.product_name}</Heading>
           <div className="flex items-center gap-3 text-sm text-text-tertiary mt-1">
             <span className="font-mono">{detail.item_uuid}</span>
-            <span>{INTAKE_TIER_ICONS[detail.intake_tier]} {INTAKE_TIER_LABELS[detail.intake_tier]}</span>
+            <span>
+              {detail.intake_tier
+                ? <>{INTAKE_TIER_ICONS[detail.intake_tier]} {INTAKE_TIER_LABELS[detail.intake_tier]}</>
+                : <>{QUICK_CAPTURE_ICON} {QUICK_CAPTURE_LABEL}</>}
+            </span>
             {detail.source_donation_id && (
               <span className="text-action">{detail.donor_name ? t('donationWithName', { name: detail.donor_name }) : t('donation')}</span>
             )}
@@ -118,16 +124,18 @@ export function IntakeDetailView({
             </span>
           ) : (
             <>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => { setNewTier(detail.intake_tier === INTAKE_TIERS.REFURBISH ? INTAKE_TIERS.PARTS : INTAKE_TIERS.REFURBISH); setShowTierChange(true) }}
-                className={`flex items-center gap-1 px-2 py-1.5 text-xs border rounded-lg ${adminInteractive.rowHover}`}
-                title={t('changeTier')}
-              >
-                <ArrowDownUp className="w-3.5 h-3.5" /> {t('changeTier')}
-              </Button>
+              {detail.intake_tier && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={() => { setNewTier(detail.intake_tier === INTAKE_TIERS.REFURBISH ? INTAKE_TIERS.PARTS : INTAKE_TIERS.REFURBISH); setShowTierChange(true) }}
+                  className={`flex items-center gap-1 px-2 py-1.5 text-xs border rounded-lg ${adminInteractive.rowHover}`}
+                  title={t('changeTier')}
+                >
+                  <ArrowDownUp className="w-3.5 h-3.5" /> {t('changeTier')}
+                </Button>
+              )}
               <Button onClick={onRefresh} variant="ghost" size="icon" title={t('refresh')}>
                 <RefreshCw className="w-4 h-4" />
               </Button>
@@ -136,7 +144,8 @@ export function IntakeDetailView({
         </div>
       </div>
 
-      {/* Progress Bar */}
+      {/* Progress Bar — annahme items only; quick captures have no checklist */}
+      {detail.intake_tier && (
       <div className="bg-surface-base border rounded-lg p-4">
         <div className="flex items-center justify-between mb-2">
           <span className="text-sm font-medium">
@@ -172,6 +181,7 @@ export function IntakeDetailView({
           />
         </div>
       </div>
+      )}
 
       {/* Checklist Groups */}
       <div className="space-y-4">
@@ -184,8 +194,9 @@ export function IntakeDetailView({
         ))}
       </div>
 
-      {/* Publish Section */}
-      {detail.intake_tier === INTAKE_TIERS.REFURBISH && detail.marketplace_status !== INTAKE_STATUS.PUBLISHED && (
+      {/* Publish Section — refurbish-tier items (checklist-gated) and quick
+          captures (no checklist, publishable immediately) */}
+      {(detail.intake_tier === INTAKE_TIERS.REFURBISH || detail.intake_tier === null) && detail.marketplace_status !== INTAKE_STATUS.PUBLISHED && (
         <div className={`border-2 rounded-lg p-4 ${
           detail.checklist_complete
             ? 'border-strong bg-action-muted'

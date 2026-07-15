@@ -32,6 +32,8 @@ export interface CreateProductResult {
   itemUUID: string
   imageUrl: string | null
   donationId: string | null
+  /** Marketplace listing id when the product was published immediately. */
+  listingId: string | null
 }
 
 /**
@@ -299,9 +301,10 @@ export async function createErfassungProduct(
   // legacy marketplace_listings insert). inventory_items stays the stock record;
   // the listings row is its public, buyable marketplace face. Skipped while the
   // intake checklist gates publication.
+  let listingId: string | null = null
   if (action === 'publish' && !options?.checklistGated) {
-    await publishRevampitListing(tx, inventoryItemId)
+    listingId = await publishRevampitListing(tx, inventoryItemId)
   }
 
-  return { productId, inventoryId: inventoryItemId, itemUUID, imageUrl, donationId }
+  return { productId, inventoryId: inventoryItemId, itemUUID, imageUrl, donationId, listingId }
 }

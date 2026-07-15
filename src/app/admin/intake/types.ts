@@ -1,4 +1,4 @@
-import { INTAKE_TIERS, type IntakeTier, type ChecklistState, type ChecklistCategory } from '@/config/intake-checklist'
+import type { IntakeTier, ChecklistState, ChecklistCategory } from '@/config/intake-checklist'
 
 export interface ChecklistProgress {
   completed: number
@@ -18,7 +18,8 @@ export interface PipelineItem {
   category: string | null
   subcategory: string | null
   short_description: string | null
-  intake_tier: IntakeTier
+  /** NULL for quick-captured devices (Schnellerfassung — no checklist). */
+  intake_tier: IntakeTier | null
   intake_checklist: ChecklistState
   checklist_complete: boolean
   checklist_progress: ChecklistProgress
@@ -58,7 +59,8 @@ export interface DetailData {
   short_description: string | null
   condition: string
   category: string | null
-  intake_tier: IntakeTier
+  /** NULL for quick-captured devices (Schnellerfassung — no checklist). */
+  intake_tier: IntakeTier | null
   marketplace_status: string
   selling_price_chf: number | null
   source_donation_id: string | null
@@ -72,37 +74,3 @@ export interface DetailData {
   intake_events: import('@/lib/intake/timeline-types').StoredIntakeEvent[]
 }
 
-export interface CreateFormData {
-  hersteller: string
-  produktname: string
-  kurzbeschreibung: string
-  verkaufspreis: number
-  zustand: string
-  hauptkategorie: string
-  unterkategorie: string
-  intake_tier: IntakeTier
-  is_donation: boolean
-  donor_name: string
-  donor_email: string
-  donor_notes: string
-  /** Set when intake was opened from an existing donation row (donations table) */
-  existing_donation_id: string | null
-  image: string | null
-}
-
-export const INITIAL_FORM_DATA: CreateFormData = {
-  hersteller: '',
-  produktname: '',
-  kurzbeschreibung: '',
-  verkaufspreis: 0,
-  zustand: 'good',
-  hauptkategorie: '',
-  unterkategorie: '',
-  intake_tier: INTAKE_TIERS.REFURBISH,
-  is_donation: false,
-  donor_name: '',
-  donor_email: '',
-  donor_notes: '',
-  existing_donation_id: null,
-  image: null,
-}

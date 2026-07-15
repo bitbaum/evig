@@ -14,6 +14,7 @@ import { BulkDetailPanel } from '@/components/erfassung/BulkDetailPanel'
 import { BulkActionBar } from '@/components/erfassung/BulkActionBar'
 import { BulkSuccessScreen } from '@/components/erfassung/BulkSuccessScreen'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
+import { AnnahmeFields } from '@/components/erfassung/AnnahmeFields'
 import { ErfassungSubmitBar } from '@/components/erfassung/ErfassungSubmitBar'
 import { useErfassungForm } from '@/components/erfassung/useErfassungForm'
 import { Button } from '@/components/ui/button'
@@ -156,6 +157,9 @@ function ErfassungContent() {
       <SuccessScreen
         itemUUID={form.savedItemUUID}
         productId={form.savedProductId}
+        inventoryId={form.savedInventoryId}
+        action={form.savedAction}
+        listingId={form.savedListingId}
         onReset={form.handleReset}
       />
     )
@@ -201,10 +205,10 @@ function ErfassungContent() {
         </Link>
         <div className="flex-1 min-w-0">
           <Heading level={1} className="text-xl sm:text-2xl font-bold text-text-primary truncate">
-            {form.isEditMode ? 'Produkt bearbeiten' : viewMode === 'bulk' ? `Bulk Erfassung (${bulkProducts.length} Produkte)` : 'Produkt Erfassung'}
+            {form.isEditMode ? 'Produkt bearbeiten' : viewMode === 'bulk' ? `Bulk Erfassung (${bulkProducts.length} Produkte)` : form.isAnnahmeMode ? 'Physische Annahme' : 'Produkt Erfassung'}
           </Heading>
           <p className="text-sm sm:text-base text-text-secondary hidden sm:block">
-            {form.isEditMode ? 'Produktdaten aktualisieren' : viewMode === 'bulk' ? 'Mehrere Produkte prüfen und erfassen' : 'Neues Produkt ins Inventar aufnehmen'}
+            {form.isEditMode ? 'Produktdaten aktualisieren' : viewMode === 'bulk' ? 'Mehrere Produkte prüfen und erfassen' : form.isAnnahmeMode ? 'Gerät annehmen — danach folgt die Checkliste im Geräte-Eingang' : 'Neues Produkt ins Inventar aufnehmen'}
           </p>
         </div>
         {viewMode === 'bulk' && (
@@ -220,18 +224,28 @@ function ErfassungContent() {
         )}
       </div>
 
-      {/* Mode switch — Schnellerfassung (here) vs Physische Annahme (intake).
-          One "Produkt aufnehmen" door, two modes; hidden in edit mode and when
-          already inside the intake→erfassung pipeline. */}
+      {/* Mode switch — one capture form, two ceremony levels (both live on
+          this page). Hidden in edit mode and inside the intake→erfassung
+          pipeline. */}
       {!form.isEditMode && !isIntakePipeline && (
-        <ProduktAufnehmenModeToggle active="schnell" />
+        <ProduktAufnehmenModeToggle active={form.isAnnahmeMode ? 'annahme' : 'schnell'} />
       )}
 
-      {/* Data Entry Tabs (always at top) */}
+      {/* Physische Annahme — Verarbeitungsstufe + Spende */}
+      {form.isAnnahmeMode && viewMode === 'single' && (
+        <AnnahmeFields annahme={form.annahme} onChange={form.setAnnahme} />
+      )}
+
+      {/* Data Entry Tabs (always at top). In Annahme mode a multi-product
+          paste still fills the single form (first product) — bulk capture is
+          a Schnellerfassung feature; Annahme devices need per-device tier +
+          checklist. */}
       <DataEntryTabs
         showAllTabs
         onProductData={form.handleProductData}
-        onBulkData={handleBulkData}
+        onBulkData={form.isAnnahmeMode
+          ? (products) => { if (products[0]) form.handleProductData(products[0]) }
+          : handleBulkData}
         onImageCapture={form.handleImageCapture}
         onError={(error) => logger.error('Data entry error', { error })}
         onDataFilled={form.handleDataFilled}
@@ -319,6 +333,7 @@ function ErfassungContent() {
 
             <ErfassungSubmitBar
               isEditMode={form.isEditMode}
+              isAnnahmeMode={form.isAnnahmeMode}
               isLoading={form.isLoading}
               onSubmit={form.handleSubmit}
             />

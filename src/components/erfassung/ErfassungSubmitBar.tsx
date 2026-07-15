@@ -1,20 +1,66 @@
 'use client'
 
 import { Link } from '@/i18n/navigation'
-import { Save, Loader2, Package } from 'lucide-react'
+import { Save, Loader2, Package, PackageCheck } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/config/routes'
 
 interface Props {
   isEditMode: boolean
+  /** Physische Annahme — single "Gerät erfassen" action into the pipeline. */
+  isAnnahmeMode?: boolean
   isLoading: boolean
   // SyntheticEvent — both <form onSubmit> and inline buttons need to invoke this
   onSubmit: (e: React.SyntheticEvent, action: 'draft' | 'erfassen' | 'publish') => void
 }
 
-export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
+export function ErfassungSubmitBar({ isEditMode, isAnnahmeMode = false, isLoading, onSubmit }: Props) {
   const t = useTranslations('components.erfassung.submitBar')
+
+  // Spinner replaces the ICON, never the label — three anonymous spinning
+  // pills told the user nothing about what was happening.
+  const iconOrSpinner = (Icon: typeof Save) =>
+    isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Icon className="w-5 h-5" />
+
+  if (isAnnahmeMode) {
+    return (
+      <>
+        {/* Desktop */}
+        <div className="hidden sm:flex justify-between items-center pt-4">
+          <Link
+            href={ROUTES.admin.intake}
+            className="inline-flex items-center justify-center rounded-md font-medium px-6 py-3 border border-default bg-surface-base hover:bg-surface-raised text-text-primary"
+          >
+            {t('cancel')}
+          </Link>
+          <Button
+            type="button"
+            onClick={(e) => onSubmit(e, 'erfassen')}
+            disabled={isLoading}
+            variant="primary"
+            className="gap-2 px-6 py-3"
+          >
+            {iconOrSpinner(PackageCheck)} {t('captureAnnahme')}
+          </Button>
+        </div>
+
+        {/* Mobile — above the admin bottom nav, same as the standard bar */}
+        <div className="sm:hidden fixed bottom-[calc(3.5rem+env(safe-area-inset-bottom))] left-0 right-0 bg-surface-base border-t border p-4 z-40">
+          <Button
+            type="button"
+            onClick={(e) => onSubmit(e, 'erfassen')}
+            disabled={isLoading}
+            variant="primary"
+            className="w-full gap-2 py-4 rounded-xl touch-manipulation min-h-[52px]"
+          >
+            {iconOrSpinner(PackageCheck)}
+            <span>{t('captureAnnahme')}</span>
+          </Button>
+        </div>
+      </>
+    )
+  }
 
   return (
     <>
@@ -30,11 +76,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
         <div className="flex gap-3">
           {isEditMode ? (
             <Button type="submit" disabled={isLoading} className="gap-2 px-6 py-3">
-              {isLoading ? (
-                <><Loader2 className="w-5 h-5 animate-spin" /> {t('saving')}</>
-              ) : (
-                <><Save className="w-5 h-5" /> {t('saveChanges')}</>
-              )}
+              {iconOrSpinner(Save)} {isLoading ? t('saving') : t('saveChanges')}
             </Button>
           ) : (
             <>
@@ -44,11 +86,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
                 disabled={isLoading}
                 className="gap-2 px-5 py-3 bg-surface-overlay hover:bg-surface-overlay disabled:bg-surface-overlay"
               >
-                {isLoading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                  <><Save className="w-5 h-5" /> {t('draft')}</>
-                )}
+                {iconOrSpinner(Save)} {t('draft')}
               </Button>
 
               <Button
@@ -57,11 +95,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
                 disabled={isLoading}
                 variant="primary" className="gap-2 px-5 py-3 disabled:bg-action"
               >
-                {isLoading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                  <><Package className="w-5 h-5" /> {t('capture')}</>
-                )}
+                {iconOrSpinner(Package)} {t('capture')}
               </Button>
 
               <Button
@@ -70,11 +104,7 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
                 disabled={isLoading}
                 className="gap-2 px-5 py-3"
               >
-                {isLoading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                  <><Package className="w-5 h-5" /> {t('captureAndShop')}</>
-                )}
+                {iconOrSpinner(Package)} {t('captureAndShop')}
               </Button>
             </>
           )}
@@ -97,14 +127,8 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
             disabled={isLoading}
             className="w-full gap-2 py-4 rounded-xl touch-manipulation min-h-[52px]"
           >
-            {isLoading ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
-            ) : (
-              <>
-                <Save className="w-5 h-5" />
-                <span>{t('saveChanges')}</span>
-              </>
-            )}
+            {iconOrSpinner(Save)}
+            <span>{t('saveChanges')}</span>
           </Button>
         ) : (
           <div className="flex gap-2">
@@ -112,13 +136,10 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
               type="button"
               onClick={(e) => onSubmit(e, 'draft')}
               disabled={isLoading}
+              aria-label={t('draft')}
               className="gap-1 px-3 py-4 rounded-xl touch-manipulation min-h-[52px] bg-surface-overlay hover:bg-surface-overlay disabled:bg-surface-overlay"
             >
-              {isLoading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <Save className="w-5 h-5" />
-              )}
+              {iconOrSpinner(Save)}
             </Button>
 
             <Button
@@ -127,14 +148,8 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
               disabled={isLoading}
               variant="primary" className="flex-1 gap-2 py-4 rounded-xl touch-manipulation min-h-[52px] disabled:bg-action"
             >
-              {isLoading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <>
-                  <Package className="w-5 h-5" />
-                  <span>{t('capture')}</span>
-                </>
-              )}
+              {iconOrSpinner(Package)}
+              <span>{t('capture')}</span>
             </Button>
 
             <Button
@@ -143,14 +158,8 @@ export function ErfassungSubmitBar({ isEditMode, isLoading, onSubmit }: Props) {
               disabled={isLoading}
               className="flex-1 gap-2 py-4 rounded-xl touch-manipulation min-h-[52px]"
             >
-              {isLoading ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
-              ) : (
-                <>
-                  <Package className="w-5 h-5" />
-                  <span>+ Shop</span>
-                </>
-              )}
+              {iconOrSpinner(Package)}
+              <span>{t('captureAndShopShort')}</span>
             </Button>
           </div>
         )}

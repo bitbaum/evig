@@ -9464,14 +9464,23 @@
         "saveChanges": "Enregistrer les modifications",
         "draft": "Draft",
         "capture": "Capture",
-        "captureAndShop": "Saisir et publier"
+        "captureAndShop": "Saisir et publier",
+        "captureAnnahme": "Saisir l'appareil",
+        "captureAndShopShort": "+ Shop"
       },
       "successScreen": {
         "title": "Produit saisi !",
         "itemUUIDLabel": "Item UUID:",
         "printFactsheet": "Imprimer la fiche technique",
         "captureAnother": "Saisir un autre produit",
-        "toOverview": "Voir l'aperçu des produits"
+        "toOverview": "Voir l'aperçu des produits",
+        "titleDraft": "Enregistré comme brouillon",
+        "titlePublished": "Saisi et publié dans le shop !",
+        "whereDraft": "L'appareil se trouve dans le pipeline sous « Prêt » et peut être modifié ou publié à tout moment.",
+        "whereErfassen": "L'appareil est maintenant visible dans le pipeline sous « Prêt » et peut y être publié.",
+        "wherePublished": "L'appareil est en ligne dans le shop et listé dans le pipeline sous « Publié ».",
+        "viewInShop": "Voir dans le shop",
+        "toDevice": "Ouvrir l'appareil dans le pipeline"
       },
       "bulkSuccess": {
         "titlePartial": "Partiellement saisi",
@@ -10157,7 +10166,7 @@
     },
     "intake": {
       "pageTitle": "Réception",
-      "pageDescription": "Saisir, vérifier et valider les appareils",
+      "pageDescription": "Tous les appareils saisis : statut, liste de contrôle et publication",
       "createForm": {
         "title": "Saisir un nouvel appareil",
         "tierLabel": "Niveau de traitement",

@@ -542,28 +542,29 @@ export const SECTIONS = {
   // ---------------------------------------------------------------------------
   // ADMIN MANAGEMENT - Staff sections (non-sensitive)
   // ---------------------------------------------------------------------------
-  // Physical intake (checklist + donation). No longer its own sidebar entry —
-  // it's the "Physische Annahme" mode of the consolidated "Produkt aufnehmen"
-  // door (see the `erfassung` section + ProduktAufnehmenModeToggle). Route +
-  // id stay live (reachable via the toggle and donation cross-links).
+  // The pipeline of ALL captured devices (Physische Annahme + Schnell-
+  // erfassung): list, checklist, publish. Sidebar-visible — this is where
+  // staff FIND a device after capturing it; hiding it made every captured
+  // device look like it vanished.
   intake: {
     id: 'intake',
     path: '/admin/intake',
     ui: {
       label: 'Geräte-Eingang',
-      description: 'Annahme & Prüfung gespendeter Geräte (Checkliste, Spende)',
+      description: 'Alle erfassten Geräte: Status, Checkliste, Publikation',
       icon: PackageCheck,
       emoji: '📋',
       color: 'primary',
     },
-    visibility: { admin: false, dashboard: false, requiresStaff: true },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 99,
     category: 'management',
     sidebarGroup: 'angebot',
   },
 
-  // The single "add a product" door. Defaults to Schnellerfassung; the
-  // ProduktAufnehmenModeToggle switches to Physische Annahme (/admin/intake).
+  // The single "add a product" door — ONE form with two ceremony levels:
+  // Schnellerfassung (default) and Physische Annahme (?annahme=1, adds
+  // Verarbeitungsstufe + Spende and lands in the checklist pipeline).
   erfassung: {
     id: 'erfassung',
     path: '/admin/erfassung',

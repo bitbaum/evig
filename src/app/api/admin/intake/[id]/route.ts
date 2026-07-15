@@ -63,19 +63,22 @@ export const GET = withAdmin<{ id: string }>('intake', async (_request, _session
       .innerJoin(aiExtractedProducts, eq(inventoryItems.aiProductId, aiExtractedProducts.id))
       .leftJoin(users, eq(aiExtractedProducts.createdBy, users.id))
       .leftJoin(donations, eq(inventoryItems.sourceDonationId, donations.id))
-      .where(and(eq(inventoryItems.id, id), isNotNull(inventoryItems.intakeTier)))
+      // No intake_tier gate: quick-captured devices (tier NULL, no checklist)
+      // are part of the same pipeline and must open in the detail view too.
+      .where(eq(inventoryItems.id, id))
 
     if (rows.length === 0) {
       return apiNotFound(ERROR_MESSAGES.INTAKE_ITEM_NOT_FOUND)
     }
 
     const row = rows[0]
-    const tier = row.intake_tier as IntakeTier
+    const tier = row.intake_tier as IntakeTier | null
     const checklist = (row.intake_checklist || {}) as ChecklistState
     const cat = row.category
 
-    // Get applicable checklist items with their config + state
-    const checklistItems = getChecklistForDevice(tier, cat)
+    // Get applicable checklist items with their config + state.
+    // Quick-captured devices have no checklist — empty list, complete=true.
+    const checklistItems = tier ? getChecklistForDevice(tier, cat) : []
     const checklistWithState = checklistItems.map(item => ({
       ...item,
       state: checklist[item.id] || { completed: false, completedBy: null, completedAt: null, notes: '' },
@@ -89,8 +92,10 @@ export const GET = withAdmin<{ id: string }>('intake', async (_request, _session
       grouped[key].push(item)
     }
 
-    const progress = getChecklistProgress(checklist, tier, cat)
-    const complete = isChecklistComplete(checklist, tier, cat)
+    const progress = tier
+      ? getChecklistProgress(checklist, tier, cat)
+      : { completed: 0, total: 0, requiredCompleted: 0, requiredTotal: 0, percentage: 100 }
+    const complete = tier ? isChecklistComplete(checklist, tier, cat) : true
 
     return apiSuccess({
       ...row,

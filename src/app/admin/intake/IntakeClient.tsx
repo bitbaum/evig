@@ -1,22 +1,32 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useIntakePipeline } from './useIntakePipeline'
 import { useIntakeDetail } from './useIntakeDetail'
-import { useIntakeCreateForm } from './useIntakeCreateForm'
 import { IntakePipelineView } from './IntakePipelineView'
-import { IntakeCreateForm } from './IntakeCreateForm'
 import { IntakeDetailView } from './IntakeDetailView'
+import { ROUTES } from '@/config/routes'
 
+/**
+ * Geräte-Eingang — the pipeline of ALL captured devices (list + detail).
+ *
+ * Capturing happens in ONE place: /admin/erfassung (Schnellerfassung, or
+ * Physische Annahme via ?annahme=1). The former inline create form here was
+ * a ~700-line duplicate of the erfassung form with its own AI panel — same
+ * job, second implementation. It is gone; "Neues Gerät erfassen" routes to
+ * the real form and returns here (detail view) after saving.
+ */
 export default function IntakeClient() {
-  const [view, setView] = useState<'pipeline' | 'create' | 'detail'>('pipeline')
+  const [view, setView] = useState<'pipeline' | 'detail'>('pipeline')
+  const router = useRouter()
 
   const pipeline = useIntakePipeline(view === 'pipeline')
   const detail = useIntakeDetail()
-  const createForm = useIntakeCreateForm()
 
-  // URL param pre-fill for donation cross-link, or reopen detail after erfassung edit
+  // URL params: donation cross-link forwards to the capture form (annahme
+  // mode) with donor prefill; ?detail= re-opens a device (e.g. returning
+  // from an erfassung edit or right after capture).
   const searchParams = useSearchParams()
   useEffect(() => {
     const donorName = searchParams.get('donor_name')
@@ -24,8 +34,11 @@ export default function IntakeClient() {
     const donationId = searchParams.get('donation_id')
     const detailId = searchParams.get('detail')
     if (donationId || donorName || donorEmail) {
-      setView('create')
-      createForm.prefillFromDonation(donorName || '', donorEmail || '', donationId || undefined)
+      const params = new URLSearchParams({ annahme: '1' })
+      if (donationId) params.set('donation_id', donationId)
+      if (donorName) params.set('donor_name', donorName)
+      if (donorEmail) params.set('donor_email', donorEmail)
+      router.replace(`${ROUTES.admin.erfassung}?${params.toString()}`)
     } else if (detailId) {
       setView('detail')
       detail.openDetail(detailId)
@@ -43,17 +56,8 @@ export default function IntakeClient() {
     detail.clearDetail()
   }
 
-  const handleCreate = () => {
-    createForm.handleCreate((inventoryId) => {
-      // After intake save, immediately open checklist/detail for the new item
-      // so the staff member can complete the checklist in one flow
-      if (inventoryId) {
-        handleOpenDetail(inventoryId)
-      } else {
-        setView('pipeline')
-        pipeline.fetchItems()
-      }
-    })
+  const handleCreateNew = () => {
+    router.push(`${ROUTES.admin.erfassung}?annahme=1`)
   }
 
   return (
@@ -72,32 +76,9 @@ export default function IntakeClient() {
           onStatusFilterChange={pipeline.setStatusFilter}
           onCategoryFilterChange={pipeline.setCategoryFilter}
           onSearchFilterChange={pipeline.setSearchFilter}
-          onCreateNew={() => setView('create')}
+          onCreateNew={handleCreateNew}
           onOpenDetail={handleOpenDetail}
           onPageChange={pipeline.fetchItems}
-        />
-      )}
-
-      {view === 'create' && (
-        <IntakeCreateForm
-          formData={createForm.formData}
-          setFormData={createForm.setFormData}
-          saving={createForm.saving}
-          aiTab={createForm.aiTab}
-          setAiTab={createForm.setAiTab}
-          aiText={createForm.aiText}
-          setAiText={createForm.setAiText}
-          aiLoading={createForm.aiLoading}
-          aiError={createForm.aiError}
-          aiOpen={createForm.aiOpen}
-          setAiOpen={createForm.setAiOpen}
-          voiceState={createForm.voiceState}
-          onAiTextExtract={createForm.handleAiTextExtract}
-          onStartVoiceRecording={createForm.startVoiceRecording}
-          onStopVoiceRecording={createForm.stopVoiceRecording}
-          onPhotoAnalysis={createForm.handlePhotoAnalysis}
-          onCreate={handleCreate}
-          onCancel={() => setView('pipeline')}
         />
       )}
 

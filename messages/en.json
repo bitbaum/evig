@@ -9423,14 +9423,23 @@
         "saveChanges": "Save changes",
         "draft": "Draft",
         "capture": "Capture",
-        "captureAndShop": "Capture & Shop"
+        "captureAndShop": "Capture & Shop",
+        "captureAnnahme": "Capture device",
+        "captureAndShopShort": "+ Shop"
       },
       "successScreen": {
         "title": "Product captured!",
         "itemUUIDLabel": "Item UUID:",
         "printFactsheet": "Print factsheet",
         "captureAnother": "Capture another product",
-        "toOverview": "To product overview"
+        "toOverview": "To product overview",
+        "titleDraft": "Saved as draft",
+        "titlePublished": "Captured and published to the shop!",
+        "whereDraft": "The device is in the device pipeline under \"Ready\" and can be edited or published at any time.",
+        "whereErfassen": "The device is now visible in the device pipeline under \"Ready\" and can be published from there.",
+        "wherePublished": "The device is live in the shop and listed in the device pipeline under \"Published\".",
+        "viewInShop": "View in shop",
+        "toDevice": "Open device in pipeline"
       },
       "bulkSuccess": {
         "titlePartial": "Partially captured",
@@ -10156,7 +10165,7 @@
     },
     "intake": {
       "pageTitle": "Device intake",
-      "pageDescription": "Log, check and release devices",
+      "pageDescription": "All captured devices: status, checklist and publication",
       "createForm": {
         "title": "Log new device",
         "tierLabel": "Processing tier",

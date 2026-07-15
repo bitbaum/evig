@@ -7,6 +7,8 @@ import { sanitizeReturnTo } from '@/lib/utils/safe-redirect'
 import type { ErfassungFormData, AIFieldMetadata } from '@/types/erfassung'
 import { DEFAULT_FORM_DATA, formDataToPayload } from '@/types/erfassung'
 import { SPEC_TEMPLATES, templateToSpecFields } from '@/config/erfassung'
+import { INTAKE_TIERS, type IntakeTier } from '@/config/intake-checklist'
+import { ROUTES } from '@/config/routes'
 
 /**
  * Merge partial AI/refined data into existing form data.
@@ -25,6 +27,26 @@ function mergeFormData(prev: ErfassungFormData, data: Partial<ErfassungFormData>
   return updated
 }
 
+/** Annahme-mode state — Verarbeitungsstufe + donation provenance. */
+export interface AnnahmeState {
+  tier: IntakeTier
+  isDonation: boolean
+  donorName: string
+  donorEmail: string
+  donorNotes: string
+  /** Set when opened from an existing donation row (/admin/donations). */
+  existingDonationId: string | null
+}
+
+const DEFAULT_ANNAHME: AnnahmeState = {
+  tier: INTAKE_TIERS.REFURBISH,
+  isDonation: false,
+  donorName: '',
+  donorEmail: '',
+  donorNotes: '',
+  existingDonationId: null,
+}
+
 export function useErfassungForm() {
   const t = useTranslations('components.erfassung.formErrors')
   const router = useRouter()
@@ -32,15 +54,40 @@ export function useErfassungForm() {
   const editId = searchParams.get('edit')
   // Prevent open-redirect: only same-origin paths
   const returnTo = sanitizeReturnTo(searchParams.get('returnTo'), '/admin/intake')
+  // Physische Annahme — same form, plus Verarbeitungsstufe + Spende; the
+  // device is saved into the checklist-gated pipeline (POST /api/admin/intake).
+  const isAnnahmeMode = searchParams.get('annahme') === '1' && !editId
 
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingProduct, setIsLoadingProduct] = useState(false)
   const [savedItemUUID, setSavedItemUUID] = useState<string | null>(null)
   const [savedProductId, setSavedProductId] = useState<string | null>(null)
+  const [savedInventoryId, setSavedInventoryId] = useState<string | null>(null)
+  const [savedAction, setSavedAction] = useState<'draft' | 'erfassen' | 'publish'>('draft')
+  const [savedListingId, setSavedListingId] = useState<string | null>(null)
   const [showAdvanced, setShowAdvanced] = useState(false)
   const [isEditMode, setIsEditMode] = useState(false)
   const [formData, setFormData] = useState<ErfassungFormData>(DEFAULT_FORM_DATA)
   const [aiMetadata, setAiMetadata] = useState<AIFieldMetadata>({})
+  const [annahme, setAnnahme] = useState<AnnahmeState>(DEFAULT_ANNAHME)
+
+  // Donation cross-link prefill (forwarded by /admin/intake and /admin/donations)
+  useEffect(() => {
+    if (!isAnnahmeMode) return
+    const donorName = searchParams.get('donor_name')
+    const donorEmail = searchParams.get('donor_email')
+    const donationId = searchParams.get('donation_id')
+    if (donorName || donorEmail || donationId) {
+      setAnnahme(prev => ({
+        ...prev,
+        isDonation: true,
+        donorName: donorName || prev.donorName,
+        donorEmail: donorEmail || prev.donorEmail,
+        existingDonationId: donationId || prev.existingDonationId,
+      }))
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAnnahmeMode])
 
   const [showAIRefine, setShowAIRefine] = useState(false)
   const [saveError, setSaveError] = useState('')
@@ -215,10 +262,47 @@ export function useErfassungForm() {
         }
 
         router.push(returnTo)
+      } else if (isAnnahmeMode) {
+        // Physische Annahme — save into the checklist-gated pipeline, then
+        // jump straight to the device's checklist so the flow continues
+        // without a dead end.
+        const result = await apiFetch<{ inventory_id: string }>('/api/admin/intake', {
+          method: 'POST',
+          body: {
+            hersteller: formData.hersteller,
+            produktname: formData.produktname,
+            kurzbeschreibung: formData.kurzbeschreibung || undefined,
+            verkaufspreis: parseFloat(formData.verkaufspreis) || undefined,
+            zustand: formData.zustand,
+            hauptkategorie: formData.hauptkategorie || undefined,
+            unterkategorie: formData.unterkategorie || undefined,
+            image: formData.image,
+            intake_tier: annahme.tier,
+            is_donation: annahme.isDonation,
+            donor_name: annahme.donorName || undefined,
+            donor_email: annahme.donorEmail || undefined,
+            donor_notes: annahme.donorNotes || undefined,
+            existing_donation_id: annahme.existingDonationId || undefined,
+          },
+        })
+
+        if (!result.success) {
+          throw new Error(result.error || t('saveFailed'))
+        }
+
+        if (result.data?.inventory_id) {
+          router.push(`${ROUTES.admin.intake}?detail=${result.data.inventory_id}`)
+        }
       } else {
         const payload = formDataToPayload(formData, action)
 
-        const result = await apiFetch<{ item_uuid: string; product_id: string }>('/api/admin/erfassung', {
+        const result = await apiFetch<{
+          item_uuid: string
+          product_id: string
+          inventory_id: string | null
+          listing_id: string | null
+          action: 'draft' | 'erfassen' | 'publish'
+        }>('/api/admin/erfassung', {
           method: 'POST',
           body: payload,
         })
@@ -230,6 +314,9 @@ export function useErfassungForm() {
         if (result.data) {
           setSavedItemUUID(result.data.item_uuid)
           setSavedProductId(result.data.product_id)
+          setSavedInventoryId(result.data.inventory_id || null)
+          setSavedAction(result.data.action || action)
+          setSavedListingId(result.data.listing_id || null)
         }
       }
     } catch (error) {
@@ -243,7 +330,11 @@ export function useErfassungForm() {
   const handleReset = useCallback(() => {
     setSavedItemUUID(null)
     setSavedProductId(null)
+    setSavedInventoryId(null)
+    setSavedAction('draft')
+    setSavedListingId(null)
     setFormData(DEFAULT_FORM_DATA)
+    setAnnahme(DEFAULT_ANNAHME)
     setAiMetadata({})
     setShowAIRefine(false)
     setDataEntryCollapsed(false)
@@ -255,6 +346,12 @@ export function useErfassungForm() {
     isLoading,
     isLoadingProduct,
     isEditMode,
+    isAnnahmeMode,
+    annahme,
+    setAnnahme,
+    savedAction,
+    savedListingId,
+    savedInventoryId,
     savedItemUUID,
     savedProductId,
     showAdvanced,

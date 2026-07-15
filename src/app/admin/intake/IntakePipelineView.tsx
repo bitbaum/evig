@@ -14,6 +14,9 @@ import {
   INTAKE_TIER_LABELS,
   INTAKE_TIER_ICONS,
   getIntakeTierOptions,
+  QUICK_CAPTURE_TIER,
+  QUICK_CAPTURE_LABEL,
+  QUICK_CAPTURE_ICON,
 } from '@/config/intake-checklist'
 import { KATEGORIEN } from '@/config/erfassung/categories'
 import { INTAKE_STATUS, INTAKE_STATUS_LABELS } from '@/config/intake-status'
@@ -82,6 +85,7 @@ export function IntakePipelineView({
           {getIntakeTierOptions().map(o => (
             <option key={o.value} value={o.value}>{o.icon} {o.label}</option>
           ))}
+          <option value={QUICK_CAPTURE_TIER}>{QUICK_CAPTURE_ICON} {QUICK_CAPTURE_LABEL}</option>
         </Select>
 
         <Select
@@ -167,24 +171,30 @@ export function IntakePipelineView({
                       </td>
                       <td className="py-2.5">
                         <span className="inline-flex items-center gap-1 text-xs">
-                          {INTAKE_TIER_ICONS[item.intake_tier]} {INTAKE_TIER_LABELS[item.intake_tier]}
+                          {item.intake_tier
+                            ? <>{INTAKE_TIER_ICONS[item.intake_tier]} {INTAKE_TIER_LABELS[item.intake_tier]}</>
+                            : <>{QUICK_CAPTURE_ICON} {QUICK_CAPTURE_LABEL}</>}
                         </span>
                       </td>
                       <td className="py-2.5">
-                        <div className="flex items-center gap-2">
-                          <div className="w-20 h-2 bg-surface-overlay rounded-full overflow-hidden">
-                            <div
-                              className={`h-full rounded-full ${
-                                progress.percentage === 100 ? 'bg-action' :
-                                progress.percentage > 50 ? 'bg-warning-500' : 'bg-error-400'
-                              }`}
-                              style={{ width: `${progress.percentage}%` }}
-                            />
+                        {item.intake_tier ? (
+                          <div className="flex items-center gap-2">
+                            <div className="w-20 h-2 bg-surface-overlay rounded-full overflow-hidden">
+                              <div
+                                className={`h-full rounded-full ${
+                                  progress.percentage === 100 ? 'bg-action' :
+                                  progress.percentage > 50 ? 'bg-warning-500' : 'bg-error-400'
+                                }`}
+                                style={{ width: `${progress.percentage}%` }}
+                              />
+                            </div>
+                            <span className="text-xs text-text-tertiary">
+                              {progress.requiredCompleted}/{progress.requiredTotal}
+                            </span>
                           </div>
-                          <span className="text-xs text-text-tertiary">
-                            {progress.requiredCompleted}/{progress.requiredTotal}
-                          </span>
-                        </div>
+                        ) : (
+                          <span className="text-xs text-text-muted">—</span>
+                        )}
                       </td>
                       <td className="py-2.5">
                         {item.marketplace_status === INTAKE_STATUS.PUBLISHED ? (

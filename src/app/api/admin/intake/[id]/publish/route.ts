@@ -52,7 +52,7 @@ export const POST = withAdmin<{ id: string }>('intake', async (request, session,
               ap.brand, ap.product_name, ap.short_description, ap.category
        FROM ${sql.raw(iiTable)} ii
        JOIN ${sql.raw(apTable)} ap ON ii.ai_product_id = ap.id
-       WHERE ii.id = ${id} AND ii.intake_tier IS NOT NULL
+       WHERE ii.id = ${id}
     `)
 
     if (existing.rows.length === 0) {
@@ -66,10 +66,11 @@ export const POST = withAdmin<{ id: string }>('intake', async (request, session,
       return apiBadRequest(ERROR_MESSAGES.INTAKE_ALREADY_PUBLISHED)
     }
 
-    // Gate: checklist complete?
-    const tier = row.intake_tier as IntakeTier
+    // Gate: checklist complete? Quick-captured devices (tier NULL) have no
+    // checklist and are publishable immediately.
+    const tier = row.intake_tier as IntakeTier | null
     const checklist = (row.intake_checklist || {}) as ChecklistState
-    if (!isChecklistComplete(checklist, tier, row.category)) {
+    if (tier && !isChecklistComplete(checklist, tier, row.category)) {
       return apiBadRequest(ERROR_MESSAGES.INTAKE_CHECKLIST_INCOMPLETE)
     }
 

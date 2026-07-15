@@ -43,6 +43,15 @@ export const INTAKE_TIER_ICONS: Record<IntakeTier, string> = {
   [INTAKE_TIERS.RECYCLE]: '♻️',
 }
 
+/**
+ * Pseudo-tier for devices captured via Schnellerfassung (intake_tier NULL —
+ * no checklist, publishable immediately). Used as a filter value in the
+ * pipeline API/UI and for display; never stored in the database.
+ */
+export const QUICK_CAPTURE_TIER = 'quick' as const
+export const QUICK_CAPTURE_LABEL = 'Schnellerfassung'
+export const QUICK_CAPTURE_ICON = '⚡'
+
 // =============================================================================
 // CHECKLIST CATEGORIES
 // =============================================================================

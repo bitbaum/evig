@@ -9520,14 +9520,23 @@
         "saveChanges": "Änderungen speichern",
         "draft": "Entwurf",
         "capture": "Erfassen",
-        "captureAndShop": "Erfassen & Shop"
+        "captureAndShop": "Erfassen & Shop",
+        "captureAnnahme": "Gerät erfassen",
+        "captureAndShopShort": "+ Shop"
       },
       "successScreen": {
         "title": "Produkt erfasst!",
         "itemUUIDLabel": "Item UUID:",
         "printFactsheet": "Factsheet drucken",
         "captureAnother": "Weiteres Produkt erfassen",
-        "toOverview": "Zur Produktübersicht"
+        "toOverview": "Zur Produktübersicht",
+        "titleDraft": "Als Entwurf gespeichert",
+        "titlePublished": "Erfasst und im Shop publiziert!",
+        "whereDraft": "Das Gerät liegt im Geräte-Eingang unter «Bereit» und kann jederzeit weiterbearbeitet oder publiziert werden.",
+        "whereErfassen": "Das Gerät ist jetzt im Geräte-Eingang unter «Bereit» sichtbar und kann von dort publiziert werden.",
+        "wherePublished": "Das Gerät ist live im Shop und im Geräte-Eingang unter «Publiziert» gelistet.",
+        "viewInShop": "Im Shop ansehen",
+        "toDevice": "Zum Gerät im Geräte-Eingang"
       },
       "bulkSuccess": {
         "titlePartial": "Teilweise erfasst",
@@ -10270,7 +10279,7 @@
     },
     "intake": {
       "pageTitle": "Geräte-Eingang",
-      "pageDescription": "Geräte erfassen, prüfen und freigeben",
+      "pageDescription": "Alle erfassten Geräte: Status, Checkliste und Publikation",
       "createForm": {
         "title": "Neues Gerät erfassen",
         "tierLabel": "Verarbeitungsstufe",

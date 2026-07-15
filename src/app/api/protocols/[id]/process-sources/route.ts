@@ -36,7 +36,7 @@ import { PROTOCOL_STATUSES } from '@/config/protocols'
 import { logger } from '@/lib/logger'
 import { validateAudioUpload } from '@/lib/protocols/audio-validation'
 import { validateTextUpload } from '@/lib/protocols/upload'
-import { transcribeAudio } from '@/lib/transcription/transcribe'
+import { transcribeAudio, TranscriptionUnavailableError } from '@/lib/transcription/transcribe'
 
 type RouteParams = { id: string }
 
@@ -109,9 +109,15 @@ export const POST = withAdmin<RouteParams>(async (
           userId: dbUserId,
           error: String(error),
         })
+        // TranscriptionUnavailableError carries a user-actionable message
+        // (e.g. "Datei zu gross, max. 24 MB") — pass it through instead of
+        // collapsing every cause into the same generic string.
+        const message = error instanceof TranscriptionUnavailableError && error.message
+          ? error.message
+          : 'Transkription fehlgeschlagen. Bitte erneut versuchen.'
         return NextResponse.json({
           success: false,
-          error: 'Transkription fehlgeschlagen. Bitte erneut versuchen.',
+          error: message,
           code: 'TRANSCRIPTION_FAILED',
           retryable: true,
         }, { status: 503 })

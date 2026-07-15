@@ -9464,14 +9464,23 @@
         "saveChanges": "変更を保存",
         "draft": "Draft",
         "capture": "Capture",
-        "captureAndShop": "登録 & ショップ"
+        "captureAndShop": "登録 & ショップ",
+        "captureAnnahme": "デバイスを登録",
+        "captureAndShopShort": "+ ショップ"
       },
       "successScreen": {
         "title": "製品を登録しました!",
         "itemUUIDLabel": "Item UUID:",
         "printFactsheet": "ファクトシートを印刷",
         "captureAnother": "別の製品を登録",
-        "toOverview": "製品一覧へ"
+        "toOverview": "製品一覧へ",
+        "titleDraft": "下書きとして保存しました",
+        "titlePublished": "登録してショップに公開しました！",
+        "whereDraft": "デバイスはパイプラインの「準備完了」にあり、いつでも編集・公開できます。",
+        "whereErfassen": "デバイスはパイプラインの「準備完了」に表示され、そこから公開できます。",
+        "wherePublished": "デバイスはショップで公開中で、パイプラインの「公開済み」に表示されています。",
+        "viewInShop": "ショップで見る",
+        "toDevice": "パイプラインでデバイスを開く"
       },
       "bulkSuccess": {
         "titlePartial": "一部のみ登録されました",
@@ -10204,7 +10213,7 @@
     },
     "intake": {
       "pageTitle": "デバイス受付",
-      "pageDescription": "デバイスを登録・確認・承認します",
+      "pageDescription": "登録済みのすべてのデバイス：ステータス、チェックリスト、公開",
       "createForm": {
         "title": "新しいデバイスを登録",
         "tierLabel": "処理段階",

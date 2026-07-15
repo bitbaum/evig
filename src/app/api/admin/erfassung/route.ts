@@ -80,6 +80,8 @@ export const POST = withAdmin('products', async (request, session) => {
     return apiSuccess({
       item_uuid: result.itemUUID,
       product_id: result.productId,
+      inventory_id: result.inventoryId,
+      listing_id: result.listingId,
       action,
       published: action === 'publish',
       image_url: result.imageUrl || null,

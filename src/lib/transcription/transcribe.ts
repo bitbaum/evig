@@ -115,10 +115,14 @@ export async function transcribeAudio(
       audioBytes: audio.size,
       localError: String(localError),
     })
+    // Message is user-facing (surfaced by the protocols UI) — say what the
+    // user can actually DO, not which provider died.
+    const sizeMb = Math.round(audio.size / 1024 / 1024)
+    const maxMb = Math.round(GROQ_MAX_BYTES / 1024 / 1024)
     throw new TranscriptionUnavailableError(
       groqSuitable
-        ? 'Transkription fehlgeschlagen (Groq und lokaler Dienst nicht verfügbar).'
-        : 'Transkription nicht verfügbar (Datei zu gross für Groq und kein lokaler Dienst erreichbar).',
+        ? 'Transkription derzeit nicht verfügbar. Bitte später erneut versuchen oder den Text direkt einfügen.'
+        : `Die Audiodatei ist zu gross für die Transkription (${sizeMb} MB, Maximum ${maxMb} MB). Bitte eine kürzere Aufnahme hochladen oder den Text direkt einfügen.`,
     )
   }
 }

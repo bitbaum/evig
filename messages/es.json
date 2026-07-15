@@ -9464,14 +9464,23 @@
         "saveChanges": "Guardar cambios",
         "draft": "Draft",
         "capture": "Capture",
-        "captureAndShop": "Registrar y publicar en la tienda"
+        "captureAndShop": "Registrar y publicar en la tienda",
+        "captureAnnahme": "Registrar dispositivo",
+        "captureAndShopShort": "+ Shop"
       },
       "successScreen": {
         "title": "¡Producto registrado!",
         "itemUUIDLabel": "Item UUID:",
         "printFactsheet": "Imprimir ficha técnica",
         "captureAnother": "Registrar otro producto",
-        "toOverview": "Ir al resumen de productos"
+        "toOverview": "Ir al resumen de productos",
+        "titleDraft": "Guardado como borrador",
+        "titlePublished": "¡Registrado y publicado en la tienda!",
+        "whereDraft": "El dispositivo está en la pipeline bajo «Listo» y puede editarse o publicarse en cualquier momento.",
+        "whereErfassen": "El dispositivo ahora es visible en la pipeline bajo «Listo» y puede publicarse desde allí.",
+        "wherePublished": "El dispositivo está en línea en la tienda y listado en la pipeline bajo «Publicado».",
+        "viewInShop": "Ver en la tienda",
+        "toDevice": "Abrir dispositivo en la pipeline"
       },
       "bulkSuccess": {
         "titlePartial": "Registrados parcialmente",
@@ -10204,7 +10213,7 @@
     },
     "intake": {
       "pageTitle": "Entrada de dispositivos",
-      "pageDescription": "Registrar, revisar y aprobar dispositivos",
+      "pageDescription": "Todos los dispositivos registrados: estado, lista de control y publicación",
       "createForm": {
         "title": "Registrar nuevo dispositivo",
         "tierLabel": "Nivel de procesamiento",

@@ -73,6 +73,9 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
     return apiSuccess(protocol, 201)
   } catch (error) {
     logger.error('Error creating protocol', { error, email: session.user.email })
-    return apiError(error, ERROR_MESSAGES.PROTOCOL_CREATE_FAILED)
+    // Staff-only endpoint: include the underlying cause so the team can act
+    // on failures directly instead of guessing from a blanket message.
+    const detail = error instanceof Error && error.message ? ` – ${error.message}` : ''
+    return apiError(error, `${ERROR_MESSAGES.PROTOCOL_CREATE_FAILED}${detail}`)
   }
 })
