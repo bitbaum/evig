@@ -53,6 +53,7 @@ export const createTaskSchema = z.object({
   due_date: z.string().optional().nullable(),
   project_id: z.string().uuid().optional().nullable(),
   assigned_to: z.string().uuid().optional().nullable(),
+  team_id: z.string().uuid().optional().nullable(),
 });
 
 /**
@@ -193,6 +194,7 @@ export interface TaskEditItem {
   due_date: string | null;
   tags: string[];
   assigned_to: string | null;
+  team_id: string | null;
 }
 
 /** Completion history record */

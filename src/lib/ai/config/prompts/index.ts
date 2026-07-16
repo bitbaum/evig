@@ -43,6 +43,7 @@ import { BLOG_PROMPTS, IT_HILFE_PROMPTS } from './content'
 import { PROTOCOL_PROMPTS } from './decisions'
 import { LOCATIONS } from '@/config/org'
 import { KATEGORIEN } from '@/config/erfassung/categories'
+import { TEAM_ACCENT_OPTIONS, TEAM_ACCENT_LABELS } from '@/config/teams'
 
 // Category options for AI extraction, derived from the KATEGORIEN SSOT — the
 // same source the marketplace category dropdown and resolveCategoryValue() use.
@@ -50,6 +51,10 @@ import { KATEGORIEN } from '@/config/erfassung/categories'
 // INVERTED 70/90 (claimed 70=Netzwerk / 90=Komponenten while the SSOT is
 // 70=Komponenten / 90=Netzwerk), so hard drives were filed under Netzwerk.
 const KATEGORIE_LISTE = KATEGORIEN.map((k) => `${k.value}=${k.label}`).join(', ')
+
+// Team accent options for AI extraction, derived from the teams config SSOT —
+// the same source the /admin/teams form select uses.
+const TEAM_ACCENT_LISTE = TEAM_ACCENT_OPTIONS.map((a) => `${a}=${TEAM_ACCENT_LABELS[a]}`).join(', ')
 
 export interface FormAIConfig {
   system: string
@@ -108,6 +113,43 @@ Antworte NUR mit dem verbesserten JSON (gleiche Felder wie oben).`,
     quickActions: {
       strengths: { label: 'Stärken ausformulieren', prompt: 'Formuliere die Stärken klar und wertschätzend aus.' },
       goals: { label: 'Lernziele vorschlagen', prompt: 'Schlage 2-3 sinnvolle Entwicklungsziele vor.' },
+    },
+    auth: 'staff',
+  },
+  'team-config': {
+    system: `${BRAND_CONTEXT}
+
+Du bist ein Assistent für das Anlegen von TEAMS bei RevampIT (Arbeitsgruppen wie
+Orga-Team, Reparatur-Team — nicht Personen-Profile). Aus einer kurzen Beschreibung
+strukturierst du die Team-Konfiguration: Name, Zweck/Zuständigkeit, betreute
+Mailordner, Sitzungsrhythmus und eine passende Akzentfarbe.`,
+    extract: `Eine Person beschreibt ein neues Team.
+Aus der folgenden Beschreibung, strukturiere die Team-Konfiguration:
+
+Beschreibung: "{text}"
+
+Antworte NUR mit folgendem JSON (lass Felder weg, die nicht genannt oder klar ableitbar sind):
+{
+  "name": "Kurzer Team-Name (z.B. 'Orga-Team')",
+  "purpose": "Zweck / Zuständigkeit in 1-3 Sätzen",
+  "mail_folders": ["betreute Mailadressen, z.B. finanz@revamp-it.ch"],
+  "meeting_cadence": "Sitzungsrhythmus in einem Wort/Satz (z.B. 'wöchentlich')",
+  "accent": "eine Option aus: ${TEAM_ACCENT_LISTE}"
+}
+
+Wichtig: Schweizer Deutsch (ss statt ß). Erfinde keine Mailadressen — nur wenn genannt.`,
+    schema: null,
+    refine: `Verbessere die folgende Team-Konfiguration gemäss der Anweisung.
+
+AKTUELLE DATEN:
+{currentData}
+
+ANWEISUNG:
+{instruction}
+
+Antworte NUR mit dem verbesserten JSON (gleiche Felder wie oben).`,
+    quickActions: {
+      purpose: { label: 'Zweck ausformulieren', prompt: 'Formuliere den Zweck klar und knapp aus (1-3 Sätze).' },
     },
     auth: 'staff',
   },

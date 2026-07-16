@@ -9,10 +9,12 @@ import TeamFocusInput from '@/components/admin/teams/TeamFocusInput'
 import TeamJoinButton from '@/components/admin/teams/TeamJoinButton'
 import TeamGoalsSection from '@/components/admin/teams/TeamGoalsSection'
 import TeamMetricsSection from '@/components/admin/teams/TeamMetricsSection'
+import { TeamTasksPanel, TeamProtocolsPanel } from '@/components/admin/teams/TeamWorkPanels'
 import { ROUTES } from '@/config/routes'
 import { requireSection } from '@/lib/admin/guards'
 import { getTeamBySlug, getTeamMembers, listStaffCandidates, listTeams } from '@/lib/services/teams'
 import { listGoals, listMetrics } from '@/lib/services/team-coordination'
+import { listTeamOpenTasks, countTeamOpenTasks, listTeamProtocols } from '@/lib/services/team-space'
 import { getAccentClasses } from '@/config/teams'
 import { WORK_STATES, WORK_STATE_LABELS, WORK_STATE_COLORS, type WorkState } from '@/config/team'
 
@@ -33,12 +35,15 @@ export default async function TeamDetailPage({ params }: PageProps) {
   const team = await getTeamBySlug(slug)
   if (!team) notFound()
 
-  const [members, candidates, allTeams, goals, metrics] = await Promise.all([
+  const [members, candidates, allTeams, goals, metrics, openTasks, openTaskCount, protocols] = await Promise.all([
     getTeamMembers(team.id),
     listStaffCandidates(),
     listTeams(),
     listGoals(team.id),
     listMetrics(team.id),
+    listTeamOpenTasks(team.id),
+    countTeamOpenTasks(team.id),
+    listTeamProtocols(team.id),
   ])
   const teamRefs = allTeams.map((t) => ({ id: t.id, name: t.name, accent: t.accent }))
 
@@ -144,6 +149,12 @@ export default async function TeamDetailPage({ params }: PageProps) {
         <div className="grid gap-5 lg:grid-cols-2">
           <TeamGoalsSection teamId={team.id} goals={goals} />
           <TeamMetricsSection teamId={team.id} metrics={metrics} />
+        </div>
+
+        {/* Work: open tasks + meeting protocols */}
+        <div className="grid gap-5 lg:grid-cols-2">
+          <TeamTasksPanel teamId={team.id} tasks={openTasks} total={openTaskCount} />
+          <TeamProtocolsPanel teamId={team.id} protocols={protocols} />
         </div>
 
         {/* Members */}

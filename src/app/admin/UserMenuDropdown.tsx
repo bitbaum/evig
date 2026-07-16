@@ -8,9 +8,11 @@ import { signOut } from 'next-auth/react'
 import {
   ChevronDown,
   ExternalLink,
+  Languages,
   LogOut,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher'
 import { ROUTES } from '@/config/routes'
 
 interface UserMenuDropdownProps {
@@ -105,6 +107,16 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
               <ExternalLink className="h-4 w-4 text-text-tertiary" />
               {t('toWebsite')}
             </Link>
+          </div>
+
+          {/* Language: the top bar hides its switcher chip below sm, so small
+              screens pick their language here with one tap. */}
+          <div className="border-t border px-4 py-3 sm:hidden">
+            <p className="mb-2 flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-text-tertiary">
+              <Languages className="h-3.5 w-3.5" />
+              {t('language')}
+            </p>
+            <LocaleSwitcher inline cookieOnly />
           </div>
 
           <div className="border-t border py-2">

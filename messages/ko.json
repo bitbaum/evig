@@ -3443,7 +3443,9 @@
       "closeAriaLabel": "장바구니 닫기",
       "paymentSuccess": "결제가 완료되었습니다! 주문이 확정되었습니다.",
       "paymentFailed": "결제에 실패했습니다. 다시 시도해 주세요.",
-      "paymentCancelled": "결제가 취소되었습니다."
+      "paymentCancelled": "결제가 취소되었습니다.",
+      "unavailableRemoved": "\"{title}\"은(는) 더 이상 구매할 수 없어 장바구니에서 제거되었습니다.",
+      "unavailableRemovedMany": "{count}개 상품이 더 이상 구매할 수 없어 장바구니에서 제거되었습니다."
     },
     "aiCamera": {
       "analyzing": "제품 분석 중...",
@@ -7845,28 +7847,34 @@
       "deliveryRemote": "원격 / 온라인",
       "deliveryOnsite": "현장 방문",
       "ctaHint": "이렇게 하면 이 사람에게 요청이 시작됩니다 — 상대방에게 알림이 전달되고 제안을 보낼 수 있습니다."
-    },
-    "seller": {
-      "backToMarketplace": "마켓플레이스로 돌아가기",
-      "memberSince": "{date}부터 회원",
-      "listings": "판매 목록",
-      "sold": "판매됨",
-      "noRatings": "리뷰 없음",
-      "ratingsCount": "{count}개 리뷰",
-      "activeListings": "활성 판매 목록 ({count})",
-      "noListingsTitle": "활성 판매 목록 없음",
-      "noListingsDescription": "이 판매자는 현재 활성 판매 목록이 없습니다.",
-      "loadingProfile": "프로필 로딩 중...",
-      "sellerNotFound": "판매자를 찾을 수 없습니다",
-      "errorLoading": "프로필 로딩 오류",
-      "meta": {
-        "title": "{name} – RevampIT Marketplace 의 판매자",
-        "titleFallback": "판매자 프로필 – RevampIT Marketplace",
-        "description": "RevampIT Marketplace 의 {name} – 활성 상품 {count} 개. 중고 기술 제품을 구매하고 순환 경제에 기여하세요."
-      },
-      "publicProfile": "판매자 프로필",
-      "verified": "인증됨"
     }
+  },
+  "sellers": {
+    "meta": {
+      "title": "{name} – RevampIT Marketplace 의 판매자",
+      "titleFallback": "판매자 프로필 – RevampIT Marketplace",
+      "description": "RevampIT Marketplace 의 {name} – 활성 상품 {count} 개. 중고 기술 제품을 구매하고 순환 경제에 기여하세요."
+    },
+    "backToMarketplace": "마켓플레이스로 돌아가기",
+    "publicProfile": "판매자 프로필",
+    "verified": "인증됨",
+    "memberSince": "{date}부터 회원",
+    "listings": "판매 목록",
+    "sold": "판매됨",
+    "noRatings": "리뷰 없음",
+    "ratingsCount": "{count}개 리뷰",
+    "activeListings": "활성 판매 목록 ({count})",
+    "noListingsTitle": "활성 판매 목록 없음",
+    "noListingsDescription": "이 판매자는 현재 활성 판매 목록이 없습니다.",
+    "loadingProfile": "프로필 로딩 중...",
+    "sellerNotFound": "판매자를 찾을 수 없습니다",
+    "errorLoading": "프로필 로딩 오류",
+    "reviewsHeading": "후기",
+    "verifiedPurchase": "구매 인증됨",
+    "sellerResponse": "판매자 답변",
+    "reviewForListing": "{title} 관련",
+    "noReviewsTitle": "아직 후기가 없습니다",
+    "noReviewsDescription": "이 판매자는 아직 후기를 받지 않았습니다."
   },
   "workshops": {
     "meta": {
@@ -8659,7 +8667,10 @@
       "errorUpdateStatus": "상태를 업데이트할 수 없습니다",
       "networkError": "네트워크 오류",
       "articlesSection": "품목 ({count})",
-      "moreItems": "+{count}개 더"
+      "moreItems": "+{count}개 더",
+      "prevPage": "이전",
+      "nextPage": "다음",
+      "paginationCurrentPage": "페이지 {page}"
     },
     "listings": {
       "pageTitle": "내 상품",
@@ -10086,9 +10097,6 @@
         "declined": "거절됨"
       }
     },
-    "localeFallback": {
-      "notice": "관리 영역은 독일어로만 제공됩니다."
-    },
     "hr": {
       "vacancies": {
         "title": "채용 공고",
@@ -10160,7 +10168,6 @@
       "dayEditorHasEntry": "입력 있음",
       "dayEditorNoEntry": "입력 없음",
       "dayActionFillFromSchedule": "근무 일정에서 채우기",
-      "dayActionFillDefault": "09:00 – 17:00 채우기",
       "dayActionFree": "휴무",
       "dayActionSick": "병가",
       "dayActionAdjust": "조정",
@@ -10183,7 +10190,7 @@
       "aiExamples": "예: 「이번 주는 화요일과 수요일만 근무했고, 수요일은 15시에 퇴근, 나머지는 병가」 · 「다음 금요일 휴가」 · 「오늘 2시간 일찍 퇴근」",
       "fillMonth": "근무 일정에서 한 달 채우기",
       "fillMonthHint": "비어 있는 모든 근무일을 근무 일정(기본 월–금 09:00–17:00)으로 채웁니다. 기존 입력과 휴무일은 변경되지 않습니다.",
-      "selectHint": "클릭은 하루 선택 · 드래그는 여러 날 선택 · Ctrl/Cmd+클릭은 개별 선택 · Shift+클릭은 범위 선택 · Del은 비우기. 그런 다음 아래에서 동작을 선택하세요.",
+      "selectHint": "클릭으로 하루 선택 · 드래그로 여러 날 선택(열을 따라 아래로 = 모든 화요일) · 요일 라벨(월, 화 …)로 열 전체 선택 · Shift+클릭으로 범위 · Ctrl/Cmd+클릭으로 개별 선택 · 더블 클릭으로 해당 날짜 열기 · Del로 비우기.",
       "selectLabel": "빠른 선택",
       "selectAllDays": "전체 월",
       "selectAllWeekdays": "모든 근무일",
@@ -10198,10 +10205,18 @@
       "lockedApproved": "승인 및 잠김",
       "reopen2": "다시 열기 (관리자)",
       "bulkAbsenceLabel": "부재",
-      "fillSkippedNonPlanDays": "{count, plural, one {근무 계획이 없는 1일 건너뜀 (목표 시간 0)} other {근무 계획이 없는 #일 건너뜀 (목표 시간 0)}}",
-      "fillNonPlanDay": "계획된 날이 아님 — 목표 시간 없음. 필요하면 시간을 직접 입력하세요.",
-      "selectHintTouch": "날짜를 눌러 선택하세요(다시 누르면 해제) · 요일 약자(월, 화 …)를 누르면 열 전체 선택 · 그런 다음 아래에서 작업을 선택하세요.",
-      "submittedUnchanged": "제출됨 — 승인 대기 중. 변경하면 다시 제출해야 합니다."
+      "selectHintTouch": "날짜를 탭하여 선택(다시 탭하면 해제) · 날짜를 길게 누른 뒤 드래그하면 여러 날 선택 · 요일 라벨(월, 화 …)로 열 전체 선택.",
+      "submittedUnchanged": "제출됨 — 승인 대기 중. 변경하면 다시 제출해야 합니다.",
+      "dayFillDefault": "표준 근무일 {start}–{end} 입력",
+      "fillDefaultedNonPlanDays": "{count, plural, other {근무 계획이 없는 #일을 표준 시간으로 채웠습니다 — 필요하면 조정하세요}}",
+      "editDay": "날짜 편집",
+      "hourGridLabel": "근무 시간 선택",
+      "hourHint": "시간 위를 클릭하거나 드래그하세요 — 각 블록이 하나의 근무이며, 사이의 빈 구간은 휴게로 계산됩니다. 분할 근무는 두 번째 블록을 드래그하면 됩니다.",
+      "hourHintTouch": "시간 위를 스와이프해 블록을 만드세요(예: 08:00–12:00). 오후는 한 번 더 스와이프 — 사이의 빈 구간은 휴게로 계산됩니다. 탭하면 30분 단위로 전환됩니다.",
+      "hourBreakSuffix": "휴게",
+      "absencePaidHint": "유급 부재(예정된 시간이 계산됨)",
+      "absenceUnpaidHint": "무급(0시간)",
+      "headerSelectColumn": "모든 {day} 선택 — 드래그하면 여러 열"
     },
     "appointments": {
       "pageTitle": "예약",
@@ -10645,14 +10660,28 @@
       "placeholder": "검색 또는 명령…",
       "openShortcut": "명령 표시줄 열기",
       "noResults": "결과 없음",
-      "recentlyVisited": "최근 방문"
+      "recentlyVisited": "최근 방문",
+      "groups": {
+        "actions": "작업",
+        "sections": "섹션",
+        "users": "사용자",
+        "decisions": "의사결정",
+        "listings": "판매글"
+      },
+      "actions": {
+        "newDevice": "새 기기 등록",
+        "newDecision": "새 의사결정",
+        "newProtocol": "새 회의록",
+        "dashboard": "대시보드"
+      }
     },
     "userMenu": {
       "darkMode": "표시 모드",
       "toWebsite": "웹사이트로",
       "signOut": "로그아웃",
       "adminArea": "관리자 영역",
-      "staffFallback": "팀원"
+      "staffFallback": "팀원",
+      "language": "언어"
     },
     "notifications": {
       "title": "알림",
@@ -10906,6 +10935,172 @@
         "publish": "게시",
         "aiPlaceholderEdit": "예: „수리 팁에 대한 섹션을 추가해 줘“ 또는 „글을 더 매력적으로 만들어 줘“",
         "aiPlaceholderNew": "블로그 기사의 주제나 아이디어를 설명해 주세요…"
+      }
+    },
+    "sections": {
+      "items": {
+        "dashboard": {
+          "label": "대시보드",
+          "description": "개요 및 통계",
+          "shortLabel": "오늘"
+        },
+        "my-timecards": {
+          "label": "근무시간 기록",
+          "description": "근무시간 기록 및 제출",
+          "shortLabel": "시간"
+        },
+        "intake": {
+          "label": "기기 입고",
+          "description": "등록된 모든 기기: 상태, 체크리스트, 게시"
+        },
+        "erfassung": {
+          "label": "제품 등록",
+          "description": "기기 접수(체크리스트/기부) 또는 빠른 제품 등록",
+          "shortLabel": "등록"
+        },
+        "marketplace": {
+          "label": "판매글",
+          "description": "판매글 검토·확인·관리"
+        },
+        "it-hilfe-admin": {
+          "label": "IT 지원",
+          "description": "지원 요청 및 기술자 관리"
+        },
+        "workshops-admin": {
+          "label": "워크숍",
+          "description": "워크숍 관리 및 신청"
+        },
+        "services": {
+          "label": "서비스",
+          "description": "서비스 관리"
+        },
+        "appointments-admin": {
+          "label": "예약",
+          "description": "서비스 예약 검토 및 배정"
+        },
+        "locations": {
+          "label": "지점",
+          "description": "지점 관리"
+        },
+        "reviews": {
+          "label": "리뷰",
+          "description": "리뷰 검토"
+        },
+        "content": {
+          "label": "블로그 및 페이지",
+          "description": "블로그, 페이지, 미디어"
+        },
+        "projects": {
+          "label": "공개 프로젝트",
+          "description": "공개 프로젝트, 필요 자원, 기여"
+        },
+        "presentations": {
+          "label": "프레젠테이션",
+          "description": "프레젠테이션 열람 및 공유"
+        },
+        "feedbackOverview": {
+          "label": "피드백",
+          "description": "모든 피드백을 한곳에: 웹사이트, 프레젠테이션, 산출물"
+        },
+        "approvals": {
+          "label": "승인",
+          "description": "제출된 콘텐츠 검토 및 승인",
+          "shortLabel": "승인"
+        },
+        "membership": {
+          "label": "멤버십",
+          "description": "멤버십 신청 검토 및 관리"
+        },
+        "teams": {
+          "label": "팀",
+          "description": "팀, 담당, 구성원"
+        },
+        "team-board": {
+          "label": "담당 현황",
+          "description": "팀의 현재 포커스와 업무"
+        },
+        "tasks": {
+          "label": "업무",
+          "description": "팀 업무 관리"
+        },
+        "deliverables": {
+          "label": "산출물",
+          "description": "보고서, 프레젠테이션, 목업 — 공유 및 피드백 수집"
+        },
+        "protocols": {
+          "label": "회의록",
+          "description": "회의록 및 메모"
+        },
+        "decisions": {
+          "label": "의사결정",
+          "description": "팀 제안 및 투표"
+        },
+        "donations": {
+          "label": "기부",
+          "description": "금전·물품 기부 관리"
+        },
+        "users": {
+          "label": "사용자",
+          "description": "사용자 관리"
+        },
+        "team": {
+          "label": "팀 프로필",
+          "description": "직원, 자원봉사자, 인턴"
+        },
+        "hr-vacancies": {
+          "label": "채용 공고",
+          "description": "공고 게시·중지·공유"
+        },
+        "hr-applications": {
+          "label": "지원서",
+          "description": "지원 파이프라인 및 채용"
+        },
+        "payroll": {
+          "label": "급여",
+          "description": "월 마감 및 회계용 CSV 내보내기"
+        },
+        "analyse-hub": {
+          "label": "분석 개요",
+          "description": "핵심 지표, 재무, 임팩트를 한눈에"
+        },
+        "finanzen": {
+          "label": "재무",
+          "description": "상세 재무 개요 및 추이"
+        },
+        "kennzahlen": {
+          "label": "핵심 지표",
+          "description": "KPI와 지표를 한눈에"
+        },
+        "wirkung": {
+          "label": "임팩트",
+          "description": "환경적·사회적 임팩트"
+        },
+        "transparenz": {
+          "label": "투명성",
+          "description": "제1원리 분석"
+        },
+        "hirn": {
+          "label": "Hirn AI",
+          "description": "Revamp-IT의 AI 어시스턴트"
+        },
+        "promo-codes": {
+          "label": "프로모션 코드",
+          "description": "할인 및 쿠폰 코드 발급"
+        },
+        "settings": {
+          "label": "설정",
+          "description": "시스템 설정"
+        }
+      },
+      "groups": {
+        "uebersicht": "오늘",
+        "angebot": "운영",
+        "inhalte": "콘텐츠",
+        "betrieb": "조직",
+        "analyse": "분석",
+        "personen": "사람",
+        "teamhr": "팀·인사",
+        "system": "시스템"
       }
     }
   },

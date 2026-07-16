@@ -16,12 +16,15 @@ import type { AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
 import type { SourceValue } from '@/components/admin/protocols/SourceUploader'
 
 export function useProtocolForm(
-  teamMembers: Array<{ id: string; name: string }>
+  teamMembers: Array<{ id: string; name: string }>,
+  /** Preselected owning team (from a team space "Neues Protokoll" link). */
+  initialTeamId?: string,
 ) {
   const router = useRouter()
 
   // Form state
   const [meetingType, setMeetingType] = useState<MeetingType | ''>('')
+  const [teamId, setTeamId] = useState(initialTeamId ?? '')
   const [title, setTitle] = useState('')
   // Default meeting date — populated client-side post-mount so the value
   // reflects the user's local-tz today, not the server's UTC today.
@@ -166,6 +169,7 @@ export function useProtocolForm(
           visibility,
           input_method: detectedInputMethod,
           attendees: selectedAttendees,
+          team_id: teamId || null,
         },
       })
       if (!createResult.success || !createResult.data) {
@@ -220,6 +224,8 @@ export function useProtocolForm(
     setMeetingDate,
     visibility,
     setVisibility,
+    teamId,
+    setTeamId,
     selectedAttendees,
     showAttendees,
     setShowAttendees,

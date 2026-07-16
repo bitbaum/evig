@@ -112,5 +112,8 @@ export { donationDropoffNotification, donationDropoffConfirmation } from './dona
 // Referral / invitation templates
 export { referralInvitation, referralCouponReceived } from './referral';
 
+// Team invitation templates (claim invites + membership notifications)
+export { teamClaimInvite, teamMemberAdded } from './teams';
+
 // Base styles (for custom templates)
 export { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createEmailLayout, createTextFooter } from './base-styles';

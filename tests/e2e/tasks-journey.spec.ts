@@ -51,7 +51,8 @@ test.describe('Admin tasks staff journey', () => {
     await expect(page.getByRole('button', { name: 'Als erledigt markieren' })).toBeVisible({
       timeout: 15000,
     })
-    await expect(page.getByText('Noch keine Erledigungen')).toBeVisible()
+    // .first(): the empty state can render in two panes (list + detail).
+    await expect(page.getByText('Noch keine Erledigungen').first()).toBeVisible()
 
     await completeAdminTask(page.request, created.id)
 

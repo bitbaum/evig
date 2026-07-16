@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ROUTES } from '@/config/routes'
 import { adminInteractive } from '@/lib/admin-ui'
+import { sectionText, type SectionsT } from '@/lib/section-labels'
 import { cn } from '@/lib/utils'
 
 // ---------------------------------------------------------------------------
@@ -66,39 +67,36 @@ interface ResultItem {
 }
 
 // ---------------------------------------------------------------------------
-// Hardcoded action commands (always available)
+// Action commands (always available) — structure here, labels from messages
+// (`admin.commandBar.actions.*`) so the palette follows the admin locale.
 // ---------------------------------------------------------------------------
 
-const ACTION_COMMANDS: ResultItem[] = [
+const ACTION_COMMANDS = [
   {
     key: 'cmd-erfassung',
-    label: 'Neues Gerät erfassen',
+    labelKey: 'actions.newDevice',
     href: ROUTES.admin.erfassungNew,
     icon: <Monitor className="w-4 h-4" />,
-    group: 'Aktionen',
   },
   {
     key: 'cmd-decision',
-    label: 'Neue Entscheidung',
+    labelKey: 'actions.newDecision',
     href: ROUTES.admin.decisionNew,
     icon: <Vote className="w-4 h-4" />,
-    group: 'Aktionen',
   },
   {
     key: 'cmd-protocol',
-    label: 'Neues Protokoll',
+    labelKey: 'actions.newProtocol',
     href: ROUTES.admin.protocolNew,
     icon: <FileText className="w-4 h-4" />,
-    group: 'Aktionen',
   },
   {
     key: 'cmd-dashboard',
-    label: 'Dashboard',
+    labelKey: 'actions.dashboard',
     href: ROUTES.admin.dashboard,
     icon: <LayoutDashboard className="w-4 h-4" />,
-    group: 'Aktionen',
   },
-]
+] as const
 
 // ---------------------------------------------------------------------------
 // Simple substring search (no extra dependency)
@@ -108,25 +106,43 @@ function matches(haystack: string, query: string): boolean {
   return haystack.toLowerCase().includes(query.toLowerCase())
 }
 
-function buildResults(index: SearchIndex | null, query: string): ResultItem[] {
+type CommandBarT = ReturnType<typeof useTranslations<'admin.commandBar'>>
+
+function buildResults(
+  index: SearchIndex | null,
+  query: string,
+  t: CommandBarT,
+  tSections: SectionsT
+): ResultItem[] {
   const q = query.trim()
 
+  const actionItems: ResultItem[] = ACTION_COMMANDS.map(a => ({
+    key: a.key,
+    label: t(a.labelKey),
+    href: a.href,
+    icon: a.icon,
+    group: t('groups.actions'),
+  }))
+
   // No query → show only action commands
-  if (!q) return ACTION_COMMANDS
+  if (!q) return actionItems
 
   const items: ResultItem[] = []
 
   if (index) {
-    // Sections are static + small → filtered client-side.
+    // Sections are static + small → filtered client-side. Labels resolve
+    // through the locale (the API returns the canonical German strings).
     for (const s of index.sections) {
-      if (matches(s.label, q) || matches(s.description, q)) {
+      const label = sectionText(tSections, s.id, 'label', s.label)
+      const description = sectionText(tSections, s.id, 'description', s.description)
+      if (matches(label, q) || matches(description, q)) {
         items.push({
           key: `section-${s.id}`,
-          label: s.label,
-          sub: s.description,
+          label,
+          sub: description,
           href: s.path,
           icon: <LayoutDashboard className="w-4 h-4" />,
-          group: 'Bereiche',
+          group: t('groups.sections'),
         })
       }
     }
@@ -140,7 +156,7 @@ function buildResults(index: SearchIndex | null, query: string): ResultItem[] {
         sub: u.email,
         href: ROUTES.admin.user(u.id),
         icon: <User className="w-4 h-4" />,
-        group: 'Benutzer',
+        group: t('groups.users'),
       })
     }
 
@@ -151,7 +167,7 @@ function buildResults(index: SearchIndex | null, query: string): ResultItem[] {
         sub: d.status,
         href: ROUTES.admin.decision(d.id),
         icon: <Vote className="w-4 h-4" />,
-        group: 'Entscheide',
+        group: t('groups.decisions'),
       })
     }
 
@@ -162,13 +178,13 @@ function buildResults(index: SearchIndex | null, query: string): ResultItem[] {
         sub: l.status,
         href: `${ROUTES.admin.marketplace}?listing=${l.id}`,
         icon: <Monitor className="w-4 h-4" />,
-        group: 'Inserate',
+        group: t('groups.listings'),
       })
     }
   }
 
   // Action commands are always client-filtered.
-  const matchedActions = ACTION_COMMANDS.filter(a => matches(a.label, q))
+  const matchedActions = actionItems.filter(a => matches(a.label, q))
 
   return [...matchedActions, ...items]
 }
@@ -179,6 +195,7 @@ function buildResults(index: SearchIndex | null, query: string): ResultItem[] {
 
 export function CommandBar() {
   const t = useTranslations('admin.commandBar')
+  const tSections = useTranslations('admin.sections')
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
   const [index, setIndex] = useState<SearchIndex | null>(null)
@@ -257,7 +274,7 @@ export function CommandBar() {
     return () => dialog.removeEventListener('click', handler)
   }, [close])
 
-  const results = useMemo(() => buildResults(index, query), [index, query])
+  const results = useMemo(() => buildResults(index, query, t, tSections), [index, query, t, tSections])
 
   // Group results
   const groups = useMemo(() => {

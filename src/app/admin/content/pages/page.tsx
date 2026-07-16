@@ -25,7 +25,7 @@ import {
 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminStatsGrid, type StatCardItem } from '@/components/admin/AdminStatsGrid'
+import { AdminStatsStrip, type StatItem } from '@/components/admin/AdminStatsStrip'
 import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
 import { AdminButton } from '@/components/admin/AdminButton'
 import { ROUTES } from '@/config/routes'
@@ -180,7 +180,7 @@ export default async function AdminPagesPage() {
     )
   }
 
-  const statCards: StatCardItem[] = [
+  const statCards: StatItem[] = [
     { icon: Globe, color: 'gray', label: 'Gesamt Seiten', value: stats.totalPages },
     { icon: CheckCircle, color: 'green', label: 'Veröffentlicht', value: stats.publishedPages },
     { icon: Clock, color: 'gray', label: 'Entwürfe', value: stats.draftPages },
@@ -236,7 +236,7 @@ export default async function AdminPagesPage() {
       actions={createAction}
     >
       <HalfWiredWarning />
-      <AdminStatsGrid items={statCards} columns={3} />
+      <AdminStatsStrip items={statCards} />
       <AdminTable columns={columns} rows={pages} rowKey={(p) => p.id} />
     </AdminPageWrapper>
   )

@@ -3443,7 +3443,9 @@
       "closeAriaLabel": "カートを閉じる",
       "paymentSuccess": "お支払いが完了しました！ご注文が確定しました。",
       "paymentFailed": "お支払いに失敗しました。もう一度お試しください。",
-      "paymentCancelled": "お支払いがキャンセルされました。"
+      "paymentCancelled": "お支払いがキャンセルされました。",
+      "unavailableRemoved": "「{title}」は在庫がなくなったため、カートから削除されました。",
+      "unavailableRemovedMany": "{count} 点の商品が在庫切れのため、カートから削除されました。"
     },
     "aiCamera": {
       "analyzing": "製品を分析中...",
@@ -7845,28 +7847,34 @@
       "deliveryRemote": "リモート・オンライン",
       "deliveryOnsite": "現地訪問",
       "ctaHint": "これでこの人へのリクエストを開始します。相手に通知が届き、見積もりを送ることができます。"
-    },
-    "seller": {
-      "backToMarketplace": "マーケットプレイスに戻る",
-      "memberSince": "{date}から会員",
-      "listings": "出品",
-      "sold": "販売済み",
-      "noRatings": "評価なし",
-      "ratingsCount": "{count}件の評価",
-      "activeListings": "アクティブな出品（{count}件）",
-      "noListingsTitle": "アクティブな出品なし",
-      "noListingsDescription": "この販売者は現在アクティブな出品がありません。",
-      "loadingProfile": "プロフィールを読み込み中...",
-      "sellerNotFound": "販売者が見つかりません",
-      "errorLoading": "プロフィールの読み込みエラー",
-      "meta": {
-        "title": "{name} – RevampIT マーケットプレイスの出品者",
-        "titleFallback": "出品者プロフィール – RevampIT マーケットプレイス",
-        "description": "RevampIT マーケットプレイスの {name} – アクティブな出品 {count} 件。中古テクノロジーを購入して循環経済に貢献しましょう。"
-      },
-      "publicProfile": "出品者プロフィール",
-      "verified": "認証済み"
     }
+  },
+  "sellers": {
+    "meta": {
+      "title": "{name} – RevampIT マーケットプレイスの出品者",
+      "titleFallback": "出品者プロフィール – RevampIT マーケットプレイス",
+      "description": "RevampIT マーケットプレイスの {name} – アクティブな出品 {count} 件。中古テクノロジーを購入して循環経済に貢献しましょう。"
+    },
+    "backToMarketplace": "マーケットプレイスに戻る",
+    "publicProfile": "出品者プロフィール",
+    "verified": "認証済み",
+    "memberSince": "{date}から会員",
+    "listings": "出品",
+    "sold": "販売済み",
+    "noRatings": "評価なし",
+    "ratingsCount": "{count}件の評価",
+    "activeListings": "アクティブな出品（{count}件）",
+    "noListingsTitle": "アクティブな出品なし",
+    "noListingsDescription": "この販売者は現在アクティブな出品がありません。",
+    "loadingProfile": "プロフィールを読み込み中...",
+    "sellerNotFound": "販売者が見つかりません",
+    "errorLoading": "プロフィールの読み込みエラー",
+    "reviewsHeading": "評価",
+    "verifiedPurchase": "購入確認済み",
+    "sellerResponse": "出品者からの返信",
+    "reviewForListing": "{title} について",
+    "noReviewsTitle": "まだ評価がありません",
+    "noReviewsDescription": "この出品者はまだ評価を受けていません。"
   },
   "workshops": {
     "meta": {
@@ -8659,7 +8667,10 @@
       "errorUpdateStatus": "ステータスを更新できませんでした",
       "networkError": "ネットワークエラー",
       "articlesSection": "商品（{count}）",
-      "moreItems": "他{count}件"
+      "moreItems": "他{count}件",
+      "prevPage": "前へ",
+      "nextPage": "次へ",
+      "paginationCurrentPage": "ページ {page}"
     },
     "listings": {
       "pageTitle": "マイ出品",
@@ -10086,9 +10097,6 @@
         "declined": "却下済み"
       }
     },
-    "localeFallback": {
-      "notice": "管理エリアはドイツ語のみで利用可能です。"
-    },
     "hr": {
       "vacancies": {
         "title": "求人",
@@ -10160,7 +10168,6 @@
       "dayEditorHasEntry": "記録あり",
       "dayEditorNoEntry": "記録なし",
       "dayActionFillFromSchedule": "スケジュールから入力",
-      "dayActionFillDefault": "09:00〜17:00を入力",
       "dayActionFree": "休み",
       "dayActionSick": "病欠",
       "dayActionAdjust": "調整",
@@ -10183,7 +10190,7 @@
       "aiExamples": "例：「今週は火曜と水曜だけ勤務、水曜は15時に退社、それ以外は病欠」 ·「来週の金曜は休暇」 ·「今日は2時間早く退社」",
       "fillMonth": "計画から月を入力",
       "fillMonthHint": "空いているすべての平日を勤務計画（標準は月〜金 09:00〜17:00）で埋めます。既存の記録と休日は変更されません。",
-      "selectHint": "クリックで1日を選択 · ドラッグで複数選択 · Ctrl/Cmd+クリックで個別 · Shift+クリックで範囲 · Delキーでクリア。その後、下部でアクションを選択します。",
+      "selectHint": "クリックで1日を選択 · ドラッグで複数選択（列を下へ = すべての火曜日） · 曜日ラベル（月、火 …）で列全体を選択 · Shift+クリックで範囲 · Ctrl/Cmd+クリックで個別 · ダブルクリックでその日を開く · Delで削除。",
       "selectLabel": "クイック選択",
       "selectAllDays": "1か月全体",
       "selectAllWeekdays": "すべての平日",
@@ -10198,10 +10205,18 @@
       "lockedApproved": "承認・ロック済み",
       "reopen2": "再度開く（管理者）",
       "bulkAbsenceLabel": "欠勤",
-      "fillSkippedNonPlanDays": "{count, plural, one {勤務予定のない1日をスキップしました（所定時間0）} other {勤務予定のない#日をスキップしました（所定時間0）}}",
-      "fillNonPlanDay": "勤務予定日ではありません — 所定時間はなし。必要に応じて手動で時間を入力してください。",
-      "selectHintTouch": "日をタップして選択（もう一度タップで解除）· 曜日の略称（月・火 …）で列全体を選択 · その後、下でアクションを選びます。",
-      "submittedUnchanged": "提出済み — 承認待ちです。変更すると、再提出が必要になります。"
+      "selectHintTouch": "日をタップして選択（もう一度タップで解除） · 日を長押ししてドラッグすると複数選択 · 曜日ラベル（月、火 …）で列全体を選択。",
+      "submittedUnchanged": "提出済み — 承認待ちです。変更すると、再提出が必要になります。",
+      "dayFillDefault": "標準勤務日 {start}–{end} を入力",
+      "fillDefaultedNonPlanDays": "{count, plural, other {勤務予定のない#日を標準時間で入力しました — 必要に応じて調整してください}}",
+      "editDay": "日を編集",
+      "hourGridLabel": "勤務時間を選択",
+      "hourHint": "時間の上をクリックまたはドラッグ — 各ブロックが1つのシフトで、間の空きは休憩として数えられます。分割シフトは2つ目のブロックをドラッグするだけです。",
+      "hourHintTouch": "時間の上をスワイプしてブロックを作成（例 08:00–12:00）、午後分はもう一度スワイプ — 間の空きは休憩になります。タップで30分単位の切り替え。",
+      "hourBreakSuffix": "休憩",
+      "absencePaidHint": "有給の不在（予定時間が計上されます）",
+      "absenceUnpaidHint": "無給（0時間）",
+      "headerSelectColumn": "すべての{day}を選択 — ドラッグで複数列"
     },
     "appointments": {
       "pageTitle": "予約",
@@ -10645,14 +10660,28 @@
       "placeholder": "検索またはコマンド…",
       "openShortcut": "コマンドバーを開く",
       "noResults": "結果がありません",
-      "recentlyVisited": "最近表示した項目"
+      "recentlyVisited": "最近表示した項目",
+      "groups": {
+        "actions": "アクション",
+        "sections": "セクション",
+        "users": "ユーザー",
+        "decisions": "意思決定",
+        "listings": "出品"
+      },
+      "actions": {
+        "newDevice": "新しい機器を登録",
+        "newDecision": "新しい意思決定",
+        "newProtocol": "新しい議事録",
+        "dashboard": "ダッシュボード"
+      }
     },
     "userMenu": {
       "darkMode": "外観",
       "toWebsite": "ウェブサイトへ",
       "signOut": "ログアウト",
       "adminArea": "管理エリア",
-      "staffFallback": "チームメンバー"
+      "staffFallback": "チームメンバー",
+      "language": "言語"
     },
     "notifications": {
       "title": "通知",
@@ -10906,6 +10935,172 @@
         "publish": "公開",
         "aiPlaceholderEdit": "例：「修理のヒントに関するセクションを追加して」や「文章をより魅力的にして」",
         "aiPlaceholderNew": "ブログ記事のテーマやアイデアを説明してください…"
+      }
+    },
+    "sections": {
+      "items": {
+        "dashboard": {
+          "label": "ダッシュボード",
+          "description": "概要と統計",
+          "shortLabel": "今日"
+        },
+        "my-timecards": {
+          "label": "勤怠入力",
+          "description": "勤務時間の記録と提出",
+          "shortLabel": "勤怠"
+        },
+        "intake": {
+          "label": "機器受入",
+          "description": "登録済み機器の一覧: ステータス、チェックリスト、公開"
+        },
+        "erfassung": {
+          "label": "商品登録",
+          "description": "機器の受入(チェックリスト/寄付)または商品のクイック登録",
+          "shortLabel": "登録"
+        },
+        "marketplace": {
+          "label": "出品",
+          "description": "出品の確認・検証・管理"
+        },
+        "it-hilfe-admin": {
+          "label": "ITサポート",
+          "description": "サポート依頼と技術者の管理"
+        },
+        "workshops-admin": {
+          "label": "ワークショップ",
+          "description": "ワークショップの管理と申込"
+        },
+        "services": {
+          "label": "サービス",
+          "description": "サービス提供の管理"
+        },
+        "appointments-admin": {
+          "label": "予約",
+          "description": "サービス予約の確認と割り当て"
+        },
+        "locations": {
+          "label": "拠点",
+          "description": "拠点の管理"
+        },
+        "reviews": {
+          "label": "レビュー",
+          "description": "レビューのモデレーション"
+        },
+        "content": {
+          "label": "ブログとページ",
+          "description": "ブログ、ページ、メディア"
+        },
+        "projects": {
+          "label": "公開プロジェクト",
+          "description": "公開プロジェクト、必要リソース、貢献"
+        },
+        "presentations": {
+          "label": "プレゼンテーション",
+          "description": "プレゼンテーションの閲覧と共有"
+        },
+        "feedbackOverview": {
+          "label": "フィードバック",
+          "description": "すべてのフィードバックを一箇所に: ウェブサイト、プレゼン、成果物"
+        },
+        "approvals": {
+          "label": "承認",
+          "description": "投稿されたコンテンツの確認と承認",
+          "shortLabel": "承認"
+        },
+        "membership": {
+          "label": "会員",
+          "description": "会員申請の確認と管理"
+        },
+        "teams": {
+          "label": "チーム",
+          "description": "チーム、担当、メンバー"
+        },
+        "team-board": {
+          "label": "担当一覧",
+          "description": "チームの現在のフォーカスとタスク"
+        },
+        "tasks": {
+          "label": "タスク",
+          "description": "チームタスクの管理"
+        },
+        "deliverables": {
+          "label": "成果物",
+          "description": "レポート、プレゼン、モックアップ — 共有とフィードバック収集"
+        },
+        "protocols": {
+          "label": "議事録",
+          "description": "会議の議事録とメモ"
+        },
+        "decisions": {
+          "label": "意思決定",
+          "description": "チームの提案と投票"
+        },
+        "donations": {
+          "label": "寄付",
+          "description": "金銭・物品寄付の管理"
+        },
+        "users": {
+          "label": "ユーザー",
+          "description": "ユーザー管理"
+        },
+        "team": {
+          "label": "チームプロフィール",
+          "description": "職員、ボランティア、インターン"
+        },
+        "hr-vacancies": {
+          "label": "求人",
+          "description": "求人の掲載・停止・共有"
+        },
+        "hr-applications": {
+          "label": "応募",
+          "description": "応募パイプラインと採用"
+        },
+        "payroll": {
+          "label": "給与",
+          "description": "月次締めと会計用CSVエクスポート"
+        },
+        "analyse-hub": {
+          "label": "分析概要",
+          "description": "主要指標、財務、インパクトを一目で"
+        },
+        "finanzen": {
+          "label": "財務",
+          "description": "詳細な財務概要とトレンド"
+        },
+        "kennzahlen": {
+          "label": "主要指標",
+          "description": "KPIと指標を一目で"
+        },
+        "wirkung": {
+          "label": "インパクト",
+          "description": "環境的・社会的インパクト"
+        },
+        "transparenz": {
+          "label": "透明性",
+          "description": "第一原理分析"
+        },
+        "hirn": {
+          "label": "Hirn AI",
+          "description": "Revamp-ITのAIアシスタント"
+        },
+        "promo-codes": {
+          "label": "プロモコード",
+          "description": "割引・クーポンコードの発行"
+        },
+        "settings": {
+          "label": "設定",
+          "description": "システム設定"
+        }
+      },
+      "groups": {
+        "uebersicht": "今日",
+        "angebot": "業務",
+        "inhalte": "コンテンツ",
+        "betrieb": "組織",
+        "analyse": "分析",
+        "personen": "人々",
+        "teamhr": "チーム・人事",
+        "system": "システム"
       }
     }
   },

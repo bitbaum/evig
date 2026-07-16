@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
 import { Trash2, ShoppingCart, Loader2, MapPin, ArrowLeft, ShieldCheck, LockKeyhole, Store, Truck } from 'lucide-react'
@@ -45,6 +45,33 @@ export function CartPageClient() {
     : 0
   const orderTotal = total + shippingCost
   const shippingFormValid = deliveryMethod !== 'shipping' || addressComplete
+
+  // The cart lives in localStorage, so it can reference listings that sold
+  // or got reserved in the meantime. Validate once after hydration and drop
+  // stale items here instead of letting checkout fail on the locked row.
+  const validatedRef = useRef(false)
+  useEffect(() => {
+    if (!hydrated || validatedRef.current || items.length === 0) return
+    validatedRef.current = true
+    const validate = async () => {
+      const res = await apiFetch<{ unavailable_ids: string[] }>('/api/marketplace/cart/validate', {
+        method: 'POST',
+        body: { listing_ids: items.map((i) => i.id) },
+      })
+      // Fail open: if the check itself errors, keep the cart — checkout
+      // still guards availability under a row lock.
+      if (!res.success || !res.data) return
+      const stale = items.filter((i) => res.data!.unavailable_ids.includes(i.id))
+      if (stale.length === 0) return
+      stale.forEach((i) => remove(i.id))
+      toast.info(
+        stale.length === 1
+          ? t('unavailableRemoved', { title: stale[0].title })
+          : t('unavailableRemovedMany', { count: stale.length }),
+      )
+    }
+    validate()
+  }, [hydrated, items, remove, t])
 
   if (!hydrated) {
     return (

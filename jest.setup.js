@@ -49,6 +49,22 @@ global.fetch = jest.fn()
 
 // Browser-only mocks (skip in node environment for API route tests)
 if (typeof window !== 'undefined') {
+  // jsdom has no PointerEvent — without it, testing-library's
+  // fireEvent.pointerDown/Move/… falls back to a bare Event that silently
+  // drops pointerType, button, clientX/Y and modifier keys. Extending
+  // MouseEvent keeps all of those and adds the pointer fields.
+  if (typeof window.PointerEvent === 'undefined') {
+    class PointerEventPolyfill extends MouseEvent {
+      constructor(type, init = {}) {
+        super(type, init)
+        this.pointerType = init.pointerType ?? ''
+        this.pointerId = init.pointerId ?? 1
+        this.isPrimary = init.isPrimary ?? true
+      }
+    }
+    window.PointerEvent = PointerEventPolyfill
+  }
+
   // Mock window.matchMedia
   Object.defineProperty(window, 'matchMedia', {
     writable: true,

@@ -1,6 +1,7 @@
 import { pgTable, uuid, text, date, timestamp, integer, boolean, index } from 'drizzle-orm/pg-core'
 import { sql } from 'drizzle-orm'
 import { users } from './auth'
+import { teams } from './teams'
 
 // =============================================================================
 // TASK PROJECTS
@@ -47,6 +48,8 @@ export const tasks = pgTable('tasks', {
   completedBy: uuid('completed_by').references(() => users.id),
   assignedTo: uuid('assigned_to').references(() => users.id, { onDelete: 'set null' }),
   projectId: uuid('project_id').references(() => taskProjects.id, { onDelete: 'set null' }),
+  // Optional owning team (134) — surfaces the task on the team space page.
+  teamId: uuid('team_id').references(() => teams.id, { onDelete: 'set null' }),
   createdBy: uuid('created_by').notNull().references(() => users.id),
   isArchived: boolean('is_archived').default(false),
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
@@ -57,6 +60,7 @@ export const tasks = pgTable('tasks', {
   index('idx_tasks_type').on(table.taskType),
   index('idx_tasks_project').on(table.projectId),
   index('idx_tasks_assigned_to').on(table.assignedTo),
+  index('idx_tasks_team').on(table.teamId),
 ])
 
 export type Task = typeof tasks.$inferSelect

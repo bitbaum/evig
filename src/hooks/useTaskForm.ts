@@ -13,6 +13,11 @@ interface TeamMember {
   position: string | null
 }
 
+interface TeamOption {
+  id: string
+  name: string
+}
+
 export interface TaskFormData {
   title: string
   description: string
@@ -25,6 +30,7 @@ export interface TaskFormData {
   due_date: string
   tags: string
   assigned_to: string
+  team_id: string
 }
 
 export function useTaskForm(task?: TaskEditItem, prefill?: Partial<TaskFormData>) {
@@ -33,6 +39,7 @@ export function useTaskForm(task?: TaskEditItem, prefill?: Partial<TaskFormData>
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
+  const [teams, setTeams] = useState<TeamOption[]>([])
   const [formData, setFormData] = useState<TaskFormData>({
     title: task?.title ?? prefill?.title ?? '',
     description: task?.description ?? prefill?.description ?? '',
@@ -45,7 +52,16 @@ export function useTaskForm(task?: TaskEditItem, prefill?: Partial<TaskFormData>
     due_date: task?.due_date ?? '',
     tags: task?.tags?.join(', ') ?? '',
     assigned_to: task?.assigned_to ?? '',
+    team_id: task?.team_id ?? prefill?.team_id ?? '',
   })
+
+  useEffect(() => {
+    apiFetch<TeamOption[]>('/api/admin/teams').then((result) => {
+      if (result.success && result.data) {
+        setTeams(result.data.map((t) => ({ id: t.id, name: t.name })))
+      }
+    })
+  }, [])
 
   useEffect(() => {
     apiFetch<Array<{ user_id: string; user_name?: string | null; position?: string | null; is_active?: boolean }>>(
@@ -106,6 +122,7 @@ export function useTaskForm(task?: TaskEditItem, prefill?: Partial<TaskFormData>
         estimated_minutes: formData.estimated_minutes ? parseInt(formData.estimated_minutes, 10) : null,
         due_date: formData.due_date || null,
         assigned_to: formData.assigned_to || null,
+        team_id: formData.team_id || null,
         tags: formData.tags ? formData.tags.split(',').map(t => t.trim()).filter(Boolean) : [],
       }
       if (isEdit) {
@@ -130,6 +147,7 @@ export function useTaskForm(task?: TaskEditItem, prefill?: Partial<TaskFormData>
     loading,
     error,
     teamMembers,
+    teams,
     formData,
     handleChange,
     handleAIFieldsFilled,

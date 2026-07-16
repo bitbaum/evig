@@ -106,7 +106,7 @@ export const ADMIN_ROUTES: InventoryRoute[] = [
   { id: 58, label: 'Create workshop (proposal flow)', path: ROUTES.admin.workshopsNew, urlPattern: /\/admin\/workshops/ },
   { id: 59, label: 'Workshop instances', path: ROUTES.admin.workshopsInstances, urlPattern: /\/admin\/workshops\/instances/ },
   { id: 85, label: 'Admin appointments', path: ROUTES.admin.appointments, urlPattern: /\/admin\/appointments/ },
-  { id: 88, label: 'Repairer applications', path: '/admin/repairer-applications' },
+  { id: 88, label: 'HR applications', path: ROUTES.admin.hrApplications, urlPattern: /\/admin\/hr\/applications/ },
   { id: 98, label: 'Admin decisions', path: ROUTES.admin.decisions, urlPattern: /\/admin\/decisions/ },
   { id: 98, label: 'New decision', path: ROUTES.admin.decisionNew, urlPattern: /\/admin\/decisions\/new/ },
   { id: 105, label: 'Admin blog CMS', path: ROUTES.admin.contentBlog, urlPattern: /\/admin\/content\/blog/ },

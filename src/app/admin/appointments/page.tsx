@@ -10,7 +10,7 @@ import { adminInteractive } from '@/lib/admin-ui'
 import { getTranslations } from 'next-intl/server'
 import { Calendar, AlertTriangle, Clock, CheckCircle2 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminStatsGrid, type StatCardItem } from '@/components/admin/AdminStatsGrid'
+import { AdminStatsStrip, type StatItem } from '@/components/admin/AdminStatsStrip'
 import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
 import { ADMIN_CONTENT } from '@/config/admin-content'
 import {
@@ -54,7 +54,7 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
     listActiveRepairers(),
   ])
 
-  const statCards: StatCardItem[] = [
+  const statCards: StatItem[] = [
     {
       icon: Calendar,
       color: 'gray',
@@ -160,7 +160,7 @@ export default async function AdminAppointmentsPage({ searchParams }: PageProps)
       icon={Calendar}
       iconColor="amber"
     >
-      <AdminStatsGrid items={statCards} />
+      <AdminStatsStrip items={statCards} />
 
       {/* Status filter chips — server-rendered Links, no client component */}
       <div className="flex flex-wrap items-center gap-2 text-sm">

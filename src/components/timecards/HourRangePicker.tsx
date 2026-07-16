@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useRef } from 'react'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { formatTimecardDuration, TIMECARD_DAY_GRID } from '@/config/timecards'
@@ -8,18 +9,21 @@ import { useCellSelection } from './useCellSelection'
 
 /**
  * HourRangePicker — pick a day's worked hours by selecting half-hour slots,
- * using the SAME model as the month calendar (useCellSelection): click,
- * Ctrl/Cmd-click for NON-ADJACENT slots, Shift-click or drag for a range.
+ * on the SAME gesture model as the month calendar (useGridPointerInput):
+ * drag/swipe paints a block, a drag starting on a selected slot erases,
+ * click/tap toggles one slot, Shift-click adds a range.
  *
- * Non-adjacent selection = split shifts: select 09:00–12:00 and 13:00–17:00
- * and the 12:00–13:00 gap becomes the break automatically. The picker reports:
+ * Split shifts are first-class: paint 08:00–12:00, lift, paint 14:00–17:00.
+ * The picker reports:
  *   start    = first selected slot
  *   end      = end of the last selected slot
  *   break    = minutes inside [start, end) that are NOT selected (the gaps)
- *   duration = selected minutes (gross worked time)
+ *   duration = selected minutes (worked time)
  *
- * Controlled by the day's entry: the parent keys this component by date, so it
- * re-seeds from the entry whenever the selected day changes.
+ * Controlled from outside: when the entry's start/end/duration change through
+ * another surface (the Von/Bis/Pause fields, a fill action, an absence
+ * switch), the grid re-seeds itself — but user gestures never echo back
+ * (see `version` in useCellSelection).
  */
 
 const { startHour: DAY_START_HOUR, endHour: DAY_END_HOUR, stepMinutes: STEP_MINUTES } = TIMECARD_DAY_GRID
@@ -32,8 +36,7 @@ function slotToTime(slotIndex: number): string {
 
 function timeToSlot(time: string | null | undefined): number | null {
   if (!time || !/^\d{2}:\d{2}$/.test(time)) return null
-  const [h, m] = time.split(':').map(Number)
-  const slot = (h * 60 + m - DAY_START_HOUR * 60) / STEP_MINUTES
+  const slot = (Number(time.slice(0, 2)) * 60 + Number(time.slice(3)) - DAY_START_HOUR * 60) / STEP_MINUTES
   if (slot < 0 || slot > SLOT_COUNT) return null
   return Math.round(slot)
 }
@@ -70,6 +73,17 @@ function reconstructWorkedSlots(
   return [...slots].sort((a, b) => a - b)
 }
 
+/** Contiguous runs of selected slot indices → shift blocks for the summary. */
+function toBlocks(idxs: number[]): Array<{ from: number; toExcl: number }> {
+  const blocks: Array<{ from: number; toExcl: number }> = []
+  for (const i of idxs) {
+    const last = blocks[blocks.length - 1]
+    if (last && last.toExcl === i) last.toExcl = i + 1
+    else blocks.push({ from: i, toExcl: i + 1 })
+  }
+  return blocks
+}
+
 export function HourRangePicker({
   start,
   end,
@@ -82,32 +96,32 @@ export function HourRangePicker({
   /** start/end "HH:MM" (null when cleared), break + gross duration in minutes. */
   onChange: (start: string | null, end: string | null, breakMinutes: number, durationMinutes: number) => void
 }) {
+  const t = useTranslations('admin.timecards')
   const slotKeys = useMemo(() => Array.from({ length: SLOT_COUNT }, (_, i) => String(i)), [])
-  // Seed once (component is keyed by date upstream, so this runs per day).
-  const initial = useMemo(
-    () => reconstructWorkedSlots(start, end, durationMinutes).map(String),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+  const sel = useCellSelection(
+    slotKeys,
+    reconstructWorkedSlots(start, end, durationMinutes).map(String),
   )
-  const sel = useCellSelection(slotKeys, initial)
 
   // Keep the latest onChange in a ref so the report-effect can depend only on
-  // the selection (an inline onChange from the parent would otherwise re-fire
-  // it every render and loop).
+  // the user-gesture version (an inline onChange from the parent would
+  // otherwise re-fire it every render and loop).
   const onChangeRef = useRef(onChange)
   useEffect(() => {
     onChangeRef.current = onChange
   })
 
-  // Report user-driven changes upward; skip the seed render so we don't loop.
-  const firstRun = useRef(true)
+  // What we last told the parent — so an entry update that merely echoes our
+  // own report doesn't re-seed the grid (which would lose the break position).
+  const lastReported = useRef<{ start: string | null; end: string | null; duration: number } | null>(null)
+
+  // Report USER-driven changes upward. `version` only moves on gestures, so
+  // programmatic re-seeds (setExact below, or the initial seed) never echo.
   useEffect(() => {
-    if (firstRun.current) {
-      firstRun.current = false
-      return
-    }
+    if (sel.version === 0) return
     const idxs = [...sel.selected].map(Number).sort((a, b) => a - b)
     if (idxs.length === 0) {
+      lastReported.current = { start: null, end: null, duration: 0 }
       onChangeRef.current(null, null, 0, 0)
       return
     }
@@ -115,22 +129,35 @@ export function HourRangePicker({
     const to = idxs[idxs.length - 1]
     const worked = idxs.length * STEP_MINUTES
     const span = (to - from + 1) * STEP_MINUTES
+    lastReported.current = { start: slotToTime(from), end: slotToTime(to + 1), duration: worked }
     onChangeRef.current(slotToTime(from), slotToTime(to + 1), span - worked, worked)
-  }, [sel.selected])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sel.version])
+
+  // Re-seed when the entry changed through ANOTHER surface (time fields, fill
+  // action, absence→work switch) — recognised by not matching our last report.
+  const { setExact } = sel
+  useEffect(() => {
+    const r = lastReported.current
+    if (r && r.start === (start ?? null) && r.end === (end ?? null) && r.duration === durationMinutes) return
+    setExact(reconstructWorkedSlots(start, end, durationMinutes).map(String))
+  }, [start, end, durationMinutes, setExact])
 
   const idxs = [...sel.selected].map(Number).sort((a, b) => a - b)
   const hasSelection = idxs.length > 0
-  const from = hasSelection ? idxs[0] : 0
-  const to = hasSelection ? idxs[idxs.length - 1] : 0
+  const blocks = toBlocks(idxs)
   const worked = idxs.length * STEP_MINUTES
-  const breakMinutes = hasSelection ? (to - from + 1) * STEP_MINUTES - worked : 0
+  const breakMinutes = hasSelection
+    ? (idxs[idxs.length - 1] - idxs[0] + 1) * STEP_MINUTES - worked
+    : 0
 
   return (
     <div>
       <div
+        {...sel.containerProps}
         role="grid"
-        aria-label="Arbeitszeit wählen"
-        className="grid select-none grid-cols-4 gap-1 sm:grid-cols-6 md:grid-cols-8"
+        aria-label={t('hourGridLabel')}
+        className="grid touch-pan-y select-none grid-cols-4 gap-1 sm:grid-cols-6 md:grid-cols-8"
       >
         {slotKeys.map((key, i) => {
           const inRange = sel.selected.has(key)
@@ -141,12 +168,9 @@ export function HourRangePicker({
               type="button"
               variant="ghost"
               aria-pressed={inRange}
-              onPointerDown={e => sel.onCellPointerDown(e)}
-              onMouseDown={e => sel.onCellMouseDown(key, e)}
-              onMouseEnter={() => sel.onCellMouseEnter(key)}
-              onClick={e => sel.onCellClick(key, e)}
+              {...sel.getCellProps(key)}
               className={cn(
-                'h-auto rounded-md border px-0 py-2 text-center font-mono text-xs tabular-nums transition-colors',
+                'h-auto min-h-9 rounded-md border px-0 py-2 text-center font-mono text-xs tabular-nums transition-colors',
                 inRange
                   ? 'border-action bg-action-muted text-action'
                   : isHourStart
@@ -163,20 +187,16 @@ export function HourRangePicker({
         {hasSelection ? (
           <>
             <span className="font-medium text-text-primary">
-              {slotToTime(from)}–{slotToTime(to + 1)}
+              {blocks.map(b => `${slotToTime(b.from)}–${slotToTime(b.toExcl)}`).join(' · ')}
             </span>{' '}
             · {formatTimecardDuration(worked)}
-            {breakMinutes > 0 && <> · {formatTimecardDuration(breakMinutes)} Pause</>}
+            {breakMinutes > 0 && <> · {formatTimecardDuration(breakMinutes)} {t('hourBreakSuffix')}</>}
           </>
         ) : (
           <>
-            {/* Device-matched hint: Ctrl/Cmd and drag don't exist on touch. */}
-            <span className="[@media(pointer:coarse)]:hidden">
-              Klicke oder ziehe über die Stunden. Ctrl/Cmd-Klick für geteilte Schichten (Lücke = Pause).
-            </span>
-            <span className="hidden [@media(pointer:coarse)]:inline">
-              Tippe zuerst die Start-Stunde an, dann die End-Stunde.
-            </span>
+            {/* Device-matched hint (drag vs swipe wording). */}
+            <span className="[@media(pointer:coarse)]:hidden">{t('hourHint')}</span>
+            <span className="hidden [@media(pointer:coarse)]:inline">{t('hourHintTouch')}</span>
           </>
         )}
       </p>

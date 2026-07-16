@@ -1,13 +1,15 @@
 import { pgTable, uuid, text, jsonb, timestamp, date, index } from 'drizzle-orm/pg-core'
 import { users } from './auth'
 import { tasks } from './tasks'
+import { teams } from './teams'
 import { decisions } from './decisions'
 
 // =============================================================================
 // MEETING PROTOCOLS
 // =============================================================================
 // Meeting minutes with AI-processed structured notes.
-// Final state includes input_method from migration 027.
+// Final state includes input_method from migration 027; all enum CHECKs
+// dropped in migration 134 (values validated via zod from src/config/protocols.ts).
 
 export const meetingProtocols = pgTable('meeting_protocols', {
   id: uuid('id').primaryKey().defaultRandom(),
@@ -25,6 +27,8 @@ export const meetingProtocols = pgTable('meeting_protocols', {
   status: text('status').notNull().default('draft'),
   // CHECK (input_method IN ('audio','transcript','notes','tasks')) — validated at app layer
   inputMethod: text('input_method').default('transcript'),
+  // Optional owning team (134) — surfaces the protocol on the team space page.
+  teamId: uuid('team_id').references(() => teams.id, { onDelete: 'set null' }),
   createdBy: uuid('created_by').notNull().references(() => users.id),
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
@@ -33,6 +37,7 @@ export const meetingProtocols = pgTable('meeting_protocols', {
   index('idx_protocols_meeting_type').on(table.meetingType),
   index('idx_protocols_status').on(table.status),
   index('idx_protocols_created_by').on(table.createdBy),
+  index('idx_protocols_team').on(table.teamId),
 ])
 
 export type MeetingProtocol = typeof meetingProtocols.$inferSelect

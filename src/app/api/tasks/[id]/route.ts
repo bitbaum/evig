@@ -221,6 +221,7 @@ export const PATCH = withAdmin<RouteParams>(async (
       due_date: 'dueDate',
       project_id: 'projectId',
       assigned_to: 'assignedTo',
+      team_id: 'teamId',
       current_status: 'currentStatus',
       is_archived: 'isArchived',
     };

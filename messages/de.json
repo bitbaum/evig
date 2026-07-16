@@ -1146,7 +1146,9 @@
       "paymentCancelled": "Zahlung abgebrochen.",
       "revampitOnly": "Nur Revamp-IT-Geräte können in den Warenkorb. Community-Inserate werden direkt gekauft.",
       "cartAriaLabel": "Warenkorb, {count} Artikel",
-      "closeAriaLabel": "Warenkorb schliessen"
+      "closeAriaLabel": "Warenkorb schliessen",
+      "unavailableRemoved": "«{title}» ist nicht mehr verfügbar und wurde aus dem Warenkorb entfernt.",
+      "unavailableRemovedMany": "{count} Artikel sind nicht mehr verfügbar und wurden aus dem Warenkorb entfernt."
     }
   },
   "services": {
@@ -7983,34 +7985,34 @@
       "deliveryRemote": "Remote / Online",
       "deliveryOnsite": "Vor Ort",
       "ctaHint": "Du startest damit eine Anfrage an diese Person – sie wird benachrichtigt und kann dir ein Angebot machen."
-    },
-    "seller": {
-      "meta": {
-        "title": "{name} – Verkäufer auf dem RevampIT Marketplace",
-        "titleFallback": "Verkäuferprofil – RevampIT Marketplace",
-        "description": "{name} auf dem RevampIT Marketplace – {count} aktive Inserate. Gebrauchte Technik kaufen und zur Kreislaufwirtschaft beitragen."
-      },
-      "backToMarketplace": "Zurück zum Marketplace",
-      "publicProfile": "Verkäuferprofil",
-      "verified": "Verifiziert",
-      "memberSince": "Mitglied seit {date}",
-      "listings": "Inserate",
-      "sold": "Verkauft",
-      "noRatings": "Keine Bewertungen",
-      "ratingsCount": "{count} Bewertungen",
-      "activeListings": "Aktive Inserate ({count})",
-      "noListingsTitle": "Keine aktiven Inserate",
-      "noListingsDescription": "Dieser Verkäufer hat momentan keine aktiven Inserate.",
-      "loadingProfile": "Profil wird geladen...",
-      "sellerNotFound": "Verkäufer nicht gefunden",
-      "errorLoading": "Fehler beim Laden des Profils",
-      "reviewsHeading": "Bewertungen",
-      "verifiedPurchase": "Verifizierter Kauf",
-      "sellerResponse": "Antwort des Verkäufers",
-      "reviewForListing": "zu {title}",
-      "noReviewsTitle": "Noch keine Bewertungen",
-      "noReviewsDescription": "Dieser Verkäufer hat noch keine Bewertungen erhalten."
     }
+  },
+  "sellers": {
+    "meta": {
+      "title": "{name} – Verkäufer auf dem RevampIT Marketplace",
+      "titleFallback": "Verkäuferprofil – RevampIT Marketplace",
+      "description": "{name} auf dem RevampIT Marketplace – {count} aktive Inserate. Gebrauchte Technik kaufen und zur Kreislaufwirtschaft beitragen."
+    },
+    "backToMarketplace": "Zurück zum Marketplace",
+    "publicProfile": "Verkäuferprofil",
+    "verified": "Verifiziert",
+    "memberSince": "Mitglied seit {date}",
+    "listings": "Inserate",
+    "sold": "Verkauft",
+    "noRatings": "Keine Bewertungen",
+    "ratingsCount": "{count} Bewertungen",
+    "activeListings": "Aktive Inserate ({count})",
+    "noListingsTitle": "Keine aktiven Inserate",
+    "noListingsDescription": "Dieser Verkäufer hat momentan keine aktiven Inserate.",
+    "loadingProfile": "Profil wird geladen...",
+    "sellerNotFound": "Verkäufer nicht gefunden",
+    "errorLoading": "Fehler beim Laden des Profils",
+    "reviewsHeading": "Bewertungen",
+    "verifiedPurchase": "Verifizierter Kauf",
+    "sellerResponse": "Antwort des Verkäufers",
+    "reviewForListing": "zu {title}",
+    "noReviewsTitle": "Noch keine Bewertungen",
+    "noReviewsDescription": "Dieser Verkäufer hat noch keine Bewertungen erhalten."
   },
   "faq": {
     "meta": {
@@ -8706,7 +8708,10 @@
       "errorLoading": "Fehler beim Laden der Bestellung",
       "errorConfirmReceipt": "Empfang konnte nicht bestätigt werden",
       "errorUpdateStatus": "Status konnte nicht aktualisiert werden",
-      "networkError": "Netzwerkfehler"
+      "networkError": "Netzwerkfehler",
+      "prevPage": "Zurück",
+      "nextPage": "Weiter",
+      "paginationCurrentPage": "Seite {page}"
     },
     "listings": {
       "pageTitle": "Meine Inserate",
@@ -10201,9 +10206,6 @@
         "declined": "Abgelehnt"
       }
     },
-    "localeFallback": {
-      "notice": "Der Admin-Bereich ist nur auf Deutsch verfügbar."
-    },
     "timecards": {
       "headerStatusSubmitted": "Eingereicht",
       "headerStatusDraft": "Entwurf",
@@ -10228,7 +10230,6 @@
       "dayEditorHasEntry": "Eintrag",
       "dayEditorNoEntry": "Kein Eintrag",
       "dayActionFillFromSchedule": "Aus Schedule ausfüllen",
-      "dayActionFillDefault": "09:00 – 17:00 ausfüllen",
       "dayActionFree": "Frei",
       "dayActionSick": "Krank",
       "dayActionAdjust": "Anpassen",
@@ -10251,7 +10252,7 @@
       "aiExamples": "z.B. «Diese Woche nur Di und Mi gearbeitet, Mi um 15 Uhr gegangen, sonst krank» · «Nächsten Freitag Ferien» · «Heute 2 Stunden früher gegangen»",
       "fillMonth": "Monat aus Plan füllen",
       "fillMonthHint": "Füllt alle leeren Werktage mit deinem Arbeitsplan (Standard Mo–Fr 09:00–17:00). Bestehende Einträge und freie Tage bleiben unverändert.",
-      "selectHint": "Klick wählt einen Tag · Ziehen bemalt die berührten Tage (z.B. eine Spalte runter = alle Dienstage) · Wochentag-Kürzel (Mo, Di …) wählt die ganze Spalte, ziehen für mehrere · Shift+Klick einen Bereich · Ctrl/Cmd+Klick einzeln · Entf leert. Dann unten eine Aktion wählen.",
+      "selectHint": "Klick wählt einen Tag · Ziehen markiert mehrere (Spalte runter = alle Dienstage) · Wochentag-Kürzel (Mo, Di …) wählt die ganze Spalte · Shift+Klick Bereich · Ctrl/Cmd+Klick einzeln · Doppelklick öffnet den Tag · Entf leert.",
       "selectLabel": "Schnellauswahl",
       "selectAllDays": "Ganzer Monat",
       "selectAllWeekdays": "Alle Werktage",
@@ -10264,10 +10265,18 @@
       "bulkAbsenceLabel": "Abwesend",
       "bulkClear": "Leeren",
       "bulkCancel": "Auswahl aufheben",
-      "fillSkippedNonPlanDays": "{count, plural, one {1 Tag ohne Arbeitsplan übersprungen (0 Soll-Stunden)} other {# Tage ohne Arbeitsplan übersprungen (0 Soll-Stunden)}}",
-      "fillNonPlanDay": "Kein Plan-Tag — keine Soll-Stunden. Trage Zeiten bei Bedarf manuell ein.",
-      "selectHintTouch": "Tippe Tage an, um sie auszuwählen (erneut tippen wählt ab) · Wochentag-Kürzel (Mo, Di …) wählt die ganze Spalte · Dann unten eine Aktion wählen.",
-      "submittedUnchanged": "Eingereicht — warten auf Freigabe. Änderungen machen ein erneutes Einreichen nötig."
+      "selectHintTouch": "Tippe Tage an, um sie auszuwählen (erneut tippen wählt ab) · Halte einen Tag kurz gedrückt und ziehe, um mehrere zu markieren · Wochentag-Kürzel (Mo, Di …) wählt die ganze Spalte.",
+      "submittedUnchanged": "Eingereicht — warten auf Freigabe. Änderungen machen ein erneutes Einreichen nötig.",
+      "dayFillDefault": "Standardtag {start}–{end} eintragen",
+      "fillDefaultedNonPlanDays": "{count, plural, one {1 Tag ohne Arbeitsplan mit Standardzeiten gefüllt — bei Bedarf anpassen} other {# Tage ohne Arbeitsplan mit Standardzeiten gefüllt — bei Bedarf anpassen}}",
+      "editDay": "Tag bearbeiten",
+      "hourGridLabel": "Arbeitszeit wählen",
+      "hourHint": "Klicke oder ziehe über die Stunden — jeder Block ist eine Schicht, Lücken dazwischen zählen als Pause. Für eine geteilte Schicht einfach einen zweiten Block ziehen.",
+      "hourHintTouch": "Wische über die Stunden für einen Block (z.B. 08:00–12:00), dann nochmals für den Nachmittag — die Lücke dazwischen zählt als Pause. Tippen wählt einzelne halbe Stunden.",
+      "hourBreakSuffix": "Pause",
+      "absencePaidHint": "Bezahlte Abwesenheit (zählt geplante Stunden)",
+      "absenceUnpaidHint": "Unbezahlt (0 Std.)",
+      "headerSelectColumn": "Alle {day} auswählen — ziehen für mehrere Spalten"
     },
     "appointments": {
       "pageTitle": "Termine",
@@ -10712,14 +10721,28 @@
       "openShortcut": "Befehlsleiste öffnen",
       "noResults": "Keine Ergebnisse für «{query}»",
       "recentlyVisited": "Zuletzt besucht",
-      "searching": "Suchen …"
+      "searching": "Suchen …",
+      "groups": {
+        "actions": "Aktionen",
+        "sections": "Bereiche",
+        "users": "Benutzer",
+        "decisions": "Entscheide",
+        "listings": "Inserate"
+      },
+      "actions": {
+        "newDevice": "Neues Gerät erfassen",
+        "newDecision": "Neue Entscheidung",
+        "newProtocol": "Neues Protokoll",
+        "dashboard": "Dashboard"
+      }
     },
     "userMenu": {
       "darkMode": "Erscheinungsbild",
       "toWebsite": "Zur Website",
       "signOut": "Abmelden",
       "adminArea": "Admin-Bereich",
-      "staffFallback": "Teammitglied"
+      "staffFallback": "Teammitglied",
+      "language": "Sprache"
     },
     "notifications": {
       "title": "Benachrichtigungen",
@@ -10973,6 +10996,172 @@
         "publish": "Veröffentlichen",
         "aiPlaceholderEdit": "z.B. „Füge einen Abschnitt über Reparatur-Tipps hinzu“ oder „Mache den Text ansprechender“",
         "aiPlaceholderNew": "Beschreibe das Thema oder die Idee für deinen Blog-Artikel…"
+      }
+    },
+    "sections": {
+      "items": {
+        "dashboard": {
+          "label": "Dashboard",
+          "description": "Übersicht und Statistiken",
+          "shortLabel": "Heute"
+        },
+        "my-timecards": {
+          "label": "Zeiterfassung",
+          "description": "Arbeitszeiten erfassen und einreichen",
+          "shortLabel": "Zeit"
+        },
+        "intake": {
+          "label": "Geräte-Eingang",
+          "description": "Alle erfassten Geräte: Status, Checkliste, Publikation"
+        },
+        "erfassung": {
+          "label": "Produkt aufnehmen",
+          "description": "Gerät annehmen (Checkliste/Spende) oder Produkt schnell erfassen",
+          "shortLabel": "Aufnehmen"
+        },
+        "marketplace": {
+          "label": "Inserate",
+          "description": "Inserate prüfen, verifizieren und verwalten"
+        },
+        "it-hilfe-admin": {
+          "label": "IT-Hilfe",
+          "description": "Hilfsanfragen und Techniker verwalten"
+        },
+        "workshops-admin": {
+          "label": "Workshops",
+          "description": "Workshop-Verwaltung und Anmeldungen"
+        },
+        "services": {
+          "label": "Dienstleistungen",
+          "description": "Service-Angebote verwalten"
+        },
+        "appointments-admin": {
+          "label": "Termine",
+          "description": "Service-Termine prüfen und zuweisen"
+        },
+        "locations": {
+          "label": "Standorte",
+          "description": "Standortverwaltung"
+        },
+        "reviews": {
+          "label": "Bewertungen",
+          "description": "Bewertungen moderieren"
+        },
+        "content": {
+          "label": "Blog & Seiten",
+          "description": "Blog, Seiten, Medien"
+        },
+        "projects": {
+          "label": "Öffentliche Projekte",
+          "description": "Öffentliche Projekte, Ressourcenbedarf und Beiträge"
+        },
+        "presentations": {
+          "label": "Präsentationen",
+          "description": "Präsentationen ansehen und teilen"
+        },
+        "feedbackOverview": {
+          "label": "Rückmeldungen",
+          "description": "Alle Rückmeldungen an einem Ort: Website, Präsentationen, Liefergegenstände"
+        },
+        "approvals": {
+          "label": "Freigaben",
+          "description": "Eingereichte Inhalte prüfen und freigeben",
+          "shortLabel": "Freigaben"
+        },
+        "membership": {
+          "label": "Mitgliedschaften",
+          "description": "Mitgliedschaftsanträge prüfen und verwalten"
+        },
+        "teams": {
+          "label": "Teams",
+          "description": "Teams, Zuständigkeiten und Mitglieder"
+        },
+        "team-board": {
+          "label": "Wer macht was",
+          "description": "Aktueller Fokus und Aufgaben des Teams"
+        },
+        "tasks": {
+          "label": "Aufgaben",
+          "description": "Teamaufgaben verwalten"
+        },
+        "deliverables": {
+          "label": "Liefergegenstände",
+          "description": "Berichte, Präsentationen, Mockups — teilen und Feedback sammeln"
+        },
+        "protocols": {
+          "label": "Protokolle",
+          "description": "Sitzungsprotokolle und Besprechungsnotizen"
+        },
+        "decisions": {
+          "label": "Entscheidungen",
+          "description": "Vorschläge und Abstimmungen im Team"
+        },
+        "donations": {
+          "label": "Spenden",
+          "description": "Geld- und Sachspenden verwalten"
+        },
+        "users": {
+          "label": "Benutzer",
+          "description": "Benutzerverwaltung"
+        },
+        "team": {
+          "label": "Team-Profile",
+          "description": "Mitarbeiter, Freiwillige, Praktikanten"
+        },
+        "hr-vacancies": {
+          "label": "Offene Stellen",
+          "description": "Stellen ausschreiben, pausieren und teilen"
+        },
+        "hr-applications": {
+          "label": "Bewerbungen",
+          "description": "Bewerbungs-Pipeline und Einstellungen"
+        },
+        "payroll": {
+          "label": "Lohnlauf",
+          "description": "Monat abschliessen und CSV für die Buchhaltung exportieren"
+        },
+        "analyse-hub": {
+          "label": "Analyse-Übersicht",
+          "description": "Kennzahlen, Finanzen und Wirkung auf einen Blick"
+        },
+        "finanzen": {
+          "label": "Finanzen",
+          "description": "Detaillierte Finanzübersicht und Trends"
+        },
+        "kennzahlen": {
+          "label": "Kennzahlen",
+          "description": "KPIs und Metriken auf einen Blick"
+        },
+        "wirkung": {
+          "label": "Wirkung",
+          "description": "Ökologische und soziale Wirkung"
+        },
+        "transparenz": {
+          "label": "Transparenz",
+          "description": "First Principles Analyse"
+        },
+        "hirn": {
+          "label": "Hirn AI",
+          "description": "KI-Assistent für Revamp-IT"
+        },
+        "promo-codes": {
+          "label": "Aktionscodes",
+          "description": "Rabatt- und Gutscheincodes ausstellen"
+        },
+        "settings": {
+          "label": "Einstellungen",
+          "description": "Systemkonfiguration"
+        }
+      },
+      "groups": {
+        "uebersicht": "Heute",
+        "angebot": "Betrieb",
+        "inhalte": "Inhalte",
+        "betrieb": "Organisation",
+        "analyse": "Analyse",
+        "personen": "Personen",
+        "teamhr": "Team & HR",
+        "system": "System"
       }
     }
   },

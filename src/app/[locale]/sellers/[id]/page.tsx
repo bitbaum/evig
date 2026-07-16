@@ -47,8 +47,9 @@ interface SellerProfile {
     category: string
     condition: string
     thumbnail: string | null
-    view_count: number
-    favorite_count: number
+    is_revampit: boolean
+    pickup_location: string | null
+    verified_at: string | null
     created_at: string
   }>
   review_stats: {
@@ -60,7 +61,7 @@ interface SellerProfile {
 }
 
 export default function SellerProfilePage({ params }: { params: Promise<{ id: string }> }) {
-  const t = useTranslations('techniker')
+  const t = useTranslations('sellers')
   const [seller, setSeller] = useState<SellerProfile | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -90,11 +91,11 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
             reviews,
           })
         } else {
-          setError(result.error || t('seller.sellerNotFound'))
+          setError(result.error || t('sellerNotFound'))
         }
       } catch (err) {
         logger.warn('Failed to load seller profile', { error: err })
-        setError(t('seller.errorLoading'))
+        setError(t('errorLoading'))
       } finally {
         setIsLoading(false)
       }
@@ -106,7 +107,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader2 className="w-8 h-8 text-action animate-spin" />
-        <span className="ml-3 text-text-secondary">{t('seller.loadingProfile')}</span>
+        <span className="ml-3 text-text-secondary">{t('loadingProfile')}</span>
       </div>
     )
   }
@@ -116,10 +117,10 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
       <div className="max-w-4xl mx-auto py-12 text-center">
         <AlertCircle className="w-16 h-16 text-text-muted mx-auto mb-4" />
         <Heading level={2} className="text-xl text-text-primary mb-2">
-          {error || t('seller.sellerNotFound')}
+          {error || t('sellerNotFound')}
         </Heading>
         <Link href={ROUTES.public.marketplace} className="text-action hover:text-action font-medium">
-          {t('seller.backToMarketplace')}
+          {t('backToMarketplace')}
         </Link>
       </div>
     )
@@ -136,7 +137,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
         className="inline-flex items-center gap-2 text-text-secondary hover:text-action mb-6 transition-colors"
       >
         <ArrowLeft className="w-4 h-4" />
-        {t('seller.backToMarketplace')}
+        {t('backToMarketplace')}
       </Link>
 
       {/* Seller Header */}
@@ -151,12 +152,12 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
           </div>
           <div className="flex-1">
             <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">
-              {t('seller.publicProfile')}
+              {t('publicProfile')}
             </div>
             <div className="mt-2 flex items-center gap-2">
               <Heading level={1} className="text-3xl font-semibold text-text-primary sm:text-4xl">{displayName}</Heading>
               {seller.is_verified && (
-                <BadgeCheck className="h-6 w-6 shrink-0 text-action" aria-label={t('seller.verified')} />
+                <BadgeCheck className="h-6 w-6 shrink-0 text-action" aria-label={t('verified')} />
               )}
             </div>
             <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-text-tertiary">
@@ -168,10 +169,10 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
               )}
               <span className="flex items-center gap-1">
                 <Calendar className="w-4 h-4" />
-                {t('seller.memberSince', { date: formatDateShort(seller.member_since) })}
+                {t('memberSince', { date: formatDateShort(seller.member_since) })}
               </span>
               {seller.is_verified && (
-                <span className="font-medium text-action">{t('seller.verified')}</span>
+                <span className="font-medium text-action">{t('verified')}</span>
               )}
             </div>
             {seller.bio && (
@@ -186,13 +187,13 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
             <div className="font-mono text-xl font-semibold tabular-nums text-text-primary">
               {seller.total_listings}
             </div>
-            <div className="mt-1 text-xs text-text-tertiary">{t('seller.listings')}</div>
+            <div className="mt-1 text-xs text-text-tertiary">{t('listings')}</div>
           </div>
           <div className="p-4">
             <div className="font-mono text-xl font-semibold tabular-nums text-text-primary">
               {seller.total_sold}
             </div>
-            <div className="mt-1 text-xs text-text-tertiary">{t('seller.sold')}</div>
+            <div className="mt-1 text-xs text-text-tertiary">{t('sold')}</div>
           </div>
           <div className="p-4">
             {rating && Number(rating) > 0 ? (
@@ -206,7 +207,7 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
               <div className="font-mono text-xl font-semibold text-text-muted">—</div>
             )}
             <div className="mt-1 text-xs text-text-tertiary">
-              {reviewCount > 0 ? t('seller.ratingsCount', { count: reviewCount }) : t('seller.noRatings')}
+              {reviewCount > 0 ? t('ratingsCount', { count: reviewCount }) : t('noRatings')}
             </div>
           </div>
         </div>
@@ -216,14 +217,14 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
       <div>
         <Heading level={2} className="text-lg text-text-primary mb-4 flex items-center gap-2">
           <ShoppingBag className="w-5 h-5" />
-          {t('seller.activeListings', { count: seller.listings.length })}
+          {t('activeListings', { count: seller.listings.length })}
         </Heading>
 
         {seller.listings.length === 0 ? (
           <EmptyState
             icon={Package}
-            title={t('seller.noListingsTitle')}
-            description={t('seller.noListingsDescription')}
+            title={t('noListingsTitle')}
+            description={t('noListingsDescription')}
           />
         ) : (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -236,10 +237,9 @@ export default function SellerProfilePage({ params }: { params: Promise<{ id: st
                   price_chf: listing.price_chf,
                   category: listing.category,
                   condition: listing.condition,
-                  is_revampit: false,
-                  pickup_location: null,
-                  view_count: listing.view_count,
-                  favorite_count: listing.favorite_count,
+                  is_revampit: listing.is_revampit,
+                  pickup_location: listing.pickup_location,
+                  verified_at: listing.verified_at,
                   seller_name: displayName,
                   seller_display_name: displayName,
                   seller_rating: rating,

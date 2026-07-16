@@ -1140,7 +1140,9 @@
       "closeAriaLabel": "Fermer le panier",
       "paymentSuccess": "Paiement réussi ! Ta commande est confirmée.",
       "paymentFailed": "Le paiement a échoué. Merci de réessayer.",
-      "paymentCancelled": "Paiement annulé."
+      "paymentCancelled": "Paiement annulé.",
+      "unavailableRemoved": "«{title}» n'est plus disponible et a été retiré du panier.",
+      "unavailableRemovedMany": "{count} articles ne sont plus disponibles et ont été retirés du panier."
     },
     "aiCamera": {
       "analyzing": "Analyse du produit en cours...",
@@ -4900,28 +4902,34 @@
       "deliveryRemote": "À distance / En ligne",
       "deliveryOnsite": "Sur place",
       "ctaHint": "Vous démarrez ainsi une demande à cette personne — elle sera notifiée et pourra vous faire une offre."
-    },
-    "seller": {
-      "backToMarketplace": "Retour au marché",
-      "memberSince": "Membre depuis {date}",
-      "listings": "Annonces",
-      "sold": "Vendus",
-      "noRatings": "Aucun avis",
-      "ratingsCount": "{count} avis",
-      "activeListings": "Annonces actives ({count})",
-      "noListingsTitle": "Aucune annonce active",
-      "noListingsDescription": "Ce vendeur n'a actuellement aucune annonce active.",
-      "loadingProfile": "Chargement du profil...",
-      "sellerNotFound": "Vendeur introuvable",
-      "errorLoading": "Erreur lors du chargement du profil",
-      "meta": {
-        "title": "{name} – Vendeur sur le marché RevampIT",
-        "titleFallback": "Profil vendeur – Marché RevampIT",
-        "description": "{name} sur le marché RevampIT – {count} annonces actives. Achetez du matériel d'occasion et contribuez à l'économie circulaire."
-      },
-      "publicProfile": "Profil de vendeur",
-      "verified": "Vérifié"
     }
+  },
+  "sellers": {
+    "meta": {
+      "title": "{name} – Vendeur sur le marché RevampIT",
+      "titleFallback": "Profil vendeur – Marché RevampIT",
+      "description": "{name} sur le marché RevampIT – {count} annonces actives. Achetez du matériel d'occasion et contribuez à l'économie circulaire."
+    },
+    "backToMarketplace": "Retour au marché",
+    "publicProfile": "Profil de vendeur",
+    "verified": "Vérifié",
+    "memberSince": "Membre depuis {date}",
+    "listings": "Annonces",
+    "sold": "Vendus",
+    "noRatings": "Aucun avis",
+    "ratingsCount": "{count} avis",
+    "activeListings": "Annonces actives ({count})",
+    "noListingsTitle": "Aucune annonce active",
+    "noListingsDescription": "Ce vendeur n'a actuellement aucune annonce active.",
+    "loadingProfile": "Chargement du profil...",
+    "sellerNotFound": "Vendeur introuvable",
+    "errorLoading": "Erreur lors du chargement du profil",
+    "reviewsHeading": "Évaluations",
+    "verifiedPurchase": "Achat vérifié",
+    "sellerResponse": "Réponse du vendeur",
+    "reviewForListing": "pour {title}",
+    "noReviewsTitle": "Pas encore d'évaluations",
+    "noReviewsDescription": "Ce vendeur n'a pas encore reçu d'évaluations."
   },
   "support": {
     "meta": {
@@ -8659,7 +8667,10 @@
       "errorUpdateStatus": "Impossible de mettre à jour le statut",
       "networkError": "Erreur réseau",
       "articlesSection": "Articles ({count})",
-      "moreItems": "+{count} de plus"
+      "moreItems": "+{count} de plus",
+      "prevPage": "Retour",
+      "nextPage": "Suivant",
+      "paginationCurrentPage": "Page {page}"
     },
     "listings": {
       "pageTitle": "Mes annonces",
@@ -10086,9 +10097,6 @@
         "declined": "Refusé"
       }
     },
-    "localeFallback": {
-      "notice": "L'espace d'administration n'est disponible qu'en allemand."
-    },
     "timecards": {
       "headerStatusSubmitted": "Soumise",
       "headerStatusDraft": "Brouillon",
@@ -10108,7 +10116,6 @@
       "dayEditorHasEntry": "Entrée",
       "dayEditorNoEntry": "Pas d'entrée",
       "dayActionFillFromSchedule": "Remplir depuis l'horaire",
-      "dayActionFillDefault": "Remplir avec 09:00 – 17:00",
       "dayActionFree": "Congé",
       "dayActionSick": "Malade",
       "dayActionAdjust": "Ajuster",
@@ -10133,7 +10140,7 @@
       "aiExamples": "p. ex. « Travaillé seulement mardi et mercredi cette semaine, parti mercredi à 15 h, sinon malade » · « Vacances vendredi prochain » · « Parti 2 heures plus tôt aujourd'hui »",
       "fillMonth": "Remplir le mois selon le plan",
       "fillMonthHint": "Remplit tous les jours ouvrables vides avec votre plan de travail (par défaut lun–ven 09:00–17:00). Les entrées existantes et les jours de congé restent inchangés.",
-      "selectHint": "Un clic sélectionne un jour · Glisser en sélectionne plusieurs · Ctrl/Cmd+clic pour un seul · Maj+clic pour une plage · Suppr efface. Choisissez ensuite une action ci-dessous.",
+      "selectHint": "Un clic sélectionne un jour · Glisser en marque plusieurs (descendre une colonne = tous les mardis) · L'abréviation du jour (Lu, Ma …) sélectionne toute la colonne · Maj+clic pour une plage · Ctrl/Cmd+clic pour des jours isolés · Double-clic ouvre le jour · Suppr efface.",
       "selectLabel": "Sélection rapide",
       "selectAllDays": "Tout le mois",
       "selectAllWeekdays": "Tous les jours ouvrables",
@@ -10151,10 +10158,18 @@
       "lockedApproved": "Approuvé et verrouillé",
       "reopen2": "Rouvrir (admin)",
       "bulkAbsenceLabel": "Absent",
-      "fillSkippedNonPlanDays": "{count, plural, one {1 jour sans plan de travail ignoré (0 heure due)} other {# jours sans plan de travail ignorés (0 heure due)}}",
-      "fillNonPlanDay": "Jour hors plan — aucune heure due. Saisis les horaires manuellement si besoin.",
-      "selectHintTouch": "Touche des jours pour les sélectionner (retoucher désélectionne) · l'abréviation du jour (lu, ma …) sélectionne toute la colonne · choisis ensuite une action en bas.",
-      "submittedUnchanged": "Soumis — en attente d'approbation. Toute modification nécessite une nouvelle soumission."
+      "selectHintTouch": "Touchez les jours pour les sélectionner (retouchez pour désélectionner) · Maintenez un jour puis glissez pour en marquer plusieurs · L'abréviation du jour (Lu, Ma …) sélectionne toute la colonne.",
+      "submittedUnchanged": "Soumis — en attente d'approbation. Toute modification nécessite une nouvelle soumission.",
+      "dayFillDefault": "Saisir un jour standard {start}–{end}",
+      "fillDefaultedNonPlanDays": "{count, plural, one {1 jour sans plan de travail rempli avec les heures standard — à ajuster si besoin} other {# jours sans plan de travail remplis avec les heures standard — à ajuster si besoin}}",
+      "editDay": "Modifier le jour",
+      "hourGridLabel": "Choisir les heures de travail",
+      "hourHint": "Cliquez ou glissez sur les heures — chaque bloc est un service, les intervalles comptent comme pause. Pour un service coupé, glissez simplement un second bloc.",
+      "hourHintTouch": "Balayez les heures pour un bloc (p. ex. 08:00–12:00), puis à nouveau pour l'après-midi — l'intervalle compte comme pause. Touchez pour basculer des demi-heures isolées.",
+      "hourBreakSuffix": "pause",
+      "absencePaidHint": "Absence payée (compte les heures planifiées)",
+      "absenceUnpaidHint": "Non payé (0 h)",
+      "headerSelectColumn": "Sélectionner tous les {day} — glisser pour plusieurs colonnes"
     },
     "appointments": {
       "pageTitle": "Rendez-vous",
@@ -10598,14 +10613,28 @@
       "placeholder": "Recherche ou commande…",
       "openShortcut": "Ouvrir la barre de commande",
       "noResults": "Aucun résultat",
-      "recentlyVisited": "Récemment visités"
+      "recentlyVisited": "Récemment visités",
+      "groups": {
+        "actions": "Actions",
+        "sections": "Rubriques",
+        "users": "Utilisateurs",
+        "decisions": "Décisions",
+        "listings": "Annonces"
+      },
+      "actions": {
+        "newDevice": "Saisir un nouvel appareil",
+        "newDecision": "Nouvelle décision",
+        "newProtocol": "Nouveau procès-verbal",
+        "dashboard": "Tableau de bord"
+      }
     },
     "userMenu": {
       "darkMode": "Mode sombre",
       "toWebsite": "Vers le site",
       "signOut": "Déconnexion",
       "adminArea": "Espace admin",
-      "staffFallback": "Membre de l'équipe"
+      "staffFallback": "Membre de l'équipe",
+      "language": "Langue"
     },
     "notifications": {
       "title": "Notifications",
@@ -10908,6 +10937,172 @@
           "confirm": "Confirmer",
           "cancel": "Annuler"
         }
+      }
+    },
+    "sections": {
+      "items": {
+        "dashboard": {
+          "label": "Tableau de bord",
+          "description": "Vue d'ensemble et statistiques",
+          "shortLabel": "Accueil"
+        },
+        "my-timecards": {
+          "label": "Saisie des heures",
+          "description": "Saisir et soumettre les heures de travail",
+          "shortLabel": "Heures"
+        },
+        "intake": {
+          "label": "Entrée des appareils",
+          "description": "Tous les appareils saisis : statut, checklist, publication"
+        },
+        "erfassung": {
+          "label": "Saisir un produit",
+          "description": "Accepter un appareil (checklist/don) ou saisir rapidement un produit",
+          "shortLabel": "Saisir"
+        },
+        "marketplace": {
+          "label": "Annonces",
+          "description": "Vérifier, valider et gérer les annonces"
+        },
+        "it-hilfe-admin": {
+          "label": "Aide informatique",
+          "description": "Gérer les demandes d'aide et les techniciens"
+        },
+        "workshops-admin": {
+          "label": "Ateliers",
+          "description": "Gestion des ateliers et des inscriptions"
+        },
+        "services": {
+          "label": "Prestations",
+          "description": "Gérer les offres de services"
+        },
+        "appointments-admin": {
+          "label": "Rendez-vous",
+          "description": "Vérifier et attribuer les rendez-vous de service"
+        },
+        "locations": {
+          "label": "Sites",
+          "description": "Gestion des sites"
+        },
+        "reviews": {
+          "label": "Évaluations",
+          "description": "Modérer les évaluations"
+        },
+        "content": {
+          "label": "Blog & pages",
+          "description": "Blog, pages, médias"
+        },
+        "projects": {
+          "label": "Projets publics",
+          "description": "Projets publics, besoins en ressources et contributions"
+        },
+        "presentations": {
+          "label": "Présentations",
+          "description": "Consulter et partager les présentations"
+        },
+        "feedbackOverview": {
+          "label": "Retours",
+          "description": "Tous les retours au même endroit : site web, présentations, livrables"
+        },
+        "approvals": {
+          "label": "Validations",
+          "description": "Vérifier et valider les contenus soumis",
+          "shortLabel": "Valider"
+        },
+        "membership": {
+          "label": "Adhésions",
+          "description": "Vérifier et gérer les demandes d'adhésion"
+        },
+        "teams": {
+          "label": "Équipes",
+          "description": "Équipes, responsabilités et membres"
+        },
+        "team-board": {
+          "label": "Qui fait quoi",
+          "description": "Priorités et tâches actuelles de l'équipe"
+        },
+        "tasks": {
+          "label": "Tâches",
+          "description": "Gérer les tâches de l'équipe"
+        },
+        "deliverables": {
+          "label": "Livrables",
+          "description": "Rapports, présentations, maquettes — partager et recueillir des retours"
+        },
+        "protocols": {
+          "label": "Procès-verbaux",
+          "description": "Procès-verbaux et notes de réunion"
+        },
+        "decisions": {
+          "label": "Décisions",
+          "description": "Propositions et votes de l'équipe"
+        },
+        "donations": {
+          "label": "Dons",
+          "description": "Gérer les dons en argent et en nature"
+        },
+        "users": {
+          "label": "Utilisateurs",
+          "description": "Gestion des utilisateurs"
+        },
+        "team": {
+          "label": "Profils d'équipe",
+          "description": "Employés, bénévoles, stagiaires"
+        },
+        "hr-vacancies": {
+          "label": "Postes ouverts",
+          "description": "Publier, suspendre et partager des postes"
+        },
+        "hr-applications": {
+          "label": "Candidatures",
+          "description": "Pipeline de candidatures et embauches"
+        },
+        "payroll": {
+          "label": "Paie",
+          "description": "Clôturer le mois et exporter le CSV pour la comptabilité"
+        },
+        "analyse-hub": {
+          "label": "Aperçu analytique",
+          "description": "Chiffres clés, finances et impact en un coup d'œil"
+        },
+        "finanzen": {
+          "label": "Finances",
+          "description": "Aperçu financier détaillé et tendances"
+        },
+        "kennzahlen": {
+          "label": "Chiffres clés",
+          "description": "KPI et métriques en un coup d'œil"
+        },
+        "wirkung": {
+          "label": "Impact",
+          "description": "Impact écologique et social"
+        },
+        "transparenz": {
+          "label": "Transparence",
+          "description": "Analyse par principes premiers"
+        },
+        "hirn": {
+          "label": "Hirn AI",
+          "description": "Assistant IA pour Revamp-IT"
+        },
+        "promo-codes": {
+          "label": "Codes promo",
+          "description": "Émettre des codes de réduction et des bons"
+        },
+        "settings": {
+          "label": "Paramètres",
+          "description": "Configuration du système"
+        }
+      },
+      "groups": {
+        "uebersicht": "Aujourd'hui",
+        "angebot": "Exploitation",
+        "inhalte": "Contenus",
+        "betrieb": "Organisation",
+        "analyse": "Analyse",
+        "personen": "Personnes",
+        "teamhr": "Équipe & RH",
+        "system": "Système"
       }
     }
   },

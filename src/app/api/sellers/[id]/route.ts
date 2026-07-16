@@ -50,6 +50,9 @@ export async function GET(
         condition: listings.condition,
         brand: listings.brand,
         model: listings.model,
+        is_revampit: listings.isRevampit,
+        pickup_location: listings.pickupLocation,
+        verified_at: listings.verifiedAt,
         created_at: listings.createdAt,
         thumbnail: listingThumbnailSubquery,
       })

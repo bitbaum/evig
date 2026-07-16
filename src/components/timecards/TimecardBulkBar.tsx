@@ -1,6 +1,6 @@
 'use client'
 
-import { CalendarCheck, X } from 'lucide-react'
+import { CalendarCheck, Pencil, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import type { TimecardEntryCategory } from '@/config/timecards'
@@ -11,7 +11,9 @@ import { TimecardActions } from './TimecardActions'
  * days are selected, so the affordance is discovered by selecting. Wraps the
  * shared TimecardActions (fill / absence / clear) with the selection count and
  * a cancel control. The same TimecardActions render in the day view, keeping
- * the two surfaces identical.
+ * the two surfaces identical. With exactly one day selected, `onEditDay` adds
+ * a "Tag bearbeiten" jump into the day editor — the touch-friendly route to
+ * fine edits (desktop also has double-click on the grid).
  */
 export function TimecardBulkBar({
   count,
@@ -19,12 +21,15 @@ export function TimecardBulkBar({
   onSetAbsence,
   onClearDays,
   onCancel,
+  onEditDay,
 }: {
   count: number
   onFillFromSchedule: () => void
   onSetAbsence: (category: TimecardEntryCategory) => void
   onClearDays: () => void
   onCancel: () => void
+  /** Open the day editor for the single selected day (only passed when count === 1). */
+  onEditDay?: () => void
 }) {
   const t = useTranslations('admin.timecards')
   if (count === 0) return null
@@ -42,6 +47,13 @@ export function TimecardBulkBar({
       <span className="hidden h-5 w-px bg-border sm:block" aria-hidden="true" />
 
       <TimecardActions onFill={onFillFromSchedule} onSetAbsence={onSetAbsence} onClear={onClearDays} />
+
+      {onEditDay && (
+        <Button type="button" variant="outline" size="sm" onClick={onEditDay} className="gap-1.5">
+          <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
+          {t('editDay')}
+        </Button>
+      )}
 
       <Button
         type="button"

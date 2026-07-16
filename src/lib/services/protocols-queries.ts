@@ -233,7 +233,7 @@ export async function createProtocol(
 ): Promise<{ id: string }> {
   const result = await db.execute(sql`
     INSERT INTO ${sql.raw(mpTable)} (
-      title, meeting_date, meeting_type, visibility, attendees, input_method, created_by
+      title, meeting_date, meeting_type, visibility, attendees, input_method, team_id, created_by
     ) VALUES (
       ${data.title},
       ${data.meeting_date},
@@ -241,6 +241,7 @@ export async function createProtocol(
       ${data.visibility},
       ${JSON.stringify(data.attendees || [])}::jsonb,
       ${data.input_method || 'transcript'},
+      ${data.team_id || null},
       ${createdBy}
     )
     RETURNING id
@@ -285,6 +286,9 @@ export async function updateProtocol(
   }
   if (data.attendees !== undefined) {
     setClauses.push(sql`attendees = ${JSON.stringify(data.attendees)}::jsonb`)
+  }
+  if (data.team_id !== undefined) {
+    setClauses.push(sql`team_id = ${data.team_id}`)
   }
   if (data.structured_notes !== undefined) {
     setClauses.push(sql`structured_notes = ${JSON.stringify(data.structured_notes)}::jsonb`)

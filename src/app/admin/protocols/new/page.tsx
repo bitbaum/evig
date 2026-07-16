@@ -8,6 +8,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowLeft, FileText } from 'lucide-react'
 import { getTeamMembers } from '@/lib/services/protocols'
+import { listTeams } from '@/lib/services/teams'
 import Heading from '@/components/admin/AdminHeading'
 import ProtocolFormClient from './ProtocolFormClient'
 import { ROUTES } from '@/config/routes'
@@ -18,8 +19,19 @@ export const metadata: Metadata = {
   description: 'Neues Sitzungsprotokoll erstellen.',
 }
 
-export default async function NewProtocolPage() {
-  const teamMembers = await getTeamMembers()
+export default async function NewProtocolPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ team?: string }>
+}) {
+  const [teamMembers, teams, { team }] = await Promise.all([
+    getTeamMembers(),
+    listTeams(),
+    searchParams,
+  ])
+  const teamOptions = teams.map((t) => ({ id: t.id, name: t.name }))
+  // Only preselect a team that actually exists (the param is user-editable).
+  const initialTeamId = teamOptions.some((t) => t.id === team) ? team : undefined
 
   return (
     <div className="space-y-6">
@@ -45,7 +57,7 @@ export default async function NewProtocolPage() {
       </div>
 
       {/* Form */}
-      <ProtocolFormClient teamMembers={teamMembers} />
+      <ProtocolFormClient teamMembers={teamMembers} teams={teamOptions} initialTeamId={initialTeamId} />
     </div>
   )
 }

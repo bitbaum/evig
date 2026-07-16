@@ -17,7 +17,7 @@ import { db } from '@/db'
 import { siteSuggestions, presentationComments, deliverableFeedback, deliverables, users } from '@/db/schema'
 import { requireAnySection } from '@/lib/admin/guards'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminStatsGrid } from '@/components/admin/AdminStatsGrid'
+import { AdminStatsStrip } from '@/components/admin/AdminStatsStrip'
 import { FEEDBACK_KIND_LABELS, type FeedbackKind } from '@/config/deliverables'
 import { formatDateTimeNumeric } from '@/lib/date-formats'
 import { logger } from '@/lib/logger'
@@ -204,7 +204,7 @@ export default async function RueckmeldungenPage({
       icon={Inbox}
       iconColor="blue"
     >
-      <AdminStatsGrid
+      <AdminStatsStrip
         items={[
           { icon: Inbox, color: 'gray', label: 'Gesamt', value: all.length },
           { icon: Inbox, color: 'amber', label: 'Offen', value: openCount },

@@ -26,6 +26,7 @@ import { eq } from 'drizzle-orm'
 import { ORG } from '@/config/org'
 import { getAccessibleSections, isSuperAdmin, canAccessSection, ADMIN_SECTION_IDS, type AdminSection } from '@/lib/permissions'
 import { ADMIN_SECTIONS } from '@/lib/permissions'
+import { sectionText } from '@/lib/section-labels'
 import { PermissionRequestsManager } from '@/components/admin/PermissionRequestsManager'
 import { RequestAccessSection } from './RequestAccessSection'
 import {
@@ -139,6 +140,7 @@ export default async function AdminDashboard() {
   // hub) — fetched once, shared by the queue and the permission-requests block.
   const approvalCountsPromise = getApprovalCounts()
   const t = await getTranslations('admin.dashboard')
+  const tSections = await getTranslations('admin.sections')
 
   const userForPermissions = {
     email: session.user.email ?? '',
@@ -155,8 +157,8 @@ export default async function AdminDashboard() {
         .filter(s => !accessibleSections.includes(s) && s !== 'dashboard')
         .map(s => ({
           id: s,
-          label: ADMIN_SECTIONS[s]?.label ?? s,
-          description: ADMIN_SECTIONS[s]?.description ?? '',
+          label: sectionText(tSections, s, 'label', ADMIN_SECTIONS[s]?.label ?? s),
+          description: sectionText(tSections, s, 'description', ADMIN_SECTIONS[s]?.description ?? ''),
         }))
 
   const canAccess = (section: AdminSection) => canAccessSection(userForPermissions, section)

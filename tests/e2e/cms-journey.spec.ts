@@ -71,7 +71,8 @@ test.describe('Admin CMS staff journey', () => {
     await expect(page.getByRole('heading', { name: title, level: 1 })).toBeVisible({
       timeout: 15000,
     })
-    await expect(page.getByText(content)).toBeVisible()
+    // .first(): the body text can also appear in the excerpt/teaser block.
+    await expect(page.getByText(content).first()).toBeVisible()
 
     if (hasDualPersonaCredentials()) {
       await loginWithCredentials(page, '/dashboard', USER_TEST_EMAIL, USER_TEST_PASSWORD)

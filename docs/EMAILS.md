@@ -2,7 +2,7 @@
 
 **What gets an email/notification, when, and to whom.** Keep this in sync when you add or change any `createNotification` / `notifyUsers` / `notifyAllStaff` / `sendCustomEmail` call.
 
-Last updated: 2026-07-09.
+Last updated: 2026-07-15.
 
 ---
 
@@ -83,6 +83,9 @@ Legend: **A** = notification system (in-app + maybe email) · **B** = direct ema
 | Status change | A + B | submitter | ✓ |
 | **Tasks** | | | |
 | Assigned / requested / completed / accepted / recurring | A | assignee / requester / creator / staff | ✓ |
+| **Teams** | | | |
+| Invited by email (new person / placeholder) | B (`teamClaimInvite`) | the invitee's real address (claim link, 14d) | ✓ |
+| Added to a team by an admin | B (`teamMemberAdded`) | the added member (self-join stays silent) | ✓ |
 
 ---
 
