@@ -1,7 +1,9 @@
 import type { APIRequestContext } from '@playwright/test'
 import {
+  CHECKLIST_RESULTS,
   getChecklistForDevice,
   INTAKE_TIERS,
+  type ChecklistResult,
   type IntakeTier,
 } from '@/config/intake-checklist'
 import { csrfPatch, csrfPost } from './api-csrf'
@@ -70,72 +72,72 @@ export async function fetchIntakeDetail(
   return parseApi<IntakeDetail>(response)
 }
 
-/** Set a verdict (pass/fail/na; null = reset) on a checklist item. */
+/** Set a verdict (pass/fail/na; null resets to open) on a checklist item. */
 export async function setIntakeChecklistVerdict(
   request: APIRequestContext,
   inventoryId: string,
   itemId: string,
-  result: 'pass' | 'fail' | 'na' | null = 'pass',
-  notes?: string,
+  result: ChecklistResult | null = CHECKLIST_RESULTS.PASS,
+  notes = '',
 ): Promise<{ checklist_complete: boolean }> {
   const response = await csrfPatch(request, `/api/admin/intake/${inventoryId}/checklist`, {
     item_id: itemId,
     result,
-    ...(notes !== undefined ? { notes } : {}),
+    notes,
   })
   return parseApi<{ checklist_complete: boolean }>(response)
 }
 
-/**
- * Mark every required checklist item as passed for the device's tier +
- * category. Items with the Vier-Augen flag (final QA) are signed off with an
- * explicit override note — the journey runs with a single staff account, and
- * the documented-override path is exactly what a solo shift uses.
- */
-export async function completeRequiredIntakeChecklist(
-  request: APIRequestContext,
-  inventoryId: string,
-  tier: IntakeTier = INTAKE_TIERS.RECYCLE,
-  category?: string | null,
-): Promise<void> {
-  const detail = await fetchIntakeDetail(request, inventoryId)
-  const cat = category ?? detail.category
-  const requiredItems = getChecklistForDevice(tier, cat ?? undefined).filter(item => item.required)
-
-  // Second-person items last — the rule looks at the other completed work.
-  const ordered = [
-    ...requiredItems.filter(i => !i.requiresSecondPerson),
-    ...requiredItems.filter(i => i.requiresSecondPerson),
-  ]
-  for (const item of ordered) {
-    await setIntakeChecklistVerdict(
-      request,
-      inventoryId,
-      item.id,
-      'pass',
-      item.requiresSecondPerson ? 'E2E: Vier-Augen-Override (Testlauf, allein im Dienst)' : undefined,
-    )
-  }
-}
-
-/** Like setIntakeChecklistVerdict but never throws — returns the raw outcome. */
+/** Non-throwing verdict attempt — for asserting the Vier-Augen 400. */
 export async function trySetIntakeChecklistVerdict(
   request: APIRequestContext,
   inventoryId: string,
   itemId: string,
-  result: 'pass' | 'fail' | 'na' | null,
-  notes?: string,
+  result: ChecklistResult | null = CHECKLIST_RESULTS.PASS,
 ): Promise<{ ok: boolean; status: number; error?: string }> {
   const response = await csrfPatch(request, `/api/admin/intake/${inventoryId}/checklist`, {
     item_id: itemId,
     result,
-    ...(notes !== undefined ? { notes } : {}),
+    notes: '',
   })
   const body = (await response.json()) as ApiEnvelope<unknown>
   return {
     ok: response.ok() && body.success === true,
     status: response.status(),
     error: body.error,
+  }
+}
+
+/**
+ * Mark every required checklist item passed for the device's tier + category.
+ *
+ * Items flagged `requiresSecondPerson` (final QA, Vier-Augen-Prinzip) cannot
+ * be signed off by the account that did all other work — pass a second staff
+ * request context for those; they are signed off last.
+ */
+export async function completeRequiredIntakeChecklist(
+  request: APIRequestContext,
+  inventoryId: string,
+  tier: IntakeTier = INTAKE_TIERS.RECYCLE,
+  category?: string | null,
+  secondPersonRequest?: APIRequestContext,
+): Promise<void> {
+  const detail = await fetchIntakeDetail(request, inventoryId)
+  const cat = category ?? detail.category
+  const requiredItems = getChecklistForDevice(tier, cat ?? undefined).filter(item => item.required)
+  const ordinary = requiredItems.filter(item => !item.requiresSecondPerson)
+  const fourEyes = requiredItems.filter(item => item.requiresSecondPerson)
+
+  for (const item of ordinary) {
+    await setIntakeChecklistVerdict(request, inventoryId, item.id)
+  }
+  for (const item of fourEyes) {
+    if (!secondPersonRequest) {
+      throw new Error(
+        `Checklist item "${item.id}" requires a second staff account (Vier-Augen-Prinzip) — pass secondPersonRequest`,
+      )
+    }
+    await setIntakeChecklistVerdict(secondPersonRequest, inventoryId, item.id)
   }
 }
 

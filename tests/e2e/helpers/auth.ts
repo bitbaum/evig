@@ -15,6 +15,15 @@ export const ADMIN_TEST_EMAIL =
 export const ADMIN_TEST_PASSWORD =
   process.env.AUTH_TEST_ADMIN_PASSWORD || process.env.TEST_ADMIN_PASSWORD || ''
 
+/**
+ * Second staff persona — needed by the intake journey since the
+ * Vier-Augen-Prinzip forbids the sole worker from signing off final QA.
+ * Seeded locally by scripts/e2e-seed.ts.
+ */
+export const SECOND_ADMIN_TEST_EMAIL =
+  process.env.AUTH_TEST_SECOND_ADMIN_EMAIL || 'e2e-admin2@revampit.test'
+export const SECOND_ADMIN_TEST_PASSWORD = process.env.AUTH_TEST_SECOND_ADMIN_PASSWORD || ''
+
 /** Legacy second account for IT-Hilfe when dual-persona env vars are not set. */
 export const TECHNICIAN_TEST_EMAIL = process.env.AUTH_TEST_TECHNICIAN_EMAIL || ''
 export const TECHNICIAN_TEST_PASSWORD = process.env.AUTH_TEST_TECHNICIAN_PASSWORD || ''

@@ -7,6 +7,10 @@ type DbConfig =
 
 const ADMIN_EMAIL = process.env.AUTH_TEST_ADMIN_EMAIL || 'e2e-admin@revampit.test'
 const ADMIN_PASSWORD = process.env.AUTH_TEST_ADMIN_PASSWORD || 'E2EAdmin123!'
+// Second staff account — the intake journey needs it because the
+// Vier-Augen-Prinzip forbids the sole worker from signing off final QA.
+const SECOND_ADMIN_EMAIL = process.env.AUTH_TEST_SECOND_ADMIN_EMAIL || 'e2e-admin2@revampit.test'
+const SECOND_ADMIN_PASSWORD = process.env.AUTH_TEST_SECOND_ADMIN_PASSWORD || 'E2EAdmin123!'
 const USER_EMAIL = process.env.AUTH_TEST_USER_EMAIL || 'e2e-user@revampit.test'
 const USER_PASSWORD = process.env.AUTH_TEST_USER_PASSWORD || 'E2EUser123!'
 
@@ -98,6 +102,15 @@ async function seed() {
       name: 'E2E Admin',
       isStaff: true,
       isSuperAdmin: true,
+      permissions: ['*'],
+    })
+
+    await upsertUser(client, {
+      email: SECOND_ADMIN_EMAIL,
+      password: SECOND_ADMIN_PASSWORD,
+      name: 'E2E Admin Zwei',
+      isStaff: true,
+      isSuperAdmin: false,
       permissions: ['*'],
     })
 
@@ -404,6 +417,7 @@ async function seed() {
 
     console.log('E2E seed ready.')
     console.log(`Admin: ${ADMIN_EMAIL}`)
+    console.log(`Second admin: ${SECOND_ADMIN_EMAIL}`)
     console.log(`User: ${USER_EMAIL}`)
   } catch (error) {
     await client.query('ROLLBACK')
