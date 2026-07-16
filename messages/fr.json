@@ -1139,7 +1139,9 @@
       "closeAriaLabel": "Fermer le panier",
       "paymentSuccess": "Paiement réussi ! Ta commande est confirmée.",
       "paymentFailed": "Le paiement a échoué. Merci de réessayer.",
-      "paymentCancelled": "Paiement annulé."
+      "paymentCancelled": "Paiement annulé.",
+      "unavailableRemoved": "«{title}» n'est plus disponible et a été retiré du panier.",
+      "unavailableRemovedMany": "{count} articles ne sont plus disponibles et ont été retirés du panier."
     },
     "aiCamera": {
       "analyzing": "Analyse du produit en cours...",
@@ -4899,28 +4901,34 @@
       "deliveryRemote": "À distance / En ligne",
       "deliveryOnsite": "Sur place",
       "ctaHint": "Vous démarrez ainsi une demande à cette personne — elle sera notifiée et pourra vous faire une offre."
-    },
-    "seller": {
-      "backToMarketplace": "Retour au marché",
-      "memberSince": "Membre depuis {date}",
-      "listings": "Annonces",
-      "sold": "Vendus",
-      "noRatings": "Aucun avis",
-      "ratingsCount": "{count} avis",
-      "activeListings": "Annonces actives ({count})",
-      "noListingsTitle": "Aucune annonce active",
-      "noListingsDescription": "Ce vendeur n'a actuellement aucune annonce active.",
-      "loadingProfile": "Chargement du profil...",
-      "sellerNotFound": "Vendeur introuvable",
-      "errorLoading": "Erreur lors du chargement du profil",
-      "meta": {
-        "title": "{name} – Vendeur sur le marché RevampIT",
-        "titleFallback": "Profil vendeur – Marché RevampIT",
-        "description": "{name} sur le marché RevampIT – {count} annonces actives. Achetez du matériel d'occasion et contribuez à l'économie circulaire."
-      },
-      "publicProfile": "Profil de vendeur",
-      "verified": "Vérifié"
     }
+  },
+  "sellers": {
+    "meta": {
+      "title": "{name} – Vendeur sur le marché RevampIT",
+      "titleFallback": "Profil vendeur – Marché RevampIT",
+      "description": "{name} sur le marché RevampIT – {count} annonces actives. Achetez du matériel d'occasion et contribuez à l'économie circulaire."
+    },
+    "backToMarketplace": "Retour au marché",
+    "publicProfile": "Profil de vendeur",
+    "verified": "Vérifié",
+    "memberSince": "Membre depuis {date}",
+    "listings": "Annonces",
+    "sold": "Vendus",
+    "noRatings": "Aucun avis",
+    "ratingsCount": "{count} avis",
+    "activeListings": "Annonces actives ({count})",
+    "noListingsTitle": "Aucune annonce active",
+    "noListingsDescription": "Ce vendeur n'a actuellement aucune annonce active.",
+    "loadingProfile": "Chargement du profil...",
+    "sellerNotFound": "Vendeur introuvable",
+    "errorLoading": "Erreur lors du chargement du profil",
+    "reviewsHeading": "Évaluations",
+    "verifiedPurchase": "Achat vérifié",
+    "sellerResponse": "Réponse du vendeur",
+    "reviewForListing": "pour {title}",
+    "noReviewsTitle": "Pas encore d'évaluations",
+    "noReviewsDescription": "Ce vendeur n'a pas encore reçu d'évaluations."
   },
   "support": {
     "meta": {
@@ -8658,7 +8666,10 @@
       "errorUpdateStatus": "Impossible de mettre à jour le statut",
       "networkError": "Erreur réseau",
       "articlesSection": "Articles ({count})",
-      "moreItems": "+{count} de plus"
+      "moreItems": "+{count} de plus",
+      "prevPage": "Retour",
+      "nextPage": "Suivant",
+      "paginationCurrentPage": "Page {page}"
     },
     "listings": {
       "pageTitle": "Mes annonces",

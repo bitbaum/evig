@@ -49,7 +49,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string; id: string }>
 }): Promise<Metadata> {
   const { locale, id } = await params
-  const t = await getTranslations({ locale, namespace: 'techniker.seller' })
+  const t = await getTranslations({ locale, namespace: 'sellers' })
 
   if (!UUID_RE.test(id)) {
     return { title: { absolute: `${t('meta.titleFallback')} | ${ORG.name}` } }

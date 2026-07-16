@@ -1145,7 +1145,9 @@
       "paymentCancelled": "Zahlung abgebrochen.",
       "revampitOnly": "Nur Revamp-IT-Geräte können in den Warenkorb. Community-Inserate werden direkt gekauft.",
       "cartAriaLabel": "Warenkorb, {count} Artikel",
-      "closeAriaLabel": "Warenkorb schliessen"
+      "closeAriaLabel": "Warenkorb schliessen",
+      "unavailableRemoved": "«{title}» ist nicht mehr verfügbar und wurde aus dem Warenkorb entfernt.",
+      "unavailableRemovedMany": "{count} Artikel sind nicht mehr verfügbar und wurden aus dem Warenkorb entfernt."
     }
   },
   "services": {
@@ -7982,34 +7984,34 @@
       "deliveryRemote": "Remote / Online",
       "deliveryOnsite": "Vor Ort",
       "ctaHint": "Du startest damit eine Anfrage an diese Person – sie wird benachrichtigt und kann dir ein Angebot machen."
-    },
-    "seller": {
-      "meta": {
-        "title": "{name} – Verkäufer auf dem RevampIT Marketplace",
-        "titleFallback": "Verkäuferprofil – RevampIT Marketplace",
-        "description": "{name} auf dem RevampIT Marketplace – {count} aktive Inserate. Gebrauchte Technik kaufen und zur Kreislaufwirtschaft beitragen."
-      },
-      "backToMarketplace": "Zurück zum Marketplace",
-      "publicProfile": "Verkäuferprofil",
-      "verified": "Verifiziert",
-      "memberSince": "Mitglied seit {date}",
-      "listings": "Inserate",
-      "sold": "Verkauft",
-      "noRatings": "Keine Bewertungen",
-      "ratingsCount": "{count} Bewertungen",
-      "activeListings": "Aktive Inserate ({count})",
-      "noListingsTitle": "Keine aktiven Inserate",
-      "noListingsDescription": "Dieser Verkäufer hat momentan keine aktiven Inserate.",
-      "loadingProfile": "Profil wird geladen...",
-      "sellerNotFound": "Verkäufer nicht gefunden",
-      "errorLoading": "Fehler beim Laden des Profils",
-      "reviewsHeading": "Bewertungen",
-      "verifiedPurchase": "Verifizierter Kauf",
-      "sellerResponse": "Antwort des Verkäufers",
-      "reviewForListing": "zu {title}",
-      "noReviewsTitle": "Noch keine Bewertungen",
-      "noReviewsDescription": "Dieser Verkäufer hat noch keine Bewertungen erhalten."
     }
+  },
+  "sellers": {
+    "meta": {
+      "title": "{name} – Verkäufer auf dem RevampIT Marketplace",
+      "titleFallback": "Verkäuferprofil – RevampIT Marketplace",
+      "description": "{name} auf dem RevampIT Marketplace – {count} aktive Inserate. Gebrauchte Technik kaufen und zur Kreislaufwirtschaft beitragen."
+    },
+    "backToMarketplace": "Zurück zum Marketplace",
+    "publicProfile": "Verkäuferprofil",
+    "verified": "Verifiziert",
+    "memberSince": "Mitglied seit {date}",
+    "listings": "Inserate",
+    "sold": "Verkauft",
+    "noRatings": "Keine Bewertungen",
+    "ratingsCount": "{count} Bewertungen",
+    "activeListings": "Aktive Inserate ({count})",
+    "noListingsTitle": "Keine aktiven Inserate",
+    "noListingsDescription": "Dieser Verkäufer hat momentan keine aktiven Inserate.",
+    "loadingProfile": "Profil wird geladen...",
+    "sellerNotFound": "Verkäufer nicht gefunden",
+    "errorLoading": "Fehler beim Laden des Profils",
+    "reviewsHeading": "Bewertungen",
+    "verifiedPurchase": "Verifizierter Kauf",
+    "sellerResponse": "Antwort des Verkäufers",
+    "reviewForListing": "zu {title}",
+    "noReviewsTitle": "Noch keine Bewertungen",
+    "noReviewsDescription": "Dieser Verkäufer hat noch keine Bewertungen erhalten."
   },
   "faq": {
     "meta": {
@@ -8705,7 +8707,10 @@
       "errorLoading": "Fehler beim Laden der Bestellung",
       "errorConfirmReceipt": "Empfang konnte nicht bestätigt werden",
       "errorUpdateStatus": "Status konnte nicht aktualisiert werden",
-      "networkError": "Netzwerkfehler"
+      "networkError": "Netzwerkfehler",
+      "prevPage": "Zurück",
+      "nextPage": "Weiter",
+      "paginationCurrentPage": "Seite {page}"
     },
     "listings": {
       "pageTitle": "Meine Inserate",

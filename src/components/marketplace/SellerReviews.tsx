@@ -49,7 +49,7 @@ function StarRow({ rating }: { rating: number }) {
  * are listing-scoped in the DB; this aggregates them to the person.
  */
 export function SellerReviews({ reviews, average, total, histogram }: SellerReviewsProps) {
-  const t = useTranslations('techniker.seller')
+  const t = useTranslations('sellers')
 
   return (
     <section className="mt-10">

@@ -261,7 +261,7 @@ export const PATCH = withAuth<{ id: string }>(async (
               .set({ status: LISTING_STATUS.SOLD })
               .where(inArray(listings.id, affectedListingIds))
             await tx.update(sellerProfiles)
-              .set({ totalSold: sql`${sellerProfiles.totalSold} + ${affectedListingIds.length}` })
+              .set({ totalSold: sql`COALESCE(${sellerProfiles.totalSold}, 0) + ${affectedListingIds.length}` })
               .where(eq(sellerProfiles.userId, order.sellerId))
           }
 

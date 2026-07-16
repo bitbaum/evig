@@ -978,7 +978,9 @@
       "closeAriaLabel": "Закрыть корзину",
       "paymentSuccess": "Оплата прошла успешно! Ваш заказ подтверждён.",
       "paymentFailed": "Оплата не удалась. Пожалуйста, попробуйте ещё раз.",
-      "paymentCancelled": "Оплата отменена."
+      "paymentCancelled": "Оплата отменена.",
+      "unavailableRemoved": "«{title}» больше недоступен и был удалён из корзины.",
+      "unavailableRemovedMany": "{count} товаров больше недоступны и были удалены из корзины."
     },
     "checkout": {
       "loading": "Загрузка...",
@@ -7953,28 +7955,34 @@
       "deliveryRemote": "Удалённо / онлайн",
       "deliveryOnsite": "На месте",
       "ctaHint": "Так вы создаёте запрос этому человеку — он получит уведомление и сможет отправить вам предложение."
-    },
-    "seller": {
-      "meta": {
-        "title": "{name} — продавец на RevampIT Marketplace",
-        "titleFallback": "Профиль продавца — RevampIT Marketplace",
-        "description": "{name} на RevampIT Marketplace — {count} активных объявлений. Покупайте подержанную технику и поддерживайте циркулярную экономику."
-      },
-      "backToMarketplace": "Назад на маркетплейс",
-      "memberSince": "Участник с {date}",
-      "listings": "Объявления",
-      "sold": "Продано",
-      "noRatings": "Нет отзывов",
-      "ratingsCount": "{count} отзывов",
-      "activeListings": "Активные объявления ({count})",
-      "noListingsTitle": "Нет активных объявлений",
-      "noListingsDescription": "У этого продавца сейчас нет активных объявлений.",
-      "loadingProfile": "Профиль загружается...",
-      "sellerNotFound": "Продавец не найден",
-      "errorLoading": "Ошибка загрузки профиля",
-      "publicProfile": "Профиль продавца",
-      "verified": "Проверено"
     }
+  },
+  "sellers": {
+    "meta": {
+      "title": "{name} — продавец на RevampIT Marketplace",
+      "titleFallback": "Профиль продавца — RevampIT Marketplace",
+      "description": "{name} на RevampIT Marketplace — {count} активных объявлений. Покупайте подержанную технику и поддерживайте циркулярную экономику."
+    },
+    "backToMarketplace": "Назад на маркетплейс",
+    "publicProfile": "Профиль продавца",
+    "verified": "Проверено",
+    "memberSince": "Участник с {date}",
+    "listings": "Объявления",
+    "sold": "Продано",
+    "noRatings": "Нет отзывов",
+    "ratingsCount": "{count} отзывов",
+    "activeListings": "Активные объявления ({count})",
+    "noListingsTitle": "Нет активных объявлений",
+    "noListingsDescription": "У этого продавца сейчас нет активных объявлений.",
+    "loadingProfile": "Профиль загружается...",
+    "sellerNotFound": "Продавец не найден",
+    "errorLoading": "Ошибка загрузки профиля",
+    "reviewsHeading": "Отзывы",
+    "verifiedPurchase": "Подтверждённая покупка",
+    "sellerResponse": "Ответ продавца",
+    "reviewForListing": "о {title}",
+    "noReviewsTitle": "Отзывов пока нет",
+    "noReviewsDescription": "У этого продавца пока нет отзывов."
   },
   "faq": {
     "meta": {
@@ -8653,7 +8661,10 @@
       "errorUpdateStatus": "Не удалось обновить статус",
       "networkError": "Ошибка сети",
       "articlesSection": "Товары ({count})",
-      "moreItems": "+{count} ещё"
+      "moreItems": "+{count} ещё",
+      "prevPage": "Назад",
+      "nextPage": "Далее",
+      "paginationCurrentPage": "Страница {page}"
     },
     "listings": {
       "pageTitle": "Мои объявления",

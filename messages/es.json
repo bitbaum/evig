@@ -3442,7 +3442,9 @@
       "closeAriaLabel": "Cerrar el carrito",
       "paymentSuccess": "¡Pago realizado con éxito! Tu pedido está confirmado.",
       "paymentFailed": "El pago ha fallado. Inténtalo de nuevo.",
-      "paymentCancelled": "Pago cancelado."
+      "paymentCancelled": "Pago cancelado.",
+      "unavailableRemoved": "«{title}» ya no está disponible y se ha eliminado del carrito.",
+      "unavailableRemovedMany": "{count} artículos ya no están disponibles y se han eliminado del carrito."
     },
     "aiCamera": {
       "analyzing": "Analizando el producto...",
@@ -7844,28 +7846,34 @@
       "deliveryRemote": "Remoto / En línea",
       "deliveryOnsite": "Presencial",
       "ctaHint": "Así inicias una solicitud a esta persona — recibirá una notificación y podrá hacerte una oferta."
-    },
-    "seller": {
-      "backToMarketplace": "Volver al mercado",
-      "memberSince": "Miembro desde {date}",
-      "listings": "Anuncios",
-      "sold": "Vendido",
-      "noRatings": "Sin valoraciones",
-      "ratingsCount": "{count} valoraciones",
-      "activeListings": "Anuncios activos ({count})",
-      "noListingsTitle": "Sin anuncios activos",
-      "noListingsDescription": "Este vendedor no tiene anuncios activos en este momento.",
-      "loadingProfile": "Cargando perfil...",
-      "sellerNotFound": "Vendedor no encontrado",
-      "errorLoading": "Error al cargar el perfil",
-      "meta": {
-        "title": "{name} – Vendedor en el marketplace de Revamp-IT",
-        "titleFallback": "Perfil de vendedor – Marketplace de Revamp-IT",
-        "description": "{name} en el marketplace de Revamp-IT – {count} anuncios activos. Compre tecnología de segunda mano y contribuya a la economía circular."
-      },
-      "publicProfile": "Perfil de vendedor",
-      "verified": "Verificado"
     }
+  },
+  "sellers": {
+    "meta": {
+      "title": "{name} – Vendedor en el marketplace de Revamp-IT",
+      "titleFallback": "Perfil de vendedor – Marketplace de Revamp-IT",
+      "description": "{name} en el marketplace de Revamp-IT – {count} anuncios activos. Compre tecnología de segunda mano y contribuya a la economía circular."
+    },
+    "backToMarketplace": "Volver al mercado",
+    "publicProfile": "Perfil de vendedor",
+    "verified": "Verificado",
+    "memberSince": "Miembro desde {date}",
+    "listings": "Anuncios",
+    "sold": "Vendido",
+    "noRatings": "Sin valoraciones",
+    "ratingsCount": "{count} valoraciones",
+    "activeListings": "Anuncios activos ({count})",
+    "noListingsTitle": "Sin anuncios activos",
+    "noListingsDescription": "Este vendedor no tiene anuncios activos en este momento.",
+    "loadingProfile": "Cargando perfil...",
+    "sellerNotFound": "Vendedor no encontrado",
+    "errorLoading": "Error al cargar el perfil",
+    "reviewsHeading": "Valoraciones",
+    "verifiedPurchase": "Compra verificada",
+    "sellerResponse": "Respuesta del vendedor",
+    "reviewForListing": "sobre {title}",
+    "noReviewsTitle": "Aún no hay valoraciones",
+    "noReviewsDescription": "Este vendedor todavía no ha recibido valoraciones."
   },
   "workshops": {
     "meta": {
@@ -8658,7 +8666,10 @@
       "errorUpdateStatus": "No se pudo actualizar el estado",
       "networkError": "Error de red",
       "articlesSection": "Artículos ({count})",
-      "moreItems": "+{count} más"
+      "moreItems": "+{count} más",
+      "prevPage": "Atrás",
+      "nextPage": "Siguiente",
+      "paginationCurrentPage": "Página {page}"
     },
     "listings": {
       "pageTitle": "Mis anuncios",

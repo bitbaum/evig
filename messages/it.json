@@ -3442,7 +3442,9 @@
       "closeAriaLabel": "Chiudi il carrello",
       "paymentSuccess": "Pagamento riuscito! Il tuo ordine è confermato.",
       "paymentFailed": "Pagamento non riuscito. Riprova.",
-      "paymentCancelled": "Pagamento annullato."
+      "paymentCancelled": "Pagamento annullato.",
+      "unavailableRemoved": "«{title}» non è più disponibile ed è stato rimosso dal carrello.",
+      "unavailableRemovedMany": "{count} articoli non sono più disponibili e sono stati rimossi dal carrello."
     },
     "aiCamera": {
       "analyzing": "Analisi del prodotto in corso...",
@@ -7844,28 +7846,34 @@
       "deliveryRemote": "Remoto / Online",
       "deliveryOnsite": "Di persona",
       "ctaHint": "Avvii così una richiesta a questa persona — riceverà una notifica e potrà farti un’offerta."
-    },
-    "seller": {
-      "backToMarketplace": "Torna al mercato",
-      "memberSince": "Membro dal {date}",
-      "listings": "Annunci",
-      "sold": "Venduto",
-      "noRatings": "Nessuna recensione",
-      "ratingsCount": "{count} recensioni",
-      "activeListings": "Annunci attivi ({count})",
-      "noListingsTitle": "Nessun annuncio attivo",
-      "noListingsDescription": "Questo venditore al momento non ha annunci attivi.",
-      "loadingProfile": "Caricamento profilo...",
-      "sellerNotFound": "Venditore non trovato",
-      "errorLoading": "Errore nel caricamento del profilo",
-      "meta": {
-        "title": "{name} – Venditore sul Marketplace RevampIT",
-        "titleFallback": "Profilo venditore – Marketplace RevampIT",
-        "description": "{name} sul Marketplace RevampIT – {count} annunci attivi. Acquistare tecnologia usata e contribuire all'economia circolare."
-      },
-      "publicProfile": "Profilo del venditore",
-      "verified": "Verificato"
     }
+  },
+  "sellers": {
+    "meta": {
+      "title": "{name} – Venditore sul Marketplace RevampIT",
+      "titleFallback": "Profilo venditore – Marketplace RevampIT",
+      "description": "{name} sul Marketplace RevampIT – {count} annunci attivi. Acquistare tecnologia usata e contribuire all'economia circolare."
+    },
+    "backToMarketplace": "Torna al mercato",
+    "publicProfile": "Profilo del venditore",
+    "verified": "Verificato",
+    "memberSince": "Membro dal {date}",
+    "listings": "Annunci",
+    "sold": "Venduto",
+    "noRatings": "Nessuna recensione",
+    "ratingsCount": "{count} recensioni",
+    "activeListings": "Annunci attivi ({count})",
+    "noListingsTitle": "Nessun annuncio attivo",
+    "noListingsDescription": "Questo venditore al momento non ha annunci attivi.",
+    "loadingProfile": "Caricamento profilo...",
+    "sellerNotFound": "Venditore non trovato",
+    "errorLoading": "Errore nel caricamento del profilo",
+    "reviewsHeading": "Recensioni",
+    "verifiedPurchase": "Acquisto verificato",
+    "sellerResponse": "Risposta del venditore",
+    "reviewForListing": "per {title}",
+    "noReviewsTitle": "Ancora nessuna recensione",
+    "noReviewsDescription": "Questo venditore non ha ancora ricevuto recensioni."
   },
   "workshops": {
     "meta": {
@@ -8658,7 +8666,10 @@
       "errorUpdateStatus": "Impossibile aggiornare lo stato",
       "networkError": "Errore di rete",
       "articlesSection": "Articoli ({count})",
-      "moreItems": "+{count} altri"
+      "moreItems": "+{count} altri",
+      "prevPage": "Indietro",
+      "nextPage": "Avanti",
+      "paginationCurrentPage": "Pagina {page}"
     },
     "listings": {
       "pageTitle": "I miei annunci",

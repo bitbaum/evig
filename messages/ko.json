@@ -3442,7 +3442,9 @@
       "closeAriaLabel": "장바구니 닫기",
       "paymentSuccess": "결제가 완료되었습니다! 주문이 확정되었습니다.",
       "paymentFailed": "결제에 실패했습니다. 다시 시도해 주세요.",
-      "paymentCancelled": "결제가 취소되었습니다."
+      "paymentCancelled": "결제가 취소되었습니다.",
+      "unavailableRemoved": "\"{title}\"은(는) 더 이상 구매할 수 없어 장바구니에서 제거되었습니다.",
+      "unavailableRemovedMany": "{count}개 상품이 더 이상 구매할 수 없어 장바구니에서 제거되었습니다."
     },
     "aiCamera": {
       "analyzing": "제품 분석 중...",
@@ -7844,28 +7846,34 @@
       "deliveryRemote": "원격 / 온라인",
       "deliveryOnsite": "현장 방문",
       "ctaHint": "이렇게 하면 이 사람에게 요청이 시작됩니다 — 상대방에게 알림이 전달되고 제안을 보낼 수 있습니다."
-    },
-    "seller": {
-      "backToMarketplace": "마켓플레이스로 돌아가기",
-      "memberSince": "{date}부터 회원",
-      "listings": "판매 목록",
-      "sold": "판매됨",
-      "noRatings": "리뷰 없음",
-      "ratingsCount": "{count}개 리뷰",
-      "activeListings": "활성 판매 목록 ({count})",
-      "noListingsTitle": "활성 판매 목록 없음",
-      "noListingsDescription": "이 판매자는 현재 활성 판매 목록이 없습니다.",
-      "loadingProfile": "프로필 로딩 중...",
-      "sellerNotFound": "판매자를 찾을 수 없습니다",
-      "errorLoading": "프로필 로딩 오류",
-      "meta": {
-        "title": "{name} – RevampIT Marketplace 의 판매자",
-        "titleFallback": "판매자 프로필 – RevampIT Marketplace",
-        "description": "RevampIT Marketplace 의 {name} – 활성 상품 {count} 개. 중고 기술 제품을 구매하고 순환 경제에 기여하세요."
-      },
-      "publicProfile": "판매자 프로필",
-      "verified": "인증됨"
     }
+  },
+  "sellers": {
+    "meta": {
+      "title": "{name} – RevampIT Marketplace 의 판매자",
+      "titleFallback": "판매자 프로필 – RevampIT Marketplace",
+      "description": "RevampIT Marketplace 의 {name} – 활성 상품 {count} 개. 중고 기술 제품을 구매하고 순환 경제에 기여하세요."
+    },
+    "backToMarketplace": "마켓플레이스로 돌아가기",
+    "publicProfile": "판매자 프로필",
+    "verified": "인증됨",
+    "memberSince": "{date}부터 회원",
+    "listings": "판매 목록",
+    "sold": "판매됨",
+    "noRatings": "리뷰 없음",
+    "ratingsCount": "{count}개 리뷰",
+    "activeListings": "활성 판매 목록 ({count})",
+    "noListingsTitle": "활성 판매 목록 없음",
+    "noListingsDescription": "이 판매자는 현재 활성 판매 목록이 없습니다.",
+    "loadingProfile": "프로필 로딩 중...",
+    "sellerNotFound": "판매자를 찾을 수 없습니다",
+    "errorLoading": "프로필 로딩 오류",
+    "reviewsHeading": "후기",
+    "verifiedPurchase": "구매 인증됨",
+    "sellerResponse": "판매자 답변",
+    "reviewForListing": "{title} 관련",
+    "noReviewsTitle": "아직 후기가 없습니다",
+    "noReviewsDescription": "이 판매자는 아직 후기를 받지 않았습니다."
   },
   "workshops": {
     "meta": {
@@ -8658,7 +8666,10 @@
       "errorUpdateStatus": "상태를 업데이트할 수 없습니다",
       "networkError": "네트워크 오류",
       "articlesSection": "품목 ({count})",
-      "moreItems": "+{count}개 더"
+      "moreItems": "+{count}개 더",
+      "prevPage": "이전",
+      "nextPage": "다음",
+      "paginationCurrentPage": "페이지 {page}"
     },
     "listings": {
       "pageTitle": "내 상품",

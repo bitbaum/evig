@@ -1139,7 +1139,9 @@
       "paymentCancelled": "Payment cancelled.",
       "revampitOnly": "Only Revamp-IT devices can be added to the cart. Community listings are purchased directly.",
       "cartAriaLabel": "Cart, {count} items",
-      "closeAriaLabel": "Close cart"
+      "closeAriaLabel": "Close cart",
+      "unavailableRemoved": "\"{title}\" is no longer available and was removed from your cart.",
+      "unavailableRemovedMany": "{count} items are no longer available and were removed from your cart."
     },
     "aiCamera": {
       "analyzing": "Analyzing product...",
@@ -4898,28 +4900,34 @@
       "deliveryRemote": "Remote / Online",
       "deliveryOnsite": "On-site",
       "ctaHint": "This starts a request to this person — they’ll be notified and can send you an offer."
-    },
-    "seller": {
-      "backToMarketplace": "Back to Marketplace",
-      "publicProfile": "Seller profile",
-      "memberSince": "Member since {date}",
-      "listings": "Listings",
-      "sold": "Sold",
-      "noRatings": "No reviews",
-      "ratingsCount": "{count} reviews",
-      "activeListings": "Active listings ({count})",
-      "noListingsTitle": "No active listings",
-      "noListingsDescription": "This seller currently has no active listings.",
-      "loadingProfile": "Loading profile...",
-      "sellerNotFound": "Seller not found",
-      "errorLoading": "Error loading profile",
-      "meta": {
-        "title": "{name} – seller on the RevampIT Marketplace",
-        "titleFallback": "Seller profile – RevampIT Marketplace",
-        "description": "{name} on the RevampIT Marketplace – {count} active listings. Buy used tech and contribute to the circular economy."
-      },
-      "verified": "Verified"
     }
+  },
+  "sellers": {
+    "meta": {
+      "title": "{name} – seller on the RevampIT Marketplace",
+      "titleFallback": "Seller profile – RevampIT Marketplace",
+      "description": "{name} on the RevampIT Marketplace – {count} active listings. Buy used tech and contribute to the circular economy."
+    },
+    "backToMarketplace": "Back to Marketplace",
+    "publicProfile": "Seller profile",
+    "verified": "Verified",
+    "memberSince": "Member since {date}",
+    "listings": "Listings",
+    "sold": "Sold",
+    "noRatings": "No reviews",
+    "ratingsCount": "{count} reviews",
+    "activeListings": "Active listings ({count})",
+    "noListingsTitle": "No active listings",
+    "noListingsDescription": "This seller currently has no active listings.",
+    "loadingProfile": "Loading profile...",
+    "sellerNotFound": "Seller not found",
+    "errorLoading": "Error loading profile",
+    "reviewsHeading": "Reviews",
+    "verifiedPurchase": "Verified purchase",
+    "sellerResponse": "Seller's response",
+    "reviewForListing": "for {title}",
+    "noReviewsTitle": "No reviews yet",
+    "noReviewsDescription": "This seller has not received any reviews yet."
   },
   "agb": {
     "meta": {
@@ -8657,7 +8665,10 @@
       "errorUpdateStatus": "Could not update status",
       "networkError": "Network error",
       "articlesSection": "Items ({count})",
-      "moreItems": "+{count} more"
+      "moreItems": "+{count} more",
+      "prevPage": "Back",
+      "nextPage": "Next",
+      "paginationCurrentPage": "Page {page}"
     },
     "listings": {
       "pageTitle": "My Listings",

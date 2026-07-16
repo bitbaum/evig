@@ -3442,7 +3442,9 @@
       "closeAriaLabel": "カートを閉じる",
       "paymentSuccess": "お支払いが完了しました！ご注文が確定しました。",
       "paymentFailed": "お支払いに失敗しました。もう一度お試しください。",
-      "paymentCancelled": "お支払いがキャンセルされました。"
+      "paymentCancelled": "お支払いがキャンセルされました。",
+      "unavailableRemoved": "「{title}」は在庫がなくなったため、カートから削除されました。",
+      "unavailableRemovedMany": "{count} 点の商品が在庫切れのため、カートから削除されました。"
     },
     "aiCamera": {
       "analyzing": "製品を分析中...",
@@ -7844,28 +7846,34 @@
       "deliveryRemote": "リモート・オンライン",
       "deliveryOnsite": "現地訪問",
       "ctaHint": "これでこの人へのリクエストを開始します。相手に通知が届き、見積もりを送ることができます。"
-    },
-    "seller": {
-      "backToMarketplace": "マーケットプレイスに戻る",
-      "memberSince": "{date}から会員",
-      "listings": "出品",
-      "sold": "販売済み",
-      "noRatings": "評価なし",
-      "ratingsCount": "{count}件の評価",
-      "activeListings": "アクティブな出品（{count}件）",
-      "noListingsTitle": "アクティブな出品なし",
-      "noListingsDescription": "この販売者は現在アクティブな出品がありません。",
-      "loadingProfile": "プロフィールを読み込み中...",
-      "sellerNotFound": "販売者が見つかりません",
-      "errorLoading": "プロフィールの読み込みエラー",
-      "meta": {
-        "title": "{name} – RevampIT マーケットプレイスの出品者",
-        "titleFallback": "出品者プロフィール – RevampIT マーケットプレイス",
-        "description": "RevampIT マーケットプレイスの {name} – アクティブな出品 {count} 件。中古テクノロジーを購入して循環経済に貢献しましょう。"
-      },
-      "publicProfile": "出品者プロフィール",
-      "verified": "認証済み"
     }
+  },
+  "sellers": {
+    "meta": {
+      "title": "{name} – RevampIT マーケットプレイスの出品者",
+      "titleFallback": "出品者プロフィール – RevampIT マーケットプレイス",
+      "description": "RevampIT マーケットプレイスの {name} – アクティブな出品 {count} 件。中古テクノロジーを購入して循環経済に貢献しましょう。"
+    },
+    "backToMarketplace": "マーケットプレイスに戻る",
+    "publicProfile": "出品者プロフィール",
+    "verified": "認証済み",
+    "memberSince": "{date}から会員",
+    "listings": "出品",
+    "sold": "販売済み",
+    "noRatings": "評価なし",
+    "ratingsCount": "{count}件の評価",
+    "activeListings": "アクティブな出品（{count}件）",
+    "noListingsTitle": "アクティブな出品なし",
+    "noListingsDescription": "この販売者は現在アクティブな出品がありません。",
+    "loadingProfile": "プロフィールを読み込み中...",
+    "sellerNotFound": "販売者が見つかりません",
+    "errorLoading": "プロフィールの読み込みエラー",
+    "reviewsHeading": "評価",
+    "verifiedPurchase": "購入確認済み",
+    "sellerResponse": "出品者からの返信",
+    "reviewForListing": "{title} について",
+    "noReviewsTitle": "まだ評価がありません",
+    "noReviewsDescription": "この出品者はまだ評価を受けていません。"
   },
   "workshops": {
     "meta": {
@@ -8658,7 +8666,10 @@
       "errorUpdateStatus": "ステータスを更新できませんでした",
       "networkError": "ネットワークエラー",
       "articlesSection": "商品（{count}）",
-      "moreItems": "他{count}件"
+      "moreItems": "他{count}件",
+      "prevPage": "前へ",
+      "nextPage": "次へ",
+      "paginationCurrentPage": "ページ {page}"
     },
     "listings": {
       "pageTitle": "マイ出品",
