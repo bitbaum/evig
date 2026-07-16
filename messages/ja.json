@@ -3168,7 +3168,8 @@
       },
       "zoomOpen": "拡大",
       "zoomClose": "閉じる",
-      "photoCount": "{count}枚の写真"
+      "photoCount": "{count}枚の写真",
+      "performedChecks": "実施した検査"
     },
     "listing_actions": {
       "payment_info": "購入者と販売者の間の直接支払い",
@@ -9491,7 +9492,10 @@
         "whereErfassen": "デバイスはパイプラインの「準備完了」に表示され、そこから公開できます。",
         "wherePublished": "デバイスはショップで公開中で、パイプラインの「公開済み」に表示されています。",
         "viewInShop": "ショップで見る",
-        "toDevice": "パイプラインでデバイスを開く"
+        "toDevice": "パイプラインでデバイスを開く",
+        "titleQcGated": "登録完了 — 品質検査が必要",
+        "whereQcGated": "この機器は販売前に検査が必要です。チェックリストが有効な状態で機器受入にあります。検査に合格すると公開できます。",
+        "printLabel": "ラベルを印刷"
       },
       "bulkSuccess": {
         "titlePartial": "一部のみ登録されました",
@@ -10317,7 +10321,20 @@
           "category": "カテゴリ",
           "price": "価格",
           "captured": "登録日"
-        }
+        },
+        "failedAlert": {
+          "heading": "検査不合格",
+          "body": "必須項目が少なくとも1つ不合格です。問題を解決して再検査するか、機器を別の区分（部品/リサイクル）に移してください。",
+          "changeTierCta": "区分を変更"
+        },
+        "qcGate": {
+          "heading": "品質検査が必要",
+          "body": "この機器はクイック登録されましたが、そのカテゴリーは販売前に検査が必要です（テスト、データ消去、クリーニング）。検査を開始してチェックリストを有効にしてください。",
+          "start": "検査を開始",
+          "starting": "開始中…"
+        },
+        "printLabel": "ラベル",
+        "printLabelTitle": "機器のQRラベルを印刷"
       },
       "pipeline": {
         "newDevice": "新しいデバイス",
@@ -10342,7 +10359,8 @@
         "status": {
           "published": "公開済み",
           "ready": "準備完了",
-          "inProgress": "処理中"
+          "inProgress": "処理中",
+          "failed": "不合格"
         },
         "donationYes": "はい",
         "hero": {
@@ -10350,7 +10368,8 @@
             "total": "合計",
             "inProgress": "処理中",
             "ready": "準備完了",
-            "published": "公開済み"
+            "published": "公開済み",
+            "failed": "不合格"
           },
           "ready": {
             "headline": "{count, plural, one {#台のデバイス} other {#台のデバイス}}が公開準備完了",
@@ -10370,17 +10389,27 @@
           "healthy": {
             "headline": "パイプラインは良好です。",
             "sub": "{published}台のデバイスが公開済みで、処理待ちはありません。"
+          },
+          "failed": {
+            "headline": "{count}台の機器が検査不合格",
+            "sub": "対応を決定：修理して再検査するか、区分を変更（部品/リサイクル）。",
+            "cta": "不合格を表示"
           }
         }
       },
       "checklist": {
         "requiredMarker": "必須項目",
-        "completedAt": "{date}に完了",
         "addNote": "メモを追加",
         "editNote": "メモを編集",
         "notePlaceholder": "例：CPUストレステスト合格、最大75°C…",
-        "ariaUncheck": "{label}を取り消す",
-        "ariaCheck": "{label}をチェック"
+        "failCount": "{count}件不合格",
+        "resultAt": "{date} に{result}",
+        "failNotePlaceholder": "何が不合格でしたか？例：バッテリーが20分しか持たない…",
+        "failNoteRequired": "理由が必要です — 具体的に何が不合格でしたか？",
+        "saveFail": "不合格にする",
+        "confirmNoteHint": "四つの目の原則：第二確認者はそのまま確認できます。一人勤務の場合は理由を記入してください。",
+        "confirmNotePlaceholder": "第二確認者は任意 — 単独承認の場合は必須（例：「一人勤務」）…",
+        "saveConfirm": "品質検査を確認"
       }
     },
     "it-hilfe": {

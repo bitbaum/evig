@@ -9,8 +9,9 @@ import { Input } from '@/components/ui/input'
 import {
   Check, RefreshCw, ExternalLink,
   AlertCircle, ArrowDownUp, Clock, CheckCheck, ClipboardList,
-  Image as ImageIcon,
+  Image as ImageIcon, QrCode,
 } from 'lucide-react'
+import { ROUTES } from '@/config/routes'
 import { KATEGORIEN, getConditionLabel } from '@/config/erfassung'
 import { formatDateShort } from '@/lib/date-formats'
 import {
@@ -18,10 +19,11 @@ import {
   INTAKE_TIER_LABELS,
   INTAKE_TIER_ICONS,
   getIntakeTierOptions,
+  requiresQualityControl,
   QUICK_CAPTURE_LABEL,
   QUICK_CAPTURE_ICON,
 } from '@/config/intake-checklist'
-import type { IntakeTier } from '@/config/intake-checklist'
+import type { IntakeTier, ChecklistResult } from '@/config/intake-checklist'
 import { INTAKE_STATUS } from '@/config/intake-status'
 import type { IntakeEventType } from '@/lib/intake/timeline-types'
 import { EVENT_TYPE_LABELS, EVENT_TYPE_ICONS } from '@/lib/intake/timeline-types'
@@ -45,8 +47,11 @@ interface IntakeDetailViewProps {
   tierChanging: boolean
   onBack: () => void
   onRefresh: () => void
-  onToggleChecklist: (itemId: string, completed: boolean, notes?: string) => void
+  checklistError: string | null
+  onSetChecklistResult: (itemId: string, result: ChecklistResult | null, notes?: string) => void
   onMarkAllRequired: () => void
+  onStartQc: () => void
+  startingQc: boolean
   onPublish: () => void
   onTierChange: () => void
 }
@@ -66,8 +71,11 @@ export function IntakeDetailView({
   tierChanging,
   onBack,
   onRefresh,
-  onToggleChecklist,
+  checklistError,
+  onSetChecklistResult,
   onMarkAllRequired,
+  onStartQc,
+  startingQc,
   onPublish,
   onTierChange,
 }: IntakeDetailViewProps) {
@@ -79,6 +87,9 @@ export function IntakeDetailView({
   }
 
   const progress = detail.checklist_progress
+  // Quick capture of a QC-required device category: publishing is blocked
+  // until the checklist workflow is started (tier assigned).
+  const qcGate = detail.intake_tier === null && requiresQualityControl(detail.category)
 
   // Pipeline step: 0 = checklist in progress, 1 = ready for erfassung, 2 = published
   const pipelineStep =
@@ -120,7 +131,14 @@ export function IntakeDetailView({
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap justify-end">
+          <Link
+            href={ROUTES.admin.intakeLabel(detail.id)}
+            className={`flex items-center gap-1 px-2 py-1.5 text-xs border rounded-lg min-h-11 sm:min-h-0 ${adminInteractive.rowHover}`}
+            title={t('printLabelTitle')}
+          >
+            <QrCode className="w-3.5 h-3.5" /> {t('printLabel')}
+          </Link>
           {detail.marketplace_status === INTAKE_STATUS.PUBLISHED ? (
             <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-action-muted text-action">
               <Check className="w-4 h-4" /> {t('inShop')}
@@ -224,6 +242,7 @@ export function IntakeDetailView({
         <div className="w-full h-3 bg-surface-overlay rounded-full overflow-hidden">
           <div
             className={`h-full rounded-full transition-all ${
+              detail.checklist_failed ? 'bg-error-500' :
               progress.percentage === 100 ? 'bg-action' :
               progress.percentage > 50 ? 'bg-warning-500' : 'bg-error-400'
             }`}
@@ -233,20 +252,69 @@ export function IntakeDetailView({
       </div>
       )}
 
+      {/* Failed QC — the device is stuck until fixed & retested, or re-tiered */}
+      {detail.checklist_failed && detail.marketplace_status !== INTAKE_STATUS.PUBLISHED && (
+        <div className="border-2 border-error-300 dark:border-error-800 bg-error-50 dark:bg-error-900/20 rounded-lg p-4 space-y-2">
+          <Heading level={3} className="font-medium flex items-center gap-2 text-error-800 dark:text-error-200">
+            <AlertCircle className="w-4 h-4" /> {t('failedAlert.heading')}
+          </Heading>
+          <p className="text-sm text-error-700 dark:text-error-300">{t('failedAlert.body')}</p>
+          {detail.intake_tier && (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => { setNewTier(detail.intake_tier === INTAKE_TIERS.PARTS ? INTAKE_TIERS.RECYCLE : INTAKE_TIERS.PARTS); setShowTierChange(true) }}
+              className={`flex items-center gap-1 px-2 py-1.5 text-xs border rounded-lg ${adminInteractive.rowHover}`}
+            >
+              <ArrowDownUp className="w-3.5 h-3.5" /> {t('failedAlert.changeTierCta')}
+            </Button>
+          )}
+        </div>
+      )}
+
+      {/* Checklist rejection (e.g. Vier-Augen-Prinzip) — never fail silently */}
+      {checklistError && (
+        <div className="flex items-start gap-2 text-sm text-error-700 dark:text-error-300 bg-error-50 dark:bg-error-900/20 border border-error-300 dark:border-error-800 p-3 rounded-lg">
+          <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
+          <span>{checklistError}</span>
+        </div>
+      )}
+
       {/* Checklist Groups */}
       <div className="space-y-4">
         {detail.checklist_grouped.map((group) => (
           <ChecklistGroup
             key={group.category}
             group={group}
-            onToggle={onToggleChecklist}
+            onSetResult={onSetChecklistResult}
           />
         ))}
       </div>
 
+      {/* QC gate — quick capture of a device category that requires the
+          checklist: no publishing until the workflow is started */}
+      {qcGate && detail.marketplace_status !== INTAKE_STATUS.PUBLISHED && (
+        <div className="border-2 border-warning-300 bg-warning-50 dark:bg-warning-900/20 rounded-lg p-4 space-y-3">
+          <Heading level={3} className="font-medium flex items-center gap-2 text-warning-800 dark:text-warning-200">
+            <AlertCircle className="w-4 h-4" /> {t('qcGate.heading')}
+          </Heading>
+          <p className="text-sm text-warning-700 dark:text-warning-200">{t('qcGate.body')}</p>
+          <Button
+            type="button"
+            onClick={onStartQc}
+            disabled={startingQc}
+            variant="primary"
+            size="sm"
+          >
+            {startingQc ? t('qcGate.starting') : t('qcGate.start')}
+          </Button>
+        </div>
+      )}
+
       {/* Publish Section — refurbish-tier items (checklist-gated) and quick
-          captures (no checklist, publishable immediately) */}
-      {(detail.intake_tier === INTAKE_TIERS.REFURBISH || detail.intake_tier === null) && detail.marketplace_status !== INTAKE_STATUS.PUBLISHED && (
+          captures of accessory categories (no QC required) */}
+      {(detail.intake_tier === INTAKE_TIERS.REFURBISH || (detail.intake_tier === null && !qcGate)) && detail.marketplace_status !== INTAKE_STATUS.PUBLISHED && (
         <div className={`border-2 rounded-lg p-4 ${
           detail.checklist_complete
             ? 'border-strong bg-action-muted'

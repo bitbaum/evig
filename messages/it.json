@@ -3168,7 +3168,8 @@
       },
       "zoomOpen": "Ingrandisci",
       "zoomClose": "Chiudi",
-      "photoCount": "{count} foto"
+      "photoCount": "{count} foto",
+      "performedChecks": "Controlli effettuati"
     },
     "listing_actions": {
       "payment_info": "Pagamento diretto tra acquirente e venditore",
@@ -9491,7 +9492,10 @@
         "whereErfassen": "Il dispositivo è ora visibile nella pipeline sotto «Pronto» e può essere pubblicato da lì.",
         "wherePublished": "Il dispositivo è online nello shop ed elencato nella pipeline sotto «Pubblicato».",
         "viewInShop": "Vedi nello shop",
-        "toDevice": "Apri dispositivo nella pipeline"
+        "toDevice": "Apri dispositivo nella pipeline",
+        "titleQcGated": "Registrato — controllo qualità richiesto",
+        "whereQcGated": "Questo dispositivo deve essere controllato prima della vendita. Si trova nell’ingresso dispositivi con una checklist attiva — una volta superato il controllo può essere pubblicato.",
+        "printLabel": "Stampa etichetta"
       },
       "bulkSuccess": {
         "titlePartial": "Registrazione parziale",
@@ -10317,7 +10321,20 @@
           "category": "Categoria",
           "price": "Prezzo",
           "captured": "Registrato"
-        }
+        },
+        "failedAlert": {
+          "heading": "Controllo fallito",
+          "body": "Almeno un punto obbligatorio è fallito. Risolvere il problema e ritestare — oppure spostare il dispositivo in un altro livello (ricambi/riciclo).",
+          "changeTierCta": "Cambia livello"
+        },
+        "qcGate": {
+          "heading": "Controllo qualità richiesto",
+          "body": "Questo dispositivo è stato registrato rapidamente, ma la sua categoria deve essere controllata prima della vendita (test, cancellazione dati, pulizia). Avviare il controllo per attivare la checklist.",
+          "start": "Avvia controllo",
+          "starting": "Avvio…"
+        },
+        "printLabel": "Etichetta",
+        "printLabelTitle": "Stampare l'etichetta QR del dispositivo"
       },
       "pipeline": {
         "newDevice": "Nuovo dispositivo",
@@ -10342,7 +10359,8 @@
         "status": {
           "published": "Pubblicato",
           "ready": "Pronto",
-          "inProgress": "In lavorazione"
+          "inProgress": "In lavorazione",
+          "failed": "Fallito"
         },
         "donationYes": "Sì",
         "hero": {
@@ -10350,7 +10368,8 @@
             "total": "Totale",
             "inProgress": "In lavorazione",
             "ready": "Pronto",
-            "published": "Pubblicato"
+            "published": "Pubblicato",
+            "failed": "Falliti"
           },
           "ready": {
             "headline": "{count, plural, one {# dispositivo} other {# dispositivi}} pronti per la pubblicazione",
@@ -10370,17 +10389,27 @@
           "healthy": {
             "headline": "Pipeline in buono stato.",
             "sub": "{published} dispositivi pubblicati, niente in attesa di lavorazione."
+          },
+          "failed": {
+            "headline": "{count, plural, one {# dispositivo} other {# dispositivi}} con controllo fallito",
+            "sub": "Decidere: riparare e ritestare, o cambiare livello (ricambi/riciclo).",
+            "cta": "Mostra falliti"
           }
         }
       },
       "checklist": {
         "requiredMarker": "Punto obbligatorio",
-        "completedAt": "Completato il {date}",
         "addNote": "Aggiungi nota",
         "editNote": "Modifica nota",
         "notePlaceholder": "es. Stress test CPU superato, max. 75 °C …",
-        "ariaUncheck": "Annulla {label}",
-        "ariaCheck": "Spunta {label}"
+        "failCount": "{count} falliti",
+        "resultAt": "{result} il {date}",
+        "failNotePlaceholder": "Cosa è fallito? es. la batteria dura solo 20 minuti…",
+        "failNoteRequired": "Motivazione richiesta — cosa è fallito esattamente?",
+        "saveFail": "Segna come fallito",
+        "confirmNoteHint": "Principio dei quattro occhi: conferma direttamente come seconda persona. Da solo in servizio? Indica il motivo.",
+        "confirmNotePlaceholder": "Facoltativo come seconda persona — obbligatorio per una conferma in solitaria, es. «da solo in servizio» …",
+        "saveConfirm": "Conferma controllo qualità"
       }
     },
     "it-hilfe": {

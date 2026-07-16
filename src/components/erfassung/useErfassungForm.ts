@@ -65,6 +65,7 @@ export function useErfassungForm() {
   const [savedInventoryId, setSavedInventoryId] = useState<string | null>(null)
   const [savedAction, setSavedAction] = useState<'draft' | 'erfassen' | 'publish'>('draft')
   const [savedListingId, setSavedListingId] = useState<string | null>(null)
+  const [savedQcRequired, setSavedQcRequired] = useState(false)
   const [showAdvanced, setShowAdvanced] = useState(false)
   const [isEditMode, setIsEditMode] = useState(false)
   const [formData, setFormData] = useState<ErfassungFormData>(DEFAULT_FORM_DATA)
@@ -302,6 +303,7 @@ export function useErfassungForm() {
           inventory_id: string | null
           listing_id: string | null
           action: 'draft' | 'erfassen' | 'publish'
+          qc_required?: boolean
         }>('/api/admin/erfassung', {
           method: 'POST',
           body: payload,
@@ -317,6 +319,7 @@ export function useErfassungForm() {
           setSavedInventoryId(result.data.inventory_id || null)
           setSavedAction(result.data.action || action)
           setSavedListingId(result.data.listing_id || null)
+          setSavedQcRequired(result.data.qc_required === true)
         }
       }
     } catch (error) {
@@ -333,6 +336,7 @@ export function useErfassungForm() {
     setSavedInventoryId(null)
     setSavedAction('draft')
     setSavedListingId(null)
+    setSavedQcRequired(false)
     setFormData(DEFAULT_FORM_DATA)
     setAnnahme(DEFAULT_ANNAHME)
     setAiMetadata({})
@@ -351,6 +355,7 @@ export function useErfassungForm() {
     setAnnahme,
     savedAction,
     savedListingId,
+    savedQcRequired,
     savedInventoryId,
     savedItemUUID,
     savedProductId,

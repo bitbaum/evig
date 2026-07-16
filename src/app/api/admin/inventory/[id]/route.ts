@@ -23,7 +23,7 @@ import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/help
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { logger } from '@/lib/logger'
 import { INTAKE_STATUS } from '@/config/intake-status'
-import { publishProduct, unpublishProduct, updateProductImage } from '@/lib/admin/inventory-actions'
+import { publishProduct, unpublishProduct, updateProductImage, QcGateError } from '@/lib/admin/inventory-actions'
 import { validateBody, InventoryUpdateSchema, InventoryPatchSchema } from '@/lib/schemas'
 import { updateKivviInventoryItem, mapConditionToKivvi, isKivviConfigured } from '@/lib/kivvi/client'
 
@@ -312,18 +312,19 @@ export const PATCH = withAdmin<{ id: string }>('products', async (request, sessi
     if (!patchValidation.success) return patchValidation.error
     const body = patchValidation.data
 
-    // Handle marketplace publish/unpublish
+    // Handle marketplace publish/unpublish. Publish runs FIRST so a QC-gate
+    // rejection leaves marketplace_status untouched (no half-published state).
     if (body.marketplace_status !== undefined) {
-      await db
-        .update(inventoryItems)
-        .set({ marketplaceStatus: body.marketplace_status, updatedAt: sql`NOW()` })
-        .where(eq(inventoryItems.aiProductId, productId))
-
       if (body.marketplace_status === INTAKE_STATUS.PUBLISHED) {
         await publishProduct(productId, session.user.id)
       } else {
         await unpublishProduct(productId, session.user.id)
       }
+
+      await db
+        .update(inventoryItems)
+        .set({ marketplaceStatus: body.marketplace_status, updatedAt: sql`NOW()` })
+        .where(eq(inventoryItems.aiProductId, productId))
     }
 
     // Handle product status change
@@ -344,6 +345,9 @@ export const PATCH = withAdmin<{ id: string }>('products', async (request, sessi
       status: body.status,
     })
   } catch (error) {
+    if (error instanceof QcGateError) {
+      return apiBadRequest(error.message)
+    }
     logger.error('Failed to patch inventory product', { error })
     return apiError(error, ERROR_MESSAGES.PRODUCT_UPDATE_FAILED)
   }

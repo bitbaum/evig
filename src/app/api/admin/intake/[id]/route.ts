@@ -17,6 +17,8 @@ import {
   getChecklistForDevice,
   getChecklistProgress,
   isChecklistComplete,
+  hasChecklistFailure,
+  normalizeChecklistItemState,
   CHECKLIST_CATEGORY_LABELS,
 } from '@/config/intake-checklist'
 import type { ChecklistState, IntakeTier } from '@/config/intake-checklist'
@@ -93,7 +95,7 @@ export const GET = withAdmin<{ id: string }>('intake', async (_request, _session
     const checklistItems = tier ? getChecklistForDevice(tier, cat) : []
     const checklistWithState = checklistItems.map(item => ({
       ...item,
-      state: checklist[item.id] || { completed: false, completedBy: null, completedAt: null, notes: '' },
+      state: normalizeChecklistItemState(checklist[item.id]),
     }))
 
     // Group by category
@@ -106,13 +108,15 @@ export const GET = withAdmin<{ id: string }>('intake', async (_request, _session
 
     const progress = tier
       ? getChecklistProgress(checklist, tier, cat)
-      : { completed: 0, total: 0, requiredCompleted: 0, requiredTotal: 0, percentage: 100 }
+      : { completed: 0, total: 0, requiredCompleted: 0, requiredTotal: 0, failed: 0, percentage: 100 }
     const complete = tier ? isChecklistComplete(checklist, tier, cat) : true
+    const checklistFailed = tier ? hasChecklistFailure(checklist, tier, cat) : false
 
     return apiSuccess({
       ...row,
       image_url: imageUrl,
       checklist_complete: complete,
+      checklist_failed: checklistFailed,
       checklist_progress: progress,
       checklist_items: checklistWithState,
       checklist_grouped: Object.entries(grouped).map(([category, items]) => ({

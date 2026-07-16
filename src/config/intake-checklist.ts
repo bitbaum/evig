@@ -102,6 +102,13 @@ export interface ChecklistItemConfig {
    * If undefined, show for ALL device categories.
    */
   deviceCategories?: string[]
+  /**
+   * Vier-Augen-Prinzip: this item should be passed by someone OTHER than the
+   * person who did all the other completed required work on the device. The
+   * checklist API blocks a solo sign-off UNLESS an explicit override reason
+   * is written in the notes (audit trail for single-staff shifts).
+   */
+  requiresSecondPerson?: boolean
 }
 
 /**
@@ -300,10 +307,11 @@ export const CHECKLIST_ITEMS: ChecklistItemConfig[] = [
   {
     id: 'final_qa',
     label: 'Qualitätskontrolle bestanden',
-    description: 'Abschlusskontrolle: Gerät vollständig funktionsfähig, alle Tests bestanden, bereit für Verkauf',
+    description: 'Abschlusskontrolle durch eine ZWEITE Person (Vier-Augen-Prinzip): Gerät vollständig funktionsfähig, alle Tests bestanden, bereit für Verkauf',
     category: 'quality',
     tiers: ['refurbish'],
     required: true,
+    requiresSecondPerson: true,
   },
   {
     id: 'warranty_label',
@@ -395,14 +403,70 @@ export const CHECKLIST_ITEMS: ChecklistItemConfig[] = [
 // CHECKLIST STATE TYPE (stored in JSONB)
 // =============================================================================
 
+/**
+ * Verdict for a checklist item. A boolean "done" can't express the most
+ * important QC outcome: the test FAILED. A fail must be recorded (with a
+ * reason) and must block publishing until fixed or the device is re-tiered.
+ */
+export const CHECKLIST_RESULTS = {
+  PASS: 'pass',
+  FAIL: 'fail',
+  /** Not applicable to this specific device (e.g. laptop without webcam). */
+  NA: 'na',
+} as const
+
+export type ChecklistResult = typeof CHECKLIST_RESULTS[keyof typeof CHECKLIST_RESULTS]
+
+export const CHECKLIST_RESULT_LABELS: Record<ChecklistResult, string> = {
+  [CHECKLIST_RESULTS.PASS]: 'Bestanden',
+  [CHECKLIST_RESULTS.FAIL]: 'Fehlgeschlagen',
+  [CHECKLIST_RESULTS.NA]: 'Nicht zutreffend',
+}
+
 export interface ChecklistItemState {
-  completed: boolean
+  /** Verdict; null = still open. */
+  result: ChecklistResult | null
+  /**
+   * Legacy boolean from before verdicts existed (migration 135 rewrites
+   * stored rows, this field only survives in un-migrated snapshots).
+   * Read via getItemResult(), never written anymore.
+   */
+  completed?: boolean
   completedBy: string | null
   completedAt: string | null
   notes: string
 }
 
 export type ChecklistState = Record<string, ChecklistItemState>
+
+/** Fresh, untouched item state. */
+export function emptyChecklistItemState(): ChecklistItemState {
+  return { result: null, completedBy: null, completedAt: null, notes: '' }
+}
+
+/** Effective verdict of an item, tolerating the legacy `completed` boolean. */
+export function getItemResult(state: ChecklistItemState | undefined): ChecklistResult | null {
+  if (!state) return null
+  if (state.result) return state.result
+  return state.completed === true ? CHECKLIST_RESULTS.PASS : null
+}
+
+/** An item counts as done (for the publish gate) when it passed or doesn't apply. */
+export function isItemDone(state: ChecklistItemState | undefined): boolean {
+  const result = getItemResult(state)
+  return result === CHECKLIST_RESULTS.PASS || result === CHECKLIST_RESULTS.NA
+}
+
+/** Normalize a stored item state to the verdict shape (for API responses). */
+export function normalizeChecklistItemState(state: ChecklistItemState | undefined): ChecklistItemState {
+  if (!state) return emptyChecklistItemState()
+  return {
+    result: getItemResult(state),
+    completedBy: state.completedBy ?? null,
+    completedAt: state.completedAt ?? null,
+    notes: state.notes ?? '',
+  }
+}
 
 // =============================================================================
 // HELPER FUNCTIONS
@@ -468,13 +532,101 @@ export function isChecklistComplete(
   const items = getChecklistForDevice(tier, deviceCategory)
   const requiredItems = items.filter(i => i.required)
 
-  return requiredItems.every(item => state[item.id]?.completed === true)
+  return requiredItems.every(item => isItemDone(state[item.id]))
+}
+
+/**
+ * True when any REQUIRED checklist item has a 'fail' verdict.
+ * A failed required item means the device is stuck: fix and retest, or
+ * change the tier (parts/recycle). Optional-item failures are recorded
+ * defects but don't block the pipeline.
+ */
+export function hasChecklistFailure(
+  state: ChecklistState,
+  tier: IntakeTier,
+  deviceCategory?: string | null,
+): boolean {
+  const items = getChecklistForDevice(tier, deviceCategory)
+  return items.some(
+    item => item.required && getItemResult(state[item.id]) === CHECKLIST_RESULTS.FAIL,
+  )
+}
+
+/**
+ * Vier-Augen-Prinzip check. A `requiresSecondPerson` item (final QA) should
+ * be signed off by someone who was NOT the sole worker on the device: at
+ * least one other completed required item must carry a different completedBy.
+ * Also true when nothing else is done yet — there is nothing to QA.
+ * The API treats a violation as blocking UNLESS the sign-off carries an
+ * explicit override note (solo-shift reality; the note is the audit trail).
+ */
+export function violatesSecondPersonRule(
+  item: ChecklistItemConfig,
+  state: ChecklistState,
+  tier: IntakeTier,
+  deviceCategory: string | null | undefined,
+  actingUserId: string,
+): boolean {
+  if (!item.requiresSecondPerson) return false
+  const otherDoneRequired = getChecklistForDevice(tier, deviceCategory)
+    .filter(i => i.required && i.id !== item.id && isItemDone(state[i.id]))
+  if (otherDoneRequired.length === 0) return true
+  return otherDoneRequired.every(i => state[i.id]?.completedBy === actingUserId)
+}
+
+/**
+ * Checklist categories whose passed items are shown to BUYERS on the
+ * marketplace listing ("Geprüft von Revamp-IT"). Intake bookkeeping
+ * (visual inspection, condition grading) and listing prep (photos, price)
+ * are staff process steps, not buyer-relevant test results.
+ */
+export const BUYER_VISIBLE_CHECK_CATEGORIES: ChecklistCategory[] = [
+  CHECKLIST_CATEGORIES.TESTING,
+  CHECKLIST_CATEGORIES.SECURITY,
+  CHECKLIST_CATEGORIES.REFURBISHMENT,
+  CHECKLIST_CATEGORIES.QUALITY,
+]
+
+/**
+ * The QC results a buyer should see for a published device: every PASSED
+ * item from the buyer-visible categories, in the shape the `listings.
+ * condition_checks` column already uses ({key,label,checked} — same contract
+ * as P2P seller-declared checks). Labels are snapshotted at publish time on
+ * purpose: the listing is a historical record of what was checked then, even
+ * if the checklist config evolves later.
+ */
+export function getBuyerVisibleChecks(
+  state: ChecklistState,
+  tier: IntakeTier,
+  deviceCategory?: string | null,
+): Array<{ key: string; label: string; checked: boolean }> {
+  return getChecklistForDevice(tier, deviceCategory)
+    .filter(item => BUYER_VISIBLE_CHECK_CATEGORIES.includes(item.category))
+    .filter(item => getItemResult(state[item.id]) === CHECKLIST_RESULTS.PASS)
+    .map(item => ({ key: item.id, label: item.label, checked: true }))
+}
+
+/**
+ * Whether devices of a main category must pass the intake checklist before
+ * they may be published. Derived from the checklist itself (SSOT): a category
+ * requires QC when any required testing or data-security item targets it.
+ * Accessory categories (components, peripherals, networking) and uncategorized
+ * items stay direct-publishable via Schnellerfassung.
+ */
+export function requiresQualityControl(deviceCategory: string | null | undefined): boolean {
+  if (!deviceCategory) return false
+  return CHECKLIST_ITEMS.some(
+    item =>
+      item.required &&
+      (item.category === CHECKLIST_CATEGORIES.TESTING || item.category === CHECKLIST_CATEGORIES.SECURITY) &&
+      item.deviceCategories?.includes(deviceCategory) === true,
+  )
 }
 
 /**
  * Calculate checklist progress.
  *
- * @returns { completed, total, requiredCompleted, requiredTotal, percentage }
+ * @returns { completed, total, requiredCompleted, requiredTotal, failed, percentage }
  */
 export function getChecklistProgress(
   state: ChecklistState,
@@ -485,19 +637,23 @@ export function getChecklistProgress(
   total: number
   requiredCompleted: number
   requiredTotal: number
+  /** Items (required or optional) with a 'fail' verdict. */
+  failed: number
   percentage: number
 } {
   const items = getChecklistForDevice(tier, deviceCategory)
   const requiredItems = items.filter(i => i.required)
 
-  const completed = items.filter(i => state[i.id]?.completed).length
-  const requiredCompleted = requiredItems.filter(i => state[i.id]?.completed).length
+  const completed = items.filter(i => isItemDone(state[i.id])).length
+  const requiredCompleted = requiredItems.filter(i => isItemDone(state[i.id])).length
+  const failed = items.filter(i => getItemResult(state[i.id]) === CHECKLIST_RESULTS.FAIL).length
 
   return {
     completed,
     total: items.length,
     requiredCompleted,
     requiredTotal: requiredItems.length,
+    failed,
     percentage: requiredItems.length > 0
       ? Math.round((requiredCompleted / requiredItems.length) * 100)
       : 100,

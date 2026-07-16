@@ -11,30 +11,65 @@ import { eq, and } from 'drizzle-orm'
 import { uploadImage, deleteImage } from '@/lib/storage/image-upload'
 import { logger } from '@/lib/logger'
 import { PRODUCT_STATUS } from '@/config/marketplace-status'
+import { ERROR_MESSAGES } from '@/config/error-messages'
+import {
+  isChecklistComplete,
+  hasChecklistFailure,
+  requiresQualityControl,
+} from '@/config/intake-checklist'
+import type { ChecklistState, IntakeTier } from '@/config/intake-checklist'
 import { publishRevampitListing, unpublishRevampitListing } from '@/lib/marketplace/publish-revampit-listing'
 
 // ─── Publish/Unpublish ─────────────────────────────────────────────
 
 /**
+ * The QC gate said no. Routes map this to a 400 with the message —
+ * distinguishing it from real server errors.
+ */
+export class QcGateError extends Error {}
+
+/**
  * Publish a product to the internal marketplace.
  * Creates or updates the marketplace listing.
+ *
+ * Enforces the same QC gate as the intake publish route — this admin path
+ * must not be a backdoor around the checklist.
  */
 export async function publishProduct(productId: string, userId: string): Promise<void> {
+  const [inventoryItem] = await db
+    .select({
+      id: inventoryItems.id,
+      intakeTier: inventoryItems.intakeTier,
+      intakeChecklist: inventoryItems.intakeChecklist,
+      category: aiExtractedProducts.category,
+    })
+    .from(inventoryItems)
+    .innerJoin(aiExtractedProducts, eq(inventoryItems.aiProductId, aiExtractedProducts.id))
+    .where(eq(inventoryItems.aiProductId, productId))
+
+  if (!inventoryItem) return
+
+  // QC gate — identical rules to POST /api/admin/intake/[id]/publish.
+  const tier = inventoryItem.intakeTier as IntakeTier | null
+  const checklist = (inventoryItem.intakeChecklist ?? {}) as ChecklistState
+  if (!tier && requiresQualityControl(inventoryItem.category)) {
+    throw new QcGateError(ERROR_MESSAGES.INTAKE_QC_REQUIRED)
+  }
+  if (tier && hasChecklistFailure(checklist, tier, inventoryItem.category)) {
+    throw new QcGateError(ERROR_MESSAGES.INTAKE_CHECKLIST_FAILED)
+  }
+  if (tier && !isChecklistComplete(checklist, tier, inventoryItem.category)) {
+    throw new QcGateError(ERROR_MESSAGES.INTAKE_CHECKLIST_INCOMPLETE)
+  }
+
   // Ensure product is approved
   await db
     .update(aiExtractedProducts)
     .set({ status: PRODUCT_STATUS.APPROVED, updatedAt: new Date().toISOString() })
     .where(eq(aiExtractedProducts.id, productId))
 
-  const [inventoryItem] = await db
-    .select({ id: inventoryItems.id })
-    .from(inventoryItems)
-    .where(eq(inventoryItems.aiProductId, productId))
-
-  if (!inventoryItem) return
-
   // Publish to the unified marketplace as a RevampIT listing.
-  await publishRevampitListing(db, inventoryItem.id)
+  await publishRevampitListing(db, inventoryItem.id, { verifiedBy: userId })
   logger.info('Product published', { productId, publishedBy: userId })
 }
 

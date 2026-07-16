@@ -80,6 +80,8 @@ jest.mock('@/config/marketplace-status', () => ({
 
 jest.mock('@/config/intake-checklist', () => ({
   isChecklistComplete: jest.fn().mockReturnValue(true),
+  hasChecklistFailure: jest.fn().mockReturnValue(false),
+  requiresQualityControl: jest.fn().mockReturnValue(false),
 }))
 
 jest.mock('@/config/error-messages', () => ({
@@ -88,6 +90,8 @@ jest.mock('@/config/error-messages', () => ({
     INTAKE_ITEM_NOT_FOUND: 'Nicht gefunden',
     INTAKE_ALREADY_PUBLISHED: 'Bereits publiziert',
     INTAKE_CHECKLIST_INCOMPLETE: 'Checkliste unvollständig',
+    INTAKE_CHECKLIST_FAILED: 'Prüfung fehlgeschlagen',
+    INTAKE_QC_REQUIRED: 'Qualitätskontrolle erforderlich',
   },
 }))
 

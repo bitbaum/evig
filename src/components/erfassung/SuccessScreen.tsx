@@ -1,7 +1,7 @@
 'use client'
 
 import { Link } from '@/i18n/navigation'
-import { Package, Printer, Plus, PackageCheck, Store } from 'lucide-react'
+import { Package, Printer, Plus, PackageCheck, QrCode, Store } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
@@ -15,6 +15,8 @@ interface SuccessScreenProps {
   action: 'draft' | 'erfassen' | 'publish'
   /** Live marketplace listing (publish only). */
   listingId: string | null
+  /** Direct-publish was intercepted by the QC gate — device is in the pipeline. */
+  qcRequired: boolean
   onReset: () => void
 }
 
@@ -24,7 +26,7 @@ interface SuccessScreenProps {
  * screen said "erfasst!" and linked to an overview that did not contain
  * the device — the classic "erfasst, aber wo?" dead end.
  */
-export function SuccessScreen({ itemUUID, productId, inventoryId, action, listingId, onReset }: SuccessScreenProps) {
+export function SuccessScreen({ itemUUID, productId, inventoryId, action, listingId, qcRequired, onReset }: SuccessScreenProps) {
   const t = useTranslations('components.erfassung.successScreen')
 
   const titles = {
@@ -37,6 +39,10 @@ export function SuccessScreen({ itemUUID, productId, inventoryId, action, listin
     erfassen: t('whereErfassen'),
     publish: t('wherePublished'),
   } as const
+  // QC gate intercepted the publish: the device is NOT live — it sits in the
+  // pipeline with a checklist. Saying "publiziert!" here would be a lie.
+  const title = qcRequired ? t('titleQcGated') : titles[action]
+  const whereabout = qcRequired ? t('whereQcGated') : whereabouts[action]
 
   const deviceHref = inventoryId
     ? `${ROUTES.admin.intake}?detail=${inventoryId}`
@@ -49,12 +55,12 @@ export function SuccessScreen({ itemUUID, productId, inventoryId, action, listin
           <Package className="w-8 h-8 text-action" />
         </div>
         <Heading level={2} className="text-2xl font-bold text-text-primary mb-2">
-          {titles[action]}
+          {title}
         </Heading>
         <p className="text-text-secondary mb-2">
           {t('itemUUIDLabel')} <code className="bg-surface-raised px-2 py-1 rounded-sm">{itemUUID}</code>
         </p>
-        <p className="text-sm text-text-secondary mb-6">{whereabouts[action]}</p>
+        <p className="text-sm text-text-secondary mb-6">{whereabout}</p>
 
         {/* Action buttons — primary action depends on where the device went */}
         <div className="flex flex-col sm:flex-row flex-wrap gap-3 justify-center">
@@ -73,6 +79,12 @@ export function SuccessScreen({ itemUUID, productId, inventoryId, action, listin
             <Plus className="w-5 h-5" />
             {t('captureAnother')}
           </Button>
+          {inventoryId && (
+            <Button as={Link} href={ROUTES.admin.intakeLabel(inventoryId)} variant="outline">
+              <QrCode className="w-5 h-5" />
+              {t('printLabel')}
+            </Button>
+          )}
           <Button as={Link} href={ROUTES.admin.erfassungFactsheet(productId)} variant="outline">
             <Printer className="w-5 h-5" />
             {t('printFactsheet')}

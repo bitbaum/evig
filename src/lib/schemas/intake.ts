@@ -7,7 +7,8 @@
 
 import { z } from 'zod'
 import { paginationSchema } from './common'
-import { INTAKE_TIERS } from '@/config/intake-checklist'
+import { INTAKE_TIERS, CHECKLIST_RESULTS } from '@/config/intake-checklist'
+import { ERROR_MESSAGES } from '@/config/error-messages'
 
 // =============================================================================
 // INTAKE CREATE — Unified donation + erfassung in one
@@ -60,14 +61,22 @@ export const IntakeUpdateSchema = z.object({
 })
 
 // =============================================================================
-// CHECKLIST UPDATE — Toggle checklist items
+// CHECKLIST UPDATE — Set a verdict on a checklist item
 // =============================================================================
 
-export const ChecklistUpdateSchema = z.object({
-  item_id: z.string().min(1, 'Checklist-Item-ID erforderlich'),
-  completed: z.boolean(),
-  notes: z.string().optional().default(''),
-})
+export const ChecklistUpdateSchema = z
+  .object({
+    item_id: z.string().min(1, 'Checklist-Item-ID erforderlich'),
+    /** pass | fail | na; null resets the item to open. */
+    result: z
+      .enum([CHECKLIST_RESULTS.PASS, CHECKLIST_RESULTS.FAIL, CHECKLIST_RESULTS.NA])
+      .nullable(),
+    notes: z.string().optional().default(''),
+  })
+  .refine(
+    data => data.result !== CHECKLIST_RESULTS.FAIL || data.notes.trim().length > 0,
+    { message: ERROR_MESSAGES.INTAKE_FAIL_NOTES_REQUIRED, path: ['notes'] },
+  )
 
 // =============================================================================
 // PUBLISH — Gate behind checklist

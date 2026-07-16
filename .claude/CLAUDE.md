@@ -125,6 +125,12 @@ Community P2P (individuals + staff posting privately)
 - Erfassung MAY result in a published listing; a staff member posting privately
   is nudged toward erfassung if it's clearly RevampIT stock, but can still post
   as a private individual (`is_revampit=false`).
+- **QC gate (2026-07)**: devices of QC-required categories (derived from
+  required testing/security checklist items — currently 10–60) can NOT be
+  direct-published via Schnellerfassung; they land in the intake pipeline with
+  a refurbish checklist. Checklist items carry pass/fail/n.a. verdicts; a
+  failed required item puts the device in the `failed` pipeline state and
+  blocks publishing. See `docs/INTAKE_QC_DESIGN.md`.
 
 ## Quick Start
 

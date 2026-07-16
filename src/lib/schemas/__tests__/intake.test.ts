@@ -152,39 +152,66 @@ describe('IntakeUpdateSchema', () => {
 // ============================================================================
 
 describe('ChecklistUpdateSchema', () => {
-  it('accepts valid checklist item toggle', () => {
+  it('accepts a pass verdict', () => {
     const result = ChecklistUpdateSchema.safeParse({
       item_id: 'check-battery',
-      completed: true,
+      result: 'pass',
     })
     expect(result.success).toBe(true)
   })
 
-  it('accepts completed: false', () => {
+  it("accepts an 'n.a.' verdict", () => {
     const result = ChecklistUpdateSchema.safeParse({
-      item_id: 'check-keyboard',
-      completed: false,
+      item_id: 'check-camera',
+      result: 'na',
     })
     expect(result.success).toBe(true)
+  })
+
+  it('accepts result: null (reset to open)', () => {
+    const result = ChecklistUpdateSchema.safeParse({
+      item_id: 'check-keyboard',
+      result: null,
+    })
+    expect(result.success).toBe(true)
+  })
+
+  it('accepts a fail verdict WITH notes', () => {
+    const result = ChecklistUpdateSchema.safeParse({
+      item_id: 'check-battery',
+      result: 'fail',
+      notes: 'Akku hält nur 20 Minuten',
+    })
+    expect(result.success).toBe(true)
+  })
+
+  it('rejects a fail verdict without notes (reason required)', () => {
+    expect(ChecklistUpdateSchema.safeParse({ item_id: 'check-battery', result: 'fail' }).success).toBe(false)
+    expect(ChecklistUpdateSchema.safeParse({ item_id: 'check-battery', result: 'fail', notes: '   ' }).success).toBe(false)
+  })
+
+  it('rejects unknown verdicts', () => {
+    const result = ChecklistUpdateSchema.safeParse({ item_id: 'check-screen', result: 'maybe' })
+    expect(result.success).toBe(false)
   })
 
   it('rejects empty item_id', () => {
-    const result = ChecklistUpdateSchema.safeParse({ item_id: '', completed: true })
+    const result = ChecklistUpdateSchema.safeParse({ item_id: '', result: 'pass' })
     expect(result.success).toBe(false)
   })
 
   it('rejects missing item_id', () => {
-    const result = ChecklistUpdateSchema.safeParse({ completed: true })
+    const result = ChecklistUpdateSchema.safeParse({ result: 'pass' })
     expect(result.success).toBe(false)
   })
 
-  it('rejects missing completed', () => {
+  it('rejects missing result', () => {
     const result = ChecklistUpdateSchema.safeParse({ item_id: 'check-screen' })
     expect(result.success).toBe(false)
   })
 
   it('defaults notes to empty string', () => {
-    const result = ChecklistUpdateSchema.safeParse({ item_id: 'check-screen', completed: true })
+    const result = ChecklistUpdateSchema.safeParse({ item_id: 'check-screen', result: 'pass' })
     if (result.success) expect(result.data.notes).toBe('')
   })
 })

@@ -15,7 +15,7 @@ import { INTAKE_STATUS } from '@/config/intake-status'
 import { logger } from '@/lib/logger'
 import { z } from 'zod'
 import { validateBody } from '@/lib/schemas'
-import { INTAKE_TIERS, getChecklistForDevice } from '@/config/intake-checklist'
+import { INTAKE_TIERS, getChecklistForDevice, emptyChecklistItemState } from '@/config/intake-checklist'
 import type { ChecklistState, IntakeTier } from '@/config/intake-checklist'
 import { appendIntakeEvent } from '@/lib/intake/timeline'
 
@@ -64,12 +64,7 @@ export const POST = withAdmin<{ id: string }>('intake', async (request, session,
     const checklistItems = getChecklistForDevice(new_tier, row.category)
     const newChecklist: ChecklistState = {}
     for (const item of checklistItems) {
-      newChecklist[item.id] = {
-        completed: false,
-        completedBy: null,
-        completedAt: null,
-        notes: '',
-      }
+      newChecklist[item.id] = emptyChecklistItemState()
     }
 
     // Update tier + reset checklist
@@ -79,6 +74,7 @@ export const POST = withAdmin<{ id: string }>('intake', async (request, session,
         intakeTier: new_tier,
         intakeChecklist: newChecklist,
         checklistComplete: false,
+        checklistFailed: false,
         updatedAt: sql`NOW()`,
       })
       .where(eq(inventoryItems.id, id))

@@ -26,6 +26,8 @@ import {
   LISTING_STATUS,
   REVAMPIT_LISTING_DELIVERY,
 } from '@/config/marketplace'
+import { getBuyerVisibleChecks } from '@/config/intake-checklist'
+import type { ChecklistState, IntakeTier } from '@/config/intake-checklist'
 import { logger } from '@/lib/logger'
 
 /** Drizzle db or transaction object. */
@@ -82,7 +84,13 @@ export async function getRevampitSellerId(tx: DbOrTx): Promise<string> {
 export async function publishRevampitListing(
   tx: DbOrTx,
   inventoryItemId: string,
-  opts?: { priceChf?: string | number; title?: string; description?: string },
+  opts?: {
+    priceChf?: string | number
+    title?: string
+    description?: string
+    /** Staff user who publishes; recorded as verified_by when QC checks are attached. */
+    verifiedBy?: string
+  },
 ): Promise<string | null> {
   const [data] = await tx
     .select({
@@ -95,6 +103,9 @@ export async function publishRevampitListing(
       condition: aiExtractedProducts.condition,
       estimatedPriceChf: aiExtractedProducts.estimatedPriceChf,
       sellingPriceChf: inventoryItems.sellingPriceChf,
+      intakeTier: inventoryItems.intakeTier,
+      intakeChecklist: inventoryItems.intakeChecklist,
+      checklistComplete: inventoryItems.checklistComplete,
     })
     .from(inventoryItems)
     .innerJoin(aiExtractedProducts, eq(inventoryItems.aiProductId, aiExtractedProducts.id))
@@ -127,11 +138,28 @@ export async function publishRevampitListing(
   const priceChf = String(opts?.priceChf ?? data.sellingPriceChf ?? data.estimatedPriceChf ?? '0')
   const nowIso = new Date().toISOString()
 
+  // QC provenance — the buyer-facing payoff of the intake checklist. A device
+  // that went through the pipeline (tier set, checklist complete) publishes
+  // with its passed test results as condition_checks and gets the
+  // "Geprüft von Revamp-IT" verification stamp. Quick-published accessories
+  // (no checklist) carry no stamp; an existing manual verification on the
+  // listing is never cleared by a re-publish.
+  const tier = data.intakeTier as IntakeTier | null
+  const qcChecks = tier && data.checklistComplete
+    ? getBuyerVisibleChecks((data.intakeChecklist ?? {}) as ChecklistState, tier, data.category)
+    : []
+  const qcVerified = qcChecks.length > 0
+  const qcProvenance = qcVerified
+    ? { conditionChecks: qcChecks, verifiedAt: nowIso, verifiedBy: opts?.verifiedBy ?? null }
+    : {}
+
   const existing = await tx
-    .select({ id: listings.id })
+    .select({ id: listings.id, verifiedAt: listings.verifiedAt })
     .from(listings)
     .where(eq(listings.inventoryItemId, inventoryItemId))
     .limit(1)
+  // Search doc: QC verification from this publish, or a prior (manual) one.
+  const isVerified = qcVerified || Boolean(existing[0]?.verifiedAt)
 
   let listingId: string
   if (existing[0]) {
@@ -149,6 +177,7 @@ export async function publishRevampitListing(
         model: data.productName ?? null,
         status: LISTING_STATUS.ACTIVE,
         updatedAt: nowIso,
+        ...qcProvenance,
       })
       .where(eq(listings.id, listingId))
   } else {
@@ -171,6 +200,7 @@ export async function publishRevampitListing(
         pickupLocation: REVAMPIT_LISTING_DELIVERY.pickupLocation,
         paymentMode: 'secure',
         status: LISTING_STATUS.ACTIVE,
+        ...qcProvenance,
       })
       .returning({ id: listings.id })
     listingId = row.id
@@ -200,7 +230,7 @@ export async function publishRevampitListing(
     payment_mode: 'secure',
     status: LISTING_STATUS.ACTIVE,
     is_revampit: true,
-    is_verified: false,
+    is_verified: isVerified,
     pickup_location: REVAMPIT_LISTING_DELIVERY.pickupLocation,
     seller_name: REVAMPIT_SELLER_NAME,
     seller_city: null,
@@ -210,7 +240,7 @@ export async function publishRevampitListing(
     thumbnail: imageUrl,
   })
 
-  logger.info('Published RevampIT listing', { listingId, inventoryItemId })
+  logger.info('Published RevampIT listing', { listingId, inventoryItemId, qcVerified, qcChecksCount: qcChecks.length })
   return listingId
 }
 

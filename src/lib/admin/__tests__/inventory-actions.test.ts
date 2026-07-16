@@ -34,6 +34,7 @@ function makeChain(result: unknown = []) {
   const chain: Record<string, unknown> = {}
   chain.select = jest.fn().mockReturnValue(chain)
   chain.from = jest.fn().mockReturnValue(chain)
+  chain.innerJoin = jest.fn().mockReturnValue(chain)
   chain.where = jest.fn().mockReturnValue(chain)
   chain.update = jest.fn().mockReturnValue(chain)
   chain.set = jest.fn().mockReturnValue(chain)
@@ -66,8 +67,12 @@ jest.mock('@/db/schema/inventory', () => ({
     id: 'aep_id', brand: 'aep_brand', productName: 'aep_productName',
     shortDescription: 'aep_shortDesc', estimatedPriceChf: 'aep_estimatedPriceChf',
     itemUuid: 'aep_itemUuid', status: 'aep_status', updatedAt: 'aep_updatedAt',
+    category: 'aep_category',
   },
-  inventoryItems: { id: 'ii_id', aiProductId: 'ii_aiProductId' },
+  inventoryItems: {
+    id: 'ii_id', aiProductId: 'ii_aiProductId',
+    intakeTier: 'ii_intakeTier', intakeChecklist: 'ii_intakeChecklist',
+  },
   marketplaceListings: {
     id: 'ml_id', inventoryItemId: 'ml_inventoryItemId',
     platform: 'ml_platform', status: 'ml_status',
@@ -121,7 +126,7 @@ jest.mock('@/lib/marketplace/publish-revampit-listing', () => ({
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { publishProduct, unpublishProduct, updateProductImage } from '../inventory-actions'
+import { publishProduct, unpublishProduct, updateProductImage, QcGateError } from '../inventory-actions'
 
 // ---------------------------------------------------------------------------
 // Setup
@@ -141,25 +146,52 @@ beforeEach(() => {
 // ============================================================================
 
 describe('publishProduct', () => {
-  it('approves the product but skips publishing when inventoryItem not found', async () => {
+  it('skips approval and publishing when inventoryItem not found', async () => {
     // First (and only) select is the inventory-item lookup → not found.
     mockDbSelect.mockReturnValueOnce(makeChain([]))
 
     await publishProduct('product-1', 'user-1')
 
-    // Status approval still runs, but no listing is created.
-    expect(mockDbUpdate).toHaveBeenCalledTimes(1) // status approval
+    // Nothing to publish → neither status approval nor listing creation runs.
+    expect(mockDbUpdate).not.toHaveBeenCalled()
     expect(mockPublishRevampitListing).not.toHaveBeenCalled()
   })
 
-  it('delegates to publishRevampitListing when inventoryItem found', async () => {
-    mockDbSelect.mockReturnValueOnce(makeChain([{ id: 'inv-1' }])) // inventory item
+  it('delegates to publishRevampitListing when inventoryItem found (no QC required)', async () => {
+    // Accessory category '80' → no QC gate for tier-NULL items.
+    mockDbSelect.mockReturnValueOnce(makeChain([{ id: 'inv-1', intakeTier: null, intakeChecklist: null, category: '80' }]))
 
     await publishProduct('product-1', 'user-1')
 
     expect(mockDbUpdate).toHaveBeenCalledTimes(1) // status approval
     expect(mockPublishRevampitListing).toHaveBeenCalledTimes(1)
-    expect(mockPublishRevampitListing).toHaveBeenCalledWith(expect.anything(), 'inv-1')
+    expect(mockPublishRevampitListing).toHaveBeenCalledWith(expect.anything(), 'inv-1', { verifiedBy: 'user-1' })
+  })
+
+  it('throws QcGateError for a tier-NULL device of a QC-required category', async () => {
+    // Laptops ('10') require the checklist before sale.
+    mockDbSelect.mockReturnValueOnce(makeChain([{ id: 'inv-1', intakeTier: null, intakeChecklist: null, category: '10' }]))
+
+    await expect(publishProduct('product-1', 'user-1')).rejects.toThrow(QcGateError)
+    expect(mockDbUpdate).not.toHaveBeenCalled()
+    expect(mockPublishRevampitListing).not.toHaveBeenCalled()
+  })
+
+  it('throws QcGateError when the checklist is incomplete', async () => {
+    mockDbSelect.mockReturnValueOnce(makeChain([{ id: 'inv-1', intakeTier: 'refurbish', intakeChecklist: {}, category: '10' }]))
+
+    await expect(publishProduct('product-1', 'user-1')).rejects.toThrow(QcGateError)
+    expect(mockPublishRevampitListing).not.toHaveBeenCalled()
+  })
+
+  it('throws QcGateError when a required checklist item failed', async () => {
+    const checklist = {
+      power_test: { result: 'fail', completedBy: 'u', completedAt: '2026-01-01', notes: 'Startet nicht' },
+    }
+    mockDbSelect.mockReturnValueOnce(makeChain([{ id: 'inv-1', intakeTier: 'refurbish', intakeChecklist: checklist, category: '10' }]))
+
+    await expect(publishProduct('product-1', 'user-1')).rejects.toThrow(QcGateError)
+    expect(mockPublishRevampitListing).not.toHaveBeenCalled()
   })
 })
 

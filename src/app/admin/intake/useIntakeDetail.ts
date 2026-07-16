@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react'
 import { apiFetch } from '@/lib/api/client'
-import { INTAKE_TIERS, type IntakeTier } from '@/config/intake-checklist'
+import { INTAKE_TIERS, CHECKLIST_RESULTS, type IntakeTier, type ChecklistResult } from '@/config/intake-checklist'
 import type { DetailData } from './types'
 
 export function useIntakeDetail() {
@@ -45,35 +45,65 @@ export function useIntakeDetail() {
     setTierChangeReason('')
   }, [])
 
-  const toggleChecklist = useCallback(async (itemId: string, completed: boolean, notes?: string) => {
+  // Rejections (e.g. Vier-Augen-Prinzip) must be visible, not silent.
+  const [checklistError, setChecklistError] = useState<string | null>(null)
+
+  const setChecklistResult = useCallback(async (itemId: string, result: ChecklistResult | null, notes?: string) => {
     if (!selectedId) return
-    const body: Record<string, unknown> = { item_id: itemId, completed }
+    setChecklistError(null)
+    const body: Record<string, unknown> = { item_id: itemId, result }
     if (notes !== undefined) body.notes = notes
-    const result = await apiFetch<void>(`/api/admin/intake/${selectedId}/checklist`, {
+    const response = await apiFetch<void>(`/api/admin/intake/${selectedId}/checklist`, {
       method: 'PATCH',
       body,
     })
-    if (result.success) {
+    if (response.success) {
       fetchDetail(selectedId)
+    } else {
+      setChecklistError(response.error || null)
     }
   }, [selectedId, fetchDetail])
 
   const markAllRequired = useCallback(async () => {
     if (!selectedId || !detail) return
-    const uncompleted = detail.checklist_grouped
+    setChecklistError(null)
+    // Only OPEN items — never overrides a recorded fail/n.a. verdict, and
+    // never auto-signs items that need a deliberate second person (final QA).
+    const open = detail.checklist_grouped
       .flatMap(g => g.items)
-      .filter(i => i.required && !i.state.completed)
-    if (uncompleted.length === 0) return
-    await Promise.all(
-      uncompleted.map(item =>
+      .filter(i => i.required && i.state.result === null && !i.requiresSecondPerson)
+    if (open.length === 0) return
+    const results = await Promise.all(
+      open.map(item =>
         apiFetch<void>(`/api/admin/intake/${selectedId}/checklist`, {
           method: 'PATCH',
-          body: { item_id: item.id, completed: true },
+          body: { item_id: item.id, result: CHECKLIST_RESULTS.PASS },
         })
       )
     )
+    const firstError = results.find(r => !r.success)
+    if (firstError) setChecklistError(firstError.error || null)
     fetchDetail(selectedId)
   }, [selectedId, detail, fetchDetail])
+
+  // Quick-captured device of a QC-required category: assign the refurbish
+  // tier so the checklist workflow (and the publish gate) kicks in.
+  const [startingQc, setStartingQc] = useState(false)
+  const startQc = useCallback(async () => {
+    if (!selectedId) return
+    setStartingQc(true)
+    try {
+      const result = await apiFetch<void>(`/api/admin/intake/${selectedId}`, {
+        method: 'PATCH',
+        body: { intake_tier: INTAKE_TIERS.REFURBISH },
+      })
+      if (result.success) {
+        fetchDetail(selectedId)
+      }
+    } finally {
+      setStartingQc(false)
+    }
+  }, [selectedId, fetchDetail])
 
   const handlePublish = useCallback(async () => {
     if (!selectedId) return
@@ -122,8 +152,11 @@ export function useIntakeDetail() {
     openDetail,
     fetchDetail,
     clearDetail,
-    toggleChecklist,
+    setChecklistResult,
+    checklistError,
     markAllRequired,
+    startQc,
+    startingQc,
     handlePublish,
     handleTierChange,
   }

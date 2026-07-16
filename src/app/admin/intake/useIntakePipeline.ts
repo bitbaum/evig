@@ -13,6 +13,7 @@ interface PaginationState {
 
 interface StatusCounts {
   inProgress: number
+  failed: number
   ready: number
   published: number
   total: number
@@ -25,7 +26,7 @@ export function useIntakePipeline(active: boolean) {
     total: 0, limit: 20, offset: 0, hasMore: false,
   })
   const [statusCounts, setStatusCounts] = useState<StatusCounts>({
-    inProgress: 0, ready: 0, published: 0, total: 0,
+    inProgress: 0, failed: 0, ready: 0, published: 0, total: 0,
   })
 
   // Filters

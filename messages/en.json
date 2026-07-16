@@ -843,7 +843,8 @@
       },
       "zoomOpen": "Zoom in",
       "zoomClose": "Close",
-      "photoCount": "{count} photos"
+      "photoCount": "{count} photos",
+      "performedChecks": "Checks performed"
     },
     "empty": "No listings found",
     "conditions": {
@@ -9450,7 +9451,10 @@
         "whereErfassen": "The device is now visible in the device pipeline under \"Ready\" and can be published from there.",
         "wherePublished": "The device is live in the shop and listed in the device pipeline under \"Published\".",
         "viewInShop": "View in shop",
-        "toDevice": "Open device in pipeline"
+        "toDevice": "Open device in pipeline",
+        "titleQcGated": "Captured — quality control required",
+        "whereQcGated": "This device must be inspected before sale. It is in device intake with an active checklist — once it passes, it can be published.",
+        "printLabel": "Print label"
       },
       "bulkSuccess": {
         "titlePartial": "Partially captured",
@@ -10269,7 +10273,20 @@
           "category": "Category",
           "price": "Price",
           "captured": "Captured"
-        }
+        },
+        "failedAlert": {
+          "heading": "Inspection failed",
+          "body": "At least one required item failed. Fix the problem and retest — or move the device to another tier (parts/recycling).",
+          "changeTierCta": "Change tier"
+        },
+        "qcGate": {
+          "heading": "Quality control required",
+          "body": "This device was quick-captured, but its category must be inspected before sale (tests, data wipe, cleaning). Start the inspection to activate the checklist.",
+          "start": "Start inspection",
+          "starting": "Starting…"
+        },
+        "printLabel": "Label",
+        "printLabelTitle": "Print the device QR label"
       },
       "pipeline": {
         "newDevice": "New device",
@@ -10294,7 +10311,8 @@
         "status": {
           "published": "Published",
           "ready": "Ready",
-          "inProgress": "In progress"
+          "inProgress": "In progress",
+          "failed": "Failed"
         },
         "donationYes": "Yes",
         "hero": {
@@ -10302,7 +10320,8 @@
             "total": "Total",
             "inProgress": "In progress",
             "ready": "Ready",
-            "published": "Published"
+            "published": "Published",
+            "failed": "Failed"
           },
           "ready": {
             "headline": "{count, plural, one {# device} other {# devices}} ready to publish",
@@ -10322,17 +10341,27 @@
           "healthy": {
             "headline": "Pipeline is healthy.",
             "sub": "{published} devices published, nothing waiting on you."
+          },
+          "failed": {
+            "headline": "{count, plural, one {# device} other {# devices}} failed inspection",
+            "sub": "Decide: fix and retest, or change the tier (parts/recycling).",
+            "cta": "Show failed"
           }
         }
       },
       "checklist": {
         "requiredMarker": "Required",
-        "completedAt": "Completed on {date}",
         "addNote": "Add note",
         "editNote": "Edit note",
         "notePlaceholder": "e.g. CPU stress test passed, max 75 °C …",
-        "ariaUncheck": "Undo {label}",
-        "ariaCheck": "Tick {label}"
+        "failCount": "{count} failed",
+        "resultAt": "{result} on {date}",
+        "failNotePlaceholder": "What failed? e.g. battery lasts only 20 minutes…",
+        "failNoteRequired": "Reason required — what exactly failed?",
+        "saveFail": "Mark as failed",
+        "confirmNoteHint": "Four-eyes principle: confirm directly as a second person. Working alone? State the reason.",
+        "confirmNotePlaceholder": "Optional as a second person — required for a solo sign-off, e.g. \"working alone\" …",
+        "saveConfirm": "Confirm quality control"
       }
     },
     "it-hilfe": {

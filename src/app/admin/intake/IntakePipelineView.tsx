@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl'
 import { adminInteractive } from '@/lib/admin-ui'
 import {
-  Plus, Search, Filter, Check, Package, Wrench, Send,
+  Plus, Search, Filter, Check, Package, Wrench, Send, AlertTriangle,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
@@ -24,13 +24,14 @@ import { Pagination } from '@/components/ui/Pagination'
 import { formatDateShort } from '@/lib/date-formats'
 import type { PipelineItem } from './types'
 import { StatusBadge } from '@/components/ui/status-badge'
+import { IntakePipelineCards } from './IntakePipelineCards'
 import { AdminHeroStatus, type HeroTone, type HeroKpi, type HeroCta } from '@/components/admin/AdminHeroStatus'
 
 interface IntakePipelineViewProps {
   items: PipelineItem[]
   loading: boolean
   pagination: { total: number; limit: number; offset: number; hasMore: boolean }
-  statusCounts: { inProgress: number; ready: number; published: number; total: number }
+  statusCounts: { inProgress: number; failed: number; ready: number; published: number; total: number }
   tierFilter: string
   statusFilter: string
   categoryFilter: string
@@ -140,7 +141,13 @@ export function IntakePipelineView({
         </div>
       ) : (
         <>
-          <div className="overflow-x-auto">
+          {/* Phone: card list (whole card tappable, 44px+ targets) */}
+          <div className="md:hidden">
+            <IntakePipelineCards items={items} onOpenDetail={onOpenDetail} />
+          </div>
+
+          {/* Desktop: dense table */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b text-left text-text-tertiary">
@@ -182,6 +189,7 @@ export function IntakePipelineView({
                             <div className="w-20 h-2 bg-surface-overlay rounded-full overflow-hidden">
                               <div
                                 className={`h-full rounded-full ${
+                                  item.checklist_failed ? 'bg-error-500' :
                                   progress.percentage === 100 ? 'bg-action' :
                                   progress.percentage > 50 ? 'bg-warning-500' : 'bg-error-400'
                                 }`}
@@ -201,6 +209,8 @@ export function IntakePipelineView({
                           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-action-muted text-action">
                             <Check className="w-3 h-3" /> {t('status.published')}
                           </span>
+                        ) : item.checklist_failed ? (
+                          <StatusBadge variant="error">{t('status.failed')}</StatusBadge>
                         ) : item.checklist_complete ? (
                           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-action-muted text-action">
                             {t('status.ready')}
@@ -240,14 +250,16 @@ export function IntakePipelineView({
 }
 
 // ─── IntakeHero ─────────────────────────────────────────────────────────────
-// Severity ladder: ready-to-publish > in-progress > empty > healthy.
-// Why "ready" beats "inProgress": work-in-progress is doing fine on its
-// own. "Ready" means a device is finished but stuck in the pipeline —
-// the admin's bottleneck to clear.
+// Severity ladder: failed-QC > ready-to-publish > in-progress > empty > healthy.
+// Why "failed" beats everything: a failed required test means a device is
+// blocked until someone decides (fix & retest, or re-tier) — pure dead
+// stock until then. "Ready" beats "inProgress": work-in-progress is doing
+// fine on its own; ready means finished but stuck in the pipeline.
 // ─────────────────────────────────────────────────────────────────────────────
 
 interface IntakeStatusCounts {
   inProgress: number
+  failed: number
   ready: number
   published: number
   total: number
@@ -269,10 +281,24 @@ export function deriveIntakeHeroState(
   const kpis: HeroKpi[] = [
     { label: t('hero.kpis.total'), value: counts.total },
     { label: t('hero.kpis.inProgress'), value: counts.inProgress },
+    { label: t('hero.kpis.failed'), value: counts.failed },
     { label: t('hero.kpis.ready'), value: counts.ready },
     { label: t('hero.kpis.published'), value: counts.published },
   ]
 
+  if (counts.failed > 0) {
+    return {
+      tone: 'urgent',
+      icon: AlertTriangle,
+      headline: t('hero.failed.headline', { count: counts.failed }),
+      sub: t('hero.failed.sub'),
+      cta: {
+        label: t('hero.failed.cta'),
+        onClick: () => onStatusFilter(INTAKE_STATUS.FAILED),
+      },
+      kpis,
+    }
+  }
   if (counts.ready > 0) {
     return {
       tone: 'attention',

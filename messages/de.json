@@ -871,7 +871,8 @@
       },
       "zoomOpen": "Vergrössern",
       "zoomClose": "Schliessen",
-      "photoCount": "{count} Fotos"
+      "photoCount": "{count} Fotos",
+      "performedChecks": "Durchgeführte Prüfungen"
     },
     "listing_actions": {
       "payment_info": "Direkte Zahlung zwischen Käufer und Verkäufer",
@@ -9541,7 +9542,10 @@
         "whereErfassen": "Das Gerät ist jetzt im Geräte-Eingang unter «Bereit» sichtbar und kann von dort publiziert werden.",
         "wherePublished": "Das Gerät ist live im Shop und im Geräte-Eingang unter «Publiziert» gelistet.",
         "viewInShop": "Im Shop ansehen",
-        "toDevice": "Zum Gerät im Geräte-Eingang"
+        "toDevice": "Zum Gerät im Geräte-Eingang",
+        "titleQcGated": "Erfasst — Qualitätskontrolle erforderlich",
+        "whereQcGated": "Dieses Gerät muss vor dem Verkauf geprüft werden. Es liegt im Geräte-Eingang mit aktiver Checkliste — nach bestandener Prüfung kann es publiziert werden.",
+        "printLabel": "Etikett drucken"
       },
       "bulkSuccess": {
         "titlePartial": "Teilweise erfasst",
@@ -10377,7 +10381,20 @@
           "category": "Kategorie",
           "price": "Preis",
           "captured": "Erfasst"
-        }
+        },
+        "failedAlert": {
+          "heading": "Prüfung fehlgeschlagen",
+          "body": "Mindestens ein Pflichtpunkt ist fehlgeschlagen. Problem beheben und erneut prüfen — oder das Gerät in eine andere Stufe verschieben (Ersatzteile/Recycling).",
+          "changeTierCta": "Stufe ändern"
+        },
+        "qcGate": {
+          "heading": "Qualitätskontrolle erforderlich",
+          "body": "Dieses Gerät wurde per Schnellerfassung aufgenommen, gehört aber zu einer Kategorie, die vor dem Verkauf geprüft werden muss (Tests, Datenlöschung, Reinigung). Prüfung starten, um die Checkliste zu aktivieren.",
+          "start": "Prüfung starten",
+          "starting": "Starten…"
+        },
+        "printLabel": "Etikett",
+        "printLabelTitle": "QR-Etikett für das Gerät drucken"
       },
       "pipeline": {
         "newDevice": "Neues Gerät",
@@ -10402,7 +10419,8 @@
         "status": {
           "published": "Publiziert",
           "ready": "Bereit",
-          "inProgress": "In Bearbeitung"
+          "inProgress": "In Bearbeitung",
+          "failed": "Fehlgeschlagen"
         },
         "donationYes": "Ja",
         "hero": {
@@ -10410,7 +10428,8 @@
             "total": "Total",
             "inProgress": "In Bearbeitung",
             "ready": "Bereit",
-            "published": "Publiziert"
+            "published": "Publiziert",
+            "failed": "Fehlgeschlagen"
           },
           "ready": {
             "headline": "{count, plural, one {# Gerät} other {# Geräte}} bereit zum Publizieren",
@@ -10430,17 +10449,27 @@
           "healthy": {
             "headline": "Pipeline im grünen Bereich.",
             "sub": "{published} Geräte publiziert, nichts wartet auf Bearbeitung."
+          },
+          "failed": {
+            "headline": "{count, plural, one {# Gerät} other {# Geräte}} mit fehlgeschlagener Prüfung",
+            "sub": "Entscheiden: Problem beheben und erneut prüfen, oder Stufe ändern (Ersatzteile/Recycling).",
+            "cta": "Fehlgeschlagene anzeigen"
           }
         }
       },
       "checklist": {
         "requiredMarker": "Pflichtpunkt",
-        "completedAt": "Erledigt am {date}",
         "addNote": "Notiz hinzufügen",
         "editNote": "Notiz bearbeiten",
         "notePlaceholder": "z.B. CPU-Stresstest bestanden, max. 75 °C …",
-        "ariaUncheck": "{label} rückgängig machen",
-        "ariaCheck": "{label} abhaken"
+        "failCount": "{count} fehlgeschlagen",
+        "resultAt": "{result} am {date}",
+        "failNotePlaceholder": "Was ist fehlgeschlagen? z.B. Akku hält nur 20 Minuten …",
+        "failNoteRequired": "Begründung erforderlich — was genau ist fehlgeschlagen?",
+        "saveFail": "Als fehlgeschlagen markieren",
+        "confirmNoteHint": "Vier-Augen-Prinzip: Als zweite Person direkt bestätigen. Allein im Dienst? Begründung angeben.",
+        "confirmNotePlaceholder": "Optional als zweite Person — erforderlich bei Allein-Bestätigung, z.B. «allein im Dienst» …",
+        "saveConfirm": "Qualitätskontrolle bestätigen"
       }
     },
     "it-hilfe": {

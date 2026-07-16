@@ -102,7 +102,11 @@ jest.mock('@/config/marketplace-status', () => ({
   INVENTORY_ITEM_STATUS: { AVAILABLE: 'available' },
 }))
 
+// Keep the real pure config (INTAKE_TIERS, emptyChecklistItemState,
+// requiresQualityControl over the real CHECKLIST_ITEMS) — only pin the
+// device checklist to a stable two-item list.
 jest.mock('@/config/intake-checklist', () => ({
+  ...jest.requireActual('@/config/intake-checklist'),
   getChecklistForDevice: jest.fn().mockReturnValue([
     { id: 'check-1' },
     { id: 'check-2' },
@@ -262,7 +266,7 @@ describe('createErfassungProduct — action/status', () => {
     // listing is created by publishRevampitListing (mocked here).
     expect(mockTxInsert).toHaveBeenCalledTimes(2)
     expect(mockPublishRevampitListing).toHaveBeenCalledTimes(1)
-    expect(mockPublishRevampitListing).toHaveBeenCalledWith(mockTx, 'inventory-1')
+    expect(mockPublishRevampitListing).toHaveBeenCalledWith(mockTx, 'inventory-1', { verifiedBy: 'user-1' })
     expect(result.productId).toBe('product-1')
   })
 
@@ -279,6 +283,35 @@ describe('createErfassungProduct — action/status', () => {
     // checklistGated overrides publish → no marketplace listing
     expect(mockTxInsert).toHaveBeenCalledTimes(2)
     expect(mockPublishRevampitListing).not.toHaveBeenCalled()
+  })
+
+  it('publish of a QC-required category → intercepted: draft + refurbish tier, no listing', async () => {
+    setupMinimalDraft()
+
+    // '10' (Laptops) has required testing items → requiresQualityControl=true
+    const result = await createErfassungProduct(
+      makePayload({ action: 'publish', hauptkategorie: '10' }),
+      'user-1',
+      mockTx as never,
+    )
+
+    expect(mockPublishRevampitListing).not.toHaveBeenCalled()
+    expect(result.qcRequired).toBe(true)
+    expect(result.listingId).toBeNull()
+  })
+
+  it('publish of an accessory category → not QC-gated, publishes directly', async () => {
+    setupMinimalDraft()
+
+    // '80' (Peripherie) has no required testing/security items
+    const result = await createErfassungProduct(
+      makePayload({ action: 'publish', hauptkategorie: '80' }),
+      'user-1',
+      mockTx as never,
+    )
+
+    expect(mockPublishRevampitListing).toHaveBeenCalledTimes(1)
+    expect(result.qcRequired).toBe(false)
   })
 })
 
