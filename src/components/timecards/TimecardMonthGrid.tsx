@@ -75,6 +75,13 @@ export function TimecardMonthGrid({
     onDragOver: date => onDaySelect(date, paintModeRef.current),
     onTap: (date, info) => {
       if (info.pointerType === 'touch' || info.pointerType === 'pen') {
+        // Tap OPENS the day editor — "I tapped the 10th, let me enter my
+        // hours" is the mobile intent. Long-press starts a selection; while
+        // one exists, taps toggle days in/out of it (Google-Photos model).
+        if (selected.size === 0 && onEditDay) {
+          onEditDay(date)
+          return
+        }
         onDaySelect(date, 'toggle')
         return
       }

@@ -125,8 +125,26 @@ describe('TimecardMonthGrid selection', () => {
   })
 
   describe('touch', () => {
-    it('a tap TOGGLES the day (no drag session)', () => {
-      const { onDaySelect, dayCells } = setup()
+    it('a tap with NO active selection OPENS the day editor', () => {
+      const { onDaySelect, onEditDay, dayCells } = setup()
+      fireEvent.pointerDown(dayCells[1], { pointerType: 'touch', clientX: 10, clientY: 10 })
+      fireEvent.pointerUp(window)
+      fireEvent.click(dayCells[1])
+      expect(onEditDay).toHaveBeenCalledWith('2026-06-02')
+      expect(onDaySelect).not.toHaveBeenCalled()
+    })
+
+    it('a tap while a selection is active TOGGLES the day instead', () => {
+      const { onDaySelect, onEditDay, dayCells } = setup({ selectedDates: ['2026-06-03'] })
+      fireEvent.pointerDown(dayCells[1], { pointerType: 'touch', clientX: 10, clientY: 10 })
+      fireEvent.pointerUp(window)
+      fireEvent.click(dayCells[1])
+      expect(onDaySelect.mock.calls).toEqual([['2026-06-02', 'toggle']])
+      expect(onEditDay).not.toHaveBeenCalled()
+    })
+
+    it('a tap without an onEditDay handler falls back to toggling', () => {
+      const { onDaySelect, dayCells } = setup({ onEditDay: undefined })
       fireEvent.pointerDown(dayCells[1], { pointerType: 'touch', clientX: 10, clientY: 10 })
       fireEvent.pointerUp(window)
       fireEvent.click(dayCells[1])
