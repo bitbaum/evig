@@ -206,10 +206,10 @@ function ErfassungContent() {
         </Link>
         <div className="flex-1 min-w-0">
           <Heading level={1} className="text-xl sm:text-2xl font-bold text-text-primary truncate">
-            {form.isEditMode ? 'Produkt bearbeiten' : viewMode === 'bulk' ? `Bulk Erfassung (${bulkProducts.length} Produkte)` : form.isAnnahmeMode ? 'Physische Annahme' : 'Produkt Erfassung'}
+            {form.isEditMode ? 'Produkt bearbeiten' : viewMode === 'bulk' ? `Bulk-Erfassung (${bulkProducts.length} Produkte)` : form.isAnnahmeMode ? 'Vollständige Geräteaufnahme' : 'Produkt aufnehmen'}
           </Heading>
           <p className="text-sm sm:text-base text-text-secondary hidden sm:block">
-            {form.isEditMode ? 'Produktdaten aktualisieren' : viewMode === 'bulk' ? 'Mehrere Produkte prüfen und erfassen' : form.isAnnahmeMode ? 'Gerät annehmen — danach folgt die Checkliste im Geräte-Eingang' : 'Neues Produkt ins Inventar aufnehmen'}
+            {form.isEditMode ? 'Produktdaten aktualisieren' : viewMode === 'bulk' ? 'Mehrere Produkte prüfen und erfassen' : form.isAnnahmeMode ? 'Foto, Produktdetails und Spendenangaben ergänzen' : 'Produktdaten erfassen und bei Bedarf direkt publizieren'}
           </p>
         </div>
         {viewMode === 'bulk' && (
@@ -336,6 +336,7 @@ function ErfassungContent() {
               isEditMode={form.isEditMode}
               isAnnahmeMode={form.isAnnahmeMode}
               isLoading={form.isLoading}
+              category={form.formData.hauptkategorie}
               onSubmit={form.handleSubmit}
             />
           </form>

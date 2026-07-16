@@ -75,7 +75,7 @@ const ACTION_COMMANDS = [
   {
     key: 'cmd-erfassung',
     labelKey: 'actions.newDevice',
-    href: ROUTES.admin.erfassungNew,
+    href: ROUTES.admin.intakeCapture,
     icon: <Monitor className="w-4 h-4" />,
   },
   {

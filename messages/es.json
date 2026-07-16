@@ -10233,6 +10233,32 @@
     "intake": {
       "pageTitle": "Entrada de dispositivos",
       "pageDescription": "Todos los dispositivos registrados: estado, lista de control y publicación",
+      "quickCapture": {
+        "title": "Registrar un dispositivo ahora",
+        "description": "Fabricante, modelo, Intro — complete el resto después en el taller.",
+        "close": "Volver al flujo",
+        "brand": "Fabricante",
+        "brandPlaceholder": "Dell",
+        "productName": "Modelo / producto",
+        "productNamePlaceholder": "Latitude 7480",
+        "submit": "Registrar",
+        "saving": "Registrando…",
+        "keyboardHint": "Teclado: fabricante → Tab → modelo → Intro",
+        "details": "Ajustar nivel, categoría o donación",
+        "tier": "Nivel de procesamiento",
+        "category": "Categoría",
+        "categoryLater": "Definir después",
+        "condition": "Estado",
+        "donation": "Es una donación",
+        "donorName": "Nombre del donante",
+        "donorEmail": "Correo electrónico",
+        "donorNotes": "Notas",
+        "created": "{itemUuid} registrado — listo para el siguiente dispositivo.",
+        "printLabel": "Imprimir etiqueta",
+        "openPipeline": "Ver flujo",
+        "fullCapture": "Registro completo con foto, IA y detalles del producto",
+        "saveFailed": "No se pudo registrar el dispositivo"
+      },
       "createForm": {
         "title": "Registrar nuevo dispositivo",
         "tierLabel": "Nivel de procesamiento",
@@ -10362,6 +10388,15 @@
           "inProgress": "En proceso",
           "failed": "Fallido"
         },
+        "board": {
+          "in_progress": "En revisión",
+          "failed": "Bloqueado",
+          "ready": "Listo",
+          "published": "En tienda",
+          "empty": "Sin dispositivos",
+          "noCategory": "Categoría pendiente",
+          "ageDays": "{count} d"
+        },
         "donationYes": "Sí",
         "hero": {
           "kpis": {
@@ -10408,6 +10443,7 @@
         "failNoteRequired": "Se requiere justificación: ¿qué falló exactamente?",
         "saveFail": "Marcar como fallido",
         "confirmNoteHint": "Principio de cuatro ojos: confirme directamente como segunda persona. ¿Trabaja solo? Indique el motivo.",
+        "overrideSecondPerson": "Excepción: trabajo solo (se requiere un motivo de al menos 10 caracteres)",
         "confirmNotePlaceholder": "Opcional como segunda persona; obligatorio si firma solo, p. ej. «trabajando solo» …",
         "saveConfirm": "Confirmar control de calidad"
       }
@@ -10951,12 +10987,12 @@
         },
         "intake": {
           "label": "Entrada de equipos",
-          "description": "Todos los equipos registrados: estado, checklist, publicación"
+          "description": "Todos los equipos registrados: estado, checklist, publicación",
+          "shortLabel": "Equipos"
         },
         "erfassung": {
           "label": "Registrar producto",
-          "description": "Aceptar un equipo (checklist/donación) o registrar un producto rápidamente",
-          "shortLabel": "Registrar"
+          "description": "Aceptar un equipo (checklist/donación) o registrar un producto rápidamente"
         },
         "marketplace": {
           "label": "Anuncios",

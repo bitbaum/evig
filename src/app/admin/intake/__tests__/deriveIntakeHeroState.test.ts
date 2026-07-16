@@ -46,11 +46,10 @@ function makeStubTranslator() {
       default: return key
     }
   }
-  return fakeT as unknown as Parameters<typeof deriveIntakeHeroState>[3]
+  return fakeT as unknown as Parameters<typeof deriveIntakeHeroState>[2]
 }
 
 const onStatusFilter = jest.fn()
-const onCreateNew = jest.fn()
 const t = makeStubTranslator()
 
 beforeEach(() => jest.clearAllMocks())
@@ -60,7 +59,6 @@ describe('deriveIntakeHeroState', () => {
     const s = deriveIntakeHeroState(
       { total: 10, inProgress: 5, failed: 1, ready: 2, published: 2 },
       onStatusFilter,
-      onCreateNew,
       t,
     )
     expect(s.tone).toBe('urgent')
@@ -73,7 +71,6 @@ describe('deriveIntakeHeroState', () => {
     const s = deriveIntakeHeroState(
       { total: 10, inProgress: 5, failed: 0, ready: 2, published: 3 },
       onStatusFilter,
-      onCreateNew,
       t,
     )
     expect(s.tone).toBe('attention')
@@ -87,7 +84,6 @@ describe('deriveIntakeHeroState', () => {
     const s = deriveIntakeHeroState(
       { total: 8, inProgress: 4, failed: 0, ready: 0, published: 4 },
       onStatusFilter,
-      onCreateNew,
       t,
     )
     expect(s.tone).toBe('attention')
@@ -100,21 +96,17 @@ describe('deriveIntakeHeroState', () => {
     const s = deriveIntakeHeroState(
       { total: 0, inProgress: 0, failed: 0, ready: 0, published: 0 },
       onStatusFilter,
-      onCreateNew,
       t,
     )
     expect(s.tone).toBe('empty')
     expect(s.headline).toContain('leer')
-    expect(s.cta?.label).toContain('Neues Gerät')
-    if (s.cta && 'onClick' in s.cta) s.cta.onClick()
-    expect(onCreateNew).toHaveBeenCalled()
+    expect(s.cta).toBeUndefined()
   })
 
   it('HEALTHY when only published > 0 (nothing waiting)', () => {
     const s = deriveIntakeHeroState(
       { total: 10, inProgress: 0, failed: 0, ready: 0, published: 10 },
       onStatusFilter,
-      onCreateNew,
       t,
     )
     expect(s.tone).toBe('healthy')
@@ -127,7 +119,6 @@ describe('deriveIntakeHeroState', () => {
     const singular = deriveIntakeHeroState(
       { total: 1, inProgress: 1, failed: 0, ready: 0, published: 0 },
       onStatusFilter,
-      onCreateNew,
       t,
     )
     expect(singular.headline).toContain('1 Gerät in Bearbeitung')
@@ -135,7 +126,6 @@ describe('deriveIntakeHeroState', () => {
     const plural = deriveIntakeHeroState(
       { total: 3, inProgress: 3, failed: 0, ready: 0, published: 0 },
       onStatusFilter,
-      onCreateNew,
       t,
     )
     expect(plural.headline).toContain('3 Geräte in Bearbeitung')
@@ -145,7 +135,6 @@ describe('deriveIntakeHeroState', () => {
     const s = deriveIntakeHeroState(
       { total: 5, inProgress: 1, failed: 0, ready: 2, published: 2 },
       onStatusFilter,
-      onCreateNew,
       t,
     )
     expect(s.kpis.map((k) => k.label)).toEqual([

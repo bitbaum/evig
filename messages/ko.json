@@ -10233,6 +10233,32 @@
     "intake": {
       "pageTitle": "기기 입고",
       "pageDescription": "등록된 모든 기기: 상태, 체크리스트, 게시",
+      "quickCapture": {
+        "title": "기기 바로 등록",
+        "description": "제조사, 모델, Enter — 나머지는 작업대에서 나중에 입력하세요.",
+        "close": "파이프라인으로",
+        "brand": "제조사",
+        "brandPlaceholder": "Dell",
+        "productName": "모델 / 제품",
+        "productNamePlaceholder": "Latitude 7480",
+        "submit": "등록",
+        "saving": "등록 중…",
+        "keyboardHint": "키보드: 제조사 → Tab → 모델 → Enter",
+        "details": "처리 단계, 카테고리 또는 기부 조정",
+        "tier": "처리 단계",
+        "category": "카테고리",
+        "categoryLater": "나중에 설정",
+        "condition": "상태",
+        "donation": "기부 물품입니다",
+        "donorName": "기부자 이름",
+        "donorEmail": "이메일",
+        "donorNotes": "메모",
+        "created": "{itemUuid} 등록 완료 — 다음 기기를 입력할 수 있습니다.",
+        "printLabel": "라벨 인쇄",
+        "openPipeline": "파이프라인 보기",
+        "fullCapture": "사진, AI 및 제품 세부정보 전체 입력",
+        "saveFailed": "기기를 등록하지 못했습니다"
+      },
       "createForm": {
         "title": "새 기기 등록",
         "tierLabel": "처리 단계",
@@ -10362,6 +10388,15 @@
           "inProgress": "처리 중",
           "failed": "실패"
         },
+        "board": {
+          "in_progress": "검사 중",
+          "failed": "차단됨",
+          "ready": "준비됨",
+          "published": "상점 게시",
+          "empty": "기기 없음",
+          "noCategory": "카테고리 미정",
+          "ageDays": "{count}일"
+        },
         "donationYes": "예",
         "hero": {
           "kpis": {
@@ -10408,6 +10443,7 @@
         "failNoteRequired": "사유 필요 — 정확히 무엇이 실패했나요?",
         "saveFail": "실패로 표시",
         "confirmNoteHint": "4눈 원칙: 두 번째 확인자는 바로 확인하세요. 혼자 근무 중이라면 사유를 적어주세요.",
+        "overrideSecondPerson": "예외: 혼자 근무 중입니다(10자 이상의 사유 필요)",
         "confirmNotePlaceholder": "두 번째 확인자는 선택 사항 — 단독 승인 시 필수 (예: \"단독 근무\") …",
         "saveConfirm": "품질 검사 확인"
       }
@@ -10951,12 +10987,12 @@
         },
         "intake": {
           "label": "기기 입고",
-          "description": "등록된 모든 기기: 상태, 체크리스트, 게시"
+          "description": "등록된 모든 기기: 상태, 체크리스트, 게시",
+          "shortLabel": "기기"
         },
         "erfassung": {
           "label": "제품 등록",
-          "description": "기기 접수(체크리스트/기부) 또는 빠른 제품 등록",
-          "shortLabel": "등록"
+          "description": "기기 접수(체크리스트/기부) 또는 빠른 제품 등록"
         },
         "marketplace": {
           "label": "판매글",

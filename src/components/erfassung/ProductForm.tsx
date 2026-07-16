@@ -66,19 +66,21 @@ export function ProductForm({
         onCategoryChange={onCategoryChange}
       />
 
-      {/* Mobile: Collapsible Advanced Section Toggle */}
+      {/* Progressive disclosure on every viewport. The capture decision is
+          brand/model/category; specs, dimensions and storage are enrichment,
+          not prerequisites that should dominate the first screen. */}
       <Button
         type="button"
         variant="ghost"
         onClick={onToggleAdvanced}
-        className="sm:hidden w-full flex items-center justify-between px-4 py-3 bg-surface-raised rounded-xl text-text-secondary touch-manipulation h-auto"
+        className="w-full flex items-center justify-between px-4 py-3 bg-surface-raised rounded-xl text-text-secondary touch-manipulation h-auto"
       >
-        <span className="font-medium">Erweiterte Optionen</span>
+        <span className="font-medium">Technische Daten, Lager &amp; Zielgruppen</span>
         {showAdvanced ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
       </Button>
 
       {/* Technical Specs */}
-      <div className={`${showAdvanced ? 'block' : 'hidden'} sm:block`}>
+      <div className={showAdvanced ? 'block' : 'hidden'}>
         <ProductSpecFields
           specs={formData.specs}
           aiMetadata={aiMetadata}
@@ -89,7 +91,7 @@ export function ProductForm({
       </div>
 
       {/* Physical Dimensions & Inventory */}
-      <div className={`${showAdvanced ? 'block' : 'hidden'} sm:block`}>
+      <div className={showAdvanced ? 'block' : 'hidden'}>
         <ProductDimensionFields
           formData={formData}
           aiMetadata={aiMetadata}
@@ -97,10 +99,12 @@ export function ProductForm({
         />
       </div>
 
-      <ProductProfileFields
-        kundenprofile={formData.kundenprofile}
-        onProfileToggle={onProfileToggle}
-      />
+      <div className={showAdvanced ? 'block' : 'hidden'}>
+        <ProductProfileFields
+          kundenprofile={formData.kundenprofile}
+          onProfileToggle={onProfileToggle}
+        />
+      </div>
     </>
   )
 }

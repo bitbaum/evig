@@ -48,7 +48,12 @@ interface IntakeDetailViewProps {
   onBack: () => void
   onRefresh: () => void
   checklistError: string | null
-  onSetChecklistResult: (itemId: string, result: ChecklistResult | null, notes?: string) => void
+  onSetChecklistResult: (
+    itemId: string,
+    result: ChecklistResult | null,
+    notes?: string,
+    options?: { secondPersonOverride?: boolean },
+  ) => void
   onMarkAllRequired: () => void
   onStartQc: () => void
   startingQc: boolean
@@ -281,12 +286,69 @@ export function IntakeDetailView({
         </div>
       )}
 
+      {/* Ready-to-publish is an action state, not checklist history. Keep the
+          final price + publish action above the completed checklist so the
+          shop hand-off is a sub-five-second task. */}
+      {detail.checklist_complete &&
+        (detail.intake_tier === INTAKE_TIERS.REFURBISH || (detail.intake_tier === null && !qcGate)) &&
+        detail.marketplace_status !== INTAKE_STATUS.PUBLISHED && (
+        <div className="border-2 border-strong bg-action-muted rounded-lg p-4">
+          <Heading level={3} className="font-medium mb-3 flex items-center gap-2">
+            <ExternalLink className="w-4 h-4" />
+            {t('publishHeading')}
+          </Heading>
+          <div className="flex flex-wrap items-end gap-3">
+            <div>
+              <label className="block text-sm font-medium mb-1">{t('sellingPriceLabel')}</label>
+              <Input
+                type="number"
+                value={publishPrice || ''}
+                onChange={(e) => setPublishPrice(Number(e.target.value))}
+                min={0}
+                className="w-32"
+              />
+            </div>
+            <Button
+              onClick={onPublish}
+              disabled={publishing || publishPrice <= 0}
+              variant="primary"
+              size="sm"
+            >
+              {publishing ? t('publishing') : t('publishNow')}
+            </Button>
+            <Link
+              href={`/admin/erfassung?edit=${detail.id}&returnTo=${encodeURIComponent(`/admin/intake?detail=${detail.id}`)}`}
+              className={`inline-flex items-center gap-1.5 px-4 py-2 border border-default text-text-secondary rounded-lg ${adminInteractive.rowHover} text-sm font-medium`}
+              title={t('openFullErfassungTitle')}
+            >
+              <ClipboardList className="w-4 h-4" />
+              {t('openFullErfassung')}
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* Published is the primary outcome, so show it before the historical
+          QC record. Published checklists are immutable and collapsed below. */}
+      {detail.marketplace_status === INTAKE_STATUS.PUBLISHED && (
+        <div className="border-2 border-strong bg-action-muted rounded-lg p-4 text-center">
+          <Check className="w-8 h-8 text-action mx-auto mb-2" />
+          <p className="font-medium text-action">{t('publishedConfirm')}</p>
+          {detail.selling_price_chf != null && (
+            <p className="text-sm text-action mt-1">
+              {t('publishedPrice', { price: Number(detail.selling_price_chf).toFixed(2) })}
+            </p>
+          )}
+        </div>
+      )}
+
       {/* Checklist Groups */}
       <div className="space-y-4">
         {detail.checklist_grouped.map((group) => (
           <ChecklistGroup
-            key={group.category}
+            key={`${group.category}-${detail.marketplace_status}`}
             group={group}
+            readOnly={detail.marketplace_status === INTAKE_STATUS.PUBLISHED}
             onSetResult={onSetChecklistResult}
           />
         ))}
@@ -314,7 +376,7 @@ export function IntakeDetailView({
 
       {/* Publish Section — refurbish-tier items (checklist-gated) and quick
           captures of accessory categories (no QC required) */}
-      {(detail.intake_tier === INTAKE_TIERS.REFURBISH || (detail.intake_tier === null && !qcGate)) && detail.marketplace_status !== INTAKE_STATUS.PUBLISHED && (
+      {!detail.checklist_complete && (detail.intake_tier === INTAKE_TIERS.REFURBISH || (detail.intake_tier === null && !qcGate)) && detail.marketplace_status !== INTAKE_STATUS.PUBLISHED && (
         <div className={`border-2 rounded-lg p-4 ${
           detail.checklist_complete
             ? 'border-strong bg-action-muted'
@@ -363,19 +425,6 @@ export function IntakeDetailView({
               </Link>
             )}
           </div>
-        </div>
-      )}
-
-      {/* Published confirmation */}
-      {detail.marketplace_status === INTAKE_STATUS.PUBLISHED && (
-        <div className="border-2 border-strong bg-action-muted rounded-lg p-4 text-center">
-          <Check className="w-8 h-8 text-action mx-auto mb-2" />
-          <p className="font-medium text-action">{t('publishedConfirm')}</p>
-          {detail.selling_price_chf != null && (
-            <p className="text-sm text-action mt-1">
-              {t('publishedPrice', { price: Number(detail.selling_price_chf).toFixed(2) })}
-            </p>
-          )}
         </div>
       )}
 

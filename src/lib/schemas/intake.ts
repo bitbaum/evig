@@ -72,10 +72,16 @@ export const ChecklistUpdateSchema = z
       .enum([CHECKLIST_RESULTS.PASS, CHECKLIST_RESULTS.FAIL, CHECKLIST_RESULTS.NA])
       .nullable(),
     notes: z.string().optional().default(''),
+    /** Explicit, audited exception for a solo shift. Never inferred from notes. */
+    second_person_override: z.boolean().optional().default(false),
   })
   .refine(
     data => data.result !== CHECKLIST_RESULTS.FAIL || data.notes.trim().length > 0,
     { message: ERROR_MESSAGES.INTAKE_FAIL_NOTES_REQUIRED, path: ['notes'] },
+  )
+  .refine(
+    data => !data.second_person_override || data.notes.trim().length >= 10,
+    { message: ERROR_MESSAGES.INTAKE_SECOND_PERSON_OVERRIDE_REASON_REQUIRED, path: ['notes'] },
   )
 
 // =============================================================================

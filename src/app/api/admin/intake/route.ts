@@ -200,7 +200,11 @@ export const GET = withAdmin('intake', async (request) => {
         LEFT JOIN ${sql.raw(uTable)} u ON ap.created_by = u.id
         LEFT JOIN ${sql.raw(dTable)} d ON ii.source_donation_id = d.id
         ${whereClause}
-        ORDER BY ii.created_at DESC
+        -- Operational work comes before history, and oldest work comes first
+        -- so stuck devices cannot be buried by new arrivals.
+        ORDER BY
+          CASE WHEN ii.marketplace_status = ${MARKETPLACE_STATUS.PUBLISHED} THEN 1 ELSE 0 END,
+          ii.created_at ASC
         LIMIT ${limit} OFFSET ${offset}
       `),
       db.execute(sql`

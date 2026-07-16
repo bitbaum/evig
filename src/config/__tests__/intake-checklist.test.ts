@@ -384,10 +384,20 @@ describe('violatesSecondPersonRule (Vier-Augen-Prinzip)', () => {
     expect(violatesSecondPersonRule(finalQa, workDoneBy('tech-1'), tier, cat, 'tech-2')).toBe(false)
   })
 
-  it('allows the primary tech when someone else completed at least one item', () => {
+  it('still blocks the primary tech when another person only did one item', () => {
     const state = workDoneBy('tech-1')
     state['data_wipe'] = { result: CHECKLIST_RESULTS.PASS, completedBy: 'tech-2', completedAt: '2026-01-01T00:00:00Z', notes: '' }
+    expect(violatesSecondPersonRule(finalQa, state, tier, cat, 'tech-1')).toBe(true)
+  })
+
+  it('allows either worker when completed work is evenly shared', () => {
+    const ids = requiredIdsFor(tier, cat).filter(i => i !== 'final_qa').slice(0, 2)
+    const state: ChecklistState = {
+      [ids[0]]: { result: CHECKLIST_RESULTS.PASS, completedBy: 'tech-1', completedAt: '2026-01-01T00:00:00Z', notes: '' },
+      [ids[1]]: { result: CHECKLIST_RESULTS.PASS, completedBy: 'tech-2', completedAt: '2026-01-01T00:00:00Z', notes: '' },
+    }
     expect(violatesSecondPersonRule(finalQa, state, tier, cat, 'tech-1')).toBe(false)
+    expect(violatesSecondPersonRule(finalQa, state, tier, cat, 'tech-2')).toBe(false)
   })
 
   it('blocks final QA when nothing else is done yet', () => {

@@ -114,24 +114,26 @@ export function AdminHeroStatus({
   const Icon = typeof icon === 'string' ? HERO_ICONS[icon] : icon
   return (
     <div className={`rounded-xl border p-5 sm:p-6 ${TONE_SURFACE[tone]}`}>
-      <div className="flex items-start gap-4">
-        <div className={`shrink-0 rounded-lg p-2 bg-surface-base/60 dark:bg-surface-base/30 ${TONE_ICON[tone]}`}>
-          <Icon className="w-6 h-6" />
-        </div>
-        <div className="min-w-0 flex-1">
-          <h2 className="text-lg sm:text-xl font-semibold text-text-primary leading-tight">
-            {headline}
-          </h2>
-          <p className="mt-1 text-sm text-text-secondary">{sub}</p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+        <div className="flex min-w-0 flex-1 items-start gap-4">
+          <div className={`shrink-0 rounded-lg p-2 bg-surface-base/60 dark:bg-surface-base/30 ${TONE_ICON[tone]}`}>
+            <Icon className="w-6 h-6" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <h2 className="text-lg sm:text-xl font-semibold text-text-primary leading-tight">
+              {headline}
+            </h2>
+            <p className="mt-1 text-sm text-text-secondary">{sub}</p>
+          </div>
         </div>
         {cta && (
           isLinkCta(cta) ? (
-            <Button as={Link} href={cta.href} variant="primary" size="sm" className="shrink-0 inline-flex items-center gap-2">
+            <Button as={Link} href={cta.href} variant="primary" size="sm" className="w-full shrink-0 items-center gap-2 sm:w-auto">
               {cta.label}
               <ArrowRight className="w-4 h-4" />
             </Button>
           ) : (
-            <Button onClick={cta.onClick} variant="primary" size="sm" className="shrink-0 inline-flex items-center gap-2">
+            <Button onClick={cta.onClick} variant="primary" size="sm" className="w-full shrink-0 items-center gap-2 sm:w-auto">
               {cta.label}
               <ArrowRight className="w-4 h-4" />
             </Button>

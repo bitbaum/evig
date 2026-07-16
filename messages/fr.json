@@ -10186,6 +10186,32 @@
     "intake": {
       "pageTitle": "Réception",
       "pageDescription": "Tous les appareils saisis : statut, liste de contrôle et publication",
+      "quickCapture": {
+        "title": "Enregistrer un appareil maintenant",
+        "description": "Fabricant, modèle, Entrée — complétez le reste plus tard à l’atelier.",
+        "close": "Retour au pipeline",
+        "brand": "Fabricant",
+        "brandPlaceholder": "Dell",
+        "productName": "Modèle / produit",
+        "productNamePlaceholder": "Latitude 7480",
+        "submit": "Enregistrer",
+        "saving": "Enregistrement…",
+        "keyboardHint": "Clavier : fabricant → Tab → modèle → Entrée",
+        "details": "Adapter le niveau, la catégorie ou le don",
+        "tier": "Niveau de traitement",
+        "category": "Catégorie",
+        "categoryLater": "Définir plus tard",
+        "condition": "État",
+        "donation": "Ceci est un don",
+        "donorName": "Nom du donateur",
+        "donorEmail": "E-mail",
+        "donorNotes": "Notes",
+        "created": "{itemUuid} enregistré — prêt pour l’appareil suivant.",
+        "printLabel": "Imprimer l’étiquette",
+        "openPipeline": "Voir le pipeline",
+        "fullCapture": "Saisie complète avec photo, IA et détails produit",
+        "saveFailed": "L’appareil n’a pas pu être enregistré"
+      },
       "createForm": {
         "title": "Saisir un nouvel appareil",
         "tierLabel": "Niveau de traitement",
@@ -10315,6 +10341,15 @@
           "inProgress": "En cours",
           "failed": "Échec"
         },
+        "board": {
+          "in_progress": "En contrôle",
+          "failed": "Bloqué",
+          "ready": "Prêt",
+          "published": "En boutique",
+          "empty": "Aucun appareil",
+          "noCategory": "Catégorie à définir",
+          "ageDays": "{count} j"
+        },
         "donationYes": "Oui",
         "hero": {
           "kpis": {
@@ -10361,6 +10396,7 @@
         "failNoteRequired": "Justification requise — qu’est-ce qui a échoué exactement ?",
         "saveFail": "Marquer comme échoué",
         "confirmNoteHint": "Principe des quatre yeux : confirmez directement en tant que seconde personne. Seul en service ? Indiquez la raison.",
+        "overrideSecondPerson": "Exception : je travaille seul (motif d’au moins 10 caractères requis)",
         "confirmNotePlaceholder": "Facultatif en tant que seconde personne — requis pour une validation en solo, p. ex. « seul en service » …",
         "saveConfirm": "Confirmer le contrôle qualité"
       }
@@ -10953,12 +10989,12 @@
         },
         "intake": {
           "label": "Entrée des appareils",
-          "description": "Tous les appareils saisis : statut, checklist, publication"
+          "description": "Tous les appareils saisis : statut, checklist, publication",
+          "shortLabel": "Appareils"
         },
         "erfassung": {
           "label": "Saisir un produit",
-          "description": "Accepter un appareil (checklist/don) ou saisir rapidement un produit",
-          "shortLabel": "Saisir"
+          "description": "Accepter un appareil (checklist/don) ou saisir rapidement un produit"
         },
         "marketplace": {
           "label": "Annonces",

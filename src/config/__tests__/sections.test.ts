@@ -244,6 +244,14 @@ describe('getSidebarGroupsWithSections', () => {
       expect(Array.isArray(g.sections)).toBe(true)
     }
   })
+
+  it('shows one device-workflow home instead of a competing capture destination', () => {
+    const ids = getSidebarGroupsWithSections().flatMap(group => group.sections.map(section => section.id))
+    expect(ids).toContain('intake')
+    expect(ids).not.toContain('erfassung')
+    // The advanced route remains an admin permission key.
+    expect(SECTIONS.erfassung.visibility.admin).toBe(true)
+  })
 })
 
 // ============================================================================

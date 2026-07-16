@@ -122,6 +122,10 @@ const PERMISSION_ALIASES: Partial<Record<AdminSection, string>> = {
   'hr-vacancies': 'team',
   'hr-applications': 'team',
   erfassung: 'intake',
+  // `products` is the hidden API permission used by the advanced product
+  // editor. Staff who can operate the device pipeline must be able to use
+  // that editor too; otherwise the visible intake flow leads to 403s.
+  products: 'intake',
   'analyse-hub': 'finanzen',
 }
 

@@ -554,8 +554,7 @@ export function hasChecklistFailure(
 
 /**
  * Vier-Augen-Prinzip check. A `requiresSecondPerson` item (final QA) should
- * be signed off by someone who was NOT the sole worker on the device: at
- * least one other completed required item must carry a different completedBy.
+ * be signed off by someone who was NOT the majority worker on the device.
  * Also true when nothing else is done yet — there is nothing to QA.
  * The API treats a violation as blocking UNLESS the sign-off carries an
  * explicit override note (solo-shift reality; the note is the audit trail).
@@ -571,7 +570,14 @@ export function violatesSecondPersonRule(
   const otherDoneRequired = getChecklistForDevice(tier, deviceCategory)
     .filter(i => i.required && i.id !== item.id && isItemDone(state[i.id]))
   if (otherDoneRequired.length === 0) return true
-  return otherDoneRequired.every(i => state[i.id]?.completedBy === actingUserId)
+  const completedByActor = otherDoneRequired.filter(
+    i => state[i.id]?.completedBy === actingUserId,
+  ).length
+
+  // A strict majority performed more than half of the completed required
+  // work. In a tie there is already shared involvement, so either worker may
+  // perform the independent final check.
+  return completedByActor > otherDoneRequired.length / 2
 }
 
 /**

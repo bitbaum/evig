@@ -13,6 +13,7 @@ export const ROUTES = {
     // removed legacy /admin/products tree — the print view is a live feature).
     erfassungFactsheet: (id: string) => `/admin/erfassung/${id}/factsheet`,
     intake:             '/admin/intake',
+    intakeCapture:      '/admin/intake/capture',
     // Small printable QR device label (physical ↔ digital link): scan at any
     // workstation to open the device's pipeline detail.
     intakeLabel:        (id: string) => `/admin/intake/${id}/label`,

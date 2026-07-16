@@ -10185,6 +10185,32 @@
     "intake": {
       "pageTitle": "Device intake",
       "pageDescription": "All captured devices: status, checklist and publication",
+      "quickCapture": {
+        "title": "Capture a device now",
+        "description": "Manufacturer, model, Enter — complete the rest later at the workbench.",
+        "close": "Back to pipeline",
+        "brand": "Manufacturer",
+        "brandPlaceholder": "Dell",
+        "productName": "Model / product",
+        "productNamePlaceholder": "Latitude 7480",
+        "submit": "Capture",
+        "saving": "Capturing…",
+        "keyboardHint": "Keyboard: enter manufacturer → Tab → enter model → Enter",
+        "details": "Adjust tier, category or donation",
+        "tier": "Processing tier",
+        "category": "Category",
+        "categoryLater": "Set later",
+        "condition": "Condition",
+        "donation": "This is a donation",
+        "donorName": "Donor name",
+        "donorEmail": "Email",
+        "donorNotes": "Notes",
+        "created": "{itemUuid} captured — ready for the next device.",
+        "printLabel": "Print label",
+        "openPipeline": "View pipeline",
+        "fullCapture": "Full capture with photo, AI and product details",
+        "saveFailed": "The device could not be captured"
+      },
       "createForm": {
         "title": "Log new device",
         "tierLabel": "Processing tier",
@@ -10314,6 +10340,15 @@
           "inProgress": "In progress",
           "failed": "Failed"
         },
+        "board": {
+          "in_progress": "In testing",
+          "failed": "Blocked",
+          "ready": "Ready",
+          "published": "In shop",
+          "empty": "No devices",
+          "noCategory": "Category still open",
+          "ageDays": "{count} d"
+        },
         "donationYes": "Yes",
         "hero": {
           "kpis": {
@@ -10360,6 +10395,7 @@
         "failNoteRequired": "Reason required — what exactly failed?",
         "saveFail": "Mark as failed",
         "confirmNoteHint": "Four-eyes principle: confirm directly as a second person. Working alone? State the reason.",
+        "overrideSecondPerson": "Exception: I am working alone (a reason of at least 10 characters is required)",
         "confirmNotePlaceholder": "Optional as a second person — required for a solo sign-off, e.g. \"working alone\" …",
         "saveConfirm": "Confirm quality control"
       }
@@ -10903,12 +10939,12 @@
         },
         "intake": {
           "label": "Device intake",
-          "description": "All captured devices: status, checklist, publication"
+          "description": "All captured devices: status, checklist, publication",
+          "shortLabel": "Devices"
         },
         "erfassung": {
           "label": "Capture product",
-          "description": "Accept a device (checklist/donation) or quickly capture a product",
-          "shortLabel": "Capture"
+          "description": "Accept a device (checklist/donation) or quickly capture a product"
         },
         "marketplace": {
           "label": "Listings",

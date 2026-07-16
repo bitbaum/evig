@@ -164,6 +164,7 @@ describe('canAccessSection', () => {
     }
     // Requesting 'erfassung' section with 'intake' permission → alias grants access
     expect(canAccessSection(withAlias, 'erfassung')).toBe(true)
+    expect(canAccessSection(withAlias, 'products')).toBe(true)
   })
 
   it('grants access via reverse alias: "erfassung" permission grants "intake" section', () => {

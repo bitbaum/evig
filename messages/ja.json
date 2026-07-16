@@ -10233,6 +10233,32 @@
     "intake": {
       "pageTitle": "デバイス受付",
       "pageDescription": "登録済みのすべてのデバイス：ステータス、チェックリスト、公開",
+      "quickCapture": {
+        "title": "デバイスをすぐに受付",
+        "description": "メーカー、モデル、Enter — 残りは作業台で後から入力できます。",
+        "close": "パイプラインに戻る",
+        "brand": "メーカー",
+        "brandPlaceholder": "Dell",
+        "productName": "モデル / 製品",
+        "productNamePlaceholder": "Latitude 7480",
+        "submit": "受付",
+        "saving": "受付中…",
+        "keyboardHint": "キーボード：メーカー → Tab → モデル → Enter",
+        "details": "処理区分、カテゴリ、寄付を変更",
+        "tier": "処理区分",
+        "category": "カテゴリ",
+        "categoryLater": "後で設定",
+        "condition": "状態",
+        "donation": "寄付品です",
+        "donorName": "寄付者名",
+        "donorEmail": "メール",
+        "donorNotes": "メモ",
+        "created": "{itemUuid} を受付しました — 次のデバイスを入力できます。",
+        "printLabel": "ラベルを印刷",
+        "openPipeline": "パイプラインを見る",
+        "fullCapture": "写真、AI、製品詳細を含む完全入力",
+        "saveFailed": "デバイスを受付できませんでした"
+      },
       "createForm": {
         "title": "新しいデバイスを登録",
         "tierLabel": "処理段階",
@@ -10362,6 +10388,15 @@
           "inProgress": "処理中",
           "failed": "不合格"
         },
+        "board": {
+          "in_progress": "検査中",
+          "failed": "保留",
+          "ready": "準備完了",
+          "published": "ショップ掲載中",
+          "empty": "デバイスなし",
+          "noCategory": "カテゴリ未設定",
+          "ageDays": "{count}日"
+        },
         "donationYes": "はい",
         "hero": {
           "kpis": {
@@ -10408,6 +10443,7 @@
         "failNoteRequired": "理由が必要です — 具体的に何が不合格でしたか？",
         "saveFail": "不合格にする",
         "confirmNoteHint": "四つの目の原則：第二確認者はそのまま確認できます。一人勤務の場合は理由を記入してください。",
+        "overrideSecondPerson": "例外：一人勤務です（10文字以上の理由が必要です）",
         "confirmNotePlaceholder": "第二確認者は任意 — 単独承認の場合は必須（例：「一人勤務」）…",
         "saveConfirm": "品質検査を確認"
       }
@@ -10951,12 +10987,12 @@
         },
         "intake": {
           "label": "機器受入",
-          "description": "登録済み機器の一覧: ステータス、チェックリスト、公開"
+          "description": "登録済み機器の一覧: ステータス、チェックリスト、公開",
+          "shortLabel": "機器"
         },
         "erfassung": {
           "label": "商品登録",
-          "description": "機器の受入(チェックリスト/寄付)または商品のクイック登録",
-          "shortLabel": "登録"
+          "description": "機器の受入(チェックリスト/寄付)または商品のクイック登録"
         },
         "marketplace": {
           "label": "出品",

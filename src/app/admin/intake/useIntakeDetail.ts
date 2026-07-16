@@ -48,11 +48,17 @@ export function useIntakeDetail() {
   // Rejections (e.g. Vier-Augen-Prinzip) must be visible, not silent.
   const [checklistError, setChecklistError] = useState<string | null>(null)
 
-  const setChecklistResult = useCallback(async (itemId: string, result: ChecklistResult | null, notes?: string) => {
+  const setChecklistResult = useCallback(async (
+    itemId: string,
+    result: ChecklistResult | null,
+    notes?: string,
+    options?: { secondPersonOverride?: boolean },
+  ) => {
     if (!selectedId) return
     setChecklistError(null)
     const body: Record<string, unknown> = { item_id: itemId, result }
     if (notes !== undefined) body.notes = notes
+    if (options?.secondPersonOverride) body.second_person_override = true
     const response = await apiFetch<void>(`/api/admin/intake/${selectedId}/checklist`, {
       method: 'PATCH',
       body,

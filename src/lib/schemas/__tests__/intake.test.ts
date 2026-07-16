@@ -214,6 +214,22 @@ describe('ChecklistUpdateSchema', () => {
     const result = ChecklistUpdateSchema.safeParse({ item_id: 'check-screen', result: 'pass' })
     if (result.success) expect(result.data.notes).toBe('')
   })
+
+  it('requires a reason of at least 10 characters for a second-person override', () => {
+    expect(ChecklistUpdateSchema.safeParse({
+      item_id: 'final_qa',
+      result: 'pass',
+      second_person_override: true,
+      notes: 'zu kurz',
+    }).success).toBe(false)
+
+    expect(ChecklistUpdateSchema.safeParse({
+      item_id: 'final_qa',
+      result: 'pass',
+      second_person_override: true,
+      notes: 'allein im Dienst',
+    }).success).toBe(true)
+  })
 })
 
 // ============================================================================

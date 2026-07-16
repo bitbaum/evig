@@ -5,18 +5,22 @@ import { Save, Loader2, Package, PackageCheck } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/config/routes'
+import { requiresQualityControl } from '@/config/intake-checklist'
 
 interface Props {
   isEditMode: boolean
   /** Physische Annahme — single "Gerät erfassen" action into the pipeline. */
   isAnnahmeMode?: boolean
   isLoading: boolean
+  /** Direct shop publication is only offered for a classified non-QC item. */
+  category?: string
   // SyntheticEvent — both <form onSubmit> and inline buttons need to invoke this
   onSubmit: (e: React.SyntheticEvent, action: 'draft' | 'erfassen' | 'publish') => void
 }
 
-export function ErfassungSubmitBar({ isEditMode, isAnnahmeMode = false, isLoading, onSubmit }: Props) {
+export function ErfassungSubmitBar({ isEditMode, isAnnahmeMode = false, isLoading, category = '', onSubmit }: Props) {
   const t = useTranslations('components.erfassung.submitBar')
+  const canPublishDirectly = Boolean(category) && !requiresQualityControl(category)
 
   // Spinner replaces the ICON, never the label — three anonymous spinning
   // pills told the user nothing about what was happening.
@@ -98,14 +102,16 @@ export function ErfassungSubmitBar({ isEditMode, isAnnahmeMode = false, isLoadin
                 {iconOrSpinner(Package)} {t('capture')}
               </Button>
 
-              <Button
-                type="button"
-                onClick={(e) => onSubmit(e, 'publish')}
-                disabled={isLoading}
-                className="gap-2 px-5 py-3"
-              >
-                {iconOrSpinner(Package)} {t('captureAndShop')}
-              </Button>
+              {canPublishDirectly && (
+                <Button
+                  type="button"
+                  onClick={(e) => onSubmit(e, 'publish')}
+                  disabled={isLoading}
+                  className="gap-2 px-5 py-3"
+                >
+                  {iconOrSpinner(Package)} {t('captureAndShop')}
+                </Button>
+              )}
             </>
           )}
         </div>
@@ -152,15 +158,17 @@ export function ErfassungSubmitBar({ isEditMode, isAnnahmeMode = false, isLoadin
               <span>{t('capture')}</span>
             </Button>
 
-            <Button
-              type="button"
-              onClick={(e) => onSubmit(e, 'publish')}
-              disabled={isLoading}
-              className="flex-1 gap-2 py-4 rounded-xl touch-manipulation min-h-[52px]"
-            >
-              {iconOrSpinner(Package)}
-              <span>{t('captureAndShopShort')}</span>
-            </Button>
+            {canPublishDirectly && (
+              <Button
+                type="button"
+                onClick={(e) => onSubmit(e, 'publish')}
+                disabled={isLoading}
+                className="flex-1 gap-2 py-4 rounded-xl touch-manipulation min-h-[52px]"
+              >
+                {iconOrSpinner(Package)}
+                <span>{t('captureAndShopShort')}</span>
+              </Button>
+            )}
           </div>
         )}
       </div>

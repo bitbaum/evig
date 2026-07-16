@@ -10293,6 +10293,32 @@
     "intake": {
       "pageTitle": "Geräte-Eingang",
       "pageDescription": "Alle erfassten Geräte: Status, Checkliste und Publikation",
+      "quickCapture": {
+        "title": "Gerät sofort aufnehmen",
+        "description": "Hersteller, Modell, Enter — den Rest ergänzt ihr später an der Werkbank.",
+        "close": "Zur Pipeline",
+        "brand": "Hersteller",
+        "brandPlaceholder": "Dell",
+        "productName": "Modell / Produkt",
+        "productNamePlaceholder": "Latitude 7480",
+        "submit": "Aufnehmen",
+        "saving": "Wird aufgenommen…",
+        "keyboardHint": "Tastatur: Hersteller eingeben → Tab → Modell eingeben → Enter",
+        "details": "Stufe, Kategorie oder Spende anpassen",
+        "tier": "Verarbeitungsstufe",
+        "category": "Kategorie",
+        "categoryLater": "Später festlegen",
+        "condition": "Zustand",
+        "donation": "Dies ist eine Spende",
+        "donorName": "Name Spender:in",
+        "donorEmail": "E-Mail",
+        "donorNotes": "Notizen",
+        "created": "{itemUuid} aufgenommen — bereit für das nächste Gerät.",
+        "printLabel": "Etikett drucken",
+        "openPipeline": "Pipeline ansehen",
+        "fullCapture": "Vollständige Erfassung mit Foto, KI und Produktdetails",
+        "saveFailed": "Gerät konnte nicht aufgenommen werden"
+      },
       "createForm": {
         "title": "Neues Gerät erfassen",
         "tierLabel": "Verarbeitungsstufe",
@@ -10422,6 +10448,15 @@
           "inProgress": "In Bearbeitung",
           "failed": "Fehlgeschlagen"
         },
+        "board": {
+          "in_progress": "In Prüfung",
+          "failed": "Blockiert",
+          "ready": "Bereit",
+          "published": "Im Shop",
+          "empty": "Keine Geräte",
+          "noCategory": "Kategorie noch offen",
+          "ageDays": "{count} T."
+        },
         "donationYes": "Ja",
         "hero": {
           "kpis": {
@@ -10468,6 +10503,7 @@
         "failNoteRequired": "Begründung erforderlich — was genau ist fehlgeschlagen?",
         "saveFail": "Als fehlgeschlagen markieren",
         "confirmNoteHint": "Vier-Augen-Prinzip: Als zweite Person direkt bestätigen. Allein im Dienst? Begründung angeben.",
+        "overrideSecondPerson": "Ausnahme: Ich bin allein im Dienst (Begründung mit mindestens 10 Zeichen erforderlich)",
         "confirmNotePlaceholder": "Optional als zweite Person — erforderlich bei Allein-Bestätigung, z.B. «allein im Dienst» …",
         "saveConfirm": "Qualitätskontrolle bestätigen"
       }
@@ -11012,12 +11048,12 @@
         },
         "intake": {
           "label": "Geräte-Eingang",
-          "description": "Alle erfassten Geräte: Status, Checkliste, Publikation"
+          "description": "Alle erfassten Geräte: Status, Checkliste, Publikation",
+          "shortLabel": "Geräte"
         },
         "erfassung": {
           "label": "Produkt aufnehmen",
-          "description": "Gerät annehmen (Checkliste/Spende) oder Produkt schnell erfassen",
-          "shortLabel": "Aufnehmen"
+          "description": "Gerät annehmen (Checkliste/Spende) oder Produkt schnell erfassen"
         },
         "marketplace": {
           "label": "Inserate",

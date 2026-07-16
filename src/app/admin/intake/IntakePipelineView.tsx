@@ -1,7 +1,7 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
-import { adminInteractive } from '@/lib/admin-ui'
 import {
   Plus, Search, Filter, Check, Package, Wrench, Send, AlertTriangle,
 } from 'lucide-react'
@@ -11,8 +11,6 @@ import { Input } from '@/components/ui/input'
 
 type IntakePipelineTranslator = ReturnType<typeof useTranslations>
 import {
-  INTAKE_TIER_LABELS,
-  INTAKE_TIER_ICONS,
   getIntakeTierOptions,
   QUICK_CAPTURE_TIER,
   QUICK_CAPTURE_LABEL,
@@ -21,11 +19,11 @@ import {
 import { KATEGORIEN } from '@/config/erfassung/categories'
 import { INTAKE_STATUS, INTAKE_STATUS_LABELS } from '@/config/intake-status'
 import { Pagination } from '@/components/ui/Pagination'
-import { formatDateShort } from '@/lib/date-formats'
 import type { PipelineItem } from './types'
-import { StatusBadge } from '@/components/ui/status-badge'
 import { IntakePipelineCards } from './IntakePipelineCards'
+import { IntakeKanban } from './IntakeKanban'
 import { AdminHeroStatus, type HeroTone, type HeroKpi, type HeroCta } from '@/components/admin/AdminHeroStatus'
+import { ROUTES } from '@/config/routes'
 
 interface IntakePipelineViewProps {
   items: PipelineItem[]
@@ -40,7 +38,6 @@ interface IntakePipelineViewProps {
   onStatusFilterChange: (v: string) => void
   onCategoryFilterChange: (v: string) => void
   onSearchFilterChange: (v: string) => void
-  onCreateNew: () => void
   onOpenDetail: (id: string) => void
   onPageChange: (offset: number) => void
 }
@@ -58,18 +55,19 @@ export function IntakePipelineView({
   onStatusFilterChange,
   onCategoryFilterChange,
   onSearchFilterChange,
-  onCreateNew,
   onOpenDetail,
   onPageChange,
 }: IntakePipelineViewProps) {
   const t = useTranslations('admin.intake.pipeline')
+  const rootRef = useRef<HTMLDivElement>(null)
+  useEffect(() => { rootRef.current?.setAttribute('data-intake-ready', 'true') }, [])
   return (
-    <div className="space-y-4">
-      <IntakeHero statusCounts={statusCounts} onStatusFilter={onStatusFilterChange} onCreateNew={onCreateNew} t={t} />
+    <div ref={rootRef} className="space-y-4" data-intake-ready="false">
+      <IntakeHero statusCounts={statusCounts} onStatusFilter={onStatusFilterChange} t={t} />
 
       {/* Filters + Actions */}
       <div className="flex flex-wrap gap-2 items-center">
-        <Button onClick={onCreateNew} variant="primary" size="sm">
+        <Button href={ROUTES.admin.intakeCapture} target="_self" variant="primary" size="sm">
           <Plus className="w-4 h-4" /> {t('newDevice')}
         </Button>
 
@@ -123,7 +121,7 @@ export function IntakePipelineView({
         </div>
       </div>
 
-      {/* Table */}
+      {/* Stage board */}
       {loading ? (
         <div className="text-center py-8 text-text-tertiary">{t('loading')}</div>
       ) : items.length === 0 ? (
@@ -131,9 +129,10 @@ export function IntakePipelineView({
           <Package className="w-12 h-12 mx-auto text-text-muted mb-3" />
           <p className="text-text-tertiary mb-2">{t('empty')}</p>
           <Button
+            href={ROUTES.admin.intakeCapture}
+            target="_self"
             variant="ghost"
             size="sm"
-            onClick={onCreateNew}
             className="text-action hover:underline text-sm"
           >
             {t('createFirst')}
@@ -146,95 +145,13 @@ export function IntakePipelineView({
             <IntakePipelineCards items={items} onOpenDetail={onOpenDetail} />
           </div>
 
-          {/* Desktop: dense table */}
-          <div className="hidden md:block overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b text-left text-text-tertiary">
-                  <th className="pb-2 font-medium">{t('columns.uuid')}</th>
-                  <th className="pb-2 font-medium">{t('columns.device')}</th>
-                  <th className="pb-2 font-medium">{t('columns.tier')}</th>
-                  <th className="pb-2 font-medium">{t('columns.checklist')}</th>
-                  <th className="pb-2 font-medium">{t('columns.status')}</th>
-                  <th className="pb-2 font-medium">{t('columns.donation')}</th>
-                  <th className="pb-2 font-medium">{t('columns.date')}</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y">
-                {items.map((item) => {
-                  const progress = item.checklist_progress
-                  return (
-                    <tr
-                      key={item.id}
-                      className={`${adminInteractive.rowHover} cursor-pointer`}
-                      onClick={() => onOpenDetail(item.id)}
-                    >
-                      <td className="py-2.5 font-mono text-xs text-text-tertiary">{item.item_uuid}</td>
-                      <td className="py-2.5">
-                        <div className="font-medium">{item.brand} {item.product_name}</div>
-                        <div className="text-xs text-text-tertiary">
-                          {KATEGORIEN.find(k => k.value === item.category)?.label || '-'}
-                        </div>
-                      </td>
-                      <td className="py-2.5">
-                        <span className="inline-flex items-center gap-1 text-xs">
-                          {item.intake_tier
-                            ? <>{INTAKE_TIER_ICONS[item.intake_tier]} {INTAKE_TIER_LABELS[item.intake_tier]}</>
-                            : <>{QUICK_CAPTURE_ICON} {QUICK_CAPTURE_LABEL}</>}
-                        </span>
-                      </td>
-                      <td className="py-2.5">
-                        {item.intake_tier ? (
-                          <div className="flex items-center gap-2">
-                            <div className="w-20 h-2 bg-surface-overlay rounded-full overflow-hidden">
-                              <div
-                                className={`h-full rounded-full ${
-                                  item.checklist_failed ? 'bg-error-500' :
-                                  progress.percentage === 100 ? 'bg-action' :
-                                  progress.percentage > 50 ? 'bg-warning-500' : 'bg-error-400'
-                                }`}
-                                style={{ width: `${progress.percentage}%` }}
-                              />
-                            </div>
-                            <span className="text-xs text-text-tertiary">
-                              {progress.requiredCompleted}/{progress.requiredTotal}
-                            </span>
-                          </div>
-                        ) : (
-                          <span className="text-xs text-text-muted">—</span>
-                        )}
-                      </td>
-                      <td className="py-2.5">
-                        {item.marketplace_status === INTAKE_STATUS.PUBLISHED ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-action-muted text-action">
-                            <Check className="w-3 h-3" /> {t('status.published')}
-                          </span>
-                        ) : item.checklist_failed ? (
-                          <StatusBadge variant="error">{t('status.failed')}</StatusBadge>
-                        ) : item.checklist_complete ? (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-action-muted text-action">
-                            {t('status.ready')}
-                          </span>
-                        ) : (
-                          <StatusBadge variant="warning">{t('status.inProgress')}</StatusBadge>
-                        )}
-                      </td>
-                      <td className="py-2.5">
-                        {item.source_donation_id ? (
-                          <span className="text-xs text-action">{item.donor_name || t('donationYes')}</span>
-                        ) : (
-                          <span className="text-xs text-text-muted">-</span>
-                        )}
-                      </td>
-                      <td className="py-2.5 text-xs text-text-tertiary">
-                        {formatDateShort(item.created_at)}
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
+          <IntakeKanban
+            items={items}
+            counts={statusCounts}
+            statusFilter={statusFilter}
+            onStatusFilterChange={onStatusFilterChange}
+            onOpenDetail={onOpenDetail}
+          />
 
           <Pagination
             currentPage={Math.floor(pagination.offset / pagination.limit) + 1}
@@ -268,7 +185,6 @@ interface IntakeStatusCounts {
 export function deriveIntakeHeroState(
   counts: IntakeStatusCounts,
   onStatusFilter: (v: string) => void,
-  onCreateNew: () => void,
   t: IntakePipelineTranslator,
 ): {
   tone: HeroTone
@@ -331,7 +247,6 @@ export function deriveIntakeHeroState(
       icon: Package,
       headline: t('hero.empty.headline'),
       sub: t('hero.empty.sub'),
-      cta: { label: t('hero.empty.cta'), onClick: onCreateNew },
       kpis,
     }
   }
@@ -347,15 +262,13 @@ export function deriveIntakeHeroState(
 function IntakeHero({
   statusCounts,
   onStatusFilter,
-  onCreateNew,
   t,
 }: {
   statusCounts: IntakeStatusCounts
   onStatusFilter: (v: string) => void
-  onCreateNew: () => void
   t: IntakePipelineTranslator
 }) {
-  const s = deriveIntakeHeroState(statusCounts, onStatusFilter, onCreateNew, t)
+  const s = deriveIntakeHeroState(statusCounts, onStatusFilter, t)
   return (
     <AdminHeroStatus
       tone={s.tone}
