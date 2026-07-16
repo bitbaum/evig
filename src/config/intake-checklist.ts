@@ -545,6 +545,38 @@ export function hasChecklistFailure(
 }
 
 /**
+ * Checklist categories whose passed items are shown to BUYERS on the
+ * marketplace listing ("Geprüft von Revamp-IT"). Intake bookkeeping
+ * (visual inspection, condition grading) and listing prep (photos, price)
+ * are staff process steps, not buyer-relevant test results.
+ */
+export const BUYER_VISIBLE_CHECK_CATEGORIES: ChecklistCategory[] = [
+  CHECKLIST_CATEGORIES.TESTING,
+  CHECKLIST_CATEGORIES.SECURITY,
+  CHECKLIST_CATEGORIES.REFURBISHMENT,
+  CHECKLIST_CATEGORIES.QUALITY,
+]
+
+/**
+ * The QC results a buyer should see for a published device: every PASSED
+ * item from the buyer-visible categories, in the shape the `listings.
+ * condition_checks` column already uses ({key,label,checked} — same contract
+ * as P2P seller-declared checks). Labels are snapshotted at publish time on
+ * purpose: the listing is a historical record of what was checked then, even
+ * if the checklist config evolves later.
+ */
+export function getBuyerVisibleChecks(
+  state: ChecklistState,
+  tier: IntakeTier,
+  deviceCategory?: string | null,
+): Array<{ key: string; label: string; checked: boolean }> {
+  return getChecklistForDevice(tier, deviceCategory)
+    .filter(item => BUYER_VISIBLE_CHECK_CATEGORIES.includes(item.category))
+    .filter(item => getItemResult(state[item.id]) === CHECKLIST_RESULTS.PASS)
+    .map(item => ({ key: item.id, label: item.label, checked: true }))
+}
+
+/**
  * Whether devices of a main category must pass the intake checklist before
  * they may be published. Derived from the checklist itself (SSOT): a category
  * requires QC when any required testing or data-security item targets it.

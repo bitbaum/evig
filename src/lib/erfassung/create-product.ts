@@ -325,7 +325,7 @@ export async function createErfassungProduct(
   // intake checklist gates publication.
   let listingId: string | null = null
   if (action === 'publish' && !options?.checklistGated && !qcRequired) {
-    listingId = await publishRevampitListing(tx, inventoryItemId)
+    listingId = await publishRevampitListing(tx, inventoryItemId, { verifiedBy: userId })
   }
 
   return { productId, inventoryId: inventoryItemId, itemUUID, imageUrl, donationId, listingId, qcRequired }

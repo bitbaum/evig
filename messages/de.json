@@ -871,7 +871,8 @@
       },
       "zoomOpen": "Vergrössern",
       "zoomClose": "Schliessen",
-      "photoCount": "{count} Fotos"
+      "photoCount": "{count} Fotos",
+      "performedChecks": "Durchgeführte Prüfungen"
     },
     "listing_actions": {
       "payment_info": "Direkte Zahlung zwischen Käufer und Verkäufer",

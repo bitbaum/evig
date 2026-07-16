@@ -3168,7 +3168,8 @@
       },
       "zoomOpen": "拡大",
       "zoomClose": "閉じる",
-      "photoCount": "{count}枚の写真"
+      "photoCount": "{count}枚の写真",
+      "performedChecks": "実施した検査"
     },
     "listing_actions": {
       "payment_info": "購入者と販売者の間の直接支払い",

@@ -843,7 +843,8 @@
       },
       "zoomOpen": "Zoom in",
       "zoomClose": "Close",
-      "photoCount": "{count} photos"
+      "photoCount": "{count} photos",
+      "performedChecks": "Checks performed"
     },
     "empty": "No listings found",
     "conditions": {

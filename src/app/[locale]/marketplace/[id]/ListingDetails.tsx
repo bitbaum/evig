@@ -59,7 +59,7 @@ export function ListingDetails({ listing, isVerified }: ListingDetailsProps) {
         </div>
       )}
 
-      {/* Verification Details */}
+      {/* Verification Details — incl. the QC checks performed at intake */}
       {isVerified && (
         <div className={`mt-6 rounded-xl p-6 border ${VERIFICATION_CONFIG.badge.borderColor} bg-action-muted`}>
           <Heading level={2} className="text-lg text-text-primary mb-2 flex items-center gap-2">
@@ -73,6 +73,21 @@ export function ListingDetails({ listing, isVerified }: ListingDetailsProps) {
             <p className="text-sm text-text-secondary mt-2 whitespace-pre-line">
               {listing.verification_notes}
             </p>
+          )}
+          {(listing.condition_checks?.filter(c => c.checked).length ?? 0) > 0 && (
+            <>
+              <p className="text-sm font-medium text-text-primary mt-3 mb-1.5">
+                {t('performedChecks')}
+              </p>
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1">
+                {listing.condition_checks!.filter(c => c.checked).map(check => (
+                  <li key={check.key} className="flex items-start gap-2 text-sm text-text-secondary">
+                    <span className="text-action mt-0.5" aria-hidden="true">&#10003;</span>
+                    {check.label}
+                  </li>
+                ))}
+              </ul>
+            </>
           )}
         </div>
       )}

@@ -3168,7 +3168,8 @@
       },
       "zoomOpen": "Ingrandisci",
       "zoomClose": "Chiudi",
-      "photoCount": "{count} foto"
+      "photoCount": "{count} foto",
+      "performedChecks": "Controlli effettuati"
     },
     "listing_actions": {
       "payment_info": "Pagamento diretto tra acquirente e venditore",

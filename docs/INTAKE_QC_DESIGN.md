@@ -1,7 +1,7 @@
 # Intake & Quality Control — System Design
 
-**Status**: Phase 1 shipped (checklist verdicts, failed state, QC publish gate) · Phases 2–4 planned
-**Last Updated**: 2026-07-15
+**Status**: Phases 1 + 3 shipped (verdicts, failed state, QC gate, buyer-facing test results) · Phases 2 + 4 planned
+**Last Updated**: 2026-07-16
 
 ---
 
@@ -88,6 +88,7 @@ Enforced at every publish path:
 |---|---|
 | `createErfassungProduct` with `action='publish'` | QC-required category without tier → intercepted: device gets `refurbish` tier + initialized checklist, stays `draft`, lands in the pipeline. Response carries `qc_required: true`; the erfassung success screen says so honestly. |
 | `POST /api/admin/intake/[id]/publish` | 400 `INTAKE_QC_REQUIRED` for tier-NULL devices of QC categories; 400 `INTAKE_CHECKLIST_FAILED` when a required item failed; 400 `INTAKE_CHECKLIST_INCOMPLETE` otherwise unfinished. |
+| `publishProduct` (admin inventory PATCH) | Same three gates, thrown as `QcGateError` → 400; `marketplace_status` is only flipped after the gate passes. |
 | Detail view (tier-NULL quick capture, QC category) | Publish box replaced by a "Prüfung starten" action (assigns `refurbish` tier via `PATCH`). |
 
 ### Files
@@ -112,15 +113,30 @@ erfassung flow already has a printable factsheet. Add a small QR label
 time; scanning at any workstation opens the device's checklist. Highest-leverage
 workshop UX: no searching, no mismatched devices.
 
-### Phase 3 — buyer-facing test results
+### Phase 3 — buyer-facing test results (SHIPPED)
 
-`listings.verified_at/verified_by` and `listings.condition_checks` (jsonb,
-migration 043) exist but are disconnected from intake. On
-`publishRevampitListing`, copy the passed checklist verdicts into
-`condition_checks` and set `verified_at`. The marketplace listing then shows
-"✓ Geprüft: Akku-Test bestanden, Daten gelöscht (NIST 800-88), Linux
-installiert" — the buyer-visible payoff of the whole pipeline and a real
-differentiator vs. untested P2P listings.
+`publishRevampitListing` now attaches QC provenance when the device went
+through the pipeline (tier set + checklist complete):
+
+- **`condition_checks`**: every PASSED item from the buyer-visible categories
+  (`BUYER_VISIBLE_CHECK_CATEGORIES` = testing, security, refurbishment,
+  quality — intake bookkeeping and listing prep are excluded), derived via
+  `getBuyerVisibleChecks()` in the checklist SSOT. Same `{key,label,checked}`
+  shape the P2P sell form writes — one column contract, two writers. Labels are
+  snapshotted at publish time on purpose: the listing is a historical record.
+- **`verified_at` / `verified_by`**: set automatically (publisher = verifier),
+  lighting up the existing "Geprüft von Revamp-IT" badge; the Meilisearch doc
+  indexes `is_verified` correctly (incl. the `verified_only` filter). A
+  re-publish never *clears* a manual verification.
+- **Listing detail page**: the verification box lists the performed checks
+  ("Durchgeführte Prüfungen" + ✓ items) — works for QC provenance and any
+  future verified P2P checks alike.
+
+Quick-published accessories (no checklist) get no stamp — verification means
+something precisely because it is not handed out for free. Listings published
+before this change carry no checks; they gain them on their next re-publish
+(no backfill: the historical checklists exist on `inventory_items`, so a
+backfill script is possible later if wanted).
 
 ### Phase 4 — two-person QA + board view
 

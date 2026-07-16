@@ -3168,7 +3168,8 @@
       },
       "zoomOpen": "확대",
       "zoomClose": "닫기",
-      "photoCount": "사진 {count}장"
+      "photoCount": "사진 {count}장",
+      "performedChecks": "수행된 검사"
     },
     "listing_actions": {
       "payment_info": "구매자와 판매자 간 직접 결제",

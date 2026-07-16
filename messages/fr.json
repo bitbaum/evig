@@ -843,7 +843,8 @@
       },
       "zoomOpen": "Agrandir",
       "zoomClose": "Fermer",
-      "photoCount": "{count} photos"
+      "photoCount": "{count} photos",
+      "performedChecks": "Contrôles effectués"
     },
     "empty": "Aucune annonce trouvée",
     "conditions": {

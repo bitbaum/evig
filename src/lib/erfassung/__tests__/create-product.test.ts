@@ -266,7 +266,7 @@ describe('createErfassungProduct — action/status', () => {
     // listing is created by publishRevampitListing (mocked here).
     expect(mockTxInsert).toHaveBeenCalledTimes(2)
     expect(mockPublishRevampitListing).toHaveBeenCalledTimes(1)
-    expect(mockPublishRevampitListing).toHaveBeenCalledWith(mockTx, 'inventory-1')
+    expect(mockPublishRevampitListing).toHaveBeenCalledWith(mockTx, 'inventory-1', { verifiedBy: 'user-1' })
     expect(result.productId).toBe('product-1')
   })
 

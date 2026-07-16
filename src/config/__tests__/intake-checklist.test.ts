@@ -17,6 +17,7 @@ import {
   isChecklistComplete,
   hasChecklistFailure,
   requiresQualityControl,
+  getBuyerVisibleChecks,
   getChecklistProgress,
   getItemResult,
   isItemDone,
@@ -350,6 +351,43 @@ describe('requiresQualityControl', () => {
   it('is false for missing category', () => {
     expect(requiresQualityControl(null)).toBe(false)
     expect(requiresQualityControl(undefined)).toBe(false)
+  })
+})
+
+// ─── getBuyerVisibleChecks ───────────────────────────────────────────────────
+
+describe('getBuyerVisibleChecks', () => {
+  const tier = INTAKE_TIERS.REFURBISH
+  const cat = '10'
+
+  it('returns passed testing/security/refurbishment/quality items in {key,label,checked} shape', () => {
+    const state = completeItems('power_test', 'data_wipe', 'cleaning', 'final_qa')
+    const checks = getBuyerVisibleChecks(state, tier, cat)
+    const keys = checks.map(c => c.key)
+    expect(keys).toEqual(expect.arrayContaining(['power_test', 'data_wipe', 'cleaning', 'final_qa']))
+    for (const c of checks) {
+      expect(c.checked).toBe(true)
+      expect(typeof c.label).toBe('string')
+      expect(c.label.length).toBeGreaterThan(0)
+    }
+  })
+
+  it('excludes intake bookkeeping and listing-prep items even when passed', () => {
+    const state = completeItems('visual_inspection', 'condition_graded', 'photos_taken', 'price_set')
+    expect(getBuyerVisibleChecks(state, tier, cat)).toEqual([])
+  })
+
+  it("excludes open, failed and 'n.a.' items", () => {
+    const state = {
+      ...itemsWithResult(CHECKLIST_RESULTS.FAIL, 'power_test'),
+      ...itemsWithResult(CHECKLIST_RESULTS.NA, 'battery_test'),
+      // ram_test left open
+    }
+    expect(getBuyerVisibleChecks(state, tier, cat)).toEqual([])
+  })
+
+  it('returns empty for empty state', () => {
+    expect(getBuyerVisibleChecks({}, tier, cat)).toEqual([])
   })
 })
 

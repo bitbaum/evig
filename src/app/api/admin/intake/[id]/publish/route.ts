@@ -113,6 +113,7 @@ export const POST = withAdmin<{ id: string }>('intake', async (request, session,
         priceChf: price_chf,
         title: listingTitle,
         description: listingDesc,
+        verifiedBy: session.user.id,
       })
     })
 

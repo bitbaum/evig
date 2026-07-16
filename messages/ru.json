@@ -861,7 +861,8 @@
       },
       "zoomOpen": "Увеличить",
       "zoomClose": "Закрыть",
-      "photoCount": "{count} фото"
+      "photoCount": "{count} фото",
+      "performedChecks": "Выполненные проверки"
     },
     "listing_actions": {
       "payment_info": "Прямая оплата между покупателем и продавцом",
