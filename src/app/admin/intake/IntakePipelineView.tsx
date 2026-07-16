@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl'
 import { adminInteractive } from '@/lib/admin-ui'
 import {
-  Plus, Search, Filter, Check, Package, Wrench, Send,
+  Plus, Search, Filter, Check, Package, Wrench, Send, AlertTriangle,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
@@ -30,7 +30,7 @@ interface IntakePipelineViewProps {
   items: PipelineItem[]
   loading: boolean
   pagination: { total: number; limit: number; offset: number; hasMore: boolean }
-  statusCounts: { inProgress: number; ready: number; published: number; total: number }
+  statusCounts: { inProgress: number; failed: number; ready: number; published: number; total: number }
   tierFilter: string
   statusFilter: string
   categoryFilter: string
@@ -201,6 +201,8 @@ export function IntakePipelineView({
                           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-action-muted text-action">
                             <Check className="w-3 h-3" /> {t('status.published')}
                           </span>
+                        ) : item.checklist_failed ? (
+                          <StatusBadge variant="error">{t('status.failed')}</StatusBadge>
                         ) : item.checklist_complete ? (
                           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-action-muted text-action">
                             {t('status.ready')}
@@ -240,14 +242,16 @@ export function IntakePipelineView({
 }
 
 // ─── IntakeHero ─────────────────────────────────────────────────────────────
-// Severity ladder: ready-to-publish > in-progress > empty > healthy.
-// Why "ready" beats "inProgress": work-in-progress is doing fine on its
-// own. "Ready" means a device is finished but stuck in the pipeline —
-// the admin's bottleneck to clear.
+// Severity ladder: failed-QC > ready-to-publish > in-progress > empty > healthy.
+// Why "failed" beats everything: a failed required test means a device is
+// blocked until someone decides (fix & retest, or re-tier) — pure dead
+// stock until then. "Ready" beats "inProgress": work-in-progress is doing
+// fine on its own; ready means finished but stuck in the pipeline.
 // ─────────────────────────────────────────────────────────────────────────────
 
 interface IntakeStatusCounts {
   inProgress: number
+  failed: number
   ready: number
   published: number
   total: number
@@ -269,10 +273,24 @@ export function deriveIntakeHeroState(
   const kpis: HeroKpi[] = [
     { label: t('hero.kpis.total'), value: counts.total },
     { label: t('hero.kpis.inProgress'), value: counts.inProgress },
+    { label: t('hero.kpis.failed'), value: counts.failed },
     { label: t('hero.kpis.ready'), value: counts.ready },
     { label: t('hero.kpis.published'), value: counts.published },
   ]
 
+  if (counts.failed > 0) {
+    return {
+      tone: 'urgent',
+      icon: AlertTriangle,
+      headline: t('hero.failed.headline', { count: counts.failed }),
+      sub: t('hero.failed.sub'),
+      cta: {
+        label: t('hero.failed.cta'),
+        onClick: () => onStatusFilter(INTAKE_STATUS.FAILED),
+      },
+      kpis,
+    }
+  }
   if (counts.ready > 0) {
     return {
       tone: 'attention',

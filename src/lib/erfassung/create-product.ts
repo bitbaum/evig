@@ -21,7 +21,14 @@ import {
   productImages,
 } from '@/db/schema/inventory'
 import { donations } from '@/db/schema/misc'
-import { getChecklistForDevice, type ChecklistState } from '@/config/intake-checklist'
+import {
+  getChecklistForDevice,
+  emptyChecklistItemState,
+  requiresQualityControl,
+  INTAKE_TIERS,
+  type ChecklistState,
+  type IntakeTier,
+} from '@/config/intake-checklist'
 import { DONATION_STATUSES } from '@/config/donations'
 import type { ErfassungPayload } from '@/types/erfassung'
 import type { PoolClient } from 'pg'
@@ -34,6 +41,12 @@ export interface CreateProductResult {
   donationId: string | null
   /** Marketplace listing id when the product was published immediately. */
   listingId: string | null
+  /**
+   * True when a requested direct-publish was intercepted by the QC gate:
+   * the device category requires the intake checklist, so the item landed
+   * in the pipeline (refurbish tier, draft) instead of going live.
+   */
+  qcRequired: boolean
 }
 
 /**
@@ -146,6 +159,18 @@ export async function createErfassungProduct(
   const productStatus = action === 'draft' ? PRODUCT_STATUS.PENDING_REVIEW : PRODUCT_STATUS.APPROVED
   const marketplaceStatus = action === 'publish' ? MARKETPLACE_STATUS.PUBLISHED : MARKETPLACE_STATUS.DRAFT
 
+  // QC gate: a direct-publish (Schnellerfassung) of a device category that
+  // requires the intake checklist may NOT go straight to the shop. It gets
+  // the refurbish tier (the sell path) and lands in the pipeline instead —
+  // the checklist then gates publication like any Physische Annahme item.
+  const qcRequired =
+    action === 'publish' &&
+    !options?.checklistGated &&
+    !options?.intakeTier &&
+    requiresQualityControl(payload.hauptkategorie)
+  const effectiveTier: IntakeTier | undefined =
+    options?.intakeTier ?? (qcRequired ? INTAKE_TIERS.REFURBISH : undefined)
+
   // 1. Insert into ai_extracted_products
   const [productRow] = await tx
     .insert(aiExtractedProducts)
@@ -200,23 +225,20 @@ export async function createErfassungProduct(
     donationId = donationRow.id
   }
 
-  // 3. Initialize intake checklist if tier provided
+  // 3. Initialize intake checklist if a tier applies (explicit or QC-gated)
   let intakeChecklist: ChecklistState | undefined
-  if (options?.intakeTier) {
-    const checklistItems = getChecklistForDevice(options.intakeTier, payload.hauptkategorie)
+  if (effectiveTier) {
+    const checklistItems = getChecklistForDevice(effectiveTier, payload.hauptkategorie)
     intakeChecklist = {}
     for (const item of checklistItems) {
-      intakeChecklist[item.id] = {
-        completed: false,
-        completedBy: null,
-        completedAt: null,
-        notes: '',
-      }
+      intakeChecklist[item.id] = emptyChecklistItemState()
     }
   }
 
-  // 4. Determine final marketplace status (checklist gate overrides publish)
-  const finalMarketplaceStatus = options?.checklistGated ? MARKETPLACE_STATUS.DRAFT : marketplaceStatus
+  // 4. Determine final marketplace status (checklist/QC gate overrides publish)
+  const finalMarketplaceStatus = options?.checklistGated || qcRequired
+    ? MARKETPLACE_STATUS.DRAFT
+    : marketplaceStatus
 
   // 5. Insert into inventory_items
   const [inventoryRow] = await tx
@@ -231,8 +253,8 @@ export async function createErfassungProduct(
       sellingPriceChf: String(payload.verkaufspreis),
       marketplaceStatus: finalMarketplaceStatus,
       // Intake-specific fields (null/undefined for non-intake)
-      ...(options?.intakeTier ? {
-        intakeTier: options.intakeTier,
+      ...(effectiveTier ? {
+        intakeTier: effectiveTier,
         intakeChecklist: intakeChecklist,
         checklistComplete: false,
         sourceDonationId: donationId,
@@ -302,9 +324,9 @@ export async function createErfassungProduct(
   // the listings row is its public, buyable marketplace face. Skipped while the
   // intake checklist gates publication.
   let listingId: string | null = null
-  if (action === 'publish' && !options?.checklistGated) {
+  if (action === 'publish' && !options?.checklistGated && !qcRequired) {
     listingId = await publishRevampitListing(tx, inventoryItemId)
   }
 
-  return { productId, inventoryId: inventoryItemId, itemUUID, imageUrl, donationId, listingId }
+  return { productId, inventoryId: inventoryItemId, itemUUID, imageUrl, donationId, listingId, qcRequired }
 }

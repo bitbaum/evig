@@ -14,7 +14,7 @@ import { ERROR_MESSAGES } from '@/config/error-messages'
 import { validateBody } from '@/lib/schemas'
 import { IntakePublishSchema } from '@/lib/schemas/intake'
 import { INTAKE_STATUS } from '@/config/intake-status'
-import { isChecklistComplete } from '@/config/intake-checklist'
+import { isChecklistComplete, hasChecklistFailure, requiresQualityControl } from '@/config/intake-checklist'
 import type { ChecklistState, IntakeTier } from '@/config/intake-checklist'
 import { logger } from '@/lib/logger'
 import { publishRevampitListing } from '@/lib/marketplace/publish-revampit-listing'
@@ -66,10 +66,21 @@ export const POST = withAdmin<{ id: string }>('intake', async (request, session,
       return apiBadRequest(ERROR_MESSAGES.INTAKE_ALREADY_PUBLISHED)
     }
 
-    // Gate: checklist complete? Quick-captured devices (tier NULL) have no
-    // checklist and are publishable immediately.
+    // Gate: quick-captured devices (tier NULL) skip the checklist ONLY for
+    // categories that don't require QC (accessories). A laptop captured via
+    // Schnellerfassung must go through the checklist before it can be sold.
     const tier = row.intake_tier as IntakeTier | null
     const checklist = (row.intake_checklist || {}) as ChecklistState
+    if (!tier && requiresQualityControl(row.category)) {
+      return apiBadRequest(ERROR_MESSAGES.INTAKE_QC_REQUIRED)
+    }
+
+    // Gate: a failed required item blocks publishing until fixed or re-tiered.
+    if (tier && hasChecklistFailure(checklist, tier, row.category)) {
+      return apiBadRequest(ERROR_MESSAGES.INTAKE_CHECKLIST_FAILED)
+    }
+
+    // Gate: all required checklist items must be done (pass or n.a.).
     if (tier && !isChecklistComplete(checklist, tier, row.category)) {
       return apiBadRequest(ERROR_MESSAGES.INTAKE_CHECKLIST_INCOMPLETE)
     }

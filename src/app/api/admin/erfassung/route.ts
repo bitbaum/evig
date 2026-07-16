@@ -69,12 +69,16 @@ export const POST = withAdmin('products', async (request, session) => {
       erfassen: 'Produkt erfasst',
       publish: 'Produkt erfasst und im Shop veröffentlicht',
     }
+    const message = result.qcRequired
+      ? 'Produkt erfasst — Qualitätskontrolle im Geräte-Eingang erforderlich'
+      : messages[action] || messages.draft
 
     logger.info('Product erfasst', {
       itemUUID: result.itemUUID,
       productId: result.productId,
       userId: session.user.id,
       action,
+      qcRequired: result.qcRequired,
     })
 
     return apiSuccess({
@@ -83,9 +87,10 @@ export const POST = withAdmin('products', async (request, session) => {
       inventory_id: result.inventoryId,
       listing_id: result.listingId,
       action,
-      published: action === 'publish',
+      published: result.listingId != null,
+      qc_required: result.qcRequired,
       image_url: result.imageUrl || null,
-      message: messages[action] || messages.draft,
+      message,
     })
 
   } catch (error) {

@@ -160,10 +160,12 @@ export const inventoryItems = pgTable('inventory_items', {
   // Added by 046: unified intake workflow
   // Values: 'refurbish', 'parts', 'recycle'. NULL = legacy item
   intakeTier: varchar('intake_tier', { length: 20 }),
-  // JSONB checklist state: { itemId: { completed, completedBy, completedAt, notes } }
+  // JSONB checklist state: { itemId: { result: 'pass'|'fail'|'na'|null, completedBy, completedAt, notes } }
   intakeChecklist: jsonb('intake_checklist').default({}),
-  // Derived flag: true when all required checklist items are completed. Gates marketplace publishing.
+  // Derived flag: true when all required checklist items are done (pass/na). Gates marketplace publishing.
   checklistComplete: boolean('checklist_complete').default(false),
+  // Added by 132: derived flag — true when any required checklist item has a 'fail' verdict.
+  checklistFailed: boolean('checklist_failed').notNull().default(false),
   // Link to donation record if this item came from a device donation
   sourceDonationId: uuid('source_donation_id'),
 

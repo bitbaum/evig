@@ -9480,7 +9480,9 @@
         "whereErfassen": "El dispositivo ahora es visible en la pipeline bajo «Listo» y puede publicarse desde allí.",
         "wherePublished": "El dispositivo está en línea en la tienda y listado en la pipeline bajo «Publicado».",
         "viewInShop": "Ver en la tienda",
-        "toDevice": "Abrir dispositivo en la pipeline"
+        "toDevice": "Abrir dispositivo en la pipeline",
+        "titleQcGated": "Registrado: se requiere control de calidad",
+        "whereQcGated": "Este dispositivo debe revisarse antes de la venta. Está en la entrada de dispositivos con una lista de control activa; una vez aprobado, puede publicarse."
       },
       "bulkSuccess": {
         "titlePartial": "Registrados parcialmente",
@@ -10302,6 +10304,17 @@
           "category": "Categoría",
           "price": "Precio",
           "captured": "Registrado"
+        },
+        "failedAlert": {
+          "heading": "Control fallido",
+          "body": "Al menos un punto obligatorio falló. Solucione el problema y vuelva a probar, o mueva el dispositivo a otro nivel (repuestos/reciclaje).",
+          "changeTierCta": "Cambiar nivel"
+        },
+        "qcGate": {
+          "heading": "Se requiere control de calidad",
+          "body": "Este dispositivo se registró de forma rápida, pero su categoría debe revisarse antes de la venta (pruebas, borrado de datos, limpieza). Inicie la revisión para activar la lista de control.",
+          "start": "Iniciar revisión",
+          "starting": "Iniciando…"
         }
       },
       "pipeline": {
@@ -10327,7 +10340,8 @@
         "status": {
           "published": "Publicado",
           "ready": "Listo",
-          "inProgress": "En proceso"
+          "inProgress": "En proceso",
+          "failed": "Fallido"
         },
         "donationYes": "Sí",
         "hero": {
@@ -10335,7 +10349,8 @@
             "total": "Total",
             "inProgress": "En proceso",
             "ready": "Listo",
-            "published": "Publicado"
+            "published": "Publicado",
+            "failed": "Fallidos"
           },
           "ready": {
             "headline": "{count, plural, one {# dispositivo} other {# dispositivos}} listo para publicar",
@@ -10355,17 +10370,24 @@
           "healthy": {
             "headline": "El flujo está en buen estado.",
             "sub": "{published} dispositivos publicados, nada pendiente de procesar."
+          },
+          "failed": {
+            "headline": "{count, plural, one {# dispositivo} other {# dispositivos}} con control fallido",
+            "sub": "Decidir: reparar y volver a probar, o cambiar de nivel (repuestos/reciclaje).",
+            "cta": "Mostrar fallidos"
           }
         }
       },
       "checklist": {
         "requiredMarker": "Punto obligatorio",
-        "completedAt": "Completado el {date}",
         "addNote": "Añadir nota",
         "editNote": "Editar nota",
         "notePlaceholder": "p. ej. prueba de estrés de CPU superada, máx. 75 °C …",
-        "ariaUncheck": "Deshacer {label}",
-        "ariaCheck": "Marcar {label}"
+        "failCount": "{count} fallidos",
+        "resultAt": "{result} el {date}",
+        "failNotePlaceholder": "¿Qué falló? p. ej. la batería solo dura 20 minutos…",
+        "failNoteRequired": "Se requiere justificación: ¿qué falló exactamente?",
+        "saveFail": "Marcar como fallido"
       }
     },
     "it-hilfe": {

@@ -160,6 +160,7 @@ function ErfassungContent() {
         inventoryId={form.savedInventoryId}
         action={form.savedAction}
         listingId={form.savedListingId}
+        qcRequired={form.savedQcRequired}
         onReset={form.handleReset}
       />
     )

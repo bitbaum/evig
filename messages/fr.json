@@ -9480,7 +9480,9 @@
         "whereErfassen": "L'appareil est maintenant visible dans le pipeline sous « Prêt » et peut y être publié.",
         "wherePublished": "L'appareil est en ligne dans le shop et listé dans le pipeline sous « Publié ».",
         "viewInShop": "Voir dans le shop",
-        "toDevice": "Ouvrir l'appareil dans le pipeline"
+        "toDevice": "Ouvrir l'appareil dans le pipeline",
+        "titleQcGated": "Saisi — contrôle qualité requis",
+        "whereQcGated": "Cet appareil doit être contrôlé avant la vente. Il se trouve dans l'entrée des appareils avec une checklist active — une fois validé, il peut être publié."
       },
       "bulkSuccess": {
         "titlePartial": "Partiellement saisi",
@@ -10255,6 +10257,17 @@
           "category": "Catégorie",
           "price": "Prix",
           "captured": "Saisi"
+        },
+        "failedAlert": {
+          "heading": "Contrôle échoué",
+          "body": "Au moins un point obligatoire a échoué. Corrigez le problème et retestez — ou déplacez l'appareil vers une autre filière (pièces/recyclage).",
+          "changeTierCta": "Changer de filière"
+        },
+        "qcGate": {
+          "heading": "Contrôle qualité requis",
+          "body": "Cet appareil a été saisi rapidement, mais sa catégorie doit être contrôlée avant la vente (tests, effacement des données, nettoyage). Démarrez le contrôle pour activer la checklist.",
+          "start": "Démarrer le contrôle",
+          "starting": "Démarrage…"
         }
       },
       "pipeline": {
@@ -10280,7 +10293,8 @@
         "status": {
           "published": "Publié",
           "ready": "Prêt",
-          "inProgress": "En cours"
+          "inProgress": "En cours",
+          "failed": "Échec"
         },
         "donationYes": "Oui",
         "hero": {
@@ -10288,7 +10302,8 @@
             "total": "Total",
             "inProgress": "En cours",
             "ready": "Prêts",
-            "published": "Publiés"
+            "published": "Publiés",
+            "failed": "Échecs"
           },
           "ready": {
             "headline": "{count, plural, one {# appareil} other {# appareils}} prêts à publier",
@@ -10308,17 +10323,24 @@
           "healthy": {
             "headline": "Le pipeline va bien.",
             "sub": "{published} appareils publiés, rien à traiter."
+          },
+          "failed": {
+            "headline": "{count, plural, one {# appareil} other {# appareils}} en échec de contrôle",
+            "sub": "Décider : réparer et retester, ou changer de filière (pièces/recyclage).",
+            "cta": "Afficher les échecs"
           }
         }
       },
       "checklist": {
         "requiredMarker": "Obligatoire",
-        "completedAt": "Terminé le {date}",
         "addNote": "Ajouter une note",
         "editNote": "Modifier la note",
         "notePlaceholder": "p.ex. Test de stress CPU réussi, max 75 °C …",
-        "ariaUncheck": "Annuler {label}",
-        "ariaCheck": "Cocher {label}"
+        "failCount": "{count} échoués",
+        "resultAt": "{result} le {date}",
+        "failNotePlaceholder": "Qu'est-ce qui a échoué ? p. ex. la batterie ne tient que 20 minutes…",
+        "failNoteRequired": "Justification requise — qu’est-ce qui a échoué exactement ?",
+        "saveFail": "Marquer comme échoué"
       }
     },
     "it-hilfe": {

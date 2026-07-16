@@ -117,6 +117,7 @@ jest.mock('@/config/error-messages', () => ({
 
 jest.mock('@/config/intake-checklist', () => ({
   isChecklistComplete: jest.fn().mockReturnValue(false),
+  hasChecklistFailure: jest.fn().mockReturnValue(false),
   getChecklistProgress: jest.fn().mockReturnValue({ completed: 0, total: 5 }),
 }))
 

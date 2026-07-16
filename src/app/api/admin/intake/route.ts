@@ -17,7 +17,7 @@ import { validateBody, validateQuery } from '@/lib/schemas'
 import { IntakeCreateSchema, IntakeQuerySchema } from '@/lib/schemas/intake'
 import { INTAKE_STATUS } from '@/config/intake-status'
 import { MARKETPLACE_STATUS, PRODUCT_STATUS } from '@/config/marketplace-status'
-import { isChecklistComplete, getChecklistProgress, QUICK_CAPTURE_TIER } from '@/config/intake-checklist'
+import { isChecklistComplete, hasChecklistFailure, getChecklistProgress, QUICK_CAPTURE_TIER } from '@/config/intake-checklist'
 import type { ChecklistState } from '@/config/intake-checklist'
 import { createErfassungProduct } from '@/lib/erfassung/create-product'
 import { logger } from '@/lib/logger'
@@ -119,11 +119,13 @@ export const GET = withAdmin('intake', async (request) => {
     //
     // Status buckets:
     //   in_progress — draft with an OPEN checklist (annahme items only)
+    //   failed      — draft with a failed required checklist item (fix or re-tier)
     //   ready       — draft that is publishable (checklist done, or none)
     //   published   — live in the shop
     const STATUS_PREDICATES: Record<string, SQL> = {
-      [INTAKE_STATUS.IN_PROGRESS]: sql`(ii.marketplace_status = ${MARKETPLACE_STATUS.DRAFT} AND ii.intake_tier IS NOT NULL AND ii.checklist_complete = false)`,
-      [INTAKE_STATUS.READY]: sql`(ii.marketplace_status = ${MARKETPLACE_STATUS.DRAFT} AND (ii.intake_tier IS NULL OR ii.checklist_complete = true))`,
+      [INTAKE_STATUS.IN_PROGRESS]: sql`(ii.marketplace_status = ${MARKETPLACE_STATUS.DRAFT} AND ii.intake_tier IS NOT NULL AND ii.checklist_complete = false AND ii.checklist_failed = false)`,
+      [INTAKE_STATUS.FAILED]: sql`(ii.marketplace_status = ${MARKETPLACE_STATUS.DRAFT} AND ii.checklist_failed = true)`,
+      [INTAKE_STATUS.READY]: sql`(ii.marketplace_status = ${MARKETPLACE_STATUS.DRAFT} AND (ii.intake_tier IS NULL OR ii.checklist_complete = true) AND ii.checklist_failed = false)`,
       [INTAKE_STATUS.PUBLISHED]: sql`(ii.marketplace_status = ${MARKETPLACE_STATUS.PUBLISHED})`,
     }
 
@@ -175,8 +177,8 @@ export const GET = withAdmin('intake', async (request) => {
       db.execute(sql`
         SELECT
           ii.id, ii.ai_product_id, ii.intake_tier, ii.intake_checklist,
-          ii.checklist_complete, ii.marketplace_status, ii.selling_price_chf,
-          ii.source_donation_id, ii.created_at,
+          ii.checklist_complete, ii.checklist_failed, ii.marketplace_status,
+          ii.selling_price_chf, ii.source_donation_id, ii.created_at,
           ap.item_uuid, ap.product_name, ap.brand, ap.condition,
           ap.category, ap.subcategory, ap.short_description,
           u.name as created_by_name,
@@ -199,6 +201,7 @@ export const GET = withAdmin('intake', async (request) => {
       db.execute(sql`
         SELECT
           COUNT(*) FILTER (WHERE ${STATUS_PREDICATES[INTAKE_STATUS.IN_PROGRESS]}) AS in_progress,
+          COUNT(*) FILTER (WHERE ${STATUS_PREDICATES[INTAKE_STATUS.FAILED]}) AS failed,
           COUNT(*) FILTER (WHERE ${STATUS_PREDICATES[INTAKE_STATUS.READY]}) AS ready,
           COUNT(*) FILTER (WHERE ${STATUS_PREDICATES[INTAKE_STATUS.PUBLISHED]}) AS published,
           COUNT(*) AS total_unfiltered
@@ -218,26 +221,28 @@ export const GET = withAdmin('intake', async (request) => {
       [key: string]: unknown
     }
     const NO_CHECKLIST_PROGRESS = {
-      completed: 0, total: 0, requiredCompleted: 0, requiredTotal: 0, percentage: 100,
+      completed: 0, total: 0, requiredCompleted: 0, requiredTotal: 0, failed: 0, percentage: 100,
     }
     const items = (itemsResult.rows as IntakeRow[]).map((row) => {
       if (!row.intake_tier) {
-        return { ...row, checklist_progress: NO_CHECKLIST_PROGRESS, checklist_complete: true }
+        return { ...row, checklist_progress: NO_CHECKLIST_PROGRESS, checklist_complete: true, checklist_failed: false }
       }
       const checklist = (row.intake_checklist || {}) as ChecklistState
       const tierVal = row.intake_tier as 'refurbish' | 'parts' | 'recycle'
       const cat = row.category
       const progress = getChecklistProgress(checklist, tierVal, cat)
       const complete = isChecklistComplete(checklist, tierVal, cat)
-      return { ...row, checklist_progress: progress, checklist_complete: complete }
+      const failed = hasChecklistFailure(checklist, tierVal, cat)
+      return { ...row, checklist_progress: progress, checklist_complete: complete, checklist_failed: failed }
     })
 
     const total = parseInt((countResult.rows[0] as { total: string })?.total || '0')
     const sc = statusCountsResult.rows[0] as {
-      in_progress: string; ready: string; published: string; total_unfiltered: string
+      in_progress: string; failed: string; ready: string; published: string; total_unfiltered: string
     } | undefined
     const statusCounts = {
       inProgress: parseInt(sc?.in_progress || '0'),
+      failed: parseInt(sc?.failed || '0'),
       ready: parseInt(sc?.ready || '0'),
       published: parseInt(sc?.published || '0'),
       total: parseInt(sc?.total_unfiltered || '0'),

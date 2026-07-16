@@ -78,6 +78,7 @@ jest.mock('@/config/intake-status', () => ({
 jest.mock('@/config/intake-checklist', () => ({
   INTAKE_TIERS: { REFURBISH: 'refurbish', PARTS: 'parts', RECYCLE: 'recycle' },
   getChecklistForDevice: jest.fn().mockReturnValue([{ id: 'photos', label: 'Fotos' }]),
+  emptyChecklistItemState: jest.fn(() => ({ result: null, completedBy: null, completedAt: null, notes: '' })),
 }))
 
 const mockValidateBody = jest.fn()

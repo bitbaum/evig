@@ -85,6 +85,8 @@ jest.mock('@/config/intake-checklist', () => ({
   getChecklistForDevice: jest.fn().mockReturnValue([]),
   getChecklistProgress: jest.fn().mockReturnValue({ completed: 0, total: 0 }),
   isChecklistComplete: jest.fn().mockReturnValue(false),
+  hasChecklistFailure: jest.fn().mockReturnValue(false),
+  normalizeChecklistItemState: jest.fn((s: unknown) => s ?? { result: null, completedBy: null, completedAt: null, notes: '' }),
   CHECKLIST_CATEGORY_LABELS: {},
 }))
 

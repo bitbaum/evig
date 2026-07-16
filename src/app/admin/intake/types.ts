@@ -1,10 +1,12 @@
-import type { IntakeTier, ChecklistState, ChecklistCategory } from '@/config/intake-checklist'
+import type { IntakeTier, ChecklistState, ChecklistCategory, ChecklistResult } from '@/config/intake-checklist'
 
 export interface ChecklistProgress {
   completed: number
   total: number
   requiredCompleted: number
   requiredTotal: number
+  /** Items with a 'fail' verdict. */
+  failed: number
   percentage: number
 }
 
@@ -22,6 +24,7 @@ export interface PipelineItem {
   intake_tier: IntakeTier | null
   intake_checklist: ChecklistState
   checklist_complete: boolean
+  checklist_failed: boolean
   checklist_progress: ChecklistProgress
   marketplace_status: string
   selling_price_chf: number | null
@@ -38,7 +41,7 @@ export interface ChecklistItemWithState {
   category: ChecklistCategory
   required: boolean
   state: {
-    completed: boolean
+    result: ChecklistResult | null
     completedBy: string | null
     completedAt: string | null
     notes: string
@@ -70,6 +73,7 @@ export interface DetailData {
   created_at: string
   created_by_name: string | null
   checklist_complete: boolean
+  checklist_failed: boolean
   checklist_progress: ChecklistProgress
   checklist_grouped: ChecklistGroup[]
   intake_events: import('@/lib/intake/timeline-types').StoredIntakeEvent[]

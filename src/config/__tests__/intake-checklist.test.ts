@@ -15,21 +15,32 @@ import {
   getChecklistForDevice,
   getChecklistGrouped,
   isChecklistComplete,
+  hasChecklistFailure,
+  requiresQualityControl,
   getChecklistProgress,
+  getItemResult,
+  isItemDone,
+  normalizeChecklistItemState,
   INTAKE_TIERS,
   CHECKLIST_ITEMS,
+  CHECKLIST_RESULTS,
 } from '@/config/intake-checklist'
-import type { ChecklistState } from '@/config/intake-checklist'
+import type { ChecklistState, ChecklistResult } from '@/config/intake-checklist'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-/** Build a ChecklistState where every given item ID is completed. */
-function completeItems(...ids: string[]): ChecklistState {
+/** Build a ChecklistState where every given item ID has the given verdict. */
+function itemsWithResult(result: ChecklistResult, ...ids: string[]): ChecklistState {
   const state: ChecklistState = {}
   for (const id of ids) {
-    state[id] = { completed: true, completedBy: 'test-user', completedAt: '2026-01-01T00:00:00Z', notes: '' }
+    state[id] = { result, completedBy: 'test-user', completedAt: '2026-01-01T00:00:00Z', notes: '' }
   }
   return state
+}
+
+/** Build a ChecklistState where every given item ID passed. */
+function completeItems(...ids: string[]): ChecklistState {
+  return itemsWithResult(CHECKLIST_RESULTS.PASS, ...ids)
 }
 
 /** Returns all required item IDs for a given tier + device category. */
@@ -260,13 +271,112 @@ describe('isChecklistComplete', () => {
     })
   })
 
-  it('completed: false on an item does not count it', () => {
+  it('an open (result: null) item does not count', () => {
     const ids = requiredIdsFor(INTAKE_TIERS.REFURBISH, '10')
     const state = completeItems(...ids)
-    // Overwrite the last item as not completed
+    // Overwrite the last item as still open
     const lastId = ids[ids.length - 1]
-    state[lastId] = { completed: false, completedBy: null, completedAt: null, notes: '' }
+    state[lastId] = { result: null, completedBy: null, completedAt: null, notes: '' }
     expect(isChecklistComplete(state, INTAKE_TIERS.REFURBISH, '10')).toBe(false)
+  })
+
+  it('a failed required item blocks completion', () => {
+    const ids = requiredIdsFor(INTAKE_TIERS.REFURBISH, '10')
+    const state = completeItems(...ids)
+    state[ids[0]] = { result: CHECKLIST_RESULTS.FAIL, completedBy: 'u', completedAt: '2026-01-01T00:00:00Z', notes: 'Akku defekt' }
+    expect(isChecklistComplete(state, INTAKE_TIERS.REFURBISH, '10')).toBe(false)
+  })
+
+  it("an 'n.a.' verdict satisfies a required item", () => {
+    const ids = requiredIdsFor(INTAKE_TIERS.REFURBISH, '10')
+    const state = completeItems(...ids.slice(1))
+    state[ids[0]] = { result: CHECKLIST_RESULTS.NA, completedBy: 'u', completedAt: '2026-01-01T00:00:00Z', notes: '' }
+    expect(isChecklistComplete(state, INTAKE_TIERS.REFURBISH, '10')).toBe(true)
+  })
+
+  it('legacy completed:true states (pre-migration snapshots) still count', () => {
+    const ids = requiredIdsFor(INTAKE_TIERS.PARTS)
+    const state: ChecklistState = {}
+    for (const id of ids) {
+      state[id] = { result: null, completed: true, completedBy: 'u', completedAt: '2026-01-01T00:00:00Z', notes: '' } as never
+    }
+    expect(isChecklistComplete(state, INTAKE_TIERS.PARTS)).toBe(true)
+  })
+})
+
+// ─── hasChecklistFailure ─────────────────────────────────────────────────────
+
+describe('hasChecklistFailure', () => {
+  const tier = INTAKE_TIERS.REFURBISH
+  const cat = '10'
+
+  it('returns false for empty state', () => {
+    expect(hasChecklistFailure({}, tier, cat)).toBe(false)
+  })
+
+  it('returns true when a required item failed', () => {
+    const state = itemsWithResult(CHECKLIST_RESULTS.FAIL, 'power_test')
+    expect(hasChecklistFailure(state, tier, cat)).toBe(true)
+  })
+
+  it('ignores failures on optional items', () => {
+    // wifi_test is optional for laptops
+    const state = itemsWithResult(CHECKLIST_RESULTS.FAIL, 'wifi_test')
+    expect(hasChecklistFailure(state, tier, cat)).toBe(false)
+  })
+
+  it('ignores failures on items not applicable to the device', () => {
+    // battery_test does not apply to desktops ('20')
+    const state = itemsWithResult(CHECKLIST_RESULTS.FAIL, 'battery_test')
+    expect(hasChecklistFailure(state, tier, '20')).toBe(false)
+  })
+})
+
+// ─── requiresQualityControl ──────────────────────────────────────────────────
+
+describe('requiresQualityControl', () => {
+  it('is true for device categories with required testing/security items', () => {
+    for (const cat of ['10', '20', '30', '40', '50', '60']) {
+      expect(requiresQualityControl(cat)).toBe(true)
+    }
+  })
+
+  it('is false for accessory categories (components, peripherals, networking)', () => {
+    for (const cat of ['70', '80', '90']) {
+      expect(requiresQualityControl(cat)).toBe(false)
+    }
+  })
+
+  it('is false for missing category', () => {
+    expect(requiresQualityControl(null)).toBe(false)
+    expect(requiresQualityControl(undefined)).toBe(false)
+  })
+})
+
+// ─── item-state helpers ──────────────────────────────────────────────────────
+
+describe('getItemResult / isItemDone / normalizeChecklistItemState', () => {
+  it('reads the stored verdict', () => {
+    expect(getItemResult({ result: 'fail', completedBy: 'u', completedAt: 'x', notes: 'n' })).toBe('fail')
+  })
+
+  it('maps legacy completed:true to pass', () => {
+    const legacy = { completed: true, completedBy: 'u', completedAt: 'x', notes: '' } as never
+    expect(getItemResult(legacy)).toBe(CHECKLIST_RESULTS.PASS)
+    expect(normalizeChecklistItemState(legacy).result).toBe(CHECKLIST_RESULTS.PASS)
+  })
+
+  it('undefined state is open and not done', () => {
+    expect(getItemResult(undefined)).toBeNull()
+    expect(isItemDone(undefined)).toBe(false)
+    expect(normalizeChecklistItemState(undefined)).toEqual({ result: null, completedBy: null, completedAt: null, notes: '' })
+  })
+
+  it('pass and na are done; fail is not', () => {
+    const base = { completedBy: 'u', completedAt: 'x', notes: '' }
+    expect(isItemDone({ ...base, result: 'pass' })).toBe(true)
+    expect(isItemDone({ ...base, result: 'na' })).toBe(true)
+    expect(isItemDone({ ...base, result: 'fail' })).toBe(false)
   })
 })
 
@@ -330,6 +440,16 @@ describe('getChecklistProgress', () => {
     expect(progress.requiredTotal).toBeGreaterThanOrEqual(0)
     expect(progress.percentage).toBeGreaterThanOrEqual(0)
     expect(progress.percentage).toBeLessThanOrEqual(100)
+  })
+
+  it('counts failed verdicts', () => {
+    const state = {
+      ...completeItems('visual_inspection'),
+      ...itemsWithResult(CHECKLIST_RESULTS.FAIL, 'power_test', 'wifi_test'),
+    }
+    const progress = getChecklistProgress(state, tier, cat)
+    expect(progress.failed).toBe(2)
+    expect(progress.completed).toBe(1) // fails are not "done"
   })
 
   it('total includes both required and optional items', () => {

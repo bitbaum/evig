@@ -82,7 +82,9 @@ jest.mock('@/lib/schemas/intake', () => ({
 jest.mock('@/config/intake-checklist', () => ({
   getChecklistForDevice: jest.fn().mockReturnValue([{ id: 'photos', label: 'Fotos', category: 'Aufnahme' }]),
   isChecklistComplete: jest.fn().mockReturnValue(false),
+  hasChecklistFailure: jest.fn().mockReturnValue(false),
   getChecklistProgress: jest.fn().mockReturnValue({ completed: 1, total: 1 }),
+  CHECKLIST_RESULT_LABELS: { pass: 'Bestanden', fail: 'Fehlgeschlagen', na: 'Nicht zutreffend' },
 }))
 
 const mockAppendIntakeEvent = jest.fn()
@@ -130,7 +132,7 @@ const MOCK_SESSION = {
 
 const MOCK_ROW = { id: 'inv-1', intakeTier: 'refurbish', intakeChecklist: {}, category: 'Laptop' }
 
-function makeRequest(body: Record<string, unknown> = { item_id: 'photos', completed: true }) {
+function makeRequest(body: Record<string, unknown> = { item_id: 'photos', result: 'pass' }) {
   return new NextRequest('http://localhost/api/admin/intake/inv-1/checklist', {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
@@ -157,12 +159,13 @@ beforeEach(() => {
 
   mockValidateBody.mockReturnValue({
     success: true,
-    data: { item_id: 'photos', completed: true },
+    data: { item_id: 'photos', result: 'pass', notes: '' },
   })
 
   const checklist = require('@/config/intake-checklist')
   checklist.getChecklistForDevice.mockReturnValue([{ id: 'photos', label: 'Fotos', category: 'Aufnahme' }])
   checklist.isChecklistComplete.mockReturnValue(false)
+  checklist.hasChecklistFailure.mockReturnValue(false)
   checklist.getChecklistProgress.mockReturnValue({ completed: 1, total: 1 })
 })
 
@@ -198,7 +201,7 @@ describe('PATCH /api/admin/intake/[id]/checklist — validation', () => {
   it('returns 400 when checklist item_id is not valid for this device', async () => {
     const checklist = require('@/config/intake-checklist')
     checklist.getChecklistForDevice.mockReturnValueOnce([]) // no applicable items
-    const response = await PATCH(makeRequest({ item_id: 'nonexistent', completed: true }), makeContext())
+    const response = await PATCH(makeRequest({ item_id: 'nonexistent', result: 'pass' }), makeContext())
     expect(response.status).toBe(400)
   })
 })

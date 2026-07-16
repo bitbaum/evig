@@ -1,7 +1,7 @@
 /**
  * Intake Checklist API
  *
- * PATCH /api/admin/intake/[id]/checklist — Toggle a checklist item
+ * PATCH /api/admin/intake/[id]/checklist — Set a verdict (pass/fail/na) on a checklist item
  */
 
 import { db } from '@/db'
@@ -15,7 +15,9 @@ import { ChecklistUpdateSchema } from '@/lib/schemas/intake'
 import {
   getChecklistForDevice,
   isChecklistComplete,
+  hasChecklistFailure,
   getChecklistProgress,
+  CHECKLIST_RESULT_LABELS,
 } from '@/config/intake-checklist'
 import type { ChecklistState, IntakeTier } from '@/config/intake-checklist'
 import { logger } from '@/lib/logger'
@@ -29,7 +31,7 @@ export const PATCH = withAdmin<{ id: string }>('intake', async (request, session
     const body = await request.json()
     const validation = validateBody(ChecklistUpdateSchema, body)
     if (!validation.success) return validation.error
-    const { item_id, completed, notes } = validation.data
+    const { item_id, result, notes } = validation.data
 
     // Get current state
     const [row] = await db
@@ -57,16 +59,17 @@ export const PATCH = withAdmin<{ id: string }>('intake', async (request, session
       return apiBadRequest(ERROR_MESSAGES.INTAKE_INVALID_CHECKLIST_ITEM)
     }
 
-    // Update checklist state
+    // Update checklist state (result=null resets the item to open)
     checklist[item_id] = {
-      completed,
-      completedBy: completed ? session.user.id : null,
-      completedAt: completed ? new Date().toISOString() : null,
+      result,
+      completedBy: result ? session.user.id : null,
+      completedAt: result ? new Date().toISOString() : null,
       notes: notes || checklist[item_id]?.notes || '',
     }
 
-    // Check if all required items are now complete
+    // Recompute the cached pipeline flags
     const complete = isChecklistComplete(checklist, tier, row.category)
+    const failed = hasChecklistFailure(checklist, tier, row.category)
     const progress = getChecklistProgress(checklist, tier, row.category)
 
     // Persist
@@ -75,30 +78,34 @@ export const PATCH = withAdmin<{ id: string }>('intake', async (request, session
       .set({
         intakeChecklist: checklist,
         checklistComplete: complete,
+        checklistFailed: failed,
         updatedAt: sql`NOW()`,
       })
       .where(eq(inventoryItems.id, id))
 
     // Record timeline event
+    const resultLabel = result ? CHECKLIST_RESULT_LABELS[result] : 'zurückgesetzt'
     await appendIntakeEvent(id, {
       type: 'checklist_toggled',
-      description: `${itemConfig.label}: ${completed ? 'erledigt' : 'rückgängig'}`,
+      description: `${itemConfig.label}: ${resultLabel}${result === 'fail' && notes ? ` — ${notes}` : ''}`,
       userId: session.user.id,
       userEmail: session.user.email,
-      metadata: { item_id, item_label: itemConfig.label, completed },
+      metadata: { item_id, item_label: itemConfig.label, result },
     })
 
-    logger.info('Checklist item toggled', {
+    logger.info('Checklist verdict set', {
       inventoryId: id,
       itemId: item_id,
-      completed,
+      result,
       checklistComplete: complete,
+      checklistFailed: failed,
       adminEmail: session.user.email,
     })
 
     return apiSuccess({
       checklist,
       checklist_complete: complete,
+      checklist_failed: failed,
       checklist_progress: progress,
     })
   } catch (error) {
