@@ -427,7 +427,7 @@ export interface ChecklistItemState {
   /** Verdict; null = still open. */
   result: ChecklistResult | null
   /**
-   * Legacy boolean from before verdicts existed (migration 132 rewrites
+   * Legacy boolean from before verdicts existed (migration 135 rewrites
    * stored rows, this field only survives in un-migrated snapshots).
    * Read via getItemResult(), never written anymore.
    */

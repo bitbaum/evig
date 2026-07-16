@@ -1,4 +1,4 @@
--- Migration 132: Intake checklist verdicts (pass / fail / n.a.)
+-- Migration 135: Intake checklist verdicts (pass / fail / n.a.)
 --
 -- The intake checklist stored only a boolean `completed` per item. That can't
 -- express the most important QC outcome — a FAILED test — so failed devices

@@ -164,7 +164,7 @@ export const inventoryItems = pgTable('inventory_items', {
   intakeChecklist: jsonb('intake_checklist').default({}),
   // Derived flag: true when all required checklist items are done (pass/na). Gates marketplace publishing.
   checklistComplete: boolean('checklist_complete').default(false),
-  // Added by 132: derived flag — true when any required checklist item has a 'fail' verdict.
+  // Added by 135: derived flag — true when any required checklist item has a 'fail' verdict.
   checklistFailed: boolean('checklist_failed').notNull().default(false),
   // Link to donation record if this item came from a device donation
   sourceDonationId: uuid('source_donation_id'),

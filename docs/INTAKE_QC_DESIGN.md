@@ -43,7 +43,7 @@ Before this design landed, the digital pipeline had three gaps:
 
 ### Checklist verdicts (pass / fail / n.a.)
 
-`intake_checklist` JSONB item states changed shape (migration 132 rewrites
+`intake_checklist` JSONB item states changed shape (migration 135 rewrites
 existing rows):
 
 ```
@@ -94,7 +94,7 @@ Enforced at every publish path:
 ### Files
 
 - Config/SSOT: `src/config/intake-checklist.ts`, `src/config/intake-status.ts`
-- Migration: `scripts/db/migrations/132_intake_checklist_verdicts.sql`
+- Migration: `scripts/db/migrations/135_intake_checklist_verdicts.sql`
   (+ Drizzle `src/db/schema/inventory.ts`)
 - API: `src/app/api/admin/intake/**`, `src/lib/erfassung/create-product.ts`,
   `src/app/api/admin/erfassung/route.ts`
@@ -142,11 +142,15 @@ backfill script is possible later if wanted).
 ### Phase 4 — two-person QA + mobile pipeline (SHIPPED)
 
 - **Vier-Augen-Prinzip**: `final_qa` carries `requiresSecondPerson: true` in
-  the checklist SSOT. `violatesSecondPersonRule()` blocks a pass/n.a. sign-off
-  by the person who did ALL the other completed required work (and blocks
-  final QA before anything else is done). Recording a FAIL is never blocked.
-  Enforced in the checklist API; "Alles in Ordnung" (mark-all) deliberately
-  skips second-person items; rejections surface as a visible error banner.
+  the checklist SSOT. `violatesSecondPersonRule()` detects a sign-off by the
+  person who did ALL the other completed required work (or before anything
+  else is done). The API blocks such a solo sign-off UNLESS an explicit
+  override reason is written in the notes («allein im Dienst») — a documented
+  exception instead of a dead end on single-staff shifts. Recording a FAIL is
+  never blocked. The UI routes the final-QA pass click through the notes
+  editor (second person saves directly; solo worker writes the reason);
+  "Alles in Ordnung" (mark-all) deliberately skips second-person items;
+  rejections surface as a visible error banner.
 - **Mobile pipeline**: `< md` the table becomes a card list
   (`IntakePipelineCards`) — whole card tappable, no horizontal scroll at
   320px. Checklist verdict buttons are 44px touch targets on phones
