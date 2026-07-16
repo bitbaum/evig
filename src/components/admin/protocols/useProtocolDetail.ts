@@ -76,9 +76,14 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
         }),
       }
 
+      // Mapped people ARE the meeting's attendees — one save keeps both in
+      // sync, so nobody has to maintain a second "Teilnehmer" list by hand.
+      const mappedIds = Object.values(attendeeMapping).filter(Boolean)
+      const attendees = Array.from(new Set([...(protocol.attendees || []), ...mappedIds]))
+
       const result = await apiFetch<void>(`/api/protocols/${protocol.id}`, {
         method: 'PATCH',
-        body: { structured_notes: updatedNotes },
+        body: { structured_notes: updatedNotes, attendees },
       })
       if (!result.success) throw new Error(result.error || 'Fehler beim Speichern')
       setMappingDirty(false)
@@ -190,6 +195,71 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
       setError(getErrorMessage(err))
     } finally {
       setCreatingTask(null)
+    }
+  }
+
+  /**
+   * Add a task the AI did NOT recognize from the transcript.
+   *
+   * Two steps so the protocol stays the SSOT: the new item is first
+   * appended to structured_notes.action_items (provenance: it belongs to
+   * this meeting), then created + linked as a real task via the same
+   * /actions endpoint the recognized items use.
+   */
+  const [addingCustomTask, setAddingCustomTask] = useState(false)
+  const handleAddCustomTask = async (
+    description: string,
+    assignee: { id: string; name: string } | null,
+  ): Promise<boolean> => {
+    const trimmed = description.trim()
+    if (!trimmed || !notes) return false
+    setAddingCustomTask(true)
+    setError(null)
+
+    try {
+      const newItem: StructuredNotes['action_items'][0] = {
+        id: `custom-${crypto.randomUUID()}`,
+        description: trimmed,
+        assigned_to_name: assignee?.name ?? null,
+        assigned_to_id: assignee?.id ?? null,
+        due_hint: null,
+        item_type: 'task',
+        topic_id: null,
+        priority_hint: null,
+      }
+
+      const patchResult = await apiFetch<void>(`/api/protocols/${protocol.id}`, {
+        method: 'PATCH',
+        body: {
+          structured_notes: { ...notes, action_items: [...notes.action_items, newItem] },
+        },
+      })
+      if (!patchResult.success) throw new Error(patchResult.error || 'Fehler beim Speichern')
+
+      const linkResult = await apiFetch<void>(`/api/protocols/${protocol.id}/actions`, {
+        method: 'POST',
+        body: {
+          action_item_id: newItem.id,
+          link_type: 'task',
+          task_data: {
+            title: trimmed,
+            description: `Aus Protokoll: ${protocol.title} (${formatDateShort(protocol.meeting_date)}) — manuell ergänzt`,
+            task_type: 'one_time',
+            category: 'admin',
+            priority: TASK_PRIORITIES.NORMAL,
+            assigned_to: assignee?.id ?? null,
+          },
+        },
+      })
+      if (!linkResult.success) throw new Error(linkResult.error || 'Fehler beim Erstellen der Aufgabe')
+
+      router.refresh()
+      return true
+    } catch (err) {
+      setError(getErrorMessage(err))
+      return false
+    } finally {
+      setAddingCustomTask(false)
     }
   }
 
@@ -312,6 +382,8 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
     bulkCreatingTasks,
     bulkTaskErrors,
     handleCreateAllTasks,
+    addingCustomTask,
+    handleAddCustomTask,
     // Finalize
     finalizing,
     showFinalizeDialog,

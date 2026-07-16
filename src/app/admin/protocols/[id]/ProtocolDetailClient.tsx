@@ -74,6 +74,8 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
     bulkCreatingTasks,
     bulkTaskErrors,
     handleCreateAllTasks,
+    addingCustomTask,
+    handleAddCustomTask,
     finalizing,
     showFinalizeDialog,
     setShowFinalizeDialog,
@@ -224,13 +226,16 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
                 <div className="flex-1 min-w-0">
                   <h3 className="text-sm font-semibold mb-1 text-text-primary">
                     {allMapped
-                      ? 'Alle Personen zugeordnet'
-                      : `Erkannte Personen (${unmappedAttendees.length} noch offen)`
+                      ? 'Wer war dabei? — alle zugeordnet'
+                      : `Wer war dabei? (${unmappedAttendees.length} ${unmappedAttendees.length === 1 ? 'Name' : 'Namen'} noch offen)`
                     }
                   </h3>
                   {!allMapped && (
                     <p className="text-xs text-text-tertiary mb-3">
-                      Optional. Zuordnung erlaubt automatische Aufgaben­zuweisung; sonst manuell.
+                      Die KI hat diese Namen im Gespräch gehört. Wähle das passende
+                      Team-Konto: die Person wird als Teilnehmer gespeichert und ihre
+                      Aufgaben werden ihr direkt zugewiesen. Unklare Namen kannst du
+                      offen lassen.
                     </p>
                   )}
                   <div className="space-y-2">
@@ -294,8 +299,11 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
             protocolDecisions={protocolDecisions}
             currentUserId={currentUserId}
             isProtocolCreator={isProtocolCreator}
+            teamMembers={teamMembers}
+            addingCustomTask={addingCustomTask}
             onCreateTask={handleCreateTask}
             onCreateAllTasks={handleCreateAllTasks}
+            onAddCustomTask={handleAddCustomTask}
             onRefresh={() => router.refresh()}
           />
 

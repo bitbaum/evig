@@ -1,3 +1,6 @@
+'use client'
+
+import { useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import {
   Loader2,
@@ -7,8 +10,11 @@ import {
   Vote,
   HelpCircle,
   Sparkles,
+  Plus,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
 import {
   PRIORITY_HINT_LABELS,
   ACTION_ITEM_TYPE_LABELS,
@@ -36,8 +42,12 @@ interface Props {
   protocolDecisions: ProtocolDecisionSummary[]
   currentUserId: string
   isProtocolCreator: boolean
+  /** For the manual add-task assignee select. */
+  teamMembers: Array<{ id: string; name: string }>
+  addingCustomTask: boolean
   onCreateTask: (actionItem: StructuredNotes['action_items'][0]) => void
   onCreateAllTasks: () => void
+  onAddCustomTask: (description: string, assignee: { id: string; name: string } | null) => Promise<boolean>
   onRefresh: () => void
 }
 
@@ -78,8 +88,11 @@ export function ProtocolActionItemsList({
   protocolDecisions,
   currentUserId,
   isProtocolCreator,
+  teamMembers,
+  addingCustomTask,
   onCreateTask,
   onCreateAllTasks,
+  onAddCustomTask,
   onRefresh,
 }: Props) {
   // Quick lookup: actionItemId → linked standalone decision (if any).
@@ -90,13 +103,25 @@ export function ProtocolActionItemsList({
   // show which structured-note topic it came from (raw → notes → item chain).
   const topicTitleById = new Map((notes.topics ?? []).map((t) => [t.id, t.title]))
 
+  const canAct = isReview || isFinalized
+
   if (!notes.action_items || notes.action_items.length === 0) {
     return (
-      <div className="bg-surface-raised border border-default rounded-lg p-4">
-        <h3 className="text-sm font-semibold text-text-primary mb-1">Keine Aktionen erkannt</h3>
-        <p className="text-sm text-text-secondary">
-          Die KI hat keine konkreten Aufgaben oder Entscheidungen extrahiert. Überarbeite den Inhalt oben und starte die Verarbeitung erneut.
-        </p>
+      <div className="bg-surface-raised border border-default rounded-lg p-4 space-y-3">
+        <div>
+          <h3 className="text-sm font-semibold text-text-primary mb-1">Keine Aktionen erkannt</h3>
+          <p className="text-sm text-text-secondary">
+            Die KI hat keine konkreten Aufgaben oder Entscheidungen extrahiert.
+            Ergänze Aufgaben unten von Hand oder überarbeite den Inhalt und starte die Verarbeitung erneut.
+          </p>
+        </div>
+        {isReview && (
+          <AddCustomTaskRow
+            teamMembers={teamMembers}
+            adding={addingCustomTask}
+            onAdd={onAddCustomTask}
+          />
+        )}
       </div>
     )
   }
@@ -108,8 +133,6 @@ export function ProtocolActionItemsList({
     const linked = decisionsByActionItem.get(d.id)
     return !linked || !linked.isClosed
   }).length
-
-  const canAct = isReview || isFinalized
 
   return (
     <div className="bg-surface-base rounded-lg border border-default overflow-hidden">
@@ -262,6 +285,107 @@ export function ProtocolActionItemsList({
           </div>
         </div>
       )}
+
+      {/* Manual add — the AI doesn't catch everything. Anything discussed in
+          the meeting can be added as a task here, with the same link
+          mechanics and provenance as the recognized items. */}
+      {isReview && (
+        <div className="border-t border-subtle px-4 py-3">
+          <AddCustomTaskRow
+            teamMembers={teamMembers}
+            adding={addingCustomTask}
+            onAdd={onAddCustomTask}
+          />
+        </div>
+      )}
+    </div>
+  )
+}
+
+// =============================================================================
+// AddCustomTaskRow — manual "the AI missed this" task entry
+// =============================================================================
+
+interface AddCustomTaskRowProps {
+  teamMembers: Array<{ id: string; name: string }>
+  adding: boolean
+  onAdd: (description: string, assignee: { id: string; name: string } | null) => Promise<boolean>
+}
+
+function AddCustomTaskRow({ teamMembers, adding, onAdd }: AddCustomTaskRowProps) {
+  const [open, setOpen] = useState(false)
+  const [description, setDescription] = useState('')
+  const [assigneeId, setAssigneeId] = useState('')
+
+  const submit = async () => {
+    const member = teamMembers.find((m) => m.id === assigneeId)
+    const ok = await onAdd(description, member ? { id: member.id, name: member.name } : null)
+    if (ok) {
+      setDescription('')
+      setAssigneeId('')
+      setOpen(false)
+    }
+  }
+
+  if (!open) {
+    return (
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => setOpen(true)}
+        className="inline-flex items-center gap-1.5 text-sm text-action hover:text-action h-auto px-0 bg-transparent hover:bg-transparent"
+      >
+        <Plus className="w-4 h-4" />
+        Aufgabe ergänzen — etwas wurde nicht erkannt?
+      </Button>
+    )
+  }
+
+  return (
+    <div className="space-y-2">
+      <div className="flex flex-col sm:flex-row gap-2">
+        <Input
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && description.trim() && !adding) submit()
+          }}
+          placeholder="Was ist zu tun?"
+          className="flex-1"
+          autoFocus
+        />
+        <Select
+          value={assigneeId}
+          onChange={(e) => setAssigneeId(e.target.value)}
+          className="sm:w-48"
+          aria-label="Zuständige Person"
+        >
+          <option value="">— Niemand zugewiesen —</option>
+          {teamMembers.map((m) => (
+            <option key={m.id} value={m.id}>{m.name}</option>
+          ))}
+        </Select>
+      </div>
+      <div className="flex items-center gap-2">
+        <Button
+          variant="primary"
+          size="sm"
+          onClick={submit}
+          disabled={adding || !description.trim()}
+          className="gap-1.5"
+        >
+          {adding ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
+          Aufgabe erstellen
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setOpen(false)}
+          className="text-text-tertiary"
+        >
+          Abbrechen
+        </Button>
+      </div>
     </div>
   )
 }

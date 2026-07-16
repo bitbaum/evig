@@ -40,6 +40,7 @@ import {
   FileText,
 } from 'lucide-react'
 import TaskActionsClient from './TaskActionsClient'
+import { TaskAIChat } from './TaskAIChat'
 import { TaskRequestResponseButtons } from './TaskRequestResponseButtons'
 import Heading from '@/components/admin/AdminHeading'
 import { ROUTES } from '@/config/routes'
@@ -326,6 +327,17 @@ export default async function TaskDetailPage({
 
           {/* Actions */}
           <TaskActionsClient taskId={task.id} taskTitle={task.title} isArchived={task.is_archived} />
+
+          {/* AI helper — complements "Um Hilfe bitten": teammates OR the AI */}
+          <TaskAIChat
+            title={task.title}
+            description={task.description}
+            instructions={task.instructions}
+            status={TASK_STATUS_LABELS[task.current_status] || task.current_status}
+            priority={TASK_PRIORITY_LABELS[task.priority] || task.priority}
+            dueDate={task.due_date ? formatDateShort(task.due_date) : null}
+            protocolTitle={protocolSource?.protocolTitle ?? null}
+          />
 
           {/* Completion History */}
           <div className="bg-surface-base rounded-lg border p-6">
