@@ -10,10 +10,10 @@ import {
   ShoppingBag,
   Package,
   Loader2,
-  AlertCircle,
+  ChevronLeft,
   ChevronRight,
 } from 'lucide-react'
-import { ORDER_STATUS_CONFIG, ORDER_STATUS, formatCHF } from '@/config/marketplace'
+import { ORDER_STATUS_CONFIG, ORDER_STATUS, MARKETPLACE_LIMITS, formatCHF } from '@/config/marketplace'
 import type { OrderStatus } from '@/config/marketplace'
 import { formatDateShort } from '@/lib/date-formats'
 import { apiFetch } from '@/lib/api/client'
@@ -36,6 +36,8 @@ interface OrderItem {
   createdAt: string
 }
 
+const PAGE_SIZE = MARKETPLACE_LIMITS.DEFAULT_PAGE_SIZE
+
 export default function DashboardOrdersPage() {
   const t = useTranslations('dashboard.orders')
   const { data: session, status: sessionStatus } = useSession()
@@ -52,25 +54,29 @@ export default function DashboardOrdersPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('')
   const [role, setRole] = useState<'buyer' | 'seller'>('buyer')
+  const [offset, setOffset] = useState(0)
+  const [limit, setLimit] = useState<number>(PAGE_SIZE)
 
   const fetchOrders = useCallback(async () => {
     setIsLoading(true)
     try {
-      const params = new URLSearchParams({ role })
+      const params = new URLSearchParams({ role, limit: String(PAGE_SIZE), offset: String(offset) })
       if (activeTab) params.set('status', activeTab)
 
-      const result = await apiFetch<{ items: OrderItem[]; pagination: { total: number } }>(
-        `/api/marketplace/orders?${params}`,
-      )
+      const result = await apiFetch<{
+        items: OrderItem[]
+        pagination: { total: number; limit: number; offset: number }
+      }>(`/api/marketplace/orders?${params}`)
 
       if (result.success && result.data) {
         setOrders(result.data.items)
         setTotal(result.data.pagination.total)
+        setLimit(result.data.pagination.limit)
       }
     } finally {
       setIsLoading(false)
     }
-  }, [activeTab, role])
+  }, [activeTab, role, offset])
 
   useEffect(() => {
     if (sessionStatus === 'unauthenticated') {
@@ -104,7 +110,7 @@ export default function DashboardOrdersPage() {
         {/* Role toggle */}
         <div className="flex bg-surface-raised rounded-lg p-1">
           <Button
-            onClick={() => setRole('buyer')}
+            onClick={() => { setRole('buyer'); setOffset(0) }}
             variant="ghost"
             size="sm"
             className={role === 'buyer'
@@ -114,7 +120,7 @@ export default function DashboardOrdersPage() {
             {t('roleBuyer')}
           </Button>
           <Button
-            onClick={() => setRole('seller')}
+            onClick={() => { setRole('seller'); setOffset(0) }}
             variant="ghost"
             size="sm"
             className={role === 'seller'
@@ -131,7 +137,7 @@ export default function DashboardOrdersPage() {
         {TABS.map(tab => (
           <Button
             key={tab.key}
-            onClick={() => setActiveTab(tab.key)}
+            onClick={() => { setActiveTab(tab.key); setOffset(0) }}
             variant="ghost"
             size="sm"
             className={`rounded-full ${
@@ -211,6 +217,35 @@ export default function DashboardOrdersPage() {
               </Link>
             )
           })}
+        </div>
+      )}
+
+      {/* Pagination — mirrors /dashboard/listings */}
+      {!isLoading && total > limit && (
+        <div className="flex items-center justify-between pt-2">
+          <p className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">
+            {t('paginationCurrentPage', { page: Math.floor(offset / limit) + 1 })}
+          </p>
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={() => setOffset(Math.max(0, offset - limit))}
+              disabled={offset === 0}
+              variant="outline"
+              size="sm"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              {t('prevPage')}
+            </Button>
+            <Button
+              onClick={() => setOffset(offset + limit)}
+              disabled={offset + limit >= total}
+              variant="outline"
+              size="sm"
+            >
+              {t('nextPage')}
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
       )}
     </article>

@@ -23,7 +23,7 @@ import {
 } from 'lucide-react'
 import { logger } from '@/lib/logger'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminStatsGrid, type StatCardItem } from '@/components/admin/AdminStatsGrid'
+import { AdminStatsStrip, type StatItem } from '@/components/admin/AdminStatsStrip'
 import { AdminButton } from '@/components/admin/AdminButton'
 import { Pagination } from '@/components/ui/Pagination'
 import { ADMIN_CONTENT } from '@/config/admin-content'
@@ -77,8 +77,9 @@ interface DbBlogRow {
  * Unified admin list: DB posts (this UI, paginated in SQL) + git file posts
  * (content/posts/*.md, shown on page 1 — a small, git-bounded set), deduped by
  * slug so staff see EVERY article regardless of where it lives. File posts are
- * marked read-only. The admin area is German-only, so file posts resolve to
- * their German version. Stats come from SQL aggregates over ALL rows, not the
+ * marked read-only. File posts resolve to their canonical German version
+ * (DE is the content source of truth, whatever the admin's UI language).
+ * Stats come from SQL aggregates over ALL rows, not the
  * fetched page.
  */
 async function getBlogPosts(page: number): Promise<{
@@ -265,7 +266,7 @@ export default async function AdminBlogPage({
     )
   }
 
-  const statCards: StatCardItem[] = [
+  const statCards: StatItem[] = [
     { icon: FileText, color: 'gray', label: 'Gesamt Artikel', value: stats.totalPosts },
     { icon: CheckCircle, color: 'green', label: 'Veröffentlicht', value: stats.publishedPosts },
     { icon: Clock, color: 'gray', label: 'Entwürfe', value: stats.draftPosts },
@@ -282,7 +283,7 @@ export default async function AdminBlogPage({
       actions={createAction}
     >
       {dbErrorBanner}
-      <AdminStatsGrid items={statCards} />
+      <AdminStatsStrip items={statCards} />
       <BlogListClient posts={posts} />
       {totalPages > 1 && (
         <Pagination

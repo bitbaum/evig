@@ -33,8 +33,6 @@ export interface ListingCardData {
   condition: string
   is_revampit: boolean
   pickup_location: string | null
-  view_count: number
-  favorite_count: number
   seller_name: string
   seller_display_name: string | null
   seller_rating: number | null

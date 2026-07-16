@@ -22,7 +22,7 @@ import {
   XCircle,
 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminStatsGrid, type StatCardItem } from '@/components/admin/AdminStatsGrid'
+import { AdminStatsStrip, type StatItem } from '@/components/admin/AdminStatsStrip'
 import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
 import { AdminButton } from '@/components/admin/AdminButton'
 import { ROUTES } from '@/config/routes'
@@ -195,13 +195,12 @@ export default async function AdminCategoriesPage() {
         />
       ) : (
         <>
-          <AdminStatsGrid
-            columns={3}
+          <AdminStatsStrip
             items={[
               { icon: Tag, color: 'gray', label: 'Gesamt Kategorien', value: stats.totalCategories },
               { icon: CheckCircle, color: 'green', label: 'Aktive Kategorien', value: stats.activeCategories },
               { icon: Tag, color: 'gray', label: 'Artikel gesamt', value: stats.totalPosts },
-            ] satisfies StatCardItem[]}
+            ] satisfies StatItem[]}
           />
           <AdminTable columns={columns} rows={categories} rowKey={(c) => c.id} />
         </>

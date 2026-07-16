@@ -16,9 +16,14 @@ type Props = {
   /** Render every locale as a row of tappable pills (one tap, large touch
    * targets, no nested dropdown) instead of the chip+dropdown. For mobile. */
   inline?: boolean
+  /** For BYPASS_INTL routes (/admin, /dashboard, /auth) that have no URL
+   * locale: skip the locale-prefixed navigation (which would 404/redirect)
+   * and instead write the NEXT_LOCALE cookie + refresh the current route so
+   * server components re-render in the new language. */
+  cookieOnly?: boolean
 }
 
-export function LocaleSwitcher({ className, openUpward = false, inline = false }: Props) {
+export function LocaleSwitcher({ className, openUpward = false, inline = false, cookieOnly = false }: Props) {
   const locale = useLocale() as Locale
   const pathname = usePathname()
   const router = useRouter()
@@ -46,6 +51,15 @@ export function LocaleSwitcher({ className, openUpward = false, inline = false }
     // those routes in the old language. Setting it here makes the switcher the
     // single source of truth for the cookie.
     document.cookie = `NEXT_LOCALE=${next}; path=/; max-age=31536000; samesite=lax`
+    if (cookieOnly) {
+      // No URL locale on this route — the cookie IS the locale. Refresh so
+      // both server and client components pick up the new language in place.
+      startTransition(() => {
+        router.refresh()
+        setOpen(false)
+      })
+      return
+    }
     // Preserve query string + hash so switching language on a filtered/paginated
     // listing (e.g. /marketplace?category=10&page=3) or an auth page with a
     // ?callbackUrl doesn't throw the user back to the unfiltered page.

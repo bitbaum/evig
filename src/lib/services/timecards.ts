@@ -257,6 +257,9 @@ async function createDraftForPeriod(userId: string, period: TimecardPeriodRange)
       ? buildTimecardEntriesForMonth(schedule, parseDate(period.periodStart))
       : buildTimecardEntriesFromSchedule(schedule, period.periodStart)
 
+    // Two first-hits for the same period race past the SELECT above (page
+    // widget + direct API call); the UNIQUE(user_id, period_start, period_end)
+    // key made the loser 500. DO NOTHING + re-fetch turns the race benign.
     const createdRows = await tx
       .insert(timecards)
       .values({
@@ -267,11 +270,28 @@ async function createDraftForPeriod(userId: string, period: TimecardPeriodRange)
         status: TIMECARD_STATUSES.DRAFT,
         notes: null,
       })
+      .onConflictDoNothing({
+        target: [timecards.userId, timecards.periodStart, timecards.periodEnd],
+      })
       .returning({ id: timecards.id })
     const created = createdRows[0]
 
     if (!created) {
-      throw new Error('timecard_creation_failed')
+      // Lost the race — the concurrent request created the row; serve it.
+      const raced = await tx
+        .select({ id: timecards.id })
+        .from(timecards)
+        .where(and(
+          eq(timecards.userId, userId),
+          eq(timecards.periodStart, period.periodStart),
+          eq(timecards.periodEnd, period.periodEnd),
+        ))
+        .limit(1)
+      const racedExisting = raced[0]
+        ? await fetchTimecardWithEntries(tx, raced[0].id)
+        : null
+      if (!racedExisting) throw new Error('timecard_creation_failed')
+      return racedExisting
     }
 
     if (templateEntries.length > 0) {

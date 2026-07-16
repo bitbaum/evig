@@ -5,6 +5,7 @@ import { Link, usePathname } from '@/i18n/navigation'
 import { Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { getMobileBottomNavSections } from '@/config/sections'
+import { sectionShortLabel } from '@/lib/section-labels'
 
 interface MobileBottomNavProps {
   accessibleSections: string[]
@@ -12,18 +13,20 @@ interface MobileBottomNavProps {
 }
 
 /**
- * Admin mobile bottom nav — three permission-filtered sections + Mehr.
+ * Admin mobile bottom nav — permission-filtered sections + Mehr.
  *
  * Items are derived from `sections.ts` via `mobileBottomNavOrder`. To
- * change what shows up here, flag the section with `mobileBottomNavOrder:
- * 1 | 2 | 3` and optionally `ui.mobileBottomNavLabel` for a shorter
- * label that fits the bar. The SSOT stays in one file; nothing about
- * this component knows which routes are "important enough."
+ * change what shows up here, flag the section with a `mobileBottomNavOrder`
+ * rank and optionally `ui.mobileBottomNavLabel` for a shorter label that
+ * fits the bar (localized via `admin.sections.items.*.shortLabel`). The
+ * SSOT stays in one file; nothing about this component knows which routes
+ * are "important enough."
  */
 export function MobileBottomNav({ accessibleSections, onMenuClick }: MobileBottomNavProps) {
   const pathname = usePathname()
   const items = getMobileBottomNavSections(accessibleSections)
   const t = useTranslations('admin.sidebar')
+  const tSections = useTranslations('admin.sections')
 
   return (
     <nav
@@ -36,7 +39,7 @@ export function MobileBottomNav({ accessibleSections, onMenuClick }: MobileBotto
         const exact = section.path === '/admin'
         const active = exact ? pathname === section.path : pathname.startsWith(section.path)
         const Icon = section.ui.icon
-        const label = section.ui.mobileBottomNavLabel ?? section.ui.label
+        const label = sectionShortLabel(tSections, section)
         return (
           <Link
             key={section.id}

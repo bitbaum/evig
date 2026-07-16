@@ -76,11 +76,6 @@ jest.mock('@/config/service-icons', () => ({
   getIconByName: (...args: unknown[]) => mockGetIconByName.apply(null, args),
 }))
 
-// The sub-modules that index.ts re-exports from
-jest.mock('../seller-service', () => ({
-  getSellerDashboard: jest.fn(),
-}))
-
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------

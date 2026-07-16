@@ -73,7 +73,7 @@ export default async function AdminMediaPage() {
         hardcoded-zero stat cards are gone. Replaced with an honest empty-
         state hero pointing at the Upload primary action.
         When the library lands a real backend, swap this for an
-        AdminStatsGrid wired to actual counts.
+        AdminStatsStrip wired to actual counts.
       */}
       <AdminHeroStatus
         tone="empty"

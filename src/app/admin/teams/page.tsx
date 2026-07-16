@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { Users, Plus, Mail, UserRound, UserRoundX, LayoutGrid } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminStatsGrid } from '@/components/admin/AdminStatsGrid'
+import { AdminStatsStrip } from '@/components/admin/AdminStatsStrip'
 import { buttonClass } from '@/components/ui/button-class'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { ROUTES } from '@/config/routes'
@@ -75,8 +75,7 @@ export default async function TeamsAdminPage() {
         />
       ) : (
         <div className="space-y-5">
-          <AdminStatsGrid
-            columns={3}
+          <AdminStatsStrip
             items={[
               { icon: Users, color: 'blue', label: 'Teams', value: teams.length },
               { icon: UserRound, color: 'green', label: 'Zuordnungen', value: totalMemberships },

@@ -8,10 +8,12 @@ export const metadata: Metadata = { title: 'Einladung – RevampIT' }
 
 interface PageProps {
   params: Promise<{ token: string }>
+  searchParams: Promise<{ email?: string }>
 }
 
-export default async function ClaimInvitePage({ params }: PageProps) {
+export default async function ClaimInvitePage({ params, searchParams }: PageProps) {
   const { token } = await params
+  const { email } = await searchParams
   const invite = await getClaimInvite(token)
 
   return (
@@ -54,7 +56,7 @@ export default async function ClaimInvitePage({ params }: PageProps) {
               </div>
             )}
 
-            <ClaimForm token={token} suggestedName={invite.currentName} />
+            <ClaimForm token={token} suggestedName={invite.currentName} suggestedEmail={email ?? null} />
           </>
         )}
       </div>

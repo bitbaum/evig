@@ -125,8 +125,6 @@ async function seed() {
           canton,
           services_offered,
           specializations,
-          is_verified,
-          verification_date,
           is_active,
           status,
           accepts_gratis,
@@ -149,8 +147,6 @@ async function seed() {
           ARRAY['hardware_diagnosis', 'computer_repair']::text[],
           ARRAY['laptop']::text[],
           true,
-          NOW(),
-          true,
           'active',
           true,
           true,
@@ -163,8 +159,6 @@ async function seed() {
           description = EXCLUDED.description,
           services_offered = EXCLUDED.services_offered,
           specializations = EXCLUDED.specializations,
-          is_verified = true,
-          verification_date = COALESCE(technician_profiles.verification_date, NOW()),
           is_active = true,
           status = 'active',
           accepts_gratis = true,
@@ -172,6 +166,18 @@ async function seed() {
           service_delivery_types = EXCLUDED.service_delivery_types,
           profile_tier = 'community',
           updated_at = NOW()
+      `,
+      [userId],
+    )
+
+    // Verification lives on user_profiles (identity SSOT since migration 121/122).
+    await client.query(
+      `
+        UPDATE user_profiles
+        SET is_verified = true,
+            verification_date = COALESCE(verification_date, NOW()),
+            updated_at = NOW()
+        WHERE user_id = $1
       `,
       [userId],
     )

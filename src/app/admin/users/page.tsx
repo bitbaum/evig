@@ -21,7 +21,7 @@ import {
 } from 'lucide-react'
 import { UsersListClient } from './UsersListClient'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminStatsGrid, type StatCardItem } from '@/components/admin/AdminStatsGrid'
+import { AdminStatsStrip, type StatItem } from '@/components/admin/AdminStatsStrip'
 import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
@@ -78,13 +78,13 @@ export default async function AdminUsersPage() {
       icon={Users}
       iconColor="blue"
     >
-      <AdminStatsGrid
+      <AdminStatsStrip
         items={[
           { icon: Users,     color: 'blue',   label: 'Gesamt Benutzer', value: stats.totalUsers },
           { icon: UserCheck, color: 'green',  label: 'Verifiziert',     value: stats.activeUsers },
           { icon: Crown,     color: 'purple', label: 'Staff',           value: stats.staffCount },
           { icon: Users,     color: 'gray',   label: 'Benutzer',        value: stats.regularUsers },
-        ] satisfies StatCardItem[]}
+        ] satisfies StatItem[]}
       />
 
       {/* Users List with Client-side Filtering */}

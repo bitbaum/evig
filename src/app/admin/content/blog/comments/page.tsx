@@ -14,7 +14,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { MessageSquare, AlertTriangle } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminStatsGrid, type StatCardItem } from '@/components/admin/AdminStatsGrid'
+import { AdminStatsStrip, type StatItem } from '@/components/admin/AdminStatsStrip'
 import { EyeOff, Eye } from 'lucide-react'
 import { ROUTES } from '@/config/routes'
 import { canAccessSection, toStaffUser } from '@/lib/permissions'
@@ -84,7 +84,7 @@ export default async function AdminBlogCommentsPage() {
   const visibleCount = comments.filter((c) => c.status === 'visible').length
   const hiddenCount = comments.length - visibleCount
 
-  const statCards: StatCardItem[] = [
+  const statCards: StatItem[] = [
     { icon: MessageSquare, color: 'gray', label: 'Kommentare', value: comments.length },
     { icon: Eye, color: 'green', label: 'Sichtbar', value: visibleCount },
     { icon: EyeOff, color: 'gray', label: 'Ausgeblendet', value: hiddenCount },
@@ -104,7 +104,7 @@ export default async function AdminBlogCommentsPage() {
           <p className="text-sm">Kommentare konnten nicht geladen werden — Datenbank nicht erreichbar.</p>
         </div>
       )}
-      <AdminStatsGrid items={statCards} />
+      <AdminStatsStrip items={statCards} />
       <CommentModerationClient comments={comments} />
     </AdminPageWrapper>
   )

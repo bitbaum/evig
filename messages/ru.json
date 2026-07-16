@@ -979,7 +979,9 @@
       "closeAriaLabel": "Закрыть корзину",
       "paymentSuccess": "Оплата прошла успешно! Ваш заказ подтверждён.",
       "paymentFailed": "Оплата не удалась. Пожалуйста, попробуйте ещё раз.",
-      "paymentCancelled": "Оплата отменена."
+      "paymentCancelled": "Оплата отменена.",
+      "unavailableRemoved": "«{title}» больше недоступен и был удалён из корзины.",
+      "unavailableRemovedMany": "{count} товаров больше недоступны и были удалены из корзины."
     },
     "checkout": {
       "loading": "Загрузка...",
@@ -7954,28 +7956,34 @@
       "deliveryRemote": "Удалённо / онлайн",
       "deliveryOnsite": "На месте",
       "ctaHint": "Так вы создаёте запрос этому человеку — он получит уведомление и сможет отправить вам предложение."
-    },
-    "seller": {
-      "meta": {
-        "title": "{name} — продавец на RevampIT Marketplace",
-        "titleFallback": "Профиль продавца — RevampIT Marketplace",
-        "description": "{name} на RevampIT Marketplace — {count} активных объявлений. Покупайте подержанную технику и поддерживайте циркулярную экономику."
-      },
-      "backToMarketplace": "Назад на маркетплейс",
-      "memberSince": "Участник с {date}",
-      "listings": "Объявления",
-      "sold": "Продано",
-      "noRatings": "Нет отзывов",
-      "ratingsCount": "{count} отзывов",
-      "activeListings": "Активные объявления ({count})",
-      "noListingsTitle": "Нет активных объявлений",
-      "noListingsDescription": "У этого продавца сейчас нет активных объявлений.",
-      "loadingProfile": "Профиль загружается...",
-      "sellerNotFound": "Продавец не найден",
-      "errorLoading": "Ошибка загрузки профиля",
-      "publicProfile": "Профиль продавца",
-      "verified": "Проверено"
     }
+  },
+  "sellers": {
+    "meta": {
+      "title": "{name} — продавец на RevampIT Marketplace",
+      "titleFallback": "Профиль продавца — RevampIT Marketplace",
+      "description": "{name} на RevampIT Marketplace — {count} активных объявлений. Покупайте подержанную технику и поддерживайте циркулярную экономику."
+    },
+    "backToMarketplace": "Назад на маркетплейс",
+    "publicProfile": "Профиль продавца",
+    "verified": "Проверено",
+    "memberSince": "Участник с {date}",
+    "listings": "Объявления",
+    "sold": "Продано",
+    "noRatings": "Нет отзывов",
+    "ratingsCount": "{count} отзывов",
+    "activeListings": "Активные объявления ({count})",
+    "noListingsTitle": "Нет активных объявлений",
+    "noListingsDescription": "У этого продавца сейчас нет активных объявлений.",
+    "loadingProfile": "Профиль загружается...",
+    "sellerNotFound": "Продавец не найден",
+    "errorLoading": "Ошибка загрузки профиля",
+    "reviewsHeading": "Отзывы",
+    "verifiedPurchase": "Подтверждённая покупка",
+    "sellerResponse": "Ответ продавца",
+    "reviewForListing": "о {title}",
+    "noReviewsTitle": "Отзывов пока нет",
+    "noReviewsDescription": "У этого продавца пока нет отзывов."
   },
   "faq": {
     "meta": {
@@ -8654,7 +8662,10 @@
       "errorUpdateStatus": "Не удалось обновить статус",
       "networkError": "Ошибка сети",
       "articlesSection": "Товары ({count})",
-      "moreItems": "+{count} ещё"
+      "moreItems": "+{count} ещё",
+      "prevPage": "Назад",
+      "nextPage": "Далее",
+      "paginationCurrentPage": "Страница {page}"
     },
     "listings": {
       "pageTitle": "Мои объявления",
@@ -10080,9 +10091,6 @@
         "declined": "Отклонено"
       }
     },
-    "localeFallback": {
-      "notice": "Административная панель доступна только на немецком языке."
-    },
     "hr": {
       "vacancies": {
         "title": "Открытые вакансии",
@@ -10636,14 +10644,28 @@
       "placeholder": "Поиск или команда…",
       "openShortcut": "Открыть командную строку",
       "noResults": "Нет результатов",
-      "recentlyVisited": "Недавно посещённые"
+      "recentlyVisited": "Недавно посещённые",
+      "groups": {
+        "actions": "Действия",
+        "sections": "Разделы",
+        "users": "Пользователи",
+        "decisions": "Решения",
+        "listings": "Объявления"
+      },
+      "actions": {
+        "newDevice": "Оформить новое устройство",
+        "newDecision": "Новое решение",
+        "newProtocol": "Новый протокол",
+        "dashboard": "Панель"
+      }
     },
     "userMenu": {
       "darkMode": "Оформление",
       "toWebsite": "На сайт",
       "signOut": "Выйти",
       "adminArea": "Раздел администратора",
-      "staffFallback": "Член команды"
+      "staffFallback": "Член команды",
+      "language": "Язык"
     },
     "notifications": {
       "title": "Уведомления",
@@ -10897,6 +10919,172 @@
         "publish": "Опубликовать",
         "aiPlaceholderEdit": "напр. «Добавь раздел с советами по ремонту» или «Сделай текст более привлекательным»",
         "aiPlaceholderNew": "Опишите тему или идею для вашей статьи блога…"
+      }
+    },
+    "sections": {
+      "items": {
+        "dashboard": {
+          "label": "Панель",
+          "description": "Обзор и статистика",
+          "shortLabel": "Сегодня"
+        },
+        "my-timecards": {
+          "label": "Учёт времени",
+          "description": "Учёт и отправка рабочих часов",
+          "shortLabel": "Время"
+        },
+        "intake": {
+          "label": "Приём устройств",
+          "description": "Все принятые устройства: статус, чек-лист, публикация"
+        },
+        "erfassung": {
+          "label": "Оформить товар",
+          "description": "Принять устройство (чек-лист/пожертвование) или быстро оформить товар",
+          "shortLabel": "Оформить"
+        },
+        "marketplace": {
+          "label": "Объявления",
+          "description": "Проверка, верификация и управление объявлениями"
+        },
+        "it-hilfe-admin": {
+          "label": "ИТ-помощь",
+          "description": "Управление запросами на помощь и техниками"
+        },
+        "workshops-admin": {
+          "label": "Воркшопы",
+          "description": "Управление воркшопами и записями"
+        },
+        "services": {
+          "label": "Услуги",
+          "description": "Управление предложениями услуг"
+        },
+        "appointments-admin": {
+          "label": "Записи",
+          "description": "Проверка и назначение сервисных записей"
+        },
+        "locations": {
+          "label": "Локации",
+          "description": "Управление локациями"
+        },
+        "reviews": {
+          "label": "Отзывы",
+          "description": "Модерация отзывов"
+        },
+        "content": {
+          "label": "Блог и страницы",
+          "description": "Блог, страницы, медиа"
+        },
+        "projects": {
+          "label": "Публичные проекты",
+          "description": "Публичные проекты, потребности в ресурсах и вклады"
+        },
+        "presentations": {
+          "label": "Презентации",
+          "description": "Просмотр и обмен презентациями"
+        },
+        "feedbackOverview": {
+          "label": "Обратная связь",
+          "description": "Вся обратная связь в одном месте: сайт, презентации, результаты работ"
+        },
+        "approvals": {
+          "label": "Модерация",
+          "description": "Проверка и одобрение присланных материалов",
+          "shortLabel": "Модерация"
+        },
+        "membership": {
+          "label": "Членство",
+          "description": "Проверка и управление заявками на членство"
+        },
+        "teams": {
+          "label": "Команды",
+          "description": "Команды, зоны ответственности и участники"
+        },
+        "team-board": {
+          "label": "Кто чем занят",
+          "description": "Текущий фокус и задачи команды"
+        },
+        "tasks": {
+          "label": "Задачи",
+          "description": "Управление задачами команды"
+        },
+        "deliverables": {
+          "label": "Результаты работ",
+          "description": "Отчёты, презентации, макеты — делиться и собирать отзывы"
+        },
+        "protocols": {
+          "label": "Протоколы",
+          "description": "Протоколы встреч и заметки"
+        },
+        "decisions": {
+          "label": "Решения",
+          "description": "Предложения и голосования команды"
+        },
+        "donations": {
+          "label": "Пожертвования",
+          "description": "Управление денежными и вещевыми пожертвованиями"
+        },
+        "users": {
+          "label": "Пользователи",
+          "description": "Управление пользователями"
+        },
+        "team": {
+          "label": "Профили команды",
+          "description": "Сотрудники, волонтёры, практиканты"
+        },
+        "hr-vacancies": {
+          "label": "Вакансии",
+          "description": "Публикация, приостановка и распространение вакансий"
+        },
+        "hr-applications": {
+          "label": "Отклики",
+          "description": "Воронка откликов и найм"
+        },
+        "payroll": {
+          "label": "Зарплата",
+          "description": "Закрыть месяц и экспортировать CSV для бухгалтерии"
+        },
+        "analyse-hub": {
+          "label": "Обзор аналитики",
+          "description": "Ключевые показатели, финансы и эффект — одним взглядом"
+        },
+        "finanzen": {
+          "label": "Финансы",
+          "description": "Подробный финансовый обзор и тренды"
+        },
+        "kennzahlen": {
+          "label": "Показатели",
+          "description": "KPI и метрики одним взглядом"
+        },
+        "wirkung": {
+          "label": "Эффект",
+          "description": "Экологический и социальный эффект"
+        },
+        "transparenz": {
+          "label": "Прозрачность",
+          "description": "Анализ от первых принципов"
+        },
+        "hirn": {
+          "label": "Hirn AI",
+          "description": "ИИ-ассистент для Revamp-IT"
+        },
+        "promo-codes": {
+          "label": "Промокоды",
+          "description": "Выпуск скидочных кодов и ваучеров"
+        },
+        "settings": {
+          "label": "Настройки",
+          "description": "Конфигурация системы"
+        }
+      },
+      "groups": {
+        "uebersicht": "Сегодня",
+        "angebot": "Работа",
+        "inhalte": "Контент",
+        "betrieb": "Организация",
+        "analyse": "Аналитика",
+        "personen": "Люди",
+        "teamhr": "Команда и HR",
+        "system": "Система"
       }
     }
   },

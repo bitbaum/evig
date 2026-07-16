@@ -13,10 +13,6 @@
  * ```
  */
 
-// Seller service (seller dashboard)
-export { getSellerDashboard } from './seller-service'
-export type { SellerProduct, SellerStats, SellerDashboardData } from './seller-service'
-
 // ============================================================================
 // Unified Service Layer (Dienstleistungen)
 // ============================================================================

@@ -59,6 +59,7 @@ import * as miscTemplates from './templates/misc';
 import * as itHilfeTemplates from './templates/it-hilfe';
 import * as appointmentTemplates from './templates/appointments';
 import * as decisionTemplates from './templates/decisions';
+import * as teamTemplates from './templates/teams';
 
 export const emailTemplates = {
   // Auth
@@ -109,6 +110,10 @@ export const emailTemplates = {
   decisionVotingOpened: decisionTemplates.decisionVotingOpened,
   decisionDeadlineReminder: decisionTemplates.decisionDeadlineReminder,
   decisionClosed: decisionTemplates.decisionClosed,
+
+  // Teams
+  teamClaimInvite: teamTemplates.teamClaimInvite,
+  teamMemberAdded: teamTemplates.teamMemberAdded,
 
   // Appointments
   appointmentNewBooking: appointmentTemplates.appointmentNewBooking,

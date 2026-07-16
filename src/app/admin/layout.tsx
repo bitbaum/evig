@@ -6,11 +6,10 @@
  */
 
 import type { Metadata } from 'next'
-import { headers, cookies } from 'next/headers'
+import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { NextIntlClientProvider, hasLocale } from 'next-intl'
-import { routing } from '@/i18n/routing'
-import deMessages from '../../../messages/de.json'
+import { NextIntlClientProvider } from 'next-intl'
+import { getLocale, getMessages } from 'next-intl/server'
 import { auth } from '@/auth'
 import { getAccessibleSections, isStaffEmail } from '@/lib/permissions'
 import { AdminLayoutClient } from './AdminLayoutClient'
@@ -56,42 +55,16 @@ export default async function AdminLayout({
     redirect('/?error=no_admin_access')
   }
 
-  // The admin area is German-only. SSOT: THIS is the single place that decides
-  // the admin locale — we pin it to German and pass the German messages so the
-  // cookie/URL locale can never leak in and half-translate the nav (e.g. a
-  // stale ja cookie rendering the sidebar in Japanese).
-  // Admin is forced to German by the i18n resolver, so read the visitor's real
-  // language preference from the cookie to decide whether to show the notice.
-  const cookieLocale = (await cookies()).get('NEXT_LOCALE')?.value
-  const visitorLocale = hasLocale(routing.locales, cookieLocale) ? cookieLocale : 'de'
-  // If the visitor came in on a non-DE locale, surface a notice IN THEIR
-  // LANGUAGE so the jump to German isn't disorienting. Read it straight from
-  // the visitor's message file — getTranslations would resolve to German here
-  // (the resolver forces DE on admin routes), defeating the notice's purpose.
-  const localeNotice =
-    visitorLocale === 'de'
-      ? null
-      : await (async () => {
-          try {
-            const msgs = (await import(`../../../messages/${visitorLocale}.json`)).default as {
-              admin?: { localeFallback?: { notice?: string } }
-            }
-            return msgs.admin?.localeFallback?.notice ?? null
-          } catch {
-            return null
-          }
-        })()
+  // Admin follows the user's language preference. SSOT: the i18n request
+  // resolver (src/i18n/request.ts) decides the locale from the NEXT_LOCALE
+  // cookie (written by the LocaleSwitcher, which is also in the admin top bar)
+  // and deep-merges the locale's messages over German. We just hand the
+  // resolved locale + messages to the client provider — no second decision here.
+  const locale = await getLocale()
+  const messages = await getMessages()
 
   return (
-    <NextIntlClientProvider locale="de" messages={deMessages}>
-      {localeNotice && (
-        <div
-          role="note"
-          className="bg-warning-50 dark:bg-warning-900/20 border-b border-warning-200 dark:border-warning-800 px-4 py-2 text-center text-xs text-warning-900 dark:text-warning-100"
-        >
-          {localeNotice}
-        </div>
-      )}
+    <NextIntlClientProvider locale={locale} messages={messages}>
       <AdminLayoutClient
         user={{
           name: session.user.name ?? null,

@@ -25,7 +25,7 @@ import {
   Calendar,
 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminStatsGrid, type StatCardItem } from '@/components/admin/AdminStatsGrid'
+import { AdminStatsStrip, type StatItem } from '@/components/admin/AdminStatsStrip'
 import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
 import { AdminButton } from '@/components/admin/AdminButton'
 import { ADMIN_CONTENT } from '@/config/admin-content'
@@ -162,7 +162,7 @@ export default async function AdminServicesPage() {
     )
   }
 
-  const statCards: StatCardItem[] = [
+  const statCards: StatItem[] = [
     { icon: Wrench, color: 'gray', label: 'Gesamt Services', value: stats.totalServices },
     { icon: CheckCircle, color: 'green', label: 'Aktiv', value: stats.activeServices },
     { icon: Users, color: 'gray', label: 'Buchungen', value: stats.totalBookings },
@@ -255,7 +255,7 @@ export default async function AdminServicesPage() {
       iconColor="green"
       actions={createAction}
     >
-      <AdminStatsGrid items={statCards} />
+      <AdminStatsStrip items={statCards} />
       <AdminTable columns={columns} rows={services} rowKey={(s) => s.id} />
     </AdminPageWrapper>
   )

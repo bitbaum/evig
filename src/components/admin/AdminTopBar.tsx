@@ -7,6 +7,7 @@ import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
 import { NotificationBell } from '@/components/admin/NotificationBell'
 import { CommandBar } from '@/components/admin/CommandBar'
 import { UserMenuDropdown } from '@/app/admin/UserMenuDropdown'
+import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { Button } from '@/components/ui/button'
 import { adminChrome, adminInteractive } from '@/lib/admin-ui'
@@ -79,6 +80,9 @@ export function AdminTopBar({
 
           <div className={adminChrome.actionDivider} aria-hidden="true" />
 
+          {/* Compact chip on ≥sm; small screens switch language via the
+              user menu (inline pills) to keep the bar uncrowded. */}
+          <LocaleSwitcher cookieOnly className="hidden sm:block" />
           <ThemeToggle />
 
           <div className={adminChrome.actionDivider} aria-hidden="true" />

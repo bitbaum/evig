@@ -1140,7 +1140,9 @@
       "paymentCancelled": "Payment cancelled.",
       "revampitOnly": "Only Revamp-IT devices can be added to the cart. Community listings are purchased directly.",
       "cartAriaLabel": "Cart, {count} items",
-      "closeAriaLabel": "Close cart"
+      "closeAriaLabel": "Close cart",
+      "unavailableRemoved": "\"{title}\" is no longer available and was removed from your cart.",
+      "unavailableRemovedMany": "{count} items are no longer available and were removed from your cart."
     },
     "aiCamera": {
       "analyzing": "Analyzing product...",
@@ -4899,28 +4901,34 @@
       "deliveryRemote": "Remote / Online",
       "deliveryOnsite": "On-site",
       "ctaHint": "This starts a request to this person — they’ll be notified and can send you an offer."
-    },
-    "seller": {
-      "backToMarketplace": "Back to Marketplace",
-      "publicProfile": "Seller profile",
-      "memberSince": "Member since {date}",
-      "listings": "Listings",
-      "sold": "Sold",
-      "noRatings": "No reviews",
-      "ratingsCount": "{count} reviews",
-      "activeListings": "Active listings ({count})",
-      "noListingsTitle": "No active listings",
-      "noListingsDescription": "This seller currently has no active listings.",
-      "loadingProfile": "Loading profile...",
-      "sellerNotFound": "Seller not found",
-      "errorLoading": "Error loading profile",
-      "meta": {
-        "title": "{name} – seller on the RevampIT Marketplace",
-        "titleFallback": "Seller profile – RevampIT Marketplace",
-        "description": "{name} on the RevampIT Marketplace – {count} active listings. Buy used tech and contribute to the circular economy."
-      },
-      "verified": "Verified"
     }
+  },
+  "sellers": {
+    "meta": {
+      "title": "{name} – seller on the RevampIT Marketplace",
+      "titleFallback": "Seller profile – RevampIT Marketplace",
+      "description": "{name} on the RevampIT Marketplace – {count} active listings. Buy used tech and contribute to the circular economy."
+    },
+    "backToMarketplace": "Back to Marketplace",
+    "publicProfile": "Seller profile",
+    "verified": "Verified",
+    "memberSince": "Member since {date}",
+    "listings": "Listings",
+    "sold": "Sold",
+    "noRatings": "No reviews",
+    "ratingsCount": "{count} reviews",
+    "activeListings": "Active listings ({count})",
+    "noListingsTitle": "No active listings",
+    "noListingsDescription": "This seller currently has no active listings.",
+    "loadingProfile": "Loading profile...",
+    "sellerNotFound": "Seller not found",
+    "errorLoading": "Error loading profile",
+    "reviewsHeading": "Reviews",
+    "verifiedPurchase": "Verified purchase",
+    "sellerResponse": "Seller's response",
+    "reviewForListing": "for {title}",
+    "noReviewsTitle": "No reviews yet",
+    "noReviewsDescription": "This seller has not received any reviews yet."
   },
   "agb": {
     "meta": {
@@ -8658,7 +8666,10 @@
       "errorUpdateStatus": "Could not update status",
       "networkError": "Network error",
       "articlesSection": "Items ({count})",
-      "moreItems": "+{count} more"
+      "moreItems": "+{count} more",
+      "prevPage": "Back",
+      "nextPage": "Next",
+      "paginationCurrentPage": "Page {page}"
     },
     "listings": {
       "pageTitle": "My Listings",
@@ -10085,9 +10096,6 @@
         "declined": "Declined"
       }
     },
-    "localeFallback": {
-      "notice": "The admin area is only available in German."
-    },
     "timecards": {
       "headerStatusSubmitted": "Submitted",
       "headerStatusDraft": "Draft",
@@ -10594,14 +10602,28 @@
       "placeholder": "Search or command…",
       "openShortcut": "Open command bar",
       "noResults": "No results",
-      "recentlyVisited": "Recently visited"
+      "recentlyVisited": "Recently visited",
+      "groups": {
+        "actions": "Actions",
+        "sections": "Sections",
+        "users": "Users",
+        "decisions": "Decisions",
+        "listings": "Listings"
+      },
+      "actions": {
+        "newDevice": "Capture new device",
+        "newDecision": "New decision",
+        "newProtocol": "New minutes",
+        "dashboard": "Dashboard"
+      }
     },
     "userMenu": {
       "darkMode": "Appearance",
       "toWebsite": "To website",
       "signOut": "Sign out",
       "adminArea": "Admin area",
-      "staffFallback": "Team member"
+      "staffFallback": "Team member",
+      "language": "Language"
     },
     "notifications": {
       "title": "Notifications",
@@ -10855,6 +10877,172 @@
         "publish": "Publish",
         "aiPlaceholderEdit": "e.g. “Add a section about repair tips” or “Make the text more engaging”",
         "aiPlaceholderNew": "Describe the topic or idea for your blog article…"
+      }
+    },
+    "sections": {
+      "items": {
+        "dashboard": {
+          "label": "Dashboard",
+          "description": "Overview and statistics",
+          "shortLabel": "Today"
+        },
+        "my-timecards": {
+          "label": "Time tracking",
+          "description": "Record and submit working hours",
+          "shortLabel": "Time"
+        },
+        "intake": {
+          "label": "Device intake",
+          "description": "All captured devices: status, checklist, publication"
+        },
+        "erfassung": {
+          "label": "Capture product",
+          "description": "Accept a device (checklist/donation) or quickly capture a product",
+          "shortLabel": "Capture"
+        },
+        "marketplace": {
+          "label": "Listings",
+          "description": "Review, verify and manage listings"
+        },
+        "it-hilfe-admin": {
+          "label": "IT help",
+          "description": "Manage help requests and technicians"
+        },
+        "workshops-admin": {
+          "label": "Workshops",
+          "description": "Workshop management and registrations"
+        },
+        "services": {
+          "label": "Services",
+          "description": "Manage service offerings"
+        },
+        "appointments-admin": {
+          "label": "Appointments",
+          "description": "Review and assign service appointments"
+        },
+        "locations": {
+          "label": "Locations",
+          "description": "Location management"
+        },
+        "reviews": {
+          "label": "Reviews",
+          "description": "Moderate reviews"
+        },
+        "content": {
+          "label": "Blog & pages",
+          "description": "Blog, pages, media"
+        },
+        "projects": {
+          "label": "Public projects",
+          "description": "Public projects, resource needs and contributions"
+        },
+        "presentations": {
+          "label": "Presentations",
+          "description": "View and share presentations"
+        },
+        "feedbackOverview": {
+          "label": "Feedback",
+          "description": "All feedback in one place: website, presentations, deliverables"
+        },
+        "approvals": {
+          "label": "Approvals",
+          "description": "Review and approve submitted content",
+          "shortLabel": "Approvals"
+        },
+        "membership": {
+          "label": "Memberships",
+          "description": "Review and manage membership applications"
+        },
+        "teams": {
+          "label": "Teams",
+          "description": "Teams, responsibilities and members"
+        },
+        "team-board": {
+          "label": "Who does what",
+          "description": "The team's current focus and tasks"
+        },
+        "tasks": {
+          "label": "Tasks",
+          "description": "Manage team tasks"
+        },
+        "deliverables": {
+          "label": "Deliverables",
+          "description": "Reports, presentations, mockups — share and collect feedback"
+        },
+        "protocols": {
+          "label": "Minutes",
+          "description": "Meeting minutes and notes"
+        },
+        "decisions": {
+          "label": "Decisions",
+          "description": "Team proposals and votes"
+        },
+        "donations": {
+          "label": "Donations",
+          "description": "Manage monetary and in-kind donations"
+        },
+        "users": {
+          "label": "Users",
+          "description": "User management"
+        },
+        "team": {
+          "label": "Team profiles",
+          "description": "Employees, volunteers, interns"
+        },
+        "hr-vacancies": {
+          "label": "Open positions",
+          "description": "Publish, pause and share job openings"
+        },
+        "hr-applications": {
+          "label": "Applications",
+          "description": "Application pipeline and hiring"
+        },
+        "payroll": {
+          "label": "Payroll",
+          "description": "Close the month and export a CSV for accounting"
+        },
+        "analyse-hub": {
+          "label": "Analytics overview",
+          "description": "Key figures, finances and impact at a glance"
+        },
+        "finanzen": {
+          "label": "Finances",
+          "description": "Detailed financial overview and trends"
+        },
+        "kennzahlen": {
+          "label": "Key figures",
+          "description": "KPIs and metrics at a glance"
+        },
+        "wirkung": {
+          "label": "Impact",
+          "description": "Environmental and social impact"
+        },
+        "transparenz": {
+          "label": "Transparency",
+          "description": "First-principles analysis"
+        },
+        "hirn": {
+          "label": "Hirn AI",
+          "description": "AI assistant for Revamp-IT"
+        },
+        "promo-codes": {
+          "label": "Promo codes",
+          "description": "Issue discount and voucher codes"
+        },
+        "settings": {
+          "label": "Settings",
+          "description": "System configuration"
+        }
+      },
+      "groups": {
+        "uebersicht": "Today",
+        "angebot": "Operations",
+        "inhalte": "Content",
+        "betrieb": "Organization",
+        "analyse": "Analytics",
+        "personen": "People",
+        "teamhr": "Team & HR",
+        "system": "System"
       }
     }
   },

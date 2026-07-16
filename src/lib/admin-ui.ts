@@ -30,10 +30,10 @@ export const adminType = {
   body:         designPrimitive.type.body,
   /** Secondary / meta text — 14px minimum for readability (WCAG) */
   meta:         designPrimitive.type.meta,
-  /** Large metric number in stat cards — font-mono ensures consistent digit widths */
-  stat:         designPrimitive.type.stat,
-  /** Stat card label below the number */
-  statLabel:    `${designPrimitive.type.smallMeta} mt-0.5`,
+  /** Compact metric value in the stats strip — tabular-nums keeps digits aligned */
+  stat:         'text-sm font-semibold tabular-nums text-text-primary',
+  /** Label next to a compact stat value in the stats strip */
+  statLabel:    designPrimitive.type.smallMeta,
 } as const
 
 // ─── Surfaces ────────────────────────────────────────────────────────────────
@@ -73,10 +73,14 @@ export const adminSpace = {
 // The colored-square-with-icon pattern used in stat cards and page headers.
 
 export const adminIconBox = {
+  /** Extra-small box: 24×24, inside the compact stats strip */
+  xs:   'w-6 h-6 rounded-md flex items-center justify-center shrink-0',
   /** Small box: 36×36, inside stat cards */
   sm:   'w-9 h-9 rounded-lg flex items-center justify-center shrink-0',
   /** Medium box: 40×40, inside page header */
   md:   'w-10 h-10 rounded-lg flex items-center justify-center shrink-0',
+  /** Icon size inside xs box */
+  iconXs: 'w-3.5 h-3.5',
   /** Icon size inside sm box */
   icon: 'w-4 h-4',
   /** Icon size inside md box */

@@ -21,7 +21,7 @@ import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminStatsGrid, type StatCardItem } from '@/components/admin/AdminStatsGrid'
+import { AdminStatsStrip, type StatItem } from '@/components/admin/AdminStatsStrip'
 import { MemberBoardCard, type BoardMemberCard } from '@/components/admin/team/MemberBoardCard'
 import { WORK_STATE_LABELS, WORK_STATE_OPTIONS, type WorkState } from '@/config/team'
 import { getAccentClasses } from '@/config/teams'
@@ -238,7 +238,7 @@ export default async function TeamBoardPage({ searchParams }: PageProps) {
       icon={Users}
       iconColor="blue"
     >
-      <AdminStatsGrid
+      <AdminStatsStrip
         items={[
           { icon: Users, color: 'blue', label: 'Aktive Mitglieder', value: stats.activeMembers },
           { icon: ClipboardList, color: 'green', label: 'Mit offenen Aufgaben', value: stats.withTasks },
@@ -250,7 +250,7 @@ export default async function TeamBoardPage({ searchParams }: PageProps) {
             value: stats.staleFocus,
             href: stats.staleFocus > 0 ? buildHref({}, { focus: 'stale' }) : undefined,
           },
-        ] satisfies StatCardItem[]}
+        ] satisfies StatItem[]}
       />
 
       {/* Filter bar — server-side via search params, no client JS. */}
