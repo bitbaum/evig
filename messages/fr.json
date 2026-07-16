@@ -9483,7 +9483,8 @@
         "viewInShop": "Voir dans le shop",
         "toDevice": "Ouvrir l'appareil dans le pipeline",
         "titleQcGated": "Saisi — contrôle qualité requis",
-        "whereQcGated": "Cet appareil doit être contrôlé avant la vente. Il se trouve dans l'entrée des appareils avec une checklist active — une fois validé, il peut être publié."
+        "whereQcGated": "Cet appareil doit être contrôlé avant la vente. Il se trouve dans l'entrée des appareils avec une checklist active — une fois validé, il peut être publié.",
+        "printLabel": "Imprimer l'étiquette"
       },
       "bulkSuccess": {
         "titlePartial": "Partiellement saisi",
@@ -10269,7 +10270,9 @@
           "body": "Cet appareil a été saisi rapidement, mais sa catégorie doit être contrôlée avant la vente (tests, effacement des données, nettoyage). Démarrez le contrôle pour activer la checklist.",
           "start": "Démarrer le contrôle",
           "starting": "Démarrage…"
-        }
+        },
+        "printLabel": "Étiquette",
+        "printLabelTitle": "Imprimer l'étiquette QR de l'appareil"
       },
       "pipeline": {
         "newDevice": "Nouvel appareil",

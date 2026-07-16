@@ -102,6 +102,12 @@ export interface ChecklistItemConfig {
    * If undefined, show for ALL device categories.
    */
   deviceCategories?: string[]
+  /**
+   * Vier-Augen-Prinzip: this item may only be passed by someone OTHER than
+   * the person who did all the other completed required work on the device.
+   * Enforced by the checklist API.
+   */
+  requiresSecondPerson?: boolean
 }
 
 /**
@@ -300,10 +306,11 @@ export const CHECKLIST_ITEMS: ChecklistItemConfig[] = [
   {
     id: 'final_qa',
     label: 'Qualitätskontrolle bestanden',
-    description: 'Abschlusskontrolle: Gerät vollständig funktionsfähig, alle Tests bestanden, bereit für Verkauf',
+    description: 'Abschlusskontrolle durch eine ZWEITE Person (Vier-Augen-Prinzip): Gerät vollständig funktionsfähig, alle Tests bestanden, bereit für Verkauf',
     category: 'quality',
     tiers: ['refurbish'],
     required: true,
+    requiresSecondPerson: true,
   },
   {
     id: 'warranty_label',
@@ -542,6 +549,26 @@ export function hasChecklistFailure(
   return items.some(
     item => item.required && getItemResult(state[item.id]) === CHECKLIST_RESULTS.FAIL,
   )
+}
+
+/**
+ * Vier-Augen-Prinzip check. A `requiresSecondPerson` item (final QA) may only
+ * be signed off by someone who was NOT the sole worker on the device: at
+ * least one other completed required item must carry a different completedBy.
+ * Also blocks when nothing else is done yet — there is nothing to QA.
+ */
+export function violatesSecondPersonRule(
+  item: ChecklistItemConfig,
+  state: ChecklistState,
+  tier: IntakeTier,
+  deviceCategory: string | null | undefined,
+  actingUserId: string,
+): boolean {
+  if (!item.requiresSecondPerson) return false
+  const otherDoneRequired = getChecklistForDevice(tier, deviceCategory)
+    .filter(i => i.required && i.id !== item.id && isItemDone(state[i.id]))
+  if (otherDoneRequired.length === 0) return true
+  return otherDoneRequired.every(i => state[i.id]?.completedBy === actingUserId)
 }
 
 /**

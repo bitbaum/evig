@@ -111,7 +111,7 @@ export function ChecklistGroup({ group, onSetResult }: ChecklistGroupProps) {
                       variant="ghost"
                       size="icon"
                       onClick={() => handleVerdict(item, CHECKLIST_RESULTS.PASS)}
-                      className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-colors ${
+                      className={`h-11 w-11 sm:h-7 sm:w-7 rounded border-2 flex items-center justify-center transition-colors ${
                         result === CHECKLIST_RESULTS.PASS
                           ? 'bg-action border-action text-white'
                           : 'border-default hover:border-action'
@@ -127,7 +127,7 @@ export function ChecklistGroup({ group, onSetResult }: ChecklistGroupProps) {
                       variant="ghost"
                       size="icon"
                       onClick={() => handleVerdict(item, CHECKLIST_RESULTS.FAIL)}
-                      className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-colors ${
+                      className={`h-11 w-11 sm:h-7 sm:w-7 rounded border-2 flex items-center justify-center transition-colors ${
                         failed
                           ? 'bg-error-600 border-error-600 text-white'
                           : 'border-default hover:border-error-500'
@@ -143,7 +143,7 @@ export function ChecklistGroup({ group, onSetResult }: ChecklistGroupProps) {
                       variant="ghost"
                       size="icon"
                       onClick={() => handleVerdict(item, CHECKLIST_RESULTS.NA)}
-                      className={`w-6 h-6 rounded border-2 flex items-center justify-center font-semibold transition-colors ${
+                      className={`h-11 w-11 sm:h-7 sm:w-7 rounded border-2 flex items-center justify-center font-semibold transition-colors ${
                         result === CHECKLIST_RESULTS.NA
                           ? 'bg-surface-overlay border-strong text-text-secondary'
                           : 'border-default text-text-muted hover:border-strong'

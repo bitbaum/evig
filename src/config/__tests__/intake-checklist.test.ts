@@ -18,6 +18,7 @@ import {
   hasChecklistFailure,
   requiresQualityControl,
   getBuyerVisibleChecks,
+  violatesSecondPersonRule,
   getChecklistProgress,
   getItemResult,
   isItemDone,
@@ -351,6 +352,46 @@ describe('requiresQualityControl', () => {
   it('is false for missing category', () => {
     expect(requiresQualityControl(null)).toBe(false)
     expect(requiresQualityControl(undefined)).toBe(false)
+  })
+})
+
+// ─── violatesSecondPersonRule ────────────────────────────────────────────────
+
+describe('violatesSecondPersonRule (Vier-Augen-Prinzip)', () => {
+  const tier = INTAKE_TIERS.REFURBISH
+  const cat = '10'
+  const finalQa = CHECKLIST_ITEMS.find(i => i.id === 'final_qa')!
+  const powerTest = CHECKLIST_ITEMS.find(i => i.id === 'power_test')!
+
+  /** State where all required items except final_qa passed, by the given user. */
+  function workDoneBy(userId: string): ChecklistState {
+    const state: ChecklistState = {}
+    for (const id of requiredIdsFor(tier, cat).filter(i => i !== 'final_qa')) {
+      state[id] = { result: CHECKLIST_RESULTS.PASS, completedBy: userId, completedAt: '2026-01-01T00:00:00Z', notes: '' }
+    }
+    return state
+  }
+
+  it('never applies to items without the flag', () => {
+    expect(violatesSecondPersonRule(powerTest, workDoneBy('tech-1'), tier, cat, 'tech-1')).toBe(false)
+  })
+
+  it('blocks the sole worker from signing off final QA', () => {
+    expect(violatesSecondPersonRule(finalQa, workDoneBy('tech-1'), tier, cat, 'tech-1')).toBe(true)
+  })
+
+  it('allows a second person to sign off final QA', () => {
+    expect(violatesSecondPersonRule(finalQa, workDoneBy('tech-1'), tier, cat, 'tech-2')).toBe(false)
+  })
+
+  it('allows the primary tech when someone else completed at least one item', () => {
+    const state = workDoneBy('tech-1')
+    state['data_wipe'] = { result: CHECKLIST_RESULTS.PASS, completedBy: 'tech-2', completedAt: '2026-01-01T00:00:00Z', notes: '' }
+    expect(violatesSecondPersonRule(finalQa, state, tier, cat, 'tech-1')).toBe(false)
+  })
+
+  it('blocks final QA when nothing else is done yet', () => {
+    expect(violatesSecondPersonRule(finalQa, {}, tier, cat, 'tech-1')).toBe(true)
   })
 })
 

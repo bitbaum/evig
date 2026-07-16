@@ -78,6 +78,11 @@ jest.mock('drizzle-orm', () => ({
 }))
 
 const mockCreateErfassungProduct = jest.fn()
+const mockSyncProductToKivvi = jest.fn()
+
+jest.mock('@/lib/kivvi/sync-product', () => ({
+  syncProductToKivvi: (...args: unknown[]) => mockSyncProductToKivvi.apply(null, args),
+}))
 
 jest.mock('@/lib/erfassung/create-product', () => ({
   createErfassungProduct: (...args: unknown[]) => mockCreateErfassungProduct.apply(null, args),
@@ -239,6 +244,14 @@ describe('POST /api/admin/intake — success', () => {
     expect(body.data.item_uuid).toBe('uuid-123')
     expect(body.data.product_id).toBe('prod-456')
     expect(body.data.inventory_id).toBe('inv-789')
+  })
+
+  it('mirrors the device to Kivvi after the transaction commits', async () => {
+    await POST(makePostRequest())
+    expect(mockSyncProductToKivvi).toHaveBeenCalledTimes(1)
+    expect(mockSyncProductToKivvi).toHaveBeenCalledWith(
+      expect.objectContaining({ inventoryId: 'inv-789' })
+    )
   })
 
   it('returns 500 when db.transaction throws', async () => {

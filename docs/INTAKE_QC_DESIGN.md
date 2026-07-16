@@ -1,6 +1,6 @@
 # Intake & Quality Control — System Design
 
-**Status**: Phases 1 + 3 shipped (verdicts, failed state, QC gate, buyer-facing test results) · Phases 2 + 4 planned
+**Status**: Phases 1–4 shipped (verdicts, failed state, QC gate, buyer-facing test results, QR labels, Vier-Augen-Prinzip, mobile pipeline, Kivvi from both doors)
 **Last Updated**: 2026-07-16
 
 ---
@@ -103,15 +103,16 @@ Enforced at every publish path:
 
 ---
 
-## Roadmap — next phases (in value-per-effort order)
+## Later phases
 
-### Phase 2 — QR labels (physical ↔ digital link)
+### Phase 2 — QR labels (SHIPPED)
 
-Every item already gets a human-readable `item_uuid` (`I-YYMMDD-NNNN`) and the
-erfassung flow already has a printable factsheet. Add a small QR label
-(item_uuid encoded as URL to `/admin/intake?detail=<id>`) printed at capture
-time; scanning at any workstation opens the device's checklist. Highest-leverage
-workshop UX: no searching, no mismatched devices.
+`/admin/intake/[id]/label` renders a 62mm label-printer format label
+(item_uuid, device, tier, condition, date) with a QR encoding
+`/admin/intake?detail=<id>` — scanning at any workstation opens the device's
+checklist. QR images come from the existing `buildQrImageUrl` config helper
+(same as the A4 factsheet). Reachable from the intake detail header
+("Etikett") and the erfassung success screen ("Etikett drucken").
 
 ### Phase 3 — buyer-facing test results (SHIPPED)
 
@@ -138,13 +139,25 @@ before this change carry no checks; they gain them on their next re-publish
 (no backfill: the historical checklists exist on `inventory_items`, so a
 backfill script is possible later if wanted).
 
-### Phase 4 — two-person QA + board view
+### Phase 4 — two-person QA + mobile pipeline (SHIPPED)
 
-- `final_qa` must be completed by a different staff member than the majority of
-  the other checklist items (compare `completedBy`); enforce in the checklist
-  route.
-- Optional: pipeline as kanban columns (Eingang → In Prüfung → Bereit → Im
-  Shop) with "stuck > X days" indicators, mobile-first (320px+).
+- **Vier-Augen-Prinzip**: `final_qa` carries `requiresSecondPerson: true` in
+  the checklist SSOT. `violatesSecondPersonRule()` blocks a pass/n.a. sign-off
+  by the person who did ALL the other completed required work (and blocks
+  final QA before anything else is done). Recording a FAIL is never blocked.
+  Enforced in the checklist API; "Alles in Ordnung" (mark-all) deliberately
+  skips second-person items; rejections surface as a visible error banner.
+- **Mobile pipeline**: `< md` the table becomes a card list
+  (`IntakePipelineCards`) — whole card tappable, no horizontal scroll at
+  320px. Checklist verdict buttons are 44px touch targets on phones
+  (`h-11 w-11 sm:h-7 sm:w-7`).
+
+### Kivvi ERP — both capture doors sync (SHIPPED)
+
+`syncProductToKivvi()` (`src/lib/kivvi/sync-product.ts`) is the SSOT for the
+fire-and-forget post-commit ERP push, used by BOTH `/api/admin/erfassung`
+(Schnellerfassung) and `/api/admin/intake` (Physische Annahme). Previously
+only the erfassung door synced — Annahme devices never reached Kivvi.
 
 ### Explicitly not planned
 

@@ -20,6 +20,7 @@ import { MARKETPLACE_STATUS, PRODUCT_STATUS } from '@/config/marketplace-status'
 import { isChecklistComplete, hasChecklistFailure, getChecklistProgress, QUICK_CAPTURE_TIER } from '@/config/intake-checklist'
 import type { ChecklistState } from '@/config/intake-checklist'
 import { createErfassungProduct } from '@/lib/erfassung/create-product'
+import { syncProductToKivvi } from '@/lib/kivvi/sync-product'
 import { logger } from '@/lib/logger'
 import { appendIntakeEvent } from '@/lib/intake/timeline'
 
@@ -61,6 +62,17 @@ export const POST = withAdmin('intake', async (request, session) => {
           checklistGated: true,
         },
       )
+    })
+
+    // Mirror the device to the Kivvi ERP (non-blocking, after commit) — the
+    // Physische-Annahme door syncs exactly like Schnellerfassung does.
+    syncProductToKivvi({
+      inventoryId: result.inventoryId,
+      hersteller: data.hersteller,
+      produktname: data.produktname,
+      kurzbeschreibung: data.kurzbeschreibung,
+      verkaufspreis: data.verkaufspreis,
+      zustand: data.zustand,
     })
 
     // Record timeline event

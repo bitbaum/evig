@@ -98,6 +98,7 @@ export default function IntakeClient() {
           tierChanging={detail.tierChanging}
           onBack={handleBackToPipeline}
           onRefresh={() => detail.selectedId && detail.fetchDetail(detail.selectedId)}
+          checklistError={detail.checklistError}
           onSetChecklistResult={detail.setChecklistResult}
           onMarkAllRequired={detail.markAllRequired}
           onStartQc={detail.startQc}

@@ -24,6 +24,7 @@ import { Pagination } from '@/components/ui/Pagination'
 import { formatDateShort } from '@/lib/date-formats'
 import type { PipelineItem } from './types'
 import { StatusBadge } from '@/components/ui/status-badge'
+import { IntakePipelineCards } from './IntakePipelineCards'
 import { AdminHeroStatus, type HeroTone, type HeroKpi, type HeroCta } from '@/components/admin/AdminHeroStatus'
 
 interface IntakePipelineViewProps {
@@ -140,7 +141,13 @@ export function IntakePipelineView({
         </div>
       ) : (
         <>
-          <div className="overflow-x-auto">
+          {/* Phone: card list (whole card tappable, 44px+ targets) */}
+          <div className="md:hidden">
+            <IntakePipelineCards items={items} onOpenDetail={onOpenDetail} />
+          </div>
+
+          {/* Desktop: dense table */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b text-left text-text-tertiary">
@@ -182,6 +189,7 @@ export function IntakePipelineView({
                             <div className="w-20 h-2 bg-surface-overlay rounded-full overflow-hidden">
                               <div
                                 className={`h-full rounded-full ${
+                                  item.checklist_failed ? 'bg-error-500' :
                                   progress.percentage === 100 ? 'bg-action' :
                                   progress.percentage > 50 ? 'bg-warning-500' : 'bg-error-400'
                                 }`}

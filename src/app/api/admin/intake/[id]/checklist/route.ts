@@ -17,6 +17,8 @@ import {
   isChecklistComplete,
   hasChecklistFailure,
   getChecklistProgress,
+  violatesSecondPersonRule,
+  CHECKLIST_RESULTS,
   CHECKLIST_RESULT_LABELS,
 } from '@/config/intake-checklist'
 import type { ChecklistState, IntakeTier } from '@/config/intake-checklist'
@@ -57,6 +59,17 @@ export const PATCH = withAdmin<{ id: string }>('intake', async (request, session
     const itemConfig = applicableItems.find(i => i.id === item_id)
     if (!itemConfig) {
       return apiBadRequest(ERROR_MESSAGES.INTAKE_INVALID_CHECKLIST_ITEM)
+    }
+
+    // Vier-Augen-Prinzip: final QA can't be signed off (pass or n.a.) by the
+    // person who did all the other required work. Recording a FAIL is always
+    // allowed — flagging a problem must never be blocked.
+    if (
+      result !== null &&
+      result !== CHECKLIST_RESULTS.FAIL &&
+      violatesSecondPersonRule(itemConfig, checklist, tier, row.category, session.user.id)
+    ) {
+      return apiBadRequest(ERROR_MESSAGES.INTAKE_SECOND_PERSON_REQUIRED)
     }
 
     // Update checklist state (result=null resets the item to open)

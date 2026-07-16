@@ -40,6 +40,8 @@ export interface ChecklistItemWithState {
   description: string
   category: ChecklistCategory
   required: boolean
+  /** Vier-Augen-Prinzip — must be signed off by a second person. */
+  requiresSecondPerson?: boolean
   state: {
     result: ChecklistResult | null
     completedBy: string | null

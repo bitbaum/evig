@@ -83,7 +83,9 @@ jest.mock('@/config/intake-checklist', () => ({
   getChecklistForDevice: jest.fn().mockReturnValue([{ id: 'photos', label: 'Fotos', category: 'Aufnahme' }]),
   isChecklistComplete: jest.fn().mockReturnValue(false),
   hasChecklistFailure: jest.fn().mockReturnValue(false),
+  violatesSecondPersonRule: jest.fn().mockReturnValue(false),
   getChecklistProgress: jest.fn().mockReturnValue({ completed: 1, total: 1 }),
+  CHECKLIST_RESULTS: { PASS: 'pass', FAIL: 'fail', NA: 'na' },
   CHECKLIST_RESULT_LABELS: { pass: 'Bestanden', fail: 'Fehlgeschlagen', na: 'Nicht zutreffend' },
 }))
 
@@ -94,7 +96,12 @@ jest.mock('@/lib/intake/timeline', () => ({
 }))
 
 jest.mock('@/config/error-messages', () => ({
-  ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Interner Serverfehler', INTAKE_ITEM_NOT_FOUND: 'Nicht gefunden', INTAKE_INVALID_CHECKLIST_ITEM: 'Ungültiges Checklistenelement' },
+  ERROR_MESSAGES: {
+    INTERNAL_SERVER_ERROR: 'Interner Serverfehler',
+    INTAKE_ITEM_NOT_FOUND: 'Nicht gefunden',
+    INTAKE_INVALID_CHECKLIST_ITEM: 'Ungültiges Checklistenelement',
+    INTAKE_SECOND_PERSON_REQUIRED: 'Vier-Augen-Prinzip erforderlich',
+  },
 }))
 
 jest.mock('@/lib/api/helpers', () => {
@@ -203,6 +210,26 @@ describe('PATCH /api/admin/intake/[id]/checklist — validation', () => {
     checklist.getChecklistForDevice.mockReturnValueOnce([]) // no applicable items
     const response = await PATCH(makeRequest({ item_id: 'nonexistent', result: 'pass' }), makeContext())
     expect(response.status).toBe(400)
+  })
+
+  it('returns 400 when the second-person rule is violated (Vier-Augen-Prinzip)', async () => {
+    const checklist = require('@/config/intake-checklist')
+    checklist.violatesSecondPersonRule.mockReturnValueOnce(true)
+    const response = await PATCH(makeRequest(), makeContext())
+    expect(response.status).toBe(400)
+    const body = await response.json()
+    expect(body.error).toContain('Vier-Augen')
+  })
+
+  it('does NOT apply the second-person rule to fail verdicts', async () => {
+    const checklist = require('@/config/intake-checklist')
+    checklist.violatesSecondPersonRule.mockReturnValue(true)
+    mockValidateBody.mockReturnValueOnce({
+      success: true,
+      data: { item_id: 'photos', result: 'fail', notes: 'defekt' },
+    })
+    const response = await PATCH(makeRequest({ item_id: 'photos', result: 'fail', notes: 'defekt' }), makeContext())
+    expect(response.status).toBe(200)
   })
 })
 

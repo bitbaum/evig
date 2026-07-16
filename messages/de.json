@@ -9539,7 +9539,8 @@
         "viewInShop": "Im Shop ansehen",
         "toDevice": "Zum Gerät im Geräte-Eingang",
         "titleQcGated": "Erfasst — Qualitätskontrolle erforderlich",
-        "whereQcGated": "Dieses Gerät muss vor dem Verkauf geprüft werden. Es liegt im Geräte-Eingang mit aktiver Checkliste — nach bestandener Prüfung kann es publiziert werden."
+        "whereQcGated": "Dieses Gerät muss vor dem Verkauf geprüft werden. Es liegt im Geräte-Eingang mit aktiver Checkliste — nach bestandener Prüfung kann es publiziert werden.",
+        "printLabel": "Etikett drucken"
       },
       "bulkSuccess": {
         "titlePartial": "Teilweise erfasst",
@@ -10382,7 +10383,9 @@
           "body": "Dieses Gerät wurde per Schnellerfassung aufgenommen, gehört aber zu einer Kategorie, die vor dem Verkauf geprüft werden muss (Tests, Datenlöschung, Reinigung). Prüfung starten, um die Checkliste zu aktivieren.",
           "start": "Prüfung starten",
           "starting": "Starten…"
-        }
+        },
+        "printLabel": "Etikett",
+        "printLabelTitle": "QR-Etikett für das Gerät drucken"
       },
       "pipeline": {
         "newDevice": "Neues Gerät",

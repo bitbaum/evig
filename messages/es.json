@@ -9483,7 +9483,8 @@
         "viewInShop": "Ver en la tienda",
         "toDevice": "Abrir dispositivo en la pipeline",
         "titleQcGated": "Registrado: se requiere control de calidad",
-        "whereQcGated": "Este dispositivo debe revisarse antes de la venta. Está en la entrada de dispositivos con una lista de control activa; una vez aprobado, puede publicarse."
+        "whereQcGated": "Este dispositivo debe revisarse antes de la venta. Está en la entrada de dispositivos con una lista de control activa; una vez aprobado, puede publicarse.",
+        "printLabel": "Imprimir etiqueta"
       },
       "bulkSuccess": {
         "titlePartial": "Registrados parcialmente",
@@ -10316,7 +10317,9 @@
           "body": "Este dispositivo se registró de forma rápida, pero su categoría debe revisarse antes de la venta (pruebas, borrado de datos, limpieza). Inicie la revisión para activar la lista de control.",
           "start": "Iniciar revisión",
           "starting": "Iniciando…"
-        }
+        },
+        "printLabel": "Etiqueta",
+        "printLabelTitle": "Imprimir la etiqueta QR del dispositivo"
       },
       "pipeline": {
         "newDevice": "Nuevo dispositivo",

@@ -9,8 +9,9 @@ import { Input } from '@/components/ui/input'
 import {
   Check, RefreshCw, ExternalLink,
   AlertCircle, ArrowDownUp, Clock, CheckCheck, ClipboardList,
-  Image as ImageIcon,
+  Image as ImageIcon, QrCode,
 } from 'lucide-react'
+import { ROUTES } from '@/config/routes'
 import { KATEGORIEN, getConditionLabel } from '@/config/erfassung'
 import { formatDateShort } from '@/lib/date-formats'
 import {
@@ -46,6 +47,7 @@ interface IntakeDetailViewProps {
   tierChanging: boolean
   onBack: () => void
   onRefresh: () => void
+  checklistError: string | null
   onSetChecklistResult: (itemId: string, result: ChecklistResult | null, notes?: string) => void
   onMarkAllRequired: () => void
   onStartQc: () => void
@@ -69,6 +71,7 @@ export function IntakeDetailView({
   tierChanging,
   onBack,
   onRefresh,
+  checklistError,
   onSetChecklistResult,
   onMarkAllRequired,
   onStartQc,
@@ -128,7 +131,14 @@ export function IntakeDetailView({
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap justify-end">
+          <Link
+            href={ROUTES.admin.intakeLabel(detail.id)}
+            className={`flex items-center gap-1 px-2 py-1.5 text-xs border rounded-lg min-h-11 sm:min-h-0 ${adminInteractive.rowHover}`}
+            title={t('printLabelTitle')}
+          >
+            <QrCode className="w-3.5 h-3.5" /> {t('printLabel')}
+          </Link>
           {detail.marketplace_status === INTAKE_STATUS.PUBLISHED ? (
             <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-action-muted text-action">
               <Check className="w-4 h-4" /> {t('inShop')}
@@ -260,6 +270,14 @@ export function IntakeDetailView({
               <ArrowDownUp className="w-3.5 h-3.5" /> {t('failedAlert.changeTierCta')}
             </Button>
           )}
+        </div>
+      )}
+
+      {/* Checklist rejection (e.g. Vier-Augen-Prinzip) — never fail silently */}
+      {checklistError && (
+        <div className="flex items-start gap-2 text-sm text-error-700 dark:text-error-300 bg-error-50 dark:bg-error-900/20 border border-error-300 dark:border-error-800 p-3 rounded-lg">
+          <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
+          <span>{checklistError}</span>
         </div>
       )}
 

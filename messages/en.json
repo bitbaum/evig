@@ -9442,7 +9442,8 @@
         "viewInShop": "View in shop",
         "toDevice": "Open device in pipeline",
         "titleQcGated": "Captured — quality control required",
-        "whereQcGated": "This device must be inspected before sale. It is in device intake with an active checklist — once it passes, it can be published."
+        "whereQcGated": "This device must be inspected before sale. It is in device intake with an active checklist — once it passes, it can be published.",
+        "printLabel": "Print label"
       },
       "bulkSuccess": {
         "titlePartial": "Partially captured",
@@ -10268,7 +10269,9 @@
           "body": "This device was quick-captured, but its category must be inspected before sale (tests, data wipe, cleaning). Start the inspection to activate the checklist.",
           "start": "Start inspection",
           "starting": "Starting…"
-        }
+        },
+        "printLabel": "Label",
+        "printLabelTitle": "Print the device QR label"
       },
       "pipeline": {
         "newDevice": "New device",

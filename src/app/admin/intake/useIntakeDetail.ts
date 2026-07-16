@@ -45,8 +45,12 @@ export function useIntakeDetail() {
     setTierChangeReason('')
   }, [])
 
+  // Rejections (e.g. Vier-Augen-Prinzip) must be visible, not silent.
+  const [checklistError, setChecklistError] = useState<string | null>(null)
+
   const setChecklistResult = useCallback(async (itemId: string, result: ChecklistResult | null, notes?: string) => {
     if (!selectedId) return
+    setChecklistError(null)
     const body: Record<string, unknown> = { item_id: itemId, result }
     if (notes !== undefined) body.notes = notes
     const response = await apiFetch<void>(`/api/admin/intake/${selectedId}/checklist`, {
@@ -55,17 +59,21 @@ export function useIntakeDetail() {
     })
     if (response.success) {
       fetchDetail(selectedId)
+    } else {
+      setChecklistError(response.error || null)
     }
   }, [selectedId, fetchDetail])
 
   const markAllRequired = useCallback(async () => {
     if (!selectedId || !detail) return
-    // Only OPEN items — never overrides a recorded fail or n.a. verdict.
+    setChecklistError(null)
+    // Only OPEN items — never overrides a recorded fail/n.a. verdict, and
+    // never auto-signs items that need a deliberate second person (final QA).
     const open = detail.checklist_grouped
       .flatMap(g => g.items)
-      .filter(i => i.required && i.state.result === null)
+      .filter(i => i.required && i.state.result === null && !i.requiresSecondPerson)
     if (open.length === 0) return
-    await Promise.all(
+    const results = await Promise.all(
       open.map(item =>
         apiFetch<void>(`/api/admin/intake/${selectedId}/checklist`, {
           method: 'PATCH',
@@ -73,6 +81,8 @@ export function useIntakeDetail() {
         })
       )
     )
+    const firstError = results.find(r => !r.success)
+    if (firstError) setChecklistError(firstError.error || null)
     fetchDetail(selectedId)
   }, [selectedId, detail, fetchDetail])
 
@@ -143,6 +153,7 @@ export function useIntakeDetail() {
     fetchDetail,
     clearDetail,
     setChecklistResult,
+    checklistError,
     markAllRequired,
     startQc,
     startingQc,

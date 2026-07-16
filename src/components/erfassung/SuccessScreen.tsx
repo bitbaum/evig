@@ -1,7 +1,7 @@
 'use client'
 
 import { Link } from '@/i18n/navigation'
-import { Package, Printer, Plus, PackageCheck, Store } from 'lucide-react'
+import { Package, Printer, Plus, PackageCheck, QrCode, Store } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
@@ -79,6 +79,12 @@ export function SuccessScreen({ itemUUID, productId, inventoryId, action, listin
             <Plus className="w-5 h-5" />
             {t('captureAnother')}
           </Button>
+          {inventoryId && (
+            <Button as={Link} href={ROUTES.admin.intakeLabel(inventoryId)} variant="outline">
+              <QrCode className="w-5 h-5" />
+              {t('printLabel')}
+            </Button>
+          )}
           <Button as={Link} href={ROUTES.admin.erfassungFactsheet(productId)} variant="outline">
             <Printer className="w-5 h-5" />
             {t('printFactsheet')}
