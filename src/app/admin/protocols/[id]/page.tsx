@@ -13,7 +13,7 @@ import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { isSuperAdmin } from '@/lib/permissions'
 import { adminIconBox, adminIconColor } from '@/lib/admin-ui'
-import { getProtocolById, getActionLinks, getTeamMembers, getDecisionsByProtocolId } from '@/lib/services/protocols'
+import { getProtocolById, getActionLinks, getTeamMembers, getDecisionsByProtocolId, recoverStaleProtocolProcessing } from '@/lib/services/protocols'
 import {
   MEETING_TYPE_LABELS,
   MEETING_TYPE_COLORS,
@@ -70,9 +70,19 @@ export default async function ProtocolDetailPage({
     notFound()
   }
 
-  const protocol = await getProtocolById(id, dbUserId, isAdmin)
+  let protocol = await getProtocolById(id, dbUserId, isAdmin)
   if (!protocol) {
     notFound()
+  }
+
+  // Self-healing: a protocol stuck in "processing" (server restarted mid-run)
+  // is reset to draft on load, so the page always offers a way forward
+  // instead of an eternal spinner.
+  if (protocol.status === PROTOCOL_STATUSES.PROCESSING) {
+    const recovered = await recoverStaleProtocolProcessing(id)
+    if (recovered) {
+      protocol = (await getProtocolById(id, dbUserId, isAdmin)) ?? protocol
+    }
   }
 
   const [actionLinks, teamMembers, protocolDecisions] = await Promise.all([

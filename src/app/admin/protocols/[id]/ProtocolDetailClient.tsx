@@ -16,7 +16,7 @@
  *   9. Erneut verarbeiten / Abschliessen / Löschen
  */
 
-import { useState, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Loader2, CheckCircle2, FileText, Trash2, AlertCircle, UserCheck } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
@@ -129,6 +129,15 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
 
   const allMapped = unmappedAttendees.length === 0 && (notes?.detected_attendees?.length ?? 0) > 0
 
+  // While the AI runs, refresh until the status flips — the user should never
+  // have to reload by hand to see their structured notes appear.
+  const isProcessing = protocol.status === PROTOCOL_STATUSES.PROCESSING
+  useEffect(() => {
+    if (!isProcessing) return
+    const timer = setInterval(() => router.refresh(), 5000)
+    return () => clearInterval(timer)
+  }, [isProcessing, router])
+
   return (
     <div className="space-y-4">
       {/* Error Banner */}
@@ -146,18 +155,18 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
         </div>
       )}
 
-      {/* Progress Strip — replaces the old wall-of-cards checklist */}
-      {(isReview || isFinalized) && (
-        <ProtocolProgressStrip items={reviewChecklist} />
-      )}
+      {/* Progress Strip — the whole pipeline (Input → Struktur → Personen →
+          Entscheide → Aufgaben → Abschluss), visible in EVERY state so the
+          user always knows where the protocol stands and what comes next. */}
+      <ProtocolProgressStrip items={reviewChecklist} />
 
       {/* Processing Spinner */}
-      {protocol.status === PROTOCOL_STATUSES.PROCESSING && (
+      {isProcessing && (
         <div className="bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800 rounded-lg p-8 text-center">
           <Loader2 className="w-8 h-8 animate-spin text-warning-500 mx-auto mb-3" />
           <p className="font-medium text-warning-800 dark:text-warning-300">Wird verarbeitet…</p>
           <p className="text-sm text-warning-700 dark:text-warning-400 mt-1">
-            Die KI strukturiert das Transkript. Dies dauert einige Sekunden.
+            Die KI strukturiert das Transkript. Die Seite aktualisiert sich automatisch.
           </p>
         </div>
       )}
@@ -166,6 +175,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
       {isDraft && !notes && (
         <ProtocolDraftInput
           allowAudio={usesUnifiedPipeline}
+          hasTranscript={Boolean(protocol.raw_transcript)}
           transcript={transcript}
           audioFile={audioFile}
           processing={processing}
@@ -177,9 +187,30 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
         />
       )}
 
+      {/* Quelle — Rohtranskript. Rendered whenever a transcript exists (also
+          without structured notes: while processing runs or after a failed
+          structuring the source must stay visible). Collapsed when the
+          structured view exists; expanded when it is the only content. */}
+      {protocol.raw_transcript && !(isDraft && !notes) && (
+        <details
+          className="bg-surface-base rounded-lg border border-default"
+          open={!notes}
+        >
+          <summary className="flex items-center gap-2 p-4 cursor-pointer text-sm font-medium text-text-secondary hover:text-text-primary select-none">
+            <FileText className="w-4 h-4 text-text-muted" />
+            Quelle · Rohtranskript ({protocol.raw_transcript.length.toLocaleString()} Zeichen)
+          </summary>
+          <div className="px-4 pb-4">
+            <pre className="text-xs text-text-secondary whitespace-pre-wrap max-h-96 overflow-y-auto bg-surface-raised rounded-lg p-3 leading-relaxed">
+              {protocol.raw_transcript}
+            </pre>
+          </div>
+        </details>
+      )}
+
       {/* Main content — only when structured notes exist. Order follows the
-          actual pipeline the user reads: overview → source → structured notes
-          → derived actions/decisions → follow-ups → tools. */}
+          actual pipeline the user reads: overview → structured notes →
+          derived actions/decisions → follow-ups → tools. */}
       {notes && (
         <>
           {/* 1. Zusammenfassung — executive overview */}
@@ -192,24 +223,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
             </p>
           </div>
 
-          {/* 2. Quelle — Rohtranskript / Notizen. Moved out of the sidebar into
-              the main flow so the pipeline reads source → structure → actions.
-              Collapsed by default; the structured view below is the daily one. */}
-          {protocol.raw_transcript && (
-            <details className="bg-surface-base rounded-lg border border-default">
-              <summary className="flex items-center gap-2 p-4 cursor-pointer text-sm font-medium text-text-secondary hover:text-text-primary select-none">
-                <FileText className="w-4 h-4 text-text-muted" />
-                Quelle · Rohtranskript ({protocol.raw_transcript.length.toLocaleString()} Zeichen)
-              </summary>
-              <div className="px-4 pb-4">
-                <pre className="text-xs text-text-secondary whitespace-pre-wrap max-h-96 overflow-y-auto bg-surface-raised rounded-lg p-3 leading-relaxed">
-                  {protocol.raw_transcript}
-                </pre>
-              </div>
-            </details>
-          )}
-
-          {/* 3. Strukturierte Notizen (Themen) — the transform of the source */}
+          {/* 2. Strukturierte Notizen (Themen) — the transform of the source */}
           <ProtocolTopicsSection
             topics={notes.topics}
             expandedTopics={expandedTopics}

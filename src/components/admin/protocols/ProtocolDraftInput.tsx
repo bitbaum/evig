@@ -12,6 +12,8 @@ import { Button } from '@/components/ui/button'
 interface Props {
   /** Audio uploads are supported for the unified pipeline only. */
   allowAudio: boolean
+  /** A transcript is already stored (e.g. transcription succeeded but structuring failed). */
+  hasTranscript?: boolean
   transcript: string
   audioFile: File | null
   processing: boolean
@@ -24,6 +26,7 @@ interface Props {
 
 export function ProtocolDraftInput({
   allowAudio,
+  hasTranscript = false,
   transcript,
   audioFile,
   processing,
@@ -37,12 +40,14 @@ export function ProtocolDraftInput({
     <div className="bg-surface-base rounded-lg border border-default p-6 space-y-4">
       <div>
         <Heading level={2} className="text-lg text-text-primary">
-          Inhalt liefern
+          {hasTranscript ? 'Transkript bereit — jetzt strukturieren' : 'Inhalt liefern'}
         </Heading>
         <p className="text-sm text-text-secondary mt-1">
-          {allowAudio
-            ? 'Lade die Aufnahme hoch oder füge Text ein — die KI erstellt daraus das Protokoll.'
-            : 'Füge den Inhalt ein — die KI erstellt daraus das Protokoll.'}
+          {hasTranscript
+            ? 'Das Transkript ist gespeichert (unten einsehbar und bearbeitbar). Starte die KI-Strukturierung, um Themen, Aufgaben und Entscheidungen zu erhalten.'
+            : allowAudio
+              ? 'Lade die Aufnahme hoch oder füge Text ein — die KI erstellt daraus das Protokoll.'
+              : 'Füge den Inhalt ein — die KI erstellt daraus das Protokoll.'}
         </p>
       </div>
 

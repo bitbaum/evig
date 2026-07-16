@@ -25,6 +25,7 @@ export {
   processTranscript,
   processNotes,
   importTasks,
+  recoverStaleProtocolProcessing,
 } from './protocols-processing'
 
 // Action item linking (tasks & decisions)
