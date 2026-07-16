@@ -160,6 +160,7 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
         dueDate: data.due_date || undefined,
         projectId: data.project_id || undefined,
         assignedTo: data.assigned_to || undefined,
+        teamId: data.team_id || undefined,
         createdBy: dbUserId,
       })
       .returning()

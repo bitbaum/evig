@@ -97,6 +97,17 @@ export const TEAM_ACCENT_OPTIONS: SectionColor[] = [
   'neutral',
 ]
 
+/** Human labels for team accents (form select + AI prompt option list). */
+export const TEAM_ACCENT_LABELS: Record<SectionColor, string> = {
+  primary: 'Grün (primär)',
+  secondary: 'Orange (sekundär)',
+  info: 'Blau',
+  warning: 'Gelb',
+  success: 'Grün (Erfolg)',
+  error: 'Rot',
+  neutral: 'Neutral',
+}
+
 /** Chip/badge classes for a team accent (used on team cards + headers). */
 export const TEAM_ACCENT_CLASSES: Record<SectionColor, string> = {
   primary: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300',

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Loader2, UserPlus, X, ArrowRightLeft } from 'lucide-react'
+import { Loader2, UserPlus, X, ArrowRightLeft, ChevronRight } from 'lucide-react'
 import { Avatar } from '@/components/ui/Avatar'
 import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
@@ -46,6 +46,7 @@ export default function MembershipManager({ teamId, teamName, teamAccent, member
   const [error, setError] = useState<string | null>(null)
   const [addUser, setAddUser] = useState('')
   const [addRole, setAddRole] = useState<TeamRole>(TEAM_ROLES.MEMBER)
+  const [showInvite, setShowInvite] = useState(false)
   const [moving, setMoving] = useState<TeamMemberRow | null>(null)
   const canMove = allTeams.length > 1
 
@@ -98,47 +99,6 @@ export default function MembershipManager({ teamId, teamName, teamAccent, member
           {error}
         </div>
       )}
-
-      {/* Add member */}
-      <div className="bg-surface-base rounded-lg border p-4">
-        <div className="flex flex-col sm:flex-row sm:items-end gap-3">
-          <div className="flex-1 min-w-0">
-            <label htmlFor="add-member" className="block text-xs font-medium text-text-secondary mb-1">
-              Mitglied hinzufügen
-            </label>
-            <Select id="add-member" value={addUser} onChange={(e) => setAddUser(e.target.value)}>
-              <option value="">Mitarbeitende/n wählen…</option>
-              {available.map((c) => (
-                <option key={c.user_id} value={c.user_id}>
-                  {c.name || c.email || c.user_id}
-                </option>
-              ))}
-            </Select>
-          </div>
-          <div className="sm:w-52">
-            <label htmlFor="add-role" className="block text-xs font-medium text-text-secondary mb-1">
-              Rolle
-            </label>
-            <Select id="add-role" value={addRole} onChange={(e) => setAddRole(e.target.value as TeamRole)}>
-              {TEAM_ROLE_OPTIONS.map((r) => (
-                <option key={r} value={r}>
-                  {TEAM_ROLE_LABELS[r]}
-                </option>
-              ))}
-            </Select>
-          </div>
-          <Button onClick={addMember} disabled={!addUser || busy === 'add'}>
-            {busy === 'add' ? <Loader2 className="w-4 h-4 animate-spin" /> : <UserPlus className="w-4 h-4" />}
-            Hinzufügen
-          </Button>
-        </div>
-        {available.length === 0 && (
-          <p className="text-xs text-text-tertiary mt-2">Alle Mitarbeitenden sind bereits in diesem Team.</p>
-        )}
-      </div>
-
-      {/* Invite by email (super admin) */}
-      {isSuperAdmin && <InviteByEmailForm teamId={teamId} />}
 
       {/* Members list */}
       {members.length === 0 ? (
@@ -216,6 +176,64 @@ export default function MembershipManager({ teamId, teamName, teamAccent, member
           ))}
         </ul>
       )}
+
+      {/* One place to bring people in: pick existing staff, or (super admin)
+          unfold the e-mail invite for people who aren't registered yet. */}
+      <div className="bg-surface-base rounded-lg border p-4 space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-end gap-3">
+          <div className="flex-1 min-w-0">
+            <label htmlFor="add-member" className="block text-xs font-medium text-text-secondary mb-1">
+              Mitglied hinzufügen
+            </label>
+            <Select id="add-member" value={addUser} onChange={(e) => setAddUser(e.target.value)}>
+              <option value="">Mitarbeitende/n wählen…</option>
+              {available.map((c) => (
+                <option key={c.user_id} value={c.user_id}>
+                  {c.name || c.email || c.user_id}
+                </option>
+              ))}
+            </Select>
+          </div>
+          <div className="sm:w-52">
+            <label htmlFor="add-role" className="block text-xs font-medium text-text-secondary mb-1">
+              Rolle
+            </label>
+            <Select id="add-role" value={addRole} onChange={(e) => setAddRole(e.target.value as TeamRole)}>
+              {TEAM_ROLE_OPTIONS.map((r) => (
+                <option key={r} value={r}>
+                  {TEAM_ROLE_LABELS[r]}
+                </option>
+              ))}
+            </Select>
+          </div>
+          <Button onClick={addMember} disabled={!addUser || busy === 'add'}>
+            {busy === 'add' ? <Loader2 className="w-4 h-4 animate-spin" /> : <UserPlus className="w-4 h-4" />}
+            Hinzufügen
+          </Button>
+        </div>
+        {available.length === 0 && (
+          <p className="text-xs text-text-tertiary">Alle Mitarbeitenden sind bereits in diesem Team.</p>
+        )}
+
+        {isSuperAdmin && (
+          <div className="border-t border-subtle pt-3">
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => setShowInvite((v) => !v)}
+              className="inline-flex items-center gap-2 text-sm font-medium text-text-secondary hover:text-text-primary h-auto px-0"
+            >
+              <ChevronRight className={`h-4 w-4 transition-transform ${showInvite ? 'rotate-90' : ''}`} aria-hidden />
+              Noch nicht registriert? Per E-Mail einladen
+            </Button>
+            {showInvite && (
+              <div className="mt-3">
+                <InviteByEmailForm teamId={teamId} />
+              </div>
+            )}
+          </div>
+        )}
+      </div>
 
       <p className="text-xs text-text-tertiary flex items-center gap-1.5 px-1">
         <ArrowRightLeft className="w-3 h-3" />

@@ -8,9 +8,10 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select } from '@/components/ui/select'
 import { FormField } from '@/components/ui/form-field'
 import { Button } from '@/components/ui/button'
+import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { apiFetch } from '@/lib/api/client'
 import { ROUTES } from '@/config/routes'
-import { TEAM_ACCENT_OPTIONS } from '@/config/teams'
+import { TEAM_ACCENT_OPTIONS, TEAM_ACCENT_LABELS } from '@/config/teams'
 import type { TeamDetail } from '@/lib/schemas/teams'
 
 /** Split a comma/newline list into a clean string[] (mail folders). */
@@ -19,16 +20,6 @@ function parseFolders(raw: string): string[] {
     .split(/[\n,]/)
     .map((s) => s.trim())
     .filter(Boolean)
-}
-
-const ACCENT_LABELS: Record<string, string> = {
-  primary: 'Grün (primär)',
-  secondary: 'Orange (sekundär)',
-  info: 'Blau',
-  warning: 'Gelb',
-  success: 'Grün (Erfolg)',
-  error: 'Rot',
-  neutral: 'Neutral',
 }
 
 export default function TeamFormClient({ team }: { team?: TeamDetail }) {
@@ -49,6 +40,25 @@ export default function TeamFormClient({ team }: { team?: TeamDetail }) {
   const set = (k: keyof typeof form) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => setForm((f) => ({ ...f, [k]: e.target.value }))
+
+  // AI fills string fields directly; mail_folders arrives as an array (the
+  // form holds it newline-joined) and accent must stay within the config enum.
+  function handleAIFieldsFilled(data: Record<string, unknown>) {
+    setForm((f) => ({
+      ...f,
+      ...(typeof data.name === 'string' && data.name ? { name: data.name } : {}),
+      ...(typeof data.purpose === 'string' && data.purpose ? { purpose: data.purpose } : {}),
+      ...(Array.isArray(data.mail_folders) && data.mail_folders.length
+        ? { mail_folders: data.mail_folders.filter((m): m is string => typeof m === 'string').join('\n') }
+        : {}),
+      ...(typeof data.meeting_cadence === 'string' && data.meeting_cadence
+        ? { meeting_cadence: data.meeting_cadence }
+        : {}),
+      ...(typeof data.accent === 'string' && (TEAM_ACCENT_OPTIONS as string[]).includes(data.accent)
+        ? { accent: data.accent }
+        : {}),
+    }))
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -87,6 +97,14 @@ export default function TeamFormClient({ team }: { team?: TeamDetail }) {
       )}
 
       <div className="bg-surface-base rounded-lg border p-6 space-y-6">
+        <AIFormAssist
+          formType="team-config"
+          placeholder="Beschreibe das Team in 1-2 Sätzen (Zweck, Mailordner, Rhythmus)..."
+          defaultExpanded={!isEdit}
+          onFieldsFilled={handleAIFieldsFilled}
+          currentData={form as unknown as Record<string, unknown>}
+        />
+
         <FormField label="Name" required htmlFor="name">
           <Input
             id="name"
@@ -128,7 +146,7 @@ export default function TeamFormClient({ team }: { team?: TeamDetail }) {
             <Select id="accent" value={form.accent} onChange={set('accent')}>
               {TEAM_ACCENT_OPTIONS.map((a) => (
                 <option key={a} value={a}>
-                  {ACCENT_LABELS[a] ?? a}
+                  {TEAM_ACCENT_LABELS[a] ?? a}
                 </option>
               ))}
             </Select>

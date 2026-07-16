@@ -57,11 +57,12 @@ export default function InviteByEmailForm({ teamId }: Props) {
   }
 
   return (
-    <form onSubmit={submit} className="bg-surface-base rounded-lg border p-4">
+    // Rendered inside the membership card's invite fold-out — no own chrome.
+    <form onSubmit={submit}>
       <div className="flex flex-col sm:flex-row sm:items-end gap-3">
         <div className="flex-1 min-w-0">
-          <label htmlFor="invite-name" className="block text-xs font-medium text-text-secondary mb-1">
-            Per E-Mail einladen
+          <label htmlFor="invite-name" className="sr-only">
+            Name
           </label>
           <Input
             id="invite-name"

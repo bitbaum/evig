@@ -21,14 +21,19 @@ import { adminInteractive } from '@/lib/admin-ui'
 
 interface ProtocolFormClientProps {
   teamMembers: Array<{ id: string; name: string }>
+  /** Active teams for the optional owning-team select. */
+  teams?: Array<{ id: string; name: string }>
+  /** Preselected team (from a team space "Neues Protokoll" link). */
+  initialTeamId?: string
 }
 
-export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientProps) {
+export default function ProtocolFormClient({ teamMembers, teams = [], initialTeamId }: ProtocolFormClientProps) {
   const {
     meetingType, setMeetingType,
     title, setTitle,
     meetingDate, setMeetingDate,
     visibility, setVisibility,
+    teamId, setTeamId,
     selectedAttendees,
     showAttendees, setShowAttendees,
     attendeeSearch, setAttendeeSearch,
@@ -42,7 +47,7 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
     toggleAttendee,
     selectAllAttendees,
     handleSubmit,
-  } = useProtocolForm(teamMembers)
+  } = useProtocolForm(teamMembers, initialTeamId)
 
   const hasAudio = sources.audio !== null
   const hasTextFiles = sources.textFiles.length > 0
@@ -171,6 +176,21 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
                   ))}
                 </Select>
               </FormField>
+
+              {teams.length > 0 && (
+                <FormField label="Team" htmlFor="protocol-team" hint="Optional — erscheint auf der Team-Seite">
+                  <Select
+                    id="protocol-team"
+                    value={teamId}
+                    onChange={(e) => setTeamId(e.target.value)}
+                  >
+                    <option value="">Kein Team</option>
+                    {teams.map((t) => (
+                      <option key={t.id} value={t.id}>{t.name}</option>
+                    ))}
+                  </Select>
+                </FormField>
+              )}
             </div>
 
             {/* Attendees */}

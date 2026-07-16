@@ -34,6 +34,8 @@ export default function TaskFormClient({ task }: Props) {
     title: searchParams.get('title') ?? undefined,
     description: searchParams.get('description') ?? undefined,
     priority: searchParams.get('priority') ?? undefined,
+    // Coming from a team space page ("Neue Aufgabe" there) preselects the team.
+    team_id: searchParams.get('team') ?? undefined,
   }
 
   const {
@@ -41,6 +43,7 @@ export default function TaskFormClient({ task }: Props) {
     loading,
     error,
     teamMembers,
+    teams,
     formData,
     handleChange,
     handleAIFieldsFilled,
@@ -155,6 +158,19 @@ export default function TaskFormClient({ task }: Props) {
             ))}
           </Select>
         </FormField>
+
+        {teams.length > 0 && (
+          <FormField label="Team" htmlFor="team_id" hint="Optional — die Aufgabe erscheint auf der Team-Seite">
+            <Select id="team_id" name="team_id" value={formData.team_id} onChange={handleChange}>
+              <option value="">Kein Team</option>
+              {teams.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.name}
+                </option>
+              ))}
+            </Select>
+          </FormField>
+        )}
 
         {formData.task_type === TASK_TYPES.RECURRING_SCHEDULED && (
           <FormField label="Zeitplan" htmlFor="schedule_human">

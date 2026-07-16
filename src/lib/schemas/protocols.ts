@@ -79,6 +79,7 @@ export const createProtocolSchema = z.object({
     .optional()
     .default([]),
   input_method: z.enum(inputMethods).optional().default('transcript'),
+  team_id: z.string().uuid().optional().nullable(),
 });
 
 /**
