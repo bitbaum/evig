@@ -78,4 +78,23 @@ test.describe('prod protocols smoke — audio pipeline', () => {
       await deleteProtocolViaUi(page)
     })
   }
+
+  // Runs LAST (suite is serial): removes smoke rows left behind by failed
+  // attempts — this run's and any earlier run's — so prod never accumulates
+  // test data. Failed rows keep their diagnostics in the uploaded Playwright
+  // traces; the DB row itself has no lasting value.
+  test('sweep leftover smoke protocols', async ({ page }) => {
+    test.setTimeout(180_000)
+    await loginWithCredentials(page, '/admin/protocols', ADMIN_TEST_EMAIL, ADMIN_TEST_PASSWORD)
+
+    for (let i = 0; i < 20; i++) {
+      const leftover = page.locator('a[href*="/admin/protocols/"]', { hasText: 'E2E Smoke' }).first()
+      if (!(await leftover.isVisible().catch(() => false))) break
+      await leftover.click()
+      await page.waitForURL(/\/admin\/protocols\/[0-9a-f-]{36}/, { timeout: 30_000 })
+      await deleteProtocolViaUi(page)
+    }
+
+    await expect(page.locator('a[href*="/admin/protocols/"]', { hasText: 'E2E Smoke' })).toHaveCount(0)
+  })
 })

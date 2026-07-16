@@ -37,6 +37,7 @@ import { logger } from '@/lib/logger'
 import { validateAudioUpload } from '@/lib/protocols/audio-validation'
 import { validateTextUpload } from '@/lib/protocols/upload'
 import { transcribeAudio, TranscriptionUnavailableError } from '@/lib/transcription/transcribe'
+import { parseMultipart, MultipartLimitError } from '@/lib/api/parse-multipart'
 
 type RouteParams = { id: string }
 
@@ -65,12 +66,24 @@ export const POST = withAdmin<RouteParams>(async (
       return apiBadRequest(ERROR_MESSAGES.PROTOCOL_NOT_EDITABLE)
     }
 
-    // ─── Parse FormData ──────────────────────────────────────────────
-    const formData = await request.formData()
-    const audioFile = formData.get('audio') as File | null
-    const textInput = (formData.get('text') as string | null)?.trim() ?? ''
-    const textFiles = formData.getAll('textFile').filter((v): v is File => v instanceof File)
-    const requestedModel = formData.get('whisper_model') as string | null
+    // ─── Parse multipart body ─────────────────────────────────────────
+    // Streamed via busboy — request.formData() fails for bodies above
+    // ~10 MB (see src/lib/api/parse-multipart.ts), and meeting recordings
+    // are routinely 50–100 MB.
+    let parsed
+    try {
+      parsed = await parseMultipart(request)
+    } catch (error) {
+      if (error instanceof MultipartLimitError) {
+        return apiBadRequest(error.message)
+      }
+      logger.error('Failed to parse multipart body', { protocolId, error: String(error) })
+      return apiBadRequest('Upload konnte nicht gelesen werden. Bitte erneut versuchen.')
+    }
+    const audioFile = parsed.files.find((f) => f.field === 'audio')?.file ?? null
+    const textInput = parsed.fields['text']?.[0]?.trim() ?? ''
+    const textFiles = parsed.files.filter((f) => f.field === 'textFile').map((f) => f.file)
+    const requestedModel = parsed.fields['whisper_model']?.[0] ?? null
 
     if (!audioFile && !textInput && textFiles.length === 0) {
       return apiBadRequest('Mindestens eine Quelle erforderlich (Audio, Text oder Datei).')

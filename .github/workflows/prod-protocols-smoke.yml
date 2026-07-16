@@ -60,7 +60,7 @@ jobs:
         id: fixtures
         run: |
           sudo DEBIAN_FRONTEND=noninteractive apt-get -qq update
-          sudo DEBIAN_FRONTEND=noninteractive apt-get -qq install -y espeak-ng
+          sudo DEBIAN_FRONTEND=noninteractive apt-get -qq install -y espeak-ng ffmpeg
           mkdir -p /tmp/protocol-fixtures
           cat > /tmp/protocol-fixtures/script.txt <<'TXT'
           Willkommen zur Teamsitzung von Revamp IT. Heute besprechen wir drei Themen.

@@ -230,6 +230,12 @@ const nextConfig = {
   // Ensure proper CSS handling
   experimental: {
     optimizeCss: process.env.NODE_ENV === 'production',
+    // The proxy (src/proxy.ts) makes Next buffer every request body, capped
+    // at 10 MB by default — larger bodies are silently TRUNCATED ("Unexpected
+    // end of form"), which broke every meeting-audio upload above 10 MB.
+    // Raise the cap above FILE_SIZE_LIMITS.AUDIO_MAX (250 MB) so protocol
+    // recordings reach /api/protocols/[id]/process-sources intact.
+    middlewareClientMaxBodySize: '260mb',
   },
   // Add specific CSS handling
   sassOptions: {
