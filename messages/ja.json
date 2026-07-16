@@ -10147,14 +10147,11 @@
       }
     },
     "timecards": {
-      "headerStatusSubmitted": "提出済み",
-      "headerStatusDraft": "下書き",
       "headerDaysSuffix": "日",
       "submit": "承認のため提出",
       "submitting": "送信中…",
       "resubmit": "再提出",
       "submitSuccess": "承認のため送信しました — 承認チームに通知されます。",
-      "submitHint": "下書きを保存すると入力内容が保持されます。「承認のため提出」で承認に送信されます。",
       "submitError": "タイムカードを提出できませんでした。",
       "save": "保存",
       "saving": "保存中…",
@@ -10182,7 +10179,7 @@
       "fieldNotePlaceholder": "この日が通常と異なる場合のみ",
       "pageTitle": "タイムカード",
       "pageDescription": "勤務時間を記録・提出・承認します",
-      "extrasToggle": "詳細設定 · コメント、テンプレートのリセット",
+      "extrasToggle": "詳細設定",
       "extrasMonthComment": "月のコメント",
       "extrasMonthCommentPlaceholder": "任意 — 例：休暇、病欠、特別業務。",
       "extrasResetMonth": "スケジュールから月を再構築（現在の記録を削除）",
@@ -10216,7 +10213,9 @@
       "hourBreakSuffix": "休憩",
       "absencePaidHint": "有給の不在（予定時間が計上されます）",
       "absenceUnpaidHint": "無給（0時間）",
-      "headerSelectColumn": "すべての{day}を選択 — ドラッグで複数列"
+      "headerSelectColumn": "すべての{day}を選択 — ドラッグで複数列",
+      "dayGridShow": "時間グリッドを表示",
+      "dayGridHide": "時間グリッドを隠す"
     },
     "appointments": {
       "pageTitle": "予約",

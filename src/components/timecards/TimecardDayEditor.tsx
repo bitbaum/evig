@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+import { ChevronRight } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import {
   TIMECARD_ENTRY_CATEGORY_LABELS,
@@ -11,6 +13,7 @@ import {
 } from '@/config/timecards'
 import type { TimecardEntryInput } from '@/lib/schemas/timecards'
 import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
@@ -18,18 +21,19 @@ import { HourRangePicker } from './HourRangePicker'
 import { TimecardActions } from './TimecardActions'
 
 /**
- * Day view — fine edits for ONE day. Mirrors the month surface: same open
- * framing (no card chrome — an open surface like the month grid) and the SAME
- * action set (TimecardActions: fill from plan / structured absences / clear)
- * at the top, scoped to this day. Below it, the HourRangePicker (the day-level
- * counterpart to the calendar grid — same pointer-paint model) is the visual
- * way in for work days, with exact Von/Bis/Pause fields beside it as the
- * precise (and screen-reader-friendly) path — both edit the same entry and
- * stay in sync. Absence days show their label. Category + note round it out.
+ * Day view — fine edits for ONE day, ordered by what the user came to do:
  *
- * On a day without plan hours the fill action is relabelled to the standard
- * manual day, so an unscheduled work day ("came in on Friday") is one tap.
+ *   1. Duration hero (how much is on this day right now)
+ *   2. Von / Bis / Pause — THE direct way to enter the day's hours. First,
+ *      always visible, big touch targets. On phones this used to sit below a
+ *      full-screen hour grid, which read as "no way to enter hours".
+ *   3. Quick actions (fill standard/plan day, absences, clear)
+ *   4. Hour grid — the visual/multi-block alternative, collapsed on phones
+ *      (it dwarfs everything else there), open on desktop where it fits
+ *      beside the form (lg: two columns).
+ *   5. Category + note (rarely touched)
  *
+ * Absence days short-circuit to the label + counted hours + the same actions.
  * The date itself lives in the view's nav bar, so it is NOT repeated here.
  */
 export function TimecardDayEditor({
@@ -54,8 +58,26 @@ export function TimecardDayEditor({
   const hasEntry = !!selectedEntry
   const isAbsence = hasEntry && isAbsenceCategory(selectedEntry.category)
 
+  // Hour grid disclosure. null = no user choice yet → the DEFAULT comes from
+  // CSS (hidden on phones, open from lg), so SSR/client render identically and
+  // desktop needs no effect-driven flicker. The first toggle resolves null
+  // against the actual viewport.
+  const [gridOpen, setGridOpen] = useState<boolean | null>(null)
+  const toggleGrid = () =>
+    setGridOpen(prev =>
+      prev === null ? !window.matchMedia('(min-width: 1024px)').matches : !prev,
+    )
+
+  const fillLabel = dayHasPlan
+    ? t('dayFill')
+    : t('dayFillDefault', {
+        start: TIMECARD_MANUAL_DEFAULT.start,
+        end: TIMECARD_MANUAL_DEFAULT.end,
+      })
+
   return (
     <section className="space-y-5">
+      {/* Duration hero: what this day currently counts. */}
       <div className="flex items-baseline justify-between gap-3">
         <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
           {hasEntry
@@ -64,46 +86,86 @@ export function TimecardDayEditor({
               : t('dayEditorHasEntry')
             : t('dayEditorNoEntry')}
         </p>
-        {hasEntry && (
-          <p className="font-mono text-xl tabular-nums text-text-primary">
-            {formatTimecardDuration(selectedEntry.duration_minutes)}
-          </p>
-        )}
+        <p className="font-mono text-2xl tabular-nums text-text-primary sm:text-3xl">
+          {formatTimecardDuration(selectedEntry?.duration_minutes ?? 0)}
+        </p>
       </div>
 
-      {/* Same actions as the month bulk bar, scoped to this day. */}
-      <TimecardActions
-        fillLabel={
-          dayHasPlan
-            ? t('dayFill')
-            : t('dayFillDefault', {
-                start: TIMECARD_MANUAL_DEFAULT.start,
-                end: TIMECARD_MANUAL_DEFAULT.end,
-              })
-        }
-        onFill={onFillDay}
-        onSetAbsence={onSetAbsence}
-        onClear={onClearDay}
-      />
-
       {isAbsence ? (
-        <p className="border-t border-subtle pt-5 text-sm text-text-secondary">
-          {TIMECARD_ENTRY_CATEGORY_LABELS[selectedEntry.category as TimecardEntryCategory]} —{' '}
-          {formatTimecardDuration(selectedEntry.duration_minutes)} {t('dayAbsenceCounted')}
-        </p>
-      ) : (
-        <div className="space-y-4 border-t border-subtle pt-5">
-          <HourRangePicker
-            key={selectedDate}
-            start={selectedEntry?.start_time ?? null}
-            end={selectedEntry?.end_time ?? null}
-            durationMinutes={selectedEntry?.duration_minutes ?? 0}
-            onChange={(start, end, breakMinutes) =>
-              onPatch({ start_time: start, end_time: end, break_minutes: breakMinutes })
-            }
+        <>
+          <TimecardActions
+            fillLabel={fillLabel}
+            onFill={onFillDay}
+            onSetAbsence={onSetAbsence}
+            onClear={onClearDay}
           />
-          <TimeFields entry={selectedEntry} onPatch={onPatch} />
-          {hasEntry && <DetailFields entry={selectedEntry} onPatch={onPatch} />}
+          <p className="border-t border-subtle pt-5 text-sm text-text-secondary">
+            {TIMECARD_ENTRY_CATEGORY_LABELS[selectedEntry.category as TimecardEntryCategory]} —{' '}
+            {formatTimecardDuration(selectedEntry.duration_minutes)} {t('dayAbsenceCounted')}
+          </p>
+        </>
+      ) : (
+        <div className="grid gap-x-8 gap-y-5 border-t border-subtle pt-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
+          <div className="space-y-5">
+            {/* 1 — Direct time entry, always visible. */}
+            <TimeFields entry={selectedEntry} onPatch={onPatch} />
+
+            {/* 2 — Quick actions for the whole day. */}
+            <TimecardActions
+              fillLabel={fillLabel}
+              onFill={onFillDay}
+              onSetAbsence={onSetAbsence}
+              onClear={onClearDay}
+            />
+
+            {/* 3 — Rarely-touched details. */}
+            {hasEntry && <DetailFields entry={selectedEntry} onPatch={onPatch} />}
+          </div>
+
+          {/* 4 — The visual grid: collapsed on phones, open on desktop. */}
+          <div>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={toggleGrid}
+              aria-expanded={gridOpen ?? undefined}
+              className="inline-flex h-auto items-center gap-2 px-0 font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary hover:text-text-secondary"
+            >
+              <ChevronRight
+                className={cn(
+                  'h-3.5 w-3.5 transition-transform',
+                  gridOpen === null ? 'lg:rotate-90' : gridOpen && 'rotate-90',
+                )}
+                aria-hidden="true"
+              />
+              {gridOpen === null ? (
+                <>
+                  <span className="lg:hidden">{t('dayGridShow')}</span>
+                  <span className="hidden lg:inline">{t('dayGridHide')}</span>
+                </>
+              ) : gridOpen ? (
+                t('dayGridHide')
+              ) : (
+                t('dayGridShow')
+              )}
+            </Button>
+            <div
+              className={cn(
+                'mt-3',
+                gridOpen === null ? 'hidden lg:block' : gridOpen ? 'block' : 'hidden',
+              )}
+            >
+              <HourRangePicker
+                key={selectedDate}
+                start={selectedEntry?.start_time ?? null}
+                end={selectedEntry?.end_time ?? null}
+                durationMinutes={selectedEntry?.duration_minutes ?? 0}
+                onChange={(start, end, breakMinutes) =>
+                  onPatch({ start_time: start, end_time: end, break_minutes: breakMinutes })
+                }
+              />
+            </div>
+          </div>
         </div>
       )}
     </section>
@@ -111,8 +173,8 @@ export function TimecardDayEditor({
 }
 
 /**
- * Exact time entry (Von / Bis / Pause) — the precise counterpart to the hour
- * grid. Works on any device and for any times (also off the 30-min raster);
+ * Exact time entry (Von / Bis / Pause) — the primary input for a day's hours.
+ * Works on any device and for any times (also off the 30-min raster);
  * editing an empty day creates the entry, exactly like painting the grid.
  */
 function TimeFields({
@@ -130,6 +192,7 @@ function TimeFields({
           type="time"
           value={entry?.start_time ?? ''}
           onChange={e => onPatch({ start_time: e.target.value || null })}
+          className="h-11 text-base tabular-nums"
         />
       </Field>
       <Field label={t('fieldEnd')}>
@@ -137,6 +200,7 @@ function TimeFields({
           type="time"
           value={entry?.end_time ?? ''}
           onChange={e => onPatch({ end_time: e.target.value || null })}
+          className="h-11 text-base tabular-nums"
         />
       </Field>
       <Field label={t('fieldBreak')} className="col-span-2 sm:col-span-1">
@@ -150,6 +214,7 @@ function TimeFields({
             const parsed = Number.parseInt(e.target.value, 10)
             onPatch({ break_minutes: Number.isNaN(parsed) ? 0 : Math.max(0, parsed) })
           }}
+          className="h-11 text-base tabular-nums"
         />
       </Field>
     </div>

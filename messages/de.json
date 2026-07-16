@@ -10207,8 +10207,6 @@
       }
     },
     "timecards": {
-      "headerStatusSubmitted": "Eingereicht",
-      "headerStatusDraft": "Entwurf",
       "headerDaysSuffix": "Tage",
       "submit": "Zur Prüfung einreichen",
       "submitting": "Sende…",
@@ -10216,7 +10214,6 @@
       "lockedApproved": "Genehmigt und gesperrt",
       "reopen2": "Wieder öffnen (Admin)",
       "submitSuccess": "Zur Prüfung gesendet — Freigabe-Team wird benachrichtigt.",
-      "submitHint": "Entwurf speichern hält deine Eingaben; «Zur Prüfung einreichen» sendet an Freigabe.",
       "submitError": "Zeitkarte konnte nicht eingereicht werden.",
       "save": "Speichern",
       "saving": "Speichere…",
@@ -10244,7 +10241,7 @@
       "fieldNotePlaceholder": "Nur wenn dieser Tag anders war",
       "pageTitle": "Zeitkarten",
       "pageDescription": "Arbeitszeiten erfassen, einreichen und genehmigen",
-      "extrasToggle": "Erweitert · Kommentar, Vorlage zurücksetzen",
+      "extrasToggle": "Erweitert",
       "extrasMonthComment": "Monatskommentar",
       "extrasMonthCommentPlaceholder": "Optional — z.B. Ferien, Krankheit, Sondereinsatz.",
       "extrasResetMonth": "Monat aus Schedule neu aufbauen (löscht aktuelle Einträge)",
@@ -10276,7 +10273,9 @@
       "hourBreakSuffix": "Pause",
       "absencePaidHint": "Bezahlte Abwesenheit (zählt geplante Stunden)",
       "absenceUnpaidHint": "Unbezahlt (0 Std.)",
-      "headerSelectColumn": "Alle {day} auswählen — ziehen für mehrere Spalten"
+      "headerSelectColumn": "Alle {day} auswählen — ziehen für mehrere Spalten",
+      "dayGridShow": "Stundenraster anzeigen",
+      "dayGridHide": "Stundenraster ausblenden"
     },
     "appointments": {
       "pageTitle": "Termine",

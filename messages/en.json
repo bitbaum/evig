@@ -10097,14 +10097,11 @@
       }
     },
     "timecards": {
-      "headerStatusSubmitted": "Submitted",
-      "headerStatusDraft": "Draft",
       "headerDaysSuffix": "days",
       "submit": "Submit for review",
       "submitting": "Submitting…",
       "resubmit": "Resubmit",
       "submitSuccess": "Submitted for review — the approval team will be notified.",
-      "submitHint": "Save keeps a draft; «Submit for review» sends to approval.",
       "submitError": "Could not submit the timecard.",
       "save": "Save",
       "saving": "Saving…",
@@ -10130,7 +10127,7 @@
       "fieldNotePlaceholder": "Only when this day was different",
       "pageTitle": "Timecards",
       "pageDescription": "Log, submit, and approve hours worked",
-      "extrasToggle": "Advanced · comment, AI assist, reset template",
+      "extrasToggle": "Advanced",
       "extrasMonthComment": "Month note",
       "extrasMonthCommentPlaceholder": "Optional — e.g. holiday, sick day, special shift.",
       "extrasAiAssist": "AI assistant",
@@ -10168,7 +10165,9 @@
       "hourBreakSuffix": "break",
       "absencePaidHint": "Paid absence (counts scheduled hours)",
       "absenceUnpaidHint": "Unpaid (0 h)",
-      "headerSelectColumn": "Select all {day} — drag for several columns"
+      "headerSelectColumn": "Select all {day} — drag for several columns",
+      "dayGridShow": "Show hour grid",
+      "dayGridHide": "Hide hour grid"
     },
     "appointments": {
       "pageTitle": "Appointments",

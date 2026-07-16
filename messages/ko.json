@@ -10147,14 +10147,11 @@
       }
     },
     "timecards": {
-      "headerStatusSubmitted": "제출됨",
-      "headerStatusDraft": "초안",
       "headerDaysSuffix": "일",
       "submit": "검토를 위해 제출",
       "submitting": "전송 중…",
       "resubmit": "다시 제출",
       "submitSuccess": "검토를 위해 전송되었습니다 — 승인 팀에 알림이 전송됩니다.",
-      "submitHint": "초안 저장은 입력 내용을 보관합니다. 「검토를 위해 제출」은 승인 단계로 전송합니다.",
       "submitError": "근무 시간표를 제출할 수 없습니다.",
       "save": "저장",
       "saving": "저장 중…",
@@ -10182,7 +10179,7 @@
       "fieldNotePlaceholder": "이 날이 평소와 달랐을 때만 입력",
       "pageTitle": "근무 시간표",
       "pageDescription": "근무 시간 기록, 제출 및 승인",
-      "extrasToggle": "고급 · 코멘트, 템플릿 초기화",
+      "extrasToggle": "고급",
       "extrasMonthComment": "월간 코멘트",
       "extrasMonthCommentPlaceholder": "선택 사항 — 예: 휴가, 병가, 특별 업무.",
       "extrasResetMonth": "근무 일정에서 월을 새로 구성 (현재 입력 내용 삭제)",
@@ -10216,7 +10213,9 @@
       "hourBreakSuffix": "휴게",
       "absencePaidHint": "유급 부재(예정된 시간이 계산됨)",
       "absenceUnpaidHint": "무급(0시간)",
-      "headerSelectColumn": "모든 {day} 선택 — 드래그하면 여러 열"
+      "headerSelectColumn": "모든 {day} 선택 — 드래그하면 여러 열",
+      "dayGridShow": "시간 그리드 표시",
+      "dayGridHide": "시간 그리드 숨기기"
     },
     "appointments": {
       "pageTitle": "예약",

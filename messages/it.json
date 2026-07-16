@@ -10147,14 +10147,11 @@
       }
     },
     "timecards": {
-      "headerStatusSubmitted": "Inviata",
-      "headerStatusDraft": "Bozza",
       "headerDaysSuffix": "giorni",
       "submit": "Invia per la verifica",
       "submitting": "Invio…",
       "resubmit": "Invia di nuovo",
       "submitSuccess": "Inviata per la verifica — il team di approvazione verrà avvisato.",
-      "submitHint": "Salvare la bozza conserva le tue voci; «Invia per la verifica» le inoltra all'approvazione.",
       "submitError": "Impossibile inviare la scheda orari.",
       "save": "Salva",
       "saving": "Salvataggio…",
@@ -10182,7 +10179,7 @@
       "fieldNotePlaceholder": "Solo se questo giorno è stato diverso",
       "pageTitle": "Schede orari",
       "pageDescription": "Registra, invia e approva gli orari di lavoro",
-      "extrasToggle": "Avanzato · Commento, ripristina modello",
+      "extrasToggle": "Avanzate",
       "extrasMonthComment": "Commento mensile",
       "extrasMonthCommentPlaceholder": "Opzionale — ad es. vacanze, malattia, intervento speciale.",
       "extrasResetMonth": "Ricostruisci il mese dall'orario (cancella le voci attuali)",
@@ -10216,7 +10213,9 @@
       "hourBreakSuffix": "pausa",
       "absencePaidHint": "Assenza pagata (conta le ore pianificate)",
       "absenceUnpaidHint": "Non pagato (0 h)",
-      "headerSelectColumn": "Seleziona tutti i {day} — trascina per più colonne"
+      "headerSelectColumn": "Seleziona tutti i {day} — trascina per più colonne",
+      "dayGridShow": "Mostra griglia oraria",
+      "dayGridHide": "Nascondi griglia oraria"
     },
     "appointments": {
       "pageTitle": "Appuntamenti",

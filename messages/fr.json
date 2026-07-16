@@ -10098,8 +10098,6 @@
       }
     },
     "timecards": {
-      "headerStatusSubmitted": "Soumise",
-      "headerStatusDraft": "Brouillon",
       "headerDaysSuffix": "jours",
       "submit": "Soumettre",
       "submitting": "Envoi…",
@@ -10128,7 +10126,7 @@
       "fieldNotePlaceholder": "Seulement si ce jour était différent",
       "pageTitle": "Feuilles de temps",
       "pageDescription": "Saisir, soumettre et approuver les heures",
-      "extrasToggle": "Avancé · commentaire, assistant IA, réinitialiser",
+      "extrasToggle": "Avancé",
       "extrasMonthComment": "Note du mois",
       "extrasMonthCommentPlaceholder": "Optionnel — p.ex. vacances, maladie, intervention spéciale.",
       "extrasAiAssist": "Assistant IA",
@@ -10153,7 +10151,6 @@
       "bulkClear": "Effacer",
       "bulkCancel": "Annuler la sélection",
       "submitSuccess": "Envoyé pour vérification — l'équipe de validation sera notifiée.",
-      "submitHint": "Enregistrer le brouillon conserve tes saisies ; « Soumettre pour vérification » envoie à la validation.",
       "submitError": "La carte de temps n'a pas pu être soumise.",
       "lockedApproved": "Approuvé et verrouillé",
       "reopen2": "Rouvrir (admin)",
@@ -10169,7 +10166,9 @@
       "hourBreakSuffix": "pause",
       "absencePaidHint": "Absence payée (compte les heures planifiées)",
       "absenceUnpaidHint": "Non payé (0 h)",
-      "headerSelectColumn": "Sélectionner tous les {day} — glisser pour plusieurs colonnes"
+      "headerSelectColumn": "Sélectionner tous les {day} — glisser pour plusieurs colonnes",
+      "dayGridShow": "Afficher la grille horaire",
+      "dayGridHide": "Masquer la grille horaire"
     },
     "appointments": {
       "pageTitle": "Rendez-vous",

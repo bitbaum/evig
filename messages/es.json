@@ -10147,14 +10147,11 @@
       }
     },
     "timecards": {
-      "headerStatusSubmitted": "Enviado",
-      "headerStatusDraft": "Borrador",
       "headerDaysSuffix": "Días",
       "submit": "Enviar para revisión",
       "submitting": "Enviando…",
       "resubmit": "Volver a enviar",
       "submitSuccess": "Enviado para revisión — se notificará al equipo de aprobación.",
-      "submitHint": "Guardar borrador conserva tus datos; «Enviar para revisión» los manda a aprobación.",
       "submitError": "No se pudo enviar la tarjeta de horario.",
       "save": "Guardar",
       "saving": "Guardando…",
@@ -10182,7 +10179,7 @@
       "fieldNotePlaceholder": "Solo si este día fue diferente",
       "pageTitle": "Tarjetas de horario",
       "pageDescription": "Registrar, enviar y aprobar horarios de trabajo",
-      "extrasToggle": "Avanzado · Comentario, restablecer plantilla",
+      "extrasToggle": "Avanzado",
       "extrasMonthComment": "Comentario del mes",
       "extrasMonthCommentPlaceholder": "Opcional — p. ej. vacaciones, enfermedad, asignación especial.",
       "extrasResetMonth": "Reconstruir el mes desde el horario (elimina los registros actuales)",
@@ -10216,7 +10213,9 @@
       "hourBreakSuffix": "pausa",
       "absencePaidHint": "Ausencia pagada (cuenta las horas planificadas)",
       "absenceUnpaidHint": "No pagado (0 h)",
-      "headerSelectColumn": "Seleccionar todos los {day} — arrastra para varias columnas"
+      "headerSelectColumn": "Seleccionar todos los {day} — arrastra para varias columnas",
+      "dayGridShow": "Mostrar cuadrícula horaria",
+      "dayGridHide": "Ocultar cuadrícula horaria"
     },
     "appointments": {
       "pageTitle": "Citas",
