@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { ChevronRight, ChevronLeft, CalendarDays, CalendarRange, CalendarCheck, Trash2, AlertCircle, Check } from 'lucide-react'
+import { ChevronRight, ChevronLeft, CalendarDays, CalendarRange, CalendarCheck, Pencil, Trash2, AlertCircle, Check } from 'lucide-react'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
@@ -59,12 +59,28 @@ export function TimecardsClient({
   const isApproved = serverStatus === 'approved'
   const isSubmittedUnchanged = serverStatus === 'submitted' && !tc.isDirty
 
+  // Jump into the day editor for one date (double-click a day, the bulk bar's
+  // "Tag bearbeiten", or the context menu on a single day).
+  const editDay = (date: string) => {
+    tc.setSelectedDate(date)
+    setView('day')
+  }
+
   // Right-click a day → the same bulk actions as the action bar, at the cursor.
   const openDayMenu = (date: string, pos: ContextMenuPosition) => {
     setMenuCount(tc.selectedDates.includes(date) ? tc.selectedDates.length : 1)
     setMenuPos(pos)
   }
   const dayMenuItems: ContextMenuItem[] = [
+    ...(menuCount === 1
+      ? [{
+          label: t('editDay'),
+          icon: <Pencil className="h-4 w-4" />,
+          // With one day in play, the selection holds exactly that day (a
+          // right-click outside the selection re-selects it first).
+          onSelect: () => editDay(tc.selectedDates[0] ?? tc.draft.selectedDate),
+        }]
+      : []),
     { label: t('bulkFill'), icon: <CalendarCheck className="h-4 w-4" />, onSelect: tc.bulkFillFromSchedule },
     ...TIMECARD_ABSENCE_TYPES.map(absence => ({
       label: absence.label,
@@ -190,6 +206,7 @@ export function TimecardsClient({
             onWeekdaySelect={tc.selectWeekday}
             onClearSelected={tc.clearSelectedEntries}
             onDayContextMenu={openDayMenu}
+            onEditDay={editDay}
           />
 
           <TimecardBulkBar
@@ -198,12 +215,18 @@ export function TimecardsClient({
             onSetAbsence={tc.bulkSetAbsence}
             onClearDays={tc.bulkClear}
             onCancel={tc.clearSelection}
+            onEditDay={
+              tc.selectedDates.length === 1
+                ? () => editDay(tc.selectedDates[0])
+                : undefined
+            }
           />
         </>
       ) : (
         <TimecardDayEditor
           selectedDate={tc.draft.selectedDate}
           selectedEntry={tc.selectedEntry}
+          dayHasPlan={tc.dayHasPlan(tc.draft.selectedDate)}
           onPatch={tc.updateSelectedEntry}
           onFillDay={tc.fillDayFromSchedule}
           onSetAbsence={tc.setDayAbsence}

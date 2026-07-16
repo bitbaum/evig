@@ -4,12 +4,14 @@ import { useTranslations } from 'next-intl'
 import {
   TIMECARD_ENTRY_CATEGORY_LABELS,
   TIMECARD_ENTRY_CATEGORY_OPTIONS,
+  TIMECARD_MANUAL_DEFAULT,
   formatTimecardDuration,
   isAbsenceCategory,
   type TimecardEntryCategory,
 } from '@/config/timecards'
 import type { TimecardEntryInput } from '@/lib/schemas/timecards'
 import { cn } from '@/lib/utils'
+import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { HourRangePicker } from './HourRangePicker'
@@ -20,14 +22,20 @@ import { TimecardActions } from './TimecardActions'
  * framing (no card chrome — an open surface like the month grid) and the SAME
  * action set (TimecardActions: fill from plan / structured absences / clear)
  * at the top, scoped to this day. Below it, the HourRangePicker (the day-level
- * counterpart to the calendar grid — same useCellSelection model) is the star
- * for work days; absence days show their label. Category + note round it out.
+ * counterpart to the calendar grid — same pointer-paint model) is the visual
+ * way in for work days, with exact Von/Bis/Pause fields beside it as the
+ * precise (and screen-reader-friendly) path — both edit the same entry and
+ * stay in sync. Absence days show their label. Category + note round it out.
+ *
+ * On a day without plan hours the fill action is relabelled to the standard
+ * manual day, so an unscheduled work day ("came in on Friday") is one tap.
  *
  * The date itself lives in the view's nav bar, so it is NOT repeated here.
  */
 export function TimecardDayEditor({
   selectedDate,
   selectedEntry,
+  dayHasPlan,
   onPatch,
   onFillDay,
   onSetAbsence,
@@ -35,6 +43,8 @@ export function TimecardDayEditor({
 }: {
   selectedDate: string
   selectedEntry: TimecardEntryInput | undefined
+  /** Whether this date's weekday has plan hours (drives the fill label). */
+  dayHasPlan: boolean
   onPatch: (patch: Partial<TimecardEntryInput>) => void
   onFillDay: () => void
   onSetAbsence: (category: TimecardEntryCategory) => void
@@ -63,7 +73,14 @@ export function TimecardDayEditor({
 
       {/* Same actions as the month bulk bar, scoped to this day. */}
       <TimecardActions
-        fillLabel={t('dayFill')}
+        fillLabel={
+          dayHasPlan
+            ? t('dayFill')
+            : t('dayFillDefault', {
+                start: TIMECARD_MANUAL_DEFAULT.start,
+                end: TIMECARD_MANUAL_DEFAULT.end,
+              })
+        }
         onFill={onFillDay}
         onSetAbsence={onSetAbsence}
         onClear={onClearDay}
@@ -85,10 +102,57 @@ export function TimecardDayEditor({
               onPatch({ start_time: start, end_time: end, break_minutes: breakMinutes })
             }
           />
+          <TimeFields entry={selectedEntry} onPatch={onPatch} />
           {hasEntry && <DetailFields entry={selectedEntry} onPatch={onPatch} />}
         </div>
       )}
     </section>
+  )
+}
+
+/**
+ * Exact time entry (Von / Bis / Pause) — the precise counterpart to the hour
+ * grid. Works on any device and for any times (also off the 30-min raster);
+ * editing an empty day creates the entry, exactly like painting the grid.
+ */
+function TimeFields({
+  entry,
+  onPatch,
+}: {
+  entry: TimecardEntryInput | undefined
+  onPatch: (patch: Partial<TimecardEntryInput>) => void
+}) {
+  const t = useTranslations('admin.timecards')
+  return (
+    <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+      <Field label={t('fieldStart')}>
+        <Input
+          type="time"
+          value={entry?.start_time ?? ''}
+          onChange={e => onPatch({ start_time: e.target.value || null })}
+        />
+      </Field>
+      <Field label={t('fieldEnd')}>
+        <Input
+          type="time"
+          value={entry?.end_time ?? ''}
+          onChange={e => onPatch({ end_time: e.target.value || null })}
+        />
+      </Field>
+      <Field label={t('fieldBreak')} className="col-span-2 sm:col-span-1">
+        <Input
+          type="number"
+          min={0}
+          step={5}
+          inputMode="numeric"
+          value={entry?.break_minutes ?? 0}
+          onChange={e => {
+            const parsed = Number.parseInt(e.target.value, 10)
+            onPatch({ break_minutes: Number.isNaN(parsed) ? 0 : Math.max(0, parsed) })
+          }}
+        />
+      </Field>
+    </div>
   )
 }
 

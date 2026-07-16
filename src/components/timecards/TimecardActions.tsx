@@ -52,7 +52,7 @@ export function TimecardActions({
             variant="outline"
             size="sm"
             onClick={() => onSetAbsence(absence.value)}
-            title={absence.paid ? 'Bezahlte Abwesenheit (zählt geplante Stunden)' : 'Unbezahlt (0 Std.)'}
+            title={absence.paid ? t('absencePaidHint') : t('absenceUnpaidHint')}
           >
             {absence.label}
           </Button>

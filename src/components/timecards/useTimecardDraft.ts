@@ -274,7 +274,7 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
   const [anchorDate, setAnchorDate] = useState<string | null>(null)
 
   const handleDaySelect = useCallback(
-    (date: string, mode: 'single' | 'toggle' | 'range' | 'add') => {
+    (date: string, mode: 'single' | 'toggle' | 'range' | 'add' | 'remove') => {
       updateCurrentDraft(current => ({ ...current, selectedDate: date }))
       if (mode === 'toggle') {
         setSelectedDates(prev =>
@@ -285,6 +285,11 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
         // Paint: add each day the drag passes over (dragging down a column
         // paints that weekday's days, across a row paints that week's days).
         setSelectedDates(prev => (prev.includes(date) ? prev : [...prev, date]))
+        setAnchorDate(date)
+      } else if (mode === 'remove') {
+        // Erase-paint: a touch drag that started on a selected day removes
+        // each day it passes over instead.
+        setSelectedDates(prev => prev.filter(d => d !== date))
         setAnchorDate(date)
       } else if (mode === 'range' && anchorDate) {
         const a = monthDates.indexOf(anchorDate)
@@ -362,6 +367,12 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     [scheduleTemplateForDate],
   )
 
+  /** Whether the date's weekday has plan hours — drives fill-button labels. */
+  const dayHasPlan = useCallback(
+    (date: string) => scheduleTemplateForDate(date) !== null,
+    [scheduleTemplateForDate],
+  )
+
   // Shared entry builders — ONE definition each for "a scheduled work day" and
   // "an absence day", used by both the month bulk actions and the day view, so
   // the two surfaces produce identical data (SSOT/DRY).
@@ -375,6 +386,25 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
       buildScheduleEntryForDate(date, effectiveSchedule.days[weekdayIdFromDate(date)]),
     [effectiveSchedule],
   )
+
+  /**
+   * A standard manual work day (TIMECARD_MANUAL_DEFAULT) — the fill result for
+   * a day the user EXPLICITLY targeted that has no plan hours ("I came in on
+   * Friday"). Never used by the whole-month fill, which stays plan-only.
+   */
+  const buildDefaultDayEntry = useCallback((date: string): TimecardEntryInput => {
+    const tpl = TIMECARD_MANUAL_DEFAULT
+    return {
+      work_date: date,
+      start_time: tpl.start,
+      end_time: tpl.end,
+      break_minutes: tpl.break_minutes,
+      duration_minutes: calculateTimeRangeMinutes(tpl.start, tpl.end, tpl.break_minutes),
+      category: TIMECARD_ENTRY_CATEGORIES.ADMIN,
+      source: 'manual',
+      description: '',
+    }
+  }, [])
 
   const buildAbsenceEntry = useCallback(
     (date: string, category: TimecardEntryCategory): TimecardEntryInput => {
@@ -399,32 +429,44 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
   )
 
   const applyToSelected = useCallback(
-    (build: (date: string) => TimecardEntryInput | null) => {
+    (build: (date: string) => TimecardEntryInput) => {
       if (selectedDates.length === 0) return
-      const additions = selectedDates
-        .map(build)
-        .filter((entry): entry is TimecardEntryInput => entry !== null)
-      const skipped = selectedDates.length - additions.length
-      if (additions.length > 0) {
-        updateCurrentDraft(current => ({
-          ...current,
-          entries: mergeEntries(current.entries, additions),
-          status: TIMECARD_STATUSES.DRAFT,
-        }))
-      }
-      if (skipped > 0) {
-        // After updateCurrentDraft (which clears messages) so it survives.
-        setSyncMessage(t('fillSkippedNonPlanDays', { count: skipped }))
-      }
+      updateCurrentDraft(current => ({
+        ...current,
+        entries: mergeEntries(current.entries, selectedDates.map(build)),
+        status: TIMECARD_STATUSES.DRAFT,
+      }))
       clearSelection()
     },
-    [selectedDates, updateCurrentDraft, clearSelection, t],
+    [selectedDates, updateCurrentDraft, clearSelection],
   )
 
-  const bulkFillFromSchedule = useCallback(
-    () => applyToSelected(buildScheduleEntry),
-    [applyToSelected, buildScheduleEntry],
-  )
+  /**
+   * Fill the SELECTED days: plan hours on plan days; a standard manual day on
+   * days without plan hours — the user explicitly picked them ("I worked that
+   * Friday"), so refusing/skipping is wrong. The message says which days got
+   * default times so they can be adjusted.
+   */
+  const bulkFillFromSchedule = useCallback(() => {
+    if (selectedDates.length === 0) return
+    let defaulted = 0
+    const additions = selectedDates.map(date => {
+      const entry = buildScheduleEntry(date)
+      if (entry) return entry
+      defaulted++
+      return buildDefaultDayEntry(date)
+    })
+    updateCurrentDraft(current => ({
+      ...current,
+      entries: mergeEntries(current.entries, additions),
+      status: TIMECARD_STATUSES.DRAFT,
+    }))
+    if (defaulted > 0) {
+      // After updateCurrentDraft (which clears messages) so it survives.
+      setSyncMessage(t('fillDefaultedNonPlanDays', { count: defaulted }))
+    }
+    clearSelection()
+  }, [selectedDates, buildScheduleEntry, buildDefaultDayEntry, updateCurrentDraft, clearSelection, t])
 
   const bulkSetAbsence = useCallback(
     (category: TimecardEntryCategory) =>
@@ -514,8 +556,9 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
             patch.end_time !== undefined ||
             patch.break_minutes !== undefined ||
             (categoryChanged && wasAbsence)
-          nextEntry =
-            shouldRecalc && mergedEntry.start_time && mergedEntry.end_time
+          nextEntry = !shouldRecalc
+            ? mergedEntry
+            : mergedEntry.start_time && mergedEntry.end_time
               ? {
                   ...mergedEntry,
                   duration_minutes: calculateTimeRangeMinutes(
@@ -524,7 +567,10 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
                     mergedEntry.break_minutes ?? 0,
                   ),
                 }
-              : mergedEntry
+              : // Times were cleared (hour grid emptied) — a work entry without
+                // a time range has no worked minutes; keeping the old duration
+                // would leave a phantom total.
+                { ...mergedEntry, duration_minutes: 0 }
         }
 
         const nextEntries = existing
@@ -540,19 +586,18 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
 
   // ── Day-scope actions (the day view applies to the focused day) ────────
   // Same builders as the month bulk actions → identical data, no note hacks.
+  // On a non-plan day the fill falls back to the standard manual day (the
+  // button is relabelled accordingly via dayHasPlan) — "I worked this Friday"
+  // must produce an editable entry, not a refusal.
   const fillDayFromSchedule = useCallback(() => {
-    const entry = buildScheduleEntry(draft.selectedDate)
-    if (!entry) {
-      // Non-plan day: nothing to fill — say so instead of silently no-oping.
-      setSyncMessage(t('fillNonPlanDay'))
-      return
-    }
+    const entry =
+      buildScheduleEntry(draft.selectedDate) ?? buildDefaultDayEntry(draft.selectedDate)
     updateCurrentDraft(current => ({
       ...current,
       entries: mergeEntries(current.entries, [entry]),
       status: TIMECARD_STATUSES.DRAFT,
     }))
-  }, [updateCurrentDraft, buildScheduleEntry, draft.selectedDate, t])
+  }, [updateCurrentDraft, buildScheduleEntry, buildDefaultDayEntry, draft.selectedDate])
 
   const setDayAbsence = useCallback(
     (category: TimecardEntryCategory) => {
@@ -830,6 +875,7 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     updateSelectedEntry,
     fillMonthFromSchedule,
     // day-scope actions (day view)
+    dayHasPlan,
     fillDayFromSchedule,
     setDayAbsence,
     clearDay,

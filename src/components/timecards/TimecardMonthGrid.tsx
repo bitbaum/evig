@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { Check } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import {
   TIMECARD_ENTRY_CATEGORY_LABELS,
   formatTimecardDuration,
@@ -9,24 +10,26 @@ import {
   type TimecardEntryCategory,
 } from '@/config/timecards'
 import type { TimecardEntryInput } from '@/lib/schemas/timecards'
+import { WEEKDAY_IDS, WEEKDAY_LABELS } from '@/lib/team/schedule'
 import { getEntryForDate } from '@/lib/team/timecard-utils'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
+import { useGridPointerInput } from './useGridPointerInput'
 
 /**
  * Month grid for the timecard editor.
  *
- * Selection is spreadsheet-style:
- *   - Plain click selects one day (and focuses it for the day editor below).
- *   - Ctrl/Cmd-click toggles a day into a non-adjacent selection.
- *   - Shift-click selects a range from the anchor.
- *   - Click + DRAG across days selects that range in one gesture (the fast
- *     path for "mark these 4 days") — mousedown starts, mouseenter extends,
- *     mouseup anywhere ends.
- *   - Delete/Backspace clears the selected days' entries.
+ * Selection runs on the shared pointer engine (useGridPointerInput), so mouse
+ * and touch behave symmetrically:
+ *   - Mouse: click selects one day; click + drag PAINTS every touched day;
+ *     Ctrl/Cmd-click toggles; Shift-click ranges; double-click opens the day
+ *     editor; Delete/Backspace clears the selected days' entries.
+ *   - Touch: tap toggles a day in/out of the selection; hold a day briefly
+ *     (or start a sideways swipe) and drag to paint — starting on a selected
+ *     day erases instead. Vertical swipes still scroll the page.
  * Selected days get an action-tinted border + check; the focused day gets a
  * ring. Absence days (Krank/Ferien/…) show the label instead of a duration;
- * gaps render "—" so the eye finds empty days immediately.
+ * gaps render "·" so the eye finds empty days immediately.
  */
 export function TimecardMonthGrid({
   visibleDates,
@@ -37,40 +40,58 @@ export function TimecardMonthGrid({
   onWeekdaySelect,
   onClearSelected,
   onDayContextMenu,
+  onEditDay,
 }: {
   visibleDates: string[]
   entries: TimecardEntryInput[]
   focusedDate: string
   selectedDates: string[]
-  onDaySelect: (date: string, mode: 'single' | 'toggle' | 'range' | 'add') => void
+  onDaySelect: (date: string, mode: 'single' | 'toggle' | 'range' | 'add' | 'remove') => void
   onWeekdaySelect?: (weekday: number, additive: boolean) => void
   onClearSelected: () => void
   onDayContextMenu?: (date: string, pos: { x: number; y: number }) => void
+  /** Open the day editor for this date (double-click / "Tag bearbeiten"). */
+  onEditDay?: (date: string) => void
 }) {
+  const t = useTranslations('admin.timecards')
   const selected = new Set(selectedDates)
 
-  // Drag-to-select (paint). `dragging` = a day-cell drag is in progress (each
-  // entered cell is painted into the selection); `headerDragging` = a weekday
-  // header drag (each entered column is added). `dragged` remembers a drag
-  // happened so the trailing click doesn't collapse it back to one day.
-  const [dragging, setDragging] = useState(false)
+  // Whether the running paint gesture adds or removes days — decided by the
+  // state of the day the gesture started on (touch); mouse always paints.
+  const paintModeRef = useRef<'add' | 'remove'>('add')
+
+  const input = useGridPointerInput({
+    onDragStart: (date, pointerType) => {
+      if (pointerType === 'touch' || pointerType === 'pen') {
+        paintModeRef.current = selected.has(date) ? 'remove' : 'add'
+        onDaySelect(date, paintModeRef.current)
+      } else {
+        // Mouse press = the plain click semantic (the trailing click is
+        // swallowed by the engine); a following drag then paints additively.
+        paintModeRef.current = 'add'
+        onDaySelect(date, 'single')
+      }
+    },
+    onDragOver: date => onDaySelect(date, paintModeRef.current),
+    onTap: (date, info) => {
+      if (info.pointerType === 'touch' || info.pointerType === 'pen') {
+        onDaySelect(date, 'toggle')
+        return
+      }
+      onDaySelect(date, info.shiftKey ? 'range' : info.ctrlKey || info.metaKey ? 'toggle' : 'single')
+    },
+  })
+
+  // Weekday-header drag (mouse): press selects the column, sweeping across
+  // headers adds columns. On touch the synthetic mousedown from a tap selects
+  // the column — good enough (columns are also paintable via long-press).
   const [headerDragging, setHeaderDragging] = useState(false)
-  const dragged = useRef(false)
-
-  // Touch has no mouseenter-drag, no Ctrl/Shift and no right-click, so taps
-  // TOGGLE days into the selection instead (multi-select by tapping). The
-  // browser fires synthetic mouse events after a tap — pointerdown tells us
-  // which device started the interaction so the mouse handlers can stand down.
-  const lastPointerType = useRef<string>('mouse')
-
   useEffect(() => {
-    const stop = () => {
-      setDragging(false)
-      setHeaderDragging(false)
-    }
+    if (!headerDragging) return
+    const stop = () => setHeaderDragging(false)
     window.addEventListener('mouseup', stop)
     return () => window.removeEventListener('mouseup', stop)
-  }, [])
+  }, [headerDragging])
 
   // Weekday-aligned calendar: blanks pad the first row so the 1st lands under
   // its weekday (Mon-first). A real month reads in ~6 rows — no endless scroll.
@@ -81,6 +102,7 @@ export function TimecardMonthGrid({
 
   return (
     <div
+      {...input.containerProps}
       role="grid"
       tabIndex={0}
       onKeyDown={e => {
@@ -89,18 +111,19 @@ export function TimecardMonthGrid({
           onClearSelected()
         }
       }}
-      className="select-none rounded-lg focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action/40"
+      className="touch-pan-y select-none rounded-lg focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action/40"
     >
       <div className="mb-1 grid grid-cols-7 gap-1 sm:gap-1.5">
-        {WEEKDAY_LABELS.map((w, i) => {
-          // WEEKDAY_LABELS is Mon-first; map to JS getUTCDay (Sun=0…Sat=6).
+        {WEEKDAY_IDS.map((id, i) => {
+          const w = WEEKDAY_LABELS[id]
+          // WEEKDAY_IDS is Mon-first; map to JS getUTCDay (Sun=0…Sat=6).
           const weekday = i === 6 ? 0 : i + 1
           return (
             <Button
-              key={w}
+              key={id}
               type="button"
               variant="ghost"
-              title={`Alle ${w} auswählen — ziehen für mehrere Spalten`}
+              title={t('headerSelectColumn', { day: w })}
               onMouseDown={e => {
                 if (e.button !== 0 || !onWeekdaySelect) return
                 e.preventDefault()
@@ -145,45 +168,14 @@ export function TimecardMonthGrid({
               key={date}
               type="button"
               variant="ghost"
-              onPointerDown={e => {
-                lastPointerType.current = e.pointerType
-              }}
-              onMouseDown={e => {
-                // Touch taps arrive here as synthetic mousedowns — selection is
-                // handled in onClick for touch (toggle), so stand down.
-                if (lastPointerType.current === 'touch') return
-                // Modifier clicks (toggle/range) are handled in onClick — let them through.
-                if (e.button !== 0 || e.shiftKey || e.ctrlKey || e.metaKey) return
-                e.preventDefault()
-                dragged.current = false
-                setDragging(true)
-                onDaySelect(date, 'single')
-              }}
-              onMouseEnter={() => {
-                if (!dragging) return
-                dragged.current = true
-                // Paint: add exactly the cells the cursor passes over (drag down
-                // a column → that weekday's days; across a row → that week).
-                onDaySelect(date, 'add')
-              }}
-              onClick={e => {
-                // Swallow the click that ends a drag so it doesn't reset to one day.
-                if (dragged.current) {
-                  dragged.current = false
-                  return
-                }
-                if (lastPointerType.current === 'touch') {
-                  onDaySelect(date, 'toggle')
-                  return
-                }
-                onDaySelect(
-                  date,
-                  e.shiftKey ? 'range' : e.ctrlKey || e.metaKey ? 'toggle' : 'single',
-                )
-              }}
+              {...input.getCellProps(date)}
+              onDoubleClick={() => onEditDay?.(date)}
               onContextMenu={e => {
                 if (!onDayContextMenu) return
                 e.preventDefault()
+                // A touch long-press is a paint gesture here, not a context
+                // menu (the bulk bar carries the same actions on touch).
+                if (input.dragActiveRef.current || input.lastPointerTypeRef.current === 'touch') return
                 // Right-clicking a day outside the current selection selects just
                 // it; right-clicking inside the selection keeps the whole batch.
                 if (!selected.has(date)) onDaySelect(date, 'single')
@@ -235,5 +227,3 @@ export function TimecardMonthGrid({
     </div>
   )
 }
-
-const WEEKDAY_LABELS = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']
