@@ -7,7 +7,8 @@ import { decisions } from './decisions'
 // MEETING PROTOCOLS
 // =============================================================================
 // Meeting minutes with AI-processed structured notes.
-// Final state includes input_method from migration 027.
+// Final state includes input_method from migration 027; all enum CHECKs
+// dropped in migration 134 (values validated via zod from src/config/protocols.ts).
 
 export const meetingProtocols = pgTable('meeting_protocols', {
   id: uuid('id').primaryKey().defaultRandom(),

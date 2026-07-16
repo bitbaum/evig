@@ -55,23 +55,18 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
     <div className="max-w-3xl space-y-6">
       {error && <StatusBanner variant="error">{error}</StatusBanner>}
 
-      {/* Inhalt — the hero. Drop a recording, record live, or paste notes;
-          the AI transcribes and structures everything in one pass. This is the
-          one thing the user came here to do, so it leads. */}
+      {/* Inhalt — the hero and the only required step. Hierarchy inside the
+          card mirrors how often each path is used: upload a file (primary),
+          record live (secondary), type notes (tertiary). */}
       <div className="bg-surface-base rounded-lg border p-6 space-y-5">
         <div>
           <Heading level={2} className="text-lg font-semibold text-text-primary">Inhalt</Heading>
           <p className="text-sm text-text-secondary mt-1">
-            Lade Audio, Notizen oder Dateien hoch oder tippe direkt hinein.
-            Die KI strukturiert alles in einem Durchgang und ergänzt Titel, Typ
-            und Teilnehmer selbst.
+            Audio, Dateien oder Notizen — die KI strukturiert alles in einem
+            Durchgang und ergänzt Titel, Typ und Teilnehmer selbst.
           </p>
         </div>
 
-        {/* Record + upload sit side-by-side — same data target. The
-            consent gate is browser-side legal (StGB Art. 179bis); audio
-            recorded without it is a CH criminal offence regardless of
-            our app's policy. */}
         <CaptureControls
           sources={sources}
           setSources={setSources}
@@ -79,25 +74,25 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
           disabled={loading || processing}
         />
 
-        <CaptureAlternatives />
-
         <FormField label="Notizen / Text einfügen (optional)" htmlFor="content">
           <Textarea
             id="content"
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="Notizen, Stichpunkte oder eine ganze Mitschrift — die KI macht ein Protokoll daraus..."
-            rows={8}
+            rows={6}
             className="font-mono text-sm"
           />
-          <div className="flex items-center justify-between mt-1">
-            {contentFormat ? (
-              <span className={`text-xs px-2 py-0.5 rounded-full ${contentFormat === 'json' ? 'bg-action-muted text-action' : 'bg-surface-raised text-text-secondary'}`}>
-                {contentFormat === 'json' ? 'JSON erkannt' : 'Freitext'}
-              </span>
-            ) : <span />}
-            <span className="text-xs text-text-tertiary">{content.length} Zeichen</span>
-          </div>
+          {(contentFormat === 'json' || hasTypedText) && (
+            <div className="flex items-center justify-between mt-1">
+              {contentFormat === 'json' ? (
+                <span className="text-xs px-2 py-0.5 rounded-full bg-action-muted text-action">
+                  JSON erkannt
+                </span>
+              ) : <span />}
+              <span className="text-xs text-text-tertiary">{content.length} Zeichen</span>
+            </div>
+          )}
         </FormField>
       </div>
 
@@ -154,17 +149,17 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
               </FormField>
             </div>
 
-            <FormField label="Titel" htmlFor="title">
-              <Input
-                id="title"
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="z.B. Teamsitzung — 2. April 2026"
-              />
-            </FormField>
-
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <FormField label="Titel" htmlFor="title">
+                <Input
+                  id="title"
+                  type="text"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  placeholder="z.B. Teamsitzung — 2. April 2026"
+                />
+              </FormField>
+
               <FormField label="Sichtbarkeit" htmlFor="visibility">
                 <Select
                   id="visibility"
@@ -238,60 +233,69 @@ export default function ProtocolFormClient({ teamMembers }: ProtocolFormClientPr
         )}
       </div>
 
-      {/* Submit — its own footer so the primary action reads clearly after
-          content + optional details. */}
-      <div className="bg-surface-base rounded-lg border p-6">
-        <div className="flex items-center justify-between gap-4">
-          <div className="text-sm text-text-tertiary flex items-center gap-2">
-            {hasAudio && (
-              <span className="inline-flex items-center gap-1">
-                <Mic className="w-3 h-3" /> Audio
-              </span>
-            )}
-            {(hasTextFiles || hasTypedText) && (
-              <span className="inline-flex items-center gap-1">
-                <FileText className="w-3 h-3" />
-                {hasTextFiles && hasTypedText
-                  ? 'Notizen + Dateien'
-                  : hasTextFiles
-                    ? `${sources.textFiles.length} Datei${sources.textFiles.length === 1 ? '' : 'en'}`
-                    : 'Notizen'}
-              </span>
-            )}
-            {!hasAudio && !hasTextFiles && !hasTypedText && (
-              <span>Quellen hochladen oder Notizen eingeben</span>
-            )}
-          </div>
-          <Button
-            onClick={handleSubmit}
-            disabled={!canSubmit}
-            variant="primary"
-            size="lg"
-            className="flex items-center gap-2"
-          >
-            {(loading || processing) ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                {processing ? 'KI verarbeitet...' : 'Erstellt...'}
-              </>
-            ) : (
-              <>
-                <Check className="w-4 h-4" />
-                Protokoll erstellen
-              </>
-            )}
-          </Button>
+      {/* Submit — a plain action row, not another card. Content + optional
+          details above; one clear primary action below. */}
+      <div className="flex items-center justify-between gap-4">
+        <div className="text-sm text-text-tertiary flex items-center gap-2">
+          {hasAudio && (
+            <span className="inline-flex items-center gap-1">
+              <Mic className="w-3 h-3" /> Audio
+            </span>
+          )}
+          {(hasTextFiles || hasTypedText) && (
+            <span className="inline-flex items-center gap-1">
+              <FileText className="w-3 h-3" />
+              {hasTextFiles && hasTypedText
+                ? 'Notizen + Dateien'
+                : hasTextFiles
+                  ? `${sources.textFiles.length} Datei${sources.textFiles.length === 1 ? '' : 'en'}`
+                  : 'Notizen'}
+            </span>
+          )}
+          {!hasAudio && !hasTextFiles && !hasTypedText && (
+            <span>Quellen hochladen oder Notizen eingeben</span>
+          )}
         </div>
+        <Button
+          onClick={handleSubmit}
+          disabled={!canSubmit}
+          variant="primary"
+          size="lg"
+          className="flex items-center gap-2"
+        >
+          {(loading || processing) ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              {processing ? 'KI verarbeitet...' : 'Erstellt...'}
+            </>
+          ) : (
+            <>
+              <Check className="w-4 h-4" />
+              Protokoll erstellen
+            </>
+          )}
+        </Button>
       </div>
+
+      {/* Fallback help (self-record / self-transcribe / self-structure with
+          open-source tools) — reference material, not part of the flow, so it
+          lives at the very bottom as a collapsed disclosure. */}
+      <CaptureAlternatives />
     </div>
   )
 }
 
 /**
- * CaptureControls — record button + upload zone + consent gate.
+ * CaptureControls — upload zone + record button + consent gate.
  *
- * Keeps consent state local (it's UX, not part of the submitted form),
- * persists "remember me" via ProtocolConsent's localStorage handler.
+ * The drop zone leads (most protocols arrive as an existing recording or
+ * notes file); live recording sits directly below it with the consent
+ * checkbox beside the button it gates. The consent gate is browser-side
+ * legal (StGB Art. 179bis): audio recorded without everyone's consent is
+ * a CH criminal offence regardless of our app's policy.
+ *
+ * Consent state stays local (it's UX, not part of the submitted form);
+ * "remember me" persists via ProtocolConsent's localStorage handler.
  */
 interface CaptureControlsProps {
   sources: ReturnType<typeof useProtocolForm>['sources']
@@ -309,20 +313,17 @@ function CaptureControls({ sources, setSources, setError, disabled }: CaptureCon
 
   return (
     <div className="space-y-4">
-      <ProtocolConsent value={consented} onChange={setConsented} />
-
-      <div className="flex flex-wrap items-center gap-3">
-        <RecordButton onRecorded={handleRecorded} disabled={disabled || !consented} />
-        <span className="text-xs text-text-tertiary">oder</span>
-        <span className="text-xs text-text-tertiary">Datei hochladen / Notizen einfügen ↓</span>
-      </div>
-
       <SourceUploader
         value={sources}
         onChange={setSources}
         onError={setError}
         disabled={disabled}
       />
+
+      <div className="flex flex-wrap items-start gap-x-4 gap-y-2">
+        <RecordButton onRecorded={handleRecorded} disabled={disabled || !consented} />
+        <ProtocolConsent value={consented} onChange={setConsented} />
+      </div>
     </div>
   )
 }
