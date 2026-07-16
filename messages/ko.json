@@ -10391,7 +10391,10 @@
         "resultAt": "{date}에 {result}",
         "failNotePlaceholder": "무엇이 실패했나요? 예: 배터리가 20분만 지속됨…",
         "failNoteRequired": "사유 필요 — 정확히 무엇이 실패했나요?",
-        "saveFail": "실패로 표시"
+        "saveFail": "실패로 표시",
+        "confirmNoteHint": "4눈 원칙: 두 번째 확인자는 바로 확인하세요. 혼자 근무 중이라면 사유를 적어주세요.",
+        "confirmNotePlaceholder": "두 번째 확인자는 선택 사항 — 단독 승인 시 필수 (예: \"단독 근무\") …",
+        "saveConfirm": "품질 검사 확인"
       }
     },
     "it-hilfe": {

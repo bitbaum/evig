@@ -10344,7 +10344,10 @@
         "resultAt": "{result} le {date}",
         "failNotePlaceholder": "Qu'est-ce qui a échoué ? p. ex. la batterie ne tient que 20 minutes…",
         "failNoteRequired": "Justification requise — qu’est-ce qui a échoué exactement ?",
-        "saveFail": "Marquer comme échoué"
+        "saveFail": "Marquer comme échoué",
+        "confirmNoteHint": "Principe des quatre yeux : confirmez directement en tant que seconde personne. Seul en service ? Indiquez la raison.",
+        "confirmNotePlaceholder": "Facultatif en tant que seconde personne — requis pour une validation en solo, p. ex. « seul en service » …",
+        "saveConfirm": "Confirmer le contrôle qualité"
       }
     },
     "it-hilfe": {

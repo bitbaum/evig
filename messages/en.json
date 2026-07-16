@@ -10343,7 +10343,10 @@
         "resultAt": "{result} on {date}",
         "failNotePlaceholder": "What failed? e.g. battery lasts only 20 minutes…",
         "failNoteRequired": "Reason required — what exactly failed?",
-        "saveFail": "Mark as failed"
+        "saveFail": "Mark as failed",
+        "confirmNoteHint": "Four-eyes principle: confirm directly as a second person. Working alone? State the reason.",
+        "confirmNotePlaceholder": "Optional as a second person — required for a solo sign-off, e.g. \"working alone\" …",
+        "saveConfirm": "Confirm quality control"
       }
     },
     "it-hilfe": {

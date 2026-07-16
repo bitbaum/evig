@@ -62,11 +62,13 @@ export const PATCH = withAdmin<{ id: string }>('intake', async (request, session
     }
 
     // Vier-Augen-Prinzip: final QA can't be signed off (pass or n.a.) by the
-    // person who did all the other required work. Recording a FAIL is always
-    // allowed — flagging a problem must never be blocked.
+    // person who did all the other required work — unless the sign-off carries
+    // an explicit override reason in the notes (solo-shift audit trail).
+    // Recording a FAIL is always allowed — flagging a problem is never blocked.
     if (
       result !== null &&
       result !== CHECKLIST_RESULTS.FAIL &&
+      !notes.trim() &&
       violatesSecondPersonRule(itemConfig, checklist, tier, row.category, session.user.id)
     ) {
       return apiBadRequest(ERROR_MESSAGES.INTAKE_SECOND_PERSON_REQUIRED)

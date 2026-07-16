@@ -26,6 +26,12 @@ export function ChecklistGroup({ group, onSetResult }: ChecklistGroupProps) {
   const [notesText, setNotesText] = useState<Record<string, string>>({})
   /** Items where a 'fail' click is waiting for its (required) reason. */
   const [pendingFail, setPendingFail] = useState<Record<string, boolean>>({})
+  /**
+   * Vier-Augen items where a 'pass' click is waiting for confirmation: a
+   * second person just saves; the sole worker writes an override reason
+   * (the API rejects a solo sign-off without one).
+   */
+  const [pendingConfirm, setPendingConfirm] = useState<Record<string, boolean>>({})
   const doneCount = group.items.filter(isDone).length
   const failCount = group.items.filter(i => i.state.result === CHECKLIST_RESULTS.FAIL).length
 
@@ -37,6 +43,7 @@ export function ChecklistGroup({ group, onSetResult }: ChecklistGroupProps) {
   const closeNotes = (itemId: string) => {
     setNotesOpen(prev => ({ ...prev, [itemId]: false }))
     setPendingFail(prev => ({ ...prev, [itemId]: false }))
+    setPendingConfirm(prev => ({ ...prev, [itemId]: false }))
   }
 
   const handleVerdict = (item: ChecklistItemWithState, result: ChecklistResult) => {
@@ -51,6 +58,13 @@ export function ChecklistGroup({ group, onSetResult }: ChecklistGroupProps) {
       openNotes(item.id, item.state.notes)
       return
     }
+    if (result === CHECKLIST_RESULTS.PASS && item.requiresSecondPerson) {
+      // Vier-Augen sign-off goes through the notes editor: a second person
+      // saves directly, a solo worker must write the override reason.
+      setPendingConfirm(prev => ({ ...prev, [item.id]: true }))
+      openNotes(item.id, item.state.notes)
+      return
+    }
     onSetResult(item.id, result)
   }
 
@@ -59,6 +73,8 @@ export function ChecklistGroup({ group, onSetResult }: ChecklistGroupProps) {
     if (pendingFail[item.id]) {
       if (!text) return // fail requires a reason
       onSetResult(item.id, CHECKLIST_RESULTS.FAIL, text)
+    } else if (pendingConfirm[item.id]) {
+      onSetResult(item.id, CHECKLIST_RESULTS.PASS, text)
     } else {
       onSetResult(item.id, item.state.result, text)
     }
@@ -209,17 +225,24 @@ export function ChecklistGroup({ group, onSetResult }: ChecklistGroupProps) {
                       </div>
                     )}
 
-                    {/* Notes editor (also collects the required fail reason) */}
+                    {/* Notes editor (also collects fail reasons + Vier-Augen overrides) */}
                     {notesOpen[item.id] && (
                       <div className="mt-2 space-y-1.5">
                         {pendingFail[item.id] && (
                           <p className="text-xs text-error-600 dark:text-error-400">{t('failNoteRequired')}</p>
                         )}
+                        {pendingConfirm[item.id] && (
+                          <p className="text-xs text-text-secondary">{t('confirmNoteHint')}</p>
+                        )}
                         <Textarea
                           autoFocus
                           value={notesText[item.id] ?? ''}
                           onChange={(e) => setNotesText(prev => ({ ...prev, [item.id]: e.target.value }))}
-                          placeholder={pendingFail[item.id] ? t('failNotePlaceholder') : t('notePlaceholder')}
+                          placeholder={
+                            pendingFail[item.id] ? t('failNotePlaceholder')
+                            : pendingConfirm[item.id] ? t('confirmNotePlaceholder')
+                            : t('notePlaceholder')
+                          }
                           rows={2}
                           className="text-xs resize-none"
                         />
@@ -231,7 +254,7 @@ export function ChecklistGroup({ group, onSetResult }: ChecklistGroupProps) {
                             variant="primary"
                             size="sm"
                           >
-                            {pendingFail[item.id] ? t('saveFail') : tForms('save')}
+                            {pendingFail[item.id] ? t('saveFail') : pendingConfirm[item.id] ? t('saveConfirm') : tForms('save')}
                           </Button>
                           <Button
                             type="button"

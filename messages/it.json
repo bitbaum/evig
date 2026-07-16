@@ -10391,7 +10391,10 @@
         "resultAt": "{result} il {date}",
         "failNotePlaceholder": "Cosa è fallito? es. la batteria dura solo 20 minuti…",
         "failNoteRequired": "Motivazione richiesta — cosa è fallito esattamente?",
-        "saveFail": "Segna come fallito"
+        "saveFail": "Segna come fallito",
+        "confirmNoteHint": "Principio dei quattro occhi: conferma direttamente come seconda persona. Da solo in servizio? Indica il motivo.",
+        "confirmNotePlaceholder": "Facoltativo come seconda persona — obbligatorio per una conferma in solitaria, es. «da solo in servizio» …",
+        "saveConfirm": "Conferma controllo qualità"
       }
     },
     "it-hilfe": {

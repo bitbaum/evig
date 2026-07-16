@@ -10391,7 +10391,10 @@
         "resultAt": "{result} el {date}",
         "failNotePlaceholder": "¿Qué falló? p. ej. la batería solo dura 20 minutos…",
         "failNoteRequired": "Se requiere justificación: ¿qué falló exactamente?",
-        "saveFail": "Marcar como fallido"
+        "saveFail": "Marcar como fallido",
+        "confirmNoteHint": "Principio de cuatro ojos: confirme directamente como segunda persona. ¿Trabaja solo? Indique el motivo.",
+        "confirmNotePlaceholder": "Opcional como segunda persona; obligatorio si firma solo, p. ej. «trabajando solo» …",
+        "saveConfirm": "Confirmar control de calidad"
       }
     },
     "it-hilfe": {

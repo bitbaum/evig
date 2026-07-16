@@ -37,7 +37,7 @@ export const ERROR_MESSAGES = {
   INTAKE_ALREADY_PUBLISHED: 'Gerät ist bereits im Shop veröffentlicht',
   INTAKE_INVALID_CHECKLIST_ITEM: 'Ungültiger Checklist-Eintrag',
   INTAKE_FAIL_NOTES_REQUIRED: 'Bei „Fehlgeschlagen“ ist eine Begründung erforderlich',
-  INTAKE_SECOND_PERSON_REQUIRED: 'Vier-Augen-Prinzip: Die Qualitätskontrolle muss von einer zweiten Person bestätigt werden, nachdem die übrigen Pflichtpunkte erledigt sind',
+  INTAKE_SECOND_PERSON_REQUIRED: 'Vier-Augen-Prinzip: Die Qualitätskontrolle muss von einer zweiten Person bestätigt werden — oder mit Begründung in der Notiz übersteuert werden (z.B. «allein im Dienst»)',
   REPAIRER_APPLICATION_NOT_FOUND: `${TECHNICIAN_LABEL}-Bewerbung nicht gefunden`,
   WORKSHOP_PROPOSAL_NOT_FOUND: 'Workshop-Vorschlag nicht gefunden',
   POOL_NOT_FOUND: 'Pool nicht gefunden',

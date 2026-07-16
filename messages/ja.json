@@ -10391,7 +10391,10 @@
         "resultAt": "{date} に{result}",
         "failNotePlaceholder": "何が不合格でしたか？例：バッテリーが20分しか持たない…",
         "failNoteRequired": "理由が必要です — 具体的に何が不合格でしたか？",
-        "saveFail": "不合格にする"
+        "saveFail": "不合格にする",
+        "confirmNoteHint": "四つの目の原則：第二確認者はそのまま確認できます。一人勤務の場合は理由を記入してください。",
+        "confirmNotePlaceholder": "第二確認者は任意 — 単独承認の場合は必須（例：「一人勤務」）…",
+        "saveConfirm": "品質検査を確認"
       }
     },
     "it-hilfe": {

@@ -103,9 +103,10 @@ export interface ChecklistItemConfig {
    */
   deviceCategories?: string[]
   /**
-   * Vier-Augen-Prinzip: this item may only be passed by someone OTHER than
-   * the person who did all the other completed required work on the device.
-   * Enforced by the checklist API.
+   * Vier-Augen-Prinzip: this item should be passed by someone OTHER than the
+   * person who did all the other completed required work on the device. The
+   * checklist API blocks a solo sign-off UNLESS an explicit override reason
+   * is written in the notes (audit trail for single-staff shifts).
    */
   requiresSecondPerson?: boolean
 }
@@ -552,10 +553,12 @@ export function hasChecklistFailure(
 }
 
 /**
- * Vier-Augen-Prinzip check. A `requiresSecondPerson` item (final QA) may only
+ * Vier-Augen-Prinzip check. A `requiresSecondPerson` item (final QA) should
  * be signed off by someone who was NOT the sole worker on the device: at
  * least one other completed required item must carry a different completedBy.
- * Also blocks when nothing else is done yet — there is nothing to QA.
+ * Also true when nothing else is done yet — there is nothing to QA.
+ * The API treats a violation as blocking UNLESS the sign-off carries an
+ * explicit override note (solo-shift reality; the note is the audit trail).
  */
 export function violatesSecondPersonRule(
   item: ChecklistItemConfig,

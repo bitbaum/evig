@@ -10457,7 +10457,10 @@
         "resultAt": "{result} am {date}",
         "failNotePlaceholder": "Was ist fehlgeschlagen? z.B. Akku hält nur 20 Minuten …",
         "failNoteRequired": "Begründung erforderlich — was genau ist fehlgeschlagen?",
-        "saveFail": "Als fehlgeschlagen markieren"
+        "saveFail": "Als fehlgeschlagen markieren",
+        "confirmNoteHint": "Vier-Augen-Prinzip: Als zweite Person direkt bestätigen. Allein im Dienst? Begründung angeben.",
+        "confirmNotePlaceholder": "Optional als zweite Person — erforderlich bei Allein-Bestätigung, z.B. «allein im Dienst» …",
+        "saveConfirm": "Qualitätskontrolle bestätigen"
       }
     },
     "it-hilfe": {

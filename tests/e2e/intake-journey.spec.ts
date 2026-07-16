@@ -23,6 +23,7 @@ import {
   fetchIntakeDetail,
   publishIntakeItem,
   tryPublishIntakeItem,
+  trySetIntakeChecklistVerdict,
 } from './helpers/intake'
 import { INTAKE_TIERS } from '@/config/intake-checklist'
 import { INTAKE_STATUS } from '@/config/intake-status'
@@ -57,6 +58,26 @@ test.describe('Intake pipeline staff journey', () => {
     const blocked = await tryPublishIntakeItem(page.request, created.inventory_id)
     expect(blocked.ok).toBe(false)
     expect(blocked.status).toBe(400)
+
+    // QC gates: a fail verdict without a reason is rejected …
+    const failWithoutNote = await trySetIntakeChecklistVerdict(
+      page.request,
+      created.inventory_id,
+      'visual_inspection',
+      'fail',
+    )
+    expect(failWithoutNote.ok).toBe(false)
+    expect(failWithoutNote.status).toBe(400)
+
+    // … and final QA can't be self-signed without a Vier-Augen override note.
+    const soloFinalQa = await trySetIntakeChecklistVerdict(
+      page.request,
+      created.inventory_id,
+      'final_qa',
+      'pass',
+    )
+    expect(soloFinalQa.ok).toBe(false)
+    expect(soloFinalQa.status).toBe(400)
 
     await completeRequiredIntakeChecklist(
       page.request,

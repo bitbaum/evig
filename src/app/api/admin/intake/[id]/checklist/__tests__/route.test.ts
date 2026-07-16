@@ -221,6 +221,17 @@ describe('PATCH /api/admin/intake/[id]/checklist — validation', () => {
     expect(body.error).toContain('Vier-Augen')
   })
 
+  it('allows a solo sign-off WITH an override note (Vier-Augen override)', async () => {
+    const checklist = require('@/config/intake-checklist')
+    checklist.violatesSecondPersonRule.mockReturnValue(true)
+    mockValidateBody.mockReturnValueOnce({
+      success: true,
+      data: { item_id: 'photos', result: 'pass', notes: 'allein im Dienst' },
+    })
+    const response = await PATCH(makeRequest({ item_id: 'photos', result: 'pass', notes: 'allein im Dienst' }), makeContext())
+    expect(response.status).toBe(200)
+  })
+
   it('does NOT apply the second-person rule to fail verdicts', async () => {
     const checklist = require('@/config/intake-checklist')
     checklist.violatesSecondPersonRule.mockReturnValue(true)

@@ -70,20 +70,28 @@ export async function fetchIntakeDetail(
   return parseApi<IntakeDetail>(response)
 }
 
-export async function toggleIntakeChecklistItem(
+/** Set a verdict (pass/fail/na; null = reset) on a checklist item. */
+export async function setIntakeChecklistVerdict(
   request: APIRequestContext,
   inventoryId: string,
   itemId: string,
-  completed = true,
+  result: 'pass' | 'fail' | 'na' | null = 'pass',
+  notes?: string,
 ): Promise<{ checklist_complete: boolean }> {
   const response = await csrfPatch(request, `/api/admin/intake/${inventoryId}/checklist`, {
     item_id: itemId,
-    completed,
+    result,
+    ...(notes !== undefined ? { notes } : {}),
   })
   return parseApi<{ checklist_complete: boolean }>(response)
 }
 
-/** Mark every required checklist item complete for the device's tier + category. */
+/**
+ * Mark every required checklist item as passed for the device's tier +
+ * category. Items with the Vier-Augen flag (final QA) are signed off with an
+ * explicit override note — the journey runs with a single staff account, and
+ * the documented-override path is exactly what a solo shift uses.
+ */
 export async function completeRequiredIntakeChecklist(
   request: APIRequestContext,
   inventoryId: string,
@@ -92,12 +100,42 @@ export async function completeRequiredIntakeChecklist(
 ): Promise<void> {
   const detail = await fetchIntakeDetail(request, inventoryId)
   const cat = category ?? detail.category
-  const requiredIds = getChecklistForDevice(tier, cat ?? undefined)
-    .filter(item => item.required)
-    .map(item => item.id)
+  const requiredItems = getChecklistForDevice(tier, cat ?? undefined).filter(item => item.required)
 
-  for (const itemId of requiredIds) {
-    await toggleIntakeChecklistItem(request, inventoryId, itemId, true)
+  // Second-person items last — the rule looks at the other completed work.
+  const ordered = [
+    ...requiredItems.filter(i => !i.requiresSecondPerson),
+    ...requiredItems.filter(i => i.requiresSecondPerson),
+  ]
+  for (const item of ordered) {
+    await setIntakeChecklistVerdict(
+      request,
+      inventoryId,
+      item.id,
+      'pass',
+      item.requiresSecondPerson ? 'E2E: Vier-Augen-Override (Testlauf, allein im Dienst)' : undefined,
+    )
+  }
+}
+
+/** Like setIntakeChecklistVerdict but never throws — returns the raw outcome. */
+export async function trySetIntakeChecklistVerdict(
+  request: APIRequestContext,
+  inventoryId: string,
+  itemId: string,
+  result: 'pass' | 'fail' | 'na' | null,
+  notes?: string,
+): Promise<{ ok: boolean; status: number; error?: string }> {
+  const response = await csrfPatch(request, `/api/admin/intake/${inventoryId}/checklist`, {
+    item_id: itemId,
+    result,
+    ...(notes !== undefined ? { notes } : {}),
+  })
+  const body = (await response.json()) as ApiEnvelope<unknown>
+  return {
+    ok: response.ok() && body.success === true,
+    status: response.status(),
+    error: body.error,
   }
 }
 
