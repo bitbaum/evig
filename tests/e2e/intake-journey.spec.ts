@@ -1,7 +1,8 @@
 /**
  * Staff intake pipeline journey — create → checklist gate → publish.
  *
- * Env: AUTH_TEST_ADMIN_* (intake admin section).
+ * Env: AUTH_TEST_ADMIN_* (intake admin section) + AUTH_TEST_SECOND_ADMIN_*
+ * (final QA must be signed off by a second person — Vier-Augen-Prinzip).
  * Optional dual-persona: AUTH_TEST_USER_* to verify non-admin blocked from /admin/intake.
  * Run: npm run test:e2e:intake:journey
  */
@@ -10,6 +11,8 @@ import { test, expect } from '@playwright/test'
 import {
   ADMIN_TEST_EMAIL,
   ADMIN_TEST_PASSWORD,
+  SECOND_ADMIN_TEST_EMAIL,
+  SECOND_ADMIN_TEST_PASSWORD,
   USER_TEST_EMAIL,
   USER_TEST_PASSWORD,
   hasDualPersonaCredentials,
@@ -23,6 +26,7 @@ import {
   fetchIntakeDetail,
   publishIntakeItem,
   tryPublishIntakeItem,
+  trySetIntakeChecklistVerdict,
 } from './helpers/intake'
 import { INTAKE_TIERS } from '@/config/intake-checklist'
 import { INTAKE_STATUS } from '@/config/intake-status'
@@ -31,9 +35,11 @@ test.describe('Intake pipeline staff journey', () => {
   test.setTimeout(120000)
 
   test.skip(!ADMIN_TEST_PASSWORD, 'Set AUTH_TEST_ADMIN_PASSWORD')
+  test.skip(!SECOND_ADMIN_TEST_PASSWORD, 'Set AUTH_TEST_SECOND_ADMIN_PASSWORD (Vier-Augen final QA)')
 
   test('admin creates refurbish device → completes checklist → publishes (API + UI)', async ({
     page,
+    browser,
   }) => {
     const productName = buildE2EIntakeProductName()
 
@@ -58,11 +64,37 @@ test.describe('Intake pipeline staff journey', () => {
     expect(blocked.ok).toBe(false)
     expect(blocked.status).toBe(400)
 
-    await completeRequiredIntakeChecklist(
+    // Vier-Augen-Prinzip: the sole worker cannot sign off final QA —
+    // neither before any work is done nor after doing everything alone.
+    const soloQa = await trySetIntakeChecklistVerdict(
       page.request,
       created.inventory_id,
-      INTAKE_TIERS.REFURBISH,
+      'final_qa',
     )
+    expect(soloQa.ok).toBe(false)
+    expect(soloQa.status).toBe(400)
+
+    // Second staff account signs off the second-person items (final QA).
+    const secondContext = await browser.newContext()
+    try {
+      const secondPage = await secondContext.newPage()
+      await loginWithCredentials(
+        secondPage,
+        '/admin/intake',
+        SECOND_ADMIN_TEST_EMAIL,
+        SECOND_ADMIN_TEST_PASSWORD,
+      )
+
+      await completeRequiredIntakeChecklist(
+        page.request,
+        created.inventory_id,
+        INTAKE_TIERS.REFURBISH,
+        undefined,
+        secondPage.request,
+      )
+    } finally {
+      await secondContext.close()
+    }
 
     detail = await fetchIntakeDetail(page.request, created.inventory_id)
     expect(detail.checklist_complete).toBe(true)
