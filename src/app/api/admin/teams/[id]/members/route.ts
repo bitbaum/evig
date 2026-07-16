@@ -3,6 +3,7 @@ import { withAdmin, type ValidSession } from '@/lib/api/middleware'
 import { apiSuccess, apiError, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { addMembershipSchema } from '@/lib/schemas/teams'
 import { getTeam, getTeamMembers, addMember, transferMembership } from '@/lib/services/teams'
+import { notifyMemberAdded } from '@/lib/services/team-invites'
 import type { TeamRole } from '@/config/teams'
 import { logger } from '@/lib/logger'
 
@@ -29,7 +30,7 @@ export const GET = withAdmin<Params>('teams', async (
  */
 export const POST = withAdmin<Params>('teams', async (
   request: NextRequest,
-  _session: ValidSession,
+  session: ValidSession,
   context?: { params?: Params },
 ) => {
   try {
@@ -47,6 +48,13 @@ export const POST = withAdmin<Params>('teams', async (
     const outcome = from_team_id
       ? await transferMembership(user_id, { from_team_id, to_team_id: teamId, role: role as TeamRole })
       : await addMember(teamId, user_id, role as TeamRole)
+
+    // Notify the person when someone ELSE adds them (self-join stays silent).
+    if (!outcome.reused && user_id !== session.user.id) {
+      notifyMemberAdded(teamId, user_id, session.user.name || 'RevampIT').catch((error) =>
+        logger.warn('Membership notification failed', { error, teamId, user_id }),
+      )
+    }
 
     return apiSuccess(outcome, outcome.reused ? 200 : 201)
   } catch (error) {

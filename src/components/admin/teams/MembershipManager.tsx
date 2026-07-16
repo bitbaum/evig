@@ -8,6 +8,7 @@ import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import MoveMemberModal, { type MoveTeamRef } from '@/components/admin/teams/MoveMemberModal'
 import PlaceholderInviteButton from '@/components/admin/teams/PlaceholderInviteButton'
+import InviteByEmailForm from '@/components/admin/teams/InviteByEmailForm'
 import { apiFetch } from '@/lib/api/client'
 import {
   TEAM_ROLES,
@@ -135,6 +136,9 @@ export default function MembershipManager({ teamId, teamName, teamAccent, member
           <p className="text-xs text-text-tertiary mt-2">Alle Mitarbeitenden sind bereits in diesem Team.</p>
         )}
       </div>
+
+      {/* Invite by email (super admin) */}
+      {isSuperAdmin && <InviteByEmailForm teamId={teamId} />}
 
       {/* Members list */}
       {members.length === 0 ? (

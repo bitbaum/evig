@@ -55,9 +55,24 @@ export const transferMembershipSchema = z.object({
   role: z.enum(roles).default('member'),
 })
 
+/** Invite a person into a team by name + email (registered or not). */
+export const inviteByEmailSchema = z.object({
+  name: z.string().min(2, 'Name erforderlich').max(120, 'Name zu lang (max 120 Zeichen)'),
+  email: z.string().email('Ungültige E-Mail-Adresse').max(200),
+  role: z.enum(roles).default('member'),
+})
+
+/** Mint a claim link for a placeholder; optional email delivery of the link. */
+export const claimInviteSchema = z.object({
+  user_id: z.string().uuid('Ungültige Benutzer-ID'),
+  email: z.string().email('Ungültige E-Mail-Adresse').max(200).optional(),
+})
+
 export type AddMembershipInput = z.infer<typeof addMembershipSchema>
 export type ChangeRoleInput = z.infer<typeof changeRoleSchema>
 export type TransferMembershipInput = z.infer<typeof transferMembershipSchema>
+export type InviteByEmailInputSchema = z.infer<typeof inviteByEmailSchema>
+export type ClaimInviteInput = z.infer<typeof claimInviteSchema>
 
 // ---- Goals ------------------------------------------------------------------
 

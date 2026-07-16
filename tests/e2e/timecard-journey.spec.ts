@@ -53,7 +53,9 @@ test.describe('Timecard staff journey', () => {
     }
 
     await submitButton.click()
-    await expect(page.getByText(/Freigabe-Team wird benachrichtigt|Zur Prüfung gesendet/i)).toBeVisible({
+    // .first(): the submitted state renders "Zur Prüfung gesendet" in two
+    // places (status banner + summary line) — either being visible suffices.
+    await expect(page.getByText(/Freigabe-Team wird benachrichtigt|Zur Prüfung gesendet/i).first()).toBeVisible({
       timeout: 20000,
     })
 
@@ -70,7 +72,8 @@ test.describe('Timecard staff journey', () => {
     expect(resubmitted.status).toBe('submitted')
 
     await loginWithCredentials(page, '/admin/zeiterfassung', ADMIN_TEST_EMAIL, ADMIN_TEST_PASSWORD)
-    await expect(page.getByRole('heading', { name: 'Zeitkarten' })).toBeVisible({ timeout: 15000 })
+    // The page's H1 is "Zeiterfassung"; "Zeitkarten" moved to the approvals page.
+    await expect(page.getByRole('heading', { name: 'Zeiterfassung' })).toBeVisible({ timeout: 15000 })
 
     await approveTimecardAsAdmin(page.request, submitted.id)
     const afterApprove = await fetchCurrentTimecard(page.request)

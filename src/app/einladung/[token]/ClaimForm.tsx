@@ -10,12 +10,14 @@ import { apiFetch } from '@/lib/api/client'
 interface Props {
   token: string
   suggestedName: string | null
+  /** Prefill from the address the invite email was delivered to. */
+  suggestedEmail?: string | null
 }
 
 /** Turns a placeholder into a real account: real name, email, password. */
-export default function ClaimForm({ token, suggestedName }: Props) {
+export default function ClaimForm({ token, suggestedName, suggestedEmail }: Props) {
   const [name, setName] = useState(suggestedName ?? '')
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState(suggestedEmail ?? '')
   const [password, setPassword] = useState('')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
