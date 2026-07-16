@@ -49,6 +49,8 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
     isFinalized,
     error,
     initialProcessingError,
+    usesUnifiedPipeline,
+    canProcess,
     expandedTopics,
     toggleTopic,
     attendeeMapping,
@@ -158,13 +160,14 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
         </div>
       )}
 
-      {/* Draft input (no notes yet) */}
+      {/* Draft input (no notes yet) — same sources + endpoint as the create page */}
       {isDraft && !notes && (
         <ProtocolDraftInput
-          inputMethod={protocol.input_method}
+          allowAudio={usesUnifiedPipeline}
           transcript={transcript}
           audioFile={audioFile}
           processing={processing}
+          canProcess={canProcess}
           onTranscriptChange={setTranscript}
           onAudioFileSelect={handleAudioFileSelect}
           onFileUpload={handleFileUpload}
@@ -309,9 +312,11 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
           {isReview && (
             <ProtocolReprocessSection
               inputMethod={protocol.input_method}
+              allowAudio={usesUnifiedPipeline}
               transcript={transcript}
               audioFile={audioFile}
               processing={processing}
+              canProcess={canProcess}
               reprocessMinLength={getReprocessMinLength()}
               onTranscriptChange={setTranscript}
               onAudioFileSelect={handleAudioFileSelect}
@@ -319,35 +324,37 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
               onProcess={handleProcess}
             />
           )}
-
-          {/* 9. Footer actions */}
-          {(isReview || isProtocolCreator || isSuperAdmin) && (
-            <div className="flex items-center justify-between pt-2">
-              <div>
-                {(isProtocolCreator || isSuperAdmin) && (
-                  <Button
-                    variant="destructive-outline"
-                    size="sm"
-                    onClick={() => setShowDeleteDialog(true)}
-                    className="gap-2"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                    Löschen
-                  </Button>
-                )}
-              </div>
-              {isReview && (
-                <Button
-                  onClick={() => setShowFinalizeDialog(true)}
-                  className="gap-2 px-6"
-                >
-                  <CheckCircle2 className="w-4 h-4" />
-                  Protokoll abschliessen
-                </Button>
-              )}
-            </div>
-          )}
         </>
+      )}
+
+      {/* Footer actions — outside the notes-only block so a stuck draft
+          (e.g. failed processing) can still be deleted instead of lingering
+          in the list forever. */}
+      {(isReview || isProtocolCreator || isSuperAdmin) && (
+        <div className="flex items-center justify-between pt-2">
+          <div>
+            {(isProtocolCreator || isSuperAdmin) && (
+              <Button
+                variant="destructive-outline"
+                size="sm"
+                onClick={() => setShowDeleteDialog(true)}
+                className="gap-2"
+              >
+                <Trash2 className="w-4 h-4" />
+                Löschen
+              </Button>
+            )}
+          </div>
+          {isReview && (
+            <Button
+              onClick={() => setShowFinalizeDialog(true)}
+              className="gap-2 px-6"
+            >
+              <CheckCircle2 className="w-4 h-4" />
+              Protokoll abschliessen
+            </Button>
+          )}
+        </div>
       )}
 
       {/* Empty state */}

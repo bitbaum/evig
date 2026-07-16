@@ -3,10 +3,10 @@
  *
  * POST /api/protocols/[id]/process-sources
  *
- * Replaces the trio:
- *   /process        (text transcript JSON body)
- *   /process-audio  (single audio FormData)
- *   /process-notes  (text notes JSON body)
+ * THE pipeline for audio/transcript protocols — used by the create page AND
+ * the detail-page retry. The legacy /process and /process-audio endpoints
+ * were removed; /process-notes remains only for direct JSON import (no AI)
+ * and /import-tasks for task lists.
  *
  * Accepts FormData with any combination of:
  *   - audio       — optional File (single)
@@ -89,10 +89,7 @@ export const POST = withAdmin<RouteParams>(async (
     // ─── Build the combined transcript ───────────────────────────────
     const parts: string[] = []
 
-    // 1. Audio transcription (if present). The transcribe-service call
-    // pattern is intentionally duplicated from /process-audio for now —
-    // when that endpoint is retired (deferred to cleanup script), this
-    // becomes the only copy.
+    // 1. Audio transcription (if present).
     let transcribedText: string | undefined
     if (audioFile) {
       let transcription
@@ -130,7 +127,9 @@ export const POST = withAdmin<RouteParams>(async (
         model: transcription.model,
       })
 
-      if (!transcribedText) {
+      // Empty transcription is only fatal when audio was the SOLE source —
+      // with typed notes or files present, those still carry the meeting.
+      if (!transcribedText && !textInput && textFiles.length === 0) {
         return NextResponse.json({
           success: false,
           error: 'Keine Sprache erkannt. Bitte deutlicher sprechen oder eine andere Aufnahme verwenden.',
@@ -138,7 +137,11 @@ export const POST = withAdmin<RouteParams>(async (
           retryable: true,
         }, { status: 422 })
       }
-      parts.push(`--- Audio-Transkript: ${audioFile.name} ---\n${transcribedText}`)
+      if (transcribedText) {
+        parts.push(`--- Audio-Transkript: ${audioFile.name} ---\n${transcribedText}`)
+      } else {
+        logger.warn('Audio yielded no speech; continuing with text sources', { protocolId })
+      }
     }
 
     // 2. Textarea content (manual notes — typed inline)

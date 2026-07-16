@@ -106,14 +106,12 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
     }
   }
 
-  const getReprocessEndpoint = () => {
-    switch (protocol.input_method) {
-      case 'notes': return 'process-notes'
-      case 'tasks': return 'import-tasks'
-      case 'audio': return 'process-audio'
-      default: return 'process'
-    }
-  }
+  // 'notes' keeps its dedicated endpoint (direct JSON import without an AI
+  // round-trip) and 'tasks' its importer; everything else — audio and/or
+  // transcript text — goes through the SAME unified /process-sources endpoint
+  // the create page uses. One pipeline, one set of error messages.
+  const usesUnifiedPipeline =
+    protocol.input_method !== 'notes' && protocol.input_method !== 'tasks'
 
   const getReprocessMinLength = () => {
     switch (protocol.input_method) {
@@ -123,38 +121,35 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
     }
   }
 
-  const getReprocessBody = () => {
-    if (protocol.input_method === 'transcript' || protocol.input_method === 'audio') {
-      return { raw_transcript: transcript }
-    }
-    return { content: transcript }
-  }
+  const canProcess = usesUnifiedPipeline
+    ? audioFile !== null || transcript.trim().length >= getReprocessMinLength()
+    : transcript.trim().length >= getReprocessMinLength()
 
   const handleProcess = async () => {
-    if (protocol.input_method !== 'audio' && transcript.length < getReprocessMinLength()) return
+    if (!canProcess) return
     setProcessing(true)
     setError(null)
 
     try {
-      const endpoint = getReprocessEndpoint()
-
-      if (protocol.input_method === 'audio') {
-        if (!audioFile) throw new Error('Bitte wähle eine Audiodatei aus.')
-        const validationError = validateAudioUpload(audioFile)
-        if (validationError) throw new Error(validationError)
-
+      if (usesUnifiedPipeline) {
+        if (audioFile) {
+          const validationError = validateAudioUpload(audioFile)
+          if (validationError) throw new Error(validationError)
+        }
         const formData = new FormData()
-        formData.append('audio', audioFile)
-        const result = await apiFetch<void>(`/api/protocols/${protocol.id}/${endpoint}`, {
+        if (audioFile) formData.append('audio', audioFile)
+        if (transcript.trim()) formData.append('text', transcript)
+        const result = await apiFetch<void>(`/api/protocols/${protocol.id}/process-sources`, {
           method: 'POST',
           body: formData,
           formData: true,
         })
         if (!result.success) throw new Error(result.error || 'Verarbeitung fehlgeschlagen')
       } else {
+        const endpoint = protocol.input_method === 'tasks' ? 'import-tasks' : 'process-notes'
         const result = await apiFetch<void>(`/api/protocols/${protocol.id}/${endpoint}`, {
           method: 'POST',
-          body: getReprocessBody(),
+          body: { content: transcript },
         })
         if (!result.success) throw new Error(result.error || 'Verarbeitung fehlgeschlagen')
       }
@@ -288,6 +283,8 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
     isFinalized,
     error,
     initialProcessingError,
+    usesUnifiedPipeline,
+    canProcess,
     // Topics
     expandedTopics,
     toggleTopic,

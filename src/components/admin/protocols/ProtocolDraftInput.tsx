@@ -1,20 +1,21 @@
-import { Loader2, Wand2, Upload } from 'lucide-react'
+import { Loader2, Wand2, Upload, Mic } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
 
-// ExternalAIPanel removed per admin UX audit Z.2 — it pushed staff to
-// open ChatGPT/Claude in another tab, then paste structured JSON back.
-// The in-app ProtocolAIChat covers the same need without the
-// out-of-app round-trip. Net deletion: 182 lines + prop chain across 4
-// files. /api/protocols/[id]/process-notes endpoint is preserved
-// (still used by the AI structuring button in this same component).
-
+/**
+ * ProtocolDraftInput — a draft protocol has no structured notes yet (its
+ * processing failed or never ran). One card finishes the job: add audio
+ * and/or text, run the AI. Mirrors the create page — same sources, same
+ * unified /process-sources endpoint (via useProtocolDetail.handleProcess).
+ */
 interface Props {
-  inputMethod: string
+  /** Audio uploads are supported for the unified pipeline only. */
+  allowAudio: boolean
   transcript: string
   audioFile: File | null
   processing: boolean
+  canProcess: boolean
   onTranscriptChange: (value: string) => void
   onAudioFileSelect: (e: React.ChangeEvent<HTMLInputElement>) => void
   onFileUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
@@ -22,10 +23,11 @@ interface Props {
 }
 
 export function ProtocolDraftInput({
-  inputMethod,
+  allowAudio,
   transcript,
   audioFile,
   processing,
+  canProcess,
   onTranscriptChange,
   onAudioFileSelect,
   onFileUpload,
@@ -33,58 +35,70 @@ export function ProtocolDraftInput({
 }: Props) {
   return (
     <div className="bg-surface-base rounded-lg border border-default p-6 space-y-4">
-      <Heading level={2} className="text-lg text-text-primary">
-        {inputMethod === 'audio' ? 'Audio hochladen' : 'Transkript einfügen'}
-      </Heading>
-      <p className="text-sm text-text-secondary">
-        {inputMethod === 'audio'
-          ? 'Lade eine Audiodatei hoch, damit sie transkribiert und strukturiert werden kann.'
-          : 'Füge das Transkript ein, um es von der KI strukturieren zu lassen.'}
-      </p>
+      <div>
+        <Heading level={2} className="text-lg text-text-primary">
+          Inhalt liefern
+        </Heading>
+        <p className="text-sm text-text-secondary mt-1">
+          {allowAudio
+            ? 'Lade die Aufnahme hoch oder füge Text ein — die KI erstellt daraus das Protokoll.'
+            : 'Füge den Inhalt ein — die KI erstellt daraus das Protokoll.'}
+        </p>
+      </div>
 
-      {inputMethod === 'audio' ? (
-        <label className="flex items-center gap-1.5 text-sm text-action hover:text-action cursor-pointer">
-          <Upload className="w-3.5 h-3.5" />
-          Audiodatei wählen
-          <input
-            type="file"
-            accept="audio/*,.mp3,.m4a,.wav,.ogg,.webm"
-            onChange={onAudioFileSelect}
-            className="hidden"
-          />
-        </label>
-      ) : (
-        <>
-          <div className="flex items-center justify-between">
-            <label className="text-sm text-text-secondary">Transkript</label>
-            <label className="flex items-center gap-1.5 text-sm text-action hover:text-action cursor-pointer">
-              <Upload className="w-3.5 h-3.5" />
-              .txt hochladen
-              <input
-                type="file"
-                accept=".txt,.md,.text"
-                onChange={onFileUpload}
-                className="hidden"
-              />
-            </label>
-          </div>
-          <Textarea
-            value={transcript}
-            onChange={(e) => onTranscriptChange(e.target.value)}
-            rows={10}
-            maxLength={100000}
-            placeholder="Transkript hier einfügen..."
-            className="font-mono text-sm"
-          />
-        </>
+      {allowAudio && (
+        <div className="flex flex-wrap items-center gap-3">
+          <label className="inline-flex items-center gap-2 text-sm font-medium text-action hover:opacity-80 cursor-pointer">
+            <Upload className="w-4 h-4" />
+            Audiodatei wählen
+            <input
+              type="file"
+              accept="audio/*,.mp3,.m4a,.wav,.ogg,.webm"
+              onChange={onAudioFileSelect}
+              className="hidden"
+            />
+          </label>
+          {audioFile && (
+            <span className="inline-flex items-center gap-1.5 text-xs text-text-secondary bg-surface-raised border border-default rounded-full px-2.5 py-1">
+              <Mic className="w-3 h-3" />
+              {audioFile.name} · {(audioFile.size / (1024 * 1024)).toFixed(1)} MB
+            </span>
+          )}
+        </div>
       )}
+
+      <div>
+        <div className="flex items-center justify-between mb-1">
+          <label htmlFor="draft-transcript" className="text-sm text-text-secondary">
+            {allowAudio ? 'Notizen / Transkript (optional bei Audio)' : 'Inhalt'}
+          </label>
+          <label className="flex items-center gap-1.5 text-sm text-action hover:opacity-80 cursor-pointer">
+            <Upload className="w-3.5 h-3.5" />
+            .txt hochladen
+            <input
+              type="file"
+              accept=".txt,.md,.text"
+              onChange={onFileUpload}
+              className="hidden"
+            />
+          </label>
+        </div>
+        <Textarea
+          id="draft-transcript"
+          value={transcript}
+          onChange={(e) => onTranscriptChange(e.target.value)}
+          rows={8}
+          maxLength={100000}
+          placeholder="Transkript, Notizen oder Stichpunkte einfügen..."
+          className="font-mono text-sm"
+        />
+      </div>
 
       <div className="flex justify-end">
         <Button
           onClick={onProcess}
-          disabled={processing || (inputMethod === 'audio' ? !audioFile : transcript.length < 50)}
+          disabled={processing || !canProcess}
           variant="primary"
-          size="sm"
           className="gap-2"
         >
           {processing ? (
@@ -95,12 +109,11 @@ export function ProtocolDraftInput({
           ) : (
             <>
               <Wand2 className="w-4 h-4" />
-              Schritt 2 starten: KI-Strukturierung
+              Mit KI strukturieren
             </>
           )}
         </Button>
       </div>
-
     </div>
   )
 }
