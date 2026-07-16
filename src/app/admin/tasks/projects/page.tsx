@@ -20,8 +20,8 @@ import {
 import type { ProjectStatus } from '@/config/tasks'
 import { ROUTES } from '@/config/routes'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminStatsGrid } from '@/components/admin/AdminStatsGrid'
-import type { StatCardItem } from '@/components/admin/AdminStatsGrid'
+import { AdminStatsStrip } from '@/components/admin/AdminStatsStrip'
+import type { StatItem } from '@/components/admin/AdminStatsStrip'
 import {
   FolderKanban,
   Plus,
@@ -87,7 +87,7 @@ export default async function TaskProjectsPage() {
   const completed = projects.filter(p => p.status === PROJECT_STATUSES.COMPLETED).length
   const onHold = projects.filter(p => p.status === PROJECT_STATUSES.ON_HOLD).length
 
-  const stats: StatCardItem[] = [
+  const stats: StatItem[] = [
     { icon: FolderKanban, color: 'gray',  label: 'Gesamt',          value: total },
     { icon: BarChart3,    color: 'green', label: 'Aktiv',           value: active,    valueColor: 'text-action' },
     { icon: PauseCircle,  color: 'amber', label: 'Pausiert',        value: onHold,    valueColor: 'text-warning-600' },
@@ -116,7 +116,7 @@ export default async function TaskProjectsPage() {
         </Link>
       }
     >
-      <AdminStatsGrid items={stats} />
+      <AdminStatsStrip items={stats} />
 
       {projects.length === 0 ? (
         <div className={cn(designPrimitive.surface.card, 'p-12 text-center')}>

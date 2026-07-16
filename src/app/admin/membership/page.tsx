@@ -12,7 +12,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { Users, CheckCircle, AlertCircle } from 'lucide-react'
 import { formatDateShort } from '@/lib/date-formats'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminStatsGrid, type StatCardItem } from '@/components/admin/AdminStatsGrid'
+import { AdminStatsStrip, type StatItem } from '@/components/admin/AdminStatsStrip'
 import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
 import { ADMIN_CONTENT } from '@/config/admin-content'
 import { MEMBERSHIP } from '@/config/org'
@@ -76,7 +76,7 @@ export default async function MembershipPage() {
   const paidCount = members.filter(isPaid).length
   const unpaidCount = members.length - paidCount
 
-  const stats: StatCardItem[] = [
+  const stats: StatItem[] = [
     { icon: Users, color: 'green', label: 'Mitglieder', value: members.length },
     { icon: CheckCircle, color: 'blue', label: 'Bezahlt', value: paidCount },
     { icon: AlertCircle, color: 'orange', label: 'Offen', value: unpaidCount, valueColor: unpaidCount > 0 ? 'text-secondary-600' : undefined },
@@ -137,7 +137,7 @@ export default async function MembershipPage() {
       icon={Users}
       iconColor="green"
     >
-      <AdminStatsGrid items={stats} columns={3} />
+      <AdminStatsStrip items={stats} />
       <AdminTable columns={columns} rows={members} rowKey={(m) => m.id} />
     </AdminPageWrapper>
   )

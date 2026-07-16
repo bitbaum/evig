@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { apiFetch } from '@/lib/api/client'
 import { getSection } from '@/config/sections'
+import { sectionText } from '@/lib/section-labels'
 import { formatDateTimeNumeric } from '@/lib/date-formats'
 
 interface PermissionRequest {
@@ -24,8 +25,10 @@ interface PermissionRequest {
 export function PermissionRequestsManager() {
   const t = useTranslations('admin.permissions.manager')
   const tForms = useTranslations('admin.forms')
-  // Labels come straight from the config SSOT (admin nav is DE-only).
-  const sectionLabelFor = (id: string): string => getSection(id)?.ui.label ?? id
+  const tSections = useTranslations('admin.sections')
+  // Localized section labels; config's German string is the fallback.
+  const sectionLabelFor = (id: string): string =>
+    sectionText(tSections, id, 'label', getSection(id)?.ui.label ?? id)
   const [requests, setRequests] = useState<PermissionRequest[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')

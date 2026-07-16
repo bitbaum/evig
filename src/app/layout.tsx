@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getLocale } from "next-intl/server";
 import { Providers } from "@/components/providers/providers";
 import { ORG } from "@/config/org";
 import { auth } from "@/auth";
@@ -30,9 +31,13 @@ export default async function RootLayout({
   // `status: 'loading'` and the lazy-loaded next-auth import could fail
   // to re-render the navbar on hydration mismatch (React error #418).
   const session = await auth();
+  // Resolved by the i18n request config (URL locale → NEXT_LOCALE cookie → de),
+  // so <html lang> matches what actually renders — including on cookie-driven
+  // routes like /admin and /dashboard.
+  const locale = await getLocale();
 
   return (
-    <html lang="de" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body className="font-sans fix-text-rendering antialiased">
         <Providers session={session}>
           {children}

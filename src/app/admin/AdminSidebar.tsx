@@ -27,6 +27,7 @@ import {
   type SidebarGroupId,
 } from '@/config/sections'
 import { ROUTES } from '@/config/routes'
+import { sectionLabel, groupLabel as localizedGroupLabel } from '@/lib/section-labels'
 
 interface AdminSidebarProps {
   sidebarCollapsed: boolean
@@ -46,9 +47,10 @@ export function AdminSidebar({
   pathname,
 }: AdminSidebarProps) {
   const t = useTranslations('admin.sidebar')
-  // Section + group labels come straight from the config SSOT (`ui.label` /
-  // `group.label`). Admin nav is DE-only, so there is no separate translation
-  // layer to drift out of sync (that caused raw `admin.sectionLabels.*` keys).
+  // Section + group labels resolve through `admin.sections` messages (all
+  // locales; DE mirrors the config SSOT, guarded by the parity test) with the
+  // config's German string as runtime fallback — see src/lib/section-labels.ts.
+  const tSections = useTranslations('admin.sections')
   // Static config — compute once, not every render.
   const groupedSections = useMemo(() => getSidebarGroupsWithSections(), [])
   const hirnSection = getHirnSection()
@@ -60,16 +62,17 @@ export function AdminSidebar({
   const normalizedQuery = filterQuery.trim().toLowerCase()
   const filteredSections = useMemo(() => {
     if (!normalizedQuery) return null
-    return groupedSections.flatMap(({ group, sections }) =>
-      sections
+    return groupedSections.flatMap(({ group, sections }) => {
+      const localizedGroup = localizedGroupLabel(tSections, group)
+      return sections
         .filter(s => accessibleSections.includes(s.id))
         .filter(s => (
-          s.ui.label.toLowerCase().includes(normalizedQuery) ||
-          group.label.toLowerCase().includes(normalizedQuery)
+          sectionLabel(tSections, s).toLowerCase().includes(normalizedQuery) ||
+          localizedGroup.toLowerCase().includes(normalizedQuery)
         ))
-        .map(s => ({ section: s, groupLabel: group.label })),
-    )
-  }, [normalizedQuery, groupedSections, accessibleSections])
+        .map(s => ({ section: s, groupLabel: localizedGroup }))
+    })
+  }, [normalizedQuery, groupedSections, accessibleSections, tSections])
 
   const isActive = (href: string) => {
     if (href === '/admin') return pathname === '/admin'
@@ -204,7 +207,7 @@ export function AdminSidebar({
                 >
                   <Icon className="h-4 w-4 shrink-0 text-text-muted dark:text-text-secondary" />
                   <span className="flex-1 text-sm font-medium">
-                    {section.ui.label}
+                    {sectionLabel(tSections, section)}
                   </span>
                   <span className="text-[10px] uppercase tracking-wider text-text-muted">{groupLabel}</span>
                 </Link>
@@ -233,7 +236,7 @@ export function AdminSidebar({
                       : 'text-text-muted dark:text-text-secondary hover:text-text-secondary dark:hover:text-text-muted'
                   }`}
                 >
-                  <span>{group.label}</span>
+                  <span>{localizedGroupLabel(tSections, group)}</span>
                   <ChevronDown
                     className={`w-3.5 h-3.5 transition-transform ${isExpanded ? '' : '-rotate-90'}`}
                   />
@@ -260,13 +263,13 @@ export function AdminSidebar({
                             ? adminInteractive.navActive
                             : `text-text-tertiary ${adminInteractive.rowHoverSubtle} hover:text-text-primary`
                         }`}
-                        title={sidebarCollapsed ? `${section.ui.label}${sensitive ? ` (${t('sensitiveLabel')})` : ''}` : sensitivityReason}
+                        title={sidebarCollapsed ? `${sectionLabel(tSections, section)}${sensitive ? ` (${t('sensitiveLabel')})` : ''}` : sensitivityReason}
                       >
                         {/* Larger icon when collapsed so it's easier to tap and recognise at a glance */}
                         <Icon className={`shrink-0 ${sidebarCollapsed ? 'h-5 w-5' : 'h-4 w-4'} ${active ? 'text-action' : 'text-text-muted dark:text-text-secondary'}`} />
                         {!sidebarCollapsed && (
                           <span className="flex-1 text-sm font-medium flex items-center gap-1.5">
-                            {section.ui.label}
+                            {sectionLabel(tSections, section)}
                             {sensitive && (
                               <span title={sensitivityReason}>
                                 <Shield className="w-3 h-3 text-warning-400" />

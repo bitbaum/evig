@@ -10082,9 +10082,6 @@
         "declined": "Rifiutato"
       }
     },
-    "localeFallback": {
-      "notice": "L'area amministrativa è disponibile solo in tedesco."
-    },
     "hr": {
       "vacancies": {
         "title": "Posizioni aperte",
@@ -10616,14 +10613,28 @@
       "placeholder": "Cerca o comando…",
       "openShortcut": "Apri la barra dei comandi",
       "noResults": "Nessun risultato",
-      "recentlyVisited": "Visitati di recente"
+      "recentlyVisited": "Visitati di recente",
+      "groups": {
+        "actions": "Azioni",
+        "sections": "Sezioni",
+        "users": "Utenti",
+        "decisions": "Decisioni",
+        "listings": "Annunci"
+      },
+      "actions": {
+        "newDevice": "Registra nuovo dispositivo",
+        "newDecision": "Nuova decisione",
+        "newProtocol": "Nuovo verbale",
+        "dashboard": "Dashboard"
+      }
     },
     "userMenu": {
       "darkMode": "Aspetto",
       "toWebsite": "Vai al sito web",
       "signOut": "Esci",
       "adminArea": "Area admin",
-      "staffFallback": "Membro del team"
+      "staffFallback": "Membro del team",
+      "language": "Lingua"
     },
     "notifications": {
       "title": "Notifiche",
@@ -10877,6 +10888,172 @@
         "publish": "Pubblica",
         "aiPlaceholderEdit": "es. «Aggiungi una sezione sui consigli di riparazione» o «Rendi il testo più accattivante»",
         "aiPlaceholderNew": "Descrivi l'argomento o l'idea per il tuo articolo del blog…"
+      }
+    },
+    "sections": {
+      "items": {
+        "dashboard": {
+          "label": "Dashboard",
+          "description": "Panoramica e statistiche",
+          "shortLabel": "Oggi"
+        },
+        "my-timecards": {
+          "label": "Rilevamento ore",
+          "description": "Registrare e inviare le ore di lavoro",
+          "shortLabel": "Ore"
+        },
+        "intake": {
+          "label": "Ingresso dispositivi",
+          "description": "Tutti i dispositivi registrati: stato, checklist, pubblicazione"
+        },
+        "erfassung": {
+          "label": "Registra prodotto",
+          "description": "Accettare un dispositivo (checklist/donazione) o registrare rapidamente un prodotto",
+          "shortLabel": "Registra"
+        },
+        "marketplace": {
+          "label": "Annunci",
+          "description": "Verificare, convalidare e gestire gli annunci"
+        },
+        "it-hilfe-admin": {
+          "label": "Aiuto IT",
+          "description": "Gestire le richieste di aiuto e i tecnici"
+        },
+        "workshops-admin": {
+          "label": "Workshop",
+          "description": "Gestione dei workshop e delle iscrizioni"
+        },
+        "services": {
+          "label": "Servizi",
+          "description": "Gestire le offerte di servizi"
+        },
+        "appointments-admin": {
+          "label": "Appuntamenti",
+          "description": "Verificare e assegnare gli appuntamenti di servizio"
+        },
+        "locations": {
+          "label": "Sedi",
+          "description": "Gestione delle sedi"
+        },
+        "reviews": {
+          "label": "Recensioni",
+          "description": "Moderare le recensioni"
+        },
+        "content": {
+          "label": "Blog e pagine",
+          "description": "Blog, pagine, media"
+        },
+        "projects": {
+          "label": "Progetti pubblici",
+          "description": "Progetti pubblici, fabbisogno di risorse e contributi"
+        },
+        "presentations": {
+          "label": "Presentazioni",
+          "description": "Visualizzare e condividere le presentazioni"
+        },
+        "feedbackOverview": {
+          "label": "Riscontri",
+          "description": "Tutti i riscontri in un unico posto: sito web, presentazioni, deliverable"
+        },
+        "approvals": {
+          "label": "Approvazioni",
+          "description": "Verificare e approvare i contenuti inviati",
+          "shortLabel": "Approva"
+        },
+        "membership": {
+          "label": "Iscrizioni",
+          "description": "Verificare e gestire le richieste di adesione"
+        },
+        "teams": {
+          "label": "Team",
+          "description": "Team, responsabilità e membri"
+        },
+        "team-board": {
+          "label": "Chi fa cosa",
+          "description": "Focus attuale e compiti del team"
+        },
+        "tasks": {
+          "label": "Compiti",
+          "description": "Gestire i compiti del team"
+        },
+        "deliverables": {
+          "label": "Deliverable",
+          "description": "Rapporti, presentazioni, mockup — condividere e raccogliere riscontri"
+        },
+        "protocols": {
+          "label": "Verbali",
+          "description": "Verbali di riunione e appunti"
+        },
+        "decisions": {
+          "label": "Decisioni",
+          "description": "Proposte e votazioni del team"
+        },
+        "donations": {
+          "label": "Donazioni",
+          "description": "Gestire le donazioni in denaro e in natura"
+        },
+        "users": {
+          "label": "Utenti",
+          "description": "Gestione degli utenti"
+        },
+        "team": {
+          "label": "Profili del team",
+          "description": "Dipendenti, volontari, stagisti"
+        },
+        "hr-vacancies": {
+          "label": "Posizioni aperte",
+          "description": "Pubblicare, sospendere e condividere le posizioni"
+        },
+        "hr-applications": {
+          "label": "Candidature",
+          "description": "Pipeline delle candidature e assunzioni"
+        },
+        "payroll": {
+          "label": "Stipendi",
+          "description": "Chiudere il mese ed esportare il CSV per la contabilità"
+        },
+        "analyse-hub": {
+          "label": "Panoramica analisi",
+          "description": "Indicatori, finanze e impatto a colpo d'occhio"
+        },
+        "finanzen": {
+          "label": "Finanze",
+          "description": "Panoramica finanziaria dettagliata e tendenze"
+        },
+        "kennzahlen": {
+          "label": "Indicatori",
+          "description": "KPI e metriche a colpo d'occhio"
+        },
+        "wirkung": {
+          "label": "Impatto",
+          "description": "Impatto ecologico e sociale"
+        },
+        "transparenz": {
+          "label": "Trasparenza",
+          "description": "Analisi dai principi primi"
+        },
+        "hirn": {
+          "label": "Hirn AI",
+          "description": "Assistente IA per Revamp-IT"
+        },
+        "promo-codes": {
+          "label": "Codici promo",
+          "description": "Emettere codici sconto e buoni"
+        },
+        "settings": {
+          "label": "Impostazioni",
+          "description": "Configurazione di sistema"
+        }
+      },
+      "groups": {
+        "uebersicht": "Oggi",
+        "angebot": "Operatività",
+        "inhalte": "Contenuti",
+        "betrieb": "Organizzazione",
+        "analyse": "Analisi",
+        "personen": "Persone",
+        "teamhr": "Team & HR",
+        "system": "Sistema"
       }
     }
   },

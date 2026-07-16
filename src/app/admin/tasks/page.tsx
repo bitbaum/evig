@@ -20,8 +20,8 @@ import {
   Clock,
 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminStatsGrid } from '@/components/admin/AdminStatsGrid'
-import type { StatCardItem } from '@/components/admin/AdminStatsGrid'
+import { AdminStatsStrip } from '@/components/admin/AdminStatsStrip'
+import type { StatItem } from '@/components/admin/AdminStatsStrip'
 import TaskFiltersClient from './TaskFiltersClient'
 import { Pagination } from '@/components/ui/Pagination'
 import { ROUTES } from '@/config/routes'
@@ -87,7 +87,7 @@ export default async function TasksAdminPage({
         </Link>
       }
     >
-      <AdminStatsGrid items={[
+      <AdminStatsStrip items={[
         {
           icon: ClipboardList,
           color: 'gray',
@@ -118,7 +118,7 @@ export default async function TasksAdminPage({
           value: stats.completedToday,
           valueColor: 'text-action',
         },
-      ] satisfies StatCardItem[]} />
+      ] satisfies StatItem[]} />
 
       <Suspense fallback={<div className="bg-surface-base rounded-lg border p-4 h-14" />}>
         <TaskFiltersClient />

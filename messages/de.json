@@ -10197,9 +10197,6 @@
         "declined": "Abgelehnt"
       }
     },
-    "localeFallback": {
-      "notice": "Der Admin-Bereich ist nur auf Deutsch verfügbar."
-    },
     "timecards": {
       "headerStatusSubmitted": "Eingereicht",
       "headerStatusDraft": "Entwurf",
@@ -10683,14 +10680,28 @@
       "openShortcut": "Befehlsleiste öffnen",
       "noResults": "Keine Ergebnisse für «{query}»",
       "recentlyVisited": "Zuletzt besucht",
-      "searching": "Suchen …"
+      "searching": "Suchen …",
+      "groups": {
+        "actions": "Aktionen",
+        "sections": "Bereiche",
+        "users": "Benutzer",
+        "decisions": "Entscheide",
+        "listings": "Inserate"
+      },
+      "actions": {
+        "newDevice": "Neues Gerät erfassen",
+        "newDecision": "Neue Entscheidung",
+        "newProtocol": "Neues Protokoll",
+        "dashboard": "Dashboard"
+      }
     },
     "userMenu": {
       "darkMode": "Erscheinungsbild",
       "toWebsite": "Zur Website",
       "signOut": "Abmelden",
       "adminArea": "Admin-Bereich",
-      "staffFallback": "Teammitglied"
+      "staffFallback": "Teammitglied",
+      "language": "Sprache"
     },
     "notifications": {
       "title": "Benachrichtigungen",
@@ -10944,6 +10955,172 @@
         "publish": "Veröffentlichen",
         "aiPlaceholderEdit": "z.B. „Füge einen Abschnitt über Reparatur-Tipps hinzu“ oder „Mache den Text ansprechender“",
         "aiPlaceholderNew": "Beschreibe das Thema oder die Idee für deinen Blog-Artikel…"
+      }
+    },
+    "sections": {
+      "items": {
+        "dashboard": {
+          "label": "Dashboard",
+          "description": "Übersicht und Statistiken",
+          "shortLabel": "Heute"
+        },
+        "my-timecards": {
+          "label": "Zeiterfassung",
+          "description": "Arbeitszeiten erfassen und einreichen",
+          "shortLabel": "Zeit"
+        },
+        "intake": {
+          "label": "Geräte-Eingang",
+          "description": "Alle erfassten Geräte: Status, Checkliste, Publikation"
+        },
+        "erfassung": {
+          "label": "Produkt aufnehmen",
+          "description": "Gerät annehmen (Checkliste/Spende) oder Produkt schnell erfassen",
+          "shortLabel": "Aufnehmen"
+        },
+        "marketplace": {
+          "label": "Inserate",
+          "description": "Inserate prüfen, verifizieren und verwalten"
+        },
+        "it-hilfe-admin": {
+          "label": "IT-Hilfe",
+          "description": "Hilfsanfragen und Techniker verwalten"
+        },
+        "workshops-admin": {
+          "label": "Workshops",
+          "description": "Workshop-Verwaltung und Anmeldungen"
+        },
+        "services": {
+          "label": "Dienstleistungen",
+          "description": "Service-Angebote verwalten"
+        },
+        "appointments-admin": {
+          "label": "Termine",
+          "description": "Service-Termine prüfen und zuweisen"
+        },
+        "locations": {
+          "label": "Standorte",
+          "description": "Standortverwaltung"
+        },
+        "reviews": {
+          "label": "Bewertungen",
+          "description": "Bewertungen moderieren"
+        },
+        "content": {
+          "label": "Blog & Seiten",
+          "description": "Blog, Seiten, Medien"
+        },
+        "projects": {
+          "label": "Öffentliche Projekte",
+          "description": "Öffentliche Projekte, Ressourcenbedarf und Beiträge"
+        },
+        "presentations": {
+          "label": "Präsentationen",
+          "description": "Präsentationen ansehen und teilen"
+        },
+        "feedbackOverview": {
+          "label": "Rückmeldungen",
+          "description": "Alle Rückmeldungen an einem Ort: Website, Präsentationen, Liefergegenstände"
+        },
+        "approvals": {
+          "label": "Freigaben",
+          "description": "Eingereichte Inhalte prüfen und freigeben",
+          "shortLabel": "Freigaben"
+        },
+        "membership": {
+          "label": "Mitgliedschaften",
+          "description": "Mitgliedschaftsanträge prüfen und verwalten"
+        },
+        "teams": {
+          "label": "Teams",
+          "description": "Teams, Zuständigkeiten und Mitglieder"
+        },
+        "team-board": {
+          "label": "Wer macht was",
+          "description": "Aktueller Fokus und Aufgaben des Teams"
+        },
+        "tasks": {
+          "label": "Aufgaben",
+          "description": "Teamaufgaben verwalten"
+        },
+        "deliverables": {
+          "label": "Liefergegenstände",
+          "description": "Berichte, Präsentationen, Mockups — teilen und Feedback sammeln"
+        },
+        "protocols": {
+          "label": "Protokolle",
+          "description": "Sitzungsprotokolle und Besprechungsnotizen"
+        },
+        "decisions": {
+          "label": "Entscheidungen",
+          "description": "Vorschläge und Abstimmungen im Team"
+        },
+        "donations": {
+          "label": "Spenden",
+          "description": "Geld- und Sachspenden verwalten"
+        },
+        "users": {
+          "label": "Benutzer",
+          "description": "Benutzerverwaltung"
+        },
+        "team": {
+          "label": "Team-Profile",
+          "description": "Mitarbeiter, Freiwillige, Praktikanten"
+        },
+        "hr-vacancies": {
+          "label": "Offene Stellen",
+          "description": "Stellen ausschreiben, pausieren und teilen"
+        },
+        "hr-applications": {
+          "label": "Bewerbungen",
+          "description": "Bewerbungs-Pipeline und Einstellungen"
+        },
+        "payroll": {
+          "label": "Lohnlauf",
+          "description": "Monat abschliessen und CSV für die Buchhaltung exportieren"
+        },
+        "analyse-hub": {
+          "label": "Analyse-Übersicht",
+          "description": "Kennzahlen, Finanzen und Wirkung auf einen Blick"
+        },
+        "finanzen": {
+          "label": "Finanzen",
+          "description": "Detaillierte Finanzübersicht und Trends"
+        },
+        "kennzahlen": {
+          "label": "Kennzahlen",
+          "description": "KPIs und Metriken auf einen Blick"
+        },
+        "wirkung": {
+          "label": "Wirkung",
+          "description": "Ökologische und soziale Wirkung"
+        },
+        "transparenz": {
+          "label": "Transparenz",
+          "description": "First Principles Analyse"
+        },
+        "hirn": {
+          "label": "Hirn AI",
+          "description": "KI-Assistent für Revamp-IT"
+        },
+        "promo-codes": {
+          "label": "Aktionscodes",
+          "description": "Rabatt- und Gutscheincodes ausstellen"
+        },
+        "settings": {
+          "label": "Einstellungen",
+          "description": "Systemkonfiguration"
+        }
+      },
+      "groups": {
+        "uebersicht": "Heute",
+        "angebot": "Betrieb",
+        "inhalte": "Inhalte",
+        "betrieb": "Organisation",
+        "analyse": "Analyse",
+        "personen": "Personen",
+        "teamhr": "Team & HR",
+        "system": "System"
       }
     }
   },

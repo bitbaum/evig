@@ -40,8 +40,8 @@ import {
   AlertTriangle,
 } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminStatsGrid } from '@/components/admin/AdminStatsGrid'
-import type { StatCardItem } from '@/components/admin/AdminStatsGrid'
+import { AdminStatsStrip } from '@/components/admin/AdminStatsStrip'
+import type { StatItem } from '@/components/admin/AdminStatsStrip'
 import Heading from '@/components/admin/AdminHeading'
 import { formatDateShort } from '@/lib/date-formats'
 import ProtocolListClient from './ProtocolListClient'
@@ -185,7 +185,7 @@ export default async function ProtocolsAdminPage({
       ) : (
         <>
       {/* Stats Cards */}
-      <AdminStatsGrid items={[
+      <AdminStatsStrip items={[
         {
           icon: FileText,
           color: 'gray',
@@ -212,7 +212,7 @@ export default async function ProtocolsAdminPage({
           value: stats.finalized,
           valueColor: 'text-action',
         },
-      ] satisfies StatCardItem[]} />
+      ] satisfies StatItem[]} />
 
       {reviewQueue.length > 0 && <ProtocolReviewQueue protocols={reviewQueue} />}
 

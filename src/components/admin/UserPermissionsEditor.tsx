@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
 import { Modal } from '@/components/ui/Modal'
 import { getSection } from '@/config/sections'
+import { sectionText } from '@/lib/section-labels'
 
 interface UserPermissionsEditorProps {
   userId: string
@@ -49,8 +50,10 @@ export function UserPermissionsEditor({
 }: UserPermissionsEditorProps) {
   const t = useTranslations('admin.permissions.editor')
   const tForms = useTranslations('admin.forms')
-  // Labels come straight from the config SSOT (admin nav is DE-only).
-  const sectionLabelFor = (id: string): string => getSection(id)?.ui.label ?? id
+  const tSections = useTranslations('admin.sections')
+  // Localized section labels; config's German string is the fallback.
+  const sectionLabelFor = (id: string): string =>
+    sectionText(tSections, id, 'label', getSection(id)?.ui.label ?? id)
   const hasFullAccess = currentPermissions.includes('*')
 
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>(

@@ -13,7 +13,7 @@ import {
 import { formatDeadline } from '@/lib/utils/date';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Pagination } from '@/components/ui/Pagination';
-import { AdminStatsGrid } from '@/components/admin/AdminStatsGrid';
+import { AdminStatsStrip } from '@/components/admin/AdminStatsStrip';
 import { AdminButton } from '@/components/admin/AdminButton';
 import { AdminListShell } from '@/components/admin/AdminListShell';
 import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable';
@@ -127,8 +127,7 @@ export default function DecisionListClient({
   return (
     <div className="space-y-4">
       {/* Stats — full DB counts, independent of active filters */}
-      <AdminStatsGrid
-        columns={4}
+      <AdminStatsStrip
         items={[
           { icon: Vote,          color: 'amber', label: 'Aktive Abstimmungen',  value: stats.voting,       valueColor: 'text-warning-600 dark:text-warning-400' },
           { icon: MessageSquare, color: 'blue',  label: 'Offene Diskussionen',  value: stats.discussion,   valueColor: 'text-action' },

@@ -5,7 +5,7 @@ import { Plus, Briefcase, Users, FileText, CheckCircle2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { AdminListShell } from '@/components/admin/AdminListShell'
-import { AdminStatsGrid } from '@/components/admin/AdminStatsGrid'
+import { AdminStatsStrip } from '@/components/admin/AdminStatsStrip'
 import { AdminFilterBar } from '@/components/admin/AdminFilterBar'
 import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/config/routes'
@@ -67,8 +67,7 @@ export default function HrVacanciesPageClient({ stats }: Props) {
           </div>
         )}
 
-        <AdminStatsGrid
-          columns={4}
+        <AdminStatsStrip
           items={[
             {
               icon: Briefcase,

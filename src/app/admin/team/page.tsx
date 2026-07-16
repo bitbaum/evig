@@ -22,8 +22,8 @@ import { ROUTES } from '@/config/routes'
 import { PermissionRequestsManager } from '@/components/admin/PermissionRequestsManager'
 import { TeamListClient } from './TeamListClient'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminStatsGrid } from '@/components/admin/AdminStatsGrid'
-import type { StatCardItem } from '@/components/admin/AdminStatsGrid'
+import { AdminStatsStrip } from '@/components/admin/AdminStatsStrip'
+import type { StatItem } from '@/components/admin/AdminStatsStrip'
 import Heading from '@/components/admin/AdminHeading'
 
 export const metadata: Metadata = {
@@ -164,7 +164,7 @@ export default async function TeamPage() {
       )}
 
       {/* Stats */}
-      <AdminStatsGrid
+      <AdminStatsStrip
         items={[
           { icon: Briefcase, color: 'blue',   label: 'Staff Gesamt', value: stats.totalStaff },
           { icon: Crown,     color: 'purple', label: 'Profile',      value: stats.totalProfiles },
@@ -180,7 +180,7 @@ export default async function TeamPage() {
             label: 'Ohne Profil',
             value: staffWithoutProfiles.length,
           },
-        ] satisfies StatCardItem[]}
+        ] satisfies StatItem[]}
       />
 
       {/* Permission Requests - Super Admin Only */}

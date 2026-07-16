@@ -12,8 +12,8 @@ import { logger } from '@/lib/logger'
 import { ROUTES } from '@/config/routes'
 import { NEED_STATUSES, CONTRIBUTION_STATUSES } from '@/config/projects'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminStatsGrid } from '@/components/admin/AdminStatsGrid'
-import type { StatCardItem } from '@/components/admin/AdminStatsGrid'
+import { AdminStatsStrip } from '@/components/admin/AdminStatsStrip'
+import type { StatItem } from '@/components/admin/AdminStatsStrip'
 import { Lightbulb, Rocket, Handshake, AlertCircle, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { designPrimitive } from '@/lib/design-system'
@@ -54,7 +54,7 @@ export default async function AdminProjectsPage() {
   const openNeedsTotal = list.reduce((sum, p) => sum + (p.openNeeds || 0), 0)
   const newContribsTotal = list.reduce((sum, p) => sum + (p.newContributions || 0), 0)
 
-  const stats: StatCardItem[] = [
+  const stats: StatItem[] = [
     { icon: Rocket,      color: 'blue',  label: t('stats.total'),            value: list.length },
     { icon: Lightbulb,   color: 'green', label: t('stats.active'),           value: list.filter(p => p.isActive).length, valueColor: 'text-action' },
     { icon: Handshake,   color: 'amber', label: t('stats.openNeeds'),        value: openNeedsTotal, valueColor: 'text-warning-600' },
@@ -68,7 +68,7 @@ export default async function AdminProjectsPage() {
       icon={Lightbulb}
       iconColor="green"
     >
-      <AdminStatsGrid items={stats} />
+      <AdminStatsStrip items={stats} />
 
       {list.length === 0 ? (
         <div className={cn(designPrimitive.surface.card, 'p-8 sm:p-12 text-center')}>
