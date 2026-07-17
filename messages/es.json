@@ -10398,7 +10398,8 @@
       "profileTotals": "{count} hojas · {duration} en total",
       "profileToReview": "{count} por revisar",
       "dayGridShow": "Mostrar cuadrícula horaria",
-      "dayGridHide": "Ocultar cuadrícula horaria"
+      "dayGridHide": "Ocultar cuadrícula horaria",
+      "durationCellHours": "{hours}h"
     },
     "appointments": {
       "pageTitle": "Citas",

@@ -10399,7 +10399,8 @@
       "profileTotals": "{count} cards · {duration} total",
       "profileToReview": "{count} to review",
       "dayGridShow": "Show hour grid",
-      "dayGridHide": "Hide hour grid"
+      "dayGridHide": "Hide hour grid",
+      "durationCellHours": "{hours}h"
     },
     "appointments": {
       "pageTitle": "Appointments",

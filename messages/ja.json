@@ -10398,7 +10398,8 @@
       "profileTotals": "{count}件 · 合計{duration}",
       "profileToReview": "{count}件要確認",
       "dayGridShow": "時間グリッドを表示",
-      "dayGridHide": "時間グリッドを隠す"
+      "dayGridHide": "時間グリッドを隠す",
+      "durationCellHours": "{hours}h"
     },
     "appointments": {
       "pageTitle": "予約",

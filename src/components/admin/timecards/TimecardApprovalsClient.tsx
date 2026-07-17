@@ -407,6 +407,10 @@ export function TimecardApprovalsClient({
                           {subtitleParts}
                         </div>
                       )}
+                      {/* Period moves under the name on phones (right column is hidden there). */}
+                      <div className="text-xs text-text-tertiary truncate sm:hidden">
+                        {period(row.period_type, row.period_start, row.period_end)}
+                      </div>
                     </div>
                     <div className="hidden sm:block min-w-0 text-sm text-text-secondary truncate text-right">
                       {period(row.period_type, row.period_start, row.period_end)}

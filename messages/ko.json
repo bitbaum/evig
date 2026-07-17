@@ -10398,7 +10398,8 @@
       "profileTotals": "{count}개 · 총 {duration}",
       "profileToReview": "검토 대상 {count}개",
       "dayGridShow": "시간 그리드 표시",
-      "dayGridHide": "시간 그리드 숨기기"
+      "dayGridHide": "시간 그리드 숨기기",
+      "durationCellHours": "{hours}h"
     },
     "appointments": {
       "pageTitle": "예약",

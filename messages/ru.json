@@ -10392,7 +10392,8 @@
       "profileTotals": "{count} табелей · всего {duration}",
       "profileToReview": "{count} на проверку",
       "dayGridShow": "Показать сетку часов",
-      "dayGridHide": "Скрыть сетку часов"
+      "dayGridHide": "Скрыть сетку часов",
+      "durationCellHours": "{hours}ч"
     },
     "appointments": {
       "pageTitle": "Записи",

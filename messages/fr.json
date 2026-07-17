@@ -10351,7 +10351,8 @@
       "profileTotals": "{count} feuilles · {duration} au total",
       "profileToReview": "{count} à vérifier",
       "dayGridShow": "Afficher la grille horaire",
-      "dayGridHide": "Masquer la grille horaire"
+      "dayGridHide": "Masquer la grille horaire",
+      "durationCellHours": "{hours}h"
     },
     "appointments": {
       "pageTitle": "Rendez-vous",

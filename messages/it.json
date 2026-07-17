@@ -10398,7 +10398,8 @@
       "profileTotals": "{count} schede · {duration} in totale",
       "profileToReview": "{count} da verificare",
       "dayGridShow": "Mostra griglia oraria",
-      "dayGridHide": "Nascondi griglia oraria"
+      "dayGridHide": "Nascondi griglia oraria",
+      "durationCellHours": "{hours}h"
     },
     "appointments": {
       "pageTitle": "Appuntamenti",

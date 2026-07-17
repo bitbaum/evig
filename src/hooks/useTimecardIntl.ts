@@ -46,6 +46,11 @@ export function useTimecardIntl() {
       statusLabel: (status: string | null | undefined) => timecardStatusLabel(t, status),
       categoryLabel: (category: string | null | undefined) => timecardCategoryLabel(t, category),
       duration: (totalMinutes: number) => formatTimecardDurationIntl(t, totalMinutes),
+      /** Compact form for tight cells (e.g. "7h" / "7.5h") — locale decimal. */
+      durationCompact: (totalMinutes: number) =>
+        t('durationCellHours', {
+          hours: new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(totalMinutes / 60),
+        }),
       period: (periodType: string, periodStart: string, periodEnd: string) =>
         formatTimecardPeriodIntl(t, locale, periodType, periodStart, periodEnd),
       monthLabel: (date: Date) =>

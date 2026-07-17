@@ -323,7 +323,9 @@ export function TimecardsClient({
                 : `${tc.periodEntries.length} ${t('headerDaysSuffix')} · ${duration(tc.totalMinutes)}`}
           </p>
         )}
-        <div className="flex items-center gap-2">
+        {/* flex-wrap + growing buttons: on a phone a label that doesn't fit
+            wraps to its own full-width line instead of pushing the page wide. */}
+        <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
           {canApprove && isApproved && tc.draft.id && (
             <Button
               type="button"
@@ -333,6 +335,7 @@ export function TimecardsClient({
                 const r = await apiFetch(`/api/admin/timecards/${tc.draft.id}/reopen`, { method: 'POST' })
                 if (r.success) window.location.reload()
               }}
+              className="flex-1 sm:flex-none"
             >
               {t('reopen2')}
             </Button>
@@ -343,6 +346,7 @@ export function TimecardsClient({
             size="sm"
             onClick={tc.saveDraft}
             disabled={tc.isSaving || tc.isLoadingDraft || isApproved || !tc.isDirty}
+            className="flex-1 sm:flex-none"
           >
             {tc.isSaving ? t('saving') : t('save')}
           </Button>
@@ -352,6 +356,7 @@ export function TimecardsClient({
             size="sm"
             onClick={tc.submitDraft}
             disabled={tc.isSubmitting || tc.periodEntries.length === 0 || tc.isLoadingDraft || isApproved || isSubmittedUnchanged}
+            className="flex-1 sm:flex-none"
           >
             {tc.isSubmitting ? t('submitting') : serverStatus === 'submitted' ? t('resubmit') : t('submit')}
           </Button>
