@@ -10604,7 +10604,13 @@
         "listingSoldBody": "This device was sold through the shop",
         "listingInactive": "Listing not active",
         "listingInactiveBody": "This device is marked as published, but its listing is no longer active in the shop.",
-        "manageListing": "Manage listings"
+        "manageListing": "Manage listings",
+        "finalQaHint": "All tests done — only the quality check (four-eyes principle) remains.",
+        "finalQaConfirm": "Confirm as second person",
+        "finalQaConfirmTitle": "You did NOT do the work yourself and confirm the final check as a second person.",
+        "finalQaSolo": "Working alone — override",
+        "finalQaSoloTitle": "Confirms the final check immediately with an audited standard reason (“working alone”).",
+        "publishGateMissing": "Open: {items}."
       },
       "pipeline": {
         "newDevice": "New device",

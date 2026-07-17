@@ -10603,7 +10603,13 @@
         "listingSoldBody": "Questo dispositivo è stato venduto tramite il negozio",
         "listingInactive": "Annuncio non attivo",
         "listingInactiveBody": "Questo dispositivo risulta pubblicato, ma il suo annuncio non è più attivo nel negozio.",
-        "manageListing": "Gestisci annunci"
+        "manageListing": "Gestisci annunci",
+        "finalQaHint": "Tutti i test completati — manca solo il controllo qualità (principio dei quattro occhi).",
+        "finalQaConfirm": "Conferma come seconda persona",
+        "finalQaConfirmTitle": "NON hai svolto il lavoro tu stesso e confermi il controllo finale come seconda persona.",
+        "finalQaSolo": "Da solo in servizio — ignora",
+        "finalQaSoloTitle": "Conferma subito il controllo finale con una motivazione standard verificata («da solo in servizio»).",
+        "publishGateMissing": "Aperto: {items}."
       },
       "pipeline": {
         "newDevice": "Nuovo dispositivo",

@@ -125,12 +125,25 @@ Community P2P (individuals + staff posting privately)
 - Erfassung MAY result in a published listing; a staff member posting privately
   is nudged toward erfassung if it's clearly RevampIT stock, but can still post
   as a private individual (`is_revampit=false`).
-- **QC gate (2026-07)**: devices of QC-required categories (derived from
-  required testing/security checklist items — currently 10–60) can NOT be
-  direct-published via Schnellerfassung; they land in the intake pipeline with
-  a refurbish checklist. Checklist items carry pass/fail/n.a. verdicts; a
-  failed required item puts the device in the `failed` pipeline state and
-  blocks publishing. See `docs/INTAKE_QC_DESIGN.md`.
+- **QC gate (2026-07, revised 2026-07-17)**: devices of QC-required categories
+  (derived from required testing/security checklist items — currently 10–60)
+  default into the intake pipeline with a refurbish checklist. Checklist
+  verdicts (pass/fail/n.a.) serialize on a row lock (`SELECT … FOR UPDATE`)
+  and support atomic bulk marking (`item_ids[]`, ONE audit event); a failed
+  required item puts the device in the `failed` state and ALWAYS blocks
+  publishing. Staff can, however, publish WITHOUT QC in one audited click
+  (`qc_skip` on the publish route, standard reason from
+  `QC_SKIP_ONE_CLICK_NOTE`) — the listing then carries NO Prüfsiegel and
+  buyers see the untested state. Final QA keeps the Vier-Augen-Prinzip with
+  a one-click solo override (`SECOND_PERSON_SOLO_OVERRIDE_NOTE`). "Im Shop"
+  in the pipeline derives from the `listings` table (SSOT); removing a
+  listing returns the device to the pipeline. See `docs/INTAKE_QC_DESIGN.md`.
+- **CO₂ SSOT (2026-07-17)**: every CO₂-avoidance figure derives from
+  `src/config/co2-impact.ts` — per-category ADEME/ARCEP 2025 open-data
+  factors × (1 − 15% refurbishment overhead), floored to 5 kg. NO weight×factor
+  shortcuts, NO uncited numbers (guarded by `co2-impact.test.ts`); categories
+  without a defensible open factor show no claim. Methodology page:
+  `/transparenz/co2`.
 
 ## Quick Start
 

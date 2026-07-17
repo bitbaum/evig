@@ -10556,7 +10556,13 @@
         "listingSoldBody": "Cet appareil a été vendu via la boutique",
         "listingInactive": "Annonce inactive",
         "listingInactiveBody": "Cet appareil est marqué comme publié, mais son annonce n'est plus active en boutique.",
-        "manageListing": "Gérer les annonces"
+        "manageListing": "Gérer les annonces",
+        "finalQaHint": "Tous les tests sont faits — il ne manque que le contrôle qualité (principe des quatre yeux).",
+        "finalQaConfirm": "Confirmer comme deuxième personne",
+        "finalQaConfirmTitle": "Tu n’as PAS fait le travail toi-même et confirmes le contrôle final en tant que deuxième personne.",
+        "finalQaSolo": "Seul·e en service — outrepasser",
+        "finalQaSoloTitle": "Confirme le contrôle final immédiatement avec une justification standard auditée (« seul·e en service »).",
+        "publishGateMissing": "En attente : {items}."
       },
       "pipeline": {
         "newDevice": "Nouvel appareil",

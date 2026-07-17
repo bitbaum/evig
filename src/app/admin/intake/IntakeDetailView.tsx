@@ -22,6 +22,8 @@ import {
   requiresQualityControl,
   QUICK_CAPTURE_LABEL,
   QUICK_CAPTURE_ICON,
+  CHECKLIST_RESULTS,
+  SECOND_PERSON_SOLO_OVERRIDE_NOTE,
 } from '@/config/intake-checklist'
 import type { IntakeTier, ChecklistResult } from '@/config/intake-checklist'
 import { INTAKE_STATUS } from '@/config/intake-status'
@@ -97,6 +99,15 @@ export function IntakeDetailView({
   }
 
   const progress = detail.checklist_progress
+  // What EXACTLY is still open? A generic "alle Pflichtpunkte müssen abgehakt
+  // sein" leaves people hunting through 18 items — name the gap instead.
+  const openRequired = detail.checklist_grouped
+    .flatMap(g => g.items)
+    .filter(i => i.required && i.state.result === null)
+  const openBulkable = openRequired.filter(i => !i.requiresSecondPerson)
+  const finalQaItems = openRequired.filter(i => i.requiresSecondPerson)
+  // Everything testable is done — only the Vier-Augen sign-off is left.
+  const onlyFinalQaLeft = openRequired.length > 0 && openBulkable.length === 0
   // Quick capture of a QC-required device category: publishing is blocked
   // until the checklist workflow is started (tier assigned).
   const qcGate = detail.intake_tier === null && requiresQualityControl(detail.category)
@@ -245,7 +256,7 @@ export function IntakeDetailView({
             {t('progress', { completed: progress.requiredCompleted, total: progress.requiredTotal })}
           </span>
           <div className="flex items-center gap-3">
-            {progress.percentage < 100 && (
+            {progress.percentage < 100 && openBulkable.length > 0 && (
               <Button
                 type="button"
                 onClick={onMarkAllRequired}
@@ -275,6 +286,35 @@ export function IntakeDetailView({
             style={{ width: `${progress.percentage}%` }}
           />
         </div>
+        {/* Everything testable passed — finish the last step HERE, where the
+            eye is, not buried inside the 18-item list. */}
+        {onlyFinalQaLeft && (
+          <div className="mt-3 flex flex-wrap items-center gap-2 rounded-lg border border-strong bg-action-muted px-3 py-2.5">
+            <p className="text-sm text-text-primary sm:flex-1">{t('finalQaHint')}</p>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                type="button"
+                variant="primary"
+                size="sm"
+                onClick={() => finalQaItems.forEach(item => onSetChecklistResult(item.id, CHECKLIST_RESULTS.PASS))}
+                title={t('finalQaConfirmTitle')}
+              >
+                {t('finalQaConfirm')}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => finalQaItems.forEach(item =>
+                  onSetChecklistResult(item.id, CHECKLIST_RESULTS.PASS, SECOND_PERSON_SOLO_OVERRIDE_NOTE, { secondPersonOverride: true }),
+                )}
+                title={t('finalQaSoloTitle')}
+              >
+                {t('finalQaSolo')}
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
       )}
 
@@ -447,7 +487,12 @@ export function IntakeDetailView({
           {!detail.checklist_complete && (
             <div className="flex items-start gap-2 mb-3 text-sm text-warning-700 dark:text-warning-200 bg-warning-50 dark:bg-warning-900/20 p-2 rounded-sm">
               <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
-              <span>{t('publishGate')}</span>
+              <span>
+                {t('publishGate')}
+                {openRequired.length > 0 && (
+                  <> {t('publishGateMissing', { items: openRequired.map(i => i.label).join(', ') })}</>
+                )}
+              </span>
             </div>
           )}
 

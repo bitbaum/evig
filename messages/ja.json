@@ -10603,7 +10603,13 @@
         "listingSoldBody": "このデバイスはショップで販売されました",
         "listingInactive": "出品が無効",
         "listingInactiveBody": "このデバイスは公開済みとされていますが、出品はショップで有効ではありません。",
-        "manageListing": "出品を管理"
+        "manageListing": "出品を管理",
+        "finalQaHint": "すべてのテスト完了 — 残るは品質検査（四つの目の原則）のみ。",
+        "finalQaConfirm": "第二者として確認",
+        "finalQaConfirmTitle": "作業を自分で行っておらず、第二者として最終検査を確認します。",
+        "finalQaSolo": "一人勤務 — 上書き",
+        "finalQaSoloTitle": "監査済みの標準理由（「一人勤務」）で最終検査を即時確認します。",
+        "publishGateMissing": "未完了：{items}。"
       },
       "pipeline": {
         "newDevice": "新しいデバイス",

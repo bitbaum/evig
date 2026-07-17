@@ -267,3 +267,36 @@ clients migrate.
   Intake as the QA pipeline.
 - `src/config/intake-checklist.ts` header — the three-tier value cascade
   (Refurbishing ~60% / Ersatzteile ~25% / Recycling ~15%).
+
+
+---
+
+## Addendum 2026-07-17 — journey-audit fixes (shipped)
+
+Findings from clicking the full staff journey on prod, all deployed:
+
+- **Atomic checklist writes.** Verdict PATCHes used to read-modify-write the
+  whole `intake_checklist` JSONB; parallel requests silently dropped each
+  other's items ("Alles in Ordnung" needed 4 clicks; swallowed clicks caused
+  duplicate audit events). Writes now serialize in a `SELECT … FOR UPDATE`
+  transaction, repeats are idempotent no-ops, and bulk marking is ONE request
+  (`item_ids[]`) producing ONE timeline event. Bulk never signs the
+  Vier-Augen item.
+- **One-click publish without QC.** `POST …/publish` accepts `qc_skip` +
+  audited reason (`QC_SKIP_ONE_CLICK_NOTE` in `src/config/intake-checklist.ts`).
+  Surfaced on the capture success screen, the detail publish box and the
+  quick-capture QC gate. A recorded FAIL still blocks — skip means
+  "not tested", never "tested and failed". The listing publishes without the
+  Prüfsiegel (no `condition_checks`, `verified_at` NULL) and buyers see the
+  untested trust-strip state.
+- **Vier-Augen stays, friction goes.** Solo shift = one click
+  (`SECOND_PERSON_SOLO_OVERRIDE_NOTE`); when only final QA remains open, the
+  progress card surfaces "Als Zweitperson bestätigen" / "Allein im Dienst —
+  übersteuern" directly, and the publish gate names the open items.
+- **"Im Shop" is the listings table.** Pipeline/detail derive the shop state
+  from `listings` (LEFT JOIN: id + status). Removing a listing resets the
+  inventory item to `draft` (device returns to the pipeline, republishable)
+  with an `unpublished` timeline event.
+- **Truthful stepper** (Erfasst → Qualitätsprüfung → Im Shop, finished state
+  supported) and a fast lane on capture ("Direkt aufnehmen & Prüfung
+  starten") plus the AIFormAssist refine loop on the review step.

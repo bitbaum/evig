@@ -10659,7 +10659,13 @@
         "listingSoldBody": "Dieses Gerät wurde über den Shop verkauft",
         "listingInactive": "Inserat nicht aktiv",
         "listingInactiveBody": "Dieses Gerät ist als publiziert markiert, aber das Inserat ist nicht mehr aktiv im Shop.",
-        "manageListing": "Inserate verwalten"
+        "manageListing": "Inserate verwalten",
+        "finalQaHint": "Alle Tests erledigt — es fehlt nur noch die Qualitätskontrolle (Vier-Augen-Prinzip).",
+        "finalQaConfirm": "Als Zweitperson bestätigen",
+        "finalQaConfirmTitle": "Du hast die Arbeit NICHT selbst gemacht und bestätigst die Endkontrolle als zweite Person.",
+        "finalQaSolo": "Allein im Dienst — übersteuern",
+        "finalQaSoloTitle": "Bestätigt die Endkontrolle sofort mit auditierter Standardbegründung («Allein im Dienst»).",
+        "publishGateMissing": "Offen: {items}."
       },
       "pipeline": {
         "newDevice": "Neues Gerät",

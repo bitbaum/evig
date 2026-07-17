@@ -10603,7 +10603,13 @@
         "listingSoldBody": "이 기기는 상점을 통해 판매되었습니다",
         "listingInactive": "등록 비활성",
         "listingInactiveBody": "이 기기는 게시됨으로 표시되어 있지만 등록이 더 이상 상점에서 활성 상태가 아닙니다.",
-        "manageListing": "등록 관리"
+        "manageListing": "등록 관리",
+        "finalQaHint": "모든 테스트 완료 — 품질 검사(4-eyes 원칙)만 남았습니다.",
+        "finalQaConfirm": "제2자로 확인",
+        "finalQaConfirmTitle": "작업을 직접 하지 않았으며 제2자로서 최종 검사를 확인합니다.",
+        "finalQaSolo": "혼자 근무 — 재정의",
+        "finalQaSoloTitle": "감사 기록된 표준 사유(“혼자 근무”)로 최종 검사를 즉시 확인합니다.",
+        "publishGateMissing": "미완료: {items}."
       },
       "pipeline": {
         "newDevice": "새 기기",

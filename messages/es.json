@@ -10603,7 +10603,13 @@
         "listingSoldBody": "Este dispositivo se vendió a través de la tienda",
         "listingInactive": "Anuncio no activo",
         "listingInactiveBody": "Este dispositivo figura como publicado, pero su anuncio ya no está activo en la tienda.",
-        "manageListing": "Gestionar anuncios"
+        "manageListing": "Gestionar anuncios",
+        "finalQaHint": "Todas las pruebas hechas — solo falta el control de calidad (principio de cuatro ojos).",
+        "finalQaConfirm": "Confirmar como segunda persona",
+        "finalQaConfirmTitle": "NO hiciste el trabajo tú mismo y confirmas el control final como segunda persona.",
+        "finalQaSolo": "Solo en el turno — anular",
+        "finalQaSoloTitle": "Confirma el control final de inmediato con una justificación estándar auditada («solo en el turno»).",
+        "publishGateMissing": "Pendiente: {items}."
       },
       "pipeline": {
         "newDevice": "Nuevo dispositivo",
