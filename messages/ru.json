@@ -50,6 +50,8 @@
       "missionHistoryDesc": "Кто мы и что нами движет",
       "impact": "Наш вклад",
       "impactDesc": "Измеримые результаты и прозрачность",
+      "howItWorks": "Как это работает",
+      "howItWorksDesc": "Путь устройства от пожертвования к новой жизни",
       "projects": "Проекты",
       "projectsDesc": "Наши инициативы",
       "locations": "Локации",
@@ -157,9 +159,7 @@
       "computerRepair": "Ремонт и апгрейды",
       "computerRepairDesc": "Возвращаем компьютеры к жизни",
       "webDesign": "Веб-разработка",
-      "webDesignDesc": "Сайты на Open Source",
-      "howItWorks": "Как это работает",
-      "howItWorksDesc": "Путь устройства от пожертвования к новой жизни"
+      "webDesignDesc": "Сайты на Open Source"
     },
     "language": "Язык",
     "missionHistory": "Миссия и история",
@@ -859,10 +859,10 @@
       "free": "Бесплатно",
       "trust": {
         "verified": "Проверено и протестировано Revamp-IT",
-        "mission": "Повторно используется, а не выбрасывается — некоммерческая организация",
         "untested": "Контроль качества пропущен — товар не проверен Revamp-IT",
         "untestedBadge": "Revamp-IT · без проверки",
         "processLink": "Как работает наш контроль качества",
+        "mission": "Повторно используется, а не выбрасывается — некоммерческая организация",
         "warranty": "Гарантия {months} месяцев",
         "returnPolicy": "Возврат в течение {days} дней при онлайн-покупке"
       },
@@ -9565,6 +9565,8 @@
         "errorAnalysis": "Анализ не удался"
       },
       "dataEntryTabs": {
+        "stepTitle": "Введите данные",
+        "stepDescription": "Текст, фото, файл или голос — ИИ заполняет одну карточку товара.",
         "tabTextLabel": "Текст",
         "tabTextDesc": "Введите информацию о товаре, ИИ заполнит форму",
         "tabFileLabel": "Файл",
@@ -9584,37 +9586,13 @@
         "pictureRequires": "Требует модель компьютерного зрения с ИИ",
         "analyzing": "ИИ анализирует…",
         "fillForm": "Заполнить форму",
+        "manualEntry": "Ввести вручную без ИИ",
         "fileImportTitle": "Импорт файла",
         "fileImportDesc": "Загрузите CSV- или Excel-файл с данными о товарах",
         "processing": "Обработка…",
         "chooseFile": "Выберите CSV- или Excel-файл или перетащите сюда",
         "fileHint": "CSV, TSV, XLSX — столбцы распознаются автоматически",
-        "unmappedColumns": "Несопоставленные столбцы:",
-        "stepTitle": "Введите данные",
-        "stepDescription": "Текст, фото, файл или голос — ИИ заполняет одну карточку товара.",
-        "manualEntry": "Ввести вручную без ИИ"
-      },
-      "formErrors": {
-        "updateFailed": "Не удалось обновить товар",
-        "saveFailed": "Не удалось сохранить товар",
-        "genericSaveError": "Ошибка при сохранении. Пожалуйста, попробуйте снова."
-      },
-      "storageLocation": {
-        "label": "Место хранения",
-        "placeholder": "Выберите место…",
-        "loading": "Загрузка…",
-        "addNew": "Добавить место",
-        "newNamePlaceholder": "Название места",
-        "kindLabel": "Тип",
-        "save": "Сохранить"
-      },
-      "voiceEntry": {
-        "start": "Начать запись",
-        "stop": "Остановить запись",
-        "processing": "Обработка…",
-        "hint": "Опишите устройство: производитель, модель, состояние, цена.",
-        "transcription": "Распознано: {text}",
-        "errorGeneric": "Не удалось обработать речь. Пожалуйста, попробуйте снова."
+        "unmappedColumns": "Несопоставленные столбцы:"
       },
       "destination": {
         "title": "Что произойдёт дальше?",
@@ -9654,6 +9632,28 @@
         "donorName": "Имя дарителя",
         "donorEmail": "Эл. почта (необязательно)",
         "donorNotes": "Примечания (необязательно)"
+      },
+      "formErrors": {
+        "updateFailed": "Не удалось обновить товар",
+        "saveFailed": "Не удалось сохранить товар",
+        "genericSaveError": "Ошибка при сохранении. Пожалуйста, попробуйте снова."
+      },
+      "storageLocation": {
+        "label": "Место хранения",
+        "placeholder": "Выберите место…",
+        "loading": "Загрузка…",
+        "addNew": "Добавить место",
+        "newNamePlaceholder": "Название места",
+        "kindLabel": "Тип",
+        "save": "Сохранить"
+      },
+      "voiceEntry": {
+        "start": "Начать запись",
+        "stop": "Остановить запись",
+        "processing": "Обработка…",
+        "hint": "Опишите устройство: производитель, модель, состояние, цена.",
+        "transcription": "Распознано: {text}",
+        "errorGeneric": "Не удалось обработать речь. Пожалуйста, попробуйте снова."
       }
     },
     "eWasteProblem": {
@@ -9875,7 +9875,14 @@
       "release": "Опубликовать",
       "accept": "Принять",
       "pageTitle": "Согласования",
-      "pageDescription": "Проверка и согласование контента, отправленного пользователями"
+      "pageDescription": "Проверка и согласование контента, отправленного пользователями",
+      "timecardsPageTitle": "Утверждения",
+      "timecardsPageDescription": "Проверка и утверждение отправленных табелей и запросов на отсутствие.",
+      "timecardsMetaTitle": "Утверждения · Табели",
+      "timecardsMetaDescription": "Массовая проверка отправленных табелей.",
+      "tabContent": "Контент",
+      "tabTimecards": "Табели и отсутствия",
+      "tabsAria": "Утверждения"
     },
     "hirn": {
       "assistantSubtitle": "Ассистент",
@@ -10265,6 +10272,125 @@
       "absencePaidHint": "Оплачиваемое отсутствие (учитываются запланированные часы)",
       "absenceUnpaidHint": "Не оплачивается (0 ч)",
       "headerSelectColumn": "Выбрать все {day} — проведите для нескольких столбцов",
+      "statusUnknown": "Неизвестно",
+      "durationMinutesOnly": "{minutes} мин",
+      "durationHoursOnly": "{hours} ч",
+      "durationHoursMinutes": "{hours} ч {minutes} мин",
+      "periodWeek": "Неделя {range}",
+      "pageEyebrow": "Фиксируй рабочие часы и отправляй их на утверждение",
+      "selfTitle": "Учёт времени",
+      "selfDescription": "Учёт и отправка собственных рабочих часов.",
+      "userFallback": "Ты",
+      "scheduleTitle": "Мой график работы",
+      "scheduleHint": "Задай дни и время — используется для заполнения табеля.",
+      "scheduleStandardButton": "Стандарт пн–пт 09–17",
+      "scheduleSave": "Сохранить график",
+      "scheduleSaved": "Сохранено",
+      "scheduleSaveError": "Не удалось сохранить график.",
+      "scheduleNone": "Нет стандартного графика",
+      "scheduleWeeklySummary": "{days} · {hours} ч/нед.",
+      "scheduleWeeklySummaryWithMinutes": "{days} · {hours} ч {minutes} мин/нед.",
+      "scheduleStandardSummary": "Стандарт: пн–пт 09:00–17:00 (можно изменить)",
+      "shiftRunning": "Смена идёт",
+      "shiftStartedAt": "Начало {time}",
+      "shiftPlaceholder": "Необязательно: чем занимаешься?",
+      "shiftStop": "Завершить смену",
+      "shiftStart": "Начать смену",
+      "shiftPromptTitle": "Работаешь сейчас?",
+      "shiftPromptBody": "Начни смену — она попадёт прямо в этот табель.",
+      "cancel": "Отмена",
+      "draftLoaded": "Табель загружен",
+      "draftLoadError": "Не удалось загрузить табель.",
+      "draftSaved": "Сохранено",
+      "draftSaveError": "Не удалось сохранить табель.",
+      "shiftSaved": "Смена сохранена",
+      "shiftSaveError": "Не удалось сохранить смену.",
+      "historyTitle": "История",
+      "historyEmpty": "Табелей пока нет. Отправь первую неделю — она появится здесь.",
+      "historyLastCount": "{count, plural, one {Последний табель} few {Последние # табеля} many {Последние # табелей} other {Последние # табеля}}",
+      "historyReviewedOn": "Проверен {date}",
+      "historySubmittedOn": "Отправлен {date}",
+      "queueStatusLabel": "Статус:",
+      "queueTabOpen": "Открытые",
+      "queueTabApproved": "Утверждённые",
+      "queuePeriodLabel": "Период:",
+      "queueFilterAll": "Все",
+      "queueFilterWeeks": "Недели",
+      "queueFilterMonths": "Месяцы",
+      "queueRefresh": "Обновить",
+      "queueSelected": "Выбрано: {count} · {duration}",
+      "queueNotePlaceholder": "Заметка (необязательно) — при отклонении объясняет команде, что исправить",
+      "queueApproveCount": "Утвердить ({count})",
+      "queueReject": "Отклонить",
+      "queueLoadError": "Не удалось загрузить табели.",
+      "queueBulkError": "Массовое утверждение не удалось.",
+      "bulkApprovedResult": "Утверждено: {count}",
+      "bulkRejectedResult": "Отклонено: {count}",
+      "bulkFailedResult": "Не удалось: {count} ({reasons})",
+      "failureSelfReview": "собственный табель",
+      "failureNotSubmitted": "больше не отправлен",
+      "failureNotFound": "не найден",
+      "failurePayrollLocked": "заблокирован в расчёте зарплаты",
+      "failureUnknown": "неизвестно",
+      "queueEmpty": "В этом виде нет табелей. По состоянию на {time}",
+      "queueSelectAll": "Выбрать все",
+      "queueCount": "{count, plural, one {# табель} few {# табеля} many {# табелей} other {# табеля}}",
+      "queueOwnBadge": "Свой табель",
+      "queueOwnTooltip": "Твой собственный табель — утверждает другой член команды",
+      "queueRowAria": "Выбрать табель {name}",
+      "queueProfileAria": "Открыть профиль в новой вкладке",
+      "queueReview": "Проверить",
+      "drawerAria": "Проверка табеля",
+      "close": "Закрыть",
+      "loading": "Загрузка…",
+      "drawerNoEntries": "Нет записей.",
+      "colDay": "День",
+      "colHours": "Ч",
+      "drawerOwnNotice": "Твой собственный табель — утверждением занимается другой член команды.",
+      "drawerNotePlaceholder": "Заметка (необязательно) — при отклонении объясняет, что исправить",
+      "approve": "Утвердить",
+      "reject": "Отклонить",
+      "edit": "Редактировать",
+      "reopen": "Открыть заново",
+      "saveFailed": "Не удалось сохранить.",
+      "actionFailed": "Действие не удалось.",
+      "drawerFallbackTitle": "Табель",
+      "status": {
+        "draft": "Черновик",
+        "submitted": "Отправлена",
+        "approved": "Утверждена",
+        "rejected": "Отклонена"
+      },
+      "category": {
+        "workshop": "Мастерская",
+        "repair": "Ремонт",
+        "intake": "Приёмка",
+        "sales": "Продажи",
+        "admin": "Администрирование",
+        "education": "Обучение",
+        "logistics": "Логистика",
+        "meeting": "Встреча",
+        "volunteering": "Волонтёрство",
+        "other": "Другое",
+        "ferien": "Отпуск",
+        "krank": "Болезнь",
+        "unfall": "Несчастный случай",
+        "feiertag": "Праздничный день",
+        "militaer": "Военная служба/гражданская оборона",
+        "unbezahlt": "Без оплаты"
+      },
+      "weekday": {
+        "monday": "Пн",
+        "tuesday": "Вт",
+        "wednesday": "Ср",
+        "thursday": "Чт",
+        "friday": "Пт",
+        "saturday": "Сб",
+        "sunday": "Вс"
+      },
+      "profileEmpty": "Табелей пока нет.",
+      "profileTotals": "{count} табелей · всего {duration}",
+      "profileToReview": "{count} на проверку",
       "dayGridShow": "Показать сетку часов",
       "dayGridHide": "Скрыть сетку часов"
     },
@@ -10283,6 +10409,32 @@
     "intake": {
       "pageTitle": "Приём устройств",
       "pageDescription": "Все зарегистрированные устройства: статус, чек-лист и публикация",
+      "quickCapture": {
+        "title": "Быстро принять устройство",
+        "description": "Производитель, модель, Enter — остальное можно заполнить позже в мастерской.",
+        "close": "Назад к процессу",
+        "brand": "Производитель",
+        "brandPlaceholder": "Dell",
+        "productName": "Модель / продукт",
+        "productNamePlaceholder": "Latitude 7480",
+        "submit": "Принять",
+        "saving": "Приём…",
+        "keyboardHint": "Клавиатура: производитель → Tab → модель → Enter",
+        "details": "Изменить уровень, категорию или данные пожертвования",
+        "tier": "Уровень обработки",
+        "category": "Категория",
+        "categoryLater": "Указать позже",
+        "condition": "Состояние",
+        "donation": "Это пожертвование",
+        "donorName": "Имя дарителя",
+        "donorEmail": "Эл. почта",
+        "donorNotes": "Примечания",
+        "created": "{itemUuid} принято — можно вводить следующее устройство.",
+        "printLabel": "Печать этикетки",
+        "openPipeline": "Открыть процесс",
+        "fullCapture": "Полный ввод с фото, ИИ и данными продукта",
+        "saveFailed": "Не удалось принять устройство"
+      },
       "createForm": {
         "title": "Зарегистрировать новое устройство",
         "tierLabel": "Этап обработки",
@@ -10412,6 +10564,15 @@
           "inProgress": "В обработке",
           "failed": "Не пройдено"
         },
+        "board": {
+          "in_progress": "На проверке",
+          "failed": "Заблокировано",
+          "ready": "Готово",
+          "published": "В магазине",
+          "empty": "Нет устройств",
+          "noCategory": "Категория не указана",
+          "ageDays": "{count} д."
+        },
         "donationYes": "Да",
         "hero": {
           "kpis": {
@@ -10445,15 +10606,6 @@
             "sub": "Решите: устранить проблему и проверить снова или изменить категорию (запчасти/утилизация).",
             "cta": "Показать непрошедшие"
           }
-        },
-        "board": {
-          "in_progress": "На проверке",
-          "failed": "Заблокировано",
-          "ready": "Готово",
-          "published": "В магазине",
-          "empty": "Нет устройств",
-          "noCategory": "Категория не указана",
-          "ageDays": "{count} д."
         }
       },
       "checklist": {
@@ -10467,35 +10619,9 @@
         "failNoteRequired": "Требуется обоснование — что именно не прошло проверку?",
         "saveFail": "Отметить как не пройдено",
         "confirmNoteHint": "Принцип четырёх глаз: как второй сотрудник подтвердите сразу. Работаете в одиночку? Укажите причину.",
+        "overrideSecondPerson": "Исключение: я работаю один (причина не короче 10 символов обязательна)",
         "confirmNotePlaceholder": "Необязательно для второго сотрудника — обязательно при единоличном подтверждении, напр. «работаю один» …",
-        "saveConfirm": "Подтвердить контроль качества",
-        "overrideSecondPerson": "Исключение: я работаю один (причина не короче 10 символов обязательна)"
-      },
-      "quickCapture": {
-        "title": "Быстро принять устройство",
-        "description": "Производитель, модель, Enter — остальное можно заполнить позже в мастерской.",
-        "close": "Назад к процессу",
-        "brand": "Производитель",
-        "brandPlaceholder": "Dell",
-        "productName": "Модель / продукт",
-        "productNamePlaceholder": "Latitude 7480",
-        "submit": "Принять",
-        "saving": "Приём…",
-        "keyboardHint": "Клавиатура: производитель → Tab → модель → Enter",
-        "details": "Изменить уровень, категорию или данные пожертвования",
-        "tier": "Уровень обработки",
-        "category": "Категория",
-        "categoryLater": "Указать позже",
-        "condition": "Состояние",
-        "donation": "Это пожертвование",
-        "donorName": "Имя дарителя",
-        "donorEmail": "Эл. почта",
-        "donorNotes": "Примечания",
-        "created": "{itemUuid} принято — можно вводить следующее устройство.",
-        "printLabel": "Печать этикетки",
-        "openPipeline": "Открыть процесс",
-        "fullCapture": "Полный ввод с фото, ИИ и данными продукта",
-        "saveFailed": "Не удалось принять устройство"
+        "saveConfirm": "Подтвердить контроль качества"
       }
     },
     "it-hilfe": {
@@ -10743,6 +10869,7 @@
       "filterNoResults": "Раздел не найден"
     },
     "commandBar": {
+      "searching": "Поиск…",
       "placeholder": "Поиск или команда…",
       "openShortcut": "Открыть командную строку",
       "noResults": "Нет результатов",
@@ -10759,8 +10886,7 @@
         "newDecision": "Новое решение",
         "newProtocol": "Новый протокол",
         "dashboard": "Панель"
-      },
-      "searching": "Поиск…"
+      }
     },
     "userMenu": {
       "darkMode": "Оформление",
@@ -11189,6 +11315,40 @@
         "teamhr": "Команда и HR",
         "system": "Система"
       }
+    },
+    "timeOff": {
+      "requestToggle": "Запросить отсутствие",
+      "kindLabel": "Тип",
+      "from": "С",
+      "to": "По",
+      "noteLabel": "Заметка (необязательно)",
+      "notePlaceholder": "напр. летний отпуск",
+      "submit": "Отправить запрос",
+      "submitting": "Отправка …",
+      "missingDates": "Выбери дату начала и окончания.",
+      "submitError": "Не удалось отправить запрос.",
+      "withdraw": "Отозвать запрос",
+      "kind": {
+        "ferien": "Отпуск",
+        "unbezahlt": "Неоплачиваемый отпуск",
+        "militaer": "Военная служба / гражданская оборона",
+        "unfall": "Несчастный случай",
+        "other": "Другое"
+      },
+      "status": {
+        "pending": "Ожидает",
+        "approved": "Утверждён",
+        "rejected": "Отклонён",
+        "cancelled": "Отозван"
+      },
+      "approvalsTitle": "Запросы на отсутствие",
+      "filterPending": "Открытые",
+      "filterAll": "Все",
+      "emptyPending": "Нет открытых запросов.",
+      "emptyAll": "Запросов нет.",
+      "approve": "Утвердить",
+      "decline": "Отклонить",
+      "unknownUser": "Неизвестно"
     }
   },
   "changelog": {

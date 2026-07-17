@@ -50,6 +50,8 @@
       "missionHistoryDesc": "Chi siamo e cosa ci muove",
       "impact": "Il nostro impatto",
       "impactDesc": "Risultati misurabili e trasparenza",
+      "howItWorks": "Come funziona",
+      "howItWorksDesc": "Il viaggio di un dispositivo, dalla donazione alla nuova vita",
       "projects": "Progetti",
       "projectsDesc": "Le nostre iniziative",
       "locations": "Sedi",
@@ -153,9 +155,7 @@
       "browseRequests": "Richieste aperte",
       "browseRequestsDesc": "Sfoglia le richieste di riparazione e offri aiuto",
       "itHelpHub": "IT Help",
-      "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point",
-      "howItWorks": "Come funziona",
-      "howItWorksDesc": "Il viaggio di un dispositivo, dalla donazione alla nuova vita"
+      "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point"
     },
     "language": "Lingua",
     "missionHistory": "Missione & Storia",
@@ -3166,10 +3166,10 @@
       "free": "Gratis",
       "trust": {
         "verified": "Verificato e testato da Revamp-IT",
-        "mission": "Riutilizzato anziché smaltito — associazione senza scopo di lucro",
         "untested": "Controllo qualità saltato — questo articolo non è verificato da Revamp-IT",
         "untestedBadge": "Revamp-IT · non testato",
         "processLink": "Scopri il nostro processo di qualità",
+        "mission": "Riutilizzato anziché smaltito — associazione senza scopo di lucro",
         "warranty": "Garanzia di {months} mesi",
         "returnPolicy": "Reso entro {days} giorni per gli acquisti online"
       },
@@ -9570,6 +9570,8 @@
         "errorAnalysis": "Analisi non riuscita"
       },
       "dataEntryTabs": {
+        "stepTitle": "Inserisci i dati",
+        "stepDescription": "Testo, foto, file o voce — l’IA compila lo stesso prodotto.",
         "tabTextLabel": "Text",
         "tabTextDesc": "Inserisca le informazioni sul prodotto, l'IA compila il resto",
         "tabFileLabel": "File",
@@ -9589,37 +9591,13 @@
         "pictureRequires": "Richiede un modello IA di visione",
         "analyzing": "L'IA sta analizzando…",
         "fillForm": "Compila modulo",
+        "manualEntry": "Inserisci manualmente senza IA",
         "fileImportTitle": "Importazione file",
         "fileImportDesc": "Carichi un file CSV o Excel con i dati dei prodotti",
         "processing": "Processing…",
         "chooseFile": "Selezioni un file CSV o Excel oppure lo trascini qui",
         "fileHint": "CSV, TSV, XLSX — le colonne vengono riconosciute automaticamente",
-        "unmappedColumns": "Colonne non mappate:",
-        "stepTitle": "Inserisci i dati",
-        "stepDescription": "Testo, foto, file o voce — l’IA compila lo stesso prodotto.",
-        "manualEntry": "Inserisci manualmente senza IA"
-      },
-      "formErrors": {
-        "updateFailed": "Impossibile aggiornare il prodotto",
-        "saveFailed": "Impossibile salvare il prodotto",
-        "genericSaveError": "Errore durante il salvataggio. La preghiamo di riprovare."
-      },
-      "storageLocation": {
-        "label": "Luogo di stoccaggio",
-        "placeholder": "Scegli la sede…",
-        "loading": "Caricamento…",
-        "addNew": "Aggiungi sede",
-        "newNamePlaceholder": "Nome della sede",
-        "kindLabel": "Tipo",
-        "save": "Salva"
-      },
-      "voiceEntry": {
-        "start": "Avvia registrazione",
-        "stop": "Ferma registrazione",
-        "processing": "Elaborazione in corso…",
-        "hint": "Descrivi il dispositivo: produttore, modello, condizioni, prezzo.",
-        "transcription": "Riconosciuto: {text}",
-        "errorGeneric": "Non è stato possibile elaborare l'audio. Riprova."
+        "unmappedColumns": "Colonne non mappate:"
       },
       "destination": {
         "title": "Cosa succede dopo?",
@@ -9659,6 +9637,28 @@
         "donorName": "Nome del donatore",
         "donorEmail": "E-mail (opzionale)",
         "donorNotes": "Note (opzionale)"
+      },
+      "formErrors": {
+        "updateFailed": "Impossibile aggiornare il prodotto",
+        "saveFailed": "Impossibile salvare il prodotto",
+        "genericSaveError": "Errore durante il salvataggio. La preghiamo di riprovare."
+      },
+      "storageLocation": {
+        "label": "Luogo di stoccaggio",
+        "placeholder": "Scegli la sede…",
+        "loading": "Caricamento…",
+        "addNew": "Aggiungi sede",
+        "newNamePlaceholder": "Nome della sede",
+        "kindLabel": "Tipo",
+        "save": "Salva"
+      },
+      "voiceEntry": {
+        "start": "Avvia registrazione",
+        "stop": "Ferma registrazione",
+        "processing": "Elaborazione in corso…",
+        "hint": "Descrivi il dispositivo: produttore, modello, condizioni, prezzo.",
+        "transcription": "Riconosciuto: {text}",
+        "errorGeneric": "Non è stato possibile elaborare l'audio. Riprova."
       }
     },
     "eWasteProblem": {
@@ -9881,7 +9881,14 @@
       "release": "Rilascia",
       "accept": "Accetta",
       "pageTitle": "Approvazioni",
-      "pageDescription": "Verifica e approva i contenuti inviati dagli utenti"
+      "pageDescription": "Verifica e approva i contenuti inviati dagli utenti",
+      "timecardsPageTitle": "Approvazioni",
+      "timecardsPageDescription": "Verifica e approva le schede ore e le richieste di assenza inviate.",
+      "timecardsMetaTitle": "Approvazioni · Schede ore",
+      "timecardsMetaDescription": "Verifica in blocco le schede ore inviate.",
+      "tabContent": "Contenuti",
+      "tabTimecards": "Schede ore e assenze",
+      "tabsAria": "Approvazioni"
     },
     "hirn": {
       "assistantSubtitle": "Assistente",
@@ -10271,6 +10278,125 @@
       "absencePaidHint": "Assenza pagata (conta le ore pianificate)",
       "absenceUnpaidHint": "Non pagato (0 h)",
       "headerSelectColumn": "Seleziona tutti i {day} — trascina per più colonne",
+      "statusUnknown": "Sconosciuto",
+      "durationMinutesOnly": "{minutes} min",
+      "durationHoursOnly": "{hours} ore",
+      "durationHoursMinutes": "{hours} ore {minutes} min",
+      "periodWeek": "Settimana {range}",
+      "pageEyebrow": "Registra le tue ore di lavoro e inviale per l'approvazione",
+      "selfTitle": "Rilevamento ore",
+      "selfDescription": "Registra e invia le tue ore di lavoro.",
+      "userFallback": "Tu",
+      "scheduleTitle": "Il mio piano di lavoro",
+      "scheduleHint": "Definisci giorni e orari — usati per compilare la scheda.",
+      "scheduleStandardButton": "Standard lun–ven 09–17",
+      "scheduleSave": "Salva piano di lavoro",
+      "scheduleSaved": "Salvato",
+      "scheduleSaveError": "Impossibile salvare il piano di lavoro.",
+      "scheduleNone": "Nessun piano standard",
+      "scheduleWeeklySummary": "{days} · {hours} ore/settimana",
+      "scheduleWeeklySummaryWithMinutes": "{days} · {hours} ore {minutes} min/settimana",
+      "scheduleStandardSummary": "Standard: lun–ven 09:00–17:00 (modificabile)",
+      "shiftRunning": "Turno in corso",
+      "shiftStartedAt": "Inizio {time}",
+      "shiftPlaceholder": "Facoltativo: a cosa stai lavorando?",
+      "shiftStop": "Termina turno",
+      "shiftStart": "Inizia turno",
+      "shiftPromptTitle": "Stai lavorando adesso?",
+      "shiftPromptBody": "Avvia un turno — finisce direttamente in questa scheda ore.",
+      "cancel": "Annulla",
+      "draftLoaded": "Scheda ore caricata",
+      "draftLoadError": "Impossibile caricare la scheda ore.",
+      "draftSaved": "Salvato",
+      "draftSaveError": "Impossibile salvare la scheda ore.",
+      "shiftSaved": "Turno salvato",
+      "shiftSaveError": "Impossibile salvare il turno.",
+      "historyTitle": "Cronologia",
+      "historyEmpty": "Ancora nessuna scheda ore. Invia la tua prima settimana e apparirà qui.",
+      "historyLastCount": "{count, plural, one {Ultima scheda ore} other {Ultime # schede ore}}",
+      "historyReviewedOn": "Verificata {date}",
+      "historySubmittedOn": "Inviata {date}",
+      "queueStatusLabel": "Stato:",
+      "queueTabOpen": "Aperte",
+      "queueTabApproved": "Approvate",
+      "queuePeriodLabel": "Periodo:",
+      "queueFilterAll": "Tutte",
+      "queueFilterWeeks": "Settimane",
+      "queueFilterMonths": "Mesi",
+      "queueRefresh": "Aggiorna",
+      "queueSelected": "{count} selezionate · {duration}",
+      "queueNotePlaceholder": "Nota (facoltativa) — in caso di rifiuto spiega al team cosa correggere",
+      "queueApproveCount": "Approva ({count})",
+      "queueReject": "Respingi",
+      "queueLoadError": "Impossibile caricare le schede ore.",
+      "queueBulkError": "Approvazione multipla non riuscita.",
+      "bulkApprovedResult": "{count} approvate",
+      "bulkRejectedResult": "{count} respinte",
+      "bulkFailedResult": "{count} non riuscite ({reasons})",
+      "failureSelfReview": "scheda propria",
+      "failureNotSubmitted": "non più inviata",
+      "failureNotFound": "non trovata",
+      "failurePayrollLocked": "bloccata nel ciclo paghe",
+      "failureUnknown": "sconosciuto",
+      "queueEmpty": "Nessuna scheda ore in questa vista. Aggiornato: {time}",
+      "queueSelectAll": "Seleziona tutte",
+      "queueCount": "{count, plural, one {1 scheda ore} other {# schede ore}}",
+      "queueOwnBadge": "Scheda propria",
+      "queueOwnTooltip": "La tua scheda ore — l'approvazione spetta a un altro membro del team",
+      "queueRowAria": "Seleziona la scheda ore di {name}",
+      "queueProfileAria": "Apri il profilo in una nuova scheda",
+      "queueReview": "Verifica",
+      "drawerAria": "Verifica scheda ore",
+      "close": "Chiudi",
+      "loading": "Caricamento…",
+      "drawerNoEntries": "Nessuna voce.",
+      "colDay": "Giorno",
+      "colHours": "Ore",
+      "drawerOwnNotice": "La tua scheda ore — l'approvazione spetta a un altro membro del team.",
+      "drawerNotePlaceholder": "Nota (facoltativa) — in caso di rifiuto spiega cosa correggere",
+      "approve": "Approva",
+      "reject": "Respingi",
+      "edit": "Modifica",
+      "reopen": "Riapri",
+      "saveFailed": "Salvataggio non riuscito.",
+      "actionFailed": "Azione non riuscita.",
+      "drawerFallbackTitle": "Scheda ore",
+      "status": {
+        "draft": "Bozza",
+        "submitted": "Inviata",
+        "approved": "Approvata",
+        "rejected": "Respinta"
+      },
+      "category": {
+        "workshop": "Workshop",
+        "repair": "Riparazione",
+        "intake": "Accettazione",
+        "sales": "Vendita",
+        "admin": "Amministrazione",
+        "education": "Formazione",
+        "logistics": "Logistica",
+        "meeting": "Riunione",
+        "volunteering": "Volontariato",
+        "other": "Altro",
+        "ferien": "Vacanze",
+        "krank": "Malattia",
+        "unfall": "Infortunio",
+        "feiertag": "Giorno festivo",
+        "militaer": "Militare/protezione civile",
+        "unbezahlt": "Non retribuito"
+      },
+      "weekday": {
+        "monday": "Lu",
+        "tuesday": "Ma",
+        "wednesday": "Me",
+        "thursday": "Gi",
+        "friday": "Ve",
+        "saturday": "Sa",
+        "sunday": "Do"
+      },
+      "profileEmpty": "Ancora nessuna scheda ore.",
+      "profileTotals": "{count} schede · {duration} in totale",
+      "profileToReview": "{count} da verificare",
       "dayGridShow": "Mostra griglia oraria",
       "dayGridHide": "Nascondi griglia oraria"
     },
@@ -10289,6 +10415,32 @@
     "intake": {
       "pageTitle": "Entrata dispositivi",
       "pageDescription": "Tutti i dispositivi registrati: stato, checklist e pubblicazione",
+      "quickCapture": {
+        "title": "Registra subito un dispositivo",
+        "description": "Produttore, modello, Invio — completa il resto più tardi al banco.",
+        "close": "Torna alla pipeline",
+        "brand": "Produttore",
+        "brandPlaceholder": "Dell",
+        "productName": "Modello / prodotto",
+        "productNamePlaceholder": "Latitude 7480",
+        "submit": "Registra",
+        "saving": "Registrazione…",
+        "keyboardHint": "Tastiera: produttore → Tab → modello → Invio",
+        "details": "Modifica livello, categoria o donazione",
+        "tier": "Livello di lavorazione",
+        "category": "Categoria",
+        "categoryLater": "Definisci più tardi",
+        "condition": "Condizione",
+        "donation": "Questa è una donazione",
+        "donorName": "Nome donatore",
+        "donorEmail": "E-mail",
+        "donorNotes": "Note",
+        "created": "{itemUuid} registrato — pronto per il prossimo dispositivo.",
+        "printLabel": "Stampa etichetta",
+        "openPipeline": "Vedi pipeline",
+        "fullCapture": "Registrazione completa con foto, IA e dettagli prodotto",
+        "saveFailed": "Impossibile registrare il dispositivo"
+      },
       "createForm": {
         "title": "Registra nuovo dispositivo",
         "tierLabel": "Livello di elaborazione",
@@ -10418,6 +10570,15 @@
           "inProgress": "In lavorazione",
           "failed": "Fallito"
         },
+        "board": {
+          "in_progress": "In verifica",
+          "failed": "Bloccato",
+          "ready": "Pronto",
+          "published": "In negozio",
+          "empty": "Nessun dispositivo",
+          "noCategory": "Categoria da definire",
+          "ageDays": "{count} g"
+        },
         "donationYes": "Sì",
         "hero": {
           "kpis": {
@@ -10451,15 +10612,6 @@
             "sub": "Decidere: riparare e ritestare, o cambiare livello (ricambi/riciclo).",
             "cta": "Mostra falliti"
           }
-        },
-        "board": {
-          "in_progress": "In verifica",
-          "failed": "Bloccato",
-          "ready": "Pronto",
-          "published": "In negozio",
-          "empty": "Nessun dispositivo",
-          "noCategory": "Categoria da definire",
-          "ageDays": "{count} g"
         }
       },
       "checklist": {
@@ -10473,35 +10625,9 @@
         "failNoteRequired": "Motivazione richiesta — cosa è fallito esattamente?",
         "saveFail": "Segna come fallito",
         "confirmNoteHint": "Principio dei quattro occhi: conferma direttamente come seconda persona. Da solo in servizio? Indica il motivo.",
+        "overrideSecondPerson": "Eccezione: lavoro da solo (motivo di almeno 10 caratteri obbligatorio)",
         "confirmNotePlaceholder": "Facoltativo come seconda persona — obbligatorio per una conferma in solitaria, es. «da solo in servizio» …",
-        "saveConfirm": "Conferma controllo qualità",
-        "overrideSecondPerson": "Eccezione: lavoro da solo (motivo di almeno 10 caratteri obbligatorio)"
-      },
-      "quickCapture": {
-        "title": "Registra subito un dispositivo",
-        "description": "Produttore, modello, Invio — completa il resto più tardi al banco.",
-        "close": "Torna alla pipeline",
-        "brand": "Produttore",
-        "brandPlaceholder": "Dell",
-        "productName": "Modello / prodotto",
-        "productNamePlaceholder": "Latitude 7480",
-        "submit": "Registra",
-        "saving": "Registrazione…",
-        "keyboardHint": "Tastiera: produttore → Tab → modello → Invio",
-        "details": "Modifica livello, categoria o donazione",
-        "tier": "Livello di lavorazione",
-        "category": "Categoria",
-        "categoryLater": "Definisci più tardi",
-        "condition": "Condizione",
-        "donation": "Questa è una donazione",
-        "donorName": "Nome donatore",
-        "donorEmail": "E-mail",
-        "donorNotes": "Note",
-        "created": "{itemUuid} registrato — pronto per il prossimo dispositivo.",
-        "printLabel": "Stampa etichetta",
-        "openPipeline": "Vedi pipeline",
-        "fullCapture": "Registrazione completa con foto, IA e dettagli prodotto",
-        "saveFailed": "Impossibile registrare il dispositivo"
+        "saveConfirm": "Conferma controllo qualità"
       }
     },
     "it-hilfe": {
@@ -10749,6 +10875,7 @@
       "filterNoResults": "Nessuna sezione trovata"
     },
     "commandBar": {
+      "searching": "Ricerca…",
       "placeholder": "Cerca o comando…",
       "openShortcut": "Apri la barra dei comandi",
       "noResults": "Nessun risultato",
@@ -10765,8 +10892,7 @@
         "newDecision": "Nuova decisione",
         "newProtocol": "Nuovo verbale",
         "dashboard": "Dashboard"
-      },
-      "searching": "Ricerca…"
+      }
     },
     "userMenu": {
       "darkMode": "Aspetto",
@@ -11195,6 +11321,40 @@
         "teamhr": "Team & HR",
         "system": "Sistema"
       }
+    },
+    "timeOff": {
+      "requestToggle": "Richiedi assenza",
+      "kindLabel": "Tipo",
+      "from": "Dal",
+      "to": "Al",
+      "noteLabel": "Nota (facoltativa)",
+      "notePlaceholder": "ad es. vacanze estive",
+      "submit": "Invia richiesta",
+      "submitting": "Invio in corso …",
+      "missingDates": "Seleziona la data di inizio e di fine.",
+      "submitError": "Impossibile inviare la richiesta.",
+      "withdraw": "Ritira richiesta",
+      "kind": {
+        "ferien": "Vacanze",
+        "unbezahlt": "Congedo non retribuito",
+        "militaer": "Militare / protezione civile",
+        "unfall": "Infortunio",
+        "other": "Altro"
+      },
+      "status": {
+        "pending": "In attesa",
+        "approved": "Approvata",
+        "rejected": "Respinta",
+        "cancelled": "Ritirata"
+      },
+      "approvalsTitle": "Richieste di assenza",
+      "filterPending": "Aperte",
+      "filterAll": "Tutte",
+      "emptyPending": "Nessuna richiesta aperta.",
+      "emptyAll": "Nessuna richiesta.",
+      "approve": "Approva",
+      "decline": "Rifiuta",
+      "unknownUser": "Sconosciuto"
     }
   },
   "changelog": {

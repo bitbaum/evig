@@ -865,12 +865,12 @@
       "free": "Gratis",
       "trust": {
         "verified": "Von Revamp-IT geprüft & getestet",
-        "mission": "Wiederverwendet statt entsorgt — Non-Profit-Verein",
-        "warranty": "{months} Monate Garantie",
-        "returnPolicy": "{days} Tage Rückgaberecht bei Online-Kauf",
         "untested": "Nicht durch Revamp-IT geprüft — kein Prüfsiegel",
         "untestedBadge": "Revamp-IT · ungeprüft",
-        "processLink": "So funktioniert unser Qualitätsprozess"
+        "processLink": "So funktioniert unser Qualitätsprozess",
+        "mission": "Wiederverwendet statt entsorgt — Non-Profit-Verein",
+        "warranty": "{months} Monate Garantie",
+        "returnPolicy": "{days} Tage Rückgaberecht bei Online-Kauf"
       },
       "zoomOpen": "Vergrössern",
       "zoomClose": "Schliessen",
@@ -9616,6 +9616,8 @@
         "errorAnalysis": "Analyse fehlgeschlagen"
       },
       "dataEntryTabs": {
+        "stepTitle": "Daten eingeben",
+        "stepDescription": "Text, Foto, Datei oder Sprache — die KI füllt denselben Produktdatensatz.",
         "tabTextLabel": "Text",
         "tabTextDesc": "Produktinfos eingeben, KI füllt aus",
         "tabFileLabel": "Datei",
@@ -9635,28 +9637,13 @@
         "pictureRequires": "Erfordert Vision-KI-Modell",
         "analyzing": "KI analysiert…",
         "fillForm": "Formular ausfüllen",
+        "manualEntry": "Ohne KI manuell eingeben",
         "fileImportTitle": "Datei-Import",
         "fileImportDesc": "Lade eine CSV- oder Excel-Datei mit Produktdaten hoch",
         "processing": "Wird verarbeitet…",
         "chooseFile": "CSV- oder Excel-Datei wählen oder hierher ziehen",
         "fileHint": "CSV, TSV, XLSX — Spalten werden automatisch erkannt",
-        "unmappedColumns": "Nicht zugeordnete Spalten:",
-        "stepTitle": "Daten eingeben",
-        "stepDescription": "Text, Foto, Datei oder Sprache — die KI füllt denselben Produktdatensatz.",
-        "manualEntry": "Ohne KI manuell eingeben"
-      },
-      "voiceEntry": {
-        "start": "Aufnahme starten",
-        "stop": "Aufnahme stoppen",
-        "processing": "Wird verarbeitet…",
-        "hint": "Beschreibe das Gerät: Hersteller, Modell, Zustand, Preis.",
-        "transcription": "Erkannt: {text}",
-        "errorGeneric": "Sprache konnte nicht verarbeitet werden. Bitte erneut versuchen."
-      },
-      "formErrors": {
-        "updateFailed": "Produkt konnte nicht aktualisiert werden",
-        "saveFailed": "Produkt konnte nicht gespeichert werden",
-        "genericSaveError": "Fehler beim Speichern. Bitte erneut versuchen."
+        "unmappedColumns": "Nicht zugeordnete Spalten:"
       },
       "destination": {
         "title": "Was passiert als Nächstes?",
@@ -9696,6 +9683,19 @@
         "donorName": "Name Spender:in",
         "donorEmail": "E-Mail (optional)",
         "donorNotes": "Notizen (optional)"
+      },
+      "voiceEntry": {
+        "start": "Aufnahme starten",
+        "stop": "Aufnahme stoppen",
+        "processing": "Wird verarbeitet…",
+        "hint": "Beschreibe das Gerät: Hersteller, Modell, Zustand, Preis.",
+        "transcription": "Erkannt: {text}",
+        "errorGeneric": "Sprache konnte nicht verarbeitet werden. Bitte erneut versuchen."
+      },
+      "formErrors": {
+        "updateFailed": "Produkt konnte nicht aktualisiert werden",
+        "saveFailed": "Produkt konnte nicht gespeichert werden",
+        "genericSaveError": "Fehler beim Speichern. Bitte erneut versuchen."
       }
     },
     "eWasteProblem": {
@@ -9937,7 +9937,14 @@
       "release": "Freigeben",
       "accept": "Annehmen",
       "pageTitle": "Freigaben",
-      "pageDescription": "Eingereichte Inhalte von Benutzern prüfen und freigeben"
+      "pageDescription": "Eingereichte Inhalte von Benutzern prüfen und freigeben",
+      "timecardsPageTitle": "Freigaben",
+      "timecardsPageDescription": "Eingereichte Zeitkarten und Abwesenheiten prüfen und genehmigen.",
+      "timecardsMetaTitle": "Freigaben · Zeitkarten",
+      "timecardsMetaDescription": "Eingereichte Zeitkarten im Stapel prüfen.",
+      "tabContent": "Inhalte",
+      "tabTimecards": "Zeitkarten & Abwesenheit",
+      "tabsAria": "Freigaben"
     },
     "hirn": {
       "assistantSubtitle": "Assistent",
@@ -10327,6 +10334,125 @@
       "absencePaidHint": "Bezahlte Abwesenheit (zählt geplante Stunden)",
       "absenceUnpaidHint": "Unbezahlt (0 Std.)",
       "headerSelectColumn": "Alle {day} auswählen — ziehen für mehrere Spalten",
+      "statusUnknown": "Unbekannt",
+      "durationMinutesOnly": "{minutes} Min.",
+      "durationHoursOnly": "{hours} Std.",
+      "durationHoursMinutes": "{hours} Std. {minutes} Min.",
+      "periodWeek": "Woche {range}",
+      "pageEyebrow": "Erfasse deine Arbeitszeiten und reiche sie zur Genehmigung ein",
+      "selfTitle": "Zeiterfassung",
+      "selfDescription": "Eigene Arbeitszeiten erfassen und einreichen.",
+      "userFallback": "Du",
+      "scheduleTitle": "Mein Arbeitsplan",
+      "scheduleHint": "Tage und Zeiten festlegen — wird zum Füllen genutzt.",
+      "scheduleStandardButton": "Standard Mo–Fr 09–17",
+      "scheduleSave": "Arbeitsplan speichern",
+      "scheduleSaved": "Gespeichert",
+      "scheduleSaveError": "Arbeitsplan konnte nicht gespeichert werden.",
+      "scheduleNone": "Kein Standardschedule",
+      "scheduleWeeklySummary": "{days} · {hours} Std./Woche",
+      "scheduleWeeklySummaryWithMinutes": "{days} · {hours} Std. {minutes} Min./Woche",
+      "scheduleStandardSummary": "Standard: Mo–Fr 09:00–17:00 (anpassbar)",
+      "shiftRunning": "Schicht läuft",
+      "shiftStartedAt": "Start {time}",
+      "shiftPlaceholder": "Optional: Was machst du?",
+      "shiftStop": "Schicht beenden",
+      "shiftStart": "Schicht starten",
+      "shiftPromptTitle": "Jetzt arbeiten?",
+      "shiftPromptBody": "Starte eine Schicht — sie landet direkt in dieser Zeitkarte.",
+      "cancel": "Abbrechen",
+      "draftLoaded": "Zeitkarte geladen",
+      "draftLoadError": "Zeitkarte konnte nicht geladen werden.",
+      "draftSaved": "Gespeichert",
+      "draftSaveError": "Zeitkarte konnte nicht gespeichert werden.",
+      "shiftSaved": "Schicht gespeichert",
+      "shiftSaveError": "Schicht konnte nicht gespeichert werden.",
+      "historyTitle": "Verlauf",
+      "historyEmpty": "Noch keine Zeiterfassungen. Reiche deine erste Woche ein, sie erscheint dann hier.",
+      "historyLastCount": "{count, plural, one {Letzte Zeiterfassung} other {Letzte # Zeiterfassungen}}",
+      "historyReviewedOn": "Geprüft {date}",
+      "historySubmittedOn": "Eingereicht {date}",
+      "queueStatusLabel": "Status:",
+      "queueTabOpen": "Offen",
+      "queueTabApproved": "Genehmigt",
+      "queuePeriodLabel": "Zeitraum:",
+      "queueFilterAll": "Alle",
+      "queueFilterWeeks": "Wochen",
+      "queueFilterMonths": "Monate",
+      "queueRefresh": "Aktualisieren",
+      "queueSelected": "{count} ausgewählt · {duration}",
+      "queueNotePlaceholder": "Notiz (optional) — bei Rückweisung erklärt sie dem Team, was anzupassen ist",
+      "queueApproveCount": "Genehmigen ({count})",
+      "queueReject": "Zurückweisen",
+      "queueLoadError": "Zeitkarten konnten nicht geladen werden.",
+      "queueBulkError": "Mehrfach-Freigabe fehlgeschlagen.",
+      "bulkApprovedResult": "{count} genehmigt",
+      "bulkRejectedResult": "{count} zurückgewiesen",
+      "bulkFailedResult": "{count} fehlgeschlagen ({reasons})",
+      "failureSelfReview": "eigene Karte",
+      "failureNotSubmitted": "nicht mehr eingereicht",
+      "failureNotFound": "nicht gefunden",
+      "failurePayrollLocked": "im Lohnlauf gesperrt",
+      "failureUnknown": "unbekannt",
+      "queueEmpty": "Keine Zeitkarten in dieser Ansicht. Stand: {time}",
+      "queueSelectAll": "Alle auswählen",
+      "queueCount": "{count, plural, one {1 Zeitkarte} other {# Zeitkarten}}",
+      "queueOwnBadge": "Eigene Karte",
+      "queueOwnTooltip": "Eigene Zeitkarte — Freigabe durch ein anderes Teammitglied",
+      "queueRowAria": "Zeitkarte von {name} auswählen",
+      "queueProfileAria": "Profil in neuem Tab öffnen",
+      "queueReview": "Prüfen",
+      "drawerAria": "Zeitkarte prüfen",
+      "close": "Schliessen",
+      "loading": "Lädt…",
+      "drawerNoEntries": "Keine Einträge.",
+      "colDay": "Tag",
+      "colHours": "Std.",
+      "drawerOwnNotice": "Eigene Zeitkarte — die Freigabe übernimmt ein anderes Teammitglied.",
+      "drawerNotePlaceholder": "Notiz (optional) — bei Rückweisung erklärt sie, was anzupassen ist",
+      "approve": "Genehmigen",
+      "reject": "Zurückweisen",
+      "edit": "Bearbeiten",
+      "reopen": "Wieder öffnen",
+      "saveFailed": "Speichern fehlgeschlagen.",
+      "actionFailed": "Aktion fehlgeschlagen.",
+      "drawerFallbackTitle": "Zeitkarte",
+      "status": {
+        "draft": "Entwurf",
+        "submitted": "Eingereicht",
+        "approved": "Genehmigt",
+        "rejected": "Abgelehnt"
+      },
+      "category": {
+        "workshop": "Workshop",
+        "repair": "Reparatur",
+        "intake": "Annahme",
+        "sales": "Verkauf",
+        "admin": "Administration",
+        "education": "Bildung",
+        "logistics": "Logistik",
+        "meeting": "Meeting",
+        "volunteering": "Freiwilligenarbeit",
+        "other": "Andere",
+        "ferien": "Ferien",
+        "krank": "Krank",
+        "unfall": "Unfall",
+        "feiertag": "Feiertag",
+        "militaer": "Militär/ZS",
+        "unbezahlt": "Unbezahlt"
+      },
+      "weekday": {
+        "monday": "Mo",
+        "tuesday": "Di",
+        "wednesday": "Mi",
+        "thursday": "Do",
+        "friday": "Fr",
+        "saturday": "Sa",
+        "sunday": "So"
+      },
+      "profileEmpty": "Noch keine Zeiterfassungen.",
+      "profileTotals": "{count} Karten · {duration} insgesamt",
+      "profileToReview": "{count} zu prüfen",
       "dayGridShow": "Stundenraster anzeigen",
       "dayGridHide": "Stundenraster ausblenden"
     },
@@ -10345,6 +10471,32 @@
     "intake": {
       "pageTitle": "Geräte-Eingang",
       "pageDescription": "Alle erfassten Geräte: Status, Checkliste und Publikation",
+      "quickCapture": {
+        "title": "Gerät sofort aufnehmen",
+        "description": "Hersteller, Modell, Enter — den Rest ergänzt ihr später an der Werkbank.",
+        "close": "Zur Pipeline",
+        "brand": "Hersteller",
+        "brandPlaceholder": "Dell",
+        "productName": "Modell / Produkt",
+        "productNamePlaceholder": "Latitude 7480",
+        "submit": "Aufnehmen",
+        "saving": "Wird aufgenommen…",
+        "keyboardHint": "Tastatur: Hersteller eingeben → Tab → Modell eingeben → Enter",
+        "details": "Stufe, Kategorie oder Spende anpassen",
+        "tier": "Verarbeitungsstufe",
+        "category": "Kategorie",
+        "categoryLater": "Später festlegen",
+        "condition": "Zustand",
+        "donation": "Dies ist eine Spende",
+        "donorName": "Name Spender:in",
+        "donorEmail": "E-Mail",
+        "donorNotes": "Notizen",
+        "created": "{itemUuid} aufgenommen — bereit für das nächste Gerät.",
+        "printLabel": "Etikett drucken",
+        "openPipeline": "Pipeline ansehen",
+        "fullCapture": "Vollständige Erfassung mit Foto, KI und Produktdetails",
+        "saveFailed": "Gerät konnte nicht aufgenommen werden"
+      },
       "createForm": {
         "title": "Neues Gerät erfassen",
         "tierLabel": "Verarbeitungsstufe",
@@ -10474,6 +10626,15 @@
           "inProgress": "In Bearbeitung",
           "failed": "Fehlgeschlagen"
         },
+        "board": {
+          "in_progress": "In Prüfung",
+          "failed": "Blockiert",
+          "ready": "Bereit",
+          "published": "Im Shop",
+          "empty": "Keine Geräte",
+          "noCategory": "Kategorie noch offen",
+          "ageDays": "{count} T."
+        },
         "donationYes": "Ja",
         "hero": {
           "kpis": {
@@ -10507,15 +10668,6 @@
             "sub": "Entscheiden: Problem beheben und erneut prüfen, oder Stufe ändern (Ersatzteile/Recycling).",
             "cta": "Fehlgeschlagene anzeigen"
           }
-        },
-        "board": {
-          "in_progress": "In Prüfung",
-          "failed": "Blockiert",
-          "ready": "Bereit",
-          "published": "Im Shop",
-          "empty": "Keine Geräte",
-          "noCategory": "Kategorie noch offen",
-          "ageDays": "{count} T."
         }
       },
       "checklist": {
@@ -10529,35 +10681,9 @@
         "failNoteRequired": "Begründung erforderlich — was genau ist fehlgeschlagen?",
         "saveFail": "Als fehlgeschlagen markieren",
         "confirmNoteHint": "Vier-Augen-Prinzip: Als zweite Person direkt bestätigen. Allein im Dienst? Begründung angeben.",
+        "overrideSecondPerson": "Ausnahme: Ich bin allein im Dienst (Begründung mit mindestens 10 Zeichen erforderlich)",
         "confirmNotePlaceholder": "Optional als zweite Person — erforderlich bei Allein-Bestätigung, z.B. «allein im Dienst» …",
-        "saveConfirm": "Qualitätskontrolle bestätigen",
-        "overrideSecondPerson": "Ausnahme: Ich bin allein im Dienst (Begründung mit mindestens 10 Zeichen erforderlich)"
-      },
-      "quickCapture": {
-        "title": "Gerät sofort aufnehmen",
-        "description": "Hersteller, Modell, Enter — den Rest ergänzt ihr später an der Werkbank.",
-        "close": "Zur Pipeline",
-        "brand": "Hersteller",
-        "brandPlaceholder": "Dell",
-        "productName": "Modell / Produkt",
-        "productNamePlaceholder": "Latitude 7480",
-        "submit": "Aufnehmen",
-        "saving": "Wird aufgenommen…",
-        "keyboardHint": "Tastatur: Hersteller eingeben → Tab → Modell eingeben → Enter",
-        "details": "Stufe, Kategorie oder Spende anpassen",
-        "tier": "Verarbeitungsstufe",
-        "category": "Kategorie",
-        "categoryLater": "Später festlegen",
-        "condition": "Zustand",
-        "donation": "Dies ist eine Spende",
-        "donorName": "Name Spender:in",
-        "donorEmail": "E-Mail",
-        "donorNotes": "Notizen",
-        "created": "{itemUuid} aufgenommen — bereit für das nächste Gerät.",
-        "printLabel": "Etikett drucken",
-        "openPipeline": "Pipeline ansehen",
-        "fullCapture": "Vollständige Erfassung mit Foto, KI und Produktdetails",
-        "saveFailed": "Gerät konnte nicht aufgenommen werden"
+        "saveConfirm": "Qualitätskontrolle bestätigen"
       }
     },
     "it-hilfe": {
@@ -11251,6 +11377,40 @@
         "teamhr": "Team & HR",
         "system": "System"
       }
+    },
+    "timeOff": {
+      "requestToggle": "Abwesenheit beantragen",
+      "kindLabel": "Art",
+      "from": "Von",
+      "to": "Bis",
+      "noteLabel": "Notiz (optional)",
+      "notePlaceholder": "z.B. Sommerferien",
+      "submit": "Antrag senden",
+      "submitting": "Wird gesendet …",
+      "missingDates": "Bitte Start- und Enddatum wählen.",
+      "submitError": "Antrag konnte nicht gesendet werden.",
+      "withdraw": "Antrag zurückziehen",
+      "kind": {
+        "ferien": "Ferien",
+        "unbezahlt": "Unbezahlter Urlaub",
+        "militaer": "Militär / Zivilschutz",
+        "unfall": "Unfall",
+        "other": "Anderes"
+      },
+      "status": {
+        "pending": "Ausstehend",
+        "approved": "Genehmigt",
+        "rejected": "Abgelehnt",
+        "cancelled": "Zurückgezogen"
+      },
+      "approvalsTitle": "Abwesenheitsanträge",
+      "filterPending": "Offen",
+      "filterAll": "Alle",
+      "emptyPending": "Keine offenen Anträge.",
+      "emptyAll": "Keine Anträge.",
+      "approve": "Genehmigen",
+      "decline": "Ablehnen",
+      "unknownUser": "Unbekannt"
     }
   },
   "changelog": {
@@ -11339,10 +11499,10 @@
     "cta": {
       "heading": "Hilf mit, den Kreislauf zu schliessen",
       "body": "Kauf aufbereitete Technik oder gib deinem alten Gerät ein zweites Leben.",
-      "buy": "Marktplatz entdecken",
-      "donate": "Gerät spenden",
       "openNote": "Prozess und Software sind offen: Übernimm, verbessere und teile sie für deine eigene lokale Kreislaufwerkstatt.",
-      "source": "Offenen Quellcode ansehen"
+      "source": "Offenen Quellcode ansehen",
+      "buy": "Marktplatz entdecken",
+      "donate": "Gerät spenden"
     }
   }
 }

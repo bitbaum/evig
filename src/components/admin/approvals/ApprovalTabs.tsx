@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 
 /**
@@ -11,14 +12,15 @@ import { cn } from '@/lib/utils'
  * surface is folded in.
  */
 const TABS = [
-  { href: '/admin/approvals', label: 'Inhalte' },
-  { href: '/admin/team/approvals', label: 'Zeitkarten & Abwesenheit' },
+  { href: '/admin/approvals', labelKey: 'tabContent' },
+  { href: '/admin/team/approvals', labelKey: 'tabTimecards' },
 ] as const
 
 export function ApprovalTabs() {
+  const t = useTranslations('admin.approvals')
   const pathname = usePathname()
   return (
-    <nav className="mb-6 flex flex-wrap gap-1 border-b border-subtle" aria-label="Freigaben">
+    <nav className="mb-6 flex flex-wrap gap-1 border-b border-subtle" aria-label={t('tabsAria')}>
       {TABS.map(tab => {
         const active = pathname === tab.href
         return (
@@ -33,7 +35,7 @@ export function ApprovalTabs() {
                 : 'border-transparent text-text-tertiary hover:border-subtle hover:text-text-secondary',
             )}
           >
-            {tab.label}
+            {t(tab.labelKey)}
           </Link>
         )
       })}

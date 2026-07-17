@@ -1,11 +1,8 @@
 'use client'
 
+import { getTimecardStatusColor } from '@/config/timecards'
+import { useTimecardIntl } from '@/hooks/useTimecardIntl'
 import { useTranslations } from 'next-intl'
-import {
-  formatTimecardDuration,
-  getTimecardStatusColor,
-  getTimecardStatusLabel,
-} from '@/config/timecards'
 import { cn } from '@/lib/utils'
 
 /**
@@ -28,6 +25,7 @@ export function TimecardHeader({
   status: string
 }) {
   const t = useTranslations('admin.timecards')
+  const { statusLabel, duration } = useTimecardIntl()
 
   return (
     <header className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-subtle pb-3">
@@ -39,11 +37,11 @@ export function TimecardHeader({
             getTimecardStatusColor(status),
           )}
         >
-          {getTimecardStatusLabel(status)}
+          {statusLabel(status)}
         </span>
       </div>
       <p className="text-sm tabular-nums text-text-tertiary">
-        {entryCount} {t('headerDaysSuffix')} · {formatTimecardDuration(totalMinutes)}
+        {entryCount} {t('headerDaysSuffix')} · {duration(totalMinutes)}
       </p>
     </header>
   )

@@ -7,7 +7,6 @@ import {
   TIMECARD_STATUSES,
   sumTimecardMinutes,
   TIMECARD_ENTRY_CATEGORIES,
-  TIMECARD_ENTRY_CATEGORY_LABELS,
   TIMECARD_ENTRY_CATEGORY_OPTIONS,
   TIMECARD_ABSENCE_TYPES,
   TIMECARD_MANUAL_DEFAULT,
@@ -16,6 +15,7 @@ import {
   type TimecardEntryCategory,
   type TimecardStatus,
 } from '@/config/timecards'
+import { useTimecardIntl } from '@/hooks/useTimecardIntl'
 import {
   buildTimecardEntriesForMonth,
   buildScheduleEntryForDate,
@@ -24,7 +24,6 @@ import {
   getMonthStart,
   getNextMonthStart,
   parseWeeklySchedule,
-  summarizeWeeklySchedule,
   toISODate,
   WEEKDAY_IDS,
   STANDARD_WEEKLY_SCHEDULE,
@@ -92,6 +91,7 @@ function draftSignature(entries: TimecardEntryInput[], notes: string): string {
 
 export function useTimecardDraft({ workingHours }: { workingHours: string | null }) {
   const t = useTranslations('admin.timecards')
+  const intl = useTimecardIntl()
   // ── Schedule + period window ───────────────────────────────────────
   const schedule = useMemo(() => parseWeeklySchedule(workingHours), [workingHours])
   const hasSchedule = useMemo(
@@ -110,8 +110,8 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     [schedule, currentMonthStart],
   )
   const monthLabel = useMemo(
-    () => new Intl.DateTimeFormat('de-CH', { month: 'long', year: 'numeric' }).format(currentDate),
-    [currentDate],
+    () => intl.monthLabel(currentDate),
+    [currentDate, intl],
   )
   // For "fill the month", fall back to the standard Mon-Fri 09:00–17:00 plan
   // when the user hasn't set a schedule yet — so the one-click fill works out
@@ -125,8 +125,8 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     [effectiveSchedule, currentMonthStart],
   )
   const scheduleSummary = hasSchedule
-    ? summarizeWeeklySchedule(schedule)
-    : 'Standard: Mo–Fr 09:00–17:00 (anpassbar)'
+    ? intl.scheduleSummary(schedule)
+    : t('scheduleStandardSummary')
 
   const currentPeriodRange = useMemo(
     () => ({
@@ -422,10 +422,10 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
         duration_minutes: counted ? calculateTimeRangeMinutes(t.start, t.end, t.break_minutes) : 0,
         category,
         source: 'manual',
-        description: TIMECARD_ENTRY_CATEGORY_LABELS[category],
+        description: intl.categoryLabel(category),
       }
     },
-    [scheduleTemplateForDate],
+    [scheduleTemplateForDate, intl],
   )
 
   const applyToSelected = useCallback(
@@ -655,7 +655,7 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
             : 0,
           category,
           source: 'ai_assisted',
-          description: desc || TIMECARD_ENTRY_CATEGORY_LABELS[category],
+          description: desc || intl.categoryLabel(category),
         }
       }
 
@@ -674,7 +674,7 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
         description: desc,
       }
     },
-    [dayTemplateForDate, scheduleTemplateForDate],
+    [dayTemplateForDate, scheduleTemplateForDate, intl],
   )
 
   const handleAIFieldsFilled = useCallback(
@@ -716,11 +716,11 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
         const result = await apiFetch<Timecard>(`/api/timecards?${params.toString()}`)
         if (!active) return
         if (!result.success || !result.data) {
-          setErrorMessage(result.error || 'Zeitkarte konnte nicht geladen werden.')
+          setErrorMessage(result.error || t('draftLoadError'))
           return
         }
         applyServerCard(result.data, monthDates[0])
-        setSyncMessage('Zeitkarte geladen')
+        setSyncMessage(t('draftLoaded'))
       } finally {
         if (active) setIsLoadingDraft(false)
       }
@@ -728,7 +728,7 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
 
     loadDraft().catch(() => {
       if (active) {
-        setErrorMessage('Zeitkarte konnte nicht geladen werden.')
+        setErrorMessage(t('draftLoadError'))
         setIsLoadingDraft(false)
       }
     })
@@ -744,6 +744,7 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     currentPeriodRange.period_type,
     monthDates,
     applyServerCard,
+    t,
   ])
 
   const saveDraft = useCallback(async () => {
@@ -757,13 +758,13 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
       })
       if (!result.success || !result.data) throw new Error(result.error || 'save_failed')
       applyServerCard(result.data, draft.selectedDate)
-      setSyncMessage('Gespeichert')
+      setSyncMessage(t('draftSaved'))
     } catch {
-      setErrorMessage('Zeitkarte konnte nicht gespeichert werden.')
+      setErrorMessage(t('draftSaveError'))
     } finally {
       setIsSaving(false)
     }
-  }, [currentSavePayload, draft.selectedDate, applyServerCard])
+  }, [currentSavePayload, draft.selectedDate, applyServerCard, t])
 
   /**
    * Add a clocked shift to the month draft and persist it immediately.
@@ -820,14 +821,14 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
         })
         if (!result.success || !result.data) throw new Error(result.error || 'shift_save_failed')
         applyServerCard(result.data, shift.work_date)
-        setSyncMessage('Schicht gespeichert')
+        setSyncMessage(t('shiftSaved'))
       } catch {
-        setErrorMessage('Schicht konnte nicht gespeichert werden.')
+        setErrorMessage(t('shiftSaveError'))
       } finally {
         setIsSaving(false)
       }
     },
-    [periodEntries, currentPeriodRange, draft.notes, applyServerCard],
+    [periodEntries, currentPeriodRange, draft.notes, applyServerCard, t],
   )
 
   const submitDraft = useCallback(async () => {

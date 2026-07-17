@@ -50,6 +50,8 @@
       "missionHistoryDesc": "私たちの理念と活動の原動力",
       "impact": "私たちの活動成果",
       "impactDesc": "測定可能な成果と透明性",
+      "howItWorks": "仕組み",
+      "howItWorksDesc": "寄付から次の利用者へ、機器の道のり",
       "projects": "プロジェクト",
       "projectsDesc": "私たちの取り組み",
       "locations": "拠点",
@@ -153,9 +155,7 @@
       "browseRequests": "未対応のリクエスト",
       "browseRequestsDesc": "修理リクエストを見て、手伝いを申し出る",
       "itHelpHub": "IT Help",
-      "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point",
-      "howItWorks": "仕組み",
-      "howItWorksDesc": "寄付から次の利用者へ、機器の道のり"
+      "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point"
     },
     "language": "言語",
     "missionHistory": "ミッション & 歴史",
@@ -3166,10 +3166,10 @@
       "free": "無料",
       "trust": {
         "verified": "Revamp-ITが検査・テスト済み",
-        "mission": "廃棄せず再利用 — 非営利団体",
         "untested": "品質検査を省略 — Revamp-ITの検証済み商品ではありません",
         "untestedBadge": "Revamp-IT · 未検査",
         "processLink": "品質プロセスを見る",
+        "mission": "廃棄せず再利用 — 非営利団体",
         "warranty": "{months}か月保証",
         "returnPolicy": "オンライン購入は{days}日以内返品可能"
       },
@@ -9570,6 +9570,8 @@
         "errorAnalysis": "解析に失敗しました"
       },
       "dataEntryTabs": {
+        "stepTitle": "データを入力",
+        "stepDescription": "テキスト、写真、ファイル、音声からAIが同じ商品データを入力します。",
         "tabTextLabel": "Text",
         "tabTextDesc": "製品情報を入力すると AI が残りを補完します",
         "tabFileLabel": "File",
@@ -9589,37 +9591,13 @@
         "pictureRequires": "ビジョン AI モデルが必要です",
         "analyzing": "AI が解析中…",
         "fillForm": "フォームを入力",
+        "manualEntry": "AIを使わず手動入力",
         "fileImportTitle": "ファイルインポート",
         "fileImportDesc": "製品データを含む CSV または Excel ファイルをアップロードしてください",
         "processing": "Processing…",
         "chooseFile": "CSV または Excel ファイルを選択するか、ここにドラッグ",
         "fileHint": "CSV、TSV、XLSX — 列は自動で認識されます",
-        "unmappedColumns": "マッピングされていない列:",
-        "stepTitle": "データを入力",
-        "stepDescription": "テキスト、写真、ファイル、音声からAIが同じ商品データを入力します。",
-        "manualEntry": "AIを使わず手動入力"
-      },
-      "formErrors": {
-        "updateFailed": "製品を更新できませんでした",
-        "saveFailed": "製品を保存できませんでした",
-        "genericSaveError": "保存中にエラーが発生しました。もう一度お試しください。"
-      },
-      "storageLocation": {
-        "label": "保管場所",
-        "placeholder": "場所を選択…",
-        "loading": "読み込み中…",
-        "addNew": "場所を追加",
-        "newNamePlaceholder": "場所の名前",
-        "kindLabel": "種類",
-        "save": "保存"
-      },
-      "voiceEntry": {
-        "start": "録音を開始",
-        "stop": "録音を停止",
-        "processing": "処理中…",
-        "hint": "機器を説明してください：メーカー、モデル、状態、価格。",
-        "transcription": "認識結果：{text}",
-        "errorGeneric": "音声を処理できませんでした。もう一度お試しください。"
+        "unmappedColumns": "マッピングされていない列:"
       },
       "destination": {
         "title": "次に何をしますか？",
@@ -9659,6 +9637,28 @@
         "donorName": "寄付者名",
         "donorEmail": "メール（任意）",
         "donorNotes": "メモ（任意）"
+      },
+      "formErrors": {
+        "updateFailed": "製品を更新できませんでした",
+        "saveFailed": "製品を保存できませんでした",
+        "genericSaveError": "保存中にエラーが発生しました。もう一度お試しください。"
+      },
+      "storageLocation": {
+        "label": "保管場所",
+        "placeholder": "場所を選択…",
+        "loading": "読み込み中…",
+        "addNew": "場所を追加",
+        "newNamePlaceholder": "場所の名前",
+        "kindLabel": "種類",
+        "save": "保存"
+      },
+      "voiceEntry": {
+        "start": "録音を開始",
+        "stop": "録音を停止",
+        "processing": "処理中…",
+        "hint": "機器を説明してください：メーカー、モデル、状態、価格。",
+        "transcription": "認識結果：{text}",
+        "errorGeneric": "音声を処理できませんでした。もう一度お試しください。"
       }
     },
     "eWasteProblem": {
@@ -9881,7 +9881,14 @@
       "release": "公開",
       "accept": "受け入れる",
       "pageTitle": "承認",
-      "pageDescription": "ユーザーから提出されたコンテンツを確認・承認します"
+      "pageDescription": "ユーザーから提出されたコンテンツを確認・承認します",
+      "timecardsPageTitle": "承認",
+      "timecardsPageDescription": "提出されたタイムカードと休暇申請を確認して承認します。",
+      "timecardsMetaTitle": "承認 · タイムカード",
+      "timecardsMetaDescription": "提出されたタイムカードを一括で確認します。",
+      "tabContent": "コンテンツ",
+      "tabTimecards": "タイムカードと休暇",
+      "tabsAria": "承認"
     },
     "hirn": {
       "assistantSubtitle": "アシスタント",
@@ -10271,6 +10278,125 @@
       "absencePaidHint": "有給の不在（予定時間が計上されます）",
       "absenceUnpaidHint": "無給（0時間）",
       "headerSelectColumn": "すべての{day}を選択 — ドラッグで複数列",
+      "statusUnknown": "不明",
+      "durationMinutesOnly": "{minutes}分",
+      "durationHoursOnly": "{hours}時間",
+      "durationHoursMinutes": "{hours}時間{minutes}分",
+      "periodWeek": "週 {range}",
+      "pageEyebrow": "勤務時間を記録して承認に提出しましょう",
+      "selfTitle": "勤怠管理",
+      "selfDescription": "自分の勤務時間を記録して提出します。",
+      "userFallback": "あなた",
+      "scheduleTitle": "勤務スケジュール",
+      "scheduleHint": "曜日と時間を設定 — タイムカードの自動入力に使われます。",
+      "scheduleStandardButton": "標準 月–金 09–17",
+      "scheduleSave": "スケジュールを保存",
+      "scheduleSaved": "保存しました",
+      "scheduleSaveError": "スケジュールを保存できませんでした。",
+      "scheduleNone": "標準スケジュールなし",
+      "scheduleWeeklySummary": "{days} · 週{hours}時間",
+      "scheduleWeeklySummaryWithMinutes": "{days} · 週{hours}時間{minutes}分",
+      "scheduleStandardSummary": "標準: 月–金 09:00–17:00(変更可能)",
+      "shiftRunning": "シフト進行中",
+      "shiftStartedAt": "開始 {time}",
+      "shiftPlaceholder": "任意: 何をしていますか?",
+      "shiftStop": "シフトを終了",
+      "shiftStart": "シフトを開始",
+      "shiftPromptTitle": "今から働きますか?",
+      "shiftPromptBody": "シフトを開始すると、このタイムカードに直接記録されます。",
+      "cancel": "キャンセル",
+      "draftLoaded": "タイムカードを読み込みました",
+      "draftLoadError": "タイムカードを読み込めませんでした。",
+      "draftSaved": "保存しました",
+      "draftSaveError": "タイムカードを保存できませんでした。",
+      "shiftSaved": "シフトを保存しました",
+      "shiftSaveError": "シフトを保存できませんでした。",
+      "historyTitle": "履歴",
+      "historyEmpty": "タイムカードはまだありません。最初の週を提出するとここに表示されます。",
+      "historyLastCount": "{count, plural, other {直近#件のタイムカード}}",
+      "historyReviewedOn": "確認 {date}",
+      "historySubmittedOn": "提出 {date}",
+      "queueStatusLabel": "ステータス:",
+      "queueTabOpen": "未処理",
+      "queueTabApproved": "承認済み",
+      "queuePeriodLabel": "期間:",
+      "queueFilterAll": "すべて",
+      "queueFilterWeeks": "週",
+      "queueFilterMonths": "月",
+      "queueRefresh": "更新",
+      "queueSelected": "{count}件選択 · {duration}",
+      "queueNotePlaceholder": "メモ(任意) — 却下時に修正点をチームに伝えます",
+      "queueApproveCount": "承認 ({count})",
+      "queueReject": "却下",
+      "queueLoadError": "タイムカードを読み込めませんでした。",
+      "queueBulkError": "一括承認に失敗しました。",
+      "bulkApprovedResult": "{count}件承認",
+      "bulkRejectedResult": "{count}件却下",
+      "bulkFailedResult": "{count}件失敗 ({reasons})",
+      "failureSelfReview": "自分のカード",
+      "failureNotSubmitted": "提出が取り消されています",
+      "failureNotFound": "見つかりません",
+      "failurePayrollLocked": "給与計算でロック中",
+      "failureUnknown": "不明",
+      "queueEmpty": "このビューにタイムカードはありません。現在時刻: {time}",
+      "queueSelectAll": "すべて選択",
+      "queueCount": "{count, plural, other {#件のタイムカード}}",
+      "queueOwnBadge": "自分のカード",
+      "queueOwnTooltip": "自分のタイムカード — 承認は他のチームメンバーが行います",
+      "queueRowAria": "{name}のタイムカードを選択",
+      "queueProfileAria": "プロフィールを新しいタブで開く",
+      "queueReview": "確認",
+      "drawerAria": "タイムカードの確認",
+      "close": "閉じる",
+      "loading": "読み込み中…",
+      "drawerNoEntries": "記録がありません。",
+      "colDay": "日",
+      "colHours": "時間",
+      "drawerOwnNotice": "自分のタイムカード — 承認は他のチームメンバーが行います。",
+      "drawerNotePlaceholder": "メモ(任意) — 却下時に修正点を伝えます",
+      "approve": "承認",
+      "reject": "却下",
+      "edit": "編集",
+      "reopen": "再オープン",
+      "saveFailed": "保存に失敗しました。",
+      "actionFailed": "操作に失敗しました。",
+      "drawerFallbackTitle": "タイムカード",
+      "status": {
+        "draft": "下書き",
+        "submitted": "提出済み",
+        "approved": "承認済み",
+        "rejected": "却下"
+      },
+      "category": {
+        "workshop": "ワークショップ",
+        "repair": "修理",
+        "intake": "受け入れ",
+        "sales": "販売",
+        "admin": "管理",
+        "education": "教育",
+        "logistics": "物流",
+        "meeting": "ミーティング",
+        "volunteering": "ボランティア",
+        "other": "その他",
+        "ferien": "休暇",
+        "krank": "病気",
+        "unfall": "事故",
+        "feiertag": "祝日",
+        "militaer": "兵役・民間防衛",
+        "unbezahlt": "無給"
+      },
+      "weekday": {
+        "monday": "月",
+        "tuesday": "火",
+        "wednesday": "水",
+        "thursday": "木",
+        "friday": "金",
+        "saturday": "土",
+        "sunday": "日"
+      },
+      "profileEmpty": "タイムカードはまだありません。",
+      "profileTotals": "{count}件 · 合計{duration}",
+      "profileToReview": "{count}件要確認",
       "dayGridShow": "時間グリッドを表示",
       "dayGridHide": "時間グリッドを隠す"
     },
@@ -10289,6 +10415,32 @@
     "intake": {
       "pageTitle": "デバイス受付",
       "pageDescription": "登録済みのすべてのデバイス：ステータス、チェックリスト、公開",
+      "quickCapture": {
+        "title": "デバイスをすぐに受付",
+        "description": "メーカー、モデル、Enter — 残りは作業台で後から入力できます。",
+        "close": "パイプラインに戻る",
+        "brand": "メーカー",
+        "brandPlaceholder": "Dell",
+        "productName": "モデル / 製品",
+        "productNamePlaceholder": "Latitude 7480",
+        "submit": "受付",
+        "saving": "受付中…",
+        "keyboardHint": "キーボード：メーカー → Tab → モデル → Enter",
+        "details": "処理区分、カテゴリ、寄付を変更",
+        "tier": "処理区分",
+        "category": "カテゴリ",
+        "categoryLater": "後で設定",
+        "condition": "状態",
+        "donation": "寄付品です",
+        "donorName": "寄付者名",
+        "donorEmail": "メール",
+        "donorNotes": "メモ",
+        "created": "{itemUuid} を受付しました — 次のデバイスを入力できます。",
+        "printLabel": "ラベルを印刷",
+        "openPipeline": "パイプラインを見る",
+        "fullCapture": "写真、AI、製品詳細を含む完全入力",
+        "saveFailed": "デバイスを受付できませんでした"
+      },
       "createForm": {
         "title": "新しいデバイスを登録",
         "tierLabel": "処理段階",
@@ -10418,6 +10570,15 @@
           "inProgress": "処理中",
           "failed": "不合格"
         },
+        "board": {
+          "in_progress": "検査中",
+          "failed": "保留",
+          "ready": "準備完了",
+          "published": "ショップ掲載中",
+          "empty": "デバイスなし",
+          "noCategory": "カテゴリ未設定",
+          "ageDays": "{count}日"
+        },
         "donationYes": "はい",
         "hero": {
           "kpis": {
@@ -10451,15 +10612,6 @@
             "sub": "対応を決定：修理して再検査するか、区分を変更（部品/リサイクル）。",
             "cta": "不合格を表示"
           }
-        },
-        "board": {
-          "in_progress": "検査中",
-          "failed": "保留",
-          "ready": "準備完了",
-          "published": "ショップ掲載中",
-          "empty": "デバイスなし",
-          "noCategory": "カテゴリ未設定",
-          "ageDays": "{count}日"
         }
       },
       "checklist": {
@@ -10473,35 +10625,9 @@
         "failNoteRequired": "理由が必要です — 具体的に何が不合格でしたか？",
         "saveFail": "不合格にする",
         "confirmNoteHint": "四つの目の原則：第二確認者はそのまま確認できます。一人勤務の場合は理由を記入してください。",
+        "overrideSecondPerson": "例外：一人勤務です（10文字以上の理由が必要です）",
         "confirmNotePlaceholder": "第二確認者は任意 — 単独承認の場合は必須（例：「一人勤務」）…",
-        "saveConfirm": "品質検査を確認",
-        "overrideSecondPerson": "例外：一人勤務です（10文字以上の理由が必要です）"
-      },
-      "quickCapture": {
-        "title": "デバイスをすぐに受付",
-        "description": "メーカー、モデル、Enter — 残りは作業台で後から入力できます。",
-        "close": "パイプラインに戻る",
-        "brand": "メーカー",
-        "brandPlaceholder": "Dell",
-        "productName": "モデル / 製品",
-        "productNamePlaceholder": "Latitude 7480",
-        "submit": "受付",
-        "saving": "受付中…",
-        "keyboardHint": "キーボード：メーカー → Tab → モデル → Enter",
-        "details": "処理区分、カテゴリ、寄付を変更",
-        "tier": "処理区分",
-        "category": "カテゴリ",
-        "categoryLater": "後で設定",
-        "condition": "状態",
-        "donation": "寄付品です",
-        "donorName": "寄付者名",
-        "donorEmail": "メール",
-        "donorNotes": "メモ",
-        "created": "{itemUuid} を受付しました — 次のデバイスを入力できます。",
-        "printLabel": "ラベルを印刷",
-        "openPipeline": "パイプラインを見る",
-        "fullCapture": "写真、AI、製品詳細を含む完全入力",
-        "saveFailed": "デバイスを受付できませんでした"
+        "saveConfirm": "品質検査を確認"
       }
     },
     "it-hilfe": {
@@ -10749,6 +10875,7 @@
       "filterNoResults": "セクションが見つかりません"
     },
     "commandBar": {
+      "searching": "検索中…",
       "placeholder": "検索またはコマンド…",
       "openShortcut": "コマンドバーを開く",
       "noResults": "結果がありません",
@@ -10765,8 +10892,7 @@
         "newDecision": "新しい意思決定",
         "newProtocol": "新しい議事録",
         "dashboard": "ダッシュボード"
-      },
-      "searching": "検索中…"
+      }
     },
     "userMenu": {
       "darkMode": "外観",
@@ -11195,6 +11321,40 @@
         "teamhr": "チーム・人事",
         "system": "システム"
       }
+    },
+    "timeOff": {
+      "requestToggle": "休暇を申請",
+      "kindLabel": "種類",
+      "from": "開始",
+      "to": "終了",
+      "noteLabel": "メモ(任意)",
+      "notePlaceholder": "例: 夏休み",
+      "submit": "申請を送信",
+      "submitting": "送信中…",
+      "missingDates": "開始日と終了日を選択してください。",
+      "submitError": "申請を送信できませんでした。",
+      "withdraw": "申請を取り下げる",
+      "kind": {
+        "ferien": "休暇",
+        "unbezahlt": "無給休暇",
+        "militaer": "兵役・民間防衛",
+        "unfall": "事故",
+        "other": "その他"
+      },
+      "status": {
+        "pending": "承認待ち",
+        "approved": "承認済み",
+        "rejected": "却下",
+        "cancelled": "取り下げ"
+      },
+      "approvalsTitle": "休暇申請",
+      "filterPending": "未処理",
+      "filterAll": "すべて",
+      "emptyPending": "未処理の申請はありません。",
+      "emptyAll": "申請はありません。",
+      "approve": "承認",
+      "decline": "却下",
+      "unknownUser": "不明"
     }
   },
   "changelog": {

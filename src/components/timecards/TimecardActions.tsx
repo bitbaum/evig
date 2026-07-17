@@ -4,6 +4,7 @@ import { CalendarCheck, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { TIMECARD_ABSENCE_TYPES, type TimecardEntryCategory } from '@/config/timecards'
+import { useTimecardIntl } from '@/hooks/useTimecardIntl'
 
 /**
  * TimecardActions — the SSOT action set for applying to a timecard scope. Three
@@ -29,6 +30,7 @@ export function TimecardActions({
   fillLabel?: string
 }) {
   const t = useTranslations('admin.timecards')
+  const { categoryLabel } = useTimecardIntl()
 
   return (
     // gap-x-4 between the three groups, gap-1.5 within the absence set — the
@@ -54,7 +56,7 @@ export function TimecardActions({
             onClick={() => onSetAbsence(absence.value)}
             title={absence.paid ? t('absencePaidHint') : t('absenceUnpaidHint')}
           >
-            {absence.label}
+            {categoryLabel(absence.value)}
           </Button>
         ))}
       </div>

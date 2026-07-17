@@ -422,7 +422,7 @@ export async function listTimecards(params: {
 export async function saveTimecardDraft(
   userId: string,
   input: TimecardSaveInput,
-  options: { keepSubmitted?: boolean } = {},
+  options: { keepSubmitted?: boolean; allowApproved?: boolean } = {},
 ): Promise<TimecardWithEntries> {
   const parsed = timecardSaveSchema.safeParse(input)
   if (!parsed.success) {
@@ -441,7 +441,9 @@ export async function saveTimecardDraft(
       .limit(1)
     const row = rowRows[0] as Record<string, any> | undefined
 
-    if (row && row.status === TIMECARD_STATUSES.APPROVED) {
+    // Owners can't edit an approved card; approvers can (allowApproved, via
+    // the audited review-edit path) — the real edit boundary is payroll below.
+    if (row && row.status === TIMECARD_STATUSES.APPROVED && !options.allowApproved) {
       throw new Error('approved_timecard_locked')
     }
     // Once a payroll batch references the card, its hours are financial
@@ -616,7 +618,7 @@ export async function saveTimecardEntriesForReview(
   const owner = rows[0]
   if (!owner) throw new Error('timecard_not_found')
 
-  const result = await saveTimecardDraft(owner.userId, input, { keepSubmitted: true })
+  const result = await saveTimecardDraft(owner.userId, input, { keepSubmitted: true, allowApproved: true })
 
   if (owner.userId !== reviewerId) {
     const periodLabel = formatTimecardPeriodLabel(result.period_type, result.period_start, result.period_end)

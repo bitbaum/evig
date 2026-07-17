@@ -841,10 +841,10 @@
       "free": "Free",
       "trust": {
         "verified": "Checked & tested by Revamp-IT",
-        "mission": "Reused, not discarded — non-profit association",
         "untested": "Quality control was skipped — this item is not Revamp-IT verified",
         "untestedBadge": "Revamp-IT · untested",
         "processLink": "See how our quality process works",
+        "mission": "Reused, not discarded — non-profit association",
         "warranty": "{months}-month warranty",
         "returnPolicy": "{days}-day return period for online purchases"
       },
@@ -9319,13 +9319,6 @@
       "methodologyLink": "How is this calculated?"
     },
     "geschichteSection": {
-      "badge": "Our History",
-      "milestoneTitle": "Milestones",
-      "milestoneDesc": "From a small workshop to the leading organization for sustainable IT in Switzerland.",
-      "currentTitle": "Today",
-      "yearsActive": "Years active",
-      "teamMembers": "Team members",
-      "devicesPerYear": "Devices rescued per year",
       "founding": {
         "title": "The founding of {orgName}",
         "subtitle": "From a cheese cellar to a movement",
@@ -9374,7 +9367,14 @@
           "title": "21 years of sustainable IT",
           "description": "Around 1,000 devices are processed each year, about 150 are sold, more than 43 tonnes of CO₂ are saved, and internships achieve an approximately 40% success rate."
         }
-      }
+      },
+      "badge": "Our History",
+      "milestoneTitle": "Milestones",
+      "milestoneDesc": "From a small workshop to the leading organization for sustainable IT in Switzerland.",
+      "currentTitle": "Today",
+      "yearsActive": "Years active",
+      "teamMembers": "Team members",
+      "devicesPerYear": "Devices rescued per year"
     },
     "impactStatsSection": {
       "sectionTitle": "Numbers & Facts",
@@ -9578,6 +9578,8 @@
         "errorAnalysis": "Analysis failed"
       },
       "dataEntryTabs": {
+        "stepTitle": "Enter data",
+        "stepDescription": "Text, image, file or speech — AI fills the same product record.",
         "tabTextLabel": "Text",
         "tabTextDesc": "Enter product info, AI fills in the rest",
         "tabFileLabel": "File",
@@ -9597,28 +9599,13 @@
         "pictureRequires": "Requires vision AI model",
         "analyzing": "AI analysing…",
         "fillForm": "Fill form",
+        "manualEntry": "Enter manually without AI",
         "fileImportTitle": "File import",
         "fileImportDesc": "Upload a CSV or Excel file with product data",
         "processing": "Processing…",
         "chooseFile": "Choose CSV or Excel file or drag here",
         "fileHint": "CSV, TSV, XLSX — columns are recognised automatically",
-        "unmappedColumns": "Unmapped columns:",
-        "stepTitle": "Enter data",
-        "stepDescription": "Text, image, file or speech — AI fills the same product record.",
-        "manualEntry": "Enter manually without AI"
-      },
-      "voiceEntry": {
-        "start": "Start recording",
-        "stop": "Stop recording",
-        "processing": "Processing…",
-        "hint": "Describe the device: brand, model, condition, price.",
-        "transcription": "Recognised: {text}",
-        "errorGeneric": "Could not process the recording. Please try again."
-      },
-      "formErrors": {
-        "updateFailed": "Product could not be updated",
-        "saveFailed": "Product could not be saved",
-        "genericSaveError": "Error saving. Please try again."
+        "unmappedColumns": "Unmapped columns:"
       },
       "destination": {
         "title": "What happens next?",
@@ -9658,6 +9645,19 @@
         "donorName": "Donor name",
         "donorEmail": "Email (optional)",
         "donorNotes": "Notes (optional)"
+      },
+      "voiceEntry": {
+        "start": "Start recording",
+        "stop": "Stop recording",
+        "processing": "Processing…",
+        "hint": "Describe the device: brand, model, condition, price.",
+        "transcription": "Recognised: {text}",
+        "errorGeneric": "Could not process the recording. Please try again."
+      },
+      "formErrors": {
+        "updateFailed": "Product could not be updated",
+        "saveFailed": "Product could not be saved",
+        "genericSaveError": "Error saving. Please try again."
       }
     },
     "eWasteProblem": {
@@ -9880,7 +9880,14 @@
       "release": "Release",
       "accept": "Accept",
       "pageTitle": "Approvals",
-      "pageDescription": "Review and approve content submitted by users"
+      "pageDescription": "Review and approve content submitted by users",
+      "timecardsPageTitle": "Approvals",
+      "timecardsPageDescription": "Review and approve submitted timecards and time-off requests.",
+      "timecardsMetaTitle": "Approvals · Timecards",
+      "timecardsMetaDescription": "Review submitted timecards in bulk.",
+      "tabContent": "Content",
+      "tabTimecards": "Timecards & time off",
+      "tabsAria": "Approvals"
     },
     "hirn": {
       "assistantSubtitle": "Assistant",
@@ -10272,6 +10279,125 @@
       "absencePaidHint": "Paid absence (counts scheduled hours)",
       "absenceUnpaidHint": "Unpaid (0 h)",
       "headerSelectColumn": "Select all {day} — drag for several columns",
+      "statusUnknown": "Unknown",
+      "durationMinutesOnly": "{minutes} min",
+      "durationHoursOnly": "{hours} hrs",
+      "durationHoursMinutes": "{hours} hrs {minutes} min",
+      "periodWeek": "Week {range}",
+      "pageEyebrow": "Track your working hours and submit them for approval",
+      "selfTitle": "Time tracking",
+      "selfDescription": "Track and submit your own working hours.",
+      "userFallback": "You",
+      "scheduleTitle": "My work schedule",
+      "scheduleHint": "Set days and times — used to fill your timecard.",
+      "scheduleStandardButton": "Standard Mon–Fri 09–17",
+      "scheduleSave": "Save schedule",
+      "scheduleSaved": "Saved",
+      "scheduleSaveError": "Could not save the schedule.",
+      "scheduleNone": "No standard schedule",
+      "scheduleWeeklySummary": "{days} · {hours} hrs/week",
+      "scheduleWeeklySummaryWithMinutes": "{days} · {hours} hrs {minutes} min/week",
+      "scheduleStandardSummary": "Default: Mon–Fri 09:00–17:00 (adjustable)",
+      "shiftRunning": "Shift running",
+      "shiftStartedAt": "Started {time}",
+      "shiftPlaceholder": "Optional: what are you working on?",
+      "shiftStop": "End shift",
+      "shiftStart": "Start shift",
+      "shiftPromptTitle": "Working now?",
+      "shiftPromptBody": "Start a shift — it lands directly in this timecard.",
+      "cancel": "Cancel",
+      "draftLoaded": "Timecard loaded",
+      "draftLoadError": "Could not load the timecard.",
+      "draftSaved": "Saved",
+      "draftSaveError": "Could not save the timecard.",
+      "shiftSaved": "Shift saved",
+      "shiftSaveError": "Could not save the shift.",
+      "historyTitle": "History",
+      "historyEmpty": "No timecards yet. Submit your first week and it will appear here.",
+      "historyLastCount": "{count, plural, one {Last timecard} other {Last # timecards}}",
+      "historyReviewedOn": "Reviewed {date}",
+      "historySubmittedOn": "Submitted {date}",
+      "queueStatusLabel": "Status:",
+      "queueTabOpen": "Open",
+      "queueTabApproved": "Approved",
+      "queuePeriodLabel": "Period:",
+      "queueFilterAll": "All",
+      "queueFilterWeeks": "Weeks",
+      "queueFilterMonths": "Months",
+      "queueRefresh": "Refresh",
+      "queueSelected": "{count} selected · {duration}",
+      "queueNotePlaceholder": "Note (optional) — on rejection it tells the team what to fix",
+      "queueApproveCount": "Approve ({count})",
+      "queueReject": "Reject",
+      "queueLoadError": "Could not load timecards.",
+      "queueBulkError": "Bulk review failed.",
+      "bulkApprovedResult": "{count} approved",
+      "bulkRejectedResult": "{count} rejected",
+      "bulkFailedResult": "{count} failed ({reasons})",
+      "failureSelfReview": "own card",
+      "failureNotSubmitted": "no longer submitted",
+      "failureNotFound": "not found",
+      "failurePayrollLocked": "locked in payroll run",
+      "failureUnknown": "unknown",
+      "queueEmpty": "No timecards in this view. As of {time}",
+      "queueSelectAll": "Select all",
+      "queueCount": "{count, plural, one {1 timecard} other {# timecards}}",
+      "queueOwnBadge": "Own card",
+      "queueOwnTooltip": "Your own timecard — approval requires another team member",
+      "queueRowAria": "Select timecard of {name}",
+      "queueProfileAria": "Open profile in a new tab",
+      "queueReview": "Review",
+      "drawerAria": "Review timecard",
+      "close": "Close",
+      "loading": "Loading…",
+      "drawerNoEntries": "No entries.",
+      "colDay": "Day",
+      "colHours": "Hrs",
+      "drawerOwnNotice": "Your own timecard — another team member handles the approval.",
+      "drawerNotePlaceholder": "Note (optional) — on rejection it explains what to fix",
+      "approve": "Approve",
+      "reject": "Reject",
+      "edit": "Edit",
+      "reopen": "Reopen",
+      "saveFailed": "Saving failed.",
+      "actionFailed": "Action failed.",
+      "drawerFallbackTitle": "Timecard",
+      "status": {
+        "draft": "Draft",
+        "submitted": "Submitted",
+        "approved": "Approved",
+        "rejected": "Rejected"
+      },
+      "category": {
+        "workshop": "Workshop",
+        "repair": "Repair",
+        "intake": "Intake",
+        "sales": "Sales",
+        "admin": "Administration",
+        "education": "Education",
+        "logistics": "Logistics",
+        "meeting": "Meeting",
+        "volunteering": "Volunteering",
+        "other": "Other",
+        "ferien": "Vacation",
+        "krank": "Sick",
+        "unfall": "Accident",
+        "feiertag": "Public holiday",
+        "militaer": "Military/civil service",
+        "unbezahlt": "Unpaid"
+      },
+      "weekday": {
+        "monday": "Mon",
+        "tuesday": "Tue",
+        "wednesday": "Wed",
+        "thursday": "Thu",
+        "friday": "Fri",
+        "saturday": "Sat",
+        "sunday": "Sun"
+      },
+      "profileEmpty": "No timecards yet.",
+      "profileTotals": "{count} cards · {duration} total",
+      "profileToReview": "{count} to review",
       "dayGridShow": "Show hour grid",
       "dayGridHide": "Hide hour grid"
     },
@@ -10290,6 +10416,32 @@
     "intake": {
       "pageTitle": "Device intake",
       "pageDescription": "All captured devices: status, checklist and publication",
+      "quickCapture": {
+        "title": "Capture a device now",
+        "description": "Manufacturer, model, Enter — complete the rest later at the workbench.",
+        "close": "Back to pipeline",
+        "brand": "Manufacturer",
+        "brandPlaceholder": "Dell",
+        "productName": "Model / product",
+        "productNamePlaceholder": "Latitude 7480",
+        "submit": "Capture",
+        "saving": "Capturing…",
+        "keyboardHint": "Keyboard: enter manufacturer → Tab → enter model → Enter",
+        "details": "Adjust tier, category or donation",
+        "tier": "Processing tier",
+        "category": "Category",
+        "categoryLater": "Set later",
+        "condition": "Condition",
+        "donation": "This is a donation",
+        "donorName": "Donor name",
+        "donorEmail": "Email",
+        "donorNotes": "Notes",
+        "created": "{itemUuid} captured — ready for the next device.",
+        "printLabel": "Print label",
+        "openPipeline": "View pipeline",
+        "fullCapture": "Full capture with photo, AI and product details",
+        "saveFailed": "The device could not be captured"
+      },
       "createForm": {
         "title": "Log new device",
         "tierLabel": "Processing tier",
@@ -10419,6 +10571,15 @@
           "inProgress": "In progress",
           "failed": "Failed"
         },
+        "board": {
+          "in_progress": "In testing",
+          "failed": "Blocked",
+          "ready": "Ready",
+          "published": "In shop",
+          "empty": "No devices",
+          "noCategory": "Category still open",
+          "ageDays": "{count} d"
+        },
         "donationYes": "Yes",
         "hero": {
           "kpis": {
@@ -10452,15 +10613,6 @@
             "sub": "Decide: fix and retest, or change the tier (parts/recycling).",
             "cta": "Show failed"
           }
-        },
-        "board": {
-          "in_progress": "In testing",
-          "failed": "Blocked",
-          "ready": "Ready",
-          "published": "In shop",
-          "empty": "No devices",
-          "noCategory": "Category still open",
-          "ageDays": "{count} d"
         }
       },
       "checklist": {
@@ -10474,35 +10626,9 @@
         "failNoteRequired": "Reason required — what exactly failed?",
         "saveFail": "Mark as failed",
         "confirmNoteHint": "Four-eyes principle: confirm directly as a second person. Working alone? State the reason.",
+        "overrideSecondPerson": "Exception: I am working alone (a reason of at least 10 characters is required)",
         "confirmNotePlaceholder": "Optional as a second person — required for a solo sign-off, e.g. \"working alone\" …",
-        "saveConfirm": "Confirm quality control",
-        "overrideSecondPerson": "Exception: I am working alone (a reason of at least 10 characters is required)"
-      },
-      "quickCapture": {
-        "title": "Capture a device now",
-        "description": "Manufacturer, model, Enter — complete the rest later at the workbench.",
-        "close": "Back to pipeline",
-        "brand": "Manufacturer",
-        "brandPlaceholder": "Dell",
-        "productName": "Model / product",
-        "productNamePlaceholder": "Latitude 7480",
-        "submit": "Capture",
-        "saving": "Capturing…",
-        "keyboardHint": "Keyboard: enter manufacturer → Tab → enter model → Enter",
-        "details": "Adjust tier, category or donation",
-        "tier": "Processing tier",
-        "category": "Category",
-        "categoryLater": "Set later",
-        "condition": "Condition",
-        "donation": "This is a donation",
-        "donorName": "Donor name",
-        "donorEmail": "Email",
-        "donorNotes": "Notes",
-        "created": "{itemUuid} captured — ready for the next device.",
-        "printLabel": "Print label",
-        "openPipeline": "View pipeline",
-        "fullCapture": "Full capture with photo, AI and product details",
-        "saveFailed": "The device could not be captured"
+        "saveConfirm": "Confirm quality control"
       }
     },
     "it-hilfe": {
@@ -10750,6 +10876,7 @@
       "filterNoResults": "No section found"
     },
     "commandBar": {
+      "searching": "Searching…",
       "placeholder": "Search or command…",
       "openShortcut": "Open command bar",
       "noResults": "No results",
@@ -10766,8 +10893,7 @@
         "newDecision": "New decision",
         "newProtocol": "New minutes",
         "dashboard": "Dashboard"
-      },
-      "searching": "Searching…"
+      }
     },
     "userMenu": {
       "darkMode": "Appearance",
@@ -11196,6 +11322,40 @@
         "teamhr": "Team & HR",
         "system": "System"
       }
+    },
+    "timeOff": {
+      "requestToggle": "Request time off",
+      "kindLabel": "Type",
+      "from": "From",
+      "to": "Until",
+      "noteLabel": "Note (optional)",
+      "notePlaceholder": "e.g. summer vacation",
+      "submit": "Send request",
+      "submitting": "Sending …",
+      "missingDates": "Please choose a start and end date.",
+      "submitError": "Could not send the request.",
+      "withdraw": "Withdraw request",
+      "kind": {
+        "ferien": "Vacation",
+        "unbezahlt": "Unpaid leave",
+        "militaer": "Military / civil service",
+        "unfall": "Accident",
+        "other": "Other"
+      },
+      "status": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "cancelled": "Withdrawn"
+      },
+      "approvalsTitle": "Time-off requests",
+      "filterPending": "Open",
+      "filterAll": "All",
+      "emptyPending": "No open requests.",
+      "emptyAll": "No requests.",
+      "approve": "Approve",
+      "decline": "Decline",
+      "unknownUser": "Unknown"
     }
   },
   "changelog": {

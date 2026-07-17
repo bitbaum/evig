@@ -50,6 +50,8 @@
       "missionHistoryDesc": "우리가 누구이며 무엇이 우리를 이끄는지",
       "impact": "우리의 영향력",
       "impactDesc": "측정 가능한 성과와 투명성",
+      "howItWorks": "운영 방식",
+      "howItWorksDesc": "기부에서 새로운 사용까지 기기의 여정",
       "projects": "프로젝트",
       "projectsDesc": "우리의 이니셔티브",
       "locations": "위치",
@@ -153,9 +155,7 @@
       "browseRequests": "열린 요청",
       "browseRequestsDesc": "수리 요청을 둘러보고 도움을 제안하세요",
       "itHelpHub": "IT Help",
-      "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point",
-      "howItWorks": "운영 방식",
-      "howItWorksDesc": "기부에서 새로운 사용까지 기기의 여정"
+      "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point"
     },
     "language": "언어",
     "missionHistory": "미션 & 역사",
@@ -3166,10 +3166,10 @@
       "free": "무료",
       "trust": {
         "verified": "Revamp-IT가 검수 및 테스트 완료",
-        "mission": "폐기 대신 재사용 — 비영리 협회",
         "untested": "품질 검사를 생략함 — Revamp-IT 검증 제품이 아닙니다",
         "untestedBadge": "Revamp-IT · 미검사",
         "processLink": "품질 프로세스 보기",
+        "mission": "폐기 대신 재사용 — 비영리 협회",
         "warranty": "{months}개월 보증",
         "returnPolicy": "온라인 구매 시 {days}일 이내 반품"
       },
@@ -9570,6 +9570,8 @@
         "errorAnalysis": "분석에 실패했습니다"
       },
       "dataEntryTabs": {
+        "stepTitle": "데이터 입력",
+        "stepDescription": "텍스트, 사진, 파일 또는 음성으로 AI가 동일한 상품 기록을 채웁니다.",
         "tabTextLabel": "Text",
         "tabTextDesc": "제품 정보를 입력하면 AI 가 나머지를 채워 줍니다",
         "tabFileLabel": "File",
@@ -9589,37 +9591,13 @@
         "pictureRequires": "비전 AI 모델이 필요합니다",
         "analyzing": "AI 가 분석하는 중입니다…",
         "fillForm": "양식 작성",
+        "manualEntry": "AI 없이 직접 입력",
         "fileImportTitle": "파일 가져오기",
         "fileImportDesc": "제품 데이터가 포함된 CSV 또는 Excel 파일을 업로드해 주십시오",
         "processing": "Processing…",
         "chooseFile": "CSV 또는 Excel 파일을 선택하거나 여기로 끌어다 놓으십시오",
         "fileHint": "CSV, TSV, XLSX — 열이 자동으로 인식됩니다",
-        "unmappedColumns": "매핑되지 않은 열:",
-        "stepTitle": "데이터 입력",
-        "stepDescription": "텍스트, 사진, 파일 또는 음성으로 AI가 동일한 상품 기록을 채웁니다.",
-        "manualEntry": "AI 없이 직접 입력"
-      },
-      "formErrors": {
-        "updateFailed": "제품을 업데이트할 수 없습니다",
-        "saveFailed": "제품을 저장할 수 없습니다",
-        "genericSaveError": "저장 중 오류가 발생했습니다. 다시 시도해 주십시오."
-      },
-      "storageLocation": {
-        "label": "보관 위치",
-        "placeholder": "위치 선택…",
-        "loading": "불러오는 중…",
-        "addNew": "위치 추가",
-        "newNamePlaceholder": "위치 이름",
-        "kindLabel": "종류",
-        "save": "저장"
-      },
-      "voiceEntry": {
-        "start": "녹음 시작",
-        "stop": "녹음 중지",
-        "processing": "처리 중…",
-        "hint": "기기를 설명하세요: 제조사, 모델, 상태, 가격.",
-        "transcription": "인식됨: {text}",
-        "errorGeneric": "음성을 처리할 수 없습니다. 다시 시도해 주세요."
+        "unmappedColumns": "매핑되지 않은 열:"
       },
       "destination": {
         "title": "다음에는 무엇을 하나요?",
@@ -9659,6 +9637,28 @@
         "donorName": "기부자 이름",
         "donorEmail": "이메일(선택)",
         "donorNotes": "메모(선택)"
+      },
+      "formErrors": {
+        "updateFailed": "제품을 업데이트할 수 없습니다",
+        "saveFailed": "제품을 저장할 수 없습니다",
+        "genericSaveError": "저장 중 오류가 발생했습니다. 다시 시도해 주십시오."
+      },
+      "storageLocation": {
+        "label": "보관 위치",
+        "placeholder": "위치 선택…",
+        "loading": "불러오는 중…",
+        "addNew": "위치 추가",
+        "newNamePlaceholder": "위치 이름",
+        "kindLabel": "종류",
+        "save": "저장"
+      },
+      "voiceEntry": {
+        "start": "녹음 시작",
+        "stop": "녹음 중지",
+        "processing": "처리 중…",
+        "hint": "기기를 설명하세요: 제조사, 모델, 상태, 가격.",
+        "transcription": "인식됨: {text}",
+        "errorGeneric": "음성을 처리할 수 없습니다. 다시 시도해 주세요."
       }
     },
     "eWasteProblem": {
@@ -9881,7 +9881,14 @@
       "release": "공개",
       "accept": "수락",
       "pageTitle": "승인",
-      "pageDescription": "사용자가 제출한 콘텐츠를 검토하고 승인합니다"
+      "pageDescription": "사용자가 제출한 콘텐츠를 검토하고 승인합니다",
+      "timecardsPageTitle": "승인",
+      "timecardsPageDescription": "제출된 타임카드와 부재 신청을 검토하고 승인합니다.",
+      "timecardsMetaTitle": "승인 · 타임카드",
+      "timecardsMetaDescription": "제출된 타임카드를 일괄 검토합니다.",
+      "tabContent": "콘텐츠",
+      "tabTimecards": "타임카드 및 부재",
+      "tabsAria": "승인"
     },
     "hirn": {
       "assistantSubtitle": "어시스턴트",
@@ -10271,6 +10278,125 @@
       "absencePaidHint": "유급 부재(예정된 시간이 계산됨)",
       "absenceUnpaidHint": "무급(0시간)",
       "headerSelectColumn": "모든 {day} 선택 — 드래그하면 여러 열",
+      "statusUnknown": "알 수 없음",
+      "durationMinutesOnly": "{minutes}분",
+      "durationHoursOnly": "{hours}시간",
+      "durationHoursMinutes": "{hours}시간 {minutes}분",
+      "periodWeek": "주 {range}",
+      "pageEyebrow": "근무 시간을 기록하고 승인을 위해 제출하세요",
+      "selfTitle": "근태 기록",
+      "selfDescription": "자신의 근무 시간을 기록하고 제출합니다.",
+      "userFallback": "나",
+      "scheduleTitle": "내 근무 일정",
+      "scheduleHint": "요일과 시간을 설정하세요 — 타임카드 자동 입력에 사용됩니다.",
+      "scheduleStandardButton": "기본 월–금 09–17",
+      "scheduleSave": "일정 저장",
+      "scheduleSaved": "저장됨",
+      "scheduleSaveError": "일정을 저장하지 못했습니다.",
+      "scheduleNone": "기본 일정 없음",
+      "scheduleWeeklySummary": "{days} · 주 {hours}시간",
+      "scheduleWeeklySummaryWithMinutes": "{days} · 주 {hours}시간 {minutes}분",
+      "scheduleStandardSummary": "기본: 월–금 09:00–17:00 (조정 가능)",
+      "shiftRunning": "근무 진행 중",
+      "shiftStartedAt": "시작 {time}",
+      "shiftPlaceholder": "선택 사항: 무엇을 하고 있나요?",
+      "shiftStop": "근무 종료",
+      "shiftStart": "근무 시작",
+      "shiftPromptTitle": "지금 일하시나요?",
+      "shiftPromptBody": "근무를 시작하면 이 타임카드에 바로 기록됩니다.",
+      "cancel": "취소",
+      "draftLoaded": "타임카드를 불러왔습니다",
+      "draftLoadError": "타임카드를 불러오지 못했습니다.",
+      "draftSaved": "저장됨",
+      "draftSaveError": "타임카드를 저장하지 못했습니다.",
+      "shiftSaved": "근무 기록 저장됨",
+      "shiftSaveError": "근무 기록을 저장하지 못했습니다.",
+      "historyTitle": "기록",
+      "historyEmpty": "아직 타임카드가 없습니다. 첫 주를 제출하면 여기에 표시됩니다.",
+      "historyLastCount": "{count, plural, other {최근 타임카드 #개}}",
+      "historyReviewedOn": "검토 {date}",
+      "historySubmittedOn": "제출 {date}",
+      "queueStatusLabel": "상태:",
+      "queueTabOpen": "미처리",
+      "queueTabApproved": "승인됨",
+      "queuePeriodLabel": "기간:",
+      "queueFilterAll": "전체",
+      "queueFilterWeeks": "주",
+      "queueFilterMonths": "월",
+      "queueRefresh": "새로고침",
+      "queueSelected": "{count}개 선택 · {duration}",
+      "queueNotePlaceholder": "메모 (선택) — 반려 시 팀에 수정할 내용을 알려줍니다",
+      "queueApproveCount": "승인 ({count})",
+      "queueReject": "반려",
+      "queueLoadError": "타임카드를 불러오지 못했습니다.",
+      "queueBulkError": "일괄 승인에 실패했습니다.",
+      "bulkApprovedResult": "{count}개 승인됨",
+      "bulkRejectedResult": "{count}개 반려됨",
+      "bulkFailedResult": "{count}개 실패 ({reasons})",
+      "failureSelfReview": "본인 카드",
+      "failureNotSubmitted": "더 이상 제출 상태가 아님",
+      "failureNotFound": "찾을 수 없음",
+      "failurePayrollLocked": "급여 정산에 잠김",
+      "failureUnknown": "알 수 없음",
+      "queueEmpty": "이 보기에 타임카드가 없습니다. 기준 시각: {time}",
+      "queueSelectAll": "전체 선택",
+      "queueCount": "{count, plural, other {타임카드 #개}}",
+      "queueOwnBadge": "본인 카드",
+      "queueOwnTooltip": "본인의 타임카드 — 승인은 다른 팀원이 합니다",
+      "queueRowAria": "{name}의 타임카드 선택",
+      "queueProfileAria": "프로필을 새 탭에서 열기",
+      "queueReview": "검토",
+      "drawerAria": "타임카드 검토",
+      "close": "닫기",
+      "loading": "불러오는 중…",
+      "drawerNoEntries": "기록이 없습니다.",
+      "colDay": "날짜",
+      "colHours": "시간",
+      "drawerOwnNotice": "본인의 타임카드 — 승인은 다른 팀원이 담당합니다.",
+      "drawerNotePlaceholder": "메모 (선택) — 반려 시 수정할 내용을 알려줍니다",
+      "approve": "승인",
+      "reject": "반려",
+      "edit": "편집",
+      "reopen": "다시 열기",
+      "saveFailed": "저장에 실패했습니다.",
+      "actionFailed": "작업에 실패했습니다.",
+      "drawerFallbackTitle": "타임카드",
+      "status": {
+        "draft": "임시 저장",
+        "submitted": "제출됨",
+        "approved": "승인됨",
+        "rejected": "반려됨"
+      },
+      "category": {
+        "workshop": "워크숍",
+        "repair": "수리",
+        "intake": "입고",
+        "sales": "판매",
+        "admin": "관리",
+        "education": "교육",
+        "logistics": "물류",
+        "meeting": "회의",
+        "volunteering": "자원봉사",
+        "other": "기타",
+        "ferien": "휴가",
+        "krank": "병가",
+        "unfall": "사고",
+        "feiertag": "공휴일",
+        "militaer": "군복무/민방위",
+        "unbezahlt": "무급"
+      },
+      "weekday": {
+        "monday": "월",
+        "tuesday": "화",
+        "wednesday": "수",
+        "thursday": "목",
+        "friday": "금",
+        "saturday": "토",
+        "sunday": "일"
+      },
+      "profileEmpty": "아직 타임카드가 없습니다.",
+      "profileTotals": "{count}개 · 총 {duration}",
+      "profileToReview": "검토 대상 {count}개",
       "dayGridShow": "시간 그리드 표시",
       "dayGridHide": "시간 그리드 숨기기"
     },
@@ -10289,6 +10415,32 @@
     "intake": {
       "pageTitle": "기기 입고",
       "pageDescription": "등록된 모든 기기: 상태, 체크리스트, 게시",
+      "quickCapture": {
+        "title": "기기 바로 등록",
+        "description": "제조사, 모델, Enter — 나머지는 작업대에서 나중에 입력하세요.",
+        "close": "파이프라인으로",
+        "brand": "제조사",
+        "brandPlaceholder": "Dell",
+        "productName": "모델 / 제품",
+        "productNamePlaceholder": "Latitude 7480",
+        "submit": "등록",
+        "saving": "등록 중…",
+        "keyboardHint": "키보드: 제조사 → Tab → 모델 → Enter",
+        "details": "처리 단계, 카테고리 또는 기부 조정",
+        "tier": "처리 단계",
+        "category": "카테고리",
+        "categoryLater": "나중에 설정",
+        "condition": "상태",
+        "donation": "기부 물품입니다",
+        "donorName": "기부자 이름",
+        "donorEmail": "이메일",
+        "donorNotes": "메모",
+        "created": "{itemUuid} 등록 완료 — 다음 기기를 입력할 수 있습니다.",
+        "printLabel": "라벨 인쇄",
+        "openPipeline": "파이프라인 보기",
+        "fullCapture": "사진, AI 및 제품 세부정보 전체 입력",
+        "saveFailed": "기기를 등록하지 못했습니다"
+      },
       "createForm": {
         "title": "새 기기 등록",
         "tierLabel": "처리 단계",
@@ -10418,6 +10570,15 @@
           "inProgress": "처리 중",
           "failed": "실패"
         },
+        "board": {
+          "in_progress": "검사 중",
+          "failed": "차단됨",
+          "ready": "준비됨",
+          "published": "상점 게시",
+          "empty": "기기 없음",
+          "noCategory": "카테고리 미정",
+          "ageDays": "{count}일"
+        },
         "donationYes": "예",
         "hero": {
           "kpis": {
@@ -10451,15 +10612,6 @@
             "sub": "결정 필요: 수리 후 재검사하거나 단계 변경(부품/재활용).",
             "cta": "실패 항목 보기"
           }
-        },
-        "board": {
-          "in_progress": "검사 중",
-          "failed": "차단됨",
-          "ready": "준비됨",
-          "published": "상점 게시",
-          "empty": "기기 없음",
-          "noCategory": "카테고리 미정",
-          "ageDays": "{count}일"
         }
       },
       "checklist": {
@@ -10473,35 +10625,9 @@
         "failNoteRequired": "사유 필요 — 정확히 무엇이 실패했나요?",
         "saveFail": "실패로 표시",
         "confirmNoteHint": "4눈 원칙: 두 번째 확인자는 바로 확인하세요. 혼자 근무 중이라면 사유를 적어주세요.",
+        "overrideSecondPerson": "예외: 혼자 근무 중입니다(10자 이상의 사유 필요)",
         "confirmNotePlaceholder": "두 번째 확인자는 선택 사항 — 단독 승인 시 필수 (예: \"단독 근무\") …",
-        "saveConfirm": "품질 검사 확인",
-        "overrideSecondPerson": "예외: 혼자 근무 중입니다(10자 이상의 사유 필요)"
-      },
-      "quickCapture": {
-        "title": "기기 바로 등록",
-        "description": "제조사, 모델, Enter — 나머지는 작업대에서 나중에 입력하세요.",
-        "close": "파이프라인으로",
-        "brand": "제조사",
-        "brandPlaceholder": "Dell",
-        "productName": "모델 / 제품",
-        "productNamePlaceholder": "Latitude 7480",
-        "submit": "등록",
-        "saving": "등록 중…",
-        "keyboardHint": "키보드: 제조사 → Tab → 모델 → Enter",
-        "details": "처리 단계, 카테고리 또는 기부 조정",
-        "tier": "처리 단계",
-        "category": "카테고리",
-        "categoryLater": "나중에 설정",
-        "condition": "상태",
-        "donation": "기부 물품입니다",
-        "donorName": "기부자 이름",
-        "donorEmail": "이메일",
-        "donorNotes": "메모",
-        "created": "{itemUuid} 등록 완료 — 다음 기기를 입력할 수 있습니다.",
-        "printLabel": "라벨 인쇄",
-        "openPipeline": "파이프라인 보기",
-        "fullCapture": "사진, AI 및 제품 세부정보 전체 입력",
-        "saveFailed": "기기를 등록하지 못했습니다"
+        "saveConfirm": "품질 검사 확인"
       }
     },
     "it-hilfe": {
@@ -10749,6 +10875,7 @@
       "filterNoResults": "영역을 찾을 수 없음"
     },
     "commandBar": {
+      "searching": "검색 중…",
       "placeholder": "검색 또는 명령…",
       "openShortcut": "명령 표시줄 열기",
       "noResults": "결과 없음",
@@ -10765,8 +10892,7 @@
         "newDecision": "새 의사결정",
         "newProtocol": "새 회의록",
         "dashboard": "대시보드"
-      },
-      "searching": "검색 중…"
+      }
     },
     "userMenu": {
       "darkMode": "표시 모드",
@@ -11195,6 +11321,40 @@
         "teamhr": "팀·인사",
         "system": "시스템"
       }
+    },
+    "timeOff": {
+      "requestToggle": "부재 신청",
+      "kindLabel": "유형",
+      "from": "시작",
+      "to": "종료",
+      "noteLabel": "메모 (선택)",
+      "notePlaceholder": "예: 여름 휴가",
+      "submit": "신청 보내기",
+      "submitting": "보내는 중…",
+      "missingDates": "시작일과 종료일을 선택하세요.",
+      "submitError": "신청을 보내지 못했습니다.",
+      "withdraw": "신청 취소",
+      "kind": {
+        "ferien": "휴가",
+        "unbezahlt": "무급 휴가",
+        "militaer": "군복무 / 민방위",
+        "unfall": "사고",
+        "other": "기타"
+      },
+      "status": {
+        "pending": "대기 중",
+        "approved": "승인됨",
+        "rejected": "반려됨",
+        "cancelled": "취소됨"
+      },
+      "approvalsTitle": "부재 신청 목록",
+      "filterPending": "미처리",
+      "filterAll": "전체",
+      "emptyPending": "미처리 신청이 없습니다.",
+      "emptyAll": "신청이 없습니다.",
+      "approve": "승인",
+      "decline": "반려",
+      "unknownUser": "알 수 없음"
     }
   },
   "changelog": {

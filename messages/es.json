@@ -50,6 +50,8 @@
       "missionHistoryDesc": "Quiénes somos y qué nos impulsa",
       "impact": "Nuestro impacto",
       "impactDesc": "Logros medibles y transparencia",
+      "howItWorks": "Cómo funciona",
+      "howItWorksDesc": "El recorrido de un dispositivo, de la donación a su nueva vida",
       "projects": "Proyectos",
       "projectsDesc": "Nuestras iniciativas",
       "locations": "Ubicaciones",
@@ -153,9 +155,7 @@
       "browseRequests": "Solicitudes abiertas",
       "browseRequestsDesc": "Explora las solicitudes de reparación y ofrece ayuda",
       "itHelpHub": "IT Help",
-      "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point",
-      "howItWorks": "Cómo funciona",
-      "howItWorksDesc": "El recorrido de un dispositivo, de la donación a su nueva vida"
+      "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point"
     },
     "language": "Idioma",
     "missionHistory": "Misión & Historia",
@@ -3166,10 +3166,10 @@
       "free": "Gratis",
       "trust": {
         "verified": "Verificado y probado por Revamp-IT",
-        "mission": "Reutilizado en lugar de desechado — asociación sin ánimo de lucro",
         "untested": "Control de calidad omitido — este artículo no está verificado por Revamp-IT",
         "untestedBadge": "Revamp-IT · sin probar",
         "processLink": "Conoce nuestro proceso de calidad",
+        "mission": "Reutilizado en lugar de desechado — asociación sin ánimo de lucro",
         "warranty": "Garantía de {months} meses",
         "returnPolicy": "Devolución en {days} días para compras en línea"
       },
@@ -9570,6 +9570,8 @@
         "errorAnalysis": "Error en el análisis"
       },
       "dataEntryTabs": {
+        "stepTitle": "Introducir datos",
+        "stepDescription": "Texto, foto, archivo o voz — la IA rellena el mismo producto.",
         "tabTextLabel": "Text",
         "tabTextDesc": "Introduzca la información del producto y la IA la completa",
         "tabFileLabel": "File",
@@ -9589,37 +9591,13 @@
         "pictureRequires": "Requiere un modelo de IA de visión",
         "analyzing": "La IA está analizando…",
         "fillForm": "Rellenar formulario",
+        "manualEntry": "Introducir manualmente sin IA",
         "fileImportTitle": "Importación de archivos",
         "fileImportDesc": "Suba un archivo CSV o Excel con datos de productos",
         "processing": "Processing…",
         "chooseFile": "Elija un archivo CSV o Excel o arrástrelo aquí",
         "fileHint": "CSV, TSV, XLSX: las columnas se reconocen automáticamente",
-        "unmappedColumns": "Columnas sin asignar:",
-        "stepTitle": "Introducir datos",
-        "stepDescription": "Texto, foto, archivo o voz — la IA rellena el mismo producto.",
-        "manualEntry": "Introducir manualmente sin IA"
-      },
-      "formErrors": {
-        "updateFailed": "No se ha podido actualizar el producto",
-        "saveFailed": "No se ha podido guardar el producto",
-        "genericSaveError": "Error al guardar. Inténtelo de nuevo."
-      },
-      "storageLocation": {
-        "label": "Ubicación de almacenamiento",
-        "placeholder": "Elegir ubicación…",
-        "loading": "Cargando…",
-        "addNew": "Añadir ubicación",
-        "newNamePlaceholder": "Nombre de la ubicación",
-        "kindLabel": "Tipo",
-        "save": "Guardar"
-      },
-      "voiceEntry": {
-        "start": "Iniciar grabación",
-        "stop": "Detener grabación",
-        "processing": "Procesando…",
-        "hint": "Describe el equipo: fabricante, modelo, estado, precio.",
-        "transcription": "Reconocido: {text}",
-        "errorGeneric": "No se pudo procesar el audio. Vuelve a intentarlo."
+        "unmappedColumns": "Columnas sin asignar:"
       },
       "destination": {
         "title": "¿Qué ocurre después?",
@@ -9659,6 +9637,28 @@
         "donorName": "Nombre del donante",
         "donorEmail": "Correo (opcional)",
         "donorNotes": "Notas (opcional)"
+      },
+      "formErrors": {
+        "updateFailed": "No se ha podido actualizar el producto",
+        "saveFailed": "No se ha podido guardar el producto",
+        "genericSaveError": "Error al guardar. Inténtelo de nuevo."
+      },
+      "storageLocation": {
+        "label": "Ubicación de almacenamiento",
+        "placeholder": "Elegir ubicación…",
+        "loading": "Cargando…",
+        "addNew": "Añadir ubicación",
+        "newNamePlaceholder": "Nombre de la ubicación",
+        "kindLabel": "Tipo",
+        "save": "Guardar"
+      },
+      "voiceEntry": {
+        "start": "Iniciar grabación",
+        "stop": "Detener grabación",
+        "processing": "Procesando…",
+        "hint": "Describe el equipo: fabricante, modelo, estado, precio.",
+        "transcription": "Reconocido: {text}",
+        "errorGeneric": "No se pudo procesar el audio. Vuelve a intentarlo."
       }
     },
     "eWasteProblem": {
@@ -9881,7 +9881,14 @@
       "release": "Publicar",
       "accept": "Aceptar",
       "pageTitle": "Aprobaciones",
-      "pageDescription": "Revisar y aprobar los contenidos enviados por los usuarios"
+      "pageDescription": "Revisar y aprobar los contenidos enviados por los usuarios",
+      "timecardsPageTitle": "Aprobaciones",
+      "timecardsPageDescription": "Revisar y aprobar las hojas de horas y solicitudes de ausencia enviadas.",
+      "timecardsMetaTitle": "Aprobaciones · Hojas de horas",
+      "timecardsMetaDescription": "Revisar en bloque las hojas de horas enviadas.",
+      "tabContent": "Contenidos",
+      "tabTimecards": "Hojas de horas y ausencias",
+      "tabsAria": "Aprobaciones"
     },
     "hirn": {
       "assistantSubtitle": "Asistente",
@@ -10271,6 +10278,125 @@
       "absencePaidHint": "Ausencia pagada (cuenta las horas planificadas)",
       "absenceUnpaidHint": "No pagado (0 h)",
       "headerSelectColumn": "Seleccionar todos los {day} — arrastra para varias columnas",
+      "statusUnknown": "Desconocido",
+      "durationMinutesOnly": "{minutes} min",
+      "durationHoursOnly": "{hours} h",
+      "durationHoursMinutes": "{hours} h {minutes} min",
+      "periodWeek": "Semana {range}",
+      "pageEyebrow": "Registra tus horas de trabajo y envíalas para su aprobación",
+      "selfTitle": "Registro de horas",
+      "selfDescription": "Registrar y enviar tus propias horas de trabajo.",
+      "userFallback": "Tú",
+      "scheduleTitle": "Mi plan de trabajo",
+      "scheduleHint": "Define días y horarios — se usan para rellenar la hoja.",
+      "scheduleStandardButton": "Estándar lun–vie 09–17",
+      "scheduleSave": "Guardar plan de trabajo",
+      "scheduleSaved": "Guardado",
+      "scheduleSaveError": "No se pudo guardar el plan de trabajo.",
+      "scheduleNone": "Sin plan estándar",
+      "scheduleWeeklySummary": "{days} · {hours} h/semana",
+      "scheduleWeeklySummaryWithMinutes": "{days} · {hours} h {minutes} min/semana",
+      "scheduleStandardSummary": "Estándar: lun–vie 09:00–17:00 (ajustable)",
+      "shiftRunning": "Turno en curso",
+      "shiftStartedAt": "Inicio {time}",
+      "shiftPlaceholder": "Opcional: ¿en qué estás trabajando?",
+      "shiftStop": "Terminar turno",
+      "shiftStart": "Iniciar turno",
+      "shiftPromptTitle": "¿Trabajando ahora?",
+      "shiftPromptBody": "Inicia un turno — se registra directamente en esta hoja de horas.",
+      "cancel": "Cancelar",
+      "draftLoaded": "Hoja de horas cargada",
+      "draftLoadError": "No se pudo cargar la hoja de horas.",
+      "draftSaved": "Guardado",
+      "draftSaveError": "No se pudo guardar la hoja de horas.",
+      "shiftSaved": "Turno guardado",
+      "shiftSaveError": "No se pudo guardar el turno.",
+      "historyTitle": "Historial",
+      "historyEmpty": "Aún no hay hojas de horas. Envía tu primera semana y aparecerá aquí.",
+      "historyLastCount": "{count, plural, one {Última hoja de horas} other {Últimas # hojas de horas}}",
+      "historyReviewedOn": "Revisada {date}",
+      "historySubmittedOn": "Enviada {date}",
+      "queueStatusLabel": "Estado:",
+      "queueTabOpen": "Abiertas",
+      "queueTabApproved": "Aprobadas",
+      "queuePeriodLabel": "Período:",
+      "queueFilterAll": "Todas",
+      "queueFilterWeeks": "Semanas",
+      "queueFilterMonths": "Meses",
+      "queueRefresh": "Actualizar",
+      "queueSelected": "{count} seleccionadas · {duration}",
+      "queueNotePlaceholder": "Nota (opcional) — en caso de rechazo explica al equipo qué corregir",
+      "queueApproveCount": "Aprobar ({count})",
+      "queueReject": "Rechazar",
+      "queueLoadError": "No se pudieron cargar las hojas de horas.",
+      "queueBulkError": "La aprobación múltiple falló.",
+      "bulkApprovedResult": "{count} aprobadas",
+      "bulkRejectedResult": "{count} rechazadas",
+      "bulkFailedResult": "{count} fallidas ({reasons})",
+      "failureSelfReview": "hoja propia",
+      "failureNotSubmitted": "ya no está enviada",
+      "failureNotFound": "no encontrada",
+      "failurePayrollLocked": "bloqueada en nómina",
+      "failureUnknown": "desconocido",
+      "queueEmpty": "No hay hojas de horas en esta vista. Actualizado: {time}",
+      "queueSelectAll": "Seleccionar todas",
+      "queueCount": "{count, plural, one {1 hoja de horas} other {# hojas de horas}}",
+      "queueOwnBadge": "Hoja propia",
+      "queueOwnTooltip": "Tu propia hoja de horas — la aprobación corresponde a otro miembro del equipo",
+      "queueRowAria": "Seleccionar la hoja de horas de {name}",
+      "queueProfileAria": "Abrir el perfil en una pestaña nueva",
+      "queueReview": "Revisar",
+      "drawerAria": "Revisar hoja de horas",
+      "close": "Cerrar",
+      "loading": "Cargando…",
+      "drawerNoEntries": "Sin entradas.",
+      "colDay": "Día",
+      "colHours": "H",
+      "drawerOwnNotice": "Tu propia hoja de horas — otro miembro del equipo se encarga de la aprobación.",
+      "drawerNotePlaceholder": "Nota (opcional) — en caso de rechazo explica qué corregir",
+      "approve": "Aprobar",
+      "reject": "Rechazar",
+      "edit": "Editar",
+      "reopen": "Reabrir",
+      "saveFailed": "Error al guardar.",
+      "actionFailed": "La acción falló.",
+      "drawerFallbackTitle": "Hoja de horas",
+      "status": {
+        "draft": "Borrador",
+        "submitted": "Enviada",
+        "approved": "Aprobada",
+        "rejected": "Rechazada"
+      },
+      "category": {
+        "workshop": "Taller",
+        "repair": "Reparación",
+        "intake": "Recepción",
+        "sales": "Venta",
+        "admin": "Administración",
+        "education": "Formación",
+        "logistics": "Logística",
+        "meeting": "Reunión",
+        "volunteering": "Voluntariado",
+        "other": "Otro",
+        "ferien": "Vacaciones",
+        "krank": "Enfermedad",
+        "unfall": "Accidente",
+        "feiertag": "Día festivo",
+        "militaer": "Militar/protección civil",
+        "unbezahlt": "No remunerado"
+      },
+      "weekday": {
+        "monday": "Lu",
+        "tuesday": "Ma",
+        "wednesday": "Mi",
+        "thursday": "Ju",
+        "friday": "Vi",
+        "saturday": "Sá",
+        "sunday": "Do"
+      },
+      "profileEmpty": "Aún no hay hojas de horas.",
+      "profileTotals": "{count} hojas · {duration} en total",
+      "profileToReview": "{count} por revisar",
       "dayGridShow": "Mostrar cuadrícula horaria",
       "dayGridHide": "Ocultar cuadrícula horaria"
     },
@@ -10289,6 +10415,32 @@
     "intake": {
       "pageTitle": "Entrada de dispositivos",
       "pageDescription": "Todos los dispositivos registrados: estado, lista de control y publicación",
+      "quickCapture": {
+        "title": "Registrar un dispositivo ahora",
+        "description": "Fabricante, modelo, Intro — complete el resto después en el taller.",
+        "close": "Volver al flujo",
+        "brand": "Fabricante",
+        "brandPlaceholder": "Dell",
+        "productName": "Modelo / producto",
+        "productNamePlaceholder": "Latitude 7480",
+        "submit": "Registrar",
+        "saving": "Registrando…",
+        "keyboardHint": "Teclado: fabricante → Tab → modelo → Intro",
+        "details": "Ajustar nivel, categoría o donación",
+        "tier": "Nivel de procesamiento",
+        "category": "Categoría",
+        "categoryLater": "Definir después",
+        "condition": "Estado",
+        "donation": "Es una donación",
+        "donorName": "Nombre del donante",
+        "donorEmail": "Correo electrónico",
+        "donorNotes": "Notas",
+        "created": "{itemUuid} registrado — listo para el siguiente dispositivo.",
+        "printLabel": "Imprimir etiqueta",
+        "openPipeline": "Ver flujo",
+        "fullCapture": "Registro completo con foto, IA y detalles del producto",
+        "saveFailed": "No se pudo registrar el dispositivo"
+      },
       "createForm": {
         "title": "Registrar nuevo dispositivo",
         "tierLabel": "Nivel de procesamiento",
@@ -10418,6 +10570,15 @@
           "inProgress": "En proceso",
           "failed": "Fallido"
         },
+        "board": {
+          "in_progress": "En revisión",
+          "failed": "Bloqueado",
+          "ready": "Listo",
+          "published": "En tienda",
+          "empty": "Sin dispositivos",
+          "noCategory": "Categoría pendiente",
+          "ageDays": "{count} d"
+        },
         "donationYes": "Sí",
         "hero": {
           "kpis": {
@@ -10451,15 +10612,6 @@
             "sub": "Decidir: reparar y volver a probar, o cambiar de nivel (repuestos/reciclaje).",
             "cta": "Mostrar fallidos"
           }
-        },
-        "board": {
-          "in_progress": "En revisión",
-          "failed": "Bloqueado",
-          "ready": "Listo",
-          "published": "En tienda",
-          "empty": "Sin dispositivos",
-          "noCategory": "Categoría pendiente",
-          "ageDays": "{count} d"
         }
       },
       "checklist": {
@@ -10473,35 +10625,9 @@
         "failNoteRequired": "Se requiere justificación: ¿qué falló exactamente?",
         "saveFail": "Marcar como fallido",
         "confirmNoteHint": "Principio de cuatro ojos: confirme directamente como segunda persona. ¿Trabaja solo? Indique el motivo.",
+        "overrideSecondPerson": "Excepción: trabajo solo (se requiere un motivo de al menos 10 caracteres)",
         "confirmNotePlaceholder": "Opcional como segunda persona; obligatorio si firma solo, p. ej. «trabajando solo» …",
-        "saveConfirm": "Confirmar control de calidad",
-        "overrideSecondPerson": "Excepción: trabajo solo (se requiere un motivo de al menos 10 caracteres)"
-      },
-      "quickCapture": {
-        "title": "Registrar un dispositivo ahora",
-        "description": "Fabricante, modelo, Intro — complete el resto después en el taller.",
-        "close": "Volver al flujo",
-        "brand": "Fabricante",
-        "brandPlaceholder": "Dell",
-        "productName": "Modelo / producto",
-        "productNamePlaceholder": "Latitude 7480",
-        "submit": "Registrar",
-        "saving": "Registrando…",
-        "keyboardHint": "Teclado: fabricante → Tab → modelo → Intro",
-        "details": "Ajustar nivel, categoría o donación",
-        "tier": "Nivel de procesamiento",
-        "category": "Categoría",
-        "categoryLater": "Definir después",
-        "condition": "Estado",
-        "donation": "Es una donación",
-        "donorName": "Nombre del donante",
-        "donorEmail": "Correo electrónico",
-        "donorNotes": "Notas",
-        "created": "{itemUuid} registrado — listo para el siguiente dispositivo.",
-        "printLabel": "Imprimir etiqueta",
-        "openPipeline": "Ver flujo",
-        "fullCapture": "Registro completo con foto, IA y detalles del producto",
-        "saveFailed": "No se pudo registrar el dispositivo"
+        "saveConfirm": "Confirmar control de calidad"
       }
     },
     "it-hilfe": {
@@ -10749,6 +10875,7 @@
       "filterNoResults": "No se encontró ninguna sección"
     },
     "commandBar": {
+      "searching": "Buscando…",
       "placeholder": "Buscar o comando…",
       "openShortcut": "Abrir la barra de comandos",
       "noResults": "Sin resultados",
@@ -10765,8 +10892,7 @@
         "newDecision": "Nueva decisión",
         "newProtocol": "Nueva acta",
         "dashboard": "Panel"
-      },
-      "searching": "Buscando…"
+      }
     },
     "userMenu": {
       "darkMode": "Apariencia",
@@ -11195,6 +11321,40 @@
         "teamhr": "Equipo y RR. HH.",
         "system": "Sistema"
       }
+    },
+    "timeOff": {
+      "requestToggle": "Solicitar ausencia",
+      "kindLabel": "Tipo",
+      "from": "Desde",
+      "to": "Hasta",
+      "noteLabel": "Nota (opcional)",
+      "notePlaceholder": "p. ej. vacaciones de verano",
+      "submit": "Enviar solicitud",
+      "submitting": "Enviando …",
+      "missingDates": "Selecciona fecha de inicio y fin.",
+      "submitError": "No se pudo enviar la solicitud.",
+      "withdraw": "Retirar solicitud",
+      "kind": {
+        "ferien": "Vacaciones",
+        "unbezahlt": "Permiso no remunerado",
+        "militaer": "Militar / protección civil",
+        "unfall": "Accidente",
+        "other": "Otro"
+      },
+      "status": {
+        "pending": "Pendiente",
+        "approved": "Aprobada",
+        "rejected": "Rechazada",
+        "cancelled": "Retirada"
+      },
+      "approvalsTitle": "Solicitudes de ausencia",
+      "filterPending": "Abiertas",
+      "filterAll": "Todas",
+      "emptyPending": "No hay solicitudes abiertas.",
+      "emptyAll": "No hay solicitudes.",
+      "approve": "Aprobar",
+      "decline": "Rechazar",
+      "unknownUser": "Desconocido"
     }
   },
   "changelog": {

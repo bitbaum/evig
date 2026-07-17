@@ -5,7 +5,7 @@
  *
  * Multi-select approval queue. The hot path: HR opens this on Monday
  * morning, scans 18 submitted weekly timecards, ticks them all, hits
- * "Genehmigen". One round-trip. Edge cases (a row that needs a custom
+ * approve. One round-trip. Edge cases (a row that needs a custom
  * note, or a row that should be rejected) keep their per-row affordances.
  *
  * Density choices:
@@ -13,12 +13,14 @@
  *     hours + status badge. Click a name → opens person profile in a
  *     new tab (so the queue position isn't lost).
  *   - Sticky action bar at the top once anything is selected.
- *   - Filter strip: period_type (week / month / both), status (always
- *     "submitted" by default, can include "rejected" to retry).
+ *   - Filter strip: status tab (open / approved — approving a card must
+ *     NOT make it vanish; it moves to the approved tab where it stays
+ *     inspectable and editable), period_type (week / month / both).
  */
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import {
   CheckCircle2,
   RefreshCw,
@@ -34,12 +36,10 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
   TIMECARD_STATUSES,
-  TIMECARD_STATUS_LABELS,
   TIMECARD_STATUS_COLORS,
-  formatTimecardDuration,
   type TimecardStatus,
 } from '@/config/timecards'
-import { formatTimecardPeriod } from '@/lib/team/timecard-display'
+import { useTimecardIntl } from '@/hooks/useTimecardIntl'
 import { adminInteractive } from '@/lib/admin-ui'
 import { cn } from '@/lib/utils'
 
@@ -75,13 +75,14 @@ interface BulkResultResponse {
 }
 
 type PeriodFilter = 'all' | 'week' | 'month'
+type StatusFilter = typeof TIMECARD_STATUSES.SUBMITTED | typeof TIMECARD_STATUSES.APPROVED
 
-// Server error codes → what the approver reads in the partial-failure banner.
-const BULK_FAILURE_REASONS: Record<string, string> = {
-  timecard_self_review: 'eigene Karte',
-  timecard_not_submitted: 'nicht mehr eingereicht',
-  timecard_not_found: 'nicht gefunden',
-  timecard_payroll_locked: 'im Lohnlauf gesperrt',
+// Server error codes → translation key for the partial-failure banner.
+const BULK_FAILURE_KEYS: Record<string, string> = {
+  timecard_self_review: 'failureSelfReview',
+  timecard_not_submitted: 'failureNotSubmitted',
+  timecard_not_found: 'failureNotFound',
+  timecard_payroll_locked: 'failurePayrollLocked',
 }
 
 export function TimecardApprovalsClient({
@@ -94,9 +95,12 @@ export function TimecardApprovalsClient({
    *  offering a doomed click to everyone else. */
   allowSelfReview?: boolean
 }) {
+  const t = useTranslations('admin.timecards')
+  const { statusLabel, duration, period, locale } = useTimecardIntl()
   const [items, setItems] = useState<ApprovalRow[]>([])
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [sharedNote, setSharedNote] = useState('')
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>(TIMECARD_STATUSES.SUBMITTED)
   const [periodFilter, setPeriodFilter] = useState<PeriodFilter>('all')
   const [isLoading, setIsLoading] = useState(false)
   const [busy, setBusy] = useState(false)
@@ -104,11 +108,14 @@ export function TimecardApprovalsClient({
   const [openCardId, setOpenCardId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
+  // Bulk approve/reject only makes sense on the open (submitted) tab.
+  const bulkEnabled = statusFilter === TIMECARD_STATUSES.SUBMITTED
+
   const loadQueue = useCallback(async () => {
     setIsLoading(true)
     setError(null)
     const params = new URLSearchParams({
-      status: TIMECARD_STATUSES.SUBMITTED,
+      status: statusFilter,
       limit: '100',
     })
     if (periodFilter !== 'all') params.set('period_type', periodFilter)
@@ -123,12 +130,12 @@ export function TimecardApprovalsClient({
         return stillThere
       })
     } else {
-      setError(result.error || 'Zeitkarten konnten nicht geladen werden.')
+      setError(result.error || t('queueLoadError'))
     }
     setIsLoading(false)
-  }, [periodFilter])
+  }, [periodFilter, statusFilter, t])
 
-  // Reload whenever the period filter changes. setState inside the effect
+  // Reload whenever a filter changes. setState inside the effect
   // is the right pattern here — we kick off an async fetch that calls
   // setItems / setError when it lands — so the lint rule is suppressed.
   /* eslint-disable react-hooks/set-state-in-effect */
@@ -177,21 +184,27 @@ export function TimecardApprovalsClient({
     })
     setBusy(false)
     if (!result.success || !result.data) {
-      setError(result.error || 'Mehrfach-Freigabe fehlgeschlagen.')
+      setError(result.error || t('queueBulkError'))
       return
     }
-    const okWord = status === 'approved' ? 'genehmigt' : 'zurückgewiesen'
-    // Surface WHY rows failed — "1 fehlgeschlagen" without a reason left the
+    const okCount = result.data.approved + result.data.rejected
+    const okPart = status === 'approved'
+      ? t('bulkApprovedResult', { count: okCount })
+      : t('bulkRejectedResult', { count: okCount })
+    // Surface WHY rows failed — a bare failure count without a reason left the
     // approver guessing (self-review, race, payroll lock all looked identical).
     const failureReasons = Array.from(new Set(
       result.data.results
         .filter(r => !r.ok)
-        .map(r => BULK_FAILURE_REASONS[r.error ?? ''] ?? r.error ?? 'unbekannt')
+        .map(r => {
+          const key = BULK_FAILURE_KEYS[r.error ?? '']
+          return key ? t(key as never) : (r.error ?? t('failureUnknown'))
+        })
     ))
     setMessage(
-      `${result.data.approved + result.data.rejected} ${okWord}` +
+      okPart +
       (result.data.failed > 0
-        ? ` · ${result.data.failed} fehlgeschlagen (${failureReasons.join(', ')})`
+        ? ` · ${t('bulkFailedResult', { count: result.data.failed, reasons: failureReasons.join(', ') })}`
         : '')
     )
     setSelected(new Set())
@@ -208,7 +221,25 @@ export function TimecardApprovalsClient({
       {/* Filter strip */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-3">
         <div className="flex items-center gap-2">
-          <span className="text-sm text-text-secondary">Zeitraum:</span>
+          <span className="text-sm text-text-secondary">{t('queueStatusLabel')}</span>
+          {([TIMECARD_STATUSES.SUBMITTED, TIMECARD_STATUSES.APPROVED] as StatusFilter[]).map(opt => (
+            <Button
+              key={opt}
+              variant={statusFilter === opt ? 'primary' : 'ghost'}
+              size="sm"
+              onClick={() => { setStatusFilter(opt); setSelected(new Set()) }}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium h-auto ${
+                statusFilter === opt
+                  ? ''
+                  : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
+              }`}
+            >
+              {opt === TIMECARD_STATUSES.SUBMITTED ? t('queueTabOpen') : t('queueTabApproved')}
+            </Button>
+          ))}
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-text-secondary">{t('queuePeriodLabel')}</span>
           {(['all', 'week', 'month'] as PeriodFilter[]).map(opt => (
             <Button
               key={opt}
@@ -221,7 +252,7 @@ export function TimecardApprovalsClient({
                   : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
               }`}
             >
-              {opt === 'all' ? 'Alle' : opt === 'week' ? 'Wochen' : 'Monate'}
+              {opt === 'all' ? t('queueFilterAll') : opt === 'week' ? t('queueFilterWeeks') : t('queueFilterMonths')}
             </Button>
           ))}
         </div>
@@ -234,23 +265,23 @@ export function TimecardApprovalsClient({
             className="inline-flex items-center gap-2"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
-            Aktualisieren
+            {t('queueRefresh')}
           </Button>
         </div>
       </div>
 
       {/* Sticky action bar — only when something is selected */}
-      {selected.size > 0 && (
+      {bulkEnabled && selected.size > 0 && (
         <div className="sticky top-0 z-10 -mx-4 px-4 sm:mx-0 sm:rounded-xl border border-strong dark:border-action/30 bg-action-muted/10 p-3">
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
             <div className="text-sm font-medium text-action-text">
-              {selected.size} ausgewählt · {formatTimecardDuration(totalSelectedMinutes)}
+              {t('queueSelected', { count: selected.size, duration: duration(totalSelectedMinutes) })}
             </div>
             <Input
               type="text"
               value={sharedNote}
               onChange={e => setSharedNote(e.target.value)}
-              placeholder="Notiz (optional) — bei Rückweisung erklärt sie dem Team, was anzupassen ist"
+              placeholder={t('queueNotePlaceholder')}
               className="flex-1 min-w-0"
               maxLength={1000}
             />
@@ -262,7 +293,7 @@ export function TimecardApprovalsClient({
                 className="inline-flex items-center gap-1.5 bg-success-600 hover:bg-success-700 text-white text-sm font-semibold"
               >
                 <CheckCircle2 className="w-4 h-4" />
-                Genehmigen ({selected.size})
+                {t('queueApproveCount', { count: selected.size })}
               </Button>
               <Button
                 variant="destructive-outline"
@@ -271,7 +302,7 @@ export function TimecardApprovalsClient({
                 className="inline-flex items-center gap-1.5 text-sm font-semibold"
               >
                 <XCircle className="w-4 h-4" />
-                Zurückweisen
+                {t('queueReject')}
               </Button>
             </div>
           </div>
@@ -295,20 +326,22 @@ export function TimecardApprovalsClient({
       <div className="rounded-xl border border bg-surface-base overflow-hidden">
         {items.length === 0 && !isLoading ? (
           <div className="px-6 py-12 text-center text-sm text-text-tertiary">
-            Keine offenen Zeitkarten. Stand: {new Date().toLocaleTimeString('de-CH', { hour: '2-digit', minute: '2-digit' })}
+            {t('queueEmpty', { time: new Date().toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' }) })}
           </div>
         ) : (
           <>
             <div className="px-4 sm:px-6 py-2.5 border-b border flex items-center gap-3 bg-surface-raised">
-              <input
-                type="checkbox"
-                checked={allSelected}
-                onChange={toggleAll}
-                aria-label="Alle auswählen"
-                className="w-4 h-4 rounded-sm border-default text-action focus:ring-action"
-              />
+              {bulkEnabled && (
+                <input
+                  type="checkbox"
+                  checked={allSelected}
+                  onChange={toggleAll}
+                  aria-label={t('queueSelectAll')}
+                  className="w-4 h-4 rounded-sm border-default text-action focus:ring-action"
+                />
+              )}
               <span className="text-xs font-medium uppercase tracking-wider text-text-tertiary">
-                {items.length} eingereicht
+                {t('queueCount', { count: items.length })}
               </span>
             </div>
             <ul className="divide-y divide-subtle">
@@ -318,7 +351,6 @@ export function TimecardApprovalsClient({
                 const isOwn = row.user_id === currentUserId && !allowSelfReview
                 const status = row.status as TimecardStatus
                 const statusColor = TIMECARD_STATUS_COLORS[status] ?? ''
-                const statusLabel = TIMECARD_STATUS_LABELS[status] ?? row.status
                 const subtitleParts = [
                   row.position,
                   row.department,
@@ -333,15 +365,17 @@ export function TimecardApprovalsClient({
                       adminInteractive.rowHoverFaint,
                     )}
                   >
-                    <input
-                      type="checkbox"
-                      checked={isSelected}
-                      onChange={() => toggle(row.id)}
-                      disabled={isOwn}
-                      title={isOwn ? 'Eigene Zeitkarte — Freigabe durch ein anderes Teammitglied' : undefined}
-                      aria-label={`Zeitkarte von ${row.user_name || row.user_email} auswählen`}
-                      className="w-4 h-4 rounded-sm border-default text-action focus:ring-action shrink-0 disabled:opacity-40"
-                    />
+                    {bulkEnabled && (
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => toggle(row.id)}
+                        disabled={isOwn}
+                        title={isOwn ? t('queueOwnTooltip') : undefined}
+                        aria-label={t('queueRowAria', { name: row.user_name || row.user_email })}
+                        className="w-4 h-4 rounded-sm border-default text-action focus:ring-action shrink-0 disabled:opacity-40"
+                      />
+                    )}
                     <Avatar
                       name={row.user_name || row.user_email}
                       size="sm"
@@ -354,7 +388,7 @@ export function TimecardApprovalsClient({
                         </span>
                         {isOwn && (
                           <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap bg-surface-overlay text-text-tertiary">
-                            Eigene Karte
+                            {t('queueOwnBadge')}
                           </span>
                         )}
                         {row.team_profile_id && (
@@ -362,7 +396,7 @@ export function TimecardApprovalsClient({
                             href={`/admin/team/${row.team_profile_id}`}
                             target="_blank"
                             className="text-text-muted hover:text-action"
-                            aria-label="Profil in neuem Tab öffnen"
+                            aria-label={t('queueProfileAria')}
                           >
                             <ExternalLink className="w-3.5 h-3.5" />
                           </Link>
@@ -375,13 +409,13 @@ export function TimecardApprovalsClient({
                       )}
                     </div>
                     <div className="hidden sm:block min-w-0 text-sm text-text-secondary truncate text-right">
-                      {formatTimecardPeriod(row.period_type, row.period_start, row.period_end)}
+                      {period(row.period_type, row.period_start, row.period_end)}
                     </div>
                     <div className="font-semibold text-text-primary text-right whitespace-nowrap text-sm">
-                      {formatTimecardDuration(Number(row.total_minutes) || 0)}
+                      {duration(Number(row.total_minutes) || 0)}
                     </div>
                     <span className={`hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap ${statusColor}`}>
-                      {statusLabel}
+                      {statusLabel(row.status)}
                     </span>
                     <Button
                       variant="outline"
@@ -389,7 +423,7 @@ export function TimecardApprovalsClient({
                       onClick={() => setOpenCardId(row.id)}
                       className="shrink-0 inline-flex items-center gap-1.5"
                     >
-                      <Eye className="w-3.5 h-3.5" /> Prüfen
+                      <Eye className="w-3.5 h-3.5" /> {t('queueReview')}
                     </Button>
                   </li>
                 )
