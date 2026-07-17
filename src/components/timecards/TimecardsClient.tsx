@@ -53,7 +53,7 @@ export function TimecardsClient({
   const [menuPos, setMenuPos] = useState<ContextMenuPosition | null>(null)
   const [menuCount, setMenuCount] = useState(1)
   const t = useTranslations('admin.timecards')
-  const { duration } = useTimecardIntl()
+  const { duration, categoryLabel } = useTimecardIntl()
 
   // Lock/label decisions come from the SERVER status + a content diff, not
   // from the local draft status (which flips on every keystroke): editing a
@@ -87,7 +87,7 @@ export function TimecardsClient({
       : []),
     { label: t('bulkFill'), icon: <CalendarCheck className="h-4 w-4" />, onSelect: tc.bulkFillFromSchedule },
     ...TIMECARD_ABSENCE_TYPES.map(absence => ({
-      label: absence.label,
+      label: categoryLabel(absence.value),
       onSelect: () => tc.bulkSetAbsence(absence.value),
     })),
     { label: t('bulkClear'), icon: <Trash2 className="h-4 w-4" />, tone: 'danger' as const, separatorBefore: true, onSelect: tc.bulkClear },
@@ -314,7 +314,7 @@ export function TimecardsClient({
       {/* Sticky action bar — THE (single) Save/Einreichen cluster; the month
           header deliberately has none. pr clears the floating feedback FAB
           (fixed right-4 on phones) so it can't cover the submit button. */}
-      <div className="sticky bottom-0 z-20 -mx-1 flex flex-col gap-2 border-t border-subtle bg-surface-base/95 py-3 pl-1 pr-16 backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:pr-1">
+      <div className="sticky bottom-[var(--bottom-nav-clearance,0px)] z-20 -mx-1 flex flex-col gap-2 border-t border-subtle bg-surface-base/95 py-3 pl-1 pr-20 backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:pr-1">
         {/* Feedback lives NEXT TO the buttons that trigger it — the header
             message is off-screen when the user submits from down here. */}
         {tc.errorMessage ? (
@@ -336,7 +336,9 @@ export function TimecardsClient({
                 : `${tc.periodEntries.length} ${t('headerDaysSuffix')} · ${duration(tc.totalMinutes)}`}
           </p>
         )}
-        <div className="flex items-center gap-2">
+        {/* flex-wrap + growing buttons: on a phone a label that doesn't fit
+            wraps to its own full-width line instead of pushing the page wide. */}
+        <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
           {canApprove && isApproved && tc.draft.id && (
             <Button
               type="button"
@@ -346,6 +348,7 @@ export function TimecardsClient({
                 const r = await apiFetch(`/api/admin/timecards/${tc.draft.id}/reopen`, { method: 'POST' })
                 if (r.success) window.location.reload()
               }}
+              className="flex-1 sm:flex-none"
             >
               {t('reopen2')}
             </Button>
@@ -356,6 +359,7 @@ export function TimecardsClient({
             size="sm"
             onClick={tc.saveDraft}
             disabled={tc.isSaving || tc.isLoadingDraft || isApproved || !tc.isDirty}
+            className="flex-1 sm:flex-none"
           >
             {tc.isSaving ? t('saving') : t('save')}
           </Button>
@@ -365,6 +369,7 @@ export function TimecardsClient({
             size="sm"
             onClick={tc.submitDraft}
             disabled={tc.isSubmitting || tc.periodEntries.length === 0 || tc.isLoadingDraft || isApproved || isSubmittedUnchanged}
+            className="flex-1 sm:flex-none"
           >
             {tc.isSubmitting ? t('submitting') : serverStatus === 'submitted' ? t('resubmit') : t('submit')}
           </Button>

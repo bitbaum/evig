@@ -52,7 +52,7 @@ export function TimecardMonthGrid({
   onEditDay?: (date: string) => void
 }) {
   const t = useTranslations('admin.timecards')
-  const { categoryLabel, duration, weekdayLabel } = useTimecardIntl()
+  const { categoryLabel, duration, durationCompact, weekdayLabel } = useTimecardIntl()
   const selected = new Set(selectedDates)
 
   // Whether the running paint gesture adds or removes days — decided by the
@@ -219,11 +219,13 @@ export function TimecardMonthGrid({
               ) : (
                 <span
                   className={cn(
-                    'font-mono text-sm tabular-nums leading-tight sm:text-base',
+                    'font-mono text-[13px] tabular-nums leading-tight sm:text-base',
                     entry ? 'text-text-primary' : 'text-text-tertiary',
                   )}
                 >
-                  {entry ? duration(entry.duration_minutes) : '·'}
+                  {/* Compact "7h" in narrow phone cells; full "7 Std." from sm up. */}
+                  <span className="sm:hidden">{entry ? durationCompact(entry.duration_minutes) : '·'}</span>
+                  <span className="hidden sm:inline">{entry ? duration(entry.duration_minutes) : '·'}</span>
                 </span>
               )}
             </Button>

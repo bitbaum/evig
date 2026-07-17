@@ -10353,7 +10353,8 @@
       "dayGridShow": "Afficher la grille horaire",
       "dayGridHide": "Masquer la grille horaire",
       "viewingPastPeriod": "Tu consultes {period} — pas le mois en cours.",
-      "backToCurrentMonth": "Revenir au mois en cours"
+      "backToCurrentMonth": "Revenir au mois en cours",
+      "durationCellHours": "{hours}h"
     },
     "appointments": {
       "pageTitle": "Rendez-vous",

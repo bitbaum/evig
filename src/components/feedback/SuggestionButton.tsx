@@ -327,7 +327,7 @@ export default function SuggestionButton() {
   // full-width primary CTA there) stays uncovered. From sm up it sits at the
   // right edge, vertically centered.
   return (
-    <div className="fixed z-40 right-4 bottom-[4.5rem] sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2">
+    <div className="fixed z-40 right-4 bottom-[calc(4.5rem+var(--bottom-nav-clearance,0px))] sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2">
       <Button
         variant="primary"
         size="icon"

@@ -10401,7 +10401,8 @@
       "dayGridShow": "Show hour grid",
       "dayGridHide": "Hide hour grid",
       "viewingPastPeriod": "You are viewing {period} — not the current month.",
-      "backToCurrentMonth": "Back to current month"
+      "backToCurrentMonth": "Back to current month",
+      "durationCellHours": "{hours}h"
     },
     "appointments": {
       "pageTitle": "Appointments",

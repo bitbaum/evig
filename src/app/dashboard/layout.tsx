@@ -31,13 +31,17 @@ export default async function DashboardLayout({ children }: { children: React.Re
           makes client pages (e.g. messages) false-redirect logged-in staff to /admin
           (React 418 hydration mismatch). /admin works precisely because it never
           double-wrapped. */}
-      <ConditionalMainLayout leanChrome>
-        {/* Desktop dashboard nav lives in the account dropdown + the home-page
-            sectioned index — no redundant horizontal strip. Mobile (<lg) keeps a
-            thumb-reachable bottom tab bar + "Mehr" sheet; the padding clears it. */}
-        <div className="pb-16 lg:pb-0">{children}</div>
-        <DashboardMobileNav {...navUser} />
-      </ConditionalMainLayout>
+      {/* .has-bottom-nav wraps the WHOLE shell (incl. MainLayout's floating
+          buttons) so every bottom-anchored element inherits the clearance var. */}
+      <div className="has-bottom-nav">
+        <ConditionalMainLayout leanChrome>
+          {/* Desktop dashboard nav lives in the account dropdown + the home-page
+              sectioned index — no redundant horizontal strip. Mobile (<lg) keeps a
+              thumb-reachable bottom tab bar + "Mehr" sheet; the padding clears it. */}
+          <div className="pb-[var(--bottom-nav-clearance,0px)]">{children}</div>
+          <DashboardMobileNav {...navUser} />
+        </ConditionalMainLayout>
+      </div>
     </NextIntlClientProvider>
   )
 }

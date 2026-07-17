@@ -10400,7 +10400,8 @@
       "dayGridShow": "Mostrar cuadrícula horaria",
       "dayGridHide": "Ocultar cuadrícula horaria",
       "viewingPastPeriod": "Estás viendo {period} — no el mes actual.",
-      "backToCurrentMonth": "Volver al mes actual"
+      "backToCurrentMonth": "Volver al mes actual",
+      "durationCellHours": "{hours}h"
     },
     "appointments": {
       "pageTitle": "Citas",

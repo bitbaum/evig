@@ -10400,7 +10400,8 @@
       "dayGridShow": "시간 그리드 표시",
       "dayGridHide": "시간 그리드 숨기기",
       "viewingPastPeriod": "{period} 보는 중 — 현재 달이 아닙니다.",
-      "backToCurrentMonth": "현재 달로 돌아가기"
+      "backToCurrentMonth": "현재 달로 돌아가기",
+      "durationCellHours": "{hours}h"
     },
     "appointments": {
       "pageTitle": "예약",

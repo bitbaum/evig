@@ -10400,7 +10400,8 @@
       "dayGridShow": "Mostra griglia oraria",
       "dayGridHide": "Nascondi griglia oraria",
       "viewingPastPeriod": "Stai visualizzando {period} — non il mese corrente.",
-      "backToCurrentMonth": "Torna al mese corrente"
+      "backToCurrentMonth": "Torna al mese corrente",
+      "durationCellHours": "{hours}h"
     },
     "appointments": {
       "pageTitle": "Appuntamenti",

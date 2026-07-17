@@ -137,6 +137,32 @@ brand.*:   social (mastodon, linkedin, facebook) — bg-brand-mastodon etc.
 | Section BG white | `bg-white` (dark auto-handled) | `bg-white dark:bg-neutral-950` (unless deeper black needed) |
 | Card hover | `hover:border-neutral-300` | `hover:shadow-xl` |
 
+### Mobile bottom-nav clearance — one variable, no hardcoded nav math
+
+Admin and dashboard render a fixed mobile bottom nav (<lg). Their shells set
+`.has-bottom-nav` (see globals.css), which defines `--bottom-nav-clearance`
+(nav height + safe-area below lg, `0px` from lg up and on navless pages).
+
+**Every fixed/sticky bottom-anchored element (FAB, submit bar, bulk bar, page
+bottom padding) MUST offset itself with this var — never hardcode the nav
+height or assume `bottom-0` is visible:**
+
+```tsx
+// ✓ FAB            fixed bottom-[calc(1.5rem+var(--bottom-nav-clearance,0px))]
+// ✓ sticky bar     sticky bottom-[var(--bottom-nav-clearance,0px)]
+// ✓ page padding   pb-[calc(1.5rem+var(--bottom-nav-clearance,0px))]
+```
+
+WRONG: `fixed bottom-6`, `sticky bottom-0`, or any arbitrary bottom offset that
+bakes in 3.5rem / the safe-area env inset by hand. (Careful with examples in
+docs: Tailwind v4 scans ALL files for class candidates — an invalid
+bracket-class in a markdown example breaks the CSS build.)
+
+Audit: `grep -rnE '(fixed|sticky)[^"]*bottom-(0|\d|\[calc\(3)' src/components src/app/admin` —
+every hit inside an admin/dashboard surface must use the var. When touching ANY
+page, check it at 390px: nothing may hide behind the bottom nav, and
+`document.documentElement.scrollWidth` must equal `innerWidth`.
+
 ### Audit commands
 
 ```bash

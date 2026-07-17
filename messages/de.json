@@ -10456,7 +10456,8 @@
       "dayGridShow": "Stundenraster anzeigen",
       "dayGridHide": "Stundenraster ausblenden",
       "viewingPastPeriod": "Du siehst {period} — nicht den aktuellen Monat.",
-      "backToCurrentMonth": "Zum aktuellen Monat"
+      "backToCurrentMonth": "Zum aktuellen Monat",
+      "durationCellHours": "{hours}h"
     },
     "appointments": {
       "pageTitle": "Termine",

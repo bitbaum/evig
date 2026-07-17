@@ -30,7 +30,7 @@ export function HirnFloatingButton({ hasAccess }: HirnFloatingButtonProps) {
         variant="primary"
         size="icon"
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full shadow-xs hover:scale-105 group"
+        className="fixed bottom-[calc(1.5rem+var(--bottom-nav-clearance,0px))] right-4 sm:right-6 z-40 w-14 h-14 rounded-full shadow-xs hover:scale-105 group"
         title={t('open')}
       >
         <Brain className="w-6 h-6 text-white" />
