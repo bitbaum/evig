@@ -6,13 +6,20 @@ import { ChevronDown, ChevronRight, Check, X, StickyNote } from 'lucide-react'
 import { formatDateShort } from '@/lib/date-formats'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
-import { CHECKLIST_RESULTS, CHECKLIST_RESULT_LABELS, type ChecklistResult } from '@/config/intake-checklist'
+import {
+  CHECKLIST_RESULTS,
+  CHECKLIST_RESULT_LABELS,
+  SECOND_PERSON_SOLO_OVERRIDE_NOTE,
+  type ChecklistResult,
+} from '@/config/intake-checklist'
 import type { ChecklistGroup as ChecklistGroupType, ChecklistItemWithState } from './types'
 import { adminInteractive } from '@/lib/admin-ui'
 
 interface ChecklistGroupProps {
   group: ChecklistGroupType
   readOnly?: boolean
+  /** Items with an in-flight save — their verdict buttons are disabled. */
+  pendingItems?: ReadonlySet<string>
   onSetResult: (
     itemId: string,
     result: ChecklistResult | null,
@@ -24,7 +31,7 @@ interface ChecklistGroupProps {
 const isDone = (item: ChecklistItemWithState) =>
   item.state.result === CHECKLIST_RESULTS.PASS || item.state.result === CHECKLIST_RESULTS.NA
 
-export function ChecklistGroup({ group, readOnly = false, onSetResult }: ChecklistGroupProps) {
+export function ChecklistGroup({ group, readOnly = false, pendingItems, onSetResult }: ChecklistGroupProps) {
   const t = useTranslations('admin.intake.checklist')
   const tForms = useTranslations('admin.forms')
   const [expanded, setExpanded] = useState(!readOnly)
@@ -122,6 +129,7 @@ export function ChecklistGroup({ group, readOnly = false, onSetResult }: Checkli
           {group.items.map((item) => {
             const result = item.state.result
             const failed = result === CHECKLIST_RESULTS.FAIL
+            const saving = pendingItems?.has(item.id) ?? false
             return (
               <div
                 key={item.id}
@@ -137,6 +145,7 @@ export function ChecklistGroup({ group, readOnly = false, onSetResult }: Checkli
                       variant="ghost"
                       size="icon"
                       onClick={() => handleVerdict(item, CHECKLIST_RESULTS.PASS)}
+                      disabled={saving}
                       className={`h-11 w-11 sm:h-7 sm:w-7 rounded border-2 flex items-center justify-center transition-colors ${
                         result === CHECKLIST_RESULTS.PASS
                           ? 'bg-action border-action text-white'
@@ -153,6 +162,7 @@ export function ChecklistGroup({ group, readOnly = false, onSetResult }: Checkli
                       variant="ghost"
                       size="icon"
                       onClick={() => handleVerdict(item, CHECKLIST_RESULTS.FAIL)}
+                      disabled={saving}
                       className={`h-11 w-11 sm:h-7 sm:w-7 rounded border-2 flex items-center justify-center transition-colors ${
                         failed
                           ? 'bg-error-600 border-error-600 text-white'
@@ -169,6 +179,7 @@ export function ChecklistGroup({ group, readOnly = false, onSetResult }: Checkli
                       variant="ghost"
                       size="icon"
                       onClick={() => handleVerdict(item, CHECKLIST_RESULTS.NA)}
+                      disabled={saving}
                       className={`h-11 w-11 sm:h-7 sm:w-7 rounded border-2 flex items-center justify-center font-semibold transition-colors ${
                         result === CHECKLIST_RESULTS.NA
                           ? 'bg-surface-overlay border-strong text-text-secondary'
@@ -244,6 +255,23 @@ export function ChecklistGroup({ group, readOnly = false, onSetResult }: Checkli
                         {pendingConfirm[item.id] && (
                           <div className="space-y-2">
                             <p className="text-xs text-text-secondary">{t('confirmNoteHint')}</p>
+                            {/* Solo shift: one click signs off with the standard
+                                audit note — no typing required. */}
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              disabled={saving}
+                              onClick={() => {
+                                onSetResult(item.id, CHECKLIST_RESULTS.PASS, SECOND_PERSON_SOLO_OVERRIDE_NOTE, {
+                                  secondPersonOverride: true,
+                                })
+                                closeNotes(item.id)
+                              }}
+                              className="w-full justify-start text-xs border-warning-300 text-warning-800 dark:border-warning-800 dark:text-warning-200"
+                            >
+                              {t('overrideSoloAction')}
+                            </Button>
                             <label className="flex min-h-11 cursor-pointer items-center gap-2 rounded-lg border border-warning-200 bg-warning-50 px-3 py-2 text-xs text-warning-800 dark:border-warning-800 dark:bg-warning-900/20 dark:text-warning-200">
                               <input
                                 type="checkbox"
@@ -272,6 +300,7 @@ export function ChecklistGroup({ group, readOnly = false, onSetResult }: Checkli
                             type="button"
                             onClick={() => saveNotes(item)}
                             disabled={
+                              saving ||
                               (pendingFail[item.id] && !(notesText[item.id]?.trim())) ||
                               (pendingConfirm[item.id] && secondPersonOverride[item.id] === true && (notesText[item.id]?.trim().length ?? 0) < 10)
                             }

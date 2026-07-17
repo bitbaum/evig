@@ -10399,7 +10399,9 @@
       "profileTotals": "{count} cards · {duration} total",
       "profileToReview": "{count} to review",
       "dayGridShow": "Show hour grid",
-      "dayGridHide": "Hide hour grid"
+      "dayGridHide": "Hide hour grid",
+      "viewingPastPeriod": "You are viewing {period} — not the current month.",
+      "backToCurrentMonth": "Back to current month"
     },
     "appointments": {
       "pageTitle": "Appointments",
@@ -10627,6 +10629,7 @@
         "saveFail": "Mark as failed",
         "confirmNoteHint": "Four-eyes principle: confirm directly as a second person. Working alone? State the reason.",
         "overrideSecondPerson": "Exception: I am working alone (a reason of at least 10 characters is required)",
+        "overrideSoloAction": "Working alone — override with one click",
         "confirmNotePlaceholder": "Optional as a second person — required for a solo sign-off, e.g. \"working alone\" …",
         "saveConfirm": "Confirm quality control"
       }

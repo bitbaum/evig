@@ -64,11 +64,7 @@ Wichtig:
   refine: `Du hast einen bestehenden Blog-Artikel erhalten, der verbessert werden soll.
 
 AKTUELLER ARTIKEL:
-Titel: {title}
-Kurzbeschreibung: {excerpt}
-Inhalt:
-{content}
-Tags: {tags}
+{currentData}
 
 ANWEISUNG ZUR VERBESSERUNG:
 {instruction}

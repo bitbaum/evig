@@ -10398,7 +10398,9 @@
       "profileTotals": "{count} hojas · {duration} en total",
       "profileToReview": "{count} por revisar",
       "dayGridShow": "Mostrar cuadrícula horaria",
-      "dayGridHide": "Ocultar cuadrícula horaria"
+      "dayGridHide": "Ocultar cuadrícula horaria",
+      "viewingPastPeriod": "Estás viendo {period} — no el mes actual.",
+      "backToCurrentMonth": "Volver al mes actual"
     },
     "appointments": {
       "pageTitle": "Citas",
@@ -10626,6 +10628,7 @@
         "saveFail": "Marcar como fallido",
         "confirmNoteHint": "Principio de cuatro ojos: confirme directamente como segunda persona. ¿Trabaja solo? Indique el motivo.",
         "overrideSecondPerson": "Excepción: trabajo solo (se requiere un motivo de al menos 10 caracteres)",
+        "overrideSoloAction": "Solo en el turno — anular con un clic",
         "confirmNotePlaceholder": "Opcional como segunda persona; obligatorio si firma solo, p. ej. «trabajando solo» …",
         "saveConfirm": "Confirmar control de calidad"
       }

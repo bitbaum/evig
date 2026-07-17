@@ -7,9 +7,11 @@
  * single most-important thing to surface, since the user has to act on them.
  */
 
+import Link from 'next/link'
 import { useLocale, useTranslations } from 'next-intl'
 import { TIMECARD_STATUS_COLORS, TIMECARD_STATUSES } from '@/config/timecards'
 import type { TimecardStatus } from '@/config/timecards'
+import { ROUTES } from '@/config/routes'
 import { formatDateShort } from '@/lib/date-formats'
 import { Clock } from 'lucide-react'
 import { TIMECARD_STATUS_ICONS } from '@/lib/team/timecard-display'
@@ -60,8 +62,14 @@ export function TimecardHistorySidebar({ history }: Props) {
           const statusColor = TIMECARD_STATUS_COLORS[status] ?? ''
           const dateRef = row.reviewedAt || row.submittedAt
           return (
-            <li key={row.id} className="px-5 py-3 hover:bg-surface-raised dark:hover:bg-surface-base/2 transition-colors">
-              <div className="flex items-start gap-3">
+            <li key={row.id} className="hover:bg-surface-raised dark:hover:bg-surface-base/2 transition-colors">
+              {/* Each row opens its period in the editor — a submitted card
+                  stays editable there until approved (edit auto-reverts it to
+                  draft; resubmitting sends it for approval again). */}
+              <Link
+                href={ROUTES.admin.zeiterfassungPeriod(row.periodType, row.periodStart)}
+                className="flex items-start gap-3 px-5 py-3"
+              >
                 <Icon className="w-4 h-4 mt-0.5 text-text-tertiary shrink-0" />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-2">
@@ -87,7 +95,7 @@ export function TimecardHistorySidebar({ history }: Props) {
                     </p>
                   )}
                 </div>
-              </div>
+              </Link>
             </li>
           )
         })}

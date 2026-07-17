@@ -1,7 +1,8 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useSearchParams } from 'next/navigation'
+import { useLocale, useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import {
   TIMECARD_STATUSES,
@@ -17,8 +18,9 @@ import {
 } from '@/config/timecards'
 import { useTimecardIntl } from '@/hooks/useTimecardIntl'
 import {
-  buildTimecardEntriesForMonth,
+  buildTimecardEntriesForRange,
   buildScheduleEntryForDate,
+  addDays,
   weekdayIdFromDate,
   calculateTimeRangeMinutes,
   getMonthStart,
@@ -34,7 +36,9 @@ import {
   mergeEntries,
   normalizeEntry,
   getDisplayDate,
+  startOfWeek,
 } from '@/lib/team/timecard-utils'
+import { formatTimecardPeriodIntl } from '@/lib/team/timecard-intl'
 import type {
   Timecard,
   TimecardEntryInput,
@@ -99,19 +103,47 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     [schedule],
   )
   const currentDate = useMemo(() => new Date(), [])
-  const currentMonthStart = useMemo(() => getMonthStart(currentDate), [currentDate])
-  const currentMonthEnd = useMemo(() => getNextMonthStart(currentDate), [currentDate])
+
+  // Viewed period — the URL is the SSOT (`?period_type=&period_date=`), so
+  // history entries deep-link straight into their card; no params = the
+  // current month. Client bounds mirror `resolveTimecardPeriod` (same shared
+  // startOfWeek/getMonthStart helpers), so GET/save target the same card.
+  const locale = useLocale()
+  const searchParams = useSearchParams()
+  const periodType: 'week' | 'month' =
+    searchParams.get('period_type') === 'week' ? 'week' : 'month'
+  const urlPeriodDate = searchParams.get('period_date')
+  const periodAnchor = useMemo(() => {
+    if (urlPeriodDate && /^\d{4}-\d{2}-\d{2}$/.test(urlPeriodDate)) {
+      return new Date(`${urlPeriodDate}T00:00:00.000Z`)
+    }
+    return currentDate
+  }, [urlPeriodDate, currentDate])
+
+  const currentMonthStart = useMemo(
+    () => (periodType === 'week' ? startOfWeek(periodAnchor) : getMonthStart(periodAnchor)),
+    [periodType, periodAnchor],
+  )
+  const currentMonthEnd = useMemo(
+    () => (periodType === 'week' ? addDays(currentMonthStart, 7) : getNextMonthStart(periodAnchor)),
+    [periodType, currentMonthStart, periodAnchor],
+  )
+  const isViewingCurrentPeriod =
+    periodType === 'month' &&
+    toISODate(currentMonthStart) === toISODate(getMonthStart(currentDate))
   const monthDates = useMemo(
     () => getDaysInRange(currentMonthStart, currentMonthEnd),
     [currentMonthStart, currentMonthEnd],
   )
   const monthEntries = useMemo(
-    () => buildTimecardEntriesForMonth(schedule, currentMonthStart),
-    [schedule, currentMonthStart],
+    () => buildTimecardEntriesForRange(schedule, currentMonthStart, currentMonthEnd),
+    [schedule, currentMonthStart, currentMonthEnd],
   )
   const monthLabel = useMemo(
-    () => intl.monthLabel(currentDate),
-    [currentDate, intl],
+    () => periodType === 'week'
+      ? formatTimecardPeriodIntl(t, locale, periodType, toISODate(currentMonthStart), toISODate(currentMonthEnd))
+      : intl.monthLabel(currentMonthStart),
+    [periodType, t, locale, currentMonthStart, currentMonthEnd, intl],
   )
   // For "fill the month", fall back to the standard Mon-Fri 09:00–17:00 plan
   // when the user hasn't set a schedule yet — so the one-click fill works out
@@ -121,8 +153,8 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     [hasSchedule, schedule],
   )
   const monthFillEntries = useMemo(
-    () => buildTimecardEntriesForMonth(effectiveSchedule, currentMonthStart),
-    [effectiveSchedule, currentMonthStart],
+    () => buildTimecardEntriesForRange(effectiveSchedule, currentMonthStart, currentMonthEnd),
+    [effectiveSchedule, currentMonthStart, currentMonthEnd],
   )
   const scheduleSummary = hasSchedule
     ? intl.scheduleSummary(schedule)
@@ -130,11 +162,11 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
 
   const currentPeriodRange = useMemo(
     () => ({
-      period_type: 'month' as const,
+      period_type: periodType,
       period_start: toISODate(currentMonthStart),
       period_end: toISODate(currentMonthEnd),
     }),
-    [currentMonthStart, currentMonthEnd],
+    [periodType, currentMonthStart, currentMonthEnd],
   )
 
   // Context handed to the AI assistant so it can resolve natural-language input
@@ -857,6 +889,7 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     // window
     monthLabel,
     visibleDates,
+    isViewingCurrentPeriod,
     // draft
     draft,
     periodEntries,

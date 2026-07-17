@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { ChevronRight, ChevronLeft, CalendarDays, CalendarRange, CalendarCheck, Pencil, Trash2, AlertCircle, Check } from 'lucide-react'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
@@ -10,6 +11,7 @@ import { ContextMenu, type ContextMenuItem, type ContextMenuPosition } from '@/c
 import { cn } from '@/lib/utils'
 import { apiFetch } from '@/lib/api/client'
 import { formatTimecardDuration, TIMECARD_ABSENCE_TYPES } from '@/config/timecards'
+import { ROUTES } from '@/config/routes'
 import { useTimecardIntl } from '@/hooks/useTimecardIntl'
 import { getDisplayDate } from '@/lib/team/timecard-utils'
 import { NoScheduleNotice } from './NoScheduleNotice'
@@ -113,6 +115,17 @@ export function TimecardsClient({
   // In month view a click both focuses the day (for the editor) and toggles
   return (
     <article className="space-y-6 pb-12">
+      {/* Opened from the history sidebar: make the time-travel obvious and
+          offer the way back (the URL owns the viewed period). */}
+      {!tc.isViewingCurrentPeriod && (
+        <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-info-200 bg-info-50 px-4 py-2.5 text-sm text-info-800 dark:border-info-800 dark:bg-info-900/20 dark:text-info-200">
+          <span>{t('viewingPastPeriod', { period: tc.monthLabel })}</span>
+          <Link href={ROUTES.admin.zeiterfassung} className="font-medium underline underline-offset-2">
+            {t('backToCurrentMonth')}
+          </Link>
+        </div>
+      )}
+
       <TimecardHeader
         monthLabel={tc.monthLabel}
         totalMinutes={tc.totalMinutes}

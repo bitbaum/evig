@@ -10398,7 +10398,9 @@
       "profileTotals": "{count}개 · 총 {duration}",
       "profileToReview": "검토 대상 {count}개",
       "dayGridShow": "시간 그리드 표시",
-      "dayGridHide": "시간 그리드 숨기기"
+      "dayGridHide": "시간 그리드 숨기기",
+      "viewingPastPeriod": "{period} 보는 중 — 현재 달이 아닙니다.",
+      "backToCurrentMonth": "현재 달로 돌아가기"
     },
     "appointments": {
       "pageTitle": "예약",
@@ -10626,6 +10628,7 @@
         "saveFail": "실패로 표시",
         "confirmNoteHint": "4눈 원칙: 두 번째 확인자는 바로 확인하세요. 혼자 근무 중이라면 사유를 적어주세요.",
         "overrideSecondPerson": "예외: 혼자 근무 중입니다(10자 이상의 사유 필요)",
+        "overrideSoloAction": "혼자 근무 중 — 한 번의 클릭으로 재정의",
         "confirmNotePlaceholder": "두 번째 확인자는 선택 사항 — 단독 승인 시 필수 (예: \"단독 근무\") …",
         "saveConfirm": "품질 검사 확인"
       }

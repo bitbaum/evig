@@ -553,6 +553,13 @@ export function hasChecklistFailure(
 }
 
 /**
+ * Audit note written by the one-click solo override. Stored on the checklist
+ * item and appended to the timeline; must satisfy the ≥10-character
+ * override-reason rule in `ChecklistUpdateSchema`.
+ */
+export const SECOND_PERSON_SOLO_OVERRIDE_NOTE = 'Allein im Dienst — Vier-Augen-Freigabe übersteuert'
+
+/**
  * Vier-Augen-Prinzip check. A `requiresSecondPerson` item (final QA) should
  * be signed off by someone who was NOT the majority worker on the device.
  * Also true when nothing else is done yet — there is nothing to QA.

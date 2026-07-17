@@ -84,7 +84,7 @@ Antworte NUR mit dem ausgefüllten JSON, keine Erklärungen.`,
   refine: `Du hast bestehende Produktdaten erhalten, die verbessert werden sollen.
 
 AKTUELLE PRODUKTDATEN:
-{currentProduct}
+{currentData}
 
 ANWEISUNG ZUR VERBESSERUNG:
 {instruction}

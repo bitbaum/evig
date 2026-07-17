@@ -10454,7 +10454,9 @@
       "profileTotals": "{count} Karten · {duration} insgesamt",
       "profileToReview": "{count} zu prüfen",
       "dayGridShow": "Stundenraster anzeigen",
-      "dayGridHide": "Stundenraster ausblenden"
+      "dayGridHide": "Stundenraster ausblenden",
+      "viewingPastPeriod": "Du siehst {period} — nicht den aktuellen Monat.",
+      "backToCurrentMonth": "Zum aktuellen Monat"
     },
     "appointments": {
       "pageTitle": "Termine",
@@ -10682,6 +10684,7 @@
         "saveFail": "Als fehlgeschlagen markieren",
         "confirmNoteHint": "Vier-Augen-Prinzip: Als zweite Person direkt bestätigen. Allein im Dienst? Begründung angeben.",
         "overrideSecondPerson": "Ausnahme: Ich bin allein im Dienst (Begründung mit mindestens 10 Zeichen erforderlich)",
+        "overrideSoloAction": "Allein im Dienst — mit einem Klick übersteuern",
         "confirmNotePlaceholder": "Optional als zweite Person — erforderlich bei Allein-Bestätigung, z.B. «allein im Dienst» …",
         "saveConfirm": "Qualitätskontrolle bestätigen"
       }

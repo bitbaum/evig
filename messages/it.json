@@ -10398,7 +10398,9 @@
       "profileTotals": "{count} schede · {duration} in totale",
       "profileToReview": "{count} da verificare",
       "dayGridShow": "Mostra griglia oraria",
-      "dayGridHide": "Nascondi griglia oraria"
+      "dayGridHide": "Nascondi griglia oraria",
+      "viewingPastPeriod": "Stai visualizzando {period} — non il mese corrente.",
+      "backToCurrentMonth": "Torna al mese corrente"
     },
     "appointments": {
       "pageTitle": "Appuntamenti",
@@ -10626,6 +10628,7 @@
         "saveFail": "Segna come fallito",
         "confirmNoteHint": "Principio dei quattro occhi: conferma direttamente come seconda persona. Da solo in servizio? Indica il motivo.",
         "overrideSecondPerson": "Eccezione: lavoro da solo (motivo di almeno 10 caratteri obbligatorio)",
+        "overrideSoloAction": "Da solo in servizio — ignora con un clic",
         "confirmNotePlaceholder": "Facoltativo come seconda persona — obbligatorio per una conferma in solitaria, es. «da solo in servizio» …",
         "saveConfirm": "Conferma controllo qualità"
       }

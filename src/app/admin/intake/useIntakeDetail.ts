@@ -48,27 +48,40 @@ export function useIntakeDetail() {
   // Rejections (e.g. Vier-Augen-Prinzip) must be visible, not silent.
   const [checklistError, setChecklistError] = useState<string | null>(null)
 
+  // Repeat taps while a verdict is saving must not fire duplicate PATCHes
+  // (they used to pile duplicate events onto the audit timeline).
+  const [pendingItems, setPendingItems] = useState<ReadonlySet<string>>(new Set())
+
   const setChecklistResult = useCallback(async (
     itemId: string,
     result: ChecklistResult | null,
     notes?: string,
     options?: { secondPersonOverride?: boolean },
   ) => {
-    if (!selectedId) return
+    if (!selectedId || pendingItems.has(itemId)) return
     setChecklistError(null)
-    const body: Record<string, unknown> = { item_id: itemId, result }
-    if (notes !== undefined) body.notes = notes
-    if (options?.secondPersonOverride) body.second_person_override = true
-    const response = await apiFetch<void>(`/api/admin/intake/${selectedId}/checklist`, {
-      method: 'PATCH',
-      body,
-    })
-    if (response.success) {
-      fetchDetail(selectedId)
-    } else {
-      setChecklistError(response.error || null)
+    setPendingItems(prev => new Set(prev).add(itemId))
+    try {
+      const body: Record<string, unknown> = { item_id: itemId, result }
+      if (notes !== undefined) body.notes = notes
+      if (options?.secondPersonOverride) body.second_person_override = true
+      const response = await apiFetch<void>(`/api/admin/intake/${selectedId}/checklist`, {
+        method: 'PATCH',
+        body,
+      })
+      if (response.success) {
+        await fetchDetail(selectedId)
+      } else {
+        setChecklistError(response.error || null)
+      }
+    } finally {
+      setPendingItems(prev => {
+        const next = new Set(prev)
+        next.delete(itemId)
+        return next
+      })
     }
-  }, [selectedId, fetchDetail])
+  }, [selectedId, fetchDetail, pendingItems])
 
   const markAllRequired = useCallback(async () => {
     if (!selectedId || !detail) return
@@ -160,6 +173,7 @@ export function useIntakeDetail() {
     clearDetail,
     setChecklistResult,
     checklistError,
+    pendingItems,
     markAllRequired,
     startQc,
     startingQc,

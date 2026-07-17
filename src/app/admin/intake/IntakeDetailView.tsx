@@ -48,6 +48,7 @@ interface IntakeDetailViewProps {
   onBack: () => void
   onRefresh: () => void
   checklistError: string | null
+  checklistPendingItems: ReadonlySet<string>
   onSetChecklistResult: (
     itemId: string,
     result: ChecklistResult | null,
@@ -77,6 +78,7 @@ export function IntakeDetailView({
   onBack,
   onRefresh,
   checklistError,
+  checklistPendingItems,
   onSetChecklistResult,
   onMarkAllRequired,
   onStartQc,
@@ -349,6 +351,7 @@ export function IntakeDetailView({
             key={`${group.category}-${detail.marketplace_status}`}
             group={group}
             readOnly={detail.marketplace_status === INTAKE_STATUS.PUBLISHED}
+            pendingItems={checklistPendingItems}
             onSetResult={onSetChecklistResult}
           />
         ))}

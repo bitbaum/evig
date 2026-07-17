@@ -292,3 +292,43 @@ describe('PATCH /api/admin/intake/[id]/checklist — success', () => {
     expect(body.data.checklist_progress).toEqual({ completed: 1, total: 1 })
   })
 })
+
+describe('PATCH /api/admin/intake/[id]/checklist — idempotency (repeat taps)', () => {
+  // Regression: rapid duplicate clicks used to append one timeline event per
+  // PATCH (55 events for 18 items in prod). An unchanged verdict must be a
+  // pure read: no DB write, no timeline growth.
+  const PASSED_STATE = {
+    photos: { result: 'pass', completedBy: 'admin-1', completedAt: '2026-07-17T10:00:00.000Z', notes: '' },
+  }
+
+  it('returns 200 without writing or appending when the verdict is unchanged', async () => {
+    mockWhere.mockResolvedValueOnce([{ ...MOCK_ROW, intakeChecklist: PASSED_STATE }])
+    const response = await PATCH(makeRequest(), makeContext())
+    expect(response.status).toBe(200)
+    expect(mockUpdate).not.toHaveBeenCalled()
+    expect(mockAppendIntakeEvent).not.toHaveBeenCalled()
+  })
+
+  it('still writes and appends when the verdict changes', async () => {
+    mockWhere.mockResolvedValueOnce([{
+      ...MOCK_ROW,
+      intakeChecklist: { photos: { ...PASSED_STATE.photos, result: 'na' } },
+    }])
+    const response = await PATCH(makeRequest(), makeContext())
+    expect(response.status).toBe(200)
+    expect(mockUpdate).toHaveBeenCalled()
+    expect(mockAppendIntakeEvent).toHaveBeenCalledTimes(1)
+  })
+
+  it('treats a new note on the same verdict as a change', async () => {
+    mockWhere.mockResolvedValueOnce([{ ...MOCK_ROW, intakeChecklist: PASSED_STATE }])
+    mockValidateBody.mockReturnValueOnce({
+      success: true,
+      data: { item_id: 'photos', result: 'pass', notes: 'Akku neu' },
+    })
+    const response = await PATCH(makeRequest({ item_id: 'photos', result: 'pass', notes: 'Akku neu' }), makeContext())
+    expect(response.status).toBe(200)
+    expect(mockUpdate).toHaveBeenCalled()
+    expect(mockAppendIntakeEvent).toHaveBeenCalledTimes(1)
+  })
+})

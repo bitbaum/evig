@@ -69,6 +69,18 @@ export const PATCH = withAdmin<{ id: string }>('intake', async (request, session
       return apiBadRequest(ERROR_MESSAGES.INTAKE_INVALID_CHECKLIST_ITEM)
     }
 
+    // Idempotent no-op: repeat taps (double-click, perceived lag) must not
+    // grow the audit timeline or rewrite completedBy/completedAt.
+    const existing = checklist[item_id]
+    if (existing && existing.result === result && (notes ? notes === existing.notes : true)) {
+      return apiSuccess({
+        checklist,
+        checklist_complete: isChecklistComplete(checklist, tier, row.category),
+        checklist_failed: hasChecklistFailure(checklist, tier, row.category),
+        checklist_progress: getChecklistProgress(checklist, tier, row.category),
+      })
+    }
+
     // Vier-Augen-Prinzip: final QA can't be signed off (pass or n.a.) by the
     // majority worker. A solo-shift exception must be explicit; a generic
     // checklist note must never silently become an override.

@@ -44,6 +44,10 @@ export const ROUTES = {
     project:            (slug: string) => `/admin/projects/${slug}`,
     team:               '/admin/team',
     teamActivity:       '/admin/team/activity',
+    zeiterfassung:      '/admin/zeiterfassung',
+    // Deep-link into a specific timecard period (history sidebar → editor).
+    zeiterfassungPeriod: (periodType: string, periodStart: string) =>
+      `/admin/zeiterfassung?period_type=${encodeURIComponent(periodType)}&period_date=${encodeURIComponent(periodStart)}`,
     teams:              '/admin/teams',
     teamsNew:           '/admin/teams/new',
     teamsAssignment:    '/admin/teams/assignment',

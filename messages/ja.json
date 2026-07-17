@@ -10398,7 +10398,9 @@
       "profileTotals": "{count}件 · 合計{duration}",
       "profileToReview": "{count}件要確認",
       "dayGridShow": "時間グリッドを表示",
-      "dayGridHide": "時間グリッドを隠す"
+      "dayGridHide": "時間グリッドを隠す",
+      "viewingPastPeriod": "{period} を表示中 — 今月ではありません。",
+      "backToCurrentMonth": "今月に戻る"
     },
     "appointments": {
       "pageTitle": "予約",
@@ -10626,6 +10628,7 @@
         "saveFail": "不合格にする",
         "confirmNoteHint": "四つの目の原則：第二確認者はそのまま確認できます。一人勤務の場合は理由を記入してください。",
         "overrideSecondPerson": "例外：一人勤務です（10文字以上の理由が必要です）",
+        "overrideSoloAction": "一人勤務 — ワンクリックで上書き",
         "confirmNotePlaceholder": "第二確認者は任意 — 単独承認の場合は必須（例：「一人勤務」）…",
         "saveConfirm": "品質検査を確認"
       }
