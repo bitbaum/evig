@@ -47,7 +47,7 @@ export function SaldoStrip({
   ownView?: boolean
 }) {
   const t = useTranslations('admin.timecards')
-  const { duration } = useTimecardIntl()
+  const { duration, durationCompact } = useTimecardIntl()
 
   const saldo = data.time.saldoMinutes
   const saldoTone = saldo < -8 * 60 ? 'text-error-600 dark:text-error-400'
@@ -67,7 +67,8 @@ export function SaldoStrip({
           <Clock4 className="hidden h-3.5 w-3.5 sm:block" aria-hidden="true" /> {t('saldoTime')}
         </p>
         <p className={cn('mt-1 font-mono tabular-nums font-semibold', compact ? 'text-lg' : 'text-base sm:text-2xl', saldoTone)}>
-          {signed(duration(Math.abs(saldo)), saldo)}
+          <span className="sm:hidden">{signed(durationCompact(Math.abs(saldo)), saldo)}</span>
+          <span className="hidden sm:inline">{signed(duration(Math.abs(saldo)), saldo)}</span>
         </p>
       </div>
       <div className={cn('bg-surface-base', compact ? 'p-3' : 'p-3 sm:p-4')}>
@@ -99,8 +100,14 @@ export function SaldoStrip({
           {t('saldoMonth')}
         </p>
         <p className={cn('mt-1 font-mono tabular-nums font-semibold text-text-primary', compact ? 'text-lg' : 'text-base sm:text-2xl')}>
-          {duration(data.time.monthIstMinutes)}
-          <span className="text-text-tertiary"> / {duration(data.time.monthSollMinutes)}</span>
+          <span className="sm:hidden">
+            {durationCompact(data.time.monthIstMinutes)}
+            <span className="text-text-tertiary"> / {durationCompact(data.time.monthSollMinutes)}</span>
+          </span>
+          <span className="hidden sm:inline">
+            {duration(data.time.monthIstMinutes)}
+            <span className="text-text-tertiary"> / {duration(data.time.monthSollMinutes)}</span>
+          </span>
         </p>
         {!compact && data.scheduleMismatch && (
           <div className="mt-0.5 text-xs text-warning-700 dark:text-warning-400">

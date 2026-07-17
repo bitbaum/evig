@@ -4,7 +4,7 @@ import { ReactNode } from 'react'
 import { Header } from './header'
 import Footer from './Footer'
 import { HirnPublicFab } from '@/components/hirn/HirnPublicFab'
-import SuggestionButton from '@/components/feedback/SuggestionButton'
+import { FleetCrownFeedbackEmbed } from '@/components/feedback/FleetCrownFeedbackEmbed'
 
 interface MainLayoutProps {
   children: ReactNode
@@ -26,7 +26,7 @@ export default function MainLayout({ children, leanChrome = false }: MainLayoutP
       {!leanChrome && (
         <>
           <HirnPublicFab />
-          <SuggestionButton />
+          <FleetCrownFeedbackEmbed />
         </>
       )}
     </div>

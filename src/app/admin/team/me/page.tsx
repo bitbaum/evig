@@ -116,14 +116,14 @@ export default async function MyTeamProfilePage() {
       {saldo && (
         <div className="mb-5 space-y-2">
           <SaldoStrip data={saldo} />
-          <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-            <Link href="/admin/zeiterfassung" className="font-medium text-action hover:underline">
+          <div className="flex flex-wrap gap-x-4 text-sm">
+            <Link href="/admin/zeiterfassung" className="inline-flex min-h-11 items-center font-medium text-action hover:underline">
               {t('selfTitle')} →
             </Link>
-            <Link href="/admin/zeiterfassung#abwesenheit" className="font-medium text-action hover:underline">
+            <Link href="/admin/zeiterfassung#abwesenheit" className="inline-flex min-h-11 items-center font-medium text-action hover:underline">
               {t('saldoRequestAbsence')} →
             </Link>
-            <Link href={`/admin/team/report/${userId}/${currentMonth}`} className="font-medium text-action hover:underline">
+            <Link href={`/admin/team/report/${userId}/${currentMonth}`} className="inline-flex min-h-11 items-center font-medium text-action hover:underline">
               {t('reportLink')} →
             </Link>
           </div>

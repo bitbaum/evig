@@ -121,9 +121,10 @@ export default async function MonthlyReportPage({
         </section>
       )}
 
-      {/* Day table */}
-      <section>
-        <table className="w-full border-collapse text-sm">
+      {/* Day table — scrolls inside its own container on narrow screens
+          (page must never scroll horizontally); print shows it in full. */}
+      <section className="overflow-x-auto print:overflow-visible">
+        <table className="w-full min-w-[560px] border-collapse text-sm print:min-w-0">
           <thead>
             <tr className="border-b border-neutral-400 text-left text-xs uppercase tracking-wide text-text-tertiary print:border-black">
               <th className="py-1.5 pr-2 font-medium">Datum</th>
