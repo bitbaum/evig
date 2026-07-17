@@ -25,26 +25,30 @@ const StepperComponent: React.FC<StepperProps> = ({
 }) => {
   const t = useTranslations('components.stepper')
 
+  // currentStep === steps.length means "flow finished": every step renders
+  // as completed instead of the last one staying eternally "active".
+  const displayIndex = Math.min(currentStep, steps.length - 1)
+
   return (
     <nav aria-label={t('progressLabel')} className={cn('w-full', className)}>
       {/* Mobile view - compact */}
       <div className="sm:hidden">
         <p className="text-sm font-medium text-text-tertiary">
-          {t('stepOf', { current: currentStep + 1, total: steps.length })}
+          {t('stepOf', { current: displayIndex + 1, total: steps.length })}
         </p>
         <p className="text-lg font-semibold text-text-primary mt-1">
-          {steps[currentStep]?.label}
+          {steps[displayIndex]?.label}
         </p>
-        {steps[currentStep]?.description && (
+        {steps[displayIndex]?.description && (
           <p className="text-sm text-text-tertiary mt-1">
-            {steps[currentStep].description}
+            {steps[displayIndex].description}
           </p>
         )}
         {/* Progress bar */}
         <div className="mt-4 h-2 bg-surface-overlay rounded-full overflow-hidden">
           <div
             className="h-full bg-action transition-all duration-300"
-            style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
+            style={{ width: `${(Math.min(currentStep + 1, steps.length) / steps.length) * 100}%` }}
           />
         </div>
       </div>

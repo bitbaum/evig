@@ -10451,16 +10451,16 @@
       "detail": {
         "pipelineSteps": [
           {
-            "label": "Réception",
-            "description": "Liste & don"
+            "label": "Saisi",
+            "description": "Données produit enregistrées"
           },
           {
-            "label": "Erfassung",
-            "description": "Saisir les données produit"
+            "label": "Contrôle qualité",
+            "description": "Compléter la checklist"
           },
           {
             "label": "En boutique",
-            "description": "Publier"
+            "description": "Publié"
           }
         ],
         "loading": "Chargement…",
@@ -10510,7 +10510,9 @@
           "starting": "Démarrage…"
         },
         "printLabel": "Étiquette",
-        "printLabelTitle": "Imprimer l'étiquette QR de l'appareil"
+        "printLabelTitle": "Imprimer l'étiquette QR de l'appareil",
+        "markAllRequiredBusy": "Enregistrement…",
+        "viewListing": "Voir l'annonce en boutique"
       },
       "pipeline": {
         "newDevice": "Nouvel appareil",

@@ -7,7 +7,7 @@
 
 import { withAdmin } from '@/lib/api/middleware'
 import { db } from '@/db'
-import { inventoryItems, aiExtractedProducts, users, donations, productImages } from '@/db/schema'
+import { inventoryItems, aiExtractedProducts, users, donations, productImages, listings } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
@@ -86,6 +86,14 @@ export const GET = withAdmin<{ id: string }>('intake', async (_request, _session
       imageUrl = img?.filePath ?? null
     }
 
+    // Published devices link straight to their live listing — "is it in the
+    // shop?" must be answerable (and clickable) from this page.
+    const [listing] = await db
+      .select({ id: listings.id })
+      .from(listings)
+      .where(eq(listings.inventoryItemId, id))
+      .limit(1)
+
     const tier = row.intake_tier as IntakeTier | null
     const checklist = (row.intake_checklist || {}) as ChecklistState
     const cat = row.category
@@ -115,6 +123,7 @@ export const GET = withAdmin<{ id: string }>('intake', async (_request, _session
     return apiSuccess({
       ...row,
       image_url: imageUrl,
+      listing_id: listing?.id ?? null,
       checklist_complete: complete,
       checklist_failed: checklistFailed,
       checklist_progress: progress,

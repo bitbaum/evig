@@ -65,6 +65,8 @@ export interface DetailData {
   condition: string
   category: string | null
   image_url: string | null
+  /** Live marketplace listing for this device (set once published). */
+  listing_id: string | null
   /** NULL when no physical quality/parts/recycling checklist was selected. */
   intake_tier: IntakeTier | null
   marketplace_status: string

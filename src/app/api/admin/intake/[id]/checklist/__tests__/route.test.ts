@@ -43,14 +43,24 @@ const mockSelect = jest.fn()
 const mockFrom = jest.fn()
 const mockInnerJoin = jest.fn()
 const mockWhere = jest.fn()
-const mockUpdate = jest.fn()
-const mockSet = jest.fn()
-const mockUpdateWhere = jest.fn()
+// Transaction-scoped chain (SELECT … FOR UPDATE → UPDATE)
+const mockTxFor = jest.fn()
+const mockTxUpdate = jest.fn()
+const mockTxSet = jest.fn()
+const mockTxUpdateWhere = jest.fn()
+
+const tx = {
+  select: () => ({ from: () => ({ where: () => ({ for: (...a: unknown[]) => mockTxFor(...a) }) }) }),
+  update: (...args: unknown[]) => {
+    mockTxUpdate(...args)
+    return { set: (...a: unknown[]) => { mockTxSet(...a); return { where: mockTxUpdateWhere } } }
+  },
+}
 
 jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => { mockSelect(...args); return { from: mockFrom } },
-    update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
+    transaction: (fn: (t: unknown) => unknown) => Promise.resolve(fn(tx)),
   },
 }))
 
@@ -164,8 +174,8 @@ beforeEach(() => {
   mockInnerJoin.mockReturnValue({ where: mockWhere })
   mockWhere.mockResolvedValue([MOCK_ROW])
 
-  mockSet.mockReturnValue({ where: mockUpdateWhere })
-  mockUpdateWhere.mockResolvedValue(undefined)
+  mockTxFor.mockResolvedValue([{ intakeChecklist: {} }])
+  mockTxUpdateWhere.mockResolvedValue(undefined)
 
   mockAppendIntakeEvent.mockResolvedValue(undefined)
 
@@ -223,7 +233,7 @@ describe('PATCH /api/admin/intake/[id]/checklist — validation', () => {
     expect(response.status).toBe(400)
     const body = await response.json()
     expect(body.error).toContain('publiziert')
-    expect(mockUpdate).not.toHaveBeenCalled()
+    expect(mockTxUpdate).not.toHaveBeenCalled()
   })
 
   it('returns 400 when the second-person rule is violated (Vier-Augen-Prinzip)', async () => {
@@ -302,33 +312,70 @@ describe('PATCH /api/admin/intake/[id]/checklist — idempotency (repeat taps)',
   }
 
   it('returns 200 without writing or appending when the verdict is unchanged', async () => {
-    mockWhere.mockResolvedValueOnce([{ ...MOCK_ROW, intakeChecklist: PASSED_STATE }])
+    mockTxFor.mockResolvedValueOnce([{ intakeChecklist: PASSED_STATE }])
     const response = await PATCH(makeRequest(), makeContext())
     expect(response.status).toBe(200)
-    expect(mockUpdate).not.toHaveBeenCalled()
+    expect(mockTxUpdate).not.toHaveBeenCalled()
     expect(mockAppendIntakeEvent).not.toHaveBeenCalled()
   })
 
   it('still writes and appends when the verdict changes', async () => {
-    mockWhere.mockResolvedValueOnce([{
-      ...MOCK_ROW,
-      intakeChecklist: { photos: { ...PASSED_STATE.photos, result: 'na' } },
-    }])
+    mockTxFor.mockResolvedValueOnce([{ intakeChecklist: { photos: { ...PASSED_STATE.photos, result: 'na' } } }])
     const response = await PATCH(makeRequest(), makeContext())
     expect(response.status).toBe(200)
-    expect(mockUpdate).toHaveBeenCalled()
+    expect(mockTxUpdate).toHaveBeenCalled()
     expect(mockAppendIntakeEvent).toHaveBeenCalledTimes(1)
   })
 
   it('treats a new note on the same verdict as a change', async () => {
-    mockWhere.mockResolvedValueOnce([{ ...MOCK_ROW, intakeChecklist: PASSED_STATE }])
+    mockTxFor.mockResolvedValueOnce([{ intakeChecklist: PASSED_STATE }])
     mockValidateBody.mockReturnValueOnce({
       success: true,
       data: { item_id: 'photos', result: 'pass', notes: 'Akku neu' },
     })
     const response = await PATCH(makeRequest({ item_id: 'photos', result: 'pass', notes: 'Akku neu' }), makeContext())
     expect(response.status).toBe(200)
-    expect(mockUpdate).toHaveBeenCalled()
+    expect(mockTxUpdate).toHaveBeenCalled()
     expect(mockAppendIntakeEvent).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe('PATCH /api/admin/intake/[id]/checklist — bulk (Alles in Ordnung)', () => {
+  // Regression: 17 parallel single-item PATCHes raced on the shared JSONB
+  // column and silently dropped most verdicts. A bulk pass is ONE request,
+  // ONE serialized write, ONE audit event.
+  it('marks many items in one request with a single timeline event', async () => {
+    const checklist = require('@/config/intake-checklist')
+    checklist.getChecklistForDevice.mockReturnValue([
+      { id: 'photos', label: 'Fotos', category: 'Aufnahme' },
+      { id: 'cleaning', label: 'Reinigung', category: 'Aufnahme' },
+    ])
+    mockValidateBody.mockReturnValueOnce({
+      success: true,
+      data: { item_ids: ['photos', 'cleaning'], result: 'pass', notes: '' },
+    })
+    const response = await PATCH(makeRequest({ item_ids: ['photos', 'cleaning'], result: 'pass' }), makeContext())
+    expect(response.status).toBe(200)
+    expect(mockTxUpdate).toHaveBeenCalledTimes(1)
+    expect(mockAppendIntakeEvent).toHaveBeenCalledTimes(1)
+    expect(mockAppendIntakeEvent).toHaveBeenCalledWith('inv-1', expect.objectContaining({
+      description: expect.stringContaining('2 Prüfpunkte'),
+      metadata: expect.objectContaining({ item_ids: ['photos', 'cleaning'] }),
+    }))
+  })
+
+  it('refuses to bulk-sign a second-person item (final QA stays individual)', async () => {
+    const checklist = require('@/config/intake-checklist')
+    checklist.getChecklistForDevice.mockReturnValue([
+      { id: 'photos', label: 'Fotos', category: 'Aufnahme' },
+      { id: 'final_qa', label: 'QK', category: 'QK', requiresSecondPerson: true },
+    ])
+    mockValidateBody.mockReturnValueOnce({
+      success: true,
+      data: { item_ids: ['photos', 'final_qa'], result: 'pass', notes: '' },
+    })
+    const response = await PATCH(makeRequest({ item_ids: ['photos', 'final_qa'], result: 'pass' }), makeContext())
+    expect(response.status).toBe(400)
+    expect(mockTxUpdate).not.toHaveBeenCalled()
   })
 })

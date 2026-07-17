@@ -10492,16 +10492,16 @@
       "detail": {
         "pipelineSteps": [
           {
-            "label": "Приём устройств",
-            "description": "Чек-лист и пожертвование"
+            "label": "Зарегистрировано",
+            "description": "Данные товара внесены"
           },
           {
-            "label": "Регистрация",
-            "description": "Ввод данных продукта"
+            "label": "Контроль качества",
+            "description": "Пройти чек-лист"
           },
           {
             "label": "В магазине",
-            "description": "Публикация"
+            "description": "Опубликовано"
           }
         ],
         "loading": "Загрузка…",
@@ -10551,7 +10551,9 @@
           "starting": "Запуск…"
         },
         "printLabel": "Этикетка",
-        "printLabelTitle": "Распечатать QR-этикетку устройства"
+        "printLabelTitle": "Распечатать QR-этикетку устройства",
+        "markAllRequiredBusy": "Сохранение…",
+        "viewListing": "Открыть объявление в магазине"
       },
       "pipeline": {
         "newDevice": "Новое устройство",

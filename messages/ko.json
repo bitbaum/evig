@@ -10498,16 +10498,16 @@
       "detail": {
         "pipelineSteps": [
           {
-            "label": "기기 입고",
-            "description": "체크리스트 및 기부"
+            "label": "등록됨",
+            "description": "제품 데이터 기록됨"
           },
           {
-            "label": "등록",
-            "description": "제품 데이터 입력"
+            "label": "품질 검사",
+            "description": "체크리스트 진행"
           },
           {
-            "label": "상점 게시",
-            "description": "게시하기"
+            "label": "상점 등록",
+            "description": "게시됨"
           }
         ],
         "loading": "로딩 중…",
@@ -10557,7 +10557,9 @@
           "starting": "시작 중…"
         },
         "printLabel": "라벨",
-        "printLabelTitle": "기기 QR 라벨 인쇄"
+        "printLabelTitle": "기기 QR 라벨 인쇄",
+        "markAllRequiredBusy": "저장 중…",
+        "viewListing": "상점에서 등록 보기"
       },
       "pipeline": {
         "newDevice": "새 기기",

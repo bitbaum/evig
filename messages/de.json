@@ -10554,16 +10554,16 @@
       "detail": {
         "pipelineSteps": [
           {
-            "label": "Geräte-Eingang",
-            "description": "Checkliste & Spende"
+            "label": "Erfasst",
+            "description": "Produktdaten aufgenommen"
           },
           {
-            "label": "Erfassung",
-            "description": "Produktdaten eingeben"
+            "label": "Qualitätsprüfung",
+            "description": "Checkliste abarbeiten"
           },
           {
             "label": "Im Shop",
-            "description": "Veröffentlichen"
+            "description": "Veröffentlicht"
           }
         ],
         "loading": "Laden…",
@@ -10613,7 +10613,9 @@
           "starting": "Starten…"
         },
         "printLabel": "Etikett",
-        "printLabelTitle": "QR-Etikett für das Gerät drucken"
+        "printLabelTitle": "QR-Etikett für das Gerät drucken",
+        "markAllRequiredBusy": "Wird gespeichert…",
+        "viewListing": "Inserat im Shop ansehen"
       },
       "pipeline": {
         "newDevice": "Neues Gerät",

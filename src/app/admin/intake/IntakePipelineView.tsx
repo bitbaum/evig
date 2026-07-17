@@ -63,7 +63,13 @@ export function IntakePipelineView({
   useEffect(() => { rootRef.current?.setAttribute('data-intake-ready', 'true') }, [])
   return (
     <div ref={rootRef} className="space-y-4" data-intake-ready="false">
-      <IntakeHero statusCounts={statusCounts} onStatusFilter={onStatusFilterChange} t={t} />
+      {/* Until counts arrive the hero would confidently claim "Pipeline ist
+          leer" on every page load — render a quiet placeholder instead. */}
+      {loading && statusCounts.total === 0 ? (
+        <div className="h-28 animate-pulse rounded-lg border border-subtle bg-surface-raised" aria-hidden="true" />
+      ) : (
+        <IntakeHero statusCounts={statusCounts} onStatusFilter={onStatusFilterChange} t={t} />
+      )}
 
       {/* Filters + Actions */}
       <div className="flex flex-wrap gap-2 items-center">

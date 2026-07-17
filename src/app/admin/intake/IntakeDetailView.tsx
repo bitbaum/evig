@@ -56,6 +56,7 @@ interface IntakeDetailViewProps {
     options?: { secondPersonOverride?: boolean },
   ) => void
   onMarkAllRequired: () => void
+  markingAll: boolean
   onStartQc: () => void
   startingQc: boolean
   onPublish: () => void
@@ -81,6 +82,7 @@ export function IntakeDetailView({
   checklistPendingItems,
   onSetChecklistResult,
   onMarkAllRequired,
+  markingAll,
   onStartQc,
   startingQc,
   onPublish,
@@ -98,11 +100,12 @@ export function IntakeDetailView({
   // until the checklist workflow is started (tier assigned).
   const qcGate = detail.intake_tier === null && requiresQualityControl(detail.category)
 
-  // Pipeline step: 0 = checklist in progress, 1 = ready for erfassung, 2 = published
+  // Pipeline stage — must tell the truth: 0 = QC in progress, 1 = QC done /
+  // ready to publish, 2 = publishing, 3 (= steps.length) = published, all done.
   const pipelineStep =
-    detail.marketplace_status === INTAKE_STATUS.PUBLISHED ? 2
-    : detail.checklist_complete ? 1
-    : 0
+    detail.marketplace_status === INTAKE_STATUS.PUBLISHED ? 3
+    : detail.checklist_complete ? 2
+    : 1
 
   return (
     <div className="space-y-6">
@@ -147,9 +150,19 @@ export function IntakeDetailView({
             <QrCode className="w-3.5 h-3.5" /> {t('printLabel')}
           </Link>
           {detail.marketplace_status === INTAKE_STATUS.PUBLISHED ? (
-            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-action-muted text-action">
-              <Check className="w-4 h-4" /> {t('inShop')}
-            </span>
+            detail.listing_id ? (
+              <Link
+                href={ROUTES.public.marketplaceListing(detail.listing_id)}
+                target="_blank"
+                className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-action-muted text-action hover:underline"
+              >
+                <Check className="w-4 h-4" /> {t('inShop')}
+              </Link>
+            ) : (
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-action-muted text-action">
+                <Check className="w-4 h-4" /> {t('inShop')}
+              </span>
+            )
           ) : (
             <>
               {detail.intake_tier && (
@@ -231,12 +244,13 @@ export function IntakeDetailView({
               <Button
                 type="button"
                 onClick={onMarkAllRequired}
+                disabled={markingAll}
                 variant="primary"
                 size="sm"
                 title={t('markAllRequiredTitle')}
               >
                 <CheckCheck className="w-3.5 h-3.5" />
-                {t('markAllRequired')}
+                {markingAll ? t('markAllRequiredBusy') : t('markAllRequired')}
               </Button>
             )}
             <span className={`text-sm font-bold ${
@@ -247,11 +261,11 @@ export function IntakeDetailView({
           </div>
         </div>
         <div className="w-full h-3 bg-surface-overlay rounded-full overflow-hidden">
+          {/* Red is reserved for actual failures — normal progress is not
+              an alarm, whatever the percentage. */}
           <div
             className={`h-full rounded-full transition-all ${
-              detail.checklist_failed ? 'bg-error-500' :
-              progress.percentage === 100 ? 'bg-action' :
-              progress.percentage > 50 ? 'bg-warning-500' : 'bg-error-400'
+              detail.checklist_failed ? 'bg-error-500' : 'bg-action'
             }`}
             style={{ width: `${progress.percentage}%` }}
           />
@@ -340,6 +354,15 @@ export function IntakeDetailView({
             <p className="text-sm text-action mt-1">
               {t('publishedPrice', { price: Number(detail.selling_price_chf).toFixed(2) })}
             </p>
+          )}
+          {detail.listing_id && (
+            <Link
+              href={ROUTES.public.marketplaceListing(detail.listing_id)}
+              target="_blank"
+              className="mt-3 inline-flex items-center gap-1.5 rounded-lg border border-strong bg-surface-base px-4 py-2 text-sm font-medium text-action hover:underline"
+            >
+              {t('viewListing')} <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+            </Link>
           )}
         </div>
       )}

@@ -10498,16 +10498,16 @@
       "detail": {
         "pipelineSteps": [
           {
-            "label": "Entrada de dispositivos",
-            "description": "Lista de control y donación"
+            "label": "Registrado",
+            "description": "Datos del producto capturados"
           },
           {
-            "label": "Registro",
-            "description": "Introducir datos del producto"
+            "label": "Control de calidad",
+            "description": "Completar la lista"
           },
           {
             "label": "En la tienda",
-            "description": "Publicar"
+            "description": "Publicado"
           }
         ],
         "loading": "Cargando…",
@@ -10557,7 +10557,9 @@
           "starting": "Iniciando…"
         },
         "printLabel": "Etiqueta",
-        "printLabelTitle": "Imprimir la etiqueta QR del dispositivo"
+        "printLabelTitle": "Imprimir la etiqueta QR del dispositivo",
+        "markAllRequiredBusy": "Guardando…",
+        "viewListing": "Ver el anuncio en la tienda"
       },
       "pipeline": {
         "newDevice": "Nuevo dispositivo",

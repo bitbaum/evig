@@ -83,8 +83,9 @@ export function useIntakeDetail() {
     }
   }, [selectedId, fetchDetail, pendingItems])
 
+  const [markingAll, setMarkingAll] = useState(false)
   const markAllRequired = useCallback(async () => {
-    if (!selectedId || !detail) return
+    if (!selectedId || !detail || markingAll) return
     setChecklistError(null)
     // Only OPEN items — never overrides a recorded fail/n.a. verdict, and
     // never auto-signs items that need a deliberate second person (final QA).
@@ -92,18 +93,20 @@ export function useIntakeDetail() {
       .flatMap(g => g.items)
       .filter(i => i.required && i.state.result === null && !i.requiresSecondPerson)
     if (open.length === 0) return
-    const results = await Promise.all(
-      open.map(item =>
-        apiFetch<void>(`/api/admin/intake/${selectedId}/checklist`, {
-          method: 'PATCH',
-          body: { item_id: item.id, result: CHECKLIST_RESULTS.PASS },
-        })
-      )
-    )
-    const firstError = results.find(r => !r.success)
-    if (firstError) setChecklistError(firstError.error || null)
-    fetchDetail(selectedId)
-  }, [selectedId, detail, fetchDetail])
+    setMarkingAll(true)
+    try {
+      // ONE bulk request: parallel per-item PATCHes raced each other on the
+      // shared JSONB column and silently dropped most of the verdicts.
+      const result = await apiFetch<void>(`/api/admin/intake/${selectedId}/checklist`, {
+        method: 'PATCH',
+        body: { item_ids: open.map(item => item.id), result: CHECKLIST_RESULTS.PASS },
+      })
+      if (!result.success) setChecklistError(result.error || null)
+      await fetchDetail(selectedId)
+    } finally {
+      setMarkingAll(false)
+    }
+  }, [selectedId, detail, fetchDetail, markingAll])
 
   // Quick-captured device of a QC-required category: assign the refurbish
   // tier so the checklist workflow (and the publish gate) kicks in.
@@ -175,6 +178,7 @@ export function useIntakeDetail() {
     checklistError,
     pendingItems,
     markAllRequired,
+    markingAll,
     startQc,
     startingQc,
     handlePublish,

@@ -95,6 +95,7 @@ export default function IntakeClient() {
           checklistPendingItems={detail.pendingItems}
           onSetChecklistResult={detail.setChecklistResult}
           onMarkAllRequired={detail.markAllRequired}
+          markingAll={detail.markingAll}
           onStartQc={detail.startQc}
           startingQc={detail.startingQc}
           onPublish={detail.handlePublish}

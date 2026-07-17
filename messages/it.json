@@ -10498,16 +10498,16 @@
       "detail": {
         "pipelineSteps": [
           {
-            "label": "Geräte-Eingang",
-            "description": "Checkliste & Spende"
+            "label": "Registrato",
+            "description": "Dati prodotto acquisiti"
           },
           {
-            "label": "Erfassung",
-            "description": "Produktdaten eingeben"
+            "label": "Controllo qualità",
+            "description": "Completare la checklist"
           },
           {
-            "label": "Im Shop",
-            "description": "Veröffentlichen"
+            "label": "In negozio",
+            "description": "Pubblicato"
           }
         ],
         "loading": "Caricamento…",
@@ -10557,7 +10557,9 @@
           "starting": "Avvio…"
         },
         "printLabel": "Etichetta",
-        "printLabelTitle": "Stampare l'etichetta QR del dispositivo"
+        "printLabelTitle": "Stampare l'etichetta QR del dispositivo",
+        "markAllRequiredBusy": "Salvataggio…",
+        "viewListing": "Vedi l'annuncio nel negozio"
       },
       "pipeline": {
         "newDevice": "Nuovo dispositivo",

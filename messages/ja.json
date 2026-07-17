@@ -10498,16 +10498,16 @@
       "detail": {
         "pipelineSteps": [
           {
-            "label": "デバイス受付",
-            "description": "チェックリストと寄付"
+            "label": "登録済み",
+            "description": "製品データを記録"
           },
           {
-            "label": "登録",
-            "description": "製品データを入力"
+            "label": "品質検査",
+            "description": "チェックリストを実施"
           },
           {
             "label": "ショップ掲載",
-            "description": "公開"
+            "description": "公開済み"
           }
         ],
         "loading": "読み込み中…",
@@ -10557,7 +10557,9 @@
           "starting": "開始中…"
         },
         "printLabel": "ラベル",
-        "printLabelTitle": "機器のQRラベルを印刷"
+        "printLabelTitle": "機器のQRラベルを印刷",
+        "markAllRequiredBusy": "保存中…",
+        "viewListing": "ショップで出品を見る"
       },
       "pipeline": {
         "newDevice": "新しいデバイス",

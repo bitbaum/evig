@@ -89,7 +89,14 @@ export const IntakeUpdateSchema = z.object({
 
 export const ChecklistUpdateSchema = z
   .object({
-    item_id: z.string().min(1, 'Checklist-Item-ID erforderlich'),
+    item_id: z.string().min(1, 'Checklist-Item-ID erforderlich').optional(),
+    /**
+     * Bulk variant ("Alles in Ordnung"): same verdict on many items in ONE
+     * request — atomic on the server, one audit event. Mutually exclusive
+     * with item_id; a bulk pass can only apply `pass`, and notes/overrides
+     * stay per-item actions.
+     */
+    item_ids: z.array(z.string().min(1)).min(1).max(100).optional(),
     /** pass | fail | na; null resets the item to open. */
     result: z
       .enum([CHECKLIST_RESULTS.PASS, CHECKLIST_RESULTS.FAIL, CHECKLIST_RESULTS.NA])
@@ -98,6 +105,14 @@ export const ChecklistUpdateSchema = z
     /** Explicit, audited exception for a solo shift. Never inferred from notes. */
     second_person_override: z.boolean().optional().default(false),
   })
+  .refine(
+    data => Boolean(data.item_id) !== Boolean(data.item_ids),
+    { message: 'Entweder item_id oder item_ids angeben', path: ['item_id'] },
+  )
+  .refine(
+    data => !data.item_ids || (data.result === CHECKLIST_RESULTS.PASS && !data.second_person_override),
+    { message: 'Sammel-Update erlaubt nur "pass" ohne Override', path: ['item_ids'] },
+  )
   .refine(
     data => data.result !== CHECKLIST_RESULTS.FAIL || data.notes.trim().length > 0,
     { message: ERROR_MESSAGES.INTAKE_FAIL_NOTES_REQUIRED, path: ['notes'] },

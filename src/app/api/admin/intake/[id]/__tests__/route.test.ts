@@ -69,6 +69,7 @@ jest.mock('@/db/schema', () => ({
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
   donations: { id: 'd_id', donorName: 'd_donorName', donorEmail: 'd_donorEmail', notes: 'd_notes', status: 'd_status' },
   productImages: { productId: 'pi_productId', isPrimary: 'pi_isPrimary', filePath: 'pi_filePath' },
+  listings: { id: 'l_id', inventoryItemId: 'l_inventoryItemId' },
 }))
 
 jest.mock('drizzle-orm', () => ({

@@ -240,8 +240,15 @@ export async function registryExtract(
     })
   }
 
+  // Refine must be surgical: a user asking for a longer description must not
+  // get a silently "improved" price back (that happened). The model only
+  // touches what the instruction covers; everything else passes through.
+  const refineGuard = mode === 'refine'
+    ? `\n\nWICHTIG: Ändere AUSSCHLIESSLICH die Felder, die die Anweisung ausdrücklich betrifft. Alle anderen Felder übernimmst du EXAKT und UNVERÄNDERT aus den aktuellen Daten — auch wenn du sie für verbesserbar hältst (Verbesserungen gehören in suggestedActions, nicht in die Daten).`
+    : ''
+
   // Append suggestion instruction to system prompt — AI returns suggestedActions alongside data
-  const systemWithSuggestions = config.system + `\n\nWICHTIG: Füge in deiner JSON-Antwort ein Feld "suggestedActions" hinzu — ein Array mit 2-3 konkreten Verbesserungsvorschlägen für die Daten. Jeder Eintrag hat "label" (kurz, max 4 Wörter) und "prompt" (was genau verbessert werden soll). Beispiel: [{"label": "Beschreibung erweitern", "prompt": "Ergänze mehr Details zur Zielgruppe und zum erwarteten Nutzen"}]. Passe die Vorschläge an den Kontext an — was fehlt, was ist dünn, was könnte besser sein.`
+  const systemWithSuggestions = config.system + refineGuard + `\n\nWICHTIG: Füge in deiner JSON-Antwort ein Feld "suggestedActions" hinzu — ein Array mit 2-3 konkreten Verbesserungsvorschlägen für die Daten. Jeder Eintrag hat "label" (kurz, max 4 Wörter) und "prompt" (was genau verbessert werden soll). Beispiel: [{"label": "Beschreibung erweitern", "prompt": "Ergänze mehr Details zur Zielgruppe und zum erwarteten Nutzen"}]. Passe die Vorschläge an den Kontext an — was fehlt, was ist dünn, was könnte besser sein.`
 
   const result = await callWithFallback({
     systemPrompt: systemWithSuggestions,

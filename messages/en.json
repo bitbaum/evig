@@ -10499,16 +10499,16 @@
       "detail": {
         "pipelineSteps": [
           {
-            "label": "Intake",
-            "description": "Checklist & donation"
+            "label": "Captured",
+            "description": "Product data recorded"
           },
           {
-            "label": "Erfassung",
-            "description": "Enter product data"
+            "label": "Quality check",
+            "description": "Work through the checklist"
           },
           {
             "label": "In shop",
-            "description": "Publish"
+            "description": "Published"
           }
         ],
         "loading": "Loading…",
@@ -10558,7 +10558,9 @@
           "starting": "Starting…"
         },
         "printLabel": "Label",
-        "printLabelTitle": "Print the device QR label"
+        "printLabelTitle": "Print the device QR label",
+        "markAllRequiredBusy": "Saving…",
+        "viewListing": "View listing in shop"
       },
       "pipeline": {
         "newDevice": "New device",
