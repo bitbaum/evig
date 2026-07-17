@@ -75,6 +75,22 @@ const COLUMNS: Array<{
   },
 ]
 
+/**
+ * SSOT label for a published device's LIVE listing state (shared by the
+ * desktop kanban card and the mobile pipeline card).
+ */
+export function listingStateLabel(
+  t: ReturnType<typeof useTranslations<'admin.intake.pipeline'>>,
+  listingStatus: string | null,
+): string {
+  return listingStatus === LISTING_STATUS.ACTIVE ? t('board.listingState.active')
+    : listingStatus === LISTING_STATUS.SOLD ? t('board.listingState.sold')
+    : listingStatus === LISTING_STATUS.RESERVED ? t('board.listingState.reserved')
+    : listingStatus === LISTING_STATUS.DRAFT ? t('board.listingState.draft')
+    : listingStatus === LISTING_STATUS.REMOVED ? t('board.listingState.removed')
+    : t('board.listingMissing')
+}
+
 /** Desktop workshop board. Cards are oldest-first inside every station. */
 export function IntakeKanban({
   items,
@@ -193,12 +209,7 @@ function KanbanCard({ item, onOpen }: { item: PipelineItem; onOpen: () => void }
               ? 'bg-surface-overlay text-text-secondary'
               : 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-200'
         }`}>
-          {item.listing_status === LISTING_STATUS.ACTIVE ? t('board.listingState.active')
-            : item.listing_status === LISTING_STATUS.SOLD ? t('board.listingState.sold')
-            : item.listing_status === LISTING_STATUS.RESERVED ? t('board.listingState.reserved')
-            : item.listing_status === LISTING_STATUS.DRAFT ? t('board.listingState.draft')
-            : item.listing_status === LISTING_STATUS.REMOVED ? t('board.listingState.removed')
-            : t('board.listingMissing')}
+          {listingStateLabel(t, item.listing_status)}
         </span>
       )}
 

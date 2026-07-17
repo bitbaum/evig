@@ -21,6 +21,8 @@ import { INTAKE_STATUS } from '@/config/intake-status'
 import { formatDateShort } from '@/lib/date-formats'
 import { StatusBadge } from '@/components/ui/status-badge'
 import type { PipelineItem } from './types'
+import { listingStateLabel } from './IntakeKanban'
+import { LISTING_STATUS } from '@/config/marketplace'
 
 interface IntakePipelineCardsProps {
   items: PipelineItem[]
@@ -54,8 +56,14 @@ export function IntakePipelineCards({ items, onOpenDetail }: IntakePipelineCards
                   </div>
                 </div>
                 {item.marketplace_status === INTAKE_STATUS.PUBLISHED ? (
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-action-muted text-action shrink-0">
-                    <Check className="w-3 h-3" /> {t('status.published')}
+                  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs shrink-0 ${
+                    item.listing_status === LISTING_STATUS.ACTIVE
+                      ? 'bg-action-muted text-action'
+                      : item.listing_status
+                        ? 'bg-surface-overlay text-text-secondary'
+                        : 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-200'
+                  }`}>
+                    <Check className="w-3 h-3" /> {listingStateLabel(t, item.listing_status)}
                   </span>
                 ) : item.checklist_failed ? (
                   <StatusBadge variant="error" className="shrink-0">{t('status.failed')}</StatusBadge>
