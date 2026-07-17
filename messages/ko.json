@@ -10587,7 +10587,12 @@
         "markAllRequiredBusy": "저장 중…",
         "viewListing": "상점에서 등록 보기",
         "publishUntested": "검사 인증 없이 게시",
-        "publishUntestedTitle": "즉시 게시 — 등록에는 검사 인증이 표시되지 않으며 사유는 기록에 저장됩니다."
+        "publishUntestedTitle": "즉시 게시 — 등록에는 검사 인증이 표시되지 않으며 사유는 기록에 저장됩니다.",
+        "listingSold": "판매됨",
+        "listingSoldBody": "이 기기는 상점을 통해 판매되었습니다",
+        "listingInactive": "등록 비활성",
+        "listingInactiveBody": "이 기기는 게시됨으로 표시되어 있지만 등록이 더 이상 상점에서 활성 상태가 아닙니다.",
+        "manageListing": "등록 관리"
       },
       "pipeline": {
         "newDevice": "새 기기",

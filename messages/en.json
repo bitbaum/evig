@@ -10588,7 +10588,12 @@
         "markAllRequiredBusy": "Saving…",
         "viewListing": "View listing in shop",
         "publishUntested": "Publish without QC seal",
-        "publishUntestedTitle": "Publish immediately — the listing explicitly carries no QC seal; the reason is stored in the history."
+        "publishUntestedTitle": "Publish immediately — the listing explicitly carries no QC seal; the reason is stored in the history.",
+        "listingSold": "Sold",
+        "listingSoldBody": "This device was sold through the shop",
+        "listingInactive": "Listing not active",
+        "listingInactiveBody": "This device is marked as published, but its listing is no longer active in the shop.",
+        "manageListing": "Manage listings"
       },
       "pipeline": {
         "newDevice": "New device",

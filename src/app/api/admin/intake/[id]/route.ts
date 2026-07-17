@@ -89,7 +89,7 @@ export const GET = withAdmin<{ id: string }>('intake', async (_request, _session
     // Published devices link straight to their live listing — "is it in the
     // shop?" must be answerable (and clickable) from this page.
     const [listing] = await db
-      .select({ id: listings.id })
+      .select({ id: listings.id, status: listings.status })
       .from(listings)
       .where(eq(listings.inventoryItemId, id))
       .limit(1)
@@ -124,6 +124,7 @@ export const GET = withAdmin<{ id: string }>('intake', async (_request, _session
       ...row,
       image_url: imageUrl,
       listing_id: listing?.id ?? null,
+      listing_status: listing?.status ?? null,
       checklist_complete: complete,
       checklist_failed: checklistFailed,
       checklist_progress: progress,

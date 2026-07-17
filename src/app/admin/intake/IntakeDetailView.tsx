@@ -25,6 +25,7 @@ import {
 } from '@/config/intake-checklist'
 import type { IntakeTier, ChecklistResult } from '@/config/intake-checklist'
 import { INTAKE_STATUS } from '@/config/intake-status'
+import { LISTING_STATUS } from '@/config/marketplace'
 import type { IntakeEventType } from '@/lib/intake/timeline-types'
 import { EVENT_TYPE_LABELS, EVENT_TYPE_ICONS } from '@/lib/intake/timeline-types'
 import { ChecklistGroup } from './ChecklistGroup'
@@ -150,7 +151,7 @@ export function IntakeDetailView({
             <QrCode className="w-3.5 h-3.5" /> {t('printLabel')}
           </Link>
           {detail.marketplace_status === INTAKE_STATUS.PUBLISHED ? (
-            detail.listing_id ? (
+            detail.listing_id && detail.listing_status === LISTING_STATUS.ACTIVE ? (
               <Link
                 href={ROUTES.public.marketplaceListing(detail.listing_id)}
                 target="_blank"
@@ -158,9 +159,13 @@ export function IntakeDetailView({
               >
                 <Check className="w-4 h-4" /> {t('inShop')}
               </Link>
+            ) : detail.listing_status === LISTING_STATUS.SOLD ? (
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-surface-overlay text-text-secondary">
+                <Check className="w-4 h-4" /> {t('listingSold')}
+              </span>
             ) : (
-              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-action-muted text-action">
-                <Check className="w-4 h-4" /> {t('inShop')}
+              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-200">
+                <AlertCircle className="w-4 h-4" /> {t('listingInactive')}
               </span>
             )
           ) : (
@@ -346,10 +351,22 @@ export function IntakeDetailView({
 
       {/* Published is the primary outcome, so show it before the historical
           QC record. Published checklists are immutable and collapsed below. */}
-      {detail.marketplace_status === INTAKE_STATUS.PUBLISHED && (
+      {detail.marketplace_status === INTAKE_STATUS.PUBLISHED &&
+        detail.listing_status !== LISTING_STATUS.ACTIVE && detail.listing_status !== LISTING_STATUS.SOLD && (
+        <div className="border-2 border-warning-300 bg-warning-50 dark:bg-warning-900/20 rounded-lg p-4 text-center space-y-2">
+          <AlertCircle className="w-6 h-6 text-warning-700 dark:text-warning-300 mx-auto" />
+          <p className="text-sm font-medium text-warning-800 dark:text-warning-200">{t('listingInactiveBody')}</p>
+          <Link href={ROUTES.admin.marketplace} className="inline-block text-sm font-medium text-action hover:underline">
+            {t('manageListing')}
+          </Link>
+        </div>
+      )}
+
+      {detail.marketplace_status === INTAKE_STATUS.PUBLISHED &&
+        (detail.listing_status === LISTING_STATUS.ACTIVE || detail.listing_status === LISTING_STATUS.SOLD) && (
         <div className="border-2 border-strong bg-action-muted rounded-lg p-4 text-center">
           <Check className="w-8 h-8 text-action mx-auto mb-2" />
-          <p className="font-medium text-action">{t('publishedConfirm')}</p>
+          <p className="font-medium text-action">{detail.listing_status === LISTING_STATUS.SOLD ? t('listingSoldBody') : t('publishedConfirm')}</p>
           {detail.selling_price_chf != null && (
             <p className="text-sm text-action mt-1">
               {t('publishedPrice', { price: Number(detail.selling_price_chf).toFixed(2) })}

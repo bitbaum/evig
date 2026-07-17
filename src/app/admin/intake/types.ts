@@ -71,6 +71,8 @@ export interface DetailData {
   image_url: string | null
   /** Live marketplace listing for this device (set once published). */
   listing_id: string | null
+  /** Current status of that listing — the shop-side truth (active/sold/…). */
+  listing_status: string | null
   /** NULL when no physical quality/parts/recycling checklist was selected. */
   intake_tier: IntakeTier | null
   marketplace_status: string

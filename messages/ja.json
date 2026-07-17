@@ -10587,7 +10587,12 @@
         "markAllRequiredBusy": "保存中…",
         "viewListing": "ショップで出品を見る",
         "publishUntested": "検査シールなしで公開",
-        "publishUntestedTitle": "即時公開 — 出品には検査シールが付きません。理由は履歴に記録されます。"
+        "publishUntestedTitle": "即時公開 — 出品には検査シールが付きません。理由は履歴に記録されます。",
+        "listingSold": "販売済み",
+        "listingSoldBody": "このデバイスはショップで販売されました",
+        "listingInactive": "出品が無効",
+        "listingInactiveBody": "このデバイスは公開済みとされていますが、出品はショップで有効ではありません。",
+        "manageListing": "出品を管理"
       },
       "pipeline": {
         "newDevice": "新しいデバイス",

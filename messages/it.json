@@ -10587,7 +10587,12 @@
         "markAllRequiredBusy": "Salvataggio…",
         "viewListing": "Vedi l'annuncio nel negozio",
         "publishUntested": "Pubblica senza sigillo di controllo",
-        "publishUntestedTitle": "Pubblica subito — l'annuncio appare espressamente senza sigillo di controllo; il motivo resta nello storico."
+        "publishUntestedTitle": "Pubblica subito — l'annuncio appare espressamente senza sigillo di controllo; il motivo resta nello storico.",
+        "listingSold": "Venduto",
+        "listingSoldBody": "Questo dispositivo è stato venduto tramite il negozio",
+        "listingInactive": "Annuncio non attivo",
+        "listingInactiveBody": "Questo dispositivo risulta pubblicato, ma il suo annuncio non è più attivo nel negozio.",
+        "manageListing": "Gestisci annunci"
       },
       "pipeline": {
         "newDevice": "Nuovo dispositivo",

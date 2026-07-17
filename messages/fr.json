@@ -10540,7 +10540,12 @@
         "markAllRequiredBusy": "Enregistrement…",
         "viewListing": "Voir l'annonce en boutique",
         "publishUntested": "Publier sans label de contrôle",
-        "publishUntestedTitle": "Publier immédiatement — l'annonce paraît expressément sans label de contrôle ; la raison est consignée dans l'historique."
+        "publishUntestedTitle": "Publier immédiatement — l'annonce paraît expressément sans label de contrôle ; la raison est consignée dans l'historique.",
+        "listingSold": "Vendu",
+        "listingSoldBody": "Cet appareil a été vendu via la boutique",
+        "listingInactive": "Annonce inactive",
+        "listingInactiveBody": "Cet appareil est marqué comme publié, mais son annonce n'est plus active en boutique.",
+        "manageListing": "Gérer les annonces"
       },
       "pipeline": {
         "newDevice": "Nouvel appareil",

@@ -16,6 +16,7 @@ export type IntakeEventType =
   | 'field_updated'
   | 'quality_skipped'
   | 'published'
+  | 'unpublished'
   | 'note_added'
 
 export interface IntakeEvent {
@@ -42,6 +43,7 @@ export const EVENT_TYPE_LABELS: Record<IntakeEventType, string> = {
   field_updated: 'Aktualisiert',
   quality_skipped: 'Prüfung übersprungen',
   published: 'Publiziert',
+  unpublished: 'Aus dem Shop entfernt',
   note_added: 'Notiz',
 }
 
@@ -52,5 +54,6 @@ export const EVENT_TYPE_ICONS: Record<IntakeEventType, string> = {
   field_updated: '✏️',
   quality_skipped: '⚠️',
   published: '🚀',
+  unpublished: '↩️',
   note_added: '📝',
 }

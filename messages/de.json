@@ -10643,7 +10643,12 @@
         "markAllRequiredBusy": "Wird gespeichert…",
         "viewListing": "Inserat im Shop ansehen",
         "publishUntested": "Ohne Prüfsiegel publizieren",
-        "publishUntestedTitle": "Sofort veröffentlichen — das Inserat erscheint ausdrücklich ohne Prüfsiegel; die Begründung wird im Verlauf gespeichert."
+        "publishUntestedTitle": "Sofort veröffentlichen — das Inserat erscheint ausdrücklich ohne Prüfsiegel; die Begründung wird im Verlauf gespeichert.",
+        "listingSold": "Verkauft",
+        "listingSoldBody": "Dieses Gerät wurde über den Shop verkauft",
+        "listingInactive": "Inserat nicht aktiv",
+        "listingInactiveBody": "Dieses Gerät ist als publiziert markiert, aber das Inserat ist nicht mehr aktiv im Shop.",
+        "manageListing": "Inserate verwalten"
       },
       "pipeline": {
         "newDevice": "Neues Gerät",

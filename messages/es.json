@@ -10587,7 +10587,12 @@
         "markAllRequiredBusy": "Guardando…",
         "viewListing": "Ver el anuncio en la tienda",
         "publishUntested": "Publicar sin sello de control",
-        "publishUntestedTitle": "Publicar de inmediato — el anuncio aparece expresamente sin sello de control; el motivo queda en el historial."
+        "publishUntestedTitle": "Publicar de inmediato — el anuncio aparece expresamente sin sello de control; el motivo queda en el historial.",
+        "listingSold": "Vendido",
+        "listingSoldBody": "Este dispositivo se vendió a través de la tienda",
+        "listingInactive": "Anuncio no activo",
+        "listingInactiveBody": "Este dispositivo figura como publicado, pero su anuncio ya no está activo en la tienda.",
+        "manageListing": "Gestionar anuncios"
       },
       "pipeline": {
         "newDevice": "Nuevo dispositivo",

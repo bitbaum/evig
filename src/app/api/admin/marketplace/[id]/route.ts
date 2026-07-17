@@ -1,5 +1,7 @@
 import { db } from '@/db'
-import { listings, listingImages, listingSpecs, listingReports, users } from '@/db/schema'
+import { listings, listingImages, listingSpecs, listingReports, users, inventoryItems } from '@/db/schema'
+import { MARKETPLACE_STATUS } from '@/config/marketplace-status'
+import { appendIntakeEvent } from '@/lib/intake/timeline'
 import { eq, ne, sql } from 'drizzle-orm'
 import { withAdmin } from '@/lib/api/middleware'
 import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
@@ -163,10 +165,28 @@ export const DELETE = withAdmin<{ id: string }>('marketplace', async (request, s
       .update(listings)
       .set({ status: LISTING_STATUS.REMOVED, updatedAt: sql`NOW()` })
       .where(eq(listings.id, id))
-      .returning({ id: listings.id })
+      .returning({ id: listings.id, inventoryItemId: listings.inventoryItemId })
 
     if (!removed) {
       return apiNotFound(ERROR_MESSAGES.LISTING_NOT_FOUND)
+    }
+
+    // SSOT: a RevampIT device whose listing is pulled is NOT "im Shop"
+    // anymore — send it back to the pipeline (checklist stays intact, it can
+    // be republished any time) instead of leaving a published-claim that
+    // points at a dead page.
+    if (removed.inventoryItemId) {
+      await db
+        .update(inventoryItems)
+        .set({ marketplaceStatus: MARKETPLACE_STATUS.DRAFT, updatedAt: sql`NOW()` })
+        .where(eq(inventoryItems.id, removed.inventoryItemId))
+      await appendIntakeEvent(removed.inventoryItemId, {
+        type: 'unpublished',
+        description: 'Inserat aus dem Shop entfernt — Gerät zurück in der Pipeline',
+        userId: session.user.id,
+        userEmail: session.user.email,
+        metadata: { listing_id: id },
+      })
     }
 
     // Remove from Meilisearch
