@@ -66,9 +66,8 @@ export const POST = withAdmin<{ id: string }>('intake', async (request, session,
       return apiBadRequest(ERROR_MESSAGES.INTAKE_ALREADY_PUBLISHED)
     }
 
-    // Gate: quick-captured devices (tier NULL) skip the checklist ONLY for
-    // categories that don't require QC (accessories). A laptop captured via
-    // Schnellerfassung must go through the checklist before it can be sold.
+    // Gate: tier-NULL records skip the checklist only for categories that do
+    // not require QC. Testable hardware must first enter the quality process.
     const tier = row.intake_tier as IntakeTier | null
     const checklist = (row.intake_checklist || {}) as ChecklistState
     if (!tier && requiresQualityControl(row.category)) {

@@ -2,10 +2,9 @@
 
 import { useState, useCallback, Suspense } from 'react'
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
-import { ArrowLeft, Loader2 } from 'lucide-react'
+import { ArrowLeft, Check, Loader2 } from 'lucide-react'
 import { DataEntryTabs } from '@/components/erfassung/DataEntryTabs'
 import { ProductForm } from '@/components/erfassung/ProductForm'
 import { SuccessScreen } from '@/components/erfassung/SuccessScreen'
@@ -13,32 +12,25 @@ import { BulkTable } from '@/components/erfassung/BulkTable'
 import { BulkDetailPanel } from '@/components/erfassung/BulkDetailPanel'
 import { BulkActionBar } from '@/components/erfassung/BulkActionBar'
 import { BulkSuccessScreen } from '@/components/erfassung/BulkSuccessScreen'
-import { AIFormAssist } from '@/components/ai/AIFormAssist'
-import { AnnahmeFields } from '@/components/erfassung/AnnahmeFields'
+import { CaptureDestinationFields } from '@/components/erfassung/CaptureDestinationFields'
 import { ErfassungSubmitBar } from '@/components/erfassung/ErfassungSubmitBar'
 import { useErfassungForm } from '@/components/erfassung/useErfassungForm'
 import { Button } from '@/components/ui/button'
-import { Stepper } from '@/components/ui/Stepper'
 import type { BulkProduct, BulkSaveResponse } from '@/types/erfassung'
 import { formDataToPayload } from '@/types/erfassung'
 import Heading from '@/components/admin/AdminHeading'
-import { ProduktAufnehmenModeToggle } from '@/components/admin/ProduktAufnehmenModeToggle'
 import { ROUTES } from '@/config/routes'
 import { adminInteractive } from '@/lib/admin-ui'
+import { CAPTURE_DESTINATIONS } from '@/config/intake-workflow'
 
-const INTAKE_PIPELINE_STEPS = [
-  { label: 'Geräte-Eingang', description: 'Checkliste & Spende' },
-  { label: 'Erfassung', description: 'Produktdaten eingeben' },
-  { label: 'Im Shop', description: 'Veröffentlichen' },
-]
+const CAPTURE_STEPS = [
+  { number: 1, label: 'Daten eingeben' },
+  { number: 2, label: 'KI-Daten prüfen' },
+  { number: 3, label: 'Nächsten Schritt wählen' },
+] as const
 
 function ErfassungContent() {
   const form = useErfassungForm()
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const returnToRaw = searchParams.get('returnTo') ?? ''
-  // Only treat as intake pipeline when returnTo is a same-origin intake path
-  const isIntakePipeline = returnToRaw.startsWith('/admin/intake')
 
   // Bulk mode state
   const [viewMode, setViewMode] = useState<'single' | 'bulk'>('single')
@@ -185,17 +177,6 @@ function ErfassungContent() {
     // pb-44 clears the fixed mobile submit bar (~84px) stacked above the
     // admin bottom nav (56px + safe area).
     <div className="space-y-4 sm:space-y-6 max-w-5xl mx-auto pb-44 sm:pb-6">
-      {/* Pipeline progress — shown when entering from Geräte-Eingang */}
-      {isIntakePipeline && (
-        <div className="bg-surface-base border border-default rounded-lg px-4 py-3">
-          <Stepper
-            steps={INTAKE_PIPELINE_STEPS}
-            currentStep={1}
-            onStepClick={(step) => { if (step === 0) router.push(returnToRaw) }}
-          />
-        </div>
-      )}
-
       {/* Header */}
       <div className="flex items-center gap-3 sm:gap-4">
         <Link
@@ -206,10 +187,10 @@ function ErfassungContent() {
         </Link>
         <div className="flex-1 min-w-0">
           <Heading level={1} className="text-xl sm:text-2xl font-bold text-text-primary truncate">
-            {form.isEditMode ? 'Produkt bearbeiten' : viewMode === 'bulk' ? `Bulk Erfassung (${bulkProducts.length} Produkte)` : form.isAnnahmeMode ? 'Physische Annahme' : 'Produkt Erfassung'}
+            {form.isEditMode ? 'Produkt bearbeiten' : viewMode === 'bulk' ? `Import prüfen (${bulkProducts.length} Produkte)` : 'Produkt aufnehmen'}
           </Heading>
           <p className="text-sm sm:text-base text-text-secondary hidden sm:block">
-            {form.isEditMode ? 'Produktdaten aktualisieren' : viewMode === 'bulk' ? 'Mehrere Produkte prüfen und erfassen' : form.isAnnahmeMode ? 'Gerät annehmen — danach folgt die Checkliste im Geräte-Eingang' : 'Neues Produkt ins Inventar aufnehmen'}
+            {form.isEditMode ? 'Produktdaten aktualisieren' : viewMode === 'bulk' ? 'KI-Ergebnis prüfen und ausgewählte Produkte ins Inventar übernehmen' : 'Daten eingeben, KI-Vorschlag prüfen und den nächsten realen Arbeitsschritt wählen'}
           </p>
         </div>
         {viewMode === 'bulk' && (
@@ -225,33 +206,44 @@ function ErfassungContent() {
         )}
       </div>
 
-      {/* Mode switch — one capture form, two ceremony levels (both live on
-          this page). Hidden in edit mode and inside the intake→erfassung
-          pipeline. */}
-      {!form.isEditMode && !isIntakePipeline && (
-        <ProduktAufnehmenModeToggle active={form.isAnnahmeMode ? 'annahme' : 'schnell'} />
+      {!form.isEditMode && (
+        <ol className="grid grid-cols-3 overflow-hidden rounded-lg border border-default bg-surface-base" aria-label="Erfassungsschritte">
+          {CAPTURE_STEPS.map((step, index) => {
+            const hasInput = Boolean(form.formData.hersteller || form.formData.produktname)
+            const hasRequiredData = Boolean(
+              form.formData.hersteller.trim() && form.formData.produktname.trim(),
+            )
+            const complete = index === 0 ? hasInput : index === 1 ? hasRequiredData : false
+            const active = index === 0
+              ? !hasInput
+              : index === 1
+                ? hasInput && !hasRequiredData
+                : hasRequiredData
+            return (
+              <li key={step.number} className={`flex min-w-0 items-center gap-2 border-r border-subtle px-2 py-2.5 text-xs last:border-r-0 sm:px-4 sm:text-sm ${active ? 'bg-action-muted text-action' : 'text-text-secondary'}`}>
+                <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${active || complete ? 'bg-action text-action-text' : 'bg-surface-overlay text-text-secondary'}`}>
+                  {complete ? <Check className="h-3.5 w-3.5" aria-hidden="true" /> : step.number}
+                </span>
+                <span className="truncate">{step.label}</span>
+              </li>
+            )
+          })}
+        </ol>
       )}
 
-      {/* Physische Annahme — Verarbeitungsstufe + Spende */}
-      {form.isAnnahmeMode && viewMode === 'single' && (
-        <AnnahmeFields annahme={form.annahme} onChange={form.setAnnahme} />
+      {/* One input step; the channel does not change the workflow. */}
+      {!form.isEditMode && (
+        <DataEntryTabs
+          showAllTabs
+          onProductData={form.handleProductData}
+          onBulkData={handleBulkData}
+          onImageCapture={form.handleImageCapture}
+          onError={(error) => logger.error('Data entry error', { error })}
+          onDataFilled={form.handleDataFilled}
+          onManualEntry={form.handleManualEntry}
+          collapsed={form.dataEntryCollapsed}
+        />
       )}
-
-      {/* Data Entry Tabs (always at top). In Annahme mode a multi-product
-          paste still fills the single form (first product) — bulk capture is
-          a Schnellerfassung feature; Annahme devices need per-device tier +
-          checklist. */}
-      <DataEntryTabs
-        showAllTabs
-        onProductData={form.handleProductData}
-        onBulkData={form.isAnnahmeMode
-          ? (products) => { if (products[0]) form.handleProductData(products[0]) }
-          : handleBulkData}
-        onImageCapture={form.handleImageCapture}
-        onError={(error) => logger.error('Data entry error', { error })}
-        onDataFilled={form.handleDataFilled}
-        collapsed={form.dataEntryCollapsed}
-      />
 
       {/* BULK MODE */}
       {viewMode === 'bulk' && (
@@ -288,54 +280,63 @@ function ErfassungContent() {
       )}
 
       {/* SINGLE MODE */}
-      {viewMode === 'single' && (
+      {viewMode === 'single' && (form.isEditMode || form.reviewStarted) && (
         <>
-          {!!(form.formData.hersteller || form.formData.produktname) && (
-            <AIFormAssist
-              formType="erfassung"
-              variant="section"
-              defaultExpanded={form.showAIRefine}
-              placeholder="z.B. Dell Latitude 7480, 16GB RAM, 512GB SSD, guter Zustand..."
-              currentData={{
-                hersteller: form.formData.hersteller,
-                produktname: form.formData.produktname,
-                kurzbeschreibung: form.formData.kurzbeschreibung,
-                specs: form.formData.specs,
-                verkaufspreis: form.formData.verkaufspreis,
-                zustand: form.formData.zustand,
-                hauptkategorie: form.formData.hauptkategorie,
-                unterkategorie: form.formData.unterkategorie,
-                kundenprofile: form.formData.kundenprofile,
-              }}
-              onFieldsFilled={form.handleProductData}
-            />
-          )}
-
-          <form onSubmit={(e) => form.handleSubmit(e, 'draft')} className="space-y-6">
+          <form data-product-form onSubmit={(e) => form.handleSubmit(e, 'erfassen')} className="space-y-5">
             {form.saveError && (
               <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 text-error-700 dark:text-error-300 px-4 py-3 rounded-lg text-sm">
                 {form.saveError}
               </div>
             )}
-            <ProductForm
-              formData={form.formData}
-              aiMetadata={form.aiMetadata}
-              showAdvanced={form.showAdvanced}
-              isEditMode={form.isEditMode}
-              onFieldChange={form.handleChange}
-              onSpecChange={form.handleSpecChange}
-              onCategoryChange={form.handleKategorieChange}
-              onProfileToggle={form.toggleProfile}
-              onSpecAdd={form.addSpecField}
-              onSpecRemove={form.removeSpecField}
-              onImageChange={(image) => form.setFormData(prev => ({ ...prev, image }))}
-              onToggleAdvanced={() => form.setShowAdvanced(!form.showAdvanced)}
-            />
+            <section aria-labelledby="capture-review-title" className="space-y-5">
+              <div className="flex items-start gap-3">
+                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-action text-sm font-semibold text-action-text">2</div>
+                <div>
+                  <Heading level={2} id="capture-review-title" className="text-base font-semibold text-text-primary">
+                    Produktdaten prüfen
+                  </Heading>
+                  <p className="mt-0.5 text-sm text-text-secondary">KI-Vorschläge kontrollieren. Nur Hersteller und Produktname sind zum Speichern nötig.</p>
+                </div>
+              </div>
+              <ProductForm
+                formData={form.formData}
+                aiMetadata={form.aiMetadata}
+                showAdvanced={form.showAdvanced}
+                isEditMode={form.isEditMode}
+                onFieldChange={form.handleChange}
+                onSpecChange={form.handleSpecChange}
+                onCategoryChange={form.handleKategorieChange}
+                onProfileToggle={form.toggleProfile}
+                onSpecAdd={form.addSpecField}
+                onSpecRemove={form.removeSpecField}
+                onImageChange={(image) => form.setFormData(prev => ({ ...prev, image }))}
+                onToggleAdvanced={() => form.setShowAdvanced(!form.showAdvanced)}
+              />
+            </section>
+
+            {!form.isEditMode && (
+              <CaptureDestinationFields
+                destination={form.destination}
+                onDestinationChange={form.setDestination}
+                qcSkipReason={form.qcSkipReason}
+                onQcSkipReasonChange={form.setQcSkipReason}
+                donation={form.donation}
+                onDonationChange={form.setDonation}
+              />
+            )}
 
             <ErfassungSubmitBar
               isEditMode={form.isEditMode}
-              isAnnahmeMode={form.isAnnahmeMode}
               isLoading={form.isLoading}
+              destination={form.destination}
+              canSubmit={Boolean(
+                form.formData.hersteller.trim() &&
+                form.formData.produktname.trim() &&
+                (form.destination !== CAPTURE_DESTINATIONS.SHOP_UNTESTED || (
+                  form.qcSkipReason.trim().length >= 10 &&
+                  Number(form.formData.verkaufspreis) > 0
+                ))
+              )}
               onSubmit={form.handleSubmit}
             />
           </form>

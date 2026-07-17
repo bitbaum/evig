@@ -23,7 +23,7 @@ export function useIntakePipeline(active: boolean) {
   const [items, setItems] = useState<PipelineItem[]>([])
   const [loading, setLoading] = useState(true)
   const [pagination, setPagination] = useState<PaginationState>({
-    total: 0, limit: 20, offset: 0, hasMore: false,
+    total: 0, limit: 48, offset: 0, hasMore: false,
   })
   const [statusCounts, setStatusCounts] = useState<StatusCounts>({
     inProgress: 0, failed: 0, ready: 0, published: 0, total: 0,
@@ -38,7 +38,7 @@ export function useIntakePipeline(active: boolean) {
   const fetchItems = useCallback(async (offset = 0) => {
     setLoading(true)
     try {
-      const params = new URLSearchParams({ limit: '20', offset: String(offset) })
+      const params = new URLSearchParams({ limit: '48', offset: String(offset) })
       if (tierFilter) params.set('tier', tierFilter)
       if (statusFilter) params.set('status', statusFilter)
       if (categoryFilter) params.set('category', categoryFilter)

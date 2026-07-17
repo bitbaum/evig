@@ -313,6 +313,22 @@ describe('createErfassungProduct — action/status', () => {
     expect(mockPublishRevampitListing).toHaveBeenCalledTimes(1)
     expect(result.qcRequired).toBe(false)
   })
+
+  it('documented QC bypass publishes a testable device without claiming verification', async () => {
+    setupMinimalDraft()
+
+    const result = await createErfassungProduct(
+      makePayload({ action: 'publish', hauptkategorie: '10' }),
+      'user-1',
+      mockTx as never,
+      { qcBypassReason: 'sealed stock sold without functional test' },
+    )
+
+    expect(mockPublishRevampitListing).toHaveBeenCalledTimes(1)
+    expect(result.qcRequired).toBe(false)
+    expect(result.qcBypassed).toBe(true)
+    expect(result.listingId).toBe('listing-1')
+  })
 })
 
 // ============================================================================

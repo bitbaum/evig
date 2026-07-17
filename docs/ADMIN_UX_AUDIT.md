@@ -1,9 +1,9 @@
 # Admin UX audit — first principles (Musk lens)
 
 **Date:** 2026-06-03  
-**Last Modified:** 2026-06-25  
-**Last Modified Summary:** Timecard submit notifies approvers (in-app + email); submit UX hint + clearer button label; Playwright smoke tests for appointments/payment return.
-**Scope:** `/admin/timecards`, `/admin/team`, `/admin/tasks`, `/admin/protocols`
+**Last Modified:** 2026-07-17
+**Last Modified Summary:** Unified product capture, shared page/Hirn guidance, honest QC bypass, and clean site-wide token audit.
+**Scope:** Admin-wide patterns, with focused execution logs per workflow.
 **Method:** 4 parallel expert subagents, each examining one section through the lens of "make requirements less dumb → delete the process step → simplify → reduce cycle time."
 
 ## Common pattern across all four sections
@@ -60,6 +60,30 @@ These are real wins but each is medium-to-large with risk of breaking a workflow
 - **Team list** scannable initialed avatars
 - **Protocol review checklist** (`getProtocolReviewChecklist`) — compact signal
 - **Permission-based field gating** on team profile — super-admin fields properly gated
+
+---
+
+## Execution log (Phase AI — product intake IA + page guidance)
+
+**Date:** 2026-07-17
+**Scope:** `/admin/intake`, `/admin/intake/capture`, global admin help, repository design-token audit.
+
+| # | Change | Result |
+|---|---|---|
+| AI.1 | Deleted the physical-vs-quick mode choice; text/photo/file/speech now feed one product record | ✓ |
+| AI.2 | One late destination decision: quality, inventory, parts, recycling, or documented untested publication | ✓ |
+| AI.3 | Canonical capture route under Geräte-Eingang; legacy route renders the same page; duplicate dashboard action removed | ✓ |
+| AI.4 | Global `?` page guide shares `HirnPageContext` with the assistant, preventing instruction drift | ✓ |
+| AI.5 | QC bypass requires reason + price, writes audit events atomically, never earns verification, and is disclosed to buyers | ✓ |
+| AI.6 | Consolidated public documentation on `/so-funktionierts`; added open-source/reproduction CTA instead of a duplicate page | ✓ |
+| AI.7 | All eight locales have shape parity and translated capture/process copy | ✓ |
+| AI.8 | Site-wide SSOT color audit reduced from seven warnings to zero; raw standalone colors moved to `ui-colors.ts` | ✓ |
+| AI.9 | 320px admin chrome hides nonessential command/theme controls; capture remains overflow-free and touch-safe | ✓ |
+
+**Next site-wide discipline work:** migrate remaining legacy palette-scale class
+usage to semantic roles component-by-component when each area is touched. The
+SSOT audit now prevents new raw colors; doing a blind global rewrite would add
+visual risk without improving the intake cycle time.
 
 ---
 

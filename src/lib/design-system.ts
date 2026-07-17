@@ -390,7 +390,7 @@ export const designPrimitive = {
   },
 
   // ── Forms ─────────────────────────────────────────────────────────────────
-  // `default` variants: page-level (page bg #0a0a0a, container surface neutral-900).
+  // `default` variants: page-level (near-black page, neutral-900 container surface).
   // Form controls — semantic tokens only. The tokens (--surface-base,
   // --text-primary, --border-default, --accent-action) flip automatically
   // between light and dark via globals.css, so no `dark:` variants needed.
@@ -424,5 +424,4 @@ export const designPrimitive = {
 export type DesignButtonVariant = keyof typeof designPrimitive.button
 export type DesignButtonSize = keyof typeof designPrimitive.buttonSize
 export type DesignBadgeVariant = keyof typeof designPrimitive.badge
-
 

@@ -12,6 +12,7 @@ import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { Button } from '@/components/ui/button'
 import { adminChrome, adminInteractive } from '@/lib/admin-ui'
 import { ROUTES } from '@/config/routes'
+import { AdminPageGuide } from '@/components/admin/AdminPageGuide'
 
 interface AdminTopBarProps {
   sidebarCollapsed: boolean
@@ -46,6 +47,7 @@ export function AdminTopBar({
             variant="ghost"
             size="icon"
             onClick={onMobileMenuOpen}
+            aria-label={t('openAria')}
             className={`shrink-0 rounded-lg p-2 ${adminInteractive.rowHover} lg:hidden`}
           >
             <Menu className="h-5 w-5" />
@@ -55,6 +57,7 @@ export function AdminTopBar({
             variant="ghost"
             size="icon"
             onClick={onToggleSidebar}
+            aria-label={sidebarCollapsed ? t('expandSidebarTitle') : t('collapseSidebarTitle')}
             className={`hidden h-9 w-9 shrink-0 items-center justify-center rounded-lg ${adminInteractive.rowHover} lg:flex`}
             title={sidebarCollapsed ? t('expandSidebarTitle') : t('collapseSidebarTitle')}
           >
@@ -66,6 +69,7 @@ export function AdminTopBar({
           <div className="hidden min-w-0 lg:block">
             <Breadcrumbs className="mb-0 flex min-w-0" />
           </div>
+          <AdminPageGuide />
         </div>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
@@ -83,11 +87,15 @@ export function AdminTopBar({
           {/* Compact chip on ≥sm; small screens switch language via the
               user menu (inline pills) to keep the bar uncrowded. */}
           <LocaleSwitcher cookieOnly className="hidden sm:block" />
-          <ThemeToggle />
+          <div className="hidden sm:block">
+            <ThemeToggle />
+          </div>
 
           <div className={adminChrome.actionDivider} aria-hidden="true" />
 
-          <CommandBar />
+          <div className="hidden sm:block">
+            <CommandBar />
+          </div>
           <NotificationBell />
           <UserMenuDropdown user={user} />
         </div>

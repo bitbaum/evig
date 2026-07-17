@@ -1,168 +1,104 @@
 'use client'
 
 import { Link } from '@/i18n/navigation'
-import { Save, Loader2, Package, PackageCheck } from 'lucide-react'
+import {
+  Archive,
+  Loader2,
+  Recycle,
+  Save,
+  ShieldCheck,
+  Store,
+  Wrench,
+} from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/config/routes'
+import {
+  CAPTURE_DESTINATIONS,
+  type CaptureDestination,
+} from '@/config/intake-workflow'
 
 interface Props {
   isEditMode: boolean
-  /** Physische Annahme — single "Gerät erfassen" action into the pipeline. */
-  isAnnahmeMode?: boolean
   isLoading: boolean
-  // SyntheticEvent — both <form onSubmit> and inline buttons need to invoke this
-  onSubmit: (e: React.SyntheticEvent, action: 'draft' | 'erfassen' | 'publish') => void
+  destination: CaptureDestination
+  canSubmit: boolean
+  onSubmit: (event: React.SyntheticEvent, action: 'draft' | 'erfassen' | 'publish') => void
 }
 
-export function ErfassungSubmitBar({ isEditMode, isAnnahmeMode = false, isLoading, onSubmit }: Props) {
+const DESTINATION_ICONS = {
+  [CAPTURE_DESTINATIONS.QUALITY]: ShieldCheck,
+  [CAPTURE_DESTINATIONS.INVENTORY]: Archive,
+  [CAPTURE_DESTINATIONS.SHOP_UNTESTED]: Store,
+  [CAPTURE_DESTINATIONS.PARTS]: Wrench,
+  [CAPTURE_DESTINATIONS.RECYCLE]: Recycle,
+} as const
+
+/** One destination, one primary action. */
+export function ErfassungSubmitBar({
+  isEditMode,
+  isLoading,
+  destination,
+  canSubmit,
+  onSubmit,
+}: Props) {
   const t = useTranslations('components.erfassung.submitBar')
+  const DestinationIcon = DESTINATION_ICONS[destination]
 
-  // Spinner replaces the ICON, never the label — three anonymous spinning
-  // pills told the user nothing about what was happening.
-  const iconOrSpinner = (Icon: typeof Save) =>
-    isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Icon className="w-5 h-5" />
+  const submit = (event: React.SyntheticEvent) =>
+    onSubmit(event, destination === CAPTURE_DESTINATIONS.SHOP_UNTESTED ? 'publish' : 'erfassen')
 
-  if (isAnnahmeMode) {
-    return (
-      <>
-        {/* Desktop */}
-        <div className="hidden sm:flex justify-between items-center pt-4">
-          <Link
-            href={ROUTES.admin.intake}
-            className="inline-flex items-center justify-center rounded-md font-medium px-6 py-3 border border-default bg-surface-base hover:bg-surface-raised text-text-primary"
-          >
-            {t('cancel')}
-          </Link>
-          <Button
-            type="button"
-            onClick={(e) => onSubmit(e, 'erfassen')}
-            disabled={isLoading}
-            variant="primary"
-            className="gap-2 px-6 py-3"
-          >
-            {iconOrSpinner(PackageCheck)} {t('captureAnnahme')}
-          </Button>
-        </div>
+  const content = isLoading ? (
+    <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
+  ) : isEditMode ? (
+    <Save className="h-5 w-5" aria-hidden="true" />
+  ) : (
+    <DestinationIcon className="h-5 w-5" aria-hidden="true" />
+  )
 
-        {/* Mobile — above the admin bottom nav, same as the standard bar */}
-        <div className="sm:hidden fixed bottom-[calc(3.5rem+env(safe-area-inset-bottom))] left-0 right-0 bg-surface-base border-t border p-4 z-40">
-          <Button
-            type="button"
-            onClick={(e) => onSubmit(e, 'erfassen')}
-            disabled={isLoading}
-            variant="primary"
-            className="w-full gap-2 py-4 rounded-xl touch-manipulation min-h-[52px]"
-          >
-            {iconOrSpinner(PackageCheck)}
-            <span>{t('captureAnnahme')}</span>
-          </Button>
-        </div>
-      </>
-    )
-  }
+  const label = isEditMode
+    ? isLoading ? t('saving') : t('saveChanges')
+    : t(`destinationActions.${destination}`)
 
   return (
     <>
-      {/* Desktop */}
-      <div className="hidden sm:flex justify-between items-center pt-4">
+      <div className="hidden items-center justify-between border-t border-subtle pt-4 sm:flex">
         <Link
           href={ROUTES.admin.intake}
-          className="inline-flex items-center justify-center rounded-md font-medium px-6 py-3 border border-default bg-surface-base hover:bg-surface-raised text-text-primary"
+          className="inline-flex min-h-11 items-center justify-center rounded-md border border-default bg-surface-base px-5 py-2.5 text-sm font-medium text-text-primary hover:bg-surface-raised"
         >
           {t('cancel')}
         </Link>
-
-        <div className="flex gap-3">
-          {isEditMode ? (
-            <Button type="submit" disabled={isLoading} className="gap-2 px-6 py-3">
-              {iconOrSpinner(Save)} {isLoading ? t('saving') : t('saveChanges')}
-            </Button>
-          ) : (
-            <>
-              <Button
-                type="button"
-                onClick={(e) => onSubmit(e, 'draft')}
-                disabled={isLoading}
-                className="gap-2 px-5 py-3 bg-surface-overlay hover:bg-surface-overlay disabled:bg-surface-overlay"
-              >
-                {iconOrSpinner(Save)} {t('draft')}
-              </Button>
-
-              <Button
-                type="button"
-                onClick={(e) => onSubmit(e, 'erfassen')}
-                disabled={isLoading}
-                variant="primary" className="gap-2 px-5 py-3 disabled:bg-action"
-              >
-                {iconOrSpinner(Package)} {t('capture')}
-              </Button>
-
-              <Button
-                type="button"
-                onClick={(e) => onSubmit(e, 'publish')}
-                disabled={isLoading}
-                className="gap-2 px-5 py-3"
-              >
-                {iconOrSpinner(Package)} {t('captureAndShop')}
-              </Button>
-            </>
-          )}
-        </div>
+        <Button
+          type={isEditMode ? 'submit' : 'button'}
+          onClick={isEditMode ? undefined : submit}
+          disabled={isLoading || !canSubmit}
+          variant="primary"
+          className="min-h-11 gap-2 px-6"
+        >
+          {content}
+          {label}
+        </Button>
       </div>
 
-      {/* Mobile Sticky Bottom Bar — sits ABOVE the admin bottom nav (h-14 +
-          safe area), which is also fixed at bottom-0 with the same z-index;
-          anchored at 0 the two bars stacked on top of each other and the
-          submit buttons were half-covered. */}
-      <div className="sm:hidden fixed bottom-[calc(3.5rem+env(safe-area-inset-bottom))] left-0 right-0 bg-surface-base border-t border p-4 z-40">
-        {isEditMode ? (
-          <Button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault()
-              const form = document.querySelector('form')
-              if (form) form.requestSubmit()
-            }}
-            disabled={isLoading}
-            className="w-full gap-2 py-4 rounded-xl touch-manipulation min-h-[52px]"
-          >
-            {iconOrSpinner(Save)}
-            <span>{t('saveChanges')}</span>
-          </Button>
-        ) : (
-          <div className="flex gap-2">
-            <Button
-              type="button"
-              onClick={(e) => onSubmit(e, 'draft')}
-              disabled={isLoading}
-              aria-label={t('draft')}
-              className="gap-1 px-3 py-4 rounded-xl touch-manipulation min-h-[52px] bg-surface-overlay hover:bg-surface-overlay disabled:bg-surface-overlay"
-            >
-              {iconOrSpinner(Save)}
-            </Button>
-
-            <Button
-              type="button"
-              onClick={(e) => onSubmit(e, 'erfassen')}
-              disabled={isLoading}
-              variant="primary" className="flex-1 gap-2 py-4 rounded-xl touch-manipulation min-h-[52px] disabled:bg-action"
-            >
-              {iconOrSpinner(Package)}
-              <span>{t('capture')}</span>
-            </Button>
-
-            <Button
-              type="button"
-              onClick={(e) => onSubmit(e, 'publish')}
-              disabled={isLoading}
-              className="flex-1 gap-2 py-4 rounded-xl touch-manipulation min-h-[52px]"
-            >
-              {iconOrSpinner(Package)}
-              <span>{t('captureAndShopShort')}</span>
-            </Button>
-          </div>
-        )}
+      <div className="fixed bottom-[calc(3.5rem+env(safe-area-inset-bottom))] left-0 right-0 z-40 border-t border-default bg-surface-base p-3 sm:hidden">
+        <Button
+          type="button"
+          onClick={(event) => {
+            if (isEditMode) {
+              event.preventDefault()
+              document.querySelector<HTMLFormElement>('form[data-product-form]')?.requestSubmit()
+              return
+            }
+            submit(event)
+          }}
+          disabled={isLoading || !canSubmit}
+          variant="primary"
+          className="min-h-[52px] w-full gap-2 rounded-xl"
+        >
+          {content}
+          {label}
+        </Button>
       </div>
     </>
   )

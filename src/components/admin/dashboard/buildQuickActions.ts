@@ -1,6 +1,5 @@
 import {
   FileText,
-  PackageCheck,
   ScanLine,
   GraduationCap,
   Wrench,
@@ -25,17 +24,15 @@ export function buildQuickActions(
 
   if (canAccessSection('intake')) {
     actions.push({
-      label: 'Gerät annehmen',
-      href: '/admin/intake',
-      icon: PackageCheck,
+      label: 'Produkt aufnehmen',
+      href: '/admin/intake/capture',
+      icon: ScanLine,
       color: 'bg-action-muted text-action hover:bg-action-muted',
     })
-  }
-
-  if (canAccessSection('products')) {
+  } else if (canAccessSection('products')) {
     actions.push({
-      label: 'Gerät erfassen',
-      href: '/admin/erfassung',
+      label: 'Produkt aufnehmen',
+      href: '/admin/intake/capture',
       icon: ScanLine,
       color: 'bg-action-muted text-action hover:bg-action-muted',
     })

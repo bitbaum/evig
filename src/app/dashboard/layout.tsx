@@ -29,7 +29,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
           seeded with the server session. We must NOT re-wrap in a second, unseeded
           <Providers> here — that nested SessionProvider starts unauthenticated and
           makes client pages (e.g. messages) false-redirect logged-in staff to /admin
-          (React #418 hydration mismatch). /admin works precisely because it never
+          (React 418 hydration mismatch). /admin works precisely because it never
           double-wrapped. */}
       <ConditionalMainLayout leanChrome>
         {/* Desktop dashboard nav lives in the account dropdown + the home-page

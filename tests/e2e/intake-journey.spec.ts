@@ -22,7 +22,6 @@ import { expectAdminRouteBlocked } from './helpers/route-smoke'
 import {
   buildE2EIntakeProductName,
   completeRequiredIntakeChecklist,
-  createIntakeItem,
   fetchIntakeDetail,
   publishIntakeItem,
   tryPublishIntakeItem,
@@ -47,14 +46,59 @@ test.describe('Intake pipeline staff journey', () => {
     await expect(page.getByRole('heading', { name: 'Geräte-Eingang' })).toBeVisible({
       timeout: 15000,
     })
+    await page.locator('[data-intake-ready="true"]').waitFor({ timeout: 15000 })
 
-    const created = await createIntakeItem(page.request, {
-      hersteller: 'RevampIT',
-      produktname: productName,
-      kurzbeschreibung: 'Automatisierter E2E-Test (Refurbish-Stufe)',
-      zustand: 'good',
-      intake_tier: INTAKE_TIERS.REFURBISH,
-    })
+    // One navigation home: the advanced product editor is reachable from the
+    // workflow, but it no longer competes as a second sidebar destination.
+    await expect(page.getByRole('link', { name: 'Geräte-Eingang', exact: true })).toBeVisible()
+    await expect(page.getByRole('link', { name: 'Produkt aufnehmen', exact: true })).toHaveCount(0)
+
+    // One capture page: enter the two required fields, keep the recommended
+    // quality destination, then create. No preliminary mode-choice screen.
+    await page.getByRole('link', { name: 'Neues Gerät', exact: true }).click()
+    await expect(page).toHaveURL(/\/admin\/intake\/capture/)
+    await expect(page.getByRole('heading', { name: 'Produkt aufnehmen' })).toBeVisible()
+
+    // Page help is generated from the same workflow context Hirn receives.
+    await page.getByRole('button', { name: 'Hilfe zu dieser Seite' }).click()
+    const guide = page.getByRole('dialog', { name: 'Produkt aufnehmen' })
+    await expect(guide.getByText('Daten eingeben', { exact: true })).toBeVisible()
+    await expect(guide.getByText('KI-Vorschlag prüfen', { exact: true })).toBeVisible()
+    await guide.getByRole('button', { name: 'Hilfe schliessen' }).click()
+
+    await page.getByRole('button', { name: 'Ohne KI manuell eingeben' }).click()
+    await page.getByLabel(/Hersteller/).fill('RevampIT')
+    await page.getByLabel(/Produktname \/ Modell/).fill(productName)
+    const createResponsePromise = page.waitForResponse(response =>
+      response.url().endsWith('/api/admin/intake') && response.request().method() === 'POST',
+    )
+    const captureStartedAt = Date.now()
+    await page.getByRole('button', { name: 'Gerät aufnehmen & Prüfung starten' }).click()
+    const createResponse = await createResponsePromise
+    expect(createResponse.ok()).toBe(true)
+    expect(Date.now() - captureStartedAt).toBeLessThan(5000)
+    const createBody = await createResponse.json() as {
+      data: { inventory_id: string; item_uuid: string }
+    }
+    const created = createBody.data
+    await expect(page.getByText(created.item_uuid, { exact: true })).toBeVisible()
+
+    // QR label is generated locally (data URL), not fetched from a public QR service.
+    const labelPage = await page.context().newPage()
+    try {
+      await labelPage.goto(`/admin/intake/${created.inventory_id}/label`)
+      const qr = labelPage.getByAltText(`QR-Code zu ${created.item_uuid}`)
+      await expect(qr).toBeVisible({ timeout: 15000 })
+      await expect(qr).toHaveAttribute('src', /^data:image\/png;base64,/)
+    } finally {
+      await labelPage.close()
+    }
+
+    await page.goto('/admin/intake')
+    // Mobile and desktop render dedicated card variants; desktop kanban is
+    // later in DOM order at this viewport.
+    await expect(page.getByText(productName, { exact: false }).last()).toBeVisible({ timeout: 15000 })
+    await expect(page.getByText('In Prüfung', { exact: true }).last()).toBeVisible()
 
     let detail = await fetchIntakeDetail(page.request, created.inventory_id)
     expect(detail.checklist_complete).toBe(false)
@@ -75,8 +119,9 @@ test.describe('Intake pipeline staff journey', () => {
     expect(failWithoutNote.status).toBe(400)
 
     // Vier-Augen-Prinzip: the sole worker cannot sign off final QA without an
-    // override note — neither before any work is done nor after doing
-    // everything alone. (A second person, or a documented override, unblocks.)
+    // explicit documented override — neither before any work is done nor
+    // after doing everything alone. (A second person, or an explicit audited
+    // solo-shift override, unblocks.)
     const soloQa = await trySetIntakeChecklistVerdict(
       page.request,
       created.inventory_id,
@@ -132,6 +177,20 @@ test.describe('Intake pipeline staff journey', () => {
     await expect(page.getByText('Dieses Gerät ist im Shop veröffentlicht')).toBeVisible({
       timeout: 15000,
     })
+
+    // Workshop-phone regression: the mobile card/capture layouts must fit a
+    // 320px viewport without reintroducing the old horizontally-scrolling table.
+    await page.setViewportSize({ width: 320, height: 720 })
+    await page.goto('/admin/intake')
+    await expect(page.getByText(productName, { exact: false }).first()).toBeVisible({ timeout: 15000 })
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true)
+
+    await page.goto('/admin/intake/capture')
+    await expect(page.getByRole('heading', { name: 'Produkt aufnehmen' })).toBeVisible({ timeout: 15000 })
+    await page.getByRole('button', { name: 'Ohne KI manuell eingeben' }).click()
+    await expect(page.getByLabel(/Hersteller/)).toBeVisible()
+    await expect(page.getByLabel(/Produktname \/ Modell/)).toBeVisible()
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true)
 
     if (hasDualPersonaCredentials()) {
       await loginWithCredentials(page, '/dashboard', USER_TEST_EMAIL, USER_TEST_PASSWORD)

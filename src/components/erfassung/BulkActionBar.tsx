@@ -6,7 +6,7 @@
  * Fixed bottom bar during bulk mode with selection count and save actions.
  */
 
-import { Save, Package, Loader2 } from 'lucide-react'
+import { Package, Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 
@@ -67,41 +67,20 @@ export function BulkActionBar({
           </div>
         )}
 
-        {/* Right: action buttons */}
-        <div className="flex gap-2">
-          <Button
-            type="button"
-            onClick={() => onSave('draft')}
-            disabled={selectedCount === 0 || isSaving}
-            size="sm"
-            className="gap-1.5 bg-surface-overlay hover:bg-surface-overlay disabled:bg-surface-overlay"
-          >
-            <Save className="w-4 h-4" />
-            <span className="hidden sm:inline">{t('draft')}</span>
-          </Button>
-
-          <Button
-            type="button"
-            onClick={() => onSave('erfassen')}
-            disabled={selectedCount === 0 || isSaving}
-            size="sm"
-            variant="primary" className="gap-1.5 disabled:bg-action"
-          >
-            <Package className="w-4 h-4" />
-            <span className="hidden sm:inline">{t('capture')}</span>
-          </Button>
-
-          <Button
-            type="button"
-            onClick={() => onSave('publish')}
-            disabled={selectedCount === 0 || isSaving}
-            size="sm"
-            className="gap-1.5"
-          >
-            <Package className="w-4 h-4" />
-            <span className="hidden sm:inline">{t('captureAndShop')}</span>
-          </Button>
-        </div>
+        {/* A file import creates inventory records. Publication and QC remain
+            per-device decisions because a spreadsheet cannot prove the state
+            of a physical device. */}
+        <Button
+          type="button"
+          onClick={() => onSave('erfassen')}
+          disabled={selectedCount === 0 || isSaving}
+          size="sm"
+          variant="primary"
+          className="gap-1.5 disabled:bg-action"
+        >
+          <Package className="w-4 h-4" />
+          <span>{t('importSelected', { count: selectedCount })}</span>
+        </Button>
       </div>
     </div>
   )

@@ -10,10 +10,12 @@
  * REVAMPIT_GUARANTEE — sourced from the intake warranty label + AGB), never
  * invented, and only ever on is_revampit stock (P2P sales carry no guarantee).
  */
-import { ShieldCheck, Recycle, BadgeCheck, RotateCcw } from 'lucide-react'
+import { ShieldCheck, ShieldAlert, Recycle, BadgeCheck, RotateCcw, ArrowRight } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { Link } from '@/i18n/navigation'
 import { CO2Badge } from '@/components/marketplace/CO2Badge'
 import { REVAMPIT_GUARANTEE } from '@/config/marketplace'
+import { ROUTES } from '@/config/routes'
 import type { ListingDetail } from './types'
 
 export function RevampitTrustStrip({
@@ -37,6 +39,12 @@ export function RevampitTrustStrip({
             {t('trust.verified')}
           </li>
         )}
+        {!isVerified && (
+          <li className="flex items-start gap-2 rounded-lg border border-warning-300 bg-warning-50 p-2.5 text-warning-800 dark:border-warning-800 dark:bg-warning-900/15 dark:text-warning-200">
+            <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+            <span>{t('trust.untested')}</span>
+          </li>
+        )}
         <li className="flex items-center gap-2">
           <BadgeCheck className="h-4 w-4 shrink-0 text-action" aria-hidden="true" />
           {t('trust.warranty', { months: REVAMPIT_GUARANTEE.warrantyMonths })}
@@ -50,6 +58,13 @@ export function RevampitTrustStrip({
           {t('trust.mission')}
         </li>
       </ul>
+      <Link
+        href={ROUTES.public.soFunktioniert}
+        className="inline-flex min-h-11 items-center gap-2 text-sm font-medium text-action hover:underline"
+      >
+        {t('trust.processLink')}
+        <ArrowRight className="h-4 w-4" aria-hidden="true" />
+      </Link>
     </div>
   )
 }

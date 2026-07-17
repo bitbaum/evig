@@ -15,11 +15,12 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
+import QRCode from 'qrcode'
 import { ArrowLeft, Package, Printer } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/admin/AdminHeading'
 import { ROUTES } from '@/config/routes'
-import { buildQrImageUrl } from '@/config/integrations'
+import { QR_BG_COLOR, QR_FG_COLOR } from '@/config/integrations'
 import { ORG } from '@/config/org'
 import { getConditionLabel } from '@/config/erfassung'
 import {
@@ -47,6 +48,7 @@ export default function IntakeLabelPage() {
   const [device, setDevice] = useState<LabelData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [qrDataUrl, setQrDataUrl] = useState<string | null>(null)
 
   useEffect(() => {
     async function fetchDevice() {
@@ -60,6 +62,22 @@ export default function IntakeLabelPage() {
     }
     if (inventoryId) fetchDevice()
   }, [inventoryId])
+
+  // Generate locally in the browser. The previous implementation sent the
+  // internal admin detail URL to a public QR-image service and made label
+  // printing depend on that service being online.
+  useEffect(() => {
+    if (!device) return
+    const detailUrl = `${window.location.origin}${ROUTES.admin.intakeDetail(device.id)}`
+    void QRCode.toDataURL(detailUrl, {
+      width: 300,
+      margin: 1,
+      errorCorrectionLevel: 'M',
+      color: { dark: `#${QR_FG_COLOR}`, light: `#${QR_BG_COLOR}` },
+    })
+      .then(setQrDataUrl)
+      .catch(() => setError('QR-Code konnte nicht erstellt werden'))
+  }, [device])
 
   if (loading) {
     return (
@@ -82,8 +100,6 @@ export default function IntakeLabelPage() {
     )
   }
 
-  const detailUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}${ROUTES.admin.intakeDetail(device.id)}`
-  const qrUrl = buildQrImageUrl(detailUrl, 300)
   const deviceName = `${device.brand ?? ''} ${device.product_name ?? ''}`.trim()
 
   return (
@@ -109,12 +125,15 @@ export default function IntakeLabelPage() {
       <div className="bg-surface-raised min-h-screen pt-20 pb-8 print:pt-0 print:pb-0 print:bg-surface-base print:min-h-0 flex items-start justify-center">
         <div className="intake-label bg-surface-base flex items-stretch gap-2 p-2 border border print:border-0">
           {/* QR — scanning opens the device's checklist */}
-          { }
-          <img
-            src={qrUrl}
-            alt={`QR-Code zu ${device.item_uuid}`}
-            className="intake-label-qr shrink-0"
-          />
+          {qrDataUrl ? (
+            <img
+              src={qrDataUrl}
+              alt={`QR-Code zu ${device.item_uuid}`}
+              className="intake-label-qr shrink-0"
+            />
+          ) : (
+            <div className="intake-label-qr shrink-0 animate-pulse bg-surface-overlay" aria-label="QR-Code wird erstellt" />
+          )}
           <div className="flex flex-col justify-between min-w-0 py-0.5">
             <div>
               <div className="font-mono font-bold text-base leading-tight">{device.item_uuid}</div>

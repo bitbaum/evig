@@ -5,6 +5,7 @@ import { newsletterSubscriptions } from '@/db/schema'
 import { eq, and, sql } from 'drizzle-orm'
 import { ORG } from '@/config/org'
 import { APP_URL } from '@/config/urls'
+import { NEWSLETTER_CONFIRMATION_COLORS as COLORS } from '@/config/ui-colors'
 
 type Outcome = 'missing' | 'invalid' | 'success' | 'error'
 
@@ -28,7 +29,7 @@ function htmlResponse(outcome: Outcome): NextResponse {
     ? 'Dieser Bestätigungslink ist ungültig oder wurde bereits verwendet. Falls du dich neu anmelden möchtest, registriere dich bitte erneut.'
     : 'Bei der Bestätigung ist ein Fehler aufgetreten. Bitte versuche es später erneut.'
 
-  const headerClass = isSuccess ? '#22c55e' : '#dc2626'
+  const headerColor = isSuccess ? COLORS.success : COLORS.error
 
   const html = `<!DOCTYPE html>
 <html lang="de">
@@ -37,14 +38,14 @@ function htmlResponse(outcome: Outcome): NextResponse {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${title} - ${ORG.name}</title>
   <style>
-    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; background-color: #fafafa; margin: 0; padding: 40px 20px; }
-    .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
-    .header { padding: 24px 20px; text-align: center; color: white; background-color: ${headerClass}; }
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: ${COLORS.body}; background-color: ${COLORS.page}; margin: 0; padding: 40px 20px; }
+    .container { max-width: 600px; margin: 0 auto; background-color: ${COLORS.surface}; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px ${COLORS.shadow}; }
+    .header { padding: 24px 20px; text-align: center; color: ${COLORS.surface}; background-color: ${headerColor}; }
     .header h1 { margin: 0; font-size: 24px; }
     .content { padding: 32px 24px; }
     .content p { margin: 0 0 16px; font-size: 16px; }
-    .button { display: inline-block; padding: 12px 24px; color: white; text-decoration: none; border-radius: 6px; background-color: #22c55e; margin-top: 16px; }
-    .footer { padding: 20px; text-align: center; color: #666; font-size: 12px; border-top: 1px solid #e5e5e5; }
+    .button { display: inline-block; padding: 12px 24px; color: ${COLORS.surface}; text-decoration: none; border-radius: 6px; background-color: ${COLORS.success}; margin-top: 16px; }
+    .footer { padding: 20px; text-align: center; color: ${COLORS.muted}; font-size: 12px; border-top: 1px solid ${COLORS.border}; }
   </style>
 </head>
 <body>

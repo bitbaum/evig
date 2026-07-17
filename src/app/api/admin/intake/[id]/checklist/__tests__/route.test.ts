@@ -55,7 +55,7 @@ jest.mock('@/db', () => ({
 }))
 
 jest.mock('@/db/schema', () => ({
-  inventoryItems: { id: 'ii_id', aiProductId: 'ii_aiProductId', intakeTier: 'ii_intakeTier', intakeChecklist: 'ii_intakeChecklist', checklistComplete: 'ii_checklistComplete', updatedAt: 'ii_updatedAt' },
+  inventoryItems: { id: 'ii_id', aiProductId: 'ii_aiProductId', intakeTier: 'ii_intakeTier', intakeChecklist: 'ii_intakeChecklist', checklistComplete: 'ii_checklistComplete', marketplaceStatus: 'ii_marketplaceStatus', updatedAt: 'ii_updatedAt' },
   aiExtractedProducts: { id: 'aep_id', category: 'aep_category', aiProductId: 'aep_aiProductId' },
 }))
 
@@ -101,7 +101,12 @@ jest.mock('@/config/error-messages', () => ({
     INTAKE_ITEM_NOT_FOUND: 'Nicht gefunden',
     INTAKE_INVALID_CHECKLIST_ITEM: 'Ungültiges Checklistenelement',
     INTAKE_SECOND_PERSON_REQUIRED: 'Vier-Augen-Prinzip erforderlich',
+    INTAKE_ALREADY_PUBLISHED: 'Bereits publiziert',
   },
+}))
+
+jest.mock('@/config/marketplace-status', () => ({
+  MARKETPLACE_STATUS: { PUBLISHED: 'published' },
 }))
 
 jest.mock('@/lib/api/helpers', () => {
@@ -137,7 +142,7 @@ const MOCK_SESSION = {
   expires: '2027-01-01',
 }
 
-const MOCK_ROW = { id: 'inv-1', intakeTier: 'refurbish', intakeChecklist: {}, category: 'Laptop' }
+const MOCK_ROW = { id: 'inv-1', intakeTier: 'refurbish', intakeChecklist: {}, category: 'Laptop', marketplaceStatus: 'draft' }
 
 function makeRequest(body: Record<string, unknown> = { item_id: 'photos', result: 'pass' }) {
   return new NextRequest('http://localhost/api/admin/intake/inv-1/checklist', {
@@ -212,6 +217,15 @@ describe('PATCH /api/admin/intake/[id]/checklist — validation', () => {
     expect(response.status).toBe(400)
   })
 
+  it('keeps the checklist immutable after publication', async () => {
+    mockWhere.mockResolvedValueOnce([{ ...MOCK_ROW, marketplaceStatus: 'published' }])
+    const response = await PATCH(makeRequest(), makeContext())
+    expect(response.status).toBe(400)
+    const body = await response.json()
+    expect(body.error).toContain('publiziert')
+    expect(mockUpdate).not.toHaveBeenCalled()
+  })
+
   it('returns 400 when the second-person rule is violated (Vier-Augen-Prinzip)', async () => {
     const checklist = require('@/config/intake-checklist')
     checklist.violatesSecondPersonRule.mockReturnValueOnce(true)
@@ -221,7 +235,7 @@ describe('PATCH /api/admin/intake/[id]/checklist — validation', () => {
     expect(body.error).toContain('Vier-Augen')
   })
 
-  it('allows a solo sign-off WITH an override note (Vier-Augen override)', async () => {
+  it('does not infer a solo override from a generic note', async () => {
     const checklist = require('@/config/intake-checklist')
     checklist.violatesSecondPersonRule.mockReturnValue(true)
     mockValidateBody.mockReturnValueOnce({
@@ -229,7 +243,32 @@ describe('PATCH /api/admin/intake/[id]/checklist — validation', () => {
       data: { item_id: 'photos', result: 'pass', notes: 'allein im Dienst' },
     })
     const response = await PATCH(makeRequest({ item_id: 'photos', result: 'pass', notes: 'allein im Dienst' }), makeContext())
+    expect(response.status).toBe(400)
+  })
+
+  it('allows an explicit solo sign-off with an audited override reason', async () => {
+    const checklist = require('@/config/intake-checklist')
+    checklist.violatesSecondPersonRule.mockReturnValue(true)
+    mockValidateBody.mockReturnValueOnce({
+      success: true,
+      data: {
+        item_id: 'photos',
+        result: 'pass',
+        notes: 'allein im Dienst',
+        second_person_override: true,
+      },
+    })
+    const response = await PATCH(makeRequest({
+      item_id: 'photos',
+      result: 'pass',
+      notes: 'allein im Dienst',
+      second_person_override: true,
+    }), makeContext())
     expect(response.status).toBe(200)
+    expect(mockAppendIntakeEvent).toHaveBeenCalledWith('inv-1', expect.objectContaining({
+      description: expect.stringContaining('Ausnahme Vier-Augen-Prinzip'),
+      metadata: expect.objectContaining({ second_person_override: true }),
+    }))
   })
 
   it('does NOT apply the second-person rule to fail verdicts', async () => {

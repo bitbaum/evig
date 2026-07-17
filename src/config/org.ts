@@ -206,4 +206,6 @@ export const EXTERNAL_LINKS = {
   /** Legacy WordPress shop — used in chatbot and external links */
   shopLegacy: 'https://www.revamp-it.ch/index.php/de/shop-de',
   wiki: 'https://revamp-it.ch/index.php/de/wiki-de',
+  /** Open implementation of the platform and its operational workflow. */
+  sourceCode: 'https://github.com/maonakamoto/revampit',
 } as const

@@ -47,6 +47,8 @@ export interface CreateProductResult {
    * in the pipeline (refurbish tier, draft) instead of going live.
    */
   qcRequired: boolean
+  /** True only for an explicitly documented direct shop publication without QC. */
+  qcBypassed: boolean
 }
 
 /**
@@ -72,6 +74,12 @@ export interface CreateProductOptions {
   existingDonationId?: string
   /** Forces DRAFT marketplace status, skips marketplace_listings insert */
   checklistGated?: boolean
+  /**
+   * Explicit staff decision to publish without the RevampIT quality check.
+   * Callers must validate and audit the reason; this low-level helper only
+   * prevents the automatic QC interception.
+   */
+  qcBypassReason?: string
 }
 
 /** Drizzle db or transaction object — both share insert/select/execute */
@@ -159,14 +167,18 @@ export async function createErfassungProduct(
   const productStatus = action === 'draft' ? PRODUCT_STATUS.PENDING_REVIEW : PRODUCT_STATUS.APPROVED
   const marketplaceStatus = action === 'publish' ? MARKETPLACE_STATUS.PUBLISHED : MARKETPLACE_STATUS.DRAFT
 
-  // QC gate: a direct-publish (Schnellerfassung) of a device category that
-  // requires the intake checklist may NOT go straight to the shop. It gets
-  // the refurbish tier (the sell path) and lands in the pipeline instead —
-  // the checklist then gates publication like any Physische Annahme item.
+  const qcBypassed =
+    action === 'publish' &&
+    Boolean(options?.qcBypassReason?.trim())
+
+  // Default safety gate: a direct publish of a testable device lands in the
+  // quality pipeline. The only exception is an explicit, validated and
+  // audited "publish untested" decision from the unified intake route.
   const qcRequired =
     action === 'publish' &&
     !options?.checklistGated &&
     !options?.intakeTier &&
+    !qcBypassed &&
     requiresQualityControl(payload.hauptkategorie)
   const effectiveTier: IntakeTier | undefined =
     options?.intakeTier ?? (qcRequired ? INTAKE_TIERS.REFURBISH : undefined)
@@ -257,8 +269,8 @@ export async function createErfassungProduct(
         intakeTier: effectiveTier,
         intakeChecklist: intakeChecklist,
         checklistComplete: false,
-        sourceDonationId: donationId,
       } : {}),
+      sourceDonationId: donationId,
     })
     .returning({ id: inventoryItems.id })
 
@@ -328,5 +340,14 @@ export async function createErfassungProduct(
     listingId = await publishRevampitListing(tx, inventoryItemId, { verifiedBy: userId })
   }
 
-  return { productId, inventoryId: inventoryItemId, itemUUID, imageUrl, donationId, listingId, qcRequired }
+  return {
+    productId,
+    inventoryId: inventoryItemId,
+    itemUUID,
+    imageUrl,
+    donationId,
+    listingId,
+    qcRequired,
+    qcBypassed,
+  }
 }

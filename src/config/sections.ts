@@ -131,6 +131,11 @@ export interface SectionConfig {
   category: SectionCategory
   /** Sidebar group for admin navigation (optional, defaults to none) */
   sidebarGroup?: SidebarGroupId
+  /**
+   * Keep the section as a permission/route key but omit it from navigation.
+   * Used for advanced sub-flows that belong to another operational home.
+   */
+  navigationVisible?: boolean
   /** Position in the admin mobile bottom nav (1-3). Sections without an
    *  order don't appear in the bottom nav; "Mehr" opens the full sidebar.
    *  Used by `getMobileBottomNavSections()`. */
@@ -542,10 +547,9 @@ export const SECTIONS = {
   // ---------------------------------------------------------------------------
   // ADMIN MANAGEMENT - Staff sections (non-sensitive)
   // ---------------------------------------------------------------------------
-  // The pipeline of ALL captured devices (Physische Annahme + Schnell-
-  // erfassung): list, checklist, publish. Sidebar-visible — this is where
-  // staff FIND a device after capturing it; hiding it made every captured
-  // device look like it vanished.
+  // The single operational home for incoming devices: keyboard-first capture,
+  // pipeline, workbench checklist and publish. Sidebar-visible so a product
+  // never appears to vanish after it has been captured.
   intake: {
     id: 'intake',
     path: '/admin/intake',
@@ -555,26 +559,7 @@ export const SECTIONS = {
       icon: PackageCheck,
       emoji: '📋',
       color: 'primary',
-    },
-    visibility: { admin: true, dashboard: false, requiresStaff: true },
-    priority: 99,
-    category: 'management',
-    sidebarGroup: 'angebot',
-  },
-
-  // The single "add a product" door — ONE form with two ceremony levels:
-  // Schnellerfassung (default) and Physische Annahme (?annahme=1, adds
-  // Verarbeitungsstufe + Spende and lands in the checklist pipeline).
-  erfassung: {
-    id: 'erfassung',
-    path: '/admin/erfassung',
-    ui: {
-      label: 'Produkt aufnehmen',
-      description: 'Gerät annehmen (Checkliste/Spende) oder Produkt schnell erfassen',
-      icon: ScanLine,
-      emoji: '📝',
-      color: 'primary',
-      mobileBottomNavLabel: 'Aufnehmen',
+      mobileBottomNavLabel: 'Geräte',
     },
     visibility: { admin: true, dashboard: false, requiresStaff: true },
     priority: 99,
@@ -583,9 +568,32 @@ export const SECTIONS = {
     mobileBottomNavOrder: 3,
   },
 
+  // Advanced product-data editor. Quick workshop intake lives under the
+  // Geräte-Eingang section; this direct route remains for richer catalogue
+  // data, AI-assisted extraction and exceptional inventory work.
+  erfassung: {
+    id: 'erfassung',
+    path: '/admin/intake/capture',
+    ui: {
+      label: 'Produkt aufnehmen',
+      description: 'Produkt über Text, Foto, Datei oder Sprache aufnehmen',
+      icon: ScanLine,
+      emoji: '📝',
+      color: 'primary',
+    },
+    visibility: { admin: true, dashboard: false, requiresStaff: true },
+    priority: 99,
+    category: 'management',
+    sidebarGroup: 'angebot',
+    // Advanced product-data editor under the Geräte-Eingang umbrella. It
+    // remains a permission key and direct route, but no longer competes with
+    // the pipeline as a second top-level destination.
+    navigationVisible: false,
+  },
+
   products: {
     id: 'products',
-    path: '/admin/erfassung',
+    path: '/admin/intake/capture',
     ui: {
       label: 'Produkte',
       description: 'Produktdaten erfassen und Inventar verwalten',
@@ -1348,7 +1356,7 @@ export function getSidebarGroupsWithSections(): Array<{
   return groups.map(group => ({
     group,
     sections: SECTION_CONFIGS
-      .filter(s => s.visibility.admin && s.sidebarGroup === group.id)
+      .filter(s => s.visibility.admin && s.navigationVisible !== false && s.sidebarGroup === group.id)
       .sort((a, b) => a.priority - b.priority),
   })).filter(g => g.sections.length > 0) // Only return groups with sections
 }
@@ -1380,6 +1388,7 @@ export function getMobileBottomNavSections(
       (s): s is SectionConfig =>
         typeof s.mobileBottomNavOrder === 'number' &&
         s.visibility.admin &&
+        s.navigationVisible !== false &&
         (allowed === null || allowed.has(s.id)),
     )
     .sort((a, b) => (a.mobileBottomNavOrder ?? 0) - (b.mobileBottomNavOrder ?? 0))

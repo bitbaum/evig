@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useIntakePipeline } from './useIntakePipeline'
 import { useIntakeDetail } from './useIntakeDetail'
@@ -9,55 +9,49 @@ import { IntakeDetailView } from './IntakeDetailView'
 import { ROUTES } from '@/config/routes'
 
 /**
- * Geräte-Eingang — the pipeline of ALL captured devices (list + detail).
+ * Geräte-Eingang — one operational home for capture, triage, QC and publish.
  *
- * Capturing happens in ONE place: /admin/erfassung (Schnellerfassung, or
- * Physische Annahme via ?annahme=1). The former inline create form here was
- * a ~700-line duplicate of the erfassung form with its own AI panel — same
- * job, second implementation. It is gone; "Neues Gerät erfassen" routes to
- * the real form and returns here (detail view) after saving.
+ * Capture has one canonical route at /admin/intake/capture. Input channels
+ * converge on one product record before the operator chooses its destination.
  */
 export default function IntakeClient() {
-  const [view, setView] = useState<'pipeline' | 'detail'>('pipeline')
+  const searchParams = useSearchParams()
   const router = useRouter()
+  const view = searchParams.has('detail') ? 'detail' : 'pipeline'
 
   const pipeline = useIntakePipeline(view === 'pipeline')
   const detail = useIntakeDetail()
 
-  // URL params: donation cross-link forwards to the capture form (annahme
-  // mode) with donor prefill; ?detail= re-opens a device (e.g. returning
-  // from an erfassung edit or right after capture).
-  const searchParams = useSearchParams()
+  // URL params: donation cross-links open capture with donor prefill;
+  // ?capture=1 preserves old bookmarks; ?detail=
+  // re-opens a device (e.g. a QR scan or return from product editing).
   useEffect(() => {
-    const donorName = searchParams.get('donor_name')
-    const donorEmail = searchParams.get('donor_email')
-    const donationId = searchParams.get('donation_id')
+    const isLegacyCapture =
+      searchParams.get('capture') === '1' ||
+      searchParams.has('donation_id') ||
+      searchParams.has('donor_name') ||
+      searchParams.has('donor_email')
+    if (isLegacyCapture) {
+      const forwarded = new URLSearchParams(searchParams.toString())
+      forwarded.delete('capture')
+      const query = forwarded.toString()
+      router.replace(`${ROUTES.admin.intakeCapture}${query ? `?${query}` : ''}`)
+      return
+    }
     const detailId = searchParams.get('detail')
-    if (donationId || donorName || donorEmail) {
-      const params = new URLSearchParams({ annahme: '1' })
-      if (donationId) params.set('donation_id', donationId)
-      if (donorName) params.set('donor_name', donorName)
-      if (donorEmail) params.set('donor_email', donorEmail)
-      router.replace(`${ROUTES.admin.erfassung}?${params.toString()}`)
-    } else if (detailId) {
-      setView('detail')
+    if (detailId) {
       detail.openDetail(detailId)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams])
 
   const handleOpenDetail = (id: string) => {
-    setView('detail')
-    detail.openDetail(id)
+    router.push(ROUTES.admin.intakeDetail(id))
   }
 
   const handleBackToPipeline = () => {
-    setView('pipeline')
     detail.clearDetail()
-  }
-
-  const handleCreateNew = () => {
-    router.push(`${ROUTES.admin.erfassung}?annahme=1`)
+    router.push(ROUTES.admin.intake)
   }
 
   return (
@@ -76,7 +70,6 @@ export default function IntakeClient() {
           onStatusFilterChange={pipeline.setStatusFilter}
           onCategoryFilterChange={pipeline.setCategoryFilter}
           onSearchFilterChange={pipeline.setSearchFilter}
-          onCreateNew={handleCreateNew}
           onOpenDetail={handleOpenDetail}
           onPageChange={pipeline.fetchItems}
         />

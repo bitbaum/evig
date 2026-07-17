@@ -204,6 +204,11 @@ export const adminChrome = {
     'hidden items-center gap-1.5 rounded-md border border-action/40 px-3 py-1.5 text-xs font-medium text-action transition-colors hover:border-action hover:bg-action/10 dark:border-action/30 sm:flex',
   /** Vertical divider between header action clusters */
   actionDivider: 'hidden h-5 w-px bg-surface-overlay dark:bg-surface-base/10 sm:block',
+  /** Modal/sheet scrim — shared neutral backdrop, never feature-colored. */
+  modalBackdrop: 'fixed inset-0 z-50 bg-neutral-950/40 backdrop-blur-[1px]',
+  /** Floating page-help panel. Elevation is reserved for this overlay layer. */
+  modalPanel:
+    'fixed inset-x-3 top-16 z-50 mx-auto max-h-[calc(100dvh-5rem)] max-w-xl overflow-y-auto rounded-xl border border-default bg-surface-base shadow-xl focus:outline-none sm:inset-x-auto sm:right-5 sm:mx-0 sm:w-[32rem]',
 } as const
 
 // ─── Form ─────────────────────────────────────────────────────────────────────

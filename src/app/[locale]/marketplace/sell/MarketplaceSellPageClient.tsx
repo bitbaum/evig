@@ -126,7 +126,7 @@ function SellPageContent() {
             {session.user.isStaff && (
               <p className="text-text-secondary mt-1">
                 Ist das RevampIT-Lagerbestand? Dann über{' '}
-                <NextLink href="/admin/erfassung" className="font-medium text-action underline underline-offset-2 hover:text-action">
+                <NextLink href="/admin/intake/capture" className="font-medium text-action underline underline-offset-2 hover:text-action">
                   Produkt aufnehmen → Erfassung
                 </NextLink>{' '}
                 erfassen — wird als RevampIT-Produkt mit Inventar gelistet. Nicht zwingend: persönliche Verkäufe gehören hierher.

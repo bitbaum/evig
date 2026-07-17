@@ -7,12 +7,15 @@
 export const ROUTES = {
   admin: {
     dashboard:          '/admin',
-    erfassung:          '/admin/erfassung',
-    erfassungNew:       '/admin/erfassung',
+    // Product capture is one step inside Geräte-Eingang. The legacy
+    // /admin/erfassung route remains render-compatible for old bookmarks.
+    erfassung:          '/admin/intake/capture',
+    erfassungNew:       '/admin/intake/capture',
     // Printable A4 sales label for a captured device (re-homed from the
     // removed legacy /admin/products tree — the print view is a live feature).
     erfassungFactsheet: (id: string) => `/admin/erfassung/${id}/factsheet`,
     intake:             '/admin/intake',
+    intakeCapture:      '/admin/intake/capture',
     // Small printable QR device label (physical ↔ digital link): scan at any
     // workstation to open the device's pipeline detail.
     intakeLabel:        (id: string) => `/admin/intake/${id}/label`,

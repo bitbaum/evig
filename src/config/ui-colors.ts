@@ -106,6 +106,29 @@ export const EMAIL_INLINE_COLORS = {
   mutedBlockBg: '#f9f9f9',
 } as const
 
+/** Standalone newsletter-confirmation HTML cannot consume CSS variables. */
+export const NEWSLETTER_CONFIRMATION_COLORS = {
+  success: '#22c55e',
+  error: '#dc2626',
+  body: '#333333',
+  page: '#fafafa',
+  surface: '#ffffff',
+  muted: '#666666',
+  border: '#e5e5e5',
+  shadow: 'rgba(0, 0, 0, 0.08)',
+} as const
+
+/** Decorative monitor-lamp SVG palette (non-UI illustration asset). */
+export const MONITOR_LAMP_PLACEHOLDER_COLORS = {
+  functional: { from: '#1f2937', to: '#0a0a0a', glow: '#f5f5f4' },
+  warm: { from: '#3b2415', to: '#1c0f06', glow: '#fbbf24' },
+  cool: { from: '#0e3a3a', to: '#062029', glow: '#7dd3fc' },
+  art: { from: '#3b0764', to: '#1e1b4b', glow: '#f0abfc' },
+  bezel: '#0a0a0a',
+  stand: '#1c1917',
+  highlight: '#ffffff',
+} as const
+
 /** Screen preview shadow for printable A4 pages */
 export const PRINT_PREVIEW_SHADOW =
   '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)'

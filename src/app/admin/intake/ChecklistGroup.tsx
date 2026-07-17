@@ -12,16 +12,22 @@ import { adminInteractive } from '@/lib/admin-ui'
 
 interface ChecklistGroupProps {
   group: ChecklistGroupType
-  onSetResult: (itemId: string, result: ChecklistResult | null, notes?: string) => void
+  readOnly?: boolean
+  onSetResult: (
+    itemId: string,
+    result: ChecklistResult | null,
+    notes?: string,
+    options?: { secondPersonOverride?: boolean },
+  ) => void
 }
 
 const isDone = (item: ChecklistItemWithState) =>
   item.state.result === CHECKLIST_RESULTS.PASS || item.state.result === CHECKLIST_RESULTS.NA
 
-export function ChecklistGroup({ group, onSetResult }: ChecklistGroupProps) {
+export function ChecklistGroup({ group, readOnly = false, onSetResult }: ChecklistGroupProps) {
   const t = useTranslations('admin.intake.checklist')
   const tForms = useTranslations('admin.forms')
-  const [expanded, setExpanded] = useState(true)
+  const [expanded, setExpanded] = useState(!readOnly)
   const [notesOpen, setNotesOpen] = useState<Record<string, boolean>>({})
   const [notesText, setNotesText] = useState<Record<string, string>>({})
   /** Items where a 'fail' click is waiting for its (required) reason. */
@@ -32,6 +38,7 @@ export function ChecklistGroup({ group, onSetResult }: ChecklistGroupProps) {
    * (the API rejects a solo sign-off without one).
    */
   const [pendingConfirm, setPendingConfirm] = useState<Record<string, boolean>>({})
+  const [secondPersonOverride, setSecondPersonOverride] = useState<Record<string, boolean>>({})
   const doneCount = group.items.filter(isDone).length
   const failCount = group.items.filter(i => i.state.result === CHECKLIST_RESULTS.FAIL).length
 
@@ -44,6 +51,7 @@ export function ChecklistGroup({ group, onSetResult }: ChecklistGroupProps) {
     setNotesOpen(prev => ({ ...prev, [itemId]: false }))
     setPendingFail(prev => ({ ...prev, [itemId]: false }))
     setPendingConfirm(prev => ({ ...prev, [itemId]: false }))
+    setSecondPersonOverride(prev => ({ ...prev, [itemId]: false }))
   }
 
   const handleVerdict = (item: ChecklistItemWithState, result: ChecklistResult) => {
@@ -74,7 +82,9 @@ export function ChecklistGroup({ group, onSetResult }: ChecklistGroupProps) {
       if (!text) return // fail requires a reason
       onSetResult(item.id, CHECKLIST_RESULTS.FAIL, text)
     } else if (pendingConfirm[item.id]) {
-      onSetResult(item.id, CHECKLIST_RESULTS.PASS, text)
+      onSetResult(item.id, CHECKLIST_RESULTS.PASS, text, {
+        secondPersonOverride: secondPersonOverride[item.id] === true,
+      })
     } else {
       onSetResult(item.id, item.state.result, text)
     }
@@ -121,7 +131,7 @@ export function ChecklistGroup({ group, onSetResult }: ChecklistGroupProps) {
               >
                 <div className="flex items-start gap-3">
                   {/* Verdict buttons: pass / fail / n.a. */}
-                  <div className="flex items-center gap-1 mt-0.5 shrink-0" role="group" aria-label={item.label}>
+                  {!readOnly && <div className="flex items-center gap-1 mt-0.5 shrink-0" role="group" aria-label={item.label}>
                     <Button
                       type="button"
                       variant="ghost"
@@ -170,7 +180,7 @@ export function ChecklistGroup({ group, onSetResult }: ChecklistGroupProps) {
                     >
                       <span className="text-[10px] leading-none">NA</span>
                     </Button>
-                  </div>
+                  </div>}
 
                   <div className="flex-1 min-w-0">
                     {/* Label + required marker */}
@@ -204,7 +214,7 @@ export function ChecklistGroup({ group, onSetResult }: ChecklistGroupProps) {
                               })}
                             </span>
                           )}
-                          {!notesOpen[item.id] && (
+                          {!readOnly && !notesOpen[item.id] && (
                             <Button
                               type="button"
                               variant="ghost"
@@ -232,7 +242,18 @@ export function ChecklistGroup({ group, onSetResult }: ChecklistGroupProps) {
                           <p className="text-xs text-error-600 dark:text-error-400">{t('failNoteRequired')}</p>
                         )}
                         {pendingConfirm[item.id] && (
-                          <p className="text-xs text-text-secondary">{t('confirmNoteHint')}</p>
+                          <div className="space-y-2">
+                            <p className="text-xs text-text-secondary">{t('confirmNoteHint')}</p>
+                            <label className="flex min-h-11 cursor-pointer items-center gap-2 rounded-lg border border-warning-200 bg-warning-50 px-3 py-2 text-xs text-warning-800 dark:border-warning-800 dark:bg-warning-900/20 dark:text-warning-200">
+                              <input
+                                type="checkbox"
+                                checked={secondPersonOverride[item.id] === true}
+                                onChange={(event) => setSecondPersonOverride(prev => ({ ...prev, [item.id]: event.target.checked }))}
+                                className="rounded border-strong text-action focus:ring-action"
+                              />
+                              {t('overrideSecondPerson')}
+                            </label>
+                          </div>
                         )}
                         <Textarea
                           autoFocus
@@ -250,7 +271,10 @@ export function ChecklistGroup({ group, onSetResult }: ChecklistGroupProps) {
                           <Button
                             type="button"
                             onClick={() => saveNotes(item)}
-                            disabled={pendingFail[item.id] && !(notesText[item.id]?.trim())}
+                            disabled={
+                              (pendingFail[item.id] && !(notesText[item.id]?.trim())) ||
+                              (pendingConfirm[item.id] && secondPersonOverride[item.id] === true && (notesText[item.id]?.trim().length ?? 0) < 10)
+                            }
                             variant="primary"
                             size="sm"
                           >

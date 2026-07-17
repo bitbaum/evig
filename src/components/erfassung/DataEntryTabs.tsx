@@ -6,16 +6,15 @@
  * Multi-mode data entry UI for product capture:
  * - Text (Formular): Quick text → AI extraction → Form prefill (single or bulk)
  * - File (Datei): CSV upload → parsed products → bulk table
- * - Speech (Sprache): Voice recording → AI extraction (future)
- * - Picture (Bild): Photo/upload → AI analysis (future)
+ * - Speech (Sprache): Voice recording → transcription → AI extraction
+ * - Picture (Bild): Photo/upload → AI analysis
  *
  * Auto-detects single vs bulk: paste one product → single form. Paste many → bulk table.
  */
 
 import { useState, useCallback, useEffect } from 'react'
-import { Mic, Camera, Zap, Loader2, CheckCircle2, AlertCircle, ChevronDown, ChevronUp, FileUp } from 'lucide-react'
+import { Mic, Camera, Zap, Loader2, CheckCircle2, AlertCircle, ChevronDown, ChevronUp, FileUp, PencilLine } from 'lucide-react'
 import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { apiFetch } from '@/lib/api/client'
@@ -33,6 +32,7 @@ interface DataEntryTabsProps {
   onImageCapture?: (imageBase64: string) => void
   onError?: (error: string) => void
   onDataFilled?: () => void
+  onManualEntry?: () => void
   activeMode?: EntryMode
   className?: string
   showAllTabs?: boolean
@@ -54,6 +54,7 @@ export function DataEntryTabs({
   onImageCapture,
   onError,
   onDataFilled,
+  onManualEntry,
   activeMode: initialMode = 'form',
   className = '',
   showAllTabs = false,
@@ -69,29 +70,26 @@ export function DataEntryTabs({
       description: t('tabTextDesc'),
     },
     {
+      id: 'picture',
+      label: t('tabPictureLabel'),
+      icon: <Camera className="w-4 h-4" />,
+      description: t('tabPictureDesc'),
+    },
+    {
       id: 'file',
       label: t('tabFileLabel'),
       icon: <FileUp className="w-4 h-4" />,
       description: t('tabFileDesc'),
     },
-  ]
-
-  const FUTURE_TABS: TabConfig[] = [
     {
       id: 'speech',
       label: t('tabSpeechLabel'),
       icon: <Mic className="w-4 h-4" />,
       description: t('tabSpeechDesc'),
     },
-    {
-      id: 'picture',
-      label: t('tabPictureLabel'),
-      icon: <Camera className="w-4 h-4" />,
-      description: t('tabPictureDesc'),
-    },
   ]
 
-  const tabs = showAllTabs ? [...CORE_TABS, ...FUTURE_TABS] : CORE_TABS
+  const tabs = showAllTabs ? CORE_TABS : CORE_TABS.filter(tab => tab.id === 'form' || tab.id === 'file')
   const [activeMode, setActiveMode] = useState<EntryMode>(initialMode)
   const [quickText, setQuickText] = useState('')
   const [quickEntryState, setQuickEntryState] = useState<QuickEntryState>('idle')
@@ -137,13 +135,13 @@ export function DataEntryTabs({
 
         onBulkData(result.data!.products)
         setQuickEntryState('success')
+        setIsCollapsed(true)
         logger.info('Bulk text entry successful', { count: result.data!.productCount })
 
         setTimeout(() => {
           setQuickEntryState('idle')
           setQuickText('')
-          setIsCollapsed(true)
-        }, 1500)
+        }, 800)
       } else {
         // Single product: call existing text API
         const result = await apiFetch<{ data: Partial<ErfassungFormData>; metadata: AIFieldMetadata }>('/api/admin/erfassung/text', {
@@ -170,14 +168,14 @@ export function DataEntryTabs({
 
         onProductData(formData, result.data!.metadata as AIFieldMetadata)
         setQuickEntryState('success')
+        setIsCollapsed(true)
+        onDataFilled?.()
         logger.info('Quick text entry successful', { product: productData.produktname })
 
         setTimeout(() => {
           setQuickEntryState('idle')
           setQuickText('')
-          setIsCollapsed(true)
-          onDataFilled?.()
-        }, 1500)
+        }, 800)
       }
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Unbekannter Fehler'
@@ -222,42 +220,45 @@ export function DataEntryTabs({
 
   return (
     <div
-      className={`bg-action-muted rounded-xl border border-strong overflow-hidden ${className}`}
+      className={`overflow-hidden rounded-xl border border-default bg-surface-base ${className}`}
     >
       {/* Collapsible header */}
       <Button
         type="button"
         variant="ghost"
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="w-full flex items-center justify-between px-4 sm:px-6 py-3 hover:bg-action-muted/40 h-auto rounded-none"
+        className="flex h-auto w-full items-center justify-between rounded-none px-4 py-3 hover:bg-surface-raised sm:px-5"
       >
-        <div className="flex items-center gap-2">
-          <Zap className="w-5 h-5 text-action" />
-          <span className="font-semibold text-text-primary">{t('quickEntryTitle')}</span>
+        <div className="flex min-w-0 items-center gap-3 text-left">
+          <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-action text-sm font-semibold text-action-text">1</span>
+          <span className="min-w-0">
+            <span className="block font-semibold text-text-primary">{t('stepTitle')}</span>
+            <span className="hidden text-xs font-normal text-text-tertiary sm:block">{t('stepDescription')}</span>
+          </span>
           {isCollapsed && quickEntryState === 'success' && (
             <span className="text-sm text-action">{t('quickEntryFilled')}</span>
           )}
         </div>
         {isCollapsed ? (
-          <ChevronDown className="w-5 h-5 text-action" />
+          <ChevronDown className="w-5 h-5 text-text-secondary" />
         ) : (
-          <ChevronUp className="w-5 h-5 text-action" />
+          <ChevronUp className="w-5 h-5 text-text-secondary" />
         )}
       </Button>
 
       {/* Tab headers */}
       {!isCollapsed && tabs.length > 1 && (
-        <div className="flex border-b border-t border-strong">
+        <div className="grid grid-cols-4 border-y border-subtle bg-surface-raised">
           {tabs.map((tab) => (
             <Button
               key={tab.id}
               type="button"
               variant="ghost"
               onClick={() => setActiveMode(tab.id)}
-              className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium h-auto rounded-none ${
+              className={`flex h-auto min-w-0 flex-col items-center justify-center gap-1 rounded-none px-1 py-2 text-xs font-medium sm:flex-row sm:gap-2 sm:px-3 sm:py-3 sm:text-sm ${
                 activeMode === tab.id
-                  ? 'bg-surface-base text-action border-b-2 border-action -mb-px'
-                  : 'text-text-secondary hover:text-action hover:bg-surface-base/50'
+                  ? 'border-b-2 border-action bg-surface-base text-action'
+                  : 'text-text-secondary hover:bg-surface-base hover:text-text-primary'
               }`}
             >
               {tab.icon}
@@ -268,7 +269,10 @@ export function DataEntryTabs({
       )}
 
       {/* Tab content */}
-      {!isCollapsed && <div className="p-6">
+      {!isCollapsed && <div className="p-4 sm:p-5">
+        <p className="mb-4 text-sm text-text-secondary">
+          {tabs.find(tab => tab.id === activeMode)?.description}
+        </p>
         {/* Speech mode — record → transcribe → extract (VoiceEntry composes
             useVoiceRecording + useVoiceProduct; posts to /api/admin/erfassung/voice) */}
         {activeMode === 'speech' && (
@@ -294,15 +298,6 @@ export function DataEntryTabs({
         {/* Form mode with Quick Text Entry */}
         {activeMode === 'form' && (
           <div className="space-y-4">
-            <div className="text-center mb-2">
-              <Heading level={3} className="text-lg font-semibold text-text-primary">
-                {t('quickEntryTitle')}
-              </Heading>
-              <p className="text-sm text-text-secondary">
-                {t('quickEntryPlaceholder')}
-              </p>
-            </div>
-
             <div className="flex flex-col gap-3">
               <Textarea
                 value={quickText}
@@ -315,7 +310,7 @@ export function DataEntryTabs({
                 }}
                 placeholder={"Dell Latitude E7470 i5 8GB 256GB SSD 280 CHF"}
                 disabled={quickEntryState === 'loading'}
-                rows={4}
+                rows={3}
                 className="resize-none"
               />
               <Button
@@ -337,6 +332,17 @@ export function DataEntryTabs({
                   </>
                 )}
               </Button>
+              {onManualEntry && (
+                <Button
+                  type="button"
+                  onClick={onManualEntry}
+                  variant="ghost"
+                  className="w-full gap-2 text-text-secondary sm:w-auto sm:self-end"
+                >
+                  <PencilLine className="h-4 w-4" aria-hidden="true" />
+                  <span>{t('manualEntry')}</span>
+                </Button>
+              )}
             </div>
 
             {/* Status feedback */}
@@ -358,15 +364,6 @@ export function DataEntryTabs({
         {/* File upload mode */}
         {activeMode === 'file' && (
           <div className="space-y-4">
-            <div className="text-center mb-2">
-              <Heading level={3} className="text-lg font-semibold text-text-primary">
-                {t('fileImportTitle')}
-              </Heading>
-              <p className="text-sm text-text-secondary">
-                {t('fileImportDesc')}
-              </p>
-            </div>
-
             <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-strong dark:border-action rounded-xl cursor-pointer hover:border-action hover:bg-action-muted transition-colors">
               {isUploading ? (
                 <>

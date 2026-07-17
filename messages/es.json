@@ -153,7 +153,9 @@
       "browseRequests": "Solicitudes abiertas",
       "browseRequestsDesc": "Explora las solicitudes de reparación y ofrece ayuda",
       "itHelpHub": "IT Help",
-      "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point"
+      "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point",
+      "howItWorks": "Cómo funciona",
+      "howItWorksDesc": "El recorrido de un dispositivo, de la donación a su nueva vida"
     },
     "language": "Idioma",
     "missionHistory": "Misión & Historia",
@@ -3164,7 +3166,12 @@
       "free": "Gratis",
       "trust": {
         "verified": "Verificado y probado por Revamp-IT",
-        "mission": "Reutilizado en lugar de desechado — asociación sin ánimo de lucro"
+        "mission": "Reutilizado en lugar de desechado — asociación sin ánimo de lucro",
+        "untested": "Control de calidad omitido — este artículo no está verificado por Revamp-IT",
+        "untestedBadge": "Revamp-IT · sin probar",
+        "processLink": "Conoce nuestro proceso de calidad",
+        "warranty": "Garantía de {months} meses",
+        "returnPolicy": "Devolución en {days} días para compras en línea"
       },
       "zoomOpen": "Ampliar",
       "zoomClose": "Cerrar",
@@ -9478,7 +9485,14 @@
         "capture": "Capture",
         "captureAndShop": "Registrar y publicar en la tienda",
         "captureAnnahme": "Registrar dispositivo",
-        "captureAndShopShort": "+ Shop"
+        "captureAndShopShort": "+ Shop",
+        "destinationActions": {
+          "quality": "Registrar e iniciar el control",
+          "inventory": "Añadir al inventario",
+          "parts": "Registrar como fuente de piezas",
+          "recycle": "Registrar para reciclaje",
+          "shop_untested": "Publicar sin control"
+        }
       },
       "successScreen": {
         "title": "¡Producto registrado!",
@@ -9536,7 +9550,8 @@
         "selectedText": "selected",
         "draft": "Draft",
         "capture": "Capture",
-        "captureAndShop": "Registrar y publicar en la tienda"
+        "captureAndShop": "Registrar y publicar en la tienda",
+        "importSelected": "Importar la selección al inventario"
       },
       "imageCapture": {
         "dragOrText": "Arrastre la imagen aquí o",
@@ -9579,7 +9594,10 @@
         "processing": "Processing…",
         "chooseFile": "Elija un archivo CSV o Excel o arrástrelo aquí",
         "fileHint": "CSV, TSV, XLSX: las columnas se reconocen automáticamente",
-        "unmappedColumns": "Columnas sin asignar:"
+        "unmappedColumns": "Columnas sin asignar:",
+        "stepTitle": "Introducir datos",
+        "stepDescription": "Texto, foto, archivo o voz — la IA rellena el mismo producto.",
+        "manualEntry": "Introducir manualmente sin IA"
       },
       "formErrors": {
         "updateFailed": "No se ha podido actualizar el producto",
@@ -9602,6 +9620,45 @@
         "hint": "Describe el equipo: fabricante, modelo, estado, precio.",
         "transcription": "Reconocido: {text}",
         "errorGeneric": "No se pudo procesar el audio. Vuelve a intentarlo."
+      },
+      "destination": {
+        "title": "¿Qué ocurre después?",
+        "description": "Esta elección dirige el recorrido real en el taller. Puede cambiarse después en el flujo.",
+        "recommended": "Recomendado",
+        "otherDestinations": "Elegir otro destino",
+        "options": {
+          "quality": {
+            "label": "Reacondicionar y comprobar",
+            "description": "Inicia la lista adecuada. Tras superarla, el anuncio recibe el sello RevampIT."
+          },
+          "inventory": {
+            "label": "Solo inventario",
+            "description": "Guarda sin probar ni publicar. Los detalles pueden completarse más tarde."
+          },
+          "parts": {
+            "label": "Fuente de piezas",
+            "description": "Guía el desmontaje, las pruebas y la catalogación de componentes."
+          },
+          "recycle": {
+            "label": "Enviar a reciclaje",
+            "description": "Documenta el tratamiento de datos y la eliminación responsable."
+          },
+          "shop_untested": {
+            "label": "Publicar ahora — sin probar",
+            "description": "Excepción: publica de inmediato, expresamente sin sello de verificación RevampIT."
+          }
+        },
+        "skipReasonLabel": "¿Por qué se omite el control de calidad?",
+        "skipReasonPlaceholder": "p. ej., accesorio sellado; prueba funcional imposible …",
+        "skipDisclosure": "El motivo queda en la auditoría. Los compradores ven que el producto no fue probado.",
+        "skipPriceRequired": "La publicación directa exige un precio de venta superior a CHF 0.",
+        "donationTitle": "Origen / donación (opcional)",
+        "donationActive": "· Donación registrada",
+        "donationCheckbox": "Este producto fue donado",
+        "existingDonation": "Vinculado a una donación existente",
+        "donorName": "Nombre del donante",
+        "donorEmail": "Correo (opcional)",
+        "donorNotes": "Notas (opcional)"
       }
     },
     "eWasteProblem": {
@@ -10394,6 +10451,15 @@
             "sub": "Decidir: reparar y volver a probar, o cambiar de nivel (repuestos/reciclaje).",
             "cta": "Mostrar fallidos"
           }
+        },
+        "board": {
+          "in_progress": "En revisión",
+          "failed": "Bloqueado",
+          "ready": "Listo",
+          "published": "En tienda",
+          "empty": "Sin dispositivos",
+          "noCategory": "Categoría pendiente",
+          "ageDays": "{count} d"
         }
       },
       "checklist": {
@@ -10408,7 +10474,34 @@
         "saveFail": "Marcar como fallido",
         "confirmNoteHint": "Principio de cuatro ojos: confirme directamente como segunda persona. ¿Trabaja solo? Indique el motivo.",
         "confirmNotePlaceholder": "Opcional como segunda persona; obligatorio si firma solo, p. ej. «trabajando solo» …",
-        "saveConfirm": "Confirmar control de calidad"
+        "saveConfirm": "Confirmar control de calidad",
+        "overrideSecondPerson": "Excepción: trabajo solo (se requiere un motivo de al menos 10 caracteres)"
+      },
+      "quickCapture": {
+        "title": "Registrar un dispositivo ahora",
+        "description": "Fabricante, modelo, Intro — complete el resto después en el taller.",
+        "close": "Volver al flujo",
+        "brand": "Fabricante",
+        "brandPlaceholder": "Dell",
+        "productName": "Modelo / producto",
+        "productNamePlaceholder": "Latitude 7480",
+        "submit": "Registrar",
+        "saving": "Registrando…",
+        "keyboardHint": "Teclado: fabricante → Tab → modelo → Intro",
+        "details": "Ajustar nivel, categoría o donación",
+        "tier": "Nivel de procesamiento",
+        "category": "Categoría",
+        "categoryLater": "Definir después",
+        "condition": "Estado",
+        "donation": "Es una donación",
+        "donorName": "Nombre del donante",
+        "donorEmail": "Correo electrónico",
+        "donorNotes": "Notas",
+        "created": "{itemUuid} registrado — listo para el siguiente dispositivo.",
+        "printLabel": "Imprimir etiqueta",
+        "openPipeline": "Ver flujo",
+        "fullCapture": "Registro completo con foto, IA y detalles del producto",
+        "saveFailed": "No se pudo registrar el dispositivo"
       }
     },
     "it-hilfe": {
@@ -10672,7 +10765,8 @@
         "newDecision": "Nueva decisión",
         "newProtocol": "Nueva acta",
         "dashboard": "Panel"
-      }
+      },
+      "searching": "Buscando…"
     },
     "userMenu": {
       "darkMode": "Apariencia",
@@ -10950,12 +11044,12 @@
         },
         "intake": {
           "label": "Entrada de equipos",
-          "description": "Todos los equipos registrados: estado, checklist, publicación"
+          "description": "Todos los equipos registrados: estado, checklist, publicación",
+          "shortLabel": "Equipos"
         },
         "erfassung": {
           "label": "Registrar producto",
-          "description": "Aceptar un equipo (checklist/donación) o registrar un producto rápidamente",
-          "shortLabel": "Registrar"
+          "description": "Aceptar un equipo (checklist/donación) o registrar un producto rápidamente"
         },
         "marketplace": {
           "label": "Anuncios",
@@ -11194,6 +11288,70 @@
     "method": {
       "title": "Forma de pago",
       "subtitle": "Elige cómo quieres pagar"
+    }
+  },
+  "soFunktioniert": {
+    "meta": {
+      "title": "Cómo funciona — El recorrido de un dispositivo",
+      "description": "Cómo los ordenadores donados vuelven a ser fiables: borrado seguro, pruebas, Linux, garantía — y qué ocurre con los que no pueden venderse."
+    },
+    "hero": {
+      "title": "El recorrido de un dispositivo",
+      "subtitle": "De la donación a un nuevo hogar: cómo un ordenador usado vuelve a ser fiable en {org} — o aporta piezas valiosas."
+    },
+    "journey": {
+      "heading": "De la donación a un nuevo hogar",
+      "intro": "Cada dispositivo donado sigue el mismo proceso cuidadoso, transparente y trazable."
+    },
+    "phases": {
+      "donation": {
+        "title": "Donación o devolución",
+        "body": "Personas y organizaciones nos entregan sus equipos retirados, en persona o mediante recogida."
+      },
+      "intake": {
+        "title": "Entrada y evaluación",
+        "body": "Cada dispositivo se registra, se inspecciona visualmente y recibe una clasificación de estado clara."
+      },
+      "wipe": {
+        "title": "Borrado seguro de datos",
+        "body": "Todos los soportes se borran según NIST 800-88. Los datos anteriores dejan de ser recuperables."
+      },
+      "refurbish": {
+        "title": "Pruebas y reacondicionamiento",
+        "body": "El hardware se prueba, limpia y mejora cuando conviene; después instalamos un sistema libre como Linux."
+      },
+      "quality": {
+        "title": "Control de calidad y garantía",
+        "body": "Una inspección final confirma el resultado. Los equipos reacondicionados tienen {months} meses de garantía."
+      },
+      "rehome": {
+        "title": "Un nuevo hogar",
+        "body": "El dispositivo llega al mercado a un precio justo y solidario, listo para una segunda vida."
+      }
+    },
+    "paths": {
+      "heading": "No todos los dispositivos se venden",
+      "intro": "No toda donación puede reutilizarse, pero nada se desperdicia. Cada dispositivo sigue uno de tres caminos.",
+      "refurbish": {
+        "title": "Reacondicionar y vender",
+        "body": "La mayoría de los dispositivos funcionales se reacondicionan y vuelven a circular."
+      },
+      "parts": {
+        "title": "Recuperar piezas",
+        "body": "RAM, SSD y fuentes útiles se recuperan de los equipos que ya no pueden venderse."
+      },
+      "recycle": {
+        "title": "Reciclar correctamente",
+        "body": "Lo que no sirve va a reciclaje certificado por SWICO. Ningún componente acaba en la basura doméstica."
+      }
+    },
+    "cta": {
+      "heading": "Ayuda a cerrar el ciclo",
+      "body": "Compra tecnología reacondicionada o da una segunda vida a tu antiguo dispositivo.",
+      "openNote": "El proceso y el software son abiertos: adóptalos, mejóralos y compártelos para tu taller circular local.",
+      "source": "Ver el código abierto",
+      "buy": "Explorar el mercado",
+      "donate": "Donar un dispositivo"
     }
   }
 }

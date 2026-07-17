@@ -867,7 +867,10 @@
         "verified": "Von Revamp-IT geprüft & getestet",
         "mission": "Wiederverwendet statt entsorgt — Non-Profit-Verein",
         "warranty": "{months} Monate Garantie",
-        "returnPolicy": "{days} Tage Rückgaberecht bei Online-Kauf"
+        "returnPolicy": "{days} Tage Rückgaberecht bei Online-Kauf",
+        "untested": "Nicht durch Revamp-IT geprüft — kein Prüfsiegel",
+        "untestedBadge": "Revamp-IT · ungeprüft",
+        "processLink": "So funktioniert unser Qualitätsprozess"
       },
       "zoomOpen": "Vergrössern",
       "zoomClose": "Schliessen",
@@ -9528,7 +9531,14 @@
         "capture": "Erfassen",
         "captureAndShop": "Erfassen & Shop",
         "captureAnnahme": "Gerät erfassen",
-        "captureAndShopShort": "+ Shop"
+        "captureAndShopShort": "+ Shop",
+        "destinationActions": {
+          "quality": "Gerät aufnehmen & Prüfung starten",
+          "inventory": "Im Inventar speichern",
+          "shop_untested": "Ohne Prüfsiegel veröffentlichen",
+          "parts": "Als Ersatzteilquelle aufnehmen",
+          "recycle": "Für Recycling aufnehmen"
+        }
       },
       "successScreen": {
         "title": "Produkt erfasst!",
@@ -9586,7 +9596,8 @@
         "selectedText": "ausgewählt",
         "draft": "Entwurf",
         "capture": "Erfassen",
-        "captureAndShop": "Erfassen & Shop"
+        "captureAndShop": "Erfassen & Shop",
+        "importSelected": "{count} ins Inventar übernehmen"
       },
       "imageCapture": {
         "dragOrText": "Bild hierhin ziehen oder",
@@ -9629,7 +9640,10 @@
         "processing": "Wird verarbeitet…",
         "chooseFile": "CSV- oder Excel-Datei wählen oder hierher ziehen",
         "fileHint": "CSV, TSV, XLSX — Spalten werden automatisch erkannt",
-        "unmappedColumns": "Nicht zugeordnete Spalten:"
+        "unmappedColumns": "Nicht zugeordnete Spalten:",
+        "stepTitle": "Daten eingeben",
+        "stepDescription": "Text, Foto, Datei oder Sprache — die KI füllt denselben Produktdatensatz.",
+        "manualEntry": "Ohne KI manuell eingeben"
       },
       "voiceEntry": {
         "start": "Aufnahme starten",
@@ -9643,6 +9657,45 @@
         "updateFailed": "Produkt konnte nicht aktualisiert werden",
         "saveFailed": "Produkt konnte nicht gespeichert werden",
         "genericSaveError": "Fehler beim Speichern. Bitte erneut versuchen."
+      },
+      "destination": {
+        "title": "Was passiert als Nächstes?",
+        "description": "Diese Entscheidung steuert den realen Arbeitsweg. Sie kann später in der Pipeline geändert werden.",
+        "recommended": "Empfohlen",
+        "otherDestinations": "Anderes Ziel wählen",
+        "options": {
+          "quality": {
+            "label": "Aufbereiten und Qualität prüfen",
+            "description": "Startet die passende Checkliste. Nach bestandener Prüfung erhält das Shop-Inserat das RevampIT-Prüfsiegel."
+          },
+          "inventory": {
+            "label": "Nur ins Inventar",
+            "description": "Speichert das Produkt ohne Prüfung oder Veröffentlichung. Details können später ergänzt werden."
+          },
+          "parts": {
+            "label": "Als Ersatzteilquelle",
+            "description": "Führt durch Demontage, Komponententest und Katalogisierung."
+          },
+          "recycle": {
+            "label": "Zum Recycling",
+            "description": "Dokumentiert Datenbehandlung und verantwortungsvolle Entsorgung."
+          },
+          "shop_untested": {
+            "label": "Direkt in den Shop — ungeprüft",
+            "description": "Ausnahme: veröffentlicht sofort, aber ausdrücklich ohne RevampIT-Prüfsiegel."
+          }
+        },
+        "skipReasonLabel": "Warum wird die Qualitätsprüfung übersprungen?",
+        "skipReasonPlaceholder": "z.B. originalverpacktes Zubehör; Funktionsprüfung nicht möglich …",
+        "skipDisclosure": "Die Begründung wird im Audit gespeichert. Käufer:innen sehen, dass das Produkt nicht geprüft wurde.",
+        "skipPriceRequired": "Für die direkte Veröffentlichung muss oben ein Verkaufspreis grösser als CHF 0 eingetragen sein.",
+        "donationTitle": "Herkunft / Spende (optional)",
+        "donationActive": "· Spende erfasst",
+        "donationCheckbox": "Dieses Produkt wurde gespendet",
+        "existingDonation": "Mit bestehender Spende verknüpft",
+        "donorName": "Name Spender:in",
+        "donorEmail": "E-Mail (optional)",
+        "donorNotes": "Notizen (optional)"
       }
     },
     "eWasteProblem": {
@@ -10454,6 +10507,15 @@
             "sub": "Entscheiden: Problem beheben und erneut prüfen, oder Stufe ändern (Ersatzteile/Recycling).",
             "cta": "Fehlgeschlagene anzeigen"
           }
+        },
+        "board": {
+          "in_progress": "In Prüfung",
+          "failed": "Blockiert",
+          "ready": "Bereit",
+          "published": "Im Shop",
+          "empty": "Keine Geräte",
+          "noCategory": "Kategorie noch offen",
+          "ageDays": "{count} T."
         }
       },
       "checklist": {
@@ -10468,7 +10530,34 @@
         "saveFail": "Als fehlgeschlagen markieren",
         "confirmNoteHint": "Vier-Augen-Prinzip: Als zweite Person direkt bestätigen. Allein im Dienst? Begründung angeben.",
         "confirmNotePlaceholder": "Optional als zweite Person — erforderlich bei Allein-Bestätigung, z.B. «allein im Dienst» …",
-        "saveConfirm": "Qualitätskontrolle bestätigen"
+        "saveConfirm": "Qualitätskontrolle bestätigen",
+        "overrideSecondPerson": "Ausnahme: Ich bin allein im Dienst (Begründung mit mindestens 10 Zeichen erforderlich)"
+      },
+      "quickCapture": {
+        "title": "Gerät sofort aufnehmen",
+        "description": "Hersteller, Modell, Enter — den Rest ergänzt ihr später an der Werkbank.",
+        "close": "Zur Pipeline",
+        "brand": "Hersteller",
+        "brandPlaceholder": "Dell",
+        "productName": "Modell / Produkt",
+        "productNamePlaceholder": "Latitude 7480",
+        "submit": "Aufnehmen",
+        "saving": "Wird aufgenommen…",
+        "keyboardHint": "Tastatur: Hersteller eingeben → Tab → Modell eingeben → Enter",
+        "details": "Stufe, Kategorie oder Spende anpassen",
+        "tier": "Verarbeitungsstufe",
+        "category": "Kategorie",
+        "categoryLater": "Später festlegen",
+        "condition": "Zustand",
+        "donation": "Dies ist eine Spende",
+        "donorName": "Name Spender:in",
+        "donorEmail": "E-Mail",
+        "donorNotes": "Notizen",
+        "created": "{itemUuid} aufgenommen — bereit für das nächste Gerät.",
+        "printLabel": "Etikett drucken",
+        "openPipeline": "Pipeline ansehen",
+        "fullCapture": "Vollständige Erfassung mit Foto, KI und Produktdetails",
+        "saveFailed": "Gerät konnte nicht aufgenommen werden"
       }
     },
     "it-hilfe": {
@@ -11011,12 +11100,12 @@
         },
         "intake": {
           "label": "Geräte-Eingang",
-          "description": "Alle erfassten Geräte: Status, Checkliste, Publikation"
+          "description": "Alle erfassten Geräte: Status, Checkliste, Publikation",
+          "shortLabel": "Geräte"
         },
         "erfassung": {
           "label": "Produkt aufnehmen",
-          "description": "Gerät annehmen (Checkliste/Spende) oder Produkt schnell erfassen",
-          "shortLabel": "Aufnehmen"
+          "description": "Produkt über Text, Foto, Datei oder Sprache aufnehmen"
         },
         "marketplace": {
           "label": "Inserate",
@@ -11251,7 +11340,9 @@
       "heading": "Hilf mit, den Kreislauf zu schliessen",
       "body": "Kauf aufbereitete Technik oder gib deinem alten Gerät ein zweites Leben.",
       "buy": "Marktplatz entdecken",
-      "donate": "Gerät spenden"
+      "donate": "Gerät spenden",
+      "openNote": "Prozess und Software sind offen: Übernimm, verbessere und teile sie für deine eigene lokale Kreislaufwerkstatt.",
+      "source": "Offenen Quellcode ansehen"
     }
   }
 }

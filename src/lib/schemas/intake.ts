@@ -8,7 +8,12 @@
 import { z } from 'zod'
 import { paginationSchema } from './common'
 import { INTAKE_TIERS, CHECKLIST_RESULTS } from '@/config/intake-checklist'
+import {
+  CAPTURE_DESTINATIONS,
+  CAPTURE_DESTINATION_VALUES,
+} from '@/config/intake-workflow'
 import { ERROR_MESSAGES } from '@/config/error-messages'
+import { erfassungPayloadSchema } from './erfassung'
 
 // =============================================================================
 // INTAKE CREATE — Unified donation + erfassung in one
@@ -20,19 +25,17 @@ const intakeTierSchema = z.enum([
   INTAKE_TIERS.RECYCLE,
 ])
 
-export const IntakeCreateSchema = z.object({
-  // Device info (same fields as erfassung)
-  hersteller: z.string().min(1, 'Hersteller erforderlich'),
-  produktname: z.string().min(1, 'Produktname erforderlich'),
-  kurzbeschreibung: z.string().optional(),
+export const IntakeCreateSchema = erfassungPayloadSchema.omit({ action: true, publish: true }).extend({
+  // Intake can be created before a price is known. Every other product field
+  // comes from erfassungPayloadSchema so the two historical entry doors can
+  // no longer drift.
   verkaufspreis: z.number().min(0).optional(),
-  zustand: z.string().min(1, 'Zustand erforderlich'),
-  hauptkategorie: z.string().optional(),
-  unterkategorie: z.string().optional(),
-  image: z.string().nullable().optional(),
-
-  // Intake-specific
-  intake_tier: intakeTierSchema,
+  // One outcome decision after the product data has been reviewed. The
+  // legacy intake_tier stays accepted so labels/bookmarks and older clients
+  // keep working during the route consolidation.
+  destination: z.enum(CAPTURE_DESTINATION_VALUES).optional(),
+  intake_tier: intakeTierSchema.optional(),
+  qc_skip_reason: z.string().trim().max(500).optional(),
 
   // Optional donation info
   is_donation: z.boolean().default(false),
@@ -43,6 +46,26 @@ export const IntakeCreateSchema = z.object({
   // — prevents creating a duplicate donation for the same physical drop-off.
   existing_donation_id: z.string().uuid().optional(),
 })
+  .refine(data => Boolean(data.destination || data.intake_tier), {
+    message: 'Ziel für das Produkt erforderlich',
+    path: ['destination'],
+  })
+  .refine(
+    data => data.destination !== CAPTURE_DESTINATIONS.SHOP_UNTESTED ||
+      Boolean(data.qc_skip_reason && data.qc_skip_reason.length >= 10),
+    {
+      message: 'Für eine Veröffentlichung ohne Prüfung ist eine Begründung mit mindestens 10 Zeichen erforderlich',
+      path: ['qc_skip_reason'],
+    },
+  )
+  .refine(
+    data => data.destination !== CAPTURE_DESTINATIONS.SHOP_UNTESTED ||
+      Boolean(data.verkaufspreis && data.verkaufspreis > 0),
+    {
+      message: 'Für eine direkte Veröffentlichung ist ein Verkaufspreis grösser als null erforderlich',
+      path: ['verkaufspreis'],
+    },
+  )
 
 // =============================================================================
 // INTAKE UPDATE — Edit device details
@@ -72,10 +95,16 @@ export const ChecklistUpdateSchema = z
       .enum([CHECKLIST_RESULTS.PASS, CHECKLIST_RESULTS.FAIL, CHECKLIST_RESULTS.NA])
       .nullable(),
     notes: z.string().optional().default(''),
+    /** Explicit, audited exception for a solo shift. Never inferred from notes. */
+    second_person_override: z.boolean().optional().default(false),
   })
   .refine(
     data => data.result !== CHECKLIST_RESULTS.FAIL || data.notes.trim().length > 0,
     { message: ERROR_MESSAGES.INTAKE_FAIL_NOTES_REQUIRED, path: ['notes'] },
+  )
+  .refine(
+    data => !data.second_person_override || data.notes.trim().length >= 10,
+    { message: ERROR_MESSAGES.INTAKE_SECOND_PERSON_OVERRIDE_REASON_REQUIRED, path: ['notes'] },
   )
 
 // =============================================================================

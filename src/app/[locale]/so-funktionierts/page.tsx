@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
-import { Recycle, ShoppingBag, HandHeart } from 'lucide-react'
-import { ORG } from '@/config/org'
+import { Recycle, ShoppingBag, HandHeart, Code2 } from 'lucide-react'
+import { EXTERNAL_LINKS, ORG } from '@/config/org'
 import { REVAMPIT_GUARANTEE } from '@/config/marketplace'
 import { PageHero } from '@/components/layout/PageHero'
 import { Section } from '@/components/layout/Section'
@@ -101,6 +101,7 @@ export default async function SoFunktioniertPage({ params }: PageProps) {
             {t('cta.heading')}
           </Heading>
           <p className="mt-3 text-white/80">{t('cta.body')}</p>
+          <p className="mt-3 text-sm text-white/70">{t('cta.openNote')}</p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             <Button href="/marketplace" variant="secondary" size="lg" className="gap-2">
               <ShoppingBag className="h-4 w-4" aria-hidden="true" />
@@ -109,6 +110,10 @@ export default async function SoFunktioniertPage({ params }: PageProps) {
             <Button href="/get-involved/donate" variant="outline-light" size="lg" className="gap-2">
               <HandHeart className="h-4 w-4" aria-hidden="true" />
               {t('cta.donate')}
+            </Button>
+            <Button href={EXTERNAL_LINKS.sourceCode} variant="outline-light" size="lg" className="gap-2">
+              <Code2 className="h-4 w-4" aria-hidden="true" />
+              {t('cta.source')}
             </Button>
           </div>
         </div>

@@ -5,13 +5,13 @@ import {
   Truck,
   CreditCard,
   ShieldCheck,
+  ShieldAlert,
 } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import { getConditionBadge } from '@/config/erfassung/conditions'
 import { DELIVERY_LABELS, PAYMENT_MODE_LABELS, formatCHF, getCategoryLabel, GRATIS_CONFIG, VERIFICATION_CONFIG } from '@/config/marketplace'
 import type { DeliveryOption, PaymentMode } from '@/config/marketplace'
 import type { ListingDetail } from './types'
-import { ORG } from '@/config/org'
 import { useTranslations } from 'next-intl'
 
 interface ListingInfoPanelProps {
@@ -41,8 +41,9 @@ export function ListingInfoPanel({ listing, isVerified, isGratis }: ListingInfoP
           </span>
         )}
         {listing.is_revampit && !isVerified && (
-          <span className="px-3 py-1 rounded-full text-xs font-medium bg-action-muted text-action">
-            {ORG.name}
+          <span className="inline-flex items-center gap-1 rounded-full bg-warning-50 px-3 py-1 text-xs font-medium text-warning-800 dark:bg-warning-900/20 dark:text-warning-200">
+            <ShieldAlert className="h-3.5 w-3.5" aria-hidden="true" />
+            {t('trust.untestedBadge')}
           </span>
         )}
         {isGratis && (

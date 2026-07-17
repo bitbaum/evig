@@ -29,6 +29,17 @@ export interface HirnPageContext {
   suggestions: string[]
   /** Relevant deep links rendered as buttons. */
   quickActions?: { label: string; href: string }[]
+  /**
+   * Human-facing page guide. The same facts are part of this context object,
+   * so Hirn and the interface cannot explain different workflows.
+   */
+  guide?: {
+    title: string
+    purpose: string
+    steps: { title: string; description: string }[]
+    note?: string
+    learnMore?: { label: string; href: string }
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -271,6 +282,33 @@ function adminDescription(sectionId: string, extra: string): string {
 
 export const ADMIN_PAGE_CONTEXTS: HirnPageContext[] = [
   {
+    pattern: /^\/admin\/(?:erfassung|intake\/capture)/,
+    area: 'admin-product-capture',
+    description:
+      'Die Mitarbeiterin nimmt ein Produkt auf. Text, Foto, Datei oder Sprache werden zu genau einem kanonischen Produktdatensatz normalisiert; danach prüft sie die KI-Vorschläge und wählt das reale nächste Ziel. Eine Veröffentlichung ohne Qualitätsprüfung ist möglich, wird aber begründet, auditiert und im Shop ausdrücklich nicht als geprüft gekennzeichnet.',
+    suggestions: [
+      'Welche Eingabeart ist hier am schnellsten?',
+      'Wann darf ich ohne Qualitätsprüfung veröffentlichen?',
+      'Wie funktioniert ein CSV-Import?',
+    ],
+    quickActions: [
+      { label: 'Zur Pipeline', href: ROUTES.admin.intake },
+      { label: 'Produkt aufnehmen', href: ROUTES.admin.intakeCapture },
+    ],
+    guide: {
+      title: 'Produkt aufnehmen',
+      purpose: 'Ein Produkt einmal erfassen und danach bewusst ins Inventar, in die Aufbereitung, zu Ersatzteilen, ins Recycling oder in den Shop weiterleiten.',
+      steps: [
+        { title: 'Daten eingeben', description: 'Text schreiben/einfügen, Foto aufnehmen, CSV/Excel hochladen oder Produkt einsprechen.' },
+        { title: 'KI-Vorschlag prüfen', description: 'Die KI füllt das Formular. Hersteller und Produktname sind Pflicht; alles Weitere kann später ergänzt werden.' },
+        { title: 'Nächsten Schritt wählen', description: 'Qualitätsprüfung ist für RevampIT-geprüfte Ware empfohlen. Alternativen bleiben sichtbar und nachvollziehbar.' },
+        { title: 'Weiterarbeiten', description: 'Etikett drucken, Checkliste bearbeiten oder das veröffentlichte Produkt im Shop öffnen.' },
+      ],
+      note: 'CSV/Excel wird als Stapel importiert und zuerst ins Inventar übernommen. Eine Datei beweist keine physische Qualitätsprüfung.',
+      learnMore: { label: 'Unser offener Aufbereitungsprozess', href: ROUTES.public.soFunktioniert },
+    },
+  },
+  {
     pattern: /^\/admin\/approvals/,
     area: 'admin-approvals',
     description: adminDescription(
@@ -284,20 +322,32 @@ export const ADMIN_PAGE_CONTEXTS: HirnPageContext[] = [
     quickActions: [{ label: 'Freigaben', href: ROUTES.admin.approvals }],
   },
   {
-    pattern: /^\/admin\/(erfassung|intake)/,
+    pattern: /^\/admin\/intake/,
     area: 'admin-erfassung',
     description: adminDescription(
       'erfassung',
-      'Die Mitarbeiterin erfasst eingehende Geräte (Specs, Zustand, Fotos) für den RevampIT-Bestand; publizierte Geräte landen als Inserate im Marktplatz.'
+      'Die Mitarbeiterin steuert den gesamten Gerätefluss: Eingang, Triage, Qualitätsprüfung, blockierte Geräte und Veröffentlichung. Der Status wird aus demselben Checklistenzustand abgeleitet, der auch die Shop-Verifizierung erzeugt.'
     ),
     suggestions: [
-      'Wie erfasse ich ein neues Gerät?',
-      'Was passiert nach der Veröffentlichung?',
+      'Welches Gerät braucht als Nächstes Aufmerksamkeit?',
+      'Was blockiert eine Veröffentlichung?',
     ],
     quickActions: [
-      { label: 'Erfassung', href: ROUTES.admin.erfassung },
+      { label: 'Produkt aufnehmen', href: ROUTES.admin.intakeCapture },
       { label: 'Geräte-Eingang', href: ROUTES.admin.intake },
     ],
+    guide: {
+      title: 'Geräte-Eingang',
+      purpose: 'Alle erfassten Geräte vom Eingang bis zum Shop an einer Stelle bearbeiten.',
+      steps: [
+        { title: 'Aufnehmen', description: 'Neues Produkt über Text, Foto, Datei oder Sprache erfassen und etikettieren.' },
+        { title: 'Bearbeiten', description: 'Gerät öffnen, Tests und Aufbereitung mit Pass, Fehler oder Nicht anwendbar dokumentieren.' },
+        { title: 'Blockaden lösen', description: 'Fehlgeschlagene Geräte reparieren und erneut testen oder zu Ersatzteilen/Recycling umstufen.' },
+        { title: 'Veröffentlichen', description: 'Vollständige geprüfte Geräte erhalten im Shop automatisch Prüfsiegel und sichtbare Testergebnisse.' },
+      ],
+      note: 'Die Spalten zeigen Arbeitszustände, keine separaten Datenkopien. Ein Gerät bleibt ein Datensatz über den gesamten Prozess.',
+      learnMore: { label: 'Unser offener Aufbereitungsprozess', href: ROUTES.public.soFunktioniert },
+    },
   },
   {
     pattern: /^\/admin\/marketplace/,

@@ -7,8 +7,11 @@ import { sanitizeReturnTo } from '@/lib/utils/safe-redirect'
 import type { ErfassungFormData, AIFieldMetadata } from '@/types/erfassung'
 import { DEFAULT_FORM_DATA, formDataToPayload } from '@/types/erfassung'
 import { SPEC_TEMPLATES, templateToSpecFields } from '@/config/erfassung'
-import { INTAKE_TIERS, type IntakeTier } from '@/config/intake-checklist'
 import { ROUTES } from '@/config/routes'
+import {
+  CAPTURE_DESTINATIONS,
+  type CaptureDestination,
+} from '@/config/intake-workflow'
 
 /**
  * Merge partial AI/refined data into existing form data.
@@ -27,9 +30,8 @@ function mergeFormData(prev: ErfassungFormData, data: Partial<ErfassungFormData>
   return updated
 }
 
-/** Annahme-mode state — Verarbeitungsstufe + donation provenance. */
-export interface AnnahmeState {
-  tier: IntakeTier
+/** Donation provenance attached to the canonical inventory item. */
+export interface DonationState {
   isDonation: boolean
   donorName: string
   donorEmail: string
@@ -38,8 +40,7 @@ export interface AnnahmeState {
   existingDonationId: string | null
 }
 
-const DEFAULT_ANNAHME: AnnahmeState = {
-  tier: INTAKE_TIERS.REFURBISH,
+const DEFAULT_DONATION: DonationState = {
   isDonation: false,
   donorName: '',
   donorEmail: '',
@@ -54,10 +55,6 @@ export function useErfassungForm() {
   const editId = searchParams.get('edit')
   // Prevent open-redirect: only same-origin paths
   const returnTo = sanitizeReturnTo(searchParams.get('returnTo'), '/admin/intake')
-  // Physische Annahme — same form, plus Verarbeitungsstufe + Spende; the
-  // device is saved into the checklist-gated pipeline (POST /api/admin/intake).
-  const isAnnahmeMode = searchParams.get('annahme') === '1' && !editId
-
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingProduct, setIsLoadingProduct] = useState(false)
   const [savedItemUUID, setSavedItemUUID] = useState<string | null>(null)
@@ -70,16 +67,18 @@ export function useErfassungForm() {
   const [isEditMode, setIsEditMode] = useState(false)
   const [formData, setFormData] = useState<ErfassungFormData>(DEFAULT_FORM_DATA)
   const [aiMetadata, setAiMetadata] = useState<AIFieldMetadata>({})
-  const [annahme, setAnnahme] = useState<AnnahmeState>(DEFAULT_ANNAHME)
+  const [donation, setDonation] = useState<DonationState>(DEFAULT_DONATION)
+  const [destination, setDestination] = useState<CaptureDestination>(CAPTURE_DESTINATIONS.QUALITY)
+  const [qcSkipReason, setQcSkipReason] = useState('')
 
   // Donation cross-link prefill (forwarded by /admin/intake and /admin/donations)
   useEffect(() => {
-    if (!isAnnahmeMode) return
+    if (editId) return
     const donorName = searchParams.get('donor_name')
     const donorEmail = searchParams.get('donor_email')
     const donationId = searchParams.get('donation_id')
     if (donorName || donorEmail || donationId) {
-      setAnnahme(prev => ({
+      setDonation(prev => ({
         ...prev,
         isDonation: true,
         donorName: donorName || prev.donorName,
@@ -87,10 +86,10 @@ export function useErfassungForm() {
         existingDonationId: donationId || prev.existingDonationId,
       }))
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAnnahmeMode])
+   
+  }, [editId, searchParams])
 
-  const [showAIRefine, setShowAIRefine] = useState(false)
+  const [reviewStarted, setReviewStarted] = useState(false)
   const [saveError, setSaveError] = useState('')
   const [dataEntryCollapsed, setDataEntryCollapsed] = useState(false)
 
@@ -215,7 +214,12 @@ export function useErfassungForm() {
 
   const handleDataFilled = useCallback(() => {
     setDataEntryCollapsed(true)
-    setShowAIRefine(true)
+    setReviewStarted(true)
+  }, [])
+
+  const handleManualEntry = useCallback(() => {
+    setDataEntryCollapsed(true)
+    setReviewStarted(true)
   }, [])
 
   // SyntheticEvent — accepts both <form onSubmit> (FormEvent) and inline button clicks (MouseEvent)
@@ -263,50 +267,32 @@ export function useErfassungForm() {
         }
 
         router.push(returnTo)
-      } else if (isAnnahmeMode) {
-        // Physische Annahme — save into the checklist-gated pipeline, then
-        // jump straight to the device's checklist so the flow continues
-        // without a dead end.
-        const result = await apiFetch<{ inventory_id: string }>('/api/admin/intake', {
-          method: 'POST',
-          body: {
-            hersteller: formData.hersteller,
-            produktname: formData.produktname,
-            kurzbeschreibung: formData.kurzbeschreibung || undefined,
-            verkaufspreis: parseFloat(formData.verkaufspreis) || undefined,
-            zustand: formData.zustand,
-            hauptkategorie: formData.hauptkategorie || undefined,
-            unterkategorie: formData.unterkategorie || undefined,
-            image: formData.image,
-            intake_tier: annahme.tier,
-            is_donation: annahme.isDonation,
-            donor_name: annahme.donorName || undefined,
-            donor_email: annahme.donorEmail || undefined,
-            donor_notes: annahme.donorNotes || undefined,
-            existing_donation_id: annahme.existingDonationId || undefined,
-          },
-        })
-
-        if (!result.success) {
-          throw new Error(result.error || t('saveFailed'))
-        }
-
-        if (result.data?.inventory_id) {
-          router.push(`${ROUTES.admin.intake}?detail=${result.data.inventory_id}`)
-        }
       } else {
-        const payload = formDataToPayload(formData, action)
+        // Every input channel converges here. Destination is the only workflow
+        // decision; the API maps it to checklist, inventory or an explicitly
+        // untested listing while keeping donation provenance attached.
+        const payload = formDataToPayload(formData, 'erfassen')
 
         const result = await apiFetch<{
           item_uuid: string
           product_id: string
-          inventory_id: string | null
+          inventory_id: string
           listing_id: string | null
-          action: 'draft' | 'erfassen' | 'publish'
-          qc_required?: boolean
-        }>('/api/admin/erfassung', {
+          published: boolean
+        }>('/api/admin/intake', {
           method: 'POST',
-          body: payload,
+          body: {
+            ...payload,
+            destination,
+            qc_skip_reason: destination === CAPTURE_DESTINATIONS.SHOP_UNTESTED
+              ? qcSkipReason.trim()
+              : undefined,
+            is_donation: donation.isDonation,
+            donor_name: donation.donorName || undefined,
+            donor_email: donation.donorEmail || undefined,
+            donor_notes: donation.donorNotes || undefined,
+            existing_donation_id: donation.existingDonationId || undefined,
+          },
         })
 
         if (!result.success) {
@@ -316,10 +302,10 @@ export function useErfassungForm() {
         if (result.data) {
           setSavedItemUUID(result.data.item_uuid)
           setSavedProductId(result.data.product_id)
-          setSavedInventoryId(result.data.inventory_id || null)
-          setSavedAction(result.data.action || action)
+          setSavedInventoryId(result.data.inventory_id)
+          setSavedAction(result.data.published ? 'publish' : 'erfassen')
           setSavedListingId(result.data.listing_id || null)
-          setSavedQcRequired(result.data.qc_required === true)
+          setSavedQcRequired(destination === CAPTURE_DESTINATIONS.QUALITY)
         }
       }
     } catch (error) {
@@ -338,9 +324,11 @@ export function useErfassungForm() {
     setSavedListingId(null)
     setSavedQcRequired(false)
     setFormData(DEFAULT_FORM_DATA)
-    setAnnahme(DEFAULT_ANNAHME)
+    setDonation(DEFAULT_DONATION)
+    setDestination(CAPTURE_DESTINATIONS.QUALITY)
+    setQcSkipReason('')
     setAiMetadata({})
-    setShowAIRefine(false)
+    setReviewStarted(false)
     setDataEntryCollapsed(false)
   }, [])
 
@@ -350,9 +338,12 @@ export function useErfassungForm() {
     isLoading,
     isLoadingProduct,
     isEditMode,
-    isAnnahmeMode,
-    annahme,
-    setAnnahme,
+    donation,
+    setDonation,
+    destination,
+    setDestination,
+    qcSkipReason,
+    setQcSkipReason,
     savedAction,
     savedListingId,
     savedQcRequired,
@@ -360,7 +351,7 @@ export function useErfassungForm() {
     savedItemUUID,
     savedProductId,
     showAdvanced,
-    showAIRefine,
+    reviewStarted,
     saveError,
     dataEntryCollapsed,
     handleChange,
@@ -372,10 +363,10 @@ export function useErfassungForm() {
     handleProductData,
     handleImageCapture,
     handleDataFilled,
+    handleManualEntry,
     handleSubmit,
     handleReset,
     setShowAdvanced,
-    setShowAIRefine,
     setFormData,
   }
 }
