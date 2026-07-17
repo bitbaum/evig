@@ -13,6 +13,7 @@
 
 import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
+import { getTranslations } from 'next-intl/server'
 import { CheckSquare } from 'lucide-react'
 import { auth } from '@/auth'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
@@ -21,12 +22,16 @@ import { TimecardApprovalsClient } from '@/components/admin/timecards/TimecardAp
 import { TimeOffApprovals } from '@/components/admin/timecards/TimeOffApprovals'
 import { ApprovalTabs } from '@/components/admin/approvals/ApprovalTabs'
 
-export const metadata: Metadata = {
-  title: 'Freigaben · Zeitkarten',
-  description: 'Eingereichte Zeitkarten im Stapel prüfen.',
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('admin.approvals')
+  return {
+    title: t('timecardsMetaTitle'),
+    description: t('timecardsMetaDescription'),
+  }
 }
 
 export default async function TimecardApprovalsPage() {
+  const t = await getTranslations('admin.approvals')
   const session = await auth()
   if (!session?.user) {
     redirect('/auth/login?callbackUrl=/admin/team/approvals')
@@ -45,8 +50,8 @@ export default async function TimecardApprovalsPage() {
 
   return (
     <AdminPageWrapper
-      title="Freigaben"
-      description="Eingereichte Zeitkarten und Abwesenheiten prüfen und genehmigen."
+      title={t('timecardsPageTitle')}
+      description={t('timecardsPageDescription')}
       icon={CheckSquare}
       iconColor="green"
     >

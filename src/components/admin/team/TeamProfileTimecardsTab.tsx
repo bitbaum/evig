@@ -13,20 +13,20 @@
  */
 
 import { useEffect, useState, useCallback } from 'react'
+import { useTranslations } from 'next-intl'
 import { adminInteractive } from '@/lib/admin-ui'
 import Link from 'next/link'
 import { Clock, ExternalLink, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { apiFetch } from '@/lib/api/client'
 import {
-  TIMECARD_STATUS_LABELS,
   TIMECARD_STATUS_COLORS,
   TIMECARD_STATUSES,
-  formatTimecardDuration,
   type TimecardStatus,
 } from '@/config/timecards'
 import { formatDateShort } from '@/lib/date-formats'
-import { TIMECARD_STATUS_ICONS, formatTimecardPeriod } from '@/lib/team/timecard-display'
+import { TIMECARD_STATUS_ICONS } from '@/lib/team/timecard-display'
+import { useTimecardIntl } from '@/hooks/useTimecardIntl'
 
 interface TimecardRow {
   id: string
@@ -49,6 +49,8 @@ interface Props {
 }
 
 export function TeamProfileTimecardsTab({ userId }: Props) {
+  const t = useTranslations('admin.timecards')
+  const { statusLabel, duration, period } = useTimecardIntl()
   const [rows, setRows] = useState<TimecardRow[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -61,10 +63,10 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
     if (result.success && result.data) {
       setRows(result.data.items)
     } else {
-      setError(result.error || 'Zeitkarten konnten nicht geladen werden.')
+      setError(result.error || t('queueLoadError'))
     }
     setIsLoading(false)
-  }, [userId])
+  }, [userId, t])
 
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
@@ -81,8 +83,8 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div className="text-sm text-text-secondary">
           {rows.length === 0 && !isLoading
-            ? 'Noch keine Zeiterfassungen.'
-            : `${rows.length} Karten · ${formatTimecardDuration(totalMinutes)} insgesamt`}
+            ? t('profileEmpty')
+            : t('profileTotals', { count: rows.length, duration: duration(totalMinutes) })}
         </div>
         <div className="flex items-center gap-2">
           {submittedCount > 0 && (
@@ -91,7 +93,7 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-warning-50 dark:bg-warning-500/10 border border-warning-200 dark:border-warning-500/30 text-warning-700 dark:text-warning-300 text-sm font-medium hover:bg-warning-100 dark:hover:bg-warning-500/20"
             >
               <ExternalLink className="w-3.5 h-3.5" />
-              {submittedCount} zu prüfen
+              {t('profileToReview', { count: submittedCount })}
             </Link>
           )}
           <Button
@@ -102,7 +104,7 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
             className="inline-flex items-center gap-1.5"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
-            Aktualisieren
+            {t('queueRefresh')}
           </Button>
         </div>
       </div>
@@ -120,7 +122,6 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
               const status = row.status as TimecardStatus
               const Icon = TIMECARD_STATUS_ICONS[status] ?? Clock
               const statusColor = TIMECARD_STATUS_COLORS[status] ?? ''
-              const statusLabel = TIMECARD_STATUS_LABELS[status] ?? row.status
               const dateRef = row.reviewed_at || row.submitted_at
               return (
                 <li key={row.id} className={`px-4 sm:px-5 py-3 ${adminInteractive.rowHoverFaint} transition-colors`}>
@@ -129,20 +130,22 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between gap-2 flex-wrap">
                         <span className="text-sm font-medium text-text-primary">
-                          {formatTimecardPeriod(row.period_type, row.period_start, row.period_end)}
+                          {period(row.period_type, row.period_start, row.period_end)}
                         </span>
                         <div className="flex items-center gap-2">
                           <span className="text-sm font-semibold text-text-primary tabular-nums">
-                            {formatTimecardDuration(Number(row.total_minutes) || 0)}
+                            {duration(Number(row.total_minutes) || 0)}
                           </span>
                           <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap ${statusColor}`}>
-                            {statusLabel}
+                            {statusLabel(row.status)}
                           </span>
                         </div>
                       </div>
                       {dateRef && (
                         <p className="mt-0.5 text-xs text-text-tertiary">
-                          {row.reviewed_at ? 'Geprüft' : 'Eingereicht'} {formatDateShort(dateRef)}
+                          {row.reviewed_at
+                            ? t('historyReviewedOn', { date: formatDateShort(dateRef) })
+                            : t('historySubmittedOn', { date: formatDateShort(dateRef) })}
                         </p>
                       )}
                       {row.status === TIMECARD_STATUSES.REJECTED && row.review_notes && (

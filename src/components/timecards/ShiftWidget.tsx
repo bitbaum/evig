@@ -1,12 +1,13 @@
 'use client'
 
 import { useEffect, useState, useCallback, useMemo } from 'react'
+import { useTranslations } from 'next-intl'
 import { Play, Square, Clock } from 'lucide-react'
 import {
   TIMECARD_ENTRY_CATEGORY_OPTIONS,
-  TIMECARD_ENTRY_CATEGORY_LABELS,
   type TimecardEntryCategory,
 } from '@/config/timecards'
+import { useTimecardIntl } from '@/hooks/useTimecardIntl'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
@@ -71,6 +72,8 @@ function hhmm(date: Date): string {
 }
 
 export function ShiftWidget({ onClockOut }: { onClockOut: (shift: ClockedShift) => void | Promise<void> }) {
+  const t = useTranslations('admin.timecards')
+  const { categoryLabel } = useTimecardIntl()
   const [active, setActive] = useState<ActiveShift | null>(null)
   const [now, setNow] = useState<number>(() => Date.now())
   const [submitting, setSubmitting] = useState(false)
@@ -146,11 +149,11 @@ export function ShiftWidget({ onClockOut }: { onClockOut: (shift: ClockedShift) 
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
             <p className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.16em] text-action">
-              <Clock className="h-3.5 w-3.5" aria-hidden="true" /> Schicht läuft
+              <Clock className="h-3.5 w-3.5" aria-hidden="true" /> {t('shiftRunning')}
             </p>
             <p className="mt-1 font-mono text-3xl tabular-nums leading-none text-text-primary">{elapsedLabel}</p>
             <p className="mt-1 text-xs text-text-tertiary">
-              Start {hhmm(new Date(active.startedAt))} · {TIMECARD_ENTRY_CATEGORY_LABELS[active.category]}
+              {t('shiftStartedAt', { time: hhmm(new Date(active.startedAt)) })} · {categoryLabel(active.category)}
             </p>
           </div>
           {/* Controls share one height (min-h-touch) so the row reads as one unit. */}
@@ -159,17 +162,17 @@ export function ShiftWidget({ onClockOut }: { onClockOut: (shift: ClockedShift) 
               type="text"
               value={description}
               onChange={e => setDescription(e.target.value)}
-              placeholder="Optional: Was machst du?"
+              placeholder={t('shiftPlaceholder')}
               maxLength={500}
               className="min-h-touch"
             />
             <div className="flex gap-2">
               <Button type="button" variant="primary" onClick={handleStop} disabled={submitting} className="flex-1 gap-2">
                 <Square className="h-4 w-4" aria-hidden="true" />
-                {submitting ? 'Speichern…' : 'Schicht beenden'}
+                {submitting ? t('saving') : t('shiftStop')}
               </Button>
               <Button type="button" variant="ghost" onClick={handleCancel} disabled={submitting} className="text-text-tertiary">
-                Abbrechen
+                {t('cancel')}
               </Button>
             </div>
           </div>
@@ -177,27 +180,27 @@ export function ShiftWidget({ onClockOut }: { onClockOut: (shift: ClockedShift) 
       ) : (
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">Jetzt arbeiten?</p>
-            <p className="mt-1 text-sm text-text-secondary">Starte eine Schicht — sie landet direkt in dieser Zeitkarte.</p>
+            <p className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">{t('shiftPromptTitle')}</p>
+            <p className="mt-1 text-sm text-text-secondary">{t('shiftPromptBody')}</p>
           </div>
           {/* Stacked full-width on mobile (no cramped side-by-side / overflow);
               height-matched row from sm up. */}
           <div className="flex flex-col items-stretch gap-2 sm:flex-row">
             <label className="sm:flex-none">
-              <span className="sr-only">Kategorie</span>
+              <span className="sr-only">{t('fieldCategory')}</span>
               <Select
                 value={category}
                 onChange={e => setCategory(e.target.value as TimecardEntryCategory)}
                 className="min-h-touch w-full sm:w-48"
               >
                 {TIMECARD_ENTRY_CATEGORY_OPTIONS.map(c => (
-                  <option key={c} value={c}>{TIMECARD_ENTRY_CATEGORY_LABELS[c]}</option>
+                  <option key={c} value={c}>{categoryLabel(c)}</option>
                 ))}
               </Select>
             </label>
             <Button type="button" variant="primary" onClick={handleStart} className="w-full justify-center gap-2 whitespace-nowrap sm:w-auto">
               <Play className="h-4 w-4" aria-hidden="true" />
-              Schicht starten
+              {t('shiftStart')}
             </Button>
           </div>
         </div>

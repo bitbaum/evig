@@ -19,6 +19,7 @@
 
 import { Metadata } from 'next'
 import { redirect } from 'next/navigation'
+import { getTranslations } from 'next-intl/server'
 import { eq, desc } from 'drizzle-orm'
 import { auth } from '@/auth'
 import { isSuperAdmin } from '@/lib/permissions'
@@ -29,12 +30,16 @@ import { TimecardsClient } from '@/components/timecards/TimecardsClient'
 import { TimecardHistorySidebar } from '@/components/dashboard/timecards/TimecardHistorySidebar'
 import { WeeklyScheduleEditor } from '@/components/timecards/WeeklyScheduleEditor'
 
-export const metadata: Metadata = {
-  title: 'Zeiterfassung',
-  description: 'Eigene Arbeitszeiten erfassen und einreichen.',
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('admin.timecards')
+  return {
+    title: t('selfTitle'),
+    description: t('selfDescription'),
+  }
 }
 
 export default async function AdminZeiterfassungPage() {
+  const t = await getTranslations('admin.timecards')
   const session = await auth()
 
   // The admin layout already enforces staff; this is the defensive branch for
@@ -84,10 +89,10 @@ export default async function AdminZeiterfassungPage() {
     <article className="mx-auto max-w-7xl space-y-8">
       <header className="border-b border-subtle pb-6">
         <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
-          Erfasse deine Arbeitszeiten und reiche sie zur Genehmigung ein
+          {t('pageEyebrow')}
         </p>
         <Heading level={1} className="mt-2 text-2xl font-semibold text-text-primary sm:text-3xl">
-          Zeiterfassung
+          {t('selfTitle')}
         </Heading>
       </header>
 
@@ -96,7 +101,7 @@ export default async function AdminZeiterfassungPage() {
           <WeeklyScheduleEditor workingHours={profile?.workingHours ?? null} />
           <TimecardsClient
             workingHours={profile?.workingHours ?? null}
-            userName={session.user.name || session.user.email || 'Du'}
+            userName={session.user.name || session.user.email || t('userFallback')}
             canApprove={canApprove}
           />
         </div>

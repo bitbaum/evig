@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { CalendarPlus, X } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import { Button } from '@/components/ui/button'
@@ -11,11 +12,10 @@ import { StatusBadge } from '@/components/ui/status-badge'
 import {
   TIME_OFF_KIND_OPTIONS,
   TIME_OFF_KINDS,
-  getTimeOffKindLabel,
-  getTimeOffStatusLabel,
   TIME_OFF_STATUSES,
   type TimeOffStatus,
 } from '@/config/time-off'
+import { timeOffKindLabel, timeOffStatusLabel } from '@/lib/team/timecard-intl'
 import type { TimeOffRequest } from '@/lib/schemas/time-off'
 import { getDisplayDate } from '@/lib/team/timecard-utils'
 
@@ -32,6 +32,7 @@ const STATUS_VARIANT: Record<TimeOffStatus, 'warning' | 'success' | 'error' | 'n
  * doesn't compete with the calendar for attention.
  */
 export function TimeOffPanel() {
+  const t = useTranslations('admin.timeOff')
   const [open, setOpen] = useState(false)
   const [requests, setRequests] = useState<TimeOffRequest[]>([])
   const [kind, setKind] = useState<string>(TIME_OFF_KINDS.FERIEN)
@@ -54,7 +55,7 @@ export function TimeOffPanel() {
   const submit = async () => {
     setError(null)
     if (!startsOn || !endsOn) {
-      setError('Bitte Start- und Enddatum wählen.')
+      setError(t('missingDates'))
       return
     }
     setSubmitting(true)
@@ -64,7 +65,7 @@ export function TimeOffPanel() {
     })
     setSubmitting(false)
     if (!res.success) {
-      setError(res.error ?? 'Antrag konnte nicht gesendet werden.')
+      setError(res.error ?? t('submitError'))
       return
     }
     setStartsOn('')
@@ -87,7 +88,7 @@ export function TimeOffPanel() {
         className="inline-flex h-auto items-center gap-2 px-0 font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary hover:text-text-secondary"
       >
         <CalendarPlus className={`h-3.5 w-3.5 transition-transform ${open ? 'rotate-45' : ''}`} aria-hidden="true" />
-        Abwesenheit beantragen
+        {t('requestToggle')}
       </Button>
 
       {open && (
@@ -101,30 +102,30 @@ export function TimeOffPanel() {
           {/* Request form */}
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="block">
-              <span className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">Art</span>
+              <span className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">{t('kindLabel')}</span>
               <Select value={kind} onChange={e => setKind(e.target.value)} className="mt-1 min-h-touch">
                 {TIME_OFF_KIND_OPTIONS.map(k => (
-                  <option key={k} value={k}>{getTimeOffKindLabel(k)}</option>
+                  <option key={k} value={k}>{timeOffKindLabel(t, k)}</option>
                 ))}
               </Select>
             </label>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <label className="block">
-                <span className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">Von</span>
+                <span className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">{t('from')}</span>
                 <Input type="date" value={startsOn} onChange={e => setStartsOn(e.target.value)} className="mt-1 min-h-touch" />
               </label>
               <label className="block">
-                <span className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">Bis</span>
+                <span className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">{t('to')}</span>
                 <Input type="date" value={endsOn} min={startsOn || undefined} onChange={e => setEndsOn(e.target.value)} className="mt-1 min-h-touch" />
               </label>
             </div>
             <label className="block sm:col-span-2">
-              <span className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">Notiz (optional)</span>
-              <Textarea rows={2} value={note} onChange={e => setNote(e.target.value)} placeholder="z.B. Sommerferien" className="mt-1 resize-none" />
+              <span className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">{t('noteLabel')}</span>
+              <Textarea rows={2} value={note} onChange={e => setNote(e.target.value)} placeholder={t('notePlaceholder')} className="mt-1 resize-none" />
             </label>
             <div className="sm:col-span-2">
               <Button type="button" variant="primary" onClick={submit} disabled={submitting}>
-                {submitting ? 'Wird gesendet …' : 'Antrag senden'}
+                {submitting ? t('submitting') : t('submit')}
               </Button>
             </div>
           </div>
@@ -136,7 +137,7 @@ export function TimeOffPanel() {
                 <li key={r.id} className="flex flex-wrap items-center justify-between gap-2 px-3 py-2.5">
                   <div className="min-w-0">
                     <p className="text-sm font-medium text-text-primary">
-                      {getTimeOffKindLabel(r.kind)}
+                      {timeOffKindLabel(t, r.kind)}
                     </p>
                     <p className="text-xs text-text-tertiary">
                       {getDisplayDate(r.starts_on)}
@@ -146,7 +147,7 @@ export function TimeOffPanel() {
                   </div>
                   <div className="flex items-center gap-2">
                     <StatusBadge variant={STATUS_VARIANT[r.status as TimeOffStatus] ?? 'neutral'}>
-                      {getTimeOffStatusLabel(r.status)}
+                      {timeOffStatusLabel(t, r.status)}
                     </StatusBadge>
                     {r.status === TIME_OFF_STATUSES.PENDING && (
                       <Button
@@ -155,7 +156,7 @@ export function TimeOffPanel() {
                         size="sm"
                         onClick={() => cancel(r.id)}
                         className="h-auto px-1.5 py-1 text-text-tertiary hover:text-error-600"
-                        aria-label="Antrag zurückziehen"
+                        aria-label={t('withdraw')}
                       >
                         <X className="h-3.5 w-3.5" aria-hidden="true" />
                       </Button>

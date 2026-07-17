@@ -10,6 +10,7 @@ import { ContextMenu, type ContextMenuItem, type ContextMenuPosition } from '@/c
 import { cn } from '@/lib/utils'
 import { apiFetch } from '@/lib/api/client'
 import { formatTimecardDuration, TIMECARD_ABSENCE_TYPES } from '@/config/timecards'
+import { useTimecardIntl } from '@/hooks/useTimecardIntl'
 import { getDisplayDate } from '@/lib/team/timecard-utils'
 import { NoScheduleNotice } from './NoScheduleNotice'
 import { TimecardDayEditor } from './TimecardDayEditor'
@@ -50,6 +51,7 @@ export function TimecardsClient({
   const [menuPos, setMenuPos] = useState<ContextMenuPosition | null>(null)
   const [menuCount, setMenuCount] = useState(1)
   const t = useTranslations('admin.timecards')
+  const { duration } = useTimecardIntl()
 
   // Lock/label decisions come from the SERVER status + a content diff, not
   // from the local draft status (which flips on every keystroke): editing a
@@ -324,7 +326,7 @@ export function TimecardsClient({
               ? t('lockedApproved')
               : isSubmittedUnchanged
                 ? t('submittedUnchanged')
-                : `${tc.periodEntries.length} ${t('headerDaysSuffix')} · ${formatTimecardDuration(tc.totalMinutes)}`}
+                : `${tc.periodEntries.length} ${t('headerDaysSuffix')} · ${duration(tc.totalMinutes)}`}
           </p>
         )}
         <div className="flex items-center gap-2">

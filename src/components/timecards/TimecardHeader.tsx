@@ -3,7 +3,7 @@
 import { AlertCircle, Check } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
-import { formatTimecardDuration } from '@/config/timecards'
+import { useTimecardIntl } from '@/hooks/useTimecardIntl'
 
 /**
  * Page header for /admin/zeiterfassung.
@@ -52,6 +52,7 @@ export function TimecardHeader({
   const isSubmitted = status === 'submitted'
   const isApproved = status === 'approved'
   const t = useTranslations('admin.timecards')
+  const { duration } = useTimecardIntl()
 
   return (
     <header className="border-b border-subtle pb-6">
@@ -59,7 +60,7 @@ export function TimecardHeader({
         <div>
           <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
             {isSubmitted ? t('headerStatusSubmitted') : t('headerStatusDraft')} · {entryCount}{' '}
-            {t('headerDaysSuffix')} · {formatTimecardDuration(totalMinutes)}
+            {t('headerDaysSuffix')} · {duration(totalMinutes)}
           </p>
           <h1 className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
             {monthLabel}

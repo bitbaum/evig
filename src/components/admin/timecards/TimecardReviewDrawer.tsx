@@ -2,18 +2,15 @@
 
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { X, Check, Ban, Pencil, Save } from 'lucide-react'
+import { useTranslations } from 'next-intl'
+import { X, Check, Ban, Pencil, Save, RotateCcw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { useFocusTrap } from '@/hooks/useFocusTrap'
 import { apiFetch } from '@/lib/api/client'
-import {
-  TIMECARD_ENTRY_CATEGORY_OPTIONS,
-  getTimecardEntryCategoryLabel,
-  formatTimecardDuration,
-} from '@/config/timecards'
-import { formatTimecardPeriod } from '@/lib/team/timecard-display'
+import { TIMECARD_ENTRY_CATEGORY_OPTIONS } from '@/config/timecards'
+import { useTimecardIntl } from '@/hooks/useTimecardIntl'
 import { getDisplayDate } from '@/lib/team/timecard-utils'
 
 interface ReviewEntry {
@@ -40,10 +37,12 @@ interface ReviewCard {
 }
 
 /**
- * Approver view of a single submitted timecard. Lets an approver SEE the day
- * entries before deciding, EDIT them (saved to the card's owner via the admin
- * PUT, status preserved), and approve / reject (reason optional). Reuses the
- * overlay focus SSOT (useFocusTrap).
+ * Approver view of a single timecard. Lets an approver SEE the day entries
+ * before deciding, EDIT them (saved to the card's owner via the admin PUT,
+ * status preserved), and approve / reject (reason optional). Approved cards
+ * stay editable — a payroll-locked card is the real edit boundary (server
+ * enforced) — and can be reopened back to draft. Reuses the overlay focus
+ * SSOT (useFocusTrap).
  */
 export function TimecardReviewDrawer({
   cardId,
@@ -60,6 +59,8 @@ export function TimecardReviewDrawer({
   onClose: () => void
   onChanged: () => void
 }) {
+  const t = useTranslations('admin.timecards')
+  const { statusLabel, categoryLabel, duration, period } = useTimecardIntl()
   const panelRef = useFocusTrap<HTMLDivElement>(true, onClose)
   const [mounted, setMounted] = useState(false)
   const [card, setCard] = useState<ReviewCard | null>(null)
@@ -77,10 +78,10 @@ export function TimecardReviewDrawer({
     apiFetch<ReviewCard>(`/api/admin/timecards/${cardId}`).then(r => {
       if (!active) return
       if (r.success && r.data) { setCard(r.data); setEntries(r.data.entries ?? []) }
-      else setError(r.error || 'Zeitkarte konnte nicht geladen werden.')
+      else setError(r.error || t('draftLoadError'))
     })
     return () => { active = false }
-  }, [cardId])
+  }, [cardId, t])
 
   const total = entries.reduce((s, e) => s + (Number(e.duration_minutes) || 0), 0)
   const isApproved = card?.status === 'approved'
@@ -104,7 +105,7 @@ export function TimecardReviewDrawer({
       },
     })
     setBusy(null)
-    if (!r.success) { setError(r.error || 'Speichern fehlgeschlagen.'); return }
+    if (!r.success) { setError(r.error || t('saveFailed')); return }
     setEditing(false)
     onChanged()
   }
@@ -116,7 +117,17 @@ export function TimecardReviewDrawer({
       body: { status, review_notes: note.trim() || null },
     })
     setBusy(null)
-    if (!r.success) { setError(r.error || 'Aktion fehlgeschlagen.'); return }
+    if (!r.success) { setError(r.error || t('actionFailed')); return }
+    onChanged()
+    onClose()
+  }
+
+  // Un-approve: back to draft so the owner (or approver) can rework it.
+  const reopen = async () => {
+    setBusy('reopen'); setError(null)
+    const r = await apiFetch(`/api/admin/timecards/${cardId}/reopen`, { method: 'POST' })
+    setBusy(null)
+    if (!r.success) { setError(r.error || t('actionFailed')); return }
     onChanged()
     onClose()
   }
@@ -128,29 +139,29 @@ export function TimecardReviewDrawer({
       <Button
         variant="ghost"
         onClick={onClose}
-        aria-label="Schliessen"
+        aria-label={t('close')}
         className="absolute inset-0 h-full w-full rounded-none bg-black/40 p-0 backdrop-blur-xs hover:bg-black/40"
       />
       <div
         ref={panelRef}
         role="dialog"
         aria-modal="true"
-        aria-label="Zeitkarte prüfen"
+        aria-label={t('drawerAria')}
         className="relative flex h-full w-full max-w-lg flex-col overflow-hidden border-l border-subtle bg-surface-base"
       >
         <div className="flex items-center justify-between border-b border-subtle px-5 py-4">
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold text-text-primary">
-              {card?.user_name || card?.user_email || 'Zeitkarte'}
+              {card?.user_name || card?.user_email || t('drawerFallbackTitle')}
             </p>
             <p className="text-xs text-text-tertiary">
               {card
-                ? `${formatTimecardPeriod(card.period_type, card.period_start, card.period_end)} · ${formatTimecardDuration(total)}`
-                : 'Lädt…'}
-              {isApproved && ' · genehmigt'}
+                ? `${period(card.period_type, card.period_start, card.period_end)} · ${duration(total)}`
+                : t('loading')}
+              {isApproved && ` · ${statusLabel('approved')}`}
             </p>
           </div>
-          <Button variant="ghost" size="icon" onClick={onClose} aria-label="Schliessen">
+          <Button variant="ghost" size="icon" onClick={onClose} aria-label={t('close')}>
             <X className="h-4 w-4" />
           </Button>
         </div>
@@ -158,16 +169,16 @@ export function TimecardReviewDrawer({
         <div className="flex-1 overflow-y-auto px-5 py-4">
           {error && <p className="mb-3 text-sm text-error-600 dark:text-error-400">{error}</p>}
           {!card ? (
-            <p className="text-sm text-text-tertiary">Lädt…</p>
+            <p className="text-sm text-text-tertiary">{t('loading')}</p>
           ) : entries.length === 0 ? (
-            <p className="text-sm text-text-tertiary">Keine Einträge.</p>
+            <p className="text-sm text-text-tertiary">{t('drawerNoEntries')}</p>
           ) : (
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-xs uppercase tracking-wide text-text-tertiary">
-                  <th className="py-1 font-medium">Tag</th>
-                  <th className="py-1 font-medium">Kategorie</th>
-                  <th className="py-1 text-right font-medium">Std.</th>
+                  <th className="py-1 font-medium">{t('colDay')}</th>
+                  <th className="py-1 font-medium">{t('fieldCategory')}</th>
+                  <th className="py-1 text-right font-medium">{t('colHours')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -182,11 +193,11 @@ export function TimecardReviewDrawer({
                           className="w-full text-sm"
                         >
                           {TIMECARD_ENTRY_CATEGORY_OPTIONS.map(c => (
-                            <option key={c} value={c}>{getTimecardEntryCategoryLabel(c)}</option>
+                            <option key={c} value={c}>{categoryLabel(c)}</option>
                           ))}
                         </Select>
                       ) : (
-                        getTimecardEntryCategoryLabel(e.category)
+                        categoryLabel(e.category)
                       )}
                     </td>
                     <td className="py-1.5 text-right tabular-nums">
@@ -203,7 +214,7 @@ export function TimecardReviewDrawer({
                           className="ml-auto w-20 text-right"
                         />
                       ) : (
-                        formatTimecardDuration(Number(e.duration_minutes) || 0)
+                        duration(Number(e.duration_minutes) || 0)
                       )}
                     </td>
                   </tr>
@@ -216,15 +227,15 @@ export function TimecardReviewDrawer({
         <div className="space-y-3 border-t border-subtle px-5 py-4">
           {isOwnCard && (
             <p className="text-sm text-warning-700 dark:text-warning-400">
-              Eigene Zeitkarte — die Freigabe übernimmt ein anderes Teammitglied.
+              {t('drawerOwnNotice')}
             </p>
           )}
-          {!editing && !isOwnCard && (
+          {!editing && !isOwnCard && !isApproved && (
             <Input
               type="text"
               value={note}
               onChange={e => setNote(e.target.value)}
-              placeholder="Notiz (optional) — bei Rückweisung erklärt sie, was anzupassen ist"
+              placeholder={t('drawerNotePlaceholder')}
               maxLength={1000}
             />
           )}
@@ -232,10 +243,10 @@ export function TimecardReviewDrawer({
             {editing ? (
               <>
                 <Button variant="primary" size="sm" onClick={save} disabled={busy !== null} className="inline-flex items-center gap-1.5">
-                  <Save className="h-3.5 w-3.5" /> Speichern
+                  <Save className="h-3.5 w-3.5" /> {t('save')}
                 </Button>
                 <Button variant="ghost" size="sm" onClick={() => { setEditing(false); setEntries(card?.entries ?? []) }} disabled={busy !== null}>
-                  Abbrechen
+                  {t('cancel')}
                 </Button>
               </>
             ) : (
@@ -247,14 +258,21 @@ export function TimecardReviewDrawer({
                   disabled={busy !== null || isApproved || isOwnCard}
                   className="inline-flex items-center gap-1.5 bg-success-600 text-white hover:bg-success-700"
                 >
-                  <Check className="h-3.5 w-3.5" /> Genehmigen
+                  <Check className="h-3.5 w-3.5" /> {t('approve')}
                 </Button>
-                <Button variant="destructive-outline" size="sm" onClick={() => review('rejected')} disabled={busy !== null || isOwnCard} className="inline-flex items-center gap-1.5">
-                  <Ban className="h-3.5 w-3.5" /> Zurückweisen
+                {!isApproved && (
+                  <Button variant="destructive-outline" size="sm" onClick={() => review('rejected')} disabled={busy !== null || isOwnCard} className="inline-flex items-center gap-1.5">
+                    <Ban className="h-3.5 w-3.5" /> {t('reject')}
+                  </Button>
+                )}
+                <Button variant="outline" size="sm" onClick={() => setEditing(true)} disabled={busy !== null || isOwnCard} className="inline-flex items-center gap-1.5">
+                  <Pencil className="h-3.5 w-3.5" /> {t('edit')}
                 </Button>
-                <Button variant="outline" size="sm" onClick={() => setEditing(true)} disabled={busy !== null || isApproved || isOwnCard} className="inline-flex items-center gap-1.5">
-                  <Pencil className="h-3.5 w-3.5" /> Bearbeiten
-                </Button>
+                {isApproved && (
+                  <Button variant="outline" size="sm" onClick={reopen} disabled={busy !== null} className="inline-flex items-center gap-1.5">
+                    <RotateCcw className="h-3.5 w-3.5" /> {t('reopen')}
+                  </Button>
+                )}
               </>
             )}
           </div>

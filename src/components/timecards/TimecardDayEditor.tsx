@@ -2,13 +2,12 @@
 
 import { useTranslations } from 'next-intl'
 import {
-  TIMECARD_ENTRY_CATEGORY_LABELS,
   TIMECARD_ENTRY_CATEGORY_OPTIONS,
   TIMECARD_MANUAL_DEFAULT,
-  formatTimecardDuration,
   isAbsenceCategory,
   type TimecardEntryCategory,
 } from '@/config/timecards'
+import { useTimecardIntl } from '@/hooks/useTimecardIntl'
 import type { TimecardEntryInput } from '@/lib/schemas/timecards'
 import { cn } from '@/lib/utils'
 import { Input } from '@/components/ui/input'
@@ -51,6 +50,7 @@ export function TimecardDayEditor({
   onClearDay: () => void
 }) {
   const t = useTranslations('admin.timecards')
+  const { categoryLabel, duration } = useTimecardIntl()
   const hasEntry = !!selectedEntry
   const isAbsence = hasEntry && isAbsenceCategory(selectedEntry.category)
 
@@ -60,13 +60,13 @@ export function TimecardDayEditor({
         <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
           {hasEntry
             ? isAbsence
-              ? TIMECARD_ENTRY_CATEGORY_LABELS[selectedEntry.category as TimecardEntryCategory]
+              ? categoryLabel(selectedEntry.category)
               : t('dayEditorHasEntry')
             : t('dayEditorNoEntry')}
         </p>
         {hasEntry && (
           <p className="font-mono text-xl tabular-nums text-text-primary">
-            {formatTimecardDuration(selectedEntry.duration_minutes)}
+            {duration(selectedEntry.duration_minutes)}
           </p>
         )}
       </div>
@@ -88,8 +88,8 @@ export function TimecardDayEditor({
 
       {isAbsence ? (
         <p className="border-t border-subtle pt-5 text-sm text-text-secondary">
-          {TIMECARD_ENTRY_CATEGORY_LABELS[selectedEntry.category as TimecardEntryCategory]} —{' '}
-          {formatTimecardDuration(selectedEntry.duration_minutes)} {t('dayAbsenceCounted')}
+          {categoryLabel(selectedEntry.category)} —{' '}
+          {duration(selectedEntry.duration_minutes)} {t('dayAbsenceCounted')}
         </p>
       ) : (
         <div className="space-y-4 border-t border-subtle pt-5">
@@ -164,6 +164,7 @@ function DetailFields({
   onPatch: (patch: Partial<TimecardEntryInput>) => void
 }) {
   const t = useTranslations('admin.timecards')
+  const { categoryLabel } = useTimecardIntl()
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       <Field label={t('fieldCategory')}>
@@ -173,7 +174,7 @@ function DetailFields({
         >
           {TIMECARD_ENTRY_CATEGORY_OPTIONS.map(category => (
             <option key={category} value={category}>
-              {TIMECARD_ENTRY_CATEGORY_LABELS[category as TimecardEntryCategory]}
+              {categoryLabel(category)}
             </option>
           ))}
         </Select>

@@ -4,7 +4,8 @@ import { useEffect, useMemo, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
-import { formatTimecardDuration, TIMECARD_DAY_GRID } from '@/config/timecards'
+import { TIMECARD_DAY_GRID } from '@/config/timecards'
+import { useTimecardIntl } from '@/hooks/useTimecardIntl'
 import { useCellSelection } from './useCellSelection'
 
 /**
@@ -97,6 +98,7 @@ export function HourRangePicker({
   onChange: (start: string | null, end: string | null, breakMinutes: number, durationMinutes: number) => void
 }) {
   const t = useTranslations('admin.timecards')
+  const { duration } = useTimecardIntl()
   const slotKeys = useMemo(() => Array.from({ length: SLOT_COUNT }, (_, i) => String(i)), [])
   const sel = useCellSelection(
     slotKeys,
@@ -189,8 +191,8 @@ export function HourRangePicker({
             <span className="font-medium text-text-primary">
               {blocks.map(b => `${slotToTime(b.from)}–${slotToTime(b.toExcl)}`).join(' · ')}
             </span>{' '}
-            · {formatTimecardDuration(worked)}
-            {breakMinutes > 0 && <> · {formatTimecardDuration(breakMinutes)} {t('hourBreakSuffix')}</>}
+            · {duration(worked)}
+            {breakMinutes > 0 && <> · {duration(breakMinutes)} {t('hourBreakSuffix')}</>}
           </>
         ) : (
           <>

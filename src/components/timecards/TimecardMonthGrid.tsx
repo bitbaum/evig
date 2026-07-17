@@ -4,13 +4,11 @@ import { useEffect, useRef, useState } from 'react'
 import { Check } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import {
-  TIMECARD_ENTRY_CATEGORY_LABELS,
-  formatTimecardDuration,
   isAbsenceCategory,
-  type TimecardEntryCategory,
 } from '@/config/timecards'
 import type { TimecardEntryInput } from '@/lib/schemas/timecards'
-import { WEEKDAY_IDS, WEEKDAY_LABELS } from '@/lib/team/schedule'
+import { WEEKDAY_IDS } from '@/lib/team/schedule'
+import { useTimecardIntl } from '@/hooks/useTimecardIntl'
 import { getEntryForDate } from '@/lib/team/timecard-utils'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -54,6 +52,7 @@ export function TimecardMonthGrid({
   onEditDay?: (date: string) => void
 }) {
   const t = useTranslations('admin.timecards')
+  const { categoryLabel, duration, weekdayLabel } = useTimecardIntl()
   const selected = new Set(selectedDates)
 
   // Whether the running paint gesture adds or removes days — decided by the
@@ -115,7 +114,7 @@ export function TimecardMonthGrid({
     >
       <div className="mb-1 grid grid-cols-7 gap-1 sm:gap-1.5">
         {WEEKDAY_IDS.map((id, i) => {
-          const w = WEEKDAY_LABELS[id]
+          const w = weekdayLabel(id)
           // WEEKDAY_IDS is Mon-first; map to JS getUTCDay (Sun=0…Sat=6).
           const weekday = i === 6 ? 0 : i + 1
           return (
@@ -159,8 +158,8 @@ export function TimecardMonthGrid({
           const dayNum = d.getUTCDate()
           const isWeekend = d.getUTCDay() === 0 || d.getUTCDay() === 6
           const absence = entry ? isAbsenceCategory(entry.category) : false
-          const categoryLabel = entry
-            ? TIMECARD_ENTRY_CATEGORY_LABELS[entry.category as TimecardEntryCategory]
+          const entryCategoryLabel = entry
+            ? categoryLabel(entry.category)
             : undefined
 
           return (
@@ -181,7 +180,7 @@ export function TimecardMonthGrid({
                 if (!selected.has(date)) onDaySelect(date, 'single')
                 onDayContextMenu(date, { x: e.clientX, y: e.clientY })
               }}
-              title={categoryLabel}
+              title={entryCategoryLabel}
               aria-pressed={isSelected}
               className={cn(
                 'group relative flex h-auto min-h-[3.25rem] w-full min-w-0 flex-col items-start gap-0.5 rounded-md border px-1.5 py-1 text-left transition-colors sm:min-h-[4rem] sm:px-2 sm:py-1.5',
@@ -208,7 +207,7 @@ export function TimecardMonthGrid({
               </span>
               {absence ? (
                 <span className="w-full truncate text-[0.65rem] font-medium leading-tight text-action sm:text-xs">
-                  {categoryLabel}
+                  {entryCategoryLabel}
                 </span>
               ) : (
                 <span
@@ -217,7 +216,7 @@ export function TimecardMonthGrid({
                     entry ? 'text-text-primary' : 'text-text-tertiary',
                   )}
                 >
-                  {entry ? formatTimecardDuration(entry.duration_minutes) : '·'}
+                  {entry ? duration(entry.duration_minutes) : '·'}
                 </span>
               )}
             </Button>
