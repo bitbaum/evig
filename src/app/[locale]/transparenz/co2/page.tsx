@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Leaf, ExternalLink, Calculator, FileText } from 'lucide-react'
 import { ORG, CONTACT } from '@/config/org'
 import { ORG_NUMBERS_DEFAULTS } from '@/lib/org-numbers.defaults'
-import { CATEGORY_WEIGHT_KG, CATEGORY_CO2_KG_OVERRIDE, estimateCO2Savings, estimateCO2Source } from '@/config/co2-impact'
+import { CATEGORY_CO2_FACTORS, CO2_SOURCES, REFURB_OVERHEAD_SHARE, estimateCO2Savings } from '@/config/co2-impact'
 import { cn } from '@/lib/utils'
 import { designPrimitive } from '@/lib/design-system'
 import { PageHero } from '@/components/layout/PageHero'
@@ -31,10 +31,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 const CO2_NUMBER_KEYS = [
-  'co2_factor_per_kg_device',
+  'co2_savings_per_device',
   'co2_production_new_laptop',
   'co2_refurbishment',
-  'co2_savings_per_device',
   'annual_co2_saved_tons',
 ] as const
 
@@ -56,9 +55,12 @@ export default async function Co2MethodologyPage({ params }: PageProps) {
     .map(k => ORG_NUMBERS_DEFAULTS[k])
     .filter(Boolean)
 
-  const mainCategories = Object.entries(CATEGORY_WEIGHT_KG)
-    .filter(([k]) => k.length === 2) // only main categories, not sub-IDs
+  // Only main categories WITH a defensible factor appear in the table;
+  // the ones without get an explicit "no claim" note below it.
+  const mainCategories = Object.entries(CATEGORY_CO2_FACTORS)
+    .filter(([k]) => k.length === 2)
     .sort(([a], [b]) => a.localeCompare(b))
+  const deductionPct = Math.round(REFURB_OVERHEAD_SHARE * 100)
 
   const limits = tRawCo2('co2.limits.items') as string[]
 
@@ -156,49 +158,77 @@ export default async function Co2MethodologyPage({ params }: PageProps) {
             {t('weights.intro')}
           </p>
           <div className={cn(designPrimitive.surface.card, 'overflow-hidden')}>
+            <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-surface-raised dark:bg-surface-base/3 text-xs uppercase tracking-wider text-text-tertiary">
                 <tr>
                   <th className="px-4 py-3 text-left font-medium">{t('weights.col.category')}</th>
-                  <th className="px-4 py-3 text-right font-medium">{t('weights.col.weight')}</th>
+                  <th className="px-4 py-3 text-right font-medium">{t('weights.col.newDevice')}</th>
                   <th className="px-4 py-3 text-right font-medium">{t('weights.col.co2')}</th>
                   <th className="px-4 py-3 text-left font-medium">{t('weights.col.source')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-subtle">
-                {mainCategories.map(([catId, weight]) => {
-                  const co2 = estimateCO2Savings(catId) ?? 0
-                  const source = estimateCO2Source(catId)
-                  const direct = CATEGORY_CO2_KG_OVERRIDE[catId]
+                {mainCategories.map(([catId, factor]) => {
+                  const co2 = estimateCO2Savings(catId)
                   return (
                     <tr key={catId}>
                       <td className="px-4 py-3 text-text-primary">
                         {t(`categories.${catId}`)}
                       </td>
                       <td className="px-4 py-3 text-right tabular-nums text-text-secondary">
-                        {weight} kg
+                        {factor.newDeviceProductionKg.toFixed(0)} kg
                       </td>
                       <td className="px-4 py-3 text-right tabular-nums text-action font-medium">
                         ~{co2} kg
                       </td>
                       <td className="px-4 py-3 text-xs text-text-tertiary">
-                        {source === 'direct'
-                          ? <span title={t('weights.tooltipDirect', { value: direct ?? co2 })}>{t('weights.sourceDirect')}</span>
-                          : <span title={t('weights.tooltipCalculated', { weight })}>{t('weights.sourceCalculated')}</span>}
+                        {factor.ademeItem}
                       </td>
                     </tr>
                   )
                 })}
               </tbody>
             </table>
+            </div>
             <p className="text-xs text-text-tertiary p-4 border-t border-subtle">
-              {t('weights.footer')}
+              {t('weights.footer', { pct: deductionPct })}
             </p>
           </div>
+          <p className="mt-4 text-sm text-text-secondary">
+            {t('weights.noFactor')}
+          </p>
         </div>
       </Section>
 
       <Section tone="surface" density="compact">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl font-bold tracking-tight text-text-primary mb-4">
+            {t('sources.heading')}
+          </h2>
+          <p className="text-sm text-text-secondary mb-5">
+            {t('sources.intro')}
+          </p>
+          <ul className="space-y-2 text-sm">
+            {Object.values(CO2_SOURCES).map(source => (
+              <li key={source.url} className="flex gap-3">
+                <FileText className="h-4 w-4 shrink-0 mt-0.5 text-text-tertiary" aria-hidden="true" />
+                {source.url.startsWith('http') ? (
+                  <a href={source.url} target="_blank" rel="noopener noreferrer" className="text-action hover:underline">
+                    {source.name} ({source.year})
+                  </a>
+                ) : (
+                  <Link href={source.url} className="text-action hover:underline">
+                    {source.name} ({source.year})
+                  </Link>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </Section>
+
+      <Section tone="tinted" density="compact">
         <div className="max-w-3xl mx-auto">
           <h2 className="text-2xl font-bold tracking-tight text-text-primary mb-4">
             {t('limits.heading')}
@@ -223,7 +253,7 @@ export default async function Co2MethodologyPage({ params }: PageProps) {
             {t('contribute.intro')}
           </p>
           <Link
-            href="https://github.com/g-but/revampit/blob/main/src/lib/org-numbers.defaults.ts"
+            href="https://github.com/g-but/revampit/blob/main/src/config/co2-impact.ts"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-sm text-action hover:underline"

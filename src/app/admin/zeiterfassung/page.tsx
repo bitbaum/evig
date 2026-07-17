@@ -110,7 +110,7 @@ export default async function AdminZeiterfassungPage() {
         <div className="flex min-w-0 flex-col gap-6">
           {saldo && (
             <div className="order-2 lg:order-none">
-              <SaldoStrip data={saldo} ownView />
+              <SaldoStrip data={saldo} ownView reportHref={`/admin/team/report/${session.user.id}/${new Date().toISOString().slice(0, 7)}`} />
             </div>
           )}
           <div id="arbeitsplan" className="order-3 scroll-mt-24 space-y-2 lg:order-none">

@@ -9,7 +9,7 @@ import { Leaf, Users } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { getTranslations } from 'next-intl/server'
 import Heading from '@/components/ui/Heading'
-import { AVG_DEVICE_WEIGHT_KG } from '@/config/co2-impact'
+import { AVG_DEVICE_WEIGHT_KG, co2DisplayValue } from '@/config/co2-impact'
 import { getDefaultNumeric } from '@/lib/org-numbers.defaults'
 import { fetchImpactStats } from '@/lib/impact-stats'
 
@@ -29,7 +29,7 @@ export default async function ImpactStatsSection() {
       methodologyHref: null as string | null,
     },
     {
-      value: `~${stats.co2SavedTons} t`,
+      value: (() => { const d = co2DisplayValue(stats.co2SavedKg); return `~${d.value} ${d.unit}` })(),
       description: t('co2Saved'),
       methodologyHref: '/transparenz/co2',
     },

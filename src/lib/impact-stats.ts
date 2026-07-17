@@ -18,12 +18,7 @@ import 'server-only'
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { LISTING_STATUS } from '@/config/marketplace'
-import {
-  CATEGORY_WEIGHT_KG,
-  CATEGORY_CO2_KG_OVERRIDE,
-  CO2_PER_KG,
-  FALLBACK_DEVICE_WEIGHT_KG,
-} from '@/config/co2-impact'
+import { estimateCO2Savings } from '@/config/co2-impact'
 import { getDefaultNumeric } from '@/lib/org-numbers.defaults'
 import { logger } from '@/lib/logger'
 
@@ -32,6 +27,8 @@ export interface ImpactStats {
   soldDevices: number
   /** Tonnes CO₂e avoided, rounded to 1 decimal. */
   co2SavedTons: number
+  /** Exact kg CO₂e avoided — use with co2DisplayValue() so small totals show as kg, not "0 t". */
+  co2SavedKg: number
   repairs: number
   users: number
   /** `true` when computed live from the DB; `false` when DB was unavailable and defaults were used. */
@@ -64,12 +61,10 @@ export async function fetchImpactStats(): Promise<ImpactStats> {
       totalDevices += count
       if (row.status === LISTING_STATUS.SOLD) {
         soldDevices += count
-        // Prefer per-category cited value (e.g. Circular Computing for
-        // laptops at 285 kg) over rough weight × factor.
-        const directCo2 = CATEGORY_CO2_KG_OVERRIDE[row.category]
-        const weightKg = CATEGORY_WEIGHT_KG[row.category] ?? FALLBACK_DEVICE_WEIGHT_KG
-        const perDevice = directCo2 ?? weightKg * CO2_PER_KG
-        co2SavedKg += count * perDevice
+        // SSOT: ADEME-based per-category factor. Categories without a
+        // defensible factor contribute NOTHING (conservative under-count).
+        const perDevice = estimateCO2Savings(row.category)
+        if (perDevice) co2SavedKg += count * perDevice
       }
     }
 
@@ -77,6 +72,7 @@ export async function fetchImpactStats(): Promise<ImpactStats> {
       totalDevices,
       soldDevices,
       co2SavedTons: Math.round((co2SavedKg / 1000) * 10) / 10,
+      co2SavedKg,
       repairs: Number(repairRows.rows[0]?.count || 0),
       users: Number(userRows.rows[0]?.count || 0),
       live: true,
@@ -87,6 +83,7 @@ export async function fetchImpactStats(): Promise<ImpactStats> {
       totalDevices: getDefaultNumeric('devices_sold_per_year'),
       soldDevices: getDefaultNumeric('devices_sold_per_year'),
       co2SavedTons: getDefaultNumeric('annual_co2_saved_tons'),
+      co2SavedKg: getDefaultNumeric('annual_co2_saved_tons') * 1000,
       repairs: 0,
       users: 0,
       live: false,

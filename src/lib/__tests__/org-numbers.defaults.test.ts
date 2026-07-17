@@ -13,7 +13,7 @@ import { getDefaultNumeric, getDefaultValue, ORG_NUMBERS_DEFAULTS } from '../org
 
 describe('getDefaultNumeric', () => {
   it('returns the numeric value for a known numeric key', () => {
-    expect(getDefaultNumeric('co2_savings_per_device')).toBe(285)
+    expect(getDefaultNumeric('co2_savings_per_device')).toBe(150)
   })
 
   it('returns the correct value for founding_year', () => {
@@ -52,7 +52,7 @@ describe('getDefaultNumeric', () => {
 
 describe('getDefaultValue', () => {
   it('returns the display string for a known key', () => {
-    expect(getDefaultValue('co2_savings_per_device')).toBe('285')
+    expect(getDefaultValue('co2_savings_per_device')).toBe('150')
   })
 
   it('returns tilde-prefixed string for estimated values', () => {

@@ -110,7 +110,7 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
 
   return (
     <div className="space-y-3">
-      {saldo && <SaldoStrip data={saldo} compact />}
+      {saldo && <SaldoStrip data={saldo} compact reportHref={`/admin/team/report/${userId}/${new Date().toISOString().slice(0, 7)}`} />}
       <ZeitPensumPanel userId={userId} onChanged={load} />
 
       {/* Proxy entry: open (or create) a month card for this person and edit

@@ -5195,11 +5195,11 @@
       },
       "formula": {
         "heading": "The formula",
-        "expression": "CO₂ saved per device = device weight (kg) × emission factor (kg CO₂e/kg)",
-        "exampleLead": "Laptop example:",
-        "exampleResult": "2.0 kg × 57 kg CO₂e/kg ≈",
-        "exampleValue": "115 kg CO₂e",
-        "note": "Estimate per device class. Model-specific numbers (Apple, Dell) are more precise and will be added as we incorporate manufacturer PCFs into our inventory."
+        "expression": "CO₂ avoided ≈ production + distribution of a new device (ADEME) × (1 − 15% refurbishment overhead)",
+        "exampleLead": "Example laptop:",
+        "exampleResult": "182 kg × 0.85 ≈",
+        "exampleValue": "~150 kg CO₂e",
+        "note": "Conservatively rounded down to 5 kg. The usage phase is excluded on both sides — a refurbished device uses the same electricity as a new one. The calculation assumes the purchase replaces a new device."
       },
       "inputs": {
         "heading": "Inputs with sources",
@@ -5207,27 +5207,30 @@
         "asOf": "As of: {date}"
       },
       "weights": {
-        "heading": "Weight per device category",
-        "intro": "These average weights feed the formula. We use conservative values from publicly available product data for the most common models.",
+        "heading": "Values per category",
+        "intro": "Based on the open data of the French environment agency ADEME (ADEME/ARCEP study, 2025 update) — full life-cycle assessments of average new devices including the phase split, published as open data and open source. We only count the production and distribution phases.",
         "col": {
           "category": "Category",
           "weight": "Weight",
-          "co2": "≈ CO₂ avoided",
-          "source": "Source"
+          "co2": "≈ CO₂ avoided per device",
+          "source": "ADEME dataset",
+          "newDevice": "New device: production + distribution"
         },
-        "sourceDirect": "Study (cited)",
-        "sourceCalculated": "Weight × factor",
-        "tooltipDirect": "Direct study value: {value} kg",
-        "tooltipCalculated": "Calculated: {weight} kg × 57 kg/kg",
-        "footer": "For \"Study (cited)\" we use the direct value from the inputs table above rather than the rough weight-times-factor estimate. As we add more category-specific LCAs (Apple/Dell PER), more categories will move here."
+        "sourceDirect": "ADEME 2025",
+        "sourceCalculated": "—",
+        "tooltipDirect": "ADEME value: {value} kg",
+        "tooltipCalculated": "—",
+        "footer": "{pct}% refurbishment overhead deducted (transport, cleaning, testing, spare parts): Circular Computing 2021 measured ~14% — including battery swap and intercontinental transport. Our refurbishment in Zürich is local, so the deduction is conservative.",
+        "noFactor": "For printers & scanners, components and peripherals we deliberately show no CO₂ figure: there is no open, defensible category value. No number beats a made-up one."
       },
       "limits": {
         "heading": "Limits of this estimate",
         "items": [
-          "The numbers cover the manufacturing phase of a new device minus refurbishment effort. Energy use during operation, shipping and end-of-life are not included.",
-          "Actual savings depend on the counterfactual scenario: would the person otherwise really have bought a new device? We assume yes — but that isn't everyone's reality.",
-          "Electricity mix assumption: Swiss grid (~12 g CO₂e/kWh). In countries with coal-heavy mixes, refurbishment emissions would be higher.",
-          "We round display values to 5 kg (under 100 kg) or 10 kg (above) — spurious precision like \"287.4 kg\" implies certainty we do not have."
+          "Averages: the ADEME values describe an average device of the category, not your specific model. Manufacturer PCFs (Apple/Dell) may differ.",
+          "Replacement assumption: the calculation assumes the refurbished device replaces a new purchase. Where that does not hold, the real saving is smaller.",
+          "The usage phase is excluded — it occurs equally for new and refurbished devices (Swiss electricity mix, comparatively low-carbon).",
+          "For categories without a defensible open value (printers, components, peripherals) we claim no savings.",
+          "All figures are estimates, marked with “~” and conservatively rounded down (5 kg steps)."
         ]
       },
       "contribute": {
@@ -5246,6 +5249,10 @@
         "70": "Component",
         "80": "Peripheral",
         "90": "Networking device"
+      },
+      "sources": {
+        "heading": "Sources & context",
+        "intro": "All values come from open, citable sources. For context: the ISO 14040/44-verified model by Fraunhofer Austria for refurbed finds 69–91% savings versus new devices (average 80%). Our laptop figure — 150 of a 193 kg life cycle ≈ 78% — sits at the conservative end of that band. The preliminary ZHAW LCA of our upcycling project (−82.7% GHG) independently confirms the order of magnitude."
       }
     }
   },
@@ -10440,7 +10447,11 @@
       "proxyOpenMonth": "Enter month",
       "proxyMonthAria": "Choose the month to enter",
       "reportLink": "Monthly report",
-      "reportPrint": "Print / PDF"
+      "reportPrint": "Print / PDF",
+      "saldoTimeExplainMinus": "{amount} less worked than your Pensum requires to date (actual − target).",
+      "saldoTimeExplainPlus": "{amount} more worked than your Pensum requires to date (actual − target).",
+      "saldoTimeExplainZero": "Balanced — time worked matches your Pensum.",
+      "saldoReportLink": "View monthly report"
     },
     "appointments": {
       "pageTitle": "Appointments",

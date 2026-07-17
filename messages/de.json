@@ -4953,11 +4953,11 @@
       },
       "formula": {
         "heading": "Die Formel",
-        "expression": "CO₂-Einsparung pro Gerät = Gerätegewicht (kg) × Emissionsfaktor (kg CO₂e/kg)",
-        "exampleLead": "Beispiel Laptop:",
-        "exampleResult": "2,0 kg × 57 kg CO₂e/kg ≈",
-        "exampleValue": "115 kg CO₂e",
-        "note": "Schätzung pro Geräteklasse. Modellgenaue Zahlen (Apple, Dell) sind genauer und werden ergänzt, sobald wir die Modell-PCFs der jeweiligen Hersteller in unsere Inventarisierung übernehmen."
+        "expression": "CO₂ vermieden ≈ Produktion + Distribution eines Neugeräts (ADEME) × (1 − 15% Aufbereitungsaufwand)",
+        "exampleLead": "Beispiel Notebook:",
+        "exampleResult": "182 kg × 0,85 ≈",
+        "exampleValue": "~150 kg CO₂e",
+        "note": "Konservativ auf 5 kg abgerundet. Die Nutzungsphase ist auf beiden Seiten ausgeklammert — ein aufbereitetes Gerät verbraucht im Betrieb gleich viel Strom wie ein neues. Die Rechnung nimmt an, dass der Kauf ein Neugerät ersetzt."
       },
       "inputs": {
         "heading": "Eingangswerte mit Quellen",
@@ -4965,27 +4965,30 @@
         "asOf": "Stand: {date}"
       },
       "weights": {
-        "heading": "Gewicht pro Gerätekategorie",
-        "intro": "Diese Durchschnittsgewichte fliessen in die Formel ein. Wir verwenden konservative Werte aus öffentlich zugänglichen Produktdaten der häufigsten Modelle.",
+        "heading": "Werte pro Kategorie",
+        "intro": "Grundlage sind die offenen Daten der französischen Umweltagentur ADEME (Studie ADEME/ARCEP, Update 2025) — vollständige Ökobilanzen durchschnittlicher Neugeräte inklusive Aufteilung nach Lebensphasen, als Open Data und Open Source publiziert. Wir rechnen nur mit der Produktions- und Distributionsphase.",
         "col": {
           "category": "Kategorie",
           "weight": "Gewicht",
-          "co2": "≈ CO₂ vermieden",
-          "source": "Quelle"
+          "co2": "≈ CO₂ vermieden pro Gerät",
+          "source": "ADEME-Datensatz",
+          "newDevice": "Neugerät: Produktion + Distribution"
         },
-        "sourceDirect": "Studie (zitiert)",
-        "sourceCalculated": "Gewicht × Faktor",
-        "tooltipDirect": "Direkter Studienwert: {value} kg",
-        "tooltipCalculated": "Berechnet: {weight} kg × 57 kg/kg",
-        "footer": "Bei „Studie (zitiert)\" verwenden wir den direkten Wert aus der Eingangswerttabelle oben statt der groben Gewicht-mal-Faktor-Schätzung. Sobald wir weitere kategoriespezifische LCAs (Apple/Dell PER) eingepflegt haben, wandern weitere Kategorien hierhin."
+        "sourceDirect": "ADEME 2025",
+        "sourceCalculated": "—",
+        "tooltipDirect": "ADEME-Wert: {value} kg",
+        "tooltipCalculated": "—",
+        "footer": "Abzug {pct}% Aufbereitungsaufwand (Transport, Reinigung, Test, Ersatzteile): Circular Computing 2021 hat ~14% gemessen — inklusive Akkutausch und Interkontinentaltransport. Unsere Aufbereitung in Zürich arbeitet lokal, der Abzug ist damit konservativ.",
+        "noFactor": "Für Drucker & Scanner, Komponenten und Peripherie zeigen wir bewusst keine CO₂-Zahl: Dafür gibt es keinen offenen, belastbaren Kategoriewert. Lieber keine Zahl als eine erfundene."
       },
       "limits": {
         "heading": "Grenzen dieser Schätzung",
         "items": [
-          "Die Zahlen umfassen die Herstellungs-Phase des Neugeräts abzüglich Aufbereitungs-Aufwand. Energieverbrauch während der Nutzung, Versand und End-of-Life sind nicht enthalten.",
-          "Die tatsächliche Einsparung hängt vom kontrafaktischen Szenario ab: Hätte die Person sonst wirklich ein Neugerät gekauft? Wir gehen davon aus, ja — aber das ist nicht jedermanns Realität.",
-          "Strommix-Annahme: Schweizer Stromnetz (~12 g CO₂e/kWh). In Ländern mit kohlelastigem Mix wären die Aufbereitungs-Emissionen höher.",
-          "Wir runden Anzeige-Werte auf 5 kg (unter 100 kg) bzw. 10 kg (darüber) — spurious Präzision wie „287,4 kg\" suggeriert Genauigkeit, die wir nicht haben."
+          "Durchschnittswerte: Die ADEME-Werte gelten für ein durchschnittliches Gerät der Kategorie, nicht für dein konkretes Modell. Modellgenaue Herstellerangaben (Apple/Dell PCF) können abweichen.",
+          "Ersatzannahme: Die Rechnung nimmt an, dass das aufbereitete Gerät den Kauf eines Neugeräts ersetzt. Wo das nicht zutrifft, ist die reale Einsparung kleiner.",
+          "Die Nutzungsphase ist ausgeklammert — sie fällt bei neuem und aufbereitetem Gerät gleichermassen an (Schweizer Strommix, vergleichsweise CO₂-arm).",
+          "Für Kategorien ohne belastbaren offenen Wert (Drucker, Komponenten, Peripherie) weisen wir keine Einsparung aus.",
+          "Alle Zahlen sind Schätzungen, mit «~» gekennzeichnet und konservativ abgerundet (5-kg-Schritte)."
         ]
       },
       "contribute": {
@@ -5004,6 +5007,10 @@
         "70": "Komponente",
         "80": "Peripherie",
         "90": "Netzwerk-Gerät"
+      },
+      "sources": {
+        "heading": "Quellen & Einordnung",
+        "intro": "Alle Werte stammen aus offenen, zitierfähigen Quellen. Zur Einordnung: Das ISO-14040/44-verifizierte Modell von Fraunhofer Austria für refurbed kommt auf 69–91% Ersparnis gegenüber Neugeräten (Durchschnitt 80%). Unsere Notebook-Zahl — 150 von 193 kg Lebenszyklus ≈ 78% — liegt am konservativen Ende dieses Bands. Die vorläufige ZHAW-Ökobilanz unseres Upcycling-Projekts (−82,7% Treibhausgase) bestätigt die Grössenordnung unabhängig."
       }
     }
   },
@@ -10495,7 +10502,11 @@
       "proxyOpenMonth": "Monat erfassen",
       "proxyMonthAria": "Monat für die Erfassung wählen",
       "reportLink": "Monatsrapport",
-      "reportPrint": "Drucken / PDF"
+      "reportPrint": "Drucken / PDF",
+      "saldoTimeExplainMinus": "{amount} weniger gearbeitet, als dein Pensum bis heute vorsieht (Ist − Soll).",
+      "saldoTimeExplainPlus": "{amount} mehr gearbeitet, als dein Pensum bis heute vorsieht (Ist − Soll).",
+      "saldoTimeExplainZero": "Ausgeglichen — geleistete Zeit entspricht dem Pensum.",
+      "saldoReportLink": "Monatsrapport ansehen"
     },
     "appointments": {
       "pageTitle": "Termine",

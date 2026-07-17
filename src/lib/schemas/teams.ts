@@ -173,6 +173,8 @@ export interface TeamMemberRow {
   avatar_url: string | null
   position: string | null
   work_state: string | null
+  /** Team-profile id — the member's profile page (/admin/team/<id>); null if no profile yet. */
+  profile_id: string | null
 }
 
 export interface TeamDetail {

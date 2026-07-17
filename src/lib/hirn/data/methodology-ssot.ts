@@ -203,12 +203,12 @@ export const METHODOLOGIES: Record<MethodologyId, Methodology> = {
       humanReadable: 'Vermiedene Emissionen = Anzahl Geräte × (CO₂ Neuproduktion − CO₂ Aufbereitung)',
       variables: [
         { symbol: 'N_devices', name: 'Anzahl aufbereitete Geräte', unit: 'Stück', source: 'Device Outcome Tracking' },
-        { symbol: 'CO₂_new', name: 'CO₂ pro Neugerät', unit: 'kg CO₂e', source: 'BAFU/EU JRC Referenzwerte' },
-        { symbol: 'CO₂_refurb', name: 'CO₂ pro Aufbereitung', unit: 'kg CO₂e', source: 'Eigene Messung + BAFU' },
+        { symbol: 'CO₂_new', name: 'Produktion+Distribution Neugerät (Kategorie-Durchschnitt)', unit: 'kg CO₂e', source: 'ADEME / ARCEP 2025 (offene Daten, impactco2.fr)' },
+        { symbol: 'CO₂_refurb', name: 'Aufbereitungsaufwand (15% pauschal)', unit: 'kg CO₂e', source: 'Circular Computing 2021 (~14% gemessen), konservativ 15%' },
       ],
       example: {
-        inputs: { N_devices: 100, CO2_new: 300, CO2_refurb: 15 },
-        output: 28500,
+        inputs: { N_devices: 100, CO2_new: 182, CO2_refurb: 27 },
+        output: 15500,
         unit: 'kg CO₂e',
       },
     },

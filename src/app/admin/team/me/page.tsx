@@ -115,7 +115,7 @@ export default async function MyTeamProfilePage() {
           Zeiterfassung page and the HR detail view (one engine, three views). */}
       {saldo && (
         <div className="mb-5 space-y-2">
-          <SaldoStrip data={saldo} />
+          <SaldoStrip data={saldo} reportHref={`/admin/team/report/${userId}/${currentMonth}`} />
           <div className="flex flex-wrap gap-x-4 text-sm">
             <Link href="/admin/zeiterfassung" className="inline-flex min-h-11 items-center font-medium text-action hover:underline">
               {t('selfTitle')} →

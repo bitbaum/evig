@@ -5249,11 +5249,11 @@
       },
       "formula": {
         "heading": "La formule",
-        "expression": "CO₂ économisé par appareil = poids de l'appareil (kg) × facteur d'émission (kg CO₂e/kg)",
+        "expression": "CO₂ évité ≈ production + distribution d’un appareil neuf (ADEME) × (1 − 15% de reconditionnement)",
         "exampleLead": "Exemple ordinateur portable :",
-        "exampleResult": "2,0 kg × 57 kg CO₂e/kg ≈",
-        "exampleValue": "115 kg CO₂e",
-        "note": "Estimation par classe d'appareil. Les chiffres spécifiques au modèle (Apple, Dell) sont plus précis et seront ajoutés à mesure que nous intégrerons les PCF des fabricants dans notre inventaire."
+        "exampleResult": "182 kg × 0,85 ≈",
+        "exampleValue": "~150 kg CO₂e",
+        "note": "Arrondi prudemment à 5 kg près (vers le bas). La phase d’usage est exclue des deux côtés — un appareil reconditionné consomme autant d’électricité qu’un neuf. Le calcul suppose que l’achat remplace un appareil neuf."
       },
       "inputs": {
         "heading": "Données d'entrée avec sources",
@@ -5261,27 +5261,30 @@
         "asOf": "État : {date}"
       },
       "weights": {
-        "heading": "Poids par catégorie d'appareil",
-        "intro": "Ces poids moyens alimentent la formule. Nous utilisons des valeurs prudentes issues des données produits publiques des modèles les plus courants.",
+        "heading": "Valeurs par catégorie",
+        "intro": "Base : les données ouvertes de l’ADEME (étude ADEME/ARCEP, mise à jour 2025) — analyses de cycle de vie complètes d’appareils neufs moyens avec répartition par phases, publiées en open data et open source. Nous ne comptons que les phases de production et de distribution.",
         "col": {
           "category": "Catégorie",
           "weight": "Poids",
-          "co2": "≈ CO₂ évité",
-          "source": "Source"
+          "co2": "≈ CO₂ évité par appareil",
+          "source": "Jeu de données ADEME",
+          "newDevice": "Neuf : production + distribution"
         },
-        "sourceDirect": "Étude (citée)",
-        "sourceCalculated": "Poids × facteur",
-        "tooltipDirect": "Valeur d'étude directe : {value} kg",
-        "tooltipCalculated": "Calculé : {weight} kg × 57 kg/kg",
-        "footer": "Pour « Étude (citée) », nous utilisons la valeur directe du tableau des données d'entrée ci-dessus plutôt que l'estimation poids × facteur. À mesure que nous ajouterons d'autres ACV spécifiques par catégorie (Apple/Dell PER), d'autres catégories migreront ici."
+        "sourceDirect": "ADEME 2025",
+        "sourceCalculated": "—",
+        "tooltipDirect": "Valeur ADEME : {value} kg",
+        "tooltipCalculated": "—",
+        "footer": "Déduction de {pct}% pour le reconditionnement (transport, nettoyage, tests, pièces) : Circular Computing 2021 a mesuré ~14%, batterie et transport intercontinental compris. Notre atelier de Zurich travaille localement — la déduction est donc prudente.",
+        "noFactor": "Pour les imprimantes, composants et périphériques, nous n’affichons délibérément aucun chiffre CO₂ : il n’existe pas de valeur ouverte et défendable par catégorie. Mieux vaut aucun chiffre qu’un chiffre inventé."
       },
       "limits": {
         "heading": "Limites de cette estimation",
         "items": [
-          "Les chiffres couvrent la phase de fabrication du neuf moins l'effort de remise à neuf. La consommation pendant l'utilisation, le transport et la fin de vie ne sont pas inclus.",
-          "L'économie réelle dépend du scénario contrefactuel : la personne aurait-elle vraiment acheté un appareil neuf sinon ? Nous supposons que oui — mais ce n'est pas la réalité de tout le monde.",
-          "Hypothèse mix électrique : réseau suisse (~12 g CO₂e/kWh). Dans les pays au mix charbonné, les émissions de remise à neuf seraient plus élevées.",
-          "Nous arrondissons les valeurs affichées à 5 kg (sous 100 kg) ou 10 kg (au-dessus) — une fausse précision comme « 287,4 kg » suggère une certitude que nous n'avons pas."
+          "Moyennes : les valeurs ADEME décrivent un appareil moyen de la catégorie, pas votre modèle précis. Les PCF des fabricants (Apple/Dell) peuvent différer.",
+          "Hypothèse de remplacement : le calcul suppose que l’appareil reconditionné remplace un achat neuf. Là où ce n’est pas le cas, l’économie réelle est moindre.",
+          "La phase d’usage est exclue — elle est identique pour un appareil neuf ou reconditionné (mix électrique suisse, relativement bas carbone).",
+          "Pour les catégories sans valeur ouverte défendable (imprimantes, composants, périphériques), nous ne revendiquons aucune économie.",
+          "Tous les chiffres sont des estimations, marquées « ~ » et arrondies prudemment vers le bas (pas de 5 kg)."
         ]
       },
       "contribute": {
@@ -5300,6 +5303,10 @@
         "70": "Composant",
         "80": "Périphérique",
         "90": "Appareil réseau"
+      },
+      "sources": {
+        "heading": "Sources et mise en contexte",
+        "intro": "Toutes les valeurs proviennent de sources ouvertes et citables. Pour contexte : le modèle vérifié ISO 14040/44 de Fraunhofer Austria pour refurbed estime 69–91% d’économies par rapport au neuf (moyenne 80%). Notre chiffre pour les portables — 150 sur un cycle de vie de 193 kg ≈ 78% — se situe à l’extrémité prudente de cette fourchette. L’ACV préliminaire de la ZHAW sur notre projet d’upcycling (−82,7% GES) confirme indépendamment l’ordre de grandeur."
       }
     }
   },
@@ -10392,7 +10399,11 @@
       "proxyOpenMonth": "Saisir le mois",
       "proxyMonthAria": "Choisir le mois à saisir",
       "reportLink": "Rapport mensuel",
-      "reportPrint": "Imprimer / PDF"
+      "reportPrint": "Imprimer / PDF",
+      "saldoTimeExplainMinus": "{amount} de moins que ce que ton taux prévoit à ce jour (réel − prévu).",
+      "saldoTimeExplainPlus": "{amount} de plus que ce que ton taux prévoit à ce jour (réel − prévu).",
+      "saldoTimeExplainZero": "Équilibré — le temps travaillé correspond à ton taux.",
+      "saldoReportLink": "Voir le rapport mensuel"
     },
     "appointments": {
       "pageTitle": "Rendez-vous",

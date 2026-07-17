@@ -1,6 +1,6 @@
 import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
-import { CATEGORY_WEIGHT_KG, CO2_PER_KG, FALLBACK_DEVICE_WEIGHT_KG } from '@/config/co2-impact'
+import { estimateCO2Savings } from '@/config/co2-impact'
 import { logger } from '@/lib/logger'
 import { apiSuccessCached, apiError } from '@/lib/api/helpers'
 import { LISTING_STATUS } from '@/config/marketplace'
@@ -44,8 +44,10 @@ export async function GET() {
 
       if (row.status === LISTING_STATUS.SOLD) {
         soldDevices += count
-        const weightKg = CATEGORY_WEIGHT_KG[row.category] ?? FALLBACK_DEVICE_WEIGHT_KG
-        co2SavedKg += Math.round(count * weightKg * CO2_PER_KG)
+        // Same SSOT as fetchImpactStats — a second, diverging formula here
+        // once produced different numbers than the website. Never again.
+        const perDevice = estimateCO2Savings(row.category)
+        if (perDevice) co2SavedKg += count * perDevice
       }
     }
 

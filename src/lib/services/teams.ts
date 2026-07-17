@@ -260,6 +260,7 @@ export async function getTeamMembers(teamId: string): Promise<TeamMemberRow[]> {
       avatar_url: userProfiles.avatarUrl,
       position: teamProfiles.position,
       work_state: teamProfiles.workState,
+      profile_id: teamProfiles.id,
     })
     .from(teamMemberships)
     .innerJoin(users, eq(teamMemberships.userId, users.id))

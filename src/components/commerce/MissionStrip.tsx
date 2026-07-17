@@ -16,6 +16,7 @@ import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { Recycle, Leaf, Heart } from 'lucide-react'
 import { fetchImpactStats } from '@/lib/impact-stats'
+import { co2DisplayValue } from '@/config/co2-impact'
 import { cn } from '@/lib/utils'
 
 interface MissionStripProps {
@@ -65,7 +66,7 @@ export async function MissionStrip({ className }: MissionStripProps) {
             <span className="inline-flex items-center gap-1.5">
               <Leaf className="h-4 w-4 text-action" aria-hidden="true" />
               <span className="font-semibold text-text-primary tabular-nums">
-                ~{stats.co2SavedTons} t
+                {(() => { const d = co2DisplayValue(stats.co2SavedKg); return `~${d.value} ${d.unit}` })()}
               </span>
               <span className="text-text-muted">{t('co2Avoided')}</span>
               <Link

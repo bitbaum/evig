@@ -11,7 +11,7 @@
  *   GET /api/stats/impact
  *   - returns 200 with devices, co2, repairs, users fields
  *   - converts string counts to numbers
- *   - computes CO2 saved from sold listings using category weight × CO2_PER_KG
+ *   - computes CO2 saved from sold listings via the estimateCO2Savings SSOT
  *     (the unified `listings` table already includes RevampIT shop stock via
  *     is_revampit=true — no separate marketplace_listings count)
  *   - returns 500 when any DB query throws
@@ -28,9 +28,8 @@ jest.mock('@/lib/auth/db', () => ({
 }))
 
 jest.mock('@/config/co2-impact', () => ({
-  CATEGORY_WEIGHT_KG: { laptop: 2.0, desktop: 5.0 },
-  CO2_PER_KG: 10,
-  FALLBACK_DEVICE_WEIGHT_KG: 2.0,
+  // SSOT function: 20 kg per sold laptop, no claim for unknown categories.
+  estimateCO2Savings: (category: string) => (category === 'laptop' ? 20 : null),
 }))
 
 jest.mock('@/config/marketplace', () => ({
@@ -126,7 +125,7 @@ describe('GET /api/stats/impact — success', () => {
   it('computes CO2 from sold listings using category weight', async () => {
     const response = await GET()
     const body = await response.json()
-    // listings: 10 × 2.0 kg × 10 CO2_PER_KG = 200
+    // listings: 10 sold laptops × 20 kg (SSOT mock) = 200
     expect(body.data.co2.savedKg).toBe(200)
   })
 
@@ -162,7 +161,7 @@ describe('GET /api/stats/impact — success', () => {
     expect(body.data.co2.savedKg).toBe(0)
   })
 
-  it('uses 2.0 kg fallback weight for unknown categories', async () => {
+  it('claims NO CO₂ for categories without a defensible factor', async () => {
     mockQuery.mockReset()
     mockQuery
       .mockResolvedValueOnce({ rows: [{ category: 'unknown-thing', status: 'sold', count: '4' }] })
@@ -171,8 +170,9 @@ describe('GET /api/stats/impact — success', () => {
 
     const response = await GET()
     const body = await response.json()
-    // 4 × 2.0 fallback × 10 CO2_PER_KG = 80
-    expect(body.data.co2.savedKg).toBe(80)
+    // Conservative under-count: no factor → no claim (devices still counted).
+    expect(body.data.co2.savedKg).toBe(0)
+    expect(body.data.devices.sold).toBe(4)
   })
 
   it('includes meta.source = "database"', async () => {

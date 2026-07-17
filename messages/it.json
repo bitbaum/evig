@@ -802,11 +802,11 @@
       },
       "formula": {
         "heading": "La formula",
-        "expression": "CO₂ risparmiata per dispositivo = peso del dispositivo (kg) × fattore di emissione (kg CO₂e/kg)",
+        "expression": "CO₂ evitata ≈ produzione + distribuzione di un dispositivo nuovo (ADEME) × (1 − 15% di ricondizionamento)",
         "exampleLead": "Esempio laptop:",
-        "exampleResult": "2,0 kg × 57 kg CO₂e/kg ≈",
-        "exampleValue": "115 kg CO₂e",
-        "note": "Stima per classe di dispositivo. I valori specifici per modello (Apple, Dell) sono più precisi e verranno aggiunti man mano che integriamo i PCF dei produttori nel nostro inventario."
+        "exampleResult": "182 kg × 0,85 ≈",
+        "exampleValue": "~150 kg CO₂e",
+        "note": "Arrotondato per difetto a 5 kg. La fase d’uso è esclusa da entrambi i lati — un dispositivo ricondizionato consuma la stessa elettricità di uno nuovo. Il calcolo presume che l’acquisto sostituisca un dispositivo nuovo."
       },
       "inputs": {
         "heading": "Input con fonti",
@@ -814,27 +814,30 @@
         "asOf": "Stato: {date}"
       },
       "weights": {
-        "heading": "Peso per categoria di dispositivo",
-        "intro": "Questi pesi medi alimentano la formula. Usiamo valori conservativi da dati pubblici dei prodotti più comuni.",
+        "heading": "Valori per categoria",
+        "intro": "Base: i dati aperti dell’agenzia ambientale francese ADEME (studio ADEME/ARCEP, aggiornamento 2025) — LCA complete di dispositivi nuovi medi con ripartizione per fasi, pubblicate come open data e open source. Contiamo solo le fasi di produzione e distribuzione.",
         "col": {
           "category": "Categoria",
           "weight": "Peso",
-          "co2": "≈ CO₂ evitato",
-          "source": "Fonte"
+          "co2": "≈ CO₂ evitata per dispositivo",
+          "source": "Dataset ADEME",
+          "newDevice": "Nuovo: produzione + distribuzione"
         },
-        "sourceDirect": "Studio (citato)",
-        "sourceCalculated": "Peso × fattore",
-        "tooltipDirect": "Valore diretto dello studio: {value} kg",
-        "tooltipCalculated": "Calcolato: {weight} kg × 57 kg/kg",
-        "footer": "In \"Studio (citato)\" usiamo il valore diretto dalla tabella degli input sopra invece della stima peso × fattore. Man mano che aggiungiamo più LCA specifici per categoria (Apple/Dell PER), altre categorie si sposteranno qui."
+        "sourceDirect": "ADEME 2025",
+        "sourceCalculated": "—",
+        "tooltipDirect": "Valore ADEME: {value} kg",
+        "tooltipCalculated": "—",
+        "footer": "Deduzione del {pct}% per il ricondizionamento (trasporto, pulizia, test, ricambi): Circular Computing 2021 ha misurato ~14%, inclusi cambio batteria e trasporto intercontinentale. Il nostro laboratorio di Zurigo lavora localmente — la deduzione è quindi prudente.",
+        "noFactor": "Per stampanti, componenti e periferiche non mostriamo deliberatamente alcuna cifra di CO₂: non esiste un valore aperto e difendibile per categoria. Meglio nessun numero che uno inventato."
       },
       "limits": {
         "heading": "Limiti di questa stima",
         "items": [
-          "I numeri coprono la fase di produzione del nuovo dispositivo meno lo sforzo di ricondizionamento. Il consumo durante l'uso, la spedizione e il fine vita non sono inclusi.",
-          "Il risparmio effettivo dipende dallo scenario controfattuale: la persona avrebbe davvero comprato un dispositivo nuovo altrimenti? Assumiamo di sì — ma non è la realtà di tutti.",
-          "Ipotesi sul mix elettrico: rete svizzera (~12 g CO₂e/kWh). Nei paesi con mix ad alto contenuto di carbone, le emissioni di ricondizionamento sarebbero più alte.",
-          "Arrotondiamo i valori visualizzati a 5 kg (sotto i 100 kg) o 10 kg (sopra) — una falsa precisione come «287,4 kg» suggerisce una certezza che non abbiamo."
+          "Medie: i valori ADEME descrivono un dispositivo medio della categoria, non il tuo modello specifico. Le PCF dei produttori (Apple/Dell) possono differire.",
+          "Ipotesi di sostituzione: il calcolo presume che il dispositivo ricondizionato sostituisca un acquisto nuovo. Dove non è così, il risparmio reale è minore.",
+          "La fase d’uso è esclusa — è identica per dispositivi nuovi e ricondizionati (mix elettrico svizzero, relativamente a basse emissioni).",
+          "Per le categorie senza un valore aperto difendibile (stampanti, componenti, periferiche) non dichiariamo alcun risparmio.",
+          "Tutte le cifre sono stime, contrassegnate con «~» e arrotondate per difetto (passi di 5 kg)."
         ]
       },
       "contribute": {
@@ -853,6 +856,10 @@
         "70": "Componente",
         "80": "Periferica",
         "90": "Dispositivo di rete"
+      },
+      "sources": {
+        "heading": "Fonti e contesto",
+        "intro": "Tutti i valori provengono da fonti aperte e citabili. Per contesto: il modello verificato ISO 14040/44 di Fraunhofer Austria per refurbed stima un risparmio del 69–91% rispetto al nuovo (media 80%). Il nostro valore per i laptop — 150 su un ciclo di vita di 193 kg ≈ 78% — si trova all’estremità prudente di quella banda. La LCA preliminare della ZHAW sul nostro progetto di upcycling (−82,7% GHG) conferma indipendentemente l’ordine di grandezza."
       }
     }
   },
@@ -10439,7 +10446,11 @@
       "proxyOpenMonth": "Registra mese",
       "proxyMonthAria": "Scegli il mese da registrare",
       "reportLink": "Rapporto mensile",
-      "reportPrint": "Stampa / PDF"
+      "reportPrint": "Stampa / PDF",
+      "saldoTimeExplainMinus": "{amount} in meno rispetto a quanto previsto dal tuo Pensum a oggi (effettivo − previsto).",
+      "saldoTimeExplainPlus": "{amount} in più rispetto a quanto previsto dal tuo Pensum a oggi (effettivo − previsto).",
+      "saldoTimeExplainZero": "In pareggio — il tempo lavorato corrisponde al Pensum.",
+      "saldoReportLink": "Vedi rapporto mensile"
     },
     "appointments": {
       "pageTitle": "Appuntamenti",
