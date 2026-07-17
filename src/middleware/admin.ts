@@ -10,7 +10,6 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import type { UserRole } from '@/lib/constants'
 import { logger } from '@/lib/logger'
-import { isStaffEmail } from '@/lib/permissions'
 
 /**
  * Check if user has permission (now checks staff_permissions)
@@ -67,9 +66,11 @@ export async function requirePermission(permission: string) {
 /**
  * Admin middleware - requires admin access
  *
- * UNIFIED: Now checks BOTH old role system AND new is_staff system.
- * Old: role === 'REVAMPIT_ADMIN'
- * New: is_staff === true OR email @revamp-it.ch
+ * SECURITY: gates on session.user.isStaff only — the DB is_staff flag,
+ * admin-controlled and revocable — never on the email domain. Do not add an
+ * isStaffEmail() OR-fallback here; that previously let anyone who could
+ * register/verify an @revamp-it.ch address into /admin regardless of their
+ * actual is_staff value.
  */
 export async function adminMiddleware(request: NextRequest) {
   try {
@@ -82,7 +83,7 @@ export async function adminMiddleware(request: NextRequest) {
     }
 
     // Check staff access via new permission system
-    if (!session.user.isStaff && !isStaffEmail(session.user.email || '')) {
+    if (!session.user.isStaff) {
       const dashboardUrl = new URL('/dashboard', request.url)
       dashboardUrl.searchParams.set('error', 'access_denied')
       return NextResponse.redirect(dashboardUrl)
@@ -117,7 +118,7 @@ export async function hasAdminRole(): Promise<boolean> {
   try {
     const session = await auth()
     if (!session?.user) return false
-    return session.user.isStaff || isStaffEmail(session.user.email || '')
+    return session.user.isStaff
   } catch {
     return false
   }

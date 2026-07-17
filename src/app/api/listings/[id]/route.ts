@@ -15,7 +15,6 @@ import { logger } from '@/lib/logger';
 import { validateBody, UpdateListingSchema } from '@/lib/schemas';
 import { LISTING_STATUS, normalizeSpecValue } from '@/config/marketplace';
 import { getListingDetail, isListingFavorited, incrementListingView } from '@/lib/marketplace/listing-detail';
-import { isStaffEmail } from '@/lib/permissions';
 import { indexListing, removeListing, type MeilisearchDocument } from '@/lib/search/meilisearch';
 import { buildMeiliSpecs } from '@/lib/marketplace/listing-helpers';
 import type { NewListing } from '@/db/schema/marketplace';
@@ -300,7 +299,7 @@ export const DELETE = withAuth<{ id: string }>(async (
 
     // Check admin access for non-owners
     if (!isOwner) {
-      if (!session.user.isStaff && !isStaffEmail(session.user.email || '')) {
+      if (!session.user.isStaff) {
         return apiForbidden('Nur der Eigentümer oder ein Admin kann dieses Inserat löschen');
       }
     }

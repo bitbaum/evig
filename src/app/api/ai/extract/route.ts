@@ -14,7 +14,6 @@ import { apiBadRequest, apiForbidden, apiError } from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { registryExtract, type ExtractMode } from '@/lib/ai/extract'
 import { FORM_AI_REGISTRY } from '@/lib/ai/config/prompts'
-import { isStaffEmail } from '@/lib/permissions'
 
 const VALID_FORM_TYPES = Object.keys(FORM_AI_REGISTRY)
 
@@ -59,7 +58,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
 
     // Check auth level from registry
     const config = FORM_AI_REGISTRY[formType]
-    if (config.auth === 'staff' && !isStaffEmail(session.user.email || '')) {
+    if (config.auth === 'staff' && !session.user.isStaff) {
       return apiForbidden('Nur für Staff-Mitglieder verfügbar')
     }
 

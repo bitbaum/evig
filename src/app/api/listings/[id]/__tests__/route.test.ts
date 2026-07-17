@@ -768,21 +768,20 @@ describe('DELETE /api/listings/[id] — success', () => {
     expect(body.data.status).toBe('removed')
   })
 
-  it('returns 200 when isStaffEmail is true for non-staff session user', async () => {
-    // User with isStaff: false but staff email
+  it('returns 403 for a non-staff session user even with a staff-looking email (no domain-based bypass)', async () => {
+    // SECURITY regression test: session.user.isStaff (the revocable DB flag)
+    // must be the sole authorization signal — an @revamp-it.ch-looking email
+    // must never grant access on its own.
     mockAuth.mockResolvedValue({
       ...MOCK_SESSION,
-      user: { ...MOCK_SESSION.user, isStaff: false },
+      user: { ...MOCK_SESSION.user, isStaff: false, email: 'someone@revamp-it.ch' },
     })
     mockIsStaffEmail.mockReturnValue(true)
 
     const mockOwnerWhere = jest.fn().mockResolvedValue([{ sellerId: 'other-user' }])
     mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
 
-    mockSet.mockReturnValue({ where: mockUpdateWhere })
-    mockUpdateWhere.mockResolvedValue(undefined)
-
     const response = await DELETE(makeDeleteRequest(), makeContext())
-    expect(response.status).toBe(200)
+    expect(response.status).toBe(403)
   })
 })

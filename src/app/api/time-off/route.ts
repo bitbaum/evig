@@ -7,13 +7,12 @@
 import { NextRequest } from 'next/server'
 import { withAuth, ValidSession } from '@/lib/api/middleware'
 import { apiSuccess, apiBadRequest, apiForbidden, apiError } from '@/lib/api/helpers'
-import { isStaffEmail } from '@/lib/permissions'
 import { createTimeOffSchema } from '@/lib/schemas/time-off'
 import { createTimeOffRequest, listMyTimeOffRequests } from '@/lib/services/time-off'
 
 export const GET = withAuth(async (_req: NextRequest, session: ValidSession) => {
   try {
-    if (!isStaffEmail(session.user.email)) return apiForbidden('Nur für Teammitglieder.')
+    if (!session.user.isStaff) return apiForbidden('Nur für Teammitglieder.')
     const data = await listMyTimeOffRequests(session.user.id)
     return apiSuccess(data)
   } catch (error) {
@@ -23,7 +22,7 @@ export const GET = withAuth(async (_req: NextRequest, session: ValidSession) => 
 
 export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
-    if (!isStaffEmail(session.user.email)) return apiForbidden('Nur für Teammitglieder.')
+    if (!session.user.isStaff) return apiForbidden('Nur für Teammitglieder.')
     let body: unknown
     try {
       body = await request.json()

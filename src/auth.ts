@@ -173,8 +173,11 @@ export const authConfig = {
           // a normal user and unlocks admin the moment they verify. Regular
           // users need no verification at all.
 
-          // Determine staff status — DB flag is SSOT, email domain only for initial setup
-          const userIsStaff = Boolean(user.is_staff) || isStaffEmail(user.email)
+          // SECURITY: DB flag is the sole source of truth for staff status.
+          // Do NOT OR in isStaffEmail(email) here — that would grant staff
+          // access to anyone who can register/verify an @revamp-it.ch
+          // address, bypassing admin-controlled promotion and revocation.
+          const userIsStaff = Boolean(user.is_staff)
           const userPermissions = user.staff_permissions?.length
             ? user.staff_permissions
             : (userIsStaff ? getInitialStaffPermissions(user.email) : [])
@@ -267,9 +270,11 @@ export const authConfig = {
         token.id = user.id
         // Legacy role - kept for backward compatibility
         // Staff get REVAMPIT_ADMIN, others get CUSTOMER
-        // SECURITY: Only grant staff privileges if email is verified
+        // SECURITY: Only grant staff privileges if email is verified, and the
+        // DB flag is the sole source of truth — never OR in isStaffEmail
+        // here (see authorize() above for why).
         const emailVerified = !!user.emailVerified
-        const userIsStaff = emailVerified ? (Boolean(user.is_staff) || isStaffEmail(user.email ?? '')) : false
+        const userIsStaff = emailVerified ? Boolean(user.is_staff) : false
         token.role = user.role || (userIsStaff ? ROLES.REVAMPIT_ADMIN : ROLES.CUSTOMER)
         token.emailVerified = emailVerified
         // New simplified auth fields
@@ -291,9 +296,7 @@ export const authConfig = {
           if (freshUser && freshUser.token_version !== (token.tokenVersion ?? 0)) {
             // Admin changed permissions — refresh the token's claims.
             const emailVerified = !!freshUser.emailVerified
-            const userIsStaff = emailVerified
-              ? (Boolean(freshUser.is_staff) || isStaffEmail(freshUser.email ?? ''))
-              : false
+            const userIsStaff = emailVerified ? Boolean(freshUser.is_staff) : false
             token.role = freshUser.role || (userIsStaff ? ROLES.REVAMPIT_ADMIN : ROLES.CUSTOMER)
             token.emailVerified = emailVerified
             token.isStaff = userIsStaff
@@ -422,15 +425,23 @@ export async function registerUser(data: {
 }): Promise<RegisterResult> {
   const { email, password, name } = data
 
-  // Determine staff status from email domain
-  const is_staff = isStaffEmail(email)
-  const staff_permissions = is_staff ? getInitialStaffPermissions(email) : []
+  // SECURITY: staff status is never auto-granted from the email domain at
+  // signup. An @revamp-it.ch address only proves the registrant can receive
+  // mail there (an alias, shared inbox, or self-service mailbox) — it is not
+  // proof of employment. Every new account starts as a regular customer;
+  // staff access is granted explicitly by a super admin
+  // (PATCH /api/admin/users/[id]/permissions) or via the HR hire flow
+  // (promoteUserToStaff). `isStaffEmail` below is cosmetic only — it picks
+  // which welcome-email copy to send.
+  const is_staff = false
+  const staff_permissions: string[] = []
+  const looksLikeStaffEmail = isStaffEmail(email)
 
   // Legacy role column — still written so pre-permissions-v2 code paths
   // (admin queries, audit logs) keep working. New code reads is_staff
   // + staff_permissions instead. Per permissions-v2 migration plan, the
   // role column will be dropped once the last legacy reader is gone.
-  const role = is_staff ? ROLES.REVAMPIT_ADMIN : ROLES.CUSTOMER
+  const role = ROLES.CUSTOMER
 
   // Email + password format are already validated by RegisterSchema at
   // the API boundary (lib/schemas/auth.ts, derived from AUTH_CONFIG).
@@ -508,7 +519,7 @@ export async function registerUser(data: {
     const emailSent = await sendRegistrationVerificationEmail(
       email,
       name,
-      is_staff,
+      looksLikeStaffEmail,
       user.id,
     )
 
