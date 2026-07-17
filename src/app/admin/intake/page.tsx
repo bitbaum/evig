@@ -9,8 +9,7 @@ export const metadata: Metadata = {
   description: 'Alle erfassten Geräte: Status, Checkliste und Publikation.',
 }
 
-// One operational home: fast capture, pipeline, device workbench and publish.
-// The full /admin/erfassung form remains an advanced product-data editor.
+// One operational home: capture, pipeline, device workbench and publish.
 export default async function IntakePage() {
   const t = await getTranslations('admin.intake')
   return (

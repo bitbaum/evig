@@ -1,7 +1,7 @@
 # Intake & Quality Control — System Design
 
-**Status**: Implemented end to end (single intake home, fast capture, kanban, verdicts, QC gate, buyer-facing results, local QR labels, Vier-Augen-Prinzip, mobile workflow, Kivvi sync)
-**Last Updated**: 2026-07-16
+**Status**: Implemented end to end (one capture contract, multi-channel AI input, explicit destinations, kanban, verdicts, QC gate/bypass audit, buyer-facing results, local QR labels, Vier-Augen-Prinzip, mobile workflow, Kivvi sync)
+**Last Updated**: 2026-07-17
 
 ---
 
@@ -16,7 +16,7 @@ Empfang → Triage (Stufe) → Werkbank (Tests/Aufbereitung) → Datenlöschung
         → Qualitätskontrolle → Fotos/Inserat → Shop → verkauft
 ```
 
-Before this design landed, the digital pipeline had six gaps:
+Before this design landed, the digital pipeline had seven gaps:
 
 1. **Schnellerfassung bypassed QC entirely.** A laptop captured via the quick
    form with "publish" went live in the shop with zero tests.
@@ -28,11 +28,13 @@ Before this design landed, the digital pipeline had six gaps:
 4. **Two competing entry points.** "Geräte-Eingang" and "Produkt aufnehmen"
    looked like equal destinations, although staff were trying to complete one
    job: get an incoming item into the system and, where appropriate, the shop.
-5. **The common path carried exceptional detail.** A workshop intake required
-   navigating a full product editor instead of entering the two facts normally
-   visible on the device: manufacturer and model.
+5. **Input channels were presented as workflows.** “Physische Annahme” and
+   “Schnellerfassung” forced an operational decision before any product facts
+   were known. Text, photo, file and speech were scattered across those modes.
 6. **The overview was a dense table.** It described rows, but did not show the
    flow of work or make blocked and ready products operationally obvious.
+7. **Page explanations drifted from AI context.** Staff saw short descriptive
+   copy, while Hirn had a different mental model of the same route.
 
 ## Design principles
 
@@ -44,19 +46,29 @@ Before this design landed, the digital pipeline had six gaps:
 - **Fail is a first-class outcome.** ~40% of devices don't make it to the shop
   (parts/recycling tiers). A recorded fail with a reason and a re-tier decision
   is the audit trail of the value cascade, not an error case.
-- **One job, one home.** `/admin/intake` owns capture, pipeline, device
-  workbench and publish. `/admin/erfassung` remains a hidden advanced editor,
-  not a competing navigation concept.
-- **Progressive disclosure.** The normal intake asks for manufacturer and
-  product/model. Tier, category and donation are available when needed; the
-  complete product catalogue is one explicit advanced step away.
+- **Input method is not process state.** Text, photo, CSV/Excel and speech all
+  normalize into the same product schema. There is no “quick” versus
+  “physical” product type.
+- **One job, one home.** `/admin/intake` owns the pipeline and workbench;
+  `/admin/intake/capture` is its only capture page. `/admin/erfassung` remains
+  a render-compatible legacy URL, not a second product.
+- **Decide late.** Staff first enter and review facts, then choose the real
+  destination: quality process, inventory only, parts, recycling, or the
+  exceptional audited untested publication path.
+- **Progressive disclosure.** Only manufacturer and product/model are required
+  to create a record. Technical data, storage and donation provenance remain
+  available without competing with the normal path.
+- **One explanation contract.** `HirnPageContext.guide` supplies both the
+  page-level `?` guide and the assistant context, so instructions cannot drift.
 - **The URL is the view state.** `/admin/intake`, `/admin/intake/capture` and
   `/admin/intake?detail=<id>` are linkable and survive refreshes and QR scans.
 
 ## Target interaction budget
 
-- **Digital capture:** manufacturer + model + Enter, designed and tested to
-  complete in under five seconds once the operator has read the device label.
+- **Digital capture:** text/photo/speech can let AI fill the record; direct
+  manufacturer + model entry remains the deterministic fast lane. With the
+  recommended quality destination already selected, capture is one action and
+  is E2E-budgeted below five seconds after the fields are known.
 - **Physical QC:** intentionally not reduced to five seconds. Required tests,
   data erasure and final QA remain real safety and trust gates.
 - **Publish after QC:** price and publish action are placed at the top of the
@@ -75,15 +87,24 @@ In Prüfung  |  Blockiert  |  Bereit  |  Im Shop
 Cards are oldest-first within each lane, show checklist progress, tier and
 category, and flag products older than the shared stuck threshold. On small
 screens the same information becomes a touch-friendly card list without
-horizontal scrolling. `Produkt aufnehmen` is still directly addressable for
-advanced fields and AI extraction, but is deliberately absent from primary
-navigation.
+horizontal scrolling. `Produkt aufnehmen` is an action inside this workflow,
+not another top-level admin area.
 
-The capture screen is a sub-route of this home. Its default path has only two
-required fields and sensible defaults (`refurbish`, `good`); less common intake
-metadata is collapsed. Saving creates the inventory item, initializes its
-checklist, syncs Kivvi after commit, and immediately offers the local label or
-the pipeline. The form resets and restores keyboard focus for the next item.
+The capture screen is a three-step, single-page flow:
+
+1. Enter data by text, photo, file or speech. CSV/Excel becomes a reviewable
+   batch and enters inventory only; a file cannot prove physical quality.
+2. Review AI-filled product data. Manufacturer and product/model are required;
+   all richer catalogue facts are optional at intake.
+3. Choose the next physical/business destination. Quality is recommended.
+   Parts and recycling initialize their own checklist. Inventory-only creates
+   no checklist. Direct untested publication requires both a positive price
+   and a written reason of at least ten characters.
+
+Every outcome uses `POST /api/admin/intake` and `createErfassungProduct()`.
+Donation provenance, technical fields, storage and the image traverse the same
+contract. Successful capture immediately offers the local QR label and the
+pipeline/device view.
 
 ---
 
@@ -181,8 +202,10 @@ through the pipeline (tier set + checklist complete):
   ("Durchgeführte Prüfungen" + ✓ items) — works for QC provenance and any
   future verified P2P checks alike.
 
-Quick-published accessories (no checklist) get no stamp — verification means
-something precisely because it is not handed out for free. Listings published
+Untested listings (no completed checklist) get no stamp — verification means
+something precisely because it is not handed out for free. They carry an
+explicit warning badge and trust-strip disclosure linking to the public process
+page. Listings published
 before this change carry no checks; they gain them on their next re-publish
 (no backfill: the historical checklists exist on `inventory_items`, so a
 backfill script is possible later if wanted).
@@ -206,12 +229,28 @@ backfill script is possible later if wanted).
   away from the buyer-visible `condition_checks` snapshot. Published groups
   collapse by default; the shop confirmation and price are shown first.
 
-### Kivvi ERP — both capture doors sync (SHIPPED)
+### Phase 5 — one guided capture contract + open process (SHIPPED)
+
+- Deleted the competing quick-capture component and physical/quick mode toggle.
+- `CAPTURE_DESTINATIONS` is the SSOT for the only consequential capture choice.
+- `/admin/intake/capture` is canonical; old `/admin/erfassung` bookmarks render
+  the same component and all dashboard/Hirn links point to the canonical route.
+- A documented QC bypass is schema-gated, price-gated, published without
+  verification, and written atomically with its reason into `intake_events`.
+- The global admin `?` guide resolves the same page context Hirn receives.
+- `/so-funktionierts` is the single public process page; it links the open
+  source and explains how another local circular workshop can reproduce the
+  process. No duplicate “refurbishment process” page was introduced.
+- All new UI uses semantic design tokens. The repository SSOT audit now reports
+  zero raw-color warnings; remaining standalone HTML/SVG colors live in
+  `src/config/ui-colors.ts`.
+
+### Kivvi ERP — canonical capture sync (SHIPPED)
 
 `syncProductToKivvi()` (`src/lib/kivvi/sync-product.ts`) is the SSOT for the
-fire-and-forget post-commit ERP push, used by BOTH `/api/admin/erfassung`
-(Schnellerfassung) and `/api/admin/intake` (Physische Annahme). Previously
-only the erfassung door synced — Annahme devices never reached Kivvi.
+fire-and-forget post-commit ERP push. The canonical `/api/admin/intake` route
+uses it; the legacy `/api/admin/erfassung` endpoint retains it while older API
+clients migrate.
 
 ### Explicitly not planned
 

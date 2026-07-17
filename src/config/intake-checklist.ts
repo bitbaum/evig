@@ -44,13 +44,13 @@ export const INTAKE_TIER_ICONS: Record<IntakeTier, string> = {
 }
 
 /**
- * Pseudo-tier for devices captured via Schnellerfassung (intake_tier NULL —
- * no checklist, publishable immediately). Used as a filter value in the
- * pipeline API/UI and for display; never stored in the database.
+ * Pseudo-tier for records without a physical checklist (intake_tier NULL).
+ * Used only as a filter/display value and never stored in the database.
+ * The name describes state, not the input channel that happened to create it.
  */
 export const QUICK_CAPTURE_TIER = 'quick' as const
-export const QUICK_CAPTURE_LABEL = 'Schnellerfassung'
-export const QUICK_CAPTURE_ICON = '⚡'
+export const QUICK_CAPTURE_LABEL = 'Ohne Prüfprozess'
+export const QUICK_CAPTURE_ICON = '○'
 
 // =============================================================================
 // CHECKLIST CATEGORIES
@@ -617,7 +617,8 @@ export function getBuyerVisibleChecks(
  * they may be published. Derived from the checklist itself (SSOT): a category
  * requires QC when any required testing or data-security item targets it.
  * Accessory categories (components, peripherals, networking) and uncategorized
- * items stay direct-publishable via Schnellerfassung.
+ * items remain compatible with the legacy direct-publish API. The canonical
+ * capture UI still makes untested publication an explicit audited choice.
  */
 export function requiresQualityControl(deviceCategory: string | null | undefined): boolean {
   if (!deviceCategory) return false

@@ -70,7 +70,7 @@ Regeln:
 - Nur bei konkretem Ausführungswunsch Actions ausgeben, sonst kein Block.
 - Maximal 4 Actions.
 - payload muss für den Typ vollständig sein.
-- Für Produkt-Erfassung: navigate mit url="/admin/erfassung" und cta="Produkt erfassen".
+- Für Produkt-Erfassung: navigate mit url="/admin/intake/capture" und cta="Produkt aufnehmen".
 - Für Workshop-Verwaltung: navigate mit url="/admin/workshops" und cta="Workshops verwalten".
 - Für Marketplace: navigate mit url="/marketplace/sell" und cta="Inserat erstellen".
 - Text ausserhalb des Blocks bleibt normal menschlich.

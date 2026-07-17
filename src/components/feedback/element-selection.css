@@ -1,15 +1,15 @@
 /* Styles for element selection mode in the suggestion panel */
 
 .suggestion-hover-element {
-  outline: 2px dashed #3b82f6 !important;
+  outline: 2px dashed var(--accent-action) !important;
   outline-offset: 2px !important;
   cursor: crosshair !important;
 }
 
 .suggestion-selected-element {
   position: relative;
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.6) !important;
-  border: 3px solid #3b82f6 !important;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-action) 60%, transparent) !important;
+  border: 3px solid var(--accent-action) !important;
   border-radius: 6px !important;
   transition: all 0.2s ease-in-out !important;
   transform: scale(1.02) !important;
@@ -23,7 +23,7 @@
   left: -2px;
   right: -2px;
   bottom: -2px;
-  background: linear-gradient(45deg, #3b82f6, #06b6d4);
+  background: linear-gradient(45deg, var(--accent-action), var(--accent-action-hover));
   border-radius: 8px;
   z-index: -1;
   opacity: 0.3;
@@ -34,8 +34,8 @@
   position: absolute;
   top: -12px;
   right: -12px;
-  background: linear-gradient(45deg, #10b981, #059669);
-  color: white;
+  background: linear-gradient(45deg, var(--accent-action), var(--accent-action-hover));
+  color: var(--accent-action-text);
   border-radius: 50%;
   width: 24px;
   height: 24px;
@@ -45,10 +45,10 @@
   font-size: 14px;
   font-weight: bold;
   z-index: 1001;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  border: 2px solid white;
+  box-shadow: 0 2px 8px var(--border-strong);
+  border: 2px solid var(--surface-base);
 }
 
 .suggestion-selected-element:hover {
-  box-shadow: 0 0 0 6px rgba(59, 130, 246, 0.4) !important;
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent-action) 40%, transparent) !important;
 }

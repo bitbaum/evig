@@ -18,6 +18,7 @@ import {
 } from '../intake'
 
 import { INTAKE_TIERS } from '@/config/intake-checklist'
+import { CAPTURE_DESTINATIONS } from '@/config/intake-workflow'
 
 // ============================================================================
 // IntakeCreateSchema
@@ -74,10 +75,32 @@ describe('IntakeCreateSchema', () => {
     expect(result.success).toBe(false)
   })
 
-  it('rejects missing intake_tier', () => {
+  it('rejects a request with neither destination nor legacy intake_tier', () => {
     const { intake_tier, ...rest } = valid
     const result = IntakeCreateSchema.safeParse(rest)
     expect(result.success).toBe(false)
+  })
+
+  it('accepts the canonical quality destination without a legacy tier', () => {
+    const { intake_tier, ...rest } = valid
+    const result = IntakeCreateSchema.safeParse({
+      ...rest,
+      destination: CAPTURE_DESTINATIONS.QUALITY,
+    })
+    expect(result.success).toBe(true)
+  })
+
+  it('requires a meaningful reason and price for untested shop publication', () => {
+    const { intake_tier, ...rest } = valid
+    const base = {
+      ...rest,
+      destination: CAPTURE_DESTINATIONS.SHOP_UNTESTED,
+      verkaufspreis: 120,
+    }
+
+    expect(IntakeCreateSchema.safeParse({ ...base, qc_skip_reason: 'too short' }).success).toBe(false)
+    expect(IntakeCreateSchema.safeParse({ ...base, qc_skip_reason: 'sealed accessory' }).success).toBe(true)
+    expect(IntakeCreateSchema.safeParse({ ...base, qc_skip_reason: 'sealed accessory', verkaufspreis: 0 }).success).toBe(false)
   })
 
   it('rejects negative verkaufspreis', () => {

@@ -29,7 +29,7 @@ export default async function RootLayout({
   // loaded for a logged-in user briefly flashed (or stuck on) the
   // Anmelden/Registrieren buttons because useSession() started in
   // `status: 'loading'` and the lazy-loaded next-auth import could fail
-  // to re-render the navbar on hydration mismatch (React error #418).
+  // to re-render the navbar on hydration mismatch (React error 418).
   const session = await auth();
   // Resolved by the i18n request config (URL locale → NEXT_LOCALE cookie → de),
   // so <html lang> matches what actually renders — including on cookie-driven

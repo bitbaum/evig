@@ -1,5 +1,3 @@
-// The capture step is a stable sub-route of the one Geräte-Eingang workflow.
-// Re-exporting the same page shell avoids a second implementation while giving
-// keyboard-first intake a progressive-enhancement-safe URL (no client state or
-// query parameter is required to open it).
-export { metadata, default } from '../page'
+// Canonical capture URL. The legacy /admin/erfassung route re-exports the same
+// implementation for bookmarks and edit links; there is only one form.
+export { default } from '../../erfassung/page'

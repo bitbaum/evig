@@ -50,6 +50,8 @@
       "missionHistoryDesc": "Chi siamo e cosa ci muove",
       "impact": "Il nostro impatto",
       "impactDesc": "Risultati misurabili e trasparenza",
+      "howItWorks": "Come funziona",
+      "howItWorksDesc": "Il viaggio di un dispositivo, dalla donazione alla nuova vita",
       "projects": "Progetti",
       "projectsDesc": "Le nostre iniziative",
       "locations": "Sedi",
@@ -3164,7 +3166,12 @@
       "free": "Gratis",
       "trust": {
         "verified": "Verificato e testato da Revamp-IT",
-        "mission": "Riutilizzato anziché smaltito — associazione senza scopo di lucro"
+        "untested": "Controllo qualità saltato — questo articolo non è verificato da Revamp-IT",
+        "untestedBadge": "Revamp-IT · non testato",
+        "processLink": "Scopri il nostro processo di qualità",
+        "mission": "Riutilizzato anziché smaltito — associazione senza scopo di lucro",
+        "warranty": "Garanzia di {months} mesi",
+        "returnPolicy": "Reso entro {days} giorni per gli acquisti online"
       },
       "zoomOpen": "Ingrandisci",
       "zoomClose": "Chiudi",
@@ -9478,7 +9485,14 @@
         "capture": "Capture",
         "captureAndShop": "Registra e Shop",
         "captureAnnahme": "Registra dispositivo",
-        "captureAndShopShort": "+ Shop"
+        "captureAndShopShort": "+ Shop",
+        "destinationActions": {
+          "quality": "Acquisisci e avvia il controllo",
+          "inventory": "Aggiungi all’inventario",
+          "parts": "Acquisisci come fonte di ricambi",
+          "recycle": "Acquisisci per il riciclo",
+          "shop_untested": "Pubblica senza controllo"
+        }
       },
       "successScreen": {
         "title": "Prodotto registrato!",
@@ -9536,7 +9550,8 @@
         "selectedText": "selected",
         "draft": "Draft",
         "capture": "Capture",
-        "captureAndShop": "Registra e Shop"
+        "captureAndShop": "Registra e Shop",
+        "importSelected": "Importa la selezione nell’inventario"
       },
       "imageCapture": {
         "dragOrText": "Trascini l'immagine qui oppure",
@@ -9555,6 +9570,8 @@
         "errorAnalysis": "Analisi non riuscita"
       },
       "dataEntryTabs": {
+        "stepTitle": "Inserisci i dati",
+        "stepDescription": "Testo, foto, file o voce — l’IA compila lo stesso prodotto.",
         "tabTextLabel": "Text",
         "tabTextDesc": "Inserisca le informazioni sul prodotto, l'IA compila il resto",
         "tabFileLabel": "File",
@@ -9574,12 +9591,52 @@
         "pictureRequires": "Richiede un modello IA di visione",
         "analyzing": "L'IA sta analizzando…",
         "fillForm": "Compila modulo",
+        "manualEntry": "Inserisci manualmente senza IA",
         "fileImportTitle": "Importazione file",
         "fileImportDesc": "Carichi un file CSV o Excel con i dati dei prodotti",
         "processing": "Processing…",
         "chooseFile": "Selezioni un file CSV o Excel oppure lo trascini qui",
         "fileHint": "CSV, TSV, XLSX — le colonne vengono riconosciute automaticamente",
         "unmappedColumns": "Colonne non mappate:"
+      },
+      "destination": {
+        "title": "Cosa succede dopo?",
+        "description": "Questa scelta determina il percorso reale in laboratorio. Può essere modificata nella pipeline.",
+        "recommended": "Consigliato",
+        "otherDestinations": "Scegli un’altra destinazione",
+        "options": {
+          "quality": {
+            "label": "Ricondiziona e controlla",
+            "description": "Avvia la checklist adatta. Dopo il superamento, l’annuncio ottiene il badge RevampIT."
+          },
+          "inventory": {
+            "label": "Solo inventario",
+            "description": "Salva senza test né pubblicazione. I dettagli possono essere completati più tardi."
+          },
+          "parts": {
+            "label": "Fonte di ricambi",
+            "description": "Guida smontaggio, test dei componenti e catalogazione."
+          },
+          "recycle": {
+            "label": "Invia al riciclo",
+            "description": "Documenta il trattamento dei dati e lo smaltimento responsabile."
+          },
+          "shop_untested": {
+            "label": "Pubblica ora — non testato",
+            "description": "Eccezione: pubblica subito, esplicitamente senza badge di verifica RevampIT."
+          }
+        },
+        "skipReasonLabel": "Perché si salta il controllo qualità?",
+        "skipReasonPlaceholder": "es. accessorio sigillato; test funzionale impossibile …",
+        "skipDisclosure": "Il motivo resta nell’audit. Gli acquirenti vedono che il prodotto non è stato testato.",
+        "skipPriceRequired": "La pubblicazione diretta richiede un prezzo di vendita superiore a CHF 0.",
+        "donationTitle": "Provenienza / donazione (opzionale)",
+        "donationActive": "· Donazione registrata",
+        "donationCheckbox": "Questo prodotto è stato donato",
+        "existingDonation": "Collegato a una donazione esistente",
+        "donorName": "Nome del donatore",
+        "donorEmail": "E-mail (opzionale)",
+        "donorNotes": "Note (opzionale)"
       },
       "formErrors": {
         "updateFailed": "Impossibile aggiornare il prodotto",
@@ -10693,6 +10750,7 @@
       "filterNoResults": "Nessuna sezione trovata"
     },
     "commandBar": {
+      "searching": "Ricerca…",
       "placeholder": "Cerca o comando…",
       "openShortcut": "Apri la barra dei comandi",
       "noResults": "Nessun risultato",
@@ -11231,6 +11289,70 @@
     "method": {
       "title": "Metodo di pagamento",
       "subtitle": "Scegli come vuoi pagare"
+    }
+  },
+  "soFunktioniert": {
+    "meta": {
+      "title": "Come funziona — Il viaggio di un dispositivo",
+      "description": "Come i computer donati tornano affidabili: cancellazione sicura, test, Linux, garanzia — e cosa accade ai dispositivi non rivendibili."
+    },
+    "hero": {
+      "title": "Il viaggio di un dispositivo",
+      "subtitle": "Dalla donazione a una nuova casa: come un vecchio computer torna affidabile da {org} — o diventa una fonte di ricambi."
+    },
+    "journey": {
+      "heading": "Dalla donazione a una nuova casa",
+      "intro": "Ogni dispositivo donato segue lo stesso processo accurato, trasparente e tracciabile."
+    },
+    "phases": {
+      "donation": {
+        "title": "Donazione o restituzione",
+        "body": "Privati e organizzazioni ci affidano le apparecchiature dismesse, in sede o tramite ritiro."
+      },
+      "intake": {
+        "title": "Ingresso e valutazione",
+        "body": "Ogni dispositivo viene registrato, ispezionato visivamente e classificato con uno stato chiaro."
+      },
+      "wipe": {
+        "title": "Cancellazione sicura",
+        "body": "Tutti i supporti vengono cancellati secondo NIST 800-88. I dati precedenti non sono più recuperabili."
+      },
+      "refurbish": {
+        "title": "Test e ricondizionamento",
+        "body": "L’hardware viene testato, pulito e aggiornato quando utile, poi dotato di un sistema libero come Linux."
+      },
+      "quality": {
+        "title": "Controllo qualità e garanzia",
+        "body": "Un controllo finale conferma il risultato. I dispositivi ricondizionati hanno {months} mesi di garanzia."
+      },
+      "rehome": {
+        "title": "Una nuova casa",
+        "body": "Il dispositivo arriva sul marketplace a un prezzo equo e solidale, pronto per una seconda vita."
+      }
+    },
+    "paths": {
+      "heading": "Non tutti i dispositivi vengono venduti",
+      "intro": "Non ogni donazione può essere riutilizzata, ma nulla viene sprecato. Ogni dispositivo segue uno di tre percorsi.",
+      "refurbish": {
+        "title": "Ricondizionare e vendere",
+        "body": "La maggior parte dei dispositivi funzionanti viene ricondizionata e rimessa in circolo."
+      },
+      "parts": {
+        "title": "Recuperare ricambi",
+        "body": "RAM, SSD e alimentatori funzionanti vengono recuperati dai dispositivi non vendibili."
+      },
+      "recycle": {
+        "title": "Riciclare correttamente",
+        "body": "Ciò che non serve va al riciclo certificato SWICO. Nessun componente finisce nei rifiuti domestici."
+      }
+    },
+    "cta": {
+      "heading": "Aiuta a chiudere il ciclo",
+      "body": "Acquista tecnologia ricondizionata o dai una seconda vita al tuo vecchio dispositivo.",
+      "openNote": "Processo e software sono aperti: adottali, migliorali e condividili per il tuo laboratorio circolare locale.",
+      "source": "Vedi il codice sorgente aperto",
+      "buy": "Esplora il marketplace",
+      "donate": "Dona un dispositivo"
     }
   }
 }

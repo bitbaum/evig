@@ -50,6 +50,8 @@
       "missionHistoryDesc": "우리가 누구이며 무엇이 우리를 이끄는지",
       "impact": "우리의 영향력",
       "impactDesc": "측정 가능한 성과와 투명성",
+      "howItWorks": "운영 방식",
+      "howItWorksDesc": "기부에서 새로운 사용까지 기기의 여정",
       "projects": "프로젝트",
       "projectsDesc": "우리의 이니셔티브",
       "locations": "위치",
@@ -3164,7 +3166,12 @@
       "free": "무료",
       "trust": {
         "verified": "Revamp-IT가 검수 및 테스트 완료",
-        "mission": "폐기 대신 재사용 — 비영리 협회"
+        "untested": "품질 검사를 생략함 — Revamp-IT 검증 제품이 아닙니다",
+        "untestedBadge": "Revamp-IT · 미검사",
+        "processLink": "품질 프로세스 보기",
+        "mission": "폐기 대신 재사용 — 비영리 협회",
+        "warranty": "{months}개월 보증",
+        "returnPolicy": "온라인 구매 시 {days}일 이내 반품"
       },
       "zoomOpen": "확대",
       "zoomClose": "닫기",
@@ -9478,7 +9485,14 @@
         "capture": "Capture",
         "captureAndShop": "등록 및 상점 게시",
         "captureAnnahme": "기기 등록",
-        "captureAndShopShort": "+ 숍"
+        "captureAndShopShort": "+ 숍",
+        "destinationActions": {
+          "quality": "등록하고 품질 검사 시작",
+          "inventory": "재고에 추가",
+          "parts": "부품 공급원으로 등록",
+          "recycle": "재활용 대상으로 등록",
+          "shop_untested": "미검사 상태로 게시"
+        }
       },
       "successScreen": {
         "title": "제품이 등록되었습니다!",
@@ -9536,7 +9550,8 @@
         "selectedText": "selected",
         "draft": "Draft",
         "capture": "Capture",
-        "captureAndShop": "등록 및 상점 게시"
+        "captureAndShop": "등록 및 상점 게시",
+        "importSelected": "선택 항목을 재고로 가져오기"
       },
       "imageCapture": {
         "dragOrText": "이미지를 여기로 끌어다 놓거나",
@@ -9555,6 +9570,8 @@
         "errorAnalysis": "분석에 실패했습니다"
       },
       "dataEntryTabs": {
+        "stepTitle": "데이터 입력",
+        "stepDescription": "텍스트, 사진, 파일 또는 음성으로 AI가 동일한 상품 기록을 채웁니다.",
         "tabTextLabel": "Text",
         "tabTextDesc": "제품 정보를 입력하면 AI 가 나머지를 채워 줍니다",
         "tabFileLabel": "File",
@@ -9574,12 +9591,52 @@
         "pictureRequires": "비전 AI 모델이 필요합니다",
         "analyzing": "AI 가 분석하는 중입니다…",
         "fillForm": "양식 작성",
+        "manualEntry": "AI 없이 직접 입력",
         "fileImportTitle": "파일 가져오기",
         "fileImportDesc": "제품 데이터가 포함된 CSV 또는 Excel 파일을 업로드해 주십시오",
         "processing": "Processing…",
         "chooseFile": "CSV 또는 Excel 파일을 선택하거나 여기로 끌어다 놓으십시오",
         "fileHint": "CSV, TSV, XLSX — 열이 자동으로 인식됩니다",
         "unmappedColumns": "매핑되지 않은 열:"
+      },
+      "destination": {
+        "title": "다음에는 무엇을 하나요?",
+        "description": "이 선택이 실제 작업 경로를 결정합니다. 나중에 파이프라인에서 변경할 수 있습니다.",
+        "recommended": "권장",
+        "otherDestinations": "다른 경로 선택",
+        "options": {
+          "quality": {
+            "label": "재생 및 품질 검사",
+            "description": "맞춤 체크리스트를 시작합니다. 통과하면 상품에 RevampIT 검증 배지가 표시됩니다."
+          },
+          "inventory": {
+            "label": "재고에만 저장",
+            "description": "검사나 게시 없이 저장합니다. 세부 정보는 나중에 보완할 수 있습니다."
+          },
+          "parts": {
+            "label": "부품 공급원",
+            "description": "분해, 부품 검사 및 카탈로그 등록을 안내합니다."
+          },
+          "recycle": {
+            "label": "재활용",
+            "description": "데이터 처리와 책임 있는 폐기를 기록합니다."
+          },
+          "shop_untested": {
+            "label": "지금 게시 — 미검사",
+            "description": "예외적으로 즉시 게시하지만 RevampIT 검증 배지는 표시되지 않습니다."
+          }
+        },
+        "skipReasonLabel": "품질 검사를 생략하는 이유는 무엇인가요?",
+        "skipReasonPlaceholder": "예: 미개봉 액세서리, 기능 검사 불가 …",
+        "skipDisclosure": "이유는 감사 기록에 보관되며 구매자에게 미검사 상품임이 표시됩니다.",
+        "skipPriceRequired": "즉시 게시하려면 CHF 0보다 큰 판매 가격을 입력해야 합니다.",
+        "donationTitle": "출처 / 기부(선택)",
+        "donationActive": "· 기부 기록됨",
+        "donationCheckbox": "이 상품은 기부되었습니다",
+        "existingDonation": "기존 기부에 연결됨",
+        "donorName": "기부자 이름",
+        "donorEmail": "이메일(선택)",
+        "donorNotes": "메모(선택)"
       },
       "formErrors": {
         "updateFailed": "제품을 업데이트할 수 없습니다",
@@ -10693,6 +10750,7 @@
       "filterNoResults": "영역을 찾을 수 없음"
     },
     "commandBar": {
+      "searching": "검색 중…",
       "placeholder": "검색 또는 명령…",
       "openShortcut": "명령 표시줄 열기",
       "noResults": "결과 없음",
@@ -11231,6 +11289,70 @@
     "method": {
       "title": "결제 수단",
       "subtitle": "결제 방법을 선택하세요"
+    }
+  },
+  "soFunktioniert": {
+    "meta": {
+      "title": "운영 방식 — 기기의 여정",
+      "description": "기부된 컴퓨터가 안전한 데이터 삭제, 검사, Linux, 보증을 거쳐 다시 신뢰할 수 있는 기기가 되는 과정과 판매할 수 없는 기기의 처리 방식입니다."
+    },
+    "hero": {
+      "title": "기기의 여정",
+      "subtitle": "기부에서 새 사용자까지: 오래된 컴퓨터가 {org}에서 다시 신뢰할 수 있는 기기 또는 유용한 부품이 됩니다."
+    },
+    "journey": {
+      "heading": "기부에서 새 사용자까지",
+      "intro": "기부된 모든 기기는 세심하고 투명하며 추적 가능한 동일한 절차를 거칩니다."
+    },
+    "phases": {
+      "donation": {
+        "title": "기부 또는 반납",
+        "body": "개인과 단체가 사용을 마친 기기를 직접 전달하거나 수거를 통해 맡깁니다."
+      },
+      "intake": {
+        "title": "입고 및 상태 평가",
+        "body": "기기를 등록하고 외관을 확인한 뒤 명확한 상태 등급을 지정합니다."
+      },
+      "wipe": {
+        "title": "안전한 데이터 삭제",
+        "body": "모든 저장 매체를 NIST 800-88에 따라 삭제하여 기존 데이터를 복구할 수 없게 합니다."
+      },
+      "refurbish": {
+        "title": "검사 및 재생",
+        "body": "하드웨어를 검사하고 청소하며 필요한 경우 업그레이드한 뒤 Linux 같은 오픈소스 운영체제를 설치합니다."
+      },
+      "quality": {
+        "title": "품질 관리 및 보증",
+        "body": "최종 검사로 결과를 확인합니다. 재생 기기에는 {months}개월 보증이 제공됩니다."
+      },
+      "rehome": {
+        "title": "새 사용자에게",
+        "body": "기기는 공정하고 연대적인 가격으로 마켓플레이스에 올라 두 번째 삶을 시작합니다."
+      }
+    },
+    "paths": {
+      "heading": "모든 기기를 판매하지는 않습니다",
+      "intro": "모든 기부품을 재사용할 수는 없지만 낭비하지 않습니다. 각 기기는 세 가지 경로 중 하나를 따릅니다.",
+      "refurbish": {
+        "title": "재생 후 판매",
+        "body": "작동하는 기기의 대부분을 재생해 마켓플레이스를 통해 새 사용자에게 전달합니다."
+      },
+      "parts": {
+        "title": "부품 회수",
+        "body": "판매할 수 없는 기기에서 RAM, SSD, 전원 공급 장치 같은 작동 부품을 회수합니다."
+      },
+      "recycle": {
+        "title": "책임 있게 재활용",
+        "body": "사용할 수 없는 것은 SWICO 인증 재활용으로 보내며 생활 폐기물로 버리지 않습니다."
+      }
+    },
+    "cta": {
+      "heading": "순환을 완성하는 데 함께해 주세요",
+      "body": "재생 기술을 구매하거나 오래된 기기에 두 번째 사용 기회를 주세요.",
+      "openNote": "과정과 소프트웨어는 공개되어 있습니다. 지역 순환 작업장에 도입하고 개선하며 공유하세요.",
+      "source": "오픈소스 보기",
+      "buy": "마켓플레이스 둘러보기",
+      "donate": "기기 기부"
     }
   }
 }

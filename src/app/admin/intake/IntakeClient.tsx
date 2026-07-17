@@ -1,47 +1,43 @@
 'use client'
 
 import { useEffect } from 'react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useIntakePipeline } from './useIntakePipeline'
 import { useIntakeDetail } from './useIntakeDetail'
 import { IntakePipelineView } from './IntakePipelineView'
 import { IntakeDetailView } from './IntakeDetailView'
-import { QuickIntakeForm, type DonationPrefill } from './QuickIntakeForm'
 import { ROUTES } from '@/config/routes'
 
 /**
  * Geräte-Eingang — one operational home for capture, triage, QC and publish.
  *
- * The keyboard-first intake at /admin/intake/capture is deliberately small.
- * Uncommon catalogue fields stay in the advanced /admin/erfassung editor,
- * instead of maintaining two full product forms for the same job.
+ * Capture has one canonical route at /admin/intake/capture. Input channels
+ * converge on one product record before the operator chooses its destination.
  */
 export default function IntakeClient() {
   const searchParams = useSearchParams()
-  const pathname = usePathname()
   const router = useRouter()
-  const view = searchParams.has('detail')
-    ? 'detail'
-    : pathname.endsWith('/capture') ||
-        searchParams.get('capture') === '1' ||
-        searchParams.has('donation_id') ||
-        searchParams.has('donor_name') ||
-        searchParams.has('donor_email')
-      ? 'capture'
-      : 'pipeline'
+  const view = searchParams.has('detail') ? 'detail' : 'pipeline'
 
   const pipeline = useIntakePipeline(view === 'pipeline')
   const detail = useIntakeDetail()
 
-  // URL params: donation cross-links open the fast capture with donor
-  // prefill; ?capture=1 opens the same keyboard-first entry point; ?detail=
+  // URL params: donation cross-links open capture with donor prefill;
+  // ?capture=1 preserves old bookmarks; ?detail=
   // re-opens a device (e.g. a QR scan or return from product editing).
-  const donationPrefill: DonationPrefill = {
-    id: searchParams.get('donation_id'),
-    name: searchParams.get('donor_name') ?? '',
-    email: searchParams.get('donor_email') ?? '',
-  }
   useEffect(() => {
+    const isLegacyCapture =
+      searchParams.get('capture') === '1' ||
+      searchParams.has('donation_id') ||
+      searchParams.has('donor_name') ||
+      searchParams.has('donor_email')
+    if (isLegacyCapture) {
+      const forwarded = new URLSearchParams(searchParams.toString())
+      forwarded.delete('capture')
+      const query = forwarded.toString()
+      router.replace(`${ROUTES.admin.intakeCapture}${query ? `?${query}` : ''}`)
+      return
+    }
     const detailId = searchParams.get('detail')
     if (detailId) {
       detail.openDetail(detailId)
@@ -102,14 +98,6 @@ export default function IntakeClient() {
           startingQc={detail.startingQc}
           onPublish={detail.handlePublish}
           onTierChange={detail.handleTierChange}
-        />
-      )}
-
-      {view === 'capture' && (
-        <QuickIntakeForm
-          donationPrefill={donationPrefill}
-          onCancel={() => router.push(ROUTES.admin.intake)}
-          onCreated={() => { void pipeline.fetchItems(0) }}
         />
       )}
     </div>

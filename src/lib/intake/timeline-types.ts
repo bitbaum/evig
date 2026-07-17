@@ -14,6 +14,7 @@ export type IntakeEventType =
   | 'checklist_toggled'
   | 'tier_changed'
   | 'field_updated'
+  | 'quality_skipped'
   | 'published'
   | 'note_added'
 
@@ -39,6 +40,7 @@ export const EVENT_TYPE_LABELS: Record<IntakeEventType, string> = {
   checklist_toggled: 'Checkliste',
   tier_changed: 'Stufe geändert',
   field_updated: 'Aktualisiert',
+  quality_skipped: 'Prüfung übersprungen',
   published: 'Publiziert',
   note_added: 'Notiz',
 }
@@ -48,6 +50,7 @@ export const EVENT_TYPE_ICONS: Record<IntakeEventType, string> = {
   checklist_toggled: '☑️',
   tier_changed: '🔄',
   field_updated: '✏️',
+  quality_skipped: '⚠️',
   published: '🚀',
   note_added: '📝',
 }

@@ -50,6 +50,8 @@
       "missionHistoryDesc": "私たちの理念と活動の原動力",
       "impact": "私たちの活動成果",
       "impactDesc": "測定可能な成果と透明性",
+      "howItWorks": "仕組み",
+      "howItWorksDesc": "寄付から次の利用者へ、機器の道のり",
       "projects": "プロジェクト",
       "projectsDesc": "私たちの取り組み",
       "locations": "拠点",
@@ -3164,7 +3166,12 @@
       "free": "無料",
       "trust": {
         "verified": "Revamp-ITが検査・テスト済み",
-        "mission": "廃棄せず再利用 — 非営利団体"
+        "untested": "品質検査を省略 — Revamp-ITの検証済み商品ではありません",
+        "untestedBadge": "Revamp-IT · 未検査",
+        "processLink": "品質プロセスを見る",
+        "mission": "廃棄せず再利用 — 非営利団体",
+        "warranty": "{months}か月保証",
+        "returnPolicy": "オンライン購入は{days}日以内返品可能"
       },
       "zoomOpen": "拡大",
       "zoomClose": "閉じる",
@@ -9478,7 +9485,14 @@
         "capture": "Capture",
         "captureAndShop": "登録 & ショップ",
         "captureAnnahme": "デバイスを登録",
-        "captureAndShopShort": "+ ショップ"
+        "captureAndShopShort": "+ ショップ",
+        "destinationActions": {
+          "quality": "登録して品質検査を開始",
+          "inventory": "在庫に追加",
+          "parts": "部品取りとして登録",
+          "recycle": "リサイクル用に登録",
+          "shop_untested": "未検査で公開"
+        }
       },
       "successScreen": {
         "title": "製品を登録しました!",
@@ -9536,7 +9550,8 @@
         "selectedText": "selected",
         "draft": "Draft",
         "capture": "Capture",
-        "captureAndShop": "登録 & ショップ"
+        "captureAndShop": "登録 & ショップ",
+        "importSelected": "選択項目を在庫に取り込む"
       },
       "imageCapture": {
         "dragOrText": "画像をここにドラッグするか",
@@ -9555,6 +9570,8 @@
         "errorAnalysis": "解析に失敗しました"
       },
       "dataEntryTabs": {
+        "stepTitle": "データを入力",
+        "stepDescription": "テキスト、写真、ファイル、音声からAIが同じ商品データを入力します。",
         "tabTextLabel": "Text",
         "tabTextDesc": "製品情報を入力すると AI が残りを補完します",
         "tabFileLabel": "File",
@@ -9574,12 +9591,52 @@
         "pictureRequires": "ビジョン AI モデルが必要です",
         "analyzing": "AI が解析中…",
         "fillForm": "フォームを入力",
+        "manualEntry": "AIを使わず手動入力",
         "fileImportTitle": "ファイルインポート",
         "fileImportDesc": "製品データを含む CSV または Excel ファイルをアップロードしてください",
         "processing": "Processing…",
         "chooseFile": "CSV または Excel ファイルを選択するか、ここにドラッグ",
         "fileHint": "CSV、TSV、XLSX — 列は自動で認識されます",
         "unmappedColumns": "マッピングされていない列:"
+      },
+      "destination": {
+        "title": "次に何をしますか？",
+        "description": "この選択が実際の作業工程を決めます。後からパイプラインで変更できます。",
+        "recommended": "推奨",
+        "otherDestinations": "別の行き先を選ぶ",
+        "options": {
+          "quality": {
+            "label": "再生して品質検査",
+            "description": "適切なチェックリストを開始します。合格後、商品にRevampIT検証バッジが付きます。"
+          },
+          "inventory": {
+            "label": "在庫のみ",
+            "description": "検査・公開せず保存します。詳細は後から追加できます。"
+          },
+          "parts": {
+            "label": "部品取り",
+            "description": "分解、部品テスト、カタログ登録へ進みます。"
+          },
+          "recycle": {
+            "label": "リサイクル",
+            "description": "データ処理と責任ある廃棄を記録します。"
+          },
+          "shop_untested": {
+            "label": "今すぐ公開 — 未検査",
+            "description": "例外として即時公開しますが、RevampIT検証バッジは付きません。"
+          }
+        },
+        "skipReasonLabel": "品質検査を省略する理由は？",
+        "skipReasonPlaceholder": "例：未開封アクセサリー、動作試験が不可能 …",
+        "skipDisclosure": "理由は監査記録に残り、購入者には未検査であることが表示されます。",
+        "skipPriceRequired": "直接公開するにはCHF 0を超える販売価格を入力してください。",
+        "donationTitle": "入手元 / 寄付（任意）",
+        "donationActive": "· 寄付を記録済み",
+        "donationCheckbox": "この商品は寄付されたものです",
+        "existingDonation": "既存の寄付にリンク済み",
+        "donorName": "寄付者名",
+        "donorEmail": "メール（任意）",
+        "donorNotes": "メモ（任意）"
       },
       "formErrors": {
         "updateFailed": "製品を更新できませんでした",
@@ -10693,6 +10750,7 @@
       "filterNoResults": "セクションが見つかりません"
     },
     "commandBar": {
+      "searching": "検索中…",
       "placeholder": "検索またはコマンド…",
       "openShortcut": "コマンドバーを開く",
       "noResults": "結果がありません",
@@ -11231,6 +11289,70 @@
     "method": {
       "title": "支払い方法",
       "subtitle": "お支払い方法をお選びください"
+    }
+  },
+  "soFunktioniert": {
+    "meta": {
+      "title": "仕組み — 機器の旅",
+      "description": "寄付されたコンピューターが安全なデータ消去、検査、Linux、保証を経て再び信頼できる機器になるまでと、販売できない機器の行方。"
+    },
+    "hero": {
+      "title": "機器の旅",
+      "subtitle": "寄付から次の利用者へ。使われなくなったコンピューターが{org}で再び信頼できる機器、または有用な部品になります。"
+    },
+    "journey": {
+      "heading": "寄付から次の利用者へ",
+      "intro": "寄付されたすべての機器が、丁寧で透明性と追跡性のある同じ工程を通ります。"
+    },
+    "phases": {
+      "donation": {
+        "title": "寄付または返却",
+        "body": "個人や組織から、持ち込みまたは回収で不要になった機器を受け取ります。"
+      },
+      "intake": {
+        "title": "受入れと状態評価",
+        "body": "機器を登録し、外観を確認して、明確な状態ランクを付けます。"
+      },
+      "wipe": {
+        "title": "安全なデータ消去",
+        "body": "すべての記憶媒体をNIST 800-88に従って消去し、以前のデータを復元不能にします。"
+      },
+      "refurbish": {
+        "title": "検査と再生",
+        "body": "ハードウェアを検査、清掃し、必要に応じて更新してからLinuxなどのオープンなOSを導入します。"
+      },
+      "quality": {
+        "title": "品質管理と保証",
+        "body": "最終検査で結果を確認します。再生機器には{months}か月の保証が付きます。"
+      },
+      "rehome": {
+        "title": "次の利用者へ",
+        "body": "機器は公正で連帯的な価格でマーケットプレイスに並び、第二の利用を始めます。"
+      }
+    },
+    "paths": {
+      "heading": "すべての機器を販売するわけではありません",
+      "intro": "すべてを再利用できるわけではありませんが、無駄にはしません。機器は3つの道のいずれかへ進みます。",
+      "refurbish": {
+        "title": "再生して販売",
+        "body": "動作する機器の多くを再生し、マーケットプレイスで次の利用者へ渡します。"
+      },
+      "parts": {
+        "title": "部品を回収",
+        "body": "販売できない機器からRAM、SSD、電源などの動作部品を回収します。"
+      },
+      "recycle": {
+        "title": "適切にリサイクル",
+        "body": "使えないものはSWICO認定の回収へ送り、家庭ごみにはしません。"
+      }
+    },
+    "cta": {
+      "heading": "循環を閉じる活動に参加",
+      "body": "再生機器を購入するか、古い機器に第二の利用機会を与えてください。",
+      "openNote": "工程とソフトウェアは公開されています。地域の循環型工房に導入し、改善し、共有できます。",
+      "source": "オープンソースを見る",
+      "buy": "マーケットプレイスを見る",
+      "donate": "機器を寄付"
     }
   }
 }

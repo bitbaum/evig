@@ -23,6 +23,11 @@ import { createErfassungProduct } from '@/lib/erfassung/create-product'
 import { syncProductToKivvi } from '@/lib/kivvi/sync-product'
 import { logger } from '@/lib/logger'
 import { appendIntakeEvent } from '@/lib/intake/timeline'
+import {
+  getTierForDestination,
+  isUntestedShopDestination,
+  type CaptureDestination,
+} from '@/config/intake-workflow'
 
 // POST — Unified intake: donation + erfassung in one transaction
 export const POST = withAdmin('intake', async (request, session) => {
@@ -31,26 +36,43 @@ export const POST = withAdmin('intake', async (request, session) => {
     const validation = validateBody(IntakeCreateSchema, raw)
     if (!validation.success) return validation.error
     const data = validation.data
+    const destination = data.destination as CaptureDestination | undefined
+    const intakeTier = destination
+      ? getTierForDestination(destination)
+      : data.intake_tier
+    const publishUntested = destination
+      ? isUntestedShopDestination(destination)
+      : false
 
     // Use unified product creation (SSOT) with intake-specific options
     const result = await db.transaction(async (tx) => {
-      return createErfassungProduct(
+      const created = await createErfassungProduct(
         {
           produktname: data.produktname,
           hersteller: data.hersteller,
           kurzbeschreibung: data.kurzbeschreibung,
+          langtext: data.langtext,
           verkaufspreis: data.verkaufspreis || 0,
           zustand: data.zustand,
+          laenge_mm: data.laenge_mm,
+          breite_mm: data.breite_mm,
+          hoehe_mm: data.hoehe_mm,
+          gewicht_kg: data.gewicht_kg,
+          location: data.location,
+          storage_location_id: data.storage_location_id,
+          box_id: data.box_id,
+          auf_lager: data.auf_lager,
           hauptkategorie: data.hauptkategorie,
           unterkategorie: data.unterkategorie,
+          kundenprofile: data.kundenprofile,
           image: data.image,
-          action: 'erfassen', // intake always approves, never direct-publishes
+          action: publishUntested ? 'publish' : 'erfassen',
         },
         session.user.id,
         tx,
         {
           source: 'intake',
-          intakeTier: data.intake_tier,
+          intakeTier,
           existingDonationId: data.existing_donation_id,
           // Skip new-donation creation when linking to an existing one
           donation: !data.existing_donation_id && data.is_donation ? {
@@ -59,13 +81,48 @@ export const POST = withAdmin('intake', async (request, session) => {
             notes: data.donor_notes,
             deviceCategory: data.hauptkategorie,
           } : undefined,
-          checklistGated: true,
+          checklistGated: Boolean(intakeTier),
+          qcBypassReason: publishUntested ? data.qc_skip_reason : undefined,
         },
       )
+
+      // These events are the auditable contract for the capture decision.
+      // Keeping them in the same transaction prevents a published untested
+      // item from existing without its required disclosure reason.
+      await appendIntakeEvent(created.inventoryId, {
+        type: 'created',
+        description: `Gerät erfasst: ${data.hersteller} ${data.produktname}`,
+        userId: session.user.id,
+        userEmail: session.user.email,
+        metadata: {
+          tier: intakeTier ?? null,
+          destination: destination ?? data.intake_tier,
+          is_donation: data.is_donation,
+          item_uuid: created.itemUUID,
+        },
+      }, { executor: tx, required: true })
+
+      if (publishUntested) {
+        await appendIntakeEvent(created.inventoryId, {
+          type: 'quality_skipped',
+          description: 'Ohne RevampIT-Qualitätsprüfung veröffentlicht',
+          userId: session.user.id,
+          userEmail: session.user.email,
+          metadata: { reason: data.qc_skip_reason },
+        }, { executor: tx, required: true })
+        await appendIntakeEvent(created.inventoryId, {
+          type: 'published',
+          description: `Ohne Prüfsiegel im Shop veröffentlicht für CHF ${(data.verkaufspreis || 0).toFixed(2)}`,
+          userId: session.user.id,
+          userEmail: session.user.email,
+          metadata: { price_chf: data.verkaufspreis || 0, verified: false },
+        }, { executor: tx, required: true })
+      }
+
+      return created
     })
 
-    // Mirror the device to the Kivvi ERP (non-blocking, after commit) — the
-    // Physische-Annahme door syncs exactly like Schnellerfassung does.
+    // Mirror the device to the Kivvi ERP only after product + audit commit.
     syncProductToKivvi({
       inventoryId: result.inventoryId,
       hersteller: data.hersteller,
@@ -75,22 +132,10 @@ export const POST = withAdmin('intake', async (request, session) => {
       zustand: data.zustand,
     })
 
-    // Record timeline event
-    await appendIntakeEvent(result.inventoryId, {
-      type: 'created',
-      description: `Gerät erfasst: ${data.hersteller} ${data.produktname} (${data.intake_tier})`,
-      userId: session.user.id,
-      userEmail: session.user.email,
-      metadata: {
-        tier: data.intake_tier,
-        is_donation: data.is_donation,
-        item_uuid: result.itemUUID,
-      },
-    })
-
     logger.info('Device intake created', {
       itemUUID: result.itemUUID,
-      tier: data.intake_tier,
+      tier: intakeTier ?? null,
+      destination: destination ?? data.intake_tier,
       isDonation: data.is_donation,
       userId: session.user.id,
     })
@@ -101,6 +146,10 @@ export const POST = withAdmin('intake', async (request, session) => {
       inventory_id: result.inventoryId,
       donation_id: result.donationId,
       image_url: result.imageUrl,
+      listing_id: result.listingId,
+      destination: destination ?? data.intake_tier,
+      published: result.listingId != null,
+      verified: false,
     })
   } catch (error) {
     logger.error('Intake creation failed', { error })
@@ -123,9 +172,8 @@ export const GET = withAdmin('intake', async (request) => {
     const uTable = getTableName(users)
     const dTable = getTableName(donations)
 
-    // The pipeline is the SSOT list of ALL captured devices — Physische
-    // Annahme (intake_tier set, checklist-gated) AND Schnellerfassung
-    // (intake_tier NULL, no checklist). The old base filter
+    // The pipeline is the SSOT list of ALL captured devices — checklist-backed
+    // physical work and tier-NULL inventory/untested records. The old base filter
     // `intake_tier IS NOT NULL` made quick-captured devices invisible in
     // every list, which read as "erfasst, aber verschwunden".
     //

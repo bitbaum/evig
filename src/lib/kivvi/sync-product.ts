@@ -3,9 +3,9 @@
  * device to the Kivvi ERP.
  *
  * Fire-and-forget by design: called AFTER the capture transaction commits and
- * never fails the request. Used by both capture paths (Schnellerfassung via
- * /api/admin/erfassung and Physische Annahme via /api/admin/intake) so the
- * ERP mirrors every device regardless of which door it came in through.
+ * never fails the request. Used by the canonical intake route and retained by
+ * the legacy erfassung endpoint while old API clients migrate, so the ERP
+ * mirrors every device regardless of caller.
  * Skips silently when Kivvi isn't configured (expected in dev).
  */
 

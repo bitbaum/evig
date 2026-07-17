@@ -186,7 +186,9 @@
       "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point",
       "viewSection": "Overview",
       "sectionDevices": "Devices",
-      "sectionHelp": "Help"
+      "sectionHelp": "Help",
+      "howItWorks": "How it works",
+      "howItWorksDesc": "The journey of a device — from donation to its next home"
     },
     "experimentalBanner": "Experimental Site",
     "experimentalBannerLink": "go to current site",
@@ -839,7 +841,12 @@
       "free": "Free",
       "trust": {
         "verified": "Checked & tested by Revamp-IT",
-        "mission": "Reused, not discarded — non-profit association"
+        "untested": "Quality control was skipped — this item is not Revamp-IT verified",
+        "untestedBadge": "Revamp-IT · untested",
+        "processLink": "See how our quality process works",
+        "mission": "Reused, not discarded — non-profit association",
+        "warranty": "{months}-month warranty",
+        "returnPolicy": "{days}-day return period for online purchases"
       },
       "zoomOpen": "Zoom in",
       "zoomClose": "Close",
@@ -9312,6 +9319,55 @@
       "methodologyLink": "How is this calculated?"
     },
     "geschichteSection": {
+      "founding": {
+        "title": "The founding of {orgName}",
+        "subtitle": "From a cheese cellar to a movement",
+        "p1": "{orgName} was founded in Zurich in December {foundingYear}, born from a simple observation: more and more usable computers were ending up as waste. Something had to change.",
+        "p2": "The first location was an old cheese cellar at the Toni dairy. That is where the idea that still guides us emerged: combine hardware reuse with Linux so older devices remain useful for years.",
+        "p3": "What began as a small project became a movement. More than 20 years later, we process around 1,000 devices each year: about 150 are refurbished and sold, while the rest provide spare parts or enter responsible recycling."
+      },
+      "milestones": {
+        "2003": {
+          "title": "Founded",
+          "description": "{orgName} is founded in an old cheese cellar at the Toni dairy in Zurich, with a vision to save usable computers from waste."
+        },
+        "2004": {
+          "title": "First projects",
+          "description": "Linux workshops and the first projects in Africa begin, demonstrating the value of combining hardware reuse and open source."
+        },
+        "2005": {
+          "title": "Debian anniversary",
+          "description": "The Debian 10-year anniversary is celebrated on the roof of the Toni dairy as the open-source community grows together."
+        },
+        "2008": {
+          "title": "Move to Wipkingen",
+          "description": "New rooms in the Reformed Church in Wipkingen provide more space for the workshop and a growing team."
+        },
+        "2012": {
+          "title": "Growth",
+          "description": "Röschibachstrasse brings more space and possibilities as the team and demand grow."
+        },
+        "2015": {
+          "title": "Two locations",
+          "description": "A shop at {storeStreet} and warehouse at {warehouseStreet} establish {orgName} firmly in the neighbourhood."
+        },
+        "2017": {
+          "title": "New premises",
+          "description": "The former bank at {storeStreet} provides more room for the workshop, shop and community."
+        },
+        "2020": {
+          "title": "Digital through the pandemic",
+          "description": "During the pandemic, affordable laptops help schools and families with home learning, and online workshops begin."
+        },
+        "2022": {
+          "title": "Hosting and cloud services",
+          "description": "Swiss cloud and hosting services extend data sovereignty to small organisations that want to keep data in Switzerland."
+        },
+        "2024": {
+          "title": "21 years of sustainable IT",
+          "description": "Around 1,000 devices are processed each year, about 150 are sold, more than 43 tonnes of CO₂ are saved, and internships achieve an approximately 40% success rate."
+        }
+      },
       "badge": "Our History",
       "milestoneTitle": "Milestones",
       "milestoneDesc": "From a small workshop to the leading organization for sustainable IT in Switzerland.",
@@ -9437,7 +9493,14 @@
         "capture": "Capture",
         "captureAndShop": "Capture & Shop",
         "captureAnnahme": "Capture device",
-        "captureAndShopShort": "+ Shop"
+        "captureAndShopShort": "+ Shop",
+        "destinationActions": {
+          "quality": "Capture & start quality check",
+          "inventory": "Add to inventory",
+          "parts": "Capture as parts source",
+          "recycle": "Capture for recycling",
+          "shop_untested": "Publish untested"
+        }
       },
       "successScreen": {
         "title": "Product captured!",
@@ -9495,7 +9558,8 @@
         "selectedText": "selected",
         "draft": "Draft",
         "capture": "Capture",
-        "captureAndShop": "Capture & Shop"
+        "captureAndShop": "Capture & Shop",
+        "importSelected": "Import selected into inventory"
       },
       "imageCapture": {
         "dragOrText": "Drag image here or",
@@ -9514,6 +9578,8 @@
         "errorAnalysis": "Analysis failed"
       },
       "dataEntryTabs": {
+        "stepTitle": "Enter data",
+        "stepDescription": "Text, image, file or speech — AI fills the same product record.",
         "tabTextLabel": "Text",
         "tabTextDesc": "Enter product info, AI fills in the rest",
         "tabFileLabel": "File",
@@ -9533,12 +9599,52 @@
         "pictureRequires": "Requires vision AI model",
         "analyzing": "AI analysing…",
         "fillForm": "Fill form",
+        "manualEntry": "Enter manually without AI",
         "fileImportTitle": "File import",
         "fileImportDesc": "Upload a CSV or Excel file with product data",
         "processing": "Processing…",
         "chooseFile": "Choose CSV or Excel file or drag here",
         "fileHint": "CSV, TSV, XLSX — columns are recognised automatically",
         "unmappedColumns": "Unmapped columns:"
+      },
+      "destination": {
+        "title": "What happens next?",
+        "description": "This decision controls the real workshop path. It can be changed later in the pipeline.",
+        "recommended": "Recommended",
+        "otherDestinations": "Choose another destination",
+        "options": {
+          "quality": {
+            "label": "Refurbish and quality-check",
+            "description": "Starts the matching checklist. After it passes, the shop listing earns the RevampIT verification badge."
+          },
+          "inventory": {
+            "label": "Inventory only",
+            "description": "Saves the product without testing or publishing. Details can be completed later."
+          },
+          "parts": {
+            "label": "Use as a parts source",
+            "description": "Guides dismantling, component testing and cataloguing."
+          },
+          "recycle": {
+            "label": "Send to recycling",
+            "description": "Documents data handling and responsible disposal."
+          },
+          "shop_untested": {
+            "label": "Publish now — untested",
+            "description": "Exception: publishes immediately and explicitly without a RevampIT verification badge."
+          }
+        },
+        "skipReasonLabel": "Why is quality control being skipped?",
+        "skipReasonPlaceholder": "e.g. sealed accessory; functional test is not possible …",
+        "skipDisclosure": "The reason is stored in the audit trail. Buyers see that the product was not tested.",
+        "skipPriceRequired": "Direct publication requires a selling price greater than CHF 0 above.",
+        "donationTitle": "Provenance / donation (optional)",
+        "donationActive": "· Donation recorded",
+        "donationCheckbox": "This product was donated",
+        "existingDonation": "Linked to an existing donation",
+        "donorName": "Donor name",
+        "donorEmail": "Email (optional)",
+        "donorNotes": "Notes (optional)"
       },
       "voiceEntry": {
         "start": "Start recording",
@@ -10645,6 +10751,7 @@
       "filterNoResults": "No section found"
     },
     "commandBar": {
+      "searching": "Searching…",
       "placeholder": "Search or command…",
       "openShortcut": "Open command bar",
       "noResults": "No results",
@@ -11183,6 +11290,70 @@
     "method": {
       "title": "Payment method",
       "subtitle": "Choose how you'd like to pay"
+    }
+  },
+  "soFunktioniert": {
+    "meta": {
+      "title": "How it works — A device’s journey",
+      "description": "How donated computers become reliable devices again: secure data erasure, testing, Linux, warranty — and what happens when a device cannot be resold."
+    },
+    "hero": {
+      "title": "A device’s journey",
+      "subtitle": "From donation to a new home: how an old computer becomes a reliable device at {org} — or a source of valuable parts."
+    },
+    "journey": {
+      "heading": "From donation to a new home",
+      "intro": "Every donated device follows the same careful, transparent and traceable process."
+    },
+    "phases": {
+      "donation": {
+        "title": "Donation or return",
+        "body": "Individuals and organisations give us retired equipment, either at our location or through collection."
+      },
+      "intake": {
+        "title": "Intake and condition assessment",
+        "body": "Each device is registered, visually inspected and assigned a clear condition grade."
+      },
+      "wipe": {
+        "title": "Secure data erasure",
+        "body": "All storage media are securely erased following NIST 800-88. Previous data cannot be recovered."
+      },
+      "refurbish": {
+        "title": "Testing and refurbishment",
+        "body": "Hardware is tested, cleaned and sensibly upgraded. We then install an open-source operating system such as Linux."
+      },
+      "quality": {
+        "title": "Quality control and warranty",
+        "body": "A final inspection confirms the result. Refurbished devices receive a {months}-month warranty."
+      },
+      "rehome": {
+        "title": "A new home",
+        "body": "The device reaches the marketplace at a fair, solidarity-based price, ready for a second life."
+      }
+    },
+    "paths": {
+      "heading": "Not every device is sold",
+      "intro": "Not every donation can be reused, but nothing is wasted. Every device follows one of three paths.",
+      "refurbish": {
+        "title": "Refurbish and sell",
+        "body": "Most working devices are refurbished and passed on through the marketplace."
+      },
+      "parts": {
+        "title": "Recover parts",
+        "body": "Working components such as RAM, SSDs and power supplies are recovered from devices that cannot be sold."
+      },
+      "recycle": {
+        "title": "Recycle responsibly",
+        "body": "Anything unusable goes to SWICO-certified recycling. No component enters household waste."
+      }
+    },
+    "cta": {
+      "heading": "Help close the loop",
+      "body": "Buy refurbished technology or give your old device a second life.",
+      "openNote": "The process and software are open: adopt, improve and share them for your own local circular workshop.",
+      "source": "View open source code",
+      "buy": "Explore the marketplace",
+      "donate": "Donate a device"
     }
   }
 }

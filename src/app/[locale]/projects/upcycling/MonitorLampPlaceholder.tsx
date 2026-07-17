@@ -20,6 +20,7 @@
  */
 
 type Variant = 'functional' | 'warm' | 'cool' | 'art'
+import { MONITOR_LAMP_PLACEHOLDER_COLORS as COLORS } from '@/config/ui-colors'
 
 interface MonitorLampPlaceholderProps {
   variant?: Variant
@@ -30,12 +31,7 @@ interface MonitorLampPlaceholderProps {
   className?: string
 }
 
-const PALETTE: Record<Variant, { from: string; to: string; glow: string }> = {
-  functional: { from: '#1f2937', to: '#0a0a0a', glow: '#f5f5f4' },
-  warm:       { from: '#3b2415', to: '#1c0f06', glow: '#fbbf24' },
-  cool:       { from: '#0e3a3a', to: '#062029', glow: '#7dd3fc' },
-  art:        { from: '#3b0764', to: '#1e1b4b', glow: '#f0abfc' },
-}
+const PALETTE: Record<Variant, { from: string; to: string; glow: string }> = COLORS
 
 export function MonitorLampPlaceholder({
   variant = 'functional',
@@ -97,18 +93,18 @@ export function MonitorLampPlaceholder({
 
         {/* Monitor bezel */}
         <g transform="translate(110, 70)">
-          <rect width="180" height="120" rx="4" fill="#0a0a0a" />
+          <rect width="180" height="120" rx="4" fill={COLORS.bezel} />
           {/* Screen (the light surface) */}
           <rect x="6" y="6" width="168" height="108" rx="2" fill={p.glow} fillOpacity="0.85" />
           <rect x="6" y="6" width="168" height="108" rx="2" fill={`url(#${glowId})`} />
           {/* Subtle bezel highlight */}
-          <rect width="180" height="120" rx="4" fill="none" stroke="#ffffff" strokeOpacity="0.08" />
+          <rect width="180" height="120" rx="4" fill="none" stroke={COLORS.highlight} strokeOpacity="0.08" />
         </g>
 
         {/* Stand */}
         <g transform="translate(180, 190)">
-          <rect width="40" height="10" rx="1" fill="#1c1917" />
-          <rect x="-30" y="10" width="100" height="6" rx="1" fill="#1c1917" />
+          <rect width="40" height="10" rx="1" fill={COLORS.stand} />
+          <rect x="-30" y="10" width="100" height="6" rx="1" fill={COLORS.stand} />
         </g>
 
         {/* Floor line — anchors the composition */}
@@ -117,7 +113,7 @@ export function MonitorLampPlaceholder({
           y1="220"
           x2="400"
           y2="220"
-          stroke="#ffffff"
+          stroke={COLORS.highlight}
           strokeOpacity="0.06"
         />
       </svg>

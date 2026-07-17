@@ -9,8 +9,8 @@ import type { ValidSession } from '@/lib/api/middleware'
 /**
  * Shared voice→product pipeline: audio blob → Whisper transcription → AI product
  * extraction → structured form data. Used by the `erfassung/voice` route (the
- * former duplicate `intake/extract-voice` route was removed together with the
- * intake page's duplicate capture form — capture now lives on /admin/erfassung).
+ * former duplicate `intake/extract-voice` route was removed when capture was
+ * consolidated at /admin/intake/capture).
  */
 export async function voiceToProductResponse(request: NextRequest, session: ValidSession) {
   try {

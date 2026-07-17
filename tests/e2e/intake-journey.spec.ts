@@ -53,16 +53,27 @@ test.describe('Intake pipeline staff journey', () => {
     await expect(page.getByRole('link', { name: 'Geräte-Eingang', exact: true })).toBeVisible()
     await expect(page.getByRole('link', { name: 'Produkt aufnehmen', exact: true })).toHaveCount(0)
 
-    // Keyboard-first fast lane: manufacturer → model → Enter.
+    // One capture page: enter the two required fields, keep the recommended
+    // quality destination, then create. No preliminary mode-choice screen.
     await page.getByRole('link', { name: 'Neues Gerät', exact: true }).click()
-    await expect(page.getByRole('heading', { name: 'Gerät sofort aufnehmen' })).toBeVisible()
-    await page.getByLabel('Hersteller').fill('RevampIT')
-    await page.getByLabel('Modell / Produkt').fill(productName)
+    await expect(page).toHaveURL(/\/admin\/intake\/capture/)
+    await expect(page.getByRole('heading', { name: 'Produkt aufnehmen' })).toBeVisible()
+
+    // Page help is generated from the same workflow context Hirn receives.
+    await page.getByRole('button', { name: 'Hilfe zu dieser Seite' }).click()
+    const guide = page.getByRole('dialog', { name: 'Produkt aufnehmen' })
+    await expect(guide.getByText('Daten eingeben', { exact: true })).toBeVisible()
+    await expect(guide.getByText('KI-Vorschlag prüfen', { exact: true })).toBeVisible()
+    await guide.getByRole('button', { name: 'Hilfe schliessen' }).click()
+
+    await page.getByRole('button', { name: 'Ohne KI manuell eingeben' }).click()
+    await page.getByLabel(/Hersteller/).fill('RevampIT')
+    await page.getByLabel(/Produktname \/ Modell/).fill(productName)
     const createResponsePromise = page.waitForResponse(response =>
       response.url().endsWith('/api/admin/intake') && response.request().method() === 'POST',
     )
     const captureStartedAt = Date.now()
-    await page.getByLabel('Modell / Produkt').press('Enter')
+    await page.getByRole('button', { name: 'Gerät aufnehmen & Prüfung starten' }).click()
     const createResponse = await createResponsePromise
     expect(createResponse.ok()).toBe(true)
     expect(Date.now() - captureStartedAt).toBeLessThan(5000)
@@ -70,7 +81,7 @@ test.describe('Intake pipeline staff journey', () => {
       data: { inventory_id: string; item_uuid: string }
     }
     const created = createBody.data
-    await expect(page.getByText(new RegExp(`${created.item_uuid} aufgenommen`))).toBeVisible()
+    await expect(page.getByText(created.item_uuid, { exact: true })).toBeVisible()
 
     // QR label is generated locally (data URL), not fetched from a public QR service.
     const labelPage = await page.context().newPage()
@@ -83,7 +94,7 @@ test.describe('Intake pipeline staff journey', () => {
       await labelPage.close()
     }
 
-    await page.getByRole('button', { name: 'Pipeline ansehen' }).click()
+    await page.goto('/admin/intake')
     // Mobile and desktop render dedicated card variants; desktop kanban is
     // later in DOM order at this viewport.
     await expect(page.getByText(productName, { exact: false }).last()).toBeVisible({ timeout: 15000 })
@@ -175,9 +186,10 @@ test.describe('Intake pipeline staff journey', () => {
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true)
 
     await page.goto('/admin/intake/capture')
-    await expect(page.getByRole('heading', { name: 'Gerät sofort aufnehmen' })).toBeVisible({ timeout: 15000 })
-    await expect(page.getByLabel('Hersteller')).toBeVisible()
-    await expect(page.getByLabel('Modell / Produkt')).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Produkt aufnehmen' })).toBeVisible({ timeout: 15000 })
+    await page.getByRole('button', { name: 'Ohne KI manuell eingeben' }).click()
+    await expect(page.getByLabel(/Hersteller/)).toBeVisible()
+    await expect(page.getByLabel(/Produktname \/ Modell/)).toBeVisible()
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true)
 
     if (hasDualPersonaCredentials()) {

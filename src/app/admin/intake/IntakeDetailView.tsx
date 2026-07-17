@@ -317,7 +317,7 @@ export function IntakeDetailView({
               {publishing ? t('publishing') : t('publishNow')}
             </Button>
             <Link
-              href={`/admin/erfassung?edit=${detail.id}&returnTo=${encodeURIComponent(`/admin/intake?detail=${detail.id}`)}`}
+              href={`${ROUTES.admin.intakeCapture}?edit=${detail.id}&returnTo=${encodeURIComponent(ROUTES.admin.intakeDetail(detail.id))}`}
               className={`inline-flex items-center gap-1.5 px-4 py-2 border border-default text-text-secondary rounded-lg ${adminInteractive.rowHover} text-sm font-medium`}
               title={t('openFullErfassungTitle')}
             >
@@ -416,7 +416,7 @@ export function IntakeDetailView({
             </Button>
             {detail.checklist_complete && (
               <Link
-                href={`/admin/erfassung?edit=${detail.id}&returnTo=${encodeURIComponent(`/admin/intake?detail=${detail.id}`)}`}
+                href={`${ROUTES.admin.intakeCapture}?edit=${detail.id}&returnTo=${encodeURIComponent(ROUTES.admin.intakeDetail(detail.id))}`}
                 className={`inline-flex items-center gap-1.5 px-4 py-2 border border-default text-text-secondary rounded-lg ${adminInteractive.rowHover} text-sm font-medium`}
                 title={t('openFullErfassungTitle')}
               >

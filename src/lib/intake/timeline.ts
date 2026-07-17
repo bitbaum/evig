@@ -18,6 +18,15 @@ export { EVENT_TYPE_LABELS, EVENT_TYPE_ICONS } from './timeline-types'
 
 import type { IntakeEvent, StoredIntakeEvent } from './timeline-types'
 
+type TimelineExecutor = Pick<typeof db, 'update'>
+
+interface AppendIntakeEventOptions {
+  /** Write through the caller's transaction when the event is business-critical. */
+  executor?: TimelineExecutor
+  /** Re-throw so the enclosing transaction rolls back instead of losing audit evidence. */
+  required?: boolean
+}
+
 // =============================================================================
 // HELPER FUNCTIONS
 // =============================================================================
@@ -29,6 +38,7 @@ import type { IntakeEvent, StoredIntakeEvent } from './timeline-types'
 export async function appendIntakeEvent(
   inventoryId: string,
   event: IntakeEvent,
+  options: AppendIntakeEventOptions = {},
 ): Promise<void> {
   const storedEvent: StoredIntakeEvent = {
     ...event,
@@ -36,18 +46,18 @@ export async function appendIntakeEvent(
   }
 
   try {
-    await db
+    await (options.executor ?? db)
       .update(inventoryItems)
       .set({
         intakeEvents: sql`COALESCE(${inventoryItems.intakeEvents}, '[]'::jsonb) || ${JSON.stringify([storedEvent])}::jsonb`,
       })
       .where(eq(inventoryItems.id, inventoryId))
   } catch (error) {
-    // Timeline is non-critical — log but don't throw
     logger.error('Failed to append intake event', {
       inventoryId,
       eventType: event.type,
       error,
     })
+    if (options.required) throw error
   }
 }

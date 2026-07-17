@@ -86,6 +86,8 @@
       "aboutDesc": "Mission, impact et projets",
       "missionHistoryDesc": "Qui nous sommes et ce qui nous anime",
       "impactDesc": "Résultats mesurables et transparence",
+      "howItWorks": "Comment ça marche",
+      "howItWorksDesc": "Le parcours d’un appareil, du don à sa nouvelle vie",
       "projectsDesc": "Nos initiatives",
       "locationsDesc": "Nos espaces à Zurich",
       "faqDesc": "Questions fréquemment posées",
@@ -839,7 +841,12 @@
       "free": "Gratuit",
       "trust": {
         "verified": "Vérifié et testé par Revamp-IT",
-        "mission": "Réemployé plutôt que jeté — association à but non lucratif"
+        "untested": "Contrôle qualité ignoré — cet article n'est pas vérifié par Revamp-IT",
+        "untestedBadge": "Revamp-IT · non testé",
+        "processLink": "Découvrir notre processus qualité",
+        "mission": "Réemployé plutôt que jeté — association à but non lucratif",
+        "warranty": "Garantie de {months} mois",
+        "returnPolicy": "Retour sous {days} jours pour les achats en ligne"
       },
       "zoomOpen": "Agrandir",
       "zoomClose": "Fermer",
@@ -9478,7 +9485,14 @@
         "capture": "Capture",
         "captureAndShop": "Saisir et publier",
         "captureAnnahme": "Saisir l'appareil",
-        "captureAndShopShort": "+ Shop"
+        "captureAndShopShort": "+ Shop",
+        "destinationActions": {
+          "quality": "Saisir et démarrer le contrôle",
+          "inventory": "Ajouter à l’inventaire",
+          "parts": "Saisir comme source de pièces",
+          "recycle": "Saisir pour recyclage",
+          "shop_untested": "Publier sans contrôle"
+        }
       },
       "successScreen": {
         "title": "Produit saisi !",
@@ -9536,7 +9550,8 @@
         "selectedText": "selected",
         "draft": "Draft",
         "capture": "Capture",
-        "captureAndShop": "Saisir et publier"
+        "captureAndShop": "Saisir et publier",
+        "importSelected": "Importer la sélection dans l’inventaire"
       },
       "imageCapture": {
         "dragOrText": "Glissez une image ici ou",
@@ -9555,6 +9570,8 @@
         "errorAnalysis": "Échec de l'analyse"
       },
       "dataEntryTabs": {
+        "stepTitle": "Saisir les données",
+        "stepDescription": "Texte, photo, fichier ou voix — l’IA remplit le même produit.",
         "tabTextLabel": "Text",
         "tabTextDesc": "Saisissez les infos du produit, l'IA complète",
         "tabFileLabel": "File",
@@ -9574,12 +9591,52 @@
         "pictureRequires": "Nécessite un modèle d'IA de vision",
         "analyzing": "L'IA analyse…",
         "fillForm": "Remplir le formulaire",
+        "manualEntry": "Saisir manuellement sans IA",
         "fileImportTitle": "Import de fichier",
         "fileImportDesc": "Téléchargez un fichier CSV ou Excel contenant des données produit",
         "processing": "Processing…",
         "chooseFile": "Choisissez un fichier CSV ou Excel, ou glissez-le ici",
         "fileHint": "CSV, TSV, XLSX — les colonnes sont reconnues automatiquement",
         "unmappedColumns": "Colonnes non mappées :"
+      },
+      "destination": {
+        "title": "Que se passe-t-il ensuite ?",
+        "description": "Ce choix pilote le parcours réel en atelier. Il reste modifiable dans le pipeline.",
+        "recommended": "Recommandé",
+        "otherDestinations": "Choisir une autre destination",
+        "options": {
+          "quality": {
+            "label": "Reconditionner et contrôler",
+            "description": "Démarre la checklist adaptée. Après validation, l’annonce reçoit le badge RevampIT."
+          },
+          "inventory": {
+            "label": "Inventaire uniquement",
+            "description": "Enregistre sans contrôle ni publication. Les détails peuvent être complétés plus tard."
+          },
+          "parts": {
+            "label": "Source de pièces",
+            "description": "Guide le démontage, le test et le catalogage des composants."
+          },
+          "recycle": {
+            "label": "Envoyer au recyclage",
+            "description": "Documente le traitement des données et l’élimination responsable."
+          },
+          "shop_untested": {
+            "label": "Publier maintenant — non testé",
+            "description": "Exception : publication immédiate, explicitement sans badge de contrôle RevampIT."
+          }
+        },
+        "skipReasonLabel": "Pourquoi le contrôle qualité est-il ignoré ?",
+        "skipReasonPlaceholder": "p. ex. accessoire scellé ; test fonctionnel impossible …",
+        "skipDisclosure": "Le motif est conservé dans l’audit. Les acheteurs voient que le produit n’a pas été testé.",
+        "skipPriceRequired": "La publication directe exige un prix de vente supérieur à CHF 0 ci-dessus.",
+        "donationTitle": "Provenance / don (facultatif)",
+        "donationActive": "· Don enregistré",
+        "donationCheckbox": "Ce produit a été donné",
+        "existingDonation": "Lié à un don existant",
+        "donorName": "Nom du donateur",
+        "donorEmail": "E-mail (facultatif)",
+        "donorNotes": "Notes (facultatif)"
       },
       "formErrors": {
         "updateFailed": "Impossible de mettre à jour le produit",
@@ -10646,6 +10703,7 @@
       "filterNoResults": "Aucune section trouvée"
     },
     "commandBar": {
+      "searching": "Recherche…",
       "placeholder": "Recherche ou commande…",
       "openShortcut": "Ouvrir la barre de commande",
       "noResults": "Aucun résultat",
@@ -11233,6 +11291,70 @@
     "method": {
       "title": "Mode de paiement",
       "subtitle": "Choisis comment tu souhaites payer"
+    }
+  },
+  "soFunktioniert": {
+    "meta": {
+      "title": "Comment ça marche — Le parcours d’un appareil",
+      "description": "Comment les ordinateurs donnés redeviennent fiables : effacement sécurisé, tests, Linux, garantie — et le devenir des appareils non revendables."
+    },
+    "hero": {
+      "title": "Le parcours d’un appareil",
+      "subtitle": "Du don à un nouveau foyer : comment un ancien ordinateur redevient fiable chez {org} — ou fournit des pièces utiles."
+    },
+    "journey": {
+      "heading": "Du don à un nouveau foyer",
+      "intro": "Chaque appareil donné suit le même processus rigoureux, transparent et traçable."
+    },
+    "phases": {
+      "donation": {
+        "title": "Don ou retour",
+        "body": "Particuliers et organisations nous confient leurs équipements, sur place ou par collecte."
+      },
+      "intake": {
+        "title": "Réception et évaluation",
+        "body": "Chaque appareil est enregistré, inspecté visuellement et classé selon un état clair."
+      },
+      "wipe": {
+        "title": "Effacement sécurisé",
+        "body": "Tous les supports sont effacés selon NIST 800-88. Les anciennes données ne sont plus récupérables."
+      },
+      "refurbish": {
+        "title": "Tests et reconditionnement",
+        "body": "Le matériel est testé, nettoyé et amélioré si utile, puis équipé d’un système libre comme Linux."
+      },
+      "quality": {
+        "title": "Contrôle qualité et garantie",
+        "body": "Un contrôle final confirme le résultat. Les appareils reconditionnés bénéficient de {months} mois de garantie."
+      },
+      "rehome": {
+        "title": "Un nouveau foyer",
+        "body": "L’appareil rejoint le marché à un prix équitable et solidaire, prêt pour une seconde vie."
+      }
+    },
+    "paths": {
+      "heading": "Tous les appareils ne sont pas vendus",
+      "intro": "Chaque don n’est pas réutilisable, mais rien n’est gaspillé. Chaque appareil suit l’une de trois voies.",
+      "refurbish": {
+        "title": "Reconditionner et vendre",
+        "body": "La plupart des appareils fonctionnels sont reconditionnés et transmis via le marché."
+      },
+      "parts": {
+        "title": "Récupérer les pièces",
+        "body": "RAM, SSD et alimentations utiles sont récupérés sur les appareils invendables."
+      },
+      "recycle": {
+        "title": "Recycler correctement",
+        "body": "Le reste rejoint une filière certifiée SWICO. Aucun composant ne finit avec les déchets ménagers."
+      }
+    },
+    "cta": {
+      "heading": "Aidez-nous à fermer la boucle",
+      "body": "Achetez du matériel reconditionné ou donnez une seconde vie à votre ancien appareil.",
+      "openNote": "Le processus et le logiciel sont ouverts : adoptez-les, améliorez-les et partagez-les pour votre atelier circulaire local.",
+      "source": "Voir le code source ouvert",
+      "buy": "Découvrir le marché",
+      "donate": "Donner un appareil"
     }
   }
 }

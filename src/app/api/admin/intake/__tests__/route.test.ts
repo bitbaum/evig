@@ -121,6 +121,8 @@ jest.mock('@/config/error-messages', () => ({
 }))
 
 jest.mock('@/config/intake-checklist', () => ({
+  INTAKE_TIERS: { REFURBISH: 'refurbish', PARTS: 'parts', RECYCLE: 'recycle' },
+  QUICK_CAPTURE_TIER: 'quick',
   isChecklistComplete: jest.fn().mockReturnValue(false),
   hasChecklistFailure: jest.fn().mockReturnValue(false),
   getChecklistProgress: jest.fn().mockReturnValue({ completed: 0, total: 5 }),
@@ -162,6 +164,9 @@ const MOCK_PRODUCT_RESULT = {
   inventoryId: 'inv-789',
   donationId: null,
   imageUrl: null,
+  listingId: null,
+  qcRequired: false,
+  qcBypassed: false,
 }
 
 const MOCK_ITEMS_RESULT = {
@@ -251,6 +256,67 @@ describe('POST /api/admin/intake — success', () => {
     expect(mockSyncProductToKivvi).toHaveBeenCalledTimes(1)
     expect(mockSyncProductToKivvi).toHaveBeenCalledWith(
       expect.objectContaining({ inventoryId: 'inv-789' })
+    )
+  })
+
+  it('maps the quality destination to the refurbish checklist tier', async () => {
+    mockValidateBody.mockReturnValueOnce({
+      success: true,
+      data: {
+        produktname: 'ThinkPad',
+        hersteller: 'Lenovo',
+        zustand: 'good',
+        destination: 'quality',
+      },
+    })
+
+    await POST(makePostRequest())
+
+    expect(mockCreateErfassungProduct).toHaveBeenCalledWith(
+      expect.objectContaining({ action: 'erfassen' }),
+      'admin-1',
+      expect.anything(),
+      expect.objectContaining({ intakeTier: 'refurbish', checklistGated: true }),
+    )
+  })
+
+  it('publishes an explicitly untested destination and records the reason atomically', async () => {
+    mockValidateBody.mockReturnValueOnce({
+      success: true,
+      data: {
+        produktname: 'Sealed dock',
+        hersteller: 'Dell',
+        zustand: 'new',
+        destination: 'shop_untested',
+        verkaufspreis: 40,
+        qc_skip_reason: 'factory sealed accessory',
+      },
+    })
+    mockCreateErfassungProduct.mockResolvedValueOnce({
+      ...MOCK_PRODUCT_RESULT,
+      listingId: 'listing-1',
+      qcBypassed: true,
+    })
+
+    const response = await POST(makePostRequest())
+    const body = await response.json()
+
+    expect(response.status).toBe(200)
+    expect(body.data.published).toBe(true)
+    expect(mockCreateErfassungProduct).toHaveBeenCalledWith(
+      expect.objectContaining({ action: 'publish' }),
+      'admin-1',
+      expect.anything(),
+      expect.objectContaining({ qcBypassReason: 'factory sealed accessory' }),
+    )
+    expect(mockAppendIntakeEvent).toHaveBeenCalledTimes(3)
+    expect(mockAppendIntakeEvent).toHaveBeenCalledWith(
+      'inv-789',
+      expect.objectContaining({
+        type: 'quality_skipped',
+        metadata: { reason: 'factory sealed accessory' },
+      }),
+      expect.objectContaining({ required: true }),
     )
   })
 

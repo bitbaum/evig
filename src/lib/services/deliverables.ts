@@ -26,6 +26,7 @@ import { sendCustomEmail } from '@/lib/email'
 import { escapeHtml } from '@/lib/utils/escape-html'
 import { APP_URL } from '@/config/urls'
 import { logger } from '@/lib/logger'
+import { EMAIL_INLINE_COLORS } from '@/config/ui-colors'
 import type {
   DeliverableListItem,
   DeliverableDetail,
@@ -294,7 +295,7 @@ async function sendFeedbackEmail(
         <p><strong>Von:</strong> ${escapeHtml(who)}</p>
         <p><strong>Art:</strong> ${escapeHtml(kindLabel)}</p>
         ${targetLine}
-        <div style="white-space: pre-wrap; padding: 16px; background: #f5f5f5; border-radius: 8px;">${escapeHtml(input.body)}</div>
+        <div style="white-space: pre-wrap; padding: 16px; background: ${EMAIL_INLINE_COLORS.mutedBlockBg}; border-radius: 8px;">${escapeHtml(input.body)}</div>
         <p style="margin-top: 16px;"><a href="${link}">Im Review-Bereich öffnen</a></p>
       </div>
     `,

@@ -142,4 +142,27 @@ describe('appendIntakeEvent', () => {
     // Should not throw
     await expect(appendIntakeEvent('inv-1', BASE_EVENT)).resolves.toBeUndefined()
   })
+
+  it('uses a supplied transaction executor for atomic audit writes', async () => {
+    const update = jest.fn().mockImplementation(() => makeChain())
+
+    await appendIntakeEvent('inv-1', BASE_EVENT, {
+      executor: { update } as never,
+      required: true,
+    })
+
+    expect(update).toHaveBeenCalledTimes(1)
+    expect(mockDbUpdate).not.toHaveBeenCalled()
+  })
+
+  it('rethrows required audit failures so the caller can roll back', async () => {
+    const update = jest.fn(() => {
+      throw new Error('transaction update failed')
+    })
+
+    await expect(appendIntakeEvent('inv-1', BASE_EVENT, {
+      executor: { update } as never,
+      required: true,
+    })).rejects.toThrow('transaction update failed')
+  })
 })

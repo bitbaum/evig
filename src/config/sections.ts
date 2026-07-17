@@ -573,10 +573,10 @@ export const SECTIONS = {
   // data, AI-assisted extraction and exceptional inventory work.
   erfassung: {
     id: 'erfassung',
-    path: '/admin/erfassung',
+    path: '/admin/intake/capture',
     ui: {
       label: 'Produkt aufnehmen',
-      description: 'Gerät annehmen (Checkliste/Spende) oder Produkt schnell erfassen',
+      description: 'Produkt über Text, Foto, Datei oder Sprache aufnehmen',
       icon: ScanLine,
       emoji: '📝',
       color: 'primary',
@@ -593,7 +593,7 @@ export const SECTIONS = {
 
   products: {
     id: 'products',
-    path: '/admin/erfassung',
+    path: '/admin/intake/capture',
     ui: {
       label: 'Produkte',
       description: 'Produktdaten erfassen und Inventar verwalten',

@@ -20,7 +20,7 @@ export interface PipelineItem {
   category: string | null
   subcategory: string | null
   short_description: string | null
-  /** NULL for quick-captured devices (Schnellerfassung — no checklist). */
+  /** NULL when no physical quality/parts/recycling checklist was selected. */
   intake_tier: IntakeTier | null
   intake_checklist: ChecklistState
   checklist_complete: boolean
@@ -65,7 +65,7 @@ export interface DetailData {
   condition: string
   category: string | null
   image_url: string | null
-  /** NULL for quick-captured devices (Schnellerfassung — no checklist). */
+  /** NULL when no physical quality/parts/recycling checklist was selected. */
   intake_tier: IntakeTier | null
   marketplace_status: string
   selling_price_chf: number | null
@@ -80,4 +80,3 @@ export interface DetailData {
   checklist_grouped: ChecklistGroup[]
   intake_events: import('@/lib/intake/timeline-types').StoredIntakeEvent[]
 }
-
