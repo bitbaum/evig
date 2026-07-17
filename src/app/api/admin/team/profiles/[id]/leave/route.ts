@@ -17,6 +17,7 @@ import { db } from '@/db'
 import { leavePeriods, teamProfiles } from '@/db/schema'
 import { eq, desc } from 'drizzle-orm'
 import { leavePeriodKindOptions } from '@/lib/schemas/team'
+import { materializeLeaveEntries, leaveKindToTimecardCategory } from '@/lib/services/time-off-materialize'
 
 const createLeaveSchema = z.object({
   starts_on: z.string().min(1, 'Startdatum erforderlich'),
@@ -70,7 +71,7 @@ export const POST = withAdmin<{ id: string }>('team', async (
     // Make sure the profile exists before we accept a leave period for it.
     // Cheap existence-check vs surfacing the FK violation as a 500.
     const [profile] = await db
-      .select({ id: teamProfiles.id })
+      .select({ id: teamProfiles.id, userId: teamProfiles.userId })
       .from(teamProfiles)
       .where(eq(teamProfiles.id, profileId))
       .limit(1)
@@ -99,6 +100,20 @@ export const POST = withAdmin<{ id: string }>('team', async (
         kind: leavePeriods.kind,
         notes: leavePeriods.notes,
       })
+
+    // Same ledger as the request flow: echo the leave into the person's
+    // timecards so the Zeit-/Feriensaldo stays true no matter which door
+    // HR uses. Best-effort — the HR record above is already committed.
+    const category = leaveKindToTimecardCategory(parsed.data.kind)
+    if (category) {
+      await materializeLeaveEntries({
+        userId: profile.userId,
+        category,
+        startsOn: parsed.data.starts_on,
+        endsOn: parsed.data.ends_on,
+        description: 'Von HR erfasste Abwesenheit',
+      }).catch(err => logger.warn('Leave materialization failed', { error: err, profileId }))
+    }
 
     logger.info('Leave period created', {
       profileId,

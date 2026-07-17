@@ -50,15 +50,30 @@ function addDaysIso(isoDate: string, days: number): string {
   return d.toISOString().slice(0, 10)
 }
 
-export async function materializeApprovedTimeOff(params: {
+/** leave_periods.kind → timecard absence category (null = no timecard echo). */
+const LEAVE_KIND_TO_CATEGORY: Record<string, string | null> = {
+  vacation: 'ferien',
+  sick: 'krank',
+  military: 'militaer',
+  unpaid: 'unbezahlt',
+  parental: null, // no matching timecard category — HR record only
+  other: null,
+}
+
+/**
+ * Write absence entries into the person's month cards for every SCHEDULED
+ * day in the range (holidays skipped, existing entries never clobbered).
+ * Shared by the time-off approval flow AND the HR "Urlaub erfassen" card —
+ * both paths land in the same ledger, so the Feriensaldo is always true.
+ */
+export async function materializeLeaveEntries(params: {
   userId: string
-  kind: string
+  category: string
   startsOn: string
   endsOn: string
-  note?: string | null
-  reviewerId: string
+  description: string
 }): Promise<void> {
-  const { userId, kind, startsOn, endsOn } = params
+  const { userId, category, startsOn, endsOn } = params
 
   const [profile] = await db
     .select({ id: teamProfiles.id, workingHours: teamProfiles.workingHours })
@@ -66,22 +81,6 @@ export async function materializeApprovedTimeOff(params: {
     .where(eq(teamProfiles.userId, userId))
     .limit(1)
 
-  // HR record (leave_periods) — profile-scoped, so only when a profile exists.
-  if (profile) {
-    await db.insert(leavePeriods).values({
-      teamProfileId: profile.id,
-      startsOn,
-      endsOn,
-      kind: LEAVE_KIND[kind] ?? 'other',
-      notes: params.note ?? null,
-      createdBy: params.reviewerId,
-    }).catch(err => logger.warn('leave_periods insert failed', { error: err, userId }))
-  }
-
-  // Timecard entries on scheduled days (paid kinds carry the scheduled
-  // minutes; unpaid gets a labelled 0-minute marker — same rule as the
-  // manual absence buttons).
-  const category = timeOffKindToEntryCategory(kind as TimeOffKind)
   const paid = getAbsenceType(category)?.paid ?? false
   const schedule = parseWeeklySchedule(profile?.workingHours ?? null)
   const hasSchedule = Object.values(schedule.days).some(d => d.enabled)
@@ -117,7 +116,7 @@ export async function materializeApprovedTimeOff(params: {
             break_minutes: 0,
             duration_minutes: minutes,
             category,
-            description: 'Aus genehmigtem Abwesenheitsantrag',
+            description: params.description,
             source: 'manual' as const,
           }
         })
@@ -152,4 +151,47 @@ export async function materializeApprovedTimeOff(params: {
       }).catch(() => undefined)
     }
   }
+}
+
+export async function materializeApprovedTimeOff(params: {
+  userId: string
+  kind: string
+  startsOn: string
+  endsOn: string
+  note?: string | null
+  reviewerId: string
+}): Promise<void> {
+  const { userId, kind, startsOn, endsOn } = params
+
+  const [profile] = await db
+    .select({ id: teamProfiles.id })
+    .from(teamProfiles)
+    .where(eq(teamProfiles.userId, userId))
+    .limit(1)
+
+  // HR record (leave_periods) — profile-scoped, so only when a profile exists.
+  if (profile) {
+    await db.insert(leavePeriods).values({
+      teamProfileId: profile.id,
+      startsOn,
+      endsOn,
+      kind: LEAVE_KIND[kind] ?? 'other',
+      notes: params.note ?? null,
+      createdBy: params.reviewerId,
+    }).catch(err => logger.warn('leave_periods insert failed', { error: err, userId }))
+  }
+
+  const category = timeOffKindToEntryCategory(kind as TimeOffKind)
+  await materializeLeaveEntries({
+    userId,
+    category,
+    startsOn,
+    endsOn,
+    description: 'Aus genehmigtem Abwesenheitsantrag',
+  })
+}
+
+/** For the HR leave card: leave kind → timecard category (or null). */
+export function leaveKindToTimecardCategory(kind: string): string | null {
+  return LEAVE_KIND_TO_CATEGORY[kind] ?? null
 }
