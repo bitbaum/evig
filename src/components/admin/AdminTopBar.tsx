@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
+import { Link as PublicLink } from '@/i18n/navigation'
 import { Menu, Globe } from 'lucide-react'
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
 import { NotificationBell } from '@/components/admin/NotificationBell'
@@ -73,14 +74,16 @@ export function AdminTopBar({
         </div>
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-          <Link
+          {/* PublicLink keeps the admin locale when crossing to the public site
+              (public locale lives in the URL prefix, not the cookie). */}
+          <PublicLink
             href={ROUTES.public.home}
             className={adminChrome.websiteLink}
             title={tUser('toWebsite')}
           >
             <Globe className="h-3.5 w-3.5" />
             <span className="hidden xl:inline">{tUser('toWebsite')}</span>
-          </Link>
+          </PublicLink>
 
           <div className={adminChrome.actionDivider} aria-hidden="true" />
 

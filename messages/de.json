@@ -11415,6 +11415,134 @@
       "approve": "Genehmigen",
       "decline": "Ablehnen",
       "unknownUser": "Unbekannt"
+    },
+    "pageGuide": {
+      "helpAria": "Hilfe zu dieser Seite",
+      "helpTitle": "Was kann ich auf dieser Seite tun?",
+      "panelLabel": "Seitenhilfe",
+      "fallbackTitle": "Was kann ich hier tun?",
+      "typicalQuestions": "Typische Fragen",
+      "closeAria": "Hilfe schliessen"
+    },
+    "hirnContexts": {
+      "admin-dashboard": {
+        "title": "Dashboard",
+        "description": "Deine Startseite im Admin: offene Aufgaben, Freigaben und die wichtigsten Zahlen des Monats auf einen Blick.",
+        "s0": "Was gibt es heute zu tun?",
+        "s1": "Erstelle eine Aufgabe",
+        "s2": "Wie viele Geräte haben wir dieses Jahr verkauft?"
+      },
+      "admin-product-capture": {
+        "title": "Produkt aufnehmen",
+        "description": "Erfasse ein Gerät per Text, Foto, Datei oder Sprache — die KI füllt das Formular, du prüfst den Vorschlag und wählst den nächsten Schritt.",
+        "s0": "Welche Eingabeart ist hier am schnellsten?",
+        "s1": "Wann darf ich ohne Qualitätsprüfung veröffentlichen?",
+        "s2": "Wie funktioniert ein CSV-Import?",
+        "guideTitle": "Produkt aufnehmen",
+        "guidePurpose": "Ein Produkt einmal erfassen und danach bewusst ins Inventar, in die Aufbereitung, zu Ersatzteilen, ins Recycling oder in den Shop weiterleiten.",
+        "guideNote": "CSV/Excel wird als Stapel importiert und zuerst ins Inventar übernommen. Eine Datei beweist keine physische Qualitätsprüfung.",
+        "guideLearnMore": "Unser offener Aufbereitungsprozess",
+        "step0Title": "Daten eingeben",
+        "step0Desc": "Text schreiben/einfügen, Foto aufnehmen, CSV/Excel hochladen oder Produkt einsprechen.",
+        "step1Title": "KI-Vorschlag prüfen",
+        "step1Desc": "Die KI füllt das Formular. Hersteller und Produktname sind Pflicht; alles Weitere kann später ergänzt werden.",
+        "step2Title": "Nächsten Schritt wählen",
+        "step2Desc": "Qualitätsprüfung ist für RevampIT-geprüfte Ware empfohlen. Alternativen bleiben sichtbar und nachvollziehbar.",
+        "step3Title": "Weiterarbeiten",
+        "step3Desc": "Etikett drucken, Checkliste bearbeiten oder das veröffentlichte Produkt im Shop öffnen."
+      },
+      "admin-approvals": {
+        "title": "Freigaben",
+        "description": "Prüfe eingereichte Inhalte (Inserate, Blogposts, Workshops, Techniker-Bewerbungen) und gib sie frei oder lehne sie ab.",
+        "s0": "Nach welchen Kriterien gebe ich Inserate frei?",
+        "s1": "Erstelle eine Aufgabe für offene Freigaben"
+      },
+      "admin-erfassung": {
+        "title": "Geräte-Eingang",
+        "description": "Steuere den gesamten Gerätefluss: Eingang, Triage, Qualitätsprüfung, blockierte Geräte und Veröffentlichung.",
+        "s0": "Welches Gerät braucht als Nächstes Aufmerksamkeit?",
+        "s1": "Was blockiert eine Veröffentlichung?",
+        "guideTitle": "Geräte-Eingang",
+        "guidePurpose": "Alle erfassten Geräte vom Eingang bis zum Shop an einer Stelle bearbeiten.",
+        "guideNote": "Die Spalten zeigen Arbeitszustände, keine separaten Datenkopien. Ein Gerät bleibt ein Datensatz über den gesamten Prozess.",
+        "guideLearnMore": "Unser offener Aufbereitungsprozess",
+        "step0Title": "Aufnehmen",
+        "step0Desc": "Neues Produkt über Text, Foto, Datei oder Sprache erfassen und etikettieren.",
+        "step1Title": "Bearbeiten",
+        "step1Desc": "Gerät öffnen, Tests und Aufbereitung mit Pass, Fehler oder Nicht anwendbar dokumentieren.",
+        "step2Title": "Blockaden lösen",
+        "step2Desc": "Fehlgeschlagene Geräte reparieren und erneut testen oder zu Ersatzteilen/Recycling umstufen.",
+        "step3Title": "Veröffentlichen",
+        "step3Desc": "Vollständige geprüfte Geräte erhalten im Shop automatisch Prüfsiegel und sichtbare Testergebnisse."
+      },
+      "admin-marketplace": {
+        "title": "Inserate",
+        "description": "Verwalte Marktplatz-Inserate: verifizieren, sperren und Meldungen bearbeiten.",
+        "s0": "Wie verifiziere ich ein Inserat?",
+        "s1": "Zeige mir gemeldete Inserate"
+      },
+      "admin-it-hilfe": {
+        "title": "IT-Hilfe",
+        "description": "Behalte offene Anfragen, Angebote und Techniker-Profile im Blick.",
+        "s0": "Wie viele Anfragen sind offen?",
+        "s1": "Wie funktioniert der IT-Hilfe-Ablauf?"
+      },
+      "admin-workshops": {
+        "title": "Workshops",
+        "description": "Verwalte Workshops: Vorschläge prüfen, Termine planen, Anmeldungen betreuen.",
+        "s0": "Wie plane ich einen neuen Workshop-Termin?",
+        "s1": "Erstelle eine Aufgabe zur Workshop-Planung"
+      },
+      "admin-tasks": {
+        "title": "Aufgaben",
+        "description": "Arbeite mit dem Aufgaben-Board: Aufgaben erstellen, zuweisen und abschliessen.",
+        "s0": "Erstelle eine Aufgabe",
+        "s1": "Welche Aufgaben sind mir zugewiesen?"
+      },
+      "admin-protocols": {
+        "title": "Protokolle",
+        "description": "Verwalte Sitzungsprotokolle: erfassen, nachlesen und Beschlüsse dokumentieren.",
+        "s0": "Erstelle einen Protokoll-Entwurf",
+        "s1": "Was stand im letzten Protokoll?"
+      },
+      "admin-decisions": {
+        "title": "Entscheidungen",
+        "description": "Bringe Vorschläge ein, stimme ab und dokumentiere Team-Entscheidungen.",
+        "s0": "Erstelle einen Entscheidungs-Entwurf",
+        "s1": "Welche Entscheidungen sind offen?"
+      },
+      "admin-zeiterfassung": {
+        "title": "Zeiterfassung",
+        "description": "Erfasse deine Arbeitszeiten: Arbeitsplan hinterlegen, Monat aus dem Plan füllen, Abwesenheiten markieren und die Zeitkarte zur Genehmigung einreichen. Genehmigt wird sie von einer anderen Person (Vier-Augen-Prinzip).",
+        "s0": "Wie fülle ich meinen Monat am schnellsten aus?",
+        "s1": "Wie trage ich Ferien oder Krankheit ein?",
+        "s2": "Was passiert nach dem Einreichen?"
+      },
+      "admin-timecard-approvals": {
+        "title": "Zeitkarten-Freigaben",
+        "description": "Prüfe eingereichte Zeitkarten einzeln oder im Stapel. Genehmigte Karten bleiben im Tab «Genehmigt» sichtbar, editierbar und lassen sich wieder öffnen.",
+        "s0": "Welche Zeitkarten warten auf Freigabe?",
+        "s1": "Wie korrigiere ich eine bereits genehmigte Zeitkarte?",
+        "s2": "Wie funktioniert das Vier-Augen-Prinzip?"
+      },
+      "admin-team": {
+        "title": "Team & HR",
+        "description": "Verwalte Teammitglieder, Profile, Zeitkarten und Bewerbungen.",
+        "s0": "Wie funktioniert der Zeitkarten-Ablauf?",
+        "s1": "Welche Zeitkarten warten auf Freigabe?"
+      },
+      "admin-analyse": {
+        "title": "Analyse",
+        "description": "Kennzahlen, Finanzen und Wirkungszahlen der Organisation.",
+        "s0": "Wie berechnen wir unsere CO₂-Einsparung?",
+        "s1": "Erkläre die wichtigsten Kennzahlen"
+      },
+      "admin-generic": {
+        "title": "Admin-Bereich",
+        "description": "Du bist im Admin-Bereich der RevampIT-Plattform.",
+        "s0": "Erstelle eine Aufgabe",
+        "s1": "Was weisst du über RevampIT?"
+      }
     }
   },
   "changelog": {
@@ -11508,5 +11636,21 @@
       "buy": "Marktplatz entdecken",
       "donate": "Gerät spenden"
     }
+  },
+  "search": {
+    "ariaLabel": "Befehlspalette",
+    "placeholder": "Suche Inserate, Bestellungen, Workshops…",
+    "noResults": "Keine Ergebnisse für «{query}»",
+    "typeToSearch": "Tippe, um zu suchen…",
+    "groupGoTo": "Gehe zu",
+    "groupMyListings": "Meine Inserate",
+    "groupMyOrders": "Meine Bestellungen",
+    "groupFavorites": "Favoriten",
+    "groupMarketplace": "Marktplatz",
+    "groupWorkshops": "Workshops",
+    "groupSearch": "Suche",
+    "marketplaceSearch": "Im Marktplatz suchen: «{query}»",
+    "trigger": "Suche",
+    "triggerAria": "Suche öffnen (⌘K)"
   }
 }

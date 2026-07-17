@@ -11,6 +11,8 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { apiFetch } from '@/lib/api/client'
 import { getDashboardSections } from '@/config/sections'
+import { useTranslations } from 'next-intl'
+import { sectionLabel, type SectionsT } from '@/lib/section-labels'
 
 /**
  * Site-wide command palette for logged-in users (⌘K / tap). Mounted once in the
@@ -47,15 +49,28 @@ function norm(s: string) {
   return s.toLowerCase().trim()
 }
 
-function buildResults(index: SearchIndex | null, query: string): ResultItem[] {
+interface GroupLabels {
+  goTo: string
+  myListings: string
+  myOrders: string
+  favorites: string
+  marketplace: string
+  workshops: string
+  search: string
+  marketplaceSearch: (query: string) => string
+  navLabel: (s: ReturnType<typeof getDashboardSections>[number]) => string
+}
+
+function buildResults(index: SearchIndex | null, query: string, L: GroupLabels): ResultItem[] {
   const q = norm(query)
   const items: ResultItem[] = []
 
   // Navigation destinations (always available, filtered by query).
   for (const s of getDashboardSections()) {
-    if (q && !norm(s.ui.label).includes(q)) continue
+    const label = L.navLabel(s)
+    if (q && !norm(label).includes(q)) continue
     items.push({
-      key: `nav:${s.id}`, label: s.ui.label, href: s.path, group: 'Gehe zu',
+      key: `nav:${s.id}`, label, href: s.path, group: L.goTo,
       icon: <Compass className="h-4 w-4" />,
     })
   }
@@ -69,33 +84,35 @@ function buildResults(index: SearchIndex | null, query: string): ResultItem[] {
 
   for (const l of index.myListings) {
     if (!matches(l.title)) continue
-    out.push({ key: `ml:${l.id}`, label: l.title, sub: l.status, href: `/marketplace/${l.id}`, group: 'Meine Inserate', icon: <Package className="h-4 w-4" /> })
+    out.push({ key: `ml:${l.id}`, label: l.title, sub: l.status, href: `/marketplace/${l.id}`, group: L.myListings, icon: <Package className="h-4 w-4" /> })
   }
   for (const o of index.myOrders) {
     if (!matches(o.title)) continue
-    out.push({ key: `mo:${o.id}`, label: o.title, sub: o.status, href: `/dashboard/orders/${o.id}`, group: 'Meine Bestellungen', icon: <ShoppingBag className="h-4 w-4" /> })
+    out.push({ key: `mo:${o.id}`, label: o.title, sub: o.status, href: `/dashboard/orders/${o.id}`, group: L.myOrders, icon: <ShoppingBag className="h-4 w-4" /> })
   }
   for (const f of index.favorites) {
     if (!matches(f.title)) continue
-    out.push({ key: `fav:${f.id}`, label: f.title, href: `/marketplace/${f.id}`, group: 'Favoriten', icon: <Heart className="h-4 w-4" /> })
+    out.push({ key: `fav:${f.id}`, label: f.title, href: `/marketplace/${f.id}`, group: L.favorites, icon: <Heart className="h-4 w-4" /> })
   }
   for (const m of index.marketplace) {
     if (!matches(m.title)) continue
-    out.push({ key: `mk:${m.id}`, label: m.title, sub: m.price_chf != null ? `CHF ${m.price_chf}` : undefined, href: `/marketplace/${m.id}`, group: 'Marktplatz', icon: <Store className="h-4 w-4" /> })
+    out.push({ key: `mk:${m.id}`, label: m.title, sub: m.price_chf != null ? `CHF ${m.price_chf}` : undefined, href: `/marketplace/${m.id}`, group: L.marketplace, icon: <Store className="h-4 w-4" /> })
   }
   for (const w of index.workshops) {
     if (!matches(w.title)) continue
-    out.push({ key: `ws:${w.id}`, label: w.title, href: `/workshops/${w.slug ?? w.id}`, group: 'Workshops', icon: <GraduationCap className="h-4 w-4" /> })
+    out.push({ key: `ws:${w.id}`, label: w.title, href: `/workshops/${w.slug ?? w.id}`, group: L.workshops, icon: <GraduationCap className="h-4 w-4" /> })
   }
 
   // Hand-off: full marketplace search for the typed query.
   if (q) {
-    out.push({ key: 'mk-search', label: `Im Marktplatz suchen: „${query.trim()}“`, href: `/marketplace?search=${encodeURIComponent(query.trim())}`, group: 'Suche', icon: <ArrowRight className="h-4 w-4" /> })
+    out.push({ key: 'mk-search', label: L.marketplaceSearch(query.trim()), href: `/marketplace?search=${encodeURIComponent(query.trim())}`, group: L.search, icon: <ArrowRight className="h-4 w-4" /> })
   }
   return out
 }
 
 export function UserCommandPalette() {
+  const t = useTranslations('search')
+  const tSections = useTranslations('admin.sections')
   const { status } = useSession()
   const loggedIn = status === 'authenticated'
   const [open, setOpen] = useState(false)
@@ -158,7 +175,18 @@ export function UserCommandPalette() {
     return () => dialog.removeEventListener('click', handler)
   }, [close])
 
-  const results = useMemo(() => buildResults(index, query), [index, query])
+  const labels = useMemo<GroupLabels>(() => ({
+    goTo: t('groupGoTo'),
+    myListings: t('groupMyListings'),
+    myOrders: t('groupMyOrders'),
+    favorites: t('groupFavorites'),
+    marketplace: t('groupMarketplace'),
+    workshops: t('groupWorkshops'),
+    search: t('groupSearch'),
+    marketplaceSearch: (q: string) => t('marketplaceSearch', { query: q }),
+    navLabel: s => sectionLabel(tSections as SectionsT, s),
+  }), [t, tSections])
+  const results = useMemo(() => buildResults(index, query, labels), [index, query, labels])
   const groups = useMemo(() => {
     const map = new Map<string, ResultItem[]>()
     for (const item of results) {
@@ -189,17 +217,17 @@ export function UserCommandPalette() {
     <>
       <dialog
         ref={dialogRef}
-        className="w-full max-w-xl rounded-xl border border bg-surface-base p-0 shadow-xs backdrop:bg-black/60"
+        className="m-auto w-[calc(100vw-2rem)] max-w-xl rounded-xl border border bg-surface-base p-0 shadow-xs backdrop:bg-black/60"
         onKeyDown={handleKeyDown}
         onClose={close}
-        aria-label="Befehlspalette"
+        aria-label={t('ariaLabel')}
       >
         <div className="flex items-center gap-3 border-b border px-4 py-3">
           <Search className="h-4 w-4 shrink-0 text-text-muted" aria-hidden="true" />
           <Input
             ref={inputRef}
             type="search"
-            placeholder="Suche Inserate, Bestellungen, Workshops…"
+            placeholder={t('placeholder')}
             value={query}
             onChange={e => { setQuery(e.target.value); setActiveIdx(0) }}
             className="flex-1 border-0 bg-transparent px-0 focus:ring-0 focus-visible:ring-0"
@@ -212,7 +240,7 @@ export function UserCommandPalette() {
         <div className="max-h-96 overflow-y-auto py-2">
           {results.length === 0 ? (
             <p className="px-4 py-8 text-center text-sm text-text-muted">
-              {query ? `Keine Ergebnisse für „${query}“` : 'Tippe, um zu suchen…'}
+              {query ? t('noResults', { query }) : t('typeToSearch')}
             </p>
           ) : (
             Array.from(groups.entries()).map(([groupLabel, gItems]) => (

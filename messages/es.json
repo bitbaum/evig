@@ -11359,6 +11359,134 @@
       "approve": "Aprobar",
       "decline": "Rechazar",
       "unknownUser": "Desconocido"
+    },
+    "pageGuide": {
+      "helpAria": "Ayuda para esta página",
+      "helpTitle": "¿Qué puedo hacer en esta página?",
+      "panelLabel": "Ayuda de la página",
+      "fallbackTitle": "¿Qué puedo hacer aquí?",
+      "typicalQuestions": "Preguntas típicas",
+      "closeAria": "Cerrar la ayuda"
+    },
+    "hirnContexts": {
+      "admin-dashboard": {
+        "title": "Dashboard",
+        "description": "Tu página de inicio del admin: tareas abiertas, aprobaciones y las cifras clave del mes de un vistazo.",
+        "s0": "¿Qué hay que hacer hoy?",
+        "s1": "Crea una tarea",
+        "s2": "¿Cuántos dispositivos hemos vendido este año?"
+      },
+      "admin-product-capture": {
+        "title": "Registrar un producto",
+        "description": "Registra un dispositivo por texto, foto, archivo o voz — la IA rellena el formulario, tú revisas la propuesta y eliges el siguiente paso.",
+        "s0": "¿Qué método de entrada es más rápido aquí?",
+        "s1": "¿Cuándo puedo publicar sin control de calidad?",
+        "s2": "¿Cómo funciona una importación CSV?",
+        "guideTitle": "Registrar un producto",
+        "guidePurpose": "Registrar un producto una sola vez y luego dirigirlo conscientemente al inventario, la restauración, las piezas, el reciclaje o la tienda.",
+        "guideNote": "CSV/Excel se importa por lotes y llega primero al inventario. Un archivo no demuestra un control de calidad físico.",
+        "guideLearnMore": "Nuestro proceso abierto de restauración",
+        "step0Title": "Introducir datos",
+        "step0Desc": "Escribir/pegar texto, tomar una foto, subir CSV/Excel o dictar el producto.",
+        "step1Title": "Revisar la propuesta de la IA",
+        "step1Desc": "La IA rellena el formulario. Fabricante y nombre del producto son obligatorios; el resto puede añadirse después.",
+        "step2Title": "Elegir el siguiente paso",
+        "step2Desc": "El control de calidad se recomienda para mercancía verificada por RevampIT. Las alternativas quedan visibles y trazables.",
+        "step3Title": "Seguir trabajando",
+        "step3Desc": "Imprimir la etiqueta, trabajar la lista de control o abrir el producto publicado en la tienda."
+      },
+      "admin-approvals": {
+        "title": "Aprobaciones",
+        "description": "Revisa los contenidos enviados (anuncios, artículos, talleres, candidaturas de técnicos) y apruébalos o recházalos.",
+        "s0": "¿Con qué criterios apruebo anuncios?",
+        "s1": "Crea una tarea para aprobaciones abiertas"
+      },
+      "admin-erfassung": {
+        "title": "Entrada de dispositivos",
+        "description": "Controla todo el flujo de dispositivos: entrada, triaje, control de calidad, dispositivos bloqueados y publicación.",
+        "s0": "¿Qué dispositivo necesita atención ahora?",
+        "s1": "¿Qué bloquea una publicación?",
+        "guideTitle": "Entrada de dispositivos",
+        "guidePurpose": "Trabajar todos los dispositivos registrados, de la entrada a la tienda, en un solo lugar.",
+        "guideNote": "Las columnas muestran estados de trabajo, no copias de datos separadas. Un dispositivo sigue siendo un único registro en todo el proceso.",
+        "guideLearnMore": "Nuestro proceso abierto de restauración",
+        "step0Title": "Registrar",
+        "step0Desc": "Registrar y etiquetar un nuevo producto por texto, foto, archivo o voz.",
+        "step1Title": "Trabajar",
+        "step1Desc": "Abrir el dispositivo y documentar pruebas y restauración con éxito, error o no aplicable.",
+        "step2Title": "Desbloquear",
+        "step2Desc": "Reparar y volver a probar los dispositivos fallidos, o reclasificarlos a piezas/reciclaje.",
+        "step3Title": "Publicar",
+        "step3Desc": "Los dispositivos totalmente verificados reciben automáticamente el sello de verificación y resultados de prueba visibles en la tienda."
+      },
+      "admin-marketplace": {
+        "title": "Anuncios",
+        "description": "Gestiona los anuncios del marketplace: verificar, bloquear y tramitar denuncias.",
+        "s0": "¿Cómo verifico un anuncio?",
+        "s1": "Muéstrame los anuncios denunciados"
+      },
+      "admin-it-hilfe": {
+        "title": "Ayuda IT",
+        "description": "Mantén a la vista las solicitudes abiertas, las ofertas y los perfiles de técnicos.",
+        "s0": "¿Cuántas solicitudes están abiertas?",
+        "s1": "¿Cómo funciona el flujo de la ayuda IT?"
+      },
+      "admin-workshops": {
+        "title": "Talleres",
+        "description": "Gestiona los talleres: revisar propuestas, planificar fechas, atender inscripciones.",
+        "s0": "¿Cómo planifico una nueva fecha de taller?",
+        "s1": "Crea una tarea para la planificación de talleres"
+      },
+      "admin-tasks": {
+        "title": "Tareas",
+        "description": "Trabaja con el tablero de tareas: crear, asignar y completar tareas.",
+        "s0": "Crea una tarea",
+        "s1": "¿Qué tareas tengo asignadas?"
+      },
+      "admin-protocols": {
+        "title": "Actas",
+        "description": "Gestiona las actas de reuniones: registrar, consultar y documentar acuerdos.",
+        "s0": "Crea un borrador de acta",
+        "s1": "¿Qué decía la última acta?"
+      },
+      "admin-decisions": {
+        "title": "Decisiones",
+        "description": "Propón, vota y documenta las decisiones del equipo.",
+        "s0": "Crea un borrador de decisión",
+        "s1": "¿Qué decisiones están abiertas?"
+      },
+      "admin-zeiterfassung": {
+        "title": "Registro de horas",
+        "description": "Registra tus horas de trabajo: define tu plan, rellena el mes desde el plan, marca ausencias y envía la hoja de horas para su aprobación. La aprueba otra persona (principio de cuatro ojos).",
+        "s0": "¿Cuál es la forma más rápida de rellenar mi mes?",
+        "s1": "¿Cómo registro vacaciones o enfermedad?",
+        "s2": "¿Qué pasa después de enviar?"
+      },
+      "admin-timecard-approvals": {
+        "title": "Aprobación de hojas de horas",
+        "description": "Revisa las hojas de horas enviadas, una a una o en bloque. Las hojas aprobadas siguen visibles en la pestaña «Aprobadas», editables y reabribles.",
+        "s0": "¿Qué hojas de horas esperan aprobación?",
+        "s1": "¿Cómo corrijo una hoja ya aprobada?",
+        "s2": "¿Cómo funciona el principio de cuatro ojos?"
+      },
+      "admin-team": {
+        "title": "Equipo & RR. HH.",
+        "description": "Gestiona miembros del equipo, perfiles, hojas de horas y candidaturas.",
+        "s0": "¿Cómo funciona el flujo de hojas de horas?",
+        "s1": "¿Qué hojas de horas esperan aprobación?"
+      },
+      "admin-analyse": {
+        "title": "Análisis",
+        "description": "Indicadores, finanzas y cifras de impacto de la organización.",
+        "s0": "¿Cómo calculamos nuestro ahorro de CO₂?",
+        "s1": "Explica los indicadores clave"
+      },
+      "admin-generic": {
+        "title": "Área de administración",
+        "description": "Estás en el área de administración de la plataforma RevampIT.",
+        "s0": "Crea una tarea",
+        "s1": "¿Qué sabes de RevampIT?"
+      }
     }
   },
   "changelog": {
@@ -11517,5 +11645,21 @@
       "buy": "Explorar el mercado",
       "donate": "Donar un dispositivo"
     }
+  },
+  "search": {
+    "ariaLabel": "Paleta de comandos",
+    "placeholder": "Buscar anuncios, pedidos, talleres…",
+    "noResults": "Sin resultados para «{query}»",
+    "typeToSearch": "Escribe para buscar…",
+    "groupGoTo": "Ir a",
+    "groupMyListings": "Mis anuncios",
+    "groupMyOrders": "Mis pedidos",
+    "groupFavorites": "Favoritos",
+    "groupMarketplace": "Marketplace",
+    "groupWorkshops": "Talleres",
+    "groupSearch": "Búsqueda",
+    "marketplaceSearch": "Buscar en el marketplace: «{query}»",
+    "trigger": "Buscar",
+    "triggerAria": "Abrir búsqueda (⌘K)"
   }
 }

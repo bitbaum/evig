@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react'
 import { adminInteractive } from '@/lib/admin-ui'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
+import { Link as PublicLink } from '@/i18n/navigation'
 import Image from 'next/image'
 import {
   ChevronLeft,
@@ -324,11 +325,16 @@ export function AdminSidebar({
           )}
           <div className="space-y-0.5">
             {[
-              { href: '/', icon: Home, label: t('linkHome') },
-              { href: ROUTES.public.marketplace, icon: Store, label: t('linkShop') },
-              { href: '/dashboard', icon: User, label: t('linkDashboard') },
-            ].map(({ href, icon: Icon, label }) => (
-              <Link
+              // `localized`: public pages carry the locale in the URL prefix, so
+              // these links must go through the i18n Link to keep the language.
+              // /dashboard is a BYPASS_INTL route (cookie locale) — plain Link.
+              { href: '/', icon: Home, label: t('linkHome'), localized: true },
+              { href: ROUTES.public.marketplace, icon: Store, label: t('linkShop'), localized: true },
+              { href: '/dashboard', icon: User, label: t('linkDashboard'), localized: false },
+            ].map(({ href, icon: Icon, label, localized }) => {
+              const LinkComp = localized ? PublicLink : Link
+              return (
+              <LinkComp
                 key={href}
                 href={href}
                 onClick={() => setMobileMenuOpen(false)}
@@ -339,8 +345,8 @@ export function AdminSidebar({
               >
                 <Icon className="w-4 h-4 shrink-0" />
                 {!sidebarCollapsed && <span className="text-sm">{label}</span>}
-              </Link>
-            ))}
+              </LinkComp>
+            )})}
           </div>
         </div>
       </nav>

@@ -428,6 +428,36 @@ export const ADMIN_PAGE_CONTEXTS: HirnPageContext[] = [
     quickActions: [{ label: 'Neue Entscheidung', href: ROUTES.admin.decisionNew }],
   },
   {
+    pattern: /^\/admin\/zeiterfassung/,
+    area: 'admin-zeiterfassung',
+    description:
+      'Die Mitarbeiterin ist auf ihrer persönlichen Zeiterfassung (/admin/zeiterfassung). Ablauf: Arbeitsplan hinterlegen («Mein Arbeitsplan») → «Monat aus Plan füllen» → einzelne Tage anpassen oder Abwesenheiten (Ferien, Krank, Feiertag, unbezahlt) markieren → «Zur Prüfung einreichen». Zusätzlich: «Schicht starten/beenden» (Stempeluhr, landet direkt in der Zeitkarte), KI-Assistent für natürliche Eingaben, «Abwesenheit beantragen» für zukünftige Abwesenheiten. Genehmigt wird die Karte von einer ANDEREN Person unter /admin/team/approvals (Vier-Augen-Prinzip); der Status ist im Verlauf sichtbar (Entwurf → Eingereicht → Genehmigt/Abgelehnt).',
+    suggestions: [
+      'Wie fülle ich meinen Monat am schnellsten aus?',
+      'Wie trage ich Ferien oder Krankheit ein?',
+      'Was passiert nach dem Einreichen?',
+    ],
+    quickActions: [
+      { label: 'Zeiterfassung', href: '/admin/zeiterfassung' },
+      { label: 'Zeitkarten-Freigaben', href: '/admin/team/approvals' },
+    ],
+  },
+  {
+    pattern: /^\/admin\/team\/approvals/,
+    area: 'admin-timecard-approvals',
+    description:
+      'Die Mitarbeiterin ist in der Zeitkarten-Freigabe (/admin/team/approvals). Ablauf: Status-Tab «Offen» zeigt eingereichte Zeitkarten; mehrere ankreuzen und im Stapel genehmigen/zurückweisen, oder einzeln mit «Prüfen» im Detail ansehen, Einträge bearbeiten und entscheiden. Genehmigte Karten bleiben im Tab «Genehmigt» sichtbar, editierbar und können mit «Wieder öffnen» zurück auf Entwurf gesetzt werden. Eigene Karten kann nur ein Super-Admin selbst freigeben (Vier-Augen-Prinzip). Darunter: Abwesenheitsanträge genehmigen/ablehnen.',
+    suggestions: [
+      'Welche Zeitkarten warten auf Freigabe?',
+      'Wie korrigiere ich eine bereits genehmigte Zeitkarte?',
+      'Wie funktioniert das Vier-Augen-Prinzip?',
+    ],
+    quickActions: [
+      { label: 'Zeitkarten-Freigaben', href: '/admin/team/approvals' },
+      { label: 'Meine Zeiterfassung', href: '/admin/zeiterfassung' },
+    ],
+  },
+  {
     pattern: /^\/admin\/(team|timecards|zeiterfassung|payroll|hr)/,
     area: 'admin-team',
     description: adminDescription(

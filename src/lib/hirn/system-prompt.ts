@@ -13,6 +13,41 @@ import { getDefaultValue, getDefaultNumeric } from '@/lib/org-numbers.defaults'
 import { HOURLY_RATE, ASSESSMENT_FEE, MEDIA_PRICES } from '@/data/pricing'
 import { HIRN_ACTION_INSTRUCTION } from './action-cockpit'
 import { ORG, LOCATIONS, CONTACT } from '@/config/org'
+import { getSidebarGroupsWithSections } from '@/config/sections'
+import { ROUTES } from '@/config/routes'
+import { localeLabels, type Locale } from '@/i18n/routing'
+
+/**
+ * Real page directory (SSOT: sections.ts + routes.ts) — Hirn may ONLY link
+ * paths from this list. Built at import time; a new admin section appears
+ * here automatically.
+ */
+function buildNavigationDirectory(): string {
+  const adminLines = getSidebarGroupsWithSections().flatMap(({ group, sections }) =>
+    sections.map(s => `- ${s.path} — «${s.ui.label}» (${group.label}): ${s.ui.description}`)
+  )
+  // Real admin pages that are not their own sidebar section.
+  const extraAdminLines = [
+    '- /admin/team/approvals — «Zeitkarten & Abwesenheit» (Freigaben): eingereichte Zeitkarten und Abwesenheitsanträge prüfen, genehmigen, zurückweisen; genehmigte Karten im Tab «Genehmigt» einsehen/bearbeiten/wieder öffnen',
+  ]
+  const p = ROUTES.public
+  const publicLines = [
+    `- ${p.home} — Startseite`,
+    `- ${p.marketplace} — Marktplatz/Shop (refurbished Geräte + P2P-Inserate)`,
+    `- ${p.marketplaceSell} — Gerät verkaufen`,
+    `- ${p.donate} — Gerät spenden`,
+    `- ${p.itHilfe} — IT-Hilfe (Reparatur-Anfragen)`,
+    `- ${p.workshops} — Workshops`,
+    `- ${p.services} — Dienstleistungen`,
+    `- ${p.soFunktioniert} — So funktioniert unser Aufbereitungsprozess`,
+    `- ${p.blog} — Blog`,
+  ]
+  return `Admin-Seiten (nur für Mitarbeitende):
+${[...adminLines, ...extraAdminLines].join('\n')}
+
+Öffentliche Seiten:
+${publicLines.join('\n')}`
+}
 
 // Derived from org-numbers SSOT
 const n = {
@@ -224,9 +259,13 @@ Vision für die Zukunft: Community Tech Space — Museum für seltene Vintage-Ha
 ═══════════════════════════════════════════════════════════════
 
 Sprache:
-- Antworte auf Deutsch, es sei denn, die Frage ist auf Englisch
-- Verwende "ss" statt "ß" (Schweizer Deutsch): "Strasse" nicht "Straße", "Grüsse" nicht "Grüße"
+- Antworte IMMER in der Sprache, in der die Nutzerin schreibt (Deutsch, Italienisch, Französisch, Englisch, …). Wenn die Sprache unklar ist, verwende die Oberflächensprache (siehe Abschnitt AKTUELLE SEITE), sonst Deutsch.
+- Auf Deutsch: verwende "ss" statt "ß" (Schweizer Deutsch): "Strasse" nicht "Straße", "Grüsse" nicht "Grüße"
 - Verwende echte Umlaute: ä, ö, ü (nie ae, oe, ue)
+
+Links & Navigation:
+- Verlinke AUSSCHLIESSLICH Pfade aus dem Abschnitt SEITENVERZEICHNIS unten. Erfinde NIEMALS URLs oder Pfade — wenn eine passende Seite nicht in der Liste steht, sag das ehrlich statt einen Pfad zu raten.
+- Verwende relative Pfade (z.B. /admin/zeiterfassung), keine Domains.
 
 Stil:
 - Sei präzise und hilfreich
@@ -236,23 +275,33 @@ Stil:
 - Verwende die oben genannten Fakten als Grundlage deiner Antworten
 
 ═══════════════════════════════════════════════════════════════
-9. ACTION COCKPIT (interne Aktionen)
+9. SEITENVERZEICHNIS (die EINZIGEN verlinkbaren Seiten)
+═══════════════════════════════════════════════════════════════
+
+${buildNavigationDirectory()}
+
+═══════════════════════════════════════════════════════════════
+10. ACTION COCKPIT (interne Aktionen)
 ═══════════════════════════════════════════════════════════════
 
 ${HIRN_ACTION_INSTRUCTION}`
 
 /**
  * Build the admin system prompt, optionally enriched with the page context
- * the user is currently looking at (from src/config/hirn/page-contexts.ts).
+ * the user is currently looking at (from src/config/hirn/page-contexts.ts)
+ * and the UI locale (so answers match the user's interface language).
  */
-export function buildSystemPrompt(pageContext?: string): string {
-  if (!pageContext) return SYSTEM_PROMPT
+export function buildSystemPrompt(pageContext?: string, uiLocale?: string): string {
+  const localeLine = uiLocale
+    ? `Oberflächensprache der Nutzerin: ${localeLabels[uiLocale as Locale] ?? uiLocale}. Antworte in dieser Sprache, ausser sie schreibt erkennbar in einer anderen.`
+    : ''
+  if (!pageContext && !localeLine) return SYSTEM_PROMPT
   return `${SYSTEM_PROMPT}
 
 ═══════════════════════════════════════════════════════════════
-10. AKTUELLE SEITE
+11. AKTUELLE SEITE
 ═══════════════════════════════════════════════════════════════
 
-${pageContext}
+${[pageContext, localeLine].filter(Boolean).join('\n\n')}
 Beziehe dich, wo hilfreich, auf diesen Kontext.`
 }

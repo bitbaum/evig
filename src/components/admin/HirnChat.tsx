@@ -81,6 +81,12 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
   // Page context (SSOT: config/hirn/page-contexts) — tells Hirn what the
   // staff member is currently looking at + seeds the empty-state chips.
   const pageContext = resolveHirnContext(pathname ?? '/admin', 'admin')
+  // Chips are UI → localized via admin.hirnContexts.<area>.sN, config German fallback.
+  const tCtx = useTranslations('admin.hirnContexts')
+  const localizedSuggestions = pageContext.suggestions.map((fallback, i) => {
+    const key = `${pageContext.area}.s${i}`
+    return tCtx.has(key as never) ? tCtx(key as never) : fallback
+  })
 
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -220,9 +226,9 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
             <p className="text-sm max-w-md mt-2">
               {t('welcomeBody', { orgName: ORG.name })}
             </p>
-            {pageContext.suggestions.length > 0 && (
+            {localizedSuggestions.length > 0 && (
               <div className="mt-5 flex flex-wrap justify-center gap-2">
-                {pageContext.suggestions.map(suggestion => (
+                {localizedSuggestions.map(suggestion => (
                   <Button
                     key={suggestion}
                     type="button"

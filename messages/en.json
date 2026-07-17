@@ -11360,6 +11360,134 @@
       "approve": "Approve",
       "decline": "Decline",
       "unknownUser": "Unknown"
+    },
+    "pageGuide": {
+      "helpAria": "Help for this page",
+      "helpTitle": "What can I do on this page?",
+      "panelLabel": "Page help",
+      "fallbackTitle": "What can I do here?",
+      "typicalQuestions": "Typical questions",
+      "closeAria": "Close help"
+    },
+    "hirnContexts": {
+      "admin-dashboard": {
+        "title": "Dashboard",
+        "description": "Your admin home: open tasks, approvals, and the month’s key numbers at a glance.",
+        "s0": "What needs doing today?",
+        "s1": "Create a task",
+        "s2": "How many devices have we sold this year?"
+      },
+      "admin-product-capture": {
+        "title": "Capture a product",
+        "description": "Capture a device via text, photo, file, or voice — the AI fills the form, you review the suggestion and choose the next step.",
+        "s0": "Which input method is fastest here?",
+        "s1": "When may I publish without quality control?",
+        "s2": "How does a CSV import work?",
+        "guideTitle": "Capture a product",
+        "guidePurpose": "Capture a product once, then deliberately route it to inventory, refurbishment, spare parts, recycling, or the shop.",
+        "guideNote": "CSV/Excel imports as a batch and lands in inventory first. A file is no proof of a physical quality check.",
+        "guideLearnMore": "Our open refurbishment process",
+        "step0Title": "Enter data",
+        "step0Desc": "Type/paste text, take a photo, upload CSV/Excel, or dictate the product.",
+        "step1Title": "Review the AI suggestion",
+        "step1Desc": "The AI fills the form. Manufacturer and product name are required; everything else can follow later.",
+        "step2Title": "Choose the next step",
+        "step2Desc": "Quality control is recommended for RevampIT-verified stock. Alternatives stay visible and traceable.",
+        "step3Title": "Continue working",
+        "step3Desc": "Print the label, work the checklist, or open the published product in the shop."
+      },
+      "admin-approvals": {
+        "title": "Approvals",
+        "description": "Review submitted content (listings, blog posts, workshops, technician applications) and approve or reject it.",
+        "s0": "What criteria do I use to approve listings?",
+        "s1": "Create a task for open approvals"
+      },
+      "admin-erfassung": {
+        "title": "Device intake",
+        "description": "Steer the whole device flow: intake, triage, quality control, blocked devices, and publishing.",
+        "s0": "Which device needs attention next?",
+        "s1": "What blocks a publication?",
+        "guideTitle": "Device intake",
+        "guidePurpose": "Work on every captured device from intake to shop in one place.",
+        "guideNote": "The columns show working states, not separate data copies. A device stays one record through the whole process.",
+        "guideLearnMore": "Our open refurbishment process",
+        "step0Title": "Capture",
+        "step0Desc": "Record and label a new product via text, photo, file, or voice.",
+        "step1Title": "Work",
+        "step1Desc": "Open a device and document tests and refurbishment with pass, fail, or not applicable.",
+        "step2Title": "Unblock",
+        "step2Desc": "Repair failed devices and retest, or downgrade to spare parts/recycling.",
+        "step3Title": "Publish",
+        "step3Desc": "Fully verified devices automatically get a verification badge and visible test results in the shop."
+      },
+      "admin-marketplace": {
+        "title": "Listings",
+        "description": "Manage marketplace listings: verify, block, and handle reports.",
+        "s0": "How do I verify a listing?",
+        "s1": "Show me reported listings"
+      },
+      "admin-it-hilfe": {
+        "title": "IT help",
+        "description": "Keep an eye on open requests, offers, and technician profiles.",
+        "s0": "How many requests are open?",
+        "s1": "How does the IT-help flow work?"
+      },
+      "admin-workshops": {
+        "title": "Workshops",
+        "description": "Manage workshops: review proposals, schedule dates, look after registrations.",
+        "s0": "How do I schedule a new workshop date?",
+        "s1": "Create a task for workshop planning"
+      },
+      "admin-tasks": {
+        "title": "Tasks",
+        "description": "Work with the task board: create, assign, and complete tasks.",
+        "s0": "Create a task",
+        "s1": "Which tasks are assigned to me?"
+      },
+      "admin-protocols": {
+        "title": "Minutes",
+        "description": "Manage meeting minutes: record, look up, and document resolutions.",
+        "s0": "Create a draft protocol",
+        "s1": "What was in the last minutes?"
+      },
+      "admin-decisions": {
+        "title": "Decisions",
+        "description": "Propose, vote on, and document team decisions.",
+        "s0": "Create a decision draft",
+        "s1": "Which decisions are open?"
+      },
+      "admin-zeiterfassung": {
+        "title": "Time tracking",
+        "description": "Track your working hours: set your schedule, fill the month from the plan, mark absences, and submit the timecard for approval. It is approved by another person (four-eyes principle).",
+        "s0": "What is the fastest way to fill my month?",
+        "s1": "How do I record vacation or sick days?",
+        "s2": "What happens after submitting?"
+      },
+      "admin-timecard-approvals": {
+        "title": "Timecard approvals",
+        "description": "Review submitted timecards individually or in bulk. Approved cards stay visible in the “Approved” tab, remain editable, and can be reopened.",
+        "s0": "Which timecards are waiting for approval?",
+        "s1": "How do I correct an already approved timecard?",
+        "s2": "How does the four-eyes principle work?"
+      },
+      "admin-team": {
+        "title": "Team & HR",
+        "description": "Manage team members, profiles, timecards, and applications.",
+        "s0": "How does the timecard flow work?",
+        "s1": "Which timecards are waiting for approval?"
+      },
+      "admin-analyse": {
+        "title": "Analytics",
+        "description": "The organisation’s KPIs, finances, and impact numbers.",
+        "s0": "How do we calculate our CO₂ savings?",
+        "s1": "Explain the key metrics"
+      },
+      "admin-generic": {
+        "title": "Admin area",
+        "description": "You are in the admin area of the RevampIT platform.",
+        "s0": "Create a task",
+        "s1": "What do you know about RevampIT?"
+      }
     }
   },
   "changelog": {
@@ -11518,5 +11646,21 @@
       "buy": "Explore the marketplace",
       "donate": "Donate a device"
     }
+  },
+  "search": {
+    "ariaLabel": "Command palette",
+    "placeholder": "Search listings, orders, workshops…",
+    "noResults": "No results for “{query}”",
+    "typeToSearch": "Type to search…",
+    "groupGoTo": "Go to",
+    "groupMyListings": "My listings",
+    "groupMyOrders": "My orders",
+    "groupFavorites": "Favorites",
+    "groupMarketplace": "Marketplace",
+    "groupWorkshops": "Workshops",
+    "groupSearch": "Search",
+    "marketplaceSearch": "Search the marketplace: “{query}”",
+    "trigger": "Search",
+    "triggerAria": "Open search (⌘K)"
   }
 }

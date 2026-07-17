@@ -11361,6 +11361,134 @@
       "approve": "Approuver",
       "decline": "Refuser",
       "unknownUser": "Inconnu"
+    },
+    "pageGuide": {
+      "helpAria": "Aide pour cette page",
+      "helpTitle": "Que puis-je faire sur cette page ?",
+      "panelLabel": "Aide de la page",
+      "fallbackTitle": "Que puis-je faire ici ?",
+      "typicalQuestions": "Questions typiques",
+      "closeAria": "Fermer l’aide"
+    },
+    "hirnContexts": {
+      "admin-dashboard": {
+        "title": "Dashboard",
+        "description": "Ta page d’accueil admin : tâches ouvertes, validations et les chiffres clés du mois en un coup d’œil.",
+        "s0": "Qu’y a-t-il à faire aujourd’hui ?",
+        "s1": "Crée une tâche",
+        "s2": "Combien d’appareils avons-nous vendus cette année ?"
+      },
+      "admin-product-capture": {
+        "title": "Saisir un produit",
+        "description": "Saisis un appareil par texte, photo, fichier ou voix — l’IA remplit le formulaire, tu vérifies la proposition et choisis l’étape suivante.",
+        "s0": "Quelle méthode de saisie est la plus rapide ici ?",
+        "s1": "Quand puis-je publier sans contrôle qualité ?",
+        "s2": "Comment fonctionne un import CSV ?",
+        "guideTitle": "Saisir un produit",
+        "guidePurpose": "Saisir un produit une seule fois, puis l’orienter consciemment vers l’inventaire, la remise en état, les pièces détachées, le recyclage ou la boutique.",
+        "guideNote": "Le CSV/Excel est importé par lot et arrive d’abord à l’inventaire. Un fichier ne prouve pas un contrôle qualité physique.",
+        "guideLearnMore": "Notre processus de remise en état ouvert",
+        "step0Title": "Saisir les données",
+        "step0Desc": "Écrire/coller du texte, prendre une photo, téléverser un CSV/Excel ou dicter le produit.",
+        "step1Title": "Vérifier la proposition IA",
+        "step1Desc": "L’IA remplit le formulaire. Fabricant et nom du produit sont obligatoires ; le reste peut suivre plus tard.",
+        "step2Title": "Choisir la prochaine étape",
+        "step2Desc": "Le contrôle qualité est recommandé pour la marchandise vérifiée par RevampIT. Les alternatives restent visibles et traçables.",
+        "step3Title": "Continuer",
+        "step3Desc": "Imprimer l’étiquette, travailler la checklist ou ouvrir le produit publié dans la boutique."
+      },
+      "admin-approvals": {
+        "title": "Validations",
+        "description": "Vérifie les contenus soumis (annonces, articles, ateliers, candidatures de techniciens) et approuve-les ou refuse-les.",
+        "s0": "Selon quels critères approuver les annonces ?",
+        "s1": "Crée une tâche pour les validations ouvertes"
+      },
+      "admin-erfassung": {
+        "title": "Entrée des appareils",
+        "description": "Pilote tout le flux des appareils : entrée, triage, contrôle qualité, appareils bloqués et publication.",
+        "s0": "Quel appareil a besoin d’attention ensuite ?",
+        "s1": "Qu’est-ce qui bloque une publication ?",
+        "guideTitle": "Entrée des appareils",
+        "guidePurpose": "Travailler tous les appareils saisis, de l’entrée à la boutique, au même endroit.",
+        "guideNote": "Les colonnes montrent des états de travail, pas des copies de données séparées. Un appareil reste un seul enregistrement tout au long du processus.",
+        "guideLearnMore": "Notre processus de remise en état ouvert",
+        "step0Title": "Saisir",
+        "step0Desc": "Enregistrer et étiqueter un nouveau produit par texte, photo, fichier ou voix.",
+        "step1Title": "Travailler",
+        "step1Desc": "Ouvrir l’appareil et documenter tests et remise en état avec réussite, erreur ou non applicable.",
+        "step2Title": "Débloquer",
+        "step2Desc": "Réparer et retester les appareils en échec, ou les reclasser en pièces détachées/recyclage.",
+        "step3Title": "Publier",
+        "step3Desc": "Les appareils entièrement vérifiés reçoivent automatiquement le badge de vérification et des résultats de test visibles dans la boutique."
+      },
+      "admin-marketplace": {
+        "title": "Annonces",
+        "description": "Gère les annonces du marketplace : vérifier, bloquer et traiter les signalements.",
+        "s0": "Comment vérifier une annonce ?",
+        "s1": "Montre-moi les annonces signalées"
+      },
+      "admin-it-hilfe": {
+        "title": "Aide IT",
+        "description": "Garde un œil sur les demandes ouvertes, les offres et les profils des techniciens.",
+        "s0": "Combien de demandes sont ouvertes ?",
+        "s1": "Comment fonctionne le flux de l’aide IT ?"
+      },
+      "admin-workshops": {
+        "title": "Ateliers",
+        "description": "Gère les ateliers : examiner les propositions, planifier les dates, suivre les inscriptions.",
+        "s0": "Comment planifier une nouvelle date d’atelier ?",
+        "s1": "Crée une tâche pour la planification d’ateliers"
+      },
+      "admin-tasks": {
+        "title": "Tâches",
+        "description": "Travaille avec le tableau des tâches : créer, assigner et terminer des tâches.",
+        "s0": "Crée une tâche",
+        "s1": "Quelles tâches me sont assignées ?"
+      },
+      "admin-protocols": {
+        "title": "Procès-verbaux",
+        "description": "Gère les procès-verbaux de séance : saisir, relire et documenter les décisions.",
+        "s0": "Crée un brouillon de procès-verbal",
+        "s1": "Que disait le dernier procès-verbal ?"
+      },
+      "admin-decisions": {
+        "title": "Décisions",
+        "description": "Propose, vote et documente les décisions d’équipe.",
+        "s0": "Crée un brouillon de décision",
+        "s1": "Quelles décisions sont ouvertes ?"
+      },
+      "admin-zeiterfassung": {
+        "title": "Saisie des heures",
+        "description": "Saisis tes heures de travail : définir l’horaire, remplir le mois depuis le plan, marquer les absences et soumettre la feuille d’heures pour approbation. Elle est approuvée par une autre personne (principe des quatre yeux).",
+        "s0": "Quel est le moyen le plus rapide de remplir mon mois ?",
+        "s1": "Comment saisir vacances ou maladie ?",
+        "s2": "Que se passe-t-il après la soumission ?"
+      },
+      "admin-timecard-approvals": {
+        "title": "Validation des feuilles d’heures",
+        "description": "Vérifie les feuilles d’heures soumises, une par une ou en lot. Les feuilles approuvées restent visibles dans l’onglet «Approuvées», modifiables et réouvrables.",
+        "s0": "Quelles feuilles d’heures attendent une validation ?",
+        "s1": "Comment corriger une feuille déjà approuvée ?",
+        "s2": "Comment fonctionne le principe des quatre yeux ?"
+      },
+      "admin-team": {
+        "title": "Équipe & RH",
+        "description": "Gère les membres de l’équipe, les profils, les feuilles d’heures et les candidatures.",
+        "s0": "Comment fonctionne le flux des feuilles d’heures ?",
+        "s1": "Quelles feuilles d’heures attendent une validation ?"
+      },
+      "admin-analyse": {
+        "title": "Analyse",
+        "description": "Indicateurs, finances et chiffres d’impact de l’organisation.",
+        "s0": "Comment calculons-nous nos économies de CO₂ ?",
+        "s1": "Explique les indicateurs clés"
+      },
+      "admin-generic": {
+        "title": "Espace admin",
+        "description": "Tu es dans l’espace admin de la plateforme RevampIT.",
+        "s0": "Crée une tâche",
+        "s1": "Que sais-tu de RevampIT ?"
+      }
     }
   },
   "changelog": {
@@ -11519,5 +11647,21 @@
       "buy": "Découvrir le marché",
       "donate": "Donner un appareil"
     }
+  },
+  "search": {
+    "ariaLabel": "Palette de commandes",
+    "placeholder": "Rechercher annonces, commandes, ateliers…",
+    "noResults": "Aucun résultat pour «{query}»",
+    "typeToSearch": "Tape pour rechercher…",
+    "groupGoTo": "Aller à",
+    "groupMyListings": "Mes annonces",
+    "groupMyOrders": "Mes commandes",
+    "groupFavorites": "Favoris",
+    "groupMarketplace": "Marketplace",
+    "groupWorkshops": "Ateliers",
+    "groupSearch": "Recherche",
+    "marketplaceSearch": "Rechercher sur le marketplace : «{query}»",
+    "trigger": "Recherche",
+    "triggerAria": "Ouvrir la recherche (⌘K)"
   }
 }

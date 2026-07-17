@@ -26,17 +26,26 @@ export const POST = withAdmin('hirn', async (request: NextRequest, session) => {
     if (!validation.success) return validation.error
     const { message, sessionId, temperature, maxTokens, pathname } = validation.data
 
-    // Enrich the system prompt with what the user is currently looking at.
-    const pageContext = pathname
-      ? resolveHirnContext(pathname, 'admin').description
-      : undefined
+    // Enrich the system prompt with what the user is currently looking at —
+    // description + the page's real deep links (so answers link correctly).
+    let pageContext: string | undefined
+    if (pathname) {
+      const ctx = resolveHirnContext(pathname, 'admin')
+      const links = ctx.quickActions?.map(a => `${a.label}: ${a.href}`).join(' · ')
+      pageContext = [ctx.description, links ? `Direkt relevante Seiten: ${links}` : '']
+        .filter(Boolean)
+        .join('\n')
+    }
+
+    // UI language — written by the LocaleSwitcher; admin routes carry no URL locale.
+    const uiLocale = request.cookies.get('NEXT_LOCALE')?.value
 
     const response = await chat(message, {
       sessionId,
       userId: session.user.id,
       temperature,
       maxTokens,
-      systemPrompt: buildSystemPrompt(pageContext),
+      systemPrompt: buildSystemPrompt(pageContext, uiLocale),
     })
 
     return apiSuccess({
