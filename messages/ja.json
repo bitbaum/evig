@@ -10211,14 +10211,11 @@
       }
     },
     "timecards": {
-      "headerStatusSubmitted": "提出済み",
-      "headerStatusDraft": "下書き",
       "headerDaysSuffix": "日",
       "submit": "承認のため提出",
       "submitting": "送信中…",
       "resubmit": "再提出",
       "submitSuccess": "承認のため送信しました — 承認チームに通知されます。",
-      "submitHint": "下書きを保存すると入力内容が保持されます。「承認のため提出」で承認に送信されます。",
       "submitError": "タイムカードを提出できませんでした。",
       "save": "保存",
       "saving": "保存中…",
@@ -10246,7 +10243,7 @@
       "fieldNotePlaceholder": "この日が通常と異なる場合のみ",
       "pageTitle": "タイムカード",
       "pageDescription": "勤務時間を記録・提出・承認します",
-      "extrasToggle": "詳細設定 · コメント、テンプレートのリセット",
+      "extrasToggle": "詳細設定",
       "extrasMonthComment": "月のコメント",
       "extrasMonthCommentPlaceholder": "任意 — 例：休暇、病欠、特別業務。",
       "extrasResetMonth": "スケジュールから月を再構築（現在の記録を削除）",
@@ -10269,11 +10266,11 @@
       "lockedApproved": "承認・ロック済み",
       "reopen2": "再度開く（管理者）",
       "bulkAbsenceLabel": "欠勤",
-      "selectHintTouch": "日をタップして選択（もう一度タップで解除） · 日を長押ししてドラッグすると複数選択 · 曜日ラベル（月、火 …）で列全体を選択。",
+      "selectHintTouch": "日をタップしてその日の時間を入力 · 日を長押しすると複数選択（入力・不在・削除） · 曜日ラベル（月、火 …）で列全体を選択。",
       "submittedUnchanged": "提出済み — 承認待ちです。変更すると、再提出が必要になります。",
       "dayFillDefault": "標準勤務日 {start}–{end} を入力",
       "fillDefaultedNonPlanDays": "{count, plural, other {勤務予定のない#日を標準時間で入力しました — 必要に応じて調整してください}}",
-      "editDay": "日を編集",
+      "editDay": "時間を入力",
       "hourGridLabel": "勤務時間を選択",
       "hourHint": "時間の上をクリックまたはドラッグ — 各ブロックが1つのシフトで、間の空きは休憩として数えられます。分割シフトは2つ目のブロックをドラッグするだけです。",
       "hourHintTouch": "時間の上をスワイプしてブロックを作成（例 08:00–12:00）、午後分はもう一度スワイプ — 間の空きは休憩になります。タップで30分単位の切り替え。",
@@ -10399,7 +10396,9 @@
       },
       "profileEmpty": "タイムカードはまだありません。",
       "profileTotals": "{count}件 · 合計{duration}",
-      "profileToReview": "{count}件要確認"
+      "profileToReview": "{count}件要確認",
+      "dayGridShow": "時間グリッドを表示",
+      "dayGridHide": "時間グリッドを隠す"
     },
     "appointments": {
       "pageTitle": "予約",

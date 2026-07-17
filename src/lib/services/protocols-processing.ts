@@ -160,6 +160,39 @@ export async function processTranscript(
 }
 
 // =============================================================================
+// STALE-PROCESSING RECOVERY
+// =============================================================================
+
+// Processing is synchronous within one request; anything still "processing"
+// after this long means the server died mid-run (deploy restart, crash) and
+// the protocol would otherwise show an eternal spinner.
+const STALE_PROCESSING_MINUTES = 10
+
+/**
+ * Reset a protocol stuck in `processing` back to `draft` so the user gets an
+ * actionable retry card instead of a spinner that never resolves. The raw
+ * transcript is preserved. Safe to call on every detail-page load — the WHERE
+ * clause makes it a no-op unless the run is genuinely stale.
+ *
+ * @returns true if the protocol was recovered (caller should re-fetch)
+ */
+export async function recoverStaleProtocolProcessing(protocolId: string): Promise<boolean> {
+  const result = await db.execute(sql`
+    UPDATE ${sql.raw(mpTable)}
+    SET status = ${PROTOCOL_STATUS.DRAFT}
+    WHERE id = ${protocolId}
+      AND status = ${PROTOCOL_STATUS.PROCESSING}
+      AND updated_at < NOW() - INTERVAL '${sql.raw(String(STALE_PROCESSING_MINUTES))} minutes'
+    RETURNING id
+  `)
+  const recovered = result.rows.length > 0
+  if (recovered) {
+    logger.warn('Recovered protocol stuck in processing', { protocolId, staleMinutes: STALE_PROCESSING_MINUTES })
+  }
+  return recovered
+}
+
+// =============================================================================
 // NOTES PROCESSING (Step 3)
 // =============================================================================
 

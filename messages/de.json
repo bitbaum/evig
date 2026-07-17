@@ -10267,8 +10267,6 @@
       }
     },
     "timecards": {
-      "headerStatusSubmitted": "Eingereicht",
-      "headerStatusDraft": "Entwurf",
       "headerDaysSuffix": "Tage",
       "submit": "Zur Prüfung einreichen",
       "submitting": "Sende…",
@@ -10276,7 +10274,6 @@
       "lockedApproved": "Genehmigt und gesperrt",
       "reopen2": "Wieder öffnen (Admin)",
       "submitSuccess": "Zur Prüfung gesendet — Freigabe-Team wird benachrichtigt.",
-      "submitHint": "Entwurf speichern hält deine Eingaben; «Zur Prüfung einreichen» sendet an Freigabe.",
       "submitError": "Zeitkarte konnte nicht eingereicht werden.",
       "save": "Speichern",
       "saving": "Speichere…",
@@ -10304,7 +10301,7 @@
       "fieldNotePlaceholder": "Nur wenn dieser Tag anders war",
       "pageTitle": "Zeitkarten",
       "pageDescription": "Arbeitszeiten erfassen, einreichen und genehmigen",
-      "extrasToggle": "Erweitert · Kommentar, Vorlage zurücksetzen",
+      "extrasToggle": "Erweitert",
       "extrasMonthComment": "Monatskommentar",
       "extrasMonthCommentPlaceholder": "Optional — z.B. Ferien, Krankheit, Sondereinsatz.",
       "extrasResetMonth": "Monat aus Schedule neu aufbauen (löscht aktuelle Einträge)",
@@ -10325,11 +10322,11 @@
       "bulkAbsenceLabel": "Abwesend",
       "bulkClear": "Leeren",
       "bulkCancel": "Auswahl aufheben",
-      "selectHintTouch": "Tippe Tage an, um sie auszuwählen (erneut tippen wählt ab) · Halte einen Tag kurz gedrückt und ziehe, um mehrere zu markieren · Wochentag-Kürzel (Mo, Di …) wählt die ganze Spalte.",
+      "selectHintTouch": "Tippe einen Tag an, um seine Zeiten einzutragen · Halte einen Tag kurz gedrückt, um mehrere auszuwählen (füllen, Abwesenheit, leeren) · Wochentag-Kürzel (Mo, Di …) wählt die ganze Spalte.",
       "submittedUnchanged": "Eingereicht — warten auf Freigabe. Änderungen machen ein erneutes Einreichen nötig.",
       "dayFillDefault": "Standardtag {start}–{end} eintragen",
       "fillDefaultedNonPlanDays": "{count, plural, one {1 Tag ohne Arbeitsplan mit Standardzeiten gefüllt — bei Bedarf anpassen} other {# Tage ohne Arbeitsplan mit Standardzeiten gefüllt — bei Bedarf anpassen}}",
-      "editDay": "Tag bearbeiten",
+      "editDay": "Zeiten eintragen",
       "hourGridLabel": "Arbeitszeit wählen",
       "hourHint": "Klicke oder ziehe über die Stunden — jeder Block ist eine Schicht, Lücken dazwischen zählen als Pause. Für eine geteilte Schicht einfach einen zweiten Block ziehen.",
       "hourHintTouch": "Wische über die Stunden für einen Block (z.B. 08:00–12:00), dann nochmals für den Nachmittag — die Lücke dazwischen zählt als Pause. Tippen wählt einzelne halbe Stunden.",
@@ -10455,7 +10452,9 @@
       },
       "profileEmpty": "Noch keine Zeiterfassungen.",
       "profileTotals": "{count} Karten · {duration} insgesamt",
-      "profileToReview": "{count} zu prüfen"
+      "profileToReview": "{count} zu prüfen",
+      "dayGridShow": "Stundenraster anzeigen",
+      "dayGridHide": "Stundenraster ausblenden"
     },
     "appointments": {
       "pageTitle": "Termine",

@@ -10162,8 +10162,6 @@
       }
     },
     "timecards": {
-      "headerStatusSubmitted": "Soumise",
-      "headerStatusDraft": "Brouillon",
       "headerDaysSuffix": "jours",
       "submit": "Soumettre",
       "submitting": "Envoi…",
@@ -10192,7 +10190,7 @@
       "fieldNotePlaceholder": "Seulement si ce jour était différent",
       "pageTitle": "Feuilles de temps",
       "pageDescription": "Saisir, soumettre et approuver les heures",
-      "extrasToggle": "Avancé · commentaire, assistant IA, réinitialiser",
+      "extrasToggle": "Avancé",
       "extrasMonthComment": "Note du mois",
       "extrasMonthCommentPlaceholder": "Optionnel — p.ex. vacances, maladie, intervention spéciale.",
       "extrasAiAssist": "Assistant IA",
@@ -10217,16 +10215,15 @@
       "bulkClear": "Effacer",
       "bulkCancel": "Annuler la sélection",
       "submitSuccess": "Envoyé pour vérification — l'équipe de validation sera notifiée.",
-      "submitHint": "Enregistrer le brouillon conserve tes saisies ; « Soumettre pour vérification » envoie à la validation.",
       "submitError": "La carte de temps n'a pas pu être soumise.",
       "lockedApproved": "Approuvé et verrouillé",
       "reopen2": "Rouvrir (admin)",
       "bulkAbsenceLabel": "Absent",
-      "selectHintTouch": "Touchez les jours pour les sélectionner (retouchez pour désélectionner) · Maintenez un jour puis glissez pour en marquer plusieurs · L'abréviation du jour (Lu, Ma …) sélectionne toute la colonne.",
+      "selectHintTouch": "Touchez un jour pour saisir ses heures · Maintenez un jour pour en sélectionner plusieurs (remplir, absence, vider) · L'abréviation du jour (Lu, Ma …) sélectionne toute la colonne.",
       "submittedUnchanged": "Soumis — en attente d'approbation. Toute modification nécessite une nouvelle soumission.",
       "dayFillDefault": "Saisir un jour standard {start}–{end}",
       "fillDefaultedNonPlanDays": "{count, plural, one {1 jour sans plan de travail rempli avec les heures standard — à ajuster si besoin} other {# jours sans plan de travail remplis avec les heures standard — à ajuster si besoin}}",
-      "editDay": "Modifier le jour",
+      "editDay": "Saisir les heures",
       "hourGridLabel": "Choisir les heures de travail",
       "hourHint": "Cliquez ou glissez sur les heures — chaque bloc est un service, les intervalles comptent comme pause. Pour un service coupé, glissez simplement un second bloc.",
       "hourHintTouch": "Balayez les heures pour un bloc (p. ex. 08:00–12:00), puis à nouveau pour l'après-midi — l'intervalle compte comme pause. Touchez pour basculer des demi-heures isolées.",
@@ -10352,7 +10349,9 @@
       },
       "profileEmpty": "Pas encore de feuilles d'heures.",
       "profileTotals": "{count} feuilles · {duration} au total",
-      "profileToReview": "{count} à vérifier"
+      "profileToReview": "{count} à vérifier",
+      "dayGridShow": "Afficher la grille horaire",
+      "dayGridHide": "Masquer la grille horaire"
     },
     "appointments": {
       "pageTitle": "Rendez-vous",

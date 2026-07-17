@@ -76,9 +76,14 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
         }),
       }
 
+      // Mapped people ARE the meeting's attendees — one save keeps both in
+      // sync, so nobody has to maintain a second "Teilnehmer" list by hand.
+      const mappedIds = Object.values(attendeeMapping).filter(Boolean)
+      const attendees = Array.from(new Set([...(protocol.attendees || []), ...mappedIds]))
+
       const result = await apiFetch<void>(`/api/protocols/${protocol.id}`, {
         method: 'PATCH',
-        body: { structured_notes: updatedNotes },
+        body: { structured_notes: updatedNotes, attendees },
       })
       if (!result.success) throw new Error(result.error || 'Fehler beim Speichern')
       setMappingDirty(false)
@@ -106,14 +111,12 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
     }
   }
 
-  const getReprocessEndpoint = () => {
-    switch (protocol.input_method) {
-      case 'notes': return 'process-notes'
-      case 'tasks': return 'import-tasks'
-      case 'audio': return 'process-audio'
-      default: return 'process'
-    }
-  }
+  // 'notes' keeps its dedicated endpoint (direct JSON import without an AI
+  // round-trip) and 'tasks' its importer; everything else — audio and/or
+  // transcript text — goes through the SAME unified /process-sources endpoint
+  // the create page uses. One pipeline, one set of error messages.
+  const usesUnifiedPipeline =
+    protocol.input_method !== 'notes' && protocol.input_method !== 'tasks'
 
   const getReprocessMinLength = () => {
     switch (protocol.input_method) {
@@ -123,38 +126,35 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
     }
   }
 
-  const getReprocessBody = () => {
-    if (protocol.input_method === 'transcript' || protocol.input_method === 'audio') {
-      return { raw_transcript: transcript }
-    }
-    return { content: transcript }
-  }
+  const canProcess = usesUnifiedPipeline
+    ? audioFile !== null || transcript.trim().length >= getReprocessMinLength()
+    : transcript.trim().length >= getReprocessMinLength()
 
   const handleProcess = async () => {
-    if (protocol.input_method !== 'audio' && transcript.length < getReprocessMinLength()) return
+    if (!canProcess) return
     setProcessing(true)
     setError(null)
 
     try {
-      const endpoint = getReprocessEndpoint()
-
-      if (protocol.input_method === 'audio') {
-        if (!audioFile) throw new Error('Bitte wähle eine Audiodatei aus.')
-        const validationError = validateAudioUpload(audioFile)
-        if (validationError) throw new Error(validationError)
-
+      if (usesUnifiedPipeline) {
+        if (audioFile) {
+          const validationError = validateAudioUpload(audioFile)
+          if (validationError) throw new Error(validationError)
+        }
         const formData = new FormData()
-        formData.append('audio', audioFile)
-        const result = await apiFetch<void>(`/api/protocols/${protocol.id}/${endpoint}`, {
+        if (audioFile) formData.append('audio', audioFile)
+        if (transcript.trim()) formData.append('text', transcript)
+        const result = await apiFetch<void>(`/api/protocols/${protocol.id}/process-sources`, {
           method: 'POST',
           body: formData,
           formData: true,
         })
         if (!result.success) throw new Error(result.error || 'Verarbeitung fehlgeschlagen')
       } else {
+        const endpoint = protocol.input_method === 'tasks' ? 'import-tasks' : 'process-notes'
         const result = await apiFetch<void>(`/api/protocols/${protocol.id}/${endpoint}`, {
           method: 'POST',
-          body: getReprocessBody(),
+          body: { content: transcript },
         })
         if (!result.success) throw new Error(result.error || 'Verarbeitung fehlgeschlagen')
       }
@@ -195,6 +195,71 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
       setError(getErrorMessage(err))
     } finally {
       setCreatingTask(null)
+    }
+  }
+
+  /**
+   * Add a task the AI did NOT recognize from the transcript.
+   *
+   * Two steps so the protocol stays the SSOT: the new item is first
+   * appended to structured_notes.action_items (provenance: it belongs to
+   * this meeting), then created + linked as a real task via the same
+   * /actions endpoint the recognized items use.
+   */
+  const [addingCustomTask, setAddingCustomTask] = useState(false)
+  const handleAddCustomTask = async (
+    description: string,
+    assignee: { id: string; name: string } | null,
+  ): Promise<boolean> => {
+    const trimmed = description.trim()
+    if (!trimmed || !notes) return false
+    setAddingCustomTask(true)
+    setError(null)
+
+    try {
+      const newItem: StructuredNotes['action_items'][0] = {
+        id: `custom-${crypto.randomUUID()}`,
+        description: trimmed,
+        assigned_to_name: assignee?.name ?? null,
+        assigned_to_id: assignee?.id ?? null,
+        due_hint: null,
+        item_type: 'task',
+        topic_id: null,
+        priority_hint: null,
+      }
+
+      const patchResult = await apiFetch<void>(`/api/protocols/${protocol.id}`, {
+        method: 'PATCH',
+        body: {
+          structured_notes: { ...notes, action_items: [...notes.action_items, newItem] },
+        },
+      })
+      if (!patchResult.success) throw new Error(patchResult.error || 'Fehler beim Speichern')
+
+      const linkResult = await apiFetch<void>(`/api/protocols/${protocol.id}/actions`, {
+        method: 'POST',
+        body: {
+          action_item_id: newItem.id,
+          link_type: 'task',
+          task_data: {
+            title: trimmed,
+            description: `Aus Protokoll: ${protocol.title} (${formatDateShort(protocol.meeting_date)}) — manuell ergänzt`,
+            task_type: 'one_time',
+            category: 'admin',
+            priority: TASK_PRIORITIES.NORMAL,
+            assigned_to: assignee?.id ?? null,
+          },
+        },
+      })
+      if (!linkResult.success) throw new Error(linkResult.error || 'Fehler beim Erstellen der Aufgabe')
+
+      router.refresh()
+      return true
+    } catch (err) {
+      setError(getErrorMessage(err))
+      return false
+    } finally {
+      setAddingCustomTask(false)
     }
   }
 
@@ -288,6 +353,8 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
     isFinalized,
     error,
     initialProcessingError,
+    usesUnifiedPipeline,
+    canProcess,
     // Topics
     expandedTopics,
     toggleTopic,
@@ -315,6 +382,8 @@ export function useProtocolDetail({ protocol, actionLinks, initialProcessingErro
     bulkCreatingTasks,
     bulkTaskErrors,
     handleCreateAllTasks,
+    addingCustomTask,
+    handleAddCustomTask,
     // Finalize
     finalizing,
     showFinalizeDialog,

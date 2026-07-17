@@ -10211,14 +10211,11 @@
       }
     },
     "timecards": {
-      "headerStatusSubmitted": "Enviado",
-      "headerStatusDraft": "Borrador",
       "headerDaysSuffix": "Días",
       "submit": "Enviar para revisión",
       "submitting": "Enviando…",
       "resubmit": "Volver a enviar",
       "submitSuccess": "Enviado para revisión — se notificará al equipo de aprobación.",
-      "submitHint": "Guardar borrador conserva tus datos; «Enviar para revisión» los manda a aprobación.",
       "submitError": "No se pudo enviar la tarjeta de horario.",
       "save": "Guardar",
       "saving": "Guardando…",
@@ -10246,7 +10243,7 @@
       "fieldNotePlaceholder": "Solo si este día fue diferente",
       "pageTitle": "Tarjetas de horario",
       "pageDescription": "Registrar, enviar y aprobar horarios de trabajo",
-      "extrasToggle": "Avanzado · Comentario, restablecer plantilla",
+      "extrasToggle": "Avanzado",
       "extrasMonthComment": "Comentario del mes",
       "extrasMonthCommentPlaceholder": "Opcional — p. ej. vacaciones, enfermedad, asignación especial.",
       "extrasResetMonth": "Reconstruir el mes desde el horario (elimina los registros actuales)",
@@ -10269,11 +10266,11 @@
       "lockedApproved": "Aprobado y bloqueado",
       "reopen2": "Reabrir (admin)",
       "bulkAbsenceLabel": "Ausente",
-      "selectHintTouch": "Toca los días para seleccionarlos (vuelve a tocar para deseleccionar) · Mantén pulsado un día y arrastra para marcar varios · La abreviatura del día (Lu, Ma …) selecciona toda la columna.",
+      "selectHintTouch": "Toca un día para registrar sus horas · Mantén pulsado un día para seleccionar varios (rellenar, ausencia, vaciar) · La abreviatura del día (Lu, Ma …) selecciona toda la columna.",
       "submittedUnchanged": "Enviado, a la espera de aprobación. Cualquier cambio requiere volver a enviarlo.",
       "dayFillDefault": "Registrar día estándar {start}–{end}",
       "fillDefaultedNonPlanDays": "{count, plural, one {1 día sin plan de trabajo rellenado con horas estándar — ajústalo si es necesario} other {# días sin plan de trabajo rellenados con horas estándar — ajústalos si es necesario}}",
-      "editDay": "Editar día",
+      "editDay": "Registrar horas",
       "hourGridLabel": "Seleccionar horas de trabajo",
       "hourHint": "Haz clic o arrastra sobre las horas — cada bloque es un turno, los huecos cuentan como pausa. Para un turno partido, arrastra simplemente un segundo bloque.",
       "hourHintTouch": "Desliza sobre las horas para un bloque (p. ej. 08:00–12:00) y de nuevo para la tarde — el hueco cuenta como pausa. Toca para alternar medias horas sueltas.",
@@ -10399,7 +10396,9 @@
       },
       "profileEmpty": "Aún no hay hojas de horas.",
       "profileTotals": "{count} hojas · {duration} en total",
-      "profileToReview": "{count} por revisar"
+      "profileToReview": "{count} por revisar",
+      "dayGridShow": "Mostrar cuadrícula horaria",
+      "dayGridHide": "Ocultar cuadrícula horaria"
     },
     "appointments": {
       "pageTitle": "Citas",

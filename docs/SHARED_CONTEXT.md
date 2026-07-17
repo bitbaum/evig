@@ -1,7 +1,7 @@
 ---
 created_date: 2026-01-07
-last_modified_date: 2026-06-19
-last_modified_summary: HR talent lifecycle — /karriere, admin vacancies/applications, hire→team_profiles
+last_modified_date: 2026-07-16
+last_modified_summary: Access Points — production URLs (revampit.orangecat.ch) + legacy-Joomla warning
 ---
 
 # Revamp-IT Shared Context (SSOT)
@@ -52,6 +52,17 @@ last_modified_summary: HR talent lifecycle — /karriere, admin vacancies/applic
 ---
 
 ## Access Points
+
+### Production (this codebase)
+
+- **App**: https://revampit.orangecat.ch — self-hosted on the Hetzner box, deployed from `main` via `deploy-selfhost.yml` (systemd `revampit-app`)
+- **Health**: https://revampit.orangecat.ch/api/health (DB + Meilisearch status)
+- **Admin**: https://revampit.orangecat.ch/admin
+- **Zeiterfassung (staff time entry)**: https://revampit.orangecat.ch/admin/zeiterfassung (same shared `TimecardsClient` also at `/dashboard/timecards`)
+
+⚠️ **https://www.revamp-it.ch is NOT this codebase** — that is the organization's legacy Joomla site. Never smoke-test or verify deploys there.
+
+### Local dev
 
 - **Frontend**: http://localhost:3000
 - **Admin Dashboard**: http://localhost:3000/admin

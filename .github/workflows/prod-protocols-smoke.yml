@@ -1,0 +1,101 @@
+name: Prod protocols smoke
+
+# On-demand browser test of the protocol audio pipeline against production:
+# generates real German speech audio (espeak-ng), logs in as the staff E2E
+# account, uploads it on /admin/protocols/new, waits for transcription + AI
+# structuring, asserts the review state, and deletes the protocol again.
+#
+# Variants:
+#   small — ~90 s m4a (< 24 MB): direct Groq Whisper path
+#   large — ~30 min m4a (> 24 MB): ffmpeg-chunked transcription path
+#
+# Requires secrets: AUTH_TEST_ADMIN_PASSWORD (and optionally
+# AUTH_TEST_ADMIN_EMAIL — defaults to georgy.butaev@revamp-it.ch).
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: Target deployment
+        default: https://revampit.orangecat.ch
+        required: true
+      variant:
+        description: Which audio sizes to test
+        type: choice
+        options: [small, large, both]
+        default: both
+
+jobs:
+  smoke:
+    name: Audio pipeline smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      AUTH_TEST_ADMIN_EMAIL: ${{ secrets.AUTH_TEST_ADMIN_EMAIL }}
+      AUTH_TEST_ADMIN_PASSWORD: ${{ secrets.AUTH_TEST_ADMIN_PASSWORD }}
+    steps:
+      - name: Check secrets configured
+        run: |
+          if [ -z "$AUTH_TEST_ADMIN_PASSWORD" ]; then
+            echo "::error::AUTH_TEST_ADMIN_PASSWORD secret not set — cannot log in to prod."
+            exit 1
+          fi
+
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Generate speech fixtures (espeak-ng + ffmpeg)
+        id: fixtures
+        run: |
+          sudo DEBIAN_FRONTEND=noninteractive apt-get -qq update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get -qq install -y espeak-ng ffmpeg
+          mkdir -p /tmp/protocol-fixtures
+          cat > /tmp/protocol-fixtures/script.txt <<'TXT'
+          Willkommen zur Teamsitzung von Revamp IT. Heute besprechen wir drei Themen.
+          Erstes Thema: der Umzug des Shops auf den neuen Marktplatz. Andreas übernimmt den Export der Artikeldaten bis Ende des Monats.
+          Zweites Thema: die Übersetzung der Produktbeschreibungen ins Französische. Maria kümmert sich um die Übersetzung bis zum zwanzigsten Juli.
+          Drittes Thema: die Reparaturwerkstatt braucht neue Ersatzteile für Notebooks. Wir haben entschieden, gebrauchte Teile aus gespendeten Geräten zu verwenden.
+          Die nächste Sitzung findet nächste Woche am gleichen Ort statt. Vielen Dank an alle für die Teilnahme.
+          TXT
+          espeak-ng -v de -s 145 -f /tmp/protocol-fixtures/script.txt -w /tmp/protocol-fixtures/speech.wav
+          FILES=""
+          if [ "${{ inputs.variant }}" != "large" ]; then
+            # ~90 s, well under the 24 MB direct-upload cap
+            ffmpeg -hide_banner -loglevel error -y -stream_loop -1 -i /tmp/protocol-fixtures/speech.wav -t 90 -c:a aac -b:a 96k /tmp/protocol-fixtures/small.m4a
+            FILES="/tmp/protocol-fixtures/small.m4a"
+          fi
+          if [ "${{ inputs.variant }}" != "small" ]; then
+            # ~30 min at 192 kbit/s stereo ≈ 43 MB — forces the chunked path
+            ffmpeg -hide_banner -loglevel error -y -stream_loop -1 -i /tmp/protocol-fixtures/speech.wav -t 1800 -ac 2 -ar 44100 -c:a aac -b:a 192k /tmp/protocol-fixtures/large.m4a
+            FILES="${FILES:+$FILES,}/tmp/protocol-fixtures/large.m4a"
+          fi
+          ls -la /tmp/protocol-fixtures/
+          echo "files=$FILES" >> "$GITHUB_OUTPUT"
+
+      - name: Run smoke against ${{ inputs.base_url }}
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ inputs.base_url }}
+          PROTOCOLS_SMOKE_AUDIO: ${{ steps.fixtures.outputs.files }}
+        run: npx playwright test tests/e2e/prod-protocols-smoke.spec.ts --project=chromium --reporter=line
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prod-protocols-smoke-artifacts
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: ignore

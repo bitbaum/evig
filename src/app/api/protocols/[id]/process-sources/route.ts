@@ -3,10 +3,10 @@
  *
  * POST /api/protocols/[id]/process-sources
  *
- * Replaces the trio:
- *   /process        (text transcript JSON body)
- *   /process-audio  (single audio FormData)
- *   /process-notes  (text notes JSON body)
+ * THE pipeline for audio/transcript protocols — used by the create page AND
+ * the detail-page retry. The legacy /process and /process-audio endpoints
+ * were removed; /process-notes remains only for direct JSON import (no AI)
+ * and /import-tasks for task lists.
  *
  * Accepts FormData with any combination of:
  *   - audio       — optional File (single)
@@ -37,6 +37,7 @@ import { logger } from '@/lib/logger'
 import { validateAudioUpload } from '@/lib/protocols/audio-validation'
 import { validateTextUpload } from '@/lib/protocols/upload'
 import { transcribeAudio, TranscriptionUnavailableError } from '@/lib/transcription/transcribe'
+import { parseMultipart, MultipartLimitError } from '@/lib/api/parse-multipart'
 
 type RouteParams = { id: string }
 
@@ -65,12 +66,24 @@ export const POST = withAdmin<RouteParams>(async (
       return apiBadRequest(ERROR_MESSAGES.PROTOCOL_NOT_EDITABLE)
     }
 
-    // ─── Parse FormData ──────────────────────────────────────────────
-    const formData = await request.formData()
-    const audioFile = formData.get('audio') as File | null
-    const textInput = (formData.get('text') as string | null)?.trim() ?? ''
-    const textFiles = formData.getAll('textFile').filter((v): v is File => v instanceof File)
-    const requestedModel = formData.get('whisper_model') as string | null
+    // ─── Parse multipart body ─────────────────────────────────────────
+    // Streamed via busboy — request.formData() fails for bodies above
+    // ~10 MB (see src/lib/api/parse-multipart.ts), and meeting recordings
+    // are routinely 50–100 MB.
+    let parsed
+    try {
+      parsed = await parseMultipart(request)
+    } catch (error) {
+      if (error instanceof MultipartLimitError) {
+        return apiBadRequest(error.message)
+      }
+      logger.error('Failed to parse multipart body', { protocolId, error: String(error) })
+      return apiBadRequest('Upload konnte nicht gelesen werden. Bitte erneut versuchen.')
+    }
+    const audioFile = parsed.files.find((f) => f.field === 'audio')?.file ?? null
+    const textInput = parsed.fields['text']?.[0]?.trim() ?? ''
+    const textFiles = parsed.files.filter((f) => f.field === 'textFile').map((f) => f.file)
+    const requestedModel = parsed.fields['whisper_model']?.[0] ?? null
 
     if (!audioFile && !textInput && textFiles.length === 0) {
       return apiBadRequest('Mindestens eine Quelle erforderlich (Audio, Text oder Datei).')
@@ -89,10 +102,7 @@ export const POST = withAdmin<RouteParams>(async (
     // ─── Build the combined transcript ───────────────────────────────
     const parts: string[] = []
 
-    // 1. Audio transcription (if present). The transcribe-service call
-    // pattern is intentionally duplicated from /process-audio for now —
-    // when that endpoint is retired (deferred to cleanup script), this
-    // becomes the only copy.
+    // 1. Audio transcription (if present).
     let transcribedText: string | undefined
     if (audioFile) {
       let transcription
@@ -130,7 +140,9 @@ export const POST = withAdmin<RouteParams>(async (
         model: transcription.model,
       })
 
-      if (!transcribedText) {
+      // Empty transcription is only fatal when audio was the SOLE source —
+      // with typed notes or files present, those still carry the meeting.
+      if (!transcribedText && !textInput && textFiles.length === 0) {
         return NextResponse.json({
           success: false,
           error: 'Keine Sprache erkannt. Bitte deutlicher sprechen oder eine andere Aufnahme verwenden.',
@@ -138,7 +150,11 @@ export const POST = withAdmin<RouteParams>(async (
           retryable: true,
         }, { status: 422 })
       }
-      parts.push(`--- Audio-Transkript: ${audioFile.name} ---\n${transcribedText}`)
+      if (transcribedText) {
+        parts.push(`--- Audio-Transkript: ${audioFile.name} ---\n${transcribedText}`)
+      } else {
+        logger.warn('Audio yielded no speech; continuing with text sources', { protocolId })
+      }
     }
 
     // 2. Textarea content (manual notes — typed inline)

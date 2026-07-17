@@ -10211,14 +10211,11 @@
       }
     },
     "timecards": {
-      "headerStatusSubmitted": "Inviata",
-      "headerStatusDraft": "Bozza",
       "headerDaysSuffix": "giorni",
       "submit": "Invia per la verifica",
       "submitting": "Invio…",
       "resubmit": "Invia di nuovo",
       "submitSuccess": "Inviata per la verifica — il team di approvazione verrà avvisato.",
-      "submitHint": "Salvare la bozza conserva le tue voci; «Invia per la verifica» le inoltra all'approvazione.",
       "submitError": "Impossibile inviare la scheda orari.",
       "save": "Salva",
       "saving": "Salvataggio…",
@@ -10246,7 +10243,7 @@
       "fieldNotePlaceholder": "Solo se questo giorno è stato diverso",
       "pageTitle": "Schede orari",
       "pageDescription": "Registra, invia e approva gli orari di lavoro",
-      "extrasToggle": "Avanzato · Commento, ripristina modello",
+      "extrasToggle": "Avanzate",
       "extrasMonthComment": "Commento mensile",
       "extrasMonthCommentPlaceholder": "Opzionale — ad es. vacanze, malattia, intervento speciale.",
       "extrasResetMonth": "Ricostruisci il mese dall'orario (cancella le voci attuali)",
@@ -10269,11 +10266,11 @@
       "lockedApproved": "Approvato e bloccato",
       "reopen2": "Riapri (Admin)",
       "bulkAbsenceLabel": "Assente",
-      "selectHintTouch": "Tocca i giorni per selezionarli (tocca di nuovo per deselezionare) · Tieni premuto un giorno e trascina per marcarne diversi · La sigla del giorno (Lu, Ma …) seleziona l'intera colonna.",
+      "selectHintTouch": "Tocca un giorno per inserire le sue ore · Tieni premuto un giorno per selezionarne diversi (riempire, assenza, svuotare) · La sigla del giorno (Lu, Ma …) seleziona l'intera colonna.",
       "submittedUnchanged": "Inviato — in attesa di approvazione. Le modifiche richiedono un nuovo invio.",
       "dayFillDefault": "Inserisci giornata standard {start}–{end}",
       "fillDefaultedNonPlanDays": "{count, plural, one {1 giorno senza piano di lavoro riempito con orari standard — da adattare se necessario} other {# giorni senza piano di lavoro riempiti con orari standard — da adattare se necessario}}",
-      "editDay": "Modifica giorno",
+      "editDay": "Inserisci le ore",
       "hourGridLabel": "Seleziona l'orario di lavoro",
       "hourHint": "Clicca o trascina sulle ore — ogni blocco è un turno, gli intervalli contano come pausa. Per un turno spezzato basta trascinare un secondo blocco.",
       "hourHintTouch": "Scorri sulle ore per un blocco (es. 08:00–12:00), poi di nuovo per il pomeriggio — l'intervallo conta come pausa. Tocca per attivare singole mezz'ore.",
@@ -10399,7 +10396,9 @@
       },
       "profileEmpty": "Ancora nessuna scheda ore.",
       "profileTotals": "{count} schede · {duration} in totale",
-      "profileToReview": "{count} da verificare"
+      "profileToReview": "{count} da verificare",
+      "dayGridShow": "Mostra griglia oraria",
+      "dayGridHide": "Nascondi griglia oraria"
     },
     "appointments": {
       "pageTitle": "Appuntamenti",

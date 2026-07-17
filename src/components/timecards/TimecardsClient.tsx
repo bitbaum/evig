@@ -115,19 +115,9 @@ export function TimecardsClient({
     <article className="space-y-6 pb-12">
       <TimecardHeader
         monthLabel={tc.monthLabel}
-        scheduleSummary={tc.scheduleSummary}
         totalMinutes={tc.totalMinutes}
         entryCount={tc.periodEntries.length}
         status={serverStatus}
-        isDirty={tc.isDirty}
-        hasEntries={tc.periodEntries.length > 0}
-        isSaving={tc.isSaving}
-        isSubmitting={tc.isSubmitting}
-        isLoadingDraft={tc.isLoadingDraft}
-        errorMessage={tc.errorMessage}
-        syncMessage={tc.syncMessage}
-        onSubmit={tc.submitDraft}
-        onSave={tc.saveDraft}
       />
 
       {!tc.hasSchedule && <NoScheduleNotice hasSchedule={tc.hasSchedule} />}
@@ -237,20 +227,24 @@ export function TimecardsClient({
       )}
 
       {/* Entry tools below the hero calendar: clock-in (compact) + the AI
-          assistant (collapsed by default so the calendar stays the focus). */}
-      <div className="space-y-3 border-t border-subtle pt-6">
-        <ShiftWidget onClockOut={tc.addShiftEntry} />
-        <div className="space-y-2">
-          <AIFormAssist<TimecardAIResult>
-            formType="timecard"
-            variant="section"
-            currentData={currentData}
-            placeholder={t('aiPlaceholder')}
-            onFieldsFilled={tc.handleAIFieldsFilled}
-          />
-          <p className="px-1 text-xs text-text-tertiary">{t('aiExamples')}</p>
+          assistant (collapsed by default so the calendar stays the focus).
+          Month view only — they act on the whole card / today, and in the day
+          view they buried the day form under two more widgets on phones. */}
+      {view === 'month' && (
+        <div className="space-y-3 border-t border-subtle pt-6">
+          <ShiftWidget onClockOut={tc.addShiftEntry} />
+          <div className="space-y-2">
+            <AIFormAssist<TimecardAIResult>
+              formType="timecard"
+              variant="section"
+              currentData={currentData}
+              placeholder={t('aiPlaceholder')}
+              onFieldsFilled={tc.handleAIFieldsFilled}
+            />
+            <p className="px-1 text-xs text-text-tertiary">{t('aiExamples')}</p>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Extras: month note + reset, behind a disclosure. */}
       <section className="border-t border-subtle pt-6">
@@ -304,10 +298,10 @@ export function TimecardsClient({
         header={t('bulkSelected', { count: menuCount })}
       />
 
-      {/* Sticky action bar — keeps Save/Einreichen one tap away right after
-          filling (the fill + leave controls sit mid-page; without this the user
-          had to scroll back up to the header to submit). Locked once approved. */}
-      <div className="sticky bottom-0 z-20 -mx-1 flex flex-col gap-2 border-t border-subtle bg-surface-base/95 px-1 py-3 backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+      {/* Sticky action bar — THE (single) Save/Einreichen cluster; the month
+          header deliberately has none. pr clears the floating feedback FAB
+          (fixed right-4 on phones) so it can't cover the submit button. */}
+      <div className="sticky bottom-0 z-20 -mx-1 flex flex-col gap-2 border-t border-subtle bg-surface-base/95 py-3 pl-1 pr-16 backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:pr-1">
         {/* Feedback lives NEXT TO the buttons that trigger it — the header
             message is off-screen when the user submits from down here. */}
         {tc.errorMessage ? (

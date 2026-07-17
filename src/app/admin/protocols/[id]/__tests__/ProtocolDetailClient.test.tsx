@@ -178,6 +178,8 @@ describe('ProtocolDetailClient', () => {
     )
 
     expect(screen.getByText('Keine Aktionen erkannt')).toBeInTheDocument()
-    expect(screen.getByText(/Überarbeite den Inhalt oben/i)).toBeInTheDocument()
+    // Empty state is actionable: manual add is offered alongside reprocessing.
+    expect(screen.getByText(/Ergänze Aufgaben unten von Hand/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Aufgabe ergänzen/i })).toBeInTheDocument()
   })
 })

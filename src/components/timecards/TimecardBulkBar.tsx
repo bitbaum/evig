@@ -35,36 +35,37 @@ export function TimecardBulkBar({
   if (count === 0) return null
 
   return (
-    // bottom-16 keeps the bar clear of the page's sticky save/submit footer
-    // (bottom-0, ~3.5rem tall) — at bottom-4 the two overlapped on mobile.
-    <div className="sticky bottom-16 z-10 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-action/30 bg-surface-base p-3 shadow-sm">
-      <span className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-text-secondary">
-        <CalendarCheck className="h-4 w-4 text-action" aria-hidden="true" />
-        {t('bulkSelected', { count })}
-      </span>
+    // bottom offset keeps the bar clear of the page's sticky save/submit
+    // footer (bottom-0; two rows ≈ 5.5rem on phones, one row ≈ 3.5rem from
+    // sm) — the bar's tail actions used to disappear behind it on mobile.
+    <div className="sticky bottom-24 z-10 space-y-2.5 rounded-xl border border-action/30 bg-surface-base p-3 shadow-sm sm:bottom-16">
+      {/* Header row: what's selected + the way out, always visible. */}
+      <div className="flex items-center justify-between gap-2">
+        <span className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-text-secondary">
+          <CalendarCheck className="h-4 w-4 text-action" aria-hidden="true" />
+          {t('bulkSelected', { count })}
+        </span>
+        <Button
+          type="button"
+          variant="ghost"
+          size="sm"
+          onClick={onCancel}
+          className="text-text-tertiary hover:text-text-secondary"
+        >
+          <X className="h-3.5 w-3.5" aria-hidden="true" />
+          {t('bulkCancel')}
+        </Button>
+      </div>
 
-      {/* divider: the count is a label for the selection, not another action */}
-      <span className="hidden h-5 w-px bg-border sm:block" aria-hidden="true" />
-
-      <TimecardActions onFill={onFillFromSchedule} onSetAbsence={onSetAbsence} onClear={onClearDays} />
-
+      {/* One day → the featured action is entering its hours. */}
       {onEditDay && (
-        <Button type="button" variant="outline" size="sm" onClick={onEditDay} className="gap-1.5">
+        <Button type="button" variant="primary" size="sm" onClick={onEditDay} className="gap-1.5">
           <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
           {t('editDay')}
         </Button>
       )}
 
-      <Button
-        type="button"
-        variant="ghost"
-        size="sm"
-        onClick={onCancel}
-        className="ml-auto text-text-tertiary hover:text-text-secondary"
-      >
-        <X className="h-3.5 w-3.5" aria-hidden="true" />
-        {t('bulkCancel')}
-      </Button>
+      <TimecardActions onFill={onFillFromSchedule} onSetAbsence={onSetAbsence} onClear={onClearDays} />
     </div>
   )
 }

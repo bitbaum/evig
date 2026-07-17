@@ -41,6 +41,13 @@ ST="$SRC/.next/standalone"
 prod_psql() {
   ssh -o BatchMode=yes "$BOX" "LC_ALL=C; DB=\$(grep -E '^DATABASE_URL=' '$REMOTE_APP/.env' | cut -d= -f2- | tr -d '\"'); if command -v psql >/dev/null 2>&1; then psql \"\$DB\" $* ; else docker exec -i -e LC_ALL=C supabase-db psql -U postgres -d revampit $* ; fi"
 }
+# ── Ensure ffmpeg on the box ────────────────────────────────────────────────
+# Protocol audio above Groq's 25 MB upload cap is transcoded + segmented
+# server-side (src/lib/transcription/segment-audio.ts); that needs ffmpeg.
+# Idempotent: installs once, no-ops on every later deploy.
+echo "=== ensure ffmpeg on box (chunked audio transcription) ==="
+ssh -o BatchMode=yes "$BOX" 'command -v ffmpeg >/dev/null 2>&1 || { sudo DEBIAN_FRONTEND=noninteractive apt-get -qq update && sudo DEBIAN_FRONTEND=noninteractive apt-get -qq install -y --no-install-recommends ffmpeg; }'
+
 echo "=== apply pending migrations → prod DB ==="
 applied_list="$(printf '' | prod_psql "-tAc 'SELECT filename FROM schema_migrations'" 2>/dev/null || true)"
 for mig in "$SRC"/scripts/db/migrations/*.sql; do

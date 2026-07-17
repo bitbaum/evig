@@ -110,7 +110,11 @@ export function ProtocolAttendeesCard({
                   {attendeeNames[uid] || 'Unbekannt'}
                 </span>
               ))
-            : <p className="text-xs text-text-muted">Keine Teilnehmer eingetragen</p>
+            : (
+              <p className="text-xs text-text-muted">
+                Keine Teilnehmer eingetragen{isReview ? ' — Personen, die du unter «Wer war dabei?» zuordnest, erscheinen hier automatisch.' : ''}
+              </p>
+            )
           }
         </div>
       )}

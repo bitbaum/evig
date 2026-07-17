@@ -86,15 +86,13 @@ export default async function AdminZeiterfassungPage() {
     .limit(8)
 
   return (
-    <article className="mx-auto max-w-7xl space-y-8">
-      <header className="border-b border-subtle pb-6">
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
-          {t('pageEyebrow')}
-        </p>
-        <Heading level={1} className="mt-2 text-2xl font-semibold text-text-primary sm:text-3xl">
-          {t('selfTitle')}
-        </Heading>
-      </header>
+    <article className="mx-auto max-w-7xl space-y-6">
+      {/* One-line page title — every vertical pixel here pushes the actual
+          time entry further off a phone screen. The month header inside
+          TimecardsClient carries status + totals. */}
+      <Heading level={1} className="text-2xl font-semibold text-text-primary sm:text-3xl">
+        {t('selfTitle')}
+      </Heading>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px] lg:gap-8">
         <div className="min-w-0 space-y-6">

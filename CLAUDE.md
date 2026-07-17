@@ -50,6 +50,12 @@ hold the line on all of it by default:
 | Search | Meilisearch |
 | Payments | Payrexx |
 
+## Production URL — don't get this wrong
+
+**This codebase runs at https://revampit.orangecat.ch** (self-hosted Hetzner, deployed from `main` by `deploy-selfhost.yml`). Health check: `https://revampit.orangecat.ch/api/health`. Staff time entry (Zeiterfassung): `/admin/zeiterfassung`.
+
+**https://www.revamp-it.ch is the org's LEGACY Joomla site — not this app.** Never verify deploys or smoke-test there. Full URL list: `docs/SHARED_CONTEXT.md` → Access Points.
+
 ---
 
 ## Design System
