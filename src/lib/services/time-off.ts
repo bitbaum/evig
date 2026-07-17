@@ -13,6 +13,7 @@ import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
 import { getTimeOffKindLabel, TIME_OFF_STATUSES } from '@/config/time-off'
 import { getTimecardApproverIds } from '@/lib/team/timecard-approvers'
 import { runReviewTransition } from '@/lib/lifecycle/review-workflow'
+import { materializeApprovedTimeOff } from '@/lib/services/time-off-materialize'
 import type { TransitionTable } from '@/lib/lifecycle'
 import type {
   CreateTimeOffInput,
@@ -187,5 +188,21 @@ export async function reviewTimeOffRequest(
   // (missing row, already reviewed, lost race).
   if (!result.ok) return null
   const [row] = await getRequestsByIds([id])
+
+  // ONE flow: an approved request lands in leave_periods (HR record) and as
+  // timecard entries on the scheduled days — the Feriensaldo drops without
+  // the person entering anything twice. Failure here must not undo the
+  // review; it degrades to a notification inside the materializer.
+  if (row && action === 'approve') {
+    await materializeApprovedTimeOff({
+      userId: row.user_id,
+      kind: row.kind,
+      startsOn: row.starts_on,
+      endsOn: row.ends_on,
+      note: row.note,
+      reviewerId: reviewerId,
+    }).catch(err => logger.error('Time-off materialization failed', { error: err, id }))
+  }
+
   return row ?? null
 }

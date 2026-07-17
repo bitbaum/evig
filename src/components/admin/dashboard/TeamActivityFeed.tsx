@@ -32,6 +32,9 @@ const ACTION_LABELS: Record<ActivityAction, string> = {
   approved_timecard: 'genehmigte Zeitkarte',
   rejected_timecard: 'wies Zeitkarte zurück',
   edited_timecard: 'passte Zeitkarte an',
+  opened_timecard_for_user: 'erfasste Zeitkarte für Teammitglied',
+  submitted_timecard_for_user: 'reichte Zeitkarte für Teammitglied ein',
+  updated_zeit_pensum: 'passte Pensum/Ferienanspruch an',
   reopened_timecard: 'öffnete Zeitkarte wieder',
   recorded_membership_payment: 'erfasste Mitgliederbeitrag',
 }

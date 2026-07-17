@@ -80,7 +80,7 @@ export function TimeOffPanel() {
   }
 
   return (
-    <section className="border-t border-subtle pt-6">
+    <section id="abwesenheit" className="scroll-mt-24 border-t border-subtle pt-6">
       <Button
         type="button"
         variant="ghost"

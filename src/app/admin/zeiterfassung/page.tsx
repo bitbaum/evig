@@ -104,17 +104,26 @@ export default async function AdminZeiterfassungPage() {
       </Heading>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px] lg:gap-8">
-        <div className="min-w-0 space-y-6">
-          {saldo && <SaldoStrip data={saldo} />}
-          <div className="space-y-2">
+        {/* Mobile-first ordering: the ACTION (the timecard editor) leads on
+            phones; saldo shrinks to a glance line; plan/reminder settings sink
+            below. Desktop (lg) keeps saldo → plan → editor. */}
+        <div className="flex min-w-0 flex-col gap-6">
+          {saldo && (
+            <div className="order-2 lg:order-none">
+              <SaldoStrip data={saldo} ownView />
+            </div>
+          )}
+          <div id="arbeitsplan" className="order-3 scroll-mt-24 space-y-2 lg:order-none">
             <WeeklyScheduleEditor workingHours={profile?.workingHours ?? null} />
             <ReminderSetting initialDay={profile?.reminderDay ?? null} />
           </div>
-          <TimecardsClient
-            workingHours={profile?.workingHours ?? null}
-            userName={session.user.name || session.user.email || t('userFallback')}
-            canApprove={canApprove}
-          />
+          <div className="order-1 lg:order-none">
+            <TimecardsClient
+              workingHours={profile?.workingHours ?? null}
+              userName={session.user.name || session.user.email || t('userFallback')}
+              canApprove={canApprove}
+            />
+          </div>
         </div>
         <aside className="min-w-0 lg:sticky lg:top-20 lg:self-start">
           <TimecardHistorySidebar history={history} />

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslations } from 'next-intl'
-import { X, Check, Ban, Pencil, Save, RotateCcw } from 'lucide-react'
+import { X, Check, Ban, Pencil, Save, RotateCcw, Send } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
@@ -85,6 +85,7 @@ export function TimecardReviewDrawer({
 
   const total = entries.reduce((s, e) => s + (Number(e.duration_minutes) || 0), 0)
   const isApproved = card?.status === 'approved'
+  const isDraft = card?.status === 'draft' || card?.status === 'rejected'
   // The server rejects self-review anyway (400) — surface that BEFORE the
   // click instead of after it.
   const isOwnCard = !!card && !!currentUserId && card.user_id === currentUserId && !allowSelfReview
@@ -116,6 +117,16 @@ export function TimecardReviewDrawer({
       method: 'PATCH',
       body: { status, review_notes: note.trim() || null },
     })
+    setBusy(null)
+    if (!r.success) { setError(r.error || t('actionFailed')); return }
+    onChanged()
+    onClose()
+  }
+
+  // Proxy path: submit a draft on the owner's behalf (audited, owner notified).
+  const submitOnBehalf = async () => {
+    setBusy('submit'); setError(null)
+    const r = await apiFetch(`/api/admin/timecards/${cardId}/submit`, { method: 'POST' })
     setBusy(null)
     if (!r.success) { setError(r.error || t('actionFailed')); return }
     onChanged()
@@ -251,16 +262,28 @@ export function TimecardReviewDrawer({
               </>
             ) : (
               <>
-                <Button
-                  variant="primary"
-                  size="sm"
-                  onClick={() => review('approved')}
-                  disabled={busy !== null || isApproved || isOwnCard}
-                  className="inline-flex items-center gap-1.5 bg-success-600 text-white hover:bg-success-700"
-                >
-                  <Check className="h-3.5 w-3.5" /> {t('approve')}
-                </Button>
-                {!isApproved && (
+                {isDraft ? (
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={submitOnBehalf}
+                    disabled={busy !== null || entries.length === 0}
+                    className="inline-flex items-center gap-1.5"
+                  >
+                    <Send className="h-3.5 w-3.5" /> {t('submit')}
+                  </Button>
+                ) : (
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => review('approved')}
+                    disabled={busy !== null || isApproved || isOwnCard}
+                    className="inline-flex items-center gap-1.5 bg-success-600 text-white hover:bg-success-700"
+                  >
+                    <Check className="h-3.5 w-3.5" /> {t('approve')}
+                  </Button>
+                )}
+                {!isApproved && !isDraft && (
                   <Button variant="destructive-outline" size="sm" onClick={() => review('rejected')} disabled={busy !== null || isOwnCard} className="inline-flex items-center gap-1.5">
                     <Ban className="h-3.5 w-3.5" /> {t('reject')}
                   </Button>
