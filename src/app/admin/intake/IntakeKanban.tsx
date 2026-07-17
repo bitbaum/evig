@@ -1,7 +1,8 @@
 'use client'
 
+import Link from 'next/link'
 import { useTranslations } from 'next-intl'
-import { AlertTriangle, Check, Clock3, Send } from 'lucide-react'
+import { AlertTriangle, Check, Clock3, Send, ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   getIntakeAgeDays,
@@ -17,6 +18,8 @@ import {
   QUICK_CAPTURE_LABEL,
 } from '@/config/intake-checklist'
 import { KATEGORIEN } from '@/config/erfassung/categories'
+import { LISTING_STATUS } from '@/config/marketplace'
+import { ROUTES } from '@/config/routes'
 import { formatDateShort } from '@/lib/date-formats'
 import type { PipelineItem } from './types'
 
@@ -115,6 +118,17 @@ export function IntakeKanban({
               </span>
             </Button>
 
+            {/* "Im Shop" is not an archive — it IS the shop. Jump straight
+                to the listings admin where these live. */}
+            {column.status === INTAKE_STATUS.PUBLISHED && (
+              <Link
+                href={ROUTES.admin.marketplace}
+                className="flex items-center justify-between border-b border-subtle px-3 py-2 text-xs font-medium text-action hover:underline"
+              >
+                {t('board.manageListings')}
+                <ExternalLink className="h-3 w-3" aria-hidden="true" />
+              </Link>
+            )}
             <div className="space-y-2 p-2">
               {columnItems.length === 0 ? (
                 <p className="px-2 py-8 text-center text-xs text-text-muted">{t('board.empty')}</p>
@@ -168,6 +182,25 @@ function KanbanCard({ item, onOpen }: { item: PipelineItem; onOpen: () => void }
       </span>
 
       <span className="mt-1 block truncate text-xs text-text-tertiary">{category || t('board.noCategory')}</span>
+
+      {/* SSOT: the shop state comes from the LISTING, not from the intake
+          record's claim — sold/removed/missing listings surface here. */}
+      {status === INTAKE_STATUS.PUBLISHED && (
+        <span className={`mt-2 inline-flex w-fit items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${
+          item.listing_status === LISTING_STATUS.ACTIVE
+            ? 'bg-action-muted text-action'
+            : item.listing_status
+              ? 'bg-surface-overlay text-text-secondary'
+              : 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-200'
+        }`}>
+          {item.listing_status === LISTING_STATUS.ACTIVE ? t('board.listingState.active')
+            : item.listing_status === LISTING_STATUS.SOLD ? t('board.listingState.sold')
+            : item.listing_status === LISTING_STATUS.RESERVED ? t('board.listingState.reserved')
+            : item.listing_status === LISTING_STATUS.DRAFT ? t('board.listingState.draft')
+            : item.listing_status === LISTING_STATUS.REMOVED ? t('board.listingState.removed')
+            : t('board.listingMissing')}
+        </span>
+      )}
 
       {item.intake_tier && status !== INTAKE_STATUS.PUBLISHED && (
         <span className="mt-3 flex items-center gap-2">

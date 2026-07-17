@@ -59,7 +59,7 @@ interface IntakeDetailViewProps {
   markingAll: boolean
   onStartQc: () => void
   startingQc: boolean
-  onPublish: () => void
+  onPublish: (options?: { skipQc?: boolean }) => void
   onTierChange: () => void
 }
 
@@ -325,7 +325,7 @@ export function IntakeDetailView({
               />
             </div>
             <Button
-              onClick={onPublish}
+              onClick={() => onPublish()}
               disabled={publishing || publishPrice <= 0}
               variant="primary"
               size="sm"
@@ -388,15 +388,29 @@ export function IntakeDetailView({
             <AlertCircle className="w-4 h-4" /> {t('qcGate.heading')}
           </Heading>
           <p className="text-sm text-warning-700 dark:text-warning-200">{t('qcGate.body')}</p>
-          <Button
-            type="button"
-            onClick={onStartQc}
-            disabled={startingQc}
-            variant="primary"
-            size="sm"
-          >
-            {startingQc ? t('qcGate.starting') : t('qcGate.start')}
-          </Button>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button
+              type="button"
+              onClick={onStartQc}
+              disabled={startingQc}
+              variant="primary"
+              size="sm"
+            >
+              {startingQc ? t('qcGate.starting') : t('qcGate.start')}
+            </Button>
+            {/* Same escape hatch as the checklist path: one click, audited,
+                listing without Prüfsiegel. */}
+            <Button
+              type="button"
+              onClick={() => onPublish({ skipQc: true })}
+              disabled={publishing || publishPrice <= 0}
+              variant="outline"
+              size="sm"
+              title={t('publishUntestedTitle')}
+            >
+              {publishing ? t('publishing') : t('publishUntested')}
+            </Button>
+          </div>
         </div>
       )}
 
@@ -429,17 +443,29 @@ export function IntakeDetailView({
                 onChange={(e) => setPublishPrice(Number(e.target.value))}
                 min={0}
                 className="w-32"
-                disabled={!detail.checklist_complete}
               />
             </div>
             <Button
-              onClick={onPublish}
+              onClick={() => onPublish()}
               disabled={!detail.checklist_complete || publishing || publishPrice <= 0}
               variant="primary"
               size="sm"
             >
               {publishing ? t('publishing') : t('publishNow')}
             </Button>
+            {/* Deliberate escape hatch: publish now, explicitly WITHOUT the
+                Prüfsiegel (audited; blocked if a check actually failed). */}
+            {!detail.checklist_failed && (
+              <Button
+                onClick={() => onPublish({ skipQc: true })}
+                disabled={publishing || publishPrice <= 0}
+                variant="outline"
+                size="sm"
+                title={t('publishUntestedTitle')}
+              >
+                {publishing ? t('publishing') : t('publishUntested')}
+              </Button>
+            )}
             {detail.checklist_complete && (
               <Link
                 href={`${ROUTES.admin.intakeCapture}?edit=${detail.id}&returnTo=${encodeURIComponent(ROUTES.admin.intakeDetail(detail.id))}`}

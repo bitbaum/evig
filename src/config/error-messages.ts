@@ -34,6 +34,7 @@ export const ERROR_MESSAGES = {
   INTAKE_CHECKLIST_INCOMPLETE: 'Checkliste nicht vollständig — alle Pflichtpunkte müssen bestanden sein',
   INTAKE_CHECKLIST_FAILED: 'Prüfung fehlgeschlagen — Problem beheben und erneut prüfen, oder Stufe ändern',
   INTAKE_QC_REQUIRED: 'Dieses Gerät benötigt eine Qualitätskontrolle — Prüfung im Geräte-Eingang starten',
+  INTAKE_QC_SKIP_REASON_REQUIRED: 'Für eine Veröffentlichung ohne Prüfung ist eine Begründung mit mindestens 10 Zeichen erforderlich',
   INTAKE_ALREADY_PUBLISHED: 'Gerät ist bereits im Shop veröffentlicht',
   INTAKE_INVALID_CHECKLIST_ITEM: 'Ungültiger Checklist-Eintrag',
   INTAKE_FAIL_NOTES_REQUIRED: 'Bei „Fehlgeschlagen“ ist eine Begründung erforderlich',

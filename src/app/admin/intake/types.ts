@@ -27,6 +27,10 @@ export interface PipelineItem {
   checklist_failed: boolean
   checklist_progress: ChecklistProgress
   marketplace_status: string
+  /** Live shop listing (SSOT for "Im Shop"): id + current status from the
+      listings table — NULL means published here but no listing exists (drift). */
+  listing_id: string | null
+  listing_status: string | null
   selling_price_chf: number | null
   source_donation_id: string | null
   donor_name: string | null

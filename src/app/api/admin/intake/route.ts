@@ -11,6 +11,7 @@ import { sql, getTableName, SQL } from 'drizzle-orm'
 import { aiExtractedProducts, inventoryItems, productImages } from '@/db/schema/inventory'
 import { donations } from '@/db/schema/misc'
 import { users } from '@/db/schema/auth'
+import { listings } from '@/db/schema/marketplace'
 import { apiError, apiSuccess , hasMoreItems} from '@/lib/api/helpers'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { validateBody, validateQuery } from '@/lib/schemas'
@@ -171,6 +172,7 @@ export const GET = withAdmin('intake', async (request) => {
     const apTable = getTableName(aiExtractedProducts)
     const uTable = getTableName(users)
     const dTable = getTableName(donations)
+    const lTable = getTableName(listings)
 
     // The pipeline is the SSOT list of ALL captured devices — checklist-backed
     // physical work and tier-NULL inventory/untested records. The old base filter
@@ -242,11 +244,13 @@ export const GET = withAdmin('intake', async (request) => {
           ap.item_uuid, ap.product_name, ap.brand, ap.condition,
           ap.category, ap.subcategory, ap.short_description,
           u.name as created_by_name,
-          d.donor_name
+          d.donor_name,
+          l.id as listing_id, l.status as listing_status
         FROM ${sql.raw(iiTable)} ii
         JOIN ${sql.raw(apTable)} ap ON ii.ai_product_id = ap.id
         LEFT JOIN ${sql.raw(uTable)} u ON ap.created_by = u.id
         LEFT JOIN ${sql.raw(dTable)} d ON ii.source_donation_id = d.id
+        LEFT JOIN ${sql.raw(lTable)} l ON l.inventory_item_id = ii.id
         ${whereClause}
         -- Operational work comes before history, and oldest work comes first
         -- so stuck devices cannot be buried by new arrivals.

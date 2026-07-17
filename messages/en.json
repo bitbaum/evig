@@ -9517,7 +9517,11 @@
         "toDevice": "Open device in pipeline",
         "titleQcGated": "Captured — quality control required",
         "whereQcGated": "This device must be inspected before sale. It is in device intake with an active checklist — once it passes, it can be published.",
-        "printLabel": "Print label"
+        "printLabel": "Print label",
+        "publishUntested": "Publish without testing",
+        "publishUntestedTitle": "Publish immediately — listing without QC seal",
+        "publishUntestedNoPrice": "No selling price captured — open the device and set a price",
+        "whereUntested": "The device is in the shop — explicitly without the QC seal. Testing can be done later."
       },
       "bulkSuccess": {
         "titlePartial": "Partially captured",
@@ -10582,7 +10586,9 @@
         "printLabel": "Label",
         "printLabelTitle": "Print the device QR label",
         "markAllRequiredBusy": "Saving…",
-        "viewListing": "View listing in shop"
+        "viewListing": "View listing in shop",
+        "publishUntested": "Publish without QC seal",
+        "publishUntestedTitle": "Publish immediately — the listing explicitly carries no QC seal; the reason is stored in the history."
       },
       "pipeline": {
         "newDevice": "New device",
@@ -10617,7 +10623,16 @@
           "published": "In shop",
           "empty": "No devices",
           "noCategory": "Category still open",
-          "ageDays": "{count} d"
+          "ageDays": "{count} d",
+          "manageListings": "Manage listings",
+          "listingMissing": "No listing found",
+          "listingState": {
+            "active": "In shop · active",
+            "sold": "Sold",
+            "reserved": "Reserved",
+            "draft": "Listing draft",
+            "removed": "Listing removed"
+          }
         },
         "donationYes": "Yes",
         "hero": {

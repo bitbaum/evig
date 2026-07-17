@@ -9509,7 +9509,11 @@
         "toDevice": "Ouvrir l'appareil dans le pipeline",
         "titleQcGated": "Saisi — contrôle qualité requis",
         "whereQcGated": "Cet appareil doit être contrôlé avant la vente. Il se trouve dans l'entrée des appareils avec une checklist active — une fois validé, il peut être publié.",
-        "printLabel": "Imprimer l'étiquette"
+        "printLabel": "Imprimer l'étiquette",
+        "publishUntested": "Publier sans contrôle",
+        "publishUntestedTitle": "Publier immédiatement — annonce sans label de contrôle",
+        "publishUntestedNoPrice": "Pas de prix de vente saisi — ouvrir l'appareil et définir un prix",
+        "whereUntested": "L'appareil est en boutique — expressément sans label de contrôle. Le contrôle peut être fait plus tard."
       },
       "bulkSuccess": {
         "titlePartial": "Partiellement saisi",
@@ -10534,7 +10538,9 @@
         "printLabel": "Étiquette",
         "printLabelTitle": "Imprimer l'étiquette QR de l'appareil",
         "markAllRequiredBusy": "Enregistrement…",
-        "viewListing": "Voir l'annonce en boutique"
+        "viewListing": "Voir l'annonce en boutique",
+        "publishUntested": "Publier sans label de contrôle",
+        "publishUntestedTitle": "Publier immédiatement — l'annonce paraît expressément sans label de contrôle ; la raison est consignée dans l'historique."
       },
       "pipeline": {
         "newDevice": "Nouvel appareil",
@@ -10569,7 +10575,16 @@
           "published": "En boutique",
           "empty": "Aucun appareil",
           "noCategory": "Catégorie à définir",
-          "ageDays": "{count} j"
+          "ageDays": "{count} j",
+          "manageListings": "Gérer les annonces",
+          "listingMissing": "Aucune annonce trouvée",
+          "listingState": {
+            "active": "En boutique · active",
+            "sold": "Vendu",
+            "reserved": "Réservé",
+            "draft": "Brouillon d'annonce",
+            "removed": "Annonce retirée"
+          }
         },
         "donationYes": "Oui",
         "hero": {

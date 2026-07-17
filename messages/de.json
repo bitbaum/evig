@@ -9555,7 +9555,11 @@
         "toDevice": "Zum Gerät im Geräte-Eingang",
         "titleQcGated": "Erfasst — Qualitätskontrolle erforderlich",
         "whereQcGated": "Dieses Gerät muss vor dem Verkauf geprüft werden. Es liegt im Geräte-Eingang mit aktiver Checkliste — nach bestandener Prüfung kann es publiziert werden.",
-        "printLabel": "Etikett drucken"
+        "printLabel": "Etikett drucken",
+        "publishUntested": "Ohne Prüfung publizieren",
+        "publishUntestedTitle": "Sofort veröffentlichen — Inserat ohne Prüfsiegel",
+        "publishUntestedNoPrice": "Kein Verkaufspreis erfasst — im Gerät öffnen und Preis setzen",
+        "whereUntested": "Das Gerät ist im Shop — ausdrücklich ohne Prüfsiegel. Die Prüfung kann später nachgeholt werden."
       },
       "bulkSuccess": {
         "titlePartial": "Teilweise erfasst",
@@ -10637,7 +10641,9 @@
         "printLabel": "Etikett",
         "printLabelTitle": "QR-Etikett für das Gerät drucken",
         "markAllRequiredBusy": "Wird gespeichert…",
-        "viewListing": "Inserat im Shop ansehen"
+        "viewListing": "Inserat im Shop ansehen",
+        "publishUntested": "Ohne Prüfsiegel publizieren",
+        "publishUntestedTitle": "Sofort veröffentlichen — das Inserat erscheint ausdrücklich ohne Prüfsiegel; die Begründung wird im Verlauf gespeichert."
       },
       "pipeline": {
         "newDevice": "Neues Gerät",
@@ -10672,7 +10678,16 @@
           "published": "Im Shop",
           "empty": "Keine Geräte",
           "noCategory": "Kategorie noch offen",
-          "ageDays": "{count} T."
+          "ageDays": "{count} T.",
+          "manageListings": "Inserate verwalten",
+          "listingMissing": "Kein Inserat gefunden",
+          "listingState": {
+            "active": "Im Shop · aktiv",
+            "sold": "Verkauft",
+            "reserved": "Reserviert",
+            "draft": "Inserat-Entwurf",
+            "removed": "Inserat entfernt"
+          }
         },
         "donationYes": "Ja",
         "hero": {

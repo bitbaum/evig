@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react'
 import { apiFetch } from '@/lib/api/client'
-import { INTAKE_TIERS, CHECKLIST_RESULTS, type IntakeTier, type ChecklistResult } from '@/config/intake-checklist'
+import { INTAKE_TIERS, CHECKLIST_RESULTS, QC_SKIP_ONE_CLICK_NOTE, type IntakeTier, type ChecklistResult } from '@/config/intake-checklist'
 import type { DetailData } from './types'
 
 export function useIntakeDetail() {
@@ -127,16 +127,22 @@ export function useIntakeDetail() {
     }
   }, [selectedId, fetchDetail])
 
-  const handlePublish = useCallback(async () => {
+  const handlePublish = useCallback(async (options?: { skipQc?: boolean }) => {
     if (!selectedId) return
     setPublishing(true)
     try {
       const result = await apiFetch<void>(`/api/admin/intake/${selectedId}/publish`, {
         method: 'POST',
-        body: { price_chf: publishPrice },
+        body: options?.skipQc
+          // One-click untested publish: audited standard reason, listing
+          // carries no Prüfsiegel (buyers see the untested state).
+          ? { price_chf: publishPrice, qc_skip: true, qc_skip_reason: QC_SKIP_ONE_CLICK_NOTE }
+          : { price_chf: publishPrice },
       })
       if (result.success) {
         fetchDetail(selectedId)
+      } else {
+        setChecklistError(result.error || null)
       }
     } finally {
       setPublishing(false)

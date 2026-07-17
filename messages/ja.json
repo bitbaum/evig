@@ -9509,7 +9509,11 @@
         "toDevice": "パイプラインでデバイスを開く",
         "titleQcGated": "登録完了 — 品質検査が必要",
         "whereQcGated": "この機器は販売前に検査が必要です。チェックリストが有効な状態で機器受入にあります。検査に合格すると公開できます。",
-        "printLabel": "ラベルを印刷"
+        "printLabel": "ラベルを印刷",
+        "publishUntested": "検査なしで公開",
+        "publishUntestedTitle": "即時公開 — 検査シールなしの出品",
+        "publishUntestedNoPrice": "販売価格が未設定 — デバイスを開いて価格を設定",
+        "whereUntested": "デバイスはショップに公開されました — 検査シールなし。検査は後で実施できます。"
       },
       "bulkSuccess": {
         "titlePartial": "一部のみ登録されました",
@@ -10581,7 +10585,9 @@
         "printLabel": "ラベル",
         "printLabelTitle": "機器のQRラベルを印刷",
         "markAllRequiredBusy": "保存中…",
-        "viewListing": "ショップで出品を見る"
+        "viewListing": "ショップで出品を見る",
+        "publishUntested": "検査シールなしで公開",
+        "publishUntestedTitle": "即時公開 — 出品には検査シールが付きません。理由は履歴に記録されます。"
       },
       "pipeline": {
         "newDevice": "新しいデバイス",
@@ -10616,7 +10622,16 @@
           "published": "ショップ掲載中",
           "empty": "デバイスなし",
           "noCategory": "カテゴリ未設定",
-          "ageDays": "{count}日"
+          "ageDays": "{count}日",
+          "manageListings": "出品を管理",
+          "listingMissing": "出品が見つかりません",
+          "listingState": {
+            "active": "ショップ掲載中",
+            "sold": "販売済み",
+            "reserved": "予約済み",
+            "draft": "出品の下書き",
+            "removed": "出品削除済み"
+          }
         },
         "donationYes": "はい",
         "hero": {

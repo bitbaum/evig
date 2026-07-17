@@ -9509,7 +9509,11 @@
         "toDevice": "Apri dispositivo nella pipeline",
         "titleQcGated": "Registrato — controllo qualità richiesto",
         "whereQcGated": "Questo dispositivo deve essere controllato prima della vendita. Si trova nell’ingresso dispositivi con una checklist attiva — una volta superato il controllo può essere pubblicato.",
-        "printLabel": "Stampa etichetta"
+        "printLabel": "Stampa etichetta",
+        "publishUntested": "Pubblica senza verifica",
+        "publishUntestedTitle": "Pubblica subito — annuncio senza sigillo di controllo",
+        "publishUntestedNoPrice": "Nessun prezzo di vendita — apri il dispositivo e imposta un prezzo",
+        "whereUntested": "Il dispositivo è nel negozio — espressamente senza sigillo di controllo. La verifica può seguire più tardi."
       },
       "bulkSuccess": {
         "titlePartial": "Registrazione parziale",
@@ -10581,7 +10585,9 @@
         "printLabel": "Etichetta",
         "printLabelTitle": "Stampare l'etichetta QR del dispositivo",
         "markAllRequiredBusy": "Salvataggio…",
-        "viewListing": "Vedi l'annuncio nel negozio"
+        "viewListing": "Vedi l'annuncio nel negozio",
+        "publishUntested": "Pubblica senza sigillo di controllo",
+        "publishUntestedTitle": "Pubblica subito — l'annuncio appare espressamente senza sigillo di controllo; il motivo resta nello storico."
       },
       "pipeline": {
         "newDevice": "Nuovo dispositivo",
@@ -10616,7 +10622,16 @@
           "published": "In negozio",
           "empty": "Nessun dispositivo",
           "noCategory": "Categoria da definire",
-          "ageDays": "{count} g"
+          "ageDays": "{count} g",
+          "manageListings": "Gestisci annunci",
+          "listingMissing": "Nessun annuncio trovato",
+          "listingState": {
+            "active": "In negozio · attivo",
+            "sold": "Venduto",
+            "reserved": "Riservato",
+            "draft": "Bozza annuncio",
+            "removed": "Annuncio rimosso"
+          }
         },
         "donationYes": "Sì",
         "hero": {

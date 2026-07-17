@@ -192,6 +192,7 @@ function ErfassungContent() {
         action={form.savedAction}
         listingId={form.savedListingId}
         qcRequired={form.savedQcRequired}
+        sellingPriceChf={Number(form.formData.verkaufspreis) || null}
         onReset={form.handleReset}
       />
     )

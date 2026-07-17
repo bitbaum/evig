@@ -9509,7 +9509,11 @@
         "toDevice": "Abrir dispositivo en la pipeline",
         "titleQcGated": "Registrado: se requiere control de calidad",
         "whereQcGated": "Este dispositivo debe revisarse antes de la venta. Está en la entrada de dispositivos con una lista de control activa; una vez aprobado, puede publicarse.",
-        "printLabel": "Imprimir etiqueta"
+        "printLabel": "Imprimir etiqueta",
+        "publishUntested": "Publicar sin comprobación",
+        "publishUntestedTitle": "Publicar de inmediato — anuncio sin sello de control",
+        "publishUntestedNoPrice": "Sin precio de venta — abre el dispositivo y define un precio",
+        "whereUntested": "El dispositivo está en la tienda — expresamente sin sello de control. La comprobación puede hacerse después."
       },
       "bulkSuccess": {
         "titlePartial": "Registrados parcialmente",
@@ -10581,7 +10585,9 @@
         "printLabel": "Etiqueta",
         "printLabelTitle": "Imprimir la etiqueta QR del dispositivo",
         "markAllRequiredBusy": "Guardando…",
-        "viewListing": "Ver el anuncio en la tienda"
+        "viewListing": "Ver el anuncio en la tienda",
+        "publishUntested": "Publicar sin sello de control",
+        "publishUntestedTitle": "Publicar de inmediato — el anuncio aparece expresamente sin sello de control; el motivo queda en el historial."
       },
       "pipeline": {
         "newDevice": "Nuevo dispositivo",
@@ -10616,7 +10622,16 @@
           "published": "En tienda",
           "empty": "Sin dispositivos",
           "noCategory": "Categoría pendiente",
-          "ageDays": "{count} d"
+          "ageDays": "{count} d",
+          "manageListings": "Gestionar anuncios",
+          "listingMissing": "Ningún anuncio encontrado",
+          "listingState": {
+            "active": "En la tienda · activo",
+            "sold": "Vendido",
+            "reserved": "Reservado",
+            "draft": "Borrador del anuncio",
+            "removed": "Anuncio retirado"
+          }
         },
         "donationYes": "Sí",
         "hero": {

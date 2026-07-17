@@ -126,11 +126,24 @@ export const ChecklistUpdateSchema = z
 // PUBLISH — Gate behind checklist
 // =============================================================================
 
-export const IntakePublishSchema = z.object({
-  price_chf: z.number().min(0, 'Preis erforderlich'),
-  title: z.string().optional(),
-  description: z.string().optional(),
-})
+export const IntakePublishSchema = z
+  .object({
+    price_chf: z.number().min(0, 'Preis erforderlich'),
+    title: z.string().optional(),
+    description: z.string().optional(),
+    /**
+     * One-click "publish without QC": bypasses the checklist gate with an
+     * audited reason. The listing publishes WITHOUT the Prüfsiegel (no QC
+     * checks attached). A recorded FAILURE still blocks — skip means
+     * "not tested", never "tested and failed".
+     */
+    qc_skip: z.boolean().optional().default(false),
+    qc_skip_reason: z.string().optional().default(''),
+  })
+  .refine(
+    data => !data.qc_skip || data.qc_skip_reason.trim().length >= 10,
+    { message: ERROR_MESSAGES.INTAKE_QC_SKIP_REASON_REQUIRED, path: ['qc_skip_reason'] },
+  )
 
 // =============================================================================
 // QUERY — List/filter pipeline items

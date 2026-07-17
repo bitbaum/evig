@@ -1,11 +1,14 @@
 'use client'
 
+import { useState } from 'react'
 import { Link } from '@/i18n/navigation'
-import { Package, Printer, Plus, PackageCheck, QrCode, Store } from 'lucide-react'
+import { Package, Printer, Plus, PackageCheck, QrCode, Store, Loader2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { ROUTES } from '@/config/routes'
+import { apiFetch } from '@/lib/api/client'
+import { QC_SKIP_ONE_CLICK_NOTE } from '@/config/intake-checklist'
 
 interface SuccessScreenProps {
   itemUUID: string
@@ -17,6 +20,8 @@ interface SuccessScreenProps {
   listingId: string | null
   /** Direct-publish was intercepted by the QC gate — device is in the pipeline. */
   qcRequired: boolean
+  /** Captured selling price — enables the one-click untested publish. */
+  sellingPriceChf?: number | null
   onReset: () => void
 }
 
@@ -26,8 +31,38 @@ interface SuccessScreenProps {
  * screen said "erfasst!" and linked to an overview that did not contain
  * the device — the classic "erfasst, aber wo?" dead end.
  */
-export function SuccessScreen({ itemUUID, productId, inventoryId, action, listingId, qcRequired, onReset }: SuccessScreenProps) {
+export function SuccessScreen({ itemUUID, productId, inventoryId, action, listingId, qcRequired, sellingPriceChf, onReset }: SuccessScreenProps) {
   const t = useTranslations('components.erfassung.successScreen')
+
+  // One-click "publish without QC" straight from the success screen — the
+  // deliberate escape hatch when testing is not wanted. Audited; the listing
+  // carries no Prüfsiegel.
+  const [skipBusy, setSkipBusy] = useState(false)
+  const [skipError, setSkipError] = useState<string | null>(null)
+  const [skippedListingId, setSkippedListingId] = useState<string | null>(null)
+  const publishUntested = async () => {
+    if (!inventoryId || skipBusy) return
+    setSkipBusy(true)
+    setSkipError(null)
+    try {
+      const result = await apiFetch<{ listing_id: string | null }>(`/api/admin/intake/${inventoryId}/publish`, {
+        method: 'POST',
+        body: {
+          price_chf: Number(sellingPriceChf) || 0,
+          qc_skip: true,
+          qc_skip_reason: QC_SKIP_ONE_CLICK_NOTE,
+        },
+      })
+      if (result.success) {
+        setSkippedListingId(result.data?.listing_id ?? null)
+      } else {
+        setSkipError(result.error || null)
+      }
+    } finally {
+      setSkipBusy(false)
+    }
+  }
+  const untestedPublished = skippedListingId !== null
 
   const titles = {
     draft: t('titleDraft'),
@@ -41,8 +76,8 @@ export function SuccessScreen({ itemUUID, productId, inventoryId, action, listin
   } as const
   // QC gate intercepted the publish: the device is NOT live — it sits in the
   // pipeline with a checklist. Saying "publiziert!" here would be a lie.
-  const title = qcRequired ? t('titleQcGated') : titles[action]
-  const whereabout = qcRequired ? t('whereQcGated') : whereabouts[action]
+  const title = untestedPublished ? t('titlePublished') : qcRequired ? t('titleQcGated') : titles[action]
+  const whereabout = untestedPublished ? t('whereUntested') : qcRequired ? t('whereQcGated') : whereabouts[action]
 
   const deviceHref = inventoryId
     ? `${ROUTES.admin.intake}?detail=${inventoryId}`
@@ -62,9 +97,20 @@ export function SuccessScreen({ itemUUID, productId, inventoryId, action, listin
         </p>
         <p className="text-sm text-text-secondary mb-6">{whereabout}</p>
 
+        {skipError && (
+          <p className="mb-4 rounded-lg border border-error-300 bg-error-50 px-3 py-2 text-sm text-error-700 dark:border-error-800 dark:bg-error-900/20 dark:text-error-300">
+            {skipError}
+          </p>
+        )}
+
         {/* Action buttons — primary action depends on where the device went */}
         <div className="flex flex-col sm:flex-row flex-wrap gap-3 justify-center">
-          {action === 'publish' && listingId ? (
+          {untestedPublished && skippedListingId ? (
+            <Button as={Link} href={ROUTES.public.marketplaceListing(skippedListingId)} variant="primary">
+              <Store className="w-5 h-5" />
+              {t('viewInShop')}
+            </Button>
+          ) : action === 'publish' && listingId ? (
             <Button as={Link} href={ROUTES.public.marketplaceListing(listingId)} variant="primary">
               <Store className="w-5 h-5" />
               {t('viewInShop')}
@@ -73,6 +119,18 @@ export function SuccessScreen({ itemUUID, productId, inventoryId, action, listin
             <Button as={Link} href={deviceHref} variant="primary">
               <PackageCheck className="w-5 h-5" />
               {t('toDevice')}
+            </Button>
+          )}
+          {qcRequired && !untestedPublished && inventoryId && (
+            <Button
+              type="button"
+              onClick={publishUntested}
+              disabled={skipBusy || !(Number(sellingPriceChf) > 0)}
+              variant="outline"
+              title={Number(sellingPriceChf) > 0 ? t('publishUntestedTitle') : t('publishUntestedNoPrice')}
+            >
+              {skipBusy ? <Loader2 className="w-5 h-5 animate-spin" /> : <Store className="w-5 h-5" />}
+              {t('publishUntested')}
             </Button>
           )}
           <Button type="button" onClick={onReset} variant="secondary">

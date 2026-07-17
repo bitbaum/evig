@@ -560,6 +560,12 @@ export function hasChecklistFailure(
 export const SECOND_PERSON_SOLO_OVERRIDE_NOTE = 'Allein im Dienst — Vier-Augen-Freigabe übersteuert'
 
 /**
+ * Audit note for the one-click "publish without QC" action. The listing
+ * publishes explicitly WITHOUT the Prüfsiegel; buyers see the untested state.
+ */
+export const QC_SKIP_ONE_CLICK_NOTE = 'Ohne Prüfung publiziert — bewusster Entscheid, Inserat ohne Prüfsiegel'
+
+/**
  * Vier-Augen-Prinzip check. A `requiresSecondPerson` item (final QA) should
  * be signed off by someone who was NOT the majority worker on the device.
  * Also true when nothing else is done yet — there is nothing to QA.

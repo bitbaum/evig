@@ -40,7 +40,7 @@ export const POST = withAdmin<{ id: string }>('intake', async (request, session,
     const body = await request.json()
     const validation = validateBody(IntakePublishSchema, body)
     if (!validation.success) return validation.error
-    const { price_chf, title, description } = validation.data
+    const { price_chf, title, description, qc_skip, qc_skip_reason } = validation.data
 
     // Get current state
     const iiTable = getTableName(inventoryItems)
@@ -67,20 +67,24 @@ export const POST = withAdmin<{ id: string }>('intake', async (request, session,
     }
 
     // Gate: tier-NULL records skip the checklist only for categories that do
-    // not require QC. Testable hardware must first enter the quality process.
+    // not require QC. Testable hardware must first enter the quality process —
+    // UNLESS the staff member explicitly, auditably publishes untested
+    // (one-click skip; the listing then carries no Prüfsiegel).
     const tier = row.intake_tier as IntakeTier | null
     const checklist = (row.intake_checklist || {}) as ChecklistState
-    if (!tier && requiresQualityControl(row.category)) {
+    if (!tier && requiresQualityControl(row.category) && !qc_skip) {
       return apiBadRequest(ERROR_MESSAGES.INTAKE_QC_REQUIRED)
     }
 
-    // Gate: a failed required item blocks publishing until fixed or re-tiered.
+    // Gate: a failed required item ALWAYS blocks publishing (also with
+    // qc_skip) — skip means "not tested", never "tested and failed".
     if (tier && hasChecklistFailure(checklist, tier, row.category)) {
       return apiBadRequest(ERROR_MESSAGES.INTAKE_CHECKLIST_FAILED)
     }
 
-    // Gate: all required checklist items must be done (pass or n.a.).
-    if (tier && !isChecklistComplete(checklist, tier, row.category)) {
+    // Gate: all required checklist items must be done (pass or n.a.),
+    // unless explicitly skipped with an audited reason.
+    if (tier && !isChecklistComplete(checklist, tier, row.category) && !qc_skip) {
       return apiBadRequest(ERROR_MESSAGES.INTAKE_CHECKLIST_INCOMPLETE)
     }
 
@@ -88,6 +92,7 @@ export const POST = withAdmin<{ id: string }>('intake', async (request, session,
     const listingTitle = title || `${row.brand} ${row.product_name}`
     const listingDesc = description || row.short_description || ''
 
+    let listingId: string | null = null
     await db.transaction(async (tx) => {
       // Update inventory item
       await tx.update(inventoryItems)
@@ -108,7 +113,7 @@ export const POST = withAdmin<{ id: string }>('intake', async (request, session,
         .where(eq(aiExtractedProducts.id, row.ai_product_id))
 
       // Publish to the unified marketplace as a RevampIT listing.
-      await publishRevampitListing(tx, id, {
+      listingId = await publishRevampitListing(tx, id, {
         priceChf: price_chf,
         title: listingTitle,
         description: listingDesc,
@@ -117,12 +122,17 @@ export const POST = withAdmin<{ id: string }>('intake', async (request, session,
     })
 
     // Record timeline event
+    const skipped = qc_skip && tier !== null && !isChecklistComplete(checklist, tier, row.category)
+    const skippedQuick = qc_skip && tier === null && requiresQualityControl(row.category)
+    const qcSkipped = skipped || skippedQuick
     await appendIntakeEvent(id, {
       type: 'published',
-      description: `Im Shop veröffentlicht für CHF ${price_chf.toFixed(2)}`,
+      description: qcSkipped
+        ? `Im Shop veröffentlicht für CHF ${price_chf.toFixed(2)} — OHNE Prüfsiegel: ${qc_skip_reason.trim()}`
+        : `Im Shop veröffentlicht für CHF ${price_chf.toFixed(2)}`,
       userId: session.user.id,
       userEmail: session.user.email,
-      metadata: { price_chf },
+      metadata: { price_chf, qc_skipped: qcSkipped },
     })
 
     logger.info('Device published to marketplace', {
@@ -131,7 +141,7 @@ export const POST = withAdmin<{ id: string }>('intake', async (request, session,
       adminEmail: session.user.email,
     })
 
-    return apiSuccess({ published: true, price_chf })
+    return apiSuccess({ published: true, price_chf, listing_id: listingId })
   } catch (error) {
     logger.error('Publish failed', { error })
     return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
