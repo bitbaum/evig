@@ -34,7 +34,7 @@ export function BulkActionBar({
   // Below lg the admin bottom nav (h-14, fixed bottom-0) is visible —
   // offset above it so the bulk actions are never covered.
   return (
-    <div className="fixed bottom-[calc(3.5rem+env(safe-area-inset-bottom))] lg:bottom-0 left-0 right-0 bg-surface-base border-t border px-4 py-3 z-40 lg:safe-area-inset-bottom shadow-xs">
+    <div className="fixed bottom-[var(--bottom-nav-clearance,0px)] left-0 right-0 bg-surface-base border-t border px-4 py-3 z-40 lg:safe-area-inset-bottom shadow-xs">
       <div className="max-w-5xl mx-auto flex items-center justify-between gap-4">
         {/* Left: selection info */}
         <div className="flex items-center gap-3">

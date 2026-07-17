@@ -81,7 +81,7 @@ export function ErfassungSubmitBar({
         </Button>
       </div>
 
-      <div className="fixed bottom-[calc(3.5rem+env(safe-area-inset-bottom))] left-0 right-0 z-40 border-t border-default bg-surface-base p-3 sm:hidden">
+      <div className="fixed bottom-[var(--bottom-nav-clearance,0px)] left-0 right-0 z-40 border-t border-default bg-surface-base p-3 sm:hidden">
         <Button
           type="button"
           onClick={(event) => {

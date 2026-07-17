@@ -216,6 +216,27 @@
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
+/* ── Bottom-nav clearance (SSOT) ─────────────────────────────────────
+ * Surfaces that render a fixed mobile bottom nav (admin, dashboard) set
+ * `.has-bottom-nav` on their shell. EVERY fixed/sticky bottom-anchored
+ * element inside (FABs, submit bars, bulk bars, page padding) MUST offset
+ * itself with var(--bottom-nav-clearance) instead of hardcoding the nav
+ * height — e.g. bottom-[calc(1.5rem+var(--bottom-nav-clearance,0px))].
+ * The var is 0 outside these shells and from lg up (nav hidden), so the
+ * same class is correct on desktop and on navless pages. */
+:root {
+  --bottom-nav-clearance: 0px;
+}
+.has-bottom-nav {
+  /* nav = 56px items + 1px border + device gesture bar */
+  --bottom-nav-clearance: calc(3.5rem + 1px + env(safe-area-inset-bottom, 0px));
+}
+@media (min-width: 1024px) {
+  .has-bottom-nav {
+    --bottom-nav-clearance: 0px;
+  }
+}
+
 @utility scrollbar-hide {
   /* Hide the scrollbar of horizontal chip/tab rows (content still scrolls).
      Used by AboutSubNav and other edge-bleed scroll rows. */

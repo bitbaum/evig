@@ -44,7 +44,7 @@ export function AdminLayoutClient({
   const hasHirnAccess = hirnSection && accessibleSections.includes(hirnSection.id)
 
   return (
-    <div className="min-h-screen bg-surface-raised">
+    <div className="has-bottom-nav min-h-screen bg-surface-raised">
       <AdminSidebar
         sidebarCollapsed={sidebarCollapsed}
         setSidebarCollapsed={setSidebarCollapsed}
@@ -73,7 +73,7 @@ export function AdminLayoutClient({
           user={user}
         />
 
-        <main className="p-4 lg:p-6 pb-20 lg:pb-6">
+        <main className="p-4 lg:p-6 pb-[calc(1.5rem+var(--bottom-nav-clearance,0px))]">
           {children}
         </main>
       </div>

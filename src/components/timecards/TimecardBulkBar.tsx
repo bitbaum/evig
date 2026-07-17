@@ -38,7 +38,7 @@ export function TimecardBulkBar({
     // bottom offset keeps the bar clear of the page's sticky save/submit
     // footer (bottom-0; two rows ≈ 5.5rem on phones, one row ≈ 3.5rem from
     // sm) — the bar's tail actions used to disappear behind it on mobile.
-    <div className="sticky bottom-24 z-10 space-y-2.5 rounded-xl border border-action/30 bg-surface-base p-3 shadow-sm sm:bottom-16">
+    <div className="sticky bottom-[calc(6rem+var(--bottom-nav-clearance,0px))] z-10 space-y-2.5 rounded-xl border border-action/30 bg-surface-base p-3 shadow-sm sm:bottom-[calc(4rem+var(--bottom-nav-clearance,0px))]">
       {/* Header row: what's selected + the way out, always visible. */}
       <div className="flex items-center justify-between gap-2">
         <span className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-text-secondary">
