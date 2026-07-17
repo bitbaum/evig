@@ -110,16 +110,13 @@ export default function MembershipManager({ teamId, teamName, teamAccent, member
             <li key={m.membership_id} className="p-3 flex flex-wrap items-center gap-3">
               <Avatar src={m.avatar_url} name={m.name || m.email} size="sm" />
               <div className="min-w-0 flex-1">
-                {m.profile_id ? (
-                  <Link
-                    href={`/admin/team/${m.profile_id}`}
-                    className="block font-medium text-text-primary truncate hover:text-action hover:underline"
-                  >
-                    {m.name || m.email || '—'}
-                  </Link>
-                ) : (
-                  <p className="font-medium text-text-primary truncate">{m.name || m.email || '—'}</p>
-                )}
+                <Link
+                  href={m.profile_id ? `/admin/team/${m.profile_id}` : `/admin/team/new?user_id=${m.user_id}`}
+                  title={m.profile_id ? 'Team-Profil öffnen' : 'Noch kein Team-Profil — jetzt anlegen'}
+                  className="block font-medium text-text-primary truncate hover:text-action hover:underline"
+                >
+                  {m.name || m.email || '—'}
+                </Link>
                 <p className="text-xs text-text-tertiary truncate">
                   {m.position || m.email || ''}
                   {m.work_state && m.work_state !== 'active' && (

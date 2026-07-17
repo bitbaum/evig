@@ -445,4 +445,4 @@ Run `scripts/db/migrations/002-simplified-auth.sql` to add:
 
 ---
 
-**Last Updated**: 2026-04-13
+**Last Updated**: 2026-07-17
