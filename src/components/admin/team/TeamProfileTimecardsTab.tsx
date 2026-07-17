@@ -28,6 +28,10 @@ import { formatDateShort } from '@/lib/date-formats'
 import { TIMECARD_STATUS_ICONS } from '@/lib/team/timecard-display'
 import { useTimecardIntl } from '@/hooks/useTimecardIntl'
 import { SaldoStrip, type SaldoStripData } from '@/components/timecards/SaldoStrip'
+import { ZeitPensumPanel } from '@/components/admin/team/ZeitPensumPanel'
+import { TimecardReviewDrawer } from '@/components/admin/timecards/TimecardReviewDrawer'
+import { Input } from '@/components/ui/input'
+import { FileText, CalendarPlus } from 'lucide-react'
 
 interface TimecardRow {
   id: string
@@ -56,6 +60,27 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
   const [saldo, setSaldo] = useState<SaldoStripData | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [openCardId, setOpenCardId] = useState<string | null>(null)
+  // Proxy entry ("erfassen im Namen von") — defaults to the previous month,
+  // the classic back-filling case.
+  const [proxyMonth, setProxyMonth] = useState(() => {
+    const d = new Date()
+    d.setMonth(d.getMonth() - 1)
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+  })
+  const [proxyBusy, setProxyBusy] = useState(false)
+
+  const openMonthForUser = async () => {
+    setProxyBusy(true)
+    setError(null)
+    const res = await apiFetch<{ id: string }>('/api/admin/timecards/for-user', {
+      method: 'POST',
+      body: { user_id: userId, month: proxyMonth },
+    })
+    setProxyBusy(false)
+    if (res.success && res.data) setOpenCardId(res.data.id)
+    else setError(res.error ?? t('actionFailed'))
+  }
 
   const load = useCallback(async () => {
     setIsLoading(true)
@@ -86,6 +111,23 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
   return (
     <div className="space-y-3">
       {saldo && <SaldoStrip data={saldo} compact />}
+      <ZeitPensumPanel userId={userId} onChanged={load} />
+
+      {/* Proxy entry: open (or create) a month card for this person and edit
+          it in the review drawer — the Vero/Reza back-filling case. */}
+      <div className="flex flex-wrap items-center gap-2">
+        <Input
+          type="month"
+          value={proxyMonth}
+          onChange={e => setProxyMonth(e.target.value)}
+          className="h-9 w-auto"
+          aria-label={t('proxyMonthAria')}
+        />
+        <Button type="button" variant="outline" size="sm" disabled={proxyBusy || !proxyMonth} onClick={openMonthForUser} className="gap-1.5">
+          <CalendarPlus className="h-3.5 w-3.5" aria-hidden="true" />
+          {t('proxyOpenMonth')}
+        </Button>
+      </div>
       {/* Header bar — totals + reload */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div className="text-sm text-text-secondary">
@@ -148,6 +190,26 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
                           </span>
                         </div>
                       </div>
+                      <div className="mt-1 flex items-center gap-3">
+                        {row.period_type === 'month' && (
+                          <a
+                            href={`/admin/team/report/${userId}/${row.period_start.slice(0, 7)}`}
+                            className="inline-flex items-center gap-1 text-xs font-medium text-action hover:underline"
+                            target="_blank"
+                          >
+                            <FileText className="h-3 w-3" aria-hidden="true" /> {t('reportLink')}
+                          </a>
+                        )}
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setOpenCardId(row.id)}
+                          className="h-auto px-0 py-0 text-xs font-medium text-action hover:underline"
+                        >
+                          {t('queueReview')}
+                        </Button>
+                      </div>
                       {dateRef && (
                         <p className="mt-0.5 text-xs text-text-tertiary">
                           {row.reviewed_at
@@ -167,6 +229,13 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
             })}
           </ul>
         </div>
+      )}
+      {openCardId && (
+        <TimecardReviewDrawer
+          cardId={openCardId}
+          onClose={() => setOpenCardId(null)}
+          onChanged={load}
+        />
       )}
     </div>
   )

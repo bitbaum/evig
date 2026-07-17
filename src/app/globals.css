@@ -216,6 +216,24 @@
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
+/* ── Print isolation ─────────────────────────────────────────────────
+ * Pages that render an official printable sheet (Monatsrapport) wrap it
+ * in `.print-area`. When printing, ONLY that area is visible — the admin
+ * sidebar/topbar/nav never leak onto paper. */
+@media print {
+  body *:not(.print-area):not(.print-area *) {
+    visibility: hidden;
+  }
+  .print-area {
+    position: absolute;
+    inset: 0;
+    visibility: visible;
+  }
+  .print-area * {
+    visibility: visible;
+  }
+}
+
 /* ── Bottom-nav clearance (SSOT) ─────────────────────────────────────
  * Surfaces that render a fixed mobile bottom nav (admin, dashboard) set
  * `.has-bottom-nav` on their shell. EVERY fixed/sticky bottom-anchored

@@ -8,7 +8,8 @@
  */
 
 import { useTranslations } from 'next-intl'
-import { Clock4, Plane } from 'lucide-react'
+import Link from 'next/link'
+import { Clock4, Plane, ArrowRight } from 'lucide-react'
 import { useTimecardIntl } from '@/hooks/useTimecardIntl'
 import { cn } from '@/lib/utils'
 
@@ -35,7 +36,16 @@ function signed(formatted: string, minutes: number): string {
   return minutes > 0 ? `+${formatted}` : minutes < 0 ? `−${formatted}` : formatted
 }
 
-export function SaldoStrip({ data, compact = false }: { data: SaldoStripData; compact?: boolean }) {
+export function SaldoStrip({
+  data,
+  compact = false,
+  ownView = false,
+}: {
+  data: SaldoStripData
+  compact?: boolean
+  /** Own Zeiterfassung page: show the "where do I change this?" links. */
+  ownView?: boolean
+}) {
   const t = useTranslations('admin.timecards')
   const { duration } = useTimecardIntl()
 
@@ -48,49 +58,67 @@ export function SaldoStrip({ data, compact = false }: { data: SaldoStripData; co
     <section
       className={cn(
         'grid gap-px overflow-hidden rounded-xl border border-subtle bg-surface-raised',
-        compact ? 'grid-cols-3' : 'grid-cols-1 sm:grid-cols-3',
+        // Always 3 columns — on phones a tight glance line, never a stats wall.
+        'grid-cols-3',
       )}
     >
-      <div className={cn('bg-surface-base', compact ? 'p-3' : 'p-4')}>
-        <p className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary">
-          <Clock4 className="h-3.5 w-3.5" aria-hidden="true" /> {t('saldoTime')}
+      <div className={cn('bg-surface-base', compact ? 'p-3' : 'p-3 sm:p-4')}>
+        <p className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-text-tertiary sm:text-[11px]">
+          <Clock4 className="hidden h-3.5 w-3.5 sm:block" aria-hidden="true" /> {t('saldoTime')}
         </p>
-        <p className={cn('mt-1 font-mono tabular-nums font-semibold', compact ? 'text-lg' : 'text-2xl', saldoTone)}>
+        <p className={cn('mt-1 font-mono tabular-nums font-semibold', compact ? 'text-lg' : 'text-base sm:text-2xl', saldoTone)}>
           {signed(duration(Math.abs(saldo)), saldo)}
         </p>
       </div>
-      <div className={cn('bg-surface-base', compact ? 'p-3' : 'p-4')}>
-        <p className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary">
-          <Plane className="h-3.5 w-3.5" aria-hidden="true" /> {t('saldoVacation')}
+      <div className={cn('bg-surface-base', compact ? 'p-3' : 'p-3 sm:p-4')}>
+        <p className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-text-tertiary sm:text-[11px]">
+          <Plane className="hidden h-3.5 w-3.5 sm:block" aria-hidden="true" /> {t('saldoVacation')}
         </p>
-        <p className={cn('mt-1 font-mono tabular-nums font-semibold text-text-primary', compact ? 'text-lg' : 'text-2xl')}>
+        <p className={cn('mt-1 font-mono tabular-nums font-semibold text-text-primary', compact ? 'text-lg' : 'text-base sm:text-2xl')}>
           {t('saldoVacationDays', { days: data.vacation.balanceDays })}
         </p>
         {!compact && (
-          <p className="mt-0.5 text-xs text-text-tertiary">
+          <p className="mt-0.5 hidden text-xs text-text-tertiary sm:block">
             {t('saldoVacationDetail', {
-              entitlement: data.vacation.entitlementDays + data.vacation.carryoverDays,
+              entitlement: data.vacation.entitlementDays,
               taken: data.vacation.takenDays,
             })}
+            {data.vacation.carryoverDays !== 0 &&
+              ` · ${t('saldoVacationCarryover', { days: data.vacation.carryoverDays > 0 ? `+${data.vacation.carryoverDays}` : String(data.vacation.carryoverDays) })}`}
             {data.vacation.isEstimated && ` · ${t('saldoVacationEstimated')}`}
           </p>
         )}
+        {!compact && ownView && (
+          <a href="#abwesenheit" className="mt-1.5 hidden items-center gap-1 text-xs font-medium text-action hover:underline sm:inline-flex">
+            {t('saldoRequestAbsence')} <ArrowRight className="h-3 w-3" aria-hidden="true" />
+          </a>
+        )}
       </div>
-      <div className={cn('bg-surface-base', compact ? 'p-3' : 'p-4')}>
-        <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary">
+      <div className={cn('bg-surface-base', compact ? 'p-3' : 'p-3 sm:p-4')}>
+        <p className="truncate font-mono text-[10px] uppercase tracking-[0.14em] text-text-tertiary sm:text-[11px]">
           {t('saldoMonth')}
         </p>
-        <p className={cn('mt-1 font-mono tabular-nums font-semibold text-text-primary', compact ? 'text-lg' : 'text-2xl')}>
+        <p className={cn('mt-1 font-mono tabular-nums font-semibold text-text-primary', compact ? 'text-lg' : 'text-base sm:text-2xl')}>
           {duration(data.time.monthIstMinutes)}
           <span className="text-text-tertiary"> / {duration(data.time.monthSollMinutes)}</span>
         </p>
         {!compact && data.scheduleMismatch && (
-          <p className="mt-0.5 text-xs text-warning-700 dark:text-warning-400">
+          <div className="mt-0.5 text-xs text-warning-700 dark:text-warning-400">
             {t('saldoScheduleMismatch', {
               schedule: duration(data.scheduleWeeklyMinutes),
               contract: duration(data.weeklyMinutes),
             })}
-          </p>
+            {ownView && (
+              <span className="mt-0.5 block space-x-3">
+                <a href="#arbeitsplan" className="font-medium text-action hover:underline">
+                  {t('saldoFixPlan')}
+                </a>
+                <Link href="/admin/team/me" className="font-medium text-action hover:underline">
+                  {t('saldoPensumQuestion')}
+                </Link>
+              </span>
+            )}
+          </div>
         )}
       </div>
     </section>

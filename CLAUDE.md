@@ -137,6 +137,39 @@ brand.*:   social (mastodon, linkedin, facebook) — bg-brand-mastodon etc.
 | Section BG white | `bg-white` (dark auto-handled) | `bg-white dark:bg-neutral-950` (unless deeper black needed) |
 | Card hover | `hover:border-neutral-300` | `hover:shadow-xl` |
 
+### Mobile-first = ACTION-first, not stats-first
+
+On a phone, the user opened the page to DO the one thing the page is for —
+not to read numbers. Respect their time:
+
+- The primary action (form, calendar, list to work through) must be visible
+  within the first screen. Stats/saldi/summaries shrink to a single glance
+  line on phones (full cards from `sm:` up) or move below the action.
+- Use responsive ordering (`flex flex-col` + `order-*` with `lg:order-none`)
+  when desktop hierarchy differs from mobile — never duplicate markup.
+- Settings (reminders, schedules, preferences) sink below the action on
+  phones; they are visited rarely.
+- Litmus test at 390px: can the user start the page's core task without
+  scrolling past anything they didn't come for?
+
+### Contextual links — every stated problem/number links to where it's fixed
+
+UI text that names a state, a number, or a problem MUST link to the place
+where the user acts on it. A warning without a way out is a dead end; a
+number without a source feels like magic.
+
+- A warning/mismatch hint → link to the control that fixes it (anchor on the
+  same page via `id` + `scroll-mt-24`, or the page where the change happens).
+- A derived number (Saldo, count, quota) → its detail line names the inputs
+  and links to where they're managed (e.g. Feriensaldo → Abwesenheit
+  beantragen; Pensum-Hinweis → Arbeitsplan-Anker + Profil).
+- An empty state → link to the action that creates the first item.
+- Approval-gated changes → link to the REQUEST flow, not a silent form.
+
+Litmus test when touching any page: for each sentence the UI says, ask
+"where does the user go next after reading this?" — if the answer is a page
+and it's not one click away, add the link.
+
 ### Mobile bottom-nav clearance — one variable, no hardcoded nav math
 
 Admin and dashboard render a fixed mobile bottom nav (<lg). Their shells set

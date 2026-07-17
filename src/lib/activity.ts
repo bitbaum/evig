@@ -20,6 +20,9 @@ export type ActivityAction =
   | 'approved_timecard'
   | 'rejected_timecard'
   | 'edited_timecard'
+  | 'opened_timecard_for_user'
+  | 'submitted_timecard_for_user'
+  | 'updated_zeit_pensum'
   | 'reopened_timecard'
   | 'recorded_membership_payment'
 
