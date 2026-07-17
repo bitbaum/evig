@@ -26,6 +26,9 @@ import {
   type ContactMethod,
 } from '@/config/team'
 import { focusFreshness } from '@/lib/team/focus-freshness'
+import { getPersonSaldo } from '@/lib/services/saldo'
+import { SaldoStrip } from '@/components/timecards/SaldoStrip'
+import { getTranslations } from 'next-intl/server'
 
 export const metadata: Metadata = {
   title: 'Mein Profil',
@@ -63,7 +66,8 @@ export default async function MyTeamProfilePage() {
   }
   const userId = session.user.id
 
-  const [[row], memberships, teams] = await Promise.all([
+  const t = await getTranslations('admin.timecards')
+  const [[row], memberships, teams, saldo] = await Promise.all([
     db
       .select({
         position: teamProfiles.position,
@@ -84,7 +88,9 @@ export default async function MyTeamProfilePage() {
       .where(eq(teamProfiles.userId, userId)),
     getMembershipsForUser(userId).catch(() => []),
     listTeams().catch(() => []),
+    getPersonSaldo(userId).catch(() => null),
   ])
+  const currentMonth = new Date().toISOString().slice(0, 7)
 
   const name = session.user.name || session.user.email
   const skills = row?.skills ?? []
@@ -105,6 +111,25 @@ export default async function MyTeamProfilePage() {
         </Link>
       }
     >
+      {/* Own Zeit-/Feriensaldo + the actions behind it — same numbers as the
+          Zeiterfassung page and the HR detail view (one engine, three views). */}
+      {saldo && (
+        <div className="mb-5 space-y-2">
+          <SaldoStrip data={saldo} />
+          <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+            <Link href="/admin/zeiterfassung" className="font-medium text-action hover:underline">
+              {t('selfTitle')} →
+            </Link>
+            <Link href="/admin/zeiterfassung#abwesenheit" className="font-medium text-action hover:underline">
+              {t('saldoRequestAbsence')} →
+            </Link>
+            <Link href={`/admin/team/report/${userId}/${currentMonth}`} className="font-medium text-action hover:underline">
+              {t('reportLink')} →
+            </Link>
+          </div>
+        </div>
+      )}
+
       <div className="grid gap-5 lg:grid-cols-2">
         {/* Focus */}
         <Card icon={Target} title="Aktueller Fokus">
