@@ -10354,7 +10354,19 @@
       "dayGridHide": "Masquer la grille horaire",
       "viewingPastPeriod": "Tu consultes {period} — pas le mois en cours.",
       "backToCurrentMonth": "Revenir au mois en cours",
-      "durationCellHours": "{hours}h"
+      "durationCellHours": "{hours}h",
+      "saldoTime": "Solde d’heures",
+      "saldoVacation": "Solde de vacances",
+      "saldoVacationDays": "{days} jours",
+      "saldoVacationDetail": "{entitlement} de droit · {taken} pris",
+      "saldoVacationEstimated": "estimé (taux d’occupation)",
+      "saldoMonth": "Ce mois (réel / dû)",
+      "saldoScheduleMismatch": "L’horaire ({schedule}/semaine) diffère du taux ({contract}/semaine)",
+      "fillAndSubmit": "Remplir et soumettre",
+      "reminderLabel": "Rappel mensuel :",
+      "reminderOff": "Désactivé",
+      "reminderDayOption": "le {day}",
+      "reminderError": "Échec de l’enregistrement."
     },
     "appointments": {
       "pageTitle": "Rendez-vous",

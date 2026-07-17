@@ -10401,7 +10401,19 @@
       "dayGridHide": "Nascondi griglia oraria",
       "viewingPastPeriod": "Stai visualizzando {period} — non il mese corrente.",
       "backToCurrentMonth": "Torna al mese corrente",
-      "durationCellHours": "{hours}h"
+      "durationCellHours": "{hours}h",
+      "saldoTime": "Saldo ore",
+      "saldoVacation": "Saldo vacanze",
+      "saldoVacationDays": "{days} giorni",
+      "saldoVacationDetail": "{entitlement} spettanti · {taken} goduti",
+      "saldoVacationEstimated": "stimato (grado di occupazione)",
+      "saldoMonth": "Questo mese (effettivo / dovuto)",
+      "saldoScheduleMismatch": "Il piano ({schedule}/settimana) differisce dal grado di occupazione ({contract}/settimana)",
+      "fillAndSubmit": "Compila e invia",
+      "reminderLabel": "Promemoria mensile:",
+      "reminderOff": "Off",
+      "reminderDayOption": "il {day}",
+      "reminderError": "Salvataggio non riuscito."
     },
     "appointments": {
       "pageTitle": "Appuntamenti",

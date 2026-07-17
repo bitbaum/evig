@@ -10401,7 +10401,19 @@
       "dayGridHide": "Ocultar cuadrícula horaria",
       "viewingPastPeriod": "Estás viendo {period} — no el mes actual.",
       "backToCurrentMonth": "Volver al mes actual",
-      "durationCellHours": "{hours}h"
+      "durationCellHours": "{hours}h",
+      "saldoTime": "Saldo de horas",
+      "saldoVacation": "Saldo de vacaciones",
+      "saldoVacationDays": "{days} días",
+      "saldoVacationDetail": "{entitlement} de derecho · {taken} disfrutados",
+      "saldoVacationEstimated": "estimado (jornada)",
+      "saldoMonth": "Este mes (real / previsto)",
+      "saldoScheduleMismatch": "El plan ({schedule}/semana) difiere de la jornada ({contract}/semana)",
+      "fillAndSubmit": "Rellenar y enviar",
+      "reminderLabel": "Recordatorio mensual:",
+      "reminderOff": "Desactivado",
+      "reminderDayOption": "el día {day}",
+      "reminderError": "Error al guardar."
     },
     "appointments": {
       "pageTitle": "Citas",

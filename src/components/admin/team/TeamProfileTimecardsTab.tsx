@@ -27,6 +27,7 @@ import {
 import { formatDateShort } from '@/lib/date-formats'
 import { TIMECARD_STATUS_ICONS } from '@/lib/team/timecard-display'
 import { useTimecardIntl } from '@/hooks/useTimecardIntl'
+import { SaldoStrip, type SaldoStripData } from '@/components/timecards/SaldoStrip'
 
 interface TimecardRow {
   id: string
@@ -52,6 +53,7 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
   const t = useTranslations('admin.timecards')
   const { statusLabel, duration, period } = useTimecardIntl()
   const [rows, setRows] = useState<TimecardRow[]>([])
+  const [saldo, setSaldo] = useState<SaldoStripData | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -59,12 +61,16 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
     setIsLoading(true)
     setError(null)
     const params = new URLSearchParams({ user_id: userId, limit: '25' })
-    const result = await apiFetch<ListResponse>(`/api/admin/timecards?${params}`)
+    const [result, saldoRes] = await Promise.all([
+      apiFetch<ListResponse>(`/api/admin/timecards?${params}`),
+      apiFetch<{ saldo: SaldoStripData | null }>(`/api/timecards/saldo?user_id=${userId}`),
+    ])
     if (result.success && result.data) {
       setRows(result.data.items)
     } else {
       setError(result.error || t('queueLoadError'))
     }
+    if (saldoRes.success) setSaldo(saldoRes.data?.saldo ?? null)
     setIsLoading(false)
   }, [userId, t])
 
@@ -79,6 +85,7 @@ export function TeamProfileTimecardsTab({ userId }: Props) {
 
   return (
     <div className="space-y-3">
+      {saldo && <SaldoStrip data={saldo} compact />}
       {/* Header bar — totals + reload */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
         <div className="text-sm text-text-secondary">

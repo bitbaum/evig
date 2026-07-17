@@ -10402,7 +10402,19 @@
       "dayGridHide": "Hide hour grid",
       "viewingPastPeriod": "You are viewing {period} — not the current month.",
       "backToCurrentMonth": "Back to current month",
-      "durationCellHours": "{hours}h"
+      "durationCellHours": "{hours}h",
+      "saldoTime": "Time balance",
+      "saldoVacation": "Vacation balance",
+      "saldoVacationDays": "{days} days",
+      "saldoVacationDetail": "{entitlement} entitled · {taken} taken",
+      "saldoVacationEstimated": "estimated (workload)",
+      "saldoMonth": "This month (actual / target)",
+      "saldoScheduleMismatch": "Schedule ({schedule}/week) differs from workload ({contract}/week)",
+      "fillAndSubmit": "Fill & submit",
+      "reminderLabel": "Monthly reminder:",
+      "reminderOff": "Off",
+      "reminderDayOption": "on the {day}.",
+      "reminderError": "Saving failed."
     },
     "appointments": {
       "pageTitle": "Appointments",

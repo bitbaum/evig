@@ -177,18 +177,35 @@ export function TimecardsClient({
               group to pick days for the bulk bar below. justify-between splits
               them; on mobile they wrap to two coherent rows. */}
           <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-            <Button
-              type="button"
-              variant="primary"
-              size="sm"
-              onClick={tc.fillMonthFromSchedule}
-              disabled={tc.isLoadingDraft || tc.isSubmitting}
-              title={t('fillMonthHint')}
-              className="gap-1.5"
-            >
-              <CalendarCheck className="h-4 w-4" aria-hidden="true" />
-              {t('fillMonth')}
-            </Button>
+            <div className="flex flex-wrap items-center gap-2">
+              <Button
+                type="button"
+                variant="primary"
+                size="sm"
+                onClick={tc.fillMonthFromSchedule}
+                disabled={tc.isLoadingDraft || tc.isSubmitting}
+                title={t('fillMonthHint')}
+                className="gap-1.5"
+              >
+                <CalendarCheck className="h-4 w-4" aria-hidden="true" />
+                {t('fillMonth')}
+              </Button>
+              {/* One-click normal month: fill from plan AND submit — shown only
+                  while the month is an empty draft (the reminder's deep link
+                  lands exactly here). */}
+              {tc.periodEntries.length === 0 && serverStatus === 'draft' && (
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={tc.submitFromPlan}
+                  disabled={tc.isLoadingDraft || tc.isSubmitting}
+                  className="gap-1.5"
+                >
+                  {tc.isSubmitting ? t('submitting') : t('fillAndSubmit')}
+                </Button>
+              )}
+            </div>
             <div className="flex flex-wrap items-center gap-1.5">
               <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary">
                 {t('selectLabel')}

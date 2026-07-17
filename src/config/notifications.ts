@@ -64,6 +64,7 @@ export const NOTIFICATION_TYPES = {
   // "needs review" notification above) — also the "you can approve it yourself"
   // prompt when the submitter is the sole approver.
   TIMECARD_SUBMIT_CONFIRMED: 'timecard_submit_confirmed',
+  TIMECARD_REMINDER: 'timecard_reminder',
   TIMECARD_REVIEWED: 'timecard_reviewed',
 
   // Permission requests

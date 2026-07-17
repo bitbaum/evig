@@ -10401,7 +10401,19 @@
       "dayGridHide": "時間グリッドを隠す",
       "viewingPastPeriod": "{period} を表示中 — 今月ではありません。",
       "backToCurrentMonth": "今月に戻る",
-      "durationCellHours": "{hours}h"
+      "durationCellHours": "{hours}h",
+      "saldoTime": "時間残高",
+      "saldoVacation": "休暇残高",
+      "saldoVacationDays": "{days}日",
+      "saldoVacationDetail": "付与{entitlement}日 · 取得{taken}日",
+      "saldoVacationEstimated": "概算(勤務率)",
+      "saldoMonth": "今月(実績 / 所定)",
+      "saldoScheduleMismatch": "スケジュール(週{schedule})が契約(週{contract})と異なります",
+      "fillAndSubmit": "入力して提出",
+      "reminderLabel": "毎月のリマインダー:",
+      "reminderOff": "オフ",
+      "reminderDayOption": "{day}日",
+      "reminderError": "保存に失敗しました。"
     },
     "appointments": {
       "pageTitle": "予約",

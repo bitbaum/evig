@@ -68,6 +68,15 @@ export const teamProfiles = pgTable('team_profiles', {
   // shortcut; new code should prefer workState.
   workState: text('work_state').notNull().default('active'),
 
+  // Zeiterfassung ledger (added by migration 136).
+  // Opening Zeitsaldo carried over from the legacy SMALL-Time tool at
+  // cutover ("Übertrag T") — punch-level history is NOT migrated.
+  timeOpeningMinutes: integer('time_opening_minutes').notNull().default(0),
+  timeOpeningDate: date('time_opening_date', { mode: 'string' }),
+  // Day-of-month (1–28) for the personal "Zeiterfassung ausfüllen" reminder;
+  // NULL = reminder off. CHECK team_profiles_reminder_day_range at DB level.
+  zeiterfassungReminderDay: integer('zeiterfassung_reminder_day'),
+
   // Status & timestamps
   isActive: boolean('is_active').default(true),
   showOnAbout: boolean('show_on_about').notNull().default(false),
@@ -272,6 +281,58 @@ export const leavePeriods = pgTable('leave_periods', {
   // Mirrors migration 080's leave_periods_dates_ordered.
   check('leave_periods_dates_ordered', sql`${table.endsOn} >= ${table.startsOn}`),
 ])
+
+// =============================================================================
+// EMPLOYMENT PERIODS (effective-dated Pensum — migration 136)
+// =============================================================================
+// The Soll side of the Zeitsaldo. One row per Pensum change; Soll for any
+// date resolves to the period with the latest valid_from <= date. Seeded
+// from team_profiles.contract_hours (which stays as the "current" shortcut,
+// mirroring the compensation_history pattern above).
+
+export const employmentPeriods = pgTable('employment_periods', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  teamProfileId: uuid('team_profile_id').notNull().references(() => teamProfiles.id, { onDelete: 'cascade' }),
+  validFrom: date('valid_from', { mode: 'string' }).notNull(),
+  // Weekly contracted working time in minutes (60% of a 40h week = 1440).
+  weeklyMinutes: integer('weekly_minutes').notNull(),
+  notes: text('notes'),
+  createdBy: uuid('created_by').references(() => users.id, { onDelete: 'set null' }),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+}, (table) => [
+  index('idx_employment_periods_profile').on(table.teamProfileId, table.validFrom),
+  check('employment_periods_weekly_minutes_range', sql`${table.weeklyMinutes} >= 0 AND ${table.weeklyMinutes} <= 6000`),
+])
+
+export type EmploymentPeriod = typeof employmentPeriods.$inferSelect
+export type NewEmploymentPeriod = typeof employmentPeriods.$inferInsert
+
+// =============================================================================
+// VACATION ENTITLEMENTS (Ferienanspruch per person-year — migration 136)
+// =============================================================================
+// Feriensaldo = days + carryover_days − taken (ferien timecard entries of the
+// year). carryover_days is the legacy tool's "Übertrag F" at cutover and the
+// year-to-year carryover afterwards.
+
+export const vacationEntitlements = pgTable('vacation_entitlements', {
+  id: uuid('id').primaryKey().defaultRandom(),
+  teamProfileId: uuid('team_profile_id').notNull().references(() => teamProfiles.id, { onDelete: 'cascade' }),
+  year: integer('year').notNull(),
+  days: numeric('days', { precision: 4, scale: 1 }).notNull(),
+  carryoverDays: numeric('carryover_days', { precision: 4, scale: 1 }).notNull().default('0'),
+  notes: text('notes'),
+  createdBy: uuid('created_by').references(() => users.id, { onDelete: 'set null' }),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+}, (table) => [
+  index('idx_vacation_entitlements_profile').on(table.teamProfileId, table.year),
+  check('vacation_entitlements_year_range', sql`${table.year} >= 2000 AND ${table.year} <= 2100`),
+  check('vacation_entitlements_days_range', sql`${table.days} >= 0 AND ${table.days} <= 60`),
+])
+
+export type VacationEntitlement = typeof vacationEntitlements.$inferSelect
+export type NewVacationEntitlement = typeof vacationEntitlements.$inferInsert
 
 export type LeavePeriod = typeof leavePeriods.$inferSelect
 export type NewLeavePeriod = typeof leavePeriods.$inferInsert

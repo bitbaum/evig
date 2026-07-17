@@ -27,6 +27,9 @@ import { db } from '@/db'
 import { teamProfiles, timecards as timecardsTable } from '@/db/schema'
 import Heading from '@/components/ui/Heading'
 import { TimecardsClient } from '@/components/timecards/TimecardsClient'
+import { SaldoStrip } from '@/components/timecards/SaldoStrip'
+import { ReminderSetting } from '@/components/timecards/ReminderSetting'
+import { getPersonSaldo } from '@/lib/services/saldo'
 import { TimecardHistorySidebar } from '@/components/dashboard/timecards/TimecardHistorySidebar'
 import { WeeklyScheduleEditor } from '@/components/timecards/WeeklyScheduleEditor'
 
@@ -62,10 +65,16 @@ export default async function AdminZeiterfassungPage() {
   // user's regular schedule. Returns null if there's no team profile yet —
   // the client handles that case (shows an empty grid the user can fill in).
   const [profile] = await db
-    .select({ workingHours: teamProfiles.workingHours })
+    .select({
+      workingHours: teamProfiles.workingHours,
+      reminderDay: teamProfiles.zeiterfassungReminderDay,
+    })
     .from(teamProfiles)
     .where(eq(teamProfiles.userId, session.user.id))
     .limit(1)
+
+  // Zeit-/Feriensaldo — null (hidden) for people without a Pensum on file.
+  const saldo = await getPersonSaldo(session.user.id).catch(() => null)
 
   // History: last 8 timecards across all periods, newest first. Narrow column
   // on desktop, collapsible on mobile.
@@ -96,7 +105,11 @@ export default async function AdminZeiterfassungPage() {
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px] lg:gap-8">
         <div className="min-w-0 space-y-6">
-          <WeeklyScheduleEditor workingHours={profile?.workingHours ?? null} />
+          {saldo && <SaldoStrip data={saldo} />}
+          <div className="space-y-2">
+            <WeeklyScheduleEditor workingHours={profile?.workingHours ?? null} />
+            <ReminderSetting initialDay={profile?.reminderDay ?? null} />
+          </div>
           <TimecardsClient
             workingHours={profile?.workingHours ?? null}
             userName={session.user.name || session.user.email || t('userFallback')}

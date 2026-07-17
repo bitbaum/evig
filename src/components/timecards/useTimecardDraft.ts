@@ -863,6 +863,37 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     [periodEntries, currentPeriodRange, draft.notes, applyServerCard, t],
   )
 
+  /**
+   * One-click «Monat aus Plan füllen & einreichen»: builds the full month
+   * from the (effective) schedule and submits it in a single POST — no
+   * intermediate save, no second click. For the 95% "normal month" case
+   * and the deep link from the monthly reminder notification.
+   */
+  const submitFromPlan = useCallback(async () => {
+    setIsSubmitting(true)
+    setSyncMessage(null)
+    setErrorMessage(null)
+    try {
+      const result = await apiFetch<Timecard>('/api/timecards', {
+        method: 'POST',
+        body: {
+          period_type: currentPeriodRange.period_type,
+          period_start: currentPeriodRange.period_start,
+          period_end: currentPeriodRange.period_end,
+          notes: draft.notes || null,
+          entries: monthFillEntries.map(entry => normalizeEntry(entry)),
+        },
+      })
+      if (!result.success || !result.data) throw new Error(result.error || 'submit_failed')
+      applyServerCard(result.data, draft.selectedDate)
+      setSyncMessage(t('submitSuccess'))
+    } catch {
+      setErrorMessage(t('submitError'))
+    } finally {
+      setIsSubmitting(false)
+    }
+  }, [currentPeriodRange, draft.notes, draft.selectedDate, monthFillEntries, t, applyServerCard])
+
   const submitDraft = useCallback(async () => {
     setIsSubmitting(true)
     setSyncMessage(null)
@@ -930,6 +961,7 @@ export function useTimecardDraft({ workingHours }: { workingHours: string | null
     rebuildCurrentDraft,
     saveDraft,
     submitDraft,
+    submitFromPlan,
     handleAIFieldsFilled,
   }
 }

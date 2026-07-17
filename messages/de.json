@@ -10457,7 +10457,19 @@
       "dayGridHide": "Stundenraster ausblenden",
       "viewingPastPeriod": "Du siehst {period} — nicht den aktuellen Monat.",
       "backToCurrentMonth": "Zum aktuellen Monat",
-      "durationCellHours": "{hours}h"
+      "durationCellHours": "{hours}h",
+      "saldoTime": "Zeitsaldo",
+      "saldoVacation": "Feriensaldo",
+      "saldoVacationDays": "{days} Tage",
+      "saldoVacationDetail": "{entitlement} Anspruch · {taken} bezogen",
+      "saldoVacationEstimated": "geschätzt (Pensum)",
+      "saldoMonth": "Dieser Monat (Ist / Soll)",
+      "saldoScheduleMismatch": "Arbeitsplan ({schedule}/Woche) weicht vom Pensum ({contract}/Woche) ab",
+      "fillAndSubmit": "Füllen & einreichen",
+      "reminderLabel": "Monatliche Erinnerung:",
+      "reminderOff": "Aus",
+      "reminderDayOption": "am {day}.",
+      "reminderError": "Speichern fehlgeschlagen."
     },
     "appointments": {
       "pageTitle": "Termine",

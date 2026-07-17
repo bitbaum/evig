@@ -10401,7 +10401,19 @@
       "dayGridHide": "시간 그리드 숨기기",
       "viewingPastPeriod": "{period} 보는 중 — 현재 달이 아닙니다.",
       "backToCurrentMonth": "현재 달로 돌아가기",
-      "durationCellHours": "{hours}h"
+      "durationCellHours": "{hours}h",
+      "saldoTime": "시간 잔고",
+      "saldoVacation": "휴가 잔고",
+      "saldoVacationDays": "{days}일",
+      "saldoVacationDetail": "부여 {entitlement}일 · 사용 {taken}일",
+      "saldoVacationEstimated": "추정(근무율)",
+      "saldoMonth": "이번 달 (실제 / 소정)",
+      "saldoScheduleMismatch": "일정(주 {schedule})이 계약(주 {contract})과 다릅니다",
+      "fillAndSubmit": "채우고 제출",
+      "reminderLabel": "월간 알림:",
+      "reminderOff": "끔",
+      "reminderDayOption": "{day}일",
+      "reminderError": "저장에 실패했습니다."
     },
     "appointments": {
       "pageTitle": "예약",
