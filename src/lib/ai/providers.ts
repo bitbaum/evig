@@ -21,16 +21,19 @@ import { ORG } from '@/config/org'
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
 const GROQ_MODEL = 'llama-3.3-70b-versatile'
-// Fallback model for large prompts that exceed the primary model's free-tier TPM limit
-const GROQ_LARGE_CONTEXT_MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct'
+// Fallback for large prompts. Groq decommissioned Llama-4-Scout (404
+// model_not_found), so fall back to the versatile 128k model — a dead model id
+// here silently broke the large-prompt retry path.
+const GROQ_LARGE_CONTEXT_MODEL = 'llama-3.3-70b-versatile'
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions'
 const OPENROUTER_MODEL = 'meta-llama/llama-3.3-70b-instruct:free'
 
-// Vision-capable models (multimodal). Llama 4 Scout on Groq accepts images;
-// OpenRouter has a free vision model. Used by callVisionWithFallback so photo
-// analysis works on prod (Ollama vision is local-dev only and isn't deployed).
-const GROQ_VISION_MODEL = 'meta-llama/llama-4-scout-17b-16e-instruct'
+// Vision-capable models (multimodal). Groq RETIRED Llama-4-Scout — its whole
+// lineup lost vision except Qwen3 (verified: qwen/qwen3.6-27b accepts image_url);
+// OpenRouter keeps a free vision model as fallback. Used by callVisionWithFallback
+// so photo analysis works on prod (Ollama vision is local-dev only, not deployed).
+const GROQ_VISION_MODEL = 'qwen/qwen3.6-27b'
 const OPENROUTER_VISION_MODEL = 'meta-llama/llama-3.2-11b-vision-instruct:free'
 
 const DEFAULT_TIMEOUT_MS = 60000
@@ -476,7 +479,9 @@ async function callOpenAICompatVision(
           ],
         }],
         temperature: opts.temperature ?? 0.3,
-        max_tokens: opts.maxTokens ?? 2048,
+        // Headroom for reasoning vision models (Qwen3 emits <think> before the
+        // JSON) — too low a ceiling truncates the answer before the JSON block.
+        max_tokens: opts.maxTokens ?? 4096,
       }),
       signal: controller.signal,
     })
