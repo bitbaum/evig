@@ -57,12 +57,17 @@ export async function proxy(request: NextRequest) {
   const requestHeaders = new Headers(request.headers)
   requestHeaders.set('x-current-path', pathname + request.nextUrl.search)
 
-  // CSRF protection for state-changing API requests
+  // CSRF protection for state-changing API requests. Exempt endpoints that
+  // authenticate with a Bearer token rather than the session cookie — CSRF is a
+  // cookie/session attack vector, so token-authed routes (webhooks, the
+  // Bearer-CRON_SECRET migration endpoint) don't need it and can't supply the
+  // double-submit token when driven server-side without a browser.
   if (
     pathname.startsWith('/api/') &&
     !pathname.startsWith('/api/webhooks/') &&
     !pathname.startsWith('/api/public/') &&
     !pathname.startsWith('/api/auth/') &&
+    !pathname.startsWith('/api/admin/migrate/') &&
     !pathname.startsWith('/api/health')
   ) {
     const csrfResult = csrfMiddleware(request)
