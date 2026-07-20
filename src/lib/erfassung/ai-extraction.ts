@@ -32,6 +32,26 @@ import { fastParseProductText } from './ai-classification'
 // Product form structure for AI to fill - imported from SSOT
 export const PRODUCT_SCHEMA = ERFASSUNG_PROMPTS.schema
 
+/**
+ * Pull the JSON object out of a model response.
+ *
+ * Reasoning vision/text models (e.g. Qwen3) emit a `<think>…</think>` block —
+ * often containing example `{…}` — before the real answer, and some wrap the
+ * result in ```json fences. A naive greedy `/\{[\s\S]*\}/` then spans reasoning
+ * prose and fails to parse ("non-whitespace after JSON"). Strip those first,
+ * then take the last balanced-looking object.
+ */
+function extractJsonObject(text: string): string | null {
+  // Drop the reasoning block (and any stray/unclosed opener) plus code fences,
+  // so the greedy first-`{`-to-last-`}` match spans only the answer object.
+  const cleaned = text
+    .replace(/<think>[\s\S]*?<\/think>/gi, '')
+    .replace(/<\/?think>/gi, '')
+    .replace(/```(?:json)?/gi, '')
+  const match = cleaned.match(/\{[\s\S]*\}/)
+  return match ? match[0] : null
+}
+
 // Build extraction prompt using SSOT prompts
 const buildExtractionPrompt = (text: string) => fillPromptTemplate(ERFASSUNG_PROMPTS.extract, {
   text,
@@ -79,11 +99,11 @@ export async function extractProductFromText(
   })
 
   if (result) {
-    // Extract JSON from response
-    const jsonMatch = result.text.match(/\{[\s\S]*\}/)
-    if (jsonMatch) {
+    // Extract JSON from response (robust to reasoning-model <think> blocks)
+    const jsonStr = extractJsonObject(result.text)
+    if (jsonStr) {
       try {
-        const productData = JSON.parse(jsonMatch[0]) as VoiceProductData
+        const productData = JSON.parse(jsonStr) as VoiceProductData
         const { metadata, allSources } = calculateFieldConfidence(text, productData, sourceType, result.model)
 
         logger.info('AI extraction successful', {
@@ -181,8 +201,8 @@ Antworte NUR mit dem ausgefüllten JSON, keine Erklärungen.`
     }
   }
 
-  const jsonMatch = result.text.match(/\{[\s\S]*\}/)
-  if (!jsonMatch) {
+  const jsonStr = extractJsonObject(result.text)
+  if (!jsonStr) {
     logger.error('No JSON found in vision response', { provider: result.provider })
     return {
       success: false,
@@ -192,7 +212,7 @@ Antworte NUR mit dem ausgefüllten JSON, keine Erklärungen.`
   }
 
   try {
-    const productData = JSON.parse(jsonMatch[0]) as VoiceProductData
+    const productData = JSON.parse(jsonStr) as VoiceProductData
     const { metadata, allSources } = calculateFieldConfidence('[image analysis]', productData, 'image')
     logger.info('Image extraction successful', {
       provider: result.provider,

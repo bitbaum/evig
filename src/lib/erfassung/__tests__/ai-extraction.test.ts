@@ -250,6 +250,18 @@ describe('extractProductFromImage', () => {
     }
   })
 
+  it('parses JSON from a reasoning model that emits a <think> block with a decoy object', async () => {
+    // Qwen3 (Groq vision) reasons before answering; the think block often
+    // contains an example `{...}`. A greedy match must not span it.
+    const withThink = `<think>\nI should output like {"foo":"bar"} maybe.\nLet me decide.\n</think>\n\`\`\`json\n${PRODUCT_JSON}\n\`\`\``
+    mockCallVisionWithFallback.mockResolvedValueOnce(visionOk(withThink))
+
+    const result = await extractProductFromImage(BASE64)
+
+    expect(result.success).toBe(true)
+    if (result.success) expect(result.data.produktname).toBe('ThinkPad T480')
+  })
+
   it('normalises a bare base64 string into a full data URL', async () => {
     mockCallVisionWithFallback.mockResolvedValueOnce(visionOk(PRODUCT_JSON))
 
