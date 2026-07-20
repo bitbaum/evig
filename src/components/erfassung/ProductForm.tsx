@@ -53,17 +53,20 @@ export function ProductForm({
 
   return (
     <>
-      <ProductImageSection
-        image={formData.image}
-        onImageChange={onImageChange}
-      />
-
+      {/* The extracted data comes first — it's what the operator opened this
+          step to verify. The photo is enrichment, so it follows the fields
+          instead of pushing them below the fold. */}
       <ProductBasicFields
         formData={formData}
         aiMetadata={aiMetadata}
         subcategories={subcategories}
         onFieldChange={onFieldChange}
         onCategoryChange={onCategoryChange}
+      />
+
+      <ProductImageSection
+        image={formData.image}
+        onImageChange={onImageChange}
       />
 
       {/* Progressive disclosure on every viewport. The capture decision is

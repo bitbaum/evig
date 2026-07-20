@@ -15,10 +15,8 @@ import { BulkSuccessScreen } from '@/components/erfassung/BulkSuccessScreen'
 import { CaptureDestinationFields } from '@/components/erfassung/CaptureDestinationFields'
 import { ErfassungSubmitBar } from '@/components/erfassung/ErfassungSubmitBar'
 import { useErfassungForm } from '@/components/erfassung/useErfassungForm'
-import { AIFormAssist } from '@/components/ai/AIFormAssist'
-import type { AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
 import { Button } from '@/components/ui/button'
-import type { BulkProduct, BulkSaveResponse, ErfassungFormData, AIFieldMetadata } from '@/types/erfassung'
+import type { BulkProduct, BulkSaveResponse } from '@/types/erfassung'
 import { formDataToPayload } from '@/types/erfassung'
 import Heading from '@/components/admin/AdminHeading'
 import { ROUTES } from '@/config/routes'
@@ -127,43 +125,6 @@ function ErfassungContent() {
     setBulkSaveResult(null)
     setSelectedProductId(null)
   }, [])
-
-  // AI refine ("make the description longer", quick-action chips): map the
-  // generic assist payload onto the erfassung form shape. The whitelist keeps
-  // stray model keys (fieldsChanged, bemerkungen) out of the form state.
-  const { handleProductData } = form
-  const handleAssistFilled = useCallback((
-    raw: Partial<Record<string, unknown>>,
-    entries: Record<string, AIFieldMetadataEntry>,
-  ) => {
-    const data: Partial<ErfassungFormData> = {}
-    const stringFields = [
-      'hersteller', 'produktname', 'kurzbeschreibung', 'verkaufspreis',
-      'zustand', 'hauptkategorie', 'unterkategorie',
-    ] as const
-    for (const field of stringFields) {
-      const value = raw[field]
-      if (typeof value === 'string' || typeof value === 'number') {
-        data[field] = String(value)
-      }
-    }
-    if (Array.isArray(raw.specs)) {
-      const specs = raw.specs
-        .filter((s): s is { key: unknown; value: unknown } => Boolean(s && typeof s === 'object' && 'key' in s && 'value' in s))
-        .map(s => ({ key: String(s.key), value: String(s.value) }))
-        .filter(s => s.key && s.value)
-      if (specs.length > 0) data.specs = specs
-    }
-    if (Array.isArray(raw.kundenprofile)) {
-      data.kundenprofile = raw.kundenprofile.map(String)
-    }
-    const metadata: AIFieldMetadata = {}
-    for (const field of Object.keys(data) as Array<keyof ErfassungFormData>) {
-      const entry = entries[field]
-      if (entry) metadata[field] = { type: 'text', ...entry }
-    }
-    handleProductData(data, metadata)
-  }, [handleProductData])
 
   const handleBulkRetryFailed = useCallback(() => {
     setBulkProducts(prev => prev.filter(p => p._status === 'error'))
@@ -329,26 +290,6 @@ function ErfassungContent() {
               </div>
             )}
 
-            {/* Fast lane: trust the AI result as-is; the pipeline is where
-                details get completed anyway. Only for the recommended quality
-                destination — every other destination needs the full step 3. */}
-            {!form.isEditMode && form.destination === CAPTURE_DESTINATIONS.QUALITY && (
-              <div className="flex flex-col gap-2 rounded-lg border border-subtle bg-surface-raised px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-sm text-text-secondary">
-                  Eilig? Daten unbesehen übernehmen — Details lassen sich später in der Pipeline ergänzen.
-                </p>
-                <Button
-                  type="button"
-                  variant="outline"
-                  disabled={form.isLoading || !(form.formData.hersteller.trim() && form.formData.produktname.trim())}
-                  onClick={(e) => form.handleSubmit(e, 'erfassen')}
-                  className="shrink-0"
-                >
-                  Direkt aufnehmen & Prüfung starten
-                </Button>
-              </div>
-            )}
-
             <section aria-labelledby="capture-review-title" className="space-y-5">
               <div className="flex items-start gap-3">
                 <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-action text-sm font-semibold text-action-text">2</div>
@@ -359,26 +300,6 @@ function ErfassungContent() {
                   <p className="mt-0.5 text-sm text-text-secondary">KI-Vorschläge kontrollieren. Nur Hersteller und Produktname sind zum Speichern nötig.</p>
                 </div>
               </div>
-              {/* Comment on the AI result in plain language ("Beschreibung
-                  länger", "Preis 250") — the same assist loop as the
-                  marketplace sell form. */}
-              <AIFormAssist
-                formType="erfassung"
-                variant="section"
-                defaultExpanded
-                currentData={{
-                  hersteller: form.formData.hersteller,
-                  produktname: form.formData.produktname,
-                  kurzbeschreibung: form.formData.kurzbeschreibung,
-                  verkaufspreis: form.formData.verkaufspreis,
-                  zustand: form.formData.zustand,
-                  hauptkategorie: form.formData.hauptkategorie,
-                  unterkategorie: form.formData.unterkategorie,
-                  specs: form.formData.specs.filter(s => s.key && s.value),
-                  kundenprofile: form.formData.kundenprofile,
-                }}
-                onFieldsFilled={handleAssistFilled}
-              />
               <ProductForm
                 formData={form.formData}
                 aiMetadata={form.aiMetadata}

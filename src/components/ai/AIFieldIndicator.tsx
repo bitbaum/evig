@@ -56,6 +56,13 @@ export function AIFieldIndicator({
 }: AIFieldIndicatorProps) {
   const [showDetails, setShowDetails] = useState(false)
 
+  // High-confidence extractions don't need a per-field flag — the filled value
+  // plus the highlighted border already say "KI hat das ausgefüllt". Only
+  // surface the badge when a field is worth a second look (medium/low
+  // confidence), so the review screen points at what needs attention instead
+  // of tagging every single field.
+  if (source.confidence >= 0.85) return null
+
   const Icon = SOURCE_ICONS[source.type]
   const confidencePercent = Math.round(source.confidence * 100)
   const colorClass = getConfidenceColor(source.confidence)
