@@ -9611,7 +9611,9 @@
         "processing": "Processing…",
         "chooseFile": "CSV 또는 Excel 파일을 선택하거나 여기로 끌어다 놓으십시오",
         "fileHint": "CSV, TSV, XLSX — 열이 자동으로 인식됩니다",
-        "unmappedColumns": "매핑되지 않은 열:"
+        "unmappedColumns": "매핑되지 않은 열:",
+        "multiProductHint": "여러 기기? 한 줄에 한 대씩 입력하면 AI가 자동으로 일괄 등록을 엽니다.",
+        "exampleInput": "Dell Latitude E7470 i5 8GB 256GB SSD 280 CHF"
       },
       "destination": {
         "title": "다음에는 무엇을 하나요?",

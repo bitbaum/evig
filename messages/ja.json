@@ -9611,7 +9611,9 @@
         "processing": "Processing…",
         "chooseFile": "CSV または Excel ファイルを選択するか、ここにドラッグ",
         "fileHint": "CSV、TSV、XLSX — 列は自動で認識されます",
-        "unmappedColumns": "マッピングされていない列:"
+        "unmappedColumns": "マッピングされていない列:",
+        "multiProductHint": "複数の機器？1行に1台入力すると、AIが自動で一括登録を開きます。",
+        "exampleInput": "Dell Latitude E7470 i5 8GB 256GB SSD 280 CHF"
       },
       "destination": {
         "title": "次に何をしますか？",

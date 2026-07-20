@@ -9611,7 +9611,9 @@
         "processing": "Processing…",
         "chooseFile": "Choisissez un fichier CSV ou Excel, ou glissez-le ici",
         "fileHint": "CSV, TSV, XLSX — les colonnes sont reconnues automatiquement",
-        "unmappedColumns": "Colonnes non mappées :"
+        "unmappedColumns": "Colonnes non mappées :",
+        "multiProductHint": "Plusieurs appareils ? Un appareil par ligne — l'IA ouvre automatiquement la saisie groupée.",
+        "exampleInput": "Dell Latitude E7470 i5 8GB 256GB SSD 280 CHF"
       },
       "destination": {
         "title": "Que se passe-t-il ensuite ?",

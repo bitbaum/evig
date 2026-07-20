@@ -9619,7 +9619,9 @@
         "processing": "Processing…",
         "chooseFile": "Choose CSV or Excel file or drag here",
         "fileHint": "CSV, TSV, XLSX — columns are recognised automatically",
-        "unmappedColumns": "Unmapped columns:"
+        "unmappedColumns": "Unmapped columns:",
+        "multiProductHint": "Multiple devices? Paste one device per line — the AI opens bulk capture automatically.",
+        "exampleInput": "Dell Latitude E7470 i5 8GB 256GB SSD 280 CHF"
       },
       "destination": {
         "title": "What happens next?",

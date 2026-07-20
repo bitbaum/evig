@@ -13,7 +13,7 @@
  */
 
 import { useState, useCallback, useEffect } from 'react'
-import { Mic, Camera, Zap, Loader2, CheckCircle2, AlertCircle, ChevronDown, ChevronUp, FileUp, PencilLine } from 'lucide-react'
+import { Mic, Camera, Zap, Loader2, CheckCircle2, AlertCircle, ChevronDown, ChevronUp, FileUp, PencilLine, Layers } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
@@ -308,11 +308,17 @@ export function DataEntryTabs({
                     handleQuickTextSubmit()
                   }
                 }}
-                placeholder={"Dell Latitude E7470 i5 8GB 256GB SSD 280 CHF"}
+                placeholder={t('exampleInput')}
                 disabled={quickEntryState === 'loading'}
                 rows={3}
                 className="resize-none"
               />
+              {/* Discoverability: the multi-product path is otherwise invisible —
+                  you only find it by accidentally pasting several lines. */}
+              <p className="flex items-start gap-1.5 text-xs text-text-tertiary">
+                <Layers className="mt-0.5 h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+                <span>{t('multiProductHint')}</span>
+              </p>
               <Button
                 type="button"
                 onClick={handleQuickTextSubmit}

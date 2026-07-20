@@ -9606,7 +9606,9 @@
         "processing": "Обработка…",
         "chooseFile": "Выберите CSV- или Excel-файл или перетащите сюда",
         "fileHint": "CSV, TSV, XLSX — столбцы распознаются автоматически",
-        "unmappedColumns": "Несопоставленные столбцы:"
+        "unmappedColumns": "Несопоставленные столбцы:",
+        "multiProductHint": "Несколько устройств? По одному на строку — ИИ автоматически откроет массовый ввод.",
+        "exampleInput": "Dell Latitude E7470 i5 8GB 256GB SSD 280 CHF"
       },
       "destination": {
         "title": "Что произойдёт дальше?",

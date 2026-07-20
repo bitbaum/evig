@@ -9657,7 +9657,9 @@
         "processing": "Wird verarbeitet…",
         "chooseFile": "CSV- oder Excel-Datei wählen oder hierher ziehen",
         "fileHint": "CSV, TSV, XLSX — Spalten werden automatisch erkannt",
-        "unmappedColumns": "Nicht zugeordnete Spalten:"
+        "unmappedColumns": "Nicht zugeordnete Spalten:",
+        "multiProductHint": "Mehrere Geräte? Ein Gerät pro Zeile einfügen — die KI öffnet automatisch die Sammelerfassung.",
+        "exampleInput": "Dell Latitude E7470 i5 8GB 256GB SSD 280 CHF"
       },
       "destination": {
         "title": "Was passiert als Nächstes?",
