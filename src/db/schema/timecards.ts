@@ -82,3 +82,22 @@ export const timecardEntries = pgTable('timecard_entries', {
 
 export type TimecardEntry = typeof timecardEntries.$inferSelect
 export type NewTimecardEntry = typeof timecardEntries.$inferInsert
+
+// =============================================================================
+// REPORT SHARES
+// =============================================================================
+// Public share tokens for the Monatsrapport. Keyed by (user_id, month) rather
+// than a timecard id — a running month may not have a card row yet. Token is an
+// unguessable bearer link; revoked_at kills it. See migration 137.
+export const reportShares = pgTable('report_shares', {
+  token: text('token').primaryKey(),
+  userId: uuid('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  month: text('month').notNull(),
+  createdBy: uuid('created_by').references(() => users.id, { onDelete: 'set null' }),
+  revokedAt: timestamp('revoked_at', { withTimezone: true, mode: 'string' }),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+}, (table) => [
+  uniqueIndex('idx_report_shares_user_month').on(table.userId, table.month),
+])
+
+export type ReportShare = typeof reportShares.$inferSelect
