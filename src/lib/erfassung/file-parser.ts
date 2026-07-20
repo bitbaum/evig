@@ -10,6 +10,7 @@ import ExcelJS from 'exceljs'
 import { CSV_COLUMN_ALIASES, normalizeConditionValue } from '@/config/erfassung'
 import { createDefaultBulkProduct } from '@/types/erfassung'
 import type { BulkProduct, ErfassungFormData } from '@/types/erfassung'
+import { detectCategory } from './ai-classification'
 
 /**
  * Auto-detect delimiter by checking first few lines
@@ -96,6 +97,16 @@ export function parseCSV(content: string): {
 
     // Apply mapped data to product
     Object.assign(product, data)
+
+    // Categorise rows that arrived without a category. A CSV rarely has a
+    // category column, so — like the paste path — infer it from the name via
+    // the shared keyword classifier (instant, no AI call). Left empty when
+    // unknown so the operator picks, rather than guessing a wrong default.
+    if (!product.hauptkategorie) {
+      product.hauptkategorie = detectCategory(
+        [product.hersteller, product.produktname, product.kurzbeschreibung].filter(Boolean).join(' '),
+      )
+    }
 
     // Validate and set status
     const hasRequired = product.hersteller && product.produktname

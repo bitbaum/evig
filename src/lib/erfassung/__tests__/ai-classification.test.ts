@@ -5,15 +5,34 @@
  * Bugs here produce incorrect product data during erfassung fallback path.
  */
 
-import { fastParseProductText } from '../ai-classification'
+import { fastParseProductText, detectCategory } from '../ai-classification'
 
 // Category ID constants (from KATEGORIEN SSOT)
 const CAT_LAPTOPS = '10'
 const CAT_DESKTOPS = '20'
 const CAT_MONITORS = '30'
+const CAT_PRINTERS = '60'
+const CAT_NETWORK = '90'
 const SUB_BUSINESS = '101'
 const SUB_CONSUMER = '102'
 const SUB_GAMING = '103'
+
+describe('detectCategory', () => {
+  it.each([
+    ['Lenovo ThinkPad X201', CAT_LAPTOPS],
+    ['Apple iMac G5 17 Zoll', CAT_DESKTOPS],
+    ['19-Zoll LED-Monitor Dell Rev A00', CAT_MONITORS],
+    ['Brother MFC-J4710DW All-in-One', CAT_PRINTERS],
+    ['Drucker HP LaserJet P3005dn', CAT_PRINTERS],
+    ['Dockingstation Lenovo ThinkPad Hybrid USB-C', CAT_NETWORK], // dock ≠ laptop despite "ThinkPad"
+  ])('classifies %s → %s', (text, expected) => {
+    expect(detectCategory(text)).toBe(expected)
+  })
+
+  it('returns empty string when nothing matches', () => {
+    expect(detectCategory('Gutschein 50 CHF')).toBe('')
+  })
+})
 
 describe('fastParseProductText', () => {
   // ── Manufacturer detection ──────────────────────────────────────────────────

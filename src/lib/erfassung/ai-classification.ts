@@ -18,6 +18,37 @@ import type { VoiceProductData } from '@/types/erfassung'
 import { KATEGORIEN } from '@/config/erfassung/categories'
 
 /**
+ * Keyword-based product-category detection → KATEGORIEN code, or '' if unknown.
+ *
+ * Single SSOT for the fast/offline classifier: used by the CSV import (instant,
+ * no AI call, so spreadsheet rows land categorised like the paste path), the
+ * fast text parser, and the multi-extract AI fallback. The paste/photo paths
+ * prefer the AI's category and only fall back here. Codes come from KATEGORIEN
+ * (looked up by label) so they stay SSOT.
+ *
+ * Accessory/printer/monitor/network patterns are matched BEFORE the laptop and
+ * desktop brand patterns — otherwise "Dockingstation Lenovo ThinkPad" would hit
+ * the `thinkpad` laptop pattern and mis-file a dock as a laptop.
+ */
+export function detectCategory(text: string): string {
+  const code = (label: string): string => KATEGORIEN.find(k => k.label === label)?.value ?? ''
+  const patterns: Array<[RegExp, string]> = [
+    [/\b(drucker|laserjet|pixma|officejet|deskjet|multifunktion|printer|scanner|toner)\b|\b(mfc|dcp)[-\s]/i, code('Drucker & Scanner')],
+    [/\b(ultrasharp|ultrawide|monitor|bildschirm|beamer|projektor|eizo|zoll[\s-]*(led|lcd|tft))\b/i, code('Monitore')],
+    [/\b(dockingstation|dock|router|switch|access\s*point|firewall|netzwerk|wlan|nas)\b/i, code('Netzwerk')],
+    [/\b(tastatur|keyboard|maus|mouse|webcam|headset|lautsprecher)\b/i, code('Peripherie')],
+    [/\b(ipad|galaxy\s*tab|surface\s*(go|pro)|tablet)\b/i, code('Tablets')],
+    [/\b(iphone|galaxy\s*s\d|pixel\s*\d|smartphone|handy)\b/i, code('Smartphones')],
+    [/\b(thinkpad|latitude|elitebook|probook|macbook|ideapad|inspiron|pavilion|vivobook|zenbook|chromebook|swift|aspire|travelmate|lifebook|laptop|notebook|ultrabook)\b/i, code('Laptops')],
+    [/\b(optiplex|prodesk|thinkcentre|imac|mac\s*mini|nuc|elitedesk|desktop|tower|workstation|power\s*macintosh|pc)\b/i, code('Desktop PCs')],
+  ]
+  for (const [re, cat] of patterns) {
+    if (cat && re.test(text)) return cat
+  }
+  return ''
+}
+
+/**
  * Fast regex-based fallback parser for when AI providers are slow/unavailable.
  * Extracts product info directly from text using pattern matching.
  */
@@ -68,14 +99,10 @@ export function fastParseProductText(text: string): VoiceProductData {
   else if (textLower.includes('akzeptabel') || textLower.includes('fair')) zustand = 'fair'
   else if (textLower.includes('schlecht')) zustand = 'poor'
 
-  // Category - default to laptops (values derived from KATEGORIEN SSOT)
+  // Category via the shared keyword classifier; default to laptops (the most
+  // common intake) when nothing matches. Values derive from KATEGORIEN SSOT.
   const catLaptops = KATEGORIEN.find(k => k.label === 'Laptops')!
-  const catDesktops = KATEGORIEN.find(k => k.label === 'Desktop PCs')!
-  const catMonitors = KATEGORIEN.find(k => k.label === 'Monitore')!
-
-  const hauptkategorie = textLower.includes('monitor') ? catMonitors.value
-    : textLower.includes('desktop') || textLower.includes('pc') ? catDesktops.value
-    : catLaptops.value
+  const hauptkategorie = detectCategory(text) || catLaptops.value
 
   const subBusiness = catLaptops.subs.find(s => s.label === 'Business Laptops')?.value || ''
   const subConsumer = catLaptops.subs.find(s => s.label === 'Consumer Laptops')?.value || ''

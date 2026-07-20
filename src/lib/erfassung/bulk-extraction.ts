@@ -10,7 +10,8 @@ import { ERFASSUNG_PROMPTS, fillPromptTemplate } from '@/lib/ai/config/prompts'
 import { formDataToBulkProduct } from '@/types/erfassung'
 import type { BulkProduct, ErfassungFormData } from '@/types/erfassung'
 import type { VoiceProductData, AIFieldMetadata } from '@/types/erfassung'
-import { BULK_LIMITS, KATEGORIEN } from '@/config/erfassung'
+import { BULK_LIMITS } from '@/config/erfassung'
+import { detectCategory } from './ai-classification'
 import { CONDITION_ALIASES } from '@/config/erfassung/conditions'
 import { callWithFallback } from '@/lib/ai/providers'
 
@@ -163,26 +164,8 @@ function fallbackParse(text: string, sourceType: 'text' | 'voice'): BulkProduct[
       }
     }
 
-    // 4. Detect category from known product patterns (values from KATEGORIEN SSOT)
-    let hauptkategorie = ''
-    const catLaptops = KATEGORIEN.find(k => k.label === 'Laptops')!.value
-    const catDesktops = KATEGORIEN.find(k => k.label === 'Desktop PCs')!.value
-    const catMonitors = KATEGORIEN.find(k => k.label === 'Monitore')!.value
-    const catTablets = KATEGORIEN.find(k => k.label === 'Tablets')!.value
-    const catPhones = KATEGORIEN.find(k => k.label === 'Smartphones')!.value
-    const categoryPatterns: [RegExp, string][] = [
-      [/\b(thinkpad|latitude|elitebook|probook|macbook|ideapad|inspiron|pavilion|vivobook|zenbook|chromebook|swift|aspire|travelmate|lifebook)\b/i, catLaptops],
-      [/\b(optiplex|prodesk|thinkcentre|imac|mac\s*mini|nuc|elitedesk)\b/i, catDesktops],
-      [/\b(ultrasharp|ultrawide|monitor|bildschirm|display|eizo)\b/i, catMonitors],
-      [/\b(ipad|galaxy\s*tab|surface\s*(go|pro)|tablet)\b/i, catTablets],
-      [/\b(iphone|galaxy\s*s\d|pixel\s*\d|smartphone)\b/i, catPhones],
-    ]
-    for (const [pattern, catValue] of categoryPatterns) {
-      if (pattern.test(line)) {
-        hauptkategorie = catValue
-        break
-      }
-    }
+    // 4. Detect category via the shared keyword classifier (KATEGORIEN SSOT)
+    const hauptkategorie = detectCategory(line)
 
     // 5. Clean up product name — remove extra whitespace, leading/trailing punctuation
     remaining = remaining.replace(/\s+/g, ' ').replace(/^[\s,;-]+|[\s,;-]+$/g, '').trim()
