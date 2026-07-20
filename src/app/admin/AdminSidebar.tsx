@@ -224,6 +224,36 @@ export function AdminSidebar({
           const hasActive = groupHasActiveItem(group.id)
           const isExpanded = isGroupOpen(group.id)
 
+          // A group with a single destination (e.g. Analyse, whose reports live
+          // one level down on the hub page) renders as a direct link, not a
+          // collapsible header with one lonely child — no pointless accordion,
+          // no doubled label. isActive() is prefix-based, so the entry stays
+          // highlighted on the hub's sub-pages too.
+          if (accessibleGroupSections.length === 1) {
+            const only = accessibleGroupSections[0]
+            const OnlyIcon = only.ui.icon
+            const onlyActive = isActive(only.path)
+            return (
+              <div key={group.id} className="mb-2">
+                <Link
+                  href={only.path}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`flex items-center gap-2.5 rounded-lg px-2 py-3 lg:py-1.5 transition-colors ${
+                    sidebarCollapsed ? 'justify-center' : ''
+                  } ${
+                    onlyActive
+                      ? adminInteractive.navActive
+                      : `text-text-tertiary ${adminInteractive.rowHoverSubtle} hover:text-text-primary`
+                  }`}
+                  title={sidebarCollapsed ? sectionLabel(tSections, only) : undefined}
+                >
+                  <OnlyIcon className={`shrink-0 ${sidebarCollapsed ? 'h-5 w-5' : 'h-4 w-4'} ${onlyActive ? 'text-action' : 'text-text-muted dark:text-text-secondary'}`} />
+                  {!sidebarCollapsed && <span className="flex-1 text-sm font-medium">{sectionLabel(tSections, only)}</span>}
+                </Link>
+              </div>
+            )
+          }
+
           return (
             <div key={group.id} className="mb-2">
               {!sidebarCollapsed && (

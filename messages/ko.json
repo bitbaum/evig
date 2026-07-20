@@ -11368,7 +11368,7 @@
           "description": "월 마감 및 회계용 CSV 내보내기"
         },
         "analyse-hub": {
-          "label": "분석 개요",
+          "label": "분석",
           "description": "핵심 지표, 재무, 임팩트를 한눈에"
         },
         "finanzen": {

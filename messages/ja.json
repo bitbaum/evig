@@ -11368,7 +11368,7 @@
           "description": "月次締めと会計用CSVエクスポート"
         },
         "analyse-hub": {
-          "label": "分析概要",
+          "label": "分析",
           "description": "主要指標、財務、インパクトを一目で"
         },
         "finanzen": {

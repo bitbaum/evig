@@ -11368,7 +11368,7 @@
           "description": "Cerrar el mes y exportar un CSV para contabilidad"
         },
         "analyse-hub": {
-          "label": "Resumen analítico",
+          "label": "Análisis",
           "description": "Cifras clave, finanzas e impacto de un vistazo"
         },
         "finanzen": {

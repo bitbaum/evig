@@ -1109,7 +1109,7 @@ export const SECTIONS = {
     id: 'analyse-hub',
     path: '/admin/analyse',
     ui: {
-      label: 'Analyse-Übersicht',
+      label: 'Analyse',
       description: 'Kennzahlen, Finanzen und Wirkung auf einen Blick',
       icon: BarChart3,
       emoji: '📊',
@@ -1134,6 +1134,9 @@ export const SECTIONS = {
     priority: 150,
     category: 'analyse',
     sidebarGroup: 'analyse',
+    // Reachable via the /admin/analyse hub (Quick Links) + direct route;
+    // kept out of the sidebar so Analyse is one clean entry, not six.
+    navigationVisible: false,
   },
 
   kennzahlen: {
@@ -1150,6 +1153,9 @@ export const SECTIONS = {
     priority: 151,
     category: 'analyse',
     sidebarGroup: 'analyse',
+    // Reachable via the /admin/analyse hub (Quick Links) + direct route;
+    // kept out of the sidebar so Analyse is one clean entry, not six.
+    navigationVisible: false,
   },
 
   wirkung: {
@@ -1166,6 +1172,9 @@ export const SECTIONS = {
     priority: 152,
     category: 'analyse',
     sidebarGroup: 'analyse',
+    // Reachable via the /admin/analyse hub (Quick Links) + direct route;
+    // kept out of the sidebar so Analyse is one clean entry, not six.
+    navigationVisible: false,
   },
 
   transparenz: {
@@ -1182,6 +1191,9 @@ export const SECTIONS = {
     priority: 153,
     category: 'analyse',
     sidebarGroup: 'analyse',
+    // Reachable via the /admin/analyse hub (Quick Links) + direct route;
+    // kept out of the sidebar so Analyse is one clean entry, not six.
+    navigationVisible: false,
   },
 
   hirn: {

@@ -11424,7 +11424,7 @@
           "description": "Monat abschliessen und CSV für die Buchhaltung exportieren"
         },
         "analyse-hub": {
-          "label": "Analyse-Übersicht",
+          "label": "Analyse",
           "description": "Kennzahlen, Finanzen und Wirkung auf einen Blick"
         },
         "finanzen": {

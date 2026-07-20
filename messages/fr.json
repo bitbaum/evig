@@ -11370,7 +11370,7 @@
           "description": "Clôturer le mois et exporter le CSV pour la comptabilité"
         },
         "analyse-hub": {
-          "label": "Aperçu analytique",
+          "label": "Analyse",
           "description": "Chiffres clés, finances et impact en un coup d'œil"
         },
         "finanzen": {

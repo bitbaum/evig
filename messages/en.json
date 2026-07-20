@@ -11369,7 +11369,7 @@
           "description": "Close the month and export a CSV for accounting"
         },
         "analyse-hub": {
-          "label": "Analytics overview",
+          "label": "Analytics",
           "description": "Key figures, finances and impact at a glance"
         },
         "finanzen": {
