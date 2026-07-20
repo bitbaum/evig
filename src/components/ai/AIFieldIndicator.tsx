@@ -56,12 +56,12 @@ export function AIFieldIndicator({
 }: AIFieldIndicatorProps) {
   const [showDetails, setShowDetails] = useState(false)
 
-  // High-confidence extractions don't need a per-field flag — the filled value
-  // plus the highlighted border already say "KI hat das ausgefüllt". Only
-  // surface the badge when a field is worth a second look (medium/low
-  // confidence), so the review screen points at what needs attention instead
-  // of tagging every single field.
-  if (source.confidence >= 0.85) return null
+  // Only flag fields the AI genuinely GUESSED (low confidence). Confident
+  // extractions get no chip — the filled value plus the highlighted border
+  // already say "KI hat das ausgefüllt". This keeps the review screen pointing
+  // at the one or two fields that actually need a human check (e.g. a condition
+  // the text never stated) instead of tagging every field with a percentage.
+  if (source.confidence >= 0.7) return null
 
   const Icon = SOURCE_ICONS[source.type]
   const confidencePercent = Math.round(source.confidence * 100)
@@ -77,11 +77,10 @@ export function AIFieldIndicator({
         size="sm"
         onClick={() => setShowDetails(!showDetails)}
         className={`inline-flex items-center gap-1 px-2 py-1 min-h-touch min-w-touch rounded-sm border text-xs font-medium hover:opacity-80 h-auto ${colorClass}`}
-        title={`KI-Extraktion: ${confidencePercent}% Konfidenz`}
+        title={`KI-Schätzung (${confidencePercent}% Konfidenz) — bitte prüfen`}
       >
         <Sparkles className="w-3 h-3" />
-        <span>{confidencePercent}%</span>
-        <Icon className="w-3 h-3" />
+        <span>Prüfen</span>
       </Button>
 
       {/* Details popover */}

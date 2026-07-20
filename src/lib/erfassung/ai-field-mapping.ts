@@ -175,6 +175,10 @@ export function calculateFieldConfidence(
   const wasExplicitlyMentioned = (value: string): boolean => {
     if (!value) return false
     const valueLower = value.toLowerCase()
+    // Verbatim match first — covers short brands/models ("HP", "LG", "T450")
+    // that the >2-char word filter below would otherwise drop, mis-scoring an
+    // obviously-present value as a low-confidence guess.
+    if (inputLower.includes(valueLower)) return true
     const words = valueLower.split(/\s+/).filter(w => w.length > 2)
     return words.some(word => inputLower.includes(word))
   }
