@@ -43,7 +43,11 @@ function StatusIcon({ status }: { status: BulkProductStatus }) {
 }
 
 function getCategoryLabel(value: string): string {
-  const kat = KATEGORIEN.find(k => k.value === value)
+  // Bulk extraction can hand back the category code as a number (10) while
+  // KATEGORIEN keys are strings ('10'); coerce so the label resolves instead of
+  // showing the operator a bare code.
+  const code = String(value)
+  const kat = KATEGORIEN.find(k => k.value === code)
   return kat ? `${kat.icon || ''} ${kat.label}` : value || '-'
 }
 
