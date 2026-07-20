@@ -19,6 +19,8 @@ import {
   Trash2,
   Calendar,
   GitBranch,
+  Users,
+  Lock,
 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
@@ -37,6 +39,7 @@ interface BlogPost {
   category_name: string | null
   source: 'db' | 'file'
   visibility: 'public' | 'unlisted' | 'link'
+  audience: 'public' | 'team' | 'author'
 }
 
 const sourceBadgeClass =
@@ -109,6 +112,18 @@ export function BlogListClient({ posts }: BlogListClientProps) {
               <span className={sourceBadgeClass} title="Nicht gelistet — nur per Link erreichbar">
                 <EyeOff className="w-3 h-3" />
                 Nicht gelistet
+              </span>
+            )}
+            {post.audience === 'team' && (
+              <span className={sourceBadgeClass} title="Zugriff: nur angemeldete Mitarbeitende">
+                <Users className="w-3 h-3" />
+                Nur Team
+              </span>
+            )}
+            {post.audience === 'author' && (
+              <span className={sourceBadgeClass} title="Zugriff: nur Autor und Super-Admins">
+                <Lock className="w-3 h-3" />
+                Nur Autor
               </span>
             )}
           </div>

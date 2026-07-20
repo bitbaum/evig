@@ -45,6 +45,7 @@ export async function importFilePostForEdit(slug: string): Promise<void> {
         featuredImage: file.featuredImage ?? null,
         tags: file.tags ?? [],
         visibility: file.visibility,
+        audience: file.audience ?? 'public',
         isPublished: file.published !== false,
         publishedAt: file.publishedAt ?? new Date().toISOString(),
         createdBy: user.id,

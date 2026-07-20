@@ -7,6 +7,7 @@ import { Suspense } from 'react'
 import { BookOpen, X } from 'lucide-react'
 import { getAllCategories, type BlogCategory } from '@/lib/blog-db'
 import { isListedPost } from '@/lib/blog'
+import { filterViewable, type BlogViewer } from '@/lib/blog-access'
 import { getMergedPosts } from '@/lib/blog-merge'
 import { paginateBlogIndex, slugifyCategory } from '@/lib/blog-utils'
 import { BLOG_PAGE_SIZE } from '@/config/blog'
@@ -54,9 +55,21 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const locale = await getLocale()
   let allPosts = await getMergedPosts(locale)
 
+  // Access control (audience) is decided first: strip any post this viewer may
+  // not load at all (team-only, author-only) before discoverability filtering.
+  const session = await auth()
+  const viewer: BlogViewer | null = session?.user
+    ? {
+        userId: session.user.id,
+        isStaff: session.user.isStaff,
+        email: session.user.email,
+        isSuperAdmin: session.user.isSuperAdmin,
+      }
+    : null
+  allPosts = filterViewable(allPosts, viewer)
+
   // Unlisted posts stay out of the public listing, but logged-in staff see them
   // (with a badge) so they can grab the link to share. Direct links stay open.
-  const session = await auth()
   const isStaff = Boolean(session?.user?.isStaff)
   if (!isStaff) {
     allPosts = allPosts.filter(isListedPost)

@@ -7,6 +7,7 @@ import { APP_URL } from '@/config/urls'
 import { ROUTES } from '@/config/routes'
 import { getMergedPosts } from '@/lib/blog-merge'
 import { isListedPost } from '@/lib/blog'
+import { canViewPost } from '@/lib/blog-access'
 import { OSS_ALTERNATIVES } from '@/config/open-source-registry'
 import { LISTING_STATUS } from '@/config/marketplace'
 import { SERVICE_CONFIGS } from '@/app/[locale]/services/data'
@@ -104,7 +105,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // 5. Published blog posts — unified DB + git-file reader, deduped by slug.
   //    Unlisted (link-only) posts are excluded so they never surface to crawlers.
   try {
-    const posts = (await getMergedPosts(defaultLocale)).filter(isListedPost)
+    // Anonymous sitemap → public audience only (team/author posts stay unindexed).
+    const posts = (await getMergedPosts(defaultLocale)).filter(
+      (p) => isListedPost(p) && canViewPost(p, null),
+    )
 
     for (const post of posts) {
       const lastModified = post.publishedAt

@@ -11,6 +11,7 @@ import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { BlogPostForm } from '@/components/admin/BlogPostForm'
 import { canAccessSection, toStaffUser } from '@/lib/permissions'
+import { parseBlogAudience } from '@/config/blog'
 
 export const metadata: Metadata = {
   title: 'Artikel bearbeiten',
@@ -35,13 +36,14 @@ async function getBlogPost(id: string) {
       is_published: boolean
       auto_translate: boolean
       visibility: string
+      audience: string
       seo_title: string | null
       seo_description: string | null
     }>(
       `SELECT
         id, slug, title, excerpt, content,
         featured_image, category_id, tags,
-        is_published, auto_translate, visibility, seo_title, seo_description
+        is_published, auto_translate, visibility, audience, seo_title, seo_description
       FROM ${TABLE_NAMES.BLOG_POSTS}
       WHERE id = $1`,
       [id]
@@ -94,6 +96,7 @@ async function getBlogPost(id: string) {
       isPublished: post.is_published,
       autoTranslate: post.auto_translate,
       visibility: (post.visibility as 'public' | 'unlisted' | 'link') || 'public',
+      audience: parseBlogAudience(post.audience),
       seoTitle: post.seo_title || '',
       seoDescription: post.seo_description || '',
       translations,

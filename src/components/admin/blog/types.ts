@@ -1,3 +1,5 @@
+import type { BlogAudience } from '@/config/blog'
+
 export interface Category {
   id: string
   name: string
@@ -27,6 +29,8 @@ export interface BlogPostData {
   isPublished: boolean
   /** public = listed + indexed · link = shareable link · unlisted = password. */
   visibility: 'public' | 'unlisted' | 'link'
+  /** Access control: public = alle · team = Mitarbeitende · author = Autor + Super-Admins. */
+  audience: BlogAudience
   seoTitle: string
   seoDescription: string
   /** Fill missing locales from the German base on publish (default true). */

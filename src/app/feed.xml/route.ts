@@ -1,5 +1,6 @@
 import { getMergedPosts } from '@/lib/blog-merge'
 import { isListedPost } from '@/lib/blog'
+import { canViewPost } from '@/lib/blog-access'
 import { APP_URL } from '@/config/urls'
 import { ORG } from '@/config/org'
 import { defaultLocale } from '@/i18n/routing'
@@ -15,7 +16,10 @@ function escapeXml(s: string): string {
 
 /** RSS 2.0 feed of the public blog (unlisted posts are never included). */
 export async function GET(): Promise<Response> {
-  const posts = (await getMergedPosts(defaultLocale)).filter(isListedPost).slice(0, 50)
+  // Anonymous feed → public audience only (team/author posts never syndicate).
+  const posts = (await getMergedPosts(defaultLocale))
+    .filter((p) => isListedPost(p) && canViewPost(p, null))
+    .slice(0, 50)
 
   const items = posts
     .map((p) => {

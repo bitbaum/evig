@@ -34,6 +34,8 @@ export const blogPosts = pgTable('blog_posts', {
   tags: text('tags').array().default([]),
   // public | unlisted — matches the file frontmatter `visibility`. App-validated.
   visibility: text('visibility').notNull().default('public'),
+  // public | team | author — access-control axis, orthogonal to visibility.
+  audience: text('audience').notNull().default('public'),
 
   // Publishing status
   isPublished: boolean('is_published').default(false),

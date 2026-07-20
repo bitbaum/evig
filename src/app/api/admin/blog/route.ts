@@ -14,6 +14,7 @@ import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
 import { syncPostTranslations } from '@/lib/services/blog-translations'
 import { fillMissingTranslations } from '@/lib/services/blog-translate'
+import { parseBlogAudience } from '@/config/blog'
 
 export const GET = withAdmin('content', async (request, session) => {
   try {
@@ -28,6 +29,7 @@ export const GET = withAdmin('content', async (request, session) => {
         category_id: blogPosts.categoryId,
         category_name: blogCategories.name,
         tags: blogPosts.tags,
+        audience: blogPosts.audience,
         is_published: blogPosts.isPublished,
         published_at: blogPosts.publishedAt,
         created_at: blogPosts.createdAt,
@@ -47,7 +49,7 @@ export const GET = withAdmin('content', async (request, session) => {
 export const POST = withAdmin('content', async (request, session) => {
   try {
     const body = await request.json()
-    const { title, slug, excerpt, content, featuredImage, categoryId, tags, isPublished, seoTitle, seoDescription, translations, autoTranslate, visibility } = body
+    const { title, slug, excerpt, content, featuredImage, categoryId, tags, isPublished, seoTitle, seoDescription, translations, autoTranslate, visibility, audience } = body
     const cleanVisibility = ['public', 'unlisted', 'link'].includes(visibility) ? visibility : 'public'
 
     if (!title || !content) {
@@ -87,6 +89,7 @@ export const POST = withAdmin('content', async (request, session) => {
         seoTitle: seoTitle || null,
         seoDescription: seoDescription || null,
         visibility: cleanVisibility,
+        audience: parseBlogAudience(audience),
         isPublished: isPublished || false,
         publishedAt: isPublished ? new Date().toISOString() : null,
         autoTranslate: autoTranslate !== false,

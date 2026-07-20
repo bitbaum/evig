@@ -19,6 +19,7 @@ import { users } from '@/db/schema/auth'
 import { eq, and, lte, desc, asc } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import type { BlogPost } from '@/lib/blog'
+import { parseBlogAudience } from '@/config/blog'
 import { defaultLocale } from '@/i18n/routing'
 
 export type { BlogPost }
@@ -45,6 +46,8 @@ const postColumns = {
   categoryName: blogCategories.name,
   tags: blogPosts.tags,
   visibility: blogPosts.visibility,
+  audience: blogPosts.audience,
+  authorId: blogPosts.createdBy,
   publishedAt: blogPosts.publishedAt,
   createdAt: blogPosts.createdAt,
   // Translation overlay — null unless a row exists for the joined locale.
@@ -264,6 +267,8 @@ function mapPostFromDb(row: {
   categoryName: string | null
   tags: string[] | null
   visibility: string
+  audience: string
+  authorId: string | null
   publishedAt: string | null
   createdAt: string | null
   tTitle?: string | null
@@ -291,6 +296,8 @@ function mapPostFromDb(row: {
     createdAt: row.createdAt || '',
     visibility:
       row.visibility === 'link' ? 'link' : row.visibility === 'unlisted' ? 'unlisted' : 'public',
+    audience: parseBlogAudience(row.audience),
+    authorId: row.authorId ?? undefined,
   }
 }
 

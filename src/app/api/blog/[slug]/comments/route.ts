@@ -9,6 +9,19 @@ import { logger } from '@/lib/logger'
 import { COMMENT_BODY_MAX, COMMENT_BODY_MIN, COMMENT_STATUS } from '@/config/blog-comments'
 import { getPostBySlug as getDbPost } from '@/lib/blog-db'
 import { getPostBySlug as getFilePost } from '@/lib/blog'
+import { canViewPost, type BlogViewer } from '@/lib/blog-access'
+import type { Session } from 'next-auth'
+
+/** Build the audience viewer from a session (null = anonymous). */
+function viewerFromSession(session: Session | null): BlogViewer | null {
+  if (!session?.user) return null
+  return {
+    userId: session.user.id,
+    isStaff: session.user.isStaff,
+    email: session.user.email,
+    isSuperAdmin: session.user.isSuperAdmin,
+  }
+}
 
 interface RouteCtx {
   params: Promise<{ slug: string }>
@@ -18,6 +31,12 @@ interface RouteCtx {
 export async function GET(_req: NextRequest, { params }: RouteCtx) {
   try {
     const { slug } = await params
+    // A restricted post (team/author) must not leak its thread — treat as
+    // not-found for anyone not entitled to read the post itself.
+    const post = (await getDbPost(slug)) || getFilePost(slug, 'de')
+    if (post && !canViewPost(post, viewerFromSession(await auth()))) {
+      return apiNotFound('Beitrag nicht gefunden.')
+    }
     const rows = await db
       .select({
         id: blogComments.id,
@@ -48,6 +67,8 @@ export async function POST(req: NextRequest, { params }: RouteCtx) {
     // The slug must belong to a real post (DB or git/file) — no comments on garbage.
     const exists = (await getDbPost(slug)) || getFilePost(slug, 'de')
     if (!exists) return apiNotFound('Beitrag nicht gefunden.')
+    // No commenting on a post you're not entitled to view (team/author).
+    if (!canViewPost(exists, viewerFromSession(session))) return apiNotFound('Beitrag nicht gefunden.')
 
     const json = (await req.json().catch(() => ({}))) as { body?: unknown }
     const body = String(json.body ?? '').trim()

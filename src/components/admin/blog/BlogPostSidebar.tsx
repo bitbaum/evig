@@ -11,6 +11,7 @@ import { Select } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import Heading from '@/components/admin/AdminHeading'
 import { apiFetch } from '@/lib/api/client'
+import { BLOG_AUDIENCE_LABELS, type BlogAudience } from '@/config/blog'
 import type { BlogPostData, Category } from './types'
 
 interface Props {
@@ -89,6 +90,25 @@ export function BlogPostSidebar({
         <p className="text-xs text-text-tertiary mt-2">
           „Über Link teilbar" ist für jeden mit dem Link sichtbar (ohne Login), erscheint aber nicht in der
           Blog-Übersicht und nicht in Suchmaschinen.
+        </p>
+      </Card>
+
+      {/* Zugriff (Zugriffssteuerung, orthogonal zur Sichtbarkeit) */}
+      <Card className="p-6">
+        <Heading level={3} className="font-medium text-text-primary mb-4">Zugriff</Heading>
+        <Select
+          value={formData.audience}
+          onChange={(e) =>
+            onFormDataChange({ ...formData, audience: e.target.value as BlogAudience })
+          }
+        >
+          {Object.entries(BLOG_AUDIENCE_LABELS).map(([value, label]) => (
+            <option key={value} value={value}>{label}</option>
+          ))}
+        </Select>
+        <p className="text-xs text-text-tertiary mt-2">
+          Steuert, wer den Beitrag überhaupt öffnen darf — unabhängig von der Sichtbarkeit.
+          „Nur Team" ist ausschliesslich für angemeldete Mitarbeitende sichtbar.
         </p>
       </Card>
 

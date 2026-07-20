@@ -15,6 +15,7 @@ import { logger } from '@/lib/logger'
 import { apiSuccess, apiError, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
 import { syncPostTranslations, getPostTranslations } from '@/lib/services/blog-translations'
 import { fillMissingTranslations } from '@/lib/services/blog-translate'
+import { parseBlogAudience } from '@/config/blog'
 
 export const GET = withAdmin<{ id: string }>('content', async (request, session, context) => {
   const { id: postId } = context!.params!
@@ -35,6 +36,7 @@ export const GET = withAdmin<{ id: string }>('content', async (request, session,
         published_at: blogPosts.publishedAt,
         auto_translate: blogPosts.autoTranslate,
         visibility: blogPosts.visibility,
+        audience: blogPosts.audience,
         seo_title: blogPosts.seoTitle,
         seo_description: blogPosts.seoDescription,
         created_at: blogPosts.createdAt,
@@ -76,6 +78,7 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
       translations,
       autoTranslate,
       visibility,
+      audience,
     } = body
 
     // Required fields, when explicitly provided, must not be blanked out —
@@ -138,6 +141,9 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
     if (visibility !== undefined && ['public', 'unlisted', 'link'].includes(visibility)) {
       update.visibility = visibility
     }
+    if (audience !== undefined) update.audience = parseBlogAudience(audience)
+    if (audience !== undefined) update.audience = parseBlogAudience(audience)
+    if (audience !== undefined) update.audience = parseBlogAudience(audience)
 
     // Always update updated_by
     update.updatedBy = session.user.id

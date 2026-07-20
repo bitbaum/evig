@@ -5,6 +5,7 @@ import { getLocale } from 'next-intl/server'
 import { getPostBySlug, getHiddenSlugs, getDbPostLocales, getDbPostForPreview, getAllCategories } from '@/lib/blog-db'
 import { auth } from '@/auth'
 import { getPostBySlug as getFilePost, isListedPost, getPostLocales } from '@/lib/blog'
+import { canViewPost, filterViewable, type BlogViewer } from '@/lib/blog-access'
 import { getMergedPosts } from '@/lib/blog-merge'
 import { slugifyCategory } from '@/lib/blog-utils'
 import { APP_URL } from '@/config/urls'
@@ -53,6 +54,15 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   const post = await getPost(slug, locale);
 
   if (!post) {
+    return {
+      title: { absolute: 'Post not found | Revamp-IT Blog' },
+    };
+  }
+
+  // No session here — treat as anonymous. A restricted post (team/author) must
+  // never leak its real title/description into <title>/OG, so return the same
+  // generic "not found" metadata an anonymous crawler would get.
+  if (!canViewPost(post, null)) {
     return {
       title: { absolute: 'Post not found | Revamp-IT Blog' },
     };
@@ -108,6 +118,28 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const post = await getPost(slug, locale, isStaff);
 
   if (!post) notFound();
+
+  const viewer: BlogViewer = {
+    userId: session?.user?.id,
+    isStaff,
+    email: session?.user?.email,
+    isSuperAdmin: session?.user?.isSuperAdmin,
+  };
+  // Audience gate — access control, orthogonal to draft/visibility. A team/author
+  // post is hidden from those not entitled: anonymous visitors get the friendly
+  // sign-in page (they may be staff or the author); a logged-in but unauthorised
+  // user gets a plain 404 so a restricted post's existence never leaks.
+  if (!canViewPost(post, viewer)) {
+    if (!session?.user) {
+      return (
+        <main>
+          <BlogUnavailable loginHref={`/auth/login?callbackUrl=/blog/${slug}`} />
+        </main>
+      );
+    }
+    notFound();
+  }
+
   const isDraft = !post.published;
   // A draft is staff-only. Everyone else gets a friendly "not published yet"
   // page (never a bare 404) plus a sign-in link in case they're staff.
@@ -133,13 +165,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   // Related = same category, public only (never surface unlisted posts to a
   // link visitor who just happens to land on an unlisted article).
   const allPosts = await getPosts(locale);
-  const relatedPosts = allPosts
+  // Never surface a post this viewer isn't entitled to (team/author) in related
+  // or prev/next — filter by audience before the listing filter.
+  const viewablePosts = filterViewable(allPosts, viewer);
+  const relatedPosts = viewablePosts
     .filter((p) => p.slug !== post.slug && p.category === post.category && isListedPost(p))
     .slice(0, 3);
 
   // Sequential prev/next over the public listing (date-desc, same order as the
   // index). Unlisted/draft posts have no position in that sequence.
-  const listedPosts = allPosts.filter(isListedPost);
+  const listedPosts = viewablePosts.filter(isListedPost);
   const postIndex = listedPosts.findIndex((p) => p.slug === post.slug);
   const newerPost = postIndex > 0 ? listedPosts[postIndex - 1] : null;
   const olderPost = postIndex >= 0 && postIndex < listedPosts.length - 1 ? listedPosts[postIndex + 1] : null;

@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
 import { locales } from '@/i18n/routing'
+import { parseBlogAudience, type BlogAudience } from '@/config/blog'
 
 // js-yaml@4 ships no bundled type declarations and @types/js-yaml is not a
 // project dependency, so import it with the minimal typed surface we consume.
@@ -58,6 +59,15 @@ export interface BlogPost {
    * ops runbook). Both stay out of the public listing and the search index.
    */
   visibility: 'public' | 'unlisted' | 'link'
+  /**
+   * Access-control axis (orthogonal to `visibility`): who may load the post.
+   * `public` (default) = anyone · `team` = logged-in staff · `author` = the
+   * author (`authorId`) + super admins. File posts carry no `authorId`, so an
+   * `author`-audience file post is reachable by super admins only.
+   */
+  audience: BlogAudience
+  /** DB author (blog_posts.created_by). Undefined for file posts. */
+  authorId?: string
 }
 
 // Frontmatter `visibility:`. `link` → shareable, no password. The "not public"
@@ -108,6 +118,7 @@ function readPost(fileName: string, slug: string, locale: string): BlogPost {
     createdAt: stats.birthtime.toISOString(),
     locale,
     visibility: parseVisibility(data.visibility),
+    audience: parseBlogAudience(data.audience),
   }
 }
 

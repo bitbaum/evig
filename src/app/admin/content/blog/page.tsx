@@ -51,6 +51,7 @@ interface BlogPost {
   // in content/posts/*.md and are managed in Git (read-only here).
   source: 'db' | 'file'
   visibility: 'public' | 'unlisted' | 'link'
+  audience: 'public' | 'team' | 'author'
 }
 
 interface BlogStats {
@@ -67,6 +68,7 @@ interface DbBlogRow {
   excerpt: string | null
   is_published: boolean
   visibility: string
+  audience: string
   published_at: string | null
   created_at: string
   updated_at: string
@@ -132,6 +134,7 @@ async function getBlogPosts(page: number): Promise<{
           bp.excerpt,
           bp.is_published,
           bp.visibility,
+          bp.audience,
           bp.published_at,
           bp.created_at,
           bp.updated_at,
@@ -146,6 +149,7 @@ async function getBlogPosts(page: number): Promise<{
         ...r,
         source: 'db',
         visibility: r.visibility === 'unlisted' ? 'unlisted' : r.visibility === 'link' ? 'link' : 'public',
+        audience: r.audience === 'team' ? 'team' : r.audience === 'author' ? 'author' : 'public',
       }))
     } catch (error) {
       // DB unreachable or query failed — surface it rather than silently showing
@@ -175,6 +179,7 @@ async function getBlogPosts(page: number): Promise<{
           category_name: p.category ?? null,
           source: 'file',
           visibility: p.visibility ?? 'public',
+          audience: p.audience ?? 'public',
         }))
     : []
 
