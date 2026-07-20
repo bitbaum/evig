@@ -20,12 +20,22 @@ export interface MonthlyReport {
   reviewerName: string | null
   saldo: PersonSaldo | null
   holidays: { date: string; name: string }[]
+  /** The date the figures are computed through (month-end, or today if the
+   *  month is still running). Entries after this are not yet "worked". */
+  asOfDate: string
+  /** True while the month is still in progress — the sheet is a Zwischenstand,
+   *  not a final record, and must not present future days as done. */
+  isInterim: boolean
 }
 
 function lastDayOfMonth(month: string): string {
   const [y, m] = month.split('-').map(Number)
   const d = new Date(Date.UTC(y, m, 0))
   return d.toISOString().slice(0, 10)
+}
+
+function todayIsoZurich(): string {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Zurich' }).format(new Date())
 }
 
 export async function getMonthlyReport(userId: string, month: string): Promise<MonthlyReport | null> {
@@ -66,8 +76,14 @@ export async function getMonthlyReport(userId: string, month: string): Promise<M
     reviewerName = reviewer?.name || reviewer?.email || null
   }
 
-  // Saldo as of the month's end (past months report their closing state).
-  const saldo = await getPersonSaldo(userId, lastDayOfMonth(month)).catch(() => null)
+  // A finished month reports its closing state (month-end). A month still in
+  // progress reports as of today — otherwise pre-filled future days would show
+  // as "worked" and the Soll/Ist/Saldo would diverge from the live dashboard.
+  const monthEnd = lastDayOfMonth(month)
+  const today = todayIsoZurich()
+  const asOfDate = today < monthEnd ? today : monthEnd
+  const isInterim = asOfDate < monthEnd
+  const saldo = await getPersonSaldo(userId, asOfDate).catch(() => null)
 
   const year = Number(month.slice(0, 4))
   const holidays = getPublicHolidays(year).filter(h => h.date.startsWith(month))
@@ -84,6 +100,8 @@ export async function getMonthlyReport(userId: string, month: string): Promise<M
     reviewerName,
     saldo,
     holidays,
+    asOfDate,
+    isInterim,
   }
 }
 

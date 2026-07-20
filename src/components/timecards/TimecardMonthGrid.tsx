@@ -106,6 +106,10 @@ export function TimecardMonthGrid({
     return d === 0 ? 6 : d - 1
   })()
 
+  // "Today" in Europe/Zurich (server saldo uses the same tz) — so the grid
+  // marks the real current day, not a UTC-shifted one near midnight.
+  const todayIso = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Zurich' }).format(new Date())
+
   return (
     <div
       {...input.containerProps}
@@ -161,6 +165,7 @@ export function TimecardMonthGrid({
           const entry = getEntryForDate(entries, date)
           const isFocused = focusedDate === date
           const isSelected = selected.has(date)
+          const isToday = date === todayIso
           const d = new Date(`${date}T00:00:00.000Z`)
           const dayNum = d.getUTCDate()
           const isWeekend = d.getUTCDay() === 0 || d.getUTCDay() === 6
@@ -187,16 +192,19 @@ export function TimecardMonthGrid({
                 if (!selected.has(date)) onDaySelect(date, 'single')
                 onDayContextMenu(date, { x: e.clientX, y: e.clientY })
               }}
-              title={entryCategoryLabel}
+              title={isToday ? t('today') : entryCategoryLabel}
               aria-pressed={isSelected}
+              aria-current={isToday ? 'date' : undefined}
               className={cn(
                 'group relative flex h-auto min-h-[3.25rem] w-full min-w-0 flex-col items-start gap-0.5 rounded-md border px-1.5 py-1 text-left transition-colors sm:min-h-[4rem] sm:px-2 sm:py-1.5',
                 isSelected
                   ? 'border-action bg-action-muted'
                   : isFocused
                     ? 'border-action ring-2 ring-action/15'
-                    : 'border-subtle hover:border-strong',
-                !entry && !isSelected && !isFocused && 'bg-canvas',
+                    : isToday
+                      ? 'border-action/60 ring-1 ring-action/30'
+                      : 'border-subtle hover:border-strong',
+                !entry && !isSelected && !isFocused && !isToday && 'bg-canvas',
               )}
             >
               {isSelected && (
@@ -204,14 +212,23 @@ export function TimecardMonthGrid({
                   <Check className="h-2.5 w-2.5" aria-hidden="true" />
                 </span>
               )}
-              <span
-                className={cn(
-                  'font-mono text-xs tabular-nums',
-                  isWeekend ? 'text-text-tertiary' : 'text-text-secondary',
-                )}
-              >
-                {String(dayNum).padStart(2, '0')}
-              </span>
+              {isToday ? (
+                <span className="inline-flex items-center gap-1">
+                  <span className="inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-action px-1 font-mono text-[0.6rem] font-semibold tabular-nums leading-none text-action-text">
+                    {String(dayNum).padStart(2, '0')}
+                  </span>
+                  <span className="hidden text-[0.55rem] font-medium uppercase tracking-wide text-action sm:inline">{t('today')}</span>
+                </span>
+              ) : (
+                <span
+                  className={cn(
+                    'font-mono text-xs tabular-nums',
+                    isWeekend ? 'text-text-tertiary' : 'text-text-secondary',
+                  )}
+                >
+                  {String(dayNum).padStart(2, '0')}
+                </span>
+              )}
               {absence ? (
                 <span className="w-full truncate text-[0.65rem] font-medium leading-tight text-action sm:text-xs">
                   {entryCategoryLabel}

@@ -16,6 +16,7 @@ import { canAccessSection } from '@/lib/permissions'
 import { getMonthlyReport, REPORT_MONTH_REGEX } from '@/lib/services/report'
 import { getTimecardMonthLabel } from '@/lib/team/timecard-period-label'
 import { getDisplayDate } from '@/lib/team/timecard-utils'
+import { SCHEDULE_FILL_DESCRIPTION } from '@/lib/team/schedule'
 import { formatTimecardDuration, getTimecardEntryCategoryLabel, getTimecardStatusLabel, isAbsenceCategory } from '@/config/timecards'
 import { ORG, LOCATIONS } from '@/config/org'
 import { PrintButton } from './PrintButton'
@@ -45,7 +46,12 @@ export default async function MonthlyReportPage({
   if (!report) notFound()
 
   const monthLabel = getTimecardMonthLabel(`${month}-01`)
-  const entries = report.card?.entries ?? []
+  // Only days up to the as-of date are "worked" — a running month must not
+  // present pre-filled future days as done (they'd also inflate the totals).
+  const allEntries = report.card?.entries ?? []
+  const entries = allEntries.filter(e => e.work_date <= report.asOfDate)
+  const futureCount = allEntries.length - entries.length
+  const asOfLabel = getDisplayDate(report.asOfDate)
   const workedMinutes = entries.filter(e => !isAbsenceCategory(e.category)).reduce((s, e) => s + e.duration_minutes, 0)
   const absenceMinutes = entries.filter(e => isAbsenceCategory(e.category)).reduce((s, e) => s + e.duration_minutes, 0)
   const absenceDaysByCategory = new Map<string, number>()
@@ -72,6 +78,11 @@ export default async function MonthlyReportPage({
         <p className="mt-2 text-lg font-semibold text-text-primary">
           Monatsrapport Arbeitszeit — {monthLabel}
         </p>
+        {report.isInterim && (
+          <p className="mt-1 text-sm font-medium text-warning-700 dark:text-warning-400">
+            Zwischenstand per {asOfLabel} — der Monat läuft noch; Zahlen bis zu diesem Tag.
+          </p>
+        )}
       </header>
 
       {/* Person + status */}
@@ -88,15 +99,15 @@ export default async function MonthlyReportPage({
       {/* Summary */}
       <section className="grid grid-cols-2 gap-2 rounded-lg border border-neutral-300 p-4 text-sm sm:grid-cols-4 print:border-black">
         <div>
-          <p className="text-xs uppercase tracking-wide text-text-tertiary">Soll (Monat)</p>
+          <p className="text-xs uppercase tracking-wide text-text-tertiary">Soll {report.isInterim ? `(bis ${asOfLabel})` : '(Monat)'}</p>
           <p className="font-mono font-semibold">{report.saldo ? formatTimecardDuration(report.saldo.time.monthSollMinutes) : '—'}</p>
         </div>
         <div>
-          <p className="text-xs uppercase tracking-wide text-text-tertiary">Ist (Monat)</p>
+          <p className="text-xs uppercase tracking-wide text-text-tertiary">Ist {report.isInterim ? `(bis ${asOfLabel})` : '(Monat)'}</p>
           <p className="font-mono font-semibold">{report.saldo ? formatTimecardDuration(report.saldo.time.monthIstMinutes) : formatTimecardDuration(workedMinutes + absenceMinutes)}</p>
         </div>
         <div>
-          <p className="text-xs uppercase tracking-wide text-text-tertiary">Zeitsaldo (Ende Monat)</p>
+          <p className="text-xs uppercase tracking-wide text-text-tertiary">Zeitsaldo {report.isInterim ? `(per ${asOfLabel})` : '(Ende Monat)'}</p>
           <p className="font-mono font-semibold">
             {report.saldo
               ? `${report.saldo.time.saldoMinutes < 0 ? '−' : '+'}${formatTimecardDuration(Math.abs(report.saldo.time.saldoMinutes))}`
@@ -145,11 +156,18 @@ export default async function MonthlyReportPage({
                   {e.start_time && e.end_time ? `${e.start_time}–${e.end_time}${e.break_minutes ? ` (${e.break_minutes}′ Pause)` : ''}` : '—'}
                 </td>
                 <td className="py-1 pr-2 text-right font-mono tabular-nums">{formatTimecardDuration(e.duration_minutes)}</td>
-                <td className="py-1 text-text-secondary">{e.description ?? ''}</td>
+                {/* The plan-fill source marker is internal noise on a document —
+                    show only genuine, hand-written remarks. */}
+                <td className="py-1 text-text-secondary">{e.description === SCHEDULE_FILL_DESCRIPTION ? '' : (e.description ?? '')}</td>
               </tr>
             ))}
           </tbody>
         </table>
+        {futureCount > 0 && (
+          <p className="mt-2 text-xs text-text-tertiary">
+            {futureCount} geplante {futureCount === 1 ? 'Tag' : 'Tage'} nach dem {asOfLabel} noch nicht berücksichtigt (Monat läuft noch).
+          </p>
+        )}
         {report.holidays.length > 0 && (
           <p className="mt-2 text-xs text-text-tertiary">
             Feiertage im {monthLabel}: {report.holidays.map(h => `${getDisplayDate(h.date)} (${h.name})`).join(', ')} — reduzieren die Sollzeit automatisch.

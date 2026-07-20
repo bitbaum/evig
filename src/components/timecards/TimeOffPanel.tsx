@@ -41,6 +41,7 @@ export function TimeOffPanel() {
   const [note, setNote] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState<string | null>(null)
 
   const load = useCallback(async () => {
     const res = await apiFetch<TimeOffRequest[]>('/api/time-off')
@@ -53,7 +54,7 @@ export function TimeOffPanel() {
   }, [open, load])
 
   const submit = async () => {
-    setError(null)
+    setError(null); setSuccess(null)
     if (!startsOn || !endsOn) {
       setError(t('missingDates'))
       return
@@ -71,6 +72,7 @@ export function TimeOffPanel() {
     setStartsOn('')
     setEndsOn('')
     setNote('')
+    setSuccess(t('requestSubmitted'))
     void load()
   }
 
@@ -96,6 +98,11 @@ export function TimeOffPanel() {
           {error && (
             <p className="rounded-lg border border-error-200 bg-error-50 px-3 py-2 text-sm text-error-700">
               {error}
+            </p>
+          )}
+          {success && (
+            <p className="rounded-lg border border-success-600/30 bg-success-600/10 px-3 py-2 text-sm text-success-700 dark:text-success-400">
+              {success}
             </p>
           )}
 

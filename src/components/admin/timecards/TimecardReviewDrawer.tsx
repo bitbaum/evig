@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslations } from 'next-intl'
-import { X, Check, Ban, Pencil, Save, RotateCcw, Send } from 'lucide-react'
+import Link from 'next/link'
+import { X, Check, Ban, Pencil, Save, RotateCcw, Send, FileText } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
@@ -69,19 +70,22 @@ export function TimecardReviewDrawer({
   const [note, setNote] = useState('')
   const [busy, setBusy] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  // Positive acknowledgement after an action — the drawer stays open showing
+  // this + the next step (the report), so the approver never has to hunt for
+  // the card they just acted on.
+  const [flash, setFlash] = useState<string | null>(null)
 
   // eslint-disable-next-line react-hooks/set-state-in-effect -- portal mount guard (SSR-safe)
   useEffect(() => { setMounted(true) }, [])
 
-  useEffect(() => {
-    let active = true
-    apiFetch<ReviewCard>(`/api/admin/timecards/${cardId}`).then(r => {
-      if (!active) return
-      if (r.success && r.data) { setCard(r.data); setEntries(r.data.entries ?? []) }
-      else setError(r.error || t('draftLoadError'))
-    })
-    return () => { active = false }
+  const load = useCallback(async () => {
+    const r = await apiFetch<ReviewCard>(`/api/admin/timecards/${cardId}`)
+    if (r.success && r.data) { setCard(r.data); setEntries(r.data.entries ?? []) }
+    else setError(r.error || t('draftLoadError'))
   }, [cardId, t])
+
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- async fetch → setState resolves off-render
+  useEffect(() => { void load() }, [load])
 
   const total = entries.reduce((s, e) => s + (Number(e.duration_minutes) || 0), 0)
   const isApproved = card?.status === 'approved'
@@ -95,7 +99,7 @@ export function TimecardReviewDrawer({
 
   const save = async () => {
     if (!card) return
-    setBusy('save'); setError(null)
+    setBusy('save'); setError(null); setFlash(null)
     const r = await apiFetch(`/api/admin/timecards/${cardId}`, {
       method: 'PUT',
       body: {
@@ -108,40 +112,50 @@ export function TimecardReviewDrawer({
     setBusy(null)
     if (!r.success) { setError(r.error || t('saveFailed')); return }
     setEditing(false)
+    await load()
+    setFlash(t('reviewDoneSaved'))
     onChanged()
   }
 
   const review = async (status: 'approved' | 'rejected') => {
-    setBusy(status); setError(null)
+    setBusy(status); setError(null); setFlash(null)
     const r = await apiFetch(`/api/admin/timecards/${cardId}`, {
       method: 'PATCH',
       body: { status, review_notes: note.trim() || null },
     })
     setBusy(null)
     if (!r.success) { setError(r.error || t('actionFailed')); return }
+    setNote('')
+    await load()
+    setFlash(status === 'approved' ? t('reviewDoneApproved') : t('reviewDoneRejected'))
     onChanged()
-    onClose()
   }
 
   // Proxy path: submit a draft on the owner's behalf (audited, owner notified).
   const submitOnBehalf = async () => {
-    setBusy('submit'); setError(null)
+    setBusy('submit'); setError(null); setFlash(null)
     const r = await apiFetch(`/api/admin/timecards/${cardId}/submit`, { method: 'POST' })
     setBusy(null)
     if (!r.success) { setError(r.error || t('actionFailed')); return }
+    await load()
+    setFlash(t('reviewDoneSubmitted'))
     onChanged()
-    onClose()
   }
 
   // Un-approve: back to draft so the owner (or approver) can rework it.
   const reopen = async () => {
-    setBusy('reopen'); setError(null)
+    setBusy('reopen'); setError(null); setFlash(null)
     const r = await apiFetch(`/api/admin/timecards/${cardId}/reopen`, { method: 'POST' })
     setBusy(null)
     if (!r.success) { setError(r.error || t('actionFailed')); return }
+    await load()
+    setFlash(t('reviewDoneReopened'))
     onChanged()
-    onClose()
   }
+
+  // Monatsrapport for this card's owner + month (the sheet the approver sends
+  // to the social worker) — the concrete next step after approving.
+  const reportHref = card ? `/admin/team/report/${card.user_id}/${card.period_start.slice(0, 7)}` : null
 
   if (!mounted) return null
 
@@ -179,6 +193,16 @@ export function TimecardReviewDrawer({
 
         <div className="flex-1 overflow-y-auto px-5 py-4">
           {error && <p className="mb-3 text-sm text-error-600 dark:text-error-400">{error}</p>}
+          {flash && (
+            <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-md border border-success-600/30 bg-success-600/10 px-3 py-2 text-sm text-success-700 dark:text-success-400">
+              <span className="inline-flex items-center gap-1.5 font-medium"><Check className="h-4 w-4" /> {flash}</span>
+              {isApproved && reportHref && (
+                <Link href={reportHref} target="_blank" className="inline-flex items-center gap-1 font-medium text-action hover:underline">
+                  <FileText className="h-3.5 w-3.5" /> {t('openReport')}
+                </Link>
+              )}
+            </div>
+          )}
           {!card ? (
             <p className="text-sm text-text-tertiary">{t('loading')}</p>
           ) : entries.length === 0 ? (
@@ -299,6 +323,15 @@ export function TimecardReviewDrawer({
               </>
             )}
           </div>
+          {!editing && reportHref && (
+            <Link
+              href={reportHref}
+              target="_blank"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-action hover:underline"
+            >
+              <FileText className="h-3.5 w-3.5" /> {t('openReport')}
+            </Link>
+          )}
         </div>
       </div>
     </div>,
