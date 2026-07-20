@@ -103,6 +103,11 @@ export const mainNavigation: NavigationItem[] = [
     ],
   },
   {
+    // The dropdown shows only the two flagship projects + "Alle Projekte";
+    // the long tail (LTSP, Kivitendo, Linuxola, FreieComputer, Compirat) stays
+    // fully reachable on /projects, but doesn't bloat the mega-menu. Keeping
+    // Projekte top-level (not under Über uns) because projects ARE the mission
+    // proof — see the header note above.
     name: 'Projekte',
     nameKey: 'projects',
     href: '/projects',
@@ -120,36 +125,6 @@ export const mainNavigation: NavigationItem[] = [
         nameKey: 'projectHardware',
         href: '/projects/hardware',
         descriptionKey: 'projectHardwareDesc',
-      },
-      {
-        name: 'LTSP',
-        nameKey: 'projectLtsp',
-        href: '/projects/ltsp',
-        descriptionKey: 'projectLtspDesc',
-      },
-      {
-        name: 'Kivitendo Modus CH',
-        nameKey: 'projectKivitendo',
-        href: '/projects/kivitendo',
-        descriptionKey: 'projectKivitendoDesc',
-      },
-      {
-        name: 'Verein Linuxola',
-        nameKey: 'projectLinuxola',
-        href: '/projects/linuxola',
-        descriptionKey: 'projectLinuxolaDesc',
-      },
-      {
-        name: 'FreieComputer.ch',
-        nameKey: 'projectFreieComputer',
-        href: '/projects/freiecomputer',
-        descriptionKey: 'projectFreieComputerDesc',
-      },
-      {
-        name: 'Compirat',
-        nameKey: 'projectCompirat',
-        href: '/projects/compirat',
-        descriptionKey: 'projectCompiratDesc',
       },
       {
         name: 'Alle Projekte',

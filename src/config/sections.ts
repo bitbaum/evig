@@ -169,10 +169,9 @@ export type SidebarGroupId =
   | 'uebersicht'   // Today: Dashboard, approval queues
   | 'angebot'      // Operations: intake, marketplace, IT-Hilfe, workshops
   | 'inhalte'      // Content: blog, reviews, projects
-  | 'betrieb'      // Organisation: tasks, protocols, decisions
+  | 'betrieb'      // Zusammenarbeit: teams, tasks, protocols, decisions
   | 'analyse'      // Analytics hub + financial / impact reporting
-  | 'personen'     // Membership & user accounts
-  | 'teamhr'       // Team profiles, HR pipeline, time & payroll
+  | 'personen'     // Personen & HR: team profiles, members, users, HR pipeline
   | 'system'       // System configuration
 
 /**
@@ -198,7 +197,8 @@ export interface SidebarGroup {
  */
 // NOTE: a few group `id`s do not match their display `label` for historical
 // reasons — the labels were revised without renaming the keys. In particular:
-//   id 'angebot' → label 'Betrieb'   ·   id 'betrieb' → label 'Organisation'
+//   id 'angebot' → label 'Betrieb'   ·   id 'betrieb' → label 'Zusammenarbeit'
+//   id 'personen' → label 'Personen & HR' (merged the old 'teamhr' group in)
 // The `label` is what users see and is authoritative; the `id` is just an
 // internal key (used in section `sidebarGroup` assignments + AdminSidebar). Match
 // on `id` when wiring, not on the German word.
@@ -220,23 +220,20 @@ export const SIDEBAR_GROUPS: Record<SidebarGroupId, SidebarGroup> = {
   },
   betrieb: {
     id: 'betrieb',
-    label: 'Organisation',
+    label: 'Zusammenarbeit',
     priority: 3,
+  },
+  // Personen & HR — the old two-item 'personen' and four-item 'teamhr' groups
+  // merged: all people administration in one place, before Analyse.
+  personen: {
+    id: 'personen',
+    label: 'Personen & HR',
+    priority: 3.5,
   },
   analyse: {
     id: 'analyse',
     label: 'Analyse',
     priority: 4,
-  },
-  personen: {
-    id: 'personen',
-    label: 'Personen',
-    priority: 5,
-  },
-  teamhr: {
-    id: 'teamhr',
-    label: 'Team & HR',
-    priority: 6,
   },
   system: {
     id: 'system',
@@ -977,9 +974,9 @@ export const SECTIONS = {
       color: 'success',
     },
     visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
-    priority: 108,
+    priority: 100,
     category: 'sensitive',
-    sidebarGroup: 'analyse',
+    sidebarGroup: 'angebot',
   },
 
   // ---------------------------------------------------------------------------
@@ -1012,9 +1009,9 @@ export const SECTIONS = {
       color: 'error',
     },
     visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
-    priority: 201,
+    priority: 106,
     category: 'sensitive',
-    sidebarGroup: 'teamhr',
+    sidebarGroup: 'personen',
   },
 
   'hr-vacancies': {
@@ -1030,7 +1027,7 @@ export const SECTIONS = {
     visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
     priority: 201.5,
     category: 'management',
-    sidebarGroup: 'teamhr',
+    sidebarGroup: 'personen',
   },
 
   'hr-applications': {
@@ -1046,7 +1043,7 @@ export const SECTIONS = {
     visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
     priority: 201.6,
     category: 'management',
-    sidebarGroup: 'teamhr',
+    sidebarGroup: 'personen',
   },
 
   timecards: {
@@ -1067,7 +1064,7 @@ export const SECTIONS = {
     visibility: { admin: false, dashboard: false, requiresStaff: true },
     priority: 202,
     category: 'management',
-    sidebarGroup: 'teamhr',
+    sidebarGroup: 'personen',
   },
 
   'timecard-approvals': {
@@ -1102,7 +1099,7 @@ export const SECTIONS = {
     visibility: { admin: true, dashboard: false, requiresStaff: true, sensitive: true },
     priority: 204,
     category: 'management',
-    sidebarGroup: 'teamhr',
+    sidebarGroup: 'personen',
   },
 
   // ---------------------------------------------------------------------------

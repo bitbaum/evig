@@ -11403,10 +11403,9 @@
         "uebersicht": "Today",
         "angebot": "Operations",
         "inhalte": "Content",
-        "betrieb": "Organization",
+        "betrieb": "Collaboration",
         "analyse": "Analytics",
-        "personen": "People",
-        "teamhr": "Team & HR",
+        "personen": "People & HR",
         "system": "System"
       }
     },
