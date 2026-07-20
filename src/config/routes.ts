@@ -104,6 +104,7 @@ export const ROUTES = {
     shop:                     '/marketplace',
     services:                 '/services',
     soFunktioniert:           '/so-funktionierts',
+    reparaturbonus:           '/reparaturbonus',
     marketplace:              '/marketplace',
     marketplaceSell:          '/marketplace/sell',
     marketplaceListing:       (id: string) => `/marketplace/${id}`,

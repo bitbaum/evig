@@ -89,6 +89,13 @@ export const mainNavigation: NavigationItem[] = [
         descriptionKey: 'howItWorksDesc',
       },
       {
+        name: 'Reparaturbonus Zürich',
+        nameKey: 'reparaturbonus',
+        href: '/reparaturbonus',
+        descriptionKey: 'reparaturbonusDesc',
+        badge: 'new',
+      },
+      {
         name: 'Standorte',
         nameKey: 'locations',
         href: '/space',

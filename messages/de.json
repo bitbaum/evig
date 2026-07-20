@@ -157,7 +157,9 @@
       "howItWorks": "So funktioniert’s",
       "howItWorksDesc": "Der Weg deines Geräts — von der Spende bis zum neuen Zuhause",
       "transparency": "Transparenz",
-      "transparencyDesc": "Finanzen, Kennzahlen und Berechnungsmethoden"
+      "transparencyDesc": "Finanzen, Kennzahlen und Berechnungsmethoden",
+      "reparaturbonus": "Reparaturbonus Zürich",
+      "reparaturbonusDesc": "Bis zu 100 Franken für Reparaturen — so funktioniert’s"
     },
     "language": "Sprache",
     "missionHistory": "Mission & Geschichte",
@@ -11656,6 +11658,150 @@
     "method": {
       "title": "Zahlungsart",
       "subtitle": "Wähle, wie du bezahlen möchtest"
+    }
+  },
+  "reparaturbonus": {
+    "meta": {
+      "title": "Reparaturbonus Zürich",
+      "description": "Die Stadt Zürich zahlt bis zu {max} Franken für Reparaturen — {percent}% der Rechnung. So funktioniert der Reparaturbonus und wie Reparaturen bei Revamp-IT dazu passen."
+    },
+    "hero": {
+      "title": "Reparaturbonus Zürich",
+      "subtitle": "Die Stadt {city} zahlt bis zu {max} Franken für Reparaturen — {percent}% der Rechnung. Reparieren lohnt sich jetzt doppelt: fürs Portemonnaie und fürs Klima.",
+      "ctaPrimary": "Betrieb auf {platform} finden",
+      "ctaSecondary": "So funktioniert’s"
+    },
+    "facts": {
+      "bonus": {
+        "value": "CHF {max}",
+        "label": "pro Person und Jahr",
+        "detail": "Der maximale Bonus pro Kalenderjahr. Nicht genutztes Guthaben bleibt im selben Jahr für weitere Reparaturen erhalten."
+      },
+      "coverage": {
+        "value": "{percent}%",
+        "label": "der Reparaturkosten",
+        "detail": "Die Stadt übernimmt die Hälfte der Rechnung — bis zum Jahresmaximum von CHF {max}."
+      },
+      "categories": {
+        "value": "Elektro + Textil",
+        "label": "zum Start förderbar",
+        "detail": "Elektrogeräte und Textilien machen den Anfang. Weitere Kategorien kommen je nach Nachfrage dazu."
+      },
+      "pilot": {
+        "value": "{years} Jahre",
+        "label": "Pilotprojekt",
+        "detail": "Gestartet im Juli 2026. Die Stadt stellt dafür rund CHF {budget} Mio. bereit."
+      }
+    },
+    "steps": {
+      "heading": "So kommst du zum Bonus",
+      "intro": "Der ganze Ablauf läuft über die städtische Reparaturplattform {platform}. In vier Schritten:",
+      "platformNote": "Bezug und Einlösen des Bonus laufen vollständig über die offizielle Plattform:",
+      "residence": {
+        "title": "Wohnsitz in der Stadt Zürich",
+        "body": "Der Bonus steht allen Personen mit Wohnsitz in der Stadt Zürich offen — pro Person bis {max} Franken im Jahr."
+      },
+      "find": {
+        "title": "Reparaturbetrieb finden",
+        "body": "Auf {platform} sind alle registrierten Reparaturbetriebe aufgeführt. Suche einen Betrieb, der dein Gerät repariert."
+      },
+      "repair": {
+        "title": "Reparieren lassen",
+        "body": "Gib die Reparatur in Auftrag. Ob Laptop, Kaffeemaschine oder Lieblingsjacke — Hauptsache, sie wird geflickt statt ersetzt."
+      },
+      "redeem": {
+        "title": "Bonus einlösen",
+        "body": "Der Bonus deckt {percent}% der Kosten, bis {max} Franken pro Jahr. Bleibt Guthaben übrig, nutzt du es im selben Jahr für weitere Reparaturen."
+      }
+    },
+    "eligible": {
+      "heading": "Was ist förderberechtigt?",
+      "intro": "Zum Start des dreijährigen Pilotprojekts sind zwei Kategorien bonusberechtigt. Das Angebot wird laufend erweitert.",
+      "electronics": {
+        "title": "Elektrogeräte",
+        "body": "Von Laptops und Computern über Smartphones bis zu Haushaltsgeräten — elektrische und elektronische Geräte werden gefördert."
+      },
+      "textiles": {
+        "title": "Textilien",
+        "body": "Kleider, Schuhe und andere Textilien: Änderungen und Reparaturen statt Neukauf."
+      },
+      "more": {
+        "title": "Weitere folgen",
+        "body": "Elektro und Textil machen den Anfang. Je nach Nachfrage nimmt die Stadt weitere Produktkategorien in die Förderung auf."
+      }
+    },
+    "fit": {
+      "heading": "Reparaturen bei {org}",
+      "intro": "{org} repariert seit {year} Computer und IT-Geräte mitten in {city}. Diese Reparaturen fallen genau in eine der bonusberechtigten Kategorien.",
+      "note": "Wichtig: Diese Seite erklärt das Programm der Stadt Zürich. Welche Betriebe aktuell teilnehmen und den Bonus abwickeln, siehst du tagesaktuell auf {platform}. Prüfe dort, ob dein Wunschbetrieb registriert ist.",
+      "category": {
+        "title": "Computer sind Elektrogeräte",
+        "body": "Laptop, Desktop, Bildschirm oder Peripherie — die Reparaturen von {org} gehören zur Kategorie Elektrogeräte und damit zu den förderbaren Leistungen."
+      },
+      "location": {
+        "title": "Mitten in der Stadt Zürich",
+        "body": "Unsere Werkstatt und Verkaufsstelle liegen an der {address} — im Stadtgebiet, in dem der Bonus gilt."
+      },
+      "mission": {
+        "title": "Reparieren statt wegwerfen",
+        "body": "Genau dafür gibt es {org} seit über zwei Jahrzehnten. Der Reparaturbonus macht das, was wir ohnehin tun, für dich noch günstiger."
+      }
+    },
+    "impact": {
+      "heading": "Warum das zählt",
+      "intro": "Der Reparaturbonus ist Teil der städtischen Kreislaufwirtschaft — und er ersetzt die früheren Entsorgungscoupons. Die Stossrichtung ist klar: reparieren statt entsorgen.",
+      "coupons": {
+        "title": "Vom Wegwerfen zum Reparieren",
+        "body": "Früher förderte die Stadt mit Entsorgungscoupons das Entsorgen. Der Reparaturbonus dreht den Anreiz um: Er belohnt, was länger genutzt wird."
+      },
+      "repairs": {
+        "title": "~{repairs} Reparaturen",
+        "body": "So viele geförderte Reparaturen erwartet die Stadt über die dreijährige Pilotphase."
+      },
+      "climate": {
+        "title": "~{co2} Tonnen CO₂",
+        "body": "So viel Treibhausgas soll dank der zusätzlichen Reparaturen eingespart werden — CO₂-Äquivalente, die sonst in die Neuproduktion geflossen wären."
+      }
+    },
+    "faq": {
+      "heading": "Häufige Fragen",
+      "who": {
+        "q": "Wer bekommt den Reparaturbonus?",
+        "a": "Alle Personen mit Wohnsitz in der Stadt Zürich. Pro Person gibt es bis zu {max} Franken pro Kalenderjahr."
+      },
+      "howMuch": {
+        "q": "Wie viel bekomme ich zurück?",
+        "a": "{percent}% der Reparaturkosten, maximal {max} Franken pro Jahr. Bei einer Reparatur von 120 Franken erhältst du also 60 Franken zurück."
+      },
+      "carryOver": {
+        "q": "Was passiert mit nicht genutztem Guthaben?",
+        "a": "Schöpfst du den Bonus bei einer Reparatur nicht ganz aus, bleibt der Restbetrag im selben Kalenderjahr für weitere Reparaturen erhalten."
+      },
+      "what": {
+        "q": "Welche Reparaturen sind förderbar?",
+        "a": "Zum Start des Pilotprojekts Elektrogeräte und Textilien. Weitere Kategorien folgen je nach Nachfrage."
+      },
+      "devices": {
+        "q": "Zählen Computer und Laptops dazu?",
+        "a": "Ja. Computer, Laptops und ähnliche IT-Geräte gehören zu den Elektrogeräten — genau die Reparaturen, die {org} anbietet."
+      },
+      "revampit": {
+        "q": "Kann ich den Bonus bei {org} einlösen?",
+        "a": "Der Bonus wird ausschliesslich über die städtische Plattform {platform} abgewickelt — dort siehst du, welche Betriebe teilnehmen. Reparaturen bei {org} fallen inhaltlich in eine förderbare Kategorie (Elektrogeräte); prüfe auf {platform}, ob und wie du sie geltend machen kannst."
+      }
+    },
+    "cta": {
+      "heading": "Reparieren lohnt sich",
+      "body": "Finde einen Reparaturbetrieb auf {platform} — oder bring dein Gerät direkt zu {org}.",
+      "platform": "Zu {platform}",
+      "repair": "Reparatur bei {org}",
+      "contact": "Frag uns"
+    },
+    "sources": {
+      "heading": "Quellen & offizielle Informationen",
+      "city": "Stadt Zürich — Reparaturförderung mit Reparaturbonus",
+      "platform": "{platform} — die offizielle Reparaturplattform",
+      "business": "Stadt Zürich — Registrierung für Reparaturbetriebe"
     }
   },
   "soFunktioniert": {

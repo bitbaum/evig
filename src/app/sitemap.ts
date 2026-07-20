@@ -33,6 +33,7 @@ const STATIC_PAGES: Array<{ path: string; priority: number; changeFrequency: Met
   { path: R.workshops,                                priority: 0.8, changeFrequency: 'weekly' },
   { path: R.blog,                                     priority: 0.8, changeFrequency: 'daily' },
   { path: '/services',                                priority: 0.8, changeFrequency: 'monthly' },
+  { path: R.reparaturbonus,                           priority: 0.6, changeFrequency: 'monthly' },
   { path: '/services/open-source-solutions',          priority: 0.8, changeFrequency: 'monthly' },
   { path: R.itHilfe,                                  priority: 0.8, changeFrequency: 'weekly' },
   { path: R.itHilfeCreate,                            priority: 0.6, changeFrequency: 'monthly' },

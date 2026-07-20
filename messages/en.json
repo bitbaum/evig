@@ -190,7 +190,9 @@
       "howItWorks": "How it works",
       "howItWorksDesc": "The journey of a device — from donation to its next home",
       "transparency": "Transparency",
-      "transparencyDesc": "Finances, key figures and how we calculate"
+      "transparencyDesc": "Finances, key figures and how we calculate",
+      "reparaturbonus": "Zurich Repair Bonus",
+      "reparaturbonusDesc": "Up to CHF 100 back on repairs — how it works"
     },
     "experimentalBanner": "Experimental Site",
     "experimentalBannerLink": "go to current site",
@@ -11666,6 +11668,150 @@
     "method": {
       "title": "Payment method",
       "subtitle": "Choose how you'd like to pay"
+    }
+  },
+  "reparaturbonus": {
+    "meta": {
+      "title": "Zurich Repair Bonus",
+      "description": "The City of Zurich pays up to CHF {max} towards repairs — {percent}% of the bill. How the repair bonus works and how repairs at Revamp-IT fit in."
+    },
+    "hero": {
+      "title": "Zurich Repair Bonus",
+      "subtitle": "The City of {city} pays up to CHF {max} towards repairs — {percent}% of the bill. Repairing now pays off twice: for your wallet and for the climate.",
+      "ctaPrimary": "Find a business on {platform}",
+      "ctaSecondary": "How it works"
+    },
+    "facts": {
+      "bonus": {
+        "value": "CHF {max}",
+        "label": "per person, per year",
+        "detail": "The maximum bonus per calendar year. Any unused balance stays available for further repairs within the same year."
+      },
+      "coverage": {
+        "value": "{percent}%",
+        "label": "of repair costs",
+        "detail": "The city covers half of the bill — up to the annual maximum of CHF {max}."
+      },
+      "categories": {
+        "value": "Electronics + textiles",
+        "label": "eligible at launch",
+        "detail": "Electrical appliances and textiles come first. More categories will be added depending on demand."
+      },
+      "pilot": {
+        "value": "{years} years",
+        "label": "pilot project",
+        "detail": "Launched in July 2026. The city has set aside around CHF {budget} million for it."
+      }
+    },
+    "steps": {
+      "heading": "How to get the bonus",
+      "intro": "The whole process runs through the city's repair platform {platform}. In four steps:",
+      "platformNote": "Claiming and redeeming the bonus is handled entirely through the official platform:",
+      "residence": {
+        "title": "Live in the City of Zurich",
+        "body": "The bonus is open to everyone resident in the City of Zurich — up to CHF {max} per person, per year."
+      },
+      "find": {
+        "title": "Find a repair business",
+        "body": "{platform} lists every registered repair business. Find one that repairs your item."
+      },
+      "repair": {
+        "title": "Get it repaired",
+        "body": "Place the repair order. Laptop, coffee machine or favourite jacket — what matters is that it gets fixed, not replaced."
+      },
+      "redeem": {
+        "title": "Redeem the bonus",
+        "body": "The bonus covers {percent}% of the cost, up to CHF {max} per year. Any leftover balance can be used for further repairs in the same year."
+      }
+    },
+    "eligible": {
+      "heading": "What qualifies?",
+      "intro": "Two categories are eligible at the start of the three-year pilot. The scope will grow over time.",
+      "electronics": {
+        "title": "Electrical appliances",
+        "body": "From laptops and computers to smartphones and household appliances — electrical and electronic devices are covered."
+      },
+      "textiles": {
+        "title": "Textiles",
+        "body": "Clothes, shoes and other textiles: alterations and repairs instead of buying new."
+      },
+      "more": {
+        "title": "More to come",
+        "body": "Electronics and textiles are the start. Depending on demand, the city will add further product categories."
+      }
+    },
+    "fit": {
+      "heading": "Repairs at {org}",
+      "intro": "{org} has repaired computers and IT equipment in the heart of {city} since {year}. Those repairs fall squarely into one of the eligible categories.",
+      "note": "Important: this page explains the City of Zurich's programme. Which businesses currently take part and settle the bonus is shown, up to date, on {platform}. Check there whether your preferred business is registered.",
+      "category": {
+        "title": "Computers are electrical appliances",
+        "body": "Laptop, desktop, monitor or peripheral — repairs by {org} belong to the electrical-appliances category and are therefore eligible."
+      },
+      "location": {
+        "title": "In the heart of Zurich",
+        "body": "Our workshop and shop are at {address} — inside the city area where the bonus applies."
+      },
+      "mission": {
+        "title": "Repair instead of discard",
+        "body": "That is exactly why {org} has existed for over two decades. The repair bonus makes what we already do even cheaper for you."
+      }
+    },
+    "impact": {
+      "heading": "Why it matters",
+      "intro": "The repair bonus is part of the city's circular economy — and it replaces the former disposal coupons. The direction is clear: repair instead of throw away.",
+      "coupons": {
+        "title": "From discarding to repairing",
+        "body": "The city used to subsidise disposal with coupons. The repair bonus flips the incentive: it rewards keeping things in use for longer."
+      },
+      "repairs": {
+        "title": "~{repairs} repairs",
+        "body": "That is how many subsidised repairs the city expects over the three-year pilot."
+      },
+      "climate": {
+        "title": "~{co2} tonnes of CO₂",
+        "body": "That is how much greenhouse gas the additional repairs are meant to save — CO₂ equivalents that would otherwise go into new production."
+      }
+    },
+    "faq": {
+      "heading": "Frequently asked questions",
+      "who": {
+        "q": "Who gets the repair bonus?",
+        "a": "Everyone resident in the City of Zurich. Each person gets up to CHF {max} per calendar year."
+      },
+      "howMuch": {
+        "q": "How much do I get back?",
+        "a": "{percent}% of the repair cost, up to CHF {max} per year. On a CHF 120 repair, you get CHF 60 back."
+      },
+      "carryOver": {
+        "q": "What happens to unused balance?",
+        "a": "If you do not use the full bonus on one repair, the remaining balance stays available for further repairs within the same calendar year."
+      },
+      "what": {
+        "q": "Which repairs are eligible?",
+        "a": "At the start of the pilot, electrical appliances and textiles. More categories will follow depending on demand."
+      },
+      "devices": {
+        "q": "Do computers and laptops count?",
+        "a": "Yes. Computers, laptops and similar IT equipment are electrical appliances — exactly the repairs {org} offers."
+      },
+      "revampit": {
+        "q": "Can I redeem the bonus at {org}?",
+        "a": "The bonus is settled exclusively through the city platform {platform} — that is where you see which businesses take part. Repairs at {org} fall into an eligible category (electrical appliances); check on {platform} whether and how you can claim them."
+      }
+    },
+    "cta": {
+      "heading": "Repairing pays off",
+      "body": "Find a repair business on {platform} — or bring your device straight to {org}.",
+      "platform": "Go to {platform}",
+      "repair": "Repair at {org}",
+      "contact": "Ask us"
+    },
+    "sources": {
+      "heading": "Sources & official information",
+      "city": "City of Zurich — repair funding with the repair bonus",
+      "platform": "{platform} — the official repair platform",
+      "business": "City of Zurich — registration for repair businesses"
     }
   },
   "soFunktioniert": {
