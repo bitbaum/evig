@@ -65,6 +65,10 @@ export async function getPersonSaldo(userId: string, today = todayIsoZurich()): 
 
   const start = profile.timeOpeningDate ?? [...periods].sort((a, b) => a.validFrom.localeCompare(b.validFrom))[0].validFrom
   const year = Number(today.slice(0, 4))
+  // A report can target a month before the opening date — load entries (and
+  // holidays) back to the earlier of the two so that month's Ist/Soll are real.
+  const monthStart = `${today.slice(0, 7)}-01`
+  const dataFrom = start < monthStart ? start : monthStart
 
   const [entries, [entitlement], [ferienTaken]] = await Promise.all([
     db
@@ -78,7 +82,7 @@ export async function getPersonSaldo(userId: string, today = todayIsoZurich()): 
       .where(and(
         eq(timecards.userId, userId),
         ne(timecards.status, TIMECARD_STATUSES.REJECTED),
-        gte(timecardEntries.workDate, start),
+        gte(timecardEntries.workDate, dataFrom),
         lte(timecardEntries.workDate, today),
       )),
     db
@@ -106,7 +110,7 @@ export async function getPersonSaldo(userId: string, today = todayIsoZurich()): 
   ])
 
   const schedule = parseWeeklySchedule(profile.workingHours)
-  const holidays = getHolidayDateSet(Number(start.slice(0, 4)), year)
+  const holidays = getHolidayDateSet(Number(dataFrom.slice(0, 4)), year)
 
   const time = computeTimeSaldo({
     openingMinutes: profile.timeOpeningMinutes ?? 0,

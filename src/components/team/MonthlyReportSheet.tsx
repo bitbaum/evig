@@ -30,6 +30,16 @@ export function MonthlyReportSheet({ report }: { report: MonthlyReport }) {
     absenceDaysByCategory.set(e.category, (absenceDaysByCategory.get(e.category) ?? 0) + 1)
   }
 
+  // Balance tile: the cumulative running Zeitsaldo only means something once the
+  // month is inside the tracked period (asOf ≥ opening date). A month that
+  // predates tracking shows its OWN Ist − Soll instead — never a fake 0.
+  const time = report.saldo?.time
+  const cumulativeTracked = !!time && report.asOfDate >= time.computedFrom
+  const balanceMinutes = time ? (cumulativeTracked ? time.saldoMinutes : time.monthSaldoMinutes) : 0
+  const balanceLabel = cumulativeTracked
+    ? (report.isInterim ? `(per ${asOfLabel})` : '(Ende Monat)')
+    : '(Monat)'
+
   return (
     <div className="print-area mx-auto max-w-3xl space-y-6 bg-surface-base p-6 print:max-w-none print:p-0">
       {/* Letterhead */}
@@ -70,10 +80,10 @@ export function MonthlyReportSheet({ report }: { report: MonthlyReport }) {
           <p className="font-mono font-semibold">{report.saldo ? formatTimecardDuration(report.saldo.time.monthIstMinutes) : formatTimecardDuration(workedMinutes + absenceMinutes)}</p>
         </div>
         <div>
-          <p className="text-xs uppercase tracking-wide text-text-tertiary">Zeitsaldo {report.isInterim ? `(per ${asOfLabel})` : '(Ende Monat)'}</p>
+          <p className="text-xs uppercase tracking-wide text-text-tertiary">Zeitsaldo {balanceLabel}</p>
           <p className="font-mono font-semibold">
             {report.saldo
-              ? `${report.saldo.time.saldoMinutes < 0 ? '−' : '+'}${formatTimecardDuration(Math.abs(report.saldo.time.saldoMinutes))}`
+              ? `${balanceMinutes < 0 ? '−' : '+'}${formatTimecardDuration(Math.abs(balanceMinutes))}`
               : '—'}
           </p>
         </div>

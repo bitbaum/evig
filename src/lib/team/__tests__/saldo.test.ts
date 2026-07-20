@@ -112,6 +112,33 @@ describe('computeTimeSaldo', () => {
     expect(result!.saldoMinutes).toBe(-80 * 60)
   })
 
+  it('a report month BEFORE the opening date still shows real month Soll/Ist (no fake 0)', () => {
+    // Georgy's case: tracking opened 2026-07-01, but a Mai/Juni report must
+    // reflect that month's actual hours, not zero out. asOf = 2026-06-03 covers
+    // 3 scheduled Mo/Di/Mi days (1., 2., 3. Juni) worked 7h each.
+    const schedule = parseWeeklySchedule(serializeWeeklySchedule(EMPTY_WEEKLY_SCHEDULE))
+    for (const day of ['monday', 'tuesday', 'wednesday'] as const) {
+      schedule.days[day] = { ...schedule.days[day], enabled: true, start: '10:00', end: '18:00', break_minutes: 60 }
+    }
+    const entries = ['2026-06-01', '2026-06-02', '2026-06-03']
+      .map(d => ({ work_date: d, duration_minutes: 420, category: 'admin' }))
+    const result = computeTimeSaldo({
+      openingMinutes: 0,
+      openingDate: '2026-07-01', // opening is AFTER the report month
+      periods: [{ validFrom: '2024-03-01', weeklyMinutes: 21 * 60 }],
+      schedule,
+      entries,
+      holidays: new Set<string>(),
+      today: '2026-06-03', // asOf = end of the report window
+    })
+    expect(result).not.toBeNull()
+    expect(result!.monthSollMinutes).toBe(3 * 420) // real target, not 0
+    expect(result!.monthIstMinutes).toBe(3 * 420) // real actual, not 0
+    expect(result!.monthSaldoMinutes).toBe(0)
+    // Cumulative running balance is still opening-gated (tracking not started).
+    expect(result!.saldoMinutes).toBe(0)
+  })
+
   it('returns null without employment periods', () => {
     expect(computeTimeSaldo({
       openingMinutes: 0, openingDate: null, periods: [],

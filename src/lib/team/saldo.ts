@@ -86,15 +86,6 @@ export function computeTimeSaldo(input: SaldoInput): SaldoResult | null {
   if (sorted.length === 0) return null
 
   const start = input.openingDate ?? sorted[0].validFrom
-  if (start > input.today) {
-    return {
-      saldoMinutes: input.openingMinutes,
-      monthSollMinutes: 0,
-      monthIstMinutes: 0,
-      monthSaldoMinutes: 0,
-      computedFrom: start,
-    }
-  }
 
   const enabledDays = WEEKDAY_IDS.filter(day => input.schedule.days[day].enabled)
   // No schedule template yet → assume the standard Mon–Fri distribution so
@@ -104,32 +95,43 @@ export function computeTimeSaldo(input: SaldoInput): SaldoResult | null {
     : new Set<string>(['monday', 'tuesday', 'wednesday', 'thursday', 'friday'])
   const dayCount = scheduledDays.size
 
+  // The asOf month may predate the tracking-opening date (a historical /
+  // pre-cutover report). Its Soll/Ist must still be REAL, so the Ist map and
+  // the month loop reach back to the month start even when it's before `start`.
+  const monthStart = `${input.today.slice(0, 7)}-01`
+  const istFrom = start < monthStart ? start : monthStart
+
   // Ist per day. Feiertag-category minutes on an actual calendar holiday are
   // dropped (the holiday already reduced Soll — counting both would inflate).
   const istByDay = new Map<string, number>()
   for (const e of input.entries) {
-    if (e.work_date < start || e.work_date > input.today) continue
+    if (e.work_date < istFrom || e.work_date > input.today) continue
     const absence = getAbsenceType(e.category)
     if (absence && !absence.paid) continue
     if (e.category === TIMECARD_ENTRY_CATEGORIES.FEIERTAG && input.holidays.has(e.work_date)) continue
     istByDay.set(e.work_date, (istByDay.get(e.work_date) ?? 0) + (e.duration_minutes || 0))
   }
 
-  const monthStart = `${input.today.slice(0, 7)}-01`
+  const sollOn = (date: string): number => {
+    if (!scheduledDays.has(weekdayIdFromDate(date)) || input.holidays.has(date)) return 0
+    return weeklyMinutesOn(date, sorted) / dayCount
+  }
+
+  // Cumulative running balance: opening + Σ(ist − soll) from the opening date to
+  // asOf. Opening-gated — days before `start` are already settled in the
+  // opening balance, so this loop simply doesn't run for a pre-opening month.
   let saldo = input.openingMinutes
+  for (let date = start; date <= input.today; date = addDaysIso(date, 1)) {
+    saldo += (istByDay.get(date) ?? 0) - sollOn(date)
+  }
+
+  // Month decomposition: the real target/actual for the asOf month, always —
+  // independent of the opening gate, so a pre-opening month is never shown as 0.
   let monthSoll = 0
   let monthIst = 0
-
-  for (let date = start; date <= input.today; date = addDaysIso(date, 1)) {
-    const isScheduled = scheduledDays.has(weekdayIdFromDate(date))
-    const isHoliday = input.holidays.has(date)
-    const soll = isScheduled && !isHoliday ? weeklyMinutesOn(date, sorted) / dayCount : 0
-    const ist = istByDay.get(date) ?? 0
-    saldo += ist - soll
-    if (date >= monthStart) {
-      monthSoll += soll
-      monthIst += ist
-    }
+  for (let date = monthStart; date <= input.today; date = addDaysIso(date, 1)) {
+    monthSoll += sollOn(date)
+    monthIst += istByDay.get(date) ?? 0
   }
 
   return {
