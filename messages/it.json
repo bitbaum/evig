@@ -155,7 +155,9 @@
       "browseRequests": "Richieste aperte",
       "browseRequestsDesc": "Sfoglia le richieste di riparazione e offri aiuto",
       "itHelpHub": "IT Help",
-      "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point"
+      "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point",
+      "transparency": "Trasparenza",
+      "transparencyDesc": "Finanze, dati chiave e metodi di calcolo"
     },
     "language": "Lingua",
     "missionHistory": "Missione & Storia",
@@ -724,7 +726,8 @@
     "stats": {
       "title": "Numeri e fatti",
       "moreLink": "Vedi i dati di impatto dettagliati",
-      "detailLink": "Visualizza i dati dettagliati sull'impatto"
+      "detailLink": "Visualizza i dati dettagliati sull'impatto",
+      "co2Link": "Calcolo CO₂ e fonti"
     },
     "howWeWork": {
       "title": "Come lavoriamo",
@@ -10289,6 +10292,13 @@
       "absencePaidHint": "Assenza pagata (conta le ore pianificate)",
       "absenceUnpaidHint": "Non pagato (0 h)",
       "headerSelectColumn": "Seleziona tutti i {day} — trascina per più colonne",
+      "today": "Oggi",
+      "openReport": "Apri rapporto mensile",
+      "reviewDoneApproved": "Approvato — pronto per il rapporto mensile.",
+      "reviewDoneRejected": "Respinto — la persona è stata avvisata.",
+      "reviewDoneReopened": "Riaperto — di nuovo in bozza.",
+      "reviewDoneSaved": "Modifiche salvate.",
+      "reviewDoneSubmitted": "Inviato.",
       "statusUnknown": "Sconosciuto",
       "durationMinutesOnly": "{minutes} min",
       "durationHoursOnly": "{hours} ore",
@@ -11410,6 +11420,7 @@
       "submitting": "Invio in corso …",
       "missingDates": "Seleziona la data di inizio e di fine.",
       "submitError": "Impossibile inviare la richiesta.",
+      "requestSubmitted": "Richiesta inviata — in attesa di approvazione.",
       "withdraw": "Ritira richiesta",
       "kind": {
         "ferien": "Vacanze",

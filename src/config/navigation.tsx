@@ -73,6 +73,16 @@ export const mainNavigation: NavigationItem[] = [
         descriptionKey: 'impactDesc',
       },
       {
+        // The accountability hub: finances, key figures and the calculation
+        // methods (incl. the CO₂ methodology). Distinct from "Unsere Wirkung"
+        // (impact outcomes) — this is the "show me the math" trust page, which
+        // was previously unreachable from the nav.
+        name: 'Transparenz',
+        nameKey: 'transparency',
+        href: '/transparenz',
+        descriptionKey: 'transparencyDesc',
+      },
+      {
         name: 'So funktioniert’s',
         nameKey: 'howItWorks',
         href: '/so-funktionierts',

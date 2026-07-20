@@ -155,7 +155,9 @@
       "sectionDevices": "Geräte",
       "sectionHelp": "Hilfe",
       "howItWorks": "So funktioniert’s",
-      "howItWorksDesc": "Der Weg deines Geräts — von der Spende bis zum neuen Zuhause"
+      "howItWorksDesc": "Der Weg deines Geräts — von der Spende bis zum neuen Zuhause",
+      "transparency": "Transparenz",
+      "transparencyDesc": "Finanzen, Kennzahlen und Berechnungsmethoden"
     },
     "language": "Sprache",
     "missionHistory": "Mission & Geschichte",
@@ -4883,7 +4885,8 @@
     "stats": {
       "title": "Zahlen & Fakten",
       "moreLink": "Detaillierte Wirkungszahlen ansehen",
-      "detailLink": "Detaillierte Wirkungszahlen ansehen"
+      "detailLink": "Detaillierte Wirkungszahlen ansehen",
+      "co2Link": "CO₂-Berechnung & Quellen"
     },
     "howWeWork": {
       "title": "Wie wir arbeiten",
@@ -10345,6 +10348,13 @@
       "absencePaidHint": "Bezahlte Abwesenheit (zählt geplante Stunden)",
       "absenceUnpaidHint": "Unbezahlt (0 Std.)",
       "headerSelectColumn": "Alle {day} auswählen — ziehen für mehrere Spalten",
+      "today": "Heute",
+      "openReport": "Monatsrapport öffnen",
+      "reviewDoneApproved": "Genehmigt — bereit für den Monatsrapport.",
+      "reviewDoneRejected": "Zurückgewiesen — Mitarbeiter:in wurde benachrichtigt.",
+      "reviewDoneReopened": "Wieder geöffnet — zurück im Entwurf.",
+      "reviewDoneSaved": "Änderungen gespeichert.",
+      "reviewDoneSubmitted": "Eingereicht.",
       "statusUnknown": "Unbekannt",
       "durationMinutesOnly": "{minutes} Min.",
       "durationHoursOnly": "{hours} Std.",
@@ -11466,6 +11476,7 @@
       "submitting": "Wird gesendet …",
       "missingDates": "Bitte Start- und Enddatum wählen.",
       "submitError": "Antrag konnte nicht gesendet werden.",
+      "requestSubmitted": "Antrag eingereicht — wartet auf Genehmigung.",
       "withdraw": "Antrag zurückziehen",
       "kind": {
         "ferien": "Ferien",

@@ -188,7 +188,9 @@
       "sectionDevices": "Devices",
       "sectionHelp": "Help",
       "howItWorks": "How it works",
-      "howItWorksDesc": "The journey of a device — from donation to its next home"
+      "howItWorksDesc": "The journey of a device — from donation to its next home",
+      "transparency": "Transparency",
+      "transparencyDesc": "Finances, key figures and how we calculate"
     },
     "experimentalBanner": "Experimental Site",
     "experimentalBannerLink": "go to current site",
@@ -5117,7 +5119,8 @@
     "stats": {
       "title": "Facts & Figures",
       "moreLink": "View detailed impact figures",
-      "detailLink": "View detailed impact figures"
+      "detailLink": "View detailed impact figures",
+      "co2Link": "CO₂ calculation & sources"
     },
     "howWeWork": {
       "title": "How We Work",
@@ -10290,6 +10293,13 @@
       "absencePaidHint": "Paid absence (counts scheduled hours)",
       "absenceUnpaidHint": "Unpaid (0 h)",
       "headerSelectColumn": "Select all {day} — drag for several columns",
+      "today": "Today",
+      "openReport": "Open monthly report",
+      "reviewDoneApproved": "Approved — ready for the monthly report.",
+      "reviewDoneRejected": "Rejected — the employee has been notified.",
+      "reviewDoneReopened": "Reopened — back to draft.",
+      "reviewDoneSaved": "Changes saved.",
+      "reviewDoneSubmitted": "Submitted.",
       "statusUnknown": "Unknown",
       "durationMinutesOnly": "{minutes} min",
       "durationHoursOnly": "{hours} hrs",
@@ -11411,6 +11421,7 @@
       "submitting": "Sending …",
       "missingDates": "Please choose a start and end date.",
       "submitError": "Could not send the request.",
+      "requestSubmitted": "Request submitted — awaiting approval.",
       "withdraw": "Withdraw request",
       "kind": {
         "ferien": "Vacation",

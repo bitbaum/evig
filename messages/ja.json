@@ -155,7 +155,9 @@
       "browseRequests": "未対応のリクエスト",
       "browseRequestsDesc": "修理リクエストを見て、手伝いを申し出る",
       "itHelpHub": "IT Help",
-      "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point"
+      "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point",
+      "transparency": "透明性",
+      "transparencyDesc": "財務・主要数値・算定方法"
     },
     "language": "言語",
     "missionHistory": "ミッション & 歴史",
@@ -724,7 +726,8 @@
     "stats": {
       "title": "Facts & Figures",
       "moreLink": "詳細な影響データを見る",
-      "detailLink": "View detailed impact figures"
+      "detailLink": "View detailed impact figures",
+      "co2Link": "CO₂の計算と出典"
     },
     "howWeWork": {
       "title": "How We Work",
@@ -10289,6 +10292,13 @@
       "absencePaidHint": "有給の不在（予定時間が計上されます）",
       "absenceUnpaidHint": "無給（0時間）",
       "headerSelectColumn": "すべての{day}を選択 — ドラッグで複数列",
+      "today": "今日",
+      "openReport": "月次レポートを開く",
+      "reviewDoneApproved": "承認しました — 月次レポートの準備ができました。",
+      "reviewDoneRejected": "差し戻しました — 本人に通知されました。",
+      "reviewDoneReopened": "再開しました — 下書きに戻りました。",
+      "reviewDoneSaved": "変更を保存しました。",
+      "reviewDoneSubmitted": "提出しました。",
       "statusUnknown": "不明",
       "durationMinutesOnly": "{minutes}分",
       "durationHoursOnly": "{hours}時間",
@@ -11410,6 +11420,7 @@
       "submitting": "送信中…",
       "missingDates": "開始日と終了日を選択してください。",
       "submitError": "申請を送信できませんでした。",
+      "requestSubmitted": "申請を送信しました — 承認待ちです。",
       "withdraw": "申請を取り下げる",
       "kind": {
         "ferien": "休暇",

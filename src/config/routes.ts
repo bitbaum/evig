@@ -140,6 +140,7 @@ export const ROUTES = {
     agb:                      '/agb',
     transparenz:              '/transparenz',
     transparenzKennzahlen:    '/transparenz/kennzahlen',
+    transparenzCo2:           '/transparenz/co2',
     mitgliedWerden:           '/mitglied-werden',
     careers:                  '/karriere',
     careerPosting:            (slug: string) => `/karriere/${slug}`,

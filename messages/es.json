@@ -155,7 +155,9 @@
       "browseRequests": "Solicitudes abiertas",
       "browseRequestsDesc": "Explora las solicitudes de reparación y ofrece ayuda",
       "itHelpHub": "IT Help",
-      "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point"
+      "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point",
+      "transparency": "Transparencia",
+      "transparencyDesc": "Finanzas, cifras clave y métodos de cálculo"
     },
     "language": "Idioma",
     "missionHistory": "Misión & Historia",
@@ -724,7 +726,8 @@
     "stats": {
       "title": "Datos y cifras",
       "moreLink": "Ver cifras de impacto detalladas",
-      "detailLink": "Ver cifras de impacto detalladas"
+      "detailLink": "Ver cifras de impacto detalladas",
+      "co2Link": "Cálculo de CO₂ y fuentes"
     },
     "howWeWork": {
       "title": "Cómo trabajamos",
@@ -10289,6 +10292,13 @@
       "absencePaidHint": "Ausencia pagada (cuenta las horas planificadas)",
       "absenceUnpaidHint": "No pagado (0 h)",
       "headerSelectColumn": "Seleccionar todos los {day} — arrastra para varias columnas",
+      "today": "Hoy",
+      "openReport": "Abrir informe mensual",
+      "reviewDoneApproved": "Aprobado — listo para el informe mensual.",
+      "reviewDoneRejected": "Rechazado — se ha notificado a la persona.",
+      "reviewDoneReopened": "Reabierto — de vuelta a borrador.",
+      "reviewDoneSaved": "Cambios guardados.",
+      "reviewDoneSubmitted": "Enviado.",
       "statusUnknown": "Desconocido",
       "durationMinutesOnly": "{minutes} min",
       "durationHoursOnly": "{hours} h",
@@ -11410,6 +11420,7 @@
       "submitting": "Enviando …",
       "missingDates": "Selecciona fecha de inicio y fin.",
       "submitError": "No se pudo enviar la solicitud.",
+      "requestSubmitted": "Solicitud enviada — pendiente de aprobación.",
       "withdraw": "Retirar solicitud",
       "kind": {
         "ferien": "Vacaciones",

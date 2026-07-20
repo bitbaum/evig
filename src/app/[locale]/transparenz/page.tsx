@@ -103,6 +103,12 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
               {tk('linkFromOverview')} <span aria-hidden="true">→</span>
             </Link>
             <Link
+              href={ROUTES.public.transparenzCo2}
+              className="text-sm font-semibold text-action hover:text-action underline underline-offset-2"
+            >
+              {t('stats.co2Link')} <span aria-hidden="true">→</span>
+            </Link>
+            <Link
               href="/about/impact"
               className="text-sm font-semibold text-action hover:text-action underline underline-offset-2"
             >

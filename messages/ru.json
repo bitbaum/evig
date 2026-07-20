@@ -159,7 +159,9 @@
       "computerRepair": "Ремонт и апгрейды",
       "computerRepairDesc": "Возвращаем компьютеры к жизни",
       "webDesign": "Веб-разработка",
-      "webDesignDesc": "Сайты на Open Source"
+      "webDesignDesc": "Сайты на Open Source",
+      "transparency": "Прозрачность",
+      "transparencyDesc": "Финансы, ключевые цифры и методы расчёта"
     },
     "language": "Язык",
     "missionHistory": "Миссия и история",
@@ -4858,7 +4860,8 @@
     "stats": {
       "title": "Цифры и факты",
       "moreLink": "Посмотреть подробные показатели влияния",
-      "detailLink": "Посмотреть подробные показатели влияния"
+      "detailLink": "Посмотреть подробные показатели влияния",
+      "co2Link": "Расчёт CO₂ и источники"
     },
     "howWeWork": {
       "title": "Как мы работаем",
@@ -10283,6 +10286,13 @@
       "absencePaidHint": "Оплачиваемое отсутствие (учитываются запланированные часы)",
       "absenceUnpaidHint": "Не оплачивается (0 ч)",
       "headerSelectColumn": "Выбрать все {day} — проведите для нескольких столбцов",
+      "today": "Сегодня",
+      "openReport": "Открыть месячный отчёт",
+      "reviewDoneApproved": "Утверждено — можно формировать месячный отчёт.",
+      "reviewDoneRejected": "Отклонено — сотрудник уведомлён.",
+      "reviewDoneReopened": "Снова открыто — возвращено в черновик.",
+      "reviewDoneSaved": "Изменения сохранены.",
+      "reviewDoneSubmitted": "Отправлено.",
       "statusUnknown": "Неизвестно",
       "durationMinutesOnly": "{minutes} мин",
       "durationHoursOnly": "{hours} ч",
@@ -11404,6 +11414,7 @@
       "submitting": "Отправка …",
       "missingDates": "Выбери дату начала и окончания.",
       "submitError": "Не удалось отправить запрос.",
+      "requestSubmitted": "Заявка отправлена — ожидает одобрения.",
       "withdraw": "Отозвать запрос",
       "kind": {
         "ferien": "Отпуск",
