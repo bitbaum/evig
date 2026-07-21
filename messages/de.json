@@ -159,7 +159,9 @@
       "transparency": "Transparenz",
       "transparencyDesc": "Finanzen, Kennzahlen und Berechnungsmethoden",
       "reparaturbonus": "Reparaturbonus Zürich",
-      "reparaturbonusDesc": "Bis zu 100 Franken für Reparaturen — so funktioniert’s"
+      "reparaturbonusDesc": "Bis zu 100 Franken für Reparaturen — so funktioniert’s",
+      "press": "Presse",
+      "pressDesc": "Medienberichte"
     },
     "language": "Sprache",
     "missionHistory": "Mission & Geschichte",

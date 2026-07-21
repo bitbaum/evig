@@ -163,7 +163,9 @@
       "transparency": "Прозрачность",
       "transparencyDesc": "Финансы, ключевые цифры и методы расчёта",
       "reparaturbonus": "Бонус за ремонт (Цюрих)",
-      "reparaturbonusDesc": "До 100 франков за ремонт — как это работает"
+      "reparaturbonusDesc": "До 100 франков за ремонт — как это работает",
+      "press": "Пресса",
+      "pressDesc": "СМИ о нас"
     },
     "language": "Язык",
     "missionHistory": "Миссия и история",

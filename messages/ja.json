@@ -159,7 +159,9 @@
       "transparency": "透明性",
       "transparencyDesc": "財務・主要数値・算定方法",
       "reparaturbonus": "チューリッヒ市 修理ボーナス",
-      "reparaturbonusDesc": "修理に最大100フランの補助 — その仕組み"
+      "reparaturbonusDesc": "修理に最大100フランの補助 — その仕組み",
+      "press": "プレス",
+      "pressDesc": "メディア掲載"
     },
     "language": "言語",
     "missionHistory": "ミッション & 歴史",

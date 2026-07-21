@@ -192,7 +192,9 @@
       "transparency": "Transparency",
       "transparencyDesc": "Finances, key figures and how we calculate",
       "reparaturbonus": "Zurich Repair Bonus",
-      "reparaturbonusDesc": "Up to CHF 100 back on repairs — how it works"
+      "reparaturbonusDesc": "Up to CHF 100 back on repairs — how it works",
+      "press": "Press",
+      "pressDesc": "Media coverage"
     },
     "experimentalBanner": "Experimental Site",
     "experimentalBannerLink": "go to current site",

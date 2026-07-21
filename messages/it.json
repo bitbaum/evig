@@ -159,7 +159,9 @@
       "transparency": "Trasparenza",
       "transparencyDesc": "Finanze, dati chiave e metodi di calcolo",
       "reparaturbonus": "Bonus riparazione Zurigo",
-      "reparaturbonusDesc": "Fino a 100 franchi sulle riparazioni — come funziona"
+      "reparaturbonusDesc": "Fino a 100 franchi sulle riparazioni — come funziona",
+      "press": "Stampa",
+      "pressDesc": "Rassegna stampa"
     },
     "language": "Lingua",
     "missionHistory": "Missione & Storia",

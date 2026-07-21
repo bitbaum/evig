@@ -198,7 +198,9 @@
       "transparency": "Transparence",
       "transparencyDesc": "Finances, chiffres clés et méthodes de calcul",
       "reparaturbonus": "Bonus réparation Zurich",
-      "reparaturbonusDesc": "Jusqu'à 100 francs pour vos réparations — comment ça marche"
+      "reparaturbonusDesc": "Jusqu'à 100 francs pour vos réparations — comment ça marche",
+      "press": "Presse",
+      "pressDesc": "Revue de presse"
     },
     "badge": {
       "new": "Nouveau"

@@ -159,7 +159,9 @@
       "transparency": "투명성",
       "transparencyDesc": "재무, 주요 수치, 산정 방법",
       "reparaturbonus": "취리히 수리 보너스",
-      "reparaturbonusDesc": "수리 비용 최대 100프랑 지원 — 이용 방법 안내"
+      "reparaturbonusDesc": "수리 비용 최대 100프랑 지원 — 이용 방법 안내",
+      "press": "언론",
+      "pressDesc": "미디어 보도"
     },
     "language": "언어",
     "missionHistory": "미션 & 역사",

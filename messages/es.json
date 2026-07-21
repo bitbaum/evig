@@ -159,7 +159,9 @@
       "transparency": "Transparencia",
       "transparencyDesc": "Finanzas, cifras clave y métodos de cálculo",
       "reparaturbonus": "Bono de reparación Zúrich",
-      "reparaturbonusDesc": "Hasta 100 francos para reparaciones — así funciona"
+      "reparaturbonusDesc": "Hasta 100 francos para reparaciones — así funciona",
+      "press": "Prensa",
+      "pressDesc": "Cobertura mediática"
     },
     "language": "Idioma",
     "missionHistory": "Misión & Historia",

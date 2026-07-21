@@ -102,6 +102,12 @@ export const mainNavigation: NavigationItem[] = [
         descriptionKey: 'locationsDesc',
       },
       {
+        name: 'Presse',
+        nameKey: 'press',
+        href: '/about/press',
+        descriptionKey: 'pressDesc',
+      },
+      {
         name: 'FAQ',
         nameKey: 'faq',
         href: '/faq',
