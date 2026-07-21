@@ -157,7 +157,9 @@
       "itHelpHub": "IT Help",
       "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point",
       "transparency": "Transparencia",
-      "transparencyDesc": "Finanzas, cifras clave y métodos de cálculo"
+      "transparencyDesc": "Finanzas, cifras clave y métodos de cálculo",
+      "reparaturbonus": "Bono de reparación Zúrich",
+      "reparaturbonusDesc": "Hasta 100 francos para reparaciones — así funciona"
     },
     "language": "Idioma",
     "missionHistory": "Misión & Historia",
@@ -11752,5 +11754,149 @@
     "marketplaceSearch": "Buscar en el marketplace: «{query}»",
     "trigger": "Buscar",
     "triggerAria": "Abrir búsqueda (⌘K)"
+  },
+  "reparaturbonus": {
+    "meta": {
+      "title": "Bono de reparación Zúrich",
+      "description": "La ciudad de Zúrich paga hasta {max} francos para reparaciones — el {percent}% de la factura. Así funciona el bono de reparación y cómo encajan las reparaciones de Revamp-IT."
+    },
+    "hero": {
+      "title": "Bono de reparación Zúrich",
+      "subtitle": "La ciudad de {city} paga hasta {max} francos para reparaciones — el {percent}% de la factura. Reparar ahora vale doblemente la pena: para tu bolsillo y para el clima.",
+      "ctaPrimary": "Encontrar un negocio en {platform}",
+      "ctaSecondary": "Así funciona"
+    },
+    "facts": {
+      "bonus": {
+        "value": "CHF {max}",
+        "label": "por persona y año",
+        "detail": "El bono máximo por año natural. El saldo no utilizado se mantiene disponible para otras reparaciones dentro del mismo año."
+      },
+      "coverage": {
+        "value": "{percent}%",
+        "label": "de los costes de reparación",
+        "detail": "La ciudad cubre la mitad de la factura — hasta el máximo anual de CHF {max}."
+      },
+      "categories": {
+        "value": "Electrónica + textil",
+        "label": "subvencionable al inicio",
+        "detail": "Los aparatos eléctricos y los textiles son los primeros. Se añadirán más categorías según la demanda."
+      },
+      "pilot": {
+        "value": "{years} años",
+        "label": "proyecto piloto",
+        "detail": "Lanzado en julio de 2026. La ciudad destina para ello alrededor de CHF {budget} millones."
+      }
+    },
+    "steps": {
+      "heading": "Cómo conseguir el bono",
+      "intro": "Todo el proceso se gestiona a través de la plataforma municipal de reparaciones {platform}. En cuatro pasos:",
+      "platformNote": "La solicitud y el canje del bono se realizan íntegramente a través de la plataforma oficial:",
+      "residence": {
+        "title": "Residencia en la ciudad de Zúrich",
+        "body": "El bono está abierto a todas las personas con residencia en la ciudad de Zúrich — hasta {max} francos por persona y año."
+      },
+      "find": {
+        "title": "Encontrar un negocio de reparación",
+        "body": "En {platform} figuran todos los negocios de reparación registrados. Busca uno que repare tu aparato."
+      },
+      "repair": {
+        "title": "Mandar reparar",
+        "body": "Encarga la reparación. Ya sea un portátil, una cafetera o tu chaqueta favorita — lo importante es que se arregle en lugar de sustituirse."
+      },
+      "redeem": {
+        "title": "Canjear el bono",
+        "body": "El bono cubre el {percent}% de los costes, hasta {max} francos al año. Si queda saldo, lo usas para otras reparaciones dentro del mismo año."
+      }
+    },
+    "eligible": {
+      "heading": "¿Qué es subvencionable?",
+      "intro": "Al inicio del proyecto piloto de tres años, dos categorías tienen derecho al bono. La oferta se irá ampliando de forma continua.",
+      "electronics": {
+        "title": "Aparatos eléctricos",
+        "body": "Desde portátiles y ordenadores hasta smartphones y electrodomésticos — se subvencionan los aparatos eléctricos y electrónicos."
+      },
+      "textiles": {
+        "title": "Textiles",
+        "body": "Ropa, calzado y otros textiles: arreglos y reparaciones en lugar de comprar nuevo."
+      },
+      "more": {
+        "title": "Y vendrán más",
+        "body": "La electrónica y el textil son el comienzo. Según la demanda, la ciudad incorporará más categorías de productos a la subvención."
+      }
+    },
+    "fit": {
+      "heading": "Reparaciones en {org}",
+      "intro": "{org} repara ordenadores y equipos informáticos en pleno centro de {city} desde {year}. Estas reparaciones encajan justo en una de las categorías subvencionables.",
+      "note": "Importante: esta página explica el programa de la ciudad de Zúrich. Qué negocios participan actualmente y gestionan el bono puedes verlo actualizado a diario en {platform}. Comprueba allí si el negocio que quieres está registrado.",
+      "category": {
+        "title": "Los ordenadores son aparatos eléctricos",
+        "body": "Portátil, sobremesa, pantalla o periféricos — las reparaciones de {org} pertenecen a la categoría de aparatos eléctricos y, por tanto, a las prestaciones subvencionables."
+      },
+      "location": {
+        "title": "En pleno centro de la ciudad de Zúrich",
+        "body": "Nuestro taller y punto de venta están en {address} — dentro del área urbana donde rige el bono."
+      },
+      "mission": {
+        "title": "Reparar en vez de tirar",
+        "body": "Precisamente para eso existe {org} desde hace más de dos décadas. El bono de reparación hace aún más barato para ti lo que ya hacemos de todos modos."
+      }
+    },
+    "impact": {
+      "heading": "Por qué importa",
+      "intro": "El bono de reparación forma parte de la economía circular municipal — y sustituye a los antiguos cupones de eliminación de residuos. La orientación es clara: reparar en lugar de desechar.",
+      "coupons": {
+        "title": "De tirar a reparar",
+        "body": "Antes la ciudad fomentaba la eliminación de residuos con cupones. El bono de reparación invierte el incentivo: premia aquello que se usa durante más tiempo."
+      },
+      "repairs": {
+        "title": "~{repairs} reparaciones",
+        "body": "Estas son las reparaciones subvencionadas que la ciudad espera durante la fase piloto de tres años."
+      },
+      "climate": {
+        "title": "~{co2} toneladas de CO₂",
+        "body": "Esta es la cantidad de gases de efecto invernadero que se pretende ahorrar gracias a las reparaciones adicionales — equivalentes de CO₂ que, de lo contrario, habrían ido a la nueva producción."
+      }
+    },
+    "faq": {
+      "heading": "Preguntas frecuentes",
+      "who": {
+        "q": "¿Quién recibe el bono de reparación?",
+        "a": "Todas las personas con residencia en la ciudad de Zúrich. Cada persona recibe hasta {max} francos por año natural."
+      },
+      "howMuch": {
+        "q": "¿Cuánto me devuelven?",
+        "a": "El {percent}% de los costes de reparación, un máximo de {max} francos al año. Así, en una reparación de 120 francos recuperas 60 francos."
+      },
+      "carryOver": {
+        "q": "¿Qué pasa con el saldo no utilizado?",
+        "a": "Si no agotas del todo el bono en una reparación, el importe restante se mantiene disponible para otras reparaciones dentro del mismo año natural."
+      },
+      "what": {
+        "q": "¿Qué reparaciones son subvencionables?",
+        "a": "Al inicio del proyecto piloto, los aparatos eléctricos y los textiles. Más categorías seguirán según la demanda."
+      },
+      "devices": {
+        "q": "¿Cuentan los ordenadores y portátiles?",
+        "a": "Sí. Los ordenadores, portátiles y equipos informáticos similares pertenecen a los aparatos eléctricos — justo las reparaciones que ofrece {org}."
+      },
+      "revampit": {
+        "q": "¿Puedo canjear el bono en {org}?",
+        "a": "El bono se gestiona exclusivamente a través de la plataforma municipal {platform} — allí ves qué negocios participan. Las reparaciones en {org} encajan por su contenido en una categoría subvencionable (aparatos eléctricos); comprueba en {platform} si puedes hacerlo valer y cómo."
+      }
+    },
+    "cta": {
+      "heading": "Reparar vale la pena",
+      "body": "Encuentra un negocio de reparación en {platform} — o trae tu aparato directamente a {org}.",
+      "platform": "Ir a {platform}",
+      "repair": "Reparación en {org}",
+      "contact": "Pregúntanos"
+    },
+    "sources": {
+      "heading": "Fuentes e información oficial",
+      "city": "Ciudad de Zúrich — fomento de la reparación con el bono de reparación",
+      "platform": "{platform} — la plataforma oficial de reparaciones",
+      "business": "Ciudad de Zúrich — registro para negocios de reparación"
+    }
   }
 }

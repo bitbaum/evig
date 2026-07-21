@@ -157,7 +157,9 @@
       "itHelpHub": "IT Help",
       "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point",
       "transparency": "Trasparenza",
-      "transparencyDesc": "Finanze, dati chiave e metodi di calcolo"
+      "transparencyDesc": "Finanze, dati chiave e metodi di calcolo",
+      "reparaturbonus": "Bonus riparazione Zurigo",
+      "reparaturbonusDesc": "Fino a 100 franchi sulle riparazioni — come funziona"
     },
     "language": "Lingua",
     "missionHistory": "Missione & Storia",
@@ -11752,5 +11754,149 @@
     "marketplaceSearch": "Cerca nel marketplace: «{query}»",
     "trigger": "Cerca",
     "triggerAria": "Apri la ricerca (⌘K)"
+  },
+  "reparaturbonus": {
+    "meta": {
+      "title": "Bonus riparazione Zurigo",
+      "description": "La Città di Zurigo paga fino a {max} franchi per le riparazioni — il {percent}% della fattura. Come funziona il bonus riparazione e come vi si inseriscono le riparazioni di Revamp-IT."
+    },
+    "hero": {
+      "title": "Bonus riparazione Zurigo",
+      "subtitle": "La Città di {city} paga fino a {max} franchi per le riparazioni — il {percent}% della fattura. Ora riparare conviene due volte: per il portafoglio e per il clima.",
+      "ctaPrimary": "Trova un'attività su {platform}",
+      "ctaSecondary": "Come funziona"
+    },
+    "facts": {
+      "bonus": {
+        "value": "CHF {max}",
+        "label": "per persona e per anno",
+        "detail": "Il bonus massimo per anno civile. Il credito non utilizzato resta disponibile per altre riparazioni nello stesso anno."
+      },
+      "coverage": {
+        "value": "{percent}%",
+        "label": "dei costi di riparazione",
+        "detail": "La Città copre metà della fattura — fino al massimo annuo di CHF {max}."
+      },
+      "categories": {
+        "value": "Elettronica + tessili",
+        "label": "idonei all'avvio",
+        "detail": "Gli apparecchi elettrici e i tessili aprono le danze. Altre categorie si aggiungeranno in base alla domanda."
+      },
+      "pilot": {
+        "value": "{years} anni",
+        "label": "progetto pilota",
+        "detail": "Avviato nel luglio 2026. La Città mette a disposizione circa CHF {budget} mio."
+      }
+    },
+    "steps": {
+      "heading": "Come ottenere il bonus",
+      "intro": "L'intera procedura passa dalla piattaforma cittadina di riparazione {platform}. In quattro passi:",
+      "platformNote": "La richiesta e il riscatto del bonus avvengono interamente tramite la piattaforma ufficiale:",
+      "residence": {
+        "title": "Domicilio nella Città di Zurigo",
+        "body": "Il bonus è aperto a tutte le persone con domicilio nella Città di Zurigo — fino a {max} franchi a persona all'anno."
+      },
+      "find": {
+        "title": "Trovare un'attività di riparazione",
+        "body": "Su {platform} sono elencate tutte le attività di riparazione registrate. Cerca quella che ripara il tuo apparecchio."
+      },
+      "repair": {
+        "title": "Far riparare",
+        "body": "Affida la riparazione. Che si tratti di un laptop, di una macchina del caffè o della giacca preferita — l'importante è che venga aggiustata anziché sostituita."
+      },
+      "redeem": {
+        "title": "Riscattare il bonus",
+        "body": "Il bonus copre il {percent}% dei costi, fino a {max} franchi all'anno. Se resta del credito, lo utilizzi nello stesso anno per altre riparazioni."
+      }
+    },
+    "eligible": {
+      "heading": "Cosa è idoneo al bonus?",
+      "intro": "All'avvio del progetto pilota triennale sono due le categorie che danno diritto al bonus. L'offerta viene ampliata di continuo.",
+      "electronics": {
+        "title": "Apparecchi elettrici",
+        "body": "Da laptop e computer agli smartphone fino agli elettrodomestici — gli apparecchi elettrici ed elettronici sono coperti."
+      },
+      "textiles": {
+        "title": "Tessili",
+        "body": "Vestiti, scarpe e altri tessili: modifiche e riparazioni anziché un nuovo acquisto."
+      },
+      "more": {
+        "title": "Altre in arrivo",
+        "body": "Elettronica e tessili sono l'inizio. A seconda della domanda, la Città inserirà nel bonus altre categorie di prodotti."
+      }
+    },
+    "fit": {
+      "heading": "Riparazioni da {org}",
+      "intro": "{org} ripara computer e apparecchi informatici nel cuore di {city} dal {year}. Queste riparazioni rientrano esattamente in una delle categorie idonee al bonus.",
+      "note": "Importante: questa pagina spiega il programma della Città di Zurigo. Quali attività partecipano attualmente e gestiscono il bonus lo vedi, sempre aggiornato, su {platform}. Verifica lì se l'attività che preferisci è registrata.",
+      "category": {
+        "title": "I computer sono apparecchi elettrici",
+        "body": "Laptop, desktop, monitor o periferica — le riparazioni di {org} appartengono alla categoria degli apparecchi elettrici e rientrano quindi tra le prestazioni idonee al bonus."
+      },
+      "location": {
+        "title": "Nel cuore della Città di Zurigo",
+        "body": "La nostra officina e il punto vendita si trovano in {address} — nell'area cittadina in cui vale il bonus."
+      },
+      "mission": {
+        "title": "Riparare invece di buttare",
+        "body": "È esattamente per questo che {org} esiste da oltre due decenni. Il bonus riparazione rende ancora più conveniente per te ciò che facciamo comunque."
+      }
+    },
+    "impact": {
+      "heading": "Perché conta",
+      "intro": "Il bonus riparazione fa parte dell'economia circolare cittadina — e sostituisce i precedenti buoni di smaltimento. La direzione è chiara: riparare invece di smaltire.",
+      "coupons": {
+        "title": "Dal buttare al riparare",
+        "body": "Un tempo la Città incentivava lo smaltimento con i buoni di smaltimento. Il bonus riparazione ribalta l'incentivo: premia ciò che viene usato più a lungo."
+      },
+      "repairs": {
+        "title": "~{repairs} riparazioni",
+        "body": "Tante sono le riparazioni sovvenzionate che la Città prevede nell'arco della fase pilota triennale."
+      },
+      "climate": {
+        "title": "~{co2} tonnellate di CO₂",
+        "body": "Tanto gas serra si intende risparmiare grazie alle riparazioni aggiuntive — equivalenti di CO₂ che altrimenti sarebbero confluiti nella nuova produzione."
+      }
+    },
+    "faq": {
+      "heading": "Domande frequenti",
+      "who": {
+        "q": "Chi riceve il bonus riparazione?",
+        "a": "Tutte le persone con domicilio nella Città di Zurigo. A ogni persona spettano fino a {max} franchi per anno civile."
+      },
+      "howMuch": {
+        "q": "Quanto mi viene restituito?",
+        "a": "Il {percent}% dei costi di riparazione, al massimo {max} franchi all'anno. Per una riparazione di 120 franchi ricevi quindi 60 franchi indietro."
+      },
+      "carryOver": {
+        "q": "Cosa succede al credito non utilizzato?",
+        "a": "Se non esaurisci il bonus con una riparazione, l'importo residuo resta disponibile per altre riparazioni nello stesso anno civile."
+      },
+      "what": {
+        "q": "Quali riparazioni sono idonee al bonus?",
+        "a": "All'avvio del progetto pilota, apparecchi elettrici e tessili. Altre categorie seguiranno in base alla domanda."
+      },
+      "devices": {
+        "q": "Rientrano anche computer e laptop?",
+        "a": "Sì. Computer, laptop e apparecchi informatici simili rientrano tra gli apparecchi elettrici — proprio le riparazioni che offre {org}."
+      },
+      "revampit": {
+        "q": "Posso riscattare il bonus da {org}?",
+        "a": "Il bonus viene gestito esclusivamente tramite la piattaforma cittadina {platform} — lì vedi quali attività partecipano. Le riparazioni da {org} rientrano nei fatti in una categoria idonea al bonus (apparecchi elettrici); verifica su {platform} se e come puoi farle valere."
+      }
+    },
+    "cta": {
+      "heading": "Riparare conviene",
+      "body": "Trova un'attività di riparazione su {platform} — oppure porta il tuo apparecchio direttamente da {org}.",
+      "platform": "Vai su {platform}",
+      "repair": "Riparazione da {org}",
+      "contact": "Chiedi a noi"
+    },
+    "sources": {
+      "heading": "Fonti e informazioni ufficiali",
+      "city": "Città di Zurigo — sostegno alle riparazioni con il bonus riparazione",
+      "platform": "{platform} — la piattaforma ufficiale di riparazione",
+      "business": "Città di Zurigo — registrazione per le attività di riparazione"
+    }
   }
 }

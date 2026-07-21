@@ -196,7 +196,9 @@
       "itHelpHub": "IT Help",
       "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point",
       "transparency": "Transparence",
-      "transparencyDesc": "Finances, chiffres clés et méthodes de calcul"
+      "transparencyDesc": "Finances, chiffres clés et méthodes de calcul",
+      "reparaturbonus": "Bonus réparation Zurich",
+      "reparaturbonusDesc": "Jusqu'à 100 francs pour vos réparations — comment ça marche"
     },
     "badge": {
       "new": "Nouveau"
@@ -11754,5 +11756,149 @@
     "marketplaceSearch": "Rechercher sur le marketplace : «{query}»",
     "trigger": "Recherche",
     "triggerAria": "Ouvrir la recherche (⌘K)"
+  },
+  "reparaturbonus": {
+    "meta": {
+      "title": "Bonus réparation Zurich",
+      "description": "La Ville de Zurich verse jusqu'à {max} francs pour les réparations — {percent}% de la facture. Comment fonctionne le bonus réparation et comment les réparations chez Revamp-IT s'y intègrent."
+    },
+    "hero": {
+      "title": "Bonus réparation Zurich",
+      "subtitle": "La Ville de {city} verse jusqu'à {max} francs pour les réparations — {percent}% de la facture. Réparer rapporte désormais doublement : pour votre porte-monnaie et pour le climat.",
+      "ctaPrimary": "Trouver un atelier sur {platform}",
+      "ctaSecondary": "Comment ça marche"
+    },
+    "facts": {
+      "bonus": {
+        "value": "CHF {max}",
+        "label": "par personne et par an",
+        "detail": "Le bonus maximal par année civile. Le solde non utilisé reste disponible pour d'autres réparations durant la même année."
+      },
+      "coverage": {
+        "value": "{percent}%",
+        "label": "des frais de réparation",
+        "detail": "La ville prend en charge la moitié de la facture — jusqu'au plafond annuel de CHF {max}."
+      },
+      "categories": {
+        "value": "Électro + textile",
+        "label": "éligibles au lancement",
+        "detail": "Les appareils électriques et les textiles ouvrent la marche. D'autres catégories viendront s'ajouter selon la demande."
+      },
+      "pilot": {
+        "value": "{years} ans",
+        "label": "projet pilote",
+        "detail": "Lancé en juillet 2026. La ville y consacre environ CHF {budget} millions."
+      }
+    },
+    "steps": {
+      "heading": "Comment obtenir le bonus",
+      "intro": "L'ensemble de la démarche passe par la plateforme de réparation de la ville, {platform}. En quatre étapes :",
+      "platformNote": "La demande et l'utilisation du bonus se font entièrement via la plateforme officielle :",
+      "residence": {
+        "title": "Domicile dans la Ville de Zurich",
+        "body": "Le bonus est ouvert à toutes les personnes domiciliées dans la Ville de Zurich — jusqu'à {max} francs par personne et par an."
+      },
+      "find": {
+        "title": "Trouver un atelier de réparation",
+        "body": "Sur {platform} figurent tous les ateliers de réparation enregistrés. Cherchez un atelier capable de réparer votre appareil."
+      },
+      "repair": {
+        "title": "Faire réparer",
+        "body": "Passez commande de la réparation. Ordinateur portable, machine à café ou veste préférée — l'essentiel, c'est qu'on la répare plutôt que de la remplacer."
+      },
+      "redeem": {
+        "title": "Utiliser le bonus",
+        "body": "Le bonus couvre {percent}% des frais, jusqu'à {max} francs par an. S'il reste du solde, vous l'utilisez la même année pour d'autres réparations."
+      }
+    },
+    "eligible": {
+      "heading": "Qu'est-ce qui est éligible ?",
+      "intro": "Au lancement du projet pilote de trois ans, deux catégories donnent droit au bonus. L'offre s'élargit progressivement.",
+      "electronics": {
+        "title": "Appareils électriques",
+        "body": "Des ordinateurs portables et de bureau aux smartphones en passant par l'électroménager — les appareils électriques et électroniques sont pris en charge."
+      },
+      "textiles": {
+        "title": "Textiles",
+        "body": "Vêtements, chaussures et autres textiles : retouches et réparations plutôt qu'achat neuf."
+      },
+      "more": {
+        "title": "D'autres à venir",
+        "body": "L'électro et le textile ouvrent la marche. Selon la demande, la ville intègre d'autres catégories de produits dans le dispositif."
+      }
+    },
+    "fit": {
+      "heading": "Réparations chez {org}",
+      "intro": "{org} répare des ordinateurs et du matériel informatique en plein cœur de {city} depuis {year}. Ces réparations entrent précisément dans l'une des catégories éligibles au bonus.",
+      "note": "Important : cette page explique le programme de la Ville de Zurich. Les ateliers qui participent actuellement et qui gèrent le bonus sont indiqués au jour le jour sur {platform}. Vérifiez-y si l'atelier de votre choix est enregistré.",
+      "category": {
+        "title": "Les ordinateurs sont des appareils électriques",
+        "body": "Ordinateur portable, de bureau, écran ou périphérique — les réparations de {org} relèvent de la catégorie des appareils électriques et font donc partie des prestations éligibles."
+      },
+      "location": {
+        "title": "En plein cœur de la Ville de Zurich",
+        "body": "Notre atelier et notre point de vente se trouvent à la {address} — dans le périmètre urbain où le bonus s'applique."
+      },
+      "mission": {
+        "title": "Réparer plutôt que jeter",
+        "body": "C'est précisément pour cela que {org} existe depuis plus de deux décennies. Le bonus réparation rend encore plus avantageux pour vous ce que nous faisons de toute façon."
+      }
+    },
+    "impact": {
+      "heading": "Pourquoi c'est important",
+      "intro": "Le bonus réparation fait partie de l'économie circulaire de la ville — et il remplace les anciens bons d'élimination. La direction est claire : réparer plutôt qu'éliminer.",
+      "coupons": {
+        "title": "De l'élimination à la réparation",
+        "body": "Autrefois, la ville encourageait l'élimination avec des bons d'élimination. Le bonus réparation inverse l'incitation : il récompense ce qui est utilisé plus longtemps."
+      },
+      "repairs": {
+        "title": "~{repairs} réparations",
+        "body": "C'est le nombre de réparations subventionnées que la ville attend sur les trois ans de la phase pilote."
+      },
+      "climate": {
+        "title": "~{co2} tonnes de CO₂",
+        "body": "C'est la quantité de gaz à effet de serre que les réparations supplémentaires doivent permettre d'économiser — des équivalents CO₂ qui auraient sinon été absorbés par la fabrication neuve."
+      }
+    },
+    "faq": {
+      "heading": "Questions fréquentes",
+      "who": {
+        "q": "Qui a droit au bonus réparation ?",
+        "a": "Toutes les personnes domiciliées dans la Ville de Zurich. Chaque personne reçoit jusqu'à {max} francs par année civile."
+      },
+      "howMuch": {
+        "q": "Combien vais-je récupérer ?",
+        "a": "{percent}% des frais de réparation, au maximum {max} francs par an. Pour une réparation de 120 francs, vous récupérez donc 60 francs."
+      },
+      "carryOver": {
+        "q": "Qu'advient-il du solde non utilisé ?",
+        "a": "Si vous n'épuisez pas entièrement le bonus lors d'une réparation, le solde restant demeure disponible pour d'autres réparations durant la même année civile."
+      },
+      "what": {
+        "q": "Quelles réparations sont éligibles ?",
+        "a": "Au lancement du projet pilote, les appareils électriques et les textiles. D'autres catégories suivront selon la demande."
+      },
+      "devices": {
+        "q": "Les ordinateurs et les portables comptent-ils ?",
+        "a": "Oui. Les ordinateurs, ordinateurs portables et matériels informatiques similaires font partie des appareils électriques — précisément les réparations que propose {org}."
+      },
+      "revampit": {
+        "q": "Puis-je utiliser le bonus chez {org} ?",
+        "a": "Le bonus est géré exclusivement via la plateforme municipale {platform} — c'est là que vous voyez quels ateliers participent. Les réparations chez {org} relèvent d'une catégorie éligible (appareils électriques) ; vérifiez sur {platform} si et comment vous pouvez les faire valoir."
+      }
+    },
+    "cta": {
+      "heading": "Réparer, ça vaut la peine",
+      "body": "Trouvez un atelier de réparation sur {platform} — ou apportez votre appareil directement chez {org}.",
+      "platform": "Vers {platform}",
+      "repair": "Réparation chez {org}",
+      "contact": "Demandez-nous"
+    },
+    "sources": {
+      "heading": "Sources et informations officielles",
+      "city": "Ville de Zurich — encouragement de la réparation avec le bonus réparation",
+      "platform": "{platform} — la plateforme de réparation officielle",
+      "business": "Ville de Zurich — inscription pour les ateliers de réparation"
+    }
   }
 }
