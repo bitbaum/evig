@@ -8011,6 +8011,33 @@
       "ctaHint": "Du startest damit eine Anfrage an diese Person – sie wird benachrichtigt und kann dir ein Angebot machen."
     }
   },
+  "profile": {
+    "publicProfile": "Öffentliches Profil",
+    "backToMarketplace": "Zurück zum Marketplace",
+    "verified": "Verifiziert",
+    "memberSince": "Mitglied seit {date}",
+    "badgeStaff": "Team",
+    "badgeTechnician": "Techniker:in",
+    "loading": "Profil wird geladen...",
+    "notFound": "Profil nicht gefunden",
+    "errorLoading": "Fehler beim Laden des Profils",
+    "statListings": "Inserate",
+    "statServices": "Dienstleistungen",
+    "statWorkshops": "Workshops",
+    "statPosts": "Beiträge",
+    "statRating": "Bewertung",
+    "tabListings": "Marktplatz",
+    "tabServices": "Dienstleistungen",
+    "tabWorkshops": "Workshops",
+    "tabContent": "Beiträge",
+    "perHour": "{price}/Std.",
+    "viewTechnicianProfile": "Ganzes Techniker-Profil ansehen",
+    "noOfferingsTitle": "Noch nichts veröffentlicht",
+    "noOfferingsDescription": "Diese Person hat noch keine öffentlichen Angebote oder Beiträge.",
+    "reviewsReceived": "Erhaltene Bewertungen ({count})",
+    "reviewsWritten": "Geschriebene Bewertungen ({count})",
+    "reviewFor": "Bewertung für {title}"
+  },
   "sellers": {
     "meta": {
       "title": "{name} – Verkäufer auf dem RevampIT Marketplace",

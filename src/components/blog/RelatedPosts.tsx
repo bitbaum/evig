@@ -5,6 +5,7 @@ import { formatDate } from '@/lib/date-formats'
 import { Card } from '@/components/ui/card'
 import Heading from '@/components/ui/Heading'
 import { getTranslations } from 'next-intl/server'
+import BlogByline from './BlogByline'
 
 interface RelatedPostsProps {
   posts: BlogPost[]
@@ -46,7 +47,7 @@ export default async function RelatedPosts({ posts }: RelatedPostsProps) {
                     </p>
                   )}
                   <div className="flex items-center gap-2 text-sm text-text-tertiary">
-                    <span>{post.author}</span>
+                    <BlogByline author={post.author} authorId={post.authorId} />
                     <span>·</span>
                     <time>{formatDate(post.publishedAt || post.createdAt)}</time>
                   </div>

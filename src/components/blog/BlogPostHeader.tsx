@@ -6,6 +6,7 @@ import { formatDate } from '@/lib/date-formats'
 import { getReadingTime } from '@/lib/blog-utils'
 import { ROUTES } from '@/config/routes'
 import UnlistedBadge from './UnlistedBadge'
+import BlogByline from './BlogByline'
 
 interface BlogPostHeaderProps {
   post: BlogPost
@@ -59,7 +60,7 @@ export default async function BlogPostHeader({ post, categorySlug }: BlogPostHea
 
       {/* Meta */}
       <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-subtle pt-6 font-mono text-xs uppercase tracking-[0.08em] text-text-tertiary">
-        <span className="text-text-secondary">{post.author}</span>
+        <BlogByline author={post.author} authorId={post.authorId} className="text-text-secondary" />
         <span aria-hidden="true">·</span>
         <time dateTime={post.publishedAt || post.createdAt}>
           {formatDate(post.publishedAt || post.createdAt)}

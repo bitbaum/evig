@@ -1,7 +1,6 @@
 ---
 title: "Ein Platz, an dem Beitrag zählt"
-excerpt: "Revamp-IT gibt nicht nur Geräten ein zweites Leben, sondern auch Menschen einen Weg zurück in die Arbeit. Wie das neue Portal diesen Weg heute schon trägt — und wie ein individuellerer Ansatz ihn morgen stärker machen kann."
-author: "RevampIT Team"
+excerpt: "Revamp-IT gibt nicht nur Geräten ein zweites Leben, sondern auch Menschen einen Weg zurück in die Arbeit. Wie das neue Portal diesen Weg heute schon trägt — und wie ein individuellerer, empathischer Ansatz ihn morgen stärker machen kann."
 featuredImage: "/blog/soziale-arbeit-hero.svg"
 category: "Menschen"
 tags:
@@ -14,9 +13,9 @@ publishedAt: "2026-07-21"
 published: true
 ---
 
-Ein gebrauchter Laptop, den andere längst abgeschrieben haben, funktioniert nach der Reparatur wieder — und landet bei jemandem, der ihn braucht. Das ist die sichtbare Hälfte unserer Mission. Die weniger sichtbare Hälfte handelt von Menschen: von Menschen, die aus dem Arbeitsleben herausgefallen sind oder nie richtig hineingekommen sind, und die bei uns einen Ort finden, an dem ihr Beitrag zählt.
+Unter unserem Logo stehen drei Wörter: **menschen, hardware, knowhow**. Zwei davon — Menschen und Knowhow — handeln gar nicht von Geräten, sondern von Personen: von dem, was sie können, lernen und werden. Das ist kein Zufall. Ein gebrauchter Laptop, den andere längst abgeschrieben haben, funktioniert nach der Reparatur wieder — und landet über unseren [Marktplatz](/marketplace) bei jemandem, der ihn braucht. Das ist die sichtbare Hälfte unserer Mission. Die andere Hälfte handelt von Menschen, die aus dem Arbeitsleben herausgefallen sind oder nie richtig hineingekommen sind, und die bei uns einen Ort finden, an dem ihr Beitrag zählt.
 
-Das ist kein Nebenprodukt. Wer bei Revamp-IT Geräte prüft, repariert, erfasst und weitergibt, tut echte Arbeit mit echtem Wert. Genau deshalb eignet sich dieser Ort so gut für den Wiedereinstieg: Es gibt hier keine Beschäftigungstherapie, sondern eine Werkstatt, einen Marktplatz, eine Organisation, die auf die geleistete Arbeit angewiesen ist. Unser [Wiedereinstiegsprogramm](/get-involved/work-reintegration) baut genau darauf auf — strukturierte Arbeitserfahrung, individuelle Begleitung, ein Tempo, das zur Person passt.
+Das ist kein Nebenprodukt. Wer bei Revamp-IT Geräte prüft, repariert, erfasst und weitergibt, tut echte Arbeit mit echtem Wert. Genau deshalb eignet sich dieser Ort so gut für den Wiedereinstieg: Es gibt hier keine Beschäftigungstherapie, sondern eine Werkstatt, einen Marktplatz, [Workshops](/workshops) und [IT-Hilfe](/it-hilfe) — eine Organisation, die auf die geleistete Arbeit angewiesen ist. Unser [Wiedereinstiegsprogramm](/get-involved/work-reintegration) baut genau darauf auf: strukturierte Arbeitserfahrung, individuelle Begleitung, ein Tempo, das zur Person passt.
 
 ## Warum der Wiedereinstieg schwer ist
 
@@ -30,7 +29,7 @@ Genau an diesem Punkt wird aus einer Werkstatt-Frage eine Portal-Frage. Denn ein
 
 Die Zusammenarbeits-Seite des Portals ist nicht als Sozialwerkzeug entworfen worden. Aber gerade weil sie normale, ehrliche Team-Arbeit abbildet, wirkt sie für den Wiedereinstieg. Vier Bausteine sind heute produktiv:
 
-**Persönliche Profile.** Jede mitarbeitende Person hat ein Profil mit Fähigkeiten, Interessen, Zielen, Stärken und Entwicklungsbereichen — nicht als starre Personalakte, sondern als wachsende Beschreibung dessen, was jemand kann und wohin er oder sie will. Fähigkeiten sind Schlagworte, die sich mit der Zeit ergänzen. Ziele, Stärken und Entwicklungsbereiche stehen bereits heute in einer eigenen «Entwicklung»-Ansicht, die jede Person für sich selbst einsehen und pflegen kann. Dazu kommt ein «aktueller Fokus»: ein Satz dazu, woran man gerade arbeitet, der auf dem «Wer macht was»-Board für das Team sichtbar wird. Wer neu anfängt, hat vielleicht drei Einträge; nach einem halben Jahr sind es zwölf. Diese Kurve ist für die Person oft das erste greifbare Zeichen, dass es vorangeht.
+**Persönliche Profile.** Jede mitarbeitende Person hat ein Profil mit Fähigkeiten, Interessen, Zielen, Stärken und Entwicklungsbereichen — nicht als starre Personalakte, sondern als wachsende Beschreibung dessen, was jemand kann und wohin er oder sie will. Ein Profil bündelt heute schon alles, was eine Person beigetragen hat: ihre Inserate auf dem [Marktplatz](/marketplace), die Dienstleistungen und [IT-Hilfe](/it-hilfe), die sie anbietet, Workshops, die sie gibt, und Beiträge, die sie geschrieben hat. Fähigkeiten sind Schlagworte, die sich mit der Zeit ergänzen. Ziele, Stärken und Entwicklungsbereiche stehen in einer eigenen «Entwicklung»-Ansicht, die jede Person für sich selbst pflegt. Dazu kommt ein «aktueller Fokus»: ein Satz dazu, woran man gerade arbeitet, der auf dem «Wer macht was»-Board für das Team sichtbar wird. Wer neu anfängt, hat vielleicht drei Einträge; nach einem halben Jahr sind es zwölf. Diese Kurve ist für die Person oft das erste greifbare Zeichen, dass es vorangeht.
 
 **Team-Profile.** Teams sind im Portal eigenständige Einheiten mit eigenen Zielen und Kennzahlen. Ein Team hat eine Liste von Zielen mit Status und eine Handvoll Metriken, an denen es seinen Fortschritt misst. Für jemanden, der lange ausserhalb stand, ist die Zugehörigkeit zu so einer sichtbaren Einheit mehr als Organisation — es ist ein «Ich gehöre dazu». Man ist nicht *bei* Revamp-IT, man ist *im* Werkstatt-Team, und das Team hat ein Ziel, zu dem man beiträgt.
 
@@ -48,6 +47,14 @@ Ein Profil, das Fähigkeiten, Interessen und Ziele nebeneinanderstellt, macht dr
 
 Für den Arbeitsmarkt ist genau das der Rohstoff, an dem es sonst fehlt. Ein gepflegtes Profil ist der Anfang eines Portfolios: eine ehrliche, belegbare Antwort auf die Frage «Was können Sie?». Wer bei uns lernt, Geräte zu prüfen und für den [Marktplatz](/marketplace) aufzubereiten, lernt nebenbei Dinge, die überall zählen — technische Fehlersuche, sorgfältiges Arbeiten nach Checkliste, Kundenkontakt, Teamabstimmung, ein Gespür für Termine. Das Portal ist der Ort, an dem diese Fähigkeiten nicht verloren gehen, sondern sich anlagern.
 
+## Messen, ohne zu vermessen
+
+Eine Organisation, die es ernst meint, braucht Prozesse und muss ihre Wirkung messen. Wir wollen wissen, ob unser Ansatz trägt: Kommen Menschen weiter? Finden sie zurück in Arbeit? Das ist keine Bürokratie, das ist Verantwortung — gegenüber den Menschen, die uns vertrauen, und gegenüber jenen, die unsere Arbeit ermöglichen.
+
+Aber hier liegt die feine Linie, auf die es ankommt. Ein Mensch im Wiedereinstieg darf sich nie *vermessen* fühlen. Wer das Gefühl hat, überwacht und bewertet zu werden, macht sich klein — genau das Gegenteil dessen, was wir wollen. Zahlen, die über einen Menschen entscheiden, erdrücken; Zahlen, die einem Menschen zeigen, wie weit er schon gekommen ist, richten auf.
+
+Deshalb ist die Haltung wichtiger als das Werkzeug. Das Portal soll Fortschritt *für die Person* sichtbar machen, nicht *über die Person* Bericht erstatten. Die «Entwicklung»-Ansicht gehört der Person selbst. Vertraulichkeit ist keine Zusatzfunktion, sondern Voraussetzung. Und jede Kennzahl, die wir bauen, muss die Frage bestehen: Stärkt sie das Selbstvertrauen dieses Menschen — oder bedient sie nur unseren Berichtsbedarf? Empathie und Wirkungsmessung schliessen sich nicht aus. Aber die Reihenfolge ist nicht verhandelbar: zuerst der Mensch, dann die Metrik.
+
 ## Ein individuellerer Ansatz — was wir bauen könnten
 
 So gut die heutigen Bausteine wirken: Sie sind Team-Werkzeuge, die für den Wiedereinstieg *mitbenutzt* werden. Der nächste Schritt wäre, den individuellen Entwicklungsweg zum eigenen, ersten Bürger im Portal zu machen. Ehrlich gesagt: Das ist heute noch nicht gebaut. Aber es liegt nah, und es würde die Arbeit der sozialen Begleitung spürbar leichter und wirksamer machen.
@@ -61,12 +68,14 @@ So gut die heutigen Bausteine wirken: Sie sind Team-Werkzeuge, die für den Wied
 | Profil als interne Ansicht | Ein **exportierbares Portfolio** für Bewerbungen, mit belegten Fähigkeiten |
 | Buddy manuell zuweisen | Eine ruhige **Begleit-Ansicht**, in der Fortschritt, Stimmung und nächste Schritte einer Person zusammenlaufen |
 
-Die letzte Zeile ist die wichtigste. Eine begleitende Fachperson jongliert heute vieles im Kopf und in verstreuten Notizen: Wo steht diese Person? Was war der letzte gute Schritt? Was ist der nächste? Ein vertraulicher, geschützter Ort im Portal, an dem sich der Weg einer Person übersichtlich zusammenfügt — Fähigkeiten, erreichte Meilensteine, offene Aufgaben, vereinbarte Ziele — würde diese Arbeit von der Buchhaltung entlasten und den Blick auf das Wesentliche freimachen: den Menschen. Vertraulichkeit ist dabei keine Zusatzfunktion, sondern Voraussetzung; die Würde und Privatsphäre der begleiteten Person hat Vorrang vor jeder Auswertung.
+Die letzte Zeile ist die wichtigste. Eine begleitende Fachperson jongliert heute vieles im Kopf und in verstreuten Notizen: Wo steht diese Person? Was war der letzte gute Schritt? Was ist der nächste? Ein vertraulicher, geschützter Ort im Portal, an dem sich der Weg einer Person übersichtlich zusammenfügt — Fähigkeiten, erreichte Meilensteine, offene Aufgaben, vereinbarte Ziele — würde diese Arbeit von der Buchhaltung entlasten und den Blick auf das Wesentliche freimachen: den Menschen.
 
-Ein solcher individueller Ansatz würde auch das ernst nehmen, was Menschen mitbringen: ihre Interessen, ihre Neigungen, ihre Träume. Nicht jede oder jeder, der bei uns wieder anfängt, will Reparatur-Technikerin werden. Manche entdecken das Erfassen und Beschreiben, manche den Kundenkontakt, manche die Logistik. Ein Portal, das diese Richtung festhält und passende nächste Schritte vorschlägt, macht aus «irgendeine Beschäftigung» einen Weg, der zur Person gehört — und Wege, die zu einem gehören, geht man weiter.
+Ein solcher individueller Ansatz würde vor allem das ernst nehmen, was Menschen mitbringen: ihre Interessen, ihre Neigungen, ihre Träume. Nicht jede oder jeder, der bei uns wieder anfängt, will Reparatur-Technikerin werden. Manche entdecken das Erfassen und Beschreiben, manche den Kundenkontakt, manche die Logistik, manche das Unterrichten in einem [Workshop](/workshops). Ein Portal, das diese Richtung festhält und passende nächste Schritte vorschlägt, kann eine Leidenschaft entfachen — und aus «irgendeine Beschäftigung» einen Weg machen, der zur Person gehört. Wege, die zu einem gehören, geht man weiter.
 
 ## Warum das zur Mission gehört
 
 Es ist derselbe Grundgedanke, der einen funktionierenden Laptop davor bewahrt, im Elektroschrott zu enden: Es ist eine Verschwendung, etwas Wertvolles abzuschreiben, nur weil der Markt gerade nicht hinschaut. Für Geräte haben wir eine Werkstatt gebaut. Für Menschen bauen wir einen Ort, an dem Beitrag zählt, sichtbar wird und wächst — und ein Portal, das diesen Weg trägt.
 
-Ein Teil davon steht schon: Profile, Teams, Aufgaben, Abstimmungen, eine eigene Spur für den Wiedereinstieg. Der nächste Teil — der individuelle Entwicklungsweg als erster Bürger — ist die Arbeit, die vor uns liegt. Sie lohnt sich, weil sie genau dort ansetzt, wo die Mission am menschlichsten wird.
+Das Ziel ist nicht nur der Wiedereinstieg in den Arbeitsmarkt. Das Ziel ist, dass ein Mensch etwas findet, das er gerne lernt und gerne tut — und dadurch zu einem nachhaltigen, tragenden Teil seiner Gemeinschaft wird. Genau da schliesst sich der Kreis zu **menschen, hardware, knowhow**: Wir reparieren nicht nur Geräte, wir helfen Menschen, ihr Knowhow und ihr Selbstvertrauen wieder aufzubauen.
+
+Ein Teil davon steht schon: Profile, Teams, Aufgaben, Abstimmungen, eine eigene Spur für den Wiedereinstieg. Der nächste Teil — der individuelle Entwicklungsweg als erster Bürger, empathisch gedacht und vertraulich gehalten — ist die Arbeit, die vor uns liegt. Wer diesen Weg mitgehen oder ermöglichen möchte, findet unter [Mitmachen](/get-involved) den Einstieg. Es lohnt sich, weil es genau dort ansetzt, wo die Mission am menschlichsten wird.

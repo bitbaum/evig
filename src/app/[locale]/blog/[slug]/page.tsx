@@ -10,6 +10,8 @@ import { getMergedPosts } from '@/lib/blog-merge'
 import { slugifyCategory } from '@/lib/blog-utils'
 import { APP_URL } from '@/config/urls'
 import { ORG } from '@/config/org'
+import { ROUTES } from '@/config/routes'
+import { resolveAuthorProfile } from '@/lib/blog/author'
 import { defaultLocale } from '@/i18n/routing'
 import { isUnlistedUnlocked } from '@/lib/blog-unlisted-auth'
 import BlogPasswordGate from './BlogPasswordGate'
@@ -97,7 +99,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       description: post.excerpt || '',
       type: 'article',
       publishedTime: post.publishedAt,
-      authors: [post.author],
+      authors: [(await resolveAuthorProfile(post.author, post.authorId)).name],
       images: post.featuredImage ? [post.featuredImage] : [],
     },
     twitter: {
@@ -187,6 +189,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     categorySlug = dbCategories.find((c) => c.name === post.category)?.slug || slugifyCategory(post.category);
   }
 
+  const author = await resolveAuthorProfile(post.author, post.authorId)
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -194,7 +197,11 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     ...(post.excerpt ? { description: post.excerpt } : {}),
     ...(post.featuredImage ? { image: `${APP_URL}${post.featuredImage}` } : {}),
     datePublished: post.publishedAt || post.createdAt,
-    author: { '@type': 'Person', name: post.author },
+    author: {
+      '@type': 'Person',
+      name: author.name,
+      ...(author.profileId ? { url: `${APP_URL}${ROUTES.public.member(author.profileId)}` } : {}),
+    },
     publisher: { '@type': 'Organization', name: ORG.name },
     mainEntityOfPage: `${APP_URL}/blog/${post.slug}`,
     inLanguage: locale,

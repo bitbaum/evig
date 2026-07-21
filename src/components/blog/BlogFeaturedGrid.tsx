@@ -5,6 +5,7 @@ import { getTranslations } from 'next-intl/server'
 import { BlogPost } from '@/lib/blog'
 import { getReadingTime } from '@/lib/blog-utils'
 import UnlistedBadge from './UnlistedBadge'
+import BlogByline from './BlogByline'
 
 interface BlogFeaturedGridProps {
   posts: BlogPost[]
@@ -54,7 +55,7 @@ export default async function BlogFeaturedGrid({ posts }: BlogFeaturedGridProps)
               )}
 
               <div className="mt-3 flex flex-wrap items-center gap-x-2.5 gap-y-1 font-mono text-[11px] uppercase tracking-[0.08em] text-text-tertiary">
-                <span className="text-text-secondary">{post.author}</span>
+                <BlogByline author={post.author} authorId={post.authorId} className="text-text-secondary" />
                 <span aria-hidden="true">·</span>
                 <span className="inline-flex items-center gap-1">
                   <Clock className="h-3 w-3" aria-hidden="true" />

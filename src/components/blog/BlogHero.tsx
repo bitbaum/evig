@@ -6,6 +6,7 @@ import { BlogPost } from '@/lib/blog'
 import { formatDate } from '@/lib/date-formats'
 import { getReadingTime } from '@/lib/blog-utils'
 import UnlistedBadge from './UnlistedBadge'
+import BlogByline from './BlogByline'
 
 interface BlogHeroProps {
   post: BlogPost
@@ -53,7 +54,7 @@ export default async function BlogHero({ post }: BlogHeroProps) {
           )}
 
           <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-[0.08em] text-text-tertiary">
-            <span className="text-text-secondary">{post.author}</span>
+            <BlogByline author={post.author} authorId={post.authorId} className="text-text-secondary" />
             <span aria-hidden="true">·</span>
             <time>{formatDate(post.publishedAt || post.createdAt)}</time>
             <span aria-hidden="true">·</span>
