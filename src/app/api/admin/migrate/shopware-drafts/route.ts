@@ -22,6 +22,7 @@ import { db } from '@/db'
 import { logger } from '@/lib/logger'
 import { createErfassungProduct } from '@/lib/erfassung/create-product'
 import { detectCategory } from '@/lib/erfassung/ai-classification'
+import { publishRevampitListing } from '@/lib/marketplace/publish-revampit-listing'
 
 export const runtime = 'nodejs'
 export const maxDuration = 300
@@ -58,11 +59,56 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const body = await request.json().catch(() => null) as { userId?: string; products?: InProduct[] } | null
+  const body = await request.json().catch(() => null) as
+    { mode?: string; userId?: string; products?: InProduct[]; limit?: number } | null
   const userId = body?.userId
+  if (!userId) {
+    return NextResponse.json({ error: 'userId required' }, { status: 400 })
+  }
+
+  // Publish mode: turn the imported drafts into live is_revampit marketplace
+  // listings (images already on R2 carry over to listing_images). Batched via
+  // `limit`; call repeatedly until `remaining` is 0.
+  if (body?.mode === 'publish') {
+    const limit = Math.min(Math.max(Number(body.limit) || 50, 1), 200)
+    const rows = await db.execute(sql`
+      SELECT ii.id AS inv_id
+      FROM inventory_items ii
+      JOIN ai_extracted_products p ON ii.ai_product_id = p.id
+      LEFT JOIN listings l ON l.inventory_item_id = ii.id
+      WHERE p.specifications->>'Shopware-Nr.' IS NOT NULL AND l.id IS NULL
+      LIMIT ${limit}
+    `)
+    const pubResults: Array<{ invId: string; status: string; listingId?: string | null; reason?: string }> = []
+    for (const row of rows.rows as Array<{ inv_id: string }>) {
+      const invId = row.inv_id
+      try {
+        const listingId = await db.transaction((tx) => publishRevampitListing(tx, invId, { verifiedBy: userId }))
+        pubResults.push({ invId, status: listingId ? 'published' : 'skipped', listingId })
+      } catch (error) {
+        logger.error('Shopware migration publish failed', { error, invId })
+        pubResults.push({ invId, status: 'error', reason: error instanceof Error ? error.message : 'unknown' })
+      }
+    }
+    const remainingRes = await db.execute(sql`
+      SELECT count(*)::int AS n
+      FROM inventory_items ii
+      JOIN ai_extracted_products p ON ii.ai_product_id = p.id
+      LEFT JOIN listings l ON l.inventory_item_id = ii.id
+      WHERE p.specifications->>'Shopware-Nr.' IS NOT NULL AND l.id IS NULL
+    `)
+    const remaining = (remainingRes.rows[0] as { n: number } | undefined)?.n ?? 0
+    const summary = pubResults.reduce<Record<string, number>>((acc, r) => {
+      acc[r.status] = (acc[r.status] || 0) + 1
+      return acc
+    }, {})
+    logger.info('Shopware migration publish batch', { summary, remaining })
+    return NextResponse.json({ mode: 'publish', summary, remaining })
+  }
+
   const products = body?.products
-  if (!userId || !Array.isArray(products)) {
-    return NextResponse.json({ error: 'userId and products[] required' }, { status: 400 })
+  if (!Array.isArray(products)) {
+    return NextResponse.json({ error: 'products[] required' }, { status: 400 })
   }
 
   const results: Array<{ nr?: string; status: string; itemUuid?: string; hasImage?: boolean; reason?: string }> = []
