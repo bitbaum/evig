@@ -12,6 +12,7 @@ import { Camera, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
+import { downscaleImage } from '@/lib/images/downscale'
 
 interface ProductImageSectionProps {
   image: string | null
@@ -57,15 +58,13 @@ export function ProductImageSection({ image, onImageChange }: ProductImageSectio
               type="file"
               accept="image/*"
               className="hidden"
-              onChange={(e) => {
+              onChange={async (e) => {
                 const file = e.target.files?.[0]
                 if (file) {
-                  const reader = new FileReader()
-                  reader.onload = (event) => {
-                    const base64 = event.target?.result as string
-                    onImageChange(base64)
-                  }
-                  reader.readAsDataURL(file)
+                  // Downscale so the stored/uploaded image is a bounded JPEG,
+                  // not a raw multi-megabyte phone photo.
+                  const base64 = await downscaleImage(file)
+                  if (base64) onImageChange(base64)
                 }
               }}
             />

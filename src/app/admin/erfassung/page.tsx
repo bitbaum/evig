@@ -14,6 +14,7 @@ import { BulkActionBar } from '@/components/erfassung/BulkActionBar'
 import { BulkSuccessScreen } from '@/components/erfassung/BulkSuccessScreen'
 import { CaptureDestinationFields } from '@/components/erfassung/CaptureDestinationFields'
 import { ErfassungSubmitBar } from '@/components/erfassung/ErfassungSubmitBar'
+import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { useErfassungForm } from '@/components/erfassung/useErfassungForm'
 import { Button } from '@/components/ui/button'
 import type { BulkProduct, BulkSaveResponse } from '@/types/erfassung'
@@ -300,6 +301,20 @@ function ErfassungContent() {
                   <p className="mt-0.5 text-sm text-text-secondary">KI-Vorschläge kontrollieren. Nur Hersteller und Produktname sind zum Speichern nötig.</p>
                 </div>
               </div>
+
+              {/* Ask the AI to change the extracted data in natural language —
+                  "Beschreibung ausführlicher", "Preis auf 80 CHF", "Specs ergänzen".
+                  Uses the shared FORM_AI_REGISTRY (formType 'erfassung') like every
+                  other admin form. */}
+              <AIFormAssist
+                formType="erfassung"
+                variant="section"
+                currentData={form.formData as unknown as Record<string, unknown>}
+                onFieldsFilled={(data, metadata) =>
+                  form.handleAssistFields(data as Partial<typeof form.formData>, metadata)
+                }
+              />
+
               <ProductForm
                 formData={form.formData}
                 aiMetadata={form.aiMetadata}

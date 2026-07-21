@@ -62,6 +62,12 @@ export const rateLimiters = {
   // AI product analysis: 5 per hour per user (expensive inference)
   aiAnalyze: createRateLimiter(ONE_HOUR_MS, 5),
 
+  // Staff photo intake: 60 per hour. An intake operator photographs many
+  // devices in a session; the public 5/hour ceiling would block real work
+  // after the first handful. Still bounded so a stuck retry loop can't hammer
+  // the vision providers.
+  erfassungImage: createRateLimiter(ONE_HOUR_MS, 60),
+
   // Reviews: 10 per hour per user
   reviewCreate: createRateLimiter(ONE_HOUR_MS, 10),
 
