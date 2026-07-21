@@ -87,24 +87,36 @@ export function AdminSidebar({
   }
 
   // User-controlled open groups (manual toggles). The group containing the
-  // active route is ALWAYS shown open via isGroupOpen() below — derived during
-  // render, so navigating never mutates state (no double-render) nor surprises
+  // active route opens by DEFAULT (groupHasActiveItem below), but an explicit
+  // collapse must still win — otherwise the group you're currently in can never
+  // be closed. `collapsedGroups` records those explicit collapses so a click
+  // always toggles, even on the active group; it's cleared when the user
+  // re-opens the group. Derived during render, so navigating never surprises
   // the user by re-expanding a group they collapsed.
   const [expandedGroups, setExpandedGroups] = useState<Set<SidebarGroupId>>(
     () => new Set<SidebarGroupId>(['uebersicht', 'angebot', 'inhalte']),
   )
+  const [collapsedGroups, setCollapsedGroups] = useState<Set<SidebarGroupId>>(
+    () => new Set<SidebarGroupId>(),
+  )
 
   const isGroupOpen = (groupId: SidebarGroupId) =>
-    expandedGroups.has(groupId) || groupHasActiveItem(groupId)
+    !collapsedGroups.has(groupId) && (expandedGroups.has(groupId) || groupHasActiveItem(groupId))
 
   const toggleGroup = (groupId: SidebarGroupId) => {
+    const open = isGroupOpen(groupId)
     setExpandedGroups(prev => {
       const next = new Set(prev)
-      if (next.has(groupId)) {
-        next.delete(groupId)
-      } else {
-        next.add(groupId)
-      }
+      if (open) next.delete(groupId)
+      else next.add(groupId)
+      return next
+    })
+    setCollapsedGroups(prev => {
+      const next = new Set(prev)
+      // Collapsing an active-by-default group needs an explicit override;
+      // re-opening clears it.
+      if (open) next.add(groupId)
+      else next.delete(groupId)
       return next
     })
   }
