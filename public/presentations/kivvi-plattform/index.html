@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Kivvi — Das ERP für die Kreislaufwirtschaft</title>
+<style>
+  :root{
+    --paper:#FBFAF7; --surface:#FFFFFF; --ink:#17181A; --muted:#5F5B54; --faint:#96938B;
+    --line:#E7E3DA; --line-strong:#D6D1C6; --accent:#1C7A44; --accent-ink:#155C34; --accent-soft:#E8F1EB;
+    --legacy:#9A8C7C; --legacy-soft:#F1ECE4;
+    --sans:'Helvetica Neue',Helvetica,Arial,'Segoe UI',system-ui,sans-serif;
+    --mono:ui-monospace,'SF Mono','JetBrains Mono',Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  html,body{height:100%}
+  body{background:#0d0f0d; color:var(--ink); font-family:var(--sans); overflow:hidden;
+    -webkit-font-smoothing:antialiased; letter-spacing:-.006em;}
+  .num{font-variant-numeric:tabular-nums}
+  .mono{font-family:var(--mono)}
+
+  /* Stage: 16:9 slide scaled to viewport */
+  #stage{position:fixed; inset:0; display:flex; align-items:center; justify-content:center;}
+  .deck{position:relative; width:100vw; height:56.25vw; max-height:100vh; max-width:177.78vh;
+    background:var(--paper); overflow:hidden;}
+  .slide{position:absolute; inset:0; padding:6.2% 7.4%; display:none; flex-direction:column;
+    opacity:0; transition:opacity .45s ease;}
+  .slide.active{display:flex; opacity:1;}
+  @media (prefers-reduced-motion:reduce){ .slide{transition:none} }
+
+  /* Chrome: progress + counter + brand */
+  #bar{position:fixed; top:0; left:0; height:3px; background:var(--accent); width:0; z-index:20; transition:width .3s ease;}
+  #counter{position:fixed; bottom:2.2vh; right:2.4vw; z-index:20; font-family:var(--mono);
+    font-size:1.5vh; letter-spacing:.12em; color:var(--faint);}
+  #brand{position:fixed; bottom:2.2vh; left:2.4vw; z-index:20; font-family:var(--mono);
+    font-size:1.5vh; letter-spacing:.14em; text-transform:uppercase; color:var(--faint);}
+  #brand b{color:var(--accent-ink); font-weight:600}
+
+  /* Type scale in vh so it scales with the slide */
+  .eyebrow{font-family:var(--mono); font-size:1.9vh; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--accent-ink); display:flex; align-items:center; gap:1.2vh; margin-bottom:2.4vh;}
+  .eyebrow::before{content:""; width:3.4vh; height:2px; background:var(--accent)}
+  h1{font-size:8.4vh; line-height:.98; font-weight:800; letter-spacing:-.03em}
+  h2{font-size:5.2vh; line-height:1.03; font-weight:750; letter-spacing:-.022em; max-width:20ch}
+  h3{font-size:2.9vh; font-weight:700; letter-spacing:-.01em}
+  p{font-size:2.5vh; line-height:1.5; color:var(--ink); max-width:30ch}
+  .lead{font-size:3.3vh; line-height:1.42; color:var(--muted); max-width:26ch; font-weight:400}
+  .kicker{color:var(--accent)}
+  .muted{color:var(--muted)}
+  .fill{flex:1}
+
+  /* Cover */
+  .cover{justify-content:center}
+  .cover .sub{font-size:3vh; color:var(--muted); margin-top:2.4vh; max-width:34ch; line-height:1.42}
+  .cover .foot{position:absolute; left:7.4%; bottom:6.2%; font-family:var(--mono); font-size:1.7vh;
+    letter-spacing:.06em; color:var(--faint); display:flex; gap:2.6vh}
+  .cover .foot b{color:var(--ink)}
+  .domns{display:flex; gap:1vh; margin-top:4vh; flex-wrap:wrap}
+  .domns span{font-family:var(--mono); font-size:1.7vh; border:1px solid var(--line-strong);
+    border-radius:2px; padding:.9vh 1.4vh; display:inline-flex; align-items:center; gap:1vh; color:var(--ink)}
+  .domns .dot{width:1vh; height:1vh; border-radius:50%; background:var(--accent)}
+
+  /* Section break */
+  .section-break{justify-content:center; background:var(--ink)}
+  .section-break h2{color:#fff; font-size:6.4vh; max-width:24ch}
+  .section-break .eyebrow{color:#6ECB8C}
+  .section-break .eyebrow::before{background:#6ECB8C}
+  .section-break p{color:#B9B6AE; margin-top:2.6vh; max-width:40ch}
+
+  /* Split content + screenshot */
+  .split{display:grid; grid-template-columns:1fr 1.15fr; gap:5.5vh; align-items:center; height:100%}
+  .split.rev{grid-template-columns:1.15fr 1fr}
+  .split .txt{display:flex; flex-direction:column; justify-content:center}
+  .shot{border:1px solid var(--line-strong); border-radius:1.4vh; overflow:hidden;
+    box-shadow:0 2vh 5vh rgba(20,30,20,.14); background:var(--surface); max-height:82vh}
+  .shot img{display:block; width:100%; height:auto}
+  .browserbar{display:flex; align-items:center; gap:.9vh; padding:1.1vh 1.5vh; background:#f0ede7; border-bottom:1px solid var(--line)}
+  .browserbar i{width:1.3vh; height:1.3vh; border-radius:50%; background:#cfc9bf; display:block}
+  .browserbar .url{margin-left:1.4vh; font-family:var(--mono); font-size:1.4vh; color:var(--muted)}
+
+  ul.feat{list-style:none; margin-top:2.4vh; display:grid; gap:1.5vh}
+  ul.feat li{position:relative; padding-left:3.2vh; font-size:2.35vh; line-height:1.4; max-width:32ch}
+  ul.feat li::before{content:""; position:absolute; left:0; top:.5em; width:1.5vh; height:1.5vh;
+    border:.28vh solid var(--accent); border-radius:.3vh; transform:rotate(45deg)}
+  ul.feat b{font-weight:650}
+
+  /* Stat slide */
+  .stats{display:grid; grid-template-columns:repeat(3,1fr); gap:0; margin-top:auto; border:1px solid var(--line); border-radius:1.2vh; overflow:hidden}
+  .stats .c{padding:3.4vh 3vh; border-right:1px solid var(--line); background:var(--surface)}
+  .stats .c:last-child{border-right:0}
+  .stats .v{font-size:6.6vh; font-weight:800; letter-spacing:-.03em; line-height:1}
+  .stats .v small{font-size:.4em; color:var(--accent-ink); font-weight:600}
+  .stats .l{font-family:var(--mono); font-size:1.55vh; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-top:1.6vh}
+
+  /* Before/after */
+  .ba{display:grid; grid-template-columns:1fr 1fr; gap:0; margin-top:auto; border:1px solid var(--line); border-radius:1.2vh; overflow:hidden}
+  .ba .col{padding:3.2vh; background:var(--surface)}
+  .ba .col.old{background:var(--legacy-soft); border-right:1px solid var(--line)}
+  .ba .tag{font-family:var(--mono); font-size:1.5vh; letter-spacing:.14em; text-transform:uppercase; margin-bottom:1.8vh; display:inline-block}
+  .ba .old .tag{color:var(--legacy)} .ba .new .tag{color:var(--accent-ink)}
+  .ba .col .row{font-size:2.1vh; padding:1.2vh 0; border-top:1px solid var(--line); line-height:1.3}
+  .ba .col .row:first-of-type{border-top:0}
+  .ba .col.old .row{color:var(--muted)}
+
+  .tech{font-family:var(--mono); font-size:1.9vh; color:var(--muted); line-height:2; margin-top:auto; letter-spacing:.02em}
+  .tech b{color:var(--ink); font-weight:600}
+
+  #hint{position:fixed; bottom:2.2vh; left:50%; transform:translateX(-50%); z-index:20;
+    font-family:var(--mono); font-size:1.4vh; letter-spacing:.1em; color:var(--faint); opacity:.8}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div id="brand"><b>KIVVI</b> · DAS ERP</div>
+<div id="counter"></div>
+<div id="hint">← → zum Blättern</div>
+
+<div id="stage"><div class="deck" id="deck">
+
+  <!-- 1 COVER -->
+  <section class="slide cover active">
+    <div class="eyebrow"><span>Das Betriebssystem der Kreislaufwirtschaft</span></div>
+    <h1>Ein ERP für<br>Spenden &amp; Einzel-<br><span class="kicker">stücke, nicht Mengen.</span></h1>
+    <p class="sub">Standard-ERPs modellieren Einkauf und Lagermengen. Kreislaufbetriebe leben von
+      Spenden und Einzelstücken mit Zustand und Geschichte. Kivvi ist dafür gebaut.</p>
+    <div class="domns"><span><span class="dot"></span>kivvi.orangecat.ch</span></div>
+    <div class="foot"><span>Überblick · <b>Was Kivvi ist und wofür</b></span><span>Open Source · <b>MIT-Lizenz</b></span></div>
+  </section>
+
+  <!-- 2 PROBLEM -->
+  <section class="slide">
+    <div class="eyebrow"><span>Ausgangslage</span></div>
+    <h2>Standard-ERPs kennen keine Spende und kein Einzelstück.</h2>
+    <div class="ba">
+      <div class="col old">
+        <span class="tag">Was Standard-ERPs annehmen</span>
+        <div class="row">Ware wird <b>eingekauft</b> — mit Lieferant und Preis.</div>
+        <div class="row">Artikel existieren in <b>Mengen</b>, nicht als Einzelstück.</div>
+        <div class="row">Kein Platz für Zustandsgrad, Reparatur-Geschichte oder Spendenquittung.</div>
+      </div>
+      <div class="col new">
+        <span class="tag">Die Realität im Kreislaufbetrieb</span>
+        <div class="row">Ware kommt als <b>Spende</b> herein — jedes Stück ist verschieden.</div>
+        <div class="row">Jedes Gerät hat einen <b>Zustand</b> und eine <b>Geschichte</b>.</div>
+        <div class="row">Bis heute: Kivitendo, Tabellen und viel Handarbeit.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 SOLUTION OVERVIEW + HOME SHOT -->
+  <section class="slide">
+    <div class="split">
+      <div class="txt">
+        <div class="eyebrow"><span>Die Antwort</span></div>
+        <h2>50 gespendete Laptops? In 30 Sekunden erfasst.</h2>
+        <p class="muted" style="margin-top:2.4vh">Vom Spendeneingang über Test und Reparatur bis zum
+          Verkauf mit Schweizer Rechnung — ein durchgängiges System für den Kreislaufbetrieb.</p>
+      </div>
+      <div class="shot">
+        <div class="browserbar"><i></i><i></i><i></i><span class="url">kivvi.orangecat.ch</span></div>
+        <img src="/blog/showcase-kivvi-home.png" alt="Kivvi Startseite">
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 FÜR WEN -->
+  <section class="slide">
+    <div class="split rev">
+      <div class="shot">
+        <div class="browserbar"><i></i><i></i><i></i><span class="url">kivvi.orangecat.ch/fuer-wen</span></div>
+        <img src="/blog/showcase-kivvi-fuer-wen.png" alt="Für wen ist Kivvi">
+      </div>
+      <div class="txt">
+        <div class="eyebrow"><span>Für wen</span></div>
+        <h3>Für Betriebe, die reparieren statt wegwerfen.</h3>
+        <ul class="feat">
+          <li><b>Refurbishment &amp; IT-Recycling:</b> gespendete Hardware, geprüft und weiterverkauft.</li>
+          <li><b>Soziale &amp; gemeinnützige Betriebe</b> mit Spendenlogik und Impact-Berichten.</li>
+          <li><b>Kreislauf-Werkstätten</b>, die Einzelstücke über ihren ganzen Lebenszyklus führen.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 SECTION: DER KERN -->
+  <section class="slide section-break">
+    <div class="eyebrow"><span>Teil 1</span></div>
+    <h2>Der Kern</h2>
+    <p>Warenannahme, Einzelartikel-Lebenszyklus, Reparatur, Verkauf und Schweizer Buchhaltung — in einem System.</p>
+  </section>
+
+  <!-- 6 WARENANNAHME / SPENDEN -->
+  <section class="slide">
+    <div class="split rev">
+      <div class="shot">
+        <div class="browserbar"><i></i><i></i><i></i><span class="url">kivvi.orangecat.ch/warenannahme</span></div>
+        <img src="/blog/showcase-kivvi-sec1.png" alt="Was Standard-ERPs nicht können">
+      </div>
+      <div class="txt">
+        <div class="eyebrow"><span>Warenannahme &amp; Spenden</span></div>
+        <h3>Was Standard-ERPs nicht können.</h3>
+        <ul class="feat">
+          <li><b>Spende statt Einkauf:</b> Herkunft und Zustandsgrad werden beim Eingang erfasst.</li>
+          <li><b>KI-Schnelleingabe</b> macht aus Foto und Text sofort einen Artikel.</li>
+          <li><b>Spendenquittungen</b> und Impact-Bericht entstehen direkt aus dem Eingang.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 EINZELARTIKEL-LEBENSZYKLUS (concept) -->
+  <section class="slide">
+    <div class="eyebrow"><span>Einzelartikel-Lebenszyklus</span></div>
+    <h2>Jedes Gerät ist ein Einzelstück mit eigener Geschichte.</h2>
+    <ul class="feat" style="grid-template-columns:1fr 1fr; display:grid; gap:1.5vh 6vh; margin-top:3vh; max-width:none">
+      <li style="max-width:38ch"><b>Ein Lebenszyklus:</b> intake → testing → repair → ready → listed → sold.</li>
+      <li style="max-width:38ch"><b>Zustand &amp; Reparaturkosten</b> hängen am Einzelstück, nicht an einer Menge.</li>
+      <li style="max-width:38ch"><b>Geschichte inklusive:</b> woher es kam, was geprüft und was ersetzt wurde.</li>
+      <li style="max-width:38ch"><b>Jederzeit auffindbar:</b> vom Eingang bis zum verkauften Gerät nachvollziehbar.</li>
+    </ul>
+  </section>
+
+  <!-- 8 REPARATUREN -->
+  <section class="slide">
+    <div class="split">
+      <div class="txt">
+        <div class="eyebrow"><span>Reparaturen</span></div>
+        <h3>Ein ganz normaler Tag im echten Betrieb.</h3>
+        <ul class="feat">
+          <li><b>Reparaturaufträge</b> am Einzelstück — mit Kosten und Aufwand.</li>
+          <li><b>Reparaturbonus</b> gleich mitgeführt, dort wo er anfällt.</li>
+          <li><b>Löschzertifikate</b> für sichere Datenvernichtung, dokumentiert und belegt.</li>
+        </ul>
+      </div>
+      <div class="shot">
+        <div class="browserbar"><i></i><i></i><i></i><span class="url">kivvi.orangecat.ch/reparatur</span></div>
+        <img src="/blog/showcase-kivvi-sec2.png" alt="Bewährt im echten Betrieb">
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 VERKAUF -->
+  <section class="slide">
+    <div class="split rev">
+      <div class="shot">
+        <div class="browserbar"><i></i><i></i><i></i><span class="url">kivvi.orangecat.ch/verkauf</span></div>
+        <img src="/blog/showcase-kivvi-sec3.png" alt="Was Kivvi kann">
+      </div>
+      <div class="txt">
+        <div class="eyebrow"><span>Verkauf</span></div>
+        <h3>Vom Angebot bis zur Mahnung.</h3>
+        <ul class="feat">
+          <li><b>Durchgängiger Ablauf:</b> Offerte → Auftrag → Rechnung → Mahnwesen.</li>
+          <li><b>Schweizer QR-Rechnungen</b> und MWST sind nativ eingebaut.</li>
+          <li>Das verkaufte Einzelstück verlässt den Lebenszyklus sauber verbucht.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10 BUCHHALTUNG + BANKING (concept) -->
+  <section class="slide">
+    <div class="eyebrow"><span>Schweizer Buchhaltung &amp; Banking</span></div>
+    <h2>Buchhaltung, die die Schweiz schon kennt.</h2>
+    <ul class="feat" style="grid-template-columns:1fr 1fr; display:grid; gap:1.5vh 6vh; margin-top:3vh; max-width:none">
+      <li style="max-width:38ch"><b>KMU-Kontenrahmen:</b> 227 Konten ab Werk, nichts von Hand anlegen.</li>
+      <li style="max-width:38ch"><b>Unveränderliches Journal</b> und native MWST — revisionssicher.</li>
+      <li style="max-width:38ch"><b>Banking:</b> CAMT.053 und CAMT.054 werden eingelesen.</li>
+      <li style="max-width:38ch"><b>QR-Abgleich:</b> Zahlungen werden automatisch der Rechnung zugeordnet.</li>
+    </ul>
+  </section>
+
+  <!-- 11 KI-BEFEHLSLEISTE -->
+  <section class="slide">
+    <div class="split">
+      <div class="txt">
+        <div class="eyebrow"><span>KI-Befehlsleiste</span></div>
+        <h3>47 Werkzeuge, jedes auditiert.</h3>
+        <ul class="feat">
+          <li><b>Per Sprache oder Text bedienen:</b> die KI ruft die passenden Werkzeuge auf.</li>
+          <li><b>47 Werkzeuge</b> decken Erfassung, Suche und Betrieb ab.</li>
+          <li><b>Jede Aktion auditiert</b> — nachvollziehbar, wer was ausgelöst hat.</li>
+        </ul>
+      </div>
+      <div class="shot">
+        <div class="browserbar"><i></i><i></i><i></i><span class="url">kivvi.orangecat.ch/wissen</span></div>
+        <img src="/blog/showcase-kivvi-sec4.png" alt="Wissen für Kreislaufbetriebe">
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 SECTION: OFFEN & VERBUNDEN -->
+  <section class="slide section-break">
+    <div class="eyebrow"><span>Teil 2</span></div>
+    <h2>Offen &amp; verbunden</h2>
+    <p>Offene Schnittstellen, sanfter Umstieg und Open Source — die Daten bleiben bei Ihnen.</p>
+  </section>
+
+  <!-- 13 OFFEN / OPEN SOURCE -->
+  <section class="slide">
+    <div class="split rev">
+      <div class="shot">
+        <div class="browserbar"><i></i><i></i><i></i><span class="url">kivvi.orangecat.ch/open-source</span></div>
+        <img src="/blog/showcase-kivvi-login.png" alt="Datenhoheit und Open Source">
+      </div>
+      <div class="txt">
+        <div class="eyebrow"><span>Datenhoheit</span></div>
+        <h3>Offen, importierbar, ohne Vendor Lock-in.</h3>
+        <ul class="feat">
+          <li><b>Offene REST-API v1</b> und signierte Webhooks für saubere Integrationen.</li>
+          <li><b>Kivitendo-CSV-Import</b> — genau die Schnittstelle an der richtigen Stelle.</li>
+          <li><b>Open Source (MIT), Self-Hosting</b> — die Daten bleiben in der Schweiz.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14 SCALE -->
+  <section class="slide">
+    <div class="eyebrow"><span>Grössenordnung</span></div>
+    <h2>Kein Prototyp — ein laufendes System.</h2>
+    <div class="stats">
+      <div class="c"><div class="v num">133</div><div class="l">Seiten</div></div>
+      <div class="c"><div class="v num">50</div><div class="l">DB-Tabellen</div></div>
+      <div class="c"><div class="v num">63</div><div class="l">Domain-Module</div></div>
+      <div class="c"><div class="v num">47</div><div class="l">KI-Werkzeuge</div></div>
+      <div class="c"><div class="v num">616</div><div class="l">Commits</div></div>
+      <div class="c"><div class="v">MIT<small> · Open Source</small></div><div class="l">Lizenz</div></div>
+    </div>
+    <div class="tech" style="margin-top:3vh"><b>Technik:</b> Next.js 14 (Monorepo) · TypeScript · PostgreSQL / Drizzle · decimal.js · SwissQRBill · REST-API v1 · signierte Webhooks</div>
+  </section>
+
+  <!-- 15 CLOSE -->
+  <section class="slide cover">
+    <div class="eyebrow"><span>Kurz gesagt</span></div>
+    <h1>Ein ERP, das den<br>Kreislauf <span class="kicker">versteht.</span></h1>
+    <p class="sub">Spende, Einzelstück, Reparatur und Schweizer Buchhaltung in einem offenen System.
+      Am besten selbst ausprobieren.</p>
+    <div class="domns"><span><span class="dot"></span>kivvi.orangecat.ch</span></div>
+  </section>
+
+</div></div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const bar = document.getElementById('bar');
+  const counter = document.getElementById('counter');
+  const hint = document.getElementById('hint');
+  let i = 0;
+  function show(n){
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle('active', k === i));
+    bar.style.width = ((i) / (slides.length - 1) * 100) + '%';
+    counter.textContent = String(i + 1).padStart(2,'0') + ' / ' + String(slides.length).padStart(2,'0');
+    if (i > 0) hint.style.display = 'none';
+  }
+  function next(){ show(i + 1) } function prev(){ show(i - 1) }
+  document.addEventListener('keydown', e => {
+    if (['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)) { e.preventDefault(); next(); }
+    else if (['ArrowLeft','ArrowUp','PageUp'].includes(e.key)) { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') show(0); else if (e.key === 'End') show(slides.length - 1);
+  });
+  document.getElementById('stage').addEventListener('click', e => {
+    const x = e.clientX / window.innerWidth; x < 0.28 ? prev() : next();
+  });
+  show(0);
+</script>
+</body>
+</html>

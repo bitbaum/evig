@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Revamp-Info — Fundraising &amp; Transparenz</title>
+<style>
+  :root{
+    --paper:#FBFAF7; --surface:#FFFFFF; --ink:#17181A; --muted:#5F5B54; --faint:#96938B;
+    --line:#E7E3DA; --line-strong:#D6D1C6; --accent:#1C7A44; --accent-ink:#155C34; --accent-soft:#E8F1EB;
+    --legacy:#9A8C7C; --legacy-soft:#F1ECE4;
+    --sans:'Helvetica Neue',Helvetica,Arial,'Segoe UI',system-ui,sans-serif;
+    --mono:ui-monospace,'SF Mono','JetBrains Mono',Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  html,body{height:100%}
+  body{background:#0d0f0d; color:var(--ink); font-family:var(--sans); overflow:hidden;
+    -webkit-font-smoothing:antialiased; letter-spacing:-.006em;}
+  .num{font-variant-numeric:tabular-nums}
+  .mono{font-family:var(--mono)}
+
+  /* Stage: 16:9 slide scaled to viewport */
+  #stage{position:fixed; inset:0; display:flex; align-items:center; justify-content:center;}
+  .deck{position:relative; width:100vw; height:56.25vw; max-height:100vh; max-width:177.78vh;
+    background:var(--paper); overflow:hidden;}
+  .slide{position:absolute; inset:0; padding:6.2% 7.4%; display:none; flex-direction:column;
+    opacity:0; transition:opacity .45s ease;}
+  .slide.active{display:flex; opacity:1;}
+  @media (prefers-reduced-motion:reduce){ .slide{transition:none} }
+
+  /* Chrome: progress + counter + brand */
+  #bar{position:fixed; top:0; left:0; height:3px; background:var(--accent); width:0; z-index:20; transition:width .3s ease;}
+  #counter{position:fixed; bottom:2.2vh; right:2.4vw; z-index:20; font-family:var(--mono);
+    font-size:1.5vh; letter-spacing:.12em; color:var(--faint);}
+  #brand{position:fixed; bottom:2.2vh; left:2.4vw; z-index:20; font-family:var(--mono);
+    font-size:1.5vh; letter-spacing:.14em; text-transform:uppercase; color:var(--faint);}
+  #brand b{color:var(--accent-ink); font-weight:600}
+
+  /* Type scale in vh so it scales with the slide */
+  .eyebrow{font-family:var(--mono); font-size:1.9vh; letter-spacing:.22em; text-transform:uppercase;
+    color:var(--accent-ink); display:flex; align-items:center; gap:1.2vh; margin-bottom:2.4vh;}
+  .eyebrow::before{content:""; width:3.4vh; height:2px; background:var(--accent)}
+  h1{font-size:8.4vh; line-height:.98; font-weight:800; letter-spacing:-.03em}
+  h2{font-size:5.2vh; line-height:1.03; font-weight:750; letter-spacing:-.022em; max-width:20ch}
+  h3{font-size:2.9vh; font-weight:700; letter-spacing:-.01em}
+  p{font-size:2.5vh; line-height:1.5; color:var(--ink); max-width:30ch}
+  .lead{font-size:3.3vh; line-height:1.42; color:var(--muted); max-width:26ch; font-weight:400}
+  .kicker{color:var(--accent)}
+  .muted{color:var(--muted)}
+  .fill{flex:1}
+
+  /* Cover */
+  .cover{justify-content:center}
+  .cover .sub{font-size:3vh; color:var(--muted); margin-top:2.4vh; max-width:34ch; line-height:1.42}
+  .cover .foot{position:absolute; left:7.4%; bottom:6.2%; font-family:var(--mono); font-size:1.7vh;
+    letter-spacing:.06em; color:var(--faint); display:flex; gap:2.6vh}
+  .cover .foot b{color:var(--ink)}
+  .domns{display:flex; gap:1vh; margin-top:4vh; flex-wrap:wrap}
+  .domns span{font-family:var(--mono); font-size:1.7vh; border:1px solid var(--line-strong);
+    border-radius:2px; padding:.9vh 1.4vh; display:inline-flex; align-items:center; gap:1vh; color:var(--ink)}
+  .domns .dot{width:1vh; height:1vh; border-radius:50%; background:var(--accent)}
+
+  /* Section break */
+  .section-break{justify-content:center; background:var(--ink)}
+  .section-break h2{color:#fff; font-size:6.4vh; max-width:24ch}
+  .section-break .eyebrow{color:#6ECB8C}
+  .section-break .eyebrow::before{background:#6ECB8C}
+  .section-break p{color:#B9B6AE; margin-top:2.6vh; max-width:40ch}
+
+  /* Split content + screenshot */
+  .split{display:grid; grid-template-columns:1fr 1.15fr; gap:5.5vh; align-items:center; height:100%}
+  .split.rev{grid-template-columns:1.15fr 1fr}
+  .split .txt{display:flex; flex-direction:column; justify-content:center}
+  .shot{border:1px solid var(--line-strong); border-radius:1.4vh; overflow:hidden;
+    box-shadow:0 2vh 5vh rgba(20,30,20,.14); background:var(--surface); max-height:82vh}
+  .shot img{display:block; width:100%; height:auto}
+  .browserbar{display:flex; align-items:center; gap:.9vh; padding:1.1vh 1.5vh; background:#f0ede7; border-bottom:1px solid var(--line)}
+  .browserbar i{width:1.3vh; height:1.3vh; border-radius:50%; background:#cfc9bf; display:block}
+  .browserbar .url{margin-left:1.4vh; font-family:var(--mono); font-size:1.4vh; color:var(--muted)}
+
+  ul.feat{list-style:none; margin-top:2.4vh; display:grid; gap:1.5vh}
+  ul.feat li{position:relative; padding-left:3.2vh; font-size:2.35vh; line-height:1.4; max-width:32ch}
+  ul.feat li::before{content:""; position:absolute; left:0; top:.5em; width:1.5vh; height:1.5vh;
+    border:.28vh solid var(--accent); border-radius:.3vh; transform:rotate(45deg)}
+  ul.feat b{font-weight:650}
+
+  /* Stat slide */
+  .stats{display:grid; grid-template-columns:repeat(3,1fr); gap:0; margin-top:auto; border:1px solid var(--line); border-radius:1.2vh; overflow:hidden}
+  .stats .c{padding:3.4vh 3vh; border-right:1px solid var(--line); background:var(--surface)}
+  .stats .c:last-child{border-right:0}
+  .stats .v{font-size:6.6vh; font-weight:800; letter-spacing:-.03em; line-height:1}
+  .stats .v small{font-size:.4em; color:var(--accent-ink); font-weight:600}
+  .stats .l{font-family:var(--mono); font-size:1.55vh; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-top:1.6vh}
+
+  /* Before/after */
+  .ba{display:grid; grid-template-columns:1fr 1fr; gap:0; margin-top:auto; border:1px solid var(--line); border-radius:1.2vh; overflow:hidden}
+  .ba .col{padding:3.2vh; background:var(--surface)}
+  .ba .col.old{background:var(--legacy-soft); border-right:1px solid var(--line)}
+  .ba .tag{font-family:var(--mono); font-size:1.5vh; letter-spacing:.14em; text-transform:uppercase; margin-bottom:1.8vh; display:inline-block}
+  .ba .old .tag{color:var(--legacy)} .ba .new .tag{color:var(--accent-ink)}
+  .ba .col .row{font-size:2.1vh; padding:1.2vh 0; border-top:1px solid var(--line); line-height:1.3}
+  .ba .col .row:first-of-type{border-top:0}
+  .ba .col.old .row{color:var(--muted)}
+
+  .tech{font-family:var(--mono); font-size:1.9vh; color:var(--muted); line-height:2; margin-top:auto; letter-spacing:.02em}
+  .tech b{color:var(--ink); font-weight:600}
+
+  #hint{position:fixed; bottom:2.2vh; left:50%; transform:translateX(-50%); z-index:20;
+    font-family:var(--mono); font-size:1.4vh; letter-spacing:.1em; color:var(--faint); opacity:.8}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<div id="brand"><b>REVAMP-INFO</b> · FUNDRAISING &amp; TRANSPARENZ</div>
+<div id="counter"></div>
+<div id="hint">← → zum Blättern</div>
+
+<div id="stage"><div class="deck" id="deck">
+
+  <!-- 1 COVER -->
+  <section class="slide cover active">
+    <div class="eyebrow"><span>Revamp-IT · Fundraising-Werkzeuge</span></div>
+    <h1>Stiftungen finden.<br>Gesuche schreiben.<br><span class="kicker">Wirkung belegen.</span></h1>
+    <p class="sub">Eine Plattform, die nach aussen Transparenz zeigt und nach innen das Fundraising
+      des Vereins beschleunigt — von der Stiftungsrecherche bis zum fertigen Gesuch-PDF.</p>
+    <div class="domns"><span><span class="dot"></span>revamp-info.orangecat.ch</span></div>
+    <div class="foot"><span>Vortrag · <b>Was gebaut wurde und warum</b></span><span>Stand · <b>Juli 2026</b></span></div>
+  </section>
+
+  <!-- 2 PROBLEM -->
+  <section class="slide">
+    <div class="eyebrow"><span>Ausgangslage</span></div>
+    <h2>Fundraising ist Handarbeit — und Geldgeber wollen Belege.</h2>
+    <div class="ba">
+      <div class="col old">
+        <span class="tag">Vorher · von Hand</span>
+        <div class="row">Passende Stiftungen finden ist mühsame Sucharbeit.</div>
+        <div class="row">Ein Gesuch zu schreiben kostet Tage.</div>
+        <div class="row">Wirkungs- und Finanzzahlen liegen verstreut.</div>
+      </div>
+      <div class="col new">
+        <span class="tag">Die Anforderung</span>
+        <div class="row">Für jeden Antrag die richtige Stiftung, nicht die Giesskanne.</div>
+        <div class="row">Ein Gesuch in Stunden statt Tagen.</div>
+        <div class="row">Wirkung &amp; Finanzen glaubwürdig und überprüfbar.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 SOLUTION OVERVIEW + HOME SHOT -->
+  <section class="slide">
+    <div class="split">
+      <div class="txt">
+        <div class="eyebrow"><span>Die Antwort</span></div>
+        <h2>Zwei Dinge in einem Werkzeug.</h2>
+        <p class="muted" style="margin-top:2.4vh"><b>Nach aussen</b> ein Transparenz-Portal für Geldgeber —
+          <b>nach innen</b> ein Fundraising-Werkzeug: Stiftungsrecherche, Gesuch-Vorlagen, Wirkungsdaten, Finanzdaten.</p>
+      </div>
+      <div class="shot">
+        <div class="browserbar"><i></i><i></i><i></i><span class="url">revamp-info.orangecat.ch</span></div>
+        <img src="/blog/showcase-revampinfo-home.png" alt="Startseite Revamp-Info">
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 SECTION: NACH AUSSEN -->
+  <section class="slide section-break">
+    <div class="eyebrow"><span>Teil 1</span></div>
+    <h2>Nach aussen: Transparenz</h2>
+    <p>Was der Verein leistet und wie er wirtschaftet — offen, belegt und für jeden Geldgeber nachprüfbar.</p>
+  </section>
+
+  <!-- 5 FINANZ-TRANSPARENZ -->
+  <section class="slide">
+    <div class="split rev">
+      <div class="shot">
+        <div class="browserbar"><i></i><i></i><i></i><span class="url">revamp-info.orangecat.ch/finanzen</span></div>
+        <img src="/blog/showcase-revampinfo-finanzen.png" alt="Finanz-Transparenz-Dashboard">
+      </div>
+      <div class="txt">
+        <div class="eyebrow"><span>Finanz-Transparenz</span></div>
+        <h3>Acht Jahre Einnahmen und Ausgaben, offen einsehbar.</h3>
+        <ul class="feat">
+          <li><b>8 Jahre Finanzdaten</b> — Einnahmen und Ausgaben in klaren Diagrammen.</li>
+          <li><b>Direkt referenzierbar:</b> jede Zahl kann in einem Antrag zitiert werden.</li>
+          <li>Kein Hochglanz-Bericht, sondern die tatsächlichen Zahlen.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6 WIRKUNGSDATEN -->
+  <section class="slide">
+    <div class="split">
+      <div class="txt">
+        <div class="eyebrow"><span>Wirkungsdaten</span></div>
+        <h3>Wirkung, die einem Antrag standhält.</h3>
+        <ul class="feat">
+          <li><b>CO₂-Vermeidung</b> pro Gerätekategorie, aus belegten Faktoren.</li>
+          <li><b>Weitergegebene Geräte</b> und soziale Integration als harte Kennzahlen.</li>
+          <li>Belegbar für Anträge — nicht geschätzt, sondern hergeleitet.</li>
+        </ul>
+      </div>
+      <div class="shot">
+        <div class="browserbar"><i></i><i></i><i></i><span class="url">revamp-info.orangecat.ch/wirkung</span></div>
+        <img src="/blog/showcase-revampinfo-wirkung.png" alt="Wirkungsdaten">
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 METHODIK -->
+  <section class="slide">
+    <div class="split rev">
+      <div class="shot">
+        <div class="browserbar"><i></i><i></i><i></i><span class="url">revamp-info.orangecat.ch/methodik</span></div>
+        <img src="/blog/showcase-revampinfo-methodik.png" alt="Methodik / Transparenzbericht">
+      </div>
+      <div class="txt">
+        <div class="eyebrow"><span>Methodik</span></div>
+        <h3>Jede Zahl trägt Quelle, Rechenweg und Konfidenz.</h3>
+        <ul class="feat">
+          <li><b>Per Klick prüfbar:</b> woher die Zahl kommt und wie sie berechnet wurde.</li>
+          <li><b>Konfidenz sichtbar</b> — keine Behauptung ohne Beleg.</li>
+          <li>Der Transparenzbericht macht das Vertrauen zur Voreinstellung.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 SECTION: NACH INNEN -->
+  <section class="slide section-break">
+    <div class="eyebrow"><span>Teil 2</span></div>
+    <h2>Nach innen: Fundraising-Intelligenz</h2>
+    <p>Dieselben Daten treiben ein Werkzeug, das Stiftungen findet und Gesuche schreibt.</p>
+  </section>
+
+  <!-- 9 STIFTUNGS-PIPELINE (concept) -->
+  <section class="slide">
+    <div class="eyebrow"><span>Stiftungs-Pipeline</span></div>
+    <h2>Rund 16'900 Schweizer Stiftungen — gefiltert nach Passung.</h2>
+    <ul class="feat" style="grid-template-columns:1fr 1fr; display:grid; gap:1.5vh 6vh; margin-top:3vh; max-width:none">
+      <li style="max-width:38ch"><b>Der ganze Trichter:</b> rund 16'900 Schweizer Stiftungen als Ausgangsmenge.</li>
+      <li style="max-width:38ch"><b>Nach Passung gefiltert:</b> Zweck, Region und Förderprofil grenzen die Menge ein.</li>
+      <li style="max-width:38ch"><b>Fit-Analyse pro Stiftung:</b> wie gut das Vorhaben zur Stiftung passt.</li>
+      <li style="max-width:38ch"><b>Statt Giesskanne:</b> Zeit fliesst in die aussichtsreichen Adressen.</li>
+    </ul>
+  </section>
+
+  <!-- 10 GESUCH-GENERATOR (concept) -->
+  <section class="slide">
+    <div class="eyebrow"><span>Gesuch-Generator</span></div>
+    <h2>Aus einem Stiftungs-Eintrag ein komplettes Antragspaket.</h2>
+    <ul class="feat" style="grid-template-columns:1fr 1fr; display:grid; gap:1.5vh 6vh; margin-top:3vh; max-width:none">
+      <li style="max-width:38ch"><b>Gesuch-PDF:</b> ein fertiges, vierseitiges Gesuch auf die Stiftung zugeschnitten.</li>
+      <li style="max-width:38ch"><b>One-Pager &amp; Pitch-Deck:</b> die Kurzfassung und die Präsentation gleich mit.</li>
+      <li style="max-width:38ch"><b>Wirkungsbericht:</b> die belegten Zahlen aus dem Transparenz-Teil, eingebettet.</li>
+      <li style="max-width:38ch"><b>Tokenisierte Share-Landingpage:</b> ein Link, den die Stiftung öffnen kann.</li>
+    </ul>
+  </section>
+
+  <!-- 11 ANTRAGS-PIPELINE (concept) -->
+  <section class="slide">
+    <div class="eyebrow"><span>Antrags-Pipeline</span></div>
+    <h2>Vom Fund bis zum Entscheid — als Kanban-Board.</h2>
+    <ul class="feat" style="grid-template-columns:1fr 1fr; display:grid; gap:1.5vh 6vh; margin-top:3vh; max-width:none">
+      <li style="max-width:38ch"><b>Ein Board:</b> jede Stiftung als Karte, von Recherche bis Zusage.</li>
+      <li style="max-width:38ch"><b>Status auf einen Blick:</b> was ist offen, eingereicht, entschieden.</li>
+      <li style="max-width:38ch"><b>Nichts fällt durch:</b> Fristen und Nachfassen an einem Ort.</li>
+      <li style="max-width:38ch"><b>Wiederholbar:</b> derselbe Ablauf für jede neue Förderrunde.</li>
+    </ul>
+  </section>
+
+  <!-- 12 SCALE -->
+  <section class="slide">
+    <div class="eyebrow"><span>Grössenordnung</span></div>
+    <h2>Kein Prototyp — ein laufendes Werkzeug.</h2>
+    <div class="stats">
+      <div class="c"><div class="v num">16'900</div><div class="l">Stiftungen im Trichter</div></div>
+      <div class="c"><div class="v num">5</div><div class="l">Dokument-Typen generiert</div></div>
+      <div class="c"><div class="v num">8</div><div class="l">Jahre Finanzdaten</div></div>
+      <div class="c"><div class="v num">31</div><div class="l">Seiten</div></div>
+      <div class="c"><div class="v num">866</div><div class="l">Commits</div></div>
+      <div class="c"><div class="v num">1</div><div class="l">Werkzeug, aussen &amp; innen</div></div>
+    </div>
+    <div class="tech" style="margin-top:3vh"><b>Technik:</b> Next.js 16 · React 19 · TypeScript · Chart.js · PDF-Generierung (@react-pdf) · PostgreSQL / Drizzle · Groq-KI</div>
+  </section>
+
+  <!-- 13 CLOSE -->
+  <section class="slide cover">
+    <div class="eyebrow"><span>Kurz gesagt</span></div>
+    <h1>Transparenz zeigen.<br><span class="kicker">Gesuche gewinnen.</span></h1>
+    <p class="sub">Nach aussen die belegte Wirkung, nach innen das Werkzeug, das aus 16'900 Stiftungen
+      den nächsten Antrag macht. Am besten selbst anschauen.</p>
+    <div class="domns"><span><span class="dot"></span>revamp-info.orangecat.ch</span></div>
+  </section>
+
+</div></div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const bar = document.getElementById('bar');
+  const counter = document.getElementById('counter');
+  const hint = document.getElementById('hint');
+  let i = 0;
+  function show(n){
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle('active', k === i));
+    bar.style.width = ((i) / (slides.length - 1) * 100) + '%';
+    counter.textContent = String(i + 1).padStart(2,'0') + ' / ' + String(slides.length).padStart(2,'0');
+    if (i > 0) hint.style.display = 'none';
+  }
+  function next(){ show(i + 1) } function prev(){ show(i - 1) }
+  document.addEventListener('keydown', e => {
+    if (['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)) { e.preventDefault(); next(); }
+    else if (['ArrowLeft','ArrowUp','PageUp'].includes(e.key)) { e.preventDefault(); prev(); }
+    else if (e.key === 'Home') show(0); else if (e.key === 'End') show(slides.length - 1);
+  });
+  document.getElementById('stage').addEventListener('click', e => {
+    const x = e.clientX / window.innerWidth; x < 0.28 ? prev() : next();
+  });
+  show(0);
+</script>
+</body>
+</html>

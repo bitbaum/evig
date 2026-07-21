@@ -34,6 +34,30 @@ export interface PresentationDeck {
 
 export const PRESENTATION_DECKS: PresentationDeck[] = [
   {
+    slug: 'revampit-portal',
+    title: 'Revamp-IT — Die Plattform',
+    description: 'Wie aus drei getrennten Alt-Systemen eine zusammenhängende Plattform wurde — Marktplatz, Werkstatt und Betrieb an einem Ort',
+    targetGroup: 'Öffentlich',
+    audience: CONTENT_AUDIENCE.PUBLIC,
+    createdMonth: '2026-07',
+  },
+  {
+    slug: 'kivvi-plattform',
+    title: 'Kivvi — Das ERP der Kreislaufwirtschaft',
+    description: 'Das offene ERP für Betriebe, die Waren ein zweites Leben geben — Spenden, Einzelstücke, Reparatur, Schweizer Buchhaltung',
+    targetGroup: 'Öffentlich',
+    audience: CONTENT_AUDIENCE.PUBLIC,
+    createdMonth: '2026-07',
+  },
+  {
+    slug: 'revamp-info-plattform',
+    title: 'Revamp-Info — Fundraising & Transparenz',
+    description: 'Transparenz nach aussen, Fundraising-Intelligenz nach innen — findet Stiftungen und erstellt Gesuche',
+    targetGroup: 'Öffentlich',
+    audience: CONTENT_AUDIENCE.PUBLIC,
+    createdMonth: '2026-07',
+  },
+  {
     slug: 'aoz-wohnen',
     title: 'AOZ Wohnen: Digitale Wohnungsverwaltung',
     description: 'Digitale Wohnungsverwaltung für Geflüchtete — einfach, sicher, human',
