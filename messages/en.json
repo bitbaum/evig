@@ -10013,7 +10013,13 @@
         "timecards": "Timecards",
         "activity": "Activity"
       },
-      "showOnAbout": "Visible on About page"
+      "showOnAbout": "Visible on About page",
+      "orgTabs": {
+        "people": "People",
+        "teams": "Teams",
+        "board": "Who does what",
+        "aria": "People & Teams"
+      }
     },
     "hr": {
       "vacancies": {
@@ -11355,7 +11361,7 @@
           "description": "User management"
         },
         "team": {
-          "label": "Team profiles",
+          "label": "People",
           "description": "Employees, volunteers, interns"
         },
         "hr-vacancies": {

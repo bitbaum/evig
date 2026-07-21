@@ -10012,7 +10012,13 @@
         "timecards": "Saisie du temps",
         "activity": "Activité"
       },
-      "showOnAbout": "Visible sur la page À propos"
+      "showOnAbout": "Visible sur la page À propos",
+      "orgTabs": {
+        "people": "Personnes",
+        "teams": "Équipes",
+        "board": "Qui fait quoi",
+        "aria": "Personnes et équipes"
+      }
     },
     "protocols": {
       "queueTitle": "File d'attente de revue IA",
@@ -11354,7 +11360,7 @@
           "description": "Gestion des utilisateurs"
         },
         "team": {
-          "label": "Profils d'équipe",
+          "label": "Personnes",
           "description": "Employés, bénévoles, stagiaires"
         },
         "hr-vacancies": {

@@ -10012,7 +10012,13 @@
         "timecards": "근무 시간 기록",
         "activity": "활동"
       },
-      "showOnAbout": "소개 페이지에 표시"
+      "showOnAbout": "소개 페이지에 표시",
+      "orgTabs": {
+        "people": "구성원",
+        "teams": "팀",
+        "board": "누가 무엇을",
+        "aria": "구성원 및 팀"
+      }
     },
     "protocols": {
       "queueTitle": "AI 리뷰 대기열",
@@ -11352,7 +11358,7 @@
           "description": "사용자 관리"
         },
         "team": {
-          "label": "팀 프로필",
+          "label": "구성원",
           "description": "직원, 자원봉사자, 인턴"
         },
         "hr-vacancies": {

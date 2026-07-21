@@ -25,10 +25,11 @@ import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { AdminStatsStrip } from '@/components/admin/AdminStatsStrip'
 import type { StatItem } from '@/components/admin/AdminStatsStrip'
 import Heading from '@/components/admin/AdminHeading'
+import { PeopleTeamsTabs } from '@/components/admin/team/PeopleTeamsTabs'
 
 export const metadata: Metadata = {
-  title: 'Team & HR',
-  description: 'Mitarbeiter und Team verwalten.',
+  title: 'Mitarbeitende',
+  description: 'Mitarbeiter, Freiwillige und Praktikant:innen — Profile verwalten.',
 }
 
 interface TeamStats {
@@ -109,8 +110,8 @@ export default async function TeamPage() {
 
   return (
     <AdminPageWrapper
-      title="Team & HR"
-      description="Mitarbeiter und Teammitglieder verwalten"
+      title="Mitarbeitende"
+      description="Mitarbeiter, Freiwillige und Praktikant:innen — Profile verwalten"
       icon={Users}
       iconColor="purple"
       actions={
@@ -129,6 +130,8 @@ export default async function TeamPage() {
         </div>
       }
     >
+      <PeopleTeamsTabs />
+
       {/* Staff without profiles — promoted to the top so adding a member
           is one click from this page. Each chip pre-fills the new-profile
           form with the user_id, skipping the "pick a user" step entirely. */}

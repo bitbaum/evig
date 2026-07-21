@@ -10012,7 +10012,13 @@
         "timecards": "Rilevamento ore",
         "activity": "Attività"
       },
-      "showOnAbout": "Visibile su Chi siamo"
+      "showOnAbout": "Visibile su Chi siamo",
+      "orgTabs": {
+        "people": "Persone",
+        "teams": "Team",
+        "board": "Chi fa cosa",
+        "aria": "Persone e team"
+      }
     },
     "protocols": {
       "queueTitle": "Coda di revisione AI",
@@ -11352,7 +11358,7 @@
           "description": "Gestione degli utenti"
         },
         "team": {
-          "label": "Profili del team",
+          "label": "Persone",
           "description": "Dipendenti, volontari, stagisti"
         },
         "hr-vacancies": {

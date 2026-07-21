@@ -873,9 +873,9 @@ export const SECTIONS = {
     // team is the whole point. Team create/delete is guarded to super admins
     // in the route handler; membership edits are open (low-stakes, transparent).
     visibility: { admin: true, dashboard: false, requiresStaff: true, alwaysForStaff: true },
-    priority: 128,
+    priority: 106.3,
     category: 'management',
-    sidebarGroup: 'betrieb',
+    sidebarGroup: 'personen',
   },
 
   'team-board': {
@@ -892,9 +892,9 @@ export const SECTIONS = {
     // Drilling into a member's full profile stays gated by the sensitive `team`
     // section, so HR/compensation never leaks through this board.
     visibility: { admin: true, dashboard: false, requiresStaff: true, alwaysForStaff: true },
-    priority: 129,
+    priority: 106.6,
     category: 'management',
-    sidebarGroup: 'betrieb',
+    sidebarGroup: 'personen',
   },
 
   tasks: {
@@ -1002,7 +1002,7 @@ export const SECTIONS = {
     id: 'team',
     path: '/admin/team',
     ui: {
-      label: 'Team-Profile',
+      label: 'Mitarbeitende',
       description: 'Mitarbeiter, Freiwillige, Praktikanten',
       icon: UserCog,
       emoji: '👔',

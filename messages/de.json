@@ -10070,7 +10070,13 @@
         "timecards": "Zeiterfassung",
         "activity": "Aktivität"
       },
-      "showOnAbout": "Auf Über-uns sichtbar"
+      "showOnAbout": "Auf Über-uns sichtbar",
+      "orgTabs": {
+        "people": "Mitarbeitende",
+        "teams": "Teams",
+        "board": "Wer macht was",
+        "aria": "Personen & Teams"
+      }
     },
     "hr": {
       "vacancies": {
@@ -11410,7 +11416,7 @@
           "description": "Benutzerverwaltung"
         },
         "team": {
-          "label": "Team-Profile",
+          "label": "Mitarbeitende",
           "description": "Mitarbeiter, Freiwillige, Praktikanten"
         },
         "hr-vacancies": {

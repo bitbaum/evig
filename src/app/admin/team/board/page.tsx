@@ -14,6 +14,7 @@
  */
 
 import { Metadata } from 'next'
+import { PeopleTeamsTabs } from '@/components/admin/team/PeopleTeamsTabs'
 import Link from 'next/link'
 import { Users, ClipboardList, Activity, AlertTriangle, UserRound } from 'lucide-react'
 import { requireSection } from '@/lib/admin/guards'
@@ -238,6 +239,8 @@ export default async function TeamBoardPage({ searchParams }: PageProps) {
       icon={Users}
       iconColor="blue"
     >
+      <PeopleTeamsTabs />
+
       <AdminStatsStrip
         items={[
           { icon: Users, color: 'blue', label: 'Aktive Mitglieder', value: stats.activeMembers },

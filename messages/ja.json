@@ -10012,7 +10012,13 @@
         "timecards": "勤怠記録",
         "activity": "アクティビティ"
       },
-      "showOnAbout": "「私たちについて」に表示"
+      "showOnAbout": "「私たちについて」に表示",
+      "orgTabs": {
+        "people": "メンバー",
+        "teams": "チーム",
+        "board": "担当マップ",
+        "aria": "メンバーとチーム"
+      }
     },
     "protocols": {
       "queueTitle": "AI レビューキュー",
@@ -11352,7 +11358,7 @@
           "description": "ユーザー管理"
         },
         "team": {
-          "label": "チームプロフィール",
+          "label": "メンバー",
           "description": "職員、ボランティア、インターン"
         },
         "hr-vacancies": {

@@ -10012,7 +10012,13 @@
         "timecards": "Registro de horas",
         "activity": "Actividad"
       },
-      "showOnAbout": "Visible en «Quiénes somos»"
+      "showOnAbout": "Visible en «Quiénes somos»",
+      "orgTabs": {
+        "people": "Personas",
+        "teams": "Equipos",
+        "board": "Quién hace qué",
+        "aria": "Personas y equipos"
+      }
     },
     "protocols": {
       "queueTitle": "Cola de revisión de IA",
@@ -11352,7 +11358,7 @@
           "description": "Gestión de usuarios"
         },
         "team": {
-          "label": "Perfiles del equipo",
+          "label": "Personas",
           "description": "Empleados, voluntarios, practicantes"
         },
         "hr-vacancies": {

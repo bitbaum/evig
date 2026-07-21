@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
+import { PeopleTeamsTabs } from '@/components/admin/team/PeopleTeamsTabs'
 import { Users, Plus, Mail, UserRound, UserRoundX, LayoutGrid } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { AdminStatsStrip } from '@/components/admin/AdminStatsStrip'
@@ -55,6 +56,8 @@ export default async function TeamsAdminPage() {
         </div>
       }
     >
+      <PeopleTeamsTabs />
+
       {listError ? (
         <div className="p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 rounded-lg text-error-700 dark:text-error-300">
           Fehler beim Laden der Teams.
