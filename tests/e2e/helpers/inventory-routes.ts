@@ -119,7 +119,9 @@ export const ADMIN_ROUTES: InventoryRoute[] = [
   { id: 114, label: 'Admin donations', path: '/admin/donations' },
   { id: 115, label: 'Admin projects', path: ROUTES.admin.projects, urlPattern: /\/admin\/projects/ },
   { id: 122, label: 'Admin dashboard', path: ROUTES.admin.dashboard, urlPattern: /\/admin/ },
-  { id: 123, label: 'Erfassung', path: ROUTES.admin.erfassung, urlPattern: /\/admin\/erfassung/ },
+  // ROUTES.admin.erfassung canonicalised to /admin/intake/capture; the pattern
+  // must follow the route or this smoke can never match (it lands on capture).
+  { id: 123, label: 'Erfassung', path: ROUTES.admin.erfassung, urlPattern: /\/admin\/intake\/capture/ },
   { id: 125, label: 'Intake pipeline', path: ROUTES.admin.intake },
   { id: 126, label: 'Locations', path: ROUTES.admin.locations, urlPattern: /\/admin\/locations/ },
   { id: 127, label: 'Admin services', path: ROUTES.admin.services, urlPattern: /\/admin\/services/ },
