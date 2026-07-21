@@ -29,6 +29,13 @@ interface AIFormAssistProps<T = Record<string, unknown>> {
   defaultExpanded?: boolean
   variant?: 'bar' | 'section'
   className?: string
+  /**
+   * Override the auto extract-vs-refine decision. Set by structured forms
+   * (e.g. erfassung) whose populated fields are too short for the default
+   * length heuristic to recognise as "the form already has a record".
+   * Undefined = use the built-in heuristic (unchanged for existing callers).
+   */
+  hasContentOverride?: boolean
 }
 
 export function AIFormAssist<T = Record<string, unknown>>({
@@ -39,6 +46,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
   defaultExpanded = false,
   variant = 'bar',
   className = '',
+  hasContentOverride,
 }: AIFormAssistProps<T>) {
   const t = useTranslations('ai.formAssist')
   const [isExpanded, setIsExpanded] = useState(defaultExpanded)
@@ -62,10 +70,17 @@ export function AIFormAssist<T = Record<string, unknown>>({
     ? Object.entries(config.quickActions).map(([key, { label }]) => ({ key, label }))
     : []
 
-  // Form has meaningful user content (not just defaults)
-  const hasContent = currentData && Object.values(currentData).some(v =>
+  // Does the form already hold a record? If so, plain-language input is a
+  // REFINE ("change the price to 80"), not a fresh extraction that would
+  // clobber the fields. Default heuristic: any field with substantial text.
+  // Structured forms whose real fields are short (erfassung: "iRobot" +
+  // "Roomba 600 Series") pass hasContentOverride so a filled record still
+  // refines — without that override the auto-heuristic (unchanged for the
+  // other forms, which carry short default fields) governs.
+  const autoHasContent = Boolean(currentData && Object.values(currentData).some(v =>
     typeof v === 'string' && v.trim().length > 20
-  )
+  ))
+  const hasContent = hasContentOverride ?? autoHasContent
 
   const handleSubmit = () => {
     if (!inputText.trim() || isExtracting) return
