@@ -33,14 +33,19 @@ import { KATEGORIEN } from '@/config/erfassung/categories'
 export function detectCategory(text: string): string {
   const code = (label: string): string => KATEGORIEN.find(k => k.label === label)?.value ?? ''
   const patterns: Array<[RegExp, string]> = [
-    [/\b(drucker|laserjet|pixma|officejet|deskjet|multifunktion|printer|scanner|toner)\b|\b(mfc|dcp)[-\s]/i, code('Drucker & Scanner')],
+    [/\b(drucker|laserjet|pixma|officejet|deskjet|i-?sensys|imageclass|maxify|multifunktion|printer|scanner|toner)\b|\b(mfc|dcp)[-\s]/i, code('Drucker & Scanner')],
     [/\b(ultrasharp|ultrawide|monitor|bildschirm|beamer|projektor|eizo|zoll[\s-]*(led|lcd|tft))\b/i, code('Monitore')],
-    [/\b(dockingstation|dock|router|switch|access\s*point|firewall|netzwerk|wlan|nas)\b/i, code('Netzwerk')],
+    [/\b(dockingstation|dock|router|switch|access\s*point|firewall|netzwerk(adapter)?|wlan|nas|tp-?link|archer|\bmodem\b|converged\s*network|(ethernet|network|server)\s*adapter|ubee)\b/i, code('Netzwerk')],
     [/\b(tastatur|keyboard|maus|mouse|webcam|headset|lautsprecher)\b/i, code('Peripherie')],
     [/\b(ipad|galaxy\s*tab|surface\s*(go|pro)|tablet)\b/i, code('Tablets')],
     [/\b(iphone|galaxy\s*s\d|pixel\s*\d|smartphone|handy)\b/i, code('Smartphones')],
-    [/\b(thinkpad|latitude|elitebook|probook|macbook|ideapad|inspiron|pavilion|vivobook|zenbook|chromebook|swift|aspire|travelmate|lifebook|laptop|notebook|ultrabook)\b/i, code('Laptops')],
-    [/\b(optiplex|prodesk|thinkcentre|imac|mac\s*mini|nuc|elitedesk|desktop|tower|workstation|power\s*macintosh|pc)\b/i, code('Desktop PCs')],
+    [/\b(thinkpad|latitude|elitebook|probook|macbook|ideapad|inspiron|pavilion|vivobook|zenbook|chromebook|swift|aspire|travelmate|lifebook|\bxps\b|laptop|notebook|ultrabook)\b/i, code('Laptops')],
+    [/\b(optiplex|prodesk|thinkcentre|imac|mac\s*mini|nuc|elitedesk|esprimo|compaq\s*\d|desktop|tower|workstation|power\s*macintosh|pc)\b/i, code('Desktop PCs')],
+    // Internal PC parts → the existing "Komponenten" bucket. Checked LAST so a
+    // device name (laptop/desktop/monitor…) always wins over a parts keyword.
+    // Includes single-category component brands (Nvidia/ATI/Seagate/WD/Arctic…)
+    // that only make one kind of part, so a bare model number still classifies.
+    [/\b(grafikkarte|graphics\s*card|\bgpu\b|radeon|geforce|quadro|nvidia|\bati\b|sapphire|matrox|club3d|festplatte|\bhdd\b|\bssd\b|nvme|barracuda|spinpoint|deskstar|caviar|seagate|western\s*digital|\bwd\d|mainboard|motherboard|\bcpu\b|prozessor|ryzen|\bxeon\b|pentium|celeron|kühler|lüfter|\bcooler\b|freezer|hydro|wraith|cryorig|gelid|\barctic\b|netzteil|\bpsu\b|be\s*quiet|arbeitsspeicher|\bddr\d?\b|\bdimm\b|laufwerk|dvd|blu-?ray|optisches|zip-?laufwerk|tape\s*drive|diskette)\b/i, code('Komponenten')],
   ]
   for (const [re, cat] of patterns) {
     if (cat && re.test(text)) return cat

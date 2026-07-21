@@ -12,6 +12,7 @@ const CAT_LAPTOPS = '10'
 const CAT_DESKTOPS = '20'
 const CAT_MONITORS = '30'
 const CAT_PRINTERS = '60'
+const CAT_COMPONENTS = '70'
 const CAT_NETWORK = '90'
 const SUB_BUSINESS = '101'
 const SUB_CONSUMER = '102'
@@ -25,12 +26,27 @@ describe('detectCategory', () => {
     ['Brother MFC-J4710DW All-in-One', CAT_PRINTERS],
     ['Drucker HP LaserJet P3005dn', CAT_PRINTERS],
     ['Dockingstation Lenovo ThinkPad Hybrid USB-C', CAT_NETWORK], // dock ≠ laptop despite "ThinkPad"
+    // Components → the existing Komponenten bucket (not new categories)
+    ['ATI Radeon HD 2400 XT', CAT_COMPONENTS],
+    ['NVIDIA GeForce GTX 480', CAT_COMPONENTS],
+    ['Festplatte Seagate Barracuda 7200.12 250 GB', CAT_COMPONENTS],
+    ['Western Digital WD10EURX 1TB', CAT_COMPONENTS],
+    ['ASRock P55 Extreme4 Motherboard', CAT_COMPONENTS],
+    ['Arctic Freezer 7 Pro', CAT_COMPONENTS],
+    ['Be Quiet! Dark Power Pro 10 750W', CAT_COMPONENTS],
+    ['DVD-RW-Laufwerk Pioneer DVR-106D', CAT_COMPONENTS],
+    // Improved coverage
+    ['Canon i-Sensys MF744Cdw', CAT_PRINTERS],
+    ['TP-Link Archer T4E AC1200', CAT_NETWORK],
+    ['HP NC365T 4-Port Ethernet Server Adapter', CAT_NETWORK],
+    ['Fujitsu Esprimo D756 E90+', CAT_DESKTOPS],
+    ['Dell XPS 13', CAT_LAPTOPS],
   ])('classifies %s → %s', (text, expected) => {
     expect(detectCategory(text)).toBe(expected)
   })
 
-  it('returns empty string when nothing matches', () => {
-    expect(detectCategory('Gutschein 50 CHF')).toBe('')
+  it('returns empty string for truly non-device items (gift cards)', () => {
+    expect(detectCategory('revamp-it Gutschein 50 Franken')).toBe('')
   })
 })
 

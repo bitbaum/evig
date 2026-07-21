@@ -158,6 +158,35 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ mode: 'reindex', indexed, failed })
   }
 
+  // Recategorize mode: re-run detectCategory on migrated products that landed
+  // uncategorized, and propagate the category to their listing. Truly
+  // non-device items (gift cards) stay uncategorized → "Sonstiges".
+  if (body?.mode === 'recategorize') {
+    const rows = await db.execute(sql`
+      SELECT p.id AS product_id, p.brand, p.product_name, p.short_description, l.id AS listing_id
+      FROM ai_extracted_products p
+      JOIN inventory_items ii ON ii.ai_product_id = p.id
+      LEFT JOIN listings l ON l.inventory_item_id = ii.id
+      WHERE p.specifications->>'Shopware-Nr.' IS NOT NULL AND (p.category IS NULL OR p.category = '')
+    `)
+    let updated = 0
+    let stillNone = 0
+    const byCat: Record<string, number> = {}
+    for (const row of rows.rows as Array<Record<string, unknown>>) {
+      const text = `${row.brand ?? ''} ${row.product_name ?? ''} ${row.short_description ?? ''}`
+      const cat = detectCategory(text)
+      if (!cat) { stillNone++; continue }
+      await db.execute(sql`UPDATE ai_extracted_products SET category = ${cat} WHERE id = ${String(row.product_id)}`)
+      if (row.listing_id) {
+        await db.execute(sql`UPDATE listings SET category = ${cat} WHERE id = ${String(row.listing_id)}`)
+      }
+      updated++
+      byCat[cat] = (byCat[cat] || 0) + 1
+    }
+    logger.info('Shopware migration recategorize complete', { updated, stillNone, byCat })
+    return NextResponse.json({ mode: 'recategorize', updated, stillNone, byCat })
+  }
+
   const products = body?.products
   if (!Array.isArray(products)) {
     return NextResponse.json({ error: 'products[] required' }, { status: 400 })
