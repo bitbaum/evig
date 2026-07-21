@@ -22,7 +22,8 @@ import { db } from '@/db'
 import { logger } from '@/lib/logger'
 import { createErfassungProduct } from '@/lib/erfassung/create-product'
 import { detectCategory } from '@/lib/erfassung/ai-classification'
-import { publishRevampitListing } from '@/lib/marketplace/publish-revampit-listing'
+import { publishRevampitListing, REVAMPIT_SELLER_NAME } from '@/lib/marketplace/publish-revampit-listing'
+import { indexListing } from '@/lib/search/meilisearch'
 
 export const runtime = 'nodejs'
 export const maxDuration = 300
@@ -104,6 +105,57 @@ export async function POST(request: NextRequest) {
     }, {})
     logger.info('Shopware migration publish batch', { summary, remaining })
     return NextResponse.json({ mode: 'publish', summary, remaining })
+  }
+
+  // Reindex mode: push the migrated listings' CURRENT db state (e.g. the fixed
+  // titles) into Meilisearch. The listings were indexed at publish time with the
+  // pre-fix titles; the browse grid reads the db so it's already correct, this
+  // syncs the search index too.
+  if (body?.mode === 'reindex') {
+    const rows = await db.execute(sql`
+      SELECT l.id, l.title, l.description, l.brand, l.model, l.category, l.condition,
+             l.price_chf, l.delivery_options, l.payment_mode, l.status, l.pickup_location,
+             l.view_count, l.favorite_count, l.created_at,
+             (SELECT url FROM listing_images WHERE listing_id = l.id ORDER BY is_primary DESC, position ASC LIMIT 1) AS thumbnail
+      FROM listings l
+      JOIN inventory_items ii ON l.inventory_item_id = ii.id
+      JOIN ai_extracted_products p ON ii.ai_product_id = p.id
+      WHERE p.specifications->>'Shopware-Nr.' IS NOT NULL
+    `)
+    let indexed = 0
+    let failed = 0
+    for (const row of rows.rows as Array<Record<string, unknown>>) {
+      try {
+        await indexListing({
+          id: String(row.id),
+          title: String(row.title ?? ''),
+          description: String(row.description ?? ''),
+          brand: (row.brand as string) ?? null,
+          model: (row.model as string) ?? null,
+          category: String(row.category ?? ''),
+          condition: String(row.condition ?? 'good'),
+          price_chf: Number(row.price_chf) || 0,
+          delivery_options: String(row.delivery_options ?? 'pickup'),
+          payment_mode: String(row.payment_mode ?? 'secure'),
+          status: String(row.status ?? 'active'),
+          is_revampit: true,
+          is_verified: false,
+          pickup_location: (row.pickup_location as string) ?? null,
+          seller_name: REVAMPIT_SELLER_NAME,
+          seller_city: null,
+          view_count: Number(row.view_count) || 0,
+          favorite_count: Number(row.favorite_count) || 0,
+          created_at: new Date(String(row.created_at)).toISOString(),
+          thumbnail: (row.thumbnail as string) ?? null,
+        })
+        indexed++
+      } catch (error) {
+        failed++
+        logger.error('Shopware migration reindex failed', { error, id: row.id })
+      }
+    }
+    logger.info('Shopware migration reindex complete', { indexed, failed })
+    return NextResponse.json({ mode: 'reindex', indexed, failed })
   }
 
   const products = body?.products
