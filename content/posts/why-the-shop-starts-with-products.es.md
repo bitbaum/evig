@@ -1,7 +1,6 @@
 ---
 title: "Por qué la tienda es el marketplace"
 excerpt: "En Revamp-IT, tienda significa a partir de ahora marketplace: un camino de compra rápido para electrónica usada de Revamp-IT y de otros proveedores."
-author: "RevampIT Team"
 featuredImage: "/blog/shop-products.svg"
 category: "Produkt"
 tags:

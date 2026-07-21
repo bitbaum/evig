@@ -43,18 +43,20 @@ export default async function PresentationsPage() {
       icon={Presentation}
       iconColor="blue"
     >
-      {/* Sharing note — decks are unlisted, not private */}
+      {/* Sharing note — decks are unlisted; access depends on each deck's Zugriff. */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-        <div className="flex items-start gap-2 bg-surface-raised rounded-xl border border px-4 py-3 flex-1">
+        <div className="flex items-start gap-2 bg-surface-raised rounded-xl border px-4 py-3 flex-1">
           <Info className="w-4 h-4 mt-0.5 shrink-0 text-text-muted" aria-hidden="true" />
           <p className="text-sm text-text-secondary">
-            Öffentlich per Link teilbar — Empfänger brauchen KEIN Konto. Leser:innen
-            können pro Folie kommentieren; Suchmaschinen sehen die Decks nicht (noindex).
+            Per Link teilbar, für Suchmaschinen unsichtbar (noindex). Der Zugriff je Deck:
+            <b className="text-text-primary"> Öffentlich</b> (ohne Konto),
+            <b className="text-text-primary"> Nur Team</b> (Anmeldung nötig) oder
+            <b className="text-text-primary"> Nur Autor</b>. Leser:innen können pro Folie kommentieren.
           </p>
         </div>
         <Link
           href="/admin/presentations/feedback"
-          className="inline-flex items-center gap-2 shrink-0 rounded-xl border border bg-surface-base px-4 py-3 text-sm font-medium text-text-primary hover:border-strong transition-colors"
+          className="inline-flex items-center gap-2 shrink-0 rounded-xl border bg-surface-base px-4 py-3 text-sm font-medium text-text-primary hover:border-strong transition-colors"
         >
           <MessageSquare className="w-4 h-4 text-text-muted" aria-hidden="true" />
           Feedback

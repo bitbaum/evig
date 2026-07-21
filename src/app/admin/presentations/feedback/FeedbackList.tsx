@@ -67,7 +67,7 @@ export function FeedbackList({ comments, decks }: { comments: Comment[]; decks: 
 
   if (total === 0) {
     return (
-      <div className="rounded-xl border border px-4 py-12 text-center text-sm text-text-secondary">
+      <div className="rounded-xl border px-4 py-12 text-center text-sm text-text-secondary">
         <MessageSquare className="w-6 h-6 mx-auto mb-2 text-text-muted" aria-hidden="true" />
         Noch keine Kommentare. Sobald jemand eine Folie kommentiert, erscheint es hier.
       </div>
@@ -82,12 +82,12 @@ export function FeedbackList({ comments, decks }: { comments: Comment[]; decks: 
       </label>
 
       {groups.length === 0 ? (
-        <div className="rounded-xl border border px-4 py-10 text-center text-sm text-text-secondary">
+        <div className="rounded-xl border px-4 py-10 text-center text-sm text-text-secondary">
           Alle Kommentare erledigt. 🎉
         </div>
       ) : (
         groups.map(([slug, list]) => (
-          <section key={slug} className="rounded-xl border border bg-surface-base overflow-hidden">
+          <section key={slug} className="rounded-xl border bg-surface-base overflow-hidden">
             <div className="flex items-center justify-between gap-3 px-4 py-3 border-b border bg-surface-raised">
               <h3 className="text-sm font-semibold text-text-primary">
                 {titleFor(slug)}

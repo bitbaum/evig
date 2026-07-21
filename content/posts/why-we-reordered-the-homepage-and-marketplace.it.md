@@ -1,7 +1,6 @@
 ---
 title: "Perché riordiniamo homepage e marketplace"
 excerpt: "La piattaforma deve aiutare prima di tutto a comprare e riparare. Le donazioni restano importanti, ma non sono più il primo invito all'azione sulla pagina iniziale."
-author: "RevampIT Team"
 featuredImage: "/blog/reorder-layout.svg"
 category: "Produkt"
 tags:

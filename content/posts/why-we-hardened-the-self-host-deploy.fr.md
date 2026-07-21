@@ -1,7 +1,6 @@
 ---
 title: "Pourquoi nous durcissons le déploiement auto-hébergé"
 excerpt: "Coolify n'est pas la prochaine étape sensée. La meilleure étape, c'est un déploiement reproductible et vérifiable sur notre infrastructure Hetzner existante."
-author: "RevampIT Team"
 featuredImage: "/blog/deploy-hardening.svg"
 category: "Technik"
 tags:

@@ -1,7 +1,6 @@
 ---
 title: "タブレットの第二の人生"
 excerpt: "「壊れた」タブレットのほとんどは、実は壊れていません。ソフトウェアが見放されただけです。なぜ使い続ける価値があるのか、古いタブレットにまだ何ができるのか、そしてどのオープンソースOSがそれに何年もの命を与えるのか。"
-author: "RevampIT Team"
 category: "Nachhaltigkeit"
 tags:
   - nachhaltigkeit

@@ -19,10 +19,9 @@ import {
   Trash2,
   Calendar,
   GitBranch,
-  Users,
-  Lock,
 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { AudienceBadge } from '@/components/admin/AudienceBadge'
 import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
 import { importFilePostForEdit, hideFilePost } from './actions'
 import { publishStatusLabel } from '@/config/content-status'
@@ -114,18 +113,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
                 Nicht gelistet
               </span>
             )}
-            {post.audience === 'team' && (
-              <span className={sourceBadgeClass} title="Zugriff: nur angemeldete Mitarbeitende">
-                <Users className="w-3 h-3" />
-                Nur Team
-              </span>
-            )}
-            {post.audience === 'author' && (
-              <span className={sourceBadgeClass} title="Zugriff: nur Autor und Super-Admins">
-                <Lock className="w-3 h-3" />
-                Nur Autor
-              </span>
-            )}
+            <AudienceBadge audience={post.audience} />
           </div>
           {post.excerpt && (
             <div className="text-sm text-text-tertiary line-clamp-1">{post.excerpt}</div>

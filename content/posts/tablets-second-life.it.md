@@ -1,7 +1,6 @@
 ---
 title: "La seconda vita di un tablet"
 excerpt: "La maggior parte dei tablet «rotti» non è affatto rotta — è solo il loro software a essere stato abbandonato. Perché il riutilizzo conviene, cosa può ancora fare un vecchio tablet e quali sistemi operativi open source gli regalano anni."
-author: "RevampIT Team"
 category: "Nachhaltigkeit"
 tags:
   - nachhaltigkeit

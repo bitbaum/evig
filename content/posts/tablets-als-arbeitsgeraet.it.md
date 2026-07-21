@@ -1,7 +1,6 @@
 ---
 title: "Vecchi tablet come strumenti di lavoro: come li usiamo in RevampIT"
 excerpt: "Un tablet non deve tornare alla vita quotidiana per essere utile — gli serve solo un compito. Ecco i compiti concreti dalla nostra officina: registrazione all'accettazione dei dispositivi, un orologio marcatempo per la rilevazione delle ore, un terminale di controllo in magazzino, un punto informativo in negozio. E perché tutto ciò diventa un know-how che ogni azienda può adottare."
-author: "RevampIT Team"
 category: "Nachhaltigkeit"
 tags:
   - nachhaltigkeit

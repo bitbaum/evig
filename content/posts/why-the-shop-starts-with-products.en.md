@@ -1,7 +1,6 @@
 ---
 title: "Why the Shop Is the Marketplace"
 excerpt: "At Revamp-IT, shop now means marketplace: a fast purchase path for used electronics from Revamp-IT and other sellers."
-author: "RevampIT Team"
 featuredImage: "/blog/shop-products.svg"
 category: "Produkt"
 tags:

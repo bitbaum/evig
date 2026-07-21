@@ -1,7 +1,6 @@
 ---
 title: "왜 우리는 셀프 호스트 배포를 강화하는가"
 excerpt: "Coolify는 다음으로 합리적인 단계가 아닙니다. 더 나은 단계는 기존 Hetzner 인프라 위에서 재현 가능하고 검증 가능한 배포를 만드는 것입니다."
-author: "RevampIT Team"
 featuredImage: "/blog/deploy-hardening.svg"
 category: "Technik"
 tags:

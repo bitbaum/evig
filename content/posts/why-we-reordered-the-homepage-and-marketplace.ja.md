@@ -1,7 +1,6 @@
 ---
 title: "なぜ私たちはホームページとマーケットプレイスを並べ替えるのか"
 excerpt: "プラットフォームはまず、購入と修理を助けるべきです。寄付は依然として重要ですが、もはやトップページ最初の呼びかけではありません。"
-author: "RevampIT Team"
 featuredImage: "/blog/reorder-layout.svg"
 category: "Produkt"
 tags:

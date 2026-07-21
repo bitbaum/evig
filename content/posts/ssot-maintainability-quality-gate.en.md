@@ -1,7 +1,6 @@
 ---
 title: "SSOT: Why We Are Making Our Website More Maintainable"
 excerpt: "We have further consolidated the technical foundation of the website: less hardcoding, clearer responsibilities, better checks, and a stricter shipping process."
-author: "Revamp-IT Team"
 featuredImage: "/blog/ssot-quality-gate.svg"
 category: "Engineering"
 tags:

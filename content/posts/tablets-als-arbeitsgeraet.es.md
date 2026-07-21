@@ -1,7 +1,6 @@
 ---
 title: "Tabletas viejas como herramientas de trabajo: cómo las usamos en RevampIT"
 excerpt: "Una tableta no tiene que volver a la vida cotidiana para ser útil — solo necesita una tarea. Aquí están las tareas concretas de nuestro propio taller: registro en la entrada de dispositivos, un reloj de fichar para el control horario, un terminal de inspección en el almacén, un punto de información en la tienda. Y por qué esto se convierte en un saber hacer que cualquier negocio puede adoptar."
-author: "RevampIT Team"
 category: "Nachhaltigkeit"
 tags:
   - nachhaltigkeit

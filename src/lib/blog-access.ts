@@ -9,28 +9,15 @@
  */
 
 import type { BlogPost } from '@/lib/blog'
-import { isSuperAdmin } from '@/lib/permissions'
+import { canAccessAudience, type AudienceViewer } from '@/lib/content-access'
 
-export interface BlogViewer {
-  userId?: string | null
-  isStaff?: boolean
-  email?: string | null
-  isSuperAdmin?: boolean
-}
+// A blog viewer is just an audience viewer — kept as a named alias so existing
+// blog call sites can keep importing `BlogViewer`.
+export type BlogViewer = AudienceViewer
 
 export function canViewPost(post: BlogPost, viewer: BlogViewer | null): boolean {
-  switch (post.audience) {
-    case 'team':
-      return Boolean(viewer?.isStaff)
-    case 'author':
-      return Boolean(
-        viewer &&
-          ((post.authorId && viewer.userId === post.authorId) ||
-            isSuperAdmin(viewer.email, viewer.isSuperAdmin)),
-      )
-    default:
-      return true
-  }
+  // Post access delegates to the shared audience rule (owner = the post author).
+  return canAccessAudience(post.audience, viewer, post.authorId)
 }
 
 export function filterViewable(posts: BlogPost[], viewer: BlogViewer | null): BlogPost[] {

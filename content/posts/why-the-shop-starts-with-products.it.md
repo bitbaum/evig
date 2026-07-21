@@ -1,7 +1,6 @@
 ---
 title: "Perché lo shop è il marketplace"
 excerpt: "Da Revamp-IT shop significa d'ora in poi marketplace: un percorso d'acquisto rapido per elettronica usata di Revamp-IT e di altri venditori."
-author: "RevampIT Team"
 featuredImage: "/blog/shop-products.svg"
 category: "Produkt"
 tags:

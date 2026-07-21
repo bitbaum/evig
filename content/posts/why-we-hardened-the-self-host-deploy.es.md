@@ -1,7 +1,6 @@
 ---
 title: "Por qué endurecemos el despliegue self-host"
 excerpt: "Coolify no es el siguiente paso sensato. El paso mejor es un despliegue reproducible y verificable sobre nuestra infraestructura Hetzner existente."
-author: "RevampIT Team"
 featuredImage: "/blog/deploy-hardening.svg"
 category: "Technik"
 tags:

@@ -33,7 +33,12 @@ const nextConfig = {
   },
   async rewrites() {
     return [
-      // Serve static presentations from public/ with clean URLs
+      // Clean deck URLs → static file. NOTE: the app route handler
+      // `src/app/presentations/[slug]/route.ts` now owns this URL and enforces
+      // each deck's `audience` access level; filesystem/app routes are matched
+      // before these afterFiles rewrites, so the handler wins. This rewrite is
+      // kept only as a fail-safe (a deck still serves if the handler ever
+      // doesn't match) — it does NOT gate. Do not rely on it for access control.
       {
         source: '/presentations/:slug',
         destination: '/presentations/:slug/index.html',

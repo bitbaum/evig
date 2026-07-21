@@ -1,7 +1,6 @@
 ---
 title: "Why We Are Reordering the Homepage and Marketplace"
 excerpt: "The platform should first help with buying and repairing. Donations remain important, but they are no longer the first call to action on the homepage."
-author: "RevampIT Team"
 featuredImage: "/blog/reorder-layout.svg"
 category: "Produkt"
 tags:

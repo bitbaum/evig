@@ -1,7 +1,6 @@
 ---
 title: "The Second Life of a Tablet"
 excerpt: "Most \"dead\" tablets aren't broken — they've just been abandoned by their software. Why reuse pays off, what an old tablet can still do, and the open-source operating systems that give it years more life."
-author: "RevampIT Team"
 category: "Sustainability"
 tags:
   - sustainability

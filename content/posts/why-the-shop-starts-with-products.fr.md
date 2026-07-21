@@ -1,7 +1,6 @@
 ---
 title: "Pourquoi la boutique, c'est le marché"
 excerpt: "Chez Revamp-IT, « boutique » signifie désormais marché : un parcours d'achat rapide pour de l'électronique d'occasion de Revamp-IT et d'autres vendeuses et vendeurs."
-author: "RevampIT Team"
 featuredImage: "/blog/shop-products.svg"
 category: "Produkt"
 tags:

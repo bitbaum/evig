@@ -1,7 +1,6 @@
 ---
 title: "Pourquoi nous réorganisons la page d'accueil et le marché"
 excerpt: "La plateforme doit d'abord aider à acheter et à réparer. Les dons restent importants, mais ils ne sont plus le premier appel à l'action sur la page d'accueil."
-author: "RevampIT Team"
 featuredImage: "/blog/reorder-layout.svg"
 category: "Produkt"
 tags:

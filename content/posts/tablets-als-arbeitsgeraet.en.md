@@ -1,7 +1,6 @@
 ---
 title: "Old Tablets as Work Tools: How We Use Them at RevampIT"
 excerpt: "A tablet doesn't have to return to everyday life to be useful — it just needs a job. Here are the concrete jobs from our own operation: capture at device intake, a wall clock for time tracking, an inspection terminal in the warehouse, an info point in the shop. And why this becomes know-how any business can adopt."
-author: "RevampIT Team"
 category: "Nachhaltigkeit"
 tags:
   - nachhaltigkeit

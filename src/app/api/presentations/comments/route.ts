@@ -7,6 +7,7 @@ import { apiSuccess, apiError, apiBadRequest, apiRateLimited } from '@/lib/api/h
 import { logger } from '@/lib/logger'
 import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit'
 import { PRESENTATION_DECKS } from '@/config/presentations'
+import { canAccessAudience } from '@/lib/content-access'
 import { SUPER_ADMIN_EMAILS, isStaffEmail } from '@/lib/permissions'
 import { createNotification } from '@/lib/services/notifications'
 
@@ -61,6 +62,22 @@ export async function POST(req: NextRequest) {
       ? (session?.user?.name ?? null)
       : (json.name ? (String(json.name).trim().slice(0, NAME_MAX) || null) : null)
     const isStaff = signedIn ? isStaffEmail(session?.user?.email ?? '') : false
+
+    // A restricted deck (team/author) only accepts comments from someone
+    // entitled to open it — don't leak its existence to the unentitled.
+    if (deck.audience !== 'public') {
+      const viewer = session?.user
+        ? {
+            userId: session.user.id,
+            isStaff: session.user.isStaff,
+            email: session.user.email,
+            isSuperAdmin: session.user.isSuperAdmin,
+          }
+        : null
+      if (!canAccessAudience(deck.audience, viewer, null)) {
+        return apiBadRequest('Unbekannte Präsentation.')
+      }
+    }
 
     await db.insert(presentationComments).values({
       deckSlug: slug,

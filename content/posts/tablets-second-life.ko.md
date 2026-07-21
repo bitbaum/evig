@@ -1,7 +1,6 @@
 ---
 title: "태블릿의 두 번째 삶"
 excerpt: "대부분의 '고장난' 태블릿은 사실 고장나지 않았습니다. 단지 소프트웨어가 버림받았을 뿐입니다. 왜 계속 쓰는 것이 이득인지, 낡은 태블릿이 여전히 무엇을 할 수 있는지, 그리고 어떤 오픈소스 운영체제가 그것에게 몇 년을 선물하는지 알아봅니다."
-author: "RevampIT Team"
 category: "Nachhaltigkeit"
 tags:
   - nachhaltigkeit

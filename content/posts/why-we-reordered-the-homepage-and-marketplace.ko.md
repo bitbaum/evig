@@ -1,7 +1,6 @@
 ---
 title: "왜 우리는 홈페이지와 마켓플레이스를 새로 배치했는가"
 excerpt: "플랫폼은 무엇보다 먼저 구매와 수리를 도와야 합니다. 기부는 여전히 중요하지만, 더 이상 시작 페이지의 첫 번째 호출이 아닙니다."
-author: "RevampIT Team"
 featuredImage: "/blog/reorder-layout.svg"
 category: "Produkt"
 tags:

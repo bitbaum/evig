@@ -1,7 +1,6 @@
 ---
 title: "La seconde vie d'une tablette"
 excerpt: "La plupart des tablettes « cassées » ne le sont pas du tout — c'est seulement leur logiciel qui a été abandonné. Pourquoi la réutilisation en vaut la peine, ce qu'une vieille tablette sait encore faire et quels systèmes d'exploitation open source lui offrent des années de vie."
-author: "RevampIT Team"
 category: "Nachhaltigkeit"
 tags:
   - nachhaltigkeit

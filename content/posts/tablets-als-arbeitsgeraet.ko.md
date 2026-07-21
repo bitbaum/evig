@@ -1,7 +1,6 @@
 ---
 title: "오래된 태블릿을 업무 단말로: RevampIT에서의 실제 활용법"
 excerpt: "태블릿은 일상으로 돌아오지 않아도 유용할 수 있습니다 — 필요한 것은 단 하나의 역할뿐입니다. 우리 현장에서 나온 구체적인 용도를 소개합니다. 기기 접수 등록, 근태용 출퇴근 단말, 창고의 검사 단말, 매장의 안내 지점. 그리고 이것이 어떤 사업체든 받아들일 수 있는 노하우가 되는 이유."
-author: "RevampIT Team"
 category: "Nachhaltigkeit"
 tags:
   - nachhaltigkeit

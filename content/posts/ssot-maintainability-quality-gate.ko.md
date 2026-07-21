@@ -1,7 +1,6 @@
 ---
 title: "SSOT: 우리가 웹사이트를 더 유지보수하기 좋게 만드는 이유"
 excerpt: "우리는 웹사이트의 기술적 기반을 한층 더 통합했습니다. 하드코딩을 줄이고, 책임을 더 명확히 하고, 검사를 개선하고, 배포 프로세스를 더 엄격하게 만들었습니다."
-author: "Revamp-IT Team"
 featuredImage: "/blog/ssot-quality-gate.svg"
 category: "Engineering"
 tags:

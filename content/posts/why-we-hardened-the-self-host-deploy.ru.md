@@ -1,7 +1,6 @@
 ---
 title: "Почему мы усиливаем self-host-деплой"
 excerpt: "Coolify — не следующий разумный шаг. Лучший шаг — воспроизводимый, проверяемый деплой на нашей существующей инфраструктуре Hetzner."
-author: "RevampIT Team"
 featuredImage: "/blog/deploy-hardening.svg"
 category: "Technik"
 tags:

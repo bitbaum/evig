@@ -1,7 +1,6 @@
 ---
 title: "Alte Tablets als Arbeitsgeräte: Wie wir sie bei RevampIT selbst einsetzen"
 excerpt: "Ein Tablet muss nicht zurück in den Alltag, um nützlich zu sein — es muss nur eine Aufgabe bekommen. Wir zeigen die konkreten Aufgaben aus unserem eigenen Betrieb: Erfassung am Geräte-Eingang, Stempeluhr für die Zeiterfassung, Prüf-Terminal im Lager, Info-Punkt im Laden. Und warum daraus ein Knowhow wird, das jeder Betrieb übernehmen kann."
-author: "RevampIT Team"
 category: "Nachhaltigkeit"
 tags:
   - nachhaltigkeit

@@ -1,7 +1,6 @@
 ---
 title: "SSOT : pourquoi nous rendons notre site plus facile à maintenir"
 excerpt: "Nous avons continué à consolider les fondations techniques du site : moins de valeurs codées en dur, des responsabilités plus claires, de meilleurs contrôles et un processus de mise en production plus strict."
-author: "Revamp-IT Team"
 featuredImage: "/blog/ssot-quality-gate.svg"
 category: "Engineering"
 tags:

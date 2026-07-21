@@ -1,7 +1,6 @@
 ---
 title: "SSOT: なぜ私たちはウェブサイトをより保守しやすくするのか"
 excerpt: "私たちはウェブサイトの技術的な土台をさらに統合しました。ハードコーディングを減らし、責務を明確にし、チェックを改善し、より厳格なシッププロセスを整えました。"
-author: "Revamp-IT Team"
 featuredImage: "/blog/ssot-quality-gate.svg"
 category: "Engineering"
 tags:

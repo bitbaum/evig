@@ -1,7 +1,6 @@
 ---
 title: "Das zweite Leben eines Tablets"
 excerpt: "Die meisten „kaputten“ Tablets sind gar nicht kaputt — nur ihre Software wurde aufgegeben. Warum sich Weiternutzung lohnt, was ein altes Tablet noch alles kann und welche Open-Source-Betriebssysteme ihm Jahre schenken."
-author: "RevampIT Team"
 category: "Nachhaltigkeit"
 tags:
   - nachhaltigkeit

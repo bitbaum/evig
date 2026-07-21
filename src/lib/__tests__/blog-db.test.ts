@@ -107,6 +107,7 @@ jest.mock('@/lib/blog', () => ({}))
 // ---------------------------------------------------------------------------
 
 import { getAllPosts, getPostBySlug, getAllCategories, getPostsByCategory } from '../blog-db'
+import { DEFAULT_BLOG_AUTHOR } from '@/config/org'
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -263,12 +264,12 @@ describe('getPostsByCategory', () => {
 // ============================================================================
 
 describe('mapPostFromDb field defaults', () => {
-  it('falls back to "Revamp-IT Team" when authorName is null', async () => {
+  it('falls back to the default blog author when authorName is null', async () => {
     mockDbSelect.mockReturnValueOnce(makeChain([makePostRow({ authorName: null })]))
 
     const [post] = await getAllPosts()
 
-    expect(post.author).toBe('Revamp-IT Team')
+    expect(post.author).toBe(DEFAULT_BLOG_AUTHOR)
   })
 
   it('falls back to empty array when tags is null', async () => {

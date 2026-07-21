@@ -1,7 +1,6 @@
 ---
 title: "Why We Are Hardening the Self-Host Deploy"
 excerpt: "Coolify is not the next sensible step. The better step is a reproducible, auditable deploy on our existing Hetzner infrastructure."
-author: "RevampIT Team"
 featuredImage: "/blog/deploy-hardening.svg"
 category: "Technik"
 tags:

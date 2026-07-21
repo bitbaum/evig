@@ -31,6 +31,7 @@ jest.mock('fs', () => ({
 
 import { getAllPosts, getPostBySlug } from '../blog'
 import { getReadingTime } from '../blog-utils'
+import { DEFAULT_BLOG_AUTHOR } from '@/config/org'
 
 beforeEach(() => {
   mockExistsSync.mockReset()
@@ -183,10 +184,10 @@ describe('getAllPosts — frontmatter parsing', () => {
     expect(getAllPosts()[0].title).toBe('Untitled')
   })
 
-  it('defaults author to "RevampIt Team" when missing', () => {
+  it('defaults author to the SSOT default author when missing', () => {
     mockReaddirSync.mockReturnValue(['p.md'])
     mockReadFileSync.mockReturnValue(makeMd({ title: 'Anon' }))
-    expect(getAllPosts()[0].author).toBe('RevampIt Team')
+    expect(getAllPosts()[0].author).toBe(DEFAULT_BLOG_AUTHOR)
   })
 
   it('defaults tags to [] when missing', () => {
@@ -313,14 +314,14 @@ describe('getPostBySlug', () => {
     expect(getPostBySlug('x')).toBeNull()
   })
 
-  it('applies same defaults as getAllPosts (Untitled, RevampIt Team, [], published=true)', () => {
+  it('applies same defaults as getAllPosts (Untitled, default author, [], published=true)', () => {
     mockExistsSync.mockReturnValue(true)
     mockReadFileSync.mockReturnValue(makeMd({}, 'body'))
     mockStatSync.mockReturnValue(makeStat(new Date('2025-01-15')))
 
     const post = getPostBySlug('p')!
     expect(post.title).toBe('Untitled')
-    expect(post.author).toBe('RevampIt Team')
+    expect(post.author).toBe(DEFAULT_BLOG_AUTHOR)
     expect(post.tags).toEqual([])
     expect(post.published).toBe(true)
   })

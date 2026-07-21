@@ -1,7 +1,6 @@
 ---
 title: "なぜショップがマーケットプレイスなのか"
 excerpt: "Revamp-ITでは、ショップは今後マーケットプレイスを意味します。Revamp-ITや他の出品者による中古電子機器への、素早い購入経路です。"
-author: "RevampIT Team"
 featuredImage: "/blog/shop-products.svg"
 category: "Produkt"
 tags:

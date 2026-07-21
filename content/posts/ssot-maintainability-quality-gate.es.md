@@ -1,7 +1,6 @@
 ---
 title: "SSOT: por qué hacemos nuestra web más mantenible"
 excerpt: "Hemos seguido consolidando la base técnica de la web: menos hardcoding, responsabilidades más claras, mejores verificaciones y un proceso de despliegue más estricto."
-author: "Revamp-IT Team"
 featuredImage: "/blog/ssot-quality-gate.svg"
 category: "Engineering"
 tags:

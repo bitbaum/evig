@@ -1,7 +1,6 @@
 ---
 title: "SSOT: Warum wir unsere Website wartbarer machen"
 excerpt: "Wir haben die technische Grundlage der Website weiter konsolidiert: weniger Hardcoding, klarere Verantwortlichkeiten, bessere Checks und ein strengerer Ship-Prozess."
-author: "Revamp-IT Team"
 featuredImage: "/blog/ssot-quality-gate.svg"
 category: "Engineering"
 tags:

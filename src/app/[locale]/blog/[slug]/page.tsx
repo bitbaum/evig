@@ -194,7 +194,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     ...(post.excerpt ? { description: post.excerpt } : {}),
     ...(post.featuredImage ? { image: `${APP_URL}${post.featuredImage}` } : {}),
     datePublished: post.publishedAt || post.createdAt,
-    author: { '@type': 'Organization', name: post.author },
+    author: { '@type': 'Person', name: post.author },
     publisher: { '@type': 'Organization', name: ORG.name },
     mainEntityOfPage: `${APP_URL}/blog/${post.slug}`,
     inLanguage: locale,

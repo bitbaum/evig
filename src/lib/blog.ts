@@ -3,6 +3,7 @@ import path from 'path'
 import matter from 'gray-matter'
 import { locales } from '@/i18n/routing'
 import { parseBlogAudience, type BlogAudience } from '@/config/blog'
+import { DEFAULT_BLOG_AUTHOR } from '@/config/org'
 
 // js-yaml@4 ships no bundled type declarations and @types/js-yaml is not a
 // project dependency, so import it with the minimal typed surface we consume.
@@ -109,7 +110,7 @@ function readPost(fileName: string, slug: string, locale: string): BlogPost {
     title: data.title || 'Untitled',
     excerpt: data.excerpt,
     featuredImage: data.featuredImage,
-    author: data.author || 'RevampIt Team',
+    author: data.author || DEFAULT_BLOG_AUTHOR,
     category: data.category,
     tags: data.tags || [],
     publishedAt: data.publishedAt,

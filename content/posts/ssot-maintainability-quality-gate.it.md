@@ -1,7 +1,6 @@
 ---
 title: "SSOT: perché rendiamo il nostro sito più manutenibile"
 excerpt: "Abbiamo consolidato ulteriormente la base tecnica del sito: meno hardcoding, responsabilità più chiare, controlli migliori e un processo di rilascio più rigoroso."
-author: "Revamp-IT Team"
 featuredImage: "/blog/ssot-quality-gate.svg"
 category: "Engineering"
 tags:

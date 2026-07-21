@@ -49,6 +49,14 @@ export const ORG = {
   timezone: 'Europe/Zurich',
 } as const
 
+/**
+ * Default blog author (SSOT). Shown when a post carries no explicit author —
+ * i.e. the personal author behind the platform's content. DB posts with a real
+ * `created_by` user show that user's name; this is the fallback for file posts
+ * and author-less DB rows.
+ */
+export const DEFAULT_BLOG_AUTHOR = 'Georgy Butaev'
+
 // ============================================================================
 // LOCATIONS
 // ============================================================================

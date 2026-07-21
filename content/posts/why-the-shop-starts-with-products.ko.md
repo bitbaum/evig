@@ -1,7 +1,6 @@
 ---
 title: "왜 상점이 곧 마켓플레이스인가"
 excerpt: "Revamp-IT에서 상점은 이제 마켓플레이스를 의미합니다. Revamp-IT와 다른 판매자들의 중고 전자제품을 위한 빠른 구매 경로입니다."
-author: "RevampIT Team"
 featuredImage: "/blog/shop-products.svg"
 category: "Produkt"
 tags:

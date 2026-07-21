@@ -1,7 +1,6 @@
 ---
 title: "なぜ私たちはセルフホストのデプロイを強化するのか"
 excerpt: "Coolifyは次の妥当なステップではありません。より良いステップは、既存のHetznerインフラ上での、再現可能で検証可能なデプロイです。"
-author: "RevampIT Team"
 featuredImage: "/blog/deploy-hardening.svg"
 category: "Technik"
 tags:

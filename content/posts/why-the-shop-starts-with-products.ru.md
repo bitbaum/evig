@@ -1,7 +1,6 @@
 ---
 title: "Почему магазин — это маркетплейс"
 excerpt: "Магазин в Revamp-IT теперь означает маркетплейс: быстрый путь покупки подержанной электроники от Revamp-IT и других продавцов."
-author: "RevampIT Team"
 featuredImage: "/blog/shop-products.svg"
 category: "Produkt"
 tags:
