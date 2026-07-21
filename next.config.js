@@ -32,18 +32,13 @@ const nextConfig = {
     ],
   },
   async rewrites() {
-    return [
-      // Clean deck URLs → static file. NOTE: the app route handler
-      // `src/app/presentations/[slug]/route.ts` now owns this URL and enforces
-      // each deck's `audience` access level; filesystem/app routes are matched
-      // before these afterFiles rewrites, so the handler wins. This rewrite is
-      // kept only as a fail-safe (a deck still serves if the handler ever
-      // doesn't match) — it does NOT gate. Do not rely on it for access control.
-      {
-        source: '/presentations/:slug',
-        destination: '/presentations/:slug/index.html',
-      },
-    ];
+    // Deck URLs (`/presentations/<slug>`) are intentionally NOT rewritten to the
+    // static index.html here: an `afterFiles` rewrite is matched BEFORE dynamic
+    // app routes, which would bypass the access gate. Instead the route handler
+    // `src/app/presentations/[slug]/route.ts` owns the URL — it enforces each
+    // deck's `audience` and serves the file from public/ (same fs pattern the
+    // blog uses for content/posts). Nested assets + /_assets stay static.
+    return [];
   },
   async headers() {
     return [
