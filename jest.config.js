@@ -25,6 +25,7 @@ const customJestConfig = {
   ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
+    '^saldo-engine$': '<rootDir>/packages/saldo/src/index.ts',
     '^next-auth$': '<rootDir>/node_modules/next-auth',
     '^next-auth/react$': '<rootDir>/node_modules/next-auth/react',
     '^next-auth/(.*)$': '<rootDir>/node_modules/next-auth/$1',

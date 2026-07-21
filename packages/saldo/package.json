@@ -1,0 +1,42 @@
+{
+  "name": "saldo-engine",
+  "version": "0.1.0",
+  "description": "A dependency-free engine for Soll/Ist time balances, vacation, and honest monthly reports.",
+  "keywords": [
+    "zeiterfassung",
+    "time-tracking",
+    "timesheet",
+    "arbeitszeit",
+    "saldo",
+    "swiss",
+    "hr",
+    "supported-employment"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "tsx --test test/*.test.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "tsx": "*",
+    "typescript": "*"
+  }
+}
