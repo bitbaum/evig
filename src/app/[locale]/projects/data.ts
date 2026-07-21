@@ -26,6 +26,10 @@ export interface ProjectConfig {
   /** For products with their own landing (e.g. Saldo): the card links here
    *  instead of the /projects/{slug} detail page. Non-localized absolute path. */
   externalHref?: string
+  /** A product's brand name (a proper noun — same in every language). When set,
+   *  it is the card title, so the name lives HERE, not scattered across the
+   *  locale files. Rebrand in one place. */
+  brandName?: string
 }
 
 /** Translatable strings for a project — `projects.items[]` (canonical order). */
@@ -49,5 +53,5 @@ export const PROJECTS: ProjectConfig[] = [
   { slug: 'hardware',      category: 'hardware',  status: 'ongoing', year: '2020', icon: Wrench },
   { slug: 'ltsp',          category: 'software',  status: 'active',  year: '2016', icon: Server },
   { slug: 'upcycling',     category: 'hardware',  status: 'ongoing', year: '2025', icon: Lightbulb },
-  { slug: 'saldo',         category: 'software',  status: 'active',  year: '2026', icon: Scale, externalHref: '/saldo' },
+  { slug: 'saldo',         category: 'software',  status: 'active',  year: '2026', icon: Scale, externalHref: '/saldo', brandName: 'Saldo' },
 ]

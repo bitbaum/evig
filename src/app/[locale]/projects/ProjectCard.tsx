@@ -15,7 +15,10 @@ export function ProjectCard({ project, index = 0 }: { project: ProjectView; inde
 
   // Structural facts (slug/category/status/year/icon) come from the config
   // SSOT; title/description/features are the project's translatable strings.
-  const { title, description, features } = project
+  const { description, features } = project
+  // A branded product's name is a proper noun (config SSOT), not a translated
+  // string — prefer it over the locale title.
+  const title = project.brandName ?? project.title
 
   const cardClass = cn(
     designPrimitive.surface.card,

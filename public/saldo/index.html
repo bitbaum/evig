@@ -243,7 +243,7 @@
 <header>
   <div class="wrap bar">
     <a class="brand" href="#top" aria-label="Saldo home">
-      <span class="glyph" aria-hidden="true"></span>Saldo<span class="brand-dot">.</span>
+      <span class="glyph" aria-hidden="true"></span><span data-brand>Saldo</span><span class="brand-dot">.</span>
     </a>
     <nav class="links" aria-label="Sections">
       <a href="#compute" data-i18n="nav1">What it computes</a>
@@ -390,7 +390,7 @@
       <div class="aud">
         <div class="card"><div class="tag" data-i18n="a1t">Social enterprises</div><h3 data-i18n="a1h">Arbeitsintegration</h3><p data-i18n="a1p">Four-eyes approval, Pensum, Feriensaldo and a month-report a case worker can read.</p></div>
         <div class="card"><div class="tag" data-i18n="a2t">SMEs & HR</div><h3 data-i18n="a2h">Small teams, real payroll</h3><p data-i18n="a2p">Balances that survive audits: effective-dated workloads, holidays and absences handled correctly.</p></div>
-        <div class="card"><div class="tag" data-i18n="a3t">Developers</div><h3 data-i18n="a3h">Embed the maths</h3><p data-i18n="a3p">A typed, tested, dependency-free package. Own your storage and UI; let Saldo own the accounting.</p></div>
+        <div class="card"><div class="tag" data-i18n="a3t">Developers</div><h3 data-i18n="a3h">Embed the maths</h3><p data-i18n="a3p">A typed, tested, dependency-free package. Own your storage and UI; let the engine own the accounting.</p></div>
       </div>
     </div>
   </section>
@@ -432,7 +432,7 @@
 
 <footer>
   <div class="wrap foot">
-    <span class="mono">Saldo — <span data-i18n="foot_tag">time tracking that balances.</span></span>
+    <span class="mono"><span data-brand>Saldo</span> — <span data-i18n="foot_tag">time tracking that balances.</span></span>
     <span>MIT © 2026 · <span data-i18n="foot_by">an open engine from Revamp-IT</span></span>
   </div>
 </footer>
@@ -479,7 +479,7 @@
       p_who: 'Entstanden als Ablösung einer Stempeluhr in einem Schweizer Sozialbetrieb, wo der Monatsrapport an die begleitende Sozialarbeit geht. Die Rechnung ist dieselbe für jedes Team, das jemandem eine ehrliche Abrechnung schuldet.',
       a1t: 'Sozialbetriebe', a1h: 'Arbeitsintegration', a1p: 'Vier-Augen-Freigabe, Pensum, Feriensaldo und ein Rapport, den die Begleitung lesen kann.',
       a2t: 'KMU & HR', a2h: 'Kleine Teams, echte Lohnbuchhaltung', a2p: 'Saldi, die Prüfungen überstehen: datierte Pensen, Feiertage und Absenzen korrekt.',
-      a3t: 'Entwickler:innen', a3h: 'Die Rechnung einbetten', a3p: 'Ein typisiertes, getestetes, abhängigkeitsfreies Paket. Speicher und UI gehören dir, die Buchhaltung Saldo.',
+      a3t: 'Entwickler:innen', a3h: 'Die Rechnung einbetten', a3p: 'Ein typisiertes, getestetes, abhängigkeitsfreies Paket. Speicher und UI gehören dir, die Buchhaltung der Engine.',
       e_product: 'Motor + Referenz-App', h_product: 'Nicht nur eine Bibliothek — ein funktionierendes Produkt zum Lernen.',
       product_p: 'Der offene Motor treibt eine vollständige Referenz-Implementierung, aus der du Muster übernehmen kannst:',
       pl1: 'Monatliche Zeitkarte mit heute markiertem Kalender', pl2: 'Aus Plan füllen, dann prüfen und einreichen',
@@ -587,6 +587,17 @@
     }
     setTimeout(run, 600);
   }
+
+  // ---- brand name — single source of truth for this site ----
+  // To rebrand: change PRODUCT.name below (or run the repo's rename script,
+  // packages/saldo/scripts/rename.mjs). The word "Saldo" elsewhere on this page
+  // (the SALDO column, Zeitsaldo/Feriensaldo, computeTimeSaldo) is the accounting
+  // term "balance" — NOT the brand — and must stay.
+  var PRODUCT = { name: 'Saldo' };
+  document.querySelectorAll('[data-brand]').forEach(function (el) { el.textContent = PRODUCT.name; });
+  document.title = PRODUCT.name + ' — time tracking that balances';
+  var brandLink = document.querySelector('.brand');
+  if (brandLink) brandLink.setAttribute('aria-label', PRODUCT.name + ' home');
 })();
 </script>
 
