@@ -4,6 +4,7 @@ import path from 'path'
 import { auth } from '@/auth'
 import { PRESENTATION_DECKS } from '@/config/presentations'
 import { canAccessAudience } from '@/lib/content-access'
+import { APP_URL } from '@/config/urls'
 
 /**
  * Serves a presentation deck at its pretty URL (`/presentations/<slug>`) and
@@ -23,7 +24,7 @@ import { canAccessAudience } from '@/lib/content-access'
 // Deck slugs are simple kebab tokens — reject anything else (path-traversal guard).
 const SLUG_RE = /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/
 
-export async function GET(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
+export async function GET(_req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   if (!SLUG_RE.test(slug)) return new NextResponse('Not found', { status: 404 })
 
@@ -44,7 +45,9 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ slug
       : null
     if (!canAccessAudience(deck.audience, viewer, null)) {
       if (!session?.user) {
-        const url = new URL('/auth/login', req.url)
+        // Build the login URL from the canonical public origin (SSOT) — `req.url`
+        // behind the reverse proxy is the internal bind address (0.0.0.0:PORT).
+        const url = new URL('/auth/login', APP_URL)
         url.searchParams.set('callbackUrl', `/presentations/${slug}`)
         return NextResponse.redirect(url)
       }
