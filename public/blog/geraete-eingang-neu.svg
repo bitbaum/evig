@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 560" role="img" font-family="Inter, system-ui, sans-serif" aria-label="Der neue Erfassungs-Pfad: ein Name, ein Foto, ein gesprochener Satz oder eine CSV-Zeile gehen an die KI-Extraktion (Qwen-Vision, Groq, Whisper), die strukturierte Felder mit Kategorie und Konfidenz zurückgibt; eine einzige Funktion createErfassungProduct schreibt den Datensatz und verzweigt zu Lager, Qualitätsprüfung oder Marktplatz, während parallel nach Kivvi synchronisiert wird. Sekunden statt Minuten.">
+  <defs>
+    <linearGradient id="bgNeu" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f0fdf4"/>
+      <stop offset="1" stop-color="#dcfce7"/>
+    </linearGradient>
+    <linearGradient id="dbNeu" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1c3a2a"/><stop offset="1" stop-color="#14261b"/>
+    </linearGradient>
+    <marker id="arrNeu" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+      <path d="M0 0 L9 4.5 L0 9 z" fill="#22c55e"/>
+    </marker>
+  </defs>
+  <rect width="1240" height="560" fill="url(#bgNeu)"/>
+
+  <!-- inputs -->
+  <g font-size="16" fill="#14532d">
+    <rect x="34" y="74" width="176" height="52" rx="12" fill="#ffffff" stroke="#86efac" stroke-width="2.5"/>
+    <text x="58" y="106">Name tippen</text>
+    <rect x="34" y="146" width="176" height="52" rx="12" fill="#ffffff" stroke="#86efac" stroke-width="2.5"/>
+    <text x="58" y="178">Foto schiessen</text>
+    <rect x="34" y="218" width="176" height="52" rx="12" fill="#ffffff" stroke="#86efac" stroke-width="2.5"/>
+    <text x="58" y="250">Sprache</text>
+    <rect x="34" y="290" width="176" height="52" rx="12" fill="#ffffff" stroke="#86efac" stroke-width="2.5"/>
+    <text x="58" y="322">CSV / Liste</text>
+  </g>
+
+  <!-- converge to AI -->
+  <g stroke="#22c55e" stroke-width="2.8" fill="none" marker-end="url(#arrNeu)">
+    <path d="M210 100 C262 100 262 195 300 205"/>
+    <path d="M210 172 C262 172 262 202 300 208"/>
+    <path d="M210 244 C262 244 262 214 300 214"/>
+    <path d="M210 316 C262 316 262 224 300 220"/>
+  </g>
+
+  <!-- AI extraction -->
+  <g>
+    <rect x="306" y="168" width="196" height="98" rx="16" fill="#16a34a"/>
+    <text x="404" y="200" font-size="18" fill="#ffffff" font-weight="700" text-anchor="middle">KI-Extraktion</text>
+    <text x="404" y="226" font-size="13.5" fill="#dcfce7" text-anchor="middle">Qwen-Vision · Groq</text>
+    <text x="404" y="246" font-size="13.5" fill="#dcfce7" text-anchor="middle">Whisper · Fallback-Kaskade</text>
+  </g>
+
+  <!-- structured fields -->
+  <g stroke="#22c55e" stroke-width="2.8" fill="none" marker-end="url(#arrNeu)"><path d="M502 217 L560 217"/></g>
+  <g>
+    <rect x="566" y="164" width="188" height="106" rx="14" fill="#ffffff" stroke="#22c55e" stroke-width="2.5"/>
+    <text x="588" y="192" font-size="15" fill="#14532d" font-weight="600">Strukturierte Felder</text>
+    <text x="588" y="216" font-size="13" fill="#166534">Hersteller · Modell · Preis</text>
+    <text x="588" y="236" font-size="13" fill="#166534">Kategorie · Zustand · Specs</text>
+    <text x="588" y="256" font-size="12.5" fill="#65a30d">+ Konfidenz je Feld</text>
+  </g>
+
+  <!-- SSOT create -->
+  <g stroke="#22c55e" stroke-width="2.8" fill="none" marker-end="url(#arrNeu)"><path d="M754 217 L812 217"/></g>
+  <g>
+    <rect x="818" y="176" width="188" height="82" rx="14" fill="#15803d"/>
+    <text x="912" y="206" font-size="15.5" fill="#ffffff" font-weight="700" text-anchor="middle">createErfassung</text>
+    <text x="912" y="226" font-size="15.5" fill="#ffffff" font-weight="700" text-anchor="middle">Product()</text>
+    <text x="912" y="246" font-size="12.5" fill="#bbf7d0" text-anchor="middle">eine Schreib-Quelle (SSOT)</text>
+  </g>
+
+  <!-- three destinations -->
+  <g stroke="#22c55e" stroke-width="2.8" fill="none" marker-end="url(#arrNeu)">
+    <path d="M1006 200 C1060 190 1060 118 1092 112"/>
+    <path d="M1006 217 L1092 217"/>
+    <path d="M1006 234 C1060 244 1060 316 1092 322"/>
+  </g>
+  <g font-size="15" fill="#14532d">
+    <rect x="1098" y="84" width="120" height="56" rx="12" fill="#ffffff" stroke="#86efac" stroke-width="2.5"/>
+    <text x="1120" y="110">Lager</text>
+    <text x="1120" y="128" font-size="11.5" fill="#65a30d">Standort/Box</text>
+    <rect x="1098" y="189" width="120" height="56" rx="12" fill="#ffffff" stroke="#86efac" stroke-width="2.5"/>
+    <text x="1120" y="215">Prüfung</text>
+    <text x="1120" y="233" font-size="11.5" fill="#65a30d">QC-Checkliste</text>
+    <rect x="1098" y="294" width="120" height="56" rx="12" fill="#ffffff" stroke="#86efac" stroke-width="2.5"/>
+    <text x="1120" y="320">Marktplatz</text>
+    <text x="1120" y="338" font-size="11.5" fill="#65a30d">live · Bild</text>
+  </g>
+
+  <!-- parallel kivvi sync (below SSOT) -->
+  <g stroke="#16a34a" stroke-width="2.4" stroke-dasharray="5 5" fill="none" marker-end="url(#arrNeu)">
+    <path d="M912 258 L912 372"/>
+  </g>
+  <g>
+    <path d="M856 372 v46 a56 14 0 0 0 112 0 v-46" fill="url(#dbNeu)"/>
+    <ellipse cx="912" cy="372" rx="56" ry="14" fill="#22543d"/>
+    <ellipse cx="912" cy="372" rx="56" ry="14" fill="none" stroke="#22c55e" stroke-width="2.5"/>
+    <text x="912" y="410" font-size="14" fill="#dcfce7" text-anchor="middle" font-weight="600">Kivvi</text>
+    <text x="912" y="448" font-size="12" fill="#166534" text-anchor="middle">non-blocking · idempotent</text>
+  </g>
+
+  <!-- banner -->
+  <rect x="34" y="482" width="770" height="52" rx="14" fill="#dcfce7" stroke="#4ade80" stroke-width="2"/>
+  <text x="66" y="515" font-size="19" fill="#166534" font-weight="700">Sekunden statt Minuten — eine Aufnahme genügt.</text>
+</svg>
