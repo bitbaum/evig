@@ -1,7 +1,7 @@
 ---
 created_date: 2026-06-19
-last_modified_date: 2026-06-26
-last_modified_summary: HR admin cohesion — stats grid, hire→profile links, team tasks tab, dashboard timecard queue
+last_modified_date: 2026-07-21
+last_modified_summary: added Zeiterfassung & Monatsrapport section (Arbeitsplan=Soll, today marker, honest interim reports, social-worker share link)
 ---
 
 # HR & Talent Lifecycle Runbook
@@ -91,6 +91,63 @@ Get-involved pages link to filtered `/karriere?track=…`.
 ## About page — named leads only
 
 On **Team-Profil bearbeiten**, enable **Auf About-Seite anzeigen** for leadership names only. No full staff directory.
+
+---
+
+## Zeiterfassung & Monatsrapport
+
+Time tracking for supported/employed staff. The month-end report doubles as the
+document sent to a referring social worker (Arbeitsintegration).
+
+### Surfaces
+
+| Surface | Path | Who |
+|---------|------|-----|
+| Self-service timecard | `/admin/zeiterfassung` | The staff member (own card) |
+| Approval queue | `/admin/team/approvals` | Staff with **timecards** permission (or super-admin) |
+| Monatsrapport (printable) | `/admin/team/report/[userId]/[month]` | Owner or timecard approver |
+| Public report (no login) | `/r/[token]` | Anyone with the link (social worker) |
+
+**SSOT:** engine `src/lib/team/saldo.ts` · service `src/lib/services/saldo.ts` ·
+report `src/lib/services/report.ts` · share tokens `src/lib/services/report-shares.ts` ·
+categories/status `src/config/timecards.ts` · holidays `src/config/holidays.ts`.
+**Migrations:** `136_zeiterfassung_ledger_foundation.sql`, `137_report_shares.sql`.
+
+### Arbeitsplan drives Soll — Pensum must reconcile
+
+The **Arbeitsplan** (`team_profiles.working_hours` — which weekdays, which hours)
+defines the expected working time. Soll per scheduled day = the person's Pensum
+(`employment_periods.weekly_minutes`) split across the scheduled days, so **the plan
+and the Pensum must agree**: if the plan sums to 21 h/week the Pensum must be 21 h,
+or every filled day shows a phantom deficit. A mismatch surfaces as a warning in the
+Saldo strip ("Arbeitsplan weicht vom Pensum ab") — fix it by adjusting the plan
+(`#arbeitsplan`) or the Pensum (`/admin/team/me`). Public holidays on scheduled days
+reduce Soll automatically; paid absences (Ferien/Krank/…) count as Ist.
+
+The calendar marks **today** (green "Heute" badge, Europe/Zurich). "Monat aus Plan
+füllen" fills the month from the Arbeitsplan; the person reviews and submits.
+
+### Approving (four-eyes)
+
+1. **Freigaben** → **Zeitkarten & Abwesenheit** → **Offen** tab
+2. **Prüfen** opens the review drawer: see the days, **Bearbeiten** to correct,
+   **Genehmigen** / **Zurückweisen** (reason optional), or **Wieder öffnen** an
+   approved card back to draft. Each action shows a confirmation and stays on the
+   card; a **Monatsrapport öffnen** link is the next step.
+3. You cannot approve your own card unless you are a super-admin.
+
+### Monatsrapport → social worker
+
+Open the report, then **Drucken / PDF** (target: "Als PDF speichern"). A **running
+month** reports *as of today* ("Zwischenstand per …") and never shows unworked future
+days — the numbers match the live dashboard; a finished month reports its closing
+state. Months **before the tracking-opening date** (`time_opening_date`) still show
+their real Ist/Soll (the month balance, labelled "(Monat)") — never a fake 0.
+
+**Delivery:** the app can't reliably email the PDF (the sending domain is not
+SPF/DKIM-authenticated) and social workers can't log in, so use **Freigabe-Link
+erstellen** on the report to mint a public `/r/<token>` link — view + print, no login.
+**Link deaktivieren** revokes it immediately. Share the link out-of-band.
 
 ---
 
