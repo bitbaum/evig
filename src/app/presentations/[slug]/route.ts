@@ -24,9 +24,21 @@ import { APP_URL } from '@/config/urls'
 // Deck slugs are simple kebab tokens — reject anything else (path-traversal guard).
 const SLUG_RE = /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/
 
+// Retired decks → their replacement, so already-shared links keep working.
+const RETIRED_DECKS: Record<string, string> = {
+  kivvi: 'kivvi-plattform',
+  'revamp-info': 'revamp-info-plattform',
+  'revampit-neu': 'revampit-portal',
+}
+
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   if (!SLUG_RE.test(slug)) return new NextResponse('Not found', { status: 404 })
+
+  const replacement = RETIRED_DECKS[slug]
+  if (replacement) {
+    return NextResponse.redirect(new URL(`/presentations/${replacement}`, APP_URL), 308)
+  }
 
   const deck = PRESENTATION_DECKS.find((d) => d.slug === slug)
   const restricted = deck ? deck.audience !== 'public' : false
