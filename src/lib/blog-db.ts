@@ -20,7 +20,7 @@ import { eq, and, lte, desc, asc } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import type { BlogPost } from '@/lib/blog'
 import { parseBlogAudience } from '@/config/blog'
-import { DEFAULT_BLOG_AUTHOR } from '@/config/org'
+import { resolveBlogAuthor } from '@/config/org'
 import { defaultLocale } from '@/i18n/routing'
 
 export type { BlogPost }
@@ -288,7 +288,7 @@ function mapPostFromDb(row: {
     seoDescription: (isTranslated ? row.tSeoDescription : row.seoDescription) || undefined,
     isMachine: isTranslated ? row.tIsMachine === true : undefined,
     featuredImage: row.featuredImage || undefined,
-    author: row.authorName || DEFAULT_BLOG_AUTHOR,
+    author: resolveBlogAuthor(row.authorName),
     category: row.categoryName || undefined,
     tags: row.tags || [],
     publishedAt: row.publishedAt || undefined,

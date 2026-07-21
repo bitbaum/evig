@@ -50,12 +50,31 @@ export const ORG = {
 } as const
 
 /**
- * Default blog author (SSOT). Shown when a post carries no explicit author —
- * i.e. the personal author behind the platform's content. DB posts with a real
- * `created_by` user show that user's name; this is the fallback for file posts
- * and author-less DB rows.
+ * Default blog author (SSOT). The personal author behind the platform's
+ * content. DB posts with a real `created_by` user show that user's name; this
+ * is the author for everything else.
  */
 export const DEFAULT_BLOG_AUTHOR = 'Georgy Butaev'
+
+/**
+ * Legacy generic "team" author placeholders. These are treated as "no real
+ * author" and resolve to {@link DEFAULT_BLOG_AUTHOR} — the platform's content is
+ * personally authored, not attributed to an anonymous team. A post with a real
+ * person's name keeps it.
+ */
+const GENERIC_AUTHOR_ALIASES = new Set([
+  'revampit team',
+  'revamp-it team',
+  'revampit ops',
+  'revamp-it ops',
+])
+
+/** Resolve a raw author string to the name shown to readers (SSOT). */
+export function resolveBlogAuthor(raw?: string | null): string {
+  const v = (raw ?? '').trim()
+  if (!v || GENERIC_AUTHOR_ALIASES.has(v.toLowerCase())) return DEFAULT_BLOG_AUTHOR
+  return v
+}
 
 // ============================================================================
 // LOCATIONS

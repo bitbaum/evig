@@ -190,6 +190,18 @@ describe('getAllPosts — frontmatter parsing', () => {
     expect(getAllPosts()[0].author).toBe(DEFAULT_BLOG_AUTHOR)
   })
 
+  it('coalesces the generic "RevampIT Team" author to the personal author', () => {
+    mockReaddirSync.mockReturnValue(['p.md'])
+    mockReadFileSync.mockReturnValue(makeMd({ title: 'Inst', author: 'RevampIT Team' }))
+    expect(getAllPosts()[0].author).toBe(DEFAULT_BLOG_AUTHOR)
+  })
+
+  it('keeps a real person author as-is', () => {
+    mockReaddirSync.mockReturnValue(['p.md'])
+    mockReadFileSync.mockReturnValue(makeMd({ title: 'Named', author: 'Veronica Caon' }))
+    expect(getAllPosts()[0].author).toBe('Veronica Caon')
+  })
+
   it('defaults tags to [] when missing', () => {
     mockReaddirSync.mockReturnValue(['p.md'])
     mockReadFileSync.mockReturnValue(makeMd({ title: 'No tags' }))
