@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saldo — time tracking that balances</title>
+<meta name="description" content="A dependency-free engine for Soll/Ist time balances, vacation and honest monthly reports.">
+<meta name="color-scheme" content="light dark">
+</head>
+<body>
+<style>
+  :root {
+    --paper: #f5f7f9;
+    --surface: #ffffff;
+    --ink: #14181d;
+    --muted: #5c6773;
+    --faint: #8b97a4;
+    --line: #dde3e9;
+    --line-strong: #c6cfd8;
+    --accent: #0e8c74;
+    --accent-ink: #0a6656;
+    --neg: #c0492f;
+    --grid: rgba(20, 100, 120, 0.045);
+    --radius: 10px;
+    --mono: ui-monospace, "JetBrains Mono", "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --maxw: 1080px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #0c0f13;
+      --surface: #12171c;
+      --ink: #eaeef2;
+      --muted: #8b97a4;
+      --faint: #6b7681;
+      --line: #1e252c;
+      --line-strong: #2b343d;
+      --accent: #2dd4a7;
+      --accent-ink: #7cf0cf;
+      --neg: #f0785e;
+      --grid: rgba(120, 200, 210, 0.05);
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #0c0f13; --surface: #12171c; --ink: #eaeef2; --muted: #8b97a4;
+    --faint: #6b7681; --line: #1e252c; --line-strong: #2b343d; --accent: #2dd4a7;
+    --accent-ink: #7cf0cf; --neg: #f0785e; --grid: rgba(120, 200, 210, 0.05);
+  }
+  :root[data-theme="light"] {
+    --paper: #f5f7f9; --surface: #ffffff; --ink: #14181d; --muted: #5c6773;
+    --faint: #8b97a4; --line: #dde3e9; --line-strong: #c6cfd8; --accent: #0e8c74;
+    --accent-ink: #0a6656; --neg: #c0492f; --grid: rgba(20, 100, 120, 0.045);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  body {
+    margin: 0;
+    background-color: var(--paper);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 28px 28px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+  .mono { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted);
+  }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+  /* ---- header ---- */
+  header {
+    position: sticky; top: 0; z-index: 40;
+    backdrop-filter: blur(8px);
+    background: color-mix(in srgb, var(--paper) 82%, transparent);
+    border-bottom: 1px solid var(--line);
+  }
+  .bar { display: flex; align-items: center; gap: 20px; height: 60px; }
+  .brand { font-family: var(--mono); font-weight: 700; font-size: 19px; letter-spacing: -0.02em; display: flex; align-items: center; gap: 9px; text-decoration: none; }
+  .glyph {
+    width: 22px; height: 22px; flex: none; border: 1.5px solid var(--accent); border-radius: 5px;
+    position: relative;
+  }
+  .glyph::before, .glyph::after {
+    content: ""; position: absolute; left: 3px; right: 3px; height: 1.5px; background: var(--accent);
+  }
+  .glyph::before { top: 6px; opacity: 0.5; }
+  .glyph::after { bottom: 6px; }
+  .brand-dot { color: var(--accent); }
+  nav.links { display: flex; gap: 22px; margin-left: auto; }
+  nav.links a { font-size: 14px; color: var(--muted); text-decoration: none; }
+  nav.links a:hover { color: var(--ink); }
+  @media (max-width: 720px) { nav.links { display: none; } }
+  .ctl { display: flex; gap: 8px; align-items: center; }
+  .btn {
+    font-family: var(--mono); font-size: 13px; cursor: pointer;
+    border: 1px solid var(--line-strong); background: var(--surface); color: var(--ink);
+    border-radius: 7px; padding: 7px 11px; line-height: 1; transition: border-color .15s, color .15s;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-accent { background: var(--accent); color: #fff; border-color: var(--accent); }
+  :root[data-theme="dark"] .btn-accent, :root:not([data-theme="light"]) .btn-accent { color: #05221c; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .btn-accent { color: #05221c; } }
+  .btn-accent:hover { filter: brightness(1.06); color: #fff; }
+  :root[data-theme="dark"] .btn-accent:hover { color: #05221c; }
+
+  /* ---- hero ---- */
+  .hero { padding: 72px 0 56px; }
+  .hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 56px; align-items: center; }
+  @media (max-width: 880px) { .hero-grid { grid-template-columns: 1fr; gap: 40px; } .hero { padding: 44px 0 40px; } }
+  h1 {
+    font-family: var(--mono); font-weight: 700; letter-spacing: -0.03em;
+    font-size: clamp(2.3rem, 6vw, 3.6rem); line-height: 1.02; margin: 16px 0 0;
+    text-wrap: balance;
+  }
+  h1 .bal { color: var(--accent); position: relative; white-space: nowrap; }
+  .lede { font-size: 1.18rem; color: var(--muted); margin: 22px 0 0; max-width: 40ch; line-height: 1.5; }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; align-items: center; }
+  .cmd {
+    font-family: var(--mono); font-size: 14px; background: var(--surface);
+    border: 1px solid var(--line-strong); border-radius: 8px; padding: 11px 14px;
+    display: inline-flex; align-items: center; gap: 12px; cursor: pointer; color: var(--ink);
+  }
+  .cmd:hover { border-color: var(--accent); }
+  .cmd .pfx { color: var(--accent); }
+  .cmd .cp { color: var(--faint); font-size: 12px; }
+  .link-cta { font-size: 14px; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--accent); padding-bottom: 2px; }
+  .badges { display: flex; gap: 16px; margin-top: 26px; flex-wrap: wrap; }
+  .badges span { font-family: var(--mono); font-size: 12px; color: var(--faint); letter-spacing: 0.02em; }
+  .badges b { color: var(--accent); font-weight: 600; }
+
+  /* ---- ledger card ---- */
+  .ledger {
+    background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius);
+    box-shadow: 0 1px 0 var(--line), 0 24px 48px -32px rgba(10,30,40,0.4);
+    overflow: hidden;
+  }
+  .ledger-top {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 13px 18px; border-bottom: 1px solid var(--line);
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+  }
+  .ledger-top .dots { display: flex; gap: 6px; }
+  .ledger-top .dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--line-strong); display: block; }
+  table.led { width: 100%; border-collapse: collapse; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  table.led th, table.led td { text-align: right; padding: 11px 18px; font-size: 14px; }
+  table.led th { font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); font-weight: 500; border-bottom: 1px solid var(--line); }
+  table.led td:first-child, table.led th:first-child { text-align: left; color: var(--muted); }
+  table.led tbody tr { border-bottom: 1px solid var(--line); }
+  table.led .ist { color: var(--ink); }
+  table.led .day.today td:first-child { color: var(--accent); }
+  table.led .day.today td:first-child::before { content: "▸ "; }
+  tfoot td { font-weight: 700; padding-top: 14px; padding-bottom: 16px; }
+  tfoot .sum-label { color: var(--muted); text-transform: uppercase; font-size: 11px; letter-spacing: 0.1em; font-weight: 500; }
+  .saldo-cell { color: var(--accent); }
+  .saldo-cell.neg { color: var(--neg); }
+  .ledger-foot {
+    display: flex; align-items: center; gap: 8px; padding: 12px 18px;
+    border-top: 1px solid var(--line); background: var(--surface);
+    font-family: var(--mono); font-size: 13px; color: var(--muted);
+    transition: color .35s, background .35s;
+  }
+  .ledger-foot .chk { width: 16px; height: 16px; flex: none; opacity: 0; transform: scale(.7); transition: opacity .3s, transform .3s; }
+  .ledger-foot.balanced { background: color-mix(in srgb, var(--accent) 8%, var(--surface)); color: var(--accent-ink); }
+  .ledger-foot.balanced .chk { opacity: 1; transform: scale(1); }
+
+  /* ---- sections ---- */
+  section { padding: 64px 0; border-top: 1px solid var(--line); }
+  .sec-head { max-width: 60ch; }
+  .sec-head h2 { font-family: var(--mono); font-weight: 700; letter-spacing: -0.02em; font-size: clamp(1.6rem, 3.4vw, 2.15rem); margin: 12px 0 0; text-wrap: balance; }
+  .sec-head p { color: var(--muted); font-size: 1.05rem; margin: 14px 0 0; }
+
+  /* metrics */
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-top: 40px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  @media (max-width: 720px) { .metrics { grid-template-columns: repeat(2, 1fr); } }
+  .metric { background: var(--surface); padding: 22px 20px; }
+  .metric .k { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); }
+  .metric .v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 1.9rem; font-weight: 700; margin-top: 8px; letter-spacing: -0.02em; }
+  .metric .v.pos { color: var(--accent); }
+  .metric .d { font-size: 13px; color: var(--muted); margin-top: 6px; line-height: 1.45; }
+
+  /* feature grid */
+  .feats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 40px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  @media (max-width: 820px) { .feats { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .feats { grid-template-columns: 1fr; } }
+  .feat { background: var(--surface); padding: 26px 22px; }
+  .feat .n { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: 0.08em; }
+  .feat h3 { font-size: 1.05rem; margin: 12px 0 8px; letter-spacing: -0.01em; }
+  .feat p { font-size: 0.95rem; color: var(--muted); margin: 0; line-height: 1.5; }
+
+  /* code */
+  .code-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 40px; align-items: start; margin-top: 8px; }
+  @media (max-width: 820px) { .code-grid { grid-template-columns: 1fr; } }
+  pre.code {
+    font-family: var(--mono); font-size: 13.5px; line-height: 1.7; margin: 0;
+    background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius);
+    padding: 20px 22px; overflow-x: auto; tab-size: 2;
+  }
+  pre.code .c { color: var(--faint); }
+  pre.code .k { color: var(--accent); }
+  pre.code .s { color: var(--neg); }
+  pre.code .f { color: var(--ink); font-weight: 600; }
+
+  /* audiences */
+  .aud { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
+  @media (max-width: 720px) { .aud { grid-template-columns: 1fr; } }
+  .aud .card { border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; background: var(--surface); }
+  .aud .card .tag { font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+  .aud .card h3 { margin: 12px 0 8px; font-size: 1.1rem; }
+  .aud .card p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+
+  /* product strip */
+  .product { background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius); padding: 34px; margin-top: 8px; }
+  .product ul { columns: 2; column-gap: 32px; margin: 22px 0 0; padding: 0; list-style: none; }
+  @media (max-width: 620px) { .product ul { columns: 1; } }
+  .product li { font-size: 0.98rem; padding: 8px 0 8px 24px; position: relative; color: var(--ink); break-inside: avoid; }
+  .product li::before { content: "+"; position: absolute; left: 0; color: var(--accent); font-family: var(--mono); font-weight: 700; }
+
+  /* cta */
+  .final { text-align: center; padding: 84px 0; border-top: 1px solid var(--line); }
+  .final h2 { font-family: var(--mono); font-weight: 700; font-size: clamp(1.8rem, 4vw, 2.6rem); letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+  .final p { color: var(--muted); margin: 16px auto 0; max-width: 44ch; }
+  .final .hero-cta { justify-content: center; }
+
+  footer { border-top: 1px solid var(--line); padding: 30px 0 44px; }
+  .foot { display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; align-items: center; font-size: 13px; color: var(--faint); }
+  .foot .mono { color: var(--muted); }
+  .hidden { display: none; }
+</style>
+
+<header>
+  <div class="wrap bar">
+    <a class="brand" href="#top" aria-label="Saldo home">
+      <span class="glyph" aria-hidden="true"></span>Saldo<span class="brand-dot">.</span>
+    </a>
+    <nav class="links" aria-label="Sections">
+      <a href="#compute" data-i18n="nav1">What it computes</a>
+      <a href="#why" data-i18n="nav2">Why it's different</a>
+      <a href="#engine" data-i18n="nav3">The engine</a>
+      <a href="#who" data-i18n="nav4">Who it's for</a>
+    </nav>
+    <div class="ctl">
+      <button class="btn" id="lang" aria-label="Switch language">DE</button>
+      <button class="btn" id="theme" aria-label="Toggle colour theme">◑</button>
+      <a class="btn btn-accent" href="#get" data-i18n="cta_top">Get started</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow" data-i18n="eyebrow">Open source · MIT · zero dependencies</p>
+        <h1 data-i18n-html="h1">Time tracking that <span class="bal">balances.</span></h1>
+        <p class="lede" data-i18n="lede">A dependency-free engine for Soll/Ist time balances, vacation and honest monthly reports. It answers the one question every timesheet dodges — did this person work the hours they were meant to?</p>
+        <div class="hero-cta">
+          <button class="cmd" id="copycmd" title="Copy">
+            <span><span class="pfx">$</span> npm install saldo-engine</span>
+            <span class="cp" id="cptxt">copy</span>
+          </button>
+          <a class="link-cta" href="#engine" data-i18n="read_docs">Read the docs →</a>
+        </div>
+        <div class="badges">
+          <span><b>0</b> <span data-i18n="b_deps">runtime deps</span></span>
+          <span><b>~350</b> <span data-i18n="b_loc">lines of core</span></span>
+          <span><b>12</b> <span data-i18n="b_tests">passing tests</span></span>
+        </div>
+      </div>
+
+      <div class="ledger" aria-label="Live weekly balance example">
+        <div class="ledger-top">
+          <span data-i18n="led_week">Week 30 · 21 h plan</span>
+          <span class="dots"><i></i><i></i><i></i></span>
+        </div>
+        <table class="led">
+          <thead>
+            <tr><th data-i18n="led_day">Day</th><th data-i18n="led_soll">Soll</th><th data-i18n="led_ist">Ist</th><th data-i18n="led_saldo">Saldo</th></tr>
+          </thead>
+          <tbody id="ledbody">
+            <tr class="day"><td>Mo 20.07</td><td>7:00</td><td class="ist" data-ist="7:00">0:00</td><td>·</td></tr>
+            <tr class="day"><td>Di 21.07</td><td>7:00</td><td class="ist" data-ist="7:00">0:00</td><td>·</td></tr>
+            <tr class="day today"><td>Mi 22.07</td><td>7:00</td><td class="ist" data-ist="7:00">0:00</td><td>·</td></tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td class="sum-label" data-i18n="led_total">Total</td>
+              <td>21:00</td>
+              <td class="ist" id="sumist">0:00</td>
+              <td class="saldo-cell neg" id="sumsaldo">−21:00</td>
+            </tr>
+          </tfoot>
+        </table>
+        <div class="ledger-foot" id="ledfoot">
+          <svg class="chk" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 8.5l3.2 3.2L13 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span id="foottext" data-i18n="led_foot_pending">Filling from the plan…</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- what it computes -->
+  <section id="compute">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow" data-i18n="e_compute">The four numbers</p>
+        <h2 data-i18n="h_compute">Every figure is derived — never typed, never faked.</h2>
+        <p data-i18n="p_compute">Give it entries, a schedule and an effective-dated workload. It returns the numbers HR, the employee and an auditor all trust.</p>
+      </div>
+      <div class="metrics">
+        <div class="metric"><div class="k">Zeitsaldo</div><div class="v pos">+0:00</div><div class="d" data-i18n="m1">Running balance: opening + Σ(Ist − Soll) through today.</div></div>
+        <div class="metric"><div class="k">Soll</div><div class="v">21:00</div><div class="d" data-i18n="m2">Weekly Pensum spread over scheduled days — holiday-aware.</div></div>
+        <div class="metric"><div class="k">Ist · Monat</div><div class="v">56:00</div><div class="d" data-i18n="m3">Worked + paid absences, real for any month.</div></div>
+        <div class="metric"><div class="k">Feriensaldo</div><div class="v">11.0</div><div class="d" data-i18n="m4">Entitlement + carryover − taken, pro-rated by workload.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- why different -->
+  <section id="why">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow" data-i18n="e_why">Correct, not just convenient</p>
+        <h2 data-i18n="h_why">The edge cases most timesheets get wrong.</h2>
+      </div>
+      <div class="feats">
+        <div class="feat"><div class="n">01</div><h3 data-i18n="f1h">Mid-year workload changes</h3><p data-i18n="f1p">A 60% → 80% change is effective-dated. Every past month stays correct; nothing is retro-broken.</p></div>
+        <div class="feat"><div class="n">02</div><h3 data-i18n="f2h">Holidays reduce Soll automatically</h3><p data-i18n="f2p">A public holiday on a scheduled day drops that day's target to zero — no one enters a holiday row by hand.</p></div>
+        <div class="feat"><div class="n">03</div><h3 data-i18n="f3h">Paid vs unpaid absences</h3><p data-i18n="f3p">Paid leave fulfils the target like worked time; unpaid doesn't. Your categories, your rules.</p></div>
+        <div class="feat"><div class="n">04</div><h3 data-i18n="f4h">Honest historical months</h3><p data-i18n="f4p">A report for a month before tracking began still shows that month's real hours — never a placeholder zero.</p></div>
+        <div class="feat"><div class="n">05</div><h3 data-i18n="f5h">As-of reporting</h3><p data-i18n="f5p">A running month reports as of today. Pre-filled future days never appear as already worked.</p></div>
+        <div class="feat"><div class="n">06</div><h3 data-i18n="f6h">Bring your own categories</h3><p data-i18n="f6p">Ships a Swiss default; swap in any set of paid/unpaid categories and holiday calendar.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- engine / code -->
+  <section id="engine">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow" data-i18n="e_engine">The engine</p>
+        <h2 data-i18n="h_engine">Pure functions. Bring your own storage and UI.</h2>
+      </div>
+      <div class="code-grid">
+        <div>
+          <p style="color:var(--muted); margin-top:22px" data-i18n="engine_p">One call returns the whole picture. No database, no framework, no globals — just input in, numbers out. Drop it into a Next.js app, a cron job, or a spreadsheet backend.</p>
+          <div class="hero-cta" style="margin-top:24px">
+            <a class="btn btn-accent" id="get" href="#get" data-i18n="cta_engine">Install & read the API</a>
+          </div>
+        </div>
+<pre class="code" aria-label="Quick start code"><span class="c">// one call — running balance + month decomposition</span>
+<span class="k">import</span> { computeTimeSaldo } <span class="k">from</span> <span class="s">'saldo-engine'</span>
+
+<span class="k">const</span> r = <span class="f">computeTimeSaldo</span>({
+  openingMinutes: <span class="s">0</span>,
+  openingDate:  <span class="s">'2026-01-01'</span>,
+  periods: [{ validFrom: <span class="s">'2026-01-01'</span>, weeklyMinutes: <span class="s">21</span>*<span class="s">60</span> }],
+  schedule: STANDARD_WEEKLY_SCHEDULE,
+  entries: [{ work_date: <span class="s">'2026-07-06'</span>, duration_minutes: <span class="s">420</span>, category: <span class="s">'work'</span> }],
+  holidays: <span class="f">getHolidayDateSet</span>(<span class="s">2026</span>, <span class="s">2026</span>),
+  today:   <span class="s">'2026-07-20'</span>,
+})
+
+<span class="c">// → { saldoMinutes, monthSollMinutes,</span>
+<span class="c">//     monthIstMinutes, monthSaldoMinutes, computedFrom }</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- who -->
+  <section id="who">
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow" data-i18n="e_who">Built for a real need</p>
+        <h2 data-i18n="h_who">Made for supported employment — useful far beyond it.</h2>
+        <p data-i18n="p_who">Born replacing a punch-clock at a Swiss social enterprise, where a monthly report goes to a referring social worker. The maths is the same for any team that owes someone an honest account of their hours.</p>
+      </div>
+      <div class="aud">
+        <div class="card"><div class="tag" data-i18n="a1t">Social enterprises</div><h3 data-i18n="a1h">Arbeitsintegration</h3><p data-i18n="a1p">Four-eyes approval, Pensum, Feriensaldo and a month-report a case worker can read.</p></div>
+        <div class="card"><div class="tag" data-i18n="a2t">SMEs & HR</div><h3 data-i18n="a2h">Small teams, real payroll</h3><p data-i18n="a2p">Balances that survive audits: effective-dated workloads, holidays and absences handled correctly.</p></div>
+        <div class="card"><div class="tag" data-i18n="a3t">Developers</div><h3 data-i18n="a3h">Embed the maths</h3><p data-i18n="a3p">A typed, tested, dependency-free package. Own your storage and UI; let Saldo own the accounting.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- product layer -->
+  <section>
+    <div class="wrap">
+      <div class="sec-head">
+        <p class="eyebrow" data-i18n="e_product">Engine + reference app</p>
+        <h2 data-i18n="h_product">Not just a library — a working product to learn from.</h2>
+      </div>
+      <div class="product">
+        <p style="margin:0; color:var(--muted)" data-i18n="product_p">The open engine powers a full reference implementation you can lift patterns from:</p>
+        <ul>
+          <li data-i18n="pl1">Self-service monthly timecards with a today-marked calendar</li>
+          <li data-i18n="pl2">Fill-from-plan, then review and submit</li>
+          <li data-i18n="pl3">Four-eyes approval queue with instant acknowledgement</li>
+          <li data-i18n="pl4">Printable Monatsrapport — interim or final</li>
+          <li data-i18n="pl5">Public share link for a referring social worker (no login)</li>
+          <li data-i18n="pl6">Absence requests, vacation balance, reminders</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="final wrap" id="get">
+    <p class="eyebrow" data-i18n="e_final">Free · MIT · production-tested</p>
+    <h2 data-i18n="h_final">Give your hours a balance that adds up.</h2>
+    <p data-i18n="p_final">Install the engine in a minute. Or lift the whole product — it's all open.</p>
+    <div class="hero-cta">
+      <button class="cmd" id="copycmd2" title="Copy">
+        <span><span class="pfx">$</span> npm install saldo-engine</span>
+        <span class="cp" id="cptxt2">copy</span>
+      </button>
+      <a class="link-cta" href="#engine" data-i18n="read_docs2">Read the docs →</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span class="mono">Saldo — <span data-i18n="foot_tag">time tracking that balances.</span></span>
+    <span>MIT © 2026 · <span data-i18n="foot_by">an open engine from Revamp-IT</span></span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var root = document.documentElement;
+
+  // ---- theme ----
+  var tbtn = document.getElementById('theme');
+  tbtn.addEventListener('click', function () {
+    var isDark = matchMedia('(prefers-color-scheme: dark)').matches;
+    var cur = root.getAttribute('data-theme') || (isDark ? 'dark' : 'light');
+    root.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+  });
+
+  // ---- language ----
+  var I18N = {
+    de: {
+      nav1: 'Was es berechnet', nav2: 'Was es besser macht', nav3: 'Der Motor', nav4: 'Für wen',
+      cta_top: 'Loslegen', eyebrow: 'Open Source · MIT · keine Abhängigkeiten',
+      h1: 'Zeiterfassung, die <span class="bal">aufgeht.</span>',
+      lede: 'Ein abhängigkeitsfreier Motor für Soll-/Ist-Saldi, Ferien und ehrliche Monatsrapporte. Er beantwortet die Frage, um die sich jede Stundenliste drückt — hat diese Person die Stunden geleistet, die sie sollte?',
+      read_docs: 'Zur Doku →', b_deps: 'Laufzeit-Deps', b_loc: 'Zeilen Kern', b_tests: 'grüne Tests',
+      led_week: 'Woche 30 · 21 Std. Plan', led_day: 'Tag', led_soll: 'Soll', led_ist: 'Ist', led_saldo: 'Saldo',
+      led_total: 'Total', led_foot_pending: 'Füllt aus dem Plan …',
+      e_compute: 'Die vier Zahlen', h_compute: 'Jede Zahl ist hergeleitet — nie getippt, nie erfunden.',
+      p_compute: 'Einträge, ein Arbeitsplan und ein datierter Beschäftigungsgrad rein. Zahlen raus, denen HR, Mitarbeitende und Revision vertrauen.',
+      m1: 'Laufender Saldo: Anfang + Σ(Ist − Soll) bis heute.',
+      m2: 'Wochenpensum auf Plantage verteilt — feiertagsbewusst.',
+      m3: 'Geleistet + bezahlte Absenzen, real für jeden Monat.',
+      m4: 'Anspruch + Übertrag − bezogen, nach Pensum anteilig.',
+      e_why: 'Korrekt, nicht nur bequem', h_why: 'Die Sonderfälle, die andere falsch rechnen.',
+      f1h: 'Pensumsänderungen im Jahr', f1p: 'Ein Wechsel 60% → 80% ist datiert. Jeder vergangene Monat bleibt korrekt.',
+      f2h: 'Feiertage senken das Soll', f2p: 'Ein Feiertag auf einem Plantag setzt das Tagessoll auf null — ohne Handeintrag.',
+      f3h: 'Bezahlt vs. unbezahlt', f3p: 'Bezahlte Absenz erfüllt das Soll wie Arbeit; unbezahlte nicht. Deine Kategorien, deine Regeln.',
+      f4h: 'Ehrliche Vormonate', f4p: 'Ein Rapport für einen Monat vor Erfassungsbeginn zeigt echte Stunden — keine Platzhalter-Null.',
+      f5h: 'Stichtag-Rapporte', f5p: 'Ein laufender Monat rapportiert per heute. Vorbefüllte Zukunftstage gelten nie als geleistet.',
+      f6h: 'Eigene Kategorien', f6p: 'Schweizer Default eingebaut; beliebige bezahlt/unbezahlt-Kategorien und Feiertagskalender einsetzbar.',
+      e_engine: 'Der Motor', h_engine: 'Reine Funktionen. Speicher und UI bringst du mit.',
+      engine_p: 'Ein Aufruf liefert das ganze Bild. Keine Datenbank, kein Framework, keine Globals — Eingabe rein, Zahlen raus. Passt in eine Next.js-App, einen Cronjob oder ein Spreadsheet-Backend.',
+      cta_engine: 'Installieren & API lesen',
+      e_who: 'Aus echtem Bedarf', h_who: 'Für die Arbeitsintegration gebaut — weit darüber hinaus nützlich.',
+      p_who: 'Entstanden als Ablösung einer Stempeluhr in einem Schweizer Sozialbetrieb, wo der Monatsrapport an die begleitende Sozialarbeit geht. Die Rechnung ist dieselbe für jedes Team, das jemandem eine ehrliche Abrechnung schuldet.',
+      a1t: 'Sozialbetriebe', a1h: 'Arbeitsintegration', a1p: 'Vier-Augen-Freigabe, Pensum, Feriensaldo und ein Rapport, den die Begleitung lesen kann.',
+      a2t: 'KMU & HR', a2h: 'Kleine Teams, echte Lohnbuchhaltung', a2p: 'Saldi, die Prüfungen überstehen: datierte Pensen, Feiertage und Absenzen korrekt.',
+      a3t: 'Entwickler:innen', a3h: 'Die Rechnung einbetten', a3p: 'Ein typisiertes, getestetes, abhängigkeitsfreies Paket. Speicher und UI gehören dir, die Buchhaltung Saldo.',
+      e_product: 'Motor + Referenz-App', h_product: 'Nicht nur eine Bibliothek — ein funktionierendes Produkt zum Lernen.',
+      product_p: 'Der offene Motor treibt eine vollständige Referenz-Implementierung, aus der du Muster übernehmen kannst:',
+      pl1: 'Monatliche Zeitkarte mit heute markiertem Kalender', pl2: 'Aus Plan füllen, dann prüfen und einreichen',
+      pl3: 'Vier-Augen-Freigabe mit sofortiger Bestätigung', pl4: 'Druckbarer Monatsrapport — Zwischenstand oder final',
+      pl5: 'Öffentlicher Freigabe-Link für die Sozialarbeit (ohne Login)', pl6: 'Absenzanträge, Feriensaldo, Erinnerungen',
+      e_final: 'Kostenlos · MIT · produktiv erprobt', h_final: 'Gib deinen Stunden einen Saldo, der aufgeht.',
+      p_final: 'Motor in einer Minute installiert. Oder das ganze Produkt übernehmen — alles offen.',
+      read_docs2: 'Zur Doku →', foot_tag: 'Zeiterfassung, die aufgeht.', foot_by: 'ein offener Motor von Revamp-IT'
+    }
+  };
+
+  var lang = 'en';
+  var balanced = false;
+  var FOOT = { en: 'Balanced — worked hours match the plan.', de: 'Ausgeglichen — geleistete Zeit entspricht dem Plan.' };
+  var lbtn = document.getElementById('lang');
+  lbtn.addEventListener('click', function () {
+    lang = (lang === 'en') ? 'de' : 'en';
+    lbtn.textContent = (lang === 'en') ? 'DE' : 'EN';
+    applyLang();
+  });
+  // capture EN defaults from DOM
+  var EN = {};
+  document.querySelectorAll('[data-i18n]').forEach(function (el) { EN[el.getAttribute('data-i18n')] = el.innerHTML; });
+  document.querySelectorAll('[data-i18n-html]').forEach(function (el) { EN[el.getAttribute('data-i18n-html')] = el.innerHTML; });
+  function applyLang() {
+    var dict = (lang === 'de') ? I18N.de : EN;
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
+      var k = el.getAttribute('data-i18n'); if (dict[k] != null) el.innerHTML = dict[k];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(function (el) {
+      var k = el.getAttribute('data-i18n-html'); if (dict[k] != null) el.innerHTML = dict[k];
+    });
+    // footer text is state-dependent, not a plain key
+    if (balanced) document.getElementById('foottext').textContent = FOOT[lang];
+  }
+
+  // ---- copy command ----
+  function wireCopy(btnId, txtId) {
+    var b = document.getElementById(btnId); if (!b) return;
+    b.addEventListener('click', function () {
+      navigator.clipboard && navigator.clipboard.writeText('npm install saldo-engine');
+      var t = document.getElementById(txtId); var old = t.textContent;
+      t.textContent = (lang === 'de') ? 'kopiert' : 'copied';
+      setTimeout(function () { t.textContent = old; }, 1400);
+    });
+  }
+  wireCopy('copycmd', 'cptxt'); wireCopy('copycmd2', 'cptxt2');
+
+  // ---- ledger balancing animation ----
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function toMin(s) { var p = s.split(':'); return (+p[0]) * 60 + (+p[1]); }
+  function fmt(m) { var h = Math.floor(m / 60), mm = m % 60; return h + ':' + String(mm).padStart(2, '0'); }
+  var cells = Array.prototype.slice.call(document.querySelectorAll('#ledbody .ist'));
+  var sumist = document.getElementById('sumist');
+  var sumsaldo = document.getElementById('sumsaldo');
+  var ledfoot = document.getElementById('ledfoot');
+  var foottext = document.getElementById('foottext');
+  var soll = 21 * 60;
+  function setSaldo(ist) {
+    var d = ist - soll;
+    sumsaldo.textContent = (d < 0 ? '−' : '+') + fmt(Math.abs(d));
+    sumsaldo.classList.toggle('neg', d < 0);
+  }
+  function markBalanced() {
+    balanced = true;
+    ledfoot.classList.add('balanced');
+    foottext.textContent = FOOT[lang];
+  }
+  function finishTo(vals) { // vals in minutes per cell
+    cells.forEach(function (c, i) { c.textContent = fmt(vals[i]); });
+    var total = vals.reduce(function (a, b) { return a + b; }, 0);
+    sumist.textContent = fmt(total); setSaldo(total);
+  }
+  var targets = cells.map(function (c) { return toMin(c.getAttribute('data-ist')); });
+
+  if (reduce) {
+    finishTo(targets); markBalanced();
+  } else {
+    var started = false;
+    function run() {
+      if (started) return; started = true;
+      cells.forEach(function (c, i) {
+        var target = targets[i];
+        setTimeout(function () {
+          var t0 = null, dur = 650;
+          function step(ts) {
+            if (!t0) t0 = ts; var k = Math.min(1, (ts - t0) / dur);
+            var e = 1 - Math.pow(1 - k, 3);
+            c.textContent = fmt(Math.round(target * e));
+            var total = cells.reduce(function (a, cc) { return a + toMin(cc.textContent || '0:00'); }, 0);
+            sumist.textContent = fmt(total); setSaldo(total);
+            if (k < 1) requestAnimationFrame(step);
+            else if (i === cells.length - 1) { finishTo(targets); markBalanced(); }
+          }
+          requestAnimationFrame(step);
+        }, 300 + i * 360);
+      });
+    }
+    // Trigger on view; guarantee it also runs shortly after load (hero is above the fold).
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) { run(); io.disconnect(); } });
+      }, { threshold: 0.25 });
+      io.observe(document.querySelector('.ledger'));
+    }
+    setTimeout(run, 600);
+  }
+})();
+</script>
+
+</body>
+</html>

@@ -169,6 +169,6 @@ export const config = {
     // reaches the next.config rewrite (→ index.html) instead of being
     // routed — and 404'd — by the next-intl router. This is why shared
     // presentation links had silently broken.
-    '/((?!_next/static|_next/image|presentations|favicon.ico|apple-icon|icon|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|woff|woff2|mp4|webm|mp3|m4a|m4v|pdf|txt|xml|json|webmanifest|html|md|map)).*)',
+    '/((?!_next/static|_next/image|presentations|saldo|favicon.ico|apple-icon|icon|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|woff|woff2|mp4|webm|mp3|m4a|m4v|pdf|txt|xml|json|webmanifest|html|md|map)).*)',
   ],
 }

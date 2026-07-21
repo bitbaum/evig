@@ -5416,6 +5416,15 @@
           "Zusammenarbeit mit Sozialunternehmen",
           "Ökologische Analysen (ZHAW)"
         ]
+      },
+      {
+        "title": "Saldo",
+        "description": "Ein abhängigkeitsfreier Motor für Zeitsaldi (Soll/Ist), Ferien und ehrliche Monatsrapporte — als Open Source aus unserer eigenen Zeiterfassung ausgekoppelt.",
+        "features": [
+          "Open Source · MIT · keine Abhängigkeiten",
+          "Soll/Ist-Saldo — feiertags- und absenzenbewusst",
+          "Von Sozialbetrieben bis KMU einsetzbar"
+        ]
       }
     ],
     "freiecomputer": {

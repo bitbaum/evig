@@ -17,19 +17,17 @@ export function ProjectCard({ project, index = 0 }: { project: ProjectView; inde
   // SSOT; title/description/features are the project's translatable strings.
   const { title, description, features } = project
 
-  return (
-    <Link
-      href={`/projects/${project.slug}`}
-      aria-label={`${title} — ${t('learnMore')}`}
-      className={cn(
-        designPrimitive.surface.card,
-        'group flex flex-col animate-fade-in-up',
-        'hover:border-strong transition-colors duration-200',
-        'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 rounded-2xl'
-      )}
-      style={{ animationDelay: `${index * 60}ms` }}
-    >
-      <div className="p-6 flex flex-col h-full">
+  const cardClass = cn(
+    designPrimitive.surface.card,
+    'group flex flex-col animate-fade-in-up',
+    'hover:border-strong transition-colors duration-200',
+    'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 rounded-2xl'
+  )
+  const cardStyle = { animationDelay: `${index * 60}ms` }
+  const aria = `${title} — ${t('learnMore')}`
+
+  const inner = (
+    <div className="p-6 flex flex-col h-full">
         {/* Card header */}
         <div className="flex items-start gap-4 mb-4">
           <div className={cn(
@@ -85,6 +83,15 @@ export function ProjectCard({ project, index = 0 }: { project: ProjectView; inde
           </span>
         </div>
       </div>
+  )
+
+  return project.externalHref ? (
+    <a href={project.externalHref} aria-label={aria} className={cardClass} style={cardStyle}>
+      {inner}
+    </a>
+  ) : (
+    <Link href={`/projects/${project.slug}`} aria-label={aria} className={cardClass} style={cardStyle}>
+      {inner}
     </Link>
   )
 }

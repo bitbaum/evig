@@ -3653,6 +3653,15 @@
           "Colaboración con empresas sociales",
           "Análisis ecológicos (ZHAW)"
         ]
+      },
+      {
+        "title": "Saldo",
+        "description": "Un motor sin dependencias para saldos de horas (Soll/Ist), vacaciones e informes mensuales honestos — liberado como open source desde nuestro propio control horario.",
+        "features": [
+          "Open source · MIT · cero dependencias",
+          "Saldo Soll/Ist — con festivos y ausencias",
+          "De empresas sociales a pymes"
+        ]
       }
     ],
     "freiecomputer": {

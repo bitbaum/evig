@@ -3653,6 +3653,15 @@
           "Collaborazione con imprese sociali",
           "Analisi ecologiche (ZHAW)"
         ]
+      },
+      {
+        "title": "Saldo",
+        "description": "Un motore senza dipendenze per i saldi orari (Soll/Ist), le ferie e rapporti mensili onesti — reso open source dalla nostra rilevazione presenze.",
+        "features": [
+          "Open source · MIT · zero dipendenze",
+          "Saldo Soll/Ist — con festività e assenze",
+          "Dalle imprese sociali alle PMI"
+        ]
       }
     ],
     "freiecomputer": {

@@ -1,4 +1,4 @@
-import { Code, Globe, Layers, Users, Wrench, Server, Lightbulb } from 'lucide-react'
+import { Code, Globe, Layers, Users, Wrench, Server, Lightbulb, Scale } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
 /**
@@ -23,6 +23,9 @@ export interface ProjectConfig {
   status: ProjectStatus
   year: string
   icon: LucideIcon
+  /** For products with their own landing (e.g. Saldo): the card links here
+   *  instead of the /projects/{slug} detail page. Non-localized absolute path. */
+  externalHref?: string
 }
 
 /** Translatable strings for a project — `projects.items[]` (canonical order). */
@@ -46,4 +49,5 @@ export const PROJECTS: ProjectConfig[] = [
   { slug: 'hardware',      category: 'hardware',  status: 'ongoing', year: '2020', icon: Wrench },
   { slug: 'ltsp',          category: 'software',  status: 'active',  year: '2016', icon: Server },
   { slug: 'upcycling',     category: 'hardware',  status: 'ongoing', year: '2025', icon: Lightbulb },
+  { slug: 'saldo',         category: 'software',  status: 'active',  year: '2026', icon: Scale, externalHref: '/saldo' },
 ]

@@ -5658,6 +5658,15 @@
           "Collaboration with social enterprises",
           "Ecological analyses (ZHAW)"
         ]
+      },
+      {
+        "title": "Saldo",
+        "description": "A dependency-free engine for time balances (Soll/Ist), vacation and honest monthly reports — open-sourced from our own time tracking.",
+        "features": [
+          "Open source · MIT · zero dependencies",
+          "Soll/Ist balance — holiday- and absence-aware",
+          "From social enterprises to SMEs"
+        ]
       }
     ],
     "freiecomputer": {

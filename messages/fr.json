@@ -5419,6 +5419,15 @@
           "Collaboration with social enterprises",
           "Ecological analyses (ZHAW)"
         ]
+      },
+      {
+        "title": "Saldo",
+        "description": "Un moteur sans dépendances pour les soldes horaires (Soll/Ist), les vacances et des rapports mensuels honnêtes — issu en open source de notre propre suivi du temps.",
+        "features": [
+          "Open source · MIT · zéro dépendance",
+          "Solde Soll/Ist — jours fériés et absences pris en compte",
+          "Des entreprises sociales aux PME"
+        ]
       }
     ],
     "freiecomputer": {
