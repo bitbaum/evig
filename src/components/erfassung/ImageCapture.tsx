@@ -31,11 +31,12 @@ import {
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { useProductAnalysis } from '@/hooks/useProductAnalysis'
-import type { ErfassungFormData } from '@/types/erfassung'
+import { downscaleImage } from '@/lib/images/downscale'
+import type { ErfassungFormData, AIFieldMetadata } from '@/types/erfassung'
 
 interface ImageCaptureProps {
   onImageCapture: (imageBase64: string) => void
-  onAnalysisComplete?: (data: Partial<ErfassungFormData>) => void
+  onAnalysisComplete?: (data: Partial<ErfassungFormData>, metadata?: AIFieldMetadata) => void
   onError?: (error: string) => void
   disabled?: boolean
   className?: string
@@ -60,28 +61,33 @@ export function ImageCapture({
   const fileInputRef = useRef<HTMLInputElement>(null)
   const cameraInputRef = useRef<HTMLInputElement>(null)
 
-  // Handle file selection
+  // Handle file selection — downscale before anything else so a 10 MB phone
+  // photo never reaches the network or the vision provider at full size.
   const handleFileSelect = useCallback(
-    (file: File) => {
+    async (file: File) => {
       if (!file.type.startsWith('image/')) {
         setErrorMessage(t('errorImageOnly'))
         setState('error')
         return
       }
 
-      const reader = new FileReader()
-      reader.onload = (ev) => {
-        const base64 = ev.target?.result as string
+      try {
+        const base64 = await downscaleImage(file)
+        if (!base64) {
+          setErrorMessage(t('errorReadFile'))
+          setState('error')
+          onError?.(t('errorReadFile'))
+          return
+        }
+        setErrorMessage(null)
         setImagePreview(base64)
         setState('preview')
         onImageCapture(base64)
-      }
-      reader.onerror = () => {
+      } catch {
         setErrorMessage(t('errorReadFile'))
         setState('error')
         onError?.(t('errorReadFile'))
       }
-      reader.readAsDataURL(file)
     },
     [t, onImageCapture, onError]
   )
@@ -143,7 +149,7 @@ export function ImageCapture({
     const result = await analyzeProduct(imagePreview)
 
     if (result) {
-      onAnalysisComplete?.(result.formData)
+      onAnalysisComplete?.(result.formData, result.metadata)
       setState('success')
 
       // Reset to preview after 2 seconds
@@ -151,8 +157,11 @@ export function ImageCapture({
         setState('preview')
       }, 2000)
     } else {
+      // Non-destructive: keep the photo in preview and surface the (actionable)
+      // provider message inline, so the operator can retry or switch to text
+      // without re-taking the picture.
       setErrorMessage(analysisError || t('errorAnalysis'))
-      setState('error')
+      setState('preview')
       onError?.(analysisError || t('errorAnalysis'))
     }
   }, [t, imagePreview, analyzeProduct, analysisError, onAnalysisComplete, onError])
@@ -160,7 +169,7 @@ export function ImageCapture({
   return (
     <div className={`flex flex-col gap-4 ${className}`}>
       {/* Main capture area */}
-      <div className="card-shell p-6">
+      <div className="card-shell p-4 sm:p-6">
         {/* Idle state: Upload area */}
         {state === 'idle' && (
           <div
@@ -258,6 +267,14 @@ export function ImageCapture({
                 </Button>
               </div>
 
+              {/* Inline, non-destructive analysis error — the photo stays put. */}
+              {state === 'preview' && errorMessage && (
+                <div className="flex items-start gap-2 py-2 px-3 bg-error-50 dark:bg-error-900/20 rounded-lg text-error-700 dark:text-error-400 text-sm">
+                  <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
+                  <span>{errorMessage}</span>
+                </div>
+              )}
+
               {/* Action buttons */}
               <div className="flex items-center justify-center gap-3">
                 {state === 'preview' && (
@@ -277,7 +294,7 @@ export function ImageCapture({
                       variant="primary"
                     >
                       <Zap className="w-4 h-4" />
-                      {t('analyzeWithAI')}
+                      {errorMessage ? t('retry') : t('analyzeWithAI')}
                     </Button>
                   </>
                 )}

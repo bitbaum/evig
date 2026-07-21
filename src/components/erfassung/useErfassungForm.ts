@@ -208,6 +208,46 @@ export function useErfassungForm() {
     }
   }, [])
 
+  /**
+   * Bridge AIFormAssist output → erfassung form state.
+   *
+   * The generic assistant returns arbitrary keys plus a flat
+   * `{ confidence, model, timestamp }` metadata map. Whitelist to real form
+   * fields (so `fieldsChanged`/`bemerkungen` don't pollute formData) and lift
+   * the metadata into the erfassung `AIFieldSource` shape (type 'text') that
+   * the field indicators render.
+   */
+  const handleAssistFields = useCallback((
+    data: Partial<ErfassungFormData>,
+    metadataEntries: Record<string, { confidence: number; model: string; timestamp: number }>,
+  ) => {
+    const clean: Partial<ErfassungFormData> = {}
+    for (const key of Object.keys(DEFAULT_FORM_DATA) as Array<keyof ErfassungFormData>) {
+      if (!(key in data)) continue
+      const value = (data as Record<string, unknown>)[key]
+      // Arrays (specs, kundenprofile) pass through; every other field is a
+      // string input, so coerce scalars — the refine model may emit a numeric
+      // price, and a raw number would drift from the form's string typing.
+      ;(clean as Record<string, unknown>)[key] =
+        Array.isArray(value) || value === null || value === undefined ? value : String(value)
+    }
+
+    const meta: AIFieldMetadata = {}
+    for (const [key, entry] of Object.entries(metadataEntries)) {
+      if (key in DEFAULT_FORM_DATA) {
+        meta[key as keyof ErfassungFormData] = {
+          type: 'text',
+          confidence: entry.confidence,
+          model: entry.model,
+          timestamp: entry.timestamp,
+        }
+      }
+    }
+
+    setFormData(prev => mergeFormData(prev, clean))
+    setAiMetadata(prev => ({ ...prev, ...meta }))
+  }, [])
+
   const handleImageCapture = useCallback((imageBase64: string) => {
     setFormData(prev => ({ ...prev, image: imageBase64 }))
   }, [])
@@ -361,6 +401,7 @@ export function useErfassungForm() {
     removeSpecField,
     toggleProfile,
     handleProductData,
+    handleAssistFields,
     handleImageCapture,
     handleDataFilled,
     handleManualEntry,

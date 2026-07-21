@@ -2,17 +2,33 @@
 
 import { useState, useCallback } from 'react'
 import { logger } from '@/lib/logger'
-import { callAnalyzeProductAPI } from '@/lib/api/ai-product-analysis'
-import type { ErfassungFormData } from '@/types/erfassung'
+import { apiFetch } from '@/lib/api/client'
+import type { ErfassungFormData, AIFieldMetadata, VoiceProductData } from '@/types/erfassung'
 
 interface AnalysisResult {
   formData: Partial<ErfassungFormData>
+  metadata: AIFieldMetadata
 }
 
 interface UseProductAnalysisResult {
   isAnalyzing: boolean
   error: string | null
   analyzeProduct: (imageBase64: string) => Promise<AnalysisResult | null>
+}
+
+/** Whitelist AI output to real form fields so formData stays clean. */
+function toFormData(data: VoiceProductData): Partial<ErfassungFormData> {
+  return {
+    hersteller: data.hersteller,
+    produktname: data.produktname,
+    kurzbeschreibung: data.kurzbeschreibung,
+    specs: data.specs,
+    verkaufspreis: data.verkaufspreis,
+    zustand: data.zustand,
+    hauptkategorie: data.hauptkategorie,
+    unterkategorie: data.unterkategorie,
+    kundenprofile: data.kundenprofile,
+  }
 }
 
 export function useProductAnalysis(): UseProductAnalysisResult {
@@ -24,24 +40,22 @@ export function useProductAnalysis(): UseProductAnalysisResult {
     setError(null)
 
     try {
-      const result = await callAnalyzeProductAPI(imageBase64, false)
+      // Full-fidelity staff route — fills ALL fields (specs, category,
+      // description, profiles) with confidence metadata, same as text intake.
+      const result = await apiFetch<{ data: VoiceProductData; metadata: AIFieldMetadata }>(
+        '/api/admin/erfassung/image',
+        { method: 'POST', body: { image: imageBase64 } },
+      )
 
-      if (!result.success) {
+      if (!result.success || !result.data) {
         throw new Error(result.error || 'Analyse fehlgeschlagen')
       }
 
-      const a = result.data?.analysis
-      if (!a) throw new Error('Keine Analysedaten erhalten')
+      const productData = result.data.data
+      if (!productData) throw new Error('Keine Analysedaten erhalten')
 
-      const formData: Partial<ErfassungFormData> = {
-        hersteller: a.brand || '',
-        produktname: a.product_name || '',
-        zustand: a.condition || '',
-        verkaufspreis: a.estimated_price_chf?.toString() || '',
-      }
-
-      logger.info('Image analysis completed', { product: a.product_name })
-      return { formData }
+      logger.info('Image analysis completed', { product: productData.produktname })
+      return { formData: toFormData(productData), metadata: result.data.metadata || {} }
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Analyse fehlgeschlagen'
       logger.error('Image analysis failed', { error: err })

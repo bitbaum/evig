@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, Suspense } from 'react'
+import { useState, useCallback, useEffect, useRef, Suspense } from 'react'
 import Link from 'next/link'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
@@ -14,6 +14,7 @@ import { BulkActionBar } from '@/components/erfassung/BulkActionBar'
 import { BulkSuccessScreen } from '@/components/erfassung/BulkSuccessScreen'
 import { CaptureDestinationFields } from '@/components/erfassung/CaptureDestinationFields'
 import { ErfassungSubmitBar } from '@/components/erfassung/ErfassungSubmitBar'
+import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { useErfassungForm } from '@/components/erfassung/useErfassungForm'
 import { Button } from '@/components/ui/button'
 import type { BulkProduct, BulkSaveResponse } from '@/types/erfassung'
@@ -38,6 +39,18 @@ function ErfassungContent() {
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null)
   const [bulkPage, setBulkPage] = useState(0)
   const [bulkSaveResult, setBulkSaveResult] = useState<BulkSaveResponse | null>(null)
+
+  // When the AI fills the form (or the operator picks manual entry), bring the
+  // review step into view. Without this the form silently appears below the
+  // fold on mobile and "where did step 2 go?" is a real complaint.
+  const reviewRef = useRef<HTMLFormElement>(null)
+  const wasReviewing = useRef(false)
+  useEffect(() => {
+    if (form.reviewStarted && !wasReviewing.current && !form.isEditMode) {
+      reviewRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+    wasReviewing.current = form.reviewStarted
+  }, [form.reviewStarted, form.isEditMode])
 
   // Bulk handlers
   const handleBulkData = useCallback((products: BulkProduct[]) => {
@@ -283,7 +296,7 @@ function ErfassungContent() {
       {/* SINGLE MODE */}
       {viewMode === 'single' && (form.isEditMode || form.reviewStarted) && (
         <>
-          <form data-product-form onSubmit={(e) => form.handleSubmit(e, 'erfassen')} className="space-y-5">
+          <form ref={reviewRef} data-product-form onSubmit={(e) => form.handleSubmit(e, 'erfassen')} className="scroll-mt-24 space-y-5">
             {form.saveError && (
               <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 text-error-700 dark:text-error-300 px-4 py-3 rounded-lg text-sm">
                 {form.saveError}
@@ -300,6 +313,37 @@ function ErfassungContent() {
                   <p className="mt-0.5 text-sm text-text-secondary">KI-Vorschläge kontrollieren. Nur Hersteller und Produktname sind zum Speichern nötig.</p>
                 </div>
               </div>
+
+              {/* Ask the AI to change the extracted data in natural language —
+                  "Beschreibung ausführlicher", "Preis auf 80 CHF", "Specs ergänzen".
+                  Expanded by default so the tweak surface is visible, not hidden
+                  behind a chevron. Uses the shared FORM_AI_REGISTRY (formType
+                  'erfassung') like every other admin form. */}
+              <AIFormAssist
+                formType="erfassung"
+                variant="section"
+                defaultExpanded
+                hasContentOverride={Boolean(
+                  form.formData.hersteller.trim() ||
+                  form.formData.produktname.trim() ||
+                  form.formData.kurzbeschreibung.trim(),
+                )}
+                currentData={{
+                  hersteller: form.formData.hersteller,
+                  produktname: form.formData.produktname,
+                  kurzbeschreibung: form.formData.kurzbeschreibung,
+                  verkaufspreis: form.formData.verkaufspreis,
+                  zustand: form.formData.zustand,
+                  hauptkategorie: form.formData.hauptkategorie,
+                  unterkategorie: form.formData.unterkategorie,
+                  specs: form.formData.specs.filter(s => s.key && s.value),
+                  kundenprofile: form.formData.kundenprofile,
+                }}
+                onFieldsFilled={(data, metadata) =>
+                  form.handleAssistFields(data as Partial<typeof form.formData>, metadata)
+                }
+              />
+
               <ProductForm
                 formData={form.formData}
                 aiMetadata={form.aiMetadata}

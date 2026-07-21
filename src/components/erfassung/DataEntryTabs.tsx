@@ -287,8 +287,8 @@ export function DataEntryTabs({
         {activeMode === 'picture' && (
           <ImageCapture
             onImageCapture={handleImageCapture}
-            onAnalysisComplete={(data) => {
-              onProductData(data)
+            onAnalysisComplete={(data, metadata) => {
+              onProductData(data, metadata)
               onDataFilled?.()
             }}
             onError={onError}

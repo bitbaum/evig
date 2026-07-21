@@ -226,3 +226,16 @@ export const ErfassungTextSchema = z.object({
 });
 
 export type ErfassungTextInput = z.infer<typeof ErfassungTextSchema>;
+
+// Image intake: a base64 data URL. Photos are downscaled client-side, so the
+// ~9 MB char ceiling is a defensive backstop, not the normal case — it keeps a
+// pathological upload from reaching the vision provider (and its own limit).
+export const ErfassungImageSchema = z.object({
+  image: z
+    .string()
+    .min(1, 'Bilddaten erforderlich')
+    .max(9_000_000, 'Bild zu gross. Bitte ein kleineres Foto verwenden.')
+    .refine((v) => v.startsWith('data:image/'), 'Ungültiges Bildformat'),
+});
+
+export type ErfassungImageInput = z.infer<typeof ErfassungImageSchema>;
