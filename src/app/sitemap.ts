@@ -56,6 +56,8 @@ const STATIC_PAGES: Array<{ path: string; priority: number; changeFrequency: Met
   { path: '/contact',                                 priority: 0.6, changeFrequency: 'monthly' },
   { path: '/faq',                                     priority: 0.6, changeFrequency: 'monthly' },
   { path: R.transparenz,                              priority: 0.5, changeFrequency: 'monthly' },
+  { path: '/about',                                   priority: 0.6, changeFrequency: 'monthly' },
+  { path: '/about/press',                             priority: 0.5, changeFrequency: 'monthly' },
   { path: R.marketplaceSell,                          priority: 0.6, changeFrequency: 'monthly' },
   { path: R.workshopsPropose,                         priority: 0.5, changeFrequency: 'monthly' },
   { path: R.blogSubmit,                               priority: 0.5, changeFrequency: 'monthly' },

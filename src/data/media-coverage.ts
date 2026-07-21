@@ -4,7 +4,7 @@
  * All media mentions, articles, and press coverage about RevampIT.
  * Ranked by credibility/prestige for "As Seen In" section.
  *
- * Last updated: 2026-02-02
+ * Last updated: 2026-07-21
  */
 
 import { ORG } from '@/config/org'
@@ -140,6 +140,18 @@ export const MEDIA_COVERAGE: MediaMention[] = [
   // ============================================
   // TIER 4 - Community & Tech
   // ============================================
+  {
+    id: 'wiedikon-maschinen-menschen',
+    source: 'Quartierverein Wiedikon',
+    sourceShort: 'QV Wiedikon',
+    title: 'Von Maschinen und Menschen',
+    url: 'https://www.quartierverein-wiedikon.ch/post/von-maschinen-und-menschen',
+    date: '2026-05',
+    type: 'feature',
+    tier: 4,
+    description: `Portrait über unsere Kreislauf-Arbeit im Quartier – gebrauchte Computer, GNU/Linux und Arbeitsplätze für Menschen mit schwerem Stand auf dem Arbeitsmarkt.`,
+    quote: 'Wir kümmern uns hier nämlich nicht nur um Maschinen, sondern auch um Menschen.'
+  },
   {
     id: 'wipkingen',
     source: 'Quartierverein Wipkingen',
