@@ -52,6 +52,10 @@ Für Fotos ist `extractProductFromImage` zuständig. Hier lohnt eine kleine Gesc
 
 Zwei Dinge machen das Ergebnis brauchbar statt nur beeindruckend. Erstens **Konfidenz pro Feld**: Jedes extrahierte Feld trägt eine Sicherheit; das Prüfformular hebt nur die Felder hervor, die wirklich einen zweiten Blick brauchen (etwa einen Zustand, den der Text nie genannt hat), statt jeden Wert mit einer Prozentzahl zuzupflastern. Zweitens die **Kategorisierung**: `detectCategory` ist eine geordnete Muster-Tabelle, die auf die bestehenden Kategorie-Codes abbildet. Die Reihenfolge ist Absicht — Zubehör-, Drucker-, Monitor- und Netzwerk-Muster greifen *vor* den Laptop-Marken, und interne Bauteile *zuletzt*, damit ein Gerätename immer gewinnt. So wird «Dockingstation Lenovo ThinkPad» korrekt als *Netzwerk* eingeordnet und nicht als Laptop.
 
+In der Oberfläche sieht das dann so aus: Man tippt einen Satz, und Sekunden später steht ein gefülltes Formular da — Hersteller, Modell, eine ausformulierte Kurzbeschreibung, die Kategorie. Genau ein Feld trägt hier einen kleinen orangen «Prüfen»-Hinweis: der *Zustand*, weil im Text nie einer stand. Alles andere ist ruhig. Das ist der springende Punkt — die KI schreit nicht «95 % sicher» in jede Zeile, sie zeigt still auf das eine, was der Mensch bestätigen soll.
+
+![Der Prüf-Schritt in der Oberfläche: aus dem getippten Satz hat die KI ein sauberes Formular gefüllt — Hersteller Lenovo, Modell ThinkPad T480, Kategorie Laptops, eine ausformulierte Beschreibung, Zustand Gut. Nur das Feld Zustand trägt einen orangen «Prüfen»-Hinweis, weil der Text den Zustand nie genannt hat.](/blog/geraete-eingang-review.svg)
+
 ### Eine einzige Schreib-Quelle
 
 So unterschiedlich die Kanäle sind — geschrieben wird an genau einer Stelle: `createErfassungProduct()` in `src/lib/erfassung/create-product.ts`. Diese Funktion ist die *Single Source of Truth* für «ein Gerät entsteht». In einer Transaktion vergibt sie eine menschenlesbare Item-Nummer (`I-YYMMDD-NNNN`), schreibt den Extraktions-Datensatz (`ai_extracted_products`), legt den Inventar-Eintrag an (`inventory_items` mit Standort, Box und Menge), verknüpft Kundenprofile, lädt das Bild nach **R2** (Objektspeicher) hoch und verlinkt es — und veröffentlicht optional gleich ein Inserat.
@@ -68,7 +72,21 @@ Wird ein Gerät publiziert, macht `publishRevampitListing` daraus ein aktives In
 
 ### Der Belastungstest: 197 Produkte aus dem alten Shop
 
-Die beste Bestätigung, dass der Ablauf trägt, war die Katalog-Migration. Der alte Shopware-Shop hatte kein brauchbares API — aber saubere Open-Graph-Metadaten pro Produktseite. Ein kleiner Scraper lief die `/Alles/`-Liste ab, zog Name, Marke, Preis, Beschreibung und Bild-URL, und ein einmaliger Migrations-Endpunkt legte **jedes der 197 Produkte als Entwurf** an — über `createErfassungProduct`, mit serverseitig heruntergeladenem und nach R2 umgehängtem Bild. Kategorien wurden per `detectCategory` erschlossen, Dubletten über die gespeicherte Shopware-Nummer verhindert (idempotent, beliebig wiederholbar). Was per Hand Tage gedauert hätte, war so eine Sache von Minuten — genau der Punkt.
+Die beste Bestätigung, dass der Ablauf trägt, war die Katalog-Migration. Der alte Shopware-Shop hatte kein brauchbares API — aber saubere Open-Graph-Metadaten pro Produktseite. Ein kleiner Scraper lief die `/Alles/`-Liste ab, zog Name, Marke, Preis, Beschreibung und Bild-URL, und ein einmaliger Migrations-Endpunkt legte **jedes der 197 Produkte als Entwurf** an — über `createErfassungProduct`, mit serverseitig heruntergeladenem und nach R2 umgehängtem Bild. Kategorien wurden per `detectCategory` erschlossen, Dubletten über die gespeicherte Shopware-Nummer verhindert (idempotent, beliebig wiederholbar). Was per Hand Tage gedauert hätte, war so eine Sache von Minuten.
+
+Und weil die Migration durch dieselbe Funktion lief wie jede Einzelaufnahme, liessen sich die Entwürfe anschliessend in einem zweiten Durchgang veröffentlichen — jeder wird zum aktiven Inserat, das R2-Bild wandert automatisch mit. Aus **11 sichtbaren Angeboten wurden 208**, jedes mit Bild, Preis und Kategorie. Der alte Shop war damit nicht nur abgetippt, sondern *überführt*.
+
+![Der Marktplatz nach der Migration: aus 11 Inseraten wurden 208 aktive Angebote — jede Karte mit Produktbild, Titel, Preis und Zustands-Badge, gespeist aus dem alten Shopware-Katalog.](/blog/geraete-eingang-marktplatz.svg)
+
+## Drei Prinzipien, die das tragen
+
+Bevor es zu den Nachbarsystemen geht, lohnt der Blick auf drei Entscheidungen, die den Unterschied zwischen «funktioniert in der Demo» und «trägt im Betrieb» ausmachen — und die überall im Code wiederkehren.
+
+**Eine Quelle der Wahrheit fürs Schreiben.** Egal ob Foto, Sprache, CSV, Einzelaufnahme oder Massen-Migration: Geschrieben wird ausschliesslich durch `createErfassungProduct`. Es gäbe tausend Versuchungen, für die Migration «schnell einen zweiten, leicht anderen Weg» zu bauen. Genau das haben wir *nicht* getan — und deshalb gelten Item-Nummern, Bild-Handling, QC-Tor und Inventar-Invarianten für alle Wege gleich. Ein Fehler wird an einer Stelle behoben, nicht an fünf.
+
+**Sicherheit statt Prozentzahlen.** Die KI liefert zu jedem Feld eine Konfidenz — aber der Bildschirm zeigt keine Prozente. Er zeigt einen «Prüfen»-Hinweis nur dort, wo die Sicherheit unter eine Schwelle fällt. Eine Zahl wie «73 %» ist für den Menschen an der Werkbank keine Handlungsanweisung; «schau hier nochmal hin» ist eine. Gute Automatisierung reduziert Entscheidungen, sie multipliziert sie nicht.
+
+**Idempotenz überall, wo es raus geht.** Jeder Sync nach Kivvi trägt einen Idempotency-Key; jeder migrierte Datensatz trägt seine Shopware-Nummer; jeder Publikations-Lauf überspringt, was schon ein Inserat hat. Das klingt nach Kleinkram, ist aber der Grund, warum wir Migrationen, Synchronisationen und Reindexierungen *beliebig wiederholen* dürfen, ohne Dubletten oder Angst. Wiederholbarkeit ist kein Luxus — sie ist die Voraussetzung dafür, dass man ein System im laufenden Betrieb reparieren kann.
 
 ## Systeme, die miteinander reden
 

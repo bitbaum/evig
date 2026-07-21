@@ -52,6 +52,10 @@ For photos, `extractProductFromImage` takes over. A small story from the engine 
 
 Two things make the result usable rather than merely impressive. First, **per-field confidence**: every extracted field carries a certainty; the review form highlights only the fields that genuinely need a second look (a condition the text never stated, say), instead of plastering every value with a percentage. Second, **categorization**: `detectCategory` is an ordered pattern table mapping onto the existing category codes. The order is intentional — accessory, printer, monitor and network patterns match *before* the laptop brands, and internal components *last*, so a device name always wins. That way "Dockingstation Lenovo ThinkPad" is correctly filed as *Network* and not as a laptop.
 
+In the interface this looks like this: you type a sentence, and seconds later a filled form appears — make, model, a written-out short description, the category. Exactly one field here carries a small orange "Prüfen" (check) hint: the *condition*, because the text never named one. Everything else is quiet. That's the crux — the AI doesn't shout "95 % sure" into every line, it quietly points at the one thing a human should confirm.
+
+![The review step in the interface: from the typed sentence the AI filled a clean form — make Lenovo, model ThinkPad T480, category Laptops, a written-out description, condition Good. Only the condition field carries an orange "check" hint, because the text never named a condition.](/blog/geraete-eingang-review.svg)
+
 ### A single source of truth for writes
 
 However different the channels are, writing happens in exactly one place: `createErfassungProduct()` in `src/lib/erfassung/create-product.ts`. This function is the *single source of truth* for "a device comes into being." In one transaction it assigns a human-readable item number (`I-YYMMDD-NNNN`), writes the extraction record (`ai_extracted_products`), creates the inventory entry (`inventory_items`, with location, box and quantity), links customer profiles, uploads the image to **R2** (object storage) and links it — and optionally publishes a listing straight away.
@@ -68,7 +72,21 @@ When a device is published, `publishRevampitListing` turns it into an active lis
 
 ### The stress test: 197 products from the old shop
 
-The best confirmation that the flow holds was the catalogue migration. The old Shopware shop had no usable API — but clean Open Graph metadata per product page. A small scraper walked the `/Alles/` listing, pulled name, brand, price, description and image URL, and a one-off migration endpoint created **each of the 197 products as a draft** — via `createErfassungProduct`, with the image downloaded server-side and re-hosted to R2. Categories were inferred via `detectCategory`, duplicates prevented via the stored Shopware number (idempotent, repeatable at will). What would have taken days by hand was a matter of minutes — exactly the point.
+The best confirmation that the flow holds was the catalogue migration. The old Shopware shop had no usable API — but clean Open Graph metadata per product page. A small scraper walked the `/Alles/` listing, pulled name, brand, price, description and image URL, and a one-off migration endpoint created **each of the 197 products as a draft** — via `createErfassungProduct`, with the image downloaded server-side and re-hosted to R2. Categories were inferred via `detectCategory`, duplicates prevented via the stored Shopware number (idempotent, repeatable at will). What would have taken days by hand was a matter of minutes.
+
+And because the migration ran through the same function as any single intake, the drafts could then be published in a second pass — each becomes an active listing, the R2 image travelling with it automatically. **11 visible listings became 208**, each with image, price and category. The old shop wasn't just typed out, it was *carried over*.
+
+![The marketplace after the migration: 11 listings became 208 active offers — each card with product image, title, price and condition badge, fed from the old Shopware catalogue.](/blog/geraete-eingang-marktplatz.svg)
+
+## Three principles that carry it
+
+Before we get to the neighbouring systems, it's worth looking at three decisions that make the difference between "works in the demo" and "holds in production" — and that recur throughout the code.
+
+**A single source of truth for writes.** Whether photo, voice, CSV, single intake or bulk migration: writing happens exclusively through `createErfassungProduct`. There would have been a thousand temptations to build "a quick second, slightly different path" for the migration. That's exactly what we did *not* do — and that's why item numbers, image handling, the QC gate and inventory invariants apply the same to every path. A bug is fixed in one place, not five.
+
+**Certainty, not percentages.** The AI delivers a confidence for every field — but the screen shows no percentages. It shows a "check" hint only where the certainty drops below a threshold. A number like "73 %" is no instruction for the person at the bench; "look here again" is. Good automation reduces decisions, it doesn't multiply them.
+
+**Idempotency everywhere it goes out.** Every sync to Kivvi carries an idempotency key; every migrated record carries its Shopware number; every publish run skips what already has a listing. This sounds like small stuff, but it's the reason we may repeat migrations, syncs and re-indexing *at will*, without duplicates or fear. Repeatability isn't a luxury — it's the precondition for being able to repair a system while it's running.
 
 ## Systems that talk to each other
 
