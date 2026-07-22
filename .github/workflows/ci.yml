@@ -30,14 +30,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run ESLint
-        run: npm run lint
-
-      - name: Type check
-        run: npx tsc --noEmit
-
-      - name: Build verification
-        run: npm run build
+      # SSOT: lint + typecheck + build are bundled in the `verify` npm script
+      # (package.json). CI calls it verbatim so the gating chain can't drift
+      # from what runs locally. Do not re-inline these checks here.
+      - name: Verify (lint + typecheck + build)
+        run: npm run verify
         env:
           NEXT_PUBLIC_VERCEL_ENV: preview
           # Build-time placeholders so strict env validation doesn't fail during CI compile.
