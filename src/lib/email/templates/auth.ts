@@ -242,14 +242,14 @@ export const staffWelcome = (name: string): EmailContent => ({
           <p>Dein Konto wurde erfolgreich aktiviert. Du bist jetzt offiziell Teil des ${ORG.name} Teams!</p>
           <h3>Deine ersten Schritte:</h3>
           <ol>
-            <li><strong>Admin-Dashboard erkunden:</strong> Unter <a href="https://revampit.vercel.app/admin">/admin</a> findest du alle Verwaltungsfunktionen.</li>
+            <li><strong>Admin-Dashboard erkunden:</strong> Unter <a href="${ORG.website}/admin">/admin</a> findest du alle Verwaltungsfunktionen.</li>
             <li><strong>Team kennenlernen:</strong> Besuche die Team-Seite im Dashboard, um deine Kolleginnen und Kollegen zu sehen.</li>
             <li><strong>Profil vervollständigen:</strong> Füge ein Foto und deine Kontaktdaten hinzu.</li>
           </ol>
           <h3>Wichtige Links:</h3>
           <ul>
-            <li><a href="https://revampit.vercel.app/admin">Admin-Dashboard</a></li>
-            <li><a href="https://revampit.vercel.app/admin/team">Team-Übersicht</a></li>
+            <li><a href="${ORG.website}/admin">Admin-Dashboard</a></li>
+            <li><a href="${ORG.website}/admin/team">Team-Übersicht</a></li>
             <li><a href="${ORG.website}">Öffentliche Website</a></li>
           </ul>
           <p>Wir freuen uns auf die Zusammenarbeit!</p>
@@ -273,8 +273,8 @@ Deine ersten Schritte:
 3. Profil vervollständigen: Füge ein Foto und deine Kontaktdaten hinzu
 
 Wichtige Links:
-- Admin-Dashboard: https://revampit.vercel.app/admin
-- Team-Übersicht: https://revampit.vercel.app/admin/team
+- Admin-Dashboard: ${ORG.website}/admin
+- Team-Übersicht: ${ORG.website}/admin/team
 - Öffentliche Website: ${ORG.website}
 
 Wir freuen uns auf die Zusammenarbeit!

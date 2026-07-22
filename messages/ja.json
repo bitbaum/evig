@@ -6557,7 +6557,7 @@
           },
           "hosting": {
             "name": "デプロイ & ホスティング",
-            "description": "LinuxサーバーのOpen Sourceソリューションからvercel、Netlifyなどのモダンプラットフォームまでの柔軟なホスティングオプション。",
+            "description": "欧州のデータセンターにあるセルフホスト型Linuxサーバーでの柔軟なホスティングオプション。Open Sourceソリューションから完全に自社運用のインフラまで対応します。",
             "benefits": [
               "複数のホスティングオプション",
               "グローバルCDN",

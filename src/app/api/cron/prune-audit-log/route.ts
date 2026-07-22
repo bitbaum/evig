@@ -5,9 +5,10 @@
  * (super-admin changes, user deletions) get severity=critical and are
  * preserved indefinitely — the WHERE filter excludes them.
  *
- * Triggered by Vercel cron daily at 02:00 UTC (see vercel.json).
- * Protected by Vercel's `x-vercel-cron` header — only Vercel infra
- * can invoke it; external callers get 401.
+ * Triggered daily at 02:00 UTC by a systemd timer on the self-hosted box
+ * (revampit-cron@prune-audit-log.timer → scripts/ops/run-cron.sh).
+ * Protected by CRON_SECRET (Authorization: Bearer ...) — external callers
+ * without the secret get 401.
  *
  * Idempotent — running twice in the same window is a no-op.
  */
@@ -21,15 +22,16 @@ import { logger } from '@/lib/logger'
 const RETENTION_DAYS = 180
 
 export async function GET(request: NextRequest) {
-  // Vercel cron requests carry an x-vercel-cron header (or use Bearer
-  // auth via CRON_SECRET env var). Reject anything else to avoid
-  // arbitrary external triggers.
-  const isVercelCron = request.headers.get('x-vercel-cron') === '1'
-  const hasCronSecret =
-    process.env.CRON_SECRET &&
-    request.headers.get('authorization') === `Bearer ${process.env.CRON_SECRET}`
+  // Authenticate via CRON_SECRET (Authorization: Bearer ...). When CRON_SECRET
+  // is unset (local dev), the check is skipped — matches the other cron routes
+  // and scripts/ops/run-cron.sh. Reject anything else to avoid arbitrary
+  // external triggers.
+  const cronSecret = process.env.CRON_SECRET
+  const authorized =
+    !cronSecret ||
+    request.headers.get('authorization') === `Bearer ${cronSecret}`
 
-  if (!isVercelCron && !hasCronSecret) {
+  if (!authorized) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

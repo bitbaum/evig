@@ -8,7 +8,7 @@
  *
  * To enable in production:
  *   1. Create a project at https://sentry.io
- *   2. Add `SENTRY_DSN=https://...@sentry.io/...` to Vercel env vars
+ *   2. Add `SENTRY_DSN=https://...@sentry.io/...` to the box's `.env` (/opt/revampit/app/.env)
  *   3. (Optional, for sourcemap upload + tunneling) install the build-time
  *      wrapper later: https://docs.sentry.io/platforms/javascript/guides/nextjs/
  *

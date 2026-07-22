@@ -3,9 +3,9 @@
  *
  * GET /api/cron/wake-recurring-tasks
  *
- * Schedule: daily at 07:00 Zurich. Vercel Hobby plan caps cron at
- * once-per-day, so we check daily and let the per-task schedule_cron
- * expression drive whether it's actually that task's day. Sufficient
+ * Schedule: daily at 07:00 Zurich (systemd timer on the self-hosted box).
+ * We run once per day and let the per-task schedule_cron expression drive
+ * whether it's actually that task's day. Sufficient
  * for the realistic patterns (weekly chores, daily routines, monthly
  * checks) — `.prev()` still gives the most recent scheduled fire time
  * and the "already-completed-this-iteration" check prevents double-fires.

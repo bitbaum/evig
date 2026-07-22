@@ -2,7 +2,8 @@
  * Tests for the XSS sanitization helpers (lib/security/sanitize.ts).
  *
  * Lightweight regex-based sanitizer (replaces isomorphic-dompurify
- * to dodge an ESM/CJS jsdom incompat on Vercel). Two exports:
+ * to dodge an ESM/CJS jsdom incompat under the Next.js server bundler).
+ * Two exports:
  *
  *   sanitizeInput(str, { allowHtml?, maxLength? })
  *     - stripAllHtml when allowHtml=false (default)

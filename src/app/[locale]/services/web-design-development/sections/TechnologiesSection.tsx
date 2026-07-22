@@ -21,7 +21,7 @@ const TECH_DEFS = [
   { name: 'Joomla', iconKey: 'Globe', category: 'CMS', url: 'https://www.joomla.org', tKey: 'joomla' },
   { name: 'WooCommerce', iconKey: 'Globe', category: 'E-Commerce', url: 'https://woocommerce.com', tKey: 'woocommerce' },
   { name: 'Shopware 6', iconKey: 'Globe', category: 'E-Commerce', url: 'https://www.shopware.com', tKey: 'shopware' },
-  { name: '', iconKey: 'Cloud', category: 'Infrastruktur', url: 'https://vercel.com', tKey: 'hosting' },
+  { name: '', iconKey: 'Cloud', category: 'Infrastruktur', url: 'https://www.hetzner.com', tKey: 'hosting' },
 ] as const
 
 export async function TechnologiesSection() {

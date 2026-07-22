@@ -17,8 +17,8 @@ import * as Sentry from '@sentry/nextjs'
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
-  environment: process.env.VERCEL_ENV || process.env.NODE_ENV || 'development',
-  release: process.env.VERCEL_GIT_COMMIT_SHA,
+  environment: process.env.NODE_ENV || 'development',
+  release: process.env.NEXT_PUBLIC_BUILD_SHA,
   tracesSampleRate: 0.1,
   ignoreErrors: [
     // Client-aborted fetches surface as AbortError on the server side too.

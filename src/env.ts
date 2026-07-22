@@ -18,10 +18,11 @@ import { z } from 'zod'
 // =============================================================================
 // Empty-string handling
 // =============================================================================
-// Vercel's env-var UI saves "" when you clear a field instead of removing the
-// variable. Zod's `.optional()` treats undefined as absent but "" as present
-// (and invalid for typed fields like .email() or .regex). Strip empty strings
-// to undefined before schema validation so optional fields behave intuitively.
+// A cleared field in an env file (e.g. `FOO=` in the box's `.env`) yields ""
+// rather than an absent variable. Zod's `.optional()` treats undefined as absent
+// but "" as present (and invalid for typed fields like .email() or .regex). Strip
+// empty strings to undefined before schema validation so optional fields behave
+// intuitively.
 
 const rawEnv: Record<string, unknown> = {}
 for (const [k, v] of Object.entries(process.env)) {
@@ -70,10 +71,10 @@ const serverEnvSchema = z.object({
   EMAIL_SECURE: z.string().optional(),
 
   // --- App URL ---------------------------------------------------------------
-  // PRESENCE only — we used to enforce .url() but Vercel project envs sometimes
-  // hold values like `${VERCEL_URL}` that are valid at runtime but fail Zod's
-  // strict URL check at build time. Runtime consumers (next.config, metadata
-  // generators) handle malformed URLs gracefully.
+  // PRESENCE only — we used to enforce .url() but env values can hold shapes
+  // that are valid at runtime yet fail Zod's strict URL check at build time.
+  // Runtime consumers (next.config, metadata generators) handle malformed URLs
+  // gracefully.
   // Presence-only; the metadata generator handles missing URL gracefully.
   NEXT_PUBLIC_SITE_URL: z.string().optional(),
   NEXT_PUBLIC_API_URL: z.string().optional(),

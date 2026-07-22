@@ -118,7 +118,7 @@ export async function getDefaultChatProvider(userId?: string): Promise<AIProvide
       return provider
     }
     // Default is configured but its credentials are dead. Log loudly so
-    // the failure surfaces in Vercel logs — the previous silent fall-
+    // the failure surfaces in the app logs — the previous silent fall-
     // through to "any other enabled provider" made stale API keys look
     // like a different provider's bug (e.g. user thinks Groq is selected,
     // sees an "OpenRouter API error: 401" because Groq quietly failed

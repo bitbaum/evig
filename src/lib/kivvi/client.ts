@@ -6,7 +6,7 @@
  * documents). The Kivvi API token is scoped to the RevampIT company account.
  *
  * Configuration (add to .env):
- *   KIVVI_API_URL=https://kivvi.vercel.app
+ *   KIVVI_API_URL=https://kivvi.orangecat.ch
  *   KIVVI_API_TOKEN=kv_...
  *
  * All calls are server-side only. Never import this in client components.

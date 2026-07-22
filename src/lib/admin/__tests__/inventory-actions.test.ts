@@ -21,8 +21,8 @@
  *   - returns null when upload fails
  *   - inserts new image record when no existing image
  *   - updates existing image record when one exists
- *   - deletes old Vercel blob when replacing existing image
- *   - does NOT call deleteImage for non-Vercel URLs
+ *   - deletes old stored image when replacing existing image
+ *   - does NOT call deleteImage for unmanaged URLs
  */
 
 // ---------------------------------------------------------------------------

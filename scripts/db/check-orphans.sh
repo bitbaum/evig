@@ -13,7 +13,7 @@
 # Usage:
 #   source .env.local && bash scripts/db/check-orphans.sh
 #
-# CI: schedule this monthly via Vercel cron or GitHub Actions schedule.
+# CI: schedule this monthly via a systemd timer on the box or a GitHub Actions schedule.
 # If any orphan count crosses an action threshold (e.g. >100), file an
 # issue; otherwise log + continue.
 

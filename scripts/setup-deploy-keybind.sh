@@ -256,8 +256,7 @@ main() {
     echo
     print_info "🔧 Additional Setup:"
     print_info "   • Install GitHub CLI: https://cli.github.com/"
-    print_info "   • Install Vercel CLI: npm i -g vercel"
-    print_info "   • Configure Vercel: vercel login && vercel link"
+    print_info "   • Deploys run on push to main via .github/workflows/deploy-selfhost.yml (build → rsync → systemd restart on the Hetzner box)"
     
     echo
     print_warning "Remember to restart your terminal or run 'source ~/.bashrc' to activate aliases and key bindings!"

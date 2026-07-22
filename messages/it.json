@@ -6557,7 +6557,7 @@
           },
           "hosting": {
             "name": "Deployment e hosting",
-            "description": "Opzioni di hosting flessibili dalle soluzioni Open Source su server Linux alle piattaforme moderne come Vercel e Netlify.",
+            "description": "Opzioni di hosting flessibili su server Linux self-hosted in data center europei, dalle soluzioni Open Source a un'infrastruttura completamente autogestita.",
             "benefits": [
               "Molteplici opzioni di hosting",
               "CDN globale",

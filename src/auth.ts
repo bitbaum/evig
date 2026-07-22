@@ -82,7 +82,7 @@ export const authConfig = {
   // Secret for signing cookies and tokens
   secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
 
-  // Required for Auth.js v5 on non-localhost deployments (Vercel, etc.)
+  // Required for Auth.js v5 on non-localhost deployments (the self-hosted Hetzner box behind Caddy)
   trustHost: true,
 
   // Skip adapter for now - JWT strategy works without it

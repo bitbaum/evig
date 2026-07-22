@@ -2,10 +2,11 @@
  * Sanitizes user input to prevent XSS attacks
  *
  * Uses a lightweight regex-based approach that works reliably on both
- * client and server (Edge, Node, Vercel serverless) without jsdom.
+ * client and server (Edge and Node runtimes) without jsdom.
  *
- * Previous implementation used isomorphic-dompurify which breaks on
- * Vercel due to ESM/CJS incompatibility in the jsdom dependency chain.
+ * Previous implementation used isomorphic-dompurify which breaks under
+ * the Next.js server bundler due to ESM/CJS incompatibility in the jsdom
+ * dependency chain.
  *
  * @param input - The string to sanitize
  * @param options - Configuration options

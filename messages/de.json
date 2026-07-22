@@ -1569,7 +1569,7 @@
           },
           "hosting": {
             "name": "Bereitstellung & Hosting",
-            "description": "Flexible Hosting-Optionen von Open-Source-Lösungen auf Linux-Servern bis hin zu modernen Plattformen wie Vercel und Netlify.",
+            "description": "Flexible Hosting-Optionen auf selbst betriebenen Linux-Servern in europäischen Rechenzentren, von Open-Source-Lösungen bis zum vollständig selbst gehosteten Betrieb.",
             "benefits": [
               "Mehrere Hosting-Optionen",
               "Globales CDN",

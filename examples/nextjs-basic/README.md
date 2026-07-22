@@ -229,12 +229,12 @@ Or pass custom styles as props:
 
 ## 🚀 Deployment
 
-### Vercel (Recommended)
+### Self-hosted Node server (Recommended)
 
 1. Push code to GitHub
-2. Connect to Vercel
-3. Set environment variables in Vercel dashboard
-4. Deploy
+2. On your server (or via CI), pull and `npm ci && npm run build`
+3. Set environment variables in the server's `.env`
+4. Serve the standalone build behind a reverse proxy (e.g. Caddy/nginx)
 
 ### Manual Deployment
 

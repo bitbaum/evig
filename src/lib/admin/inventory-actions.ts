@@ -127,7 +127,7 @@ export async function updateProductImage(
   // URL. Filenames are deterministic (<itemUuid>.jpg) so re-uploads usually
   // overwrite in place (no-op here); this handles the rarer differing-key case.
   // deleteImage() handles both the S3/Hetzner and local-fs backends.
-  // (Replaces a dead check for blob.vercel-storage.com — Vercel Blob is gone.)
+  // (Replaces a dead check for a legacy hosted-blob URL — that backend is gone.)
   if (existingImage) {
     const oldUrl = existingImage.filePath
     if (oldUrl && oldUrl !== uploadResult.url) {

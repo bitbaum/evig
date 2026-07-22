@@ -39,7 +39,6 @@ jobs:
       - name: Build verification
         run: npm run build
         env:
-          NEXT_PUBLIC_VERCEL_ENV: preview
           # Build-time placeholders so strict env validation doesn't fail during CI compile.
           AUTH_SECRET: ci-build-placeholder-secret-32chars
           DB_HOST: localhost
@@ -215,8 +214,6 @@ jobs:
 
       - name: Build app
         run: npm run build
-        env:
-          NEXT_PUBLIC_VERCEL_ENV: preview
 
       - name: Start app
         run: |

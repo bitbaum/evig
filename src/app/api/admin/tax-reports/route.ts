@@ -168,8 +168,8 @@ export const GET = withAdmin('finanzen', async (request: NextRequest) => {
  *   - nextStart: day AFTER end (used as the SQL exclusive upper bound)
  *
  * Why strings + Postgres AT TIME ZONE: the previous Date-based logic
- * computed boundaries in the server's local timezone (UTC on Vercel/
- * Node), so a transaction at 00:30 Zurich on Jan 1 (= 23:30 UTC Dec 31
+ * computed boundaries in the server's local timezone (UTC on the
+ * self-hosted box), so a transaction at 00:30 Zurich on Jan 1 (= 23:30 UTC Dec 31
  * in winter) was attributed to the PRIOR year's VAT period — a real
  * accounting drift at year-end. Returning naive Swiss-local dates and
  * letting Postgres convert via `${date}::date AT TIME ZONE 'Europe/
