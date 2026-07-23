@@ -79,7 +79,7 @@
       "buyDevices": "機器を購入",
       "communityListings": "コミュニティ出品",
       "communityListingsDesc": "個人からの中古IT — 手数料0%",
-      "orgShop": "Revamp-IT ショップ",
+      "orgShop": "evig ショップ",
       "orgShopDesc": "検査済みの再生品デバイス",
       "store": "チューリッヒ店舗",
       "storeDesc": "店頭で見て、相談する",
@@ -175,7 +175,7 @@
     "webDevelopment": "ウェブ開発",
     "openSourceSolutions": "オープンソースソリューション",
     "communityListings": "コミュニティ出品",
-    "shopRevampIT": "RevampITショップ",
+    "shopRevampIT": "evigショップ",
     "storeZurich": "チューリッヒ店舗",
     "createListing": "出品作成",
     "myListings": "マイ出品",
@@ -366,7 +366,7 @@
       "errorVerificationError": "メール確認中にエラーが発生しました",
       "errorConnection": "接続の問題が発生しました。1分後にもう一度お試しください。",
       "backHome": "ホームに戻る",
-      "pageTitle": "ログイン | RevampIT",
+      "pageTitle": "ログイン | evig",
       "errorLocked": "アカウントが一時的にロックされています。数分後にもう一度お試しください。",
       "errorNoPassword": "このアカウントにはまだパスワードが設定されていません。「パスワードをお忘れの方」からアカウントを有効化してください。",
       "errorUnverified": "まずメールアドレスを確認してください。受信トレイをご確認ください。"
@@ -425,7 +425,7 @@
       "failed": "ログアウトに失敗しました",
       "retry": "もう一度ログアウト",
       "backToDashboard": "ダッシュボードに戻る",
-      "pageTitle": "ログアウト | RevampIT",
+      "pageTitle": "ログアウト | evig",
       "heading": "ログアウト中...",
       "errorHeading": "ログアウトに失敗しました",
       "errorMessage": "ログアウトに失敗しました。もう一度お試しください。"
@@ -519,7 +519,7 @@
       "hidePassword": "パスワードを非表示"
     },
     "accountTitle": "アカウント",
-    "accountDesc": "RevampITにログインして、修理リクエストを送信し、マーケットプレイスで取引し、ワークショップに参加しましょう。"
+    "accountDesc": "evigにログインして、修理リクエストを送信し、マーケットプレイスで取引し、ワークショップに参加しましょう。"
   },
   "cookies": {
     "title": "Cookieについて",
@@ -553,7 +553,7 @@
   "agb": {
     "meta": {
       "title": "Terms and Conditions",
-      "description": "Terms and Conditions of revamp-it"
+      "description": "Terms and Conditions of evig"
     },
     "title": "Terms and Conditions",
     "section1": {
@@ -611,7 +611,7 @@
   "datenschutz": {
     "meta": {
       "title": "Privacy Policy",
-      "description": "Privacy Policy of revamp-it"
+      "description": "Privacy Policy of evig"
     },
     "title": "Privacy Policy",
     "section1": {
@@ -959,7 +959,7 @@
         "careerReentries": "プログラムを通じて年間約{value}件の職場復帰",
         "peopleHelped": "2003年以来、持続可能なITで{value}人をサポート",
         "successStories": "成功事例",
-        "testimonial": "RevampITのおかげで、3年間の失業後にIT業界に再び足を踏み入れることができました。",
+        "testimonial": "evigのおかげで、3年間の失業後にIT業界に再び足を踏み入れることができました。",
         "testimonialAuthor": "Sarah M.、元インターン生"
       },
       "economic": {
@@ -1677,7 +1677,7 @@
       "heading": "私たちのコミュニティが言うこと",
       "items": [
         {
-          "quote": "難民として、Revamp-ITは私にここで参加する機会を与えてくれました。私は多くを学び、自分の目標に合ったスキルを身につける自由があります。今はコードを書いており、興味のあることは何でも学ぶことができます — ここでは誰もが知識を共有しているからです。これは本物のコミュニティです。",
+          "quote": "難民として、evigは私にここで参加する機会を与えてくれました。私は多くを学び、自分の目標に合ったスキルを身につける自由があります。今はコードを書いており、興味のあることは何でも学ぶことができます — ここでは誰もが知識を共有しているからです。これは本物のコミュニティです。",
           "author": "G.",
           "role": "ボランティア"
         }
@@ -1711,8 +1711,8 @@
       "description": "熱心なボランティアチームに参加して、テクノロジーを持続可能ですべての人にアクセスしやすくする手助けをしましょう。",
       "ctaText": "関心を表明する",
       "overview": {
-        "title": "なぜRevamp-ITでボランティアをするのか？",
-        "content": "Revamp-ITでは、すべての人が技術へのアクセスとそれを使用するスキルを持つべきだと考えています。"
+        "title": "なぜevigでボランティアをするのか？",
+        "content": "evigでは、すべての人が技術へのアクセスとそれを使用するスキルを持つべきだと考えています。"
       },
       "benefitsHeading": "ボランティアの利点",
       "benefits": [
@@ -1971,7 +1971,7 @@
       "benefitsHeading": "パートナーシップの利点",
       "overview": {
         "title": "なぜ私たちと協力するのか?",
-        "content": "Revamp-IT では、協力こそが意義ある変化を生む力だと信じています。私たちのパートナーシップは、専門性、リソース、共通の価値観を組み合わせます。"
+        "content": "evig では、協力こそが意義ある変化を生む力だと信じています。私たちのパートナーシップは、専門性、リソース、共通の価値観を組み合わせます。"
       },
       "benefits": [
         {
@@ -2875,7 +2875,7 @@
     "hub": {
       "eyebrow": "IT Help",
       "title": "Fix your computer, reinstall your OS, solve any IT problem",
-      "subtitle": "RevampIT connects you with community technicians — free or fairly paid.",
+      "subtitle": "evig connects you with community technicians — free or fairly paid.",
       "paths": {
         "request": {
           "title": "Request help",
@@ -2913,7 +2913,7 @@
   },
   "knowhow": {
     "meta": {
-      "title": "ノウハウ — ガイド、ブログ、ワークショップ | revamp-it",
+      "title": "ノウハウ — ガイド、ブログ、ワークショップ | evig",
       "description": "ヴィンテージハードウェア、Linux、Open Sourceについて学ぶ。ガイド、ワークショップ、ブログ、厳選リソース。"
     },
     "hero": {
@@ -3179,9 +3179,9 @@
       "sellerVerified": "認証済み出品者",
       "free": "無料",
       "trust": {
-        "verified": "Revamp-ITが検査・テスト済み",
-        "untested": "品質検査を省略 — Revamp-ITの検証済み商品ではありません",
-        "untestedBadge": "Revamp-IT · 未検査",
+        "verified": "evigが検査・テスト済み",
+        "untested": "品質検査を省略 — evigの検証済み商品ではありません",
+        "untestedBadge": "evig · 未検査",
         "processLink": "品質プロセスを見る",
         "mission": "廃棄せず再利用 — 非営利団体",
         "warranty": "{months}か月保証",
@@ -3213,9 +3213,9 @@
       "errorReport": "出品の通報に失敗しました",
       "errorNetworkReport": "ネットワークエラー：出品を通報できませんでした",
       "buyNow": "今すぐ購入",
-      "securePaymentTitle": "Revamp-IT による安全なお支払い",
+      "securePaymentTitle": "evig による安全なお支払い",
       "securePaymentDesc": "Payrexx でお支払い — 受け取り確認後に販売者へ送金されます",
-      "revampitTrustTitle": "Revamp-IT による検査済み",
+      "revampitTrustTitle": "evig による検査済み",
       "revampitTrustDesc": "プロフェッショナルに整備・テストされ、次のオーナーに引き渡す準備が整いました",
       "unavailableReserved": "この出品は他の方が予約済みです。",
       "unavailableSold": "この出品は既に販売済みです。",
@@ -3459,7 +3459,7 @@
       "itemCount": "{count}点の商品",
       "continueShopping": "買い物を続ける",
       "pickupNote": "チューリッヒで無料受け取り",
-      "revampitOnly": "Revamp-ITの商品だけカートに追加できます。コミュニティ出品は直接購入します。",
+      "revampitOnly": "evigの商品だけカートに追加できます。コミュニティ出品は直接購入します。",
       "cartAriaLabel": "カート、{count}点の商品",
       "closeAriaLabel": "カートを閉じる",
       "paymentSuccess": "お支払いが完了しました！ご注文が確定しました。",
@@ -3588,7 +3588,7 @@
     "items": [
       {
         "title": "Kivitendo Modus CH",
-        "description": "2015年7月以来、revamp-itはKivitendoプロジェクトのプレミアムパートナーです。2005年から、当初は自社目的のために、やがて顧客のニーズを満たすために、会計、リソース、顧客管理のためのソフトウェアソリューションを探し始めました。",
+        "description": "2015年7月以来、evigはKivitendoプロジェクトのプレミアムパートナーです。2005年から、当初は自社目的のために、やがて顧客のニーズを満たすために、会計、リソース、顧客管理のためのソフトウェアソリューションを探し始めました。",
         "features": [
           "2015年からのプレミアムパートナーシップ",
           "会計とリソース管理",
@@ -3608,7 +3608,7 @@
       },
       {
         "title": "FreieComputer.ch",
-        "description": "事前インストール済みのフリーソフトウェアと保証されたサポートを持つコンピューターのスイスラベル！revamp-itは積極的なOpen Sourceコミュニティとともにこのラベルの誕生に貢献しました。",
+        "description": "事前インストール済みのフリーソフトウェアと保証されたサポートを持つコンピューターのスイスラベル！evigは積極的なOpen Sourceコミュニティとともにこのラベルの誕生に貢献しました。",
         "features": [
           "フリーソフトウェアのスイスラベル",
           "事前インストール済みOpen Sourceソフトウェア",
@@ -3618,7 +3618,7 @@
       },
       {
         "title": "Compirat",
-        "description": "Compiratはカリタスチューリッヒとrevamp-itの協力プロジェクトです。Compiratの支援により、チューリッヒ州の限られた資力を持つ人々が自宅近くでコンピューターの使い方を学ぶ機会を得られます。",
+        "description": "Compiratはカリタスチューリッヒとevigの協力プロジェクトです。Compiratの支援により、チューリッヒ州の限られた資力を持つ人々が自宅近くでコンピューターの使い方を学ぶ機会を得られます。",
         "features": [
           "カリタスチューリッヒとのパートナーシップ",
           "限られた資力を持つ人々への支援",
@@ -3628,7 +3628,7 @@
       },
       {
         "title": "ハードウェア開発",
-        "description": "revamp-itのハードウェア開発作業は、廃棄されたコンピューターハードウェアの新たな可能性を発見し、エネルギーとリソースの消費を最適化し、Open Sourceハードウェアの組み立てガイドを作成することに焦点を当てています。",
+        "description": "evigのハードウェア開発作業は、廃棄されたコンピューターハードウェアの新たな可能性を発見し、エネルギーとリソースの消費を最適化し、Open Sourceハードウェアの組み立てガイドを作成することに焦点を当てています。",
         "features": [
           "廃棄ハードウェアのアップサイクル",
           "エネルギーとリソースの最適化",
@@ -3679,7 +3679,7 @@
       },
       "about": {
         "title": "FreieComputer.ch について",
-        "description": "オープンソースコミュニティの熱心な人々と共に、revamp-it はこのラベルの設立を支援し、コンピューティングにおける選択の自由を推進し、自由なソフトウェアをプリインストールしたコンピュータを販売する販売店を支援してきました。",
+        "description": "オープンソースコミュニティの熱心な人々と共に、evig はこのラベルの設立を支援し、コンピューティングにおける選択の自由を推進し、自由なソフトウェアをプリインストールしたコンピュータを販売する販売店を支援してきました。",
         "cards": [
           {
             "title": "自由ソフトウェア",
@@ -3741,7 +3741,7 @@
         "cards": [
           {
             "title": "私たちの歩み",
-            "description": "2010 年の FreieComputer.ch 開始以来、revamp-it は自由ソフトウェアと透明なサポートを重視した認証パソコンを提供しています。",
+            "description": "2010 年の FreieComputer.ch 開始以来、evig は自由ソフトウェアと透明なサポートを重視した認証パソコンを提供しています。",
             "features": [
               "2010 年設立",
               "非営利団体としての体制",
@@ -3774,7 +3774,7 @@
     "hardware": {
       "meta": {
         "title": "ハードウェア開発",
-        "description": "revamp-it のハードウェア開発は、使われなくなったコンピュータハードウェアの新しい活用方法、エネルギー最適化、そしてオープンソースのハードウェア組立ガイドの作成に焦点を当てています。"
+        "description": "evig のハードウェア開発は、使われなくなったコンピュータハードウェアの新しい活用方法、エネルギー最適化、そしてオープンソースのハードウェア組立ガイドの作成に焦点を当てています。"
       },
       "hero": {
         "title": "ハードウェア開発",
@@ -3784,7 +3784,7 @@
       },
       "overview": {
         "title": "私たちのハードウェアの取り組みについて",
-        "description": "revamp-it では、まだ完全に動作するものの、技術的進歩により本来の用途には適さなくなった、使われなくなったコンピュータハードウェアに新しい用途を見つけることに注力しています。",
+        "description": "evig では、まだ完全に動作するものの、技術的進歩により本来の用途には適さなくなった、使われなくなったコンピュータハードウェアに新しい用途を見つけることに注力しています。",
         "cards": [
           {
             "title": "ハードウェアの再利用",
@@ -3968,8 +3968,8 @@
     },
     "kivitendo": {
       "meta": {
-        "title": "Kivitendo - Open Source CRM & ERP | revamp-it",
-        "description": "継続的なパーソナライズ開発によって最高品質基準を満たす、revamp-it によるユニークなオープンソース CRM & ERP。"
+        "title": "Kivitendo - Open Source CRM & ERP | evig",
+        "description": "継続的なパーソナライズ開発によって最高品質基準を満たす、evig によるユニークなオープンソース CRM & ERP。"
       },
       "hero": {
         "title": "Kivitendo",
@@ -4033,7 +4033,7 @@
       },
       "partnership": {
         "title": "プレミアムパートナーシップ",
-        "description": "2015 年 7 月以来、revamp-it は Kivitendo プロジェクトのプレミアムパートナーです。私たちはこのオープンソース ERP システムの設定とサポートを提供しています。",
+        "description": "2015 年 7 月以来、evig は Kivitendo プロジェクトのプレミアムパートナーです。私たちはこのオープンソース ERP システムの設定とサポートを提供しています。",
         "cards": [
           {
             "title": "私たちのサービス",
@@ -4069,8 +4069,8 @@
     },
     "compirat": {
       "meta": {
-        "title": "Compirat - Linux でコンピュータスキル | revamp-it",
-        "description": "Caritas Zürich と revamp-it の共同プロジェクトで、チューリッヒ州の低所得者の方々にコンピュータコースとインターネットアクセスポイントを提供しています。"
+        "title": "Compirat - Linux でコンピュータスキル | evig",
+        "description": "Caritas Zürich と evig の共同プロジェクトで、チューリッヒ州の低所得者の方々にコンピュータコースとインターネットアクセスポイントを提供しています。"
       },
       "hero": {
         "title": "Compirat",
@@ -4080,7 +4080,7 @@
       },
       "about": {
         "title": "Compirat について",
-        "description": "Caritas Zürich と revamp-it の共同プロジェクトで、チューリッヒ州の低所得者の方々に利用しやすいコンピュータコースとインターネットアクセスポイントを提供しています。",
+        "description": "Caritas Zürich と evig の共同プロジェクトで、チューリッヒ州の低所得者の方々に利用しやすいコンピュータコースとインターネットアクセスポイントを提供しています。",
         "cards": [
           {
             "title": "地域のコース",
@@ -4271,7 +4271,7 @@
       },
       "hero": {
         "title": "Monitor-Upcycling",
-        "description": "使われなくなったコンピュータモニターを、高品質で機能的な照明に変えます。電子廃棄物を回避し、社会的事業所で意義ある仕事を生み出し、スイス市場向けの循環型製品を開発する、revamp-it の革新的なパイロットプロジェクトです。",
+        "description": "使われなくなったコンピュータモニターを、高品質で機能的な照明に変えます。電子廃棄物を回避し、社会的事業所で意義ある仕事を生み出し、スイス市場向けの循環型製品を開発する、evig の革新的なパイロットプロジェクトです。",
         "cta1": "プロジェクトを見る",
         "cta2": "パートナーになる",
         "photoAlt": "zuerich.repair の RepairHub 作業台の上に吊るされた曲面アップサイクル・ライト、2026年7月"
@@ -4419,7 +4419,7 @@
               "story": "画面が割れた大型の曲面モニターが作業場の照明になりました。影のない均一な光は、作業する修理担当者にとても喜ばれています。そして、この設置は訪れた人の目をすぐに引きつける見どころにもなっています。"
             },
             "laden": {
-              "title": "revamp-itの店舗＆事務所",
+              "title": "evigの店舗＆事務所",
               "location": "Birmensdorferstrasse 379、Zürich",
               "story": "店舗の入口では、2台のアップサイクル照明が既存の天井灯に取って代わりました。お客様の反応はどれも好評です。事務所ではもう1台が1年以上、問題なく稼働しています。"
             },
@@ -4519,7 +4519,7 @@
           "title": "ソースコードとライセンス",
           "body": "プラットフォームコードとすべてのガイドは GitHub にあります。Fork、Issue、Pull Request、いずれも歓迎します。",
           "repoCta": "GitHub で見る",
-          "repoUrl": "https://github.com/g-but/revampit",
+          "repoUrl": "https://github.com/g-but/evig",
           "licenseLabel": "Creative Commons CC-BY-SA · プラットフォームコードは MIT",
           "wikiTitle": "改造Wiki：monitor-upcycling.org",
           "wikiBody": "すべての改造手順書は公開Wikiでも見られます。世界中の電子技術者がほかのモデルを記録できるように作られています。ライセンスはCC-BY-SAで、商用利用も自由です。",
@@ -4574,7 +4574,7 @@
         "title": "Lenovo L2251pwd",
         "subtitle": "22 インチモニターを照明に改造",
         "metaLine": "モデル: Lenovo L2251pwd・所要時間: 約 1 時間・難易度: 簡単",
-        "credit": "ガイド執筆: Daniel, RevampIT · 公開: 2026年5月28日",
+        "credit": "ガイド執筆: Daniel, evig · 公開: 2026年5月28日",
         "safety": {
           "title": "まず安全を",
           "body": "通電状態では絶対に作業しないでください。動作テストの前には必要な安全対策を講じてください。不安な場合は、電子工学の経験者に同席してもらいましょう。"
@@ -4969,8 +4969,8 @@
           },
           "links": [
             {
-              "label": "動画：モニターから照明への改修（revamp-it Nextcloud）",
-              "url": "https://cloud.revamp-it.ch/index.php/s/c7XTe95TJgFLB8N"
+              "label": "動画：モニターから照明への改修（evig Nextcloud）",
+              "url": "https://cloud.evig.ch/index.php/s/c7XTe95TJgFLB8N"
             },
             {
               "label": "Open Hardware Repository（CERN）",
@@ -4985,7 +4985,7 @@
         "lieferanten": {
           "eyebrow": "供給 · 物流",
           "title": "原材料：退役モニター。",
-          "intro": "LEDバックライト付きの動作する画面（通常19–24インチ）が必要。Revamp-ITはチューリッヒで退役IT機器を収集；現在のモニター在庫で第2段階小ロットは足りる。",
+          "intro": "LEDバックライト付きの動作する画面（通常19–24インチ）が必要。evigはチューリッヒで退役IT機器を収集；現在のモニター在庫で第2段階小ロットは足りる。",
           "stockBreakdown": {
             "title": "拠点の関連機器",
             "subtitle": "モニターアップサイクルに焦点 — 全在庫調査ではない",
@@ -5008,7 +5008,7 @@
             "title": "今後の画面の供給源",
             "items": [
               {
-                "label": "revamp-itの既存在庫",
+                "label": "evigの既存在庫",
                 "body": "拠点で収集・仕分け済みのモニター在庫で第2段階小ロットをカバー。",
                 "cite": "cit04_kurzbericht_e1"
               },
@@ -5231,7 +5231,7 @@
               },
               {
                 "label": "実装パートナー",
-                "value": "Verein revamp-it",
+                "value": "Verein evig",
                 "cite": "cit01_innolink"
               }
             ]
@@ -5319,7 +5319,7 @@
               "title": "主要パートナー",
               "items": [
                 {
-                  "name": "Verein revamp-it",
+                  "name": "Verein evig",
                   "role": "プロジェクト主体、収集、作業所コーディネーション",
                   "cite": "cit01_innolink"
                 },
@@ -5402,12 +5402,12 @@
               "title": "プロジェクトチーム",
               "items": [
                 {
-                  "name": "Andreas Rudin (revamp-it)",
+                  "name": "Andreas Rudin (evig)",
                   "role": "プロジェクト・コーディネーション、協会理事。",
                   "cite": "cit04_kurzbericht_e1"
                 },
                 {
-                  "name": "Mike Rey (revamp-it)",
+                  "name": "Mike Rey (evig)",
                   "role": "プロジェクト責任、学術評価との連携、パイロット評価。",
                   "cite": "cit04_kurzbericht_e1"
                 },
@@ -5417,7 +5417,7 @@
                   "cite": "cit04_kurzbericht_e1"
                 },
                 {
-                  "name": "Daniel Afzali (revamp-it)",
+                  "name": "Daniel Afzali (evig)",
                   "role": "改修ステップとパイロット導入の写真・動画記録。",
                   "cite": "cit04_kurzbericht_e1"
                 },
@@ -5494,7 +5494,7 @@
               "cite": "cit01_innolink"
             },
             {
-              "label": "revamp-it自己資金",
+              "label": "evig自己資金",
               "status": "投入済み",
               "amount": "ca. 80'500 CHF",
               "note": "収集、試験、保管、2023〜2024年の申請作業。",
@@ -5533,14 +5533,14 @@
         "mitmachen": {
           "eyebrow": "参加する",
           "title": "プロジェクトを支える4つの具体的な方法。",
-          "intro": "パイロット拠点、ハードウェア、作業所パートナー、資金提供候補の紹介を募集しています。直接連絡：Andreas Rudin, andreas.rudin@revamp-it.ch, +41 43 960 32 64.",
+          "intro": "パイロット拠点、ハードウェア、作業所パートナー、資金提供候補の紹介を募集しています。直接連絡：Andreas Rudin, andreas.rudin@evig.ch, +41 43 960 32 64.",
           "options": [
             {
               "key": "pilot",
               "title": "パイロット拠点になる",
               "body": "御社の階段室、オフィス、学校に試験的に照明を設置し、寿命と消費電力を学術的に評価します。求める利用パターンは3つ：常時運転、昼／週末タイマー、人感センサー。",
               "ctaLabel": "パイロット問い合わせ",
-              "ctaHref": "mailto:andreas.rudin@revamp-it.ch?subject=%E3%83%91%E3%82%A4%E3%83%AD%E3%83%83%E3%83%88%E6%8B%A0%E7%82%B9%20Monitor-Upcycling",
+              "ctaHref": "mailto:andreas.rudin@evig.ch?subject=%E3%83%91%E3%82%A4%E3%83%AD%E3%83%83%E3%83%88%E6%8B%A0%E7%82%B9%20Monitor-Upcycling",
               "cite": "cit04_kurzbericht_e1"
             },
             {
@@ -5556,7 +5556,7 @@
               "title": "作業所パートナーになる",
               "body": "他の保護作業所やRepair Café：手順、工具、スタンバイ・バイパス解を共有します。目標は公開Wikiでのデータベース化。",
               "ctaLabel": "作業所問い合わせ",
-              "ctaHref": "mailto:andreas.rudin@revamp-it.ch?subject=%E4%BD%9C%E6%A5%AD%E6%89%80%E3%83%91%E3%83%BC%E3%83%88%E3%83%8A%E3%83%BC%20Monitor-Upcycling",
+              "ctaHref": "mailto:andreas.rudin@evig.ch?subject=%E4%BD%9C%E6%A5%AD%E6%89%80%E3%83%91%E3%83%BC%E3%83%88%E3%83%8A%E3%83%BC%20Monitor-Upcycling",
               "cite": "cit04_kurzbericht_e1"
             },
             {
@@ -5564,7 +5564,7 @@
               "title": "資金提供候補を推薦する",
               "body": "オープンハードウェア＋社会的イノベーション＋スイス国内素材循環に合う財団を探しています。心当たり、または橋渡しが可能であれば、一報お願いします。",
               "ctaLabel": "推薦を送る",
-              "ctaHref": "mailto:andreas.rudin@revamp-it.ch?subject=%E8%B3%87%E9%87%91%E6%8F%90%E4%BE%9B%E5%80%99%E8%A3%9C%20Monitor-Upcycling",
+              "ctaHref": "mailto:andreas.rudin@evig.ch?subject=%E8%B3%87%E9%87%91%E6%8F%90%E4%BE%9B%E5%80%99%E8%A3%9C%20Monitor-Upcycling",
               "cite": null
             }
           ]
@@ -5577,7 +5577,7 @@
             {
               "key": "cit01_innolink",
               "label": "Innolink申請 132.351 INNO-EE",
-              "detail": "Innosuisse Innovation Booster / Innoscheck申請『光源としてのモニター再利用の環境性能評価』、ZHAW + Verein revamp-it、2025年11月21日",
+              "detail": "Innosuisse Innovation Booster / Innoscheck申請『光源としてのモニター再利用の環境性能評価』、ZHAW + Verein evig、2025年11月21日",
               "url": null
             },
             {
@@ -5595,7 +5595,7 @@
             {
               "key": "cit04_kurzbericht_e1",
               "label": "ステージ1短報告書（2026年3月12日時点）",
-              "detail": "Verein revamp-it、プロジェクト2023-02-01『IT機器の機能的循環利用』ステージ1短報告書、2026年3月12日改訂版",
+              "detail": "Verein evig、プロジェクト2023-02-01『IT機器の機能的循環利用』ステージ1短報告書、2026年3月12日改訂版",
               "url": null
             },
             {
@@ -5619,8 +5619,8 @@
             {
               "key": "cit10_film",
               "label": "動画：モニターから照明への改修",
-              "detail": "改修プロセスの動画記録。Revamp-IT Nextcloudインスタンスでホスト",
-              "url": "https://cloud.revamp-it.ch/index.php/s/c7XTe95TJgFLB8N"
+              "detail": "改修プロセスの動画記録。evig Nextcloudインスタンスでホスト",
+              "url": "https://cloud.evig.ch/index.php/s/c7XTe95TJgFLB8N"
             },
             {
               "key": "cit11_vesa",
@@ -5687,7 +5687,7 @@
         "documentMeta": {
           "project": "Monitor-Upcycling zu Wand- und Deckenleuchten",
           "sponsor": "Swico イノベーション基金 · 第2段階",
-          "preparedBy": "Verein revamp-it",
+          "preparedBy": "Verein evig",
           "asOf": "15.06.2026",
           "versionLabel": "更新日",
           "projectLabel": "プロジェクト",
@@ -5698,7 +5698,7 @@
           "eyebrow": "エグゼクティブサマリー",
           "title": "意思決定者向け要約",
           "paragraphs": [
-            "Revamp-ITは退役LEDモニターを壁・天井ランプに改装 — ソーシャルワークショップ Werkraum 4（zsge財団）で生産、ZHAWが科学的支援（ISO 14044 LCA、プロジェクト 132.351 INNO-EE）。",
+            "evigは退役LEDモニターを壁・天井ランプに改装 — ソーシャルワークショップ Werkraum 4（zsge財団）で生産、ZHAWが科学的支援（ISO 14044 LCA、プロジェクト 132.351 INNO-EE）。",
             "2026年6月中旬時点：Swico第2段階進行中（予算65’000 CHF、うち15’000 CHFはInnosuisse経由でZHAWへ）。12モデル改装成功、5モデルはスタンバイ回避を文書化。初の完全写真付きモデルガイド（Lenovo L2251pwd）は2026年5月28日から公開。",
             "Swico最終報告（30.06.2026）まで：小ロットの信頼できる単価とパイロット設置の知見が未確定。ZHAW LCA報告書は仕上げ中（提出18.06.2026）；結果発表は5月末に実施。次の公開マイルストーン：Swicoプレゼン 03.07.2026。"
           ],
@@ -5801,7 +5801,7 @@
           "guideCta": "自分で作る",
           "sourceLink": {
             "label": "プラットフォームのソース",
-            "url": "https://github.com/g-but/revampit"
+            "url": "https://github.com/g-but/evig"
           }
         },
         "circularity": {
@@ -5823,7 +5823,7 @@
             },
             {
               "label": "End of use",
-              "description": "Return to Revamp-IT or a partner workshop. LED driver reused, housing recycled. No component reaches household waste."
+              "description": "Return to evig or a partner workshop. LED driver reused, housing recycled. No component reaches household waste."
             }
           ]
         },
@@ -5896,7 +5896,7 @@
         "title": "Lenovo L2440pwC",
         "subtitle": "24インチモニターを照明に改造する",
         "metaLine": "モデル：Lenovo L2440pwC · 所要時間：約1時間 · 難易度：やさしい · 下書き",
-        "credit": "手順書：RevampITのBruno · 下書き — 未公開",
+        "credit": "手順書：evigのBruno · 下書き — 未公開",
         "safety": {
           "title": "まず安全から",
           "body": "通電したまま作業しないでください。始める前にモニターを電源から完全に切り離し、1〜2分待ちます。動作テストのたびに必要な安全対策を取り、不安があれば電子工作に詳しい仲間を呼びましょう。"
@@ -6001,7 +6001,7 @@
         "title": "HP Z23n",
         "subtitle": "23インチモニターを照明に改造する",
         "metaLine": "モデル：HP Z23n · 所要時間：約1時間 · 難易度：やさしい · 下書き",
-        "credit": "手順書：RevampITのBruno · 下書き — 未公開",
+        "credit": "手順書：evigのBruno · 下書き — 未公開",
         "safety": {
           "title": "まず安全から",
           "body": "通電したまま作業しないでください。始める前にモニターを電源から完全に切り離し、1〜2分待ちます。動作テストのたびに必要な安全対策を取り、不安があれば電子工作に詳しい仲間を呼びましょう。"
@@ -6229,7 +6229,7 @@
       "description": "チューリッヒでのプロフェッショナルなパソコン修理、ウェブ開発、データ復旧、Linuxサポート、ハードウェアリサイクル。",
       "layoutTitle": "コンピュータ修理・ITサービス",
       "serviceDetailTitle": "サービス詳細",
-      "serviceDetailDesc": "チューリッヒのRevamp-ITによるプロフェッショナルなITサービス。"
+      "serviceDetailDesc": "チューリッヒのevigによるプロフェッショナルなITサービス。"
     },
     "page": {
       "schemaName": "パソコン修理 & ITサービス",
@@ -6920,7 +6920,7 @@
     "openSourceSolutions": {
       "meta": {
         "title": "オープンソースの代替ソフト",
-        "description": "独自ソフトウェアの最良のオープンソース代替を見つけましょう。正直なレビュー、移行のヒント、Revamp-ITのサポート。",
+        "description": "独自ソフトウェアの最良のオープンソース代替を見つけましょう。正直なレビュー、移行のヒント、evigのサポート。",
         "keywords": [
           "オープンソース代替",
           "オープンソースソフトウェア",
@@ -7386,7 +7386,7 @@
   "shop": {
     "meta": {
       "title": "Buy refurbished IT",
-      "description": "Tested refurbished computers, laptops, monitors, and accessories directly from the Revamp-IT shop in Zurich.",
+      "description": "Tested refurbished computers, laptops, monitors, and accessories directly from the evig shop in Zurich.",
       "productNotFound": "商品が見つかりません",
       "productFallbackDesc": "{brand} {model} — {orgName}により検査・整備済み"
     },
@@ -7422,9 +7422,9 @@
     "empty": "商品が見つかりませんでした",
     "verifiedBadge": "検査済み",
     "page": {
-      "heroTitle": "Buy refurbished IT directly from Revamp-IT",
+      "heroTitle": "Buy refurbished IT directly from evig",
       "heroSubtitle": "Tested laptops, computers, monitors, and accessories from our own refurbishment work. Browse online, pick up in store, or buy directly.",
-      "metaDescription": "Tested refurbished computers, laptops, monitors, and accessories directly from the Revamp-IT shop in Zurich.",
+      "metaDescription": "Tested refurbished computers, laptops, monitors, and accessories directly from the evig shop in Zurich.",
       "store": {
         "title": "店舗（チューリッヒ）",
         "tagline": "相談、デバイスの確認、その場で持ち帰り",
@@ -7455,13 +7455,13 @@
         "altTitle": "手頃な価格のテクノロジーへの他の方法",
         "altIntro": "ここに来るのは購入のためだけではありません。経済的に余裕のない方への機器の提供や、古いハードウェアの寄付も受け付けています。",
         "donateTitle": "ハードウェアを寄付する",
-        "donateBody": "動作する、または修理可能な機器を Revamp-IT へ。私たちが整備して次の方へ届けます。",
+        "donateBody": "動作する、または修理可能な機器を evig へ。私たちが整備して次の方へ届けます。",
         "donateCta": "寄付ページへ",
         "needTitle": "機器が必要だけれど、購入が難しいですか?",
         "needBody": "Compirat プログラムを通じて、Caritas Zürich と協力し、経済的に余裕のない方々へ機器を提供しています。",
         "needCta": "Compirat を見る"
       },
-      "heroEyebrow": "Revamp-IT shop",
+      "heroEyebrow": "evig shop",
       "trust": {
         "qualityTitle": "Tested, cleaned, ready",
         "qualityBody": "Devices are refurbished, checked, and shipped with practical software.",
@@ -7471,7 +7471,7 @@
       "products": {
         "eyebrow": "Our inventory",
         "title": "Current products",
-        "body": "This is the primary Revamp-IT shop. Shopware remains only as a fallback when an older item is still better represented there.",
+        "body": "This is the primary evig shop. Shopware remains only as a fallback when an older item is still better represented there.",
         "allCta": "Browse all",
         "emptyTitle": "No products are published right now",
         "emptyBody": "Inventory is maintained by the workshop. Check back later or contact us directly."
@@ -7757,11 +7757,11 @@
   },
   "support": {
     "meta": {
-      "title": "RevampITを支援する",
+      "title": "evigを支援する",
       "description": "持続可能なテクノロジーに関する高品質で広告なしのコンテンツ制作を支援してください。"
     },
     "hero": {
-      "title": "RevampITを支援する",
+      "title": "evigを支援する",
       "subtitle": "持続可能なテクノロジー、Open Source、コンピューティングの未来に関する高品質で広告なしのコンテンツ制作にご協力ください。"
     },
     "pillars": {
@@ -7780,7 +7780,7 @@
     },
     "promise": {
       "title": "私たちの約束",
-      "intro": "RevampITは企業ではありません — 一つの運動です。持続可能なテクノロジーに関する高品質な情報は、有料の壁や押しつけがましい広告なしに誰もがアクセスできるべきだと信じています。",
+      "intro": "evigは企業ではありません — 一つの運動です。持続可能なテクノロジーに関する高品質な情報は、有料の壁や押しつけがましい広告なしに誰もがアクセスできるべきだと信じています。",
       "enables": "あなたの支援により、私たちは以下が可能になります：",
       "items": [
         "深い調査と分析を行う",
@@ -7881,9 +7881,9 @@
   },
   "sellers": {
     "meta": {
-      "title": "{name} – RevampIT マーケットプレイスの出品者",
-      "titleFallback": "出品者プロフィール – RevampIT マーケットプレイス",
-      "description": "RevampIT マーケットプレイスの {name} – アクティブな出品 {count} 件。中古テクノロジーを購入して循環経済に貢献しましょう。"
+      "title": "{name} – evig マーケットプレイスの出品者",
+      "titleFallback": "出品者プロフィール – evig マーケットプレイス",
+      "description": "evig マーケットプレイスの {name} – アクティブな出品 {count} 件。中古テクノロジーを購入して循環経済に貢献しましょう。"
     },
     "backToMarketplace": "マーケットプレイスに戻る",
     "publicProfile": "出品者プロフィール",
@@ -8397,7 +8397,7 @@
   "abos": {
     "tagline": "サブスク交換",
     "title": "サブスクリプションプールを共有",
-    "subtitle": "Revamp-ITコミュニティとデジタルサブスクリプションを共有して節約しましょう。各自が自分の分だけ支払います。",
+    "subtitle": "evigコミュニティとデジタルサブスクリプションを共有して節約しましょう。各自が自分の分だけ支払います。",
     "createPool": "プールを作成",
     "filterAll": "すべて",
     "perMonthPerson": "月額/人",
@@ -8460,7 +8460,7 @@
         "subtitle": "言語とニュースレター",
         "languageLabel": "使用言語",
         "newsletterLabel": "ニュースレターを購読",
-        "newsletterDesc": "RevampITのワークショップ、オファー、ニュースの更新を受け取る"
+        "newsletterDesc": "evigのワークショップ、オファー、ニュースの更新を受け取る"
       },
       "address": {
         "heading": "住所",
@@ -8803,7 +8803,7 @@
       "loadErrorGeneric": "ダッシュボードの読み込みエラー",
       "retry": "もう一度試す",
       "unexpectedError": "予期しないエラーが発生しました",
-      "pageSubtitle": "RevampITマーケットプレイスで商品を管理し、売上を追跡しましょう。",
+      "pageSubtitle": "evigマーケットプレイスで商品を管理し、売上を追跡しましょう。",
       "refresh": "更新",
       "statsProducts": "私の商品",
       "statsActive": "{count}件有効",
@@ -8821,8 +8821,8 @@
       "manageAll": "すべての商品を管理",
       "quickActionsTitle": "クイックアクセス",
       "quickActionsSubtitle": "よく使う販売者機能",
-      "infoTitle": "RevampIT マーケットプレイス",
-      "infoDesc": "販売者として、RevampITマーケットプレイスで自分のリファービッシュ製品を販売できます。あなたの製品は公式RevampIT製品とともに表示され、循環経済の促進に貢献します。",
+      "infoTitle": "evig マーケットプレイス",
+      "infoDesc": "販売者として、evigマーケットプレイスで自分のリファービッシュ製品を販売できます。あなたの製品は公式evig製品とともに表示され、循環経済の促進に貢献します。",
       "viewMarketplace": "マーケットプレイスを見る",
       "addProduct": "商品を追加",
       "quickNewProduct": "新しい商品",
@@ -8978,7 +8978,7 @@
     "donations": {
       "backToDashboard": "ダッシュボードへ戻る",
       "pageTitle": "寄付一覧",
-      "pageSubtitle": "RevampIT への金銭的・現物寄付の概要",
+      "pageSubtitle": "evig への金銭的・現物寄付の概要",
       "loginTitle": "ログインが必要です",
       "loginDesc": "寄付を確認するにはログインしてください。",
       "loginButton": "ログイン",
@@ -8987,10 +8987,10 @@
       "receiptRequested": "領収書申請済み",
       "receiptSent": "領収書受領済み",
       "emptyTitle": "寄付が記録されていません",
-      "emptyDesc": "RevampIT への寄付は、チームが処理後にここに表示されます。",
+      "emptyDesc": "evig への寄付は、チームが処理後にここに表示されます。",
       "donateNow": "今すぐ寄付する",
       "receiptInfoTitle": "寄付領収書に関する注意",
-      "receiptInfoText": "RevampIT は非営利団体です。CHF 100 以上の寄付には税務申告用の寄付確認書を発行します。お問い合わせ:",
+      "receiptInfoText": "evig は非営利団体です。CHF 100 以上の寄付には税務申告用の寄付確認書を発行します。お問い合わせ:",
       "loadError": "寄付の読み込みエラー",
       "networkError": "データ読み込み時のネットワークエラー",
       "journey": {
@@ -9064,13 +9064,13 @@
     },
     "meta": {
       "dashboardTitle": "ダッシュボード",
-      "dashboardDesc": "RevampITのアカウント、ワークショップ、注文などを管理できます。",
+      "dashboardDesc": "evigのアカウント、ワークショップ、注文などを管理できます。",
       "technikerTitle": "技術者ダッシュボード",
       "technikerDesc": "ITサポートのリクエストと申し出を管理できます。",
       "blogSubmissionsTitle": "投稿した記事",
       "blogSubmissionsDesc": "投稿したブログ記事のステータスを確認・編集できます。",
       "membershipTitle": "会員資格",
-      "membershipDesc": "Revamp-ITの会員資格。",
+      "membershipDesc": "evigの会員資格。",
       "decisionsTitle": "投票",
       "decisionsDesc": "あなたの声が届くオープン投票。",
       "decisionDetailTitle": "投票"
@@ -9113,7 +9113,7 @@
       "privacy": "プライバシーを尊重します。スパムなし、約束します。",
       "communityTitle": "コミュニティサポート。広告モデルなし。",
       "communityDesc": "広告なしの高品質で誠実なコンテンツを信じています。私たちの仕事を評価していただける方は、ぜひサポートをお願いします。",
-      "supportButton": "RevampITを支援する",
+      "supportButton": "evigを支援する",
       "successMessage": "ようこそ！メールを確認してください。",
       "networkError": "接続エラー。後でもう一度お試しください。"
     },
@@ -9415,7 +9415,7 @@
     "zeroWaste": {
       "badge": "解決策",
       "heading": "ゼロウェイストへのアプローチ",
-      "description": "RevampIT は「修理 ＞ リファービッシュ ＞ リサイクル」の原則に従います。これによって、各機器の価値を最大化し、環境への影響を最小化します。",
+      "description": "evig は「修理 ＞ リファービッシュ ＞ リサイクル」の原則に従います。これによって、各機器の価値を最大化し、環境への影響を最小化します。",
       "impactTitle": "このアプローチによるインパクト",
       "devicesSavedLabel": "年間で救った機器の数",
       "devicesSavedDesc": "シュレッダー行きから救出し、再利用",
@@ -9636,7 +9636,7 @@
         "options": {
           "quality": {
             "label": "再生して品質検査",
-            "description": "適切なチェックリストを開始します。合格後、商品にRevampIT検証バッジが付きます。"
+            "description": "適切なチェックリストを開始します。合格後、商品にevig検証バッジが付きます。"
           },
           "inventory": {
             "label": "在庫のみ",
@@ -9652,7 +9652,7 @@
           },
           "shop_untested": {
             "label": "今すぐ公開 — 未検査",
-            "description": "例外として即時公開しますが、RevampIT検証バッジは付きません。"
+            "description": "例外として即時公開しますが、evig検証バッジは付きません。"
           }
         },
         "skipReasonLabel": "品質検査を省略する理由は？",
@@ -9736,7 +9736,7 @@
       "visionLabel": "私たちのビジョン",
       "visionCta": "このビジョンの実現にご協力ください。",
       "supportProject": "プロジェクトを支援する",
-      "locationName": "RevampIT ショップ",
+      "locationName": "evig ショップ",
       "offerings": [
         "リファービッシュ済みハードウェアの購入",
         "ヴィンテージコンピュータコレクションの見学",
@@ -9923,7 +9923,7 @@
       "assistantSubtitle": "アシスタント",
       "openFullscreen": "全画面で開く",
       "pageTitle": "Hirn AI",
-      "pageDescription": "RevampITのAIアシスタント",
+      "pageDescription": "evigのAIアシスタント",
       "sidebar": {
         "newConversation": "新しい会話",
         "documentsLabel": "ドキュメント",
@@ -10760,7 +10760,7 @@
           "active": "有効",
           "unverified": "未検証",
           "openReports": "未処理の通報",
-          "revampit": "RevampITの出品"
+          "revampit": "evigの出品"
         },
         "urgent": {
           "headline": "{count, plural, one {#件の未処理の通報} other {#件の未処理の通報}}を確認",
@@ -10782,7 +10782,7 @@
           "allStatus": "すべてのステータス",
           "allCategories": "すべてのカテゴリー",
           "allSellers": "すべての出品者",
-          "revampit": "RevampIT",
+          "revampit": "evig",
           "community": "コミュニティ",
           "verification": "検証",
           "verified": "検証済み",
@@ -10943,7 +10943,7 @@
     },
     "analytics": {
       "pageTitle": "アナリティクス",
-      "pageDescription": "RevampITの統計と分析"
+      "pageDescription": "evigの統計と分析"
     },
     "donations": {
       "pageTitle": "寄付",
@@ -11408,7 +11408,7 @@
         },
         "hirn": {
           "label": "Hirn AI",
-          "description": "Revamp-ITのAIアシスタント"
+          "description": "evigのAIアシスタント"
         },
         "promo-codes": {
           "label": "プロモコード",
@@ -11495,7 +11495,7 @@
         "step1Title": "AI提案を確認",
         "step1Desc": "AIがフォームを埋めます。メーカーと製品名は必須。それ以外は後から補完できます。",
         "step2Title": "次のステップを選択",
-        "step2Desc": "RevampIT検証品には品質検査を推奨。代替の選択肢も可視化され追跡できます。",
+        "step2Desc": "evig検証品には品質検査を推奨。代替の選択肢も可視化され追跡できます。",
         "step3Title": "作業を続ける",
         "step3Desc": "ラベルを印刷、チェックリストを処理、または公開された製品をショップで開きます。"
       },
@@ -11587,22 +11587,22 @@
       },
       "admin-generic": {
         "title": "管理エリア",
-        "description": "RevampITプラットフォームの管理エリアにいます。",
+        "description": "evigプラットフォームの管理エリアにいます。",
         "s0": "タスクを作成",
-        "s1": "RevampITについて教えて"
+        "s1": "evigについて教えて"
       }
     }
   },
   "changelog": {
     "meta": {
       "title": "変更履歴",
-      "description": "RevampITプラットフォームの最新の修正、機能、改善。"
+      "description": "evigプラットフォームの最新の修正、機能、改善。"
     },
     "hero": {
-      "eyebrow": "RevampIT",
+      "eyebrow": "evig",
       "badge": "Live",
       "title": "変更履歴",
-      "subtitle": "revampit.chに展開している最新の修正、機能、改善。"
+      "subtitle": "evig.chに展開している最新の修正、機能、改善。"
     },
     "latest": {
       "label": "最新"
@@ -11618,7 +11618,7 @@
   "kennzahlen": {
     "meta": {
       "title": "主要指標",
-      "description": "Revamp-ITの重要な数字をすべて公開。出典と信頼度つき。誇張のない数値です。"
+      "description": "evigの重要な数字をすべて公開。出典と信頼度つき。誇張のない数値です。"
     },
     "hero": {
       "title": "主要指標",
@@ -11769,7 +11769,7 @@
   "reparaturbonus": {
     "meta": {
       "title": "チューリッヒ市 修理ボーナス",
-      "description": "チューリッヒ市が修理費用に最大{max}フラン、請求額の{percent}%を補助します。修理ボーナスの仕組みと、Revamp-ITでの修理がどのように対象になるのかをご紹介します。"
+      "description": "チューリッヒ市が修理費用に最大{max}フラン、請求額の{percent}%を補助します。修理ボーナスの仕組みと、evigでの修理がどのように対象になるのかをご紹介します。"
     },
     "hero": {
       "title": "チューリッヒ市 修理ボーナス",

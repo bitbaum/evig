@@ -76,8 +76,8 @@
       "marketplaceDesc": "Kaufen, verkaufen und IT-Hilfe",
       "buyDevices": "Geräte kaufen",
       "communityListings": "Marktplatz",
-      "communityListingsDesc": "Gebrauchte IT von Revamp-IT und anderen Anbieter:innen",
-      "orgShop": "Revamp-IT Shop",
+      "communityListingsDesc": "Gebrauchte IT von evig und anderen Anbieter:innen",
+      "orgShop": "evig Shop",
       "orgShopDesc": "Geprüfte, aufbereitete Geräte",
       "store": "Ladenlokal Zürich",
       "storeDesc": "Vor Ort stöbern und beraten lassen",
@@ -175,7 +175,7 @@
     "webDevelopment": "Webentwicklung",
     "openSourceSolutions": "Open Source-Lösungen",
     "communityListings": "Marktplatz",
-    "shopRevampIT": "Revamp-IT Inserate",
+    "shopRevampIT": "evig Inserate",
     "storeZurich": "Ladenlokal Zürich",
     "createListing": "Inserat erstellen",
     "myListings": "Meine Inserate",
@@ -357,7 +357,7 @@
       "sell": {
         "label": "01 / SHOP",
         "title": "Refurbished IT kaufen?",
-        "subtitle": "Geprüfte Geräte aus dem RevampIT Shop — lokal, transparent und sofort einsatzbereit.",
+        "subtitle": "Geprüfte Geräte aus dem evig Shop — lokal, transparent und sofort einsatzbereit.",
         "primaryLabel": "Zum Shop",
         "secondaryLabel": "Marktplatz ansehen"
       },
@@ -482,7 +482,7 @@
   "shop": {
     "meta": {
       "title": "Refurbished IT kaufen",
-      "description": "Tested refurbished computers, laptops, monitors, and accessories directly from the Revamp-IT shop in Zurich.",
+      "description": "Tested refurbished computers, laptops, monitors, and accessories directly from the evig shop in Zurich.",
       "productNotFound": "Produkt nicht gefunden",
       "productFallbackDesc": "{brand} {model} — geprüft und aufbereitet von {orgName}"
     },
@@ -518,9 +518,9 @@
     "empty": "Keine Produkte gefunden",
     "verifiedBadge": "Geprüft",
     "page": {
-      "heroTitle": "Refurbished IT direkt von Revamp-IT kaufen",
+      "heroTitle": "Refurbished IT direkt von evig kaufen",
       "heroSubtitle": "Geprüfte Laptops, Computer, Monitore und Zubehör aus unserer eigenen Aufbereitung. Online ansehen, im Laden abholen oder direkt kaufen.",
-      "metaDescription": "Geprüfte, aufgearbeitete Computer, Laptops, Monitore und Zubehör direkt aus dem Revamp-IT Shop in Zürich.",
+      "metaDescription": "Geprüfte, aufgearbeitete Computer, Laptops, Monitore und Zubehör direkt aus dem evig Shop in Zürich.",
       "store": {
         "title": "Ladenlokal (Zürich)",
         "tagline": "Beratung, Geräte ansehen, direkt mitnehmen",
@@ -551,13 +551,13 @@
         "altTitle": "Andere Wege zu bezahlbarer Technik",
         "altIntro": "Nicht alle landen hier, um zu kaufen — wir vermitteln auch Geräte an Menschen mit geringen Mitteln und nehmen gerne deine alte Hardware entgegen.",
         "donateTitle": "Hardware spenden",
-        "donateBody": "Funktionstüchtige oder reparierbare Geräte an revamp-it geben — wir bereiten sie auf und geben sie weiter.",
+        "donateBody": "Funktionstüchtige oder reparierbare Geräte an evig geben — wir bereiten sie auf und geben sie weiter.",
         "donateCta": "Zur Spenden­seite",
         "needTitle": "Brauchst du ein Gerät und kannst es dir nicht leisten?",
         "needBody": "Über das Compirat-Programm vermitteln wir gemeinsam mit Caritas Zürich Geräte an Menschen mit geringen Mitteln.",
         "needCta": "Compirat ansehen"
       },
-      "heroEyebrow": "Revamp-IT Shop",
+      "heroEyebrow": "evig Shop",
       "trust": {
         "qualityTitle": "Geprüft, gereinigt, bereit",
         "qualityBody": "Unsere Geräte werden aufbereitet, getestet und mit sinnvoller Software ausgeliefert.",
@@ -567,7 +567,7 @@
       "products": {
         "eyebrow": "Unser Sortiment",
         "title": "Aktuelle Produkte",
-        "body": "Das ist der primäre Revamp-IT Shop. Shopware bleibt nur ein Fallback, falls ein Produkt dort noch besser abgebildet ist.",
+        "body": "Das ist der primäre evig Shop. Shopware bleibt nur ein Fallback, falls ein Produkt dort noch besser abgebildet ist.",
         "allCta": "Alles durchsuchen",
         "emptyTitle": "Aktuell sind keine Produkte veröffentlicht",
         "emptyBody": "Das Inventar wird von der Werkstatt gepflegt. Schau später wieder vorbei oder kontaktiere uns direkt."
@@ -870,9 +870,9 @@
       "sellerVerified": "Verkäufer verifiziert",
       "free": "Gratis",
       "trust": {
-        "verified": "Von Revamp-IT geprüft & getestet",
-        "untested": "Nicht durch Revamp-IT geprüft — kein Prüfsiegel",
-        "untestedBadge": "Revamp-IT · ungeprüft",
+        "verified": "Von evig geprüft & getestet",
+        "untested": "Nicht durch evig geprüft — kein Prüfsiegel",
+        "untestedBadge": "evig · ungeprüft",
         "processLink": "So funktioniert unser Qualitätsprozess",
         "mission": "Wiederverwendet statt entsorgt — Non-Profit-Verein",
         "warranty": "{months} Monate Garantie",
@@ -893,9 +893,9 @@
       "cancel": "Abbrechen",
       "contactSeller": "Nachricht senden",
       "buyNow": "Jetzt kaufen",
-      "securePaymentTitle": "Sichere Zahlung über Revamp-IT",
+      "securePaymentTitle": "Sichere Zahlung über evig",
       "securePaymentDesc": "Zahlung per Payrexx — Geld wird erst nach Empfangsbestätigung freigegeben",
-      "revampitTrustTitle": "Geprüft von Revamp-IT",
+      "revampitTrustTitle": "Geprüft von evig",
       "revampitTrustDesc": "Professionell aufbereitet, getestet und bereit für den nächsten Besitzer",
       "save": "Merken",
       "share": "Teilen",
@@ -1153,7 +1153,7 @@
       "paymentSuccess": "Zahlung erfolgreich! Deine Bestellung ist bestätigt.",
       "paymentFailed": "Zahlung fehlgeschlagen. Bitte versuche es erneut.",
       "paymentCancelled": "Zahlung abgebrochen.",
-      "revampitOnly": "Nur Revamp-IT-Geräte können in den Warenkorb. Community-Inserate werden direkt gekauft.",
+      "revampitOnly": "Nur evig-Geräte können in den Warenkorb. Community-Inserate werden direkt gekauft.",
       "cartAriaLabel": "Warenkorb, {count} Artikel",
       "closeAriaLabel": "Warenkorb schliessen",
       "unavailableRemoved": "«{title}» ist nicht mehr verfügbar und wurde aus dem Warenkorb entfernt.",
@@ -1166,7 +1166,7 @@
       "description": "Professionelle Computer-Reparaturen, Webentwicklung, Datenrettung, Linux-Support und Hardware-Recycling in Zürich.",
       "layoutTitle": "Computer Reparatur & IT Services",
       "serviceDetailTitle": "Service Details",
-      "serviceDetailDesc": "Professionelle IT-Dienstleistungen von Revamp-IT in Zürich."
+      "serviceDetailDesc": "Professionelle IT-Dienstleistungen von evig in Zürich."
     },
     "title": "Dienstleistungen",
     "subtitle": "Was wir für dich tun können",
@@ -1932,7 +1932,7 @@
     "openSourceSolutions": {
       "meta": {
         "title": "Open-Source-Alternativen",
-        "description": "Finde die beste Open-Source-Alternative zu proprietärer Software. Ehrliche Bewertungen, Migrations-Tipps und Unterstützung durch Revamp-IT.",
+        "description": "Finde die beste Open-Source-Alternative zu proprietärer Software. Ehrliche Bewertungen, Migrations-Tipps und Unterstützung durch evig.",
         "keywords": [
           "open source alternativen",
           "open source software",
@@ -2681,7 +2681,7 @@
         "careerReentries": "~{value} berufliche Wiedereinstiege pro Jahr durch unser Programm",
         "peopleHelped": "{value} Menschen in nachhaltiger IT begleitet seit 2003",
         "successStories": "Erfolgsgeschichten",
-        "testimonial": "Dank RevampIT habe ich nach 3 Jahren Arbeitslosigkeit wieder Fuss gefasst in der IT-Branche.",
+        "testimonial": "Dank evig habe ich nach 3 Jahren Arbeitslosigkeit wieder Fuss gefasst in der IT-Branche.",
         "testimonialAuthor": "Sarah M., ehemalige Praktikantin"
       },
       "economic": {
@@ -3423,7 +3423,7 @@
     "hub": {
       "eyebrow": "IT-Hilfe",
       "title": "Computer reparieren, OS neu installieren, IT-Probleme lösen",
-      "subtitle": "RevampIT verbindet dich mit Community-Technikern — kostenlos oder fair vergütet.",
+      "subtitle": "evig verbindet dich mit Community-Technikern — kostenlos oder fair vergütet.",
       "paths": {
         "request": {
           "title": "Hilfe anfragen",
@@ -3631,7 +3631,7 @@
       "errorVerificationError": "Ein Fehler ist bei der E-Mail-Verifizierung aufgetreten",
       "errorConnection": "Verbindungsproblem. Bitte versuche es in einer Minute erneut.",
       "backHome": "Zurück zur Startseite",
-      "pageTitle": "Anmelden | RevampIT",
+      "pageTitle": "Anmelden | evig",
       "errorLocked": "Konto vorübergehend gesperrt. Bitte versuche es in einigen Minuten erneut.",
       "errorNoPassword": "Für dieses Konto ist noch kein Passwort gesetzt. Nutze «Passwort vergessen», um dein Konto zu aktivieren.",
       "errorUnverified": "Bitte bestätige zuerst deine E-Mail-Adresse. Überprüfe deinen Posteingang."
@@ -3690,7 +3690,7 @@
       "failed": "Abmeldung fehlgeschlagen",
       "retry": "Erneut abmelden",
       "backToDashboard": "Zurück zum Dashboard",
-      "pageTitle": "Abmelden | RevampIT",
+      "pageTitle": "Abmelden | evig",
       "heading": "Abmeldung läuft...",
       "errorHeading": "Abmeldung fehlgeschlagen",
       "errorMessage": "Abmeldung fehlgeschlagen. Bitte versuche es erneut."
@@ -3784,7 +3784,7 @@
       "hidePassword": "Passwort verbergen"
     },
     "accountTitle": "Konto",
-    "accountDesc": "Melde dich bei RevampIT an, um Reparaturanfragen zu stellen, auf dem Marktplatz zu handeln und an Workshops teilzunehmen."
+    "accountDesc": "Melde dich bei evig an, um Reparaturanfragen zu stellen, auf dem Marktplatz zu handeln und an Workshops teilzunehmen."
   },
   "cookies": {
     "title": "Cookie-Hinweis",
@@ -3948,7 +3948,7 @@
       "heading": "Was unsere Gemeinschaft sagt",
       "items": [
         {
-          "quote": "Als Geflüchteter hat mir Revamp-IT die Möglichkeit gegeben, hier mitzumachen. Ich lerne viel und habe die Freiheit, Fähigkeiten zu entwickeln, die zu meinen Zielen passen. Ich schreibe jetzt Code und kann alles lernen, was mich interessiert — denn hier teilt jeder sein Wissen. Das ist eine echte Gemeinschaft.",
+          "quote": "Als Geflüchteter hat mir evig die Möglichkeit gegeben, hier mitzumachen. Ich lerne viel und habe die Freiheit, Fähigkeiten zu entwickeln, die zu meinen Zielen passen. Ich schreibe jetzt Code und kann alles lernen, was mich interessiert — denn hier teilt jeder sein Wissen. Das ist eine echte Gemeinschaft.",
           "author": "G.",
           "role": "Freiwilliger"
         }
@@ -3982,8 +3982,8 @@
       "description": "Schliess dich unserem Team engagierter Freiwilliger an und hilf, Technologie nachhaltig und für alle zugänglich zu machen.",
       "ctaText": "Interesse bekunden",
       "overview": {
-        "title": "Warum Freiwilligenarbeit bei Revamp-IT?",
-        "content": "Bei Revamp-IT glauben wir, dass jeder Zugang zu Technologie und den Fähigkeiten haben sollte, sie zu nutzen. Als Freiwillige/r wirst du Teil einer Gemeinschaft, die diese Vision verwirklicht. Ob du dich für Technologie, Nachhaltigkeit oder Gemeindedienst begeisterst — in unserem Team ist Platz für dich."
+        "title": "Warum Freiwilligenarbeit bei evig?",
+        "content": "Bei evig glauben wir, dass jeder Zugang zu Technologie und den Fähigkeiten haben sollte, sie zu nutzen. Als Freiwillige/r wirst du Teil einer Gemeinschaft, die diese Vision verwirklicht. Ob du dich für Technologie, Nachhaltigkeit oder Gemeindedienst begeisterst — in unserem Team ist Platz für dich."
       },
       "benefitsHeading": "Vorteile der Freiwilligenarbeit",
       "benefits": [
@@ -4242,7 +4242,7 @@
       "benefitsHeading": "Partnerschaftsvorteile",
       "overview": {
         "title": "Warum mit uns zusammenarbeiten?",
-        "content": "Bei Revamp-IT glauben wir an die Kraft der Zusammenarbeit, um sinnvolle Veränderungen zu bewirken. Unsere Partnerschaften kombinieren Expertise, Ressourcen und gemeinsame Werte."
+        "content": "Bei evig glauben wir an die Kraft der Zusammenarbeit, um sinnvolle Veränderungen zu bewirken. Unsere Partnerschaften kombinieren Expertise, Ressourcen und gemeinsame Werte."
       },
       "benefits": [
         {
@@ -4611,7 +4611,7 @@
   },
   "knowhow": {
     "meta": {
-      "title": "Knowhow - Guides, Blog, Workshops | revamp-it",
+      "title": "Knowhow - Guides, Blog, Workshops | evig",
       "description": "Lerne über Vintage Hardware, Linux und Open Source. Guides, Workshops, Blog und curatierte Ressourcen."
     },
     "hero": {
@@ -4675,7 +4675,7 @@
   "agb": {
     "meta": {
       "title": "Allgemeine Geschäftsbedingungen",
-      "description": "Allgemeine Geschäftsbedingungen von revamp-it"
+      "description": "Allgemeine Geschäftsbedingungen von evig"
     },
     "title": "Allgemeine Geschäftsbedingungen",
     "section1": {
@@ -4733,7 +4733,7 @@
   "datenschutz": {
     "meta": {
       "title": "Datenschutzerklärung",
-      "description": "Datenschutzerklärung von revamp-it"
+      "description": "Datenschutzerklärung von evig"
     },
     "title": "Datenschutzerklärung",
     "section1": {
@@ -4838,7 +4838,7 @@
   "kennzahlen": {
     "meta": {
       "title": "Kennzahlen",
-      "description": "Alle wichtigen Zahlen von Revamp-IT – offen gelegt, mit Quelle und Vertrauensgrad. Keine geschönten Werte."
+      "description": "Alle wichtigen Zahlen von evig – offen gelegt, mit Quelle und Vertrauensgrad. Keine geschönten Werte."
     },
     "hero": {
       "title": "Kennzahlen",
@@ -5036,8 +5036,8 @@
   "projects": {
     "kivitendo": {
       "meta": {
-        "title": "Kivitendo - Open Source CRM & ERP | revamp-it",
-        "description": "Das einzigartige Open Source CRM & ERP von revamp-it, das durch ständige personalisierte Weiterentwicklung höchste Qualitätsstandards erfüllt."
+        "title": "Kivitendo - Open Source CRM & ERP | evig",
+        "description": "Das einzigartige Open Source CRM & ERP von evig, das durch ständige personalisierte Weiterentwicklung höchste Qualitätsstandards erfüllt."
       },
       "hero": {
         "title": "Kivitendo",
@@ -5101,7 +5101,7 @@
       },
       "partnership": {
         "title": "Premium-Partnerschaft",
-        "description": "Seit Juli 2015 ist revamp-it Premium-Partner des Kivitendo-Projekts. Wir bieten Konfiguration und Support für dieses Open-Source ERP-System.",
+        "description": "Seit Juli 2015 ist evig Premium-Partner des Kivitendo-Projekts. Wir bieten Konfiguration und Support für dieses Open-Source ERP-System.",
         "cards": [
           {
             "title": "Unsere Dienstleistungen",
@@ -5351,7 +5351,7 @@
     "items": [
       {
         "title": "Kivitendo Modus CH",
-        "description": "Seit Juli 2015 ist revamp-it Premium-Partner des Kivitendo-Projekts. Ab 2005 suchten wir – zunächst für unsere eigenen Zwecke, aber bald zur Befriedigung der Bedürfnisse unserer Kunden – nach einer Software-Lösung für Buchhaltung, Ressourcen- und Kundenverwaltung.",
+        "description": "Seit Juli 2015 ist evig Premium-Partner des Kivitendo-Projekts. Ab 2005 suchten wir – zunächst für unsere eigenen Zwecke, aber bald zur Befriedigung der Bedürfnisse unserer Kunden – nach einer Software-Lösung für Buchhaltung, Ressourcen- und Kundenverwaltung.",
         "features": [
           "Premium-Partnerschaft seit 2015",
           "Buchhaltung und Ressourcenverwaltung",
@@ -5371,7 +5371,7 @@
       },
       {
         "title": "FreieComputer.ch",
-        "description": "Das Schweizer Label für Computer mit vorinstallierter freier Software und garantiertem Support! revamp-it hat zusammen mit der engagierten Open-Source-Gemeinschaft zur Entstehung dieses Labels beigetragen.",
+        "description": "Das Schweizer Label für Computer mit vorinstallierter freier Software und garantiertem Support! evig hat zusammen mit der engagierten Open-Source-Gemeinschaft zur Entstehung dieses Labels beigetragen.",
         "features": [
           "Schweizer Label für freie Software",
           "Vorinstallierte Open-Source-Software",
@@ -5381,7 +5381,7 @@
       },
       {
         "title": "Compirat",
-        "description": "Compirat ist eine Zusammenarbeit zwischen Caritas Zürich und revamp-it. Dank der Unterstützung von Compirat erhalten Menschen mit begrenzten Mitteln im Kanton Zürich die Möglichkeit, das Arbeiten mit Computern in der Nähe ihres Wohnorts zu erlernen.",
+        "description": "Compirat ist eine Zusammenarbeit zwischen Caritas Zürich und evig. Dank der Unterstützung von Compirat erhalten Menschen mit begrenzten Mitteln im Kanton Zürich die Möglichkeit, das Arbeiten mit Computern in der Nähe ihres Wohnorts zu erlernen.",
         "features": [
           "Partnerschaft mit Caritas Zürich",
           "Unterstützung für Menschen mit begrenzten Mitteln",
@@ -5391,7 +5391,7 @@
       },
       {
         "title": "Hardware-Entwicklung",
-        "description": "Die Hardware-Entwicklungsarbeit bei revamp-it konzentriert sich darauf, neue Möglichkeiten stillgelegter Computer-Hardware zu entdecken, Energie- und Ressourcenverbrauch zu optimieren und Anleitungen für den Zusammenbau von Open-Source-Hardware zu erstellen.",
+        "description": "Die Hardware-Entwicklungsarbeit bei evig konzentriert sich darauf, neue Möglichkeiten stillgelegter Computer-Hardware zu entdecken, Energie- und Ressourcenverbrauch zu optimieren und Anleitungen für den Zusammenbau von Open-Source-Hardware zu erstellen.",
         "features": [
           "Upcycling stillgelegter Hardware",
           "Energie- und Ressourcenoptimierung",
@@ -5442,7 +5442,7 @@
       },
       "about": {
         "title": "Über FreieComputer.ch",
-        "description": "Zusammen mit engagierten Leuten aus der Open-Source-Community hat revamp-it geholfen, dieses Label zu etablieren, um die Wahlfreiheit in der Informatik zu fördern und Händler zu unterstützen, die Computer mit vorinstallierter freier Software verkaufen.",
+        "description": "Zusammen mit engagierten Leuten aus der Open-Source-Community hat evig geholfen, dieses Label zu etablieren, um die Wahlfreiheit in der Informatik zu fördern und Händler zu unterstützen, die Computer mit vorinstallierter freier Software verkaufen.",
         "cards": [
           {
             "title": "Freie Software",
@@ -5504,7 +5504,7 @@
         "cards": [
           {
             "title": "Unsere Geschichte",
-            "description": "Seit der Lancierung von FreieComputer.ch im Jahr 2010 bietet revamp-it zertifizierte Computer unter dem Label zum Verkauf an. Wir arbeiten weiterhin mit engagierten Personen aus der Open-Source-Community zusammen, um das Label bekannter und zugänglicher zu machen.",
+            "description": "Seit der Lancierung von FreieComputer.ch im Jahr 2010 bietet evig zertifizierte Computer unter dem Label zum Verkauf an. Wir arbeiten weiterhin mit engagierten Personen aus der Open-Source-Community zusammen, um das Label bekannter und zugänglicher zu machen.",
             "features": [
               "Gegründet 2010",
               "Struktur als gemeinnütziger Verein",
@@ -5537,7 +5537,7 @@
     "hardware": {
       "meta": {
         "title": "Hardware-Entwicklung",
-        "description": "Die Hardware-Entwicklungsarbeit von revamp-it konzentriert sich auf neue Möglichkeiten für ausgemusterte Computer-Hardware, Energieoptimierung und Open-Source-Hardware-Anleitungen."
+        "description": "Die Hardware-Entwicklungsarbeit von evig konzentriert sich auf neue Möglichkeiten für ausgemusterte Computer-Hardware, Energieoptimierung und Open-Source-Hardware-Anleitungen."
       },
       "hero": {
         "title": "Hardware-Entwicklung",
@@ -5547,7 +5547,7 @@
       },
       "overview": {
         "title": "Über unsere Hardware-Arbeit",
-        "description": "Bei revamp-it konzentrieren wir uns darauf, neue Anwendungen für ausgemusterte Computer-Hardware zu finden, die noch voll funktionsfähig ist, aber aufgrund des technologischen Fortschritts nicht mehr für ihren ursprünglichen Zweck geeignet ist.",
+        "description": "Bei evig konzentrieren wir uns darauf, neue Anwendungen für ausgemusterte Computer-Hardware zu finden, die noch voll funktionsfähig ist, aber aufgrund des technologischen Fortschritts nicht mehr für ihren ursprünglichen Zweck geeignet ist.",
         "cards": [
           {
             "title": "Hardware-Wiederverwendung",
@@ -5641,8 +5641,8 @@
     },
     "compirat": {
       "meta": {
-        "title": "Compirat - Computerkenntnisse mit Linux | revamp-it",
-        "description": "Ein gemeinsames Projekt von Caritas Zürich und revamp-it, das Computerkurse und Internetzugangspunkte für Menschen mit geringem Einkommen im Kanton Zürich anbietet."
+        "title": "Compirat - Computerkenntnisse mit Linux | evig",
+        "description": "Ein gemeinsames Projekt von Caritas Zürich und evig, das Computerkurse und Internetzugangspunkte für Menschen mit geringem Einkommen im Kanton Zürich anbietet."
       },
       "hero": {
         "title": "Compirat",
@@ -5652,7 +5652,7 @@
       },
       "about": {
         "title": "Über Compirat",
-        "description": "Ein gemeinsames Projekt von Caritas Zürich und revamp-it, das zugängliche Computerkurse und Internetzugangspunkte für Menschen mit geringem Einkommen im Kanton Zürich anbietet.",
+        "description": "Ein gemeinsames Projekt von Caritas Zürich und evig, das zugängliche Computerkurse und Internetzugangspunkte für Menschen mit geringem Einkommen im Kanton Zürich anbietet.",
         "cards": [
           {
             "title": "Lokale Kurse",
@@ -5741,7 +5741,7 @@
       },
       "hero": {
         "title": "Monitor-Upcycling",
-        "description": "Wir verwandeln ausgediente Computermonitore in hochwertige, funktionale Leuchten. Ein innovatives Pilotprojekt von revamp-it, das Elektroschrott vermeidet, sinnvolle Arbeit in sozialen Betrieben schafft und kreislauffähige Produkte für den Schweizer Markt entwickelt.",
+        "description": "Wir verwandeln ausgediente Computermonitore in hochwertige, funktionale Leuchten. Ein innovatives Pilotprojekt von evig, das Elektroschrott vermeidet, sinnvolle Arbeit in sozialen Betrieben schafft und kreislauffähige Produkte für den Schweizer Markt entwickelt.",
         "cta1": "Projekt entdecken",
         "cta2": "Partner werden",
         "photoAlt": "Curved-Upcycling-Leuchte über der Werkbank im RepairHub von zuerich.repair, Juli 2026"
@@ -5889,7 +5889,7 @@
               "story": "Ein grosser Curved-Monitor mit gebrochenem Display wurde zur Werkstattleuchte. Das gleichmässige Licht ohne Schattenwurf wird von den Reparateur*innen bei der Arbeit sehr geschätzt — und die Installation ist ein Blickfang, der Besucher*innen sofort auffällt."
             },
             "laden": {
-              "title": "Laden & Büro revamp-it",
+              "title": "Laden & Büro evig",
               "location": "Birmensdorferstrasse 379, Zürich",
               "story": "Im Eingangsbereich des Ladens ersetzen zwei Upcycling-Leuchten die bestehenden Deckenleuchten — die Reaktionen der Kund*innen sind durchweg positiv. Im Büro läuft eine weitere Leuchte seit über einem Jahr einwandfrei."
             },
@@ -6015,7 +6015,7 @@
           "title": "Quellcode & Lizenz",
           "body": "Plattform-Code und alle Anleitungen liegen auf GitHub. Fork, Issue oder Pull Request: alles willkommen.",
           "repoCta": "Auf GitHub ansehen",
-          "repoUrl": "https://github.com/g-but/revampit",
+          "repoUrl": "https://github.com/g-but/evig",
           "licenseLabel": "Creative Commons CC-BY-SA · Plattform-Code unter MIT",
           "wikiTitle": "Umbau-Wiki: monitor-upcycling.org",
           "wikiBody": "Alle Umbau-Anleitungen sind auch im öffentlichen Wiki verfügbar — so aufgebaut, dass Elektroniker*innen aus aller Welt weitere Modelle dokumentieren können. Lizenz CC-BY-SA, Nutzung auch kommerziell frei.",
@@ -6044,7 +6044,7 @@
         "title": "Lenovo L2251pwd",
         "subtitle": "22-Zoll-Monitor zur Leuchte umbauen",
         "metaLine": "Modell: Lenovo L2251pwd · Dauer: ca. 1 Stunde · Schwierigkeit: einfach",
-        "credit": "Anleitung von Daniel, RevampIT · Veröffentlicht 28. Mai 2026",
+        "credit": "Anleitung von Daniel, evig · Veröffentlicht 28. Mai 2026",
         "safety": {
           "title": "Sicherheit zuerst",
           "body": "Niemals unter Spannung arbeiten. Vor jedem Funktionstest die nötigen Schutzmassnahmen treffen. Wenn du unsicher bist: hol einen Elektronik-Kollegen dazu."
@@ -6189,7 +6189,7 @@
         "title": "Lenovo L2440pwC",
         "subtitle": "24-Zoll-Monitor zur Leuchte umbauen",
         "metaLine": "Modell: Lenovo L2440pwC · Dauer: ca. 1 Stunde · Schwierigkeit: einfach · Entwurf",
-        "credit": "Anleitung von Bruno, RevampIT · Entwurf — noch nicht veröffentlicht",
+        "credit": "Anleitung von Bruno, evig · Entwurf — noch nicht veröffentlicht",
         "safety": {
           "title": "Sicherheit zuerst",
           "body": "Niemals unter Spannung arbeiten. Trenne den Monitor vollständig vom Stromnetz und warte 1–2 Minuten, bevor du startest. Vor jedem Funktionstest die nötigen Schutzmassnahmen treffen — bei Unsicherheit einen Elektronik-Kollegen dazuholen."
@@ -6294,7 +6294,7 @@
         "title": "HP Z23n",
         "subtitle": "23-Zoll-Monitor zur Leuchte umbauen",
         "metaLine": "Modell: HP Z23n · Dauer: ca. 1 Stunde · Schwierigkeit: einfach · Entwurf",
-        "credit": "Anleitung von Bruno, RevampIT · Entwurf — noch nicht veröffentlicht",
+        "credit": "Anleitung von Bruno, evig · Entwurf — noch nicht veröffentlicht",
         "safety": {
           "title": "Sicherheit zuerst",
           "body": "Niemals unter Spannung arbeiten. Trenne den Monitor vollständig vom Stromnetz und warte 1–2 Minuten, bevor du startest. Vor jedem Funktionstest die nötigen Schutzmassnahmen treffen — bei Unsicherheit einen Elektronik-Kollegen dazuholen."
@@ -6595,7 +6595,7 @@
         "documentMeta": {
           "project": "Monitor-Upcycling zu Wand- und Deckenleuchten",
           "sponsor": "Swico Innovationsfonds · Etappe 2",
-          "preparedBy": "Verein revamp-it",
+          "preparedBy": "Verein evig",
           "asOf": "15.06.2026",
           "versionLabel": "Stand",
           "projectLabel": "Projekt",
@@ -6614,7 +6614,7 @@
           "eyebrow": "ZUSAMMENFASSUNG",
           "title": "Kurzfassung für Entscheidungsträger",
           "paragraphs": [
-            "Revamp-IT wandelt ausgemusterte LED-Monitore in Wand- und Deckenleuchten um — produziert in der Sozialwerkstatt Werkraum 4 (Stiftung zsge), wissenschaftlich begleitet durch die ZHAW (Ökobilanz nach ISO 14044, Projekt 132.351 INNO-EE).",
+            "evig wandelt ausgemusterte LED-Monitore in Wand- und Deckenleuchten um — produziert in der Sozialwerkstatt Werkraum 4 (Stiftung zsge), wissenschaftlich begleitet durch die ZHAW (Ökobilanz nach ISO 14044, Projekt 132.351 INNO-EE).",
             "Stand Mitte Juni 2026: Etappe 2 des Swico Innovationsfonds läuft (Budget 65'000 CHF brutto, davon 15'000 CHF Innosuisse an die ZHAW). Zwölf Monitor-Modelle sind erfolgreich umgebaut; fünf davon mit dokumentierter Standby-Lösung. Der erste vollständig fotodokumentierte Modell-Leitfaden (Lenovo L2251pwd) ist seit 28. Mai 2026 online.",
             "Bis zum Swico-Schlussbericht (30.06.2026) fehlen noch belastbare Stückkosten aus der Kleinserie und Erkenntnisse aus den Pilot-Installationen. Der ZHAW-LCA-Bericht wird bis 18.06.2026 finalisiert; die Ergebnispräsentation fand Ende Mai statt. Nächster öffentlicher Meilenstein: Präsentation bei Swico am 03.07.2026."
           ],
@@ -6731,8 +6731,8 @@
           },
           "links": [
             {
-              "label": "Film: Umbau eines Monitors zu einer Leuchte (revamp-it Nextcloud)",
-              "url": "https://cloud.revamp-it.ch/index.php/s/c7XTe95TJgFLB8N"
+              "label": "Film: Umbau eines Monitors zu einer Leuchte (evig Nextcloud)",
+              "url": "https://cloud.evig.ch/index.php/s/c7XTe95TJgFLB8N"
             },
             {
               "label": "Open Hardware Repository (CERN)",
@@ -6747,7 +6747,7 @@
         "lieferanten": {
           "eyebrow": "LIEFERANTEN · MATERIALSTROM",
           "title": "Rohmaterial: ausgemusterte Monitore.",
-          "intro": "Das Projekt braucht funktionsfähige Bildschirme mit LED-Hintergrundbeleuchtung (typisch 19–24 Zoll). Revamp-IT sammelt ausgemusterte IT-Hardware am Standort Zürich; der vorhandene Monitor-Bestand reicht für die Etappe-2-Kleinserie.",
+          "intro": "Das Projekt braucht funktionsfähige Bildschirme mit LED-Hintergrundbeleuchtung (typisch 19–24 Zoll). evig sammelt ausgemusterte IT-Hardware am Standort Zürich; der vorhandene Monitor-Bestand reicht für die Etappe-2-Kleinserie.",
           "stockBreakdown": {
             "title": "Relevante Geräte am Standort",
             "subtitle": "Fokus Monitor-Upcycling — keine Voll-Lagerinventur",
@@ -6770,7 +6770,7 @@
             "title": "Wo die Bildschirme künftig herkommen",
             "items": [
               {
-                "label": "Bestehender Lagerbestand revamp-it",
+                "label": "Bestehender Lagerbestand evig",
                 "body": "Der am Standort gesammelte und vorsortierte Monitor-Bestand deckt die Etappe-2-Kleinserie.",
                 "cite": "cit04_kurzbericht_e1"
               },
@@ -6993,7 +6993,7 @@
               },
               {
                 "label": "Implementierungspartner",
-                "value": "Verein revamp-it",
+                "value": "Verein evig",
                 "cite": "cit01_innolink"
               }
             ]
@@ -7081,7 +7081,7 @@
               "title": "Hauptpartner",
               "items": [
                 {
-                  "name": "Verein revamp-it",
+                  "name": "Verein evig",
                   "role": "Projektträger, Sammlung, Werkstatt-Koordination",
                   "cite": "cit01_innolink"
                 },
@@ -7164,12 +7164,12 @@
               "title": "Projektteam",
               "items": [
                 {
-                  "name": "Andreas Rudin (revamp-it)",
+                  "name": "Andreas Rudin (evig)",
                   "role": "Projektkoordination, Vereinsvorstand.",
                   "cite": "cit04_kurzbericht_e1"
                 },
                 {
-                  "name": "Mike Rey (revamp-it)",
+                  "name": "Mike Rey (evig)",
                   "role": "Projektverantwortung, Verbindung zur wissenschaftlichen Begleitung, Auswertung Pilot-Einsätze.",
                   "cite": "cit04_kurzbericht_e1"
                 },
@@ -7179,7 +7179,7 @@
                   "cite": "cit04_kurzbericht_e1"
                 },
                 {
-                  "name": "Daniel Afzali (revamp-it)",
+                  "name": "Daniel Afzali (evig)",
                   "role": "Foto- und Video-Dokumentation der Umbauschritte und Pilot-Einsätze.",
                   "cite": "cit04_kurzbericht_e1"
                 },
@@ -7256,7 +7256,7 @@
               "cite": "cit01_innolink"
             },
             {
-              "label": "Eigenmittel revamp-it",
+              "label": "Eigenmittel evig",
               "status": "eingesetzt",
               "amount": "ca. 80'500 CHF",
               "note": "Sammeln, Testen, Lagerung, Antragstellung 2023–2024.",
@@ -7295,14 +7295,14 @@
         "mitmachen": {
           "eyebrow": "MITMACHEN",
           "title": "Vier konkrete Wege, das Projekt zu unterstützen.",
-          "intro": "Wir suchen Pilot-Standorte, Hardware, Werkstatt-Partner und Empfehlungen für Förderer. Direkter Kontakt: Andreas Rudin, andreas.rudin@revamp-it.ch, +41 43 960 32 64.",
+          "intro": "Wir suchen Pilot-Standorte, Hardware, Werkstatt-Partner und Empfehlungen für Förderer. Direkter Kontakt: Andreas Rudin, andreas.rudin@evig.ch, +41 43 960 32 64.",
           "options": [
             {
               "key": "pilot",
               "title": "Pilot-Standort werden",
               "body": "Wir installieren eine Leuchte testweise in Ihrem Treppenhaus, Bürobereich oder Schulhaus — und werten Lebensdauer und Energieverbrauch wissenschaftlich aus. Drei Nutzungsmuster werden gesucht: Dauerbetrieb, Tag-/Wochenende-Schaltung, Bewegungssensor.",
               "ctaLabel": "Pilot-Anfrage",
-              "ctaHref": "mailto:andreas.rudin@revamp-it.ch?subject=Pilot-Standort%20Monitor-Upcycling",
+              "ctaHref": "mailto:andreas.rudin@evig.ch?subject=Pilot-Standort%20Monitor-Upcycling",
               "cite": "cit04_kurzbericht_e1"
             },
             {
@@ -7318,7 +7318,7 @@
               "title": "Werkstatt-Partner werden",
               "body": "Andere geschützte Werkstätten und Repair Cafés: wir teilen Anleitungen, Werkzeuge und die Standby-Bypass-Lösung. Ziel ist eine als Wiki organisierte öffentlich zugängliche Datenbank.",
               "ctaLabel": "Werkstatt anfragen",
-              "ctaHref": "mailto:andreas.rudin@revamp-it.ch?subject=Werkstatt-Partnerschaft%20Monitor-Upcycling",
+              "ctaHref": "mailto:andreas.rudin@evig.ch?subject=Werkstatt-Partnerschaft%20Monitor-Upcycling",
               "cite": "cit04_kurzbericht_e1"
             },
             {
@@ -7326,7 +7326,7 @@
               "title": "Förderer empfehlen",
               "body": "Wir suchen Stiftungen, die zu Open Hardware + sozialer Innovation + Schweizer Materialkreisläufen passen. Wenn Sie eine kennen oder einen Kontakt vermitteln können — kurze Nachricht reicht.",
               "ctaLabel": "Förder-Hinweis senden",
-              "ctaHref": "mailto:andreas.rudin@revamp-it.ch?subject=F%C3%B6rderer%20Monitor-Upcycling",
+              "ctaHref": "mailto:andreas.rudin@evig.ch?subject=F%C3%B6rderer%20Monitor-Upcycling",
               "cite": null
             }
           ]
@@ -7339,7 +7339,7 @@
             {
               "key": "cit01_innolink",
               "label": "Innolink-Antrag 132.351 INNO-EE",
-              "detail": "Innosuisse Innovation Booster / Innoscheck-Antrag «Bewertung der Umweltleistung für den Re-Use von Monitoren als Lichtquellen», ZHAW + Verein revamp-it, 21. November 2025",
+              "detail": "Innosuisse Innovation Booster / Innoscheck-Antrag «Bewertung der Umweltleistung für den Re-Use von Monitoren als Lichtquellen», ZHAW + Verein evig, 21. November 2025",
               "url": null
             },
             {
@@ -7357,7 +7357,7 @@
             {
               "key": "cit04_kurzbericht_e1",
               "label": "Kurzbericht Etappe 1 (Stand 12.03.2026)",
-              "detail": "Verein revamp-it, Kurzbericht Etappe 1 Projekt 2023-02-01 «Funktionelle Kreislaufnutzung von IT-Geräten», überarbeiteter Stand 12. März 2026",
+              "detail": "Verein evig, Kurzbericht Etappe 1 Projekt 2023-02-01 «Funktionelle Kreislaufnutzung von IT-Geräten», überarbeiteter Stand 12. März 2026",
               "url": null
             },
             {
@@ -7381,8 +7381,8 @@
             {
               "key": "cit10_film",
               "label": "Film: Umbau eines Monitors zu einer Leuchte",
-              "detail": "Filmdokumentation des Umbauprozesses, gehostet auf der Revamp-IT Nextcloud-Instanz",
-              "url": "https://cloud.revamp-it.ch/index.php/s/c7XTe95TJgFLB8N"
+              "detail": "Filmdokumentation des Umbauprozesses, gehostet auf der evig Nextcloud-Instanz",
+              "url": "https://cloud.evig.ch/index.php/s/c7XTe95TJgFLB8N"
             },
             {
               "key": "cit11_vesa",
@@ -7526,7 +7526,7 @@
           "guideCta": "Selber bauen",
           "sourceLink": {
             "label": "Plattform-Quellcode",
-            "url": "https://github.com/g-but/revampit"
+            "url": "https://github.com/g-but/evig"
           }
         },
         "circularity": {
@@ -7548,7 +7548,7 @@
             },
             {
               "label": "Ende der Nutzung",
-              "description": "Rückgabe an Revamp-IT oder Partner-Werkstatt. LED-Treiber wiederverwendet, Gehäuse rezykliert. Keine Komponente erreicht den Hausmüll."
+              "description": "Rückgabe an evig oder Partner-Werkstatt. LED-Treiber wiederverwendet, Gehäuse rezykliert. Keine Komponente erreicht den Hausmüll."
             }
           ]
         },
@@ -7891,11 +7891,11 @@
   },
   "support": {
     "meta": {
-      "title": "RevampIT unterstützen",
+      "title": "evig unterstützen",
       "description": "Unterstütze qualitativ hochwertige, werbefreie Inhalte über nachhaltige Technologie."
     },
     "hero": {
-      "title": "Unterstütze RevampIT",
+      "title": "Unterstütze evig",
       "subtitle": "Hilf uns, qualitativ hochwertige, werbefreie Inhalte über nachhaltige Technologie, Open Source und die Zukunft des Computing zu erstellen."
     },
     "pillars": {
@@ -7914,7 +7914,7 @@
     },
     "promise": {
       "title": "Unser Versprechen",
-      "intro": "RevampIT ist kein Unternehmen – es ist eine Bewegung. Wir glauben daran, dass qualitativ hochwertige Informationen über nachhaltige Technologie für alle zugänglich sein sollten, ohne Bezahlschranken oder aufdringliche Werbung.",
+      "intro": "evig ist kein Unternehmen – es ist eine Bewegung. Wir glauben daran, dass qualitativ hochwertige Informationen über nachhaltige Technologie für alle zugänglich sein sollten, ohne Bezahlschranken oder aufdringliche Werbung.",
       "enables": "Deine Unterstützung ermöglicht es uns:",
       "items": [
         "Tiefgreifende Recherchen und Analysen durchzuführen",
@@ -8042,9 +8042,9 @@
   },
   "sellers": {
     "meta": {
-      "title": "{name} – Verkäufer auf dem RevampIT Marketplace",
-      "titleFallback": "Verkäuferprofil – RevampIT Marketplace",
-      "description": "{name} auf dem RevampIT Marketplace – {count} aktive Inserate. Gebrauchte Technik kaufen und zur Kreislaufwirtschaft beitragen."
+      "title": "{name} – Verkäufer auf dem evig Marketplace",
+      "titleFallback": "Verkäuferprofil – evig Marketplace",
+      "description": "{name} auf dem evig Marketplace – {count} aktive Inserate. Gebrauchte Technik kaufen und zur Kreislaufwirtschaft beitragen."
     },
     "backToMarketplace": "Zurück zum Marketplace",
     "publicProfile": "Verkäuferprofil",
@@ -8444,7 +8444,7 @@
   "abos": {
     "tagline": "Abo-Tauschbörse",
     "title": "Abo-Pools teilen",
-    "subtitle": "Teile digitale Abos mit der Revamp-IT-Community und spare Geld. Jeder zahlt nur seinen Anteil.",
+    "subtitle": "Teile digitale Abos mit der evig-Community und spare Geld. Jeder zahlt nur seinen Anteil.",
     "createPool": "Pool erstellen",
     "filterAll": "Alle",
     "perMonthPerson": "pro Monat/Person",
@@ -8524,7 +8524,7 @@
         "subtitle": "Sprache und Newsletter",
         "languageLabel": "Bevorzugte Sprache",
         "newsletterLabel": "Newsletter abonnieren",
-        "newsletterDesc": "Erhalte Updates zu Workshops, Angeboten und Neuigkeiten von RevampIT"
+        "newsletterDesc": "Erhalte Updates zu Workshops, Angeboten und Neuigkeiten von evig"
       },
       "address": {
         "heading": "Adresse",
@@ -8867,7 +8867,7 @@
       "loadErrorGeneric": "Fehler beim Laden des Dashboards",
       "retry": "Erneut versuchen",
       "unexpectedError": "Ein unerwarteter Fehler ist aufgetreten",
-      "pageSubtitle": "Verwalte deine Produkte im RevampIT Marketplace und verfolge deine Verkäufe.",
+      "pageSubtitle": "Verwalte deine Produkte im evig Marketplace und verfolge deine Verkäufe.",
       "refresh": "Aktualisieren",
       "statsProducts": "Meine Produkte",
       "statsActive": "{count} aktiv",
@@ -8885,8 +8885,8 @@
       "manageAll": "Alle Produkte verwalten",
       "quickActionsTitle": "Schnellzugriff",
       "quickActionsSubtitle": "Häufig verwendete Seller-Funktionen",
-      "infoTitle": "RevampIT Marketplace",
-      "infoDesc": "Als Seller kannst du deine eigenen refurbished Produkte im RevampIT Marketplace verkaufen. Deine Produkte erscheinen neben den offiziellen RevampIT Produkten und helfen dabei, die Kreislaufwirtschaft zu fördern.",
+      "infoTitle": "evig Marketplace",
+      "infoDesc": "Als Seller kannst du deine eigenen refurbished Produkte im evig Marketplace verkaufen. Deine Produkte erscheinen neben den offiziellen evig Produkten und helfen dabei, die Kreislaufwirtschaft zu fördern.",
       "viewMarketplace": "Marketplace ansehen",
       "addProduct": "Produkt hinzufügen",
       "quickNewProduct": "Neues Produkt",
@@ -9042,7 +9042,7 @@
     "donations": {
       "backToDashboard": "Zurück zum Dashboard",
       "pageTitle": "Meine Spenden",
-      "pageSubtitle": "Übersicht deiner Geld- und Sachspenden an RevampIT",
+      "pageSubtitle": "Übersicht deiner Geld- und Sachspenden an evig",
       "loginTitle": "Anmeldung erforderlich",
       "loginDesc": "Bitte melde dich an, um deine Spenden zu sehen.",
       "loginButton": "Anmelden",
@@ -9051,10 +9051,10 @@
       "receiptRequested": "Quittung angefordert",
       "receiptSent": "Quittung erhalten",
       "emptyTitle": "Noch keine Spenden erfasst",
-      "emptyDesc": "Deine Spenden an RevampIT werden hier angezeigt, sobald sie von unserem Team erfasst wurden.",
+      "emptyDesc": "Deine Spenden an evig werden hier angezeigt, sobald sie von unserem Team erfasst wurden.",
       "donateNow": "Jetzt spenden",
       "receiptInfoTitle": "Hinweis zu Spendenquittungen",
-      "receiptInfoText": "RevampIT ist ein gemeinnütziger Verein. Für Spenden ab CHF 100 stellen wir dir gerne eine Spendenbestätigung für die Steuererklärung aus. Kontaktiere uns unter",
+      "receiptInfoText": "evig ist ein gemeinnütziger Verein. Für Spenden ab CHF 100 stellen wir dir gerne eine Spendenbestätigung für die Steuererklärung aus. Kontaktiere uns unter",
       "loadError": "Fehler beim Laden der Spenden",
       "networkError": "Netzwerkfehler beim Laden der Daten",
       "journey": {
@@ -9128,13 +9128,13 @@
     },
     "meta": {
       "dashboardTitle": "Dashboard",
-      "dashboardDesc": "Verwalte dein RevampIT-Konto, Workshops, Bestellungen und mehr.",
+      "dashboardDesc": "Verwalte dein evig-Konto, Workshops, Bestellungen und mehr.",
       "technikerTitle": "Techniker Dashboard",
       "technikerDesc": "Verwalte deine IT-Hilfe Anfragen und Angebote.",
       "blogSubmissionsTitle": "Meine Einreichungen",
       "blogSubmissionsDesc": "Status deiner eingereichten Blog-Beiträge.",
       "membershipTitle": "Mitgliedschaft",
-      "membershipDesc": "Deine Vereinsmitgliedschaft bei Revamp-IT.",
+      "membershipDesc": "Deine Vereinsmitgliedschaft bei evig.",
       "decisionsTitle": "Abstimmungen",
       "decisionsDesc": "Offene Abstimmungen, bei denen deine Stimme zählt.",
       "decisionDetailTitle": "Abstimmung"
@@ -9177,7 +9177,7 @@
       "privacy": "Wir respektieren deine Privatsphäre. Keine Spam-Mails, versprochen.",
       "communityTitle": "Community-gestützt. Kein Werbemodell.",
       "communityDesc": "Wir glauben an qualitativ hochwertige, wahrheitsgetreue Inhalte ohne Werbung. Wenn du unsere Arbeit schätzen, kannst du uns gerne unterstützen.",
-      "supportButton": "RevampIT unterstützen",
+      "supportButton": "evig unterstützen",
       "successMessage": "Willkommen! Überprüfe deine E-Mail.",
       "networkError": "Verbindungsfehler. Bitte versuche es später erneut."
     },
@@ -9479,7 +9479,7 @@
     "zeroWaste": {
       "badge": "Die Lösung",
       "heading": "Unser Zero-Waste Ansatz",
-      "description": "RevampIT folgt dem Prinzip: Reparieren vor Aufbereiten vor Recyceln. So maximieren wir den Wert jedes Geräts und minimieren Umweltauswirkungen.",
+      "description": "evig folgt dem Prinzip: Reparieren vor Aufbereiten vor Recyceln. So maximieren wir den Wert jedes Geräts und minimieren Umweltauswirkungen.",
       "impactTitle": "Unsere Wirkung durch diesen Ansatz",
       "devicesSavedLabel": "Geräte pro Jahr gerettet",
       "devicesSavedDesc": "Vor dem Schredder bewahrt und wiederverwendet",
@@ -9709,7 +9709,7 @@
         "options": {
           "quality": {
             "label": "Aufbereiten und Qualität prüfen",
-            "description": "Startet die passende Checkliste. Nach bestandener Prüfung erhält das Shop-Inserat das RevampIT-Prüfsiegel."
+            "description": "Startet die passende Checkliste. Nach bestandener Prüfung erhält das Shop-Inserat das evig-Prüfsiegel."
           },
           "inventory": {
             "label": "Nur ins Inventar",
@@ -9725,7 +9725,7 @@
           },
           "shop_untested": {
             "label": "Direkt in den Shop — ungeprüft",
-            "description": "Ausnahme: veröffentlicht sofort, aber ausdrücklich ohne RevampIT-Prüfsiegel."
+            "description": "Ausnahme: veröffentlicht sofort, aber ausdrücklich ohne evig-Prüfsiegel."
           }
         },
         "skipReasonLabel": "Warum wird die Qualitätsprüfung übersprungen?",
@@ -9800,7 +9800,7 @@
       "visionLabel": "Unsere Vision",
       "visionCta": "Hilf uns, diese Vision Wirklichkeit werden zu lassen.",
       "supportProject": "Projekt unterstützen",
-      "locationName": "RevampIT Laden",
+      "locationName": "evig Laden",
       "offerings": [
         "Refurbished Hardware kaufen",
         "Vintage-Computer-Sammlung besichtigen",
@@ -10006,7 +10006,7 @@
       "assistantSubtitle": "Assistent",
       "openFullscreen": "Vollbild öffnen",
       "pageTitle": "Hirn AI",
-      "pageDescription": "KI-Assistent für RevampIT",
+      "pageDescription": "KI-Assistent für evig",
       "sidebar": {
         "newConversation": "Neues Gespräch",
         "documentsLabel": "Dokumente",
@@ -10843,7 +10843,7 @@
           "active": "Aktiv",
           "unverified": "Ungeprüft",
           "openReports": "Offene Meldungen",
-          "revampit": "RevampIT-Inserate"
+          "revampit": "evig-Inserate"
         },
         "urgent": {
           "headline": "{count, plural, one {# offene Meldung} other {# offene Meldungen}} prüfen",
@@ -10865,7 +10865,7 @@
           "allStatus": "Alle Status",
           "allCategories": "Alle Kategorien",
           "allSellers": "Alle Verkäufer",
-          "revampit": "RevampIT",
+          "revampit": "evig",
           "community": "Community",
           "verification": "Verifizierung",
           "verified": "Geprüft",
@@ -11026,7 +11026,7 @@
     },
     "analytics": {
       "pageTitle": "Analytics",
-      "pageDescription": "Statistiken und Auswertungen für RevampIT"
+      "pageDescription": "Statistiken und Auswertungen für evig"
     },
     "donations": {
       "pageTitle": "Spenden",
@@ -11491,7 +11491,7 @@
         },
         "hirn": {
           "label": "Hirn AI",
-          "description": "KI-Assistent für Revamp-IT"
+          "description": "KI-Assistent für evig"
         },
         "promo-codes": {
           "label": "Aktionscodes",
@@ -11578,7 +11578,7 @@
         "step1Title": "KI-Vorschlag prüfen",
         "step1Desc": "Die KI füllt das Formular. Hersteller und Produktname sind Pflicht; alles Weitere kann später ergänzt werden.",
         "step2Title": "Nächsten Schritt wählen",
-        "step2Desc": "Qualitätsprüfung ist für RevampIT-geprüfte Ware empfohlen. Alternativen bleiben sichtbar und nachvollziehbar.",
+        "step2Desc": "Qualitätsprüfung ist für evig-geprüfte Ware empfohlen. Alternativen bleiben sichtbar und nachvollziehbar.",
         "step3Title": "Weiterarbeiten",
         "step3Desc": "Etikett drucken, Checkliste bearbeiten oder das veröffentlichte Produkt im Shop öffnen."
       },
@@ -11670,22 +11670,22 @@
       },
       "admin-generic": {
         "title": "Admin-Bereich",
-        "description": "Du bist im Admin-Bereich der RevampIT-Plattform.",
+        "description": "Du bist im Admin-Bereich der evig-Plattform.",
         "s0": "Erstelle eine Aufgabe",
-        "s1": "Was weisst du über RevampIT?"
+        "s1": "Was weisst du über evig?"
       }
     }
   },
   "changelog": {
     "meta": {
       "title": "Changelog",
-      "description": "Neueste Fixes, Features und Verbesserungen an der RevampIT-Plattform."
+      "description": "Neueste Fixes, Features und Verbesserungen an der evig-Plattform."
     },
     "hero": {
-      "eyebrow": "RevampIT",
+      "eyebrow": "evig",
       "badge": "Live",
       "title": "Changelog",
-      "subtitle": "Die neuesten Fixes, Features und Verbesserungen, die wir auf revampit.ch ausrollen."
+      "subtitle": "Die neuesten Fixes, Features und Verbesserungen, die wir auf evig.ch ausrollen."
     },
     "latest": {
       "label": "Neueste"
@@ -11707,7 +11707,7 @@
   "reparaturbonus": {
     "meta": {
       "title": "Reparaturbonus Zürich",
-      "description": "Die Stadt Zürich zahlt bis zu {max} Franken für Reparaturen — {percent}% der Rechnung. So funktioniert der Reparaturbonus und wie Reparaturen bei Revamp-IT dazu passen."
+      "description": "Die Stadt Zürich zahlt bis zu {max} Franken für Reparaturen — {percent}% der Rechnung. So funktioniert der Reparaturbonus und wie Reparaturen bei evig dazu passen."
     },
     "hero": {
       "title": "Reparaturbonus Zürich",
