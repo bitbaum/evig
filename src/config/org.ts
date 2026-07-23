@@ -14,31 +14,31 @@
 
 /** Canonical logo asset paths — import from here, never hardcode */
 export const ORG_IMAGES = {
-  /** Full horizontal logo (200×48px) */
-  logo: '/images/logo/revampit-logo.png',
-  /** Square favicon/icon (40×40px) */
-  favicon: '/images/logo/revampit-favicon.png',
+  /** Full horizontal logo (200×48px). TODO: replace visual asset with evig branding. */
+  logo: '/images/logo/evig-logo.png',
+  /** Square favicon/icon (40×40px). TODO: replace visual asset with evig branding. */
+  favicon: '/images/logo/evig-favicon.png',
 } as const
 
 export const ORG = {
   /** Official organization name — use this everywhere */
-  name: 'Revamp-IT',
-  /** Legal entity name */
-  legalName: 'Verein Revamp-IT',
+  name: 'evig',
+  /** Legal entity name (evig is newly founded — incorporation pending) */
+  legalName: 'evig',
   /** Founding year */
-  foundingYear: 2003,
-  /** Legal form */
-  legalForm: 'Schweizer Non-Profit-Verein',
+  foundingYear: 2026,
+  /** Legal form — evig is in formation */
+  legalForm: 'in Gründung',
   /** Motto */
-  motto: 'Technik ein zweites Leben geben',
+  motto: 'Intelligenz, für alle bezahlbar.',
   /** Short description */
-  description: 'Wir machen Technologie nachhaltig und für alle zugänglich.',
-  /** Current production app URL. revamp-it.ch still serves the legacy Joomla site. */
-  website: 'https://revampit.orangecat.ch',
-  /** Legacy public site (Joomla) — target of the "zur aktuellen Site" banner link. */
-  websiteLegacy: 'https://revamp-it.ch',
-  /** Email domain */
-  emailDomain: 'revamp-it.ch',
+  description: 'Gute, langlebige Technik für alle bezahlbar — kuratiert statt Ramsch.',
+  /** Current production app URL. */
+  website: 'https://evig.orangecat.ch',
+  /** evig has no legacy site (new organisation). Empty hides the "zur aktuellen Site" banner. */
+  websiteLegacy: '',
+  /** Email domain. TODO: register evig.ch + mailboxes. Staff-auth domain lives in permissions.ts. */
+  emailDomain: 'evig.ch',
   /**
    * IANA timezone for the organization. Used in cron schedules,
    * tax-report date boundaries, and any "local time" formatting that
@@ -174,14 +174,15 @@ export function formatLocationPeriod(period: LocationHistoryEntry['period']): st
 // CONTACT
 // ============================================================================
 
-const DEFAULT_CONTACT_EMAIL = 'empfang@revamp-it.ch' as const
+const DEFAULT_CONTACT_EMAIL = 'hallo@evig.ch' as const // TODO: register evig.ch mailbox
 
 export const CONTACT = {
   email: DEFAULT_CONTACT_EMAIL,
   supportEmail: process.env.SUPPORT_EMAIL || DEFAULT_CONTACT_EMAIL,
-  phone: '+41 (0)43 960 32 64',
+  /** evig has no phone line yet. TODO. */
+  phone: '',
   /** Phone in tel: URI format */
-  phoneTel: 'tel:+41439603264',
+  phoneTel: '',
   /** Canonical placeholders for user phone input fields */
   phonePlaceholder: '+41 79 123 45 67',
   phonePlaceholderLandline: '+41 44 123 45 67',
@@ -206,11 +207,25 @@ export const OPENING_HOURS = {
 // BANK & PAYMENT (SSOT for all payment references)
 // ============================================================================
 
+// evig has no bank account yet. Payments/donations run via BTC + the OrangeCat
+// profile (see PAYMENT). These fields are intentionally blank so the app NEVER
+// routes money to a third party — fill only with evig's OWN account.
 export const BANK = {
-  name: 'PostFinance AG',
-  iban: 'CH16 0900 0000 8725 0971 7',
-  bic: 'POFICHBEXXX',
-  accountHolder: 'Verein Revamp-IT',
+  name: '',
+  iban: '',
+  bic: '',
+  accountHolder: 'evig',
+} as const
+
+/**
+ * evig payment identity (SSOT) — BTC-native + OrangeCat maker profile.
+ * TODO: set evig's real BTC address and OrangeCat profile URL.
+ */
+export const PAYMENT = {
+  /** evig BTC address for donations/payments. */
+  btcAddress: '',
+  /** evig's OrangeCat maker profile (how to help / participate). */
+  orangeCatUrl: '',
 } as const
 
 export const MEMBERSHIP = {
@@ -228,11 +243,11 @@ export const MEMBERSHIP = {
 // ============================================================================
 
 export const EXTERNAL_LINKS = {
-  /** Shopware shop — the current externally-hosted storefront */
-  shopware: 'https://shop.revamp-it.ch/',
-  /** Legacy WordPress shop — used in chatbot and external links */
-  shopLegacy: 'https://www.revamp-it.ch/index.php/de/shop-de',
-  wiki: 'https://revamp-it.ch/index.php/de/wiki-de',
+  /** External storefront — evig uses the built-in marketplace. TODO if a separate shop is added. */
+  shopware: '',
+  /** Legacy shop — evig has none. */
+  shopLegacy: '',
+  wiki: '',
   /** Open implementation of the platform and its operational workflow. */
-  sourceCode: 'https://github.com/maonakamoto/revampit',
+  sourceCode: 'https://github.com/maonakamoto/evig',
 } as const

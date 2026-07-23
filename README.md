@@ -1,20 +1,19 @@
-# Revamp-IT
+# evig
 
-> Used computers repaired and rehomed — not landfilled.
+> Intelligenz, für alle bezahlbar — gute, langlebige Technik, kuratiert statt Ramsch.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6.svg)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-16-000.svg)](https://nextjs.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Self--hosted-336791.svg)](https://www.postgresql.org/)
-[![Production](https://img.shields.io/badge/Production-revampit.orangecat.ch-green.svg)](https://revampit.orangecat.ch)
 
-Revamp-IT is a Swiss non-profit association (Verein) operating since 2003 in Zürich. We accept donated computers, refurbish them, and redistribute them — to people who can't reach the commercial channel, to schools and community projects, and through our marketplace. We also run repair workshops and an open IT-Hilfe (IT help) program so the people we serve learn to keep their devices running themselves. This repository is the platform we use to run all of it.
+evig makes genuinely good computing affordable to everyone — curated, decent hardware people actually want to use, not junk refurb. Founded 2026. This repository is the platform that runs it: a storefront, a community marketplace, repair & IT-help, workshops, an AI-assisted intake pipeline, and an in-house AI assistant.
 
 ## What this platform does
 
 | Surface | Who it serves | What it does |
 |---|---|---|
-| **Storefront** | The public | Sells refurbished hardware (RevampIT-certified) to fund operations |
+| **Storefront** | The public | Sells refurbished hardware (evig-certified) to fund operations |
 | **P2P Marketplace** | Community | Lets members buy / sell / give away tech between each other |
 | **IT-Hilfe** | People who need help | Matches help requests with volunteer technicians; in-person + remote |
 | **Workshops** | Community | Repair Café sessions, Linux installs, digital-skills classes — paid + free |
