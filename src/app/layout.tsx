@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getLocale } from "next-intl/server";
 import { Providers } from "@/components/providers/providers";
 import { ORG } from "@/config/org";
+import { PUBLIC_SITE_URL } from "@/config/urls";
 import { auth } from "@/auth";
 // Side-effect import: runs Zod env-var validation at app startup. If any
 // required env var is missing, the process throws with a clear listing
@@ -11,12 +12,16 @@ import "@/env";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  // Resolve relative metadata (og:image, canonical) against the real public
+  // host — without this, Next infers the internal bind port and emits
+  // og:image URLs pointing at localhost, breaking every social preview.
+  metadataBase: new URL(PUBLIC_SITE_URL),
   title: {
     default: ORG.name,
     template: `%s | ${ORG.name}`,
   },
-  description: `${ORG.name} - Nachhaltige Technologielösungen durch Aufarbeitung und Recycling. Helfen Sie mit, Elektroschrott zu reduzieren und Technologie für alle zugänglich zu machen.`,
-  keywords: ["Elektroschrott", "Recycling", "Aufarbeitung", "nachhaltige Technologie", "Workshops", "Freiwilligenarbeit"],
+  description: `${ORG.motto} ${ORG.description}`,
+  keywords: ["bezahlbare Computer", "kuratierte Hardware", "refurbished Laptops", "Computer-Reparatur", "Linux", "nachhaltige Technik", "Schweiz"],
 };
 
 export default async function RootLayout({

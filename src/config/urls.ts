@@ -17,6 +17,17 @@ export const APP_URL =
   'http://localhost:3000'
 
 /**
+ * Public, canonical origin — where the app is reachable from the internet.
+ * DISTINCT from APP_URL: never falls back to NEXTAUTH_URL, which on the box is
+ * the internal bind port (localhost:4004). Used as Next's `metadataBase` so
+ * og:image / canonical metadata resolve to real absolute URLs a social scraper
+ * can fetch — not localhost. Override with NEXT_PUBLIC_SITE_URL when the public
+ * host changes (e.g. once evig.ch / evig.orangecat.ch goes live).
+ */
+export const PUBLIC_SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://revampit.orangecat.ch'
+
+/**
  * Meilisearch URL
  * Used for full-text search on listings
  */
