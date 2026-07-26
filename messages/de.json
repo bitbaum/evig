@@ -339,16 +339,16 @@
       "description": "Refurbished IT kaufen, Marktplatz entdecken und Techniker oder Werkstätten für Reparaturen finden."
     },
     "hero": {
-      "title": "Alte Hardware. Neues Leben.",
-      "titlePrimary": "Alte Hardware.",
-      "titleSecondary": "Neues Leben.",
-      "lede": "Kaufe geprüfte refurbished IT oder finde Hilfe, wenn dein Gerät repariert werden soll.",
+      "title": "Zugang zu Intelligenz. Für alle bezahlbar.",
+      "titlePrimary": "Zugang zu Intelligenz.",
+      "titleSecondary": "Für alle bezahlbar.",
+      "lede": "Kuratierte Technik, KI und Robotik zu fairen Preisen — plus wirklich zugängliche Reparatur.",
       "sublede": "Shop, Community-Marktplatz, Werkstatt und Techniker-Netzwerk — alles unter einem Dach.",
-      "subtitle": "Jedes Jahr landen 62 Millionen Tonnen Elektrogeräte auf dem Müll. Wir ändern das — mit einer Community, die repariert, weitergibt und voneinander lernt.",
-      "ctaDonate": "Refurbished IT kaufen",
+      "subtitle": "Gute Technik ist zu teuer und zu schnell Müll. Wir drehen beides um: bezahlbaren Zugang zu Intelligenz — und einen Kreislauf, der Geräte im Umlauf hält statt auf dem Schrott.",
+      "ctaDonate": "Technik entdecken",
       "ctaDiscover": "Reparatur finden",
       "ctaAbout": "Über uns",
-      "positioning": "Schweizer Non-Profit für Kreislaufwirtschaft · seit 2003"
+      "positioning": "Zugang zu Intelligenz · Kreislaufwirtschaft · Zürich"
     },
     "actions": {
       "eyebrow": "DREI WEGE",
@@ -2602,45 +2602,45 @@
   "about": {
     "meta": {
       "title": "Über uns",
-      "description": "Erfahre mehr über unsere Mission, die Lebensdauer von IT-Geräten zu verlängern und nachhaltiges Computing zu fördern."
+      "description": "Warum es evig gibt, wofür wir stehen und wie wir Zugang zu Intelligenz für alle bezahlbar machen."
     },
     "title": "Über uns",
     "mission": {
       "badge": "Unsere Mission",
-      "title": "Nachhaltigkeit trifft Technologie",
+      "title": "Intelligenz gehört allen",
       "yearsExperience": "Jahre Erfahrung",
-      "quote": "10 Jahre sind das Minimum für ein Velo – und für einen Laptop auch!",
-      "paragraph1": "Als gemeinnütziger Verein verändern wir seit 2003 den Umgang mit Technik. Unsere Mission ist klar: <strong>Die Lebensdauer von IT-Geräten verlängern</strong> und Elektroschrott durch Reparatur, Wiederaufbereitung und nachhaltige Praktiken reduzieren.",
-      "paragraph2": "In unseren Räumlichkeiten – einer ehemaligen Bank – haben wir einen Treffpunkt geschaffen, wo Technik und Nachhaltigkeit zusammenkommen. Unser Ansatz verbindet Hardware-Recycling mit Open Source-Software und schafft so nachhaltige IT-Lösungen für Mensch und Umwelt.",
-      "imageAlt": "Schaufenster mit Computern und Geräten"
+      "quote": "Der Zugang zu KI und Robotik entscheidet über Teilhabe — er darf nicht vom Geldbeutel abhängen.",
+      "paragraph1": "evig macht den Zugang zu Intelligenz bezahlbar: <strong>kuratierte Technik, KI und Robotik</strong> zu fairen Preisen. Wir sind kein Wohltätigkeitsprojekt, sondern ein Markt- und Qualitätsmodell — gut und günstig, weil Technik im Kreislauf bleibt statt im Müll zu landen.",
+      "paragraph2": "Dazu kommt wirklich zugängliche Reparatur — Werkstatt, Repair-Café und ein Techniker-Netzwerk — und ein Kreislauf-Marktplatz für geprüfte gebrauchte Technik. Was funktioniert, soll im Umlauf bleiben.",
+      "imageAlt": "Kuratierte Technik bei evig"
     },
     "team": "Das Team",
     "history": "Geschichte",
     "values": "Unsere Werte",
     "join": "Mitmachen",
     "hero": {
-      "title": "Technik ein zweites Leben geben",
-      "subtitle": "Seit über 20 Jahren setzen wir uns gegen die vorschnelle Ausmusterung von Computern ein und fördern nachhaltige IT-Praktiken."
+      "title": "Warum es evig gibt",
+      "subtitle": "evig ist eine Abspaltung aus der Schweizer Kreislauf-IT — mit einer klaren Überzeugung: Zugang zu Intelligenz gehört allen."
     },
     "impactAreas": {
-      "title": "Unsere Wirkungsbereiche",
-      "subtitle": "Drei Säulen, ein Ziel: Technologie nachhaltiger und zugänglicher machen.",
+      "title": "Worauf wir uns konzentrieren",
+      "subtitle": "Drei Schwerpunkte, ein Ziel: Intelligenz und gute Technik für alle zugänglich machen.",
       "hardware": {
-        "title": "Hardware-Recycling",
-        "description": "Wir reparieren und überholen IT-Geräte jeden Alters und schenken ihnen ein zweites Leben. Von alten MacBooks bis zu Vintage-Computern – jedes Gerät verdient eine zweite Chance."
+        "title": "Zugang zu Intelligenz",
+        "description": "Kuratierte, leistungsfähige Hardware, KI und Robotik — bezahlbar. Wir wählen aus, was wirklich taugt, statt Ramsch zu verkaufen."
       },
       "openSource": {
-        "title": "Open Source-Software",
-        "description": "Wir setzen auf Linux und andere Open Source-Lösungen. Diese Technologien halten ältere Geräte effizient am Laufen und bieten Sicherheit durch Kontrolle über das eigene System."
+        "title": "Reparatur für alle",
+        "description": "Reparatur soll einfach und bezahlbar sein. Werkstatt, Repair-Café und ein Techniker-Netzwerk halten Geräte am Leben — mit Linux und Open Source, wo es Sinn macht."
       },
       "community": {
-        "title": "Gemeinschaft & Soziales",
-        "description": "Wir schaffen sinnvolle Arbeitsplätze für Menschen, die es auf dem regulären Arbeitsmarkt schwer haben. Mit unserem Tauschsystem kann man Dienstleistungen gegen Technik tauschen."
+        "title": "Kreislauf-Marktplatz",
+        "description": "Ein Marktplatz für geprüfte gebrauchte Technik: kaufen, verkaufen, weitergeben. Was funktioniert, bleibt im Umlauf statt auf dem Schrott."
       }
     },
     "cta": {
-      "title": "Werde Teil unserer Mission",
-      "description": "Ob du ein Gerät reparieren lassen möchtest, mehr über nachhaltige IT erfahren willst oder unsere Sache unterstützen möchtest – bei uns bist du willkommen. Gemeinsam machen wir Technik nachhaltiger und zugänglicher für alle.",
+      "title": "Mach mit bei evig",
+      "description": "Ob du Technik suchst, ein Gerät reparieren lassen willst oder die Idee unterstützen möchtest — bei evig bist du willkommen. Gemeinsam machen wir Intelligenz und gute Technik für alle zugänglich.",
       "button": "Mitmachen"
     },
     "impact": {
@@ -9408,11 +9408,11 @@
     },
     "geschichteSection": {
       "founding": {
-        "title": "Die Gründung von {orgName}",
-        "subtitle": "Vom Käsekeller zur Bewegung",
-        "p1": "{orgName} wurde im Dezember {foundingYear} in Zürich gegründet – geboren aus einer einfachen Beobachtung: Immer mehr brauchbare Computer landeten im Müll. \"Da muss etwas passieren\", war der Gedanke, der alles ins Rollen brachte.",
-        "p2": "Der erste Standort war ein alter Käsekeller in der Toni Molkerei. Dort entstand die Idee, die bis heute trägt: Hardware-Recycling und Linux kombinieren. Denn mit Open-Source-Software funktionieren auch ältere Geräte noch jahrelang.",
-        "p3": "Was als kleines Projekt begann, wurde zur Bewegung. Ohne gross nach Leuten zu suchen, kamen immer wieder Menschen dazu, die sagten: \"Toll, was ihr da macht.\" Heute, über 20 Jahre später, verarbeiten wir jährlich rund 1000 Geräte – davon werden etwa 150 aufbereitet und verkauft, der Rest geht in Ersatzteilgewinnung und fachgerechtes Recycling."
+        "title": "Ein Spin-off aus Überzeugung",
+        "subtitle": "Dieselben Wurzeln, ein mutigerer Weg",
+        "p1": "evig entstand {foundingYear} in Zürich — als Abspaltung aus der Schweizer Kreislauf-IT. Die Überzeugung dahinter: Der Zugang zu Intelligenz — KI und Robotik — ist die grosse Chance unserer Zeit, und er sollte für alle bezahlbar sein.",
+        "p2": "Wir haben die Plattform dafür gebaut: einen Marktplatz, einen KI-Assistenten und eine techno-optimistische Vision von KI, Robotik und offener Technik im Kreislauf. Diesen Weg wollte unser Umfeld nicht mitgehen.",
+        "p3": "Also gehen wir ihn selbst. evig behält die Wurzeln der Kreislaufwirtschaft und richtet sie auf das Zeitalter der Intelligenz aus — als echtes Markt- und Qualitätsmodell, offen und unabhängig."
       },
       "milestones": {
         "2003": {
@@ -9456,7 +9456,7 @@
           "description": "Rund 1000 Geräte pro Jahr verarbeitet, davon ~150 verkauft. Über 43 Tonnen CO₂ pro Jahr eingespart. ~40% Erfolgsquote bei Praktika. {orgName} ist Vorbild für nachhaltige IT in der Schweiz."
         }
       },
-      "badge": "Unsere Geschichte",
+      "badge": "Warum es evig gibt",
       "milestoneTitle": "Meilensteine",
       "milestoneDesc": "Von der kleinen Werkstatt zur führenden Organisation für nachhaltige IT in der Schweiz.",
       "currentTitle": "Heute",

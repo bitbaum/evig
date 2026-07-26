@@ -5,23 +5,32 @@
  * Used in: product erfassung, navigation, filtering, search
  *
  * SSOT: This is the single source of truth for product categories.
- * Adding/removing a category here automatically updates the entire app.
+ * Adding/removing a category here automatically updates the entire app —
+ * marketplace filters, search, and erfassung pick it up from this array, and
+ * category-keyed rules (QC checklist in `intake-checklist.ts`, CO₂ factors in
+ * `co2-impact.ts`) degrade gracefully: a category with no rule simply carries
+ * no QC gate and makes no CO₂ claim. That is the correct default for future
+ * non-IT goods, so no other file needs editing to introduce one.
  *
- * Structure:
- *   - Main categories (10, 20, 30, ...)
- *   - Subcategories (101, 102, 201, 202, ...)
+ * The parent↔child link is the NESTING itself (`Kategorie.subs`), NOT the id
+ * string — `getParentCategory` resolves a sub to its parent by membership. So
+ * ids are opaque, free-form, and stable: pick any unique string. There is no
+ * "2-digit main / 3-digit sub" rule and no 9-category ceiling; existing ids
+ * (10/101…) are kept only because listings already reference them in the DB —
+ * never renumber a live id.
  *
- * ID Convention:
- *   - Main: 2-digit (10, 20, 30, ...)
- *   - Sub: 3-digit, first digit = parent (101, 102 under 10)
+ * To add a top-level category:
+ *   1. Append a `Kategorie` to KATEGORIEN with a unique `value` (any string).
+ *   2. Optional: add a spec template (spec-templates.ts), a QC checklist
+ *      (intake-checklist.ts), or a CO₂ factor (co2-impact.ts). Omit them and
+ *      the category still works — just untested/no-claim.
  *
- * To add a new category:
- *   1. Add to KATEGORIEN array
- *   2. Add spec template in spec-templates.ts if needed
+ * To add a subcategory:
+ *   1. Append a `SubKategorie` with a unique `value` to the parent's `subs`.
  *
- * To add a new subcategory:
- *   1. Add to parent category's subs array
- *   2. Use 3-digit ID starting with parent's ID
+ * (Known follow-up: `label`/`description` are German literals here; when a
+ * non-IT range ships, move these to `messages/*` per the i18n-SSOT rule so
+ * category names localise. Structure stays here, strings move to messages.)
  */
 
 export interface SubKategorie {
@@ -49,14 +58,12 @@ export interface Kategorie {
 }
 
 /**
- * Product categories hierarchy
+ * Product categories hierarchy.
  *
- * RevampIT focuses on refurbished IT equipment:
- * - Computing devices (Laptops, Desktops, Tablets, Phones)
- * - Display & Output (Monitors, Printers)
- * - Components & Upgrades
- * - Peripherals & Accessories
- * - Networking
+ * evig curates refurbished IT today — computing devices, displays, components,
+ * peripherals, networking. The structure is deliberately open so non-IT circular
+ * goods can be added later as their own top-level `Kategorie` (see the header
+ * note) without touching consumers.
  */
 export const KATEGORIEN: Kategorie[] = [
   {
@@ -336,12 +343,15 @@ export function getSubcategoryByValue(value: string): SubKategorie | undefined {
 }
 
 /**
- * Get parent category for a subcategory
+ * Get the parent category of a subcategory.
+ *
+ * Resolves by MEMBERSHIP — the category whose `subs` contains this value — not
+ * by slicing the id string. This is what frees ids from the "2-digit main /
+ * 3-digit sub" convention and lifts the 9-category ceiling: a sub can carry any
+ * unique id and still find its parent.
  */
 export function getParentCategory(subValue: string): Kategorie | undefined {
-  // Subcategory value starts with parent value (e.g., 101 -> 10)
-  const parentValue = subValue.slice(0, -1)
-  return getCategoryByValue(parentValue)
+  return KATEGORIEN.find((k) => k.subs.some((s) => s.value === subValue))
 }
 
 /**

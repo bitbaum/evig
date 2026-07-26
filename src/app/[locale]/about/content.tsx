@@ -1,17 +1,14 @@
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { PageHero } from '@/components/layout/PageHero'
-import { AboutSubNav, GeschichteSection, ImpactStatsSection } from '@/components/about'
-import { ORG } from '@/config/org'
-import { Recycle, Code, Users, Quote, Leaf } from 'lucide-react'
+import { AboutSubNav, GeschichteSection } from '@/components/about'
+import { Cpu, Wrench, Recycle, Quote, Leaf } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
-import { getDefaultNumeric } from '@/lib/org-numbers.defaults'
 import { getTranslations } from 'next-intl/server'
 
 export default async function AboutContent() {
   const t = await getTranslations('about')
   const tEye = await getTranslations('common.eyebrows')
-  const yearsActive = new Date().getFullYear() - getDefaultNumeric('founding_year')
 
   return (
     <main className="min-h-screen">
@@ -42,18 +39,13 @@ export default async function AboutContent() {
             <div className="relative">
               <div className="relative h-[400px] lg:h-[500px] rounded-2xl overflow-hidden border">
                 <Image
-                  src="/images/Article Pics/storefront.webp"
-                  alt={`${ORG.name} ${t('mission.imageAlt')}`}
+                  src="/images/logo/evig-brand-panel.webp"
+                  alt={t('mission.imageAlt')}
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   priority
                 />
-              </div>
-              {/* Floating Badge */}
-              <div className="absolute -bottom-6 -right-6 bg-action text-action-text p-4 rounded-xl shadow-xs hidden md:block">
-                <p className="text-3xl font-bold">{yearsActive}</p>
-                <p className="text-sm">{t('mission.yearsExperience')}</p>
               </div>
             </div>
 
@@ -93,10 +85,10 @@ export default async function AboutContent() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-4">
-            {/* Card 1 - Hardware Recycling */}
+            {/* Card 1 - Access to intelligence */}
             <article className="ui-public-card group">
               <div className="w-14 h-14 bg-action-muted/15 rounded-xl flex items-center justify-center mb-6 group-hover:bg-action group-hover:scale-110 transition-all duration-300">
-                <Recycle className="h-7 w-7 text-action group-hover:text-action-text transition-colors" />
+                <Cpu className="h-7 w-7 text-action group-hover:text-action-text transition-colors" />
               </div>
               <h3 className="ui-public-card-title">{t('impactAreas.hardware.title')}</h3>
               <p className="ui-public-card-body">
@@ -104,10 +96,10 @@ export default async function AboutContent() {
               </p>
             </article>
 
-            {/* Card 2 - Open Source */}
+            {/* Card 2 - Accessible repair */}
             <article className="ui-public-card group">
               <div className="w-14 h-14 bg-action-muted/15 rounded-xl flex items-center justify-center mb-6 group-hover:bg-action group-hover:scale-110 transition-all duration-300">
-                <Code className="h-7 w-7 text-action group-hover:text-action-text transition-colors" />
+                <Wrench className="h-7 w-7 text-action group-hover:text-action-text transition-colors" />
               </div>
               <h3 className="ui-public-card-title">{t('impactAreas.openSource.title')}</h3>
               <p className="ui-public-card-body">
@@ -115,10 +107,10 @@ export default async function AboutContent() {
               </p>
             </article>
 
-            {/* Card 3 - Community */}
+            {/* Card 3 - Circular marketplace */}
             <article className="ui-public-card group">
               <div className="w-14 h-14 bg-action-muted/15 rounded-xl flex items-center justify-center mb-6 group-hover:bg-action group-hover:scale-110 transition-all duration-300">
-                <Users className="h-7 w-7 text-action group-hover:text-action-text transition-colors" />
+                <Recycle className="h-7 w-7 text-action group-hover:text-action-text transition-colors" />
               </div>
               <h3 className="ui-public-card-title">{t('impactAreas.community.title')}</h3>
               <p className="ui-public-card-body">
@@ -129,10 +121,8 @@ export default async function AboutContent() {
         </div>
       </section>
 
-      {/* By the Numbers Section - Data from SSOT */}
-      <ImpactStatsSection />
-
-      {/* Our Story - Full Timeline */}
+      {/* Origin story — why evig exists. No track-record stats: evig is new
+          and never shows numbers it hasn't genuinely earned (removed until real). */}
       <GeschichteSection />
 
       {/* Call to Action */}
