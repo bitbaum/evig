@@ -172,7 +172,9 @@ export async function handleMarketplacePayment(
   order: MarketplaceOrder,
   status: string,
   transactionId: string | null,
-  amountClaim: WebhookAmountClaim
+  amountClaim: WebhookAmountClaim,
+  /** Which payment rail confirmed this — defaults to the incumbent Payrexx route. */
+  providerSlug: string = 'payrexx'
 ): Promise<void> {
   switch (status) {
     case PAYREXX_TRANSACTION_STATUS.RESERVED: {
@@ -204,9 +206,10 @@ export async function handleMarketplacePayment(
         })
         .where(eq(marketplaceOrders.id, order.id))
 
-      logger.info('Marketplace order marked paid via Payrexx', {
+      logger.info('Marketplace order marked paid', {
         orderId: order.id,
         transactionId,
+        provider: providerSlug,
       })
 
       // Fire-and-forget email notifications
@@ -356,7 +359,9 @@ export async function handleGenericPayment(
   paymentTx: PaymentTransaction,
   status: string,
   payrexxTransactionId: string | null,
-  amountClaim: WebhookAmountClaim
+  amountClaim: WebhookAmountClaim,
+  /** Which payment rail confirmed this — defaults to the incumbent Payrexx route. */
+  providerSlug: string = 'payrexx'
 ): Promise<void> {
   switch (status) {
     case PAYREXX_TRANSACTION_STATUS.RESERVED: {
@@ -449,15 +454,17 @@ export async function handleGenericPayment(
       }
 
       if (paymentTx.workshopRegistrationId) {
-        logger.info('Workshop registration confirmed via Payrexx', {
+        logger.info('Workshop registration confirmed via payment', {
           registrationId: paymentTx.workshopRegistrationId,
           transactionId: paymentTx.id,
+          provider: providerSlug,
         })
       }
       if (paymentTx.serviceAppointmentId) {
-        logger.info('Service appointment confirmed via Payrexx payment', {
+        logger.info('Service appointment confirmed via payment', {
           appointmentId: paymentTx.serviceAppointmentId,
           transactionId: paymentTx.id,
+          provider: providerSlug,
         })
       }
 
