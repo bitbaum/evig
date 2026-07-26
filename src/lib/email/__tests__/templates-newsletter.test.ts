@@ -3,6 +3,7 @@
  */
 
 import { newsletterConfirmation } from '../templates/newsletter'
+import { ORG } from '@/config/org'
 
 describe('newsletterConfirmation', () => {
   const CONFIRM_URL = 'https://revamp-it.ch/newsletter/confirm?token=abc123'
@@ -30,6 +31,6 @@ describe('newsletterConfirmation', () => {
 
   it('subject interpolates ORG.name (not literal "${ORG.name}")', () => {
     expect(email.subject).not.toMatch(/\$\{/)
-    expect(email.subject).toMatch(/Revamp-IT|revamp-it/i)
+    expect(email.subject).toContain(ORG.name)
   })
 })

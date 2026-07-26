@@ -73,11 +73,6 @@ export const aboutConfig: AboutPageConfig = {
         variant: 'primary'
       },
       {
-        text: 'Unsere Wirkung',
-        href: '/about/impact',
-        variant: 'outline'
-      },
-      {
         text: 'FAQ',
         href: '/faq',
         variant: 'outline'

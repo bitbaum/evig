@@ -1,21 +1,3 @@
-import { Metadata } from 'next'
-import ImpactPageContent from './content'
-import { ORG } from '@/config/org'
-import { getTranslations } from 'next-intl/server'
-
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'about' })
-  const title = `${t('impact.meta.title')} - ${ORG.name}`
-  const description = t('impact.meta.description')
-  return {
-    title,
-    description,
-    openGraph: { title, description, type: 'website' },
-  }
-}
-
-export default function ImpactPage() {
-  return <ImpactPageContent />
-}
-
+import { notFound } from 'next/navigation'
+// Hidden until real: evig (2026 spin-off) has no track record to show yet.
+export default function Page() { notFound() }

@@ -8,7 +8,6 @@ import { Eye, Target, BarChart3, Briefcase, FileText, Users } from 'lucide-react
 import { PageHero } from '@/components/layout/PageHero'
 import Heading from '@/components/ui/Heading'
 import { IconBadge } from '@/components/ui/IconBadge'
-import { getCompactMetrics } from '@/data/impact-metrics'
 import { ORG, CONTACT } from '@/config/org'
 import { ROUTES } from '@/config/routes'
 import { getTranslations } from 'next-intl/server'
@@ -36,16 +35,6 @@ export async function generateMetadata({ params }: TransparenzPageProps): Promis
 export default async function TransparenzPage({ params }: TransparenzPageProps) {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'transparenz' })
-  const tk = await getTranslations({ locale, namespace: 'kennzahlen' })
-  const compactMetrics = getCompactMetrics({
-    devicesRescued: t('compactMetrics.devicesRescued'),
-    peopleTrained: t('compactMetrics.peopleTrained'),
-    reuseRate: t('compactMetrics.reuseRate'),
-    lifespanExtension: t('compactMetrics.lifespanExtension'),
-    internshipSuccess: t('compactMetrics.internshipSuccess'),
-    careerReentries: t('compactMetrics.careerReentries'),
-  })
-
   const platforms = t.raw('platforms') as Array<{ title: string; description: string; href: string }>
 
   return (
@@ -86,33 +75,12 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
             </Heading>
           </div>
 
-          <dl className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
-            {compactMetrics.map((metric, index) => (
-              <div key={index} className="bg-surface-base rounded-xl p-4 sm:p-6 text-center border border-subtle">
-                <dd className="text-2xl sm:text-3xl font-bold text-action">{metric.value}</dd>
-                <dt className="mt-1 text-xs sm:text-sm text-text-secondary">{metric.label}</dt>
-              </div>
-            ))}
-          </dl>
-
-          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
-            <Link
-              href={ROUTES.public.transparenzKennzahlen}
-              className="text-sm font-semibold text-action hover:text-action underline underline-offset-2"
-            >
-              {tk('linkFromOverview')} <span aria-hidden="true">→</span>
-            </Link>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
             <Link
               href={ROUTES.public.transparenzCo2}
               className="text-sm font-semibold text-action hover:text-action underline underline-offset-2"
             >
               {t('stats.co2Link')} <span aria-hidden="true">→</span>
-            </Link>
-            <Link
-              href="/about/impact"
-              className="text-sm font-semibold text-action hover:text-action underline underline-offset-2"
-            >
-              {t('stats.moreLink')} <span aria-hidden="true">→</span>
             </Link>
           </div>
         </div>

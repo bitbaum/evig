@@ -7,8 +7,7 @@
  * estimates" tag.
  *
  * Server-only. Used by:
- *   - <ImpactStatsSection> on /about/impact (full layout)
- *   - <MissionStrip>      on /shop + /marketplace (compact above-the-fold)
+ *   - the MissionStrip on commerce pages (compact above-the-fold)
  *
  * Single source of truth ensures the homepage stat, the methodology
  * page, and the commerce strip all show the same number.
@@ -19,7 +18,6 @@ import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { LISTING_STATUS } from '@/config/marketplace'
 import { estimateCO2Savings } from '@/config/co2-impact'
-import { getDefaultNumeric } from '@/lib/org-numbers.defaults'
 import { logger } from '@/lib/logger'
 
 export interface ImpactStats {
@@ -78,12 +76,12 @@ export async function fetchImpactStats(): Promise<ImpactStats> {
       live: true,
     }
   } catch (error) {
-    logger.warn('fetchImpactStats: DB unavailable, using defaults', { error })
+    logger.warn('fetchImpactStats: DB unavailable, returning zeros', { error })
     return {
-      totalDevices: getDefaultNumeric('devices_sold_per_year'),
-      soldDevices: getDefaultNumeric('devices_sold_per_year'),
-      co2SavedTons: getDefaultNumeric('annual_co2_saved_tons'),
-      co2SavedKg: getDefaultNumeric('annual_co2_saved_tons') * 1000,
+      totalDevices: 0,
+      soldDevices: 0,
+      co2SavedTons: 0,
+      co2SavedKg: 0,
       repairs: 0,
       users: 0,
       live: false,

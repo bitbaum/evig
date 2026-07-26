@@ -6,13 +6,11 @@ import { Computer, Award, Sparkles, ArrowRight } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { PageHero } from '@/components/layout/PageHero'
 import { Button } from '@/components/ui/button'
-import { getDefaultValue } from '@/lib/org-numbers.defaults'
 import { BuildTool } from './BuildTool'
 
 export default function BuildYourComputerPage() {
   const t = useTranslations('services.buildComputer')
   const tEye = useTranslations('common.eyebrows')
-  const tCommon = useTranslations('common')
 
   return (
     <main>
@@ -88,37 +86,6 @@ export default function BuildYourComputerPage() {
             </div>
             <Heading level={2} className="ui-public-display-md mt-4">{t('certification.heading')}</Heading>
             <p className="ui-public-section-lede mt-6 mx-auto">{t('certification.body')}</p>
-
-            <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-8 border-t border-subtle pt-10">
-              <div>
-                <div className="text-3xl font-semibold text-text-primary tabular-nums tracking-tight">
-                  {getDefaultValue('reuse_rate')}
-                </div>
-                <div className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary mt-2">
-                  {t('certification.sustainabilityScore')}
-                </div>
-              </div>
-              <div>
-                <div className="text-3xl font-semibold text-text-primary tabular-nums tracking-tight">
-                  {getDefaultValue('co2_savings_per_device')} kg
-                </div>
-                <div className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary mt-2 flex items-center justify-center gap-1">
-                  {t('certification.co2Saved')}
-                  <span>·</span>
-                  <Link href="/transparenz/co2" className="hover:text-text-primary transition-colors normal-case tracking-normal">
-                    {tCommon('methodologyLink')}
-                  </Link>
-                </div>
-              </div>
-              <div>
-                <div className="text-3xl font-semibold text-text-primary tabular-nums tracking-tight">
-                  {getDefaultValue('devices_processed_per_year')}
-                </div>
-                <div className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary mt-2">
-                  {t('certification.certifiedComputers')}
-                </div>
-              </div>
-            </div>
 
             <div className="mt-10">
               <Button as={Link} href="/revamped" variant="primary">

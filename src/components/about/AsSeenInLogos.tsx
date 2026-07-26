@@ -3,12 +3,10 @@
  *
  * Displays media logos in grey, colored on hover.
  * Used on homepage for social proof/credibility.
- * Links to full press page for more details.
  */
 
 'use client'
 
-import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 
 /**
@@ -93,16 +91,6 @@ export default function AsSeenInLogos() {
               </span>
             </a>
           ))}
-        </div>
-
-        {/* Link to full press page */}
-        <div className="mt-8 text-center">
-          <Link
-            href="/about/press"
-            className="text-sm text-text-tertiary hover:text-action transition-colors"
-          >
-            {t('allCoverage')} →
-          </Link>
         </div>
       </div>
     </section>

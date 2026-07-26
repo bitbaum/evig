@@ -22,12 +22,6 @@ export interface InvolvementOption {
   href: string
 }
 
-export interface Testimonial {
-  quote: string
-  author: string
-  role: string
-}
-
 export interface PartnerInstitution {
   name: string
   url: string
@@ -151,15 +145,6 @@ export const INVOLVEMENT_OPTIONS: InvolvementOption[] = [
     ],
     cta: 'Mitglied werden',
     href: '/mitglied-werden'
-  }
-]
-
-// Testimonials Configuration
-export const TESTIMONIALS: Testimonial[] = [
-  {
-    quote: "Als Geflüchteter hat mir Revamp-IT die Möglichkeit gegeben, hier mitzumachen. Ich lerne viel und habe die Freiheit, Fähigkeiten zu entwickeln, die zu meinen Zielen passen. Ich schreibe jetzt Code und kann alles lernen, was mich interessiert — denn hier teilt jeder sein Wissen. Das ist eine echte Gemeinschaft.",
-    author: "G.",
-    role: "Freiwilliger"
   }
 ]
 

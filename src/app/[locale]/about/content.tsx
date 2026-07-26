@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { PageHero } from '@/components/layout/PageHero'
-import { AboutSubNav, GeschichteSection } from '@/components/about'
+import { GeschichteSection } from '@/components/about'
 import { Cpu, Wrench, Recycle, Quote, Leaf } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import { getTranslations } from 'next-intl/server'
@@ -18,9 +18,6 @@ export default async function AboutContent() {
         title={t('hero.title')}
         subtitle={t('hero.subtitle')}
       />
-
-      {/* Sub Navigation */}
-      <AboutSubNav />
 
       {/* Mission Section - Redesigned */}
       <section className="py-16 md:py-24">

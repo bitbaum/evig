@@ -67,12 +67,6 @@ export const mainNavigation: NavigationItem[] = [
         descriptionKey: 'missionHistoryDesc',
       },
       {
-        name: 'Unsere Wirkung',
-        nameKey: 'impact',
-        href: '/about/impact',
-        descriptionKey: 'impactDesc',
-      },
-      {
         // The accountability hub: finances, key figures and the calculation
         // methods (incl. the CO₂ methodology). Distinct from "Unsere Wirkung"
         // (impact outcomes) — this is the "show me the math" trust page, which
@@ -94,18 +88,6 @@ export const mainNavigation: NavigationItem[] = [
         href: '/reparaturbonus',
         descriptionKey: 'reparaturbonusDesc',
         badge: 'new',
-      },
-      {
-        name: 'Standorte',
-        nameKey: 'locations',
-        href: '/space',
-        descriptionKey: 'locationsDesc',
-      },
-      {
-        name: 'Presse',
-        nameKey: 'press',
-        href: '/about/press',
-        descriptionKey: 'pressDesc',
       },
       {
         name: 'FAQ',

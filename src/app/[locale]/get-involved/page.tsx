@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic'
 import { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
-import { Heart, Recycle, Users, Zap, Globe } from 'lucide-react'
+import { Recycle, Users, Zap, Globe } from 'lucide-react'
 import { ContactLink } from '@/components/ui/contact-link'
 import { PageHero } from '@/components/layout/PageHero'
 import { ORG } from '@/config/org'
@@ -58,11 +58,6 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
     description: string
     features: string[]
     cta: string
-  }>
-  const testimonialItems = t.raw('testimonials.items') as Array<{
-    quote: string
-    author: string
-    role: string
   }>
   const partnerNames = t.raw('partners.names') as string[]
 
@@ -133,28 +128,6 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
                   {option.cta}
                 </Button>
               </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="ui-public-band py-20 sm:py-24">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <div className="ui-public-eyebrow">{t('testimonials.heading').toUpperCase()}</div>
-            <h2 className="ui-public-display-lg mt-4">{t('testimonials.heading')}</h2>
-          </div>
-          <div className="space-y-4">
-            {testimonialItems.map((testimonial, index) => (
-              <blockquote key={index} className="ui-public-card">
-                <Heart className="w-6 h-6 text-action mb-3" aria-hidden="true" />
-                <p className="ui-public-body-lg italic">&ldquo;{testimonial.quote}&rdquo;</p>
-                <footer className="mt-4">
-                  <div className="ui-public-prose-strong">{testimonial.author}</div>
-                  <div className="ui-public-meta">{testimonial.role}</div>
-                </footer>
-              </blockquote>
             ))}
           </div>
         </div>

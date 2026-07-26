@@ -2,14 +2,14 @@
  * MissionStrip — compact above-the-fold banner for commerce pages.
  *
  * Frames the shop/marketplace not as "second-hand vendor" but as the
- * circular-economy nonprofit it actually is. Shows live cumulative
+ * circular-economy platform it is. Shows live cumulative
  * impact (devices kept out of landfill, CO₂ avoided) and a one-line
  * mission anchor. Methodology link on the CO₂ number — credibility
  * lives one click away, never asserted blindly.
  *
- * Server component. Pulls from the same `fetchImpactStats` helper as
- * the full ImpactStatsSection, so numbers stay consistent across the
- * site without ever drifting between two sources.
+ * Server component. Pulls from `fetchImpactStats` (the one impact SSOT), and
+ * only renders the numbers when there is real live data — a brand-new org shows
+ * the mission anchor without inventing a track record.
  */
 
 import { getTranslations } from 'next-intl/server'
@@ -54,34 +54,36 @@ export async function MissionStrip({ className }: MissionStripProps) {
             </p>
           </div>
 
-          {/* Live stats — devices + CO₂ */}
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pl-9 text-xs sm:shrink-0 sm:pl-0 sm:text-sm">
-            <span className="inline-flex items-center gap-1.5">
-              <Heart className="h-4 w-4 text-action" aria-hidden="true" />
-              <span className="font-semibold text-text-primary tabular-nums">
-                {stats.soldDevices || stats.totalDevices}+
+          {/* Live stats — devices + CO₂ (only when there's real data) */}
+          {stats.totalDevices > 0 && (
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pl-9 text-xs sm:shrink-0 sm:pl-0 sm:text-sm">
+              <span className="inline-flex items-center gap-1.5">
+                <Heart className="h-4 w-4 text-action" aria-hidden="true" />
+                <span className="font-semibold text-text-primary tabular-nums">
+                  {stats.soldDevices || stats.totalDevices}+
+                </span>
+                <span className="text-text-muted">{t('devicesRehomed')}</span>
               </span>
-              <span className="text-text-muted">{t('devicesRehomed')}</span>
-            </span>
-            <span className="inline-flex items-center gap-1.5">
-              <Leaf className="h-4 w-4 text-action" aria-hidden="true" />
-              <span className="font-semibold text-text-primary tabular-nums">
-                {(() => { const d = co2DisplayValue(stats.co2SavedKg); return `~${d.value} ${d.unit}` })()}
+              <span className="inline-flex items-center gap-1.5">
+                <Leaf className="h-4 w-4 text-action" aria-hidden="true" />
+                <span className="font-semibold text-text-primary tabular-nums">
+                  {(() => { const d = co2DisplayValue(stats.co2SavedKg); return `~${d.value} ${d.unit}` })()}
+                </span>
+                <span className="text-text-muted">{t('co2Avoided')}</span>
+                <Link
+                  href="/transparenz/co2"
+                  className="text-xs text-action hover:underline underline-offset-2 ml-1"
+                >
+                  {t('methodologyLink')}
+                </Link>
               </span>
-              <span className="text-text-muted">{t('co2Avoided')}</span>
-              <Link
-                href="/transparenz/co2"
-                className="text-xs text-action hover:underline underline-offset-2 ml-1"
-              >
-                {t('methodologyLink')}
-              </Link>
-            </span>
-            {!stats.live && (
-              <span className="text-xs text-text-tertiary italic">
-                {t('estimateNote')}
-              </span>
-            )}
-          </div>
+              {!stats.live && (
+                <span className="text-xs text-text-tertiary italic">
+                  {t('estimateNote')}
+                </span>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </section>
