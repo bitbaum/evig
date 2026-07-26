@@ -1,6 +1,6 @@
-# Revamp-IT
+# evig
 
-Swiss non-profit platform enabling free exchange of technology — used computers repaired and rehomed, not landfilled.
+Affordable-intelligence platform — curated, durable hardware and digital access at a fair price (rebranded from Revamp-IT 2026-07-24; see `.claude/CLAUDE.md` for the Layer A/B rebrand rule — brand is `evig`, but infra identifiers like `is_revampit`/`revampit_cms`/`@revamp-it.ch` stay until the infra cutover).
 
 @~/.claude/CLAUDE.md
 @.claude/CLAUDE.md

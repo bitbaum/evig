@@ -21,15 +21,15 @@ evig makes genuinely good computing affordable to everyone — curated, decent h
 | **Member services** | Members | Member directory, Swiss-compliant donation receipts, voting on association decisions |
 | **HIRN AI** | Staff | In-house knowledge / action assistant; cascades through Groq / OpenRouter / Ollama |
 
-## How a non-profit funds this kind of platform
+## How evig funds this platform
 
-We are not VC-backed. The economic model is deliberately mixed so no single source carries the whole organization:
+evig is not VC-backed and not a charity — it runs a market/quality model where affordable pricing is the product, not a subsidy. The economic model is deliberately mixed so no single source carries the whole organization:
 
-1. **Storefront revenue** — refurbished devices sold at affordable prices. Margin funds operations; surplus subsidizes the people who can't pay full price.
-2. **Service revenue** — paid workshops, repair services, IT-Hilfe billable to companies that can pay (free for individuals who can't).
-3. **Donations** — direct cash donations and in-kind hardware donations (we issue Swiss-tax-compliant receipts; see `LEGAL_NONPROFIT_COMPLIANCE.md`).
-4. **Membership** — yearly membership fees (regular CHF 50, reduced CHF 20).
-5. **Grants & partnerships** — selective collaborations with municipal programs and aligned organizations.
+1. **Storefront revenue** — curated, decent hardware sold at affordable prices. Margin funds operations.
+2. **Service revenue** — paid workshops, repair services, IT-Hilfe billable to companies that can pay (kept affordable for individuals).
+3. **Donations** — direct BTC donations and in-kind hardware donations.
+4. **Membership** — yearly membership fees.
+5. **Grants & partnerships** — selective collaborations with aligned organizations.
 
 The platform is the operational backbone for all five. It is open-source ([MIT](LICENSE)) so other circular-economy organizations can adopt it directly — there's no extractive layer in between.
 
@@ -113,8 +113,8 @@ These are enforced, not suggested:
 ### Setup
 
 ```bash
-git clone https://github.com/g-but/revampit.git
-cd revampit
+git clone https://github.com/maonakamoto/evig.git
+cd evig
 cp .env.example .env.local    # fill in DATABASE_URL, AUTH_SECRET, payment keys, etc.
 npm install
 npm run db:migrate
@@ -203,4 +203,4 @@ MIT
 
 ---
 
-Revamp-IT -- Birmensdorferstrasse 379, 8055 Zürich -- [revamp-it.ch](https://revamp-it.ch)
+evig -- Intelligenz, für alle bezahlbar -- [evig.orangecat.ch](https://evig.orangecat.ch)
