@@ -46,7 +46,7 @@ export class OpenRouterProvider implements AIProvider {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${this.apiKey}`,
           'HTTP-Referer': APP_URL,
-          'X-Title': 'RevampIT Hirn',
+          'X-Title': 'evig Hirn',
         },
         body: JSON.stringify({
           model: this.model,

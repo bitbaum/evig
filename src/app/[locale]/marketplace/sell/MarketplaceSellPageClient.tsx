@@ -121,15 +121,15 @@ function SellPageContent() {
           <Info className="w-5 h-5 shrink-0 mt-0.5 text-text-tertiary" aria-hidden />
           <div className="min-w-0">
             <p className="text-text-primary">
-              Du erstellst ein <span className="font-semibold">Community-Inserat</span> (Privatverkauf) — kein RevampIT-Lagerbestand.
+              Du erstellst ein <span className="font-semibold">Community-Inserat</span> (Privatverkauf) — kein evig-Lagerbestand.
             </p>
             {session.user.isStaff && (
               <p className="text-text-secondary mt-1">
-                Ist das RevampIT-Lagerbestand? Dann über{' '}
+                Ist das evig-Lagerbestand? Dann über{' '}
                 <NextLink href="/admin/intake/capture" className="font-medium text-action underline underline-offset-2 hover:text-action">
                   Produkt aufnehmen → Erfassung
                 </NextLink>{' '}
-                erfassen — wird als RevampIT-Produkt mit Inventar gelistet. Nicht zwingend: persönliche Verkäufe gehören hierher.
+                erfassen — wird als evig-Produkt mit Inventar gelistet. Nicht zwingend: persönliche Verkäufe gehören hierher.
               </p>
             )}
           </div>

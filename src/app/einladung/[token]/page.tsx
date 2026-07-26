@@ -4,7 +4,7 @@ import ClaimForm from './ClaimForm'
 import { getClaimInvite } from '@/lib/services/team-invites'
 import { getTeamRoleColor } from '@/config/teams'
 
-export const metadata: Metadata = { title: 'Einladung – RevampIT' }
+export const metadata: Metadata = { title: 'Einladung – evig' }
 
 interface PageProps {
   params: Promise<{ token: string }>
@@ -30,7 +30,7 @@ export default async function ClaimInvitePage({ params, searchParams }: PageProp
         ) : (
           <>
             <div className="text-center mb-6">
-              <h1 className="text-xl font-semibold text-text-primary">Willkommen bei RevampIT</h1>
+              <h1 className="text-xl font-semibold text-text-primary">Willkommen bei evig</h1>
               <p className="text-sm text-text-secondary mt-1">
                 Du wurdest eingeladen, dein Konto zu übernehmen. Setze deinen Namen, deine E-Mail und
                 ein Passwort — deine Teams bleiben erhalten.

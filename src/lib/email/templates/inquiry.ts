@@ -78,7 +78,7 @@ export const inquiryConfirmation = (
         </ul>
       </div>
       <p>In der Zwischenzeit kannst du mehr über uns erfahren auf <a href="${ORG.website}">${ORG.emailDomain}</a>.</p>
-      <p>Bis bald!<br>Das Revamp-IT Team</p>
+      <p>Bis bald!<br>Das evig Team</p>
     `
     ),
     text: `Hallo ${name},\n\nvielen Dank für dein Interesse an ${topic} bei ${ORG.name}!\n\nWir haben deine Nachricht erhalten und melden uns in Kürze bei dir.\n\n${createTextFooter()}`,

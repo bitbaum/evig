@@ -176,7 +176,7 @@ export const GET_INVOLVED_CONFIG = {
   },
   coreValues: {
     title: 'Unsere Grundwerte',
-    description: 'Bei Revamp-IT arbeiten wir daran, Technologie zugänglich und nachhaltig zu machen, während wir unsere Gemeinschaft aufbauen.'
+    description: 'Bei evig arbeiten wir daran, Technologie zugänglich und nachhaltig zu machen, während wir unsere Gemeinschaft aufbauen.'
   },
   cta: {
     title: 'Bereit anzufangen?',
@@ -189,8 +189,8 @@ export const GET_INVOLVED_CONFIG = {
 // Volunteer Page Content
 export const VOLUNTEER_PAGE: PageContent = {
   overview: {
-    title: 'Warum Freiwilligenarbeit bei Revamp-IT?',
-    content: 'Bei Revamp-IT glauben wir, dass jeder Zugang zu Technologie und den Fähigkeiten haben sollte, sie zu nutzen. Als Freiwillige/r wirst du Teil einer Gemeinschaft, die diese Vision verwirklicht. Ob du dich für Technologie, Nachhaltigkeit oder Gemeindedienst begeisterst - in unserem Team ist Platz für dich.'
+    title: 'Warum Freiwilligenarbeit bei evig?',
+    content: 'Bei evig glauben wir, dass jeder Zugang zu Technologie und den Fähigkeiten haben sollte, sie zu nutzen. Als Freiwillige/r wirst du Teil einer Gemeinschaft, die diese Vision verwirklicht. Ob du dich für Technologie, Nachhaltigkeit oder Gemeindedienst begeisterst - in unserem Team ist Platz für dich.'
   },
   benefits: [
     {
@@ -460,7 +460,7 @@ export const INTERNSHIPS_PAGE: PageContent = {
 export const PARTNERSHIPS_PAGE: PageContent = {
   overview: {
     title: 'Warum mit uns zusammenarbeiten?',
-    content: 'Bei Revamp-IT glauben wir an die Kraft der Zusammenarbeit, um sinnvolle Veränderungen zu bewirken. Unsere Partnerschaften kombinieren Expertise, Ressourcen und gemeinsame Werte, um nachhaltige Technologielösungen zu schaffen, die Gemeinschaften und der Umwelt zugutekommen.'
+    content: 'Bei evig glauben wir an die Kraft der Zusammenarbeit, um sinnvolle Veränderungen zu bewirken. Unsere Partnerschaften kombinieren Expertise, Ressourcen und gemeinsame Werte, um nachhaltige Technologielösungen zu schaffen, die Gemeinschaften und der Umwelt zugutekommen.'
   },
   benefits: [
     {
@@ -518,7 +518,7 @@ export const PARTNERSHIPS_PAGE: PageContent = {
 export const IT_HILFE_TECHNIKER_PAGE: PageContent = {
   overview: {
     title: 'Was IT-Hilfe bedeutet',
-    content: 'Viele Menschen — ältere Personen, Geflüchtete, Menschen mit wenig Erfahrung — kämpfen täglich mit ihrem Computer. Du hast das Wissen, um zu helfen. Als IT-Hilfe Techniker bei Revamp-IT vermittelst du dein Können direkt an Menschen, die es brauchen: in der Werkstatt, bei Hausbesuchen oder in kleinen Kursen.'
+    content: 'Viele Menschen — ältere Personen, Geflüchtete, Menschen mit wenig Erfahrung — kämpfen täglich mit ihrem Computer. Du hast das Wissen, um zu helfen. Als IT-Hilfe Techniker bei evig vermittelst du dein Können direkt an Menschen, die es brauchen: in der Werkstatt, bei Hausbesuchen oder in kleinen Kursen.'
   },
   benefits: [
     {

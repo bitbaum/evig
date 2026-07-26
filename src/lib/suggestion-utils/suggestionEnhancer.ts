@@ -99,11 +99,11 @@ export const ENHANCED_SUGGESTIONS: Record<string, Record<Language, Pick<Navigati
   'partnerships': {
     'de': {
       label: 'Partnerschaft eingehen',
-      description: 'Unternehmerische Zusammenarbeit mit Revamp-IT'
+      description: 'Unternehmerische Zusammenarbeit mit evig'
     },
     'en': {
       label: 'Become a Partner',
-      description: 'Business collaboration with Revamp-IT'
+      description: 'Business collaboration with evig'
     }
   },
   'technical-expert': {
@@ -121,11 +121,11 @@ export const ENHANCED_SUGGESTIONS: Record<string, Record<Language, Pick<Navigati
   'about': {
     'de': {
       label: 'Über uns erfahren',
-      description: 'Mission, Werte und Team von Revamp-IT kennenlernen'
+      description: 'Mission, Werte und Team von evig kennenlernen'
     },
     'en': {
       label: 'Learn About Us',
-      description: 'Get to know Revamp-IT\'s mission, values and team'
+      description: 'Get to know evig\'s mission, values and team'
     }
   },
   'revamped': {

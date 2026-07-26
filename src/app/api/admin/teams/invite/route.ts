@@ -23,7 +23,7 @@ export const POST = withAdmin('teams', async (request: NextRequest, session: Val
     const { user_id, email } = result.data
 
     if (email) {
-      const invite = await emailClaimInvite(user_id, email, session.user.name || 'RevampIT')
+      const invite = await emailClaimInvite(user_id, email, session.user.name || 'evig')
       if (!invite) return apiNotFound('Platzhalter-Konto (oder bereits übernommen)')
       return apiSuccess(invite)
     }

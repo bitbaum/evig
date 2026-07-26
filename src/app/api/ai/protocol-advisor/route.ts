@@ -33,7 +33,7 @@ const requestSchema = z.object({
   question: z.string().min(1).max(500),
 })
 
-const SYSTEM_PROMPT = `Du bist ein hilfreicher Assistent für RevampIT-Sitzungsprotokolle.
+const SYSTEM_PROMPT = `Du bist ein hilfreicher Assistent für evig-Sitzungsprotokolle.
 Du hilfst Teammitgliedern, Protokolle besser zu verstehen und offene Fragen zu klären.
 
 Regeln:

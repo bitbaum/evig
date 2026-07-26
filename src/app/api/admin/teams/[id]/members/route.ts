@@ -51,7 +51,7 @@ export const POST = withAdmin<Params>('teams', async (
 
     // Notify the person when someone ELSE adds them (self-join stays silent).
     if (!outcome.reused && user_id !== session.user.id) {
-      notifyMemberAdded(teamId, user_id, session.user.name || 'RevampIT').catch((error) =>
+      notifyMemberAdded(teamId, user_id, session.user.name || 'evig').catch((error) =>
         logger.warn('Membership notification failed', { error, teamId, user_id }),
       )
     }

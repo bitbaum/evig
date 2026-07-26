@@ -45,5 +45,5 @@ export async function resolveAuthorProfile(
     return { name: record.name, profileId, role: record.role }
   }
   // Unknown author: keep the raw label; still link to the DB account if present.
-  return { name: authorRaw?.trim() || 'Revamp-IT', profileId: dbAuthorId ?? null }
+  return { name: authorRaw?.trim() || 'evig', profileId: dbAuthorId ?? null }
 }

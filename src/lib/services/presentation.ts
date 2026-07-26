@@ -209,7 +209,7 @@ export const defaultPresentation: ServicePresentation = {
   hero: {
     title: 'Service',
     subtitle: 'Professioneller IT-Service',
-    description: 'Professionelle IT-Dienstleistungen von RevampIT.',
+    description: 'Professionelle IT-Dienstleistungen von evig.',
   },
   features: [],
 }

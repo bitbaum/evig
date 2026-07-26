@@ -15,7 +15,7 @@ import HirnPageClient from './HirnPageClient'
 
 export const metadata: Metadata = {
   title: 'Hirn AI',
-  description: 'AI-Assistent für RevampIT.',
+  description: 'AI-Assistent für evig.',
 }
 
 export default async function AdminHirnPage() {

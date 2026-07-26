@@ -35,7 +35,7 @@ export interface PresentationDeck {
 export const PRESENTATION_DECKS: PresentationDeck[] = [
   {
     slug: 'revampit-portal',
-    title: 'Revamp-IT — Die Plattform',
+    title: 'evig — Die Plattform',
     description: 'Wie aus drei getrennten Alt-Systemen eine zusammenhängende Plattform wurde — Marktplatz, Werkstatt und Betrieb an einem Ort',
     targetGroup: 'Öffentlich',
     audience: CONTENT_AUDIENCE.PUBLIC,

@@ -1,7 +1,6 @@
 import { Link } from '@/i18n/navigation'
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
-import AsSeenInLogos from '@/components/about/AsSeenInLogos'
 import { ORG, CONTACT, LOCATIONS, OPENING_HOURS } from '@/config/org'
 import { safeJsonLd } from '@/lib/seo/json-ld'
 import { ROUTES } from '@/config/routes'
@@ -213,15 +212,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── Press strip — real coverage only ──────────────────────────── */}
-      <section className="py-16">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="ui-public-eyebrow text-center">{t('press.eyebrow')}</div>
-          <div className="mt-8">
-            <AsSeenInLogos />
-          </div>
-        </div>
-      </section>
 
       {/* ── Community entry points ─────────────────────────────────── */}
       <section className="py-20 sm:py-24">

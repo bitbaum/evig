@@ -403,7 +403,7 @@ describe('OpenRouterProvider — chat', () => {
     const init = (global.fetch as jest.Mock).mock.calls[0][1] as RequestInit
     const headers = init.headers as Record<string, string>
     expect(headers['HTTP-Referer']).toBe('http://localhost:3000')
-    expect(headers['X-Title']).toBe('RevampIT Hirn')
+    expect(headers['X-Title']).toBe('evig Hirn')
   })
 
   it('throws on non-ok HTTP response', async () => {

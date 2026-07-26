@@ -15,7 +15,7 @@ interface PageProps {
 
 export async function generateMetadata(): Promise<Metadata> {
   const title = `Karriere | ${ORG.name}`
-  const description = 'Offene Stellen bei RevampIT — Freiwilligenarbeit, Praktika und Anstellungen.'
+  const description = 'Offene Stellen bei evig — Freiwilligenarbeit, Praktika und Anstellungen.'
   return {
     title: { absolute: title },
     description,
@@ -34,7 +34,7 @@ export default async function CareersPage({ searchParams }: PageProps) {
       <PageHero
         theme="getInvolved"
         icon={Briefcase}
-        title="Karriere bei RevampIT"
+        title="Karriere bei evig"
         subtitle="Mach mit — ob Freiwilligenarbeit, Praktikum, Wiedereinstieg oder Festanstellung."
       />
 

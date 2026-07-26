@@ -325,7 +325,7 @@ export const SECTIONS = {
     path: SERVICE_APPOINTMENT_ROUTES.list,
     ui: {
       label: 'Service-Termine',
-      description: 'Termin bei der Revamp-IT Werkstatt buchen',
+      description: 'Termin bei der evig Werkstatt buchen',
       icon: Calendar,
       emoji: '📅',
       color: 'warning',

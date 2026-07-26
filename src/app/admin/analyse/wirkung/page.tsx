@@ -122,7 +122,7 @@ export default async function WirkungPage() {
           <div>
             <Heading level={1} className="text-3xl font-bold">Wirkung</Heading>
             <p className="text-muted-foreground">
-              Ökologische und soziale Wirkung von Revamp-IT
+              Ökologische und soziale Wirkung von evig
             </p>
           </div>
         </div>
@@ -139,7 +139,7 @@ export default async function WirkungPage() {
       {/* Info Banner */}
       <div className="p-4 bg-action-muted border border-strong rounded-lg">
         <p className="text-sm text-action">
-          <strong>Wirkungsbericht:</strong> Diese Seite zeigt die messbare Wirkung von Revamp-IT.
+          <strong>Wirkungsbericht:</strong> Diese Seite zeigt die messbare Wirkung von evig.
           Die Daten werden aus verschiedenen Quellen aggregiert und regelmässig aktualisiert.
           {missingMetrics.length > 0 && (
             <span className="block mt-2 text-warning-700 dark:text-warning-300">
@@ -226,7 +226,7 @@ export default async function WirkungPage() {
         <CardHeader>
           <CardTitle>UN Sustainable Development Goals</CardTitle>
           <CardDescription>
-            Revamp-IT trägt zu mehreren SDGs bei
+            evig trägt zu mehreren SDGs bei
           </CardDescription>
         </CardHeader>
         <CardContent>

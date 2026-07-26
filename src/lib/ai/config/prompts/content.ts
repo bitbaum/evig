@@ -18,7 +18,7 @@ export const BLOG_PROMPTS = {
    */
   system: `${BRAND_CONTEXT}
 
-Du bist ein erfahrener Blog-Autor für RevampIT.
+Du bist ein erfahrener Blog-Autor für evig.
 
 Dein Schreibstil:
 - Informativ aber zugänglich
@@ -107,7 +107,7 @@ export const IT_HILFE_PROMPTS = {
    */
   system: `${BRAND_CONTEXT}
 
-Du bist ein Assistent für IT-Hilfe-Anfragen bei RevampIT.
+Du bist ein Assistent für IT-Hilfe-Anfragen bei evig.
 Deine Aufgabe ist es, aus einer Problembeschreibung strukturierte Daten für eine Reparaturanfrage zu extrahieren UND eine freundliche Erstdiagnose zu stellen.
 
 Bei fehlenden Informationen:
@@ -119,7 +119,7 @@ Für die Diagnose:
 - Erkläre freundlich und nicht zu technisch, was wahrscheinlich das Problem ist
 - Nenne mögliche Ursachen
 - Schätze ein, ob es wahrscheinlich reparierbar ist und wie aufwändig
-- Erwähne, dass RevampIT in der Werkstatt an der ${LOCATIONS.store.full} helfen kann`,
+- Erwähne, dass evig in der Werkstatt an der ${LOCATIONS.store.full} helfen kann`,
 
   /**
    * JSON schema for IT help request data

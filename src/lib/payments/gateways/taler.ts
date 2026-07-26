@@ -77,7 +77,7 @@ export const talerGateway: PaymentGateway = {
           // direct lookup, no side mapping table needed.
           order_id: params.referenceId,
           amount: toTalerAmount(params.amount, params.currency),
-          summary: params.purpose || `Revamp-IT ${params.referenceId}`,
+          summary: params.purpose || `evig ${params.referenceId}`,
           fulfillment_url: params.successRedirectUrl,
         },
       }),

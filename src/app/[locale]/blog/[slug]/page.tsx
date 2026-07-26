@@ -57,7 +57,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
   if (!post) {
     return {
-      title: { absolute: 'Post not found | Revamp-IT Blog' },
+      title: { absolute: 'Post not found | evig Blog' },
     };
   }
 
@@ -66,7 +66,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   // generic "not found" metadata an anonymous crawler would get.
   if (!canViewPost(post, null)) {
     return {
-      title: { absolute: 'Post not found | Revamp-IT Blog' },
+      title: { absolute: 'Post not found | evig Blog' },
     };
   }
 
@@ -85,7 +85,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
   return {
     // SEO overrides (DB posts) take precedence over the display title/excerpt.
-    title: { absolute: `${post.seoTitle || post.title} | Revamp-IT Blog` },
+    title: { absolute: `${post.seoTitle || post.title} | evig Blog` },
     description: post.seoDescription || post.excerpt || '',
     // Unlisted posts are link-only: keep them out of the index even if a crawler
     // ever finds the URL. Listed posts get canonical + hreflang alternates.

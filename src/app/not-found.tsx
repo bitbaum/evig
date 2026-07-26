@@ -5,6 +5,7 @@ export const dynamic = 'force-dynamic'
 import Link from 'next/link'
 import { Home } from 'lucide-react'
 import { buttonClass } from '@/components/ui/button-class'
+import { ORG } from '@/config/org'
 
 /**
  * Global 404 fallback — fires for routes outside any `[locale]` segment
@@ -24,7 +25,7 @@ export default function NotFound() {
         </p>
         <Link href="/" className={buttonClass({ variant: 'primary', className: 'gap-2 inline-flex' })}>
           <Home className="w-4 h-4" />
-          revamp-it.ch
+          {ORG.name}
         </Link>
       </div>
     </div>

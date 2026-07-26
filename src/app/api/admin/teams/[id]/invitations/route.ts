@@ -33,7 +33,7 @@ export const POST = withAdmin<Params>('teams', async (
       name: result.data.name,
       email: result.data.email,
       role: result.data.role as TeamRole,
-      inviterName: session.user.name || 'RevampIT',
+      inviterName: session.user.name || 'evig',
     })
     if (invite.outcome === 'error') return apiBadRequest(invite.error)
     return apiSuccess(invite, 201)

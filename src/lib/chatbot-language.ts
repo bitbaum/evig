@@ -23,13 +23,13 @@ export interface ChatbotMessages {
 export const chatbotMessages: Record<Language, ChatbotMessages> = {
   de: {
     welcome: {
-      default: 'Hallo! Ich bin dein persönlicher Revamp IT Navigator. Wie kann ich dir heute dabei helfen, das zu finden, was du suchst?',
-      '/': 'Hallo! Ich bin dein persönlicher Revamp IT Assistent. Wie kann ich dir heute helfen, unsere nachhaltigen IT-Lösungen zu entdecken?',
+      default: 'Hallo! Ich bin dein persönlicher evig Navigator. Wie kann ich dir heute dabei helfen, das zu finden, was du suchst?',
+      '/': 'Hallo! Ich bin dein persönlicher evig Assistent. Wie kann ich dir heute helfen, unsere nachhaltigen IT-Lösungen zu entdecken?',
       '/about': 'Du bist auf unserer "Über uns" Seite! Möchtest du mehr über unsere Mission erfahren oder zu anderen Bereichen navigieren?',
       '/services': 'Perfekt! Du schaust dir unsere Dienstleistungen an. Suchst du etwas Bestimmtes oder brauchst du Hilfe bei der Auswahl?',
       '/projects': 'Interessant! Du entdeckst unsere Projekte. Möchtest du mehr über ein spezielles Projekt erfahren oder andere Bereiche erkunden?',
       '/workshops': 'Du interessierst dich für unsere Workshops! Suchst du nach bestimmten Kursen oder hast du Fragen zu unserem Bildungsangebot?',
-      '/get-involved': 'Fantastisch, dass du dich engagieren möchtest! Wie kannst du am besten bei Revamp IT mitmachen?',
+      '/get-involved': 'Fantastisch, dass du dich engagieren möchtest! Wie kannst du am besten bei evig mitmachen?',
       '/contact': 'Du bist auf unserer Kontaktseite. Brauchst du Hilfe dabei, den richtigen Ansprechpartner zu finden?',
       '/blog': 'Du liest unseren Blog! Suchst du nach bestimmten Themen oder möchtest du andere Bereiche erkunden?'
     },
@@ -47,13 +47,13 @@ export const chatbotMessages: Record<Language, ChatbotMessages> = {
   },
   en: {
     welcome: {
-      default: 'Hello! I\'m your personal Revamp IT navigator. How can I help you find what you\'re looking for today?',
-      '/': 'Hello! I\'m your personal Revamp IT assistant. How can I help you discover our sustainable IT solutions today?',
+      default: 'Hello! I\'m your personal evig navigator. How can I help you find what you\'re looking for today?',
+      '/': 'Hello! I\'m your personal evig assistant. How can I help you discover our sustainable IT solutions today?',
       '/about': 'You\'re on our "About us" page! Would you like to learn more about our mission or navigate to other areas?',
       '/services': 'Perfect! You\'re looking at our services. Are you looking for something specific or do you need help choosing?',
       '/projects': 'Interesting! You\'re exploring our projects. Would you like to learn more about a specific project or explore other areas?',
       '/workshops': 'You\'re interested in our workshops! Are you looking for specific courses or do you have questions about our educational offerings?',
-      '/get-involved': 'Fantastic that you want to get involved! How can you best participate with Revamp IT?',
+      '/get-involved': 'Fantastic that you want to get involved! How can you best participate with evig?',
       '/contact': 'You\'re on our contact page. Do you need help finding the right contact person?',
       '/blog': 'You\'re reading our blog! Are you looking for specific topics or would you like to explore other areas?'
     },

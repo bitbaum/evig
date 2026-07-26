@@ -36,7 +36,7 @@ export interface TranslatedFields {
 }
 
 const KEEP_VERBATIM =
-  'RevampIT, Mastodon, Bluesky, Nostr, Lemmy, Matrix, Element, Signal, Telegram, ' +
+  'evig, Mastodon, Bluesky, Nostr, Lemmy, Matrix, Element, Signal, Telegram, ' +
   'X, Twitter, Threads, TikTok, Meta, ActivityPub, AT Protocol, MTProto, PDS, DID, ' +
   'AppView, Relay, Fediverse, xAI, Grok'
 

@@ -99,10 +99,10 @@ export const PUBLIC_PAGE_CONTEXTS: HirnPageContext[] = [
     pattern: /^\/marketplace/,
     area: 'marketplace',
     description:
-      'Die Nutzerin ist auf der Marktplatz-Übersicht: refurbished Geräte von RevampIT und Inserate von Privatpersonen. Sie kann filtern, suchen, kaufen oder selbst ein Gerät verkaufen.',
+      'Die Nutzerin ist auf der Marktplatz-Übersicht: refurbished Geräte von evig und Inserate von Privatpersonen. Sie kann filtern, suchen, kaufen oder selbst ein Gerät verkaufen.',
     suggestions: [
       'Wie verkaufe ich ein Gerät?',
-      'Was bedeutet «refurbished von RevampIT»?',
+      'Was bedeutet «refurbished von evig»?',
       'Wie finde ich einen günstigen Laptop?',
     ],
     quickActions: [
@@ -239,9 +239,9 @@ export const PUBLIC_PAGE_CONTEXTS: HirnPageContext[] = [
     pattern: /^\/$/,
     area: 'home',
     description:
-      'Die Nutzerin ist auf der Startseite von RevampIT und verschafft sich einen Überblick über das Angebot: Marktplatz, IT-Hilfe, Workshops, Spenden und Reparaturen.',
+      'Die Nutzerin ist auf der Startseite von evig und verschafft sich einen Überblick über das Angebot: Marktplatz, IT-Hilfe, Workshops, Spenden und Reparaturen.',
     suggestions: [
-      'Was macht RevampIT genau?',
+      'Was macht evig genau?',
       'Wie kaufe ich einen günstigen Laptop?',
       'Wie spende ich ein Gerät?',
     ],
@@ -256,9 +256,9 @@ export const PUBLIC_PAGE_CONTEXTS: HirnPageContext[] = [
     pattern: /./,
     area: 'public-generic',
     description:
-      'Die Nutzerin ist auf einer Seite der RevampIT-Plattform (gemeinnütziger Technologie-Austausch: Marktplatz, IT-Hilfe, Workshops, Spenden).',
+      'Die Nutzerin ist auf einer Seite der evig-Plattform (gemeinnütziger Technologie-Austausch: Marktplatz, IT-Hilfe, Workshops, Spenden).',
     suggestions: [
-      'Was bietet RevampIT an?',
+      'Was bietet evig an?',
       'Wie funktioniert der Marktplatz?',
       'Wo finde ich Hilfe bei IT-Problemen?',
     ],
@@ -301,7 +301,7 @@ export const ADMIN_PAGE_CONTEXTS: HirnPageContext[] = [
       steps: [
         { title: 'Daten eingeben', description: 'Text schreiben/einfügen, Foto aufnehmen, CSV/Excel hochladen oder Produkt einsprechen.' },
         { title: 'KI-Vorschlag prüfen', description: 'Die KI füllt das Formular. Hersteller und Produktname sind Pflicht; alles Weitere kann später ergänzt werden.' },
-        { title: 'Nächsten Schritt wählen', description: 'Qualitätsprüfung ist für RevampIT-geprüfte Ware empfohlen. Alternativen bleiben sichtbar und nachvollziehbar.' },
+        { title: 'Nächsten Schritt wählen', description: 'Qualitätsprüfung ist für evig-geprüfte Ware empfohlen. Alternativen bleiben sichtbar und nachvollziehbar.' },
         { title: 'Weiterarbeiten', description: 'Etikett drucken, Checkliste bearbeiten oder das veröffentlichte Produkt im Shop öffnen.' },
       ],
       note: 'CSV/Excel wird als Stapel importiert und zuerst ins Inventar übernommen. Eine Datei beweist keine physische Qualitätsprüfung.',
@@ -505,10 +505,10 @@ export const ADMIN_PAGE_CONTEXTS: HirnPageContext[] = [
     pattern: /./,
     area: 'admin-generic',
     description:
-      'Die Mitarbeiterin ist im Admin-Bereich der RevampIT-Plattform.',
+      'Die Mitarbeiterin ist im Admin-Bereich der evig-Plattform.',
     suggestions: [
       'Erstelle eine Aufgabe',
-      'Was weisst du über RevampIT?',
+      'Was weisst du über evig?',
     ],
     quickActions: [{ label: 'Admin-Übersicht', href: ROUTES.admin.dashboard }],
   },

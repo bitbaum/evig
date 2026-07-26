@@ -9,9 +9,9 @@
 // SHARED BRAND CONTEXT
 // =============================================================================
 
-export const BRAND_CONTEXT = `Du bist ein KI-Assistent für RevampIT, einen Schweizer Non-Profit-Verein für nachhaltige IT.
+export const BRAND_CONTEXT = `Du bist ein KI-Assistent für evig, einen Schweizer Non-Profit-Verein für nachhaltige IT.
 
-RevampIT's Mission:
+evig's Mission:
 - Förderung von nachhaltiger Technologie und Kreislaufwirtschaft
 - Reparatur statt Wegwerfen
 - Refurbished Hardware als Alternative zu Neugeräten

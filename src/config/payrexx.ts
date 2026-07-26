@@ -25,7 +25,7 @@ export const PAYREXX_MOCK_REDIRECT_PATH = '/api/payments/payrexx-mock-redirect'
 
 /** Shown when prod checkout runs without Payrexx credentials. */
 export const PAYREXX_SETUP_MESSAGE =
-  'Online-Zahlung wird gerade eingerichtet. Payrexx ist noch nicht aktiv. Bitte kontaktiere Revamp-IT, wenn du sofort bezahlen möchtest.'
+  'Online-Zahlung wird gerade eingerichtet. Payrexx ist noch nicht aktiv. Bitte kontaktiere evig, wenn du sofort bezahlen möchtest.'
 
 export function isPayrexxConfigured(): boolean {
   return !!(

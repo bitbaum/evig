@@ -120,7 +120,7 @@ export const HR_TRACK_DISCLAIMERS: Partial<Record<RoleTrack, string>> = {
   volunteer:
     'Freiwilligenarbeit ist unentgeltlich und begründet kein Arbeitsverhältnis im Sinne des OR.',
   intern:
-    'Praktikumsstellen unterliegen den Vereinbarungen zwischen RevampIT, Praktikant/in und ggf. Bildungsinstitution.',
+    'Praktikumsstellen unterliegen den Vereinbarungen zwischen evig, Praktikant/in und ggf. Bildungsinstitution.',
   reintegration:
     'Unser Wiedereinstiegsprogramm unterstützt Menschen beim Wiederanfang in der IT — in einem respektvollen, strukturierten Rahmen.',
 }
@@ -133,7 +133,7 @@ export const HR_APPLICATION_RETENTION_DAYS = 365
 // ─── Share templates ─────────────────────────────────────────────────────────
 
 export function buildVacancyShareText(title: string, publicUrl: string): string {
-  return `Offene Stelle bei RevampIT: ${title}\n${publicUrl}`
+  return `Offene Stelle bei evig: ${title}\n${publicUrl}`
 }
 
 export function buildVacancyShareLinkedIn(title: string, publicUrl: string): string {

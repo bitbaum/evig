@@ -75,8 +75,8 @@ export const CHANGELOG_RELEASES: ChangelogRelease[] = [
         en: 'Navigation, sitemap, chatbot suggestions, and shop URL helpers no longer generate new /shop links',
       },
       {
-        de: 'Revamp-IT-Inserate werden einheitlich anhand Flag oder Staff-E-Mail markiert; andere Anbieter werden neutral benannt',
-        en: 'Revamp-IT listings are consistently marked by explicit flag or staff email; other sellers use neutral labeling',
+        de: 'evig-Inserate werden einheitlich anhand Flag oder Staff-E-Mail markiert; andere Anbieter werden neutral benannt',
+        en: 'evig listings are consistently marked by explicit flag or staff email; other sellers use neutral labeling',
       },
       {
         de: 'Payrexx-Zahlungen stoppen in Produktion mit Setup-Meldung, solange kein Payrexx-Konto konfiguriert ist',
@@ -151,8 +151,8 @@ export const CHANGELOG_RELEASES: ChangelogRelease[] = [
     version: '0.1.0',
     date: '2026-06-15',
     title: {
-      de: 'RevampIT Plattform 0.1.0',
-      en: 'RevampIT Platform 0.1.0',
+      de: 'evig Plattform 0.1.0',
+      en: 'evig Platform 0.1.0',
     },
     changes: [
       {
@@ -178,8 +178,8 @@ export const CHANGELOG_RELEASES: ChangelogRelease[] = [
     version: '0.0.9',
     date: '2026-06-14',
     title: {
-      de: 'RevampIT Plattform 0.0.9',
-      en: 'RevampIT Platform 0.0.9',
+      de: 'evig Plattform 0.0.9',
+      en: 'evig Platform 0.0.9',
     },
     changes: [
       {
@@ -201,8 +201,8 @@ export const CHANGELOG_RELEASES: ChangelogRelease[] = [
     version: '0.0.8',
     date: '2026-06-10',
     title: {
-      de: 'RevampIT Plattform 0.0.8',
-      en: 'RevampIT Platform 0.0.8',
+      de: 'evig Plattform 0.0.8',
+      en: 'evig Platform 0.0.8',
     },
     changes: [
       {
@@ -228,8 +228,8 @@ export const CHANGELOG_RELEASES: ChangelogRelease[] = [
     version: '0.0.7',
     date: '2026-06-05',
     title: {
-      de: 'RevampIT Plattform 0.0.7',
-      en: 'RevampIT Platform 0.0.7',
+      de: 'evig Plattform 0.0.7',
+      en: 'evig Platform 0.0.7',
     },
     changes: [
       {
@@ -251,8 +251,8 @@ export const CHANGELOG_RELEASES: ChangelogRelease[] = [
     version: '0.0.6',
     date: '2026-05-28',
     title: {
-      de: 'RevampIT Plattform 0.0.6',
-      en: 'RevampIT Platform 0.0.6',
+      de: 'evig Plattform 0.0.6',
+      en: 'evig Platform 0.0.6',
     },
     changes: [
       {

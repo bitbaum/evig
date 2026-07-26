@@ -8,6 +8,5 @@
 export { default as AboutSection } from './AboutSection'
 export { default as AboutCTA } from './AboutCTA'
 export { default as GeschichteSection } from './GeschichteSection'
-export { default as AsSeenInLogos, AsSeenInLogosMinimal } from './AsSeenInLogos'
 
 

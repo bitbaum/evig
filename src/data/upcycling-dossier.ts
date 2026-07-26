@@ -13,6 +13,8 @@
  * Kontaktaufnahme ein Klick statt eine leere Seite ist.
  */
 
+import { ORG } from '@/config/org'
+
 export interface DossierContact {
   name: string
   category: string
@@ -49,14 +51,14 @@ export interface DossierGroup {
 
 const GRUSS = 'Guten Tag'
 const SIGNATUR =
-  'Freundliche Grüsse\nRevamp-IT — Verein für funktionelle Kreislaufnutzung von IT-Geräten\nhttps://revamp-it.ch'
+  `Freundliche Grüsse\n${ORG.name} — funktionelle Kreislaufnutzung von IT-Geräten\n${ORG.website}`
 
 const OUTREACH = {
   hersteller: {
     subject: 'Produktionspartnerschaft: Monitore werden zu Leuchten',
     body:
       `${GRUSS}\n\n` +
-      'Revamp-IT verwandelt ausgediente Computermonitore in funktionierende ' +
+      'evig verwandelt ausgediente Computermonitore in funktionierende ' +
       'LED-Leuchten und Leuchtpaneele. Für die Serienfertigung einer Kleinserie ' +
       '(rund 70 Stück) suchen wir eine geschützte Werkstatt mit Elektronik- und ' +
       'Montage-Know-how als Produktionspartnerin.\n\n' +
@@ -68,7 +70,7 @@ const OUTREACH = {
     subject: 'Kreislauf-Leuchten aus Monitoren für Ihre Liegenschaften',
     body:
       `${GRUSS}\n\n` +
-      'Revamp-IT fertigt aus ausgedienten Monitoren langlebige LED-Leuchten für ' +
+      'evig fertigt aus ausgedienten Monitoren langlebige LED-Leuchten für ' +
       'Nebenräume wie Keller, Velo- und Technikräume, Einstellhallen und Korridore. ' +
       'Wir suchen Pilotpartner mit grösseren Liegenschaftsportfolios für einen ' +
       'Praxistest mit Feedback.\n\n' +
@@ -80,7 +82,7 @@ const OUTREACH = {
     subject: 'Förderanfrage: Kreislaufnutzung von IT-Geräten',
     body:
       `${GRUSS}\n\n` +
-      'Revamp-IT entwickelt ein Verfahren, mit dem ausgediente Computermonitore ' +
+      'evig entwickelt ein Verfahren, mit dem ausgediente Computermonitore ' +
       'zu funktionierenden Leuchten aufgewertet statt rezykliert werden — als ' +
       'gemeinnütziges Kreislauf- und Arbeitsintegrationsprojekt in der Region ' +
       'Zürich.\n\n' +
@@ -93,7 +95,7 @@ const OUTREACH = {
     subject: 'Upcycling-Leuchten aus Monitoren — Verkauf in Ihrem Sortiment?',
     body:
       `${GRUSS}\n\n` +
-      'Revamp-IT stellt aus ausgedienten Monitoren designstarke Kreislauf-Leuchten ' +
+      'evig stellt aus ausgedienten Monitoren designstarke Kreislauf-Leuchten ' +
       'her — lokal produziert, reparierbar und mit nachweisbarer Ökobilanz. ' +
       'Wir suchen Verkaufspartner, die solche Produkte führen.\n\n' +
       'Hätten Sie Interesse an Mustern und Konditionen für Ihr Sortiment?\n\n' +
@@ -103,7 +105,7 @@ const OUTREACH = {
     subject: 'Kreislauf-Leuchten aus Schweizer Produktion — Partnerschaft',
     body:
       `${GRUSS}\n\n` +
-      'Revamp-IT verwandelt ausgediente Computermonitore in langlebige, ' +
+      'evig verwandelt ausgediente Computermonitore in langlebige, ' +
       'reparierbare LED-Leuchten — gemeinnützig, lokal produziert und mit ' +
       'nachweisbarer CO₂-Einsparung gegenüber Neuware. Das passt zu Ihren ' +
       'Nachhaltigkeits- und Kreislaufzielen.\n\n' +

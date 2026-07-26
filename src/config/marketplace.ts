@@ -170,7 +170,7 @@ export interface ShippingAddress {
 export const REVAMPIT_LISTING_DELIVERY = {
   options: 'both',
   shippingCostChf: '12.00',
-  pickupLocation: 'Revamp-IT Zürich',
+  pickupLocation: 'evig Zürich',
 } as const satisfies {
   options: DeliveryOption
   shippingCostChf: string | null
@@ -327,7 +327,7 @@ export const GRATIS_CONFIG = {
 
 export const VERIFICATION_CONFIG = {
   badge: {
-    label: 'Geprüft von Revamp-IT',
+    label: 'Geprüft von evig',
     shortLabel: 'Geprüft',
     color: UI_STATUS.success,
     borderColor: 'border-primary-200 dark:border-primary-800',

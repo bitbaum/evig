@@ -30,7 +30,7 @@ export function SiteFeedbackList({ items }: { items: Item[] }) {
 
   function copyPrompt() {
     const use = visible.filter(i => !i.resolved).length ? visible.filter(i => !i.resolved) : visible
-    const lines = ['Website-Feedback (revamp-it):', '']
+    const lines = ['Website-Feedback (evig):', '']
     for (const i of use) {
       const where = i.pageTitle || i.page || 'Website'
       const who = i.contact ? ` [${i.contact}]` : ''

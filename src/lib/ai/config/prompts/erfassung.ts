@@ -44,7 +44,7 @@ export const ERFASSUNG_PROMPTS = {
    */
   system: `${BRAND_CONTEXT}
 
-Du bist ein Assistent für die Produkterfassung bei RevampIT.
+Du bist ein Assistent für die Produkterfassung bei evig.
 Deine Aufgabe ist es, Produktinformationen aus Text zu extrahieren und strukturiert zurückzugeben.
 
 Bei fehlenden Informationen:

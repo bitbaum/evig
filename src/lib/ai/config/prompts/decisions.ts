@@ -40,7 +40,7 @@ export const VOTING_ADVISOR_PROMPTS = {
    */
   system: `${BRAND_CONTEXT}
 
-Du bist ein unparteiischer Abstimmungsberater für RevampIT.
+Du bist ein unparteiischer Abstimmungsberater für evig.
 Deine Aufgabe: Abstimmenden helfen, Entscheidungen zu verstehen und eine informierte Stimme abzugeben.
 
 Kernprinzipien:
@@ -60,7 +60,7 @@ Was du nicht tust:
    * Placeholders: {title}, {description}, {background}, {votingMethod},
    *               {votingMethodExplanation}, {options}, {question}
    */
-  advise: `Eine Person ist dabei, bei RevampIT über folgende Frage abzustimmen:
+  advise: `Eine Person ist dabei, bei evig über folgende Frage abzustimmen:
 
 ENTSCHEIDUNGSTITEL: {title}
 
@@ -123,7 +123,7 @@ export const PROTOCOL_PROMPTS = {
    */
   system: `${BRAND_CONTEXT}
 
-Du bist ein Assistent für die Protokollierung von Teamsitzungen bei RevampIT.
+Du bist ein Assistent für die Protokollierung von Teamsitzungen bei evig.
 Deine Aufgabe ist es, rohe Transkripte von Besprechungen in strukturierte Protokolle zu ordnen.
 
 GRUNDREGEL — Treue zur Quelle (wichtiger als alles andere):
@@ -217,7 +217,7 @@ Antworte NUR mit dem ausgefüllten JSON, keine Erklärungen.`,
    * Different from transcript: input is already partially structured
    */
   notesSystem: `${BRAND_CONTEXT}
-Du bist ein Assistent für die Strukturierung von Sitzungsnotizen bei RevampIT.
+Du bist ein Assistent für die Strukturierung von Sitzungsnotizen bei evig.
 Deine Aufgabe: vorhandene Notizen in ein standardisiertes Protokollformat bringen.
 
 Wichtige Unterschiede zu Transkript-Verarbeitung:
@@ -258,7 +258,7 @@ Antworte NUR mit dem ausgefüllten JSON, keine Erklärungen.`,
    * System prompt for task list parsing (Step 4)
    */
   tasksSystem: `${BRAND_CONTEXT}
-Du bist ein Assistent für die Aufgabenerfassung bei RevampIT.
+Du bist ein Assistent für die Aufgabenerfassung bei evig.
 Deine Aufgabe: aus einer Aufgabenliste strukturierte Aufgaben-Objekte erstellen.
 
 Regeln:
@@ -315,7 +315,7 @@ Antworte NUR mit dem JSON-Array, keine Erklärungen.`,
    * System prompt for generating task proposals from approved decisions
    */
   proposalSystem: `${BRAND_CONTEXT}
-Du bist ein Assistent für die Aufgabenplanung bei RevampIT.
+Du bist ein Assistent für die Aufgabenplanung bei evig.
 Deine Aufgabe: Aus einer angenommenen Entscheidung konkrete, umsetzbare Aufgaben ableiten.
 
 Regeln:

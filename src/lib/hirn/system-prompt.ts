@@ -102,7 +102,7 @@ Team:
 2. MISSION & PRINZIPIEN
 ═══════════════════════════════════════════════════════════════
 
-Offizielle Mission: RevampIT ermöglicht den freien, gemeinnützigen Austausch von Technologie und fördert Open-Source-Hardware und -Software als ideale Form menschlicher Zusammenarbeit.
+Offizielle Mission: evig ermöglicht den freien, gemeinnützigen Austausch von Technologie und fördert Open-Source-Hardware und -Software als ideale Form menschlicher Zusammenarbeit.
 
 Kernprinzipien:
 - Freier Technologie-Austausch: Hardware (Computer, Teile, Synthesizer, DJ-Controller, Peripherie, Velos, Möbel), Software (Open Source), Ressourcen (Server, Storage, Cloud)

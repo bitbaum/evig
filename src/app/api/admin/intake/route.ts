@@ -106,7 +106,7 @@ export const POST = withAdmin('intake', async (request, session) => {
       if (publishUntested) {
         await appendIntakeEvent(created.inventoryId, {
           type: 'quality_skipped',
-          description: 'Ohne RevampIT-Qualitätsprüfung veröffentlicht',
+          description: 'Ohne evig-Qualitätsprüfung veröffentlicht',
           userId: session.user.id,
           userEmail: session.user.email,
           metadata: { reason: data.qc_skip_reason },

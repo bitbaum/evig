@@ -87,7 +87,7 @@ export const projectContributionConfirmation = (
         </ul>
       </div>
       <p>Falls du in der Zwischenzeit weitere Details ergänzen willst, antworte einfach auf diese E-Mail.</p>
-      <p>Bis bald!<br>Das Revamp-IT Team</p>
+      <p>Bis bald!<br>Das evig Team</p>
     `
     ),
     text: `Hallo ${name},\n\nvielen Dank, dass du das Projekt ${projectTitle} bei ${ORG.name} unterstützen willst!\n\nWir haben dein Angebot erhalten und melden uns in Kürze bei dir.\n\n${createTextFooter()}`,
