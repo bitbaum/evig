@@ -339,16 +339,16 @@
       "description": "Buy refurbished IT, browse community listings, and find technicians or repair shops for repairs."
     },
     "hero": {
-      "title": "Old Hardware. New Life.",
-      "titlePrimary": "Old Hardware.",
-      "subtitle": "Every year, 62 million tonnes of electronics end up in landfill. We're changing that — with a community that repairs, shares and learns together.",
-      "ctaDiscover": "Find repair help",
+      "title": "Access to intelligence. Affordable for everyone.",
+      "titlePrimary": "Access to intelligence.",
+      "subtitle": "Good tech is too expensive and turns to junk too fast. We flip both: affordable access to intelligence — and a cycle that keeps devices in circulation instead of in the scrap heap.",
+      "ctaDiscover": "Find repair",
       "ctaAbout": "About us",
-      "positioning": "Swiss circular-economy nonprofit since 2003",
-      "titleSecondary": "New life.",
-      "lede": "Buy verified refurbished IT or find help when your device needs repair.",
-      "sublede": "Shop, community marketplace, workshop, and technician network — all under one roof.",
-      "ctaDonate": "Buy refurbished IT"
+      "positioning": "Access to intelligence · Circular economy · Zurich",
+      "titleSecondary": "Affordable for everyone.",
+      "lede": "Curated tech, AI and robotics at fair prices — plus repair that's truly within reach.",
+      "sublede": "Shop, community marketplace, workshop and technician network — all under one roof.",
+      "ctaDonate": "Explore tech"
     },
     "actions": {
       "heading": "What would you like to do?",
@@ -2610,45 +2610,45 @@
   "about": {
     "meta": {
       "title": "About us",
-      "description": "Learn about our mission to extend the lifespan of IT devices and promote sustainable computing."
+      "description": "Why evig exists, what we stand for, and how we make access to intelligence affordable for everyone."
     },
     "title": "About",
     "mission": {
       "badge": "Our mission",
-      "title": "Sustainability meets technology",
+      "title": "Intelligence belongs to everyone",
       "yearsExperience": "years of experience",
-      "quote": "10 years is the minimum for a bicycle – and for a laptop too!",
-      "paragraph1": "As a non-profit association, we have been changing the way technology is used since 2003. Our mission is clear: <strong>extend the lifespan of IT devices</strong> and reduce e-waste through repair, refurbishment and sustainable practices.",
-      "paragraph2": "In our premises – a former bank – we have created a meeting place where technology and sustainability come together. Our approach combines hardware recycling with open source software to create sustainable IT solutions for people and the environment.",
-      "imageAlt": "Storefront with computers and devices"
+      "quote": "Access to AI and robotics decides who gets to take part — it must not depend on your wallet.",
+      "paragraph1": "evig makes access to intelligence affordable: <strong>curated tech, AI and robotics</strong> at fair prices. We're not a charity, but a market-and-quality model — good and affordable because tech stays in circulation instead of ending up as waste.",
+      "paragraph2": "On top of that comes repair that's truly within reach — workshop, repair café and a technician network — and a circular marketplace for tested second-hand tech. What works should stay in circulation.",
+      "imageAlt": "Curated tech at evig"
     },
     "team": "The team",
     "history": "History",
     "values": "Our values",
     "join": "Get involved",
     "hero": {
-      "title": "Giving technology a second life",
-      "subtitle": "For over 20 years we have been fighting against the premature decommissioning of computers and promoting sustainable IT practices."
+      "title": "Why evig exists",
+      "subtitle": "evig is a spin-off from Swiss circular IT — with one clear conviction: access to intelligence belongs to everyone."
     },
     "impactAreas": {
-      "title": "Our impact areas",
-      "subtitle": "Three pillars, one goal: making technology more sustainable and accessible.",
+      "title": "What we focus on",
+      "subtitle": "Three focus areas, one goal: make intelligence and good tech accessible to everyone.",
       "hardware": {
-        "title": "Hardware recycling",
-        "description": "We repair and refurbish IT devices of any age and give them a second life. From old MacBooks to vintage computers – every device deserves a second chance."
+        "title": "Access to intelligence",
+        "description": "Curated, high-performance hardware, AI and robotics — affordable. We pick what genuinely delivers instead of selling junk."
       },
       "openSource": {
-        "title": "Open source software",
-        "description": "We rely on Linux and other open source solutions. These technologies keep older devices running efficiently and provide security through control over one's own system."
+        "title": "Repair for everyone",
+        "description": "Repair should be simple and affordable. Workshop, repair café and a technician network keep devices alive — with Linux and open source where it makes sense."
       },
       "community": {
-        "title": "Community & social",
-        "description": "We create meaningful jobs for people who struggle in the regular job market. With our exchange system, services can be traded for technology."
+        "title": "Circular marketplace",
+        "description": "A marketplace for tested second-hand tech: buy, sell, pass it on. What works stays in circulation instead of on the scrap heap."
       }
     },
     "cta": {
-      "title": "Join our mission",
-      "description": "Whether you want to have a device repaired, learn more about sustainable IT or support our cause – you are welcome here. Together we make technology more sustainable and accessible for everyone.",
+      "title": "Join evig",
+      "description": "Whether you're looking for tech, want a device repaired, or want to support the idea — you're welcome at evig. Together we make intelligence and good tech accessible to everyone.",
       "button": "Get involved"
     },
     "impact": {
@@ -3815,7 +3815,7 @@
       "dark": "Dark"
     },
     "chatbot": {
-      "open": "Open Revamp IT assistant"
+      "open": "Open evig assistant"
     },
     "feedback": {
       "open": "Open improvement suggestions",
@@ -9343,11 +9343,11 @@
     },
     "geschichteSection": {
       "founding": {
-        "title": "The founding of {orgName}",
-        "subtitle": "From a cheese cellar to a movement",
-        "p1": "{orgName} was founded in Zurich in December {foundingYear}, born from a simple observation: more and more usable computers were ending up as waste. Something had to change.",
-        "p2": "The first location was an old cheese cellar at the Toni dairy. That is where the idea that still guides us emerged: combine hardware reuse with Linux so older devices remain useful for years.",
-        "p3": "What began as a small project became a movement. More than 20 years later, we process around 1,000 devices each year: about 150 are refurbished and sold, while the rest provide spare parts or enter responsible recycling."
+        "title": "A spin-off born of conviction",
+        "subtitle": "The same roots, a bolder path",
+        "p1": "evig was founded in {foundingYear} in Zurich — as a spin-off from Swiss circular IT. The conviction behind it: access to intelligence — AI and robotics — is the great opportunity of our time, and it should be affordable for everyone.",
+        "p2": "We built the platform for it: a marketplace, an AI assistant, and a techno-optimist vision of AI, robotics and open tech in circulation. Our surroundings didn't want to walk that path with us.",
+        "p3": "So we're walking it ourselves. evig keeps the roots of the circular economy and aims them at the age of intelligence — as a genuine market-and-quality model, open and independent."
       },
       "milestones": {
         "2003": {
@@ -9391,7 +9391,7 @@
           "description": "Around 1,000 devices are processed each year, about 150 are sold, more than 43 tonnes of CO₂ are saved, and internships achieve an approximately 40% success rate."
         }
       },
-      "badge": "Our History",
+      "badge": "Why evig exists",
       "milestoneTitle": "Milestones",
       "milestoneDesc": "From a small workshop to the leading organization for sustainable IT in Switzerland.",
       "currentTitle": "Today",

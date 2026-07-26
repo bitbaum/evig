@@ -543,7 +543,7 @@
       "dark": "Scuro"
     },
     "chatbot": {
-      "open": "Apri l'assistente Revamp IT"
+      "open": "Apri l'assistente evig"
     },
     "feedback": {
       "open": "Apri suggerimenti per miglioramenti",
@@ -885,40 +885,40 @@
   "about": {
     "meta": {
       "title": "Chi siamo",
-      "description": "Scopri la nostra missione per prolungare la vita dei dispositivi IT e promuovere un computing sostenibile."
+      "description": "Perché evig esiste, in cosa crediamo e come rendiamo l'accesso all'intelligenza alla portata di tutti."
     },
     "hero": {
-      "title": "Dare una seconda vita alla tecnologia",
-      "subtitle": "Da oltre 20 anni ci battiamo contro il ritiro prematuro dei computer e promuoviamo pratiche IT sostenibili."
+      "title": "Perché evig esiste",
+      "subtitle": "evig è uno spin-off dell'IT circolare svizzera — con una convinzione chiara: l'accesso all'intelligenza appartiene a tutti."
     },
     "mission": {
       "badge": "La nostra missione",
-      "title": "Sostenibilità incontra tecnologia",
+      "title": "L'intelligenza appartiene a tutti",
       "yearsExperience": "anni di esperienza",
-      "quote": "10 anni sono il minimo per una bici — e per un laptop anche!",
-      "paragraph1": "Come associazione senza scopo di lucro, dal 2003 cambiamo il modo in cui le persone si rapportano alla tecnologia. La nostra missione è chiara: <strong>prolungare la vita dei dispositivi IT</strong> e ridurre i rifiuti elettronici attraverso riparazione, ricondizionamento e pratiche sostenibili.",
-      "paragraph2": "Nei nostri spazi — una ex banca — abbiamo creato un punto di incontro dove tecnologia e sostenibilità si incontrano. Il nostro approccio unisce il riciclo hardware al software Open Source, creando soluzioni IT sostenibili per le persone e per l'ambiente.",
-      "imageAlt": "Vetrina con computer e dispositivi"
+      "quote": "L'accesso all'IA e alla robotica decide chi può partecipare — non deve dipendere dal portafoglio.",
+      "paragraph1": "evig rende l'accesso all'intelligenza accessibile: <strong>tecnologia selezionata, IA e robotica</strong> a prezzi equi. Non siamo un progetto di beneficenza, ma un modello di mercato e qualità — buono ed economico perché la tecnologia resta in circolazione invece di finire nella spazzatura.",
+      "paragraph2": "A questo si aggiunge una riparazione davvero accessibile — officina, repair café e una rete di tecnici — e un mercato circolare di tecnologia usata e verificata. Ciò che funziona deve restare in circolazione.",
+      "imageAlt": "Tecnologia selezionata da evig"
     },
     "impactAreas": {
-      "title": "Le nostre aree di impatto",
-      "subtitle": "Tre pilastri, un obiettivo: rendere la tecnologia più sostenibile e accessibile.",
+      "title": "Su cosa ci concentriamo",
+      "subtitle": "Tre aree, un obiettivo: rendere l'intelligenza e la buona tecnologia accessibili a tutti.",
       "hardware": {
-        "title": "Riciclo hardware",
-        "description": "Ripariamo e rimettiamo a nuovo dispositivi IT di tutte le età, dando loro una seconda vita. Dai vecchi MacBook ai computer vintage — ogni dispositivo merita una seconda possibilità."
+        "title": "Accesso all'intelligenza",
+        "description": "Hardware, IA e robotica selezionati e performanti — a prezzi accessibili. Scegliamo ciò che vale davvero, invece di vendere chincaglieria."
       },
       "openSource": {
-        "title": "Software Open Source",
-        "description": "Puntiamo su Linux e altre soluzioni Open Source. Queste tecnologie mantengono i dispositivi più vecchi efficienti e funzionanti, offrendo sicurezza attraverso il controllo del proprio sistema."
+        "title": "Riparazione per tutti",
+        "description": "Riparare dovrebbe essere semplice ed economico. Officina, repair café e una rete di tecnici tengono in vita i dispositivi — con Linux e l'open source dove ha senso."
       },
       "community": {
-        "title": "Comunità e sociale",
-        "description": "Creiamo posti di lavoro significativi per persone che hanno difficoltà nel mercato del lavoro regolare. Con il nostro sistema di scambio, è possibile scambiare servizi con tecnologia."
+        "title": "Mercato circolare",
+        "description": "Un mercato di tecnologia usata e verificata: comprare, vendere, tramandare. Ciò che funziona resta in circolazione invece di finire tra i rottami."
       }
     },
     "cta": {
-      "title": "Entra a far parte della nostra missione",
-      "description": "Che tu voglia far riparare un dispositivo, saperne di più sull'IT sostenibile o sostenere la nostra causa — sei il benvenuto. Insieme rendiamo la tecnologia più sostenibile e accessibile a tutti.",
+      "title": "Unisciti a evig",
+      "description": "Che tu cerchi tecnologia, voglia far riparare un dispositivo o voglia sostenere l'idea — da evig sei il benvenuto. Insieme rendiamo l'intelligenza e la buona tecnologia accessibili a tutti.",
       "button": "Partecipa"
     },
     "impact": {
@@ -2344,16 +2344,16 @@
       "description": "Compra e vendi IT usato. Riparazione computer dalla community. Workshop su Linux, hardware e programmazione."
     },
     "hero": {
-      "title": "Hardware vecchio. Nuova vita.",
-      "titlePrimary": "Hardware vecchio.",
-      "subtitle": "Ogni anno 62 milioni di tonnellate di dispositivi elettronici finiscono in discarica. Noi lo cambiamo — con una community che ripara, condivide e impara insieme.",
-      "ctaDiscover": "Scopri ora",
+      "title": "Accesso all'intelligenza. Alla portata di tutti.",
+      "titlePrimary": "Accesso all'intelligenza.",
+      "subtitle": "La buona tecnologia costa troppo e diventa rifiuto troppo in fretta. Noi ribaltiamo entrambe le cose: accesso all'intelligenza a prezzi accessibili — e un ciclo che tiene i dispositivi in circolazione anziché tra i rottami.",
+      "ctaDiscover": "Trova una riparazione",
       "ctaAbout": "Chi siamo",
-      "positioning": "Organizzazione non profit svizzera per l'economia circolare dal 2003",
-      "titleSecondary": "Nuova vita.",
-      "lede": "Ripariamo computer usati e li portiamo a chi ne ha bisogno.",
-      "sublede": "Negozio, mercato della comunità, officina e rete di tecnici — tutto sotto lo stesso tetto.",
-      "ctaDonate": "Dona un dispositivo"
+      "positioning": "Accesso all'intelligenza · Economia circolare · Zurigo",
+      "titleSecondary": "Alla portata di tutti.",
+      "lede": "Tecnologia selezionata, IA e robotica a prezzi equi — e una riparazione davvero accessibile.",
+      "sublede": "Negozio, mercato della community, officina e rete di tecnici — tutto sotto lo stesso tetto.",
+      "ctaDonate": "Scopri la tecnologia"
     },
     "actions": {
       "heading": "Cosa vuoi fare?",
@@ -9343,7 +9343,7 @@
       "methodologyLink": "Come è calcolato?"
     },
     "geschichteSection": {
-      "badge": "La nostra storia",
+      "badge": "Perché evig esiste",
       "milestoneTitle": "Tappe",
       "milestoneDesc": "Da un piccolo laboratorio all'organizzazione leader per l'IT sostenibile in Svizzera.",
       "currentTitle": "Oggi",
@@ -9351,11 +9351,11 @@
       "teamMembers": "Membri del team",
       "devicesPerYear": "Dispositivi salvati all'anno",
       "founding": {
-        "title": "La fondazione di {orgName}",
-        "subtitle": "Da una cantina del formaggio a un movimento",
-        "p1": "{orgName} è stata fondata nel dicembre {foundingYear} a Zürich, nata da una semplice constatazione: sempre più computer ancora utilizzabili finivano tra i rifiuti. \"Bisogna fare qualcosa\", è stato il pensiero che ha messo tutto in moto.",
-        "p2": "La prima sede è stata una vecchia cantina del formaggio nella Toni Molkerei. Lì è nata l'idea che ci accompagna ancora oggi: unire il riciclo dell'hardware e Linux. Perché con il software open source anche i dispositivi più vecchi continuano a funzionare per anni.",
-        "p3": "Quello che è iniziato come un piccolo progetto è diventato un movimento. Senza cercare troppo, continuavano ad arrivare persone che dicevano: \"Che bello quello che fate.\" Oggi, oltre 20 anni dopo, trattiamo circa 1000 dispositivi all'anno, di cui circa 150 vengono ricondizionati e venduti, mentre il resto viene destinato al recupero di pezzi di ricambio e al riciclo a regola d'arte."
+        "title": "Uno spin-off per convinzione",
+        "subtitle": "Le stesse radici, una strada più coraggiosa",
+        "p1": "evig è nata nel {foundingYear} a Zurigo — come spin-off dell'IT circolare svizzera. La convinzione alla base: l'accesso all'intelligenza — IA e robotica — è la grande occasione del nostro tempo, e dovrebbe essere alla portata di tutti.",
+        "p2": "Abbiamo costruito la piattaforma per questo: un mercato, un assistente IA e una visione tecno-ottimista di IA, robotica e tecnologia aperta in circolazione. Il nostro ambiente non ha voluto percorrere questa strada con noi.",
+        "p3": "Così la percorriamo da soli. evig mantiene le radici dell'economia circolare e le orienta verso l'era dell'intelligenza — come un autentico modello di mercato e qualità, aperto e indipendente."
       },
       "milestones": {
         "2003": {
