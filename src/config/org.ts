@@ -14,9 +14,9 @@
 
 /** Canonical logo asset paths — import from here, never hardcode */
 export const ORG_IMAGES = {
-  /** Full horizontal logo (200×48px). TODO: replace visual asset with evig branding. */
+  /** Horizontal evig lockup (mark + wordmark) for external contexts — JSON-LD, OG. */
   logo: '/images/logo/evig-logo.png',
-  /** Square favicon/icon (40×40px). TODO: replace visual asset with evig branding. */
+  /** Square evig app-icon (near-black tile + green mark) for compact UI + structured data. */
   favicon: '/images/logo/evig-favicon.png',
 } as const
 

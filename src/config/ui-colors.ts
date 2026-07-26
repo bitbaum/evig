@@ -56,13 +56,13 @@ export const UI_COLOR_PALETTE = [
 /** Default blog/content category color */
 export const DEFAULT_CATEGORY_COLOR = UI_COLOR_PALETTE[0]
 
-/** Open Graph image colors */
+/** Open Graph image colors — evig dark brand card (mark + wordmark on near-black) */
 export const OG_IMAGE_COLORS = {
-  backgroundGradient: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 50%, #bbf7d0 100%)',
-  heading: '#111827',
-  accent: '#16a34a',
-  body: '#4b5563',
-  meta: '#9ca3af',
+  backgroundGradient: 'linear-gradient(135deg, #0a0a0a 0%, #0d1512 55%, #0a0a0a 100%)',
+  heading: '#ffffff',
+  accent: '#22c55e',
+  body: '#a3a3a3',
+  meta: '#6b7280',
 } as const
 
 /** Fallback product condition colors */
