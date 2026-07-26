@@ -1,27 +1,57 @@
-# Revamp-IT - Swiss Non-Profit Tech Platform
+# evig — affordable-intelligence tech platform
 
 @~/.claude/CLAUDE.md
 
 ---
 
+## ⚠️ Rebrand in progress: Revamp-IT → evig (since 2026-07-24)
+
+This codebase was built for Revamp-IT and is now the platform for **evig** —
+George's own independent org (founded 2026-07-24, `in Gründung`). evig is a
+**market/quality model, NOT a charity**: make genuinely good, durable hardware
+affordable to everyone — curated, not junk refurb. Do not describe evig as a
+"non-profit" or frame it around "without extracting profit"; that was Revamp-IT's
+framing, deliberately left behind.
+
+**Two layers — rebrand ONLY Layer A, never blind-rename Layer B:**
+- **Layer A (user-facing brand)** → say `evig`: copy, i18n message values, README,
+  page content, org identity in `src/config/org.ts`. Done on branch `rebrand/evig`.
+- **Layer B (infra identifiers)** → still literally carry the `revampit` name and
+  MUST stay accurate to the running system until a deliberate infra refactor:
+  DB `revampit_cms` / prod DB `revampit`, the `is_revampit` column, staff-auth
+  domain `@revamp-it.ch`, deploy paths `/opt/revampit/app`, systemd `revampit-app`,
+  script `selfhost-deploy-revampit.sh`, host `revampit.orangecat.ch`. Renaming any
+  of these in docs/code without migrating the actual infra makes the docs LIE and
+  can lock the sole admin out (his login is `@revamp-it.ch`). Leave them until the
+  infra cutover is explicitly done.
+
+---
+
 ## Mission
 
-**Used computers get repaired and rehomed — not landfilled.**
+**Make genuinely good computing affordable to everyone.**
 
-Revamp-IT serves two users: people who need affordable tech and can't get it through commercial channels, and donors/volunteers who want their old hardware to have a second life. The platform succeeds when a working computer reaches someone who needs it, a repair technician earns meaningful work, or a community member gains digital skills — all without extracting profit.
+evig curates decent, durable hardware people actually want to use and makes it
+affordable — plus repair, IT-help, workshops, and an in-house AI assistant. It
+serves people who need capable tech at a fair price, and the community that keeps
+hardware in use instead of landfilled. Market/quality model: affordable pricing is
+the product, not a subsidy.
 
 **Engineering guardrails derived from this mission:**
-- Features that don't move hardware from donors to recipients, or connect repair needs to technicians, need strong justification before being built.
-- Complexity that serves staff over users should be deferred until core user journeys are bulletproof.
-- The platform is Swiss-based with international reach — multilingual support is not a nice-to-have, it is the mission.
+- Features that don't help someone get capable, affordable tech — or keep hardware
+  usefully in circulation — need strong justification before being built.
+- Complexity that serves staff over users should be deferred until core user journeys
+  are bulletproof.
+- Swiss-based with international reach — multilingual support is not a nice-to-have.
 
-**One-line value proposition:** Used computers repaired and rehomed — not landfilled.
+**One-line value proposition:** Affordable intelligence — good hardware, fair price.
 
 ---
 
 ## Overview
 
-Revamp-IT is a **Swiss non-profit** enabling free exchange of technology, promoting open-source hardware and software. Built with Next.js 16, TypeScript, and Tailwind.
+evig is an **affordable-intelligence** platform — curated durable hardware, repair,
+and digital access at a fair price. Built with Next.js 16, TypeScript, and Tailwind.
 
 ## Architecture
 
