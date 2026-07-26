@@ -141,7 +141,7 @@
       "projectLinuxola": "Verein Linuxola",
       "projectLinuxolaDesc": "Linux 보급과 디지털 역량을 위한 파트너 협회.",
       "projectFreieComputer": "FreieComputer.ch",
-      "projectFreieComputerDesc": "비영리 용도의 자유 소프트웨어 재생 컴퓨터.",
+      "projectFreieComputerDesc": "자유 소프트웨어를 탑재한 리퍼비시 컴퓨터 — 모두가 누릴 수 있는 가격으로.",
       "projectCompirat": "Compirat",
       "projectCompiratDesc": "PC 재정비의 역사적 활동.",
       "sectionAllProjects": "모든 프로젝트",
@@ -307,8 +307,8 @@
     "irreversible": "이 작업은 취소할 수 없습니다."
   },
   "footer": {
-    "tagline": "오래된 하드웨어. 새로운 삶.",
-    "mission": "저희는 지속 가능한 기술을 위한 스위스 비영리 단체입니다.",
+    "tagline": "지능을, 모두가 누릴 수 있는 가격으로.",
+    "mission": "evig는 지능에 대한 접근을 누구나 누릴 수 있게 만듭니다 — 엄선된 기술, AI와 로보틱스, 공정한 수리, 그리고 순환형 마켓플레이스.",
     "navigation": "내비게이션",
     "services": "서비스",
     "community": "커뮤니티",
@@ -562,7 +562,7 @@
     },
     "section2": {
       "title": "2. Services",
-      "intro": "{orgName} is a non-profit association committed to the sustainable refurbishment and reuse of IT equipment. Our services include:",
+      "intro": "{orgName}는 지능에 대한 접근을 누구나 누릴 수 있게 만듭니다 — 엄선된 기술, 공정한 수리, 그리고 순환형 마켓플레이스. 당사의 서비스는 다음을 포함합니다:",
       "items": [
         "Refurbishment and sale of second-hand IT equipment",
         "IT repair services",
@@ -698,7 +698,7 @@
     "legalForm": "Legal Form",
     "legalFormValue": "Association under Art. 60 et seq. ZGB (Swiss Civil Code)",
     "purpose": "Purpose",
-    "purposeText": "{description} {orgName} is a non-profit association committed to the free exchange of technology, the promotion of open-source hardware and software, and the sustainable refurbishment and reuse of IT equipment.",
+    "purposeText": "{description} {orgName}는 지능에 대한 접근을 누구나 누릴 수 있게 만들며, 자유롭고 개방된 기술, 공정한 수리, 그리고 IT 기기를 순환 속에서 재사용하는 데 힘씁니다.",
     "disclaimer": "Disclaimer",
     "disclaimerP1": "The author accepts no liability whatsoever regarding the accuracy, correctness, currency, reliability and completeness of the information on this website.",
     "disclaimerP2": "Liability claims against the author for material or immaterial damage arising from access to or use or non-use of published information, from misuse of the connection or from technical malfunctions are excluded.",
@@ -775,9 +775,9 @@
     ],
     "finances": {
       "title": "Finances",
-      "body": "비영리 단체로서 재무 정보를 공개합니다. 연간 보고서는 총회에서 발표되며 회원이 열람할 수 있습니다.",
+      "body": "evig는 설립 준비 중입니다. 신뢰할 수 있는 재무 수치가 확보되는 대로 이곳에 공개하겠습니다.",
       "memberLink": "Become a member and gain access",
-      "text": "As a non-profit association, we make our finances public. The annual report is presented at the General Meeting and is available to members."
+      "text": "evig는 설립 준비 중입니다. 신뢰할 수 있는 재무 수치가 확보되는 대로 이곳에 공개하겠습니다."
     },
     "board": {
       "title": "Board",
@@ -2281,7 +2281,7 @@
       "transferNow": "지금 이체하기",
       "transparencyLabel": "투명성",
       "annualBudget": "CHF 60k",
-      "annualBudgetLabel": "연간 예산 (비영리 단체)",
+      "annualBudgetLabel": "연간 예산",
       "devicesSavedLabel": "연간 구조된 기기",
       "co2SavedLabel": "연간 절감",
       "impactTitle": "귀하의 기부가 하는 일",
@@ -2340,7 +2340,7 @@
   },
   "home": {
     "meta": {
-      "title": "오래된 하드웨어. 새로운 삶. | 스위스 컴퓨터 수리 & Linux",
+      "title": "evig — 지능을, 모두가 누릴 수 있는 가격으로 | 스위스의 기술·수리·리눅스",
       "description": "중고 IT 구매 & 판매. 커뮤니티 컴퓨터 수리. Linux, 하드웨어, 프로그래밍 워크숍."
     },
     "hero": {
@@ -2462,7 +2462,7 @@
       "right": {
         "eyebrow": "전달",
         "title": "필요한 사람들에게 전달합니다.",
-        "body": "단체, 학교, 예산이 부족한 사람들을 위해 재정비. 커뮤니티 내 직접 전달을 위한 마켓플레이스. 기부자에게는 기부 영수증 — 중개인 없음, 수수료 없음."
+        "body": "단체, 학교, 예산이 빠듯한 이들을 위한 리퍼비시. 커뮤니티 안에서 직접 전달하는 마켓플레이스 — 중개자 없이, 수수료 없이."
       }
     },
     "process": {
@@ -3183,7 +3183,7 @@
         "untested": "품질 검사를 생략함 — evig 검증 제품이 아닙니다",
         "untestedBadge": "evig · 미검사",
         "processLink": "품질 프로세스 보기",
-        "mission": "폐기 대신 재사용 — 비영리 협회",
+        "mission": "폐기하지 않고 재사용 — 순환 속으로.",
         "warranty": "{months}개월 보증",
         "returnPolicy": "온라인 구매 시 {days}일 이내 반품"
       },
@@ -8194,7 +8194,7 @@
       "title": "직접 돕기.",
       "body": "모든 기부는 전자 폐기물에서 기기를 구하고, 수명을 연장하며, 그렇지 않으면 감당할 수 없는 사람들이 기술에 접근할 수 있게 합니다.",
       "cta": "지금 이체하기",
-      "positioning": "기부 · 스위스 비영리단체 · 2003년부터",
+      "positioning": "후원 · 순환 경제 · 취리히",
       "titleSecondary": "즉시 효과적.",
       "lede": "모든 기부는 장치를 전자 폐기물에서 구해내고, 그렇지 않으면 살 수 없는 사람들에게 기술을 제공합니다.",
       "sublede": "계좌로 송금하거나 작업장에 장치를 가져오시면 — 둘 다 직접적인 도움이 됩니다.",
@@ -8204,7 +8204,7 @@
     "transparency": {
       "label": "투명성",
       "budgetValue": "CHF 60k",
-      "budgetLabel": "연간 예산 (비영리 단체)",
+      "budgetLabel": "연간 예산",
       "devicesLabel": "연간 구조된 기기",
       "co2Label": "연간 절감"
     },
@@ -8990,7 +8990,7 @@
       "emptyDesc": "evig에 대한 기부는 팀이 처리한 후 여기에 표시됩니다.",
       "donateNow": "지금 기부하기",
       "receiptInfoTitle": "기부 영수증 안내",
-      "receiptInfoText": "evig은 비영리 단체입니다. CHF 100 이상 기부 시 세금 신고용 기부 확인서를 발급해 드립니다. 문의:",
+      "receiptInfoText": "evig는 아직 설립 준비 중입니다. 후원 및 영수증에 관한 문의는 다음으로 연락해 주세요",
       "loadError": "기부 로드 오류",
       "networkError": "데이터 로드 중 네트워크 오류",
       "journey": {
@@ -9798,7 +9798,7 @@
     "missionStrip": {
       "ariaLabel": "저희의 임팩트",
       "anchor": "구매 하나가 기기 하나를 쓰레기에서 구합니다.",
-      "subAnchor": "저희는 2003 년부터 순환 경제를 위해 활동하는 스위스 비영리 단체입니다.",
+      "subAnchor": "지능의 시대를 위한 순환 경제.",
       "devicesRehomed": "전달된 기기",
       "co2Avoided": "CO₂ 절감량",
       "methodologyLink": "어떻게 계산했나요?",
@@ -9895,8 +9895,8 @@
   },
   "meta": {
     "meta": {},
-    "tagline": "오래된 하드웨어. 새로운 삶.",
-    "description": "{orgName}은(는) 지속 가능한 기술을 위한 스위스 비영리 단체입니다: 재건, 수리, 오픈 소스 솔루션 및 워크숍."
+    "tagline": "지능을, 모두가 누릴 수 있는 가격으로.",
+    "description": "{orgName}는 지능에 대한 접근을 누구나 누릴 수 있게 만듭니다: 엄선된 기술, AI와 로보틱스, 공정한 수리, 그리고 검증된 중고 기술을 위한 순환형 마켓플레이스."
   },
   "projectsMeta": {
     "title": "우리의 프로젝트",

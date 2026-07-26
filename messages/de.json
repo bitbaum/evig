@@ -139,7 +139,7 @@
       "projectLinuxola": "Verein Linuxola",
       "projectLinuxolaDesc": "Partnerverein für Linux-Förderung und Wissensvermittlung.",
       "projectFreieComputer": "FreieComputer.ch",
-      "projectFreieComputerDesc": "Refurbished Computer mit freier Software für gemeinnützige Zwecke.",
+      "projectFreieComputerDesc": "Refurbished Computer mit freier Software — bezahlbar für alle.",
       "projectCompirat": "Compirat",
       "projectCompiratDesc": "Historisches Projekt zur PC-Wiederaufbereitung.",
       "sectionAllProjects": "Alle Projekte",
@@ -307,8 +307,8 @@
     "irreversible": "Diese Aktion kann nicht rückgängig gemacht werden."
   },
   "footer": {
-    "tagline": "Alte Hardware. Neues Leben.",
-    "mission": "Wir sind ein Schweizer Non-Profit-Verein für nachhaltige Technologie.",
+    "tagline": "Intelligenz, für alle bezahlbar.",
+    "mission": "evig macht Zugang zu Intelligenz bezahlbar — kuratierte Technik, KI und Robotik, faire Reparatur und ein Kreislauf-Marktplatz.",
     "navigation": "Navigation",
     "services": "Dienstleistungen",
     "community": "Community",
@@ -335,7 +335,7 @@
   },
   "home": {
     "meta": {
-      "title": "Alte Hardware. Neues Leben. | Computer-Reparatur & Linux in der Schweiz",
+      "title": "evig — Intelligenz, für alle bezahlbar | Technik, Reparatur & Linux in der Schweiz",
       "description": "Refurbished IT kaufen, Marktplatz entdecken und Techniker oder Werkstätten für Reparaturen finden."
     },
     "hero": {
@@ -389,7 +389,7 @@
       "right": {
         "eyebrow": "WEITERGEBEN",
         "title": "Wir bringen sie zu denen, die sie brauchen.",
-        "body": "Refurbished an Vereine, Schulen, Menschen mit knappem Budget. Marktplatz für direkte Weitergabe in der Community. Spendenbescheinigung für Geberinnen — kein Mittelsmann, keine Gebühr."
+        "body": "Refurbished an Vereine, Schulen und Menschen mit knappem Budget. Marktplatz für direkte Weitergabe in der Community — kein Mittelsmann, keine Gebühr."
       }
     },
     "process": {
@@ -874,7 +874,7 @@
         "untested": "Nicht durch evig geprüft — kein Prüfsiegel",
         "untestedBadge": "evig · ungeprüft",
         "processLink": "So funktioniert unser Qualitätsprozess",
-        "mission": "Wiederverwendet statt entsorgt — Non-Profit-Verein",
+        "mission": "Wiederverwendet statt entsorgt — im Kreislauf.",
         "warranty": "{months} Monate Garantie",
         "returnPolicy": "{days} Tage Rückgaberecht bei Online-Kauf"
       },
@@ -4552,7 +4552,7 @@
       "transferNow": "Jetzt überweisen",
       "transparencyLabel": "Transparenz",
       "annualBudget": "CHF 60k",
-      "annualBudgetLabel": "Jahresbudget (gemeinnütziger Verein)",
+      "annualBudgetLabel": "Jahresbudget",
       "devicesSavedLabel": "Geräte jährlich gerettet",
       "co2SavedLabel": "eingespart pro Jahr",
       "impactTitle": "Was deine Spende bewirkt",
@@ -4684,7 +4684,7 @@
     },
     "section2": {
       "title": "2. Leistungen",
-      "intro": "{orgName} ist ein gemeinnütziger Verein, der sich für die nachhaltige Aufarbeitung und Weiterverwendung von IT-Geräten einsetzt. Unsere Leistungen umfassen:",
+      "intro": "{orgName} macht Zugang zu Intelligenz bezahlbar — kuratierte Technik, faire Reparatur und einen Kreislauf-Marktplatz. Unsere Leistungen umfassen:",
       "items": [
         "Aufarbeitung und Verkauf gebrauchter IT-Geräte",
         "IT-Reparaturdienstleistungen",
@@ -4820,7 +4820,7 @@
     "legalForm": "Rechtsform",
     "legalFormValue": "Verein nach Art. 60 ff. ZGB (Schweizerisches Zivilgesetzbuch)",
     "purpose": "Zweck",
-    "purposeText": "{description} {orgName} ist ein gemeinnütziger Verein, der sich für den freien Austausch von Technologie, die Förderung von Open-Source-Hardware und -Software sowie die nachhaltige Aufarbeitung und Wiederverwendung von IT-Geräten einsetzt.",
+    "purposeText": "{description} {orgName} macht Zugang zu Intelligenz bezahlbar und setzt sich für freie, offene Technologie, faire Reparatur und die Wiederverwendung von IT-Geräten im Kreislauf ein.",
     "disclaimer": "Haftungsausschluss",
     "disclaimerP1": "Der Autor übernimmt keinerlei Gewähr hinsichtlich der inhaltlichen Richtigkeit, Genauigkeit, Aktualität, Zuverlässigkeit und Vollständigkeit der Informationen auf dieser Website.",
     "disclaimerP2": "Haftungsansprüche gegen den Autor wegen Schäden materieller oder immaterieller Art, welche aus dem Zugriff oder der Nutzung beziehungsweise Nichtnutzung der veröffentlichten Informationen, durch Missbrauch der Verbindung oder durch technische Störungen entstanden sind, werden ausgeschlossen.",
@@ -4934,9 +4934,9 @@
     ],
     "finances": {
       "title": "Finanzen",
-      "body": "Als gemeinnütziger Verein legen wir unsere Finanzen offen. Der Jahresbericht wird an der Generalversammlung präsentiert und ist für Mitglieder einsehbar.",
+      "body": "evig befindet sich in Gründung. Sobald belastbare Finanzzahlen vorliegen, legen wir sie hier offen.",
       "memberLink": "Mitglied werden und Einblick erhalten",
-      "text": "Als gemeinnütziger Verein legen wir unsere Finanzen offen. Der Jahresbericht wird an der Generalversammlung präsentiert und ist für Mitglieder einsehbar."
+      "text": "evig befindet sich in Gründung. Sobald belastbare Finanzzahlen vorliegen, legen wir sie hier offen."
     },
     "board": {
       "title": "Vorstand",
@@ -8238,7 +8238,7 @@
       "description": "Direkt helfen. Jede Spende rettet Geräte vor dem Elektroschrott und macht Technologie für alle zugänglich."
     },
     "hero": {
-      "positioning": "Spenden · Schweizer Non-Profit · seit 2003",
+      "positioning": "Unterstützen · Kreislaufwirtschaft · Zürich",
       "title": "Direkt helfen.",
       "titleSecondary": "Sofort wirksam.",
       "lede": "Jede Spende rettet Geräte vor dem Elektroschrott und ermöglicht Technologie für Menschen, die sich das sonst nicht leisten können.",
@@ -8263,7 +8263,7 @@
     "transparency": {
       "label": "Transparenz",
       "budgetValue": "CHF 60k",
-      "budgetLabel": "Jahresbudget (gemeinnütziger Verein)",
+      "budgetLabel": "Jahresbudget",
       "devicesLabel": "Geräte jährlich gerettet",
       "co2Label": "eingespart pro Jahr"
     },
@@ -9054,7 +9054,7 @@
       "emptyDesc": "Deine Spenden an evig werden hier angezeigt, sobald sie von unserem Team erfasst wurden.",
       "donateNow": "Jetzt spenden",
       "receiptInfoTitle": "Hinweis zu Spendenquittungen",
-      "receiptInfoText": "evig ist ein gemeinnütziger Verein. Für Spenden ab CHF 100 stellen wir dir gerne eine Spendenbestätigung für die Steuererklärung aus. Kontaktiere uns unter",
+      "receiptInfoText": "evig befindet sich noch in Gründung. Für Fragen zu Spenden und Belegen kontaktiere uns unter",
       "loadError": "Fehler beim Laden der Spenden",
       "networkError": "Netzwerkfehler beim Laden der Daten",
       "journey": {
@@ -9862,7 +9862,7 @@
     "missionStrip": {
       "ariaLabel": "Unsere Wirkung",
       "anchor": "Jeder Kauf hält ein Gerät aus dem Müll.",
-      "subAnchor": "Wir sind ein Schweizer Non-Profit für Kreislaufwirtschaft seit 2003.",
+      "subAnchor": "Kreislaufwirtschaft für das Zeitalter der Intelligenz.",
       "devicesRehomed": "Geräte weitergegeben",
       "co2Avoided": "CO₂ vermieden",
       "methodologyLink": "Wie berechnet?",
@@ -9978,8 +9978,8 @@
   },
   "meta": {
     "meta": {},
-    "tagline": "Alte Hardware. Neues Leben.",
-    "description": "{orgName} ist ein Schweizer Non-Profit-Verein für nachhaltige Technologie: Aufarbeitung, Reparatur, Open-Source-Lösungen und Workshops."
+    "tagline": "Intelligenz, für alle bezahlbar.",
+    "description": "{orgName} macht Zugang zu Intelligenz bezahlbar: kuratierte Technik, KI und Robotik, faire Reparatur und ein Kreislauf-Marktplatz für geprüfte gebrauchte Technik."
   },
   "projectsMeta": {
     "title": "Unsere Projekte",

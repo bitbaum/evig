@@ -180,7 +180,7 @@
       "projectLinuxola": "Verein Linuxola",
       "projectLinuxolaDesc": "Association partenaire pour la promotion de Linux et des compétences numériques.",
       "projectFreieComputer": "FreieComputer.ch",
-      "projectFreieComputerDesc": "Ordinateurs reconditionnés avec logiciels libres à usage associatif.",
+      "projectFreieComputerDesc": "Ordinateurs reconditionnés avec des logiciels libres — abordables pour tous.",
       "projectCompirat": "Compirat",
       "projectCompiratDesc": "Initiative historique de remise à neuf de PC.",
       "sectionAllProjects": "Tous les projets",
@@ -307,8 +307,8 @@
     "irreversible": "Cette action ne peut pas être annulée."
   },
   "footer": {
-    "tagline": "Vieux matériel. Nouvelle vie.",
-    "mission": "Nous sommes une association à but non lucratif suisse dédiée à la technologie durable.",
+    "tagline": "L'intelligence, abordable pour tous.",
+    "mission": "evig rend l'accès à l'intelligence abordable : technique sélectionnée, IA et robotique, réparation équitable et une place de marché circulaire.",
     "navigation": "Navigation",
     "services": "Services",
     "community": "Communauté",
@@ -335,7 +335,7 @@
   },
   "home": {
     "meta": {
-      "title": "Vieux matériel. Nouvelle vie. | Réparation informatique & Linux en Suisse",
+      "title": "evig — L'intelligence, abordable pour tous | Technique, réparation et Linux en Suisse",
       "description": "Acheter & vendre du matériel informatique d'occasion. Réparation par la communauté. Ateliers Linux, hardware et programmation."
     },
     "hero": {
@@ -457,7 +457,7 @@
       "right": {
         "eyebrow": "TRANSMETTRE",
         "title": "Nous les apportons à ceux qui en ont besoin.",
-        "body": "Reconditionnés pour associations, écoles, personnes à budget serré. Marché pour le don direct dans la communauté. Reçu fiscal pour les donateurs — pas d'intermédiaire, pas de frais."
+        "body": "Reconditionné pour les associations, les écoles et les personnes au budget serré. Une place de marché pour la transmission directe au sein de la communauté — sans intermédiaire, sans frais."
       }
     },
     "process": {
@@ -850,7 +850,7 @@
         "untested": "Contrôle qualité ignoré — cet article n'est pas vérifié par evig",
         "untestedBadge": "evig · non testé",
         "processLink": "Découvrir notre processus qualité",
-        "mission": "Réemployé plutôt que jeté — association à but non lucratif",
+        "mission": "Réutilisé, pas jeté — dans le cycle.",
         "warranty": "Garantie de {months} mois",
         "returnPolicy": "Retour sous {days} jours pour les achats en ligne"
       },
@@ -4726,7 +4726,7 @@
       "transferNow": "Virer maintenant",
       "transparencyLabel": "Transparence",
       "annualBudget": "CHF 60k",
-      "annualBudgetLabel": "Budget annuel (association à but non lucratif)",
+      "annualBudgetLabel": "Budget annuel",
       "devicesSavedLabel": "appareils sauvés chaque année",
       "co2SavedLabel": "économisés par an",
       "impactTitle": "L'impact de votre don",
@@ -5009,7 +5009,7 @@
     },
     "section2": {
       "title": "2. Prestations",
-      "intro": "{orgName} est une association à but non lucratif qui s'engage en faveur du reconditionnement durable et de la réutilisation des équipements informatiques. Nos prestations comprennent :",
+      "intro": "{orgName} rend l'accès à l'intelligence abordable : technique sélectionnée, réparation équitable et une place de marché circulaire. Nos prestations comprennent :",
       "items": [
         "Reconditionnement et vente d'équipements informatiques d'occasion",
         "Services de réparation informatique",
@@ -5145,7 +5145,7 @@
     "legalForm": "Forme juridique",
     "legalFormValue": "Association selon les art. 60 ss CC (Code civil suisse)",
     "purpose": "Objet",
-    "purposeText": "{description} {orgName} est une association à but non lucratif qui s'engage en faveur de l'échange libre de technologie, la promotion du matériel et des logiciels open source ainsi que le reconditionnement durable et la réutilisation des équipements informatiques.",
+    "purposeText": "{description} {orgName} rend l'accès à l'intelligence abordable et s'engage pour une technologie libre et ouverte, une réparation équitable et la réutilisation des appareils informatiques dans le cycle.",
     "disclaimer": "Clause de non-responsabilité",
     "disclaimerP1": "L'auteur ne donne aucune garantie quant à l'exactitude, la précision, l'actualité, la fiabilité et l'exhaustivité des informations contenues sur ce site web.",
     "disclaimerP2": "Toute responsabilité de l'auteur pour des dommages matériels ou immatériels résultant de l'accès ou de l'utilisation ou de la non-utilisation des informations publiées, d'un usage abusif de la connexion ou de perturbations techniques est exclue.",
@@ -5222,9 +5222,9 @@
     ],
     "finances": {
       "title": "Finances",
-      "body": "En tant qu'association à but non lucratif, nous divulguons nos finances. Le rapport annuel est présenté lors de l'assemblée générale et est accessible aux membres.",
+      "body": "evig est en cours de constitution. Dès que des chiffres financiers fiables seront disponibles, nous les publierons ici.",
       "memberLink": "Devenir membre et obtenir un accès",
-      "text": "En tant qu'association à but non lucratif, nous rendons nos finances publiques. Le rapport annuel est présenté à l'assemblée générale et consultable par les membres."
+      "text": "evig est en cours de constitution. Dès que des chiffres financiers fiables seront disponibles, nous les publierons ici."
     },
     "board": {
       "title": "Comité directeur",
@@ -8194,7 +8194,7 @@
       "title": "Aider directement.",
       "body": "Chaque don sauve des appareils des déchets électroniques, prolonge les cycles de vie et permet à des personnes qui ne pourraient autrement pas se le permettre d'accéder à la technologie.",
       "cta": "Virer maintenant",
-      "positioning": "Dons · Association suisse à but non lucratif · depuis 2003",
+      "positioning": "Soutenir · Économie circulaire · Zurich",
       "titleSecondary": "Immédiatement efficace.",
       "lede": "Chaque don sauve des appareils du gaspillage électronique et offre la technologie à ceux qui ne pourraient pas se le permettre.",
       "sublede": "Argent sur notre compte ou appareil à notre atelier — les deux aident directement.",
@@ -8204,7 +8204,7 @@
     "transparency": {
       "label": "Transparence",
       "budgetValue": "CHF 60k",
-      "budgetLabel": "Budget annuel (association à but non lucratif)",
+      "budgetLabel": "Budget annuel",
       "devicesLabel": "Appareils sauvés annuellement",
       "co2Label": "économisés par an"
     },
@@ -8990,7 +8990,7 @@
       "emptyDesc": "Vos dons à evig apparaîtront ici une fois traités par notre équipe.",
       "donateNow": "Faire un don maintenant",
       "receiptInfoTitle": "Note sur les reçus de dons",
-      "receiptInfoText": "evig est une association à but non lucratif. Pour les dons de CHF 100 ou plus, nous fournissons une confirmation de don pour votre déclaration d'impôts. Contactez-nous à",
+      "receiptInfoText": "evig est encore en cours de constitution. Pour toute question sur les contributions et les reçus, contactez-nous à",
       "loadError": "Erreur de chargement des dons",
       "networkError": "Erreur réseau lors du chargement",
       "journey": {
@@ -9798,7 +9798,7 @@
     "missionStrip": {
       "ariaLabel": "Notre impact",
       "anchor": "Chaque achat empêche un appareil de finir à la poubelle.",
-      "subAnchor": "Nous sommes une association suisse à but non lucratif pour l'économie circulaire depuis 2003.",
+      "subAnchor": "Une économie circulaire pour l'ère de l'intelligence.",
       "devicesRehomed": "Appareils transmis",
       "co2Avoided": "CO₂ évité",
       "methodologyLink": "Comment est-ce calculé ?",
@@ -9895,8 +9895,8 @@
   },
   "meta": {
     "meta": {},
-    "tagline": "Vieux matériel. Nouvelle vie.",
-    "description": "{orgName} est une association suisse à but non lucratif pour la technologie durable : remise à neuf, réparation, solutions open source et ateliers."
+    "tagline": "L'intelligence, abordable pour tous.",
+    "description": "{orgName} rend l'accès à l'intelligence abordable : technique sélectionnée, IA et robotique, réparation équitable et une place de marché circulaire pour du matériel d'occasion contrôlé."
   },
   "projectsMeta": {
     "title": "Nos projets",

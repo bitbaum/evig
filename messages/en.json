@@ -172,7 +172,7 @@
       "projectLinuxola": "Verein Linuxola",
       "projectLinuxolaDesc": "Partner association promoting Linux and digital skills.",
       "projectFreieComputer": "FreieComputer.ch",
-      "projectFreieComputerDesc": "Refurbished computers with free software for non-profit use.",
+      "projectFreieComputerDesc": "Refurbished computers with free software — affordable for everyone.",
       "projectCompirat": "Compirat",
       "projectCompiratDesc": "Historical PC refurbishing initiative.",
       "sectionAllProjects": "All projects",
@@ -307,8 +307,8 @@
     "irreversible": "This action cannot be undone."
   },
   "footer": {
-    "tagline": "Old hardware. New life.",
-    "mission": "We are a Swiss non-profit association dedicated to sustainable technology.",
+    "tagline": "Intelligence, affordable for everyone.",
+    "mission": "evig makes access to intelligence affordable — curated tech, AI and robotics, fair repair, and a circular marketplace.",
     "navigation": "Navigation",
     "services": "Services",
     "community": "Community",
@@ -335,7 +335,7 @@
   },
   "home": {
     "meta": {
-      "title": "Old Hardware. New Life. | Computer Repair & Linux in Switzerland",
+      "title": "evig — Intelligence, affordable for everyone | Tech, repair & Linux in Switzerland",
       "description": "Buy refurbished IT, browse community listings, and find technicians or repair shops for repairs."
     },
     "hero": {
@@ -457,7 +457,7 @@
       "right": {
         "eyebrow": "PASS ON",
         "title": "We bring them to people who need them.",
-        "body": "Refurbished for associations, schools, people on tight budgets. Marketplace for direct community handover. Donation receipt for givers — no middleman, no fee."
+        "body": "Refurbished for associations, schools, and people on a tight budget. A marketplace for passing tech on directly within the community — no middleman, no fee."
       }
     },
     "process": {
@@ -850,7 +850,7 @@
         "untested": "Quality control was skipped — this item is not evig verified",
         "untestedBadge": "evig · untested",
         "processLink": "See how our quality process works",
-        "mission": "Reused, not discarded — non-profit association",
+        "mission": "Reused, not discarded — kept in the loop.",
         "warranty": "{months}-month warranty",
         "returnPolicy": "{days}-day return period for online purchases"
       },
@@ -4725,7 +4725,7 @@
       "transferNow": "Transfer now",
       "transparencyLabel": "Transparency",
       "annualBudget": "CHF 60k",
-      "annualBudgetLabel": "Annual budget (non-profit association)",
+      "annualBudgetLabel": "Annual budget",
       "devicesSavedLabel": "devices saved annually",
       "co2SavedLabel": "saved per year",
       "impactTitle": "What your donation achieves",
@@ -4955,7 +4955,7 @@
     },
     "section2": {
       "title": "2. Services",
-      "intro": "{orgName} is a non-profit association committed to the sustainable refurbishment and reuse of IT equipment. Our services include:",
+      "intro": "{orgName} makes access to intelligence affordable — curated tech, fair repair, and a circular marketplace. Our services include:",
       "items": [
         "Refurbishment and sale of second-hand IT equipment",
         "IT repair services",
@@ -5091,7 +5091,7 @@
     "legalForm": "Legal Form",
     "legalFormValue": "Association under Art. 60 et seq. ZGB (Swiss Civil Code)",
     "purpose": "Purpose",
-    "purposeText": "{description} {orgName} is a non-profit association committed to the free exchange of technology, the promotion of open-source hardware and software, and the sustainable refurbishment and reuse of IT equipment.",
+    "purposeText": "{description} {orgName} makes access to intelligence affordable and champions free, open technology, fair repair, and keeping IT devices in circulation through reuse.",
     "disclaimer": "Disclaimer",
     "disclaimerP1": "The author accepts no liability whatsoever regarding the accuracy, correctness, currency, reliability and completeness of the information on this website.",
     "disclaimerP2": "Liability claims against the author for material or immaterial damage arising from access to or use or non-use of published information, from misuse of the connection or from technical malfunctions are excluded.",
@@ -5168,9 +5168,9 @@
     ],
     "finances": {
       "title": "Finances",
-      "body": "As a non-profit association, we disclose our finances. The annual report is presented at the general assembly and is available to members.",
+      "body": "evig is in formation. As soon as reliable financial figures are available, we will disclose them here.",
       "memberLink": "Become a member and gain access",
-      "text": "As a non-profit association, we make our finances public. The annual report is presented at the General Meeting and is available to members."
+      "text": "evig is in formation. As soon as reliable financial figures are available, we will disclose them here."
     },
     "board": {
       "title": "Board",
@@ -8193,7 +8193,7 @@
       "title": "Help directly.",
       "body": "Every donation rescues devices from e-waste, extends lifecycles and enables technology for people who couldn't otherwise afford it.",
       "cta": "Transfer now",
-      "positioning": "Donate · Swiss non-profit · since 2003",
+      "positioning": "Support · Circular economy · Zürich",
       "titleSecondary": "Immediately effective.",
       "lede": "Every donation rescues devices from e-waste and gives technology to people who otherwise could not afford it.",
       "sublede": "Money to our account or a device to our workshop — both help directly.",
@@ -8203,7 +8203,7 @@
     "transparency": {
       "label": "Transparency",
       "budgetValue": "CHF 60k",
-      "budgetLabel": "Annual budget (non-profit association)",
+      "budgetLabel": "Annual budget",
       "devicesLabel": "Devices rescued annually",
       "co2Label": "saved per year"
     },
@@ -8989,7 +8989,7 @@
       "emptyDesc": "Your donations to evig will appear here once processed by our team.",
       "donateNow": "Donate now",
       "receiptInfoTitle": "Note on donation receipts",
-      "receiptInfoText": "evig is a non-profit association. For donations of CHF 100 or more, we are happy to issue a donation confirmation for your tax return. Contact us at",
+      "receiptInfoText": "evig is still in formation. For questions about contributions and receipts, contact us at",
       "loadError": "Error loading donations",
       "networkError": "Network error loading data",
       "journey": {
@@ -9797,7 +9797,7 @@
     "missionStrip": {
       "ariaLabel": "Our impact",
       "anchor": "Every purchase keeps a device out of landfill.",
-      "subAnchor": "A Swiss circular-economy nonprofit since 2003.",
+      "subAnchor": "Circular economy for the age of intelligence.",
       "devicesRehomed": "devices rehomed",
       "co2Avoided": "CO₂ avoided",
       "methodologyLink": "How is this calculated?",
@@ -9894,8 +9894,8 @@
   },
   "meta": {
     "meta": {},
-    "tagline": "Old Hardware. New Life.",
-    "description": "{orgName} is a Swiss non-profit for sustainable technology: refurbishment, repair, open-source solutions and workshops."
+    "tagline": "Intelligence, affordable for everyone.",
+    "description": "{orgName} makes access to intelligence affordable: curated tech, AI and robotics, fair repair, and a circular marketplace for tested pre-owned tech."
   },
   "projectsMeta": {
     "title": "Our Projects",
