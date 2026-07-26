@@ -49,7 +49,6 @@ const STATIC_PAGES: Array<{ path: string; priority: number; changeFrequency: Met
   { path: '/get-involved/kontakt',                    priority: 0.6, changeFrequency: 'monthly' },
   { path: R.mitgliedWerden,                           priority: 0.7, changeFrequency: 'monthly' },
   { path: '/abos',                                    priority: 0.6, changeFrequency: 'monthly' },
-  { path: '/projects',                                priority: 0.6, changeFrequency: 'monthly' },
   { path: '/revamped',                                priority: 0.6, changeFrequency: 'monthly' },
   { path: '/knowhow',                                 priority: 0.6, changeFrequency: 'monthly' },
   { path: '/contact',                                 priority: 0.6, changeFrequency: 'monthly' },

@@ -34,18 +34,13 @@ export interface NavigationItem {
 /**
  * Main navigation structure
  *
- * Strategic positioning (7 top-level items):
+ * Strategic positioning (6 top-level items):
  * 1. Über uns       - About, mission, history (identity)
- * 2. Projekte       - Mission proof — what we've built. Direct link, no dropdown.
- * 3. Dienstleistungen - Professional services (B2C)
- * 4. Marktplatz     - ALL customer-facing buy/sell/help: Shop + Marketplace + IT-Hilfe
- * 5. Lernen         - Workshops, guides, blog
- * 6. Mitmachen      - Volunteer, donate, partner
- * 7. Kontakt        - CTA (highlighted)
- *
- * Why 7 (not 6): "Projekte" became its own top-level entry because projects ARE the mission
- * proof — burying them under Über uns hid the work. Direct links don't add dropdown
- * cognitive load, so the extra slot is cheap.
+ * 2. Dienstleistungen - Professional services (B2C)
+ * 3. Marktplatz     - ALL customer-facing buy/sell/help: Shop + Marketplace + IT-Hilfe
+ * 4. Lernen         - Workshops, guides, blog
+ * 5. Mitmachen      - Volunteer, donate, partner
+ * 6. Kontakt        - CTA (highlighted)
  *
  * Key decision: Shop + Marketplace (P2P) + IT-Hilfe live together under "Marktplatz" because
  * a customer looking for tech or help doesn't care about the organizational boundary between
@@ -94,37 +89,6 @@ export const mainNavigation: NavigationItem[] = [
         nameKey: 'faq',
         href: '/faq',
         descriptionKey: 'faqDesc',
-      },
-    ],
-  },
-  {
-    // The dropdown shows only the two flagship projects + "Alle Projekte";
-    // the long tail (LTSP, Kivitendo, Linuxola, FreieComputer, Compirat) stays
-    // fully reachable on /projects, but doesn't bloat the mega-menu. Keeping
-    // Projekte top-level (not under Über uns) because projects ARE the mission
-    // proof — see the header note above.
-    name: 'Projekte',
-    nameKey: 'projects',
-    href: '/projects',
-    descriptionKey: 'projectsDesc',
-    subItems: [
-      {
-        name: 'Monitor-Upcycling',
-        nameKey: 'projectMonitorUpcycling',
-        href: '/projects/upcycling',
-        descriptionKey: 'projectMonitorUpcyclingDesc',
-        badge: 'new',
-      },
-      {
-        name: 'Hardware-Entwicklung',
-        nameKey: 'projectHardware',
-        href: '/projects/hardware',
-        descriptionKey: 'projectHardwareDesc',
-      },
-      {
-        name: 'Alle Projekte',
-        nameKey: 'sectionAllProjects',
-        href: '/projects',
       },
     ],
   },

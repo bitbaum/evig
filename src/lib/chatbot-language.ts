@@ -27,7 +27,6 @@ export const chatbotMessages: Record<Language, ChatbotMessages> = {
       '/': 'Hallo! Ich bin dein persönlicher evig Assistent. Wie kann ich dir heute helfen, unsere nachhaltigen IT-Lösungen zu entdecken?',
       '/about': 'Du bist auf unserer "Über uns" Seite! Möchtest du mehr über unsere Mission erfahren oder zu anderen Bereichen navigieren?',
       '/services': 'Perfekt! Du schaust dir unsere Dienstleistungen an. Suchst du etwas Bestimmtes oder brauchst du Hilfe bei der Auswahl?',
-      '/projects': 'Interessant! Du entdeckst unsere Projekte. Möchtest du mehr über ein spezielles Projekt erfahren oder andere Bereiche erkunden?',
       '/workshops': 'Du interessierst dich für unsere Workshops! Suchst du nach bestimmten Kursen oder hast du Fragen zu unserem Bildungsangebot?',
       '/get-involved': 'Fantastisch, dass du dich engagieren möchtest! Wie kannst du am besten bei evig mitmachen?',
       '/contact': 'Du bist auf unserer Kontaktseite. Brauchst du Hilfe dabei, den richtigen Ansprechpartner zu finden?',
@@ -51,7 +50,6 @@ export const chatbotMessages: Record<Language, ChatbotMessages> = {
       '/': 'Hello! I\'m your personal evig assistant. How can I help you discover our sustainable IT solutions today?',
       '/about': 'You\'re on our "About us" page! Would you like to learn more about our mission or navigate to other areas?',
       '/services': 'Perfect! You\'re looking at our services. Are you looking for something specific or do you need help choosing?',
-      '/projects': 'Interesting! You\'re exploring our projects. Would you like to learn more about a specific project or explore other areas?',
       '/workshops': 'You\'re interested in our workshops! Are you looking for specific courses or do you have questions about our educational offerings?',
       '/get-involved': 'Fantastic that you want to get involved! How can you best participate with evig?',
       '/contact': 'You\'re on our contact page. Do you need help finding the right contact person?',
@@ -140,13 +138,11 @@ export function getContextualSuggestions(page: string, language: Language) {
     '/about': language === 'de' ? [
       { label: '🏷️ REVAMPED-Zertifizierung', href: '/revamped', description: 'Unsere nachhaltige Computer-Zertifizierung' },
       { label: '📚 Wiki besuchen', href: EXTERNAL_LINKS.wiki, description: 'Unser Wissensportal', external: true },
-      { label: '🔧 Dienstleistungen ansehen', href: '/services', description: 'Was wir für dich tun können' },
-      { label: '💼 Projekte entdecken', href: '/projects', description: 'Unsere aktuellen Initiativen' }
+      { label: '🔧 Dienstleistungen ansehen', href: '/services', description: 'Was wir für dich tun können' }
     ] : [
       { label: '🏷️ REVAMPED Certification', href: '/revamped', description: 'Our sustainable computer certification' },
       { label: '📚 Visit Wiki', href: EXTERNAL_LINKS.wiki, description: 'Our knowledge portal', external: true },
-      { label: '🔧 View Services', href: '/services', description: 'What we can do for you' },
-      { label: '💼 Discover Projects', href: '/projects', description: 'Our current initiatives' }
+      { label: '🔧 View Services', href: '/services', description: 'What we can do for you' }
     ],
     
     '/services': language === 'de' ? [

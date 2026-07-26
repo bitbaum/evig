@@ -179,17 +179,6 @@ export const PUBLIC_PAGE_CONTEXTS: HirnPageContext[] = [
     ],
   },
   {
-    pattern: /^\/projects\/upcycling/,
-    area: 'projects-upcycling',
-    description:
-      'Die Nutzerin schaut sich das Upcycling-Projekt an: Aus defekten Monitoren werden Leuchten und andere Produkte — funktionelle Kreislaufnutzung von IT-Geräten.',
-    suggestions: [
-      'Wie entstehen die Upcycling-Leuchten?',
-      'Kann ich eine Leuchte kaufen oder selber bauen?',
-    ],
-    quickActions: [{ label: 'Alle Projekte', href: '/projects' }],
-  },
-  {
     pattern: /^\/dashboard\/listings/,
     area: 'dashboard-listings',
     description:

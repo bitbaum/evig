@@ -56,11 +56,6 @@ export const CO2_SOURCES = {
     url: 'https://www.refurbed.ch/sustainability/',
     year: 2024,
   },
-  zhaw: {
-    name: 'ZHAW Institut für Nachhaltige Entwicklung: LCA Upcycling-Projekt RevampIT (VORLÄUFIG)',
-    url: '/projects/upcycling/wirkung',
-    year: 2026,
-  },
 } as const satisfies Record<string, Co2Source>
 
 /**
