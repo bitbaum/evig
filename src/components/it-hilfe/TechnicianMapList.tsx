@@ -15,13 +15,10 @@ import { apiFetch } from '@/lib/api/client'
 import {
   Sparkles,
   TrendingUp,
-  MapPin,
   Award,
-  ExternalLink,
-  Store,
 } from 'lucide-react'
 import { logger } from '@/lib/logger'
-import { getSkillById, REVAMPIT_STORE } from '@/config/it-hilfe'
+import { getSkillById } from '@/config/it-hilfe'
 import { getCantonCoordinates } from '@/config/canton-coordinates'
 import type { MapMarker } from '@/components/map/LeafletMap'
 import { TechnicianMatchCard } from './TechnicianMatchCard'
@@ -99,16 +96,6 @@ export function TechnicianMapList({ requestId, requestTitle, requestCanton }: Te
   // Build map markers
   const markers: MapMarker[] = []
 
-  // Always add RevampIT store marker
-  markers.push({
-    id: 'revampit-store',
-    lat: REVAMPIT_STORE.lat,
-    lng: REVAMPIT_STORE.lng,
-    label: REVAMPIT_STORE.name,
-    description: `${REVAMPIT_STORE.address}, ${REVAMPIT_STORE.postalCode} ${REVAMPIT_STORE.city}`,
-    type: 'store',
-  })
-
   // Add helper markers (use canton coordinates as approximation)
   // Deterministic offset from userId to avoid overlap without re-render jitter
   for (const helper of matches) {
@@ -170,30 +157,6 @@ export function TechnicianMapList({ requestId, requestTitle, requestCanton }: Te
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Left: List */}
         <div className="space-y-4 order-1 lg:order-1">
-          {/* RevampIT Store Card - Always visible */}
-          <div className="bg-surface-raised border-2 border-strong dark:border-action/30 rounded-xl p-5">
-            <div className="flex items-center gap-2 mb-2">
-              <Store className="w-5 h-5 text-action" />
-              <Heading level={4} className="font-semibold text-text-primary">{REVAMPIT_STORE.name}</Heading>
-            </div>
-            <p className="text-sm text-text-secondary mb-2">
-              {REVAMPIT_STORE.description}
-            </p>
-            <div className="flex items-center gap-2 text-sm text-text-secondary mb-3">
-              <MapPin className="w-4 h-4" />
-              <span>{REVAMPIT_STORE.address}, {REVAMPIT_STORE.postalCode} {REVAMPIT_STORE.city}</span>
-            </div>
-            <a
-              href={REVAMPIT_STORE.googleMapsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-sm text-action hover:text-action font-medium"
-            >
-              {t('planRoute')}
-              <ExternalLink className="w-3 h-3" />
-            </a>
-          </div>
-
           {/* Community Helpers */}
           {topMatches.length > 0 ? (
             <>

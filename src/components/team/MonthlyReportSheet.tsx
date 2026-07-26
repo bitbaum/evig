@@ -11,7 +11,7 @@ import { getTimecardMonthLabel } from '@/lib/team/timecard-period-label'
 import { getDisplayDate } from '@/lib/team/timecard-utils'
 import { SCHEDULE_FILL_DESCRIPTION } from '@/lib/team/schedule'
 import { formatTimecardDuration, getTimecardEntryCategoryLabel, getTimecardStatusLabel, isAbsenceCategory } from '@/config/timecards'
-import { ORG, LOCATIONS } from '@/config/org'
+import { ORG, BASE_REGION } from '@/config/org'
 import type { MonthlyReport } from '@/lib/services/report'
 
 export function MonthlyReportSheet({ report }: { report: MonthlyReport }) {
@@ -46,7 +46,7 @@ export function MonthlyReportSheet({ report }: { report: MonthlyReport }) {
       <header className="border-b-2 border-neutral-900 pb-4 print:border-black">
         <div className="flex items-baseline justify-between gap-4">
           <h1 className="text-2xl font-bold text-text-primary">{ORG.name}</h1>
-          <p className="text-sm text-text-secondary">{LOCATIONS.store.full}</p>
+          <p className="text-sm text-text-secondary">{BASE_REGION.full}</p>
         </div>
         <p className="mt-2 text-lg font-semibold text-text-primary">
           Monatsrapport Arbeitszeit — {monthLabel}

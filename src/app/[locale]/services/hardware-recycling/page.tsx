@@ -14,12 +14,10 @@ import {
   Truck,
   CheckCircle2,
   Leaf,
-  MapPin,
-  Phone,
-  Clock
+  Mail
 } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
-import { ORG, CONTACT, LOCATIONS, OPENING_HOURS } from '@/config/org'
+import { ORG, CONTACT, BASE_REGION } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
 import { safeJsonLd } from '@/lib/seo/json-ld'
 
@@ -71,7 +69,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
             'serviceType': 'IT Equipment Recycling',
             'areaServed': {
               '@type': 'City',
-              'name': LOCATIONS.store.city
+              'name': BASE_REGION.city
             },
             'offers': {
               '@type': 'Offer',
@@ -192,34 +190,17 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-                <div className="bg-surface-base rounded-xl p-6 sm:p-8 border">
-                  <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-action mb-3 sm:mb-4" />
-                  <Heading level={3} className="mb-3 sm:mb-4">{t('contact.locations')}</Heading>
-                  <div className="space-y-2 sm:space-y-3 text-sm sm:text-base text-text-secondary">
-                    <p><strong>{t('contact.store')}:</strong><br />{LOCATIONS.store.full}</p>
-                    <p><strong>{t('contact.warehouse')}:</strong><br />{LOCATIONS.warehouse.full}<br />{LOCATIONS.warehouse.note}</p>
-                  </div>
-                </div>
-
-                <div className="bg-surface-base rounded-xl p-6 sm:p-8 border">
-                  <div className="mb-4 sm:mb-6">
-                    <Phone className="w-6 h-6 sm:w-8 sm:h-8 text-action mb-3 sm:mb-4" />
-                    <Heading level={3} className="mb-3 sm:mb-4">{t('contact.contactInfo')}</Heading>
-                    <p className="text-sm sm:text-base text-text-secondary">
-                      <strong>{t('contact.phone')}:</strong><br />
-                      {CONTACT.phone}
-                    </p>
-                  </div>
-
-                  <div>
-                    <Clock className="w-6 h-6 sm:w-8 sm:h-8 text-action mb-3 sm:mb-4" />
-                    <Heading level={3} className="mb-3 sm:mb-4">{t('contact.hours')}</Heading>
-                    <div className="text-sm sm:text-base text-text-secondary space-y-1">
-                      <p>{t('contact.monday')}: {OPENING_HOURS.monday}</p>
-                      <p>{t('contact.weekdays')}: {OPENING_HOURS.tuesdayToFriday}</p>
-                    </div>
-                  </div>
+              <div className="mx-auto max-w-md">
+                <div className="bg-surface-base rounded-xl p-6 sm:p-8 border text-center">
+                  <Mail className="w-6 h-6 sm:w-8 sm:h-8 text-action mb-3 sm:mb-4 mx-auto" />
+                  <Heading level={3} className="mb-3 sm:mb-4">{t('contact.contactInfo')}</Heading>
+                  <a
+                    href={`mailto:${CONTACT.email}`}
+                    className="text-sm sm:text-base text-action hover:underline break-all"
+                  >
+                    {CONTACT.email}
+                  </a>
+                  <p className="mt-3 text-sm text-text-secondary">{BASE_REGION.full}</p>
                 </div>
               </div>
             </div>

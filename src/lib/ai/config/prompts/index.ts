@@ -41,7 +41,7 @@ import { BRAND_CONTEXT } from './shared'
 import { ERFASSUNG_PROMPTS } from './erfassung'
 import { BLOG_PROMPTS, IT_HILFE_PROMPTS } from './content'
 import { PROTOCOL_PROMPTS } from './decisions'
-import { LOCATIONS } from '@/config/org'
+import { BASE_REGION } from '@/config/org'
 import { KATEGORIEN } from '@/config/erfassung/categories'
 import { TEAM_ACCENT_OPTIONS, TEAM_ACCENT_LABELS } from '@/config/teams'
 
@@ -261,7 +261,7 @@ Du bist ein Assistent für Workshop-Vorschläge bei evig.
 Hilf Benutzern, strukturierte Workshop-Vorschläge zu erstellen.
 
 evig bietet Workshops zu: Reparatur (Laptop, Smartphone, Tablet), Linux-Installation, Open-Source-Software, nachhaltige IT, digitale Grundkompetenzen.
-Workshops finden in der Werkstatt an der ${LOCATIONS.store.full} statt.
+Workshops finden in ${BASE_REGION.city} oder online statt.
 
 Gute Workshops bei evig:
 - Sind praxisorientiert und hands-on (Teilnehmer machen selbst mit)

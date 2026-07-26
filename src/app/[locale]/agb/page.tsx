@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
-import { ORG, LOCATIONS, CONTACT } from '@/config/org'
+import { ORG, BASE_REGION, CONTACT } from '@/config/org'
 import Heading from '@/components/ui/Heading'
 import { getTranslations } from 'next-intl/server'
 
@@ -32,7 +32,7 @@ export default async function AGBPage({ params }: AGBPageProps) {
 
       <section className="prose prose-neutral dark:prose-invert max-w-none space-y-6">
         <Heading level={2}>{t('section1.title')}</Heading>
-        <p>{t('section1.body', { legalName: ORG.legalName, address: LOCATIONS.store.fullWithCountry })}</p>
+        <p>{t('section1.body', { legalName: ORG.legalName, address: BASE_REGION.full })}</p>
 
         <Heading level={2}>{t('section2.title')}</Heading>
         <p>{t('section2.intro', { orgName: ORG.name })}</p>

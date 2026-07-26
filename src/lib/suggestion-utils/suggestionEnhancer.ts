@@ -5,7 +5,7 @@
 
 import { NavigationSuggestion, Language, SuggestionConfig } from './types'
 import { ensureIconInLabel } from './iconMapping'
-import { LOCATIONS } from '@/config/org'
+import { BASE_REGION } from '@/config/org'
 
 /**
  * Enhanced suggestion templates with consistent labels and descriptions
@@ -197,11 +197,11 @@ export const ENHANCED_SUGGESTIONS: Record<string, Record<Language, Pick<Navigati
   'location': {
     'de': {
       label: 'Standort besuchen',
-      description: LOCATIONS.store.full,
+      description: BASE_REGION.full,
     },
     'en': {
       label: 'Visit Our Location',
-      description: LOCATIONS.store.full,
+      description: BASE_REGION.full,
     }
   },
   'consultation': {

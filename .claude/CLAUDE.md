@@ -273,10 +273,10 @@ Anything language-independent must NEVER live in a message file:
 - **Structure → config.** Slugs, routes/hrefs, enum keys (status/category/type),
   icon names, ordering, ids, counts/numbers used as data, booleans, CSS classes.
   These live in `src/config/*` or a route-local `data.ts` and are paired to
-  translations by stable index/key. (Reference: `src/app/[locale]/projects/data.ts`
-  + `messages.*.projects.items` — structure in config, only title/description/
-  features in messages.) Putting structure in messages let translators corrupt
-  slugs → `/projects/undefined`, and bloats next-intl's typed-key union.
+  translations by stable index/key (structure in config, only the human
+  strings — title/description/features — in messages). Putting structure in
+  messages let translators corrupt slugs → `/route/undefined`, and bloats
+  next-intl's typed-key union.
 - **Org data → org.ts.** Emails, phone, addresses, hours, org URLs come from
   `src/config/org.ts` (see §5), never baked into a translated string.
 - **Arrays are fragile.** The DE deep-merge fallback (`src/i18n/request.ts`)

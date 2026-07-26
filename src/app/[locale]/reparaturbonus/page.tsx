@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { Coins, ArrowRight, Wrench, ExternalLink, HelpCircle, Info } from 'lucide-react'
-import { ORG, LOCATIONS } from '@/config/org'
+import { ORG, BASE_REGION } from '@/config/org'
 import { PageHero } from '@/components/layout/PageHero'
 import { Section } from '@/components/layout/Section'
 import { Card } from '@/components/ui/card'
@@ -52,7 +52,7 @@ export default async function ReparaturbonusPage({ params }: PageProps) {
     co2: nf(REPARATURBONUS.expectedCo2Tonnes),
     budget: REPARATURBONUS.budgetChfMillions.toString(),
     platform: REPARATURBONUS.platformName,
-    city: LOCATIONS.store.city,
+    city: BASE_REGION.city,
     org: ORG.name,
   }
 
@@ -178,7 +178,7 @@ export default async function ReparaturbonusPage({ params }: PageProps) {
             {t('fit.heading', { org: ORG.name })}
           </Heading>
           <p className="mt-3 text-text-secondary">
-            {t('fit.intro', { org: ORG.name, year: String(ORG.foundingYear), city: LOCATIONS.store.city })}
+            {t('fit.intro', { org: ORG.name, year: String(ORG.foundingYear), city: BASE_REGION.city })}
           </p>
         </div>
 
@@ -190,7 +190,7 @@ export default async function ReparaturbonusPage({ params }: PageProps) {
                 {t(`fit.${item.id}.title` as never)}
               </Heading>
               <p className="mt-2 text-sm leading-relaxed text-text-secondary">
-                {t(`fit.${item.id}.body` as never, { org: ORG.name, address: LOCATIONS.store.full } as never)}
+                {t(`fit.${item.id}.body` as never, { org: ORG.name, address: BASE_REGION.full } as never)}
               </p>
             </Card>
           ))}

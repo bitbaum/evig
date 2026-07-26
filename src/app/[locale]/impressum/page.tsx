@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
-import { ORG, CONTACT, LOCATIONS } from '@/config/org'
+import { ORG, CONTACT, BASE_REGION } from '@/config/org'
 import Heading from '@/components/ui/Heading'
 import { getTranslations } from 'next-intl/server'
 
@@ -34,9 +34,7 @@ export default async function ImpressumPage({ params }: ImpressumPageProps) {
         <Heading level={3}>{t('organisation')}</Heading>
         <p>
           {ORG.legalName}<br />
-          {LOCATIONS.store.street}<br />
-          {LOCATIONS.store.postalCode} {LOCATIONS.store.city}<br />
-          {LOCATIONS.store.country}
+          {BASE_REGION.full}
         </p>
 
         <Heading level={3}>{t('contact')}</Heading>

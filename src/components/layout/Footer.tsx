@@ -3,14 +3,12 @@
 import { Link } from '@/i18n/navigation'
 import { mainNavigation, socialLinks } from '@/config/navigation'
 import { Logo } from '@/components/ui/Logo'
-import { Mail, Phone, MapPin, Clock } from 'lucide-react'
-import { ORG, CONTACT, OPENING_HOURS, getLocationsDisplay, LOCATIONS } from '@/config/org'
+import { Mail } from 'lucide-react'
+import { ORG, CONTACT } from '@/config/org'
 import { ROUTES } from '@/config/routes'
 import { NewsletterSignup } from '@/components/community/NewsletterSignup'
 import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
-
-const footerLocations = getLocationsDisplay()
 
 /**
  * Footer — flips with theme like the rest of the site. The legacy
@@ -26,7 +24,7 @@ export default function Footer() {
   return (
     <footer className="bg-surface-raised text-text-primary border-t border">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {/* Brand Section */}
           <div>
             <Logo className="mb-4" showText={true} />
@@ -71,40 +69,6 @@ export default function Footer() {
               {tNav('contact')}
             </Heading>
             <address className="space-y-4 not-italic">
-              {footerLocations.map((location) => {
-                // Strip the country line — we render a translated version below
-                const linesWithoutCountry = location.addressLines.filter(
-                  (line) => line !== LOCATIONS.store.country
-                )
-                const showCountry = location.key === 'store'
-                return (
-                  <div className="flex items-start" key={location.key}>
-                    <MapPin className="w-4 h-4 mt-0.5 mr-3 shrink-0 text-text-tertiary" />
-                    <div>
-                      <p className="text-sm font-medium text-text-primary">
-                        {tFooter(`locations.${location.key}` as never)}
-                      </p>
-                      {linesWithoutCountry.map((line) => (
-                        <p className="text-sm text-text-secondary" key={line}>{line}</p>
-                      ))}
-                      {showCountry && (
-                        <p className="text-sm text-text-secondary">{tFooter('locations.country')}</p>
-                      )}
-                      {location.note && (
-                        <p className="text-xs text-text-tertiary dark:text-text-tertiary mt-0.5">
-                          {tFooter('locations.byAppointmentOnly')}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                )
-              })}
-              <div className="flex items-center gap-3">
-                <Phone className="w-4 h-4 text-text-tertiary shrink-0" />
-                <a href={`tel:${CONTACT.phone}`} className="text-sm text-text-secondary hover:text-text-primary transition-colors">
-                  {CONTACT.phone}
-                </a>
-              </div>
               <div className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-text-tertiary shrink-0" />
                 <a href={`mailto:${CONTACT.email}`} className="text-sm text-text-secondary hover:text-text-primary transition-colors">
@@ -112,18 +76,6 @@ export default function Footer() {
                 </a>
               </div>
             </address>
-          </div>
-
-          {/* Opening Hours */}
-          <div>
-            <Heading level={3} className="text-sm font-semibold uppercase tracking-wider text-text-tertiary mb-4">
-              <Clock className="inline w-4 h-4 mr-1.5 mb-0.5" />
-              {tFooter('openingHours')}
-            </Heading>
-            <div className="space-y-1 text-sm text-text-secondary">
-              <p>{tFooter('openingHoursMonday', { hours: OPENING_HOURS.monday })}</p>
-              <p>{tFooter('openingHoursTueFri', { hours: OPENING_HOURS.tuesdayToFriday })}</p>
-            </div>
           </div>
         </div>
 
@@ -134,21 +86,23 @@ export default function Footer() {
           />
         </div>
 
-        {/* Social Links */}
-        <div className="mt-8 pt-6 border-t border flex justify-center gap-4">
-          {socialLinks.map((social) => (
-            <a
-              key={social.name}
-              href={social.href}
-              className="p-2 text-text-tertiary hover:text-text-primary transition-colors rounded-md hover:bg-surface-raised dark:hover:bg-surface-base/4"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span className="sr-only">{social.name}</span>
-              <social.icon className="h-5 w-5" />
-            </a>
-          ))}
-        </div>
+        {/* Social Links — only when evig actually has profiles (see socialLinks) */}
+        {socialLinks.length > 0 && (
+          <div className="mt-8 pt-6 border-t border flex justify-center gap-4">
+            {socialLinks.map((social) => (
+              <a
+                key={social.name}
+                href={social.href}
+                className="p-2 text-text-tertiary hover:text-text-primary transition-colors rounded-md hover:bg-surface-raised dark:hover:bg-surface-base/4"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span className="sr-only">{social.name}</span>
+                <social.icon className="h-5 w-5" />
+              </a>
+            ))}
+          </div>
+        )}
 
         {/* Legal Links — routes from ROUTES.public SSOT */}
         <div className="mt-6 pt-6 border-t border">

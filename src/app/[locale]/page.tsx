@@ -1,7 +1,7 @@
 import { Link } from '@/i18n/navigation'
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
-import { ORG, CONTACT, LOCATIONS, OPENING_HOURS } from '@/config/org'
+import { ORG } from '@/config/org'
 import { safeJsonLd } from '@/lib/seo/json-ld'
 import { ROUTES } from '@/config/routes'
 import { JOURNEY_ENTRYPOINTS } from '@/config/customer-journeys'
@@ -86,26 +86,11 @@ export default async function Home() {
         dangerouslySetInnerHTML={{
           __html: safeJsonLd({
             "@context": "https://schema.org",
-            "@type": "LocalBusiness",
+            "@type": "Organization",
             "name": ORG.name,
             "description": t('jsonld.description'),
             "url": ORG.website,
-            "telephone": CONTACT.phone,
-            "address": {
-              "@type": "PostalAddress",
-              "streetAddress": LOCATIONS.store.street,
-              "postalCode": LOCATIONS.store.postalCode,
-              "addressLocality": LOCATIONS.store.city,
-              "addressRegion": "ZH",
-              "addressCountry": "CH"
-            },
             "areaServed": t('jsonld.areaServed').split(',').map((s: string) => s.trim()),
-            "priceRange": "$$",
-            "openingHours": OPENING_HOURS.schemaOrg,
-            "sameAs": [
-              "https://twitter.com/revampit",
-              "https://linkedin.com/company/revampit"
-            ],
             "hasOfferCatalog": {
               "@type": "OfferCatalog",
               "name": "IT Services",

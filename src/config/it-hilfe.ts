@@ -112,23 +112,13 @@ export const REVIEW_MIN_CHARS = 10
 export const REVIEW_MAX_CHARS = 5000
 
 // ============================================================================
-// REVAMPIT STORE (Physical location - Werkstatt & Laden)
-// Derived from SSOT: @/config/org
+// NOTIFICATION EMAIL — Derived from SSOT: @/config/org
+// evig is online-first with no public store; technician matching is
+// canton-based (see MATCH_SCORES / helper cantons), not anchored to an
+// org address.
 // ============================================================================
 
-import { ORG, LOCATIONS, CONTACT } from '@/config/org'
-
-export const REVAMPIT_STORE = {
-  name: `${ORG.name} Werkstatt`,
-  address: LOCATIONS.store.street,
-  postalCode: LOCATIONS.store.postalCode,
-  city: LOCATIONS.store.city,
-  canton: LOCATIONS.store.canton,
-  lat: LOCATIONS.store.lat,
-  lng: LOCATIONS.store.lng,
-  googleMapsUrl: LOCATIONS.store.googleMapsUrl,
-  description: 'Unser Laden und Werkstatt in Zürich Wiedikon',
-} as const
+import { CONTACT } from '@/config/org'
 
 export const REVAMPIT_NOTIFICATION_EMAIL = process.env.NOTIFICATION_EMAIL || CONTACT.email
 

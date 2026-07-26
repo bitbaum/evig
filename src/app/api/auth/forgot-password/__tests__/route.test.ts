@@ -47,9 +47,6 @@ jest.mock('@/lib/email', () => ({
 jest.mock('@/config/org', () => ({
   ORG: { name: 'RevampIT' },
   CONTACT: { email: 'kontakt@revamp-it.ch' },
-  LOCATIONS: {
-    store: { street: 'Birmensdorferstrasse 379', postalCode: '8055', city: 'Zürich', canton: 'Zürich' },
-  },
 }))
 
 jest.mock('@/config/urls', () => ({

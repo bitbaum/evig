@@ -8,7 +8,7 @@ import { Select } from '@/components/ui/select'
 import { FormField } from '@/components/ui/form-field'
 import { Button } from '@/components/ui/button'
 import type { Workshop, WorkshopInstanceWithDetails, InstanceFormData } from './types'
-import { LOCATIONS } from '@/config/org'
+import { ORG, BASE_REGION } from '@/config/org'
 import { WORKSHOP_INSTANCE_STATUS, WORKSHOP_INSTANCE_STATUS_LABELS } from '@/config/workshops'
 
 interface InstanceFormModalProps {
@@ -91,7 +91,7 @@ export function InstanceFormModal({
               type="text"
               value={formData.location}
               onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
-              placeholder={`z.B. RevampIT, ${LOCATIONS.store.full}`}
+              placeholder={`z.B. ${ORG.name}, ${BASE_REGION.city}`}
             />
           </FormField>
 

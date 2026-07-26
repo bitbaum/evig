@@ -7,7 +7,7 @@ import ServiceProcessSection from '@/components/services/ServiceProcess'
 import ServiceCTA from '@/components/services/ServiceCTA'
 import { getService, getAllServiceSlugs } from '@/lib/services'
 import { Clock } from 'lucide-react'
-import { ORG, ORG_IMAGES, LOCATIONS } from '@/config/org'
+import { ORG, ORG_IMAGES, BASE_REGION } from '@/config/org'
 
 /**
  * Generate static paths for all featured services
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: { params: Promise<{ service: 
 
   // Special SEO metadata for data recovery
   if (slug === 'data-recovery-transfer') {
-    const city = LOCATIONS.store.city
+    const city = BASE_REGION.city
     return {
       title: { absolute: `Data Recovery & Transfer Services ${city} | ${ORG.name}` },
       description: `Professional data recovery and transfer services in ${city}. Recover data from old computers, transfer files between devices, access legacy media (floppy disks, ZIP drives, MO drives). Base fee CHF 30.`,
@@ -92,12 +92,6 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
                 'name': ORG.name,
                 'url': ORG.website,
                 'logo': `${ORG.website}${ORG_IMAGES.logo}`,
-                'address': {
-                  '@type': 'PostalAddress',
-                  'addressLocality': LOCATIONS.store.city,
-                  'addressRegion': 'ZH',
-                  'addressCountry': 'CH'
-                }
               },
               'serviceType': [
                 'Data Recovery',
@@ -107,7 +101,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
               ],
               'areaServed': {
                 '@type': 'City',
-                'name': LOCATIONS.store.city,
+                'name': BASE_REGION.city,
               },
               'hasOfferCatalog': {
                 '@type': 'OfferCatalog',

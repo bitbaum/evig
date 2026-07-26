@@ -49,17 +49,6 @@ jest.mock('lucide-react', () => {
 
 jest.mock('@/config/org', () => ({
   ORG: { name: 'Revamp-IT' },
-  LOCATIONS: {
-    store: {
-      street: 'Teststrasse 1',
-      postalCode: '8000',
-      city: 'Zürich',
-      canton: 'ZH',
-      lat: 47.37,
-      lng: 8.54,
-      googleMapsUrl: 'https://maps.google.com/?q=test',
-    },
-  },
   CONTACT: { email: 'test@revamp-it.ch' },
 }))
 

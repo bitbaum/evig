@@ -8,7 +8,7 @@ import { Link } from '@/i18n/navigation'
 import { NewsletterSignup } from '@/components/community/NewsletterSignup'
 import { DropoffForm } from '@/components/donate/DropoffForm'
 import { CopyButton } from '@/components/community/CopyButton'
-import { BANK, LOCATIONS, CONTACT, OPENING_HOURS, ORG } from '@/config/org'
+import { BANK, CONTACT, BASE_REGION, ORG } from '@/config/org'
 import { DONATION_TIER_AMOUNTS } from '@/config/donations'
 import { ROUTES } from '@/config/routes'
 import { getTranslations } from 'next-intl/server'
@@ -37,7 +37,6 @@ const TIER_AMOUNTS = DONATION_TIER_AMOUNTS
 export default async function DonatePage({ params }: DonatePageProps) {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'donate' })
-  const tFooter = await getTranslations({ locale, namespace: 'footer' })
   const tSupport = await getTranslations({ locale, namespace: 'support' })
 
   const now = new Date()
@@ -170,12 +169,8 @@ export default async function DonatePage({ params }: DonatePageProps) {
           </div>
 
           <div className="mt-10 rounded-lg border bg-surface-base p-6 sm:p-8">
-            <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary mb-2">
-              {t('devices.addressLabel')}
-            </p>
-            <p className="text-sm font-semibold text-text-primary">{ORG.name} {tFooter('locations.store')}</p>
-            <p className="text-sm text-text-secondary">{LOCATIONS.store.full}</p>
-            <p className="text-xs text-text-tertiary mt-2">{OPENING_HOURS.compact}</p>
+            <p className="text-sm font-semibold text-text-primary">{ORG.name}</p>
+            <p className="text-sm text-text-secondary">{BASE_REGION.full}</p>
             <a
               href={`mailto:${CONTACT.email}`}
               className="ui-public-card-meta mt-4 inline-flex items-center gap-1 hover:text-text-primary transition-colors"

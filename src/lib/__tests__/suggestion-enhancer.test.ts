@@ -26,10 +26,7 @@
  */
 
 jest.mock('@/config/org', () => ({
-  LOCATIONS: {
-    store: { full: 'Zürich Ausstellungsstrasse 36' },
-    office: { full: 'Zürich' },
-  },
+  BASE_REGION: { city: 'Zürich', country: 'Schweiz', region: 'ZH', full: 'Zürich, Schweiz' },
   CONTACT: { email: 'info@revamp-it.ch' },
 }))
 

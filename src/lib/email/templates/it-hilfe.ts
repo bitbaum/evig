@@ -6,7 +6,7 @@
 
 import type { EmailContent } from '../types'
 import { BASE_STYLES, COPYRIGHT_TEXT } from './base-styles'
-import { ORG, LOCATIONS } from '@/config/org'
+import { ORG } from '@/config/org'
 import { escapeHtml } from '@/lib/utils/escape-html'
 
 // Every `${data}` interpolated into an html: body that comes from a user
@@ -58,10 +58,7 @@ export const itHilfeRequestConfirmation = (
 
           <div style="background-color: #f0fdf4; padding: 15px; border-radius: 5px; margin: 15px 0;">
             <p><strong>Über ${ORG.name}</strong></p>
-            <p>Wir sind ein Schweizer Non-Profit-Verein für nachhaltige IT. Reparieren statt Wegwerfen ist unser Motto.</p>
-            <p>Du kannst dein Gerät auch direkt in unsere Werkstatt bringen:</p>
-            <p><strong>${ORG.name} Werkstatt</strong><br>
-            ${LOCATIONS.store.full}</p>
+            <p>Wir sind ein Schweizer Verein für nachhaltige IT. Reparieren statt Wegwerfen ist unser Motto.</p>
           </div>
 
           <p><strong>Was passiert als Nächstes?</strong></p>
@@ -94,9 +91,6 @@ ${aiDiagnosis}
 
 (Dies ist eine automatische Ersteinschätzung und ersetzt keine professionelle Diagnose.)
 ` : ''}
-Du kannst dein Gerät auch direkt vorbeibringen:
-${ORG.name} Werkstatt - ${LOCATIONS.store.full}
-
 Was passiert als Nächstes?
 - Techniker aus der Community werden deine Anfrage sehen
 - Du wirst benachrichtigt, wenn jemand ein Angebot macht

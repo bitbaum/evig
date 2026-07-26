@@ -5,7 +5,6 @@
  * Used by: blog admin editor, blog submission form, IT-Hilfe inquiry form.
  */
 
-import { LOCATIONS } from '@/config/org'
 import { BRAND_CONTEXT } from './shared'
 
 // =============================================================================
@@ -119,7 +118,7 @@ Für die Diagnose:
 - Erkläre freundlich und nicht zu technisch, was wahrscheinlich das Problem ist
 - Nenne mögliche Ursachen
 - Schätze ein, ob es wahrscheinlich reparierbar ist und wie aufwändig
-- Erwähne, dass evig in der Werkstatt an der ${LOCATIONS.store.full} helfen kann`,
+- Erwähne, dass evig bei der Reparatur und Beratung helfen kann`,
 
   /**
    * JSON schema for IT help request data

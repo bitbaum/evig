@@ -29,7 +29,7 @@ import {
   Smartphone,
 } from 'lucide-react'
 import { CUSTOMER_PROFILES } from '@/config/erfassung/profiles'
-import { ORG, LOCATIONS } from '@/config/org'
+import { ORG, BASE_REGION } from '@/config/org'
 import { CONDITION_COLORS, PRINT_PREVIEW_SHADOW, PRODUCT_CONDITION_FALLBACK_COLORS } from '@/config/ui-colors'
 import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/admin/AdminHeading'
@@ -339,7 +339,7 @@ export default function FactSheetPage() {
                 <span className="font-medium">{ORG.name}</span> | {ORG.legalForm}
               </div>
               <div className="text-text-tertiary">
-                {ORG.emailDomain} | {LOCATIONS.store.city}
+                {ORG.emailDomain} | {BASE_REGION.city}
               </div>
             </div>
           </div>

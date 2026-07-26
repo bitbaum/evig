@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
-import { ORG, CONTACT, LOCATIONS } from '@/config/org'
+import { ORG, CONTACT, BASE_REGION } from '@/config/org'
 import Heading from '@/components/ui/Heading'
 import { getTranslations } from 'next-intl/server'
 
@@ -36,8 +36,7 @@ export default async function DatenschutzPage({ params }: DatenschutzPageProps) 
         <Heading level={2}>{t('section1.title')}</Heading>
         <p>
           {ORG.legalName}<br />
-          {LOCATIONS.store.street}<br />
-          {LOCATIONS.store.postalCode} {LOCATIONS.store.city}, {LOCATIONS.store.country}<br />
+          {BASE_REGION.full}<br />
           {t('section1.emailLabel')} {CONTACT.email}
         </p>
 

@@ -15,7 +15,7 @@
 
 import type { EmailContent } from '../types'
 import { createEmailLayout, createTextFooter } from './base-styles'
-import { ORG, LOCATIONS, OPENING_HOURS } from '@/config/org'
+import { ORG } from '@/config/org'
 import { escapeHtml } from '@/lib/utils/escape-html'
 
 interface DropoffFields {
@@ -99,16 +99,12 @@ export const donationDropoffConfirmation = (fields: DropoffFields): EmailContent
         <ul style="margin:8px 0; padding-left:20px;">
           <li>Wir prüfen deine Anmeldung und melden uns in der Regel innerhalb weniger Werktage.</li>
           <li>Falls dein Wunschtermin nicht passt oder wir Rückfragen haben, kontaktieren wir dich direkt.</li>
-          <li>Anschliessend kannst du die Geräte zu unseren Öffnungszeiten vorbeibringen.</li>
+          <li>Anschliessend koordinieren wir mit dir, wie deine Geräte zu uns gelangen.</li>
         </ul>
       </div>
-      <p><strong>Abgabeort:</strong><br>
-      ${ORG.name} ${LOCATIONS.store.name}<br>
-      ${LOCATIONS.store.full}<br>
-      ${OPENING_HOURS.compact}</p>
       <p>Bis bald!<br>Das ${ORG.name} Team</p>
     `,
     ),
-    text: `Hallo ${fields.name},\n\nvielen Dank für deine Geräte-Spende-Anmeldung bei ${ORG.name}!\n\n${fields.preferredDate ? `Bevorzugter Termin: ${fields.preferredDate}\n\n` : ''}Du hast angegeben:\n${fields.devices}\n\nWir melden uns in Kürze bei dir.\n\nAbgabeort: ${LOCATIONS.store.full} (${OPENING_HOURS.compact})\n\n${createTextFooter()}`,
+    text: `Hallo ${fields.name},\n\nvielen Dank für deine Geräte-Spende-Anmeldung bei ${ORG.name}!\n\n${fields.preferredDate ? `Bevorzugter Termin: ${fields.preferredDate}\n\n` : ''}Du hast angegeben:\n${fields.devices}\n\nWir melden uns in Kürze bei dir und koordinieren die Übergabe.\n\n${createTextFooter()}`,
   }
 }

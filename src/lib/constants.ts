@@ -54,17 +54,12 @@ export type UserRole = typeof ROLES[keyof typeof ROLES]
 // CONTACT & SHOP CONSTANTS — re-exported from SSOT (@/config/org)
 // =============================================================================
 
-import { CONTACT, LOCATIONS, EXTERNAL_LINKS } from '@/config/org'
+import { CONTACT, EXTERNAL_LINKS } from '@/config/org'
 
 export const CONTACT_EMAIL = CONTACT.email
 export const SUPPORT_EMAIL = CONTACT.supportEmail
 
 export const SHOPWARE_URL = EXTERNAL_LINKS.shopware
-export const STORE_ADDRESS = LOCATIONS.store.full
-export const STORE_GOOGLE_MAPS_URL = LOCATIONS.store.googleMapsUrl
-export const STORE_OSM_URL = LOCATIONS.store.osmUrl
-export const WAREHOUSE_GOOGLE_MAPS_URL = LOCATIONS.warehouse.googleMapsUrl
-export const WAREHOUSE_OSM_URL = LOCATIONS.warehouse.osmUrl
 
 // =============================================================================
 // NEW SIMPLIFIED PERMISSION SYSTEM (v2)

@@ -10,7 +10,7 @@
  * Org facts and routes come from their SSOTs so links are always real.
  */
 
-import { ORG, LOCATIONS, CONTACT, OPENING_HOURS } from '@/config/org'
+import { ORG, CONTACT } from '@/config/org'
 import { ROUTES } from '@/config/routes'
 import type { HirnPageContext } from '@/config/hirn/page-contexts'
 
@@ -24,8 +24,8 @@ WAS DIE PLATTFORM BIETET (mit internen Links):
 - IT-Hilfe — Hilfe bei IT-Problemen anfragen oder als Techniker helfen: [IT-Hilfe](${P.itHilfe}), [Anfrage erstellen](${P.itHilfeCreate}), [Techniker](${P.techniker})
 - Workshops — Linux, Reparatur, nachhaltige IT: [Workshops](${P.workshops})
 - Spenden & Mitmachen — Geräte spenden, Mitglied werden, mithelfen: [Gerät spenden](${P.donate}), [Mitmachen](${P.getInvolved}), [Mitglied werden](${P.mitgliedWerden})
-- Reparaturen & Beratung im Laden: ${LOCATIONS.store.street}, ${LOCATIONS.store.postalCode} ${LOCATIONS.store.city} — Öffnungszeiten: ${OPENING_HOURS.compact}
-- Kontakt: ${CONTACT.email}, ${CONTACT.phone}
+- Reparaturen & Beratung: [IT-Hilfe](${P.itHilfe})
+- Kontakt: ${CONTACT.email}
 
 AKTUELLE SEITE:
 ${context.description}

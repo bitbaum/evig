@@ -77,73 +77,23 @@ export function resolveBlogAuthor(raw?: string | null): string {
 }
 
 // ============================================================================
-// LOCATIONS
+// BASE REGION
 // ============================================================================
 
-export const LOCATIONS = {
-  store: {
-    name: 'Verkaufsstelle',
-    /** Full street name — never abbreviate in code, abbreviate only in tight UI */
-    street: 'Birmensdorferstrasse 379',
-    postalCode: '8055',
-    city: 'Zürich',
-    country: 'Schweiz',
-    canton: 'Zürich',
-    lat: 47.3815,
-    lng: 8.5237,
-    /** Pre-formatted single-line address */
-    full: 'Birmensdorferstrasse 379, 8055 Zürich',
-    /** Full address with country */
-    fullWithCountry: 'Birmensdorferstrasse 379, 8055 Zürich, Schweiz',
-    googleMapsUrl: 'https://www.google.com/maps/place/Birmensdorferstrasse+379,+8055+Zürich',
-    osmUrl: 'https://www.openstreetmap.org/?mlat=47.3815&mlon=8.5237#map=17/47.3815/8.5237',
-    googleMapsEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2701.1234567890123!2d8.5237!3d47.3815!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x479aa0a7e8c7b8b9%3A0x1234567890abcdef!2sBirmensdorferstrasse%20379%2C%208055%20Z%C3%BCrich!5e0!3m2!1sen!2sch!4v1234567890123',
-  },
-  warehouse: {
-    name: 'Lager',
-    street: 'Badenerstrasse 816',
-    postalCode: '8048',
-    city: 'Zürich',
-    country: 'Schweiz',
-    full: 'Badenerstrasse 816, 8048 Zürich',
-    note: '(nur nach Terminvereinbarung)',
-    googleMapsUrl: 'https://www.google.com/maps/place/Badenerstrasse+816,+8048+Zürich',
-    osmUrl: 'https://www.openstreetmap.org/?mlat=47.3890&mlon=8.4880#map=17/47.3890/8.4880',
-  },
-} as const
-
 /**
- * Display-shaped view of every LOCATIONS entry — name + the
- * address lines a card / footer / contact block wants to render,
- * plus an optional note. Centralises the "street, then postal+city,
- * then country (or omit it if same as Switzerland)" decision so
- * consumers don't re-build it inline.
+ * evig is an online-first org "in Gründung" with NO public store or warehouse.
+ * It IS Zürich-based, so renderers that need a region line (SEO areaServed,
+ * legal jurisdiction, letterhead) use city/country only — never a street
+ * address. This is the ONLY location fact evig asserts.
  */
-export interface LocationDisplay {
-  key: string
-  name: string
-  addressLines: string[]
-  note?: string
-}
-
-export function getLocationsDisplay(): LocationDisplay[] {
-  return Object.entries(LOCATIONS).map(([key, loc]) => {
-    const note = 'note' in loc ? loc.note : undefined
-    return {
-      key,
-      name: loc.name,
-      addressLines: [
-        loc.street,
-        `${loc.postalCode} ${loc.city}`,
-        // Only show country for the primary store (we're a Swiss org, all
-        // locations are CH — the country line is for press / SEO use of
-        // .fullWithCountry rather than visible chrome).
-        ...(key === 'store' ? [loc.country] : []),
-      ],
-      ...(note ? { note } : {}),
-    }
-  })
-}
+export const BASE_REGION = {
+  city: 'Zürich',
+  country: 'Schweiz',
+  /** Region as an ISO country subdivision hint for structured data. */
+  region: 'ZH',
+  /** Pre-formatted "City, Country" line for display / structured data. */
+  full: 'Zürich, Schweiz',
+} as const
 
 // ============================================================================
 // CONTACT
@@ -161,21 +111,6 @@ export const CONTACT = {
   /** Canonical placeholders for user phone input fields */
   phonePlaceholder: '+41 79 123 45 67',
   phonePlaceholderLandline: '+41 44 123 45 67',
-} as const
-
-// ============================================================================
-// OPENING HOURS
-// ============================================================================
-
-export const OPENING_HOURS = {
-  monday: '9:00 - 12:00',
-  tuesdayToFriday: '13:00 - 17:00',
-  /** Pre-formatted multi-line string for display */
-  formatted: 'Montag: 9:00 - 12:00\nDienstag - Freitag: 13:00 - 17:00',
-  /** Compact single-line format for tight UI */
-  compact: 'Mo 9–12 Uhr · Di–Fr 13–17 Uhr',
-  /** Schema.org format */
-  schemaOrg: 'Mo 09:00-12:00, Tu-Fr 13:00-17:00',
 } as const
 
 // ============================================================================

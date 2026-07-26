@@ -12,7 +12,7 @@
 import { getDefaultValue, getDefaultNumeric } from '@/lib/org-numbers.defaults'
 import { HOURLY_RATE, ASSESSMENT_FEE, MEDIA_PRICES } from '@/data/pricing'
 import { HIRN_ACTION_INSTRUCTION } from './action-cockpit'
-import { ORG, LOCATIONS, CONTACT } from '@/config/org'
+import { ORG, BASE_REGION, CONTACT } from '@/config/org'
 import { getSidebarGroupsWithSections } from '@/config/sections'
 import { ROUTES } from '@/config/routes'
 import { localeLabels, type Locale } from '@/i18n/routing'
@@ -90,7 +90,7 @@ ${ORG.name} ist ein ${ORG.legalForm}, gegründet im Dezember ${n.foundingYear} i
 
 Motto: "${ORG.motto}" / "10 Jahre sind das Minimum — für ein Velo und für einen Laptop auch!"
 
-Standort: ${LOCATIONS.store.fullWithCountry}
+Standort: ${BASE_REGION.full}
 Website: ${ORG.website}
 Rechtsform: ${ORG.legalForm}
 
@@ -188,9 +188,9 @@ ${n.foundingYear}: Gründung in der Toni Molkerei in Zürich — in einem alten 
 
 2012: Röschibachstrasse — mehr Raum, das Team wächst.
 
-2015: Zwei Standorte: Laden an der ${LOCATIONS.store.street}, Lager an der ${LOCATIONS.warehouse.street}.
+2015: Zwei Standorte in Zürich — Laden und Lager.
 
-2017: Umzug in die ehemalige Bank an der ${LOCATIONS.store.street}. Mehr Platz für Werkstatt, Laden und Community.
+2017: Umzug in grössere Räume in Zürich. Mehr Platz für Werkstatt, Laden und Community.
 
 2020: Während der Pandemie: günstige Laptops für Homeschooling an Schulen und Familien. Online-Workshops starten.
 
@@ -246,7 +246,7 @@ Zero-Waste-Prinzipien (Priorität):
 3. Recyceln — nicht mehr nutzbare Geräte fachgerecht zerlegen
 4. Aufklären — Workshops und Bildung
 
-Laden: Der ${ORG.name} Laden an der ${LOCATIONS.store.full} bietet:
+Laden: Der ${ORG.name} Standort in ${BASE_REGION.city} bietet:
 - Refurbished Hardware kaufen
 - Vintage-Computer-Sammlung besichtigen
 - Persönliche Beratung

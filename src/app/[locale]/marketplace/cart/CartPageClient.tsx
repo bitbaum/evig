@@ -15,7 +15,7 @@ import { useCart } from '@/components/marketplace/cart/CartProvider'
 import { useShippingAddress } from '@/hooks/useShippingAddress'
 import { apiFetch } from '@/lib/api/client'
 import { formatCHF, REVAMPIT_LISTING_DELIVERY } from '@/config/marketplace'
-import { LOCATIONS, OPENING_HOURS } from '@/config/org'
+import { BASE_REGION } from '@/config/org'
 
 export function CartPageClient() {
   const t = useTranslations('marketplace.cart')
@@ -202,8 +202,7 @@ export function CartPageClient() {
                     <Store className="mt-0.5 h-4 w-4 shrink-0 text-action" aria-hidden="true" />
                     <span className="min-w-0 flex-1">
                       <span className="block text-sm font-medium text-text-primary">{tCheckout('delivery.pickup')}</span>
-                      <span className="mt-1 block text-sm text-text-secondary">{LOCATIONS.store.full}</span>
-                      <span className="mt-1 block text-xs text-text-tertiary">{OPENING_HOURS.compact}</span>
+                      <span className="mt-1 block text-sm text-text-secondary">{BASE_REGION.full}</span>
                     </span>
                     <span className="text-sm font-medium text-action">{tCheckout('delivery.free')}</span>
                   </label>

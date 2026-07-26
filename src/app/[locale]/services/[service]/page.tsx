@@ -10,7 +10,7 @@ import ServiceProcessSection from '@/components/services/ServiceProcess'
 import ServiceCTA from '@/components/services/ServiceCTA'
 import { getService, getAllServiceSlugs } from '@/lib/services'
 import { Clock } from 'lucide-react'
-import { ORG, ORG_IMAGES, LOCATIONS } from '@/config/org'
+import { ORG, ORG_IMAGES, BASE_REGION } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
 import { safeJsonLd } from '@/lib/seo/json-ld'
 
@@ -97,12 +97,6 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
                 'name': ORG.name,
                 'url': ORG.website,
                 'logo': `${ORG.website}${ORG_IMAGES.logo}`,
-                'address': {
-                  '@type': 'PostalAddress',
-                  'addressLocality': LOCATIONS.store.city,
-                  'addressRegion': 'ZH',
-                  'addressCountry': 'CH'
-                }
               },
               'serviceType': [
                 'Data Recovery',
@@ -112,7 +106,7 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
               ],
               'areaServed': {
                 '@type': 'City',
-                'name': LOCATIONS.store.city,
+                'name': BASE_REGION.city,
               },
               'hasOfferCatalog': {
                 '@type': 'OfferCatalog',
