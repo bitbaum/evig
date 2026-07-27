@@ -1,6 +1,7 @@
 import { Link } from '@/i18n/navigation'
 import { cn } from '@/lib/utils'
 import { ORG } from '@/config/org'
+import { EVIG_MARK } from '@/config/brand'
 
 interface LogoProps {
   className?: string
@@ -33,18 +34,19 @@ export function Logo({ className, href = '/', showText = true }: LogoProps) {
       className={cn('group inline-flex shrink-0 items-center gap-2', className)}
     >
       <svg
-        viewBox="0 0 64 64"
+        viewBox={EVIG_MARK.viewBox}
         role="img"
         aria-hidden="true"
         className="h-9 w-9 shrink-0 transition-transform duration-200 group-hover:scale-105 sm:h-11 sm:w-11"
         fill="none"
         stroke="var(--color-primary-600)"
-        strokeWidth={9}
+        strokeWidth={EVIG_MARK.strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        <path d="M30 30 C23 20 10 22 10 32 C10 42 23 44 30 34" />
-        <path d="M27 35 C33 25 41 21 46 21 C55 21 55 34 49 39 C43 43 35 43 30 34 C28 31 27 30 26 29" />
+        {EVIG_MARK.paths.map((d) => (
+          <path key={d} d={d} />
+        ))}
       </svg>
       {showText && (
         <span className="font-sans text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">

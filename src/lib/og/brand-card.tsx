@@ -1,5 +1,6 @@
 import { ORG } from '@/config/org'
 import { OG_IMAGE_COLORS } from '@/config/ui-colors'
+import { EVIG_MARK } from '@/config/brand'
 
 /**
  * evig Open Graph share card — the SINGLE source for every og:image
@@ -18,7 +19,7 @@ export const OG_ALT = `${ORG.name} — ${ORG.motto}`
  * Satori's partial inline-SVG handling. Green comes from the OG accent token.
  */
 const MARK_DATA_URI = `data:image/svg+xml;base64,${btoa(
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" stroke="${OG_IMAGE_COLORS.accent}" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M30 30 C23 20 10 22 10 32 C10 42 23 44 30 34"/><path d="M27 35 C33 25 41 21 46 21 C55 21 55 34 49 39 C43 43 35 43 30 34 C28 31 27 30 26 29"/></svg>`
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${EVIG_MARK.viewBox}" fill="none" stroke="${OG_IMAGE_COLORS.accent}" stroke-width="${EVIG_MARK.strokeWidth}" stroke-linecap="round" stroke-linejoin="round">${EVIG_MARK.paths.map((d) => `<path d="${d}"/>`).join('')}</svg>`
 )}`
 
 export function BrandOgCard() {
