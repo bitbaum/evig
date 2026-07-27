@@ -258,7 +258,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
               <div
                 className={`max-w-[80%] ${
                   message.role === 'user'
-                    ? 'bg-action text-white rounded-2xl rounded-br-sm px-4 py-2'
+                    ? 'bg-action text-action-text rounded-2xl rounded-br-sm px-4 py-2'
                     : 'bg-surface-raised text-text-primary rounded-2xl rounded-bl-sm px-4 py-3'
                 }`}
               >

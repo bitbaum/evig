@@ -157,7 +157,7 @@ export function UserMenu() {
             unoptimized
           />
         ) : (
-          <div className="w-8 h-8 rounded-full bg-action flex items-center justify-center text-white text-xs font-semibold ring-2 ring-white">
+          <div className="w-8 h-8 rounded-full bg-action flex items-center justify-center text-action-text text-xs font-semibold ring-2 ring-white">
             {initials}
           </div>
         )}
@@ -194,7 +194,7 @@ export function UserMenu() {
                   unoptimized
                 />
               ) : (
-                <div className="w-10 h-10 rounded-full bg-action flex items-center justify-center text-white text-sm font-semibold">
+                <div className="w-10 h-10 rounded-full bg-action flex items-center justify-center text-action-text text-sm font-semibold">
                   {initials}
                 </div>
               )}

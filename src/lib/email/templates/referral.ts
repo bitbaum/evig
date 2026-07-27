@@ -16,10 +16,10 @@ export const referralInvitation = (inviterName: string, referralUrl: string): Em
         <title>Einladung zu ${ORG.name}</title>
         <style>
           ${BASE_STYLES}
-          .invite-box { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 20px; margin: 20px 0; text-align: center; }
+          .invite-box { background: #f7fee7; border: 1px solid #d9f99d; border-radius: 8px; padding: 20px; margin: 20px 0; text-align: center; }
           .invite-box p { margin: 0 0 12px; font-size: 14px; color: #555; }
-          .url-box { background: #fff; border: 1px solid #d1fae5; border-radius: 6px; padding: 10px 16px; font-family: monospace; font-size: 13px; word-break: break-all; color: #166534; }
-          .badge { display: inline-block; background: #22c55e; color: #fff; border-radius: 20px; padding: 4px 14px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
+          .url-box { background: #fff; border: 1px solid #d1fae5; border-radius: 6px; padding: 10px 16px; font-family: monospace; font-size: 13px; word-break: break-all; color: #365314; }
+          .badge { display: inline-block; background: #4d7c0f; color: #fff; border-radius: 20px; padding: 4px 14px; font-size: 13px; font-weight: bold; margin-bottom: 8px; }
         </style>
       </head>
       <body>
@@ -87,9 +87,9 @@ export const referralCouponReceived = (
         <title>Dein Gutschein</title>
         <style>
           ${BASE_STYLES}
-          .coupon { background: #f0fdf4; border: 2px dashed #22c55e; border-radius: 10px; padding: 24px; margin: 20px 0; text-align: center; }
-          .coupon-amount { font-size: 36px; font-weight: bold; color: #15803d; margin: 8px 0; }
-          .coupon-code { font-family: monospace; font-size: 22px; font-weight: bold; letter-spacing: 4px; color: #166534; background: #fff; border: 1px solid #bbf7d0; border-radius: 6px; padding: 10px 20px; display: inline-block; margin: 12px 0; }
+          .coupon { background: #f7fee7; border: 2px dashed #4d7c0f; border-radius: 10px; padding: 24px; margin: 20px 0; text-align: center; }
+          .coupon-amount { font-size: 36px; font-weight: bold; color: #3f6212; margin: 8px 0; }
+          .coupon-code { font-family: monospace; font-size: 22px; font-weight: bold; letter-spacing: 4px; color: #365314; background: #fff; border: 1px solid #d9f99d; border-radius: 6px; padding: 10px 20px; display: inline-block; margin: 12px 0; }
         </style>
       </head>
       <body>

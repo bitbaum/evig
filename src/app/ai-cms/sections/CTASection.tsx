@@ -21,7 +21,7 @@ export function CTASection() {
           </Link>
           <Link
             href="/contact"
-            className="inline-flex items-center justify-center px-8 py-3 border border-action text-white font-semibold rounded-lg hover:bg-action transition-colors"
+            className="inline-flex items-center justify-center px-8 py-3 border border-action text-action-text font-semibold rounded-lg hover:bg-action transition-colors"
           >
             Kontakt aufnehmen
           </Link>

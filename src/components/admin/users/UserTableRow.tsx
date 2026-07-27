@@ -70,7 +70,7 @@ function UserInfoCell({
   userIsStaff: boolean
 }) {
   const avatarColor = userIsSuperAdmin || userIsStaff
-    ? 'bg-action text-white'
+    ? 'bg-action text-action-text'
     : 'bg-surface-overlay text-text-primary'
 
   return (

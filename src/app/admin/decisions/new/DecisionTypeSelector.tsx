@@ -31,7 +31,7 @@ export function DecisionTypeSelector({ selected, onChange }: Props) {
             >
               <div className="flex items-center gap-2">
                 <span className={`flex h-7 w-7 items-center justify-center rounded-md text-sm font-bold ${
-                  isSelected ? 'bg-action text-white' : 'bg-surface-raised text-text-tertiary'
+                  isSelected ? 'bg-action text-action-text' : 'bg-surface-raised text-text-tertiary'
                 }`}>
                   {conf.icon}
                 </span>

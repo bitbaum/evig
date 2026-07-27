@@ -77,7 +77,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
           className={cn(
             'shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors',
             !activeCategoryId
-              ? 'bg-action text-white'
+              ? 'bg-action text-action-text'
               : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
           )}
         >
@@ -91,7 +91,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
             className={cn(
               'shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap',
               activeCategoryId === cat.id
-                ? 'bg-action text-white'
+                ? 'bg-action text-action-text'
                 : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
             )}
           >

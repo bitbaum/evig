@@ -138,7 +138,7 @@ export default async function UserDetailPage({ params }: PageProps) {
           <Avatar
             name={user.name || user.email}
             size="xl"
-            colorClassName={userIsSuperAdmin || userIsStaff ? 'bg-action text-white' : 'bg-surface-overlay text-text-primary'}
+            colorClassName={userIsSuperAdmin || userIsStaff ? 'bg-action text-action-text' : 'bg-surface-overlay text-text-primary'}
           />
 
           {/* Info */}

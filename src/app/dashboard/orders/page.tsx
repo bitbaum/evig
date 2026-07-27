@@ -142,7 +142,7 @@ export default function DashboardOrdersPage() {
             size="sm"
             className={`rounded-full ${
               activeTab === tab.key
-                ? 'bg-action text-white'
+                ? 'bg-action text-action-text'
                 : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
             }`}
           >

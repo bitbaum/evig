@@ -41,7 +41,7 @@ export function OptionCard({
             className="object-contain p-2"
           />
           {selected && (
-            <div className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-action text-white shadow-sm">
+            <div className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full bg-action text-action-text shadow-sm">
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>

@@ -129,7 +129,7 @@ export function ConfirmReviewCard({
               variant="outline"
               className={`flex-1 py-3 px-4 min-h-touch font-medium border-2 ${
                 recommended === true
-                  ? 'bg-action text-white border-action'
+                  ? 'bg-action text-action-text border-action'
                   : 'bg-surface-base text-text-secondary border-default hover:border-action'
               }`}
             >

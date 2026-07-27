@@ -120,7 +120,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                     sizes="(max-width: 1024px) 100vw, 50vw"
                     priority
                   />
-                  <div className="absolute top-4 right-4 bg-action text-white px-3 py-2 rounded-lg text-sm font-semibold shadow-xs">
+                  <div className="absolute top-4 right-4 bg-action text-action-text px-3 py-2 rounded-lg text-sm font-semibold shadow-xs">
                     <div className="flex items-center">
                       <Award className="w-4 h-4 mr-2" />
                       REVAMPED
@@ -257,7 +257,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
                       <div className="text-xs text-text-secondary">CERTIFIED</div>
                     </div>
                   </div>
-                  <div className="absolute top-3 right-3 bg-action text-white text-xs px-3 py-1 rounded-full">NEW</div>
+                  <div className="absolute top-3 right-3 bg-action text-action-text text-xs px-3 py-1 rounded-full">NEW</div>
                 </div>
                 <Heading level={3} className="text-xl font-bold mb-2">{t('stickers.sticker3.title')}</Heading>
                 <p className="text-text-secondary">{t('stickers.sticker3.body')}</p>

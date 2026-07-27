@@ -10,7 +10,7 @@ export const blogCategories = pgTable('blog_categories', {
   slug: text('slug').notNull().unique(),
   name: text('name').notNull(),
   description: text('description'),
-  color: text('color').default('#16a34a'),
+  color: text('color').default('#4d7c0f'),
   sortOrder: integer('sort_order').default(0),
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),

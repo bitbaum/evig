@@ -85,7 +85,7 @@ export function ActivityCard({ activity }: ActivityCardProps) {
     <div className="bg-surface-base rounded-lg border border-subtle p-4 hover:border-strong transition-shadow">
       <div className="flex gap-3">
         {/* Avatar */}
-        <Avatar name={activity.user_name || activity.user_email} size="md" colorClassName="bg-action text-white" />
+        <Avatar name={activity.user_name || activity.user_email} size="md" colorClassName="bg-action text-action-text" />
 
         {/* Content */}
         <div className="flex-1 min-w-0">

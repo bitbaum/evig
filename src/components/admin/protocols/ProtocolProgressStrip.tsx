@@ -20,7 +20,7 @@ const SHORT_LABELS: Record<string, string> = {
 const STATE_CONFIG = {
   done: {
     icon: CheckCircle2,
-    dotClass: 'bg-action text-white',
+    dotClass: 'bg-action text-action-text',
     labelClass: 'text-action',
     lineClass: 'bg-action',
   },

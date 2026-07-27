@@ -60,7 +60,7 @@ export const DEFAULT_CATEGORY_COLOR = UI_COLOR_PALETTE[0]
 export const OG_IMAGE_COLORS = {
   backgroundGradient: 'linear-gradient(135deg, #0a0a0a 0%, #0d1512 55%, #0a0a0a 100%)',
   heading: '#ffffff',
-  accent: '#22c55e',
+  accent: '#B6F531',
   body: '#a3a3a3',
   meta: '#6b7280',
 } as const
@@ -82,7 +82,7 @@ export const ELEMENT_SELECTION_COLORS = {
 /** Feedback scope accent colors */
 export const FEEDBACK_SCOPE_COLORS = {
   site: '#7c3aed',
-  page: '#16a34a',
+  page: '#4d7c0f',
   element: '#2563eb',
 } as const
 
@@ -95,7 +95,7 @@ export const GLOBAL_ERROR_COLORS = {
   pageBg: '#f9fafb',
   heading: '#111827',
   body: '#4b5563',
-  primary: '#16a34a',
+  primary: '#4d7c0f',
   white: '#fff',
   secondaryText: '#374151',
   border: '#d1d5db',
@@ -108,7 +108,7 @@ export const EMAIL_INLINE_COLORS = {
 
 /** Standalone newsletter-confirmation HTML cannot consume CSS variables. */
 export const NEWSLETTER_CONFIRMATION_COLORS = {
-  success: '#22c55e',
+  success: '#4d7c0f',
   error: '#dc2626',
   body: '#333333',
   page: '#fafafa',

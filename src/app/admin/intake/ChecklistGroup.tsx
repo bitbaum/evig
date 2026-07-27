@@ -148,7 +148,7 @@ export function ChecklistGroup({ group, readOnly = false, pendingItems, onSetRes
                       disabled={saving}
                       className={`h-11 w-11 sm:h-7 sm:w-7 rounded border-2 flex items-center justify-center transition-colors ${
                         result === CHECKLIST_RESULTS.PASS
-                          ? 'bg-action border-action text-white'
+                          ? 'bg-action border-action text-action-text'
                           : 'border-default hover:border-action'
                       }`}
                       title={CHECKLIST_RESULT_LABELS.pass}

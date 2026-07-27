@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { ORG } from '@/config/org'
 import { ROUTES } from '@/config/routes'
+import { EVIG_MARK } from '@/config/brand'
 import type { ReactNode } from 'react'
 
 /**
@@ -11,14 +12,13 @@ import type { ReactNode } from 'react'
  * from the scoped `.theme-vision` tokens in globals.css — zero literal hex.
  */
 
-// The refined "eternal loop" mark (single-stroke closed infinity, tilted −8°).
-const LOOP_D =
-  'M32 32 C24 19 12 19 12 32 C12 45 24 45 32 32 C40 19 52 19 52 32 C52 45 40 45 32 32'
+// The mark geometry is the brand SSOT (src/config/brand.ts) — no divergence.
+const LOOP_D = EVIG_MARK.paths[0]
 
-function Mark({ className, width = 7 }: { className?: string; width?: number }) {
+function Mark({ className, width = EVIG_MARK.strokeWidth }: { className?: string; width?: number }) {
   return (
-    <svg className={className} viewBox="0 0 64 64" fill="none" aria-hidden="true">
-      <g transform="rotate(-8 32 32)">
+    <svg className={className} viewBox={EVIG_MARK.viewBox} fill="none" aria-hidden="true">
+      <g transform={EVIG_MARK.transform}>
         <path d={LOOP_D} stroke="currentColor" strokeWidth={width} strokeLinecap="round" strokeLinejoin="round" />
       </g>
     </svg>
@@ -27,8 +27,8 @@ function Mark({ className, width = 7 }: { className?: string; width?: number }) 
 
 function HeroLoop({ label }: { label: string }) {
   return (
-    <svg className="v-loop" viewBox="0 0 64 64" fill="none" role="img" aria-label={label}>
-      <g transform="rotate(-8 32 32)">
+    <svg className="v-loop" viewBox={EVIG_MARK.viewBox} fill="none" role="img" aria-label={label}>
+      <g transform={EVIG_MARK.transform}>
         <path className="v-draw" pathLength={100} d={LOOP_D} stroke="currentColor" strokeWidth={6} strokeLinecap="round" strokeLinejoin="round" />
         <path className="v-pulse" pathLength={100} d={LOOP_D} stroke="var(--text-primary)" strokeWidth={6} strokeLinecap="round" strokeLinejoin="round" />
       </g>

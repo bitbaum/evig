@@ -56,7 +56,7 @@ export function listingPublishedConfirmation(data: ListingPublishedData): { subj
         <p>Hallo ${escapeHtml(data.recipientName)},</p>
         <p>Dein Inserat <strong>"${escapeHtml(data.listingTitle)}"</strong> wurde erfolgreich veröffentlicht und ist jetzt im Marketplace sichtbar.</p>
         <p>
-          <a href="${data.listingUrl}" style="display: inline-block; background-color: #16a34a; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+          <a href="${data.listingUrl}" style="display: inline-block; background-color: #4d7c0f; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
             Inserat ansehen
           </a>
         </p>
@@ -111,7 +111,7 @@ export function newListingQuestion(data: NewListingQuestionData): { subject: str
           <p style="margin: 0; color: #374151;">${escapeHtml(data.questionPreview)}</p>
         </div>
         <p>
-          <a href="${data.listingUrl}" style="display: inline-block; background-color: #16a34a; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+          <a href="${data.listingUrl}" style="display: inline-block; background-color: #4d7c0f; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
             Jetzt antworten
           </a>
         </p>
@@ -177,7 +177,7 @@ export function orderConfirmationBuyer(data: OrderConfirmationBuyerData): { subj
           </table>
         </div>
         <p>
-          <a href="${data.orderUrl}" style="display: inline-block; background-color: #16a34a; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+          <a href="${data.orderUrl}" style="display: inline-block; background-color: #4d7c0f; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
             Bestellung ansehen
           </a>
         </p>
@@ -203,12 +203,12 @@ export function newOrderNotificationSeller(data: NewOrderNotificationSellerData)
         <p><strong>${escapeHtml(data.buyerName)}</strong> hat dein Inserat <strong>"${escapeHtml(data.listingTitle)}"</strong> bestellt.</p>
         <div style="background-color: #f3f4f6; border-radius: 8px; padding: 16px; margin: 16px 0;">
           <table style="width: 100%; border-collapse: collapse;">
-            <tr><td style="padding: 4px 0; color: #6b7280;">Deine Auszahlung</td><td style="padding: 4px 0; text-align: right; font-weight: 600; color: #16a34a;">${escapeHtml(data.payoutAmountChf)}</td></tr>
+            <tr><td style="padding: 4px 0; color: #6b7280;">Deine Auszahlung</td><td style="padding: 4px 0; text-align: right; font-weight: 600; color: #4d7c0f;">${escapeHtml(data.payoutAmountChf)}</td></tr>
             <tr><td style="padding: 4px 0; color: #6b7280;">Lieferart</td><td style="padding: 4px 0; text-align: right;">${escapeHtml(data.deliveryMethod)}</td></tr>
           </table>
         </div>
         <p>
-          <a href="${data.orderUrl}" style="display: inline-block; background-color: #16a34a; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+          <a href="${data.orderUrl}" style="display: inline-block; background-color: #4d7c0f; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
             Bestellung verwalten
           </a>
         </p>
@@ -237,7 +237,7 @@ export function orderStatusUpdate(data: OrderStatusUpdateData): { subject: strin
         </div>
         ${data.actionHint ? `<p style="color: #374151;">${escapeHtml(data.actionHint)}</p>` : ''}
         <p>
-          <a href="${data.orderUrl}" style="display: inline-block; background-color: #16a34a; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+          <a href="${data.orderUrl}" style="display: inline-block; background-color: #4d7c0f; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
             Bestellung ansehen
           </a>
         </p>
@@ -284,7 +284,7 @@ export function orderReceiptConfirmed(data: OrderReceiptConfirmedData): { subjec
         <p>Der Käufer hat den Erhalt von <strong>"${escapeHtml(data.listingTitle)}"</strong> bestätigt. Die Zahlung wurde freigegeben und wird dir in Kürze ausbezahlt.</p>
         <p style="color: #6b7280; font-size: 14px;">Bestellnummer: ${escapeHtml(data.orderNumber)}</p>
         <p>
-          <a href="${data.orderUrl}" style="display: inline-block; background-color: #16a34a; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+          <a href="${data.orderUrl}" style="display: inline-block; background-color: #4d7c0f; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
             Bestellung ansehen
           </a>
         </p>
@@ -308,7 +308,7 @@ export function orderReviewPrompt(data: OrderReviewPromptData): { subject: strin
         <p>Hallo ${escapeHtml(data.recipientName)},</p>
         <p>Wir hoffen, du bist zufrieden mit <strong>"${escapeHtml(data.listingTitle)}"</strong>. Deine Bewertung hilft anderen Käuferinnen und Käufern bei der Entscheidung und unterstützt verantwortungsvolle Verkäufer.</p>
         <p>
-          <a href="${data.reviewUrl}" style="display: inline-block; background-color: #16a34a; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+          <a href="${data.reviewUrl}" style="display: inline-block; background-color: #4d7c0f; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
             Jetzt bewerten
           </a>
         </p>
@@ -341,7 +341,7 @@ export function orderReviewReceived(data: OrderReviewReceivedData): { subject: s
           ${escapeHtml(data.content)}
         </blockquote>
         <p>
-          <a href="${data.reviewUrl}" style="display: inline-block; background-color: #16a34a; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+          <a href="${data.reviewUrl}" style="display: inline-block; background-color: #4d7c0f; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
             Bewertung ansehen
           </a>
         </p>
@@ -367,7 +367,7 @@ export function listingReviewNotification(data: ListingReviewData): { subject: s
           <p style="margin: 8px 0 0; color: #374151; font-weight: 600;">${data.rating} von 5 Sternen</p>
         </div>
         <p>
-          <a href="${data.reviewUrl}" style="display: inline-block; background-color: #16a34a; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+          <a href="${data.reviewUrl}" style="display: inline-block; background-color: #4d7c0f; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600;">
             Bewertung ansehen
           </a>
         </p>

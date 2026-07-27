@@ -30,7 +30,7 @@ export default function BlogUnavailable({ blogHref = '/blog', loginHref }: Props
         <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
           <Link
             href={blogHref}
-            className="inline-flex items-center gap-2 rounded-btn bg-action px-5 py-2.5 text-sm font-medium text-white hover:opacity-90"
+            className="inline-flex items-center gap-2 rounded-btn bg-action px-5 py-2.5 text-sm font-medium text-action-text hover:opacity-90"
           >
             Zum Blog <ArrowRight className="h-4 w-4" />
           </Link>

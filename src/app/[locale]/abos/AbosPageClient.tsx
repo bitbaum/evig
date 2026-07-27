@@ -60,7 +60,7 @@ export default function AbosPageClient() {
               variant="ghost"
               onClick={() => setActiveCategory(null)}
               className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                !activeCategory ? 'bg-action text-white' : 'bg-surface-base text-text-secondary hover:bg-surface-raised border'
+                !activeCategory ? 'bg-action text-action-text' : 'bg-surface-base text-text-secondary hover:bg-surface-raised border'
               }`}
             >
               {t('filterAll')}
@@ -73,7 +73,7 @@ export default function AbosPageClient() {
                   variant="ghost"
                   onClick={() => setActiveCategory(cat)}
                   className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                    activeCategory === cat ? 'bg-action text-white' : 'bg-surface-base text-text-secondary hover:bg-surface-raised border'
+                    activeCategory === cat ? 'bg-action text-action-text' : 'bg-surface-base text-text-secondary hover:bg-surface-raised border'
                   }`}
                 >
                   {/* @ts-expect-error — dynamic category key */}

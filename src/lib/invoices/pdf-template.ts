@@ -115,10 +115,10 @@ function generateInvoiceHTML(invoice: InvoiceData): string {
           align-items: flex-start;
           margin-bottom: 40px;
           padding-bottom: 20px;
-          border-bottom: 2px solid #16a34a;
+          border-bottom: 2px solid #4d7c0f;
         }
         .company-info h1 {
-          color: #16a34a;
+          color: #4d7c0f;
           margin: 0;
           font-size: 28px;
         }
@@ -127,7 +127,7 @@ function generateInvoiceHTML(invoice: InvoiceData): string {
         }
         .invoice-details h2 {
           margin: 0 0 10px 0;
-          color: #16a34a;
+          color: #4d7c0f;
         }
         .customer-info {
           margin-bottom: 30px;

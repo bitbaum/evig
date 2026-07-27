@@ -56,7 +56,7 @@ export const itHilfeRequestConfirmation = (
           </div>
           ` : ''}
 
-          <div style="background-color: #f0fdf4; padding: 15px; border-radius: 5px; margin: 15px 0;">
+          <div style="background-color: #f7fee7; padding: 15px; border-radius: 5px; margin: 15px 0;">
             <p><strong>Über ${ORG.name}</strong></p>
             <p>Wir sind ein Schweizer Verein für nachhaltige IT. Reparieren statt Wegwerfen ist unser Motto.</p>
           </div>
@@ -158,7 +158,7 @@ export const itHilfeAnonymousRequestClaim = (
             Dieser Link ist 7 Tage gültig. Falls er abgelaufen ist, kannst du auf der Anmeldeseite "Passwort vergessen" wählen und einen neuen Link anfordern.
           </p>
 
-          <div style="background-color: #f0fdf4; padding: 15px; border-radius: 5px; margin: 15px 0;">
+          <div style="background-color: #f7fee7; padding: 15px; border-radius: 5px; margin: 15px 0;">
             <p style="margin: 0;"><strong>Was passiert als Nächstes?</strong></p>
             <p style="margin: 8px 0 0 0;">Sobald dein Konto aktiviert ist, siehst du eingehende Angebote von Technikern aus der Community. Du entscheidest, welches Angebot du annimmst.</p>
           </div>
@@ -245,7 +245,7 @@ export const helperNewMatchingRequest = (
 
           <p><strong>Deine passenden Fähigkeiten:</strong></p>
           <div style="margin: 10px 0;">
-            ${matchingSkillNames.map(skill => `<span style="display: inline-block; background-color: #dcfce7; color: #166534; padding: 4px 12px; border-radius: 12px; font-size: 13px; margin: 3px 2px;">${escapeHtml(skill)}</span>`).join('')}
+            ${matchingSkillNames.map(skill => `<span style="display: inline-block; background-color: #ecfccb; color: #365314; padding: 4px 12px; border-radius: 12px; font-size: 13px; margin: 3px 2px;">${escapeHtml(skill)}</span>`).join('')}
           </div>
 
           <a href="${requestUrl}" class="button button-green">Anfrage ansehen &amp; Angebot machen</a>

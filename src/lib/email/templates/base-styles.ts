@@ -10,18 +10,18 @@ export const BASE_STYLES = `
   body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
   .container { max-width: 600px; margin: 0 auto; padding: 20px; }
   .header { padding: 20px; text-align: center; color: white; }
-  .header-green { background-color: #22c55e; }
+  .header-green { background-color: #4d7c0f; }
   .header-red { background-color: #dc2626; }
   .header-orange { background-color: #f59e0b; }
   .header-blue { background-color: #3b82f6; }
   .header-purple { background-color: #8b5cf6; }
   .content { padding: 30px 20px; background-color: #f9f9f9; }
   .button { display: inline-block; padding: 12px 24px; color: white; text-decoration: none; border-radius: 5px; margin: 20px 0; }
-  .button-green { background-color: #22c55e; }
+  .button-green { background-color: #4d7c0f; }
   .button-orange { background-color: #f59e0b; }
   .button-blue { background-color: #3b82f6; }
   .button-purple { background-color: #8b5cf6; }
-  .code { font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #22c55e; background-color: #f0fdf4; padding: 20px; text-align: center; border-radius: 8px; margin: 20px 0; }
+  .code { font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #4d7c0f; background-color: #f7fee7; padding: 20px; text-align: center; border-radius: 8px; margin: 20px 0; }
   .footer { padding: 20px; text-align: center; color: #666; font-size: 12px; }
   .highlight-box { background-color: #fef3c7; padding: 15px; border-radius: 5px; margin: 15px 0; }
 `;

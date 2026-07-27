@@ -58,10 +58,10 @@ export const donationDropoffNotification = (fields: DropoffFields): EmailContent
         ${optionalRow('Bevorzugter Termin', eDate)}
       </table>
       <p><strong>Geräte:</strong></p>
-      <div style="background:#f9fafb; border-left:4px solid #22c55e; padding:16px; margin:12px 0; border-radius:4px;">
+      <div style="background:#f9fafb; border-left:4px solid #4d7c0f; padding:16px; margin:12px 0; border-radius:4px;">
         ${eDevicesHtml}
       </div>
-      ${eNotesHtml ? `<p><strong>Anmerkungen:</strong></p><div style="background:#f9fafb; border-left:4px solid #22c55e; padding:16px; margin:12px 0; border-radius:4px;">${eNotesHtml}</div>` : ''}
+      ${eNotesHtml ? `<p><strong>Anmerkungen:</strong></p><div style="background:#f9fafb; border-left:4px solid #4d7c0f; padding:16px; margin:12px 0; border-radius:4px;">${eNotesHtml}</div>` : ''}
       <p style="margin-top:24px;">
         <a href="mailto:${eEmail}" class="button button-green">Direkt antworten</a>
       </p>
@@ -91,7 +91,7 @@ export const donationDropoffConfirmation = (fields: DropoffFields): EmailContent
       <p>vielen Dank, dass du ${ORG.name} Geräte spenden möchtest! Wir haben deine Anmeldung erhalten.</p>
       ${dateLine}
       <p><strong>Du hast angegeben:</strong></p>
-      <div style="background:#f9fafb; border-left:4px solid #22c55e; padding:16px; margin:12px 0; border-radius:4px;">
+      <div style="background:#f9fafb; border-left:4px solid #4d7c0f; padding:16px; margin:12px 0; border-radius:4px;">
         ${eDevicesHtml}
       </div>
       <div class="highlight-box">

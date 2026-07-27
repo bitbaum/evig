@@ -80,7 +80,7 @@ export default async function RepairPage({ params }: Props) {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {process.map((step, index) => (
               <div key={index} className="bg-surface-raised/50 rounded-xl p-8">
-                <div className="w-12 h-12 bg-action text-white rounded-full flex items-center justify-center text-xl font-bold mb-4">
+                <div className="w-12 h-12 bg-action text-action-text rounded-full flex items-center justify-center text-xl font-bold mb-4">
                   {index + 1}
                 </div>
                 <Heading level={3} className="text-xl font-semibold mb-3">{step.title}</Heading>

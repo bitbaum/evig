@@ -126,7 +126,7 @@ export default function BlogComments({ slug }: { slug: string }) {
                 {c.authorImage ? (
                   <img src={c.authorImage} alt="" className="h-9 w-9 shrink-0 rounded-full" />
                 ) : (
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-action text-xs font-semibold text-white">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-action text-xs font-semibold text-action-text">
                     {initials(c.authorName)}
                   </div>
                 )}

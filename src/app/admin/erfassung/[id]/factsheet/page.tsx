@@ -168,7 +168,7 @@ export default function FactSheetPage() {
         <div className="factsheet-page w-[210mm] min-h-[297mm] mx-auto bg-surface-base shadow-xs print:shadow-none">
 
           {/* Green Header Bar */}
-          <div className="bg-action text-white px-8 py-4">
+          <div className="bg-action text-action-text px-8 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 bg-surface-base rounded-xl flex items-center justify-center">

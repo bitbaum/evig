@@ -71,7 +71,7 @@ function OptionCard({
   )
 }
 
-/** Monochrome step indicator — replaces bg-action-text-white circles. */
+/** Monochrome step indicator — replaces bg-action-text-action-text circles. */
 function StepDots({ step }: { step: number }) {
   return (
     <div className="flex items-center justify-center gap-3 mb-8 font-mono tabular-nums">

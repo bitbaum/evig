@@ -102,7 +102,7 @@ function SellPageContent() {
       {/* Step indicator */}
       <div className="flex items-center gap-0 mb-6">
         <div className="flex items-center gap-2">
-          <span className="w-7 h-7 rounded-full bg-action text-white text-xs font-bold flex items-center justify-center">1</span>
+          <span className="w-7 h-7 rounded-full bg-action text-action-text text-xs font-bold flex items-center justify-center">1</span>
           <span className="text-sm font-semibold text-action">{t('stepDetails')}</span>
         </div>
         <div className="flex-1 h-px bg-surface-overlay mx-3" />

@@ -89,7 +89,7 @@ export function LocaleSwitcher({ className, openUpward = false, inline = false, 
                 'min-h-touch flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
                 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action',
                 active
-                  ? 'bg-action text-white'
+                  ? 'bg-action text-action-text'
                   : 'bg-surface-raised text-text-secondary hover:bg-surface-base',
                 isPending && 'opacity-50 cursor-wait',
               )}

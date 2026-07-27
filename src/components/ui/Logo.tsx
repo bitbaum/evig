@@ -39,14 +39,16 @@ export function Logo({ className, href = '/', showText = true }: LogoProps) {
         aria-hidden="true"
         className="h-9 w-9 shrink-0 transition-transform duration-200 group-hover:scale-105 sm:h-11 sm:w-11"
         fill="none"
-        stroke="var(--color-primary-600)"
+        stroke="var(--color-action)"
         strokeWidth={EVIG_MARK.strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
       >
-        {EVIG_MARK.paths.map((d) => (
-          <path key={d} d={d} />
-        ))}
+        <g transform={EVIG_MARK.transform}>
+          {EVIG_MARK.paths.map((d) => (
+            <path key={d} d={d} />
+          ))}
+        </g>
       </svg>
       {showText && (
         <span className="font-sans text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">

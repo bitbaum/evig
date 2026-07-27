@@ -4,6 +4,8 @@
 
 @theme {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), var(--font-inter), ui-sans-serif, 'Hiragino Sans', 'Noto Sans JP', 'Noto Sans KR', system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, 'JetBrains Mono', monospace;
 
   --color-surface-page: var(--surface-page);
   --color-surface-base: var(--surface-base);
@@ -20,21 +22,27 @@
   --color-action-hover: var(--accent-action-hover);
   --color-action-muted: var(--accent-action-muted);
   --color-action-text: var(--accent-action-text);
+  /* "strong" = the electric Ion Lime, for loud CTA fills (buttons). Kept
+     separate from --color-action so text/links stay the readable deep lime. */
+  --color-action-strong: var(--accent-strong);
+  --color-action-strong-text: var(--accent-strong-text);
 
   --color-canvas: var(--surface-page);
   --color-muted: var(--text-muted);
   --color-faint: var(--text-muted);
 
-  --color-primary-50: #f0fdf4;
-  --color-primary-100: #dcfce7;
-  --color-primary-200: #bbf7d0;
-  --color-primary-300: #86efac;
-  --color-primary-400: #4ade80;
-  --color-primary-500: #22c55e;
-  --color-primary-600: #16a34a;
-  --color-primary-700: #15803d;
-  --color-primary-800: #166534;
-  --color-primary-900: #14532d;
+  /* evig brand scale — Ion Lime. Deep shades (700-900) stay readable as text /
+     with white text on fills; 500 is the electric identity lime. */
+  --color-primary-50: #f7fee7;
+  --color-primary-100: #ecfccb;
+  --color-primary-200: #d9f99d;
+  --color-primary-300: #bef264;
+  --color-primary-400: #a3e635;
+  --color-primary-500: #84cc16;
+  --color-primary-600: #65a30d;
+  --color-primary-700: #4d7c0f;
+  --color-primary-800: #3f6212;
+  --color-primary-900: #365314;
 
   --color-secondary-50: #fff7ed;
   --color-secondary-100: #ffedd5;
@@ -315,8 +323,9 @@
   padding-bottom: 3rem;
 }
 @utility ui-public-eyebrow {
-  /* Eyebrow / kicker — small caps label above a title. */
+  /* Eyebrow / kicker — small caps mono label above a title. */
   @apply text-xs uppercase tracking-[0.18em];
+  font-family: var(--font-mono);
   color: var(--text-tertiary);
 }
 @utility ui-public-hero-badge {
@@ -326,15 +335,16 @@
   color: var(--text-secondary);
 }
 @utility ui-public-hero-title {
-  /* Hero display title — fluid clamp() type, brand display weight + tracking. */
+  /* Hero display title — fluid clamp() type, Space Grotesk display face. */
+  font-family: var(--font-display);
   font-size: clamp(
     var(--hero-title-min),
     var(--hero-title-fluid),
     var(--hero-title-max)
   );
-  line-height: 1;
-  letter-spacing: 0;
-  @apply font-semibold;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  @apply font-bold;
   color: var(--text-primary);
 }
 @utility ui-public-hero-title-fade {
@@ -371,12 +381,11 @@
   color: var(--text-tertiary);
 }
 @utility ui-public-cta {
-  /* CTA primary — RevampIT green; large tap target; opacity hover.
-   * Text uses --accent-action-text which flips: white on dark-green (light mode),
-   * near-black on bright-green (dark mode) — keeps WCAG AA contrast in both. */
+  /* CTA primary — electric Ion Lime fill + ink text. Punchy and WCAG-AA in
+     both light and dark (ink on #B6F531 reads either way). */
   @apply inline-flex items-center justify-center rounded-md px-6 py-3 text-sm font-semibold transition-opacity hover:opacity-90 active:opacity-80;
-  background: var(--accent-action);
-  color: var(--accent-action-text);
+  background: var(--accent-strong);
+  color: var(--accent-strong-text);
   min-height: 48px;
 }
 @utility ui-public-cta-ghost {
@@ -570,11 +579,14 @@
  * ─────────────────────────────────────────────────────────────────────────── */
 @layer base {
   :root {
-    /* Primitive palette — raw values, not used directly by components */
-    --primitive-green-500: #22c55e;
-    --primitive-green-600: #16a34a;
-    --primitive-green-700: #15803d;
-    --primitive-green-800: #166534;
+    /* Primitive palette — raw values, not used directly by components.
+       evig Ion Lime: electric (#B6F531) is the identity pop; the deep shades
+       are the contrast-safe interactive colours (readable as text on white). */
+    --primitive-lime-electric: #B6F531;
+    --primitive-lime-500: #84cc16;
+    --primitive-lime-600: #65a30d;
+    --primitive-lime-700: #4d7c0f;
+    --primitive-lime-800: #3f6212;
     --primitive-orange-500: #F7931A;
 
     /* ─── Semantic tokens (light) ───────────────────────────────────────
@@ -609,10 +621,12 @@
     /* Action accent — RevampIT brand green. The ONLY chromatic color
      * outside status badges. Used for primary buttons, links, focus
      * rings, key icons. Everything else stays achromatic. */
-    --accent-action:         var(--primitive-green-700);    /* #15803d — darker for AA as text/links on white */
-    --accent-action-hover:   var(--primitive-green-800);    /* #166534 — darker on hover */
-    --accent-action-muted:   rgba(22, 163, 74, 0.10);        /* subtle fills */
-    --accent-action-text:    #ffffff;                        /* text ON action surfaces */
+    --accent-action:         var(--primitive-lime-700);    /* #4d7c0f — deep lime: AA as text/links on white, white text on fills */
+    --accent-action-hover:   var(--primitive-lime-800);    /* #3f6212 — darker on hover */
+    --accent-action-muted:   rgba(132, 204, 22, 0.12);      /* subtle lime fills */
+    --accent-action-text:    #ffffff;                        /* text ON action surfaces (deep-lime fill) */
+    --accent-strong:         var(--primitive-lime-electric);/* #B6F531 — electric CTA fill */
+    --accent-strong-text:    #0a0a0a;                        /* ink on electric lime */
 
     /* Fluid display type — single SSOT, used by .ui-public-hero-title */
     --hero-title-min:        2.25rem;        /* 36px — fits iPhone SE */
@@ -641,23 +655,24 @@
     --text-muted:            #525252;
     --text-inverted:         #0a0a0a;
 
-    /* Surfaces — role-based */
-    --surface-page:          #0a0a0a;
-    --surface-base:          #131313;
-    --surface-raised:        #1f1f1f;
-    --surface-overlay:       #2a2a2a;
+    /* Surfaces — role-based (Obsidian) */
+    --surface-page:          #0A0B0A;
+    --surface-base:          #111311;
+    --surface-raised:        #171A15;
+    --surface-overlay:       #1E221B;
 
     /* Borders — role-based */
     --border-subtle:         rgba(255, 255, 255, 0.06);
     --border-default:        rgba(255, 255, 255, 0.10);
     --border-strong:         rgba(255, 255, 255, 0.24);
 
-    /* Action — green stays the brand pulse in dark too, slightly brighter
-     * so it pops against the near-black surfaces. */
-    --accent-action:         var(--primitive-green-500);    /* #22c55e */
-    --accent-action-hover:   var(--primitive-green-600);    /* #16a34a */
-    --accent-action-muted:   rgba(34, 197, 94, 0.12);
-    --accent-action-text:    #0a0a0a;                        /* dark text on bright action */
+    /* Action — electric Ion Lime pops against the obsidian surfaces. */
+    --accent-action:         var(--primitive-lime-electric);  /* #B6F531 */
+    --accent-action-hover:   #a3e635;
+    --accent-action-muted:   rgba(182, 245, 49, 0.14);
+    --accent-action-text:    #0a0a0a;                        /* ink text on electric lime */
+    --accent-strong:         var(--primitive-lime-electric);  /* #B6F531 — same electric in dark */
+    --accent-strong-text:    #0a0a0a;
   }
 
   html {
@@ -831,7 +846,7 @@
 .rich-editor-content h2 { font-size: 1.4rem; font-weight: 700; line-height: 1.3; margin-top: 1.4em; }
 .rich-editor-content h3 { font-size: 1.15rem; font-weight: 600; line-height: 1.3; margin-top: 1.2em; }
 .rich-editor-content p { margin: 0; }
-.rich-editor-content a { color: var(--primitive-green-600, #16a34a); text-decoration: underline; }
+.rich-editor-content a { color: var(--color-action); text-decoration: underline; }
 .rich-editor-content ul { list-style: disc; padding-left: 1.4em; }
 .rich-editor-content ol { list-style: decimal; padding-left: 1.4em; }
 .rich-editor-content li { margin: 0.2em 0; }
@@ -849,65 +864,28 @@
   border: 1px solid var(--color-border); padding: 0.4em 0.6em; text-align: left; min-width: 4em;
 }
 .rich-editor-content th { background: var(--color-surface-raised); font-weight: 600; }
-.rich-editor-content .selectedCell { background: color-mix(in srgb, var(--color-brand, #16a34a) 12%, transparent); }
+.rich-editor-content .selectedCell { background: color-mix(in srgb, var(--color-action) 12%, transparent); }
 .rich-editor-content:empty::before,
 .rich-editor-content p.is-editor-empty:first-child::before {
   content: attr(aria-label); color: var(--color-text-faint); pointer-events: none; float: left; height: 0;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
- * evig /vision — scoped "Obsidian & Ion Lime" manifesto theme
+ * evig /vision — manifesto layout
  * ---------------------------------------------------------------------------
- * A self-contained dark brand surface used ONLY by the /vision route
- * (wrapped in `.theme-vision`). It redefines the semantic design tokens for
- * its subtree — the rest of the app (green) is untouched. All colour comes
- * from tokens; components carry zero literal hex. This is also the beachhead
- * for evig's new visual identity; a global retheme remains a separate call.
+ * /vision uses the GLOBAL design tokens (obsidian/lime, light + dark) — there
+ * is no separate theme any more. This block only sets the page shell (the route
+ * bypasses the app chrome and renders its own header/footer) and maps the
+ * display/body/mono fonts onto the local `--font-v*` aliases the .v-* layout
+ * classes read. One SSOT: colours from tokens, mark from brand.ts, type from
+ * the global font vars.
  * ═══════════════════════════════════════════════════════════════════════════ */
 
-/* Brand faces — subset (latin + Swiss umlauts), self-hosted, no CDN. */
-@font-face{font-family:'SpaceGroteskVision';font-weight:500;font-style:normal;font-display:swap;src:url('/fonts/vision-space-grotesk-500.woff2') format('woff2');}
-@font-face{font-family:'SpaceGroteskVision';font-weight:700;font-style:normal;font-display:swap;src:url('/fonts/vision-space-grotesk-700.woff2') format('woff2');}
-@font-face{font-family:'InterVision';font-weight:400;font-style:normal;font-display:swap;src:url('/fonts/vision-inter-400.woff2') format('woff2');}
-@font-face{font-family:'InterVision';font-weight:600;font-style:normal;font-display:swap;src:url('/fonts/vision-inter-600.woff2') format('woff2');}
-@font-face{font-family:'PlexMonoVision';font-weight:400;font-style:normal;font-display:swap;src:url('/fonts/vision-ibm-plex-mono-400.woff2') format('woff2');}
-
 @layer base {
-  :root {
-    /* Obsidian & Ion Lime primitives (raw values live here only) */
-    --primitive-obsidian:        #0A0B0A;
-    --primitive-obsidian-raised: #111311;
-    --primitive-obsidian-over:   #171A15;
-    --primitive-lime:            #B6F531;
-    --primitive-paper:           #FAFCF7;
-    --primitive-mute:            #8E968A;
-    --primitive-ink:             #0A0A0A;
-  }
-
-  /* Scope: everything below inherits obsidian/lime semantic tokens. */
   .theme-vision {
-    --surface-page:    var(--primitive-obsidian);
-    --surface-base:    var(--primitive-obsidian-raised);
-    --surface-raised:  var(--primitive-obsidian-raised);
-    --surface-overlay: var(--primitive-obsidian-over);
-
-    --text-primary:    var(--primitive-paper);
-    --text-secondary:  #B7BEB2;
-    --text-tertiary:   var(--primitive-mute);
-    --text-muted:      var(--primitive-mute);
-    --text-inverted:   var(--primitive-ink);
-
-    --accent-action:       var(--primitive-lime);
-    --accent-action-hover: var(--primitive-lime);
-    --accent-action-text:  var(--primitive-ink);
-
-    --border-subtle:  rgba(250, 252, 247, 0.08);
-    --border-default: rgba(182, 245, 49, 0.14);
-    --border-strong:  rgba(182, 245, 49, 0.30);
-
-    --font-vd: 'SpaceGroteskVision', system-ui, sans-serif;
-    --font-vb: 'InterVision', system-ui, sans-serif;
-    --font-vm: 'PlexMonoVision', ui-monospace, monospace;
+    --font-vd: var(--font-display);
+    --font-vb: var(--font-sans);
+    --font-vm: var(--font-mono);
 
     min-height: 100dvh;
     background: var(--surface-page);

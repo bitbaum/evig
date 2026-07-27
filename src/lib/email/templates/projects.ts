@@ -47,7 +47,7 @@ export const projectContributionNotification = (
         <tr style="background:#f3f4f6;"><td style="padding:8px; font-weight:bold;">Organisation</td><td style="padding:8px;">${eOrg}</td></tr>
       </table>
       <p><strong>Nachricht:</strong></p>
-      <div style="background:#f9fafb; border-left:4px solid #22c55e; padding:16px; margin:12px 0; border-radius:4px;">
+      <div style="background:#f9fafb; border-left:4px solid #4d7c0f; padding:16px; margin:12px 0; border-radius:4px;">
         ${eMessageHtml}
       </div>
       <p style="margin-top:24px;">

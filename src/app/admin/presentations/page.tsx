@@ -61,7 +61,7 @@ export default async function PresentationsPage() {
           <MessageSquare className="w-4 h-4 text-text-muted" aria-hidden="true" />
           Feedback
           {openFeedback > 0 && (
-            <span className="inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-action text-white text-xs font-semibold">
+            <span className="inline-flex items-center justify-center min-w-5 h-5 px-1.5 rounded-full bg-action text-action-text text-xs font-semibold">
               {openFeedback}
             </span>
           )}

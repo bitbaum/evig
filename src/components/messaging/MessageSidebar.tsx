@@ -196,7 +196,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
                             {conversation.type}
                           </span>
                           {conversation.unread_count > 0 && (
-                            <span className="bg-action text-white text-xs px-2 py-1 rounded-full">
+                            <span className="bg-action text-action-text text-xs px-2 py-1 rounded-full">
                               {conversation.unread_count}
                             </span>
                           )}
@@ -247,7 +247,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
                         <div
                           className={`max-w-xs px-4 py-2 rounded-lg ${
                             isOwn
-                              ? 'bg-action text-white'
+                              ? 'bg-action text-action-text'
                               : 'bg-surface-raised text-text-primary'
                           }`}
                         >

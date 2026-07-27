@@ -74,7 +74,7 @@ export default function DeliverableChat({
               <div
                 className={`inline-block rounded-lg px-3 py-2 text-sm text-left max-w-[85%] ${
                   t.role === 'user'
-                    ? 'bg-action text-white whitespace-pre-wrap'
+                    ? 'bg-action text-action-text whitespace-pre-wrap'
                     : 'bg-surface-raised text-text-primary'
                 }`}
               >

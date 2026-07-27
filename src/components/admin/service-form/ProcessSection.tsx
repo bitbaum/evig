@@ -25,7 +25,7 @@ export function ProcessSection({ steps, onAdd, onUpdate, onRemove }: ProcessSect
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-action text-white rounded-full flex items-center justify-center text-sm font-bold">
+                <div className="w-8 h-8 bg-action text-action-text rounded-full flex items-center justify-center text-sm font-bold">
                   {step.step}
                 </div>
                 <span className="text-sm font-medium text-text-secondary">

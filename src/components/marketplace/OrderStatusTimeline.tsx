@@ -89,7 +89,7 @@ export function OrderStatusTimeline({
             <div className="flex flex-col items-center shrink-0 min-w-[60px]">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
                 reached
-                  ? 'bg-action text-white'
+                  ? 'bg-action text-action-text'
                   : 'bg-surface-overlay text-text-muted'
               }`}>
                 {reached

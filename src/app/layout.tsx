@@ -1,6 +1,15 @@
 import type { Metadata } from "next";
 import { getLocale } from "next-intl/server";
+import { Space_Grotesk, Inter, IBM_Plex_Mono } from "next/font/google";
 import { Providers } from "@/components/providers/providers";
+
+// Brand faces — one SSOT for typography. Space Grotesk = display (headings,
+// wordmark), Inter = body, IBM Plex Mono = labels/eyebrows. Space Grotesk is
+// latin-only; the CSS font stacks (globals.css @theme) carry CJK/Cyrillic
+// system fallbacks for ja/ko, and Inter covers cyrillic for ru.
+const display = Space_Grotesk({ subsets: ["latin"], weight: ["500", "700"], variable: "--font-space-grotesk", display: "swap" });
+const sans = Inter({ subsets: ["latin", "latin-ext", "cyrillic"], variable: "--font-inter", display: "swap" });
+const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-plex-mono", display: "swap" });
 import { ORG } from "@/config/org";
 import { PUBLIC_SITE_URL } from "@/config/urls";
 import { auth } from "@/auth";
@@ -42,7 +51,7 @@ export default async function RootLayout({
   const locale = await getLocale();
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning className={`${display.variable} ${sans.variable} ${mono.variable}`}>
       <body className="font-sans fix-text-rendering antialiased">
         <Providers session={session}>
           {children}

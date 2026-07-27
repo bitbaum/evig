@@ -330,7 +330,7 @@ export function MobileMenu({
             <div className="space-y-3">
               {/* User Info */}
               <div className="flex items-center gap-3 p-3 bg-action-muted/8 rounded-xl border border-subtle dark:border-action/20">
-                <div className="w-10 h-10 rounded-full bg-action flex items-center justify-center text-white text-sm font-semibold shrink-0">
+                <div className="w-10 h-10 rounded-full bg-action flex items-center justify-center text-action-text text-sm font-semibold shrink-0">
                   {session.user.name
                     ?.split(' ')
                     .map((n) => n[0])

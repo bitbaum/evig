@@ -236,7 +236,7 @@ export default function WorkshopRegistrationForm({ workshop, instance }: Worksho
         <Button
           type="button"
           onClick={() => setRegistrationUIStatus('not-registered')}
-          className="w-full bg-action text-white hover:opacity-90"
+          className="w-full bg-action text-action-text hover:opacity-90"
         >
           {t('retryButton')}
         </Button>

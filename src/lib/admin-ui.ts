@@ -188,7 +188,7 @@ export const adminInteractive = {
   /** Unread notification row tint */
   unreadTint:      'bg-action-muted/50',
   /** Active team member avatar */
-  avatarActive:    'bg-action text-white',
+  avatarActive:    'bg-action text-action-text',
   /** Inactive team member avatar — readable initials on dark admin chrome */
   avatarInactive:  'bg-surface-overlay text-text-secondary',
 } as const

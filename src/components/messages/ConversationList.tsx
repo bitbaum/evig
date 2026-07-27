@@ -91,7 +91,7 @@ export default function ConversationList({ conversations, selectedId, onSelect }
                   {conv.last_message_preview || t('noMessage')}
                 </p>
                 {conv.unread_count > 0 && (
-                  <span className="ml-2 shrink-0 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-action rounded-full">
+                  <span className="ml-2 shrink-0 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-action-text bg-action rounded-full">
                     {conv.unread_count}
                   </span>
                 )}

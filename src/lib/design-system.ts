@@ -209,9 +209,9 @@ export function getStatusColors(status: keyof typeof statusColors) {
  */
 export const buttonVariants = {
   primary: {
-    bg: 'bg-action',
-    hover: 'hover:bg-action-hover',
-    text: 'text-action-text',
+    bg: 'bg-action-strong',
+    hover: 'hover:opacity-90',
+    text: 'text-action-strong-text',
     border: 'border-transparent',
   },
   secondary: {
