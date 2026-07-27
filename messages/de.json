@@ -332,7 +332,8 @@
       "warehouse": "Lager",
       "byAppointmentOnly": "(nur nach Terminvereinbarung)",
       "country": "Schweiz"
-    }
+    },
+    "vision": "Vision"
   },
   "home": {
     "meta": {
@@ -8913,6 +8914,109 @@
       "visit": "Zur Anwendung",
       "source": "Quellcode ansehen",
       "license": "{license}-Lizenz"
+    }
+  },
+  "vision": {
+    "meta": {
+      "title": "Die Vision",
+      "description": "Intelligenz soll für alle erreichbar sein — überall. Warum es evig gibt, und welche Ungleichheit wir schliessen wollen."
+    },
+    "badge": {
+      "region": "Zürich · Schweiz",
+      "legal": "Gemeinnütziger Verein · in Gründung"
+    },
+    "hero": {
+      "eyebrow": "Die evig-Vision",
+      "title": "Intelligenz soll für alle erreichbar sein — überall.",
+      "lede": "Rechenleistung, künstliche Intelligenz und — bald — <b>Roboter</b>. Erreichbar für Menschen, nicht nur für Institutionen und Wohlhabende.",
+      "tag": "raise for longer"
+    },
+    "thesis": {
+      "eyebrow": "Warum das zählt",
+      "title": "Die Ungleichheit, die über alle anderen entscheidet.",
+      "p1": "Wir sprechen über Einkommens- und Vermögensungleichheit. Doch das sind Symptome. Die Ungleichheit, die ein Leben heute am stärksten prägt, ist der <b>Zugang zu Intelligenz</b> — und es gibt sie in zwei Formen.",
+      "ai": "<b>Künstliche Intelligenz.</b> Wer sich ein Abo für ein führendes KI-Modell leisten kann, lernt schneller, arbeitet besser und erreicht Chancen — einen besseren Job, neue Fähigkeiten, Ideen, auf die man allein nicht käme — die anderen verschlossen bleiben.",
+      "robot": "<b>Verkörperte Intelligenz — Roboter.</b> Ein Roboter, der saugt und wischt, nimmt echte Arbeit aus einem Leben; Geschirrspüler und Waschmaschine taten es zuvor, und ein humanoider Roboter wird bald weit mehr davon übernehmen. Was sie zurückgeben, ist das Knappste überhaupt: <b>Zeit, und die Energie, sie zu nutzen.</b>",
+      "pull": "Zugang zu Intelligenz ist die eine Ungleichheit, die sich verstärkt.",
+      "p2": "Wer Zugang hat, wird Jahr für Jahr fähiger und freier; wer keinen hat, fällt zurück — automatisch, ohne dass es jemand entscheidet. Genau deshalb lohnt es sich, diese Lücke zu schliessen: Gib einem Menschen Zugang zu Intelligenz, künstlich oder verkörpert, und du gibst ihm seine Zeit zurück und vervielfachst, was er tun kann. Keine verordnete Gleichheit der Ergebnisse — <b>eine faire Chance auf die Werkzeuge, mit denen sich jeder selbst erheben kann.</b>"
+    },
+    "origin": {
+      "eyebrow": "Woher wir kommen",
+      "quote": "Ein aufbereiteter Laptop ist die günstigste Auffahrt zur Intelligenz, die es gibt.",
+      "p1": "evig ist aus der stillen Arbeit der Kreislauf-IT entstanden — müde Laptops und Computer nehmen, reparieren, auf Vordermann bringen und ihnen ein zweites Leben geben statt der Deponie. Diese Arbeit ist gut für den Planeten. Aber wir sahen, was die Recycling-Sicht übersah: Dieselbe Maschine, die Elektroschrott geworden wäre, ist — richtig eingerichtet — ein Tor zu den mächtigsten Werkzeugen, die die Menschheit je gebaut hat.",
+      "p2": "<b>Kreislaufwirtschaft und Zugang zu Intelligenz erwiesen sich als dieselbe Handlung, von zwei Seiten betrachtet.</b> Wir haben eine Plattform um diese Idee gebaut. Unser Umfeld war nicht bereit, diesen Weg zu gehen — also gehen wir ihn seit 2026, in Zürich, selbst. Dieselben Wurzeln, ein mutigeres Ziel."
+    },
+    "diff": {
+      "eyebrow": "Was uns anders macht",
+      "title": "Gut, weil bezahlbar. Bezahlbar, weil gut.",
+      "intro": "Die Welt, aus der wir kommen, arbeitet oft als Wohltätigkeits-Recycling: den Schrott nehmen, die Teile ernten, das Gerade-noch-Genügende weitergeben. Ehrenwert — aber nicht wir. evig ist ein Markt- und Qualitätsmodell, geführt als gemeinnütziger Verein. Der Unterschied zeigt sich in drei Versprechen.",
+      "p1": {
+        "title": "Ganze Maschinen, keine Teile",
+        "body": "Keine Fragmente, kein Kasten voller Vielleichts, niemandem ein Projekt verkaufen. Alles auf dem evig-Marktplatz ist eine funktionierende Maschine — und mit der Zeit ein funktionierender Roboter. Was gelistet ist, läuft."
+      },
+      "p2": {
+        "title": "Qualität ist ein Versprechen, keine Lotterie",
+        "body": "Wenn wir sagen, eine Maschine sei <b>ideal fürs Live-Coding von Musik</b>, dann ist die Software bereits installiert, es ist die richtige Software, korrekt eingerichtet, und sie funktioniert, sobald du den Deckel öffnest. Die Eignung für einen echten Zweck ist das Produkt — nicht ein Datenblatt."
+      },
+      "p3": {
+        "title": "Hardware, Software und Wissen — zusammen",
+        "body": "Die Kiste zu besitzen ist nicht der Punkt; die Sache zu tun schon. Leistungsfähige Hardware, eingerichtet und bereit, übergeben mit den Workshops und dem Know-how, um sie wirklich zu nutzen und zu erhalten. Hardware ohne Software ist ein Briefbeschwerer. Software ohne Wissen ist eine verschlossene Tür."
+      }
+    },
+    "research": {
+      "eyebrow": "Wir forschen — offen",
+      "title": "Eine Organisation mit einer Haltung, der man folgen will.",
+      "p1": "Man kann Intelligenz nicht ehrlich erreichbar machen, ohne sie tief zu verstehen — und die Grenze verschiebt sich jede Woche. Neue Modelle, neue Hardware, neue Roboter, neue Wege, leistungsfähige KI auf bescheidenen Maschinen laufen zu lassen. Jedes Versprechen, das wir geben, ruht darauf, dass jemand diese Arbeit tut.",
+      "pull": "Forschung ist der Motor unter der Kuratierung.",
+      "p2": "Wir veröffentlichen, was wir lernen — Notizen und Texte über bezahlbare KI, Intelligenz auf Second-Life-Hardware, offene Robotik, Reparatur und Souveränität über die eigenen Werkzeuge. Offen, denn <b>Wissen im Kreislauf ist dieselbe Idee wie Hardware im Kreislauf.</b> Es macht evig verfolgenswert, und es bringt die richtigen Menschen an Bord. Unsere Forschung <em>ist</em> unser Recruiting."
+    },
+    "afford": {
+      "eyebrow": "Wie Menschen es sich leisten",
+      "title": "Nicht nur gekauft. Gemeinsam ermöglicht.",
+      "intro": "Zugang sollte nicht nur davon abhängen, was schon im Portemonnaie ist. Neben dem direkten Kauf baut evig Wege, auf denen Menschen sich den Zugang zu Intelligenz <b>erschliessen</b> — gemeinsam.",
+      "w1": {
+        "k": "Gemeinsam",
+        "title": "Abo-Crowdfunding & gepoolte Finanzierung",
+        "body": "Gemeinschaften, Klassen und Gruppen sammeln zusammen Mittel, damit eine Person oder ein Projekt die nötigen Werkzeuge erreicht."
+      },
+      "w2": {
+        "k": "Geteilt",
+        "title": "Geteilte Abo-Pools",
+        "body": "Die laufenden Kosten der KI- und Software-Abos selbst aufteilen — damit der Preis der Intelligenz geteilt und nicht allein getragen wird."
+      },
+      "w3": {
+        "k": "Direkt",
+        "title": "Ein Gerät geben, ein Werkzeug finanzieren, einen Platz stiften",
+        "body": "Spende eine funktionierende Maschine, finanziere ein bestimmtes Stück Ausrüstung oder stifte einen Workshop-Platz. Kein Mittelsmann, kein Aufschlag."
+      },
+      "close": "Genau das bedeutet der Leitspruch. <lime>Raise for longer:</lime> die Mittel heben, das Leben der Maschine verlängern, die Schwelle heben, wer teilhaben darf — und sie oben halten."
+    },
+    "future": {
+      "eyebrow": "Wohin es geht",
+      "title": "Computer — und Roboter.",
+      "p1": "Heute ist der Marktplatz Computer. Das ist der Anfang, nicht das Ganze. Roboter werden zum nächsten Allzweckwerkzeug, so wie es der Personal Computer einst wurde — und dieselbe Logik gilt: nützlich nur, wenn er auf Anhieb funktioniert, ehrlich über sein Können ist und mit dem Wissen kommt, ihn einzusetzen.",
+      "pull": "Humanoide Roboter werden noch nicht gebraucht verkauft. Neu kaum.",
+      "p2": "Dieses Fenster bleibt nicht lange zu. Wenn es sich öffnet, will evig der erste Laden sein, der es richtig macht — Roboter, die vollständig, geprüft und für ihren Zweck belegt sind, gestützt auf die Workshops, um sie zu nutzen; neu, und mit der Zeit ein zweites Leben, so wie wir es heute Laptops geben. <b>Früh dran und richtig sind nicht dasselbe.</b> Der einzige Weg, beides zu sein, ist, die Arbeit schon jetzt zu tun. Dafür ist die Forschung da."
+    },
+    "close": {
+      "eyebrow": "Intelligenz, erreichbar — und erreichbar gehalten",
+      "title": "Zwei Wege, das voranzubringen.",
+      "support": {
+        "k": "Die Mission unterstützen",
+        "title": "evig fördern",
+        "body": "Für Stiftungen, Förderstellen und Gönner, die überzeugt sind, dass Zugang zu Intelligenz nicht vom Portemonnaie abhängen darf.",
+        "cta": "Ein Gespräch beginnen"
+      },
+      "build": {
+        "k": "Mit uns bauen",
+        "title": "Bei der Arbeit mitmachen",
+        "body": "Für Menschen und Partner, die forschen, reparieren, lehren und gute Werkzeuge in mehr Hände bringen wollen.",
+        "cta": "Sieh, wo du hinpasst"
+      },
+      "commercial": "Baust du auf unseren Plattform-Produkten auf? <b>hirnli</b> und <b>kivvi</b> sind offene, unabhängige Projekte mit eigenem Zuhause — <a>melde dich</a>. Bewusst getrennt vom Verein."
+    },
+    "footer": {
+      "legal": "evig — «ewig» — ist ein gemeinnütziger Verein <em>in Gründung</em> in Zürich, Schweiz. Wir beanspruchen keinen anerkannten gemeinnützigen Status und stellen keine steuerlich abzugsfähigen Spendenbescheinigungen aus, solange der Verein nicht eingetragen und kantonal anerkannt ist. Alles auf dieser Seite ist das, worauf wir hinarbeiten — als Absicht formuliert, nicht als Leistungsausweis, den wir noch nicht verdient haben."
     }
   }
 }

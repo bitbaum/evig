@@ -854,3 +854,167 @@
 .rich-editor-content p.is-editor-empty:first-child::before {
   content: attr(aria-label); color: var(--color-text-faint); pointer-events: none; float: left; height: 0;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+ * evig /vision — scoped "Obsidian & Ion Lime" manifesto theme
+ * ---------------------------------------------------------------------------
+ * A self-contained dark brand surface used ONLY by the /vision route
+ * (wrapped in `.theme-vision`). It redefines the semantic design tokens for
+ * its subtree — the rest of the app (green) is untouched. All colour comes
+ * from tokens; components carry zero literal hex. This is also the beachhead
+ * for evig's new visual identity; a global retheme remains a separate call.
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Brand faces — subset (latin + Swiss umlauts), self-hosted, no CDN. */
+@font-face{font-family:'SpaceGroteskVision';font-weight:500;font-style:normal;font-display:swap;src:url('/fonts/vision-space-grotesk-500.woff2') format('woff2');}
+@font-face{font-family:'SpaceGroteskVision';font-weight:700;font-style:normal;font-display:swap;src:url('/fonts/vision-space-grotesk-700.woff2') format('woff2');}
+@font-face{font-family:'InterVision';font-weight:400;font-style:normal;font-display:swap;src:url('/fonts/vision-inter-400.woff2') format('woff2');}
+@font-face{font-family:'InterVision';font-weight:600;font-style:normal;font-display:swap;src:url('/fonts/vision-inter-600.woff2') format('woff2');}
+@font-face{font-family:'PlexMonoVision';font-weight:400;font-style:normal;font-display:swap;src:url('/fonts/vision-ibm-plex-mono-400.woff2') format('woff2');}
+
+@layer base {
+  :root {
+    /* Obsidian & Ion Lime primitives (raw values live here only) */
+    --primitive-obsidian:        #0A0B0A;
+    --primitive-obsidian-raised: #111311;
+    --primitive-obsidian-over:   #171A15;
+    --primitive-lime:            #B6F531;
+    --primitive-paper:           #FAFCF7;
+    --primitive-mute:            #8E968A;
+    --primitive-ink:             #0A0A0A;
+  }
+
+  /* Scope: everything below inherits obsidian/lime semantic tokens. */
+  .theme-vision {
+    --surface-page:    var(--primitive-obsidian);
+    --surface-base:    var(--primitive-obsidian-raised);
+    --surface-raised:  var(--primitive-obsidian-raised);
+    --surface-overlay: var(--primitive-obsidian-over);
+
+    --text-primary:    var(--primitive-paper);
+    --text-secondary:  #B7BEB2;
+    --text-tertiary:   var(--primitive-mute);
+    --text-muted:      var(--primitive-mute);
+    --text-inverted:   var(--primitive-ink);
+
+    --accent-action:       var(--primitive-lime);
+    --accent-action-hover: var(--primitive-lime);
+    --accent-action-text:  var(--primitive-ink);
+
+    --border-subtle:  rgba(250, 252, 247, 0.08);
+    --border-default: rgba(182, 245, 49, 0.14);
+    --border-strong:  rgba(182, 245, 49, 0.30);
+
+    --font-vd: 'SpaceGroteskVision', system-ui, sans-serif;
+    --font-vb: 'InterVision', system-ui, sans-serif;
+    --font-vm: 'PlexMonoVision', ui-monospace, monospace;
+
+    min-height: 100dvh;
+    background: var(--surface-page);
+    color: var(--text-secondary);
+    font-family: var(--font-vb);
+    font-size: 1.06rem;
+    line-height: 1.68;
+    letter-spacing: 0.005em;
+    -webkit-font-smoothing: antialiased;
+  }
+  .theme-vision ::selection { background: var(--accent-action); color: var(--accent-action-text); }
+}
+
+/* ─── /vision layout (self-contained `.v-*` classes, tokens only) ─────────── */
+.theme-vision .v-wrap { max-width: 760px; margin: 0 auto; padding: 0 28px; }
+.theme-vision .v-col  { max-width: 62ch; }
+.theme-vision a { color: inherit; }
+
+.theme-vision .v-eyebrow{
+  font-family: var(--font-vm); font-size: .72rem; font-weight: 400; letter-spacing: .24em;
+  text-transform: uppercase; color: var(--text-tertiary); margin: 0 0 1.1rem; display: block;
+}
+.theme-vision .v-eyebrow .dot { color: var(--accent-action); }
+.theme-vision .v-h1, .theme-vision .v-h2, .theme-vision .v-h3 { font-family: var(--font-vd); font-weight: 700; text-wrap: balance; margin: 0; color: var(--text-primary); }
+.theme-vision p { margin: 0 0 1.15rem; color: var(--text-secondary); }
+.theme-vision strong { font-weight: 600; color: var(--text-primary); }
+.theme-vision .lime { color: var(--accent-action); }
+
+/* top bar */
+.theme-vision .v-header{
+  position: sticky; top: 0; z-index: 20; backdrop-filter: blur(10px);
+  background: linear-gradient(var(--surface-page), color-mix(in srgb, var(--surface-page) 72%, transparent));
+  border-bottom: 1px solid var(--border-subtle);
+}
+.theme-vision .v-bar{ max-width: 760px; margin: 0 auto; padding: 15px 28px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.theme-vision .v-brand{ display: flex; align-items: center; gap: 11px; }
+.theme-vision .v-brand .mk{ width: 30px; height: 30px; flex: none; color: var(--accent-action); }
+.theme-vision .v-brand .wm{ font-family: var(--font-vd); font-weight: 700; font-size: 1.32rem; letter-spacing: -.02em; color: var(--text-primary); }
+.theme-vision .v-status{ font-family: var(--font-vm); font-size: .66rem; letter-spacing: .14em; text-transform: uppercase; color: var(--text-tertiary); text-align: right; line-height: 1.5; }
+@media (max-width: 560px){ .theme-vision .v-status{ display: none; } }
+
+/* hero */
+.theme-vision .v-hero{ padding: 76px 0 30px; text-align: center; }
+.theme-vision .v-loop{ width: min(230px, 52vw); margin: 0 auto 34px; color: var(--accent-action); }
+.theme-vision .v-h1{ font-size: clamp(2.5rem, 7.4vw, 4.7rem); line-height: 1.02; letter-spacing: -.035em; margin: 0 auto; max-width: 15ch; }
+.theme-vision .v-lede{ font-size: clamp(1.12rem, 2.3vw, 1.35rem); color: var(--text-tertiary); line-height: 1.55; max-width: 34ch; margin: 1.5rem auto 0; }
+.theme-vision .v-lede strong{ color: var(--text-primary); }
+.theme-vision .v-tag{ display: inline-block; margin-top: 2.1rem; font-family: var(--font-vm); font-size: .72rem; letter-spacing: .22em; text-transform: uppercase; color: var(--accent-action); border: 1px solid var(--border-default); border-radius: 999px; padding: .5rem 1rem; }
+
+/* sections */
+.theme-vision .v-section{ padding: 52px 0; }
+.theme-vision .v-rule{ height: 1px; background: var(--border-subtle); max-width: 760px; margin: 0 auto; }
+.theme-vision .v-h2{ font-size: clamp(1.6rem, 3.6vw, 2.3rem); line-height: 1.08; letter-spacing: -.025em; max-width: 20ch; }
+.theme-vision .v-leadq{ font-family: var(--font-vd); font-weight: 500; font-size: clamp(1.5rem, 3.8vw, 2.15rem); line-height: 1.2; letter-spacing: -.02em; color: var(--text-primary); max-width: 24ch; margin: 0 0 1.6rem; text-wrap: balance; }
+.theme-vision .v-after{ margin-top: 1.3rem; }
+.theme-vision .v-gap{ margin-top: 1.8rem; }
+.theme-vision .v-pull{ border-left: 2px solid var(--accent-action); padding: .2rem 0 .2rem 1.3rem; margin: 1.9rem 0; font-family: var(--font-vd); font-weight: 500; font-size: 1.24rem; line-height: 1.35; letter-spacing: -.015em; color: var(--text-primary); max-width: 30ch; text-wrap: balance; }
+
+/* three promises */
+.theme-vision .v-promises{ display: flex; flex-direction: column; gap: 0; margin-top: 2rem; }
+.theme-vision .v-promise{ padding: 1.5rem 0; border-top: 1px solid var(--border-subtle); display: grid; grid-template-columns: 26px 1fr; gap: 18px; }
+.theme-vision .v-promise:last-child{ border-bottom: 1px solid var(--border-subtle); }
+.theme-vision .v-promise .glyph{ width: 22px; height: 22px; margin-top: 4px; color: var(--accent-action); flex: none; }
+.theme-vision .v-promise .v-h3{ font-size: 1.18rem; letter-spacing: -.01em; margin: 0 0 .5rem; }
+.theme-vision .v-promise p{ margin: 0; font-size: 1rem; line-height: 1.6; }
+
+/* funding ways */
+.theme-vision .v-ways{ display: flex; flex-direction: column; gap: 14px; margin-top: 1.9rem; }
+.theme-vision .v-way{ border: 1px solid var(--border-subtle); border-radius: 14px; padding: 1.2rem 1.3rem; background: var(--surface-base); }
+.theme-vision .v-way .k{ font-family: var(--font-vm); font-size: .68rem; letter-spacing: .18em; text-transform: uppercase; color: var(--accent-action); display: block; margin-bottom: .5rem; }
+.theme-vision .v-way .v-h3{ font-weight: 600; font-size: 1.05rem; margin: 0 0 .35rem; letter-spacing: -.01em; }
+.theme-vision .v-way p{ margin: 0; font-size: .96rem; line-height: 1.55; }
+
+/* close / doors */
+.theme-vision .v-close{ padding: 60px 0 20px; text-align: center; }
+.theme-vision .v-close .v-h2{ margin: 0 auto; max-width: 22ch; }
+.theme-vision .v-doors{ display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 2.4rem auto 0; text-align: left; }
+@media (max-width: 560px){ .theme-vision .v-doors{ grid-template-columns: 1fr; } }
+.theme-vision .v-door{ border-radius: 16px; padding: 1.5rem; text-decoration: none; display: block; transition: transform .25s ease, border-color .25s ease; }
+.theme-vision .v-door:focus-visible{ outline: 2px solid var(--accent-action); outline-offset: 3px; }
+.theme-vision .v-door.primary{ background: var(--accent-action); color: var(--accent-action-text); }
+.theme-vision .v-door.ghost{ border: 1px solid var(--border-default); color: var(--text-primary); background: var(--surface-base); }
+.theme-vision .v-door:hover{ transform: translateY(-3px); }
+.theme-vision .v-door.ghost:hover{ border-color: var(--accent-action); }
+.theme-vision .v-door .k{ font-family: var(--font-vm); font-size: .66rem; letter-spacing: .18em; text-transform: uppercase; display: block; margin-bottom: .7rem; opacity: .75; }
+.theme-vision .v-door .v-h3{ font-size: 1.28rem; letter-spacing: -.02em; margin: 0 0 .45rem; }
+.theme-vision .v-door p{ margin: 0; font-size: .92rem; line-height: 1.5; }
+.theme-vision .v-door.primary p{ color: color-mix(in srgb, var(--accent-action-text) 72%, transparent); }
+.theme-vision .v-door.ghost p{ color: var(--text-tertiary); }
+.theme-vision .v-door .arr{ display: inline-block; margin-top: .9rem; font-family: var(--font-vm); font-size: .8rem; letter-spacing: .05em; }
+.theme-vision .v-commercial{ margin: 2rem auto 0; font-family: var(--font-vm); font-size: .74rem; letter-spacing: .04em; color: var(--text-tertiary); max-width: 46ch; line-height: 1.6; }
+.theme-vision .v-commercial a{ color: var(--text-primary); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--border-default); }
+
+/* footer */
+.theme-vision .v-foot{ border-top: 1px solid var(--border-subtle); margin-top: 36px; padding: 34px 0 60px; }
+.theme-vision .v-foot .fbar{ display: flex; align-items: center; gap: 12px; margin-bottom: 1.1rem; }
+.theme-vision .v-foot .mk{ width: 22px; height: 22px; color: var(--accent-action); }
+.theme-vision .v-foot .wm{ font-family: var(--font-vd); font-weight: 700; font-size: 1rem; letter-spacing: -.02em; color: var(--text-primary); }
+.theme-vision .v-foot p{ font-family: var(--font-vm); font-size: .7rem; line-height: 1.7; letter-spacing: .03em; color: var(--text-tertiary); margin: 0; max-width: 60ch; }
+
+/* motion — the eternal loop draws itself, then a slow light-pulse runs it */
+.theme-vision .v-draw{ stroke-dasharray: 100; stroke-dashoffset: 100; animation: v-draw 2.1s ease forwards .25s; }
+@keyframes v-draw{ to{ stroke-dashoffset: 0; } }
+.theme-vision .v-pulse{ stroke-dasharray: 7 93; stroke-dashoffset: 100; opacity: 0; animation: v-pulseIn .6s ease forwards 2.2s, v-travel 5.5s linear infinite 2.2s; }
+@keyframes v-pulseIn{ to{ opacity: 1; } }
+@keyframes v-travel{ from{ stroke-dashoffset: 100; } to{ stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce){
+  .theme-vision .v-draw{ animation: none; stroke-dashoffset: 0; }
+  .theme-vision .v-pulse{ display: none; }
+}

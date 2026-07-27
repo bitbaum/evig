@@ -149,6 +149,10 @@ export const ROUTES = {
     careers:                  '/karriere',
     careerPosting:            (slug: string) => `/karriere/${slug}`,
     getInvolved:              '/get-involved',
+    partnerships:             '/get-involved/partnerships',
+    contact:                  '/contact',
     changelog:                '/changelog',
+    // The founding vision / manifesto — a full-bleed dark brand surface.
+    vision:                   '/vision',
   },
 } as const

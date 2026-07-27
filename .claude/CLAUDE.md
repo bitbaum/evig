@@ -8,10 +8,23 @@
 
 This codebase was built for Revamp-IT and is now the platform for **evig** —
 George's own independent org (founded 2026-07-24, `in Gründung`). evig is a
-**market/quality model, NOT a charity**: make genuinely good, durable hardware
-affordable to everyone — curated, not junk refurb. Do not describe evig as a
-"non-profit" or frame it around "without extracting profit"; that was Revamp-IT's
-framing, deliberately left behind.
+**non-profit run on a market/quality model**: make genuinely good, durable hardware
+affordable to everyone — curated, not junk refurb. The non-profit purpose funds the
+mission; affordable pricing is the product, not a subsidy.
+
+**Non-profit framing (George, 2026-07-27) — with an honesty boundary:**
+- evig IS positioned as a non-profit — a **gemeinnütziger Verein *in Gründung*** (being
+  founded). Describe it that way; the earlier "NOT a charity, don't call it non-profit"
+  rule is retired (that was an over-correction away from Revamp-IT's *specific* framing,
+  not a rejection of non-profit status).
+- **Honesty boundary — do NOT reactivate what isn't true yet:** until the Verein is
+  actually registered AND canton-recognized as tax-exempt (`gemeinnützig`), evig may
+  **not** issue tax-deductible donation receipts (Spendenbescheinigungen) or claim
+  recognized tax-exempt status. Say "in Gründung"; never fabricate a UID, recognition,
+  or receipt authority. The removal of false Spendenbescheinigungen stays correct until
+  registration is real.
+- Still George's call (not to be guessed): legal form confirmation (Verein) + timing of
+  registration → when to switch copy from "in Gründung" to a recognized non-profit.
 
 **Two layers — rebrand ONLY Layer A, never blind-rename Layer B:**
 - **Layer A (user-facing brand)** → say `evig`: copy, i18n message values, README,

@@ -332,7 +332,8 @@
       "warehouse": "Warehouse",
       "byAppointmentOnly": "(by appointment only)",
       "country": "Switzerland"
-    }
+    },
+    "vision": "Vision"
   },
   "home": {
     "meta": {
@@ -8896,6 +8897,109 @@
       "visit": "Open the app",
       "source": "View source",
       "license": "{license} license"
+    }
+  },
+  "vision": {
+    "meta": {
+      "title": "The vision",
+      "description": "Intelligence should be reachable by anyone, anywhere. Why evig exists — and the inequality we are here to close."
+    },
+    "badge": {
+      "region": "Zürich · Switzerland",
+      "legal": "Non-profit association · in formation"
+    },
+    "hero": {
+      "eyebrow": "The evig vision",
+      "title": "Intelligence should be reachable by anyone, anywhere.",
+      "lede": "Compute, artificial intelligence, and — soon — <b>robots</b>. Within reach of people, not just institutions and the wealthy.",
+      "tag": "raise for longer"
+    },
+    "thesis": {
+      "eyebrow": "Why this matters",
+      "title": "The gap that decides all the others.",
+      "p1": "We talk about inequality of income, and of wealth. But those are symptoms. The inequality that shapes a life most today is <b>access to intelligence</b> — and it comes in two forms.",
+      "ai": "<b>Artificial intelligence.</b> Someone who can afford a frontier AI subscription learns faster, works better, and reaches opportunities — a better job, new skills, ideas they could not reach alone — that stay closed to someone who cannot.",
+      "robot": "<b>Embodied intelligence — robots.</b> A robot that vacuums and mops takes real work out of a life; the dishwasher and washing machine did it before, and a humanoid will do far more of it soon. What they hand back is the scarcest thing there is: <b>time, and the energy to use it.</b>",
+      "pull": "Intelligence is the one inequality that compounds.",
+      "p2": "Those with access grow more capable and freer every year; those without fall behind — automatically, without anyone deciding it. That is why it is the gap worth closing: give a person access to intelligence, artificial or embodied, and you hand back their time and multiply what they can do with it. Not equal outcomes handed down — <b>an equal shot at the tools that let anyone raise themselves.</b>"
+    },
+    "origin": {
+      "eyebrow": "Where we come from",
+      "quote": "A refurbished laptop is the cheapest on-ramp to intelligence that exists.",
+      "p1": "evig grew out of the quiet work of circular IT — taking tired laptops and computers, fixing them, tuning them up, and giving them a second life instead of a landfill. That work is good for the planet. But we saw what the recycling framing missed: the same machine that would have been e-waste is, set up right, a doorway to the most powerful tools humanity has ever built.",
+      "p2": "<b>Circular economy and access to intelligence turned out to be the same act, seen from two sides.</b> We built a platform around that idea. Our surroundings were not ready to walk toward it — so in 2026, in Zürich, we started walking on our own. Same roots, bolder destination."
+    },
+    "diff": {
+      "eyebrow": "What makes us different",
+      "title": "Good because it is affordable. Affordable because it is good.",
+      "intro": "The world we came from often does its work as charity-recycling: take the scrap, harvest the parts, pass on good enough. Honourable — but not us. evig is a market-and-quality model run as a non-profit. The difference shows up in three promises.",
+      "p1": {
+        "title": "Complete machines, not parts",
+        "body": "No fragments, no bin of maybes, no selling someone a project. Everything in the evig marketplace is a working machine — and, in time, a working robot. If it is listed, it runs."
+      },
+      "p2": {
+        "title": "Quality is a promise, not a lottery",
+        "body": "When we say a machine is <b>great for live-coding music</b>, the software is already installed, it is the right software, it is configured correctly, and it works the moment you open the lid. Fitness for a real purpose is the product — not a spec sheet."
+      },
+      "p3": {
+        "title": "Hardware, software, and knowledge — together",
+        "body": "Owning the box is not the point; doing the thing is. Capable hardware, set up and ready, handed over with the workshops and know-how to actually use and keep it. Hardware without software is a paperweight. Software without knowledge is a locked door."
+      }
+    },
+    "research": {
+      "eyebrow": "We do the research — in the open",
+      "title": "An organisation with a point of view worth following.",
+      "p1": "You cannot honestly make intelligence reachable if you do not understand it deeply — and the frontier moves every week. New models, new hardware, new robots, new ways to run capable AI on humble machines. Every promise we make rests on someone doing that work.",
+      "pull": "Research is the engine under the curation.",
+      "p2": "We publish what we learn — notes and writing on affordable AI, intelligence on second-life hardware, open robotics, repair, and sovereignty over your own tools. Openly, because <b>knowledge in circulation is the same idea as hardware in circulation.</b> It makes evig worth following, and it brings the right people on board. Our research <em>is</em> our recruiting."
+    },
+    "afford": {
+      "eyebrow": "How people afford it",
+      "title": "Not only bought. Raised for.",
+      "intro": "Access should not depend only on what is already in your wallet. Alongside buying outright, evig is building ways for people to <b>raise</b> their way to intelligence.",
+      "w1": {
+        "k": "Together",
+        "title": "Subscription crowdfunding & pooled financing",
+        "body": "Communities, classes and groups raising funds together so a person or a project can reach the tools they need."
+      },
+      "w2": {
+        "k": "Shared",
+        "title": "Shared-subscription pools",
+        "body": "Splitting the running cost of the AI and software subscriptions themselves — so the price of intelligence is shared, not shouldered alone."
+      },
+      "w3": {
+        "k": "Direct",
+        "title": "Give a device, fund a tool, sponsor a seat",
+        "body": "Donate a working machine, fund a specific piece of kit, or sponsor a workshop place. No middleman, no markup."
+      },
+      "close": "This is what the tagline means. <lime>Raise for longer:</lime> raise the funds, raise the machine's life, raise the ceiling on who gets to take part — and keep it raised."
+    },
+    "future": {
+      "eyebrow": "Where it is going",
+      "title": "Computers — and robots.",
+      "p1": "Today the marketplace is computers. That is the wedge, not the whole. Robots are becoming the next general-purpose tool, the way the personal computer once did — and the same logic applies: useful only if it works out of the box, honest about what it can do, and paired with the knowledge to put it to work.",
+      "pull": "Humanoid robots are not sold second-hand yet. They are barely sold new.",
+      "p2": "That window will not stay closed for long. When it opens, evig intends to be the first store that does it right — robots that are complete, tested, purpose-proven, and backed by the workshops to use them; new, and in time given a second life the same way we give laptops one now. <b>Being early and being right are not the same thing.</b> The only way to be both is to already be doing the work. That is what the research is for."
+    },
+    "close": {
+      "eyebrow": "Intelligence, reachable — and kept reachable",
+      "title": "Two ways to move this forward.",
+      "support": {
+        "k": "Support the mission",
+        "title": "Back evig",
+        "body": "For foundations, grant-makers and patrons who believe access to intelligence should not depend on a wallet.",
+        "cta": "Start a conversation"
+      },
+      "build": {
+        "k": "Build with us",
+        "title": "Join the work",
+        "body": "For people and partners who want to research, repair, teach, and put good tools in more hands.",
+        "cta": "See where you fit"
+      },
+      "commercial": "Building on our platform products? <b>hirnli</b> and <b>kivvi</b> are open, independent projects with their own home — <a>get in touch</a>. Kept separate from the association, by design."
+    },
+    "footer": {
+      "legal": "evig — eternal — is a non-profit association (Verein) <em>in formation</em> in Zürich, Switzerland. We do not claim recognised charitable status or issue tax-deductible donation receipts until the association is registered and canton-recognised. Everything on this page is what we are building toward — stated as intent, not a track record we have not yet earned."
     }
   }
 }
