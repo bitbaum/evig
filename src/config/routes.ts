@@ -125,6 +125,9 @@ export const ROUTES = {
     blogSubmit:               '/blog/submit',
     workshops:                '/workshops',
     workshopsPropose:         '/workshops/propose',
+    /** evig's own projects showcase (SSOT: src/config/evig-projects.ts). */
+    projects:                 '/projects',
+    project:                  (slug: string) => `/projects/${slug}`,
     profil:                   '/profil',
     profilTechniker:          '/profil/techniker',
     login:                    '/auth/login',

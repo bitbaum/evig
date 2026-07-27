@@ -204,7 +204,8 @@
     "aboPools": "Abo-Pools",
     "badge": {
       "new": "Neu"
-    }
+    },
+    "projectsDesc": "Was evig baut — eigene, quelloffene Projekte"
   },
   "common": {
     "loading": "Laden...",
@@ -8881,5 +8882,37 @@
     "marketplaceSearch": "Im Marktplatz suchen: «{query}»",
     "trigger": "Suche",
     "triggerAria": "Suche öffnen (⌘K)"
+  },
+  "projects": {
+    "meta": {
+      "title": "Projekte",
+      "description": "Was evig baut — eigene, meist quelloffene Projekte."
+    },
+    "hero": {
+      "title": "Was wir bauen",
+      "subtitle": "evig betreibt nicht nur eine Plattform — wir bauen eigene Werkzeuge und geben sie frei. Meist Open Source."
+    },
+    "index": {
+      "more": "Mehr erfahren"
+    },
+    "status": {
+      "live": "Live",
+      "beta": "Beta",
+      "building": "In Entwicklung",
+      "planned": "Geplant"
+    },
+    "items": {
+      "kivvi": {
+        "tagline": "Open-Source-ERP für Kreislauf-Organisationen",
+        "description": "Kivvi ist evigs Open-Source-ERP: Inventar, Erfassung und Geschäftsdaten für Betriebe, die Hardware im Kreislauf halten. Es treibt evigs eigenen Betrieb an — und steht unter MIT-Lizenz allen offen."
+      }
+    },
+    "detail": {
+      "back": "Alle Projekte",
+      "resources": "Ressourcen",
+      "visit": "Zur Anwendung",
+      "source": "Quellcode ansehen",
+      "license": "{license}-Lizenz"
+    }
   }
 }

@@ -204,7 +204,8 @@
     "languageSelection": "Language selection",
     "badge": {
       "new": "New"
-    }
+    },
+    "projectsDesc": "What evig builds — our own, open-source projects"
   },
   "common": {
     "loading": "Loading...",
@@ -8864,5 +8865,37 @@
     "marketplaceSearch": "Search the marketplace: “{query}”",
     "trigger": "Search",
     "triggerAria": "Open search (⌘K)"
+  },
+  "projects": {
+    "meta": {
+      "title": "Projects",
+      "description": "What evig builds — our own, mostly open-source projects."
+    },
+    "hero": {
+      "title": "What we build",
+      "subtitle": "evig doesn't just run a platform — we build our own tools and give them away. Mostly open source."
+    },
+    "index": {
+      "more": "Learn more"
+    },
+    "status": {
+      "live": "Live",
+      "beta": "Beta",
+      "building": "In development",
+      "planned": "Planned"
+    },
+    "items": {
+      "kivvi": {
+        "tagline": "Open-source ERP for circular-economy organisations",
+        "description": "Kivvi is evig's open-source ERP: inventory, intake and business records for operations that keep hardware in the loop. It powers evig's own operation — and it's MIT-licensed and open to everyone."
+      }
+    },
+    "detail": {
+      "back": "All projects",
+      "resources": "Resources",
+      "visit": "Open the app",
+      "source": "View source",
+      "license": "{license} license"
+    }
   }
 }

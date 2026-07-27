@@ -204,7 +204,8 @@
     "aboPools": "Grupos de suscripción",
     "badge": {
       "new": "Nuevo"
-    }
+    },
+    "projectsDesc": "Lo que construye evig: proyectos propios de código abierto"
   },
   "common": {
     "loading": "Cargando...",
@@ -8862,6 +8863,38 @@
       "city": "Ciudad de Zúrich — fomento de la reparación con el bono de reparación",
       "platform": "{platform} — la plataforma oficial de reparaciones",
       "business": "Ciudad de Zúrich — registro para negocios de reparación"
+    }
+  },
+  "projects": {
+    "meta": {
+      "title": "Proyectos",
+      "description": "Lo que construye evig: proyectos propios, en su mayoría de código abierto."
+    },
+    "hero": {
+      "title": "Lo que construimos",
+      "subtitle": "evig no solo opera una plataforma: construimos nuestras propias herramientas y las liberamos. En su mayoría de código abierto."
+    },
+    "index": {
+      "more": "Saber más"
+    },
+    "status": {
+      "live": "En vivo",
+      "beta": "Beta",
+      "building": "En desarrollo",
+      "planned": "Planeado"
+    },
+    "items": {
+      "kivvi": {
+        "tagline": "ERP de código abierto para organizaciones de economía circular",
+        "description": "Kivvi es el ERP de código abierto de evig: inventario, registro de entradas y datos operativos para negocios que mantienen el hardware en circulación. Impulsa la propia operación de evig y, con licencia MIT, está abierto a todos."
+      }
+    },
+    "detail": {
+      "back": "Todos los proyectos",
+      "resources": "Recursos",
+      "visit": "Abrir la aplicación",
+      "source": "Ver código fuente",
+      "license": "Licencia {license}"
     }
   }
 }

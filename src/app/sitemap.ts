@@ -5,6 +5,7 @@ import { eq, gt } from 'drizzle-orm'
 import { locales, defaultLocale } from '@/i18n/routing'
 import { APP_URL } from '@/config/urls'
 import { ROUTES } from '@/config/routes'
+import { getEvigProjectSlugs } from '@/config/evig-projects'
 import { getMergedPosts } from '@/lib/blog-merge'
 import { isListedPost } from '@/lib/blog'
 import { canViewPost } from '@/lib/blog-access'
@@ -55,6 +56,7 @@ const STATIC_PAGES: Array<{ path: string; priority: number; changeFrequency: Met
   { path: '/faq',                                     priority: 0.6, changeFrequency: 'monthly' },
   { path: R.transparenz,                              priority: 0.5, changeFrequency: 'monthly' },
   { path: '/about',                                   priority: 0.6, changeFrequency: 'monthly' },
+  { path: R.projects,                                 priority: 0.6, changeFrequency: 'monthly' },
   { path: R.marketplaceSell,                          priority: 0.6, changeFrequency: 'monthly' },
   { path: R.workshopsPropose,                         priority: 0.5, changeFrequency: 'monthly' },
   { path: R.blogSubmit,                               priority: 0.5, changeFrequency: 'monthly' },
@@ -97,6 +99,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         url: url(service.href, locale),
         changeFrequency: 'monthly',
         priority: 0.7,
+      })
+    }
+  }
+
+  // 4. evig project detail pages (config-driven — auto-updates from evig-projects.ts)
+  for (const slug of getEvigProjectSlugs()) {
+    for (const locale of locales) {
+      entries.push({
+        url: url(ROUTES.public.project(slug), locale),
+        changeFrequency: 'monthly',
+        priority: 0.6,
       })
     }
   }

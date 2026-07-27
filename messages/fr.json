@@ -204,7 +204,8 @@
     },
     "badge": {
       "new": "Nouveau"
-    }
+    },
+    "projectsDesc": "Ce que construit evig — nos propres projets open source"
   },
   "common": {
     "loading": "Chargement...",
@@ -8864,6 +8865,38 @@
       "city": "Ville de Zurich — encouragement de la réparation avec le bonus réparation",
       "platform": "{platform} — la plateforme de réparation officielle",
       "business": "Ville de Zurich — inscription pour les ateliers de réparation"
+    }
+  },
+  "projects": {
+    "meta": {
+      "title": "Projets",
+      "description": "Ce que construit evig — nos propres projets, la plupart open source."
+    },
+    "hero": {
+      "title": "Ce que nous construisons",
+      "subtitle": "evig ne se contente pas d'exploiter une plateforme : nous construisons nos propres outils et les mettons à disposition. La plupart en open source."
+    },
+    "index": {
+      "more": "En savoir plus"
+    },
+    "status": {
+      "live": "En ligne",
+      "beta": "Bêta",
+      "building": "En développement",
+      "planned": "Prévu"
+    },
+    "items": {
+      "kivvi": {
+        "tagline": "ERP open source pour les organisations de l'économie circulaire",
+        "description": "Kivvi est l'ERP open source d'evig : inventaire, réception et données d'entreprise pour les structures qui maintiennent le matériel dans le circuit. Il fait tourner la propre activité d'evig — et, sous licence MIT, il est ouvert à tous."
+      }
+    },
+    "detail": {
+      "back": "Tous les projets",
+      "resources": "Ressources",
+      "visit": "Ouvrir l'application",
+      "source": "Voir le code source",
+      "license": "Licence {license}"
     }
   }
 }

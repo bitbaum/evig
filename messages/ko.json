@@ -204,7 +204,8 @@
     "aboPools": "구독 풀",
     "badge": {
       "new": "신규"
-    }
+    },
+    "projectsDesc": "evig가 만드는 것 — 자체 오픈소스 프로젝트"
   },
   "common": {
     "loading": "로딩 중...",
@@ -8862,6 +8863,38 @@
       "city": "취리히시 — 수리 보너스를 통한 수리 지원",
       "platform": "{platform} — 공식 수리 플랫폼",
       "business": "취리히시 — 수리 업체 등록"
+    }
+  },
+  "projects": {
+    "meta": {
+      "title": "프로젝트",
+      "description": "evig가 만드는 것 — 대부분 오픈소스인 자체 프로젝트."
+    },
+    "hero": {
+      "title": "우리가 만드는 것",
+      "subtitle": "evig는 플랫폼만 운영하지 않습니다. 우리는 직접 도구를 만들고 공개합니다. 대부분 오픈소스입니다."
+    },
+    "index": {
+      "more": "자세히 보기"
+    },
+    "status": {
+      "live": "라이브",
+      "beta": "베타",
+      "building": "개발 중",
+      "planned": "예정"
+    },
+    "items": {
+      "kivvi": {
+        "tagline": "순환경제 조직을 위한 오픈소스 ERP",
+        "description": "Kivvi는 evig의 오픈소스 ERP입니다. 하드웨어를 순환시키는 사업을 위한 재고, 입고, 업무 데이터를 다룹니다. evig의 운영을 직접 뒷받침하며, MIT 라이선스로 누구에게나 열려 있습니다."
+      }
+    },
+    "detail": {
+      "back": "모든 프로젝트",
+      "resources": "리소스",
+      "visit": "앱 열기",
+      "source": "소스 보기",
+      "license": "{license} 라이선스"
     }
   }
 }

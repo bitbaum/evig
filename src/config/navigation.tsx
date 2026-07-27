@@ -62,6 +62,13 @@ export const mainNavigation: NavigationItem[] = [
         descriptionKey: 'missionHistoryDesc',
       },
       {
+        // What evig builds — its own projects (SSOT: config/evig-projects.ts).
+        name: 'Projekte',
+        nameKey: 'projects',
+        href: '/projects',
+        descriptionKey: 'projectsDesc',
+      },
+      {
         // The accountability hub: finances, key figures and the calculation
         // methods (incl. the CO₂ methodology). Distinct from "Unsere Wirkung"
         // (impact outcomes) — this is the "show me the math" trust page, which
