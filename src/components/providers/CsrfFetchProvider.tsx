@@ -10,6 +10,17 @@ function isAuthEndpoint(input: RequestInfo | URL): boolean {
   return new URL(url, window.location.origin).pathname.startsWith('/api/auth/')
 }
 
+/**
+ * Only same-origin requests get the CSRF header. Stamping it on cross-origin
+ * fetches leaks the token to third-party hosts AND breaks their CORS preflight
+ * (observed: the FleetCrown feedback widget's ingest POST was rejected because
+ * x-csrf-token wasn't in the target's Access-Control-Allow-Headers).
+ */
+function isSameOrigin(input: RequestInfo | URL): boolean {
+  const url = input instanceof Request ? input.url : input.toString()
+  return new URL(url, window.location.origin).origin === window.location.origin
+}
+
 export function CsrfFetchProvider() {
   useEffect(() => {
     if (installed || typeof window === 'undefined') return
@@ -17,7 +28,7 @@ export function CsrfFetchProvider() {
 
     const originalFetch = window.fetch.bind(window)
     window.fetch = (input: RequestInfo | URL, init: RequestInit = {}) => {
-      if (isAuthEndpoint(input)) {
+      if (isAuthEndpoint(input) || !isSameOrigin(input)) {
         return originalFetch(input, init)
       }
 
