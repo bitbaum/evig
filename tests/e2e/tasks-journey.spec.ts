@@ -65,7 +65,10 @@ test.describe('Admin tasks staff journey', () => {
     await expect(page.getByRole('heading', { name: 'Erledigungen (1)' })).toBeVisible({
       timeout: 15000,
     })
-    await expect(page.getByText('E2E erledigt')).toBeVisible()
+    // .first(): like the empty state above, the completion note renders in two
+    // panes (list + detail), so a bare getByText matches 2 elements once both
+    // panes have hydrated — which flaked under strict mode.
+    await expect(page.getByText('E2E erledigt').first()).toBeVisible()
 
     if (hasDualPersonaCredentials()) {
       await loginWithCredentials(page, '/dashboard', USER_TEST_EMAIL, USER_TEST_PASSWORD)

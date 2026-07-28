@@ -96,8 +96,18 @@ test.describe('Marketplace dual-persona checkout journey', () => {
       await publishAnswer.click()
       await expect(page.getByText(testAnswer)).toBeVisible({ timeout: 15000 })
 
-      const questionsAfterAnswer = await fetchListingQuestions(page.request, listingId)
-      expect(questionsAfterAnswer.find((q) => q.question === testQuestion)?.status).toBe('answered')
+      // The UI confirms the answer above, but the question-status write can lag the
+      // read by a beat — poll the API until it reflects 'answered' instead of a
+      // single racy fetch (which flaked with status still 'open').
+      await expect
+        .poll(
+          async () => {
+            const qs = await fetchListingQuestions(page.request, listingId)
+            return qs.find((q) => q.question === testQuestion)?.status
+          },
+          { timeout: 15000 },
+        )
+        .toBe('answered')
 
       // 2c. Seller cannot buy own listing (must run while listing is still active)
       await loginWithCredentials(
