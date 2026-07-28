@@ -30,19 +30,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run ESLint
-        run: npm run lint
-
-      # Enforces the Swiss umlaut convention (display text keeps ä/ö/ü; only
-      # code identifiers/slugs may use ASCII). Was manual-only before — now gated.
-      - name: Check umlauts
-        run: npm run lint:umlauts
-
-      - name: Type check
-        run: npx tsc --noEmit
-
-      - name: Build verification
-        run: npm run build
+      # SSOT: lint + umlauts + typecheck + build are bundled in the `verify` npm
+      # script (package.json). CI calls it verbatim so the gating chain can't
+      # drift from what runs locally. Do not re-inline these checks here — the
+      # umlaut gate (Swiss ä/ö/ü convention) lives inside `verify` too.
+      - name: Verify (lint + umlauts + typecheck + build)
+        run: npm run verify
         env:
           # Build-time placeholders so strict env validation doesn't fail during CI compile.
           AUTH_SECRET: ci-build-placeholder-secret-32chars
