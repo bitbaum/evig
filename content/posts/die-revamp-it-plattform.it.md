@@ -9,7 +9,7 @@ tags:
   - marktplatz
   - it-hilfe
 publishedAt: "2026-07-21"
-published: true
+published: false
 ---
 
 Un computer funzionante finisce nel container. Nello stesso momento, a poche vie di distanza, c'è qualcuno a cui proprio quel computer potrebbe servire, ma che non può permettersi un apparecchio nuovo. Per anni, da Revamp-IT, tra queste due persone non c'è stato un ponte, bensì un mosaico di software che non si parlavano. Abbiamo colmato questa lacuna — con un'unica piattaforma che ricostruisce l'intero percorso, dal vecchio apparecchio donato fino alla nuova proprietaria.

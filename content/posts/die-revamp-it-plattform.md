@@ -9,7 +9,7 @@ tags:
   - marktplatz
   - it-hilfe
 publishedAt: "2026-07-21"
-published: true
+published: false
 ---
 
 Ein funktionierender Computer landet im Container. Gleichzeitig sitzt jemand ein paar Strassen weiter, der genau diesen Computer brauchen könnte, sich aber kein neues Gerät leisten kann. Zwischen diesen beiden Menschen stand bei Revamp-IT jahrelang keine Brücke, sondern ein Flickenteppich aus Software, die nicht miteinander redete. Diese Lücke haben wir geschlossen — mit einer einzigen Plattform, die den ganzen Weg vom gespendeten Altgerät bis zur neuen Besitzerin abbildet.

@@ -9,7 +9,7 @@ tags:
   - marktplatz
   - it-hilfe
 publishedAt: "2026-07-21"
-published: true
+published: false
 ---
 
 Un ordinateur en état de marche finit à la benne. Au même moment, à quelques rues de là, quelqu'un qui pourrait justement avoir besoin de cet ordinateur ne peut pas s'offrir un appareil neuf. Pendant des années, il n'y a eu, chez Revamp-IT, aucun pont entre ces deux personnes, mais une mosaïque de logiciels qui ne se parlaient pas. Nous avons comblé cette lacune — avec une seule plateforme qui retrace tout le parcours, de l'ancien appareil donné jusqu'à sa nouvelle propriétaire.

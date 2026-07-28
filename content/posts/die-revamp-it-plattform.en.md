@@ -9,7 +9,7 @@ tags:
   - marktplatz
   - it-hilfe
 publishedAt: "2026-07-21"
-published: true
+published: false
 ---
 
 A working computer ends up in the skip. At the same time, a few streets away, someone who could use exactly that computer can't afford a new device. For years, there was no bridge between these two people at Revamp-IT — only a patchwork of software that didn't talk to itself. We've closed that gap, with a single platform that maps the whole journey from a donated old device to its new owner.

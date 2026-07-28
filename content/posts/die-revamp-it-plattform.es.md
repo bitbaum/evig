@@ -9,7 +9,7 @@ tags:
   - marktplatz
   - it-hilfe
 publishedAt: "2026-07-21"
-published: true
+published: false
 ---
 
 Un ordenador que funciona acaba en el contenedor. Al mismo tiempo, a unas pocas calles de distancia, hay alguien que podría necesitar justamente ese ordenador, pero que no puede permitirse un aparato nuevo. Durante años, en Revamp-IT, entre estas dos personas no hubo un puente, sino un mosaico de programas que no se hablaban entre sí. Hemos cerrado esa brecha — con una única plataforma que reproduce todo el recorrido, desde el aparato viejo donado hasta su nueva propietaria.
