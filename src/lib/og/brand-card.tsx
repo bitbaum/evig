@@ -19,7 +19,7 @@ export const OG_ALT = `${ORG.name} — ${ORG.motto}`
  * Satori's partial inline-SVG handling. Green comes from the OG accent token.
  */
 const MARK_DATA_URI = `data:image/svg+xml;base64,${btoa(
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${EVIG_MARK.viewBox}" fill="none" stroke="${OG_IMAGE_COLORS.accent}" stroke-width="${EVIG_MARK.strokeWidth}" stroke-linecap="round" stroke-linejoin="round">${EVIG_MARK.paths.map((d) => `<path d="${d}"/>`).join('')}</svg>`
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${EVIG_MARK.viewBox}" fill="none"><path d="${EVIG_MARK.ringPath}" stroke="${OG_IMAGE_COLORS.accent}" stroke-width="${EVIG_MARK.strokeWidth}"/><circle cx="${EVIG_MARK.node.cx}" cy="${EVIG_MARK.node.cy}" r="${EVIG_MARK.node.r}" fill="${OG_IMAGE_COLORS.accent}"/></svg>`
 )}`
 
 export function BrandOgCard() {
