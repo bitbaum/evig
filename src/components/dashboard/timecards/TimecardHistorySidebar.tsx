@@ -12,6 +12,7 @@ import { useLocale, useTranslations } from 'next-intl'
 import { TIMECARD_STATUS_COLORS, TIMECARD_STATUSES } from '@/config/timecards'
 import type { TimecardStatus } from '@/config/timecards'
 import { ROUTES } from '@/config/routes'
+import { Card } from '@/components/ui/card'
 import { formatDateShort } from '@/lib/date-formats'
 import { Clock } from 'lucide-react'
 import { TIMECARD_STATUS_ICONS } from '@/lib/team/timecard-display'
@@ -38,17 +39,17 @@ export function TimecardHistorySidebar({ history }: Props) {
 
   if (history.length === 0) {
     return (
-      <div className="rounded-xl border bg-surface-base p-5">
+      <Card className="p-5">
         <h2 className="text-sm font-semibold text-text-primary mb-2">{t('historyTitle')}</h2>
         <p className="text-sm text-text-tertiary">
           {t('historyEmpty')}
         </p>
-      </div>
+      </Card>
     )
   }
 
   return (
-    <div className="rounded-xl border bg-surface-base overflow-hidden">
+    <Card className="overflow-hidden">
       <div className="px-5 py-4 border-b border">
         <h2 className="text-sm font-semibold text-text-primary">{t('historyTitle')}</h2>
         <p className="text-xs text-text-tertiary">
@@ -100,6 +101,6 @@ export function TimecardHistorySidebar({ history }: Props) {
           )
         })}
       </ul>
-    </div>
+    </Card>
   )
 }

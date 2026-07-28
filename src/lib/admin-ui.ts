@@ -1,5 +1,6 @@
 import { UI_STATUS } from '@/config/ui/status'
 import { designPrimitive } from '@/lib/design-system'
+import { NAV_STATE } from '@/lib/design/nav'
 
 /**
  * Admin UI Design Tokens — SSOT
@@ -181,8 +182,8 @@ export const adminInteractive = {
   rowHoverFaint:   'hover:bg-surface-raised dark:hover:bg-surface-base/2',
   /** Checkbox-selected or active leave-period row */
   rowSelected:     'bg-action-muted/40',
-  /** Sidebar nav item — current route */
-  navActive:       'bg-action/10 text-action ring-1 ring-action/20',
+  /** Sidebar nav item — current route. Value lives in the nav-state SSOT. */
+  navActive:       NAV_STATE.sidebar.active,
   /** Command palette / typeahead keyboard highlight */
   pickerActive:    'bg-action-muted text-action',
   /** Unread notification row tint */

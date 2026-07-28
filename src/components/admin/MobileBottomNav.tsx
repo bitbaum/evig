@@ -1,9 +1,8 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import { Link, usePathname } from '@/i18n/navigation'
-import { Menu } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { usePathname } from '@/i18n/navigation'
+import { BottomNav } from '@/components/layout/BottomNav'
 import { getMobileBottomNavSections } from '@/config/sections'
 import { sectionShortLabel } from '@/lib/section-labels'
 
@@ -24,49 +23,25 @@ interface MobileBottomNavProps {
  */
 export function MobileBottomNav({ accessibleSections, onMenuClick }: MobileBottomNavProps) {
   const pathname = usePathname()
-  const items = getMobileBottomNavSections(accessibleSections)
+  const sections = getMobileBottomNavSections(accessibleSections)
   const t = useTranslations('admin.sidebar')
   const tSections = useTranslations('admin.sections')
 
-  return (
-    <nav
-      className="fixed bottom-0 left-0 right-0 z-50 flex border-t border bg-surface-base safe-area-inset-bottom lg:hidden"
-      aria-label={t('navAria')}
-    >
-      {items.map(section => {
-        // Dashboard ("/admin") needs exact-match so it isn't lit for
-        // every /admin/* page; everything else uses prefix-match.
-        const exact = section.path === '/admin'
-        const active = exact ? pathname === section.path : pathname.startsWith(section.path)
-        const Icon = section.ui.icon
-        const label = sectionShortLabel(tSections, section)
-        return (
-          <Link
-            key={section.id}
-            href={section.path}
-            className={`flex-1 flex flex-col items-center justify-center gap-0.5 py-2 min-h-[56px] text-xs transition-colors ${
-              active
-                ? 'text-action'
-                : 'text-text-tertiary dark:text-text-tertiary hover:text-text-secondary'
-            }`}
-            aria-current={active ? 'page' : undefined}
-          >
-            <Icon className="w-5 h-5" aria-hidden="true" />
-            <span>{label}</span>
-          </Link>
-        )
-      })}
+  const items = sections.map(section => ({
+    key: section.id,
+    href: section.path,
+    label: sectionShortLabel(tSections, section),
+    icon: section.ui.icon,
+    // Dashboard ("/admin") needs exact-match so it isn't lit for every
+    // /admin/* page; everything else uses prefix-match.
+    active: section.path === '/admin' ? pathname === section.path : pathname.startsWith(section.path),
+  }))
 
-      {/* Mehr — opens sidebar */}
-      <Button
-        variant="ghost"
-        onClick={onMenuClick}
-        className="flex-1 flex flex-col items-center justify-center gap-0.5 py-2 min-h-[56px] h-auto text-xs text-text-tertiary hover:text-text-secondary rounded-none"
-        aria-label={t('openAria')}
-      >
-        <Menu className="w-5 h-5" aria-hidden="true" />
-        <span>{t('mobileMore')}</span>
-      </Button>
-    </nav>
+  return (
+    <BottomNav
+      items={items}
+      ariaLabel={t('navAria')}
+      more={{ label: t('mobileMore'), ariaLabel: t('openAria'), onClick: onMenuClick }}
+    />
   )
 }

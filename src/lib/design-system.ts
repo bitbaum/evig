@@ -331,7 +331,10 @@ export const designPrimitive = {
   // x.ai style: tight tracking, high contrast, scale discipline
   type: {
     pageTitle:   'text-2xl font-bold tracking-tight text-text-primary',
+    // Header row *inside* a card (AdminSectionHeader). Compact.
     sectionTitle:'text-sm font-semibold tracking-tight text-text-primary',
+    // Title of a standalone titled surface (<Panel>). One step up from sectionTitle.
+    panelTitle:  'text-base font-semibold tracking-tight text-text-primary',
     subTitle:    'text-sm font-medium text-text-secondary',
     body:        'text-sm text-text-secondary',
     meta:        'text-xs text-text-tertiary',

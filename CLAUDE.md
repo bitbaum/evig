@@ -137,6 +137,46 @@ brand.*:   social (mastodon, linkedin, facebook) — bg-brand-mastodon etc.
 | Section BG white | `bg-white` (dark auto-handled) | `bg-white dark:bg-neutral-950` (unless deeper black needed) |
 | Card hover | `hover:border-neutral-300` | `hover:shadow-xl` |
 
+### Chrome & Navigation — one primitive per shape (SSOT)
+
+"Chrome" = the repeated structural shells: headers, footers, nav bars, panels,
+sidebars, bottom nav. Each SHAPE has exactly ONE primitive. Never hand-roll a
+card shell (`bg-surface-base rounded-lg border p-…`) or an active-nav class
+(`bg-action/10 … ring-action/20`, `text-action`, `border-action bg-action-muted`)
+inline — those are defined once and consumed everywhere. Retheming chrome = edit
+the primitive, not N components.
+
+| Need | Use | File | Never hand-roll |
+|---|---|---|---|
+| Titled bordered surface (title + subtitle + right action + body) | `<Panel title subtitle icon action>` | `components/ui/Panel.tsx` | `<div className="bg-surface-base rounded-lg border p-5">` + own `<h2>` |
+| Untitled surface | `<Card>` | `components/ui/card.tsx` | `<div className="card-shell p-6">` / `rounded-xl border bg-surface-base` |
+| Header row *inside* a card | `<AdminSectionHeader>` | `components/admin/AdminSectionHeader.tsx` | bespoke `flex justify-between` + divider |
+| Full-bleed page hero (centered) | `<PageHero theme title subtitle>` | `components/layout/PageHero.tsx` | a one-off `<section>` with a bespoke `<h1>` type string |
+| Page-section vertical rhythm / tinted band | `<Section density tone>` | `components/layout/Section.tsx` | hardcoded `py-16 sm:py-20 …` |
+| Mobile bottom tab bar (`<lg`) | `<BottomNav items ariaLabel more>` | `components/layout/BottomNav.tsx` | a `fixed bottom-0 … flex` `<nav>` + tab loop |
+| Active/inactive nav item classes | `navLinkClass(shape, active)` / `NAV_STATE` | `lib/design/nav.ts` | inline `text-action` / `ring-action/20` ladders |
+
+Rules:
+- **Nav state is one definition.** `NAV_STATE` (`sidebar` / `bottomTab` / `pill`)
+  is the ONLY place "current page" is styled. `adminInteractive.navActive`
+  re-exports `NAV_STATE.sidebar.active` — the value lives in `nav.ts`, not admin.
+  Need a new nav shape? Add it to `NAV_STATE`, don't hand-roll a sixth encoding.
+- **Neutral home for shared chrome.** Dashboard must not import from `app/admin/*`
+  (see SoC rule). `BottomNav` + `nav.ts` live in neutral `components/layout` /
+  `lib/design` so admin, dashboard, and public all consume them.
+- **One primitive per shape.** If you find yourself building a second "hero" or a
+  second "bottom bar," extend the existing primitive with a prop — don't fork it.
+  (This is why `ResponsiveHero` was folded into `PageHero`.)
+- **Card shell = `card-shell` only** (rounded-xl + border + surface, NO shadow).
+  `<Card>`/`<Panel>` both resolve to it. `rounded-lg`, missing border, or
+  `shadow-xs` on a static card is drift — fix it, don't copy it.
+
+Deliberately NOT unified (yet): the right-edge **drawer/sheet** overlay
+(MessageSidebar, MobileMenu, DashboardMobileNav sheet) — a shared `<Drawer>`
+with focus-trap + scroll-lock is the next chrome primitive; until it lands,
+match MobileMenu's implementation (scrim `bg-black/40 backdrop-blur-xs`, focus
+trap via `useFocusTrap`, body scroll-lock) and never `bg-opacity-*`.
+
 ### Mobile-first = ACTION-first, not stats-first
 
 On a phone, the user opened the page to DO the one thing the page is for —
@@ -207,5 +247,14 @@ grep -rn 'shadow-lg\|shadow-xl\|shadow-2xl' src/app/[locale]/ src/components/
 
 # Gradient backgrounds that should be flat
 grep -rn 'bg-gradient-to' src/app/[locale]/ src/components/ | grep -v 'from-black\|to-transparent'
+
+# Hand-rolled card shells — should be <Card>/<Panel> (resolve to card-shell)
+grep -rnE 'bg-surface-base rounded-(lg|xl) border' src/components src/app
+
+# Nav-active drift — active state must come from NAV_STATE / navLinkClass
+grep -rn 'ring-action/30' src/components src/app
+
+# Deprecated opacity utility on scrims (use bg-black/NN)
+grep -rn 'bg-opacity-' src/components src/app
 ```
 

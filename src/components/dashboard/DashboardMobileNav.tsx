@@ -2,9 +2,11 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { Menu, X } from 'lucide-react'
+import { X } from 'lucide-react'
 import { Link, usePathname } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
+import { BottomNav } from '@/components/layout/BottomNav'
+import { navLinkClass } from '@/lib/design/nav'
 import { useFocusTrap } from '@/hooks/useFocusTrap'
 import {
   DASHBOARD_CATEGORIES,
@@ -86,39 +88,18 @@ export function DashboardMobileNav({
 
   return (
     <>
-      {/* Bottom tab bar */}
-      <nav
-        aria-label="Dashboard"
-        className="fixed bottom-0 left-0 right-0 z-40 flex border-t border-subtle bg-surface-base lg:hidden"
-      >
-        {barItems.map(item => {
-          const active = isActive(pathname, item.href)
-          const Icon = item.icon
-          return (
-            <Link
-              key={item.id}
-              href={item.href}
-              aria-current={active ? 'page' : undefined}
-              className={`flex min-h-[56px] flex-1 flex-col items-center justify-center gap-0.5 py-2 text-xs transition-colors ${
-                active ? 'text-action' : 'text-text-tertiary hover:text-text-secondary'
-              }`}
-            >
-              <Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
-              <span className="max-w-full truncate px-1">{item.shortLabel ?? item.title}</span>
-            </Link>
-          )
-        })}
-        <Button
-          variant="ghost"
-          onClick={() => setMoreOpen(true)}
-          aria-label="Mehr anzeigen"
-          aria-expanded={moreOpen}
-          className="flex min-h-[56px] flex-1 flex-col items-center justify-center gap-0.5 rounded-none py-2 text-xs text-text-tertiary hover:text-text-secondary h-auto"
-        >
-          <Menu className="h-5 w-5" aria-hidden="true" />
-          <span>Mehr</span>
-        </Button>
-      </nav>
+      {/* Bottom tab bar — SSOT bar chrome; the "Mehr" sheet is dashboard-specific. */}
+      <BottomNav
+        ariaLabel="Dashboard"
+        items={barItems.map(item => ({
+          key: item.id,
+          href: item.href,
+          label: item.shortLabel ?? item.title,
+          icon: item.icon,
+          active: isActive(pathname, item.href),
+        }))}
+        more={{ label: 'Mehr', ariaLabel: 'Mehr anzeigen', onClick: () => setMoreOpen(true), expanded: moreOpen }}
+      />
 
       {/* "Mehr" bottom sheet */}
       {mounted && moreOpen && createPortal(
@@ -160,11 +141,7 @@ export function DashboardMobileNav({
                           key={card.id}
                           href={card.href}
                           aria-current={active ? 'page' : undefined}
-                          className={`flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm transition-colors ${
-                            active
-                              ? 'border-action bg-action-muted text-action'
-                              : 'border-subtle text-text-secondary hover:border-strong hover:text-text-primary'
-                          }`}
+                          className={navLinkClass('pill', active)}
                         >
                           <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
                           <span className="min-w-0 truncate">{card.title}</span>

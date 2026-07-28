@@ -12,6 +12,7 @@ import { toast } from 'sonner'
 import { apiFetch } from '@/lib/api/client'
 import { cn } from '@/lib/utils'
 import { designPrimitive } from '@/lib/design-system'
+import { Panel } from '@/components/ui/Panel'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
@@ -82,12 +83,10 @@ export function ContributionsPanel({ slug, initialContributions, needs }: Props)
   }
 
   return (
-    <section className={cn(designPrimitive.surface.card, 'p-4 sm:p-5')}>
-      <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
-        <div className="min-w-0">
-          <h2 className="text-base font-semibold text-text-primary">{t('contributions.title')}</h2>
-          <p className="text-xs text-text-tertiary mt-0.5">{t('contributions.subtitle')}</p>
-        </div>
+    <Panel
+      title={t('contributions.title')}
+      subtitle={t('contributions.subtitle')}
+      action={
         <Select
           value={filter}
           onChange={e => setFilter(e.target.value as ContributionStatus | 'all')}
@@ -98,7 +97,8 @@ export function ContributionsPanel({ slug, initialContributions, needs }: Props)
             <option key={s} value={s}>{t(`contributionStatusLabels.${s}`)}</option>
           ))}
         </Select>
-      </div>
+      }
+    >
 
       {filtered.length === 0 ? (
         <p className="text-sm text-text-tertiary text-center py-8">
@@ -111,7 +111,7 @@ export function ContributionsPanel({ slug, initialContributions, needs }: Props)
           {filtered.map(c => {
             const need = c.needId ? needById[c.needId] : null
             return (
-              <div key={c.id} className="rounded-lg border border p-3 sm:p-4">
+              <div key={c.id} className="rounded-lg border p-3 sm:p-4">
                 <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2 mb-1">
@@ -187,6 +187,6 @@ export function ContributionsPanel({ slug, initialContributions, needs }: Props)
           })}
         </div>
       )}
-    </section>
+    </Panel>
   )
 }

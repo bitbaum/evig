@@ -11,8 +11,7 @@ import { useState, useTransition, type FormEvent } from 'react'
 import { useTranslations } from 'next-intl'
 import { toast } from 'sonner'
 import { apiFetch } from '@/lib/api/client'
-import { cn } from '@/lib/utils'
-import { designPrimitive } from '@/lib/design-system'
+import { Panel } from '@/components/ui/Panel'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
@@ -108,12 +107,10 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
   }
 
   return (
-    <section className={cn(designPrimitive.surface.card, 'p-4 sm:p-5 mb-5')}>
-      <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
-        <div className="min-w-0">
-          <h2 className="text-base font-semibold text-text-primary">{t('needs.title')}</h2>
-          <p className="text-xs text-text-tertiary mt-0.5">{t('needs.subtitle')}</p>
-        </div>
+    <Panel
+      title={t('needs.title')}
+      subtitle={t('needs.subtitle')}
+      action={
         <Button
           type="button"
           variant="primary"
@@ -124,12 +121,14 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
           <Plus className="h-3.5 w-3.5" />
           {t('needs.new')}
         </Button>
-      </div>
+      }
+      className="mb-5"
+    >
 
       {adding && (
         <form
           onSubmit={handleAdd}
-          className="grid gap-3 grid-cols-1 sm:grid-cols-2 mb-5 p-3 rounded-lg border border bg-surface-raised dark:bg-surface-base/3"
+          className="grid gap-3 grid-cols-1 sm:grid-cols-2 mb-5 p-3 rounded-lg border bg-surface-raised dark:bg-surface-base/3"
         >
           <Select name="type" variant="elevated">
             {Object.values(NEED_TYPES).map(v => (
@@ -169,7 +168,7 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
           {needs.map(need => (
             <div
               key={need.id}
-              className="rounded-lg border border p-3 space-y-2"
+              className="rounded-lg border p-3 space-y-2"
             >
               {/* Row 1 — main editable line. Stacks on mobile, lays out responsively on larger screens */}
               <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">
@@ -252,6 +251,6 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
           ))}
         </div>
       )}
-    </section>
+    </Panel>
   )
 }

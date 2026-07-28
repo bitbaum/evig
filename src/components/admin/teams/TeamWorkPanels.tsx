@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ClipboardList, FileText, Plus } from 'lucide-react'
+import { Panel } from '@/components/ui/Panel'
 import { buttonClass } from '@/components/ui/button-class'
 import { ROUTES } from '@/config/routes'
 import { TASK_PRIORITY_LABELS, TASK_PRIORITY_COLORS, type TaskPriority } from '@/config/tasks'
@@ -19,13 +20,15 @@ export function TeamTasksPanel({ teamId, tasks, total }: {
   total: number
 }) {
   return (
-    <section className="bg-surface-base rounded-lg border p-5">
-      <div className="flex items-center justify-between mb-3">
-        <h2 className="text-sm font-semibold text-text-primary flex items-center gap-1.5">
-          <ClipboardList className="w-4 h-4 text-text-tertiary" aria-hidden />
+    <Panel
+      icon={ClipboardList}
+      title={
+        <>
           Offene Aufgaben
           {total > 0 && <span className="text-text-tertiary font-normal">({total})</span>}
-        </h2>
+        </>
+      }
+      action={
         <Link
           href={`${ROUTES.admin.taskNew}?team=${teamId}`}
           className={buttonClass({ variant: 'secondary', size: 'sm' })}
@@ -33,8 +36,8 @@ export function TeamTasksPanel({ teamId, tasks, total }: {
           <Plus className="w-4 h-4" />
           Neue Aufgabe
         </Link>
-      </div>
-
+      }
+    >
       {tasks.length === 0 ? (
         <p className="text-sm text-text-tertiary">
           Keine offenen Aufgaben — dieses Team hat gerade nichts Pendentes.
@@ -68,7 +71,7 @@ export function TeamTasksPanel({ teamId, tasks, total }: {
           ))}
         </ul>
       )}
-    </section>
+    </Panel>
   )
 }
 
@@ -77,12 +80,10 @@ export function TeamProtocolsPanel({ teamId, protocols }: {
   protocols: TeamProtocolItem[]
 }) {
   return (
-    <section className="bg-surface-base rounded-lg border p-5">
-      <div className="flex items-center justify-between mb-3">
-        <h2 className="text-sm font-semibold text-text-primary flex items-center gap-1.5">
-          <FileText className="w-4 h-4 text-text-tertiary" aria-hidden />
-          Protokolle
-        </h2>
+    <Panel
+      icon={FileText}
+      title="Protokolle"
+      action={
         <Link
           href={`${ROUTES.admin.protocolNew}?team=${teamId}`}
           className={buttonClass({ variant: 'secondary', size: 'sm' })}
@@ -90,8 +91,8 @@ export function TeamProtocolsPanel({ teamId, protocols }: {
           <Plus className="w-4 h-4" />
           Neues Protokoll
         </Link>
-      </div>
-
+      }
+    >
       {protocols.length === 0 ? (
         <p className="text-sm text-text-tertiary">
           Noch keine Protokolle — Sitzungsnotizen landen hier, wenn beim Protokoll dieses Team gewählt ist.
@@ -118,6 +119,6 @@ export function TeamProtocolsPanel({ teamId, protocols }: {
           ))}
         </ul>
       )}
-    </section>
+    </Panel>
   )
 }

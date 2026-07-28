@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import { adminInteractive } from '@/lib/admin-ui'
+import { navLinkClass } from '@/lib/design/nav'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { Link as PublicLink } from '@/i18n/navigation'
@@ -212,11 +213,7 @@ export function AdminSidebar({
                   key={section.path}
                   href={section.path}
                   onClick={() => { setMobileMenuOpen(false); setFilterQuery('') }}
-                  className={`flex items-center gap-2.5 rounded-lg px-2 py-3 lg:py-1.5 transition-colors ${
-                    isActive(section.path)
-                      ? adminInteractive.navActive
-                      : `text-text-tertiary ${adminInteractive.rowHoverSubtle} hover:text-text-primary`
-                  }`}
+                  className={navLinkClass('sidebar', isActive(section.path))}
                 >
                   <Icon className="h-4 w-4 shrink-0 text-text-muted dark:text-text-secondary" />
                   <span className="flex-1 text-sm font-medium">
@@ -250,13 +247,7 @@ export function AdminSidebar({
                 <Link
                   href={only.path}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-center gap-2.5 rounded-lg px-2 py-3 lg:py-1.5 transition-colors ${
-                    sidebarCollapsed ? 'justify-center' : ''
-                  } ${
-                    onlyActive
-                      ? adminInteractive.navActive
-                      : `text-text-tertiary ${adminInteractive.rowHoverSubtle} hover:text-text-primary`
-                  }`}
+                  className={navLinkClass('sidebar', onlyActive, sidebarCollapsed ? 'justify-center' : '')}
                   title={sidebarCollapsed ? sectionLabel(tSections, only) : undefined}
                 >
                   <OnlyIcon className={`shrink-0 ${sidebarCollapsed ? 'h-5 w-5' : 'h-4 w-4'} ${onlyActive ? 'text-action' : 'text-text-muted dark:text-text-secondary'}`} />
@@ -299,13 +290,7 @@ export function AdminSidebar({
                         key={section.path}
                         href={section.path}
                         onClick={() => setMobileMenuOpen(false)}
-                        className={`flex items-center gap-2.5 rounded-lg px-2 py-3 lg:py-1.5 transition-colors ${
-                          sidebarCollapsed ? 'justify-center' : ''
-                        } ${
-                          active
-                            ? adminInteractive.navActive
-                            : `text-text-tertiary ${adminInteractive.rowHoverSubtle} hover:text-text-primary`
-                        }`}
+                        className={navLinkClass('sidebar', active, sidebarCollapsed ? 'justify-center' : '')}
                         title={sidebarCollapsed ? `${sectionLabel(tSections, section)}${sensitive ? ` (${t('sensitiveLabel')})` : ''}` : sensitivityReason}
                       >
                         {/* Larger icon when collapsed so it's easier to tap and recognise at a glance */}
@@ -340,7 +325,7 @@ export function AdminSidebar({
                 sidebarCollapsed ? 'justify-center' : ''
               } ${
                 isActive(hirnSection.path)
-                  ? 'bg-action/10 text-action ring-1 ring-action/30'
+                  ? adminInteractive.navActive
                   : 'text-text-secondary hover:bg-action/10'
               }`}
               title={sidebarCollapsed ? t('hirnTitle') : undefined}

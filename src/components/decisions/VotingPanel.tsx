@@ -5,7 +5,7 @@ import { DECISION_STATUS, type VotingMethod } from '@/config/decisions';
 import { apiFetch } from '@/lib/api/client';
 import { Button } from '@/components/ui/button';
 import { useVoteState } from '@/hooks/useVoteState';
-import Heading from '@/components/admin/AdminHeading';
+import { Panel } from '@/components/ui/Panel';
 import { DeadlineCountdown } from './voting/DeadlineCountdown';
 import { ConsentVote } from './voting/ConsentVote';
 import { ApprovalVote } from './voting/ApprovalVote';
@@ -111,16 +111,12 @@ export default function VotingPanel({
         />
       )}
 
-      <div className="rounded-lg bg-surface-base p-6 shadow-xs">
+      <Panel title="Deine Stimme" className="p-6">
       {votingDeadline && status === DECISION_STATUS.VOTING && (
         <div className="mb-4">
           <DeadlineCountdown deadline={votingDeadline} />
         </div>
       )}
-
-      <Heading level={2} className="mb-4 text-lg font-semibold text-text-primary">
-        Deine Stimme
-      </Heading>
 
       {error && (
         <div className="mb-4 rounded-md bg-error-50 dark:bg-error-900/20 p-3 text-sm text-error-700 dark:text-error-300">{error}</div>
@@ -180,7 +176,7 @@ export default function VotingPanel({
       >
         {submitting ? 'Wird gesendet...' : 'Stimme abgeben'}
       </Button>
-      </div>
+      </Panel>
     </div>
   );
 }

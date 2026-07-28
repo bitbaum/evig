@@ -8,7 +8,7 @@ import {
   type ConsentResponse,
   type SimpleMajorityResponse,
 } from '@/config/decisions';
-import Heading from '@/components/admin/AdminHeading';
+import { Panel } from '@/components/ui/Panel';
 
 interface RankedOption {
   id: string;
@@ -103,8 +103,7 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
   if (!data) return null;
 
   return (
-    <div className="rounded-lg bg-surface-base p-6 shadow-xs">
-      <Heading level={2} className="mb-4 text-lg font-semibold text-text-primary">Ergebnis</Heading>
+    <Panel title="Ergebnis" className="p-6">
 
       {/* AI Outcome Narrative — Beschluss hero */}
       {aiOutcomeNarrative && (
@@ -284,6 +283,6 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
           <p className="mt-1 text-sm text-action">{outcomeSummary}</p>
         </div>
       )}
-    </div>
+    </Panel>
   );
 }

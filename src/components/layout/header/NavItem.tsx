@@ -17,6 +17,7 @@ import { ChevronDown } from 'lucide-react'
 import { Link, usePathname } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
+import { designPrimitive } from '@/lib/design-system'
 import type { NavigationItem } from '@/config/navigation'
 import { groupItemsBySection } from './utils'
 import { MegaMenuContent } from './MegaMenuContent'
@@ -134,9 +135,9 @@ export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
         href={item.href}
         aria-current={pathname === item.href ? 'page' : undefined}
         className={cn(
-          "relative px-4 py-2 text-sm font-medium whitespace-nowrap",
+          "relative px-4 py-2 text-sm font-medium whitespace-nowrap rounded-lg",
           "transition-colors duration-200",
-          "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950 rounded-lg",
+          designPrimitive.focus,
           isActive
             ? "text-text-primary after:absolute after:left-4 after:right-4 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-text-primary/50"
             : "text-text-secondary hover:text-text-primary"
@@ -173,7 +174,7 @@ export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
             : "text-text-secondary hover:text-text-primary dark:text-text-muted",
           isActive && !isOpen &&
             "text-text-primary after:absolute after:left-4 after:right-4 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-text-primary/50",
-          "focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action focus-visible:ring-offset-2 dark:focus-visible:ring-offset-neutral-950"
+          designPrimitive.focus
         )}
         aria-expanded={isOpen}
         aria-haspopup="true"

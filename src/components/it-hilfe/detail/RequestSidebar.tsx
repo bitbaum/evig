@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
+import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {
   MapPin,
@@ -60,7 +61,7 @@ export function RequestSidebar({
   return (
     <div className="space-y-6">
       {/* Request Info */}
-      <div className="card-shell p-6">
+      <Card className="p-6">
         <Heading level={3} className="text-sm font-medium text-text-tertiary uppercase tracking-wider mb-4">
           {t('sidebarDetails')}
         </Heading>
@@ -138,11 +139,11 @@ export function RequestSidebar({
             </div>
           </div>
         </div>
-      </div>
+      </Card>
 
       {/* Preferred technician (owner only) */}
       {request.isOwner && request.preferredTechnicianId && request.preferredTechnicianName && (
-        <div className="card-shell p-6">
+        <Card className="p-6">
           <Heading level={3} className="text-sm font-medium text-text-tertiary uppercase tracking-wider mb-4">
             {t('preferredTechnicianSidebar.title')}
           </Heading>
@@ -164,11 +165,11 @@ export function RequestSidebar({
               </Link>
             </div>
           </div>
-        </div>
+        </Card>
       )}
 
       {/* Requester Info */}
-      <div className="card-shell p-6">
+      <Card className="p-6">
         <Heading level={3} className="text-sm font-medium text-text-tertiary uppercase tracking-wider mb-4">
           {t('requesterSection')}
         </Heading>
@@ -183,21 +184,21 @@ export function RequestSidebar({
             )}
           </div>
         </div>
-      </div>
+      </Card>
 
       {/* Message Button */}
       {conversationId && hasSession && (
-        <div className="card-shell p-6">
+        <Card className="p-6">
           <Button onClick={onShowMessages} variant="primary" className="w-full">
             <MessageSquare className="w-4 h-4" aria-hidden="true" />
             {t('sendMessage')}
           </Button>
-        </div>
+        </Card>
       )}
 
       {/* Owner Actions */}
       {request.isOwner && (
-        <div className="card-shell p-6">
+        <Card className="p-6">
           <Heading level={3} className="text-sm font-medium text-text-tertiary uppercase tracking-wider mb-4">
             {t('actionsSection')}
           </Heading>
@@ -222,7 +223,7 @@ export function RequestSidebar({
               {t('allMyRequests')}
             </Button>
           </div>
-        </div>
+        </Card>
       )}
     </div>
   )

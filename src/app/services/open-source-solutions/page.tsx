@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { ResponsiveHero } from '@/components/layout/ResponsiveHero'
+import { PageHero } from '@/components/layout/PageHero'
 import { BenefitsSection } from './components/BenefitsSection'
 import { ServicesSection } from './components/ServicesSection'
 import { ComparisonSection } from './components/ComparisonSection'
@@ -24,10 +24,10 @@ export default function OpenSourceSolutionsPage() {
   return (
     <main>
       {/* Hero Section */}
-      <ResponsiveHero
+      <PageHero
+        theme="services"
         title="Open-Source-Lösungen"
-        description="Professionelle Implementierung von Open-Source-Software, die proprietären Alternativen entspricht oder diese übertrifft."
-        backgroundColor="green"
+        subtitle="Professionelle Implementierung von Open-Source-Software, die proprietären Alternativen entspricht oder diese übertrifft."
       />
 
       {/* Benefits Section */}
