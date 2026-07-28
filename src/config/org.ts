@@ -34,12 +34,11 @@ export const ORG = {
   /** Short description */
   description: 'Gute, langlebige Technik für alle bezahlbar — kuratiert statt Ramsch.',
   /**
-   * Current production app URL — the LIVE host (Layer B infra). `evig.orangecat.ch`
-   * has no DNS yet; pointing here at a non-resolving domain broke the canonical /
-   * JSON-LD / OG URLs. Keep the working host until the infra cutover (DNS + Caddy
-   * vhost + deploy paths) makes `evig.orangecat.ch` real, then flip this one line.
+   * Current production app URL. `evig.orangecat.ch` is live (DNS + Caddy vhost →
+   * the app on the Hetzner box, HTTPS). `revampit.orangecat.ch` remains a working
+   * alias until the deploy paths / systemd identifiers are cut over (Layer B).
    */
-  website: 'https://revampit.orangecat.ch',
+  website: 'https://evig.orangecat.ch',
   /** evig has no legacy site (new organisation). Empty hides the "zur aktuellen Site" banner. */
   websiteLegacy: '',
   /** Email domain. TODO: register evig.ch + mailboxes. Staff-auth domain lives in permissions.ts. */

@@ -21,11 +21,11 @@ export const APP_URL =
  * DISTINCT from APP_URL: never falls back to NEXTAUTH_URL, which on the box is
  * the internal bind port (localhost:4004). Used as Next's `metadataBase` so
  * og:image / canonical metadata resolve to real absolute URLs a social scraper
- * can fetch — not localhost. Override with NEXT_PUBLIC_SITE_URL when the public
- * host changes (e.g. once evig.ch / evig.orangecat.ch goes live).
+ * can fetch — not localhost. Override with NEXT_PUBLIC_SITE_URL; prod sets it to
+ * the live host. `revampit.orangecat.ch` remains a working alias.
  */
 export const PUBLIC_SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || 'https://revampit.orangecat.ch'
+  process.env.NEXT_PUBLIC_SITE_URL || 'https://evig.orangecat.ch'
 
 /**
  * Meilisearch URL
