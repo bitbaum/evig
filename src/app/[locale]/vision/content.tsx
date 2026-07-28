@@ -13,13 +13,15 @@ import type { ReactNode } from 'react'
  */
 
 // The mark geometry is the brand SSOT (src/config/brand.ts) — no divergence.
-const { ringPath: RING, node: NODE } = EVIG_MARK
+const { loopPath: LOOP, sparkPath: SPARK, loopTransform: TILT } = EVIG_MARK
 
 function Mark({ className, width = EVIG_MARK.strokeWidth }: { className?: string; width?: number }) {
   return (
     <svg className={className} viewBox={EVIG_MARK.viewBox} fill="none" aria-hidden="true">
-      <path d={RING} stroke="currentColor" strokeWidth={width} />
-      <circle cx={NODE.cx} cy={NODE.cy} r={NODE.r} fill="currentColor" />
+      <g transform={TILT}>
+        <path d={LOOP} stroke="currentColor" strokeWidth={width} strokeLinecap="round" strokeLinejoin="round" />
+      </g>
+      <path d={SPARK} fill="currentColor" />
     </svg>
   )
 }
@@ -27,9 +29,11 @@ function Mark({ className, width = EVIG_MARK.strokeWidth }: { className?: string
 function HeroLoop({ label }: { label: string }) {
   return (
     <svg className="v-loop" viewBox={EVIG_MARK.viewBox} fill="none" role="img" aria-label={label}>
-      <path className="v-draw" pathLength={100} d={RING} stroke="currentColor" strokeWidth={6} />
-      <path className="v-pulse" pathLength={100} d={RING} stroke="var(--text-primary)" strokeWidth={6} />
-      <circle cx={NODE.cx} cy={NODE.cy} r={NODE.r} fill="currentColor" />
+      <g transform={TILT}>
+        <path className="v-draw" pathLength={100} d={LOOP} stroke="currentColor" strokeWidth={6} strokeLinecap="round" strokeLinejoin="round" />
+        <path className="v-pulse" pathLength={100} d={LOOP} stroke="var(--text-primary)" strokeWidth={6} strokeLinecap="round" strokeLinejoin="round" />
+      </g>
+      <path d={SPARK} fill="currentColor" />
     </svg>
   )
 }

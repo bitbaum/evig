@@ -1,22 +1,24 @@
 /**
- * Brand geometry — SINGLE SOURCE OF TRUTH for the evig "orbit" mark.
+ * Brand geometry — SINGLE SOURCE OF TRUTH for the evig mark.
  *
- * The mark is an eternal orbit (a ring — evig = "eternal", the circular-reuse
- * loop) carrying a single bright node: the spark of intelligence riding the
- * cycle. Everything that renders the mark — the <Logo> component, the /vision
- * manifesto, the OG share card, and the favicon/app-icon raster generators —
- * reads it from HERE. Change the mark once, and every surface follows.
+ * The mark is the eternal-reuse infinity loop (evig = "eternal" + the circular
+ * loop) with an AI spark — a four-point sparkle at the top-right — marking the
+ * intelligence the loop makes accessible. Everything that renders the mark —
+ * the <Logo> component, the /vision manifesto, the OG share card, and the
+ * favicon/app-icon raster generators — reads it from HERE. Change it once, and
+ * every surface follows.
  *
  * The colour comes from the design-token SSOT (`--color-action` — Ion Lime);
  * components reference that token, never a hex.
  */
 export const EVIG_MARK = {
   viewBox: '0 0 64 64',
-  /** Ring stroke weight. */
-  strokeWidth: 6,
-  /** The eternal orbit — a ring, expressed as a stroked circle path so it can
-   *  be stroke-drawn (vision manifesto) as well as simply rendered. r17 @ 30,33. */
-  ringPath: 'M13 33 a17 17 0 1 0 34 0 a17 17 0 1 0 -34 0',
-  /** The intelligence spark — a filled node sitting on the ring (top-right). */
-  node: { cx: 42, cy: 21, r: 6 },
+  /** Infinity-loop stroke weight. */
+  strokeWidth: 7,
+  /** The loop is tilted for motion; renderers wrap the loop path in this. */
+  loopTransform: 'rotate(-8 32 32)',
+  /** One continuous closed infinity stroke. */
+  loopPath: 'M32 32 C24 19 12 19 12 32 C12 45 24 45 32 32 C40 19 52 19 52 32 C52 45 40 45 32 32',
+  /** AI spark — a filled four-point sparkle, upright, at the top-right. */
+  sparkPath: 'M50 5 Q50 12 57 12 Q50 12 50 19 Q50 12 43 12 Q50 12 50 5 Z',
 } as const

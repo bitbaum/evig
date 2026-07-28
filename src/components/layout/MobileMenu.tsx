@@ -10,6 +10,7 @@ import { NavigationItem } from '@/config/navigation'
 import { ORG } from '@/config/org'
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/ui/Logo'
+import { Avatar } from '@/components/ui/Avatar'
 import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { useSession } from 'next-auth/react'
@@ -285,14 +286,7 @@ export function MobileMenu({
             <div className="space-y-3">
               {/* User Info */}
               <div className="flex items-center gap-3 p-3 bg-action-muted/8 rounded-xl border border-subtle dark:border-action/20">
-                <div className="w-10 h-10 rounded-full bg-action flex items-center justify-center text-action-text text-sm font-semibold shrink-0">
-                  {session.user.name
-                    ?.split(' ')
-                    .map((n) => n[0])
-                    .join('')
-                    .toUpperCase()
-                    .slice(0, 2) || session.user.email?.charAt(0).toUpperCase() || 'U'}
-                </div>
+                <Avatar src={session.user.image} name={session.user.name || session.user.email} size="md" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-text-primary truncate">
                     {session.user.name || t('defaultUser')}

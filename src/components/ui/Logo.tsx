@@ -41,14 +41,18 @@ export function Logo({ className, href = '/', showText = true }: LogoProps) {
         className="h-9 w-9 shrink-0 transition-transform duration-200 group-hover:scale-105 sm:h-11 sm:w-11"
         fill="none"
       >
-        {/* Eternal orbit (stroked) + intelligence spark (filled) — both in the
-            brand token so light/dark flip automatically. */}
-        <path
-          d={EVIG_MARK.ringPath}
-          stroke="var(--color-action)"
-          strokeWidth={EVIG_MARK.strokeWidth}
-        />
-        <circle cx={EVIG_MARK.node.cx} cy={EVIG_MARK.node.cy} r={EVIG_MARK.node.r} fill="var(--color-action)" />
+        {/* Infinity loop (stroked) + AI spark (filled) — both in the brand
+            token so light/dark flip automatically. */}
+        <g transform={EVIG_MARK.loopTransform}>
+          <path
+            d={EVIG_MARK.loopPath}
+            stroke="var(--color-action)"
+            strokeWidth={EVIG_MARK.strokeWidth}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </g>
+        <path d={EVIG_MARK.sparkPath} fill="var(--color-action)" />
       </svg>
       {showText && (
         <span className="font-sans text-2xl font-bold tracking-tight text-text-primary sm:text-3xl">

@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import Image from 'next/image'
 import { useSession, signOut } from 'next-auth/react'
 import { Link } from '@/i18n/navigation'
 import {
@@ -25,6 +24,7 @@ import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
 import { ROUTES } from '@/config/routes'
 import { Button } from '@/components/ui/button'
+import { Avatar } from '@/components/ui/Avatar'
 import { NotificationBell } from '@/components/admin/NotificationBell'
 import { useTechnicianProfileStatus } from '@/hooks/useTechnicianProfileStatus'
 
@@ -86,14 +86,6 @@ export function UserMenu() {
     )
   }
 
-  // Logged in - Show avatar with dropdown
-  const initials = session.user.name
-    ?.split(' ')
-    .map((n) => n[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2) || session.user.email?.charAt(0).toUpperCase() || 'U'
-
   // Build menu item groups - include admin link for staff members
   const isStaff = session.user.isStaff
 
@@ -147,20 +139,7 @@ export function UserMenu() {
         aria-haspopup="true"
         title={`${session.user.name || session.user.email} - ${t('accountMenu')}`}
       >
-        {session.user.image ? (
-          <Image
-            src={session.user.image}
-            alt={session.user.name || t('profilePicture')}
-            width={32}
-            height={32}
-            className="w-8 h-8 rounded-full ring-2 ring-white"
-            unoptimized
-          />
-        ) : (
-          <div className="w-8 h-8 rounded-full bg-action flex items-center justify-center text-action-text text-xs font-semibold ring-2 ring-white">
-            {initials}
-          </div>
-        )}
+        <Avatar src={session.user.image} name={session.user.name || session.user.email} size="xs" />
         {/* Chevron is decorative — hidden on phones where header width is scarce */}
         <ChevronDown
           className={cn(
@@ -184,20 +163,7 @@ export function UserMenu() {
           {/* User Info Header */}
           <div className="px-5 py-4 bg-surface-raised border-b border-subtle dark:border-white/6">
             <div className="flex items-center gap-3">
-              {session.user.image ? (
-                <Image
-                  src={session.user.image}
-                  alt={session.user.name || t('profilePicture')}
-                  width={40}
-                  height={40}
-                  className="w-10 h-10 rounded-full"
-                  unoptimized
-                />
-              ) : (
-                <div className="w-10 h-10 rounded-full bg-action flex items-center justify-center text-action-text text-sm font-semibold">
-                  {initials}
-                </div>
-              )}
+              <Avatar src={session.user.image} name={session.user.name || session.user.email} size="md" />
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-text-primary truncate">
                   {session.user.name || t('user')}
