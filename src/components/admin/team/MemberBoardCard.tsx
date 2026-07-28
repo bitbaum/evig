@@ -57,7 +57,7 @@ export function MemberBoardCard({ card }: { card: BoardMemberCard }) {
   return (
     <Link
       href={`/admin/team/${card.profile_id}`}
-      className="flex flex-col gap-4 rounded-xl border border-neutral-200 bg-surface-base p-5 transition-colors hover:border-neutral-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 dark:border-neutral-800"
+      className="flex flex-col gap-4 rounded-xl border border-neutral-200 bg-surface-base p-5 transition-colors hover:border-neutral-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-action dark:border-neutral-800"
     >
       {/* Header: identity + state */}
       <div className="flex items-start gap-3">

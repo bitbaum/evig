@@ -46,7 +46,7 @@ interface Item {
 const SOURCE_META: Record<Source, { label: string; cls: string }> = {
   website: { label: 'Website', cls: 'bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-info-200' },
   presentation: { label: 'Präsentation', cls: 'bg-secondary-100 text-secondary-800 dark:bg-secondary-900/30 dark:text-secondary-200' },
-  deliverable: { label: 'Liefergegenstand', cls: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300' },
+  deliverable: { label: 'Liefergegenstand', cls: 'bg-action-muted text-action' },
 }
 
 function snippet(s: string, n = 160): string {
@@ -219,7 +219,7 @@ export default async function RueckmeldungenPage({
             key={f.key}
             href={`/admin/rueckmeldungen${qs({ source: f.key })}`}
             className={`text-sm rounded-full px-3 py-1.5 border transition-colors ${
-              activeSource === f.key ? 'bg-primary-700 text-white border-primary-700' : 'text-text-secondary hover:text-action'
+              activeSource === f.key ? 'bg-action text-action-text border-action' : 'text-text-secondary hover:text-action'
             }`}
           >
             {f.label}
@@ -229,7 +229,7 @@ export default async function RueckmeldungenPage({
         <Link
           href={`/admin/rueckmeldungen${qs({ open: openOnly ? undefined : '1' })}`}
           className={`text-sm rounded-full px-3 py-1.5 border transition-colors ${
-            openOnly ? 'bg-primary-700 text-white border-primary-700' : 'text-text-secondary hover:text-action'
+            openOnly ? 'bg-action text-action-text border-action' : 'text-text-secondary hover:text-action'
           }`}
         >
           Nur offene
@@ -273,7 +273,7 @@ export default async function RueckmeldungenPage({
                     <td className="px-4 py-3 text-text-secondary whitespace-nowrap">{i.createdAt ? formatDateTimeNumeric(i.createdAt) : '—'}</td>
                     <td className="px-4 py-3">
                       <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium whitespace-nowrap ${
-                        i.open ? 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-200' : 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300'
+                        i.open ? 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-200' : 'bg-action-muted text-action'
                       }`}>
                         {i.open ? 'Offen' : 'Erledigt'}
                       </span>

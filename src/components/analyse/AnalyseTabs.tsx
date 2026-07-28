@@ -1,7 +1,7 @@
 'use client'
 
 import { Link, usePathname } from '@/i18n/navigation'
-import { cn } from '@/lib/utils'
+import { navLinkClass } from '@/lib/design/nav'
 import { PiggyBank, TrendingUp, Target, Eye } from 'lucide-react'
 
 const TABS = [
@@ -28,12 +28,7 @@ export function AnalyseTabs() {
             <Link
               key={tab.href}
               href={tab.href}
-              className={cn(
-                'flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap',
-                isActive
-                  ? 'border-primary text-primary'
-                  : 'border-transparent text-muted-foreground hover:text-foreground hover:border-strong'
-              )}
+              className={navLinkClass('tab', isActive, 'flex items-center gap-2')}
             >
               <Icon className="w-4 h-4" />
               {tab.label}

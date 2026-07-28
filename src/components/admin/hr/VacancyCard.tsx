@@ -65,7 +65,7 @@ export function VacancyCard({
           </div>
           <Link
             href={ROUTES.admin.hrVacancy(vacancy.id)}
-            className="text-lg font-semibold text-text-primary hover:text-primary-600"
+            className="text-lg font-semibold text-text-primary hover:text-action"
           >
             {vacancy.title}
           </Link>

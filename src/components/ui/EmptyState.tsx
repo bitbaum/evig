@@ -4,9 +4,9 @@ import Heading from './Heading'
 
 interface EmptyStateProps {
   icon: LucideIcon
-  /** Tailwind bg classes for the icon circle, e.g. "bg-primary-50 dark:bg-primary-900/20" */
+  /** Tailwind bg classes for the icon circle, e.g. "bg-action-muted" (brand token, not primary-*) */
   iconBg?: string
-  /** Tailwind text classes for the icon, e.g. "text-primary-600 dark:text-primary-400" */
+  /** Tailwind text classes for the icon, e.g. "text-action" (brand token, flips in dark) */
   iconColor?: string
   title: string
   description?: string

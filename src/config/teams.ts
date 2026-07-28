@@ -32,7 +32,7 @@ export const TEAM_ROLE_LABELS: Record<TeamRole, string> = {
 }
 
 export const TEAM_ROLE_COLORS: Record<TeamRole, string> = {
-  lead: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300',
+  lead: 'bg-action-muted text-action',
   deputy: 'bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-info-300',
   member: 'bg-neutral-100 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300',
 }
@@ -110,7 +110,7 @@ export const TEAM_ACCENT_LABELS: Record<SectionColor, string> = {
 
 /** Chip/badge classes for a team accent (used on team cards + headers). */
 export const TEAM_ACCENT_CLASSES: Record<SectionColor, string> = {
-  primary: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300',
+  primary: 'bg-action-muted text-action',
   secondary: 'bg-secondary-100 text-secondary-800 dark:bg-secondary-900/30 dark:text-secondary-300',
   info: 'bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-info-300',
   warning: 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-300',

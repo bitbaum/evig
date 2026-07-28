@@ -297,7 +297,7 @@ export default async function TeamBoardPage({ searchParams }: PageProps) {
             {hasFilters ? 'Keine Mitglieder passen zu diesen Filtern.' : 'Noch keine aktiven Team-Profile.'}
           </p>
           {hasFilters && (
-            <Link href="/admin/team/board" className="mt-3 inline-block text-sm font-medium text-primary-700 hover:underline dark:text-primary-400">
+            <Link href="/admin/team/board" className="mt-3 inline-block text-sm font-medium text-action hover:underline">
               Filter zurücksetzen
             </Link>
           )}
@@ -386,7 +386,7 @@ function FilterChip({ href, active, children }: { href: string; active: boolean;
       href={href}
       className={
         active
-          ? 'inline-flex items-center rounded-full border border-primary-600 bg-primary-600 px-3 py-1 text-xs font-medium text-white'
+          ? 'inline-flex items-center rounded-full border border-action bg-action px-3 py-1 text-xs font-medium text-action-text'
           : 'inline-flex items-center rounded-full border border-subtle bg-surface-base px-3 py-1 text-xs font-medium text-text-secondary transition-colors hover:border-neutral-300 hover:text-text-primary'
       }
     >

@@ -21,6 +21,7 @@ import { ArrowLeft, User, Clock, Activity, Edit2, Mail, Calendar, Phone, CheckSq
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
+import { navLinkClass } from '@/lib/design/nav'
 import { adminInteractive } from '@/lib/admin-ui'
 import { Avatar } from '@/components/ui/Avatar'
 import { TeamProfileView } from './TeamProfileView'
@@ -190,12 +191,7 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
                 onClick={() => goTo(key)}
                 role="tab"
                 aria-selected={isActive}
-                className={cn(
-                  'inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors whitespace-nowrap h-auto rounded-none',
-                  isActive
-                    ? 'border-action text-action'
-                    : 'border-transparent text-text-secondary hover:text-text-primary hover:border-strong dark:hover:border-white/10',
-                )}
+                className={navLinkClass('tab', isActive, 'inline-flex items-center gap-2 h-auto rounded-none')}
               >
                 <Icon className="w-4 h-4" />
                 {meta.label}

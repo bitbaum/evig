@@ -53,7 +53,7 @@ export function BlogTranslationTabs({
       >
         {label}
         {done && machine && <Sparkles className={`w-3.5 h-3.5 ${active ? 'text-white' : 'text-warning-500'}`} />}
-        {done && !machine && <Check className={`w-3.5 h-3.5 ${active ? 'text-white' : 'text-primary-600'}`} />}
+        {done && !machine && <Check className={`w-3.5 h-3.5 ${active ? 'text-white' : 'text-action'}`} />}
       </Button>
     )
   }
@@ -84,7 +84,7 @@ export function BlogTranslationTabs({
             type="checkbox"
             checked={autoTranslate ?? true}
             onChange={(e) => onAutoTranslateChange(e.target.checked)}
-            className="h-4 w-4 rounded border-strong text-primary-600 focus:ring-primary-500"
+            className="h-4 w-4 rounded border-strong text-action focus:ring-action"
           />
           Beim Veröffentlichen fehlende Sprachen automatisch übersetzen
           <Sparkles className="w-3.5 h-3.5 text-warning-500" />

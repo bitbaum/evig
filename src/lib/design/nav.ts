@@ -17,7 +17,7 @@
  */
 import { cn } from '@/lib/utils'
 
-export type NavShape = 'sidebar' | 'bottomTab' | 'pill'
+export type NavShape = 'sidebar' | 'bottomTab' | 'pill' | 'tab'
 
 /**
  * base     — layout/shape classes shared by both states
@@ -44,6 +44,15 @@ export const NAV_STATE: Record<NavShape, { base: string; active: string; inactiv
     active: 'border-action bg-action-muted text-action',
     inactive:
       'border-subtle text-text-secondary hover:border-strong hover:text-text-primary',
+  },
+  /** Horizontal underline tab (in a `border-b` tablist). Sits on a bottom rule
+   *  via -mb-px. Was hand-rolled 5 ways (border-primary-600 / border-primary /
+   *  border-action) — this is the ONE current-tab treatment. */
+  tab: {
+    base: '-mb-px whitespace-nowrap border-b-2 px-4 py-2.5 text-sm font-medium transition-colors',
+    active: 'border-action text-action',
+    inactive:
+      'border-transparent text-text-tertiary hover:border-strong hover:text-text-secondary',
   },
 }
 

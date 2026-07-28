@@ -84,7 +84,7 @@ export default async function DeliverablesAdminPage() {
                         {d.title}
                       </Link>
                       {d.open_feedback_count > 0 && (
-                        <span className="ml-2 inline-flex items-center gap-1 text-xs text-orange-700">
+                        <span className="ml-2 inline-flex items-center gap-1 text-xs text-secondary-700">
                           <MessageSquare className="w-3 h-3" />
                           {d.open_feedback_count} offen
                         </span>

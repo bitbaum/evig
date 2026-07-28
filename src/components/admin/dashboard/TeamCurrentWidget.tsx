@@ -92,7 +92,7 @@ export async function TeamCurrentWidget({ userId }: { userId: string }) {
         </h2>
         <Link
           href="/admin/team/board"
-          className="inline-flex items-center gap-1 text-xs font-medium text-primary-700 hover:underline dark:text-primary-400"
+          className="inline-flex items-center gap-1 text-xs font-medium text-action hover:underline"
         >
           Wer macht was
           <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -109,7 +109,7 @@ export async function TeamCurrentWidget({ userId }: { userId: string }) {
             <li key={m.profile_id}>
               <Link
                 href={`/admin/team/${m.profile_id}`}
-                className="flex items-center gap-3 rounded-lg border border-subtle bg-surface-base p-3 transition-colors hover:border-neutral-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+                className="flex items-center gap-3 rounded-lg border border-subtle bg-surface-base p-3 transition-colors hover:border-neutral-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-action"
               >
                 <Avatar src={m.avatar_url} name={name} size="sm" />
                 <div className="min-w-0 flex-1">

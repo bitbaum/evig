@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import { cn } from '@/lib/utils'
+import { navLinkClass } from '@/lib/design/nav'
 
 /**
  * People & Teams are one area seen through three lenses — the individual
@@ -46,12 +46,7 @@ export function PeopleTeamsTabs() {
             key={tab.href}
             href={tab.href}
             aria-current={active ? 'page' : undefined}
-            className={cn(
-              '-mb-px border-b-2 px-4 py-2.5 text-sm font-medium transition-colors',
-              active
-                ? 'border-primary-600 text-text-primary'
-                : 'border-transparent text-text-tertiary hover:border-subtle hover:text-text-secondary',
-            )}
+            className={navLinkClass('tab', active)}
           >
             {t(tab.labelKey)}
           </Link>

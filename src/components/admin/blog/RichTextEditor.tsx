@@ -54,7 +54,7 @@ function ToolbarButton({
       title={title}
       aria-label={title}
       aria-pressed={active}
-      className={active ? 'bg-primary-600 text-white hover:bg-primary-600' : 'text-text-secondary'}
+      className={active ? 'bg-action text-action-text hover:bg-action' : 'text-text-secondary'}
     >
       {children}
     </Button>

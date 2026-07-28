@@ -45,7 +45,7 @@ export default function CareerDetailClient({ posting }: { posting: PublicVacancy
       </Link>
 
       <div>
-        <p className="text-sm font-medium text-primary-700">{getRoleTrackLabel(posting.role_track)}</p>
+        <p className="text-sm font-medium text-action">{getRoleTrackLabel(posting.role_track)}</p>
         <h1 className="ui-public-display-lg mt-2">{posting.title}</h1>
         {posting.summary && (
           <p className="ui-public-section-lede mt-4">{posting.summary}</p>

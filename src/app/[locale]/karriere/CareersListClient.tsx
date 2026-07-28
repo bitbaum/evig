@@ -70,7 +70,7 @@ export default function CareersListClient({ postings, activeTrack }: Props) {
         <div className="text-center py-16 text-text-muted">
           <Briefcase className="w-12 h-12 mx-auto mb-4 opacity-50" />
           <p>Aktuell keine offenen Stellen in dieser Kategorie.</p>
-          <Link href="/get-involved/kontakt" className="text-primary-600 underline text-sm mt-2 inline-block">
+          <Link href="/get-involved/kontakt" className="text-action underline text-sm mt-2 inline-block">
             Initiativbewerbung senden
           </Link>
         </div>
@@ -101,7 +101,7 @@ export default function CareersListClient({ postings, activeTrack }: Props) {
                     </div>
                     <Link
                       href={ROUTES.public.careerPosting(p.slug)}
-                      className="text-lg font-semibold text-text-primary hover:text-primary-600"
+                      className="text-lg font-semibold text-text-primary hover:text-action"
                     >
                       {p.title}
                     </Link>

@@ -56,10 +56,10 @@ export const contrastSafeColors = {
       inverse: 'text-white',
       onPrimary: 'text-white',
     },
-    bg: 'bg-primary-600',
-    border: 'border-primary-700',
+    bg: 'bg-action',
+    border: 'border-action',
   },
-  
+
   // Secondary orange backgrounds
   secondary: {
     text: {

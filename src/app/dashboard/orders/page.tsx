@@ -179,7 +179,7 @@ export default function DashboardOrdersPage() {
               <Link
                 key={order.id}
                 href={`/dashboard/orders/${order.id}`}
-                className="flex items-center gap-4 bg-surface-base rounded-xl p-4 hover:shadow-md hover:ring-1 hover:ring-action/20 dark:hover:ring-primary-800 transition-all"
+                className="flex items-center gap-4 bg-surface-base rounded-xl p-4 hover:shadow-md hover:ring-1 hover:ring-action/20 dark:hover:ring-action/20 transition-all"
               >
                 <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 bg-surface-raised">
                   {order.thumbnail ? (

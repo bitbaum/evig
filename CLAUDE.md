@@ -251,6 +251,13 @@ grep -rn 'shadow-lg\|shadow-xl\|shadow-2xl' src/app/[locale]/ src/components/
 # Gradient backgrounds that should be flat
 grep -rn 'bg-gradient-to' src/app/[locale]/ src/components/ | grep -v 'from-black\|to-transparent'
 
+# Off-token brand green — `primary-*` is the RAW lime scale (does NOT flip to
+# electric in dark, ≠ the brand action green). Brand accents MUST use `action`
+# (bg-action / text-action / border-action / ring-action / bg-action-muted).
+# `secondary-*` (orange) is allowed for commerce semantics; `success/warning/
+# error/info` only for their actual status meaning, never as decoration.
+grep -rnE '(bg|text|border|ring)-primary-[0-9]' src/components src/app
+
 # Hand-rolled card shells — should be <Card>/<Panel> (resolve to card-shell)
 grep -rnE 'bg-surface-base rounded-(lg|xl) border' src/components src/app
 

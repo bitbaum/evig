@@ -831,9 +831,10 @@
  * ─────────────────────────────────────────────────────────────────────────── */
 }
 
-/* Focus ring — keyboard navigation */
+/* Focus ring — keyboard navigation. Uses the brand action token (not the raw
+   primary-* lime scale) so it matches every other focus ring and flips in dark. */
 .focus-ring {
-  @apply focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  @apply focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2;
 }
 
 @media print {

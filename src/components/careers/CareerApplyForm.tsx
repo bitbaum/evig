@@ -186,7 +186,7 @@ export function CareerApplyForm({ slug, roleTrack, acceptsApplications }: Props)
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {disclaimer && (
-        <p className="text-sm text-text-muted border-l-2 border-primary-500 pl-3">{disclaimer}</p>
+        <p className="text-sm text-text-muted border-l-2 border-action pl-3">{disclaimer}</p>
       )}
 
       <div className="grid sm:grid-cols-2 gap-4">
@@ -309,7 +309,7 @@ export function CareerApplyForm({ slug, roleTrack, acceptsApplications }: Props)
               disabled={cvUploading}
               onChange={(e) => handleCvUpload(e.target.files?.[0] ?? null)}
             />
-            {cvStorageKey && <p className="text-xs text-primary-600 mt-1">CV hochgeladen</p>}
+            {cvStorageKey && <p className="text-xs text-action mt-1">CV hochgeladen</p>}
           </FormField>
         </>
       )}
