@@ -143,11 +143,11 @@ export function Header() {
               <Logo />
             </div>
 
-            {/* Primary Navigation — inline only at xl+ (below xl the hamburger menu
-                is used). Content-width + the nav's gap-6/justify-between keep clean
-                space from the logo and actions — NOT flex-1, which made the items
-                overflow and collide with the logo. */}
-            <div className="hidden xl:flex items-center">
+            {/* Primary Navigation — inline from lg+ (below lg the hamburger menu
+                is used). lg (not xl) so laptops and windowed/OS-scaled desktops
+                — the common real-world widths — get the nav instead of only the
+                hamburger. Content-width + gap keeps clean space from the logo/actions. */}
+            <div className="hidden lg:flex items-center">
               <div className="flex items-center gap-1">
                 {primaryNavItems.map((item) => (
                   <NavItem
@@ -160,35 +160,36 @@ export function Header() {
               </div>
             </div>
 
-            {/* Right Side Actions — desktop (xl+). shrink-0 so the account actions
+            {/* Right Side Actions — desktop (lg+). shrink-0 so the account actions
                 (bell, avatar / login) can never be clipped by the nav. */}
-            <div className="hidden xl:flex shrink-0 items-center gap-2 ml-auto">
-              {/* Command palette trigger (logged-in users) */}
-              <CommandPaletteTrigger />
+            <div className="hidden lg:flex shrink-0 items-center gap-2 ml-auto">
+              {/* Secondary controls (command · locale · theme · Kontakt) appear
+                  from xl. At lg the full nav + auth already fill the bar — adding
+                  these pushes the auth button off-screen (measured: right cluster
+                  needs ≤159px at 1024, the auth button alone is ~120px). Below lg
+                  they live in the compact cluster / mobile menu, so nothing is lost;
+                  the lg–xl band trades them for a visible nav. */}
+              <div className="hidden xl:flex items-center gap-2">
+                <CommandPaletteTrigger />
+                <LocaleSwitcher />
+                <ThemeToggle />
+                {/* Highlighted CTA(s) — e.g. Kontakt */}
+                {actionNavItems.map((item) => (
+                  <Button key={item.name} href={item.href} variant="outline" size="sm">
+                    {item.nameKey ? navItemLabel(tNav as NavTranslator, item.nameKey) : item.name}
+                  </Button>
+                ))}
+                {/* Divider */}
+                <div className="w-px h-5 bg-surface-overlay dark:bg-surface-base/10" />
+              </div>
 
-              {/* Locale Switcher */}
-              <LocaleSwitcher />
-
-              {/* Theme Toggle */}
-              <ThemeToggle />
-
-              {/* Highlighted CTA(s) — e.g. Kontakt (was unreachable on desktop) */}
-              {actionNavItems.map((item) => (
-                <Button key={item.name} href={item.href} variant="outline" size="sm">
-                  {item.nameKey ? navItemLabel(tNav as NavTranslator, item.nameKey) : item.name}
-                </Button>
-              ))}
-
-              {/* Divider */}
-              <div className="w-px h-5 bg-surface-overlay dark:bg-surface-base/10" />
-
-              {/* User Menu / Auth */}
+              {/* User Menu / Auth — always in the desktop bar from lg up */}
               <UserMenu />
             </div>
 
-            {/* Compact Right Side — phones, tablets and laptops below xl. Account
+            {/* Compact Right Side — phones and tablets below lg. Account
                 actions (bell + avatar / login) stay visible; full nav is in the menu. */}
-            <div className="xl:hidden flex shrink-0 items-center gap-1.5 ml-auto">
+            <div className="lg:hidden flex shrink-0 items-center gap-1.5 ml-auto">
               {/* One-tap theme toggle from sm up. On phones the top bar is the
                   scarcest surface on the site — the toggle lives in the mobile
                   menu footer instead (next to the language switcher). */}

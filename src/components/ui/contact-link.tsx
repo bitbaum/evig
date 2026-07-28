@@ -16,10 +16,12 @@ export function ContactLink({
 }: ContactLinkProps) {
   const baseStyles = 'inline-flex items-center justify-center rounded-lg font-semibold transition-colors duration-300'
   
+  // Brand accent comes from the design-token SSOT (--color-action), not the
+  // raw primary-* scale — so this follows the single per-mode brand green.
   const variants = {
-    default: 'bg-primary-600 text-white hover:bg-primary-700',
-    outline: 'bg-transparent border-2 border-primary-600 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20',
-    ghost: 'bg-transparent text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20'
+    default: 'bg-action text-action-text hover:bg-action-hover',
+    outline: 'bg-transparent border-2 border-action text-action hover:bg-action-muted',
+    ghost: 'bg-transparent text-action hover:bg-action-muted'
   }
 
   const sizes = {

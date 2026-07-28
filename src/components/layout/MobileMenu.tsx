@@ -73,7 +73,7 @@ export function MobileMenu({
       onClose={onClose}
       side="right"
       ariaLabel="Mobile Navigation"
-      rootClassName="xl:hidden"
+      rootClassName="lg:hidden"
     >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-subtle dark:border-white/6">

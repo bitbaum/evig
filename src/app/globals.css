@@ -618,15 +618,20 @@
     --border-default:        rgba(0, 0, 0, 0.14);
     --border-strong:         rgba(0, 0, 0, 0.24);
 
-    /* Action accent — RevampIT brand green. The ONLY chromatic color
-     * outside status badges. Used for primary buttons, links, focus
-     * rings, key icons. Everything else stays achromatic. */
-    --accent-action:         var(--primitive-lime-700);    /* #4d7c0f — deep lime: AA as text/links on white, white text on fills */
+    /* Action accent — evig brand green. ONE green in light mode: deep lime,
+     * the only chromatic color outside status badges. #4d7c0f is the most
+     * vivid lime that is still AA both as text/links on white AND with white
+     * text on fills — so fills, CTAs, links, logo and focus rings all share it.
+     * The electric Ion Lime (#B6F531) is the DARK-mode brand green; it can't be
+     * a fill or text on a white canvas without failing contrast, so light mode
+     * does not use it. (Keeping electric for light CTAs was what put two greens
+     * on one page — retired for SSOT: one brand green per mode.) */
+    --accent-action:         var(--primitive-lime-700);    /* #4d7c0f — deep lime */
     --accent-action-hover:   var(--primitive-lime-800);    /* #3f6212 — darker on hover */
     --accent-action-muted:   rgba(132, 204, 22, 0.12);      /* subtle lime fills */
-    --accent-action-text:    #ffffff;                        /* text ON action surfaces (deep-lime fill) */
-    --accent-strong:         var(--primitive-lime-electric);/* #B6F531 — electric CTA fill */
-    --accent-strong-text:    #0a0a0a;                        /* ink on electric lime */
+    --accent-action-text:    #ffffff;                        /* text ON action surfaces */
+    --accent-strong:         var(--primitive-lime-700);    /* #4d7c0f — same single light green (was electric; unified) */
+    --accent-strong-text:    #ffffff;                        /* white on deep lime */
 
     /* Fluid display type — single SSOT, used by .ui-public-hero-title */
     --hero-title-min:        2.25rem;        /* 36px — fits iPhone SE */
