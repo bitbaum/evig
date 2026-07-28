@@ -39,8 +39,8 @@ export const APPROVAL_STATUS_BADGES: Record<string, ApprovalBadge> = {
   },
   [APPROVAL_STATUS.APPROVED]: {
     label: 'Genehmigt',
-    color: 'text-primary-800 dark:text-primary-300',
-    bg: 'bg-primary-100 dark:bg-primary-900/30',
+    color: 'text-success-800 dark:text-success-300',
+    bg: 'bg-success-100 dark:bg-success-900/30',
   },
   [APPROVAL_STATUS.REJECTED]: {
     label: 'Abgelehnt',
@@ -54,8 +54,8 @@ export const APPROVAL_STATUS_BADGES: Record<string, ApprovalBadge> = {
   },
   [APPROVAL_STATUS.PUBLISHED]: {
     label: 'Veröffentlicht',
-    color: 'text-primary-800 dark:text-primary-300',
-    bg: 'bg-primary-100 dark:bg-primary-900/30',
+    color: 'text-success-800 dark:text-success-300',
+    bg: 'bg-success-100 dark:bg-success-900/30',
   },
 }
 

@@ -29,9 +29,9 @@ export const MEETING_TYPE_LABELS: Record<MeetingType, string> = {
 };
 
 export const MEETING_TYPE_COLORS: Record<MeetingType, string> = {
-  team_weekly: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  team_weekly: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
   project_review: 'bg-purple-100 text-purple-800',
-  retro: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  retro: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
   board: 'bg-orange-100 text-orange-800',
   ad_hoc: 'bg-neutral-100 text-neutral-800',
 };
@@ -105,7 +105,7 @@ export const PROTOCOL_STATUS_COLORS: Record<ProtocolStatus, string> = {
   draft: 'bg-neutral-100 text-neutral-800',
   processing: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
   review: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
-  finalized: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  finalized: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
 };
 
 // Visibility options
@@ -133,20 +133,20 @@ export const ACTION_ITEM_TYPE_LABELS: Record<ActionItemType, string> = {
 };
 
 export const ACTION_ITEM_TYPE_COLORS: Record<ActionItemType, string> = {
-  task: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  task: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
   decision: 'bg-purple-100 text-purple-800',
   info: 'bg-neutral-100 text-neutral-800',
 };
 
 export const ACTION_ITEM_BORDER_COLORS: Record<ActionItemType, string> = {
-  task: 'border-l-4 border-l-primary-400',
+  task: 'border-l-4 border-l-success-400',
   decision: 'border-l-4 border-l-purple-400',
   info: 'border-l-4 border-l-neutral-300',
 };
 
 export const FOLLOW_UP_STATUS_COLORS: Record<string, string> = {
-  erledigt: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
-  'in Arbeit': 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  erledigt: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
+  'in Arbeit': 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
   offen: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
 };
 
@@ -217,7 +217,7 @@ export const DECISION_RESULT_LABELS: Record<DecisionResult, string> = {
 };
 
 export const DECISION_RESULT_COLORS: Record<DecisionResult, string> = {
-  approved: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  approved: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
   rejected: 'bg-error-100 text-error-800',
   pending: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
 };

@@ -148,14 +148,14 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
     name: 'Reparaturen',
     description: 'Hardware-Reparaturen und Ersatzteile',
     icon: Wrench,
-    color: 'bg-primary-500',
+    color: 'bg-success-500',
   },
   {
     id: 'setup',
     name: 'Installation & Setup',
     description: 'Software-Installation und Geräte-Einrichtung',
     icon: Settings,
-    color: 'bg-primary-500',
+    color: 'bg-success-500',
   },
   {
     id: 'support',
@@ -291,7 +291,7 @@ export const BUDGET_TIERS: BudgetTier[] = [
     icon: '💰',
     requiresAmount: true,
     multiplier: 1.0,
-    badgeClass: 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300',
+    badgeClass: 'bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-300',
   },
   {
     id: 'supporter',
@@ -300,7 +300,7 @@ export const BUDGET_TIERS: BudgetTier[] = [
     icon: '💚',
     requiresAmount: true,
     multiplier: 1.5,
-    badgeClass: 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300',
+    badgeClass: 'bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-300',
   },
 ]
 
@@ -325,7 +325,7 @@ export const DEVICE_CATEGORIES: DeviceCategory[] = [
     name: 'Laptop',
     description: 'Notebooks, MacBooks, Ultrabooks',
     icon: Laptop,
-    color: 'bg-primary-500',
+    color: 'bg-success-500',
     suggestedSkills: ['hardware_diagnosis', 'screen_repair', 'battery_replacement', 'keyboard_repair', 'ssd_upgrade', 'os_installation'],
     defaultTitle: 'Laptop-Hilfe benötigt',
     defaultDescription: 'Mein Laptop hat folgendes Problem:\n\n- \n\nMarke/Modell: \nAlter: ca. ',
@@ -365,7 +365,7 @@ export const DEVICE_CATEGORIES: DeviceCategory[] = [
     name: 'Spielkonsole',
     description: 'PlayStation, Xbox, Nintendo, Retro-Konsolen',
     icon: Gamepad2,
-    color: 'bg-primary-500',
+    color: 'bg-success-500',
     suggestedSkills: ['hardware_diagnosis', 'soldering', 'cleaning'],
     defaultTitle: 'Konsolen-Hilfe benötigt',
     defaultDescription: 'Meine Spielkonsole hat folgendes Problem:\n\n- \n\nKonsole: \nAlter: ca. ',
@@ -538,9 +538,9 @@ export function deriveBudgetType(amountCents: number | null | undefined): 'free'
 }
 
 export const REQUEST_STATUSES: RequestStatus[] = [
-  { id: REQUEST_STATUS.OPEN, name: 'Offen', description: 'Anfrage ist offen für Angebote', badgeClass: 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' },
-  { id: REQUEST_STATUS.MATCHED, name: 'Vergeben', description: 'Angebot akzeptiert, Hilfe läuft', badgeClass: 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' },
-  { id: REQUEST_STATUS.COMPLETED, name: 'Abgeschlossen', description: 'Erfolgreich abgeschlossen', badgeClass: 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' },
+  { id: REQUEST_STATUS.OPEN, name: 'Offen', description: 'Anfrage ist offen für Angebote', badgeClass: 'bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-300' },
+  { id: REQUEST_STATUS.MATCHED, name: 'Vergeben', description: 'Angebot akzeptiert, Hilfe läuft', badgeClass: 'bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-300' },
+  { id: REQUEST_STATUS.COMPLETED, name: 'Abgeschlossen', description: 'Erfolgreich abgeschlossen', badgeClass: 'bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-300' },
   { id: REQUEST_STATUS.CANCELLED, name: 'Abgebrochen', description: 'Anfrage wurde abgebrochen', badgeClass: 'bg-neutral-100 text-neutral-500' },
   { id: REQUEST_STATUS.EXPIRED, name: 'Abgelaufen', description: 'Frist abgelaufen — keine Angebote erhalten', badgeClass: 'bg-neutral-100 text-neutral-500' },
 ]
@@ -566,7 +566,7 @@ export type OfferStatusId = typeof OFFER_STATUS[keyof typeof OFFER_STATUS];
 
 export const OFFER_STATUSES: OfferStatus[] = [
   { id: OFFER_STATUS.PENDING, name: 'Ausstehend', badgeClass: 'bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-200' },
-  { id: OFFER_STATUS.ACCEPTED, name: 'Akzeptiert', badgeClass: 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' },
+  { id: OFFER_STATUS.ACCEPTED, name: 'Akzeptiert', badgeClass: 'bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-300' },
   { id: OFFER_STATUS.REJECTED, name: 'Abgelehnt', badgeClass: 'bg-error-100 text-error-700' },
   { id: OFFER_STATUS.WITHDRAWN, name: 'Zurückgezogen', badgeClass: 'bg-neutral-100 text-neutral-500' },
 ]

@@ -96,8 +96,8 @@ describe('getBackgroundColor', () => {
     expect(getBackgroundColor('neutral')).toBe('bg-surface-raised')
   })
 
-  it('returns bg-primary-600 for primary', () => {
-    expect(getBackgroundColor('primary')).toBe('bg-primary-600')
+  it('returns bg-action for primary', () => {
+    expect(getBackgroundColor('primary')).toBe('bg-action')
   })
 
   it('returns bg-secondary-500 for secondary', () => {
@@ -134,8 +134,8 @@ describe('getBorderColor', () => {
     expect(getBorderColor('neutral')).toBe('border-default')
   })
 
-  it('returns border-primary-700 for primary', () => {
-    expect(getBorderColor('primary')).toBe('border-primary-700')
+  it('returns border-action for primary', () => {
+    expect(getBorderColor('primary')).toBe('border-action')
   })
 
   it('returns border-subtle for dark background', () => {
@@ -202,9 +202,9 @@ describe('getStatusColors', () => {
 describe('getButtonVariant', () => {
   it('returns primary button classes', () => {
     const result = getButtonVariant('primary')
-    expect(result.bg).toBe('bg-action')
-    expect(result.text).toBe('text-action-text')
-    expect(result.hover).toBe('hover:bg-action-hover')
+    expect(result.bg).toBe('bg-action-strong')
+    expect(result.text).toBe('text-action-strong-text')
+    expect(result.hover).toBe('hover:opacity-90')
   })
 
   it('returns secondary button classes', () => {

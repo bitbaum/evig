@@ -66,7 +66,7 @@ export const WORKSHOP_CATEGORIES: WorkshopCategory[] = [
     description:
       "Betriebssysteme, Terminal, Server-Administration und Open-Source-Tools.",
     icon: BookOpen,
-    color: "bg-primary-500",
+    color: "bg-success-500",
   },
   {
     id: "hardware",
@@ -122,7 +122,7 @@ export const WORKSHOP_CATEGORIES: WorkshopCategory[] = [
     description:
       "Nachhaltige IT: Reparieren statt wegwerfen, Energie sparen, E-Waste vermeiden.",
     icon: Leaf,
-    color: "bg-primary-500",
+    color: "bg-success-500",
   },
   {
     id: "digital-skills",
@@ -141,7 +141,7 @@ export const WORKSHOP_LEVELS: WorkshopLevel[] = [
   {
     id: "beginner",
     name: "Anfänger",
-    badgeClass: "bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300",
+    badgeClass: "bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300",
   },
   {
     id: "intermediate",
@@ -179,9 +179,9 @@ export const WORKSHOP_INSTANCE_STATUS_LABELS: Record<WorkshopInstanceStatus, str
 };
 
 export const WORKSHOP_INSTANCE_STATUS_COLORS: Record<WorkshopInstanceStatus, string> = {
-  [WORKSHOP_INSTANCE_STATUS.SCHEDULED]: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  [WORKSHOP_INSTANCE_STATUS.SCHEDULED]: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
   [WORKSHOP_INSTANCE_STATUS.CANCELLED]: 'bg-error-100 text-error-800',
-  [WORKSHOP_INSTANCE_STATUS.COMPLETED]: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  [WORKSHOP_INSTANCE_STATUS.COMPLETED]: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
 };
 
 /**

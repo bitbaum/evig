@@ -53,7 +53,7 @@ export const EVIG_PROJECTS: EvigProject[] = [
  * kennzahlen confidence badges.
  */
 export const PROJECT_STATUS_STYLE: Record<ProjectStatus, string> = {
-  live: 'bg-primary-50 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300',
+  live: 'bg-success-50 text-success-700 dark:bg-success-900/30 dark:text-success-300',
   beta: 'bg-info-50 text-info-700 dark:bg-info-900/30 dark:text-info-300',
   building: 'bg-warning-50 text-warning-700 dark:bg-warning-900/30 dark:text-warning-300',
   planned: 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300',

@@ -36,16 +36,16 @@ const APPLICATION_STATUS_BADGE_STYLES: Record<ApplicationStatus, { color: string
     bg: 'bg-warning-100 dark:bg-warning-900/30',
   },
   interview: {
-    color: 'text-primary-800 dark:text-primary-300',
-    bg: 'bg-primary-100 dark:bg-primary-900/30',
+    color: 'text-success-800 dark:text-success-300',
+    bg: 'bg-success-100 dark:bg-success-900/30',
   },
   offer: {
     color: 'text-purple-800 dark:text-purple-300',
     bg: 'bg-purple-100 dark:bg-purple-900/30',
   },
   hired: {
-    color: 'text-primary-800 dark:text-primary-300',
-    bg: 'bg-primary-100 dark:bg-primary-900/30',
+    color: 'text-success-800 dark:text-success-300',
+    bg: 'bg-success-100 dark:bg-success-900/30',
   },
   rejected: {
     color: 'text-error-800 dark:text-error-300',

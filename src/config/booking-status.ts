@@ -158,7 +158,7 @@ export const BOOKING_STATUS_BADGES: Record<string, BookingStatusBadge> = {
   },
   [BOOKING_STATUS.ACCEPTED]: {
     label: 'Angenommen',
-    color: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300',
+    color: 'bg-success-100 text-success-800 dark:bg-success-900/30 dark:text-success-300',
     description: `${TECHNICIAN_LABEL} hat angenommen`,
   },
   [BOOKING_STATUS.QUOTED]: {
@@ -168,7 +168,7 @@ export const BOOKING_STATUS_BADGES: Record<string, BookingStatusBadge> = {
   },
   [BOOKING_STATUS.QUOTE_APPROVED]: {
     label: 'Bestätigt',
-    color: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300',
+    color: 'bg-success-100 text-success-800 dark:bg-success-900/30 dark:text-success-300',
     description: 'Wartet auf Start',
   },
   [BOOKING_STATUS.QUOTE_REJECTED]: {
@@ -178,12 +178,12 @@ export const BOOKING_STATUS_BADGES: Record<string, BookingStatusBadge> = {
   },
   [BOOKING_STATUS.IN_PROGRESS]: {
     label: 'In Bearbeitung',
-    color: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300',
+    color: 'bg-success-100 text-success-800 dark:bg-success-900/30 dark:text-success-300',
     description: 'Wird repariert',
   },
   [BOOKING_STATUS.COMPLETED]: {
     label: 'Abgeschlossen',
-    color: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300',
+    color: 'bg-success-100 text-success-800 dark:bg-success-900/30 dark:text-success-300',
     description: 'Reparatur fertig',
   },
   [BOOKING_STATUS.REJECTED]: {
@@ -203,7 +203,7 @@ export const BOOKING_STATUS_BADGES: Record<string, BookingStatusBadge> = {
   },
   [BOOKING_STATUS.CONFIRMED]: {
     label: 'Bestätigt',
-    color: 'bg-primary-100 text-primary-800 dark:bg-primary-900/30 dark:text-primary-300',
+    color: 'bg-success-100 text-success-800 dark:bg-success-900/30 dark:text-success-300',
   },
 }
 

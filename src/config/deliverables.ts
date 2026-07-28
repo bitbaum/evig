@@ -53,7 +53,7 @@ export const DELIVERABLE_STATUS_COLORS: Record<DeliverableStatus, string> = {
   draft: 'bg-neutral-100 text-neutral-800',
   in_review: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
   revising: 'bg-orange-100 text-orange-800',
-  approved: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  approved: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
 }
 
 // ---- Visibility -------------------------------------------------------------
@@ -89,7 +89,7 @@ export const FEEDBACK_KIND_LABELS: Record<FeedbackKind, string> = {
 export const FEEDBACK_KIND_COLORS: Record<FeedbackKind, string> = {
   comment: 'bg-neutral-100 text-neutral-800',
   change_request: 'bg-orange-100 text-orange-800',
-  approval: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  approval: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
 }
 
 // ---- Feedback status (change_request lifecycle) -----------------------------
@@ -112,9 +112,9 @@ export const FEEDBACK_STATUS_LABELS: Record<FeedbackStatus, string> = {
 
 export const FEEDBACK_STATUS_COLORS: Record<FeedbackStatus, string> = {
   open: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
-  addressed: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  addressed: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
   wontfix: 'bg-neutral-100 text-neutral-800',
-  approved: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  approved: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
 }
 
 // ---- Files ------------------------------------------------------------------

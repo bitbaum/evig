@@ -23,10 +23,10 @@ export const ACTIVITY_UPDATE_TYPE_LABELS: Record<ActivityUpdateType, string> = {
 };
 
 export const ACTIVITY_UPDATE_TYPE_COLORS: Record<ActivityUpdateType, string> = {
-  accomplishment: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  accomplishment: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
   milestone: 'bg-purple-100 text-purple-800',
   note: 'bg-neutral-100 text-neutral-800',
-  announcement: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  announcement: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
 };
 
 export const ACTIVITY_UPDATE_TYPE_ICONS: Record<ActivityUpdateType, string> = {
@@ -91,8 +91,8 @@ export const HELP_REQUEST_STATUS_LABELS: Record<HelpRequestStatus, string> = {
 
 export const HELP_REQUEST_STATUS_COLORS: Record<HelpRequestStatus, string> = {
   open: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
-  in_progress: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
-  resolved: 'bg-primary-100 dark:bg-primary-900/30 text-primary-800 dark:text-primary-300',
+  in_progress: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
+  resolved: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
   cancelled: 'bg-neutral-100 text-neutral-800',
 };
 

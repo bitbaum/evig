@@ -50,9 +50,9 @@ export const contrastSafeColors = {
   // Primary green backgrounds
   primary: {
     text: {
-      primary: 'text-white',            // White on green
-      secondary: 'text-primary-50',    // Very light green
-      muted: 'text-primary-100',
+      primary: 'text-white',            // White on the action fill
+      secondary: 'text-white/90',
+      muted: 'text-white/75',
       inverse: 'text-white',
       onPrimary: 'text-white',
     },
@@ -387,7 +387,7 @@ export const designPrimitive = {
     secondary:   'border-transparent bg-surface-raised text-text-secondary',
     destructive: 'border-transparent bg-error-600 text-white',
     outline:     'border-subtle text-text-secondary',
-    success:     'border-primary-200 bg-primary-50 text-primary-800 dark:border-primary-500/30 dark:bg-primary-500/10 dark:text-primary-400',
+    success:     'border-success-200 bg-success-50 text-success-800 dark:border-success-500/30 dark:bg-success-500/10 dark:text-success-400',
     warning:     'border-warning-200 bg-warning-50 text-warning-800 dark:border-warning-500/30 dark:bg-warning-500/10 dark:text-warning-400',
     info:        'border-neutral-200 bg-neutral-50 text-neutral-800 dark:border-neutral-500/30 dark:bg-neutral-500/10 dark:text-neutral-400',
   },

@@ -330,7 +330,7 @@ export const VERIFICATION_CONFIG = {
     label: 'Geprüft von evig',
     shortLabel: 'Geprüft',
     color: UI_STATUS.success,
-    borderColor: 'border-primary-200 dark:border-primary-800',
+    borderColor: 'border-success-200 dark:border-success-800',
   },
 } as const;
 

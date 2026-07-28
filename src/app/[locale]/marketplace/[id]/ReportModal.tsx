@@ -61,7 +61,7 @@ export function ReportModal({
                   value={r.value}
                   checked={reportReason === r.value}
                   onChange={e => onReportReasonChange(e.target.value)}
-                  className="accent-primary-600"
+                  className="accent-action"
                 />
                 <span className="text-sm text-text-primary">{r.label}</span>
               </label>

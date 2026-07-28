@@ -96,7 +96,7 @@ export const adminIconBox = {
 // Keys are kept for API stability; the non-semantic ones now render neutral.
 const NEUTRAL_ICON = 'bg-neutral-100 text-neutral-600 dark:bg-neutral-500/12 dark:text-neutral-400'
 export const adminIconColor = {
-  green:  'bg-primary-100 text-primary-600 dark:bg-primary-500/12 dark:text-primary-400',
+  green:  'bg-success-100 text-success-600 dark:bg-success-500/12 dark:text-success-400',
   amber:  'bg-warning-100 text-warning-600 dark:bg-warning-500/12 dark:text-warning-400',
   red:    'bg-error-100 text-error-600 dark:bg-error-500/12 dark:text-error-400',
   blue:   NEUTRAL_ICON,
