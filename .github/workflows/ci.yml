@@ -33,6 +33,11 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
+      # Enforces the Swiss umlaut convention (display text keeps ä/ö/ü; only
+      # code identifiers/slugs may use ASCII). Was manual-only before — now gated.
+      - name: Check umlauts
+        run: npm run lint:umlauts
+
       - name: Type check
         run: npx tsc --noEmit
 
