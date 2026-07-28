@@ -70,6 +70,10 @@ jobs:
         if: steps.secrets.outputs.configured == 'true'
         run: npm run lint
 
+      - name: Check umlauts
+        if: steps.secrets.outputs.configured == 'true'
+        run: npm run lint:umlauts
+
       - name: Type check
         if: steps.secrets.outputs.configured == 'true'
         run: npm run typecheck
