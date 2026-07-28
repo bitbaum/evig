@@ -154,6 +154,8 @@ the primitive, not N components.
 | Full-bleed page hero (centered) | `<PageHero theme title subtitle>` | `components/layout/PageHero.tsx` | a one-off `<section>` with a bespoke `<h1>` type string |
 | Page-section vertical rhythm / tinted band | `<Section density tone>` | `components/layout/Section.tsx` | hardcoded `py-16 sm:py-20 …` |
 | Mobile bottom tab bar (`<lg`) | `<BottomNav items ariaLabel more>` | `components/layout/BottomNav.tsx` | a `fixed bottom-0 … flex` `<nav>` + tab loop |
+| Edge overlay (right sheet / bottom sheet) | `<Drawer isOpen onClose side ariaLabel>` | `components/ui/Drawer.tsx` | a hand-rolled `fixed inset-0` portal + backdrop + focus-trap |
+| Centered dialog | `<Modal isOpen onClose title>` | `components/ui/Modal.tsx` | a bespoke centered overlay |
 | Active/inactive nav item classes | `navLinkClass(shape, active)` / `NAV_STATE` | `lib/design/nav.ts` | inline `text-action` / `ring-action/20` ladders |
 
 Rules:
@@ -171,11 +173,12 @@ Rules:
   `<Card>`/`<Panel>` both resolve to it. `rounded-lg`, missing border, or
   `shadow-xs` on a static card is drift — fix it, don't copy it.
 
-Deliberately NOT unified (yet): the right-edge **drawer/sheet** overlay
-(MessageSidebar, MobileMenu, DashboardMobileNav sheet) — a shared `<Drawer>`
-with focus-trap + scroll-lock is the next chrome primitive; until it lands,
-match MobileMenu's implementation (scrim `bg-black/40 backdrop-blur-xs`, focus
-trap via `useFocusTrap`, body scroll-lock) and never `bg-opacity-*`.
+Every edge overlay goes through `<Drawer>` (right sheet or `side="bottom"`) —
+it owns the portal, `useFocusTrap` (Escape / initial focus / Tab cycle / focus
+restore), body scroll-lock, and the `bg-black/40 backdrop-blur-xs` scrim. Pass
+panel size via `className`, viewport gating via `rootClassName` (`xl:hidden` /
+`lg:hidden`). Never hand-roll a `fixed inset-0` overlay and never `bg-opacity-*`
+(use `bg-black/NN`). Centered dialogs use `<Modal>`, its sibling.
 
 ### Mobile-first = ACTION-first, not stats-first
 

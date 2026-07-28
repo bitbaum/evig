@@ -1,13 +1,12 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
 import { Link, usePathname } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
 import { BottomNav } from '@/components/layout/BottomNav'
+import { Drawer } from '@/components/ui/Drawer'
 import { navLinkClass } from '@/lib/design/nav'
-import { useFocusTrap } from '@/hooks/useFocusTrap'
 import {
   DASHBOARD_CATEGORIES,
   getAllDashboardCards,
@@ -53,20 +52,6 @@ export function DashboardMobileNav({
     [role, isStaff, isSuperAdmin, isTechnician],
   )
   const [moreOpen, setMoreOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
-  const sheetRef = useFocusTrap<HTMLDivElement>(moreOpen, () => setMoreOpen(false))
-
-  useEffect(() => setMounted(true), [])
-
-  // Lock body scroll while the sheet is open.
-  useEffect(() => {
-    if (!moreOpen) return
-    const prev = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.body.style.overflow = prev
-    }
-  }, [moreOpen])
 
   // Close the sheet on navigation.
   useEffect(() => {
@@ -101,19 +86,15 @@ export function DashboardMobileNav({
         more={{ label: 'Mehr', ariaLabel: 'Mehr anzeigen', onClick: () => setMoreOpen(true), expanded: moreOpen }}
       />
 
-      {/* "Mehr" bottom sheet */}
-      {mounted && moreOpen && createPortal(
-        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Dashboard-Menü">
-          <Button
-            variant="ghost"
-            aria-label="Schliessen"
-            onClick={() => setMoreOpen(false)}
-            className="absolute inset-0 h-full w-full rounded-none bg-black/40 p-0 backdrop-blur-xs hover:bg-black/40"
-          />
-          <div
-            ref={sheetRef}
-            className="absolute inset-x-0 bottom-0 max-h-[80vh] overflow-y-auto rounded-t-2xl border-t border-subtle bg-surface-base p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-card"
-          >
+      {/* "Mehr" bottom sheet — Drawer supplies the portal, focus-trap and scroll-lock. */}
+      <Drawer
+        isOpen={moreOpen}
+        onClose={() => setMoreOpen(false)}
+        side="bottom"
+        ariaLabel="Dashboard-Menü"
+        rootClassName="lg:hidden"
+        className="overflow-y-auto p-4 pb-[max(1rem,env(safe-area-inset-bottom))] shadow-card"
+      >
             <div className="mb-3 flex items-center justify-between">
               <span className="text-sm font-semibold text-text-primary">Alle Bereiche</span>
               <Button
@@ -152,10 +133,7 @@ export function DashboardMobileNav({
                 </div>
               ))}
             </div>
-          </div>
-        </div>,
-        document.body,
-      )}
+      </Drawer>
     </>
   )
 }

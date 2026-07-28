@@ -19,6 +19,7 @@ import { formatDateShort, formatTime } from '@/lib/date-formats'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Drawer } from '@/components/ui/Drawer'
 
 interface Conversation {
   id: string
@@ -130,11 +131,8 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
     conv.title?.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
-  if (!isOpen) return null
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex">
-      <div className="ml-auto w-full max-w-md bg-surface-base h-full flex flex-col">
+    <Drawer isOpen={isOpen} onClose={onClose} side="right" ariaLabel={t('title')}>
         {/* Header */}
         <div className="p-4 border-b border-strong flex items-center justify-between">
           <Heading level={2} className="text-lg font-semibold">{t('title')}</Heading>
@@ -295,8 +293,7 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
             </div>
           )}
         </div>
-      </div>
-    </div>
+    </Drawer>
   )
 }
 

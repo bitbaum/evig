@@ -1,12 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Link } from '@/i18n/navigation'
-import { useFocusTrap } from '@/hooks/useFocusTrap'
 import { useRouter } from 'next/navigation'
 import { X, ChevronDown, ExternalLink, ArrowRight } from 'lucide-react'
-import { createPortal } from 'react-dom'
 import { useTranslations } from 'next-intl'
+import { Drawer } from '@/components/ui/Drawer'
 import { NavigationItem } from '@/config/navigation'
 import { ORG } from '@/config/org'
 import { Button } from '@/components/ui/button'
@@ -47,27 +46,9 @@ export function MobileMenu({
     if (!key) return null
     try { return tBadge(key as never) } catch { return key }
   }
-  // Escape-to-close, initial focus, focus restore (to the hamburger trigger)
-  // and the Tab trap all live in the shared hook; attach its ref to the panel.
-  const menuPanelRef = useFocusTrap<HTMLDivElement>(isOpen, onClose)
+  // Portal, backdrop, focus-trap (Escape / initial focus / Tab cycle / focus
+  // restore) and body scroll-lock all live in <Drawer>.
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    // Defer setState to avoid synchronous update during effect
-    const frame = requestAnimationFrame(() => setMounted(true))
-    return () => cancelAnimationFrame(frame)
-  }, [])
-
-  // Lock body scroll while the menu is open.
-  useEffect(() => {
-    if (!isOpen) return
-    const prevOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => {
-      document.body.style.overflow = prevOverflow
-    }
-  }, [isOpen])
 
   const handleNavigation = (href: string) => {
     if (href === '#') return
@@ -82,44 +63,18 @@ export function MobileMenu({
     setOpenDropdown(openDropdown === itemName ? null : itemName)
   }
 
-  if (!mounted || !isOpen) return null
-
   // Separate primary nav from action items
   const primaryItems = navigationItems.filter(item => !item.highlight)
   const actionItems = navigationItems.filter(item => item.highlight)
 
-  return createPortal(
-    <div
-      className="fixed inset-0 z-100 xl:hidden"
-      role="dialog"
-      aria-modal="true"
-      aria-label="Mobile Navigation"
+  return (
+    <Drawer
+      isOpen={isOpen}
+      onClose={onClose}
+      side="right"
+      ariaLabel="Mobile Navigation"
+      rootClassName="xl:hidden"
     >
-      {/* Backdrop */}
-      <div
-        className={cn(
-          "fixed inset-0 bg-black/40 backdrop-blur-xs",
-          "transition-opacity duration-300",
-          isOpen ? "opacity-100" : "opacity-0"
-        )}
-        onClick={onClose}
-        aria-hidden="true"
-      />
-
-      {/* Menu Panel */}
-      <div
-        ref={menuPanelRef}
-        tabIndex={-1}
-        className={cn(
-          "fixed inset-y-0 right-0 z-101 w-full sm:max-w-md",
-          // Border-only separation matches the rest of the design system —
-          // the translucent backdrop already provides the plane lift.
-          "bg-surface-base border-l border",
-          "flex flex-col",
-          "transition-transform duration-300 ease-out",
-          isOpen ? "translate-x-0" : "translate-x-full"
-        )}
-      >
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-subtle dark:border-white/6">
           <Button type="button" variant="ghost" onClick={onClose} className="cursor-pointer bg-transparent border-none p-0 h-auto">
@@ -392,9 +347,7 @@ export function MobileMenu({
             </div>
           )}
         </div>
-      </div>
-    </div>,
-    document.body
+    </Drawer>
   )
 }
 
