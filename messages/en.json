@@ -6343,9 +6343,9 @@
       "founding": {
         "title": "A spin-off born of conviction",
         "subtitle": "The same roots, a bolder path",
-        "p1": "evig was founded in {foundingYear} in Zurich — as a spin-off from Swiss circular IT. The conviction behind it: access to intelligence — AI and robotics — is the great opportunity of our time, and it should be affordable for everyone.",
-        "p2": "We built the platform for it: a marketplace, an AI assistant, and a techno-optimist vision of AI, robotics and open tech in circulation. Our surroundings didn't want to walk that path with us.",
-        "p3": "So we're walking it ourselves. evig keeps the roots of the circular economy and aims them at the age of intelligence — as a genuine market-and-quality model, open and independent."
+        "p1": "evig was founded in {foundingYear} in Zurich — as a spin-off from Zurich's circular-IT scene, out of <a>Revamp-IT</a>. Since 2003, that non-profit association has been turning old hardware back into usable computers: repairing them, reinstalling Linux and free software, passing them on instead of scrapping them — and opening access to technology for people on a small budget. Good, important work, and the ground evig grew from.",
+        "p2": "Out of that work we built the platform — marketplace, AI assistant, workshop — and a techno-optimist vision: making access to intelligence, to AI and robotics, affordable for everyone, fast and beyond Zurich. Revamp-IT stays with what it does well — repair and reuse, at a calm, local pace. A different goal, a different tempo.",
+        "p3": "So we walk our path independently. evig keeps the roots of the circular economy and aims them at the age of intelligence — full ownership, no committee to convince, a genuine market-and-quality model, open and independent. Revamp-IT's history stays Revamp-IT's; evig writes its own."
       },
       "badge": "Why evig exists",
       "milestoneTitle": "Milestones",
@@ -8926,8 +8926,8 @@
     "origin": {
       "eyebrow": "Where we come from",
       "quote": "A refurbished laptop is the cheapest on-ramp to intelligence that exists.",
-      "p1": "evig grew out of the quiet work of circular IT — taking tired laptops and computers, fixing them, tuning them up, and giving them a second life instead of a landfill. That work is good for the planet. But we saw what the recycling framing missed: the same machine that would have been e-waste is, set up right, a doorway to the most powerful tools humanity has ever built.",
-      "p2": "<b>Circular economy and access to intelligence turned out to be the same act, seen from two sides.</b> We built a platform around that idea. Our surroundings were not ready to walk toward it — so in 2026, in Zürich, we started walking on our own. Same roots, bolder destination."
+      "p1": "evig grew out of Zurich's circular IT — out of <a>Revamp-IT</a>, where since 2003 tired laptops and computers are turned back into usable machines: repaired, reinstalled with Linux, given a second life instead of a landfill. That work is good for the planet. But we saw what the recycling framing missed: the same machine that would have been e-waste is, set up right, a doorway to the most powerful tools humanity has ever built.",
+      "p2": "<b>Circular economy and access to intelligence turned out to be the same act, seen from two sides.</b> We built a platform around that idea, and we wanted to carry it fast and far. Revamp-IT stays true to repair and reuse — good work, at a local pace. We wanted to go further: so in 2026, in Zürich, we walk on independently. Same roots, bolder destination."
     },
     "diff": {
       "eyebrow": "What makes us different",

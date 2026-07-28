@@ -6350,9 +6350,9 @@
       "founding": {
         "title": "Uno spin-off per convinzione",
         "subtitle": "Le stesse radici, una strada più coraggiosa",
-        "p1": "evig è nata nel {foundingYear} a Zurigo — come spin-off dell'IT circolare svizzera. La convinzione alla base: l'accesso all'intelligenza — IA e robotica — è la grande occasione del nostro tempo, e dovrebbe essere alla portata di tutti.",
-        "p2": "Abbiamo costruito la piattaforma per questo: un mercato, un assistente IA e una visione tecno-ottimista di IA, robotica e tecnologia aperta in circolazione. Il nostro ambiente non ha voluto percorrere questa strada con noi.",
-        "p3": "Così la percorriamo da soli. evig mantiene le radici dell'economia circolare e le orienta verso l'era dell'intelligenza — come un autentico modello di mercato e qualità, aperto e indipendente."
+        "p1": "evig è nata nel {foundingYear} a Zurigo — come spin-off dell'IT circolare zurighese, nata da <a>Revamp-IT</a>. Dal 2003 quell'associazione senza scopo di lucro trasforma il vecchio hardware in computer di nuovo utilizzabili: ripararli, reinstallarli con Linux e software libero, cederli invece di rottamarli — aprendo così l'accesso alla tecnologia a chi ha un piccolo budget. Un lavoro prezioso e importante, e il terreno da cui evig è cresciuta.",
+        "p2": "Da quel lavoro abbiamo costruito la piattaforma — mercato, assistente IA, laboratorio — e una visione tecno-ottimista: rendere l'accesso all'intelligenza, all'IA e alla robotica, alla portata di tutti, in fretta e oltre Zurigo. Revamp-IT resta fedele a ciò che sa fare bene — riparazione e riuso, a un ritmo locale e tranquillo. Un obiettivo diverso, un tempo diverso.",
+        "p3": "Così proseguiamo la nostra strada in autonomia. evig mantiene le radici dell'economia circolare e le orienta verso l'era dell'intelligenza — piena responsabilità, nessun comitato da convincere, un autentico modello di mercato e qualità, aperto e indipendente. La storia di Revamp-IT resta di Revamp-IT; evig scrive la propria."
       }
     },
     "impactStatsSection": {

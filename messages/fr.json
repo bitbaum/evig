@@ -6350,9 +6350,9 @@
       "founding": {
         "title": "Une scission par conviction",
         "subtitle": "Les mêmes racines, un chemin plus audacieux",
-        "p1": "evig est née en {foundingYear} à Zurich — comme scission de l'informatique circulaire suisse. La conviction derrière : l'accès à l'intelligence — IA et robotique — est la grande chance de notre époque, et il devrait être abordable pour tous.",
-        "p2": "Nous avons bâti la plateforme pour cela : un marché, un assistant IA et une vision techno-optimiste de l'IA, de la robotique et de la technologie ouverte en circulation. Notre entourage n'a pas voulu emprunter ce chemin avec nous.",
-        "p3": "Alors nous l'empruntons nous-mêmes. evig conserve les racines de l'économie circulaire et les oriente vers l'ère de l'intelligence — comme un véritable modèle de marché et de qualité, ouvert et indépendant."
+        "p1": "evig est née en {foundingYear} à Zurich — comme spin-off de l'informatique circulaire zurichoise, issue de <a>Revamp-IT</a>. Depuis 2003, cette association à but non lucratif redonne vie à du vieux matériel pour en faire des ordinateurs à nouveau utilisables : les réparer, les réinstaller sous Linux et logiciels libres, les transmettre plutôt que les mettre au rebut — et ainsi ouvrir l'accès à la technologie aux personnes disposant d'un petit budget. Un travail précieux et important, et le terreau sur lequel evig a grandi.",
+        "p2": "C'est de ce travail qu'est née la plateforme — marché, assistant IA, atelier — ainsi qu'une vision techno-optimiste : rendre l'accès à l'intelligence, à l'IA et à la robotique, abordable pour toutes et tous, vite et au-delà de Zurich. Revamp-IT reste fidèle à ce qu'elle fait bien — la réparation et le réemploi, à un rythme local et tranquille. Un autre but, un autre tempo.",
+        "p3": "Alors nous avançons de manière autonome. evig conserve les racines de l'économie circulaire et les oriente vers l'ère de l'intelligence — pleine responsabilité, aucun comité à convaincre, un véritable modèle de marché et de qualité, ouvert et indépendant. L'histoire de Revamp-IT reste celle de Revamp-IT ; evig écrit la sienne."
       }
     },
     "impactStatsSection": {

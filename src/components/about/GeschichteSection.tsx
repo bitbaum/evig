@@ -1,11 +1,12 @@
 /**
  * Origin Story Section — why evig exists.
  *
- * evig is a 2026 spin-off, not a 20-year-old organisation. This section tells
- * the founding story only; it deliberately carries NO achievement timeline and
- * NO "since 2003" track-record stats — evig has no history to claim yet, and we
- * never present another org's record (or invented metrics) as our own. When evig
- * has real, verifiable numbers, add them from the org-numbers SSOT — not before.
+ * evig is a 2026 spin-off, not a 20-year-old organisation. This section names
+ * and honours the org evig grew out of — Revamp-IT, the Zürich circular-IT
+ * non-profit (link + facts from {@link ORG_ORIGIN}). Their "since 2003" history
+ * is theirs, told as theirs; evig claims no track record it hasn't earned and
+ * carries NO achievement timeline or invented metrics of its own. When evig has
+ * real, verifiable numbers, add them from the org-numbers SSOT — not before.
  */
 
 'use client'
@@ -13,7 +14,7 @@
 import { Compass } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
-import { ORG } from '@/config/org'
+import { ORG, ORG_ORIGIN } from '@/config/org'
 
 export default function GeschichteSection() {
   const t = useTranslations('components.geschichteSection')
@@ -37,11 +38,23 @@ export default function GeschichteSection() {
         {/* Founding Story */}
         <div className="card-shell rounded-2xl p-8">
           <div className="prose prose-lg max-w-none">
-            {(['p1', 'p2', 'p3'] as const).map((k) => (
-              <p key={k} className="text-text-secondary mb-4 last:mb-0">
-                {t(`founding.${k}`, foundingParams)}
-              </p>
-            ))}
+            <p className="text-text-secondary mb-4">
+              {t.rich('founding.p1', {
+                ...foundingParams,
+                a: (chunks) => (
+                  <a
+                    href={ORG_ORIGIN.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-action underline underline-offset-2"
+                  >
+                    {chunks}
+                  </a>
+                ),
+              })}
+            </p>
+            <p className="text-text-secondary mb-4">{t('founding.p2', foundingParams)}</p>
+            <p className="text-text-secondary mb-4 last:mb-0">{t('founding.p3', foundingParams)}</p>
           </div>
         </div>
       </div>

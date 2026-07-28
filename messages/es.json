@@ -6350,9 +6350,9 @@
       "founding": {
         "title": "Una escisión por convicción",
         "subtitle": "Las mismas raíces, un camino más audaz",
-        "p1": "evig nació en {foundingYear} en Zúrich, como escisión de la IT circular suiza. La convicción detrás: el acceso a la inteligencia —IA y robótica— es la gran oportunidad de nuestro tiempo, y debería ser asequible para todos.",
-        "p2": "Construimos la plataforma para ello: un mercado, un asistente de IA y una visión tecnooptimista de la IA, la robótica y la tecnología abierta en circulación. Nuestro entorno no quiso recorrer ese camino con nosotros.",
-        "p3": "Así que lo recorremos nosotros. evig conserva las raíces de la economía circular y las orienta hacia la era de la inteligencia, como un auténtico modelo de mercado y calidad, abierto e independiente."
+        "p1": "evig nació en {foundingYear} en Zúrich — como escisión de la IT circular zuriquesa, surgida de <a>Revamp-IT</a>. Desde 2003, esa asociación sin ánimo de lucro convierte hardware viejo en ordenadores de nuevo útiles: repararlos, reinstalarlos con Linux y software libre, transmitirlos en lugar de desecharlos — y así abrir el acceso a la tecnología a personas con poco presupuesto. Un trabajo valioso e importante, y el terreno del que creció evig.",
+        "p2": "De ese trabajo construimos la plataforma — mercado, asistente de IA, taller — y una visión tecnooptimista: hacer que el acceso a la inteligencia, a la IA y la robótica, sea asequible para todos, rápido y más allá de Zúrich. Revamp-IT sigue con lo que hace bien — reparación y reutilización, a un ritmo local y sosegado. Un objetivo distinto, un tempo distinto.",
+        "p3": "Así que seguimos nuestro camino de forma independiente. evig conserva las raíces de la economía circular y las orienta hacia la era de la inteligencia — plena responsabilidad, ningún comité al que convencer, un auténtico modelo de mercado y calidad, abierto e independiente. La historia de Revamp-IT sigue siendo de Revamp-IT; evig escribe la suya."
       }
     },
     "impactStatsSection": {

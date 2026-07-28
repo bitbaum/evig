@@ -1,6 +1,6 @@
 import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
-import { ORG } from '@/config/org'
+import { ORG, ORG_ORIGIN } from '@/config/org'
 import { ROUTES } from '@/config/routes'
 import { EVIG_MARK } from '@/config/brand'
 import type { ReactNode } from 'react'
@@ -44,6 +44,13 @@ export default async function VisionContent({ locale }: { locale: string }) {
     b: (c: ReactNode) => <strong>{c}</strong>,
     em: (c: ReactNode) => <em>{c}</em>,
     lime: (c: ReactNode) => <strong className="lime">{c}</strong>,
+    // External link to the origin org (Revamp-IT). close.commercial overrides
+    // this with its own internal contact Link via a later spread.
+    a: (c: ReactNode) => (
+      <a className="lime underline underline-offset-2" href={ORG_ORIGIN.url} target="_blank" rel="noreferrer">
+        {c}
+      </a>
+    ),
   }
 
   return (

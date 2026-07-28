@@ -6408,9 +6408,9 @@
       "founding": {
         "title": "Ein Spin-off aus Überzeugung",
         "subtitle": "Dieselben Wurzeln, ein mutigerer Weg",
-        "p1": "evig entstand {foundingYear} in Zürich — als Abspaltung aus der Schweizer Kreislauf-IT. Die Überzeugung dahinter: Der Zugang zu Intelligenz — KI und Robotik — ist die grosse Chance unserer Zeit, und er sollte für alle bezahlbar sein.",
-        "p2": "Wir haben die Plattform dafür gebaut: einen Marktplatz, einen KI-Assistenten und eine techno-optimistische Vision von KI, Robotik und offener Technik im Kreislauf. Diesen Weg wollte unser Umfeld nicht mitgehen.",
-        "p3": "Also gehen wir ihn selbst. evig behält die Wurzeln der Kreislaufwirtschaft und richtet sie auf das Zeitalter der Intelligenz aus — als echtes Markt- und Qualitätsmodell, offen und unabhängig."
+        "p1": "evig entstand {foundingYear} in Zürich — als Spin-off aus der Zürcher Kreislauf-IT, aus <a>Revamp-IT</a>. Der gemeinnützige Verein macht seit 2003 aus alter Hardware wieder brauchbare Computer: reparieren, mit Linux und freier Software neu aufsetzen, weitergeben statt verschrotten — und so Menschen mit kleinem Budget den Zugang zur Technik öffnen. Gute, wichtige Arbeit, und der Boden, auf dem evig gewachsen ist.",
+        "p2": "Aus dieser Arbeit heraus haben wir die Plattform gebaut — Marktplatz, KI-Assistent, Werkstatt — und eine techno-optimistische Vision: den Zugang zu Intelligenz, zu KI und Robotik, für alle bezahlbar machen, schnell und über Zürich hinaus. Revamp-IT bleibt bei dem, was es gut kann — Reparatur und Reuse, im ruhigen, lokalen Takt. Ein anderes Ziel, ein anderes Tempo.",
+        "p3": "Also gehen wir den Weg eigenständig. evig behält die Wurzeln der Kreislaufwirtschaft und richtet sie auf das Zeitalter der Intelligenz aus — volle Verantwortung, kein Komitee zu überzeugen, ein echtes Markt- und Qualitätsmodell, offen und unabhängig. Die Geschichte von Revamp-IT bleibt Revamp-IT; evig schreibt seine eigene."
       },
       "badge": "Warum es evig gibt",
       "milestoneTitle": "Meilensteine",
@@ -8943,8 +8943,8 @@
     "origin": {
       "eyebrow": "Woher wir kommen",
       "quote": "Ein aufbereiteter Laptop ist die günstigste Auffahrt zur Intelligenz, die es gibt.",
-      "p1": "evig ist aus der stillen Arbeit der Kreislauf-IT entstanden — müde Laptops und Computer nehmen, reparieren, auf Vordermann bringen und ihnen ein zweites Leben geben statt der Deponie. Diese Arbeit ist gut für den Planeten. Aber wir sahen, was die Recycling-Sicht übersah: Dieselbe Maschine, die Elektroschrott geworden wäre, ist — richtig eingerichtet — ein Tor zu den mächtigsten Werkzeugen, die die Menschheit je gebaut hat.",
-      "p2": "<b>Kreislaufwirtschaft und Zugang zu Intelligenz erwiesen sich als dieselbe Handlung, von zwei Seiten betrachtet.</b> Wir haben eine Plattform um diese Idee gebaut. Unser Umfeld war nicht bereit, diesen Weg zu gehen — also gehen wir ihn seit 2026, in Zürich, selbst. Dieselben Wurzeln, ein mutigeres Ziel."
+      "p1": "evig ist aus der Zürcher Kreislauf-IT entstanden — aus <a>Revamp-IT</a>, wo seit 2003 aus müden Laptops und Computern wieder brauchbare Geräte werden: reparieren, mit Linux neu aufsetzen, ein zweites Leben geben statt Deponie. Diese Arbeit ist gut für den Planeten. Aber wir sahen, was die Recycling-Sicht übersah: Dieselbe Maschine, die Elektroschrott geworden wäre, ist — richtig eingerichtet — ein Tor zu den mächtigsten Werkzeugen, die die Menschheit je gebaut hat.",
+      "p2": "<b>Kreislaufwirtschaft und Zugang zu Intelligenz erwiesen sich als dieselbe Handlung, von zwei Seiten betrachtet.</b> Wir haben eine Plattform um diese Idee gebaut und wollten sie schnell und weit tragen. Revamp-IT bleibt der Reparatur und dem Reuse treu — gute Arbeit, im lokalen Takt. Wir wollten weiter: also gehen wir seit 2026, in Zürich, eigenständig. Dieselben Wurzeln, ein mutigeres Ziel."
     },
     "diff": {
       "eyebrow": "Was uns anders macht",

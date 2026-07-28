@@ -1,11 +1,11 @@
 {
-  "name": "RevampIT",
-  "short_name": "RevampIT",
-  "description": "RevampIT - Nachhaltige Technologielösungen durch Aufarbeitung und Recycling",
+  "name": "evig",
+  "short_name": "evig",
+  "description": "evig — Intelligenz, für alle bezahlbar. Gute, langlebige Technik, kuratiert statt Ramsch.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#ff6b35",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",

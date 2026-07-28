@@ -61,9 +61,13 @@ reachable by anyone, anywhere.
 
 ## Where we come from
 
-evig grew out of the world of circular IT — the quiet, unglamorous work of taking
-tired laptops and computers, fixing them, tuning them up, and giving them a second
-life instead of a landfill.
+evig grew out of the world of circular IT — and specifically out of
+[**Revamp-IT**](https://www.revamp-it.ch), the Zürich non-profit association
+(*gemeinnütziger Verein*) that has, since **2003**, done the quiet, unglamorous work
+of taking tired laptops and computers, repairing them, reinstalling Linux and free
+software, and giving them a second life instead of a landfill — opening access to
+technology for people on a small budget. That's good, important work, and it's the
+ground evig grew from. We name it, and we're grateful for it.
 
 That work is good for the planet. A repaired laptop is a laptop that didn't have to
 be mined, manufactured, and shipped a second time. But we came to see something the
@@ -75,15 +79,18 @@ seen from two sides.
 
 We built a platform around that idea — a marketplace, an AI assistant, workshops, a
 whole techno-optimist vision of good hardware, AI, robotics, and open tech kept in
-circulation. We were ready to walk toward it.
+circulation — and we wanted to carry it fast and far, beyond Zürich, as an
+independent organisation. Revamp-IT stays with what it does well: repair and reuse,
+at a calm, local pace. A different goal, a different tempo — both legitimate.
 
-Our surroundings weren't. So in **2026, in Zürich, we started walking on our own.**
-That's evig — full ownership, no inherited mandate, no committee to convince. The
-same roots, aimed at a bolder destination.
+So in **2026, in Zürich, we started walking on our own.** That's evig — full
+ownership, no committee to convince, the same roots aimed at a bolder destination.
 
-*(Origin tone: confident spin-off, not grievance. We say what we're for, not who
-we're against. We never claim another organisation's history, track record, or
-numbers as our own — evig is new, and says so.)*
+*(Origin tone: confident spin-off, **grateful to Revamp-IT, never at their expense.**
+We name Revamp-IT with respect and honour their history as **theirs** — we never
+claim their "since 2003", their track record, or their numbers as evig's own. We
+describe the split as a difference of mission and tempo, not a grievance: we say what
+we're for and where we diverged, never who we're against. evig is new, and says so.)*
 
 ---
 
@@ -225,11 +232,15 @@ anywhere — and kept reachable, for longer.**
 
 - **Confident, forward-leaning, warm.** Techno-optimist without hype. We're building
   the future of access, not apologising for the past of waste.
-- **Honest by default.** No numbers we haven't earned. No "since 2003." "In Gründung"
+- **Honest by default.** No numbers we haven't earned. evig claims no "since 2003" of
+  its own — that's Revamp-IT's history, and we say so when we tell it. "In Gründung"
   is stated plainly, not hidden. We don't issue tax-deductible receipts or claim
   recognised charitable status until the Verein is actually registered and recognised.
-- **Differentiate by what we *are*,** never by naming and knocking another
-  organisation. "Complete machines, not parts" makes the point; insults don't.
+- **Honour the roots, name Revamp-IT with respect.** We came out of Revamp-IT and we
+  say so — gratefully, and linked. We describe the split as a difference of mission
+  and tempo (fast/independent vs. calm/local; both legitimate), never as a grievance
+  and never by knocking them. Differentiate by what evig *is* — "complete machines,
+  not parts" makes the point; insults don't.
 - **"Intelligence" is the through-line word** — AI, robotics, and the compute to run
   them. Every page should be traceable back to *intelligence within reach*.
 - **Reuse = energy, not guilt.** Circular economy is how we make it affordable, not a

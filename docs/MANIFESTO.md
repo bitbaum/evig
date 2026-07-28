@@ -1,8 +1,14 @@
-# Revamp-IT — Platform Manifesto & Vision
+# evig — Platform Manifesto & Vision
 
 **Status:** Living vision doc (captures direction from founder brainstorming,
 2026-07-06). Marks clearly what is **built** vs **proposed**. Not a spec — a
-compass. Companion to the concrete plans in
+compass.
+
+> **Historical note.** This was written *before* the 2026 spin-off, when the
+> platform served **Revamp-IT** directly, so the body below refers to Revamp-IT as
+> the operating org and dogfooding customer. The platform is now **evig**'s (see
+> [`EVIG_STORY.md`](./EVIG_STORY.md)); those references are kept as the dated record,
+> not updated in place. Companion to the concrete plans in
 [`SYSTEM_MIGRATION_STRATEGY.md`](./SYSTEM_MIGRATION_STRATEGY.md),
 [`KIVVI_ERP_ADOPTION.md`](./KIVVI_ERP_ADOPTION.md),
 [`SHOPWARE_MIGRATION_PLAN.md`](./SHOPWARE_MIGRATION_PLAN.md).

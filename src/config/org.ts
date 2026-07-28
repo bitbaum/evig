@@ -50,6 +50,23 @@ export const ORG = {
 } as const
 
 /**
+ * Origin org (SSOT) — the Zürich circular-IT non-profit evig grew out of.
+ * evig is a 2026 spin-off; Revamp-IT's history is Revamp-IT's, honoured as
+ * theirs and never claimed as evig's own (see docs/EVIG_STORY.md). Named +
+ * linked wherever we tell the founding story, so the roots are visible and
+ * verifiable.
+ */
+export const ORG_ORIGIN = {
+  name: 'Revamp-IT',
+  /** Registered Zürich non-profit ("im Handelsregister eingetragener gemeinnütziger Verein"). */
+  legalForm: 'gemeinnütziger Verein',
+  city: 'Zürich',
+  /** Revamp-IT's own founding year — theirs, not evig's. */
+  since: 2003,
+  url: 'https://www.revamp-it.ch',
+} as const
+
+/**
  * Default blog author (SSOT). The personal author behind the platform's
  * content. DB posts with a real `created_by` user show that user's name; this
  * is the author for everything else.
