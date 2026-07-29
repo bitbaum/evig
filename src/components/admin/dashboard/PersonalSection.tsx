@@ -2,36 +2,13 @@ import { Link } from '@/i18n/navigation'
 import { CheckSquare, FileText, Calendar, AlertCircle, ArrowRight } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { getTranslations } from 'next-intl/server'
-import { db } from '@/db'
-import { sql } from 'drizzle-orm'
-import { TABLE_NAMES } from '@/config/database'
-import { logger } from '@/lib/logger'
-import { APPROVAL_STATUS } from '@/config/approval-status'
 import { ROUTES } from '@/config/routes'
 import { adminInteractive } from '@/lib/admin-ui'
+import { getPersonalSectionData, TASK_LIMIT, SUBMISSION_LIMIT } from '@/lib/dashboard/personal-section'
 
 interface PersonalSectionProps {
   userId: string
 }
-
-interface MyTask {
-  id: string
-  title: string
-  due_date: string | null
-  priority: string | null
-}
-
-interface MySubmission {
-  id: string
-  content_type: string | null
-  title: string | null
-  status: string
-  created_at: string
-}
-
-// Single source of truth for both the SQL LIMIT and the "view all" threshold
-const TASK_LIMIT = 5
-const SUBMISSION_LIMIT = 5
 
 function taskIsOverdue(dueDate: string | null): boolean {
   if (!dueDate) return false
@@ -52,7 +29,6 @@ function formatDueDate(iso: string | null): string | null {
 
 export async function PersonalSection({ userId }: PersonalSectionProps) {
   const t = await getTranslations('admin.dashboard')
-  type Row = Record<string, unknown>
 
   function contentTypeLabel(type: string | null): string {
     switch (type) {
@@ -63,44 +39,7 @@ export async function PersonalSection({ userId }: PersonalSectionProps) {
     }
   }
 
-  const [tasksResult, submissionsResult] = await Promise.allSettled([
-    db.execute(sql`
-      SELECT id, title, due_date, priority
-      FROM ${sql.raw(TABLE_NAMES.TASKS)}
-      WHERE assigned_to = ${userId}
-        AND is_completed = false
-        AND is_archived = false
-      ORDER BY due_date ASC NULLS LAST, priority DESC
-      LIMIT ${TASK_LIMIT}
-    `),
-    db.execute(sql`
-      SELECT id, content_type, title, status, created_at
-      FROM ${sql.raw(TABLE_NAMES.USER_CONTENT_SUBMISSIONS)}
-      WHERE user_id = ${userId}
-        AND status = ${APPROVAL_STATUS.PENDING}
-      ORDER BY created_at DESC
-      LIMIT ${SUBMISSION_LIMIT}
-    `),
-  ])
-
-  const myTasks: MyTask[] = tasksResult.status === 'fulfilled'
-    ? (tasksResult.value.rows as Row[]).map(r => ({
-        id: String(r.id ?? ''),
-        title: String(r.title ?? ''),
-        due_date: r.due_date ? String(r.due_date) : null,
-        priority: r.priority ? String(r.priority) : null,
-      }))
-    : (() => { logger.warn('PersonalSection tasks query failed', { error: (tasksResult as PromiseRejectedResult).reason }); return [] })()
-
-  const mySubmissions: MySubmission[] = submissionsResult.status === 'fulfilled'
-    ? (submissionsResult.value.rows as Row[]).map(r => ({
-        id: String(r.id ?? ''),
-        content_type: r.content_type ? String(r.content_type) : null,
-        title: r.title ? String(r.title) : null,
-        status: String(r.status ?? APPROVAL_STATUS.PENDING),
-        created_at: String(r.created_at ?? ''),
-      }))
-    : (() => { logger.warn('PersonalSection submissions query failed', { error: (submissionsResult as PromiseRejectedResult).reason }); return [] })()
+  const { myTasks, mySubmissions } = await getPersonalSectionData(userId)
 
   if (myTasks.length === 0 && mySubmissions.length === 0) return null
 

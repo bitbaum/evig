@@ -1,19 +1,6 @@
-import { db } from '@/db'
-import { sql, getTableName } from 'drizzle-orm'
-import { activityFeed, users } from '@/db/schema'
-import { logger } from '@/lib/logger'
 import { formatRelativeTime } from '@/lib/utils'
 import type { ActivityAction } from '@/lib/activity'
-
-const feedTable = getTableName(activityFeed)
-const usersTable = getTableName(users)
-
-interface FeedRow {
-  actor_name: string | null
-  action: string
-  subject_label: string | null
-  created_at: string
-}
+import { getTeamActivity } from '@/lib/dashboard/team-activity'
 
 // Human-readable labels for each action type. Typed as
 // Record<ActivityAction, string> so adding a new variant to the
@@ -40,25 +27,7 @@ const ACTION_LABELS: Record<ActivityAction, string> = {
 }
 
 export async function TeamActivityFeed() {
-  let rows: FeedRow[] = []
-
-  try {
-    const result = await db.execute(sql`
-      SELECT
-        u.name AS actor_name,
-        f.action,
-        f.subject_label,
-        f.created_at
-      FROM ${sql.raw(feedTable)} f
-      LEFT JOIN ${sql.raw(usersTable)} u ON u.id = f.actor_id
-      ORDER BY f.created_at DESC
-      LIMIT 10
-    `)
-    rows = result.rows as unknown as FeedRow[]
-  } catch (error) {
-    logger.warn('TeamActivityFeed query failed', { error })
-    return null
-  }
+  const rows = await getTeamActivity()
 
   if (rows.length === 0) return null
 
