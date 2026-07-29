@@ -16,49 +16,20 @@
  *   - Filter strip: status tab (open / approved — approving a card must
  *     NOT make it vanish; it moves to the approved tab where it stays
  *     inspectable and editable), period_type (week / month / both).
+ *
+ * State + data flow live here; render slices live in ./approvals/*.
  */
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import Link from 'next/link'
 import { useTranslations } from 'next-intl'
-import {
-  CheckCircle2,
-  RefreshCw,
-  XCircle,
-  ExternalLink,
-  AlertTriangle,
-  Eye,
-} from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import { TimecardReviewDrawer } from './TimecardReviewDrawer'
-import { Avatar } from '@/components/ui/Avatar'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import {
-  TIMECARD_STATUSES,
-  TIMECARD_STATUS_COLORS,
-  type TimecardStatus,
-} from '@/config/timecards'
-import { useTimecardIntl } from '@/hooks/useTimecardIntl'
-import { adminInteractive } from '@/lib/admin-ui'
-import { cn } from '@/lib/utils'
-
-interface ApprovalRow {
-  id: string
-  user_id: string
-  team_profile_id: string | null
-  user_name: string | null
-  user_email: string
-  department: string | null
-  position: string | null
-  employment_type: string | null
-  period_type: string
-  period_start: string
-  period_end: string
-  status: string
-  total_minutes: number
-  submitted_at: string | null
-}
+import { TIMECARD_STATUSES } from '@/config/timecards'
+import { ApprovalsBanners } from './approvals/ApprovalsBanners'
+import { ApprovalsBulkBar } from './approvals/ApprovalsBulkBar'
+import { ApprovalsFilterBar } from './approvals/ApprovalsFilterBar'
+import { ApprovalsQueue } from './approvals/ApprovalsQueue'
+import type { ApprovalRow, PeriodFilter, StatusFilter } from './approvals/types'
 
 interface ListResponse {
   items: ApprovalRow[]
@@ -73,9 +44,6 @@ interface BulkResultResponse {
   failed: number
   results: Array<{ id: string; ok: boolean; error?: string }>
 }
-
-type PeriodFilter = 'all' | 'week' | 'month'
-type StatusFilter = typeof TIMECARD_STATUSES.SUBMITTED | typeof TIMECARD_STATUSES.APPROVED
 
 // Server error codes → translation key for the partial-failure banner.
 const BULK_FAILURE_KEYS: Record<string, string> = {
@@ -96,7 +64,6 @@ export function TimecardApprovalsClient({
   allowSelfReview?: boolean
 }) {
   const t = useTranslations('admin.timecards')
-  const { statusLabel, duration, period, locale } = useTimecardIntl()
   const [items, setItems] = useState<ApprovalRow[]>([])
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [sharedNote, setSharedNote] = useState('')
@@ -219,223 +186,44 @@ export function TimecardApprovalsClient({
   return (
     <div className="space-y-4">
       {/* Filter strip */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-text-secondary">{t('queueStatusLabel')}</span>
-          {([TIMECARD_STATUSES.SUBMITTED, TIMECARD_STATUSES.APPROVED] as StatusFilter[]).map(opt => (
-            <Button
-              key={opt}
-              variant={statusFilter === opt ? 'primary' : 'ghost'}
-              size="sm"
-              onClick={() => { setStatusFilter(opt); setSelected(new Set()) }}
-              className={`px-3 py-1.5 rounded-md text-sm font-medium h-auto ${
-                statusFilter === opt
-                  ? ''
-                  : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
-              }`}
-            >
-              {opt === TIMECARD_STATUSES.SUBMITTED ? t('queueTabOpen') : t('queueTabApproved')}
-            </Button>
-          ))}
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-text-secondary">{t('queuePeriodLabel')}</span>
-          {(['all', 'week', 'month'] as PeriodFilter[]).map(opt => (
-            <Button
-              key={opt}
-              variant={periodFilter === opt ? 'primary' : 'ghost'}
-              size="sm"
-              onClick={() => setPeriodFilter(opt)}
-              className={`px-3 py-1.5 rounded-md text-sm font-medium h-auto ${
-                periodFilter === opt
-                  ? ''
-                  : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
-              }`}
-            >
-              {opt === 'all' ? t('queueFilterAll') : opt === 'week' ? t('queueFilterWeeks') : t('queueFilterMonths')}
-            </Button>
-          ))}
-        </div>
-        <div className="sm:ml-auto flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={loadQueue}
-            disabled={isLoading}
-            className="inline-flex items-center gap-2"
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
-            {t('queueRefresh')}
-          </Button>
-        </div>
-      </div>
+      <ApprovalsFilterBar
+        statusFilter={statusFilter}
+        periodFilter={periodFilter}
+        isLoading={isLoading}
+        onStatusFilterChange={opt => { setStatusFilter(opt); setSelected(new Set()) }}
+        onPeriodFilterChange={setPeriodFilter}
+        onRefresh={loadQueue}
+      />
 
       {/* Sticky action bar — only when something is selected */}
       {bulkEnabled && selected.size > 0 && (
-        <div className="sticky top-0 z-10 -mx-4 px-4 sm:mx-0 sm:rounded-xl border border-strong dark:border-action/30 bg-action-muted/10 p-3">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-            <div className="text-sm font-medium text-action-text">
-              {t('queueSelected', { count: selected.size, duration: duration(totalSelectedMinutes) })}
-            </div>
-            <Input
-              type="text"
-              value={sharedNote}
-              onChange={e => setSharedNote(e.target.value)}
-              placeholder={t('queueNotePlaceholder')}
-              className="flex-1 min-w-0"
-              maxLength={1000}
-            />
-            <div className="flex gap-2 shrink-0">
-              <Button
-                variant="primary"
-                onClick={() => runBulk('approved')}
-                disabled={busy}
-                className="inline-flex items-center gap-1.5 bg-success-600 hover:bg-success-700 text-white text-sm font-semibold"
-              >
-                <CheckCircle2 className="w-4 h-4" />
-                {t('queueApproveCount', { count: selected.size })}
-              </Button>
-              <Button
-                variant="destructive-outline"
-                onClick={() => runBulk('rejected')}
-                disabled={busy}
-                className="inline-flex items-center gap-1.5 text-sm font-semibold"
-              >
-                <XCircle className="w-4 h-4" />
-                {t('queueReject')}
-              </Button>
-            </div>
-          </div>
-        </div>
+        <ApprovalsBulkBar
+          selectedCount={selected.size}
+          totalSelectedMinutes={totalSelectedMinutes}
+          sharedNote={sharedNote}
+          busy={busy}
+          onSharedNoteChange={setSharedNote}
+          onApprove={() => runBulk('approved')}
+          onReject={() => runBulk('rejected')}
+        />
       )}
 
       {/* Status banners */}
-      {message && (
-        <div className="rounded-lg bg-success-50 dark:bg-success-500/10 border border-success-200 dark:border-success-500/30 px-4 py-2.5 text-sm text-success-700 dark:text-success-300">
-          {message}
-        </div>
-      )}
-      {error && (
-        <div className="rounded-lg bg-error-50 dark:bg-error-500/10 border border-error-200 dark:border-error-500/30 px-4 py-2.5 text-sm text-error-700 dark:text-error-300 flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4 shrink-0" />
-          <span>{error}</span>
-        </div>
-      )}
+      <ApprovalsBanners message={message} error={error} />
 
       {/* Queue */}
-      <div className="rounded-xl border border bg-surface-base overflow-hidden">
-        {items.length === 0 && !isLoading ? (
-          <div className="px-6 py-12 text-center text-sm text-text-tertiary">
-            {t('queueEmpty', { time: new Date().toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' }) })}
-          </div>
-        ) : (
-          <>
-            <div className="px-4 sm:px-6 py-2.5 border-b border flex items-center gap-3 bg-surface-raised">
-              {bulkEnabled && (
-                <input
-                  type="checkbox"
-                  checked={allSelected}
-                  onChange={toggleAll}
-                  aria-label={t('queueSelectAll')}
-                  className="w-4 h-4 rounded-sm border-default text-action focus:ring-action"
-                />
-              )}
-              <span className="text-xs font-medium uppercase tracking-wider text-text-tertiary">
-                {t('queueCount', { count: items.length })}
-              </span>
-            </div>
-            <ul className="divide-y divide-subtle">
-              {items.map(row => {
-                const isSelected = selected.has(row.id)
-                // Own card is only lockable when the viewer isn't a super-admin.
-                const isOwn = row.user_id === currentUserId && !allowSelfReview
-                const status = row.status as TimecardStatus
-                const statusColor = TIMECARD_STATUS_COLORS[status] ?? ''
-                const subtitleParts = [
-                  row.position,
-                  row.department,
-                  row.employment_type,
-                ].filter(Boolean).join(' · ')
-                return (
-                  <li
-                    key={row.id}
-                    className={cn(
-                      'flex items-center gap-3 px-4 sm:px-6 py-3 transition-colors',
-                      isSelected && adminInteractive.rowSelected,
-                      adminInteractive.rowHoverFaint,
-                    )}
-                  >
-                    {bulkEnabled && (
-                      <input
-                        type="checkbox"
-                        checked={isSelected}
-                        onChange={() => toggle(row.id)}
-                        disabled={isOwn}
-                        title={isOwn ? t('queueOwnTooltip') : undefined}
-                        aria-label={t('queueRowAria', { name: row.user_name || row.user_email })}
-                        className="w-4 h-4 rounded-sm border-default text-action focus:ring-action shrink-0 disabled:opacity-40"
-                      />
-                    )}
-                    <Avatar
-                      name={row.user_name || row.user_email}
-                      size="sm"
-                      colorClassName="bg-surface-overlay text-text-secondary"
-                    />
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-medium text-text-primary truncate">
-                          {row.user_name || row.user_email}
-                        </span>
-                        {isOwn && (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap bg-surface-overlay text-text-tertiary">
-                            {t('queueOwnBadge')}
-                          </span>
-                        )}
-                        {row.team_profile_id && (
-                          <Link
-                            href={`/admin/team/${row.team_profile_id}`}
-                            target="_blank"
-                            className="text-text-muted hover:text-action"
-                            aria-label={t('queueProfileAria')}
-                          >
-                            <ExternalLink className="w-3.5 h-3.5" />
-                          </Link>
-                        )}
-                      </div>
-                      {subtitleParts && (
-                        <div className="text-xs text-text-tertiary truncate">
-                          {subtitleParts}
-                        </div>
-                      )}
-                      {/* Period moves under the name on phones (right column is hidden there). */}
-                      <div className="text-xs text-text-tertiary truncate sm:hidden">
-                        {period(row.period_type, row.period_start, row.period_end)}
-                      </div>
-                    </div>
-                    <div className="hidden sm:block min-w-0 text-sm text-text-secondary truncate text-right">
-                      {period(row.period_type, row.period_start, row.period_end)}
-                    </div>
-                    <div className="font-semibold text-text-primary text-right whitespace-nowrap text-sm">
-                      {duration(Number(row.total_minutes) || 0)}
-                    </div>
-                    <span className={`hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap ${statusColor}`}>
-                      {statusLabel(row.status)}
-                    </span>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setOpenCardId(row.id)}
-                      className="shrink-0 inline-flex items-center gap-1.5"
-                    >
-                      <Eye className="w-3.5 h-3.5" /> {t('queueReview')}
-                    </Button>
-                  </li>
-                )
-              })}
-            </ul>
-          </>
-        )}
-      </div>
+      <ApprovalsQueue
+        items={items}
+        isLoading={isLoading}
+        bulkEnabled={bulkEnabled}
+        selected={selected}
+        allSelected={allSelected}
+        currentUserId={currentUserId}
+        allowSelfReview={allowSelfReview}
+        onToggle={toggle}
+        onToggleAll={toggleAll}
+        onReview={setOpenCardId}
+      />
 
       {openCardId && (
         <TimecardReviewDrawer
