@@ -4,9 +4,11 @@
 
 import { ChevronDown, ExternalLink } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { usePathname } from '@/i18n/navigation'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { NavigationItem } from '@/config/navigation'
 import { Button } from '@/components/ui/button'
+import { NAV_STATE } from '@/lib/design/nav'
 import { cn } from '@/lib/utils'
 import { groupItemsBySection } from '@/components/layout/header/utils'
 import { navItemLabel, type NavTranslator } from '@/components/layout/header/nav-i18n'
@@ -31,6 +33,7 @@ export function MobileMenuNav({
   badgeLabel: (key: string | undefined) => string | null
   onClose: () => void
 }) {
+  const pathname = usePathname()
   return (
     <nav className="flex-1 overflow-y-auto px-4 py-4 sm:px-6">
       <ul className="space-y-1">
@@ -138,10 +141,12 @@ export function MobileMenuNav({
                 <Button
                   type="button"
                   variant="ghost"
+                  aria-current={pathname === item.href ? 'page' : undefined}
                   className={cn(
                     "block w-full text-left py-3 px-4 -mx-4 h-auto justify-start",
                     "text-sm font-medium text-text-primary",
-                    "rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors duration-200"
+                    "rounded-lg hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors duration-200",
+                    pathname === item.href && NAV_STATE.sidebar.active
                   )}
                   onClick={() => handleNavigation(item.href)}
                 >
@@ -164,10 +169,12 @@ export function MobileMenuNav({
                   <Button
                     type="button"
                     variant="ghost"
+                    aria-current={pathname === item.href ? 'page' : undefined}
                     className={cn(
                       "block w-full text-left py-3 px-4 -mx-4 h-auto justify-start",
                       "text-base font-medium text-text-primary",
-                      "rounded-xl hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors duration-200"
+                      "rounded-xl hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors duration-200",
+                      pathname === item.href && NAV_STATE.sidebar.active
                     )}
                     onClick={() => handleNavigation(item.href)}
                   >

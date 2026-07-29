@@ -4,8 +4,10 @@
 
 import { ExternalLink } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { usePathname } from '@/i18n/navigation'
 import { NavigationItem } from '@/config/navigation'
 import { Button } from '@/components/ui/button'
+import { NAV_STATE } from '@/lib/design/nav'
 import { cn } from '@/lib/utils'
 import { navItemDescription, navItemLabel, type NavTranslator } from '@/components/layout/header/nav-i18n'
 
@@ -22,6 +24,8 @@ export function MobileSubLink({
   onNavigate: (href: string) => void
   onClose: () => void
 }) {
+  const pathname = usePathname()
+  const isCurrent = !subItem.external && pathname === subItem.href
   const subLabel = subItem.nameKey ? navItemLabel(t as NavTranslator, subItem.nameKey) : subItem.name
   const subDescription = subItem.descriptionKey
     ? navItemDescription(t as NavTranslator, subItem.descriptionKey)
@@ -64,13 +68,16 @@ export function MobileSubLink({
       <Button
         type="button"
         variant="ghost"
+        aria-current={isCurrent ? 'page' : undefined}
         className={cn(
           'group flex h-auto w-full flex-col items-start justify-start rounded-lg px-2 py-2.5',
           'hover:bg-surface-raised transition-colors duration-200',
+          isCurrent && NAV_STATE.sidebar.active,
         )}
         onClick={() => onNavigate(subItem.href)}
       >
-        <span className="flex items-center gap-2 text-sm font-medium text-text-primary">
+        {/* Label inherits the row's NAV_STATE active color when current */}
+        <span className={cn('flex items-center gap-2 text-sm font-medium', !isCurrent && 'text-text-primary')}>
           {subLabel}
           {subItem.badge && (
             <span className="rounded-full bg-action-muted px-1.5 py-0.5 text-[10px] font-semibold uppercase text-action">
