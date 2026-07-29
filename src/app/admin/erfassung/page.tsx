@@ -1,34 +1,19 @@
 'use client'
 
 import { useState, useCallback, useEffect, useRef, Suspense } from 'react'
-import Link from 'next/link'
 import { apiFetch } from '@/lib/api/client'
 import { logger } from '@/lib/logger'
-import { ArrowLeft, Check, Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { DataEntryTabs } from '@/components/erfassung/DataEntryTabs'
-import { ProductForm } from '@/components/erfassung/ProductForm'
 import { SuccessScreen } from '@/components/erfassung/SuccessScreen'
-import { BulkTable } from '@/components/erfassung/BulkTable'
-import { BulkDetailPanel } from '@/components/erfassung/BulkDetailPanel'
-import { BulkActionBar } from '@/components/erfassung/BulkActionBar'
 import { BulkSuccessScreen } from '@/components/erfassung/BulkSuccessScreen'
-import { CaptureDestinationFields } from '@/components/erfassung/CaptureDestinationFields'
-import { ErfassungSubmitBar } from '@/components/erfassung/ErfassungSubmitBar'
-import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { useErfassungForm } from '@/components/erfassung/useErfassungForm'
-import { Button } from '@/components/ui/button'
 import type { BulkProduct, BulkSaveResponse } from '@/types/erfassung'
 import { formDataToPayload } from '@/types/erfassung'
-import Heading from '@/components/admin/AdminHeading'
-import { ROUTES } from '@/config/routes'
-import { adminInteractive } from '@/lib/admin-ui'
-import { CAPTURE_DESTINATIONS } from '@/config/intake-workflow'
-
-const CAPTURE_STEPS = [
-  { number: 1, label: 'Daten eingeben' },
-  { number: 2, label: 'KI-Daten prüfen' },
-  { number: 3, label: 'Nächsten Schritt wählen' },
-] as const
+import { ErfassungHeader } from './page-sections/ErfassungHeader'
+import { CaptureSteps } from './page-sections/CaptureSteps'
+import { BulkSection } from './page-sections/BulkSection'
+import { SingleCaptureForm } from './page-sections/SingleCaptureForm'
 
 function ErfassungContent() {
   const form = useErfassungForm()
@@ -183,67 +168,19 @@ function ErfassungContent() {
     )
   }
 
-  const selectedBulkProduct = bulkProducts.find(p => p._tempId === selectedProductId) || null
-  const selectedCount = bulkProducts.filter(p => p._selected).length
-  const isBulkSaving = bulkProducts.some(p => p._status === 'processing')
-
   return (
     // pb-44 clears the fixed mobile submit bar (~84px) stacked above the
     // admin bottom nav (56px + safe area).
     <div className="space-y-4 sm:space-y-6 max-w-5xl mx-auto pb-44 sm:pb-6">
       {/* Header */}
-      <div className="flex items-center gap-3 sm:gap-4">
-        <Link
-          href={ROUTES.admin.intake}
-          className={`p-2 sm:p-2 rounded-lg ${adminInteractive.rowHover} touch-manipulation`}
-        >
-          <ArrowLeft className="w-5 h-5 sm:w-5 sm:h-5" />
-        </Link>
-        <div className="flex-1 min-w-0">
-          <Heading level={1} className="text-xl sm:text-2xl font-bold text-text-primary truncate">
-            {form.isEditMode ? 'Produkt bearbeiten' : viewMode === 'bulk' ? `Import prüfen (${bulkProducts.length} Produkte)` : 'Produkt aufnehmen'}
-          </Heading>
-          <p className="text-sm sm:text-base text-text-secondary hidden sm:block">
-            {form.isEditMode ? 'Produktdaten aktualisieren' : viewMode === 'bulk' ? 'KI-Ergebnis prüfen und ausgewählte Produkte ins Inventar übernehmen' : 'Daten eingeben, KI-Vorschlag prüfen und den nächsten realen Arbeitsschritt wählen'}
-          </p>
-        </div>
-        {viewMode === 'bulk' && (
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={handleBulkReset}
-            className="text-sm text-text-tertiary hover:text-text-secondary"
-          >
-            Zurück zur Einzelerfassung
-          </Button>
-        )}
-      </div>
+      <ErfassungHeader
+        form={form}
+        viewMode={viewMode}
+        bulkProducts={bulkProducts}
+        handleBulkReset={handleBulkReset}
+      />
 
-      {!form.isEditMode && (
-        <ol className="grid grid-cols-3 overflow-hidden rounded-lg border border-default bg-surface-base" aria-label="Erfassungsschritte">
-          {CAPTURE_STEPS.map((step, index) => {
-            const hasInput = Boolean(form.formData.hersteller || form.formData.produktname)
-            const hasRequiredData = Boolean(
-              form.formData.hersteller.trim() && form.formData.produktname.trim(),
-            )
-            const complete = index === 0 ? hasInput : index === 1 ? hasRequiredData : false
-            const active = index === 0
-              ? !hasInput
-              : index === 1
-                ? hasInput && !hasRequiredData
-                : hasRequiredData
-            return (
-              <li key={step.number} className={`flex min-w-0 items-center gap-2 border-r border-subtle px-2 py-2.5 text-xs last:border-r-0 sm:px-4 sm:text-sm ${active ? 'bg-action-muted text-action' : 'text-text-secondary'}`}>
-                <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-semibold ${active || complete ? 'bg-action text-action-text' : 'bg-surface-overlay text-text-secondary'}`}>
-                  {complete ? <Check className="h-3.5 w-3.5" aria-hidden="true" /> : step.number}
-                </span>
-                <span className="truncate">{step.label}</span>
-              </li>
-            )
-          })}
-        </ol>
-      )}
+      {!form.isEditMode && <CaptureSteps form={form} />}
 
       {/* One input step; the channel does not change the workflow. */}
       {!form.isEditMode && (
@@ -261,132 +198,22 @@ function ErfassungContent() {
 
       {/* BULK MODE */}
       {viewMode === 'bulk' && (
-        <>
-          <BulkTable
-            products={bulkProducts}
-            page={bulkPage}
-            onPageChange={setBulkPage}
-            onProductUpdate={handleBulkProductUpdate}
-            onProductSelect={handleBulkProductSelect}
-            onSelectAll={handleBulkSelectAll}
-            onProductClick={(tempId) => setSelectedProductId(tempId)}
-          />
-
-          {selectedBulkProduct && (
-            <BulkDetailPanel
-              key={selectedBulkProduct._tempId}
-              product={selectedBulkProduct}
-              onUpdate={(updates) => handleBulkProductUpdate(selectedBulkProduct._tempId, updates)}
-              onClose={() => setSelectedProductId(null)}
-            />
-          )}
-
-          <BulkActionBar
-            totalCount={bulkProducts.length}
-            selectedCount={selectedCount}
-            isSaving={isBulkSaving}
-            savedCount={bulkProducts.filter(p => p._status === 'saved').length}
-            onSave={handleBulkSave}
-            onSelectAll={handleBulkSelectAll}
-            allSelected={bulkProducts.every(p => p._selected)}
-          />
-        </>
+        <BulkSection
+          bulkProducts={bulkProducts}
+          bulkPage={bulkPage}
+          setBulkPage={setBulkPage}
+          selectedProductId={selectedProductId}
+          setSelectedProductId={setSelectedProductId}
+          handleBulkProductUpdate={handleBulkProductUpdate}
+          handleBulkProductSelect={handleBulkProductSelect}
+          handleBulkSelectAll={handleBulkSelectAll}
+          handleBulkSave={handleBulkSave}
+        />
       )}
 
       {/* SINGLE MODE */}
       {viewMode === 'single' && (form.isEditMode || form.reviewStarted) && (
-        <>
-          <form ref={reviewRef} data-product-form onSubmit={(e) => form.handleSubmit(e, 'erfassen')} className="scroll-mt-24 space-y-5">
-            {form.saveError && (
-              <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 text-error-700 dark:text-error-300 px-4 py-3 rounded-lg text-sm">
-                {form.saveError}
-              </div>
-            )}
-
-            <section aria-labelledby="capture-review-title" className="space-y-5">
-              <div className="flex items-start gap-3">
-                <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-action text-sm font-semibold text-action-text">2</div>
-                <div>
-                  <Heading level={2} id="capture-review-title" className="text-base font-semibold text-text-primary">
-                    Produktdaten prüfen
-                  </Heading>
-                  <p className="mt-0.5 text-sm text-text-secondary">KI-Vorschläge kontrollieren. Nur Hersteller und Produktname sind zum Speichern nötig.</p>
-                </div>
-              </div>
-
-              {/* Ask the AI to change the extracted data in natural language —
-                  "Beschreibung ausführlicher", "Preis auf 80 CHF", "Specs ergänzen".
-                  Expanded by default so the tweak surface is visible, not hidden
-                  behind a chevron. Uses the shared FORM_AI_REGISTRY (formType
-                  'erfassung') like every other admin form. */}
-              <AIFormAssist
-                formType="erfassung"
-                variant="section"
-                defaultExpanded
-                hasContentOverride={Boolean(
-                  form.formData.hersteller.trim() ||
-                  form.formData.produktname.trim() ||
-                  form.formData.kurzbeschreibung.trim(),
-                )}
-                currentData={{
-                  hersteller: form.formData.hersteller,
-                  produktname: form.formData.produktname,
-                  kurzbeschreibung: form.formData.kurzbeschreibung,
-                  verkaufspreis: form.formData.verkaufspreis,
-                  zustand: form.formData.zustand,
-                  hauptkategorie: form.formData.hauptkategorie,
-                  unterkategorie: form.formData.unterkategorie,
-                  specs: form.formData.specs.filter(s => s.key && s.value),
-                  kundenprofile: form.formData.kundenprofile,
-                }}
-                onFieldsFilled={(data, metadata) =>
-                  form.handleAssistFields(data as Partial<typeof form.formData>, metadata)
-                }
-              />
-
-              <ProductForm
-                formData={form.formData}
-                aiMetadata={form.aiMetadata}
-                showAdvanced={form.showAdvanced}
-                isEditMode={form.isEditMode}
-                onFieldChange={form.handleChange}
-                onSpecChange={form.handleSpecChange}
-                onCategoryChange={form.handleKategorieChange}
-                onProfileToggle={form.toggleProfile}
-                onSpecAdd={form.addSpecField}
-                onSpecRemove={form.removeSpecField}
-                onImageChange={(image) => form.setFormData(prev => ({ ...prev, image }))}
-                onToggleAdvanced={() => form.setShowAdvanced(!form.showAdvanced)}
-              />
-            </section>
-
-            {!form.isEditMode && (
-              <CaptureDestinationFields
-                destination={form.destination}
-                onDestinationChange={form.setDestination}
-                qcSkipReason={form.qcSkipReason}
-                onQcSkipReasonChange={form.setQcSkipReason}
-                donation={form.donation}
-                onDonationChange={form.setDonation}
-              />
-            )}
-
-            <ErfassungSubmitBar
-              isEditMode={form.isEditMode}
-              isLoading={form.isLoading}
-              destination={form.destination}
-              canSubmit={Boolean(
-                form.formData.hersteller.trim() &&
-                form.formData.produktname.trim() &&
-                (form.destination !== CAPTURE_DESTINATIONS.SHOP_UNTESTED || (
-                  form.qcSkipReason.trim().length >= 10 &&
-                  Number(form.formData.verkaufspreis) > 0
-                ))
-              )}
-              onSubmit={form.handleSubmit}
-            />
-          </form>
-        </>
+        <SingleCaptureForm form={form} reviewRef={reviewRef} />
       )}
     </div>
   )
