@@ -12,6 +12,7 @@ import {
   ArrowRight,
 } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
+import { Section } from '@/components/layout/Section'
 import { buttonClass } from '@/components/ui/button-class'
 import Image from 'next/image'
 import { PageHero } from '@/components/layout/PageHero'
@@ -75,7 +76,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
       </PageHero>
 
       {/* Hero Image with Real Revamped Laptop */}
-      <section className="py-12 sm:py-16 md:py-20">
+      <Section density="default" contained={false}>
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
@@ -132,10 +133,10 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
             </div>
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* What Revamped Means */}
-      <section className="py-20 bg-surface-raised">
+      <Section density="spacious" tone="tinted" contained={false}>
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
@@ -170,10 +171,10 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
             </div>
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* Certificate of Authenticity */}
-      <section id="certificate" className="py-20">
+      <Section id="certificate" density="spacious" contained={false}>
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -209,10 +210,10 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
             </div>
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* Sticker Gallery */}
-      <section className="py-20 bg-surface-raised">
+      <Section density="spacious" tone="tinted" contained={false}>
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
@@ -266,10 +267,10 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
             </div>
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* Call to Action */}
-      <section className="py-12 sm:py-16 md:py-20">
+      <Section density="default" contained={false}>
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <Heading level={2} className={`${responsiveTypography.section} font-bold mb-6`}>{t('cta.title')}</Heading>
@@ -287,7 +288,7 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
             </div>
           </div>
         </div>
-      </section>
+      </Section>
     </main>
   )
 }

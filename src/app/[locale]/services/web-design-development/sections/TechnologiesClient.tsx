@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
 import { IconBadge } from '@/components/ui/IconBadge'
 import type { TechItem } from './TechnologiesSection'
+import { Section } from '@/components/layout/Section'
 
 const ICON_MAP: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {
   Code, Palette, Database, Layers, Shield, Globe, Cloud,
@@ -39,7 +40,7 @@ export function TechnologiesClient({ technologies, categories, allLabel, totalCo
     : t('showingFiltered', { count: filteredTechnologies.length, total: totalCount, category: selectedCategory })
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-surface-base">
+    <Section density="default" tone="surface" contained={false}>
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-12">
           <Heading level={2} className="mb-6">{labels.title}</Heading>
@@ -141,6 +142,6 @@ export function TechnologiesClient({ technologies, categories, allLabel, totalCo
           overflow: hidden;
         }
       `}</style>
-    </section>
+    </Section>
   )
 }

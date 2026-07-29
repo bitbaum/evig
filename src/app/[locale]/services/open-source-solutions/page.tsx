@@ -12,6 +12,7 @@ import {
 } from '@/config/open-source-registry'
 import { getTranslations } from 'next-intl/server'
 import type { Metadata } from 'next'
+import { Section } from '@/components/layout/Section'
 
 export async function generateMetadata({
   params,
@@ -52,8 +53,7 @@ export default async function OpenSourceSolutionsPage({
         subtitle={t('meta.description')}
       />
 
-      <section className="py-12 sm:py-16 md:py-20 bg-surface-raised">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <Section density="default" tone="tinted">
           {/* Quick stats */}
           <div className="flex flex-wrap justify-center gap-6 sm:gap-10 mb-10 text-center">
             <div>
@@ -71,8 +71,7 @@ export default async function OpenSourceSolutionsPage({
           </div>
 
           <RegistrySearch alternatives={alternatives} categories={categories} />
-        </div>
-      </section>
+      </Section>
     </main>
   )
 }

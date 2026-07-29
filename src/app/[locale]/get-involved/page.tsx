@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Recycle, Users, Zap, Globe } from 'lucide-react'
 import { ContactLink } from '@/components/ui/contact-link'
 import { PageHero } from '@/components/layout/PageHero'
+import { Section } from '@/components/layout/Section'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
 
@@ -103,7 +104,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
       </section>
 
       {/* Involvement Options */}
-      <section id="get-started" className="py-20 sm:py-24">
+      <Section id="get-started" density="spacious" contained={false}>
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <Eyebrow as="div">{t('options.heading').toUpperCase()}</Eyebrow>
@@ -132,10 +133,10 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
             ))}
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* Partner Institutions */}
-      <section className="py-20 sm:py-24">
+      <Section density="spacious" contained={false}>
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <Eyebrow as="div">{t('partners.heading').toUpperCase()}</Eyebrow>
@@ -160,10 +161,10 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
             ))}
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* CTA Section */}
-      <section className="border-t border-subtle py-20 text-center">
+      <Section density="spacious" contained={false} className="border-t border-subtle text-center">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <Eyebrow as="div">{tEye('ready')}</Eyebrow>
           <h2 className="ui-public-display-lg mt-4">{t('cta.heading')}</h2>
@@ -177,7 +178,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
             </Link>
           </div>
         </div>
-      </section>
+      </Section>
     </main>
   )
 }

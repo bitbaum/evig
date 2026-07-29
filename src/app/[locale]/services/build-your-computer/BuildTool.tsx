@@ -20,6 +20,7 @@ import {
 import { Link } from '@/i18n/navigation'
 import type { BuildRecommendation } from '@/config/build-computer'
 import { getBuildRecommendation, USE_CASE_OPTIONS, PERFORMANCE_OPTIONS, BUDGET_OPTIONS } from '@/config/build-computer'
+import { Section } from '@/components/layout/Section'
 
 type UseCaseId = typeof USE_CASE_OPTIONS[number]['id']
 type PerformanceId = typeof PERFORMANCE_OPTIONS[number]['id']
@@ -148,7 +149,7 @@ export function BuildTool() {
   const scanningLines = t.raw('buildTool.scanningLines') as string[]
 
   return (
-    <section className="py-20 sm:py-24" id="build-tool">
+    <Section id="build-tool" density="spacious" contained={false}>
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <Heading level={2} className="ui-public-display-md text-center mb-4">
@@ -195,7 +196,7 @@ export function BuildTool() {
           </Card>
         </div>
       </div>
-    </section>
+    </Section>
   )
 }
 

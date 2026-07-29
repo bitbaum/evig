@@ -10,22 +10,18 @@ import Heading from '@/components/ui/Heading'
 import { AboutSection as AboutSectionType } from '@/data/about'
 import { CheckCircle } from 'lucide-react'
 import { responsiveTypography } from '@/lib/responsive'
+import { Section } from '@/components/layout/Section'
 
 interface AboutSectionProps {
   section: AboutSectionType
 }
 
 export default function AboutSection({ section }: AboutSectionProps) {
-  const bgClass = {
-    white: 'bg-surface-base',
-    gray: 'bg-surface-raised'
-  }[section.backgroundColor]
-
   const textColorClass = 'text-text-primary'
   const textSecondaryClass = 'text-text-secondary'
 
   return (
-    <section className={`py-20 ${bgClass}`}>
+    <Section density="spacious" tone={section.backgroundColor === 'gray' ? 'tinted' : 'surface'} contained={false}>
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
@@ -92,7 +88,7 @@ export default function AboutSection({ section }: AboutSectionProps) {
           )}
         </div>
       </div>
-    </section>
+    </Section>
   )
 }
 

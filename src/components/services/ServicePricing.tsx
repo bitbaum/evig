@@ -10,6 +10,7 @@ import type { ServicePricing } from '@/lib/services'
 import { Card } from '@/components/ui/card'
 import { getTextColor } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
+import { Section } from '@/components/layout/Section'
 
 interface ServicePricingProps {
   pricing: ServicePricing
@@ -17,7 +18,7 @@ interface ServicePricingProps {
 
 export default function ServicePricingSection({ pricing }: ServicePricingProps) {
   return (
-    <section className="py-12 sm:py-16 md:py-20">
+    <Section density="default" contained={false}>
       <div className="container mx-auto px-4 sm:px-6">
         <Card className="max-w-2xl mx-auto p-6 sm:p-8">
           <h2 className={cn('text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center', getTextColor('white', 'primary'))}>Preise</h2>
@@ -48,7 +49,7 @@ export default function ServicePricingSection({ pricing }: ServicePricingProps) 
           )}
         </Card>
       </div>
-    </section>
+    </Section>
   )
 }
 

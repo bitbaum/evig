@@ -6,6 +6,7 @@ import type { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
 import { HelpCircle } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
+import { Section } from '@/components/layout/Section'
 import Heading from '@/components/ui/Heading'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
@@ -79,7 +80,7 @@ export default async function FAQPage({ params }: FAQPageProps) {
         title={t('hero.title')}
         subtitle={t('hero.subtitle')}
       />
-      <section className="py-12 sm:py-16">
+      <Section density="default" contained={false}>
         <PageShell maxWidth="5xl" py="">
             <div className="space-y-10 sm:space-y-12">
               {groups.map((group) => (
@@ -130,7 +131,7 @@ export default async function FAQPage({ params }: FAQPageProps) {
               </p>
             </div>
         </PageShell>
-      </section>
+      </Section>
     </>
   )
 }

@@ -4,6 +4,7 @@ import { Metadata } from 'next'
 import { Briefcase } from 'lucide-react'
 import { ORG } from '@/config/org'
 import { PageHero } from '@/components/layout/PageHero'
+import { Section } from '@/components/layout/Section'
 import { listPublicVacancies } from '@/lib/services/hr-vacancies'
 import type { RoleTrack } from '@/config/hr-vacancies'
 import CareersListClient from './CareersListClient'
@@ -38,14 +39,14 @@ export default async function CareersPage({ searchParams }: PageProps) {
         subtitle="Mach mit — ob Freiwilligenarbeit, Praktikum, Wiedereinstieg oder Festanstellung."
       />
 
-      <section className="py-16 sm:py-20">
+      <Section density="default" contained={false}>
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <CareersListClient
             postings={postings}
             activeTrack={track ?? null}
           />
         </div>
-      </section>
+      </Section>
     </main>
   )
 }

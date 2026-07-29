@@ -1,4 +1,5 @@
 import { Eyebrow } from '@/components/ui/Eyebrow'
+import { Section } from '@/components/layout/Section'
 import { Link } from '@/i18n/navigation'
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
@@ -161,7 +162,7 @@ export default async function Home() {
       </section>
 
       {/* ── Two-column principle ribbon — pure typography, no chrome ── */}
-      <section className="py-24">
+      <Section density="spacious" contained={false}>
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-x-16 gap-y-20 md:grid-cols-2">
             <div>
@@ -176,7 +177,7 @@ export default async function Home() {
             </div>
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* ── 01 / 02 / 03 — the cycle ────────────────────────────────── */}
       <section className="ui-public-band py-20 sm:py-24">
@@ -200,7 +201,7 @@ export default async function Home() {
 
 
       {/* ── Community entry points ─────────────────────────────────── */}
-      <section className="py-20 sm:py-24">
+      <Section density="spacious" contained={false}>
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto">
             <Eyebrow as="div">{t('community.eyebrow')}</Eyebrow>
@@ -220,10 +221,10 @@ export default async function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* ── Final centered CTA band ─────────────────────────────────── */}
-      <section className="border-t border-subtle py-20 text-center">
+      <Section density="spacious" contained={false} className="border-t border-subtle text-center">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <Eyebrow as="div">{t('finalCta.eyebrow')}</Eyebrow>
           <h2 className="ui-public-display-lg mt-4">{t('finalCta.heading')}</h2>
@@ -235,7 +236,7 @@ export default async function Home() {
           </div>
           <p className="ui-public-meta mt-6">{t('finalCta.note')}</p>
         </div>
-      </section>
+      </Section>
     </div>
   )
 }

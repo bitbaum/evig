@@ -6,6 +6,7 @@ import { GeschichteSection } from '@/components/about'
 import { Cpu, Wrench, Recycle, Quote, Leaf } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import { getTranslations } from 'next-intl/server'
+import { Section } from '@/components/layout/Section'
 
 export default async function AboutContent() {
   const t = await getTranslations('about')
@@ -21,7 +22,7 @@ export default async function AboutContent() {
       />
 
       {/* Mission Section - Redesigned */}
-      <section className="py-16 md:py-24">
+      <Section density="default" contained={false}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           {/* Section Header */}
           <div className="text-center mb-12">
@@ -69,10 +70,10 @@ export default async function AboutContent() {
             </div>
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* Impact Areas - Redesigned */}
-      <section className="py-16 md:py-24 bg-canvas">
+      <Section density="default" contained={false}>
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           {/* Section Header */}
           <div className="text-center mb-12">
@@ -117,14 +118,14 @@ export default async function AboutContent() {
             </article>
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* Origin story — why evig exists. No track-record stats: evig is new
           and never shows numbers it hasn't genuinely earned (removed until real). */}
       <GeschichteSection />
 
       {/* Call to Action */}
-      <section className="border-t border-subtle py-20 text-center">
+      <Section density="spacious" contained={false} className="border-t border-subtle text-center">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <Eyebrow as="div">{tEye('ready')}</Eyebrow>
           <h2 className="ui-public-display-lg mt-4">{t('cta.title')}</h2>
@@ -135,7 +136,7 @@ export default async function AboutContent() {
             </Link>
           </div>
         </div>
-      </section>
+      </Section>
     </main>
   )
 }

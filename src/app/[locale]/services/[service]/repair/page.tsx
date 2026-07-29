@@ -11,6 +11,7 @@ import { Card } from '@/components/ui/card'
 import { IconBadge } from '@/components/ui/IconBadge'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
+import { Section } from '@/components/layout/Section'
 
 // Icons are positional — parallel to features translation array
 const FEATURE_ICONS = [Wrench, Zap, Shield, Clock]
@@ -54,7 +55,7 @@ export default async function RepairPage({ params }: Props) {
       </PageHero>
 
       {/* Features Section */}
-      <section className="py-12 sm:py-16 md:py-20">
+      <Section density="default" contained={false}>
         <div className="container mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             {features.map((feature, index) => {
@@ -73,10 +74,10 @@ export default async function RepairPage({ params }: Props) {
             })}
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* Process Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-surface-base">
+      <Section density="default" tone="surface" contained={false}>
         <div className="container mx-auto px-4">
           <Heading level={2} className="text-3xl font-bold mb-12 text-center">{t('processHeading')}</Heading>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -91,10 +92,10 @@ export default async function RepairPage({ params }: Props) {
             ))}
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* Pricing Section */}
-      <section className="py-20">
+      <Section density="spacious" contained={false}>
         <div className="container mx-auto px-4">
           <Card className="max-w-2xl mx-auto p-8">
             <Heading level={2} className="text-3xl font-bold mb-8 text-center">{t('pricing.heading')}</Heading>
@@ -111,10 +112,10 @@ export default async function RepairPage({ params }: Props) {
             </div>
           </Card>
         </div>
-      </section>
+      </Section>
 
       {/* CTA Section */}
-      <section className="border-t border-subtle py-20 text-center">
+      <Section density="spacious" contained={false} className="border-t border-subtle text-center">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <Eyebrow as="div">{tEye('ready')}</Eyebrow>
           <h2 className="ui-public-display-lg mt-4">{t('cta.heading')}</h2>
@@ -128,7 +129,7 @@ export default async function RepairPage({ params }: Props) {
             </Link>
           </div>
         </div>
-      </section>
+      </Section>
     </main>
   )
 }

@@ -8,6 +8,7 @@ import { getTranslations } from 'next-intl/server'
 import { ArrowLeft, ExternalLink, Github, Scale } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { PageHero } from '@/components/layout/PageHero'
+import { Section } from '@/components/layout/Section'
 import Heading from '@/components/ui/Heading'
 import { ORG } from '@/config/org'
 import { ROUTES } from '@/config/routes'
@@ -42,7 +43,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailProps) 
     <main className="min-h-screen">
       <PageHero theme="about" icon={project.icon} title={project.name} subtitle={t(`items.${slug}.tagline` as never)} />
 
-      <section className="py-16 md:py-24">
+      <Section density="default" contained={false}>
         <div className="mx-auto max-w-3xl px-4 sm:px-6">
           <Link
             href={ROUTES.public.projects}
@@ -84,7 +85,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailProps) 
             </div>
           )}
         </div>
-      </section>
+      </Section>
     </main>
   )
 }

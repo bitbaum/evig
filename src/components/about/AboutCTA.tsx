@@ -8,6 +8,7 @@
 import { Button } from '@/components/ui/button'
 import { Link } from '@/i18n/navigation'
 import Heading from '@/components/ui/Heading'
+import { Section } from '@/components/layout/Section'
 
 interface AboutCTAProps {
   title: string
@@ -18,7 +19,7 @@ interface AboutCTAProps {
 
 export default function AboutCTA({ title, description, buttonText, href }: AboutCTAProps) {
   return (
-    <section className="py-20 bg-action text-action-text">
+    <Section density="spacious" tone="inverse" contained={false}>
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center">
           <Heading level={2} className="text-3xl font-bold mb-6">{title}</Heading>
@@ -35,7 +36,7 @@ export default function AboutCTA({ title, description, buttonText, href }: About
           </Link>
         </div>
       </div>
-    </section>
+    </Section>
   )
 }
 

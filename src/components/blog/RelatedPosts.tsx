@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/card'
 import Heading from '@/components/ui/Heading'
 import { getTranslations } from 'next-intl/server'
 import BlogByline from './BlogByline'
+import { Section } from '@/components/layout/Section'
 
 interface RelatedPostsProps {
   posts: BlogPost[]
@@ -15,7 +16,7 @@ export default async function RelatedPosts({ posts }: RelatedPostsProps) {
   const t = await getTranslations('blog')
 
   return (
-    <section className="bg-surface-raised py-16">
+    <Section density="default" tone="tinted" contained={false}>
       <div className="max-w-[1200px] mx-auto px-6">
         <Heading level={2} className="text-3xl font-bold text-text-primary mb-8">{t('relatedArticles')}</Heading>
         <div className="grid md:grid-cols-3 gap-8">
@@ -57,6 +58,6 @@ export default async function RelatedPosts({ posts }: RelatedPostsProps) {
           ))}
         </div>
       </div>
-    </section>
+    </Section>
   )
 }

@@ -9,6 +9,7 @@ import type { ServiceFeature } from '@/lib/services'
 import { Card } from '@/components/ui/card'
 import { getTextColor } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
+import { Section } from '@/components/layout/Section'
 
 interface ServiceFeaturesProps {
   features: ServiceFeature[]
@@ -16,7 +17,7 @@ interface ServiceFeaturesProps {
 
 export default function ServiceFeatures({ features }: ServiceFeaturesProps) {
   return (
-    <section className="py-12 sm:py-16 md:py-20">
+    <Section density="default" contained={false}>
       <div className="container mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
           {features.map((feature, index) => (
@@ -34,7 +35,7 @@ export default function ServiceFeatures({ features }: ServiceFeaturesProps) {
           ))}
         </div>
       </div>
-    </section>
+    </Section>
   )
 }
 

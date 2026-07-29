@@ -8,6 +8,7 @@ import { Mail, MessageCircle } from 'lucide-react'
 import { ORG, CONTACT } from '@/config/org'
 import Heading from '@/components/ui/Heading'
 import { PageHero } from '@/components/layout/PageHero'
+import { Section } from '@/components/layout/Section'
 import { getTranslations } from 'next-intl/server'
 
 import ContactForm from './ContactForm'
@@ -47,7 +48,7 @@ export default async function ContactPage() {
       />
 
       {/* Contact Information Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-surface-base">
+      <Section density="default" tone="surface" contained={false}>
         <div className="container mx-auto px-4 sm:px-6">
           <div className="text-center mb-10">
             <Eyebrow as="div">{t('hero.title').toUpperCase()}</Eyebrow>
@@ -74,7 +75,7 @@ export default async function ContactPage() {
             ))}
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* Contact Form Section */}
       <section className="ui-public-band py-12 sm:py-16 md:py-20">

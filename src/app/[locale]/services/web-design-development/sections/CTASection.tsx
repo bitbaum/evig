@@ -1,13 +1,14 @@
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Link } from '@/i18n/navigation'
 import { getTranslations } from 'next-intl/server'
+import { Section } from '@/components/layout/Section'
 
 export async function CTASection() {
   const t = await getTranslations('services.webDesign.cta')
   const tEye = await getTranslations('common.eyebrows')
 
   return (
-    <section className="border-t border-subtle py-20 text-center">
+    <Section density="spacious" contained={false} className="border-t border-subtle text-center">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <Eyebrow as="div">{tEye('ready')}</Eyebrow>
         <h2 className="ui-public-display-lg mt-4">{t('title')}</h2>
@@ -21,6 +22,6 @@ export async function CTASection() {
           </Link>
         </div>
       </div>
-    </section>
+    </Section>
   )
 }

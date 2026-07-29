@@ -3,6 +3,7 @@ import { ReactNode } from 'react'
 import { Link } from '@/i18n/navigation'
 import { getTranslations } from 'next-intl/server'
 import { PageHero } from '@/components/layout/PageHero'
+import { Section } from '@/components/layout/Section'
 import { Users } from 'lucide-react'
 
 interface InvolvementPageLayoutProps {
@@ -38,13 +39,13 @@ export async function InvolvementPageLayout({
         </div>
       </PageHero>
 
-      <section className="py-16 sm:py-20">
+      <Section density="default" contained={false}>
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           {children}
         </div>
-      </section>
+      </Section>
 
-      <section className="border-t border-subtle py-20 text-center">
+      <Section density="spacious" contained={false} className="border-t border-subtle text-center">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <Eyebrow as="div">{tEye('ready')}</Eyebrow>
           <h2 className="ui-public-display-lg mt-4">{t('readyHeading')}</h2>
@@ -58,7 +59,7 @@ export async function InvolvementPageLayout({
             </Link>
           </div>
         </div>
-      </section>
+      </Section>
     </main>
   )
 }

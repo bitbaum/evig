@@ -22,6 +22,7 @@ import { PageHero } from '@/components/layout/PageHero'
 import { ORG, CONTACT, BASE_REGION } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
 import { safeJsonLd } from '@/lib/seo/json-ld'
+import { Section } from '@/components/layout/Section'
 
 interface HardwareRecyclingPageProps {
   params: Promise<{ locale: string }>
@@ -91,7 +92,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
         />
 
         {/* Features Grid */}
-        <section className="py-12 sm:py-16 md:py-20 bg-surface-base">
+        <Section density="default" tone="surface" contained={false}>
           <div className="container mx-auto px-4 sm:px-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto">
               {features.map((feature, index) => {
@@ -112,10 +113,10 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
               })}
             </div>
           </div>
-        </section>
+        </Section>
 
         {/* Pricing Section */}
-        <section className="py-12 sm:py-16 md:py-20 bg-surface-raised">
+        <Section density="default" tone="tinted" contained={false}>
           <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-3xl mx-auto">
               <div className="text-center mb-8 sm:mb-12">
@@ -149,10 +150,10 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
               </Card>
             </div>
           </div>
-        </section>
+        </Section>
 
         {/* Environmental Impact */}
-        <section className="py-12 sm:py-16 md:py-20 bg-surface-base">
+        <Section density="default" tone="surface" contained={false}>
           <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-8 sm:mb-12">
@@ -179,10 +180,10 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
               </div>
             </div>
           </div>
-        </section>
+        </Section>
 
         {/* Contact Information */}
-        <section className="py-12 sm:py-16 md:py-20 bg-surface-raised">
+        <Section density="default" tone="tinted" contained={false}>
           <div className="container mx-auto px-4 sm:px-6">
             <div className="max-w-4xl mx-auto">
               <div className="text-center mb-8 sm:mb-12">
@@ -207,10 +208,10 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
               </div>
             </div>
           </div>
-        </section>
+        </Section>
 
         {/* CTA Section */}
-        <section className="border-t border-subtle py-20 text-center">
+        <Section density="spacious" contained={false} className="border-t border-subtle text-center">
           <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
             <Eyebrow as="div">{tEye('ready')}</Eyebrow>
             <h2 className="ui-public-display-lg mt-4">{t('cta.heading')}</h2>
@@ -225,7 +226,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
               </Link>
             </div>
           </div>
-        </section>
+        </Section>
       </main>
     </>
   )

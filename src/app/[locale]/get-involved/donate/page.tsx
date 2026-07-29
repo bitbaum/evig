@@ -9,6 +9,7 @@ import { Link } from '@/i18n/navigation'
 import { NewsletterSignup } from '@/components/community/NewsletterSignup'
 import { DropoffForm } from '@/components/donate/DropoffForm'
 import { CopyButton } from '@/components/community/CopyButton'
+import { Section } from '@/components/layout/Section'
 import { BANK, CONTACT, BASE_REGION, ORG } from '@/config/org'
 import { DONATION_TIER_AMOUNTS } from '@/config/donations'
 import { ROUTES } from '@/config/routes'
@@ -90,7 +91,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
       </section>
 
       {/* ── Impact tiers — text-only cards ────────────────────────── */}
-      <section className="py-20 sm:py-24">
+      <Section density="spacious" contained={false}>
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto">
             <Eyebrow as="div">{t('tiers.eyebrow')}</Eyebrow>
@@ -112,7 +113,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
             ))}
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* ── Bank transfer — clean utility block ────────────────────── */}
       <section id="bankueberweisung" className="ui-public-band py-20 sm:py-24 scroll-mt-8">
@@ -148,7 +149,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
       </section>
 
       {/* ── Device donation — text-only ───────────────────────────── */}
-      <section id="geraete" className="py-20 sm:py-24 scroll-mt-8">
+      <Section id="geraete" density="spacious" contained={false} className="scroll-mt-8">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <Eyebrow as="div">{t('devices.eyebrow')}</Eyebrow>
           <h2 className="ui-public-display-md mt-3">{t('devices.heading')}</h2>
@@ -180,7 +181,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
             </a>
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* ── Drop-off form ──────────────────────────────────────────── */}
       <section id="anmeldung" className="ui-public-band py-20 sm:py-24 scroll-mt-8">
@@ -196,7 +197,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
       </section>
 
       {/* ── More ways to support (consolidated from the former /support) ── */}
-      <section className="py-20 sm:py-24 border-t border-subtle">
+      <Section density="spacious" contained={false} className="border-t border-subtle">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
             <Eyebrow as="div">{tSupport('otherWays.title').toUpperCase()}</Eyebrow>
@@ -247,10 +248,10 @@ export default async function DonatePage({ params }: DonatePageProps) {
             </Link>
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* ── Newsletter ─────────────────────────────────────────────── */}
-      <section className="py-20 sm:py-24 border-t border-subtle">
+      <Section density="spacious" contained={false} className="border-t border-subtle">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <NewsletterSignup
             title={t('newsletter.title')}
@@ -258,7 +259,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
             source="donate-page"
           />
         </div>
-      </section>
+      </Section>
     </div>
   )
 }

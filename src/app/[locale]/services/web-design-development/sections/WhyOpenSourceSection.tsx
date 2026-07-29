@@ -2,6 +2,7 @@ import Heading from '@/components/ui/Heading'
 import { Card } from '@/components/ui/card'
 import { getTranslations } from 'next-intl/server'
 import { Code, Database, Shield, Globe, Heart, Rocket } from 'lucide-react'
+import { Section } from '@/components/layout/Section'
 
 const REASON_ICONS = [Code, Database, Shield, Globe, Heart, Rocket]
 const REASON_KEYS = ['ownCode', 'ownData', 'privacyByDesign', 'decentralized', 'openSourceBase', 'futureProof'] as const
@@ -16,7 +17,7 @@ export async function WhyOpenSourceSection() {
   }))
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-surface-raised">
+    <Section density="default" tone="tinted" contained={false}>
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <Heading level={2} className="mb-6">{t('title')}</Heading>
@@ -38,6 +39,6 @@ export async function WhyOpenSourceSection() {
           ))}
         </div>
       </div>
-    </section>
+    </Section>
   )
 }

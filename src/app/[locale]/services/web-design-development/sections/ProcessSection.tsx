@@ -1,5 +1,6 @@
 import Heading from '@/components/ui/Heading'
 import { getTranslations } from 'next-intl/server'
+import { Section } from '@/components/layout/Section'
 
 const STEP_NUMBERS = ['01', '02', '03', '04']
 const STEP_KEYS = ['discovery', 'planning', 'development', 'launch'] as const
@@ -14,7 +15,7 @@ export async function ProcessSection() {
   }))
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-surface-base">
+    <Section density="default" tone="surface" contained={false}>
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <Heading level={2} className="mb-6">{t('title')}</Heading>
@@ -34,6 +35,6 @@ export async function ProcessSection() {
           ))}
         </div>
       </div>
-    </section>
+    </Section>
   )
 }

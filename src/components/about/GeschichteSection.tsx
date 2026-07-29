@@ -15,13 +15,14 @@ import { Compass } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { ORG, ORG_ORIGIN } from '@/config/org'
+import { Section } from '@/components/layout/Section'
 
 export default function GeschichteSection() {
   const t = useTranslations('components.geschichteSection')
   const foundingParams = { orgName: ORG.name, foundingYear: ORG.foundingYear }
 
   return (
-    <section className="py-20 bg-surface-raised">
+    <Section density="spacious" tone="tinted" contained={false}>
       <div className="max-w-3xl mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12">
@@ -58,6 +59,6 @@ export default function GeschichteSection() {
           </div>
         </div>
       </div>
-    </section>
+    </Section>
   )
 }

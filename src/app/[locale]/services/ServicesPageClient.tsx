@@ -22,6 +22,7 @@ import {
 } from './data'
 import { useTranslations } from 'next-intl'
 import { ROUTES } from '@/config/routes'
+import { Section } from '@/components/layout/Section'
 
 const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
   const t = useTranslations('services.page')
@@ -164,7 +165,7 @@ export default function ServicesPage() {
           showResultsCount={true}
         />
 
-        <section className="border-t border-subtle py-20 text-center">
+        <Section density="spacious" contained={false} className="border-t border-subtle text-center">
           <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
             <Eyebrow as="div">{t('ctaEyebrow')}</Eyebrow>
             <h2 className="ui-public-display-lg mt-4">{t('ctaTitle')}</h2>
@@ -178,7 +179,7 @@ export default function ServicesPage() {
               </Link>
             </div>
           </div>
-        </section>
+        </Section>
       </main>
     </>
   )

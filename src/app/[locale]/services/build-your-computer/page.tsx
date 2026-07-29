@@ -9,6 +9,7 @@ import { Link } from '@/i18n/navigation'
 import { PageHero } from '@/components/layout/PageHero'
 import { Button } from '@/components/ui/button'
 import { BuildTool } from './BuildTool'
+import { Section } from '@/components/layout/Section'
 
 export default function BuildYourComputerPage() {
   const t = useTranslations('services.buildComputer')
@@ -78,7 +79,7 @@ export default function BuildYourComputerPage() {
       </section>
 
       {/* ── Revamped Certification ─────────────────────────────────── */}
-      <section className="py-20">
+      <Section density="spacious" contained={false}>
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <Card className="p-8 md:p-12 text-center">
             <Eyebrow as="div" className="inline-flex items-center gap-2 text-action">
@@ -97,10 +98,10 @@ export default function BuildYourComputerPage() {
             </div>
           </Card>
         </div>
-      </section>
+      </Section>
 
       {/* ── CTA ────────────────────────────────────────────────────── */}
-      <section className="border-t border-subtle py-20 text-center">
+      <Section density="spacious" contained={false} className="border-t border-subtle text-center">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <Eyebrow as="div">{tEye('ready')}</Eyebrow>
           <h2 className="ui-public-display-lg mt-4">{t('cta.heading')}</h2>
@@ -114,7 +115,7 @@ export default function BuildYourComputerPage() {
             </Link>
           </div>
         </div>
-      </section>
+      </Section>
     </main>
   )
 }

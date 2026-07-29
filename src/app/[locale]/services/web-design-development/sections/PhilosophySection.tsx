@@ -1,6 +1,7 @@
 import Heading from '@/components/ui/Heading'
 import { Card } from '@/components/ui/card'
 import { getTranslations } from 'next-intl/server'
+import { Section } from '@/components/layout/Section'
 
 const RATING_KEYS = ['openSource', 'decentralization', 'privacy', 'dataOwnership', 'codeOwnership', 'automation', 'ux', 'dx'] as const
 
@@ -13,7 +14,7 @@ export async function PhilosophySection() {
   }))
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-surface-base">
+    <Section density="default" tone="surface" contained={false}>
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
@@ -77,6 +78,6 @@ export async function PhilosophySection() {
           </div>
         </div>
       </div>
-    </section>
+    </Section>
   )
 }

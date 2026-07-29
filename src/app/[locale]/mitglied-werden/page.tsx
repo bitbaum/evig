@@ -6,6 +6,7 @@ import type { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
 import { Award, Vote, Users, Heart, CheckCircle, User as UserIcon } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { Section } from '@/components/layout/Section'
 import { Card } from '@/components/ui/card'
 import { ORG, MEMBERSHIP } from '@/config/org'
 import { auth } from '@/auth'
@@ -69,17 +70,17 @@ export default async function MitgliedWerdenPage({ params }: MitgliedWerdenPageP
 
   return (
     <div className="bg-canvas">
-      <section className="border-b border-subtle py-12 sm:py-16">
+      <Section density="default" contained={false} className="border-b border-subtle">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
           <Eyebrow as="div">{t('hero.title').toUpperCase()}</Eyebrow>
           <Award className="w-10 h-10 text-action mx-auto mt-6 mb-4" aria-hidden="true" />
           <h1 className="ui-public-display-lg">{t('hero.title')}</h1>
           <p className="ui-public-section-lede mt-6 mx-auto">{t('hero.body')}</p>
         </div>
-      </section>
+      </Section>
 
       {/* What you get */}
-      <section className="py-12 sm:py-16">
+      <Section density="default" contained={false}>
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-4 sm:grid-cols-3">
             {whatYouGet.map((item, index) => {
@@ -94,7 +95,7 @@ export default async function MitgliedWerdenPage({ params }: MitgliedWerdenPageP
             })}
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* Form or status */}
       <section className="ui-public-band py-10 sm:py-14">
@@ -129,7 +130,7 @@ export default async function MitgliedWerdenPage({ params }: MitgliedWerdenPageP
       </section>
 
       {/* FAQ */}
-      <section className="py-12 sm:py-16">
+      <Section density="default" contained={false}>
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
             <Eyebrow as="div">{t('faq.heading').toUpperCase()}</Eyebrow>
@@ -144,7 +145,7 @@ export default async function MitgliedWerdenPage({ params }: MitgliedWerdenPageP
             ))}
           </div>
         </div>
-      </section>
+      </Section>
     </div>
   )
 }

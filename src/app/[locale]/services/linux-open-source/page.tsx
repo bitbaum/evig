@@ -25,6 +25,7 @@ import { Link } from '@/i18n/navigation'
 import { PageHero } from '@/components/layout/PageHero'
 import { ORG, CONTACT } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
+import { Section } from '@/components/layout/Section'
 
 interface LinuxPageProps {
   params: Promise<{ locale: string }>
@@ -91,7 +92,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
       </PageHero>
 
       {/* Services & Pricing Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-surface-base">
+      <Section density="default" tone="surface" contained={false}>
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <Heading level={2} className="mb-6">{t('servicesSection.heading')}</Heading>
@@ -167,10 +168,10 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
             </div>
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* Benefits Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-surface-raised">
+      <Section density="default" tone="tinted" contained={false}>
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <Heading level={2} className="mb-6">{t('benefitsSection.heading')}</Heading>
@@ -193,10 +194,10 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
             })}
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* Distributions Section */}
-      <section className="py-12 sm:py-16 md:py-20 bg-surface-base">
+      <Section density="default" tone="surface" contained={false}>
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-12">
             <Heading level={2} className="mb-6">{t('distrosSection.heading')}</Heading>
@@ -301,10 +302,10 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
             })}
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* Final CTA */}
-      <section className="border-t border-subtle py-20 text-center">
+      <Section density="spacious" contained={false} className="border-t border-subtle text-center">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <Eyebrow as="div">{tEye('ready')}</Eyebrow>
           <h2 className="ui-public-display-lg mt-4">{t('finalCta.heading')}</h2>
@@ -318,7 +319,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
             </Link>
           </div>
         </div>
-      </section>
+      </Section>
     </main>
   )
 }

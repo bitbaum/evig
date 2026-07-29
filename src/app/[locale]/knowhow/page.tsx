@@ -5,6 +5,7 @@ import { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
 import { BookOpen, FileText, Users, LinkIcon, Lightbulb } from 'lucide-react'
 import { PageHero } from '@/components/layout/PageHero'
+import { Section } from '@/components/layout/Section'
 import Heading from '@/components/ui/Heading'
 import { buttonClass as btnClass } from '@/components/ui/button-class'
 import { getTranslations } from 'next-intl/server'
@@ -94,7 +95,7 @@ export default async function WissenPage() {
       />
 
       {/* Main Sections Grid */}
-      <section className="px-4 sm:px-6 py-12 sm:py-16 lg:px-8">
+      <Section density="default" contained={false} className="px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
             {sections.map((section) => {
@@ -118,10 +119,10 @@ export default async function WissenPage() {
             })}
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* Resources Section */}
-      <section id="ressourcen" className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 lg:px-8 bg-surface-raised">
+      <Section id="ressourcen" density="default" tone="tinted" contained={false} className="px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-6xl">
           <Heading level={2} className="text-2xl sm:text-3xl tracking-tight text-text-primary mb-8 sm:mb-12 md:mb-16 text-center">
             {t('curatedResources')}
@@ -184,10 +185,10 @@ export default async function WissenPage() {
             </div>
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* CTA Section */}
-      <section className="px-4 sm:px-6 py-12 sm:py-16 md:py-20 lg:px-8">
+      <Section density="default" contained={false} className="px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           <Heading level={2} className="text-2xl sm:text-3xl tracking-tight text-text-primary mb-4 sm:mb-6">
             {t('cta.title')}
@@ -199,7 +200,7 @@ export default async function WissenPage() {
             {t('cta.button')}
           </Link>
         </div>
-      </section>
+      </Section>
     </main>
   )
 }

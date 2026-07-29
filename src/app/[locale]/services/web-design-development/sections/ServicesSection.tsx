@@ -3,6 +3,7 @@ import Heading from '@/components/ui/Heading'
 import { IconBadge } from '@/components/ui/IconBadge'
 import { getTranslations } from 'next-intl/server'
 import { Code, Palette, Globe, Shield } from 'lucide-react'
+import { Section } from '@/components/layout/Section'
 
 const SERVICE_ICONS = [Code, Palette, Globe, Shield]
 const SERVICE_KEYS = ['customDev', 'responsiveDesign', 'cmsDev', 'maintenance'] as const
@@ -18,7 +19,7 @@ export async function ServicesSection() {
   }))
 
   return (
-    <section id="services" className="py-20 bg-surface-base">
+    <Section id="services" density="spacious" tone="surface" contained={false}>
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <Heading level={2} className="mb-6">{t('title')}</Heading>
@@ -57,6 +58,6 @@ export async function ServicesSection() {
           ))}
         </div>
       </div>
-    </section>
+    </Section>
   )
 }

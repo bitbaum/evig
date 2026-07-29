@@ -8,6 +8,7 @@
 import Link from 'next/link'
 import AppointmentBookingForm from './AppointmentBookingForm'
 import { Eyebrow } from '@/components/ui/Eyebrow'
+import { Section } from '@/components/layout/Section'
 
 interface ServiceCTAProps {
   serviceTitle: string
@@ -17,7 +18,7 @@ interface ServiceCTAProps {
 
 export default function ServiceCTA({ serviceTitle, serviceSlug, pricing }: ServiceCTAProps) {
   return (
-    <section className="border-t border-subtle bg-surface-base py-12 sm:py-16">
+    <Section density="default" tone="surface" contained={false} className="border-t border-subtle">
       <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
         <Eyebrow as="div">Termin</Eyebrow>
         <h2 className="mt-3 text-2xl font-semibold text-text-primary sm:text-3xl">Bereit loszulegen?</h2>
@@ -46,6 +47,6 @@ export default function ServiceCTA({ serviceTitle, serviceSlug, pricing }: Servi
           </Link>
         </div>
       </div>
-    </section>
+    </Section>
   )
 }

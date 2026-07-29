@@ -3,6 +3,7 @@ import { Card } from '@/components/ui/card'
 import { IconBadge } from '@/components/ui/IconBadge'
 import { getTranslations } from 'next-intl/server'
 import { Zap, Code, Smartphone, Search } from 'lucide-react'
+import { Section } from '@/components/layout/Section'
 
 const BENEFIT_ICONS = [Zap, Code, Smartphone, Search]
 const BENEFIT_KEYS = ['automationFirst', 'openSourceBase', 'seamlessUX', 'devFriendly'] as const
@@ -17,7 +18,7 @@ export async function BenefitsSection() {
   }))
 
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-surface-raised">
+    <Section density="default" tone="tinted" contained={false}>
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <Heading level={2} className="mb-6">{t('title')}</Heading>
@@ -39,6 +40,6 @@ export async function BenefitsSection() {
           ))}
         </div>
       </div>
-    </section>
+    </Section>
   )
 }

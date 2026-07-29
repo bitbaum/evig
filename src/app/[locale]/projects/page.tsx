@@ -7,6 +7,7 @@ import { getTranslations } from 'next-intl/server'
 import { FolderGit2 } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { PageHero } from '@/components/layout/PageHero'
+import { Section } from '@/components/layout/Section'
 import { IconBadge } from '@/components/ui/IconBadge'
 import Heading from '@/components/ui/Heading'
 import { ORG } from '@/config/org'
@@ -28,7 +29,7 @@ export default async function ProjectsPage() {
     <main className="min-h-screen">
       <PageHero theme="about" icon={FolderGit2} title={t('hero.title')} subtitle={t('hero.subtitle')} />
 
-      <section className="py-16 md:py-24">
+      <Section density="default" contained={false}>
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {EVIG_PROJECTS.map((project) => (
@@ -58,7 +59,7 @@ export default async function ProjectsPage() {
             ))}
           </div>
         </div>
-      </section>
+      </Section>
     </main>
   )
 }
