@@ -17,26 +17,22 @@
  */
 
 import { useEffect, useMemo } from 'react'
-import { Loader2, CheckCircle2, FileText, Trash2, AlertCircle, UserCheck } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
-import { Select } from '@/components/ui/select'
 import {
   useProtocolDetail,
   ProtocolReprocessSection,
-  ProtocolDraftInput,
   ProtocolTopicsSection,
   ProtocolActionItemsList,
   ProtocolFollowUps,
-  ProtocolProgressStrip,
   ProtocolAIChat,
 } from '@/components/admin/protocols'
 import type { ProtocolDetailProps } from '@/components/admin/protocols'
 import { PROTOCOL_STATUSES } from '@/config/protocols'
 import { useRouter } from 'next/navigation'
-import Heading from '@/components/admin/AdminHeading'
 import { getProtocolReviewChecklist, getProtocolReviewCounts } from '@/lib/protocols/review'
-import { pluralDe } from '@/lib/i18n/plural-de'
+import { ProtocolPipelineHeader } from './detail/ProtocolPipelineHeader'
+import { ProtocolSummaryCard } from './detail/ProtocolSummaryCard'
+import { ProtocolAttendeeMapping } from './detail/ProtocolAttendeeMapping'
+import { ProtocolDetailFooter } from './detail/ProtocolDetailFooter'
 
 export default function ProtocolDetailClient(props: ProtocolDetailProps) {
   const router = useRouter()
@@ -140,73 +136,25 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
 
   return (
     <div className="space-y-4">
-      {/* Error Banner */}
-      {error && (
-        <div className="flex items-start gap-3 p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg text-error-700 dark:text-error-400">
-          <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
-          <div>
-            <p>{error}</p>
-            {initialProcessingError?.retryable && (
-              <p className="text-sm mt-1 opacity-80">
-                Nutze &ldquo;Erneut verarbeiten&rdquo; weiter unten, um es erneut zu versuchen.
-              </p>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Progress Strip — the whole pipeline (Input → Struktur → Personen →
-          Entscheide → Aufgaben → Abschluss), visible in EVERY state so the
-          user always knows where the protocol stands and what comes next. */}
-      <ProtocolProgressStrip items={reviewChecklist} />
-
-      {/* Processing Spinner */}
-      {isProcessing && (
-        <div className="bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800 rounded-lg p-8 text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-warning-500 mx-auto mb-3" />
-          <p className="font-medium text-warning-800 dark:text-warning-300">Wird verarbeitet…</p>
-          <p className="text-sm text-warning-700 dark:text-warning-400 mt-1">
-            Die KI strukturiert das Transkript. Die Seite aktualisiert sich automatisch.
-          </p>
-        </div>
-      )}
-
-      {/* Draft input (no notes yet) — same sources + endpoint as the create page */}
-      {isDraft && !notes && (
-        <ProtocolDraftInput
-          allowAudio={usesUnifiedPipeline}
-          hasTranscript={Boolean(protocol.raw_transcript)}
-          transcript={transcript}
-          audioFile={audioFile}
-          processing={processing}
-          canProcess={canProcess}
-          onTranscriptChange={setTranscript}
-          onAudioFileSelect={handleAudioFileSelect}
-          onFileUpload={handleFileUpload}
-          onProcess={handleProcess}
-        />
-      )}
-
-      {/* Quelle — Rohtranskript. Rendered whenever a transcript exists (also
-          without structured notes: while processing runs or after a failed
-          structuring the source must stay visible). Collapsed when the
-          structured view exists; expanded when it is the only content. */}
-      {protocol.raw_transcript && !(isDraft && !notes) && (
-        <details
-          className="bg-surface-base rounded-lg border border-default"
-          open={!notes}
-        >
-          <summary className="flex items-center gap-2 p-4 cursor-pointer text-sm font-medium text-text-secondary hover:text-text-primary select-none">
-            <FileText className="w-4 h-4 text-text-muted" />
-            Quelle · Rohtranskript ({protocol.raw_transcript.length.toLocaleString()} Zeichen)
-          </summary>
-          <div className="px-4 pb-4">
-            <pre className="text-xs text-text-secondary whitespace-pre-wrap max-h-96 overflow-y-auto bg-surface-raised rounded-lg p-3 leading-relaxed">
-              {protocol.raw_transcript}
-            </pre>
-          </div>
-        </details>
-      )}
+      {/* Error banner, progress strip, processing state, draft input, source */}
+      <ProtocolPipelineHeader
+        error={error}
+        initialProcessingError={initialProcessingError}
+        reviewChecklist={reviewChecklist}
+        isProcessing={isProcessing}
+        isDraft={isDraft}
+        notes={notes}
+        protocol={protocol}
+        usesUnifiedPipeline={usesUnifiedPipeline}
+        transcript={transcript}
+        audioFile={audioFile}
+        processing={processing}
+        canProcess={canProcess}
+        setTranscript={setTranscript}
+        handleAudioFileSelect={handleAudioFileSelect}
+        handleFileUpload={handleFileUpload}
+        handleProcess={handleProcess}
+      />
 
       {/* Main content — only when structured notes exist. Order follows the
           actual pipeline the user reads: overview → structured notes →
@@ -214,14 +162,7 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
       {notes && (
         <>
           {/* 1. Zusammenfassung — executive overview */}
-          <div className="bg-surface-base rounded-lg border border-default p-5">
-            <h2 className="text-base font-semibold text-text-primary mb-2">
-              Zusammenfassung
-            </h2>
-            <p className="text-text-secondary leading-relaxed">
-              {notes.summary}
-            </p>
-          </div>
+          <ProtocolSummaryCard notes={notes} />
 
           {/* 2. Strukturierte Notizen (Themen) — the transform of the source */}
           <ProtocolTopicsSection
@@ -234,64 +175,18 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
               it annotates, not above it. Advisory, not blocking (finalization
               isn't gated on it; task assignment just falls back to manual). */}
           {isReview && notes.detected_attendees && notes.detected_attendees.length > 0 && (
-            <div className="rounded-lg border border-default bg-surface-base p-4">
-              <div className="flex items-start gap-3">
-                <UserCheck className="w-5 h-5 shrink-0 mt-0.5 text-text-tertiary" />
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-sm font-semibold mb-1 text-text-primary">
-                    {allMapped
-                      ? 'Wer war dabei? — alle zugeordnet'
-                      : `Wer war dabei? (${unmappedAttendees.length} ${unmappedAttendees.length === 1 ? 'Name' : 'Namen'} noch offen)`
-                    }
-                  </h3>
-                  {!allMapped && (
-                    <p className="text-xs text-text-tertiary mb-3">
-                      Die KI hat diese Namen im Gespräch gehört. Wähle das passende
-                      Team-Konto: die Person wird als Teilnehmer gespeichert und ihre
-                      Aufgaben werden ihr direkt zugewiesen. Unklare Namen kannst du
-                      offen lassen.
-                    </p>
-                  )}
-                  <div className="space-y-2">
-                    {notes.detected_attendees.map((name) => (
-                      <div key={name} className="flex items-center gap-3">
-                        <span className="text-sm text-text-secondary min-w-[120px] font-medium">{name}</span>
-                        <Select
-                          value={attendeeMapping[name] || ''}
-                          onChange={(e) => {
-                            setAttendeeMapping(prev => ({ ...prev, [name]: e.target.value }))
-                            setMappingDirty(true)
-                          }}
-                          className="w-auto"
-                        >
-                          <option value="">— Nicht zugeordnet —</option>
-                          {teamMembers.map(m => (
-                            <option key={m.id} value={m.id}>
-                              {m.name}{m.open_task_count > 0 ? ` (${m.open_task_count} Aufgaben)` : ''}
-                            </option>
-                          ))}
-                        </Select>
-                      </div>
-                    ))}
-                  </div>
-                  {mappingDirty && (
-                    <Button
-                      onClick={handleSaveMapping}
-                      disabled={savingMapping}
-                      variant="primary"
-                      size="sm"
-                      className="mt-3 gap-2"
-                    >
-                      {savingMapping
-                        ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                        : <CheckCircle2 className="w-3.5 h-3.5" />
-                      }
-                      Zuordnung speichern
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </div>
+            <ProtocolAttendeeMapping
+              notes={notes}
+              teamMembers={teamMembers}
+              unmappedAttendees={unmappedAttendees}
+              allMapped={allMapped}
+              attendeeMapping={attendeeMapping}
+              setAttendeeMapping={setAttendeeMapping}
+              mappingDirty={mappingDirty}
+              setMappingDirty={setMappingDirty}
+              savingMapping={savingMapping}
+              handleSaveMapping={handleSaveMapping}
+            />
           )}
 
           {/* 5. Aktionen & Entscheidungen — derived items, each tagged with the
@@ -351,89 +246,23 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
 
       {/* Footer actions — outside the notes-only block so a stuck draft
           (e.g. failed processing) can still be deleted instead of lingering
-          in the list forever. */}
-      {(isReview || isProtocolCreator || isSuperAdmin) && (
-        <div className="flex items-center justify-between pt-2">
-          <div>
-            {(isProtocolCreator || isSuperAdmin) && (
-              <Button
-                variant="destructive-outline"
-                size="sm"
-                onClick={() => setShowDeleteDialog(true)}
-                className="gap-2"
-              >
-                <Trash2 className="w-4 h-4" />
-                Löschen
-              </Button>
-            )}
-          </div>
-          {isReview && (
-            <Button
-              onClick={() => setShowFinalizeDialog(true)}
-              className="gap-2 px-6"
-            >
-              <CheckCircle2 className="w-4 h-4" />
-              Protokoll abschliessen
-            </Button>
-          )}
-        </div>
-      )}
-
-      {/* Empty state */}
-      {!notes && !isDraft && protocol.status !== PROTOCOL_STATUSES.PROCESSING && (
-        <div className="bg-surface-base rounded-lg border border-default p-12 text-center">
-          <FileText className="w-12 h-12 text-text-muted mx-auto mb-4" />
-          <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
-            Keine strukturierten Notizen
-          </Heading>
-          <p className="text-text-tertiary">
-            Füge ein Transkript hinzu, um es von der KI verarbeiten zu lassen.
-          </p>
-        </div>
-      )}
-
-      <ConfirmDialog
-        isOpen={showFinalizeDialog}
-        title="Protokoll abschliessen"
-        message="Nach dem Abschliessen kann das Protokoll nicht mehr bearbeitet werden."
-        details={finalizeBlockers.hasAny ? (
-          <div className="rounded-lg border border-warning-300 bg-warning-50 dark:bg-warning-900/20 dark:border-warning-700/50 p-3 text-sm text-warning-800 dark:text-warning-200">
-            <p className="font-medium mb-1.5">Offen vor dem Abschluss:</p>
-            <ul className="list-disc pl-5 space-y-0.5">
-              {finalizeBlockers.unlinkedTasks > 0 && (
-                <li>{finalizeBlockers.unlinkedTasks} {pluralDe(finalizeBlockers.unlinkedTasks, 'Aktionspunkt', 'Aktionspunkte')} noch nicht in Aufgaben umgewandelt — nach Abschluss nicht mehr möglich.</li>
-              )}
-              {finalizeBlockers.openDecisions > 0 && (
-                <li>{finalizeBlockers.openDecisions} {pluralDe(finalizeBlockers.openDecisions, 'Entscheidung', 'Entscheidungen')} offen — Abstimmung oder Abschluss fehlt.</li>
-              )}
-              {finalizeBlockers.closedDecisionsWithoutTask > 0 && (
-                <li>{finalizeBlockers.closedDecisionsWithoutTask} {pluralDe(finalizeBlockers.closedDecisionsWithoutTask, 'angenommene Entscheidung', 'angenommene Entscheidungen')} ohne Folgeaufgabe im Aufgaben-System.</li>
-              )}
-              {finalizeBlockers.unresolvedAssignees > 0 && (
-                <li>{finalizeBlockers.unresolvedAssignees} {pluralDe(finalizeBlockers.unresolvedAssignees, 'Personen-Zuordnung', 'Personen-Zuordnungen')} ungeklärt — Aufgaben werden ohne Team-Verknüpfung erstellt.</li>
-              )}
-            </ul>
-          </div>
-        ) : undefined}
-        confirmLabel={finalizeBlockers.hasAny ? 'Trotzdem abschliessen' : 'Abschliessen'}
-        cancelLabel="Abbrechen"
-        variant="warning"
-        isLoading={finalizing}
-        onConfirm={handleFinalize}
-        onClose={() => setShowFinalizeDialog(false)}
-      />
-
-      <ConfirmDialog
-        isOpen={showDeleteDialog}
-        title="Protokoll löschen"
-        message="Das Protokoll und alle verknüpften Daten (Abstimmungen, Entscheidungen) werden unwiderruflich gelöscht."
-        itemName={protocol.title}
-        confirmLabel="Löschen"
-        cancelLabel="Abbrechen"
-        variant="danger"
-        isLoading={deleting}
-        onConfirm={handleDelete}
-        onClose={() => setShowDeleteDialog(false)}
+          in the list forever. Also owns the empty state + confirm dialogs. */}
+      <ProtocolDetailFooter
+        protocol={protocol}
+        notes={notes}
+        isDraft={isDraft}
+        isReview={isReview}
+        isProtocolCreator={isProtocolCreator}
+        isSuperAdmin={isSuperAdmin}
+        finalizeBlockers={finalizeBlockers}
+        showFinalizeDialog={showFinalizeDialog}
+        setShowFinalizeDialog={setShowFinalizeDialog}
+        finalizing={finalizing}
+        handleFinalize={handleFinalize}
+        showDeleteDialog={showDeleteDialog}
+        setShowDeleteDialog={setShowDeleteDialog}
+        deleting={deleting}
+        handleDelete={handleDelete}
       />
     </div>
   )
