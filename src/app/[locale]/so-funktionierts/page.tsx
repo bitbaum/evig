@@ -40,7 +40,7 @@ export default async function SoFunktioniertPage({ params }: PageProps) {
       />
 
       {/* The journey — donation → rehome, in order. */}
-      <Section density="default">
+      <Section density="default" tone="surface">
         <div className="max-w-2xl">
           <Heading level={2} className="text-2xl font-semibold text-text-primary sm:text-3xl">
             {t('journey.heading')}

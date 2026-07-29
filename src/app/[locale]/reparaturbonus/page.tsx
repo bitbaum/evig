@@ -85,7 +85,7 @@ export default async function ReparaturbonusPage({ params }: PageProps) {
       </PageHero>
 
       {/* Headline figures */}
-      <Section density="default">
+      <Section density="default" tone="surface">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {KEY_FACTS.map((fact) => (
             <Card key={fact.id} className="h-full p-6">
@@ -148,7 +148,7 @@ export default async function ReparaturbonusPage({ params }: PageProps) {
       </Section>
 
       {/* What qualifies */}
-      <Section density="default">
+      <Section density="default" tone="surface">
         <div className="max-w-2xl">
           <Heading level={2} className="text-2xl font-semibold text-text-primary sm:text-3xl">
             {t('eligible.heading')}
@@ -206,7 +206,7 @@ export default async function ReparaturbonusPage({ params }: PageProps) {
       </Section>
 
       {/* Why it matters */}
-      <Section density="default">
+      <Section density="default" tone="surface">
         <div className="max-w-2xl">
           <Heading level={2} className="text-2xl font-semibold text-text-primary sm:text-3xl">
             {t('impact.heading')}
@@ -292,7 +292,7 @@ export default async function ReparaturbonusPage({ params }: PageProps) {
       </Section>
 
       {/* Sources — every figure on this page traces here (credibility SSOT). */}
-      <Section density="compact">
+      <Section density="compact" tone="surface">
         <div className="mx-auto max-w-3xl">
           <h2 className="text-xs font-mono uppercase tracking-wider text-text-tertiary">
             {t('sources.heading')}

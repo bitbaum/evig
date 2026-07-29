@@ -12,13 +12,15 @@ import { cn } from '@/lib/utils'
  *   spacious = py-24 sm:py-32 lg:py-40 (hero-adjacent, feature reveals)
  *
  * Tones (driven by CSS vars — auto-dark):
- *   surface  = page background (default)
+ *   canvas   = transparent; shows the page canvas (--surface-page). DEFAULT —
+ *              most sections sit directly on the page and must not repaint it.
+ *   surface  = solid base (--surface-base, #fff light) — an explicit card-like band
  *   tinted   = raised surface (slight contrast between sections)
- *   inverse  = dark band for emphasis (CTAs)
+ *   inverse  = brand band for emphasis (CTAs)
  */
 
 type Density = 'compact' | 'default' | 'spacious'
-type Tone = 'surface' | 'tinted' | 'inverse'
+type Tone = 'canvas' | 'surface' | 'tinted' | 'inverse'
 
 interface SectionProps extends React.HTMLAttributes<HTMLElement> {
   density?: Density
@@ -34,6 +36,7 @@ const densityClass: Record<Density, string> = {
 }
 
 const toneClass: Record<Tone, string> = {
+  canvas:  '',                    // transparent — keeps the page canvas (--surface-page)
   surface: 'bg-surface-base',
   tinted:  'bg-surface-raised',
   inverse: 'bg-action text-action-text',
@@ -41,7 +44,7 @@ const toneClass: Record<Tone, string> = {
 
 export function Section({
   density = 'default',
-  tone = 'surface',
+  tone = 'canvas',
   contained = true,
   className,
   children,
