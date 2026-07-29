@@ -78,7 +78,7 @@ export default async function ContactPage() {
       </Section>
 
       {/* Contact Form Section */}
-      <section className="ui-public-band py-12 sm:py-16 md:py-20">
+      <Section density="spacious" tone="tinted" contained={false} className="border-y border-subtle">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-8">
@@ -88,7 +88,7 @@ export default async function ContactPage() {
             <ContactForm />
           </div>
         </div>
-      </section>
+      </Section>
     </main>
   )
 }

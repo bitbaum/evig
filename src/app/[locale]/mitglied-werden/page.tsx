@@ -98,7 +98,7 @@ export default async function MitgliedWerdenPage({ params }: MitgliedWerdenPageP
       </Section>
 
       {/* Form or status */}
-      <section className="ui-public-band py-10 sm:py-14">
+      <Section density="default" tone="tinted" contained={false} className="border-y border-subtle">
         <div className="mx-auto max-w-xl px-4 sm:px-6 lg:px-8">
           <Card className="p-6 sm:p-8">
             {status.isMember ? (
@@ -127,7 +127,7 @@ export default async function MitgliedWerdenPage({ params }: MitgliedWerdenPageP
             )}
           </Card>
         </div>
-      </section>
+      </Section>
 
       {/* FAQ */}
       <Section density="default" contained={false}>

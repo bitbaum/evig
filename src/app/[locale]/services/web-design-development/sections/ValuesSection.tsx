@@ -1,5 +1,6 @@
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import Heading from '@/components/ui/Heading'
+import { Section } from '@/components/layout/Section'
 import { getTranslations } from 'next-intl/server'
 
 const VALUE_KEYS = [
@@ -18,7 +19,7 @@ export async function ValuesSection() {
   const tEye = await getTranslations('common.eyebrows')
 
   return (
-    <section className="ui-public-band py-20 sm:py-24">
+    <Section density="spacious" tone="tinted" contained={false} className="border-y border-subtle">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto text-center mb-14">
           <Eyebrow as="div">{tEye('principles')}</Eyebrow>
@@ -40,6 +41,6 @@ export async function ValuesSection() {
           ))}
         </div>
       </div>
-    </section>
+    </Section>
   )
 }

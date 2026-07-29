@@ -131,7 +131,7 @@ export default async function Home() {
       </section>
 
       {/* ── Three primary actions ──────────────────────────────────── */}
-      <section className="ui-public-band py-20 sm:py-24">
+      <Section density="spacious" tone="tinted" contained={false} className="border-y border-subtle">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-10 md:grid-cols-[0.9fr_1.1fr] md:items-end">
             <div>
@@ -159,7 +159,7 @@ export default async function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* ── Two-column principle ribbon — pure typography, no chrome ── */}
       <Section density="spacious" contained={false}>
@@ -180,7 +180,7 @@ export default async function Home() {
       </Section>
 
       {/* ── 01 / 02 / 03 — the cycle ────────────────────────────────── */}
-      <section className="ui-public-band py-20 sm:py-24">
+      <Section density="spacious" tone="tinted" contained={false} className="border-y border-subtle">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <Eyebrow as="div">{t('process.eyebrow')}</Eyebrow>
           <h2 className="ui-public-display-lg mt-4">{t('process.heading')}</h2>
@@ -197,7 +197,7 @@ export default async function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </Section>
 
 
       {/* ── Community entry points ─────────────────────────────────── */}

@@ -73,7 +73,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
       </section>
 
       {/* ── Two paths ribbon ──────────────────────────────────────── */}
-      <section className="ui-public-band py-20 sm:py-24">
+      <Section density="spacious" tone="tinted" contained={false} className="border-y border-subtle">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-x-16 gap-y-20 md:grid-cols-2">
             <div>
@@ -88,7 +88,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
             </div>
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* ── Impact tiers — text-only cards ────────────────────────── */}
       <Section density="spacious" contained={false}>
@@ -116,7 +116,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
       </Section>
 
       {/* ── Bank transfer — clean utility block ────────────────────── */}
-      <section id="bankueberweisung" className="ui-public-band py-20 sm:py-24 scroll-mt-8">
+      <Section id="bankueberweisung" density="spacious" tone="tinted" contained={false} className="border-y border-subtle scroll-mt-8">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <Eyebrow as="div">{t('transfer.eyebrow')}</Eyebrow>
           <h2 className="ui-public-display-md mt-3">{t('transfer.heading')}</h2>
@@ -146,7 +146,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
             ))}
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* ── Device donation — text-only ───────────────────────────── */}
       <Section id="geraete" density="spacious" contained={false} className="scroll-mt-8">
@@ -184,7 +184,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
       </Section>
 
       {/* ── Drop-off form ──────────────────────────────────────────── */}
-      <section id="anmeldung" className="ui-public-band py-20 sm:py-24 scroll-mt-8">
+      <Section id="anmeldung" density="spacious" tone="tinted" contained={false} className="border-y border-subtle scroll-mt-8">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <Eyebrow as="div">{t('dropoff.eyebrow')}</Eyebrow>
           <h2 className="ui-public-display-md mt-3">{t('dropoff.heading')}</h2>
@@ -194,7 +194,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
             <DropoffForm />
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* ── More ways to support (consolidated from the former /support) ── */}
       <Section density="spacious" contained={false} className="border-t border-subtle">

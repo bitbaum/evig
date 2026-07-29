@@ -82,7 +82,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
       </PageHero>
 
       {/* Core Values Section */}
-      <section id="learn-more" className="ui-public-band py-20 sm:py-24">
+      <Section id="learn-more" density="spacious" tone="tinted" contained={false} className="border-y border-subtle">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <Eyebrow as="div">{t('coreValues.heading').toUpperCase()}</Eyebrow>
@@ -101,7 +101,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
             })}
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* Involvement Options */}
       <Section id="get-started" density="spacious" contained={false}>

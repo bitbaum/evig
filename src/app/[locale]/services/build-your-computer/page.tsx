@@ -36,7 +36,7 @@ export default function BuildYourComputerPage() {
       </PageHero>
 
       {/* ── How It Works — text-only numbered steps ─────────────────── */}
-      <section className="ui-public-band py-20 sm:py-24">
+      <Section density="spacious" tone="tinted" contained={false} className="border-y border-subtle">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <Eyebrow as="div">{tEye('howItWorks')}</Eyebrow>
           <Heading level={2} className="ui-public-display-lg mt-4">{t('howItWorks.heading')}</Heading>
@@ -52,13 +52,13 @@ export default function BuildYourComputerPage() {
             ))}
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* ── Interactive Build Tool — extracted component ───────────── */}
       <BuildTool />
 
       {/* ── Features — text-only cards ─────────────────────────────── */}
-      <section className="ui-public-band py-20 sm:py-24">
+      <Section density="spacious" tone="tinted" contained={false} className="border-y border-subtle">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto">
             <Eyebrow as="div">{tEye('benefits')}</Eyebrow>
@@ -76,7 +76,7 @@ export default function BuildYourComputerPage() {
             ))}
           </div>
         </div>
-      </section>
+      </Section>
 
       {/* ── Revamped Certification ─────────────────────────────────── */}
       <Section density="spacious" contained={false}>
