@@ -1,193 +1,19 @@
 'use client'
 
+// Command palette shell (⌘K): dialog state, fetch/debounce, keyboard nav. Rows +
+// registry live in ./command-bar/.
+
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { apiFetch } from '@/lib/api/client'
-import {
-  Search,
-  Monitor,
-  Vote,
-  FileText,
-  LayoutDashboard,
-  User,
-  ChevronRight,
-} from 'lucide-react'
+import { Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { ROUTES } from '@/config/routes'
-import { adminInteractive } from '@/lib/admin-ui'
-import { sectionText, type SectionsT } from '@/lib/section-labels'
-import { cn } from '@/lib/utils'
-
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
-interface SearchSection {
-  id: string
-  label: string
-  path: string
-  description: string
-}
-
-interface SearchUser {
-  id: string
-  name: string
-  email: string
-}
-
-interface SearchDecision {
-  id: string
-  title: string
-  status: string
-}
-
-interface SearchListing {
-  id: string
-  title: string
-  status: string
-}
-
-interface SearchIndex {
-  sections: SearchSection[]
-  recentUsers: SearchUser[]
-  recentDecisions: SearchDecision[]
-  recentListings: SearchListing[]
-}
-
-interface ResultItem {
-  key: string
-  label: string
-  sub?: string
-  href: string
-  icon: React.ReactNode
-  group: string
-}
-
-// ---------------------------------------------------------------------------
-// Action commands (always available) — structure here, labels from messages
-// (`admin.commandBar.actions.*`) so the palette follows the admin locale.
-// ---------------------------------------------------------------------------
-
-const ACTION_COMMANDS = [
-  {
-    key: 'cmd-erfassung',
-    labelKey: 'actions.newDevice',
-    href: ROUTES.admin.intakeCapture,
-    icon: <Monitor className="w-4 h-4" />,
-  },
-  {
-    key: 'cmd-decision',
-    labelKey: 'actions.newDecision',
-    href: ROUTES.admin.decisionNew,
-    icon: <Vote className="w-4 h-4" />,
-  },
-  {
-    key: 'cmd-protocol',
-    labelKey: 'actions.newProtocol',
-    href: ROUTES.admin.protocolNew,
-    icon: <FileText className="w-4 h-4" />,
-  },
-  {
-    key: 'cmd-dashboard',
-    labelKey: 'actions.dashboard',
-    href: ROUTES.admin.dashboard,
-    icon: <LayoutDashboard className="w-4 h-4" />,
-  },
-] as const
-
-// ---------------------------------------------------------------------------
-// Simple substring search (no extra dependency)
-// ---------------------------------------------------------------------------
-
-function matches(haystack: string, query: string): boolean {
-  return haystack.toLowerCase().includes(query.toLowerCase())
-}
-
-type CommandBarT = ReturnType<typeof useTranslations<'admin.commandBar'>>
-
-function buildResults(
-  index: SearchIndex | null,
-  query: string,
-  t: CommandBarT,
-  tSections: SectionsT
-): ResultItem[] {
-  const q = query.trim()
-
-  const actionItems: ResultItem[] = ACTION_COMMANDS.map(a => ({
-    key: a.key,
-    label: t(a.labelKey),
-    href: a.href,
-    icon: a.icon,
-    group: t('groups.actions'),
-  }))
-
-  // No query → show only action commands
-  if (!q) return actionItems
-
-  const items: ResultItem[] = []
-
-  if (index) {
-    // Sections are static + small → filtered client-side. Labels resolve
-    // through the locale (the API returns the canonical German strings).
-    for (const s of index.sections) {
-      const label = sectionText(tSections, s.id, 'label', s.label)
-      const description = sectionText(tSections, s.id, 'description', s.description)
-      if (matches(label, q) || matches(description, q)) {
-        items.push({
-          key: `section-${s.id}`,
-          label,
-          sub: description,
-          href: s.path,
-          icon: <LayoutDashboard className="w-4 h-4" />,
-          group: t('groups.sections'),
-        })
-      }
-    }
-
-    // Users / decisions / listings are already matched server-side for the
-    // current query (full-table ILIKE) — show them as-is, no client re-filter.
-    for (const u of index.recentUsers) {
-      items.push({
-        key: `user-${u.id}`,
-        label: u.name || u.email,
-        sub: u.email,
-        href: ROUTES.admin.user(u.id),
-        icon: <User className="w-4 h-4" />,
-        group: t('groups.users'),
-      })
-    }
-
-    for (const d of index.recentDecisions) {
-      items.push({
-        key: `decision-${d.id}`,
-        label: d.title,
-        sub: d.status,
-        href: ROUTES.admin.decision(d.id),
-        icon: <Vote className="w-4 h-4" />,
-        group: t('groups.decisions'),
-      })
-    }
-
-    for (const l of index.recentListings) {
-      items.push({
-        key: `listing-${l.id}`,
-        label: l.title,
-        sub: l.status,
-        href: `${ROUTES.admin.marketplace}?listing=${l.id}`,
-        icon: <Monitor className="w-4 h-4" />,
-        group: t('groups.listings'),
-      })
-    }
-  }
-
-  // Action commands are always client-filtered.
-  const matchedActions = actionItems.filter(a => matches(a.label, q))
-
-  return [...matchedActions, ...items]
-}
+import { buildResults } from './command-bar/build-results'
+import { ResultsList } from './command-bar/ResultsList'
+import type { SearchIndex, ResultItem } from './command-bar/types'
 
 // ---------------------------------------------------------------------------
 // CommandBar component
@@ -307,9 +133,6 @@ export function CommandBar() {
     }
   }
 
-  // Flat index for cursor tracking across groups
-  let flatIdx = 0
-
   return (
     <>
       {/* Trigger in top bar. Icon-only below xl (keeps the dense header from
@@ -359,57 +182,16 @@ export function CommandBar() {
         </div>
 
         {/* Results */}
-        <div className="overflow-y-auto max-h-96 py-2">
-          {results.length === 0 ? (
-            <p className="px-4 py-8 text-center text-sm text-text-muted">
-              {loading ? t('searching') : t('noResults', { query })}
-            </p>
-          ) : (
-            Array.from(groups.entries()).map(([groupLabel, items]) => (
-              <div key={groupLabel}>
-                <p className="px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-text-muted">
-                  {groupLabel}
-                </p>
-                {items.map(item => {
-                  const isCurrent = flatIdx === activeIdx
-                  const currentFlatIdx = flatIdx
-                  flatIdx++
-                  return (
-                    <Button
-                      key={item.key}
-                      variant="ghost"
-                      onClick={() => { router.push(item.href); close() }}
-                      onMouseEnter={() => setActiveIdx(currentFlatIdx)}
-                      className={cn(
-                        'w-full flex items-center gap-3 px-4 py-2.5 text-left h-auto rounded-none justify-start',
-                        isCurrent
-                          ? adminInteractive.pickerActive
-                          : cn('text-text-secondary', adminInteractive.rowHoverSubtle),
-                      )}
-                    >
-                      <span className={`shrink-0 ${isCurrent ? 'text-action' : 'text-text-muted'}`}>
-                        {item.icon}
-                      </span>
-                      <span className="flex-1 min-w-0">
-                        <span className="block font-medium text-sm leading-snug truncate">
-                          {item.label}
-                        </span>
-                        {item.sub && (
-                          <span className="block text-xs text-text-muted truncate mt-0.5">
-                            {item.sub}
-                          </span>
-                        )}
-                      </span>
-                      {isCurrent && (
-                        <ChevronRight className="w-3.5 h-3.5 shrink-0 text-action" aria-hidden="true" />
-                      )}
-                    </Button>
-                  )
-                })}
-              </div>
-            ))
-          )}
-        </div>
+        <ResultsList
+          results={results}
+          groups={groups}
+          activeIdx={activeIdx}
+          loading={loading}
+          query={query}
+          t={t}
+          onSelect={item => { router.push(item.href); close() }}
+          onHover={setActiveIdx}
+        />
 
         {/* Footer hint */}
         <div className="flex items-center gap-4 border-t border-subtle px-4 py-2 text-xs text-text-muted">
