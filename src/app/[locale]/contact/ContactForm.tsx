@@ -5,6 +5,7 @@ import { Mail, MessageSquare, Send, User } from 'lucide-react'
 import { ORG } from '@/config/org'
 import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/ui/Heading'
+import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -55,7 +56,7 @@ export default function ContactForm() {
   }
 
   return (
-    <div className="card-shell p-8">
+    <Card className="p-8">
       <Heading level={2} className="text-3xl font-bold mb-6 text-center">{t('title')}</Heading>
       {status === 'success' && (
         <div className="mb-6 rounded-lg border border-strong dark:border-action bg-action-muted px-4 py-3 text-action text-sm">
@@ -151,6 +152,6 @@ export default function ContactForm() {
           </Button>
         </div>
       </form>
-    </div>
+    </Card>
   )
 }

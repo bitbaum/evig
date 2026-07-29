@@ -21,6 +21,7 @@ import { LocationSection } from '@/components/it-hilfe-create/LocationSection'
 import { SkillsSection } from '@/components/it-hilfe-create/SkillsSection'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
 import Heading from '@/components/ui/Heading'
+import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { useEditITHilfeForm } from '@/hooks/useEditITHilfeForm'
@@ -92,7 +93,7 @@ export default function EditRequestPage() {
           {t('backToRequest')}
         </Link>
 
-        <div className="card-shell p-6 mb-6">
+        <Card className="p-6 mb-6">
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-action-muted rounded-lg">
               <Wrench className="w-6 h-6 text-action" />
@@ -100,13 +101,13 @@ export default function EditRequestPage() {
             <Heading level={1} className="text-2xl text-text-primary">{t('title')}</Heading>
           </div>
           <p className="text-text-secondary">{t('description')}</p>
-        </div>
+        </Card>
 
         {error && <ErrorAlert message={error} variant="inline" className="mb-6" />}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Device Category */}
-          <div className="card-shell p-6">
+          <Card className="p-6">
             <Heading level={2} className="text-lg text-text-primary mb-4">{t('sectionCategory')}</Heading>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
               {DEVICE_CATEGORIES.map((cat) => {
@@ -131,7 +132,7 @@ export default function EditRequestPage() {
                 )
               })}
             </div>
-          </div>
+          </Card>
 
           {formData.categoryId && (
             <>
@@ -162,7 +163,7 @@ export default function EditRequestPage() {
               />
 
               {/* Budget */}
-              <div className="card-shell p-6">
+              <Card className="p-6">
                 <Heading level={2} className="text-lg text-text-primary mb-2">{t('sectionBudget')}</Heading>
                 <p className="text-sm text-text-secondary mb-4">{t('budgetDescription')}</p>
                 <div className="flex items-center gap-3">
@@ -180,10 +181,10 @@ export default function EditRequestPage() {
                     {!formData.maxBudget ? t('budgetFree') : t('budgetUpTo', { amount: formData.maxBudget })}
                   </span>
                 </div>
-              </div>
+              </Card>
 
               {/* Service Type & Urgency */}
-              <div className="card-shell p-6">
+              <Card className="p-6">
                 <Heading level={2} className="text-lg text-text-primary mb-4">{t('sectionOptions')}</Heading>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
@@ -213,7 +214,7 @@ export default function EditRequestPage() {
                     </Select>
                   </div>
                 </div>
-              </div>
+              </Card>
 
               <SkillsSection
                 skillsNeeded={formData.skillsNeeded}

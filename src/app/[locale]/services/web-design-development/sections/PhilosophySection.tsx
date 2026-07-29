@@ -1,4 +1,5 @@
 import Heading from '@/components/ui/Heading'
+import { Card } from '@/components/ui/card'
 import { getTranslations } from 'next-intl/server'
 
 const RATING_KEYS = ['openSource', 'decentralization', 'privacy', 'dataOwnership', 'codeOwnership', 'automation', 'ux', 'dx'] as const
@@ -66,12 +67,12 @@ export async function PhilosophySection() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-6 p-4 bg-surface-base rounded-lg border border-strong">
+              <Card className="mt-6 p-4 border-strong">
                 <p className="text-sm text-action font-semibold mb-1">{t('commitment.label')}</p>
                 <p className="text-xs text-action">
                   {t('commitment.text')}
                 </p>
-              </div>
+              </Card>
             </div>
           </div>
         </div>

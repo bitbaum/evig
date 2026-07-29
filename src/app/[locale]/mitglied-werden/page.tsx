@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
 import { Award, Vote, Users, Heart, CheckCircle, User as UserIcon } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { Card } from '@/components/ui/card'
 import { ORG, MEMBERSHIP } from '@/config/org'
 import { auth } from '@/auth'
 import { db } from '@/db'
@@ -97,7 +98,7 @@ export default async function MitgliedWerdenPage({ params }: MitgliedWerdenPageP
       {/* Form or status */}
       <section className="ui-public-band py-10 sm:py-14">
         <div className="mx-auto max-w-xl px-4 sm:px-6 lg:px-8">
-          <div className="card-shell p-6 sm:p-8">
+          <Card className="p-6 sm:p-8">
             {status.isMember ? (
               <div className="text-center">
                 <CheckCircle className="w-12 h-12 text-action mx-auto mb-4" aria-hidden="true" />
@@ -122,7 +123,7 @@ export default async function MitgliedWerdenPage({ params }: MitgliedWerdenPageP
                 <MembershipApplicationForm />
               </>
             )}
-          </div>
+          </Card>
         </div>
       </section>
 

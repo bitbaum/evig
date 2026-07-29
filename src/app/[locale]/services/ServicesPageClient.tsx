@@ -9,6 +9,7 @@ import { ORG } from '@/config/org'
 import { safeJsonLd } from '@/lib/seo/json-ld'
 import { Link } from '@/i18n/navigation'
 import { FilterableSection } from '@/components/ui/FilterableSection'
+import { Card } from '@/components/ui/card'
 import Heading from '@/components/ui/Heading'
 import { PageHero } from '@/components/layout/PageHero'
 import {
@@ -25,7 +26,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
   const t = useTranslations('services.page')
 
   return (
-    <div className="group card-shell hover:border-strong transition-colors duration-300 overflow-hidden flex flex-col h-full">
+    <Card className="group hover:border-strong transition-colors duration-300 overflow-hidden flex flex-col h-full">
       <div className="p-6 sm:p-8 flex flex-col h-full">
         <div className="mb-6">
           <div className="flex items-center justify-between gap-3 mb-3">
@@ -84,7 +85,7 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
           </div>
         </div>
       </div>
-    </div>
+    </Card>
   )
 }
 

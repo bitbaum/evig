@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 
 import { Metadata } from 'next'
 import Heading from '@/components/ui/Heading'
+import { Card } from '@/components/ui/card'
 import { buttonClass } from '@/components/ui/button-class'
 import {
   Terminal,
@@ -129,7 +130,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {advantageItems.map((adv, index) => (
-                <div key={index} className="bg-surface-base rounded-xl p-8 border border-l-4 border-l-primary-600">
+                <Card key={index} className="p-8 border-l-4 border-l-primary-600">
                   <Heading level={3} className="mb-4">{adv.title}</Heading>
                   <ul className="space-y-3">
                     {adv.points.map((point, i) => (
@@ -139,7 +140,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
                       </li>
                     ))}
                   </ul>
-                </div>
+                </Card>
               ))}
             </div>
           </div>
@@ -180,13 +181,13 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
             {benefitItems.map((benefit, index) => {
               const Icon = BENEFIT_ICONS[index]
               return (
-                <div key={index} className="bg-surface-base rounded-xl p-8 border hover:border-strong transition-all duration-300">
+                <Card key={index} className="p-8 hover:border-strong transition-all duration-300">
                   <div className="flex items-center mb-4">
                     <Icon className="w-6 h-6 text-action mr-3" />
                     <Heading level={3} className="">{benefit.title}</Heading>
                   </div>
                   <p className="text-text-secondary">{benefit.description}</p>
-                </div>
+                </Card>
               )
             })}
           </div>

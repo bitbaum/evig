@@ -6,6 +6,7 @@ import { Link } from '@/i18n/navigation'
 import { ArrowLeft, AlertCircle, CheckCircle, MessageCircle, Wrench } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
+import { Card } from '@/components/ui/card'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { Button } from '@/components/ui/button'
 import { formatDate } from '@/lib/date-formats'
@@ -148,13 +149,13 @@ export default function ITHilfeDetailPage() {
 
             {/* Technician Map */}
             {request.status === REQUEST_STATUS.OPEN && (
-              <div className="card-shell p-6">
+              <Card className="p-6">
                 <TechnicianMapList
                   requestId={request.id}
                   requestTitle={request.title}
                   requestCanton={request.canton}
                 />
-              </div>
+              </Card>
             )}
 
             {/* Helper: mark completed */}
@@ -231,7 +232,7 @@ export default function ITHilfeDetailPage() {
                 register instead of showing the offer form. The server enforces
                 the same rule (403), so this is the honest UI for that gate. */}
             {detail.needsTechnicianProfile && !detail.userOffer && (
-              <div className="card-shell p-6">
+              <Card className="p-6">
                 <div className="flex items-start gap-4">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-action-muted">
                     <Wrench className="h-5 w-5 text-action" aria-hidden="true" />
@@ -259,7 +260,7 @@ export default function ITHilfeDetailPage() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </Card>
             )}
 
             {/* Owner, open request, zero offers → nudge toward the levers that

@@ -24,6 +24,7 @@ import { LocationSection } from '@/components/it-hilfe-create/LocationSection'
 import { SkillsSection } from '@/components/it-hilfe-create/SkillsSection'
 import { ErrorAlert } from '@/components/common/ErrorAlert'
 import Heading from '@/components/ui/Heading'
+import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { type AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
@@ -210,7 +211,7 @@ export default function CreatePeerRepairPage() {
           />
 
           {status === 'unauthenticated' && (
-            <div className="card-shell p-6 border-l-4 border-action">
+            <Card className="p-6 border-l-4 border-action">
               <Heading level={2} className="text-lg text-text-primary mb-2">
                 Deine E-Mail-Adresse
               </Heading>
@@ -228,7 +229,7 @@ export default function CreatePeerRepairPage() {
                 autoComplete="email"
                 aria-label="E-Mail-Adresse"
               />
-            </div>
+            </Card>
           )}
 
           {formData.aiDiagnosis && (
@@ -251,7 +252,7 @@ export default function CreatePeerRepairPage() {
           />
 
           {/* Device Category */}
-          <div className="card-shell p-6">
+          <Card className="p-6">
             <Heading level={2} className="text-lg text-text-primary mb-4">{t('sectionDevice')}</Heading>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
               {DEVICE_CATEGORIES.map((cat) => {
@@ -276,7 +277,7 @@ export default function CreatePeerRepairPage() {
                 )
               })}
             </div>
-          </div>
+          </Card>
 
               <ITHilfeImageUpload
                 imageUrls={formData.imageUrls}
@@ -295,7 +296,7 @@ export default function CreatePeerRepairPage() {
               {/* Budget — solidarity pricing tiers (structure from BUDGET_TIERS
                   config; labels from i18n). The amount field appears only for
                   tiers that take one. */}
-              <div className="card-shell p-6">
+              <Card className="p-6">
                 <Heading level={2} className="text-lg text-text-primary mb-2">{t('sectionBudget')}</Heading>
                 <p className="text-sm text-text-secondary mb-4">{t('budgetDescription')}</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -343,10 +344,10 @@ export default function CreatePeerRepairPage() {
                     </span>
                   </div>
                 )}
-              </div>
+              </Card>
 
               {/* Service Type & Urgency */}
-              <div className="card-shell p-6">
+              <Card className="p-6">
                 <Heading level={2} className="text-lg text-text-primary mb-4">{t('sectionOptions')}</Heading>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
@@ -376,7 +377,7 @@ export default function CreatePeerRepairPage() {
                     </Select>
                   </div>
                 </div>
-              </div>
+              </Card>
 
               <SkillsSection
                 skillsNeeded={formData.skillsNeeded}

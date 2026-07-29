@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
+import { Card } from '@/components/ui/card'
 import { Computer, Award, Sparkles, ArrowRight } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { PageHero } from '@/components/layout/PageHero'
@@ -78,7 +79,7 @@ export default function BuildYourComputerPage() {
       {/* ── Revamped Certification ─────────────────────────────────── */}
       <section className="py-20">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <div className="card-shell p-8 md:p-12 text-center">
+          <Card className="p-8 md:p-12 text-center">
             <div className="ui-public-eyebrow inline-flex items-center gap-2 text-action">
               <Award className="w-4 h-4" />
               <span>{t('certification.eyebrow')}</span>
@@ -93,7 +94,7 @@ export default function BuildYourComputerPage() {
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
-          </div>
+          </Card>
         </div>
       </section>
 

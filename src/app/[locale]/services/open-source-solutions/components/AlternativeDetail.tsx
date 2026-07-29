@@ -4,6 +4,7 @@ import { Link } from '@/i18n/navigation'
 import { ArrowLeft, ExternalLink, Code2, CheckCircle2, AlertTriangle, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import Heading from '@/components/ui/Heading'
+import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {
   type OSSAlternative,
@@ -72,14 +73,14 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
           {/* Main content (2/3) */}
           <div className="lg:col-span-2 space-y-8">
             {/* Description */}
-            <section className="card-shell p-6">
+            <Card className="p-6">
               <Heading level={2} className="text-xl font-bold text-text-primary mb-4">{t('detail.description')}</Heading>
               <p className="text-text-secondary leading-relaxed">{alternative.description}</p>
-            </section>
+            </Card>
 
             {/* What it replaces */}
             {alternative.replaces.length > 0 && (
-              <section className="card-shell p-6">
+              <Card className="p-6">
                 <Heading level={2} className="text-xl font-bold text-text-primary mb-4">{t('detail.replaces')}</Heading>
                 <div className="space-y-4">
                   {alternative.replaces.map(r => {
@@ -122,11 +123,11 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
                     )
                   })}
                 </div>
-              </section>
+              </Card>
             )}
 
             {/* Highlights */}
-            <section className="card-shell p-6">
+            <Card className="p-6">
               <Heading level={2} className="text-xl font-bold text-text-primary mb-4">{t('detail.highlights')}</Heading>
               <ul className="space-y-2">
                 {alternative.highlights.map((h, i) => (
@@ -136,10 +137,10 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
                   </li>
                 ))}
               </ul>
-            </section>
+            </Card>
 
             {/* Limitations */}
-            <section className="card-shell p-6">
+            <Card className="p-6">
               <Heading level={2} className="text-xl font-bold text-text-primary mb-4">{t('detail.limitations')}</Heading>
               <ul className="space-y-2">
                 {alternative.limitations.map((l, i) => (
@@ -149,7 +150,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
                   </li>
                 ))}
               </ul>
-            </section>
+            </Card>
 
             {/* Related */}
             <RelatedAlternatives current={alternative} />
@@ -158,7 +159,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
           {/* Sidebar (1/3) */}
           <div className="space-y-6">
             {/* Quick links */}
-            <div className="card-shell p-5">
+            <Card className="p-5">
               <Heading level={3} className="text-base font-bold text-text-primary mb-4">{t('detail.links')}</Heading>
               <div className="space-y-3">
                 <Button as="a" href={alternative.website} target="_blank" rel="noopener noreferrer" variant="primary" size="sm">
@@ -172,10 +173,10 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
                   </Button>
                 )}
               </div>
-            </div>
+            </Card>
 
             {/* Info */}
-            <div className="card-shell p-5">
+            <Card className="p-5">
               <Heading level={3} className="text-base font-bold text-text-primary mb-4">{t('detail.details')}</Heading>
               <dl className="space-y-3 text-sm">
                 <div>
@@ -196,7 +197,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
                   <dd><MaturityBadge maturity={alternative.maturity} /></dd>
                 </div>
               </dl>
-            </div>
+            </Card>
 
             {/* RevampIT CTA */}
             <RevampITServicesCTA alternative={alternative} />

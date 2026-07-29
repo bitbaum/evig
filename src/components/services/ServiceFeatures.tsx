@@ -6,6 +6,7 @@
  */
 
 import type { ServiceFeature } from '@/lib/services'
+import { Card } from '@/components/ui/card'
 import { getTextColor } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
 
@@ -19,7 +20,7 @@ export default function ServiceFeatures({ features }: ServiceFeaturesProps) {
       <div className="container mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 md:gap-12">
           {features.map((feature, index) => (
-            <div key={index} className="bg-surface-base rounded-xl p-6 sm:p-8 border">
+            <Card key={index} className="p-6 sm:p-8">
               <div className="flex items-start mb-4 sm:mb-6">
                 <div className="p-2 sm:p-3 bg-action-muted rounded-lg text-action mr-3 sm:mr-4 shrink-0">
                   <feature.icon className="w-6 h-6 sm:w-8 sm:h-8" />
@@ -29,7 +30,7 @@ export default function ServiceFeatures({ features }: ServiceFeaturesProps) {
                   <p className={cn('text-sm sm:text-base', getTextColor('white', 'muted'))}>{feature.description}</p>
                 </div>
               </div>
-            </div>
+            </Card>
           ))}
         </div>
       </div>

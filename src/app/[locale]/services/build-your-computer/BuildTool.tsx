@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
+import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
@@ -158,7 +159,7 @@ export function BuildTool() {
 
           <StepDots step={step} />
 
-          <div className="card-shell p-8">
+          <Card className="p-8">
             {step === 1 && (
               <Step1
                 t={t}
@@ -190,7 +191,7 @@ export function BuildTool() {
                 onBack={() => setStep(1)}
               />
             )}
-          </div>
+          </Card>
         </div>
       </div>
     </section>
@@ -309,7 +310,7 @@ function Step2({ t, formData, isAnalyzing, scanningLines, onBack, onAnalyze }: S
     <div className="text-center space-y-8">
       <Heading level={3} className="ui-public-display-md">{t('buildTool.step2Heading')}</Heading>
 
-      <div className="card-shell p-6 text-left">
+      <Card className="p-6 text-left">
         <Heading level={4} className="font-semibold mb-4">{t('buildTool.requirementsSummary')}</Heading>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <div><strong>{t('buildTool.useCaseLabel')}:</strong>{' '}
@@ -326,7 +327,7 @@ function Step2({ t, formData, isAnalyzing, scanningLines, onBack, onAnalyze }: S
             <strong>{t('buildTool.specialNotesLabel')}:</strong> {formData.specific}
           </div>
         )}
-      </div>
+      </Card>
 
       <p className="text-text-secondary">{t('buildTool.analyzeDescription')}</p>
 
@@ -379,7 +380,7 @@ function Step3({ t, buildResult, componentRows, onBack }: Step3Props) {
       </div>
 
       {/* Honest next steps: browse the REAL marketplace or request a built machine. */}
-      <div className="card-shell space-y-4 p-6">
+      <Card className="space-y-4 p-6">
         <p className="text-sm text-text-secondary">{t('buildTool.resultNote')}</p>
         <div className="flex flex-col gap-3 sm:flex-row">
           <Button onClick={onBack} variant="outline" className="flex-1">
@@ -393,13 +394,13 @@ function Step3({ t, buildResult, componentRows, onBack }: Step3Props) {
             {t('buildTool.orderBuild')}
           </Button>
         </div>
-      </div>
+      </Card>
 
       {/* Honest sustainability line — no fabricated CO₂/percentage numbers. */}
-      <div className="card-shell flex items-start gap-3 p-6">
+      <Card className="flex items-start gap-3 p-6">
         <Leaf className="mt-0.5 w-4 h-4 shrink-0 text-action" />
         <p className="text-sm text-text-secondary">{t('buildTool.sustainabilityNote')}</p>
-      </div>
+      </Card>
     </div>
   )
 }

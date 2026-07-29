@@ -4,6 +4,7 @@ export const dynamic = 'force-dynamic'
 import type { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
 import Heading from '@/components/ui/Heading'
+import { Card } from '@/components/ui/card'
 import { buttonClass } from '@/components/ui/button-class'
 import {
   ArrowRight,
@@ -95,7 +96,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
               {features.map((feature, index) => {
                 const Icon = FEATURE_ICONS[index]
                 return (
-                  <div key={index} className="card-shell p-6 sm:p-8 border-l-4 border-l-primary-600">
+                  <Card key={index} className="p-6 sm:p-8 border-l-4 border-l-primary-600">
                     <div className="flex items-start">
                       <div className="p-2 sm:p-3 bg-action-muted/15 rounded-lg text-action mr-3 sm:mr-4">
                         <Icon className="w-6 h-6 sm:w-8 sm:h-8" />
@@ -105,7 +106,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
                         <p className="text-sm sm:text-base text-text-secondary">{feature.description}</p>
                       </div>
                     </div>
-                  </div>
+                  </Card>
                 )
               })}
             </div>
@@ -121,7 +122,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
                 <p className="text-base sm:text-lg md:text-xl text-text-secondary">{t('pricing.subtitle')}</p>
               </div>
 
-              <div className="card-shell rounded-2xl p-6 sm:p-8 md:p-12">
+              <Card className="p-6 sm:p-8 md:p-12">
                 <div className="text-center mb-6 sm:mb-8">
                   <div className="inline-block bg-action-muted text-action px-4 sm:px-6 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold mb-4 sm:mb-6">
                     {t('pricing.badge')}
@@ -144,7 +145,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
                 <Link href="/contact" className={buttonClass({ variant: 'primary', className: 'w-full' })}>
                   {t('pricing.cta')}
                 </Link>
-              </div>
+              </Card>
             </div>
           </div>
         </section>
@@ -191,7 +192,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
               </div>
 
               <div className="mx-auto max-w-md">
-                <div className="bg-surface-base rounded-xl p-6 sm:p-8 border text-center">
+                <Card className="p-6 sm:p-8 text-center">
                   <Mail className="w-6 h-6 sm:w-8 sm:h-8 text-action mb-3 sm:mb-4 mx-auto" />
                   <Heading level={3} className="mb-3 sm:mb-4">{t('contact.contactInfo')}</Heading>
                   <a
@@ -201,7 +202,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
                     {CONTACT.email}
                   </a>
                   <p className="mt-3 text-sm text-text-secondary">{BASE_REGION.full}</p>
-                </div>
+                </Card>
               </div>
             </div>
           </div>

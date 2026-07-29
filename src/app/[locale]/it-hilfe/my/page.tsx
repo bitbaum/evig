@@ -27,6 +27,7 @@ import {
 } from '@/config/it-hilfe'
 import type { ITHilfeRequest } from '@/components/it-hilfe/detail/types'
 import Heading from '@/components/ui/Heading'
+import { Card } from '@/components/ui/card'
 import { useTranslations } from 'next-intl'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { ROUTES } from '@/config/routes'
@@ -114,7 +115,7 @@ export default function MyRequestsPage() {
       <PageShell maxWidth="5xl" py="py-8 sm:py-12">
 
         {/* Status Filter */}
-        <div className="card-shell p-4 mb-6">
+        <Card className="p-4 mb-6">
           <div className="flex flex-wrap gap-2">
             <Button
               variant="ghost"
@@ -142,7 +143,7 @@ export default function MyRequestsPage() {
               </Button>
             ))}
           </div>
-        </div>
+        </Card>
 
         {/* Fetch Error */}
         {fetchError && (

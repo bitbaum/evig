@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Link2, Gift, Users, Send, Copy, Check } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ORG } from '@/config/org'
@@ -90,26 +91,26 @@ export default function InvitePage() {
 
         {/* Incentive cards */}
         <div className="grid sm:grid-cols-2 gap-4 mb-8">
-          <div className="card-shell p-5">
+          <Card className="p-5">
             <div className="flex items-center gap-3 mb-2">
               <Gift className="w-5 h-5 text-action" />
               <span className="font-semibold text-text-primary">{t('friendReceives')}</span>
             </div>
             <p className="text-2xl font-bold text-action mb-1">CHF {inviteeCHF}</p>
             <p className="text-sm text-text-tertiary">{t('friendReceivesDesc')}</p>
-          </div>
-          <div className="card-shell p-5">
+          </Card>
+          <Card className="p-5">
             <div className="flex items-center gap-3 mb-2">
               <Gift className="w-5 h-5 text-action" />
               <span className="font-semibold text-text-primary">{t('youReceive')}</span>
             </div>
             <p className="text-2xl font-bold text-action mb-1">CHF {rewardCHF}</p>
             <p className="text-sm text-text-tertiary">{t('youReceiveDesc')}</p>
-          </div>
+          </Card>
         </div>
 
         {/* Referral link */}
-        <div className="card-shell p-6 mb-6">
+        <Card className="p-6 mb-6">
           <div className="flex items-center gap-2 mb-3">
             <Link2 className="w-4 h-4 text-text-tertiary" />
             <span className="text-sm font-medium text-text-secondary">{t('linkLabel')}</span>
@@ -129,10 +130,10 @@ export default function InvitePage() {
               </Button>
             </div>
           )}
-        </div>
+        </Card>
 
         {/* Invite by email */}
-        <div className="card-shell p-6 mb-6">
+        <Card className="p-6 mb-6">
           <Heading level={2} className="text-lg font-semibold mb-4">{t('inviteByEmail')}</Heading>
           <form onSubmit={handleInvite} className="flex flex-col sm:flex-row gap-2">
             <Input
@@ -153,19 +154,19 @@ export default function InvitePage() {
               {feedback.message}
             </p>
           )}
-        </div>
+        </Card>
 
         {/* Stats */}
         {data && (
           <div className="flex gap-6 text-center">
-            <div className="flex-1 card-shell p-4">
+            <Card className="flex-1 p-4">
               <p className="text-2xl font-bold text-text-primary">{data.totalInvites}</p>
               <p className="text-sm text-text-tertiary">{t('invitesSent')}</p>
-            </div>
-            <div className="flex-1 card-shell p-4">
+            </Card>
+            <Card className="flex-1 p-4">
               <p className="text-2xl font-bold text-action">{data.registrations}</p>
               <p className="text-sm text-text-tertiary">{t('registrations')}</p>
-            </div>
+            </Card>
           </div>
         )}
     </PageShell>

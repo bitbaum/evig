@@ -7,6 +7,7 @@
 
 import { CheckCircle2 } from 'lucide-react'
 import type { ServicePricing } from '@/lib/services'
+import { Card } from '@/components/ui/card'
 import { getTextColor } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
 
@@ -18,7 +19,7 @@ export default function ServicePricingSection({ pricing }: ServicePricingProps) 
   return (
     <section className="py-12 sm:py-16 md:py-20">
       <div className="container mx-auto px-4 sm:px-6">
-        <div className="max-w-2xl mx-auto bg-surface-base rounded-xl p-6 sm:p-8 border">
+        <Card className="max-w-2xl mx-auto p-6 sm:p-8">
           <h2 className={cn('text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center', getTextColor('white', 'primary'))}>Preise</h2>
           <div className="text-center mb-6 sm:mb-8">
             <p className="text-xl sm:text-2xl font-bold text-action">{pricing.base}</p>
@@ -45,7 +46,7 @@ export default function ServicePricingSection({ pricing }: ServicePricingProps) 
               </div>
             </div>
           )}
-        </div>
+        </Card>
       </div>
     </section>
   )

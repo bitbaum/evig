@@ -16,6 +16,7 @@ import { buttonClass } from '@/components/ui/button-class'
 import Image from 'next/image'
 import { PageHero } from '@/components/layout/PageHero'
 import Heading from '@/components/ui/Heading'
+import { Card } from '@/components/ui/card'
 import { IconBadge } from '@/components/ui/IconBadge'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
@@ -250,13 +251,13 @@ export default async function RevampedPage({ params }: RevampedPageProps) {
               </div>
               <div className="text-center">
                 <div className="bg-surface-raised p-12 rounded-2xl border mb-6 relative">
-                  <div className="w-40 h-40 mx-auto flex items-center justify-center bg-surface-base rounded-xl border">
+                  <Card className="w-40 h-40 mx-auto flex items-center justify-center">
                     <div className="text-center">
                       <Award className="w-12 h-12 text-action mx-auto mb-2" />
                       <div className="text-sm font-bold text-action">REVAMPED</div>
                       <div className="text-xs text-text-secondary">CERTIFIED</div>
                     </div>
-                  </div>
+                  </Card>
                   <div className="absolute top-3 right-3 bg-action text-action-text text-xs px-3 py-1 rounded-full">NEW</div>
                 </div>
                 <Heading level={3} className="text-xl font-bold mb-2">{t('stickers.sticker3.title')}</Heading>

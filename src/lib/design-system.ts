@@ -341,6 +341,9 @@ export const designPrimitive = {
     smallMeta:   'text-xs text-text-muted',
     tableHeader: 'text-xs font-medium uppercase tracking-wider text-text-muted',
     stat:        'text-2xl font-bold tabular-nums text-text-primary',
+    // Eyebrow / kicker — small mono-uppercase label above a title. Prefer the
+    // <Eyebrow> component; this string is for non-JSX consumers.
+    eyebrow:     'ui-public-eyebrow',
   },
 
   // ── Surfaces ──────────────────────────────────────────────────────────────

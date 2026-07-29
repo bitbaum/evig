@@ -6,6 +6,7 @@ import { Wrench, CheckCircle2, Clock, Shield, Zap } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { PageHero } from '@/components/layout/PageHero'
 import Heading from '@/components/ui/Heading'
+import { Card } from '@/components/ui/card'
 import { IconBadge } from '@/components/ui/IconBadge'
 import { ORG } from '@/config/org'
 import { getTranslations } from 'next-intl/server'
@@ -58,7 +59,7 @@ export default async function RepairPage({ params }: Props) {
             {features.map((feature, index) => {
               const Icon = FEATURE_ICONS[index]
               return (
-                <div key={index} className="bg-surface-base rounded-xl p-8 border">
+                <Card key={index} className="p-8">
                   <div className="flex items-start mb-6">
                     <IconBadge icon={Icon} theme="services" size="lg" className="mr-4" />
                     <div>
@@ -66,7 +67,7 @@ export default async function RepairPage({ params }: Props) {
                       <p className="text-text-secondary">{feature.description}</p>
                     </div>
                   </div>
-                </div>
+                </Card>
               )
             })}
           </div>
@@ -94,7 +95,7 @@ export default async function RepairPage({ params }: Props) {
       {/* Pricing Section */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto bg-surface-base rounded-xl p-8 border">
+          <Card className="max-w-2xl mx-auto p-8">
             <Heading level={2} className="text-3xl font-bold mb-8 text-center">{t('pricing.heading')}</Heading>
             <div className="text-center mb-8">
               <p className="text-2xl font-bold text-action">{t('pricing.base')}</p>
@@ -107,7 +108,7 @@ export default async function RepairPage({ params }: Props) {
                 </div>
               ))}
             </div>
-          </div>
+          </Card>
         </div>
       </section>
 

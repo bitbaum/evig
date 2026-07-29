@@ -1,4 +1,5 @@
 import Heading from '@/components/ui/Heading'
+import { Card } from '@/components/ui/card'
 import { getTranslations } from 'next-intl/server'
 import { Code, Database, Shield, Globe, Heart, Rocket } from 'lucide-react'
 
@@ -25,7 +26,7 @@ export async function WhyOpenSourceSection() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {reasons.map((reason, index) => (
-            <div key={index} className="bg-surface-base rounded-xl p-6 border hover:border-strong transition-all duration-300">
+            <Card key={index} className="p-6 hover:border-strong transition-all duration-300">
               <div className="flex items-center mb-4">
                 <div className="p-3 bg-action-muted rounded-lg text-action mr-4">
                   <reason.icon className="w-6 h-6" />
@@ -33,7 +34,7 @@ export async function WhyOpenSourceSection() {
                 <Heading level={3} className="">{reason.title}</Heading>
               </div>
               <p className="text-text-secondary">{reason.description}</p>
-            </div>
+            </Card>
           ))}
         </div>
       </div>
