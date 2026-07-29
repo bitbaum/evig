@@ -6,6 +6,7 @@ import { Package, Printer, Plus, PackageCheck, QrCode, Store, Loader2 } from 'lu
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
+import { IconBadge } from '@/components/ui/IconBadge'
 import { ROUTES } from '@/config/routes'
 import { apiFetch } from '@/lib/api/client'
 import { QC_SKIP_ONE_CLICK_NOTE } from '@/config/intake-checklist'
@@ -86,9 +87,7 @@ export function SuccessScreen({ itemUUID, productId, inventoryId, action, listin
   return (
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="text-center max-w-lg">
-        <div className="w-16 h-16 bg-action-muted rounded-full flex items-center justify-center mx-auto mb-4">
-          <Package className="w-8 h-8 text-action" />
-        </div>
+        <IconBadge icon={Package} shape="circle" size="lg" className="mx-auto mb-4" />
         <Heading level={2} className="text-2xl font-bold text-text-primary mb-2">
           {title}
         </Heading>

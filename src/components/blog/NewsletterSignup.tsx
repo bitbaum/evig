@@ -8,6 +8,7 @@ import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { IconBadge } from '@/components/ui/IconBadge'
 import { ROUTES } from '@/config/routes'
 
 export default function NewsletterSignup() {
@@ -26,9 +27,7 @@ export default function NewsletterSignup() {
       <div className="border-t border-b border py-12">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-action-muted rounded-full mb-4">
-            <Mail className="w-8 h-8 text-action" />
-          </div>
+          <IconBadge icon={Mail} shape="circle" size="lg" className="mb-4" />
           <Heading level={3} className="text-2xl font-bold text-text-primary mb-3">
             {t('title')}
           </Heading>
@@ -67,9 +66,7 @@ export default function NewsletterSignup() {
         {/* Signup Form */}
         {status === 'success' ? (
           <div className="bg-action-muted border border-strong rounded-lg p-6 text-center">
-            <div className="inline-flex items-center justify-center w-12 h-12 bg-action-muted rounded-full mb-3">
-              <Check className="w-6 h-6 text-action" />
-            </div>
+            <IconBadge icon={Check} shape="circle" size="md" className="mb-3" />
             <p className="text-action font-semibold mb-1">{t('successMessage')}</p>
             <p className="text-action text-sm">
               {t('confirmEmail')}

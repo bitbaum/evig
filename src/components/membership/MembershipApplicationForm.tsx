@@ -8,6 +8,7 @@ import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { IconBadge } from '@/components/ui/IconBadge'
 import { BANK, MEMBERSHIP, ORG } from '@/config/org'
 import { UI_FEEDBACK_MS } from '@/config/limits'
 
@@ -85,9 +86,7 @@ export function MembershipApplicationForm() {
       <div className="space-y-6">
         {/* Confirmation */}
         <div className="bg-action-muted border border-strong rounded-xl p-6 text-center">
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-action-muted rounded-full mb-4">
-            <CheckCircle className="w-7 h-7 text-action" />
-          </div>
+          <IconBadge icon={CheckCircle} shape="circle" size="lg" className="mb-4" />
           <Heading level={3} className="text-xl text-action mb-2">
             {t('welcome')}
           </Heading>

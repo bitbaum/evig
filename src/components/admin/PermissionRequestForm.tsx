@@ -7,6 +7,7 @@ import { useFormHandler } from '@/hooks/useFormHandler'
 import { Textarea } from '@/components/ui/textarea'
 import { FormField } from '@/components/ui/form-field'
 import { Button } from '@/components/ui/button'
+import { IconBadge } from '@/components/ui/IconBadge'
 
 interface Section {
   id: string
@@ -59,9 +60,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
     return (
       <div className="p-6 bg-action-muted border border-strong rounded-xl">
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 bg-action-muted rounded-full flex items-center justify-center">
-            <Check className="w-5 h-5 text-action" />
-          </div>
+          <IconBadge icon={Check} shape="circle" size="md" />
           <div>
             <Heading level={3} className="font-semibold text-action-text">
               {t('successTitle')}
@@ -89,9 +88,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
   return (
     <form onSubmit={form.handleSubmit} className="space-y-6">
       <div className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 bg-action-muted rounded-full flex items-center justify-center">
-          <Shield className="w-5 h-5 text-action" />
-        </div>
+        <IconBadge icon={Shield} shape="circle" size="md" />
         <div>
           <Heading level={3} className="font-semibold text-text-primary">
             {t('title')}

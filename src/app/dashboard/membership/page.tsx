@@ -8,6 +8,7 @@ import { TABLE_NAMES } from '@/config/database'
 import { BadgeCheck, CheckCircle, AlertCircle, ArrowRight, CreditCard, Calendar } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
+import { IconBadge } from '@/components/ui/IconBadge'
 import { MEMBERSHIP, ORG } from '@/config/org'
 import { MEMBERSHIP_TYPE_LABELS } from '@/config/membership-status'
 import { formatDate } from '@/lib/date-formats'
@@ -79,9 +80,7 @@ export default async function MembershipPage() {
           {/* Status card */}
           <div className="bg-surface-base rounded-xl border p-6">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-full bg-action-muted flex items-center justify-center shrink-0">
-                <BadgeCheck className="w-6 h-6 text-action" aria-hidden="true" />
-              </div>
+              <IconBadge icon={BadgeCheck} shape="circle" size="md" />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <Heading level={2} className="text-lg font-semibold text-text-primary">

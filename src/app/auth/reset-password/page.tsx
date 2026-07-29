@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { StatusBanner } from '@/components/ui/status-banner'
 import Heading from '@/components/ui/Heading'
+import { IconBadge } from '@/components/ui/IconBadge'
 import { apiFetch } from '@/lib/api/client'
 import { useTranslations } from 'next-intl'
 import { AUTH_CONFIG } from '@/lib/auth/config'
@@ -131,9 +132,7 @@ function ResetPasswordContent() {
       <div className="min-h-screen bg-surface-raised flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <div className="flex justify-center">
-            <div className="w-16 h-16 bg-action-muted rounded-full flex items-center justify-center">
-              <CheckCircle2 className="w-8 h-8 text-action" />
-            </div>
+            <IconBadge icon={CheckCircle2} shape="circle" size="lg" />
           </div>
           <Heading level={2} className="mt-6 text-center text-3xl text-text-primary">
             {t('successHeading')}

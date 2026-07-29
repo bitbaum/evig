@@ -12,6 +12,7 @@ import { resolveHirnContext } from '@/config/hirn/page-contexts'
 import { logger } from '@/lib/logger'
 import { ORG } from '@/config/org'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
+import { IconBadge } from '@/components/ui/IconBadge'
 
 interface HirnActionCard {
   id: string
@@ -250,9 +251,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
               className={`flex gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}
             >
               {message.role === 'assistant' && (
-                <div className="shrink-0 w-8 h-8 rounded-full bg-action-muted flex items-center justify-center">
-                  <Bot className="w-4 h-4 text-action" />
-                </div>
+                <IconBadge icon={Bot} shape="circle" size="sm" />
               )}
 
               <div
@@ -308,9 +307,7 @@ export function HirnChat({ sessionId, onSessionChange, compact = false }: HirnCh
 
         {loading && (
           <div className="flex gap-3">
-            <div className="shrink-0 w-8 h-8 rounded-full bg-action-muted flex items-center justify-center">
-              <Bot className="w-4 h-4 text-action" />
-            </div>
+            <IconBadge icon={Bot} shape="circle" size="sm" />
             <div className="bg-surface-raised rounded-2xl rounded-bl-sm px-4 py-3">
               <div className="flex gap-1">
                 <span className="w-2 h-2 bg-action rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />

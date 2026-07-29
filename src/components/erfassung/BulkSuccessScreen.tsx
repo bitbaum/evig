@@ -11,6 +11,7 @@ import { CheckCircle2, AlertCircle, Download, RotateCcw, Plus } from 'lucide-rea
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
+import { IconBadge } from '@/components/ui/IconBadge'
 import type { BulkSaveResponse } from '@/types/erfassung'
 
 interface BulkSuccessScreenProps {
@@ -57,9 +58,7 @@ export function BulkSuccessScreen({ result, onRetryFailed, onReset }: BulkSucces
               <AlertCircle className="w-10 h-10 text-warning-600 dark:text-warning-400" />
             </div>
           ) : (
-            <div className="w-20 h-20 rounded-full bg-action-muted flex items-center justify-center">
-              <CheckCircle2 className="w-10 h-10 text-action" />
-            </div>
+            <IconBadge icon={CheckCircle2} shape="circle" size="xl" />
           )}
         </div>
 

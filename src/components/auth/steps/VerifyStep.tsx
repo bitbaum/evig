@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { IconBadge } from '@/components/ui/IconBadge'
 import { RESEND_CODE_COOLDOWN_SECONDS, VERIFICATION_CODE_LENGTH } from '@/config/auth-ui'
 
 export interface VerifyStepProps {
@@ -103,9 +104,7 @@ export function VerifyStep({
   if (verified) {
     return (
       <div role="status" aria-live="polite" className="text-center py-8">
-        <div className="w-16 h-16 bg-action-muted rounded-full flex items-center justify-center mx-auto mb-4">
-          <CheckCircle2 className="w-8 h-8 text-action" />
-        </div>
+        <IconBadge icon={CheckCircle2} shape="circle" size="lg" className="mx-auto mb-4" />
         <Heading level={2} className="text-xl font-bold text-text-primary mb-2">
           {t('successHeading')}
         </Heading>
@@ -119,9 +118,7 @@ export function VerifyStep({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <div className="w-16 h-16 bg-action-muted rounded-full flex items-center justify-center mx-auto mb-4">
-          <Mail className="w-8 h-8 text-action" />
-        </div>
+        <IconBadge icon={Mail} shape="circle" size="lg" className="mx-auto mb-4" />
         <Heading level={2} className="text-xl font-bold text-text-primary mb-2">
           {t('heading')}
         </Heading>

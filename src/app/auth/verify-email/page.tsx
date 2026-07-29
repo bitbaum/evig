@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { CheckCircle, XCircle, Loader2, Mail } from 'lucide-react'
 import Link from 'next/link'
 import Heading from '@/components/ui/Heading'
+import { IconBadge } from '@/components/ui/IconBadge'
 import { apiFetch } from '@/lib/api/client'
 import { useTranslations } from 'next-intl'
 import { ROUTES } from '@/config/routes'
@@ -53,9 +54,7 @@ function VerifyEmailContent() {
     <div className="min-h-screen bg-surface-raised flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
-          <div className="w-16 h-16 bg-action-muted rounded-full flex items-center justify-center">
-            <Mail className="w-8 h-8 text-action" />
-          </div>
+          <IconBadge icon={Mail} shape="circle" size="lg" />
         </div>
         <Heading level={2} className="mt-6 text-center text-3xl text-text-primary">
           {t('heading')}
@@ -132,9 +131,7 @@ function VerifyEmailFallback() {
     <div className="min-h-screen bg-surface-raised flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
-          <div className="w-16 h-16 bg-action-muted rounded-full flex items-center justify-center">
-            <Mail className="w-8 h-8 text-action" />
-          </div>
+          <IconBadge icon={Mail} shape="circle" size="lg" />
         </div>
       </div>
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">

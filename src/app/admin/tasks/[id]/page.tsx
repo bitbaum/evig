@@ -40,6 +40,7 @@ import {
   FileText,
 } from 'lucide-react'
 import TaskActionsClient from './TaskActionsClient'
+import { IconBadge } from '@/components/ui/IconBadge'
 import { TaskAIChat } from './TaskAIChat'
 import { TaskRequestResponseButtons } from './TaskRequestResponseButtons'
 import Heading from '@/components/admin/AdminHeading'
@@ -353,9 +354,7 @@ export default async function TaskDetailPage({
                     key={completion.id}
                     className="flex items-start gap-3 pb-4 border-b last:border-0"
                   >
-                    <div className="w-8 h-8 bg-action-muted rounded-full flex items-center justify-center">
-                      <CheckCircle2 className="w-4 h-4 text-action" />
-                    </div>
+                    <IconBadge icon={CheckCircle2} shape="circle" size="sm" />
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
                         <p className="font-medium text-text-primary">

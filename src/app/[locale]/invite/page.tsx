@@ -8,6 +8,7 @@ import Heading from '@/components/ui/Heading'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { IconBadge } from '@/components/ui/IconBadge'
 import { ORG } from '@/config/org'
 import { useTranslations } from 'next-intl'
 import { PageShell } from '@/components/layout/PageShell'
@@ -80,9 +81,7 @@ export default function InvitePage() {
 
         {/* Header */}
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-14 h-14 bg-action-muted rounded-2xl mb-4">
-            <Users className="w-7 h-7 text-action" />
-          </div>
+          <IconBadge icon={Users} shape="rounded" size="lg" className="mb-4" />
           <Heading level={1} className="text-3xl sm:text-4xl mb-3">{t('title')}</Heading>
           <p className="text-text-secondary text-lg">
             {t('subtitle', { orgName: ORG.name })}

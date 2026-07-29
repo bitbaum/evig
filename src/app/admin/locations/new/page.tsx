@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Heading from '@/components/admin/AdminHeading'
 import { Button } from '@/components/ui/button'
+import { IconBadge } from '@/components/ui/IconBadge'
 import { MapPin, ArrowLeft, Save, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
 import { ROUTES } from '@/config/routes'
 import {
@@ -39,9 +40,7 @@ export default function NewLocationPage() {
           </Link>
 
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-action-muted rounded-full mb-6">
-              <MapPin className="w-8 h-8 text-action" />
-            </div>
+            <IconBadge icon={MapPin} shape="circle" size="lg" className="mb-6" />
             <Heading level={1} className="text-3xl font-bold text-text-primary mb-2">
               Neuen Ort erstellen
             </Heading>

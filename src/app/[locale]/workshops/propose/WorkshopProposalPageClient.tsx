@@ -10,6 +10,7 @@ import {
 import { WorkshopProposalForm } from './components/WorkshopProposalForm'
 import { responsiveTypography } from '@/lib/responsive'
 import Heading from '@/components/ui/Heading'
+import { IconBadge } from '@/components/ui/IconBadge'
 import { useTranslations } from 'next-intl'
 import { ROUTES } from '@/config/routes'
 import { PageShell } from '@/components/layout/PageShell'
@@ -50,9 +51,7 @@ export default function WorkshopProposalPage() {
           </Link>
 
           <div className="text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-action-muted rounded-full mb-6">
-              <GraduationCap className="w-8 h-8 text-action" />
-            </div>
+            <IconBadge icon={GraduationCap} shape="circle" size="lg" className="mb-6" />
             <Heading level={1} className={`${responsiveTypography.section} text-text-primary mb-2`}>
               {t('title')}
             </Heading>

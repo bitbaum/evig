@@ -7,6 +7,7 @@ import { ArrowLeft, AlertCircle, CheckCircle, MessageCircle, Wrench } from 'luci
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { Card } from '@/components/ui/card'
+import { IconBadge } from '@/components/ui/IconBadge'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { Button } from '@/components/ui/button'
 import { formatDate } from '@/lib/date-formats'
@@ -234,9 +235,7 @@ export default function ITHilfeDetailPage() {
             {detail.needsTechnicianProfile && !detail.userOffer && (
               <Card className="p-6">
                 <div className="flex items-start gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-action-muted">
-                    <Wrench className="h-5 w-5 text-action" aria-hidden="true" />
-                  </div>
+                  <IconBadge icon={Wrench} shape="circle" size="md" />
                   <div className="flex-1 min-w-0">
                     <Heading level={3} className="text-base font-medium text-text-primary">
                       {t('becomeTechnicianTitle')}

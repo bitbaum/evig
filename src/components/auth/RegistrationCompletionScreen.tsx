@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
+import { IconBadge } from '@/components/ui/IconBadge'
 import { ORG } from '@/config/org'
 import { ROUTES } from '@/config/routes'
 
@@ -78,9 +79,7 @@ export function RegistrationCompletionScreen({ emailVerified }: RegistrationComp
     <div className="w-full max-w-md mx-auto">
       <div className="card-shell rounded-2xl p-6 sm:p-8">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-action-muted rounded-full flex items-center justify-center mx-auto mb-4">
-            <CheckCircle2 className="w-8 h-8 text-action" />
-          </div>
+          <IconBadge icon={CheckCircle2} shape="circle" size="lg" className="mx-auto mb-4" />
           <Heading level={2} className="text-xl font-bold text-text-primary mb-2">
             {t('welcomeHeading', { orgName: ORG.name })}
           </Heading>

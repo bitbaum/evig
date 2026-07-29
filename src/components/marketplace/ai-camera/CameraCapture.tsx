@@ -8,6 +8,7 @@ import { Camera, Upload } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
+import { IconBadge } from '@/components/ui/IconBadge'
 
 interface CameraCaptureProps {
   isCapturing: boolean
@@ -34,9 +35,7 @@ export function CameraCapture({
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <div className="w-16 h-16 bg-action-muted rounded-full flex items-center justify-center mx-auto mb-4">
-          <Camera className="w-8 h-8 text-action" />
-        </div>
+        <IconBadge icon={Camera} shape="circle" size="lg" className="mx-auto mb-4" />
         <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
           {t('title')}
         </Heading>

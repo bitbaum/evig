@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { IconBadge } from '@/components/ui/IconBadge'
 
 interface InquiryFormProps {
   defaultThema?: string
@@ -56,9 +57,7 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
   if (success) {
     return (
       <div className="text-center py-12 px-4">
-        <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-action-muted mb-4">
-          <CheckCircle className="w-8 h-8 text-action" />
-        </div>
+        <IconBadge icon={CheckCircle} shape="circle" size="lg" className="mb-4" />
         <Heading level={2} className="text-text-primary mb-2">{t('successHeading', { name })}</Heading>
         <p className="text-text-secondary mb-6 max-w-md mx-auto">
           {t('successText', { topic: resolvedTopic })}
