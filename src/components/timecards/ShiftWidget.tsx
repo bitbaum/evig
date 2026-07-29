@@ -11,6 +11,7 @@ import { useTimecardIntl } from '@/hooks/useTimecardIntl'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { cn } from '@/lib/utils'
 
 /**
@@ -148,9 +149,9 @@ export function ShiftWidget({ onClockOut }: { onClockOut: (shift: ClockedShift) 
       {active ? (
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="min-w-0">
-            <p className="flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.16em] text-action">
+            <Eyebrow className="flex items-center gap-1.5 text-action">
               <Clock className="h-3.5 w-3.5" aria-hidden="true" /> {t('shiftRunning')}
-            </p>
+            </Eyebrow>
             <p className="mt-1 font-mono text-3xl tabular-nums leading-none text-text-primary">{elapsedLabel}</p>
             <p className="mt-1 text-xs text-text-tertiary">
               {t('shiftStartedAt', { time: hhmm(new Date(active.startedAt)) })} · {categoryLabel(active.category)}
@@ -180,7 +181,7 @@ export function ShiftWidget({ onClockOut }: { onClockOut: (shift: ClockedShift) 
       ) : (
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">{t('shiftPromptTitle')}</p>
+            <Eyebrow>{t('shiftPromptTitle')}</Eyebrow>
             <p className="mt-1 text-sm text-text-secondary">{t('shiftPromptBody')}</p>
           </div>
           {/* Stacked full-width on mobile (no cramped side-by-side / overflow);

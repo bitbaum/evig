@@ -1,5 +1,6 @@
 'use client'
 
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Link } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
 import {
@@ -60,7 +61,7 @@ export default function MyOffersPage() {
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <div>
-              <div className="ui-public-eyebrow">IT-HILFE</div>
+              <Eyebrow as="div">IT-HILFE</Eyebrow>
               <h1 className="ui-public-display-md mt-3">{t('title')}</h1>
               <p className="ui-public-meta mt-2">{t('description')}</p>
             </div>

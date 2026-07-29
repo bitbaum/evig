@@ -1,6 +1,7 @@
 // SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles
 export const dynamic = 'force-dynamic'
 
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import type { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
 import Heading from '@/components/ui/Heading'
@@ -211,7 +212,7 @@ export default async function HardwareRecyclingPage({ params }: HardwareRecyclin
         {/* CTA Section */}
         <section className="border-t border-subtle py-20 text-center">
           <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-            <div className="ui-public-eyebrow">{tEye('ready')}</div>
+            <Eyebrow as="div">{tEye('ready')}</Eyebrow>
             <h2 className="ui-public-display-lg mt-4">{t('cta.heading')}</h2>
             <p className="ui-public-section-lede mt-6 mx-auto">{t('cta.body')}</p>
             <div className="ui-public-cta-row mt-10">

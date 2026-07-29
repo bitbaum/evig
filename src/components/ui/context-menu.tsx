@@ -2,6 +2,7 @@
 
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { cn } from '@/lib/utils'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 
 /**
  * ContextMenu — a small, reusable cursor-positioned menu (SSOT for right-click
@@ -95,9 +96,7 @@ export function ContextMenu({
       className="fixed z-50 min-w-[12rem] overflow-hidden rounded-lg border border-strong bg-surface-base py-1 shadow-md"
     >
       {header && (
-        <p className="px-3 py-1.5 font-mono text-[0.65rem] uppercase tracking-[0.16em] text-text-tertiary">
-          {header}
-        </p>
+        <Eyebrow className="px-3 py-1.5">{header}</Eyebrow>
       )}
       {items.map((item, i) => (
         <div key={`${item.label}-${i}`}>

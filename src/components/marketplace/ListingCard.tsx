@@ -18,6 +18,7 @@ import { useTranslations } from 'next-intl'
 import { normalizeConditionValue, ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
 import { formatCHF } from '@/config/marketplace'
 import { Button } from '@/components/ui/button'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { ListingImage } from './ListingImage'
 import { CO2Badge } from './CO2Badge'
 import { useCart } from './cart/CartProvider'
@@ -90,9 +91,9 @@ export function ListingCard({ listing, variant = 'default', className = '' }: Li
 
         <div className={isCompact ? 'p-3' : 'p-4'}>
           {eyebrowParts.length > 0 && (
-            <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary mb-2 truncate">
+            <Eyebrow as="div" className="mb-2 truncate">
               {eyebrowParts.join(' · ')}
-            </div>
+            </Eyebrow>
           )}
 
           <h3 className={`font-semibold text-text-primary line-clamp-2 ${isCompact ? 'text-sm' : 'text-base'}`}>

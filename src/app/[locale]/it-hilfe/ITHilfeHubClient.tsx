@@ -1,5 +1,6 @@
 'use client'
 
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { useSession } from 'next-auth/react'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
@@ -48,7 +49,7 @@ export default function ITHilfeHubClient() {
       <section className="border-b border-subtle py-12 sm:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
-            <div className="ui-public-eyebrow">{t('eyebrow')}</div>
+            <Eyebrow as="div">{t('eyebrow')}</Eyebrow>
             <h1 className="ui-public-display-lg mt-4">{t('title')}</h1>
             <p className="ui-public-section-lede mt-4">{t('subtitle')}</p>
           </div>

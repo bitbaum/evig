@@ -1,6 +1,7 @@
 'use client'
 
 import { Calendar, Clock, Wrench, AlertCircle, CheckCircle, XCircle, ArrowLeft } from 'lucide-react'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { EmptyState } from '@/components/ui/EmptyState'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
@@ -106,9 +107,9 @@ export default function AppointmentsDashboard() {
             <ArrowLeft className="mr-1.5 h-3 w-3" />
             {t('backToDashboard')}
           </Link>
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+          <Eyebrow>
             {isRepairerView ? t('pageSubtitleRepairer') : t('pageSubtitle')}
-          </p>
+          </Eyebrow>
           <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
             {t('pageTitle')}
           </Heading>

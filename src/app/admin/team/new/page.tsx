@@ -5,6 +5,7 @@
  */
 
 import { Metadata } from 'next'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { isSuperAdmin } from '@/lib/permissions'
 import { requireSection } from '@/lib/admin/guards'
 import { query } from '@/lib/auth/db'
@@ -61,11 +62,11 @@ export default async function NewTeamProfilePage({ searchParams }: PageProps) {
   return (
     <div className="mx-auto max-w-4xl">
       <header className="mb-8 border-b border-subtle pb-6">
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+        <Eyebrow>
           {validPreselection
             ? `Für ${validPreselection.name || validPreselection.email}`
             : 'Staff-Profil anlegen'}
-        </p>
+        </Eyebrow>
         <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
           Neues Team-Profil
         </Heading>
@@ -73,9 +74,9 @@ export default async function NewTeamProfilePage({ searchParams }: PageProps) {
 
       {availableUsers.length === 0 ? (
         <div className="rounded-lg border border-warning-200 bg-warning-50 p-6 text-center dark:border-warning-800 dark:bg-warning-900/20">
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-warning-700 dark:text-warning-400">
+          <Eyebrow className="text-warning-700 dark:text-warning-400">
             Alle Profile angelegt
-          </p>
+          </Eyebrow>
           <p className="mt-2 text-sm text-warning-800 dark:text-warning-300">
             Es gibt keine Staff-Mitglieder ohne Team-Profil.
           </p>

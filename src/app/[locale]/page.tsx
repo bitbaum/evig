@@ -1,3 +1,4 @@
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Link } from '@/i18n/navigation'
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
@@ -133,7 +134,7 @@ export default async function Home() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-10 md:grid-cols-[0.9fr_1.1fr] md:items-end">
             <div>
-              <div className="ui-public-eyebrow">{t('actions.eyebrow')}</div>
+              <Eyebrow as="div">{t('actions.eyebrow')}</Eyebrow>
               <h2 className="ui-public-display-lg mt-4">{t('actions.heading')}</h2>
             </div>
             <p className="ui-public-section-lede md:justify-self-end">
@@ -164,12 +165,12 @@ export default async function Home() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-x-16 gap-y-20 md:grid-cols-2">
             <div>
-              <div className="ui-public-eyebrow">{t('ribbon.left.eyebrow')}</div>
+              <Eyebrow as="div">{t('ribbon.left.eyebrow')}</Eyebrow>
               <h3 className="ui-public-display-md mt-3">{t('ribbon.left.title')}</h3>
               <p className="ui-public-section-lede mt-6">{t('ribbon.left.body')}</p>
             </div>
             <div>
-              <div className="ui-public-eyebrow">{t('ribbon.right.eyebrow')}</div>
+              <Eyebrow as="div">{t('ribbon.right.eyebrow')}</Eyebrow>
               <h3 className="ui-public-display-md mt-3">{t('ribbon.right.title')}</h3>
               <p className="ui-public-section-lede mt-6">{t('ribbon.right.body')}</p>
             </div>
@@ -180,7 +181,7 @@ export default async function Home() {
       {/* ── 01 / 02 / 03 — the cycle ────────────────────────────────── */}
       <section className="ui-public-band py-20 sm:py-24">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <div className="ui-public-eyebrow">{t('process.eyebrow')}</div>
+          <Eyebrow as="div">{t('process.eyebrow')}</Eyebrow>
           <h2 className="ui-public-display-lg mt-4">{t('process.heading')}</h2>
 
           <div className="ui-public-body-lg mx-auto mt-16 max-w-3xl space-y-16 text-left">
@@ -202,7 +203,7 @@ export default async function Home() {
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto">
-            <div className="ui-public-eyebrow">{t('community.eyebrow')}</div>
+            <Eyebrow as="div">{t('community.eyebrow')}</Eyebrow>
             <h2 className="ui-public-display-lg mt-4">{t('community.heading')}</h2>
             <p className="ui-public-section-lede mt-6 mx-auto">{t('community.subtitle')}</p>
           </div>
@@ -224,7 +225,7 @@ export default async function Home() {
       {/* ── Final centered CTA band ─────────────────────────────────── */}
       <section className="border-t border-subtle py-20 text-center">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div className="ui-public-eyebrow">{t('finalCta.eyebrow')}</div>
+          <Eyebrow as="div">{t('finalCta.eyebrow')}</Eyebrow>
           <h2 className="ui-public-display-lg mt-4">{t('finalCta.heading')}</h2>
           <p className="ui-public-section-lede mt-6 mx-auto">{t('finalCta.subtitle')}</p>
           <div className="mt-10">

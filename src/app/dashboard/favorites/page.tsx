@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -96,9 +97,9 @@ export default function FavoritesPage() {
   return (
     <article className="mx-auto max-w-6xl space-y-6 px-4 py-12 sm:px-6 lg:px-8">
       <header className="border-b border-subtle pb-8">
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+        <Eyebrow>
           {t('pageSubtitle')}
-        </p>
+        </Eyebrow>
         <Heading
           level={1}
           className="mt-2 flex items-center gap-2 text-3xl font-semibold text-text-primary sm:text-4xl"

@@ -7,6 +7,7 @@ import { getReadingTime } from '@/lib/blog-utils'
 import { ROUTES } from '@/config/routes'
 import UnlistedBadge from './UnlistedBadge'
 import BlogByline from './BlogByline'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 
 interface BlogPostHeaderProps {
   post: BlogPost
@@ -40,7 +41,7 @@ export default async function BlogPostHeader({ post, categorySlug }: BlogPostHea
               {post.category}
             </Link>
           ) : (
-            <span className="ui-public-eyebrow">{post.category}</span>
+            <Eyebrow as="span">{post.category}</Eyebrow>
           )
         )}
         {post.visibility === 'unlisted' && <UnlistedBadge />}

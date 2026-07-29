@@ -6,6 +6,7 @@ import { BlogPost } from '@/lib/blog'
 import { getReadingTime } from '@/lib/blog-utils'
 import UnlistedBadge from './UnlistedBadge'
 import BlogByline from './BlogByline'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 
 interface BlogFeaturedGridProps {
   posts: BlogPost[]
@@ -40,7 +41,7 @@ export default async function BlogFeaturedGrid({ posts }: BlogFeaturedGridProps)
               )}
 
               <div className="flex flex-wrap items-center gap-2.5">
-                {post.category && <span className="ui-public-eyebrow">{post.category}</span>}
+                {post.category && <Eyebrow as="span">{post.category}</Eyebrow>}
                 {post.visibility === 'unlisted' && <UnlistedBadge />}
               </div>
 

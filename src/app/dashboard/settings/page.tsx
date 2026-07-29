@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import Heading from '@/components/ui/Heading'
 import { useState } from 'react'
 import { User, Bell, Shield, Save, Loader2, CheckCircle2, ArrowLeft } from 'lucide-react'
@@ -52,9 +53,9 @@ export default function SettingsPage() {
               <ArrowLeft className="mr-1.5 h-3 w-3" />
               {t('backToDashboard')}
             </Link>
-            <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+            <Eyebrow>
               {labels.pageDescription}
-            </p>
+            </Eyebrow>
             <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
               {labels.pageTitle}
             </Heading>

@@ -35,6 +35,7 @@ import { formatDateShort } from '@/lib/date-formats'
 import { formatCHF } from '@/config/marketplace'
 import { ROUTES } from '@/config/routes'
 import { Avatar } from '@/components/ui/Avatar'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Tabs } from '@/components/ui/Tabs'
@@ -68,9 +69,9 @@ function OfferingCard({
       )}
       <div className="flex flex-1 flex-col p-4">
         {eyebrow && (
-          <div className="mb-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-text-tertiary">
+          <Eyebrow as="div" className="mb-1.5">
             {eyebrow}
-          </div>
+          </Eyebrow>
         )}
         <Heading
           level={3}
@@ -316,9 +317,7 @@ export default function PublicProfile({ params }: { params: Promise<{ id: string
         <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
           <Avatar src={profile.avatar_url} name={profile.name} size="xl" shape="rounded" bordered className="sm:h-24 sm:w-24" />
           <div className="min-w-0 flex-1">
-            <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">
-              {t('publicProfile')}
-            </div>
+            <Eyebrow as="div">{t('publicProfile')}</Eyebrow>
             <div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1">
               <Heading level={1} className="text-3xl font-semibold text-text-primary sm:text-4xl">
                 {profile.name}

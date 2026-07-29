@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 
 interface ChangelogVersionRailProps {
   label: string
@@ -51,9 +52,7 @@ export function ChangelogVersionRail({ label, items }: ChangelogVersionRailProps
 
   return (
     <nav aria-label={label} className="ui-public-toc-rail hidden lg:block">
-      <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">
-        {label}
-      </p>
+      <Eyebrow className="mb-3">{label}</Eyebrow>
       <ul className="space-y-1.5 text-sm">
         {items.map((item) => {
           const active = item.id === activeId

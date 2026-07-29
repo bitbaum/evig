@@ -1,6 +1,7 @@
 // SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles
 export const dynamic = 'force-dynamic'
 
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { ORG } from '@/config/org'
@@ -108,13 +109,13 @@ export default async function WorkshopDetailPage({ params }: Props) {
             />
 
             <div className="card-shell p-6">
-              <div className="ui-public-eyebrow">{t('detail.materials').toUpperCase()}</div>
+              <Eyebrow as="div">{t('detail.materials').toUpperCase()}</Eyebrow>
               <Heading level={3} className="font-semibold text-text-primary mt-3 mb-4">{t('detail.materials')}</Heading>
               <WorkshopMaterials workshopSlug={workshop.slug} />
             </div>
 
             <div className="card-shell p-6">
-              <div className="ui-public-eyebrow">{t('detail.reviews').toUpperCase()}</div>
+              <Eyebrow as="div">{t('detail.reviews').toUpperCase()}</Eyebrow>
               <Heading level={3} className="font-semibold text-text-primary mt-3 mb-4">{t('detail.reviews')}</Heading>
               <WorkshopReviews workshopSlug={workshop.slug} />
             </div>

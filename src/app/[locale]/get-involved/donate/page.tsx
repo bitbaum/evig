@@ -1,6 +1,7 @@
 // SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles
 export const dynamic = 'force-dynamic'
 
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import React from 'react'
 import { Metadata } from 'next'
 import { ArrowDown, Coffee, Heart } from 'lucide-react'
@@ -75,12 +76,12 @@ export default async function DonatePage({ params }: DonatePageProps) {
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-x-16 gap-y-20 md:grid-cols-2">
             <div>
-              <div className="ui-public-eyebrow">{t('paths.money.eyebrow')}</div>
+              <Eyebrow as="div">{t('paths.money.eyebrow')}</Eyebrow>
               <h3 className="ui-public-display-md mt-3">{t('paths.money.title')}</h3>
               <p className="ui-public-section-lede mt-6">{t('paths.money.body')}</p>
             </div>
             <div>
-              <div className="ui-public-eyebrow">{t('paths.device.eyebrow')}</div>
+              <Eyebrow as="div">{t('paths.device.eyebrow')}</Eyebrow>
               <h3 className="ui-public-display-md mt-3">{t('paths.device.title')}</h3>
               <p className="ui-public-section-lede mt-6">{t('paths.device.body')}</p>
             </div>
@@ -92,7 +93,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto">
-            <div className="ui-public-eyebrow">{t('tiers.eyebrow')}</div>
+            <Eyebrow as="div">{t('tiers.eyebrow')}</Eyebrow>
             <h2 className="ui-public-display-lg mt-4">{t('tiers.heading')}</h2>
           </div>
 
@@ -116,7 +117,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
       {/* ── Bank transfer — clean utility block ────────────────────── */}
       <section id="bankueberweisung" className="ui-public-band py-20 sm:py-24 scroll-mt-8">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div className="ui-public-eyebrow">{t('transfer.eyebrow')}</div>
+          <Eyebrow as="div">{t('transfer.eyebrow')}</Eyebrow>
           <h2 className="ui-public-display-md mt-3">{t('transfer.heading')}</h2>
           <p className="ui-public-section-lede mt-4">{t('transfer.intro')}</p>
 
@@ -129,9 +130,9 @@ export default async function DonatePage({ params }: DonatePageProps) {
             ]).map((row) => (
               <div key={row.label} className="flex items-start justify-between gap-4">
                 <div className="min-w-0 flex-1">
-                  <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary mb-1">
+                  <Eyebrow className="mb-1">
                     {row.label}
-                  </p>
+                  </Eyebrow>
                   <p className={`text-sm font-semibold text-text-primary break-all ${row.mono ? 'font-mono' : ''}`}>
                     {row.value}
                   </p>
@@ -149,7 +150,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
       {/* ── Device donation — text-only ───────────────────────────── */}
       <section id="geraete" className="py-20 sm:py-24 scroll-mt-8">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div className="ui-public-eyebrow">{t('devices.eyebrow')}</div>
+          <Eyebrow as="div">{t('devices.eyebrow')}</Eyebrow>
           <h2 className="ui-public-display-md mt-3">{t('devices.heading')}</h2>
           <p className="ui-public-section-lede mt-4">{t('devices.intro')}</p>
 
@@ -184,7 +185,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
       {/* ── Drop-off form ──────────────────────────────────────────── */}
       <section id="anmeldung" className="ui-public-band py-20 sm:py-24 scroll-mt-8">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div className="ui-public-eyebrow">{t('dropoff.eyebrow')}</div>
+          <Eyebrow as="div">{t('dropoff.eyebrow')}</Eyebrow>
           <h2 className="ui-public-display-md mt-3">{t('dropoff.heading')}</h2>
           <p className="ui-public-section-lede mt-4">{t('dropoff.intro')}</p>
 
@@ -198,7 +199,7 @@ export default async function DonatePage({ params }: DonatePageProps) {
       <section className="py-20 sm:py-24 border-t border-subtle">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <div className="ui-public-eyebrow">{tSupport('otherWays.title').toUpperCase()}</div>
+            <Eyebrow as="div">{tSupport('otherWays.title').toUpperCase()}</Eyebrow>
             <h2 className="ui-public-display-md mt-4">{tSupport('otherWays.title')}</h2>
           </div>
 

@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl'
 import { Lock, Loader2, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { unlockUnlistedPost, type UnlockState } from './actions'
 
 const INITIAL: UnlockState = { ok: false }
@@ -40,7 +41,7 @@ export default function BlogPasswordGate({ title }: Props) {
           <span className="flex h-12 w-12 items-center justify-center rounded-full border border-subtle bg-surface-raised text-action">
             <Lock className="h-5 w-5" aria-hidden="true" />
           </span>
-          <div className="ui-public-eyebrow mt-6">{t('eyebrow')}</div>
+          <Eyebrow as="div" className="mt-6">{t('eyebrow')}</Eyebrow>
           <h1 className="ui-public-display-md mt-2">{title}</h1>
           <p className="mt-3 text-sm text-text-secondary">{t('intro')}</p>
         </div>

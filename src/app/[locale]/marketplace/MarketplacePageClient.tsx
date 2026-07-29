@@ -1,5 +1,6 @@
 'use client'
 
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
@@ -108,7 +109,7 @@ export default function MarketplacePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
             <div>
-              <div className="ui-public-eyebrow">{t('eyebrows.marketplace')}</div>
+              <Eyebrow as="div">{t('eyebrows.marketplace')}</Eyebrow>
               <h1 className="ui-public-display-md mt-3">{t('subtitle')}</h1>
               <p className="ui-public-meta mt-3 font-mono tabular-nums">
                 {t('listingsAvailable', { count: pagination.total })}
@@ -301,7 +302,7 @@ export default function MarketplacePage() {
         {status === 'unauthenticated' && (
           <section className="mt-16 border-t border-subtle pt-16 text-center">
             <div className="mx-auto max-w-2xl">
-              <div className="ui-public-eyebrow">{t('eyebrows.getInvolved')}</div>
+              <Eyebrow as="div">{t('eyebrows.getInvolved')}</Eyebrow>
               <h2 className="ui-public-display-md mt-3">{t('signInCta.title')}</h2>
               <p className="ui-public-section-lede mt-4">{t('signInCta.description')}</p>
               <div className="ui-public-cta-row mt-8">
@@ -327,7 +328,7 @@ export default function MarketplacePage() {
           />
           <aside ref={drawerRef} tabIndex={-1} className="absolute right-0 top-0 h-full w-full max-w-md bg-surface-base flex flex-col border-l border-strong focus:outline-none">
             <div className="flex items-center justify-between p-4 border-b border-subtle shrink-0">
-              <span className="ui-public-eyebrow">{t('filters.advanced')}</span>
+              <Eyebrow as="span">{t('filters.advanced')}</Eyebrow>
               <Button
                 type="button"
                 variant="ghost"

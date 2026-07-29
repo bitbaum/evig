@@ -1,6 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -69,9 +70,9 @@ export default function SellerProfileEditPage() {
 
       <div className="rounded-lg border border-subtle bg-surface-base">
         <div className="border-b border-subtle p-6">
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+          <Eyebrow>
             {noProfile ? t('noProfileDesc') : t('editProfileDesc')}
-          </p>
+          </Eyebrow>
           <Heading
             level={1}
             className="mt-2 flex items-center gap-2 text-2xl font-semibold text-text-primary"

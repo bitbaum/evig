@@ -17,6 +17,7 @@
  */
 
 import { Suspense } from 'react'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { auth } from '@/auth'
@@ -192,9 +193,9 @@ export default async function AdminDashboard() {
       {/* Header — date in mono on top, big greeting, subtle mode toggle */}
       <header className="flex flex-col gap-4 border-b border-subtle pb-8 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+          <Eyebrow>
             {todayLongLabel()} · {isSuper ? t('roleSuperAdmin') : t('roleStaff')}
-          </p>
+          </Eyebrow>
           <h1 className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
             {t('greeting', { firstName })}
           </h1>

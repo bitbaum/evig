@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -223,9 +224,9 @@ export default function DashboardOrdersPage() {
       {/* Pagination — mirrors /dashboard/listings */}
       {!isLoading && total > limit && (
         <div className="flex items-center justify-between pt-2">
-          <p className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">
+          <Eyebrow>
             {t('paginationCurrentPage', { page: Math.floor(offset / limit) + 1 })}
-          </p>
+          </Eyebrow>
           <div className="flex items-center gap-2">
             <Button
               onClick={() => setOffset(Math.max(0, offset - limit))}

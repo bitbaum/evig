@@ -17,6 +17,7 @@ import { Link } from '@/i18n/navigation'
 import { Phone, User } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { ROUTES } from '@/config/routes'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 
 interface Props {
   technicianId: string
@@ -29,9 +30,7 @@ export function MatchedTechnicianCard({ technicianId, technicianName, technician
 
   return (
     <div className="card-shell p-6">
-      <div className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary mb-3">
-        {t('eyebrow')}
-      </div>
+      <Eyebrow as="div" className="mb-3">{t('eyebrow')}</Eyebrow>
 
       <div className="flex items-start justify-between gap-4">
         <div>

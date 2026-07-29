@@ -14,6 +14,7 @@ import { ChevronRight, Plus } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { useTimecardIntl } from '@/hooks/useTimecardIntl'
 import { cn } from '@/lib/utils'
 
@@ -76,9 +77,9 @@ export function ZeitPensumPanel({ userId, onChanged }: { userId: string; onChang
         onClick={() => setOpen(o => !o)}
         className="flex h-auto w-full items-center justify-between rounded-xl px-4 py-3 text-left"
       >
-        <span className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">
+        <Eyebrow as="span">
           {t('zeitPanelTitle')}
-        </span>
+        </Eyebrow>
         <ChevronRight className={cn('h-4 w-4 shrink-0 text-text-tertiary transition-transform', open && 'rotate-90')} aria-hidden="true" />
       </Button>
 

@@ -1,6 +1,7 @@
 // SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles
 export const dynamic = 'force-dynamic'
 
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import type { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
 import { Award, Vote, Users, Heart, CheckCircle, User as UserIcon } from 'lucide-react'
@@ -70,7 +71,7 @@ export default async function MitgliedWerdenPage({ params }: MitgliedWerdenPageP
     <div className="bg-canvas">
       <section className="border-b border-subtle py-12 sm:py-16">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 text-center">
-          <div className="ui-public-eyebrow">{t('hero.title').toUpperCase()}</div>
+          <Eyebrow as="div">{t('hero.title').toUpperCase()}</Eyebrow>
           <Award className="w-10 h-10 text-action mx-auto mt-6 mb-4" aria-hidden="true" />
           <h1 className="ui-public-display-lg">{t('hero.title')}</h1>
           <p className="ui-public-section-lede mt-6 mx-auto">{t('hero.body')}</p>
@@ -131,7 +132,7 @@ export default async function MitgliedWerdenPage({ params }: MitgliedWerdenPageP
       <section className="py-12 sm:py-16">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
-            <div className="ui-public-eyebrow">{t('faq.heading').toUpperCase()}</div>
+            <Eyebrow as="div">{t('faq.heading').toUpperCase()}</Eyebrow>
             <Heading level={2} className="ui-public-display-md mt-3">{t('faq.heading')}</Heading>
           </div>
           <div className="space-y-4">

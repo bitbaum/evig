@@ -1,5 +1,6 @@
 'use client'
 
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { useState } from 'react'
 import { Link } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
@@ -310,7 +311,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
 
         {/* Call to Action */}
         <div className="mt-16 border-t border-subtle pt-16 text-center">
-          <div className="ui-public-eyebrow">{tEye('propose')}</div>
+          <Eyebrow as="div">{tEye('propose')}</Eyebrow>
           <h2 className="ui-public-display-md mt-3">{t('cta.title')}</h2>
           <p className="ui-public-section-lede mt-4 mx-auto max-w-2xl">{t('cta.subtitle')}</p>
           <div className="mt-8">

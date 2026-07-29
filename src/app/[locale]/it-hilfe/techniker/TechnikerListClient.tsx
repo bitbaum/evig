@@ -1,5 +1,6 @@
 'use client'
 
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { useSession } from 'next-auth/react'
 import { Link } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
@@ -70,7 +71,7 @@ export default function TechnikerListClient() {
           </Link>
           <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
             <div>
-              <div className="ui-public-eyebrow">{tEye('technicians')}</div>
+              <Eyebrow as="div">{tEye('technicians')}</Eyebrow>
               <h1 className="ui-public-display-md mt-3">{t('list.title')}</h1>
               <p className="ui-public-meta mt-3 font-mono tabular-nums">
                 {pagination.total === 0 && !hasActiveFilters
@@ -217,7 +218,7 @@ export default function TechnikerListClient() {
           <section className="mt-12 border-t border-subtle pt-8">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <div className="ui-public-eyebrow">{tEye('getInvolved')}</div>
+                <Eyebrow as="div">{tEye('getInvolved')}</Eyebrow>
                 <h2 className="mt-2 text-lg font-semibold text-text-primary">{t('list.ctaTitle')}</h2>
                 <p className="mt-2 max-w-2xl text-sm leading-relaxed text-text-secondary">{t('list.ctaDescription')}</p>
               </div>

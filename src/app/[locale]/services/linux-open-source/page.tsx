@@ -1,6 +1,7 @@
 // SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles
 export const dynamic = 'force-dynamic'
 
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Metadata } from 'next'
 import Heading from '@/components/ui/Heading'
 import { Card } from '@/components/ui/card'
@@ -219,7 +220,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
                   className="group block rounded-xl border border-subtle bg-surface-base p-5 transition-colors hover:border-strong"
                 >
                   <p className="text-sm font-medium text-text-primary">{item.need}</p>
-                  <p className="mt-3 font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">{chooser.recommendedLabel}</p>
+                  <Eyebrow className="mt-3">{chooser.recommendedLabel}</Eyebrow>
                   <p className="mt-0.5 inline-flex items-center gap-1 text-base font-semibold text-action">
                     {item.distro}
                     <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
@@ -305,7 +306,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
       {/* Final CTA */}
       <section className="border-t border-subtle py-20 text-center">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div className="ui-public-eyebrow">{tEye('ready')}</div>
+          <Eyebrow as="div">{tEye('ready')}</Eyebrow>
           <h2 className="ui-public-display-lg mt-4">{t('finalCta.heading')}</h2>
           <p className="ui-public-section-lede mt-6 mx-auto">{t('finalCta.body')}</p>
           <div className="ui-public-cta-row mt-10">

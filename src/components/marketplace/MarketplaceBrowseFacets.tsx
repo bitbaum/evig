@@ -8,6 +8,7 @@ import {
 import { ORG } from '@/config/org'
 import type { FiltersObj } from '@/components/marketplace/MarketplaceFilterSidebar'
 import { FilterPill } from '@/components/marketplace/FilterPill'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 
 interface MarketplaceBrowseFacetsProps {
   filters: FiltersObj
@@ -45,13 +46,12 @@ export function MarketplaceBrowseFacets({
   const rowClass = isVertical
     ? 'flex flex-wrap gap-1.5'
     : 'flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-thin'
-  const labelClass = 'mb-2 font-mono text-[10px] uppercase tracking-[0.16em] text-text-muted'
 
   return (
     <>
       {/* Source */}
       <div className={blockClass}>
-        <p className={labelClass}>{t('filters.sellerTypeTitle')}</p>
+        <Eyebrow className="mb-2 text-text-muted">{t('filters.sellerTypeTitle')}</Eyebrow>
         <div className={rowClass} role="group" aria-label={t('filters.sellerTypeAriaLabel')}>
           {sourceOptions.map((opt) => (
             <FilterPill
@@ -67,7 +67,7 @@ export function MarketplaceBrowseFacets({
 
       {/* Category */}
       <div className={blockClass}>
-        <p className={labelClass}>{t('filters.categoryTitle')}</p>
+        <Eyebrow className="mb-2 text-text-muted">{t('filters.categoryTitle')}</Eyebrow>
         <div className={rowClass} role="group" aria-label={t('filters.categoryAriaLabel')}>
           <FilterPill
             active={!filters.category}

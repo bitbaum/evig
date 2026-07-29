@@ -1,5 +1,6 @@
 'use client'
 
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { useSearchParams } from 'next/navigation'
 import useSWR from 'swr'
 import { Link } from '@/i18n/navigation'
@@ -154,7 +155,7 @@ export default function CreatePeerRepairPage() {
             <ArrowLeft className="w-4 h-4" aria-hidden="true" />
             {t('backToList')}
           </Link>
-          <div className="ui-public-eyebrow">{t('eyebrow')}</div>
+          <Eyebrow as="div">{t('eyebrow')}</Eyebrow>
           <h1 className="ui-public-display-md mt-3">{t('title')}</h1>
           <p className="ui-public-section-lede mt-4">{t('description')}</p>
         </div>
@@ -166,9 +167,9 @@ export default function CreatePeerRepairPage() {
 
         {preferredTechnician && (
           <section className="mb-6 rounded-xl border border-action/30 bg-action-muted p-4" aria-labelledby="preferred-technician">
-            <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-action">
+            <Eyebrow as="div" className="text-action">
               {t('preferredTechnician.eyebrow')}
-            </div>
+            </Eyebrow>
             <div className="mt-2 flex flex-wrap items-start justify-between gap-4">
               <div>
                 <Heading id="preferred-technician" level={2} className="text-base text-text-primary">

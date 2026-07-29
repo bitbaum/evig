@@ -14,6 +14,7 @@
  */
 
 import { Metadata } from 'next'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { PeopleTeamsTabs } from '@/components/admin/team/PeopleTeamsTabs'
 import Link from 'next/link'
 import { Users, ClipboardList, Activity, AlertTriangle, UserRound } from 'lucide-react'
@@ -325,9 +326,9 @@ export default async function TeamBoardPage({ searchParams }: PageProps) {
         </div>
       )}
 
-      <p className="border-t border-subtle pt-6 font-mono text-xs uppercase tracking-[0.14em] text-text-tertiary">
+      <Eyebrow className="border-t border-subtle pt-6">
         Fokus gilt nach {FOCUS_STALE_DAYS} Tagen als veraltet · Aufgaben sind Live-Daten aus «Aufgaben»
-      </p>
+      </Eyebrow>
     </AdminPageWrapper>
   )
 }

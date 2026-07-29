@@ -9,6 +9,7 @@
 
 'use client'
 
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { getSkillById } from '@/config/it-hilfe'
@@ -50,9 +51,9 @@ export function TechnicianCard({ technician }: { technician: Technician }) {
       className="block card-shell p-5 hover:border-strong transition-colors"
     >
       {/* Eyebrow */}
-      <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary truncate">
+      <Eyebrow as="div" className="truncate">
         {eyebrowParts.join(' · ')}
-      </div>
+      </Eyebrow>
 
       {/* Name */}
       <h3 className="mt-2 text-base font-semibold text-text-primary line-clamp-1">

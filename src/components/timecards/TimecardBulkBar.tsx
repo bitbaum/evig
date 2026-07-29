@@ -3,6 +3,7 @@
 import { CalendarCheck, Pencil, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import type { TimecardEntryCategory } from '@/config/timecards'
 import { TimecardActions } from './TimecardActions'
 
@@ -41,10 +42,10 @@ export function TimecardBulkBar({
     <div className="sticky bottom-[calc(6rem+var(--bottom-nav-clearance,0px))] z-10 space-y-2.5 rounded-xl border border-action/30 bg-surface-base p-3 shadow-sm sm:bottom-[calc(4rem+var(--bottom-nav-clearance,0px))]">
       {/* Header row: what's selected + the way out, always visible. */}
       <div className="flex items-center justify-between gap-2">
-        <span className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-text-secondary">
+        <Eyebrow as="span" className="inline-flex items-center gap-2 text-text-secondary">
           <CalendarCheck className="h-4 w-4 text-action" aria-hidden="true" />
           {t('bulkSelected', { count })}
-        </span>
+        </Eyebrow>
         <Button
           type="button"
           variant="ghost"

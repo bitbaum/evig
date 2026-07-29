@@ -15,6 +15,7 @@ import { Link } from '@/i18n/navigation'
 import { ExternalLink, ArrowRight } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import type { NavigationItem } from '@/config/navigation'
 import type { NavigationGroup } from './utils'
 import { navItemDescription, navItemLabel, type NavTranslator } from './nav-i18n'
@@ -130,9 +131,7 @@ function MegaMenuSection({
   return (
     <div className="flex flex-col p-4 sm:p-5">
       {group.section && (
-        <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">
-          {getLabel(group.section, t)}
-        </p>
+        <Eyebrow className="mb-4">{getLabel(group.section, t)}</Eyebrow>
       )}
       <ul className="space-y-1">
         {group.items.map((item) => (

@@ -7,6 +7,7 @@ import { ChevronRight, ChevronLeft, CalendarDays, CalendarRange, CalendarCheck, 
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { ContextMenu, type ContextMenuItem, type ContextMenuPosition } from '@/components/ui/context-menu'
 import { cn } from '@/lib/utils'
 import { apiFetch } from '@/lib/api/client'
@@ -207,9 +208,9 @@ export function TimecardsClient({
               )}
             </div>
             <div className="flex flex-wrap items-center gap-1.5">
-              <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary">
+              <Eyebrow as="span">
                 {t('selectLabel')}
-              </span>
+              </Eyebrow>
               <Button type="button" variant="ghost" size="sm" onClick={tc.selectAll} className="h-auto px-2 py-1 text-sm text-text-secondary hover:text-text-primary">
                 {t('selectAllDays')}
               </Button>
@@ -294,9 +295,9 @@ export function TimecardsClient({
         {extrasOpen && (
           <div className="mt-5 space-y-5">
             <label className="block">
-              <span className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">
+              <Eyebrow as="span">
                 {t('extrasMonthComment')}
-              </span>
+              </Eyebrow>
               <Textarea
                 variant="elevated"
                 rows={2}

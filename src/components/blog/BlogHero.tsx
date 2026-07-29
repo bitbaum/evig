@@ -7,6 +7,7 @@ import { formatDate } from '@/lib/date-formats'
 import { getReadingTime } from '@/lib/blog-utils'
 import UnlistedBadge from './UnlistedBadge'
 import BlogByline from './BlogByline'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 
 interface BlogHeroProps {
   post: BlogPost
@@ -39,7 +40,7 @@ export default async function BlogHero({ post }: BlogHeroProps) {
         {/* Content */}
         <div className="order-1 lg:order-2">
           <div className="flex flex-wrap items-center gap-3">
-            {post.category && <span className="ui-public-eyebrow">{post.category}</span>}
+            {post.category && <Eyebrow as="span">{post.category}</Eyebrow>}
             {post.visibility === 'unlisted' && <UnlistedBadge />}
           </div>
 

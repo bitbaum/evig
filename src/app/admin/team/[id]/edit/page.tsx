@@ -5,6 +5,7 @@
  */
 
 import { Metadata } from 'next'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { notFound } from 'next/navigation'
 import { isSuperAdmin } from '@/lib/permissions'
 import { requireSection } from '@/lib/admin/guards'
@@ -134,9 +135,9 @@ export default async function TeamProfileEditPage({ params }: PageProps) {
   return (
     <div className="mx-auto max-w-4xl">
       <header className="mb-8 border-b border-subtle pb-6">
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+        <Eyebrow>
           {profile.user_name || profile.user_email}
-        </p>
+        </Eyebrow>
         <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
           Profil bearbeiten
         </Heading>

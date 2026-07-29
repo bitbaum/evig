@@ -3,6 +3,7 @@
 import { CalendarCheck, Trash2 } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { TIMECARD_ABSENCE_TYPES, type TimecardEntryCategory } from '@/config/timecards'
 import { useTimecardIntl } from '@/hooks/useTimecardIntl'
 
@@ -44,9 +45,9 @@ export function TimecardActions({
 
       {/* 2 — Mark absent (labelled group) */}
       <div className="flex flex-wrap items-center gap-1.5">
-        <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary">
+        <Eyebrow as="span">
           {t('bulkAbsenceLabel')}
-        </span>
+        </Eyebrow>
         {TIMECARD_ABSENCE_TYPES.map(absence => (
           <Button
             key={absence.value}

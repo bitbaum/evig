@@ -2,6 +2,7 @@ import { Link } from '@/i18n/navigation'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { getTranslations } from 'next-intl/server'
 import { BlogPost } from '@/lib/blog'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 
 interface BlogPrevNextProps {
   /** Chronologically newer post (published after the current one). */
@@ -23,10 +24,10 @@ export default async function BlogPrevNext({ newer, older }: BlogPrevNextProps) 
             href={`/blog/${newer.slug}`}
             className="group rounded-xl border border-subtle p-5 transition-colors hover:border-strong"
           >
-            <span className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.08em] text-text-tertiary">
+            <Eyebrow as="span" className="inline-flex items-center gap-1.5">
               <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
               {t('prevNext.newer')}
-            </span>
+            </Eyebrow>
             <span className="mt-2 line-clamp-2 block font-semibold leading-snug text-text-primary transition-colors group-hover:text-action">
               {newer.title}
             </span>
@@ -39,10 +40,10 @@ export default async function BlogPrevNext({ newer, older }: BlogPrevNextProps) 
             href={`/blog/${older.slug}`}
             className="group rounded-xl border border-subtle p-5 text-right transition-colors hover:border-strong"
           >
-            <span className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.08em] text-text-tertiary">
+            <Eyebrow as="span" className="inline-flex items-center gap-1.5">
               {t('prevNext.older')}
               <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-            </span>
+            </Eyebrow>
             <span className="mt-2 line-clamp-2 block font-semibold leading-snug text-text-primary transition-colors group-hover:text-action">
               {older.title}
             </span>

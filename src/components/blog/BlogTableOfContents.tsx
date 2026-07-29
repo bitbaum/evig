@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import type { TocHeading } from '@/lib/blog-toc'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 
 interface Props {
   headings: TocHeading[]
@@ -42,9 +43,7 @@ export default function BlogTableOfContents({ headings }: Props) {
         aria-label={t('onThisPage')}
         className="sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto"
       >
-        <p className="mb-4 font-mono text-[10.5px] uppercase tracking-[0.16em] text-text-tertiary">
-          {t('onThisPage')}
-        </p>
+        <Eyebrow className="mb-4">{t('onThisPage')}</Eyebrow>
         <ul className="space-y-1 border-l border-subtle">
           {headings.map((h) => {
             const active = activeId === h.id

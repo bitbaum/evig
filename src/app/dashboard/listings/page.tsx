@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import {
   Package,
   Plus,
@@ -85,10 +86,10 @@ export default function MyListingsPage() {
         {/* Header */}
         <header className="flex flex-col gap-4 border-b border-subtle pb-8 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+            <Eyebrow>
               {t('pageSubtitle')}
               {total > 0 && ` · ${t('totalCount', { count: total })}`}
-            </p>
+            </Eyebrow>
             <h1 className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
               {t('pageTitle')}
             </h1>
@@ -254,9 +255,9 @@ export default function MyListingsPage() {
         {/* Pagination */}
         {!isLoading && !error && (hasNext || hasPrev) && (
           <div className="flex items-center justify-between pt-2">
-            <p className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">
+            <Eyebrow>
               {t('paginationCurrentPage', { page })}
-            </p>
+            </Eyebrow>
             <div className="flex items-center gap-2">
               <Button onClick={goPrev} disabled={!hasPrev} variant="outline" size="sm">
                 <ChevronLeft className="h-4 w-4" />

@@ -1,6 +1,7 @@
 // SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles
 export const dynamic = 'force-dynamic'
 
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
@@ -83,7 +84,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
       <section id="learn-more" className="ui-public-band py-20 sm:py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <div className="ui-public-eyebrow">{t('coreValues.heading').toUpperCase()}</div>
+            <Eyebrow as="div">{t('coreValues.heading').toUpperCase()}</Eyebrow>
             <h2 className="ui-public-display-lg mt-4">{t('coreValues.heading')}</h2>
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -105,7 +106,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
       <section id="get-started" className="py-20 sm:py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <div className="ui-public-eyebrow">{t('options.heading').toUpperCase()}</div>
+            <Eyebrow as="div">{t('options.heading').toUpperCase()}</Eyebrow>
             <h2 className="ui-public-display-lg mt-4">{t('options.heading')}</h2>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -137,7 +138,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
       <section className="py-20 sm:py-24">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-            <div className="ui-public-eyebrow">{t('partners.heading').toUpperCase()}</div>
+            <Eyebrow as="div">{t('partners.heading').toUpperCase()}</Eyebrow>
             <h2 className="ui-public-display-lg mt-4">{t('partners.heading')}</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -164,7 +165,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
       {/* CTA Section */}
       <section className="border-t border-subtle py-20 text-center">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div className="ui-public-eyebrow">{tEye('ready')}</div>
+          <Eyebrow as="div">{tEye('ready')}</Eyebrow>
           <h2 className="ui-public-display-lg mt-4">{t('cta.heading')}</h2>
           <p className="ui-public-section-lede mt-6 mx-auto">{t('cta.body')}</p>
           <div className="ui-public-cta-row mt-10">

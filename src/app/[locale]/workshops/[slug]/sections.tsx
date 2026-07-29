@@ -5,6 +5,7 @@
  * them; this file holds the JSX so the orchestration stays readable.
  */
 
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Link } from '@/i18n/navigation'
 import { ArrowLeft, CheckCircle, Calendar, Clock, MapPin, BookOpen } from 'lucide-react'
 import { formatDateWithWeekday, formatTime } from '@/lib/date-formats'
@@ -38,9 +39,9 @@ export function WorkshopHeader({
           {t('detail.backToWorkshops')}
         </Link>
 
-        <div className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary mb-3">
+        <Eyebrow as="div" className="mb-3">
           WORKSHOP{categoryName ? ` · ${categoryName}` : ''}
-        </div>
+        </Eyebrow>
         <div className="flex items-start gap-3 flex-wrap">
           <Heading level={1} className="ui-public-display-md text-text-primary">
             {workshop.title}
@@ -80,13 +81,13 @@ export function WorkshopDetailsCard({
 
   return (
     <div className="card-shell p-6 sm:p-8">
-      <div className="ui-public-eyebrow">{t('detail.details').toUpperCase()}</div>
+      <Eyebrow as="div">{t('detail.details').toUpperCase()}</Eyebrow>
       <Heading level={2} className="ui-public-display-md mt-3">{t('detail.details')}</Heading>
 
       <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-6 border-t border-subtle pt-8">
         {stats.map((s) => (
           <div key={s.label}>
-            <div className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">{s.label}</div>
+            <Eyebrow as="div">{s.label}</Eyebrow>
             <div className="text-text-primary font-semibold mt-2">{s.value}</div>
           </div>
         ))}
@@ -125,17 +126,17 @@ export function WorkshopDetailsCard({
         <Section title={t('detail.materials')}>
           {workshop.materials_provided && (
             <div className="mb-4">
-              <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary mb-1">
+              <Eyebrow className="mb-1">
                 {t('detail.materialsProvided')}
-              </p>
+              </Eyebrow>
               <p className="text-text-secondary">{workshop.materials_provided}</p>
             </div>
           )}
           {workshop.materials_required && (
             <div>
-              <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary mb-1">
+              <Eyebrow className="mb-1">
                 {t('detail.materialsRequired')}
-              </p>
+              </Eyebrow>
               <p className="text-text-secondary">{workshop.materials_required}</p>
             </div>
           )}
@@ -148,7 +149,7 @@ export function WorkshopDetailsCard({
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="mt-8 border-t border-subtle pt-8">
-      <div className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary mb-3">{title}</div>
+      <Eyebrow as="div" className="mb-3">{title}</Eyebrow>
       {children}
     </div>
   )
@@ -167,7 +168,7 @@ export function WorkshopInstancesList({
 
   return (
     <div className="card-shell p-6 sm:p-8">
-      <div className="ui-public-eyebrow">{t('detail.upcomingDates').toUpperCase()}</div>
+      <Eyebrow as="div">{t('detail.upcomingDates').toUpperCase()}</Eyebrow>
       <Heading level={2} className="ui-public-display-md mt-3">{t('detail.upcomingDates')}</Heading>
 
       <div className="mt-8 space-y-4">
@@ -247,7 +248,7 @@ export function WorkshopStatsCard({
 
   return (
     <div className="card-shell p-6">
-      <div className="ui-public-eyebrow">{t('detail.stats').toUpperCase()}</div>
+      <Eyebrow as="div">{t('detail.stats').toUpperCase()}</Eyebrow>
       <Heading level={3} className="font-semibold text-text-primary mt-3 mb-4">
         <span className="inline-flex items-center gap-2">
           <BookOpen className="w-4 h-4 text-text-muted" />{t('detail.stats')}
@@ -269,7 +270,7 @@ export function WorkshopStatsCard({
 export function NoUpcomingDatesNotice({ t }: { t: TFunc }) {
   return (
     <div className="card-shell p-6">
-      <div className="ui-public-eyebrow">{t('detail.registration').toUpperCase()}</div>
+      <Eyebrow as="div">{t('detail.registration').toUpperCase()}</Eyebrow>
       <Heading level={3} className="font-semibold text-text-primary mt-3 mb-4">{t('detail.registration')}</Heading>
       <StatusBanner variant="warning">{t('detail.noDates')}</StatusBanner>
     </div>

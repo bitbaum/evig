@@ -7,6 +7,7 @@ import { ChevronRight, Check } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { cn } from '@/lib/utils'
 import { useTimecardIntl } from '@/hooks/useTimecardIntl'
 import {
@@ -78,9 +79,9 @@ export function WeeklyScheduleEditor({ workingHours }: { workingHours: string | 
         className="flex h-auto w-full items-center justify-between rounded-xl px-4 py-3 text-left"
       >
         <span className="min-w-0">
-          <span className="block font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">
+          <Eyebrow as="span" className="block">
             {t('scheduleTitle')}
-          </span>
+          </Eyebrow>
           <span className="mt-0.5 block truncate text-sm text-text-secondary">
             {scheduleSummary(schedule)}
           </span>

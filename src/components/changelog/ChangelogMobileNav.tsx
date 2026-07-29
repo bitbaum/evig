@@ -1,6 +1,7 @@
 'use client'
 
 import { Select } from '@/components/ui/select'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 
 interface ChangelogMobileNavProps {
   label: string
@@ -15,9 +16,9 @@ export function ChangelogMobileNav({ label, items }: ChangelogMobileNavProps) {
     >
       <div className="mx-auto max-w-7xl px-4 py-2.5 sm:px-6">
         <label className="flex items-center gap-3">
-          <span className="shrink-0 font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">
+          <Eyebrow as="span" className="shrink-0">
             {label}
-          </span>
+          </Eyebrow>
           <Select
             className="min-w-0 flex-1 text-sm"
             defaultValue=""

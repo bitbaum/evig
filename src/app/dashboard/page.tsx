@@ -14,6 +14,7 @@
  */
 
 import { Link } from '@/i18n/navigation'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { ArrowRight } from 'lucide-react'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
@@ -100,9 +101,9 @@ export default async function DashboardPage() {
       <article className="mx-auto max-w-4xl space-y-12 px-4 py-12 sm:px-6 lg:px-8">
         {/* Header */}
         <header className="border-b border-subtle pb-8">
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+          <Eyebrow>
             {todayLongLabel()} · {t('subtitle')}
-          </p>
+          </Eyebrow>
           <h1 className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
             Hallo, {firstName}.
           </h1>

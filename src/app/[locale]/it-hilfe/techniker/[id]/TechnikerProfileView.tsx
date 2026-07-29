@@ -1,3 +1,4 @@
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Link } from '@/i18n/navigation'
 import { ArrowLeft, ArrowRight, BadgeCheck, MapPin, Star, Wrench } from 'lucide-react'
 import { getServiceTypeById, getSkillById, IT_HILFE } from '@/config/it-hilfe'
@@ -70,9 +71,9 @@ export function TechnikerProfileView({ technician, copy, meta }: TechnikerProfil
           <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
             <Avatar src={technician.avatarUrl} name={displayName} size="xl" shape="rounded" bordered className="font-mono" />
             <div className="min-w-0 flex-1">
-              <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">
+              <Eyebrow as="div">
                 {meta.eyebrow}
-              </div>
+              </Eyebrow>
               <h1 className="ui-public-display-md mt-3">{displayName}</h1>
 
               {meta.locationLine && (
@@ -133,7 +134,7 @@ export function TechnikerProfileView({ technician, copy, meta }: TechnikerProfil
 
         {technician.bio && (
           <section className="py-8 border-b border-subtle">
-            <h2 className="ui-public-eyebrow">{copy.aboutMe}</h2>
+            <Eyebrow as="h2">{copy.aboutMe}</Eyebrow>
             <p className="mt-4 text-sm leading-relaxed text-text-secondary whitespace-pre-line">
               {technician.bio}
             </p>
@@ -142,14 +143,14 @@ export function TechnikerProfileView({ technician, copy, meta }: TechnikerProfil
 
         {skillLabels.length > 0 && (
           <section className="py-8 border-b border-subtle">
-            <h2 className="ui-public-eyebrow">{copy.skills}</h2>
+            <Eyebrow as="h2">{copy.skills}</Eyebrow>
             <p className="mt-4 text-sm text-text-secondary">{skillLabels.join(' · ')}</p>
           </section>
         )}
 
         {deliveryLabels.length > 0 && (
           <section className="py-8 border-b border-subtle">
-            <h2 className="ui-public-eyebrow">{copy.deliveryTypes}</h2>
+            <Eyebrow as="h2">{copy.deliveryTypes}</Eyebrow>
             <p className="mt-4 text-sm text-text-secondary">{deliveryLabels.join(' · ')}</p>
           </section>
         )}

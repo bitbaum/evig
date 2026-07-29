@@ -1,6 +1,7 @@
 // SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles
 export const dynamic = 'force-dynamic'
 
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
 import { Mail, MessageCircle } from 'lucide-react'
@@ -49,7 +50,7 @@ export default async function ContactPage() {
       <section className="py-12 sm:py-16 md:py-20 bg-surface-base">
         <div className="container mx-auto px-4 sm:px-6">
           <div className="text-center mb-10">
-            <div className="ui-public-eyebrow">{t('hero.title').toUpperCase()}</div>
+            <Eyebrow as="div">{t('hero.title').toUpperCase()}</Eyebrow>
             <Heading level={2} className="ui-public-display-md mt-3 sr-only">{t('hero.title')}</Heading>
           </div>
           <div className="grid grid-cols-1 gap-4 sm:gap-6 md:gap-8 max-w-md mx-auto">
@@ -80,7 +81,7 @@ export default async function ContactPage() {
         <div className="container mx-auto px-4 sm:px-6">
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-8">
-              <div className="ui-public-eyebrow mb-3">{t('form.title').toUpperCase()}</div>
+              <Eyebrow as="div" className="mb-3">{t('form.title').toUpperCase()}</Eyebrow>
               <Heading level={2} className="ui-public-display-md mb-6 text-center">{t('form.title')}</Heading>
             </div>
             <ContactForm />

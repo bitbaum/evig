@@ -1,6 +1,7 @@
 // SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles
 export const dynamic = 'force-dynamic'
 
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import type { Metadata } from 'next'
 import { Link } from '@/i18n/navigation'
 import { HelpCircle } from 'lucide-react'
@@ -83,7 +84,7 @@ export default async function FAQPage({ params }: FAQPageProps) {
             <div className="space-y-10 sm:space-y-12">
               {groups.map((group) => (
                 <section key={group.category}>
-                  <div className="ui-public-eyebrow mb-3">{group.category.toUpperCase()}</div>
+                  <Eyebrow as="div" className="mb-3">{group.category.toUpperCase()}</Eyebrow>
                   <Heading level={2} className="ui-public-display-md mb-4">
                     {group.category}
                   </Heading>

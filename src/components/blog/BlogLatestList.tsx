@@ -6,6 +6,7 @@ import { BlogPost } from '@/lib/blog'
 import { formatDate } from '@/lib/date-formats'
 import { getReadingTime } from '@/lib/blog-utils'
 import UnlistedBadge from './UnlistedBadge'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 
 interface BlogLatestListProps {
   posts: BlogPost[]
@@ -46,7 +47,7 @@ export default async function BlogLatestList({ posts }: BlogLatestListProps) {
               {/* Content */}
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2.5">
-                  {post.category && <span className="ui-public-eyebrow">{post.category}</span>}
+                  {post.category && <Eyebrow as="span">{post.category}</Eyebrow>}
                   {post.visibility === 'unlisted' && <UnlistedBadge />}
                 </div>
 

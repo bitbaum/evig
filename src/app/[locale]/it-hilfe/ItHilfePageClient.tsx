@@ -1,5 +1,6 @@
 'use client'
 
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { useSession } from 'next-auth/react'
 import { Link } from '@/i18n/navigation'
 import { Button } from '@/components/ui/button'
@@ -69,7 +70,7 @@ export default function ITHilfeBrowseRequestsPage() {
           </Link>
           <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
             <div>
-              <div className="ui-public-eyebrow">{tHub('eyebrow')}</div>
+              <Eyebrow as="div">{tHub('eyebrow')}</Eyebrow>
               <h1 className="ui-public-display-md mt-3">{t('title')}</h1>
               <p className="ui-public-meta mt-3 font-mono tabular-nums">
                 {t('requestCount', { count: total })} · {t('subtitle')}

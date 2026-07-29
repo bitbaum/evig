@@ -1,6 +1,7 @@
 'use client'
 
 import { Calendar, CheckCircle, XCircle, AlertCircle, ArrowLeft } from 'lucide-react'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
 import Link from 'next/link'
 import { formatDate } from '@/lib/date-formats'
@@ -115,9 +116,9 @@ export default function WorkshopsDashboard() {
             <ArrowLeft className="mr-1.5 h-3 w-3" />
             {t('backToDashboard')}
           </Link>
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+          <Eyebrow>
             {t('pageSubtitle')}
-          </p>
+          </Eyebrow>
           <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
             {t('pageTitle')}
           </Heading>

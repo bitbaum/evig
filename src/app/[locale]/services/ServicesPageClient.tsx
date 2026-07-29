@@ -1,4 +1,5 @@
 'use client'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import {
   Wrench,
   ArrowRight,
@@ -30,13 +31,13 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
       <div className="p-6 sm:p-8 flex flex-col h-full">
         <div className="mb-6">
           <div className="flex items-center justify-between gap-3 mb-3">
-            <span className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+            <Eyebrow as="span">
               {service.category}
-            </span>
+            </Eyebrow>
             {service.badge && (
-              <span className="font-mono text-xs uppercase tracking-[0.18em] text-action">
+              <Eyebrow as="span" className="text-action">
                 · {service.badge}
-              </span>
+              </Eyebrow>
             )}
           </div>
           <Heading level={3} className="text-xl sm:text-2xl font-semibold text-text-primary">
@@ -165,7 +166,7 @@ export default function ServicesPage() {
 
         <section className="border-t border-subtle py-20 text-center">
           <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-            <div className="ui-public-eyebrow">{t('ctaEyebrow')}</div>
+            <Eyebrow as="div">{t('ctaEyebrow')}</Eyebrow>
             <h2 className="ui-public-display-lg mt-4">{t('ctaTitle')}</h2>
             <p className="ui-public-section-lede mt-6 mx-auto">{t('ctaSubtitle')}</p>
             <div className="ui-public-cta-row mt-10">

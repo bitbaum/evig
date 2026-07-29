@@ -8,6 +8,7 @@
  */
 
 import { Metadata } from 'next'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { getTranslations } from 'next-intl/server'
 import { ORG } from '@/config/org'
 import { query } from '@/lib/auth/db'
@@ -194,9 +195,9 @@ export default async function TeamPage() {
 
       {/* Footer notice — sensitive data + auto-staff detection, collapsed
           to a single mono line so it stops competing with the list. */}
-      <p className="border-t border-subtle pt-6 font-mono text-xs uppercase tracking-[0.14em] text-text-tertiary">
+      <Eyebrow className="border-t border-subtle pt-6">
         {t('footerNotice', { domain: `@${ORG.emailDomain}` })}
-      </p>
+      </Eyebrow>
     </AdminPageWrapper>
   )
 }

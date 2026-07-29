@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { ClipboardList, AlertTriangle, CircleDot } from 'lucide-react'
 import { Avatar } from '@/components/ui/Avatar'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { WORK_STATE_LABELS, WORK_STATE_COLORS, type WorkState } from '@/config/team'
 import {
   TASK_STATUS_LABELS,
@@ -96,10 +97,10 @@ export function MemberBoardCard({ card }: { card: BoardMemberCard }) {
 
       {/* Active tasks (ground truth) */}
       <div className="min-w-0">
-        <div className="mb-1.5 flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-text-tertiary">
+        <Eyebrow as="div" className="mb-1.5 flex items-center gap-1.5">
           <ClipboardList className="h-3 w-3" />
           {card.activeTaskCount > 0 ? `${card.activeTaskCount} aktive Aufgaben` : 'Keine offenen Aufgaben'}
-        </div>
+        </Eyebrow>
         {card.tasks.slice(0, 2).map((t) => (
           <div key={t.id} className="flex items-center gap-2 py-0.5">
             <span

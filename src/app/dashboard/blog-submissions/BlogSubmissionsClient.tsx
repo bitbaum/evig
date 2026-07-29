@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Button } from '@/components/ui/button'
 import { useTranslations } from 'next-intl'
 import {
@@ -77,9 +78,9 @@ export default function BlogSubmissionsClient() {
             <ArrowLeft className="mr-1.5 h-3 w-3" />
             {t('backToDashboard')}
           </Link>
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+          <Eyebrow>
             {t('pageSubtitle')}
-          </p>
+          </Eyebrow>
           <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
             {t('pageTitle')}
           </Heading>

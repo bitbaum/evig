@@ -1,6 +1,7 @@
 'use client'
 
 import { useSession } from 'next-auth/react'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import {
   MessageSquare,
   Edit3,
@@ -287,9 +288,9 @@ export default function UserReviewsPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="border-b border-subtle pb-8">
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+        <Eyebrow>
           {t('pageDescription')}
-        </p>
+        </Eyebrow>
         <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
           {t('pageTitle')}
         </Heading>

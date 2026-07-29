@@ -9,6 +9,7 @@ import { Select } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { StatusBadge } from '@/components/ui/status-badge'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import {
   TIME_OFF_KIND_OPTIONS,
   TIME_OFF_KINDS,
@@ -109,7 +110,7 @@ export function TimeOffPanel() {
           {/* Request form */}
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="block">
-              <span className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">{t('kindLabel')}</span>
+              <Eyebrow as="span">{t('kindLabel')}</Eyebrow>
               <Select value={kind} onChange={e => setKind(e.target.value)} className="mt-1 min-h-touch">
                 {TIME_OFF_KIND_OPTIONS.map(k => (
                   <option key={k} value={k}>{timeOffKindLabel(t, k)}</option>
@@ -118,16 +119,16 @@ export function TimeOffPanel() {
             </label>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <label className="block">
-                <span className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">{t('from')}</span>
+                <Eyebrow as="span">{t('from')}</Eyebrow>
                 <Input type="date" value={startsOn} onChange={e => setStartsOn(e.target.value)} className="mt-1 min-h-touch" />
               </label>
               <label className="block">
-                <span className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">{t('to')}</span>
+                <Eyebrow as="span">{t('to')}</Eyebrow>
                 <Input type="date" value={endsOn} min={startsOn || undefined} onChange={e => setEndsOn(e.target.value)} className="mt-1 min-h-touch" />
               </label>
             </div>
             <label className="block sm:col-span-2">
-              <span className="font-mono text-xs uppercase tracking-[0.16em] text-text-tertiary">{t('noteLabel')}</span>
+              <Eyebrow as="span">{t('noteLabel')}</Eyebrow>
               <Textarea rows={2} value={note} onChange={e => setNote(e.target.value)} placeholder={t('notePlaceholder')} className="mt-1 resize-none" />
             </label>
             <div className="sm:col-span-2">

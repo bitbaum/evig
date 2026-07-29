@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { X, ChevronDown, ExternalLink, ArrowRight } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Drawer } from '@/components/ui/Drawer'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { NavigationItem } from '@/config/navigation'
 import { ORG } from '@/config/org'
 import { Button } from '@/components/ui/button'
@@ -163,11 +164,11 @@ export function MobileMenu({
                               return groups.map((group, groupIdx) => (
                                 <div key={groupIdx}>
                                   {group.section && (
-                                    <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">
+                                    <Eyebrow className="mb-2">
                                       {group.section.nameKey
                                         ? navItemLabel(t as NavTranslator, group.section.nameKey)
                                         : group.section.name}
-                                    </p>
+                                    </Eyebrow>
                                   )}
                                   <ul className="space-y-0.5">
                                     {group.items.map((subItem) => (

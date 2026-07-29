@@ -1,5 +1,6 @@
 'use client'
 
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
@@ -372,7 +373,7 @@ function Step3({ t, buildResult, componentRows, onBack }: Step3Props) {
           <div key={index} className="flex items-center gap-4 rounded-lg border p-4">
             <row.icon className="w-6 h-6 shrink-0 text-text-tertiary" />
             <div className="min-w-0 grow">
-              <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-text-tertiary">{row.type}</p>
+              <Eyebrow>{row.type}</Eyebrow>
               <Heading level={4} className="font-semibold text-text-primary">{row.guidance}</Heading>
             </div>
           </div>

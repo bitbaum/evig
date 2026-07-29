@@ -1,6 +1,7 @@
 'use client'
 
 import { useSession } from 'next-auth/react'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Heart, Package, ArrowLeft, CheckCircle, Clock, Receipt, LogIn } from 'lucide-react'
@@ -159,9 +160,9 @@ export default function DonationsDashboard() {
             <ArrowLeft className="mr-1.5 h-3 w-3" />
             {t('backToDashboard')}
           </Link>
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+          <Eyebrow>
             {t('pageSubtitle')}
-          </p>
+          </Eyebrow>
           <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
             {t('pageTitle')}
           </Heading>

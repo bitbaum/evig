@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
@@ -92,7 +93,7 @@ export default async function TechnikerDashboardPage() {
         {/* Header */}
         <div className="mb-8 flex flex-col gap-4 border-b border-subtle pb-8 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+            <Eyebrow>
               {t('pageSubtitle')}
               {profile.city ? ` · ${profile.city}` : ''}
               {!profile.isActive && (
@@ -100,7 +101,7 @@ export default async function TechnikerDashboardPage() {
                   {t('profileInactive')}
                 </span>
               )}
-            </p>
+            </Eyebrow>
             <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
               {t('pageTitle')}
             </Heading>

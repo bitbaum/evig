@@ -12,6 +12,7 @@
  */
 
 import { Metadata } from 'next'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { redirect } from 'next/navigation'
@@ -75,9 +76,9 @@ export default async function MyTeamProfileEditPage() {
           <ArrowLeft className="w-3 h-3" />
           Mein Profil
         </Link>
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+        <Eyebrow>
           {session.user.name || session.user.email}
-        </p>
+        </Eyebrow>
         <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
           Mein Profil bearbeiten
         </Heading>

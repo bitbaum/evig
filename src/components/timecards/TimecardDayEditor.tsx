@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { HourRangePicker } from './HourRangePicker'
 import { TimecardActions } from './TimecardActions'
 
@@ -79,13 +80,13 @@ export function TimecardDayEditor({
     <section className="space-y-5">
       {/* Duration hero: what this day currently counts. */}
       <div className="flex items-baseline justify-between gap-3">
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+        <Eyebrow>
           {hasEntry
             ? isAbsence
               ? categoryLabel(selectedEntry.category)
               : t('dayEditorHasEntry')
             : t('dayEditorNoEntry')}
-        </p>
+        </Eyebrow>
         <p className="font-mono text-2xl tabular-nums text-text-primary sm:text-3xl">
           {duration(selectedEntry?.duration_minutes ?? 0)}
         </p>

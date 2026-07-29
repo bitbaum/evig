@@ -23,6 +23,7 @@ import { getCantonCoordinates } from '@/config/canton-coordinates'
 import type { MapMarker } from '@/components/map/LeafletMap'
 import { TechnicianMatchCard } from './TechnicianMatchCard'
 import Heading from '@/components/ui/Heading'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { ROUTES } from '@/config/routes'
 
 const LeafletMap = dynamic(() => import('@/components/map/LeafletMap'), {
@@ -195,9 +196,9 @@ export function TechnicianMapList({ requestId, requestTitle, requestCanton }: Te
                     onMouseLeave={() => setHighlightedHelperId(null)}
                   >
                     {helper.isPreferred && (
-                      <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-action">
+                      <Eyebrow as="div" className="mb-2 text-action">
                         {t('preferredTechnician')}
-                      </div>
+                      </Eyebrow>
                     )}
 
                     {showTopMatchBadge && (

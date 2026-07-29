@@ -11,6 +11,7 @@ import {
 import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
 import { useMarketplaceListings } from '@/hooks/useMarketplaceListings'
 import { Button } from '@/components/ui/button'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Input } from '@/components/ui/input'
 import { FilterPill } from '@/components/marketplace/FilterPill'
 import { MarketplaceBrowseFacets } from '@/components/marketplace/MarketplaceBrowseFacets'
@@ -39,9 +40,7 @@ interface FilterSidebarProps {
 function FilterGroup({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="border-t border-subtle pt-5">
-      <p className="mb-3 font-mono text-[10px] uppercase tracking-[0.16em] text-text-muted">
-        {label}
-      </p>
+      <Eyebrow className="mb-3 text-text-muted">{label}</Eyebrow>
       {children}
     </div>
   )
@@ -121,7 +120,7 @@ export function MarketplaceFilterSidebar({
     <div>
       {/* Panel header */}
       <div className="flex items-center justify-between pb-1">
-        <span className="ui-public-eyebrow">{t('filters.label')}</span>
+        <Eyebrow as="span">{t('filters.label')}</Eyebrow>
         {hasActiveFilters && (
           <Button
             type="button"

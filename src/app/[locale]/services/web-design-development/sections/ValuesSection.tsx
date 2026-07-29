@@ -1,3 +1,4 @@
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import Heading from '@/components/ui/Heading'
 import { getTranslations } from 'next-intl/server'
 
@@ -20,7 +21,7 @@ export async function ValuesSection() {
     <section className="ui-public-band py-20 sm:py-24">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto text-center mb-14">
-          <div className="ui-public-eyebrow">{tEye('principles')}</div>
+          <Eyebrow as="div">{tEye('principles')}</Eyebrow>
           <Heading level={2} className="ui-public-display-lg mt-4">{t('title')}</Heading>
           <p
             className="ui-public-section-lede mt-6 mx-auto"

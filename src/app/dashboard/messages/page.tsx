@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback, Suspense } from 'react'
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { MessageSquare, Loader2 } from 'lucide-react'
@@ -86,9 +87,9 @@ function MessagesContent() {
   return (
     <div className="space-y-6">
       <header className="border-b border-subtle pb-6">
-        <p className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary">
+        <Eyebrow>
           {t('pageSubtitle')}
-        </p>
+        </Eyebrow>
         <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
           {t('pageTitle')}
         </Heading>

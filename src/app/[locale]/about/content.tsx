@@ -1,3 +1,4 @@
+import { Eyebrow } from '@/components/ui/Eyebrow'
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { PageHero } from '@/components/layout/PageHero'
@@ -24,7 +25,7 @@ export default async function AboutContent() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           {/* Section Header */}
           <div className="text-center mb-12">
-            <div className="ui-public-eyebrow">{t('mission.badge').toUpperCase()}</div>
+            <Eyebrow as="div">{t('mission.badge').toUpperCase()}</Eyebrow>
             <Heading level={2} className="ui-public-display-lg mt-4">
               {t('mission.title')}
             </Heading>
@@ -125,7 +126,7 @@ export default async function AboutContent() {
       {/* Call to Action */}
       <section className="border-t border-subtle py-20 text-center">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <div className="ui-public-eyebrow">{tEye('ready')}</div>
+          <Eyebrow as="div">{tEye('ready')}</Eyebrow>
           <h2 className="ui-public-display-lg mt-4">{t('cta.title')}</h2>
           <p className="ui-public-section-lede mt-6 mx-auto">{t('cta.description')}</p>
           <div className="mt-10">
