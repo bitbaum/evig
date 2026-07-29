@@ -1,33 +1,23 @@
 'use client';
 
-import Image from 'next/image';
-import Link from 'next/link';
 import { useState } from 'react';
-import { ROUTES } from '@/config/routes';
-import { ClipboardPlus, FileText, Loader2 } from 'lucide-react';
 import {
   DECISION_STATUS,
-  DECISION_STATUS_CONFIG,
-  DECISION_TYPE_CONFIG,
-  VOTING_METHOD_CONFIG,
-  DECISION_CATEGORY_LABELS,
   VALID_TRANSITIONS,
-  EDITABLE_STATUSES,
   type DecisionStatus,
 } from '@/config/decisions';
-import { Link2, Check, CheckCircle2, Mail } from 'lucide-react';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
-import { AdminButton } from '@/components/admin/AdminButton';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
 import { adminSurface, adminType } from '@/lib/admin-ui';
 import { cn } from '@/lib/utils';
-import { formatDateShort } from '@/lib/date-formats';
 import { apiFetch } from '@/lib/api/client';
 import { getErrorMessage } from '@/lib/utils/error';
-import BeschlussPdfExport from '@/components/decisions/BeschlussPdfExport';
 import type { DecisionDetail } from './types';
 import { useDecisionHeaderCard } from '@/hooks/useDecisionHeaderCard';
+import { HeaderMetaRow } from './header/HeaderMetaRow';
+import { HeaderActions } from './header/HeaderActions';
+import { CloseConfirmPanel } from './header/CloseConfirmPanel';
+import { CancelConfirmPanel } from './header/CancelConfirmPanel';
+import { OptionsDisplay } from './header/OptionsDisplay';
 
 interface Props {
   decision: DecisionDetail;
@@ -71,9 +61,6 @@ export default function DecisionHeaderCard({
     handleDelete,
   } = useDecisionHeaderCard(decision.id, onDeleteSuccess, onError)
 
-  const statusConf = DECISION_STATUS_CONFIG[decision.status];
-  const typeConf = DECISION_TYPE_CONFIG[decision.decisionType];
-  const methodConf = VOTING_METHOD_CONFIG[decision.votingMethod];
   const validTargets = VALID_TRANSITIONS[decision.status] || [];
   const canDelete = decision.creator.id === currentUserId || isSuperAdmin;
   const canCreateFollowUpTask = decision.status === DECISION_STATUS.CLOSED
@@ -102,217 +89,46 @@ export default function DecisionHeaderCard({
   return (
     <div className={cn(adminSurface.card, 'p-4 md:p-6')}>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        {/* Metadata row */}
-        <div className="flex flex-wrap items-center gap-2">
-          <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusConf.color}`}>
-            {statusConf.label}
-          </span>
-          <span className="rounded-full bg-surface-raised px-2.5 py-0.5 text-xs text-text-secondary">
-            {typeConf.label}
-          </span>
-          <span className="rounded-full bg-surface-raised px-2.5 py-0.5 text-xs text-text-secondary">
-            {methodConf.label}
-          </span>
-          <span className="rounded-full bg-surface-raised px-2.5 py-0.5 text-xs text-text-secondary">
-            {DECISION_CATEGORY_LABELS[decision.category] || decision.category}
-          </span>
-          <span className={adminType.meta}>
-            {decision.creator.email} · {formatDateShort(decision.createdAt)}
-          </span>
-          {decision.protocolId && (
-            <Link
-              href={`/admin/protocols/${decision.protocolId}`}
-              className="inline-flex items-center gap-1 rounded-full bg-surface-raised px-2.5 py-0.5 text-xs text-action hover:text-action-hover"
-            >
-              <FileText className="h-3 w-3" />
-              Aus Protokoll
-            </Link>
-          )}
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex flex-wrap gap-2 shrink-0">
-          {(EDITABLE_STATUSES as readonly string[]).includes(decision.status) && (
-            <AdminButton variant="secondary" href={`/admin/decisions/${decision.id}/edit`}>
-              Bearbeiten
-            </AdminButton>
-          )}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleCopyLink}
-            className={cn(
-              'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
-              linkCopied
-                ? 'bg-action-muted text-action-muted'
-                : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
-            )}
-          >
-            {linkCopied ? (
-              <><Check className="h-3.5 w-3.5" /> Link kopiert</>
-            ) : (
-              <><Link2 className="h-3.5 w-3.5" /> Link teilen</>
-            )}
-          </Button>
-          {decision.status === DECISION_STATUS.VOTING && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleSendInvitations}
-              disabled={sendingInvitations}
-              className={cn(
-                'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
-                invitationsResult
-                  ? 'bg-action-muted text-action-muted'
-                  : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay disabled:opacity-50'
-              )}
-            >
-              <Mail className="h-3.5 w-3.5" />
-              {sendingInvitations
-                ? 'Sende...'
-                : invitationsResult
-                  ? `${invitationsResult.sent} gesendet`
-                  : 'Einladungen senden'}
-            </Button>
-          )}
-          {validTargets.includes(DECISION_STATUS.DISCUSSION) && (
-            <AdminButton variant="action" onClick={() => onTransition(DECISION_STATUS.DISCUSSION)}>
-              Zur Diskussion
-            </AdminButton>
-          )}
-          {validTargets.includes(DECISION_STATUS.VOTING) && (
-            <AdminButton variant="warning" onClick={() => onTransition(DECISION_STATUS.VOTING)}>
-              Zur Abstimmung
-            </AdminButton>
-          )}
-          {validTargets.includes(DECISION_STATUS.CLOSED) && !showCloseInput && (
-            <AdminButton variant="primary" onClick={() => setShowCloseInput(true)}>
-              Abstimmung schliessen
-            </AdminButton>
-          )}
-          {validTargets.includes(DECISION_STATUS.CANCELLED) && !showCancelInput && (
-            <AdminButton variant="dangerOutline" onClick={() => setShowCancelInput(true)}>
-              Abbrechen
-            </AdminButton>
-          )}
-          {decision.status === DECISION_STATUS.CLOSED && (
-            <>
-              <BeschlussPdfExport
-                decision={{
-                  id: decision.id,
-                  title: decision.title,
-                  description: decision.description,
-                  votingMethod: decision.votingMethod,
-                  category: decision.category,
-                  outcome: decision.outcome,
-                  outcomeSummary: decision.outcomeSummary,
-                  aiOutcomeNarrative: decision.aiOutcomeNarrative,
-                }}
-              />
-              {decision.linkedTaskId ? (
-                <AdminButton variant="secondary" href={`/admin/tasks/${decision.linkedTaskId}`}>
-                  <CheckCircle2 className="w-4 h-4" />
-                  Folgeaufgabe öffnen
-                </AdminButton>
-              ) : canCreateFollowUpTask ? (
-                <AdminButton
-                  variant="secondary"
-                  onClick={handleCreateFollowUpTask}
-                  disabled={creatingFollowUpTask}
-                >
-                  {creatingFollowUpTask
-                    ? <Loader2 className="w-4 h-4 animate-spin" />
-                    : <ClipboardPlus className="w-4 h-4" />
-                  }
-                  Aufgabe erstellen
-                </AdminButton>
-              ) : (
-                <AdminButton
-                  href={`${ROUTES.admin.taskNew}?${new URLSearchParams({
-                    title: `Folge aus: ${decision.title}`,
-                    description: [
-                      decision.outcomeSummary,
-                      decision.outcomeSummary ? '' : null,
-                      `(Aus Entscheid: ${decision.title})`,
-                    ].filter(Boolean).join('\n'),
-                  }).toString()}`}
-                  variant="secondary"
-                >
-                  <ClipboardPlus className="w-4 h-4" />
-                  Aufgabe manuell
-                </AdminButton>
-              )}
-            </>
-          )}
-          {canDelete && (
-            <AdminButton variant="dangerOutline" onClick={() => setShowDeleteDialog(true)}>
-              Löschen
-            </AdminButton>
-          )}
-        </div>
+        <HeaderMetaRow decision={decision} />
+        <HeaderActions
+          decision={decision}
+          validTargets={validTargets}
+          canDelete={canDelete}
+          canCreateFollowUpTask={canCreateFollowUpTask}
+          creatingFollowUpTask={creatingFollowUpTask}
+          linkCopied={linkCopied}
+          sendingInvitations={sendingInvitations}
+          invitationsResult={invitationsResult}
+          showCloseInput={showCloseInput}
+          showCancelInput={showCancelInput}
+          onTransition={onTransition}
+          handleCopyLink={handleCopyLink}
+          handleSendInvitations={handleSendInvitations}
+          handleCreateFollowUpTask={handleCreateFollowUpTask}
+          setShowCloseInput={setShowCloseInput}
+          setShowCancelInput={setShowCancelInput}
+          setShowDeleteDialog={setShowDeleteDialog}
+        />
       </div>
 
       {/* Close confirmation */}
       {showCloseInput && (
-        <div className="mt-3 rounded-md border border-strong bg-action-muted p-3">
-          <label className={cn('mb-1 block', adminType.subTitle)}>
-            Zusammenfassung (optional)
-          </label>
-          <Textarea
-            value={closeSummary}
-            onChange={(e) => setCloseSummary(e.target.value)}
-            rows={2}
-            className="mb-2"
-            placeholder="Zusammenfassung des Ergebnisses..."
-          />
-          <div className="flex gap-2">
-            <AdminButton
-              variant="primary"
-              onClick={() => {
-                onTransition(DECISION_STATUS.CLOSED, { outcomeSummary: closeSummary || undefined });
-                setShowCloseInput(false);
-              }}
-            >
-              Bestätigen
-            </AdminButton>
-            <AdminButton variant="secondary" onClick={() => setShowCloseInput(false)}>
-              Zurück
-            </AdminButton>
-          </div>
-        </div>
+        <CloseConfirmPanel
+          closeSummary={closeSummary}
+          setCloseSummary={setCloseSummary}
+          setShowCloseInput={setShowCloseInput}
+          onTransition={onTransition}
+        />
       )}
 
       {/* Cancel confirmation */}
       {showCancelInput && (
-        <div className="mt-3 rounded-md border border-error-200 dark:border-error-800 bg-error-50 dark:bg-error-900/20 p-3">
-          <label className={cn('mb-1 block', adminType.subTitle)}>
-            Grund für Abbruch
-          </label>
-          <Textarea
-            value={cancelReason}
-            onChange={(e) => setCancelReason(e.target.value)}
-            rows={2}
-            className="mb-2"
-            placeholder="Warum wird abgebrochen?"
-          />
-          <div className="flex gap-2">
-            <AdminButton
-              variant="danger"
-              disabled={!cancelReason.trim()}
-              onClick={() => {
-                if (cancelReason.trim()) {
-                  onTransition(DECISION_STATUS.CANCELLED, { cancelReason });
-                  setShowCancelInput(false);
-                }
-              }}
-            >
-              Abbrechen bestätigen
-            </AdminButton>
-            <AdminButton variant="secondary" onClick={() => setShowCancelInput(false)}>
-              Zurück
-            </AdminButton>
-          </div>
-        </div>
+        <CancelConfirmPanel
+          cancelReason={cancelReason}
+          setCancelReason={setCancelReason}
+          setShowCancelInput={setShowCancelInput}
+          onTransition={onTransition}
+        />
       )}
 
       {/* Description */}
@@ -335,55 +151,7 @@ export default function DecisionHeaderCard({
       )}
 
       {/* Options Display */}
-      {decision.options.length > 0 && (
-        <div className="mt-4">
-          <p className={cn(adminType.subTitle, 'mb-2')}>
-            Optionen ({decision.options.length})
-          </p>
-          {decision.options.some((o) => o.imageUrl) ? (
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-              {decision.options.map((opt) => (
-                <div key={opt.id} className="rounded-lg border border bg-surface-raised overflow-hidden">
-                  {opt.imageUrl ? (
-                    <div className="relative aspect-square w-full bg-surface-base">
-                      <Image
-                        src={opt.imageUrl}
-                        alt={opt.label}
-                        fill
-                        className="object-contain p-2"
-                      />
-                    </div>
-                  ) : (
-                    <div className="flex aspect-square w-full items-center justify-center bg-surface-raised text-3xl font-bold text-text-muted">
-                      {opt.label.charAt(0).toUpperCase()}
-                    </div>
-                  )}
-                  <div className="p-2">
-                    <p className={cn('truncate text-xs font-medium', adminType.body)}>{opt.label}</p>
-                    {opt.description && (
-                      <p className={cn('truncate', adminType.meta)}>{opt.description}</p>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="space-y-1">
-              {decision.options.map((opt) => (
-                <div
-                  key={opt.id}
-                  className="rounded-md border border px-3 py-2"
-                >
-                  <span className={cn('font-medium', adminType.body)}>{opt.label}</span>
-                  {opt.description && (
-                    <span className={cn('ml-2', adminType.meta)}>– {opt.description}</span>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
+      <OptionsDisplay decision={decision} />
 
       {/* Cancel Reason */}
       {decision.status === DECISION_STATUS.CANCELLED && decision.cancelReason && (
