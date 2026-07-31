@@ -4,8 +4,8 @@ import { Users } from 'lucide-react'
 import {
   UsersTableClient,
   UserFilters,
-  Pagination,
 } from '@/components/admin/users'
+import { Pagination } from '@/components/ui/Pagination'
 import { AdminListShell } from '@/components/admin/AdminListShell'
 import { useUsersList } from '@/hooks/useUsersList'
 
@@ -59,10 +59,10 @@ export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProp
         currentUserIsSuperAdmin={currentUserIsSuperAdmin}
       />
       <Pagination
-        page={pagination.page}
+        currentPage={pagination.page}
         totalPages={pagination.pages}
-        total={pagination.total}
-        limit={pagination.limit}
+        totalItems={pagination.total}
+        pageSize={pagination.limit}
         onPageChange={handlePageChange}
       />
     </AdminListShell>

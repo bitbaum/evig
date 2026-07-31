@@ -6134,7 +6134,10 @@
     },
     "pagination": {
       "of": "di",
-      "morePages": "altre pagine"
+      "morePages": "altre pagine",
+      "label": "Paginazione",
+      "previous": "Pagina precedente",
+      "next": "Pagina successiva"
     },
     "serviceBooking": {
       "genericError": "Si è verificato un errore"

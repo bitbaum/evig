@@ -8,7 +8,6 @@ export { EditProfileModal } from './EditProfileModal'
 export { DeleteUserModal } from './DeleteUserModal'
 export { EmptyState } from '@/components/common/EmptyState'
 export { UserFilters } from './UserFilters'
-export { Pagination } from './Pagination'
 export { useUserManagement } from './useUserManagement'
 
 // Types

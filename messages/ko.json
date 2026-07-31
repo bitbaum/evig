@@ -6134,7 +6134,10 @@
     },
     "pagination": {
       "of": "/",
-      "morePages": "더 많은 페이지"
+      "morePages": "더 많은 페이지",
+      "label": "페이지 탐색",
+      "previous": "이전 페이지",
+      "next": "다음 페이지"
     },
     "serviceBooking": {
       "genericError": "오류가 발생했습니다"

@@ -6134,7 +6134,10 @@
     },
     "pagination": {
       "of": "de",
-      "morePages": "más páginas"
+      "morePages": "más páginas",
+      "label": "Paginación",
+      "previous": "Página anterior",
+      "next": "Página siguiente"
     },
     "serviceBooking": {
       "genericError": "Se produjo un error"

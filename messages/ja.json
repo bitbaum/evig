@@ -6134,7 +6134,10 @@
     },
     "pagination": {
       "of": "の",
-      "morePages": "さらにページ"
+      "morePages": "さらにページ",
+      "label": "ページネーション",
+      "previous": "前のページ",
+      "next": "次のページ"
     },
     "serviceBooking": {
       "genericError": "エラーが発生しました"

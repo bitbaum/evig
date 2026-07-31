@@ -3,6 +3,8 @@
 import { Link } from '@/i18n/navigation'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { NAV_STATE } from '@/lib/design/nav'
+import { cn } from '@/lib/utils'
 
 interface PaginationProps {
   currentPage: number
@@ -15,15 +17,17 @@ interface PaginationProps {
   onPageChange?: (page: number) => void
 }
 
-// min-w/min-h ensure 44×44px touch targets (WCAG 2.5.5) even when visually smaller
+// min-w/min-h ensure 44×44px touch targets (WCAG 2.5.5) even when visually smaller.
+// The current page is styled by NAV_STATE.chip.active — the one "selected item" fill.
 const btnClass = (active: boolean, disabled = false) =>
-  `inline-flex items-center justify-center min-w-11 min-h-11 w-9 h-9 text-sm rounded-md transition-colors ${
+  cn(
+    'inline-flex items-center justify-center min-w-11 min-h-11 w-9 h-9 text-sm rounded-md transition-colors',
     disabled
       ? 'text-text-muted cursor-not-allowed'
       : active
-      ? 'bg-action text-action-text font-medium'
-      : 'text-text-secondary hover:bg-surface-raised'
-  }`
+        ? cn(NAV_STATE.chip.active, 'font-medium')
+        : 'text-text-secondary hover:bg-surface-raised',
+  )
 
 /** Build a page href by replacing or appending the `page` param in `hrefBase` */
 function makeHref(hrefBase: string, page: number): string {
@@ -46,7 +50,11 @@ function PageItem({
 }) {
   if (hrefBase) {
     return (
-      <Link href={makeHref(hrefBase, page)} className={btnClass(active)}>
+      <Link
+        href={makeHref(hrefBase, page)}
+        aria-current={active ? 'page' : undefined}
+        className={btnClass(active)}
+      >
         {page}
       </Link>
     )
@@ -55,6 +63,7 @@ function PageItem({
     <button
       onClick={() => onPageChange?.(page)}
       disabled={active}
+      aria-current={active ? 'page' : undefined}
       className={btnClass(active)}
     >
       {page}
@@ -65,21 +74,23 @@ function PageItem({
 function NavButton({
   page,
   disabled,
+  label,
   children,
   hrefBase,
   onPageChange,
 }: {
   page: number
   disabled: boolean
+  label: string
   children: React.ReactNode
   hrefBase?: string
   onPageChange?: (page: number) => void
 }) {
   if (hrefBase) {
     return disabled ? (
-      <span className={btnClass(false, true)}>{children}</span>
+      <span aria-hidden="true" className={btnClass(false, true)}>{children}</span>
     ) : (
-      <Link href={makeHref(hrefBase, page)} className={btnClass(false)}>
+      <Link href={makeHref(hrefBase, page)} aria-label={label} className={btnClass(false)}>
         {children}
       </Link>
     )
@@ -88,6 +99,7 @@ function NavButton({
     <button
       onClick={() => onPageChange?.(page)}
       disabled={disabled}
+      aria-label={label}
       className={btnClass(false, disabled)}
     >
       {children}
@@ -119,12 +131,15 @@ export function Pagination({
   const pageList = Array.from(pages).sort((a, b) => a - b)
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-y-2 px-4 py-3 border-t border-subtle">
+    <nav
+      aria-label={t('label')}
+      className="flex flex-wrap items-center justify-between gap-y-2 px-4 py-3 border-t border-subtle"
+    >
       <p className="text-sm text-text-tertiary">
         {from}–{to} {t('of')} {totalItems}
       </p>
       <div className="flex items-center gap-1">
-        <NavButton page={currentPage - 1} disabled={currentPage <= 1} hrefBase={hrefBase} onPageChange={onPageChange}>
+        <NavButton page={currentPage - 1} disabled={currentPage <= 1} label={t('previous')} hrefBase={hrefBase} onPageChange={onPageChange}>
           <ChevronLeft className="w-4 h-4" />
         </NavButton>
 
@@ -153,10 +168,10 @@ export function Pagination({
           {currentPage} / {totalPages}
         </span>
 
-        <NavButton page={currentPage + 1} disabled={currentPage >= totalPages} hrefBase={hrefBase} onPageChange={onPageChange}>
+        <NavButton page={currentPage + 1} disabled={currentPage >= totalPages} label={t('next')} hrefBase={hrefBase} onPageChange={onPageChange}>
           <ChevronRight className="w-4 h-4" />
         </NavButton>
       </div>
-    </div>
+    </nav>
   )
 }

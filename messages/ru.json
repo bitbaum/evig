@@ -6129,7 +6129,10 @@
     },
     "pagination": {
       "of": "из",
-      "morePages": "ещё страниц"
+      "morePages": "ещё страниц",
+      "label": "Навигация по страницам",
+      "previous": "Предыдущая страница",
+      "next": "Следующая страница"
     },
     "serviceBooking": {
       "genericError": "Произошла ошибка"

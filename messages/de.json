@@ -6199,7 +6199,10 @@
     },
     "pagination": {
       "of": "von",
-      "morePages": "weitere Seiten"
+      "morePages": "weitere Seiten",
+      "label": "Seitennavigation",
+      "previous": "Vorherige Seite",
+      "next": "Nächste Seite"
     },
     "serviceBooking": {
       "genericError": "Ein Fehler ist aufgetreten"
