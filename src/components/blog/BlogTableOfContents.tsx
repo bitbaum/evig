@@ -1,9 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { useTranslations } from 'next-intl'
 import type { TocHeading } from '@/lib/blog-toc'
 import { Eyebrow } from '@/components/ui/Eyebrow'
+import { useScrollSpy } from '@/hooks/useScrollSpy'
+import { navLinkClass } from '@/lib/design/nav'
+import { cn } from '@/lib/utils'
 
 interface Props {
   headings: TocHeading[]
@@ -11,31 +13,12 @@ interface Props {
 
 /**
  * Sticky "on this page" rail for long posts. Highlights the section currently
- * in view via IntersectionObserver. Rendered only on xl+ screens (the article
- * reads fine without it on narrow viewports).
+ * in view via useScrollSpy + NAV_STATE.rail. Rendered only on lg+ screens (the
+ * article reads fine without it on narrow viewports).
  */
 export default function BlogTableOfContents({ headings }: Props) {
   const t = useTranslations('blog')
-  const [activeId, setActiveId] = useState<string>('')
-
-  useEffect(() => {
-    const els = headings
-      .map((h) => document.getElementById(h.id))
-      .filter((el): el is HTMLElement => el !== null)
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        // Prefer the topmost heading currently intersecting the trigger band.
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
-        if (visible[0]) setActiveId(visible[0].target.id)
-      },
-      { rootMargin: '-80px 0px -70% 0px', threshold: [0, 1] },
-    )
-    els.forEach((el) => observer.observe(el))
-    return () => observer.disconnect()
-  }, [headings])
+  const activeId = useScrollSpy(headings.map((h) => h.id))
 
   return (
     <aside className="hidden lg:block">
@@ -51,13 +34,8 @@ export default function BlogTableOfContents({ headings }: Props) {
               <li key={h.id}>
                 <a
                   href={`#${h.id}`}
-                  className={[
-                    '-ml-px block border-l-2 py-1 text-[13px] leading-snug transition-colors',
-                    h.level === 3 ? 'pl-6' : 'pl-4',
-                    active
-                      ? 'border-action font-medium text-text-primary'
-                      : 'border-transparent text-text-tertiary hover:border-subtle hover:text-text-secondary',
-                  ].join(' ')}
+                  aria-current={active ? 'location' : undefined}
+                  className={navLinkClass('rail', active, cn('text-[13px]', h.level === 3 && 'pl-6'))}
                 >
                   {h.text}
                 </a>
