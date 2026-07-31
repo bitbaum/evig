@@ -5,7 +5,6 @@ export interface FilterConfig {
   label: string
   options: string[]
   defaultValue?: string
-  color?: 'green' | 'blue' | 'purple' | 'orange'
   /** The sentinel value that means "show all" — set automatically by useFiltering */
   allValue?: string
 }

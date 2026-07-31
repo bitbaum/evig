@@ -17,7 +17,7 @@
  */
 import { cn } from '@/lib/utils'
 
-export type NavShape = 'sidebar' | 'bottomTab' | 'pill' | 'tab'
+export type NavShape = 'sidebar' | 'bottomTab' | 'pill' | 'tab' | 'segmented' | 'chip' | 'rail'
 
 /**
  * base     — layout/shape classes shared by both states
@@ -53,6 +53,30 @@ export const NAV_STATE: Record<NavShape, { base: string; active: string; inactiv
     active: 'border-action text-action',
     inactive:
       'border-transparent text-text-tertiary hover:border-strong hover:text-text-secondary',
+  },
+  /** Segment inside a raised-track segmented control (`bg-surface-raised p-1
+   *  rounded-lg` track). The active segment lifts to the base surface. */
+  segmented: {
+    base: 'flex flex-1 items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors',
+    active: 'bg-surface-base text-text-primary',
+    inactive: 'text-text-tertiary hover:text-text-primary',
+  },
+  /** Filled selection chip in a chip group (filter bars, locale pills, the
+   *  current page number). The selected chip fills with the action color. */
+  chip: {
+    base: 'inline-flex items-center justify-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium transition-colors',
+    active: 'bg-action text-action-text',
+    inactive:
+      'bg-surface-raised text-text-secondary hover:bg-surface-overlay hover:text-text-primary',
+  },
+  /** Scroll-spy TOC rail item (blog "on this page", changelog versions):
+   *  vertical `border-l` list where the action-colored rule marks the section
+   *  currently in view. Pair with `useScrollSpy` + `aria-current="location"`. */
+  rail: {
+    base: '-ml-px block border-l-2 py-1 pl-4 leading-snug transition-colors',
+    active: 'border-action font-medium text-text-primary',
+    inactive:
+      'border-transparent text-text-tertiary hover:border-subtle hover:text-text-secondary',
   },
 }
 

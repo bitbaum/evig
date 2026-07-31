@@ -110,7 +110,6 @@ export function buildServiceFilters(
       key: SERVICE_FILTER_KEY,
       label: byCategory,
       options: SERVICE_CATEGORY_KEYS.map(k => categoryLabels[k]),
-      color: 'green',
     },
   ]
 }

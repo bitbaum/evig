@@ -5,6 +5,7 @@ import { usePathname, useRouter } from '@/i18n/navigation'
 import { locales, localeLabels, type Locale } from '@/i18n/routing'
 import { useTransition, useState, useRef, useEffect } from 'react'
 import { ChevronDown } from 'lucide-react'
+import { navLinkClass } from '@/lib/design/nav'
 import { cn } from '@/lib/utils'
 
 type Props = {
@@ -86,11 +87,8 @@ export function LocaleSwitcher({ className, openUpward = false, inline = false, 
               disabled={isPending}
               aria-current={active ? 'true' : undefined}
               className={cn(
-                'min-h-touch flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors',
+                navLinkClass('chip', active, 'min-h-touch rounded-lg px-3'),
                 'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action',
-                active
-                  ? 'bg-action text-action-text'
-                  : 'bg-surface-raised text-text-secondary hover:bg-surface-base',
                 isPending && 'opacity-50 cursor-wait',
               )}
             >
