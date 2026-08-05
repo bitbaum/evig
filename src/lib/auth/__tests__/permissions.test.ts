@@ -41,7 +41,7 @@ import type { StaffUser } from '@/lib/permissions'
 describe('isStaffEmail', () => {
   it('returns true for @revamp-it.ch emails', () => {
     expect(isStaffEmail('user@revamp-it.ch')).toBe(true)
-    expect(isStaffEmail('andreas@revamp-it.ch')).toBe(true)
+    expect(isStaffEmail('georgy.butaev@revamp-it.ch')).toBe(true)
   })
 
   it('is case-insensitive', () => {
@@ -72,12 +72,21 @@ describe('isStaffEmail', () => {
 
 describe('isSuperAdmin', () => {
   it('returns true for known super admin emails', () => {
-    expect(isSuperAdmin('andreas@revamp-it.ch')).toBe(true)
-    expect(isSuperAdmin('georgy@revamp-it.ch')).toBe(true)
+    expect(isSuperAdmin('georgy.butaev@revamp-it.ch')).toBe(true)
+  })
+
+  // Regression guard: evig separated from Revamp-IT on 2026-07-24. Their
+  // super admins must never regain access to evig's sensitive sections by
+  // e-mail alone. Never re-add these to SUPER_ADMIN_EMAILS.
+  it('denies the removed Revamp-IT super admins', () => {
+    expect(isSuperAdmin('andreas@revamp-it.ch')).toBe(false)
+    expect(isSuperAdmin('veronica@revamp-it.ch')).toBe(false)
+    expect(isSuperAdmin('daniel@revamp-it.ch')).toBe(false)
+    expect(isSuperAdmin('georgy@revamp-it.ch')).toBe(false)
   })
 
   it('is case-insensitive', () => {
-    expect(isSuperAdmin('ANDREAS@REVAMP-IT.CH')).toBe(true)
+    expect(isSuperAdmin('GEORGY.BUTAEV@REVAMP-IT.CH')).toBe(true)
   })
 
   it('returns true when isSuperAdminFromDb flag is true', () => {
@@ -100,7 +109,7 @@ describe('isSuperAdmin', () => {
 
 describe('canAccessSection', () => {
   const superAdmin: StaffUser = {
-    email: 'andreas@revamp-it.ch',
+    email: 'georgy.butaev@revamp-it.ch',
     is_staff: true,
     staff_permissions: ['dashboard'],
   }
@@ -179,7 +188,7 @@ describe('canAccessSection', () => {
 describe('canAccessSensitive', () => {
   it('returns true for super admins', () => {
     const superAdmin: StaffUser = {
-      email: 'andreas@revamp-it.ch',
+      email: 'georgy.butaev@revamp-it.ch',
       is_staff: true,
       staff_permissions: [],
     }
@@ -229,7 +238,7 @@ describe('canAccessSensitive', () => {
 describe('getAccessibleSections', () => {
   it('returns all sections for super admin', () => {
     const superAdmin: StaffUser = {
-      email: 'andreas@revamp-it.ch',
+      email: 'georgy.butaev@revamp-it.ch',
       is_staff: true,
       staff_permissions: [],
     }
@@ -270,7 +279,7 @@ describe('getAccessibleSections', () => {
 
 describe('getInitialStaffPermissions', () => {
   it('returns wildcard for super admins', () => {
-    expect(getInitialStaffPermissions('andreas@revamp-it.ch')).toEqual(['*'])
+    expect(getInitialStaffPermissions('georgy.butaev@revamp-it.ch')).toEqual(['*'])
   })
 
   it('returns default permissions for regular staff', () => {
@@ -289,7 +298,12 @@ describe('getInitialStaffPermissions', () => {
 
 describe('auth constants', () => {
   it('has correct staff domain', () => {
-    expect(STAFF_EMAIL_DOMAIN).toBe('revamp-it.ch')
+    expect(STAFF_EMAIL_DOMAIN).toBe('evig.ch')
+  })
+
+  // Layer B: legacy Revamp-IT logins must keep working until infra cutover.
+  it('still recognises legacy Revamp-IT addresses', () => {
+    expect(isStaffEmail('georgy.butaev@revamp-it.ch')).toBe(true)
   })
 
   it('has super admin emails defined', () => {
