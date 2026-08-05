@@ -10,6 +10,7 @@ name: Deploy production app
 # Without E2E passwords the post-deploy inventory step is skipped.
 
 on:
+  workflow_dispatch: {}
   push:
     branches: [main]
 
