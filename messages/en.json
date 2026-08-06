@@ -4865,7 +4865,8 @@
       "title": "Facts & Figures",
       "moreLink": "View detailed impact figures",
       "detailLink": "View detailed impact figures",
-      "co2Link": "CO₂ calculation & sources"
+      "co2Link": "CO₂ calculation & sources",
+      "statutenLink": "Read the statutes"
     },
     "howWeWork": {
       "title": "How We Work",
@@ -9003,6 +9004,119 @@
     },
     "footer": {
       "legal": "evig — eternal — is a non-profit association (Verein) <em>in formation</em> in Zürich, Switzerland. We do not claim recognised charitable status or issue tax-deductible donation receipts until the association is registered and canton-recognised. Everything on this page is what we are building toward — stated as intent, not a track record we have not yet earned."
+    }
+  },
+  "statuten": {
+    "meta": {
+      "title": "Statutes",
+      "description": "The statutes of {orgName} — fully public, in every language, with a traceable history of changes."
+    },
+    "hero": {
+      "title": "Statutes",
+      "subtitle": "The constitution of {orgName} — open to read before it is adopted."
+    },
+    "draft": {
+      "title": "Draft — not yet adopted",
+      "body": "{orgName} is being founded. These statutes are a draft and have not yet been adopted by any founding assembly. They do not yet establish an association or any rights. We publish them anyway — because a constitution should be readable before it is adopted, not only afterwards."
+    },
+    "adopted": {
+      "title": "Adopted",
+      "body": "These statutes were adopted at the founding assembly of {adoptedOn} and have been in force since."
+    },
+    "authoritative": {
+      "title": "The German version is authoritative",
+      "body": "This translation is provided for understanding. Only the German version is legally binding."
+    },
+    "source": {
+      "title": "Where this document comes from",
+      "body": "These statutes live in the public source-code repository of {orgName}. Every change is traceable there as a single dated revision — retroactively as well.",
+      "cta": "View source and change history"
+    },
+    "toc": {
+      "title": "Contents"
+    },
+    "articleLabel": "Art. {num}",
+    "sections": {
+      "name": "Name, registered office and duration",
+      "zweck": "Purpose and resources",
+      "mitgliedschaft": "Membership",
+      "organe": "Bodies",
+      "transparenz": "Transparency",
+      "schluss": "Final provisions"
+    },
+    "articles": {
+      "name-sitz": {
+        "title": "Name and registered office",
+        "body": "Under the name {orgName} there exists an association within the meaning of Art. 60 ff. of the Swiss Civil Code (ZGB).\n\nThe registered office of the association is in Zurich.\n\nThe duration of the association is unlimited."
+      },
+      "zweck": {
+        "title": "Purpose",
+        "body": "The purpose of the association is to give people access to capable information technology and to digital education — regardless of their financial means.\n\nIt pursues this purpose in particular through:\n\na) testing, repairing and passing on used devices so that they stay in use for as long as possible (circular economy);\nb) repair, advisory and support services for hardware and software;\nc) educational offerings for digital participation;\nd) the development and free publication of open-source software and of research results as a publicly accessible good;\ne) offerings that give people with restricted access to the labour market a meaningful occupation.\n\nThe association is charitable and neutral in both religious and political terms. It does not pursue commercial ends and does not seek profit.\n\nEconomic activity is permitted insofar as it serves the fulfilment of the purpose and remains subordinate to it. It is a means to the purpose and never an end in itself.\n\nThe activity of the association is directed at the general public and not merely at its members."
+      },
+      "mittel": {
+        "title": "Resources",
+        "body": "To pursue its purpose, the association has at its disposal:\n\na) membership fees;\nb) contributions, donations, legacies and inheritances;\nc) grants from public authorities and from foundations;\nd) income from purpose-related activities and services;\ne) income from the association's assets.\n\nAny surplus remains entirely with the association and is used exclusively for the purpose set out in Art. 2. Any distribution to members or third parties is excluded.\n\nThe assets of the association are dedicated exclusively and irrevocably to its purpose."
+      },
+      "beteiligungen": {
+        "title": "Participations",
+        "body": "In order to fulfil its purpose, the association may hold participations in legal entities or establish such entities.\n\nSuch participations are held as an investment of assets and remain subordinate to the purpose. The association does not exercise management in the companies concerned.\n\nIncome from participations accrues entirely to the purpose of the association."
+      },
+      "erwerb": {
+        "title": "Acquisition of membership",
+        "body": "Natural persons and legal entities that support the purpose of the association may become members.\n\nThe board decides on admission. A rejection does not have to be justified."
+      },
+      "erloeschen": {
+        "title": "Termination of membership",
+        "body": "Membership ends:\n\na) for natural persons upon death, for legal entities upon dissolution;\nb) by written resignation at the end of a financial year, subject to one month's notice;\nc) by exclusion.\n\nThe board may exclude a member who harms the purpose of the association or who fails to meet their obligations despite a reminder. The member concerned may refer the decision to the general assembly within 30 days.\n\nMembers who have resigned or been excluded have no claim to the assets of the association."
+      },
+      "beitraege-haftung": {
+        "title": "Fees and liability",
+        "body": "The general assembly sets the annual membership fee.\n\nOnly the assets of the association are liable for its obligations. Any personal liability of the members and any obligation to make additional contributions are excluded (Art. 75a ZGB)."
+      },
+      "organe": {
+        "title": "Bodies",
+        "body": "The bodies of the association are:\n\na) the general assembly;\nb) the board;\nc) the auditors, if any are appointed."
+      },
+      "generalversammlung": {
+        "title": "General assembly",
+        "body": "The general assembly is the supreme body of the association. It is convened once a year in ordinary session, stating the agenda and with at least 20 days' notice.\n\nThe following non-transferable powers are vested in it:\n\na) approval of the annual report and the annual accounts;\nb) discharge of the board;\nc) election and removal of the members of the board and of any auditors;\nd) setting the membership fee;\ne) resolutions on compensation paid to members of the bodies (Art. 12);\nf) amendment of the statutes;\ng) dissolution of the association.\n\nEach member has one vote. Resolutions are passed by a simple majority of the votes cast; in the event of a tie, the chair casts the deciding vote.\n\nAn extraordinary general assembly is convened by resolution of the board or at the written request of at least one fifth of the members.\n\nResolutions may also be passed in writing or electronically, provided that no member requests an oral deliberation."
+      },
+      "vorstand": {
+        "title": "Board",
+        "body": "The board consists of at least two members. It constitutes itself.\n\nIf the employment or the compensation of a board member is resolved upon, the board must consist of at least three members.\n\nThe term of office is two years; re-election is possible.\n\nThe board holds all powers that are not expressly reserved to another body. It conducts the day-to-day business and represents the association externally.\n\nThe board has a quorum when the majority of its members are present. Minutes are kept of the deliberations and resolutions."
+      },
+      "zeichnungsberechtigung": {
+        "title": "Signatory authority",
+        "body": "The association is legally bound by the joint signature of two members of the board."
+      },
+      "entschaedigung": {
+        "title": "Compensation and abstention",
+        "body": "The members of the board hold their office on a voluntary basis as a matter of principle.\n\nActual expenses are reimbursed against receipts. Lump-sum expense allowances are excluded.\n\nAppropriate compensation may be paid for work actually performed. It is determined by the general assembly.\n\nWhere a matter concerns the personal interests of a member of a body — in particular their employment or compensation — that member abstains. They take part neither in the deliberation nor in the decision. The abstention is recorded in the minutes.\n\nCompensation paid to members of the bodies is disclosed in the annual report."
+      },
+      "revisionsstelle": {
+        "title": "Auditors",
+        "body": "The general assembly may appoint auditors.\n\nIf the legal conditions for a statutory audit are met (Art. 69b ZGB), the general assembly appoints auditors in accordance with the applicable provisions."
+      },
+      "offenlegung": {
+        "title": "Disclosure",
+        "body": "The association publishes its statutes, the composition of its board and, annually, the annual report and the annual accounts.\n\nPublication takes a form that makes subsequent changes traceable.\n\nAs long as the association is not legally exempt from taxation, it issues no donation receipts and makes no statements claiming recognised charitable status."
+      },
+      "geschaeftsjahr": {
+        "title": "Financial year",
+        "body": "The financial year corresponds to the calendar year. The first financial year ends on 31 December of the year of foundation."
+      },
+      "statutenaenderung": {
+        "title": "Amendment of the statutes",
+        "body": "Amendments to these statutes require the approval of two thirds of the votes cast at the general assembly. Amendments to Art. 2 (purpose) and Art. 17 (allocation of assets) are reported to the cantonal tax authority."
+      },
+      "aufloesung": {
+        "title": "Dissolution and allocation of assets",
+        "body": "The dissolution of the association requires the approval of two thirds of the votes cast at the general assembly.\n\nUpon dissolution of the association, its assets pass to another tax-exempt legal entity domiciled in Switzerland that pursues the same or a similar purpose.\n\nThe repayment of contributions to members and any other distribution of the assets to the members are excluded."
+      },
+      "inkrafttreten": {
+        "title": "Entry into force",
+        "body": "These statutes were adopted at the founding assembly and have been in force since."
+      }
     }
   }
 }

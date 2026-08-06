@@ -72,7 +72,7 @@ describe('isStaffEmail', () => {
 
 describe('isSuperAdmin', () => {
   it('returns true for a known super admin email', () => {
-    expect(isSuperAdmin('andreas@revamp-it.ch')).toBe(true)
+    expect(isSuperAdmin('georgy.butaev@revamp-it.ch')).toBe(true)
   })
 
   it('returns false for a regular staff email', () => {
@@ -88,7 +88,7 @@ describe('isSuperAdmin', () => {
   })
 
   it('isSuperAdminFromDb=false does not override email check', () => {
-    expect(isSuperAdmin('andreas@revamp-it.ch', false)).toBe(true)
+    expect(isSuperAdmin('georgy.butaev@revamp-it.ch', false)).toBe(true)
   })
 
   it('all SUPER_ADMIN_EMAILS entries return true', () => {
@@ -104,7 +104,7 @@ describe('isSuperAdmin', () => {
 
 describe('canAccessSection', () => {
   const superAdmin: StaffUser = {
-    email: 'andreas@revamp-it.ch',
+    email: 'georgy.butaev@revamp-it.ch',
     is_staff: true,
     staff_permissions: [],
   }
@@ -191,7 +191,7 @@ describe('canAccessSensitive', () => {
   })
 
   it('super admin can access sensitive', () => {
-    expect(canAccessSensitive({ email: 'andreas@revamp-it.ch', is_staff: true, staff_permissions: [] })).toBe(true)
+    expect(canAccessSensitive({ email: 'georgy.butaev@revamp-it.ch', is_staff: true, staff_permissions: [] })).toBe(true)
   })
 
   it('wildcard permission grants sensitive access', () => {
@@ -221,7 +221,7 @@ describe('getAccessibleSections', () => {
   })
 
   it('super admin gets all admin sections', () => {
-    const sections = getAccessibleSections({ email: 'andreas@revamp-it.ch', is_staff: true, staff_permissions: [] })
+    const sections = getAccessibleSections({ email: 'georgy.butaev@revamp-it.ch', is_staff: true, staff_permissions: [] })
     // Should include all ADMIN_SECTION_IDS from mock
     expect(sections.length).toBeGreaterThan(0)
     expect(sections).toContain('dashboard')
@@ -252,7 +252,7 @@ describe('getAccessibleSections', () => {
 
 describe('getInitialStaffPermissions', () => {
   it('returns ["*"] for super admins', () => {
-    expect(getInitialStaffPermissions('andreas@revamp-it.ch')).toEqual(['*'])
+    expect(getInitialStaffPermissions('georgy.butaev@revamp-it.ch')).toEqual(['*'])
   })
 
   it('returns non-sensitive sections for regular staff', () => {

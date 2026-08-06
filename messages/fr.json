@@ -4918,7 +4918,8 @@
       "title": "Chiffres & faits",
       "moreLink": "Voir les chiffres d'impact détaillés",
       "detailLink": "Voir les chiffres d'impact détaillés",
-      "co2Link": "Calcul CO₂ & sources"
+      "co2Link": "Calcul CO₂ & sources",
+      "statutenLink": "Lire les statuts"
     },
     "howWeWork": {
       "title": "Comment nous travaillons",
@@ -8900,6 +8901,119 @@
       "visit": "Ouvrir l'application",
       "source": "Voir le code source",
       "license": "Licence {license}"
+    }
+  },
+  "statuten": {
+    "meta": {
+      "title": "Statuts",
+      "description": "Les statuts de {orgName} — entièrement publics, dans toutes les langues, avec un historique des modifications vérifiable."
+    },
+    "hero": {
+      "title": "Statuts",
+      "subtitle": "La charte fondatrice de {orgName} — consultable avant même son adoption."
+    },
+    "draft": {
+      "title": "Projet — pas encore adopté",
+      "body": "{orgName} est en cours de fondation. Ces statuts sont un projet et n'ont encore été adoptés par aucune assemblée constitutive. Ils ne fondent encore ni association ni droits. Nous les publions malgré tout — parce qu'une charte fondatrice devrait pouvoir être lue avant son adoption, et non seulement après."
+    },
+    "adopted": {
+      "title": "Adoptés",
+      "body": "Ces statuts ont été adoptés lors de l'assemblée constitutive du {adoptedOn} et sont en vigueur depuis lors."
+    },
+    "authoritative": {
+      "title": "La version allemande fait foi",
+      "body": "Cette traduction sert à la compréhension. Seule la version allemande est juridiquement contraignante."
+    },
+    "source": {
+      "title": "Origine de ce document",
+      "body": "Ces statuts se trouvent dans le dépôt de code source public de {orgName}. Chaque modification y est vérifiable sous la forme d'une révision datée — rétroactivement aussi.",
+      "cta": "Consulter le code source et l'historique des modifications"
+    },
+    "toc": {
+      "title": "Sommaire"
+    },
+    "articleLabel": "Art. {num}",
+    "sections": {
+      "name": "Nom, siège et durée",
+      "zweck": "But et ressources",
+      "mitgliedschaft": "Sociétariat",
+      "organe": "Organes",
+      "transparenz": "Transparence",
+      "schluss": "Dispositions finales"
+    },
+    "articles": {
+      "name-sitz": {
+        "title": "Nom et siège",
+        "body": "Sous le nom {orgName} est constituée une association au sens des art. 60 et suivants du Code civil suisse (CC).\n\nLe siège de l'association est à Zurich.\n\nLa durée de l'association est illimitée."
+      },
+      "zweck": {
+        "title": "But",
+        "body": "L'association a pour but de permettre aux personnes d'accéder à des technologies de l'information performantes et à la formation numérique — indépendamment de leurs moyens financiers.\n\nElle poursuit ce but notamment par :\n\na) le contrôle, la remise en état et la transmission d'appareils d'occasion, afin qu'ils restent utilisés le plus longtemps possible (économie circulaire) ;\nb) des offres de réparation, de conseil et de soutien pour le matériel et les logiciels ;\nc) des offres de formation favorisant la participation numérique ;\nd) le développement et la publication gratuite de logiciels libres ainsi que de résultats de recherche, en tant que bien accessible au public ;\ne) des offres permettant à des personnes ayant un accès difficile au marché du travail d'exercer une activité utile.\n\nL'association est d'utilité publique et neutre sur les plans confessionnel et politique. Elle ne poursuit aucun but lucratif et ne recherche aucun bénéfice.\n\nUne activité économique est admise dans la mesure où elle sert la réalisation du but et lui reste subordonnée. Elle est un moyen au service du but et jamais une fin en soi.\n\nL'activité de l'association s'adresse à la collectivité et non pas uniquement à ses membres."
+      },
+      "mittel": {
+        "title": "Ressources",
+        "body": "Pour poursuivre son but, l'association dispose :\n\na) des cotisations des membres ;\nb) de libéralités, dons, legs et successions ;\nc) de contributions des pouvoirs publics et de fondations ;\nd) de produits d'activités et de prestations liées au but ;\ne) de produits de la fortune de l'association.\n\nD'éventuels excédents restent intégralement acquis à l'association et sont utilisés exclusivement pour le but défini à l'art. 2. Toute distribution aux membres ou à des tiers est exclue.\n\nLa fortune de l'association est affectée exclusivement et irrévocablement à son but."
+      },
+      "beteiligungen": {
+        "title": "Participations",
+        "body": "Pour réaliser son but, l'association peut prendre des participations dans des personnes morales ou en constituer.\n\nDe telles participations sont détenues à titre de placement de fortune et restent subordonnées au but. L'association n'exerce aucune direction dans les entreprises concernées.\n\nLes revenus des participations reviennent intégralement au but de l'association."
+      },
+      "erwerb": {
+        "title": "Acquisition du sociétariat",
+        "body": "Peuvent devenir membres les personnes physiques et morales qui soutiennent le but de l'association.\n\nLe comité statue sur l'admission. Un refus n'a pas à être motivé."
+      },
+      "erloeschen": {
+        "title": "Perte du sociétariat",
+        "body": "Le sociétariat prend fin :\n\na) pour les personnes physiques par le décès, pour les personnes morales par la dissolution ;\nb) par démission écrite pour la fin d'un exercice, moyennant un préavis d'un mois ;\nc) par exclusion.\n\nLe comité peut exclure un membre qui porte atteinte au but de l'association ou qui, malgré rappel, ne remplit pas ses obligations. Le membre concerné peut porter la décision devant l'assemblée générale dans un délai de 30 jours.\n\nLes membres démissionnaires ou exclus n'ont aucun droit sur la fortune de l'association."
+      },
+      "beitraege-haftung": {
+        "title": "Cotisations et responsabilité",
+        "body": "L'assemblée générale fixe la cotisation annuelle des membres.\n\nSeule la fortune de l'association répond de ses engagements. Toute responsabilité personnelle des membres ainsi que toute obligation de versement supplémentaire sont exclues (art. 75a CC)."
+      },
+      "organe": {
+        "title": "Organes",
+        "body": "Les organes de l'association sont :\n\na) l'assemblée générale ;\nb) le comité ;\nc) l'organe de révision, si un tel organe est désigné."
+      },
+      "generalversammlung": {
+        "title": "Assemblée générale",
+        "body": "L'assemblée générale est l'organe suprême de l'association. Elle est convoquée une fois par an en séance ordinaire, avec indication de l'ordre du jour et un délai d'au moins 20 jours.\n\nLes attributions intransmissibles suivantes lui reviennent :\n\na) l'approbation du rapport annuel et des comptes annuels ;\nb) la décharge du comité ;\nc) l'élection et la révocation des membres du comité ainsi que d'un éventuel organe de révision ;\nd) la fixation de la cotisation des membres ;\ne) la décision sur les indemnités versées aux membres des organes (art. 12) ;\nf) la modification des statuts ;\ng) la dissolution de l'association.\n\nChaque membre dispose d'une voix. Les décisions sont prises à la majorité simple des voix exprimées ; en cas d'égalité, la voix de la personne qui préside est prépondérante.\n\nUne assemblée générale extraordinaire est convoquée sur décision du comité ou sur demande écrite d'un cinquième au moins des membres.\n\nLes décisions peuvent également être prises par voie écrite ou électronique, pour autant qu'aucun membre ne demande une délibération orale."
+      },
+      "vorstand": {
+        "title": "Comité",
+        "body": "Le comité se compose d'au moins deux membres. Il se constitue lui-même.\n\nSi l'engagement ou l'indemnisation d'un membre du comité est décidé, le comité doit compter au moins trois membres.\n\nLa durée du mandat est de deux ans ; la réélection est possible.\n\nLe comité dispose de toutes les compétences qui ne sont pas expressément réservées à un autre organe. Il gère les affaires courantes et représente l'association vis-à-vis de l'extérieur.\n\nLe comité délibère valablement lorsque la majorité de ses membres est présente. Un procès-verbal des délibérations et des décisions est tenu."
+      },
+      "zeichnungsberechtigung": {
+        "title": "Droit de signature",
+        "body": "L'association est valablement engagée par la signature collective à deux de membres du comité."
+      },
+      "entschaedigung": {
+        "title": "Indemnisation et récusation",
+        "body": "Les membres du comité exercent leur charge en principe à titre bénévole.\n\nLes frais effectifs sont remboursés sur présentation de justificatifs. Les indemnités forfaitaires sont exclues.\n\nUne indemnité appropriée peut être versée pour le travail effectivement fourni. Elle est fixée par l'assemblée générale.\n\nLorsqu'une affaire touche aux intérêts personnels d'un membre d'un organe — en particulier son engagement ou son indemnisation — ce membre se récuse. Il ne participe ni à la délibération ni à la décision. La récusation est consignée au procès-verbal.\n\nLes indemnités versées aux membres des organes sont divulguées dans le rapport annuel."
+      },
+      "revisionsstelle": {
+        "title": "Organe de révision",
+        "body": "L'assemblée générale peut désigner un organe de révision.\n\nSi les conditions légales d'une obligation de révision sont remplies (art. 69b CC), l'assemblée générale désigne un organe de révision conformément aux prescriptions applicables."
+      },
+      "offenlegung": {
+        "title": "Publicité",
+        "body": "L'association publie ses statuts, la composition de son comité ainsi que, chaque année, le rapport annuel et les comptes annuels.\n\nLa publication se fait sous une forme qui rend les modifications ultérieures vérifiables.\n\nTant que l'association n'est pas exonérée d'impôt par une décision entrée en force, elle n'établit aucune attestation de don et ne fait aucune indication prétendant à une utilité publique reconnue."
+      },
+      "geschaeftsjahr": {
+        "title": "Exercice",
+        "body": "L'exercice correspond à l'année civile. Le premier exercice se termine le 31 décembre de l'année de fondation."
+      },
+      "statutenaenderung": {
+        "title": "Modification des statuts",
+        "body": "Les modifications des présents statuts requièrent l'approbation des deux tiers des voix exprimées à l'assemblée générale. Les modifications de l'art. 2 (but) et de l'art. 17 (dévolution de la fortune) sont annoncées à l'administration fiscale cantonale."
+      },
+      "aufloesung": {
+        "title": "Dissolution et dévolution de la fortune",
+        "body": "La dissolution de l'association requiert l'approbation des deux tiers des voix exprimées à l'assemblée générale.\n\nEn cas de dissolution de l'association, la fortune revient à une autre personne morale exonérée d'impôt ayant son siège en Suisse et poursuivant un but identique ou analogue.\n\nLe remboursement des apports aux membres ainsi que toute autre répartition de la fortune entre les membres sont exclus."
+      },
+      "inkrafttreten": {
+        "title": "Entrée en vigueur",
+        "body": "Les présents statuts ont été adoptés lors de l'assemblée constitutive et sont en vigueur depuis lors."
+      }
     }
   }
 }

@@ -1,16 +1,22 @@
 /**
- * RevampIT Simplified Permission System
+ * evig Simplified Permission System
  *
  * This replaces the complex 15+ role system with a simple approach:
  * - Regular users: No roles, just create content that needs approval
- * - Staff (@revamp-it.ch): Access to admin with granular permissions
+ * - Staff: `is_staff` in the DB, granted explicitly by a super admin
+ *   (PATCH /api/admin/users/[id]/permissions) or the HR hire flow.
+ *
+ * Staff status is NEVER derived from the e-mail domain. Anyone may register;
+ * a super admin decides who becomes staff. `isStaffEmail` below is cosmetic
+ * only (it picks which welcome-email copy to send) — see `src/auth.ts`.
  *
  * SSOT: Section definitions come from @/config/sections.ts
  * KISS, DRY principles applied.
  *
- * Last Updated: 2026-01-26
+ * Last Updated: 2026-08-05
  */
 
+import { ORG } from '@/config/org'
 import {
   SECTIONS,
   ADMIN_SECTION_IDS,
@@ -51,11 +57,18 @@ export type AdminSection = SectionId
 // STAFF EMAIL DOMAIN
 // =============================================================================
 
-export const STAFF_EMAIL_DOMAIN = 'revamp-it.ch'
-export const LEGACY_STAFF_EMAIL_DOMAINS = ['revampit.ch'] as const
+/**
+ * evig's own mail domain (SSOT: org.ts). Layer B — the legacy Revamp-IT
+ * domains stay listed until the infra cutover, because existing accounts
+ * (including the owner's) still log in with them.
+ */
+export const STAFF_EMAIL_DOMAIN = ORG.emailDomain
+export const LEGACY_STAFF_EMAIL_DOMAINS = ['revamp-it.ch', 'revampit.ch'] as const
 
 /**
- * Check if an email belongs to staff
+ * COSMETIC ONLY — picks the welcome-email template at registration.
+ * This grants NOTHING. Staff access comes from the `is_staff` DB column,
+ * set by a super admin. Never use this as an authorization check.
  */
 export function isStaffEmail(email: string | null | undefined): boolean {
   if (!email) return false
@@ -71,16 +84,23 @@ export function isStaffEmail(email: string | null | undefined): boolean {
 // =============================================================================
 
 /**
- * Super admins have full access to all sections including sensitive ones.
- * This is a simple allowlist of email addresses.
+ * BOOTSTRAP ALLOWLIST — the owner, so the platform can never be locked out
+ * of its own admin (e.g. if `is_super_admin` is cleared by a bad migration).
+ *
+ * The DATABASE (`users.is_super_admin`) is the SSOT for super-admin status;
+ * this list is a floor, not the roster. Grant super admin to anyone else via
+ * PATCH /api/admin/users/[id]/permissions — never by editing this array.
+ *
+ * evig separated from Revamp-IT on 2026-07-24. The Revamp-IT super admins
+ * (andreas@, veronica@, daniel@) were removed on 2026-08-05: they held full
+ * access to evig's sensitive sections (users, finances, settings) purely by
+ * e-mail, bypassing the DB — and the demotion guard below made them
+ * un-removable through the UI.
+ *
+ * Layer B: the owner's login is still `@revamp-it.ch` (see .claude/CLAUDE.md).
+ * Add the evig address here at infra cutover, do not swap it before.
  */
-export const SUPER_ADMIN_EMAILS = [
-  'andreas@revamp-it.ch',
-  'veronica@revamp-it.ch',
-  'daniel@revamp-it.ch',
-  'georgy@revamp-it.ch',
-  'georgy.butaev@revamp-it.ch',
-] as const
+export const SUPER_ADMIN_EMAILS = ['georgy.butaev@revamp-it.ch'] as const
 
 /**
  * Check if a user is a super admin
@@ -137,10 +157,12 @@ export function canAccessSection(
   section: AdminSection
 ): boolean {
   if (!user) return false
-  if (!user.is_staff) return false
 
-  // Super admins always have full access
+  // Super admins always have full access — checked BEFORE the is_staff gate so
+  // that a cleared `is_staff` flag can never lock the owner out of admin.
   if (isSuperAdmin(user.email, user.is_super_admin)) return true
+
+  if (!user.is_staff) return false
 
   // Personal staff tools (own Zeiterfassung, …) are open to every staff
   // member — permission narrowing never removes someone's own tools.
@@ -171,8 +193,8 @@ export function canAccessSection(
  */
 export function canAccessSensitive(user: StaffUser | null | undefined): boolean {
   if (!user) return false
-  if (!user.is_staff) return false
   if (isSuperAdmin(user.email, user.is_super_admin)) return true
+  if (!user.is_staff) return false
   if (user.staff_permissions.includes('*')) return true
 
   // Check if they have permission for any sensitive section
@@ -205,12 +227,13 @@ export function toStaffUser(sessionUser: {
 export function getAccessibleSections(
   user: StaffUser | null | undefined
 ): AdminSection[] {
-  if (!user || !user.is_staff) return []
+  if (!user) return []
 
-  // Super admins or wildcard = all sections
-  if (isSuperAdmin(user.email, user.is_super_admin) || user.staff_permissions.includes('*')) {
-    return ADMIN_SECTION_IDS
-  }
+  // Super admins or wildcard = all sections. Super admin is checked before the
+  // is_staff gate for the same lockout reason as canAccessSection.
+  if (isSuperAdmin(user.email, user.is_super_admin)) return ADMIN_SECTION_IDS
+  if (!user.is_staff) return []
+  if (user.staff_permissions.includes('*')) return ADMIN_SECTION_IDS
 
   // Filter to permitted sections, checking aliases for backward compat.
   // Personal staff tools (alwaysForStaff) are included for every staff member.

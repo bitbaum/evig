@@ -732,7 +732,8 @@
       "title": "Numeri e fatti",
       "moreLink": "Vedi i dati di impatto dettagliati",
       "detailLink": "Visualizza i dati dettagliati sull'impatto",
-      "co2Link": "Calcolo CO₂ e fonti"
+      "co2Link": "Calcolo CO₂ e fonti",
+      "statutenLink": "Leggere lo statuto"
     },
     "howWeWork": {
       "title": "Come lavoriamo",
@@ -8898,6 +8899,119 @@
       "visit": "Apri l'applicazione",
       "source": "Vedi il codice sorgente",
       "license": "Licenza {license}"
+    }
+  },
+  "statuten": {
+    "meta": {
+      "title": "Statuto",
+      "description": "Lo statuto di {orgName} — interamente pubblico, in tutte le lingue, con una cronologia delle modifiche verificabile."
+    },
+    "hero": {
+      "title": "Statuto",
+      "subtitle": "L'ordinamento fondamentale di {orgName} — consultabile prima ancora di essere approvato."
+    },
+    "draft": {
+      "title": "Bozza — non ancora approvata",
+      "body": "{orgName} è in fase di costituzione. Questo statuto è una bozza e non è ancora stato approvato da alcuna assemblea costitutiva. Non fonda ancora né un'associazione né diritti. Lo pubblichiamo comunque — perché un ordinamento fondamentale dovrebbe poter essere letto prima di essere approvato, e non soltanto dopo."
+    },
+    "adopted": {
+      "title": "Approvato",
+      "body": "Questo statuto è stato approvato dall'assemblea costitutiva del {adoptedOn} ed è da allora in vigore."
+    },
+    "authoritative": {
+      "title": "Fa fede la versione tedesca",
+      "body": "Questa traduzione serve alla comprensione. Giuridicamente vincolante è unicamente la versione tedesca."
+    },
+    "source": {
+      "title": "Provenienza di questo documento",
+      "body": "Questo statuto si trova nel repository pubblico del codice sorgente di {orgName}. Ogni modifica è lì verificabile come singola revisione datata — anche retroattivamente.",
+      "cta": "Consultare il codice sorgente e la cronologia delle modifiche"
+    },
+    "toc": {
+      "title": "Indice"
+    },
+    "articleLabel": "Art. {num}",
+    "sections": {
+      "name": "Nome, sede e durata",
+      "zweck": "Scopo e mezzi",
+      "mitgliedschaft": "Qualità di socio",
+      "organe": "Organi",
+      "transparenz": "Trasparenza",
+      "schluss": "Disposizioni finali"
+    },
+    "articles": {
+      "name-sitz": {
+        "title": "Nome e sede",
+        "body": "Sotto il nome {orgName} esiste un'associazione ai sensi degli art. 60 segg. del Codice civile svizzero (CC).\n\nLa sede dell'associazione è a Zurigo.\n\nLa durata dell'associazione è illimitata."
+      },
+      "zweck": {
+        "title": "Scopo",
+        "body": "L'associazione ha lo scopo di consentire alle persone l'accesso a tecnologie dell'informazione performanti e alla formazione digitale — indipendentemente dai loro mezzi finanziari.\n\nPersegue questo scopo in particolare mediante:\n\na) la verifica, la riparazione e la cessione di apparecchi usati, affinché restino in uso il più a lungo possibile (economia circolare);\nb) offerte di riparazione, consulenza e supporto per hardware e software;\nc) offerte formative per la partecipazione digitale;\nd) lo sviluppo e la pubblicazione gratuita di software open source nonché di risultati di ricerca quale bene accessibile al pubblico;\ne) offerte che permettono a persone con accesso difficoltoso al mercato del lavoro di svolgere un'attività significativa.\n\nL'associazione è di pubblica utilità e neutrale sia sul piano confessionale sia su quello politico. Non persegue scopi di lucro e non mira a realizzare utili.\n\nUn'attività economica è ammessa nella misura in cui serve all'adempimento dello scopo e gli resta subordinata. È un mezzo per lo scopo e mai un fine in sé.\n\nL'attività dell'associazione è rivolta alla collettività e non soltanto ai suoi soci."
+      },
+      "mittel": {
+        "title": "Mezzi",
+        "body": "Per perseguire il proprio scopo l'associazione dispone di:\n\na) quote sociali;\nb) elargizioni, donazioni, legati ed eredità;\nc) contributi dell'ente pubblico e di fondazioni;\nd) proventi da attività e prestazioni vincolate allo scopo;\ne) proventi dal patrimonio dell'associazione.\n\nEventuali eccedenze restano integralmente all'associazione e sono impiegate esclusivamente per lo scopo di cui all'art. 2. Ogni distribuzione ai soci o a terzi è esclusa.\n\nIl patrimonio dell'associazione è destinato in modo esclusivo e irrevocabile al suo scopo."
+      },
+      "beteiligungen": {
+        "title": "Partecipazioni",
+        "body": "Per l'adempimento del proprio scopo l'associazione può assumere partecipazioni in persone giuridiche o costituirne.\n\nTali partecipazioni sono detenute quale investimento patrimoniale e restano subordinate allo scopo. L'associazione non assume la direzione nelle imprese interessate.\n\nI proventi delle partecipazioni affluiscono integralmente allo scopo dell'associazione."
+      },
+      "erwerb": {
+        "title": "Acquisizione della qualità di socio",
+        "body": "Possono diventare soci le persone fisiche e giuridiche che sostengono lo scopo dell'associazione.\n\nSull'ammissione decide il comitato. Un rifiuto non deve essere motivato."
+      },
+      "erloeschen": {
+        "title": "Estinzione della qualità di socio",
+        "body": "La qualità di socio si estingue:\n\na) per le persone fisiche con la morte, per le persone giuridiche con lo scioglimento;\nb) per dimissioni scritte alla fine di un esercizio, con un preavviso di un mese;\nc) per esclusione.\n\nIl comitato può escludere un socio che danneggia lo scopo dell'associazione o che, nonostante diffida, non adempie ai propri obblighi. Il socio interessato può deferire la decisione all'assemblea generale entro 30 giorni.\n\nI soci dimissionari o esclusi non hanno alcun diritto sul patrimonio dell'associazione."
+      },
+      "beitraege-haftung": {
+        "title": "Quote e responsabilità",
+        "body": "L'assemblea generale stabilisce la quota sociale annuale.\n\nPer gli impegni dell'associazione risponde esclusivamente il patrimonio sociale. Ogni responsabilità personale dei soci nonché ogni obbligo di versamento suppletivo sono esclusi (art. 75a CC)."
+      },
+      "organe": {
+        "title": "Organi",
+        "body": "Gli organi dell'associazione sono:\n\na) l'assemblea generale;\nb) il comitato;\nc) l'ufficio di revisione, se ne viene designato uno."
+      },
+      "generalversammlung": {
+        "title": "Assemblea generale",
+        "body": "L'assemblea generale è l'organo supremo dell'associazione. È convocata in seduta ordinaria una volta all'anno, con indicazione dell'ordine del giorno e con un termine di almeno 20 giorni.\n\nLe spettano le seguenti competenze intrasmissibili:\n\na) l'approvazione del rapporto annuale e del conto annuale;\nb) il discarico al comitato;\nc) l'elezione e la revoca dei membri del comitato nonché di un eventuale ufficio di revisione;\nd) la determinazione della quota sociale;\ne) la decisione sulle indennità ai membri degli organi (art. 12);\nf) la modifica dello statuto;\ng) lo scioglimento dell'associazione.\n\nOgni socio dispone di un voto. Le decisioni sono prese a maggioranza semplice dei voti espressi; in caso di parità decide la persona che presiede.\n\nUn'assemblea generale straordinaria è convocata su decisione del comitato o su richiesta scritta di almeno un quinto dei soci.\n\nLe decisioni possono essere prese anche per via scritta o elettronica, purché nessun socio chieda una deliberazione orale."
+      },
+      "vorstand": {
+        "title": "Comitato",
+        "body": "Il comitato si compone di almeno due membri. Si costituisce autonomamente.\n\nSe viene deciso l'assunzione o l'indennizzo di un membro del comitato, il comitato deve constare di almeno tre membri.\n\nLa durata del mandato è di due anni; la rielezione è possibile.\n\nAl comitato spettano tutte le competenze che non sono espressamente riservate a un altro organo. Gestisce gli affari correnti e rappresenta l'associazione verso l'esterno.\n\nIl comitato delibera validamente quando è presente la maggioranza dei suoi membri. Delle deliberazioni e delle decisioni è tenuto un verbale."
+      },
+      "zeichnungsberechtigung": {
+        "title": "Diritto di firma",
+        "body": "L'associazione è validamente impegnata dalla firma collettiva a due di membri del comitato."
+      },
+      "entschaedigung": {
+        "title": "Indennità e ricusazione",
+        "body": "I membri del comitato esercitano la loro carica di principio a titolo onorifico.\n\nLe spese effettive sono rimborsate contro giustificativo. Le indennità forfettarie sono escluse.\n\nPer il lavoro effettivamente prestato può essere versata un'indennità adeguata. Essa è stabilita dall'assemblea generale.\n\nSe un affare concerne gli interessi personali di un membro di un organo — in particolare la sua assunzione o la sua indennità — questi si ricusa. Non partecipa né alla deliberazione né alla decisione. La ricusazione è messa a verbale.\n\nLe indennità ai membri degli organi sono rese note nel rapporto annuale."
+      },
+      "revisionsstelle": {
+        "title": "Ufficio di revisione",
+        "body": "L'assemblea generale può designare un ufficio di revisione.\n\nSe sono adempiute le condizioni legali di un obbligo di revisione (art. 69b CC), l'assemblea generale designa un ufficio di revisione secondo le prescrizioni applicabili."
+      },
+      "offenlegung": {
+        "title": "Pubblicità",
+        "body": "L'associazione pubblica il proprio statuto, la composizione del comitato nonché, annualmente, il rapporto annuale e il conto annuale.\n\nLa pubblicazione avviene in una forma che rende verificabili le modifiche successive.\n\nFinché l'associazione non è esentata dalle imposte con decisione cresciuta in giudicato, non rilascia attestazioni di donazione e non fornisce indicazioni che affermino una pubblica utilità riconosciuta."
+      },
+      "geschaeftsjahr": {
+        "title": "Esercizio",
+        "body": "L'esercizio corrisponde all'anno civile. Il primo esercizio termina il 31 dicembre dell'anno di costituzione."
+      },
+      "statutenaenderung": {
+        "title": "Modifica dello statuto",
+        "body": "Le modifiche del presente statuto richiedono l'approvazione di due terzi dei voti espressi in assemblea generale. Le modifiche dell'art. 2 (scopo) e dell'art. 17 (devoluzione del patrimonio) sono comunicate all'amministrazione cantonale delle contribuzioni."
+      },
+      "aufloesung": {
+        "title": "Scioglimento e devoluzione del patrimonio",
+        "body": "Lo scioglimento dell'associazione richiede l'approvazione di due terzi dei voti espressi in assemblea generale.\n\nIn caso di scioglimento dell'associazione il patrimonio è devoluto a un'altra persona giuridica esente da imposte con sede in Svizzera che persegue uno scopo uguale o analogo.\n\nLa restituzione dei conferimenti ai soci nonché ogni altra ripartizione del patrimonio fra i soci sono escluse."
+      },
+      "inkrafttreten": {
+        "title": "Entrata in vigore",
+        "body": "Il presente statuto è stato approvato dall'assemblea costitutiva ed è da allora in vigore."
+      }
     }
   }
 }

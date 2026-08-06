@@ -732,7 +732,8 @@
       "title": "Datos y cifras",
       "moreLink": "Ver cifras de impacto detalladas",
       "detailLink": "Ver cifras de impacto detalladas",
-      "co2Link": "Cálculo de CO₂ y fuentes"
+      "co2Link": "Cálculo de CO₂ y fuentes",
+      "statutenLink": "Leer los estatutos"
     },
     "howWeWork": {
       "title": "Cómo trabajamos",
@@ -8898,6 +8899,119 @@
       "visit": "Abrir la aplicación",
       "source": "Ver código fuente",
       "license": "Licencia {license}"
+    }
+  },
+  "statuten": {
+    "meta": {
+      "title": "Estatutos",
+      "description": "Los estatutos de {orgName} — íntegramente públicos, en todos los idiomas, con un historial de cambios verificable."
+    },
+    "hero": {
+      "title": "Estatutos",
+      "subtitle": "El ordenamiento fundamental de {orgName} — consultable antes de ser aprobado."
+    },
+    "draft": {
+      "title": "Borrador — aún no aprobado",
+      "body": "{orgName} está en proceso de constitución. Estos estatutos son un borrador y todavía no han sido aprobados por ninguna asamblea constitutiva. Aún no fundan una asociación ni derecho alguno. Los publicamos de todos modos — porque un ordenamiento fundamental debería poder leerse antes de ser aprobado, y no solo después."
+    },
+    "adopted": {
+      "title": "Aprobados",
+      "body": "Estos estatutos fueron aprobados en la asamblea constitutiva del {adoptedOn} y están en vigor desde entonces."
+    },
+    "authoritative": {
+      "title": "La versión alemana es la vinculante",
+      "body": "Esta traducción sirve para facilitar la comprensión. Jurídicamente vinculante es únicamente la versión alemana."
+    },
+    "source": {
+      "title": "Procedencia de este documento",
+      "body": "Estos estatutos se encuentran en el repositorio público de código fuente de {orgName}. Cada modificación es allí verificable como una revisión fechada e individual — también de forma retroactiva.",
+      "cta": "Ver el código fuente y el historial de cambios"
+    },
+    "toc": {
+      "title": "Contenido"
+    },
+    "articleLabel": "Art. {num}",
+    "sections": {
+      "name": "Nombre, domicilio y duración",
+      "zweck": "Fin y medios",
+      "mitgliedschaft": "Condición de socio",
+      "organe": "Órganos",
+      "transparenz": "Transparencia",
+      "schluss": "Disposiciones finales"
+    },
+    "articles": {
+      "name-sitz": {
+        "title": "Nombre y domicilio",
+        "body": "Bajo el nombre {orgName} existe una asociación en el sentido de los art. 60 y ss. del Código Civil suizo (CC).\n\nEl domicilio de la asociación se encuentra en Zúrich.\n\nLa duración de la asociación es ilimitada."
+      },
+      "zweck": {
+        "title": "Fin",
+        "body": "La asociación tiene por fin permitir a las personas el acceso a tecnologías de la información de calidad y a la formación digital — con independencia de sus medios económicos.\n\nPersigue este fin en particular mediante:\n\na) la comprobación, reparación y entrega de aparatos usados, para que permanezcan en uso el mayor tiempo posible (economía circular);\nb) ofertas de reparación, asesoramiento y apoyo para hardware y software;\nc) ofertas formativas para la participación digital;\nd) el desarrollo y la publicación gratuita de software de código abierto así como de resultados de investigación como bien de acceso público;\ne) ofertas que permitan a personas con acceso difícil al mercado laboral desempeñar una actividad con sentido.\n\nLa asociación es de utilidad pública y neutral tanto en lo confesional como en lo político. No persigue fines lucrativos ni aspira a obtener beneficios.\n\nUna actividad económica es admisible en la medida en que sirva al cumplimiento del fin y le permanezca subordinada. Es un medio para el fin y nunca un fin en sí misma.\n\nLa actividad de la asociación se dirige a la colectividad y no únicamente a sus socios."
+      },
+      "mittel": {
+        "title": "Medios",
+        "body": "Para perseguir su fin, la asociación dispone de:\n\na) cuotas de los socios;\nb) aportaciones, donaciones, legados y herencias;\nc) contribuciones de las administraciones públicas y de fundaciones;\nd) ingresos de actividades y prestaciones vinculadas al fin;\ne) ingresos del patrimonio de la asociación.\n\nLos eventuales excedentes quedan íntegramente en la asociación y se destinan exclusivamente al fin previsto en el art. 2. Queda excluido cualquier reparto entre socios o terceros.\n\nEl patrimonio de la asociación está destinado de forma exclusiva e irrevocable a su fin."
+      },
+      "beteiligungen": {
+        "title": "Participaciones",
+        "body": "Para el cumplimiento de su fin, la asociación puede participar en personas jurídicas o constituirlas.\n\nTales participaciones se mantienen como inversión patrimonial y permanecen subordinadas al fin. La asociación no asume la dirección de las empresas correspondientes.\n\nLos rendimientos de las participaciones se destinan íntegramente al fin de la asociación."
+      },
+      "erwerb": {
+        "title": "Adquisición de la condición de socio",
+        "body": "Pueden ser socios las personas físicas y jurídicas que apoyen el fin de la asociación.\n\nSobre la admisión decide la junta directiva. Una denegación no debe motivarse."
+      },
+      "erloeschen": {
+        "title": "Pérdida de la condición de socio",
+        "body": "La condición de socio se extingue:\n\na) en las personas físicas por fallecimiento, en las personas jurídicas por disolución;\nb) por baja escrita al final de un ejercicio, con un preaviso de un mes;\nc) por exclusión.\n\nLa junta directiva puede excluir a un socio que perjudique el fin de la asociación o que, pese a requerimiento, no cumpla sus obligaciones. El socio afectado puede recurrir la decisión ante la asamblea general en un plazo de 30 días.\n\nLos socios que hayan causado baja o hayan sido excluidos no tienen derecho alguno sobre el patrimonio de la asociación."
+      },
+      "beitraege-haftung": {
+        "title": "Cuotas y responsabilidad",
+        "body": "La asamblea general fija la cuota anual de los socios.\n\nDe las obligaciones de la asociación responde exclusivamente su patrimonio. Queda excluida toda responsabilidad personal de los socios así como cualquier obligación de aportación suplementaria (art. 75a CC)."
+      },
+      "organe": {
+        "title": "Órganos",
+        "body": "Los órganos de la asociación son:\n\na) la asamblea general;\nb) la junta directiva;\nc) el órgano de revisión, en caso de que se designe uno."
+      },
+      "generalversammlung": {
+        "title": "Asamblea general",
+        "body": "La asamblea general es el órgano supremo de la asociación. Se convoca una vez al año en sesión ordinaria, indicando el orden del día y con un plazo mínimo de 20 días.\n\nLe corresponden de forma indelegable las siguientes competencias:\n\na) la aprobación de la memoria anual y de las cuentas anuales;\nb) la aprobación de la gestión de la junta directiva;\nc) la elección y el cese de los miembros de la junta directiva así como de un eventual órgano de revisión;\nd) la fijación de la cuota de socio;\ne) la decisión sobre las retribuciones a los miembros de los órganos (art. 12);\nf) la modificación de los estatutos;\ng) la disolución de la asociación.\n\nCada socio dispone de un voto. Los acuerdos se adoptan por mayoría simple de los votos emitidos; en caso de empate decide la persona que preside.\n\nSe convoca una asamblea general extraordinaria por acuerdo de la junta directiva o a solicitud escrita de al menos una quinta parte de los socios.\n\nLos acuerdos pueden adoptarse también por vía escrita o electrónica, siempre que ningún socio solicite una deliberación oral."
+      },
+      "vorstand": {
+        "title": "Junta directiva",
+        "body": "La junta directiva se compone de al menos dos miembros. Se constituye por sí misma.\n\nSi se acuerda la contratación o la retribución de un miembro de la junta directiva, esta deberá estar compuesta por al menos tres miembros.\n\nLa duración del mandato es de dos años; la reelección es posible.\n\nA la junta directiva le corresponden todas las competencias que no estén expresamente reservadas a otro órgano. Gestiona los asuntos corrientes y representa a la asociación frente a terceros.\n\nLa junta directiva puede adoptar acuerdos cuando esté presente la mayoría de sus miembros. De las deliberaciones y los acuerdos se levanta acta."
+      },
+      "zeichnungsberechtigung": {
+        "title": "Derecho de firma",
+        "body": "La asociación queda obligada de forma jurídicamente vinculante mediante la firma colectiva de dos miembros de la junta directiva."
+      },
+      "entschaedigung": {
+        "title": "Retribución y abstención",
+        "body": "Los miembros de la junta directiva ejercen su cargo, por principio, de forma honorífica.\n\nLos gastos efectivos se reembolsan contra justificante. Quedan excluidas las dietas a tanto alzado.\n\nPor el trabajo efectivamente prestado puede abonarse una retribución adecuada. Esta la fija la asamblea general.\n\nCuando un asunto afecte a los intereses personales de un miembro de un órgano — en particular su contratación o su retribución — este se abstiene. No participa ni en la deliberación ni en la adopción del acuerdo. La abstención se hace constar en acta.\n\nLas retribuciones a los miembros de los órganos se hacen públicas en la memoria anual."
+      },
+      "revisionsstelle": {
+        "title": "Órgano de revisión",
+        "body": "La asamblea general puede designar un órgano de revisión.\n\nSi se cumplen los requisitos legales de una obligación de revisión (art. 69b CC), la asamblea general designa un órgano de revisión conforme a las disposiciones aplicables."
+      },
+      "offenlegung": {
+        "title": "Publicidad",
+        "body": "La asociación publica sus estatutos, la composición de su junta directiva y, anualmente, la memoria anual y las cuentas anuales.\n\nLa publicación se realiza en una forma que hace verificables las modificaciones posteriores.\n\nMientras la asociación no esté exenta de impuestos por resolución firme, no expide certificados de donación ni realiza indicaciones que afirmen una utilidad pública reconocida."
+      },
+      "geschaeftsjahr": {
+        "title": "Ejercicio",
+        "body": "El ejercicio coincide con el año natural. El primer ejercicio finaliza el 31 de diciembre del año de constitución."
+      },
+      "statutenaenderung": {
+        "title": "Modificación de los estatutos",
+        "body": "Las modificaciones de estos estatutos requieren la aprobación de dos tercios de los votos emitidos en la asamblea general. Las modificaciones del art. 2 (fin) y del art. 17 (destino del patrimonio) se comunican a la administración tributaria cantonal."
+      },
+      "aufloesung": {
+        "title": "Disolución y destino del patrimonio",
+        "body": "La disolución de la asociación requiere la aprobación de dos tercios de los votos emitidos en la asamblea general.\n\nEn caso de disolución de la asociación, el patrimonio pasa a otra persona jurídica exenta de impuestos con domicilio en Suiza que persiga un fin igual o similar.\n\nQuedan excluidos la devolución de aportaciones a los socios así como cualquier otro reparto del patrimonio entre los socios."
+      },
+      "inkrafttreten": {
+        "title": "Entrada en vigor",
+        "body": "Estos estatutos fueron aprobados en la asamblea constitutiva y están en vigor desde entonces."
+      }
     }
   }
 }

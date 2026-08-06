@@ -365,7 +365,7 @@ The auth system uses a simple, extensible approach:
 ┌──────────────────────────────────────────────────────────────┐
 │                     USER TYPES                               │
 ├──────────────────────────────────────────────────────────────┤
-│ Regular Users        │ Staff (@revamp-it.ch email)           │
+│ Regular Users        │ Staff (promoted by a super admin)     │
 │ - No roles needed    │ - is_staff: true                      │
 │ - Create content     │ - staff_permissions: string[]         │
 │ - Content needs      │ - Access admin dashboard              │
@@ -384,11 +384,15 @@ The auth system uses a simple, extensible approach:
 ```typescript
 import { isStaffEmail, isSuperAdmin } from '@/lib/permissions';
 
-// Anyone with @revamp-it.ch email is staff
-isStaffEmail('user@revamp-it.ch')  // true
+// Staff status is the `is_staff` DB column, granted explicitly by a super
+// admin (PATCH /api/admin/users/[id]/permissions) or the HR hire flow.
+// It is NEVER derived from the e-mail domain — anyone may register.
+// `isStaffEmail` is COSMETIC ONLY (picks the welcome-email template).
 
-// Super admins have full access to sensitive sections
-isSuperAdmin('andreas@revamp-it.ch')  // true
+// Super admins have full access to sensitive sections. The DB
+// (`users.is_super_admin`) is the SSOT; SUPER_ADMIN_EMAILS is a
+// bootstrap floor holding only the owner, so evig can't lock itself out.
+isSuperAdmin('georgy.butaev@revamp-it.ch')  // true
 ```
 
 ### Permission Checking
@@ -443,7 +447,7 @@ session.user = {
   id: string,
   email: string,
   name: string | null,
-  isStaff: boolean,           // true for @revamp-it.ch emails
+  isStaff: boolean,           // from the is_staff DB column (admin-granted)
   staffPermissions: string[], // ['dashboard', 'products', ...] or ['*']
 }
 ```

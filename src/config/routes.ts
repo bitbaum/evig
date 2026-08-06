@@ -145,6 +145,7 @@ export const ROUTES = {
     transparenz:              '/transparenz',
     transparenzKennzahlen:    '/transparenz/kennzahlen',
     transparenzCo2:           '/transparenz/co2',
+    transparenzStatuten:      '/transparenz/statuten',
     mitgliedWerden:           '/mitglied-werden',
     careers:                  '/karriere',
     careerPosting:            (slug: string) => `/karriere/${slug}`,
