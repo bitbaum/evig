@@ -4631,7 +4631,8 @@
       "title": "Zahlen & Fakten",
       "moreLink": "Detaillierte Wirkungszahlen ansehen",
       "detailLink": "Detaillierte Wirkungszahlen ansehen",
-      "co2Link": "CO₂-Berechnung & Quellen"
+      "co2Link": "CO₂-Berechnung & Quellen",
+      "statutenLink": "Statuten lesen"
     },
     "howWeWork": {
       "title": "Wie wir arbeiten",
@@ -9020,6 +9021,119 @@
     },
     "footer": {
       "legal": "evig — «ewig» — ist ein gemeinnütziger Verein <em>in Gründung</em> in Zürich, Schweiz. Wir beanspruchen keinen anerkannten gemeinnützigen Status und stellen keine steuerlich abzugsfähigen Spendenbescheinigungen aus, solange der Verein nicht eingetragen und kantonal anerkannt ist. Alles auf dieser Seite ist das, worauf wir hinarbeiten — als Absicht formuliert, nicht als Leistungsausweis, den wir noch nicht verdient haben."
+    }
+  },
+  "statuten": {
+    "meta": {
+      "title": "Statuten",
+      "description": "Die Statuten von {orgName} — vollständig öffentlich, in allen Sprachen, mit nachvollziehbarer Änderungsgeschichte."
+    },
+    "hero": {
+      "title": "Statuten",
+      "subtitle": "Die Grundordnung von {orgName} — offen einsehbar, bevor sie beschlossen ist."
+    },
+    "draft": {
+      "title": "Entwurf — noch nicht beschlossen",
+      "body": "{orgName} ist in Gründung. Diese Statuten sind ein Entwurf und wurden noch von keiner Gründungsversammlung beschlossen. Sie begründen noch keinen Verein und keine Rechte. Wir veröffentlichen sie trotzdem — weil man eine Grundordnung lesen können sollte, bevor sie beschlossen wird, und nicht erst danach."
+    },
+    "adopted": {
+      "title": "Beschlossen",
+      "body": "Diese Statuten wurden an der Gründungsversammlung vom {adoptedOn} beschlossen und sind seither in Kraft."
+    },
+    "authoritative": {
+      "title": "Massgebend ist die deutsche Fassung",
+      "body": "Diese Übersetzung dient dem Verständnis. Rechtlich verbindlich ist ausschliesslich die deutsche Fassung."
+    },
+    "source": {
+      "title": "Herkunft dieses Dokuments",
+      "body": "Diese Statuten liegen im öffentlichen Quellcode-Repository von {orgName}. Jede Änderung ist dort als einzelne, datierte Revision nachvollziehbar — auch rückwirkend.",
+      "cta": "Quelltext und Änderungsgeschichte ansehen"
+    },
+    "toc": {
+      "title": "Inhalt"
+    },
+    "articleLabel": "Art. {num}",
+    "sections": {
+      "name": "Name, Sitz und Dauer",
+      "zweck": "Zweck und Mittel",
+      "mitgliedschaft": "Mitgliedschaft",
+      "organe": "Organe",
+      "transparenz": "Transparenz",
+      "schluss": "Schlussbestimmungen"
+    },
+    "articles": {
+      "name-sitz": {
+        "title": "Name und Sitz",
+        "body": "Unter dem Namen {orgName} besteht ein Verein im Sinne von Art. 60 ff. des Schweizerischen Zivilgesetzbuches (ZGB).\n\nDer Sitz des Vereins ist in Zürich.\n\nDie Dauer des Vereins ist unbeschränkt."
+      },
+      "zweck": {
+        "title": "Zweck",
+        "body": "Der Verein bezweckt, Menschen den Zugang zu leistungsfähiger Informationstechnologie und zu digitaler Bildung zu ermöglichen — unabhängig von ihren finanziellen Mitteln.\n\nEr verfolgt diesen Zweck insbesondere durch:\n\na) die Prüfung, Instandsetzung und Weitergabe gebrauchter Geräte, damit diese möglichst lange im Gebrauch bleiben (Kreislaufwirtschaft);\nb) Reparatur-, Beratungs- und Unterstützungsangebote für Hard- und Software;\nc) Bildungsangebote zur digitalen Teilhabe;\nd) die Entwicklung und unentgeltliche Veröffentlichung quelloffener Software sowie von Forschungsergebnissen als öffentlich zugängliches Gut;\ne) Angebote, die Menschen mit erschwertem Zugang zum Arbeitsmarkt eine sinnvolle Tätigkeit ermöglichen.\n\nDer Verein ist gemeinnützig und sowohl konfessionell als auch politisch neutral. Er verfolgt keinen Erwerbszweck und erstrebt keinen Gewinn.\n\nEine wirtschaftliche Tätigkeit ist zulässig, soweit sie der Erfüllung des Zwecks dient und diesem untergeordnet bleibt. Sie ist Mittel zum Zweck und nie Selbstzweck.\n\nDie Tätigkeit des Vereins richtet sich an die Allgemeinheit und nicht bloss an seine Mitglieder."
+      },
+      "mittel": {
+        "title": "Mittel",
+        "body": "Zur Verfolgung seines Zwecks verfügt der Verein über:\n\na) Mitgliederbeiträge;\nb) Zuwendungen, Spenden, Legate und Erbschaften;\nc) Beiträge der öffentlichen Hand sowie von Stiftungen;\nd) Erträge aus zweckgebundenen Tätigkeiten und Leistungen;\ne) Erträge aus dem Vereinsvermögen.\n\nAllfällige Überschüsse verbleiben vollumfänglich beim Verein und werden ausschliesslich für den Zweck nach Art. 2 verwendet. Eine Ausschüttung an Mitglieder oder Dritte ist ausgeschlossen.\n\nDas Vereinsvermögen ist dem Zweck ausschliesslich und unwiderruflich gewidmet."
+      },
+      "beteiligungen": {
+        "title": "Beteiligungen",
+        "body": "Der Verein kann sich zur Erfüllung seines Zwecks an juristischen Personen beteiligen oder solche gründen.\n\nSolche Beteiligungen werden als Vermögensanlage gehalten und bleiben dem Zweck untergeordnet. Der Verein nimmt in den betreffenden Unternehmen keine Geschäftsführung wahr.\n\nErträge aus Beteiligungen fliessen vollumfänglich dem Zweck des Vereins zu."
+      },
+      "erwerb": {
+        "title": "Erwerb der Mitgliedschaft",
+        "body": "Mitglied werden können natürliche und juristische Personen, die den Zweck des Vereins unterstützen.\n\nÜber die Aufnahme entscheidet der Vorstand. Eine Ablehnung muss nicht begründet werden."
+      },
+      "erloeschen": {
+        "title": "Erlöschen der Mitgliedschaft",
+        "body": "Die Mitgliedschaft erlischt:\n\na) bei natürlichen Personen durch Tod, bei juristischen Personen durch Auflösung;\nb) durch schriftlichen Austritt auf Ende eines Geschäftsjahres unter Einhaltung einer Frist von einem Monat;\nc) durch Ausschluss.\n\nDer Vorstand kann ein Mitglied ausschliessen, das den Zweck des Vereins schädigt oder seinen Verpflichtungen trotz Mahnung nicht nachkommt. Das betroffene Mitglied kann den Entscheid innert 30 Tagen an die Generalversammlung weiterziehen.\n\nAusgetretene oder ausgeschlossene Mitglieder haben keinen Anspruch auf das Vereinsvermögen."
+      },
+      "beitraege-haftung": {
+        "title": "Beiträge und Haftung",
+        "body": "Die Generalversammlung legt den jährlichen Mitgliederbeitrag fest.\n\nFür die Verbindlichkeiten des Vereins haftet ausschliesslich das Vereinsvermögen. Eine persönliche Haftung der Mitglieder sowie jede Nachschusspflicht sind ausgeschlossen (Art. 75a ZGB)."
+      },
+      "organe": {
+        "title": "Organe",
+        "body": "Die Organe des Vereins sind:\n\na) die Generalversammlung;\nb) der Vorstand;\nc) die Revisionsstelle, sofern eine solche bestellt wird."
+      },
+      "generalversammlung": {
+        "title": "Generalversammlung",
+        "body": "Die Generalversammlung ist das oberste Organ des Vereins. Sie wird jährlich einmal ordentlich einberufen, unter Angabe der Traktanden und mit einer Frist von mindestens 20 Tagen.\n\nIhr stehen unübertragbar folgende Befugnisse zu:\n\na) Genehmigung des Jahresberichts und der Jahresrechnung;\nb) Entlastung des Vorstands;\nc) Wahl und Abberufung der Mitglieder des Vorstands sowie einer allfälligen Revisionsstelle;\nd) Festlegung des Mitgliederbeitrags;\ne) Beschluss über Entschädigungen an Organmitglieder (Art. 12);\nf) Änderung der Statuten;\ng) Auflösung des Vereins.\n\nJedes Mitglied hat eine Stimme. Beschlüsse werden mit der einfachen Mehrheit der abgegebenen Stimmen gefasst; bei Stimmengleichheit entscheidet die vorsitzende Person.\n\nEine ausserordentliche Generalversammlung wird einberufen auf Beschluss des Vorstands oder auf schriftliches Verlangen von mindestens einem Fünftel der Mitglieder.\n\nBeschlüsse können auch auf schriftlichem oder elektronischem Weg gefasst werden, sofern kein Mitglied die mündliche Beratung verlangt."
+      },
+      "vorstand": {
+        "title": "Vorstand",
+        "body": "Der Vorstand besteht aus mindestens zwei Mitgliedern. Er konstituiert sich selbst.\n\nWird eine Anstellung oder eine Entschädigung eines Vorstandsmitglieds beschlossen, muss der Vorstand aus mindestens drei Mitgliedern bestehen.\n\nDie Amtsdauer beträgt zwei Jahre; Wiederwahl ist möglich.\n\nDem Vorstand stehen alle Befugnisse zu, die nicht ausdrücklich einem anderen Organ vorbehalten sind. Er führt die laufenden Geschäfte und vertritt den Verein nach aussen.\n\nDer Vorstand ist beschlussfähig, wenn die Mehrheit seiner Mitglieder anwesend ist. Über die Verhandlungen und Beschlüsse wird ein Protokoll geführt."
+      },
+      "zeichnungsberechtigung": {
+        "title": "Zeichnungsberechtigung",
+        "body": "Der Verein wird durch Kollektivunterschrift zu zweien von Mitgliedern des Vorstands rechtsverbindlich verpflichtet."
+      },
+      "entschaedigung": {
+        "title": "Entschädigung und Ausstand",
+        "body": "Die Mitglieder des Vorstands üben ihr Amt grundsätzlich ehrenamtlich aus.\n\nEffektive Auslagen werden gegen Beleg ersetzt. Pauschalspesen sind ausgeschlossen.\n\nFür tatsächlich geleistete Arbeit kann eine angemessene Entschädigung ausgerichtet werden. Sie wird von der Generalversammlung festgelegt.\n\nBetrifft ein Geschäft die persönlichen Interessen eines Mitglieds eines Organs — insbesondere seine Anstellung oder Entschädigung — so tritt dieses in den Ausstand. Es nimmt weder an der Beratung noch an der Beschlussfassung teil. Der Ausstand wird protokolliert.\n\nEntschädigungen an Organmitglieder werden im Jahresbericht offengelegt."
+      },
+      "revisionsstelle": {
+        "title": "Revisionsstelle",
+        "body": "Die Generalversammlung kann eine Revisionsstelle bestellen.\n\nSind die gesetzlichen Voraussetzungen einer Revisionspflicht erfüllt (Art. 69b ZGB), bestellt die Generalversammlung eine Revisionsstelle nach den massgebenden Vorschriften."
+      },
+      "offenlegung": {
+        "title": "Offenlegung",
+        "body": "Der Verein veröffentlicht seine Statuten, die Zusammensetzung des Vorstands sowie jährlich den Jahresbericht und die Jahresrechnung.\n\nDie Veröffentlichung erfolgt in einer Form, welche spätere Änderungen nachvollziehbar macht.\n\nSolange der Verein nicht rechtskräftig von der Steuer befreit ist, stellt er keine Spendenbescheinigungen aus und macht keine Angaben, die eine anerkannte Gemeinnützigkeit behaupten."
+      },
+      "geschaeftsjahr": {
+        "title": "Geschäftsjahr",
+        "body": "Das Geschäftsjahr entspricht dem Kalenderjahr. Das erste Geschäftsjahr endet am 31. Dezember des Gründungsjahres."
+      },
+      "statutenaenderung": {
+        "title": "Statutenänderung",
+        "body": "Änderungen dieser Statuten bedürfen der Zustimmung von zwei Dritteln der an der Generalversammlung abgegebenen Stimmen. Änderungen von Art. 2 (Zweck) und Art. 17 (Vermögensanfall) werden dem Kantonalen Steueramt gemeldet."
+      },
+      "aufloesung": {
+        "title": "Auflösung und Vermögensanfall",
+        "body": "Die Auflösung des Vereins bedarf der Zustimmung von zwei Dritteln der an der Generalversammlung abgegebenen Stimmen.\n\nBei Auflösung des Vereins fällt das Vermögen an eine andere von der Steuer befreite juristische Person mit Sitz in der Schweiz, welche einen gleichen oder ähnlichen Zweck verfolgt.\n\nDie Rückerstattung von Einlagen an Mitglieder sowie jede andere Verteilung des Vermögens an die Mitglieder ist ausgeschlossen."
+      },
+      "inkrafttreten": {
+        "title": "Inkrafttreten",
+        "body": "Diese Statuten wurden an der Gründungsversammlung beschlossen und sind seither in Kraft."
+      }
     }
   }
 }
