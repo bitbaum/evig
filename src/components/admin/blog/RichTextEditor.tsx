@@ -16,11 +16,20 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { useEditor, EditorContent, type Editor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
-import Table from '@tiptap/extension-table'
-import TableRow from '@tiptap/extension-table-row'
-import TableHeader from '@tiptap/extension-table-header'
-import TableCell from '@tiptap/extension-table-cell'
-import { Markdown } from 'tiptap-markdown'
+// v3 consolidated the table nodes into one package with named exports; the
+// per-node packages (-row/-header/-cell) are no longer needed.
+import { Table, TableRow, TableHeader, TableCell } from '@tiptap/extension-table'
+import { Markdown, type MarkdownStorage } from 'tiptap-markdown'
+
+// v3 narrowed `editor.storage` from an index signature to an empty interface
+// that extensions augment. tiptap-markdown ships the storage type but not the
+// augmentation, so declare it here — this is what makes `.markdown` typed
+// rather than cast away.
+declare module '@tiptap/core' {
+  interface Storage {
+    markdown: MarkdownStorage
+  }
+}
 import {
   Bold, Italic, Heading2, Heading3, List, ListOrdered, Quote, Link2, Table as TableIcon,
   Code, Undo2, Redo2, Type,
