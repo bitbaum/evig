@@ -261,3 +261,51 @@ jobs:
       - name: Run tests
         run: npm run test
         continue-on-error: true
+
+  # Red-main alarm for the DISPATCHED path.
+  #
+  # Every merge here is an auto-merge made with GITHUB_TOKEN, which fires no
+  # push event — so the sweep re-arms this workflow by dispatch, and a
+  # dispatched run emits no `workflow_run` event for main-red-alert.yml to
+  # catch. That workflow is therefore silent on almost every main CI run this
+  # repo produces (observed 2026-08-06: main went red on a66baa55 and no issue
+  # was filed). A dispatched run does the handoff itself; the push path keeps
+  # using main-red-alert.yml. One trigger per path, one shared policy script.
+  post-main:
+    name: Main Red Alert (dispatched)
+    needs: [quality, auth-smoke, inventory-smoke, e2e-local]
+    if: always() && github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      issues: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      REPO: ${{ github.repository }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Resolve this run's verdict
+        id: verdict
+        env:
+          R_QUALITY: ${{ needs.quality.result }}
+          R_AUTH: ${{ needs.auth-smoke.result }}
+          R_INVENTORY: ${{ needs.inventory-smoke.result }}
+          R_E2E: ${{ needs.e2e-local.result }}
+        run: |
+          set -euo pipefail
+          # `skipped` is not a failure — jobs here are conditional on event type.
+          results="$R_QUALITY $R_AUTH $R_INVENTORY $R_E2E"
+          conclusion=success
+          case "$results" in *cancelled*) conclusion=cancelled ;; esac
+          case "$results" in *failure*) conclusion=failure ;; esac
+          echo "conclusion=$conclusion" >> "$GITHUB_OUTPUT"
+          echo "verdict: $conclusion (from: $results)"
+
+      - name: File or resolve the main-red issue
+        env:
+          CONCLUSION: ${{ steps.verdict.outputs.conclusion }}
+          RUN_SHA: ${{ github.sha }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: bash scripts/ci/main-red-alert.sh
