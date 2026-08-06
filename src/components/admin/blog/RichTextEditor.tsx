@@ -110,7 +110,10 @@ export function RichTextEditor({ value, onChange, placeholder }: Props) {
   const editor = useEditor({
     immediatelyRender: false, // avoid SSR hydration mismatch in the App Router
     extensions: [
-      StarterKit,
+      // tiptap v3's StarterKit bundles its own Link; ours is configured
+      // differently (no open-on-click in the editor), so disable the bundled
+      // one rather than registering the mark twice.
+      StarterKit.configure({ link: false }),
       Link.configure({ openOnClick: false, autolink: true }),
       Table.configure({ resizable: false }),
       TableRow,
@@ -138,7 +141,10 @@ export function RichTextEditor({ value, onChange, placeholder }: Props) {
     if (!editor) return
     if (value !== lastEmitted.current) {
       lastEmitted.current = value
-      editor.commands.setContent(value || '', false)
+      // v3 replaced the positional `emitUpdate` boolean with an options object.
+      // It defaults to TRUE, so passing `false` positionally would be ignored
+      // and every external content push would loop back through onChange.
+      editor.commands.setContent(value || '', { emitUpdate: false })
     }
   }, [value, editor])
 
