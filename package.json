@@ -150,7 +150,7 @@
   "devDependencies": {
     "@playwright/test": "^1.55.1",
     "@swc/helpers": "0.5.17",
-    "@tailwindcss/postcss": "^4.3.0",
+    "@tailwindcss/postcss": "^4.3.3",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
