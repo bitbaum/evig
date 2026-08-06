@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
-import { ArrowLeft, ExternalLink, Github, Scale } from 'lucide-react'
+import { ArrowLeft, ExternalLink, GitBranch, Scale } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { PageHero } from '@/components/layout/PageHero'
 import { Section } from '@/components/layout/Section'
@@ -73,7 +73,7 @@ export default async function ProjectDetailPage({ params }: ProjectDetailProps) 
                 )}
                 {project.repoUrl && (
                   <a href={project.repoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-action hover:underline underline-offset-2">
-                    <Github className="h-4 w-4" /> {t('detail.source')}
+                    <GitBranch className="h-4 w-4" /> {t('detail.source')}
                   </a>
                 )}
                 {project.license && (

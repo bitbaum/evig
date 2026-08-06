@@ -25,7 +25,7 @@ import {
   FileCheck,
   FileX,
   FileText,
-  Chrome,
+  Compass,
   Image,
   Video,
   Cloud,
@@ -256,7 +256,7 @@ export const consumerComparisons: Comparison[] = [
     },
     proprietary: {
       name: 'Chrome/Edge',
-      icon: Chrome,
+      icon: Compass,
       cost: 'Kostenlos mit Datenerfassung',
       comparisons: [
         'Umfangreiche Datenerfassung und Tracking',
