@@ -1,0 +1,59 @@
+name: Security Audit
+
+# The gap this closes.
+#
+# On 2026-08-06 three CRITICAL auth advisories (next-auth / @auth/core) were
+# open against a live site and nothing was red. Not CI, not the deploy — the
+# tree had not changed, so no push-triggered check had any reason to run. They
+# surfaced only because a `git push` happened to print GitHub's "found 10
+# vulnerabilities" banner, which is not a monitoring system.
+#
+# Advisories are published on someone else's schedule, against code that merged
+# weeks ago. Only a scheduled check can see them. ci.yml's `security` job covers
+# the other direction — a PR introducing a critical — and shares the same script.
+#
+# This run does not block anything. It files one issue and closes it when clean,
+# so a new advisory is visible without jamming the merge train.
+
+on:
+  schedule:
+    - cron: '17 6 * * *' # daily, offset off the hour to dodge GitHub's cron rush
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: security-audit
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    name: Audit dependencies on main
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v7
+        with:
+          ref: main
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Audit and report
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          ALERT_ISSUE: '1'
+          # Reporting only: a newly published advisory should raise an issue,
+          # not fail a run nobody triggered.
+          FAIL_ON: none
+        run: bash scripts/ci/dependency-audit.sh

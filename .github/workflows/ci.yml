@@ -262,6 +262,33 @@ jobs:
         run: npm run test
         continue-on-error: true
 
+  # Dependency advisories. Blocks a PR that INTRODUCES a critical; high and
+  # below are reported but do not fail, because a third party publishing an
+  # advisory must not be able to jam the merge train (auto-merge refuses a red
+  # base). Advisories that appear with no code change are caught by the
+  # scheduled security-audit.yml instead — this job only sees what a run touches.
+  security:
+    name: Dependency Security Audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Audit runtime dependencies
+        env:
+          FAIL_ON: critical
+        run: bash scripts/ci/dependency-audit.sh
+
   # Red-main alarm for the DISPATCHED path.
   #
   # Every merge here is an auto-merge made with GITHUB_TOKEN, which fires no
@@ -273,7 +300,7 @@ jobs:
   # using main-red-alert.yml. One trigger per path, one shared policy script.
   post-main:
     name: Main Red Alert (dispatched)
-    needs: [quality, auth-smoke, inventory-smoke, e2e-local]
+    needs: [quality, auth-smoke, inventory-smoke, e2e-local, security]
     if: always() && github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -293,10 +320,11 @@ jobs:
           R_AUTH: ${{ needs.auth-smoke.result }}
           R_INVENTORY: ${{ needs.inventory-smoke.result }}
           R_E2E: ${{ needs.e2e-local.result }}
+          R_SECURITY: ${{ needs.security.result }}
         run: |
           set -euo pipefail
           # `skipped` is not a failure — jobs here are conditional on event type.
-          results="$R_QUALITY $R_AUTH $R_INVENTORY $R_E2E"
+          results="$R_QUALITY $R_AUTH $R_INVENTORY $R_E2E $R_SECURITY"
           conclusion=success
           case "$results" in *cancelled*) conclusion=cancelled ;; esac
           case "$results" in *failure*) conclusion=failure ;; esac
