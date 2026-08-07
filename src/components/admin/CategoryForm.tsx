@@ -7,6 +7,7 @@
  */
 
 import { useState } from 'react'
+import { useAiForm } from '@fleet/ai-forms/react'
 import { useRouter } from 'next/navigation'
 import Heading from '@/components/admin/AdminHeading'
 import { Tag, Save, ArrowLeft, Trash2 } from 'lucide-react'
@@ -24,6 +25,8 @@ import { generateSlug } from '@/lib/utils/slug'
 import { UI_FEEDBACK_MS } from '@/config/limits'
 import { ROUTES } from '@/config/routes'
 import { adminInteractive } from '@/lib/admin-ui'
+import { AiFormBar } from '@/components/ui/AiFormBar'
+import { CATEGORY_FORM } from '@/config/ai-forms'
 
 interface CategoryFormProps {
   initialData?: Partial<CategoryFormData>
@@ -40,23 +43,38 @@ export default function CategoryForm({
   const t = useTranslations('admin.categories')
   const { saving, deleting, error, success, saveCategory, deleteCategory } = useBlogCategories()
   const [confirmDelete, setConfirmDelete] = useState(false)
-  const [formData, setFormData] = useState<CategoryFormData>({
-    name: initialData?.name || '',
-    slug: initialData?.slug || '',
-    description: initialData?.description || '',
-    color: initialData?.color || DEFAULT_CATEGORY_COLOR,
-    sort_order: initialData?.sort_order || 0,
-    is_active: initialData?.is_active ?? true,
-  })
   const [slugManuallyEdited, setSlugManuallyEdited] = useState(isEdit)
+
+  // One store, written by both the user and the assistant — that is what lets a
+  // follow-up instruction ("Beschreibung kürzer") revise what is already here
+  // instead of starting over. It replaces the per-form useState object.
+  const assist = useAiForm({
+    target: CATEGORY_FORM.key,
+    fields: CATEGORY_FORM.fields,
+    initialValues: {
+      name: initialData?.name || '',
+      slug: initialData?.slug || '',
+      description: initialData?.description || '',
+      color: initialData?.color || DEFAULT_CATEGORY_COLOR,
+      sort_order: initialData?.sort_order || 0,
+      is_active: initialData?.is_active ?? true,
+    },
+    // The slug is aiExcluded, so the model never writes it — but a name it
+    // writes still has to produce one, exactly as typing a name does. Without
+    // this, an AI-filled form would save with an empty slug.
+    onApplied: (values, changed) => {
+      if (slugManuallyEdited || !changed.includes('name')) return
+      const name = String(values.name ?? '')
+      if (name) assist.setValue('slug', generateSlug(name))
+    },
+  })
+
+  const formData = assist.values as unknown as CategoryFormData
 
   // Auto-generate slug from name — computed during name change, not via effect
   const updateName = (name: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      name,
-      ...(!slugManuallyEdited && name ? { slug: generateSlug(name) } : {}),
-    }))
+    assist.setValue('name', name)
+    if (!slugManuallyEdited && name) assist.setValue('slug', generateSlug(name))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -141,6 +159,14 @@ export default function CategoryForm({
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* Shown when editing too — refining an existing category is the half a
+            fill-only button cannot do. */}
+        <AiFormBar
+          form={assist}
+          fillPlaceholder={t('aiFillPlaceholder')}
+          refinePlaceholder={t('aiRefinePlaceholder')}
+        />
+
         <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6">
           <div className="grid md:grid-cols-2 gap-6">
             {/* Name */}
@@ -166,7 +192,7 @@ export default function CategoryForm({
                 value={formData.slug}
                 onChange={(e) => {
                   setSlugManuallyEdited(true)
-                  setFormData((prev) => ({ ...prev, slug: e.target.value }))
+                  assist.setValue('slug', e.target.value)
                 }}
                 placeholder="z.B. nachhaltigkeit"
                 className="font-mono text-sm"
@@ -182,10 +208,7 @@ export default function CategoryForm({
               <Textarea
                 value={formData.description}
                 onChange={(e) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    description: e.target.value,
-                  }))
+                  assist.setValue('description', e.target.value)
                 }
                 placeholder="Kurze Beschreibung der Kategorie..."
                 rows={3}
@@ -204,7 +227,7 @@ export default function CategoryForm({
                     type="color"
                     value={formData.color}
                     onChange={(e) =>
-                      setFormData((prev) => ({ ...prev, color: e.target.value }))
+                      assist.setValue('color', e.target.value)
                     }
                     className="w-10 h-10 rounded-sm cursor-pointer border-0"
                   />
@@ -212,7 +235,7 @@ export default function CategoryForm({
                     type="text"
                     value={formData.color}
                     onChange={(e) =>
-                      setFormData((prev) => ({ ...prev, color: e.target.value }))
+                      assist.setValue('color', e.target.value)
                     }
                     className="flex-1 font-mono text-sm"
                     placeholder={DEFAULT_CATEGORY_COLOR}
@@ -225,7 +248,7 @@ export default function CategoryForm({
                       type="button"
                       variant="ghost"
                       onClick={() =>
-                        setFormData((prev) => ({ ...prev, color }))
+                        assist.setValue('color', color)
                       }
                       className={`w-8 h-8 p-0 rounded-full border-2 hover:scale-110 ${
                         formData.color === color
@@ -248,10 +271,7 @@ export default function CategoryForm({
                   type="number"
                   value={formData.sort_order}
                   onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      sort_order: parseInt(e.target.value) || 0,
-                    }))
+                    assist.setValue('sort_order', parseInt(e.target.value) || 0)
                   }
                   min={0}
                 />
@@ -263,10 +283,7 @@ export default function CategoryForm({
                   id="is_active"
                   checked={formData.is_active}
                   onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      is_active: e.target.checked,
-                    }))
+                    assist.setValue('is_active', e.target.checked)
                   }
                   className="w-5 h-5 rounded-sm border-default text-action focus:ring-action"
                 />

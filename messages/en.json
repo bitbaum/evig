@@ -7102,7 +7102,9 @@
       "deleteDialog": {
         "title": "Delete category",
         "message": "Really delete this category?"
-      }
+      },
+      "aiFillPlaceholder": "e.g. «Repair tips: guides for fixing things yourself, in green»",
+      "aiRefinePlaceholder": "e.g. «shorter description, make it blue»"
     },
     "dashboard": {
       "myTasks": "My tasks",
@@ -9118,5 +9120,15 @@
         "body": "These statutes were adopted at the founding assembly and have been in force since."
       }
     }
+  },
+  "aiForm": {
+    "fillTitle": "Fill with AI",
+    "refineTitle": "Change with AI",
+    "fillHint": "Describe it in your own words and the form fills in.",
+    "refineHint": "Say what to change — e.g. «shorter» or «make it green».",
+    "fillSubmit": "Fill fields",
+    "refineSubmit": "Apply change",
+    "undo": "Undo",
+    "changedFields": "{count, plural, one {# field changed} other {# fields changed}}"
   }
 }

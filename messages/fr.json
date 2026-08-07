@@ -7053,7 +7053,9 @@
       "deleteDialog": {
         "title": "Supprimer la catégorie",
         "message": "Voulez-vous vraiment supprimer la catégorie ?"
-      }
+      },
+      "aiFillPlaceholder": "p.ex. «Conseils de réparation : guides pour réparer soi-même, en vert»",
+      "aiRefinePlaceholder": "p.ex. «description plus courte, plutôt bleu»"
     },
     "dashboard": {
       "myTasks": "Mes tâches",
@@ -9015,5 +9017,15 @@
         "body": "Les présents statuts ont été adoptés lors de l'assemblée constitutive et sont en vigueur depuis lors."
       }
     }
+  },
+  "aiForm": {
+    "fillTitle": "Remplir avec l'IA",
+    "refineTitle": "Modifier avec l'IA",
+    "fillHint": "Décrivez-le avec vos mots — le formulaire se remplit.",
+    "refineHint": "Dites ce qu'il faut changer — p.ex. «plus court» ou «plutôt vert».",
+    "fillSubmit": "Remplir les champs",
+    "refineSubmit": "Appliquer la modification",
+    "undo": "Annuler",
+    "changedFields": "{count, plural, one {# champ modifié} other {# champs modifiés}}"
   }
 }

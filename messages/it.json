@@ -7053,7 +7053,9 @@
       "deleteDialog": {
         "title": "Elimina categoria",
         "message": "Eliminare davvero la categoria?"
-      }
+      },
+      "aiFillPlaceholder": "p.es. «Consigli di riparazione: guide per riparare da sé, in verde»",
+      "aiRefinePlaceholder": "p.es. «descrizione più corta, piuttosto blu»"
     },
     "dashboard": {
       "myTasks": "I miei compiti",
@@ -9013,5 +9015,15 @@
         "body": "Il presente statuto è stato approvato dall'assemblea costitutiva ed è da allora in vigore."
       }
     }
+  },
+  "aiForm": {
+    "fillTitle": "Compila con l'IA",
+    "refineTitle": "Modifica con l'IA",
+    "fillHint": "Descrivilo con parole tue — il modulo si compila.",
+    "refineHint": "Di' cosa cambiare — p.es. «più corto» o «piuttosto verde».",
+    "fillSubmit": "Compila i campi",
+    "refineSubmit": "Applica la modifica",
+    "undo": "Annulla",
+    "changedFields": "{count, plural, one {# campo modificato} other {# campi modificati}}"
   }
 }

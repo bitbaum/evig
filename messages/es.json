@@ -7053,7 +7053,9 @@
       "deleteDialog": {
         "title": "Eliminar categoría",
         "message": "¿Seguro que desea eliminar la categoría?"
-      }
+      },
+      "aiFillPlaceholder": "p.ej. «Consejos de reparación: guías para arreglar tú mismo, en verde»",
+      "aiRefinePlaceholder": "p.ej. «descripción más corta, mejor azul»"
     },
     "dashboard": {
       "myTasks": "Mis tareas",
@@ -9013,5 +9015,15 @@
         "body": "Estos estatutos fueron aprobados en la asamblea constitutiva y están en vigor desde entonces."
       }
     }
+  },
+  "aiForm": {
+    "fillTitle": "Rellenar con IA",
+    "refineTitle": "Modificar con IA",
+    "fillHint": "Descríbelo con tus palabras y el formulario se rellena.",
+    "refineHint": "Di qué cambiar — p.ej. «más corto» o «mejor en verde».",
+    "fillSubmit": "Rellenar campos",
+    "refineSubmit": "Aplicar cambio",
+    "undo": "Deshacer",
+    "changedFields": "{count, plural, one {# campo modificado} other {# campos modificados}}"
   }
 }

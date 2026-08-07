@@ -7053,7 +7053,9 @@
       "deleteDialog": {
         "title": "カテゴリーを削除",
         "message": "本当にこのカテゴリーを削除しますか?"
-      }
+      },
+      "aiFillPlaceholder": "例：「修理のヒント：自分で直すためのガイド、緑で」",
+      "aiRefinePlaceholder": "例：「説明を短く、青にして」"
     },
     "dashboard": {
       "myTasks": "マイタスク",
@@ -9013,5 +9015,15 @@
         "body": "本定款は設立総会において議決され、以後効力を有する。"
       }
     }
+  },
+  "aiForm": {
+    "fillTitle": "AIで入力",
+    "refineTitle": "AIで変更",
+    "fillHint": "自分の言葉で説明すると、フォームが入力されます。",
+    "refineHint": "変更内容を伝えてください — 例：「短く」「緑に」。",
+    "fillSubmit": "項目を入力",
+    "refineSubmit": "変更を適用",
+    "undo": "元に戻す",
+    "changedFields": "{count, plural, other {# 件の項目を変更しました}}"
   }
 }

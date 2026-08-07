@@ -7053,7 +7053,9 @@
       "deleteDialog": {
         "title": "카테고리 삭제",
         "message": "정말 카테고리를 삭제하시겠습니까?"
-      }
+      },
+      "aiFillPlaceholder": "예: 「수리 팁: 직접 고치는 가이드, 초록색으로」",
+      "aiRefinePlaceholder": "예: 「설명을 더 짧게, 파란색으로」"
     },
     "dashboard": {
       "myTasks": "내 업무",
@@ -9013,5 +9015,15 @@
         "body": "본 정관은 창립총회에서 의결되었으며 그 이후 효력을 가진다."
       }
     }
+  },
+  "aiForm": {
+    "fillTitle": "AI로 채우기",
+    "refineTitle": "AI로 수정",
+    "fillHint": "직접 설명하면 양식이 채워집니다.",
+    "refineHint": "무엇을 바꿀지 말해 주세요 — 예: 「더 짧게」, 「초록색으로」.",
+    "fillSubmit": "항목 채우기",
+    "refineSubmit": "변경 적용",
+    "undo": "실행 취소",
+    "changedFields": "{count, plural, other {# 개 항목이 변경되었습니다}}"
   }
 }

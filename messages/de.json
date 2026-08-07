@@ -7186,7 +7186,9 @@
       "deleteDialog": {
         "title": "Kategorie löschen",
         "message": "Kategorie wirklich löschen?"
-      }
+      },
+      "aiFillPlaceholder": "z.B. «Reparatur-Tipps: Anleitungen zum Selberflicken, in Grün»",
+      "aiRefinePlaceholder": "z.B. «Beschreibung kürzer, Farbe eher blau»"
     },
     "dashboard": {
       "myTasks": "Meine Aufgaben",
@@ -9135,5 +9137,15 @@
         "body": "Diese Statuten wurden an der Gründungsversammlung beschlossen und sind seither in Kraft."
       }
     }
+  },
+  "aiForm": {
+    "fillTitle": "Mit KI ausfüllen",
+    "refineTitle": "Mit KI ändern",
+    "fillHint": "Beschreiben Sie es in eigenen Worten — das Formular füllt sich aus.",
+    "refineHint": "Sagen Sie, was geändert werden soll — z.B. «kürzer» oder «eher grün».",
+    "fillSubmit": "Felder ausfüllen",
+    "refineSubmit": "Änderung übernehmen",
+    "undo": "Rückgängig",
+    "changedFields": "{count, plural, one {# Feld geändert} other {# Felder geändert}}"
   }
 }
