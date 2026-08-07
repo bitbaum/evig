@@ -58,51 +58,6 @@ HOLD_LABELS='["hold","no-automerge","do-not-merge","wip"]'
 # doomed run every 10 minutes indefinitely and bury the real signal.
 MAX_RUN_ATTEMPTS="${MAX_RUN_ATTEMPTS:-3}"
 
-echo "[auto-merge] sweeping open PRs against ${BASE_BRANCH} in ${REPO}"
-
-# Never add changes to a base that is red or mid-verification.
-#
-# The run has to belong to the CURRENT tip of the base branch. Checking only
-# "the latest CI run" is a trap: right after a merge, the newest run is still
-# the *previous* commit's — and it is green — so the guard would wave through a
-# second merge onto a commit nothing has verified yet. That is exactly the
-# batching this script exists to prevent.
-base_sha=$(gh api "repos/${REPO}/commits/${BASE_BRANCH}" --jq '.sha')
-base_ci=$(gh run list --repo "$REPO" --workflow "$CI_WORKFLOW" --branch "$BASE_BRANCH" --limit 1 \
-  --json status,conclusion,headSha --jq '.[0] // empty')
-
-if [ -z "$base_ci" ]; then
-  echo "[auto-merge] no CI history for ${BASE_BRANCH} — proceeding"
-else
-  base_status=$(printf '%s' "$base_ci" | jq -r '.status')
-  base_conclusion=$(printf '%s' "$base_ci" | jq -r '.conclusion // ""')
-  base_ci_sha=$(printf '%s' "$base_ci" | jq -r '.headSha')
-
-  if [ "$base_ci_sha" != "$base_sha" ]; then
-    echo "[auto-merge] ${BASE_BRANCH} is at ${base_sha:0:8} but the newest CI run is for ${base_ci_sha:0:8} — waiting for CI to catch up"
-    exit 0
-  fi
-  if [ "$base_status" != "completed" ]; then
-    echo "[auto-merge] ${BASE_BRANCH} CI is still running — deferring to the next sweep"
-    exit 0
-  fi
-  if [ "$base_conclusion" != "success" ]; then
-    echo "[auto-merge] ${BASE_BRANCH} CI is ${base_conclusion} — refusing to merge onto a broken base" >&2
-    exit 0
-  fi
-fi
-
-prs_json=$(gh pr list --repo "$REPO" --state open --base "$BASE_BRANCH" --limit 50 \
-  --json number,title,isDraft,mergeable,mergeStateStatus,labels,statusCheckRollup)
-
-count=$(printf '%s' "$prs_json" | jq 'length')
-if [ "$count" -eq 0 ]; then
-  echo "[auto-merge] no open PRs"
-  exit 0
-fi
-
-merged_any=0
-
 # Did this run fail WITHOUT executing any of our own steps?
 #
 # A job whose only failed step is "Set up job" never ran a line of this repo's
@@ -133,6 +88,103 @@ run_failure_is_infra() {
   [ -n "$run_failure_is_infra_steps" ] || return 1
   [ "$run_failure_is_infra_steps" = "Set up job" ]
 }
+
+# Is this conclusion a statement ABOUT THE CODE, or just noise?
+#
+# `cancelled` never is (concurrency:cancel-in-progress, or an incident killing
+# the run mid-flight). `failure` usually is — unless nothing of ours ever ran.
+run_conclusion_is_non_verdict() {
+  case "$1" in
+    cancelled) return 0 ;;
+    failure) run_failure_is_infra "$2" ;;
+    *) return 1 ;;
+  esac
+}
+
+# Re-run a run that produced no verdict, capped by its own attempt counter.
+#
+# `gh run rerun` (rather than a fresh `workflow run` dispatch) is deliberate:
+# re-running increments run_attempt, so the attempt counter IS the loop cap. A
+# fresh dispatch would start every retry back at attempt 1 and could churn
+# forever. Prints why it declined, so the sweep log always explains itself.
+rerun_non_verdict_run() {
+  rerun_id="$1"
+  rerun_what="$2"
+
+  rerun_attempt=$(gh api "repos/${REPO}/actions/runs/${rerun_id}" \
+    --jq '.run_attempt // 1' 2>/dev/null || echo "$MAX_RUN_ATTEMPTS")
+  if [ "$rerun_attempt" -ge "$MAX_RUN_ATTEMPTS" ]; then
+    echo "[auto-merge] ${rerun_what} run ${rerun_id} already at attempt ${rerun_attempt}/${MAX_RUN_ATTEMPTS} — not retrying again" >&2
+    return 1
+  fi
+
+  echo "[auto-merge] ${rerun_what} run ${rerun_id} produced no verdict (attempt ${rerun_attempt}) — re-running"
+  gh run rerun "$rerun_id" --repo "$REPO" \
+    || { echo "[auto-merge] could not re-run ${rerun_id}" >&2; return 1; }
+}
+
+echo "[auto-merge] sweeping open PRs against ${BASE_BRANCH} in ${REPO}"
+
+# Never add changes to a base that is red or mid-verification.
+#
+# The run has to belong to the CURRENT tip of the base branch. Checking only
+# "the latest CI run" is a trap: right after a merge, the newest run is still
+# the *previous* commit's — and it is green — so the guard would wave through a
+# second merge onto a commit nothing has verified yet. That is exactly the
+# batching this script exists to prevent.
+base_sha=$(gh api "repos/${REPO}/commits/${BASE_BRANCH}" --jq '.sha')
+base_ci=$(gh run list --repo "$REPO" --workflow "$CI_WORKFLOW" --branch "$BASE_BRANCH" --limit 1 \
+  --json status,conclusion,headSha,databaseId --jq '.[0] // empty')
+
+if [ -z "$base_ci" ]; then
+  echo "[auto-merge] no CI history for ${BASE_BRANCH} — proceeding"
+else
+  base_status=$(printf '%s' "$base_ci" | jq -r '.status')
+  base_conclusion=$(printf '%s' "$base_ci" | jq -r '.conclusion // ""')
+  base_ci_sha=$(printf '%s' "$base_ci" | jq -r '.headSha')
+  base_run_id=$(printf '%s' "$base_ci" | jq -r '.databaseId')
+
+  if [ "$base_ci_sha" != "$base_sha" ]; then
+    echo "[auto-merge] ${BASE_BRANCH} is at ${base_sha:0:8} but the newest CI run is for ${base_ci_sha:0:8} — waiting for CI to catch up"
+    exit 0
+  fi
+  if [ "$base_status" != "completed" ]; then
+    echo "[auto-merge] ${BASE_BRANCH} CI is still running — deferring to the next sweep"
+    exit 0
+  fi
+  if [ "$base_conclusion" != "success" ]; then
+    # THE DEADLOCK. The only thing that produces a new CI run on the base is a
+    # merge, and merges are exactly what this guard blocks — so a base run that
+    # ended without a verdict strands every open PR until a human notices, and
+    # nothing signals that they should. The sweep still exits 0, so from the
+    # outside the automation looks perfectly healthy while merging nothing.
+    #
+    # Observed in this repo 2026-08-07: an Actions incident left main's run
+    # `failure` with no failed job at all (one cancelled, rest green). It held
+    # 11 PRs for ~14h. The retry below is the same reasoning already applied to
+    # PR checks further down — this is the sibling path that was left open.
+    #
+    # A genuine failure still blocks: that IS a verdict about the code.
+    if run_conclusion_is_non_verdict "$base_conclusion" "$base_run_id"; then
+      rerun_non_verdict_run "$base_run_id" "${BASE_BRANCH}" || true
+      echo "[auto-merge] deferring to the next sweep to judge ${BASE_BRANCH}"
+      exit 0
+    fi
+    echo "[auto-merge] ${BASE_BRANCH} CI is ${base_conclusion} — refusing to merge onto a broken base" >&2
+    exit 0
+  fi
+fi
+
+prs_json=$(gh pr list --repo "$REPO" --state open --base "$BASE_BRANCH" --limit 50 \
+  --json number,title,isDraft,mergeable,mergeStateStatus,labels,statusCheckRollup)
+
+count=$(printf '%s' "$prs_json" | jq 'length')
+if [ "$count" -eq 0 ]; then
+  echo "[auto-merge] no open PRs"
+  exit 0
+fi
+
+merged_any=0
 
 # OLDEST FIRST. `gh pr list` returns newest-first, and this loop merges the
 # first eligible PR and stops — so the newest green PR wins every sweep and an
@@ -217,20 +269,15 @@ for number in $(printf '%s' "$prs_json" | jq -r 'sort_by(.number) | .[].number')
         fi
       fi
 
+      # Whole run, never `--failed`. A partial re-run re-runs the failed jobs
+      # but flips everything that was SKIPPED to CANCELLED, so the PR ends up
+      # non-green for a NEW reason and needs yet another retry. Observed on
+      # #278 on 2026-08-07. Re-running everything costs more minutes and is
+      # the only way to get one coherent verdict.
       for url in $retry_urls; do
         run_id=$(printf '%s' "$url" | grep -oE '/runs/[0-9]+' | grep -oE '[0-9]+' || true)
         [ -z "$run_id" ] && continue
-        # Cap attempts: during a multi-hour incident an uncapped retry would
-        # re-run the same doomed run every sweep, forever.
-        attempt=$(gh api "repos/${REPO}/actions/runs/${run_id}" --jq '.run_attempt // 1' 2>/dev/null || echo "$MAX_RUN_ATTEMPTS")
-        if [ "$attempt" -ge "$MAX_RUN_ATTEMPTS" ]; then
-          echo "[auto-merge] #${number} run ${run_id} already at attempt ${attempt} — not retrying again"
-          continue
-        fi
-        echo "[auto-merge] #${number} re-running run ${run_id} (attempt ${attempt})"
-        gh run rerun "$run_id" --repo "$REPO" --failed \
-          || gh run rerun "$run_id" --repo "$REPO" \
-          || echo "[auto-merge] #${number} could not re-run ${run_id}" >&2
+        rerun_non_verdict_run "$run_id" "#${number}" || true
       done
     fi
     continue
