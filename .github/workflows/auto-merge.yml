@@ -28,11 +28,15 @@ permissions:
   contents: write # merge the PR
   pull-requests: write # read PR state, delete the branch
   actions: write # dispatch the re-arm workflows
-  # Merging a PR that edits .github/workflows/ writes those files to the base
-  # branch, which GitHub gates on this scope. Without it the sweep reads such a
-  # PR as MERGEABLE/BLOCKED and every merge path is refused — gh, --auto, and
-  # the REST endpoint alike — while PRs touching nothing else merge normally.
-  workflows: write
+
+# KNOWN LIMIT — PRs that edit .github/workflows/ cannot be merged by this
+# sweep. GITHUB_TOKEN has no workflow-writing scope AT ALL: `workflows: write`
+# is not a valid permissions key (adding it makes this file unparseable and
+# silently kills every trigger — that exact mistake shipped as #287 and took
+# the sweep down for 5 hours). To GITHUB_TOKEN such a PR reads as
+# MERGEABLE/BLOCKED and gh, --auto, and the REST endpoint all refuse it.
+# Those PRs need a merge with a personal token (`gh pr merge --squash` as a
+# user); everything else self-merges here.
 
 # Never let two sweeps merge concurrently — they would race on the same PRs.
 concurrency:
