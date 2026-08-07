@@ -300,7 +300,12 @@ jobs:
   # using main-red-alert.yml. One trigger per path, one shared policy script.
   post-main:
     name: Main Red Alert (dispatched)
-    needs: [quality, auth-smoke, inventory-smoke, e2e-local, security]
+    # MUST list every other job in this file. The alarm's verdict has to mean
+    # the same thing as the merge gate's, and the gate reads the RUN's
+    # conclusion — which every job contributes to. Enforced by
+    # src/__tests__/ci/main-red-verdict.test.ts, because this list has already
+    # drifted once (see the commit that added this comment).
+    needs: [quality, auth-smoke, inventory-smoke, migrations, e2e-local, test, security]
     if: always() && github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -319,15 +324,29 @@ jobs:
           R_QUALITY: ${{ needs.quality.result }}
           R_AUTH: ${{ needs.auth-smoke.result }}
           R_INVENTORY: ${{ needs.inventory-smoke.result }}
+          R_MIGRATIONS: ${{ needs.migrations.result }}
           R_E2E: ${{ needs.e2e-local.result }}
+          R_TEST: ${{ needs.test.result }}
           R_SECURITY: ${{ needs.security.result }}
         run: |
           set -euo pipefail
-          # `skipped` is not a failure — jobs here are conditional on event type.
-          results="$R_QUALITY $R_AUTH $R_INVENTORY $R_E2E $R_SECURITY"
+          # The question this answers is NOT "did the code break?" but "is main
+          # blocking the merge queue?" — because that is what the auto-merge
+          # green-base guard asks, and the two must agree.
+          #
+          # So anything that is not success-or-skipped counts as red, including
+          # `cancelled`. A cancelled job on main blocks every open PR exactly as
+          # hard as a failing one; treating it as a non-event is what let main
+          # sit red and SILENT for ~14h on 2026-08-07 while 11 PRs waited.
+          # (`skipped` stays green: jobs here are conditional on event type.)
+          results="$R_QUALITY $R_AUTH $R_INVENTORY $R_MIGRATIONS $R_E2E $R_TEST $R_SECURITY"
           conclusion=success
-          case "$results" in *cancelled*) conclusion=cancelled ;; esac
-          case "$results" in *failure*) conclusion=failure ;; esac
+          for result in $results; do
+            case "$result" in
+              success|skipped) ;;
+              *) conclusion=failure ;;
+            esac
+          done
           echo "conclusion=$conclusion" >> "$GITHUB_OUTPUT"
           echo "verdict: $conclusion (from: $results)"
 
