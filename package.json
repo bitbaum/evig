@@ -114,7 +114,7 @@
     "exceljs": "^4.4.0",
     "framer-motion": "^12.23.25",
     "gray-matter": "^4.0.3",
-    "ioredis": "^5.10.0",
+    "ioredis": "^6.0.0",
     "jsonwebtoken": "^9.0.2",
     "leaflet": "^1.9.4",
     "lru-cache": "^11.2.6",
