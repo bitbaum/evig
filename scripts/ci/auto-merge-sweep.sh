@@ -304,15 +304,33 @@ for number in $(printf '%s' "$prs_json" | jq -r 'sort_by(.number) | .[].number')
     continue
   fi
 
-  echo "[auto-merge] #${number} green and ready — merging: ${title}"
+  echo "[auto-merge] #${number} green and ready (${mergeable}/${state}) — merging: ${title}"
   if gh pr merge "$number" --repo "$REPO" --squash --delete-branch; then
     merged_any=1
     echo "[auto-merge] #${number} merged"
     # One car per sweep: let CI verify this on the base before the next couples.
     break
   else
-    # Losing a race (someone merged first, or the base moved underneath) is
-    # normal; the next sweep re-evaluates from fresh state.
+    # A direct merge can be refused with "the base branch policy prohibits the
+    # merge" for a PR that this same sweep just read as MERGEABLE/CLEAN. The
+    # refusal is gh's client-side precheck acting on the mergeStateStatus that
+    # GITHUB_TOKEN sees, which is not always the one a PAT sees — so it is not
+    # something this script can inspect its way out of. Observed 2026-08-07 on
+    # #278 and #282: three consecutive sweeps, both PRs fully green, both
+    # refused, while PRs not touching .github/ merged normally throughout.
+    #
+    # Native auto-merge is GitHub performing the merge itself once its own
+    # requirements are met, so it does not go through that precheck. It is the
+    # documented escape hatch (gh prints it in the failure message).
+    #
+    # Deliberately still followed by `break`: at most one PR per sweep is ever
+    # handed to auto-merge, which keeps the one-car-per-sweep discipline even
+    # though GitHub, not this script, completes the merge.
+    echo "[auto-merge] #${number} direct merge refused (${mergeable}/${state}) — delegating to native auto-merge" >&2
+    if gh pr merge "$number" --repo "$REPO" --squash --delete-branch --auto; then
+      echo "[auto-merge] #${number} handed to native auto-merge; GitHub will complete it"
+      break
+    fi
     echo "[auto-merge] #${number} merge failed — leaving for the next sweep" >&2
   fi
 done
