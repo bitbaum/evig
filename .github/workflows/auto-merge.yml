@@ -28,6 +28,11 @@ permissions:
   contents: write # merge the PR
   pull-requests: write # read PR state, delete the branch
   actions: write # dispatch the re-arm workflows
+  # Merging a PR that edits .github/workflows/ writes those files to the base
+  # branch, which GitHub gates on this scope. Without it the sweep reads such a
+  # PR as MERGEABLE/BLOCKED and every merge path is refused — gh, --auto, and
+  # the REST endpoint alike — while PRs touching nothing else merge normally.
+  workflows: write
 
 # Never let two sweeps merge concurrently — they would race on the same PRs.
 concurrency:
