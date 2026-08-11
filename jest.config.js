@@ -21,7 +21,7 @@ const customJestConfig = {
   ],
   moduleDirectories: ['node_modules', '<rootDir>/'],
   transformIgnorePatterns: [
-    '/node_modules/(?!(@auth|next-auth|next-intl|use-intl)/)',
+    '/node_modules/(?!(@auth|next-auth|next-intl|use-intl|cookie)/)',
   ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
@@ -40,4 +40,17 @@ const customJestConfig = {
 }
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-module.exports = createJestConfig(customJestConfig)
+const buildConfig = createJestConfig(customJestConfig)
+
+// next/jest PREPENDS its own transformIgnorePatterns, and patterns are OR'd —
+// if any one matches, the file is never transformed. So an allowlist entry in
+// customJestConfig above cannot rescue an ESM-only package on its own; the
+// package must also be injected into next/jest's generated allowlist here.
+// cookie v2 is pure ESM ("type": "module") and is imported by src/lib/auth.
+module.exports = async () => {
+  const config = await buildConfig()
+  config.transformIgnorePatterns = config.transformIgnorePatterns.map((pattern) =>
+    pattern.includes('(?!(next-auth|') ? pattern.replace('(?!(next-auth|', '(?!(cookie|next-auth|') : pattern
+  )
+  return config
+}
