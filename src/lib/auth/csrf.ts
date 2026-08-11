@@ -12,7 +12,9 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { serialize, parse } from 'cookie'
+// cookie v2 renamed the exports: serialize → stringifySetCookie (now taking
+// {name, value, ...options} as one object), parse → parseCookie.
+import { stringifySetCookie, parseCookie } from 'cookie'
 
 // =============================================================================
 // Edge-compatible crypto utilities (Web Crypto API)
@@ -103,7 +105,9 @@ export async function validateCsrfToken(token: string, hash: string): Promise<bo
  * Create a CSRF cookie
  */
 export function createCsrfCookie(token: string): string {
-  return serialize(CSRF_CONFIG.cookieName, token, {
+  return stringifySetCookie({
+    name: CSRF_CONFIG.cookieName,
+    value: token,
     httpOnly: false, // Must be false: Double Submit Cookie pattern requires JS to read the token
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
@@ -117,7 +121,7 @@ export function createCsrfCookie(token: string): string {
  */
 export function getCsrfFromCookies(cookieHeader: string | null): string | null {
   if (!cookieHeader) return null
-  const cookies = parse(cookieHeader)
+  const cookies = parseCookie(cookieHeader)
   return cookies[CSRF_CONFIG.cookieName] || null
 }
 
