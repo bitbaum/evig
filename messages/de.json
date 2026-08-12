@@ -161,7 +161,10 @@
       "reparaturbonus": "Reparaturbonus Zürich",
       "reparaturbonusDesc": "Bis zu 100 Franken für Reparaturen — so funktioniert’s",
       "press": "Presse",
-      "pressDesc": "Medienberichte"
+      "pressDesc": "Medienberichte",
+      "aiDivision": "Zugang zu künstlicher Intelligenz — Assistent und passende Hardware",
+      "architectureDivision": "Bauen, das auch als Ruine noch etwas taugt",
+      "healthDivision": "Forschung zu Langlebigkeit und zum Bewahren von Erinnerung"
     },
     "language": "Sprache",
     "missionHistory": "Mission & Geschichte",
@@ -345,7 +348,6 @@
       "titlePrimary": "Zugang zu Intelligenz.",
       "titleSecondary": "Für alle bezahlbar.",
       "lede": "Kuratierte Technik, KI und Robotik zu fairen Preisen — plus wirklich zugängliche Reparatur.",
-      "sublede": "Shop, Community-Marktplatz, Werkstatt und Techniker-Netzwerk — alles unter einem Dach.",
       "subtitle": "Gute Technik ist zu teuer und zu schnell Müll. Wir drehen beides um: bezahlbaren Zugang zu Intelligenz — und einen Kreislauf, der Geräte im Umlauf hält statt auf dem Schrott.",
       "ctaDonate": "Technik entdecken",
       "ctaDiscover": "Reparatur finden",
@@ -9147,5 +9149,201 @@
     "refineSubmit": "Änderung übernehmen",
     "undo": "Rückgängig",
     "changedFields": "{count, plural, one {# Feld geändert} other {# Felder geändert}}"
+  },
+  "divisions": {
+    "overview": {
+      "eyebrow": "Bereiche",
+      "heading": "{count, plural, one {Ein Bereich} other {# Bereiche}}, ein Prinzip",
+      "subtitle": "Ein Gedanke, in jedem Bereich neu angewandt: die Zeit verlängern, in der etwas nützlich, brauchbar und schön bleibt. Vom Gerät bis zum Gebäude — und bis zum Menschen, der beides benutzt."
+    },
+    "status": {
+      "live": "Aktiv",
+      "research": "In Forschung"
+    },
+    "items": {
+      "computers": {
+        "tagline": "Gute Maschinen, länger im Umlauf",
+        "description": "Kuratierte, geprüfte Geräte — ausgewählt, weil sie wirklich taugen, und so bepreist, dass sie erreichbar bleiben.",
+        "cta": "Zum Marktplatz"
+      },
+      "repairs": {
+        "tagline": "Reparieren statt ersetzen",
+        "description": "Techniker in deiner Nähe — von der defekten Tastatur bis zum System, das nicht mehr startet.",
+        "cta": "IT-Hilfe finden"
+      },
+      "ai": {
+        "tagline": "Intelligenz, die erreichbar ist",
+        "description": "Ein Assistent, der zur Plattform gehört statt zu einem Abo — auf Hardware, die man sich leisten kann.",
+        "cta": "Bereich ansehen"
+      },
+      "architecture": {
+        "tagline": "Bauen für die Ruine",
+        "description": "Häuser, die auch als Ruine noch etwas taugen: ehrliches Material, sichtbare Konstruktion, nichts, was nach zwanzig Jahren nur noch peinlich ist.",
+        "cta": "Bereich ansehen"
+      },
+      "health": {
+        "tagline": "Länger da sein — und bleiben, was man weiss",
+        "description": "Unser Forschungsbereich zu Langlebigkeit: mehr gesunde Jahre und das Bewahren dessen, was einen Menschen ausmacht.",
+        "cta": "Zur Forschung"
+      }
+    },
+    "pages": {
+      "ai": {
+        "meta": {
+          "title": "Zugang zu Intelligenz",
+          "description": "Der Bereich für erreichbare künstliche Intelligenz: ein Assistent, der zur Plattform gehört, auf Hardware, die bezahlbar ist."
+        },
+        "hero": {
+          "title": "Intelligenz sollte nicht davon abhängen, was man verdient.",
+          "lede": "Wer ein teures Abo bezahlen kann, lernt schneller, arbeitet besser und kommt an Chancen, die anderen verschlossen bleiben. Diese Lücke wächst von selbst. Genau sie wollen wir schliessen."
+        },
+        "thesis": {
+          "eyebrow": "Warum",
+          "title": "Die Lücke, die alle anderen vergrössert",
+          "body": "Intelligenz ist die Meta-Ressource: Sie verstärkt sich selbst. Gib zwei Menschen dieselbe Aufgabe, und wer Intelligenz auf Abruf hat, zieht davon — und bleibt vorne. Deshalb behandeln wir Zugang zu KI nicht als Zusatzfunktion neben einem Laden, sondern als denselben Auftrag wie bezahlbare Hardware. Ein gebrauchtes Notebook, richtig eingerichtet, ist der günstigste Einstieg in künstliche Intelligenz, den es gibt."
+        },
+        "strands": {
+          "eyebrow": "Woran wir arbeiten",
+          "heading": "Drei Teile, die zusammengehören",
+          "assistant": {
+            "title": "Der Assistent",
+            "body": "Auf jeder Seite dieser Plattform sitzt ein Assistent, der den Kontext der Seite kennt und Fragen dazu beantwortet. Er gehört zur Plattform und ist kein Zusatzprodukt — kein zweites Abo, keine getrennte Anmeldung."
+          },
+          "hardware": {
+            "title": "Die Maschine dazu",
+            "body": "Software ohne Gerät ist eine Theorie. Deshalb liegen Hardware und Assistent bei uns nicht in getrennten Abteilungen: Die Geräte im Marktplatz sind so eingerichtet, dass sie am Tag der Übergabe das können, wofür man sie geholt hat."
+          },
+          "sovereignty": {
+            "title": "Souveränität",
+            "body": "Unser Ziel sind offene Modelle überall dort, wo sie taugen, und Nachvollziehbarkeit dort, wo wir auf externe Anbieter angewiesen sind. Wo ein Dienst von aussen antwortet, soll das sichtbar sein statt versteckt."
+          }
+        },
+        "boundary": {
+          "eyebrow": "Ehrliche Grenzen",
+          "heading": "Was dieser Bereich nicht ist",
+          "noLab": {
+            "title": "Kein Labor",
+            "body": "Wir trainieren keine eigenen grossen Modelle. Wir bauen die Brücke zwischen Menschen und den Modellen, die es bereits gibt."
+          },
+          "noMagic": {
+            "title": "Kein Wundermittel",
+            "body": "Ein Assistent irrt sich. Wir sagen, wofür er taugt — und wofür man weiterhin einen Menschen fragt."
+          },
+          "noLockIn": {
+            "title": "Keine Einbahnstrasse",
+            "body": "Was du hier tust, soll dir gehören. Ein Bereich, aus dem man nicht wieder herauskommt, wäre das Gegenteil von Zugang."
+          }
+        },
+        "cta": {
+          "heading": "Fang mit dem Gerät an",
+          "body": "Der günstigste Zugang zu künstlicher Intelligenz ist ein gutes, gebrauchtes Notebook, das jemand richtig eingerichtet hat.",
+          "button": "Geräte ansehen"
+        }
+      },
+      "architecture": {
+        "meta": {
+          "title": "Bauen für die Ruine",
+          "description": "Ein Forschungsbereich zum Bauen: Material, das altert statt zu verfallen, Konstruktion, die man sehen darf, und Teile, die sich wieder trennen lassen."
+        },
+        "hero": {
+          "title": "Bauen, damit auch die Ruine noch etwas taugt.",
+          "lede": "Die härteste Prüfung für ein Gebäude beginnt, wenn niemand es mehr pflegt. Was dann noch dasteht und immer noch schön ist, war ehrlich gebaut. Alles andere war Verkleidung."
+        },
+        "thesis": {
+          "eyebrow": "Warum",
+          "title": "Die Ruine ist der ehrlichste Gutachter",
+          "body": "Ein Bau aus Stein wird zur Ruine und bleibt sehenswert. Ein Bau aus Gipskarton, Klebstoff und Folie wird zu Abfall — und zwar lange bevor er einstürzt, nämlich in dem Moment, in dem die Verkleidung abfällt. Der Unterschied liegt nicht im Alter, sondern darin, ob das, was trägt, auch das ist, was man sieht. Genau diese Frage stellen wir schon bei einem Notebook: Steckt drin, was draufsteht, und lässt es sich öffnen, reparieren und weitergeben? Ein Haus ist nur das grösste Gerät, das ein Mensch besitzt."
+        },
+        "strands": {
+          "eyebrow": "Woran wir es messen",
+          "heading": "Drei Prüfsteine",
+          "materials": {
+            "title": "Material, das altert statt zu verfallen",
+            "body": "Stein, Holz, Ziegel, Lehm, Beton ohne Verkleidung: Baustoffe, die Patina ansetzen, statt zu vergilben. Ein Material, das nur neu gut aussieht, ist eine Wette gegen die Zeit — und die verliert man immer."
+          },
+          "structure": {
+            "title": "Konstruktion, die man sehen darf",
+            "body": "Wenn das Tragwerk sichtbar bleibt, muss es ehrlich sein. Sichtbare Konstruktion ist keine Frage des Geschmacks, sondern eine Selbstverpflichtung: Was sich nicht verstecken lässt, baut man ordentlich."
+          },
+          "reversibility": {
+            "title": "Trennbar, umnutzbar, rückbaubar",
+            "body": "Ein Gebäude, dessen Teile sich trennen, austauschen und wiederverwenden lassen, kann seine erste Nutzung überleben. Verklebte Schichten können das nicht. Es ist dasselbe Prinzip wie beim verlöteten Akku, nur tausendmal grösser."
+          }
+        },
+        "boundary": {
+          "eyebrow": "Ehrliche Grenzen",
+          "heading": "Was dieser Bereich nicht ist",
+          "noFirm": {
+            "title": "Kein Architekturbüro",
+            "body": "Wir planen keine Gebäude und nehmen keine Aufträge an. Das hier ist eine Haltung und ein Forschungsbereich, kein Angebot."
+          },
+          "noNostalgia": {
+            "title": "Keine Nostalgie",
+            "body": "Es geht nicht darum, Altes nachzubauen. Ein gut gebautes Haus von heute darf aussehen wie von heute — es muss nur ehrlich sein."
+          },
+          "noAdvice": {
+            "title": "Keine Bauberatung",
+            "body": "Wir geben keine bau- oder sicherheitstechnischen Empfehlungen. Wer baut, braucht Fachleute, die dafür Verantwortung tragen."
+          }
+        },
+        "cta": {
+          "heading": "Dasselbe Prinzip, nur kleiner",
+          "body": "Bis wir bauen, lässt sich der Gedanke an dem Gegenstand ablesen, mit dem wir angefangen haben: ein Gerät, das sich öffnen, reparieren und weitergeben lässt.",
+          "button": "Geräte ansehen"
+        }
+      },
+      "health": {
+        "meta": {
+          "title": "Langlebigkeit und Bewahrung",
+          "description": "Der Forschungsbereich zu Langlebigkeit: mehr gesunde Jahre und das Bewahren des Bewusstseins eines Menschen. Offene Forschung — keine Medizin, kein Produkt, keine Versprechen."
+        },
+        "hero": {
+          "title": "Das Längste, was wir erhalten wollen, ist ein Mensch.",
+          "lede": "Wir halten Dinge länger in Gebrauch: erst Geräte, dann das Wissen, sie zu benutzen. Der nächste Schritt ist der naheliegendste und zugleich der schwerste — die Zeit, die ein Mensch hat, und das, was von ihm bleibt."
+        },
+        "thesis": {
+          "eyebrow": "Warum",
+          "title": "Dieselbe Frage, eine Ebene höher",
+          "body": "Ein repariertes Notebook ist ein Notebook, das nicht ein zweites Mal gebaut werden musste. Eine Ebene höher gestellt lautet dieselbe Frage: Was verlängert die Zeit, in der ein Mensch gesund, wach und er selbst ist? Und was davon lässt sich bewahren, wenn diese Zeit endet? Wir behaupten nicht, die Antwort zu kennen. Wir halten die Frage für zu wichtig, um sie denen zu überlassen, die sie sich leisten können."
+        },
+        "strands": {
+          "eyebrow": "Woran wir forschen",
+          "heading": "Drei Stränge",
+          "healthspan": {
+            "title": "Gesundheitsspanne",
+            "body": "Nicht länger leben um jeden Preis, sondern länger gesund sein. Wir tragen offen zugängliches Wissen zusammen und prüfen es: was belegt ist, was nur behauptet wird und was es kostet. Wir verkaufen nichts dazu — keine Präparate, keine Programme."
+          },
+          "memory": {
+            "title": "Erinnerung",
+            "body": "Was ein Mensch weiss, entschieden hat und sich merkt, liegt heute verstreut in Diensten, die ihm nicht gehören. Wir untersuchen, wie dieser Kontext der Person selbst gehören kann: verschlüsselt, tragbar, exportierbar — nutzbar von einer KI, die für sie arbeitet statt über sie."
+          },
+          "continuity": {
+            "title": "Weitergabe",
+            "body": "Ein Mensch endet. Was er wusste, muss es nicht. Wir untersuchen, wie sich Wissen, Stimme und Erinnerungen so bewahren lassen, dass die Menschen danach damit arbeiten können — mit ausdrücklicher Einwilligung zu Lebzeiten und ohne je so zu tun, als wäre die Aufzeichnung die Person."
+          }
+        },
+        "boundary": {
+          "eyebrow": "Ehrliche Grenzen",
+          "heading": "Was dieser Bereich nicht ist",
+          "noMedicine": {
+            "title": "Keine Medizin",
+            "body": "Wir stellen keine Diagnosen, geben keine Behandlungsempfehlungen und ersetzen keine Ärztin und keinen Arzt."
+          },
+          "noProduct": {
+            "title": "Kein Produkt",
+            "body": "Es gibt hier nichts zu kaufen. Dieser Bereich ist heute Forschung, und wir führen sie öffentlich."
+          },
+          "noImmortality": {
+            "title": "Kein Versprechen auf Unsterblichkeit",
+            "body": "Wir arbeiten an mehr gesunder Zeit und an sorgfältiger Bewahrung. Nicht an Wundern — und nicht an einer Kopie eines Menschen."
+          }
+        },
+        "cta": {
+          "heading": "Wir forschen öffentlich",
+          "body": "Dieser Bereich steht am Anfang. Wenn du mitdenken willst — als Forscherin, als Ärztin, als jemand, den das persönlich angeht — schreib uns.",
+          "button": "Kontakt aufnehmen"
+        }
+      }
+    }
   }
 }

@@ -1,6 +1,7 @@
 import React from 'react'
 import { ORG, EXTERNAL_LINKS } from '@/config/org'
 import { buildMarktplatzNavigationItems } from '@/config/customer-journeys'
+import { DIVISION_PAGES, EVIG_DIVISIONS } from '@/config/divisions'
 import { buildServicesNavigationItems } from '@/config/services-nav'
 
 /**
@@ -68,6 +69,14 @@ export const mainNavigation: NavigationItem[] = [
         href: '/projects',
         descriptionKey: 'projectsDesc',
       },
+      // The evig divisions that own a page (computers and repairs are reached
+      // through Marktplatz). Wordmarks come from the divisions SSOT and are
+      // proper nouns — they stay literal in every locale, so no nameKey.
+      ...EVIG_DIVISIONS.filter((division) => division.id in DIVISION_PAGES).map((division) => ({
+        name: division.wordmark,
+        href: division.href,
+        descriptionKey: `${division.id}Division`,
+      })),
       {
         // The accountability hub: finances, key figures and the calculation
         // methods (incl. the CO₂ methodology). Distinct from "Unsere Wirkung"

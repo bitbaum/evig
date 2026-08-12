@@ -314,13 +314,19 @@
    * is the default, not an afterthought.
    * ─────────────────────────────────────────────────────────────────────── */
 
-  /* Hero fold — fills viewport on every screen so CTAs land above the fold.
-     min-h:88vh (mobile chrome safe) leaving room for nav above + safe-area
-     below. JSX renders: badge → title → lede → sublede → CTA row, centered. */
+  /* Hero fold. JSX renders: badge → title → lede → CTA row → division rail,
+     centered. On phones the height follows the content: a forced 88vh fold
+     centred a short block inside a tall box, so the first screen was mostly
+     empty and the second CTA landed on the bottom edge under the FABs. From
+     sm: up there is vertical room to spare, so the full fold returns. */
   @apply relative z-10 flex flex-col items-center justify-center px-4 sm:px-6 text-center;
-  min-height: 88vh;
-  padding-top: 3rem;
-  padding-bottom: 3rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  @media (min-width: 640px) {
+    min-height: 88vh;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
 }
 @utility ui-public-eyebrow {
   /* Eyebrow / kicker — small caps mono label above a title. */

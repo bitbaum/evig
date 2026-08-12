@@ -161,7 +161,10 @@
       "reparaturbonus": "Bono de reparación Zúrich",
       "reparaturbonusDesc": "Hasta 100 francos para reparaciones — así funciona",
       "press": "Prensa",
-      "pressDesc": "Cobertura mediática"
+      "pressDesc": "Cobertura mediática",
+      "aiDivision": "Acceso a la inteligencia artificial — el asistente y el hardware para moverlo",
+      "architectureDivision": "Construir de modo que aguante incluso como ruina",
+      "healthDivision": "Investigación sobre longevidad y conservación de la memoria"
     },
     "language": "Idioma",
     "missionHistory": "Misión & Historia",
@@ -2093,7 +2096,6 @@
       "positioning": "Acceso a la inteligencia · Economía circular · Zúrich",
       "titleSecondary": "Asequible para todos.",
       "lede": "Tecnología seleccionada, IA y robótica a precios justos, más una reparación realmente accesible.",
-      "sublede": "Tienda, mercado comunitario, taller y red de técnicos: todo bajo un mismo techo.",
       "ctaDonate": "Descubrir tecnología"
     },
     "actions": {
@@ -9025,5 +9027,201 @@
     "refineSubmit": "Aplicar cambio",
     "undo": "Deshacer",
     "changedFields": "{count, plural, one {# campo modificado} other {# campos modificados}}"
+  },
+  "divisions": {
+    "overview": {
+      "eyebrow": "Áreas",
+      "heading": "{count, plural, one {Un área} other {# áreas}}, un principio",
+      "subtitle": "Una sola idea, retomada en cada área: alargar el tiempo durante el cual algo sigue siendo útil, usable y hermoso. Del dispositivo al edificio — y hasta la persona que usa ambos."
+    },
+    "status": {
+      "live": "Activa",
+      "research": "En investigación"
+    },
+    "items": {
+      "computers": {
+        "tagline": "Buenas máquinas, más tiempo en circulación",
+        "description": "Equipos seleccionados y probados — elegidos porque de verdad cumplen, y con un precio que los mantiene al alcance.",
+        "cta": "Al marketplace"
+      },
+      "repairs": {
+        "tagline": "Reparar en lugar de reemplazar",
+        "description": "Técnicos cerca de ti — desde un teclado roto hasta un sistema que ya no arranca.",
+        "cta": "Buscar ayuda IT"
+      },
+      "ai": {
+        "tagline": "Inteligencia al alcance",
+        "description": "Un asistente que forma parte de la plataforma y no de una suscripción — sobre hardware asequible.",
+        "cta": "Ver esta área"
+      },
+      "architecture": {
+        "tagline": "Construir para la ruina",
+        "description": "Edificios que aguantan incluso como ruina: materiales honestos, estructura a la vista, nada que a los veinte años solo dé vergüenza.",
+        "cta": "Ver esta área"
+      },
+      "health": {
+        "tagline": "Estar más tiempo — y conservar lo que uno sabe",
+        "description": "Nuestra área de investigación sobre longevidad: más años con salud y la conservación de lo que hace a una persona ser quien es.",
+        "cta": "A la investigación"
+      }
+    },
+    "pages": {
+      "ai": {
+        "meta": {
+          "title": "Acceso a la inteligencia",
+          "description": "El área de la inteligencia artificial alcanzable: un asistente integrado en la plataforma, sobre hardware asequible."
+        },
+        "hero": {
+          "title": "La inteligencia no debería depender de lo que uno gana.",
+          "lede": "Quien puede pagar una suscripción cara aprende más rápido, trabaja mejor y llega a oportunidades que a los demás les quedan cerradas. Esa brecha crece sola. Es justo la que queremos cerrar."
+        },
+        "thesis": {
+          "eyebrow": "Por qué",
+          "title": "La brecha que agranda todas las demás",
+          "body": "La inteligencia es el meta-recurso: se acumula. Dale el mismo problema a dos personas y la que tiene inteligencia a demanda se adelanta — y sigue adelantándose. Por eso no tratamos el acceso a la IA como una función añadida a una tienda: es el mismo encargo que el hardware asequible. Un portátil de segunda mano, bien configurado, es la puerta de entrada más barata que existe a la inteligencia artificial."
+        },
+        "strands": {
+          "eyebrow": "En qué trabajamos",
+          "heading": "Tres piezas que van juntas",
+          "assistant": {
+            "title": "El asistente",
+            "body": "En cada página de esta plataforma hay un asistente que conoce el contexto de la página y responde preguntas sobre ella. Forma parte de la plataforma y no es un producto aparte — ni una segunda suscripción ni un acceso separado."
+          },
+          "hardware": {
+            "title": "La máquina para moverlo",
+            "body": "El software sin dispositivo es una teoría. Por eso aquí el hardware y el asistente no son departamentos separados: las máquinas del marketplace se preparan para que, el día de la entrega, ya sepan hacer aquello para lo que se buscaron."
+          },
+          "sovereignty": {
+            "title": "Soberanía",
+            "body": "Aspiramos a modelos abiertos allí donde estén a la altura y a trazabilidad allí donde dependamos de proveedores externos. Cuando responde un servicio de fuera, eso debe verse en lugar de esconderse."
+          }
+        },
+        "boundary": {
+          "eyebrow": "Límites honestos",
+          "heading": "Lo que esta área no es",
+          "noLab": {
+            "title": "No es un laboratorio",
+            "body": "No entrenamos grandes modelos propios. Construimos el puente entre las personas y los modelos que ya existen."
+          },
+          "noMagic": {
+            "title": "No es un milagro",
+            "body": "Un asistente se equivoca. Decimos para qué sirve — y para qué conviene seguir preguntando a una persona."
+          },
+          "noLockIn": {
+            "title": "No es un camino sin retorno",
+            "body": "Lo que haces aquí debe ser tuyo. Un área de la que no se puede salir sería lo contrario del acceso."
+          }
+        },
+        "cta": {
+          "heading": "Empieza por la máquina",
+          "body": "El acceso más barato a la inteligencia artificial es un buen portátil de segunda mano que alguien configuró como es debido.",
+          "button": "Ver equipos"
+        }
+      },
+      "architecture": {
+        "meta": {
+          "title": "Construir para la ruina",
+          "description": "Un área de investigación sobre el construir: materiales que envejecen en vez de degradarse, estructura que se puede mostrar y piezas que vuelven a separarse."
+        },
+        "hero": {
+          "title": "Construir para que hasta la ruina valga la mirada.",
+          "lede": "La prueba más dura de un edificio empieza cuando ya nadie lo cuida. Lo que entonces sigue en pie — y sigue siendo hermoso — se construyó con honestidad. Todo lo demás era revestimiento."
+        },
+        "thesis": {
+          "eyebrow": "Por qué",
+          "title": "La ruina es el perito más honesto",
+          "body": "Una construcción de piedra se convierte en ruina y sigue mereciendo una mirada. Una construcción de placa de yeso, pegamento y láminas se convierte en residuo — mucho antes de derrumbarse, justo en el momento en que se cae el revestimiento. La diferencia no está en la edad, sino en si lo que sostiene es también lo que se ve. Esa misma pregunta ya se la hacemos a un portátil: ¿es lo que dice ser, y se puede abrir, reparar y transmitir? Una casa no es más que el dispositivo más grande que tiene una persona."
+        },
+        "strands": {
+          "eyebrow": "Nuestros criterios",
+          "heading": "Tres pruebas",
+          "materials": {
+            "title": "Material que envejece en vez de degradarse",
+            "body": "Piedra, madera, ladrillo, barro, hormigón visto: materiales que toman pátina en lugar de amarillear. Un material que solo se ve bien nuevo es una apuesta contra el tiempo — y esa apuesta se pierde siempre."
+          },
+          "structure": {
+            "title": "Estructura que se puede mostrar",
+            "body": "Si la estructura queda a la vista, tiene que ser honesta. La estructura vista no es cuestión de gusto sino un compromiso: lo que no se puede esconder se construye bien."
+          },
+          "reversibility": {
+            "title": "Separable, reutilizable, reversible",
+            "body": "Un edificio cuyas partes se pueden separar, sustituir y reutilizar puede sobrevivir a su primer uso. Las capas pegadas no. Es el mismo principio que la batería soldada, mil veces más grande."
+          }
+        },
+        "boundary": {
+          "eyebrow": "Límites honestos",
+          "heading": "Lo que esta área no es",
+          "noFirm": {
+            "title": "No es un estudio de arquitectura",
+            "body": "No proyectamos edificios ni aceptamos encargos. Esto es una postura y una línea de investigación, no una oferta."
+          },
+          "noNostalgia": {
+            "title": "No es nostalgia",
+            "body": "No se trata de copiar lo antiguo. Una casa bien construida hoy puede parecer de hoy — solo tiene que ser honesta."
+          },
+          "noAdvice": {
+            "title": "No es asesoramiento en construcción",
+            "body": "No damos recomendaciones estructurales ni de seguridad. Quien construye necesita profesionales que asuman la responsabilidad."
+          }
+        },
+        "cta": {
+          "heading": "El mismo principio, más pequeño",
+          "body": "Hasta que construyamos, la idea se lee en el objeto con el que empezamos: un dispositivo que se puede abrir, reparar y transmitir.",
+          "button": "Ver equipos"
+        }
+      },
+      "health": {
+        "meta": {
+          "title": "Longevidad y conservación",
+          "description": "El área de investigación sobre longevidad: más años con salud y la conservación de la consciencia de una persona. Investigación abierta — sin medicina, sin producto, sin promesas."
+        },
+        "hero": {
+          "title": "Lo que más tiempo queremos conservar es a una persona.",
+          "lede": "Mantenemos las cosas en uso durante más tiempo: primero los dispositivos, luego el saber para usarlos. El siguiente paso es el más evidente y a la vez el más difícil — el tiempo que tiene una persona y lo que queda de ella."
+        },
+        "thesis": {
+          "eyebrow": "Por qué",
+          "title": "La misma pregunta, un piso más arriba",
+          "body": "Un portátil reparado es un portátil que no hubo que fabricar por segunda vez. Formulada un piso más arriba, la pregunta es la misma: ¿qué alarga el tiempo en que una persona sigue sana, lúcida y siendo ella misma? ¿Y cuánto de eso puede conservarse cuando ese tiempo termina? No pretendemos conocer la respuesta. Nos parece una pregunta demasiado importante como para dejarla a quienes pueden permitirse hacérsela."
+        },
+        "strands": {
+          "eyebrow": "Qué investigamos",
+          "heading": "Tres líneas",
+          "healthspan": {
+            "title": "Años con salud",
+            "body": "No vivir más a cualquier precio, sino mantenerse sano más tiempo. Reunimos el conocimiento de acceso abierto y lo examinamos: qué está demostrado, qué solo se afirma y cuánto cuesta. No vendemos nada al lado — ni suplementos ni programas."
+          },
+          "memory": {
+            "title": "Memoria",
+            "body": "Lo que una persona sabe, ha decidido y recuerda está hoy repartido en servicios que no le pertenecen. Investigamos cómo ese contexto puede pertenecer a la propia persona: cifrado, portátil, exportable — utilizable por una IA que trabaja para ella y no sobre ella."
+          },
+          "continuity": {
+            "title": "Transmisión",
+            "body": "Una persona termina. Lo que sabía no tiene por qué terminar con ella. Investigamos cómo conservar saber, voz y recuerdos para que quienes vengan después puedan trabajar con ellos — con consentimiento explícito dado en vida y sin hacer creer nunca que el registro es la persona."
+          }
+        },
+        "boundary": {
+          "eyebrow": "Límites honestos",
+          "heading": "Lo que esta área no es",
+          "noMedicine": {
+            "title": "No es medicina",
+            "body": "No hacemos diagnósticos, no damos recomendaciones de tratamiento y no sustituimos a ningún médico."
+          },
+          "noProduct": {
+            "title": "No es un producto",
+            "body": "Aquí no hay nada que comprar. Esta área hoy es investigación, y la hacemos en público."
+          },
+          "noImmortality": {
+            "title": "No es una promesa de inmortalidad",
+            "body": "Trabajamos por más tiempo con salud y por una conservación cuidadosa. No por milagros — y no por una copia de una persona."
+          }
+        },
+        "cta": {
+          "heading": "Investigamos en público",
+          "body": "Esta área está en sus comienzos. Si quieres pensarla con nosotros — como investigadora, como médica o como alguien a quien esto le toca de cerca — escríbenos.",
+          "button": "Contactar"
+        }
+      }
+    }
   }
 }

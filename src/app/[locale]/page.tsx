@@ -7,6 +7,7 @@ import { ORG } from '@/config/org'
 import { safeJsonLd } from '@/lib/seo/json-ld'
 import { ROUTES } from '@/config/routes'
 import { JOURNEY_ENTRYPOINTS } from '@/config/customer-journeys'
+import { EVIG_DIVISIONS, DIVISION_STATUS_STYLE } from '@/config/divisions'
 
 const OG_LOCALE_MAP: Record<string, string> = {
   de: 'de_CH',
@@ -44,6 +45,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function Home() {
   const t = await getTranslations('home')
+  const tDivisions = await getTranslations('divisions')
   const actionCards = [
     {
       label: t('actions.sell.label'),
@@ -117,7 +119,6 @@ export default async function Home() {
           </h1>
 
           <p className="ui-public-hero-lede">{t('hero.lede')}</p>
-          <p className="ui-public-hero-sublede">{t('hero.sublede')}</p>
 
           <div className="ui-public-cta-row">
             <Link href={JOURNEY_ENTRYPOINTS.orgShop} className="ui-public-cta">
@@ -127,8 +128,67 @@ export default async function Home() {
               {t('hero.ctaDiscover')}
             </Link>
           </div>
+
+          {/* Division rail — the brand architecture, stated in the first screen
+              and rendered straight from EVIG_DIVISIONS. This replaced a hand-
+              written sublede that listed surfaces ("Shop, Marktplatz, Werkstatt
+              …") and drifted every time the org changed shape. */}
+          <nav
+            aria-label={tDivisions('overview.eyebrow')}
+            className="mt-10 flex flex-wrap items-center justify-center gap-x-5 gap-y-2"
+          >
+            {EVIG_DIVISIONS.map((division) => (
+              <Link
+                key={division.id}
+                href={division.href}
+                className="ui-public-eyebrow hover:text-text-primary transition-colors"
+              >
+                {division.wordmark}
+              </Link>
+            ))}
+          </nav>
         </div>
       </section>
+
+      {/* ── The evig divisions (SSOT: config/divisions.ts) ───────────
+          First section under the hero: before we ask anyone to do
+          something, the page says what this organisation actually is. */}
+      <Section density="spacious" contained={false} className="border-t border-subtle">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl">
+            <Eyebrow as="div">{tDivisions('overview.eyebrow')}</Eyebrow>
+            <h2 className="ui-public-display-lg mt-4">
+              {/* The count is data, not copy — it follows EVIG_DIVISIONS. */}
+              {tDivisions('overview.heading', { count: EVIG_DIVISIONS.length })}
+            </h2>
+            <p className="ui-public-section-lede mt-6">{tDivisions('overview.subtitle')}</p>
+          </div>
+
+          <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {EVIG_DIVISIONS.map((division) => (
+              <Link key={division.id} href={division.href} className="ui-public-card group">
+                <div className="ui-public-card-label flex items-center justify-between gap-2">
+                  <span>{division.wordmark}</span>
+                  <span
+                    className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-semibold normal-case tracking-normal ${DIVISION_STATUS_STYLE[division.status]}`}
+                  >
+                    {tDivisions(`status.${division.status}` as never)}
+                  </span>
+                </div>
+                <h3 className="ui-public-card-title">
+                  {tDivisions(`items.${division.id}.tagline` as never)}
+                </h3>
+                <p className="ui-public-card-body">
+                  {tDivisions(`items.${division.id}.description` as never)}
+                </p>
+                <span className="ui-public-card-meta inline-flex items-center gap-1 group-hover:text-text-primary transition-colors">
+                  {tDivisions(`items.${division.id}.cta` as never)} →
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </Section>
 
       {/* ── Three primary actions ──────────────────────────────────── */}
       <Section density="spacious" tone="tinted" contained={false} className="border-y border-subtle">

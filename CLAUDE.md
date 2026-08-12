@@ -5,6 +5,41 @@ Affordable-intelligence platform — curated, durable hardware and digital acces
 @~/.claude/CLAUDE.md
 @.claude/CLAUDE.md
 
+## Brand architecture — the evig divisions (SSOT: `src/config/divisions.ts`)
+
+evig is one organisation stated as several divisions, all of them the same idea
+at rising scale: **keep something useful for longer.**
+
+| Division | Lives at | Status |
+|---|---|---|
+| `evig computers` | `/marketplace` — curated, tested hardware | live |
+| `evig repairs` | `/it-hilfe` — repair instead of replace | live |
+| `evig ai` | `/ai` — intelligence within reach | live |
+| `evig architecture` | `/architecture` — build so the ruin still reads | research |
+| `evig health` | `/health` — healthspan + preserving a person | research |
+
+Rules:
+- **`EVIG_DIVISIONS` is the only list.** The homepage hero rail, the homepage
+  divisions section (including its **count** — via ICU `{count}`, never a
+  number typed into a message), the footer column, the nav entries and the
+  division pages all derive from it. Never hardcode a wordmark: it is composed
+  as `${ORG.name} ${id}`.
+- **A division is a lens, not a second storefront.** `computers` and `repairs`
+  point at the surfaces that already serve them. Only add a `DIVISION_PAGES`
+  entry when a division has no home; then it renders through the shared
+  `DivisionPage` component — one shape, never forked.
+- **Structure in config, strings in messages**, paired by the stable `id`
+  (`divisions.items.<id>`, `divisions.pages.<id>`). No arrays in the message
+  files for any of it.
+- **`status: 'research'` is a claim-limiter, not a teaser.** It means nothing
+  is sold and nothing is promised, and the page must say so: every division
+  page carries a required `boundary` block ("what this is NOT") *before* its
+  CTA. `evig health` states plainly that it is not medicine and issues no
+  health promises; `evig architecture` states that it is not an architecture
+  practice and gives no structural advice. Do not soften or drop these — they
+  are what keeps an ambitious claim honest (see the honesty boundary in
+  `.claude/CLAUDE.md`).
+
 ## Non-negotiable standards (the default for every change — don't wait to be told)
 
 The full rationale lives in the imported global standards above. In this repo,

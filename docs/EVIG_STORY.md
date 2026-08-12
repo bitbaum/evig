@@ -228,6 +228,46 @@ anywhere — and kept reachable, for longer.**
 
 ---
 
+## The divisions — one idea at rising scale
+
+evig says itself in divisions. They are not business units bolted together; they
+are the same sentence spoken at five sizes. **Keep something useful for longer.**
+
+- **evig computers** — the machine, curated so it lasts instead of landfilling.
+- **evig repairs** — the machine someone already owns, kept alive.
+- **evig ai** — the intelligence that machine can reach.
+- **evig architecture** — the largest device a person owns.
+- **evig health** — the person in front of all of it.
+
+Two of them are live surfaces under different names already (the marketplace, the
+technician network). Two are openly marked *research* and sell nothing.
+
+**evig architecture — build so the ruin still reads.** The hardest test of a
+building starts when nobody maintains it. A thing of stone becomes a ruin and stays
+worth looking at; a thing of plasterboard, adhesive and foil becomes waste the
+moment the cladding falls off, long before it collapses. The difference isn't age —
+it's whether what carries the load is also what you see. That is the laptop question
+asked at building size: is it what it says it is, and can it be opened, repaired and
+passed on? A house is only the largest device a person owns.
+
+**evig health — the longest-lived thing we want to keep is a person.** A repaired
+laptop is a laptop that didn't have to be built twice. One level up, the question is
+the same: what extends the time a person stays healthy, awake and themselves, and how
+much of that survives when the time ends? Three strands: healthspan (open knowledge,
+tested, nothing sold alongside it), memory (the context of a life belonging to the
+person — encrypted, portable, usable by an AI working *for* them, not *on* them), and
+continuity (what someone knew outlasting them, with consent given in life).
+
+**The honesty rule that makes these sayable.** An ambitious claim earns its place
+only next to the limit beside it — so each division page states what it is *not*
+before it asks for anything. evig health is not medicine, has no product, and
+promises no immortality and no copy of a person. evig architecture is not a practice,
+takes no commissions, and gives no structural advice. Written that way these are
+convictions in public; written without the limits they'd be vapour, and the rest of
+the site would be worth less for it.
+
+---
+
 ## Voice notes (for anyone writing evig copy)
 
 - **Confident, forward-leaning, warm.** Techno-optimist without hype. We're building

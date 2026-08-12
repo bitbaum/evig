@@ -194,7 +194,10 @@
       "reparaturbonus": "Zurich Repair Bonus",
       "reparaturbonusDesc": "Up to CHF 100 back on repairs — how it works",
       "press": "Press",
-      "pressDesc": "Media coverage"
+      "pressDesc": "Media coverage",
+      "aiDivision": "Access to artificial intelligence — the assistant and the hardware to run it",
+      "architectureDivision": "Building that still holds up as a ruin",
+      "healthDivision": "Research on longevity and on preserving memory"
     },
     "experimentalBanner": "Experimental Site",
     "experimentalBannerLink": "go to current site",
@@ -349,7 +352,6 @@
       "positioning": "Access to intelligence · Circular economy · Zurich",
       "titleSecondary": "Affordable for everyone.",
       "lede": "Curated tech, AI and robotics at fair prices — plus repair that's truly within reach.",
-      "sublede": "Shop, community marketplace, workshop and technician network — all under one roof.",
       "ctaDonate": "Explore tech"
     },
     "actions": {
@@ -9130,5 +9132,201 @@
     "refineSubmit": "Apply change",
     "undo": "Undo",
     "changedFields": "{count, plural, one {# field changed} other {# fields changed}}"
+  },
+  "divisions": {
+    "overview": {
+      "eyebrow": "Divisions",
+      "heading": "{count, plural, one {One division} other {# divisions}}, one principle",
+      "subtitle": "One idea, applied afresh in every division: extend the time something stays useful, workable and good to look at. From the device to the building — and to the person who uses both."
+    },
+    "status": {
+      "live": "Active",
+      "research": "In research"
+    },
+    "items": {
+      "computers": {
+        "tagline": "Good machines, longer in circulation",
+        "description": "Curated, tested devices — chosen because they genuinely deliver, priced so people can actually reach them.",
+        "cta": "To the marketplace"
+      },
+      "repairs": {
+        "tagline": "Repair instead of replace",
+        "description": "Technicians near you — from a broken keyboard to a system that will not boot.",
+        "cta": "Find IT help"
+      },
+      "ai": {
+        "tagline": "Intelligence within reach",
+        "description": "An assistant that comes with the platform rather than with a subscription — on hardware people can afford.",
+        "cta": "See this division"
+      },
+      "architecture": {
+        "tagline": "Build for the ruin",
+        "description": "Buildings that still hold up as ruins: honest materials, visible structure, nothing that is merely embarrassing after twenty years.",
+        "cta": "See this division"
+      },
+      "health": {
+        "tagline": "Stay longer — and keep what you know",
+        "description": "Our research division on longevity: more healthy years, and preserving what makes a person who they are.",
+        "cta": "To the research"
+      }
+    },
+    "pages": {
+      "ai": {
+        "meta": {
+          "title": "Access to intelligence",
+          "description": "The division for reachable artificial intelligence: an assistant that comes with the platform, on hardware people can afford."
+        },
+        "hero": {
+          "title": "Intelligence should not depend on what you earn.",
+          "lede": "Whoever can pay for an expensive subscription learns faster, works better and reaches opportunities that stay closed to everyone else. That gap widens on its own. Closing it is the work."
+        },
+        "thesis": {
+          "eyebrow": "Why",
+          "title": "The gap that widens all the others",
+          "body": "Intelligence is the meta-resource: it compounds. Give two people the same problem and the one with intelligence on tap pulls ahead — and keeps pulling ahead. So we do not treat access to AI as a feature bolted onto a shop; it is the same mandate as affordable hardware. A used laptop, set up properly, is the cheapest on-ramp to artificial intelligence that exists."
+        },
+        "strands": {
+          "eyebrow": "What we are building",
+          "heading": "Three parts that belong together",
+          "assistant": {
+            "title": "The assistant",
+            "body": "Every page of this platform carries an assistant that knows the context of that page and answers questions about it. It belongs to the platform and is not a separate product — no second subscription, no separate login."
+          },
+          "hardware": {
+            "title": "The machine to run it",
+            "body": "Software without a device is a theory. That is why hardware and assistant are not separate departments here: the machines in the marketplace are set up so that on the day they change hands they can already do the thing they were bought for."
+          },
+          "sovereignty": {
+            "title": "Sovereignty",
+            "body": "We aim for open models wherever they hold up, and traceability wherever we depend on outside providers. Where an external service answers, that should be visible rather than hidden."
+          }
+        },
+        "boundary": {
+          "eyebrow": "Honest limits",
+          "heading": "What this division is not",
+          "noLab": {
+            "title": "Not a lab",
+            "body": "We do not train large models of our own. We build the bridge between people and the models that already exist."
+          },
+          "noMagic": {
+            "title": "Not a miracle",
+            "body": "An assistant gets things wrong. We say what it is good for — and what you should still ask a person about."
+          },
+          "noLockIn": {
+            "title": "Not a one-way street",
+            "body": "What you do here should belong to you. A division you cannot leave would be the opposite of access."
+          }
+        },
+        "cta": {
+          "heading": "Start with the machine",
+          "body": "The cheapest way into artificial intelligence is a good used laptop that somebody set up properly.",
+          "button": "Browse devices"
+        }
+      },
+      "architecture": {
+        "meta": {
+          "title": "Building for the ruin",
+          "description": "A research division on building: materials that age instead of decaying, structure you are allowed to see, and parts that come apart again."
+        },
+        "hero": {
+          "title": "Build so that even the ruin is worth looking at.",
+          "lede": "The hardest test of a building begins when nobody maintains it any more. Whatever is still standing then — and still beautiful — was built honestly. Everything else was cladding."
+        },
+        "thesis": {
+          "eyebrow": "Why",
+          "title": "The ruin is the most honest inspector",
+          "body": "A building of stone becomes a ruin and stays worth looking at. A building of plasterboard, adhesive and foil becomes waste — long before it collapses, at the moment the cladding falls off. The difference is not age; it is whether the thing carrying the load is also the thing you see. We already ask exactly that of a laptop: is it what it says it is, and can it be opened, repaired and passed on? A house is just the largest device a person owns."
+        },
+        "strands": {
+          "eyebrow": "What we hold it to",
+          "heading": "Three tests",
+          "materials": {
+            "title": "Material that ages instead of decaying",
+            "body": "Stone, timber, brick, clay, concrete left uncovered: materials that take on a patina rather than yellowing. A material that only looks good new is a bet against time — and that bet always loses."
+          },
+          "structure": {
+            "title": "Structure you are allowed to see",
+            "body": "If the frame stays visible, it has to be honest. Exposed structure is not a matter of taste but a commitment: what cannot be hidden gets built properly."
+          },
+          "reversibility": {
+            "title": "Separable, re-usable, reversible",
+            "body": "A building whose parts can be separated, replaced and reused can outlive its first purpose. Glued-together layers cannot. It is the same principle as the soldered-in battery, a thousand times larger."
+          }
+        },
+        "boundary": {
+          "eyebrow": "Honest limits",
+          "heading": "What this division is not",
+          "noFirm": {
+            "title": "Not an architecture practice",
+            "body": "We do not design buildings and we take no commissions. This is a stance and a research direction, not an offer."
+          },
+          "noNostalgia": {
+            "title": "Not nostalgia",
+            "body": "This is not about copying the old. A well-built house of today may look like today — it only has to be honest."
+          },
+          "noAdvice": {
+            "title": "Not building advice",
+            "body": "We give no structural or safety recommendations. Anyone who builds needs professionals who carry the responsibility for it."
+          }
+        },
+        "cta": {
+          "heading": "The same principle, smaller",
+          "body": "Until we build, the idea is legible in the object we started with: a device that can be opened, repaired and passed on.",
+          "button": "Browse devices"
+        }
+      },
+      "health": {
+        "meta": {
+          "title": "Longevity and preservation",
+          "description": "The research division on longevity: more healthy years, and preserving a person's consciousness. Open research — no medicine, no product, no promises."
+        },
+        "hero": {
+          "title": "The longest-lived thing we want to keep is a person.",
+          "lede": "We keep things in use for longer: devices first, then the knowledge to use them. The next step is the most obvious one and the hardest — the time a person has, and what remains of them."
+        },
+        "thesis": {
+          "eyebrow": "Why",
+          "title": "The same question, one level up",
+          "body": "A repaired laptop is a laptop that did not have to be built a second time. Asked one level up, the question is the same: what extends the time a person stays healthy, awake and themselves? And how much of that can be preserved when that time ends? We do not claim to know the answer. We think the question is far too important to leave to the people who can afford to ask it."
+        },
+        "strands": {
+          "eyebrow": "What we research",
+          "heading": "Three strands",
+          "healthspan": {
+            "title": "Healthspan",
+            "body": "Not living longer at any cost, but staying healthy longer. We gather openly available knowledge and test it: what is evidenced, what is merely asserted, and what it costs. We sell nothing alongside it — no supplements, no programmes."
+          },
+          "memory": {
+            "title": "Memory",
+            "body": "What a person knows, decided and remembers is scattered today across services that do not belong to them. We are researching how that context can belong to the person instead: encrypted, portable, exportable — usable by an AI that works for them rather than on them."
+          },
+          "continuity": {
+            "title": "Continuity",
+            "body": "A person ends. What they knew does not have to. We are researching how knowledge, voice and memories can be preserved so that the people who come after can work with them — with explicit consent given in life, and without ever pretending the record is the person."
+          }
+        },
+        "boundary": {
+          "eyebrow": "Honest limits",
+          "heading": "What this division is not",
+          "noMedicine": {
+            "title": "Not medicine",
+            "body": "We do not diagnose, we do not recommend treatment, and we do not replace a doctor."
+          },
+          "noProduct": {
+            "title": "Not a product",
+            "body": "There is nothing here to buy. This division is research today, and we do it in public."
+          },
+          "noImmortality": {
+            "title": "Not a promise of immortality",
+            "body": "We work on more healthy time and on careful preservation. Not on miracles — and not on a copy of a person."
+          }
+        },
+        "cta": {
+          "heading": "We research in the open",
+          "body": "This division is at its beginning. If you want to think it through with us — as a researcher, as a clinician, as someone this touches personally — write to us.",
+          "button": "Get in touch"
+        }
+      }
+    }
   }
 }

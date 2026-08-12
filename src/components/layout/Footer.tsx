@@ -6,6 +6,7 @@ import { Logo } from '@/components/ui/Logo'
 import { Mail } from 'lucide-react'
 import { ORG, CONTACT } from '@/config/org'
 import { ROUTES } from '@/config/routes'
+import { EVIG_DIVISIONS } from '@/config/divisions'
 import { NewsletterSignup } from '@/components/community/NewsletterSignup'
 import Heading from '@/components/ui/Heading'
 import { useTranslations } from 'next-intl'
@@ -20,11 +21,12 @@ import { useTranslations } from 'next-intl'
 export default function Footer() {
   const tFooter = useTranslations('footer')
   const tNav = useTranslations('nav')
+  const tDivisions = useTranslations('divisions')
 
   return (
     <footer className="bg-surface-raised text-text-primary border-t border">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand Section */}
           <div>
             <Logo className="mb-4" showText={true} />
@@ -68,6 +70,25 @@ export default function Footer() {
                   {tFooter('vision')}
                 </Link>
               </li>
+            </ul>
+          </nav>
+
+          {/* Divisions — the four evig lenses (SSOT: config/divisions.ts) */}
+          <nav aria-label={tDivisions('overview.eyebrow')}>
+            <Heading level={3} className="text-sm font-semibold uppercase tracking-wider text-text-tertiary mb-4">
+              {tDivisions('overview.eyebrow')}
+            </Heading>
+            <ul className="space-y-2">
+              {EVIG_DIVISIONS.map((division) => (
+                <li key={division.id}>
+                  <Link
+                    href={division.href}
+                    className="text-sm text-text-secondary hover:text-text-primary transition-colors"
+                  >
+                    {division.wordmark}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </nav>
 
