@@ -1,9 +1,9 @@
 import { Link } from '@/i18n/navigation'
 import { ArrowLeft } from 'lucide-react'
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { BlogPost } from '@/lib/blog'
 import { formatDate } from '@/lib/date-formats'
-import { getReadingTime } from '@/lib/blog-utils'
+import { blogCategoryKey, getReadingTime } from '@/lib/blog-utils'
 import { ROUTES } from '@/config/routes'
 import UnlistedBadge from './UnlistedBadge'
 import BlogByline from './BlogByline'
@@ -17,7 +17,10 @@ interface BlogPostHeaderProps {
 
 export default async function BlogPostHeader({ post, categorySlug }: BlogPostHeaderProps) {
   const t = await getTranslations('blog')
+  const locale = await getLocale()
   const readingTime = getReadingTime(post.body)
+  const categoryKey = post.category ? blogCategoryKey(post.category) : null
+  const categoryLabel = categoryKey ? t(`categoryLabels.${categoryKey}`) : post.category
 
   return (
     <header className="mx-auto max-w-[720px] px-4 pt-10 pb-8 sm:px-6 sm:pt-16">
@@ -38,10 +41,10 @@ export default async function BlogPostHeader({ post, categorySlug }: BlogPostHea
               href={`/blog?categories=${encodeURIComponent(categorySlug)}`}
               className="ui-public-eyebrow transition-colors hover:text-action"
             >
-              {post.category}
+              {categoryLabel}
             </Link>
           ) : (
-            <Eyebrow as="span">{post.category}</Eyebrow>
+            <Eyebrow as="span">{categoryLabel}</Eyebrow>
           )
         )}
         {post.visibility === 'unlisted' && <UnlistedBadge />}
@@ -64,7 +67,7 @@ export default async function BlogPostHeader({ post, categorySlug }: BlogPostHea
         <BlogByline author={post.author} authorId={post.authorId} className="text-text-secondary" />
         <span aria-hidden="true">·</span>
         <time dateTime={post.publishedAt || post.createdAt}>
-          {formatDate(post.publishedAt || post.createdAt)}
+          {formatDate(post.publishedAt || post.createdAt, locale)}
         </time>
         <span aria-hidden="true">·</span>
         <span>

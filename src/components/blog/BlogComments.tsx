@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { Link } from '@/i18n/navigation'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { MessageSquare, Trash2, Loader2 } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import { formatDate } from '@/lib/date-formats'
@@ -28,6 +28,7 @@ function initials(name: string | null): string {
 
 export default function BlogComments({ slug }: { slug: string }) {
   const t = useTranslations('blog.comments')
+  const locale = useLocale()
   const { data: session } = useSession()
   const [comments, setComments] = useState<Comment[]>([])
   const [loading, setLoading] = useState(true)
@@ -134,7 +135,7 @@ export default function BlogComments({ slug }: { slug: string }) {
                   <div className="flex items-center gap-2 text-sm">
                     <span className="font-semibold text-text-primary">{c.authorName || t('anon')}</span>
                     {c.createdAt && (
-                      <time className="font-mono text-xs text-text-tertiary">{formatDate(c.createdAt)}</time>
+                      <time className="font-mono text-xs text-text-tertiary">{formatDate(c.createdAt, locale)}</time>
                     )}
                     {canModerate(c) && (
                       <Button

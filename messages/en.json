@@ -3243,6 +3243,15 @@
     },
     "unlisted": "Unlisted",
     "minutesShort": "min",
+    "categoryLabels": {
+      "betrieb": "Operations",
+      "engineering": "Engineering",
+      "menschen": "People",
+      "nachhaltigkeit": "Sustainability",
+      "produkt": "Product",
+      "sustainability": "Sustainability",
+      "technik": "Technology"
+    },
     "categories": "Categories",
     "hero": {
       "title": "Blog",

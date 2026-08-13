@@ -1,10 +1,10 @@
 import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { Clock } from 'lucide-react'
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { BlogPost } from '@/lib/blog'
 import { formatDate } from '@/lib/date-formats'
-import { getReadingTime } from '@/lib/blog-utils'
+import { blogCategoryKey, getReadingTime } from '@/lib/blog-utils'
 import UnlistedBadge from './UnlistedBadge'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 
@@ -14,11 +14,14 @@ interface BlogLatestListProps {
 
 export default async function BlogLatestList({ posts }: BlogLatestListProps) {
   const t = await getTranslations('blog')
+  const locale = await getLocale()
 
   return (
     <div className="grid gap-x-8 gap-y-2 md:grid-cols-2">
       {posts.map((post) => {
         const readingTime = getReadingTime(post.body)
+        const categoryKey = post.category ? blogCategoryKey(post.category) : null
+        const categoryLabel = categoryKey ? t(`categoryLabels.${categoryKey}`) : post.category
 
         return (
           <Link
@@ -47,7 +50,7 @@ export default async function BlogLatestList({ posts }: BlogLatestListProps) {
               {/* Content */}
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2.5">
-                  {post.category && <Eyebrow as="span">{post.category}</Eyebrow>}
+                  {post.category && <Eyebrow as="span">{categoryLabel}</Eyebrow>}
                   {post.visibility === 'unlisted' && <UnlistedBadge />}
                 </div>
 
@@ -56,7 +59,7 @@ export default async function BlogLatestList({ posts }: BlogLatestListProps) {
                 </h3>
 
                 <div className="mt-2 flex flex-wrap items-center gap-x-2.5 gap-y-1 font-mono text-[11px] uppercase tracking-[0.08em] text-text-tertiary">
-                  <time>{formatDate(post.publishedAt || post.createdAt)}</time>
+                  <time>{formatDate(post.publishedAt || post.createdAt, locale)}</time>
                   <span aria-hidden="true">·</span>
                   <span className="inline-flex items-center gap-1">
                     <Clock className="h-3 w-3" aria-hidden="true" />

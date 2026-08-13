@@ -8,6 +8,8 @@ import { getPostBySlug as getFilePost, isListedPost, getPostLocales } from '@/li
 import { canViewPost, filterViewable, type BlogViewer } from '@/lib/blog-access'
 import { getMergedPosts } from '@/lib/blog-merge'
 import { slugifyCategory } from '@/lib/blog-utils'
+import { RETIRED_POST_REDIRECTS } from '@/config/blog'
+import { permanentRedirect } from '@/i18n/navigation'
 import { APP_URL } from '@/config/urls'
 import { ORG } from '@/config/org'
 import { ROUTES } from '@/config/routes'
@@ -93,6 +95,8 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     alternates: {
       canonical,
       ...(!isNoindex && Object.keys(languages).length > 1 ? { languages } : {}),
+      // Feed autodiscovery on posts too, not only the index.
+      types: { 'application/rss+xml': '/feed.xml' },
     },
     openGraph: {
       title: post.title,
@@ -114,6 +118,10 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
   const locale = await getLocale();
+  // Retired posts that may still be linked externally get a permanent redirect
+  // instead of a 404. Must run before any await that could start streaming.
+  const retiredTarget = RETIRED_POST_REDIRECTS[slug];
+  if (retiredTarget) permanentRedirect({ href: retiredTarget, locale });
   // Staff may preview drafts; everyone else only sees published posts.
   const session = await auth();
   const isStaff = !!session?.user?.isStaff;

@@ -4,7 +4,7 @@ import { BlogPost } from '@/lib/blog'
 import { formatDate } from '@/lib/date-formats'
 import { Card } from '@/components/ui/card'
 import Heading from '@/components/ui/Heading'
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import BlogByline from './BlogByline'
 import { Section } from '@/components/layout/Section'
 
@@ -14,6 +14,7 @@ interface RelatedPostsProps {
 
 export default async function RelatedPosts({ posts }: RelatedPostsProps) {
   const t = await getTranslations('blog')
+  const locale = await getLocale()
 
   return (
     <Section density="default" tone="tinted" contained={false}>
@@ -50,7 +51,7 @@ export default async function RelatedPosts({ posts }: RelatedPostsProps) {
                   <div className="flex items-center gap-2 text-sm text-text-tertiary">
                     <BlogByline author={post.author} authorId={post.authorId} />
                     <span>·</span>
-                    <time>{formatDate(post.publishedAt || post.createdAt)}</time>
+                    <time>{formatDate(post.publishedAt || post.createdAt, locale)}</time>
                   </div>
                 </div>
               </Card>

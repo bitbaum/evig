@@ -1036,6 +1036,15 @@
     "onThisPage": "En esta página",
     "unlisted": "No listado",
     "minutesShort": "min",
+    "categoryLabels": {
+      "betrieb": "Operaciones",
+      "engineering": "Ingeniería",
+      "menschen": "Personas",
+      "nachhaltigkeit": "Sostenibilidad",
+      "produkt": "Producto",
+      "sustainability": "Sostenibilidad",
+      "technik": "Tecnología"
+    },
     "gate": {
       "eyebrow": "Interno · Confidencial",
       "intro": "Esta entrada no está listada públicamente. Introduce la contraseña para leerla.",

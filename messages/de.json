@@ -3235,6 +3235,15 @@
     },
     "unlisted": "Nicht gelistet",
     "minutesShort": "Min",
+    "categoryLabels": {
+      "betrieb": "Betrieb",
+      "engineering": "Engineering",
+      "menschen": "Menschen",
+      "nachhaltigkeit": "Nachhaltigkeit",
+      "produkt": "Produkt",
+      "sustainability": "Nachhaltigkeit",
+      "technik": "Technik"
+    },
     "categories": "Kategorien",
     "hero": {
       "title": "Blog",

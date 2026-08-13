@@ -22,18 +22,31 @@ import { Pagination } from '@/components/ui/Pagination'
 import { buttonClass } from '@/components/ui/button-class'
 import { PageHero } from '@/components/layout/PageHero'
 import { getTranslations, getLocale } from 'next-intl/server'
+import { APP_URL } from '@/config/urls'
+import { ORG } from '@/config/org'
+import { routing, defaultLocale } from '@/i18n/routing'
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params
   const t = await getTranslations({ locale, namespace: 'blog' })
   const title = t('meta.title')
   const description = t('meta.description')
+  // Same canonical/hreflang shape as the post pages: default locale unprefixed.
+  const blogUrl = (loc: string) =>
+    loc === defaultLocale ? `${APP_URL}/blog` : `${APP_URL}/${loc}/blog`
+  const canonical = blogUrl(locale)
+  const languages = Object.fromEntries(routing.locales.map((loc) => [loc, blogUrl(loc)]))
+  // The locale segment's brand OG card (opengraph-image.tsx) — referenced
+  // explicitly because the index metadata otherwise ships without og:image.
+  const ogImage = locale === defaultLocale ? '/opengraph-image' : `/${locale}/opengraph-image`
   return {
     title,
     description,
-    openGraph: { title, description, type: 'website' },
+    openGraph: { title, description, type: 'website', url: canonical, images: [ogImage] },
     // Make the (already-working) RSS feed discoverable to feed readers.
     alternates: {
+      canonical,
+      languages,
       types: { 'application/rss+xml': '/feed.xml' },
     },
   }
@@ -189,8 +202,23 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
   const clearQs = clearParams.toString()
   const clearHref = clearQs ? `/blog?${clearQs}` : '/blog'
 
+  // Blog collection identity for search engines (posts carry BlogPosting).
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    name: t('meta.title'),
+    description: t('meta.description'),
+    url: locale === defaultLocale ? `${APP_URL}/blog` : `${APP_URL}/${locale}/blog`,
+    publisher: { '@type': 'Organization', name: ORG.name },
+    inLanguage: locale,
+  }
+
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <PageHero
         theme="blog"
         icon={BookOpen}
