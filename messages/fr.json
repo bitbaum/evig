@@ -3313,6 +3313,15 @@
     "onThisPage": "Sur cette page",
     "unlisted": "Non répertorié",
     "minutesShort": "min",
+    "categoryLabels": {
+      "betrieb": "Opérations",
+      "engineering": "Ingénierie",
+      "menschen": "Personnes",
+      "nachhaltigkeit": "Durabilité",
+      "produkt": "Produit",
+      "sustainability": "Durabilité",
+      "technik": "Technologie"
+    },
     "gate": {
       "eyebrow": "Interne · Confidentiel",
       "intro": "Cet article n'est pas listé publiquement. Saisis le mot de passe pour le lire.",

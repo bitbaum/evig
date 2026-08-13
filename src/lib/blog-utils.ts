@@ -3,6 +3,8 @@
  * (no fs / server-only deps).
  */
 
+import { BLOG_CATEGORY_KEYS, type BlogCategoryKey } from '@/config/blog'
+
 const WORDS_PER_MINUTE = 200
 
 /** Estimated reading time in minutes for a blog post body. */
@@ -17,6 +19,17 @@ export function getReadingTime(content: string): number {
  */
 export function slugifyCategory(name: string): string {
   return name.toLowerCase().replace(/\s+/g, '-')
+}
+
+/**
+ * Resolve a raw category name (frontmatter or DB) to its translation key in
+ * `blog.categoryLabels`, or null when no label exists (render the raw name).
+ */
+export function blogCategoryKey(name: string): BlogCategoryKey | null {
+  const slug = slugifyCategory(name)
+  return (BLOG_CATEGORY_KEYS as readonly string[]).includes(slug)
+    ? (slug as BlogCategoryKey)
+    : null
 }
 
 export interface BlogIndexPage<T> {

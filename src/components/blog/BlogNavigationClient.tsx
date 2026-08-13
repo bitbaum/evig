@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { ChevronDown, X, Search, Rss } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { BlogCategory } from '@/lib/blog-db'
+import { blogCategoryKey } from '@/lib/blog-utils'
 import { UI_COLOR_PALETTE } from '@/config/ui-colors'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
@@ -33,6 +34,11 @@ export default function BlogNavigationClient({
   searchQuery = '',
 }: BlogNavigationClientProps) {
   const t = useTranslations('blog')
+  // Translated chip label; unknown categories keep their raw (German) name.
+  const categoryLabel = (category: BlogCategory) => {
+    const key = blogCategoryKey(category.name)
+    return key ? t(`categoryLabels.${key}`) : category.name
+  }
   const router = useRouter()
   const searchParams = useSearchParams()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -149,7 +155,7 @@ export default function BlogNavigationClient({
                       )}
                       style={!selected ? { backgroundColor: color } : undefined}
                     />
-                    {category.name}
+                    {categoryLabel(category)}
                   </Button>
 
                   {/* Tooltip with description */}
@@ -263,7 +269,7 @@ export default function BlogNavigationClient({
                       )}
                       style={!selected ? { backgroundColor: color } : undefined}
                     />
-                    {category.name}
+                    {categoryLabel(category)}
                   </Button>
                 )
               })}

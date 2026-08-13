@@ -1036,6 +1036,15 @@
     "onThisPage": "このページの内容",
     "unlisted": "非公開",
     "minutesShort": "分",
+    "categoryLabels": {
+      "betrieb": "運営",
+      "engineering": "エンジニアリング",
+      "menschen": "人",
+      "nachhaltigkeit": "サステナビリティ",
+      "produkt": "プロダクト",
+      "sustainability": "サステナビリティ",
+      "technik": "テクノロジー"
+    },
     "gate": {
       "eyebrow": "内部 · 機密",
       "intro": "この記事は一般公開されていません。読むにはパスワードを入力してください。",

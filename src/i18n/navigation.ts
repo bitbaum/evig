@@ -3,5 +3,5 @@ import { routing } from './routing'
 
 // Typed navigation helpers — use these instead of next/link and next/navigation
 // in locale-aware pages so locale prefix is handled automatically.
-export const { Link, redirect, usePathname, useRouter, getPathname } =
+export const { Link, redirect, permanentRedirect, usePathname, useRouter, getPathname } =
   createNavigation(routing)
