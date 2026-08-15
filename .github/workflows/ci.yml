@@ -151,7 +151,18 @@ jobs:
   e2e-local:
     name: Local E2E Journeys
     runs-on: ubuntu-latest
-    needs: [quality, migrations]
+    # Deliberately NO `needs:`. This job is self-contained — it brings its own
+    # postgres service, applies its own migrations, seeds its own data, builds
+    # the app and starts its own server. It consumed no output from `quality`
+    # or `migrations`; both were gates expressed as dependencies, and they cost
+    # the full 373s of `quality` on the critical path of the second-longest job.
+    #
+    # Measured before: quality 373s → e2e 336s = 709s wall-clock.
+    # `needs:` is for "I use what that job produced", not "I prefer to run
+    # after it". Every job here remains a required check regardless of order.
+    #
+    # Trade-off, stated: a PR that fails lint now also spends the e2e minutes
+    # rather than being cut off early.
     services:
       postgres:
         image: pgvector/pgvector:pg17
