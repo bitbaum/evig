@@ -17,7 +17,22 @@ import type {
 } from './types'
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1'
-const DEFAULT_MODEL = 'meta-llama/llama-3.3-70b-instruct'
+
+/**
+ * The default model, and it must be a FREE one.
+ *
+ * This was `meta-llama/llama-3.3-70b-instruct`, which is billed — verified
+ * against OpenRouter's own catalogue on 2026-08-16, where it reports
+ * `pricing.prompt = 0.0000001`. It reads free because the price is tiny and
+ * because a `:free` sibling used to exist; that sibling is no longer in the
+ * catalogue at all, so every Hirn chat answered by OpenRouter has been charged.
+ *
+ * `openai/gpt-oss-20b:free` reports `pricing.prompt = 0` and was probed live for
+ * tool-call support on 2026-08-15. Free catalogues rot, so this is overridable
+ * without a deploy — and when it rots, replace it with another `:free` id rather
+ * than dropping the suffix.
+ */
+const DEFAULT_MODEL = process.env.OPENROUTER_MODEL?.trim() || 'openai/gpt-oss-20b:free'
 const REQUEST_TIMEOUT_MS = 30_000
 const AVAILABILITY_TIMEOUT_MS = 5_000
 
