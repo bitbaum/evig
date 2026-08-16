@@ -78,7 +78,7 @@ describe('LISTING_STATUS_CONFIG', () => {
   })
 
   it('ACTIVE status has green color', () => {
-    expect(LISTING_STATUS_CONFIG[LISTING_STATUS.ACTIVE].color).toContain('primary')
+    expect(LISTING_STATUS_CONFIG[LISTING_STATUS.ACTIVE].color).toContain('success')
   })
 
   it('SOLD status has a distinct color from ACTIVE', () => {

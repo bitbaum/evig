@@ -43,17 +43,17 @@ describe('getCategoryStyle', () => {
   it('returns repair style for "repair"', () => {
     const style = getCategoryStyle('repair')
     expect(style).toBe(CATEGORY_STYLES.repair)
-    expect(style.primary).toContain('primary')
+    expect(style.primary).toContain('success')
   })
 
   it('returns data style for "data"', () => {
     const style = getCategoryStyle('data')
-    expect(style.primary).toContain('primary')
+    expect(style.primary).toContain('success')
   })
 
   it('returns recycling style for "recycling"', () => {
     const style = getCategoryStyle('recycling')
-    expect(style.primary).toContain('primary')
+    expect(style.primary).toContain('success')
   })
 
   it('returns general fallback for unknown category', () => {

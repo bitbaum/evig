@@ -111,7 +111,7 @@ describe('getApprovalStatusBadge', () => {
 
   it('returns badge for approved (green)', () => {
     const badge = getApprovalStatusBadge(APPROVAL_STATUS.APPROVED)
-    expect(badge.color).toContain('primary')
+    expect(badge.color).toContain('success')
   })
 
   it('returns gray fallback badge for unknown status', () => {

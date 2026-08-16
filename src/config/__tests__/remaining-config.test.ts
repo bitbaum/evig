@@ -132,7 +132,7 @@ describe('getEmploymentTypeColor', () => {
 
   it('volunteer → green CSS class', () => {
     const color = getEmploymentTypeColor('volunteer')
-    expect(color).toContain('primary')
+    expect(color).toContain('success')
   })
 
   it('unknown → gray CSS class (default)', () => {
@@ -226,7 +226,7 @@ describe('getReviewStatusLabel', () => {
 
 describe('getReviewStatusBadgeColor', () => {
   it('published → green classes', () => {
-    expect(getReviewStatusBadgeColor(REVIEW_STATUS.PUBLISHED)).toContain('primary')
+    expect(getReviewStatusBadgeColor(REVIEW_STATUS.PUBLISHED)).toContain('success')
   })
 
   it('hidden → red classes', () => {

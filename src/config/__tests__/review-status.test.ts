@@ -64,7 +64,7 @@ describe('getReviewStatusLabel', () => {
 
 describe('getReviewStatusBadgeColor', () => {
   it('returns green badge for published', () => {
-    expect(getReviewStatusBadgeColor(REVIEW_STATUS.PUBLISHED)).toContain('primary')
+    expect(getReviewStatusBadgeColor(REVIEW_STATUS.PUBLISHED)).toContain('success')
   })
 
   it('returns orange badge for pending_moderation', () => {
