@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { useTranslations } from 'next-intl'
 import { apiFetch } from '@/lib/api/client'
 import { type VotingMethod } from '@/config/decisions'
+import { ERROR_CODES } from '@/config/error-messages'
 import { useVoteState } from '@/hooks/useVoteState'
 import { ConsentVote } from '@/components/decisions/voting/ConsentVote'
 import { ApprovalVote } from '@/components/decisions/voting/ApprovalVote'
@@ -58,6 +59,7 @@ export default function PublicVoteClient({
   const [email, setEmail] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
+  const [errorCode, setErrorCode] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
 
   const vote = useVoteState({ votingMethod, options, dotCount })
@@ -75,6 +77,7 @@ export default function PublicVoteClient({
     }
 
     setError('')
+    setErrorCode(null)
     setSubmitting(true)
 
     const voteData = vote.buildVoteData()
@@ -85,6 +88,7 @@ export default function PublicVoteClient({
     })
     if (!result.success) {
       setError(result.error || t('submitError'))
+      setErrorCode(result.code ?? null)
       setSubmitting(false)
       return
     }
@@ -224,6 +228,13 @@ export default function PublicVoteClient({
       {error && (
         <div className="rounded-lg bg-error-50 dark:bg-red-500/8 border border-error-200 dark:border-red-500/20 p-3 text-sm text-error-700 dark:text-red-300">
           {error}
+          {/* "Sign in to vote with this address" is a dead end without the
+              door — send them straight to it. */}
+          {errorCode === ERROR_CODES.VOTE_EMAIL_REGISTERED && (
+            <Link href={loginUrl} className="ml-1 font-semibold underline">
+              {t('successLoginCta')}
+            </Link>
+          )}
         </div>
       )}
 

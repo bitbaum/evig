@@ -148,16 +148,21 @@ export function apiRateLimited(
  * Bad request response helper
  * @param message - Error message
  * @param errors - Optional validation errors
+ * @param code - Optional stable code from ERROR_CODES. The message is for the
+ *   human; the code is for the UI, so it can offer the way out (a login link,
+ *   a retry) without pattern-matching German prose that translators may change.
  */
 export function apiBadRequest(
   message: string,
-  errors?: Record<string, string[]>
+  errors?: Record<string, string[]>,
+  code?: string
 ): NextResponse {
   return NextResponse.json(
     {
       success: false,
       error: message,
       ...(errors && { errors }),
+      ...(code && { code }),
     },
     { status: 400 }
   );

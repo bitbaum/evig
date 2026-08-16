@@ -48,7 +48,8 @@ jest.mock('@/lib/api/helpers', () => {
     apiSuccess: (data: unknown, status = 200) => NextResponse.json({ success: true, data }, { status }),
     apiSuccessCached: (data: unknown) => NextResponse.json({ success: true, data }, { status: 200 }),
     apiError: (_err: unknown, msg: string, status = 500) => NextResponse.json({ success: false, error: msg }, { status }),
-    apiBadRequest: (msg: string) => NextResponse.json({ success: false, error: msg }, { status: 400 }),
+    apiBadRequest: (msg: string, errors?: unknown, code?: string) =>
+      NextResponse.json({ success: false, error: msg, ...(code && { code }) }, { status: 400 }),
   }
 })
 
@@ -279,6 +280,10 @@ describe('POST /api/vote/[id] — cannot vote as a registered member', () => {
     expect(response.status).toBe(400)
     const body = await response.json()
     expect(body.error).toMatch(/registrierten Konto/i)
+    // The UI offers a login link off this code. Without it the only way to
+    // recognise this failure is matching the German sentence, which breaks
+    // the first time someone rewords or translates it.
+    expect(body.code).toBe('vote_email_registered')
     // The whole point: no ballot is cast, so the member's existing vote
     // cannot be overwritten and allow_public_voting cannot be bypassed.
     expect(mockSubmitVote).not.toHaveBeenCalled()

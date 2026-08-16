@@ -145,6 +145,37 @@ describe('apiFetch', () => {
     expect(result.error).toBe('Anfrage fehlgeschlagen (503)')
   })
 
+  // ── error codes ─────────────────────────────────────────────────────────────
+
+  it('passes a machine-readable error code through to the caller', async () => {
+    mockFetch.mockResolvedValueOnce(
+      jsonResponse({ success: false, error: 'Bitte melde dich an.', code: 'vote_email_registered' }, 400)
+    )
+
+    const result = await apiFetch('/api/test')
+
+    // Without this the UI can only tell failures apart by matching German
+    // prose — which breaks the moment the sentence is reworded.
+    expect(result.code).toBe('vote_email_registered')
+    expect(result.error).toBe('Bitte melde dich an.')
+  })
+
+  it('omits code entirely when the response has none', async () => {
+    mockFetch.mockResolvedValueOnce(jsonResponse({ success: false, error: 'plain' }, 400))
+
+    const result = await apiFetch('/api/test')
+
+    expect(result).toEqual({ success: false, error: 'plain' })
+  })
+
+  it('ignores a non-string code rather than passing junk to the UI', async () => {
+    mockFetch.mockResolvedValueOnce(jsonResponse({ success: false, error: 'x', code: 42 }, 400))
+
+    const result = await apiFetch('/api/test')
+
+    expect(result.code).toBeUndefined()
+  })
+
   // ── network failures ────────────────────────────────────────────────────────
 
   it('returns a friendly network error when fetch rejects', async () => {

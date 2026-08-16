@@ -140,3 +140,18 @@ export const SUCCESS_MESSAGES = {
   // Workshops
   WORKSHOP_REGISTERED: 'Erfolgreich für Workshop angemeldet',
 } as const;
+
+/**
+ * Stable error codes — SSOT shared by the API and the UI.
+ *
+ * Only add one when the interface must *do* something different for that
+ * failure (offer a login link, a retry, a different form). The human sentence
+ * lives in ERROR_MESSAGES and is free to be reworded or translated; the code
+ * is what the UI is allowed to branch on.
+ */
+export const ERROR_CODES = {
+  /** Anonymous ballot naming an email that belongs to a registered account. */
+  VOTE_EMAIL_REGISTERED: 'vote_email_registered',
+} as const;
+
+export type ErrorCode = typeof ERROR_CODES[keyof typeof ERROR_CODES];

@@ -10,6 +10,12 @@ export interface ApiResponse<T = unknown> {
   success: boolean
   data?: T
   error?: string
+  /**
+   * Stable machine-readable discriminator from ERROR_CODES, set only where the
+   * UI must react to *which* failure it was. `error` stays the human sentence —
+   * branching on that text breaks the moment it is reworded or translated.
+   */
+  code?: string
 }
 
 /** Paginated API response (page-based) */

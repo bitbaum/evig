@@ -59,6 +59,10 @@ export async function apiFetch<T = unknown>(
         error: fieldMessages.length > 0
           ? `${baseError}: ${fieldMessages.join(' · ')}`
           : baseError,
+        // Pass the code through untouched — callers that offer a way out of a
+        // specific failure need it, and flattening it away is what forced
+        // string-matching on German prose.
+        ...(typeof data.code === 'string' && { code: data.code }),
       }
     }
 

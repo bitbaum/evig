@@ -22,7 +22,7 @@ import { submitVote, getPublicDecision } from '@/lib/services/decisions'
 import { TABLE_NAMES } from '@/config/database'
 import { logger } from '@/lib/logger'
 import { apiSuccess, apiSuccessCached, apiError, apiBadRequest } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
+import { ERROR_CODES, ERROR_MESSAGES } from '@/config/error-messages'
 import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit'
 
 type RouteParams = { params: Promise<{ id: string }> }
@@ -106,7 +106,11 @@ export async function POST(
         [normalizedEmail]
       )
       if (registered.rows.length > 0) {
-        return apiBadRequest(ERROR_MESSAGES.VOTE_EMAIL_REGISTERED)
+        return apiBadRequest(
+          ERROR_MESSAGES.VOTE_EMAIL_REGISTERED,
+          undefined,
+          ERROR_CODES.VOTE_EMAIL_REGISTERED,
+        )
       }
 
       voterIdentity = { voterEmail: normalizedEmail }
