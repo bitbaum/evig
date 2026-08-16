@@ -50,7 +50,12 @@ jobs:
   auth-smoke:
     name: Auth Smoke Test
     runs-on: ubuntu-latest
-    needs: quality
+    # Deliberately NO `needs:`. This job tests the ALREADY-DEPLOYED production
+    # site (PLAYWRIGHT_BASE_URL defaults to https://revampit.orangecat.ch); it
+    # never builds this branch and reads nothing `quality` produced. Waiting on
+    # `quality` (429s) was ordering, not dependency — and after #303 unblocked
+    # the e2e job, this pair became the new critical path: quality 429s →
+    # inventory-smoke 181s = 610s of a 634s run.
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
@@ -90,7 +95,10 @@ jobs:
   inventory-smoke:
     name: Dual-Persona Inventory Smoke
     runs-on: ubuntu-latest
-    needs: quality
+    # Deliberately NO `needs:` — same reason as auth-smoke above. This walks 186
+    # routes on the LIVE site via scripts/e2e-inventory-prod.sh; nothing about
+    # that verdict depends on whether this branch lints. Removing the wait moves
+    # 181s off the critical path without changing what is checked.
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
