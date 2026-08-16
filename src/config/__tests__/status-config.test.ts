@@ -141,7 +141,7 @@ describe('getApprovalStatusBadge', () => {
   it('returns badge object for approved (green)', () => {
     const badge = getApprovalStatusBadge(APPROVAL_STATUS.APPROVED)
     expect(badge.label).toBe('Genehmigt')
-    expect(badge.color).toContain('primary')
+    expect(badge.color).toContain('success')
   })
 
   it('returns badge object for rejected (red)', () => {

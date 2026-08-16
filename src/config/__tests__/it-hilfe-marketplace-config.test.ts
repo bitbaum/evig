@@ -319,7 +319,7 @@ describe('getMarketplaceStatusLabel', () => {
 
 describe('getMarketplaceStatusBadgeColor', () => {
   it('published → green CSS classes', () => {
-    expect(getMarketplaceStatusBadgeColor(MARKETPLACE_STATUS.PUBLISHED)).toContain('primary')
+    expect(getMarketplaceStatusBadgeColor(MARKETPLACE_STATUS.PUBLISHED)).toContain('success')
   })
 
   it('draft → warning CSS classes', () => {
@@ -347,8 +347,8 @@ describe('getProductStatusLabel', () => {
 })
 
 describe('getProductStatusBadgeColor', () => {
-  it('approved → primary CSS classes', () => {
-    expect(getProductStatusBadgeColor(PRODUCT_STATUS.APPROVED)).toContain('primary')
+  it('approved → success CSS classes', () => {
+    expect(getProductStatusBadgeColor(PRODUCT_STATUS.APPROVED)).toContain('success')
   })
 
   it('unknown → gray fallback', () => {

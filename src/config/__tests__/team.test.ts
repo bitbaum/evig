@@ -109,7 +109,7 @@ describe('getEmploymentTypeColor', () => {
   })
 
   it('returns green class for volunteer', () => {
-    expect(getEmploymentTypeColor(EMPLOYMENT_TYPES.VOLUNTEER)).toContain('primary')
+    expect(getEmploymentTypeColor(EMPLOYMENT_TYPES.VOLUNTEER)).toContain('success')
   })
 
   it('returns gray fallback for null', () => {

@@ -63,7 +63,7 @@ describe('getMarketplaceStatusLabel', () => {
 describe('getMarketplaceStatusBadgeColor', () => {
   it('returns green badge for published', () => {
     const color = getMarketplaceStatusBadgeColor(MARKETPLACE_STATUS.PUBLISHED)
-    expect(color).toContain('primary')
+    expect(color).toContain('success')
   })
 
   it('returns warning badge for draft', () => {
@@ -104,9 +104,9 @@ describe('getProductStatusLabel', () => {
 // ============================================================================
 
 describe('getProductStatusBadgeColor', () => {
-  it('returns primary badge for approved', () => {
+  it('returns success badge for approved', () => {
     const color = getProductStatusBadgeColor(PRODUCT_STATUS.APPROVED)
-    expect(color).toContain('primary')
+    expect(color).toContain('success')
   })
 
   it('returns orange badge for pending_review', () => {

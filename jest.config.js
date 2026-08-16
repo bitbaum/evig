@@ -1,3 +1,16 @@
+// Pin the suite's timezone BEFORE anything constructs a Date.
+//
+// src/lib/date-formats.ts deliberately renders every timestamp in
+// Europe/Zurich (without it, a server-rendered 15:00 workshop shows 1-2h off).
+// Tests then build reference dates with `new Date(2026, 4, 15, 14, 30)`, which
+// is the RUNNER's local time — so the same assertion means "14:30" on a Swiss
+// laptop and "16:30" on a UTC CI runner. Six date tests were failing on every
+// CI run for exactly this reason, invisibly, because the job discarded its own
+// result. Pinning here rather than in each npm script keeps one source of
+// truth: test, test:watch, test:coverage and test:i18n all load this config,
+// and jest's worker processes inherit the env set at config-load time.
+process.env.TZ = 'Europe/Zurich'
+
 const nextJest = require('next/jest')
 
 const createJestConfig = nextJest({

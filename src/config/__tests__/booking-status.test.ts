@@ -42,7 +42,7 @@ describe('getBookingStatusBadge', () => {
   it('returns badge for "completed"', () => {
     const badge = getBookingStatusBadge(BOOKING_STATUS.COMPLETED)
     expect(badge.label).toBe('Abgeschlossen')
-    expect(badge.color).toContain('primary')
+    expect(badge.color).toContain('success')
   })
 
   it('returns badge for "cancelled"', () => {

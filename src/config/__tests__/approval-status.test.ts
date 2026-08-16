@@ -105,8 +105,8 @@ describe('getApprovalStatusBadge', () => {
   it('returns badge for APPROVED with green styling', () => {
     const badge = getApprovalStatusBadge(APPROVAL_STATUS.APPROVED)
     expect(badge.label).toBe('Genehmigt')
-    expect(badge.color).toContain('primary')
-    expect(badge.bg).toContain('primary')
+    expect(badge.color).toContain('success')
+    expect(badge.bg).toContain('success')
   })
 
   it('returns badge for REJECTED with red styling', () => {
@@ -123,11 +123,11 @@ describe('getApprovalStatusBadge', () => {
     expect(badge.bg).toContain('orange')
   })
 
-  it('returns badge for PUBLISHED with primary styling', () => {
+  it('returns badge for PUBLISHED with success styling', () => {
     const badge = getApprovalStatusBadge(APPROVAL_STATUS.PUBLISHED)
     expect(badge.label).toBe('Veröffentlicht')
-    expect(badge.color).toContain('primary')
-    expect(badge.bg).toContain('primary')
+    expect(badge.color).toContain('success')
+    expect(badge.bg).toContain('success')
   })
 
   it('returns gray fallback badge for unknown status', () => {

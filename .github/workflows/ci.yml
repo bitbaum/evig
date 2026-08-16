@@ -31,11 +31,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # SSOT: lint + umlauts + typecheck + build are bundled in the `verify` npm
-      # script (package.json). CI calls it verbatim so the gating chain can't
-      # drift from what runs locally. Do not re-inline these checks here — the
-      # umlaut gate (Swiss ä/ö/ü convention) lives inside `verify` too.
-      - name: Verify (lint + umlauts + typecheck + build)
+      # SSOT: lint + umlauts + typecheck + test + build are bundled in the
+      # `verify` npm script (package.json). CI calls it verbatim so the gating
+      # chain can't drift from what runs locally. Do not re-inline these checks
+      # here — the umlaut gate (Swiss ä/ö/ü convention) lives inside `verify`
+      # too. Unit tests are ALSO run by the standalone `test` job below, which
+      # the post-main verdict needs by name; that duplication is deliberate and
+      # parallel (no wall-clock cost), not an oversight.
+      - name: Verify (lint + umlauts + typecheck + test + build)
         run: npm run verify
         env:
           # Build-time placeholders so strict env validation doesn't fail during CI compile.
@@ -259,10 +262,17 @@ jobs:
             revampit-e2e.log
           if-no-files-found: ignore
 
-  # Unit tests (still non-blocking while suite matures)
+  # Unit tests. This job ran with `continue-on-error: true` from the day it was
+  # added ("non-blocking while suite matures"), and the suite matured to 7,769
+  # tests without anyone flipping it back. The cost was not hypothetical: the
+  # 2026-07-28 primary-* -> success-* token sweep left 25 assertions failing in
+  # 15 suites, and every PR since reported this job green. A gate whose result
+  # is discarded is not a gate — it is a 6-minute no-op that buys confidence it
+  # has not earned.
   test:
     name: Run Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     if: github.event_name == 'pull_request'
     steps:
       - name: Checkout code
@@ -279,7 +289,6 @@ jobs:
 
       - name: Run tests
         run: npm run test
-        continue-on-error: true
 
   # Dependency advisories. Blocks a PR that INTRODUCES a critical; high and
   # below are reported but do not fail, because a third party publishing an
