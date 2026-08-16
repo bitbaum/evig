@@ -382,6 +382,21 @@ export const SIMPLE_MAJORITY_RESPONSE_CONFIG: Record<
   abstain: { label: 'Enthaltung' },
 };
 
+// ─── Thumbs Up / Down Choices ─────────────────────────────────────────────
+// Must stay in step with thumbsUpDownVoteSchema (src/lib/schemas/decisions.ts).
+
+export const THUMBS_UP_DOWN_CHOICES = ['up', 'down'] as const;
+
+export type ThumbsUpDownChoice = (typeof THUMBS_UP_DOWN_CHOICES)[number];
+
+export const THUMBS_UP_DOWN_CHOICE_CONFIG: Record<
+  ThumbsUpDownChoice,
+  { label: string }
+> = {
+  up: { label: 'Dafür' },
+  down: { label: 'Dagegen' },
+};
+
 // ─── Comment Positions ────────────────────────────────────────────────────
 
 export const COMMENT_POSITIONS = [

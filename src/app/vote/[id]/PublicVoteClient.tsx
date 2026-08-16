@@ -16,6 +16,7 @@ import { DotVote } from '@/components/decisions/voting/DotVote'
 import { ScoreVote } from '@/components/decisions/voting/ScoreVote'
 import { RankedChoiceVote } from '@/components/decisions/voting/RankedChoiceVote'
 import { SimpleMajorityVote } from '@/components/decisions/voting/SimpleMajorityVote'
+import { ThumbsUpDownVote } from '@/components/decisions/voting/ThumbsUpDownVote'
 import { DeadlineCountdown } from '@/components/decisions/voting/DeadlineCountdown'
 import { VoteAIAdvisor } from '@/components/decisions/VoteAIAdvisor'
 
@@ -222,6 +223,9 @@ export default function PublicVoteClient({
             onMoveUp={vote.moveRankingUp}
             onMoveDown={vote.moveRankingDown}
           />
+        )}
+        {votingMethod === 'thumbs_up_down' && (
+          <ThumbsUpDownVote choice={vote.thumbsChoice} onChange={vote.setThumbsChoice} />
         )}
       </div>
 

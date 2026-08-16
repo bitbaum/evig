@@ -13,6 +13,7 @@ import { DotVote } from './voting/DotVote';
 import { ScoreVote } from './voting/ScoreVote';
 import { RankedChoiceVote } from './voting/RankedChoiceVote';
 import { SimpleMajorityVote } from './voting/SimpleMajorityVote';
+import { ThumbsUpDownVote } from './voting/ThumbsUpDownVote';
 import { VoteAIAdvisor } from '@/components/decisions/VoteAIAdvisor';
 
 interface Option {
@@ -166,6 +167,9 @@ export default function VotingPanel({
       )}
       {votingMethod === 'simple_majority' && (
         <SimpleMajorityVote response={vote.majorityResponse} onChange={vote.setMajorityResponse} />
+      )}
+      {votingMethod === 'thumbs_up_down' && (
+        <ThumbsUpDownVote choice={vote.thumbsChoice} onChange={vote.setThumbsChoice} />
       )}
 
       <Button

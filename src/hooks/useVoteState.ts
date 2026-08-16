@@ -5,6 +5,7 @@ import {
   type VotingMethod,
   type ConsentResponse,
   type SimpleMajorityResponse,
+  type ThumbsUpDownChoice,
 } from '@/config/decisions';
 
 interface Option {
@@ -31,6 +32,9 @@ export function useVoteState({ votingMethod, options, dotCount }: UseVoteStatePr
   );
   const [majorityResponse, setMajorityResponse] = useState<SimpleMajorityResponse>('yes');
   const [ranking, setRanking] = useState<string[]>(() => options.map((o) => o.id));
+  // No default: a thumbs vote is one deliberate tap, so pre-selecting "Dafür"
+  // would submit an opinion the voter never expressed.
+  const [thumbsChoice, setThumbsChoice] = useState<ThumbsUpDownChoice | null>(null);
 
   function toggleApproval(optId: string) {
     setApprovedOptions((prev) => {
@@ -75,6 +79,15 @@ export function useVoteState({ votingMethod, options, dotCount }: UseVoteStatePr
       case 'score':           return { scores };
       case 'simple_majority': return { response: majorityResponse };
       case 'ranked_choice':   return { ranking };
+      case 'thumbs_up_down':  return thumbsChoice ? { choice: thumbsChoice } : undefined;
+      default: {
+        // A method in VOTING_METHODS with no case here used to fall through to
+        // `undefined`, which the UI rendered as an empty ballot and the server
+        // rejected as "Stimmdaten erforderlich" — a decision nobody could vote
+        // on, with nothing on screen explaining why. Now it fails the build.
+        const unhandled: never = votingMethod;
+        throw new Error(`Unhandled voting method: ${String(unhandled)}`);
+      }
     }
   }
 
@@ -86,6 +99,7 @@ export function useVoteState({ votingMethod, options, dotCount }: UseVoteStatePr
     scores, setScore,
     majorityResponse, setMajorityResponse,
     ranking, moveRankingUp, moveRankingDown,
+    thumbsChoice, setThumbsChoice,
     buildVoteData,
   };
 }
