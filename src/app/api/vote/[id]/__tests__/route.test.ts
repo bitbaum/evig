@@ -5,12 +5,27 @@
  *
  * Behaviors locked:
  *   GET  - 404 (decision not found), 200 (with decision data)
- *   POST - 400 (no email), 400 (no voteData), 404 (user not found),
- *          400 (submitVote returns error), 200 (success)
+ *   POST - 400 (no email), 400 (no voteData),
+ *          400 (submitVote returns error), 200 (anonymous success)
+ *
+ * Security invariant (the reason this route exists in its current shape):
+ * an unauthenticated caller can NEVER vote as a registered member. Identity
+ * comes from the session; a body email only ever names an anonymous voter.
+ * The negative cases below are the point — they assert the closed side.
  */
 
 const mockGetPublicDecision = jest.fn()
 const mockSubmitVote = jest.fn()
+const mockAuth = jest.fn()
+const mockGetDbUserId = jest.fn()
+
+jest.mock('@/auth', () => ({
+  auth: () => mockAuth(),
+}))
+
+jest.mock('@/lib/api/task-helpers', () => ({
+  getDbUserId: (...args: unknown[]) => mockGetDbUserId(...args),
+}))
 
 jest.mock('@/lib/services/decisions', () => ({
   getPublicDecision: (...args: unknown[]) => mockGetPublicDecision(...args),
@@ -67,7 +82,11 @@ beforeEach(() => {
 
   ;(rateLimiters.voteSubmit as jest.Mock).mockReturnValue(true)
   mockGetPublicDecision.mockResolvedValue(MOCK_DECISION)
-  mockQuery.mockResolvedValue({ rows: [{ id: 'user-1' }] })
+  // Default: no session, and the typed email belongs to nobody — the ordinary
+  // "someone opened a shared link" case.
+  mockAuth.mockResolvedValue(null)
+  mockQuery.mockResolvedValue({ rows: [] })
+  mockGetDbUserId.mockResolvedValue({ dbUserId: 'user-1' })
   mockSubmitVote.mockResolvedValue({ vote: { id: 'vote-1', optionId: 'opt-1' } })
 })
 
@@ -164,8 +183,6 @@ describe('POST /api/vote/[id] — missing voteData', () => {
 
 describe('POST /api/vote/[id] — anonymous voter', () => {
   it('submits anonymously when email is not registered', async () => {
-    mockQuery.mockResolvedValueOnce({ rows: [] })
-
     const req = new NextRequest('http://localhost/api/vote/decision-1', {
       method: 'POST',
       body: JSON.stringify({ email: 'unknown@example.com', voteData: { optionId: 'opt-1' } }),
@@ -236,6 +253,73 @@ describe('POST /api/vote/[id] — success', () => {
       expect.stringContaining('SELECT id FROM'),
       ['voter@example.com']
     )
-    expect(mockSubmitVote).toHaveBeenCalledWith('decision-1', { userId: 'user-1' }, { optionId: 'opt-1' })
+    expect(mockSubmitVote).toHaveBeenCalledWith(
+      'decision-1',
+      { voterEmail: 'voter@example.com' },
+      { optionId: 'opt-1' }
+    )
+  })
+})
+
+// ============================================================================
+// POST — identity may never be asserted by the request body
+// ============================================================================
+
+describe('POST /api/vote/[id] — cannot vote as a registered member', () => {
+  it('refuses an unauthenticated ballot claiming a registered email', async () => {
+    mockQuery.mockResolvedValueOnce({ rows: [{ id: 'victim-user' }] })
+
+    const req = new NextRequest('http://localhost/api/vote/decision-1', {
+      method: 'POST',
+      body: JSON.stringify({ email: 'Member@Example.com', voteData: { optionId: 'opt-1' } }),
+      headers: { 'Content-Type': 'application/json' },
+    })
+    const response = await POST(req, { params: Promise.resolve({ id: 'decision-1' }) })
+
+    expect(response.status).toBe(400)
+    const body = await response.json()
+    expect(body.error).toMatch(/registrierten Konto/i)
+    // The whole point: no ballot is cast, so the member's existing vote
+    // cannot be overwritten and allow_public_voting cannot be bypassed.
+    expect(mockSubmitVote).not.toHaveBeenCalled()
+  })
+
+  it('never passes a userId derived from the request body', async () => {
+    mockQuery.mockResolvedValue({ rows: [{ id: 'victim-user' }] })
+
+    for (const email of ['member@example.com', 'MEMBER@example.com ']) {
+      const req = new NextRequest('http://localhost/api/vote/decision-1', {
+        method: 'POST',
+        body: JSON.stringify({ email, voteData: { optionId: 'opt-1' } }),
+        headers: { 'Content-Type': 'application/json' },
+      })
+      await POST(req, { params: Promise.resolve({ id: 'decision-1' }) })
+    }
+
+    for (const call of mockSubmitVote.mock.calls) {
+      expect(call[1]).not.toHaveProperty('userId')
+    }
+  })
+})
+
+describe('POST /api/vote/[id] — signed-in voter', () => {
+  it('votes as the session user and ignores the email in the body', async () => {
+    mockAuth.mockResolvedValueOnce({ user: { email: 'me@example.com' } })
+
+    const req = new NextRequest('http://localhost/api/vote/decision-1', {
+      method: 'POST',
+      body: JSON.stringify({ email: 'someone-else@example.com', voteData: { optionId: 'opt-1' } }),
+      headers: { 'Content-Type': 'application/json' },
+    })
+    const response = await POST(req, { params: Promise.resolve({ id: 'decision-1' }) })
+
+    expect(response.status).toBe(200)
+    expect(mockSubmitVote).toHaveBeenCalledWith(
+      'decision-1',
+      { userId: 'user-1' },
+      { optionId: 'opt-1' }
+    )
+    // The body email is never looked up when a session decides identity.
+    expect(mockQuery).not.toHaveBeenCalled()
   })
 })

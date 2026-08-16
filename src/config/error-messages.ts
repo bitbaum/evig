@@ -113,6 +113,7 @@ export const ERROR_MESSAGES = {
   VOTE_SUBMIT_FAILED: 'Fehler beim Abgeben der Stimme',
   VOTE_DATA_REQUIRED: 'Stimmdaten erforderlich',
   VOTE_NOT_PUBLIC: 'Diese Abstimmung ist nicht öffentlich. Bitte melde dich mit einem registrierten Konto an.',
+  VOTE_EMAIL_REGISTERED: 'Diese E-Mail gehört zu einem registrierten Konto. Bitte melde dich an, um damit abzustimmen.',
   DECISION_NOT_ACTIVE: 'Entscheidung nicht gefunden oder nicht aktiv',
   VOTE_NOT_IN_VOTING_PHASE_PUBLIC: 'Diese Abstimmung läuft gerade nicht',
   COMMENT_NOT_AUTHOR: 'Nur der Autor kann diesen Kommentar bearbeiten',
