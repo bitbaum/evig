@@ -87,7 +87,11 @@ hold the line on all of it by default:
 
 ## Production URL — don't get this wrong
 
-**This codebase runs at https://revampit.orangecat.ch** (self-hosted Hetzner, deployed from `main` by `deploy-selfhost.yml`). Health check: `https://revampit.orangecat.ch/api/health`. Staff time entry (Zeiterfassung): `/admin/zeiterfassung`.
+**This codebase runs at https://evig.orangecat.ch** (self-hosted Hetzner, deployed from `main` by `deploy-selfhost.yml`). Health check: `https://evig.orangecat.ch/api/health`. Staff time entry (Zeiterfassung): `/admin/zeiterfassung`.
+
+**`revampit.orangecat.ch` still resolves and redirects here** (Caddy, `/etc/caddy/Caddyfile`). That redirect **must stay a 308, never a 301/`permanent`**: 301 does not preserve the HTTP method, so every POST to the old host arrives as a bodyless GET. On 2026-08-16 it was set to `permanent` and `/api/auth/callback/credentials` began answering `InvalidProvider: Callback for provider type (credentials) is not supported` — Auth.js rejecting a GET on a credentials callback. Browser traffic looked fine (it lands on the canonical host and posts there), so only non-browser POST clients broke: the CI auth smoke, API callers, and any webhook still aimed at the old host.
+
+The `auth-smoke` / `inventory-smoke` CI jobs deliberately point `PLAYWRIGHT_BASE_URL` at the **old** host, so they exercise that redirect. Do not "fix" a redirect failure by repointing them at the canonical host — that deletes the only coverage of it.
 
 **https://www.revamp-it.ch is the org's LEGACY Joomla site — not this app.** Never verify deploys or smoke-test there. Full URL list: `docs/SHARED_CONTEXT.md` → Access Points.
 
