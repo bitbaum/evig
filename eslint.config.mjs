@@ -1,5 +1,6 @@
 import nextConfig from "eslint-config-next";
 import reactHooks from "eslint-plugin-react-hooks";
+import * as espree from "espree";
 
 // ─── Design system enforcement rules ────────────────────────────────────────
 // Why: the BB.6 bug ("white text on grey dropdown") happened because feature
@@ -89,6 +90,29 @@ const eslintConfig = [
     ],
   },
   ...nextConfig,
+  {
+    // eslint-config-next ships `settings.react.version: 'detect'`. Detection
+    // calls eslint-plugin-react's resolveBasedir(context), which still calls
+    // the removed `context.getFilename()` — eslint-plugin-react has no
+    // ESLint 10 release yet (peerDependencies cap at ^9.7 as of 7.37.5), so
+    // "detect" throws on every file linted under ESLint 10. Pin the version
+    // from package.json instead: detection was only ever re-deriving this
+    // same value at lint time, so nothing is lost by reading it directly.
+    settings: { react: { version: "18.2.0" } },
+  },
+  {
+    // Plain .js/.mjs files (config files, scripts/ — none use JSX or Babel-only
+    // syntax) are parsed via nextConfig's default parser, which is Next.js's
+    // OWN vendored/compiled `next/dist/compiled/babel/eslint-parser`. That
+    // bundle predates ESLint 10's Language API (SourceCode.finalize calls
+    // `scopeManager.addGlobals`, a method the bundled parser's scope manager
+    // doesn't implement) and crashes the whole run — not a config problem,
+    // Next has not republished this bundle for ESLint 10 yet. .ts/.tsx already
+    // escape it via the "next/typescript" override below; do the same for
+    // plain JS with plain espree, since none of these files need Babel/JSX.
+    files: ["**/*.js", "**/*.mjs"],
+    languageOptions: { parser: espree },
+  },
   {
     // Re-register react-hooks here so these overrides resolve the plugin in the
     // SAME config object — eslint-config-next only registers it inside a
