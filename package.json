@@ -146,7 +146,7 @@
     "*.{ts,tsx,js,jsx}": "eslint --fix"
   },
   "devDependencies": {
-    "@playwright/test": "^1.55.1",
+    "@playwright/test": "^1.62.1",
     "@swc/helpers": "0.5.17",
     "@tailwindcss/postcss": "^4.3.3",
     "@testing-library/jest-dom": "^6.9.1",
