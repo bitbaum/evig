@@ -13,6 +13,14 @@ updates:
       tiptap:
         patterns:
           - "@tiptap/*"
+      # react-dom and the @types packages peer-pin react's major — a half-bump
+      # (react without react-dom, or code types split) cannot even npm ci.
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
     commit-message:
       prefix: "deps"
     labels:
