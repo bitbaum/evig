@@ -7,6 +7,12 @@ updates:
       interval: "weekly"
       day: "monday"
     open-pull-requests-limit: 10
+    # tiptap's packages share one version and break TypeScript's command
+    # augmentation when bumped separately — they must move as one PR.
+    groups:
+      tiptap:
+        patterns:
+          - "@tiptap/*"
     commit-message:
       prefix: "deps"
     labels:
