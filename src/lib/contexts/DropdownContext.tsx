@@ -41,7 +41,7 @@ export function DropdownProvider({ children }: DropdownProviderProps) {
   const [openDropdown, setOpenDropdownState] = useState<string | null>(null)
   const [dropdownPosition, setDropdownPosition] = useState<DropdownPosition | null>(null)
   const dropdownElements = useRef<Map<string, HTMLElement>>(new Map())
-  const hoverTimeoutRef = useRef<NodeJS.Timeout>()
+  const hoverTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined)
 
   const calculatePosition = useCallback((triggerElement: HTMLElement, dropdownWidth: number): DropdownPosition => {
     const rect = triggerElement.getBoundingClientRect()

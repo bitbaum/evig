@@ -32,7 +32,7 @@ const FOCUSABLE_SELECTOR =
 export function useFocusTrap<T extends HTMLElement = HTMLDivElement>(
   active: boolean,
   onEscape?: () => void,
-): RefObject<T> {
+): RefObject<T | null> {
   const containerRef = useRef<T>(null)
   // Track the element focused when the trap activated, to restore on close.
   const previousFocusRef = useRef<HTMLElement | null>(null)

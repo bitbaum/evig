@@ -6,6 +6,7 @@
  * Displays a single activity item from the unified stream
  */
 
+import type { JSX } from 'react'
 import { CheckCircle, Flag, FileText, Megaphone, HelpCircle, Clock } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import {

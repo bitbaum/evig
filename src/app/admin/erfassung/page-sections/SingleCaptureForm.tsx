@@ -12,7 +12,7 @@ import { CAPTURE_DESTINATIONS } from '@/config/intake-workflow'
 
 interface SingleCaptureFormProps {
   form: ReturnType<typeof useErfassungForm>
-  reviewRef: RefObject<HTMLFormElement>
+  reviewRef: RefObject<HTMLFormElement | null>
 }
 
 export function SingleCaptureForm({ form, reviewRef }: SingleCaptureFormProps) {
