@@ -19,6 +19,7 @@ import {
   getRegistrationForInstance,
   listWorkshopsWithInstances,
   pickFreeWorkshopWithCapacity,
+  pickPageNextInstance,
   pickPaidWorkshopWithCapacity,
 } from './helpers/workshops'
 
@@ -44,9 +45,8 @@ test.describe('Workshops dual-persona journey', () => {
       const freeWorkshop = pickFreeWorkshopWithCapacity(workshops)
 
       if (freeWorkshop) {
-        const instance = freeWorkshop.instances.find(
-          inst => inst.status === 'scheduled' && inst.current_participants < inst.max_participants,
-        )!
+        // The page registers its OWN next instance — assert on exactly that one.
+        const instance = pickPageNextInstance(freeWorkshop.instances)!
 
         const existing = await getRegistrationForInstance(page.request, instance.id)
         if (existing.registered && existing.registration?.id) {

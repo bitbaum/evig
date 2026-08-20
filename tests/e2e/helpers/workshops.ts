@@ -12,13 +12,16 @@ export interface WorkshopWithInstances {
   slug: string
   title: string
   price_cents: number
-  instances: Array<{
-    id: string
-    status: string
-    current_participants: number
-    max_participants: number
-  }>
+  instances: Array<WorkshopInstanceSummary>
   user_registered?: boolean
+}
+
+export interface WorkshopInstanceSummary {
+  id: string
+  status: string
+  start_date: string
+  current_participants: number
+  max_participants: number
 }
 
 async function parseApi<T>(response: {
@@ -41,34 +44,48 @@ export async function listWorkshopsWithInstances(
   return parseApi<WorkshopWithInstances[]>(response)
 }
 
+/**
+ * The instance the workshop page actually registers for. Must mirror the page
+ * exactly (src/app/[locale]/workshops/[slug]/page.tsx): scheduled AND in the
+ * future, ordered by start_date ascending, first one — regardless of capacity.
+ * Asserting on any other instance is how this journey used to go flaky: the UI
+ * registered the page's next instance while the test watched a past one.
+ */
+export function pickPageNextInstance(
+  instances: WorkshopInstanceSummary[] | undefined,
+): WorkshopInstanceSummary | null {
+  const upcoming = (instances ?? [])
+    .filter(
+      inst =>
+        inst.status === WORKSHOP_INSTANCE_STATUS.SCHEDULED &&
+        new Date(inst.start_date) > new Date(),
+    )
+    .sort((a, b) => new Date(a.start_date).getTime() - new Date(b.start_date).getTime())
+  return upcoming[0] ?? null
+}
+
+function pickWorkshopWithOpenNextInstance(
+  workshops: WorkshopWithInstances[],
+  matchesPrice: (priceCents: number) => boolean,
+): WorkshopWithInstances | null {
+  for (const workshop of workshops) {
+    if (!matchesPrice(workshop.price_cents)) continue
+    const next = pickPageNextInstance(workshop.instances)
+    if (next && next.current_participants < next.max_participants) return workshop
+  }
+  return null
+}
+
 export function pickFreeWorkshopWithCapacity(
   workshops: WorkshopWithInstances[],
 ): WorkshopWithInstances | null {
-  for (const workshop of workshops) {
-    if (workshop.price_cents > 0) continue
-    const open = workshop.instances?.find(
-      inst =>
-        inst.status === WORKSHOP_INSTANCE_STATUS.SCHEDULED &&
-        inst.current_participants < inst.max_participants,
-    )
-    if (open) return workshop
-  }
-  return null
+  return pickWorkshopWithOpenNextInstance(workshops, price => price <= 0)
 }
 
 export function pickPaidWorkshopWithCapacity(
   workshops: WorkshopWithInstances[],
 ): WorkshopWithInstances | null {
-  for (const workshop of workshops) {
-    if (workshop.price_cents <= 0) continue
-    const open = workshop.instances?.find(
-      inst =>
-        inst.status === WORKSHOP_INSTANCE_STATUS.SCHEDULED &&
-        inst.current_participants < inst.max_participants,
-    )
-    if (open) return workshop
-  }
-  return null
+  return pickWorkshopWithOpenNextInstance(workshops, price => price > 0)
 }
 
 export async function registerForFreeWorkshop(
