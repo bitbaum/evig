@@ -90,7 +90,7 @@
   },
   "dependencies": {
     "@auth/pg-adapter": "^1.11.3",
-    "@aws-sdk/client-s3": "^3.1105.0",
+    "@aws-sdk/client-s3": "^3.1111.0",
     "@eslint/eslintrc": "^3.3.6",
     "@eslint/js": "^9.39.2",
     "@fleet/ai-forms": "github:maonakamoto/ai-forms#v0.1.0",
