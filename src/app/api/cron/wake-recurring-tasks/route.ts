@@ -41,18 +41,11 @@ import { ORG } from '@/config/org'
 import { notifyUsers, notifyAllStaff } from '@/lib/services/notifications'
 import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
 import { logger } from '@/lib/logger'
-
-function authorized(request: NextRequest): boolean {
-  const cronSecret = process.env.CRON_SECRET
-  if (!cronSecret) return true // dev: allow if not configured
-  const authHeader = request.headers.get('authorization')
-  return authHeader === `Bearer ${cronSecret}`
-}
+import { requireCronAuth } from '@/lib/api/cron-auth'
 
 export async function GET(request: NextRequest) {
-  if (!authorized(request)) {
-    return Response.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  const auth = requireCronAuth(request)
+  if (!auth.ok) return auth.response
 
   try {
     const candidates = await db

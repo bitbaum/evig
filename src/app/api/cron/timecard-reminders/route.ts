@@ -16,17 +16,11 @@ import { getReminderUserIdsForToday } from '@/lib/services/saldo'
 import { createNotification } from '@/lib/services/notifications'
 import { NOTIFICATION_TYPES } from '@/config/notifications'
 import { logger } from '@/lib/logger'
-
-function authorized(request: NextRequest): boolean {
-  const cronSecret = process.env.CRON_SECRET
-  if (!cronSecret) return false
-  return request.headers.get('authorization') === `Bearer ${cronSecret}`
-}
+import { requireCronAuth } from '@/lib/api/cron-auth'
 
 export async function GET(request: NextRequest) {
-  if (!authorized(request)) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  const auth = requireCronAuth(request)
+  if (!auth.ok) return auth.response
   try {
     const userIds = await getReminderUserIdsForToday()
     const monthLabel = new Intl.DateTimeFormat('de-CH', {

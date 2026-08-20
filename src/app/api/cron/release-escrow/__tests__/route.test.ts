@@ -63,18 +63,20 @@ function setDue(rows: unknown[]) {
 
 beforeEach(() => {
   jest.resetAllMocks()
-  delete process.env.CRON_SECRET
+  // Configured, because an unset secret now denies every request —
+  // these routes are no longer reachable without one.
+  process.env.CRON_SECRET = 'test-cron-secret'
   // db.update(...).set(...).where(...) resolves
   mockSet.mockReturnValue({ where: mockUpdateWhere })
   mockUpdateWhere.mockResolvedValue(undefined)
   mockCapture.mockResolvedValue({ id: 1, status: 'confirmed' })
 })
 
-const req = () => new NextRequest('http://localhost/api/cron/release-escrow')
+const req = () => new NextRequest('http://localhost/api/cron/release-escrow', { headers: { authorization: `Bearer ${process.env.CRON_SECRET}` } })
 
 describe('GET /api/cron/release-escrow — auth', () => {
   it('returns 401 when CRON_SECRET is set and bearer is wrong', async () => {
-    process.env.CRON_SECRET = 'top-secret'
+    process.env.CRON_SECRET = 'test-cron-secret'
     const res = await GET(new NextRequest('http://localhost/api/cron/release-escrow', { headers: { authorization: 'Bearer nope' } }))
     expect(res.status).toBe(401)
   })

@@ -18,22 +18,13 @@ import { db } from '@/db'
 import { authAuditLog } from '@/db/schema'
 import { and, lt, ne, sql } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
+import { requireCronAuth } from '@/lib/api/cron-auth'
 
 const RETENTION_DAYS = 180
 
 export async function GET(request: NextRequest) {
-  // Authenticate via CRON_SECRET (Authorization: Bearer ...). When CRON_SECRET
-  // is unset (local dev), the check is skipped — matches the other cron routes
-  // and scripts/ops/run-cron.sh. Reject anything else to avoid arbitrary
-  // external triggers.
-  const cronSecret = process.env.CRON_SECRET
-  const authorized =
-    !cronSecret ||
-    request.headers.get('authorization') === `Bearer ${cronSecret}`
-
-  if (!authorized) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  const auth = requireCronAuth(request)
+  if (!auth.ok) return auth.response
 
   try {
     const result = await db

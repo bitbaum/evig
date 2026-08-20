@@ -19,16 +19,11 @@ import { itHilfeRequests } from '@/db/schema'
 import { and, eq, isNotNull, lt, sql } from 'drizzle-orm'
 import { logger } from '@/lib/logger'
 import { REQUEST_STATUS } from '@/config/it-hilfe'
+import { requireCronAuth } from '@/lib/api/cron-auth'
 
 export async function GET(request: NextRequest) {
-  // Verify cron secret (skip in dev if not set)
-  const cronSecret = process.env.CRON_SECRET
-  if (cronSecret) {
-    const authHeader = request.headers.get('authorization')
-    if (authHeader !== `Bearer ${cronSecret}`) {
-      return Response.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-  }
+  const auth = requireCronAuth(request)
+  if (!auth.ok) return auth.response
 
   try {
     const expired = await db

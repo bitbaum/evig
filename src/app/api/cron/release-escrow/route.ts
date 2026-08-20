@@ -19,16 +19,11 @@ import { and, eq, lt, isNotNull, sql } from 'drizzle-orm'
 import { captureTransaction } from '@/lib/payments/payrexx-client'
 import { ESCROW_STATUS } from '@/config/payment-status'
 import { logger } from '@/lib/logger'
+import { requireCronAuth } from '@/lib/api/cron-auth'
 
 export async function GET(request: NextRequest) {
-  // Verify cron secret (skip in dev if not set) — same convention as the other crons.
-  const cronSecret = process.env.CRON_SECRET
-  if (cronSecret) {
-    const authHeader = request.headers.get('authorization')
-    if (authHeader !== `Bearer ${cronSecret}`) {
-      return Response.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-  }
+  const auth = requireCronAuth(request)
+  if (!auth.ok) return auth.response
 
   try {
     // Active escrows past their deadline, with the gateway transaction to capture.

@@ -104,7 +104,11 @@ const MOCK_UPCOMING_DECISION = {
   invitedParticipants: [],
 }
 
-function makeRequest(authHeader?: string): NextRequest {
+function makeRequest(
+  authHeader: string | undefined = `Bearer ${process.env.CRON_SECRET}`,
+  opts: { omitAuth?: boolean } = {},
+): NextRequest {
+  if (opts.omitAuth) authHeader = undefined
   return new NextRequest('http://localhost/api/cron/close-decisions', {
     headers: authHeader ? { authorization: authHeader } : {},
   })
@@ -112,7 +116,9 @@ function makeRequest(authHeader?: string): NextRequest {
 
 beforeEach(() => {
   jest.resetAllMocks()
-  delete process.env.CRON_SECRET
+  // Configured, because an unset secret now denies every request —
+  // these routes are no longer reachable without one.
+  process.env.CRON_SECRET = 'test-cron-secret'
   mockTransitionDecision.mockResolvedValue({ id: 'decision-1', status: 'closed' })
   mockNotifyAllStaff.mockResolvedValue(undefined)
   mockNotifyUsers.mockResolvedValue(undefined)
@@ -129,15 +135,17 @@ beforeEach(() => {
 
 describe('GET /api/cron/close-decisions — auth', () => {
   it('returns 401 when CRON_SECRET is set and authorization header is missing', async () => {
-    process.env.CRON_SECRET = 'secret-abc'
-    const res = await GET(makeRequest())
+    process.env.CRON_SECRET = 'test-cron-secret'
+    // Explicitly headerless — makeRequest() now defaults to a valid bearer,
+    // because every other test needs one to reach the route body at all.
+    const res = await GET(makeRequest(undefined, { omitAuth: true }))
     expect(res.status).toBe(401)
     const body = await res.json()
     expect(body.error).toBe('Unauthorized')
   })
 
   it('returns 401 when CRON_SECRET is set and authorization header is wrong', async () => {
-    process.env.CRON_SECRET = 'secret-abc'
+    process.env.CRON_SECRET = 'test-cron-secret'
     const res = await GET(makeRequest('Bearer wrong-secret'))
     expect(res.status).toBe(401)
   })
@@ -149,8 +157,8 @@ describe('GET /api/cron/close-decisions — auth', () => {
   })
 
   it('runs with correct Bearer token', async () => {
-    process.env.CRON_SECRET = 'secret-abc'
-    const res = await GET(makeRequest('Bearer secret-abc'))
+    process.env.CRON_SECRET = 'test-cron-secret'
+    const res = await GET(makeRequest(`Bearer ${process.env.CRON_SECRET}`))
     expect(res.status).toBe(200)
   })
 })
