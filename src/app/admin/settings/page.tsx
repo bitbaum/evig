@@ -5,6 +5,7 @@ import { requireSection } from '@/lib/admin/guards'
 import { Settings, Globe, Mail, Shield, Database, Bell } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import Heading from '@/components/admin/AdminHeading'
+import { Card } from '@/components/ui/card'
 
 export const metadata: Metadata = {
   title: 'Einstellungen',
@@ -92,18 +93,18 @@ export default async function SettingsPage() {
             <Link
               key={section.title}
               href={section.href}
-              className="block p-6 bg-surface-base rounded-xl border border hover:border-neutral-300 transition-colors"
+              className="card-shell block p-6 hover:border-neutral-300 transition-colors"
             >
               {inner}
             </Link>
           ) : (
-            <div
+            <Card
               key={section.title}
-              className="p-6 bg-surface-base rounded-xl border border opacity-70"
+              className="p-6 opacity-70"
               aria-disabled="true"
             >
               {inner}
-            </div>
+            </Card>
           )
         })}
       </div>

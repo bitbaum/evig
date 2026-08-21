@@ -8,6 +8,7 @@ import { query } from '@/lib/auth/db'
 import { TABLE_NAMES } from '@/config/database'
 import { BadgeCheck, CheckCircle, AlertCircle, ArrowRight, CreditCard, Calendar } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { Card } from '@/components/ui/card'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { IconBadge } from '@/components/ui/IconBadge'
 import { MEMBERSHIP, ORG } from '@/config/org'
@@ -79,7 +80,7 @@ export default async function MembershipPage() {
       {isMember ? (
         <div className="space-y-4">
           {/* Status card */}
-          <div className="bg-surface-base rounded-xl border p-6">
+          <Card className="p-6">
             <div className="flex items-start gap-4">
               <IconBadge icon={BadgeCheck} shape="circle" size="md" />
               <div className="flex-1 min-w-0">
@@ -109,10 +110,10 @@ export default async function MembershipPage() {
                 )}
               </div>
             </div>
-          </div>
+          </Card>
 
           {/* Payment details */}
-          <div className="bg-surface-base rounded-xl border p-6">
+          <Card className="p-6">
             <Heading level={3} className="text-base font-semibold text-text-primary mb-4 flex items-center gap-2">
               <CreditCard className="w-4 h-4 text-text-tertiary" aria-hidden="true" />
               {t('annualFee')}
@@ -147,7 +148,7 @@ export default async function MembershipPage() {
                 </Link>
               </div>
             )}
-          </div>
+          </Card>
 
           {/* What membership means */}
           <div className="bg-surface-raised rounded-xl p-6 border">

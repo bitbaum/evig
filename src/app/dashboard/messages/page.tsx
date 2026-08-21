@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { MessageSquare, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import ConversationList from '@/components/messages/ConversationList'
 import type { Conversation } from '@/components/messages/ConversationList'
 import MessageThread from '@/components/messages/MessageThread'
@@ -109,7 +110,7 @@ function MessagesContent() {
           }
         />
       ) : (
-        <div className="bg-surface-base rounded-xl border overflow-hidden" style={{ height: 'calc(100vh - 220px)', minHeight: '500px' }}>
+        <Card className="overflow-hidden" style={{ height: 'calc(100vh - 220px)', minHeight: '500px' }}>
           <div className="flex h-full">
             {/* Conversation list — hidden on mobile when thread is open */}
             <div className={`w-full lg:w-80 lg:border-r border overflow-y-auto shrink-0 ${
@@ -144,7 +145,7 @@ function MessagesContent() {
               )}
             </div>
           </div>
-        </div>
+        </Card>
       )}
     </div>
   )

@@ -8,6 +8,7 @@ import { useTranslations } from 'next-intl'
 import { adminInteractive } from '@/lib/admin-ui'
 import { Search, ExternalLink, Edit3, ClipboardList } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { Select } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import Link from 'next/link'
@@ -157,9 +158,9 @@ export function RequestsTab({
       {rows.length > 0 ? (
         <AdminTable columns={columns} rows={rows} rowKey={(r) => r.id} />
       ) : (
-        <div className="bg-surface-base rounded-xl border border-default p-8 text-center text-text-tertiary">
+        <Card className="p-8 text-center text-text-tertiary">
           {t('empty')}
-        </div>
+        </Card>
       )}
 
       {requests && requests.pagination.total > 50 && (

@@ -23,7 +23,7 @@ export default async function ContentPage() {
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
         <Link
           href={ROUTES.admin.contentSubmissions}
-          className="p-6 bg-surface-base rounded-xl border border hover:border-warning-500 transition-colors relative group"
+          className="card-shell p-6 hover:border-warning-500 transition-colors relative group"
         >
           <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-warning-600 dark:group-hover:text-warning-400 transition-colors">Einreichungen</Heading>
           <p className="text-sm text-text-secondary">
@@ -34,7 +34,7 @@ export default async function ContentPage() {
 
         <Link
           href={ROUTES.admin.contentBlog}
-          className="p-6 bg-surface-base rounded-xl border border hover:border-action transition-colors group"
+          className="card-shell p-6 hover:border-action transition-colors group"
         >
           <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-action dark:group-hover:text-action transition-colors">Blog-Artikel</Heading>
           <p className="text-sm text-text-secondary">
@@ -44,7 +44,7 @@ export default async function ContentPage() {
 
         <Link
           href={ROUTES.admin.categories}
-          className="p-6 bg-surface-base rounded-xl border border hover:border-action transition-colors group"
+          className="card-shell p-6 hover:border-action transition-colors group"
         >
           <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-action dark:group-hover:text-action transition-colors">Kategorien</Heading>
           <p className="text-sm text-text-secondary">
@@ -54,7 +54,7 @@ export default async function ContentPage() {
 
         <Link
           href={ROUTES.admin.contentPages}
-          className="p-6 bg-surface-base rounded-xl border border hover:border-action transition-colors group"
+          className="card-shell p-6 hover:border-action transition-colors group"
         >
           <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-action dark:group-hover:text-action transition-colors">Seiten</Heading>
           <p className="text-sm text-text-secondary">
@@ -64,7 +64,7 @@ export default async function ContentPage() {
 
         <Link
           href={ROUTES.admin.contentMedia}
-          className="p-6 bg-surface-base rounded-xl border border hover:border-action transition-colors group"
+          className="card-shell p-6 hover:border-action transition-colors group"
         >
           <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-action dark:group-hover:text-action transition-colors">Medien</Heading>
           <p className="text-sm text-text-secondary">

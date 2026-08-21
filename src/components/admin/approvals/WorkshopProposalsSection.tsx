@@ -7,6 +7,7 @@ import { ExternalLink } from 'lucide-react'
 import { apiFetch } from '@/lib/api/client'
 import { formatDateShort } from '@/lib/date-formats'
 import Heading from '@/components/admin/AdminHeading'
+import { Card } from '@/components/ui/card'
 import { InlineDecisionActions } from './InlineDecisionActions'
 
 interface ProposalRow {
@@ -57,7 +58,7 @@ export function WorkshopProposalsSection() {
   if (!loaded || items.length === 0) return null
 
   return (
-    <div className="bg-surface-base rounded-xl border border">
+    <Card>
       <div className="p-4 border-b border flex items-center justify-between">
         <Heading level={2} className="font-semibold text-text-primary">Workshop-Vorschläge</Heading>
         <Link href="/admin/workshops" className="text-sm text-action hover:underline">
@@ -87,6 +88,6 @@ export function WorkshopProposalsSection() {
           </div>
         ))}
       </div>
-    </div>
+    </Card>
   )
 }

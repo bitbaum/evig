@@ -15,6 +15,7 @@ import { logger } from '@/lib/logger'
 import { formatDateShort } from '@/lib/date-formats'
 import { buttonClass } from '@/components/ui/button-class'
 import { Avatar } from '@/components/ui/Avatar'
+import { Card } from '@/components/ui/card'
 import {
   ArrowLeft,
   Mail,
@@ -132,7 +133,7 @@ export default async function UserDetailPage({ params }: PageProps) {
       </div>
 
       {/* Profile Card */}
-      <div className="bg-surface-base rounded-xl border border p-6">
+      <Card className="p-6">
         <div className="flex items-start gap-6">
           {/* Avatar */}
           <Avatar
@@ -194,11 +195,11 @@ export default async function UserDetailPage({ params }: PageProps) {
             </div>
           </div>
         </div>
-      </div>
+      </Card>
 
       {/* Team Profile Link */}
       {userIsStaff && (
-        <div className="bg-surface-base rounded-xl border border p-6">
+        <Card className="p-6">
           <Heading level={2} className="font-semibold text-text-primary mb-4 flex items-center gap-2">
             <User className="w-5 h-5" />
             Team-Profil
@@ -225,12 +226,12 @@ export default async function UserDetailPage({ params }: PageProps) {
               </Link>
             </div>
           )}
-        </div>
+        </Card>
       )}
 
       {/* Permissions */}
       {userIsStaff && (
-        <div className="bg-surface-base rounded-xl border border p-6">
+        <Card className="p-6">
           <Heading level={2} className="font-semibold text-text-primary mb-4 flex items-center gap-2">
             <Shield className="w-5 h-5" />
             Berechtigungen
@@ -260,7 +261,7 @@ export default async function UserDetailPage({ params }: PageProps) {
               Keine speziellen Berechtigungen zugewiesen
             </p>
           )}
-        </div>
+        </Card>
       )}
 
       {/* Meta */}

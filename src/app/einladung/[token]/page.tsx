@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import { Users } from 'lucide-react'
 import ClaimForm from './ClaimForm'
+import { Card } from '@/components/ui/card'
 import { getClaimInvite } from '@/lib/services/team-invites'
 import { getTeamRoleColor } from '@/config/teams'
 
@@ -18,7 +19,7 @@ export default async function ClaimInvitePage({ params, searchParams }: PageProp
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-surface-raised p-4">
-      <div className="w-full max-w-md bg-surface-base rounded-xl border p-6 sm:p-8">
+      <Card className="w-full max-w-md p-6 sm:p-8">
         {!invite ? (
           <div className="text-center space-y-3">
             <h1 className="text-lg font-semibold text-text-primary">Einladung ungültig</h1>
@@ -59,7 +60,7 @@ export default async function ClaimInvitePage({ params, searchParams }: PageProp
             <ClaimForm token={token} suggestedName={invite.currentName} suggestedEmail={email ?? null} />
           </>
         )}
-      </div>
+      </Card>
     </main>
   )
 }

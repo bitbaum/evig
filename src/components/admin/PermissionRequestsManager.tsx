@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { Shield, Check, X, Clock, User, RefreshCw } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
 import { apiFetch } from '@/lib/api/client'
 import { getSection } from '@/config/sections'
@@ -98,7 +99,7 @@ export function PermissionRequestsManager() {
 
   if (loading) {
     return (
-      <div className="p-6 bg-surface-base rounded-xl border border">
+      <Card className="p-6">
         <div className="animate-pulse">
           <div className="h-6 bg-surface-overlay rounded-sm w-1/3 mb-4" />
           <div className="space-y-3">
@@ -106,7 +107,7 @@ export function PermissionRequestsManager() {
             <div className="h-16 bg-surface-overlay rounded-sm" />
           </div>
         </div>
-      </div>
+      </Card>
     )
   }
 
@@ -128,17 +129,17 @@ export function PermissionRequestsManager() {
 
   if (requests.length === 0) {
     return (
-      <div className="p-6 bg-surface-base rounded-xl border border">
+      <Card className="p-6">
         <div className="flex items-center gap-3 text-text-tertiary">
           <Shield className="w-5 h-5" />
           <span>{t('empty')}</span>
         </div>
-      </div>
+      </Card>
     )
   }
 
   return (
-    <div className="bg-surface-base rounded-xl border border">
+    <Card>
       <div className="p-4 border-b border flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Shield className="w-5 h-5 text-secondary-500" />
@@ -250,6 +251,6 @@ export function PermissionRequestsManager() {
           </div>
         ))}
       </div>
-    </div>
+    </Card>
   )
 }

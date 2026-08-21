@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { apiFetch } from '@/lib/api/client'
 import { formatDateShort } from '@/lib/date-formats'
 import Heading from '@/components/admin/AdminHeading'
+import { Card } from '@/components/ui/card'
 import { InlineDecisionActions } from './InlineDecisionActions'
 
 interface LocationRow {
@@ -58,7 +59,7 @@ export function LocationApprovalsSection() {
   if (!loaded || items.length === 0) return null
 
   return (
-    <div className="bg-surface-base rounded-xl border border">
+    <Card>
       <div className="p-4 border-b border flex items-center justify-between">
         <Heading level={2} className="font-semibold text-text-primary">Standorte</Heading>
         <Link href="/admin/locations" className="text-sm text-action hover:underline">
@@ -83,6 +84,6 @@ export function LocationApprovalsSection() {
           </div>
         ))}
       </div>
-    </div>
+    </Card>
   )
 }

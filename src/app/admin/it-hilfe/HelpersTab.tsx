@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { adminInteractive } from '@/lib/admin-ui'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { Select } from '@/components/ui/select'
 import {
   HelpCircle, UserCheck, ShieldCheck, Ban,
@@ -149,7 +150,7 @@ export function HelpersTab({
 
       {/* Table */}
       {helpers && helpers.items.length === 0 ? (
-        <div className="bg-surface-base rounded-xl border border-default p-8 text-center text-text-tertiary">{t('empty')}</div>
+        <Card className="p-8 text-center text-text-tertiary">{t('empty')}</Card>
       ) : (
         <AdminTable columns={columns} rows={helpers?.items ?? []} rowKey={(h) => h.id} />
       )}
