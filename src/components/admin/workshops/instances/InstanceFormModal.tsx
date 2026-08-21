@@ -1,7 +1,7 @@
 'use client'
 
-import { X, Loader2, Save } from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
+import { Loader2, Save } from 'lucide-react'
+import { Modal } from '@/components/ui/Modal'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Select } from '@/components/ui/select'
@@ -33,18 +33,8 @@ export function InstanceFormModal({
   onClose,
 }: InstanceFormModalProps) {
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={onClose}>
-      <div className="bg-surface-base dark:border dark:border-white/6 rounded-xl shadow-xs max-w-lg w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-        <div className="px-6 py-4 border-b border flex items-center justify-between">
-          <Heading level={2} className="text-xl text-text-primary">
-            {editingInstance ? 'Termin bearbeiten' : 'Neuer Termin'}
-          </Heading>
-          <Button variant="ghost" size="icon" onClick={onClose} className="text-text-tertiary hover:text-text-secondary">
-            <X className="w-5 h-5" />
-          </Button>
-        </div>
-
-        <div className="p-6 space-y-4">
+    <Modal isOpen onClose={onClose} title={editingInstance ? 'Termin bearbeiten' : 'Neuer Termin'}>
+        <div className="space-y-4">
           {error && (
             <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 rounded-lg p-3 text-error-800 dark:text-error-400 text-sm">
               {error}
@@ -139,7 +129,7 @@ export function InstanceFormModal({
           </FormField>
         </div>
 
-        <div className="px-6 py-4 border-t border flex justify-end gap-3">
+        <div className="mt-6 pt-4 border-t border flex justify-end gap-3">
           <Button onClick={onClose} variant="outline">
             Abbrechen
           </Button>
@@ -153,7 +143,6 @@ export function InstanceFormModal({
             {submitting ? 'Speichern...' : (editingInstance ? 'Speichern' : 'Erstellen')}
           </Button>
         </div>
-      </div>
-    </div>
+    </Modal>
   )
 }

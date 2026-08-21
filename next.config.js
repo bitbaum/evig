@@ -235,7 +235,7 @@ const nextConfig = {
     // end of form"), which broke every meeting-audio upload above 10 MB.
     // Raise the cap above FILE_SIZE_LIMITS.AUDIO_MAX (250 MB) so protocol
     // recordings reach /api/protocols/[id]/process-sources intact.
-    middlewareClientMaxBodySize: '260mb',
+    proxyClientMaxBodySize: '260mb',
   },
   // Add specific CSS handling
   sassOptions: {

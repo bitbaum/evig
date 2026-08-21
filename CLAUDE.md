@@ -297,7 +297,10 @@ grep -rn 'bg-gradient-to' src/app/[locale]/ src/components/ | grep -v 'from-blac
 # error/info` only for their actual status meaning, never as decoration.
 grep -rnE '(bg|text|border|ring)-primary-[0-9]' src/components src/app
 
-# Hand-rolled card shells — should be <Card>/<Panel> (resolve to card-shell)
+# Hand-rolled card shells — should be <Card>/<Panel> (resolve to card-shell).
+# Enforced as a ratchet: scripts/ci/card-shell-ratchet.sh (runs in `npm run
+# verify`) pins the count — it may fall or hold, never rise. When you reduce
+# it, lower scripts/ci/card-shell-baseline.txt in the same PR.
 grep -rnE 'bg-surface-base rounded-(lg|xl) border' src/components src/app
 
 # Nav-active drift — active state must come from NAV_STATE / navLinkClass
