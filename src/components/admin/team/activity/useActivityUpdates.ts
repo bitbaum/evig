@@ -6,8 +6,9 @@
  * Data fetching and mutation hooks for activity updates
  */
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { apiFetch } from '@/lib/api/client'
+import { useSwrFetch } from '@/lib/api/swr'
 import type { ActivityUpdate } from './types'
 
 // ============================================================================
@@ -23,39 +24,24 @@ interface UseActivityUpdatesReturn {
 }
 
 export function useActivityUpdates(userId?: string): UseActivityUpdatesReturn {
-  const [updates, setUpdates] = useState<ActivityUpdate[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [total, setTotal] = useState(0)
+  const params = new URLSearchParams()
+  if (userId) params.set('user_id', userId)
 
-  const fetchUpdates = useCallback(async () => {
-    setLoading(true)
-    setError(null)
+  const { data, error, isLoading, mutate } = useSwrFetch<{ items: ActivityUpdate[]; total: number }>(
+    `/api/admin/team/activity/updates?${params.toString()}`,
+  )
 
-    try {
-      const params = new URLSearchParams()
-      if (userId) params.set('user_id', userId)
+  const refetch = useCallback(async () => {
+    await mutate()
+  }, [mutate])
 
-      const result = await apiFetch<{ items: ActivityUpdate[]; total: number }>(`/api/admin/team/activity/updates?${params.toString()}`)
-
-      if (!result.success) {
-        throw new Error(result.error || 'Fehler beim Laden')
-      }
-
-      setUpdates(result.data?.items || [])
-      setTotal(result.data?.total || 0)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
-    } finally {
-      setLoading(false)
-    }
-  }, [userId])
-
-  useEffect(() => {
-    fetchUpdates()
-  }, [fetchUpdates])
-
-  return { updates, loading, error, total, refetch: fetchUpdates }
+  return {
+    updates: data?.items ?? [],
+    loading: isLoading,
+    error: error instanceof Error ? error.message : null,
+    total: data?.total ?? 0,
+    refetch,
+  }
 }
 
 // ============================================================================

@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useSwrFetch } from '@/lib/api/swr';
 import { adminInteractive } from '@/lib/admin-ui'
 import { Pencil, Trash2, Check, X } from 'lucide-react';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
@@ -34,23 +35,18 @@ export default function DiscussionThread({
   readOnly: boolean;
   currentUserId?: string;
 }) {
-  const [comments, setComments] = useState<Comment[]>([]);
-  const [loading, setLoading] = useState(true);
+  const {
+    data,
+    isLoading: loading,
+    mutate: refreshComments,
+  } = useSwrFetch<Comment[]>(`/api/decisions/${decisionId}/comments`);
+  const comments = data ?? [];
 
   // New comment state
   const [content, setContent] = useState('');
   const [position, setPosition] = useState<CommentPosition>('info');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
-
-  async function fetchComments() {
-    const result = await apiFetch<Comment[]>(`/api/decisions/${decisionId}/comments`);
-    if (result.success && result.data) setComments(result.data);
-    setLoading(false);
-  }
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { fetchComments(); }, [decisionId]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -70,7 +66,7 @@ export default function DiscussionThread({
     }
 
     setContent('');
-    fetchComments();
+    refreshComments();
     setSubmitting(false);
   }
 
@@ -109,7 +105,7 @@ export default function DiscussionThread({
 
     setEditingId(null);
     setEditContent('');
-    fetchComments();
+    refreshComments();
     setEditSaving(false);
   }
 
@@ -130,7 +126,7 @@ export default function DiscussionThread({
     }
 
     setDeleteId(null);
-    fetchComments();
+    refreshComments();
     setDeleteLoading(false);
   }
 

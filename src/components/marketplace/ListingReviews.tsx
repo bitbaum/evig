@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
 import { Star, MessageSquare } from 'lucide-react'
@@ -10,7 +10,7 @@ import { ROUTES } from '@/config/routes'
 import { Button } from '@/components/ui/button'
 import Heading from '@/components/ui/Heading'
 import { formatDateShort } from '@/lib/date-formats'
-import { apiFetch } from '@/lib/api/client'
+import { useSwrFetch } from '@/lib/api/swr'
 import { REVIEW_TARGET_TYPES } from '@/config/database'
 
 interface Review {
@@ -36,37 +36,23 @@ interface ListingReviewsProps {
 export default function ListingReviews({ listingId, sellerId }: ListingReviewsProps) {
   const t = useTranslations('components.listingReviews')
   const { data: session } = useSession()
-  const [reviews, setReviews] = useState<Review[]>([])
-  const [stats, setStats] = useState<ReviewStats>({ average_rating: null, review_count: 0 })
-  const [isLoading, setIsLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
 
-  const fetchReviews = useCallback(async () => {
-    try {
-      const result = await apiFetch<{ reviews: Review[]; stats?: ReviewStats }>(`/api/reviews?targetType=${REVIEW_TARGET_TYPES.LISTING}&targetId=${listingId}`)
-      if (result.success && result.data) {
-        // The API returns aggregate stats over ALL reviews (not just this page),
-        // so consume them directly instead of averaging the current page.
-        setReviews(result.data.reviews || [])
-        setStats(result.data.stats ?? { average_rating: null, review_count: 0 })
-      }
-    } catch {
-      // Silently fail — reviews are non-critical
-    } finally {
-      setIsLoading(false)
-    }
-  }, [listingId])
-
-  useEffect(() => {
-    fetchReviews()
-  }, [fetchReviews])
+  // Load errors intentionally render as an empty section — reviews are
+  // non-critical. The API returns aggregate stats over ALL reviews (not just
+  // this page), so consume them directly instead of averaging the current page.
+  const { data, isLoading, mutate } = useSwrFetch<{ reviews: Review[]; stats?: ReviewStats }>(
+    `/api/reviews?targetType=${REVIEW_TARGET_TYPES.LISTING}&targetId=${listingId}`,
+  )
+  const reviews = data?.reviews ?? []
+  const stats = data?.stats ?? { average_rating: null, review_count: 0 }
 
   const canReview = session?.user?.id && session.user.id !== sellerId
   const hasReviewed = reviews.some(r => r.reviewerId === session?.user?.id)
 
   const handleReviewSubmitted = () => {
     setShowForm(false)
-    fetchReviews()
+    mutate()
   }
 
   if (isLoading) {

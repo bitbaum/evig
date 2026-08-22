@@ -6,6 +6,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { apiFetch } from '@/lib/api/client'
+import { useSwrFetch } from '@/lib/api/swr'
 import type { TeamProfileWithUser } from '@/lib/schemas/team'
 import type { TeamFilterState } from './types'
 
@@ -86,44 +87,19 @@ export function useTeamProfiles(options: UseTeamProfilesOptions = {}): UseTeamPr
  * Hook for fetching a single team profile
  */
 export function useTeamProfile(profileId: string | null) {
-  const [profile, setProfile] = useState<TeamProfileWithUser | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const { data, error, isLoading, mutate } = useSwrFetch<TeamProfileWithUser>(
+    profileId ? `/api/admin/team/profiles/${profileId}` : null,
+  )
 
-  const fetchProfile = useCallback(async () => {
-    if (!profileId) {
-      setProfile(null)
-      return
-    }
-
-    try {
-      setLoading(true)
-      setError(null)
-
-      const result = await apiFetch<TeamProfileWithUser>(`/api/admin/team/profiles/${profileId}`)
-
-      if (!result.success) {
-        throw new Error(result.error || 'Profil nicht gefunden')
-      }
-
-      setProfile(result.data ?? null)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
-      setProfile(null)
-    } finally {
-      setLoading(false)
-    }
-  }, [profileId])
-
-  useEffect(() => {
-    fetchProfile()
-  }, [fetchProfile])
+  const refetch = useCallback(async () => {
+    await mutate()
+  }, [mutate])
 
   return {
-    profile,
-    loading,
-    error,
-    refetch: fetchProfile,
+    profile: data ?? null,
+    loading: isLoading,
+    error: error instanceof Error ? error.message : null,
+    refetch,
   }
 }
 
