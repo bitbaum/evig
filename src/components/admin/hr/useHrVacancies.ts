@@ -1,7 +1,8 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { apiFetch } from '@/lib/api/client'
+import { useSwrFetch } from '@/lib/api/swr'
 import { UI_FEEDBACK_MS } from '@/config/limits'
 import { VACANCY_STATUS, type VacancyStatus } from '@/config/hr-vacancies'
 import { publicVacancyUrl } from '@/lib/hr/public-urls'
@@ -10,9 +11,7 @@ import type { VacancyFormData, VacancyListItem } from './types'
 import { logger } from '@/lib/logger'
 
 export function useHrVacancies() {
-  const [postings, setPostings] = useState<VacancyListItem[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [actionError, setError] = useState<string | null>(null)
   const [statusFilter, setStatusFilter] = useState<string>('')
   const [searchQuery, setSearchQuery] = useState('')
   const [actionLoading, setActionLoading] = useState<string | null>(null)
@@ -23,29 +22,27 @@ export function useHrVacancies() {
     setTimeout(() => setSuccessMessage(null), UI_FEEDBACK_MS.SUCCESS)
   }
 
-  const fetchPostings = useCallback(async () => {
-    try {
-      setLoading(true)
-      setError(null)
-      const params = new URLSearchParams()
-      if (statusFilter) params.set('status', statusFilter)
-      if (searchQuery) params.set('search', searchQuery)
-      const qs = params.toString()
-      const result = await apiFetch<{ postings: VacancyListItem[] }>(
-        `/api/admin/hr/vacancies${qs ? `?${qs}` : ''}`,
-      )
-      if (!result.success) throw new Error(result.error || 'Laden fehlgeschlagen')
-      setPostings(result.data?.postings ?? [])
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
-    } finally {
-      setLoading(false)
-    }
-  }, [statusFilter, searchQuery])
+  // Filters are encoded in the SWR key — changing them refetches.
+  const params = new URLSearchParams()
+  if (statusFilter) params.set('status', statusFilter)
+  if (searchQuery) params.set('search', searchQuery)
+  const qs = params.toString()
 
-  useEffect(() => {
-    fetchPostings()
-  }, [fetchPostings])
+  const {
+    data,
+    error: loadError,
+    isLoading: loading,
+    mutate,
+  } = useSwrFetch<{ postings: VacancyListItem[] }>(
+    `/api/admin/hr/vacancies${qs ? `?${qs}` : ''}`,
+  )
+  const postings = data?.postings ?? []
+  // One error surface: action errors win (they're the fresher user feedback).
+  const error = actionError ?? (loadError instanceof Error ? loadError.message : null)
+
+  const fetchPostings = useCallback(async () => {
+    await mutate()
+  }, [mutate])
 
   const transitionStatus = async (id: string, status: VacancyStatus) => {
     setActionLoading(id)

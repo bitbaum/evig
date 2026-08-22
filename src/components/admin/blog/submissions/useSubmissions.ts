@@ -1,42 +1,38 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { apiFetch } from '@/lib/api/client'
+import { useSwrFetch } from '@/lib/api/swr'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { APPROVAL_STATUS } from '@/config/approval-status'
 import type { Submission, FilterStatus, SubmissionAction, StatusCounts } from './types'
 
 export function useSubmissions() {
-  const [submissions, setSubmissions] = useState<Submission[]>([])
   const [filter, setFilter] = useState<FilterStatus>(APPROVAL_STATUS.PENDING)
   const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
   const [actionLoading, setActionLoading] = useState<string | null>(null)
   const [showRejectModal, setShowRejectModal] = useState(false)
   const [showChangesModal, setShowChangesModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
   const [rejectionReason, setRejectionReason] = useState('')
   const [reviewNotes, setReviewNotes] = useState('')
-  const [error, setError] = useState('')
+  const [actionError, setActionError] = useState('')
   const [success, setSuccess] = useState('')
 
-  const fetchSubmissions = useCallback(async () => {
-    try {
-      setIsLoading(true)
-      const result = await apiFetch<{ submissions: Submission[] }>('/api/blog/submit')
-      if (result.success) {
-        setSubmissions(result.data?.submissions || [])
-      }
-    } catch {
-      setError('Fehler beim Laden der Einreichungen')
-    } finally {
-      setIsLoading(false)
-    }
-  }, [])
+  const {
+    data,
+    error: loadError,
+    isLoading,
+    mutate,
+  } = useSwrFetch<{ submissions: Submission[] }>('/api/blog/submit')
+  const submissions = data?.submissions ?? []
+  // One error surface: action errors win (they're the fresher user feedback).
+  const error = actionError || (loadError ? 'Fehler beim Laden der Einreichungen' : '')
+  const setError = setActionError
 
-  useEffect(() => {
-    fetchSubmissions()
-  }, [fetchSubmissions])
+  const fetchSubmissions = useCallback(async () => {
+    await mutate()
+  }, [mutate])
 
   const handleAction = async (
     action: SubmissionAction,
