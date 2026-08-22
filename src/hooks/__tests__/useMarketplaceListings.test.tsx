@@ -5,18 +5,24 @@
  * through this. A regression here either breaks the buyer-discovery
  * funnel or sends bogus filters to the listings API.
  *
+ * The hook fetches via useSwrFetch (SWR), so each test renders inside an
+ * SWRConfig with a FRESH cache and dedupe disabled — otherwise SWR's
+ * module-level cache leaks data between tests and fetch-count assertions lie.
+ *
  * Behaviors locked:
- *   - validatePrices: negative, min>max, max-50000 boundaries
- *   - fetchListings URL construction (only-truthy filters, booleans →
- *     "true", limit/offset always set)
- *   - 300ms debounced search auto-fires + resets pagination offset to 0
- *   - handleSearch preventDefault + immediate apply
+ *   - priceError derives from priceMin/priceMax: negative, min>max,
+ *     max-50000 boundaries; clears itself when the range becomes valid
+ *   - invalid price bounds are NOT sent to the API
+ *   - fetch URL construction (only-truthy filters, booleans → "true",
+ *     limit/offset always set)
+ *   - 300ms debounced search fires + typing resets pagination offset to 0
+ *   - handleSearch preventDefault + reset offset (term applies via debounce)
  *   - clearFilters resets EVERY filter dimension
  *   - hasActiveFilters is true iff any filter dimension is set
  *   - Pagination math: totalPages = ceil(total/limit),
  *     currentPage = floor(offset/limit) + 1
  *   - goToPage maps page-1-indexed → offset
- *   - Failure: error state populated, listings cleared to []
+ *   - Failure: error state populated, listings empty
  */
 
 const mockApiFetch = jest.fn()
@@ -29,8 +35,20 @@ jest.mock('@/config/marketplace', () => ({
   MARKETPLACE_LIMITS: { DEFAULT_PAGE_SIZE: 20 },
 }))
 
+import type { ReactNode } from 'react'
 import { renderHook, act, waitFor } from '@testing-library/react'
+import { SWRConfig } from 'swr'
 import { useMarketplaceListings } from '../useMarketplaceListings'
+
+// Fresh SWR cache per render — no cross-test cache leaks, no dedupe window.
+const wrapper = ({ children }: { children: ReactNode }) => (
+  <SWRConfig value={{ provider: () => new Map(), dedupingInterval: 0, revalidateOnFocus: false }}>
+    {children}
+  </SWRConfig>
+)
+
+const renderListings = (initial?: Parameters<typeof useMarketplaceListings>[0]) =>
+  renderHook(() => useMarketplaceListings(initial), { wrapper })
 
 const okResponse = (overrides?: { items?: unknown[]; pagination?: unknown }) => ({
   success: true,
@@ -39,6 +57,8 @@ const okResponse = (overrides?: { items?: unknown[]; pagination?: unknown }) => 
     pagination: overrides?.pagination ?? { total: 0, limit: 20, offset: 0 },
   },
 })
+
+const lastUrl = () => mockApiFetch.mock.calls[mockApiFetch.mock.calls.length - 1][0] as string
 
 beforeEach(() => {
   mockApiFetch.mockReset()
@@ -51,7 +71,7 @@ beforeEach(() => {
 describe('useMarketplaceListings — initial state', () => {
   it('starts with empty filters and DEFAULT_PAGE_SIZE pagination', async () => {
     mockApiFetch.mockResolvedValue(okResponse())
-    const { result } = renderHook(() => useMarketplaceListings())
+    const { result } = renderListings()
 
     expect(result.current.pagination).toEqual({ total: 0, limit: 20, offset: 0 })
     expect(result.current.filters.category).toBe('')
@@ -61,7 +81,7 @@ describe('useMarketplaceListings — initial state', () => {
 
   it('triggers initial fetch on mount', async () => {
     mockApiFetch.mockResolvedValue(okResponse())
-    renderHook(() => useMarketplaceListings())
+    renderListings()
 
     await waitFor(() => expect(mockApiFetch).toHaveBeenCalled())
     const url = mockApiFetch.mock.calls[0][0] as string
@@ -73,16 +93,16 @@ describe('useMarketplaceListings — initial state', () => {
 })
 
 // ============================================================================
-// validatePrices
+// priceError — derived validation
 // ============================================================================
 
-describe('validatePrices', () => {
+describe('priceError (derived)', () => {
   beforeEach(() => {
     mockApiFetch.mockResolvedValue(okResponse())
   })
 
-  it('valid range returns true with no error', async () => {
-    const { result } = renderHook(() => useMarketplaceListings())
+  it('valid range → no error, prices sent to the API', async () => {
+    const { result } = renderListings()
     await waitFor(() => expect(mockApiFetch).toHaveBeenCalled())
 
     act(() => {
@@ -90,32 +110,26 @@ describe('validatePrices', () => {
       result.current.filters.setPriceMax('500')
     })
 
-    let valid = false
-    act(() => {
-      valid = result.current.validatePrices()
-    })
-    expect(valid).toBe(true)
     expect(result.current.filters.priceError).toBeNull()
+    await waitFor(() => {
+      expect(lastUrl()).toContain('price_min=100')
+      expect(lastUrl()).toContain('price_max=500')
+    })
   })
 
   it('negative min → error "Preis kann nicht negativ sein"', async () => {
-    const { result } = renderHook(() => useMarketplaceListings())
+    const { result } = renderListings()
     await waitFor(() => expect(mockApiFetch).toHaveBeenCalled())
 
     act(() => {
       result.current.filters.setPriceMin('-50')
     })
 
-    let valid = true
-    act(() => {
-      valid = result.current.validatePrices()
-    })
-    expect(valid).toBe(false)
     expect(result.current.filters.priceError).toBe('Preis kann nicht negativ sein')
   })
 
   it('min > max → "Mindestpreis darf nicht höher als Höchstpreis sein" (proper umlaut)', async () => {
-    const { result } = renderHook(() => useMarketplaceListings())
+    const { result } = renderListings()
     await waitFor(() => expect(mockApiFetch).toHaveBeenCalled())
 
     act(() => {
@@ -123,57 +137,60 @@ describe('validatePrices', () => {
       result.current.filters.setPriceMax('100')
     })
 
-    let valid = true
-    act(() => {
-      valid = result.current.validatePrices()
-    })
-    expect(valid).toBe(false)
     expect(result.current.filters.priceError).toContain('höher')
     expect(result.current.filters.priceError).not.toContain('hoeher')
   })
 
   it('min > 50000 → "Preis darf maximal CHF 50\'000 sein"', async () => {
-    const { result } = renderHook(() => useMarketplaceListings())
+    const { result } = renderListings()
     await waitFor(() => expect(mockApiFetch).toHaveBeenCalled())
 
     act(() => {
       result.current.filters.setPriceMin('60000')
     })
 
-    let valid = true
-    act(() => {
-      valid = result.current.validatePrices()
-    })
-    expect(valid).toBe(false)
     expect(result.current.filters.priceError).toContain('50')
   })
 
+  it('invalid bounds are NOT sent to the API', async () => {
+    const { result } = renderListings()
+    await waitFor(() => expect(mockApiFetch).toHaveBeenCalled())
+
+    act(() => {
+      result.current.filters.setPriceMin('500')
+      result.current.filters.setPriceMax('100')
+    })
+
+    await waitFor(() => {
+      expect(lastUrl()).not.toContain('price_min')
+      expect(lastUrl()).not.toContain('price_max')
+    })
+  })
+
   it('clears previous error when range becomes valid', async () => {
-    const { result } = renderHook(() => useMarketplaceListings())
+    const { result } = renderListings()
     await waitFor(() => expect(mockApiFetch).toHaveBeenCalled())
 
     act(() => {
       result.current.filters.setPriceMin('-50')
     })
-    act(() => { result.current.validatePrices() })
     expect(result.current.filters.priceError).not.toBeNull()
 
     act(() => {
       result.current.filters.setPriceMin('100')
     })
-    act(() => { result.current.validatePrices() })
     expect(result.current.filters.priceError).toBeNull()
   })
 })
 
 // ============================================================================
-// URL construction in fetchListings
+// URL construction
 // ============================================================================
 
-describe('fetchListings — URL construction', () => {
+describe('fetch — URL construction', () => {
   it('always sets limit and offset', async () => {
     mockApiFetch.mockResolvedValue(okResponse())
-    renderHook(() => useMarketplaceListings())
+    renderListings()
 
     await waitFor(() => expect(mockApiFetch).toHaveBeenCalled())
     const url = mockApiFetch.mock.calls[0][0] as string
@@ -183,7 +200,7 @@ describe('fetchListings — URL construction', () => {
 
   it('only-truthy string filters become query params', async () => {
     mockApiFetch.mockResolvedValue(okResponse())
-    const { result } = renderHook(() => useMarketplaceListings())
+    const { result } = renderListings()
     await waitFor(() => expect(mockApiFetch).toHaveBeenCalled())
 
     act(() => {
@@ -193,16 +210,15 @@ describe('fetchListings — URL construction', () => {
     })
 
     await waitFor(() => {
-      const lastUrl = mockApiFetch.mock.calls[mockApiFetch.mock.calls.length - 1][0] as string
-      expect(lastUrl).toContain('category=laptop')
-      expect(lastUrl).toContain('condition=good')
-      expect(lastUrl).toContain('price_min=100')
+      expect(lastUrl()).toContain('category=laptop')
+      expect(lastUrl()).toContain('condition=good')
+      expect(lastUrl()).toContain('price_min=100')
     })
   })
 
   it('booleans → "true" string when set', async () => {
     mockApiFetch.mockResolvedValue(okResponse())
-    const { result } = renderHook(() => useMarketplaceListings())
+    const { result } = renderListings()
     await waitFor(() => expect(mockApiFetch).toHaveBeenCalled())
 
     act(() => {
@@ -211,15 +227,14 @@ describe('fetchListings — URL construction', () => {
     })
 
     await waitFor(() => {
-      const lastUrl = mockApiFetch.mock.calls[mockApiFetch.mock.calls.length - 1][0] as string
-      expect(lastUrl).toContain('gratis_only=true')
-      expect(lastUrl).toContain('verified_only=true')
+      expect(lastUrl()).toContain('gratis_only=true')
+      expect(lastUrl()).toContain('verified_only=true')
     })
   })
 
   it('false booleans omit the param entirely', async () => {
     mockApiFetch.mockResolvedValue(okResponse())
-    renderHook(() => useMarketplaceListings())
+    renderListings()
 
     await waitFor(() => expect(mockApiFetch).toHaveBeenCalled())
     const url = mockApiFetch.mock.calls[0][0] as string
@@ -229,7 +244,7 @@ describe('fetchListings — URL construction', () => {
 
   it('spec filters use snake_case API param names', async () => {
     mockApiFetch.mockResolvedValue(okResponse())
-    const { result } = renderHook(() => useMarketplaceListings())
+    const { result } = renderListings()
     await waitFor(() => expect(mockApiFetch).toHaveBeenCalled())
 
     act(() => {
@@ -239,45 +254,43 @@ describe('fetchListings — URL construction', () => {
     })
 
     await waitFor(() => {
-      const lastUrl = mockApiFetch.mock.calls[mockApiFetch.mock.calls.length - 1][0] as string
-      expect(lastUrl).toContain('spec_ram_min=16')
-      expect(lastUrl).toContain('spec_storage_min=512')
-      expect(lastUrl).toContain('spec_display_min=14')
+      expect(lastUrl()).toContain('spec_ram_min=16')
+      expect(lastUrl()).toContain('spec_storage_min=512')
+      expect(lastUrl()).toContain('spec_display_min=14')
     })
   })
 })
 
 // ============================================================================
-// fetchListings — failure paths
+// Failure paths
 // ============================================================================
 
-describe('fetchListings — failure', () => {
-  it('failure populates error and clears listings to []', async () => {
+describe('fetch — failure', () => {
+  it('failure populates error and leaves listings empty', async () => {
     mockApiFetch.mockResolvedValue({ success: false, error: 'Server down' })
 
-    const { result } = renderHook(() => useMarketplaceListings())
+    const { result } = renderListings()
 
-    await waitFor(() => expect(result.current.isLoading).toBe(false))
-    expect(result.current.error).toBe('Server down')
+    await waitFor(() => expect(result.current.error).toBe('Server down'))
     expect(result.current.listings).toEqual([])
   })
 
-  it('thrown error caught with German fallback "Ein unerwarteter Fehler ist aufgetreten"', async () => {
+  it('thrown non-Error caught with German fallback "Ein unerwarteter Fehler ist aufgetreten"', async () => {
     mockApiFetch.mockRejectedValue('weird non-Error throw')
 
-    const { result } = renderHook(() => useMarketplaceListings())
+    const { result } = renderListings()
 
-    await waitFor(() => expect(result.current.isLoading).toBe(false))
-    expect(result.current.error).toBe('Ein unerwarteter Fehler ist aufgetreten')
+    await waitFor(() =>
+      expect(result.current.error).toBe('Ein unerwarteter Fehler ist aufgetreten'),
+    )
   })
 
-  it('Swiss-German fallback "Fehler beim Laden der Inserate" when result.error missing', async () => {
+  it('German fallback "Anfrage fehlgeschlagen" when result.error missing', async () => {
     mockApiFetch.mockResolvedValue({ success: false })
 
-    const { result } = renderHook(() => useMarketplaceListings())
+    const { result } = renderListings()
 
-    await waitFor(() => expect(result.current.isLoading).toBe(false))
-    expect(result.current.error).toBe('Fehler beim Laden der Inserate')
+    await waitFor(() => expect(result.current.error).toBe('Anfrage fehlgeschlagen'))
   })
 })
 
@@ -290,7 +303,7 @@ describe('debounced search', () => {
     jest.useFakeTimers()
     mockApiFetch.mockResolvedValue(okResponse())
 
-    const { result } = renderHook(() => useMarketplaceListings())
+    const { result } = renderListings()
 
     // Wait for the initial mount-fetch to settle (only the first call)
     await act(async () => {
@@ -303,8 +316,10 @@ describe('debounced search', () => {
       result.current.filters.setSearchInput('macbook')
     })
 
-    // Right after typing — no new fetch yet (debounce)
-    expect(mockApiFetch.mock.calls.length).toBe(initialCalls)
+    // Right after typing — the search term itself is not applied yet (debounce)
+    expect(
+      mockApiFetch.mock.calls.some(call => (call[0] as string).includes('search=macbook')),
+    ).toBe(false)
 
     // After 300ms debounce — search applied, new fetch fires
     await act(async () => {
@@ -312,26 +327,26 @@ describe('debounced search', () => {
     })
 
     await waitFor(() => {
-      const calls = mockApiFetch.mock.calls.length
-      expect(calls).toBeGreaterThan(initialCalls)
+      expect(mockApiFetch.mock.calls.length).toBeGreaterThan(initialCalls)
+      expect(lastUrl()).toContain('search=macbook')
     })
-
-    const lastUrl = mockApiFetch.mock.calls[mockApiFetch.mock.calls.length - 1][0] as string
-    expect(lastUrl).toContain('search=macbook')
 
     jest.useRealTimers()
   })
 })
 
 // ============================================================================
-// handleSearch — immediate apply
+// handleSearch — submit resets paging, term applies via debounce
 // ============================================================================
 
 describe('handleSearch', () => {
-  it('preventDefault on submit + immediate apply (no debounce wait)', async () => {
+  it('preventDefault on submit; term applies via the 300ms debounce', async () => {
+    jest.useFakeTimers()
     mockApiFetch.mockResolvedValue(okResponse())
-    const { result } = renderHook(() => useMarketplaceListings())
-    await waitFor(() => expect(mockApiFetch).toHaveBeenCalled())
+    const { result } = renderListings()
+    await act(async () => {
+      jest.advanceTimersByTime(0)
+    })
 
     act(() => {
       result.current.filters.setSearchInput('quick search')
@@ -346,18 +361,22 @@ describe('handleSearch', () => {
 
     expect(preventDefault).toHaveBeenCalled()
 
-    // Search applied immediately (no 300ms wait)
-    await waitFor(() => {
-      const lastUrl = mockApiFetch.mock.calls[mockApiFetch.mock.calls.length - 1][0] as string
-      expect(lastUrl).toContain('search=quick')
+    await act(async () => {
+      jest.advanceTimersByTime(300)
     })
+
+    await waitFor(() => {
+      expect(lastUrl()).toContain('search=quick')
+    })
+
+    jest.useRealTimers()
   })
 
-  it('search reset offset to 0', async () => {
+  it('typing a search resets offset to 0', async () => {
     mockApiFetch.mockResolvedValue(okResponse({
       pagination: { total: 100, limit: 20, offset: 60 },
     }))
-    const { result } = renderHook(() => useMarketplaceListings())
+    const { result } = renderListings()
     await waitFor(() => expect(mockApiFetch).toHaveBeenCalled())
 
     // Move to page 4 first
@@ -374,10 +393,9 @@ describe('handleSearch', () => {
       result.current.handleSearch({ preventDefault } as unknown as React.FormEvent)
     })
 
-    // After search, offset is reset to 0 (next fetch will use offset=0)
+    // After search, offset is reset to 0 (next fetch uses offset=0)
     await waitFor(() => {
-      const lastUrl = mockApiFetch.mock.calls[mockApiFetch.mock.calls.length - 1][0] as string
-      expect(lastUrl).toContain('offset=0')
+      expect(lastUrl()).toContain('offset=0')
     })
   })
 })
@@ -389,7 +407,7 @@ describe('handleSearch', () => {
 describe('clearFilters', () => {
   it('resets every filter dimension and offset', async () => {
     mockApiFetch.mockResolvedValue(okResponse())
-    const { result } = renderHook(() => useMarketplaceListings())
+    const { result } = renderListings()
     await waitFor(() => expect(mockApiFetch).toHaveBeenCalled())
 
     act(() => {
@@ -439,13 +457,13 @@ describe('hasActiveFilters', () => {
   })
 
   it('false on initial mount', async () => {
-    const { result } = renderHook(() => useMarketplaceListings())
+    const { result } = renderListings()
     await waitFor(() => expect(mockApiFetch).toHaveBeenCalled())
     expect(result.current.hasActiveFilters).toBe(false)
   })
 
   it('does NOT count default sort=newest as active', async () => {
-    const { result } = renderHook(() => useMarketplaceListings())
+    const { result } = renderListings()
     await waitFor(() => expect(mockApiFetch).toHaveBeenCalled())
 
     // Sort defaults to "newest" but hasActiveFilters explicitly excludes sort
@@ -454,7 +472,7 @@ describe('hasActiveFilters', () => {
   })
 
   it('true when only gratisOnly is set', async () => {
-    const { result } = renderHook(() => useMarketplaceListings())
+    const { result } = renderListings()
     await waitFor(() => expect(mockApiFetch).toHaveBeenCalled())
 
     act(() => {
@@ -465,7 +483,7 @@ describe('hasActiveFilters', () => {
   })
 
   it('true when only a spec filter is set', async () => {
-    const { result } = renderHook(() => useMarketplaceListings())
+    const { result } = renderListings()
     await waitFor(() => expect(mockApiFetch).toHaveBeenCalled())
 
     act(() => {
@@ -486,7 +504,7 @@ describe('pagination math', () => {
       pagination: { total: 47, limit: 20, offset: 0 },
     }))
 
-    const { result } = renderHook(() => useMarketplaceListings())
+    const { result } = renderListings()
     await waitFor(() => expect(result.current.pagination.total).toBe(47))
 
     expect(result.current.totalPages).toBe(3) // ceil(47/20)
@@ -497,8 +515,8 @@ describe('pagination math', () => {
       pagination: { total: 0, limit: 20, offset: 0 },
     }))
 
-    const { result } = renderHook(() => useMarketplaceListings())
-    await waitFor(() => expect(result.current.pagination.total).toBe(0))
+    const { result } = renderListings()
+    await waitFor(() => expect(mockApiFetch).toHaveBeenCalled())
 
     expect(result.current.totalPages).toBe(0)
   })
@@ -508,7 +526,7 @@ describe('pagination math', () => {
       pagination: { total: 100, limit: 20, offset: 40 },
     }))
 
-    const { result } = renderHook(() => useMarketplaceListings())
+    const { result } = renderListings()
     await waitFor(() => expect(result.current.pagination.offset).toBe(40))
 
     expect(result.current.currentPage).toBe(3) // floor(40/20) + 1
@@ -519,7 +537,7 @@ describe('pagination math', () => {
       pagination: { total: 50, limit: 20, offset: 0 },
     }))
 
-    const { result } = renderHook(() => useMarketplaceListings())
+    const { result } = renderListings()
     await waitFor(() => expect(result.current.pagination.offset).toBe(0))
 
     expect(result.current.currentPage).toBe(1)
@@ -530,7 +548,7 @@ describe('pagination math', () => {
       pagination: { total: 100, limit: 20, offset: 0 },
     }))
 
-    const { result } = renderHook(() => useMarketplaceListings())
+    const { result } = renderListings()
     await waitFor(() => expect(mockApiFetch).toHaveBeenCalled())
 
     act(() => {
@@ -539,8 +557,7 @@ describe('pagination math', () => {
 
     // After goToPage(5): offset = (5-1) * 20 = 80
     await waitFor(() => {
-      const lastUrl = mockApiFetch.mock.calls[mockApiFetch.mock.calls.length - 1][0] as string
-      expect(lastUrl).toContain('offset=80')
+      expect(lastUrl()).toContain('offset=80')
     })
   })
 
@@ -549,16 +566,22 @@ describe('pagination math', () => {
       pagination: { total: 100, limit: 20, offset: 60 },
     }))
 
-    const { result } = renderHook(() => useMarketplaceListings())
+    const { result } = renderListings()
     await waitFor(() => expect(mockApiFetch).toHaveBeenCalled())
+
+    act(() => {
+      result.current.goToPage(5)
+    })
+    await waitFor(() => {
+      expect(lastUrl()).toContain('offset=80')
+    })
 
     act(() => {
       result.current.goToPage(1)
     })
 
     await waitFor(() => {
-      const lastUrl = mockApiFetch.mock.calls[mockApiFetch.mock.calls.length - 1][0] as string
-      expect(lastUrl).toContain('offset=0')
+      expect(lastUrl()).toContain('offset=0')
     })
   })
 })

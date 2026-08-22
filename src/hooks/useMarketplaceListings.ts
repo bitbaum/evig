@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { useDebounce } from '@/hooks/useDebounce'
-import { apiFetch } from '@/lib/api/client'
+import { useSwrFetch } from '@/lib/api/swr'
 import { MARKETPLACE_LIMITS } from '@/config/marketplace'
 
 export interface ListingItem {
@@ -60,14 +60,7 @@ interface InitialMarketplaceFilters {
 }
 
 export function useMarketplaceListings(initialFilters: InitialMarketplaceFilters = {}) {
-  const [listings, setListings] = useState<ListingItem[]>([])
-  const [pagination, setPagination] = useState<Pagination>({
-    total: 0,
-    limit: MARKETPLACE_LIMITS.DEFAULT_PAGE_SIZE,
-    offset: 0,
-  })
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [offset, setOffset] = useState(0)
 
   // Filters
   const [category, setCategory] = useState(initialFilters.category ?? '')
@@ -75,11 +68,9 @@ export function useMarketplaceListings(initialFilters: InitialMarketplaceFilters
   const [delivery, setDelivery] = useState('')
   const [payment, setPayment] = useState('')
   const [sort, setSort] = useState('newest')
-  const [search, setSearch] = useState(initialFilters.search ?? '')
-  const [searchInput, setSearchInput] = useState(initialFilters.search ?? '')
+  const [searchInput, setSearchInputState] = useState(initialFilters.search ?? '')
   const [priceMin, setPriceMin] = useState('')
   const [priceMax, setPriceMax] = useState('')
-  const [priceError, setPriceError] = useState<string | null>(null)
   // Phase 1 additions
   const [sellerType, setSellerType] = useState(initialFilters.sellerType ?? '')
   const [gratisOnly, setGratisOnly] = useState(false)
@@ -88,94 +79,72 @@ export function useMarketplaceListings(initialFilters: InitialMarketplaceFilters
   const [specStorageMin, setSpecStorageMin] = useState('')
   const [specDisplayMin, setSpecDisplayMin] = useState('')
 
+  // The debounced input IS the applied search term (no second `search` copy).
   const debouncedSearch = useDebounce(searchInput, 300)
 
-  const validatePrices = useCallback(() => {
+  // Derived, not state: recomputes as the user types, clears itself when the
+  // inputs become valid again.
+  const priceError = useMemo((): string | null => {
     const min = Number(priceMin)
     const max = Number(priceMax)
-
-    if (priceMin && min < 0) {
-      setPriceError('Preis kann nicht negativ sein')
-      return false
-    }
-    if (priceMax && max < 0) {
-      setPriceError('Preis kann nicht negativ sein')
-      return false
-    }
-    if (priceMin && priceMax && min > max) {
-      setPriceError('Mindestpreis darf nicht höher als Höchstpreis sein')
-      return false
-    }
-    if (priceMin && min > 50000) {
-      setPriceError('Preis darf maximal CHF 50\'000 sein')
-      return false
-    }
-    if (priceMax && max > 50000) {
-      setPriceError('Preis darf maximal CHF 50\'000 sein')
-      return false
-    }
-
-    setPriceError(null)
-    return true
+    if ((priceMin && min < 0) || (priceMax && max < 0)) return 'Preis kann nicht negativ sein'
+    if (priceMin && priceMax && min > max) return 'Mindestpreis darf nicht höher als Höchstpreis sein'
+    if ((priceMin && min > 50000) || (priceMax && max > 50000)) return 'Preis darf maximal CHF 50\'000 sein'
+    return null
   }, [priceMin, priceMax])
 
+  // All applied filters + pagination live in the SWR key — any change
+  // refetches automatically. Invalid price bounds are simply not applied.
+  const params = new URLSearchParams()
+  if (category) params.set('category', category)
+  if (condition) params.set('condition', condition)
+  if (delivery) params.set('delivery', delivery)
+  if (payment) params.set('payment', payment)
+  if (sort) params.set('sort', sort)
+  if (debouncedSearch) params.set('search', debouncedSearch)
+  if (priceMin && !priceError) params.set('price_min', priceMin)
+  if (priceMax && !priceError) params.set('price_max', priceMax)
+  if (sellerType) params.set('seller_type', sellerType)
+  if (gratisOnly) params.set('gratis_only', 'true')
+  if (verifiedOnly) params.set('verified_only', 'true')
+  if (specRamMin) params.set('spec_ram_min', specRamMin)
+  if (specStorageMin) params.set('spec_storage_min', specStorageMin)
+  if (specDisplayMin) params.set('spec_display_min', specDisplayMin)
+  params.set('limit', String(MARKETPLACE_LIMITS.DEFAULT_PAGE_SIZE))
+  params.set('offset', String(offset))
+
+  const { data, error: loadError, isLoading, mutate } = useSwrFetch<{
+    items: ListingItem[]
+    pagination: Pagination
+  }>(`/api/listings?${params.toString()}`)
+
   const fetchListings = useCallback(async () => {
-    if (!validatePrices()) return
-    setIsLoading(true)
-    setError(null)
+    await mutate()
+  }, [mutate])
 
-    try {
-      const params = new URLSearchParams()
-      if (category) params.set('category', category)
-      if (condition) params.set('condition', condition)
-      if (delivery) params.set('delivery', delivery)
-      if (payment) params.set('payment', payment)
-      if (sort) params.set('sort', sort)
-      if (search) params.set('search', search)
-      if (priceMin) params.set('price_min', priceMin)
-      if (priceMax) params.set('price_max', priceMax)
-      if (sellerType) params.set('seller_type', sellerType)
-      if (gratisOnly) params.set('gratis_only', 'true')
-      if (verifiedOnly) params.set('verified_only', 'true')
-      if (specRamMin) params.set('spec_ram_min', specRamMin)
-      if (specStorageMin) params.set('spec_storage_min', specStorageMin)
-      if (specDisplayMin) params.set('spec_display_min', specDisplayMin)
-      params.set('limit', String(pagination.limit))
-      params.set('offset', String(pagination.offset))
+  const listings = data?.items ?? []
+  const pagination: Pagination = data?.pagination ?? {
+    total: 0,
+    limit: MARKETPLACE_LIMITS.DEFAULT_PAGE_SIZE,
+    offset,
+  }
+  const error = loadError
+    ? loadError instanceof Error && loadError.message
+      ? loadError.message
+      : 'Ein unerwarteter Fehler ist aufgetreten'
+    : null
 
-      const result = await apiFetch<{ items: ListingItem[]; pagination: Pagination }>(`/api/listings?${params.toString()}`)
+  const resetOffset = () => setOffset(0)
 
-      if (result.success && result.data) {
-        setListings(result.data.items)
-        setPagination(result.data.pagination)
-      } else {
-        throw new Error(result.error || 'Fehler beim Laden der Inserate')
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Ein unerwarteter Fehler ist aufgetreten')
-      setListings([])
-    } finally {
-      setIsLoading(false)
-    }
-  }, [category, condition, delivery, payment, sort, search, priceMin, priceMax, sellerType, gratisOnly, verifiedOnly, specRamMin, specStorageMin, specDisplayMin, pagination.limit, pagination.offset, validatePrices])
-
-  useEffect(() => {
-    fetchListings()
-  }, [fetchListings])
-
-  // Auto-search when debounced input changes
-  useEffect(() => {
-    if (debouncedSearch !== search) {
-      setSearch(debouncedSearch)
-      setPagination(prev => ({ ...prev, offset: 0 }))
-    }
-  }, [debouncedSearch, search])
-
-  const resetOffset = () => setPagination(prev => ({ ...prev, offset: 0 }))
+  // Typing starts a new search — back to the first page immediately.
+  const setSearchInput = useCallback((value: string) => {
+    setSearchInputState(value)
+    setOffset(0)
+  }, [])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    setSearch(searchInput)
+    // The debounced term applies within 300ms; submit just resets paging.
     resetOffset()
   }
 
@@ -185,8 +154,7 @@ export function useMarketplaceListings(initialFilters: InitialMarketplaceFilters
     setDelivery('')
     setPayment('')
     setSort('newest')
-    setSearch('')
-    setSearchInput('')
+    setSearchInputState('')
     setPriceMin('')
     setPriceMax('')
     setSellerType('')
@@ -198,13 +166,13 @@ export function useMarketplaceListings(initialFilters: InitialMarketplaceFilters
     resetOffset()
   }
 
-  const hasActiveFilters = !!(category || condition || delivery || payment || search || priceMin || priceMax || sellerType || gratisOnly || verifiedOnly || specRamMin || specStorageMin || specDisplayMin)
+  const hasActiveFilters = !!(category || condition || delivery || payment || searchInput || priceMin || priceMax || sellerType || gratisOnly || verifiedOnly || specRamMin || specStorageMin || specDisplayMin)
 
   const totalPages = Math.ceil(pagination.total / pagination.limit)
   const currentPage = Math.floor(pagination.offset / pagination.limit) + 1
 
   const goToPage = (page: number) => {
-    setPagination(prev => ({ ...prev, offset: (page - 1) * prev.limit }))
+    setOffset((page - 1) * MARKETPLACE_LIMITS.DEFAULT_PAGE_SIZE)
   }
 
   return {
@@ -223,7 +191,7 @@ export function useMarketplaceListings(initialFilters: InitialMarketplaceFilters
       searchInput, setSearchInput,
       priceMin, setPriceMin,
       priceMax, setPriceMax,
-      priceError, setPriceError,
+      priceError,
       sellerType, setSellerType,
       gratisOnly, setGratisOnly,
       verifiedOnly, setVerifiedOnly,
@@ -234,7 +202,6 @@ export function useMarketplaceListings(initialFilters: InitialMarketplaceFilters
     // Actions
     handleSearch,
     clearFilters,
-    validatePrices,
     fetchListings,
     resetOffset,
     goToPage,

@@ -31,7 +31,8 @@ import { apiFetch } from './client'
 async function apiFetchSwrFetcher<T>(url: string): Promise<T> {
   const result = await apiFetch<T>(url)
   if (!result.success) {
-    throw new Error(result.error || 'Request failed')
+    // German fallback: hooks surface error.message directly in the UI.
+    throw new Error(result.error || 'Anfrage fehlgeschlagen')
   }
   // result.data may legitimately be undefined when the endpoint returns
   // a success envelope without a body — cast through unknown to satisfy

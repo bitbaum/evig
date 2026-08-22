@@ -76,7 +76,6 @@ function buildChips(
       onRemove: () => {
         filters.setPriceMin('')
         filters.setPriceMax('')
-        filters.setPriceError(null)
         resetOffset()
       },
     })
@@ -84,13 +83,13 @@ function buildChips(
     chips.push({
       key: 'priceMin',
       label: t('chips.priceFrom', { min: filters.priceMin }),
-      onRemove: () => { filters.setPriceMin(''); filters.setPriceError(null); resetOffset() },
+      onRemove: () => { filters.setPriceMin(''); resetOffset() },
     })
   } else if (filters.priceMax) {
     chips.push({
       key: 'priceMax',
       label: t('chips.priceTo', { max: filters.priceMax }),
-      onRemove: () => { filters.setPriceMax(''); filters.setPriceError(null); resetOffset() },
+      onRemove: () => { filters.setPriceMax(''); resetOffset() },
     })
   }
 
