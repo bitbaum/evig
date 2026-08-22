@@ -6,8 +6,8 @@
  * Data fetching hook for activity digest/summary
  */
 
-import { useState, useEffect, useCallback } from 'react'
-import { apiFetch } from '@/lib/api/client'
+import { useCallback } from 'react'
+import { useSwrFetch } from '@/lib/api/swr'
 import type { DigestSummary } from './types'
 
 // ============================================================================
@@ -22,37 +22,23 @@ interface UseDigestReturn {
 }
 
 export function useDigest(since?: string, until?: string, department?: string): UseDigestReturn {
-  const [digest, setDigest] = useState<DigestSummary | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const params = new URLSearchParams()
+  if (since) params.set('since', since)
+  if (until) params.set('until', until)
+  if (department) params.set('department', department)
 
-  const fetchDigest = useCallback(async () => {
-    setLoading(true)
-    setError(null)
+  const { data, error, isLoading, mutate } = useSwrFetch<DigestSummary>(
+    `/api/admin/team/digest?${params.toString()}`,
+  )
 
-    try {
-      const params = new URLSearchParams()
-      if (since) params.set('since', since)
-      if (until) params.set('until', until)
-      if (department) params.set('department', department)
+  const refetch = useCallback(async () => {
+    await mutate()
+  }, [mutate])
 
-      const result = await apiFetch<DigestSummary>(`/api/admin/team/digest?${params.toString()}`)
-
-      if (!result.success) {
-        throw new Error(result.error || 'Fehler beim Laden')
-      }
-
-      setDigest(result.data ?? null)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
-    } finally {
-      setLoading(false)
-    }
-  }, [since, until, department])
-
-  useEffect(() => {
-    fetchDigest()
-  }, [fetchDigest])
-
-  return { digest, loading, error, refetch: fetchDigest }
+  return {
+    digest: data ?? null,
+    loading: isLoading,
+    error: error instanceof Error ? error.message : null,
+    refetch,
+  }
 }

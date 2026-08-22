@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback, Suspense } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { useSession } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -11,8 +11,7 @@ import { Card } from '@/components/ui/card'
 import ConversationList from '@/components/messages/ConversationList'
 import type { Conversation } from '@/components/messages/ConversationList'
 import MessageThread from '@/components/messages/MessageThread'
-import { apiFetch } from '@/lib/api/client'
-import { logger } from '@/lib/logger'
+import { useSwrFetch } from '@/lib/api/swr'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
@@ -23,44 +22,26 @@ function MessagesContent() {
   const { data: session, status: sessionStatus } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [conversations, setConversations] = useState<Conversation[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  // The deep-link param seeds the initial selection; the SWR fetch is gated on
+  // an authenticated session (null key = no request).
   const [selectedConvId, setSelectedConvId] = useState<string | null>(
     searchParams.get('conversation')
   )
 
+  const { data, isLoading } = useSwrFetch<{ conversations: Conversation[] }>(
+    session?.user ? '/api/messages' : null,
+  )
+  const conversations = data?.conversations ?? []
+
   // Track the selected conversation's details for the thread
   const selectedConv = conversations.find(c => c.id === selectedConvId)
 
-  const fetchConversations = useCallback(async () => {
-    try {
-      const result = await apiFetch<{ conversations: Conversation[] }>('/api/messages')
-      if (result.success) {
-        setConversations(result.data!.conversations)
-        // If deep-link param but not yet in list, keep it
-        const deepLink = searchParams.get('conversation')
-        if (deepLink && result.data!.conversations.some((c: Conversation) => c.id === deepLink)) {
-          setSelectedConvId(deepLink)
-        }
-      }
-    } catch (err) {
-      logger.error('Failed to load conversations', { error: err })
-    } finally {
-      setIsLoading(false)
-    }
-  }, [searchParams])
-
-  // Auth-gated data load. setState happens inside fetchConversations —
-  // legitimate "subscribe to external system on session change" pattern.
-   
   useEffect(() => {
     if (sessionStatus === 'loading') return
     if (!session?.user) {
       router.push('/auth/login')
-      return
     }
-    fetchConversations()
-  }, [session, sessionStatus, router, fetchConversations])
+  }, [session, sessionStatus, router])
 
   const handleSelectConversation = (id: string) => {
     setSelectedConvId(id)
@@ -77,7 +58,8 @@ function MessagesContent() {
     window.history.replaceState({}, '', url.toString())
   }
 
-  if (sessionStatus === 'loading' || isLoading) {
+  // !session?.user: keep the spinner while the login redirect is in flight
+  if (sessionStatus === 'loading' || isLoading || !session?.user) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader2 className="w-8 h-8 text-action animate-spin" aria-hidden="true" />

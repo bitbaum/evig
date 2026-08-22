@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { HelpCircle, Loader2, MessageCircleQuestion, Send } from 'lucide-react'
@@ -9,6 +9,7 @@ import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { apiFetch } from '@/lib/api/client'
+import { useSwrFetch } from '@/lib/api/swr'
 import { formatDateShort } from '@/lib/date-formats'
 import { LISTING_QUESTION_STATUS } from '@/config/marketplace'
 
@@ -34,9 +35,6 @@ export default function ListingQuestions({ listingId, sellerId }: ListingQuestio
   const router = useRouter()
   const t = useTranslations('marketplace.questions')
 
-  const [questions, setQuestions] = useState<ListingQuestion[]>([])
-  const [canAsk, setCanAsk] = useState(false)
-  const [loading, setLoading] = useState(true)
   const [newQuestion, setNewQuestion] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -46,28 +44,14 @@ export default function ListingQuestions({ listingId, sellerId }: ListingQuestio
 
   const isOwner = session?.user?.id === sellerId
 
-  const loadQuestions = useCallback(async () => {
-    setLoading(true)
-    try {
-      const result = await apiFetch<{
-        questions: ListingQuestion[]
-        can_ask: boolean
-      }>(`/api/listings/${listingId}/questions`)
-
-      if (result.success && result.data) {
-        setQuestions(result.data.questions)
-        setCanAsk(result.data.can_ask)
-      }
-    } catch {
-      // Non-critical — section stays empty
-    } finally {
-      setLoading(false)
-    }
-  }, [listingId])
-
-  useEffect(() => {
-    void loadQuestions()
-  }, [loadQuestions])
+  // Load errors intentionally render as an empty section — questions are
+  // non-critical to the listing page.
+  const { data, isLoading: loading, mutate: loadQuestions } = useSwrFetch<{
+    questions: ListingQuestion[]
+    can_ask: boolean
+  }>(`/api/listings/${listingId}/questions`)
+  const questions = data?.questions ?? []
+  const canAsk = data?.can_ask ?? false
 
   const handleAsk = async () => {
     if (!newQuestion.trim() || submitting) return
