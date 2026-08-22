@@ -48,7 +48,6 @@ export default function MarketplacePage() {
     filters,
     handleSearch,
     clearFilters,
-    validatePrices,
     fetchListings,
     resetOffset,
     goToPage,
@@ -92,7 +91,6 @@ export default function MarketplacePage() {
 
   const sharedSidebarProps = {
     filters,
-    validatePrices,
     resetOffset,
     clearFilters,
     hasActiveFilters,

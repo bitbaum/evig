@@ -20,7 +20,6 @@ export type FiltersObj = ReturnType<typeof useMarketplaceListings>['filters']
 
 interface FilterSidebarProps {
   filters: FiltersObj
-  validatePrices: () => boolean
   resetOffset: () => void
   clearFilters: () => void
   hasActiveFilters: boolean
@@ -82,7 +81,6 @@ function PillGroup({
 
 export function MarketplaceFilterSidebar({
   filters,
-  validatePrices,
   resetOffset,
   clearFilters,
   hasActiveFilters,
@@ -169,8 +167,8 @@ export function MarketplaceFilterSidebar({
               step="1"
               placeholder={t('filters.priceMin')}
               value={filters.priceMin}
-              onChange={(e) => { filters.setPriceMin(e.target.value); filters.setPriceError(null) }}
-              onBlur={() => { validatePrices(); resetOffset() }}
+              onChange={(e) => { filters.setPriceMin(e.target.value) }}
+              onBlur={resetOffset}
               aria-label={t('filters.priceMinAriaLabel')}
               aria-invalid={!!filters.priceError}
               className={`w-full ${filters.priceError ? 'border-error-400' : ''}`}
@@ -183,8 +181,8 @@ export function MarketplaceFilterSidebar({
               step="1"
               placeholder={t('filters.priceMax')}
               value={filters.priceMax}
-              onChange={(e) => { filters.setPriceMax(e.target.value); filters.setPriceError(null) }}
-              onBlur={() => { validatePrices(); resetOffset() }}
+              onChange={(e) => { filters.setPriceMax(e.target.value) }}
+              onBlur={resetOffset}
               aria-label={t('filters.priceMaxAriaLabel')}
               aria-invalid={!!filters.priceError}
               className={`w-full ${filters.priceError ? 'border-error-400' : ''}`}
