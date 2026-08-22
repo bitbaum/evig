@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { toast } from 'sonner'
 import { logger } from '@/lib/logger'
 import { apiFetch } from '@/lib/api/client'
+import { useSwrFetch } from '@/lib/api/swr'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import type { Workshop, WorkshopInstanceWithDetails, InstanceFormData, InstanceFiltersState } from './types'
 import { initialFormData } from './types'
@@ -13,10 +14,7 @@ import { WORKSHOP_INSTANCE_STATUS, WORKSHOP_INSTANCE_STATUS_LABELS, WORKSHOP_INS
 export function useWorkshopInstances() {
   const { data: session, status: sessionStatus } = useSession()
 
-  const [instances, setInstances] = useState<WorkshopInstanceWithDetails[]>([])
-  const [workshops, setWorkshops] = useState<Workshop[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [actionError, setError] = useState('')
 
   const [filters, setFilters] = useState<InstanceFiltersState>({
     workshopId: '',
@@ -30,44 +28,41 @@ export function useWorkshopInstances() {
   const [submitting, setSubmitting] = useState(false)
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null)
 
-  const loadWorkshops = useCallback(async () => {
-    try {
-      const result = await apiFetch<{ workshops: Workshop[] }>('/api/admin/workshops/list')
-      if (result.success && result.data) {
-        setWorkshops(result.data.workshops)
-      }
-    } catch (err) {
-      logger.error('Error loading workshops', { error: err })
-    }
-  }, [])
+  // Both fetches are gated on an authenticated session via null SWR keys;
+  // filters are encoded in the instances key, so changing them refetches.
+  const authed = sessionStatus === 'authenticated'
+
+  // Workshops list is auxiliary (dropdown options) — load errors are non-fatal
+  // and intentionally not surfaced, matching the previous log-only behavior.
+  const { data: workshopsData } = useSwrFetch<{ workshops: Workshop[] }>(
+    authed ? '/api/admin/workshops/list' : null,
+  )
+  const workshops = workshopsData?.workshops ?? []
+
+  const params = new URLSearchParams()
+  if (filters.workshopId) params.set('workshopId', filters.workshopId)
+  if (filters.status !== 'all') params.set('status', filters.status)
+  if (filters.upcoming) params.set('upcoming', 'true')
+
+  const {
+    data: instancesData,
+    error: loadError,
+    isLoading: loading,
+    mutate,
+  } = useSwrFetch<{ instances: WorkshopInstanceWithDetails[] }>(
+    authed ? `/api/admin/workshops/instances?${params}` : null,
+  )
+  const instances = instancesData?.instances ?? []
+  // One error surface: action errors win (they're the fresher user feedback).
+  const error =
+    actionError ||
+    (loadError instanceof Error
+      ? loadError.message || 'Fehler beim Laden der Workshop-Termine'
+      : '')
 
   const loadInstances = useCallback(async () => {
-    try {
-      setLoading(true)
-      const params = new URLSearchParams()
-      if (filters.workshopId) params.set('workshopId', filters.workshopId)
-      if (filters.status !== 'all') params.set('status', filters.status)
-      if (filters.upcoming) params.set('upcoming', 'true')
-
-      const result = await apiFetch<{ instances: WorkshopInstanceWithDetails[] }>(`/api/admin/workshops/instances?${params}`)
-      if (result.success && result.data) {
-        setInstances(result.data.instances)
-      } else {
-        setError(result.error || 'Fehler beim Laden der Workshop-Termine')
-      }
-    } catch {
-      setError(ERROR_MESSAGES.NETWORK_ERROR)
-    } finally {
-      setLoading(false)
-    }
-  }, [filters])
-
-  useEffect(() => {
-    if (sessionStatus === 'authenticated') {
-      loadWorkshops()
-      loadInstances()
-    }
-  }, [sessionStatus, loadWorkshops, loadInstances])
+    await mutate()
+  }, [mutate])
 
   const handleCreateOrUpdate = async () => {
     setSubmitting(true)

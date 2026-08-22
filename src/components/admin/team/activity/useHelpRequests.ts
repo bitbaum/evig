@@ -6,8 +6,9 @@
  * Data fetching and mutation hooks for help requests
  */
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { apiFetch } from '@/lib/api/client'
+import { useSwrFetch } from '@/lib/api/swr'
 import { API_DEFAULTS } from '@/config/api-defaults'
 import type { HelpRequest, HelpRequestFilter } from './types'
 
@@ -28,55 +29,44 @@ interface UseHelpRequestsReturn {
 export function useHelpRequests(
   initialFilters?: Partial<HelpRequestFilter>
 ): UseHelpRequestsReturn {
-  const [requests, setRequests] = useState<HelpRequest[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [total, setTotal] = useState(0)
   const [filters, setFiltersState] = useState<HelpRequestFilter>({
     limit: API_DEFAULTS.PAGINATION_LIMIT,
     offset: 0,
     ...initialFilters,
   })
 
-  const fetchRequests = useCallback(async () => {
-    setLoading(true)
-    setError(null)
+  // Filters (incl. pagination) are encoded in the SWR key — changing them refetches.
+  const params = new URLSearchParams()
+  if (filters.status) params.set('status', filters.status)
+  if (filters.urgency) params.set('urgency', filters.urgency)
+  if (filters.category) params.set('category', filters.category)
+  if (filters.requester_id) params.set('requester_id', filters.requester_id)
+  if (filters.requested_user_id) params.set('requested_user_id', filters.requested_user_id)
+  if (filters.is_broadcast !== undefined) params.set('is_broadcast', String(filters.is_broadcast))
+  params.set('limit', String(filters.limit))
+  params.set('offset', String(filters.offset))
 
-    try {
-      const params = new URLSearchParams()
-      if (filters.status) params.set('status', filters.status)
-      if (filters.urgency) params.set('urgency', filters.urgency)
-      if (filters.category) params.set('category', filters.category)
-      if (filters.requester_id) params.set('requester_id', filters.requester_id)
-      if (filters.requested_user_id) params.set('requested_user_id', filters.requested_user_id)
-      if (filters.is_broadcast !== undefined) params.set('is_broadcast', String(filters.is_broadcast))
-      params.set('limit', String(filters.limit))
-      params.set('offset', String(filters.offset))
-
-      const result = await apiFetch<{ items: HelpRequest[]; total: number }>(`/api/admin/team/help-requests?${params.toString()}`)
-
-      if (!result.success) {
-        throw new Error(result.error || 'Fehler beim Laden')
-      }
-
-      setRequests(result.data?.items || [])
-      setTotal(result.data?.total || 0)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
-    } finally {
-      setLoading(false)
-    }
-  }, [filters])
-
-  useEffect(() => {
-    fetchRequests()
-  }, [fetchRequests])
+  const { data, error, isLoading, mutate } = useSwrFetch<{ items: HelpRequest[]; total: number }>(
+    `/api/admin/team/help-requests?${params.toString()}`,
+  )
 
   const setFilters = useCallback((newFilters: Partial<HelpRequestFilter>) => {
     setFiltersState((prev) => ({ ...prev, ...newFilters }))
   }, [])
 
-  return { requests, loading, error, total, filters, setFilters, refetch: fetchRequests }
+  const refetch = useCallback(async () => {
+    await mutate()
+  }, [mutate])
+
+  return {
+    requests: data?.items ?? [],
+    loading: isLoading,
+    error: error instanceof Error ? error.message : null,
+    total: data?.total ?? 0,
+    filters,
+    setFilters,
+    refetch,
+  }
 }
 
 // ============================================================================

@@ -4,7 +4,7 @@
  * Hook for fetching and managing team profiles
  */
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { apiFetch } from '@/lib/api/client'
 import { useSwrFetch } from '@/lib/api/swr'
 import type { TeamProfileWithUser } from '@/lib/schemas/team'
@@ -31,55 +31,37 @@ const defaultFilters: TeamFilterState = {
 }
 
 export function useTeamProfiles(options: UseTeamProfilesOptions = {}): UseTeamProfilesReturn {
-  const [profiles, setProfiles] = useState<TeamProfileWithUser[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [filters, setFiltersState] = useState<TeamFilterState>({
     ...defaultFilters,
     ...options.initialFilters,
   })
 
-  const fetchProfiles = useCallback(async () => {
-    try {
-      setLoading(true)
-      setError(null)
+  // Filters are encoded in the SWR key, so changing them refetches automatically.
+  const params = new URLSearchParams()
+  if (filters.department) params.set('department', filters.department)
+  if (filters.employmentType) params.set('employment_type', filters.employmentType)
+  if (filters.isActive !== 'all') params.set('is_active', filters.isActive)
+  if (filters.search) params.set('search', filters.search)
 
-      const params = new URLSearchParams()
-      if (filters.department) params.set('department', filters.department)
-      if (filters.employmentType) params.set('employment_type', filters.employmentType)
-      if (filters.isActive !== 'all') params.set('is_active', filters.isActive)
-      if (filters.search) params.set('search', filters.search)
-
-      const result = await apiFetch<TeamProfileWithUser[]>(`/api/admin/team/profiles?${params.toString()}`)
-
-      if (!result.success) {
-        throw new Error(result.error || 'Fehler beim Laden der Profile')
-      }
-
-      setProfiles(result.data || [])
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
-      setProfiles([])
-    } finally {
-      setLoading(false)
-    }
-  }, [filters])
-
-  useEffect(() => {
-    fetchProfiles()
-  }, [fetchProfiles])
+  const { data, error, isLoading, mutate } = useSwrFetch<TeamProfileWithUser[]>(
+    `/api/admin/team/profiles?${params.toString()}`,
+  )
 
   const setFilters = useCallback((newFilters: Partial<TeamFilterState>) => {
     setFiltersState(prev => ({ ...prev, ...newFilters }))
   }, [])
 
+  const refetch = useCallback(async () => {
+    await mutate()
+  }, [mutate])
+
   return {
-    profiles,
-    loading,
-    error,
+    profiles: data ?? [],
+    loading: isLoading,
+    error: error instanceof Error ? error.message : null,
     filters,
     setFilters,
-    refetch: fetchProfiles,
+    refetch,
   }
 }
 

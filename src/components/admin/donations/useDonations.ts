@@ -1,7 +1,9 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import { useSession } from 'next-auth/react'
 import { toast } from 'sonner'
 import { apiFetch } from '@/lib/api/client'
+import { useSwrFetch } from '@/lib/api/swr'
+import { useDebounce } from '@/hooks/useDebounce'
 import { logger } from '@/lib/logger'
 import { API_DEFAULTS } from '@/config/api-defaults'
 import { ERROR_MESSAGES } from '@/config/error-messages'
@@ -11,11 +13,6 @@ import { DEFAULT_FORM_DATA } from './types'
 
 export function useDonations() {
   const { status: sessionStatus } = useSession()
-
-  const [donations, setDonations] = useState<Donation[]>([])
-  const [stats, setStats] = useState<DonationStats | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
 
   const [filters, setFilters] = useState<DonationFiltersState>({
     donation_type: 'all',
@@ -28,94 +25,70 @@ export function useDonations() {
 
   // User search state
   const [userSearch, setUserSearch] = useState('')
-  const [userResults, setUserResults] = useState<UserResult[]>([])
-  const [searchingUsers, setSearchingUsers] = useState(false)
   const [selectedUser, setSelectedUser] = useState<UserResult | null>(null)
 
   // Form state
   const [formData, setFormData] = useState<DonationFormData>(DEFAULT_FORM_DATA)
 
+  // Filters are encoded in the SWR key (fetch gated on an authenticated session).
+  const params = new URLSearchParams({ limit: String(API_DEFAULTS.PAGINATION_LIMIT) })
+  if (filters.donation_type !== 'all') {
+    params.set('donation_type', filters.donation_type)
+  }
+  if (filters.status !== 'all') {
+    params.set('status', filters.status)
+  }
+
+  const {
+    data: donationsData,
+    error: loadError,
+    isLoading: loading,
+    mutate,
+  } = useSwrFetch<{ items: Donation[] }>(
+    sessionStatus === 'authenticated' ? `/api/admin/donations?${params}` : null,
+  )
+  const donations = useMemo(() => donationsData?.items ?? [], [donationsData])
+  const error = loadError instanceof Error ? loadError.message || ERROR_MESSAGES.NETWORK_ERROR : ''
+
+  // Stats derive from the loaded page — pure computation, no second state copy.
+  const stats: DonationStats | null = useMemo(() => {
+    if (!donationsData) return null
+    const items = donations
+    const totalValue = items.reduce((sum: number, d: Donation) => {
+      if (d.donation_type === DONATION_TYPES.MONETARY && d.amount_cents) return sum + d.amount_cents
+      if (d.donation_type === DONATION_TYPES.DEVICE && d.estimated_value_cents) return sum + d.estimated_value_cents
+      return sum
+    }, 0)
+    return {
+      total: items.length,
+      monetary: items.filter((d: Donation) => d.donation_type === DONATION_TYPES.MONETARY).length,
+      device: items.filter((d: Donation) => d.donation_type === DONATION_TYPES.DEVICE).length,
+      pendingThanks: items.filter((d: Donation) => !d.thank_you_sent).length,
+      pendingReceipts: items.filter((d: Donation) => d.receipt_requested && !d.receipt_sent).length,
+      totalValueCents: totalValue,
+    }
+  }, [donationsData, donations])
+
   const loadDonations = useCallback(async () => {
-    try {
-      setLoading(true)
-      const params = new URLSearchParams({ limit: String(API_DEFAULTS.PAGINATION_LIMIT) })
+    await mutate()
+  }, [mutate])
 
-      if (filters.donation_type !== 'all') {
-        params.set('donation_type', filters.donation_type)
-      }
-      if (filters.status !== 'all') {
-        params.set('status', filters.status)
-      }
-
-      const result = await apiFetch<{ items: Donation[] }>(`/api/admin/donations?${params}`)
-
-      if (result.success && result.data) {
-        const items = result.data.items || []
-        setDonations(items)
-
-        const monetary = items.filter((d: Donation) => d.donation_type === DONATION_TYPES.MONETARY)
-        const device = items.filter((d: Donation) => d.donation_type === DONATION_TYPES.DEVICE)
-        const pendingThanks = items.filter((d: Donation) => !d.thank_you_sent)
-        const pendingReceipts = items.filter((d: Donation) => d.receipt_requested && !d.receipt_sent)
-        const totalValue = items.reduce((sum: number, d: Donation) => {
-          if (d.donation_type === DONATION_TYPES.MONETARY && d.amount_cents) return sum + d.amount_cents
-          if (d.donation_type === DONATION_TYPES.DEVICE && d.estimated_value_cents) return sum + d.estimated_value_cents
-          return sum
-        }, 0)
-
-        setStats({
-          total: items.length,
-          monetary: monetary.length,
-          device: device.length,
-          pendingThanks: pendingThanks.length,
-          pendingReceipts: pendingReceipts.length,
-          totalValueCents: totalValue,
-        })
-      } else {
-        setError(result.error || ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
-      }
-    } catch {
-      setError(ERROR_MESSAGES.NETWORK_ERROR)
-    } finally {
-      setLoading(false)
-    }
-  }, [filters.donation_type, filters.status])
-
-  useEffect(() => {
-    if (sessionStatus === 'authenticated') {
-      loadDonations()
-    }
-  }, [sessionStatus, loadDonations])
-
-  // User search with debounce
-  useEffect(() => {
-    if (userSearch.length < 2) {
-      setUserResults([])
-      return
-    }
-
-    const timeoutId = setTimeout(async () => {
-      setSearchingUsers(true)
-      try {
-        const result = await apiFetch<{ users: UserResult[] }>(`/api/admin/donations/users?search=${encodeURIComponent(userSearch)}`)
-        if (result.success && result.data) {
-          setUserResults(result.data.users || [])
-        }
-      } catch {
-        // Ignore search errors
-      } finally {
-        setSearchingUsers(false)
-      }
-    }, 300)
-
-    return () => clearTimeout(timeoutId)
-  }, [userSearch])
+  // User search: debounced term becomes the SWR key (null under 2 chars = no
+  // request, empty results). Search errors stay silent, as before.
+  const debouncedUserSearch = useDebounce(userSearch, 300)
+  const userSearchKey =
+    debouncedUserSearch.length >= 2
+      ? `/api/admin/donations/users?search=${encodeURIComponent(debouncedUserSearch)}`
+      : null
+  const { data: userSearchData, isLoading: searchingUsers } = useSwrFetch<{ users: UserResult[] }>(
+    userSearchKey,
+  )
+  const userResults = userSearchKey ? userSearchData?.users ?? [] : []
 
   const handleSelectUser = (user: UserResult) => {
     setSelectedUser(user)
     setFormData(prev => ({ ...prev, donor_name: user.name || '', donor_email: user.email }))
     setUserSearch('')
-    setUserResults([])
   }
 
   const handleClearUser = () => {
@@ -171,7 +144,6 @@ export function useDonations() {
         setShowForm(false)
         setSelectedUser(null)
         setUserSearch('')
-        setUserResults([])
         setFormData(DEFAULT_FORM_DATA)
         loadDonations()
       } else {
