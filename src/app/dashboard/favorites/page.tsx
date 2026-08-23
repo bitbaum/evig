@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { useSwrFetch } from '@/lib/api/swr'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
@@ -45,41 +46,40 @@ export default function FavoritesPage() {
   const t = useTranslations('dashboard.favorites')
   const { data: session, status: sessionStatus } = useSession()
   const router = useRouter()
-  const [favorites, setFavorites] = useState<FavoriteListing[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [removingId, setRemovingId] = useState<string | null>(null)
 
-  const fetchFavorites = useCallback(async () => {
-    setIsLoading(true)
-    setError(null)
-    const result = await apiFetch<{ items: FavoriteListing[] }>('/api/listings/favorites')
-    if (result.success && result.data) {
-      setFavorites(result.data.items)
-    } else {
-      setError(result.error || t('loadError'))
-    }
-    setIsLoading(false)
-  }, [t])
+  // Fetch is gated on an authenticated session via the null SWR key.
+  const { data, error: loadError, isLoading, mutate } = useSwrFetch<{
+    items: FavoriteListing[]
+  }>(session?.user ? '/api/listings/favorites' : null)
+  const favorites = data?.items ?? []
+  const error = loadError
+    ? loadError instanceof Error && loadError.message
+      ? loadError.message
+      : t('loadError')
+    : null
 
-  // Auth-gated data load. setState happens inside fetchFavorites — this is
-  // the legitimate "subscribe to external system on session change" pattern.
-   
+  const fetchFavorites = useCallback(async () => {
+    await mutate()
+  }, [mutate])
+
   useEffect(() => {
     if (sessionStatus === 'loading') return
     if (!session?.user) {
       router.push('/auth/login')
-      return
     }
-    fetchFavorites()
-  }, [session, sessionStatus, router, fetchFavorites])
+  }, [session, sessionStatus, router])
 
   const removeFavorite = async (listingId: string) => {
     setRemovingId(listingId)
     try {
       const result = await apiFetch<unknown>(`/api/listings/${listingId}/favorite`, { method: 'POST' })
       if (result.success) {
-        setFavorites(prev => prev.filter(f => f.id !== listingId))
+        // The server already removed it — drop it from the cached list locally.
+        mutate(
+          current => current && { items: current.items.filter(f => f.id !== listingId) },
+          { revalidate: false },
+        )
       }
     } finally {
       setRemovingId(null)

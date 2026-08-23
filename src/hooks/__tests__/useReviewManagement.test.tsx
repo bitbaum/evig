@@ -53,8 +53,20 @@ jest.mock('@/lib/logger', () => ({
   },
 }))
 
+import type { ReactNode } from 'react'
 import { renderHook, act, waitFor } from '@testing-library/react'
+import { SWRConfig } from 'swr'
 import { useReviewManagement, type Review } from '../useReviewManagement'
+
+// Fresh SWR cache per render — no cross-test cache leaks, no dedupe window.
+const wrapper = ({ children }: { children: ReactNode }) => (
+  <SWRConfig value={{ provider: () => new Map(), dedupingInterval: 0, revalidateOnFocus: false }}>
+    {children}
+  </SWRConfig>
+)
+
+const renderReviews = (authStatus: string) =>
+  renderHook(() => useReviewManagement(authStatus), { wrapper })
 
 const baseReview: Review = {
   id: 'rev-1',
@@ -94,13 +106,13 @@ beforeEach(() => {
 
 describe('useReviewManagement — auth gate', () => {
   it('redirects to /auth/login when unauthenticated', () => {
-    renderHook(() => useReviewManagement('unauthenticated'))
+    renderReviews('unauthenticated')
     expect(mockRedirect).toHaveBeenCalledWith('/auth/login')
     expect(mockApiFetch).not.toHaveBeenCalled()
   })
 
   it('does NOT fetch or redirect while auth status is "loading"', () => {
-    renderHook(() => useReviewManagement('loading'))
+    renderReviews('loading')
     expect(mockRedirect).not.toHaveBeenCalled()
     expect(mockApiFetch).not.toHaveBeenCalled()
   })
@@ -108,7 +120,7 @@ describe('useReviewManagement — auth gate', () => {
   it('fetches reviews when authenticated', async () => {
     mockApiFetch.mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })
 
-    renderHook(() => useReviewManagement('authenticated'))
+    renderReviews('authenticated')
 
     await waitFor(() => expect(mockApiFetch).toHaveBeenCalledWith('/api/user/reviews'))
   })
@@ -125,7 +137,7 @@ describe('useReviewManagement — fetchUserReviews', () => {
       data: { reviews: [baseReview, { ...baseReview, id: 'rev-2' }] },
     })
 
-    const { result } = renderHook(() => useReviewManagement('authenticated'))
+    const { result } = renderReviews('authenticated')
 
     await waitFor(() => expect(result.current.loading).toBe(false))
     expect(result.current.reviews).toHaveLength(2)
@@ -135,7 +147,7 @@ describe('useReviewManagement — fetchUserReviews', () => {
   it('defaults reviews to [] when data.reviews is missing', async () => {
     mockApiFetch.mockResolvedValueOnce({ success: true, data: {} })
 
-    const { result } = renderHook(() => useReviewManagement('authenticated'))
+    const { result } = renderReviews('authenticated')
 
     await waitFor(() => expect(result.current.loading).toBe(false))
     expect(result.current.reviews).toEqual([])
@@ -144,16 +156,16 @@ describe('useReviewManagement — fetchUserReviews', () => {
   it('sets error from result on failure with fallback message', async () => {
     mockApiFetch.mockResolvedValueOnce({ success: false })
 
-    const { result } = renderHook(() => useReviewManagement('authenticated'))
+    const { result } = renderReviews('authenticated')
 
     await waitFor(() => expect(result.current.loading).toBe(false))
-    expect(result.current.error).toBe('Failed to fetch reviews')
+    expect(result.current.error).toBe('Anfrage fehlgeschlagen')
   })
 
   it('catches thrown errors with the message', async () => {
     mockApiFetch.mockRejectedValueOnce(new Error('Network down'))
 
-    const { result } = renderHook(() => useReviewManagement('authenticated'))
+    const { result } = renderReviews('authenticated')
 
     await waitFor(() => expect(result.current.loading).toBe(false))
     expect(result.current.error).toBe('Network down')
@@ -168,7 +180,7 @@ describe('handleEditReview', () => {
   it('sets editingReview to the review id and populates editForm from review', async () => {
     mockApiFetch.mockResolvedValue({ success: true, data: { reviews: [baseReview] } })
 
-    const { result } = renderHook(() => useReviewManagement('authenticated'))
+    const { result } = renderReviews('authenticated')
     await waitFor(() => expect(result.current.loading).toBe(false))
 
     act(() => {
@@ -195,7 +207,7 @@ describe('handleEditReview', () => {
       ratings: { communication: 3 }, // only one rating present
     }
 
-    const { result } = renderHook(() => useReviewManagement('authenticated'))
+    const { result } = renderReviews('authenticated')
     await waitFor(() => expect(result.current.loading).toBe(false))
 
     act(() => {
@@ -213,7 +225,7 @@ describe('handleEditReview', () => {
     mockApiFetch.mockResolvedValue({ success: true, data: { reviews: [baseReview] } })
     const noTitle: Review = { ...baseReview, title: undefined }
 
-    const { result } = renderHook(() => useReviewManagement('authenticated'))
+    const { result } = renderReviews('authenticated')
     await waitFor(() => expect(result.current.loading).toBe(false))
 
     act(() => {
@@ -232,7 +244,7 @@ describe('cancelEdit', () => {
   it('clears editingReview state', async () => {
     mockApiFetch.mockResolvedValue({ success: true, data: { reviews: [baseReview] } })
 
-    const { result } = renderHook(() => useReviewManagement('authenticated'))
+    const { result } = renderReviews('authenticated')
     await waitFor(() => expect(result.current.loading).toBe(false))
 
     act(() => {
@@ -258,7 +270,7 @@ describe('handleSaveEdit', () => {
       .mockResolvedValueOnce({ success: true })                                    // PUT
       .mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })   // re-fetch
 
-    const { result } = renderHook(() => useReviewManagement('authenticated'))
+    const { result } = renderReviews('authenticated')
     await waitFor(() => expect(result.current.loading).toBe(false))
 
     act(() => {
@@ -281,7 +293,7 @@ describe('handleSaveEdit', () => {
   it('no-op when editingReview is null', async () => {
     mockApiFetch.mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })
 
-    const { result } = renderHook(() => useReviewManagement('authenticated'))
+    const { result } = renderReviews('authenticated')
     await waitFor(() => expect(result.current.loading).toBe(false))
 
     // No handleEditReview call → editingReview is null
@@ -299,7 +311,7 @@ describe('handleSaveEdit', () => {
       .mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })
       .mockResolvedValueOnce({ success: false, error: 'forbidden' })
 
-    const { result } = renderHook(() => useReviewManagement('authenticated'))
+    const { result } = renderReviews('authenticated')
     await waitFor(() => expect(result.current.loading).toBe(false))
 
     act(() => {
@@ -324,7 +336,7 @@ describe('handleDeleteReview', () => {
     mockApiFetch.mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })
     const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(false)
 
-    const { result } = renderHook(() => useReviewManagement('authenticated'))
+    const { result } = renderReviews('authenticated')
     await waitFor(() => expect(result.current.loading).toBe(false))
 
     await act(async () => {
@@ -344,7 +356,7 @@ describe('handleDeleteReview', () => {
       .mockResolvedValueOnce({ success: true, data: { reviews: [] } })
     const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true)
 
-    const { result } = renderHook(() => useReviewManagement('authenticated'))
+    const { result } = renderReviews('authenticated')
     await waitFor(() => expect(result.current.loading).toBe(false))
 
     await act(async () => {
@@ -365,7 +377,7 @@ describe('handleDeleteReview', () => {
       .mockResolvedValueOnce({ success: false, error: 'cannot delete' })
     const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true)
 
-    const { result } = renderHook(() => useReviewManagement('authenticated'))
+    const { result } = renderReviews('authenticated')
     await waitFor(() => expect(result.current.loading).toBe(false))
 
     await act(async () => {
@@ -388,7 +400,7 @@ describe('handleVote', () => {
       .mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })
       .mockResolvedValueOnce({ success: true, data: { action: 'added' } })
 
-    const { result } = renderHook(() => useReviewManagement('authenticated'))
+    const { result } = renderReviews('authenticated')
     await waitFor(() => expect(result.current.loading).toBe(false))
 
     await act(async () => {
@@ -405,7 +417,7 @@ describe('handleVote', () => {
       .mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })
       .mockResolvedValueOnce({ success: true, data: { action: 'added' } })
 
-    const { result } = renderHook(() => useReviewManagement('authenticated'))
+    const { result } = renderReviews('authenticated')
     await waitFor(() => expect(result.current.loading).toBe(false))
 
     await act(async () => {
@@ -421,7 +433,7 @@ describe('handleVote', () => {
       .mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })
       .mockResolvedValueOnce({ success: true, data: { action: 'removed' } })
 
-    const { result } = renderHook(() => useReviewManagement('authenticated'))
+    const { result } = renderReviews('authenticated')
     await waitFor(() => expect(result.current.loading).toBe(false))
 
     await act(async () => {
@@ -438,7 +450,7 @@ describe('handleVote', () => {
       .mockResolvedValueOnce({ success: true, data: { reviews: [baseReview, reviewB] } })
       .mockResolvedValueOnce({ success: true, data: { action: 'added' } })
 
-    const { result } = renderHook(() => useReviewManagement('authenticated'))
+    const { result } = renderReviews('authenticated')
     await waitFor(() => expect(result.current.loading).toBe(false))
 
     await act(async () => {
@@ -454,7 +466,7 @@ describe('handleVote', () => {
       .mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })
       .mockResolvedValueOnce({ success: false, error: 'rate limit' })
 
-    const { result } = renderHook(() => useReviewManagement('authenticated'))
+    const { result } = renderReviews('authenticated')
     await waitFor(() => expect(result.current.loading).toBe(false))
 
     await act(async () => {
@@ -484,30 +496,30 @@ describe('canEditReview', () => {
   })
 
   it('returns true for a review created today', () => {
-    const { result } = renderHook(() => useReviewManagement('loading'))
+    const { result } = renderReviews('loading')
     expect(result.current.canEditReview('2026-01-15T10:00:00Z')).toBe(true)
   })
 
   it('returns true for a review created 29 days ago', () => {
-    const { result } = renderHook(() => useReviewManagement('loading'))
+    const { result } = renderReviews('loading')
     // 29 days before 2026-01-15 = 2025-12-17
     expect(result.current.canEditReview('2025-12-17T12:00:00Z')).toBe(true)
   })
 
   it('returns true at exactly 30 days (boundary inclusive)', () => {
-    const { result } = renderHook(() => useReviewManagement('loading'))
+    const { result } = renderReviews('loading')
     // 30 days before 2026-01-15 = 2025-12-16
     expect(result.current.canEditReview('2025-12-16T12:00:00Z')).toBe(true)
   })
 
   it('returns false for a review created 31 days ago', () => {
-    const { result } = renderHook(() => useReviewManagement('loading'))
+    const { result } = renderReviews('loading')
     // 31 days before = 2025-12-15
     expect(result.current.canEditReview('2025-12-15T11:00:00Z')).toBe(false)
   })
 
   it('returns false for an ancient review', () => {
-    const { result } = renderHook(() => useReviewManagement('loading'))
+    const { result } = renderReviews('loading')
     expect(result.current.canEditReview('2024-01-01T00:00:00Z')).toBe(false)
   })
 })
@@ -522,7 +534,7 @@ describe('getUserVoteForReview', () => {
       .mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })
       .mockResolvedValueOnce({ success: true, data: { action: 'added' } })
 
-    const { result } = renderHook(() => useReviewManagement('authenticated'))
+    const { result } = renderReviews('authenticated')
     await waitFor(() => expect(result.current.loading).toBe(false))
 
     await act(async () => {
@@ -539,7 +551,7 @@ describe('getUserVoteForReview', () => {
       .mockResolvedValueOnce({ success: true, data: { action: 'added' } })
       .mockResolvedValueOnce({ success: true, data: { action: 'removed' } })
 
-    const { result } = renderHook(() => useReviewManagement('authenticated'))
+    const { result } = renderReviews('authenticated')
     await waitFor(() => expect(result.current.loading).toBe(false))
 
     await act(async () => {

@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
+import { useSwrFetch } from '@/lib/api/swr'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
@@ -17,7 +18,6 @@ import {
 import { ORDER_STATUS_CONFIG, ORDER_STATUS, MARKETPLACE_LIMITS, formatCHF } from '@/config/marketplace'
 import type { OrderStatus } from '@/config/marketplace'
 import { formatDateShort } from '@/lib/date-formats'
-import { apiFetch } from '@/lib/api/client'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
@@ -43,7 +43,6 @@ export default function DashboardOrdersPage() {
   const t = useTranslations('dashboard.orders')
   const { data: session, status: sessionStatus } = useSession()
   const router = useRouter()
-  const [orders, setOrders] = useState<OrderItem[]>([])
   const TABS = [
     { key: '', label: t('tabAll') },
     { key: ORDER_STATUS.PENDING_PAYMENT, label: t('tabPending') },
@@ -51,43 +50,29 @@ export default function DashboardOrdersPage() {
     { key: ORDER_STATUS.SHIPPED, label: t('tabShipped') },
     { key: ORDER_STATUS.COMPLETED, label: t('tabCompleted') },
   ]
-  const [total, setTotal] = useState(0)
-  const [isLoading, setIsLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('')
   const [role, setRole] = useState<'buyer' | 'seller'>('buyer')
   const [offset, setOffset] = useState(0)
-  const [limit, setLimit] = useState<number>(PAGE_SIZE)
 
-  const fetchOrders = useCallback(async () => {
-    setIsLoading(true)
-    try {
-      const params = new URLSearchParams({ role, limit: String(PAGE_SIZE), offset: String(offset) })
-      if (activeTab) params.set('status', activeTab)
+  // Role/tab/offset are encoded in the SWR key (fetch gated on an
+  // authenticated session) — any change refetches automatically.
+  const params = new URLSearchParams({ role, limit: String(PAGE_SIZE), offset: String(offset) })
+  if (activeTab) params.set('status', activeTab)
 
-      const result = await apiFetch<{
-        items: OrderItem[]
-        pagination: { total: number; limit: number; offset: number }
-      }>(`/api/marketplace/orders?${params}`)
+  const { data, isLoading } = useSwrFetch<{
+    items: OrderItem[]
+    pagination: { total: number; limit: number; offset: number }
+  }>(sessionStatus === 'authenticated' ? `/api/marketplace/orders?${params}` : null)
 
-      if (result.success && result.data) {
-        setOrders(result.data.items)
-        setTotal(result.data.pagination.total)
-        setLimit(result.data.pagination.limit)
-      }
-    } finally {
-      setIsLoading(false)
-    }
-  }, [activeTab, role, offset])
+  const orders = data?.items ?? []
+  const total = data?.pagination.total ?? 0
+  const limit = data?.pagination.limit ?? PAGE_SIZE
 
   useEffect(() => {
     if (sessionStatus === 'unauthenticated') {
       router.push('/auth/login')
-      return
     }
-    if (sessionStatus === 'authenticated') {
-      fetchOrders()
-    }
-  }, [sessionStatus, fetchOrders, router])
+  }, [sessionStatus, router])
 
   if (sessionStatus === 'loading') {
     return (

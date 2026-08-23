@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react'
 import { useTranslations } from 'next-intl'
 import { toast } from 'sonner'
 import { apiFetch } from '@/lib/api/client'
+import { useSwrFetch } from '@/lib/api/swr'
 import { logger } from '@/lib/logger'
 import { REQUEST_STATUS } from '@/config/it-hilfe'
 import { REVIEW_TARGET_TYPES } from '@/config/database'
@@ -14,10 +15,7 @@ export function useITHilfeDetail(id: string) {
   const t = useTranslations('itHelp.detail')
   const { data: session } = useSession()
 
-  const [request, setRequest] = useState<ITHilfeRequest | null>(null)
-  const [offers, setOffers] = useState<Offer[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [actionError, setError] = useState('')
 
   // Offer form state
   const [showOfferForm, setShowOfferForm] = useState(false)
@@ -62,49 +60,36 @@ export function useITHilfeDetail(id: string) {
   const [pendingConfirm, setPendingConfirm] = useState<PendingConfirm | null>(null)
   const cancelPendingConfirm = () => setPendingConfirm(null)
 
+  const {
+    data: requestData,
+    error: requestError,
+    isLoading: loading,
+    mutate: mutateRequest,
+  } = useSwrFetch<{ request: ITHilfeRequest }>(`/api/it-hilfe/requests/${id}`)
+  const request = requestData?.request ?? null
+  // One error surface: action errors win (they're the fresher user feedback).
+  const error =
+    actionError ||
+    (requestError
+      ? requestError instanceof Error && requestError.message
+        ? requestError.message
+        : t('errorLoading')
+      : '')
+
+  // Offers are owner-only — the null SWR key skips the fetch for everyone else.
+  // Load errors stay silent (log-only), matching the previous behavior.
+  const { data: offersData, mutate: mutateOffers } = useSwrFetch<{ offers: Offer[] }>(
+    request?.isOwner ? `/api/it-hilfe/requests/${id}/offers` : null,
+  )
+  const offers = offersData?.offers ?? []
+
   const fetchRequest = useCallback(async () => {
-    try {
-      setLoading(true)
-      const result = await apiFetch<{ request: ITHilfeRequest }>(`/api/it-hilfe/requests/${id}`)
-
-      if (!result.success || !result.data) {
-        setError(result.error || t('errorLoading'))
-        return
-      }
-
-      setRequest(result.data.request)
-    } catch (err) {
-      const message = err instanceof Error ? err.message : t('unexpectedError')
-      setError(message)
-      logger.error('Error fetching peer repair request', { error: err })
-    } finally {
-      setLoading(false)
-    }
-  }, [id, t])
+    await mutateRequest()
+  }, [mutateRequest])
 
   const fetchOffers = useCallback(async () => {
-    if (!request?.isOwner) return
-
-    try {
-      const result = await apiFetch<{ offers: Offer[] }>(`/api/it-hilfe/requests/${id}/offers`)
-
-      if (result.success && result.data) {
-        setOffers(result.data.offers)
-      }
-    } catch (err) {
-      logger.error('Error fetching offers', { error: err })
-    }
-  }, [id, request?.isOwner])
-
-  useEffect(() => {
-    fetchRequest()
-  }, [fetchRequest])
-
-  useEffect(() => {
-    if (request?.isOwner) {
-      fetchOffers()
-    }
-  }, [request?.isOwner, fetchOffers])
+    await mutateOffers()
+  }, [mutateOffers])
 
   // Fetch current user's own offer on this request (non-owners only)
   useEffect(() => {

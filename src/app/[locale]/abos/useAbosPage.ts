@@ -1,61 +1,63 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { apiFetch } from '@/lib/api/client'
-import { logger } from '@/lib/logger'
+import { useSwrFetch } from '@/lib/api/swr'
 import type { Pool } from './types'
 
 export function useAbosPage() {
   const { data: session } = useSession()
-  const [pools, setPools] = useState<Pool[]>([])
-  const [myPoolIds, setMyPoolIds] = useState<Set<string>>(new Set())
-  const [loading, setLoading] = useState(true)
   const [showCreate, setShowCreate] = useState(false)
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
 
-  const loadPools = useCallback(async () => {
-    try {
-      const result = await apiFetch<Pool[]>('/api/pools')
-      if (result.success && result.data) {
-        setPools(result.data)
-      } else {
-        logger.error('Failed to load pools', { error: result.error })
-      }
-    } finally {
-      setLoading(false)
-    }
-  }, [])
+  const {
+    data: poolsData,
+    isLoading: loading,
+    mutate: mutatePools,
+  } = useSwrFetch<Pool[]>('/api/pools')
+  const pools = poolsData ?? []
 
-  const loadMyMemberships = useCallback(async () => {
-    if (!session?.user) return
-    const result = await apiFetch<{ poolId: string }[]>('/api/pools/my')
-    if (result.success && result.data) {
-      setMyPoolIds(new Set(result.data.map(m => m.poolId)))
-    }
-  }, [session?.user])
+  // Memberships are gated on an authenticated session via the null SWR key.
+  const { data: myData, mutate: mutateMy } = useSwrFetch<{ poolId: string }[]>(
+    session?.user ? '/api/pools/my' : null,
+  )
+  const myPoolIds = new Set((myData ?? []).map(m => m.poolId))
 
-  useEffect(() => {
-    loadPools()
-    loadMyMemberships()
-  }, [loadPools, loadMyMemberships])
+  // Join/leave patch both caches locally — the server already recorded the change.
+  const applyMembership = (id: string, delta: 1 | -1) => {
+    mutateMy(
+      current => delta === 1
+        ? [...(current ?? []), { poolId: id }]
+        : (current ?? []).filter(m => m.poolId !== id),
+      { revalidate: false },
+    )
+    mutatePools(
+      current => current?.map(p =>
+        p.id === id
+          ? { ...p, memberCount: p.memberCount + delta, spotsLeft: p.spotsLeft - delta }
+          : p
+      ),
+      { revalidate: false },
+    )
+  }
 
   const handleJoin = async (id: string) => {
     const result = await apiFetch<unknown>(`/api/pools/${id}/join`, { method: 'POST' })
     if (!result.success) throw new Error(result.error)
-    setMyPoolIds(prev => new Set([...prev, id]))
-    setPools(prev => prev.map(p =>
-      p.id === id ? { ...p, memberCount: p.memberCount + 1, spotsLeft: p.spotsLeft - 1 } : p
-    ))
+    applyMembership(id, 1)
   }
 
   const handleLeave = async (id: string) => {
     const result = await apiFetch<unknown>(`/api/pools/${id}/leave`, { method: 'POST' })
     if (!result.success) throw new Error(result.error)
-    setMyPoolIds(prev => { const s = new Set(prev); s.delete(id); return s })
-    setPools(prev => prev.map(p =>
-      p.id === id ? { ...p, memberCount: p.memberCount - 1, spotsLeft: p.spotsLeft + 1 } : p
-    ))
+    applyMembership(id, -1)
+  }
+
+  // A newly created pool goes straight into both caches (creator auto-joins).
+  const addPool = (pool: Pool) => {
+    mutatePools(current => [pool, ...(current ?? [])], { revalidate: false })
+    mutateMy(current => [...(current ?? []), { poolId: pool.id }], { revalidate: false })
   }
 
   const filtered = activeCategory ? pools.filter(p => p.serviceCategory === activeCategory) : pools
@@ -64,9 +66,8 @@ export function useAbosPage() {
   return {
     session,
     pools,
-    setPools,
     myPoolIds,
-    setMyPoolIds,
+    addPool,
     loading,
     showCreate,
     setShowCreate,
