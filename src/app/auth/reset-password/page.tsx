@@ -33,19 +33,6 @@ function ResetPasswordContent() {
   const [isLoading, setIsLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [tokenValid, setTokenValid] = useState<boolean | null>(null)
-
-  // Validate token on page load
-  useEffect(() => {
-    if (!token) {
-      setTokenValid(false)
-      setError(t('errorInvalidToken'))
-      return
-    }
-
-    // You could add token validation here if needed
-    setTokenValid(true)
-  }, [token, t])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -92,7 +79,8 @@ function ResetPasswordContent() {
     }
   }
 
-  if (!token || tokenValid === false) {
+  // No token in the URL → the dedicated invalid-link screen, not the form.
+  if (!token) {
     return (
       <div className="min-h-screen bg-surface-raised flex flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">

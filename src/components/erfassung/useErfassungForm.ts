@@ -78,6 +78,9 @@ export function useErfassungForm() {
     const donorEmail = searchParams.get('donor_email')
     const donationId = searchParams.get('donation_id')
     if (donorName || donorEmail || donationId) {
+      // One-shot prefill of donation fields from query params into editable
+      // form state.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setDonation(prev => ({
         ...prev,
         isDonation: true,
@@ -95,6 +98,8 @@ export function useErfassungForm() {
 
   useEffect(() => {
     if (editId) {
+      // One-shot edit-mode prefill from the API into editable form state.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsEditMode(true)
       setIsLoadingProduct(true)
       setShowAdvanced(true)

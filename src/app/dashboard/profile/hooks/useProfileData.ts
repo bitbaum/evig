@@ -123,7 +123,7 @@ export function useProfileData() {
     if (status === 'authenticated' && session?.user) {
       loadProfile()
     } else if (status === 'unauthenticated') {
-      setIsLoading(false)
+      // Keep isLoading true — the spinner stays up while the redirect lands.
       router.push('/auth/login?callbackUrl=/dashboard/profile')
     }
   }, [session, status, router])

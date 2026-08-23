@@ -26,6 +26,7 @@ export function Monatsueberblick({ stats, defaultOpen = false, children }: Monat
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY)
     // Reading localStorage is an external system sync — setState in effect is intentional.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMeta({
       // Stored preference wins; fall back to prop (defaultOpen for 'lead' mode)
       open: stored !== null ? stored === 'true' : defaultOpen,
