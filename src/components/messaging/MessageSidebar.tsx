@@ -56,7 +56,11 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
   const t = useTranslations('components.messageSidebar')
   const { data: session } = useSession()
   const [conversations, setConversations] = useState<Conversation[]>([])
-  const [selectedConversation, setSelectedConversation] = useState<string | null>(null)
+  // undefined = user hasn't chosen yet → the deep-link prop decides;
+  // null = user explicitly went back to the list.
+  const [userSelection, setSelectedConversation] = useState<string | null | undefined>(undefined)
+  const selectedConversation =
+    userSelection !== undefined ? userSelection : (isOpen ? initialConversationId ?? null : null)
   const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -67,12 +71,6 @@ export function MessageSidebar({ isOpen, onClose, initialConversationId }: Messa
       fetchConversations()
     }
   }, [isOpen, session])
-
-  useEffect(() => {
-    if (isOpen && initialConversationId) {
-      setSelectedConversation(initialConversationId)
-    }
-  }, [isOpen, initialConversationId])
 
   useEffect(() => {
     if (selectedConversation) {

@@ -30,6 +30,8 @@ export function HirnPublicFab() {
 
   // Proactive chip: first suggestion for this page, once per pathname per session.
   useEffect(() => {
+    // sessionStorage (external store) decides once-per-path chip visibility.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setShowChip(false)
     if (isOpen || context.suggestions.length === 0) return
     const key = `${CHIP_STORAGE_PREFIX}${pathname}`

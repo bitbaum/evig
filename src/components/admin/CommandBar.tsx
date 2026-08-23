@@ -3,7 +3,7 @@
 // Command palette shell (⌘K): dialog state, fetch/debounce, keyboard nav. Rows +
 // registry live in ./command-bar/.
 
-import { useEffect, useRef, useState, useCallback, useMemo } from 'react'
+import { useEffect, useRef, useState, useCallback, useMemo, useSyncExternalStore } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
@@ -27,13 +27,16 @@ export function CommandBar() {
   const [index, setIndex] = useState<SearchIndex | null>(null)
   const [activeIdx, setActiveIdx] = useState(0)
   const [loading, setLoading] = useState(false)
-  const [mounted, setMounted] = useState(false)
+  // Portal target only exists after mount (SSR has no document) — the
+  // subscribe-to-nothing store reads false on the server, true on the client.
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  )
   const dialogRef = useRef<HTMLDialogElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
-
-  // Portal target only exists after mount (SSR has no document).
-  useEffect(() => setMounted(true), [])
 
   // Debounce the query so we search the server (not just a prefetched slice)
   // on a settled term rather than every keystroke.

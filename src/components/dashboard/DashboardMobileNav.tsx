@@ -53,8 +53,10 @@ export function DashboardMobileNav({
   )
   const [moreOpen, setMoreOpen] = useState(false)
 
-  // Close the sheet on navigation.
+  // Close the sheet on navigation — pathname is the external signal that the
+  // user left the page the sheet was opened on.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMoreOpen(false)
   }, [pathname])
 

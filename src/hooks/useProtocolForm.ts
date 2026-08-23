@@ -37,6 +37,9 @@ export function useProtocolForm(
   // imperceptible.
   const [meetingDate, setMeetingDate] = useState<string>('')
   useEffect(() => {
+    // Deliberate client-only fill: the local-tz "today" is only knowable in
+    // the browser (see the SSR/timezone rationale above).
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (!meetingDate) setMeetingDate(todayLocalIso())
   // Only populate on initial mount — never overwrite a user-picked date.
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -60,10 +63,13 @@ export function useProtocolForm(
   const [processing, setProcessing] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Auto-generate title when meeting type changes
+  // Auto-generate title when meeting type changes. Type/date arrive from
+  // several sources (user pick, template load), so the sync lives here rather
+  // than duplicated across every write path.
   useEffect(() => {
     if (meetingType) {
       const template = MEETING_TYPE_TEMPLATES[meetingType]
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setVisibility(template.default_visibility)
       if (!title) {
         setTitle(

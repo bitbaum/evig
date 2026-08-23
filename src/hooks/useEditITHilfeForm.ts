@@ -105,19 +105,23 @@ export function useEditITHilfeForm(id: string, errors: UseEditITHilfeFormErrors)
     })
   }, [id, authStatus, errors.errorNotFound, errors.errorNotOwner, errors.errorNotEditable])
 
-  useEffect(() => {
-    if (formData?.postalCode?.length === 4) {
-      const data = lookupSwissPostalCode(formData.postalCode)
-      if (data) {
-        setFormData((prev) => prev ? { ...prev, city: data.city, canton: data.canton } : prev)
-      }
-    }
-  }, [formData?.postalCode])
-
   const updateField = <K extends keyof ITHilfeCreateFormData>(
     key: K,
     value: ITHilfeCreateFormData[K],
-  ) => setFormData((prev) => prev ? { ...prev, [key]: value } : prev)
+  ) =>
+    setFormData((prev) => {
+      if (!prev) return prev
+      const updated = { ...prev, [key]: value }
+      // A complete Swiss postal code fills city/canton right in the handler.
+      if (key === 'postalCode' && typeof value === 'string' && value.length === 4) {
+        const data = lookupSwissPostalCode(value)
+        if (data) {
+          updated.city = data.city
+          updated.canton = data.canton
+        }
+      }
+      return updated
+    })
 
   const handleCategorySelect = (catId: string) => {
     const category = getCategoryById(catId)

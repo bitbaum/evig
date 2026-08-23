@@ -37,6 +37,9 @@ export function useBlogSubmitForm() {
 
   useEffect(() => {
     if (session?.user) {
+      // Prefill name/email from the session without clobbering user input —
+      // syncing editable form state from an external auth source.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setFormData(prev => ({
         ...prev,
         name: session.user.name ?? prev.name,

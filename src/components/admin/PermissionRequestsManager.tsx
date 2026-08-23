@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Shield, Check, X, Clock, User, RefreshCw } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
 import { apiFetch } from '@/lib/api/client'
+import { useSwrFetch } from '@/lib/api/swr'
 import { getSection } from '@/config/sections'
 import { sectionText } from '@/lib/section-labels'
 import { formatDateTimeNumeric } from '@/lib/date-formats'
@@ -30,34 +31,25 @@ export function PermissionRequestsManager() {
   // Localized section labels; config's German string is the fallback.
   const sectionLabelFor = (id: string): string =>
     sectionText(tSections, id, 'label', getSection(id)?.ui.label ?? id)
-  const [requests, setRequests] = useState<PermissionRequest[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [actionError, setActionError] = useState('')
   const [processingId, setProcessingId] = useState<string | null>(null)
   const [rejectingId, setRejectingId] = useState<string | null>(null)
   const [rejectionNotes, setRejectionNotes] = useState('')
 
-  const fetchRequests = async () => {
-    try {
-      setLoading(true)
-      const result = await apiFetch<{ requests: PermissionRequest[] }>('/api/admin/permissions/requests?status=pending')
+  const { data, error: loadError, isLoading: loading, mutate } = useSwrFetch<{
+    requests: PermissionRequest[]
+  }>('/api/admin/permissions/requests?status=pending')
+  const requests = data?.requests ?? []
+  // One error surface: action errors win (they're the fresher user feedback).
+  const error =
+    actionError ||
+    (loadError
+      ? loadError instanceof Error && loadError.message
+        ? loadError.message
+        : t('unknownError')
+      : '')
 
-      if (!result.success) {
-        throw new Error(result.error || t('loadError'))
-      }
-
-      setRequests(result.data?.requests || [])
-    } catch (err) {
-      setError(err instanceof Error ? err.message : t('unknownError'))
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  // Fetch on mount. setState happens inside fetchRequests via setItems/setError —
-  // legitimate "subscribe for updates from external system" pattern.
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => { fetchRequests() }, [])
+  const fetchRequests = () => mutate()
 
   const handleApprove = async (requestId: string) => {
     setProcessingId(requestId)
@@ -69,9 +61,9 @@ export function PermissionRequestsManager() {
       if (!result.success) {
         throw new Error(result.error || t('processError'))
       }
-      setRequests(prev => prev.filter(r => r.id !== requestId))
+      mutate(current => current && { requests: current.requests.filter(r => r.id !== requestId) }, { revalidate: false })
     } catch (err) {
-      setError(err instanceof Error ? err.message : t('genericError'))
+      setActionError(err instanceof Error ? err.message : t('genericError'))
     } finally {
       setProcessingId(null)
     }
@@ -89,9 +81,9 @@ export function PermissionRequestsManager() {
       }
       setRejectingId(null)
       setRejectionNotes('')
-      setRequests(prev => prev.filter(r => r.id !== requestId))
+      mutate(current => current && { requests: current.requests.filter(r => r.id !== requestId) }, { revalidate: false })
     } catch (err) {
-      setError(err instanceof Error ? err.message : t('genericError'))
+      setActionError(err instanceof Error ? err.message : t('genericError'))
     } finally {
       setProcessingId(null)
     }

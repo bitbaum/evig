@@ -32,6 +32,8 @@ export function ProtocolConsent({ value, onChange }: Props) {
   useEffect(() => {
     if (typeof window === 'undefined') return
     if (window.localStorage.getItem(STORAGE_KEY) === 'true') {
+      // localStorage hydration must run client-side after mount (SSR-safe).
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setRemember(true)
       onChange(true)
     }

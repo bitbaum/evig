@@ -30,8 +30,6 @@ export function SuggestionProvider({ children }: SuggestionProviderProps) {
     title: 'Startseite',
     url: typeof window !== 'undefined' ? window.location.href : '/'
   })
-  const [isVisible, setIsVisible] = useState(true)
-
   // Update page info when route changes
   useEffect(() => {
     const updatePageInfo = () => {
@@ -78,12 +76,9 @@ export function SuggestionProvider({ children }: SuggestionProviderProps) {
     }
   }, [])
 
-  // Hide suggestion button on certain pages if needed
-  useEffect(() => {
-    const hiddenPaths = ['/admin', '/dashboard'] // Add paths where button should be hidden
-    const shouldHide = hiddenPaths.some(path => currentPage.path.startsWith(path))
-    setIsVisible(!shouldHide)
-  }, [currentPage.path])
+  // Hide suggestion button on certain pages — derived, not state.
+  const hiddenPaths = ['/admin', '/dashboard']
+  const isVisible = !hiddenPaths.some(path => currentPage.path.startsWith(path))
 
   const value: SuggestionContextValue = {
     currentPage,

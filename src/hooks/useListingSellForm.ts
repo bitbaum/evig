@@ -35,6 +35,9 @@ export function useListingSellForm() {
     const id = searchParams.get('edit')
     if (!id || status !== 'authenticated' || !session?.user) return
 
+    // One-shot edit-mode prefill from URL + API into editable form state —
+    // the documented React pattern for seeding a form from an external source.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setEditId(id)
     setIsLoadingEdit(true)
     setError(null)

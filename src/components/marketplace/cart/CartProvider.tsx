@@ -49,6 +49,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
         const parsed = JSON.parse(raw)
+        // localStorage hydration must run client-side after mount (SSR-safe).
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (Array.isArray(parsed)) setItems(parsed)
       }
     } catch {
