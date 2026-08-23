@@ -124,7 +124,11 @@ const eslintConfig = [
       "@next/next/no-img-element": "off",
       "react/no-unescaped-entities": "off",
       "react-hooks/immutability": "off",
-      "react-hooks/set-state-in-effect": "warn",
+      // Driven to zero 2026-08 (PRs #341–#345: fetch hooks → useSwrFetch,
+      // derivable state derived). Error keeps the class closed; a genuinely
+      // legitimate external-store sync (localStorage hydration, one-shot form
+      // prefill) gets a targeted eslint-disable line stating why.
+      "react-hooks/set-state-in-effect": "error",
     },
   },
   {
