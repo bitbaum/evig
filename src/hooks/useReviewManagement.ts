@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { toast } from 'sonner'
 import { apiFetch } from '@/lib/api/client'
+import { useSwrFetch } from '@/lib/api/swr'
 import { logger } from '@/lib/logger'
 import { redirect } from 'next/navigation'
 
@@ -62,34 +63,28 @@ const DEFAULT_EDIT_FORM: EditForm = {
 }
 
 export function useReviewManagement(authStatus: string) {
-  const [reviews, setReviews] = useState<Review[]>([])
   const [userVotes, setUserVotes] = useState<UserVote[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [editingReview, setEditingReview] = useState<string | null>(null)
   const [editForm, setEditForm] = useState<EditForm>(DEFAULT_EDIT_FORM)
 
+  // Fetch is gated on an authenticated session via the null SWR key.
+  const { data, error: loadError, isLoading: loading, mutate } = useSwrFetch<{
+    reviews: Review[]
+  }>(authStatus === 'authenticated' ? '/api/user/reviews' : null)
+  const reviews = data?.reviews ?? []
+  const error = loadError
+    ? loadError instanceof Error && loadError.message
+      ? loadError.message
+      : 'Unknown error'
+    : null
+
   const fetchUserReviews = async () => {
-    try {
-      setLoading(true)
-      const result = await apiFetch<{ reviews: Review[] }>('/api/user/reviews')
-      if (result.success) {
-        setReviews(result.data?.reviews || [])
-      } else {
-        setError(result.error || 'Failed to fetch reviews')
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error')
-    } finally {
-      setLoading(false)
-    }
+    await mutate()
   }
 
   useEffect(() => {
     if (authStatus === 'unauthenticated') {
       redirect('/auth/login')
-    } else if (authStatus === 'authenticated') {
-      fetchUserReviews()
     }
   }, [authStatus])
 
@@ -164,19 +159,25 @@ export function useReviewManagement(authStatus: string) {
 
       const action = result.data!.action
 
-      setReviews(reviews.map(review =>
-        review.id === reviewId
-          ? {
-              ...review,
-              helpfulVotes: voteType === 'helpful'
-                ? (action === 'added' ? review.helpfulVotes + 1 : review.helpfulVotes - 1)
-                : review.helpfulVotes,
-              totalVotes: action === 'added'
-                ? review.totalVotes + 1
-                : review.totalVotes - 1
-            }
-          : review
-      ))
+      // Patch the cached payload locally — the server already recorded the vote.
+      mutate(
+        current => current && {
+          reviews: current.reviews.map(review =>
+            review.id === reviewId
+              ? {
+                  ...review,
+                  helpfulVotes: voteType === 'helpful'
+                    ? (action === 'added' ? review.helpfulVotes + 1 : review.helpfulVotes - 1)
+                    : review.helpfulVotes,
+                  totalVotes: action === 'added'
+                    ? review.totalVotes + 1
+                    : review.totalVotes - 1
+                }
+              : review
+          ),
+        },
+        { revalidate: false },
+      )
 
       if (action === 'added') {
         setUserVotes([...userVotes.filter(v => v.reviewId !== reviewId), { reviewId, voteType }])

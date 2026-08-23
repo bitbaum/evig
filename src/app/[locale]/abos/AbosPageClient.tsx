@@ -14,9 +14,8 @@ export default function AbosPageClient() {
   const {
     session,
     pools,
-    setPools,
     myPoolIds,
-    setMyPoolIds,
+    addPool,
     loading,
     showCreate,
     setShowCreate,
@@ -125,10 +124,7 @@ export default function AbosPageClient() {
       {showCreate && (
         <CreatePoolModal
           onClose={() => setShowCreate(false)}
-          onCreate={pool => {
-            setPools(prev => [pool, ...prev])
-            setMyPoolIds(prev => new Set([...prev, pool.id]))
-          }}
+          onCreate={addPool}
         />
       )}
     </>
