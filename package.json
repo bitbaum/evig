@@ -95,7 +95,7 @@
     "@eslint/eslintrc": "^3.3.6",
     "@eslint/js": "^9.39.2",
     "@fleet/ai-forms": "github:maonakamoto/ai-forms#v0.1.0",
-    "@sentry/nextjs": "^10.61.0",
+    "@sentry/nextjs": "^10.70.0",
     "@tiptap/extension-link": "^3.30.2",
     "@tiptap/extension-table": "^3.30.2",
     "@tiptap/pm": "^3.30.2",
