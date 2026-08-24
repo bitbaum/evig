@@ -142,7 +142,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.6",
-    "@eslint/js": "^9.39.2",
+    "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.62.1",
     "@swc/helpers": "0.5.23",
     "@tailwindcss/postcss": "^4.3.3",
@@ -163,7 +163,7 @@
     "concurrently": "^9.2.0",
     "critters": "^0.0.23",
     "drizzle-kit": "^0.31.9",
-    "eslint": "^10.8.1",
+    "eslint": "^10.9.0",
     "eslint-config-next": "^16.3.2",
     "eslint-plugin-react-hooks": "^7.1.1",
     "husky": "^9.1.7",
