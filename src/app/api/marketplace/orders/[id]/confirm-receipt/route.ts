@@ -25,6 +25,7 @@ import { orderReceiptConfirmed, orderReviewPrompt } from '@/lib/email/templates/
 import { createNotification } from '@/lib/services/notifications'
 import { NOTIFICATION_TYPES } from '@/config/notifications'
 import { APP_URL } from '@/config/urls'
+import { applyOrderCompletion } from '@/lib/marketplace/complete-order'
 
 export const POST = withAuth<{ id: string }>(async (
   _request: NextRequest,
@@ -119,23 +120,11 @@ export const POST = withAuth<{ id: string }>(async (
             }
           }
 
-          await tx
-            .update(marketplaceOrders)
-            .set({
-              status: ORDER_STATUS.COMPLETED,
-              deliveredAt: sql`COALESCE(${marketplaceOrders.deliveredAt}, NOW())`,
-              completedAt: sql`NOW()`,
-              updatedAt: sql`NOW()`,
-            })
-            .where(eq(marketplaceOrders.id, orderId))
-          await tx
-            .update(listings)
-            .set({ status: LISTING_STATUS.SOLD })
-            .where(inArray(listings.id, affectedListingIds))
-          await tx
-            .update(sellerProfiles)
-            .set({ totalSold: sql`COALESCE(${sellerProfiles.totalSold}, 0) + ${affectedListingIds.length}` })
-            .where(eq(sellerProfiles.userId, order.sellerId))
+          await applyOrderCompletion(tx, {
+            orderId,
+            sellerId: order.sellerId,
+            listingIds: affectedListingIds,
+          })
         },
       })
     } catch (txError) {

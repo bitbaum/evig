@@ -12,6 +12,7 @@ import { listings, listingImages, marketplaceOrders, marketplaceOrderItems, sell
 import { eq, and, sql, inArray } from 'drizzle-orm';
 import { ORDER_STATUS_CONFIG, ORDER_STATUS, LISTING_STATUS, ORDER_TRANSITIONS } from '@/config/marketplace';
 import type { OrderStatus, OrderRole } from '@/config/marketplace';
+import { applyOrderCompletion } from '@/lib/marketplace/complete-order';
 import { TABLE_NAMES } from '@/config/database';
 import { guardedTransition, resolveTransition } from '@/lib/lifecycle';
 import { logger } from '@/lib/logger';
@@ -255,14 +256,16 @@ export const PATCH = withAuth<{ id: string }>(async (
             affectedListingIds = items.map(i => i.listingId)
           }
 
-          // If completed: mark listing(s) SOLD + bump seller total_sold (once per item).
-          if (newStatus === ORDER_STATUS.COMPLETED && affectedListingIds.length > 0) {
-            await tx.update(listings)
-              .set({ status: LISTING_STATUS.SOLD })
-              .where(inArray(listings.id, affectedListingIds))
-            await tx.update(sellerProfiles)
-              .set({ totalSold: sql`COALESCE(${sellerProfiles.totalSold}, 0) + ${affectedListingIds.length}` })
-              .where(eq(sellerProfiles.userId, order.sellerId))
+          // If completed: the shared completion effects (status, completedAt,
+          // deliveredAt, listings SOLD, seller total_sold). This path used to
+          // set the status alone, so an order completed here rendered a blank
+          // OrderStatusTimeline — it reads completed_at/delivered_at.
+          if (newStatus === ORDER_STATUS.COMPLETED) {
+            await applyOrderCompletion(tx, {
+              orderId,
+              sellerId: order.sellerId,
+              listingIds: affectedListingIds,
+            })
           }
 
           // If cancelled: restore reserved listing(s) to active
