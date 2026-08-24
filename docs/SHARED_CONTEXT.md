@@ -12,9 +12,16 @@ last_modified_summary: Access Points — production URLs (revampit.orangecat.ch)
 
 ## Project Overview
 
-**Revamp-IT** is a Swiss non-profit organization dedicated to **enabling free exchange of technology** between individuals and groups, promoting **open-source hardware and software** as the ideal form of human collaboration.
+**evig** is a Swiss *gemeinnütziger Verein in Gründung* making genuinely good,
+durable computing affordable to everyone — curated hardware, repair, IT-help,
+workshops and an in-house AI assistant. (This file previously described
+Revamp-IT, the org evig separated from on 2026-07-24.)
 
-**Location**: Birmensdorferstrasse 379, 8055 Zürich, Switzerland
+**Location**: Zürich, Switzerland — **city and country only.** evig is
+online-first with no public store or warehouse; `src/config/org.ts` states that
+a street address must never be published, and the one that used to sit here was
+Revamp-IT's. Anything needing a region line (SEO `areaServed`, legal
+jurisdiction, letterhead) takes it from `ORG` in that file.
 
 **Full Mission Statement**: See `docs/MISSION_STATEMENT.md`  
 **Legal Compliance**: See `docs/LEGAL_NONPROFIT_COMPLIANCE.md`
@@ -106,14 +113,14 @@ People come to RevampIT for two jobs — SSOT: `src/config/customer-journeys.ts`
 
 | Layer | SSOT |
 |-------|------|
-| DB table | `repairer_profiles` (+ `user_skills`) — `helper_profiles` merged by migration 061, dropped by 073 |
-| Public list/detail | `GET /api/technicians`, `GET /api/technicians/[id]` — **`id` = `repairer_profiles.id` (profile UUID)** |
+| DB table | `technician_profiles` (+ `user_skills`) — `helper_profiles` merged by migration 061, dropped by 073 |
+| Public list/detail | `GET /api/technicians`, `GET /api/technicians/[id]` — **`id` = `technician_profiles.id` (profile UUID)** |
 | Self-service edit | `GET/PUT /api/user/technician-profile` |
 | Profile tier | `REPAIRER_PROFILE_TIER` in `src/config/repairer-status.ts` (`community` \| `professional`) |
 | Domain logic | `src/lib/services/technician-service.ts`, `src/lib/domain/technician-profile.ts` |
 | Legacy (410 Gone) | List routes `/api/it-hilfe/helpers`, `/api/repairers`, `/api/it-hilfe/helper/*` — use successors in `IT_HILFE.api`; `/api/it-hilfe/helpers/[id]` still proxies detail |
 
-Migration `095_backfill_repairer_profiles_from_user_skills.sql` creates missing `repairer_profiles` rows for users with `user_skills` only (safe after 073).
+Migration `095_backfill_repairer_profiles_from_user_skills.sql` creates missing `technician_profiles` rows for users with `user_skills` only (safe after 073).
 
 Legacy `/techniker` redirects to `/it-hilfe/techniker`. Do not add separate nav entries for “Hilfe suchen” vs “Techniker finden” — one hub, three paths inside.
 

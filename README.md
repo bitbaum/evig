@@ -95,7 +95,7 @@ These are enforced, not suggested:
 
 | Layer | Technology |
 |-------|------------|
-| Framework | Next.js 16 (App Router), React 18, TypeScript 5, Tailwind 3 |
+| Framework | Next.js 16 (App Router), React 19, TypeScript 5, Tailwind 4 |
 | Database | PostgreSQL (prod: Hetzner self-hosted; dev: Docker 5433), Drizzle ORM |
 | Auth | NextAuth v5 (Auth.js) + @auth/pg-adapter (shares the app `DATABASE_URL` pool) |
 | Search | Meilisearch |

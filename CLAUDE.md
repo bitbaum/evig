@@ -79,7 +79,7 @@ hold the line on all of it by default:
 | Layer | Technology |
 |-------|-----------|
 | Framework | Next.js 16, TypeScript 5.3 |
-| Styling | Tailwind CSS 3.4 |
+| Styling | Tailwind CSS 4 (CSS-first, no tailwind.config) |
 | Database | PostgreSQL (prod: self-hosted on Hetzner; dev: Docker on 5433), Drizzle ORM |
 | Auth | NextAuth v5 (Auth.js) + @auth/pg-adapter |
 | Search | Meilisearch |
@@ -99,71 +99,67 @@ The `auth-smoke` / `inventory-smoke` CI jobs deliberately point `PLAYWRIGHT_BASE
 
 ## Design System
 
-### How it works — three layers, each with one job
+### How it works — two layers, each with one job
 
 ```
-globals.css             ← SSOT: CSS custom properties + global dark overrides
-tailwind.config.ts      ← palette scales (hex literals) + Tailwind utilities
-src/lib/design/         ← TypeScript SSOT for section theming (tokens.ts) and component primitives (design-system.ts)
+src/app/globals.css      ← SSOT: raw tokens (:root / .dark) + the @theme block
+                           that turns them into Tailwind utilities
+src/lib/design-system.ts ← designPrimitive: component-level class strings
+src/lib/design/          ← tokens.ts (section theming) + nav.ts (NAV_STATE)
 ```
+
+**There is no `tailwind.config.ts`.** This is Tailwind v4 (`@tailwindcss/postcss`),
+which is CSS-first: the palette lives in the `@theme` block of globals.css, not
+in a JS config. Do not create one — that would split the token source in two,
+the exact anti-pattern the rest of this section exists to prevent.
 
 ### Layer 1 — `src/app/globals.css`
 
-**CSS custom properties** (`:root` + `.dark`) define semantic surface, text, and border tokens:
+Two tiers, both in this file:
+
+1. **Raw tokens** on `:root` and `.dark` — the actual values
+   (`--surface-base`, `--text-primary`, `--accent-action`, `--border-default`, …).
+   Dark mode is a second definition of the same names under `.dark`.
+2. **`@theme { … }`** — maps those raw tokens to Tailwind utility names:
+   `--color-surface-base: var(--surface-base)` is what makes `bg-surface-base`
+   exist. Utilities come from this block; nothing else defines them.
+
+The semantic names to write in components:
 
 ```
-light / dark
---color-bg:              #fafafa   / #0a0a0a    (page background)
---color-surface:         #ffffff   / #171717    (card/panel = neutral-900)
---color-surface-raised:  #f5f5f5   / #262626    (section bg = neutral-800)
---color-border:          #e5e5e5   / rgba(255,255,255,0.06)
---color-text:            #171717   / #ffffff
---color-text-muted:      #525252   / #a3a3a3
+surfaces   bg-surface-page · bg-surface-base · bg-surface-raised · bg-surface-overlay
+text       text-text-primary · text-text-secondary · text-text-tertiary · text-text-muted
+borders    border-default · border-subtle · border-strong · border-interactive
+brand      bg-action · text-action · border-action · bg-action-muted
+           bg-action-strong (loud CTA fills — the electric Ion Lime)
 ```
 
-**Global dark mode overrides** (in `@layer utilities`) auto-remap standard Tailwind classes in dark mode.
-This means: **you do NOT need explicit `dark:` variants for these common classes**:
+Because light and dark are defined on the same token names, these classes flip
+automatically. **`dark:` is only for cases where the token itself is wrong for
+that surface** — not as a routine second class.
 
-| Class you write | In dark mode becomes |
-|---|---|
-| `bg-white` | `var(--color-surface)` = neutral-900 |
-| `bg-neutral-50` | `var(--color-surface-raised)` = neutral-800 |
-| `bg-neutral-100` | same as neutral-50 |
-| `border-neutral-200` | `var(--color-border)` = white/6% |
-| `border-neutral-100` | `var(--color-border-subtle)` = white/4% |
-| `text-neutral-900/800` | white |
-| `text-neutral-700/600` | `var(--color-text-muted)` = neutral-400 |
-| `text-neutral-500` | `var(--color-text-faint)` = neutral-500 |
-| `text-primary-600` | `var(--primitive-green-500)` = #22c55e |
-
-**Use explicit `dark:` only when** the automatic mapping is wrong for your use case (e.g. `dark:bg-neutral-950` for a deeper black, or `dark:text-primary-400` for a lighter green).
+`primary-*` is the RAW Ion Lime scale (`--color-primary-50 … 900`). It does NOT
+flip in dark mode and is not the brand action colour — use `action` for brand
+accents. `secondary-*` (orange) is for commerce semantics; `success/warning/
+error/info` only for their real status meaning, never as decoration.
 
 **What breaks dark mode** — avoid these:
-- `shadow-lg`, `shadow-xl`, `shadow-2xl` on cards (no global override, invisible on dark)
-- `bg-gradient-to-*` for decoration (flat colors only — brand CTA: `bg-primary-700`)
-- Inline `style={{ background: '...' }}` (bypasses the override system)
-- `border-neutral-100` on white cards (too subtle — use `border-neutral-200`)
+- `shadow-lg`, `shadow-xl`, `shadow-2xl` on cards (invisible on dark)
+- `bg-gradient-to-*` for decoration (flat colors only — brand CTA: `bg-action`)
+- Inline `style={{ background: '...' }}` (bypasses the token system entirely)
+- Any raw hex in a class (`bg-[#…]`) — `grep -rn '\[#' src/` must stay empty
 
-### Layer 2 — `tailwind.config.ts`
+### Layer 2 — the TypeScript primitives
 
-Color palette scales (hex literals). Used via Tailwind utilities like `bg-primary-600`, `text-warning-500`.
-
-```
-primary:   green  (50→#f0fdf4 … 900→#14532d) — sustainability brand
-secondary: orange (50→#fff7ed … 900→#7c2d12) — commerce/marketplace
-neutral:   gray   (50→#fafafa … 900→#171717)
-warning/error/info/success: standard semantic palette
-brand.*:   social (mastodon, linkedin, facebook) — bg-brand-mastodon etc.
-```
-
-### Layer 3 — `src/lib/design/`
-
-**`tokens.ts` → `DESIGN_TOKENS`**: which section uses which icon badge color (green vs orange) and button variant. Import when a component needs to know its section theme.
-
-**`design-system.ts` → `designPrimitive`**: TypeScript strings for component-level primitives:
-- `designPrimitive.surface.card` — full card class string (used by `<Card>`)
+**`src/lib/design-system.ts` → `designPrimitive`** (note: `src/lib/`, *not*
+`src/lib/design/`) — class strings for component-level primitives:
+- `designPrimitive.surface.card` — resolves to `card-shell`, used by `<Card>`
 - `designPrimitive.type.*` — heading/body/meta typography strings
 - `designPrimitive.button.*` — button variant strings
+
+**`src/lib/design/tokens.ts` → `DESIGN_TOKENS`**: which section uses which icon
+badge colour and button variant. **`src/lib/design/nav.ts` → `NAV_STATE`**: the
+only definition of active/inactive navigation state.
 
 ### Component primitives — always use these
 
