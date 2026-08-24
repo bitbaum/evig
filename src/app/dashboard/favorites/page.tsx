@@ -19,6 +19,7 @@ import { apiFetch } from '@/lib/api/client'
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { getConditionBadge } from '@/config/erfassung/conditions'
 import { formatCHF, LISTING_STATUS } from '@/config/marketplace'
 import { ROUTES } from '@/config/routes'
@@ -148,9 +149,9 @@ export default function FavoritesPage() {
             const conditionInfo = getConditionBadge(listing.condition)
             const sellerName = listing.seller_display_name || listing.seller_name
             return (
-              <div
+              <Card
                 key={listing.id}
-                className="group bg-surface-base rounded-xl border border-subtle overflow-hidden"
+                className="group overflow-hidden"
               >
                 <Link href={`/marketplace/${listing.id}`}>
                   <div className="relative aspect-4/3">
@@ -202,7 +203,7 @@ export default function FavoritesPage() {
                     {t('removeButton')}
                   </Button>
                 </div>
-              </div>
+              </Card>
             )
           })}
         </div>

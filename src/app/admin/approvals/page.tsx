@@ -25,6 +25,7 @@ import { PermissionRequestsManager } from '@/components/admin/PermissionRequests
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import Link from 'next/link'
 import Heading from '@/components/admin/AdminHeading'
+import { Card } from '@/components/ui/card'
 import { StatusBadge } from '@/components/ui/status-badge'
 import { adminInteractive } from '@/lib/admin-ui'
 import { APPROVAL_SOURCES } from '@/config/approval-sources'
@@ -119,7 +120,7 @@ export default async function ApprovalsPage() {
       <LocationApprovalsSection />
 
       {/* Act-elsewhere sources — live counts, link to the right surface. */}
-      <div className="bg-surface-base rounded-xl border border-subtle">
+      <Card>
         <div className="p-4 border-b border-subtle">
           <Heading level={2} className="font-semibold text-text-primary">Weitere Freigaben</Heading>
         </div>
@@ -146,7 +147,7 @@ export default async function ApprovalsPage() {
             )
           })}
         </div>
-      </div>
+      </Card>
 
       {/* Permission requests (super admin only) */}
       {isSuper && (

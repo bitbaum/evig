@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { Users, Pencil, Mail, HeartPulse, CalendarClock } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { buttonClass } from '@/components/ui/button-class'
+import { Card } from '@/components/ui/card'
 import MembershipManager from '@/components/admin/teams/MembershipManager'
 import TeamFocusInput from '@/components/admin/teams/TeamFocusInput'
 import TeamJoinButton from '@/components/admin/teams/TeamJoinButton'
@@ -82,7 +83,7 @@ export default async function TeamDetailPage({ params }: PageProps) {
     >
       <div className="space-y-5">
         {/* Meta strip: accent + mail folders + team focus */}
-        <div className="bg-surface-base rounded-lg border p-5 space-y-4">
+        <Card className="p-5 space-y-4">
           <div className="flex flex-wrap items-center gap-2">
             <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${getAccentClasses(team.accent)}`}>
               {team.name}
@@ -143,7 +144,7 @@ export default async function TeamDetailPage({ params }: PageProps) {
               <span>Sitzungsrhythmus: {team.meeting_cadence}</span>
             </div>
           )}
-        </div>
+        </Card>
 
         {/* Coordination: goals + KPI metrics */}
         <div className="grid gap-5 lg:grid-cols-2">

@@ -43,6 +43,7 @@ import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { AdminStatsStrip } from '@/components/admin/AdminStatsStrip'
 import type { StatItem } from '@/components/admin/AdminStatsStrip'
 import Heading from '@/components/admin/AdminHeading'
+import { Card } from '@/components/ui/card'
 import { formatDateShort } from '@/lib/date-formats'
 import ProtocolListClient from './ProtocolListClient'
 import { Pagination } from '@/components/ui/Pagination'
@@ -155,7 +156,7 @@ export default async function ProtocolsAdminPage({
       }
     >
       {listError ? (
-        <div className="bg-surface-base rounded-lg border p-12 text-center">
+        <Card className="p-12 text-center">
           <AlertTriangle className="w-12 h-12 text-error-400 mx-auto mb-4" />
           <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
             {ADMIN_CONTENT.protocols.errorMessage}
@@ -166,10 +167,10 @@ export default async function ProtocolsAdminPage({
           <Link href={ROUTES.admin.protocols} className={buttonClass({ variant: 'primary' })}>
             Seite neu laden
           </Link>
-        </div>
+        </Card>
       ) : stats.total === 0 ? (
         // Single, clean empty state — no zero-stats, no empty queue, no filters.
-        <div className="bg-surface-base rounded-lg border p-12 text-center">
+        <Card className="p-12 text-center">
           <FileText className="w-12 h-12 text-text-muted mx-auto mb-4" />
           <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
             {ADMIN_CONTENT.protocols.emptyTitle}
@@ -181,7 +182,7 @@ export default async function ProtocolsAdminPage({
             <Plus className="w-4 h-4" />
             Neues Protokoll
           </Link>
-        </div>
+        </Card>
       ) : (
         <>
       {/* Stats Cards */}
@@ -217,12 +218,12 @@ export default async function ProtocolsAdminPage({
       {reviewQueue.length > 0 && <ProtocolReviewQueue protocols={reviewQueue} />}
 
       {/* Filters */}
-      <Suspense fallback={<div className="bg-surface-base rounded-lg border p-4 h-14" />}>
+      <Suspense fallback={<Card className="p-4 h-14" />}>
         <ProtocolListClient teamMembers={teamMembers} />
       </Suspense>
 
       {/* Protocol List */}
-      <div className="bg-surface-base rounded-lg border overflow-hidden overflow-x-auto">
+      <Card className="overflow-hidden overflow-x-auto">
         {filteredProtocols.length === 0 ? (
           // Protocols exist, but none match the current filters (the truly-empty
           // case is handled by the page-level empty state above).
@@ -373,7 +374,7 @@ export default async function ProtocolsAdminPage({
           pageSize={PROTOCOLS_PAGE_SIZE}
           hrefBase={protocolsHrefBase}
         />
-      </div>
+      </Card>
         </>
       )}
     </AdminPageWrapper>

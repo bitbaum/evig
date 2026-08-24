@@ -1,4 +1,5 @@
 import { Loader2, Wand2, Upload, Mic } from 'lucide-react'
+import { Card } from '@/components/ui/card'
 import Heading from '@/components/admin/AdminHeading'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
@@ -37,7 +38,7 @@ export function ProtocolDraftInput({
   onProcess,
 }: Props) {
   return (
-    <div className="bg-surface-base rounded-lg border border-default p-6 space-y-4">
+    <Card className="p-6 space-y-4">
       <div>
         <Heading level={2} className="text-lg text-text-primary">
           {hasTranscript ? 'Transkript bereit — jetzt strukturieren' : 'Inhalt liefern'}
@@ -119,6 +120,6 @@ export function ProtocolDraftInput({
           )}
         </Button>
       </div>
-    </div>
+    </Card>
   )
 }

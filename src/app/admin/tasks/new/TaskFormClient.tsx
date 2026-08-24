@@ -19,6 +19,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select } from '@/components/ui/select'
 import { FormField } from '@/components/ui/form-field'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 
 interface Props {
@@ -76,7 +77,7 @@ export default function TaskFormClient({ task }: Props) {
         </div>
       )}
 
-      <div className="bg-surface-base rounded-lg border p-6 space-y-6">
+      <Card className="p-6 space-y-6">
         {!isEdit && (
           <AIFormAssist
             formType="task"
@@ -284,7 +285,7 @@ export default function TaskFormClient({ task }: Props) {
             {isEdit ? 'Speichern' : 'Aufgabe erstellen'}
           </Button>
         </div>
-      </div>
+      </Card>
     </form>
   )
 }

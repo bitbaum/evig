@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Users, Plus, X, Loader2, ArrowRightLeft } from 'lucide-react'
 import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import MoveMemberModal, { type MoveTeamRef } from '@/components/admin/teams/MoveMemberModal'
 import { apiFetch } from '@/lib/api/client'
 import { ROUTES } from '@/config/routes'
@@ -60,7 +61,7 @@ export default function MemberTeamsCard({ person, memberships, allTeams }: Props
     )
 
   return (
-    <div className="bg-surface-base rounded-lg border p-5">
+    <Card className="p-5">
       <h3 className="text-sm font-semibold text-text-primary flex items-center gap-2 mb-3">
         <Users className="w-4 h-4 text-text-secondary" />
         Teams
@@ -144,6 +145,6 @@ export default function MemberTeamsCard({ person, memberships, allTeams }: Props
           onMoved={() => router.refresh()}
         />
       )}
-    </div>
+    </Card>
   )
 }

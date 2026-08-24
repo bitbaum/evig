@@ -12,6 +12,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select } from '@/components/ui/select'
 import { FormField } from '@/components/ui/form-field'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { StatusBanner } from '@/components/ui/status-banner'
 import { SourceUploader } from '@/components/admin/protocols/SourceUploader'
 import { RecordButton } from '@/components/admin/protocols/RecordButton'
@@ -63,7 +64,7 @@ export default function ProtocolFormClient({ teamMembers, teams = [], initialTea
       {/* Inhalt — the hero and the only required step. Hierarchy inside the
           card mirrors how often each path is used: upload a file (primary),
           record live (secondary), type notes (tertiary). */}
-      <div className="bg-surface-base rounded-lg border p-6 space-y-5">
+      <Card className="p-6 space-y-5">
         <div>
           <Heading level={2} className="text-lg font-semibold text-text-primary">Inhalt</Heading>
           <p className="text-sm text-text-secondary mt-1">
@@ -99,12 +100,12 @@ export default function ProtocolFormClient({ teamMembers, teams = [], initialTea
             </div>
           )}
         </FormField>
-      </div>
+      </Card>
 
       {/* Sitzungsdetails — optional; collapsed by default. Describe the meeting
           in words (KI-Assistent) or set the fields by hand to override what the
           AI infers from the recording. */}
-      <div className="bg-surface-base rounded-lg border p-6 space-y-4">
+      <Card className="p-6 space-y-4">
         <Button
           type="button"
           variant="ghost"
@@ -251,7 +252,7 @@ export default function ProtocolFormClient({ teamMembers, teams = [], initialTea
             </div>
           </div>
         )}
-      </div>
+      </Card>
 
       {/* Submit — a plain action row, not another card. Content + optional
           details above; one clear primary action below. */}

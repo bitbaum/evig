@@ -1,4 +1,5 @@
 import { getFollowUpStatusColor } from '@/config/protocols'
+import { Card } from '@/components/ui/card'
 import Heading from '@/components/admin/AdminHeading'
 import type { StructuredNotes } from '@/lib/schemas/protocols'
 
@@ -10,7 +11,7 @@ export function ProtocolFollowUps({ followUps }: Props) {
   if (followUps.length === 0) return null
 
   return (
-    <div className="bg-surface-base rounded-lg border p-6">
+    <Card className="p-6">
       <Heading level={2} className="text-lg text-text-primary mb-3">
         Offene Punkte aus früheren Sitzungen
       </Heading>
@@ -24,6 +25,6 @@ export function ProtocolFollowUps({ followUps }: Props) {
           </li>
         ))}
       </ul>
-    </div>
+    </Card>
   )
 }

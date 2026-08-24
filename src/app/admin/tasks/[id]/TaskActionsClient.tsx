@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Select } from '@/components/ui/select'
@@ -53,7 +54,7 @@ export default function TaskActionsClient({
   } = useTaskActions(taskId)
 
   return (
-    <div className="bg-surface-base rounded-lg border p-6">
+    <Card className="p-6">
       <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Aktionen</Heading>
 
       {error && (
@@ -258,6 +259,6 @@ export default function TaskActionsClient({
           )}
         </div>
       )}
-    </div>
+    </Card>
   )
 }

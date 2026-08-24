@@ -5,6 +5,7 @@ import { Target, Plus, Pencil, Trash2, Check, X, Loader2 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { apiFetch } from '@/lib/api/client'
 import { useAsyncAction } from '@/hooks/useAsyncAction'
 import {
@@ -129,7 +130,7 @@ export default function TeamGoalsSection({ teamId, goals }: Props) {
     run(`del-${goalId}`, () => apiFetch(`/api/admin/teams/${teamId}/goals/${goalId}`, { method: 'DELETE' }))
 
   return (
-    <div className="bg-surface-base rounded-lg border p-5">
+    <Card className="p-5">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-sm font-semibold text-text-primary flex items-center gap-2">
           <Target className="w-4 h-4 text-text-secondary" />
@@ -187,6 +188,6 @@ export default function TeamGoalsSection({ teamId, goals }: Props) {
           <GoalDraftForm draft={draft} setDraft={setDraft} onSave={create} onCancel={() => { setAdding(false); setDraft(emptyDraft) }} saving={busy === 'create'} />
         </div>
       )}
-    </div>
+    </Card>
   )
 }

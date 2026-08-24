@@ -10,6 +10,7 @@ import type { TaskDetail, TaskCompletion } from '@/lib/schemas/tasks'
 import { CheckCircle2 } from 'lucide-react'
 import TaskActionsClient from '../TaskActionsClient'
 import { IconBadge } from '@/components/ui/IconBadge'
+import { Card } from '@/components/ui/card'
 import { TaskAIChat } from '../TaskAIChat'
 import Heading from '@/components/admin/AdminHeading'
 import type { getTaskProtocolSource } from '@/lib/services/protocol-decision-tasks'
@@ -29,20 +30,20 @@ export function TaskMainContent({
     <div className="lg:col-span-2 space-y-6">
       {/* Description */}
       {task.description && (
-        <div className="bg-surface-base rounded-lg border p-6">
+        <Card className="p-6">
           <Heading level={2} className="text-lg font-semibold text-text-primary mb-3">
             Beschreibung
           </Heading>
           <p className="text-text-secondary whitespace-pre-wrap">{task.description}</p>
-        </div>
+        </Card>
       )}
 
       {/* Instructions */}
       {task.instructions && (
-        <div className="bg-surface-base rounded-lg border p-6">
+        <Card className="p-6">
           <Heading level={2} className="text-lg font-semibold text-text-primary mb-3">Anleitung</Heading>
           <div className="text-text-secondary whitespace-pre-wrap">{task.instructions}</div>
-        </div>
+        </Card>
       )}
 
       {/* Actions */}
@@ -60,7 +61,7 @@ export function TaskMainContent({
       />
 
       {/* Completion History */}
-      <div className="bg-surface-base rounded-lg border p-6">
+      <Card className="p-6">
         <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">
           Erledigungen ({completions.length})
         </Heading>
@@ -98,7 +99,7 @@ export function TaskMainContent({
             ))}
           </div>
         )}
-      </div>
+      </Card>
     </div>
   )
 }

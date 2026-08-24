@@ -20,6 +20,7 @@ import { useReviewManagement, type Review } from '@/hooks/useReviewManagement'
 import Heading from '@/components/ui/Heading'
 import { EmptyState } from '@/components/ui/EmptyState'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { FormField } from '@/components/ui/form-field'
@@ -128,7 +129,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
   const t = useTranslations('dashboard.reviews')
   const tDates = useTranslations('dashboard.dates')
   return (
-    <div className="bg-surface-base rounded-lg border overflow-hidden">
+    <Card className="overflow-hidden">
       <div className="p-6 border-b border">
         <div className="flex items-start justify-between">
           <div className="flex-1">
@@ -239,7 +240,7 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
           )}
         </div>
       </div>
-    </div>
+    </Card>
   )
 }
 

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { PackageCheck, Plus, MessageSquare } from 'lucide-react'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { buttonClass } from '@/components/ui/button-class'
+import { Card } from '@/components/ui/card'
 import { ROUTES } from '@/config/routes'
 import { listDeliverables } from '@/lib/services/deliverables'
 import type { DeliverableListItem } from '@/lib/schemas/deliverables'
@@ -49,7 +50,7 @@ export default async function DeliverablesAdminPage() {
           Fehler beim Laden der Liefergegenstände.
         </div>
       ) : rows.length === 0 ? (
-        <div className="bg-surface-base rounded-lg border p-10 text-center">
+        <Card className="p-10 text-center">
           <PackageCheck className="w-10 h-10 mx-auto text-text-secondary mb-3" />
           <p className="text-text-primary font-medium">Noch keine Liefergegenstände</p>
           <p className="text-text-secondary text-sm mt-1">
@@ -62,9 +63,9 @@ export default async function DeliverablesAdminPage() {
             <Plus className="w-4 h-4" />
             Neuer Liefergegenstand
           </Link>
-        </div>
+        </Card>
       ) : (
-        <div className="bg-surface-base rounded-lg border overflow-hidden">
+        <Card className="overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm min-w-[640px]">
               <thead className="bg-surface-raised text-text-secondary text-left">
@@ -105,7 +106,7 @@ export default async function DeliverablesAdminPage() {
               </tbody>
             </table>
           </div>
-        </div>
+        </Card>
       )}
     </AdminPageWrapper>
   )

@@ -97,7 +97,7 @@ export default async function TeamsAdminPage() {
             <Link
               key={t.id}
               href={ROUTES.admin.teamBySlug(t.slug)}
-              className="bg-surface-base rounded-lg border p-5 hover:border-neutral-300 dark:hover:border-neutral-600 transition-colors block"
+              className="card-shell p-5 hover:border-neutral-300 dark:hover:border-neutral-600 transition-colors block"
             >
               <div className="flex items-start justify-between gap-2 mb-2">
                 <h2 className="font-semibold text-text-primary leading-snug">{t.name}</h2>

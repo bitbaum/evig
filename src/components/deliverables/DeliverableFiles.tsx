@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Download, Code2, ChevronDown, Loader2, FileText } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { isTextFile } from '@/config/deliverables'
 
 interface DeliverableFile {
@@ -18,7 +19,7 @@ interface DeliverableFile {
 export default function DeliverableFiles({ files }: { files: DeliverableFile[] }) {
   if (!files || files.length === 0) return null
   return (
-    <div className="bg-surface-base rounded-lg border p-5">
+    <Card className="p-5">
       <h2 className="flex items-center gap-2 font-semibold text-text-primary mb-4">
         <FileText className="w-4 h-4" />
         Dateien ({files.length})
@@ -28,7 +29,7 @@ export default function DeliverableFiles({ files }: { files: DeliverableFile[] }
           <FileRow key={f.url} file={f} />
         ))}
       </ul>
-    </div>
+    </Card>
   )
 }
 

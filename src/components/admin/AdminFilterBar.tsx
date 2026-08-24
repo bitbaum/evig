@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { FormField } from '@/components/ui/form-field'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 
 export interface FilterDropdown {
   key: string
@@ -37,7 +38,7 @@ export function AdminFilterBar({
 }: AdminFilterBarProps) {
   const t = useTranslations('admin.filters')
   return (
-    <div className="bg-surface-base rounded-lg border border p-4">
+    <Card className="p-4">
       {/* Stack vertically on mobile, row on sm+ — each field is max 240px on desktop to prevent
           dropdowns stretching absurdly wide in wide containers */}
       <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3">
@@ -97,6 +98,6 @@ export function AdminFilterBar({
           </div>
         )}
       </div>
-    </div>
+    </Card>
   )
 }

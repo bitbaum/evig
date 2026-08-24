@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { formatDateShort } from '@/lib/date-formats'
 import Heading from '@/components/admin/AdminHeading'
 import { LOCATION_STATUS, LOCATION_STATUS_COLORS, getLocationStatusLabel } from '@/config/location-status'
@@ -80,7 +81,7 @@ export default function LocationDetailPage() {
     return (
       <div className="min-h-screen bg-surface-raised py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-surface-base rounded-xl border border-subtle p-8">
+          <Card className="p-8">
             <div className="animate-pulse">
               <div className="h-8 bg-surface-overlay rounded-sm w-1/3 mb-4"></div>
               <div className="h-4 bg-surface-overlay rounded-sm w-1/2 mb-8"></div>
@@ -90,7 +91,7 @@ export default function LocationDetailPage() {
                 ))}
               </div>
             </div>
-          </div>
+          </Card>
         </div>
       </div>
     )
@@ -105,7 +106,7 @@ export default function LocationDetailPage() {
     return (
       <div className="min-h-screen bg-surface-raised py-8">
         <div className="max-w-4xl mx-auto px-4">
-          <div className="bg-surface-base rounded-xl border border-subtle p-8 text-center">
+          <Card className="p-8 text-center">
             <AlertCircle className="w-12 h-12 text-error-400 mx-auto mb-4" />
             <Heading level={2} className="text-lg font-medium text-text-primary mb-2">{error}</Heading>
             <Link
@@ -115,7 +116,7 @@ export default function LocationDetailPage() {
               <ArrowLeft className="w-4 h-4 mr-1" />
               Zurück zur Ortsverwaltung
             </Link>
-          </div>
+          </Card>
         </div>
       </div>
     )

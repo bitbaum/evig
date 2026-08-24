@@ -13,7 +13,7 @@ export function ProtocolTranscriptSource({ protocol, notes }: ProtocolTranscript
   if (!protocol.raw_transcript) return null
   return (
     <details
-      className="bg-surface-base rounded-lg border border-default"
+      className="card-shell"
       open={!notes}
     >
       <summary className="flex items-center gap-2 p-4 cursor-pointer text-sm font-medium text-text-secondary hover:text-text-primary select-none">

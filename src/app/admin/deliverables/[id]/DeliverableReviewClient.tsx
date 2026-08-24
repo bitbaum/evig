@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
 import { FormField } from '@/components/ui/form-field'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { apiFetch } from '@/lib/api/client'
 import DeliverableFiles from '@/components/deliverables/DeliverableFiles'
 import DeliverableChat from '@/components/deliverables/DeliverableChat'
@@ -122,13 +123,13 @@ export default function DeliverableReviewClient({ deliverable, initialFeedback }
       {/* Left: meta + preview + feedback */}
       <div className="lg:col-span-2 space-y-6">
         {deliverable.description && (
-          <div className="bg-surface-base rounded-lg border p-5">
+          <Card className="p-5">
             <p className="text-text-primary whitespace-pre-wrap">{deliverable.description}</p>
-          </div>
+          </Card>
         )}
 
         {deliverable.url && (
-          <div className="bg-surface-base rounded-lg border overflow-hidden">
+          <Card className="overflow-hidden">
             <div className="flex items-center justify-between px-4 py-2.5 border-b">
               <span className="text-sm font-medium text-text-secondary">Vorschau</span>
               <a
@@ -147,7 +148,7 @@ export default function DeliverableReviewClient({ deliverable, initialFeedback }
                 className="w-full h-[520px] bg-surface-base"
               />
             )}
-          </div>
+          </Card>
         )}
 
         <DeliverableFiles files={deliverable.files} />
@@ -158,7 +159,7 @@ export default function DeliverableReviewClient({ deliverable, initialFeedback }
         />
 
         {/* Feedback thread */}
-        <div className="bg-surface-base rounded-lg border p-5">
+        <Card className="p-5">
           <h2 className="flex items-center gap-2 font-semibold text-text-primary mb-4">
             <MessageSquare className="w-4 h-4" />
             Feedback ({feedback.length})
@@ -245,12 +246,12 @@ export default function DeliverableReviewClient({ deliverable, initialFeedback }
               ))}
             </ul>
           )}
-        </div>
+        </Card>
       </div>
 
       {/* Right: controls */}
       <div className="space-y-4">
-        <div className="bg-surface-base rounded-lg border p-5 space-y-4">
+        <Card className="p-5 space-y-4">
           <div>
             <label htmlFor="status" className="block text-sm font-medium text-text-secondary mb-1.5">Status</label>
             <Select id="status" value={status} onChange={(e) => changeStatus(e.target.value)} disabled={busy === 'status'}>
@@ -275,10 +276,10 @@ export default function DeliverableReviewClient({ deliverable, initialFeedback }
               </div>
             )}
           </dl>
-        </div>
+        </Card>
 
         {/* Share link */}
-        <div className="bg-surface-base rounded-lg border p-5 space-y-3">
+        <Card className="p-5 space-y-3">
           <h3 className="flex items-center gap-2 text-sm font-semibold text-text-primary">
             <Link2 className="w-4 h-4" />
             Freigabe-Link (ohne Login)
@@ -304,10 +305,10 @@ export default function DeliverableReviewClient({ deliverable, initialFeedback }
           <p className="text-xs text-text-secondary">
             Zum Teilen mit Externen: Lesen + Kommentieren, kein Login. Feedback landet direkt hier.
           </p>
-        </div>
+        </Card>
 
         {/* Agent brief */}
-        <div className="bg-surface-base rounded-lg border p-5 space-y-3">
+        <Card className="p-5 space-y-3">
           <h3 className="flex items-center gap-2 text-sm font-semibold text-text-primary">
             <Bot className="w-4 h-4" />
             Überarbeitung durch Agent
@@ -319,7 +320,7 @@ export default function DeliverableReviewClient({ deliverable, initialFeedback }
           <p className="text-xs text-text-secondary">
             Fasst die offenen Änderungswünsche + den Quell-Ordner zu einem fertigen Prompt zusammen — in Claude Code einfügen, überarbeiten lassen.
           </p>
-        </div>
+        </Card>
       </div>
     </div>
   )

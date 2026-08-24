@@ -15,6 +15,7 @@ import { ROUTES } from '@/config/routes'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { Textarea } from '@/components/ui/textarea'
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
 import { cn } from '@/lib/utils'
@@ -95,7 +96,7 @@ export function ApplicationCard({
   const canAdvance = !isTerminalApplicationStatus(application.status)
 
   return (
-    <div className="bg-surface-base rounded-lg border border-subtle overflow-hidden">
+    <Card className="overflow-hidden">
       <Button
         type="button"
         variant="ghost"
@@ -180,7 +181,7 @@ export function ApplicationCard({
           </div>
         </div>
       )}
-    </div>
+    </Card>
   )
 }
 

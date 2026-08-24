@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select } from '@/components/ui/select'
 import { FormField } from '@/components/ui/form-field'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { AIFormAssist } from '@/components/ai/AIFormAssist'
 import { apiFetch } from '@/lib/api/client'
 import { ROUTES } from '@/config/routes'
@@ -96,7 +97,7 @@ export default function TeamFormClient({ team }: { team?: TeamDetail }) {
         </div>
       )}
 
-      <div className="bg-surface-base rounded-lg border p-6 space-y-6">
+      <Card className="p-6 space-y-6">
         <AIFormAssist
           formType="team-config"
           placeholder="Beschreibe das Team in 1-2 Sätzen (Zweck, Mailordner, Rhythmus)..."
@@ -178,7 +179,7 @@ export default function TeamFormClient({ team }: { team?: TeamDetail }) {
             Team aktiv
           </label>
         )}
-      </div>
+      </Card>
 
       <div className="mt-6 flex items-center gap-3">
         <Button type="submit" disabled={loading || !form.name.trim()}>

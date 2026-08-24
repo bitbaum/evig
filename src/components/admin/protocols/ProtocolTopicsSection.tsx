@@ -1,5 +1,6 @@
 import { ChevronDown, ChevronRight, CheckCircle2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import Heading from '@/components/admin/AdminHeading'
 import type { StructuredNotes } from '@/lib/schemas/protocols'
 
@@ -13,7 +14,7 @@ export function ProtocolTopicsSection({ topics, expandedTopics, onToggleTopic }:
   if (!topics || topics.length === 0) return null
 
   return (
-    <div className="bg-surface-base rounded-lg border overflow-hidden">
+    <Card className="overflow-hidden">
       <div className="p-4 border-b bg-surface-raised">
         <Heading level={2} className="text-lg text-text-primary">
           Themen ({topics.length})
@@ -50,6 +51,6 @@ export function ProtocolTopicsSection({ topics, expandedTopics, onToggleTopic }:
           </div>
         ))}
       </div>
-    </div>
+    </Card>
   )
 }

@@ -1,3 +1,5 @@
+import { Card } from '@/components/ui/card'
+
 export function FeaturesSection() {
   const features = [
     { icon: '🗺️', title: 'Seitenkontext automatisch', description: 'URL, Screenshot und Seitentitel werden beim Einreichen automatisch erfasst.' },
@@ -16,11 +18,11 @@ export function FeaturesSection() {
         </h2>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
           {features.map((f) => (
-            <div key={f.title} className="bg-surface-base rounded-lg border border-strong p-6">
+            <Card key={f.title} className="border-strong p-6">
               <div className="text-3xl mb-3">{f.icon}</div>
               <h3 className="font-semibold text-text-primary mb-2">{f.title}</h3>
               <p className="text-text-secondary text-sm">{f.description}</p>
-            </div>
+            </Card>
           ))}
         </div>
       </div>

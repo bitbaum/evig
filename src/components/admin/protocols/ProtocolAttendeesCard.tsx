@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { apiFetch } from '@/lib/api/client'
 import { getErrorMessage } from '@/lib/utils/error'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { adminInteractive } from '@/lib/admin-ui'
 
@@ -61,7 +62,7 @@ export function ProtocolAttendeesCard({
   }
 
   return (
-    <div className="bg-surface-base rounded-lg border border-default p-4">
+    <Card className="p-4">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Users className="w-4 h-4 text-text-muted" />
@@ -155,6 +156,6 @@ export function ProtocolAttendeesCard({
           {error && <p className="text-xs text-error-600">{error}</p>}
         </div>
       )}
-    </div>
+    </Card>
   )
 }

@@ -10,6 +10,7 @@ import { useState } from 'react'
 import { adminInteractive } from '@/lib/admin-ui'
 import { Plus, Filter, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { Select } from '@/components/ui/select'
 import { FormField } from '@/components/ui/form-field'
 import {
@@ -136,7 +137,7 @@ export function HelpRequestsPageClient({
 
       {/* Filter Panel */}
       {showFilters && (
-        <div className="bg-surface-base rounded-lg border border-subtle p-4">
+        <Card className="p-4">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Status Filter */}
             <FormField label="Status" className="flex-1">
@@ -194,7 +195,7 @@ export function HelpRequestsPageClient({
               </div>
             )}
           </div>
-        </div>
+        </Card>
       )}
 
       {/* Error State */}
@@ -208,9 +209,9 @@ export function HelpRequestsPageClient({
       {loading && (
         <div className="space-y-4">
           {[...Array(3)].map((_, i) => (
-            <div
+            <Card
               key={i}
-              className="bg-surface-base rounded-lg border border-subtle p-4 animate-pulse"
+              className="p-4 animate-pulse"
             >
               <div className="flex gap-3">
                 <div className="w-10 h-10 bg-surface-overlay rounded-full" />
@@ -220,14 +221,14 @@ export function HelpRequestsPageClient({
                   <div className="h-3 bg-surface-overlay rounded-sm w-1/4" />
                 </div>
               </div>
-            </div>
+            </Card>
           ))}
         </div>
       )}
 
       {/* Empty State */}
       {!loading && !error && requests.length === 0 && (
-        <div className="bg-surface-base rounded-lg border border-subtle p-8 text-center">
+        <Card className="p-8 text-center">
           <p className="text-text-tertiary mb-4">
             {hasActiveFilters
               ? 'Keine Hilfsanfragen mit diesen Filtern gefunden.'
@@ -243,7 +244,7 @@ export function HelpRequestsPageClient({
               Erste Anfrage erstellen
             </Button>
           )}
-        </div>
+        </Card>
       )}
 
       {/* Requests List */}

@@ -2,6 +2,7 @@
 
 import { CheckCircle2, Circle, CircleAlert, Clock } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { Card } from '@/components/ui/card'
 import type { ProtocolReviewChecklistItem } from '@/lib/protocols/review'
 
 interface ProtocolProgressStripProps {
@@ -51,7 +52,7 @@ export function ProtocolProgressStrip({ items }: ProtocolProgressStripProps) {
   // NOT interactive (the old version rendered disabled buttons that looked
   // clickable but did nothing). State + the active-step hint below convey progress.
   return (
-    <div className="bg-surface-base rounded-lg border border-default p-4">
+    <Card className="p-4">
       {/* Step dots row */}
       <div className="flex items-center">
         {items.map((item, idx) => {
@@ -87,6 +88,6 @@ export function ProtocolProgressStrip({ items }: ProtocolProgressStripProps) {
           {activeItem.description}
         </div>
       )}
-    </div>
+    </Card>
   )
 }

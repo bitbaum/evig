@@ -18,6 +18,7 @@ import {
   type DeliverableType,
   type FeedbackKind,
 } from '@/config/deliverables'
+import { Card } from '@/components/ui/card'
 import DeliverableFiles from '@/components/deliverables/DeliverableFiles'
 import DeliverableChat from '@/components/deliverables/DeliverableChat'
 import Markdown from '@/components/deliverables/Markdown'
@@ -59,14 +60,14 @@ export default async function SharedDeliverablePage({
           </p>
           <h1 className="text-2xl font-bold text-text-primary">{deliverable.title}</h1>
           {deliverable.description && (
-            <div className="mt-3 bg-surface-base rounded-lg border p-5">
+            <Card className="mt-3 p-5">
               <Markdown>{deliverable.description}</Markdown>
-            </div>
+            </Card>
           )}
         </header>
 
         {deliverable.url && (
-          <div className="bg-surface-base rounded-lg border overflow-hidden mb-6">
+          <Card className="overflow-hidden mb-6">
             <div className="flex items-center justify-between px-4 py-2.5 border-b">
               <span className="text-sm font-medium text-text-secondary">Vorschau</span>
               <a
@@ -81,7 +82,7 @@ export default async function SharedDeliverablePage({
             {isInternalPreview && (
               <iframe src={deliverable.url} title={deliverable.title} className="w-full h-[560px] bg-surface-base" />
             )}
-          </div>
+          </Card>
         )}
 
         <div className="mb-6">
@@ -95,7 +96,7 @@ export default async function SharedDeliverablePage({
           />
         </div>
 
-        <section className="bg-surface-base rounded-lg border p-5">
+        <section className="card-shell p-5">
           <h2 className="font-semibold text-text-primary mb-4">Feedback</h2>
 
           <SharedFeedbackForm token={token} />

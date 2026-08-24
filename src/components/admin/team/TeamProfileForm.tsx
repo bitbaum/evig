@@ -35,6 +35,7 @@ import { TeamHRNotesSection } from './TeamHRNotesSection'
 import { TeamCompensationSection } from './TeamCompensationSection'
 import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import Heading from '@/components/admin/AdminHeading'
 
 interface FormSection {
@@ -124,7 +125,7 @@ export function TeamProfileForm({
 
       {/* User Selection (only for new profiles) */}
       {!isEdit && users && (
-        <div className="bg-surface-base rounded-lg border border-subtle p-6">
+        <Card className="p-6">
           <div className="flex items-center gap-3 mb-4">
             <User className="w-5 h-5 text-text-tertiary" />
             <Heading level={2} className="text-text-primary">{tSection('userSelectTitle')}</Heading>
@@ -144,14 +145,14 @@ export function TeamProfileForm({
               </option>
             ))}
           </Select>
-        </div>
+        </Card>
       )}
 
       {/* Form Sections */}
       {FORM_SECTIONS.map(section => (
-        <div
+        <Card
           key={section.id}
-          className="bg-surface-base rounded-lg border border-subtle overflow-hidden"
+          className="overflow-hidden"
         >
           <Button
             type="button"
@@ -198,7 +199,7 @@ export function TeamProfileForm({
               ) : null}
             </div>
           )}
-        </div>
+        </Card>
       ))}
 
       {/* HR Notes Section - Super Admin Only */}

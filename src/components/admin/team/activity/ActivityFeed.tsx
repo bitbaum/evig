@@ -12,6 +12,7 @@ import { Plus, Filter, RefreshCw, Loader2 } from 'lucide-react'
 import { Select } from '@/components/ui/select'
 import { FormField } from '@/components/ui/form-field'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import Heading from '@/components/admin/AdminHeading'
 import {
   ACTIVITY_SOURCE_LABELS,
@@ -126,7 +127,7 @@ export function ActivityFeed({
 
       {/* Filter Panel */}
       {showFilters && showFilterPanel && (
-        <div className="bg-surface-base rounded-lg border border-subtle p-4">
+        <Card className="p-4">
           <div className="flex flex-col md:flex-row gap-4">
             {/* Source Type Filter */}
             <div className="flex-1">
@@ -190,7 +191,7 @@ export function ActivityFeed({
               </div>
             )}
           </div>
-        </div>
+        </Card>
       )}
 
       {/* Error State */}
@@ -204,9 +205,9 @@ export function ActivityFeed({
       {loading && (
         <div className="space-y-4">
           {[...Array(compact ? 3 : 5)].map((_, i) => (
-            <div
+            <Card
               key={i}
-              className="bg-surface-base rounded-lg border border-subtle p-4 animate-pulse"
+              className="p-4 animate-pulse"
             >
               <div className="flex gap-3">
                 <div className="w-10 h-10 bg-surface-overlay rounded-full" />
@@ -216,14 +217,14 @@ export function ActivityFeed({
                   <div className="h-3 bg-surface-overlay rounded-sm w-1/4" />
                 </div>
               </div>
-            </div>
+            </Card>
           ))}
         </div>
       )}
 
       {/* Empty State */}
       {!loading && !error && activities.length === 0 && (
-        <div className="bg-surface-base rounded-lg border border-subtle p-8 text-center">
+        <Card className="p-8 text-center">
           <p className="text-text-tertiary mb-4">
             {hasActiveFilters
               ? 'Keine Aktivitäten mit diesen Filtern gefunden.'
@@ -240,7 +241,7 @@ export function ActivityFeed({
               Erste Aktivität hinzufügen
             </Button>
           )}
-        </div>
+        </Card>
       )}
 
       {/* Activity List */}

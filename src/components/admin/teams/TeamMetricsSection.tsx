@@ -5,6 +5,7 @@ import { Gauge, Plus, Pencil, Trash2, Check, X, Loader2, ArrowUp, ArrowDown } fr
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { apiFetch } from '@/lib/api/client'
 import { useAsyncAction } from '@/hooks/useAsyncAction'
 import { metricProgress } from '@/lib/team/metric-progress'
@@ -146,7 +147,7 @@ export default function TeamMetricsSection({ teamId, metrics }: Props) {
     run(`del-${id}`, () => apiFetch(`/api/admin/teams/${teamId}/metrics/${id}`, { method: 'DELETE' }))
 
   return (
-    <div className="bg-surface-base rounded-lg border p-5">
+    <Card className="p-5">
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-sm font-semibold text-text-primary flex items-center gap-2">
           <Gauge className="w-4 h-4 text-text-secondary" />
@@ -211,6 +212,6 @@ export default function TeamMetricsSection({ teamId, metrics }: Props) {
           <MetricDraftForm draft={draft} setDraft={setDraft} onSave={create} onCancel={() => { setAdding(false); setDraft(emptyDraft) }} saving={busy === 'create'} />
         </div>
       )}
-    </div>
+    </Card>
   )
 }
