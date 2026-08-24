@@ -49,8 +49,25 @@ echo "=== ensure ffmpeg on box (chunked audio transcription) ==="
 ssh -o BatchMode=yes "$BOX" 'command -v ffmpeg >/dev/null 2>&1 || { sudo DEBIAN_FRONTEND=noninteractive apt-get -qq update && sudo DEBIAN_FRONTEND=noninteractive apt-get -qq install -y --no-install-recommends ffmpeg; }'
 
 echo "=== apply pending migrations → prod DB ==="
-applied_list="$(printf '' | prod_psql "-tAc 'SELECT filename FROM schema_migrations'" 2>/dev/null || true)"
-for mig in "$SRC"/scripts/db/migrations/*.sql; do
+# Fail CLOSED when the applied-migrations state cannot be read. With `|| true`
+# a transient ssh/psql failure produced an EMPTY list, which does not mean
+# "nothing is applied" — it means "we could not look". The loop below treats
+# every unlisted file as pending, so an unreadable state would have re-applied
+# all ~150 migrations against the live production database.
+if ! applied_list="$(printf '' | prod_psql "-tAc 'SELECT filename FROM schema_migrations'")"; then
+  echo "ERROR: could not read schema_migrations on prod — refusing to guess which"
+  echo "       migrations are pending (an empty answer would re-apply all of them)."
+  exit 1
+fi
+
+# Same order and same superseded-duplicate list as the CI replay and the local
+# runner. This path used a bare glob (lexicographic), which orders the 005*
+# duplicates the OPPOSITE way from `sort -V` — so the order production would use
+# during a disaster-recovery rebuild was the one order CI never exercised.
+# shellcheck source=scripts/db/migration-order.sh
+source "$SRC/scripts/db/migration-order.sh"
+
+for mig in $(migration_files); do
   fname="$(basename "$mig")"
   printf '%s\n' "$applied_list" | grep -qxF "$fname" && continue
   echo "  → applying $fname"

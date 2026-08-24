@@ -67,21 +67,27 @@ jobs:
           restore-keys: |
             nextjs-${{ runner.os }}-${{ hashFiles('package-lock.json') }}-
 
-      - name: Run ESLint
+      # ONE definition of "verified" — the same bundle ci.yml runs, called
+      # verbatim. These four steps used to be re-inlined here, which quietly made
+      # the DEPLOY gate weaker than the MERGE gate: it omitted `lint:chrome`
+      # (the card-shell ratchet) and ran only the i18n subset instead of the
+      # full unit suite. A regression those cover could not block a merge but
+      # could still ship. `verify` = lint + umlauts + chrome + typecheck + test
+      # + build, and it already includes the i18n structure gate via `test`.
+      - name: Verify (lint + umlauts + chrome + typecheck + test + build)
         if: steps.secrets.outputs.configured == 'true'
-        run: npm run lint
-
-      - name: Check umlauts
-        if: steps.secrets.outputs.configured == 'true'
-        run: npm run lint:umlauts
-
-      - name: Type check
-        if: steps.secrets.outputs.configured == 'true'
-        run: npm run typecheck
-
-      - name: i18n structure gate
-        if: steps.secrets.outputs.configured == 'true'
-        run: npm run test:i18n
+        run: npm run verify
+        env:
+          # Same build-time placeholders ci.yml uses: this step runs BEFORE
+          # .env.selfhost.local is written, so strict env validation would
+          # otherwise fail during compile. The deploy script rebuilds after
+          # this with the real env and the release SHA; that second build is
+          # warm (the .next/cache step above), so the gate costs little.
+          AUTH_SECRET: ci-build-placeholder-secret-32chars
+          DB_HOST: localhost
+          DB_NAME: revampit_ci
+          DB_USER: ci
+          DB_PASSWORD: ci
 
       - name: Write selfhost env
         if: steps.secrets.outputs.configured == 'true'

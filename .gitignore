@@ -44,6 +44,8 @@ next-env.d.ts
 
 # test results and reports
 test-results/
+test-results.json
+*.bak
 playwright-report/
 tests/e2e/.auth/
 coverage/
@@ -108,15 +110,14 @@ tina/__generated__
 
 # Uploaded files (development)
 public/uploads/
-*.sh
-# CI scripts are part of the build contract — workflows call them by path, so a
-# missing one breaks CI rather than merely being absent. Negate the whole
-# directory instead of listing them one by one; the per-file negations below
-# predate this and are kept because those scripts live outside scripts/ci/.
-!scripts/ci/*.sh
-!scripts/selfhost-deploy-revampit.sh
-!scripts/e2e-inventory-prod.sh
-!scripts/db/apply-migrations-ci.sh
+# Ad-hoc one-off scripts get dropped at the repo ROOT while debugging — keep
+# those out, but ONLY those. This used to be a blanket `*.sh` plus a hand-kept
+# list of negations, which meant every new script under scripts/ was silently
+# invisible to git: it committed clean, then CI or the deploy failed on a file
+# that only ever existed on one laptop. Everything under scripts/ is part of the
+# build/deploy contract (workflows and other scripts source it by path), so the
+# default there is tracked.
+/*.sh
 ship
 cookies.txt
 daten/

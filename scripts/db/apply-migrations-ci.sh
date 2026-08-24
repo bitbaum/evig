@@ -25,20 +25,12 @@ else
 fi
 
 count=0
-# 005_messaging_system.sql duplicates 005c_messaging_system.sql (same triggers/tables).
-# Fresh CI DB applies 005c first (sort -V); re-running 005_messaging fails on triggers.
-SKIP_FILES=("005_messaging_system.sql")
+# Ordering + the superseded-duplicate list are shared with the local runner and
+# the production deploy — see scripts/db/migration-order.sh.
+# shellcheck source=scripts/db/migration-order.sh
+source "$ROOT/scripts/db/migration-order.sh"
 
-for f in $(ls scripts/db/migrations/*.sql | sort -V); do
-  base=$(basename "$f")
-  skip=0
-  for s in "${SKIP_FILES[@]}"; do
-    if [ "$base" = "$s" ]; then skip=1; break; fi
-  done
-  if [ "$skip" -eq 1 ]; then
-    echo "↷ skip $(basename "$f") (superseded duplicate)"
-    continue
-  fi
+for f in $(migration_files); do
   count=$((count + 1))
   echo "→ $(basename "$f")"
   psql -v ON_ERROR_STOP=1 -1 -f "$f" >/dev/null

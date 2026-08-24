@@ -91,7 +91,14 @@ echo -e "${YELLOW}Running migrations (version-sorted, skipping already-applied).
 COUNT_APPLIED=0
 COUNT_SKIPPED=0
 
-for path in $(ls "$MIGRATIONS_DIR"/*.sql | sort -V); do
+# Ordering + the superseded-duplicate list are shared with the CI replay and the
+# production deploy — see scripts/db/migration-order.sh. Before that file, this
+# runner had no skip list, so a from-scratch local DB died on the duplicate
+# 005_messaging_system.sql that CI had been skipping for months.
+# shellcheck source=scripts/db/migration-order.sh
+source "$(dirname "${BASH_SOURCE[0]}")/migration-order.sh"
+
+for path in $(migration_files); do
     name=$(basename "$path")
     if is_applied "$name"; then
         COUNT_SKIPPED=$((COUNT_SKIPPED + 1))
