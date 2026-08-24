@@ -27,6 +27,7 @@ import {
 } from '@/config/protocols'
 import type { MeetingType, InputMethod } from '@/config/protocols'
 import Heading from '@/components/admin/AdminHeading'
+import { Card } from '@/components/ui/card'
 import {
   ArrowLeft,
   FileText,
@@ -173,7 +174,7 @@ export default async function ProtocolDetailPage({
         {/* Sidebar */}
         <div className="space-y-4">
           {/* Protocol Details */}
-          <div className="bg-surface-base rounded-lg border border-default p-4">
+          <Card className="p-4">
             <Heading level={2} className="text-sm font-semibold text-text-primary mb-3">Details</Heading>
             <dl className="space-y-3">
               <div>
@@ -228,7 +229,7 @@ export default async function ProtocolDetailPage({
                 </div>
               )}
             </dl>
-          </div>
+          </Card>
 
           {/* Attendees — editable client component. The raw transcript used to
               live here in a collapsed sidebar accordion (buried, last on mobile);

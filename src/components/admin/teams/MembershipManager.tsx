@@ -7,6 +7,7 @@ import { Loader2, UserPlus, X, ArrowRightLeft, ChevronRight } from 'lucide-react
 import { Avatar } from '@/components/ui/Avatar'
 import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import MoveMemberModal, { type MoveTeamRef } from '@/components/admin/teams/MoveMemberModal'
 import PlaceholderInviteButton from '@/components/admin/teams/PlaceholderInviteButton'
 import InviteByEmailForm from '@/components/admin/teams/InviteByEmailForm'
@@ -105,7 +106,7 @@ export default function MembershipManager({ teamId, teamName, teamAccent, member
       {members.length === 0 ? (
         <p className="text-sm text-text-secondary px-1">Noch keine Mitglieder in diesem Team.</p>
       ) : (
-        <ul className="bg-surface-base rounded-lg border divide-y">
+        <ul className="card-shell divide-y">
           {members.map((m) => (
             <li key={m.membership_id} className="p-3 flex flex-wrap items-center gap-3">
               <Avatar src={m.avatar_url} name={m.name || m.email} size="sm" />
@@ -186,7 +187,7 @@ export default function MembershipManager({ teamId, teamName, teamAccent, member
 
       {/* One place to bring people in: pick existing staff, or (super admin)
           unfold the e-mail invite for people who aren't registered yet. */}
-      <div className="bg-surface-base rounded-lg border p-4 space-y-3">
+      <Card className="p-4 space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-end gap-3">
           <div className="flex-1 min-w-0">
             <label htmlFor="add-member" className="block text-xs font-medium text-text-secondary mb-1">
@@ -240,7 +241,7 @@ export default function MembershipManager({ teamId, teamName, teamAccent, member
             )}
           </div>
         )}
-      </div>
+      </Card>
 
       <p className="text-xs text-text-tertiary flex items-center gap-1.5 px-1">
         <ArrowRightLeft className="w-3 h-3" />

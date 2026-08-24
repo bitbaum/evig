@@ -22,6 +22,7 @@ import type {
 } from '@/lib/schemas/tasks'
 import { Clock, User, Calendar } from 'lucide-react'
 import Heading from '@/components/admin/AdminHeading'
+import { Card } from '@/components/ui/card'
 
 export function TaskStatusBadges({ task }: { task: TaskDetail }) {
   return (
@@ -68,7 +69,7 @@ export function TaskSidebar({
   return (
     <div className="space-y-6">
       {/* Task Info */}
-      <div className="bg-surface-base rounded-lg border p-6">
+      <Card className="p-6">
         <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Details</Heading>
         <dl className="space-y-4">
           <div>
@@ -132,10 +133,10 @@ export function TaskSidebar({
             </div>
           )}
         </dl>
-      </div>
+      </Card>
 
       {/* Quick Stats */}
-      <div className="bg-surface-base rounded-lg border p-6">
+      <Card className="p-6">
         <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Statistiken</Heading>
         <div className="space-y-3">
           <div className="flex justify-between">
@@ -151,7 +152,7 @@ export function TaskSidebar({
             <span className="font-medium text-text-primary">{requests.length}</span>
           </div>
         </div>
-      </div>
+      </Card>
     </div>
   )
 }

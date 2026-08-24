@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select } from '@/components/ui/select'
 import { FormField } from '@/components/ui/form-field'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { apiFetch } from '@/lib/api/client'
 import { ROUTES } from '@/config/routes'
 import {
@@ -71,7 +72,7 @@ export default function DeliverableFormClient() {
         </div>
       )}
 
-      <div className="bg-surface-base rounded-lg border p-6 space-y-6">
+      <Card className="p-6 space-y-6">
         <FormField label="Titel" required htmlFor="title">
           <Input
             id="title"
@@ -157,7 +158,7 @@ export default function DeliverableFormClient() {
             </Select>
           </FormField>
         </div>
-      </div>
+      </Card>
 
       <div className="mt-6 flex items-center gap-3">
         <Button type="submit" disabled={loading || !form.title.trim()}>

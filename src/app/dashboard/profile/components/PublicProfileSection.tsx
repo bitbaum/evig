@@ -2,6 +2,7 @@
 
 import { Globe, Lock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import Heading from '@/components/ui/Heading'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -17,7 +18,7 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
   const t = useTranslations('dashboard.profile.publicProfile')
 
   return (
-    <div className="bg-surface-base rounded-xl border border-subtle p-6">
+    <Card className="p-6">
       <Heading level={2} className="text-xl font-semibold text-text-primary mb-6">
         {t('heading')}
       </Heading>
@@ -103,6 +104,6 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
           </p>
         </div>
       </div>
-    </div>
+    </Card>
   )
 }

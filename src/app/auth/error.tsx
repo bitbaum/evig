@@ -8,6 +8,7 @@ import { logger } from '@/lib/logger'
 import Heading from '@/components/ui/Heading'
 import { ROUTES } from '@/config/routes'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 
 export default function AuthError({
   error,
@@ -24,7 +25,7 @@ export default function AuthError({
 
   return (
     <div className="min-h-screen bg-surface-raised flex items-center justify-center">
-      <div className="max-w-md w-full bg-surface-base rounded-xl border border-strong p-6 text-center">
+      <Card className="max-w-md w-full border-strong p-6 text-center">
         <AlertCircle className="w-12 h-12 text-error-500 mx-auto mb-4" aria-hidden="true" />
         <Heading level={1} className="text-lg text-text-primary">
           {t('heading')}
@@ -40,7 +41,7 @@ export default function AuthError({
             {t('goToLogin')}
           </Button>
         </div>
-      </div>
+      </Card>
     </div>
   )
 }

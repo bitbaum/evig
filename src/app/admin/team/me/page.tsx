@@ -49,7 +49,7 @@ function Chips({ items }: { items: string[] }) {
 
 function Card({ icon: Icon, title, children }: { icon: React.ComponentType<{ className?: string }>; title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-surface-base rounded-lg border p-5">
+    <div className="card-shell p-5">
       <h2 className="text-sm font-semibold text-text-primary flex items-center gap-2 mb-3">
         <Icon className="w-4 h-4 text-text-secondary" />
         {title}

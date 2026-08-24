@@ -4,6 +4,7 @@ import { auth } from '@/auth'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import Heading from '@/components/ui/Heading'
+import { Card } from '@/components/ui/card'
 import { getTextColor } from '@/lib/design-system'
 import { cn } from '@/lib/utils'
 import { IT_HILFE, formatBudget } from '@/config/it-hilfe'
@@ -125,7 +126,7 @@ export default async function TechnikerDashboardPage() {
 
         {/* Stats row */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-          <div className="bg-surface-base rounded-lg border p-5">
+          <Card className="p-5">
             <p className={cn('text-xs font-medium uppercase tracking-wide', getTextColor('neutral', 'muted'), 'dark:text-text-muted')}>
               {t('statsCompleted')}
             </p>
@@ -135,9 +136,9 @@ export default async function TechnikerDashboardPage() {
             <p className={cn('text-xs mt-0.5', getTextColor('neutral', 'muted'), 'dark:text-text-tertiary')}>
               {t('statsCompletedSub')}
             </p>
-          </div>
+          </Card>
 
-          <div className="bg-surface-base rounded-lg border p-5">
+          <Card className="p-5">
             <p className={cn('text-xs font-medium uppercase tracking-wide', getTextColor('neutral', 'muted'), 'dark:text-text-muted')}>
               {t('statsRating')}
             </p>
@@ -147,9 +148,9 @@ export default async function TechnikerDashboardPage() {
             <p className={cn('text-xs mt-0.5', getTextColor('neutral', 'muted'), 'dark:text-text-tertiary')}>
               {t('statsRatingSub')}
             </p>
-          </div>
+          </Card>
 
-          <div className="bg-surface-base rounded-lg border p-5 col-span-2 md:col-span-1">
+          <Card className="p-5 col-span-2 md:col-span-1">
             <p className={cn('text-xs font-medium uppercase tracking-wide', getTextColor('neutral', 'muted'), 'dark:text-text-muted')}>
               {t('statsActiveOffers')}
             </p>
@@ -159,14 +160,14 @@ export default async function TechnikerDashboardPage() {
             <p className={cn('text-xs mt-0.5', getTextColor('neutral', 'muted'), 'dark:text-text-tertiary')}>
               {t('statsActiveOffersSub')}
             </p>
-          </div>
+          </Card>
         </div>
 
         {/* Main content: two sections */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
           {/* Section 1: Passende Anfragen */}
-          <div className="bg-surface-base rounded-lg border">
+          <Card>
             <div className="p-5 border-b border-subtle flex items-center justify-between">
               <div>
                 <Heading level={2} className={cn('text-base font-semibold', getTextColor('neutral', 'primary'), 'dark:text-white')}>
@@ -223,10 +224,10 @@ export default async function TechnikerDashboardPage() {
                 </div>
               )}
             </div>
-          </div>
+          </Card>
 
           {/* Section 2: Meine Angebote */}
-          <div className="bg-surface-base rounded-lg border">
+          <Card>
             <div className="p-5 border-b border-subtle flex items-center justify-between">
               <div>
                 <Heading level={2} className={cn('text-base font-semibold', getTextColor('neutral', 'primary'), 'dark:text-white')}>
@@ -276,7 +277,7 @@ export default async function TechnikerDashboardPage() {
                 </div>
               )}
             </div>
-          </div>
+          </Card>
         </div>
 
         {/* Quick links footer */}

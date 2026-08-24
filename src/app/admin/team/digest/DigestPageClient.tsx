@@ -22,6 +22,7 @@ import {
 import Heading from '@/components/admin/AdminHeading'
 import { useDigest } from '@/components/admin/team/activity'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { TASK_CATEGORY_LABELS, type TaskCategory } from '@/config/tasks'
 import { formatRelativeTime } from '@/lib/utils'
 
@@ -93,23 +94,23 @@ export function DigestPageClient() {
         <div className="space-y-6">
           <div className="grid md:grid-cols-4 gap-4">
             {[...Array(4)].map((_, i) => (
-              <div
+              <Card
                 key={i}
-                className="bg-surface-base rounded-lg border border-subtle p-4 animate-pulse"
+                className="p-4 animate-pulse"
               >
                 <div className="h-8 bg-surface-overlay rounded-sm w-16 mb-2" />
                 <div className="h-4 bg-surface-overlay rounded-sm w-24" />
-              </div>
+              </Card>
             ))}
           </div>
-          <div className="bg-surface-base rounded-lg border border-subtle p-6 animate-pulse">
+          <Card className="p-6 animate-pulse">
             <div className="h-6 bg-surface-overlay rounded-sm w-40 mb-4" />
             <div className="space-y-3">
               {[...Array(5)].map((_, i) => (
                 <div key={i} className="h-12 bg-surface-overlay rounded-sm" />
               ))}
             </div>
-          </div>
+          </Card>
         </div>
       )}
 
@@ -126,7 +127,7 @@ export function DigestPageClient() {
 
           {/* Totals */}
           <div className="grid md:grid-cols-5 gap-4">
-            <div className="p-4 bg-surface-base rounded-lg border border-subtle">
+            <Card className="p-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-action-muted rounded-lg flex items-center justify-center">
                   <CheckCircle className="w-5 h-5 text-action" />
@@ -138,9 +139,9 @@ export function DigestPageClient() {
                   <p className="text-xs text-text-secondary">Aufgaben erledigt</p>
                 </div>
               </div>
-            </div>
+            </Card>
 
-            <div className="p-4 bg-surface-base rounded-lg border border-subtle">
+            <Card className="p-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-surface-raised rounded-lg flex items-center justify-center">
                   <FileText className="w-5 h-5 text-text-secondary" />
@@ -152,9 +153,9 @@ export function DigestPageClient() {
                   <p className="text-xs text-text-secondary">Aktivitäten</p>
                 </div>
               </div>
-            </div>
+            </Card>
 
-            <div className="p-4 bg-surface-base rounded-lg border border-subtle">
+            <Card className="p-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-warning-100 dark:bg-warning-900/30 rounded-lg flex items-center justify-center">
                   <HelpCircle className="w-5 h-5 text-warning-600 dark:text-warning-200" />
@@ -166,9 +167,9 @@ export function DigestPageClient() {
                   <p className="text-xs text-text-secondary">Hilfsanfragen</p>
                 </div>
               </div>
-            </div>
+            </Card>
 
-            <div className="p-4 bg-surface-base rounded-lg border border-subtle">
+            <Card className="p-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-action-muted rounded-lg flex items-center justify-center">
                   <CheckCircle className="w-5 h-5 text-action" />
@@ -180,9 +181,9 @@ export function DigestPageClient() {
                   <p className="text-xs text-text-secondary">Gelöst</p>
                 </div>
               </div>
-            </div>
+            </Card>
 
-            <div className="p-4 bg-surface-base rounded-lg border border-subtle">
+            <Card className="p-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-surface-raised rounded-lg flex items-center justify-center">
                   <Users className="w-5 h-5 text-text-secondary" />
@@ -194,13 +195,13 @@ export function DigestPageClient() {
                   <p className="text-xs text-text-secondary">Aktive Mitarbeiter</p>
                 </div>
               </div>
-            </div>
+            </Card>
           </div>
 
           {/* Top Contributors & Milestones */}
           <div className="grid lg:grid-cols-2 gap-6">
             {/* Top Contributors */}
-            <div className="bg-surface-base rounded-lg border border-subtle p-6">
+            <Card className="p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Trophy className="w-5 h-5 text-warning-500" />
                 <Heading level={3} className="font-semibold text-text-primary">Top Beiträger</Heading>
@@ -248,10 +249,10 @@ export function DigestPageClient() {
                   ))}
                 </div>
               )}
-            </div>
+            </Card>
 
             {/* Recent Milestones */}
-            <div className="bg-surface-base rounded-lg border border-subtle p-6">
+            <Card className="p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Flag className="w-5 h-5 text-action" />
                 <Heading level={3} className="font-semibold text-text-primary">
@@ -285,12 +286,12 @@ export function DigestPageClient() {
                   ))}
                 </div>
               )}
-            </div>
+            </Card>
           </div>
 
           {/* Category Breakdown */}
           {digest.by_category.length > 0 && (
-            <div className="bg-surface-base rounded-lg border border-subtle p-6">
+            <Card className="p-6">
               <Heading level={3} className="font-semibold text-text-primary mb-4">
                 Aufgaben nach Kategorie
               </Heading>
@@ -309,12 +310,12 @@ export function DigestPageClient() {
                   </div>
                 ))}
               </div>
-            </div>
+            </Card>
           )}
 
           {/* All Users Activity */}
           {digest.by_user.length > 0 && (
-            <div className="bg-surface-base rounded-lg border border-subtle p-6">
+            <Card className="p-6">
               <Heading level={3} className="font-semibold text-text-primary mb-4">
                 Alle Mitarbeiter
               </Heading>
@@ -372,7 +373,7 @@ export function DigestPageClient() {
                   </tbody>
                 </table>
               </div>
-            </div>
+            </Card>
           )}
         </>
       )}

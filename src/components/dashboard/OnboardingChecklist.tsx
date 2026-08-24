@@ -33,7 +33,7 @@ function ChecklistCard({
   const remaining = steps.filter((s) => !s.done).length
 
   return (
-    <div className={cn('bg-surface-base rounded-lg border p-4', className)}>
+    <div className={cn('card-shell p-4', className)}>
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-sm font-semibold text-text-secondary">{title}</h2>
         <span className="text-xs text-text-tertiary">

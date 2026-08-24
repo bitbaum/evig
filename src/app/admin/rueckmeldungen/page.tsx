@@ -18,6 +18,7 @@ import { siteSuggestions, presentationComments, deliverableFeedback, deliverable
 import { requireAnySection } from '@/lib/admin/guards'
 import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
 import { AdminStatsStrip } from '@/components/admin/AdminStatsStrip'
+import { Card } from '@/components/ui/card'
 import { FEEDBACK_KIND_LABELS, type FeedbackKind } from '@/config/deliverables'
 import { formatDateTimeNumeric } from '@/lib/date-formats'
 import { logger } from '@/lib/logger'
@@ -237,13 +238,13 @@ export default async function RueckmeldungenPage({
       </div>
 
       {rows.length === 0 ? (
-        <div className="bg-surface-base rounded-lg border p-10 text-center">
+        <Card className="p-10 text-center">
           <Inbox className="w-10 h-10 mx-auto text-text-secondary mb-3" />
           <p className="text-text-primary font-medium">Keine Rückmeldungen</p>
           <p className="text-text-secondary text-sm mt-1">Hier erscheinen Rückmeldungen aus allen drei Quellen.</p>
-        </div>
+        </Card>
       ) : (
-        <div className="bg-surface-base rounded-lg border overflow-hidden">
+        <Card className="overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm min-w-[760px]">
               <thead className="bg-surface-raised text-text-secondary text-left">
@@ -283,7 +284,7 @@ export default async function RueckmeldungenPage({
               </tbody>
             </table>
           </div>
-        </div>
+        </Card>
       )}
     </AdminPageWrapper>
   )

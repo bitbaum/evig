@@ -143,7 +143,7 @@ export default function AssignmentBoard({ columns, allTeams }: Props) {
                           e.dataTransfer.setData('application/json', JSON.stringify(payload))
                           e.dataTransfer.effectAllowed = 'move'
                         }}
-                        className={`group bg-surface-base rounded-lg border p-2.5 flex items-center gap-2 ${
+                        className={`group card-shell p-2.5 flex items-center gap-2 ${
                           busy ? 'opacity-50' : 'md:cursor-grab active:md:cursor-grabbing hover:border-neutral-300 dark:hover:border-neutral-600'
                         }`}
                       >

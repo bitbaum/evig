@@ -5,6 +5,7 @@ import {
   type DonationType,
   type DonationStatus,
 } from '@/config/donations'
+import { Card } from '@/components/ui/card'
 import { Select } from '@/components/ui/select'
 import type { DonationFiltersState } from './types'
 
@@ -15,7 +16,7 @@ interface Props {
 
 export function DonationFilters({ filters, onFiltersChange }: Props) {
   return (
-    <div className="bg-surface-base rounded-lg border border-subtle p-4 mb-6">
+    <Card className="p-4 mb-6">
       <div className="flex flex-wrap gap-4 items-center">
         <div className="flex items-center gap-2">
           <Filter className="w-5 h-5 text-text-tertiary" />
@@ -40,6 +41,6 @@ export function DonationFilters({ filters, onFiltersChange }: Props) {
           ))}
         </Select>
       </div>
-    </div>
+    </Card>
   )
 }

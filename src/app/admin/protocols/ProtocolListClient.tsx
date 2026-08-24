@@ -12,6 +12,7 @@ import { useTranslations } from 'next-intl'
 import { Filter, Search } from 'lucide-react'
 import { Select } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
+import { Card } from '@/components/ui/card'
 import {
   MEETING_TYPE_LABELS,
   PROTOCOL_STATUS_LABELS,
@@ -40,7 +41,7 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
   }
 
   return (
-    <div className="bg-surface-base rounded-lg border p-4">
+    <Card className="p-4">
       <div className="flex items-center gap-4 flex-wrap">
         <Filter className="w-5 h-5 text-text-tertiary" />
 
@@ -134,6 +135,6 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
           </Select>
         </div>
       </div>
-    </div>
+    </Card>
   )
 }

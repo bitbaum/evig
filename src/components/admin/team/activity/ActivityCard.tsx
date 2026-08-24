@@ -17,6 +17,7 @@ import {
 } from '@/config/activity'
 import { formatRelativeTime } from '@/lib/utils'
 import { Avatar } from '@/components/ui/Avatar'
+import { Card } from '@/components/ui/card'
 import { URGENCY_DEFAULT } from '@/config/it-hilfe'
 import type { UnifiedActivity } from './types'
 
@@ -83,7 +84,7 @@ export function ActivityCard({ activity }: ActivityCardProps) {
   }
 
   return (
-    <div className="bg-surface-base rounded-lg border border-subtle p-4 hover:border-strong transition-shadow">
+    <Card className="p-4 hover:border-strong transition-shadow">
       <div className="flex gap-3">
         {/* Avatar */}
         <Avatar name={activity.user_name || activity.user_email} size="md" colorClassName="bg-action text-action-text" />
@@ -135,6 +136,6 @@ export function ActivityCard({ activity }: ActivityCardProps) {
           </p>
         </div>
       </div>
-    </div>
+    </Card>
   )
 }

@@ -24,6 +24,7 @@ import { formatDateTime, formatDateShort } from '@/lib/date-formats';
 import { formatPriceCents } from '@/config/marketplace';
 import { APPROVAL_STATUS } from '@/config/approval-status';
 import Heading from '@/components/admin/AdminHeading';
+import { Card } from '@/components/ui/card';
 import { useWorkshopProposalDetail } from '@/hooks/useWorkshopProposalDetail';
 
 export default function WorkshopProposalDetailPage() {
@@ -37,13 +38,13 @@ export default function WorkshopProposalDetailPage() {
     return (
       <div className="min-h-screen bg-surface-raised py-8">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="bg-surface-base rounded-xl border border-subtle p-8">
+          <Card className="p-8">
             <div className="animate-pulse space-y-4">
               <div className="h-8 bg-surface-overlay rounded-sm w-1/3"></div>
               <div className="h-4 bg-surface-overlay rounded-sm w-full"></div>
               <div className="h-4 bg-surface-overlay rounded-sm w-2/3"></div>
             </div>
-          </div>
+          </Card>
         </div>
       </div>
     );

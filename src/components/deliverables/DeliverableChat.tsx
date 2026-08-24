@@ -5,6 +5,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import { Sparkles, Send, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { apiFetch } from '@/lib/api/client'
 
 interface Turn {
@@ -58,7 +59,7 @@ export default function DeliverableChat({
   }
 
   return (
-    <div className="bg-surface-base rounded-lg border p-5">
+    <Card className="p-5">
       <h2 className="flex items-center gap-2 font-semibold text-text-primary mb-1">
         <Sparkles className="w-4 h-4 text-action" />
         Hirn fragen
@@ -156,6 +157,6 @@ export default function DeliverableChat({
           {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
         </Button>
       </form>
-    </div>
+    </Card>
   )
 }

@@ -8,6 +8,7 @@ import {
   Sparkles,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { ACTION_ITEM_TYPE_LABELS } from '@/config/protocols'
 import { pluralDe } from '@/lib/i18n/plural-de'
 import type { StructuredNotes, ActionLinkRecord } from '@/lib/schemas/protocols'
@@ -110,7 +111,7 @@ export function ProtocolActionItemsList({
   }).length
 
   return (
-    <div className="bg-surface-base rounded-lg border border-default overflow-hidden">
+    <Card className="overflow-hidden">
       {/* One header + one tally. The old design also printed a redundant
           "Aktionen N" superset count next to the "Aufgaben M" subset count,
           which read as two conflicting numbers — removed. */}
@@ -273,6 +274,6 @@ export function ProtocolActionItemsList({
           />
         </div>
       )}
-    </div>
+    </Card>
   )
 }

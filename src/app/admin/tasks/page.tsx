@@ -8,6 +8,7 @@ import { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { buttonClass } from '@/components/ui/button-class'
+import { Card } from '@/components/ui/card'
 import { Suspense } from 'react'
 import { logger } from '@/lib/logger'
 import { TASK_STATUSES, TASK_LIST_FILTERS } from '@/config/tasks'
@@ -120,7 +121,7 @@ export default async function TasksAdminPage({
         },
       ] satisfies StatItem[]} />
 
-      <Suspense fallback={<div className="bg-surface-base rounded-lg border p-4 h-14" />}>
+      <Suspense fallback={<Card className="p-4 h-14" />}>
         <TaskFiltersClient />
       </Suspense>
 

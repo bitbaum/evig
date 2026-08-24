@@ -18,6 +18,7 @@ import {
 } from '@/config/team'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
+import { Card } from '@/components/ui/card'
 import type { TeamFiltersProps } from './types'
 
 export function TeamFilters({
@@ -31,7 +32,7 @@ export function TeamFilters({
   onSearchChange,
 }: TeamFiltersProps) {
   return (
-    <div className="bg-surface-base rounded-xl border border-subtle p-4">
+    <Card className="p-4">
       <div className="flex flex-col lg:flex-row gap-4">
         {/* Search */}
         <div className="flex-1 min-w-[200px]">
@@ -89,6 +90,6 @@ export function TeamFilters({
           </Select>
         </div>
       </div>
-    </div>
+    </Card>
   )
 }

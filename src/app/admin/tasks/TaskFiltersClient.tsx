@@ -12,6 +12,7 @@ import {
   TASK_LIST_DEFAULT_FILTER,
   TASK_STATUSES,
 } from '@/config/tasks'
+import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 
@@ -108,7 +109,7 @@ export default function TaskFiltersClient() {
   }
 
   return (
-    <div className="bg-surface-base rounded-lg border dark:border-white/8 p-4">
+    <Card className="dark:border-white/8 p-4">
       <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
         {/* Search */}
         <div className="relative flex-1 w-full md:w-auto">
@@ -164,6 +165,6 @@ export default function TaskFiltersClient() {
           </div>
         </div>
       </div>
-    </div>
+    </Card>
   )
 }

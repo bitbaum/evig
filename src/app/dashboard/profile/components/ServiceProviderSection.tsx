@@ -2,6 +2,7 @@
 
 import { Wrench } from 'lucide-react'
 import Heading from '@/components/ui/Heading'
+import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { useTranslations } from 'next-intl'
@@ -15,7 +16,7 @@ interface ServiceProviderSectionProps {
 export function ServiceProviderSection({ profile, handleChange }: ServiceProviderSectionProps) {
   const t = useTranslations('dashboard.profile.serviceProvider')
   return (
-    <div className="bg-surface-base rounded-xl border border-subtle p-6">
+    <Card className="p-6">
       <div className="flex items-center gap-3 mb-6">
         <div className="w-10 h-10 bg-action-muted rounded-lg flex items-center justify-center">
           <Wrench className="w-5 h-5 text-action" />
@@ -98,6 +99,6 @@ export function ServiceProviderSection({ profile, handleChange }: ServiceProvide
           <p className="text-xs text-text-tertiary mt-1">{t('radiusHint')}</p>
         </div>
       </div>
-    </div>
+    </Card>
   )
 }

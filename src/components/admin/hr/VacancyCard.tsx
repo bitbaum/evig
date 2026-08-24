@@ -12,6 +12,7 @@ import {
   Users,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import { ROUTES } from '@/config/routes'
 import {
   VACANCY_STATUS,
@@ -46,7 +47,7 @@ export function VacancyCard({
   const applicationCount = vacancy.application_count ?? 0
 
   return (
-    <div className="bg-surface-base rounded-lg border border-subtle p-4 sm:p-5 space-y-4">
+    <Card className="p-4 sm:p-5 space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2 mb-1">
@@ -153,6 +154,6 @@ export function VacancyCard({
           </Button>
         </Link>
       </div>
-    </div>
+    </Card>
   )
 }
