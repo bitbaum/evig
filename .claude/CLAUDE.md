@@ -85,7 +85,7 @@ revampit/
 |-------|------------|------|
 | Frontend | Next.js 16, TypeScript, Tailwind | 3000 |
 | **Prod DB** | **Self-hosted Postgres on Hetzner** (Supabase stack, `localhost:5432/revampit`) | On the app box |
-| **Dev DB** | Neon PostgreSQL (cloud) | Remote |
+| **Dev DB** | PostgreSQL in Docker (`npm run services:up`, port 5433) | localhost:5433 |
 | Search | Meilisearch | 7700 |
 | Payments | Payrexx (mock in dev) | — |
 
@@ -413,22 +413,32 @@ const sections = getAccessibleSections(user);
 
 ### Admin Sections
 
-Defined in `ADMIN_SECTIONS` constant:
+**SSOT: `src/config/sections.ts`.** Read it — do not trust a table here.
+`ADMIN_SECTIONS` in `lib/permissions.ts` is derived from it, and the ids/paths
+change often enough that any copy in a doc goes stale and starts handing out the
+wrong permission. This section used to carry a 10-row table listing ids that no
+longer exist (`products`, `finances`) and paths that 404 — granting `workshops`
+to a staff member gave them nothing, because the admin section is
+`workshops-admin` while `workshops` is a *dashboard* section.
 
-| Section | Path | Sensitive |
-|---------|------|-----------|
-| dashboard | /admin | No |
-| products | /admin/products | No |
-| workshops | /admin/workshops | No |
-| services | /admin/services | No |
-| approvals | /admin/approvals | No |
-| users | /admin/users | **Yes** |
-| team | /admin/team | **Yes** |
-| finances | /admin/hirn/finanzen | **Yes** |
-| hirn | /admin/hirn | **Yes** |
-| settings | /admin/settings | **Yes** |
+To see the real list:
 
-**Sensitive sections** require super admin or explicit permission.
+```bash
+# every admin section id + path
+grep -nE "^  [a-z-]+: \{" src/config/sections.ts
+
+# the sensitive ones (require super admin or an explicit grant)
+grep -n "sensitive: true" -B8 src/config/sections.ts | grep -E "^\s+id:"
+```
+
+Rules that do not change:
+- **Sensitive sections require super admin or an explicit permission.**
+  `DEFAULT_STAFF_PERMISSIONS` = all sections *minus* the sensitive ones, so
+  `is_staff` alone grants none of them.
+- Route-level checks go through `withAdmin('<section>')`, or — for endpoints a
+  resource owner must also reach — the section-specific helper (e.g.
+  `canAccessFinance`). **Never** gate on `session.user.isStaff` directly; that is
+  a much wider set and has produced a live privilege escalation before.
 
 ### Content Approval Flow
 
@@ -454,7 +464,7 @@ session.user = {
 
 ### Database Migration
 
-Run `scripts/db/migrations/002-simplified-auth.sql` to add:
+Run `scripts/db/migrations/002b-simplified-auth.sql` to add:
 - `is_staff` column to users table
 - `staff_permissions` column to users table
 - `technician_profiles` table (replaces repairer)
