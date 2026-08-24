@@ -20,6 +20,7 @@ import {
   isEuroZone,
   getVATRate,
 } from '../currency'
+import { SWISS_VAT_RATES } from '@/config/tax'
 
 // ============================================================================
 // Constants
@@ -28,7 +29,7 @@ import {
 describe('CURRENCY_CONFIG', () => {
   it('has CHF configuration', () => {
     expect(CURRENCY_CONFIG.CHF.code).toBe('CHF')
-    expect(CURRENCY_CONFIG.CHF.taxRate).toBe(0.077)
+    expect(CURRENCY_CONFIG.CHF.taxRate).toBe(SWISS_VAT_RATES.standard)
     expect(CURRENCY_CONFIG.CHF.decimalPlaces).toBe(2)
   })
 
@@ -88,18 +89,20 @@ describe('formatCurrency', () => {
 // ============================================================================
 
 describe('calculateVAT', () => {
-  it('calculates VAT for CHF (7.7%)', () => {
+  it('calculates VAT for CHF at the Swiss rate', () => {
+    const vat = 100 * SWISS_VAT_RATES.standard
     const result = calculateVAT(100, 'CHF', false)
     expect(result.subtotal).toBe(100)
-    expect(result.vat).toBe(7.7)
-    expect(result.total).toBe(107.7)
+    expect(result.vat).toBeCloseTo(vat, 6)
+    expect(result.total).toBeCloseTo(100 + vat, 6)
   })
 
   it('extracts VAT from inclusive amount for CHF', () => {
-    const result = calculateVAT(107.7, 'CHF', true)
-    expect(result.subtotal).toBe(100)
-    expect(result.vat).toBe(7.7)
-    expect(result.total).toBe(107.7)
+    const gross = 100 * (1 + SWISS_VAT_RATES.standard)
+    const result = calculateVAT(gross, 'CHF', true)
+    expect(result.subtotal).toBeCloseTo(100, 6)
+    expect(result.vat).toBeCloseTo(gross - 100, 6)
+    expect(result.total).toBeCloseTo(gross, 6)
   })
 
   it('calculates VAT for EUR (19%)', () => {
@@ -203,8 +206,8 @@ describe('isEuroZone', () => {
 })
 
 describe('getVATRate', () => {
-  it('returns 7.7% for CHF', () => {
-    expect(getVATRate('CHF')).toBe(0.077)
+  it('returns the Swiss standard rate for CHF', () => {
+    expect(getVATRate('CHF')).toBe(SWISS_VAT_RATES.standard)
   })
 
   it('returns 19% for EUR', () => {

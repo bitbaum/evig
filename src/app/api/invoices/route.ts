@@ -7,6 +7,7 @@ import { apiError, apiSuccess, apiBadRequest, parsePagination } from '@/lib/api/
 import { logger } from '@/lib/logger'
 import { canAccessFinance } from '@/lib/permissions'
 import { calculateTaxes } from '@/lib/payments/tax-compliance'
+import { SWISS_VAT_RATES } from '@/config/tax'
 import { INVOICE_STATUS } from '@/config/invoice-status'
 import { z } from 'zod'
 import { validateBody } from '@/lib/schemas'
@@ -26,7 +27,7 @@ const CreateInvoiceSchema = z.object({
   lineItems: z.array(LineItemSchema).min(1),
   dueDate: z.string().optional(),
   notes: z.string().optional(),
-  taxRate: z.number().min(0).max(1).default(0.077), // Swiss VAT
+  taxRate: z.number().min(0).max(1).default(SWISS_VAT_RATES.standard), // SSOT: @/config/tax
   currency: z.string().length(3).default('CHF'),
   customerCountry: z.string().length(2).default('CH'),
   customerType: z.enum(['consumer', 'business']).default('consumer'),

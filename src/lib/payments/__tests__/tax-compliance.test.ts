@@ -22,10 +22,14 @@ import {
 // ============================================================================
 
 describe('VAT rate constants', () => {
-  it('has correct Swiss VAT rates', () => {
-    expect(SWISS_VAT_RATES.standard).toBe(0.077)
-    expect(SWISS_VAT_RATES.reduced).toBe(0.025)
-    expect(SWISS_VAT_RATES.special).toBe(0.035)
+  // Switzerland raised VAT on 2024-01-01. These assertions previously pinned
+  // the pre-2024 rates, so the whole duplication was gate-protected: any
+  // attempt to correct the rate turned the suite red and looked like a
+  // regression. Keep them tracking the law, not the old code.
+  it('has the Swiss VAT rates in force since 2024-01-01', () => {
+    expect(SWISS_VAT_RATES.standard).toBe(0.081)
+    expect(SWISS_VAT_RATES.reduced).toBe(0.026)
+    expect(SWISS_VAT_RATES.accommodation).toBe(0.038)
   })
 
   it('has correct EU VAT rates', () => {
@@ -61,7 +65,7 @@ describe('getTaxConfig', () => {
   it('returns Swiss config for CH', () => {
     const config = getTaxConfig('CH')
     expect(config.regime).toBe('swiss')
-    expect(config.vatRate).toBe(0.077)
+    expect(config.vatRate).toBe(0.081)
   })
 
   it('returns EU config for DE consumer', () => {
@@ -84,7 +88,7 @@ describe('getTaxConfig', () => {
   it('does not apply reverse charge for Swiss business', () => {
     const config = getTaxConfig('CH', 'business')
     expect(config.regime).toBe('swiss')
-    expect(config.vatRate).toBe(0.077)
+    expect(config.vatRate).toBe(0.081)
   })
 })
 
@@ -96,8 +100,8 @@ describe('calculateTaxes', () => {
   it('calculates Swiss VAT correctly', () => {
     const result = calculateTaxes(100, 'CH')
     expect(result.subtotal).toBe(100)
-    expect(result.vatAmount).toBe(7.7)
-    expect(result.total).toBe(107.7)
+    expect(result.vatAmount).toBe(8.1)
+    expect(result.total).toBe(108.1)
     expect(result.regime).toBe('swiss')
   })
 
@@ -122,10 +126,10 @@ describe('calculateTaxes', () => {
   })
 
   it('rounds to 2 decimal places', () => {
-    // 33.33 * 0.077 = 2.56641
+    // 33.33 * 0.081 = 2.69973
     const result = calculateTaxes(33.33, 'CH')
-    expect(result.vatAmount).toBe(2.57)
-    expect(result.total).toBe(35.9)
+    expect(result.vatAmount).toBe(2.7)
+    expect(result.total).toBe(36.03)
   })
 })
 
@@ -171,7 +175,7 @@ describe('generateTaxInvoiceData', () => {
     const result = generateTaxInvoiceData(transaction, { countryCode: 'CH' })
 
     expect(result.invoice.subtotal).toBe(100)
-    expect(result.invoice.vatRate).toBe(0.077)
+    expect(result.invoice.vatRate).toBe(0.081)
     expect(result.invoice.taxRegime).toBe('swiss')
     expect(result.compliance.reverseChargeApplied).toBe(false)
     expect(result.legal.retentionPeriod).toBe(10)

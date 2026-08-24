@@ -352,7 +352,9 @@ export const invoices = pgTable('invoices', {
   totalCents: bigint('total_cents', { mode: 'number' }).notNull(),
 
   currency: varchar('currency', { length: 3 }).notNull().default('CHF'),
-  taxRate: decimal('tax_rate', { precision: 5, scale: 4 }).default('0.0770'),
+  // 8.1% — Swiss VAT since 2024-01-01. SSOT for the rate is @/config/tax; this
+  // default mirrors it and is kept in sync by migration 140.
+  taxRate: decimal('tax_rate', { precision: 5, scale: 4 }).default('0.0810'),
 
   // Invoice data
   lineItems: jsonb('line_items').default([]),

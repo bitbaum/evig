@@ -16,6 +16,7 @@ import {
   DEFAULT_AUTO_RELEASE_DAYS,
   type PaymentProvider,
 } from '../payments-fees'
+import { SWISS_VAT_RATES } from '@/config/tax'
 
 // ============================================================================
 // Test helpers
@@ -106,16 +107,14 @@ describe('calculateFees', () => {
 // ============================================================================
 
 describe('calculateSwissVAT', () => {
-  it('calculates VAT at 7.7% (Swiss standard rate)', () => {
-    // 10000 * 0.077 = 770
+  it('calculates VAT at the Swiss standard rate', () => {
     const vat = calculateSwissVAT(10000)
-    expect(vat).toBe(770)
+    expect(vat).toBe(Math.round(10000 * SWISS_VAT_RATES.standard))
   })
 
   it('rounds to nearest cent', () => {
-    // 333 * 0.077 = 25.641 → 26
     const vat = calculateSwissVAT(333)
-    expect(vat).toBe(26)
+    expect(vat).toBe(Math.round(333 * SWISS_VAT_RATES.standard))
   })
 
   it('returns 0 for 0 amount', () => {
@@ -124,9 +123,8 @@ describe('calculateSwissVAT', () => {
   })
 
   it('handles typical shop price (CHF 350 → 35000 cents)', () => {
-    // 35000 * 0.077 = 2695
     const vat = calculateSwissVAT(35000)
-    expect(vat).toBe(2695)
+    expect(vat).toBe(Math.round(35000 * SWISS_VAT_RATES.standard))
   })
 })
 

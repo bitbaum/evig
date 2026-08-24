@@ -49,19 +49,10 @@ export interface TaxReportTransaction {
   customerCountry: string
 }
 
-// Swiss VAT rates (as of 2024)
-export const SWISS_VAT_RATES = {
-  standard: 0.077,    // 7.7% for most services
-  reduced: 0.025,     // 2.5% for certain goods
-  special: 0.035      // 3.7% for accommodation
-} as const
-
-// EU VAT rates (simplified - in practice, varies by country)
-export const EU_VAT_RATES = {
-  standard: 0.19,     // 19% standard rate
-  reduced: 0.07,      // 7% reduced rate
-  superReduced: 0.05  // 5% super reduced rate
-} as const
+// Rates live in @/config/tax — see the note there on the 2024-01-01 increase.
+// Re-exported so existing importers keep working, but there is one definition.
+import { SWISS_VAT_RATES, EU_VAT_RATES } from '@/config/tax'
+export { SWISS_VAT_RATES, EU_VAT_RATES }
 
 // Tax configurations by country/region
 export const TAX_CONFIGURATIONS: Record<string, TaxConfig> = {

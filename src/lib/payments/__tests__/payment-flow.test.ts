@@ -263,8 +263,8 @@ describe('calculateFees', () => {
 // ============================================================================
 
 describe('calculateSwissVAT', () => {
-  it('calculates 7.7% VAT on a standard amount', () => {
-    expect(calculateSwissVAT(10000)).toBe(770)
+  it('calculates VAT on a standard amount at the Swiss rate', () => {
+    expect(calculateSwissVAT(10000)).toBe(Math.round(10000 * SWISS_VAT_RATES.standard))
   })
 
   it('returns 0 for zero amount', () => {
@@ -272,11 +272,11 @@ describe('calculateSwissVAT', () => {
   })
 
   it('rounds correctly for fractional VAT', () => {
-    expect(calculateSwissVAT(1234)).toBe(95)
+    expect(calculateSwissVAT(1234)).toBe(Math.round(1234 * SWISS_VAT_RATES.standard))
   })
 
   it('handles large amounts', () => {
-    expect(calculateSwissVAT(1_000_000)).toBe(77000)
+    expect(calculateSwissVAT(1_000_000)).toBe(Math.round(1_000_000 * SWISS_VAT_RATES.standard))
   })
 
   it('uses the standard Swiss VAT rate', () => {

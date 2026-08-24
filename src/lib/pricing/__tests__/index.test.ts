@@ -16,11 +16,12 @@ import {
   calculateTotalWithFees,
   calculateServicePricing,
 } from '../index'
+import { SWISS_VAT_RATES, SWISS_VAT_STANDARD_PERCENT } from '@/config/tax'
 
 describe('getVATRate', () => {
-  it('returns Swiss VAT rate (7.7%) for CHF', () => {
+  it('returns the Swiss VAT rate for CHF', () => {
     expect(getVATRate('CHF')).toBe(VAT_RATE_CHF)
-    expect(getVATRate('CHF')).toBeCloseTo(0.077)
+    expect(getVATRate('CHF')).toBeCloseTo(SWISS_VAT_RATES.standard)
   })
 
   it('returns default VAT rate (19%) for EUR', () => {
@@ -34,8 +35,8 @@ describe('getVATRate', () => {
 })
 
 describe('getVATRateLabel', () => {
-  it('returns "7.7" for CHF', () => {
-    expect(getVATRateLabel('CHF')).toBe('7.7')
+  it('returns the Swiss rate as a label for CHF', () => {
+    expect(getVATRateLabel('CHF')).toBe(SWISS_VAT_STANDARD_PERCENT)
   })
 
   it('returns "19.0" for EUR', () => {
@@ -49,8 +50,7 @@ describe('getVATRateLabel', () => {
 
 describe('calculateVAT', () => {
   it('calculates Swiss VAT on CHF amount', () => {
-    // 100 CHF subtotal → 7.70 CHF VAT
-    expect(calculateVAT(100, 'CHF')).toBeCloseTo(7.7)
+    expect(calculateVAT(100, 'CHF')).toBeCloseTo(100 * SWISS_VAT_RATES.standard)
   })
 
   it('calculates EUR VAT on EUR amount', () => {
@@ -59,7 +59,7 @@ describe('calculateVAT', () => {
   })
 
   it('defaults to CHF when currency omitted', () => {
-    expect(calculateVAT(100)).toBeCloseTo(7.7)
+    expect(calculateVAT(100)).toBeCloseTo(100 * SWISS_VAT_RATES.standard)
   })
 
   it('returns 0 VAT on 0 subtotal', () => {
@@ -95,12 +95,13 @@ describe('calculatePaymentFees', () => {
 
 describe('calculateTotalWithFees', () => {
   it('adds CHF VAT then payment fees to subtotal', () => {
-    // Subtotal: 100 CHF
-    // VAT: 7.70 CHF → subtotalWithVat: 107.70
-    // Payment fee: 107.70 * 2.9% + 0.30 = 3.1233 + 0.30 = 3.4233
-    // Total: 107.70 + 3.4233 ≈ 111.12
+    // Subtotal 100 CHF → + VAT at the Swiss rate → + 2.9% + 0.30 payment fee,
+    // charged on the VAT-inclusive amount. Derived from the SSOT so the
+    // assertion follows a rate change instead of blocking it.
+    const withVat = 100 * (1 + SWISS_VAT_RATES.standard)
+    const expected = withVat + (withVat * 0.029 + 0.30)
     expect(calculateTotalWithFees(100, 'CHF')).toBeGreaterThan(100)
-    expect(calculateTotalWithFees(100, 'CHF')).toBeCloseTo(111.12, 1)
+    expect(calculateTotalWithFees(100, 'CHF')).toBeCloseTo(expected, 1)
   })
 
   it('total is always greater than subtotal', () => {
@@ -128,7 +129,7 @@ describe('calculateServicePricing', () => {
 
   it('calculates VAT on subtotal (not on total)', () => {
     const result = calculateServicePricing(10000, 'CHF')
-    expect(result.vat).toBeCloseTo(7.7, 1)
+    expect(result.vat).toBeCloseTo(100 * SWISS_VAT_RATES.standard, 1)
   })
 
   it('total is subtotal + VAT + fees', () => {
