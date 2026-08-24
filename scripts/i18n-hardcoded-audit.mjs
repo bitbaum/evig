@@ -51,6 +51,14 @@ const SCAN_EXCLUDE = [
   /\bmessages\.[a-z]+\.json$/,
 ]
 
+// KNOWN BLIND SPOT (found by mutation-testing this gate, 2026-08):
+// only QUOTED string literals are scanned. A German sentence written as JSX
+// TEXT — `<p>Keine Einträge gefunden</p>` — is not detected, because it never
+// appears inside quotes. Planting one produces "0 new" and a green gate.
+// Attribute values, props and variables ARE caught. Closing this needs a JSX
+// text-node pass (parse, or a `>…<` scan that excludes expressions); until
+// then, do not read a green run as "no hardcoded German in components".
+//
 // Strings that legitimately contain umlauts but are NOT user-facing:
 //   - logger / console calls (the next-intl runtime allows German error logs)
 //   - import paths, route paths, regex patterns, comments
@@ -230,7 +238,13 @@ function scanMessageFile(locale) {
 // Run
 // ============================================================================
 
-function fingerprintSrc(f)     { return `src::${f.file}:${f.line}::${f.snippet}` }
+// Deliberately WITHOUT the line number. Keying a known violation to file:line
+// meant that editing anything ABOVE it shifted the line and the same untouched
+// string reported as a NEW violation — so an unrelated PR could turn the gate
+// red and the only cheap answer was to re-snapshot the baseline. A gate that
+// cries wolf on every refactor is a gate that gets removed. file + snippet
+// identifies the violation; the line is display only.
+function fingerprintSrc(f)     { return `src::${f.file}::${f.snippet}` }
 function fingerprintMsg(f)     { return `msg::${f.file}::${f.keyPath}` }
 
 const allSrcFindings = []
