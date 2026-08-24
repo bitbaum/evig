@@ -10,6 +10,7 @@ import { useTranslations } from 'next-intl'
 import type { ProductSuggestion } from './types'
 import Heading from '@/components/ui/Heading'
 import { Button } from '@/components/ui/button'
+import { useFocusTrap } from '@/hooks/useFocusTrap'
 
 interface ProductSuccessModalProps {
   suggestion: ProductSuggestion
@@ -18,6 +19,7 @@ interface ProductSuccessModalProps {
 
 export function ProductSuccessModal({ suggestion, onClose }: ProductSuccessModalProps) {
   const t = useTranslations('components.productSuccessModal')
+  const dialogRef = useFocusTrap<HTMLDivElement>(true, onClose)
   const IconComponent = suggestion.icon
   return (
     <motion.div
@@ -27,13 +29,17 @@ export function ProductSuccessModal({ suggestion, onClose }: ProductSuccessModal
       onClick={onClose}
     >
       <motion.div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="product-success-modal-title"
         initial={{ scale: 0.9 }}
         animate={{ scale: 1 }}
         className="bg-surface-base dark:border dark:border-white/6 rounded-xl shadow-xs max-w-md w-full p-6 text-center"
         onClick={(e) => e.stopPropagation()}
       >
         <CheckCircle className="w-16 h-16 text-action mx-auto mb-4" />
-        <Heading level={2} className="text-2xl font-bold text-text-primary mb-2">
+        <Heading level={2} id="product-success-modal-title" className="text-2xl font-bold text-text-primary mb-2">
           {t('title')}
         </Heading>
         <p className="text-text-secondary mb-6">

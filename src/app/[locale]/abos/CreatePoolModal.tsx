@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
+import { useFocusTrap } from '@/hooks/useFocusTrap'
 import type { Pool } from './types'
 import { CATEGORY_EMOJIS } from './types'
 
@@ -18,6 +19,7 @@ interface Props {
 
 export function CreatePoolModal({ onClose, onCreate }: Props) {
   const t = useTranslations('abos')
+  const dialogRef = useFocusTrap<HTMLDivElement>(true, onClose)
   const [form, setForm] = useState({
     serviceName: '',
     serviceCategory: 'streaming',
@@ -54,9 +56,15 @@ export function CreatePoolModal({ onClose, onCreate }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-      <div className="bg-surface-base dark:border dark:border-white/6 rounded-2xl shadow-xs w-full max-w-lg p-6">
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="create-pool-modal-title"
+        className="bg-surface-base dark:border dark:border-white/6 rounded-2xl shadow-xs w-full max-w-lg p-6"
+      >
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-lg font-semibold">{t('modal.title')}</h2>
+          <h2 id="create-pool-modal-title" className="text-lg font-semibold">{t('modal.title')}</h2>
           <Button onClick={onClose} variant="ghost" size="icon">
             <X className="w-4 h-4" />
           </Button>

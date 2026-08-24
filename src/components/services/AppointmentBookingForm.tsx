@@ -13,6 +13,7 @@ import { SUCCESS_MESSAGES } from '@/config/error-messages'
 import { apiFetch } from '@/lib/api/client'
 import { ROUTES } from '@/config/routes'
 import { todayLocalIso } from '@/lib/utils/date'
+import { Modal } from '@/components/ui/Modal'
 
 interface AppointmentBookingFormProps {
   serviceSlug: string
@@ -99,23 +100,18 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
   }
 
   return (
-    <div className="fixed inset-0 bg-surface-overlay/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-      <div className="bg-surface-base dark:border dark:border-white/6 rounded-xl shadow-xs w-full max-w-lg max-h-[90vh] overflow-y-auto">
-        <div className="p-4 sm:p-6">
-          <div className="flex items-center justify-between mb-4 sm:mb-6">
-            <h3 className="text-lg sm:text-xl font-bold text-text-primary">
-              Termin für {serviceTitle} buchen
-            </h3>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsOpen(false)}
-              className="text-text-tertiary hover:text-text-secondary min-w-[touch] min-h-[touch] touch-target -mr-2"
-              aria-label="Schliessen"
-            >
-              ✕
-            </Button>
-          </div>
+    // <Modal> owns the portal shell: the canonical scrim, Escape-to-close,
+    // initial focus, the Tab trap and focus restoration — none of which this
+    // dialog had while it hand-rolled its own `fixed inset-0` overlay. A
+    // keyboard user could tab straight out of an open booking form into the
+    // page behind it, and had no way to dismiss it without reaching the ✕.
+    <Modal
+      isOpen={isOpen}
+      onClose={() => setIsOpen(false)}
+      title={`Termin für ${serviceTitle} buchen`}
+      size="md"
+    >
+      <div className="max-h-[70vh] overflow-y-auto">
 
           {pricing && (
             <div className="bg-surface-raised border rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
@@ -261,9 +257,8 @@ export default function AppointmentBookingForm({ serviceSlug, serviceTitle, pric
               </div>
             </form>
           )}
-        </div>
       </div>
-    </div>
+    </Modal>
   )
 }
 

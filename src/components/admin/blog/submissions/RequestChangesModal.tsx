@@ -5,6 +5,7 @@ import Heading from '@/components/admin/AdminHeading'
 import { Textarea } from '@/components/ui/textarea'
 import { FormField } from '@/components/ui/form-field'
 import { Button } from '@/components/ui/button'
+import { useFocusTrap } from '@/hooks/useFocusTrap'
 
 interface RequestChangesModalProps {
   reviewNotes: string
@@ -21,10 +22,19 @@ export function RequestChangesModal({
   onConfirm,
   onClose,
 }: RequestChangesModalProps) {
+  const dialogRef = useFocusTrap<HTMLDivElement>(true, onClose)
+
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
-      <div className="bg-surface-base rounded-xl p-6 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
-        <Heading level={3} className="text-lg text-text-primary mb-4">
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="request-changes-modal-title"
+        className="bg-surface-base rounded-xl p-6 max-w-md w-full"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <Heading level={3} id="request-changes-modal-title" className="text-lg text-text-primary mb-4">
           Änderungen anfragen
         </Heading>
         <FormField label="Welche Änderungen werden benötigt?" required className="mb-4">

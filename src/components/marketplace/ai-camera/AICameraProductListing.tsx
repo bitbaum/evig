@@ -22,6 +22,7 @@ import { AIAnalysisLoader } from './AIAnalysisLoader'
 import { AIProductResults } from './AIProductResults'
 import { getConditionLabel, generateProductDescription } from './config'
 import type { AICameraProductListingProps, ProductSuggestion, DetectedProductData } from './types'
+import { useFocusTrap } from '@/hooks/useFocusTrap'
 
 export function AICameraProductListing({ onProductDetected, onClose }: AICameraProductListingProps) {
   const [selectedSuggestion, setSelectedSuggestion] = useState<ProductSuggestion | null>(null)
@@ -58,6 +59,10 @@ export function AICameraProductListing({ onProductDetected, onClose }: AICameraP
     onProductDetected(detectedData)
   }
 
+  // Escape-to-close, initial focus, Tab cycle and focus restoration. Declared
+  // before the early return below so the hook order stays stable.
+  const dialogRef = useFocusTrap<HTMLDivElement>(true, onClose)
+
   // Show success modal after product selection
   if (selectedSuggestion) {
     return <ProductSuccessModal suggestion={selectedSuggestion} onClose={onClose} />
@@ -72,7 +77,19 @@ export function AICameraProductListing({ onProductDetected, onClose }: AICameraP
         className="fixed inset-0 bg-black/75 flex items-center justify-center z-50 p-4"
         onClick={onClose}
       >
+        {/*
+          Keyboard accessibility comes from the shared useFocusTrap hook rather
+          than from <Modal>: this dialog animates in and out via framer-motion,
+          which Modal does not do, so converting it would change the UX. The
+          hook supplies exactly what was missing — Escape-to-close, initial
+          focus, a Tab cycle and focus restoration. Without it a keyboard user
+          could tab out of the open dialog into the page behind it.
+        */}
         <motion.div
+          ref={dialogRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Produkt erfassen"
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}

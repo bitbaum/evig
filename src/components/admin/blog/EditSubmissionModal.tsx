@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/button';
 import { BLOG_SUBMISSION_EDITABLE_FIELDS } from '@/config/editable-fields';
 import { logger } from '@/lib/logger';
 import { apiFetch } from '@/lib/api/client';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
 
 interface BlogSubmission {
   id: string;
@@ -39,6 +40,8 @@ export function EditSubmissionModal({
   onClose,
   onSaved,
 }: EditSubmissionModalProps) {
+  const dialogRef = useFocusTrap<HTMLDivElement>(true, onClose);
+
   // Initialize form data from submission
   const [formData, setFormData] = useState<Record<string, any>>(() => {
     const data: Record<string, any> = {};
@@ -180,10 +183,17 @@ export function EditSubmissionModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
-      <div className="bg-surface-base dark:border dark:border-white/6 rounded-lg shadow-xs max-w-4xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="edit-submission-modal-title"
+        className="bg-surface-base dark:border dark:border-white/6 rounded-lg shadow-xs max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header */}
         <div className="sticky top-0 bg-surface-base border-b px-6 py-4 flex items-center justify-between">
-          <Heading level={2} className="text-2xl">Einreichung bearbeiten</Heading>
+          <Heading level={2} id="edit-submission-modal-title" className="text-2xl">Einreichung bearbeiten</Heading>
           <Button
             variant="ghost"
             size="icon"
