@@ -5699,7 +5699,7 @@
       "trackShipment": "Traccia spedizione",
       "priceSection": "Riepilogo prezzi",
       "amountLabel": "Importo",
-      "serviceFee": "Commissione di servizio (5%)",
+      "serviceFee": "Commissione di servizio ({rate}%)",
       "yourPayout": "Il tuo pagamento",
       "totalPaid": "Totale pagato",
       "buyerProtection": "Protezione acquirente attiva",

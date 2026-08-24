@@ -5699,7 +5699,7 @@
       "trackShipment": "Suivre l'envoi",
       "priceSection": "Récapitulatif des prix",
       "amountLabel": "Montant",
-      "serviceFee": "Frais de service (5%)",
+      "serviceFee": "Frais de service ({rate}%)",
       "yourPayout": "Votre paiement",
       "totalPaid": "Total payé",
       "buyerProtection": "Protection acheteur active",

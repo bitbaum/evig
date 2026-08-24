@@ -5694,7 +5694,7 @@
       "trackShipment": "Отследить отправление",
       "priceSection": "Обзор цен",
       "amountLabel": "Сумма",
-      "serviceFee": "Сервисный сбор (5%)",
+      "serviceFee": "Сервисный сбор ({rate}%)",
       "yourPayout": "Ваша выплата",
       "totalPaid": "Всего оплачено",
       "buyerProtection": "Защита покупателя активна",

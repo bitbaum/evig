@@ -5766,7 +5766,7 @@
       "trackShipment": "Sendung verfolgen",
       "priceSection": "Preisübersicht",
       "amountLabel": "Betrag",
-      "serviceFee": "Servicegebühr (5%)",
+      "serviceFee": "Servicegebühr ({rate}%)",
       "yourPayout": "Ihre Auszahlung",
       "totalPaid": "Total bezahlt",
       "buyerProtection": "Käuferschutz aktiv",

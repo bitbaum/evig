@@ -5699,7 +5699,7 @@
       "trackShipment": "배송 추적",
       "priceSection": "가격 내역",
       "amountLabel": "금액",
-      "serviceFee": "서비스 수수료 (5%)",
+      "serviceFee": "서비스 수수료 ({rate}%)",
       "yourPayout": "내 정산금",
       "totalPaid": "총 결제액",
       "buyerProtection": "구매자 보호 활성",

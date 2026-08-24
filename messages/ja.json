@@ -5699,7 +5699,7 @@
       "trackShipment": "配送を追跡",
       "priceSection": "価格内訳",
       "amountLabel": "金額",
-      "serviceFee": "サービス料 (5%)",
+      "serviceFee": "サービス料 ({rate}%)",
       "yourPayout": "あなたの支払い",
       "totalPaid": "合計支払額",
       "buyerProtection": "購入者保護有効",

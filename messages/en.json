@@ -5699,7 +5699,7 @@
       "trackShipment": "Track shipment",
       "priceSection": "Price breakdown",
       "amountLabel": "Amount",
-      "serviceFee": "Service fee (5%)",
+      "serviceFee": "Service fee ({rate}%)",
       "yourPayout": "Your payout",
       "totalPaid": "Total paid",
       "buyerProtection": "Buyer protection active",

@@ -5699,7 +5699,7 @@
       "trackShipment": "Rastrear envío",
       "priceSection": "Desglose de precios",
       "amountLabel": "Importe",
-      "serviceFee": "Comisión de servicio (5%)",
+      "serviceFee": "Comisión de servicio ({rate}%)",
       "yourPayout": "Tu pago",
       "totalPaid": "Total pagado",
       "buyerProtection": "Protección al comprador activa",
