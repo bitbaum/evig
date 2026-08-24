@@ -32,6 +32,7 @@ import {
 } from '@/lib/kivvi/client'
 import { triggerInviterReward } from '@/lib/referral'
 import { SWISS_VAT_STANDARD_PERCENT } from '@/config/tax'
+import { applyOrderCompletion, listingIdsForOrder } from '@/lib/marketplace/complete-order'
 
 // ============================================================================
 // Types
@@ -253,13 +254,18 @@ export async function handleMarketplacePayment(
         return
       }
 
-      await db
-        .update(marketplaceOrders)
-        .set({
-          status: ORDER_STATUS.COMPLETED,
-          updatedAt: sql`NOW()`,
+      // Atomic, and with the SAME side effects as the other completion paths.
+      // This used to set the status alone, so a successful capture left the
+      // listing RESERVED forever — the very lock the CANCELLED branch below
+      // documents fixing, on the path that actually succeeds.
+      await db.transaction(async (tx) => {
+        const listingIds = await listingIdsForOrder(tx, order)
+        await applyOrderCompletion(tx, {
+          orderId: order.id,
+          sellerId: order.sellerId,
+          listingIds,
         })
-        .where(eq(marketplaceOrders.id, order.id))
+      })
 
       syncP2PPayoutToKivvi(order).catch(err =>
         logger.error('Kivvi payout sync failed — order completed but seller payable not cleared', {

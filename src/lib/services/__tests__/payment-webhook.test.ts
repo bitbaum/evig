@@ -105,9 +105,11 @@ jest.mock('@/db', () => ({
 }))
 
 jest.mock('@/db/schema', () => ({
-  marketplaceOrders: { id: 'marketplaceOrders' },
-  marketplaceOrderItems: { id: 'marketplaceOrderItems' },
+  marketplaceOrders: { id: 'marketplaceOrders', deliveredAt: 'deliveredAt' },
+  marketplaceOrderItems: { id: 'marketplaceOrderItems', listingId: 'listingId', orderId: 'orderId' },
   listings: { id: 'listings' },
+  // Completion bumps the seller's counter (see lib/marketplace/complete-order).
+  sellerProfiles: { userId: 'sellerProfiles.userId', totalSold: 'sellerProfiles.totalSold' },
   users: { id: 'users' },
   paymentTransactions: { id: 'paymentTransactions' },
   workshopRegistrations: { id: 'workshopRegistrations' },
