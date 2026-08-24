@@ -5,6 +5,7 @@ import { invoices, users, userProfiles } from '@/db/schema'
 import { eq, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
+import { canAccessFinance } from '@/lib/permissions'
 import { generateInvoicePDF, type InvoiceData } from '@/lib/invoices/pdf-template'
 
 // GET /api/invoices/[id]/pdf - Generate and return PDF
@@ -17,7 +18,7 @@ export const GET = withAuth<{ id: string }>(async (request, session, context) =>
       return apiNotFound('Rechnung')
     }
 
-    if (invoice.user_id !== session.user.id && !session.user.isStaff) {
+    if (invoice.user_id !== session.user.id && !canAccessFinance(session.user)) {
       return apiUnauthorized('Sie haben keine Berechtigung, diese Rechnung anzuzeigen')
     }
 
@@ -53,7 +54,7 @@ export const POST = withAuth<{ id: string }>(async (request, session, context) =
       return apiNotFound('Rechnung')
     }
 
-    if (invoice.user_id !== session.user.id && !session.user.isStaff) {
+    if (invoice.user_id !== session.user.id && !canAccessFinance(session.user)) {
       return apiUnauthorized('Sie haben keine Berechtigung, ein PDF für diese Rechnung zu generieren')
     }
 

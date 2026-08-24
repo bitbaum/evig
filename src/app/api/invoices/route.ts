@@ -5,6 +5,7 @@ import { invoices, users } from '@/db/schema'
 import { eq, and, sql, desc } from 'drizzle-orm'
 import { apiError, apiSuccess, apiBadRequest, parsePagination } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
+import { canAccessFinance } from '@/lib/permissions'
 import { calculateTaxes } from '@/lib/payments/tax-compliance'
 import { INVOICE_STATUS } from '@/config/invoice-status'
 import { z } from 'zod'
@@ -56,7 +57,7 @@ export const POST = withAuth(async (request, session) => {
     } = validation.data
 
     // Check if user is admin or creating invoice for themselves
-    const isAdmin = session.user.isStaff
+    const isAdmin = canAccessFinance(session.user)
     const targetUserId = isAdmin && userId ? userId : session.user.id
 
     if (!targetUserId) {
@@ -152,7 +153,7 @@ export const GET = withAuth(async (request: NextRequest, session) => {
     const { limit, offset } = parsePagination(request, { defaultLimit: 20 })
 
     // Check if user is admin
-    const isAdmin = session.user.isStaff
+    const isAdmin = canAccessFinance(session.user)
 
     const conditions = []
     if (!isAdmin) {

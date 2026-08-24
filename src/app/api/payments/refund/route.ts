@@ -7,6 +7,7 @@ import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } fro
 import { PAYMENT_STATUS, PAYMENT_TRANSACTION_TYPE } from '@/config/payment-status'
 import { REFUND_STATUS } from '@/config/refund'
 import { logger } from '@/lib/logger'
+import { canAccessFinance } from '@/lib/permissions'
 import { validateBody, RefundSchema } from '@/lib/schemas'
 
 export const POST = withAuth(async (request, session) => {
@@ -52,7 +53,7 @@ export const POST = withAuth(async (request, session) => {
     const txn = transactionRows[0]
 
     // Check if user owns the transaction or is admin
-    const isAdmin = session.user.isStaff
+    const isAdmin = canAccessFinance(session.user)
 
     if (txn.userId !== session.user.id && !isAdmin) {
       return apiUnauthorized('Du kannst nur eigene Transaktionen erstatten')

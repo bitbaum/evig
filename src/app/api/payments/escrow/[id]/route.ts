@@ -6,6 +6,7 @@ import { eq, and, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { PAYMENT_STATUS, ESCROW_STATUS, PAYMENT_TRANSACTION_TYPE } from '@/config/payment-status'
 import { logger } from '@/lib/logger'
+import { canAccessFinance } from '@/lib/permissions'
 import { validateBody, EscrowReleaseSchema } from '@/lib/schemas'
 
 interface EscrowRow {
@@ -81,7 +82,7 @@ export const GET = withAuth<{ id: string }>(async (request, session, context) =>
     const escrow = escrowResult.rows[0]
 
     // Check permissions - buyer, seller, or admin can view
-    const isAdmin = session.user.isStaff
+    const isAdmin = canAccessFinance(session.user)
 
     if (escrow.buyer_id !== session.user.id && escrow.seller_id !== session.user.id && !isAdmin) {
       return apiUnauthorized('Keine Berechtigung, dieses Treuhandkonto einzusehen')
@@ -174,7 +175,7 @@ export const POST = withAuth<{ id: string }>(async (request, session, context) =
     const escrow = escrowRows[0] as EscrowReleaseRow
 
     // Check permissions - only buyer or admin can release funds
-    const isAdmin = session.user.isStaff
+    const isAdmin = canAccessFinance(session.user)
 
     if (escrow.buyerId !== session.user.id && !isAdmin) {
       return apiUnauthorized('Nur der Käufer kann Treuhandgelder freigeben')

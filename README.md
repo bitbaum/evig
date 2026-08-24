@@ -57,12 +57,18 @@ Adding a new domain means adding constants to one file. If a table name is wrong
 Three tiers, zero ambiguity:
 
 ```
-Users  -->  Staff (@revamp-it.ch email)  -->  Super Admins (hardcoded list)
+Users  -->  Staff (is_staff, granted by a super admin)  -->  Super Admins (DB flag + owner floor)
 ```
 
 - `is_staff` boolean + `staff_permissions` text array on the users table
-- Staff detection by email domain; super admins by explicit list
-- Sensitive sections require permission checks -- no implicit trust
+- **Staff status is never derived from the e-mail domain.** Anyone may register;
+  `is_staff` is granted explicitly (`PATCH /api/admin/users/[id]/permissions` or
+  the HR hire flow). `isStaffEmail` is cosmetic only — it picks a welcome-email
+  template. Super admins come from `users.is_super_admin`, with
+  `SUPER_ADMIN_EMAILS` as a bootstrap floor so the org cannot lock itself out.
+- Sensitive sections (finance, users, settings, …) require an explicit
+  permission — `is_staff` alone grants none of them, so money and admin routes
+  must check the section, never the staff flag.
 
 ### Content Approval Flow
 

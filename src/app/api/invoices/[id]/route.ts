@@ -5,6 +5,7 @@ import { invoices, users } from '@/db/schema'
 import { eq, sql } from 'drizzle-orm'
 import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
 import { logger } from '@/lib/logger'
+import { canAccessFinance } from '@/lib/permissions'
 import { validateBody, UpdateInvoiceSchema } from '@/lib/schemas'
 import { INVOICE_STATUS } from '@/config/invoice-status'
 import { ERROR_MESSAGES } from '@/config/error-messages'
@@ -15,7 +16,7 @@ export const GET = withAuth<{ id: string }>(async (request, session, context) =>
     const { id: invoiceId } = context!.params!
 
     // Check if user is admin
-    const isAdmin = session.user.isStaff
+    const isAdmin = canAccessFinance(session.user)
 
     // Get invoice details
     const [invoice] = await db
@@ -76,7 +77,7 @@ export const PUT = withAuth<{ id: string }>(async (request: NextRequest, session
     const updates = validation.data
 
     // Check if user is admin
-    const isAdmin = session.user.isStaff
+    const isAdmin = canAccessFinance(session.user)
 
     // Get current invoice
     const [invoice] = await db
@@ -200,7 +201,7 @@ export const DELETE = withAuth<{ id: string }>(async (request, session, context)
     const { id: invoiceId } = context!.params!
 
     // Check if user is admin
-    const isAdmin = session.user.isStaff
+    const isAdmin = canAccessFinance(session.user)
 
     // Get invoice
     const [invoice] = await db

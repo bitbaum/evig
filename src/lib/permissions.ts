@@ -222,6 +222,29 @@ export function toStaffUser(sessionUser: {
 }
 
 /**
+ * Does this session user hold the sensitive `finanzen` permission?
+ *
+ * Money routes are "owner OR finance staff", not "owner OR any staff": a user
+ * reaches their own invoice/refund, finance staff reach everyone's. They can't
+ * use `withAdmin('finanzen')` because that would lock out the owner, so they
+ * previously tested `session.user.isStaff` inline — which is a *different, much
+ * wider* set. `finanzen` is `sensitive: true`, so DEFAULT_STAFF_PERMISSIONS
+ * excludes it: every non-finance staff member (workshop coordinators, repair
+ * techs, …) passed that inline check and could read any user's invoice and
+ * refund transactions that were not theirs. Route-level authorization for money
+ * goes through this helper so the two stay one decision.
+ */
+export function canAccessFinance(
+  sessionUser:
+    | { email: string; isStaff: boolean; staffPermissions: string[]; isSuperAdmin?: boolean }
+    | null
+    | undefined
+): boolean {
+  if (!sessionUser) return false
+  return canAccessSection(toStaffUser(sessionUser), 'finanzen')
+}
+
+/**
  * Get all sections a user can access
  */
 export function getAccessibleSections(
