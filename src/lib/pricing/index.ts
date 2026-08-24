@@ -1,15 +1,19 @@
 /**
- * Pricing Module — SSOT for payment calculations
+ * Pricing Module — payment fee and total calculations.
  *
- * All payment fees, VAT rates, and pricing logic lives here.
  * Components and hooks import from this module — never hardcode rates.
+ * VAT rates are NOT defined here: they live in @/config/tax. This file used to
+ * declare its own `VAT_RATE_CHF = 0.077` while calling itself the SSOT, which is
+ * how the platform ended up issuing invoices at the pre-2024 rate.
  */
 
-/** Swiss VAT rate (7.7%) */
-export const VAT_RATE_CHF = 0.077
+import { SWISS_VAT_RATES, EU_VAT_RATES, SWISS_VAT_STANDARD_PERCENT } from '@/config/tax'
 
-/** Default VAT rate for non-CHF currencies */
-export const VAT_RATE_DEFAULT = 0.19
+/** Swiss VAT rate — SSOT: @/config/tax (8.1% since 2024-01-01). */
+export const VAT_RATE_CHF = SWISS_VAT_RATES.standard
+
+/** Default VAT rate for non-CHF currencies. */
+export const VAT_RATE_DEFAULT = EU_VAT_RATES.standard
 
 /** Payment processor fee percentage (Payrexx) */
 export const PAYMENT_FEE_PERCENTAGE = 0.029
@@ -28,7 +32,11 @@ export function getVATRate(currency: string): number {
  * Get VAT rate as display string (e.g., "7.7").
  */
 export function getVATRateLabel(currency: string): string {
-  return currency === 'CHF' ? '7.7' : '19.0'
+  // Derived, not typed: this string is printed on invoices, so a literal here
+  // would show customers a different rate than the one actually charged.
+  return currency === 'CHF'
+    ? SWISS_VAT_STANDARD_PERCENT
+    : (EU_VAT_RATES.standard * 100).toFixed(1)
 }
 
 /**

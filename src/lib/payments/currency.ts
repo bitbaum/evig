@@ -1,5 +1,7 @@
-// Currency utilities for RevampIT payment processing
+// Currency utilities for evig payment processing
 // Supports CHF (Swiss Franc) and EUR (Euro) with automatic conversion
+
+import { SWISS_VAT_RATES } from '@/config/tax'
 
 export type SupportedCurrency = 'CHF' | 'EUR'
 
@@ -26,7 +28,7 @@ export const CURRENCY_CONFIG: Record<SupportedCurrency, CurrencyConfig> = {
     symbol: 'CHF',
     name: 'Swiss Franc',
     decimalPlaces: 2,
-    taxRate: 0.077 // 7.7% Swiss VAT
+    taxRate: SWISS_VAT_RATES.standard
   },
   EUR: {
     code: 'EUR',
@@ -205,7 +207,7 @@ export function getVATRate(
   // Swiss VAT is 7.7% for most services
   // EU VAT varies by service type and country
   if (currency === 'CHF') {
-    return 0.077 // Swiss VAT
+    return SWISS_VAT_RATES.standard
   } else if (currency === 'EUR') {
     // EU standard VAT rates
     switch (businessType) {

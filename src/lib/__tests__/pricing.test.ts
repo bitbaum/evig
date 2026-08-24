@@ -20,12 +20,13 @@ import {
   calculateTotalWithFees,
   calculateServicePricing,
 } from '../pricing'
+import { SWISS_VAT_RATES, SWISS_VAT_STANDARD_PERCENT } from '@/config/tax'
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 describe('pricing constants', () => {
-  it('VAT_RATE_CHF is 7.7%', () => {
-    expect(VAT_RATE_CHF).toBeCloseTo(0.077)
+  it('VAT_RATE_CHF tracks the Swiss VAT SSOT', () => {
+    expect(VAT_RATE_CHF).toBeCloseTo(SWISS_VAT_RATES.standard)
   })
 
   it('VAT_RATE_DEFAULT is 19%', () => {
@@ -44,7 +45,7 @@ describe('pricing constants', () => {
 // ─── getVATRate ───────────────────────────────────────────────────────────────
 
 describe('getVATRate', () => {
-  it('CHF → 7.7% (Swiss VAT)', () => {
+  it('CHF → the Swiss VAT rate', () => {
     expect(getVATRate('CHF')).toBe(VAT_RATE_CHF)
   })
 
@@ -69,8 +70,8 @@ describe('getVATRate', () => {
 // ─── getVATRateLabel ──────────────────────────────────────────────────────────
 
 describe('getVATRateLabel', () => {
-  it('CHF → "7.7"', () => {
-    expect(getVATRateLabel('CHF')).toBe('7.7')
+  it('CHF → the Swiss rate as a label', () => {
+    expect(getVATRateLabel('CHF')).toBe(SWISS_VAT_STANDARD_PERCENT)
   })
 
   it('EUR → "19.0"', () => {
@@ -89,8 +90,8 @@ describe('getVATRateLabel', () => {
 // ─── calculateVAT ─────────────────────────────────────────────────────────────
 
 describe('calculateVAT', () => {
-  it('100 CHF subtotal → 7.70 VAT', () => {
-    expect(calculateVAT(100, 'CHF')).toBeCloseTo(7.7)
+  it('100 CHF subtotal → 100 × the Swiss rate', () => {
+    expect(calculateVAT(100, 'CHF')).toBeCloseTo(100 * SWISS_VAT_RATES.standard)
   })
 
   it('100 EUR subtotal → 19.00 VAT', () => {
@@ -102,7 +103,7 @@ describe('calculateVAT', () => {
   })
 
   it('defaults to CHF if no currency specified', () => {
-    expect(calculateVAT(100)).toBeCloseTo(7.7)
+    expect(calculateVAT(100)).toBeCloseTo(100 * SWISS_VAT_RATES.standard)
   })
 
   it('result is proportional: 200 CHF → twice the VAT of 100 CHF', () => {
@@ -141,9 +142,9 @@ describe('calculateTotalWithFees', () => {
     expect(calculateTotalWithFees(100, 'CHF')).toBeGreaterThan(100)
   })
 
-  it('100 CHF → ~111.5 (100 + 7.7 VAT + ~3.5 payment fee on 107.7)', () => {
-    // 100 + 7.7 = 107.7 subtotalWithVat; 107.7 * 0.029 + 0.30 = 3.423
-    const expected = 107.7 + (107.7 * 0.029 + 0.30)
+  it('100 CHF → subtotal + VAT, then the payment fee on that', () => {
+    const withVat = 100 * (1 + SWISS_VAT_RATES.standard)
+    const expected = withVat + (withVat * 0.029 + 0.30)
     expect(calculateTotalWithFees(100, 'CHF')).toBeCloseTo(expected, 2)
   })
 
@@ -164,9 +165,9 @@ describe('calculateServicePricing', () => {
     expect(result.subtotal).toBeCloseTo(100)
   })
 
-  it('10000 cents (CHF 100) → vat≈7.70', () => {
+  it('10000 cents (CHF 100) → VAT at the Swiss rate', () => {
     const result = calculateServicePricing(10000, 'CHF')
-    expect(result.vat).toBeCloseTo(7.7)
+    expect(result.vat).toBeCloseTo(100 * SWISS_VAT_RATES.standard)
   })
 
   it('total > subtotal + vat (payment fees included)', () => {

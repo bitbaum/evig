@@ -31,6 +31,7 @@ import {
   recordKivviPayout,
 } from '@/lib/kivvi/client'
 import { triggerInviterReward } from '@/lib/referral'
+import { SWISS_VAT_STANDARD_PERCENT } from '@/config/tax'
 
 // ============================================================================
 // Types
@@ -594,11 +595,11 @@ export async function handleGenericPayment(
  * before sending (see grossToNetChf), otherwise the invoice total is inflated by
  * the VAT rate and never matches the recorded payment.
  *
- * NOTE (SSOT follow-up): the app also carries a stale VAT_RATE_CHF (7.7%) in
- * src/lib/pricing and a duplicate in src/lib/payments/currency.ts. The VAT-rate
- * source of truth should be consolidated to one place at the correct 8.1%.
+ * The rate comes from @/config/tax, which is now the only place any VAT rate is
+ * declared. (This constant used to be the sole correct 8.1% in the codebase
+ * while invoices went out at a stale 7.7% — the divergence this note asked for.)
  */
-export const KIVVI_MWST_RATE = '8.1'
+export const KIVVI_MWST_RATE = SWISS_VAT_STANDARD_PERCENT
 
 /**
  * Convert a VAT-inclusive (gross) CHF amount to the net amount, so that Kivvi's
