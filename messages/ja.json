@@ -728,8 +728,8 @@
     },
     "mission": {
       "title": "Our Mission",
-      "body": "{legalForm}（{foundingYear}年設立）として、中古ハードウェアに第二の命を与え、オープンソフトウェアを誰もが利用できるようにし、人々が自律的にテクノロジーの使い方を学べるよう取り組んでいます。",
-      "text": "{description} As a {legalForm} (founded in {foundingYear}), we are committed to giving second-hand hardware a second life, making open software available to everyone, and helping people learn to use technology on their own terms."
+      "body": "{legalForm}（{foundingYear} 年設立）として、私たちは AI とロボティクスが誰にとっても手の届くものになるよう取り組んでいます。循環し続けるからこそ手が届くハードウェア、ベンダーに縛られないオープンなソフトウェア、そしてその道具を自分の意思で使い、持ち続けるための知識とともに。",
+      "text": "{description} {legalForm}（{foundingYear} 年設立）として、私たちは AI とロボティクスが誰にとっても手の届くものになるよう取り組んでいます。循環し続けるからこそ手が届くハードウェア、ベンダーに縛られないオープンなソフトウェア、そしてその道具を自分の意思で使い、持ち続けるための知識とともに。"
     },
     "stats": {
       "title": "Facts & Figures",
@@ -2100,9 +2100,7 @@
     "hero": {
       "title": "知能へのアクセスを、すべての人に手の届く価格で。",
       "titlePrimary": "知能へのアクセスを。",
-      "subtitle": "良いテクノロジーは高すぎて、あまりにも早くゴミになる。私たちはその両方を覆します。手の届く価格で知能にアクセスできるように。そして、機器をスクラップにせず循環させ続ける仕組みを。",
       "ctaDiscover": "修理を探す",
-      "ctaAbout": "私たちについて",
       "positioning": "すべての人に AI · 端末、手助け、学び · チューリッヒ",
       "titleSecondary": "すべての人に手の届く価格で。",
       "lede": "厳選したテクノロジー、AI、ロボティクスを適正価格で。そして、本当に手の届く修理も。",
@@ -2114,42 +2112,22 @@
         "title": "古いデバイスはありますか？",
         "subtitle": "2分で無料出品 — 手数料なし。",
         "primaryLabel": "マーケットを見る",
-        "secondaryLabel": "今すぐ出品",
         "label": "01 / マーケット"
       },
       "repair": {
         "title": "パソコンが壊れましたか？",
         "subtitle": "近くの技術者が手伝います — または自分で修理を提供する。",
         "primaryLabel": "サポートを探す",
-        "secondaryLabel": "技術者になる",
         "label": "02 / ITサポート"
       },
       "learn": {
         "title": "新しいことを学びたいですか？",
         "subtitle": "Linux、ハードウェア修理、プログラミング、AIの実践ワークショップ。",
         "primaryLabel": "ワークショップを見る",
-        "secondaryLabel": "ノウハウを探る",
         "label": "03 / ワークショップ"
       },
       "eyebrow": "3つの道",
       "subtitle": "古いデバイスを手放したい、手頃なものを買いたい、修理を手伝いたい — どんな目的でも、ここが正しい場所です。"
-    },
-    "proServices": {
-      "text": "私たちはプロフェッショナルな{link}も提供しています：パソコン修理、データ復旧、Linuxインストール、ウェブ開発。",
-      "linkLabel": "ITサービス"
-    },
-    "impact": {
-      "title": "私たちの活動成果",
-      "subtitle": "一緒に達成したこと",
-      "moreLink": "活動成果について詳しく",
-      "compactMetrics": {
-        "devicesRescued": "年間救済デバイス数",
-        "peopleTrained": "研修受講者数",
-        "reuseRate": "再利用率",
-        "lifespanExtension": "寿命延長年数",
-        "internshipSuccess": "インターンシップ成功率",
-        "careerReentries": "職業復帰件数"
-      }
     },
     "community": {
       "heading": "コミュニティの一員になる",
@@ -2176,26 +2154,6 @@
       },
       "eyebrow": "参加する"
     },
-    "newsletter": {
-      "title": "最新情報をお届け",
-      "subtitle": "テクノロジーを持続可能にする方法をお伝えします。スパムなし、大切な内容のみ。",
-      "namePlaceholder": "名前（任意）",
-      "emailPlaceholder": "メールアドレス",
-      "submit": "登録",
-      "submitting": "登録中...",
-      "successMessage": "ありがとうございます！メールを確認してニュースレターを有効にしてください。",
-      "networkError": "ネットワークエラーが発生しました。後でもう一度お試しください。"
-    },
-    "stats": {
-      "users": "ユーザー",
-      "listings": "出品",
-      "repairs": "修理件数",
-      "workshops": "ワークショップ"
-    },
-    "asSeenIn": {
-      "heading": "メディア掲載",
-      "allCoverage": "すべてのメディア報道を見る"
-    },
     "jsonld": {
       "description": "AI とロボティクスへの手の届くアクセス。検査済みの中古ハードウェア、修理と IT の手助け、Linux とオープンソフトウェア、学び直し、そして組織への伴走。",
       "areaServed": "チューリッヒ、バーゼル、ルツェルン、スイス",
@@ -2206,15 +2164,22 @@
       "service3Name": "現場の AI とロボティクス",
       "service3Desc": "導入にあたっての研修、学び直し、そして伴走"
     },
-    "press": {
-      "eyebrow": "報道掲載"
-    },
     "finalCta": {
       "eyebrow": "準備はいい?",
       "heading": "あなたのコンピュータに第二の命を。",
       "subtitle": "5分の手間で。私たちが引き取ります。寄付証明書を受け取れます。あなたのデバイスは必要としている人のもとへ。",
       "button": "デバイスを寄付",
       "note": "デバイスの寄付は「参加する」から引き続き可能です。"
+    },
+    "newsletter": {
+      "title": "最新情報をお届け",
+      "subtitle": "テクノロジーを持続可能にする方法をお伝えします。スパムなし、大切な内容のみ。",
+      "namePlaceholder": "名前（任意）",
+      "emailPlaceholder": "メールアドレス",
+      "submit": "登録",
+      "submitting": "登録中...",
+      "successMessage": "ありがとうございます！メールを確認してニュースレターを有効にしてください。",
+      "networkError": "ネットワークエラーが発生しました。後でもう一度お試しください。"
     }
   },
   "itHelp": {

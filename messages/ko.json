@@ -728,8 +728,8 @@
     },
     "mission": {
       "title": "Our Mission",
-      "body": "{legalForm}으로서 ({foundingYear}년 설립), 중고 하드웨어에 두 번째 삶을 부여하고, 오픈 소프트웨어를 모두가 이용할 수 있게 하며, 사람들이 자율적으로 기술 사용법을 배울 수 있도록 노력합니다.",
-      "text": "{description} As a {legalForm} (founded in {foundingYear}), we are committed to giving second-hand hardware a second life, making open software available to everyone, and helping people learn to use technology on their own terms."
+      "body": "{legalForm}({foundingYear}년 설립)로서 우리는 AI와 로보틱스가 모두에게 닿을 수 있도록 일합니다. 순환 속에 머물기에 감당할 수 있는 하드웨어, 공급사에 묶이지 않는 열린 소프트웨어, 그리고 그 도구를 스스로 쓰고 지킬 수 있게 하는 지식과 함께.",
+      "text": "{description} {legalForm}({foundingYear}년 설립)로서 우리는 AI와 로보틱스가 모두에게 닿을 수 있도록 일합니다. 순환 속에 머물기에 감당할 수 있는 하드웨어, 공급사에 묶이지 않는 열린 소프트웨어, 그리고 그 도구를 스스로 쓰고 지킬 수 있게 하는 지식과 함께."
     },
     "stats": {
       "title": "Facts & Figures",
@@ -2100,9 +2100,7 @@
     "hero": {
       "title": "지능에 대한 접근을, 모두가 감당할 수 있는 가격으로.",
       "titlePrimary": "지능에 대한 접근을.",
-      "subtitle": "좋은 기술은 너무 비싸고, 너무 빨리 쓰레기가 됩니다. 우리는 그 둘을 뒤집습니다. 지능에 대한 접근을 누구나 감당할 수 있게, 그리고 기기를 폐기물이 아니라 순환 속에 머물게 하는 구조로.",
       "ctaDiscover": "수리 찾기",
-      "ctaAbout": "소개",
       "positioning": "모두를 위한 AI · 기기, 도움, 교육 · 취리히",
       "titleSecondary": "모두가 감당할 수 있는 가격으로.",
       "lede": "엄선한 기술과 AI, 로보틱스를 합리적인 가격에. 그리고 정말로 손닿는 곳에 있는 수리까지.",
@@ -2114,42 +2112,22 @@
         "title": "오래된 기기가 있으신가요?",
         "subtitle": "2분 안에 판매하거나 나눠드리세요 — 무료, 수수료 없음.",
         "primaryLabel": "마켓플레이스 둘러보기",
-        "secondaryLabel": "지금 판매하기",
         "label": "01 / 마켓플레이스"
       },
       "repair": {
         "title": "컴퓨터가 고장났나요?",
         "subtitle": "가까운 기술자가 도움을 드립니다 — 또는 직접 수리를 제공해 보세요.",
         "primaryLabel": "도움 찾기",
-        "secondaryLabel": "기술자 되기",
         "label": "02 / IT 지원"
       },
       "learn": {
         "title": "새로운 것을 배우고 싶으신가요?",
         "subtitle": "Linux, 하드웨어 수리, 프로그래밍, AI에 관한 실습 워크숍.",
         "primaryLabel": "워크숍 보기",
-        "secondaryLabel": "노하우 탐색",
         "label": "03 / 워크숍"
       },
       "eyebrow": "세 가지 길",
       "subtitle": "오래된 장치를 처분하고 싶거나, 저렴한 장치를 사고 싶거나, 수리를 돕고 싶다면 — 제대로 찾아오셨습니다."
-    },
-    "proServices": {
-      "text": "저희는 전문 {link}도 제공합니다: 컴퓨터 수리, 데이터 복구, Linux 설치, 웹 개발.",
-      "linkLabel": "IT 서비스"
-    },
-    "impact": {
-      "title": "우리의 영향력",
-      "subtitle": "함께 달성한 것들",
-      "moreLink": "영향력에 대해 더 알아보기",
-      "compactMetrics": {
-        "devicesRescued": "연간 구제된 기기 수",
-        "peopleTrained": "교육받은 사람 수",
-        "reuseRate": "재사용률",
-        "lifespanExtension": "수명 연장 연수",
-        "internshipSuccess": "인턴십 성공률",
-        "careerReentries": "직업 복귀 건수"
-      }
     },
     "community": {
       "heading": "커뮤니티의 일원이 되세요",
@@ -2176,26 +2154,6 @@
       },
       "eyebrow": "참여"
     },
-    "newsletter": {
-      "title": "최신 소식 받기",
-      "subtitle": "기술을 지속 가능하게 만드는 방법을 알아보세요. 스팸 없이, 중요한 내용만.",
-      "namePlaceholder": "이름 (선택)",
-      "emailPlaceholder": "이메일 주소",
-      "submit": "구독",
-      "submitting": "구독 중...",
-      "successMessage": "감사합니다! 뉴스레터를 활성화하려면 이메일을 확인해 주세요.",
-      "networkError": "네트워크 오류입니다. 나중에 다시 시도해 주세요."
-    },
-    "stats": {
-      "users": "사용자",
-      "listings": "판매 목록",
-      "repairs": "수리",
-      "workshops": "워크숍"
-    },
-    "asSeenIn": {
-      "heading": "언론 보도",
-      "allCoverage": "모든 미디어 보도 보기"
-    },
     "jsonld": {
       "description": "AI와 로보틱스에 대한 감당 가능한 접근. 검사된 중고 하드웨어, 수리와 IT 도움, 리눅스와 열린 소프트웨어, 재교육, 그리고 조직 동행.",
       "areaServed": "취리히, 바젤, 루체른, 스위스",
@@ -2206,15 +2164,22 @@
       "service3Name": "현장의 AI와 로보틱스",
       "service3Desc": "도입을 위한 교육, 재교육, 그리고 동행"
     },
-    "press": {
-      "eyebrow": "언론 보도"
-    },
     "finalCta": {
       "eyebrow": "준비됐나요?",
       "heading": "컴퓨터에 두 번째 생명을 주세요.",
       "subtitle": "5분만 투자하세요. 저희가 수거합니다. 기부 영수증을 받습니다. 당신의 장치가 필요한 사람의 손에 들어갑니다.",
       "button": "장치 기부하기",
       "note": "기기 기부는 ‘참여하기’에서 계속 가능합니다."
+    },
+    "newsletter": {
+      "title": "최신 소식 받기",
+      "subtitle": "기술을 지속 가능하게 만드는 방법을 알아보세요. 스팸 없이, 중요한 내용만.",
+      "namePlaceholder": "이름 (선택)",
+      "emailPlaceholder": "이메일 주소",
+      "submit": "구독",
+      "submitting": "구독 중...",
+      "successMessage": "감사합니다! 뉴스레터를 활성화하려면 이메일을 확인해 주세요.",
+      "networkError": "네트워크 오류입니다. 나중에 다시 시도해 주세요."
     }
   },
   "itHelp": {

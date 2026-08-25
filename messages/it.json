@@ -728,8 +728,8 @@
     },
     "mission": {
       "title": "La nostra missione",
-      "body": "Come {legalForm} (fondata nel {foundingYear}), ci impegniamo a dare una seconda vita all'hardware usato, a rendere il software aperto disponibile a tutti e a permettere alle persone di imparare a usare la tecnologia in modo autonomo.",
-      "text": "{description} Come {legalForm} (fondata nel {foundingYear}) ci impegniamo affinché l'hardware usato abbia una seconda vita, il software libero sia accessibile a tutti e le persone possano imparare a usare la tecnologia in modo autonomo."
+      "body": "In quanto {legalForm} (fondata nel {foundingYear}), lavoriamo perché IA e robotica siano alla portata di tutti: con hardware accessibile perché resta in circolazione, con software aperto invece della dipendenza da un fornitore, e con le conoscenze per usare e conservare questi strumenti in autonomia.",
+      "text": "{description} In quanto {legalForm} (fondata nel {foundingYear}), lavoriamo perché IA e robotica siano alla portata di tutti: con hardware accessibile perché resta in circolazione, con software aperto invece della dipendenza da un fornitore, e con le conoscenze per usare e conservare questi strumenti in autonomia."
     },
     "stats": {
       "title": "Numeri e fatti",
@@ -2100,9 +2100,7 @@
     "hero": {
       "title": "Accesso all'intelligenza. Alla portata di tutti.",
       "titlePrimary": "Accesso all'intelligenza.",
-      "subtitle": "La buona tecnologia costa troppo e diventa rifiuto troppo in fretta. Noi ribaltiamo entrambe le cose: accesso all'intelligenza a prezzi accessibili — e un ciclo che tiene i dispositivi in circolazione anziché tra i rottami.",
       "ctaDiscover": "Trova una riparazione",
-      "ctaAbout": "Chi siamo",
       "positioning": "IA per tutti · Dispositivi, aiuto, formazione · Zurigo",
       "titleSecondary": "Alla portata di tutti.",
       "lede": "Tecnologia selezionata, IA e robotica a prezzi equi — e una riparazione davvero accessibile.",
@@ -2114,42 +2112,22 @@
         "title": "Hai un vecchio dispositivo?",
         "subtitle": "Vendilo o regalalo in 2 minuti — gratis e senza commissioni.",
         "primaryLabel": "Scopri il mercato",
-        "secondaryLabel": "Vendi ora",
         "label": "01 / MERCATO"
       },
       "repair": {
         "title": "Computer guasto?",
         "subtitle": "I tecnici vicino a te sono pronti ad aiutare — o offri tu stesso riparazioni.",
         "primaryLabel": "Trova aiuto",
-        "secondaryLabel": "Diventa tecnico",
         "label": "02 / AIUTO IT"
       },
       "learn": {
         "title": "Vuoi imparare qualcosa di nuovo?",
         "subtitle": "Workshop pratici su Linux, riparazione hardware, programmazione e IA.",
         "primaryLabel": "Vedi i workshop",
-        "secondaryLabel": "Scopri il knowhow",
         "label": "03 / WORKSHOP"
       },
       "eyebrow": "TRE STRADE",
       "subtitle": "Che tu voglia disfarti di un vecchio dispositivo, comprarne uno conveniente o aiutare con le riparazioni — sei nel posto giusto."
-    },
-    "proServices": {
-      "text": "Offriamo anche {link} professionali: riparazione computer, recupero dati, installazione Linux e sviluppo web.",
-      "linkLabel": "servizi IT"
-    },
-    "impact": {
-      "title": "Il nostro impatto",
-      "subtitle": "Cosa abbiamo raggiunto insieme",
-      "moreLink": "Scopri di più sul nostro impatto",
-      "compactMetrics": {
-        "devicesRescued": "Dispositivi salvati all anno",
-        "peopleTrained": "Persone formate",
-        "reuseRate": "Tasso di riutilizzo",
-        "lifespanExtension": "Anni di vita estesa",
-        "internshipSuccess": "Tirocini riusciti",
-        "careerReentries": "Reinserimenti lavorativi"
-      }
     },
     "community": {
       "heading": "Entra a far parte della community",
@@ -2176,26 +2154,6 @@
       },
       "eyebrow": "PARTECIPA"
     },
-    "newsletter": {
-      "title": "Rimani aggiornato",
-      "subtitle": "Scopri come rendiamo la tecnologia sostenibile. Niente spam, solo contenuti che contano.",
-      "namePlaceholder": "Nome (facoltativo)",
-      "emailPlaceholder": "Indirizzo email",
-      "submit": "Iscriviti",
-      "submitting": "Iscrizione in corso...",
-      "successMessage": "Grazie! Conferma la tua email per attivare la newsletter.",
-      "networkError": "Errore di rete. Riprova più tardi."
-    },
-    "stats": {
-      "users": "Utenti",
-      "listings": "Annunci",
-      "repairs": "Riparazioni",
-      "workshops": "Workshop"
-    },
-    "asSeenIn": {
-      "heading": "Come visto in",
-      "allCoverage": "Vedi tutta la copertura mediatica"
-    },
     "jsonld": {
       "description": "Accesso accessibile a IA e robotica: hardware usato e testato, riparazione e aiuto informatico, Linux e software aperto, formazione e accompagnamento alle organizzazioni.",
       "areaServed": "Zurigo, Basilea, Lucerna, Svizzera",
@@ -2206,15 +2164,22 @@
       "service3Name": "IA e robotica nel lavoro",
       "service3Desc": "Formazione, riqualificazione e accompagnamento nella loro introduzione"
     },
-    "press": {
-      "eyebrow": "COME RIPORTATO"
-    },
     "finalCta": {
       "eyebrow": "PRONTO?",
       "heading": "Dai una seconda vita al tuo computer.",
       "subtitle": "5 minuti di sforzo. Lo ritiriamo noi. Ricevi una ricevuta di donazione. Il tuo dispositivo finisce a chi ne ha bisogno.",
       "button": "Dona un dispositivo",
       "note": "Donare dispositivi resta possibile in Partecipa."
+    },
+    "newsletter": {
+      "title": "Rimani aggiornato",
+      "subtitle": "Scopri come rendiamo la tecnologia sostenibile. Niente spam, solo contenuti che contano.",
+      "namePlaceholder": "Nome (facoltativo)",
+      "emailPlaceholder": "Indirizzo email",
+      "submit": "Iscriviti",
+      "submitting": "Iscrizione in corso...",
+      "successMessage": "Grazie! Conferma la tua email per attivare la newsletter.",
+      "networkError": "Errore di rete. Riprova più tardi."
     }
   },
   "itHelp": {

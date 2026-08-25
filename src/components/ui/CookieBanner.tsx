@@ -53,7 +53,11 @@ export function CookieBanner() {
       role="dialog"
       aria-live="polite"
       aria-label={t('title')}
-      className="fixed inset-x-0 bottom-0 z-9998 border-t-2 border-subtle bg-surface-base"
+      // `bottom-0` is not the bottom of the visible area on admin and dashboard
+      // shells: below lg they render a fixed bottom nav, and the banner was
+      // sharing those 3.5rem with it. --bottom-nav-clearance is 0px wherever
+      // there is no nav, so this is correct on public pages too.
+      className="fixed inset-x-0 bottom-[var(--bottom-nav-clearance,0px)] z-9998 border-t-2 border-subtle bg-surface-base"
     >
       <div className="mx-auto grid max-w-6xl gap-2 px-3 py-3 sm:flex sm:items-center sm:justify-between sm:gap-4 sm:px-6 sm:py-4">
         <p className="text-xs leading-relaxed text-text-secondary sm:text-sm">
