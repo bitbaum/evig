@@ -158,7 +158,5 @@ export const ROUTES = {
     // evig divisions that own a page (SSOT: src/config/divisions.ts). The other
     // two — computers and repairs — route to /marketplace and /it-hilfe.
     ai:                       '/ai',
-    architecture:             '/architecture',
-    health:                   '/health',
   },
 } as const

@@ -15,8 +15,11 @@ at rising scale: **keep something useful for longer.**
 | `evig computers` | `/marketplace` — curated, tested hardware | live |
 | `evig repairs` | `/it-hilfe` — repair instead of replace | live |
 | `evig ai` | `/ai` — intelligence within reach | live |
-| `evig architecture` | `/architecture` — build so the ruin still reads | research |
-| `evig health` | `/health` — healthspan + preserving a person | research |
+
+`evig architecture` and `evig health` were removed on 2026-08-25. They were
+George's personal research, not evig's work, and carrying them here diluted the
+one thing evig is for. They now live as projects on orangecat.ch ("Building for
+the Ruin", "Healthspan and Preservation"). Do not reintroduce them.
 
 Rules:
 - **`EVIG_DIVISIONS` is the only list.** The homepage hero rail, the homepage
@@ -34,11 +37,9 @@ Rules:
 - **`status: 'research'` is a claim-limiter, not a teaser.** It means nothing
   is sold and nothing is promised, and the page must say so: every division
   page carries a required `boundary` block ("what this is NOT") *before* its
-  CTA. `evig health` states plainly that it is not medicine and issues no
-  health promises; `evig architecture` states that it is not an architecture
-  practice and gives no structural advice. Do not soften or drop these — they
-  are what keeps an ambitious claim honest (see the honesty boundary in
-  `.claude/CLAUDE.md`).
+  CTA. `evig ai` states plainly that it is not a research lab, sells no magic,
+  and locks nobody in. Do not soften or drop these — they are what keeps an
+  ambitious claim honest (see the honesty boundary in `.claude/CLAUDE.md`).
 
 ## Non-negotiable standards (the default for every change — don't wait to be told)
 

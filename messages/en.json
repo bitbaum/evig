@@ -2622,7 +2622,7 @@
       "title": "Intelligence belongs to everyone",
       "yearsExperience": "years of experience",
       "quote": "Access to AI and robotics decides who gets to take part — it must not depend on your wallet.",
-      "paragraph1": "evig makes access to intelligence affordable: <strong>curated tech, AI and robotics</strong> at fair prices. We're not a charity, but a market-and-quality model — good and affordable because tech stays in circulation instead of ending up as waste.",
+      "paragraph1": "evig makes access to intelligence affordable: <strong>curated tech, AI and robotics</strong> at fair prices. A non-profit association in formation, run on a market-and-quality model — good and affordable because tech stays in circulation instead of ending up as waste.",
       "paragraph2": "On top of that comes repair that's truly within reach — workshop, repair café and a technician network — and a circular marketplace for tested second-hand tech. What works should stay in circulation.",
       "imageAlt": "Curated tech at evig"
     },
@@ -8949,7 +8949,7 @@
     "diff": {
       "eyebrow": "What makes us different",
       "title": "Good because it is affordable. Affordable because it is good.",
-      "intro": "The world we came from often does its work as charity-recycling: take the scrap, harvest the parts, pass on good enough. Honourable — but not us. evig is a market-and-quality model run as a non-profit. The difference shows up in three promises.",
+      "intro": "The world we came from often passes on merely good enough: take the scrap, harvest the parts, hand it along. We do it differently. evig is a market-and-quality model, run as a non-profit association in formation. The difference shows up in three promises.",
       "p1": {
         "title": "Complete machines, not parts",
         "body": "No fragments, no bin of maybes, no selling someone a project. Everything in the evig marketplace is a working machine — and, in time, a working robot. If it is listed, it runs."
@@ -9167,16 +9167,6 @@
         "tagline": "Intelligence within reach",
         "description": "An assistant that comes with the platform rather than with a subscription — on hardware people can afford.",
         "cta": "See this division"
-      },
-      "architecture": {
-        "tagline": "Build for the ruin",
-        "description": "Buildings that still hold up as ruins: honest materials, visible structure, nothing that is merely embarrassing after twenty years.",
-        "cta": "See this division"
-      },
-      "health": {
-        "tagline": "Stay longer — and keep what you know",
-        "description": "Our research division on longevity: more healthy years, and preserving what makes a person who they are.",
-        "cta": "To the research"
       }
     },
     "pages": {
@@ -9230,110 +9220,6 @@
           "heading": "Start with the machine",
           "body": "The cheapest way into artificial intelligence is a good used laptop that somebody set up properly.",
           "button": "Browse devices"
-        }
-      },
-      "architecture": {
-        "meta": {
-          "title": "Building for the ruin",
-          "description": "A research division on building: materials that age instead of decaying, structure you are allowed to see, and parts that come apart again."
-        },
-        "hero": {
-          "title": "Build so that even the ruin is worth looking at.",
-          "lede": "The hardest test of a building begins when nobody maintains it any more. Whatever is still standing then — and still beautiful — was built honestly. Everything else was cladding."
-        },
-        "thesis": {
-          "eyebrow": "Why",
-          "title": "The ruin is the most honest inspector",
-          "body": "A building of stone becomes a ruin and stays worth looking at. A building of plasterboard, adhesive and foil becomes waste — long before it collapses, at the moment the cladding falls off. The difference is not age; it is whether the thing carrying the load is also the thing you see. We already ask exactly that of a laptop: is it what it says it is, and can it be opened, repaired and passed on? A house is just the largest device a person owns."
-        },
-        "strands": {
-          "eyebrow": "What we hold it to",
-          "heading": "Three tests",
-          "materials": {
-            "title": "Material that ages instead of decaying",
-            "body": "Stone, timber, brick, clay, concrete left uncovered: materials that take on a patina rather than yellowing. A material that only looks good new is a bet against time — and that bet always loses."
-          },
-          "structure": {
-            "title": "Structure you are allowed to see",
-            "body": "If the frame stays visible, it has to be honest. Exposed structure is not a matter of taste but a commitment: what cannot be hidden gets built properly."
-          },
-          "reversibility": {
-            "title": "Separable, re-usable, reversible",
-            "body": "A building whose parts can be separated, replaced and reused can outlive its first purpose. Glued-together layers cannot. It is the same principle as the soldered-in battery, a thousand times larger."
-          }
-        },
-        "boundary": {
-          "eyebrow": "Honest limits",
-          "heading": "What this division is not",
-          "noFirm": {
-            "title": "Not an architecture practice",
-            "body": "We do not design buildings and we take no commissions. This is a stance and a research direction, not an offer."
-          },
-          "noNostalgia": {
-            "title": "Not nostalgia",
-            "body": "This is not about copying the old. A well-built house of today may look like today — it only has to be honest."
-          },
-          "noAdvice": {
-            "title": "Not building advice",
-            "body": "We give no structural or safety recommendations. Anyone who builds needs professionals who carry the responsibility for it."
-          }
-        },
-        "cta": {
-          "heading": "The same principle, smaller",
-          "body": "Until we build, the idea is legible in the object we started with: a device that can be opened, repaired and passed on.",
-          "button": "Browse devices"
-        }
-      },
-      "health": {
-        "meta": {
-          "title": "Longevity and preservation",
-          "description": "The research division on longevity: more healthy years, and preserving a person's consciousness. Open research — no medicine, no product, no promises."
-        },
-        "hero": {
-          "title": "The longest-lived thing we want to keep is a person.",
-          "lede": "We keep things in use for longer: devices first, then the knowledge to use them. The next step is the most obvious one and the hardest — the time a person has, and what remains of them."
-        },
-        "thesis": {
-          "eyebrow": "Why",
-          "title": "The same question, one level up",
-          "body": "A repaired laptop is a laptop that did not have to be built a second time. Asked one level up, the question is the same: what extends the time a person stays healthy, awake and themselves? And how much of that can be preserved when that time ends? We do not claim to know the answer. We think the question is far too important to leave to the people who can afford to ask it."
-        },
-        "strands": {
-          "eyebrow": "What we research",
-          "heading": "Three strands",
-          "healthspan": {
-            "title": "Healthspan",
-            "body": "Not living longer at any cost, but staying healthy longer. We gather openly available knowledge and test it: what is evidenced, what is merely asserted, and what it costs. We sell nothing alongside it — no supplements, no programmes."
-          },
-          "memory": {
-            "title": "Memory",
-            "body": "What a person knows, decided and remembers is scattered today across services that do not belong to them. We are researching how that context can belong to the person instead: encrypted, portable, exportable — usable by an AI that works for them rather than on them."
-          },
-          "continuity": {
-            "title": "Continuity",
-            "body": "A person ends. What they knew does not have to. We are researching how knowledge, voice and memories can be preserved so that the people who come after can work with them — with explicit consent given in life, and without ever pretending the record is the person."
-          }
-        },
-        "boundary": {
-          "eyebrow": "Honest limits",
-          "heading": "What this division is not",
-          "noMedicine": {
-            "title": "Not medicine",
-            "body": "We do not diagnose, we do not recommend treatment, and we do not replace a doctor."
-          },
-          "noProduct": {
-            "title": "Not a product",
-            "body": "There is nothing here to buy. This division is research today, and we do it in public."
-          },
-          "noImmortality": {
-            "title": "Not a promise of immortality",
-            "body": "We work on more healthy time and on careful preservation. Not on miracles — and not on a copy of a person."
-          }
-        },
-        "cta": {
-          "heading": "We research in the open",
-          "body": "This division is at its beginning. If you want to think it through with us — as a researcher, as a clinician, as someone this touches personally — write to us.",
-          "button": "Get in touch"
         }
       }
     }

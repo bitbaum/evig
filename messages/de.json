@@ -2614,7 +2614,7 @@
       "title": "Intelligenz gehört allen",
       "yearsExperience": "Jahre Erfahrung",
       "quote": "Der Zugang zu KI und Robotik entscheidet über Teilhabe — er darf nicht vom Geldbeutel abhängen.",
-      "paragraph1": "evig macht den Zugang zu Intelligenz bezahlbar: <strong>kuratierte Technik, KI und Robotik</strong> zu fairen Preisen. Wir sind kein Wohltätigkeitsprojekt, sondern ein Markt- und Qualitätsmodell — gut und günstig, weil Technik im Kreislauf bleibt statt im Müll zu landen.",
+      "paragraph1": "evig macht den Zugang zu Intelligenz bezahlbar: <strong>kuratierte Technik, KI und Robotik</strong> zu fairen Preisen. Ein gemeinnütziger Verein in Gründung, geführt nach einem Markt- und Qualitätsmodell — gut und günstig, weil Technik im Kreislauf bleibt statt im Müll zu landen.",
       "paragraph2": "Dazu kommt wirklich zugängliche Reparatur — Werkstatt, Repair-Café und ein Techniker-Netzwerk — und ein Kreislauf-Marktplatz für geprüfte gebrauchte Technik. Was funktioniert, soll im Umlauf bleiben.",
       "imageAlt": "Kuratierte Technik bei evig"
     },
@@ -8966,7 +8966,7 @@
     "diff": {
       "eyebrow": "Was uns anders macht",
       "title": "Gut, weil bezahlbar. Bezahlbar, weil gut.",
-      "intro": "Die Welt, aus der wir kommen, arbeitet oft als Wohltätigkeits-Recycling: den Schrott nehmen, die Teile ernten, das Gerade-noch-Genügende weitergeben. Ehrenwert — aber nicht wir. evig ist ein Markt- und Qualitätsmodell, geführt als gemeinnütziger Verein. Der Unterschied zeigt sich in drei Versprechen.",
+      "intro": "Die Welt, aus der wir kommen, reicht oft das Gerade-noch-Genügende weiter: den Schrott nehmen, die Teile ernten, weitergeben. Wir machen es anders. evig ist ein Markt- und Qualitätsmodell, geführt als gemeinnütziger Verein in Gründung. Der Unterschied zeigt sich in drei Versprechen.",
       "p1": {
         "title": "Ganze Maschinen, keine Teile",
         "body": "Keine Fragmente, kein Kasten voller Vielleichts, niemandem ein Projekt verkaufen. Alles auf dem evig-Marktplatz ist eine funktionierende Maschine — und mit der Zeit ein funktionierender Roboter. Was gelistet ist, läuft."
@@ -9184,16 +9184,6 @@
         "tagline": "Intelligenz, die erreichbar ist",
         "description": "Ein Assistent, der zur Plattform gehört statt zu einem Abo — auf Hardware, die man sich leisten kann.",
         "cta": "Bereich ansehen"
-      },
-      "architecture": {
-        "tagline": "Bauen für die Ruine",
-        "description": "Häuser, die auch als Ruine noch etwas taugen: ehrliches Material, sichtbare Konstruktion, nichts, was nach zwanzig Jahren nur noch peinlich ist.",
-        "cta": "Bereich ansehen"
-      },
-      "health": {
-        "tagline": "Länger da sein — und bleiben, was man weiss",
-        "description": "Unser Forschungsbereich zu Langlebigkeit: mehr gesunde Jahre und das Bewahren dessen, was einen Menschen ausmacht.",
-        "cta": "Zur Forschung"
       }
     },
     "pages": {
@@ -9247,110 +9237,6 @@
           "heading": "Fang mit dem Gerät an",
           "body": "Der günstigste Zugang zu künstlicher Intelligenz ist ein gutes, gebrauchtes Notebook, das jemand richtig eingerichtet hat.",
           "button": "Geräte ansehen"
-        }
-      },
-      "architecture": {
-        "meta": {
-          "title": "Bauen für die Ruine",
-          "description": "Ein Forschungsbereich zum Bauen: Material, das altert statt zu verfallen, Konstruktion, die man sehen darf, und Teile, die sich wieder trennen lassen."
-        },
-        "hero": {
-          "title": "Bauen, damit auch die Ruine noch etwas taugt.",
-          "lede": "Die härteste Prüfung für ein Gebäude beginnt, wenn niemand es mehr pflegt. Was dann noch dasteht und immer noch schön ist, war ehrlich gebaut. Alles andere war Verkleidung."
-        },
-        "thesis": {
-          "eyebrow": "Warum",
-          "title": "Die Ruine ist der ehrlichste Gutachter",
-          "body": "Ein Bau aus Stein wird zur Ruine und bleibt sehenswert. Ein Bau aus Gipskarton, Klebstoff und Folie wird zu Abfall — und zwar lange bevor er einstürzt, nämlich in dem Moment, in dem die Verkleidung abfällt. Der Unterschied liegt nicht im Alter, sondern darin, ob das, was trägt, auch das ist, was man sieht. Genau diese Frage stellen wir schon bei einem Notebook: Steckt drin, was draufsteht, und lässt es sich öffnen, reparieren und weitergeben? Ein Haus ist nur das grösste Gerät, das ein Mensch besitzt."
-        },
-        "strands": {
-          "eyebrow": "Woran wir es messen",
-          "heading": "Drei Prüfsteine",
-          "materials": {
-            "title": "Material, das altert statt zu verfallen",
-            "body": "Stein, Holz, Ziegel, Lehm, Beton ohne Verkleidung: Baustoffe, die Patina ansetzen, statt zu vergilben. Ein Material, das nur neu gut aussieht, ist eine Wette gegen die Zeit — und die verliert man immer."
-          },
-          "structure": {
-            "title": "Konstruktion, die man sehen darf",
-            "body": "Wenn das Tragwerk sichtbar bleibt, muss es ehrlich sein. Sichtbare Konstruktion ist keine Frage des Geschmacks, sondern eine Selbstverpflichtung: Was sich nicht verstecken lässt, baut man ordentlich."
-          },
-          "reversibility": {
-            "title": "Trennbar, umnutzbar, rückbaubar",
-            "body": "Ein Gebäude, dessen Teile sich trennen, austauschen und wiederverwenden lassen, kann seine erste Nutzung überleben. Verklebte Schichten können das nicht. Es ist dasselbe Prinzip wie beim verlöteten Akku, nur tausendmal grösser."
-          }
-        },
-        "boundary": {
-          "eyebrow": "Ehrliche Grenzen",
-          "heading": "Was dieser Bereich nicht ist",
-          "noFirm": {
-            "title": "Kein Architekturbüro",
-            "body": "Wir planen keine Gebäude und nehmen keine Aufträge an. Das hier ist eine Haltung und ein Forschungsbereich, kein Angebot."
-          },
-          "noNostalgia": {
-            "title": "Keine Nostalgie",
-            "body": "Es geht nicht darum, Altes nachzubauen. Ein gut gebautes Haus von heute darf aussehen wie von heute — es muss nur ehrlich sein."
-          },
-          "noAdvice": {
-            "title": "Keine Bauberatung",
-            "body": "Wir geben keine bau- oder sicherheitstechnischen Empfehlungen. Wer baut, braucht Fachleute, die dafür Verantwortung tragen."
-          }
-        },
-        "cta": {
-          "heading": "Dasselbe Prinzip, nur kleiner",
-          "body": "Bis wir bauen, lässt sich der Gedanke an dem Gegenstand ablesen, mit dem wir angefangen haben: ein Gerät, das sich öffnen, reparieren und weitergeben lässt.",
-          "button": "Geräte ansehen"
-        }
-      },
-      "health": {
-        "meta": {
-          "title": "Langlebigkeit und Bewahrung",
-          "description": "Der Forschungsbereich zu Langlebigkeit: mehr gesunde Jahre und das Bewahren des Bewusstseins eines Menschen. Offene Forschung — keine Medizin, kein Produkt, keine Versprechen."
-        },
-        "hero": {
-          "title": "Das Längste, was wir erhalten wollen, ist ein Mensch.",
-          "lede": "Wir halten Dinge länger in Gebrauch: erst Geräte, dann das Wissen, sie zu benutzen. Der nächste Schritt ist der naheliegendste und zugleich der schwerste — die Zeit, die ein Mensch hat, und das, was von ihm bleibt."
-        },
-        "thesis": {
-          "eyebrow": "Warum",
-          "title": "Dieselbe Frage, eine Ebene höher",
-          "body": "Ein repariertes Notebook ist ein Notebook, das nicht ein zweites Mal gebaut werden musste. Eine Ebene höher gestellt lautet dieselbe Frage: Was verlängert die Zeit, in der ein Mensch gesund, wach und er selbst ist? Und was davon lässt sich bewahren, wenn diese Zeit endet? Wir behaupten nicht, die Antwort zu kennen. Wir halten die Frage für zu wichtig, um sie denen zu überlassen, die sie sich leisten können."
-        },
-        "strands": {
-          "eyebrow": "Woran wir forschen",
-          "heading": "Drei Stränge",
-          "healthspan": {
-            "title": "Gesundheitsspanne",
-            "body": "Nicht länger leben um jeden Preis, sondern länger gesund sein. Wir tragen offen zugängliches Wissen zusammen und prüfen es: was belegt ist, was nur behauptet wird und was es kostet. Wir verkaufen nichts dazu — keine Präparate, keine Programme."
-          },
-          "memory": {
-            "title": "Erinnerung",
-            "body": "Was ein Mensch weiss, entschieden hat und sich merkt, liegt heute verstreut in Diensten, die ihm nicht gehören. Wir untersuchen, wie dieser Kontext der Person selbst gehören kann: verschlüsselt, tragbar, exportierbar — nutzbar von einer KI, die für sie arbeitet statt über sie."
-          },
-          "continuity": {
-            "title": "Weitergabe",
-            "body": "Ein Mensch endet. Was er wusste, muss es nicht. Wir untersuchen, wie sich Wissen, Stimme und Erinnerungen so bewahren lassen, dass die Menschen danach damit arbeiten können — mit ausdrücklicher Einwilligung zu Lebzeiten und ohne je so zu tun, als wäre die Aufzeichnung die Person."
-          }
-        },
-        "boundary": {
-          "eyebrow": "Ehrliche Grenzen",
-          "heading": "Was dieser Bereich nicht ist",
-          "noMedicine": {
-            "title": "Keine Medizin",
-            "body": "Wir stellen keine Diagnosen, geben keine Behandlungsempfehlungen und ersetzen keine Ärztin und keinen Arzt."
-          },
-          "noProduct": {
-            "title": "Kein Produkt",
-            "body": "Es gibt hier nichts zu kaufen. Dieser Bereich ist heute Forschung, und wir führen sie öffentlich."
-          },
-          "noImmortality": {
-            "title": "Kein Versprechen auf Unsterblichkeit",
-            "body": "Wir arbeiten an mehr gesunder Zeit und an sorgfältiger Bewahrung. Nicht an Wundern — und nicht an einer Kopie eines Menschen."
-          }
-        },
-        "cta": {
-          "heading": "Wir forschen öffentlich",
-          "body": "Dieser Bereich steht am Anfang. Wenn du mitdenken willst — als Forscherin, als Ärztin, als jemand, den das persönlich angeht — schreib uns.",
-          "button": "Kontakt aufnehmen"
         }
       }
     }
