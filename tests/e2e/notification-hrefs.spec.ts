@@ -11,6 +11,21 @@ function buildNotificationHref(base: string): string {
 /** Routes that exist but require auth — redirect or 401 is OK; bare 404 is not. */
 const ACCEPTABLE_STATUSES = new Set([200, 301, 302, 307, 308, 401, 403])
 
+/**
+ * Run signed out, explicitly.
+ *
+ * This spec asks "does the ROUTE exist", using a dummy UUID that matches no
+ * record. Signed out, an auth redirect or 401 answers that without ever
+ * touching the database. Signed IN, the admin page renders and then correctly
+ * 404s because the record is missing — so the test reports "deep link is
+ * broken" when nothing is broken.
+ *
+ * playwright.config.ts sets `storageState` globally, so a context inherits a
+ * saved login unless it says otherwise. That is exactly what happened in CI:
+ * job_application failed on a 404 while the route was perfectly fine.
+ */
+test.use({ storageState: { cookies: [], origins: [] } })
+
 test.describe('Notification bell deep links (RELATED_TYPE_HREFS)', () => {
   for (const [type, base] of Object.entries(RELATED_TYPE_HREFS)) {
     test(`${type} → ${base} resolves without HTTP 404`, async ({ request }) => {

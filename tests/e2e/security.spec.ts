@@ -25,6 +25,22 @@ import { test, expect } from '@playwright/test'
 import { ADMIN_BLOCK_CHECK_ROUTES } from './helpers/inventory-routes'
 
 /**
+ * Force a genuinely empty session. THIS LINE IS THE TEST.
+ *
+ * playwright.config.ts sets `storageState` globally, so every context — the
+ * `page` AND the `request` fixture — silently inherits a saved login. Without
+ * this override these tests ran AUTHENTICATED while claiming to be signed out,
+ * and CI proved it: /api/invoices, /api/admin/users and /api/admin/refunds all
+ * answered 200. They passed locally only because no saved-session file existed
+ * there, which is the worst kind of green — right answer, wrong reason,
+ * environment-dependent.
+ *
+ * A signed-out test that quietly carries a session asserts nothing about the
+ * closed side of the boundary. Do not remove this.
+ */
+test.use({ storageState: { cookies: [], origins: [] } })
+
+/**
  * Admin/money APIs. A signed-out request must never receive a success body.
  * 405 is acceptable for a POST-only route reached with GET — the request was
  * refused before any handler logic ran.
