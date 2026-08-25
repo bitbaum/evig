@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
+import { ArrowRight } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { PageHero } from '@/components/layout/PageHero'
 import { Section } from '@/components/layout/Section'
@@ -45,7 +46,7 @@ export async function DivisionPage({
   locale: string
   division: Division & { id: DivisionPageId }
 }) {
-  const { strands, boundaries, ctaHref } = DIVISION_PAGES[division.id]
+  const { strands, strandLinks, boundaries, ctaHref } = DIVISION_PAGES[division.id]
   const t = await getTranslations({ locale, namespace: 'divisions' })
 
   // Page copy is namespaced by division id; next-intl's key union can't see the
@@ -99,6 +100,18 @@ export async function DivisionPage({
                     {k(`strands.${strand}.title`)}
                   </Heading>
                   <p className="ui-public-prose-muted mt-3">{k(`strands.${strand}.body`)}</p>
+                  {/* A strand that describes something the reader can do today
+                      links to where they do it — a paragraph naming an offer
+                      with no way to reach it is a dead end. */}
+                  {strandLinks?.[strand] && (
+                    <Link
+                      href={strandLinks[strand]}
+                      className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-action hover:underline"
+                    >
+                      {k(`strands.${strand}.link`)}
+                      <ArrowRight className="h-4 w-4" aria-hidden />
+                    </Link>
+                  )}
                 </div>
               </div>
             ))}

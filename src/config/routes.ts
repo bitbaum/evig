@@ -158,5 +158,9 @@ export const ROUTES = {
     // evig divisions that own a page (SSOT: src/config/divisions.ts). The other
     // two — computers and repairs — route to /marketplace and /it-hilfe.
     ai:                       '/ai',
+    // Shared subscriptions. Belongs to the AI thesis (a pooled seat is the most
+    // direct way to make an expensive subscription affordable), not to the
+    // membership section it used to sit under.
+    abos:                     '/abos',
   },
 } as const

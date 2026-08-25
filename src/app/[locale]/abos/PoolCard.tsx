@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { Users, ChevronRight, RefreshCw, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import type { Pool } from './types'
 import { CATEGORY_EMOJIS } from './types'
 
@@ -39,7 +40,10 @@ export function PoolCard({ pool, userId, onJoin, onLeave, myPoolIds }: Props) {
     : t('spotsLeftPlural', { count: pool.spotsLeft })
 
   return (
-    <div className="card-shell rounded-2xl p-6 flex flex-col gap-4 hover:border-strong transition-colors">
+    // `card-shell` already carries the shared radius; the old `rounded-2xl`
+    // here overrode it, so pool cards were visibly rounder than every other
+    // card on the site. One shape, one definition.
+    <Card className="p-6 flex flex-col gap-4 hover:border-strong transition-colors">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <span className="text-3xl">{emoji}</span>
@@ -101,6 +105,6 @@ export function PoolCard({ pool, userId, onJoin, onLeave, myPoolIds }: Props) {
           <span className="text-xs text-text-muted">{t('loginToJoin')}</span>
         )}
       </div>
-    </div>
+    </Card>
   )
 }
