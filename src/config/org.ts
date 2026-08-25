@@ -120,7 +120,22 @@ export const BASE_REGION = {
 // CONTACT
 // ============================================================================
 
-const DEFAULT_CONTACT_EMAIL = 'hallo@evig.ch' as const // TODO: register evig.ch mailbox
+/**
+ * The address users are told to write to. It must be a mailbox that ACTUALLY
+ * RECEIVES MAIL — this string is printed on public pages and is the fallback
+ * the checkout wall points at ("Bitte kontaktiere evig, wenn du sofort bezahlen
+ * möchtest") while Payrexx is unset.
+ *
+ * It was `hallo@evig.ch`. `evig.ch` is not purchased yet — it publishes no MX
+ * and no A record — so every message a would-be buyer sent to it bounced, on a
+ * catalogue of 200+ live listings with online payment deliberately switched off
+ * and no phone number configured. The one route to a human was a dead end.
+ *
+ * Gmail is not the long-term brand address; it is the one that works today.
+ * When evig.ch is registered and its mail is authenticated (Brevo SPF+DKIM),
+ * change this ONE line back — everything user-facing reads it from here.
+ */
+const DEFAULT_CONTACT_EMAIL = 'butaeff@gmail.com' as const
 
 export const CONTACT = {
   email: DEFAULT_CONTACT_EMAIL,

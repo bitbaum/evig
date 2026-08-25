@@ -11,7 +11,7 @@ import { logger } from '@/lib/logger'
 import { ERROR_MESSAGES } from '@/config/error-messages'
 import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
 import { validateBody, ForgotPasswordSchema } from '@/lib/schemas'
-import { ORG } from '@/config/org'
+import { ORG, CONTACT } from '@/config/org'
 import { getPasswordResetUrl } from '@/config/urls'
 
 export async function POST(request: NextRequest) {
@@ -86,7 +86,12 @@ export async function POST(request: NextRequest) {
       // delivery failure so they are not stuck behind a false success message.
       return apiError(
         new Error('Password reset email not delivered'),
-        'E-Mail konnte nicht gesendet werden. Bitte versuche es später erneut oder kontaktiere uns unter kontakt@revamp-it.ch.',
+        // Address comes from CONTACT, never typed here: this message is shown
+        // precisely WHEN mail delivery just failed, so the address in it is the
+        // user's only remaining way back in. It used to name a hardcoded
+        // kontakt@revamp-it.ch, which is neither the org's address nor
+        // guaranteed to be monitored.
+        `E-Mail konnte nicht gesendet werden. Bitte versuche es später erneut oder kontaktiere uns unter ${CONTACT.email}.`,
         503,
       )
     }
