@@ -2621,7 +2621,7 @@
       "title": "L'intelligence appartient à tous",
       "yearsExperience": "ans d'expérience",
       "quote": "L'accès à l'IA et à la robotique décide de qui peut participer — il ne doit pas dépendre du porte-monnaie.",
-      "paragraph1": "evig rend l'accès à l'intelligence abordable : <strong>une technologie sélectionnée, de l'IA et de la robotique</strong> à des prix justes. Nous ne sommes pas une œuvre caritative, mais un modèle de marché et de qualité — bon et abordable parce que la technologie reste en circulation au lieu de finir à la poubelle.",
+      "paragraph1": "evig rend l'accès à l'intelligence abordable : <strong>une technologie sélectionnée, de l'IA et de la robotique</strong> à des prix justes. Une association à but non lucratif en cours de constitution, gérée selon un modèle de marché et de qualité — bon et abordable parce que la technologie reste en circulation au lieu de finir à la poubelle.",
       "paragraph2": "S'y ajoute une réparation vraiment accessible — atelier, repair café et réseau de techniciens — ainsi qu'un marché circulaire de technologie d'occasion vérifiée. Ce qui fonctionne doit rester en circulation.",
       "imageAlt": "Technologie sélectionnée chez evig"
     },
@@ -9064,16 +9064,6 @@
         "tagline": "Une intelligence à portée de main",
         "description": "Un assistant qui fait partie de la plateforme plutôt que d’un abonnement — sur du matériel abordable.",
         "cta": "Voir ce domaine"
-      },
-      "architecture": {
-        "tagline": "Construire pour la ruine",
-        "description": "Des bâtiments qui tiennent encore debout en ruine : des matériaux honnêtes, une structure visible, rien qui ne soit plus que gênant après vingt ans.",
-        "cta": "Voir ce domaine"
-      },
-      "health": {
-        "tagline": "Rester plus longtemps — et garder ce que l’on sait",
-        "description": "Notre domaine de recherche sur la longévité : plus d’années en bonne santé et la préservation de ce qui fait une personne.",
-        "cta": "Vers la recherche"
       }
     },
     "pages": {
@@ -9127,110 +9117,6 @@
           "heading": "Commencez par la machine",
           "body": "L’accès le moins cher à l’intelligence artificielle, c’est un bon ordinateur portable d’occasion que quelqu’un a correctement préparé.",
           "button": "Voir les appareils"
-        }
-      },
-      "architecture": {
-        "meta": {
-          "title": "Construire pour la ruine",
-          "description": "Un domaine de recherche sur la construction : des matériaux qui vieillissent au lieu de se dégrader, une structure que l’on a le droit de voir, et des pièces qui se séparent à nouveau."
-        },
-        "hero": {
-          "title": "Construire pour que même la ruine vaille le regard.",
-          "lede": "L’épreuve la plus dure pour un bâtiment commence quand plus personne ne l’entretient. Ce qui tient encore debout à ce moment-là — et reste beau — a été construit honnêtement. Tout le reste n’était que parement."
-        },
-        "thesis": {
-          "eyebrow": "Pourquoi",
-          "title": "La ruine est l’expert le plus honnête",
-          "body": "Un édifice de pierre devient une ruine et reste digne d’être vu. Un édifice de plaques de plâtre, de colle et de films devient un déchet — bien avant de s’effondrer, précisément au moment où le parement tombe. La différence ne tient pas à l’âge, mais au fait que ce qui porte soit aussi ce que l’on voit. Nous posons déjà exactement cette question à un ordinateur portable : est-il ce qu’il prétend être, et peut-on l’ouvrir, le réparer et le transmettre ? Une maison n’est que le plus grand appareil que possède une personne."
-        },
-        "strands": {
-          "eyebrow": "Nos critères",
-          "heading": "Trois épreuves",
-          "materials": {
-            "title": "Un matériau qui vieillit au lieu de se dégrader",
-            "body": "Pierre, bois, brique, terre, béton laissé nu : des matériaux qui prennent la patine au lieu de jaunir. Un matériau qui n’est beau que neuf est un pari contre le temps — et ce pari est toujours perdu."
-          },
-          "structure": {
-            "title": "Une structure que l’on a le droit de voir",
-            "body": "Si l’ossature reste visible, elle doit être honnête. La structure apparente n’est pas une affaire de goût mais un engagement : ce que l’on ne peut pas cacher, on le construit correctement."
-          },
-          "reversibility": {
-            "title": "Démontable, réutilisable, réversible",
-            "body": "Un bâtiment dont les éléments peuvent être séparés, remplacés et réemployés peut survivre à son premier usage. Des couches collées ne le peuvent pas. C’est le même principe que la batterie soudée, en mille fois plus grand."
-          }
-        },
-        "boundary": {
-          "eyebrow": "Limites honnêtes",
-          "heading": "Ce que ce domaine n’est pas",
-          "noFirm": {
-            "title": "Pas une agence d’architecture",
-            "body": "Nous ne concevons pas de bâtiments et n’acceptons aucune commande. Il s’agit d’une position et d’un axe de recherche, pas d’une offre."
-          },
-          "noNostalgia": {
-            "title": "Pas de la nostalgie",
-            "body": "Il ne s’agit pas de recopier l’ancien. Une maison bien bâtie aujourd’hui peut ressembler à aujourd’hui — elle doit seulement être honnête."
-          },
-          "noAdvice": {
-            "title": "Pas du conseil en construction",
-            "body": "Nous ne donnons aucune recommandation de structure ou de sécurité. Qui construit a besoin de professionnels qui en portent la responsabilité."
-          }
-        },
-        "cta": {
-          "heading": "Le même principe, en plus petit",
-          "body": "En attendant que nous construisions, l’idée se lit dans l’objet par lequel nous avons commencé : un appareil que l’on peut ouvrir, réparer et transmettre.",
-          "button": "Voir les appareils"
-        }
-      },
-      "health": {
-        "meta": {
-          "title": "Longévité et préservation",
-          "description": "Le domaine de recherche sur la longévité : plus d’années en bonne santé et la préservation de la conscience d’une personne. Recherche ouverte — pas de médecine, pas de produit, pas de promesses."
-        },
-        "hero": {
-          "title": "La chose que nous voulons conserver le plus longtemps, c’est une personne.",
-          "lede": "Nous gardons les choses en usage plus longtemps : les appareils d’abord, puis le savoir qui permet de s’en servir. L’étape suivante est la plus évidente et la plus difficile — le temps dont dispose une personne, et ce qui reste d’elle."
-        },
-        "thesis": {
-          "eyebrow": "Pourquoi",
-          "title": "La même question, un étage plus haut",
-          "body": "Un ordinateur portable réparé est un ordinateur qu’il n’a pas fallu fabriquer une seconde fois. Posée un étage plus haut, la question est la même : qu’est-ce qui prolonge le temps où une personne reste en bonne santé, éveillée et elle-même ? Et que peut-on en préserver lorsque ce temps s’achève ? Nous ne prétendons pas connaître la réponse. Nous trouvons la question bien trop importante pour la laisser à ceux qui ont les moyens de se la poser."
-        },
-        "strands": {
-          "eyebrow": "Ce que nous étudions",
-          "heading": "Trois axes",
-          "healthspan": {
-            "title": "Espérance de vie en bonne santé",
-            "body": "Non pas vivre plus longtemps à tout prix, mais rester en bonne santé plus longtemps. Nous rassemblons les connaissances librement accessibles et nous les examinons : ce qui est démontré, ce qui n’est qu’affirmé, et ce que cela coûte. Nous ne vendons rien à côté — ni compléments, ni programmes."
-          },
-          "memory": {
-            "title": "Mémoire",
-            "body": "Ce qu’une personne sait, a décidé et retient est aujourd’hui dispersé dans des services qui ne lui appartiennent pas. Nous étudions comment ce contexte peut appartenir à la personne elle-même : chiffré, transportable, exportable — utilisable par une IA qui travaille pour elle et non sur elle."
-          },
-          "continuity": {
-            "title": "Transmission",
-            "body": "Une personne s’achève. Ce qu’elle savait n’y est pas obligé. Nous étudions comment préserver un savoir, une voix et des souvenirs pour que ceux qui viennent après puissent travailler avec — avec un consentement explicite donné du vivant de la personne, et sans jamais faire croire que l’enregistrement est la personne."
-          }
-        },
-        "boundary": {
-          "eyebrow": "Limites honnêtes",
-          "heading": "Ce que ce domaine n’est pas",
-          "noMedicine": {
-            "title": "Pas de la médecine",
-            "body": "Nous ne posons pas de diagnostic, nous ne recommandons pas de traitement et nous ne remplaçons aucun médecin."
-          },
-          "noProduct": {
-            "title": "Pas un produit",
-            "body": "Il n’y a rien à acheter ici. Ce domaine est aujourd’hui de la recherche, et nous la menons publiquement."
-          },
-          "noImmortality": {
-            "title": "Pas une promesse d’immortalité",
-            "body": "Nous travaillons sur plus de temps en bonne santé et sur une préservation soigneuse. Pas sur des miracles — et pas sur une copie d’une personne."
-          }
-        },
-        "cta": {
-          "heading": "Nous cherchons en public",
-          "body": "Ce domaine n’en est qu’à ses débuts. Si vous voulez y réfléchir avec nous — comme chercheuse, comme médecin, ou comme personne directement concernée — écrivez-nous.",
-          "button": "Nous contacter"
         }
       }
     }

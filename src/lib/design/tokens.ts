@@ -35,7 +35,7 @@ export const SECTION_KEYS = [
   'marketplace', 'itHilfe', 'services', 'about', 'contact', 'getInvolved',
   'workshops', 'blog', 'faq', 'space', 'projects', 'repairers', 'knowhow', 'home',
   // evig division pages (SSOT: src/config/divisions.ts)
-  'ai', 'architecture', 'health',
+  'ai',
 ] as const
 
 export type ThemeKey = (typeof SECTION_KEYS)[number]

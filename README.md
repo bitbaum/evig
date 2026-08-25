@@ -23,7 +23,7 @@ evig makes genuinely good computing affordable to everyone — curated, decent h
 
 ## How evig funds this platform
 
-evig is not VC-backed and not a charity — it runs a market/quality model where affordable pricing is the product, not a subsidy. The economic model is deliberately mixed so no single source carries the whole organization:
+evig is a non-profit association in formation, run on a market/quality model where affordable pricing is the product, not a subsidy. The economic model is deliberately mixed so no single source carries the whole organization:
 
 1. **Storefront revenue** — curated, decent hardware sold at affordable prices. Margin funds operations.
 2. **Service revenue** — paid workshops, repair services, IT-Hilfe billable to companies that can pay (kept affordable for individuals).

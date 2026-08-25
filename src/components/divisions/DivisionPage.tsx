@@ -27,13 +27,13 @@ export async function divisionMetadata(locale: string, id: DivisionPageId): Prom
 }
 
 /**
- * One shape for every evig division page (evig ai, evig health).
+ * One shape for every evig division page that owns a page of its own.
  *
  * Hero → thesis → numbered strands → honesty boundary → closing CTA. The order
  * is the argument: what we claim, why we claim it, what we are actually doing,
  * and — before the CTA, never after it — what we are explicitly NOT claiming.
  *
- * A third division page adds a DIVISION_PAGES entry plus its strings under
+ * A further division page adds a DIVISION_PAGES entry plus its strings under
  * `divisions.pages.<id>`; it does not fork this component. Strand and boundary
  * ids come from config and are read by KEY (never by array index), so a locale
  * can never desync its way into an out-of-bounds render.

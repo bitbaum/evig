@@ -7,8 +7,6 @@
  *   computers    → the machine, curated so it lasts instead of landfilling
  *   repairs      → the machine someone already owns, kept alive
  *   ai           → the intelligence that machine can reach
- *   architecture → the largest device we own — built so the ruin still reads
- *   health       → the person in front of all of it — research, nothing sold
  *
  * This array IS the brand architecture: the homepage section, the footer
  * column, the nav entries and the division pages all derive from it, including
@@ -24,12 +22,12 @@
  *   3. A division that needs a page of its own gets a DIVISION_PAGES entry.
  */
 
-import { Columns3, HeartPulse, Laptop, Sparkles, Wrench, type LucideIcon } from 'lucide-react'
+import { Laptop, Sparkles, Wrench, type LucideIcon } from 'lucide-react'
 import { ORG } from '@/config/org'
 import { ROUTES } from '@/config/routes'
 import type { ThemeKey } from '@/lib/design/tokens'
 
-export type DivisionId = 'computers' | 'repairs' | 'ai' | 'architecture' | 'health'
+export type DivisionId = 'computers' | 'repairs' | 'ai'
 
 /**
  * How far a division actually is.
@@ -82,22 +80,6 @@ export const EVIG_DIVISIONS: readonly Division[] = [
     theme: 'ai',
     status: 'live',
   },
-  {
-    id: 'architecture',
-    wordmark: wordmark('architecture'),
-    href: ROUTES.public.architecture,
-    icon: Columns3,
-    theme: 'architecture',
-    status: 'research',
-  },
-  {
-    id: 'health',
-    wordmark: wordmark('health'),
-    href: ROUTES.public.health,
-    icon: HeartPulse,
-    theme: 'health',
-    status: 'research',
-  },
 ]
 
 /**
@@ -115,7 +97,7 @@ export const DIVISION_STATUS_STYLE: Record<DivisionStatus, string> = {
  * on purpose — they route to the marketplace and IT-Hilfe surfaces that already
  * do the job, and a second landing page for either would be drift.
  */
-export type DivisionPageId = Extract<DivisionId, 'ai' | 'architecture' | 'health'>
+export type DivisionPageId = Extract<DivisionId, 'ai'>
 
 export interface DivisionPageConfig {
   /** Ordered strand ids → `divisions.pages.<id>.strands.<strandId>.{title,body}`. */
@@ -135,16 +117,6 @@ export const DIVISION_PAGES: Record<DivisionPageId, DivisionPageConfig> = {
     strands: ['assistant', 'hardware', 'sovereignty'],
     boundaries: ['noLab', 'noMagic', 'noLockIn'],
     ctaHref: ROUTES.public.marketplace,
-  },
-  architecture: {
-    strands: ['materials', 'structure', 'reversibility'],
-    boundaries: ['noFirm', 'noNostalgia', 'noAdvice'],
-    ctaHref: ROUTES.public.marketplace,
-  },
-  health: {
-    strands: ['healthspan', 'memory', 'continuity'],
-    boundaries: ['noMedicine', 'noProduct', 'noImmortality'],
-    ctaHref: ROUTES.public.contact,
   },
 }
 
