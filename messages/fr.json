@@ -346,9 +346,7 @@
     "hero": {
       "title": "L'accès à l'intelligence. Abordable pour tous.",
       "titlePrimary": "L'accès à l'intelligence.",
-      "subtitle": "La bonne technologie est trop chère et devient trop vite un déchet. Nous inversons les deux : un accès abordable à l'intelligence — et un cycle qui garde les appareils en circulation plutôt qu'à la casse.",
       "ctaDiscover": "Trouver une réparation",
-      "ctaAbout": "Qui sommes-nous",
       "positioning": "L'IA pour tous · Appareils, aide, formation · Zurich",
       "titleSecondary": "Abordable pour tous.",
       "lede": "Une technologie sélectionnée, de l'IA et de la robotique à des prix justes — plus une réparation vraiment accessible.",
@@ -360,42 +358,22 @@
         "title": "Un vieux appareil à donner?",
         "subtitle": "Vendez-le ou donnez-le en 2 minutes — gratuitement et sans frais.",
         "primaryLabel": "Découvrir la marketplace",
-        "secondaryLabel": "Vendre maintenant",
         "label": "01 / MARCHÉ"
       },
       "repair": {
         "title": "Ordinateur en panne?",
         "subtitle": "Des techniciens près de chez vous aident — ou proposez vous-même des réparations.",
         "primaryLabel": "Trouver de l'aide",
-        "secondaryLabel": "Devenir technicien",
         "label": "02 / AIDE IT"
       },
       "learn": {
         "title": "Envie d'apprendre?",
         "subtitle": "Ateliers pratiques sur Linux, réparation hardware, programmation et IA.",
         "primaryLabel": "Voir les ateliers",
-        "secondaryLabel": "Explorer les ressources",
         "label": "03 / ATELIERS"
       },
       "eyebrow": "TROIS VOIES",
       "subtitle": "Que vous souhaitiez vous débarrasser d'un vieil appareil, en acheter un abordable ou aider aux réparations — vous êtes au bon endroit."
-    },
-    "proServices": {
-      "text": "Nous proposons également des {link} professionnels: réparation informatique, récupération de données, installation Linux et développement web.",
-      "linkLabel": "services IT"
-    },
-    "impact": {
-      "title": "Notre impact",
-      "subtitle": "Ce que nous avons accompli ensemble",
-      "moreLink": "En savoir plus sur notre impact",
-      "compactMetrics": {
-        "devicesRescued": "Appareils sauvés annuellement",
-        "peopleTrained": "Personnes formées",
-        "reuseRate": "Taux de réutilisation",
-        "lifespanExtension": "Années de prolongation de vie",
-        "internshipSuccess": "Stages réussis",
-        "careerReentries": "Réinsertions professionnelles"
-      }
     },
     "community": {
       "heading": "Rejoignez la communauté",
@@ -422,26 +400,6 @@
       },
       "eyebrow": "PARTICIPER"
     },
-    "newsletter": {
-      "title": "Restez informé",
-      "subtitle": "Découvrez comment nous rendons la technologie durable. Pas de spam, seulement l'essentiel.",
-      "namePlaceholder": "Nom (optionnel)",
-      "emailPlaceholder": "Adresse e-mail",
-      "submit": "S'inscrire",
-      "submitting": "Inscription en cours...",
-      "successMessage": "Merci! Confirmez votre e-mail pour activer la newsletter.",
-      "networkError": "Erreur réseau. Veuillez réessayer plus tard."
-    },
-    "stats": {
-      "users": "Utilisateurs",
-      "listings": "Annonces",
-      "repairs": "Réparations",
-      "workshops": "Ateliers"
-    },
-    "asSeenIn": {
-      "heading": "Vu dans",
-      "allCoverage": "Voir toute la couverture médiatique"
-    },
     "jsonld": {
       "description": "Un accès abordable à l'IA et à la robotique : matériel d'occasion testé, réparation et aide informatique, Linux et logiciels libres, formation et accompagnement des organisations.",
       "areaServed": "Zurich, Bâle, Lucerne, Suisse",
@@ -452,15 +410,22 @@
       "service3Name": "IA et robotique au travail",
       "service3Desc": "Formation, reconversion et accompagnement lors de leur mise en place"
     },
-    "press": {
-      "eyebrow": "TEL QUE RAPPORTÉ"
-    },
     "finalCta": {
       "eyebrow": "PRÊT ?",
       "heading": "Donnez une seconde vie à votre ordinateur.",
       "subtitle": "5 minutes d'effort. Nous le récupérons. Vous recevez un reçu fiscal. Votre appareil finit chez quelqu'un qui en a besoin.",
       "button": "Faire don d'un appareil",
       "note": "Le don d’appareils reste possible via Participer."
+    },
+    "newsletter": {
+      "title": "Restez informé",
+      "subtitle": "Découvrez comment nous rendons la technologie durable. Pas de spam, seulement l'essentiel.",
+      "namePlaceholder": "Nom (optionnel)",
+      "emailPlaceholder": "Adresse e-mail",
+      "submit": "S'inscrire",
+      "submitting": "Inscription en cours...",
+      "successMessage": "Merci! Confirmez votre e-mail pour activer la newsletter.",
+      "networkError": "Erreur réseau. Veuillez réessayer plus tard."
     }
   },
   "shop": {
@@ -4886,8 +4851,8 @@
     },
     "mission": {
       "title": "Notre mission",
-      "body": "En tant que {legalForm} (fondée en {foundingYear}), nous nous engageons à donner une seconde vie au matériel usagé, à rendre les logiciels libres accessibles à tous et à permettre aux gens d'apprendre à utiliser la technologie de manière autonome.",
-      "text": "{description} En tant que {legalForm} (fondée en {foundingYear}), nous nous engageons pour que le matériel d'occasion ait une seconde vie, que les logiciels libres soient accessibles à tous, et que les personnes puissent apprendre à utiliser la technologie de manière autonome."
+      "body": "En tant que {legalForm} (fondée en {foundingYear}), nous œuvrons pour mettre l'IA et la robotique à la portée de tous : avec du matériel abordable parce qu'il reste en circulation, avec des logiciels libres plutôt qu'une dépendance à un fournisseur, et avec les connaissances permettant d'utiliser et de garder ces outils en toute autonomie.",
+      "text": "{description} En tant que {legalForm} (fondée en {foundingYear}), nous œuvrons pour mettre l'IA et la robotique à la portée de tous : avec du matériel abordable parce qu'il reste en circulation, avec des logiciels libres plutôt qu'une dépendance à un fournisseur, et avec les connaissances permettant d'utiliser et de garder ces outils en toute autonomie."
     },
     "stats": {
       "title": "Chiffres & faits",

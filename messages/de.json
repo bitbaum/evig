@@ -349,10 +349,8 @@
       "titlePrimary": "Zugang zu Intelligenz.",
       "titleSecondary": "Für alle bezahlbar.",
       "lede": "Kuratierte Technik, KI und Robotik zu fairen Preisen — plus wirklich zugängliche Reparatur.",
-      "subtitle": "Gute Technik ist zu teuer und zu schnell Müll. Wir drehen beides um: bezahlbaren Zugang zu Intelligenz — und einen Kreislauf, der Geräte im Umlauf hält statt auf dem Schrott.",
       "ctaDonate": "Technik entdecken",
       "ctaDiscover": "Reparatur finden",
-      "ctaAbout": "Über uns",
       "positioning": "KI für alle · Geräte, Hilfe, Ausbildung · Zürich"
     },
     "actions": {
@@ -363,30 +361,20 @@
         "label": "01 / SHOP",
         "title": "Refurbished IT kaufen?",
         "subtitle": "Geprüfte Geräte aus dem evig Shop — lokal, transparent und sofort einsatzbereit.",
-        "primaryLabel": "Zum Shop",
-        "secondaryLabel": "Marktplatz ansehen"
+        "primaryLabel": "Zum Shop"
       },
       "repair": {
         "label": "02 / REPARATUR",
         "title": "Computer kaputt?",
         "subtitle": "Techniker und Werkstätten in deiner Nähe helfen — oder biete selbst Reparaturen an.",
-        "primaryLabel": "Techniker finden",
-        "secondaryLabel": "Techniker werden"
+        "primaryLabel": "Techniker finden"
       },
       "learn": {
         "label": "03 / WORKSHOPS",
         "title": "Etwas Neues lernen?",
         "subtitle": "Praxisnahe Workshops zu Linux, Hardware-Reparatur, Programmierung und KI.",
-        "primaryLabel": "Workshops ansehen",
-        "secondaryLabel": "Knowhow entdecken"
+        "primaryLabel": "Workshops ansehen"
       }
-    },
-    "proServices": {
-      "text": "Wir bieten auch professionelle {link} an: Computer-Reparatur, Datenrettung, Linux-Installation und Webentwicklung.",
-      "linkLabel": "IT-Dienstleistungen"
-    },
-    "press": {
-      "eyebrow": "ÜBER UNS BERICHTET"
     },
     "community": {
       "eyebrow": "MITMACHEN",
@@ -420,26 +408,6 @@
       "button": "Zum Shop",
       "note": "Geräte spenden bleibt möglich unter Mitmachen."
     },
-    "newsletter": {
-      "title": "Bleib auf dem Laufenden",
-      "subtitle": "Erfahre, wie wir Technologie nachhaltig machen. Kein Spam, nur Inhalte die zählen.",
-      "namePlaceholder": "Name (optional)",
-      "emailPlaceholder": "E-Mail-Adresse",
-      "submit": "Anmelden",
-      "submitting": "Wird angemeldet...",
-      "successMessage": "Danke! Bestätige deine E-Mail, um den Newsletter zu aktivieren.",
-      "networkError": "Netzwerkfehler. Bitte versuche es später."
-    },
-    "stats": {
-      "users": "Nutzer:innen",
-      "listings": "Inserate",
-      "repairs": "Reparaturen",
-      "workshops": "Workshops"
-    },
-    "asSeenIn": {
-      "heading": "Bekannt aus",
-      "allCoverage": "Alle Medienberichte ansehen"
-    },
     "jsonld": {
       "description": "Bezahlbarer Zugang zu KI und Robotik: geprüfte gebrauchte Hardware, Reparatur und IT-Hilfe, Linux und offene Software, Weiterbildung und Begleitung von Organisationen.",
       "areaServed": "Zürich, Basel, Luzern, Schweiz",
@@ -450,10 +418,15 @@
       "service3Name": "KI und Robotik im Betrieb",
       "service3Desc": "Weiterbildung, Umschulung und Begleitung bei der Einführung in Organisationen"
     },
-    "impact": {
-      "title": "Unsere Wirkung",
-      "subtitle": "Was wir gemeinsam erreicht haben",
-      "moreLink": "Mehr über unsere Wirkung"
+    "newsletter": {
+      "title": "Bleib auf dem Laufenden",
+      "subtitle": "Erfahre, wie wir Technologie nachhaltig machen. Kein Spam, nur Inhalte die zählen.",
+      "namePlaceholder": "Name (optional)",
+      "emailPlaceholder": "E-Mail-Adresse",
+      "submit": "Anmelden",
+      "submitting": "Wird angemeldet...",
+      "successMessage": "Danke! Bestätige deine E-Mail, um den Newsletter zu aktivieren.",
+      "networkError": "Netzwerkfehler. Bitte versuche es später."
     }
   },
   "shop": {
@@ -4599,8 +4572,8 @@
     },
     "mission": {
       "title": "Unsere Mission",
-      "body": "Als {legalForm} (gegründet {foundingYear}) setzen wir uns dafür ein, dass gebrauchte Hardware ein zweites Leben bekommt, offene Software für alle verfügbar ist, und Menschen den Umgang mit Technologie selbstbestimmt erlernen können.",
-      "text": "{description} Als {legalForm} (gegründet {foundingYear}) setzen wir uns dafür ein, dass gebrauchte Hardware ein zweites Leben bekommt, offene Software für alle verfügbar ist, und Menschen den Umgang mit Technologie selbstbestimmt erlernen können."
+      "body": "Als {legalForm} (gegründet {foundingYear}) setzen wir uns dafür ein, dass KI und Robotik für alle erreichbar sind: mit Hardware, die man sich leisten kann, weil sie im Kreislauf bleibt, mit offener Software statt Anbieterbindung, und mit Wissen, damit Menschen ihre Werkzeuge selbstbestimmt nutzen und behalten können.",
+      "text": "{description} Als {legalForm} (gegründet {foundingYear}) setzen wir uns dafür ein, dass KI und Robotik für alle erreichbar sind: mit Hardware, die man sich leisten kann, weil sie im Kreislauf bleibt, mit offener Software statt Anbieterbindung, und mit Wissen, damit Menschen ihre Werkzeuge selbstbestimmt nutzen und behalten können."
     },
     "stats": {
       "title": "Zahlen & Fakten",

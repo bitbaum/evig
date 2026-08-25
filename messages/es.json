@@ -728,8 +728,8 @@
     },
     "mission": {
       "title": "Nuestra misión",
-      "body": "Como {legalForm} (fundada en {foundingYear}), nos comprometemos a dar una segunda vida al hardware usado, hacer el software libre accesible a todos y permitir que las personas aprendan a usar la tecnología de forma independiente.",
-      "text": "{description} Como {legalForm} (fundada en {foundingYear}), nos dedicamos a dar una segunda vida al hardware usado, a poner el software libre al alcance de todos y a que las personas puedan aprender a manejar la tecnología de forma autónoma."
+      "body": "Como {legalForm} (fundada en {foundingYear}), trabajamos para que la IA y la robótica estén al alcance de todos: con hardware asequible porque permanece en circulación, con software abierto en lugar de dependencia de un proveedor, y con el conocimiento para usar y conservar esas herramientas de forma autónoma.",
+      "text": "{description} Como {legalForm} (fundada en {foundingYear}), trabajamos para que la IA y la robótica estén al alcance de todos: con hardware asequible porque permanece en circulación, con software abierto en lugar de dependencia de un proveedor, y con el conocimiento para usar y conservar esas herramientas de forma autónoma."
     },
     "stats": {
       "title": "Datos y cifras",
@@ -2100,9 +2100,7 @@
     "hero": {
       "title": "Acceso a la inteligencia. Asequible para todos.",
       "titlePrimary": "Acceso a la inteligencia.",
-      "subtitle": "La buena tecnología es demasiado cara y se convierte en basura demasiado rápido. Nosotros damos la vuelta a ambas cosas: acceso asequible a la inteligencia y un ciclo que mantiene los dispositivos en circulación en lugar de en el vertedero.",
       "ctaDiscover": "Encontrar reparación",
-      "ctaAbout": "Sobre nosotros",
       "positioning": "IA para todos · Dispositivos, ayuda, formación · Zúrich",
       "titleSecondary": "Asequible para todos.",
       "lede": "Tecnología seleccionada, IA y robótica a precios justos, más una reparación realmente accesible.",
@@ -2114,42 +2112,22 @@
         "title": "¿Tienes un dispositivo viejo?",
         "subtitle": "Véndelo o regálalo en 2 minutos — gratis y sin comisiones.",
         "primaryLabel": "Explorar el mercado",
-        "secondaryLabel": "Vender ahora",
         "label": "01 / MERCADO"
       },
       "repair": {
         "title": "¿Ordenador averiado?",
         "subtitle": "Técnicos cerca de ti te ayudan — o tú mismo ofrece reparaciones.",
         "primaryLabel": "Buscar ayuda",
-        "secondaryLabel": "Ser técnico",
         "label": "02 / AYUDA IT"
       },
       "learn": {
         "title": "¿Quieres aprender algo nuevo?",
         "subtitle": "Talleres prácticos de Linux, reparación de hardware, programación e IA.",
         "primaryLabel": "Ver talleres",
-        "secondaryLabel": "Explorar knowhow",
         "label": "03 / TALLERES"
       },
       "eyebrow": "TRES CAMINOS",
       "subtitle": "Ya quieras deshacerte de un dispositivo viejo, comprar uno asequible o ayudar con reparaciones — estás en el lugar correcto."
-    },
-    "proServices": {
-      "text": "También ofrecemos {link} profesionales: reparación de ordenadores, recuperación de datos, instalación de Linux y desarrollo web.",
-      "linkLabel": "servicios TI"
-    },
-    "impact": {
-      "title": "Nuestro impacto",
-      "subtitle": "Lo que hemos logrado juntos",
-      "moreLink": "Más sobre nuestro impacto",
-      "compactMetrics": {
-        "devicesRescued": "Dispositivos rescatados al año",
-        "peopleTrained": "Personas formadas",
-        "reuseRate": "Tasa de reutilización",
-        "lifespanExtension": "Años de vida útil extendida",
-        "internshipSuccess": "Prácticas exitosas",
-        "careerReentries": "Reinserción laboral"
-      }
     },
     "community": {
       "heading": "Únete a la comunidad",
@@ -2176,26 +2154,6 @@
       },
       "eyebrow": "PARTICIPAR"
     },
-    "newsletter": {
-      "title": "Mantente informado/a",
-      "subtitle": "Descubre cómo hacemos la tecnología sostenible. Sin spam, solo contenido que importa.",
-      "namePlaceholder": "Nombre (opcional)",
-      "emailPlaceholder": "Correo electrónico",
-      "submit": "Suscribirse",
-      "submitting": "Suscribiendo...",
-      "successMessage": "¡Gracias! Confirma tu correo para activar el newsletter.",
-      "networkError": "Error de red. Por favor, inténtalo más tarde."
-    },
-    "stats": {
-      "users": "Usuarios/as",
-      "listings": "Anuncios",
-      "repairs": "Reparaciones",
-      "workshops": "Talleres"
-    },
-    "asSeenIn": {
-      "heading": "Aparecido en",
-      "allCoverage": "Ver toda la cobertura de medios"
-    },
     "jsonld": {
       "description": "Acceso asequible a la IA y la robótica: hardware usado y probado, reparación y ayuda informática, Linux y software abierto, formación y acompañamiento a organizaciones.",
       "areaServed": "Zúrich, Basilea, Lucerna, Suiza",
@@ -2206,15 +2164,22 @@
       "service3Name": "IA y robótica en el trabajo",
       "service3Desc": "Formación, reciclaje profesional y acompañamiento en su adopción"
     },
-    "press": {
-      "eyebrow": "COMO SE REPORTÓ"
-    },
     "finalCta": {
       "eyebrow": "¿LISTO?",
       "heading": "Dale una segunda vida a tu ordenador.",
       "subtitle": "5 minutos de esfuerzo. Lo recogemos. Recibes un recibo de donación. Tu dispositivo termina con alguien que lo necesita.",
       "button": "Donar un dispositivo",
       "note": "Donar dispositivos sigue siendo posible en Participar."
+    },
+    "newsletter": {
+      "title": "Mantente informado/a",
+      "subtitle": "Descubre cómo hacemos la tecnología sostenible. Sin spam, solo contenido que importa.",
+      "namePlaceholder": "Nombre (opcional)",
+      "emailPlaceholder": "Correo electrónico",
+      "submit": "Suscribirse",
+      "submitting": "Suscribiendo...",
+      "successMessage": "¡Gracias! Confirma tu correo para activar el newsletter.",
+      "networkError": "Error de red. Por favor, inténtalo más tarde."
     }
   },
   "itHelp": {

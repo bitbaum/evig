@@ -347,9 +347,7 @@
     "hero": {
       "title": "Access to intelligence. Affordable for everyone.",
       "titlePrimary": "Access to intelligence.",
-      "subtitle": "Good tech is too expensive and turns to junk too fast. We flip both: affordable access to intelligence — and a cycle that keeps devices in circulation instead of in the scrap heap.",
       "ctaDiscover": "Find repair",
-      "ctaAbout": "About us",
       "positioning": "AI for everyone · Devices, help, training · Zurich",
       "titleSecondary": "Affordable for everyone.",
       "lede": "Curated tech, AI and robotics at fair prices — plus repair that's truly within reach.",
@@ -361,42 +359,22 @@
         "title": "Need refurbished IT?",
         "subtitle": "Verified devices from the evig shop — local, transparent, and ready to use.",
         "primaryLabel": "Go to shop",
-        "secondaryLabel": "Browse marketplace",
         "label": "01 / SHOP"
       },
       "repair": {
         "title": "Computer broken?",
         "subtitle": "Technicians and workshops near you can help — or offer repairs yourself.",
         "primaryLabel": "Find technicians",
-        "secondaryLabel": "Become a technician",
         "label": "02 / REPAIR"
       },
       "learn": {
         "title": "Want to learn something new?",
         "subtitle": "Hands-on workshops on Linux, hardware repair, programming and AI.",
         "primaryLabel": "View workshops",
-        "secondaryLabel": "Browse resources",
         "label": "03 / WORKSHOPS"
       },
       "eyebrow": "THREE WAYS",
       "subtitle": "Buy, repair, learn, or contribute — start with the job you need done today."
-    },
-    "proServices": {
-      "text": "We also offer professional {link}: computer repair, data recovery, Linux installation and web development.",
-      "linkLabel": "IT services"
-    },
-    "impact": {
-      "title": "Our Impact",
-      "subtitle": "What we've achieved together",
-      "moreLink": "More about our impact",
-      "compactMetrics": {
-        "devicesRescued": "Devices rescued annually",
-        "peopleTrained": "People trained",
-        "reuseRate": "Reuse rate",
-        "lifespanExtension": "Years of lifespan extension",
-        "internshipSuccess": "Successful internships",
-        "careerReentries": "Career re-entries"
-      }
     },
     "community": {
       "heading": "Join the Community",
@@ -423,26 +401,6 @@
       },
       "eyebrow": "GET INVOLVED"
     },
-    "newsletter": {
-      "title": "Stay up to date",
-      "subtitle": "Learn how we make technology sustainable. No spam — only content that matters.",
-      "namePlaceholder": "Name (optional)",
-      "emailPlaceholder": "Email address",
-      "submit": "Subscribe",
-      "submitting": "Subscribing...",
-      "successMessage": "Thank you! Please confirm your email to activate the newsletter.",
-      "networkError": "Network error. Please try again later."
-    },
-    "stats": {
-      "users": "Users",
-      "listings": "Listings",
-      "repairs": "Repairs",
-      "workshops": "Workshops"
-    },
-    "asSeenIn": {
-      "heading": "As seen in",
-      "allCoverage": "View all media coverage"
-    },
     "jsonld": {
       "description": "Affordable access to AI and robotics: tested used hardware, repair and IT help, Linux and open software, training, and support for organisations.",
       "areaServed": "Zurich, Basel, Lucerne, Switzerland",
@@ -453,15 +411,22 @@
       "service3Name": "AI and robotics at work",
       "service3Desc": "Training, retraining, and support for adopting AI and robotics in organisations"
     },
-    "press": {
-      "eyebrow": "AS REPORTED IN"
-    },
     "finalCta": {
       "eyebrow": "READY?",
       "heading": "Need a device built to last?",
       "subtitle": "The shop has verified refurbished IT. If something is broken, repair search connects you with suitable technicians and workshops.",
       "button": "Go to shop",
       "note": "Device donations still live under Get involved."
+    },
+    "newsletter": {
+      "title": "Stay up to date",
+      "subtitle": "Learn how we make technology sustainable. No spam — only content that matters.",
+      "namePlaceholder": "Name (optional)",
+      "emailPlaceholder": "Email address",
+      "submit": "Subscribe",
+      "submitting": "Subscribing...",
+      "successMessage": "Thank you! Please confirm your email to activate the newsletter.",
+      "networkError": "Network error. Please try again later."
     }
   },
   "shop": {
@@ -4833,8 +4798,8 @@
     },
     "mission": {
       "title": "Our Mission",
-      "body": "As a {legalForm} (founded {foundingYear}), we are committed to giving used hardware a second life, making open software available to all, and enabling people to learn how to use technology independently.",
-      "text": "{description} As a {legalForm} (founded in {foundingYear}), we are committed to giving second-hand hardware a second life, making open software available to everyone, and helping people learn to use technology on their own terms."
+      "body": "As a {legalForm} (founded {foundingYear}), we work to put AI and robotics within reach of everyone: with hardware people can afford because it stays in circulation, with open software instead of vendor lock-in, and with the knowledge to use and keep those tools on their own terms.",
+      "text": "{description} As a {legalForm} (founded in {foundingYear}), we work to put AI and robotics within reach of everyone: with hardware people can afford because it stays in circulation, with open software instead of vendor lock-in, and with the knowledge to use and keep those tools on their own terms."
     },
     "stats": {
       "title": "Facts & Figures",
