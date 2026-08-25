@@ -61,9 +61,22 @@ issuing routes exist, redemption (`validateAndComputeDiscount`,
 - **Duplicate vocabularies**: two `SWISS_CANTONS` (names vs codes) both
   exported from `src/config`, two `DEVICE_CATEGORIES`, two `WORK_STATE_OPTIONS`
   with drifted labels.
-- **E2E specs that no CI job runs**: `security.spec.ts`,
-  `user-admin-flows.spec.ts`, `payment-return.spec.ts`, and 6 more — only
-  `*journey.spec.ts` is wired.
+- **E2E specs that no CI job runs** — RESOLVED IN PART. Three are now wired via
+  `npm run test:e2e:guards` (`security`, `notification-hrefs`,
+  `user-admin-flows` = 41 assertions). All nine were run against a locally
+  seeded instance first; the rest are **not** wired because they do not pass,
+  and the reason matters — specs nothing runs rot:
+
+  | spec | result | why |
+  |---|---|---|
+  | `marketplace` | 9 failed / 2 passed | expects `h1` = "Marketplace" and "gebrauchte IT-Geräte" — pre-rebrand Revamp-IT copy |
+  | `it-hilfe` | 4 failed / 10 passed | mixed; worth salvaging, 10 tests already pass |
+  | `appointments` | 3 failed | session-email mismatch against seeded accounts |
+  | `payment-return` | 1 failed / 1 passed | — |
+  | `timecards` | 1 failed | — |
+  | `dashboard-timecards` | 1 skipped | skips its only test → inert if wired |
+
+  `it-hilfe` is the best next candidate: two thirds of it already passes.
 - **`scripts/ship.sh`** duplicates `verify` with a different check list; delete
   it or make it call `verify`.
 - Duplicate scripts: `rollback.sh` vs `rollback-production.sh`,
