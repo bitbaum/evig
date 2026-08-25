@@ -126,8 +126,8 @@
       "becomeMemberDesc": "Teil des Vereins werden und mitbestimmen",
       "contact": "Kontakt",
       "contactDesc": "Wir freuen uns auf dich",
-      "aboPools": "Abo-Pools",
-      "aboPoolsDesc": "Digitale Abos teilen und Kosten aufteilen",
+      "aboPools": "Abos teilen",
+      "aboPoolsDesc": "Ein KI-Abo zu viert — jede und jeder zahlt den eigenen Anteil",
       "projectMonitorUpcycling": "Monitor-Upcycling",
       "projectMonitorUpcyclingDesc": "Aktiv · Wand- und Deckenleuchten aus ausgemusterten Bildschirmen, mit ZHAW-Ökobilanz und Swico-Förderung.",
       "projectHardware": "Hardware-Entwicklung",
@@ -163,8 +163,8 @@
       "press": "Presse",
       "pressDesc": "Medienberichte",
       "aiDivision": "Zugang zu künstlicher Intelligenz — Assistent und passende Hardware",
-      "architectureDivision": "Bauen, das auch als Ruine noch etwas taugt",
-      "healthDivision": "Forschung zu Langlebigkeit und zum Bewahren von Erinnerung"
+      "vision": "Vision",
+      "visionDesc": "Wofür evig da ist, in voller Länge"
     },
     "language": "Sprache",
     "missionHistory": "Mission & Geschichte",
@@ -341,7 +341,8 @@
   "home": {
     "meta": {
       "title": "evig — Intelligenz, für alle bezahlbar | Technik, Reparatur & Linux in der Schweiz",
-      "description": "Refurbished IT kaufen, Marktplatz entdecken und Techniker oder Werkstätten für Reparaturen finden."
+      "description": "Gebrauchte Notebooks und Hardware, die für echte Arbeit reicht. Reparatur und IT-Hilfe in der Nähe, Linux und offene Software, Workshops und Begleitung bei KI und Robotik.",
+      "keywords": "gebrauchte Laptops, Notebook für KI, GPU gebraucht, Computer Reparatur Schweiz, Techniker finden, Linux Installation, Open Source, KI Weiterbildung, KI und Robotik im Betrieb, Zürich, Basel, Luzern"
     },
     "hero": {
       "title": "Zugang zu Intelligenz. Für alle bezahlbar.",
@@ -352,7 +353,7 @@
       "ctaDonate": "Technik entdecken",
       "ctaDiscover": "Reparatur finden",
       "ctaAbout": "Über uns",
-      "positioning": "Zugang zu Intelligenz · Kreislaufwirtschaft · Zürich"
+      "positioning": "KI für alle · Geräte, Hilfe, Ausbildung · Zürich"
     },
     "actions": {
       "eyebrow": "DREI WEGE",
@@ -383,34 +384,6 @@
     "proServices": {
       "text": "Wir bieten auch professionelle {link} an: Computer-Reparatur, Datenrettung, Linux-Installation und Webentwicklung.",
       "linkLabel": "IT-Dienstleistungen"
-    },
-    "ribbon": {
-      "left": {
-        "eyebrow": "REPARIEREN",
-        "title": "Wir geben Geräten ein zweites Leben.",
-        "body": "Jeder Computer, jedes Laptop, jede Komponente verdient eine zweite Chance. Unsere Techniker und Freiwillige bringen sie wieder zum Laufen — ohne kommerziellen Aufpreis."
-      },
-      "right": {
-        "eyebrow": "WEITERGEBEN",
-        "title": "Wir bringen sie zu denen, die sie brauchen.",
-        "body": "Refurbished an Vereine, Schulen und Menschen mit knappem Budget. Marktplatz für direkte Weitergabe in der Community — kein Mittelsmann, keine Gebühr."
-      }
-    },
-    "process": {
-      "eyebrow": "SO FUNKTIONIERT ES",
-      "heading": "Drei Schritte. Ein Kreislauf.",
-      "step1": {
-        "title": "Spenden oder verkaufen",
-        "body": "Bring uns dein altes Gerät, lass es abholen oder stelle es selbst auf den Marktplatz. Keine Gebühr, keine Mittelsleute, Spendenquittung inklusive."
-      },
-      "step2": {
-        "title": "Reparieren statt entsorgen",
-        "body": "Unsere Werkstatt prüft, reinigt und repariert. Was nicht mehr zu retten ist, wird sortenrein zerlegt — nichts landet im Müll, solange es noch Sinn ergibt."
-      },
-      "step3": {
-        "title": "Weiterleben statt wegwerfen",
-        "body": "Im Shop, in der Community, oder direkt an Organisationen mit Bedarf. Faire Preise, transparente Herkunft, sofort einsatzbereit."
-      }
     },
     "press": {
       "eyebrow": "ÜBER UNS BERICHTET"
@@ -468,14 +441,14 @@
       "allCoverage": "Alle Medienberichte ansehen"
     },
     "jsonld": {
-      "description": "Computer-Reparatur, Linux-Installation und Datenrettung. Nachhaltige IT-Lösungen für Privatpersonen, Vereine und KMU.",
+      "description": "Bezahlbarer Zugang zu KI und Robotik: geprüfte gebrauchte Hardware, Reparatur und IT-Hilfe, Linux und offene Software, Weiterbildung und Begleitung von Organisationen.",
       "areaServed": "Zürich, Basel, Luzern, Schweiz",
-      "service1Name": "Linux-Installation",
-      "service1Desc": "Alte Laptops schneller gemacht durch Linux-Installation",
-      "service2Name": "Datenrettung",
-      "service2Desc": "Wiederherstellung von Daten aus beschädigten Geräten",
-      "service3Name": "Computer-Reparatur",
-      "service3Desc": "Reparatur und Aufbau von Vintage-Computern"
+      "service1Name": "Geprüfte gebrauchte Hardware",
+      "service1Desc": "Notebooks, GPUs und Zubehör, die für echte Arbeit und für KI reichen",
+      "service2Name": "Reparatur und IT-Hilfe",
+      "service2Desc": "Technikerinnen und Techniker in der Nähe finden, statt auf einen Termin zu warten",
+      "service3Name": "KI und Robotik im Betrieb",
+      "service3Desc": "Weiterbildung, Umschulung und Begleitung bei der Einführung in Organisationen"
     },
     "impact": {
       "title": "Unsere Wirkung",
@@ -5470,9 +5443,9 @@
     }
   },
   "abos": {
-    "tagline": "Abo-Tauschbörse",
-    "title": "Abo-Pools teilen",
-    "subtitle": "Teile digitale Abos mit der evig-Community und spare Geld. Jeder zahlt nur seinen Anteil.",
+    "tagline": "Geteilte Abos",
+    "title": "Zugang teilen statt einzeln bezahlen",
+    "subtitle": "Ein KI-Abo kostet allein 22 Franken im Monat. Zu viert sind es 5.50. Teile ein Abo mit der evig-Community — jede und jeder zahlt nur den eigenen Anteil.",
     "createPool": "Pool erstellen",
     "filterAll": "Alle",
     "perMonthPerson": "pro Monat/Person",
@@ -5507,12 +5480,13 @@
       "unknownError": "Ein unbekannter Fehler ist aufgetreten"
     },
     "categories": {
-      "streaming": "Streaming",
+      "ai": "KI",
       "software": "Software",
       "cloud": "Cloud",
-      "gaming": "Gaming",
       "music": "Musik",
       "news": "News",
+      "streaming": "Streaming",
+      "gaming": "Gaming",
       "other": "Sonstiges"
     }
   },
@@ -9163,7 +9137,7 @@
     "overview": {
       "eyebrow": "Bereiche",
       "heading": "{count, plural, one {Ein Bereich} other {# Bereiche}}, ein Prinzip",
-      "subtitle": "Ein Gedanke, in jedem Bereich neu angewandt: die Zeit verlängern, in der etwas nützlich, brauchbar und schön bleibt. Vom Gerät bis zum Gebäude — und bis zum Menschen, der beides benutzt."
+      "subtitle": "Ein Gedanke, in jedem Bereich neu angewandt: die Zeit verlängern, in der etwas nützlich und brauchbar bleibt. Von der Maschine über die Reparatur bis zu der Intelligenz, die beide erreichbar macht."
     },
     "status": {
       "live": "Aktiv",
@@ -9208,9 +9182,15 @@
             "title": "Der Assistent",
             "body": "Auf jeder Seite dieser Plattform sitzt ein Assistent, der den Kontext der Seite kennt und Fragen dazu beantwortet. Er gehört zur Plattform und ist kein Zusatzprodukt — kein zweites Abo, keine getrennte Anmeldung."
           },
+          "sharing": {
+            "title": "Geteilter Zugang",
+            "body": "Ein gutes KI-Abo kostet allein rund 22 Franken im Monat — genau die Schwelle, an der die Lücke entsteht. Zu viert sind es 5.50. Auf dieser Plattform kann man ein Abo mit anderen teilen und zahlt nur den eigenen Anteil.",
+            "link": "Abo-Pools ansehen"
+          },
           "hardware": {
             "title": "Die Maschine dazu",
-            "body": "Software ohne Gerät ist eine Theorie. Deshalb liegen Hardware und Assistent bei uns nicht in getrennten Abteilungen: Die Geräte im Marktplatz sind so eingerichtet, dass sie am Tag der Übergabe das können, wofür man sie geholt hat."
+            "body": "Software ohne Gerät ist eine Theorie. Deshalb liegen Hardware und Assistent bei uns nicht in getrennten Abteilungen: Die Geräte im Marktplatz sind so eingerichtet, dass sie am Tag der Übergabe das können, wofür man sie geholt hat.",
+            "link": "Geräte ansehen"
           },
           "sovereignty": {
             "title": "Souveränität",
@@ -9238,6 +9218,38 @@
           "body": "Der günstigste Zugang zu künstlicher Intelligenz ist ein gutes, gebrauchtes Notebook, das jemand richtig eingerichtet hat.",
           "button": "Geräte ansehen"
         }
+      }
+    }
+  },
+  "pillars": {
+    "eyebrow": "WAS WIR TUN",
+    "heading": "{count, plural, one {Ein Weg} other {# Wege}}, ein Ziel",
+    "subtitle": "KI und Robotik verschieben gerade, wer welche Arbeit tun kann. Wir arbeiten daran, dass der Zugang dazu nicht davon abhängt, was jemand verdient — mit Geräten, mit Hilfe, mit Software, mit Ausbildung und mit Begleitung im Betrieb.",
+    "items": {
+      "hardware": {
+        "title": "Geräte, die für echte Arbeit reichen",
+        "body": "Gebrauchte Notebooks, mit denen man wirklich arbeiten kann, dazu GPUs und die Hardware, auf der KI läuft — ausgesucht, geprüft, bezahlbar. Keine Drucker, kein Elektroschrott mit Preisschild. Dass ein weitergenutztes Gerät nebenbei der Umwelt hilft, ist die Folge, nicht der Verkaufsgrund.",
+        "cta": "Geräte ansehen"
+      },
+      "technicians": {
+        "title": "Jemanden finden, der es repariert",
+        "body": "Reparatur und IT-Hilfe sollen so leicht zu finden sein wie eine Fahrt: Anfrage stellen, Angebote von Technikerinnen und Technikern in der Nähe erhalten, sich für eine entscheiden. Nicht warten, bis jemand Zeit hat.",
+        "cta": "Technikerin oder Techniker finden"
+      },
+      "software": {
+        "title": "Linux und offene Software",
+        "body": "Ein acht Jahre altes Notebook läuft unter Linux oft flüssiger als an dem Tag, an dem es gekauft wurde. Wir richten es ein, zeigen die offenen Alternativen zu teurer Software — und binden niemanden an einen Anbieter.",
+        "cta": "Linux und Open Source"
+      },
+      "training": {
+        "title": "Umschulung für eine Arbeitswelt mit KI",
+        "body": "KI und Roboter übernehmen gerade Aufgaben, von denen Menschen leben. Wer mit ihnen umgehen kann, verliert dabei weniger und gewinnt mehr. Workshops, die genau das vermitteln — an echten Aufgaben, nicht an Folien.",
+        "cta": "Workshops ansehen"
+      },
+      "adoption": {
+        "title": "KI und Robotik in den Betrieb bringen",
+        "body": "Für Organisationen und Betriebe, die wissen, dass sich etwas ändern muss, aber nicht, wo man anfängt. Wir schauen uns die Arbeit an, die tatsächlich getan wird, und bauen mit — bis etwas läuft.",
+        "cta": "Gespräch vereinbaren"
       }
     }
   }

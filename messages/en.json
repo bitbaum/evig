@@ -99,8 +99,8 @@
       "findHelpDesc": "Community technicians near you",
       "findTechnicianDesc": "Browse technician profiles and get in touch",
       "becomeTechnicianDesc": "Share IT knowledge and help others",
-      "aboPools": "Subscription Pools",
-      "aboPoolsDesc": "Share digital subscriptions and split costs",
+      "aboPools": "Share subscriptions",
+      "aboPoolsDesc": "One AI subscription split four ways — everyone pays their share",
       "learnDesc": "Workshops, guides and resources",
       "workshopsDesc": "Book in-person courses",
       "guidesDesc": "Step-by-step instructions",
@@ -196,8 +196,8 @@
       "press": "Press",
       "pressDesc": "Media coverage",
       "aiDivision": "Access to artificial intelligence — the assistant and the hardware to run it",
-      "architectureDivision": "Building that still holds up as a ruin",
-      "healthDivision": "Research on longevity and on preserving memory"
+      "vision": "Vision",
+      "visionDesc": "What evig is for, at full length"
     },
     "experimentalBanner": "Experimental Site",
     "experimentalBannerLink": "go to current site",
@@ -341,7 +341,8 @@
   "home": {
     "meta": {
       "title": "evig — Intelligence, affordable for everyone | Tech, repair & Linux in Switzerland",
-      "description": "Buy refurbished IT, browse community listings, and find technicians or repair shops for repairs."
+      "description": "Used laptops and hardware good enough for real work. Repair and IT help nearby, Linux and open software, workshops and support for adopting AI and robotics.",
+      "keywords": "used laptops, laptop for AI, second-hand GPU, computer repair Switzerland, find a technician, Linux installation, open source, AI training, AI and robotics adoption, Zurich, Basel, Lucerne"
     },
     "hero": {
       "title": "Access to intelligence. Affordable for everyone.",
@@ -349,7 +350,7 @@
       "subtitle": "Good tech is too expensive and turns to junk too fast. We flip both: affordable access to intelligence — and a cycle that keeps devices in circulation instead of in the scrap heap.",
       "ctaDiscover": "Find repair",
       "ctaAbout": "About us",
-      "positioning": "Access to intelligence · Circular economy · Zurich",
+      "positioning": "AI for everyone · Devices, help, training · Zurich",
       "titleSecondary": "Affordable for everyone.",
       "lede": "Curated tech, AI and robotics at fair prices — plus repair that's truly within reach.",
       "ctaDonate": "Explore tech"
@@ -443,42 +444,14 @@
       "allCoverage": "View all media coverage"
     },
     "jsonld": {
-      "description": "Computer repair, Linux installation and data recovery. Sustainable IT solutions for individuals, associations and SMEs.",
+      "description": "Affordable access to AI and robotics: tested used hardware, repair and IT help, Linux and open software, training, and support for organisations.",
       "areaServed": "Zurich, Basel, Lucerne, Switzerland",
-      "service1Name": "Linux Installation",
-      "service1Desc": "Old laptops made faster with Linux installation",
-      "service2Name": "Data Recovery",
-      "service2Desc": "Recovery of data from damaged devices",
-      "service3Name": "Computer Repair",
-      "service3Desc": "Repair and restoration of vintage computers"
-    },
-    "ribbon": {
-      "left": {
-        "eyebrow": "REPAIR",
-        "title": "We give devices a second life.",
-        "body": "Every computer, every laptop, every component deserves a second chance. Our technicians and volunteers bring them back to life — no commercial markup."
-      },
-      "right": {
-        "eyebrow": "PASS ON",
-        "title": "We bring them to people who need them.",
-        "body": "Refurbished for associations, schools, and people on a tight budget. A marketplace for passing tech on directly within the community — no middleman, no fee."
-      }
-    },
-    "process": {
-      "eyebrow": "HOW IT WORKS",
-      "heading": "Three steps. One cycle.",
-      "step1": {
-        "title": "Donate or sell",
-        "body": "Bring us your old device, have it picked up, or list it yourself on the marketplace. No fee, no middleman, donation receipt included."
-      },
-      "step2": {
-        "title": "Repair instead of discard",
-        "body": "Our workshop checks, cleans and repairs. What can't be saved is taken apart by type — nothing goes to landfill as long as it still makes sense."
-      },
-      "step3": {
-        "title": "Live on instead of be thrown away",
-        "body": "In the shop, in the community, or directly to organizations in need. Fair prices, transparent origin, ready to use."
-      }
+      "service1Name": "Tested used hardware",
+      "service1Desc": "Laptops, GPUs and accessories good enough for real work and for AI",
+      "service2Name": "Repair and IT help",
+      "service2Desc": "Find a technician nearby instead of waiting for an appointment",
+      "service3Name": "AI and robotics at work",
+      "service3Desc": "Training, retraining, and support for adopting AI and robotics in organisations"
     },
     "press": {
       "eyebrow": "AS REPORTED IN"
@@ -5422,9 +5395,9 @@
     }
   },
   "abos": {
-    "tagline": "Subscription Exchange",
-    "title": "Share Subscription Pools",
-    "subtitle": "Share digital subscriptions with the evig community and save money. Everyone pays only their share.",
+    "tagline": "Shared subscriptions",
+    "title": "Share access instead of paying alone",
+    "subtitle": "An AI subscription costs CHF 22 a month on your own. Split four ways it is CHF 5.50. Share one with the evig community — everyone pays only their share.",
     "createPool": "Create pool",
     "filterAll": "All",
     "perMonthPerson": "per month/person",
@@ -5459,12 +5432,13 @@
       "unknownError": "An unknown error occurred"
     },
     "categories": {
-      "streaming": "Streaming",
+      "ai": "AI",
       "software": "Software",
       "cloud": "Cloud",
-      "gaming": "Gaming",
       "music": "Music",
       "news": "News",
+      "streaming": "Streaming",
+      "gaming": "Gaming",
       "other": "Other"
     }
   },
@@ -9146,7 +9120,7 @@
     "overview": {
       "eyebrow": "Divisions",
       "heading": "{count, plural, one {One division} other {# divisions}}, one principle",
-      "subtitle": "One idea, applied afresh in every division: extend the time something stays useful, workable and good to look at. From the device to the building — and to the person who uses both."
+      "subtitle": "One idea, applied afresh in every division: extend the time something stays useful and workable. From the machine, through the repair, to the intelligence that puts both within reach."
     },
     "status": {
       "live": "Active",
@@ -9191,9 +9165,15 @@
             "title": "The assistant",
             "body": "Every page of this platform carries an assistant that knows the context of that page and answers questions about it. It belongs to the platform and is not a separate product — no second subscription, no separate login."
           },
+          "sharing": {
+            "title": "Shared access",
+            "body": "A good AI subscription costs around CHF 22 a month on your own — precisely the threshold where the gap opens. Split four ways it is CHF 5.50. On this platform you can share one subscription with others and pay only your share.",
+            "link": "See subscription pools"
+          },
           "hardware": {
             "title": "The machine to run it",
-            "body": "Software without a device is a theory. That is why hardware and assistant are not separate departments here: the machines in the marketplace are set up so that on the day they change hands they can already do the thing they were bought for."
+            "body": "Software without a device is a theory. That is why hardware and assistant are not separate departments here: the machines in the marketplace are set up so that on the day they change hands they can already do the thing they were bought for.",
+            "link": "See devices"
           },
           "sovereignty": {
             "title": "Sovereignty",
@@ -9221,6 +9201,38 @@
           "body": "The cheapest way into artificial intelligence is a good used laptop that somebody set up properly.",
           "button": "Browse devices"
         }
+      }
+    }
+  },
+  "pillars": {
+    "eyebrow": "WHAT WE DO",
+    "heading": "{count, plural, one {One route} other {# routes}}, one goal",
+    "subtitle": "AI and robotics are shifting who can do which work. We are working to make sure access to them does not depend on what someone earns — through devices, through help, through software, through training, and through showing up where the work happens.",
+    "items": {
+      "hardware": {
+        "title": "Machines good enough for real work",
+        "body": "Used laptops you can genuinely work on, plus GPUs and the hardware AI runs on — chosen, tested, affordable. No printers, no e-waste with a price tag. That a machine kept in use also helps the environment is the consequence, not the sales pitch.",
+        "cta": "See devices"
+      },
+      "technicians": {
+        "title": "Find someone who will fix it",
+        "body": "Repair and IT help should be as easy to find as a ride: post what is wrong, get offers from technicians nearby, pick one. Not wait until somebody has time.",
+        "cta": "Find a technician"
+      },
+      "software": {
+        "title": "Linux and open software",
+        "body": "An eight-year-old laptop often runs better under Linux than it did the day it was bought. We set it up, show the open alternatives to expensive software — and tie nobody to a vendor.",
+        "cta": "Linux and open source"
+      },
+      "training": {
+        "title": "Retraining for a labour market with AI",
+        "body": "AI and robots are taking over tasks people live on. Those who can work with them lose less and gain more. Workshops that teach exactly that — on real tasks, not on slides.",
+        "cta": "See workshops"
+      },
+      "adoption": {
+        "title": "Putting AI and robotics to work",
+        "body": "For organisations that know something has to change but not where to start. We look at the work actually being done and build alongside you — until something runs.",
+        "cta": "Arrange a conversation"
       }
     }
   }

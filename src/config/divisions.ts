@@ -103,6 +103,15 @@ export interface DivisionPageConfig {
   /** Ordered strand ids → `divisions.pages.<id>.strands.<strandId>.{title,body}`. */
   strands: readonly string[]
   /**
+   * Strand id → where the reader acts on what that strand describes.
+   *
+   * A strand that names something the user can do today but gives them no way
+   * to reach it is a dead end — the contextual-links rule in CLAUDE.md. Strands
+   * that are a statement rather than an offer simply have no entry here; the
+   * link text comes from `strands.<id>.link` in the messages.
+   */
+  strandLinks?: Readonly<Record<string, string>>
+  /**
    * Ordered honesty-boundary ids → `divisions.pages.<id>.boundary.<id>`.
    * Every division page states what it is NOT; that block is required, not
    * decorative, and it is what keeps an ambitious claim honest.
@@ -114,7 +123,11 @@ export interface DivisionPageConfig {
 
 export const DIVISION_PAGES: Record<DivisionPageId, DivisionPageConfig> = {
   ai: {
-    strands: ['assistant', 'hardware', 'sovereignty'],
+    strands: ['assistant', 'sharing', 'hardware', 'sovereignty'],
+    strandLinks: {
+      sharing: ROUTES.public.abos,
+      hardware: ROUTES.public.marketplace,
+    },
     boundaries: ['noLab', 'noMagic', 'noLockIn'],
     ctaHref: ROUTES.public.marketplace,
   },

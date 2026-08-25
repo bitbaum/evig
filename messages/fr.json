@@ -107,8 +107,8 @@
       "findHelpDesc": "Techniciens communautaires près de chez vous",
       "findTechnicianDesc": "Techniciens communautaires et professionnels",
       "becomeTechnicianDesc": "Partager des connaissances informatiques et aider les autres",
-      "aboPools": "Pools d'abonnements",
-      "aboPoolsDesc": "Partager des abonnements numériques et diviser les coûts",
+      "aboPools": "Partager les abonnements",
+      "aboPoolsDesc": "Un abonnement d'IA à quatre — chacun paie sa part",
       "learnDesc": "Ateliers, guides et ressources",
       "workshopsDesc": "Réserver des cours en personne",
       "guidesDesc": "Instructions étape par étape",
@@ -202,8 +202,8 @@
       "press": "Presse",
       "pressDesc": "Revue de presse",
       "aiDivision": "Accès à l’intelligence artificielle — l’assistant et le matériel pour le faire tourner",
-      "architectureDivision": "Construire de manière à tenir encore debout en ruine",
-      "healthDivision": "Recherche sur la longévité et la préservation de la mémoire"
+      "vision": "Vision",
+      "visionDesc": "La raison d'être d'evig, en entier"
     },
     "badge": {
       "new": "Nouveau"
@@ -340,7 +340,8 @@
   "home": {
     "meta": {
       "title": "evig — L'intelligence, abordable pour tous | Technique, réparation et Linux en Suisse",
-      "description": "Acheter & vendre du matériel informatique d'occasion. Réparation par la communauté. Ateliers Linux, hardware et programmation."
+      "description": "Des portables et du matériel d'occasion qui suffisent pour du vrai travail. Réparation et aide informatique à proximité, Linux et logiciels libres, ateliers et accompagnement sur l'IA et la robotique.",
+      "keywords": "portables d'occasion, portable pour l'IA, GPU d'occasion, réparation d'ordinateurs Suisse, trouver un technicien, installation Linux, open source, formation IA, adoption de l'IA et de la robotique, Zurich, Bâle, Lucerne"
     },
     "hero": {
       "title": "L'accès à l'intelligence. Abordable pour tous.",
@@ -348,7 +349,7 @@
       "subtitle": "La bonne technologie est trop chère et devient trop vite un déchet. Nous inversons les deux : un accès abordable à l'intelligence — et un cycle qui garde les appareils en circulation plutôt qu'à la casse.",
       "ctaDiscover": "Trouver une réparation",
       "ctaAbout": "Qui sommes-nous",
-      "positioning": "Accès à l'intelligence · Économie circulaire · Zurich",
+      "positioning": "L'IA pour tous · Appareils, aide, formation · Zurich",
       "titleSecondary": "Abordable pour tous.",
       "lede": "Une technologie sélectionnée, de l'IA et de la robotique à des prix justes — plus une réparation vraiment accessible.",
       "ctaDonate": "Découvrir la technologie"
@@ -442,42 +443,14 @@
       "allCoverage": "Voir toute la couverture médiatique"
     },
     "jsonld": {
-      "description": "Réparation d'ordinateurs, installation Linux et récupération de données. Solutions IT durables pour particuliers, associations et PME.",
+      "description": "Un accès abordable à l'IA et à la robotique : matériel d'occasion testé, réparation et aide informatique, Linux et logiciels libres, formation et accompagnement des organisations.",
       "areaServed": "Zurich, Bâle, Lucerne, Suisse",
-      "service1Name": "Installation Linux",
-      "service1Desc": "Anciens ordinateurs portables accélérés par l'installation Linux",
-      "service2Name": "Récupération de données",
-      "service2Desc": "Récupération de données depuis des appareils endommagés",
-      "service3Name": "Réparation d'ordinateurs",
-      "service3Desc": "Réparation et restauration d'ordinateurs vintage"
-    },
-    "ribbon": {
-      "left": {
-        "eyebrow": "RÉPARER",
-        "title": "Nous donnons une seconde vie aux appareils.",
-        "body": "Chaque ordinateur, chaque portable, chaque composant mérite une seconde chance. Nos techniciens et bénévoles les remettent en marche — sans marge commerciale."
-      },
-      "right": {
-        "eyebrow": "TRANSMETTRE",
-        "title": "Nous les apportons à ceux qui en ont besoin.",
-        "body": "Reconditionné pour les associations, les écoles et les personnes au budget serré. Une place de marché pour la transmission directe au sein de la communauté — sans intermédiaire, sans frais."
-      }
-    },
-    "process": {
-      "eyebrow": "COMMENT ÇA MARCHE",
-      "heading": "Trois étapes. Un cycle.",
-      "step1": {
-        "title": "Donner ou vendre",
-        "body": "Apportez-nous votre vieil appareil, faites-le récupérer ou mettez-le vous-même sur le marché. Aucun frais, pas d'intermédiaire, reçu fiscal inclus."
-      },
-      "step2": {
-        "title": "Réparer plutôt que jeter",
-        "body": "Notre atelier vérifie, nettoie et répare. Ce qui n'est pas récupérable est démonté par catégorie — rien ne va à la décharge tant que cela a du sens."
-      },
-      "step3": {
-        "title": "Continuer à vivre plutôt qu'être jeté",
-        "body": "Au magasin, dans la communauté, ou directement à des organisations dans le besoin. Prix justes, origine transparente, prêt à l'emploi."
-      }
+      "service1Name": "Matériel d'occasion testé",
+      "service1Desc": "Portables, GPU et accessoires qui suffisent pour du vrai travail et pour l'IA",
+      "service2Name": "Réparation et aide informatique",
+      "service2Desc": "Trouver une technicienne ou un technicien à proximité plutôt que d'attendre un rendez-vous",
+      "service3Name": "IA et robotique au travail",
+      "service3Desc": "Formation, reconversion et accompagnement lors de leur mise en place"
     },
     "press": {
       "eyebrow": "TEL QUE RAPPORTÉ"
@@ -5422,9 +5395,9 @@
     }
   },
   "abos": {
-    "tagline": "Bourse d'abonnements",
-    "title": "Partager des pools d'abonnements",
-    "subtitle": "Partagez des abonnements numériques avec la communauté evig et économisez de l'argent. Chacun ne paie que sa part.",
+    "tagline": "Abonnements partagés",
+    "title": "Partager l'accès plutôt que de payer seul",
+    "subtitle": "Un abonnement d'IA coûte 22 francs par mois tout seul. À quatre, il revient à 5.50. Partagez-en un avec la communauté evig : chacun ne paie que sa part.",
     "createPool": "Créer un pool",
     "filterAll": "Tous",
     "perMonthPerson": "par mois/personne",
@@ -5459,12 +5432,13 @@
       "unknownError": "Une erreur inconnue s'est produite"
     },
     "categories": {
-      "streaming": "Streaming",
+      "ai": "IA",
       "software": "Logiciel",
       "cloud": "Cloud",
-      "gaming": "Jeux",
       "music": "Musique",
       "news": "Actualités",
+      "streaming": "Streaming",
+      "gaming": "Jeux",
       "other": "Autre"
     }
   },
@@ -9043,7 +9017,7 @@
     "overview": {
       "eyebrow": "Domaines",
       "heading": "{count, plural, one {Un domaine} other {# domaines}}, un principe",
-      "subtitle": "Une seule idée, reprise dans chaque domaine : prolonger le temps pendant lequel une chose reste utile, utilisable et belle. De l’appareil au bâtiment — et jusqu’à la personne qui se sert des deux."
+      "subtitle": "Une seule idée, reprise dans chaque domaine : prolonger le temps pendant lequel une chose reste utile et utilisable. De la machine à la réparation, jusqu’à l’intelligence qui met les deux à portée."
     },
     "status": {
       "live": "Actif",
@@ -9088,9 +9062,15 @@
             "title": "L’assistant",
             "body": "Sur chaque page de cette plateforme se trouve un assistant qui connaît le contexte de la page et répond aux questions qui s’y rapportent. Il fait partie de la plateforme et n’est pas un produit à part — pas de deuxième abonnement, pas de connexion séparée."
           },
+          "sharing": {
+            "title": "Accès partagé",
+            "body": "Un bon abonnement d'IA coûte environ 22 francs par mois tout seul — précisément le seuil où l'écart se creuse. À quatre, il revient à 5.50. Sur cette plateforme, vous pouvez partager un abonnement et ne payer que votre part.",
+            "link": "Voir les abonnements partagés"
+          },
           "hardware": {
             "title": "La machine pour le faire tourner",
-            "body": "Un logiciel sans appareil reste une théorie. C’est pourquoi le matériel et l’assistant ne sont pas chez nous deux services distincts : les machines de la place de marché sont préparées pour que, le jour de la remise, elles fassent déjà ce pour quoi on est venu les chercher."
+            "body": "Un logiciel sans appareil reste une théorie. C’est pourquoi le matériel et l’assistant ne sont pas chez nous deux services distincts : les machines de la place de marché sont préparées pour que, le jour de la remise, elles fassent déjà ce pour quoi on est venu les chercher.",
+            "link": "Voir les appareils"
           },
           "sovereignty": {
             "title": "Souveraineté",
@@ -9118,6 +9098,38 @@
           "body": "L’accès le moins cher à l’intelligence artificielle, c’est un bon ordinateur portable d’occasion que quelqu’un a correctement préparé.",
           "button": "Voir les appareils"
         }
+      }
+    }
+  },
+  "pillars": {
+    "eyebrow": "CE QUE NOUS FAISONS",
+    "heading": "{count, plural, one {Une voie} other {# voies}}, un objectif",
+    "subtitle": "L'IA et la robotique déplacent en ce moment qui peut faire quel travail. Nous œuvrons pour que l'accès à ces outils ne dépende pas de ce que l'on gagne : par les appareils, par l'aide, par les logiciels, par la formation et en venant là où le travail se fait.",
+    "items": {
+      "hardware": {
+        "title": "Des machines qui suffisent pour du vrai travail",
+        "body": "Des portables d'occasion avec lesquels on peut réellement travailler, ainsi que des GPU et le matériel sur lequel tourne l'IA : choisis, testés, abordables. Pas d'imprimantes, pas de déchets électroniques avec une étiquette de prix. Qu'un appareil qui reste en service aide aussi l'environnement est la conséquence, pas l'argument de vente.",
+        "cta": "Voir les appareils"
+      },
+      "technicians": {
+        "title": "Trouver quelqu’un qui le répare",
+        "body": "La réparation et l'aide informatique devraient se trouver aussi facilement qu'une course : vous décrivez la panne, vous recevez des offres de techniciennes et techniciens proches, vous choisissez. Sans attendre que quelqu'un ait le temps.",
+        "cta": "Trouver un technicien"
+      },
+      "software": {
+        "title": "Linux et logiciels libres",
+        "body": "Un portable de huit ans tourne souvent mieux sous Linux que le jour de son achat. Nous l'installons, montrons les alternatives libres aux logiciels coûteux — et n'enfermons personne chez un fournisseur.",
+        "cta": "Linux et open source"
+      },
+      "training": {
+        "title": "Reconversion pour un marché du travail avec l'IA",
+        "body": "L'IA et les robots reprennent des tâches dont des gens vivent. Celles et ceux qui savent travailler avec eux perdent moins et gagnent plus. Des ateliers qui enseignent exactement cela, sur de vraies tâches et non sur des diapositives.",
+        "cta": "Voir les ateliers"
+      },
+      "adoption": {
+        "title": "Mettre l'IA et la robotique au travail",
+        "body": "Pour les organisations qui savent que quelque chose doit changer, sans savoir par où commencer. Nous regardons le travail réellement effectué et construisons avec vous, jusqu'à ce que quelque chose tourne.",
+        "cta": "Convenir d’un entretien"
       }
     }
   }

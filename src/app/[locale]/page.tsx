@@ -8,6 +8,7 @@ import { safeJsonLd } from '@/lib/seo/json-ld'
 import { ROUTES } from '@/config/routes'
 import { JOURNEY_ENTRYPOINTS } from '@/config/customer-journeys'
 import { EVIG_DIVISIONS, DIVISION_STATUS_STYLE } from '@/config/divisions'
+import { EVIG_PILLARS } from '@/config/pillars'
 
 const OG_LOCALE_MAP: Record<string, string> = {
   de: 'de_CH',
@@ -26,7 +27,13 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return {
     title: `${ORG.name} – ${t('meta.title')}`,
     description: t('meta.description'),
-    keywords: ['Computer Reparatur Schweiz', 'Linux Installation', 'Datenrettung', 'Vintage Computer', 'Open Source', 'nachhaltige IT', 'Zürich', 'Basel', 'Luzern', 'refurbished Computer'],
+    // Keywords are language-specific prose, so they belong in the message
+    // files like every other sentence — they used to be a German array frozen
+    // into this component, which meant seven locales were served German SEO
+    // keywords. One comma-separated string per locale, split here: the same
+    // shape `jsonld.areaServed` already uses, and it avoids the array-in-
+    // messages fragility (the DE fallback replaces arrays wholesale).
+    keywords: t('meta.keywords').split(',').map((s: string) => s.trim()),
     openGraph: {
       title: `${ORG.name} – ${t('hero.title')}`,
       description: t('meta.description'),
@@ -46,6 +53,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function Home() {
   const t = await getTranslations('home')
   const tDivisions = await getTranslations('divisions')
+  const tPillars = await getTranslations('pillars')
   const actionCards = [
     {
       label: t('actions.sell.label'),
@@ -68,12 +76,6 @@ export default async function Home() {
       ctaLabel: t('actions.learn.primaryLabel'),
       ctaHref: '/workshops',
     },
-  ]
-
-  const processSteps = [
-    { num: '01', title: t('process.step1.title'), body: t('process.step1.body') },
-    { num: '02', title: t('process.step2.title'), body: t('process.step2.body') },
-    { num: '03', title: t('process.step3.title'), body: t('process.step3.body') },
   ]
 
   const communityCards = [
@@ -221,40 +223,43 @@ export default async function Home() {
         </div>
       </Section>
 
-      {/* ── Two-column principle ribbon — pure typography, no chrome ── */}
-      <Section density="spacious" contained={false}>
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-x-16 gap-y-20 md:grid-cols-2">
-            <div>
-              <Eyebrow as="div">{t('ribbon.left.eyebrow')}</Eyebrow>
-              <h3 className="ui-public-display-md mt-3">{t('ribbon.left.title')}</h3>
-              <p className="ui-public-section-lede mt-6">{t('ribbon.left.body')}</p>
-            </div>
-            <div>
-              <Eyebrow as="div">{t('ribbon.right.eyebrow')}</Eyebrow>
-              <h3 className="ui-public-display-md mt-3">{t('ribbon.right.title')}</h3>
-              <p className="ui-public-section-lede mt-6">{t('ribbon.right.body')}</p>
-            </div>
-          </div>
-        </div>
-      </Section>
-
-      {/* ── 01 / 02 / 03 — the cycle ────────────────────────────────── */}
+      {/* ── The five pillars (SSOT: config/pillars.ts) ───────────────
+          This replaced two bands that told the circular-IT story of the
+          organisation evig came from: a "zweites Leben / weitergeben" ribbon
+          and a "Drei Schritte. Ein Kreislauf." funnel that opened by asking
+          the reader to donate their old kit. That story is still true, but it
+          is the consequence, not the reason — and it answered a question
+          nobody arriving here is asking. These five say what evig can do for
+          the person reading, and each one links to where they do it. */}
       <Section density="spacious" tone="tinted" contained={false} className="border-y border-subtle">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-          <Eyebrow as="div">{t('process.eyebrow')}</Eyebrow>
-          <h2 className="ui-public-display-lg mt-4">{t('process.heading')}</h2>
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl">
+            <Eyebrow as="div">{tPillars('eyebrow')}</Eyebrow>
+            <h2 className="ui-public-display-lg mt-4">
+              {/* Count is data, not copy — it follows EVIG_PILLARS. */}
+              {tPillars('heading', { count: EVIG_PILLARS.length })}
+            </h2>
+            <p className="ui-public-section-lede mt-6">{tPillars('subtitle')}</p>
+          </div>
 
-          <div className="ui-public-body-lg mx-auto mt-16 max-w-3xl space-y-16 text-left">
-            {processSteps.map((step) => (
-              <div key={step.num} className="flex gap-8">
-                <div className="ui-public-step-num">{step.num}</div>
-                <div>
-                  <div className="ui-public-prose-strong">{step.title}</div>
-                  <div className="ui-public-prose-muted mt-2">{step.body}</div>
-                </div>
-              </div>
-            ))}
+          <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {EVIG_PILLARS.map((pillar) => {
+              const Icon = pillar.icon
+              return (
+                <Link key={pillar.id} href={pillar.href} className="ui-public-card group">
+                  <Icon className="h-6 w-6 text-action" aria-hidden />
+                  <h3 className="ui-public-card-title mt-4">
+                    {tPillars(`items.${pillar.id}.title` as never)}
+                  </h3>
+                  <p className="ui-public-card-body">
+                    {tPillars(`items.${pillar.id}.body` as never)}
+                  </p>
+                  <span className="ui-public-card-meta inline-flex items-center gap-1 group-hover:text-text-primary transition-colors">
+                    {tPillars(`items.${pillar.id}.cta` as never)} →
+                  </span>
+                </Link>
+              )
+            })}
           </div>
         </div>
       </Section>

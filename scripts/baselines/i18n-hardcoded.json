@@ -1,6 +1,6 @@
 {
   "description": "Known i18n hardcoded-string violations. Audit fails on regressions only. Run scripts/i18n-hardcoded-audit.mjs --update-baseline to refresh after intentional fixes.",
-  "generatedAt": "2026-08-24",
+  "generatedAt": "2026-08-25",
   "source": [
     {
       "file": "src/app/[locale]/karriere/CareersListClient.tsx",
@@ -16,11 +16,6 @@
       "file": "src/app/[locale]/karriere/[slug]/CareerDetailClient.tsx",
       "line": 71,
       "snippet": "Bewerbungen sind vorübergehend pausiert."
-    },
-    {
-      "file": "src/app/[locale]/page.tsx",
-      "line": 29,
-      "snippet": "Zürich"
     },
     {
       "file": "src/app/admin/analyse/transparenz/page.tsx",
@@ -1999,7 +1994,7 @@
     },
     {
       "file": "src/app/api/auth/forgot-password/route.ts",
-      "line": 89,
+      "line": 94,
       "snippet": "E-Mail konnte nicht gesendet werden. Bitte versuche es später erneut oder kontak…"
     },
     {
@@ -7099,22 +7094,22 @@
     },
     {
       "file": "src/config/navigation.tsx",
-      "line": 54,
+      "line": 55,
       "snippet": "Über uns"
     },
     {
       "file": "src/config/navigation.tsx",
-      "line": 97,
+      "line": 119,
       "snippet": "Reparaturbonus Zürich"
     },
     {
       "file": "src/config/navigation.tsx",
-      "line": 196,
+      "line": 218,
       "snippet": "Unterstützen"
     },
     {
       "file": "src/config/navigation.tsx",
-      "line": 208,
+      "line": 230,
       "snippet": "Geräte spenden"
     },
     {
@@ -13154,11 +13149,11 @@
     },
     {
       "file": "messages/it.json",
-      "keyPath": "home.process.heading",
+      "keyPath": "home.jsonld.service2Desc",
       "suspectedLanguage": "fr",
-      "ownRatio": 0,
-      "otherRatio": 0.25,
-      "snippet": "Tre passi. Un ciclo."
+      "ownRatio": 0.11,
+      "otherRatio": 0.22,
+      "snippet": "Trovare un tecnico vicino invece di aspettare un appuntamento"
     },
     {
       "file": "messages/it.json",
@@ -14882,27 +14877,27 @@
     },
     {
       "file": "messages/it.json",
-      "keyPath": "divisions.pages.health.thesis.title",
+      "keyPath": "pillars.heading",
       "suspectedLanguage": "fr",
-      "ownRatio": 0.13,
-      "otherRatio": 0.25,
-      "snippet": "La stessa domanda, un piano più in alto"
-    },
-    {
-      "file": "messages/it.json",
-      "keyPath": "divisions.pages.health.strands.healthspan.title",
-      "suspectedLanguage": "en",
       "ownRatio": 0,
       "otherRatio": 0.33,
-      "snippet": "Anni in salute"
+      "snippet": "{count, plural, one {Una via} other {# vie}}, un obiettivo"
     },
     {
       "file": "messages/it.json",
-      "keyPath": "divisions.pages.health.cta.heading",
-      "suspectedLanguage": "en",
+      "keyPath": "pillars.items.technicians.cta",
+      "suspectedLanguage": "fr",
       "ownRatio": 0,
-      "otherRatio": 0.25,
-      "snippet": "Facciamo ricerca in pubblico"
+      "otherRatio": 0.33,
+      "snippet": "Trova un tecnico"
+    },
+    {
+      "file": "messages/it.json",
+      "keyPath": "pillars.items.adoption.cta",
+      "suspectedLanguage": "fr",
+      "ownRatio": 0,
+      "otherRatio": 0.33,
+      "snippet": "Fissare un colloquio"
     },
     {
       "file": "messages/fr.json",
@@ -14930,11 +14925,11 @@
     },
     {
       "file": "messages/fr.json",
-      "keyPath": "nav.items.architectureDivision",
+      "keyPath": "nav.items.visionDesc",
       "suspectedLanguage": "es",
-      "ownRatio": 0.11,
-      "otherRatio": 0.22,
-      "snippet": "Construire de manière à tenir encore debout en ruine"
+      "ownRatio": 0.13,
+      "otherRatio": 0.25,
+      "snippet": "La raison d'être d'evig, en entier"
     },
     {
       "file": "messages/fr.json",
@@ -16153,14 +16148,6 @@
       "snippet": "De bonnes machines, plus longtemps en circulation"
     },
     {
-      "file": "messages/fr.json",
-      "keyPath": "divisions.pages.health.strands.healthspan.title",
-      "suspectedLanguage": "es",
-      "ownRatio": 0.17,
-      "otherRatio": 0.33,
-      "snippet": "Espérance de vie en bonne santé"
-    },
-    {
       "file": "messages/es.json",
       "keyPath": "members.helpfulCount",
       "suspectedLanguage": "it",
@@ -16327,14 +16314,6 @@
       "ownRatio": 0,
       "otherRatio": 0.2,
       "snippet": "Lo que hemos logrado juntos"
-    },
-    {
-      "file": "messages/es.json",
-      "keyPath": "home.process.heading",
-      "suspectedLanguage": "fr",
-      "ownRatio": 0,
-      "otherRatio": 0.25,
-      "snippet": "Tres pasos. Un ciclo."
     },
     {
       "file": "messages/es.json",
@@ -16938,11 +16917,27 @@
     },
     {
       "file": "messages/es.json",
-      "keyPath": "divisions.pages.health.thesis.title",
+      "keyPath": "pillars.eyebrow",
+      "suspectedLanguage": "it",
+      "ownRatio": 0,
+      "otherRatio": 0.33,
+      "snippet": "LO QUE HACEMOS"
+    },
+    {
+      "file": "messages/es.json",
+      "keyPath": "pillars.heading",
       "suspectedLanguage": "fr",
-      "ownRatio": 0.14,
-      "otherRatio": 0.29,
-      "snippet": "La misma pregunta, un piso más arriba"
+      "ownRatio": 0,
+      "otherRatio": 0.33,
+      "snippet": "{count, plural, one {Un camino} other {# caminos}}, un objetivo"
+    },
+    {
+      "file": "messages/es.json",
+      "keyPath": "pillars.items.technicians.title",
+      "suspectedLanguage": "it",
+      "ownRatio": 0,
+      "otherRatio": 0.2,
+      "snippet": "Encontrar a quien lo repare"
     },
     {
       "file": "messages/ja.json",

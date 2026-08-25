@@ -128,8 +128,8 @@
       "becomeMemberDesc": "Entra nell'associazione e partecipa alle decisioni",
       "contact": "Contatto",
       "contactDesc": "Siamo felici di sentirti",
-      "aboPools": "Pool di abbonamenti",
-      "aboPoolsDesc": "Condividi abbonamenti digitali e dividi i costi",
+      "aboPools": "Condividere gli abbonamenti",
+      "aboPoolsDesc": "Un abbonamento di IA in quattro: ognuno paga la propria quota",
       "projectMonitorUpcycling": "Monitor-Upcycling",
       "projectMonitorUpcyclingDesc": "Attivo · plafoniere e applique da monitor dismessi, con LCA ZHAW e sostegno Swico.",
       "projectHardware": "Sviluppo hardware",
@@ -163,8 +163,8 @@
       "press": "Stampa",
       "pressDesc": "Rassegna stampa",
       "aiDivision": "Accesso all’intelligenza artificiale — l’assistente e l’hardware per farlo girare",
-      "architectureDivision": "Costruire in modo che regga anche da rovina",
-      "healthDivision": "Ricerca sulla longevità e sulla conservazione della memoria"
+      "vision": "Visione",
+      "visionDesc": "Perché esiste evig, per esteso"
     },
     "language": "Lingua",
     "missionHistory": "Missione & Storia",
@@ -2094,7 +2094,8 @@
   "home": {
     "meta": {
       "title": "evig — L'intelligenza, alla portata di tutti | Tecnologia, riparazione e Linux in Svizzera",
-      "description": "Compra e vendi IT usato. Riparazione computer dalla community. Workshop su Linux, hardware e programmazione."
+      "description": "Portatili e hardware usati che bastano per lavorare sul serio. Riparazione e aiuto informatico vicino a te, Linux e software aperto, laboratori e accompagnamento su IA e robotica.",
+      "keywords": "portatili usati, portatile per IA, GPU usata, riparazione computer Svizzera, trovare un tecnico, installazione Linux, open source, formazione IA, adozione di IA e robotica, Zurigo, Basilea, Lucerna"
     },
     "hero": {
       "title": "Accesso all'intelligenza. Alla portata di tutti.",
@@ -2102,7 +2103,7 @@
       "subtitle": "La buona tecnologia costa troppo e diventa rifiuto troppo in fretta. Noi ribaltiamo entrambe le cose: accesso all'intelligenza a prezzi accessibili — e un ciclo che tiene i dispositivi in circolazione anziché tra i rottami.",
       "ctaDiscover": "Trova una riparazione",
       "ctaAbout": "Chi siamo",
-      "positioning": "Accesso all'intelligenza · Economia circolare · Zurigo",
+      "positioning": "IA per tutti · Dispositivi, aiuto, formazione · Zurigo",
       "titleSecondary": "Alla portata di tutti.",
       "lede": "Tecnologia selezionata, IA e robotica a prezzi equi — e una riparazione davvero accessibile.",
       "ctaDonate": "Scopri la tecnologia"
@@ -2196,42 +2197,14 @@
       "allCoverage": "Vedi tutta la copertura mediatica"
     },
     "jsonld": {
-      "description": "Riparazione computer, installazione Linux e recupero dati. Soluzioni IT sostenibili per privati, associazioni e PMI.",
+      "description": "Accesso accessibile a IA e robotica: hardware usato e testato, riparazione e aiuto informatico, Linux e software aperto, formazione e accompagnamento alle organizzazioni.",
       "areaServed": "Zurigo, Basilea, Lucerna, Svizzera",
-      "service1Name": "Installazione Linux",
-      "service1Desc": "Vecchi laptop resi più veloci con l'installazione Linux",
-      "service2Name": "Recupero dati",
-      "service2Desc": "Recupero di dati da dispositivi danneggiati",
-      "service3Name": "Riparazione computer",
-      "service3Desc": "Riparazione e restauro di computer vintage"
-    },
-    "ribbon": {
-      "left": {
-        "eyebrow": "RIPARARE",
-        "title": "Diamo una seconda vita ai dispositivi.",
-        "body": "Ogni computer, ogni portatile, ogni componente merita una seconda possibilità. I nostri tecnici e volontari li rimettono in funzione — senza ricarico commerciale."
-      },
-      "right": {
-        "eyebrow": "TRASMETTERE",
-        "title": "Li portiamo a chi ne ha bisogno.",
-        "body": "Ricondizionato per associazioni, scuole e persone con budget limitato. Un mercato per il passaggio diretto all'interno della comunità — senza intermediari, senza commissioni."
-      }
-    },
-    "process": {
-      "eyebrow": "COME FUNZIONA",
-      "heading": "Tre passi. Un ciclo.",
-      "step1": {
-        "title": "Donare o vendere",
-        "body": "Portaci il tuo vecchio dispositivo, fallo ritirare o mettilo tu stesso sul mercato. Nessuna commissione, nessun intermediario, ricevuta di donazione inclusa."
-      },
-      "step2": {
-        "title": "Riparare invece di buttare",
-        "body": "La nostra officina controlla, pulisce e ripara. Ciò che non si può salvare viene smontato per tipologia — niente finisce in discarica finché ha senso."
-      },
-      "step3": {
-        "title": "Continuare a vivere invece di essere buttato",
-        "body": "Nel negozio, nella comunità o direttamente a organizzazioni che ne hanno bisogno. Prezzi giusti, origine trasparente, pronto all'uso."
-      }
+      "service1Name": "Hardware usato e testato",
+      "service1Desc": "Portatili, GPU e accessori che bastano per lavorare sul serio e per l'IA",
+      "service2Name": "Riparazione e aiuto informatico",
+      "service2Desc": "Trovare un tecnico vicino invece di aspettare un appuntamento",
+      "service3Name": "IA e robotica nel lavoro",
+      "service3Desc": "Formazione, riqualificazione e accompagnamento nella loro introduzione"
     },
     "press": {
       "eyebrow": "COME RIPORTATO"
@@ -5422,9 +5395,9 @@
     }
   },
   "abos": {
-    "tagline": "Borsa abbonamenti",
-    "title": "Condividi pool di abbonamenti",
-    "subtitle": "Condividi abbonamenti digitali con la community evig e risparmia. Ognuno paga solo la propria quota.",
+    "tagline": "Abbonamenti condivisi",
+    "title": "Condividi l'accesso invece di pagarlo da solo",
+    "subtitle": "Un abbonamento di IA costa 22 franchi al mese da soli. In quattro sono 5.50. Condividine uno con la comunità evig: ognuno paga solo la propria quota.",
     "createPool": "Crea pool",
     "filterAll": "Tutti",
     "perMonthPerson": "al mese/persona",
@@ -5459,12 +5432,13 @@
       "unknownError": "Si è verificato un errore sconosciuto"
     },
     "categories": {
-      "streaming": "Streaming",
+      "ai": "IA",
       "software": "Software",
       "cloud": "Cloud",
-      "gaming": "Gaming",
       "music": "Musica",
       "news": "Notizie",
+      "streaming": "Streaming",
+      "gaming": "Gaming",
       "other": "Altro"
     }
   },
@@ -9041,7 +9015,7 @@
     "overview": {
       "eyebrow": "Aree",
       "heading": "{count, plural, one {Un’area} other {# aree}}, un principio",
-      "subtitle": "Una sola idea, ripresa in ogni area: allungare il tempo in cui qualcosa resta utile, utilizzabile e bello da vedere. Dal dispositivo all’edificio — e fino alla persona che usa entrambi."
+      "subtitle": "Una sola idea, ripresa in ogni area: allungare il tempo in cui qualcosa resta utile e utilizzabile. Dalla macchina alla riparazione, fino all’intelligenza che rende entrambe raggiungibili."
     },
     "status": {
       "live": "Attiva",
@@ -9086,9 +9060,15 @@
             "title": "L’assistente",
             "body": "Su ogni pagina di questa piattaforma c’è un assistente che conosce il contesto della pagina e risponde alle domande su di essa. Fa parte della piattaforma e non è un prodotto a parte — nessun secondo abbonamento, nessun accesso separato."
           },
+          "sharing": {
+            "title": "Accesso condiviso",
+            "body": "Un buon abbonamento di IA costa circa 22 franchi al mese da soli: esattamente la soglia in cui si apre il divario. In quattro sono 5.50. Su questa piattaforma puoi condividere un abbonamento e pagare solo la tua quota.",
+            "link": "Vedi gli abbonamenti condivisi"
+          },
           "hardware": {
             "title": "La macchina per farlo girare",
-            "body": "Il software senza un dispositivo è una teoria. Per questo hardware e assistente da noi non sono reparti separati: le macchine del marketplace sono preparate perché, il giorno della consegna, sappiano già fare ciò per cui sono state prese."
+            "body": "Il software senza un dispositivo è una teoria. Per questo hardware e assistente da noi non sono reparti separati: le macchine del marketplace sono preparate perché, il giorno della consegna, sappiano già fare ciò per cui sono state prese.",
+            "link": "Vedi i dispositivi"
           },
           "sovereignty": {
             "title": "Sovranità",
@@ -9116,6 +9096,38 @@
           "body": "L’accesso più economico all’intelligenza artificiale è un buon portatile usato che qualcuno ha configurato come si deve.",
           "button": "Guarda i dispositivi"
         }
+      }
+    }
+  },
+  "pillars": {
+    "eyebrow": "COSA FACCIAMO",
+    "heading": "{count, plural, one {Una via} other {# vie}}, un obiettivo",
+    "subtitle": "L'IA e la robotica stanno spostando chi può fare quale lavoro. Lavoriamo perché l'accesso a questi strumenti non dipenda da quanto una persona guadagna: con i dispositivi, con l'aiuto, con il software, con la formazione e stando dove il lavoro si fa davvero.",
+    "items": {
+      "hardware": {
+        "title": "Macchine che bastano per lavorare sul serio",
+        "body": "Portatili usati con cui si può davvero lavorare, più GPU e l'hardware su cui gira l'IA: scelti, testati, accessibili. Niente stampanti, niente rifiuti elettronici con un cartellino del prezzo. Che un apparecchio ancora in uso aiuti anche l'ambiente è la conseguenza, non l'argomento di vendita.",
+        "cta": "Vedi i dispositivi"
+      },
+      "technicians": {
+        "title": "Trovare qualcuno che lo ripari",
+        "body": "Riparazione e aiuto informatico dovrebbero trovarsi con la stessa facilità di una corsa: descrivi il guasto, ricevi offerte da tecniche e tecnici vicini, scegli. Senza aspettare che qualcuno abbia tempo.",
+        "cta": "Trova un tecnico"
+      },
+      "software": {
+        "title": "Linux e software aperto",
+        "body": "Un portatile di otto anni spesso va meglio con Linux che il giorno in cui è stato comprato. Lo configuriamo, mostriamo le alternative aperte al software costoso e non leghiamo nessuno a un fornitore.",
+        "cta": "Linux e open source"
+      },
+      "training": {
+        "title": "Riqualificazione per un mercato del lavoro con l'IA",
+        "body": "L'IA e i robot stanno assumendo compiti di cui le persone vivono. Chi sa lavorare con loro perde meno e guadagna di più. Laboratori che insegnano esattamente questo, su compiti veri e non su diapositive.",
+        "cta": "Vedi i laboratori"
+      },
+      "adoption": {
+        "title": "Portare IA e robotica nel lavoro",
+        "body": "Per organizzazioni che sanno che qualcosa deve cambiare ma non da dove cominciare. Guardiamo il lavoro che si fa davvero e costruiamo insieme, finché qualcosa funziona.",
+        "cta": "Fissare un colloquio"
       }
     }
   }
