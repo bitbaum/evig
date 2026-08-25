@@ -1,3 +1,15 @@
+/**
+ * Routes are addressed WITHOUT the `/de` prefix on purpose.
+ *
+ * The app 307-redirects `/de/x` → `/x`, and when that server redirect races the
+ * client router Playwright aborts the navigation (`net::ERR_ABORTED`) — which
+ * looks exactly like a broken page but is a timing artefact of the redirect.
+ * It surfaced the moment this spec started running in CI: `/de/profil/techniker`
+ * failed while its identical sibling passed, on a freshly seeded database.
+ * The unprefixed path is where the redirect lands anyway, so this both removes
+ * the race and tests the URL users actually end up on.
+ */
+
 import { test, expect, type Page } from '@playwright/test'
 import { loginWithCredentials } from './helpers/auth'
 
@@ -75,7 +87,7 @@ describeAuthenticatedFlows(
 
     test('technician profile editor loads', async () => {
       const page = getPage()
-      await page.goto('/de/profil/techniker')
+      await page.goto('/profil/techniker')
       await page.waitForLoadState('domcontentloaded')
       await expectNotLoginPage(page)
       expect(page.url()).toMatch(/techniker|profil/)
@@ -83,18 +95,18 @@ describeAuthenticatedFlows(
 
     test('IT-Hilfe hub and browse load', async () => {
       const page = getPage()
-      await page.goto('/de/it-hilfe')
+      await page.goto('/it-hilfe')
       await page.waitForLoadState('domcontentloaded')
       await expect(page.locator('body')).toBeVisible()
 
-      await page.goto('/de/it-hilfe/anfragen')
+      await page.goto('/it-hilfe/anfragen')
       await page.waitForLoadState('domcontentloaded')
       await expectNotLoginPage(page)
     })
 
     test('IT-Hilfe create form loads when authenticated', async () => {
       const page = getPage()
-      await page.goto('/de/it-hilfe/create')
+      await page.goto('/it-hilfe/create')
       await page.waitForLoadState('domcontentloaded')
       await expectNotLoginPage(page)
       expect(page.url()).toMatch(/create|anfragen|login/)
@@ -102,7 +114,7 @@ describeAuthenticatedFlows(
 
     test('marketplace browse loads', async () => {
       const page = getPage()
-      await page.goto('/de/marketplace')
+      await page.goto('/marketplace')
       await page.waitForLoadState('domcontentloaded')
       await expect(page.locator('body')).toBeVisible()
     })
@@ -177,7 +189,7 @@ describeAuthenticatedFlows(
 
     test('technician profile editor loads', async () => {
       const page = getPage()
-      await page.goto('/de/profil/techniker')
+      await page.goto('/profil/techniker')
       await page.waitForLoadState('domcontentloaded')
       await expectNotLoginPage(page)
     })
