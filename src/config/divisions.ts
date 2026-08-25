@@ -5,12 +5,18 @@
  * at rising scale: keep something useful for longer.
  *
  *   computers    → the machine, curated so it lasts instead of landfilling
- *   repairs      → the machine someone already owns, kept alive
+ *   technicians  → the person who fixes the machine someone already owns
  *   ai           → the intelligence that machine can reach
+ *
+ * `technicians` was called `repairs` until 2026-08-25. The old name described
+ * the *service*; this one describes what the user is actually looking for — a
+ * person, found the way people find a ride. The surface it points at already
+ * works that way (post a request, receive offers from technicians nearby,
+ * choose one); only the naming lagged behind the product.
  *
  * This array IS the brand architecture: the homepage section, the footer
  * column, the nav entries and the division pages all derive from it, including
- * the count in the section heading. `computers` and `repairs` point at the
+ * the count in the section heading. `computers` and `technicians` point at the
  * surfaces that already serve them (marketplace, IT-Hilfe) — a division is a
  * lens on the org, not a duplicate storefront.
  *
@@ -27,7 +33,7 @@ import { ORG } from '@/config/org'
 import { ROUTES } from '@/config/routes'
 import type { ThemeKey } from '@/lib/design/tokens'
 
-export type DivisionId = 'computers' | 'repairs' | 'ai'
+export type DivisionId = 'computers' | 'technicians' | 'ai'
 
 /**
  * How far a division actually is.
@@ -41,7 +47,7 @@ export type DivisionStatus = 'live' | 'research'
 export interface Division {
   /** URL-safe id AND the stable i18n key under `divisions.items.<id>`. */
   id: DivisionId
-  /** Full wordmark ("evig health") — composed from ORG.name, never hardcoded. */
+  /** Full wordmark ("evig technicians") — composed from ORG.name, never hardcoded. */
   wordmark: string
   /** Where the division's work actually lives today. */
   href: string
@@ -52,7 +58,7 @@ export interface Division {
   status: DivisionStatus
 }
 
-/** The wordmark is the org name plus the division id — one brand, four lenses. */
+/** The wordmark is the org name plus the division id — one brand, three lenses. */
 const wordmark = (id: DivisionId): string => `${ORG.name} ${id}`
 
 export const EVIG_DIVISIONS: readonly Division[] = [
@@ -65,8 +71,8 @@ export const EVIG_DIVISIONS: readonly Division[] = [
     status: 'live',
   },
   {
-    id: 'repairs',
-    wordmark: wordmark('repairs'),
+    id: 'technicians',
+    wordmark: wordmark('technicians'),
     href: ROUTES.public.itHilfe,
     icon: Wrench,
     theme: 'itHilfe',
@@ -93,7 +99,7 @@ export const DIVISION_STATUS_STYLE: Record<DivisionStatus, string> = {
 }
 
 /**
- * Divisions that own a page of their own. `computers` and `repairs` are absent
+ * Divisions that own a page of their own. `computers` and `technicians` are absent
  * on purpose — they route to the marketplace and IT-Hilfe surfaces that already
  * do the job, and a second landing page for either would be drift.
  */

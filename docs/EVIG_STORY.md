@@ -234,7 +234,7 @@ evig says itself in divisions. They are not business units bolted together; they
 are the same sentence spoken at three sizes. **Keep something useful for longer.**
 
 - **evig computers** — the machine, curated so it lasts instead of landfilling.
-- **evig repairs** — the machine someone already owns, kept alive.
+- **evig technicians** — the person who fixes the machine someone already owns.
 - **evig ai** — the intelligence that machine can reach.
 
 Two of them are live surfaces under different names already (the marketplace, the

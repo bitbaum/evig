@@ -2148,15 +2148,6 @@
           }
         ]
       },
-      "certification": {
-        "heading": "Get Your Revamped Certification",
-        "body": "Every computer we build receives our exclusive \"Revamped\" certification — your guarantee for sustainability, quality and performance.",
-        "eyebrow": "REVAMPED CERTIFIED",
-        "sustainabilityScore": "Sustainability Score",
-        "co2Saved": "CO₂ Saved",
-        "certifiedComputers": "Certified Computers",
-        "learnMore": "Learn more about the Revamped Certification"
-      },
       "cta": {
         "heading": "Ready to Build Sustainably?",
         "body": "Join the revolution in computer building. Get a custom-tailored, sustainable build that performs excellently while protecting our planet.",
@@ -2766,9 +2757,9 @@
   },
   "itHelp": {
     "meta": {
-      "title": "IT Help — Free Community Repair",
-      "description": "Free IT support for individuals and non-profit organisations. Community technicians help with computers, laptops, Wi-Fi, and more.",
-      "layoutTitle": "IT Help — Community Repair",
+      "title": "Find a technician — repair and IT help nearby",
+      "description": "Describe the problem and get offers from technicians nearby. Repair, reinstallation, data recovery and everyday IT help — free through the community or fairly paid.",
+      "layoutTitle": "Find a technician — repair and IT help",
       "detailTitle": "{title} | IT Help | {orgName}",
       "detailDescription": "IT Help request: {title}{location}. Community-based tech repair support.",
       "detailOgDescription": "Repair request{location} — Help out or learn more.",
@@ -2776,19 +2767,19 @@
       "inCity": " in {city}"
     },
     "title": "IT Help",
-    "subtitle": "Free support from the community",
+    "subtitle": "Post a request, get offers, choose",
     "request": "Request help",
     "volunteer": "Register as a volunteer",
     "page": {
       "title": "IT Help",
       "requestCount": "{count, plural, one {# request} other {# requests}}",
-      "tagline": "Community-based tech repair",
+      "tagline": "Repair and IT help nearby",
       "getHelp": "Get help",
       "findTechnician": "Find a technician",
       "becomeTechnician": "Become a technician",
       "myRequests": "My requests",
       "myOffers": "My offers",
-      "searchPlaceholder": "Broken laptop, Wi-Fi issue, printer...",
+      "searchPlaceholder": "Broken laptop, Wi-Fi issue, install Linux...",
       "searchAriaLabel": "Search IT help requests",
       "searchButton": "Search",
       "sortLabel": "Sort",
@@ -3147,7 +3138,7 @@
     "hub": {
       "eyebrow": "IT Help",
       "title": "Fix your computer, reinstall your OS, solve any IT problem",
-      "subtitle": "evig connects you with community technicians — free or fairly paid.",
+      "subtitle": "evig connects you with technicians near you — free through the community or fairly paid.",
       "paths": {
         "request": {
           "title": "Request help",
@@ -4467,7 +4458,7 @@
       "donateDevicesTitle": "Donate devices",
       "donateDevicesDescription": "Hardware you no longer need can give someone else a real opportunity. We accept working or repairable devices, refurbish them, and pass them on.",
       "weAccept": "What we accept:",
-      "weAcceptList": "Laptops, desktop PCs, monitors, keyboards, mice, printers — working or repairable.",
+      "weAcceptList": "Laptops, desktop PCs, GPUs, monitors, keyboards, mice — working or repairable.",
       "weDoNotAccept": "What we don't accept:",
       "weDoNotAcceptList": "Physically damaged devices, broken screens without frames.",
       "preparation": "Preparation:",
@@ -5001,137 +4992,6 @@
     "retry": "Try Again",
     "goHome": "Go to Homepage"
   },
-  "revamped": {
-    "meta": {
-      "title": "REVAMPED Certification | Sustainable Computer Builds",
-      "description": "Learn about our exclusive REVAMPED certification – guaranteeing sustainability, quality and performance in every computer we build."
-    },
-    "hero": {
-      "title": "The REVAMPED Certification",
-      "subtitle": "Every computer we build receives our exclusive REVAMPED label – a guarantee of sustainability, quality and performance that sets a new standard in the industry.",
-      "badge1": "Sustainability Focus",
-      "badge2": "Quality Guarantee",
-      "badge3": "AI-Optimized Builds",
-      "badge": {
-        "sustainability": "Sustainability Focus",
-        "quality": "Quality Guarantee",
-        "ai": "AI-Optimised Builds"
-      }
-    },
-    "heroSection": {
-      "title": "Real REVAMPED Computers in Action",
-      "body": "Sustainable technology that people love to use. Our REVAMPED certification is not just a promise – it's a visible commitment to quality and environmental responsibility.",
-      "check1": "Primarily used and refurbished components",
-      "check2": "Significant reduction in environmental impact",
-      "check3": "Quality guarantee on every build",
-      "check4": "Physical certification sticker included",
-      "buildBtn": "Build your computer",
-      "learnBtn": "Learn more about certification"
-    },
-    "whatIs": {
-      "title": "What \"REVAMPED\" Means",
-      "body": "Our certification is not just a label – it's a comprehensive standard ensuring every computer meets our strict criteria for sustainability, quality and performance.",
-      "sustainability": {
-        "title": "Sustainability First",
-        "body": "We prioritize used and refurbished components wherever possible, drastically reducing environmental impact while maintaining peak performance. We follow circular economy principles in every build."
-      },
-      "quality": {
-        "title": "Quality Guaranteed",
-        "body": "Every component is thoroughly tested, cleaned and verified to meet our strict performance and reliability standards. Quality is never compromised for sustainability."
-      },
-      "ai": {
-        "title": "AI-Optimized",
-        "body": "Our AI ensures perfect component compatibility and optimal performance tuning for your specific use case. Every build is intelligently designed for your needs."
-      }
-    },
-    "certificate": {
-      "title": "Certificate of Authenticity",
-      "subtitle": "Every REVAMPED computer comes with a detailed certificate providing full transparency about your sustainable build.",
-      "check1": "Component sustainability ratings",
-      "check2": "CO₂ emissions saved vs. new build",
-      "check3": "Component origin and condition",
-      "check4": "Performance benchmarks",
-      "check5": "Warranty coverage details",
-      "certTitle": "Digital & Physical",
-      "certBody": "Your certificate includes both a physical sticker and a digital QR code for instant verification and detailed component information.",
-      "items": [
-        "Component sustainability ratings",
-        "CO₂ emissions saved versus new build",
-        "Component provenance and condition",
-        "Performance benchmarks",
-        "Warranty coverage details"
-      ],
-      "digitalPhysical": "Digital & Physical",
-      "digitalDesc": "Your certificate includes both a physical sticker and a digital QR code for instant verification and detailed component information."
-    },
-    "stickers": {
-      "title": "The REVAMPED Label Collection",
-      "subtitle": "Each design represents our commitment to sustainable computing and quality assurance.",
-      "sticker1": {
-        "title": "Original Design",
-        "body": "Clean, professional certification mark emphasizing our laptop-focused sustainability approach"
-      },
-      "sticker2": {
-        "title": "Eco Variant",
-        "body": "Extended design emphasizing our environmental focus and circular economy principles"
-      },
-      "sticker3": {
-        "title": "Digital Certificate",
-        "body": "QR-code linked verification system with blockchain-backed authenticity records"
-      },
-      "original": {
-        "title": "Original Design",
-        "description": "Clean, professional certification mark emphasising our laptop-focused sustainability approach."
-      },
-      "eco": {
-        "title": "Eco Variant",
-        "description": "Extended design highlighting our environmental focus and circular economy principles."
-      },
-      "digital": {
-        "title": "Digital Certificate",
-        "description": "QR-code-linked verification system with blockchain-backed authenticity records."
-      }
-    },
-    "cta": {
-      "title": "Join the REVAMPED Revolution",
-      "body": "When you choose a REVAMPED computer, you're not just getting a great machine – you're making a statement about the future of technology. Sustainable, powerful and built with purpose.",
-      "buildBtn": "Start your REVAMPED build",
-      "learnBtn": "Learn more about certification",
-      "subtitle": "When you choose a REVAMPED computer, you're not just getting a great machine – you're making a statement about the future of technology. Sustainable, powerful, and built with purpose.",
-      "startBuild": "Start Your REVAMPED Build",
-      "learnMore": "Learn More About Certification"
-    },
-    "inAction": {
-      "title": "Real REVAMPED Computers in Action",
-      "subtitle": "Sustainable technology that people love to use. Our REVAMPED certification isn't just a promise – it's a visible commitment to quality and environmental responsibility.",
-      "points": [
-        "Primarily used and refurbished components",
-        "Significant reduction in environmental impact",
-        "Quality guarantee on every build",
-        "Physical certification sticker included"
-      ],
-      "ctaBuild": "Build Your Computer",
-      "ctaLearn": "Learn More About Certification"
-    },
-    "meaning": {
-      "title": "What \"REVAMPED\" Means",
-      "subtitle": "Our certification is more than a label – it's a comprehensive standard ensuring every computer meets our strict criteria for sustainability, quality and performance.",
-      "pillars": [
-        {
-          "title": "Sustainability First",
-          "description": "We prioritise used and refurbished components wherever possible, drastically reducing environmental impact while maintaining peak performance. We apply circular economy principles to every build."
-        },
-        {
-          "title": "Quality Guaranteed",
-          "description": "Every component is thoroughly tested, cleaned and verified to meet our strict performance and reliability standards. Quality is never compromised for sustainability."
-        },
-        {
-          "title": "AI-Optimised",
-          "description": "Our AI ensures perfect component compatibility and optimal performance tuning for your specific use case. Every build is intelligently designed around your needs."
-        }
-      ]
-    }
-  },
   "support": {
     "meta": {
       "title": "Support evig",
@@ -5250,7 +5110,7 @@
         "Peripherals"
       ],
       "acceptLabel": "What we accept:",
-      "acceptText": "Laptops, desktop PCs, monitors, keyboards, mice, printers — working or repairable.",
+      "acceptText": "Laptops, desktop PCs, GPUs, monitors, keyboards, mice — working or repairable.",
       "notAcceptLabel": "What we don't accept:",
       "notAcceptText": "Devices with physical damage, broken screens without frames.",
       "prepLabel": "Preparation:",
@@ -9132,10 +8992,10 @@
         "description": "Curated, tested devices — chosen because they genuinely deliver, priced so people can actually reach them.",
         "cta": "To the marketplace"
       },
-      "repairs": {
-        "tagline": "Repair instead of replace",
-        "description": "Technicians near you — from a broken keyboard to a system that will not boot.",
-        "cta": "Find IT help"
+      "technicians": {
+        "tagline": "Find someone who will fix it",
+        "description": "Post a request, get offers from technicians nearby, choose one — from a broken keyboard to a system that will not boot.",
+        "cta": "Find a technician"
       },
       "ai": {
         "tagline": "Intelligence within reach",

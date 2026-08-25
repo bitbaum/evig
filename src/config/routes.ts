@@ -143,7 +143,6 @@ export const ROUTES = {
     datenschutz:              '/datenschutz',
     agb:                      '/agb',
     transparenz:              '/transparenz',
-    transparenzKennzahlen:    '/transparenz/kennzahlen',
     transparenzCo2:           '/transparenz/co2',
     transparenzStatuten:      '/transparenz/statuten',
     mitgliedWerden:           '/mitglied-werden',

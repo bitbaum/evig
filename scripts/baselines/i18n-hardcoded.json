@@ -13509,30 +13509,6 @@
     },
     {
       "file": "messages/it.json",
-      "keyPath": "revamped.heroSection.title",
-      "suspectedLanguage": "en",
-      "ownRatio": 0,
-      "otherRatio": 0.2,
-      "snippet": "Computer REVAMPED reali in azione"
-    },
-    {
-      "file": "messages/it.json",
-      "keyPath": "revamped.certificate.check2",
-      "suspectedLanguage": "es",
-      "ownRatio": 0,
-      "otherRatio": 0.17,
-      "snippet": "Emissioni CO₂ risparmiate rispetto al nuovo"
-    },
-    {
-      "file": "messages/it.json",
-      "keyPath": "revamped.inAction.title",
-      "suspectedLanguage": "en",
-      "ownRatio": 0,
-      "otherRatio": 0.25,
-      "snippet": "Computer REVAMPED in azione"
-    },
-    {
-      "file": "messages/it.json",
       "keyPath": "services.page.booking",
       "suspectedLanguage": "en",
       "ownRatio": 0,
@@ -14877,6 +14853,14 @@
     },
     {
       "file": "messages/it.json",
+      "keyPath": "divisions.items.technicians.cta",
+      "suspectedLanguage": "fr",
+      "ownRatio": 0,
+      "otherRatio": 0.33,
+      "snippet": "Trovare un tecnico"
+    },
+    {
+      "file": "messages/it.json",
       "keyPath": "pillars.heading",
       "suspectedLanguage": "fr",
       "ownRatio": 0,
@@ -15661,38 +15645,6 @@
     },
     {
       "file": "messages/fr.json",
-      "keyPath": "revamped.heroSection.title",
-      "suspectedLanguage": "es",
-      "ownRatio": 0.17,
-      "otherRatio": 0.33,
-      "snippet": "De vrais ordinateurs REVAMPED en action"
-    },
-    {
-      "file": "messages/fr.json",
-      "keyPath": "revamped.whatIs.sustainability.title",
-      "suspectedLanguage": "es",
-      "ownRatio": 0,
-      "otherRatio": 0.33,
-      "snippet": "Durabilité en premier"
-    },
-    {
-      "file": "messages/fr.json",
-      "keyPath": "revamped.inAction.title",
-      "suspectedLanguage": "es",
-      "ownRatio": 0.17,
-      "otherRatio": 0.33,
-      "snippet": "De vrais ordinateurs REVAMPED en action"
-    },
-    {
-      "file": "messages/fr.json",
-      "keyPath": "revamped.meaning.pillars.0.title",
-      "suspectedLanguage": "es",
-      "ownRatio": 0.25,
-      "otherRatio": 0.5,
-      "snippet": "La durabilité en premier"
-    },
-    {
-      "file": "messages/fr.json",
       "keyPath": "donate.transparency.co2Label",
       "suspectedLanguage": "en",
       "ownRatio": 0,
@@ -16413,14 +16365,6 @@
     },
     {
       "file": "messages/es.json",
-      "keyPath": "revamped.certificate.items.1",
-      "suspectedLanguage": "fr",
-      "ownRatio": 0.11,
-      "otherRatio": 0.22,
-      "snippet": "Emisiones de CO₂ ahorradas frente a un equipo nuevo"
-    },
-    {
-      "file": "messages/es.json",
       "keyPath": "services.openSourceSolutions.detail.replaces",
       "suspectedLanguage": "it",
       "ownRatio": 0,
@@ -16909,11 +16853,11 @@
     },
     {
       "file": "messages/es.json",
-      "keyPath": "divisions.items.repairs.description",
-      "suspectedLanguage": "fr",
-      "ownRatio": 0.07,
+      "keyPath": "divisions.items.technicians.tagline",
+      "suspectedLanguage": "it",
+      "ownRatio": 0,
       "otherRatio": 0.2,
-      "snippet": "Técnicos cerca de ti — desde un teclado roto hasta un sistema que ya no arranca."
+      "snippet": "Encontrar a quien lo repare"
     },
     {
       "file": "messages/es.json",

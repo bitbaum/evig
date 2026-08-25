@@ -13,8 +13,16 @@ at rising scale: **keep something useful for longer.**
 | Division | Lives at | Status |
 |---|---|---|
 | `evig computers` | `/marketplace` — curated, tested hardware | live |
-| `evig repairs` | `/it-hilfe` — repair instead of replace | live |
+| `evig technicians` | `/it-hilfe` — find someone who will fix it | live |
 | `evig ai` | `/ai` — intelligence within reach | live |
+
+`evig technicians` was `evig repairs` until 2026-08-25. The old name described
+the service; the new one describes what the user is looking for — a person,
+found the way people find a ride. The surface already worked that way (post a
+request, receive offers from technicians nearby, choose one); only the naming
+and the copy lagged. Do not reintroduce "kostenlose Community-Reparatur"
+framing: it promises volunteer charity and forecloses the half of the model
+where a technician actually earns.
 
 `evig architecture` and `evig health` were removed on 2026-08-25. They were
 George's personal research, not evig's work, and carrying them here diluted the
@@ -27,7 +35,7 @@ Rules:
   number typed into a message), the footer column, the nav entries and the
   division pages all derive from it. Never hardcode a wordmark: it is composed
   as `${ORG.name} ${id}`.
-- **A division is a lens, not a second storefront.** `computers` and `repairs`
+- **A division is a lens, not a second storefront.** `computers` and `technicians`
   point at the surfaces that already serve them. Only add a `DIVISION_PAGES`
   entry when a division has no home; then it renders through the shared
   `DivisionPage` component — one shape, never forked.

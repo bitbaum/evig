@@ -2051,7 +2051,7 @@
       "donateDevicesTitle": "Donar dispositivos",
       "donateDevicesDescription": "El hardware que ya no usas puede dar a otra persona una verdadera oportunidad. Aceptamos dispositivos en funcionamiento o reparables, los reacondicionamos y los redistribuimos.",
       "weAccept": "Lo que aceptamos:",
-      "weAcceptList": "Portátiles, ordenadores de sobremesa, monitores, teclados, ratones, impresoras — en funcionamiento o reparables.",
+      "weAcceptList": "Portátiles, ordenadores de sobremesa, GPU, monitores, teclados, ratones — en funcionamiento o reparables.",
       "weDoNotAccept": "Lo que no aceptamos:",
       "weDoNotAcceptList": "Dispositivos con daños físicos, pantallas defectuosas sin marco.",
       "preparation": "Preparación:",
@@ -2219,9 +2219,9 @@
   },
   "itHelp": {
     "meta": {
-      "title": "Ayuda TI — Reparación comunitaria gratuita",
-      "description": "Soporte TI gratuito para particulares y organizaciones sin ánimo de lucro. Técnicos de la comunidad ayudan con ordenadores, portátiles, WiFi y más.",
-      "layoutTitle": "Ayuda TI — Reparación Comunitaria",
+      "title": "Encontrar técnico — reparación y ayuda informática cerca",
+      "description": "Describe tu problema y recibe ofertas de técnicos cercanos. Reparación, reinstalación, recuperación de datos y ayuda informática del día a día: gratis a través de la comunidad o con pago justo.",
+      "layoutTitle": "Encontrar técnico — reparación y ayuda informática",
       "detailTitle": "{title} | Ayuda TI | {orgName}",
       "detailDescription": "Solicitud de ayuda TI: {title}{location}. Soporte comunitario de reparación tecnológica.",
       "detailOgDescription": "Solicitud de reparación{location} — Ayuda o conoce más.",
@@ -2231,13 +2231,13 @@
     "page": {
       "title": "Ayuda TI",
       "requestCount": "{count, plural, one {# solicitud} other {# solicitudes}}",
-      "tagline": "Reparación tecnológica comunitaria",
+      "tagline": "Reparación y ayuda informática cerca",
       "getHelp": "Pedir ayuda",
       "findTechnician": "Encontrar técnico",
       "becomeTechnician": "Ser técnico",
       "myRequests": "Mis solicitudes",
       "myOffers": "Mis ofertas",
-      "searchPlaceholder": "Portátil averiado, problema WiFi, impresora...",
+      "searchPlaceholder": "Portátil averiado, problema WiFi, instalar Linux...",
       "searchAriaLabel": "Buscar solicitudes de ayuda TI",
       "searchButton": "Buscar",
       "sortLabel": "Ordenar",
@@ -2526,7 +2526,7 @@
       "offersCount": "{count, plural, one {# oferta} other {# ofertas}}"
     },
     "title": "Ayuda informática",
-    "subtitle": "Apoyo gratuito de la comunidad",
+    "subtitle": "Publica tu avería, recibe ofertas, elige",
     "request": "Solicitar ayuda",
     "volunteer": "Registrarse como voluntario/a",
     "review": {
@@ -2600,7 +2600,7 @@
     "hub": {
       "eyebrow": "IT Help",
       "title": "Fix your computer, reinstall your OS, solve any IT problem",
-      "subtitle": "evig connects you with community technicians — free or fairly paid.",
+      "subtitle": "evig te conecta con técnicos cerca de ti: gratis a través de la comunidad o con pago justo.",
       "paths": {
         "request": {
           "title": "Request help",
@@ -3287,137 +3287,6 @@
     "subtitle": "Apoye nuestra misión",
     "fee": "Cuota de socio",
     "join": "Hágase socio ahora"
-  },
-  "revamped": {
-    "meta": {
-      "title": "Certificación REVAMPED | Ordenadores sostenibles",
-      "description": "Descubre nuestra exclusiva certificación REVAMPED — que garantiza sostenibilidad, calidad y rendimiento en cada ordenador que ensamblamos."
-    },
-    "hero": {
-      "title": "La certificación REVAMPED",
-      "subtitle": "Cada ordenador que ensamblamos recibe nuestra exclusiva etiqueta REVAMPED — una garantía de sostenibilidad, calidad y rendimiento que marca un nuevo estándar en el sector.",
-      "badge1": "Enfoque en sostenibilidad",
-      "badge2": "Garantía de calidad",
-      "badge3": "Builds optimizados por IA",
-      "badge": {
-        "sustainability": "Enfoque sostenible",
-        "quality": "Garantía de calidad",
-        "ai": "Builds optimizados por IA"
-      }
-    },
-    "heroSection": {
-      "title": "Computadoras REVAMPED reales en acción",
-      "body": "Tecnología sostenible que la gente ama usar. Nuestra certificación REVAMPED no es solo una promesa – es un compromiso visible con la calidad y la responsabilidad ambiental.",
-      "check1": "Principalmente componentes usados y reacondicionados",
-      "check2": "Reducción significativa del impacto ambiental",
-      "check3": "Garantía de calidad en cada build",
-      "check4": "Pegatina de certificación física incluida",
-      "buildBtn": "Construir tu computadora",
-      "learnBtn": "Saber más sobre la certificación"
-    },
-    "whatIs": {
-      "title": "Qué significa «REVAMPED»",
-      "body": "Nuestra certificación no es solo una etiqueta – es un estándar completo que garantiza que cada computadora cumpla con nuestros estrictos criterios de sostenibilidad, calidad y rendimiento.",
-      "sustainability": {
-        "title": "Sostenibilidad primero",
-        "body": "Priorizamos componentes usados y reacondicionados donde sea posible, reduciendo drásticamente el impacto ambiental manteniendo el máximo rendimiento."
-      },
-      "quality": {
-        "title": "Calidad garantizada",
-        "body": "Cada componente se prueba, limpia y verifica minuciosamente para cumplir con nuestros estrictos estándares de rendimiento y fiabilidad."
-      },
-      "ai": {
-        "title": "Optimizado por IA",
-        "body": "Nuestra IA garantiza la compatibilidad perfecta de componentes y el ajuste óptimo del rendimiento para tu caso de uso específico."
-      }
-    },
-    "certificate": {
-      "title": "Certificado de autenticidad",
-      "subtitle": "Cada ordenador REVAMPED viene con un certificado detallado que ofrece total transparencia sobre tu build sostenible.",
-      "check1": "Calificaciones de sostenibilidad de componentes",
-      "check2": "Emisiones de CO₂ ahorradas vs. nuevo",
-      "check3": "Origen y estado de los componentes",
-      "check4": "Benchmarks de rendimiento",
-      "check5": "Detalles de cobertura de garantía",
-      "certTitle": "Digital y físico",
-      "certBody": "Tu certificado incluye tanto una pegatina física como un código QR digital para verificación instantánea e información detallada sobre componentes.",
-      "items": [
-        "Puntuaciones de sostenibilidad de los componentes",
-        "Emisiones de CO₂ ahorradas frente a un equipo nuevo",
-        "Procedencia y estado de los componentes",
-        "Benchmarks de rendimiento",
-        "Detalles de la cobertura de garantía"
-      ],
-      "digitalPhysical": "Digital y físico",
-      "digitalDesc": "Tu certificado incluye tanto una pegatina física como un código QR digital para verificación instantánea e información detallada sobre los componentes."
-    },
-    "stickers": {
-      "title": "La colección de etiquetas REVAMPED",
-      "subtitle": "Cada diseño representa nuestro compromiso con la informática sostenible y el aseguramiento de la calidad.",
-      "sticker1": {
-        "title": "Diseño original",
-        "body": "Marca de certificación limpia y profesional que enfatiza nuestro enfoque de sostenibilidad centrado en laptops"
-      },
-      "sticker2": {
-        "title": "Variante eco",
-        "body": "Diseño extendido que enfatiza nuestro enfoque ambiental y los principios de economía circular"
-      },
-      "sticker3": {
-        "title": "Certificado digital",
-        "body": "Sistema de verificación vinculado por código QR con registros de autenticidad respaldados por blockchain"
-      },
-      "original": {
-        "title": "Diseño original",
-        "description": "Marca de certificación limpia y profesional que enfatiza nuestro enfoque sostenible centrado en portátiles."
-      },
-      "eco": {
-        "title": "Variante eco",
-        "description": "Diseño ampliado que destaca nuestro enfoque medioambiental y los principios de la economía circular."
-      },
-      "digital": {
-        "title": "Certificado digital",
-        "description": "Sistema de verificación vinculado a código QR con registros de autenticidad respaldados por blockchain."
-      }
-    },
-    "cta": {
-      "title": "Únete a la revolución REVAMPED",
-      "body": "Al elegir una computadora REVAMPED, no solo obtienes una excelente máquina – haces una declaración sobre el futuro de la tecnología. Sostenible, potente y construida con propósito.",
-      "buildBtn": "Iniciar tu build REVAMPED",
-      "learnBtn": "Saber más sobre la certificación",
-      "subtitle": "Al elegir un ordenador REVAMPED, no solo obtienes una máquina fantástica — haces una declaración sobre el futuro de la tecnología. Sostenible, potente y construido con propósito.",
-      "startBuild": "Empezar tu build REVAMPED",
-      "learnMore": "Más sobre la certificación"
-    },
-    "inAction": {
-      "title": "Ordenadores REVAMPED reales en uso",
-      "subtitle": "Tecnología sostenible que la gente usa con gusto. Nuestra certificación REVAMPED no es solo una promesa — es un compromiso visible con la calidad y la responsabilidad medioambiental.",
-      "points": [
-        "Principalmente componentes usados y reacondicionados",
-        "Reducción significativa del impacto ambiental",
-        "Garantía de calidad en cada build",
-        "Pegatina de certificación física incluida"
-      ],
-      "ctaBuild": "Ensamblar tu ordenador",
-      "ctaLearn": "Más sobre la certificación"
-    },
-    "meaning": {
-      "title": "Qué significa «REVAMPED»",
-      "subtitle": "Nuestra certificación no es solo una etiqueta — es un estándar integral que garantiza que cada ordenador cumple nuestros estrictos criterios de sostenibilidad, calidad y rendimiento.",
-      "pillars": [
-        {
-          "title": "Sostenibilidad primero",
-          "description": "Priorizamos componentes usados y reacondicionados siempre que es posible, reduciendo drásticamente el impacto ambiental sin sacrificar el máximo rendimiento. Aplicamos los principios de la economía circular en cada build."
-        },
-        {
-          "title": "Calidad garantizada",
-          "description": "Cada componente se prueba a fondo, se limpia y se verifica para cumplir nuestros estrictos estándares de rendimiento y fiabilidad. La calidad nunca se compromete en aras de la sostenibilidad."
-        },
-        {
-          "title": "Optimizado por IA",
-          "description": "Nuestra IA garantiza la compatibilidad perfecta de componentes y el ajuste óptimo del rendimiento para tu caso de uso específico. Cada build está diseñado de forma inteligente para tus necesidades."
-        }
-      ]
-    }
   },
   "services": {
     "meta": {
@@ -4347,15 +4216,6 @@
           }
         ]
       },
-      "certification": {
-        "heading": "Obtén tu certificación Revamped",
-        "body": "Cada ordenador que construimos recibe nuestra certificación exclusiva \"Revamped\" — tu garantía de sostenibilidad, calidad y rendimiento.",
-        "eyebrow": "CERTIFICADO REVAMPED",
-        "sustainabilityScore": "Puntuación de sostenibilidad",
-        "co2Saved": "CO₂ ahorrado",
-        "certifiedComputers": "Ordenadores certificados",
-        "learnMore": "Saber más sobre la certificación Revamped"
-      },
       "cta": {
         "heading": "¿Listo para construir de forma sostenible?",
         "body": "Únete a la revolución en la construcción de ordenadores. Obtén un build a medida y sostenible que funcione excelentemente protegiendo nuestro planeta.",
@@ -5250,7 +5110,7 @@
         "Periféricos"
       ],
       "acceptLabel": "Lo que aceptamos:",
-      "acceptText": "Laptops, PCs de escritorio, monitores, teclados, ratones, impresoras — funcionales o reparables.",
+      "acceptText": "Portátiles, ordenadores de sobremesa, GPU, monitores, teclados, ratones — en funcionamiento o reparables.",
       "notAcceptLabel": "Lo que no aceptamos:",
       "notAcceptText": "Dispositivos con daños físicos, pantallas defectuosas sin marco.",
       "prepLabel": "Preparación:",
@@ -9027,10 +8887,10 @@
         "description": "Equipos seleccionados y probados — elegidos porque de verdad cumplen, y con un precio que los mantiene al alcance.",
         "cta": "Al marketplace"
       },
-      "repairs": {
-        "tagline": "Reparar en lugar de reemplazar",
-        "description": "Técnicos cerca de ti — desde un teclado roto hasta un sistema que ya no arranca.",
-        "cta": "Buscar ayuda IT"
+      "technicians": {
+        "tagline": "Encontrar a quien lo repare",
+        "description": "Publica tu avería, recibe ofertas de técnicos cercanos y elige: desde un teclado roto hasta un sistema que ya no arranca.",
+        "cta": "Encontrar técnico"
       },
       "ai": {
         "tagline": "Inteligencia al alcance",

@@ -2140,15 +2140,6 @@
           }
         ]
       },
-      "certification": {
-        "heading": "Hol sich deine Revamped-Zertifizierung",
-        "body": "Jeder von uns gebaute Computer erhält unsere exklusive \"Revamped\"-Zertifizierung - deine Garantie für Nachhaltigkeit, Qualität und Leistung.",
-        "eyebrow": "REVAMPED ZERTIFIZIERT",
-        "sustainabilityScore": "Nachhaltigkeits-Score",
-        "co2Saved": "CO₂ gespart",
-        "certifiedComputers": "Zertifizierte Computer",
-        "learnMore": "Mehr über die Revamped-Zertifizierung erfahren"
-      },
       "cta": {
         "heading": "Bereit, nachhaltig zu bauen?",
         "body": "Schliess dich der Revolution im Computerbau an. Hol sich einen massgeschneiderten, nachhaltigen Build, der hervorragend funktioniert und gleichzeitig unseren Planeten schont.",
@@ -2758,9 +2749,9 @@
   },
   "itHelp": {
     "meta": {
-      "title": "IT-Hilfe — Kostenlose Community-Reparatur",
-      "description": "Kostenlose IT-Unterstützung für Privatpersonen und gemeinnützige Organisationen. Community-Techniker helfen mit Computer, Laptop, WLAN und mehr.",
-      "layoutTitle": "IT-Hilfe — Community-Reparatur",
+      "title": "Techniker finden — Reparatur und IT-Hilfe in der Nähe",
+      "description": "Beschreibe dein Problem und erhalte Angebote von Technikerinnen und Technikern in der Nähe. Reparatur, Neuinstallation, Datenrettung und alltägliche IT-Hilfe — über die Community gratis oder fair bezahlt.",
+      "layoutTitle": "Techniker finden — Reparatur und IT-Hilfe",
       "detailTitle": "{title} | IT-Hilfe | {orgName}",
       "detailDescription": "IT-Hilfe Anfrage: {title}{location}. Community-basierte Tech-Reparaturhilfe.",
       "detailOgDescription": "Reparaturanfrage{location} — Hilf mit oder erfahre mehr.",
@@ -2768,19 +2759,19 @@
       "inCity": " in {city}"
     },
     "title": "IT-Hilfe",
-    "subtitle": "Kostenlose Unterstützung durch die Community",
+    "subtitle": "Anfrage stellen, Angebote erhalten, auswählen",
     "request": "Hilfe anfragen",
     "volunteer": "Als Helfer:in registrieren",
     "page": {
       "title": "IT-Hilfe",
       "requestCount": "{count, plural, one {# Anfrage} other {# Anfragen}}",
-      "tagline": "Community-basierte Tech-Reparatur",
+      "tagline": "Reparatur und IT-Hilfe in der Nähe",
       "getHelp": "Hilfe holen",
       "findTechnician": "Techniker finden",
       "becomeTechnician": "Techniker werden",
       "myRequests": "Meine Anfragen",
       "myOffers": "Meine Angebote",
-      "searchPlaceholder": "Laptop kaputt, WLAN Problem, Drucker...",
+      "searchPlaceholder": "Laptop kaputt, WLAN-Problem, Linux installieren...",
       "searchAriaLabel": "IT-Hilfe Anfragen durchsuchen",
       "searchButton": "Suchen",
       "sortLabel": "Sortierung",
@@ -3139,7 +3130,7 @@
     "hub": {
       "eyebrow": "IT-Hilfe",
       "title": "Computer reparieren, OS neu installieren, IT-Probleme lösen",
-      "subtitle": "evig verbindet dich mit Community-Technikern — kostenlos oder fair vergütet.",
+      "subtitle": "evig verbindet dich mit Technikerinnen und Technikern in deiner Nähe — über die Community gratis oder fair bezahlt.",
       "paths": {
         "request": {
           "title": "Hilfe anfragen",
@@ -4294,7 +4285,7 @@
       "donateDevicesTitle": "Geräte spenden",
       "donateDevicesDescription": "Hardware, die du nicht mehr brauchst, kann einem anderen Menschen eine echte Chance geben. Wir nehmen funktionierende oder reparierbare Geräte entgegen, bereiten sie auf und geben sie weiter.",
       "weAccept": "Was wir annehmen:",
-      "weAcceptList": "Laptops, Desktop-PCs, Monitore, Tastaturen, Mäuse, Drucker — funktionierend oder reparierbar.",
+      "weAcceptList": "Laptops, Desktop-PCs, GPUs, Monitore, Tastaturen, Mäuse — funktionierend oder reparierbar.",
       "weDoNotAccept": "Was wir nicht annehmen:",
       "weDoNotAcceptList": "Geräte mit physischen Schäden, defekte Bildschirme ohne Rahmen.",
       "preparation": "Vorbereitung:",
@@ -4759,137 +4750,6 @@
     "retry": "Erneut versuchen",
     "goHome": "Zur Startseite"
   },
-  "revamped": {
-    "meta": {
-      "title": "REVAMPED Zertifizierung | Nachhaltige Computer-Builds",
-      "description": "Erfahre mehr über unsere exklusive REVAMPED-Zertifizierung – die Nachhaltigkeit, Qualität und Leistung in jedem Computer garantiert, den wir bauen."
-    },
-    "hero": {
-      "title": "Die REVAMPED-Zertifizierung",
-      "subtitle": "Jeder Computer, den wir bauen, erhält unser exklusives REVAMPED-Label – eine Garantie für Nachhaltigkeit, Qualität und Leistung, die einen neuen Standard in der Branche setzt.",
-      "badge1": "Nachhaltigkeitsfokus",
-      "badge2": "Qualitätsgarantie",
-      "badge3": "KI-optimierte Builds",
-      "badge": {
-        "sustainability": "Nachhaltigkeitsfokus",
-        "quality": "Qualitätsgarantie",
-        "ai": "KI-optimierte Builds"
-      }
-    },
-    "heroSection": {
-      "title": "Echte REVAMPED-Computer im Einsatz",
-      "body": "Nachhaltige Technologie, die Menschen gerne verwenden. Unsere REVAMPED-Zertifizierung ist nicht nur ein Versprechen – sie ist ein sichtbares Bekenntnis zu Qualität und Umweltverantwortung.",
-      "check1": "Hauptsächlich gebrauchte und aufgearbeitete Komponenten",
-      "check2": "Erhebliche Reduzierung der Umweltauswirkungen",
-      "check3": "Qualitätsgarantie auf jeden Build",
-      "check4": "Physischer Zertifizierungs-Aufkleber inbegriffen",
-      "buildBtn": "Deinen Computer bauen",
-      "learnBtn": "Mehr über Zertifizierung erfahren"
-    },
-    "whatIs": {
-      "title": "Was «REVAMPED» bedeutet",
-      "body": "Unsere Zertifizierung ist nicht nur ein Label – es ist ein umfassender Standard, der sicherstellt, dass jeder Computer unsere strengen Kriterien für Nachhaltigkeit, Qualität und Leistung erfüllt.",
-      "sustainability": {
-        "title": "Nachhaltigkeit zuerst",
-        "body": "Wir priorisieren gebrauchte und aufgearbeitete Komponenten wo immer möglich und reduzieren so die Umweltauswirkungen drastisch, während wir die Spitzenleistung beibehalten. Wir befolgen Kreislaufwirtschaftsprinzipien in jedem Build."
-      },
-      "quality": {
-        "title": "Qualität garantiert",
-        "body": "Jede Komponente wird gründlich getestet, gereinigt und verifiziert, um unsere strengen Leistungs- und Zuverlässigkeitsstandards zu erfüllen. Qualität wird niemals für Nachhaltigkeit kompromittiert."
-      },
-      "ai": {
-        "title": "KI-optimiert",
-        "body": "Unsere KI gewährleistet perfekte Komponentenkompatibilität und optimale Leistungsabstimmung für deinen spezifischen Anwendungsfall. Jeder Build ist intelligent für deine Bedürfnisse konzipiert."
-      }
-    },
-    "certificate": {
-      "title": "Echtheitszertifikat",
-      "subtitle": "Jeder REVAMPED-Computer wird mit einem detaillierten Zertifikat geliefert, das vollständige Transparenz über deinen nachhaltigen Build bietet.",
-      "check1": "Nachhaltigkeitsbewertungen der Komponenten",
-      "check2": "Eingesparte CO₂-Emissionen gegenüber Neubau",
-      "check3": "Herkunft und Zustand der Komponenten",
-      "check4": "Leistungs-Benchmarks",
-      "check5": "Details zur Garantieabdeckung",
-      "certTitle": "Digital & physisch",
-      "certBody": "Dein Zertifikat umfasst sowohl einen physischen Aufkleber als auch einen digitalen QR-Code für sofortige Verifizierung und detaillierte Komponenteninformationen.",
-      "items": [
-        "Nachhaltigkeitsbewertungen der Komponenten",
-        "Eingesparte CO₂-Emissionen gegenüber Neubau",
-        "Herkunft und Zustand der Komponenten",
-        "Leistungs-Benchmarks",
-        "Details zur Garantieabdeckung"
-      ],
-      "digitalPhysical": "Digital & physisch",
-      "digitalDesc": "Dein Zertifikat umfasst sowohl einen physischen Aufkleber als auch einen digitalen QR-Code für sofortige Verifizierung und detaillierte Komponenteninformationen."
-    },
-    "stickers": {
-      "title": "Die REVAMPED-Label-Kollektion",
-      "subtitle": "Jedes Design repräsentiert unser Engagement für nachhaltiges Computing und Qualitätssicherung.",
-      "sticker1": {
-        "title": "Original-Design",
-        "body": "Sauberes, professionelles Zertifizierungszeichen, das unseren laptop-fokussierten Nachhaltigkeitsansatz betont"
-      },
-      "sticker2": {
-        "title": "Öko-Variante",
-        "body": "Erweitertes Design, das unseren Umweltfokus und Kreislaufwirtschaftsprinzipien betont"
-      },
-      "sticker3": {
-        "title": "Digitales Zertifikat",
-        "body": "QR-Code-verknüpftes Verifizierungssystem mit Blockchain-gestützten Authentizitätsaufzeichnungen"
-      },
-      "original": {
-        "title": "Original-Design",
-        "description": "Saubere, professionelle Zertifizierungsmarke, die unseren laptop-fokussierten Nachhaltigkeitsansatz betont."
-      },
-      "eco": {
-        "title": "Öko-Variante",
-        "description": "Erweitertes Design, das unseren Umweltfokus und Kreislaufwirtschaftsprinzipien betont."
-      },
-      "digital": {
-        "title": "Digitales Zertifikat",
-        "description": "QR-Code-verknüpftes Verifizierungssystem mit blockchain-gestützten Authentizitätsaufzeichnungen."
-      }
-    },
-    "cta": {
-      "title": "Schliess dich der REVAMPED-Revolution an",
-      "body": "Wenn du einen REVAMPED-Computer wählst, erhältst du nicht nur eine grossartige Maschine – du setzt ein Statement über die Zukunft der Technologie. Nachhaltig, leistungsstark und mit einem Zweck gebaut.",
-      "buildBtn": "Deinen REVAMPED-Build starten",
-      "learnBtn": "Mehr über Zertifizierung erfahren",
-      "subtitle": "Wenn du einen REVAMPED-Computer wählst, erhältst du nicht nur eine grossartige Maschine – du setzt ein Statement über die Zukunft der Technologie. Nachhaltig, leistungsstark und mit einem Zweck gebaut.",
-      "startBuild": "Deinen REVAMPED-Build starten",
-      "learnMore": "Mehr über Zertifizierung erfahren"
-    },
-    "inAction": {
-      "title": "Echte REVAMPED-Computer im Einsatz",
-      "subtitle": "Nachhaltige Technologie, die Menschen gerne verwenden. Unsere REVAMPED-Zertifizierung ist nicht nur ein Versprechen – sie ist ein sichtbares Bekenntnis zu Qualität und Umweltverantwortung.",
-      "points": [
-        "Hauptsächlich gebrauchte und aufgearbeitete Komponenten",
-        "Erhebliche Reduzierung der Umweltauswirkungen",
-        "Qualitätsgarantie auf jeden Build",
-        "Physischer Zertifizierungs-Aufkleber inbegriffen"
-      ],
-      "ctaBuild": "Deinen Computer bauen",
-      "ctaLearn": "Mehr über Zertifizierung erfahren"
-    },
-    "meaning": {
-      "title": "Was \"REVAMPED\" bedeutet",
-      "subtitle": "Unsere Zertifizierung ist nicht nur ein Label – es ist ein umfassender Standard, der sicherstellt, dass jeder Computer unsere strengen Kriterien für Nachhaltigkeit, Qualität und Leistung erfüllt.",
-      "pillars": [
-        {
-          "title": "Nachhaltigkeit zuerst",
-          "description": "Wir priorisieren gebrauchte und aufgearbeitete Komponenten wo immer möglich und reduzieren so die Umweltauswirkungen drastisch, während wir die Spitzenleistung beibehalten. Wir befolgen Kreislaufwirtschaftsprinzipien in jedem Build."
-        },
-        {
-          "title": "Qualität garantiert",
-          "description": "Jede Komponente wird gründlich getestet, gereinigt und verifiziert, um unsere strengen Leistungs- und Zuverlässigkeitsstandards zu erfüllen. Qualität wird niemals für Nachhaltigkeit kompromittiert."
-        },
-        {
-          "title": "KI-optimiert",
-          "description": "Unsere KI gewährleistet perfekte Komponentenkompatibilität und optimale Leistungsabstimmung für deinen spezifischen Anwendungsfall. Jeder Build ist intelligent für deine Bedürfnisse konzipiert."
-        }
-      ]
-    }
-  },
   "support": {
     "meta": {
       "title": "evig unterstützen",
@@ -5311,7 +5171,7 @@
         "Peripherie"
       ],
       "acceptLabel": "Was wir annehmen:",
-      "acceptText": "Laptops, Desktop-PCs, Monitore, Tastaturen, Mäuse, Drucker — funktionierend oder reparierbar.",
+      "acceptText": "Laptops, Desktop-PCs, GPUs, Monitore, Tastaturen, Mäuse — funktionierend oder reparierbar.",
       "notAcceptLabel": "Was wir nicht annehmen:",
       "notAcceptText": "Geräte mit physischen Schäden, defekte Bildschirme ohne Rahmen.",
       "prepLabel": "Vorbereitung:",
@@ -9149,10 +9009,10 @@
         "description": "Kuratierte, geprüfte Geräte — ausgewählt, weil sie wirklich taugen, und so bepreist, dass sie erreichbar bleiben.",
         "cta": "Zum Marktplatz"
       },
-      "repairs": {
-        "tagline": "Reparieren statt ersetzen",
-        "description": "Techniker in deiner Nähe — von der defekten Tastatur bis zum System, das nicht mehr startet.",
-        "cta": "IT-Hilfe finden"
+      "technicians": {
+        "tagline": "Jemanden finden, der es repariert",
+        "description": "Anfrage stellen, Angebote von Technikerinnen und Technikern in der Nähe erhalten, auswählen — von der defekten Tastatur bis zum System, das nicht mehr startet.",
+        "cta": "Techniker finden"
       },
       "ai": {
         "tagline": "Intelligenz, die erreichbar ist",

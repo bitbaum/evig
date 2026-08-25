@@ -3,11 +3,9 @@
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { useTranslations } from 'next-intl'
 import Heading from '@/components/ui/Heading'
-import { Card } from '@/components/ui/card'
-import { Computer, Award, Sparkles, ArrowRight } from 'lucide-react'
+import { Computer } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { PageHero } from '@/components/layout/PageHero'
-import { Button } from '@/components/ui/button'
 import { BuildTool } from './BuildTool'
 import { Section } from '@/components/layout/Section'
 
@@ -78,27 +76,12 @@ export default function BuildYourComputerPage() {
         </div>
       </Section>
 
-      {/* ── Revamped Certification ─────────────────────────────────── */}
-      <Section density="spacious" contained={false}>
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <Card className="p-8 md:p-12 text-center">
-            <Eyebrow as="div" className="inline-flex items-center gap-2 text-action">
-              <Award className="w-4 h-4" />
-              <span>{t('certification.eyebrow')}</span>
-              <Sparkles className="w-4 h-4" />
-            </Eyebrow>
-            <Heading level={2} className="ui-public-display-md mt-4">{t('certification.heading')}</Heading>
-            <p className="ui-public-section-lede mt-6 mx-auto">{t('certification.body')}</p>
-
-            <div className="mt-10">
-              <Button as={Link} href="/revamped" variant="primary">
-                {t('certification.learnMore')}
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </div>
-          </Card>
-        </div>
-      </Section>
+      {/* The "REVAMPED-Zertifizierung" block stood here. It sold an exclusive
+          label, under the previous organisation's name, for computers "we
+          build" — on a page whose own service is `available: false`. It linked
+          to /revamped, which is deleted in this commit. If evig ever wants a
+          quality label, it should be built on the QC Prüfsiegel the intake
+          pipeline already produces, not on a name evig no longer carries. */}
 
       {/* ── CTA ────────────────────────────────────────────────────── */}
       <Section density="spacious" contained={false} className="border-t border-subtle text-center">
