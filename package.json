@@ -48,6 +48,7 @@
     "test:e2e": "playwright test",
     "test:e2e:auth": "playwright test tests/e2e/auth-smoke.spec.ts -g 'credentials login'",
     "test:e2e:journeys": "playwright test tests/e2e/*journey.spec.ts",
+    "test:e2e:guards": "playwright test tests/e2e/security.spec.ts tests/e2e/notification-hrefs.spec.ts tests/e2e/user-admin-flows.spec.ts",
     "test:e2e:it-hilfe": "playwright test tests/e2e/it-hilfe.spec.ts",
     "test:e2e:it-hilfe:journey": "playwright test tests/e2e/it-hilfe-journey.spec.ts",
     "test:e2e:marketplace:journey": "playwright test tests/e2e/marketplace-checkout-journey.spec.ts",
