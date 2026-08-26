@@ -2540,8 +2540,8 @@
       }
     },
     "hub": {
-      "eyebrow": "IT Help",
-      "title": "Fix your computer, reinstall your OS, solve any IT problem",
+      "eyebrow": "기술자 찾기",
+      "title": "고쳐 줄 사람을 찾기",
       "subtitle": "evig가 가까운 기술자와 연결해 드립니다 — 커뮤니티를 통해 무료로, 또는 정당한 보수로.",
       "paths": {
         "request": {

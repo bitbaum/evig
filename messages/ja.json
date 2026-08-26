@@ -2540,8 +2540,8 @@
       }
     },
     "hub": {
-      "eyebrow": "IT Help",
-      "title": "Fix your computer, reinstall your OS, solve any IT problem",
+      "eyebrow": "技術者を探す",
+      "title": "直してくれる人を見つける",
       "subtitle": "evig はあなたの近くの技術者とつなぎます——コミュニティを通じて無料で、あるいは正当な報酬で。",
       "paths": {
         "request": {

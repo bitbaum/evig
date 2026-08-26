@@ -3077,8 +3077,8 @@
       }
     },
     "hub": {
-      "eyebrow": "IT Help",
-      "title": "Fix your computer, reinstall your OS, solve any IT problem",
+      "eyebrow": "Trouver un technicien",
+      "title": "Trouver quelqu’un qui le répare",
       "subtitle": "evig vous met en relation avec des techniciennes et techniciens près de chez vous — gratuitement via la communauté ou rémunéré équitablement.",
       "paths": {
         "request": {

@@ -2540,8 +2540,8 @@
       }
     },
     "hub": {
-      "eyebrow": "IT Help",
-      "title": "Fix your computer, reinstall your OS, solve any IT problem",
+      "eyebrow": "Trovare un tecnico",
+      "title": "Trovare qualcuno che lo ripari",
       "subtitle": "evig ti mette in contatto con tecniche e tecnici vicino a te: gratis tramite la community o pagato equamente.",
       "paths": {
         "request": {

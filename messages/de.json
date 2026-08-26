@@ -3078,8 +3078,8 @@
       }
     },
     "hub": {
-      "eyebrow": "IT-Hilfe",
-      "title": "Computer reparieren, OS neu installieren, IT-Probleme lösen",
+      "eyebrow": "Techniker finden",
+      "title": "Jemanden finden, der es repariert",
       "subtitle": "evig verbindet dich mit Technikerinnen und Technikern in deiner Nähe — über die Community gratis oder fair bezahlt.",
       "paths": {
         "request": {

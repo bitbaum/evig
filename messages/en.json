@@ -3078,8 +3078,8 @@
       }
     },
     "hub": {
-      "eyebrow": "IT Help",
-      "title": "Fix your computer, reinstall your OS, solve any IT problem",
+      "eyebrow": "Find a technician",
+      "title": "Find someone who will fix it",
       "subtitle": "evig connects you with technicians near you — free through the community or fairly paid.",
       "paths": {
         "request": {
