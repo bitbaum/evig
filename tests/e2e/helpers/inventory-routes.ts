@@ -5,11 +5,21 @@
 
 import { ROUTES } from '@/config/routes'
 
-/** Service slugs that expose `/services/[slug]/repair` booking pages. */
-const SERVICE_REPAIR_SLUGS = [
-  'computer-repair-upgrades',
-  'data-recovery-transfer',
-  'linux-open-source',
+/**
+ * Public service pages, smoke-tested for a non-404.
+ *
+ * Kept in step with SERVICE_CONFIGS by
+ * `src/config/__tests__/inventory-routes-match-services.test.ts` — this list
+ * asserted `/services/hardware-recycling` and three `/services/<slug>/repair`
+ * pages for weeks after they were deleted, and because this smoke runs
+ * against the LIVE site it only went red once the deletion deployed, turning
+ * every later PR red for a reason unrelated to that PR.
+ */
+const SERVICE_PAGE_PATHS = [
+  '/services/ai-robotics',
+  '/services/web-design-development',
+  '/services/linux-open-source',
+  '/services/open-source-solutions',
 ] as const
 
 export interface InventoryRoute {
@@ -63,14 +73,14 @@ export const PUBLIC_ROUTES: InventoryRoute[] = [
   { id: 51, label: 'Workshop catalog', path: ROUTES.public.workshops },
   { id: 56, label: 'Propose workshop', path: ROUTES.public.workshopsPropose },
   { id: 68, label: 'Services landing', path: ROUTES.public.services },
-  { id: 69, label: 'Service category', path: '/services/hardware-recycling' },
-  ...SERVICE_REPAIR_SLUGS.map(slug => ({
-    id: 70,
-    label: `Book repair (${slug})`,
-    path: `/services/${slug}/repair`,
-    urlPattern: /\/services\/[^/]+\/repair/,
+  ...SERVICE_PAGE_PATHS.map(path => ({
+    id: 69,
+    label: `Service page (${path.split('/').pop()})`,
+    path,
   })),
-  { id: 71, label: 'Open-source solutions', path: '/services/open-source-solutions' },
+  // Retired services keep their URLs alive as redirects into IT-Hilfe, so the
+  // old inbound links still land somewhere useful.
+  { id: 70, label: 'Retired service redirect', path: '/services/computer-repair-upgrades', urlPattern: /\/it-hilfe/ },
   // Route #116 (the /projects/upcycling/* mini-site) was intentionally removed
   // with the /projects purge (commit 10c1b8adf); its config lingers but the pages
   // 404, so it is no longer smoke-tested here.
