@@ -27,12 +27,16 @@ export default async function WissenPage() {
 
   const sections = [
     {
+      // Was href '/#guides' — a homepage anchor that does not exist, for
+      // guides that have never been written. It points at the real thing
+      // instead: the 43-entry open-source alternatives registry, which is the
+      // most substantial teaching content evig owns.
       id: 'guides',
       titleKey: 'sections.guides.title',
       descriptionKey: 'sections.guides.description',
       ctaKey: 'sections.guides.cta',
       icon: BookOpen,
-      href: '/#guides',
+      href: '/services/open-source-solutions',
     },
     {
       id: 'blog',

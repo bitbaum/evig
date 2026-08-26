@@ -79,8 +79,6 @@
       "buyDevices": "機器を購入",
       "communityListings": "コミュニティ出品",
       "communityListingsDesc": "個人からの中古IT — 手数料0%",
-      "orgShop": "evig ショップ",
-      "orgShopDesc": "検査済みの再生品デバイス",
       "store": "チューリッヒ店舗",
       "storeDesc": "店頭で見て、相談する",
       "sell": "出品する",
@@ -99,12 +97,8 @@
       "learnDesc": "ワークショップ、ガイド、リソース",
       "workshops": "ワークショップ",
       "workshopsDesc": "現地コースを予約",
-      "guides": "ガイド",
-      "guidesDesc": "ステップバイステップの手順",
       "blog": "ブログ",
       "blogDesc": "ヒントとストーリー",
-      "wiki": "Wiki",
-      "wikiDesc": "共有知識ポータル",
       "getInvolved": "参加する",
       "getInvolvedDesc": "この活動の一員になる",
       "engagement": "エンゲージメント",
@@ -164,7 +158,9 @@
       "pressDesc": "メディア掲載",
       "aiDivision": "人工知能へのアクセス——アシスタントと、それを動かすハードウェア",
       "vision": "ビジョン",
-      "visionDesc": "evig が何のためにあるのか、その全文"
+      "visionDesc": "evig が何のためにあるのか、その全文",
+      "resources": "リソース",
+      "resourcesDesc": "厳選したツール、ディストリビューション、ドキュメント"
     },
     "language": "言語",
     "missionHistory": "ミッション & 歴史",
@@ -1244,14 +1240,6 @@
             "link": {
               "href": "/shop",
               "label": "ショップへ"
-            }
-          },
-          {
-            "q": "REVAMPED認証とは何ですか？",
-            "a": "REVAMPEDは、出所のドキュメント化、明確なアップグレードパス、品質保証を備えた持続可能で修理可能なビルドを示しています。",
-            "link": {
-              "href": "/revamped",
-              "label": "REVAMPEDについてもっと"
             }
           },
           {
@@ -2581,16 +2569,16 @@
   "knowhow": {
     "meta": {
       "title": "ノウハウ — ガイド、ブログ、ワークショップ | evig",
-      "description": "ヴィンテージハードウェア、Linux、Open Sourceについて学ぶ。ガイド、ワークショップ、ブログ、厳選リソース。"
+      "description": "Linux、オープンなソフトウェア、AI の実践的な使い方を学ぶ。ガイド、ワークショップ、ブログ、厳選した資料。"
     },
     "hero": {
-      "title": "ヴィンテージハードウェア、Linux、Open Sourceのノウハウを共有",
-      "subtitle": "テクノロジーをより深く理解し活用できるよう、16年以上のノウハウを共有します。初心者でも専門家でも — ここで学習の旅に役立つリソースを見つけてください。"
+      "title": "機械に何ができるかを学ぶ — Linux、オープンなソフトウェア、AI",
+      "subtitle": "機器を直し、設定し、動かしながら学んだことをそのまま渡します。誰かを待つのではなく、自分の道具を自分で使いこなせるように。"
     },
     "sections": {
       "guides": {
         "title": "ガイド",
-        "description": "Linux、ヴィンテージハードウェア、Open Sourceのステップバイステップの手順",
+        "description": "Linux、オープンなソフトウェア、AI をはじめるための手順ガイド",
         "cta": "ガイドを見る"
       },
       "blog": {

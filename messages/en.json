@@ -92,7 +92,6 @@
       "openSourceSolutionsDesc": "Consulting and implementation",
       "marketplaceDesc": "Buy, sell and IT help",
       "communityListingsDesc": "Used IT from evig and other sellers",
-      "orgShopDesc": "Tested, refurbished devices",
       "storeDesc": "Browse in person and get advice",
       "createListingDesc": "Sell your own devices — for free",
       "myListingsDesc": "Manage listings and sales",
@@ -103,9 +102,7 @@
       "aboPoolsDesc": "One AI subscription split four ways — everyone pays their share",
       "learnDesc": "Workshops, guides and resources",
       "workshopsDesc": "Book in-person courses",
-      "guidesDesc": "Step-by-step instructions",
       "blogDesc": "Tips and stories",
-      "wikiDesc": "Shared knowledge portal",
       "getInvolvedDesc": "Become part of the movement",
       "volunteerDesc": "Contribute your time and skills",
       "internshipDesc": "Gain experience",
@@ -134,7 +131,6 @@
       "marketplace": "Marketplace",
       "buyDevices": "Buy devices",
       "communityListings": "Marketplace",
-      "orgShop": "evig listings",
       "store": "Zürich storefront",
       "sell": "Sell",
       "createListing": "Create listing",
@@ -145,9 +141,7 @@
       "becomeTechnician": "Become a technician",
       "learn": "Learn",
       "workshops": "Workshops",
-      "guides": "Guides",
       "blog": "Blog",
-      "wiki": "Wiki",
       "getInvolved": "Get involved",
       "engagement": "Engagement",
       "volunteer": "Volunteering",
@@ -197,7 +191,9 @@
       "pressDesc": "Media coverage",
       "aiDivision": "Access to artificial intelligence — the assistant and the hardware to run it",
       "vision": "Vision",
-      "visionDesc": "What evig is for, at full length"
+      "visionDesc": "What evig is for, at full length",
+      "resources": "Resources",
+      "resourcesDesc": "Curated tools, distributions and docs"
     },
     "experimentalBanner": "Experimental Site",
     "experimentalBannerLink": "go to current site",
@@ -3434,14 +3430,6 @@
             }
           },
           {
-            "q": "What is the REVAMPED certification?",
-            "a": "REVAMPED marks sustainable, repairable builds with documented provenance, clear upgrade paths and quality assurance.",
-            "link": {
-              "href": "/revamped",
-              "label": "More about REVAMPED"
-            }
-          },
-          {
             "q": "Is there a warranty on your devices?",
             "a": "Yes. Refurbished devices come with a warranty. We state the details transparently for each product."
           }
@@ -4281,16 +4269,16 @@
   "knowhow": {
     "meta": {
       "title": "Knowhow - Guides, Blog, Workshops | evig",
-      "description": "Learn about vintage hardware, Linux and open source. Guides, workshops, blog and curated resources."
+      "description": "Learn Linux, open software and the practical use of AI. Guides, workshops, blog and curated resources."
     },
     "hero": {
-      "title": "Sharing knowhow about vintage hardware, Linux and open source",
-      "subtitle": "We share our 16+ years of knowhow so you can better understand and use technology. Whether you are just starting out or already an expert – here you will find resources for your learning journey."
+      "title": "Learn what the machine can do — Linux, open software, AI",
+      "subtitle": "We pass on what we learn repairing, setting up and running machines — so you command your own tools instead of waiting for someone."
     },
     "sections": {
       "guides": {
         "title": "Guides",
-        "description": "Step-by-step instructions for Linux, vintage hardware and open source",
+        "description": "Step-by-step guides for Linux, open software and getting started with AI",
         "cta": "View guides"
       },
       "blog": {

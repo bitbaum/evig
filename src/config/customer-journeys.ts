@@ -10,7 +10,6 @@
  */
 
 import { ROUTES } from '@/config/routes'
-import { EXTERNAL_LINKS } from '@/config/org'
 import type { NavigationItem } from '@/config/navigation'
 
 export const CUSTOMER_JOURNEYS = {
@@ -19,14 +18,13 @@ export const CUSTOMER_JOURNEYS = {
     sectionKey: 'sectionBuySell',
     hubHref: ROUTES.public.marketplace,
     items: [
-      {
-        // The official RevampIT storefront is the external Shopware shop;
-        // the internal /marketplace is the community P2P listing surface.
-        nameKey: 'orgShop',
-        href: EXTERNAL_LINKS.shopware,
-        descriptionKey: 'orgShopDesc',
-        external: true,
-      },
+      // An "evig Shop" entry stood here, pointing at EXTERNAL_LINKS.shopware —
+      // an empty string. It rendered as <a href="" target="_blank">, so the
+      // first item of the Marktplatz menu opened a blank copy of the current
+      // page in a new tab. Its comment still described "the official RevampIT
+      // storefront". evig has ONE store and it is /marketplace (see the
+      // storefront architecture rule in .claude/CLAUDE.md), so there is no
+      // second shop to link to.
       {
         nameKey: 'communityListings',
         href: ROUTES.public.marketplace,

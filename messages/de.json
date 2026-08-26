@@ -77,8 +77,6 @@
       "buyDevices": "Geräte kaufen",
       "communityListings": "Marktplatz",
       "communityListingsDesc": "Gebrauchte IT von evig und anderen Anbieter:innen",
-      "orgShop": "evig Shop",
-      "orgShopDesc": "Geprüfte, aufbereitete Geräte",
       "store": "Ladenlokal Zürich",
       "storeDesc": "Vor Ort stöbern und beraten lassen",
       "sell": "Verkaufen",
@@ -97,12 +95,8 @@
       "learnDesc": "Workshops, Guides und Ressourcen",
       "workshops": "Workshops",
       "workshopsDesc": "Kurse vor Ort buchen",
-      "guides": "Guides",
-      "guidesDesc": "Schritt-für-Schritt Anleitungen",
       "blog": "Blog",
       "blogDesc": "Tipps und Geschichten",
-      "wiki": "Wiki",
-      "wikiDesc": "Gemeinsames Wissensportal",
       "getInvolved": "Mitmachen",
       "getInvolvedDesc": "Teil der Bewegung werden",
       "engagement": "Engagement",
@@ -164,7 +158,9 @@
       "pressDesc": "Medienberichte",
       "aiDivision": "Zugang zu künstlicher Intelligenz — Assistent und passende Hardware",
       "vision": "Vision",
-      "visionDesc": "Wofür evig da ist, in voller Länge"
+      "visionDesc": "Wofür evig da ist, in voller Länge",
+      "resources": "Ressourcen",
+      "resourcesDesc": "Kuratierte Tools, Distributionen und Doku"
     },
     "language": "Sprache",
     "missionHistory": "Mission & Geschichte",
@@ -4116,16 +4112,16 @@
   "knowhow": {
     "meta": {
       "title": "Knowhow - Guides, Blog, Workshops | evig",
-      "description": "Lerne über Vintage Hardware, Linux und Open Source. Guides, Workshops, Blog und curatierte Ressourcen."
+      "description": "Lerne Linux, offene Software und den praktischen Umgang mit KI. Guides, Workshops, Blog und kuratierte Ressourcen."
     },
     "hero": {
-      "title": "Knowhow teilen über Vintage Hardware, Linux und Open Source",
-      "subtitle": "Wir teilen unser 16+ Jahre Knowhow, damit du Technologie besser verstehen und nutzen kannst. Egal ob du gerade anfängst oder bereits ein Experte bist – hier findest du Ressourcen für deine Lernreise."
+      "title": "Lernen, was die Maschine kann — Linux, offene Software, KI",
+      "subtitle": "Wir geben weiter, was wir beim Instandsetzen, Einrichten und Betreiben von Geräten gelernt haben — damit du deine Werkzeuge selbst beherrschst, statt auf jemanden zu warten."
     },
     "sections": {
       "guides": {
         "title": "Guides",
-        "description": "Schritt-für-Schritt Anleitungen für Linux, Vintage Hardware und Open Source",
+        "description": "Schritt-für-Schritt-Anleitungen für Linux, offene Software und den Einstieg in KI",
         "cta": "Zu den Guides"
       },
       "blog": {
@@ -4829,14 +4825,6 @@
             "link": {
               "href": "/marketplace",
               "label": "Zum Shop"
-            }
-          },
-          {
-            "q": "Was ist die REVAMPED-Zertifizierung?",
-            "a": "REVAMPED kennzeichnet nachhaltige, reparierbare Builds mit dokumentierter Herkunft, klaren Upgrade-Pfaden und Qualitätssicherung.",
-            "link": {
-              "href": "/revamped",
-              "label": "Mehr zu REVAMPED"
             }
           },
           {

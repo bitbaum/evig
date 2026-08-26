@@ -4,13 +4,13 @@ export const dynamic = 'force-dynamic'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import React from 'react'
 import { Metadata } from 'next'
-import { ArrowDown, Coffee, Heart } from 'lucide-react'
+import { ArrowDown } from 'lucide-react'
 import { Link } from '@/i18n/navigation'
 import { NewsletterSignup } from '@/components/community/NewsletterSignup'
 import { DropoffForm } from '@/components/donate/DropoffForm'
 import { CopyButton } from '@/components/community/CopyButton'
 import { Section } from '@/components/layout/Section'
-import { BANK, CONTACT, BASE_REGION, ORG } from '@/config/org'
+import { BANK, CONTACT, BASE_REGION, ORG, EXTERNAL_LINKS } from '@/config/org'
 import { DONATION_TIER_AMOUNTS } from '@/config/donations'
 import { ROUTES } from '@/config/routes'
 import { getTranslations } from 'next-intl/server'
@@ -204,39 +204,17 @@ export default async function DonatePage({ params }: DonatePageProps) {
             <h2 className="ui-public-display-md mt-4">{tSupport('otherWays.title')}</h2>
           </div>
 
-          <div className="mt-12 grid gap-4 md:grid-cols-2">
-            <article className="ui-public-card">
-              <Coffee className="mb-4 h-8 w-8 text-action" aria-hidden="true" />
-              <h3 className="ui-public-card-title">{tSupport('oneTime.title')}</h3>
-              <p className="ui-public-card-body">{tSupport('oneTime.description')}</p>
-              <a
-                href="https://ko-fi.com/revampit"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="ui-public-cta mt-6 w-full text-center"
-              >
-                {tSupport('oneTime.cta')}
-              </a>
-            </article>
-
-            <article className="ui-public-card">
-              <Heart className="mb-4 h-8 w-8 text-action" aria-hidden="true" />
-              <h3 className="ui-public-card-title">{tSupport('monthly.title')}</h3>
-              <p className="ui-public-card-body">{tSupport('monthly.description')}</p>
-              <a
-                href="https://github.com/sponsors/revampit"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="ui-public-cta mt-6 w-full text-center"
-              >
-                {tSupport('monthly.cta')}
-              </a>
-            </article>
-          </div>
+          {/* Two donation buttons stood here, hardcoded to ko-fi.com/revampit
+              and github.com/sponsors/revampit. On evig's own donate page they
+              sent money to a DIFFERENT organisation — the one evig span out
+              of. evig has no Ko-fi and no GitHub Sponsors account, so there is
+              nothing to repoint them at; the honest options were "remove" or
+              "collect donations for someone else". The bank transfer above and
+              the device donation below are evig's real paths. */}
 
           <div className="ui-public-cta-row mt-8 justify-center">
             <a
-              href="https://github.com/revampit"
+              href={EXTERNAL_LINKS.sourceCode}
               target="_blank"
               rel="noopener noreferrer"
               className="ui-public-cta-ghost"

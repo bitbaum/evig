@@ -1,5 +1,5 @@
 import React from 'react'
-import { ORG, EXTERNAL_LINKS } from '@/config/org'
+import { ORG } from '@/config/org'
 import { buildMarktplatzNavigationItems } from '@/config/customer-journeys'
 import { DIVISION_PAGES, EVIG_DIVISIONS } from '@/config/divisions'
 import { ROUTES } from '@/config/routes'
@@ -160,10 +160,32 @@ export const mainNavigation: NavigationItem[] = [
         descriptionKey: 'workshopsDesc',
       },
       {
-        name: 'Guides',
-        nameKey: 'guides',
-        href: '/knowhow#guides',
-        descriptionKey: 'guidesDesc',
+        // "Guides" pointed at /knowhow#guides. There is no #guides element on
+        // /knowhow — its only id is `ressourcen` — and the card ON that page
+        // pointed at /#guides, a homepage anchor that does not exist either.
+        // Two dead links that did not even agree with each other, for content
+        // that has never been written.
+        //
+        // These two entries are what evig actually owns to teach with: a
+        // 43-entry open-source alternatives registry, and a Linux page with a
+        // distro-recommendation matrix. Both were filed under Dienstleistungen,
+        // three levels from anyone looking to learn something.
+        name: 'Open-Source-Alternativen',
+        nameKey: 'openSourceSolutions',
+        href: '/services/open-source-solutions',
+        descriptionKey: 'openSourceSolutionsDesc',
+      },
+      {
+        name: 'Linux einrichten',
+        nameKey: 'linuxOpenSource',
+        href: '/services/linux-open-source',
+        descriptionKey: 'linuxOpenSourceDesc',
+      },
+      {
+        name: 'Ressourcen',
+        nameKey: 'resources',
+        href: '/knowhow#ressourcen',
+        descriptionKey: 'resourcesDesc',
       },
       {
         name: 'Blog',
@@ -171,13 +193,10 @@ export const mainNavigation: NavigationItem[] = [
         href: '/blog',
         descriptionKey: 'blogDesc',
       },
-      {
-        name: 'Wiki',
-        nameKey: 'wiki',
-        href: EXTERNAL_LINKS.wiki,
-        descriptionKey: 'wikiDesc',
-        external: true,
-      },
+      // A "Wiki" entry stood here with href = EXTERNAL_LINKS.wiki, which is an
+      // empty string — the same defect as the Marktplatz "evig Shop" entry:
+      // it rendered as <a href="" target="_blank"> and opened a blank copy of
+      // the current page. evig has no wiki.
     ],
   },
   {

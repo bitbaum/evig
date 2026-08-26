@@ -79,8 +79,6 @@
       "buyDevices": "기기 구매",
       "communityListings": "커뮤니티 판매 목록",
       "communityListingsDesc": "개인 간 중고 IT — 수수료 0%",
-      "orgShop": "evig 쇼핑몰",
-      "orgShopDesc": "검증된 리퍼비시 기기",
       "store": "취리히 매장",
       "storeDesc": "직접 방문하여 둘러보고 상담받기",
       "sell": "판매하기",
@@ -99,12 +97,8 @@
       "learnDesc": "워크숍, 가이드 및 리소스",
       "workshops": "워크숍",
       "workshopsDesc": "현장 강좌 예약",
-      "guides": "가이드",
-      "guidesDesc": "단계별 안내",
       "blog": "블로그",
       "blogDesc": "팁과 이야기",
-      "wiki": "위키",
-      "wikiDesc": "공동 지식 포털",
       "getInvolved": "참여하기",
       "getInvolvedDesc": "운동의 일원이 되기",
       "engagement": "참여",
@@ -164,7 +158,9 @@
       "pressDesc": "미디어 보도",
       "aiDivision": "인공지능에 대한 접근 — 어시스턴트와 그것을 돌릴 하드웨어",
       "vision": "비전",
-      "visionDesc": "evig가 무엇을 위해 있는지, 전문으로"
+      "visionDesc": "evig가 무엇을 위해 있는지, 전문으로",
+      "resources": "자료",
+      "resourcesDesc": "선별한 도구, 배포판, 문서"
     },
     "language": "언어",
     "missionHistory": "미션 & 역사",
@@ -1244,14 +1240,6 @@
             "link": {
               "href": "/shop",
               "label": "쇼핑몰로 이동"
-            }
-          },
-          {
-            "q": "REVAMPED 인증이란 무엇인가요?",
-            "a": "REVAMPED는 문서화된 출처, 명확한 업그레이드 경로, 품질 보증이 있는 지속 가능하고 수리 가능한 빌드를 표시합니다.",
-            "link": {
-              "href": "/revamped",
-              "label": "REVAMPED에 대해 더 알아보기"
             }
           },
           {
@@ -2581,16 +2569,16 @@
   "knowhow": {
     "meta": {
       "title": "노하우 - 가이드, 블로그, 워크숍 | evig",
-      "description": "빈티지 하드웨어, Linux, 오픈 소스에 대해 배우세요. 가이드, 워크숍, 블로그 및 큐레이션된 리소스."
+      "description": "리눅스와 열린 소프트웨어, 그리고 AI의 실질적인 활용을 배우세요. 가이드, 워크숍, 블로그, 선별된 자료."
     },
     "hero": {
-      "title": "빈티지 하드웨어, Linux, 오픈 소스에 관한 노하우 나누기",
-      "subtitle": "저희의 16년 이상의 노하우를 공유하여 귀하가 기술을 더 잘 이해하고 활용할 수 있도록 합니다. 막 시작하든 이미 전문가이든 — 여기서 학습 여정을 위한 리소스를 찾을 수 있습니다."
+      "title": "기계가 무엇을 할 수 있는지 배우기 — 리눅스, 열린 소프트웨어, AI",
+      "subtitle": "기기를 고치고, 설치하고, 운영하며 배운 것을 그대로 전합니다. 누군가를 기다리는 대신 자기 도구를 스스로 다룰 수 있도록."
     },
     "sections": {
       "guides": {
         "title": "가이드",
-        "description": "Linux, 빈티지 하드웨어, 오픈 소스를 위한 단계별 안내",
+        "description": "리눅스, 열린 소프트웨어, AI 입문을 위한 단계별 안내",
         "cta": "가이드 보기"
       },
       "blog": {

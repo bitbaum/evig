@@ -79,8 +79,6 @@
       "buyDevices": "Comprar dispositivos",
       "communityListings": "Anuncios de la comunidad",
       "communityListingsDesc": "TI de segunda mano de particulares — 0% comisiones",
-      "orgShop": "Tienda evig",
-      "orgShopDesc": "Dispositivos verificados y reacondicionados",
       "store": "Tienda física Zúrich",
       "storeDesc": "Explora y recibe asesoría en persona",
       "sell": "Vender",
@@ -99,12 +97,8 @@
       "learnDesc": "Talleres, guías y recursos",
       "workshops": "Talleres",
       "workshopsDesc": "Cursos presenciales para reservar",
-      "guides": "Guías",
-      "guidesDesc": "Instrucciones paso a paso",
       "blog": "Blog",
       "blogDesc": "Consejos e historias",
-      "wiki": "Wiki",
-      "wikiDesc": "Portal de conocimiento colectivo",
       "getInvolved": "Participa",
       "getInvolvedDesc": "Forma parte del movimiento",
       "engagement": "Compromiso",
@@ -164,7 +158,9 @@
       "pressDesc": "Cobertura mediática",
       "aiDivision": "Acceso a la inteligencia artificial — el asistente y el hardware para moverlo",
       "vision": "Visión",
-      "visionDesc": "Para qué existe evig, en toda su extensión"
+      "visionDesc": "Para qué existe evig, en toda su extensión",
+      "resources": "Recursos",
+      "resourcesDesc": "Herramientas, distribuciones y documentación seleccionadas"
     },
     "language": "Idioma",
     "missionHistory": "Misión & Historia",
@@ -1244,14 +1240,6 @@
             "link": {
               "href": "/shop",
               "label": "Ir a la tienda"
-            }
-          },
-          {
-            "q": "¿Qué es la certificación REVAMPED?",
-            "a": "REVAMPED identifica builds sostenibles y reparables con procedencia documentada, rutas de actualización claras y aseguramiento de la calidad.",
-            "link": {
-              "href": "/revamped",
-              "label": "Más sobre REVAMPED"
             }
           },
           {
@@ -2581,16 +2569,16 @@
   "knowhow": {
     "meta": {
       "title": "Knowhow - Guías, Blog, Talleres | evig",
-      "description": "Aprende sobre hardware vintage, Linux y Open Source. Guías, talleres, blog y recursos curados."
+      "description": "Aprende Linux, software abierto y el uso práctico de la IA. Guías, talleres, blog y recursos seleccionados."
     },
     "hero": {
-      "title": "Compartir knowhow sobre hardware vintage, Linux y Open Source",
-      "subtitle": "Compartimos más de 16 años de knowhow para que puedas entender y aprovechar mejor la tecnología. Tanto si estás empezando como si ya eres experto/a — aquí encontrarás recursos para tu camino de aprendizaje."
+      "title": "Aprende lo que la máquina puede hacer: Linux, software abierto, IA",
+      "subtitle": "Transmitimos lo que aprendemos reparando, configurando y manteniendo equipos, para que domines tus propias herramientas en lugar de esperar a alguien."
     },
     "sections": {
       "guides": {
         "title": "Guías",
-        "description": "Instrucciones paso a paso para Linux, hardware vintage y Open Source",
+        "description": "Guías paso a paso de Linux, software abierto y primeros pasos con la IA",
         "cta": "Ver guías"
       },
       "blog": {

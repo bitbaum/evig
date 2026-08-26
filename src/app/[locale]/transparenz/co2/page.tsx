@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Leaf, ExternalLink, Calculator, FileText } from 'lucide-react'
-import { ORG, CONTACT } from '@/config/org'
+import { ORG, CONTACT, EXTERNAL_LINKS } from '@/config/org'
 import { ORG_NUMBERS_DEFAULTS } from '@/lib/org-numbers.defaults'
 import { CATEGORY_CO2_FACTORS, CO2_SOURCES, REFURB_OVERHEAD_SHARE, estimateCO2Savings } from '@/config/co2-impact'
 import { cn } from '@/lib/utils'
@@ -252,8 +252,12 @@ export default async function Co2MethodologyPage({ params }: PageProps) {
           <p className="text-sm text-text-secondary mb-3">
             {t('contribute.intro')}
           </p>
+          {/* Was hardcoded to g-but/revampit — a retired GitHub handle AND the
+              previous organisation's repo, so the "check our maths" link on
+              the transparency page pointed at neither evig nor a live account.
+              It derives from EXTERNAL_LINKS.sourceCode now. */}
           <Link
-            href="https://github.com/g-but/revampit/blob/main/src/config/co2-impact.ts"
+            href={`${EXTERNAL_LINKS.sourceCode}/blob/main/src/config/co2-impact.ts`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-sm text-action hover:underline"

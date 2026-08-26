@@ -100,7 +100,6 @@
       "openSourceSolutionsDesc": "Conseil et mise en œuvre",
       "marketplaceDesc": "Acheter, vendre et aide informatique",
       "communityListingsDesc": "Informatique d'occasion — 0% de frais",
-      "orgShopDesc": "Appareils testés et remis à neuf",
       "storeDesc": "Parcourez en personne et obtenez des conseils",
       "createListingDesc": "Vendez vos appareils — gratuitement",
       "myListingsDesc": "Gérer les annonces et les ventes",
@@ -111,9 +110,7 @@
       "aboPoolsDesc": "Un abonnement d'IA à quatre — chacun paie sa part",
       "learnDesc": "Ateliers, guides et ressources",
       "workshopsDesc": "Réserver des cours en personne",
-      "guidesDesc": "Instructions étape par étape",
       "blogDesc": "Conseils et histoires",
-      "wikiDesc": "Portail de connaissances partagées",
       "getInvolvedDesc": "Faire partie du mouvement",
       "volunteerDesc": "Contribuer votre temps et vos compétences",
       "internshipDesc": "Acquérir de l'expérience",
@@ -142,7 +139,6 @@
       "marketplace": "Marché",
       "buyDevices": "Acheter des appareils",
       "communityListings": "Annonces de la communauté",
-      "orgShop": "Boutique evig",
       "store": "Magasin de Zurich",
       "sell": "Vendre",
       "createListing": "Créer une annonce",
@@ -153,9 +149,7 @@
       "becomeTechnician": "Devenir technicien",
       "learn": "Apprendre",
       "workshops": "Ateliers",
-      "guides": "Guides",
       "blog": "Blog",
-      "wiki": "Wiki",
       "getInvolved": "Participer",
       "engagement": "Engagement",
       "volunteer": "Bénévolat",
@@ -203,7 +197,9 @@
       "pressDesc": "Revue de presse",
       "aiDivision": "Accès à l’intelligence artificielle — l’assistant et le matériel pour le faire tourner",
       "vision": "Vision",
-      "visionDesc": "La raison d'être d'evig, en entier"
+      "visionDesc": "La raison d'être d'evig, en entier",
+      "resources": "Ressources",
+      "resourcesDesc": "Outils, distributions et documentation sélectionnés"
     },
     "badge": {
       "new": "Nouveau"
@@ -3434,14 +3430,6 @@
             }
           },
           {
-            "q": "Qu'est-ce que la certification REVAMPED ?",
-            "a": "REVAMPED désigne des configurations durables et réparables avec une origine documentée, des voies de mise à niveau claires et un contrôle qualité.",
-            "link": {
-              "href": "/revamped",
-              "label": "En savoir plus sur REVAMPED"
-            }
-          },
-          {
             "q": "Y a-t-il une garantie sur vos appareils ?",
             "a": "Oui. Les appareils reconditionnés sont livrés avec une garantie. Nous indiquons les détails de manière transparente pour chaque produit."
           }
@@ -4281,16 +4269,16 @@
   "knowhow": {
     "meta": {
       "title": "Knowhow - Guides, Blog, Ateliers | evig",
-      "description": "Apprends sur le matériel vintage, Linux et l'open source. Guides, ateliers, blog et ressources sélectionnées."
+      "description": "Apprenez Linux, les logiciels libres et l'usage concret de l'IA. Guides, ateliers, blog et ressources sélectionnées."
     },
     "hero": {
-      "title": "Partager le knowhow sur le matériel vintage, Linux et l'open source",
-      "subtitle": "Nous partageons notre knowhow de 16+ ans pour que tu puisses mieux comprendre et utiliser la technologie. Que tu débuttes ou que tu sois déjà expert – tu trouveras ici des ressources pour ton voyage d'apprentissage."
+      "title": "Apprendre ce que la machine sait faire : Linux, logiciels libres, IA",
+      "subtitle": "Nous transmettons ce que nous apprenons en réparant, installant et faisant tourner des machines — pour que vous maîtrisiez vos outils au lieu d'attendre quelqu'un."
     },
     "sections": {
       "guides": {
         "title": "Guides",
-        "description": "Instructions étape par étape pour Linux, matériel vintage et open source",
+        "description": "Guides pas à pas pour Linux, les logiciels libres et les premiers pas avec l'IA",
         "cta": "Voir les guides"
       },
       "blog": {

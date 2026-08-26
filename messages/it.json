@@ -79,8 +79,6 @@
       "buyDevices": "Acquista dispositivi",
       "communityListings": "Annunci community",
       "communityListingsDesc": "IT usato da privati — 0% commissioni",
-      "orgShop": "Shop evig",
-      "orgShopDesc": "Dispositivi verificati e ricondizionati",
       "store": "Negozio Zurigo",
       "storeDesc": "Sfoglia e ricevi consulenza di persona",
       "sell": "Vendi",
@@ -99,12 +97,8 @@
       "learnDesc": "Workshop, guide e risorse",
       "workshops": "Workshop",
       "workshopsDesc": "Corsi in presenza da prenotare",
-      "guides": "Guide",
-      "guidesDesc": "Istruzioni passo per passo",
       "blog": "Blog",
       "blogDesc": "Consigli e storie",
-      "wiki": "Wiki",
-      "wikiDesc": "Portale di conoscenze condivise",
       "getInvolved": "Partecipa",
       "getInvolvedDesc": "Entra a far parte del movimento",
       "engagement": "Impegno",
@@ -164,7 +158,9 @@
       "pressDesc": "Rassegna stampa",
       "aiDivision": "Accesso all’intelligenza artificiale — l’assistente e l’hardware per farlo girare",
       "vision": "Visione",
-      "visionDesc": "Perché esiste evig, per esteso"
+      "visionDesc": "Perché esiste evig, per esteso",
+      "resources": "Risorse",
+      "resourcesDesc": "Strumenti, distribuzioni e documentazione selezionati"
     },
     "language": "Lingua",
     "missionHistory": "Missione & Storia",
@@ -1244,14 +1240,6 @@
             "link": {
               "href": "/shop",
               "label": "Vai allo shop"
-            }
-          },
-          {
-            "q": "Cos'è la certificazione REVAMPED?",
-            "a": "REVAMPED identifica build sostenibili e riparabili con provenienza documentata, chiari percorsi di upgrade e garanzia di qualità.",
-            "link": {
-              "href": "/revamped",
-              "label": "Scopri REVAMPED"
             }
           },
           {
@@ -2581,16 +2569,16 @@
   "knowhow": {
     "meta": {
       "title": "Knowhow - Guide, Blog, Workshop | evig",
-      "description": "Impara sull'hardware vintage, Linux e Open Source. Guide, workshop, blog e risorse curate."
+      "description": "Impara Linux, il software aperto e l'uso pratico dell'IA. Guide, laboratori, blog e risorse selezionate."
     },
     "hero": {
-      "title": "Condividi il knowhow su hardware vintage, Linux e Open Source",
-      "subtitle": "Condividiamo il nostro knowhow di oltre 16 anni per aiutarti a capire e usare meglio la tecnologia. Che tu stia iniziando o sia già un esperto — qui trovi risorse per il tuo percorso di apprendimento."
+      "title": "Imparare cosa sa fare la macchina: Linux, software aperto, IA",
+      "subtitle": "Trasmettiamo ciò che impariamo riparando, configurando e facendo funzionare le macchine, perché tu sia padrone dei tuoi strumenti invece di aspettare qualcuno."
     },
     "sections": {
       "guides": {
         "title": "Guide",
-        "description": "Istruzioni passo per passo per Linux, hardware vintage e Open Source",
+        "description": "Guide passo passo su Linux, software aperto e primi passi con l'IA",
         "cta": "Vai alle guide"
       },
       "blog": {
