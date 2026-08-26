@@ -1,9 +1,10 @@
-# Deep-dive audit — 2026-08-24, refocus pass 2026-08-25
+# Deep-dive audit — 2026-08-24, refocus 2026-08-25, page walk 2026-08-26
 
-Two rounds. The first (PRs #358, #359, #368–#377) was correctness and gate
-hygiene. The second (#379, #381, #382, #383) was the strategic refocus onto
-**AI for all** — hardware, technicians, Linux/open source, retraining, and
-adoption in organisations.
+Three rounds. The first (PRs #358, #359, #368–#377) was correctness and gate
+hygiene. The second (#379, #381–#385, #387) was the strategic refocus onto
+**AI for all**. The third (#388, #389, #391) came from opening all 33 public
+pages in a browser rather than reading the code, and found things no gate
+could see.
 
 This file records what is **still open**, so the next session starts from the
 findings rather than re-deriving them.
@@ -16,11 +17,24 @@ findings rather than re-deriving them.
 - **`evig repairs` is now `evig technicians`** (#382). The old name described
   the service; the new one describes what the user is looking for — a person.
 - **The homepage states five pillars** (#381), driven by `src/config/pillars.ts`.
-  It no longer opens with a donation funnel or a recycling cycle.
+  It no longer opens with a donation funnel or a recycling cycle, and (#385)
+  no longer says the same thing three times.
 - **The "not a charity" line is gone** (#379). evig is a gemeinnütziger Verein
   *in Gründung*; saying what it is not contradicted its own legal page.
 - **evig does not ask for printers** (#382). Category `'60'` stays in erfassung
   for existing inventory rows; the donation copy no longer solicits new ones.
+- **The services catalogue is four entries** (#389): webDesign (kept — real
+  revenue, George's explicit call), linuxOpenSource, openSourceSolutions and
+  the new aiAdoption at `/services/ai-robotics`. hardwareRecycling and
+  buildYourComputer were removed; computerRepair and dataRecovery redirect to
+  `/it-hilfe`, because evig is where you FIND a technician, not the shop that
+  charges CHF 70/h.
+- **Über uns is five items in two sections** (#389), not nine unsectioned ones.
+  `evig ai` and `Abos teilen` live under Marktplatz — three ways to get
+  something, not three parts of an org chart.
+- **Service placement is data** (#389). Each service declares
+  `navGroup: 'services' | 'learn'` once; both menus derive from it. A service
+  in two menus, or none, fails `services-nav.test.ts`.
 
 ## Needs a human decision (not started)
 
@@ -36,10 +50,22 @@ behaves behind Caddy. Left in place on purpose.
 issuing routes exist, redemption (`validateAndComputeDiscount`,
 `recordRedemption`) was never wired into checkout. Finish or remove.
 
-**Pillar 5 (`adoption`) has no page.** It points at `/contact` deliberately —
-writing a consulting service page for work nobody has scoped would be the
-claim the honesty rule exists to prevent. When there is a real engagement to
-describe, it belongs in `SERVICE_CONFIGS`, not as a bespoke page.
+**Praktikum + Wiedereinstieg — does evig actually run these?**
+`/get-involved/internships` and `/get-involved/work-reintegration` describe
+real integration programmes and name partners: HEKS, AOZ, the *Verein für
+berufliche und soziale Integration Bezirk Uster* and the *Arbeitsintegrations-
+stelle der Gemeinde Rüti*. If evig runs them they belong with pillar 4
+(training) and should be much more prominent. If they came across with the
+code from Revamp-IT, they are commitments evig cannot honour and naming those
+four organisations is worse than off-thesis. **Only George can answer this**;
+nothing in the repo distinguishes the two cases.
+
+**`/karriere` is invisible and monolingual.** Not in the nav, not in the
+footer, not in the sitemap — reachable only from the three get-involved CTAs
+(`?track=volunteer|intern|reintegration`). Its hero is the only hardcoded
+German `PageHero` on the site (`title="Karriere bei evig"`), so it is also the
+one page that cannot be translated. Decide: surface it properly and i18n it,
+or fold it into get-involved.
 
 ## Ratcheted debt (gated, may fall, must not rise)
 
@@ -47,9 +73,21 @@ describe, it belongs in `SERVICE_CONFIGS`, not as a bespoke page.
 |---|---|---|
 | `lint:chrome` | 3 | hand-rolled card shells (2 justified + 1 doc comment) |
 | `lint:docs` | 68 | stale paths in older reference docs; CLAUDE.md/README held at 0 |
-| `compliance:i18n-hardcoded` | ~1.7k | hardcoded strings, mostly in older components |
+| `compliance:i18n-hardcoded` | 2430 src / 84 msg | was ~2531/706; the msg drop is real leaks fixed, the src drop is the deleted `community.ts` tree |
 | `compliance:i18n` | 175 | missing translation keys |
 | `compliance:i18n-leaks` | ja/ko/ru | untranslated leaks per locale |
+
+## Gates added in this pass (each mutation-proved)
+
+| gate | catches |
+|---|---|
+| `navigation-links-resolve.test.ts` | a nav entry with an empty or malformed href — two shipped as `<a href="">` for months |
+| `services-nav.test.ts` (rewritten) | a service in two menus or none, now that `navGroup` decides placement |
+| `workshops-config-matches-messages.test.ts` | the German category labels in config drifting from the message files |
+| `page-titles-not-doubled.test.ts` | a title string carrying "\| evig" when the layout template already appends it |
+
+**Every one was proved by planting the defect back and watching the gate name
+it.** A gate that has never been seen red is a claim, not a check.
 
 ## Known gate limitations — do not read green as clean
 
@@ -80,28 +118,38 @@ describe, it belongs in `SERVICE_CONFIGS`, not as a bespoke page.
 ## Found but not fixed (from the audit sweeps)
 
 ### Content / IA
-- **`/karriere` + `/karriere/[slug]`** are orphaned from nav AND footer, absent
-  from the sitemap, and **fully hardcoded German with no i18n namespace** —
-  a straight violation of the i18n SSOT rule.
+- **EDUCATION IS THE BIGGEST GAP.** George has said teaching and retraining
+  will be a large part of what evig does, and today `/workshops` renders
+  **"0 Workshops · Aktuell sind keine Workshops geplant"** while `/blog`
+  renders nothing at all. The page is DB-driven; the only workshop rows in
+  version control are 6 seeds in `001-unified-auth.sql` whose categories are
+  legacy strings matching none of the 10 canonical ids, written in formal
+  "Sie" against the site's informal "du", and **no `workshop_instances` are
+  seeded anywhere except `e2e-seed.ts`** — without instances there are no
+  dates and registration is impossible. Meanwhile the 43-entry open-source
+  registry (1029 lines, real, indexed) is the largest teaching asset evig
+  owns; #388 moved it and the Linux page into Lernen, which is a signpost,
+  not a fix. Seeding real workshops in the `retraining` category is the
+  single highest-value content job left.
 - **Near-duplicate recruiting pages**: `/get-involved/technical-experts` vs
   `/get-involved/it-hilfe-techniker` — same shape, same namespace, different
-  sub-keys. The latter has zero inbound links and is not in the sitemap.
+  sub-keys. The latter has **zero inbound links anywhere** and is not in the
+  sitemap. Technician recruiting also exists at `/profil/techniker` and in the
+  `/it-hilfe` hub's offerHelp block: four doors, one job.
 - **Five `notFound()` stubs** kept deliberately ("hidden until real"):
   `/space`, `/about/finances`, `/about/impact`, `/about/press`,
   `/transparenz/kennzahlen`. Behaviourally identical to not existing; they
   document intent. `ROUTES.public.transparenzKennzahlen` was removed in #382.
-- **`home.actions.sell`** is a *buy* card labelled `01 / SHOP` under a key
-  named `sell` — key/content drift. `home.finalCta` still sends everyone to
-  the shop rather than to the pillar they came for.
-- **`/vision` is now in the nav** (#381), but "Über uns" is overloaded at
-  8 items, mixing identity, division pages, trust pages and a Zürich subsidy
-  programme.
-- **"Dienstleistungen" splits pillars 3 and 5 across a Hardware/Software axis**
-  that maps to neither, and lists `Hardware-Recycling` as a peer of
-  `Reparatur` — recycling is a consequence, not a service headline.
-- **Pillar 4 is buried**: `src/config/workshops.ts` already defines a
-  `retraining` category with real strings, rendered as one of ten equal filter
-  chips. No landing page, no nav entry, absent from `workshops.meta`.
+- **`home.actions.*` is gone** (#385) along with the section it fed, so the
+  `sell`-key-on-a-buy-card drift went with it. `home.finalCta` now closes on
+  the thesis rather than the shop.
+- **A German typo in production copy**: `getInvolved.itHilfeTechniker.description`
+  reads "kann anderen das Leben **leichtern**" (should be "erleichtern" or
+  "leichter machen").
+- **`/so-funktionierts` and `/reparaturbonus` left the nav** (#389) but both
+  pages remain. Reparaturbonus describes a City of Zürich subsidy evig does
+  not administer and, per the page's own FAQ, cannot redeem. Worth deciding
+  whether it earns its 445 lines.
 
 ### Correctness
 - **Workshop capacity** computed three ways; free registrations do not
@@ -165,6 +213,19 @@ salvaging — some failures may now be different failures.
 - **CI green is not live.** Every merge here was re-probed against
   https://evig.orangecat.ch — which is how the stale divisions subtitle was
   caught, rendering under a heading that correctly read "3 Bereiche".
+- **A cancelled deploy is not a failed deploy.** GitHub cancels an in-flight
+  deploy when a newer commit lands on main, and a watcher that only checks
+  "not success" reports a false alarm. Read `conclusion` and treat
+  `cancelled` as "superseded", then verify the NEXT run.
+- **OPEN THE PAGES.** The third round found things no gate could see, only
+  because the site was loaded in a browser: two nav entries rendering
+  `<a href="">`, donation buttons pointing at another organisation's Ko-fi,
+  a 404 in the live FAQ, "16+ Jahre" on a two-year-old org, a wrapped price,
+  and three different causes of a doubled page title. Greps and typechecks
+  had all been green throughout. Budget a page walk per refocus.
+- **Measure the output, don't reason about the framework.** Two of the three
+  doubled titles were missed by reasoning about Next's `title.template`
+  resolution and found by curling the rendered `<title>`.
 
 ## Repo state
 
