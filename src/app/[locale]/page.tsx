@@ -7,7 +7,7 @@ import { ORG } from '@/config/org'
 import { safeJsonLd } from '@/lib/seo/json-ld'
 import { ROUTES } from '@/config/routes'
 import { JOURNEY_ENTRYPOINTS } from '@/config/customer-journeys'
-import { EVIG_DIVISIONS, DIVISION_STATUS_STYLE } from '@/config/divisions'
+import { EVIG_DIVISIONS } from '@/config/divisions'
 import { EVIG_PILLARS } from '@/config/pillars'
 
 const OG_LOCALE_MAP: Record<string, string> = {
@@ -25,7 +25,11 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const t = await getTranslations({ locale, namespace: 'home' })
 
   return {
-    title: `${ORG.name} – ${t('meta.title')}`,
+    // The layout already appends "| evig" via its title template, and
+    // meta.title used to start with "evig —" as well, so the tab read
+    // "evig – evig — … | evig". The org name belongs to the template; this
+    // string is only the descriptive half.
+    title: t('meta.title'),
     description: t('meta.description'),
     // Keywords are language-specific prose, so they belong in the message
     // files like every other sentence — they used to be a German array frozen
@@ -54,29 +58,6 @@ export default async function Home() {
   const t = await getTranslations('home')
   const tDivisions = await getTranslations('divisions')
   const tPillars = await getTranslations('pillars')
-  const actionCards = [
-    {
-      label: t('actions.sell.label'),
-      title: t('actions.sell.title'),
-      body: t('actions.sell.subtitle'),
-      ctaLabel: t('actions.sell.primaryLabel'),
-      ctaHref: JOURNEY_ENTRYPOINTS.orgShop,
-    },
-    {
-      label: t('actions.repair.label'),
-      title: t('actions.repair.title'),
-      body: t('actions.repair.subtitle'),
-      ctaLabel: t('actions.repair.primaryLabel'),
-      ctaHref: JOURNEY_ENTRYPOINTS.itHelpRequest,
-    },
-    {
-      label: t('actions.learn.label'),
-      title: t('actions.learn.title'),
-      body: t('actions.learn.subtitle'),
-      ctaLabel: t('actions.learn.primaryLabel'),
-      ctaHref: '/workshops',
-    },
-  ]
 
   const communityCards = [
     { title: t('community.use.title'),        body: t('community.use.desc'),        href: ROUTES.public.shop,           ctaLabel: t('community.use.cta') },
@@ -152,76 +133,18 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* ── The evig divisions (SSOT: config/divisions.ts) ───────────
-          First section under the hero: before we ask anyone to do
-          something, the page says what this organisation actually is. */}
-      <Section density="spacious" contained={false} className="border-t border-subtle">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl">
-            <Eyebrow as="div">{tDivisions('overview.eyebrow')}</Eyebrow>
-            <h2 className="ui-public-display-lg mt-4">
-              {/* The count is data, not copy — it follows EVIG_DIVISIONS. */}
-              {tDivisions('overview.heading', { count: EVIG_DIVISIONS.length })}
-            </h2>
-            <p className="ui-public-section-lede mt-6">{tDivisions('overview.subtitle')}</p>
-          </div>
+      {/* Two sections stood here and both said what the pillars section below
+          now says. The divisions grid restated the hero rail as cards — its
+          `technicians` card headline was VERBATIM the pillars' "Jemanden
+          finden, der es repariert", the same sentence twice on one page — and
+          the "Drei Wege" grid was a third framing of the same choices, with
+          "Techniker finden" appearing as a CTA in all three.
 
-          <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {EVIG_DIVISIONS.map((division) => (
-              <Link key={division.id} href={division.href} className="ui-public-card group">
-                <div className="ui-public-card-label flex items-center justify-between gap-2">
-                  <span>{division.wordmark}</span>
-                  <span
-                    className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-semibold normal-case tracking-normal ${DIVISION_STATUS_STYLE[division.status]}`}
-                  >
-                    {tDivisions(`status.${division.status}` as never)}
-                  </span>
-                </div>
-                <h3 className="ui-public-card-title">
-                  {tDivisions(`items.${division.id}.tagline` as never)}
-                </h3>
-                <p className="ui-public-card-body">
-                  {tDivisions(`items.${division.id}.description` as never)}
-                </p>
-                <span className="ui-public-card-meta inline-flex items-center gap-1 group-hover:text-text-primary transition-colors">
-                  {tDivisions(`items.${division.id}.cta` as never)} →
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </Section>
-
-      {/* ── Three primary actions ──────────────────────────────────── */}
-      <Section density="spacious" tone="tinted" contained={false} className="border-y border-subtle">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-10 md:grid-cols-[0.9fr_1.1fr] md:items-end">
-            <div>
-              <Eyebrow as="div">{t('actions.eyebrow')}</Eyebrow>
-              <h2 className="ui-public-display-lg mt-4">{t('actions.heading')}</h2>
-            </div>
-            <p className="ui-public-section-lede md:justify-self-end">
-              {t('actions.subtitle')}
-            </p>
-          </div>
-
-          <div className="mt-14 grid gap-4 md:grid-cols-3">
-            {actionCards.map((card) => (
-              <article key={card.title} className="ui-public-card">
-                <div className="ui-public-card-label">{card.label}</div>
-                <h3 className="ui-public-card-title">{card.title}</h3>
-                <p className="ui-public-card-body">{card.body}</p>
-                <Link
-                  href={card.ctaHref}
-                  className="ui-public-card-meta inline-flex items-center gap-1 hover:text-text-primary transition-colors"
-                >
-                  {card.ctaLabel} →
-                </Link>
-              </article>
-            ))}
-          </div>
-        </div>
-      </Section>
+          Together they were 1612px of desktop and 2442px of phone spent
+          repeating the answer. Divisions remain the brand SSOT and still
+          render in the hero rail above, the footer column, the nav and the
+          /ai page; they just do not need a card grid competing with the
+          section that states what evig actually does. */}
 
       {/* ── The five pillars (SSOT: config/pillars.ts) ───────────────
           This replaced two bands that told the circular-IT story of the

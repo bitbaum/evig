@@ -30,11 +30,15 @@ one thing evig is for. They now live as projects on orangecat.ch ("Building for
 the Ruin", "Healthspan and Preservation"). Do not reintroduce them.
 
 Rules:
-- **`EVIG_DIVISIONS` is the only list.** The homepage hero rail, the homepage
-  divisions section (including its **count** — via ICU `{count}`, never a
-  number typed into a message), the footer column, the nav entries and the
-  division pages all derive from it. Never hardcode a wordmark: it is composed
-  as `${ORG.name} ${id}`.
+- **`EVIG_DIVISIONS` is the only list.** The homepage hero rail, the footer
+  column, the nav entries and the division pages all derive from it. Never
+  hardcode a wordmark: it is composed as `${ORG.name} ${id}`.
+- **The homepage has no divisions card grid** (removed 2026-08-25). It
+  restated the hero rail directly above it, and its `technicians` card
+  headline was word-for-word the pillars section's — the same sentence twice
+  on one page. Divisions are how the org is *named*; `EVIG_PILLARS` says what
+  it *does*, and that is what the homepage owes a first-time visitor. Do not
+  reinstate the grid.
 - **A division is a lens, not a second storefront.** `computers` and `technicians`
   point at the surfaces that already serve them. Only add a `DIVISION_PAGES`
   entry when a division has no home; then it renders through the shared

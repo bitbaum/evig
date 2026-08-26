@@ -339,7 +339,7 @@
   },
   "home": {
     "meta": {
-      "title": "evig — L'intelligence, abordable pour tous | Technique, réparation et Linux en Suisse",
+      "title": "L'intelligence à la portée de tous : appareils, réparation, Linux",
       "description": "Des portables et du matériel d'occasion qui suffisent pour du vrai travail. Réparation et aide informatique à proximité, Linux et logiciels libres, ateliers et accompagnement sur l'IA et la robotique.",
       "keywords": "portables d'occasion, portable pour l'IA, GPU d'occasion, réparation d'ordinateurs Suisse, trouver un technicien, installation Linux, open source, formation IA, adoption de l'IA et de la robotique, Zurich, Bâle, Lucerne"
     },
@@ -351,29 +351,6 @@
       "titleSecondary": "Abordable pour tous.",
       "lede": "Une technologie sélectionnée, de l'IA et de la robotique à des prix justes — plus une réparation vraiment accessible.",
       "ctaDonate": "Découvrir la technologie"
-    },
-    "actions": {
-      "heading": "Que souhaitez-vous faire?",
-      "sell": {
-        "title": "Un vieux appareil à donner?",
-        "subtitle": "Vendez-le ou donnez-le en 2 minutes — gratuitement et sans frais.",
-        "primaryLabel": "Découvrir la marketplace",
-        "label": "01 / MARCHÉ"
-      },
-      "repair": {
-        "title": "Ordinateur en panne?",
-        "subtitle": "Des techniciens près de chez vous aident — ou proposez vous-même des réparations.",
-        "primaryLabel": "Trouver de l'aide",
-        "label": "02 / AIDE IT"
-      },
-      "learn": {
-        "title": "Envie d'apprendre?",
-        "subtitle": "Ateliers pratiques sur Linux, réparation hardware, programmation et IA.",
-        "primaryLabel": "Voir les ateliers",
-        "label": "03 / ATELIERS"
-      },
-      "eyebrow": "TROIS VOIES",
-      "subtitle": "Que vous souhaitiez vous débarrasser d'un vieil appareil, en acheter un abordable ou aider aux réparations — vous êtes au bon endroit."
     },
     "community": {
       "heading": "Rejoignez la communauté",
@@ -411,11 +388,11 @@
       "service3Desc": "Formation, reconversion et accompagnement lors de leur mise en place"
     },
     "finalCta": {
-      "eyebrow": "PRÊT ?",
-      "heading": "Donnez une seconde vie à votre ordinateur.",
-      "subtitle": "5 minutes d'effort. Nous le récupérons. Vous recevez un reçu fiscal. Votre appareil finit chez quelqu'un qui en a besoin.",
-      "button": "Faire don d'un appareil",
-      "note": "Le don d’appareils reste possible via Participer."
+      "eyebrow": "COMMENCER",
+      "heading": "La voie la moins chère vers l'IA est une bonne machine d'occasion",
+      "subtitle": "Un portable que quelqu'un a testé et correctement configuré fait ce pour quoi vous l'avez pris dès le jour où vous le recevez, sans avoir à être fabriqué une seconde fois.",
+      "button": "Voir les appareils",
+      "note": "Quelque chose est cassé ? Trouvez une technicienne ou un technicien près de chez vous via l'aide informatique."
     },
     "newsletter": {
       "title": "Restez informé",

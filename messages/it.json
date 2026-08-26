@@ -2093,7 +2093,7 @@
   },
   "home": {
     "meta": {
-      "title": "evig — L'intelligenza, alla portata di tutti | Tecnologia, riparazione e Linux in Svizzera",
+      "title": "Intelligenza alla portata di tutti: dispositivi, riparazione, Linux",
       "description": "Portatili e hardware usati che bastano per lavorare sul serio. Riparazione e aiuto informatico vicino a te, Linux e software aperto, laboratori e accompagnamento su IA e robotica.",
       "keywords": "portatili usati, portatile per IA, GPU usata, riparazione computer Svizzera, trovare un tecnico, installazione Linux, open source, formazione IA, adozione di IA e robotica, Zurigo, Basilea, Lucerna"
     },
@@ -2105,29 +2105,6 @@
       "titleSecondary": "Alla portata di tutti.",
       "lede": "Tecnologia selezionata, IA e robotica a prezzi equi — e una riparazione davvero accessibile.",
       "ctaDonate": "Scopri la tecnologia"
-    },
-    "actions": {
-      "heading": "Cosa vuoi fare?",
-      "sell": {
-        "title": "Hai un vecchio dispositivo?",
-        "subtitle": "Vendilo o regalalo in 2 minuti — gratis e senza commissioni.",
-        "primaryLabel": "Scopri il mercato",
-        "label": "01 / MERCATO"
-      },
-      "repair": {
-        "title": "Computer guasto?",
-        "subtitle": "I tecnici vicino a te sono pronti ad aiutare — o offri tu stesso riparazioni.",
-        "primaryLabel": "Trova aiuto",
-        "label": "02 / AIUTO IT"
-      },
-      "learn": {
-        "title": "Vuoi imparare qualcosa di nuovo?",
-        "subtitle": "Workshop pratici su Linux, riparazione hardware, programmazione e IA.",
-        "primaryLabel": "Vedi i workshop",
-        "label": "03 / WORKSHOP"
-      },
-      "eyebrow": "TRE STRADE",
-      "subtitle": "Che tu voglia disfarti di un vecchio dispositivo, comprarne uno conveniente o aiutare con le riparazioni — sei nel posto giusto."
     },
     "community": {
       "heading": "Entra a far parte della community",
@@ -2165,11 +2142,11 @@
       "service3Desc": "Formazione, riqualificazione e accompagnamento nella loro introduzione"
     },
     "finalCta": {
-      "eyebrow": "PRONTO?",
-      "heading": "Dai una seconda vita al tuo computer.",
-      "subtitle": "5 minuti di sforzo. Lo ritiriamo noi. Ricevi una ricevuta di donazione. Il tuo dispositivo finisce a chi ne ha bisogno.",
-      "button": "Dona un dispositivo",
-      "note": "Donare dispositivi resta possibile in Partecipa."
+      "eyebrow": "INIZIARE",
+      "heading": "La via più economica verso l'IA è una buona macchina usata",
+      "subtitle": "Un portatile che qualcuno ha testato e configurato bene fa ciò per cui lo hai preso già dal giorno in cui lo ricevi, senza dover essere costruito una seconda volta.",
+      "button": "Vedi i dispositivi",
+      "note": "Qualcosa si è rotto? Trova un tecnico vicino a te tramite l'aiuto informatico."
     },
     "newsletter": {
       "title": "Rimani aggiornato",

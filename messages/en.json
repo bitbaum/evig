@@ -340,7 +340,7 @@
   },
   "home": {
     "meta": {
-      "title": "evig — Intelligence, affordable for everyone | Tech, repair & Linux in Switzerland",
+      "title": "Intelligence everyone can afford — devices, repair, Linux",
       "description": "Used laptops and hardware good enough for real work. Repair and IT help nearby, Linux and open software, workshops and support for adopting AI and robotics.",
       "keywords": "used laptops, laptop for AI, second-hand GPU, computer repair Switzerland, find a technician, Linux installation, open source, AI training, AI and robotics adoption, Zurich, Basel, Lucerne"
     },
@@ -352,29 +352,6 @@
       "titleSecondary": "Affordable for everyone.",
       "lede": "Curated tech, AI and robotics at fair prices — plus repair that's truly within reach.",
       "ctaDonate": "Explore tech"
-    },
-    "actions": {
-      "heading": "What would you like to do?",
-      "sell": {
-        "title": "Need refurbished IT?",
-        "subtitle": "Verified devices from the evig shop — local, transparent, and ready to use.",
-        "primaryLabel": "Go to shop",
-        "label": "01 / SHOP"
-      },
-      "repair": {
-        "title": "Computer broken?",
-        "subtitle": "Technicians and workshops near you can help — or offer repairs yourself.",
-        "primaryLabel": "Find technicians",
-        "label": "02 / REPAIR"
-      },
-      "learn": {
-        "title": "Want to learn something new?",
-        "subtitle": "Hands-on workshops on Linux, hardware repair, programming and AI.",
-        "primaryLabel": "View workshops",
-        "label": "03 / WORKSHOPS"
-      },
-      "eyebrow": "THREE WAYS",
-      "subtitle": "Buy, repair, learn, or contribute — start with the job you need done today."
     },
     "community": {
       "heading": "Join the Community",
@@ -412,11 +389,11 @@
       "service3Desc": "Training, retraining, and support for adopting AI and robotics in organisations"
     },
     "finalCta": {
-      "eyebrow": "READY?",
-      "heading": "Need a device built to last?",
-      "subtitle": "The shop has verified refurbished IT. If something is broken, repair search connects you with suitable technicians and workshops.",
-      "button": "Go to shop",
-      "note": "Device donations still live under Get involved."
+      "eyebrow": "GET STARTED",
+      "heading": "The cheapest way into AI is a good used machine",
+      "subtitle": "A laptop somebody tested and set up properly can do what you got it for on the day you receive it — without having to be built again.",
+      "button": "See devices",
+      "note": "Something broken? Find a technician near you through IT help."
     },
     "newsletter": {
       "title": "Stay up to date",

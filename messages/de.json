@@ -340,7 +340,7 @@
   },
   "home": {
     "meta": {
-      "title": "evig — Intelligenz, für alle bezahlbar | Technik, Reparatur & Linux in der Schweiz",
+      "title": "Intelligenz, für alle bezahlbar — Geräte, Reparatur, Linux",
       "description": "Gebrauchte Notebooks und Hardware, die für echte Arbeit reicht. Reparatur und IT-Hilfe in der Nähe, Linux und offene Software, Workshops und Begleitung bei KI und Robotik.",
       "keywords": "gebrauchte Laptops, Notebook für KI, GPU gebraucht, Computer Reparatur Schweiz, Techniker finden, Linux Installation, Open Source, KI Weiterbildung, KI und Robotik im Betrieb, Zürich, Basel, Luzern"
     },
@@ -352,29 +352,6 @@
       "ctaDonate": "Technik entdecken",
       "ctaDiscover": "Reparatur finden",
       "positioning": "KI für alle · Geräte, Hilfe, Ausbildung · Zürich"
-    },
-    "actions": {
-      "eyebrow": "DREI WEGE",
-      "heading": "Was möchtest du tun?",
-      "subtitle": "Kaufen, reparieren lassen, lernen oder mitmachen — der Einstieg richtet sich nach dem, was du gerade brauchst.",
-      "sell": {
-        "label": "01 / SHOP",
-        "title": "Refurbished IT kaufen?",
-        "subtitle": "Geprüfte Geräte aus dem evig Shop — lokal, transparent und sofort einsatzbereit.",
-        "primaryLabel": "Zum Shop"
-      },
-      "repair": {
-        "label": "02 / REPARATUR",
-        "title": "Computer kaputt?",
-        "subtitle": "Techniker und Werkstätten in deiner Nähe helfen — oder biete selbst Reparaturen an.",
-        "primaryLabel": "Techniker finden"
-      },
-      "learn": {
-        "label": "03 / WORKSHOPS",
-        "title": "Etwas Neues lernen?",
-        "subtitle": "Praxisnahe Workshops zu Linux, Hardware-Reparatur, Programmierung und KI.",
-        "primaryLabel": "Workshops ansehen"
-      }
     },
     "community": {
       "eyebrow": "MITMACHEN",
@@ -402,11 +379,11 @@
       }
     },
     "finalCta": {
-      "eyebrow": "BEREIT?",
-      "heading": "Brauchst du ein Gerät, das länger hält?",
-      "subtitle": "Im Shop findest du geprüfte refurbished IT. Wenn etwas kaputt ist, führt dich die Reparatur-Suche zu passenden Technikern und Werkstätten.",
-      "button": "Zum Shop",
-      "note": "Geräte spenden bleibt möglich unter Mitmachen."
+      "eyebrow": "ANFANGEN",
+      "heading": "Der günstigste Zugang zu KI ist ein gutes gebrauchtes Gerät",
+      "subtitle": "Ein Notebook, das jemand geprüft und richtig eingerichtet hat, kann am Tag der Übergabe das, wofür du es geholt hast — ohne neu gekauft werden zu müssen.",
+      "button": "Geräte ansehen",
+      "note": "Etwas ist kaputt? Technikerinnen und Techniker in der Nähe findest du über die IT-Hilfe."
     },
     "jsonld": {
       "description": "Bezahlbarer Zugang zu KI und Robotik: geprüfte gebrauchte Hardware, Reparatur und IT-Hilfe, Linux und offene Software, Weiterbildung und Begleitung von Organisationen.",
