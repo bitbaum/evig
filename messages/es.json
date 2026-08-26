@@ -4280,13 +4280,29 @@
         "clearFilters": "Restablecer filtros"
       },
       "emptyAll": {
-        "title": "No hay talleres programados en este momento",
-        "subtitle": "¡Vuelve pronto!"
+        "title": "Todavía no hay ninguna fecha programada",
+        "subtitle": "El programa nace de las propuestas. Propón un taller: un tema que quieras aprender o un curso que quieras impartir. Lo revisamos y lo publicamos en el calendario.",
+        "cta": "Proponer un taller"
       },
       "cta": {
         "title": "¿Quieres proponer un taller?",
         "subtitle": "¿Tienes una idea para un taller? Nos encantan las propuestas de nuevos temas y contenidos.",
         "button": "Proponer taller"
+      },
+      "meanwhile": {
+        "eyebrow": "YA DISPONIBLE",
+        "title": "Sin fecha no significa sin nada que aprender",
+        "subtitle": "Dos cosas que puedes usar ahora mismo, ambas mantenidas por nosotros y gratuitas.",
+        "openSource": {
+          "title": "Alternativas de código abierto",
+          "body": "43 programas libres que sustituyen software caro, cada uno con su madurez y el esfuerzo que exige la migración.",
+          "cta": "Explorar las alternativas"
+        },
+        "linux": {
+          "title": "Configurar Linux",
+          "body": "Qué distribución encaja con cada equipo y cómo volver a hacer rápido un portátil antiguo.",
+          "cta": "Leer la guía"
+        }
       }
     },
     "detail": {

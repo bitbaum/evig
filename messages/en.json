@@ -1832,13 +1832,29 @@
         "clearFilters": "Reset filters"
       },
       "emptyAll": {
-        "title": "No workshops scheduled at the moment",
-        "subtitle": "Check back soon!"
+        "title": "No date is scheduled yet",
+        "subtitle": "The programme grows out of proposals. Propose a workshop — either a topic you want to learn, or a course you would like to teach. We review it and put it on the calendar.",
+        "cta": "Propose a workshop"
       },
       "cta": {
         "title": "Want to propose a workshop?",
         "subtitle": "Have an idea for a workshop? We welcome your suggestions for new topics and content.",
         "button": "Propose a workshop"
+      },
+      "meanwhile": {
+        "eyebrow": "AVAILABLE ALREADY",
+        "title": "No date does not mean nothing to learn",
+        "subtitle": "Two things you can use right now — both maintained by us, both free.",
+        "openSource": {
+          "title": "Open-source alternatives",
+          "body": "43 free programs that replace expensive software, each with how mature it is and how much work the switch takes.",
+          "cta": "Browse the alternatives"
+        },
+        "linux": {
+          "title": "Set up Linux",
+          "body": "Which distribution suits which machine, and how to make an older laptop fast again.",
+          "cta": "Read the guide"
+        }
       }
     },
     "detail": {

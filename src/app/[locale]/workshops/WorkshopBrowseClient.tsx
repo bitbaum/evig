@@ -37,6 +37,19 @@ interface WorkshopBrowseClientProps {
   workshops: WorkshopWithInstances[]
 }
 
+/**
+ * What evig can teach you TODAY, shown when nothing is scheduled.
+ *
+ * Structure here, strings in messages under `workshops.browse.meanwhile.<id>`,
+ * paired by the stable id — the same rule the divisions and pillars follow.
+ * These are the only two teaching assets evig actually owns right now; do not
+ * add a third here unless the page behind it is real.
+ */
+const MEANWHILE_LINKS = [
+  { id: 'openSource', href: '/services/open-source-solutions' },
+  { id: 'linux', href: '/services/linux-open-source' },
+] as const
+
 export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClientProps) {
   const t = useTranslations('workshops.browse')
   const tCat = useTranslations('workshops.categories')
@@ -282,29 +295,80 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
             })}
           </div>
         ) : (
-          <div className="text-center py-12">
-            <BookOpen className="w-16 h-16 text-text-muted dark:text-text-secondary mx-auto mb-4" />
-            <Heading level={3} className="text-xl font-semibold text-text-primary mb-2">
-              {categoryFilter !== 'all' || levelFilter !== 'all'
-                ? t('emptyFiltered.title')
-                : t('emptyAll.title')}
-            </Heading>
-            <p className="text-text-secondary mb-4">
-              {categoryFilter !== 'all' || levelFilter !== 'all'
-                ? t('emptyFiltered.subtitle')
-                : t('emptyAll.subtitle')}
-            </p>
-            {(categoryFilter !== 'all' || levelFilter !== 'all') && (
-              <Button
-                variant="ghost"
-                onClick={() => {
-                  setCategoryFilter('all')
-                  setLevelFilter('all')
-                }}
-                className="text-action hover:text-action font-medium"
-              >
-                {t('emptyFiltered.clearFilters')}
-              </Button>
+          <div className="py-12">
+            <div className="text-center">
+              <BookOpen className="w-16 h-16 text-text-muted dark:text-text-secondary mx-auto mb-4" />
+              <Heading level={3} className="text-xl font-semibold text-text-primary mb-2">
+                {categoryFilter !== 'all' || levelFilter !== 'all'
+                  ? t('emptyFiltered.title')
+                  : t('emptyAll.title')}
+              </Heading>
+              <p className="text-text-secondary mb-4 mx-auto max-w-2xl">
+                {categoryFilter !== 'all' || levelFilter !== 'all'
+                  ? t('emptyFiltered.subtitle')
+                  : t('emptyAll.subtitle')}
+              </p>
+              {categoryFilter !== 'all' || levelFilter !== 'all' ? (
+                <Button
+                  variant="ghost"
+                  onClick={() => {
+                    setCategoryFilter('all')
+                    setLevelFilter('all')
+                  }}
+                  className="text-action hover:text-action font-medium"
+                >
+                  {t('emptyFiltered.clearFilters')}
+                </Button>
+              ) : (
+                // The proposal pipeline is real and complete — propose, an
+                // admin approves, and the approve route inserts the workshop
+                // AND a scheduled instance, which lands on this page. Saying
+                // "Schau bald wieder vorbei" here told people to wait for
+                // something they could start themselves, with a working
+                // "Workshop vorschlagen" button directly above it.
+                <Link href="/workshops/propose" className="ui-public-cta mt-2 inline-flex items-center gap-2">
+                  {t('emptyAll.cta')}
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              )}
+            </div>
+
+            {/* Nothing scheduled is not the same as nothing to learn.
+                This page is where pillar 4 (retraining) sends people, and it
+                answered them with "Schau bald wieder vorbei!" — a dead end on
+                a core promise. These are the two teaching assets evig owns
+                today and can hand over immediately: a 43-entry open-source
+                alternatives registry and a Linux setup guide with a distro
+                matrix. Shown only when the calendar is empty; once workshops
+                exist, the workshops are the answer. */}
+            {categoryFilter === 'all' && levelFilter === 'all' && (
+              <div className="mt-14 border-t border-subtle pt-14">
+                <div className="mx-auto max-w-2xl text-center">
+                  <Eyebrow as="div">{t('meanwhile.eyebrow')}</Eyebrow>
+                  <Heading level={3} className="ui-public-display-md mt-3">
+                    {t('meanwhile.title')}
+                  </Heading>
+                  <p className="ui-public-section-lede mt-4 mx-auto">
+                    {t('meanwhile.subtitle')}
+                  </p>
+                </div>
+
+                <div className="mt-10 grid gap-4 md:grid-cols-2">
+                  {MEANWHILE_LINKS.map((item) => (
+                    <Link key={item.id} href={item.href} className="ui-public-card group">
+                      <Heading level={4} className="ui-public-card-title">
+                        {t(`meanwhile.${item.id}.title` as never)}
+                      </Heading>
+                      <p className="ui-public-card-body">
+                        {t(`meanwhile.${item.id}.body` as never)}
+                      </p>
+                      <span className="ui-public-card-meta inline-flex items-center gap-1 group-hover:text-text-primary transition-colors">
+                        {t(`meanwhile.${item.id}.cta` as never)} →
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
             )}
           </div>
         )}

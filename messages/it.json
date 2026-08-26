@@ -4280,13 +4280,29 @@
         "clearFilters": "Reimposta filtri"
       },
       "emptyAll": {
-        "title": "Al momento non ci sono workshop in programma",
-        "subtitle": "Torna presto!"
+        "title": "Non è ancora fissata nessuna data",
+        "subtitle": "Il programma nasce dalle proposte. Proponi un laboratorio: un tema che vuoi imparare, o un corso che vorresti tenere tu. Lo esaminiamo e lo mettiamo in calendario.",
+        "cta": "Proporre un laboratorio"
       },
       "cta": {
         "title": "Vuoi proporre un workshop?",
         "subtitle": "Hai un'idea per un workshop? Siamo felici di ricevere i tuoi suggerimenti su nuovi temi e contenuti.",
         "button": "Proponi un workshop"
+      },
+      "meanwhile": {
+        "eyebrow": "GIÀ DISPONIBILE",
+        "title": "Nessuna data non significa niente da imparare",
+        "subtitle": "Due cose che puoi usare subito, entrambe curate da noi e gratuite.",
+        "openSource": {
+          "title": "Alternative open source",
+          "body": "43 programmi liberi che sostituiscono software costoso, ognuno con la sua maturità e quanto lavoro richiede il passaggio.",
+          "cta": "Sfoglia le alternative"
+        },
+        "linux": {
+          "title": "Configurare Linux",
+          "body": "Quale distribuzione si adatta a quale macchina e come rendere di nuovo veloce un portatile datato.",
+          "cta": "Leggi la guida"
+        }
       }
     },
     "detail": {

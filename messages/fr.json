@@ -1831,13 +1831,29 @@
         "clearFilters": "Réinitialiser les filtres"
       },
       "emptyAll": {
-        "title": "Aucun atelier planifié actuellement",
-        "subtitle": "Revenez bientôt!"
+        "title": "Aucune date n'est encore programmée",
+        "subtitle": "Le programme naît des propositions. Proposez un atelier : un sujet que vous voulez apprendre, ou un cours que vous aimeriez donner. Nous l'examinons et le mettons au calendrier.",
+        "cta": "Proposer un atelier"
       },
       "cta": {
         "title": "Proposer un atelier?",
         "subtitle": "Vous avez une idée d'atelier? Nous sommes ravis de recevoir vos suggestions de nouveaux thèmes et contenus.",
         "button": "Proposer un atelier"
+      },
+      "meanwhile": {
+        "eyebrow": "DÉJÀ DISPONIBLE",
+        "title": "Pas de date ne veut pas dire rien à apprendre",
+        "subtitle": "Deux choses utilisables tout de suite — toutes deux entretenues par nous, toutes deux gratuites.",
+        "openSource": {
+          "title": "Alternatives open source",
+          "body": "43 logiciels libres qui remplacent des logiciels coûteux, avec leur maturité et l'effort que demande la migration.",
+          "cta": "Parcourir les alternatives"
+        },
+        "linux": {
+          "title": "Installer Linux",
+          "body": "Quelle distribution convient à quelle machine, et comment rendre un portable ancien à nouveau rapide.",
+          "cta": "Lire le guide"
+        }
       }
     },
     "detail": {

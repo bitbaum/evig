@@ -1832,13 +1832,29 @@
         "clearFilters": "Filter zurücksetzen"
       },
       "emptyAll": {
-        "title": "Aktuell sind keine Workshops geplant",
-        "subtitle": "Schau bald wieder vorbei!"
+        "title": "Noch ist kein Termin ausgeschrieben",
+        "subtitle": "Das Programm entsteht aus Vorschlägen. Schlag einen Workshop vor — als Thema, das du lernen willst, oder als Kurs, den du selbst geben möchtest. Wir schauen ihn an und schreiben ihn aus.",
+        "cta": "Workshop vorschlagen"
       },
       "cta": {
         "title": "Workshop vorschlagen?",
         "subtitle": "Hast du eine Idee für einen Workshop? Wir freuen uns über deine Vorschläge für neue Themen und Inhalte.",
         "button": "Workshop vorschlagen"
+      },
+      "meanwhile": {
+        "eyebrow": "SCHON JETZT VERFÜGBAR",
+        "title": "Kein Termin heisst nicht: nichts zu lernen",
+        "subtitle": "Zwei Dinge kannst du sofort nutzen — beide von uns gepflegt, beide kostenlos.",
+        "openSource": {
+          "title": "Open-Source-Alternativen",
+          "body": "43 freie Programme, die teure Software ersetzen — mit Einschätzung, wie ausgereift sie sind und wie aufwendig der Umstieg ist.",
+          "cta": "Alternativen durchsuchen"
+        },
+        "linux": {
+          "title": "Linux einrichten",
+          "body": "Welche Distribution zu welchem Gerät passt, und wie du ein älteres Notebook wieder schnell bekommst.",
+          "cta": "Zur Anleitung"
+        }
       }
     },
     "detail": {
