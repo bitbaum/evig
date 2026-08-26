@@ -97,9 +97,8 @@ export default function ServicesPage() {
 
   // Category labels live in services.page (t) to avoid dynamic-key type issues
   const categoryLabels: Record<ServiceCategoryKey, string> = {
-    hardware: t('categoryLabels.hardware'),
     software: t('categoryLabels.software'),
-    soon: t('categoryLabels.soon'),
+    organisations: t('categoryLabels.organisations'),
   }
 
   // Use .raw() with `as never` to access dynamic service entry keys

@@ -4853,506 +4853,6 @@
       "snippet": "Fraunhofer Austria × refurbed: Ökobilanz-Berechnungsmodell, ISO 14040/44-verifiz…"
     },
     {
-      "file": "src/config/community.ts",
-      "line": 60,
-      "snippet": "Schliesse dich unserem Team engagierter Freiwilliger an. Keine Vorerfahrung erfo…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 64,
-      "snippet": "Neue Fähigkeiten erlernen"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 73,
-      "snippet": "Wenn du Erfahrung mit Open-Source-Software, Hardware oder Elektronik hast, würde…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 79,
-      "snippet": "Neue Lösungen entwickeln"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 86,
-      "snippet": "Wir bieten Praktikumsmöglichkeiten für diejenigen, die Erfahrungen in Technologi…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 91,
-      "snippet": "Mentoring-Möglichkeiten"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 94,
-      "snippet": "Für Praktikum bewerben"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 99,
-      "snippet": "Wir arbeiten mit Institutionen zusammen, um Arbeitsintegrations-möglichkeiten fü…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 102,
-      "snippet": "Fähigkeitsentwicklung"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 104,
-      "snippet": "Professionelle Unterstützung"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 112,
-      "snippet": "Wir arbeiten mit Bildungseinrichtungen und Organisationen zusammen, um sinnvolle…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 116,
-      "snippet": "Praktikumsplätze"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 118,
-      "snippet": "Nachhaltige Lösungen"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 125,
-      "snippet": "Unterstütze unsere Mission, Technologie nachhaltig und für alle zugänglich zu ma…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 128,
-      "snippet": "Nachhaltige Technologie unterstützen"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 130,
-      "snippet": "Community-Programme ermöglichen"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 131,
-      "snippet": "Technologie zugänglich machen"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 138,
-      "snippet": "Werde offizielles Mitglied des Vereins und übernimm Mitverantwortung. Mitglieder…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 143,
-      "snippet": "Jahresbeitrag ${MEMBERSHIP.currency} ${MEMBERSHIP.fees.regular} (ermässigt ${MEM…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 144,
-      "snippet": "Finanzielle Unterstützung der Mission"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 154,
-      "snippet": "Verein für berufliche und soziale Integration Bezirk Uster"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 158,
-      "snippet": "Arbeitsintegrationsstelle der Gemeinde Rüti"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 166,
-      "snippet": "AOZ (Asylorganisation Zürich)"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 175,
-      "snippet": "Werde Teil einer Gemeinschaft, die Technologie nachhaltig und für alle zugänglic…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 179,
-      "snippet": "Bei evig arbeiten wir daran, Technologie zugänglich und nachhaltig zu machen, wä…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 183,
-      "snippet": "Hast du Fragen oder möchtest du mehr erfahren? Wir sind da, um dir beim nächsten…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 193,
-      "snippet": "Bei evig glauben wir, dass jeder Zugang zu Technologie und den Fähigkeiten haben…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 202,
-      "snippet": "Neue Fähigkeiten erlernen"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 203,
-      "snippet": "Entwickle technische und soziale Fähigkeiten durch unsere Schulungsprogramme und…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 208,
-      "snippet": "Bewirke einen echten Unterschied in deiner Gemeinschaft, indem du dabei hilfst, …"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 213,
-      "snippet": "Werde Teil eines vielfältigen und leidenschaftlichen Teams, das auf ein gemeinsa…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 223,
-      "snippet": "Unsere Gemeinschaftsinitiativen unterstützen"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 232,
-      "snippet": "Regelmässige und gelegentliche Möglichkeiten"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 240,
-      "snippet": "Mach dir keine Sorgen, wenn du keine technischen Erfahrungen hast. Wir bieten al…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 244,
-      "snippet": "Als Freiwillige/r wirst du Teil einer Bewegung, die Technologie nachhaltiger und…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 253,
-      "snippet": "Deine Unterstützung ermöglicht es uns, unsere Mission fortzusetzen, Technologie …"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 258,
-      "snippet": "Helfen Sie, Elektroschrott zu reduzieren und nachhaltige Technologiepraktiken zu…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 262,
-      "snippet": "Gemeinschaftsunterstützung"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 263,
-      "snippet": "Ermögliche Zugang zu Technologie für diejenigen, die sie am meisten benötigen."
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 268,
-      "snippet": "Unterstütze unsere Bildungsprogramme und Fähigkeitsentwicklungsinitiativen."
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 273,
-      "snippet": "Trage zum Aufbau eines nachhaltigeren Technologie-Ökosystems bei."
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 279,
-      "snippet": "Spendmöglichkeiten"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 285,
-      "snippet": "Vermächtnisspenden"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 293,
-      "snippet": "Öffentlichkeitsarbeit in der Gemeinschaft"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 295,
-      "snippet": "Operative Unterstützung"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 302,
-      "snippet": "Unternehmens-Sponsoring-Möglichkeiten"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 311,
-      "snippet": "Wir verpflichten uns, deine Spenden effektiv und transparent zu verwenden. Du er…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 315,
-      "snippet": "Deine Grosszügigkeit macht unsere Arbeit möglich. Gemeinsam können wir eine nach…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 324,
-      "snippet": "Wir suchen immer technische Experten, die unsere Leidenschaft für nachhaltige Te…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 329,
-      "snippet": "Trage zu unseren Open-Source-Projekten bei und hilf, unsere Software-Lösungen zu…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 334,
-      "snippet": "Arbeite an Hardware-Projekten, die Technologie nachhaltiger und zugänglicher mac…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 375,
-      "snippet": "Zusammenarbeit mit einem vielfältigen Expertenteam"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 377,
-      "snippet": "Möglichkeiten zur Führung und Betreuung anderer"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 378,
-      "snippet": "Flexible Beitragsmöglichkeiten"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 385,
-      "snippet": "Wir glauben an die Kraft von Open-Source-Software und -Hardware. Als technischer…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 393,
-      "snippet": "Über unser Praktikumsprogramm"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 394,
-      "snippet": "Unser Praktikumsprogramm bietet eine einzigartige Gelegenheit, praktische Erfahr…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 404,
-      "snippet": "Lerne von erfahrenen Mentoren und entwickle wertvolle Fähigkeiten."
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 409,
-      "snippet": "Arbeite mit einem vielfältigen Team von Fachleuten und Freiwilligen."
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 413,
-      "snippet": "Lernmöglichkeiten"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 420,
-      "snippet": "Verfügbare Positionen"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 436,
-      "snippet": "Gemeinschaftsengagement und Öffentlichkeitsarbeit"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 444,
-      "snippet": "Leidenschaft für Technologie und Nachhaltigkeit haben"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 445,
-      "snippet": "Sich für die Programmdauer verpflichten können"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 446,
-      "snippet": "Grundlegende Computerfähigkeiten haben"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 454,
-      "snippet": "Wir verstehen, dass Studenten und Berufstätige unterschiedliche Zeitpläne haben.…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 463,
-      "snippet": "Bei evig glauben wir an die Kraft der Zusammenarbeit, um sinnvolle Veränderungen…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 468,
-      "snippet": "Verstärke die Wirkung deiner Organisation durch gemeinsame Initiativen."
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 478,
-      "snippet": "Zugang zu geteilten Ressourcen und Expertise für grössere Effizienz."
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 483,
-      "snippet": "Entwickle innovative Lösungen durch gemeinsame Anstrengungen."
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 493,
-      "snippet": "Allianzen mit gemeinnützigen Organisationen"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 504,
-      "snippet": "Gemeinschafts-Öffentlichkeitsprogramme"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 512,
-      "snippet": "Wir verstehen, dass jede Organisation einzigartige Bedürfnisse und Ziele hat. Un…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 521,
-      "snippet": "Viele Menschen — ältere Personen, Geflüchtete, Menschen mit wenig Erfahrung — kä…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 526,
-      "snippet": "Dein IT-Wissen wird gebraucht — nicht in einem Büro, sondern für Menschen in dei…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 536,
-      "snippet": "Du wirst Teil eines Netzwerks aus Freiwilligen, die alle dasselbe Ziel haben: Te…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 541,
-      "snippet": "Erkläre, dokumentiere, löse Probleme in der Praxis — das schärft deine Fähigkeit…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 549,
-      "snippet": "Software-Probleme diagnostizieren und lösen (Windows, Linux, macOS)"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 550,
-      "snippet": "Geräte einrichten und konfigurieren"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 551,
-      "snippet": "Linux-Installationen auf aufbereiteten Laptops durchführen"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 552,
-      "snippet": "Kurzeinführungen zu Computer, Internet und Datensicherheit geben"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 553,
-      "snippet": "Auf Anfrage Hausbesuche für mobilitätseingeschränkte Personen"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 559,
-      "snippet": "Grundkenntnisse in IT — kein Abschluss, kein Zertifikat nötig"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 560,
-      "snippet": "Freude daran, Dinge einfach zu erklären"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 561,
-      "snippet": "Geduld und Offenheit gegenüber Menschen mit wenig Technikerfahrung"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 569,
-      "snippet": "Du musst nicht alles wissen. Wir suchen Menschen, die gerne helfen und etwas erk…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 577,
-      "snippet": "Über unser Programm"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 578,
-      "snippet": "Unser Arbeitsreintegrationsprogramm ist darauf ausgelegt, Menschen dabei zu helf…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 582,
-      "snippet": "Fähigkeitsentwicklung"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 583,
-      "snippet": "Lerne praktische Fähigkeiten in Technologie und Nachhaltigkeit."
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 592,
-      "snippet": "Unterstützendes Umfeld"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 593,
-      "snippet": "Arbeite in einem unterstützenden und verständnisvollen Team."
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 608,
-      "snippet": "Individuelle Unterstützung und Betreuung"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 610,
-      "snippet": "Schrittweise Arbeitsbelastungserhöhung"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 624,
-      "snippet": "Unterstützungsdienstleistungen"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 626,
-      "snippet": "Regelmässige Check-ins und Fortschrittsüberprüfungen"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 629,
-      "snippet": "Karriereführung und -planung"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 630,
-      "snippet": "Networking-Möglichkeiten"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 637,
-      "snippet": "Wir verstehen, dass jeder Weg einzigartig ist. Unser Programm ist flexibel und k…"
-    },
-    {
-      "file": "src/config/community.ts",
-      "line": 641,
-      "snippet": "Wir wahren während des gesamten Programms strenge Vertraulichkeit. Deine Privats…"
-    },
-    {
       "file": "src/config/content-audience.ts",
       "line": 21,
       "snippet": "Öffentlich — für alle"
@@ -7094,22 +6594,17 @@
     },
     {
       "file": "src/config/navigation.tsx",
-      "line": 55,
+      "line": 62,
       "snippet": "Über uns"
     },
     {
       "file": "src/config/navigation.tsx",
-      "line": 119,
-      "snippet": "Reparaturbonus Zürich"
-    },
-    {
-      "file": "src/config/navigation.tsx",
-      "line": 218,
+      "line": 223,
       "snippet": "Unterstützen"
     },
     {
       "file": "src/config/navigation.tsx",
-      "line": 230,
+      "line": 235,
       "snippet": "Geräte spenden"
     },
     {
@@ -9354,42 +8849,42 @@
     },
     {
       "file": "src/config/workshops.ts",
-      "line": 59,
+      "line": 68,
       "snippet": "Neue Fähigkeiten für die Arbeitswelt von morgen. Werde 10x produktiver mit AI-To…"
     },
     {
       "file": "src/config/workshops.ts",
-      "line": 75,
-      "snippet": "Computer reparieren, aufrüsten und warten. Löten, Diagnose, Vintage-Restauration…"
+      "line": 84,
+      "snippet": "Computer reparieren, aufrüsten und warten. Löten, Diagnose, Fehlersuche."
     },
     {
       "file": "src/config/workshops.ts",
-      "line": 99,
+      "line": 108,
       "snippet": "Künstliche Intelligenz verstehen und nutzen. ChatGPT, Automatisierung, AI-Tools."
     },
     {
       "file": "src/config/workshops.ts",
-      "line": 107,
+      "line": 116,
       "snippet": "Kryptowährungen, dezentrale Anwendungen und Blockchain-Technologie."
     },
     {
       "file": "src/config/workshops.ts",
-      "line": 115,
+      "line": 124,
       "snippet": "Online-Sicherheit, Verschlüsselung, Passwort-Management und Privatsphäre."
     },
     {
       "file": "src/config/workshops.ts",
-      "line": 131,
+      "line": 140,
       "snippet": "Grundlegende digitale Kompetenzen für Alltag und Beruf."
     },
     {
       "file": "src/config/workshops.ts",
-      "line": 143,
+      "line": 152,
       "snippet": "Anfänger"
     },
     {
       "file": "src/config/workshops.ts",
-      "line": 207,
+      "line": 216,
       "snippet": "Änderungen erforderlich"
     },
     {

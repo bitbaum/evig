@@ -50,8 +50,6 @@
       "missionHistoryDesc": "Quiénes somos y qué nos impulsa",
       "impact": "Nuestro impacto",
       "impactDesc": "Logros medibles y transparencia",
-      "howItWorks": "Cómo funciona",
-      "howItWorksDesc": "El recorrido de un dispositivo, de la donación a su nueva vida",
       "projects": "Proyectos",
       "projectsDesc": "Nuestras iniciativas",
       "locations": "Ubicaciones",
@@ -60,20 +58,13 @@
       "faqDesc": "Preguntas frecuentes",
       "services": "Servicios",
       "servicesDesc": "Servicios TI profesionales",
-      "hardware": "Hardware",
-      "computerRepair": "Reparación y mejoras",
-      "computerRepairDesc": "Devolver la vida a tu ordenador",
-      "dataRecovery": "Recuperación de datos",
-      "dataRecoveryDesc": "Respaldar y transferir datos",
-      "hardwareRecycling": "Reciclaje de hardware",
-      "hardwareRecyclingDesc": "Eliminación responsable",
       "software": "Software",
       "linuxOpenSource": "Linux y Open Source",
       "linuxOpenSourceDesc": "Instalación y soporte",
       "webDesign": "Desarrollo web",
       "webDesignDesc": "Sitios web con Open Source",
       "openSourceSolutions": "Soluciones Open Source",
-      "openSourceSolutionsDesc": "Consultoría e implementación",
+      "openSourceSolutionsDesc": "43 alternativas al software caro",
       "marketplace": "Mercado",
       "marketplaceDesc": "Comprar, vender y ayuda TI",
       "buyDevices": "Comprar dispositivos",
@@ -152,15 +143,20 @@
       "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point",
       "transparency": "Transparencia",
       "transparencyDesc": "Finanzas, cifras clave y métodos de cálculo",
-      "reparaturbonus": "Bono de reparación Zúrich",
-      "reparaturbonusDesc": "Hasta 100 francos para reparaciones — así funciona",
       "press": "Prensa",
       "pressDesc": "Cobertura mediática",
       "aiDivision": "Acceso a la inteligencia artificial — el asistente y el hardware para moverlo",
       "vision": "Visión",
       "visionDesc": "Para qué existe evig, en toda su extensión",
       "resources": "Recursos",
-      "resourcesDesc": "Herramientas, distribuciones y documentación seleccionadas"
+      "resourcesDesc": "Herramientas, distribuciones y documentación seleccionadas",
+      "whoWeAre": "Quiénes somos",
+      "trust": "Confianza",
+      "sectionAiAccess": "Acceso a la IA",
+      "aiDivisionLink": "evig ai",
+      "aiAdoption": "IA y robótica",
+      "aiAdoptionDesc": "Llevarla al trabajo",
+      "organisations": "Para organizaciones"
     },
     "language": "Idioma",
     "missionHistory": "Misión & Historia",
@@ -3220,9 +3216,9 @@
   },
   "services": {
     "meta": {
-      "title": "Servicios | Servicios TI en Zúrich",
-      "description": "Reparaciones de ordenadores profesionales, desarrollo web, recuperación de datos, soporte Linux y reciclaje de hardware en Zúrich.",
-      "layoutTitle": "Reparación de Computadoras & Servicios TI",
+      "title": "Für Organisationen — KI, Robotik und offene Software",
+      "description": "Wir bringen KI und Robotik in den Betrieb, bauen Weboberflächen mit offener Technik und richten Linux ein. Für Organisationen, die etwas ändern müssen.",
+      "layoutTitle": "Für Organisationen",
       "serviceDetailTitle": "Detalles del servicio",
       "serviceDetailDesc": "Servicios de TI profesionales de evig en Zúrich."
     },
@@ -3249,9 +3245,8 @@
       "bookingFailed": "Error al reservar la cita",
       "networkError": "Error de red. Por favor, inténtalo de nuevo.",
       "categoryLabels": {
-        "hardware": "Servicios de Hardware",
-        "software": "Soluciones de Software",
-        "soon": "Próximamente"
+        "software": "Linux y software abierto",
+        "organisations": "Para organizaciones"
       },
       "filterByCategory": "Filtrar por categoría",
       "ctaEyebrow": "¿LISTO?",
@@ -3613,75 +3608,6 @@
         "allServices": "Descubrir todos los servicios"
       }
     },
-    "hardwareRecycling": {
-      "meta": {
-        "title": "Reciclaje de hardware",
-        "description": "Reciclaje responsable y reacondicionamiento de equipos informáticos. Borrado seguro de datos, servicio de recogida gratuito y soluciones TI sostenibles.",
-        "ogTitle": "Reciclaje de hardware",
-        "ogDescription": "Soluciones TI sostenibles mediante el reciclaje y reacondicionamiento responsable de equipos informáticos."
-      },
-      "hero": {
-        "title": "Reciclaje de hardware",
-        "subtitle": "Servicios responsables de reciclaje y reacondicionamiento de equipos informáticos. Ayudamos a reducir los residuos electrónicos garantizando el borrado seguro de datos."
-      },
-      "features": [
-        {
-          "title": "Borrado seguro de datos",
-          "description": "Borrado completo y seguro de todos los datos de los dispositivos."
-        },
-        {
-          "title": "Reacondicionamiento de dispositivos",
-          "description": "Reacondicionamiento profesional de equipos informáticos."
-        },
-        {
-          "title": "Reciclaje de componentes",
-          "description": "Reciclaje responsable de componentes electrónicos."
-        },
-        {
-          "title": "Servicio de recogida gratuito",
-          "description": "Servicio de recogida conveniente para tu equipo antiguo."
-        }
-      ],
-      "pricing": {
-        "heading": "Precios",
-        "subtitle": "Sostenible y asequible",
-        "badge": "Mejor opción",
-        "price": "Gratis",
-        "forMostItems": "para la mayoría de artículos",
-        "features": [
-          "Servicio de recogida gratuito",
-          "Borrado seguro de datos",
-          "Responsable con el medio ambiente",
-          "Certificado de destrucción"
-        ],
-        "cta": "¿Listo para empezar?"
-      },
-      "impact": {
-        "heading": "Responsabilidad ambiental",
-        "subtitle": "Cada dispositivo reciclado ayuda a proteger nuestro planeta",
-        "dataSecurity": "Borrado seguro de datos",
-        "sustainableProcesses": "Procesos sostenibles",
-        "reducedEwaste": "Reducción de residuos electrónicos"
-      },
-      "contact": {
-        "heading": "Contáctenos hoy",
-        "subtitle": "Para obtener más información sobre nuestros servicios de reciclaje de hardware",
-        "locations": "Ubicaciones",
-        "store": "Venta",
-        "warehouse": "Almacén",
-        "contactInfo": "Contacto",
-        "phone": "Teléfono",
-        "hours": "Horario de apertura",
-        "monday": "Lunes",
-        "weekdays": "Martes - Viernes"
-      },
-      "cta": {
-        "heading": "¿Listo para empezar?",
-        "body": "Contáctenos hoy para obtener más información sobre nuestros servicios de reciclaje de hardware.",
-        "contact": "Contacto",
-        "back": "Volver a Servicios"
-      }
-    },
     "linuxOpenSource": {
       "meta": {
         "title": "Linux & Open Source",
@@ -3971,275 +3897,7 @@
         "workshopLink": "Ver taller"
       }
     },
-    "repair": {
-      "meta": {
-        "title": "Reparaciones y mejoras de ordenadores",
-        "description": "Reparaciones y mejoras informáticas profesionales. Nos especializamos en lo que otros no pueden reparar — incluyendo reparaciones de placas base y fallos a nivel de componentes."
-      },
-      "hero": {
-        "title": "Reparaciones y mejoras de ordenadores",
-        "subtitle": "Reparaciones en las que puedes confiar",
-        "description": "Combinamos experiencia técnica con acción sostenible para prolongar la vida útil de tus dispositivos. Nuestros servicios de reparación se centran en lo que otros abandonan — ahorrando dinero y reduciendo residuos electrónicos."
-      },
-      "features": [
-        {
-          "title": "Reparaciones a nivel de componentes",
-          "description": "No solo cambiamos piezas — las reparamos. Nuestros técnicos pueden arreglar placas base, fuentes de alimentación y otros componentes a nivel de circuito."
-        },
-        {
-          "title": "Mejoras de hardware",
-          "description": "Prolonga la vida de tu ordenador con mejoras específicas. Te ayudamos a seleccionar e instalar los componentes adecuados."
-        },
-        {
-          "title": "Servicio de diagnóstico",
-          "description": "Diagnóstico completo para identificar y solucionar problemas rápidamente. Con herramientas profesionales y años de experiencia, damos en el clavo."
-        },
-        {
-          "title": "Servicio exprés",
-          "description": "¿Urgente? Para muchos problemas comunes ofrecemos reparaciones el mismo día. Trae el dispositivo durante nuestro horario de apertura."
-        }
-      ],
-      "pricing": {
-        "heading": "Precios",
-        "base": "Desde CHF 70/hora",
-        "details": [
-          "Diagnóstico inicial gratuito",
-          "Sin reparación = sin coste",
-          "Precios transparentes",
-          "Garantía en reparaciones"
-        ]
-      },
-      "processHeading": "Nuestro proceso de reparación",
-      "process": [
-        {
-          "title": "Diagnóstico",
-          "description": "Examinamos tu dispositivo y proporcionamos una evaluación precisa del problema."
-        },
-        {
-          "title": "Presupuesto",
-          "description": "Recibes un presupuesto transparente — sin cargos ocultos."
-        },
-        {
-          "title": "Reparación",
-          "description": "Nuestros técnicos reparan tu dispositivo con piezas de calidad y métodos probados."
-        },
-        {
-          "title": "Prueba",
-          "description": "Todas las reparaciones se prueban a fondo para asegurar que tu dispositivo funcione perfectamente."
-        }
-      ],
-      "cta": {
-        "heading": "¿Quieres reparar tu dispositivo?",
-        "body": "Contáctanos para un diagnóstico gratuito y presupuesto. Te ayudamos a volver a poner en marcha tu dispositivo de forma rápida y asequible.",
-        "contact": "Ponerse en contacto",
-        "allServices": "Todos los servicios"
-      }
-    },
-    "buildComputer": {
-      "meta": {
-        "title": "Ensamblajes de ordenadores sostenibles con IA",
-        "description": "Nuestro sistema de IA escanea redes de socios globales para ensamblar tu ordenador ideal principalmente a partir de componentes usados y reacondicionados."
-      },
-      "hero": {
-        "title": "Ensamblajes de ordenadores sostenibles con IA",
-        "subtitle": "Nuestro revolucionario sistema de IA escanea nuestro inventario y redes de socios globales para ensamblar tu ordenador ideal principalmente a partir de componentes usados y reacondicionados.",
-        "strong": "100% Prioridad piezas usadas • Red de inventario global • Emparejamiento IA inteligente",
-        "badge1": "Economía circular",
-        "badge2": "Red global",
-        "badge3": "Optimizado con IA"
-      },
-      "howItWorks": {
-        "heading": "Cómo funciona nuestro sistema de build con IA",
-        "steps": [
-          {
-            "title": "Análisis de requisitos",
-            "description": "Cuéntanos tu caso de uso, requisitos de rendimiento y preferencias de sostenibilidad"
-          },
-          {
-            "title": "Escaneo de inventario global",
-            "description": "La IA escanea nuestro inventario + redes de socios en toda Europa y más allá"
-          },
-          {
-            "title": "Optimización inteligente",
-            "description": "El algoritmo prioriza piezas usadas, optimizando para rendimiento y sostenibilidad"
-          },
-          {
-            "title": "Ensamblaje & Certificación",
-            "description": "Ensamblaje profesional con nuestra certificación de sostenibilidad \"Revamped\""
-          }
-        ]
-      },
-      "buildTool": {
-        "heading": "Prueba nuestra demo de herramienta de build",
-        "subtitle": "Descubre cómo nuestro sistema de IA recomendaría componentes para tus necesidades específicas",
-        "step1Heading": "¿Para qué usarás tu ordenador?",
-        "performanceHeading": "Requisitos de rendimiento",
-        "budgetLabel": "Rango de presupuesto (CHF)",
-        "budgetPlaceholder": "Seleccionar rango de presupuesto",
-        "specificLabel": "Requisitos específicos (opcional)",
-        "specificPlaceholder": "¿Tienes necesidades especiales? (p.ej. varios monitores, gaming VR, requisitos de software específicos)",
-        "nextButton": "Continuar al análisis",
-        "step2Heading": "Análisis de inventario con IA",
-        "requirementsSummary": "Resumen de tus requisitos:",
-        "useCaseLabel": "Caso de uso",
-        "performanceLabel": "Rendimiento",
-        "budgetSummaryLabel": "Presupuesto",
-        "sustainabilityLabel": "Sostenibilidad",
-        "sustainabilityValue": "Alta prioridad",
-        "specialNotesLabel": "Notas especiales",
-        "analyzeDescription": "¿Listo para escanear nuestra red de inventario global y generar tu recomendación de build personalizada?",
-        "backButton": "Volver a editar",
-        "analyzeButton": "Analizar inventario global",
-        "scanningLabel": "🔍 Escaneando redes de inventario...",
-        "scanningLines": [
-          "Verificando almacén de Zúrich (847 componentes)",
-          "Escaneando socios europeos (12.450+ componentes)",
-          "IA optimizando para sostenibilidad + rendimiento",
-          "Calculando rutas y costes de envío"
-        ],
-        "step3Heading": "Tu build optimizado",
-        "sustainableLabel": "% Sostenible",
-        "performanceMatchLabel": "% Coincidencia de rendimiento",
-        "usedPartsLabel": "% Piezas usadas",
-        "componentTypes": {
-          "cpu": "Procesador",
-          "gpu": "Tarjeta gráfica",
-          "ram": "Memoria",
-          "storage": "Almacenamiento"
-        },
-        "conditions": {
-          "used": "Usado",
-          "refurbished": "Reacondicionado",
-          "new": "Nuevo"
-        },
-        "inStock": "en stock",
-        "deliveryTime": "aprox. 3-5 días",
-        "totalCost": "Coste total del build:",
-        "extras": "+ Ensamblaje & Prueba: CHF 120 | + Envío: CHF 45 | + Certificación \"Revamped\": Incluida",
-        "changeRequirements": "Cambiar requisitos",
-        "orderBuild": "Pedir este build",
-        "environmentHeading": "Impacto ambiental",
-        "co2Saved": "CO₂ ahorrado",
-        "co2Value": "~85kg comparado con un build nuevo",
-        "reusedLabel": "Componentes reutilizados",
-        "reusedValue": "4 de 4 partes principales",
-        "circularLabel": "Economía circular",
-        "circularValue": "Extiende la vida útil del hardware",
-        "browseComponents": "Ver componentes",
-        "resultNote": "Montamos tu equipo con componentes reacondicionados y verificados. Mira las piezas adecuadas en nuestro marketplace o solicita directamente un equipo ya montado.",
-        "sustainabilityNote": "Cada componente reutilizado alarga la vida útil del hardware y ahorra las emisiones de una nueva fabricación."
-      },
-      "features": {
-        "heading": "¿Por qué elegir nuestro sistema de build con IA?",
-        "items": [
-          {
-            "title": "Red de inventario global",
-            "description": "Acceso a miles de componentes usados y reacondicionados en toda Europa y más allá, con seguimiento de stock en tiempo real."
-          },
-          {
-            "title": "Optimización con IA",
-            "description": "Algoritmos inteligentes equilibran rendimiento, sostenibilidad, coste y disponibilidad para encontrar tu combinación de build ideal."
-          },
-          {
-            "title": "Certificación \"Revamped\"",
-            "description": "Cada build recibe nuestra certificación de sostenibilidad, garantizando calidad y apoyando la economía circular."
-          }
-        ]
-      },
-      "cta": {
-        "heading": "¿Listo para construir de forma sostenible?",
-        "body": "Únete a la revolución en la construcción de ordenadores. Obtén un build a medida y sostenible que funcione excelentemente protegiendo nuestro planeta.",
-        "startBuild": "Inicia tu build",
-        "explore": "Explorar todos los servicios"
-      },
-      "useCaseOptions": {
-        "office": {
-          "name": "Oficina & Negocios",
-          "description": "Email, documentos, navegación web, videollamadas"
-        },
-        "creative": {
-          "name": "Trabajo creativo",
-          "description": "Edición de fotos/vídeos, diseño, creación de contenido"
-        },
-        "gaming": {
-          "name": "Gaming",
-          "description": "Juegos modernos, streaming, computación de alto rendimiento"
-        },
-        "development": {
-          "name": "Desarrollo de software",
-          "description": "Programación, pruebas, múltiples VMs, compilación"
-        },
-        "server": {
-          "name": "Servidor/NAS",
-          "description": "Servidor de archivos, servidor multimedia, domótica"
-        },
-        "ai": {
-          "name": "IA/Aprendizaje automático",
-          "description": "Entrenamiento de modelos, procesamiento de datos, cargas de trabajo CUDA"
-        }
-      },
-      "performanceOptions": {
-        "basic": {
-          "name": "Básico",
-          "description": "Tareas ligeras, rendimiento adecuado"
-        },
-        "moderate": {
-          "name": "Moderado",
-          "description": "Rendimiento equilibrado para la mayoría de tareas"
-        },
-        "high": {
-          "name": "Alto",
-          "description": "Alto rendimiento para tareas exigentes"
-        },
-        "extreme": {
-          "name": "Extremo",
-          "description": "Rendimiento máximo, sin compromisos"
-        }
-      },
-      "budgetOptions": {
-        "300-500": "CHF 300-500",
-        "500-800": "CHF 500-800",
-        "800-1200": "CHF 800-1200",
-        "1200+": "CHF 1200+"
-      }
-    },
     "catalog": {
-      "computerRepair": {
-        "title": "Reparación y Mejoras de Ordenadores",
-        "description": "Reparaciones expertas para todo tipo de ordenadores y componentes. Nos especializamos en reparar lo que otros no pueden, incluyendo reparaciones de placas base y arreglos a nivel de componentes.",
-        "features": [
-          "Reparaciones a nivel de componentes",
-          "Mejoras de hardware",
-          "Servicios de diagnóstico",
-          "Evaluación profesional"
-        ],
-        "highlight": "Evaluación profesional requerida",
-        "pricing": "CHF 70/h"
-      },
-      "dataRecovery": {
-        "title": "Recuperación y Transferencia de Datos",
-        "description": "Servicios de transferencia de datos seguros y confiables para todo tipo de medios de almacenamiento. Podemos recuperar datos de dispositivos dañados y transferirlos a soluciones modernas.",
-        "features": [
-          "Transferencia segura de datos",
-          "Recuperación de datos de dispositivos dañados",
-          "Soporte para medios heredados (disquetes, unidades ZIP, MO, SCSI/IDE)",
-          "Seguridad completa de datos"
-        ],
-        "highlight": "Evaluación requerida antes de la recuperación",
-        "pricing": "CHF 70/h"
-      },
-      "hardwareRecycling": {
-        "title": "Reciclaje de Hardware",
-        "description": "Reciclaje y restauración responsable de dispositivos de TI. Damos nueva vida a tus dispositivos antiguos y garantizamos el borrado seguro de datos.",
-        "features": [
-          "Borrado seguro de datos",
-          "Restauración de dispositivos",
-          "Reciclaje de componentes",
-          "Servicio de recogida gratuito"
-        ],
-        "highlight": "Servicio de recogida gratuito disponible",
-        "pricing": "Gratuito para la mayoría de artículos"
-      },
       "webDesign": {
         "title": "Diseño y Desarrollo Web",
         "description": "Servicios profesionales de diseño y desarrollo web con tecnologías modernas de código abierto. Sitios web rápidos y responsivos con Next.js, CMS sin cabeza y prácticas sostenibles.",
@@ -4277,17 +3935,16 @@
         "highlight": "Consulta inicial gratuita",
         "pricing": "CHF 70/h"
       },
-      "buildYourComputer": {
-        "title": "Construye tu Ordenador",
-        "description": "Obtén un ordenador personalizado para tus necesidades específicas, con el apoyo del análisis de IA de nuestro extenso inventario. Obtenemos piezas globalmente y ofrecemos ensamblaje profesional.",
+      "aiAdoption": {
+        "title": "KI & Robotik im Betrieb",
+        "description": "Wir schauen uns die Arbeit an, die tatsächlich getan wird, wählen eine Aufgabe aus und bauen sie mit euch — bis jemand bei euch sie selbst bedienen kann.",
         "features": [
-          "Recomendaciones de construcción con IA",
-          "Red global de obtención de piezas",
-          "Ensamblaje y pruebas profesionales",
-          "Garantía de calidad"
+          "Analyse der tatsächlichen Arbeitsabläufe",
+          "Eine Aufgabe umsetzen statt zehn planen",
+          "Offene Werkzeuge, wo es geht",
+          "Übergabe an euer Team"
         ],
-        "highlight": "Próximamente",
-        "pricing": ""
+        "highlight": "Beginnt mit einem Gespräch"
       }
     },
     "payment": {
@@ -4363,11 +4020,67 @@
     "pricingTitle": "Precios",
     "mediaCostsTitle": "Costes de Medios",
     "processTitle": "Nuestro Proceso",
-    "title": "Servicios",
-    "subtitle": "Lo que podemos hacer por ti",
+    "title": "Para organizaciones",
+    "subtitle": "Lo que hacemos para empresas e instituciones",
     "bookAppointment": "Reservar cita",
     "requestQuote": "Solicitar presupuesto",
-    "priceFrom": "Desde CHF"
+    "priceFrom": "Desde CHF",
+    "aiAdoption": {
+      "meta": {
+        "title": "KI und Robotik im Betrieb",
+        "description": "Für Organisationen, die wissen, dass sich etwas ändern muss, aber nicht, wo man anfängt. Wir schauen uns die Arbeit an und bauen mit."
+      },
+      "hero": {
+        "title": "KI und Robotik in den Betrieb bringen",
+        "lede": "Für Organisationen, die wissen, dass sich etwas ändern muss, aber nicht, wo man anfängt."
+      },
+      "thesis": {
+        "eyebrow": "Warum",
+        "title": "Das Problem ist selten das Modell",
+        "body": "Die meisten Betriebe scheitern nicht daran, dass es die Technik nicht gäbe. Sie scheitern daran, dass niemand Zeit hatte, die eigene Arbeit anzuschauen und zu fragen, welcher Teil davon sich überhaupt lohnt zu automatisieren. Genau da fangen wir an — nicht bei einem Werkzeug, sondern bei dem, was ihr tatsächlich den ganzen Tag macht."
+      },
+      "steps": {
+        "eyebrow": "Wie es abläuft",
+        "heading": "Vier Schritte, keine Folien",
+        "look": {
+          "title": "Hinschauen",
+          "body": "Wir sitzen einen Tag dort, wo die Arbeit passiert, und schreiben auf, was wirklich Zeit frisst. Nicht das, was im Organigramm steht."
+        },
+        "pick": {
+          "title": "Auswählen",
+          "body": "Aus dieser Liste nehmen wir eine Aufgabe: die mit dem besten Verhältnis aus Aufwand und gewonnener Zeit. Eine, nicht zehn."
+        },
+        "build": {
+          "title": "Bauen",
+          "body": "Wir bauen sie mit euch — mit euren Daten, in eurer Umgebung, mit offenen Werkzeugen, wo es geht. Ihr seht jeden Schritt."
+        },
+        "handover": {
+          "title": "Übergeben",
+          "body": "Am Ende kann jemand bei euch das Ding bedienen, ändern und abschalten. Wenn das nicht stimmt, haben wir nichts geliefert, sondern eine Abhängigkeit gebaut."
+        }
+      },
+      "boundary": {
+        "eyebrow": "Ehrliche Grenzen",
+        "heading": "Was das nicht ist",
+        "noMagic": {
+          "title": "Kein Wundermittel",
+          "body": "Manche Arbeit lässt sich nicht automatisieren, und manche sollte man nicht automatisieren. Wir sagen es, wenn wir es sehen."
+        },
+        "noLockIn": {
+          "title": "Keine Abhängigkeit",
+          "body": "Was wir bauen, gehört euch — Code, Daten, Zugänge. Wir bauen nichts, das nur läuft, solange wir da sind."
+        },
+        "noHeadcount": {
+          "title": "Keine grosse Firma",
+          "body": "evig ist klein. Wir nehmen an, was wir wirklich begleiten können, und sagen ab, wenn es nicht passt."
+        }
+      },
+      "cta": {
+        "heading": "Erzähl uns, was Zeit frisst",
+        "body": "Ein Gespräch, kein Angebotsprozess. Wenn wir nicht die Richtigen sind, sagen wir das früh.",
+        "button": "Gespräch vereinbaren"
+      }
+    }
   },
   "shop": {
     "error": {
@@ -4793,7 +4506,7 @@
     "categoryDescriptions": {
       "retraining": "Nuevas habilidades para el mundo laboral del mañana. Sé 10 veces más productivo con herramientas de IA y automatización.",
       "linux": "Sistemas operativos, terminal, administración de servidores y herramientas de código abierto.",
-      "hardware": "Repara, actualiza y mantén ordenadores. Soldadura, diagnóstico, restauración vintage.",
+      "hardware": "Reparar, ampliar y mantener ordenadores. Soldadura, diagnóstico, localización de averías.",
       "development": "Aprende a programar: Python, JavaScript, desarrollo web y más.",
       "web": "Crea sitios web con herramientas modernas: HTML, CSS, React, Next.js.",
       "ai": "Comprende y usa la inteligencia artificial. ChatGPT, automatización, herramientas de IA.",
@@ -6295,47 +6008,6 @@
           "description": "Huella media de CO₂ al producir un nuevo laptop",
           "source": "Circular Computing (estudio con 230 laptops)"
         }
-      }
-    },
-    "communitySpace": {
-      "badge": "Nuestra ubicación",
-      "heading": "Visítanos",
-      "intro": "Nuestra tienda en Zúrich es más que un comercio — es un punto de encuentro para todas las personas interesadas en IT sostenible y Open Source.",
-      "offeringsTitle": "Lo que puedes encontrar con nosotros:",
-      "planRoute": "Planificar ruta",
-      "workshopDesc": "Aprende de los expertos en nuestros talleres y charlas regulares. Para principiantes y avanzados.",
-      "workshopLink": "Programa de talleres",
-      "visionLabel": "Nuestra visión",
-      "visionCta": "Ayúdanos a hacer realidad esta visión.",
-      "supportProject": "Apoyar el proyecto",
-      "locationName": "Tienda evig",
-      "offerings": [
-        "Comprar hardware reacondicionado",
-        "Ver nuestra colección de ordenadores vintage",
-        "Recibir asesoramiento personalizado",
-        "Entregar dispositivos para reparación o donación"
-      ],
-      "workshops": {
-        "title": "Talleres y charlas",
-        "topics": [
-          "Fundamentos de Linux para principiantes",
-          "Software Open Source en el día a día",
-          "IA sostenible y sus límites",
-          "Modelos tecno-económicos alternativos",
-          "Talleres de reparación: laptop, smartphone, etc.",
-          "Historia de la evolución del ordenador"
-        ]
-      },
-      "vision": {
-        "title": "Community Tech Space",
-        "description": "Nuestro sueño es un espacio mayor que sirva como museo, taller y punto de encuentro para la comunidad de la tecnología sostenible.",
-        "features": [
-          "Museo para hardware vintage poco común",
-          "Colección de sintetizadores históricos e instrumentos electrónicos",
-          "Taller abierto para sesiones de reparación",
-          "Sala de eventos para charlas y meetups",
-          "Zona de café para el intercambio de la comunidad"
-        ]
       }
     },
     "messageSidebar": {

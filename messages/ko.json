@@ -50,8 +50,6 @@
       "missionHistoryDesc": "우리가 누구이며 무엇이 우리를 이끄는지",
       "impact": "우리의 영향력",
       "impactDesc": "측정 가능한 성과와 투명성",
-      "howItWorks": "운영 방식",
-      "howItWorksDesc": "기부에서 새로운 사용까지 기기의 여정",
       "projects": "프로젝트",
       "projectsDesc": "우리의 이니셔티브",
       "locations": "위치",
@@ -60,20 +58,13 @@
       "faqDesc": "자주 묻는 질문",
       "services": "서비스",
       "servicesDesc": "전문 IT 서비스",
-      "hardware": "하드웨어",
-      "computerRepair": "수리 & 업그레이드",
-      "computerRepairDesc": "컴퓨터를 다시 정상으로",
-      "dataRecovery": "데이터 복구",
-      "dataRecoveryDesc": "데이터 저장 및 전송",
-      "hardwareRecycling": "하드웨어 재활용",
-      "hardwareRecyclingDesc": "책임감 있는 처리",
       "software": "소프트웨어",
       "linuxOpenSource": "Linux & 오픈 소스",
       "linuxOpenSourceDesc": "설치 및 지원",
       "webDesign": "웹 개발",
       "webDesignDesc": "오픈 소스 기반 웹사이트",
       "openSourceSolutions": "오픈 소스 솔루션",
-      "openSourceSolutionsDesc": "컨설팅 및 구현",
+      "openSourceSolutionsDesc": "비싼 소프트웨어의 대안 43가지",
       "marketplace": "마켓플레이스",
       "marketplaceDesc": "구매, 판매 및 IT 지원",
       "buyDevices": "기기 구매",
@@ -152,15 +143,20 @@
       "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point",
       "transparency": "투명성",
       "transparencyDesc": "재무, 주요 수치, 산정 방법",
-      "reparaturbonus": "취리히 수리 보너스",
-      "reparaturbonusDesc": "수리 비용 최대 100프랑 지원 — 이용 방법 안내",
       "press": "언론",
       "pressDesc": "미디어 보도",
       "aiDivision": "인공지능에 대한 접근 — 어시스턴트와 그것을 돌릴 하드웨어",
       "vision": "비전",
       "visionDesc": "evig가 무엇을 위해 있는지, 전문으로",
       "resources": "자료",
-      "resourcesDesc": "선별한 도구, 배포판, 문서"
+      "resourcesDesc": "선별한 도구, 배포판, 문서",
+      "whoWeAre": "우리는 누구인가",
+      "trust": "신뢰",
+      "sectionAiAccess": "AI 접근",
+      "aiDivisionLink": "evig ai",
+      "aiAdoption": "AI와 로보틱스",
+      "aiAdoptionDesc": "현장에 들이기",
+      "organisations": "조직을 위해"
     },
     "language": "언어",
     "missionHistory": "미션 & 역사",
@@ -3220,9 +3216,9 @@
   },
   "services": {
     "meta": {
-      "title": "서비스 | 취리히 IT 서비스",
-      "description": "취리히에서 전문적인 컴퓨터 수리, 웹 개발, 데이터 복구, Linux 지원, 하드웨어 재활용.",
-      "layoutTitle": "컴퓨터 수리 & IT 서비스",
+      "title": "Für Organisationen — KI, Robotik und offene Software",
+      "description": "Wir bringen KI und Robotik in den Betrieb, bauen Weboberflächen mit offener Technik und richten Linux ein. Für Organisationen, die etwas ändern müssen.",
+      "layoutTitle": "Für Organisationen",
       "serviceDetailTitle": "서비스 상세",
       "serviceDetailDesc": "취리히 evig의 전문 IT 서비스."
     },
@@ -3249,9 +3245,8 @@
       "bookingFailed": "예약 실패",
       "networkError": "네트워크 오류. 다시 시도해 주세요.",
       "categoryLabels": {
-        "hardware": "하드웨어 서비스",
-        "software": "소프트웨어 솔루션",
-        "soon": "출시 예정"
+        "software": "리눅스와 열린 소프트웨어",
+        "organisations": "조직을 위해"
       },
       "filterByCategory": "카테고리별 필터",
       "ctaEyebrow": "준비됐나요?",
@@ -3613,75 +3608,6 @@
         "allServices": "모든 서비스 탐색"
       }
     },
-    "hardwareRecycling": {
-      "meta": {
-        "title": "하드웨어 재활용",
-        "description": "IT 장비의 책임감 있는 재활용 및 재생. 안전한 데이터 삭제, 무료 수거 서비스 및 지속 가능한 IT 솔루션.",
-        "ogTitle": "하드웨어 재활용",
-        "ogDescription": "IT 장비의 책임감 있는 재활용 및 재생을 통한 지속 가능한 IT 솔루션."
-      },
-      "hero": {
-        "title": "하드웨어 재활용",
-        "subtitle": "IT 장비의 책임감 있는 재활용 및 재생 서비스. 전자 폐기물을 줄이고 안전한 데이터 삭제를 보장합니다."
-      },
-      "features": [
-        {
-          "title": "안전한 데이터 삭제",
-          "description": "장치에서 모든 데이터를 완전하고 안전하게 삭제합니다."
-        },
-        {
-          "title": "장치 재생",
-          "description": "IT 장비의 전문적인 재생."
-        },
-        {
-          "title": "부품 재활용",
-          "description": "전자 부품의 책임감 있는 재활용."
-        },
-        {
-          "title": "무료 수거 서비스",
-          "description": "구형 장비의 편리한 수거 서비스."
-        }
-      ],
-      "pricing": {
-        "heading": "가격",
-        "subtitle": "지속 가능하고 합리적인",
-        "badge": "최고의 선택",
-        "price": "무료",
-        "forMostItems": "대부분의 품목",
-        "features": [
-          "무료 수거 서비스",
-          "안전한 데이터 삭제",
-          "환경적으로 책임감 있는",
-          "폐기 인증서"
-        ],
-        "cta": "시작할 준비가 되셨나요?"
-      },
-      "impact": {
-        "heading": "환경적 책임",
-        "subtitle": "재활용된 모든 장치가 지구를 보호합니다",
-        "dataSecurity": "안전한 데이터 삭제",
-        "sustainableProcesses": "지속 가능한 프로세스",
-        "reducedEwaste": "전자 폐기물 감소"
-      },
-      "contact": {
-        "heading": "오늘 문의하세요",
-        "subtitle": "하드웨어 재활용 서비스에 대해 더 알아보기",
-        "locations": "위치",
-        "store": "판매",
-        "warehouse": "창고",
-        "contactInfo": "연락처",
-        "phone": "전화",
-        "hours": "영업시간",
-        "monday": "월요일",
-        "weekdays": "화요일 - 금요일"
-      },
-      "cta": {
-        "heading": "시작할 준비가 되셨나요?",
-        "body": "하드웨어 재활용 서비스에 대해 더 알아보려면 오늘 문의하세요.",
-        "contact": "연락처",
-        "back": "서비스로 돌아가기"
-      }
-    },
     "linuxOpenSource": {
       "meta": {
         "title": "Linux & 오픈소스",
@@ -3971,275 +3897,7 @@
         "workshopLink": "워크숍 보기"
       }
     },
-    "repair": {
-      "meta": {
-        "title": "컴퓨터 수리 및 업그레이드",
-        "description": "전문적인 컴퓨터 수리 및 업그레이드. 마더보드 수리 및 부품 수준 결함 등 다른 곳에서 수리하지 못하는 것을 전문으로 합니다."
-      },
-      "hero": {
-        "title": "컴퓨터 수리 및 업그레이드",
-        "subtitle": "신뢰할 수 있는 수리",
-        "description": "기술적 전문성과 지속 가능한 행동을 결합하여 장치의 수명을 연장합니다. 저희 수리 서비스는 다른 곳에서 포기하는 것에 집중합니다."
-      },
-      "features": [
-        {
-          "title": "부품 수준 수리",
-          "description": "단순히 부품을 교체하는 것이 아니라 수리합니다. 기술자들이 마더보드, 전원 공급 장치 등을 회로 수준에서 수리할 수 있습니다."
-        },
-        {
-          "title": "하드웨어 업그레이드",
-          "description": "목표한 업그레이드로 컴퓨터 수명을 연장하세요. 적합한 부품 선택 및 설치를 도와드립니다."
-        },
-        {
-          "title": "진단 서비스",
-          "description": "문제를 신속하게 파악하고 해결하기 위한 포괄적인 진단. 전문 도구와 풍부한 경험으로 정확히 처리합니다."
-        },
-        {
-          "title": "익스프레스 서비스",
-          "description": "긴급하신가요? 많은 일반적인 문제에 대해 당일 수리를 제공합니다. 영업 시간 중에 장치를 가져오세요."
-        }
-      ],
-      "pricing": {
-        "heading": "가격",
-        "base": "CHF 70/시간부터",
-        "details": [
-          "초기 진단 무료",
-          "수리 없음 = 비용 없음",
-          "투명한 가격 책정",
-          "수리 보증"
-        ]
-      },
-      "processHeading": "수리 프로세스",
-      "process": [
-        {
-          "title": "진단",
-          "description": "장치를 검사하고 문제에 대한 정확한 평가를 제공합니다."
-        },
-        {
-          "title": "견적",
-          "description": "투명한 견적을 받으세요 — 숨겨진 비용 없음."
-        },
-        {
-          "title": "수리",
-          "description": "기술자가 고품질 부품과 검증된 방법으로 장치를 수리합니다."
-        },
-        {
-          "title": "테스트",
-          "description": "모든 수리는 장치가 완벽하게 작동하는지 확인하기 위해 철저히 테스트됩니다."
-        }
-      ],
-      "cta": {
-        "heading": "장치를 수리하시겠습니까?",
-        "body": "무료 진단 및 견적을 위해 문의하세요. 빠르고 저렴하게 장치를 다시 작동시키도록 도와드립니다.",
-        "contact": "문의하기",
-        "allServices": "모든 서비스"
-      }
-    },
-    "buildComputer": {
-      "meta": {
-        "title": "AI 기반 지속 가능한 컴퓨터 빌드",
-        "description": "AI 시스템이 글로벌 파트너 네트워크를 스캔하여 주로 중고 및 재생 부품으로 최적의 컴퓨터를 조립합니다."
-      },
-      "hero": {
-        "title": "AI 기반 지속 가능한 컴퓨터 빌드",
-        "subtitle": "혁신적인 AI 시스템이 인벤토리와 글로벌 파트너 네트워크를 스캔하여 주로 중고 및 재생 부품으로 최적의 컴퓨터를 조립합니다.",
-        "strong": "100% 중고 부품 우선 • 글로벌 인벤토리 네트워크 • 지능형 AI 매칭",
-        "badge1": "순환 경제",
-        "badge2": "글로벌 네트워크",
-        "badge3": "AI 최적화"
-      },
-      "howItWorks": {
-        "heading": "AI 빌드 시스템 작동 방식",
-        "steps": [
-          {
-            "title": "요구사항 분석",
-            "description": "사용 사례, 성능 요구사항 및 지속 가능성 선호도를 알려주세요"
-          },
-          {
-            "title": "글로벌 인벤토리 스캔",
-            "description": "AI가 유럽 전역 및 그 이상의 인벤토리 + 파트너 네트워크를 스캔"
-          },
-          {
-            "title": "지능형 최적화",
-            "description": "알고리즘이 중고 부품을 우선시하고 성능과 지속 가능성을 최적화"
-          },
-          {
-            "title": "조립 & 인증",
-            "description": "\"Revamped\" 지속 가능성 인증과 함께 전문 조립"
-          }
-        ]
-      },
-      "buildTool": {
-        "heading": "빌드 도구 데모 체험",
-        "subtitle": "AI 시스템이 특정 요구사항에 맞는 부품을 어떻게 추천하는지 경험하세요",
-        "step1Heading": "컴퓨터를 어떤 용도로 사용하실 건가요?",
-        "performanceHeading": "성능 요구사항",
-        "budgetLabel": "예산 범위 (CHF)",
-        "budgetPlaceholder": "예산 범위 선택",
-        "specificLabel": "구체적인 요구사항 (선택)",
-        "specificPlaceholder": "특별한 요구사항이 있으신가요? (예: 다중 모니터, VR 게이밍, 특정 소프트웨어 요구사항)",
-        "nextButton": "분석으로 계속",
-        "step2Heading": "AI 인벤토리 분석",
-        "requirementsSummary": "요구사항 요약:",
-        "useCaseLabel": "사용 사례",
-        "performanceLabel": "성능",
-        "budgetSummaryLabel": "예산",
-        "sustainabilityLabel": "지속 가능성",
-        "sustainabilityValue": "높은 우선순위",
-        "specialNotesLabel": "특별 참고사항",
-        "analyzeDescription": "글로벌 인벤토리 네트워크를 스캔하고 개인화된 빌드 추천을 생성할 준비가 됐나요?",
-        "backButton": "편집으로 돌아가기",
-        "analyzeButton": "글로벌 인벤토리 분석",
-        "scanningLabel": "🔍 인벤토리 네트워크 스캔 중...",
-        "scanningLines": [
-          "취리히 창고 확인 중 (847개 부품)",
-          "유럽 파트너 스캔 중 (12,450개+ 부품)",
-          "AI가 지속 가능성 + 성능 최적화 중",
-          "배송 경로 및 비용 계산 중"
-        ],
-        "step3Heading": "최적화된 빌드",
-        "sustainableLabel": "% 지속 가능",
-        "performanceMatchLabel": "% 성능 일치",
-        "usedPartsLabel": "% 중고 부품",
-        "componentTypes": {
-          "cpu": "프로세서",
-          "gpu": "그래픽 카드",
-          "ram": "메모리",
-          "storage": "저장 장치"
-        },
-        "conditions": {
-          "used": "중고",
-          "refurbished": "재생품",
-          "new": "신품"
-        },
-        "inStock": "재고 있음",
-        "deliveryTime": "약 3-5일",
-        "totalCost": "총 빌드 비용:",
-        "extras": "+ 조립 & 테스트: CHF 120 | + 배송: CHF 45 | + \"Revamped\" 인증: 포함",
-        "changeRequirements": "요구사항 변경",
-        "orderBuild": "이 빌드 주문",
-        "environmentHeading": "환경 영향",
-        "co2Saved": "CO₂ 절감",
-        "co2Value": "신규 빌드 대비 약 85kg 절감",
-        "reusedLabel": "재사용 부품",
-        "reusedValue": "주요 4개 부품 중 4개",
-        "circularLabel": "순환 경제",
-        "circularValue": "하드웨어 수명 연장",
-        "browseComponents": "부품 보기",
-        "resultNote": "검증된 리퍼비시 부품으로 기기를 조립해 드립니다. 마켓플레이스에서 알맞은 부품을 살펴보거나 완성된 조립품을 바로 문의하세요.",
-        "sustainabilityNote": "재사용된 부품 하나하나가 하드웨어의 수명을 늘리고 신제품 생산에 드는 배출량을 절약합니다."
-      },
-      "features": {
-        "heading": "왜 AI 빌드 시스템을 선택해야 할까요?",
-        "items": [
-          {
-            "title": "글로벌 인벤토리 네트워크",
-            "description": "실시간 재고 추적으로 유럽 전역 및 그 이상의 수천 개의 중고 및 재생 부품에 접근."
-          },
-          {
-            "title": "AI 최적화",
-            "description": "지능형 알고리즘이 성능, 지속 가능성, 비용 및 가용성의 균형을 맞춰 완벽한 빌드 조합을 찾습니다."
-          },
-          {
-            "title": "\"Revamped\" 인증",
-            "description": "모든 빌드는 지속 가능성 인증을 받아 품질을 보장하면서 순환 경제를 지원합니다."
-          }
-        ]
-      },
-      "cta": {
-        "heading": "지속 가능하게 구축할 준비가 됐나요?",
-        "body": "컴퓨터 구축 혁명에 동참하세요. 지구를 보호하면서 탁월한 성능을 발휘하는 맞춤형 지속 가능한 빌드를 얻으세요.",
-        "startBuild": "빌드 시작",
-        "explore": "모든 서비스 탐색"
-      },
-      "useCaseOptions": {
-        "office": {
-          "name": "사무 & 비즈니스",
-          "description": "이메일, 문서, 웹 브라우징, 화상 통화"
-        },
-        "creative": {
-          "name": "크리에이티브 작업",
-          "description": "사진/동영상 편집, 디자인, 콘텐츠 제작"
-        },
-        "gaming": {
-          "name": "게이밍",
-          "description": "최신 게임, 스트리밍, 고성능 컴퓨팅"
-        },
-        "development": {
-          "name": "소프트웨어 개발",
-          "description": "프로그래밍, 테스트, 다중 VM, 컴파일"
-        },
-        "server": {
-          "name": "서버/NAS",
-          "description": "파일 서버, 미디어 서버, 홈 오토메이션"
-        },
-        "ai": {
-          "name": "AI/머신러닝",
-          "description": "모델 훈련, 데이터 처리, CUDA 워크로드"
-        }
-      },
-      "performanceOptions": {
-        "basic": {
-          "name": "기본",
-          "description": "가벼운 작업, 적절한 성능"
-        },
-        "moderate": {
-          "name": "중간",
-          "description": "대부분의 작업에 균형 잡힌 성능"
-        },
-        "high": {
-          "name": "높음",
-          "description": "까다로운 작업을 위한 높은 성능"
-        },
-        "extreme": {
-          "name": "익스트림",
-          "description": "최고 성능, 타협 없음"
-        }
-      },
-      "budgetOptions": {
-        "300-500": "CHF 300-500",
-        "500-800": "CHF 500-800",
-        "800-1200": "CHF 800-1200",
-        "1200+": "CHF 1200+"
-      }
-    },
     "catalog": {
-      "computerRepair": {
-        "title": "컴퓨터 수리 & 업그레이드",
-        "description": "모든 종류의 컴퓨터와 부품에 대한 전문 수리 서비스. 마더보드 수리 및 부품 수준의 수리 등 다른 곳에서 할 수 없는 수리를 전문으로 합니다.",
-        "features": [
-          "부품 수준 수리",
-          "하드웨어 업그레이드",
-          "진단 서비스",
-          "전문적인 평가"
-        ],
-        "highlight": "전문적인 평가 필요",
-        "pricing": "CHF 70/h"
-      },
-      "dataRecovery": {
-        "title": "데이터 복구 & 이전",
-        "description": "모든 종류의 저장 매체를 위한 안전하고 신뢰할 수 있는 데이터 전송 서비스. 손상된 기기에서 데이터를 복구하여 최신 스토리지 솔루션으로 이전합니다.",
-        "features": [
-          "안전한 데이터 전송",
-          "손상된 기기에서 데이터 복구",
-          "레거시 미디어 지원 (플로피, ZIP, MO, SCSI/IDE 드라이브)",
-          "완전한 데이터 보안"
-        ],
-        "highlight": "복구 전 평가 필요",
-        "pricing": "CHF 70/h"
-      },
-      "hardwareRecycling": {
-        "title": "하드웨어 재활용",
-        "description": "IT 기기의 책임감 있는 재활용 및 재생. 오래된 기기에 새 생명을 불어넣고 안전한 데이터 삭제를 보장합니다.",
-        "features": [
-          "안전한 데이터 삭제",
-          "기기 재생",
-          "부품 재활용",
-          "무료 수거 서비스"
-        ],
-        "highlight": "무료 수거 서비스 이용 가능",
-        "pricing": "대부분의 물품 무료"
-      },
       "webDesign": {
         "title": "웹 디자인 & 개발",
         "description": "최신 오픈소스 기술을 활용한 전문적인 웹 디자인 및 개발 서비스. Next.js, 헤드리스 CMS 및 지속 가능한 방법으로 빠르고 반응형 웹사이트를 구축합니다.",
@@ -4277,17 +3935,16 @@
         "highlight": "무료 초기 상담",
         "pricing": "CHF 70/h"
       },
-      "buildYourComputer": {
-        "title": "컴퓨터 조립",
-        "description": "풍부한 재고에 대한 AI 분석을 통해 귀하의 특정 요구에 맞는 맞춤형 컴퓨터를 제공합니다. 전 세계에서 부품을 조달하고 전문적인 조립 서비스를 제공합니다.",
+      "aiAdoption": {
+        "title": "KI & Robotik im Betrieb",
+        "description": "Wir schauen uns die Arbeit an, die tatsächlich getan wird, wählen eine Aufgabe aus und bauen sie mit euch — bis jemand bei euch sie selbst bedienen kann.",
         "features": [
-          "AI 기반 구성 추천",
-          "글로벌 부품 조달 네트워크",
-          "전문적인 조립 및 테스트",
-          "품질 보증"
+          "Analyse der tatsächlichen Arbeitsabläufe",
+          "Eine Aufgabe umsetzen statt zehn planen",
+          "Offene Werkzeuge, wo es geht",
+          "Übergabe an euer Team"
         ],
-        "highlight": "곧 출시 예정",
-        "pricing": ""
+        "highlight": "Beginnt mit einem Gespräch"
       }
     },
     "payment": {
@@ -4363,11 +4020,67 @@
     "pricingTitle": "가격",
     "mediaCostsTitle": "미디어 비용",
     "processTitle": "저희 프로세스",
-    "title": "서비스",
-    "subtitle": "우리가 할 수 있는 것",
+    "title": "조직을 위해",
+    "subtitle": "기업과 기관을 위해 우리가 하는 일",
     "bookAppointment": "예약하기",
     "requestQuote": "견적 요청",
-    "priceFrom": "CHF~"
+    "priceFrom": "CHF~",
+    "aiAdoption": {
+      "meta": {
+        "title": "KI und Robotik im Betrieb",
+        "description": "Für Organisationen, die wissen, dass sich etwas ändern muss, aber nicht, wo man anfängt. Wir schauen uns die Arbeit an und bauen mit."
+      },
+      "hero": {
+        "title": "KI und Robotik in den Betrieb bringen",
+        "lede": "Für Organisationen, die wissen, dass sich etwas ändern muss, aber nicht, wo man anfängt."
+      },
+      "thesis": {
+        "eyebrow": "Warum",
+        "title": "Das Problem ist selten das Modell",
+        "body": "Die meisten Betriebe scheitern nicht daran, dass es die Technik nicht gäbe. Sie scheitern daran, dass niemand Zeit hatte, die eigene Arbeit anzuschauen und zu fragen, welcher Teil davon sich überhaupt lohnt zu automatisieren. Genau da fangen wir an — nicht bei einem Werkzeug, sondern bei dem, was ihr tatsächlich den ganzen Tag macht."
+      },
+      "steps": {
+        "eyebrow": "Wie es abläuft",
+        "heading": "Vier Schritte, keine Folien",
+        "look": {
+          "title": "Hinschauen",
+          "body": "Wir sitzen einen Tag dort, wo die Arbeit passiert, und schreiben auf, was wirklich Zeit frisst. Nicht das, was im Organigramm steht."
+        },
+        "pick": {
+          "title": "Auswählen",
+          "body": "Aus dieser Liste nehmen wir eine Aufgabe: die mit dem besten Verhältnis aus Aufwand und gewonnener Zeit. Eine, nicht zehn."
+        },
+        "build": {
+          "title": "Bauen",
+          "body": "Wir bauen sie mit euch — mit euren Daten, in eurer Umgebung, mit offenen Werkzeugen, wo es geht. Ihr seht jeden Schritt."
+        },
+        "handover": {
+          "title": "Übergeben",
+          "body": "Am Ende kann jemand bei euch das Ding bedienen, ändern und abschalten. Wenn das nicht stimmt, haben wir nichts geliefert, sondern eine Abhängigkeit gebaut."
+        }
+      },
+      "boundary": {
+        "eyebrow": "Ehrliche Grenzen",
+        "heading": "Was das nicht ist",
+        "noMagic": {
+          "title": "Kein Wundermittel",
+          "body": "Manche Arbeit lässt sich nicht automatisieren, und manche sollte man nicht automatisieren. Wir sagen es, wenn wir es sehen."
+        },
+        "noLockIn": {
+          "title": "Keine Abhängigkeit",
+          "body": "Was wir bauen, gehört euch — Code, Daten, Zugänge. Wir bauen nichts, das nur läuft, solange wir da sind."
+        },
+        "noHeadcount": {
+          "title": "Keine grosse Firma",
+          "body": "evig ist klein. Wir nehmen an, was wir wirklich begleiten können, und sagen ab, wenn es nicht passt."
+        }
+      },
+      "cta": {
+        "heading": "Erzähl uns, was Zeit frisst",
+        "body": "Ein Gespräch, kein Angebotsprozess. Wenn wir nicht die Richtigen sind, sagen wir das früh.",
+        "button": "Gespräch vereinbaren"
+      }
+    }
   },
   "shop": {
     "error": {
@@ -4793,7 +4506,7 @@
     "categoryDescriptions": {
       "retraining": "내일의 직장 환경을 위한 새로운 기술. AI 도구와 자동화로 10배 더 생산적으로.",
       "linux": "운영체제, 터미널, 서버 관리, 오픈 소스 도구.",
-      "hardware": "컴퓨터를 수리하고 업그레이드하고 유지 보수합니다. 납땜, 진단, 빈티지 복원.",
+      "hardware": "컴퓨터 수리, 업그레이드, 유지보수. 납땜, 진단, 고장 찾기.",
       "development": "프로그래밍 배우기: Python, JavaScript, 웹 개발 등.",
       "web": "최신 도구로 웹사이트 만들기: HTML, CSS, React, Next.js.",
       "ai": "인공지능 이해하고 활용하기. ChatGPT, 자동화, AI 도구.",
@@ -6295,47 +6008,6 @@
           "description": "새 노트북 생산의 평균 CO₂ 발자국",
           "source": "Circular Computing(노트북 230대 대상 연구)"
         }
-      }
-    },
-    "communitySpace": {
-      "badge": "우리의 위치",
-      "heading": "방문하세요",
-      "intro": "취리히의 저희 매장은 단순한 가게 그 이상입니다 — 지속 가능한 IT와 오픈 소스에 관심 있는 모두를 위한 만남의 장소입니다.",
-      "offeringsTitle": "여기서 할 수 있는 일:",
-      "planRoute": "경로 보기",
-      "workshopDesc": "정기적인 워크숍과 강연에서 전문가에게 배우세요. 초보자부터 고급자까지.",
-      "workshopLink": "워크숍 프로그램",
-      "visionLabel": "우리의 비전",
-      "visionCta": "이 비전을 함께 실현해 주세요.",
-      "supportProject": "프로젝트 후원하기",
-      "locationName": "evig 매장",
-      "offerings": [
-        "리퍼비시된 하드웨어 구매",
-        "빈티지 컴퓨터 컬렉션 관람",
-        "대면 상담 받기",
-        "수리 또는 기증을 위한 기기 전달"
-      ],
-      "workshops": {
-        "title": "워크숍 및 강연",
-        "topics": [
-          "초보자를 위한 Linux 기초",
-          "일상 속 오픈 소스 소프트웨어",
-          "지속 가능한 AI와 그 한계",
-          "대안적 기술경제 모델",
-          "수리 워크숍: 노트북, 스마트폰 등",
-          "컴퓨터 진화의 역사"
-        ]
-      },
-      "vision": {
-        "title": "커뮤니티 테크 스페이스",
-        "description": "우리의 꿈은 박물관, 작업장, 그리고 지속 가능한 테크 커뮤니티의 만남의 장소로 기능하는 더 큰 공간입니다.",
-        "features": [
-          "희귀한 빈티지 하드웨어 박물관",
-          "역사적인 신디사이저와 전자 악기 컬렉션",
-          "수리 세션을 위한 오픈 워크숍",
-          "강연과 밋업을 위한 이벤트 공간",
-          "커뮤니티 교류를 위한 카페 공간"
-        ]
       }
     },
     "messageSidebar": {

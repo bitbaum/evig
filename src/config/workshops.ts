@@ -48,8 +48,17 @@ export interface WorkshopLevel {
 /**
  * Workshop categories
  *
- * "Retraining" is a key category - RevampIT doesn't just revamp hardware,
- * we revamp careers. Helping people stay employable in an AI/automation world.
+ * `retraining` is the category that matters most now: AI and robots are taking
+ * over tasks people live on, and the ones who can work with them lose less and
+ * gain more.
+ *
+ * NOTE — the German `name` and `description` here are a SECOND COPY of
+ * workshops.categories.<id> / workshops.categoryDescriptions.<id> in the
+ * message files, which is what the public browse page actually renders (it
+ * calls tCat(cat.id)). They cannot simply be deleted: `normalizeCategoryId`
+ * matches legacy DB rows on the German name, and the admin filter uses it as
+ * an option value. Until that is untangled, the copies are kept in step by
+ * `workshops-config-matches-messages.test.ts` — divergence fails the build.
  */
 export const WORKSHOP_CATEGORIES: WorkshopCategory[] = [
   {
@@ -72,7 +81,7 @@ export const WORKSHOP_CATEGORIES: WorkshopCategory[] = [
     id: "hardware",
     name: "Hardware-Reparatur",
     description:
-      "Computer reparieren, aufrüsten und warten. Löten, Diagnose, Vintage-Restauration.",
+      "Computer reparieren, aufrüsten und warten. Löten, Diagnose, Fehlersuche.",
     icon: HardDrive,
     color: "bg-neutral-500",
   },

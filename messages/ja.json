@@ -50,8 +50,6 @@
       "missionHistoryDesc": "私たちの理念と活動の原動力",
       "impact": "私たちの活動成果",
       "impactDesc": "測定可能な成果と透明性",
-      "howItWorks": "仕組み",
-      "howItWorksDesc": "寄付から次の利用者へ、機器の道のり",
       "projects": "プロジェクト",
       "projectsDesc": "私たちの取り組み",
       "locations": "拠点",
@@ -60,20 +58,13 @@
       "faqDesc": "よくある質問",
       "services": "サービス",
       "servicesDesc": "プロフェッショナルなITサービス",
-      "hardware": "ハードウェア",
-      "computerRepair": "修理・アップグレード",
-      "computerRepairDesc": "パソコンを復活させる",
-      "dataRecovery": "データ復旧",
-      "dataRecoveryDesc": "データの保護と転送",
-      "hardwareRecycling": "ハードウェアリサイクル",
-      "hardwareRecyclingDesc": "責任ある廃棄",
       "software": "ソフトウェア",
       "linuxOpenSource": "Linux & Open Source",
       "linuxOpenSourceDesc": "インストールとサポート",
       "webDesign": "ウェブ開発",
       "webDesignDesc": "Open Sourceによるウェブサイト制作",
       "openSourceSolutions": "Open Sourceソリューション",
-      "openSourceSolutionsDesc": "コンサルティングと導入",
+      "openSourceSolutionsDesc": "高価なソフトへの 43 の代替",
       "marketplace": "マーケット",
       "marketplaceDesc": "購入・販売・ITサポート",
       "buyDevices": "機器を購入",
@@ -152,15 +143,20 @@
       "itHelpHubDesc": "Repair, reinstall OS, solve IT problems — one entry point",
       "transparency": "透明性",
       "transparencyDesc": "財務・主要数値・算定方法",
-      "reparaturbonus": "チューリッヒ市 修理ボーナス",
-      "reparaturbonusDesc": "修理に最大100フランの補助 — その仕組み",
       "press": "プレス",
       "pressDesc": "メディア掲載",
       "aiDivision": "人工知能へのアクセス——アシスタントと、それを動かすハードウェア",
       "vision": "ビジョン",
       "visionDesc": "evig が何のためにあるのか、その全文",
       "resources": "リソース",
-      "resourcesDesc": "厳選したツール、ディストリビューション、ドキュメント"
+      "resourcesDesc": "厳選したツール、ディストリビューション、ドキュメント",
+      "whoWeAre": "私たちについて",
+      "trust": "信頼",
+      "sectionAiAccess": "AI へのアクセス",
+      "aiDivisionLink": "evig ai",
+      "aiAdoption": "AI とロボティクス",
+      "aiAdoptionDesc": "現場に入れる",
+      "organisations": "組織向け"
     },
     "language": "言語",
     "missionHistory": "ミッション & 歴史",
@@ -3220,9 +3216,9 @@
   },
   "services": {
     "meta": {
-      "title": "サービス | チューリッヒのITサービス",
-      "description": "チューリッヒでのプロフェッショナルなパソコン修理、ウェブ開発、データ復旧、Linuxサポート、ハードウェアリサイクル。",
-      "layoutTitle": "コンピュータ修理・ITサービス",
+      "title": "Für Organisationen — KI, Robotik und offene Software",
+      "description": "Wir bringen KI und Robotik in den Betrieb, bauen Weboberflächen mit offener Technik und richten Linux ein. Für Organisationen, die etwas ändern müssen.",
+      "layoutTitle": "Für Organisationen",
       "serviceDetailTitle": "サービス詳細",
       "serviceDetailDesc": "チューリッヒのevigによるプロフェッショナルなITサービス。"
     },
@@ -3249,9 +3245,8 @@
       "bookingFailed": "予約に失敗しました",
       "networkError": "ネットワークエラーが発生しました。もう一度お試しください。",
       "categoryLabels": {
-        "hardware": "ハードウェアサービス",
-        "software": "ソフトウェアソリューション",
-        "soon": "近日公開"
+        "software": "Linux とオープンなソフトウェア",
+        "organisations": "組織向け"
       },
       "filterByCategory": "カテゴリーでフィルター",
       "ctaEyebrow": "準備はいい?",
@@ -3613,75 +3608,6 @@
         "allServices": "すべてのサービスを探る"
       }
     },
-    "hardwareRecycling": {
-      "meta": {
-        "title": "ハードウェアリサイクル",
-        "description": "IT機器の責任ある回収・リサイクル。安全なデータ消去、無料引き取りサービス、持続可能なITソリューション。",
-        "ogTitle": "ハードウェアリサイクル",
-        "ogDescription": "IT機器の責任ある回収・リサイクルによる持続可能なITソリューション。"
-      },
-      "hero": {
-        "title": "ハードウェアリサイクル",
-        "subtitle": "IT機器の責任ある回収・リサイクルサービス。電子廃棄物の削減と安全なデータ消去を実現します。"
-      },
-      "features": [
-        {
-          "title": "安全なデータ消去",
-          "description": "デバイスからすべてのデータを完全かつ安全に消去します。"
-        },
-        {
-          "title": "デバイスの再生利用",
-          "description": "IT機器のプロフェッショナルな再生利用。"
-        },
-        {
-          "title": "部品リサイクル",
-          "description": "電子部品の責任あるリサイクル。"
-        },
-        {
-          "title": "無料引き取りサービス",
-          "description": "古い機器の便利な引き取りサービス。"
-        }
-      ],
-      "pricing": {
-        "heading": "料金",
-        "subtitle": "持続可能でお手頃",
-        "badge": "おすすめ",
-        "price": "無料",
-        "forMostItems": "ほとんどの品目",
-        "features": [
-          "無料引き取りサービス",
-          "安全なデータ消去",
-          "環境への責任",
-          "廃棄証明書"
-        ],
-        "cta": "今すぐ始めますか？"
-      },
-      "impact": {
-        "heading": "環境への責任",
-        "subtitle": "リサイクルされたデバイスが地球を守ります",
-        "dataSecurity": "安全なデータ消去",
-        "sustainableProcesses": "持続可能なプロセス",
-        "reducedEwaste": "電子廃棄物の削減"
-      },
-      "contact": {
-        "heading": "今日お問い合わせください",
-        "subtitle": "ハードウェアリサイクルサービスの詳細について",
-        "locations": "所在地",
-        "store": "販売",
-        "warehouse": "倉庫",
-        "contactInfo": "お問い合わせ",
-        "phone": "電話",
-        "hours": "営業時間",
-        "monday": "月曜日",
-        "weekdays": "火曜日〜金曜日"
-      },
-      "cta": {
-        "heading": "今すぐ始めますか？",
-        "body": "ハードウェアリサイクルサービスの詳細については、今日お問い合わせください。",
-        "contact": "お問い合わせ",
-        "back": "サービスに戻る"
-      }
-    },
     "linuxOpenSource": {
       "meta": {
         "title": "Linux & オープンソース",
@@ -3971,275 +3897,7 @@
         "workshopLink": "ワークショップを見る"
       }
     },
-    "repair": {
-      "meta": {
-        "title": "コンピュータ修理・アップグレード",
-        "description": "プロフェッショナルなコンピュータ修理・アップグレード。マザーボード修理や部品レベルの障害など、他社では修理できないものを専門としています。"
-      },
-      "hero": {
-        "title": "コンピュータ修理・アップグレード",
-        "subtitle": "信頼できる修理",
-        "description": "技術的な専門知識と持続可能な行動を組み合わせ、お客様のデバイスの寿命を延ばします。私たちの修理サービスは、他社が諦めるものに特化しています。"
-      },
-      "features": [
-        {
-          "title": "部品レベルの修理",
-          "description": "単に部品を交換するのではなく、修理します。技術者はマザーボード、電源ユニットなどを回路レベルで修理できます。"
-        },
-        {
-          "title": "ハードウェアアップグレード",
-          "description": "的を絞ったアップグレードでコンピュータの寿命を延ばします。適切な部品の選択と取り付けをお手伝いします。"
-        },
-        {
-          "title": "診断サービス",
-          "description": "問題を迅速に特定し修正するための包括的な診断。プロのツールと豊富な経験で的確に対応します。"
-        },
-        {
-          "title": "エクスプレスサービス",
-          "description": "急ぎですか？多くの一般的な問題については当日修理を提供しています。営業時間内にデバイスをお持ちください。"
-        }
-      ],
-      "pricing": {
-        "heading": "料金",
-        "base": "CHF 70/時間から",
-        "details": [
-          "初回診断無料",
-          "修理なし = 費用なし",
-          "透明な料金体系",
-          "修理保証"
-        ]
-      },
-      "processHeading": "修理プロセス",
-      "process": [
-        {
-          "title": "診断",
-          "description": "デバイスを調査し、問題の正確な評価を提供します。"
-        },
-        {
-          "title": "見積もり",
-          "description": "透明な見積もりを受け取れます — 隠れた費用はありません。"
-        },
-        {
-          "title": "修理",
-          "description": "技術者が高品質の部品と実績ある方法でデバイスを修理します。"
-        },
-        {
-          "title": "テスト",
-          "description": "すべての修理は、デバイスが完全に機能することを確認するために徹底的にテストされます。"
-        }
-      ],
-      "cta": {
-        "heading": "デバイスを修理しますか？",
-        "body": "無料診断と見積もりについてお問い合わせください。デバイスを迅速かつ手頃な価格で修理するお手伝いをします。",
-        "contact": "お問い合わせ",
-        "allServices": "全サービス"
-      }
-    },
-    "buildComputer": {
-      "meta": {
-        "title": "AIを活用したサステナブルなコンピュータービルド",
-        "description": "AIシステムがグローバルパートナーネットワークをスキャンし、主に中古・再生パーツからあなたに最適なコンピューターを組み立てます。"
-      },
-      "hero": {
-        "title": "AIを活用したサステナブルなコンピュータービルド",
-        "subtitle": "革新的なAIシステムが在庫とグローバルパートナーネットワークをスキャンし、主に中古・再生パーツからあなたに最適なコンピューターを組み立てます。",
-        "strong": "100%中古パーツ優先 • グローバル在庫ネットワーク • インテリジェントAIマッチング",
-        "badge1": "循環型経済",
-        "badge2": "グローバルネットワーク",
-        "badge3": "AI最適化"
-      },
-      "howItWorks": {
-        "heading": "AIビルドシステムの仕組み",
-        "steps": [
-          {
-            "title": "要件分析",
-            "description": "ユースケース、パフォーマンス要件、サステナビリティの好みをお知らせください"
-          },
-          {
-            "title": "グローバル在庫スキャン",
-            "description": "AIがヨーロッパ全土とそれ以外の在庫＋パートナーネットワークをスキャン"
-          },
-          {
-            "title": "インテリジェント最適化",
-            "description": "アルゴリズムが中古パーツを優先し、パフォーマンスとサステナビリティを最適化"
-          },
-          {
-            "title": "組み立て＆認定",
-            "description": "\"Revamped\"サステナビリティ認定でプロフェッショナルな組み立て"
-          }
-        ]
-      },
-      "buildTool": {
-        "heading": "ビルドツールデモを試す",
-        "subtitle": "AIシステムがあなたの特定のニーズにどのようなコンポーネントを推薦するかを体験してください",
-        "step1Heading": "コンピューターを何に使いますか？",
-        "performanceHeading": "パフォーマンス要件",
-        "budgetLabel": "予算範囲（CHF）",
-        "budgetPlaceholder": "予算範囲を選択",
-        "specificLabel": "具体的な要件（任意）",
-        "specificPlaceholder": "特別なニーズはありますか？（例：複数モニター、VRゲーミング、特定のソフトウェア要件）",
-        "nextButton": "分析へ進む",
-        "step2Heading": "AI在庫分析",
-        "requirementsSummary": "要件の概要：",
-        "useCaseLabel": "ユースケース",
-        "performanceLabel": "パフォーマンス",
-        "budgetSummaryLabel": "予算",
-        "sustainabilityLabel": "サステナビリティ",
-        "sustainabilityValue": "高優先度",
-        "specialNotesLabel": "特記事項",
-        "analyzeDescription": "グローバル在庫ネットワークをスキャンし、パーソナライズされたビルド推薦を生成する準備ができていますか？",
-        "backButton": "編集に戻る",
-        "analyzeButton": "グローバル在庫を分析",
-        "scanningLabel": "🔍 在庫ネットワークをスキャン中...",
-        "scanningLines": [
-          "チューリッヒ倉庫を確認中（847コンポーネント）",
-          "ヨーロッパパートナーをスキャン中（12,450+コンポーネント）",
-          "AIがサステナビリティ＋パフォーマンスを最適化中",
-          "配送ルートとコストを計算中"
-        ],
-        "step3Heading": "あなたの最適化されたビルド",
-        "sustainableLabel": "% サステナブル",
-        "performanceMatchLabel": "% パフォーマンス一致",
-        "usedPartsLabel": "% 中古パーツ",
-        "componentTypes": {
-          "cpu": "プロセッサー",
-          "gpu": "グラフィックカード",
-          "ram": "メモリ",
-          "storage": "ストレージ"
-        },
-        "conditions": {
-          "used": "中古",
-          "refurbished": "再生品",
-          "new": "新品"
-        },
-        "inStock": "在庫あり",
-        "deliveryTime": "約3〜5日",
-        "totalCost": "ビルド総費用：",
-        "extras": "+ 組み立て＆テスト：CHF 120 | + 配送：CHF 45 | + \"Revamped\"認定：含む",
-        "changeRequirements": "要件を変更",
-        "orderBuild": "このビルドを注文",
-        "environmentHeading": "環境への影響",
-        "co2Saved": "CO₂削減量",
-        "co2Value": "新品ビルドと比較して約85kg削減",
-        "reusedLabel": "再利用コンポーネント",
-        "reusedValue": "主要4パーツ中4つ",
-        "circularLabel": "循環型経済",
-        "circularValue": "ハードウェアの寿命を延ばす",
-        "browseComponents": "パーツを見る",
-        "resultNote": "検査済みのリファービッシュ品パーツで機器を組み立てます。マーケットプレイスで合うパーツを見るか、完成品を直接ご相談ください。",
-        "sustainabilityNote": "再利用されるパーツは、ハードウェアの寿命を延ばし、新規製造による排出を減らします。"
-      },
-      "features": {
-        "heading": "なぜ当社のAIビルドシステムを選ぶのか？",
-        "items": [
-          {
-            "title": "グローバル在庫ネットワーク",
-            "description": "リアルタイム在庫追跡により、ヨーロッパ全土とそれ以外の何千もの中古・再生コンポーネントにアクセス。"
-          },
-          {
-            "title": "AI最適化",
-            "description": "インテリジェントなアルゴリズムがパフォーマンス、サステナビリティ、コスト、可用性のバランスを取り、完璧なビルドの組み合わせを見つけます。"
-          },
-          {
-            "title": "\"Revamped\"認定",
-            "description": "各ビルドはサステナビリティ認定を受け、品質を保証しながら循環型経済を支援します。"
-          }
-        ]
-      },
-      "cta": {
-        "heading": "サステナブルに構築する準備はできていますか？",
-        "body": "コンピュータービルドの革命に参加しましょう。地球を守りながら優れたパフォーマンスを発揮するカスタムのサステナブルビルドを手に入れましょう。",
-        "startBuild": "ビルドを開始",
-        "explore": "すべてのサービスを見る"
-      },
-      "useCaseOptions": {
-        "office": {
-          "name": "オフィス＆ビジネス",
-          "description": "メール、ドキュメント、ウェブブラウジング、ビデオ通話"
-        },
-        "creative": {
-          "name": "クリエイティブ作業",
-          "description": "写真/動画編集、デザイン、コンテンツ作成"
-        },
-        "gaming": {
-          "name": "ゲーミング",
-          "description": "最新ゲーム、ストリーミング、高性能コンピューティング"
-        },
-        "development": {
-          "name": "ソフトウェア開発",
-          "description": "プログラミング、テスト、複数のVM、コンパイル"
-        },
-        "server": {
-          "name": "サーバー/NAS",
-          "description": "ファイルサーバー、メディアサーバー、ホームオートメーション"
-        },
-        "ai": {
-          "name": "AI/機械学習",
-          "description": "モデルトレーニング、データ処理、CUDAワークロード"
-        }
-      },
-      "performanceOptions": {
-        "basic": {
-          "name": "基本",
-          "description": "軽いタスク、十分なパフォーマンス"
-        },
-        "moderate": {
-          "name": "中程度",
-          "description": "ほとんどのタスクに対してバランスの取れたパフォーマンス"
-        },
-        "high": {
-          "name": "高い",
-          "description": "要求の多いタスクのための高パフォーマンス"
-        },
-        "extreme": {
-          "name": "エクストリーム",
-          "description": "妥協なし、最高のパフォーマンス"
-        }
-      },
-      "budgetOptions": {
-        "300-500": "CHF 300-500",
-        "500-800": "CHF 500-800",
-        "800-1200": "CHF 800-1200",
-        "1200+": "CHF 1200+"
-      }
-    },
     "catalog": {
-      "computerRepair": {
-        "title": "パソコン修理・アップグレード",
-        "description": "あらゆる種類のコンピューターとコンポーネントの専門修理。マザーボード修理やコンポーネントレベルの修理など、他社では対応できない修理を専門としています。",
-        "features": [
-          "コンポーネントレベル修理",
-          "ハードウェアアップグレード",
-          "診断サービス",
-          "専門的な評価"
-        ],
-        "highlight": "専門的な評価が必要",
-        "pricing": "CHF 70/h"
-      },
-      "dataRecovery": {
-        "title": "データ復旧・転送",
-        "description": "あらゆる種類のストレージメディアに対応した安全で信頼性の高いデータ転送サービス。破損したデバイスからデータを復旧し、現代のストレージソリューションへ転送します。",
-        "features": [
-          "安全なデータ転送",
-          "破損デバイスからのデータ復旧",
-          "レガシーメディア対応（フロッピー、ZIP、MO、SCSI/IDEドライブ）",
-          "完全なデータセキュリティ"
-        ],
-        "highlight": "復旧前に評価が必要",
-        "pricing": "CHF 70/h"
-      },
-      "hardwareRecycling": {
-        "title": "ハードウェアリサイクル",
-        "description": "ITデバイスの責任あるリサイクルと再生利用。古いデバイスに新しい命を与え、安全なデータ消去を保証します。",
-        "features": [
-          "安全なデータ消去",
-          "デバイスの再生利用",
-          "コンポーネントリサイクル",
-          "無料引き取りサービス"
-        ],
-        "highlight": "無料引き取りサービスあり",
-        "pricing": "ほとんどの機器は無料"
-      },
       "webDesign": {
         "title": "ウェブデザイン・開発",
         "description": "最新のオープンソース技術を使ったプロフェッショナルなウェブデザイン・開発サービス。Next.js、ヘッドレスCMS、持続可能な手法による高速でレスポンシブなウェブサイト。",
@@ -4277,17 +3935,16 @@
         "highlight": "初回相談無料",
         "pricing": "CHF 70/h"
       },
-      "buildYourComputer": {
-        "title": "カスタムPC構築",
-        "description": "当社の豊富な在庫をAIが分析し、あなたのニーズに合ったカスタムPCをご提供します。世界中からパーツを調達し、プロフェッショナルな組み立てを提供します。",
+      "aiAdoption": {
+        "title": "KI & Robotik im Betrieb",
+        "description": "Wir schauen uns die Arbeit an, die tatsächlich getan wird, wählen eine Aufgabe aus und bauen sie mit euch — bis jemand bei euch sie selbst bedienen kann.",
         "features": [
-          "AI搭載の構成レコメンデーション",
-          "グローバルパーツ調達ネットワーク",
-          "プロフェッショナルな組み立て・テスト",
-          "品質保証"
+          "Analyse der tatsächlichen Arbeitsabläufe",
+          "Eine Aufgabe umsetzen statt zehn planen",
+          "Offene Werkzeuge, wo es geht",
+          "Übergabe an euer Team"
         ],
-        "highlight": "近日公開予定",
-        "pricing": ""
+        "highlight": "Beginnt mit einem Gespräch"
       }
     },
     "payment": {
@@ -4363,11 +4020,67 @@
     "pricingTitle": "料金",
     "mediaCostsTitle": "メディアコスト",
     "processTitle": "私たちのプロセス",
-    "title": "サービス",
-    "subtitle": "私たちができること",
+    "title": "組織向け",
+    "subtitle": "企業や団体のために私たちがすること",
     "bookAppointment": "予約する",
     "requestQuote": "見積もりを依頼",
-    "priceFrom": "CHF〜"
+    "priceFrom": "CHF〜",
+    "aiAdoption": {
+      "meta": {
+        "title": "KI und Robotik im Betrieb",
+        "description": "Für Organisationen, die wissen, dass sich etwas ändern muss, aber nicht, wo man anfängt. Wir schauen uns die Arbeit an und bauen mit."
+      },
+      "hero": {
+        "title": "KI und Robotik in den Betrieb bringen",
+        "lede": "Für Organisationen, die wissen, dass sich etwas ändern muss, aber nicht, wo man anfängt."
+      },
+      "thesis": {
+        "eyebrow": "Warum",
+        "title": "Das Problem ist selten das Modell",
+        "body": "Die meisten Betriebe scheitern nicht daran, dass es die Technik nicht gäbe. Sie scheitern daran, dass niemand Zeit hatte, die eigene Arbeit anzuschauen und zu fragen, welcher Teil davon sich überhaupt lohnt zu automatisieren. Genau da fangen wir an — nicht bei einem Werkzeug, sondern bei dem, was ihr tatsächlich den ganzen Tag macht."
+      },
+      "steps": {
+        "eyebrow": "Wie es abläuft",
+        "heading": "Vier Schritte, keine Folien",
+        "look": {
+          "title": "Hinschauen",
+          "body": "Wir sitzen einen Tag dort, wo die Arbeit passiert, und schreiben auf, was wirklich Zeit frisst. Nicht das, was im Organigramm steht."
+        },
+        "pick": {
+          "title": "Auswählen",
+          "body": "Aus dieser Liste nehmen wir eine Aufgabe: die mit dem besten Verhältnis aus Aufwand und gewonnener Zeit. Eine, nicht zehn."
+        },
+        "build": {
+          "title": "Bauen",
+          "body": "Wir bauen sie mit euch — mit euren Daten, in eurer Umgebung, mit offenen Werkzeugen, wo es geht. Ihr seht jeden Schritt."
+        },
+        "handover": {
+          "title": "Übergeben",
+          "body": "Am Ende kann jemand bei euch das Ding bedienen, ändern und abschalten. Wenn das nicht stimmt, haben wir nichts geliefert, sondern eine Abhängigkeit gebaut."
+        }
+      },
+      "boundary": {
+        "eyebrow": "Ehrliche Grenzen",
+        "heading": "Was das nicht ist",
+        "noMagic": {
+          "title": "Kein Wundermittel",
+          "body": "Manche Arbeit lässt sich nicht automatisieren, und manche sollte man nicht automatisieren. Wir sagen es, wenn wir es sehen."
+        },
+        "noLockIn": {
+          "title": "Keine Abhängigkeit",
+          "body": "Was wir bauen, gehört euch — Code, Daten, Zugänge. Wir bauen nichts, das nur läuft, solange wir da sind."
+        },
+        "noHeadcount": {
+          "title": "Keine grosse Firma",
+          "body": "evig ist klein. Wir nehmen an, was wir wirklich begleiten können, und sagen ab, wenn es nicht passt."
+        }
+      },
+      "cta": {
+        "heading": "Erzähl uns, was Zeit frisst",
+        "body": "Ein Gespräch, kein Angebotsprozess. Wenn wir nicht die Richtigen sind, sagen wir das früh.",
+        "button": "Gespräch vereinbaren"
+      }
+    }
   },
   "shop": {
     "error": {
@@ -4793,7 +4506,7 @@
     "categoryDescriptions": {
       "retraining": "明日の職場のための新しいスキル。AI ツールと自動化で 10 倍生産的に。",
       "linux": "OS、ターミナル、サーバー管理、オープンソースツール。",
-      "hardware": "コンピュータの修理、アップグレード、保守。はんだ付け、診断、ビンテージ復元。",
+      "hardware": "パソコンの修理・強化・保守。はんだ付け、診断、故障の切り分け。",
       "development": "プログラミングを学ぶ：Python、JavaScript、Web 開発、その他。",
       "web": "最新ツールで Web サイトを構築：HTML、CSS、React、Next.js。",
       "ai": "人工知能を理解し活用する。ChatGPT、自動化、AI ツール。",
@@ -6295,47 +6008,6 @@
           "description": "新品ラップトップ製造による平均的な CO₂ フットプリント",
           "source": "Circular Computing（230 台のラップトップを対象とした調査）"
         }
-      }
-    },
-    "communitySpace": {
-      "badge": "私たちの拠点",
-      "heading": "お越しください",
-      "intro": "チューリッヒの私たちの店舗は単なるお店以上の存在です — 持続可能な IT とオープンソースに関心のあるすべての人のための交流の場です。",
-      "offeringsTitle": "ここでできること:",
-      "planRoute": "経路を調べる",
-      "workshopDesc": "定期的なワークショップと講演で専門家から学べます。初心者から上級者まで対応しています。",
-      "workshopLink": "ワークショップのプログラム",
-      "visionLabel": "私たちのビジョン",
-      "visionCta": "このビジョンの実現にご協力ください。",
-      "supportProject": "プロジェクトを支援する",
-      "locationName": "evig ショップ",
-      "offerings": [
-        "リファービッシュ済みハードウェアの購入",
-        "ヴィンテージコンピュータコレクションの見学",
-        "対面での相談",
-        "修理または寄付のための機器の持ち込み"
-      ],
-      "workshops": {
-        "title": "ワークショップと講演",
-        "topics": [
-          "初心者向け Linux の基本",
-          "日常生活におけるオープンソースソフトウェア",
-          "持続可能な AI とその限界",
-          "代替的なテクノエコノミックモデル",
-          "修理ワークショップ: ラップトップ、スマートフォンなど",
-          "コンピュータの歴史"
-        ]
-      },
-      "vision": {
-        "title": "コミュニティテックスペース",
-        "description": "私たちの夢は、博物館、工房、そして持続可能なテクノロジーコミュニティの集いの場として機能する、より大きなスペースです。",
-        "features": [
-          "希少なヴィンテージハードウェアの博物館",
-          "歴史的なシンセサイザーと電子楽器のコレクション",
-          "修理ワークショップ向けのオープンな工房",
-          "講演やミートアップのためのイベントスペース",
-          "コミュニティ交流のためのカフェエリア"
-        ]
       }
     },
     "messageSidebar": {

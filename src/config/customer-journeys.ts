@@ -66,11 +66,36 @@ export const CUSTOMER_JOURNEYS = {
       },
     ],
   },
+  /**
+   * Access to intelligence — the third thing a person can get from evig, and
+   * the one the whole organisation is named for.
+   *
+   * Both of these lived under "Über uns", which asks who evig is. A division
+   * page explaining the AI offer and a pool you can join and pay a share of
+   * are not answers to that question; they are answers to "what can I get".
+   */
+  ai: {
+    id: 'ai',
+    sectionKey: 'sectionAiAccess',
+    hubHref: ROUTES.public.ai,
+    items: [
+      {
+        nameKey: 'aiDivisionLink',
+        href: ROUTES.public.ai,
+        descriptionKey: 'aiDivision',
+      },
+      {
+        nameKey: 'aboPools',
+        href: ROUTES.public.abos,
+        descriptionKey: 'aboPoolsDesc',
+      },
+    ],
+  },
 } as const
 
-/** Marktplatz mega-menu — both customer journeys in two columns. */
+/** Marktplatz mega-menu — the three things you can get from evig. */
 export function buildMarktplatzNavigationItems(): NavigationItem[] {
-  const { hardware, itHelp } = CUSTOMER_JOURNEYS
+  const { hardware, itHelp, ai } = CUSTOMER_JOURNEYS
 
   const section = (
     key: string,
@@ -100,6 +125,8 @@ export function buildMarktplatzNavigationItems(): NavigationItem[] {
     ...hardware.items.map(link),
     section(itHelp.sectionKey, itHelp.hubHref),
     ...itHelp.items.map(link),
+    section(ai.sectionKey, ai.hubHref),
+    ...ai.items.map(link),
   ]
 }
 

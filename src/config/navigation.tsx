@@ -1,9 +1,11 @@
 import React from 'react'
 import { ORG } from '@/config/org'
 import { buildMarktplatzNavigationItems } from '@/config/customer-journeys'
-import { DIVISION_PAGES, EVIG_DIVISIONS } from '@/config/divisions'
 import { ROUTES } from '@/config/routes'
-import { buildServicesNavigationItems } from '@/config/services-nav'
+import {
+  buildLearnServiceNavigationItems,
+  buildServicesNavigationItems,
+} from '@/config/services-nav'
 
 /**
  * Navigation Configuration - SSOT for all navigation data
@@ -37,18 +39,23 @@ export interface NavigationItem {
  * Main navigation structure
  *
  * Strategic positioning (6 top-level items):
- * 1. Über uns       - Identity: mission, vision, projects, evig ai, trust pages
+ * 1. Über uns       - Identity + trust ONLY, in two sections
  * 2. Dienstleistungen - Professional services (B2C)
- * 3. Marktplatz     - ALL customer-facing buy/sell/help: Shop + Marketplace + IT-Hilfe
- * 4. Lernen         - Workshops, guides, blog
+ * 3. Marktplatz     - the three things you can GET: Geräte · IT-Hilfe · KI
+ * 4. Lernen         - workshops, the OSS registry, Linux, resources, blog
  * 5. Mitmachen      - Volunteer, donate, partner, membership
  * 6. Kontakt        - CTA (highlighted)
+ *
+ * Each dropdown answers exactly ONE question, and every multi-item menu uses
+ * `isSection` eyebrows. "Über uns" used to answer five at once — it carried a
+ * brand division, a transactional product and a municipal subsidy programme
+ * alongside the mission — which is what made it unreadable.
  *
  * Key decision: the storefront and IT-Hilfe live together under "Marktplatz"
  * because someone looking for a device or for help does not care about the
  * organisational boundary between evig's own stock and community listings.
- * Inside Marktplatz, demand-side links come before supply-side links: buy
- * first, find a technician next, then create a listing or offer repairs.
+ * Access to AI joins them for the same reason: from the reader's side these
+ * are three ways to get something, not three parts of an org chart.
  */
 export const mainNavigation: NavigationItem[] = [
   {
@@ -57,6 +64,25 @@ export const mainNavigation: NavigationItem[] = [
     href: '/about',
     descriptionKey: 'aboutDesc',
     subItems: [
+      // This dropdown held NINE unsectioned items spanning five unrelated
+      // groups: identity, a brand division (evig ai), a transactional product
+      // (Abos teilen — join a pool, pay a share), trust pages, and two
+      // operational explainers, one of them a City of Zürich subsidy evig does
+      // not administer and cannot redeem. Two carried a `new` badge at once.
+      // It was the only multi-item menu with no `isSection` eyebrows, so nine
+      // heterogeneous rows arrived as one flat list.
+      //
+      // It answers one question now — who is this and can I trust them — in
+      // two groups. `evig ai` and `Abos teilen` moved to Marktplatz, where the
+      // things you can actually GET from evig live. `So funktioniert’s` and
+      // `Reparaturbonus Zürich` left the nav entirely; both pages remain and
+      // stay reachable in context, but neither is an answer to "who are you".
+      {
+        name: 'Wer wir sind',
+        nameKey: 'whoWeAre',
+        href: '/about',
+        isSection: true,
+      },
       {
         name: 'Mission & Geschichte',
         nameKey: 'missionHistory',
@@ -79,48 +105,19 @@ export const mainNavigation: NavigationItem[] = [
         href: '/projects',
         descriptionKey: 'projectsDesc',
       },
-      // The evig divisions that own a page (computers and repairs are reached
-      // through Marktplatz). Wordmarks come from the divisions SSOT and are
-      // proper nouns — they stay literal in every locale, so no nameKey.
-      ...EVIG_DIVISIONS.filter((division) => division.id in DIVISION_PAGES).map((division) => ({
-        name: division.wordmark,
-        href: division.href,
-        descriptionKey: `${division.id}Division`,
-      })),
       {
-        // Shared subscriptions sit next to `evig ai`, not under Mitmachen. The
-        // old placement called them "a resource-sharing engagement model" — a
-        // rationale that predates the AI thesis. A pooled seat in a paid
-        // assistant is the most concrete thing on this site that makes
-        // intelligence affordable, so it belongs where that claim is made.
-        name: 'Abos teilen',
-        nameKey: 'aboPools',
-        href: ROUTES.public.abos,
-        descriptionKey: 'aboPoolsDesc',
-        badge: 'new',
+        name: 'Vertrauen',
+        nameKey: 'trust',
+        href: '/transparenz',
+        isSection: true,
       },
       {
         // The accountability hub: finances, key figures and the calculation
-        // methods (incl. the CO₂ methodology). Distinct from "Unsere Wirkung"
-        // (impact outcomes) — this is the "show me the math" trust page, which
-        // was previously unreachable from the nav.
+        // methods (incl. the CO₂ methodology).
         name: 'Transparenz',
         nameKey: 'transparency',
         href: '/transparenz',
         descriptionKey: 'transparencyDesc',
-      },
-      {
-        name: 'So funktioniert’s',
-        nameKey: 'howItWorks',
-        href: '/so-funktionierts',
-        descriptionKey: 'howItWorksDesc',
-      },
-      {
-        name: 'Reparaturbonus Zürich',
-        nameKey: 'reparaturbonus',
-        href: '/reparaturbonus',
-        descriptionKey: 'reparaturbonusDesc',
-        badge: 'new',
       },
       {
         name: 'FAQ',
@@ -159,28 +156,17 @@ export const mainNavigation: NavigationItem[] = [
         href: '/workshops',
         descriptionKey: 'workshopsDesc',
       },
-      {
-        // "Guides" pointed at /knowhow#guides. There is no #guides element on
-        // /knowhow — its only id is `ressourcen` — and the card ON that page
-        // pointed at /#guides, a homepage anchor that does not exist either.
-        // Two dead links that did not even agree with each other, for content
-        // that has never been written.
-        //
-        // These two entries are what evig actually owns to teach with: a
-        // 43-entry open-source alternatives registry, and a Linux page with a
-        // distro-recommendation matrix. Both were filed under Dienstleistungen,
-        // three levels from anyone looking to learn something.
-        name: 'Open-Source-Alternativen',
-        nameKey: 'openSourceSolutions',
-        href: '/services/open-source-solutions',
-        descriptionKey: 'openSourceSolutionsDesc',
-      },
-      {
-        name: 'Linux einrichten',
-        nameKey: 'linuxOpenSource',
-        href: '/services/linux-open-source',
-        descriptionKey: 'linuxOpenSourceDesc',
-      },
+      // "Guides" pointed at /knowhow#guides. There is no #guides element on
+      // /knowhow — its only id is `ressourcen` — and the card ON that page
+      // pointed at /#guides, a homepage anchor that does not exist either.
+      // Two dead links that did not even agree with each other, for content
+      // that has never been written.
+      //
+      // What replaces them is DERIVED, not retyped: the service pages that
+      // declare `navGroup: 'learn'` in SERVICE_CONFIGS. Listing them here by
+      // hand — as the first version of this change did — put the same two
+      // items in two menus fed by two independent lists.
+      ...buildLearnServiceNavigationItems(),
       {
         name: 'Ressourcen',
         nameKey: 'resources',

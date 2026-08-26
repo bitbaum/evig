@@ -84,12 +84,9 @@
       "locationsDesc": "Our spaces in Zurich",
       "faqDesc": "Frequently asked questions",
       "servicesDesc": "Professional IT services",
-      "computerRepairDesc": "Get your computer back in shape",
-      "dataRecoveryDesc": "Back up and transfer data",
-      "hardwareRecyclingDesc": "Responsible disposal",
       "linuxOpenSourceDesc": "Installation and support",
-      "webDesignDesc": "Websites with open source",
-      "openSourceSolutionsDesc": "Consulting and implementation",
+      "webDesignDesc": "Websites built on open technology",
+      "openSourceSolutionsDesc": "43 alternatives to expensive software",
       "marketplaceDesc": "Buy, sell and IT help",
       "communityListingsDesc": "Used IT from evig and other sellers",
       "storeDesc": "Browse in person and get advice",
@@ -120,14 +117,10 @@
       "locations": "Locations",
       "faq": "FAQ",
       "services": "Services",
-      "hardware": "Hardware",
-      "computerRepair": "Repairs & upgrades",
-      "dataRecovery": "Data recovery",
-      "hardwareRecycling": "Hardware recycling",
       "software": "Software",
-      "linuxOpenSource": "Linux & open source",
+      "linuxOpenSource": "Set up Linux",
       "webDesign": "Web development",
-      "openSourceSolutions": "Open-source solutions",
+      "openSourceSolutions": "Open-source alternatives",
       "marketplace": "Marketplace",
       "buyDevices": "Buy devices",
       "communityListings": "Marketplace",
@@ -181,19 +174,22 @@
       "viewSection": "Overview",
       "sectionDevices": "Devices",
       "sectionHelp": "Help",
-      "howItWorks": "How it works",
-      "howItWorksDesc": "The journey of a device — from donation to its next home",
       "transparency": "Transparency",
       "transparencyDesc": "Finances, key figures and how we calculate",
-      "reparaturbonus": "Zurich Repair Bonus",
-      "reparaturbonusDesc": "Up to CHF 100 back on repairs — how it works",
       "press": "Press",
       "pressDesc": "Media coverage",
       "aiDivision": "Access to artificial intelligence — the assistant and the hardware to run it",
       "vision": "Vision",
       "visionDesc": "What evig is for, at full length",
       "resources": "Resources",
-      "resourcesDesc": "Curated tools, distributions and docs"
+      "resourcesDesc": "Curated tools, distributions and docs",
+      "whoWeAre": "Who we are",
+      "trust": "Trust",
+      "sectionAiAccess": "Access to AI",
+      "aiDivisionLink": "evig ai",
+      "aiAdoption": "AI & robotics",
+      "aiAdoptionDesc": "Put it to work",
+      "organisations": "For organisations"
     },
     "experimentalBanner": "Experimental Site",
     "experimentalBannerLink": "go to current site",
@@ -923,14 +919,14 @@
   },
   "services": {
     "meta": {
-      "title": "Services | IT Services in Zurich",
-      "description": "Professional computer repair, web development, data recovery, Linux support and hardware recycling in Zurich.",
-      "layoutTitle": "Computer Repair & IT Services",
+      "title": "For organisations — AI, robotics and open software",
+      "description": "We put AI and robotics to work, build web surfaces with open technology, and set up Linux. For organisations that know something has to change.",
+      "layoutTitle": "For organisations",
       "serviceDetailTitle": "Service Details",
       "serviceDetailDesc": "Professional IT services from evig in Zurich."
     },
-    "title": "Services",
-    "subtitle": "What we can do for you",
+    "title": "For organisations",
+    "subtitle": "What we do for businesses and institutions",
     "bookAppointment": "Book an appointment",
     "requestQuote": "Request a quote",
     "priceFrom": "From CHF",
@@ -957,9 +953,8 @@
       "bookingFailed": "Booking failed",
       "networkError": "Network error. Please try again.",
       "categoryLabels": {
-        "hardware": "Hardware Services",
-        "software": "Software Solutions",
-        "soon": "Coming Soon"
+        "software": "Linux & open software",
+        "organisations": "For organisations"
       },
       "badges": {
         "soon": "Coming soon"
@@ -1391,75 +1386,6 @@
         "allServices": "Explore all services"
       }
     },
-    "hardwareRecycling": {
-      "meta": {
-        "title": "Hardware Recycling",
-        "description": "Responsible recycling and refurbishment of IT equipment. Secure data erasure, free pickup service, and sustainable IT solutions.",
-        "ogTitle": "Hardware Recycling",
-        "ogDescription": "Sustainable IT solutions through responsible recycling and refurbishment of IT equipment."
-      },
-      "hero": {
-        "title": "Hardware Recycling",
-        "subtitle": "Responsible recycling and refurbishment services for IT equipment. We help reduce e-waste while ensuring secure data erasure."
-      },
-      "features": [
-        {
-          "title": "Secure Data Erasure",
-          "description": "Complete and secure erasure of all data from devices."
-        },
-        {
-          "title": "Device Refurbishment",
-          "description": "Professional refurbishment of IT equipment."
-        },
-        {
-          "title": "Component Recycling",
-          "description": "Responsible recycling of electronic components."
-        },
-        {
-          "title": "Free Pickup Service",
-          "description": "Convenient pickup service for your old equipment."
-        }
-      ],
-      "pricing": {
-        "heading": "Pricing",
-        "subtitle": "Sustainable and affordable",
-        "badge": "Best choice",
-        "price": "Free",
-        "forMostItems": "for most items",
-        "features": [
-          "Free pickup service",
-          "Secure data erasure",
-          "Environmentally responsible",
-          "Certificate of destruction"
-        ],
-        "cta": "Ready to get started?"
-      },
-      "impact": {
-        "heading": "Environmental Responsibility",
-        "subtitle": "Every recycled device helps protect our planet",
-        "dataSecurity": "Secure data erasure",
-        "sustainableProcesses": "Sustainable processes",
-        "reducedEwaste": "Reduced e-waste"
-      },
-      "contact": {
-        "heading": "Contact us today",
-        "subtitle": "To learn more about our hardware recycling services",
-        "locations": "Locations",
-        "store": "Sales",
-        "warehouse": "Warehouse",
-        "contactInfo": "Contact",
-        "phone": "Phone",
-        "hours": "Opening hours",
-        "monday": "Monday",
-        "weekdays": "Tuesday - Friday"
-      },
-      "cta": {
-        "heading": "Ready to get started?",
-        "body": "Contact us today to learn more about our hardware recycling services.",
-        "contact": "Contact",
-        "back": "Back to Services"
-      }
-    },
     "linuxOpenSource": {
       "meta": {
         "title": "Linux & Open Source",
@@ -1749,275 +1675,7 @@
         "workshopLink": "View workshop"
       }
     },
-    "repair": {
-      "meta": {
-        "title": "Computer Repairs & Upgrades",
-        "description": "Professional computer repairs and upgrades. We specialize in what others can't repair — including motherboard repairs and component-level faults."
-      },
-      "hero": {
-        "title": "Computer Repairs & Upgrades",
-        "subtitle": "Repairs you can rely on",
-        "description": "We combine technical expertise with sustainable action to extend the lifespan of your devices. Our repair services focus on what others give up on — saving money and reducing e-waste."
-      },
-      "features": [
-        {
-          "title": "Component-Level Repairs",
-          "description": "We don't just swap parts — we repair them. Our technicians can fix motherboards, power supplies, and other components at the circuit level."
-        },
-        {
-          "title": "Hardware Upgrades",
-          "description": "Extend your computer's lifespan with targeted upgrades. We help you select and install the right components."
-        },
-        {
-          "title": "Diagnostic Service",
-          "description": "Comprehensive diagnosis to quickly identify and fix problems. With professional tools and years of experience, we hit the mark."
-        },
-        {
-          "title": "Express Service",
-          "description": "Urgent? For many common problems we offer same-day repairs. Just bring your device in during our opening hours."
-        }
-      ],
-      "pricing": {
-        "heading": "Pricing",
-        "base": "From CHF 70/hour",
-        "details": [
-          "Free initial diagnosis",
-          "No repair = no charge",
-          "Transparent pricing",
-          "Guarantee on repairs"
-        ]
-      },
-      "processHeading": "Our Repair Process",
-      "process": [
-        {
-          "title": "Diagnosis",
-          "description": "We examine your device and provide an accurate assessment of the problem."
-        },
-        {
-          "title": "Quote",
-          "description": "You receive a transparent quote — no hidden fees."
-        },
-        {
-          "title": "Repair",
-          "description": "Our technicians repair your device with quality parts and proven methods."
-        },
-        {
-          "title": "Testing",
-          "description": "All repairs are thoroughly tested to ensure your device works perfectly."
-        }
-      ],
-      "cta": {
-        "heading": "Get your device repaired?",
-        "body": "Contact us for a free diagnosis and quote. We help you get your device running again quickly and affordably.",
-        "contact": "Get in touch",
-        "allServices": "All Services"
-      }
-    },
-    "buildComputer": {
-      "meta": {
-        "title": "AI-Powered Sustainable Computer Builds",
-        "description": "Our AI system scans global partner networks to assemble your perfect computer primarily from used and refurbished components."
-      },
-      "hero": {
-        "title": "AI-Powered Sustainable Computer Builds",
-        "subtitle": "Our revolutionary AI system scans our inventory and global partner networks to assemble your perfect computer primarily from used and refurbished components.",
-        "strong": "100% Used Parts Priority • Global Inventory Network • Intelligent AI Matching",
-        "badge1": "Circular Economy",
-        "badge2": "Global Network",
-        "badge3": "AI-Optimized"
-      },
-      "howItWorks": {
-        "heading": "How Our AI Build System Works",
-        "steps": [
-          {
-            "title": "Requirements Analysis",
-            "description": "Tell us your use case, performance requirements and sustainability preferences"
-          },
-          {
-            "title": "Global Inventory Scan",
-            "description": "The AI scans our inventory + partner networks across Europe and beyond"
-          },
-          {
-            "title": "Intelligent Optimization",
-            "description": "The algorithm prioritizes used parts, optimizing for performance and sustainability"
-          },
-          {
-            "title": "Assembly & Certification",
-            "description": "Professional assembly with our \"Revamped\" sustainability certification"
-          }
-        ]
-      },
-      "buildTool": {
-        "heading": "Try Our Build Tool Demo",
-        "subtitle": "Experience how our AI system would recommend components for your specific needs",
-        "step1Heading": "What will you use your computer for?",
-        "performanceHeading": "Performance Requirements",
-        "budgetLabel": "Budget Range (CHF)",
-        "budgetPlaceholder": "Select budget range",
-        "specificLabel": "Specific Requirements (optional)",
-        "specificPlaceholder": "Do you have special needs? (e.g. multiple monitors, VR gaming, specific software requirements)",
-        "nextButton": "Continue to Analysis",
-        "step2Heading": "AI Inventory Analysis",
-        "requirementsSummary": "Summary of your requirements:",
-        "useCaseLabel": "Use Case",
-        "performanceLabel": "Performance",
-        "budgetSummaryLabel": "Budget",
-        "sustainabilityLabel": "Sustainability",
-        "sustainabilityValue": "High Priority",
-        "specialNotesLabel": "Special Notes",
-        "analyzeDescription": "Ready to scan our global inventory network and generate your personalized build recommendation?",
-        "backButton": "Back to Edit",
-        "analyzeButton": "Analyze Global Inventory",
-        "scanningLabel": "🔍 Scanning inventory networks...",
-        "scanningLines": [
-          "Checking Zurich warehouse (847 components)",
-          "Scanning European partners (12,450+ components)",
-          "AI optimizing for sustainability + performance",
-          "Calculating shipping routes and costs"
-        ],
-        "step3Heading": "Your Optimized Build",
-        "sustainableLabel": "% Sustainable",
-        "performanceMatchLabel": "% Performance Match",
-        "usedPartsLabel": "% Used Parts",
-        "componentTypes": {
-          "cpu": "Processor",
-          "gpu": "Graphics Card",
-          "ram": "Memory",
-          "storage": "Storage"
-        },
-        "conditions": {
-          "used": "Used",
-          "refurbished": "Refurbished",
-          "new": "New"
-        },
-        "inStock": "in stock",
-        "deliveryTime": "approx. 3-5 days",
-        "totalCost": "Total Build Cost:",
-        "extras": "+ Assembly & Testing: CHF 120 | + Shipping: CHF 45 | + \"Revamped\" Certification: Included",
-        "changeRequirements": "Change Requirements",
-        "orderBuild": "Request a build",
-        "browseComponents": "Browse components",
-        "resultNote": "We build your machine from tested, refurbished components. Browse matching parts in our marketplace, or request a ready-made build directly.",
-        "sustainabilityNote": "Every reused part extends the life of existing hardware and avoids the emissions of manufacturing new components.",
-        "environmentHeading": "Environmental Impact",
-        "co2Saved": "CO₂ Saved",
-        "co2Value": "~85kg compared to new build",
-        "reusedLabel": "Reused Components",
-        "reusedValue": "4 of 4 main parts",
-        "circularLabel": "Circular Economy",
-        "circularValue": "Extends hardware lifespan"
-      },
-      "features": {
-        "heading": "Why Choose Our AI Build System?",
-        "items": [
-          {
-            "title": "Global Inventory Network",
-            "description": "Access to thousands of used and refurbished components across Europe and beyond, with real-time stock tracking."
-          },
-          {
-            "title": "AI-Powered Optimization",
-            "description": "Smart algorithms balance performance, sustainability, cost and availability to find your perfect build combination."
-          },
-          {
-            "title": "\"Revamped\" Certification",
-            "description": "Every build receives our sustainability certification, guaranteeing quality while supporting the circular economy."
-          }
-        ]
-      },
-      "cta": {
-        "heading": "Ready to Build Sustainably?",
-        "body": "Join the revolution in computer building. Get a custom-tailored, sustainable build that performs excellently while protecting our planet.",
-        "startBuild": "Start Your Build",
-        "explore": "Explore All Services"
-      },
-      "useCaseOptions": {
-        "office": {
-          "name": "Office & Business",
-          "description": "Email, documents, web browsing, video calls"
-        },
-        "creative": {
-          "name": "Creative Work",
-          "description": "Photo/video editing, design, content creation"
-        },
-        "gaming": {
-          "name": "Gaming",
-          "description": "Modern games, streaming, high-performance computing"
-        },
-        "development": {
-          "name": "Software Development",
-          "description": "Programming, testing, multiple VMs, compiling"
-        },
-        "server": {
-          "name": "Server/NAS",
-          "description": "File server, media server, home automation"
-        },
-        "ai": {
-          "name": "AI/Machine Learning",
-          "description": "Model training, data processing, CUDA workloads"
-        }
-      },
-      "performanceOptions": {
-        "basic": {
-          "name": "Basic",
-          "description": "Light tasks, adequate performance"
-        },
-        "moderate": {
-          "name": "Moderate",
-          "description": "Balanced performance for most tasks"
-        },
-        "high": {
-          "name": "High",
-          "description": "Strong performance for demanding tasks"
-        },
-        "extreme": {
-          "name": "Extreme",
-          "description": "Peak performance, no compromises"
-        }
-      },
-      "budgetOptions": {
-        "300-500": "CHF 300-500",
-        "500-800": "CHF 500-800",
-        "800-1200": "CHF 800-1200",
-        "1200+": "CHF 1200+"
-      }
-    },
     "catalog": {
-      "computerRepair": {
-        "title": "Computer Repair & Upgrades",
-        "description": "Expert repairs for all types of computers and components. We specialize in fixing what others cannot, including motherboard repairs and component-level fixes.",
-        "features": [
-          "Component-level repairs",
-          "Hardware upgrades",
-          "Diagnostic services",
-          "Professional assessment"
-        ],
-        "highlight": "Professional assessment required",
-        "pricing": "CHF 70/h"
-      },
-      "dataRecovery": {
-        "title": "Data Recovery & Transfer",
-        "description": "Safe and reliable data transfer services for all types of storage media. We can recover data from damaged devices and transfer it to modern storage solutions.",
-        "features": [
-          "Secure data transfer",
-          "Data recovery from damaged devices",
-          "Support for legacy media (floppy disks, ZIP drives, MO drives, SCSI/IDE drives)",
-          "Complete data security"
-        ],
-        "highlight": "Evaluation required before recovery",
-        "pricing": "CHF 70/h"
-      },
-      "hardwareRecycling": {
-        "title": "Hardware Recycling",
-        "description": "Responsible recycling and refurbishment of IT devices. We give your old devices a new life and ensure secure data erasure.",
-        "features": [
-          "Secure data erasure",
-          "Device refurbishment",
-          "Component recycling",
-          "Free pickup service"
-        ],
-        "highlight": "Free pickup service available",
-        "pricing": "Free for most items"
-      },
       "webDesign": {
         "title": "Web Design & Development",
         "description": "Professional web design and development services using modern open-source technologies. Fast, responsive websites with Next.js, headless CMS and sustainable practices.",
@@ -2055,22 +1713,77 @@
         "highlight": "Free initial consultation",
         "pricing": "CHF 70/h"
       },
-      "buildYourComputer": {
-        "title": "Build Your Computer",
-        "description": "Get a custom-built computer for your specific needs, supported by AI analysis of our extensive inventory. We source parts globally and offer professional assembly.",
+      "aiAdoption": {
+        "title": "AI & robotics at work",
+        "description": "We look at the work that actually gets done, pick one task, and build it with you — until someone on your side can run it themselves.",
         "features": [
-          "AI-powered build recommendations",
-          "Global parts sourcing network",
-          "Professional assembly and testing",
-          "Quality guarantee and warranty"
+          "Analysis of how the work really flows",
+          "Ship one task instead of planning ten",
+          "Open tools where possible",
+          "Handover to your team"
         ],
-        "highlight": "Coming soon",
-        "pricing": ""
+        "highlight": "Starts with a conversation"
       }
     },
     "pricingTitle": "Prices",
     "mediaCostsTitle": "Media Costs",
-    "processTitle": "Our Process"
+    "processTitle": "Our Process",
+    "aiAdoption": {
+      "meta": {
+        "title": "AI and robotics at work",
+        "description": "For organisations that know something has to change but not where to start. We look at the work and build alongside you."
+      },
+      "hero": {
+        "title": "Putting AI and robotics to work",
+        "lede": "For organisations that know something has to change, but not where to start."
+      },
+      "thesis": {
+        "eyebrow": "Why",
+        "title": "The problem is rarely the model",
+        "body": "Most organisations are not stuck because the technology does not exist. They are stuck because nobody had time to look at their own work and ask which part of it is even worth automating. That is where we start — not with a tool, but with what you actually do all day."
+      },
+      "steps": {
+        "eyebrow": "How it goes",
+        "heading": "Four steps, no slides",
+        "look": {
+          "title": "Look",
+          "body": "We spend a day where the work happens and write down what actually eats time. Not what the org chart says."
+        },
+        "pick": {
+          "title": "Pick",
+          "body": "From that list we take one task: the best ratio of effort to time recovered. One, not ten."
+        },
+        "build": {
+          "title": "Build",
+          "body": "We build it with you — your data, your environment, open tools where possible. You see every step."
+        },
+        "handover": {
+          "title": "Hand over",
+          "body": "At the end, someone on your side can run it, change it and switch it off. If that is not true, we did not deliver a thing — we built a dependency."
+        }
+      },
+      "boundary": {
+        "eyebrow": "Honest limits",
+        "heading": "What this is not",
+        "noMagic": {
+          "title": "Not a silver bullet",
+          "body": "Some work cannot be automated, and some should not be. We say so when we see it."
+        },
+        "noLockIn": {
+          "title": "Not a dependency",
+          "body": "What we build is yours — code, data, access. We build nothing that only runs while we are around."
+        },
+        "noHeadcount": {
+          "title": "Not a big firm",
+          "body": "evig is small. We take on what we can genuinely see through, and decline what does not fit."
+        }
+      },
+      "cta": {
+        "heading": "Tell us what eats your time",
+        "body": "A conversation, not a procurement process. If we are not the right people, we say so early.",
+        "button": "Arrange a conversation"
+      }
+    }
   },
   "workshops": {
     "meta": {
@@ -2331,7 +2044,7 @@
     "categoryDescriptions": {
       "retraining": "New skills for tomorrow's working world. Become 10x more productive with AI tools and automation.",
       "linux": "Operating systems, terminal, server administration and open-source tools.",
-      "hardware": "Repair, upgrade and maintain computers. Soldering, diagnostics, vintage restoration.",
+      "hardware": "Repair, upgrade and maintain computers. Soldering, diagnosis, fault-finding.",
       "development": "Learn to code: Python, JavaScript, web development and more.",
       "web": "Build websites with modern tools: HTML, CSS, React, Next.js.",
       "ai": "Understand and use artificial intelligence. ChatGPT, automation, AI tools.",
@@ -6295,47 +6008,6 @@
           "description": "Average CO₂ footprint of producing a new laptop",
           "source": "Circular Computing (study with 230 laptops)"
         }
-      }
-    },
-    "communitySpace": {
-      "badge": "Our Location",
-      "heading": "Visit Us",
-      "intro": "Our shop in Zurich is more than just a store — it is a meeting place for everyone interested in sustainable IT and open source.",
-      "offeringsTitle": "What you can find with us:",
-      "planRoute": "Plan route",
-      "workshopDesc": "Learn from experts in our regular workshops and talks. For beginners to advanced.",
-      "workshopLink": "Workshop programme",
-      "visionLabel": "Our Vision",
-      "visionCta": "Help us make this vision a reality.",
-      "supportProject": "Support the project",
-      "locationName": "evig Shop",
-      "offerings": [
-        "Buy refurbished hardware",
-        "Visit our vintage computer collection",
-        "Get personal advice",
-        "Drop off devices for repair or donation"
-      ],
-      "workshops": {
-        "title": "Workshops & Talks",
-        "topics": [
-          "Linux basics for beginners",
-          "Open-Source software in everyday life",
-          "Sustainable AI and its limits",
-          "Alternative techno-economic models",
-          "Repair workshops: laptop, smartphone, etc.",
-          "History of computer evolution"
-        ]
-      },
-      "vision": {
-        "title": "Community Tech Space",
-        "description": "Our dream is a larger space serving as a museum, workshop, and meeting point for the sustainable tech community.",
-        "features": [
-          "Museum for rare vintage hardware",
-          "Collection of historic synthesizers and electronic instruments",
-          "Open workshop for repair sessions",
-          "Event space for talks and meetups",
-          "Café area for community exchange"
-        ]
       }
     },
     "messageSidebar": {

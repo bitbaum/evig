@@ -1,29 +1,50 @@
 import type { NavigationItem } from '@/config/navigation'
-import { SERVICE_CONFIGS, type ServiceCategoryKey } from '@/app/[locale]/services/data'
+import {
+  SERVICE_CONFIGS,
+  type ServiceCategoryKey,
+  type ServiceNavGroup,
+} from '@/app/[locale]/services/data'
 
 /**
- * Services mega-menu items — derived from SERVICE_CONFIGS (the services SSOT)
- * so the menu can never drift from the actual service pages. Add, remove,
- * reorder or re-href a service in SERVICE_CONFIGS and the nav follows.
+ * Service links for the main navigation — derived from SERVICE_CONFIGS (the
+ * services SSOT) so a menu can never drift from the actual service pages.
+ * Add, remove, reorder, re-href or re-GROUP a service in SERVICE_CONFIGS and
+ * both menus follow.
  *
- * Only the LINKS are derived (which services, their order, grouping by
- * category, and href). Labels stay in the `nav` namespace because the menu
- * uses intentionally shorter wording than the full services.catalog titles
- * (e.g. "Reparatur & Upgrades" vs "Computerreparatur & Aufrüstungen"). Each
- * service's i18n key matches its SERVICE_CONFIGS `key`, so the nav resolves
- * `nav.items.{key}` / `nav.items.{key}Desc` with no per-service mapping.
+ * Only the LINKS are derived (which services, their order, grouping, href).
+ * Labels stay in the `nav` namespace because the menu uses intentionally
+ * shorter wording than the full services.catalog titles (e.g. "Linux
+ * einrichten" vs "Linux & Open Source"). Each service's i18n key matches its
+ * SERVICE_CONFIGS `key`, so the nav resolves `nav.items.{key}` /
+ * `nav.items.{key}Desc` with no per-service mapping.
  *
- * `soon`/unavailable services (e.g. build-your-computer) are omitted — the nav
- * only surfaces live services.
+ * `available: false` services are omitted — the nav only surfaces live work.
  */
 
-/** Categories shown in the menu, in display order. `soon` is intentionally excluded. */
-const MENU_CATEGORIES: ServiceCategoryKey[] = ['hardware', 'software']
+/** Categories shown under Dienstleistungen, in display order. */
+const SERVICES_MENU_CATEGORIES: ServiceCategoryKey[] = ['organisations']
 
+function servicesInGroup(group: ServiceNavGroup) {
+  return SERVICE_CONFIGS.filter((s) => s.navGroup === group && s.available)
+}
+
+function link(service: (typeof SERVICE_CONFIGS)[number]): NavigationItem {
+  return {
+    name: service.key,
+    nameKey: service.key,
+    href: service.href,
+    descriptionKey: `${service.key}Desc`,
+  }
+}
+
+/** Dienstleistungen mega-menu — what evig does FOR organisations. */
 export function buildServicesNavigationItems(): NavigationItem[] {
   const items: NavigationItem[] = []
 
-  for (const categoryKey of MENU_CATEGORIES) {
+  for (const categoryKey of SERVICES_MENU_CATEGORIES) {
+    const inCategory = servicesInGroup('services').filter((s) => s.categoryKey === categoryKey)
+    if (inCategory.length === 0) continue
+
     // Section eyebrow — label + overview link resolve from nav.items.{category}.
     items.push({
       name: categoryKey,
@@ -31,17 +52,20 @@ export function buildServicesNavigationItems(): NavigationItem[] {
       href: '/services',
       isSection: true,
     })
-
-    for (const service of SERVICE_CONFIGS) {
-      if (service.categoryKey !== categoryKey || !service.available) continue
-      items.push({
-        name: service.key,
-        nameKey: service.key,
-        href: service.href,
-        descriptionKey: `${service.key}Desc`,
-      })
-    }
+    items.push(...inCategory.map(link))
   }
 
   return items
+}
+
+/**
+ * The service pages that belong under Lernen.
+ *
+ * Linux and the open-source registry are the two most substantial pieces of
+ * teaching material evig owns — a distro-recommendation matrix and a 43-entry
+ * alternatives registry. They were three levels deep under Dienstleistungen,
+ * where nobody looking to learn would find them.
+ */
+export function buildLearnServiceNavigationItems(): NavigationItem[] {
+  return servicesInGroup('learn').map(link)
 }
