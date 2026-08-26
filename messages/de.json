@@ -8472,7 +8472,7 @@
       "ai": {
         "meta": {
           "title": "Zugang zu Intelligenz",
-          "description": "Der Bereich für erreichbare künstliche Intelligenz: ein Assistent, der zur Plattform gehört, auf Hardware, die bezahlbar ist."
+          "description": "Der Bereich für erreichbare künstliche Intelligenz: Zugang als Sozialleistung statt als Abo — ohne Bedürftigkeitsprüfung, auf Hardware, die bezahlbar ist."
         },
         "hero": {
           "title": "Intelligenz sollte nicht davon abhängen, was man verdient.",
@@ -8480,15 +8480,20 @@
         },
         "thesis": {
           "eyebrow": "Warum",
-          "title": "Die Lücke, die alle anderen vergrössert",
-          "body": "Intelligenz ist die Meta-Ressource: Sie verstärkt sich selbst. Gib zwei Menschen dieselbe Aufgabe, und wer Intelligenz auf Abruf hat, zieht davon — und bleibt vorne. Deshalb behandeln wir Zugang zu KI nicht als Zusatzfunktion neben einem Laden, sondern als denselben Auftrag wie bezahlbare Hardware. Ein gebrauchtes Notebook, richtig eingerichtet, ist der günstigste Einstieg in künstliche Intelligenz, den es gibt."
+          "title": "Eine Grundversorgung, die auf keiner Liste steht",
+          "body": "Sozialhilfe deckt, was man zum Mitmachen braucht: Wohnen, Essen, Prämienverbilligung, ein vergünstigtes Billett. Zugang zu Intelligenz steht auf keiner dieser Listen — obwohl er heute mitentscheidet, ob jemand eine Bewerbung schreibt, einen Behördenbrief versteht oder einen Beruf umlernt. Intelligenz ist die Meta-Ressource: Sie verstärkt sich selbst. Gib zwei Menschen dieselbe Aufgabe, und wer Intelligenz auf Abruf hat, zieht davon — und bleibt vorne. Deshalb behandeln wir Zugang zu KI wie eine Sozialleistung und nicht wie ein Zusatzprodukt: als etwas, das man bekommt, weil man dabei sein soll, nicht weil man es sich leisten kann."
         },
         "strands": {
           "eyebrow": "Woran wir arbeiten",
-          "heading": "Drei Teile, die zusammengehören",
+          "heading": "{count, plural, one {Ein Teil des Ganzen} other {# Teile, die zusammengehören}}",
+          "welfare": {
+            "title": "Zugang ohne Bedürftigkeitsprüfung",
+            "body": "Sozialleistungen scheitern selten am Geld allein — sie scheitern am Weg dorthin: Antrag, Nachweis, die eigene Lage erklären müssen. Deshalb prüft evig niemanden. Wer ein Konto hat, hat Zugang: keine Begründung, kein Einkommensnachweis, keine Warteliste. Wer mehr braucht, als wir verschenken können, findet unten die günstigeren Wege dorthin.",
+            "link": "Konto erstellen"
+          },
           "assistant": {
             "title": "Der Assistent",
-            "body": "Auf jeder Seite dieser Plattform sitzt ein Assistent, der den Kontext der Seite kennt und Fragen dazu beantwortet. Er gehört zur Plattform und ist kein Zusatzprodukt — kein zweites Abo, keine getrennte Anmeldung."
+            "body": "Die KI-Hilfe sitzt dort, wo Schreiben zur Hürde wird: die Reparaturanfrage beschreiben, ein Inserat formulieren, einen Workshop vorschlagen. Sie gehört zum Konto und ist kein Zusatzprodukt — kein zweites Abo, keine getrennte Anmeldung."
           },
           "sharing": {
             "title": "Geteilter Zugang",
@@ -8519,6 +8524,10 @@
           "noLockIn": {
             "title": "Keine Einbahnstrasse",
             "body": "Was du hier tust, soll dir gehören. Ein Bereich, aus dem man nicht wieder herauskommt, wäre das Gegenteil von Zugang."
+          },
+          "noAuthority": {
+            "title": "Kein Sozialamt",
+            "body": "Wir zahlen kein Geld aus, ersetzen keinen gesetzlichen Anspruch und entscheiden über niemandes Bedürftigkeit. Was der Staat schuldet, schuldet weiterhin der Staat — wir schliessen eine Lücke, die er noch nicht kennt."
           }
         },
         "cta": {

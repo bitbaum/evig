@@ -129,12 +129,19 @@ export interface DivisionPageConfig {
 
 export const DIVISION_PAGES: Record<DivisionPageId, DivisionPageConfig> = {
   ai: {
-    strands: ['assistant', 'sharing', 'hardware', 'sovereignty'],
+    // `welfare` leads on purpose: it is the claim the other four serve. evig
+    // treats access to intelligence as a social provision, so the page states
+    // that first and only then says by which means it delivers it.
+    strands: ['welfare', 'assistant', 'sharing', 'hardware', 'sovereignty'],
     strandLinks: {
+      welfare: ROUTES.public.register,
       sharing: ROUTES.public.abos,
       hardware: ROUTES.public.marketplace,
     },
-    boundaries: ['noLab', 'noMagic', 'noLockIn'],
+    // `noAuthority` is the price of the welfare claim: an organisation that
+    // calls its work social assistance owes the reader the sentence saying it
+    // is not the Sozialamt, pays out no money and replaces no entitlement.
+    boundaries: ['noLab', 'noMagic', 'noLockIn', 'noAuthority'],
     ctaHref: ROUTES.public.marketplace,
   },
 }

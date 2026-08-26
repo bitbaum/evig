@@ -8342,7 +8342,7 @@
       "ai": {
         "meta": {
           "title": "Accesso all’intelligenza",
-          "description": "L’area dell’intelligenza artificiale raggiungibile: un assistente integrato nella piattaforma, su hardware accessibile."
+          "description": "L'area dell'intelligenza artificiale raggiungibile: accesso come prestazione sociale invece che come abbonamento — senza verifica dei mezzi, su hardware alla portata."
         },
         "hero": {
           "title": "L’intelligenza non dovrebbe dipendere da quanto si guadagna.",
@@ -8350,15 +8350,20 @@
         },
         "thesis": {
           "eyebrow": "Perché",
-          "title": "Il divario che allarga tutti gli altri",
-          "body": "L’intelligenza è la meta-risorsa: si accumula. Date lo stesso problema a due persone e quella che ha intelligenza a disposizione va avanti — e continua ad andare avanti. Per questo non trattiamo l’accesso all’IA come una funzione aggiunta a un negozio: è lo stesso mandato dell’hardware accessibile. Un portatile usato, configurato bene, è la porta d’ingresso più economica che esista all’intelligenza artificiale."
+          "title": "Una prestazione di base che non compare in nessun elenco",
+          "body": "L'assistenza sociale copre ciò che serve per partecipare: l'alloggio, il cibo, la riduzione dei premi dell'assicurazione malattia, un biglietto di trasporto scontato. L'accesso all'intelligenza non compare in nessuno di questi elenchi, benché oggi concorra a decidere se qualcuno scrive una candidatura, capisce una lettera delle autorità o si riqualifica per un altro mestiere. L'intelligenza è la meta-risorsa: si rafforza da sé. Date lo stesso compito a due persone: chi ha intelligenza su richiesta va avanti — e resta avanti. Per questo trattiamo l'accesso all'IA come una prestazione sociale e non come un prodotto aggiuntivo: come qualcosa che si riceve perché si deve poter partecipare, non perché ci si può permettere di pagarlo."
         },
         "strands": {
           "eyebrow": "A cosa lavoriamo",
-          "heading": "Tre parti che stanno insieme",
+          "heading": "{count, plural, one {Una parte dell'insieme} other {# parti che stanno insieme}}",
+          "welfare": {
+            "title": "Accesso senza verifica dei mezzi",
+            "body": "Le prestazioni raramente falliscono solo per i soldi: falliscono per la strada che porta a esse — la domanda, il giustificativo, il dover spiegare la propria situazione. Per questo evig non esamina nessuno. Chi ha un account ha accesso: nessuna motivazione, nessun certificato di reddito, nessuna lista d'attesa. E per ciò che non possiamo regalare, le vie più economiche sono qui sotto.",
+            "link": "Creare un account"
+          },
           "assistant": {
             "title": "L’assistente",
-            "body": "Su ogni pagina di questa piattaforma c’è un assistente che conosce il contesto della pagina e risponde alle domande su di essa. Fa parte della piattaforma e non è un prodotto a parte — nessun secondo abbonamento, nessun accesso separato."
+            "body": "L'aiuto dell'IA sta dove scrivere diventa l'ostacolo: descrivere una richiesta di riparazione, formulare un annuncio, proporre un workshop. Appartiene all'account e non è un prodotto a parte: nessun secondo abbonamento, nessun accesso separato."
           },
           "sharing": {
             "title": "Accesso condiviso",
@@ -8389,6 +8394,10 @@
           "noLockIn": {
             "title": "Non è una strada a senso unico",
             "body": "Quello che fai qui deve appartenerti. Un’area da cui non si può uscire sarebbe l’opposto dell’accesso."
+          },
+          "noAuthority": {
+            "title": "Non siamo i servizi sociali",
+            "body": "Non versiamo denaro, non sostituiamo alcun diritto di legge e non decidiamo sul bisogno di nessuno. Ciò che lo Stato deve, lo deve ancora: noi colmiamo una lacuna che non conosce ancora."
           }
         },
         "cta": {

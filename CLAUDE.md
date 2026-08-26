@@ -52,6 +52,16 @@ Rules:
   CTA. `evig ai` states plainly that it is not a research lab, sells no magic,
   and locks nobody in. Do not soften or drop these — they are what keeps an
   ambitious claim honest (see the honesty boundary in `.claude/CLAUDE.md`).
+- **`evig ai` frames access as social assistance, and pays the price for it.**
+  The page argues that access to intelligence belongs in the basic provision a
+  society owes people — a welfare claim, so it carries the `noAuthority`
+  boundary: evig pays out no money, replaces no legal entitlement and rules on
+  nobody's need. Nor does it means-test: access comes with any free account, no
+  proof and no application, which is the whole point (a provision that shames
+  the recipient goes unclaimed). Keep both halves — the claim without the limit
+  is exactly the kind of unearned promise this file exists to prevent.
+  Narrative SSOT: `docs/EVIG_STORY.md` → "Access to intelligence is social
+  assistance".
 
 ## Non-negotiable standards (the default for every change — don't wait to be told)
 

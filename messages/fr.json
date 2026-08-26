@@ -8344,7 +8344,7 @@
       "ai": {
         "meta": {
           "title": "Accès à l’intelligence",
-          "description": "Le domaine de l’intelligence artificielle accessible : un assistant intégré à la plateforme, sur du matériel abordable."
+          "description": "Le domaine de l'intelligence artificielle accessible : un accès conçu comme une prestation sociale plutôt que comme un abonnement — sans examen des ressources, sur du matériel abordable."
         },
         "hero": {
           "title": "L’intelligence ne devrait pas dépendre de ce que l’on gagne.",
@@ -8352,15 +8352,20 @@
         },
         "thesis": {
           "eyebrow": "Pourquoi",
-          "title": "L’écart qui creuse tous les autres",
-          "body": "L’intelligence est la méta-ressource : elle se cumule. Donnez le même problème à deux personnes, et celle qui dispose d’intelligence à la demande prend de l’avance — et la garde. Nous ne traitons donc pas l’accès à l’IA comme une fonction ajoutée à une boutique : c’est le même mandat que le matériel abordable. Un ordinateur portable d’occasion, bien configuré, est la porte d’entrée la moins chère qui existe vers l’intelligence artificielle."
+          "title": "Une prestation de base qui ne figure sur aucune liste",
+          "body": "L'aide sociale couvre ce qu'il faut pour participer : le logement, la nourriture, la réduction des primes d'assurance-maladie, un billet de transport à prix réduit. L'accès à l'intelligence ne figure sur aucune de ces listes — alors qu'il décide aujourd'hui en partie si quelqu'un rédige une candidature, comprend une lettre de l'administration ou se reconvertit. L'intelligence est la méta-ressource : elle se renforce elle-même. Donnez la même tâche à deux personnes : celle qui dispose d'intelligence à la demande prend de l'avance — et la garde. C'est pourquoi nous traitons l'accès à l'IA comme une prestation sociale et non comme un produit annexe : comme quelque chose que l'on reçoit parce que l'on doit pouvoir participer, non parce que l'on peut se le payer."
         },
         "strands": {
           "eyebrow": "Ce que nous construisons",
-          "heading": "Trois pièces qui vont ensemble",
+          "heading": "{count, plural, one {Une pièce de l'ensemble} other {# pièces qui vont ensemble}}",
+          "welfare": {
+            "title": "Un accès sans examen des ressources",
+            "body": "Les prestations échouent rarement sur le seul argent : elles échouent sur le chemin qui y mène — la demande, le justificatif, devoir exposer sa situation. C'est pourquoi evig n'examine personne. Qui a un compte a l'accès : sans justification, sans preuve de revenu, sans liste d'attente. Et pour ce que nous ne pouvons pas offrir, les voies les moins chères figurent ci-dessous.",
+            "link": "Créer un compte"
+          },
           "assistant": {
             "title": "L’assistant",
-            "body": "Sur chaque page de cette plateforme se trouve un assistant qui connaît le contexte de la page et répond aux questions qui s’y rapportent. Il fait partie de la plateforme et n’est pas un produit à part — pas de deuxième abonnement, pas de connexion séparée."
+            "body": "L'aide IA se trouve là où écrire devient l'obstacle : décrire une demande de réparation, formuler une annonce, proposer un atelier. Elle fait partie du compte et n'est pas un produit annexe — pas de deuxième abonnement, pas de connexion séparée."
           },
           "sharing": {
             "title": "Accès partagé",
@@ -8391,6 +8396,10 @@
           "noLockIn": {
             "title": "Pas une voie sans retour",
             "body": "Ce que vous faites ici doit vous appartenir. Un domaine dont on ne peut plus sortir serait le contraire de l’accès."
+          },
+          "noAuthority": {
+            "title": "Pas un service social",
+            "body": "Nous ne versons pas d'argent, ne remplaçons aucun droit légal et ne statuons sur le besoin de personne. Ce que l'État doit, il le doit toujours — nous comblons une lacune qu'il ne connaît pas encore."
           }
         },
         "cta": {

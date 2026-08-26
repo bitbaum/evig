@@ -8447,7 +8447,7 @@
       "ai": {
         "meta": {
           "title": "Access to intelligence",
-          "description": "The division for reachable artificial intelligence: an assistant that comes with the platform, on hardware people can afford."
+          "description": "The division for reachable artificial intelligence: access as a social provision rather than a subscription — no means test, on hardware people can afford."
         },
         "hero": {
           "title": "Intelligence should not depend on what you earn.",
@@ -8455,15 +8455,20 @@
         },
         "thesis": {
           "eyebrow": "Why",
-          "title": "The gap that widens all the others",
-          "body": "Intelligence is the meta-resource: it compounds. Give two people the same problem and the one with intelligence on tap pulls ahead — and keeps pulling ahead. So we do not treat access to AI as a feature bolted onto a shop; it is the same mandate as affordable hardware. A used laptop, set up properly, is the cheapest on-ramp to artificial intelligence that exists."
+          "title": "A basic provision that appears on no list",
+          "body": "Social assistance covers what a person needs in order to take part: housing, food, a subsidy on health-insurance premiums, a discounted transit pass. Access to intelligence is on none of those lists — even though it now helps decide whether someone writes a job application, understands a letter from the authorities, or retrains for a new trade. Intelligence is the meta-resource: it compounds. Give two people the same task, and the one with intelligence on tap pulls ahead — and keeps pulling ahead. So we treat access to AI as a social provision rather than an add-on product: as something you get because you are meant to be here, not because you can afford it."
         },
         "strands": {
           "eyebrow": "What we are building",
-          "heading": "Three parts that belong together",
+          "heading": "{count, plural, one {One part of the whole} other {# parts that belong together}}",
+          "welfare": {
+            "title": "Access without a means test",
+            "body": "Benefits rarely fail on money alone — they fail on the path to them: the application, the proof, having to explain your situation. So evig tests nobody. If you have an account, you have access: no justification, no proof of income, no waiting list. If you need more than we can give away, the cheaper routes to it are below.",
+            "link": "Create an account"
+          },
           "assistant": {
             "title": "The assistant",
-            "body": "Every page of this platform carries an assistant that knows the context of that page and answers questions about it. It belongs to the platform and is not a separate product — no second subscription, no separate login."
+            "body": "The AI help sits where writing becomes the barrier: describing a repair request, wording a listing, proposing a workshop. It belongs to the account and is not an add-on product — no second subscription, no separate login."
           },
           "sharing": {
             "title": "Shared access",
@@ -8494,6 +8499,10 @@
           "noLockIn": {
             "title": "Not a one-way street",
             "body": "What you do here should belong to you. A division you cannot leave would be the opposite of access."
+          },
+          "noAuthority": {
+            "title": "Not a welfare office",
+            "body": "We pay out no money, replace no legal entitlement, and rule on nobody's need. What the state owes, the state still owes — we close a gap it does not yet recognise."
           }
         },
         "cta": {

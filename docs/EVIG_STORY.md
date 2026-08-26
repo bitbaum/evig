@@ -59,6 +59,39 @@ reachable by anyone, anywhere.
 
 ---
 
+## Access to intelligence is social assistance
+
+Naming a gap is not the same as saying what kind of thing it is. Here is the claim,
+and it is a strong one: **access to intelligence belongs in the basic provision a
+society owes the people in it** — the same category as a roof, a doctor, a discounted
+transit pass, a library card. Not a perk sitting on top of the minimum. Part of the
+minimum.
+
+The list a welfare system covers is not a law of nature. It is a snapshot of what a
+society decided, at some point, a person needs in order to take part — and it has been
+rewritten before. Schooling, health care, a telephone line, an internet connection all
+joined that list after a stretch of being luxuries. Intelligence on tap is the current
+omission. It already helps decide whether someone writes a job application, understands
+a letter from an authority, files an appeal, or retrains for a trade. No benefit
+anywhere covers it.
+
+**Where we differ from a welfare office: we test nobody.** Benefits rarely fail on
+money alone. They fail on the path to them — the application, the proof of income, the
+requirement to explain your own situation to a stranger holding a form. Any provision
+that shames the person receiving it goes unclaimed by exactly the people it was built
+for. So evig grants access the one way that avoids this: universally, to anyone with an
+account, with no means test, no justification and no waiting list. Where money is
+genuinely unavoidable — a subscription at a large provider, a technician's hour — the
+price is shared or scaled rather than gated, and the person decides which rung they are
+on (see *How people afford it*).
+
+And the limit that a claim this large obliges us to state out loud: **evig is not the
+Sozialamt.** We pay out no money, replace no legal entitlement, and rule on nobody's
+need. What the state owes, the state still owes. We close a gap it does not yet
+recognise; we do not stand in for the parts it already covers.
+
+---
+
 ## Where we come from
 
 evig grew out of the world of circular IT — and specifically out of
@@ -193,6 +226,10 @@ outright, evig is building ways for people to **raise** their way to intelligenc
 - **Shared-subscription pools** — splitting the cost of the AI and software
   subscriptions themselves, so the running cost of intelligence is shared, not
   shouldered alone.
+- **Solidarity pricing where a person pays a person** — a repair request carries the
+  rung its author picked: free for someone in acute need, half price with a KulturLegi
+  card, the normal rate, or a supporter rate for people who want to pay more so that
+  the free rung stays possible. Nobody is asked to prove which one they are on.
 - **Direct support** — donate a device, fund a specific tool, sponsor a workshop seat.
   No middleman, no markup.
 
@@ -250,9 +287,10 @@ the remaining ones legible.
 **The honesty rule that makes an ambitious division sayable.** A claim earns its
 place only next to the limit beside it — so each division page states what it is
 *not* before it asks for anything. evig ai is not a research lab, sells no magic,
-and locks nobody in. Written that way these are convictions in public; written
-without the limits they'd be vapour, and the rest of the site would be worth less
-for it.
+locks nobody in — and, since it calls its work social assistance, says plainly that
+it is not a welfare authority either. Written that way these are convictions in
+public; written without the limits they'd be vapour, and the rest of the site would
+be worth less for it.
 
 ---
 

@@ -28,6 +28,24 @@ export async function divisionMetadata(locale: string, id: DivisionPageId): Prom
 }
 
 /**
+ * Boundary grid, balanced for how many boundaries a division actually states.
+ *
+ * Keyed lookup rather than a computed class, because Tailwind v4 scans source
+ * for literal class names — an interpolated `md:grid-cols-${n}` compiles to
+ * nothing. Falls back to three across for any count not listed.
+ *
+ * Four boundaries wrap to 2×2 rather than 4 across: the container is capped at
+ * max-w-5xl, so a fourth column would squeeze every card to ~230px and set two
+ * sentences as a column of single words.
+ */
+const BOUNDARY_GRID: Record<number, string> = {
+  1: 'md:grid-cols-1',
+  2: 'md:grid-cols-2',
+  3: 'md:grid-cols-3',
+  4: 'sm:grid-cols-2',
+}
+
+/**
  * One shape for every evig division page that owns a page of its own.
  *
  * Hero → thesis → numbered strands → honesty boundary → closing CTA. The order
@@ -51,7 +69,8 @@ export async function DivisionPage({
 
   // Page copy is namespaced by division id; next-intl's key union can't see the
   // dynamic segment, hence the cast (same pattern as /projects).
-  const k = (suffix: string) => t(`pages.${division.id}.${suffix}` as never)
+  const k = (suffix: string, values?: Record<string, string | number>) =>
+    t(`pages.${division.id}.${suffix}` as never, values as never)
 
   return (
     <main className="min-h-screen">
@@ -87,8 +106,10 @@ export async function DivisionPage({
       <Section density="spacious" tone="tinted" contained={false} className="border-y border-subtle">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <Eyebrow as="div">{k('strands.eyebrow')}</Eyebrow>
+          {/* The count comes from config, never from the sentence: the heading
+              read "Drei Teile" while four strands rendered below it. */}
           <Heading level={2} className="ui-public-display-lg mt-4">
-            {k('strands.heading')}
+            {k('strands.heading', { count: strands.length })}
           </Heading>
 
           <div className="mt-14 space-y-14">
@@ -127,7 +148,9 @@ export async function DivisionPage({
             {k('boundary.heading')}
           </Heading>
 
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
+          <div
+            className={`mt-10 grid gap-4 ${BOUNDARY_GRID[boundaries.length] ?? 'md:grid-cols-3'}`}
+          >
             {boundaries.map((boundary) => (
               <article key={boundary} className="ui-public-card">
                 <Heading level={3} className="ui-public-card-title">

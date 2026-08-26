@@ -8342,7 +8342,7 @@
       "ai": {
         "meta": {
           "title": "Acceso a la inteligencia",
-          "description": "El área de la inteligencia artificial alcanzable: un asistente integrado en la plataforma, sobre hardware asequible."
+          "description": "El área de la inteligencia artificial al alcance: acceso como prestación social en lugar de suscripción — sin comprobación de recursos, sobre hardware asequible."
         },
         "hero": {
           "title": "La inteligencia no debería depender de lo que uno gana.",
@@ -8350,15 +8350,20 @@
         },
         "thesis": {
           "eyebrow": "Por qué",
-          "title": "La brecha que agranda todas las demás",
-          "body": "La inteligencia es el meta-recurso: se acumula. Dale el mismo problema a dos personas y la que tiene inteligencia a demanda se adelanta — y sigue adelantándose. Por eso no tratamos el acceso a la IA como una función añadida a una tienda: es el mismo encargo que el hardware asequible. Un portátil de segunda mano, bien configurado, es la puerta de entrada más barata que existe a la inteligencia artificial."
+          "title": "Una prestación básica que no figura en ninguna lista",
+          "body": "La asistencia social cubre lo que hace falta para participar: vivienda, comida, una ayuda para la prima del seguro de salud, un billete de transporte con descuento. El acceso a la inteligencia no figura en ninguna de esas listas, aunque hoy influye en si alguien escribe una candidatura, entiende una carta de la administración o se reconvierte a otro oficio. La inteligencia es el metarrecurso: se refuerza a sí misma. Da la misma tarea a dos personas y quien tiene inteligencia a demanda se adelanta, y sigue adelantándose. Por eso tratamos el acceso a la IA como una prestación social y no como un producto añadido: como algo que se recibe porque uno debe poder participar, no porque pueda pagarlo."
         },
         "strands": {
           "eyebrow": "En qué trabajamos",
-          "heading": "Tres piezas que van juntas",
+          "heading": "{count, plural, one {Una pieza del conjunto} other {# piezas que van juntas}}",
+          "welfare": {
+            "title": "Acceso sin comprobación de recursos",
+            "body": "Las prestaciones rara vez fallan solo por el dinero: fallan por el camino hasta ellas — la solicitud, el justificante, tener que explicar la propia situación. Por eso evig no examina a nadie. Quien tiene una cuenta tiene acceso: sin justificación, sin certificado de ingresos, sin lista de espera. Y quien necesite más de lo que podemos regalar encontrará abajo las vías más baratas.",
+            "link": "Crear una cuenta"
+          },
           "assistant": {
             "title": "El asistente",
-            "body": "En cada página de esta plataforma hay un asistente que conoce el contexto de la página y responde preguntas sobre ella. Forma parte de la plataforma y no es un producto aparte — ni una segunda suscripción ni un acceso separado."
+            "body": "La ayuda de IA está donde escribir se convierte en la barrera: describir una solicitud de reparación, redactar un anuncio, proponer un taller. Pertenece a la cuenta y no es un producto aparte: ninguna segunda suscripción, ningún acceso separado."
           },
           "sharing": {
             "title": "Acceso compartido",
@@ -8389,6 +8394,10 @@
           "noLockIn": {
             "title": "No es un camino sin retorno",
             "body": "Lo que haces aquí debe ser tuyo. Un área de la que no se puede salir sería lo contrario del acceso."
+          },
+          "noAuthority": {
+            "title": "No somos servicios sociales",
+            "body": "No pagamos dinero, no sustituimos ningún derecho legal y no decidimos sobre la necesidad de nadie. Lo que debe el Estado lo sigue debiendo el Estado: nosotros cerramos una brecha que todavía no reconoce."
           }
         },
         "cta": {
