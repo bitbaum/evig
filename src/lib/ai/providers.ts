@@ -19,22 +19,41 @@ import { ORG } from '@/config/org'
 // CONFIGURATION (SSOT - all AI provider settings in one place)
 // =============================================================================
 
+// ── Read the comments below before changing a model id ──────────────────────
+//
+// This block has now been repinned three times, and the first two repins are
+// still visible in its history: Llama-4-Scout was decommissioned, so it moved
+// to `llama-3.3-70b-versatile` — and Groq has since retired the entire
+// llama-3.x family, so that id died too, along with every OpenRouter llama-3
+// entry beside it. Four of the five ids here were dead simultaneously.
+//
+// Repinning is what this repo keeps doing and it is not what fixes it. What
+// fixes it is that dotfiles/scripts/ci/model-pin-audit.mjs now asks both
+// vendors DAILY whether these ids still exist, so the next retirement surfaces
+// within a day instead of on a user's screen. Every id below was verified
+// present in the live catalogue on 2026-08-27.
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions'
-const GROQ_MODEL = 'llama-3.3-70b-versatile'
-// Fallback for large prompts. Groq decommissioned Llama-4-Scout (404
-// model_not_found), so fall back to the versatile 128k model — a dead model id
-// here silently broke the large-prompt retry path.
-const GROQ_LARGE_CONTEXT_MODEL = 'llama-3.3-70b-versatile'
+const GROQ_MODEL = 'openai/gpt-oss-120b'
+// Fallback for large prompts. Same 131k context as the default above, which is
+// the whole Groq free lineup's window now — Groq's catalogue no longer has a
+// larger free model to escalate to, so this is a retry rather than an upgrade.
+const GROQ_LARGE_CONTEXT_MODEL = 'openai/gpt-oss-120b'
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions'
-const OPENROUTER_MODEL = 'meta-llama/llama-3.3-70b-instruct:free'
+const OPENROUTER_MODEL = 'nvidia/nemotron-3-super-120b-a12b:free'
 
-// Vision-capable models (multimodal). Groq RETIRED Llama-4-Scout — its whole
-// lineup lost vision except Qwen3 (verified: qwen/qwen3.6-27b accepts image_url);
-// OpenRouter keeps a free vision model as fallback. Used by callVisionWithFallback
-// so photo analysis works on prod (Ollama vision is local-dev only, not deployed).
+// Vision-capable models (multimodal). Groq's lineup lost vision except Qwen3
+// (verified: qwen/qwen3.6-27b accepts image_url, and it is still listed);
+// OpenRouter keeps a free vision model as fallback. Used by
+// callVisionWithFallback so photo analysis works on prod (Ollama vision is
+// local-dev only, not deployed).
+//
+// The OpenRouter vision id was `meta-llama/llama-3.2-11b-vision-instruct:free`,
+// retired with the rest of that family. Its replacement was chosen against the
+// live catalogue on three properties, not on name: `:free` with
+// `pricing.prompt = 0`, `image` in its input modalities, and tool support.
 const GROQ_VISION_MODEL = 'qwen/qwen3.6-27b'
-const OPENROUTER_VISION_MODEL = 'meta-llama/llama-3.2-11b-vision-instruct:free'
+const OPENROUTER_VISION_MODEL = 'google/gemma-4-26b-a4b-it:free'
 
 const DEFAULT_TIMEOUT_MS = 60000
 

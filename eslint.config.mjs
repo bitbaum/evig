@@ -87,6 +87,19 @@ const eslintConfig = [
       "node_modules/**",
       "examples/**",
       "packages/**",
+      // Per-session agent worktrees are complete checkouts of this repo living
+      // inside it, so without this every file gets linted twice: once here and
+      // once per worktree. Measured 2026-08-27 — `npx eslint .` reported 641
+      // errors and ALL 641 were inside .claude/worktrees. The real tree had
+      // zero.
+      //
+      // That makes `npm run verify` permanently red on a clean repo, while CI —
+      // which checks out without the worktrees — stays green. A gate that fails
+      // on good code is worse than no gate: it is what teaches people to reach
+      // for --no-verify, and then the day it means something, nobody reads it.
+      //
+      // Ignored by FAMILY, not by instance, so a new worktree needs no new line.
+      ".claude/worktrees/**",
     ],
   },
   ...nextConfig,

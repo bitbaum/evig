@@ -32,7 +32,12 @@ const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1'
  * without a deploy — and when it rots, replace it with another `:free` id rather
  * than dropping the suffix.
  */
-const DEFAULT_MODEL = process.env.OPENROUTER_MODEL?.trim() || 'openai/gpt-oss-20b:free'
+// `openai/gpt-oss-20b:free` has since been retired — the comment above already
+// said this would happen and asked for another `:free` id rather than dropping
+// the suffix, which is exactly what this is. Verified 2026-08-27: `:free`, and
+// `pricing.prompt = 0` in OpenRouter's own catalogue.
+const DEFAULT_MODEL =
+  process.env.OPENROUTER_MODEL?.trim() || 'nvidia/nemotron-3-super-120b-a12b:free'
 const REQUEST_TIMEOUT_MS = 30_000
 const AVAILABILITY_TIMEOUT_MS = 5_000
 

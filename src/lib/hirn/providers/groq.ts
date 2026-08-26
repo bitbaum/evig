@@ -16,7 +16,10 @@ import type {
 } from './types'
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1'
-const DEFAULT_MODEL = 'llama-3.3-70b-versatile'
+// Groq retired the whole llama-3.x family; this read
+// `llama-3.3-70b-versatile`, so every Hirn chat answered by Groq returned 404
+// with a valid key. Verified present in the live catalogue 2026-08-27.
+const DEFAULT_MODEL = 'openai/gpt-oss-120b'
 const REQUEST_TIMEOUT_MS = 30_000
 const AVAILABILITY_TIMEOUT_MS = 5_000
 
