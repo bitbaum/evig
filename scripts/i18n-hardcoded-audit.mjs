@@ -133,13 +133,60 @@ const LOCALES_TO_CHECK = ['it', 'fr', 'es', 'ja', 'ko', 'ru']
 // Stop-word sets per language. If a string contains stop-words from a DIFFERENT
 // language than its locale at a higher ratio than from its own, flag it.
 // Kept small on purpose — we want signal, not noise.
+//
+// A HOLE in one list is worse than a short list: it makes CORRECT text look
+// foreign. "Trovare un tecnico" is unimpeachable Italian, but `un` was listed
+// only under fr (it had `una`/`uno` and not the masculine `un`), so it scored
+// Italian 0.00 / French 0.33 and was flagged three separate times. Likewise
+// "Encontrar a quien lo repare" — es was missing both `lo` and `a`, while it
+// had `lo`. Every entry below is a function word; if you add one to a list,
+// check whether its siblings need it too.
 const STOP_WORDS = {
-  en: ['the', 'and', 'is', 'are', 'of', 'with', 'for', 'to', 'our', 'we', 'their', 'they', 'this', 'that', 'have', 'has', 'on', 'in', 'an', 'by'],
-  de: ['der', 'die', 'das', 'und', 'ist', 'sind', 'mit', 'für', 'wir', 'unser', 'unsere', 'eine', 'einen', 'durch', 'als', 'auf', 'von', 'auch', 'nicht', 'werden'],
-  it: ['il', 'la', 'lo', 'gli', 'le', 'di', 'che', 'è', 'sono', 'con', 'per', 'noi', 'nostro', 'nostra', 'una', 'uno', 'del', 'della', 'nel', 'nella'],
-  fr: ['le', 'la', 'les', 'de', 'des', 'et', 'est', 'sont', 'avec', 'pour', 'nous', 'notre', 'nos', 'une', 'un', 'du', 'au', 'aux', 'dans', 'sur'],
-  es: ['el', 'la', 'los', 'las', 'de', 'y', 'es', 'son', 'con', 'para', 'nosotros', 'nuestro', 'nuestra', 'una', 'uno', 'del', 'al', 'en', 'por', 'sus'],
+  en: ['the', 'and', 'is', 'are', 'of', 'with', 'for', 'to', 'our', 'we', 'their', 'they', 'this', 'that', 'have', 'has', 'on', 'in', 'an', 'by',
+       'a', 'or', 'but', 'if', 'as', 'at', 'from', 'it', 'its', 'be', 'you', 'your', 'not', 'can', 'what', 'who'],
+  de: ['der', 'die', 'das', 'und', 'ist', 'sind', 'mit', 'für', 'wir', 'unser', 'unsere', 'eine', 'einen', 'durch', 'als', 'auf', 'von', 'auch', 'nicht', 'werden',
+       'in', 'zu', 'den', 'dem', 'ein', 'sich', 'oder', 'aber', 'wenn', 'wie', 'mehr', 'hat', 'haben', 'sein', 'was', 'wer', 'man', 'nur'],
+  it: ['il', 'la', 'lo', 'gli', 'le', 'di', 'che', 'è', 'sono', 'con', 'per', 'noi', 'nostro', 'nostra', 'una', 'uno', 'del', 'della', 'nel', 'nella',
+       'un', 'in', 'e', 'a', 'da', 'non', 'si', 'come', 'più', 'anche', 'ma', 'se', 'ha', 'hanno', 'essere', 'questo', 'questa', 'chi', 'o', 'ai'],
+  fr: ['le', 'la', 'les', 'de', 'des', 'et', 'est', 'sont', 'avec', 'pour', 'nous', 'notre', 'nos', 'une', 'un', 'du', 'au', 'aux', 'dans', 'sur',
+       'à', 'en', 'que', 'qui', 'ne', 'pas', 'ce', 'cette', 'ou', 'si', 'plus', 'comme', 'a', 'ont', 'être', 'par', 'son', 'se'],
+  es: ['el', 'la', 'los', 'las', 'de', 'y', 'es', 'son', 'con', 'para', 'nosotros', 'nuestro', 'nuestra', 'una', 'uno', 'del', 'al', 'en', 'por', 'sus',
+       'lo', 'a', 'que', 'quien', 'se', 'un', 'no', 'su', 'como', 'más', 'pero', 'ha', 'han', 'ser', 'este', 'esta', 'o', 'si'],
 }
+
+/**
+ * Below this many tokens the verdict is noise, not signal.
+ *
+ * The heuristic's resolution is 1/N: on a three-word string a single shared
+ * article moves the ratio by 0.33, which clears the 0.15 threshold on its own.
+ * Guessing a language from three words is not something this check can do, so
+ * it declines to instead of guessing wrong.
+ */
+const MIN_TOKENS_FOR_LANGUAGE_GUESS = 6
+
+/**
+ * The only languages this check claims to detect.
+ *
+ * A bag-of-stop-words comparison CANNOT separate sibling Romance languages,
+ * and pretending otherwise cost real time: across three PRs it flagged
+ * "Trovare un tecnico", "Encontrar a quien lo repare", "LO QUE HACEMOS" and
+ * seven more — every one of them correct in its own language, none of them a
+ * real defect. The words simply overlap (`un`, `su`, `e`, `non`, `nos`,
+ * `lo`), and widening the dictionaries only moves the contamination around:
+ * teaching es the word `su` immediately made correct Italian look Spanish.
+ *
+ * What it detects reliably is untranslated **English or German** sitting in a
+ * translated file, because those function words barely overlap with Romance
+ * or CJK ones — and that is the leak that actually happens here, since DE is
+ * the source language and EN the pivot. Restricted to that, the check found
+ * ~28 genuine leaks across six locales on its first run.
+ *
+ * KNOWN AND ACCEPTED GAP: French text sitting in es.json will not be caught.
+ * We have never observed one; we had observed ten false alarms. If that
+ * changes, the fix is a real language-identification library, not more
+ * stop-words.
+ */
+const LEAK_SOURCES = ['en', 'de']
 
 function wordRatio(text, words) {
   const tokens = text.toLowerCase().match(/[a-zàâäçéèêëîïôöùûüÿœñáíóúü]+/gi) || []
@@ -153,13 +200,27 @@ function looksLikeWrongLanguage(text, locale) {
   if (typeof text !== 'string' || text.trim().length < 12) return null
   // Strip ICU placeholders to avoid skewing token counts
   const cleaned = text.replace(/\{[^}]+\}/g, '')
+  const tokenCount = (cleaned.toLowerCase().match(/[a-zàâäçéèêëîïôöùûüÿœñáíóúü]+/gi) || []).length
+  if (tokenCount < MIN_TOKENS_FOR_LANGUAGE_GUESS) return null
+
+  // For ja/ko/ru the tokenizer only ever sees the LATIN fragments — brand
+  // names, product names, a stray article. A Korean sentence containing
+  // "evig" and "Revamp-IT" would score as English on those crumbs alone.
+  // Only judge a string whose letters are overwhelmingly Latin; anything
+  // written in its own script is, by construction, not an English leak.
+  // \p{L} is required here: JavaScript's \w (and therefore [^\W\d_]) is
+  // ASCII-only even under the /u flag, so Hangul, kana and Cyrillic all
+  // counted as ZERO letters and this guard silently did nothing.
+  const latin = (cleaned.match(/[a-zàâäçéèêëîïôöùûüÿœñáíóúü]/gi) || []).length
+  const nonLatin = (cleaned.match(/\p{L}/gu) || []).length - latin
+  if (nonLatin > latin * 0.25) return null
   const ownWords = STOP_WORDS[locale] || []
   const ownRatio = wordRatio(cleaned, ownWords)
   let bestOther = null
   let bestRatio = 0
-  for (const [other, words] of Object.entries(STOP_WORDS)) {
+  for (const other of LEAK_SOURCES) {
     if (other === locale) continue
-    const r = wordRatio(cleaned, words)
+    const r = wordRatio(cleaned, STOP_WORDS[other])
     if (r > bestRatio) {
       bestRatio = r
       bestOther = other

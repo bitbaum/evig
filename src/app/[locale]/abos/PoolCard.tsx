@@ -53,7 +53,11 @@ export function PoolCard({ pool, userId, onJoin, onLeave, myPoolIds }: Props) {
           </div>
         </div>
         <div className="text-right">
-          <div className="text-lg font-bold text-action">
+          {/* A price must not wrap. "CHF 300.00" broke across two lines on a
+              390px card, which reads as a layout bug rather than a number.
+              The title beside it may wrap instead — that is the right thing
+              to give way. */}
+          <div className="text-lg font-bold text-action whitespace-nowrap tabular-nums">
             CHF {Number(pool.costPerMemberChf).toFixed(2)}
           </div>
           <div className="text-xs text-text-tertiary">{t('perMonthPerson')}</div>

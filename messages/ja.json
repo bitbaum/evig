@@ -668,7 +668,7 @@
       "downloadText": "登録済みユーザーはいつでも以下からデータの完全なコピーをダウンロードできます",
       "settingsLinkLabel": "設定 → プライバシー",
       "contactText": "For all other enquiries, please contact:",
-      "exportText": "Registered users can download a full copy of their data at any time under",
+      "exportText": "登録済みのユーザーは、いつでも自分のデータの完全なコピーを次の場所からダウンロードできます",
       "exportLink": "Settings → Privacy"
     },
     "section8": {
@@ -2540,23 +2540,23 @@
       }
     },
     "hub": {
-      "eyebrow": "IT Help",
-      "title": "Fix your computer, reinstall your OS, solve any IT problem",
+      "eyebrow": "技術者を探す",
+      "title": "直してくれる人を見つける",
       "subtitle": "evig はあなたの近くの技術者とつなぎます——コミュニティを通じて無料で、あるいは正当な報酬で。",
       "paths": {
         "request": {
           "title": "Request help",
-          "description": "Describe your issue and receive offers from technicians",
+          "description": "困りごとを書くと、技術者から提案が届きます",
           "cta": "Start a request →"
         },
         "technicians": {
           "title": "Choose a technician",
-          "description": "Browse profiles and contact someone directly",
+          "description": "プロフィールを見て、直接連絡する",
           "cta": "Find technicians →"
         },
         "browse": {
           "title": "Open requests",
-          "description": "Help as a technician — requests near you",
+          "description": "技術者として手を貸す — 近くの依頼",
           "cta": "Browse requests →"
         }
       },
@@ -2566,7 +2566,7 @@
       },
       "offerHelp": {
         "title": "Can you repair devices?",
-        "description": "Register as a technician and help people nearby.",
+        "description": "技術者として登録して、近くの人を手助けしてください。",
         "cta": "Become a technician"
       }
     },
@@ -4382,179 +4382,17 @@
     "priceFrom": "CHF〜"
   },
   "shop": {
-    "meta": {
-      "title": "Buy refurbished IT",
-      "description": "Tested refurbished computers, laptops, monitors, and accessories directly from the evig shop in Zurich.",
-      "productNotFound": "商品が見つかりません",
-      "productFallbackDesc": "{brand} {model} — {orgName}により検査・整備済み"
-    },
-    "title": "私たちのショップ",
-    "subtitle": "検査済みリファービッシュ・ハードウェア",
-    "filters": {
-      "all": "すべて",
-      "laptops": "ラップトップ",
-      "desktops": "デスクトップ",
-      "accessories": "アクセサリー"
-    },
-    "product": {
-      "addToCart": "カートに追加",
-      "outOfStock": "在庫切れ",
-      "condition": "状態",
-      "warranty": "保証",
-      "months": "{count}ヶ月",
-      "stockMany": "{count}点在庫あり",
-      "stockOne": "残り1点",
-      "suitableFor": "対象ユーザー",
-      "verifiedTitle": "検査済み・整備済み",
-      "verifiedDesc": "すべての機器は{orgName}が丁寧に検査、クリーニング、再インストールしています。",
-      "buyOnline": "オンラインショップで購入",
-      "buyInStore": "店頭で購入",
-      "similarProducts": "類似製品",
-      "conditionLabels": {
-        "wieNeu": "新品同様",
-        "sehrGut": "非常に良い",
-        "gut": "良い",
-        "akzeptabel": "許容範囲"
-      }
-    },
-    "empty": "商品が見つかりませんでした",
-    "verifiedBadge": "検査済み",
-    "page": {
-      "heroTitle": "Buy refurbished IT directly from evig",
-      "heroSubtitle": "Tested laptops, computers, monitors, and accessories from our own refurbishment work. Browse online, pick up in store, or buy directly.",
-      "metaDescription": "Tested refurbished computers, laptops, monitors, and accessories directly from the evig shop in Zurich.",
-      "store": {
-        "title": "店舗（チューリッヒ）",
-        "tagline": "相談、デバイスの確認、その場で持ち帰り",
-        "accessInfo": "公共交通機関でアクセスしやすい。近くに駐車場あり。",
-        "openingHours": "営業時間",
-        "openingHoursMonday": "月曜日：{hours}",
-        "openingHoursTueFri": "火曜日 – 金曜日：{hours}",
-        "openGoogleMaps": "Google Mapsで開く",
-        "openOsm": "OpenStreetMapで開く",
-        "contact": "お問い合わせ",
-        "mapsInfoTitle": "なぜ2つの地図オプションがあるのですか？",
-        "mapsInfoBody": "OpenStreetMapはコミュニティ主導でプライバシーに配慮しています。Google/Apple Mapsはナビゲーション、リアルタイム交通情報、スポット情報が充実しています。あなたに合ったものを選んでください — 透明性と選択の自由を大切にしています。",
-        "eyebrow": "In store"
-      },
-      "online": {
-        "title": "オンラインショップ",
-        "tagline": "Our own online shop is the default.",
-        "benefit1": "すべてのチャンネルで検査済みの品質と保証",
-        "benefit2": "公正な価格、持続可能な選択",
-        "benefit3": "安全な支払い",
-        "currentShop": "現在のオンラインショップ",
-        "shopwareShop": "Open Shopware",
-        "onlineShop": "{orgName}オンラインショップ",
-        "multiShopTitle": "複数のショップチャンネル？",
-        "multiShopBody": "{orgName}オンラインショップは最高の品揃えのリファービッシュITハードウェアを提供します。Shopwareショップとレガシーシステムでも商品をご覧いただけます。"
-      },
-      "otherPaths": {
-        "altTitle": "手頃な価格のテクノロジーへの他の方法",
-        "altIntro": "ここに来るのは購入のためだけではありません。経済的に余裕のない方への機器の提供や、古いハードウェアの寄付も受け付けています。",
-        "donateTitle": "ハードウェアを寄付する",
-        "donateBody": "動作する、または修理可能な機器を evig へ。私たちが整備して次の方へ届けます。",
-        "donateCta": "寄付ページへ",
-        "needTitle": "機器が必要だけれど、購入が難しいですか?",
-        "needBody": "Compirat プログラムを通じて、Caritas Zürich と協力し、経済的に余裕のない方々へ機器を提供しています。",
-        "needCta": "Compirat を見る"
-      },
-      "heroEyebrow": "evig shop",
-      "trust": {
-        "qualityTitle": "Tested, cleaned, ready",
-        "qualityBody": "Devices are refurbished, checked, and shipped with practical software.",
-        "stockTitle": "{count} available products",
-        "stockBody": "Live from our published inventory."
-      },
-      "products": {
-        "eyebrow": "Our inventory",
-        "title": "Current products",
-        "body": "This is the primary evig shop. Shopware remains only as a fallback when an older item is still better represented there.",
-        "allCta": "Browse all",
-        "emptyTitle": "No products are published right now",
-        "emptyBody": "Inventory is maintained by the workshop. Check back later or contact us directly."
-      },
-      "repair": {
-        "eyebrow": "Repair before replacing",
-        "title": "Device broken? Describe the problem.",
-        "body": "Create a request with the symptoms, device type, and location. The request stays in the system and matching technicians or shops can respond.",
-        "requestCta": "Request repair",
-        "techniciansCta": "View technicians & shops"
-      },
-      "legacy": {
-        "eyebrow": "Fallback",
-        "title": "Shopware only when you need it",
-        "body": "Our own shop is the default. We keep the Shopware channel as a transition path and for older listings that may still live there.",
-        "cta": "Open Shopware"
-      }
-    },
-    "search": {
-      "metaTitleWithQuery": "検索：「{query}」| {orgName}ショップ",
-      "metaDescWithQuery": "「{query}」の検索結果 — {orgName}の持続可能なリファービッシュITデバイス。",
-      "metaTitle": "検索 | {orgName}ショップ",
-      "metaDesc": "持続可能なリファービッシュITデバイスの品揃えを検索。",
-      "heroTitleWithQuery": "「{query}」の結果",
-      "heroTitle": "ショップを検索",
-      "placeholder": "何をお探しですか？例：ラップトップ、モニター、キーボード...",
-      "submitButton": "検索",
-      "breadcrumbHome": "ホーム",
-      "breadcrumbShop": "ショップ",
-      "breadcrumbSearchWithQuery": "検索：「{query}」",
-      "breadcrumbSearch": "検索",
-      "resultsTitle": "「{query}」の検索",
-      "resultsComingSoon": "商品検索を現在設定中です。まもなくリファービッシュITデバイスを検索できるようになります。",
-      "goToShop": "オンラインショップへ",
-      "allShopOptions": "すべてのショップオプション",
-      "popularSearches": "人気の検索",
-      "browseByCategory": "カテゴリーで探す",
-      "productCount": "{count}件の商品",
-      "allCategories": "すべてのカテゴリーを表示 →",
-      "noResultsForQuery": "\"{query}\" に一致する製品はありません",
-      "noResultsHint": "別の検索ワードを試すか、カテゴリーを参照してください。",
-      "foundCount": "{count}件の製品が見つかりました",
-      "loadingText": "検索中..."
-    },
-    "category": {
-      "notFoundMeta": "カテゴリーが見つかりません | {orgName}ショップ",
-      "metaTitle": "{categoryName} | {orgName}ショップ",
-      "metaTitleWithParent": "{categoryName} – {parentName} | {orgName}ショップ",
-      "metaDesc": "{orgName}の{categoryNameLower}の品揃えをご覧ください — 持続可能なリファービッシュITデバイス。",
-      "heroSubtitle": "持続可能なリファービッシュ{categoryNameLower}の品揃えをご覧ください — 公正な価格で検査済みの品質。",
-      "productCount": "このカテゴリーに{count}件の商品",
-      "subcategories": "サブカテゴリー",
-      "categoryProductCount": "{count}件の商品",
-      "productsLoading": "商品を読み込み中",
-      "productsComingSoon": "まもなくマーケットプレイスの{categoryName}カテゴリーでリファービッシュITデバイスをご覧いただけます。",
-      "goToShop": "オンラインショップへ",
-      "allShopOptions": "すべてのショップオプション",
-      "relatedIn": "{parentName}の関連商品",
-      "breadcrumbHome": "ホーム",
-      "showAllProducts": "全{count}件の商品を表示"
+    "error": {
+      "backToShop": "ショップに戻る",
+      "body": "ショップの読み込み中にエラーが発生しました。",
+      "retry": "再試行",
+      "title": "問題が発生しました"
     },
     "loading": {
       "text": "ショップを読み込み中..."
     },
-    "error": {
-      "title": "問題が発生しました",
-      "body": "ショップの読み込み中にエラーが発生しました。",
-      "retry": "再試行",
-      "backToShop": "ショップに戻る"
-    },
-    "header": {
-      "skipToContent": "メインコンテンツへスキップ",
-      "skipToFooter": "フッターへスキップ",
-      "skipLinks": "スキップリンク",
-      "openMenu": "メニューを開く",
-      "categories": "カテゴリー",
-      "searchPlaceholder": "何をお探しですか？",
-      "searchLabel": "検索",
-      "closeSearch": "検索を閉じる",
-      "compareLabel": "比較リスト（{count}件）",
-      "wishlistLabel": "ウィッシュリスト（{count}件）",
-      "cartLabel": "カート",
-      "backToShop": "ショップに戻る",
-      "shopOverview": "ショップ概要へ",
-      "closeMenu": "メニューを閉じる"
+    "search": {
+      "loadingText": "検索中..."
     }
   },
   "support": {
