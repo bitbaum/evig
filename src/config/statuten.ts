@@ -33,7 +33,7 @@ export const STATUTEN_STATUS: {
 
 /** Public source of the document, so anyone can diff every revision. */
 export const STATUTEN_SOURCE_URL =
-  'https://github.com/maonakamoto/evig/blob/main/docs/legal/STATUTEN.md'
+  'https://github.com/catomean/evig/blob/main/docs/legal/STATUTEN.md'
 
 export interface StatutenSection {
   id: string

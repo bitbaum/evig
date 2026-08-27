@@ -119,7 +119,7 @@ These are enforced, not suggested:
 ### Setup
 
 ```bash
-git clone https://github.com/maonakamoto/evig.git
+git clone https://github.com/catomean/evig.git
 cd evig
 cp .env.example .env.local    # fill in DATABASE_URL, AUTH_SECRET, payment keys, etc.
 npm install

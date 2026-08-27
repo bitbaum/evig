@@ -17,11 +17,11 @@
   "homepage": "https://revampit.orangecat.ch/saldo",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/maonakamoto/evig.git",
+    "url": "git+https://github.com/catomean/evig.git",
     "directory": "packages/saldo"
   },
   "bugs": {
-    "url": "https://github.com/maonakamoto/evig/issues"
+    "url": "https://github.com/catomean/evig/issues"
   },
   "type": "module",
   "main": "./dist/index.js",
