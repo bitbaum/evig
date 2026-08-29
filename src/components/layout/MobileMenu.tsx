@@ -92,24 +92,26 @@ export function MobileMenu({
           </Button>
         </div>
 
-        {/* Experimental Site Banner */}
-        <div className="mx-4 mt-3 sm:mx-6">
-          <div className="flex items-center gap-2 rounded-lg border border-warning-100 bg-warning-50 px-3 py-2 text-xs text-warning-700 dark:border-warning-500/20 dark:bg-warning-500/10 dark:text-warning-400">
-            <div className="w-2 h-2 bg-warning-400 rounded-full animate-pulse shrink-0" />
-            <span>
-              {t('experimentalBanner')} –
-              <a
-                href={ORG.websiteLegacy}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-medium text-warning-800 dark:text-warning-300 hover:text-warning-900 dark:hover:text-warning-200 underline ml-1"
-                onClick={onClose}
-              >
-                {t('experimentalBannerLink')}
-              </a>
-            </span>
+        {/* Experimental Site Banner — only when a legacy site exists to link to */}
+        {ORG.websiteLegacy && (
+          <div className="mx-4 mt-3 sm:mx-6">
+            <div className="flex items-center gap-2 rounded-lg border border-warning-100 bg-warning-50 px-3 py-2 text-xs text-warning-700 dark:border-warning-500/20 dark:bg-warning-500/10 dark:text-warning-400">
+              <div className="w-2 h-2 bg-warning-400 rounded-full animate-pulse shrink-0" />
+              <span>
+                {t('experimentalBanner')} –
+                <a
+                  href={ORG.websiteLegacy}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-warning-800 dark:text-warning-300 hover:text-warning-900 dark:hover:text-warning-200 underline ml-1"
+                  onClick={onClose}
+                >
+                  {t('experimentalBannerLink')}
+                </a>
+              </span>
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Navigation */}
         <MobileMenuNav
