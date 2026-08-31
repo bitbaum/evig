@@ -42,7 +42,7 @@ export const EVIG_PROJECTS: EvigProject[] = [
     name: 'Kivvi',
     status: 'live',
     icon: Boxes,
-    repoUrl: 'https://github.com/catomean/kivvi',
+    repoUrl: 'https://github.com/bitbaum/kivvi',
     license: 'MIT',
   },
 ]

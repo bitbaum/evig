@@ -20,7 +20,7 @@ Thanks for the interest. This document covers the practical workflow for shippin
 ## Local setup
 
 ```bash
-git clone https://github.com/catomean/evig.git
+git clone https://github.com/bitbaum/evig.git
 cd evig
 cp .env.example .env.local         # fill in DATABASE_URL, AUTH_SECRET, payment + email keys
 npm install
@@ -79,7 +79,7 @@ Code reviews focus on: correctness, the rules above, test coverage, and whether 
 
 ## Recognition
 
-Contributors land in [GitHub's contributor graph](https://github.com/catomean/evig/graphs/contributors); significant contributions get a callout in release notes. We don't currently maintain a separate CONTRIBUTORS file — git history is the source of truth.
+Contributors land in [GitHub's contributor graph](https://github.com/bitbaum/evig/graphs/contributors); significant contributions get a callout in release notes. We don't currently maintain a separate CONTRIBUTORS file — git history is the source of truth.
 
 ## License
 

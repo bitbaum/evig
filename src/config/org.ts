@@ -195,5 +195,5 @@ export const EXTERNAL_LINKS = {
   shopLegacy: '',
   wiki: '',
   /** Open implementation of the platform and its operational workflow. */
-  sourceCode: 'https://github.com/catomean/evig',
+  sourceCode: 'https://github.com/bitbaum/evig',
 } as const
