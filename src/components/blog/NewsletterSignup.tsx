@@ -24,7 +24,7 @@ export default function NewsletterSignup() {
 
   return (
     <div className="max-w-[680px] mx-auto px-6 py-12">
-      <div className="border-t border-b border py-12">
+      <div className="border-t border-b py-12">
         {/* Header */}
         <div className="text-center mb-8">
           <IconBadge icon={Mail} shape="circle" size="lg" className="mb-4" />
@@ -106,7 +106,7 @@ export default function NewsletterSignup() {
         )}
 
         {/* Community Support */}
-        <div className="mt-8 pt-8 border-t border text-center">
+        <div className="mt-8 pt-8 border-t text-center">
           <div className="flex items-center justify-center gap-2 text-text-secondary mb-2">
             <Heart className="w-5 h-5 text-error-500" />
             <p className="text-sm">{t('communityTitle')}</p>
