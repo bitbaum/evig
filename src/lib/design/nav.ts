@@ -85,3 +85,28 @@ export function navLinkClass(shape: NavShape, active: boolean, className?: strin
   const s = NAV_STATE[shape]
   return cn(s.base, active ? s.active : s.inactive, className)
 }
+
+/**
+ * The class AND the announcement, from one call.
+ *
+ * `navLinkClass` on its own lets a caller style the active item and forget to
+ * say which one it is — the highlight then exists only for people who can see
+ * it. AdminSidebar did exactly that on all three of its link sites while every
+ * other nav surface here set `aria-current` correctly, which is what applying
+ * a rule by hand looks like at the margin.
+ *
+ * Spread this instead of passing `className` by itself, and the two decisions
+ * cannot drift apart:
+ *
+ *   <Link href={x} {...navLinkProps('sidebar', active)} />
+ */
+export function navLinkProps(
+  shape: NavShape,
+  active: boolean,
+  className?: string,
+): { className: string; 'aria-current': 'page' | undefined } {
+  return {
+    className: navLinkClass(shape, active, className),
+    'aria-current': active ? 'page' : undefined,
+  }
+}

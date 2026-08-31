@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import { adminInteractive } from '@/lib/admin-ui'
-import { navLinkClass } from '@/lib/design/nav'
+import { navLinkProps } from '@/lib/design/nav'
 import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { Link as PublicLink } from '@/i18n/navigation'
@@ -213,7 +213,7 @@ export function AdminSidebar({
                   key={section.path}
                   href={section.path}
                   onClick={() => { setMobileMenuOpen(false); setFilterQuery('') }}
-                  className={navLinkClass('sidebar', isActive(section.path))}
+                  {...navLinkProps('sidebar', isActive(section.path))}
                 >
                   <Icon className="h-4 w-4 shrink-0 text-text-muted dark:text-text-secondary" />
                   <span className="flex-1 text-sm font-medium">
@@ -247,7 +247,7 @@ export function AdminSidebar({
                 <Link
                   href={only.path}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={navLinkClass('sidebar', onlyActive, sidebarCollapsed ? 'justify-center' : '')}
+                  {...navLinkProps('sidebar', onlyActive, sidebarCollapsed ? 'justify-center' : '')}
                   title={sidebarCollapsed ? sectionLabel(tSections, only) : undefined}
                 >
                   <OnlyIcon className={`shrink-0 ${sidebarCollapsed ? 'h-5 w-5' : 'h-4 w-4'} ${onlyActive ? 'text-action' : 'text-text-muted dark:text-text-secondary'}`} />
@@ -290,7 +290,7 @@ export function AdminSidebar({
                         key={section.path}
                         href={section.path}
                         onClick={() => setMobileMenuOpen(false)}
-                        className={navLinkClass('sidebar', active, sidebarCollapsed ? 'justify-center' : '')}
+                        {...navLinkProps('sidebar', active, sidebarCollapsed ? 'justify-center' : '')}
                         title={sidebarCollapsed ? `${sectionLabel(tSections, section)}${sensitive ? ` (${t('sensitiveLabel')})` : ''}` : sensitivityReason}
                       >
                         {/* Larger icon when collapsed so it's easier to tap and recognise at a glance */}
