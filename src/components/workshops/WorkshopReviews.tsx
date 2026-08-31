@@ -1,71 +1,71 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { Star, MessageSquare, User } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
-import { logger } from '@/lib/logger'
-import { apiFetch } from '@/lib/api/client'
-import { formatDateMonth } from '@/lib/date-formats'
+import { useState, useEffect } from 'react';
+import { Star, MessageSquare, User } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
+import { logger } from '@/lib/logger';
+import { apiFetch } from '@/lib/api/client';
+import { formatDateMonth } from '@/lib/date-formats';
 
 interface Review {
-  id: string
-  user_name: string
-  rating: number
-  feedback: string
-  created_at: string
-  instance_date: string
+  id: string;
+  user_name: string;
+  rating: number;
+  feedback: string;
+  created_at: string;
+  instance_date: string;
 }
 
 interface ReviewStats {
-  averageRating: number
-  reviewCount: number
+  averageRating: number;
+  reviewCount: number;
 }
 
 interface WorkshopReviewsProps {
-  workshopSlug: string
+  workshopSlug: string;
 }
 
 export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) {
-  const t = useTranslations('workshops.reviews')
-  const [reviews, setReviews] = useState<Review[]>([])
-  const [stats, setStats] = useState<ReviewStats>({ averageRating: 0, reviewCount: 0 })
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const t = useTranslations('workshops.reviews');
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [stats, setStats] = useState<ReviewStats>({ averageRating: 0, reviewCount: 0 });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const result = await apiFetch<{ reviews: Review[]; stats: ReviewStats }>(`/api/workshops/${workshopSlug}/reviews`)
+        const result = await apiFetch<{ reviews: Review[]; stats: ReviewStats }>(
+          `/api/workshops/${workshopSlug}/reviews`,
+        );
         if (result.success && result.data) {
-          setReviews(result.data.reviews)
-          setStats(result.data.stats)
+          setReviews(result.data.reviews);
+          setStats(result.data.stats);
         } else {
-          setError(result.error || t('error'))
+          setError(result.error || t('error'));
         }
       } catch (err) {
-        logger.error('Error fetching workshop reviews', { error: err })
-        setError(t('networkError'))
+        logger.error('Error fetching workshop reviews', { error: err });
+        setError(t('networkError'));
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchReviews()
-  }, [workshopSlug, t])
+    fetchReviews();
+  }, [workshopSlug, t]);
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, i) => (
       <Star
         key={i}
         className={`w-4 h-4 ${
-          i < rating
-            ? 'text-warning-400 fill-warning-400'
-            : 'text-text-muted'
+          i < rating ? 'text-warning-400 fill-warning-400' : 'text-text-muted'
         }`}
       />
-    ))
-  }
+    ));
+  };
 
   if (loading) {
     return (
@@ -74,7 +74,7 @@ export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) 
         <div className="h-20 bg-surface-overlay rounded-sm mb-2"></div>
         <div className="h-20 bg-surface-overlay rounded-sm"></div>
       </div>
-    )
+    );
   }
 
   if (error) {
@@ -82,7 +82,7 @@ export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) 
       <div className="text-center py-4">
         <p className="text-error-500 text-sm">{error}</p>
       </div>
-    )
+    );
   }
 
   if (stats.reviewCount === 0) {
@@ -90,11 +90,9 @@ export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) 
       <div className="text-center py-8">
         <Star className="w-12 h-12 text-text-muted mx-auto mb-3" />
         <p className="text-text-tertiary">{t('emptyTitle')}</p>
-        <p className="text-text-tertiary text-sm mt-1">
-          {t('emptyMessage')}
-        </p>
+        <p className="text-text-tertiary text-sm mt-1">{t('emptyMessage')}</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -105,9 +103,7 @@ export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) 
           <div className="text-3xl font-bold text-text-primary">
             {stats.averageRating.toFixed(1)}
           </div>
-          <div className="flex gap-0.5 mt-1">
-            {renderStars(Math.round(stats.averageRating))}
-          </div>
+          <div className="flex gap-0.5 mt-1">{renderStars(Math.round(stats.averageRating))}</div>
         </div>
         <div className="text-text-secondary text-sm">
           {t('count', { count: stats.reviewCount })}
@@ -127,9 +123,7 @@ export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) 
                   <span className="font-medium text-text-primary text-sm truncate">
                     {review.user_name}
                   </span>
-                  <div className="flex gap-0.5">
-                    {renderStars(review.rating)}
-                  </div>
+                  <div className="flex gap-0.5">{renderStars(review.rating)}</div>
                 </div>
                 <p className="text-text-secondary text-sm">{review.feedback}</p>
                 <p className="text-text-tertiary text-xs mt-2">
@@ -143,11 +137,14 @@ export default function WorkshopReviews({ workshopSlug }: WorkshopReviewsProps) 
 
       {reviews.length > 5 && (
         <div className="mt-4 text-center">
-          <Button variant="ghost" className="text-action hover:text-action text-sm font-medium h-auto px-0 bg-transparent hover:bg-transparent">
+          <Button
+            variant="ghost"
+            className="text-action hover:text-action text-sm font-medium h-auto px-0 bg-transparent hover:bg-transparent"
+          >
             {t('showAll', { count: reviews.length })}
           </Button>
         </div>
       )}
     </div>
-  )
+  );
 }

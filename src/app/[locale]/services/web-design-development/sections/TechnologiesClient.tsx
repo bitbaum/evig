@@ -1,52 +1,81 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useTranslations } from 'next-intl'
-import { CheckCircle2, ArrowRight, Filter, Globe, Code, Palette, Shield, Database, Cloud, Layers } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import Heading from '@/components/ui/Heading'
-import { IconBadge } from '@/components/ui/IconBadge'
-import type { TechItem } from './TechnologiesSection'
-import { Section } from '@/components/layout/Section'
+import { useState } from 'react';
+import { useTranslations } from 'next-intl';
+import {
+  CheckCircle2,
+  ArrowRight,
+  Filter,
+  Globe,
+  Code,
+  Palette,
+  Shield,
+  Database,
+  Cloud,
+  Layers,
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Heading from '@/components/ui/Heading';
+import { IconBadge } from '@/components/ui/IconBadge';
+import type { TechItem } from './TechnologiesSection';
+import { Section } from '@/components/layout/Section';
 
 const ICON_MAP: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement>>> = {
-  Code, Palette, Database, Layers, Shield, Globe, Cloud,
-}
+  Code,
+  Palette,
+  Database,
+  Layers,
+  Shield,
+  Globe,
+  Cloud,
+};
 
 interface TechnologiesClientProps {
-  technologies: TechItem[]
-  categories: string[]
-  allLabel: string
-  totalCount: number
+  technologies: TechItem[];
+  categories: string[];
+  allLabel: string;
+  totalCount: number;
   labels: {
-    title: string
-    subtitle: string
-    filterLabel: string
-    visitWebsite: string
-    showing: string
-  }
+    title: string;
+    subtitle: string;
+    filterLabel: string;
+    visitWebsite: string;
+    showing: string;
+  };
 }
 
-export function TechnologiesClient({ technologies, categories, allLabel, totalCount, labels }: TechnologiesClientProps) {
-  const t = useTranslations('services.webDesign.technologies')
-  const [selectedCategory, setSelectedCategory] = useState(allLabel)
+export function TechnologiesClient({
+  technologies,
+  categories,
+  allLabel,
+  totalCount,
+  labels,
+}: TechnologiesClientProps) {
+  const t = useTranslations('services.webDesign.technologies');
+  const [selectedCategory, setSelectedCategory] = useState(allLabel);
 
-  const filteredTechnologies = selectedCategory === allLabel
-    ? technologies
-    : technologies.filter(tech => tech.category === selectedCategory)
+  const filteredTechnologies =
+    selectedCategory === allLabel
+      ? technologies
+      : technologies.filter((tech) => tech.category === selectedCategory);
 
-  const showingText = selectedCategory === allLabel
-    ? labels.showing
-    : t('showingFiltered', { count: filteredTechnologies.length, total: totalCount, category: selectedCategory })
+  const showingText =
+    selectedCategory === allLabel
+      ? labels.showing
+      : t('showingFiltered', {
+          count: filteredTechnologies.length,
+          total: totalCount,
+          category: selectedCategory,
+        });
 
   return (
     <Section density="default" tone="surface" contained={false}>
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-12">
-          <Heading level={2} className="mb-6">{labels.title}</Heading>
-          <p className="text-lg text-text-secondary mb-8">
-            {labels.subtitle}
-          </p>
+          <Heading level={2} className="mb-6">
+            {labels.title}
+          </Heading>
+          <p className="text-lg text-text-secondary mb-8">{labels.subtitle}</p>
 
           {/* Technology Filter */}
           <div className="flex flex-wrap justify-center gap-3 mb-12">
@@ -74,7 +103,7 @@ export function TechnologiesClient({ technologies, categories, allLabel, totalCo
         {/* Technologies Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredTechnologies.map((tech, index) => {
-            const IconComponent = ICON_MAP[tech.iconKey] || ICON_MAP['Globe']
+            const IconComponent = ICON_MAP[tech.iconKey] || ICON_MAP['Globe'];
             return (
               <a
                 key={`${tech.name}-${selectedCategory}`}
@@ -87,11 +116,20 @@ export function TechnologiesClient({ technologies, categories, allLabel, totalCo
                 <div className="flex items-start mb-4">
                   <IconBadge icon={IconComponent} theme="services" size="lg" className="mr-4" />
                   <div className="min-w-0 flex-1">
-                    <div className="text-sm text-action font-semibold mb-1 truncate">{tech.category}</div>
-                    <Heading level={3} className="mb-2 line-clamp-2 group-hover:text-action transition-colors duration-300">{tech.name}</Heading>
+                    <div className="text-sm text-action font-semibold mb-1 truncate">
+                      {tech.category}
+                    </div>
+                    <Heading
+                      level={3}
+                      className="mb-2 line-clamp-2 group-hover:text-action transition-colors duration-300"
+                    >
+                      {tech.name}
+                    </Heading>
                   </div>
                 </div>
-                <p className="text-text-secondary mb-4 text-sm leading-relaxed">{tech.description}</p>
+                <p className="text-text-secondary mb-4 text-sm leading-relaxed">
+                  {tech.description}
+                </p>
                 <div className="space-y-2">
                   {tech.benefits.map((benefit, i) => (
                     <div key={i} className="flex items-center text-sm text-text-secondary">
@@ -106,15 +144,13 @@ export function TechnologiesClient({ technologies, categories, allLabel, totalCo
                   <span>{labels.visitWebsite}</span>
                 </div>
               </a>
-            )
+            );
           })}
         </div>
 
         {/* Results count */}
         <div className="text-center mt-8">
-          <p className="text-text-tertiary text-sm">
-            {showingText}
-          </p>
+          <p className="text-text-tertiary text-sm">{showingText}</p>
         </div>
       </div>
 
@@ -143,5 +179,5 @@ export function TechnologiesClient({ technologies, categories, allLabel, totalCo
         }
       `}</style>
     </Section>
-  )
+  );
 }

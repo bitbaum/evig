@@ -6,13 +6,13 @@
  * the count + total hours of linked timecards. Newest first.
  */
 
-import { NextRequest } from 'next/server'
-import { withAdmin, type ValidSession } from '@/lib/api/middleware'
-import { apiError, apiSuccess } from '@/lib/api/helpers'
-import { logger } from '@/lib/logger'
-import { db } from '@/db'
-import { payrollBatches, timecards, timecardEntries, users } from '@/db/schema'
-import { eq, sql, desc } from 'drizzle-orm'
+import { NextRequest } from 'next/server';
+import { withAdmin, type ValidSession } from '@/lib/api/middleware';
+import { apiError, apiSuccess } from '@/lib/api/helpers';
+import { logger } from '@/lib/logger';
+import { db } from '@/db';
+import { payrollBatches, timecards, timecardEntries, users } from '@/db/schema';
+import { eq, sql, desc } from 'drizzle-orm';
 
 export const GET = withAdmin('payroll', async (_request: NextRequest, _session: ValidSession) => {
   try {
@@ -34,17 +34,13 @@ export const GET = withAdmin('payroll', async (_request: NextRequest, _session: 
       .leftJoin(users, eq(payrollBatches.closedBy, users.id))
       .leftJoin(timecards, eq(timecards.payrollBatchId, payrollBatches.id))
       .leftJoin(timecardEntries, eq(timecardEntries.timecardId, timecards.id))
-      .groupBy(
-        payrollBatches.id,
-        users.name,
-        users.email,
-      )
+      .groupBy(payrollBatches.id, users.name, users.email)
       .orderBy(desc(payrollBatches.periodStart), desc(payrollBatches.createdAt))
-      .limit(50)
+      .limit(50);
 
-    return apiSuccess({ items: rows })
+    return apiSuccess({ items: rows });
   } catch (error) {
-    logger.error('Failed to list payroll batches', { error })
-    return apiError(error, 'Lohnläufe konnten nicht geladen werden')
+    logger.error('Failed to list payroll batches', { error });
+    return apiError(error, 'Lohnläufe konnten nicht geladen werden');
   }
-})
+});

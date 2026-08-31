@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import { z } from 'zod';
 
 /**
  * Static pages (admin CMS) — validation for /api/admin/pages.
@@ -11,11 +11,14 @@ export const StaticPageSchema = z.object({
     .string()
     .min(1, 'URL-Slug ist erforderlich')
     .max(200)
-    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug darf nur Kleinbuchstaben, Zahlen und Bindestriche enthalten'),
+    .regex(
+      /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+      'Slug darf nur Kleinbuchstaben, Zahlen und Bindestriche enthalten',
+    ),
   content: z.string().default(''),
   is_published: z.boolean().default(false),
   seo_title: z.string().max(200).optional().nullable(),
   seo_description: z.string().max(500).optional().nullable(),
-})
+});
 
-export type StaticPageInput = z.infer<typeof StaticPageSchema>
+export type StaticPageInput = z.infer<typeof StaticPageSchema>;

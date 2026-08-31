@@ -21,7 +21,12 @@ const optionSchema = z.object({
   id: z.string().optional(),
   label: z.string().min(1),
   description: z.string().optional(),
-  imageUrl: z.string().url().optional().or(z.literal('')).transform(v => v || undefined),
+  imageUrl: z
+    .string()
+    .url()
+    .optional()
+    .or(z.literal(''))
+    .transform((v) => v || undefined),
 });
 
 export type DecisionOption = z.infer<typeof optionSchema>;
@@ -43,14 +48,21 @@ export const createDecisionSchema = z
     description: z.string().min(1),
     background: z.string().optional().nullable(),
     category: z.string().optional(),
-    decisionType: z.enum(DECISION_TYPES as unknown as [string, ...string[]]) as z.ZodType<DecisionType>,
-    votingMethod: z.enum(VOTING_METHODS as unknown as [string, ...string[]]) as z.ZodType<VotingMethod>,
+    decisionType: z.enum(
+      DECISION_TYPES as unknown as [string, ...string[]],
+    ) as z.ZodType<DecisionType>,
+    votingMethod: z.enum(
+      VOTING_METHODS as unknown as [string, ...string[]],
+    ) as z.ZodType<VotingMethod>,
     options: z.array(optionSchema).optional().default([]),
     quorum: quorumSchema.optional(),
     blindVoting: z.boolean().optional().default(true),
     dotCount: z.number().int().min(1).max(20).optional().nullable(),
     invitedParticipants: z.array(z.string()).optional().default([]),
-    participantScope: z.enum(PARTICIPANT_SCOPES as unknown as [string, ...string[]]).optional().default(PARTICIPANT_SCOPE_DEFAULT),
+    participantScope: z
+      .enum(PARTICIPANT_SCOPES as unknown as [string, ...string[]])
+      .optional()
+      .default(PARTICIPANT_SCOPE_DEFAULT),
     discussionDeadline: z.string().datetime().optional().nullable(),
     votingDeadline: z.string().datetime().optional().nullable(),
     allowPublicVoting: z.boolean().optional().default(false),
@@ -77,7 +89,7 @@ export const createDecisionSchema = z
       }
       return true;
     },
-    { message: 'Mindestens 2 Optionen erforderlich für diese Abstimmungsmethode' }
+    { message: 'Mindestens 2 Optionen erforderlich für diese Abstimmungsmethode' },
   )
   .refine(
     (data) => {
@@ -87,7 +99,7 @@ export const createDecisionSchema = z
       }
       return true;
     },
-    { message: 'Punktanzahl ist für Punktabstimmung erforderlich' }
+    { message: 'Punktanzahl ist für Punktabstimmung erforderlich' },
   );
 
 export type CreateDecisionInput = z.infer<typeof createDecisionSchema>;
@@ -99,8 +111,12 @@ export const updateDecisionSchema = z.object({
   description: z.string().min(1).optional(),
   background: z.string().optional().nullable(),
   category: z.string().optional(),
-  decisionType: z.enum(DECISION_TYPES as unknown as [string, ...string[]]).optional() as z.ZodType<DecisionType | undefined>,
-  votingMethod: z.enum(VOTING_METHODS as unknown as [string, ...string[]]).optional() as z.ZodType<VotingMethod | undefined>,
+  decisionType: z.enum(DECISION_TYPES as unknown as [string, ...string[]]).optional() as z.ZodType<
+    DecisionType | undefined
+  >,
+  votingMethod: z.enum(VOTING_METHODS as unknown as [string, ...string[]]).optional() as z.ZodType<
+    VotingMethod | undefined
+  >,
   options: z.array(optionSchema).optional(),
   quorum: quorumSchema.optional(),
   blindVoting: z.boolean().optional(),
@@ -118,7 +134,9 @@ export type UpdateDecisionInput = z.infer<typeof updateDecisionSchema>;
 // ─── Transition ───────────────────────────────────────────────────────────
 
 export const transitionDecisionSchema = z.object({
-  status: z.enum(DECISION_STATUSES as unknown as [string, ...string[]]) as z.ZodType<DecisionStatus>,
+  status: z.enum(
+    DECISION_STATUSES as unknown as [string, ...string[]],
+  ) as z.ZodType<DecisionStatus>,
   cancelReason: z.string().optional(),
   outcomeSummary: z.string().optional(),
 });
@@ -139,7 +157,7 @@ export const consentVoteSchema = z
       }
       return true;
     },
-    { message: 'Bei einer Blockierung ist eine Begründung erforderlich' }
+    { message: 'Bei einer Blockierung ist eine Begründung erforderlich' },
   );
 
 export type ConsentVoteInput = z.infer<typeof consentVoteSchema>;
@@ -157,10 +175,7 @@ export const dotVoteSchema = z.object({
 export type DotVoteInput = z.infer<typeof dotVoteSchema>;
 
 export const scoreVoteSchema = z.object({
-  scores: z.record(
-    z.string(),
-    z.number().int().min(SCORE_RANGE.min).max(SCORE_RANGE.max)
-  ),
+  scores: z.record(z.string(), z.number().int().min(SCORE_RANGE.min).max(SCORE_RANGE.max)),
 });
 
 export type ScoreVoteInput = z.infer<typeof scoreVoteSchema>;

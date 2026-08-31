@@ -2,13 +2,13 @@
  * Users Table - barrel export
  */
 
-export { UsersTableClient } from './UsersTableClient'
-export { UserTableRow } from './UserTableRow'
-export { EditProfileModal } from './EditProfileModal'
-export { DeleteUserModal } from './DeleteUserModal'
-export { EmptyState } from '@/components/common/EmptyState'
-export { UserFilters } from './UserFilters'
-export { useUserManagement } from './useUserManagement'
+export { UsersTableClient } from './UsersTableClient';
+export { UserTableRow } from './UserTableRow';
+export { EditProfileModal } from './EditProfileModal';
+export { DeleteUserModal } from './DeleteUserModal';
+export { EmptyState } from '@/components/common/EmptyState';
+export { UserFilters } from './UserFilters';
+export { useUserManagement } from './useUserManagement';
 
 // Types
-export type { UserRow, UsersTableClientProps } from './types'
+export type { UserRow, UsersTableClientProps } from './types';

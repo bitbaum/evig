@@ -1,15 +1,18 @@
-import { NextRequest } from "next/server";
-import { db } from "@/db";
+import { NextRequest } from 'next/server';
+import { db } from '@/db';
 import { parse } from 'csv-parse/sync';
-import { aiExtractedProducts, inventoryItems, sustainabilityScores } from "@/db/schema";
-import { eq, desc } from "drizzle-orm";
-import { apiSuccess, apiError, apiBadRequest } from "@/lib/api/helpers";
-import { logger } from "@/lib/logger";
-import { withAdmin, ValidSession } from "@/lib/api/middleware";
+import { aiExtractedProducts, inventoryItems, sustainabilityScores } from '@/db/schema';
+import { eq, desc } from 'drizzle-orm';
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
+import { logger } from '@/lib/logger';
+import { withAdmin, ValidSession } from '@/lib/api/middleware';
 import { validateBody, ImportCSVSchema } from '@/lib/schemas';
 import { APPROVAL_STATUS } from '@/config/approval-status';
 import { INVENTORY_ITEM_STATUS } from '@/config/marketplace-status';
-import { analyzeProductDescription, calculateSustainabilityScore } from '@/lib/inventory/csv-analysis';
+import {
+  analyzeProductDescription,
+  calculateSustainabilityScore,
+} from '@/lib/inventory/csv-analysis';
 import { rateLimiters } from '@/lib/security/rate-limit';
 
 interface CSVRow {
@@ -53,7 +56,9 @@ export const POST = withAdmin('products', async (request: NextRequest, session: 
 
     // SECURITY: Limit row count to prevent resource exhaustion
     if (records.length > MAX_CSV_ROWS) {
-      return apiBadRequest(`CSV darf maximal ${MAX_CSV_ROWS} Zeilen enthalten (${records.length} gefunden).`);
+      return apiBadRequest(
+        `CSV darf maximal ${MAX_CSV_ROWS} Zeilen enthalten (${records.length} gefunden).`,
+      );
     }
 
     const result: ImportResult = {
@@ -61,7 +66,7 @@ export const POST = withAdmin('products', async (request: NextRequest, session: 
       imported: 0,
       skipped: 0,
       errors: [],
-      duplicates: []
+      duplicates: [],
     };
 
     // Process each row
@@ -116,7 +121,7 @@ export const POST = withAdmin('products', async (request: NextRequest, session: 
               rawAiResponse: {
                 source: 'csv_import',
                 original_data: row,
-                analysis_method: 'rule_based'
+                analysis_method: 'rule_based',
               },
               createdBy: session.user.id,
               status: APPROVAL_STATUS.PENDING,
@@ -128,24 +133,22 @@ export const POST = withAdmin('products', async (request: NextRequest, session: 
             throw new Error(`Failed to create AI product for ${row.Artikelnummer}`);
           }
 
-          await tx
-            .insert(sustainabilityScores)
-            .values({
-              productId: aiProduct.id,
-              overallScore: sustainScore.overall_score,
-              environmentalScore: sustainScore.environmental_score,
-              socialScore: sustainScore.social_score,
-              economicScore: sustainScore.economic_score,
-              factors: sustainScore.factors,
-              recommendations: sustainScore.recommendations,
-              improvementSuggestions: sustainScore.improvement_suggestions,
-              aiAnalysis: {
-                assessment_method: 'rule_based',
-                data_sources: ['product_description', 'brand_info'],
-                confidence: 0.7
-              },
-              assessedBy: 'csv_import',
-            });
+          await tx.insert(sustainabilityScores).values({
+            productId: aiProduct.id,
+            overallScore: sustainScore.overall_score,
+            environmentalScore: sustainScore.environmental_score,
+            socialScore: sustainScore.social_score,
+            economicScore: sustainScore.economic_score,
+            factors: sustainScore.factors,
+            recommendations: sustainScore.recommendations,
+            improvementSuggestions: sustainScore.improvement_suggestions,
+            aiAnalysis: {
+              assessment_method: 'rule_based',
+              data_sources: ['product_description', 'brand_info'],
+              confidence: 0.7,
+            },
+            assessedBy: 'csv_import',
+          });
 
           const [inventoryRow] = await tx
             .insert(inventoryItems)
@@ -166,7 +169,6 @@ export const POST = withAdmin('products', async (request: NextRequest, session: 
         });
 
         result.imported++;
-
       } catch (error) {
         result.errors.push(`Error processing row ${row.Artikelnummer}: ${error}`);
         result.skipped++;
@@ -174,9 +176,8 @@ export const POST = withAdmin('products', async (request: NextRequest, session: 
     }
 
     return apiSuccess(result);
-
   } catch (error) {
-    return apiError(error, "CSV-Daten konnten nicht importiert werden");
+    return apiError(error, 'CSV-Daten konnten nicht importiert werden');
   }
 });
 
@@ -201,10 +202,9 @@ export const GET = withAdmin('products', async (_request: NextRequest, session: 
       .limit(50);
 
     return apiSuccess({
-      imports: importHistory
+      imports: importHistory,
     });
-
   } catch (error) {
-    return apiError(error, "Importverlauf konnte nicht geladen werden");
+    return apiError(error, 'Importverlauf konnte nicht geladen werden');
   }
 });

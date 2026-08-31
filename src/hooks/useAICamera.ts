@@ -5,14 +5,14 @@
  * Camera + file upload + analysis in one hook.
  */
 
-import { useState, useCallback } from 'react'
-import { useAIProductAnalysis, type ProductAnalysis } from './useAIProductAnalysis'
-import { getCategoryIcon } from '@/components/marketplace/ai-camera/config'
-import { resolveCategoryValue } from '@/config/marketplace'
-import type { ProductSuggestion } from '@/components/marketplace/ai-camera/types'
+import { useState, useCallback } from 'react';
+import { useAIProductAnalysis, type ProductAnalysis } from './useAIProductAnalysis';
+import { getCategoryIcon } from '@/components/marketplace/ai-camera/config';
+import { resolveCategoryValue } from '@/config/marketplace';
+import type { ProductSuggestion } from '@/components/marketplace/ai-camera/types';
 
 export function useAICamera() {
-  const [suggestions, setSuggestions] = useState<ProductSuggestion[]>([])
+  const [suggestions, setSuggestions] = useState<ProductSuggestion[]>([]);
 
   const mapToSuggestion = useCallback((result: ProductAnalysis): void => {
     const suggestion: ProductSuggestion = {
@@ -30,16 +30,16 @@ export function useAICamera() {
         ? Object.entries(result.specifications).map(([key, value]) => `${key}: ${value}`)
         : [],
       icon: getCategoryIcon(result.category || ''),
-    }
-    setSuggestions([suggestion])
-  }, [])
+    };
+    setSuggestions([suggestion]);
+  }, []);
 
-  const hook = useAIProductAnalysis({ onAnalyzed: mapToSuggestion })
+  const hook = useAIProductAnalysis({ onAnalyzed: mapToSuggestion });
 
   const resetCapture = useCallback(() => {
-    hook.reset()
-    setSuggestions([])
-  }, [hook])
+    hook.reset();
+    setSuggestions([]);
+  }, [hook]);
 
   return {
     isCapturing: !!hook.videoRef.current?.srcObject,
@@ -55,5 +55,5 @@ export function useAICamera() {
     capturePhoto: hook.capturePhoto,
     handleFileUpload: hook.handleFileSelect,
     resetCapture,
-  }
+  };
 }

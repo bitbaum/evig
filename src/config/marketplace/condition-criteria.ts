@@ -13,18 +13,18 @@
 
 export interface ConditionCriterion {
   /** Unique key for this criterion */
-  key: string
+  key: string;
   /** German label shown to seller/buyer */
-  label: string
+  label: string;
 }
 
 export interface CategoryConditionCriteria {
   /** KATEGORIEN category value */
-  categoryValue: string
+  categoryValue: string;
   /** Condition value (from LISTING_CONDITIONS) */
-  condition: string
+  condition: string;
   /** What this condition means for this category */
-  criteria: ConditionCriterion[]
+  criteria: ConditionCriterion[];
 }
 
 /**
@@ -85,7 +85,10 @@ const CRITERIA_MAP: Record<string, ConditionCriterion[]> = {
   ],
   // Monitore — Akzeptabel
   '30:fair': [
-    { key: 'display_usable', label: 'Display funktionsfähig (minimale Ungleichmässigkeiten möglich)' },
+    {
+      key: 'display_usable',
+      label: 'Display funktionsfähig (minimale Ungleichmässigkeiten möglich)',
+    },
     { key: 'stand_basic', label: 'Standfuss vorhanden und stabil' },
     { key: 'visible_wear', label: 'Sichtbare Gebrauchsspuren' },
   ],
@@ -118,7 +121,7 @@ const CRITERIA_MAP: Record<string, ConditionCriterion[]> = {
     { key: 'touch_works', label: 'Touch-Funktion einwandfrei' },
     { key: 'minor_wear', label: 'Leichte Gebrauchsspuren am Gehäuse' },
   ],
-}
+};
 
 /**
  * Get condition criteria for a category and condition.
@@ -126,16 +129,16 @@ const CRITERIA_MAP: Record<string, ConditionCriterion[]> = {
  */
 export function getConditionCriteria(
   categoryValue: string,
-  condition: string
+  condition: string,
 ): ConditionCriterion[] | null {
-  return CRITERIA_MAP[`${categoryValue}:${condition}`] || null
+  return CRITERIA_MAP[`${categoryValue}:${condition}`] || null;
 }
 
 /**
  * Check if criteria exist for a given category (any condition).
  */
 export function hasCriteriaForCategory(categoryValue: string): boolean {
-  return Object.keys(CRITERIA_MAP).some(key => key.startsWith(`${categoryValue}:`))
+  return Object.keys(CRITERIA_MAP).some((key) => key.startsWith(`${categoryValue}:`));
 }
 
 /**
@@ -143,6 +146,6 @@ export function hasCriteriaForCategory(categoryValue: string): boolean {
  */
 export function getConditionsWithCriteria(categoryValue: string): string[] {
   return Object.keys(CRITERIA_MAP)
-    .filter(key => key.startsWith(`${categoryValue}:`))
-    .map(key => key.split(':')[1])
+    .filter((key) => key.startsWith(`${categoryValue}:`))
+    .map((key) => key.split(':')[1]);
 }

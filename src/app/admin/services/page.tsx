@@ -4,99 +4,90 @@
  * Shows service types from the database with full CRUD functionality.
  */
 
-import { Metadata } from 'next'
-import { adminInteractive } from '@/lib/admin-ui'
-import { getTranslations } from 'next-intl/server'
-import Link from 'next/link'
-import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
-import { SERVICE_CATEGORY_LABELS } from '@/config/service-categories'
-import { formatPriceCents } from '@/config/marketplace'
-import {
-  Plus,
-  Wrench,
-  Users,
-  Edit,
-  Eye,
-  CheckCircle,
-  Star,
-  Calendar,
-} from 'lucide-react'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminStatsStrip, type StatItem } from '@/components/admin/AdminStatsStrip'
-import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
-import { AdminButton } from '@/components/admin/AdminButton'
-import { ADMIN_CONTENT } from '@/config/admin-content'
-import { ROUTES } from '@/config/routes'
+import { Metadata } from 'next';
+import { adminInteractive } from '@/lib/admin-ui';
+import { getTranslations } from 'next-intl/server';
+import Link from 'next/link';
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
+import { query } from '@/lib/auth/db';
+import { TABLE_NAMES } from '@/config/database';
+import { SERVICE_CATEGORY_LABELS } from '@/config/service-categories';
+import { formatPriceCents } from '@/config/marketplace';
+import { Plus, Wrench, Users, Edit, Eye, CheckCircle, Star, Calendar } from 'lucide-react';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import { AdminStatsStrip, type StatItem } from '@/components/admin/AdminStatsStrip';
+import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable';
+import { AdminButton } from '@/components/admin/AdminButton';
+import { ADMIN_CONTENT } from '@/config/admin-content';
+import { ROUTES } from '@/config/routes';
 
 export const metadata: Metadata = {
   title: 'Dienstleistungen verwalten',
   description: 'Dienstleistungen erstellen, bearbeiten und verwalten.',
-}
+};
 
 interface ServiceType {
-  id: string
-  slug: string
-  name: string
-  description: string | null
-  category: string | null
-  price_cents: number | null
-  duration_minutes: number | null
-  is_active: boolean
-  is_bookable: boolean
-  is_featured: boolean
-  display_order: number
-  created_at: string
+  id: string;
+  slug: string;
+  name: string;
+  description: string | null;
+  category: string | null;
+  price_cents: number | null;
+  duration_minutes: number | null;
+  is_active: boolean;
+  is_bookable: boolean;
+  is_featured: boolean;
+  display_order: number;
+  created_at: string;
 }
 
 interface ServiceStats {
-  totalServices: number
-  activeServices: number
-  totalBookings: number
-  totalTechnicians: number
+  totalServices: number;
+  activeServices: number;
+  totalBookings: number;
+  totalTechnicians: number;
 }
 
 async function getServiceStats(): Promise<ServiceStats> {
-  let totalServices = 0
-  let activeServices = 0
-  let totalBookings = 0
-  let totalTechnicians = 0
+  let totalServices = 0;
+  let activeServices = 0;
+  let totalBookings = 0;
+  let totalTechnicians = 0;
 
   try {
     const servicesResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.SERVICE_TYPES}`
-    )
-    totalServices = parseInt(servicesResult.rows[0]?.count || '0')
+      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.SERVICE_TYPES}`,
+    );
+    totalServices = parseInt(servicesResult.rows[0]?.count || '0');
 
     const activeResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.SERVICE_TYPES} WHERE is_active = true`
-    )
-    activeServices = parseInt(activeResult.rows[0]?.count || '0')
+      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.SERVICE_TYPES} WHERE is_active = true`,
+    );
+    activeServices = parseInt(activeResult.rows[0]?.count || '0');
   } catch {
     // Table might not exist
   }
 
   try {
     const bookingsResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.SERVICE_APPOINTMENTS}`
-    )
-    totalBookings = parseInt(bookingsResult.rows[0]?.count || '0')
+      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.SERVICE_APPOINTMENTS}`,
+    );
+    totalBookings = parseInt(bookingsResult.rows[0]?.count || '0');
   } catch {
     // Table might not exist
   }
 
   try {
     const techResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} WHERE is_active = true`
-    )
-    totalTechnicians = parseInt(techResult.rows[0]?.count || '0')
+      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES} WHERE is_active = true`,
+    );
+    totalTechnicians = parseInt(techResult.rows[0]?.count || '0');
   } catch {
     // Table might not exist
   }
 
-  return { totalServices, activeServices, totalBookings, totalTechnicians }
+  return { totalServices, activeServices, totalBookings, totalTechnicians };
 }
 
 async function getServices(): Promise<ServiceType[]> {
@@ -108,50 +99,52 @@ async function getServices(): Promise<ServiceType[]> {
         is_active, is_bookable, is_featured, display_order,
         created_at
        FROM ${TABLE_NAMES.SERVICE_TYPES}
-       ORDER BY is_active DESC, display_order, name ASC`
-    )
-    return result.rows
+       ORDER BY is_active DESC, display_order, name ASC`,
+    );
+    return result.rows;
   } catch {
     // Table might not exist
-    return []
+    return [];
   }
 }
 
-const formatPrice = formatPriceCents
+const formatPrice = formatPriceCents;
 
 function formatDuration(minutes: number | null): string {
-  if (minutes === null) return '-'
-  if (minutes < 60) return `${minutes} Min.`
-  const hours = Math.floor(minutes / 60)
-  const mins = minutes % 60
-  if (mins === 0) return `${hours} Std.`
-  return `${hours} Std. ${mins} Min.`
+  if (minutes === null) return '-';
+  if (minutes < 60) return `${minutes} Min.`;
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  if (mins === 0) return `${hours} Std.`;
+  return `${hours} Std. ${mins} Min.`;
 }
 
 export default async function AdminServicesPage() {
-  const t = await getTranslations('admin.services')
-  const session = await auth()
+  const t = await getTranslations('admin.services');
+  const session = await auth();
 
   if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/services')
+    redirect('/auth/login?callbackUrl=/admin/services');
   }
 
-  const [stats, services] = await Promise.all([
-    getServiceStats(),
-    getServices(),
-  ])
+  const [stats, services] = await Promise.all([getServiceStats(), getServices()]);
 
   const createAction = (
     <AdminButton href={ROUTES.admin.serviceNew} variant="primary" className="gap-2">
       <Plus className="w-4 h-4" />
       Dienstleistung erstellen
     </AdminButton>
-  )
+  );
 
   // No services at all → single empty state, no dead stats grid.
   if (services.length === 0) {
     return (
-      <AdminPageWrapper title={t('pageTitle')} description={t('pageDescription')} icon={Wrench} iconColor="green">
+      <AdminPageWrapper
+        title={t('pageTitle')}
+        description={t('pageDescription')}
+        icon={Wrench}
+        iconColor="green"
+      >
         <div className="rounded-lg border border-default bg-surface-base p-12 text-center">
           <Wrench className="w-12 h-12 text-text-muted mx-auto mb-4" />
           <p className="font-medium text-text-primary">{ADMIN_CONTENT.services.emptyTitle}</p>
@@ -159,7 +152,7 @@ export default async function AdminServicesPage() {
           {createAction}
         </div>
       </AdminPageWrapper>
-    )
+    );
   }
 
   const statCards: StatItem[] = [
@@ -167,7 +160,7 @@ export default async function AdminServicesPage() {
     { icon: CheckCircle, color: 'green', label: 'Aktiv', value: stats.activeServices },
     { icon: Users, color: 'gray', label: 'Buchungen', value: stats.totalBookings },
     { icon: Wrench, color: 'gray', label: 'Techniker', value: stats.totalTechnicians },
-  ]
+  ];
 
   const columns: AdminTableColumn<ServiceType>[] = [
     {
@@ -184,7 +177,10 @@ export default async function AdminServicesPage() {
       className: 'whitespace-nowrap',
       cell: (s) => (
         <span className="text-text-secondary">
-          {s.category ? SERVICE_CATEGORY_LABELS[s.category as keyof typeof SERVICE_CATEGORY_LABELS] || s.category : '-'}
+          {s.category
+            ? SERVICE_CATEGORY_LABELS[s.category as keyof typeof SERVICE_CATEGORY_LABELS] ||
+              s.category
+            : '-'}
         </span>
       ),
     },
@@ -202,9 +198,11 @@ export default async function AdminServicesPage() {
       header: 'Flags',
       cell: (s) => (
         <div className="flex items-center gap-1.5">
-          <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${
-            s.is_active ? 'bg-action-muted text-action' : 'bg-surface-raised text-text-primary'
-          }`}>
+          <span
+            className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${
+              s.is_active ? 'bg-action-muted text-action' : 'bg-surface-raised text-text-primary'
+            }`}
+          >
             {s.is_active ? 'Aktiv' : 'Inaktiv'}
           </span>
           {s.is_featured && (
@@ -245,7 +243,7 @@ export default async function AdminServicesPage() {
         </div>
       ),
     },
-  ]
+  ];
 
   return (
     <AdminPageWrapper
@@ -258,5 +256,5 @@ export default async function AdminServicesPage() {
       <AdminStatsStrip items={statCards} />
       <AdminTable columns={columns} rows={services} rowKey={(s) => s.id} />
     </AdminPageWrapper>
-  )
+  );
 }

@@ -14,7 +14,7 @@
    #input_row_table_id, table.tbl-horizontal (Kopf-Panels in float-Spalten
    div.col), .numeric und .horizontal-scroll-wrapper. Responsiv: nebeneinander
    auf Desktop, gestapelt ab 1100px/640px — für jedes Gerät.
-   Nur noch /* ⚠ PRÜFEN */ sind die Zeilen-Steuerelemente (Ziehen/Löschen/
+   Nur noch [⚠ PRÜFEN] sind die Zeilen-Steuerelemente (Ziehen/Löschen/
    Aufklappen) — bei leerer Tabelle nicht prüfbar; F12 an einer echten Zeile
    bestätigt sie. Nichts geht dabei kaputt.
    ============================================================================ */
@@ -23,25 +23,25 @@
    1) Stellschrauben — hier zentral anpassen (Schriftgrösse, Farben, Abstände)
    --------------------------------------------------------------------------- */
 :root {
-  --ri-font:            0.5rem; /* wird unten überschrieben – siehe Basis */
-  --ri-text:            17px;   /* Basis-Schriftgrösse (älteren Augen zuliebe) */
-  --ri-text-lg:         19px;   /* Beschriftungen / wichtige Felder */
-  --ri-line:            1.5;    /* Zeilenhöhe */
+  --ri-font: 0.5rem; /* wird unten überschrieben – siehe Basis */
+  --ri-text: 17px; /* Basis-Schriftgrösse (älteren Augen zuliebe) */
+  --ri-text-lg: 19px; /* Beschriftungen / wichtige Felder */
+  --ri-line: 1.5; /* Zeilenhöhe */
 
-  --ri-ink:             #1a1a1a; /* Text (hoher Kontrast) */
-  --ri-ink-soft:        #444;    /* Sekundärtext */
-  --ri-line-color:      #c9c9c9; /* Rahmen */
-  --ri-line-strong:     #9a9a9a; /* kräftigerer Rahmen */
-  --ri-bg:              #ffffff; /* Feld-Hintergrund */
-  --ri-panel:           #f5f6f7; /* Karten/Panel-Hintergrund */
-  --ri-head:            #eef1f3; /* Tabellenkopf */
-  --ri-zebra:           #f7f9fa; /* Zeilenstreifen */
-  --ri-accent:          #0b6b5f; /* Revamp-Grün (Fokus/Aktion) */
-  --ri-accent-ink:      #ffffff;
+  --ri-ink: #1a1a1a; /* Text (hoher Kontrast) */
+  --ri-ink-soft: #444; /* Sekundärtext */
+  --ri-line-color: #c9c9c9; /* Rahmen */
+  --ri-line-strong: #9a9a9a; /* kräftigerer Rahmen */
+  --ri-bg: #ffffff; /* Feld-Hintergrund */
+  --ri-panel: #f5f6f7; /* Karten/Panel-Hintergrund */
+  --ri-head: #eef1f3; /* Tabellenkopf */
+  --ri-zebra: #f7f9fa; /* Zeilenstreifen */
+  --ri-accent: #0b6b5f; /* Revamp-Grün (Fokus/Aktion) */
+  --ri-accent-ink: #ffffff;
 
-  --ri-touch:           44px;    /* Mindest-Touchfläche (Tablet) */
-  --ri-radius:          8px;
-  --ri-gap:             14px;
+  --ri-touch: 44px; /* Mindest-Touchfläche (Tablet) */
+  --ri-radius: 8px;
+  --ri-gap: 14px;
 }
 
 /* ---------------------------------------------------------------------------
@@ -49,7 +49,8 @@
    --------------------------------------------------------------------------- */
 body,
 .wrapper,                     /* ⚠ PRÜFEN — Kivitendo Haupt-Wrapper */
-#content {                    /* ⚠ PRÜFEN — Inhaltsbereich */
+#content {
+  /* ⚠ PRÜFEN — Inhaltsbereich */
   font-size: var(--ri-text);
   line-height: var(--ri-line);
   color: var(--ri-ink);
@@ -77,11 +78,11 @@ th,
 /* ---------------------------------------------------------------------------
    3) Eingabefelder — gross genug für Finger & Augen
    --------------------------------------------------------------------------- */
-input[type="text"],
-input[type="number"],
-input[type="date"],
-input[type="email"],
-input[type="search"],
+input[type='text'],
+input[type='number'],
+input[type='date'],
+input[type='email'],
+input[type='search'],
 select,
 textarea {
   font-size: var(--ri-text);
@@ -95,7 +96,10 @@ textarea {
   max-width: 100%;
 }
 
-textarea { min-height: 3lh; line-height: var(--ri-line); }
+textarea {
+  min-height: 3lh;
+  line-height: var(--ri-line);
+}
 
 /* Deutlich sichtbarer Fokus — hilft bei der Tastatur- und Tablet-Bedienung */
 input:focus,
@@ -122,7 +126,8 @@ input:disabled {
    nebeneinander (wir erzwingen KEINE 100%-Breite mehr) — das Stapeln für
    kleinere Geräte passiert responsiv in Abschnitt 9.
    --------------------------------------------------------------------------- */
-table.tbl-horizontal {        /* verifiziert */
+table.tbl-horizontal {
+  /* verifiziert */
   background: var(--ri-panel);
   border: 1px solid var(--ri-line-color);
   border-radius: var(--ri-radius);
@@ -142,12 +147,14 @@ table.tbl-horizontal th {
    Wir verstärken nur das waagrechte Scrollen und lassen der Tabelle ihre
    natürliche Breite — so wird auf schmalen Geräten gescrollt statt abgeschnitten.
    --------------------------------------------------------------------------- */
-.horizontal-scroll-wrapper {  /* verifiziert */
+.horizontal-scroll-wrapper {
+  /* verifiziert */
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   max-width: 100%;
 }
-#row_table_id {               /* verifiziert */
+#row_table_id {
+  /* verifiziert */
   border-collapse: separate;
   border-spacing: 0;
   font-size: var(--ri-text);
@@ -176,12 +183,16 @@ table.tbl-horizontal th {
 }
 
 /* Zeilenstreifen für bessere Orientierung über die Breite */
-#row_table_id tbody tr:nth-child(odd) td { background: var(--ri-zebra); }
-#row_table_id tbody tr:hover td          { background: #eef6f4; }
+#row_table_id tbody tr:nth-child(odd) td {
+  background: var(--ri-zebra);
+}
+#row_table_id tbody tr:hover td {
+  background: #eef6f4;
+}
 
 /* Eingabefelder INNERHALB der Positionszeilen füllen ihre Zelle aus */
-#row_table_id input[type="text"],
-#row_table_id input[type="number"],
+#row_table_id input[type='text'],
+#row_table_id input[type='number'],
 #row_table_id select,
 #row_table_id textarea {
   width: 100%;
@@ -208,13 +219,17 @@ table.tbl-horizontal th {
    6) Summen / Fussbereich — das Wichtigste gross und deutlich
    --------------------------------------------------------------------------- */
 .order-totals,                /* ⚠ PRÜFEN — Container der Summen */
-table.totals {                /* ⚠ PRÜFEN */
+table.totals {
+  /* ⚠ PRÜFEN */
   margin-top: var(--ri-gap);
-  margin-left: auto;          /* rechtsbündig unter der Tabelle */
+  margin-left: auto; /* rechtsbündig unter der Tabelle */
   font-size: var(--ri-text-lg);
 }
 .order-totals td,
-table.totals td { padding: 6px 12px; text-align: right; }
+table.totals td {
+  padding: 6px 12px;
+  text-align: right;
+}
 
 .order-totals .grand-total,   /* ⚠ PRÜFEN — Zeile "Total" */
 tr.grand-total td {
@@ -227,8 +242,8 @@ tr.grand-total td {
    7) Buttons — grosse, gut trennbare Touch-Ziele
    --------------------------------------------------------------------------- */
 button,
-input[type="submit"],
-input[type="button"],
+input[type='submit'],
+input[type='button'],
 a.button {
   font-size: var(--ri-text-lg);
   min-height: var(--ri-touch);
@@ -241,20 +256,25 @@ a.button {
   margin: 4px 6px 4px 0;
 }
 button:hover,
-input[type="submit"]:hover,
-a.button:hover { background: var(--ri-panel); }
+input[type='submit']:hover,
+a.button:hover {
+  background: var(--ri-panel);
+}
 
 /* Primäraktion (Speichern) hervorheben */
-input[type="submit"],
-button[type="submit"],
-.button--primary {            /* ⚠ PRÜFEN — falls vorhanden */
+input[type='submit'],
+button[type='submit'],
+.button--primary {
+  /* ⚠ PRÜFEN — falls vorhanden */
   background: var(--ri-accent);
   color: var(--ri-accent-ink);
   border-color: var(--ri-accent);
   font-weight: 700;
 }
-input[type="submit"]:hover,
-button[type="submit"]:hover { filter: brightness(0.94); }
+input[type='submit']:hover,
+button[type='submit']:hover {
+  filter: brightness(0.94);
+}
 
 /* ---------------------------------------------------------------------------
    8) Zeilen-Steuerelemente — Sortieren, Löschen, Auf-/Zuklappen
@@ -266,26 +286,34 @@ button[type="submit"]:hover { filter: brightness(0.94); }
    --------------------------------------------------------------------------- */
 
 /* Ziehen zum Umsortieren (updown.png) — grosses, greifbares Touch-Ziel */
-#row_table_id img.dragdrop {          /* ⚠ PRÜFEN */
-  width: 22px; height: 22px;
+#row_table_id img.dragdrop {
+  /* ⚠ PRÜFEN */
+  width: 22px;
+  height: 22px;
   padding: 10px;
   box-sizing: content-box;
   cursor: grab;
   opacity: 0.7;
 }
-#row_table_id img.dragdrop:hover { opacity: 1; }
+#row_table_id img.dragdrop:hover {
+  opacity: 1;
+}
 
 /* Auf-/Zuklappen (expand/collapse.svg) & «aus Stammdaten aktualisieren» */
 #row_table_id img.row-icon,           /* ⚠ PRÜFEN */
-#row_table_id img.expand {            /* ⚠ PRÜFEN */
-  width: 22px; height: 22px;
+#row_table_id img.expand {
+  /* ⚠ PRÜFEN */
+  width: 22px;
+  height: 22px;
   padding: 10px;
   box-sizing: content-box;
   cursor: pointer;
   opacity: 0.7;
 }
 #row_table_id img.row-icon:hover,
-#row_table_id img.expand:hover { opacity: 1; }
+#row_table_id img.expand:hover {
+  opacity: 1;
+}
 
 /* Löschen-Knopf (das «X») — kompaktes, aber sicher tippbares Quadrat.
    Überschreibt in der Zeile die grosse Standard-Button-Regel aus Abschnitt 7. */
@@ -326,30 +354,50 @@ button[type="submit"]:hover { filter: brightness(0.94); }
    abgeschnitten, alles bleibt bedienbar.
    --------------------------------------------------------------------------- */
 @media (max-width: 1100px) {
-  :root { --ri-text: 18px; --ri-text-lg: 20px; }
+  :root {
+    --ri-text: 18px;
+    --ri-text-lg: 20px;
+  }
 
-  div.col {                    /* verifiziert: Kopf-Spalten sind float:left */
+  div.col {
+    /* verifiziert: Kopf-Spalten sind float:left */
     float: none;
     width: 100%;
     margin-right: 0;
   }
-  table.tbl-horizontal { width: 100%; }
+  table.tbl-horizontal {
+    width: 100%;
+  }
 
-  #content input[type="text"],
-  #content input[type="number"],
-  #content input[type="date"],
+  #content input[type='text'],
+  #content input[type='number'],
+  #content input[type='date'],
   #content select,
-  #content textarea { width: 100%; max-width: 100%; }
+  #content textarea {
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
 /* Handy: einspaltig, kompaktere Abstände */
 @media (max-width: 640px) {
-  :root { --ri-text: 17px; --ri-text-lg: 19px; --ri-gap: 10px; }
+  :root {
+    --ri-text: 17px;
+    --ri-text-lg: 19px;
+    --ri-gap: 10px;
+  }
   table.tbl-horizontal td,
-  table.tbl-horizontal th { padding: 4px 6px; }
+  table.tbl-horizontal th {
+    padding: 4px 6px;
+  }
   #row_table_id td,
-  #row_table_id thead th { padding: 8px 6px; }
+  #row_table_id thead th {
+    padding: 8px 6px;
+  }
 }
 
 /* Sehr grosse Schrift optional: Body-Klasse `ri-xl` setzen für +2px überall */
-body.ri-xl { --ri-text: 20px; --ri-text-lg: 22px; }
+body.ri-xl {
+  --ri-text: 20px;
+  --ri-text-lg: 22px;
+}

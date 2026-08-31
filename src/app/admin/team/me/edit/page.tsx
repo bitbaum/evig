@@ -11,31 +11,31 @@
  * here — those stay on the admin route — so `isSuperAdmin` is forced false.
  */
 
-import { Metadata } from 'next'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
-import { redirect } from 'next/navigation'
-import { auth } from '@/auth'
-import { db } from '@/db'
-import { teamProfiles } from '@/db/schema'
-import { eq } from 'drizzle-orm'
-import Heading from '@/components/admin/AdminHeading'
-import { TeamProfileForm } from '@/components/admin/team'
-import type { TeamProfile } from '@/lib/schemas/team'
+import { Metadata } from 'next';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
+import { redirect } from 'next/navigation';
+import { auth } from '@/auth';
+import { db } from '@/db';
+import { teamProfiles } from '@/db/schema';
+import { eq } from 'drizzle-orm';
+import Heading from '@/components/admin/AdminHeading';
+import { TeamProfileForm } from '@/components/admin/team';
+import type { TeamProfile } from '@/lib/schemas/team';
 
 export const metadata: Metadata = {
   title: 'Mein Profil bearbeiten',
   description: 'Ergänze dein Team-Profil (Fähigkeiten, Ziele, Erreichbarkeit).',
-}
+};
 
 export default async function MyTeamProfileEditPage() {
-  const session = await auth()
+  const session = await auth();
   if (!session?.user?.id || !session.user.isStaff) {
-    redirect('/auth/login?callbackUrl=/admin/team/me/edit')
+    redirect('/auth/login?callbackUrl=/admin/team/me/edit');
   }
 
-  const userId = session.user.id
+  const userId = session.user.id;
 
   // Own profile only — non-sensitive columns (comp/AHV are managed on the admin
   // route, never surfaced in self-service). Returns undefined for new staff who
@@ -63,33 +63,29 @@ export default async function MyTeamProfileEditPage() {
       show_on_about: teamProfiles.showOnAbout,
     })
     .from(teamProfiles)
-    .where(eq(teamProfiles.userId, userId))
+    .where(eq(teamProfiles.userId, userId));
 
   // The form consumes snake_case keys at runtime; the prop's camelCase
   // Partial<TeamProfile> type is loose (same pattern as the admin [id] page).
-  const initialData = (row ?? { user_id: userId }) as Partial<TeamProfile & { user_id?: string }>
+  const initialData = (row ?? { user_id: userId }) as Partial<TeamProfile & { user_id?: string }>;
 
   return (
     <div className="mx-auto max-w-4xl">
       <header className="mb-8 border-b border-subtle pb-6">
-        <Link href="/admin/team/me" className="inline-flex items-center gap-1 text-xs text-text-tertiary hover:text-text-secondary transition-colors mb-1">
+        <Link
+          href="/admin/team/me"
+          className="inline-flex items-center gap-1 text-xs text-text-tertiary hover:text-text-secondary transition-colors mb-1"
+        >
           <ArrowLeft className="w-3 h-3" />
           Mein Profil
         </Link>
-        <Eyebrow>
-          {session.user.name || session.user.email}
-        </Eyebrow>
+        <Eyebrow>{session.user.name || session.user.email}</Eyebrow>
         <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
           Mein Profil bearbeiten
         </Heading>
       </header>
 
-      <TeamProfileForm
-        initialData={initialData}
-        isEdit
-        profileId="me"
-        isSuperAdmin={false}
-      />
+      <TeamProfileForm initialData={initialData} isEdit profileId="me" isSuperAdmin={false} />
     </div>
-  )
+  );
 }

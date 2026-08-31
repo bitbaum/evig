@@ -1,35 +1,35 @@
-import type { APIRequestContext } from '@playwright/test'
-import { VACANCY_STATUS } from '@/config/hr-vacancies'
-import { csrfPost } from './api-csrf'
+import type { APIRequestContext } from '@playwright/test';
+import { VACANCY_STATUS } from '@/config/hr-vacancies';
+import { csrfPost } from './api-csrf';
 
 interface ApiEnvelope<T> {
-  success: boolean
-  data?: T
-  error?: string
+  success: boolean;
+  data?: T;
+  error?: string;
 }
 
 async function parseApi<T>(response: {
-  ok: () => boolean
-  json: () => Promise<unknown>
-  status: () => number
-  url: () => string
+  ok: () => boolean;
+  json: () => Promise<unknown>;
+  status: () => number;
+  url: () => string;
 }): Promise<T> {
-  const body = (await response.json()) as ApiEnvelope<T>
+  const body = (await response.json()) as ApiEnvelope<T>;
   if (!response.ok() || !body.success) {
-    throw new Error(body.error || `API ${response.status()} ${response.url()}`)
+    throw new Error(body.error || `API ${response.status()} ${response.url()}`);
   }
-  return body.data as T
+  return body.data as T;
 }
 
 export interface VacancyCreateResult {
-  id: string
-  slug: string
-  title: string
-  status: string
+  id: string;
+  slug: string;
+  title: string;
+  status: string;
 }
 
 export function buildE2EVacancyTitle(suffix = Date.now()): string {
-  return `E2E HR Stelle ${suffix}`
+  return `E2E HR Stelle ${suffix}`;
 }
 
 export async function createVacancyDraft(
@@ -42,8 +42,8 @@ export async function createVacancyDraft(
     role_track: 'volunteer',
     summary: 'Automatisierter E2E-Test',
     initial_status: VACANCY_STATUS.DRAFT,
-  })
-  return parseApi<VacancyCreateResult>(response)
+  });
+  return parseApi<VacancyCreateResult>(response);
 }
 
 export async function publishVacancy(
@@ -52,8 +52,8 @@ export async function publishVacancy(
 ): Promise<VacancyCreateResult> {
   const response = await csrfPost(request, `/api/admin/hr/vacancies/${vacancyId}/transition`, {
     status: VACANCY_STATUS.PUBLISHED,
-  })
-  return parseApi<VacancyCreateResult>(response)
+  });
+  return parseApi<VacancyCreateResult>(response);
 }
 
 export async function applyToVacancy(
@@ -71,8 +71,8 @@ export async function applyToVacancy(
       hours_per_week: 4,
       skills: ['Hardware'],
     },
-  })
-  return parseApi<{ id: string }>(response)
+  });
+  return parseApi<{ id: string }>(response);
 }
 
 export async function hireApplication(
@@ -81,18 +81,20 @@ export async function hireApplication(
 ): Promise<{ team_profile_id: string }> {
   const response = await csrfPost(request, `/api/admin/hr/applications/${applicationId}/hire`, {
     spawn_onboarding_tasks: false,
-  })
-  return parseApi<{ team_profile_id: string }>(response)
+  });
+  return parseApi<{ team_profile_id: string }>(response);
 }
 
 export async function listApplicationsForPosting(
   request: APIRequestContext,
   postingId: string,
 ): Promise<Array<{ id: string; applicant_email: string }>> {
-  const response = await request.get(`/api/admin/hr/applications?job_posting_id=${postingId}`)
-  const body = (await response.json()) as ApiEnvelope<{ applications: Array<{ id: string; applicant_email: string }> }>
+  const response = await request.get(`/api/admin/hr/applications?job_posting_id=${postingId}`);
+  const body = (await response.json()) as ApiEnvelope<{
+    applications: Array<{ id: string; applicant_email: string }>;
+  }>;
   if (!response.ok() || !body.success) {
-    throw new Error(body.error || 'Failed to list applications')
+    throw new Error(body.error || 'Failed to list applications');
   }
-  return body.data?.applications ?? []
+  return body.data?.applications ?? [];
 }

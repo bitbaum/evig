@@ -8,19 +8,19 @@ export const MAP_TILES = {
     url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   },
-} as const
+} as const;
 
 /** Base URL for the pointhi/leaflet-color-markers CDN */
-const MARKER_BASE = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img'
-const SHADOW_URL = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png'
+const MARKER_BASE = 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img';
+const SHADOW_URL = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png';
 
 export interface MapIconOptions {
-  iconUrl: string
-  shadowUrl: string
-  iconSize: [number, number]
-  iconAnchor: [number, number]
-  popupAnchor: [number, number]
-  shadowSize: [number, number]
+  iconUrl: string;
+  shadowUrl: string;
+  iconSize: [number, number];
+  iconAnchor: [number, number];
+  popupAnchor: [number, number];
+  shadowSize: [number, number];
 }
 
 export const MAP_MARKER_ICONS: Record<string, MapIconOptions> = {
@@ -51,10 +51,10 @@ export const MAP_MARKER_ICONS: Record<string, MapIconOptions> = {
     popupAnchor: [1, -40],
     shadowSize: [49, 49],
   },
-}
+};
 
 /** Default map view centered on Switzerland */
 export const MAP_DEFAULTS = {
   center: [47.37, 8.54] as [number, number],
   zoom: 10,
-} as const
+} as const;

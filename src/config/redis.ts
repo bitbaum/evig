@@ -1,6 +1,6 @@
 /**
  * Redis configuration
- * 
+ *
  * Single Source of Truth for Redis configuration
  * Following dev guide: docs/development/DEV_GUIDE.md
  */

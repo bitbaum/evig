@@ -1,25 +1,25 @@
-import { Metadata } from 'next'
-import { notFound, redirect } from 'next/navigation'
-import { Users } from 'lucide-react'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import TeamFormClient from '@/components/admin/teams/TeamFormClient'
-import { ROUTES } from '@/config/routes'
-import { requireSection } from '@/lib/admin/guards'
-import { getTeamBySlug } from '@/lib/services/teams'
+import { Metadata } from 'next';
+import { notFound, redirect } from 'next/navigation';
+import { Users } from 'lucide-react';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import TeamFormClient from '@/components/admin/teams/TeamFormClient';
+import { ROUTES } from '@/config/routes';
+import { requireSection } from '@/lib/admin/guards';
+import { getTeamBySlug } from '@/lib/services/teams';
 
-export const metadata: Metadata = { title: 'Team bearbeiten' }
+export const metadata: Metadata = { title: 'Team bearbeiten' };
 
 interface PageProps {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string }>;
 }
 
 export default async function EditTeamPage({ params }: PageProps) {
-  const session = await requireSection('teams')
-  if (!session.user.isSuperAdmin) redirect(ROUTES.admin.teams)
+  const session = await requireSection('teams');
+  if (!session.user.isSuperAdmin) redirect(ROUTES.admin.teams);
 
-  const { slug } = await params
-  const team = await getTeamBySlug(slug)
-  if (!team) notFound()
+  const { slug } = await params;
+  const team = await getTeamBySlug(slug);
+  if (!team) notFound();
 
   return (
     <AdminPageWrapper
@@ -30,5 +30,5 @@ export default async function EditTeamPage({ params }: PageProps) {
     >
       <TeamFormClient team={team} />
     </AdminPageWrapper>
-  )
+  );
 }

@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
-import { MapPin, PackageCheck, Truck } from 'lucide-react'
+import { useTranslations } from 'next-intl';
+import { MapPin, PackageCheck, Truck } from 'lucide-react';
 import {
   MARKETPLACE_LIMITS,
   DELIVERY_OPTIONS,
@@ -11,59 +11,66 @@ import {
   MARKETPLACE_CATEGORY_VALUES,
   MARKETPLACE_CATEGORY_LABELS,
   CATEGORY_ICONS,
-} from '@/config/marketplace'
-import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
-import { getConditionCriteria } from '@/config/marketplace/condition-criteria'
-import { SpecFields } from './SpecFields'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
-import type { ListingFormData, ListingFormUpdater, SpecFieldData, ConditionCheckData } from './types'
+} from '@/config/marketplace';
+import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions';
+import { getConditionCriteria } from '@/config/marketplace/condition-criteria';
+import { SpecFields } from './SpecFields';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import type {
+  ListingFormData,
+  ListingFormUpdater,
+  SpecFieldData,
+  ConditionCheckData,
+} from './types';
 
 interface Props {
-  formData: ListingFormData
-  setFormData: ListingFormUpdater
+  formData: ListingFormData;
+  setFormData: ListingFormUpdater;
 }
 
 export function ListingFormFields({ formData, setFormData }: Props) {
-  const t = useTranslations('marketplace.sell.form')
-  const tCommon = useTranslations('common')
+  const t = useTranslations('marketplace.sell.form');
+  const tCommon = useTranslations('common');
 
   const update = <K extends keyof ListingFormData>(key: K, value: ListingFormData[K]) =>
-    setFormData(prev => ({ ...prev, [key]: value }))
+    setFormData((prev) => ({ ...prev, [key]: value }));
 
   const handleCategoryChange = (value: string) => {
     // Reset specs when category changes
-    setFormData(prev => ({ ...prev, category: value, specs: [], conditionChecks: [] }))
-  }
+    setFormData((prev) => ({ ...prev, category: value, specs: [], conditionChecks: [] }));
+  };
 
   const handleConditionChange = (value: string) => {
     // Load condition criteria for the selected category + condition
-    const criteria = getConditionCriteria(formData.category, value)
+    const criteria = getConditionCriteria(formData.category, value);
     const checks: ConditionCheckData[] = criteria
-      ? criteria.map(c => ({ key: c.key, label: c.label, checked: false }))
-      : []
-    setFormData(prev => ({ ...prev, condition: value, conditionChecks: checks }))
-  }
+      ? criteria.map((c) => ({ key: c.key, label: c.label, checked: false }))
+      : [];
+    setFormData((prev) => ({ ...prev, condition: value, conditionChecks: checks }));
+  };
 
   const handleConditionCheckToggle = (key: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      conditionChecks: prev.conditionChecks.map(c =>
-        c.key === key ? { ...c, checked: !c.checked } : c
+      conditionChecks: prev.conditionChecks.map((c) =>
+        c.key === key ? { ...c, checked: !c.checked } : c,
       ),
-    }))
-  }
+    }));
+  };
 
   const handleSpecsChange = (specs: SpecFieldData[]) => {
-    update('specs', specs)
-  }
+    update('specs', specs);
+  };
 
   return (
     <>
       {/* Section header: Basic info */}
-      <h2 className="text-xs font-semibold text-text-muted uppercase tracking-widest">{t('sectionBasicInfo')}</h2>
+      <h2 className="text-xs font-semibold text-text-muted uppercase tracking-widest">
+        {t('sectionBasicInfo')}
+      </h2>
 
       {/* Title */}
       <div>
@@ -71,7 +78,9 @@ export function ListingFormFields({ formData, setFormData }: Props) {
           <label htmlFor="listing-title" className="block text-sm font-medium text-text-secondary">
             {t('title')} <span className="text-error-500">*</span>
           </label>
-          <span className={`text-xs ${formData.title.length >= MARKETPLACE_LIMITS.MAX_TITLE_LENGTH ? 'text-error-500' : 'text-text-muted'}`}>
+          <span
+            className={`text-xs ${formData.title.length >= MARKETPLACE_LIMITS.MAX_TITLE_LENGTH ? 'text-error-500' : 'text-text-muted'}`}
+          >
             {formData.title.length}/{MARKETPLACE_LIMITS.MAX_TITLE_LENGTH}
           </span>
         </div>
@@ -88,10 +97,15 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       {/* Description */}
       <div>
         <div className="flex items-center justify-between mb-1">
-          <label htmlFor="listing-description" className="block text-sm font-medium text-text-secondary">
+          <label
+            htmlFor="listing-description"
+            className="block text-sm font-medium text-text-secondary"
+          >
             {t('description')} <span className="text-error-500">*</span>
           </label>
-          <span className={`text-xs ${formData.description.length >= MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH ? 'text-error-500' : 'text-text-muted'}`}>
+          <span
+            className={`text-xs ${formData.description.length >= MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH ? 'text-error-500' : 'text-text-muted'}`}
+          >
             {formData.description.length}/{MARKETPLACE_LIMITS.MAX_DESCRIPTION_LENGTH}
           </span>
         </div>
@@ -107,12 +121,17 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       </div>
 
       {/* Section header: Category & condition */}
-      <h2 className="text-xs font-semibold text-text-muted uppercase tracking-widest pt-2">{t('sectionCategoryCondition')}</h2>
+      <h2 className="text-xs font-semibold text-text-muted uppercase tracking-widest pt-2">
+        {t('sectionCategoryCondition')}
+      </h2>
 
       {/* Price + Category + Condition */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
-          <label htmlFor="listing-price" className="block text-sm font-medium text-text-secondary mb-1">
+          <label
+            htmlFor="listing-price"
+            className="block text-sm font-medium text-text-secondary mb-1"
+          >
             {t('price')}
           </label>
           <Input
@@ -124,12 +143,13 @@ export function ListingFormFields({ formData, setFormData }: Props) {
             onChange={(e) => update('price', e.target.value)}
             placeholder={t('pricePlaceholder')}
           />
-          {formData.price === '0' && (
-            <p className="text-xs text-action mt-1">{t('freeNotice')}</p>
-          )}
+          {formData.price === '0' && <p className="text-xs text-action mt-1">{t('freeNotice')}</p>}
         </div>
         <div>
-          <label htmlFor="listing-category" className="block text-sm font-medium text-text-secondary mb-1">
+          <label
+            htmlFor="listing-category"
+            className="block text-sm font-medium text-text-secondary mb-1"
+          >
             {t('category')} <span className="text-error-500">*</span>
           </label>
           <Select
@@ -138,15 +158,19 @@ export function ListingFormFields({ formData, setFormData }: Props) {
             onChange={(e) => handleCategoryChange(e.target.value)}
           >
             <option value="">{t('selectPlaceholder')}</option>
-            {MARKETPLACE_CATEGORY_VALUES.map(val => (
+            {MARKETPLACE_CATEGORY_VALUES.map((val) => (
               <option key={val} value={val}>
-                {CATEGORY_ICONS[val] ? `${CATEGORY_ICONS[val]} ` : ''}{MARKETPLACE_CATEGORY_LABELS[val] || val}
+                {CATEGORY_ICONS[val] ? `${CATEGORY_ICONS[val]} ` : ''}
+                {MARKETPLACE_CATEGORY_LABELS[val] || val}
               </option>
             ))}
           </Select>
         </div>
         <div>
-          <label htmlFor="listing-condition" className="block text-sm font-medium text-text-secondary mb-1">
+          <label
+            htmlFor="listing-condition"
+            className="block text-sm font-medium text-text-secondary mb-1"
+          >
             {t('condition')}
           </label>
           <Select
@@ -155,8 +179,10 @@ export function ListingFormFields({ formData, setFormData }: Props) {
             onChange={(e) => handleConditionChange(e.target.value)}
           >
             <option value="">{t('selectPlaceholder')}</option>
-            {ZUSTAND_OPTIONS.map(opt => (
-              <option key={opt.value} value={opt.value}>{opt.label} — {opt.description}</option>
+            {ZUSTAND_OPTIONS.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label} — {opt.description}
+              </option>
             ))}
           </Select>
         </div>
@@ -166,10 +192,12 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       {formData.conditionChecks.length > 0 && (
         <div className="rounded-lg border border-strong bg-action-muted p-4">
           <p className="text-sm font-medium text-action mb-3">
-            {t('conditionHeader', { condition: ZUSTAND_OPTIONS.find(o => o.value === formData.condition)?.label ?? '' })}
+            {t('conditionHeader', {
+              condition: ZUSTAND_OPTIONS.find((o) => o.value === formData.condition)?.label ?? '',
+            })}
           </p>
           <div className="space-y-2">
-            {formData.conditionChecks.map(check => (
+            {formData.conditionChecks.map((check) => (
               <label key={check.key} className="flex items-start gap-2 cursor-pointer">
                 <input
                   type="checkbox"
@@ -220,16 +248,16 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       )}
 
       {/* Section header: Delivery & payment */}
-      <h2 className="text-xs font-semibold text-text-muted uppercase tracking-widest pt-2">{t('sectionDelivery')}</h2>
+      <h2 className="text-xs font-semibold text-text-muted uppercase tracking-widest pt-2">
+        {t('sectionDelivery')}
+      </h2>
 
       <div>
-        <p className="mb-2 block text-sm font-medium text-text-secondary">
-          {t('delivery')}
-        </p>
+        <p className="mb-2 block text-sm font-medium text-text-secondary">{t('delivery')}</p>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           {DELIVERY_OPTIONS.map((opt) => {
-            const active = formData.deliveryOptions === opt
-            const Icon = opt === 'pickup' ? MapPin : opt === 'shipping' ? Truck : PackageCheck
+            const active = formData.deliveryOptions === opt;
+            const Icon = opt === 'pickup' ? MapPin : opt === 'shipping' ? Truck : PackageCheck;
             return (
               <Button
                 key={opt}
@@ -244,14 +272,17 @@ export function ListingFormFields({ formData, setFormData }: Props) {
                 }`}
               >
                 <span className="block">
-                  <Icon className={`mb-3 h-4 w-4 ${active ? 'text-action' : 'text-text-tertiary'}`} aria-hidden="true" />
+                  <Icon
+                    className={`mb-3 h-4 w-4 ${active ? 'text-action' : 'text-text-tertiary'}`}
+                    aria-hidden="true"
+                  />
                   <span className="block text-sm font-semibold">{DELIVERY_LABELS[opt]}</span>
                   <span className="mt-1 block text-xs leading-relaxed text-text-tertiary">
                     {t(`deliveryHelp.${opt}` as never)}
                   </span>
                 </span>
               </Button>
-            )
+            );
           })}
         </div>
       </div>
@@ -265,8 +296,10 @@ export function ListingFormFields({ formData, setFormData }: Props) {
             value={formData.paymentMode}
             onChange={(e) => update('paymentMode', e.target.value)}
           >
-            {PAYMENT_MODES.map(opt => (
-              <option key={opt} value={opt}>{PAYMENT_MODE_LABELS[opt]}</option>
+            {PAYMENT_MODES.map((opt) => (
+              <option key={opt} value={opt}>
+                {PAYMENT_MODE_LABELS[opt]}
+              </option>
             ))}
           </Select>
         </div>
@@ -292,7 +325,8 @@ export function ListingFormFields({ formData, setFormData }: Props) {
       {/* Pickup location */}
       <div>
         <label className="block text-sm font-medium text-text-secondary mb-1">
-          {t('pickupLocation')} <span className="text-xs text-text-tertiary">({tCommon('optional')})</span>
+          {t('pickupLocation')}{' '}
+          <span className="text-xs text-text-tertiary">({tCommon('optional')})</span>
         </label>
         <Input
           type="text"
@@ -302,5 +336,5 @@ export function ListingFormFields({ formData, setFormData }: Props) {
         />
       </div>
     </>
-  )
+  );
 }

@@ -14,8 +14,8 @@
  *   pending = requested, confirmed = accepted/quote_approved
  */
 
-import { TECHNICIAN_LABEL } from '@/config/terminology'
-import type { Transition } from '@/lib/lifecycle'
+import { TECHNICIAN_LABEL } from '@/config/terminology';
+import type { Transition } from '@/lib/lifecycle';
 
 export const BOOKING_STATUS = {
   REQUESTED: 'requested',
@@ -30,9 +30,9 @@ export const BOOKING_STATUS = {
   // Repairer-view aliases
   PENDING: 'pending',
   CONFIRMED: 'confirmed',
-} as const
+} as const;
 
-export type BookingStatus = typeof BOOKING_STATUS[keyof typeof BOOKING_STATUS]
+export type BookingStatus = (typeof BOOKING_STATUS)[keyof typeof BOOKING_STATUS];
 
 /**
  * Lifecycle statuses an appointment row can actually carry in the DB.
@@ -50,7 +50,7 @@ export const CANONICAL_BOOKING_STATUSES: readonly BookingStatus[] = [
   BOOKING_STATUS.COMPLETED,
   BOOKING_STATUS.REJECTED,
   BOOKING_STATUS.CANCELLED,
-]
+];
 
 // ============================================================================
 // Appointment Transitions (SSOT) — who can do what, from which state
@@ -63,71 +63,98 @@ export const CANONICAL_BOOKING_STATUSES: readonly BookingStatus[] = [
 // appointments PATCH route). Validated via resolveTransition() from
 // @/lib/lifecycle; the per-action side-effect fields stay in buildActionUpdate.
 
-export type AppointmentRole = 'customer' | 'repairer'
+export type AppointmentRole = 'customer' | 'repairer';
 
 export type AppointmentAction =
-  | 'accept' | 'reject' | 'quote' | 'approve_quote' | 'reject_quote'
-  | 'start' | 'complete' | 'update' | 'rate' | 'cancel'
+  | 'accept'
+  | 'reject'
+  | 'quote'
+  | 'approve_quote'
+  | 'reject_quote'
+  | 'start'
+  | 'complete'
+  | 'update'
+  | 'rate'
+  | 'cancel';
 
-export interface AppointmentTransition
-  extends Transition<BookingStatus, AppointmentAction, AppointmentRole> {
+export interface AppointmentTransition extends Transition<
+  BookingStatus,
+  AppointmentAction,
+  AppointmentRole
+> {
   /** 403 — actor's role may not perform this action. */
-  roleError: string
+  roleError: string;
   /** 400 — action not allowed from the current status. */
-  stateError: string
+  stateError: string;
 }
 
 export const APPOINTMENT_TRANSITIONS: readonly AppointmentTransition[] = [
   {
-    action: 'accept', role: 'repairer',
-    from: [BOOKING_STATUS.REQUESTED], to: BOOKING_STATUS.ACCEPTED,
+    action: 'accept',
+    role: 'repairer',
+    from: [BOOKING_STATUS.REQUESTED],
+    to: BOOKING_STATUS.ACCEPTED,
     roleError: 'Nur der Techniker kann annehmen',
     stateError: 'Termin kann nicht angenommen werden',
   },
   {
-    action: 'reject', role: 'repairer',
-    from: [BOOKING_STATUS.REQUESTED], to: BOOKING_STATUS.REJECTED,
+    action: 'reject',
+    role: 'repairer',
+    from: [BOOKING_STATUS.REQUESTED],
+    to: BOOKING_STATUS.REJECTED,
     roleError: 'Nur der Techniker kann ablehnen',
     stateError: 'Termin kann nicht abgelehnt werden',
   },
   {
-    action: 'quote', role: 'repairer',
-    from: [BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTE_REJECTED], to: BOOKING_STATUS.QUOTED,
+    action: 'quote',
+    role: 'repairer',
+    from: [BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTE_REJECTED],
+    to: BOOKING_STATUS.QUOTED,
     roleError: 'Nur der Techniker kann Angebote erstellen',
     stateError: 'Angebot kann in diesem Status nicht erstellt werden',
   },
   {
-    action: 'approve_quote', role: 'customer',
-    from: [BOOKING_STATUS.QUOTED], to: BOOKING_STATUS.QUOTE_APPROVED,
+    action: 'approve_quote',
+    role: 'customer',
+    from: [BOOKING_STATUS.QUOTED],
+    to: BOOKING_STATUS.QUOTE_APPROVED,
     roleError: 'Nur der Kunde kann Angebote bestätigen',
     stateError: 'Kein Angebot zum Bestätigen',
   },
   {
-    action: 'reject_quote', role: 'customer',
-    from: [BOOKING_STATUS.QUOTED], to: BOOKING_STATUS.QUOTE_REJECTED,
+    action: 'reject_quote',
+    role: 'customer',
+    from: [BOOKING_STATUS.QUOTED],
+    to: BOOKING_STATUS.QUOTE_REJECTED,
     roleError: 'Nur der Kunde kann Angebote ablehnen',
     stateError: 'Kein Angebot zum Ablehnen',
   },
   {
-    action: 'start', role: 'repairer',
-    from: [BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTE_APPROVED], to: BOOKING_STATUS.IN_PROGRESS,
+    action: 'start',
+    role: 'repairer',
+    from: [BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTE_APPROVED],
+    to: BOOKING_STATUS.IN_PROGRESS,
     roleError: 'Nur der Techniker kann starten',
     stateError: 'Termin kann nicht gestartet werden',
   },
   {
-    action: 'complete', role: 'repairer',
-    from: [BOOKING_STATUS.IN_PROGRESS], to: BOOKING_STATUS.COMPLETED,
+    action: 'complete',
+    role: 'repairer',
+    from: [BOOKING_STATUS.IN_PROGRESS],
+    to: BOOKING_STATUS.COMPLETED,
     roleError: 'Nur der Techniker kann abschliessen',
     stateError: 'Termin ist nicht in Bearbeitung',
   },
   {
-    action: 'update', role: 'customer',
+    action: 'update',
+    role: 'customer',
     from: [BOOKING_STATUS.REQUESTED], // no status change
     roleError: 'Nur der Kunde kann Angaben bearbeiten',
     stateError: 'Angaben können nur im Status "Angefragt" bearbeitet werden',
   },
   {
-    action: 'rate', role: 'customer',
+    action: 'rate',
+    role: 'customer',
     from: [BOOKING_STATUS.COMPLETED], // no status change
     roleError: 'Nur der Kunde kann bewerten',
     stateError: 'Nur abgeschlossene Termine können bewertet werden',
@@ -136,18 +163,24 @@ export const APPOINTMENT_TRANSITIONS: readonly AppointmentTransition[] = [
     // Either party may cancel before the job is in progress. No role gate
     // beyond "is a participant" (the route's upfront access check covers that),
     // so roleError is unreachable in practice.
-    action: 'cancel', role: ['customer', 'repairer'],
-    from: [BOOKING_STATUS.REQUESTED, BOOKING_STATUS.ACCEPTED, BOOKING_STATUS.QUOTED, BOOKING_STATUS.QUOTE_APPROVED],
+    action: 'cancel',
+    role: ['customer', 'repairer'],
+    from: [
+      BOOKING_STATUS.REQUESTED,
+      BOOKING_STATUS.ACCEPTED,
+      BOOKING_STATUS.QUOTED,
+      BOOKING_STATUS.QUOTE_APPROVED,
+    ],
     to: BOOKING_STATUS.CANCELLED,
     roleError: 'Kein Zugriff auf diesen Termin',
     stateError: 'Termin kann nicht mehr storniert werden',
   },
-]
+];
 
 export interface BookingStatusBadge {
-  label: string
-  color: string
-  description?: string
+  label: string;
+  color: string;
+  description?: string;
 }
 
 export const BOOKING_STATUS_BADGES: Record<string, BookingStatusBadge> = {
@@ -205,27 +238,29 @@ export const BOOKING_STATUS_BADGES: Record<string, BookingStatusBadge> = {
     label: 'Bestätigt',
     color: 'bg-success-100 text-success-800 dark:bg-success-900/30 dark:text-success-300',
   },
-}
+};
 
 export function getBookingStatusBadge(status: string): BookingStatusBadge {
-  return BOOKING_STATUS_BADGES[status] ?? {
-    label: status,
-    color: 'bg-neutral-100 text-neutral-800 dark:bg-neutral-900/30 dark:text-neutral-300',
-  }
+  return (
+    BOOKING_STATUS_BADGES[status] ?? {
+      label: status,
+      color: 'bg-neutral-100 text-neutral-800 dark:bg-neutral-900/30 dark:text-neutral-300',
+    }
+  );
 }
 
 export function getBookingStatusLabel(status: string): string {
-  return BOOKING_STATUS_BADGES[status]?.label ?? status
+  return BOOKING_STATUS_BADGES[status]?.label ?? status;
 }
 
 /** Statuses where the customer can initiate Payrexx checkout. */
 export const PAYABLE_BOOKING_STATUSES: readonly BookingStatus[] = [
   BOOKING_STATUS.QUOTE_APPROVED,
   BOOKING_STATUS.IN_PROGRESS,
-] as const
+] as const;
 
 export function isPayableBookingStatus(status: string): boolean {
-  return (PAYABLE_BOOKING_STATUSES as readonly string[]).includes(status)
+  return (PAYABLE_BOOKING_STATUSES as readonly string[]).includes(status);
 }
 
 /**
@@ -244,8 +279,8 @@ export const URGENCY_BADGES: Record<string, { label: string; color: string }> = 
     label: 'Normal',
     color: 'bg-neutral-100 text-neutral-800 dark:bg-neutral-700 dark:text-neutral-300',
   },
-}
+};
 
 export function getUrgencyBadge(urgency: string): { label: string; color: string } {
-  return URGENCY_BADGES[urgency] ?? URGENCY_BADGES.normal
+  return URGENCY_BADGES[urgency] ?? URGENCY_BADGES.normal;
 }

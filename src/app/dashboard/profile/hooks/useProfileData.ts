@@ -1,44 +1,44 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { ROLES } from '@/lib/constants'
-import { apiFetch } from '@/lib/api/client'
-import { logger } from '@/lib/logger'
+import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { ROLES } from '@/lib/constants';
+import { apiFetch } from '@/lib/api/client';
+import { logger } from '@/lib/logger';
 
 export interface ProfileData {
-  first_name: string
-  last_name: string
-  company_name: string
-  phone: string
-  mobile: string
-  address_line1: string
-  address_line2: string
-  postal_code: string
-  city: string
-  canton: string
-  country: string
-  preferred_language: string
-  newsletter_subscribed: boolean
+  first_name: string;
+  last_name: string;
+  company_name: string;
+  phone: string;
+  mobile: string;
+  address_line1: string;
+  address_line2: string;
+  postal_code: string;
+  city: string;
+  canton: string;
+  country: string;
+  preferred_language: string;
+  newsletter_subscribed: boolean;
   // Public profile fields
-  avatar_url?: string
-  display_name?: string
-  bio?: string
-  profile_visibility?: 'public' | 'private'
+  avatar_url?: string;
+  display_name?: string;
+  bio?: string;
+  profile_visibility?: 'public' | 'private';
   // Privacy settings
-  show_email?: boolean
-  show_phone?: boolean
+  show_email?: boolean;
+  show_phone?: boolean;
   // Notification preferences
-  email_notifications?: boolean
-  sms_notifications?: boolean
-  marketplace_updates?: boolean
-  workshop_reminders?: boolean
+  email_notifications?: boolean;
+  sms_notifications?: boolean;
+  marketplace_updates?: boolean;
+  workshop_reminders?: boolean;
   // Service provider fields
-  skills?: string[]
-  expertise_areas?: string[]
-  website?: string
-  service_radius_km?: number
+  skills?: string[];
+  expertise_areas?: string[];
+  website?: string;
+  service_radius_km?: number;
 }
 
 const DEFAULT_PROFILE: ProfileData = {
@@ -69,64 +69,66 @@ const DEFAULT_PROFILE: ProfileData = {
   expertise_areas: [],
   website: '',
   service_radius_km: 50,
-}
+};
 
 export function useProfileData() {
-  const { data: session, status } = useSession()
-  const router = useRouter()
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
-  const [isLoading, setIsLoading] = useState(true)
-  const [profile, setProfile] = useState<ProfileData>(DEFAULT_PROFILE)
-  const [userRole, setUserRole] = useState<string>('')
+  const [isLoading, setIsLoading] = useState(true);
+  const [profile, setProfile] = useState<ProfileData>(DEFAULT_PROFILE);
+  const [userRole, setUserRole] = useState<string>('');
 
-  const isServiceProvider = userRole === ROLES.REPAIRER || userRole === ROLES.SELLER
+  const isServiceProvider = userRole === ROLES.REPAIRER || userRole === ROLES.SELLER;
 
   // Redirect if not authenticated
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.push('/auth/login?callbackUrl=/dashboard/profile')
+      router.push('/auth/login?callbackUrl=/dashboard/profile');
     }
-  }, [status, router])
+  }, [status, router]);
 
   // Load profile data
   useEffect(() => {
     async function loadProfile() {
-      logger.info('Profile loading', { userId: session?.user?.id })
+      logger.info('Profile loading', { userId: session?.user?.id });
 
       try {
-        const result = await apiFetch<{ profile: Partial<ProfileData>; role?: string }>('/api/user/profile')
+        const result = await apiFetch<{ profile: Partial<ProfileData>; role?: string }>(
+          '/api/user/profile',
+        );
         if (result.success && result.data) {
           if (result.data.profile) {
-            setProfile(prev => ({ ...prev, ...result.data!.profile }))
+            setProfile((prev) => ({ ...prev, ...result.data!.profile }));
             logger.info('Profile loaded successfully', {
               userId: session?.user?.id,
               hasAvatar: !!result.data.profile.avatar_url,
               hasDisplayName: !!result.data.profile.display_name,
-            })
+            });
           }
           if (result.data.role) {
-            setUserRole(result.data.role)
+            setUserRole(result.data.role);
           }
         } else if (result.error) {
           logger.warn('Profile load failed', {
             userId: session?.user?.id,
             error: result.error,
-          })
+          });
         }
       } catch (error) {
-        logger.error('Failed to load profile', { error, userId: session?.user?.id })
+        logger.error('Failed to load profile', { error, userId: session?.user?.id });
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
     }
 
     if (status === 'authenticated' && session?.user) {
-      loadProfile()
+      loadProfile();
     } else if (status === 'unauthenticated') {
       // Keep isLoading true — the spinner stays up while the redirect lands.
-      router.push('/auth/login?callbackUrl=/dashboard/profile')
+      router.push('/auth/login?callbackUrl=/dashboard/profile');
     }
-  }, [session, status, router])
+  }, [session, status, router]);
 
   return {
     session,
@@ -136,5 +138,5 @@ export function useProfileData() {
     setProfile,
     userRole,
     isServiceProvider,
-  }
+  };
 }

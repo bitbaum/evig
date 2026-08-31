@@ -5,93 +5,93 @@
  * Separated from API route to keep route thin.
  */
 
-import { logger } from '@/lib/logger'
-import { formatDateShort } from '@/lib/date-formats'
-import { SUPPORT_EMAIL } from '@/lib/constants'
-import { ORG, BANK } from '@/config/org'
-import type { InvoiceStatus } from '@/config/invoice-status'
+import { logger } from '@/lib/logger';
+import { formatDateShort } from '@/lib/date-formats';
+import { SUPPORT_EMAIL } from '@/lib/constants';
+import { ORG, BANK } from '@/config/org';
+import type { InvoiceStatus } from '@/config/invoice-status';
 
 // ─── Types ──────────────────────────────────────────────────────────
 
 export interface InvoiceLineItem {
-  description: string
-  quantity: number
-  unitPrice: number
-  total: number
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  total: number;
 }
 
 export interface CustomerAddress {
-  street?: string
-  city?: string
-  postal_code?: string
-  country?: string
+  street?: string;
+  city?: string;
+  postal_code?: string;
+  country?: string;
 }
 
 export interface InvoiceData {
-  id: string
-  invoice_number: string
-  user_id: string
-  status: InvoiceStatus
-  issue_date: string | Date
-  due_date?: string | Date
-  currency: string
-  tax_rate: number
-  subtotal_cents: number
-  tax_cents: number
-  total_cents: number
-  line_items: InvoiceLineItem[]
-  notes?: string
-  payment_terms?: string
-  customer_name: string
-  customer_email: string
-  first_name?: string
-  last_name?: string
-  phone?: string
-  customer_address?: CustomerAddress
+  id: string;
+  invoice_number: string;
+  user_id: string;
+  status: InvoiceStatus;
+  issue_date: string | Date;
+  due_date?: string | Date;
+  currency: string;
+  tax_rate: number;
+  subtotal_cents: number;
+  tax_cents: number;
+  total_cents: number;
+  line_items: InvoiceLineItem[];
+  notes?: string;
+  payment_terms?: string;
+  customer_name: string;
+  customer_email: string;
+  first_name?: string;
+  last_name?: string;
+  phone?: string;
+  customer_address?: CustomerAddress;
 }
 
 // ─── PDF Generation ─────────────────────────────────────────────────
 
 export async function generateInvoicePDF(invoice: InvoiceData): Promise<Buffer> {
   try {
-    const puppeteer = await import('puppeteer')
+    const puppeteer = await import('puppeteer');
     const browser = await puppeteer.default.launch({
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
       executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
-    })
+    });
 
-    const page = await browser.newPage()
-    const htmlContent = generateInvoiceHTML(invoice)
+    const page = await browser.newPage();
+    const htmlContent = generateInvoiceHTML(invoice);
 
     // Puppeteer 24.43+ removed 'networkidle0' from setContent's waitUntil
     // type — only 'load' and 'domcontentloaded' remain. For an inline-HTML
     // invoice (no external requests beyond fonts CSS that's already on the
     // page-level wait), 'load' is the correct gate.
-    await page.setContent(htmlContent, { waitUntil: 'load' })
+    await page.setContent(htmlContent, { waitUntil: 'load' });
 
     const pdfBuffer = await page.pdf({
       format: 'A4',
       printBackground: true,
       margin: { top: '20mm', right: '20mm', bottom: '20mm', left: '20mm' },
-    })
+    });
 
-    await browser.close()
-    return Buffer.from(pdfBuffer)
+    await browser.close();
+    return Buffer.from(pdfBuffer);
   } catch (error) {
-    logger.warn('Puppeteer PDF generation failed, using fallback', { error })
-    const htmlContent = generateInvoiceHTML(invoice)
-    return Buffer.from(htmlContent, 'utf-8')
+    logger.warn('Puppeteer PDF generation failed, using fallback', { error });
+    const htmlContent = generateInvoiceHTML(invoice);
+    return Buffer.from(htmlContent, 'utf-8');
   }
 }
 
 // ─── HTML Template ──────────────────────────────────────────────────
 
 function generateInvoiceHTML(invoice: InvoiceData): string {
-  const lineItems = invoice.line_items || []
-  const subtotal = invoice.subtotal_cents / 100
-  const tax = invoice.tax_cents / 100
-  const total = invoice.total_cents / 100
+  const lineItems = invoice.line_items || [];
+  const subtotal = invoice.subtotal_cents / 100;
+  const tax = invoice.tax_cents / 100;
+  const total = invoice.total_cents / 100;
 
   return `
     <!DOCTYPE html>
@@ -222,14 +222,18 @@ function generateInvoiceHTML(invoice: InvoiceData): string {
           </tr>
         </thead>
         <tbody>
-          ${lineItems.map((item: InvoiceLineItem) => `
+          ${lineItems
+            .map(
+              (item: InvoiceLineItem) => `
             <tr>
               <td>${item.description}</td>
               <td class="text-right">${item.quantity}</td>
               <td class="text-right">${item.unitPrice.toFixed(2)} ${invoice.currency}</td>
               <td class="text-right">${item.total.toFixed(2)} ${invoice.currency}</td>
             </tr>
-          `).join('')}
+          `,
+            )
+            .join('')}
         </tbody>
       </table>
 
@@ -251,12 +255,16 @@ function generateInvoiceHTML(invoice: InvoiceData): string {
       </div>
       <div style="clear: both;"></div>
 
-      ${invoice.notes ? `
+      ${
+        invoice.notes
+          ? `
         <div style="margin-top: 30px;">
           <h3>Notizen</h3>
           <p>${invoice.notes}</p>
         </div>
-      ` : ''}
+      `
+          : ''
+      }
 
       <div class="footer">
         <p>
@@ -272,5 +280,5 @@ function generateInvoiceHTML(invoice: InvoiceData): string {
       </div>
     </body>
     </html>
-  `
+  `;
 }

@@ -1,9 +1,9 @@
-import { NextRequest } from 'next/server'
-import { apiSuccess, apiBadRequest, apiRateLimited } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { createRateLimiter, getClientIdentifier } from '@/lib/security/rate-limit'
+import { NextRequest } from 'next/server';
+import { apiSuccess, apiBadRequest, apiRateLimited } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { createRateLimiter, getClientIdentifier } from '@/lib/security/rate-limit';
 
-const loginStatusLimiter = createRateLimiter(60 * 1000, 10) // 10 requests/minute per IP
+const loginStatusLimiter = createRateLimiter(60 * 1000, 10); // 10 requests/minute per IP
 
 /**
  * POST /api/auth/login-status
@@ -24,22 +24,22 @@ const loginStatusLimiter = createRateLimiter(60 * 1000, 10) // 10 requests/minut
  * existing/future callers don't 404; the response shape is unchanged.
  */
 export async function POST(req: NextRequest) {
-  const clientId = getClientIdentifier(req)
+  const clientId = getClientIdentifier(req);
   if (!loginStatusLimiter(clientId)) {
-    return apiRateLimited()
+    return apiRateLimited();
   }
 
   // Still require a body field so accidental probes are surfaced as 400,
   // but don't actually look the email up — that lookup is the enumeration vector.
-  let email: unknown = null
+  let email: unknown = null;
   try {
-    const body = await req.json()
-    email = body?.email
+    const body = await req.json();
+    email = body?.email;
   } catch {
-    return apiBadRequest(ERROR_MESSAGES.EMAIL_REQUIRED)
+    return apiBadRequest(ERROR_MESSAGES.EMAIL_REQUIRED);
   }
   if (typeof email !== 'string' || email.length === 0) {
-    return apiBadRequest(ERROR_MESSAGES.EMAIL_REQUIRED)
+    return apiBadRequest(ERROR_MESSAGES.EMAIL_REQUIRED);
   }
 
   // Uniform response — never branches on whether the user exists.
@@ -49,5 +49,5 @@ export async function POST(req: NextRequest) {
     hasPassword: true,
     locked: false,
     lockedUntil: null,
-  })
+  });
 }

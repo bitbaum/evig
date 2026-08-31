@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Marketplace cart — RevampIT shop stock only (is_revampit listings).
@@ -8,79 +8,87 @@
  * server-side cart for v1. P2P community listings do NOT use the cart (they
  * stay direct-buy / contact-seller), matching the Galaxus-vs-Ricardo split.
  */
-import { createContext, useContext, useEffect, useState, useCallback, useMemo, type ReactNode } from 'react'
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+  type ReactNode,
+} from 'react';
 
 export interface CartItem {
   /** listing id */
-  id: string
-  title: string
-  priceChf: number
-  thumbnail: string | null
-  category: string
-  condition: string
+  id: string;
+  title: string;
+  priceChf: number;
+  thumbnail: string | null;
+  category: string;
+  condition: string;
 }
 
 interface CartState {
-  items: CartItem[]
-  count: number
-  total: number
-  hydrated: boolean
-  has: (id: string) => boolean
-  add: (item: CartItem) => void
-  remove: (id: string) => void
-  clear: () => void
+  items: CartItem[];
+  count: number;
+  total: number;
+  hydrated: boolean;
+  has: (id: string) => boolean;
+  add: (item: CartItem) => void;
+  remove: (id: string) => void;
+  clear: () => void;
   /** Slide-in drawer visibility (shared by CartIcon trigger + CartDrawer). */
-  drawerOpen: boolean
-  openDrawer: () => void
-  closeDrawer: () => void
+  drawerOpen: boolean;
+  openDrawer: () => void;
+  closeDrawer: () => void;
 }
 
-const CartContext = createContext<CartState | null>(null)
-const STORAGE_KEY = 'revampit-cart-v1'
+const CartContext = createContext<CartState | null>(null);
+const STORAGE_KEY = 'revampit-cart-v1';
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>([])
-  const [hydrated, setHydrated] = useState(false)
-  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [items, setItems] = useState<CartItem[]>([]);
+  const [hydrated, setHydrated] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   // Load once on mount (client only).
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY)
+      const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
-        const parsed = JSON.parse(raw)
+        const parsed = JSON.parse(raw);
         // localStorage hydration must run client-side after mount (SSR-safe).
         // eslint-disable-next-line react-hooks/set-state-in-effect
-        if (Array.isArray(parsed)) setItems(parsed)
+        if (Array.isArray(parsed)) setItems(parsed);
       }
     } catch {
       /* corrupt storage — start empty */
     }
-    setHydrated(true)
-  }, [])
+    setHydrated(true);
+  }, []);
 
   // Persist on change (after hydration so we don't clobber stored state).
   useEffect(() => {
-    if (!hydrated) return
+    if (!hydrated) return;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
     } catch {
       /* ignore quota/availability errors */
     }
-  }, [items, hydrated])
+  }, [items, hydrated]);
 
   const add = useCallback((item: CartItem) => {
-    setItems((prev) => (prev.some((i) => i.id === item.id) ? prev : [...prev, item]))
-  }, [])
+    setItems((prev) => (prev.some((i) => i.id === item.id) ? prev : [...prev, item]));
+  }, []);
   const remove = useCallback((id: string) => {
-    setItems((prev) => prev.filter((i) => i.id !== id))
-  }, [])
-  const clear = useCallback(() => setItems([]), [])
-  const openDrawer = useCallback(() => setDrawerOpen(true), [])
-  const closeDrawer = useCallback(() => setDrawerOpen(false), [])
+    setItems((prev) => prev.filter((i) => i.id !== id));
+  }, []);
+  const clear = useCallback(() => setItems([]), []);
+  const openDrawer = useCallback(() => setDrawerOpen(true), []);
+  const closeDrawer = useCallback(() => setDrawerOpen(false), []);
 
   const value = useMemo<CartState>(() => {
-    const total = items.reduce((sum, i) => sum + (Number(i.priceChf) || 0), 0)
+    const total = items.reduce((sum, i) => sum + (Number(i.priceChf) || 0), 0);
     return {
       items,
       count: items.length,
@@ -93,14 +101,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
       drawerOpen,
       openDrawer,
       closeDrawer,
-    }
-  }, [items, hydrated, add, remove, clear, drawerOpen, openDrawer, closeDrawer])
+    };
+  }, [items, hydrated, add, remove, clear, drawerOpen, openDrawer, closeDrawer]);
 
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 
 export function useCart(): CartState {
-  const ctx = useContext(CartContext)
-  if (!ctx) throw new Error('useCart must be used within a CartProvider')
-  return ctx
+  const ctx = useContext(CartContext);
+  if (!ctx) throw new Error('useCart must be used within a CartProvider');
+  return ctx;
 }

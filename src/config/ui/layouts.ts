@@ -43,4 +43,4 @@ export const LAYOUTS = {
     col: 'flex flex-col',
     wrap: 'flex flex-wrap',
   },
-} as const
+} as const;

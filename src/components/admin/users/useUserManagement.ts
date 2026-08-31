@@ -1,80 +1,80 @@
-'use client'
+'use client';
 
 /**
  * Hook for user management operations
  * Handles state and API calls for editing/deleting users
  */
 
-import { useState } from 'react'
-import { apiFetch } from '@/lib/api/client'
-import { logger } from '@/lib/logger'
-import type { UserRow } from './types'
+import { useState } from 'react';
+import { apiFetch } from '@/lib/api/client';
+import { logger } from '@/lib/logger';
+import type { UserRow } from './types';
 
 interface UseUserManagementReturn {
   // Modal states
-  editingUser: UserRow | null
-  editingProfile: UserRow | null
-  deletingUser: UserRow | null
+  editingUser: UserRow | null;
+  editingProfile: UserRow | null;
+  deletingUser: UserRow | null;
 
   // Loading states
-  isDeleting: boolean
-  isSaving: boolean
-  error: string | null
+  isDeleting: boolean;
+  isSaving: boolean;
+  error: string | null;
 
   // Form state
-  editName: string
-  editEmail: string
-  setEditName: (name: string) => void
-  setEditEmail: (email: string) => void
+  editName: string;
+  editEmail: string;
+  setEditName: (name: string) => void;
+  setEditEmail: (email: string) => void;
 
   // Actions
-  handleEditPermissions: (user: UserRow) => void
-  handleEditProfile: (user: UserRow) => void
-  handleDeleteClick: (user: UserRow) => void
-  handleCloseModal: () => void
-  handleSaveProfile: () => Promise<void>
-  handleDeleteUser: () => Promise<void>
+  handleEditPermissions: (user: UserRow) => void;
+  handleEditProfile: (user: UserRow) => void;
+  handleDeleteClick: (user: UserRow) => void;
+  handleCloseModal: () => void;
+  handleSaveProfile: () => Promise<void>;
+  handleDeleteUser: () => Promise<void>;
 }
 
 export function useUserManagement(): UseUserManagementReturn {
-  const [editingUser, setEditingUser] = useState<UserRow | null>(null)
-  const [editingProfile, setEditingProfile] = useState<UserRow | null>(null)
-  const [deletingUser, setDeletingUser] = useState<UserRow | null>(null)
-  const [isDeleting, setIsDeleting] = useState(false)
-  const [isSaving, setIsSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [editingUser, setEditingUser] = useState<UserRow | null>(null);
+  const [editingProfile, setEditingProfile] = useState<UserRow | null>(null);
+  const [deletingUser, setDeletingUser] = useState<UserRow | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Edit profile form state
-  const [editName, setEditName] = useState('')
-  const [editEmail, setEditEmail] = useState('')
+  const [editName, setEditName] = useState('');
+  const [editEmail, setEditEmail] = useState('');
 
   const handleEditPermissions = (user: UserRow) => {
-    setEditingUser(user)
-  }
+    setEditingUser(user);
+  };
 
   const handleEditProfile = (user: UserRow) => {
-    setEditingProfile(user)
-    setEditName(user.name || '')
-    setEditEmail(user.email)
-    setError(null)
-  }
+    setEditingProfile(user);
+    setEditName(user.name || '');
+    setEditEmail(user.email);
+    setError(null);
+  };
 
   const handleDeleteClick = (user: UserRow) => {
-    setDeletingUser(user)
-  }
+    setDeletingUser(user);
+  };
 
   const handleCloseModal = () => {
-    setEditingUser(null)
-    setEditingProfile(null)
-    setDeletingUser(null)
-    setError(null)
-  }
+    setEditingUser(null);
+    setEditingProfile(null);
+    setDeletingUser(null);
+    setError(null);
+  };
 
   const handleSaveProfile = async () => {
-    if (!editingProfile) return
+    if (!editingProfile) return;
 
-    setIsSaving(true)
-    setError(null)
+    setIsSaving(true);
+    setError(null);
 
     try {
       const result = await apiFetch(`/api/admin/users/${editingProfile.id}`, {
@@ -83,46 +83,46 @@ export function useUserManagement(): UseUserManagementReturn {
           name: editName || null,
           email: editEmail,
         },
-      })
+      });
 
       if (!result.success) {
-        setError(result.error || 'Failed to update user')
-        return
+        setError(result.error || 'Failed to update user');
+        return;
       }
 
-      window.location.reload()
+      window.location.reload();
     } catch (err) {
-      logger.warn('Failed to update user', { error: err })
-      setError('Failed to update user')
+      logger.warn('Failed to update user', { error: err });
+      setError('Failed to update user');
     } finally {
-      setIsSaving(false)
+      setIsSaving(false);
     }
-  }
+  };
 
   const handleDeleteUser = async () => {
-    if (!deletingUser) return
+    if (!deletingUser) return;
 
-    setIsDeleting(true)
-    setError(null)
+    setIsDeleting(true);
+    setError(null);
 
     try {
       const result = await apiFetch(`/api/admin/users/${deletingUser.id}`, {
         method: 'DELETE',
-      })
+      });
 
       if (!result.success) {
-        setError(result.error || 'Failed to delete user')
-        return
+        setError(result.error || 'Failed to delete user');
+        return;
       }
 
-      window.location.reload()
+      window.location.reload();
     } catch (err) {
-      logger.warn('Failed to delete user', { error: err })
-      setError('Failed to delete user')
+      logger.warn('Failed to delete user', { error: err });
+      setError('Failed to delete user');
     } finally {
-      setIsDeleting(false)
+      setIsDeleting(false);
     }
-  }
+  };
 
   return {
     editingUser,
@@ -141,5 +141,5 @@ export function useUserManagement(): UseUserManagementReturn {
     handleCloseModal,
     handleSaveProfile,
     handleDeleteUser,
-  }
+  };
 }

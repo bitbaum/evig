@@ -1,15 +1,15 @@
-import { getTranslations } from 'next-intl/server'
-import { adminInteractive } from '@/lib/admin-ui'
-import { cn } from '@/lib/utils'
-import { Link } from '@/i18n/navigation'
-import { Check, ArrowRight } from 'lucide-react'
-import { InlineActionButton } from './InlineActionButton'
-import { formatQueueAge } from './format'
-import type { UnifiedQueueItem } from './types'
-import { URGENCY_TONES } from '@/config/dashboard'
+import { getTranslations } from 'next-intl/server';
+import { adminInteractive } from '@/lib/admin-ui';
+import { cn } from '@/lib/utils';
+import { Link } from '@/i18n/navigation';
+import { Check, ArrowRight } from 'lucide-react';
+import { InlineActionButton } from './InlineActionButton';
+import { formatQueueAge } from './format';
+import type { UnifiedQueueItem } from './types';
+import { URGENCY_TONES } from '@/config/dashboard';
 
 interface UnifiedQueueProps {
-  items: UnifiedQueueItem[]
+  items: UnifiedQueueItem[];
 }
 
 // Badge background is queue-specific (no equivalent on ActionItemsSection), so
@@ -18,7 +18,7 @@ const URGENCY_BADGE = {
   urgent: 'bg-error-100 text-error-700 dark:bg-error-900/40 dark:text-error-300',
   warning: 'bg-warning-100 text-warning-700 dark:bg-warning-900/40 dark:text-warning-300',
   success: 'bg-action-muted text-action',
-} as const
+} as const;
 
 /**
  * "Auf deinem Tisch" — the day's queue.
@@ -32,7 +32,7 @@ const URGENCY_BADGE = {
  * Empty state still gets a small reassurance line.
  */
 export async function UnifiedQueue({ items }: UnifiedQueueProps) {
-  const t = await getTranslations('admin.dashboard')
+  const t = await getTranslations('admin.dashboard');
   return (
     <section aria-labelledby="dashboard-queue-title">
       <div className="flex items-baseline justify-between">
@@ -43,9 +43,7 @@ export async function UnifiedQueue({ items }: UnifiedQueueProps) {
           {t('attentionQueueTitle')}
         </h2>
         {items.length > 0 && (
-          <span className="font-mono text-xs tabular-nums text-text-tertiary">
-            {items.length}
-          </span>
+          <span className="font-mono text-xs tabular-nums text-text-tertiary">{items.length}</span>
         )}
       </div>
 
@@ -57,14 +55,17 @@ export async function UnifiedQueue({ items }: UnifiedQueueProps) {
       ) : (
         <ul className="mt-3 divide-y divide-subtle rounded-lg border border-subtle bg-surface-base">
           {items.map((item, index) => {
-            const age = formatQueueAge(item.oldestAt)
-            const ariaLabel = `${URGENCY_TONES[item.type].label}: ${item.label}${age ? `, ${age}` : ''}${item.count ? `, ${item.count} Einträge` : ''}`
+            const age = formatQueueAge(item.oldestAt);
+            const ariaLabel = `${URGENCY_TONES[item.type].label}: ${item.label}${age ? `, ${age}` : ''}${item.count ? `, ${item.count} Einträge` : ''}`;
             return (
               <li key={index}>
                 <Link
                   href={item.href}
                   aria-label={ariaLabel}
-                  className={cn('group flex items-center justify-between gap-3 px-4 py-3 transition-colors', adminInteractive.rowHover)}
+                  className={cn(
+                    'group flex items-center justify-between gap-3 px-4 py-3 transition-colors',
+                    adminInteractive.rowHover,
+                  )}
                 >
                   <div className="flex min-w-0 items-start gap-3">
                     <span
@@ -76,9 +77,7 @@ export async function UnifiedQueue({ items }: UnifiedQueueProps) {
                         {item.label}
                       </p>
                       {age && (
-                        <p className={`mt-0.5 text-xs ${URGENCY_TONES[item.type].text}`}>
-                          {age}
-                        </p>
+                        <p className={`mt-0.5 text-xs ${URGENCY_TONES[item.type].text}`}>{age}</p>
                       )}
                     </div>
                   </div>
@@ -104,10 +103,10 @@ export async function UnifiedQueue({ items }: UnifiedQueueProps) {
                   </div>
                 </Link>
               </li>
-            )
+            );
           })}
         </ul>
       )}
     </section>
-  )
+  );
 }

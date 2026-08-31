@@ -10,25 +10,33 @@ export const REVIEW_STATUS = {
   PENDING_MODERATION: 'pending_moderation',
   HIDDEN: 'hidden',
   DELETED: 'deleted',
-} as const
+} as const;
 
-export type ReviewStatus = typeof REVIEW_STATUS[keyof typeof REVIEW_STATUS]
-export const REVIEW_STATUS_VALUES = Object.values(REVIEW_STATUS) as [ReviewStatus, ...ReviewStatus[]]
-export const REVIEW_MODERATION_VALUES = [REVIEW_STATUS.PUBLISHED, REVIEW_STATUS.HIDDEN, REVIEW_STATUS.DELETED] as const
+export type ReviewStatus = (typeof REVIEW_STATUS)[keyof typeof REVIEW_STATUS];
+export const REVIEW_STATUS_VALUES = Object.values(REVIEW_STATUS) as [
+  ReviewStatus,
+  ...ReviewStatus[],
+];
+export const REVIEW_MODERATION_VALUES = [
+  REVIEW_STATUS.PUBLISHED,
+  REVIEW_STATUS.HIDDEN,
+  REVIEW_STATUS.DELETED,
+] as const;
 
 export const REVIEW_STATUS_LABELS: Record<string, string> = {
   [REVIEW_STATUS.PUBLISHED]: 'Veröffentlicht',
   [REVIEW_STATUS.PENDING_MODERATION]: 'Wartet auf Moderation',
   [REVIEW_STATUS.HIDDEN]: 'Ausgeblendet',
   [REVIEW_STATUS.DELETED]: 'Gelöscht',
-}
+};
 
 export const REVIEW_STATUS_BADGES: Record<string, string> = {
-  [REVIEW_STATUS.PUBLISHED]: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
+  [REVIEW_STATUS.PUBLISHED]:
+    'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
   [REVIEW_STATUS.PENDING_MODERATION]: 'bg-orange-100 text-orange-800',
   [REVIEW_STATUS.HIDDEN]: 'bg-error-100 text-error-800',
   [REVIEW_STATUS.DELETED]: 'bg-neutral-100 text-neutral-800',
-}
+};
 
 /** Short labels for filter tabs */
 export const REVIEW_FILTER_LABELS: Record<string, string> = {
@@ -36,7 +44,7 @@ export const REVIEW_FILTER_LABELS: Record<string, string> = {
   [REVIEW_STATUS.PENDING_MODERATION]: 'Moderation',
   [REVIEW_STATUS.HIDDEN]: 'Ausgeblendet',
   [REVIEW_STATUS.DELETED]: 'Gelöscht',
-}
+};
 
 /** Past-tense labels for moderation action results */
 export const REVIEW_ACTION_LABELS: Record<string, string> = {
@@ -46,25 +54,29 @@ export const REVIEW_ACTION_LABELS: Record<string, string> = {
   restore: 'wiederhergestellt',
   flag_spam: 'als Spam markiert',
   flag_inappropriate: 'als unangemessen markiert',
-}
+};
 
 export function getReviewStatusLabel(status: string): string {
-  return REVIEW_STATUS_LABELS[status] ?? 'Unbekannt'
+  return REVIEW_STATUS_LABELS[status] ?? 'Unbekannt';
 }
 
 export function getReviewStatusBadgeColor(status: string): string {
-  return REVIEW_STATUS_BADGES[status] ?? REVIEW_STATUS_BADGES[REVIEW_STATUS.PENDING_MODERATION]
+  return REVIEW_STATUS_BADGES[status] ?? REVIEW_STATUS_BADGES[REVIEW_STATUS.PENDING_MODERATION];
 }
 
 export function getReviewFilterLabel(status: string): string {
-  return REVIEW_FILTER_LABELS[status] ?? status
+  return REVIEW_FILTER_LABELS[status] ?? status;
 }
 
 export function getReviewActionLabel(action: string): string {
-  return REVIEW_ACTION_LABELS[action] ?? 'moderiert'
+  return REVIEW_ACTION_LABELS[action] ?? 'moderiert';
 }
 
 /** Combined config for AdminStatusBadge — avoids rebuilding via Object.fromEntries in page files */
-export const REVIEW_STATUS_CONFIG: Record<string, { label: string; color: string }> = Object.fromEntries(
-  Object.values(REVIEW_STATUS).map(s => [s, { label: REVIEW_STATUS_LABELS[s], color: REVIEW_STATUS_BADGES[s] }])
-)
+export const REVIEW_STATUS_CONFIG: Record<string, { label: string; color: string }> =
+  Object.fromEntries(
+    Object.values(REVIEW_STATUS).map((s) => [
+      s,
+      { label: REVIEW_STATUS_LABELS[s], color: REVIEW_STATUS_BADGES[s] },
+    ]),
+  );

@@ -5,71 +5,66 @@
  * Uses new API with server-side filtering.
  */
 
-import { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
-import { ORG } from '@/config/org'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
-import { isSuperAdmin } from '@/lib/permissions'
-import { requireSection } from '@/lib/admin/guards'
-import { logger } from '@/lib/logger'
-import {
-  Users,
-  Shield,
-  UserCheck,
-  Crown,
-} from 'lucide-react'
-import { UsersListClient } from './UsersListClient'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminStatsStrip, type StatItem } from '@/components/admin/AdminStatsStrip'
-import Heading from '@/components/admin/AdminHeading'
+import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
+import { ORG } from '@/config/org';
+import { query } from '@/lib/auth/db';
+import { TABLE_NAMES } from '@/config/database';
+import { isSuperAdmin } from '@/lib/permissions';
+import { requireSection } from '@/lib/admin/guards';
+import { logger } from '@/lib/logger';
+import { Users, Shield, UserCheck, Crown } from 'lucide-react';
+import { UsersListClient } from './UsersListClient';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import { AdminStatsStrip, type StatItem } from '@/components/admin/AdminStatsStrip';
+import Heading from '@/components/admin/AdminHeading';
 
 export const metadata: Metadata = {
   title: 'Benutzer verwalten',
   description: 'Benutzerkonten anzeigen und verwalten.',
-}
+};
 
 interface UserStats {
-  totalUsers: number
-  activeUsers: number
-  staffCount: number
-  regularUsers: number
+  totalUsers: number;
+  activeUsers: number;
+  staffCount: number;
+  regularUsers: number;
 }
 
 async function getUserStats(): Promise<UserStats> {
   try {
     const totalResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USERS}`
-    )
-    const totalUsers = parseInt(totalResult.rows[0]?.count || '0')
+      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USERS}`,
+    );
+    const totalUsers = parseInt(totalResult.rows[0]?.count || '0');
 
     const verifiedResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USERS} WHERE "emailVerified" IS NOT NULL`
-    )
-    const activeUsers = parseInt(verifiedResult.rows[0]?.count || '0')
+      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USERS} WHERE "emailVerified" IS NOT NULL`,
+    );
+    const activeUsers = parseInt(verifiedResult.rows[0]?.count || '0');
 
     const staffResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USERS} WHERE is_staff = true`
-    )
-    const staffCount = parseInt(staffResult.rows[0]?.count || '0')
+      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USERS} WHERE is_staff = true`,
+    );
+    const staffCount = parseInt(staffResult.rows[0]?.count || '0');
 
     return {
       totalUsers,
       activeUsers,
       staffCount,
       regularUsers: totalUsers - staffCount,
-    }
+    };
   } catch (error) {
-    logger.error('Failed to fetch user stats', { error })
-    return { totalUsers: 0, activeUsers: 0, staffCount: 0, regularUsers: 0 }
+    logger.error('Failed to fetch user stats', { error });
+    return { totalUsers: 0, activeUsers: 0, staffCount: 0, regularUsers: 0 };
   }
 }
 
 export default async function AdminUsersPage() {
-  const t = await getTranslations('admin.users')
-  const session = await requireSection('users')
-  const stats = await getUserStats()
-  const currentUserIsSuperAdmin = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
+  const t = await getTranslations('admin.users');
+  const session = await requireSection('users');
+  const stats = await getUserStats();
+  const currentUserIsSuperAdmin = isSuperAdmin(session.user.email, session.user.isSuperAdmin);
 
   return (
     <AdminPageWrapper
@@ -79,12 +74,14 @@ export default async function AdminUsersPage() {
       iconColor="blue"
     >
       <AdminStatsStrip
-        items={[
-          { icon: Users,     color: 'blue',   label: 'Gesamt Benutzer', value: stats.totalUsers },
-          { icon: UserCheck, color: 'green',  label: 'Verifiziert',     value: stats.activeUsers },
-          { icon: Crown,     color: 'purple', label: 'Staff',           value: stats.staffCount },
-          { icon: Users,     color: 'gray',   label: 'Benutzer',        value: stats.regularUsers },
-        ] satisfies StatItem[]}
+        items={
+          [
+            { icon: Users, color: 'blue', label: 'Gesamt Benutzer', value: stats.totalUsers },
+            { icon: UserCheck, color: 'green', label: 'Verifiziert', value: stats.activeUsers },
+            { icon: Crown, color: 'purple', label: 'Staff', value: stats.staffCount },
+            { icon: Users, color: 'gray', label: 'Benutzer', value: stats.regularUsers },
+          ] satisfies StatItem[]
+        }
       />
 
       {/* Users List with Client-side Filtering */}
@@ -102,11 +99,12 @@ export default async function AdminUsersPage() {
             </Heading>
             <p className="text-sm text-text-secondary mt-1">
               Benutzer mit @{ORG.emailDomain} E-Mail-Adressen werden automatisch als Staff erkannt.
-              Super Admins haben vollen Zugriff und können anderen Staff-Mitgliedern Berechtigungen erteilen.
+              Super Admins haben vollen Zugriff und können anderen Staff-Mitgliedern Berechtigungen
+              erteilen.
             </p>
           </div>
         </div>
       </div>
     </AdminPageWrapper>
-  )
+  );
 }

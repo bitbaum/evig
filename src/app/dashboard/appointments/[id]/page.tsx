@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import { use } from 'react'
-import Link from 'next/link'
-import { AlertCircle, ArrowLeft, Loader2 } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
-import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
-import { PaymentReturnBanner } from '@/components/payments/PaymentReturnBanner'
-import { useBookingDetail } from './useBookingDetail'
+import { use } from 'react';
+import Link from 'next/link';
+import { AlertCircle, ArrowLeft, Loader2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/ui/Heading';
+import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments';
+import { PaymentReturnBanner } from '@/components/payments/PaymentReturnBanner';
+import { useBookingDetail } from './useBookingDetail';
 import {
   BookingHeaderCard,
   ServiceDetailsCard,
@@ -15,20 +15,20 @@ import {
   DatesCard,
   LocationCard,
   RatingCard,
-} from './sections'
+} from './sections';
 
 export default function AppointmentDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params)
-  const td = useTranslations('dashboard.bookings.detail')
-  const state = useBookingDetail(id)
-  const { appointment, sessionStatus, loading, error } = state
+  const { id } = use(params);
+  const td = useTranslations('dashboard.bookings.detail');
+  const state = useBookingDetail(id);
+  const { appointment, sessionStatus, loading, error } = state;
 
   if (sessionStatus === 'loading' || loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader2 className="w-8 h-8 text-action animate-spin" />
       </div>
-    )
+    );
   }
 
   if (error || !appointment) {
@@ -45,7 +45,7 @@ export default function AppointmentDetailPage({ params }: { params: Promise<{ id
           {td('backToBookings')}
         </Link>
       </div>
-    )
+    );
   }
 
   return (
@@ -69,5 +69,5 @@ export default function AppointmentDetailPage({ params }: { params: Promise<{ id
       <LocationCard appointment={appointment} />
       <RatingCard appointment={appointment} />
     </article>
-  )
+  );
 }

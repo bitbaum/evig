@@ -22,27 +22,27 @@
  *   - getUserVoteForReview lookup
  */
 
-const mockApiFetch = jest.fn()
-const mockToastSuccess = jest.fn()
-const mockToastError = jest.fn()
-const mockRedirect = jest.fn()
-const mockLoggerWarn = jest.fn()
-const mockLoggerError = jest.fn()
+const mockApiFetch = jest.fn();
+const mockToastSuccess = jest.fn();
+const mockToastError = jest.fn();
+const mockRedirect = jest.fn();
+const mockLoggerWarn = jest.fn();
+const mockLoggerError = jest.fn();
 
 jest.mock('@/lib/api/client', () => ({
   apiFetch: (...args: unknown[]) => mockApiFetch.apply(null, args),
-}))
+}));
 
 jest.mock('sonner', () => ({
   toast: {
     success: (...args: unknown[]) => mockToastSuccess.apply(null, args),
     error: (...args: unknown[]) => mockToastError.apply(null, args),
   },
-}))
+}));
 
 jest.mock('next/navigation', () => ({
   redirect: (...args: unknown[]) => mockRedirect.apply(null, args),
-}))
+}));
 
 jest.mock('@/lib/logger', () => ({
   logger: {
@@ -51,22 +51,22 @@ jest.mock('@/lib/logger', () => ({
     error: (...args: unknown[]) => mockLoggerError.apply(null, args),
     debug: jest.fn(),
   },
-}))
+}));
 
-import type { ReactNode } from 'react'
-import { renderHook, act, waitFor } from '@testing-library/react'
-import { SWRConfig } from 'swr'
-import { useReviewManagement, type Review } from '../useReviewManagement'
+import type { ReactNode } from 'react';
+import { renderHook, act, waitFor } from '@testing-library/react';
+import { SWRConfig } from 'swr';
+import { useReviewManagement, type Review } from '../useReviewManagement';
 
 // Fresh SWR cache per render — no cross-test cache leaks, no dedupe window.
 const wrapper = ({ children }: { children: ReactNode }) => (
   <SWRConfig value={{ provider: () => new Map(), dedupingInterval: 0, revalidateOnFocus: false }}>
     {children}
   </SWRConfig>
-)
+);
 
 const renderReviews = (authStatus: string) =>
-  renderHook(() => useReviewManagement(authStatus), { wrapper })
+  renderHook(() => useReviewManagement(authStatus), { wrapper });
 
 const baseReview: Review = {
   id: 'rev-1',
@@ -89,16 +89,16 @@ const baseReview: Review = {
   isVerifiedPurchase: true,
   createdAt: '2025-12-15T10:00:00Z',
   updatedAt: '2025-12-15T10:00:00Z',
-}
+};
 
 beforeEach(() => {
-  mockApiFetch.mockReset()
-  mockToastSuccess.mockReset()
-  mockToastError.mockReset()
-  mockRedirect.mockReset()
-  mockLoggerWarn.mockReset()
-  mockLoggerError.mockReset()
-})
+  mockApiFetch.mockReset();
+  mockToastSuccess.mockReset();
+  mockToastError.mockReset();
+  mockRedirect.mockReset();
+  mockLoggerWarn.mockReset();
+  mockLoggerError.mockReset();
+});
 
 // ============================================================================
 // Auth gate
@@ -106,25 +106,25 @@ beforeEach(() => {
 
 describe('useReviewManagement — auth gate', () => {
   it('redirects to /auth/login when unauthenticated', () => {
-    renderReviews('unauthenticated')
-    expect(mockRedirect).toHaveBeenCalledWith('/auth/login')
-    expect(mockApiFetch).not.toHaveBeenCalled()
-  })
+    renderReviews('unauthenticated');
+    expect(mockRedirect).toHaveBeenCalledWith('/auth/login');
+    expect(mockApiFetch).not.toHaveBeenCalled();
+  });
 
   it('does NOT fetch or redirect while auth status is "loading"', () => {
-    renderReviews('loading')
-    expect(mockRedirect).not.toHaveBeenCalled()
-    expect(mockApiFetch).not.toHaveBeenCalled()
-  })
+    renderReviews('loading');
+    expect(mockRedirect).not.toHaveBeenCalled();
+    expect(mockApiFetch).not.toHaveBeenCalled();
+  });
 
   it('fetches reviews when authenticated', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })
+    mockApiFetch.mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } });
 
-    renderReviews('authenticated')
+    renderReviews('authenticated');
 
-    await waitFor(() => expect(mockApiFetch).toHaveBeenCalledWith('/api/user/reviews'))
-  })
-})
+    await waitFor(() => expect(mockApiFetch).toHaveBeenCalledWith('/api/user/reviews'));
+  });
+});
 
 // ============================================================================
 // Fetch reviews
@@ -135,42 +135,42 @@ describe('useReviewManagement — fetchUserReviews', () => {
     mockApiFetch.mockResolvedValueOnce({
       success: true,
       data: { reviews: [baseReview, { ...baseReview, id: 'rev-2' }] },
-    })
+    });
 
-    const { result } = renderReviews('authenticated')
+    const { result } = renderReviews('authenticated');
 
-    await waitFor(() => expect(result.current.loading).toBe(false))
-    expect(result.current.reviews).toHaveLength(2)
-    expect(result.current.reviews[0].id).toBe('rev-1')
-  })
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    expect(result.current.reviews).toHaveLength(2);
+    expect(result.current.reviews[0].id).toBe('rev-1');
+  });
 
   it('defaults reviews to [] when data.reviews is missing', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: true, data: {} })
+    mockApiFetch.mockResolvedValueOnce({ success: true, data: {} });
 
-    const { result } = renderReviews('authenticated')
+    const { result } = renderReviews('authenticated');
 
-    await waitFor(() => expect(result.current.loading).toBe(false))
-    expect(result.current.reviews).toEqual([])
-  })
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    expect(result.current.reviews).toEqual([]);
+  });
 
   it('sets error from result on failure with fallback message', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: false })
+    mockApiFetch.mockResolvedValueOnce({ success: false });
 
-    const { result } = renderReviews('authenticated')
+    const { result } = renderReviews('authenticated');
 
-    await waitFor(() => expect(result.current.loading).toBe(false))
-    expect(result.current.error).toBe('Anfrage fehlgeschlagen')
-  })
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    expect(result.current.error).toBe('Anfrage fehlgeschlagen');
+  });
 
   it('catches thrown errors with the message', async () => {
-    mockApiFetch.mockRejectedValueOnce(new Error('Network down'))
+    mockApiFetch.mockRejectedValueOnce(new Error('Network down'));
 
-    const { result } = renderReviews('authenticated')
+    const { result } = renderReviews('authenticated');
 
-    await waitFor(() => expect(result.current.loading).toBe(false))
-    expect(result.current.error).toBe('Network down')
-  })
-})
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    expect(result.current.error).toBe('Network down');
+  });
+});
 
 // ============================================================================
 // handleEditReview
@@ -178,16 +178,16 @@ describe('useReviewManagement — fetchUserReviews', () => {
 
 describe('handleEditReview', () => {
   it('sets editingReview to the review id and populates editForm from review', async () => {
-    mockApiFetch.mockResolvedValue({ success: true, data: { reviews: [baseReview] } })
+    mockApiFetch.mockResolvedValue({ success: true, data: { reviews: [baseReview] } });
 
-    const { result } = renderReviews('authenticated')
-    await waitFor(() => expect(result.current.loading).toBe(false))
+    const { result } = renderReviews('authenticated');
+    await waitFor(() => expect(result.current.loading).toBe(false));
 
     act(() => {
-      result.current.handleEditReview(baseReview)
-    })
+      result.current.handleEditReview(baseReview);
+    });
 
-    expect(result.current.editingReview).toBe('rev-1')
+    expect(result.current.editingReview).toBe('rev-1');
     expect(result.current.editForm).toEqual({
       overallRating: 5,
       communicationRating: 5,
@@ -197,44 +197,44 @@ describe('handleEditReview', () => {
       valueRating: 5,
       title: 'Excellent service',
       content: 'Great experience overall',
-    })
-  })
+    });
+  });
 
   it('defaults missing per-dimension ratings to 5', async () => {
-    mockApiFetch.mockResolvedValue({ success: true, data: { reviews: [baseReview] } })
+    mockApiFetch.mockResolvedValue({ success: true, data: { reviews: [baseReview] } });
     const incomplete: Review = {
       ...baseReview,
       ratings: { communication: 3 }, // only one rating present
-    }
+    };
 
-    const { result } = renderReviews('authenticated')
-    await waitFor(() => expect(result.current.loading).toBe(false))
+    const { result } = renderReviews('authenticated');
+    await waitFor(() => expect(result.current.loading).toBe(false));
 
     act(() => {
-      result.current.handleEditReview(incomplete)
-    })
+      result.current.handleEditReview(incomplete);
+    });
 
-    expect(result.current.editForm.communicationRating).toBe(3)
-    expect(result.current.editForm.professionalismRating).toBe(5) // default
-    expect(result.current.editForm.qualityRating).toBe(5)
-    expect(result.current.editForm.timelinessRating).toBe(5)
-    expect(result.current.editForm.valueRating).toBe(5)
-  })
+    expect(result.current.editForm.communicationRating).toBe(3);
+    expect(result.current.editForm.professionalismRating).toBe(5); // default
+    expect(result.current.editForm.qualityRating).toBe(5);
+    expect(result.current.editForm.timelinessRating).toBe(5);
+    expect(result.current.editForm.valueRating).toBe(5);
+  });
 
   it('defaults missing title to empty string', async () => {
-    mockApiFetch.mockResolvedValue({ success: true, data: { reviews: [baseReview] } })
-    const noTitle: Review = { ...baseReview, title: undefined }
+    mockApiFetch.mockResolvedValue({ success: true, data: { reviews: [baseReview] } });
+    const noTitle: Review = { ...baseReview, title: undefined };
 
-    const { result } = renderReviews('authenticated')
-    await waitFor(() => expect(result.current.loading).toBe(false))
+    const { result } = renderReviews('authenticated');
+    await waitFor(() => expect(result.current.loading).toBe(false));
 
     act(() => {
-      result.current.handleEditReview(noTitle)
-    })
+      result.current.handleEditReview(noTitle);
+    });
 
-    expect(result.current.editForm.title).toBe('')
-  })
-})
+    expect(result.current.editForm.title).toBe('');
+  });
+});
 
 // ============================================================================
 // cancelEdit
@@ -242,22 +242,22 @@ describe('handleEditReview', () => {
 
 describe('cancelEdit', () => {
   it('clears editingReview state', async () => {
-    mockApiFetch.mockResolvedValue({ success: true, data: { reviews: [baseReview] } })
+    mockApiFetch.mockResolvedValue({ success: true, data: { reviews: [baseReview] } });
 
-    const { result } = renderReviews('authenticated')
-    await waitFor(() => expect(result.current.loading).toBe(false))
-
-    act(() => {
-      result.current.handleEditReview(baseReview)
-    })
-    expect(result.current.editingReview).toBe('rev-1')
+    const { result } = renderReviews('authenticated');
+    await waitFor(() => expect(result.current.loading).toBe(false));
 
     act(() => {
-      result.current.cancelEdit()
-    })
-    expect(result.current.editingReview).toBeNull()
-  })
-})
+      result.current.handleEditReview(baseReview);
+    });
+    expect(result.current.editingReview).toBe('rev-1');
+
+    act(() => {
+      result.current.cancelEdit();
+    });
+    expect(result.current.editingReview).toBeNull();
+  });
+});
 
 // ============================================================================
 // handleSaveEdit
@@ -267,65 +267,63 @@ describe('handleSaveEdit', () => {
   it('PUTs to /api/reviews/:id with editForm and toasts success', async () => {
     mockApiFetch
       .mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } }) // initial fetch
-      .mockResolvedValueOnce({ success: true })                                    // PUT
-      .mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })   // re-fetch
+      .mockResolvedValueOnce({ success: true }) // PUT
+      .mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } }); // re-fetch
 
-    const { result } = renderReviews('authenticated')
-    await waitFor(() => expect(result.current.loading).toBe(false))
+    const { result } = renderReviews('authenticated');
+    await waitFor(() => expect(result.current.loading).toBe(false));
 
     act(() => {
-      result.current.handleEditReview(baseReview)
-    })
+      result.current.handleEditReview(baseReview);
+    });
 
     await act(async () => {
-      await result.current.handleSaveEdit()
-    })
+      await result.current.handleSaveEdit();
+    });
 
-    const putCall = mockApiFetch.mock.calls.find(
-      (c) => c[0] === '/api/reviews/rev-1',
-    )
-    expect(putCall).toBeDefined()
-    expect(putCall![1]).toMatchObject({ method: 'PUT' })
-    expect(mockToastSuccess).toHaveBeenCalledWith('Bewertung erfolgreich aktualisiert!')
-    expect(result.current.editingReview).toBeNull()
-  })
+    const putCall = mockApiFetch.mock.calls.find((c) => c[0] === '/api/reviews/rev-1');
+    expect(putCall).toBeDefined();
+    expect(putCall![1]).toMatchObject({ method: 'PUT' });
+    expect(mockToastSuccess).toHaveBeenCalledWith('Bewertung erfolgreich aktualisiert!');
+    expect(result.current.editingReview).toBeNull();
+  });
 
   it('no-op when editingReview is null', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })
+    mockApiFetch.mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } });
 
-    const { result } = renderReviews('authenticated')
-    await waitFor(() => expect(result.current.loading).toBe(false))
+    const { result } = renderReviews('authenticated');
+    await waitFor(() => expect(result.current.loading).toBe(false));
 
     // No handleEditReview call → editingReview is null
     await act(async () => {
-      await result.current.handleSaveEdit()
-    })
+      await result.current.handleSaveEdit();
+    });
 
     // Only the initial fetch happened — no PUT
-    expect(mockApiFetch).toHaveBeenCalledTimes(1)
-    expect(mockToastSuccess).not.toHaveBeenCalled()
-  })
+    expect(mockApiFetch).toHaveBeenCalledTimes(1);
+    expect(mockToastSuccess).not.toHaveBeenCalled();
+  });
 
   it('toasts error and logs warning on failure', async () => {
     mockApiFetch
       .mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })
-      .mockResolvedValueOnce({ success: false, error: 'forbidden' })
+      .mockResolvedValueOnce({ success: false, error: 'forbidden' });
 
-    const { result } = renderReviews('authenticated')
-    await waitFor(() => expect(result.current.loading).toBe(false))
+    const { result } = renderReviews('authenticated');
+    await waitFor(() => expect(result.current.loading).toBe(false));
 
     act(() => {
-      result.current.handleEditReview(baseReview)
-    })
+      result.current.handleEditReview(baseReview);
+    });
 
     await act(async () => {
-      await result.current.handleSaveEdit()
-    })
+      await result.current.handleSaveEdit();
+    });
 
-    expect(mockToastError).toHaveBeenCalledWith(expect.stringContaining('forbidden'))
-    expect(mockLoggerWarn).toHaveBeenCalled()
-  })
-})
+    expect(mockToastError).toHaveBeenCalledWith(expect.stringContaining('forbidden'));
+    expect(mockLoggerWarn).toHaveBeenCalled();
+  });
+});
 
 // ============================================================================
 // handleDeleteReview
@@ -333,62 +331,62 @@ describe('handleSaveEdit', () => {
 
 describe('handleDeleteReview', () => {
   it('skips DELETE when window.confirm returns false', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })
-    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(false)
+    mockApiFetch.mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } });
+    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(false);
 
-    const { result } = renderReviews('authenticated')
-    await waitFor(() => expect(result.current.loading).toBe(false))
+    const { result } = renderReviews('authenticated');
+    await waitFor(() => expect(result.current.loading).toBe(false));
 
     await act(async () => {
-      await result.current.handleDeleteReview('rev-1')
-    })
+      await result.current.handleDeleteReview('rev-1');
+    });
 
-    expect(confirmSpy).toHaveBeenCalled()
+    expect(confirmSpy).toHaveBeenCalled();
     // Only initial fetch, no DELETE
-    expect(mockApiFetch).toHaveBeenCalledTimes(1)
-    confirmSpy.mockRestore()
-  })
+    expect(mockApiFetch).toHaveBeenCalledTimes(1);
+    confirmSpy.mockRestore();
+  });
 
   it('DELETEs and refetches when confirmed', async () => {
     mockApiFetch
       .mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })
       .mockResolvedValueOnce({ success: true })
-      .mockResolvedValueOnce({ success: true, data: { reviews: [] } })
-    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true)
+      .mockResolvedValueOnce({ success: true, data: { reviews: [] } });
+    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
 
-    const { result } = renderReviews('authenticated')
-    await waitFor(() => expect(result.current.loading).toBe(false))
+    const { result } = renderReviews('authenticated');
+    await waitFor(() => expect(result.current.loading).toBe(false));
 
     await act(async () => {
-      await result.current.handleDeleteReview('rev-1')
-    })
+      await result.current.handleDeleteReview('rev-1');
+    });
 
     const deleteCall = mockApiFetch.mock.calls.find(
       (c) => c[0] === '/api/reviews/rev-1' && c[1]?.method === 'DELETE',
-    )
-    expect(deleteCall).toBeDefined()
-    expect(mockToastSuccess).toHaveBeenCalledWith('Bewertung erfolgreich gelöscht!')
-    confirmSpy.mockRestore()
-  })
+    );
+    expect(deleteCall).toBeDefined();
+    expect(mockToastSuccess).toHaveBeenCalledWith('Bewertung erfolgreich gelöscht!');
+    confirmSpy.mockRestore();
+  });
 
   it('toasts error and logs warning on DELETE failure', async () => {
     mockApiFetch
       .mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })
-      .mockResolvedValueOnce({ success: false, error: 'cannot delete' })
-    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true)
+      .mockResolvedValueOnce({ success: false, error: 'cannot delete' });
+    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
 
-    const { result } = renderReviews('authenticated')
-    await waitFor(() => expect(result.current.loading).toBe(false))
+    const { result } = renderReviews('authenticated');
+    await waitFor(() => expect(result.current.loading).toBe(false));
 
     await act(async () => {
-      await result.current.handleDeleteReview('rev-1')
-    })
+      await result.current.handleDeleteReview('rev-1');
+    });
 
-    expect(mockToastError).toHaveBeenCalledWith(expect.stringContaining('cannot delete'))
-    expect(mockLoggerWarn).toHaveBeenCalled()
-    confirmSpy.mockRestore()
-  })
-})
+    expect(mockToastError).toHaveBeenCalledWith(expect.stringContaining('cannot delete'));
+    expect(mockLoggerWarn).toHaveBeenCalled();
+    confirmSpy.mockRestore();
+  });
+});
 
 // ============================================================================
 // handleVote — optimistic update logic
@@ -398,88 +396,88 @@ describe('handleVote', () => {
   it('action=added increments totalVotes and helpful (when voteType=helpful)', async () => {
     mockApiFetch
       .mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })
-      .mockResolvedValueOnce({ success: true, data: { action: 'added' } })
+      .mockResolvedValueOnce({ success: true, data: { action: 'added' } });
 
-    const { result } = renderReviews('authenticated')
-    await waitFor(() => expect(result.current.loading).toBe(false))
+    const { result } = renderReviews('authenticated');
+    await waitFor(() => expect(result.current.loading).toBe(false));
 
     await act(async () => {
-      await result.current.handleVote('rev-1', 'helpful')
-    })
+      await result.current.handleVote('rev-1', 'helpful');
+    });
 
     // helpful added: helpfulVotes 3→4, totalVotes 5→6
-    expect(result.current.reviews[0].helpfulVotes).toBe(4)
-    expect(result.current.reviews[0].totalVotes).toBe(6)
-  })
+    expect(result.current.reviews[0].helpfulVotes).toBe(4);
+    expect(result.current.reviews[0].totalVotes).toBe(6);
+  });
 
   it('action=added with voteType=unhelpful increments totalVotes only (not helpfulVotes)', async () => {
     mockApiFetch
       .mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })
-      .mockResolvedValueOnce({ success: true, data: { action: 'added' } })
+      .mockResolvedValueOnce({ success: true, data: { action: 'added' } });
 
-    const { result } = renderReviews('authenticated')
-    await waitFor(() => expect(result.current.loading).toBe(false))
+    const { result } = renderReviews('authenticated');
+    await waitFor(() => expect(result.current.loading).toBe(false));
 
     await act(async () => {
-      await result.current.handleVote('rev-1', 'unhelpful')
-    })
+      await result.current.handleVote('rev-1', 'unhelpful');
+    });
 
-    expect(result.current.reviews[0].helpfulVotes).toBe(3) // unchanged
-    expect(result.current.reviews[0].totalVotes).toBe(6)   // +1
-  })
+    expect(result.current.reviews[0].helpfulVotes).toBe(3); // unchanged
+    expect(result.current.reviews[0].totalVotes).toBe(6); // +1
+  });
 
   it('action=removed decrements totalVotes (and helpful when voteType=helpful)', async () => {
     mockApiFetch
       .mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })
-      .mockResolvedValueOnce({ success: true, data: { action: 'removed' } })
+      .mockResolvedValueOnce({ success: true, data: { action: 'removed' } });
 
-    const { result } = renderReviews('authenticated')
-    await waitFor(() => expect(result.current.loading).toBe(false))
+    const { result } = renderReviews('authenticated');
+    await waitFor(() => expect(result.current.loading).toBe(false));
 
     await act(async () => {
-      await result.current.handleVote('rev-1', 'helpful')
-    })
+      await result.current.handleVote('rev-1', 'helpful');
+    });
 
-    expect(result.current.reviews[0].helpfulVotes).toBe(2) // -1
-    expect(result.current.reviews[0].totalVotes).toBe(4)   // -1
-  })
+    expect(result.current.reviews[0].helpfulVotes).toBe(2); // -1
+    expect(result.current.reviews[0].totalVotes).toBe(4); // -1
+  });
 
   it('only mutates the matching review id (other reviews untouched)', async () => {
-    const reviewB = { ...baseReview, id: 'rev-2', helpfulVotes: 10, totalVotes: 20 }
+    const reviewB = { ...baseReview, id: 'rev-2', helpfulVotes: 10, totalVotes: 20 };
     mockApiFetch
       .mockResolvedValueOnce({ success: true, data: { reviews: [baseReview, reviewB] } })
-      .mockResolvedValueOnce({ success: true, data: { action: 'added' } })
+      .mockResolvedValueOnce({ success: true, data: { action: 'added' } });
 
-    const { result } = renderReviews('authenticated')
-    await waitFor(() => expect(result.current.loading).toBe(false))
+    const { result } = renderReviews('authenticated');
+    await waitFor(() => expect(result.current.loading).toBe(false));
 
     await act(async () => {
-      await result.current.handleVote('rev-1', 'helpful')
-    })
+      await result.current.handleVote('rev-1', 'helpful');
+    });
 
-    expect(result.current.reviews[1].helpfulVotes).toBe(10) // untouched
-    expect(result.current.reviews[1].totalVotes).toBe(20)
-  })
+    expect(result.current.reviews[1].helpfulVotes).toBe(10); // untouched
+    expect(result.current.reviews[1].totalVotes).toBe(20);
+  });
 
   it('toasts error and logs on vote failure (no state mutation)', async () => {
     mockApiFetch
       .mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })
-      .mockResolvedValueOnce({ success: false, error: 'rate limit' })
+      .mockResolvedValueOnce({ success: false, error: 'rate limit' });
 
-    const { result } = renderReviews('authenticated')
-    await waitFor(() => expect(result.current.loading).toBe(false))
+    const { result } = renderReviews('authenticated');
+    await waitFor(() => expect(result.current.loading).toBe(false));
 
     await act(async () => {
-      await result.current.handleVote('rev-1', 'helpful')
-    })
+      await result.current.handleVote('rev-1', 'helpful');
+    });
 
-    expect(mockToastError).toHaveBeenCalledWith(expect.stringContaining('rate limit'))
-    expect(mockLoggerError).toHaveBeenCalled()
+    expect(mockToastError).toHaveBeenCalledWith(expect.stringContaining('rate limit'));
+    expect(mockLoggerError).toHaveBeenCalled();
     // Vote counts unchanged
-    expect(result.current.reviews[0].helpfulVotes).toBe(3)
-    expect(result.current.reviews[0].totalVotes).toBe(5)
-  })
-})
+    expect(result.current.reviews[0].helpfulVotes).toBe(3);
+    expect(result.current.reviews[0].totalVotes).toBe(5);
+  });
+});
 
 // ============================================================================
 // canEditReview — 30-day window
@@ -487,42 +485,42 @@ describe('handleVote', () => {
 
 describe('canEditReview', () => {
   beforeEach(() => {
-    jest.useFakeTimers()
-    jest.setSystemTime(new Date('2026-01-15T12:00:00Z'))
-  })
+    jest.useFakeTimers();
+    jest.setSystemTime(new Date('2026-01-15T12:00:00Z'));
+  });
 
   afterEach(() => {
-    jest.useRealTimers()
-  })
+    jest.useRealTimers();
+  });
 
   it('returns true for a review created today', () => {
-    const { result } = renderReviews('loading')
-    expect(result.current.canEditReview('2026-01-15T10:00:00Z')).toBe(true)
-  })
+    const { result } = renderReviews('loading');
+    expect(result.current.canEditReview('2026-01-15T10:00:00Z')).toBe(true);
+  });
 
   it('returns true for a review created 29 days ago', () => {
-    const { result } = renderReviews('loading')
+    const { result } = renderReviews('loading');
     // 29 days before 2026-01-15 = 2025-12-17
-    expect(result.current.canEditReview('2025-12-17T12:00:00Z')).toBe(true)
-  })
+    expect(result.current.canEditReview('2025-12-17T12:00:00Z')).toBe(true);
+  });
 
   it('returns true at exactly 30 days (boundary inclusive)', () => {
-    const { result } = renderReviews('loading')
+    const { result } = renderReviews('loading');
     // 30 days before 2026-01-15 = 2025-12-16
-    expect(result.current.canEditReview('2025-12-16T12:00:00Z')).toBe(true)
-  })
+    expect(result.current.canEditReview('2025-12-16T12:00:00Z')).toBe(true);
+  });
 
   it('returns false for a review created 31 days ago', () => {
-    const { result } = renderReviews('loading')
+    const { result } = renderReviews('loading');
     // 31 days before = 2025-12-15
-    expect(result.current.canEditReview('2025-12-15T11:00:00Z')).toBe(false)
-  })
+    expect(result.current.canEditReview('2025-12-15T11:00:00Z')).toBe(false);
+  });
 
   it('returns false for an ancient review', () => {
-    const { result } = renderReviews('loading')
-    expect(result.current.canEditReview('2024-01-01T00:00:00Z')).toBe(false)
-  })
-})
+    const { result } = renderReviews('loading');
+    expect(result.current.canEditReview('2024-01-01T00:00:00Z')).toBe(false);
+  });
+});
 
 // ============================================================================
 // getUserVoteForReview
@@ -532,36 +530,36 @@ describe('getUserVoteForReview', () => {
   it('returns the voteType after a successful vote', async () => {
     mockApiFetch
       .mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })
-      .mockResolvedValueOnce({ success: true, data: { action: 'added' } })
+      .mockResolvedValueOnce({ success: true, data: { action: 'added' } });
 
-    const { result } = renderReviews('authenticated')
-    await waitFor(() => expect(result.current.loading).toBe(false))
+    const { result } = renderReviews('authenticated');
+    await waitFor(() => expect(result.current.loading).toBe(false));
 
     await act(async () => {
-      await result.current.handleVote('rev-1', 'helpful')
-    })
+      await result.current.handleVote('rev-1', 'helpful');
+    });
 
-    expect(result.current.getUserVoteForReview('rev-1')).toBe('helpful')
-    expect(result.current.getUserVoteForReview('rev-other')).toBeUndefined()
-  })
+    expect(result.current.getUserVoteForReview('rev-1')).toBe('helpful');
+    expect(result.current.getUserVoteForReview('rev-other')).toBeUndefined();
+  });
 
   it('returns undefined after the vote is removed', async () => {
     mockApiFetch
       .mockResolvedValueOnce({ success: true, data: { reviews: [baseReview] } })
       .mockResolvedValueOnce({ success: true, data: { action: 'added' } })
-      .mockResolvedValueOnce({ success: true, data: { action: 'removed' } })
+      .mockResolvedValueOnce({ success: true, data: { action: 'removed' } });
 
-    const { result } = renderReviews('authenticated')
-    await waitFor(() => expect(result.current.loading).toBe(false))
-
-    await act(async () => {
-      await result.current.handleVote('rev-1', 'helpful')
-    })
-    expect(result.current.getUserVoteForReview('rev-1')).toBe('helpful')
+    const { result } = renderReviews('authenticated');
+    await waitFor(() => expect(result.current.loading).toBe(false));
 
     await act(async () => {
-      await result.current.handleVote('rev-1', 'helpful')
-    })
-    expect(result.current.getUserVoteForReview('rev-1')).toBeUndefined()
-  })
-})
+      await result.current.handleVote('rev-1', 'helpful');
+    });
+    expect(result.current.getUserVoteForReview('rev-1')).toBe('helpful');
+
+    await act(async () => {
+      await result.current.handleVote('rev-1', 'helpful');
+    });
+    expect(result.current.getUserVoteForReview('rev-1')).toBeUndefined();
+  });
+});

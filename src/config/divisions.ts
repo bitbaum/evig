@@ -28,12 +28,12 @@
  *   3. A division that needs a page of its own gets a DIVISION_PAGES entry.
  */
 
-import { Laptop, Sparkles, Wrench, type LucideIcon } from 'lucide-react'
-import { ORG } from '@/config/org'
-import { ROUTES } from '@/config/routes'
-import type { ThemeKey } from '@/lib/design/tokens'
+import { Laptop, Sparkles, Wrench, type LucideIcon } from 'lucide-react';
+import { ORG } from '@/config/org';
+import { ROUTES } from '@/config/routes';
+import type { ThemeKey } from '@/lib/design/tokens';
 
-export type DivisionId = 'computers' | 'technicians' | 'ai'
+export type DivisionId = 'computers' | 'technicians' | 'ai';
 
 /**
  * How far a division actually is.
@@ -42,24 +42,24 @@ export type DivisionId = 'computers' | 'technicians' | 'ai'
  * nothing to buy, nothing is promised, and the page says so out loud. evig
  * states no capability it has not earned (see .claude/CLAUDE.md).
  */
-export type DivisionStatus = 'live' | 'research'
+export type DivisionStatus = 'live' | 'research';
 
 export interface Division {
   /** URL-safe id AND the stable i18n key under `divisions.items.<id>`. */
-  id: DivisionId
+  id: DivisionId;
   /** Full wordmark ("evig technicians") — composed from ORG.name, never hardcoded. */
-  wordmark: string
+  wordmark: string;
   /** Where the division's work actually lives today. */
-  href: string
+  href: string;
   /** Section icon (lucide). */
-  icon: LucideIcon
+  icon: LucideIcon;
   /** Section theme for hero + icon badge. */
-  theme: ThemeKey
-  status: DivisionStatus
+  theme: ThemeKey;
+  status: DivisionStatus;
 }
 
 /** The wordmark is the org name plus the division id — one brand, three lenses. */
-const wordmark = (id: DivisionId): string => `${ORG.name} ${id}`
+const wordmark = (id: DivisionId): string => `${ORG.name} ${id}`;
 
 export const EVIG_DIVISIONS: readonly Division[] = [
   {
@@ -86,7 +86,7 @@ export const EVIG_DIVISIONS: readonly Division[] = [
     theme: 'ai',
     status: 'live',
   },
-]
+];
 
 /**
  * Status-badge styling — semantic palette scales (never arbitrary hex), with
@@ -96,18 +96,18 @@ export const EVIG_DIVISIONS: readonly Division[] = [
 export const DIVISION_STATUS_STYLE: Record<DivisionStatus, string> = {
   live: 'bg-success-50 text-success-700 dark:bg-success-900/30 dark:text-success-300',
   research: 'bg-info-50 text-info-700 dark:bg-info-900/30 dark:text-info-300',
-}
+};
 
 /**
  * Divisions that own a page of their own. `computers` and `technicians` are absent
  * on purpose — they route to the marketplace and IT-Hilfe surfaces that already
  * do the job, and a second landing page for either would be drift.
  */
-export type DivisionPageId = Extract<DivisionId, 'ai'>
+export type DivisionPageId = Extract<DivisionId, 'ai'>;
 
 export interface DivisionPageConfig {
   /** Ordered strand ids → `divisions.pages.<id>.strands.<strandId>.{title,body}`. */
-  strands: readonly string[]
+  strands: readonly string[];
   /**
    * Strand id → where the reader acts on what that strand describes.
    *
@@ -116,15 +116,15 @@ export interface DivisionPageConfig {
    * that are a statement rather than an offer simply have no entry here; the
    * link text comes from `strands.<id>.link` in the messages.
    */
-  strandLinks?: Readonly<Record<string, string>>
+  strandLinks?: Readonly<Record<string, string>>;
   /**
    * Ordered honesty-boundary ids → `divisions.pages.<id>.boundary.<id>`.
    * Every division page states what it is NOT; that block is required, not
    * decorative, and it is what keeps an ambitious claim honest.
    */
-  boundaries: readonly string[]
+  boundaries: readonly string[];
   /** Where the closing CTA points. */
-  ctaHref: string
+  ctaHref: string;
 }
 
 export const DIVISION_PAGES: Record<DivisionPageId, DivisionPageConfig> = {
@@ -137,16 +137,16 @@ export const DIVISION_PAGES: Record<DivisionPageId, DivisionPageConfig> = {
     boundaries: ['noLab', 'noMagic', 'noLockIn'],
     ctaHref: ROUTES.public.marketplace,
   },
-}
+};
 
 /** Look up a division by id (page metadata + validation). */
 export function getDivision(id: DivisionId): Division | undefined {
-  return EVIG_DIVISIONS.find((d) => d.id === id)
+  return EVIG_DIVISIONS.find((d) => d.id === id);
 }
 
 /** Narrow a division to one that owns a page — the division-page components need both halves. */
 export function getDivisionPage(id: DivisionPageId): Division & { id: DivisionPageId } {
-  const division = getDivision(id)
-  if (!division) throw new Error(`Unknown evig division: ${id}`)
-  return { ...division, id }
+  const division = getDivision(id);
+  if (!division) throw new Error(`Unknown evig division: ${id}`);
+  return { ...division, id };
 }

@@ -1,21 +1,21 @@
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
-import { Star, MessageSquare } from 'lucide-react'
-import { ROUTES } from '@/config/routes'
-import Heading from '@/components/ui/Heading'
-import { ReviewCard } from './profile-cards'
-import type { PublicProfile as PublicProfileData } from '@/lib/services/profile-service'
+import { useTranslations } from 'next-intl';
+import { Star, MessageSquare } from 'lucide-react';
+import { ROUTES } from '@/config/routes';
+import Heading from '@/components/ui/Heading';
+import { ReviewCard } from './profile-cards';
+import type { PublicProfile as PublicProfileData } from '@/lib/services/profile-service';
 
 /**
  * Reputation: reviews received and reviews written. Renders nothing when the
  * person has neither, so the section never shows an empty shell.
  */
 export function ProfileReputation({ profile }: { profile: PublicProfileData }) {
-  const t = useTranslations('profile')
+  const t = useTranslations('profile');
 
   if (profile.reviews_received.length === 0 && profile.reviews_written.length === 0) {
-    return null
+    return null;
   }
 
   return (
@@ -63,5 +63,5 @@ export function ProfileReputation({ profile }: { profile: PublicProfileData }) {
         </section>
       )}
     </div>
-  )
+  );
 }

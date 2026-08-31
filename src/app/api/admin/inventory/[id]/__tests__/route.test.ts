@@ -31,103 +31,142 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn()
+const mockAuth = jest.fn();
 
 jest.mock('@/auth', () => ({
   auth: (...args: unknown[]) => mockAuth.apply(null, args),
-}))
+}));
 
 jest.mock('@/lib/api/middleware', () => ({
   withAdmin: (sectionOrHandler: unknown, maybeHandler?: unknown) => {
-    const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler
+    const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler;
     return (req: Request, context?: { params?: Promise<{ id: string }> }) =>
       mockAuth().then(async (session: unknown) => {
         if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server')
-          return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
+          const { NextResponse } = jest.requireActual('next/server');
+          return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
-        const resolvedContext = context?.params
-          ? { params: await context.params }
-          : undefined
-        return (handler as (r: Request, s: unknown, c: unknown) => unknown)(req, session, resolvedContext)
-      })
+        const resolvedContext = context?.params ? { params: await context.params } : undefined;
+        return (handler as (r: Request, s: unknown, c: unknown) => unknown)(
+          req,
+          session,
+          resolvedContext,
+        );
+      });
   },
-}))
+}));
 
 // Drizzle select chain
-const mockSelect = jest.fn()
-const mockFrom = jest.fn()
-const mockLeftJoin = jest.fn()
-const mockInnerJoin = jest.fn()
-const mockLeftJoinWhere = jest.fn()    // terminal: after leftJoin
-const mockInnerJoinWhere = jest.fn()   // terminal: after innerJoin
-const mockSelectWhere = jest.fn()      // intermediate/terminal for no-join selects
-const mockSelectWhereLimit = jest.fn() // terminal: after where in image query
+const mockSelect = jest.fn();
+const mockFrom = jest.fn();
+const mockLeftJoin = jest.fn();
+const mockInnerJoin = jest.fn();
+const mockLeftJoinWhere = jest.fn(); // terminal: after leftJoin
+const mockInnerJoinWhere = jest.fn(); // terminal: after innerJoin
+const mockSelectWhere = jest.fn(); // intermediate/terminal for no-join selects
+const mockSelectWhereLimit = jest.fn(); // terminal: after where in image query
 
 // Drizzle delete chain
-const mockDelete = jest.fn()
-const mockDeleteWhere = jest.fn()
-const mockDeleteReturning = jest.fn()
-const mockTransaction = jest.fn()
+const mockDelete = jest.fn();
+const mockDeleteWhere = jest.fn();
+const mockDeleteReturning = jest.fn();
+const mockTransaction = jest.fn();
 
 // Drizzle update chain
-const mockUpdate = jest.fn()
-const mockSet = jest.fn()
-const mockUpdateWhere = jest.fn()
-const mockUpdateReturning = jest.fn()
+const mockUpdate = jest.fn();
+const mockSet = jest.fn();
+const mockUpdateWhere = jest.fn();
+const mockUpdateReturning = jest.fn();
 
 jest.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => { mockSelect(...args); return { from: mockFrom } },
-    delete: (...args: unknown[]) => { mockDelete(...args); return { where: mockDeleteWhere } },
-    update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
+    select: (...args: unknown[]) => {
+      mockSelect(...args);
+      return { from: mockFrom };
+    },
+    delete: (...args: unknown[]) => {
+      mockDelete(...args);
+      return { where: mockDeleteWhere };
+    },
+    update: (...args: unknown[]) => {
+      mockUpdate(...args);
+      return { set: mockSet };
+    },
     transaction: (...args: unknown[]) => mockTransaction(...args),
   },
-}))
+}));
 
 jest.mock('@/db/schema', () => ({
-  aiExtractedProducts: { id: 'aep_id', productName: 'aep_name', brand: 'aep_brand', itemUuid: 'aep_itemUuid', shortDescription: 'aep_shortDesc', specifications: 'aep_specs', estimatedPriceChf: 'aep_price', condition: 'aep_condition', dimensions: 'aep_dims', weightGrams: 'aep_weight', category: 'aep_category', subcategory: 'aep_subcategory', createdAt: 'aep_createdAt', status: 'aep_status', updatedAt: 'aep_updatedAt' },
-  inventoryItems: { id: 'ii_id', aiProductId: 'ii_aiProductId', location: 'ii_location', boxId: 'ii_boxId', quantityAvailable: 'ii_qty', marketplaceStatus: 'ii_mktStatus', updatedAt: 'ii_updatedAt' },
+  aiExtractedProducts: {
+    id: 'aep_id',
+    productName: 'aep_name',
+    brand: 'aep_brand',
+    itemUuid: 'aep_itemUuid',
+    shortDescription: 'aep_shortDesc',
+    specifications: 'aep_specs',
+    estimatedPriceChf: 'aep_price',
+    condition: 'aep_condition',
+    dimensions: 'aep_dims',
+    weightGrams: 'aep_weight',
+    category: 'aep_category',
+    subcategory: 'aep_subcategory',
+    createdAt: 'aep_createdAt',
+    status: 'aep_status',
+    updatedAt: 'aep_updatedAt',
+  },
+  inventoryItems: {
+    id: 'ii_id',
+    aiProductId: 'ii_aiProductId',
+    location: 'ii_location',
+    boxId: 'ii_boxId',
+    quantityAvailable: 'ii_qty',
+    marketplaceStatus: 'ii_mktStatus',
+    updatedAt: 'ii_updatedAt',
+  },
   productCustomerProfiles: { productId: 'pcp_productId', profileId: 'pcp_profileId' },
   customerProfiles: { id: 'cp_id', slug: 'cp_slug' },
-  productImages: { productId: 'pi_productId', filePath: 'pi_filePath', isPrimary: 'pi_isPrimary', id: 'pi_id' },
+  productImages: {
+    productId: 'pi_productId',
+    filePath: 'pi_filePath',
+    isPrimary: 'pi_isPrimary',
+    id: 'pi_id',
+  },
   marketplaceListings: { id: 'ml_id', inventoryItemId: 'ml_inventoryItemId' },
-}))
+}));
 
 jest.mock('drizzle-orm', () => ({
   and: (...args: unknown[]) => ({ __and: args }),
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
-  sql: Object.assign(
-    (_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }),
-    { raw: (s: string) => ({ __raw: s }) }
-  ),
+  sql: Object.assign((_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }), {
+    raw: (s: string) => ({ __raw: s }),
+  }),
   inArray: (col: unknown, arr: unknown) => ({ __inArray: [col, arr] }),
-}))
+}));
 
 jest.mock('@/config/intake-status', () => ({
   INTAKE_STATUS: { PUBLISHED: 'published', DRAFT: 'draft' },
-}))
+}));
 
-const mockPublishProduct = jest.fn()
-const mockUnpublishProduct = jest.fn()
-const mockUpdateProductImage = jest.fn()
+const mockPublishProduct = jest.fn();
+const mockUnpublishProduct = jest.fn();
+const mockUpdateProductImage = jest.fn();
 
 jest.mock('@/lib/admin/inventory-actions', () => ({
   publishProduct: (...args: unknown[]) => mockPublishProduct.apply(null, args),
   unpublishProduct: (...args: unknown[]) => mockUnpublishProduct.apply(null, args),
   updateProductImage: (...args: unknown[]) => mockUpdateProductImage.apply(null, args),
-}))
+}));
 
-const mockValidateBody = jest.fn()
+const mockValidateBody = jest.fn();
 
 jest.mock('@/lib/schemas', () => ({
   validateBody: (...args: unknown[]) => mockValidateBody.apply(null, args),
   InventoryUpdateSchema: {},
   InventoryPatchSchema: {},
-}))
+}));
 
 jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server')
+  const { NextResponse } = jest.requireActual('next/server');
   return {
     apiSuccess: (data: unknown) => NextResponse.json({ success: true, data }),
     apiError: (err: unknown, msg: string, status = 500) =>
@@ -136,46 +175,61 @@ jest.mock('@/lib/api/helpers', () => {
       NextResponse.json({ success: false, error: msg }, { status: 404 }),
     apiBadRequest: (msg: string) =>
       NextResponse.json({ success: false, error: msg }, { status: 400 }),
-  }
-})
+  };
+});
 
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
-}))
+}));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server'
-import { GET, DELETE, PUT, PATCH } from '../route'
+import { NextRequest } from 'next/server';
+import { GET, DELETE, PUT, PATCH } from '../route';
 
 // ---------------------------------------------------------------------------
 // Fixtures
 // ---------------------------------------------------------------------------
 
 const MOCK_SESSION = {
-  user: { id: 'admin-1', email: 'admin@revamp-it.ch', name: 'Admin', isStaff: true, staffPermissions: ['*'] as string[], isSuperAdmin: true },
+  user: {
+    id: 'admin-1',
+    email: 'admin@revamp-it.ch',
+    name: 'Admin',
+    isStaff: true,
+    staffPermissions: ['*'] as string[],
+    isSuperAdmin: true,
+  },
   expires: '2027-01-01',
-}
+};
 
-const MOCK_PRODUCT = { id: 'prod-1', product_name: 'ThinkPad', brand: 'Lenovo', item_uuid: 'uuid-1', location: null, box_id: null, quantity_available: 1 }
+const MOCK_PRODUCT = {
+  id: 'prod-1',
+  product_name: 'ThinkPad',
+  brand: 'Lenovo',
+  item_uuid: 'uuid-1',
+  location: null,
+  box_id: null,
+  quantity_available: 1,
+};
 
 function makeRequest(method = 'GET', body?: Record<string, unknown>) {
   return new NextRequest('http://localhost/api/admin/inventory/prod-1', {
     method,
     headers: body ? { 'Content-Type': 'application/json' } : {},
     body: body ? JSON.stringify(body) : undefined,
-  })
+  });
 }
 
 function makeContext(id = 'prod-1') {
-  return { params: Promise.resolve({ id }) }
+  return { params: Promise.resolve({ id }) };
 }
 
 beforeEach(() => {
-  jest.resetAllMocks()
-  mockAuth.mockResolvedValue(MOCK_SESSION)
+  jest.resetAllMocks();
+  mockAuth.mockResolvedValue(MOCK_SESSION);
 
   // SELECT chain:
   // Query 1 (leftJoin path): from → leftJoin → where (terminal)
@@ -185,19 +239,19 @@ beforeEach(() => {
     leftJoin: mockLeftJoin,
     innerJoin: mockInnerJoin,
     where: mockSelectWhere,
-  })
-  mockLeftJoin.mockReturnValue({ where: mockLeftJoinWhere })
-  mockLeftJoinWhere.mockResolvedValue([MOCK_PRODUCT])
-  mockInnerJoin.mockReturnValue({ where: mockInnerJoinWhere })
-  mockInnerJoinWhere.mockResolvedValue([])
-  mockSelectWhere.mockReturnValue({ limit: mockSelectWhereLimit })
-  mockSelectWhereLimit.mockResolvedValue([])
+  });
+  mockLeftJoin.mockReturnValue({ where: mockLeftJoinWhere });
+  mockLeftJoinWhere.mockResolvedValue([MOCK_PRODUCT]);
+  mockInnerJoin.mockReturnValue({ where: mockInnerJoinWhere });
+  mockInnerJoinWhere.mockResolvedValue([]);
+  mockSelectWhere.mockReturnValue({ limit: mockSelectWhereLimit });
+  mockSelectWhereLimit.mockResolvedValue([]);
 
   // DELETE chain:
   // db.delete(x).where(...) → returns { returning: fn } (awaiting as plain object = fine when result ignored)
   // db.delete(aiExtractedProducts).where(...).returning() → the final delete
-  mockDeleteWhere.mockReturnValue({ returning: mockDeleteReturning })
-  mockDeleteReturning.mockResolvedValue([{ id: 'prod-1', itemUuid: 'uuid-1' }])
+  mockDeleteWhere.mockReturnValue({ returning: mockDeleteReturning });
+  mockDeleteReturning.mockResolvedValue([{ id: 'prod-1', itemUuid: 'uuid-1' }]);
 
   // db.transaction(callback) — the route's DELETE handler runs all five
   // delete statements + the inventoryItems select inside a transaction.
@@ -206,38 +260,38 @@ beforeEach(() => {
   // override mockDeleteReturning to drive the not-found path).
   mockTransaction.mockImplementation(async (fn: (tx: unknown) => Promise<unknown>) => {
     const txDelete = (...args: unknown[]) => {
-      mockDelete(...args)
-      return { where: mockDeleteWhere }
-    }
+      mockDelete(...args);
+      return { where: mockDeleteWhere };
+    };
     const txSelect = (...args: unknown[]) => {
-      mockSelect(...args)
+      mockSelect(...args);
       // Inside the transaction, tx.select(...).from(inventoryItems).where(...)
       // should resolve to [] by default (no marketplace listings to delete).
       const from = jest.fn().mockReturnValue({
         where: jest.fn().mockResolvedValue([]),
-      })
-      return { from }
-    }
-    return fn({ delete: txDelete, select: txSelect })
-  })
+      });
+      return { from };
+    };
+    return fn({ delete: txDelete, select: txSelect });
+  });
 
   // UPDATE chain:
   // db.update(x).set(...).where(...) → returns { returning: fn }
   // db.update(aiExtractedProducts).set(...).where(...).returning() → returns updated product
-  mockSet.mockReturnValue({ where: mockUpdateWhere })
-  mockUpdateWhere.mockReturnValue({ returning: mockUpdateReturning })
-  mockUpdateReturning.mockResolvedValue([MOCK_PRODUCT])
+  mockSet.mockReturnValue({ where: mockUpdateWhere });
+  mockUpdateWhere.mockReturnValue({ returning: mockUpdateReturning });
+  mockUpdateReturning.mockResolvedValue([MOCK_PRODUCT]);
 
   // validateBody default (used by PATCH)
   mockValidateBody.mockReturnValue({
     success: true,
     data: { marketplace_status: 'published' },
-  })
+  });
 
-  mockPublishProduct.mockResolvedValue(undefined)
-  mockUnpublishProduct.mockResolvedValue(undefined)
-  mockUpdateProductImage.mockResolvedValue('https://example.com/image.jpg')
-})
+  mockPublishProduct.mockResolvedValue(undefined);
+  mockUnpublishProduct.mockResolvedValue(undefined);
+  mockUpdateProductImage.mockResolvedValue('https://example.com/image.jpg');
+});
 
 // ============================================================================
 // GET /api/admin/inventory/[id]
@@ -245,28 +299,28 @@ beforeEach(() => {
 
 describe('GET /api/admin/inventory/[id] — unauthenticated', () => {
   it('returns 401 when session is null', async () => {
-    mockAuth.mockResolvedValueOnce(null)
-    const response = await GET(makeRequest(), makeContext())
-    expect(response.status).toBe(401)
-  })
-})
+    mockAuth.mockResolvedValueOnce(null);
+    const response = await GET(makeRequest(), makeContext());
+    expect(response.status).toBe(401);
+  });
+});
 
 describe('GET /api/admin/inventory/[id] — authenticated', () => {
   it('returns 404 when product not found', async () => {
-    mockLeftJoinWhere.mockResolvedValueOnce([])
-    const response = await GET(makeRequest(), makeContext())
-    expect(response.status).toBe(404)
-  })
+    mockLeftJoinWhere.mockResolvedValueOnce([]);
+    const response = await GET(makeRequest(), makeContext());
+    expect(response.status).toBe(404);
+  });
 
   it('returns 200 with product data', async () => {
-    const response = await GET(makeRequest(), makeContext())
-    expect(response.status).toBe(200)
-    const body = await response.json()
-    expect(body.data.product.id).toBe('prod-1')
-    expect(body.data.product.customer_profiles).toEqual([])
-    expect(body.data.product.image_url).toBeNull()
-  })
-})
+    const response = await GET(makeRequest(), makeContext());
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.data.product.id).toBe('prod-1');
+    expect(body.data.product.customer_profiles).toEqual([]);
+    expect(body.data.product.image_url).toBeNull();
+  });
+});
 
 // ============================================================================
 // DELETE /api/admin/inventory/[id]
@@ -274,25 +328,25 @@ describe('GET /api/admin/inventory/[id] — authenticated', () => {
 
 describe('DELETE /api/admin/inventory/[id] — unauthenticated', () => {
   it('returns 401 when session is null', async () => {
-    mockAuth.mockResolvedValueOnce(null)
-    const response = await DELETE(makeRequest('DELETE'), makeContext())
-    expect(response.status).toBe(401)
-  })
-})
+    mockAuth.mockResolvedValueOnce(null);
+    const response = await DELETE(makeRequest('DELETE'), makeContext());
+    expect(response.status).toBe(401);
+  });
+});
 
 describe('DELETE /api/admin/inventory/[id] — authenticated', () => {
   it('returns 404 when product not found', async () => {
-    mockDeleteReturning.mockResolvedValueOnce([])
-    const response = await DELETE(makeRequest('DELETE'), makeContext())
-    expect(response.status).toBe(404)
-  })
+    mockDeleteReturning.mockResolvedValueOnce([]);
+    const response = await DELETE(makeRequest('DELETE'), makeContext());
+    expect(response.status).toBe(404);
+  });
 
   it('returns 200 on success', async () => {
-    const response = await DELETE(makeRequest('DELETE'), makeContext())
-    expect(response.status).toBe(200)
-    const body = await response.json()
-    expect(body.data.deleted.id).toBe('prod-1')
-  })
+    const response = await DELETE(makeRequest('DELETE'), makeContext());
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.data.deleted.id).toBe('prod-1');
+  });
 
   it('wraps all 5 child + parent deletes in a single transaction so partial failures roll back', async () => {
     // Previously DELETE ran 5 sequential auto-commit statements:
@@ -311,26 +365,26 @@ describe('DELETE /api/admin/inventory/[id] — authenticated', () => {
       where: jest.fn().mockReturnValue({
         returning: jest.fn().mockResolvedValue([{ id: 'prod-1', itemUuid: 'uuid-1' }]),
       }),
-    })
+    });
     const txSelect = jest.fn().mockReturnValue({
       from: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue([]) }),
-    })
+    });
     mockTransaction.mockImplementationOnce(async (fn: (tx: unknown) => Promise<unknown>) =>
       fn({ delete: txDelete, select: txSelect }),
-    )
+    );
 
-    const response = await DELETE(makeRequest('DELETE'), makeContext())
-    expect(response.status).toBe(200)
+    const response = await DELETE(makeRequest('DELETE'), makeContext());
+    expect(response.status).toBe(200);
     // The transaction is invoked exactly once with the whole batch.
-    expect(mockTransaction).toHaveBeenCalledTimes(1)
+    expect(mockTransaction).toHaveBeenCalledTimes(1);
     // Four unconditional tx.delete calls (productCustomerProfiles, productImages,
     // inventoryItems, aiExtractedProducts) — marketplaceListings is conditional
     // on the inventoryItems select returning rows (empty by default).
-    expect(txDelete).toHaveBeenCalledTimes(4)
+    expect(txDelete).toHaveBeenCalledTimes(4);
     // The top-level db.delete must NOT be used in the DELETE path — that
     // would mean a write happened outside the shared transaction.
-    expect(mockDelete).not.toHaveBeenCalled()
-  })
+    expect(mockDelete).not.toHaveBeenCalled();
+  });
 
   it('rolls back to 500 when the transaction throws partway through (e.g. FK lock on the final delete)', async () => {
     // Simulate: child deletes succeed, but the final aiExtractedProducts
@@ -338,13 +392,13 @@ describe('DELETE /api/admin/inventory/[id] — authenticated', () => {
     // transaction must reject, postgres rolls back the prior deletes, and
     // the route's outer catch surfaces a 500.
     mockTransaction.mockImplementationOnce(async () => {
-      throw new Error('FK constraint violation on aiExtractedProducts delete')
-    })
+      throw new Error('FK constraint violation on aiExtractedProducts delete');
+    });
 
-    const response = await DELETE(makeRequest('DELETE'), makeContext())
-    expect(response.status).toBe(500)
-  })
-})
+    const response = await DELETE(makeRequest('DELETE'), makeContext());
+    expect(response.status).toBe(500);
+  });
+});
 
 // ============================================================================
 // PUT /api/admin/inventory/[id]
@@ -352,40 +406,43 @@ describe('DELETE /api/admin/inventory/[id] — authenticated', () => {
 
 describe('PUT /api/admin/inventory/[id] — unauthenticated', () => {
   it('returns 401 when session is null', async () => {
-    mockAuth.mockResolvedValueOnce(null)
-    const response = await PUT(makeRequest('PUT', { product_name: 'New Name' }), makeContext())
-    expect(response.status).toBe(401)
-  })
-})
+    mockAuth.mockResolvedValueOnce(null);
+    const response = await PUT(makeRequest('PUT', { product_name: 'New Name' }), makeContext());
+    expect(response.status).toBe(401);
+  });
+});
 
 describe('PUT /api/admin/inventory/[id] — validation', () => {
   it('returns 400 when body is invalid', async () => {
-    const { NextResponse } = jest.requireActual('next/server')
+    const { NextResponse } = jest.requireActual('next/server');
     mockValidateBody.mockReturnValueOnce({
       success: false,
-      error: NextResponse.json({ success: false, error: 'Ungültige Eingabedaten' }, { status: 400 }),
-    })
-    const response = await PUT(makeRequest('PUT', {}), makeContext())
-    expect(response.status).toBe(400)
-  })
+      error: NextResponse.json(
+        { success: false, error: 'Ungültige Eingabedaten' },
+        { status: 400 },
+      ),
+    });
+    const response = await PUT(makeRequest('PUT', {}), makeContext());
+    expect(response.status).toBe(400);
+  });
 
   it('returns 400 when no valid fields to update', async () => {
-    mockValidateBody.mockReturnValueOnce({ success: true, data: {} })
-    const response = await PUT(makeRequest('PUT', {}), makeContext())
-    expect(response.status).toBe(400)
-  })
-})
+    mockValidateBody.mockReturnValueOnce({ success: true, data: {} });
+    const response = await PUT(makeRequest('PUT', {}), makeContext());
+    expect(response.status).toBe(400);
+  });
+});
 
 describe('PUT /api/admin/inventory/[id] — success', () => {
   it('returns 200 on success', async () => {
     mockValidateBody.mockReturnValueOnce({
       success: true,
       data: { product_name: 'Updated Name' },
-    })
-    const response = await PUT(makeRequest('PUT', { product_name: 'Updated Name' }), makeContext())
-    expect(response.status).toBe(200)
-  })
-})
+    });
+    const response = await PUT(makeRequest('PUT', { product_name: 'Updated Name' }), makeContext());
+    expect(response.status).toBe(200);
+  });
+});
 
 // ============================================================================
 // PATCH /api/admin/inventory/[id]
@@ -393,35 +450,47 @@ describe('PUT /api/admin/inventory/[id] — success', () => {
 
 describe('PATCH /api/admin/inventory/[id] — unauthenticated', () => {
   it('returns 401 when session is null', async () => {
-    mockAuth.mockResolvedValueOnce(null)
-    const response = await PATCH(makeRequest('PATCH', { marketplace_status: 'published' }), makeContext())
-    expect(response.status).toBe(401)
-  })
-})
+    mockAuth.mockResolvedValueOnce(null);
+    const response = await PATCH(
+      makeRequest('PATCH', { marketplace_status: 'published' }),
+      makeContext(),
+    );
+    expect(response.status).toBe(401);
+  });
+});
 
 describe('PATCH /api/admin/inventory/[id] — validation', () => {
   it('returns 400 when body is invalid', async () => {
-    const { NextResponse } = jest.requireActual('next/server')
+    const { NextResponse } = jest.requireActual('next/server');
     mockValidateBody.mockReturnValueOnce({
       success: false,
-      error: NextResponse.json({ success: false, error: 'Ungültige Eingabedaten' }, { status: 400 }),
-    })
-    const response = await PATCH(makeRequest('PATCH', {}), makeContext())
-    expect(response.status).toBe(400)
-  })
-})
+      error: NextResponse.json(
+        { success: false, error: 'Ungültige Eingabedaten' },
+        { status: 400 },
+      ),
+    });
+    const response = await PATCH(makeRequest('PATCH', {}), makeContext());
+    expect(response.status).toBe(400);
+  });
+});
 
 describe('PATCH /api/admin/inventory/[id] — success', () => {
   it('returns 200 and calls publishProduct when marketplace_status is published', async () => {
-    const response = await PATCH(makeRequest('PATCH', { marketplace_status: 'published' }), makeContext())
-    expect(response.status).toBe(200)
-    expect(mockPublishProduct).toHaveBeenCalledWith('prod-1', 'admin-1')
-  })
+    const response = await PATCH(
+      makeRequest('PATCH', { marketplace_status: 'published' }),
+      makeContext(),
+    );
+    expect(response.status).toBe(200);
+    expect(mockPublishProduct).toHaveBeenCalledWith('prod-1', 'admin-1');
+  });
 
   it('returns 200 and calls unpublishProduct when marketplace_status is not published', async () => {
-    mockValidateBody.mockReturnValueOnce({ success: true, data: { marketplace_status: 'draft' } })
-    const response = await PATCH(makeRequest('PATCH', { marketplace_status: 'draft' }), makeContext())
-    expect(response.status).toBe(200)
-    expect(mockUnpublishProduct).toHaveBeenCalledWith('prod-1', 'admin-1')
-  })
-})
+    mockValidateBody.mockReturnValueOnce({ success: true, data: { marketplace_status: 'draft' } });
+    const response = await PATCH(
+      makeRequest('PATCH', { marketplace_status: 'draft' }),
+      makeContext(),
+    );
+    expect(response.status).toBe(200);
+    expect(mockUnpublishProduct).toHaveBeenCalledWith('prod-1', 'admin-1');
+  });
+});

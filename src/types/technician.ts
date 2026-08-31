@@ -16,57 +16,57 @@
  * No more "Helper" or "Repairer" types — everything is Technician.
  */
 
-export type TechnicianTier = 'community' | 'professional'
+export type TechnicianTier = 'community' | 'professional';
 
 export interface Technician {
   /** Repairer-profile UUID (will be renamed to technician_profiles in QQQ.5). */
-  id: string
+  id: string;
   /** FK to users.id — owner of this technician profile. */
-  userId: string
+  userId: string;
   /** Display name joined from users.name. */
-  name: string
+  name: string;
 
   // Profile content
-  bio: string | null
+  bio: string | null;
 
   // Location
-  city: string | null
-  postalCode: string | null
-  canton: string | null
+  city: string | null;
+  postalCode: string | null;
+  canton: string | null;
   /** Max travel distance for onsite jobs. Community-tier only convention. */
-  maxTravelKm: number | null
+  maxTravelKm: number | null;
 
   // Pricing
-  hourlyRateCents: number | null
-  acceptsGratis: boolean
-  acceptsKulturlegi: boolean
+  hourlyRateCents: number | null;
+  acceptsGratis: boolean;
+  acceptsKulturlegi: boolean;
 
   // Capabilities
-  skills: string[]
+  skills: string[];
   /**
    * How the technician delivers service — 'remote', 'onsite', 'pickup',
    * 'dropoff', 'flexible'. DB column: service_delivery_types.
    * NOTE: This is NOT the same as the `service_types` catalog table.
    */
-  serviceDeliveryTypes: string[] | null
+  serviceDeliveryTypes: string[] | null;
 
   // Classification
-  profileTier: TechnicianTier
+  profileTier: TechnicianTier;
 
   // Status
-  isActive: boolean
-  isVerified: boolean
+  isActive: boolean;
+  isVerified: boolean;
 
   // Aggregated stats (denormalized on the profile row)
-  averageRating: number | null
-  totalJobsCompleted: number
-  totalReviews: number
+  averageRating: number | null;
+  totalJobsCompleted: number;
+  totalReviews: number;
 
   // Professional-tier-only enrichment (optional)
-  businessName?: string | null
-  servicesOffered?: string[]
-  emergencyFeeCents?: number | null
-  homeVisitFeeCents?: number | null
+  businessName?: string | null;
+  servicesOffered?: string[];
+  emergencyFeeCents?: number | null;
+  homeVisitFeeCents?: number | null;
 }
 
 // The write-shape for self-service technician edits is the single

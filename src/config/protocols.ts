@@ -7,9 +7,19 @@
  * Created: 2026-02-10
  */
 
-import { Users, FolderKanban, RefreshCw, Landmark, MessageSquare, Mic, FileText, ListTree, ListChecks } from 'lucide-react'
-import { PROTOCOL_STATUS, type ProtocolStatus } from './protocol-status'
-import type { ComponentType } from 'react'
+import {
+  Users,
+  FolderKanban,
+  RefreshCw,
+  Landmark,
+  MessageSquare,
+  Mic,
+  FileText,
+  ListTree,
+  ListChecks,
+} from 'lucide-react';
+import { PROTOCOL_STATUS, type ProtocolStatus } from './protocol-status';
+import type { ComponentType } from 'react';
 
 // Meeting types
 export const MEETING_TYPES = {
@@ -44,7 +54,10 @@ export const MEETING_TYPE_ICONS: Record<MeetingType, string> = {
   ad_hoc: 'MessageSquare',
 };
 
-export const MEETING_TYPE_ICON_COMPONENTS: Record<MeetingType, ComponentType<{ className?: string }>> = {
+export const MEETING_TYPE_ICON_COMPONENTS: Record<
+  MeetingType,
+  ComponentType<{ className?: string }>
+> = {
   team_weekly: Users,
   project_review: FolderKanban,
   retro: RefreshCw,
@@ -53,15 +66,23 @@ export const MEETING_TYPE_ICON_COMPONENTS: Record<MeetingType, ComponentType<{ c
 };
 
 // Templates with defaults per meeting type
-export const MEETING_TYPE_TEMPLATES: Record<MeetingType, {
-  default_attendees: string[]
-  agenda_hints: string[]
-  typical_duration: string
-  default_visibility: ProtocolVisibility
-}> = {
+export const MEETING_TYPE_TEMPLATES: Record<
+  MeetingType,
+  {
+    default_attendees: string[];
+    agenda_hints: string[];
+    typical_duration: string;
+    default_visibility: ProtocolVisibility;
+  }
+> = {
   team_weekly: {
     default_attendees: [],
-    agenda_hints: ['Rückblick letzte Woche', 'Aktuelle Projekte', 'Hindernisse', 'Nächste Schritte'],
+    agenda_hints: [
+      'Rückblick letzte Woche',
+      'Aktuelle Projekte',
+      'Hindernisse',
+      'Nächste Schritte',
+    ],
     typical_duration: '60 min',
     default_visibility: 'team',
   },
@@ -184,7 +205,10 @@ export const INPUT_METHOD_ICONS: Record<InputMethod, string> = {
   tasks: 'ListChecks',
 };
 
-export const INPUT_METHOD_ICON_COMPONENTS: Record<InputMethod, ComponentType<{ className?: string }>> = {
+export const INPUT_METHOD_ICON_COMPONENTS: Record<
+  InputMethod,
+  ComponentType<{ className?: string }>
+> = {
   audio: Mic,
   transcript: FileText,
   notes: ListTree,
@@ -234,6 +258,8 @@ export type DecisionResult = (typeof DECISION_RESULTS)[keyof typeof DECISION_RES
 // Options arrays for forms (derived from constants)
 export const MEETING_TYPE_OPTIONS = Object.values(MEETING_TYPES) as [string, ...string[]];
 export const PROTOCOL_STATUS_OPTIONS = Object.values(PROTOCOL_STATUSES) as [string, ...string[]];
-export const PROTOCOL_VISIBILITY_OPTIONS = Object.values(PROTOCOL_VISIBILITY) as [string, ...string[]];
+export const PROTOCOL_VISIBILITY_OPTIONS = Object.values(PROTOCOL_VISIBILITY) as [
+  string,
+  ...string[],
+];
 export const INPUT_METHOD_OPTIONS = Object.values(INPUT_METHODS) as [string, ...string[]];
-

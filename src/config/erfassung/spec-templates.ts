@@ -13,12 +13,12 @@
  *   2. List relevant spec fields with German labels
  */
 
-import type { SpecField } from '@/types/erfassung'
+import type { SpecField } from '@/types/erfassung';
 
 /** Template definition — defines which fields exist for a category */
 export interface SpecTemplate {
-  key: string
-  placeholder?: string
+  key: string;
+  placeholder?: string;
 }
 
 /**
@@ -139,19 +139,16 @@ export const SPEC_TEMPLATES: Record<string, SpecTemplate[]> = {
   ],
 
   // Default template for unknown categories
-  default: [
-    { key: 'Beschreibung' },
-    { key: 'Zustand Details' },
-  ],
-}
+  default: [{ key: 'Beschreibung' }, { key: 'Zustand Details' }],
+};
 
 /**
  * Get spec template for a category.
  * Returns a deep copy to avoid mutation.
  */
 export function getSpecTemplate(categoryValue: string): SpecTemplate[] {
-  const template = SPEC_TEMPLATES[categoryValue] ?? SPEC_TEMPLATES.default
-  return template.map(field => ({ ...field }))
+  const template = SPEC_TEMPLATES[categoryValue] ?? SPEC_TEMPLATES.default;
+  return template.map((field) => ({ ...field }));
 }
 
 /**
@@ -160,44 +157,41 @@ export function getSpecTemplate(categoryValue: string): SpecTemplate[] {
  */
 export function getSpecTemplateForSubcategory(subValue: string): SpecTemplate[] {
   // Try direct match first
-  if (SPEC_TEMPLATES[subValue]) return getSpecTemplate(subValue)
+  if (SPEC_TEMPLATES[subValue]) return getSpecTemplate(subValue);
 
   // Walk up: try progressively shorter prefixes (e.g. 101 → 10 → 1)
   for (let len = subValue.length - 1; len >= 1; len--) {
-    const prefix = subValue.slice(0, len)
-    if (SPEC_TEMPLATES[prefix]) return getSpecTemplate(prefix)
+    const prefix = subValue.slice(0, len);
+    if (SPEC_TEMPLATES[prefix]) return getSpecTemplate(prefix);
   }
 
-  return getSpecTemplate('default')
+  return getSpecTemplate('default');
 }
 
 /**
  * Convert a template to empty spec fields (for form initialization)
  */
 export function templateToSpecFields(templates: SpecTemplate[]): SpecField[] {
-  return templates.map(t => ({ key: t.key, value: '' }))
+  return templates.map((t) => ({ key: t.key, value: '' }));
 }
 
 /**
  * Merge existing specs with template.
  * Keeps existing values, adds missing fields from template.
  */
-export function mergeWithTemplate(
-  existingSpecs: SpecField[],
-  categoryValue: string
-): SpecField[] {
-  const template = getSpecTemplate(categoryValue)
-  const existingKeys = new Set(existingSpecs.map(s => s.key.toLowerCase()))
+export function mergeWithTemplate(existingSpecs: SpecField[], categoryValue: string): SpecField[] {
+  const template = getSpecTemplate(categoryValue);
+  const existingKeys = new Set(existingSpecs.map((s) => s.key.toLowerCase()));
 
   // Keep existing specs
-  const result = [...existingSpecs]
+  const result = [...existingSpecs];
 
   // Add missing template fields
   for (const field of template) {
     if (!existingKeys.has(field.key.toLowerCase())) {
-      result.push({ key: field.key, value: '' })
+      result.push({ key: field.key, value: '' });
     }
   }
 
-  return result
+  return result;
 }

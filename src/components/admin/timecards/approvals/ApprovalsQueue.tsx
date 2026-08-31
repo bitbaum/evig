@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
 /** Queue list slice: empty state, select-all header, and the one-row-per-timecard list. */
 
-import Link from 'next/link'
-import { useTranslations } from 'next-intl'
-import { ExternalLink, Eye } from 'lucide-react'
-import { Avatar } from '@/components/ui/Avatar'
-import { Button } from '@/components/ui/button'
-import { TIMECARD_STATUS_COLORS, type TimecardStatus } from '@/config/timecards'
-import { useTimecardIntl } from '@/hooks/useTimecardIntl'
-import { adminInteractive } from '@/lib/admin-ui'
-import { cn } from '@/lib/utils'
-import type { ApprovalRow } from './types'
+import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { ExternalLink, Eye } from 'lucide-react';
+import { Avatar } from '@/components/ui/Avatar';
+import { Button } from '@/components/ui/button';
+import { TIMECARD_STATUS_COLORS, type TimecardStatus } from '@/config/timecards';
+import { useTimecardIntl } from '@/hooks/useTimecardIntl';
+import { adminInteractive } from '@/lib/admin-ui';
+import { cn } from '@/lib/utils';
+import type { ApprovalRow } from './types';
 
 export function ApprovalsQueue({
   items,
@@ -25,24 +25,26 @@ export function ApprovalsQueue({
   onToggleAll,
   onReview,
 }: {
-  items: ApprovalRow[]
-  isLoading: boolean
-  bulkEnabled: boolean
-  selected: Set<string>
-  allSelected: boolean
-  currentUserId: string
-  allowSelfReview: boolean
-  onToggle: (id: string) => void
-  onToggleAll: () => void
-  onReview: (id: string) => void
+  items: ApprovalRow[];
+  isLoading: boolean;
+  bulkEnabled: boolean;
+  selected: Set<string>;
+  allSelected: boolean;
+  currentUserId: string;
+  allowSelfReview: boolean;
+  onToggle: (id: string) => void;
+  onToggleAll: () => void;
+  onReview: (id: string) => void;
 }) {
-  const t = useTranslations('admin.timecards')
-  const { statusLabel, duration, period, locale } = useTimecardIntl()
+  const t = useTranslations('admin.timecards');
+  const { statusLabel, duration, period, locale } = useTimecardIntl();
   return (
     <div className="rounded-xl border border bg-surface-base overflow-hidden">
       {items.length === 0 && !isLoading ? (
         <div className="px-6 py-12 text-center text-sm text-text-tertiary">
-          {t('queueEmpty', { time: new Date().toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' }) })}
+          {t('queueEmpty', {
+            time: new Date().toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' }),
+          })}
         </div>
       ) : (
         <>
@@ -61,17 +63,15 @@ export function ApprovalsQueue({
             </span>
           </div>
           <ul className="divide-y divide-subtle">
-            {items.map(row => {
-              const isSelected = selected.has(row.id)
+            {items.map((row) => {
+              const isSelected = selected.has(row.id);
               // Own card is only lockable when the viewer isn't a super-admin.
-              const isOwn = row.user_id === currentUserId && !allowSelfReview
-              const status = row.status as TimecardStatus
-              const statusColor = TIMECARD_STATUS_COLORS[status] ?? ''
-              const subtitleParts = [
-                row.position,
-                row.department,
-                row.employment_type,
-              ].filter(Boolean).join(' · ')
+              const isOwn = row.user_id === currentUserId && !allowSelfReview;
+              const status = row.status as TimecardStatus;
+              const statusColor = TIMECARD_STATUS_COLORS[status] ?? '';
+              const subtitleParts = [row.position, row.department, row.employment_type]
+                .filter(Boolean)
+                .join(' · ');
               return (
                 <li
                   key={row.id}
@@ -119,9 +119,7 @@ export function ApprovalsQueue({
                       )}
                     </div>
                     {subtitleParts && (
-                      <div className="text-xs text-text-tertiary truncate">
-                        {subtitleParts}
-                      </div>
+                      <div className="text-xs text-text-tertiary truncate">{subtitleParts}</div>
                     )}
                     {/* Period moves under the name on phones (right column is hidden there). */}
                     <div className="text-xs text-text-tertiary truncate sm:hidden">
@@ -134,7 +132,9 @@ export function ApprovalsQueue({
                   <div className="font-semibold text-text-primary text-right whitespace-nowrap text-sm">
                     {duration(Number(row.total_minutes) || 0)}
                   </div>
-                  <span className={`hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap ${statusColor}`}>
+                  <span
+                    className={`hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap ${statusColor}`}
+                  >
                     {statusLabel(row.status)}
                   </span>
                   <Button
@@ -146,11 +146,11 @@ export function ApprovalsQueue({
                     <Eye className="w-3.5 h-3.5" /> {t('queueReview')}
                   </Button>
                 </li>
-              )
+              );
             })}
           </ul>
         </>
       )}
     </div>
-  )
+  );
 }

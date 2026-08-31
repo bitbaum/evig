@@ -1,19 +1,16 @@
-'use client'
+'use client';
 
-import { Select } from '@/components/ui/select'
-import { Eyebrow } from '@/components/ui/Eyebrow'
+import { Select } from '@/components/ui/select';
+import { Eyebrow } from '@/components/ui/Eyebrow';
 
 interface ChangelogMobileNavProps {
-  label: string
-  items: { id: string; label: string }[]
+  label: string;
+  items: { id: string; label: string }[];
 }
 
 export function ChangelogMobileNav({ label, items }: ChangelogMobileNavProps) {
   return (
-    <nav
-      aria-label={label}
-      className="border-b border-subtle bg-surface-base lg:hidden"
-    >
+    <nav aria-label={label} className="border-b border-subtle bg-surface-base lg:hidden">
       <div className="mx-auto max-w-7xl px-4 py-2.5 sm:px-6">
         <label className="flex items-center gap-3">
           <Eyebrow as="span" className="shrink-0">
@@ -24,7 +21,7 @@ export function ChangelogMobileNav({ label, items }: ChangelogMobileNavProps) {
             defaultValue=""
             onChange={(e) => {
               if (e.target.value) {
-                window.location.hash = e.target.value
+                window.location.hash = e.target.value;
               }
             }}
           >
@@ -38,5 +35,5 @@ export function ChangelogMobileNav({ label, items }: ChangelogMobileNavProps) {
         </label>
       </div>
     </nav>
-  )
+  );
 }

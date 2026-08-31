@@ -1,21 +1,21 @@
-'use client'
+'use client';
 
-import { type OSSAlternative, getAlternativesByCategory } from '@/config/open-source-registry'
-import { AlternativeCard } from './AlternativeCard'
-import Heading from '@/components/ui/Heading'
-import { useTranslations } from 'next-intl'
+import { type OSSAlternative, getAlternativesByCategory } from '@/config/open-source-registry';
+import { AlternativeCard } from './AlternativeCard';
+import Heading from '@/components/ui/Heading';
+import { useTranslations } from 'next-intl';
 
 interface RelatedAlternativesProps {
-  current: OSSAlternative
+  current: OSSAlternative;
 }
 
 export function RelatedAlternatives({ current }: RelatedAlternativesProps) {
-  const t = useTranslations('services.openSourceSolutions')
+  const t = useTranslations('services.openSourceSolutions');
   const related = getAlternativesByCategory(current.categoryId)
-    .filter(a => a.id !== current.id)
-    .slice(0, 3)
+    .filter((a) => a.id !== current.id)
+    .slice(0, 3);
 
-  if (related.length === 0) return null
+  if (related.length === 0) return null;
 
   return (
     <section className="mt-12">
@@ -23,10 +23,10 @@ export function RelatedAlternatives({ current }: RelatedAlternativesProps) {
         {t('detail.relatedAlternatives')}
       </Heading>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-        {related.map(alt => (
+        {related.map((alt) => (
           <AlternativeCard key={alt.id} alternative={alt} />
         ))}
       </div>
     </section>
-  )
+  );
 }

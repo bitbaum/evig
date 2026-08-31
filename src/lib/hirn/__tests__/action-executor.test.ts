@@ -1,4 +1,4 @@
-import { isRiskyAction, validateExecuteActionInput } from '../action-executor-contracts'
+import { isRiskyAction, validateExecuteActionInput } from '../action-executor-contracts';
 
 describe('hirn action executor contracts', () => {
   it('validates supported action payload envelope', () => {
@@ -7,10 +7,10 @@ describe('hirn action executor contracts', () => {
       actionType: 'create_task',
       payload: { title: 'Inbox leeren' },
       dryRun: false,
-    })
+    });
 
-    expect(parsed.success).toBe(true)
-  })
+    expect(parsed.success).toBe(true);
+  });
 
   it('blocks unknown action type', () => {
     const parsed = validateExecuteActionInput({
@@ -18,13 +18,13 @@ describe('hirn action executor contracts', () => {
       actionType: 'do_magic',
       payload: {},
       dryRun: false,
-    })
+    });
 
-    expect(parsed.success).toBe(false)
-  })
+    expect(parsed.success).toBe(false);
+  });
 
   it('no current actions are risky', () => {
-    expect(isRiskyAction('create_task')).toBe(false)
-    expect(isRiskyAction('navigate')).toBe(false)
-  })
-})
+    expect(isRiskyAction('create_task')).toBe(false);
+    expect(isRiskyAction('navigate')).toBe(false);
+  });
+});

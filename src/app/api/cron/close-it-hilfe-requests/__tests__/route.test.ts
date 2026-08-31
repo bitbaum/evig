@@ -12,16 +12,19 @@
  *     start expiring MATCHED/COMPLETED rows.
  */
 
-const mockUpdate = jest.fn()
-const mockSet = jest.fn()
-const mockWhere = jest.fn()
-const mockReturning = jest.fn()
+const mockUpdate = jest.fn();
+const mockSet = jest.fn();
+const mockWhere = jest.fn();
+const mockReturning = jest.fn();
 
 jest.mock('@/db', () => ({
   db: {
-    update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
+    update: (...args: unknown[]) => {
+      mockUpdate(...args);
+      return { set: mockSet };
+    },
   },
-}))
+}));
 
 jest.mock('@/db/schema', () => ({
   itHilfeRequests: {
@@ -30,143 +33,150 @@ jest.mock('@/db/schema', () => ({
     expiresAt: 'ihr_expiresAt',
     updatedAt: 'ihr_updatedAt',
   },
-}))
+}));
 
 jest.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   isNotNull: (a: unknown) => ({ __isNotNull: a }),
   lt: (a: unknown, b: unknown) => ({ __lt: [a, b] }),
-  sql: Object.assign(
-    (_s: TemplateStringsArray, ..._v: unknown[]) => ({ __sql: true }),
-    { raw: (s: string) => ({ __raw: s }) },
-  ),
-}))
+  sql: Object.assign((_s: TemplateStringsArray, ..._v: unknown[]) => ({ __sql: true }), {
+    raw: (s: string) => ({ __raw: s }),
+  }),
+}));
 
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
-}))
+}));
 
 jest.mock('@/config/it-hilfe', () => ({
   REQUEST_STATUS: { OPEN: 'open', EXPIRED: 'expired' },
-}))
+}));
 
-import { NextRequest } from 'next/server'
-import { GET } from '../route'
+import { NextRequest } from 'next/server';
+import { GET } from '../route';
 
 beforeEach(() => {
-  jest.resetAllMocks()
+  jest.resetAllMocks();
   // Configured, because an unset secret now denies every request —
   // these routes are no longer reachable without one.
-  process.env.CRON_SECRET = 'test-cron-secret'
+  process.env.CRON_SECRET = 'test-cron-secret';
 
   // Chain: db.update(...).set(...).where(...).returning() -> [rows]
-  mockReturning.mockResolvedValue([])
-  mockWhere.mockReturnValue({ returning: mockReturning })
-  mockSet.mockReturnValue({ where: mockWhere })
-})
+  mockReturning.mockResolvedValue([]);
+  mockWhere.mockReturnValue({ returning: mockReturning });
+  mockSet.mockReturnValue({ where: mockWhere });
+});
 
 describe('GET /api/cron/close-it-hilfe-requests — auth', () => {
   it('returns 401 when CRON_SECRET is set and bearer is wrong', async () => {
-    process.env.CRON_SECRET = 'test-cron-secret'
+    process.env.CRON_SECRET = 'test-cron-secret';
     const req = new NextRequest('http://localhost/api/cron/close-it-hilfe-requests', {
       headers: { authorization: 'Bearer nope' },
-    })
-    const res = await GET(req)
-    expect(res.status).toBe(401)
-  })
+    });
+    const res = await GET(req);
+    expect(res.status).toBe(401);
+  });
 
   it('returns 401 when CRON_SECRET is set and bearer is missing', async () => {
-    process.env.CRON_SECRET = 'test-cron-secret'
-    const req = new NextRequest('http://localhost/api/cron/close-it-hilfe-requests')
-    const res = await GET(req)
-    expect(res.status).toBe(401)
-  })
+    process.env.CRON_SECRET = 'test-cron-secret';
+    const req = new NextRequest('http://localhost/api/cron/close-it-hilfe-requests');
+    const res = await GET(req);
+    expect(res.status).toBe(401);
+  });
 
   // Was: 'skips auth check when CRON_SECRET is unset (dev mode)', asserting a
   // 200. That convenience is exactly the hole — this route closes IT-Hilfe
   // requests, and its siblings release escrowed money. An unset secret is a
   // broken deployment, so it now denies everything.
   it('denies everything when CRON_SECRET is unset, rather than skipping the check', async () => {
-    delete process.env.CRON_SECRET
-    const req = new NextRequest('http://localhost/api/cron/close-it-hilfe-requests', { headers: { authorization: 'Bearer anything' } })
-    const res = await GET(req)
-    expect(res.status).toBe(401)
-  })
+    delete process.env.CRON_SECRET;
+    const req = new NextRequest('http://localhost/api/cron/close-it-hilfe-requests', {
+      headers: { authorization: 'Bearer anything' },
+    });
+    const res = await GET(req);
+    expect(res.status).toBe(401);
+  });
 
   it('accepts the correct bearer token', async () => {
-    process.env.CRON_SECRET = 'test-cron-secret'
+    process.env.CRON_SECRET = 'test-cron-secret';
     const req = new NextRequest('http://localhost/api/cron/close-it-hilfe-requests', {
       headers: { authorization: `Bearer ${process.env.CRON_SECRET}` },
-    })
-    const res = await GET(req)
-    expect(res.status).toBe(200)
-  })
-})
+    });
+    const res = await GET(req);
+    expect(res.status).toBe(200);
+  });
+});
 
 describe('GET /api/cron/close-it-hilfe-requests — bulk expire', () => {
   it('returns expired=0 when nothing is past its deadline', async () => {
-    mockReturning.mockResolvedValueOnce([])
+    mockReturning.mockResolvedValueOnce([]);
 
-    const req = new NextRequest('http://localhost/api/cron/close-it-hilfe-requests', { headers: { authorization: `Bearer ${process.env.CRON_SECRET}` } })
-    const res = await GET(req)
+    const req = new NextRequest('http://localhost/api/cron/close-it-hilfe-requests', {
+      headers: { authorization: `Bearer ${process.env.CRON_SECRET}` },
+    });
+    const res = await GET(req);
 
-    expect(res.status).toBe(200)
-    const body = await res.json()
-    expect(body).toEqual({ success: true, expired: 0 })
-    expect(mockUpdate).toHaveBeenCalledTimes(1)
-  })
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body).toEqual({ success: true, expired: 0 });
+    expect(mockUpdate).toHaveBeenCalledTimes(1);
+  });
 
   it('returns expired=N for each row transitioned', async () => {
-    mockReturning.mockResolvedValueOnce([
-      { id: 'req-1' },
-      { id: 'req-2' },
-      { id: 'req-3' },
-    ])
+    mockReturning.mockResolvedValueOnce([{ id: 'req-1' }, { id: 'req-2' }, { id: 'req-3' }]);
 
-    const req = new NextRequest('http://localhost/api/cron/close-it-hilfe-requests', { headers: { authorization: `Bearer ${process.env.CRON_SECRET}` } })
-    const res = await GET(req)
+    const req = new NextRequest('http://localhost/api/cron/close-it-hilfe-requests', {
+      headers: { authorization: `Bearer ${process.env.CRON_SECRET}` },
+    });
+    const res = await GET(req);
 
-    expect(res.status).toBe(200)
-    const body = await res.json()
-    expect(body).toEqual({ success: true, expired: 3 })
-  })
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body).toEqual({ success: true, expired: 3 });
+  });
 
   it('sets status=expired in the update payload', async () => {
-    const req = new NextRequest('http://localhost/api/cron/close-it-hilfe-requests', { headers: { authorization: `Bearer ${process.env.CRON_SECRET}` } })
-    await GET(req)
+    const req = new NextRequest('http://localhost/api/cron/close-it-hilfe-requests', {
+      headers: { authorization: `Bearer ${process.env.CRON_SECRET}` },
+    });
+    await GET(req);
 
-    const setPayload = mockSet.mock.calls[0]?.[0]
-    expect(setPayload).toMatchObject({ status: 'expired' })
-  })
+    const setPayload = mockSet.mock.calls[0]?.[0];
+    expect(setPayload).toMatchObject({ status: 'expired' });
+  });
 
   it('locks the three where-predicates so MATCHED/COMPLETED rows can never be touched', async () => {
-    const req = new NextRequest('http://localhost/api/cron/close-it-hilfe-requests', { headers: { authorization: `Bearer ${process.env.CRON_SECRET}` } })
-    await GET(req)
+    const req = new NextRequest('http://localhost/api/cron/close-it-hilfe-requests', {
+      headers: { authorization: `Bearer ${process.env.CRON_SECRET}` },
+    });
+    await GET(req);
 
     // The where clause is and(eq(status, 'open'), isNotNull(expiresAt), lt(expiresAt, NOW()))
-    const whereArg = mockWhere.mock.calls[0]?.[0] as { __and: unknown[] }
-    expect(whereArg.__and).toHaveLength(3)
+    const whereArg = mockWhere.mock.calls[0]?.[0] as { __and: unknown[] };
+    expect(whereArg.__and).toHaveLength(3);
 
     const [statusFilter, notNullFilter, ltFilter] = whereArg.__and as Array<{
-      __eq?: [unknown, unknown]
-      __isNotNull?: unknown
-      __lt?: [unknown, unknown]
-    }>
-    expect(statusFilter.__eq).toEqual(['ihr_status', 'open'])
-    expect(notNullFilter.__isNotNull).toBe('ihr_expiresAt')
-    expect(ltFilter.__lt?.[0]).toBe('ihr_expiresAt')
-  })
-})
+      __eq?: [unknown, unknown];
+      __isNotNull?: unknown;
+      __lt?: [unknown, unknown];
+    }>;
+    expect(statusFilter.__eq).toEqual(['ihr_status', 'open']);
+    expect(notNullFilter.__isNotNull).toBe('ihr_expiresAt');
+    expect(ltFilter.__lt?.[0]).toBe('ihr_expiresAt');
+  });
+});
 
 describe('GET /api/cron/close-it-hilfe-requests — DB error', () => {
   it('returns 500 when the update throws', async () => {
-    mockReturning.mockRejectedValueOnce(new Error('connection refused'))
+    mockReturning.mockRejectedValueOnce(new Error('connection refused'));
 
-    const req = new NextRequest('http://localhost/api/cron/close-it-hilfe-requests', { headers: { authorization: `Bearer ${process.env.CRON_SECRET}` } })
-    const res = await GET(req)
-    expect(res.status).toBe(500)
-    const body = await res.json()
-    expect(body).toEqual({ error: 'Internal error' })
-  })
-})
+    const req = new NextRequest('http://localhost/api/cron/close-it-hilfe-requests', {
+      headers: { authorization: `Bearer ${process.env.CRON_SECRET}` },
+    });
+    const res = await GET(req);
+    expect(res.status).toBe(500);
+    const body = await res.json();
+    expect(body).toEqual({ error: 'Internal error' });
+  });
+});

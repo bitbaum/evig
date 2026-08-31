@@ -5,7 +5,7 @@
  * Following dev guide: docs/development/DEV_GUIDE.md
  */
 
-import { TECHNICIAN_LABEL, technicianNotFoundMessage } from '@/config/terminology'
+import { TECHNICIAN_LABEL, technicianNotFoundMessage } from '@/config/terminology';
 
 export const ERROR_MESSAGES = {
   // Authentication & Authorization
@@ -31,15 +31,21 @@ export const ERROR_MESSAGES = {
   IT_HILFE_REQUEST_NOT_FOUND: 'IT-Hilfe-Anfrage nicht gefunden',
   HELPER_NOT_FOUND: 'Techniker nicht gefunden',
   INTAKE_ITEM_NOT_FOUND: 'Gerät nicht gefunden',
-  INTAKE_CHECKLIST_INCOMPLETE: 'Checkliste nicht vollständig — alle Pflichtpunkte müssen bestanden sein',
-  INTAKE_CHECKLIST_FAILED: 'Prüfung fehlgeschlagen — Problem beheben und erneut prüfen, oder Stufe ändern',
-  INTAKE_QC_REQUIRED: 'Dieses Gerät benötigt eine Qualitätskontrolle — Prüfung im Geräte-Eingang starten',
-  INTAKE_QC_SKIP_REASON_REQUIRED: 'Für eine Veröffentlichung ohne Prüfung ist eine Begründung mit mindestens 10 Zeichen erforderlich',
+  INTAKE_CHECKLIST_INCOMPLETE:
+    'Checkliste nicht vollständig — alle Pflichtpunkte müssen bestanden sein',
+  INTAKE_CHECKLIST_FAILED:
+    'Prüfung fehlgeschlagen — Problem beheben und erneut prüfen, oder Stufe ändern',
+  INTAKE_QC_REQUIRED:
+    'Dieses Gerät benötigt eine Qualitätskontrolle — Prüfung im Geräte-Eingang starten',
+  INTAKE_QC_SKIP_REASON_REQUIRED:
+    'Für eine Veröffentlichung ohne Prüfung ist eine Begründung mit mindestens 10 Zeichen erforderlich',
   INTAKE_ALREADY_PUBLISHED: 'Gerät ist bereits im Shop veröffentlicht',
   INTAKE_INVALID_CHECKLIST_ITEM: 'Ungültiger Checklist-Eintrag',
   INTAKE_FAIL_NOTES_REQUIRED: 'Bei „Fehlgeschlagen“ ist eine Begründung erforderlich',
-  INTAKE_SECOND_PERSON_REQUIRED: 'Vier-Augen-Prinzip: Die Qualitätskontrolle muss von einer zweiten Person bestätigt werden — oder mit Begründung in der Notiz übersteuert werden (z.B. «allein im Dienst»)',
-  INTAKE_SECOND_PERSON_OVERRIDE_REASON_REQUIRED: 'Für die Ausnahme vom Vier-Augen-Prinzip ist eine ausdrückliche Begründung mit mindestens 10 Zeichen erforderlich',
+  INTAKE_SECOND_PERSON_REQUIRED:
+    'Vier-Augen-Prinzip: Die Qualitätskontrolle muss von einer zweiten Person bestätigt werden — oder mit Begründung in der Notiz übersteuert werden (z.B. «allein im Dienst»)',
+  INTAKE_SECOND_PERSON_OVERRIDE_REASON_REQUIRED:
+    'Für die Ausnahme vom Vier-Augen-Prinzip ist eine ausdrückliche Begründung mit mindestens 10 Zeichen erforderlich',
   REPAIRER_APPLICATION_NOT_FOUND: `${TECHNICIAN_LABEL}-Bewerbung nicht gefunden`,
   WORKSHOP_PROPOSAL_NOT_FOUND: 'Workshop-Vorschlag nicht gefunden',
   POOL_NOT_FOUND: 'Pool nicht gefunden',
@@ -112,8 +118,10 @@ export const ERROR_MESSAGES = {
   VOTE_INVALID_DATA: 'Ungültige Abstimmungsdaten',
   VOTE_SUBMIT_FAILED: 'Fehler beim Abgeben der Stimme',
   VOTE_DATA_REQUIRED: 'Stimmdaten erforderlich',
-  VOTE_NOT_PUBLIC: 'Diese Abstimmung ist nicht öffentlich. Bitte melde dich mit einem registrierten Konto an.',
-  VOTE_EMAIL_REGISTERED: 'Diese E-Mail gehört zu einem registrierten Konto. Bitte melde dich an, um damit abzustimmen.',
+  VOTE_NOT_PUBLIC:
+    'Diese Abstimmung ist nicht öffentlich. Bitte melde dich mit einem registrierten Konto an.',
+  VOTE_EMAIL_REGISTERED:
+    'Diese E-Mail gehört zu einem registrierten Konto. Bitte melde dich an, um damit abzustimmen.',
   DECISION_NOT_ACTIVE: 'Entscheidung nicht gefunden oder nicht aktiv',
   VOTE_NOT_IN_VOTING_PHASE_PUBLIC: 'Diese Abstimmung läuft gerade nicht',
   COMMENT_NOT_AUTHOR: 'Nur der Autor kann diesen Kommentar bearbeiten',
@@ -131,7 +139,8 @@ export const ERROR_MESSAGES = {
  * Success messages
  */
 export const SUCCESS_MESSAGES = {
-  REPAIRER_APPLICATION_SUBMITTED: 'Ihre Bewerbung wurde erfolgreich eingereicht! Du erhältst in Kürze eine E-Mail mit weiteren Informationen.',
+  REPAIRER_APPLICATION_SUBMITTED:
+    'Ihre Bewerbung wurde erfolgreich eingereicht! Du erhältst in Kürze eine E-Mail mit weiteren Informationen.',
   APPOINTMENT_BOOKED: 'Termin erfolgreich gebucht!',
 
   // Protocols
@@ -154,4 +163,4 @@ export const ERROR_CODES = {
   VOTE_EMAIL_REGISTERED: 'vote_email_registered',
 } as const;
 
-export type ErrorCode = typeof ERROR_CODES[keyof typeof ERROR_CODES];
+export type ErrorCode = (typeof ERROR_CODES)[keyof typeof ERROR_CODES];

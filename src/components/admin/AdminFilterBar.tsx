@@ -1,30 +1,30 @@
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
-import { Search, X } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
-import { FormField } from '@/components/ui/form-field'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
+import { useTranslations } from 'next-intl';
+import { Search, X } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { FormField } from '@/components/ui/form-field';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
 
 export interface FilterDropdown {
-  key: string
-  label: string
-  value: string
-  onChange: (value: string) => void
-  options: { value: string; label: string }[]
-  allLabel?: string
+  key: string;
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  options: { value: string; label: string }[];
+  allLabel?: string;
 }
 
 export interface AdminFilterBarProps {
-  searchValue?: string
-  onSearchChange?: (value: string) => void
-  searchPlaceholder?: string
-  dropdowns?: FilterDropdown[]
-  hasActiveFilters?: boolean
-  onClearFilters?: () => void
-  children?: React.ReactNode
+  searchValue?: string;
+  onSearchChange?: (value: string) => void;
+  searchPlaceholder?: string;
+  dropdowns?: FilterDropdown[];
+  hasActiveFilters?: boolean;
+  onClearFilters?: () => void;
+  children?: React.ReactNode;
 }
 
 export function AdminFilterBar({
@@ -36,7 +36,7 @@ export function AdminFilterBar({
   onClearFilters,
   children,
 }: AdminFilterBarProps) {
-  const t = useTranslations('admin.filters')
+  const t = useTranslations('admin.filters');
   return (
     <Card className="p-4">
       {/* Stack vertically on mobile, row on sm+ — each field is max 240px on desktop to prevent
@@ -61,7 +61,7 @@ export function AdminFilterBar({
         )}
 
         {dropdowns.map((dropdown) => {
-          const selectId = `admin-filter-${dropdown.key}`
+          const selectId = `admin-filter-${dropdown.key}`;
           return (
             <div key={dropdown.key} className="w-full sm:flex-[0_1_200px]">
               <FormField label={dropdown.label} htmlFor={selectId}>
@@ -79,19 +79,14 @@ export function AdminFilterBar({
                 </Select>
               </FormField>
             </div>
-          )
+          );
         })}
 
         {children}
 
         {hasActiveFilters && onClearFilters && (
           <div className="flex items-end">
-            <Button
-              onClick={onClearFilters}
-              variant="outline"
-              size="sm"
-              className="gap-1.5"
-            >
+            <Button onClick={onClearFilters} variant="outline" size="sm" className="gap-1.5">
               <X className="w-4 h-4" />
               {t('clearFilters')}
             </Button>
@@ -99,5 +94,5 @@ export function AdminFilterBar({
         )}
       </div>
     </Card>
-  )
+  );
 }

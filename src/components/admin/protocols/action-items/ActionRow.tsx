@@ -1,32 +1,27 @@
-'use client'
+'use client';
 
-import { Link } from '@/i18n/navigation'
-import {
-  Loader2,
-  CheckCircle2,
-  ListChecks,
-  ExternalLink,
-} from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { PRIORITY_HINT_LABELS } from '@/config/protocols'
-import type { StructuredNotes, ActionLinkRecord } from '@/lib/schemas/protocols'
-import type { ProtocolDecisionSummary } from '@/lib/services/decisions-crud'
-import DecisionBridge from '@/components/admin/protocols/DecisionBridge'
+import { Link } from '@/i18n/navigation';
+import { Loader2, CheckCircle2, ListChecks, ExternalLink } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { PRIORITY_HINT_LABELS } from '@/config/protocols';
+import type { StructuredNotes, ActionLinkRecord } from '@/lib/schemas/protocols';
+import type { ProtocolDecisionSummary } from '@/lib/services/decisions-crud';
+import DecisionBridge from '@/components/admin/protocols/DecisionBridge';
 
 interface ActionRowProps {
-  item: StructuredNotes['action_items'][0]
-  topicTitle: string | undefined
-  isLinked: boolean
-  link: ActionLinkRecord | undefined
-  canAct: boolean
-  creatingTask: string | null
-  protocolId: string
-  attendeeCount: number
-  linkedDecision: ProtocolDecisionSummary | undefined
-  currentUserId: string
-  isProtocolCreator: boolean
-  onCreateTask: (item: StructuredNotes['action_items'][0]) => void
-  onRefresh: () => void
+  item: StructuredNotes['action_items'][0];
+  topicTitle: string | undefined;
+  isLinked: boolean;
+  link: ActionLinkRecord | undefined;
+  canAct: boolean;
+  creatingTask: string | null;
+  protocolId: string;
+  attendeeCount: number;
+  linkedDecision: ProtocolDecisionSummary | undefined;
+  currentUserId: string;
+  isProtocolCreator: boolean;
+  onCreateTask: (item: StructuredNotes['action_items'][0]) => void;
+  onRefresh: () => void;
 }
 
 export function ActionRow({
@@ -54,21 +49,17 @@ export function ActionRow({
             </span>
           )}
           {item.assigned_to_name && (
-            <span className="text-xs text-text-tertiary">
-              {item.assigned_to_name}
-            </span>
+            <span className="text-xs text-text-tertiary">{item.assigned_to_name}</span>
           )}
-          {item.due_hint && (
-            <span className="text-xs text-text-muted">
-              {item.due_hint}
-            </span>
-          )}
+          {item.due_hint && <span className="text-xs text-text-muted">{item.due_hint}</span>}
           {item.priority_hint && item.priority_hint !== 'normal' && (
-            <span className={`text-xs font-medium ${
-              item.priority_hint === 'high'
-                ? 'text-error-600 dark:text-error-400'
-                : 'text-text-muted'
-            }`}>
+            <span
+              className={`text-xs font-medium ${
+                item.priority_hint === 'high'
+                  ? 'text-error-600 dark:text-error-400'
+                  : 'text-text-muted'
+              }`}
+            >
               {PRIORITY_HINT_LABELS[item.priority_hint] ?? item.priority_hint}
             </span>
           )}
@@ -93,10 +84,11 @@ export function ActionRow({
             disabled={creatingTask === item.id}
             className="inline-flex items-center gap-1 text-xs text-action hover:text-action h-auto px-0 bg-transparent hover:bg-transparent"
           >
-            {creatingTask === item.id
-              ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
-              : <ListChecks className="w-3.5 h-3.5" />
-            }
+            {creatingTask === item.id ? (
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            ) : (
+              <ListChecks className="w-3.5 h-3.5" />
+            )}
             Aufgabe erstellen
           </Button>
         ) : item.item_type === 'decision' && canAct ? (
@@ -111,5 +103,5 @@ export function ActionRow({
         ) : null}
       </div>
     </div>
-  )
+  );
 }

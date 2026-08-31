@@ -5,23 +5,34 @@
  * Handles marketplace orders, workshop registrations, and service appointments.
  */
 
-import { db } from '@/db'
-import { marketplaceOrders, marketplaceOrderItems, listings, users, paymentTransactions, workshopRegistrations, serviceAppointments } from '@/db/schema'
-import { inventoryItems } from '@/db/schema/inventory'
-import { eq, and, sql, inArray } from 'drizzle-orm'
-import { logger } from '@/lib/logger'
-import { sendCustomEmail } from '@/lib/email'
+import { db } from '@/db';
+import {
+  marketplaceOrders,
+  marketplaceOrderItems,
+  listings,
+  users,
+  paymentTransactions,
+  workshopRegistrations,
+  serviceAppointments,
+} from '@/db/schema';
+import { inventoryItems } from '@/db/schema/inventory';
+import { eq, and, sql, inArray } from 'drizzle-orm';
+import { logger } from '@/lib/logger';
+import { sendCustomEmail } from '@/lib/email';
 import {
   orderConfirmationBuyer,
   newOrderNotificationSeller,
-} from '@/lib/email/templates/marketplace'
-import { formatCHF, DELIVERY_LABELS, ORDER_STATUS, LISTING_STATUS } from '@/config/marketplace'
-import { PAYMENT_STATUS } from '@/config/payment-status'
-import { PAYREXX_TRANSACTION_STATUS, captureTransaction } from '@/lib/payments/payrexx-client'
-import { BOOKING_STATUS } from '@/config/booking-status'
-import { WORKSHOP_REGISTRATION_STATUS, WORKSHOP_PAYMENT_STATUS } from '@/config/workshop-registration-status'
-import { APP_URL } from '@/config/urls'
-import type { DeliveryOption } from '@/config/marketplace'
+} from '@/lib/email/templates/marketplace';
+import { formatCHF, DELIVERY_LABELS, ORDER_STATUS, LISTING_STATUS } from '@/config/marketplace';
+import { PAYMENT_STATUS } from '@/config/payment-status';
+import { PAYREXX_TRANSACTION_STATUS, captureTransaction } from '@/lib/payments/payrexx-client';
+import { BOOKING_STATUS } from '@/config/booking-status';
+import {
+  WORKSHOP_REGISTRATION_STATUS,
+  WORKSHOP_PAYMENT_STATUS,
+} from '@/config/workshop-registration-status';
+import { APP_URL } from '@/config/urls';
+import type { DeliveryOption } from '@/config/marketplace';
 import {
   createKivviInvoice,
   updateKivviDocumentStatus,
@@ -29,46 +40,46 @@ import {
   updateKivviInventoryItem,
   recordKivviAgencySale,
   recordKivviPayout,
-} from '@/lib/kivvi/client'
-import { triggerInviterReward } from '@/lib/referral'
-import { SWISS_VAT_STANDARD_PERCENT } from '@/config/tax'
-import { applyOrderCompletion, listingIdsForOrder } from '@/lib/marketplace/complete-order'
+} from '@/lib/kivvi/client';
+import { triggerInviterReward } from '@/lib/referral';
+import { SWISS_VAT_STANDARD_PERCENT } from '@/config/tax';
+import { applyOrderCompletion, listingIdsForOrder } from '@/lib/marketplace/complete-order';
 
 // ============================================================================
 // Types
 // ============================================================================
 
 interface MarketplaceOrder {
-  id: string
-  buyerId: string
-  sellerId: string
-  listingId: string | null
-  amountChf: string
-  commissionChf: string
-  sellerPayoutChf: string
-  status: string
-  deliveryMethod: string
+  id: string;
+  buyerId: string;
+  sellerId: string;
+  listingId: string | null;
+  amountChf: string;
+  commissionChf: string;
+  sellerPayoutChf: string;
+  status: string;
+  deliveryMethod: string;
 }
 
 interface PaymentTransaction {
-  id: string
-  status: string
-  workshopRegistrationId: string | null
-  serviceAppointmentId: string | null
-  amountCents: number
+  id: string;
+  status: string;
+  workshopRegistrationId: string | null;
+  serviceAppointmentId: string | null;
+  amountCents: number;
   /** Set only for escrow payments (auto-release date). Null/absent → non-escrow,
    *  which must be captured immediately on the reserved webhook (a reservation
    *  otherwise expires uncaptured in ~7 days and the funds are never collected).
    *  The runtime lookup always selects it; optional only so unrelated test
    *  fixtures (which exercise non-escrow paths) need not specify it. */
-  escrowReleaseDate?: string | null
+  escrowReleaseDate?: string | null;
 }
 
 /** Result from looking up a payment record by referenceId */
 export interface PaymentLookupResult {
-  type: 'marketplace' | 'payment_transaction' | 'not_found'
-  order?: MarketplaceOrder
-  paymentTx?: PaymentTransaction
+  type: 'marketplace' | 'payment_transaction' | 'not_found';
+  order?: MarketplaceOrder;
+  paymentTx?: PaymentTransaction;
 }
 
 /**
@@ -82,12 +93,12 @@ export interface PaymentLookupResult {
  */
 export interface WebhookAmountClaim {
   /** Amount in smallest unit (e.g. Rappen for CHF). null if Payrexx omitted it. */
-  amount: number | null
+  amount: number | null;
   /** ISO 4217 code (e.g. "CHF"). null if Payrexx omitted it. */
-  currency: string | null
+  currency: string | null;
 }
 
-const EXPECTED_CURRENCY = 'CHF'
+const EXPECTED_CURRENCY = 'CHF';
 
 /**
  * Marketplace orders price in CHF (decimal string like "150.00"). Convert to
@@ -98,26 +109,29 @@ function verifyMarketplaceAmount(order: MarketplaceOrder, claim: WebhookAmountCl
   // Statuses that don't move money (CANCELLED, DECLINED, REFUNDED) sometimes
   // arrive with amount=0 or null. Amount verification only matters when we're
   // about to flip the order to PAID/COMPLETED. The caller chooses when to call.
-  if (claim.amount === null || claim.currency === null) return false
-  if (claim.currency !== EXPECTED_CURRENCY) return false
+  if (claim.amount === null || claim.currency === null) return false;
+  if (claim.currency !== EXPECTED_CURRENCY) return false;
 
-  const expectedCents = Math.round(parseFloat(order.amountChf) * 100)
+  const expectedCents = Math.round(parseFloat(order.amountChf) * 100);
   // parseFloat would silently return NaN on a bad string — guard explicitly
   // so a corrupted row never lets a mismatched webhook through.
-  if (!Number.isFinite(expectedCents) || expectedCents <= 0) return false
+  if (!Number.isFinite(expectedCents) || expectedCents <= 0) return false;
 
-  return claim.amount === expectedCents
+  return claim.amount === expectedCents;
 }
 
 /**
  * Payment transactions store amount as cents directly. Direct equality after
  * currency check.
  */
-function verifyTransactionAmount(paymentTx: PaymentTransaction, claim: WebhookAmountClaim): boolean {
-  if (claim.amount === null || claim.currency === null) return false
-  if (claim.currency !== EXPECTED_CURRENCY) return false
-  if (paymentTx.amountCents <= 0) return false
-  return claim.amount === paymentTx.amountCents
+function verifyTransactionAmount(
+  paymentTx: PaymentTransaction,
+  claim: WebhookAmountClaim,
+): boolean {
+  if (claim.amount === null || claim.currency === null) return false;
+  if (claim.currency !== EXPECTED_CURRENCY) return false;
+  if (paymentTx.amountCents <= 0) return false;
+  return claim.amount === paymentTx.amountCents;
 }
 
 // ============================================================================
@@ -125,15 +139,17 @@ function verifyTransactionAmount(paymentTx: PaymentTransaction, claim: WebhookAm
 // ============================================================================
 
 /** Find the payment record matching a Payrexx referenceId */
-export async function lookupPaymentByReferenceId(referenceId: string): Promise<PaymentLookupResult> {
+export async function lookupPaymentByReferenceId(
+  referenceId: string,
+): Promise<PaymentLookupResult> {
   // Try marketplace order first
   const orderRows = await db
     .select()
     .from(marketplaceOrders)
-    .where(eq(marketplaceOrders.id, referenceId))
+    .where(eq(marketplaceOrders.id, referenceId));
 
   if (orderRows[0]) {
-    return { type: 'marketplace', order: orderRows[0] }
+    return { type: 'marketplace', order: orderRows[0] };
   }
 
   // Try payment transaction (workshops, appointments)
@@ -147,13 +163,13 @@ export async function lookupPaymentByReferenceId(referenceId: string): Promise<P
       escrowReleaseDate: paymentTransactions.escrowReleaseDate,
     })
     .from(paymentTransactions)
-    .where(eq(paymentTransactions.id, referenceId))
+    .where(eq(paymentTransactions.id, referenceId));
 
   if (txRows[0]) {
-    return { type: 'payment_transaction', paymentTx: txRows[0] }
+    return { type: 'payment_transaction', paymentTx: txRows[0] };
   }
 
-  return { type: 'not_found' }
+  return { type: 'not_found' };
 }
 
 // ============================================================================
@@ -176,7 +192,7 @@ export async function handleMarketplacePayment(
   transactionId: string | null,
   amountClaim: WebhookAmountClaim,
   /** Which payment rail confirmed this — defaults to the incumbent Payrexx route. */
-  providerSlug: string = 'payrexx'
+  providerSlug: string = 'payrexx',
 ): Promise<void> {
   switch (status) {
     case PAYREXX_TRANSACTION_STATUS.RESERVED: {
@@ -184,19 +200,22 @@ export async function handleMarketplacePayment(
         logger.info('Payrexx webhook: order not in pending_payment, skipping', {
           orderId: order.id,
           currentStatus: order.status,
-        })
-        return
+        });
+        return;
       }
 
       if (!verifyMarketplaceAmount(order, amountClaim)) {
-        logger.error('Payrexx webhook: amount/currency mismatch on RESERVED, refusing to mark paid', {
-          orderId: order.id,
-          expectedChf: order.amountChf,
-          claimedAmount: amountClaim.amount,
-          claimedCurrency: amountClaim.currency,
-          transactionId,
-        })
-        return
+        logger.error(
+          'Payrexx webhook: amount/currency mismatch on RESERVED, refusing to mark paid',
+          {
+            orderId: order.id,
+            expectedChf: order.amountChf,
+            claimedAmount: amountClaim.amount,
+            claimedCurrency: amountClaim.currency,
+            transactionId,
+          },
+        );
+        return;
       }
 
       await db
@@ -206,32 +225,36 @@ export async function handleMarketplacePayment(
           payrexxTransactionId: transactionId,
           updatedAt: sql`NOW()`,
         })
-        .where(eq(marketplaceOrders.id, order.id))
+        .where(eq(marketplaceOrders.id, order.id));
 
       logger.info('Marketplace order marked paid', {
         orderId: order.id,
         transactionId,
         provider: providerSlug,
-      })
+      });
 
       // Fire-and-forget email notifications
-      sendOrderEmails(order).catch(err =>
-        logger.error('Failed to send order emails', { error: err, orderId: order.id })
-      )
+      sendOrderEmails(order).catch((err) =>
+        logger.error('Failed to send order emails', { error: err, orderId: order.id }),
+      );
 
       // Fire-and-forget Kivvi accounting sync (owned stock → invoice; P2P → agency journal)
-      syncMarketplaceOrderToKivvi(order, transactionId).catch(err =>
+      syncMarketplaceOrderToKivvi(order, transactionId).catch((err) =>
         logger.error('Kivvi accounting sync failed — order paid but not in GL', {
           error: err,
           orderId: order.id,
-        })
-      )
+        }),
+      );
 
       // Fire-and-forget inviter reward (CHF 10 coupon on buyer's first purchase)
-      triggerInviterReward(order.buyerId).catch(err =>
-        logger.error('Referral inviter reward failed', { error: err, orderId: order.id, buyerId: order.buyerId })
-      )
-      break
+      triggerInviterReward(order.buyerId).catch((err) =>
+        logger.error('Referral inviter reward failed', {
+          error: err,
+          orderId: order.id,
+          buyerId: order.buyerId,
+        }),
+      );
+      break;
     }
 
     case PAYREXX_TRANSACTION_STATUS.CONFIRMED: {
@@ -239,19 +262,22 @@ export async function handleMarketplacePayment(
         logger.info('Payrexx webhook: unexpected confirmed status', {
           orderId: order.id,
           currentStatus: order.status,
-        })
-        return
+        });
+        return;
       }
 
       if (!verifyMarketplaceAmount(order, amountClaim)) {
-        logger.error('Payrexx webhook: amount/currency mismatch on CONFIRMED, refusing to mark completed', {
-          orderId: order.id,
-          expectedChf: order.amountChf,
-          claimedAmount: amountClaim.amount,
-          claimedCurrency: amountClaim.currency,
-          transactionId,
-        })
-        return
+        logger.error(
+          'Payrexx webhook: amount/currency mismatch on CONFIRMED, refusing to mark completed',
+          {
+            orderId: order.id,
+            expectedChf: order.amountChf,
+            claimedAmount: amountClaim.amount,
+            claimedCurrency: amountClaim.currency,
+            transactionId,
+          },
+        );
+        return;
       }
 
       // Atomic, and with the SAME side effects as the other completion paths.
@@ -259,27 +285,27 @@ export async function handleMarketplacePayment(
       // listing RESERVED forever — the very lock the CANCELLED branch below
       // documents fixing, on the path that actually succeeds.
       await db.transaction(async (tx) => {
-        const listingIds = await listingIdsForOrder(tx, order)
+        const listingIds = await listingIdsForOrder(tx, order);
         await applyOrderCompletion(tx, {
           orderId: order.id,
           sellerId: order.sellerId,
           listingIds,
-        })
-      })
+        });
+      });
 
-      syncP2PPayoutToKivvi(order).catch(err =>
+      syncP2PPayoutToKivvi(order).catch((err) =>
         logger.error('Kivvi payout sync failed — order completed but seller payable not cleared', {
           error: err,
           orderId: order.id,
-        })
-      )
-      break
+        }),
+      );
+      break;
     }
 
     case PAYREXX_TRANSACTION_STATUS.CANCELLED:
     case PAYREXX_TRANSACTION_STATUS.DECLINED: {
       if (order.status === ORDER_STATUS.COMPLETED || order.status === ORDER_STATUS.CANCELLED) {
-        return
+        return;
       }
 
       // Atomic: cancel the order AND restore the listing in one shot.
@@ -298,7 +324,7 @@ export async function handleMarketplacePayment(
             status: ORDER_STATUS.CANCELLED,
             updatedAt: sql`NOW()`,
           })
-          .where(eq(marketplaceOrders.id, order.id))
+          .where(eq(marketplaceOrders.id, order.id));
 
         // Restore the reserved listing(s) to active. Single-item orders carry
         // listingId; cart orders restore every item via marketplace_order_items.
@@ -306,26 +332,36 @@ export async function handleMarketplacePayment(
           await tx
             .update(listings)
             .set({ status: LISTING_STATUS.ACTIVE })
-            .where(and(eq(listings.id, order.listingId), eq(listings.status, LISTING_STATUS.RESERVED)))
+            .where(
+              and(eq(listings.id, order.listingId), eq(listings.status, LISTING_STATUS.RESERVED)),
+            );
         } else {
           const items = await tx
             .select({ listingId: marketplaceOrderItems.listingId })
             .from(marketplaceOrderItems)
-            .where(eq(marketplaceOrderItems.orderId, order.id))
+            .where(eq(marketplaceOrderItems.orderId, order.id));
           if (items.length > 0) {
             await tx
               .update(listings)
               .set({ status: LISTING_STATUS.ACTIVE })
-              .where(and(inArray(listings.id, items.map((i) => i.listingId)), eq(listings.status, LISTING_STATUS.RESERVED)))
+              .where(
+                and(
+                  inArray(
+                    listings.id,
+                    items.map((i) => i.listingId),
+                  ),
+                  eq(listings.status, LISTING_STATUS.RESERVED),
+                ),
+              );
           }
         }
-      })
+      });
 
       logger.info('Marketplace order cancelled via Payrexx webhook', {
         orderId: order.id,
         reason: status,
-      })
-      break
+      });
+      break;
     }
 
     case PAYREXX_TRANSACTION_STATUS.REFUNDED:
@@ -336,17 +372,17 @@ export async function handleMarketplacePayment(
           status: ORDER_STATUS.REFUNDED,
           updatedAt: sql`NOW()`,
         })
-        .where(eq(marketplaceOrders.id, order.id))
+        .where(eq(marketplaceOrders.id, order.id));
 
       logger.info('Marketplace order refunded via Payrexx webhook', {
         orderId: order.id,
         status,
-      })
-      break
+      });
+      break;
     }
 
     default:
-      logger.info('Payrexx webhook: unhandled status', { status, orderId: order.id })
+      logger.info('Payrexx webhook: unhandled status', { status, orderId: order.id });
   }
 }
 
@@ -368,7 +404,7 @@ export async function handleGenericPayment(
   payrexxTransactionId: string | null,
   amountClaim: WebhookAmountClaim,
   /** Which payment rail confirmed this — defaults to the incumbent Payrexx route. */
-  providerSlug: string = 'payrexx'
+  providerSlug: string = 'payrexx',
 ): Promise<void> {
   switch (status) {
     case PAYREXX_TRANSACTION_STATUS.RESERVED: {
@@ -376,19 +412,22 @@ export async function handleGenericPayment(
         logger.info('Payrexx webhook: payment transaction not pending, skipping', {
           transactionId: paymentTx.id,
           currentStatus: paymentTx.status,
-        })
-        return
+        });
+        return;
       }
 
       if (!verifyTransactionAmount(paymentTx, amountClaim)) {
-        logger.error('Payrexx webhook: amount/currency mismatch on RESERVED, refusing to mark succeeded', {
-          transactionId: paymentTx.id,
-          expectedCents: paymentTx.amountCents,
-          claimedAmount: amountClaim.amount,
-          claimedCurrency: amountClaim.currency,
-          payrexxTransactionId,
-        })
-        return
+        logger.error(
+          'Payrexx webhook: amount/currency mismatch on RESERVED, refusing to mark succeeded',
+          {
+            transactionId: paymentTx.id,
+            expectedCents: paymentTx.amountCents,
+            claimedAmount: amountClaim.amount,
+            claimedCurrency: amountClaim.currency,
+            payrexxTransactionId,
+          },
+        );
+        return;
       }
 
       // Atomic: payment is recorded as SUCCEEDED AND the linked
@@ -410,7 +449,7 @@ export async function handleGenericPayment(
             processedAt: sql`CURRENT_TIMESTAMP`,
             updatedAt: sql`CURRENT_TIMESTAMP`,
           })
-          .where(eq(paymentTransactions.id, paymentTx.id))
+          .where(eq(paymentTransactions.id, paymentTx.id));
 
         // Update linked workshop registration
         if (paymentTx.workshopRegistrationId) {
@@ -422,7 +461,7 @@ export async function handleGenericPayment(
               confirmedAt: sql`CURRENT_TIMESTAMP`,
               updatedAt: sql`CURRENT_TIMESTAMP`,
             })
-            .where(eq(workshopRegistrations.id, paymentTx.workshopRegistrationId))
+            .where(eq(workshopRegistrations.id, paymentTx.workshopRegistrationId));
         }
 
         // Update linked service appointment
@@ -433,9 +472,9 @@ export async function handleGenericPayment(
               status: BOOKING_STATUS.IN_PROGRESS,
               updatedAt: sql`CURRENT_TIMESTAMP`,
             })
-            .where(eq(serviceAppointments.id, paymentTx.serviceAppointmentId))
+            .where(eq(serviceAppointments.id, paymentTx.serviceAppointmentId));
         }
-      })
+      });
 
       // Non-escrow payments (workshops, appointments) authorize-then-capture in
       // one step: the gateway only RESERVES funds, so we must capture now or the
@@ -445,18 +484,21 @@ export async function handleGenericPayment(
       // out of what they paid for — a failure is loud-logged for manual capture.
       if (!paymentTx.escrowReleaseDate && payrexxTransactionId) {
         try {
-          await captureTransaction(payrexxTransactionId, paymentTx.amountCents)
+          await captureTransaction(payrexxTransactionId, paymentTx.amountCents);
           logger.info('Non-escrow payment captured', {
             transactionId: paymentTx.id,
             payrexxTransactionId,
-          })
+          });
         } catch (captureError) {
-          logger.error('Non-escrow capture FAILED — funds reserved but not captured; capture manually within 7 days', {
-            transactionId: paymentTx.id,
-            payrexxTransactionId,
-            amountCents: paymentTx.amountCents,
-            error: captureError instanceof Error ? captureError.message : String(captureError),
-          })
+          logger.error(
+            'Non-escrow capture FAILED — funds reserved but not captured; capture manually within 7 days',
+            {
+              transactionId: paymentTx.id,
+              payrexxTransactionId,
+              amountCents: paymentTx.amountCents,
+              error: captureError instanceof Error ? captureError.message : String(captureError),
+            },
+          );
         }
       }
 
@@ -465,17 +507,17 @@ export async function handleGenericPayment(
           registrationId: paymentTx.workshopRegistrationId,
           transactionId: paymentTx.id,
           provider: providerSlug,
-        })
+        });
       }
       if (paymentTx.serviceAppointmentId) {
         logger.info('Service appointment confirmed via payment', {
           appointmentId: paymentTx.serviceAppointmentId,
           transactionId: paymentTx.id,
           provider: providerSlug,
-        })
+        });
       }
 
-      break
+      break;
     }
 
     case PAYREXX_TRANSACTION_STATUS.CANCELLED:
@@ -495,11 +537,14 @@ export async function handleGenericPayment(
           .update(paymentTransactions)
           .set({
             status: PAYMENT_STATUS.FAILED,
-            failureReason: status === PAYREXX_TRANSACTION_STATUS.DECLINED ? 'Payment declined' : 'Payment cancelled',
+            failureReason:
+              status === PAYREXX_TRANSACTION_STATUS.DECLINED
+                ? 'Payment declined'
+                : 'Payment cancelled',
             processedAt: sql`CURRENT_TIMESTAMP`,
             updatedAt: sql`CURRENT_TIMESTAMP`,
           })
-          .where(eq(paymentTransactions.id, paymentTx.id))
+          .where(eq(paymentTransactions.id, paymentTx.id));
 
         // Revert workshop registration + decrement participant count
         if (paymentTx.workshopRegistrationId) {
@@ -509,7 +554,7 @@ export async function handleGenericPayment(
           const [reg] = await tx
             .select({ workshopInstanceId: workshopRegistrations.workshopInstanceId })
             .from(workshopRegistrations)
-            .where(eq(workshopRegistrations.id, paymentTx.workshopRegistrationId))
+            .where(eq(workshopRegistrations.id, paymentTx.workshopRegistrationId));
 
           await tx
             .update(workshopRegistrations)
@@ -519,7 +564,7 @@ export async function handleGenericPayment(
               cancelledAt: sql`CURRENT_TIMESTAMP`,
               updatedAt: sql`CURRENT_TIMESTAMP`,
             })
-            .where(eq(workshopRegistrations.id, paymentTx.workshopRegistrationId))
+            .where(eq(workshopRegistrations.id, paymentTx.workshopRegistrationId));
 
           if (reg?.workshopInstanceId) {
             // current_participants is a real DB column (cms-api migration 003)
@@ -529,7 +574,7 @@ export async function handleGenericPayment(
               UPDATE workshop_instances
               SET current_participants = GREATEST(current_participants - 1, 0)
               WHERE id = ${reg.workshopInstanceId}
-            `)
+            `);
           }
         }
 
@@ -541,15 +586,15 @@ export async function handleGenericPayment(
               status: BOOKING_STATUS.QUOTE_APPROVED,
               updatedAt: sql`CURRENT_TIMESTAMP`,
             })
-            .where(eq(serviceAppointments.id, paymentTx.serviceAppointmentId))
+            .where(eq(serviceAppointments.id, paymentTx.serviceAppointmentId));
         }
-      })
+      });
 
       logger.info('Payment transaction failed via Payrexx webhook', {
         transactionId: paymentTx.id,
         reason: status,
-      })
-      break
+      });
+      break;
     }
 
     case PAYREXX_TRANSACTION_STATUS.REFUNDED:
@@ -560,20 +605,20 @@ export async function handleGenericPayment(
           status: PAYMENT_STATUS.REFUNDED,
           updatedAt: sql`CURRENT_TIMESTAMP`,
         })
-        .where(eq(paymentTransactions.id, paymentTx.id))
+        .where(eq(paymentTransactions.id, paymentTx.id));
 
       logger.info('Payment transaction refunded via Payrexx webhook', {
         transactionId: paymentTx.id,
         status,
-      })
-      break
+      });
+      break;
     }
 
     default:
       logger.info('Payrexx webhook: unhandled status for payment transaction', {
         status,
         transactionId: paymentTx.id,
-      })
+      });
   }
 }
 
@@ -605,7 +650,7 @@ export async function handleGenericPayment(
  * declared. (This constant used to be the sole correct 8.1% in the codebase
  * while invoices went out at a stale 7.7% — the divergence this note asked for.)
  */
-export const KIVVI_MWST_RATE = SWISS_VAT_STANDARD_PERCENT
+export const KIVVI_MWST_RATE = SWISS_VAT_STANDARD_PERCENT;
 
 /**
  * Convert a VAT-inclusive (gross) CHF amount to the net amount, so that Kivvi's
@@ -613,10 +658,10 @@ export const KIVVI_MWST_RATE = SWISS_VAT_STANDARD_PERCENT
  * Returns a 2-decimal string. Falls back to the input on unparseable values.
  */
 export function grossToNetChf(grossChf: string, ratePercent: string = KIVVI_MWST_RATE): string {
-  const gross = parseFloat(grossChf)
-  const rate = parseFloat(ratePercent)
-  if (!Number.isFinite(gross) || !Number.isFinite(rate)) return grossChf
-  return (gross / (1 + rate / 100)).toFixed(2)
+  const gross = parseFloat(grossChf);
+  const rate = parseFloat(ratePercent);
+  if (!Number.isFinite(gross) || !Number.isFinite(rate)) return grossChf;
+  return (gross / (1 + rate / 100)).toFixed(2);
 }
 
 /**
@@ -634,15 +679,15 @@ async function isRevampitOwnedOrder(order: MarketplaceOrder): Promise<boolean> {
       .select({ isRevampit: listings.isRevampit })
       .from(listings)
       .where(eq(listings.id, order.listingId))
-      .limit(1)
-    return Boolean(row?.isRevampit)
+      .limit(1);
+    return Boolean(row?.isRevampit);
   }
   const rows = await db
     .select({ isRevampit: listings.isRevampit })
     .from(marketplaceOrderItems)
     .innerJoin(listings, eq(marketplaceOrderItems.listingId, listings.id))
-    .where(eq(marketplaceOrderItems.orderId, order.id))
-  return rows.length > 0 && rows.every((r) => Boolean(r.isRevampit))
+    .where(eq(marketplaceOrderItems.orderId, order.id));
+  return rows.length > 0 && rows.every((r) => Boolean(r.isRevampit));
 }
 
 async function syncMarketplaceOrderToKivvi(
@@ -650,22 +695,22 @@ async function syncMarketplaceOrderToKivvi(
   payrexxTransactionId: string | null,
 ): Promise<void> {
   if (await isRevampitOwnedOrder(order)) {
-    return syncOrderToKivvi(order, payrexxTransactionId)
+    return syncOrderToKivvi(order, payrexxTransactionId);
   }
-  return syncP2POrderToKivvi(order, payrexxTransactionId)
+  return syncP2POrderToKivvi(order, payrexxTransactionId);
 }
 
 /** VAT on platform commission fee only (Swiss 8.1%). Zero when commission is 0. */
 function computeCommissionVatAmount(commissionNetChf: string): string {
-  const net = Number(commissionNetChf || 0)
-  if (!Number.isFinite(net) || net <= 0) return '0.00'
-  return (Math.round(net * 0.081 * 100) / 100).toFixed(2)
+  const net = Number(commissionNetChf || 0);
+  if (!Number.isFinite(net) || net <= 0) return '0.00';
+  return (Math.round(net * 0.081 * 100) / 100).toFixed(2);
 }
 
 function formatChfAmount(value: string | number): string {
-  const n = typeof value === 'number' ? value : Number(value)
-  if (!Number.isFinite(n)) return '0.00'
-  return n.toFixed(2)
+  const n = typeof value === 'number' ? value : Number(value);
+  if (!Number.isFinite(n)) return '0.00';
+  return n.toFixed(2);
 }
 
 /**
@@ -676,10 +721,10 @@ async function syncP2POrderToKivvi(
   order: MarketplaceOrder,
   payrexxTransactionId: string | null,
 ): Promise<void> {
-  const commissionAmount = formatChfAmount(order.commissionChf)
-  const commissionVatAmount = computeCommissionVatAmount(commissionAmount)
-  const sellerPayout = formatChfAmount(order.sellerPayoutChf)
-  const grossAmount = formatChfAmount(order.amountChf)
+  const commissionAmount = formatChfAmount(order.commissionChf);
+  const commissionVatAmount = computeCommissionVatAmount(commissionAmount);
+  const sellerPayout = formatChfAmount(order.sellerPayoutChf);
+  const grossAmount = formatChfAmount(order.amountChf);
 
   await recordKivviAgencySale(
     {
@@ -695,14 +740,14 @@ async function syncP2POrderToKivvi(
         : `P2P sale MO-${order.id}`,
     },
     `marketplace-order:${order.id}:paid`,
-  )
+  );
 
   logger.info('Kivvi P2P agency sale booked', {
     orderId: order.id,
     grossAmount,
     commissionAmount,
     sellerPayout,
-  })
+  });
 }
 
 /**
@@ -711,12 +756,12 @@ async function syncP2POrderToKivvi(
  */
 async function syncP2PPayoutToKivvi(order: MarketplaceOrder): Promise<void> {
   if (await isRevampitOwnedOrder(order)) {
-    return
+    return;
   }
 
-  const sellerPayout = formatChfAmount(order.sellerPayoutChf)
+  const sellerPayout = formatChfAmount(order.sellerPayoutChf);
   if (Number(sellerPayout) <= 0) {
-    return
+    return;
   }
 
   await recordKivviPayout(
@@ -727,12 +772,12 @@ async function syncP2PPayoutToKivvi(order: MarketplaceOrder): Promise<void> {
       description: `P2P seller payout MO-${order.id}`,
     },
     `marketplace-order:${order.id}:payout`,
-  )
+  );
 
   logger.info('Kivvi P2P seller payout booked', {
     orderId: order.id,
     amount: sellerPayout,
-  })
+  });
 }
 
 async function syncOrderToKivvi(
@@ -744,37 +789,45 @@ async function syncOrderToKivvi(
     .select({ name: users.name, email: users.email })
     .from(users)
     .where(eq(users.id, order.buyerId))
-    .limit(1)
+    .limit(1);
 
   // Resolve the Kivvi inventory item id behind a listing (if it's backed by one).
-  const resolveKivviItemId = async (listingInventoryItemId: string | null): Promise<string | undefined> => {
-    if (!listingInventoryItemId) return undefined
+  const resolveKivviItemId = async (
+    listingInventoryItemId: string | null,
+  ): Promise<string | undefined> => {
+    if (!listingInventoryItemId) return undefined;
     const [row] = await db
       .select({ kivviInventoryItemId: inventoryItems.kivviInventoryItemId })
       .from(inventoryItems)
       .where(eq(inventoryItems.id, listingInventoryItemId))
-      .limit(1)
-    return row?.kivviInventoryItemId ?? undefined
-  }
+      .limit(1);
+    return row?.kivviInventoryItemId ?? undefined;
+  };
 
   // 1. Build invoice line items. Single-item orders → one line priced at the
   // full order amount (includes any shipping). Cart orders → one line per
   // order item, each at its unit price.
-  const invoiceItems: { description: string; quantity: string; unitPrice: string; vatRate: string; kivviInventoryItemId?: string }[] = []
-  const kivviItemIdsToMarkSold: string[] = []
+  const invoiceItems: {
+    description: string;
+    quantity: string;
+    unitPrice: string;
+    vatRate: string;
+    kivviInventoryItemId?: string;
+  }[] = [];
+  const kivviItemIdsToMarkSold: string[] = [];
 
   if (order.listingId) {
     const [info] = await db
       .select({ title: listings.title, inventoryItemId: listings.inventoryItemId })
       .from(listings)
       .where(eq(listings.id, order.listingId))
-      .limit(1)
+      .limit(1);
     if (!info) {
-      logger.warn('Kivvi sync: could not fetch listing for order', { orderId: order.id })
-      return
+      logger.warn('Kivvi sync: could not fetch listing for order', { orderId: order.id });
+      return;
     }
-    const kivviItemId = await resolveKivviItemId(info.inventoryItemId)
-    if (kivviItemId) kivviItemIdsToMarkSold.push(kivviItemId)
+    const kivviItemId = await resolveKivviItemId(info.inventoryItemId);
+    if (kivviItemId) kivviItemIdsToMarkSold.push(kivviItemId);
     invoiceItems.push({
       description: info.title,
       quantity: '1',
@@ -782,7 +835,7 @@ async function syncOrderToKivvi(
       unitPrice: grossToNetChf(order.amountChf),
       vatRate: KIVVI_MWST_RATE,
       kivviInventoryItemId: kivviItemId,
-    })
+    });
   } else {
     const items = await db
       .select({
@@ -794,14 +847,14 @@ async function syncOrderToKivvi(
       .from(marketplaceOrderItems)
       .leftJoin(listings, eq(marketplaceOrderItems.listingId, listings.id))
       .where(eq(marketplaceOrderItems.orderId, order.id))
-      .orderBy(marketplaceOrderItems.createdAt)
+      .orderBy(marketplaceOrderItems.createdAt);
     if (items.length === 0) {
-      logger.warn('Kivvi sync: cart order has no items', { orderId: order.id })
-      return
+      logger.warn('Kivvi sync: cart order has no items', { orderId: order.id });
+      return;
     }
     for (const it of items) {
-      const kivviItemId = await resolveKivviItemId(it.inventoryItemId)
-      if (kivviItemId) kivviItemIdsToMarkSold.push(kivviItemId)
+      const kivviItemId = await resolveKivviItemId(it.inventoryItemId);
+      if (kivviItemId) kivviItemIdsToMarkSold.push(kivviItemId);
       invoiceItems.push({
         description: it.title,
         quantity: String(it.quantity),
@@ -809,7 +862,7 @@ async function syncOrderToKivvi(
         unitPrice: grossToNetChf(it.unitPriceChf),
         vatRate: KIVVI_MWST_RATE,
         kivviInventoryItemId: kivviItemId,
-      })
+      });
     }
   }
 
@@ -818,44 +871,42 @@ async function syncOrderToKivvi(
     contactName: buyer?.name || 'Unbekannter Käufer',
     contactEmail: buyer?.email || undefined,
     items: invoiceItems,
-    notes: payrexxTransactionId
-      ? `Payrexx Transaktion: ${payrexxTransactionId}`
-      : undefined,
-  })
+    notes: payrexxTransactionId ? `Payrexx Transaktion: ${payrexxTransactionId}` : undefined,
+  });
 
   logger.info('Kivvi invoice created for marketplace order', {
     orderId: order.id,
     kivviDocumentId: invoice.id,
     invoiceNumber: invoice.number,
     lineItems: invoiceItems.length,
-  })
+  });
 
   // 3. Mark invoice as sent → triggers GL: Debit 1100 AR / Credit 3000 Revenue + 2200 VAT
-  await updateKivviDocumentStatus(invoice.id, 'sent')
+  await updateKivviDocumentStatus(invoice.id, 'sent');
 
   // 4. Record payment → GL: Debit 1020 Bank / Credit 1100 AR
-  const today = new Date().toISOString().split('T')[0]
+  const today = new Date().toISOString().split('T')[0];
   await recordKivviPayment(invoice.id, {
     amount: order.amountChf,
     date: today,
     method: 'other', // Payrexx online payment
     reference: payrexxTransactionId || undefined,
-  })
+  });
 
   logger.info('Kivvi accounting loop closed for marketplace order', {
     orderId: order.id,
     kivviDocumentId: invoice.id,
     amount: order.amountChf,
-  })
+  });
 
   // 5. Mark each backing Kivvi inventory item as sold (fire-and-forget, best effort)
   for (const kivviItemId of kivviItemIdsToMarkSold) {
-    updateKivviInventoryItem(kivviItemId, { status: 'sold' }).catch(err =>
+    updateKivviInventoryItem(kivviItemId, { status: 'sold' }).catch((err) =>
       logger.warn('Kivvi: failed to mark inventory item sold', {
         kivviInventoryItemId: kivviItemId,
         error: err,
-      })
-    )
+      }),
+    );
   }
 }
 
@@ -868,50 +919,59 @@ async function syncOrderToKivvi(
  * listing title; cart orders (listingId null) summarise their line items as
  * "First item +N weitere".
  */
-async function resolveOrderTitle(orderId: string, listingId: string | null): Promise<string | null> {
+async function resolveOrderTitle(
+  orderId: string,
+  listingId: string | null,
+): Promise<string | null> {
   if (listingId) {
-    const [l] = await db.select({ title: listings.title }).from(listings).where(eq(listings.id, listingId))
-    return l?.title ?? null
+    const [l] = await db
+      .select({ title: listings.title })
+      .from(listings)
+      .where(eq(listings.id, listingId));
+    return l?.title ?? null;
   }
   const items = await db
     .select({ title: marketplaceOrderItems.title })
     .from(marketplaceOrderItems)
     .where(eq(marketplaceOrderItems.orderId, orderId))
-    .orderBy(marketplaceOrderItems.createdAt)
-  if (items.length === 0) return null
-  return items.length === 1 ? items[0].title : `${items[0].title} +${items.length - 1} weitere Artikel`
+    .orderBy(marketplaceOrderItems.createdAt);
+  if (items.length === 0) return null;
+  return items.length === 1
+    ? items[0].title
+    : `${items[0].title} +${items.length - 1} weitere Artikel`;
 }
 
 async function sendOrderEmails(order: {
-  id: string
-  buyerId: string
-  sellerId: string
+  id: string;
+  buyerId: string;
+  sellerId: string;
   // null for multi-item cart orders — title is then summarised from order items.
-  listingId: string | null
-  amountChf: string
-  commissionChf: string
-  sellerPayoutChf: string
-  deliveryMethod: string
+  listingId: string | null;
+  amountChf: string;
+  commissionChf: string;
+  sellerPayoutChf: string;
+  deliveryMethod: string;
 }) {
-  const orderUrl = `${APP_URL}/dashboard/orders/${order.id}`
-  const deliveryLabel = DELIVERY_LABELS[order.deliveryMethod as DeliveryOption] || order.deliveryMethod
+  const orderUrl = `${APP_URL}/dashboard/orders/${order.id}`;
+  const deliveryLabel =
+    DELIVERY_LABELS[order.deliveryMethod as DeliveryOption] || order.deliveryMethod;
 
-  const title = await resolveOrderTitle(order.id, order.listingId)
+  const title = await resolveOrderTitle(order.id, order.listingId);
   if (!title) {
-    logger.warn('Order email skipped: could not resolve title', { orderId: order.id })
-    return
+    logger.warn('Order email skipped: could not resolve title', { orderId: order.id });
+    return;
   }
 
   // Buyer + seller looked up directly (no listing join — cart orders have none).
   const [buyerInfo] = await db
     .select({ name: users.name, email: users.email })
     .from(users)
-    .where(eq(users.id, order.buyerId))
+    .where(eq(users.id, order.buyerId));
 
   const [sellerInfo] = await db
     .select({ name: users.name, email: users.email })
     .from(users)
-    .where(eq(users.id, order.sellerId))
+    .where(eq(users.id, order.sellerId));
 
   // Buyer confirmation
   if (buyerInfo?.email) {
@@ -924,8 +984,8 @@ async function sendOrderEmails(order: {
         commissionChf: formatCHF(Number(order.commissionChf)),
         deliveryMethod: deliveryLabel,
         orderUrl,
-      })
-    )
+      }),
+    );
   }
 
   // Seller notification
@@ -939,7 +999,7 @@ async function sendOrderEmails(order: {
         payoutAmountChf: formatCHF(Number(order.sellerPayoutChf)),
         deliveryMethod: deliveryLabel,
         orderUrl,
-      })
-    )
+      }),
+    );
   }
 }

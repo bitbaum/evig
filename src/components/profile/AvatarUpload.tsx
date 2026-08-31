@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import { useState, useRef, ChangeEvent } from 'react'
-import Image from 'next/image'
-import { logger } from '@/lib/logger'
-import { apiFetch } from '@/lib/api/client'
-import { PROFILE_CONFIG } from '@/config/profile'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
+import { useState, useRef, ChangeEvent } from 'react';
+import Image from 'next/image';
+import { logger } from '@/lib/logger';
+import { apiFetch } from '@/lib/api/client';
+import { PROFILE_CONFIG } from '@/config/profile';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
 
 interface AvatarUploadProps {
-  currentAvatarUrl?: string | null
-  onUploadSuccess: (url: string) => void
-  onRemove?: () => void
-  className?: string
+  currentAvatarUrl?: string | null;
+  onUploadSuccess: (url: string) => void;
+  onRemove?: () => void;
+  className?: string;
 }
 
 export function AvatarUpload({
@@ -21,123 +21,126 @@ export function AvatarUpload({
   onRemove,
   className = '',
 }: AvatarUploadProps) {
-  const [isUploading, setIsUploading] = useState(false)
-  const [previewUrl, setPreviewUrl] = useState<string | null>(currentAvatarUrl || null)
-  const [error, setError] = useState<string | null>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [isUploading, setIsUploading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(currentAvatarUrl || null);
+  const [error, setError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const config = PROFILE_CONFIG.avatar
-  const t = useTranslations('components.avatarUpload')
+  const config = PROFILE_CONFIG.avatar;
+  const t = useTranslations('components.avatarUpload');
 
   const validateFile = (file: File): string | null => {
     // Check file type
     if (!(config.allowedTypes as readonly string[]).includes(file.type)) {
-      return t('errorFileType')
+      return t('errorFileType');
     }
 
     // Check file size
     if (file.size > config.maxSizeBytes) {
-      return t('errorFileSize')
+      return t('errorFileSize');
     }
 
-    return null
-  }
+    return null;
+  };
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-    setError(null)
+    setError(null);
 
     // Validate file
-    const validationError = validateFile(file)
+    const validationError = validateFile(file);
     if (validationError) {
-      setError(validationError)
+      setError(validationError);
       logger.warn('Avatar validation failed', {
         fileName: file.name,
         fileSize: file.size,
         fileType: file.type,
         error: validationError,
-      })
-      return
+      });
+      return;
     }
 
     // Create preview
-    const reader = new FileReader()
+    const reader = new FileReader();
     reader.onloadend = () => {
-      setPreviewUrl(reader.result as string)
-    }
-    reader.readAsDataURL(file)
+      setPreviewUrl(reader.result as string);
+    };
+    reader.readAsDataURL(file);
 
     // Upload file
-    setIsUploading(true)
+    setIsUploading(true);
     logger.info('Avatar upload starting', {
       fileName: file.name,
       fileSize: file.size,
       fileType: file.type,
-    })
+    });
 
     try {
-      const formData = new FormData()
-      formData.append('file', file)
+      const formData = new FormData();
+      formData.append('file', file);
 
-      const { data, error: apiError } = await apiFetch<{ images?: { thumbnail: string }[]; urls?: string[] }>('/api/uploads', {
+      const { data, error: apiError } = await apiFetch<{
+        images?: { thumbnail: string }[];
+        urls?: string[];
+      }>('/api/uploads', {
         method: 'POST',
         body: formData,
         formData: true,
-      })
+      });
 
       if (apiError) {
-        throw new Error(apiError)
+        throw new Error(apiError);
       }
 
       // Use thumbnail URL (200x200) for avatars
-      const avatarUrl = data?.images?.[0]?.thumbnail || data?.urls?.[0] || ''
+      const avatarUrl = data?.images?.[0]?.thumbnail || data?.urls?.[0] || '';
 
       logger.info('Avatar upload successful', {
         url: avatarUrl,
         fileName: file.name,
-      })
+      });
 
-      onUploadSuccess(avatarUrl)
-      setError(null)
+      onUploadSuccess(avatarUrl);
+      setError(null);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : t('errorUpload')
-      setError(errorMessage)
-      setPreviewUrl(currentAvatarUrl || null) // Reset to original on error
+      const errorMessage = err instanceof Error ? err.message : t('errorUpload');
+      setError(errorMessage);
+      setPreviewUrl(currentAvatarUrl || null); // Reset to original on error
 
       logger.error('Avatar upload failed', {
         error: err,
         fileName: file.name,
-      })
+      });
     } finally {
-      setIsUploading(false)
+      setIsUploading(false);
       // Reset input so same file can be selected again
       if (fileInputRef.current) {
-        fileInputRef.current.value = ''
+        fileInputRef.current.value = '';
       }
     }
-  }
+  };
 
   const handleRemove = () => {
-    setPreviewUrl(null)
-    setError(null)
+    setPreviewUrl(null);
+    setError(null);
     if (fileInputRef.current) {
-      fileInputRef.current.value = ''
+      fileInputRef.current.value = '';
     }
 
-    logger.info('Avatar removed')
+    logger.info('Avatar removed');
 
     if (onRemove) {
-      onRemove()
+      onRemove();
     } else {
-      onUploadSuccess('') // Empty string to clear avatar_url
+      onUploadSuccess(''); // Empty string to clear avatar_url
     }
-  }
+  };
 
   const handleClick = () => {
-    fileInputRef.current?.click()
-  }
+    fileInputRef.current?.click();
+  };
 
   return (
     <div className={`space-y-4 ${className}`}>
@@ -154,12 +157,7 @@ export function AvatarUpload({
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-text-muted">
-              <svg
-                className="w-16 h-16"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
+              <svg className="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -182,17 +180,8 @@ export function AvatarUpload({
             disabled={isUploading}
           />
 
-          <Button
-            type="button"
-            onClick={handleClick}
-            disabled={isUploading}
-            variant="primary"
-          >
-            {isUploading
-              ? t('saving')
-              : previewUrl
-              ? t('change')
-              : t('upload')}
+          <Button type="button" onClick={handleClick} disabled={isUploading} variant="primary">
+            {isUploading ? t('saving') : previewUrl ? t('change') : t('upload')}
           </Button>
 
           {previewUrl && (
@@ -220,5 +209,5 @@ export function AvatarUpload({
         {config.allowedExtensions.join(', ').toUpperCase()} • Max {config.maxSizeMB}MB
       </p>
     </div>
-  )
+  );
 }

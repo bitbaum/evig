@@ -5,28 +5,30 @@
  * them; this file holds the JSX so the orchestration stays readable.
  */
 
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { Link } from '@/i18n/navigation'
-import { ArrowLeft, CheckCircle, Calendar, Clock, MapPin, BookOpen } from 'lucide-react'
-import { formatDateWithWeekday, formatTime } from '@/lib/date-formats'
-import { StatusBadge } from '@/components/ui/status-badge'
-import { StatusBanner } from '@/components/ui/status-banner'
-import { getLevelBadgeClass, normalizeLevelId } from '@/config/workshops'
-import Heading from '@/components/ui/Heading'
-import type { getTranslations } from 'next-intl/server'
-import type { WorkshopInstanceWithCount } from '@/components/workshops/types'
-import type { WorkshopDetail } from './data'
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { Link } from '@/i18n/navigation';
+import { ArrowLeft, CheckCircle, Calendar, Clock, MapPin, BookOpen } from 'lucide-react';
+import { formatDateWithWeekday, formatTime } from '@/lib/date-formats';
+import { StatusBadge } from '@/components/ui/status-badge';
+import { StatusBanner } from '@/components/ui/status-banner';
+import { getLevelBadgeClass, normalizeLevelId } from '@/config/workshops';
+import Heading from '@/components/ui/Heading';
+import type { getTranslations } from 'next-intl/server';
+import type { WorkshopInstanceWithCount } from '@/components/workshops/types';
+import type { WorkshopDetail } from './data';
 
-type TFunc = Awaited<ReturnType<typeof getTranslations<'workshops'>>>
+type TFunc = Awaited<ReturnType<typeof getTranslations<'workshops'>>>;
 
 /* ────────────────────── Top header ────────────────────── */
 
 export function WorkshopHeader({
-  workshop, categoryName, t,
+  workshop,
+  categoryName,
+  t,
 }: {
-  workshop: WorkshopDetail
-  categoryName: string | null
-  t: TFunc
+  workshop: WorkshopDetail;
+  categoryName: string | null;
+  t: TFunc;
 }) {
   return (
     <div className="bg-surface-base border-b border-subtle">
@@ -46,10 +48,14 @@ export function WorkshopHeader({
           <Heading level={1} className="ui-public-display-md text-text-primary">
             {workshop.title}
           </Heading>
-          <span className={`mt-2 px-3 py-1 rounded-full text-xs font-medium ${getLevelBadgeClass(workshop.level)}`}>
+          <span
+            className={`mt-2 px-3 py-1 rounded-full text-xs font-medium ${getLevelBadgeClass(workshop.level)}`}
+          >
             {(() => {
-              const lvlId = normalizeLevelId(workshop.level)
-              return lvlId ? t(`levels.${lvlId}` as never) : (workshop.level || t('detail.allLevels'))
+              const lvlId = normalizeLevelId(workshop.level);
+              return lvlId
+                ? t(`levels.${lvlId}` as never)
+                : workshop.level || t('detail.allLevels');
             })()}
           </span>
         </div>
@@ -58,31 +64,39 @@ export function WorkshopHeader({
         )}
       </div>
     </div>
-  )
+  );
 }
 
 /* ────────────────────── Details card ────────────────────── */
 
 export function WorkshopDetailsCard({
-  workshop, categoryName, t,
+  workshop,
+  categoryName,
+  t,
 }: {
-  workshop: WorkshopDetail
-  categoryName: string | null
-  t: TFunc
+  workshop: WorkshopDetail;
+  categoryName: string | null;
+  t: TFunc;
 }) {
   const stats: Array<{ label: string; value: string }> = [
-    { label: t('detail.duration'),        value: workshop.duration || t('detail.variableDuration') },
+    { label: t('detail.duration'), value: workshop.duration || t('detail.variableDuration') },
     { label: t('detail.maxParticipants'), value: String(workshop.max_participants) },
-    { label: t('detail.category'),        value: categoryName || t('detail.generalCategory') },
-    { label: t('detail.price'),           value: workshop.price_cents === 0
-      ? t('detail.free')
-      : t('detail.priceChf', { amount: Math.round(workshop.price_cents / 100) }) },
-  ]
+    { label: t('detail.category'), value: categoryName || t('detail.generalCategory') },
+    {
+      label: t('detail.price'),
+      value:
+        workshop.price_cents === 0
+          ? t('detail.free')
+          : t('detail.priceChf', { amount: Math.round(workshop.price_cents / 100) }),
+    },
+  ];
 
   return (
     <div className="card-shell p-6 sm:p-8">
       <Eyebrow as="div">{t('detail.details').toUpperCase()}</Eyebrow>
-      <Heading level={2} className="ui-public-display-md mt-3">{t('detail.details')}</Heading>
+      <Heading level={2} className="ui-public-display-md mt-3">
+        {t('detail.details')}
+      </Heading>
 
       <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-6 border-t border-subtle pt-8">
         {stats.map((s) => (
@@ -93,9 +107,7 @@ export function WorkshopDetailsCard({
         ))}
       </div>
 
-      {workshop.description && (
-        <p className="text-text-secondary mt-8">{workshop.description}</p>
-      )}
+      {workshop.description && <p className="text-text-secondary mt-8">{workshop.description}</p>}
 
       {workshop.target_audience && (
         <Section title={t('detail.targetAudience')}>
@@ -126,57 +138,62 @@ export function WorkshopDetailsCard({
         <Section title={t('detail.materials')}>
           {workshop.materials_provided && (
             <div className="mb-4">
-              <Eyebrow className="mb-1">
-                {t('detail.materialsProvided')}
-              </Eyebrow>
+              <Eyebrow className="mb-1">{t('detail.materialsProvided')}</Eyebrow>
               <p className="text-text-secondary">{workshop.materials_provided}</p>
             </div>
           )}
           {workshop.materials_required && (
             <div>
-              <Eyebrow className="mb-1">
-                {t('detail.materialsRequired')}
-              </Eyebrow>
+              <Eyebrow className="mb-1">{t('detail.materialsRequired')}</Eyebrow>
               <p className="text-text-secondary">{workshop.materials_required}</p>
             </div>
           )}
         </Section>
       )}
     </div>
-  )
+  );
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="mt-8 border-t border-subtle pt-8">
-      <Eyebrow as="div" className="mb-3">{title}</Eyebrow>
+      <Eyebrow as="div" className="mb-3">
+        {title}
+      </Eyebrow>
       {children}
     </div>
-  )
+  );
 }
 
 /* ────────────────────── Upcoming instances list ────────────────────── */
 
 export function WorkshopInstancesList({
-  instances, fallbackMax, t,
+  instances,
+  fallbackMax,
+  t,
 }: {
-  instances: WorkshopInstanceWithCount[]
-  fallbackMax: number
-  t: TFunc
+  instances: WorkshopInstanceWithCount[];
+  fallbackMax: number;
+  t: TFunc;
 }) {
-  if (instances.length === 0) return null
+  if (instances.length === 0) return null;
 
   return (
     <div className="card-shell p-6 sm:p-8">
       <Eyebrow as="div">{t('detail.upcomingDates').toUpperCase()}</Eyebrow>
-      <Heading level={2} className="ui-public-display-md mt-3">{t('detail.upcomingDates')}</Heading>
+      <Heading level={2} className="ui-public-display-md mt-3">
+        {t('detail.upcomingDates')}
+      </Heading>
 
       <div className="mt-8 space-y-4">
         {instances.map((instance) => {
-          const maxParts = instance.max_participants ?? fallbackMax
-          const spotsLeft = maxParts - instance.current_participants
-          const isFull = spotsLeft <= 0
-          const fillPct = Math.min(100, (instance.current_participants / Math.max(maxParts, 1)) * 100)
+          const maxParts = instance.max_participants ?? fallbackMax;
+          const spotsLeft = maxParts - instance.current_participants;
+          const isFull = spotsLeft <= 0;
+          const fillPct = Math.min(
+            100,
+            (instance.current_participants / Math.max(maxParts, 1)) * 100,
+          );
 
           return (
             <div key={instance.id} className="border rounded-lg p-4">
@@ -196,7 +213,12 @@ export function WorkshopInstancesList({
                   <StatusBadge variant="error">{t('detail.soldOut')}</StatusBadge>
                 ) : (
                   <div className="font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary flex items-center gap-3">
-                    <span>{t('detail.registrationCount', { current: instance.current_participants, max: maxParts })}</span>
+                    <span>
+                      {t('detail.registrationCount', {
+                        current: instance.current_participants,
+                        max: maxParts,
+                      })}
+                    </span>
                     <span className="w-24 bg-surface-overlay rounded-full h-1.5 overflow-hidden">
                       <span
                         className="block bg-text-primary h-full"
@@ -219,31 +241,37 @@ export function WorkshopInstancesList({
                 )}
               </div>
             </div>
-          )
+          );
         })}
       </div>
     </div>
-  )
+  );
 }
 
 /* ────────────────────── Sidebar stats ────────────────────── */
 
 export function WorkshopStatsCard({
-  workshop, categoryName, upcomingCount, t,
+  workshop,
+  categoryName,
+  upcomingCount,
+  t,
 }: {
-  workshop: WorkshopDetail
-  categoryName: string | null
-  upcomingCount: number
-  t: TFunc
+  workshop: WorkshopDetail;
+  categoryName: string | null;
+  upcomingCount: number;
+  t: TFunc;
 }) {
   const rows: Array<{ label: string; value: string }> = [
-    { label: t('detail.category'),        value: categoryName || t('detail.generalCategory') },
-    { label: t('detail.level'),           value: workshop.level || t('detail.allLevels') },
-    { label: t('detail.duration'),        value: workshop.duration || t('detail.variableDuration') },
+    { label: t('detail.category'), value: categoryName || t('detail.generalCategory') },
+    { label: t('detail.level'), value: workshop.level || t('detail.allLevels') },
+    { label: t('detail.duration'), value: workshop.duration || t('detail.variableDuration') },
     { label: t('detail.maxParticipants'), value: String(workshop.max_participants) },
-  ]
+  ];
   if (upcomingCount > 0) {
-    rows.push({ label: t('detail.dates'), value: t('detail.datesAvailable', { count: upcomingCount }) })
+    rows.push({
+      label: t('detail.dates'),
+      value: t('detail.datesAvailable', { count: upcomingCount }),
+    });
   }
 
   return (
@@ -251,7 +279,8 @@ export function WorkshopStatsCard({
       <Eyebrow as="div">{t('detail.stats').toUpperCase()}</Eyebrow>
       <Heading level={3} className="font-semibold text-text-primary mt-3 mb-4">
         <span className="inline-flex items-center gap-2">
-          <BookOpen className="w-4 h-4 text-text-muted" />{t('detail.stats')}
+          <BookOpen className="w-4 h-4 text-text-muted" />
+          {t('detail.stats')}
         </span>
       </Heading>
 
@@ -264,15 +293,17 @@ export function WorkshopStatsCard({
         ))}
       </dl>
     </div>
-  )
+  );
 }
 
 export function NoUpcomingDatesNotice({ t }: { t: TFunc }) {
   return (
     <div className="card-shell p-6">
       <Eyebrow as="div">{t('detail.registration').toUpperCase()}</Eyebrow>
-      <Heading level={3} className="font-semibold text-text-primary mt-3 mb-4">{t('detail.registration')}</Heading>
+      <Heading level={3} className="font-semibold text-text-primary mt-3 mb-4">
+        {t('detail.registration')}
+      </Heading>
       <StatusBanner variant="warning">{t('detail.noDates')}</StatusBanner>
     </div>
-  )
+  );
 }

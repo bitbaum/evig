@@ -17,49 +17,52 @@
  * stays at /admin/team/approvals.
  */
 
-import { Metadata } from 'next'
-import { redirect } from 'next/navigation'
-import { getTranslations } from 'next-intl/server'
-import { eq, desc } from 'drizzle-orm'
-import { auth } from '@/auth'
-import { isSuperAdmin } from '@/lib/permissions'
-import { db } from '@/db'
-import { teamProfiles, timecards as timecardsTable } from '@/db/schema'
-import Heading from '@/components/ui/Heading'
-import { TimecardsClient } from '@/components/timecards/TimecardsClient'
-import { SaldoStrip } from '@/components/timecards/SaldoStrip'
-import { ReminderSetting } from '@/components/timecards/ReminderSetting'
-import { getPersonSaldo } from '@/lib/services/saldo'
-import { TimecardHistorySidebar } from '@/components/dashboard/timecards/TimecardHistorySidebar'
-import { WeeklyScheduleEditor } from '@/components/timecards/WeeklyScheduleEditor'
+import { Metadata } from 'next';
+import { redirect } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
+import { eq, desc } from 'drizzle-orm';
+import { auth } from '@/auth';
+import { isSuperAdmin } from '@/lib/permissions';
+import { db } from '@/db';
+import { teamProfiles, timecards as timecardsTable } from '@/db/schema';
+import Heading from '@/components/ui/Heading';
+import { TimecardsClient } from '@/components/timecards/TimecardsClient';
+import { SaldoStrip } from '@/components/timecards/SaldoStrip';
+import { ReminderSetting } from '@/components/timecards/ReminderSetting';
+import { getPersonSaldo } from '@/lib/services/saldo';
+import { TimecardHistorySidebar } from '@/components/dashboard/timecards/TimecardHistorySidebar';
+import { WeeklyScheduleEditor } from '@/components/timecards/WeeklyScheduleEditor';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('admin.timecards')
+  const t = await getTranslations('admin.timecards');
   return {
     title: t('selfTitle'),
     description: t('selfDescription'),
-  }
+  };
 }
 
 export default async function AdminZeiterfassungPage() {
-  const t = await getTranslations('admin.timecards')
-  const session = await auth()
+  const t = await getTranslations('admin.timecards');
+  const session = await auth();
 
   // The admin layout already enforces staff; this is the defensive branch for
   // direct navigation edge cases.
   if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/zeiterfassung')
+    redirect('/auth/login?callbackUrl=/admin/zeiterfassung');
   }
   if (!session.user.isStaff) {
-    redirect('/')
+    redirect('/');
   }
 
   // Approvers (superadmins / timecard-permission staff) can reopen a card that
   // was reviewed/approved by mistake — see the "Wieder öffnen" action.
-  const u = session.user as typeof session.user & { isSuperAdmin?: boolean; staffPermissions?: string[] }
+  const u = session.user as typeof session.user & {
+    isSuperAdmin?: boolean;
+    staffPermissions?: string[];
+  };
   const canApprove =
     isSuperAdmin(u.email, u.isSuperAdmin) ||
-    (u.staffPermissions ?? []).some(p => ['timecards', 'timecard-approvals', '*'].includes(p))
+    (u.staffPermissions ?? []).some((p) => ['timecards', 'timecard-approvals', '*'].includes(p));
 
   // Pull workingHours so the TimecardsClient can prefill entries from the
   // user's regular schedule. Returns null if there's no team profile yet —
@@ -71,10 +74,10 @@ export default async function AdminZeiterfassungPage() {
     })
     .from(teamProfiles)
     .where(eq(teamProfiles.userId, session.user.id))
-    .limit(1)
+    .limit(1);
 
   // Zeit-/Feriensaldo — null (hidden) for people without a Pensum on file.
-  const saldo = await getPersonSaldo(session.user.id).catch(() => null)
+  const saldo = await getPersonSaldo(session.user.id).catch(() => null);
 
   // History: last 8 timecards across all periods, newest first. Narrow column
   // on desktop, collapsible on mobile.
@@ -92,7 +95,7 @@ export default async function AdminZeiterfassungPage() {
     .from(timecardsTable)
     .where(eq(timecardsTable.userId, session.user.id))
     .orderBy(desc(timecardsTable.periodStart), desc(timecardsTable.createdAt))
-    .limit(8)
+    .limit(8);
 
   return (
     <article className="mx-auto max-w-7xl space-y-6">
@@ -110,7 +113,11 @@ export default async function AdminZeiterfassungPage() {
         <div className="flex min-w-0 flex-col gap-6">
           {saldo && (
             <div className="order-2 lg:order-none">
-              <SaldoStrip data={saldo} ownView reportHref={`/admin/team/report/${session.user.id}/${new Date().toISOString().slice(0, 7)}`} />
+              <SaldoStrip
+                data={saldo}
+                ownView
+                reportHref={`/admin/team/report/${session.user.id}/${new Date().toISOString().slice(0, 7)}`}
+              />
             </div>
           )}
           <div id="arbeitsplan" className="order-3 scroll-mt-24 space-y-2 lg:order-none">
@@ -130,5 +137,5 @@ export default async function AdminZeiterfassungPage() {
         </aside>
       </div>
     </article>
-  )
+  );
 }

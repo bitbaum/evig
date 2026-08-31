@@ -1,31 +1,31 @@
-'use client'
+'use client';
 
 /** Page-tail slice — footer actions, empty state, and the finalize/delete confirm dialogs. */
 
-import type { ComponentProps } from 'react'
-import { PROTOCOL_STATUSES } from '@/config/protocols'
-import type { ProtocolDetail, StructuredNotes } from '@/lib/schemas/protocols'
-import { ProtocolFooterActions } from './ProtocolFooterActions'
-import { ProtocolEmptyState } from './ProtocolEmptyState'
-import { ProtocolFinalizeDialog } from './ProtocolFinalizeDialog'
-import { ProtocolDeleteDialog } from './ProtocolDeleteDialog'
+import type { ComponentProps } from 'react';
+import { PROTOCOL_STATUSES } from '@/config/protocols';
+import type { ProtocolDetail, StructuredNotes } from '@/lib/schemas/protocols';
+import { ProtocolFooterActions } from './ProtocolFooterActions';
+import { ProtocolEmptyState } from './ProtocolEmptyState';
+import { ProtocolFinalizeDialog } from './ProtocolFinalizeDialog';
+import { ProtocolDeleteDialog } from './ProtocolDeleteDialog';
 
 interface ProtocolDetailFooterProps {
-  protocol: ProtocolDetail
-  notes: StructuredNotes | null
-  isDraft: boolean
-  isReview: boolean
-  isProtocolCreator: boolean
-  isSuperAdmin: boolean
-  finalizeBlockers: ComponentProps<typeof ProtocolFinalizeDialog>['finalizeBlockers']
-  showFinalizeDialog: boolean
-  setShowFinalizeDialog: (open: boolean) => void
-  finalizing: boolean
-  handleFinalize: () => void
-  showDeleteDialog: boolean
-  setShowDeleteDialog: (open: boolean) => void
-  deleting: boolean
-  handleDelete: () => void
+  protocol: ProtocolDetail;
+  notes: StructuredNotes | null;
+  isDraft: boolean;
+  isReview: boolean;
+  isProtocolCreator: boolean;
+  isSuperAdmin: boolean;
+  finalizeBlockers: ComponentProps<typeof ProtocolFinalizeDialog>['finalizeBlockers'];
+  showFinalizeDialog: boolean;
+  setShowFinalizeDialog: (open: boolean) => void;
+  finalizing: boolean;
+  handleFinalize: () => void;
+  showDeleteDialog: boolean;
+  setShowDeleteDialog: (open: boolean) => void;
+  deleting: boolean;
+  handleDelete: () => void;
 }
 
 export function ProtocolDetailFooter({
@@ -78,5 +78,5 @@ export function ProtocolDetailFooter({
         handleDelete={handleDelete}
       />
     </>
-  )
+  );
 }

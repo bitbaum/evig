@@ -1,22 +1,13 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { useTranslations } from 'next-intl'
-import {
-  ArrowLeft,
-  Save,
-  Loader2,
-  CheckCircle,
-  MapPin,
-  Clock,
-  Euro,
-  Users,
-} from 'lucide-react'
-import Heading from '@/components/ui/Heading'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
+import { ArrowLeft, Save, Loader2, CheckCircle, MapPin, Clock, Euro, Users } from 'lucide-react';
+import Heading from '@/components/ui/Heading';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import {
   IT_HILFE,
   SERVICE_CATEGORIES,
@@ -26,13 +17,13 @@ import {
   BUDGET_TIERS,
   SWISS_CANTONS,
   type ITSkill,
-} from '@/config/it-hilfe'
-import { useTechnicianProfile } from '@/hooks/useTechnicianProfile'
-import { getTechnicianProfileGaps } from '@/lib/domain/technician-profile'
-import { TechnicianProfileCompletenessBanner } from '@/components/it-hilfe/TechnicianProfileCompletenessBanner'
+} from '@/config/it-hilfe';
+import { useTechnicianProfile } from '@/hooks/useTechnicianProfile';
+import { getTechnicianProfileGaps } from '@/lib/domain/technician-profile';
+import { TechnicianProfileCompletenessBanner } from '@/components/it-hilfe/TechnicianProfileCompletenessBanner';
 
 export default function TechnikerProfilPage() {
-  const t = useTranslations('profil.techniker')
+  const t = useTranslations('profil.techniker');
 
   const {
     profile,
@@ -45,16 +36,16 @@ export default function TechnikerProfilPage() {
     handleSkillToggle,
     handleServiceTypeToggle,
     handleSave,
-  } = useTechnicianProfile(t('saveFailed'))
+  } = useTechnicianProfile(t('saveFailed'));
 
-  const profileGaps = getTechnicianProfileGaps(profile)
+  const profileGaps = getTechnicianProfileGaps(profile);
 
   if (authStatus === 'loading' || loading) {
     return (
       <div className="min-h-screen bg-surface-raised flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-action" />
       </div>
-    )
+    );
   }
 
   return (
@@ -73,9 +64,7 @@ export default function TechnikerProfilPage() {
           <Heading level={1} className="text-2xl text-text-primary">
             {t('pageTitle')}
           </Heading>
-          <p className="text-text-secondary mt-1">
-            {t('pageDesc')}
-          </p>
+          <p className="text-text-secondary mt-1">{t('pageDesc')}</p>
         </div>
 
         {/* Error/Success Messages */}
@@ -97,28 +86,33 @@ export default function TechnikerProfilPage() {
         )}
 
         {/* Skills Selection */}
-        <div id="skills" className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6 mb-6 scroll-mt-24">
+        <div
+          id="skills"
+          className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6 mb-6 scroll-mt-24"
+        >
           <Heading level={2} className="text-lg text-text-primary mb-4 flex items-center gap-2">
             <Users className="w-5 h-5 text-action" />
             {t('skills.heading')}
           </Heading>
-          <p className="text-sm text-text-secondary mb-6">
-            {t('skills.desc')}
-          </p>
+          <p className="text-sm text-text-secondary mb-6">{t('skills.desc')}</p>
 
           {SERVICE_CATEGORIES.map((category) => {
-            const skills = IT_SKILLS[category.id] || []
-            if (skills.length === 0) return null
+            const skills = IT_SKILLS[category.id] || [];
+            if (skills.length === 0) return null;
 
-            const CategoryIcon = category.icon
+            const CategoryIcon = category.icon;
 
             return (
               <div key={category.id} className="mb-6 last:mb-0">
                 <div className="flex items-center gap-2 mb-3">
-                  <div className={`w-8 h-8 rounded-lg ${category.color} flex items-center justify-center`}>
+                  <div
+                    className={`w-8 h-8 rounded-lg ${category.color} flex items-center justify-center`}
+                  >
                     <CategoryIcon className="w-4 h-4 text-white" />
                   </div>
-                  <Heading level={3} className="font-medium text-text-primary">{category.name}</Heading>
+                  <Heading level={3} className="font-medium text-text-primary">
+                    {category.name}
+                  </Heading>
                 </div>
                 <div className="flex flex-wrap gap-2 ml-10">
                   {skills.map((skill: ITSkill) => (
@@ -140,7 +134,7 @@ export default function TechnikerProfilPage() {
                   ))}
                 </div>
               </div>
-            )
+            );
           })}
         </div>
 
@@ -150,9 +144,7 @@ export default function TechnikerProfilPage() {
             <Clock className="w-5 h-5 text-action" />
             {t('serviceType.heading')}
           </Heading>
-          <p className="text-sm text-text-secondary mb-4">
-            {t('serviceType.desc')}
-          </p>
+          <p className="text-sm text-text-secondary mb-4">{t('serviceType.desc')}</p>
 
           <div className="flex flex-wrap gap-2">
             {SERVICE_TYPES.filter((t) => t.id !== SERVICE_TYPE.FLEXIBLE).map((type) => (
@@ -175,14 +167,15 @@ export default function TechnikerProfilPage() {
         </div>
 
         {/* Location */}
-        <div id="location" className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6 mb-6 scroll-mt-24">
+        <div
+          id="location"
+          className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6 mb-6 scroll-mt-24"
+        >
           <Heading level={2} className="text-lg text-text-primary mb-4 flex items-center gap-2">
             <MapPin className="w-5 h-5 text-action" />
             {t('location.heading')}
           </Heading>
-          <p className="text-sm text-text-secondary mb-4">
-            {t('location.desc')}
-          </p>
+          <p className="text-sm text-text-secondary mb-4">{t('location.desc')}</p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -192,9 +185,7 @@ export default function TechnikerProfilPage() {
               <Input
                 type="text"
                 value={profile.postalCode}
-                onChange={(e) =>
-                  setProfile((prev) => ({ ...prev, postalCode: e.target.value }))
-                }
+                onChange={(e) => setProfile((prev) => ({ ...prev, postalCode: e.target.value }))}
                 placeholder="8000"
                 maxLength={4}
               />
@@ -207,9 +198,7 @@ export default function TechnikerProfilPage() {
               <Input
                 type="text"
                 value={profile.city}
-                onChange={(e) =>
-                  setProfile((prev) => ({ ...prev, city: e.target.value }))
-                }
+                onChange={(e) => setProfile((prev) => ({ ...prev, city: e.target.value }))}
                 placeholder="Zürich"
               />
             </div>
@@ -220,9 +209,7 @@ export default function TechnikerProfilPage() {
               </label>
               <Select
                 value={profile.canton}
-                onChange={(e) =>
-                  setProfile((prev) => ({ ...prev, canton: e.target.value }))
-                }
+                onChange={(e) => setProfile((prev) => ({ ...prev, canton: e.target.value }))}
               >
                 <option value="">{t('location.cantonPlaceholder')}</option>
                 {SWISS_CANTONS.map((canton) => (
@@ -259,9 +246,7 @@ export default function TechnikerProfilPage() {
             <Euro className="w-5 h-5 text-action" />
             {t('pricing.heading')}
           </Heading>
-          <p className="text-sm text-text-secondary mb-4">
-            {t('pricing.desc')}
-          </p>
+          <p className="text-sm text-text-secondary mb-4">{t('pricing.desc')}</p>
 
           <div className="space-y-4">
             <div>
@@ -283,9 +268,7 @@ export default function TechnikerProfilPage() {
                 min={0}
                 step={5}
               />
-              <p className="text-xs text-text-tertiary mt-1">
-                {t('pricing.hourlyRateHint')}
-              </p>
+              <p className="text-xs text-text-tertiary mt-1">{t('pricing.hourlyRateHint')}</p>
             </div>
 
             <div className="space-y-2">
@@ -302,7 +285,8 @@ export default function TechnikerProfilPage() {
                   className="w-4 h-4 text-action border-default rounded-sm focus:ring-action"
                 />
                 <span className="text-sm text-text-secondary">
-                  {BUDGET_TIERS.find((tier) => tier.id === 'gratis')?.icon} {t('pricing.acceptsGratis')}
+                  {BUDGET_TIERS.find((tier) => tier.id === 'gratis')?.icon}{' '}
+                  {t('pricing.acceptsGratis')}
                 </span>
               </label>
 
@@ -319,7 +303,8 @@ export default function TechnikerProfilPage() {
                   className="w-4 h-4 text-action border-default rounded-sm focus:ring-action"
                 />
                 <span className="text-sm text-text-secondary">
-                  {BUDGET_TIERS.find((tier) => tier.id === 'kulturlegi')?.icon} {t('pricing.acceptsKulturlegi')}
+                  {BUDGET_TIERS.find((tier) => tier.id === 'kulturlegi')?.icon}{' '}
+                  {t('pricing.acceptsKulturlegi')}
                 </span>
               </label>
             </div>
@@ -331,15 +316,11 @@ export default function TechnikerProfilPage() {
           <Heading level={2} className="text-lg text-text-primary mb-4">
             {t('bio.heading')}
           </Heading>
-          <p className="text-sm text-text-secondary mb-4">
-            {t('bio.desc')}
-          </p>
+          <p className="text-sm text-text-secondary mb-4">{t('bio.desc')}</p>
 
           <Textarea
             value={profile.bio}
-            onChange={(e) =>
-              setProfile((prev) => ({ ...prev, bio: e.target.value }))
-            }
+            onChange={(e) => setProfile((prev) => ({ ...prev, bio: e.target.value }))}
             placeholder={t('bio.placeholder')}
             rows={4}
             maxLength={1000}
@@ -366,21 +347,15 @@ export default function TechnikerProfilPage() {
             disabled={saving || profile.skills.length === 0}
             variant="primary"
           >
-            {saving ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
-            ) : (
-              <Save className="w-5 h-5" />
-            )}
+            {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
             {saving ? t('saving') : t('save')}
           </Button>
         </div>
 
         {profile.skills.length === 0 && (
-          <p className="text-sm text-warning-600 text-center mt-4">
-            {t('skillRequired')}
-          </p>
+          <p className="text-sm text-warning-600 text-center mt-4">{t('skillRequired')}</p>
         )}
       </div>
     </div>
-  )
+  );
 }

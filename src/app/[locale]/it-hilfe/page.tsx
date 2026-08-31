@@ -1,5 +1,5 @@
-import ITHilfeHubClient from './ITHilfeHubClient'
+import ITHilfeHubClient from './ITHilfeHubClient';
 
 export default function ITHilfeHubPage() {
-  return <ITHilfeHubClient />
+  return <ITHilfeHubClient />;
 }

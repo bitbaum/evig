@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
-import type { FiltersObj } from '@/components/marketplace/MarketplaceFilterSidebar'
-import { FilterPill } from '@/components/marketplace/FilterPill'
-import { MarketplaceBrowseFacets } from '@/components/marketplace/MarketplaceBrowseFacets'
+import { useTranslations } from 'next-intl';
+import type { FiltersObj } from '@/components/marketplace/MarketplaceFilterSidebar';
+import { FilterPill } from '@/components/marketplace/FilterPill';
+import { MarketplaceBrowseFacets } from '@/components/marketplace/MarketplaceBrowseFacets';
 
 interface MarketplaceFilterBarProps {
-  filters: FiltersObj
-  resetOffset: () => void
-  onOpenAdvanced?: () => void
-  activeAdvancedCount?: number
+  filters: FiltersObj;
+  resetOffset: () => void;
+  onOpenAdvanced?: () => void;
+  activeAdvancedCount?: number;
 }
 
 /**
@@ -24,11 +24,15 @@ export function MarketplaceFilterBar({
   onOpenAdvanced,
   activeAdvancedCount = 0,
 }: MarketplaceFilterBarProps) {
-  const t = useTranslations('marketplace')
+  const t = useTranslations('marketplace');
 
   return (
     <div className="space-y-4 mb-6">
-      <MarketplaceBrowseFacets filters={filters} resetOffset={resetOffset} orientation="horizontal" />
+      <MarketplaceBrowseFacets
+        filters={filters}
+        resetOffset={resetOffset}
+        orientation="horizontal"
+      />
 
       {onOpenAdvanced && (
         <div className="flex items-center gap-3 pt-1 border-t border-subtle">
@@ -43,5 +47,5 @@ export function MarketplaceFilterBar({
         </div>
       )}
     </div>
-  )
+  );
 }

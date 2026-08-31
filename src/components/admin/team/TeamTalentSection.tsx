@@ -1,27 +1,27 @@
-'use client'
+'use client';
 
-import { X, Plus } from 'lucide-react'
-import { ALL_SKILL_SUGGESTIONS } from '@/config/team'
-import type { TeamProfileFormState } from './useTeamProfileForm'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { FormField } from '@/components/ui/form-field'
-import { Button } from '@/components/ui/button'
-import { adminInteractive } from '@/lib/admin-ui'
+import { X, Plus } from 'lucide-react';
+import { ALL_SKILL_SUGGESTIONS } from '@/config/team';
+import type { TeamProfileFormState } from './useTeamProfileForm';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { FormField } from '@/components/ui/form-field';
+import { Button } from '@/components/ui/button';
+import { adminInteractive } from '@/lib/admin-ui';
 
 interface Props {
-  form: TeamProfileFormState
-  skillInput: string
-  interestInput: string
-  showSkillSuggestions: boolean
-  onSetSkillInput: (value: string) => void
-  onSetInterestInput: (value: string) => void
-  onSetShowSkillSuggestions: (value: boolean) => void
-  onChange: (field: string, value: string) => void
-  onAddSkill: (skill: string) => void
-  onRemoveSkill: (skill: string) => void
-  onAddInterest: (interest: string) => void
-  onRemoveInterest: (interest: string) => void
+  form: TeamProfileFormState;
+  skillInput: string;
+  interestInput: string;
+  showSkillSuggestions: boolean;
+  onSetSkillInput: (value: string) => void;
+  onSetInterestInput: (value: string) => void;
+  onSetShowSkillSuggestions: (value: boolean) => void;
+  onChange: (field: string, value: string) => void;
+  onAddSkill: (skill: string) => void;
+  onRemoveSkill: (skill: string) => void;
+  onAddInterest: (interest: string) => void;
+  onRemoveInterest: (interest: string) => void;
 }
 
 export function TeamTalentSection({
@@ -39,23 +39,28 @@ export function TeamTalentSection({
   onRemoveInterest,
 }: Props) {
   const filteredSkillSuggestions = ALL_SKILL_SUGGESTIONS.filter(
-    skill =>
-      skill.toLowerCase().includes(skillInput.toLowerCase()) &&
-      !form.skills.includes(skill)
-  ).slice(0, 5)
+    (skill) =>
+      skill.toLowerCase().includes(skillInput.toLowerCase()) && !form.skills.includes(skill),
+  ).slice(0, 5);
 
   return (
     <div className="space-y-4">
       {/* Skills — combobox with autocomplete overlay */}
       <FormField label="Fähigkeiten">
         <div className="flex flex-wrap gap-2 mb-2">
-          {form.skills.map(skill => (
+          {form.skills.map((skill) => (
             <span
               key={skill}
               className="flex items-center gap-1 px-3 py-1 bg-surface-raised text-text-secondary text-sm rounded-full"
             >
               {skill}
-              <Button type="button" onClick={() => onRemoveSkill(skill)} variant="ghost" size="icon" className="hover:text-error-500">
+              <Button
+                type="button"
+                onClick={() => onRemoveSkill(skill)}
+                variant="ghost"
+                size="icon"
+                className="hover:text-error-500"
+              >
                 <X className="w-3 h-3" />
               </Button>
             </span>
@@ -66,22 +71,22 @@ export function TeamTalentSection({
             type="text"
             value={skillInput}
             onChange={(e) => {
-              onSetSkillInput(e.target.value)
-              onSetShowSkillSuggestions(true)
+              onSetSkillInput(e.target.value);
+              onSetShowSkillSuggestions(true);
             }}
             onFocus={() => onSetShowSkillSuggestions(true)}
             onBlur={() => setTimeout(() => onSetShowSkillSuggestions(false), 200)}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
-                e.preventDefault()
-                onAddSkill(skillInput)
+                e.preventDefault();
+                onAddSkill(skillInput);
               }
             }}
             placeholder="Fähigkeit hinzufügen..."
           />
           {showSkillSuggestions && filteredSkillSuggestions.length > 0 && (
             <div className="absolute z-10 w-full mt-1 max-h-56 overflow-y-auto bg-surface-base border border rounded-lg shadow-xs">
-              {filteredSkillSuggestions.map(skill => (
+              {filteredSkillSuggestions.map((skill) => (
                 <Button
                   key={skill}
                   type="button"
@@ -101,13 +106,19 @@ export function TeamTalentSection({
       {/* Interests */}
       <FormField label="Interessen">
         <div className="flex flex-wrap gap-2 mb-2">
-          {form.interests.map(interest => (
+          {form.interests.map((interest) => (
             <span
               key={interest}
               className="flex items-center gap-1 px-3 py-1 bg-action-muted text-action text-sm rounded-full"
             >
               {interest}
-              <Button type="button" onClick={() => onRemoveInterest(interest)} variant="ghost" size="icon" className="hover:text-error-500">
+              <Button
+                type="button"
+                onClick={() => onRemoveInterest(interest)}
+                variant="ghost"
+                size="icon"
+                className="hover:text-error-500"
+              >
                 <X className="w-3 h-3" />
               </Button>
             </span>
@@ -120,8 +131,8 @@ export function TeamTalentSection({
             onChange={(e) => onSetInterestInput(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
-                e.preventDefault()
-                onAddInterest(interestInput)
+                e.preventDefault();
+                onAddInterest(interestInput);
               }
             }}
             placeholder="Interesse hinzufügen..."
@@ -169,5 +180,5 @@ export function TeamTalentSection({
         />
       </FormField>
     </div>
-  )
+  );
 }

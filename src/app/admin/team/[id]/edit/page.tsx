@@ -4,68 +4,68 @@
  * Server component that fetches profile data and passes to form.
  */
 
-import { Metadata } from 'next'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { notFound } from 'next/navigation'
-import { isSuperAdmin } from '@/lib/permissions'
-import { requireSection } from '@/lib/admin/guards'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
-import { logger } from '@/lib/logger'
-import { TeamProfileForm } from '@/components/admin/team'
-import Heading from '@/components/admin/AdminHeading'
+import { Metadata } from 'next';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { notFound } from 'next/navigation';
+import { isSuperAdmin } from '@/lib/permissions';
+import { requireSection } from '@/lib/admin/guards';
+import { query } from '@/lib/auth/db';
+import { TABLE_NAMES } from '@/config/database';
+import { logger } from '@/lib/logger';
+import { TeamProfileForm } from '@/components/admin/team';
+import Heading from '@/components/admin/AdminHeading';
 
 interface PageProps {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { id } = await params
-  const profile = await getProfile(id)
+  const { id } = await params;
+  const profile = await getProfile(id);
 
   return {
     title: profile
       ? `${profile.user_name || profile.user_email} bearbeiten | Team`
       : 'Profil bearbeiten',
     description: 'Team-Profil bearbeiten',
-  }
+  };
 }
 
 interface ProfileData {
-  id: string
-  user_id: string
-  user_name: string | null
-  user_email: string
-  position: string | null
-  department: string | null
-  employment_type: string | null
-  start_date: string | null
-  contract_hours: number | null
-  skills: string[]
-  interests: string[]
-  goals: string | null
-  strengths: string | null
-  development_areas: string | null
-  availability: string | null
-  working_hours: string | null
-  preferred_contact: string
-  phone: string | null
-  emergency_contact_name: string | null
-  emergency_contact_phone: string | null
-  emergency_contact_relation: string | null
-  hr_notes: string | null
-  is_active: boolean
-  show_on_about: boolean
+  id: string;
+  user_id: string;
+  user_name: string | null;
+  user_email: string;
+  position: string | null;
+  department: string | null;
+  employment_type: string | null;
+  start_date: string | null;
+  contract_hours: number | null;
+  skills: string[];
+  interests: string[];
+  goals: string | null;
+  strengths: string | null;
+  development_areas: string | null;
+  availability: string | null;
+  working_hours: string | null;
+  preferred_contact: string;
+  phone: string | null;
+  emergency_contact_name: string | null;
+  emergency_contact_phone: string | null;
+  emergency_contact_relation: string | null;
+  hr_notes: string | null;
+  is_active: boolean;
+  show_on_about: boolean;
   // Lifecycle (visible to any team admin)
-  end_date: string | null
-  exit_reason: string | null
-  work_state: string
+  end_date: string | null;
+  exit_reason: string | null;
+  work_state: string;
   // Sensitive (super-admin only; null otherwise)
-  hourly_rate_cents: number | null
-  salary_chf: string | number | null
-  salary_effective_date: string | null
-  ahv_number: string | null
-  canton_tax_code: string | null
+  hourly_rate_cents: number | null;
+  salary_chf: string | number | null;
+  salary_effective_date: string | null;
+  ahv_number: string | null;
+  canton_tax_code: string | null;
 }
 
 async function getProfile(id: string, includeSensitive = false): Promise<ProfileData | null> {
@@ -80,7 +80,7 @@ async function getProfile(id: string, includeSensitive = false): Promise<Profile
         tp.salary_effective_date,
         tp.ahv_number,
         tp.canton_tax_code`
-      : ''
+      : '';
 
     const result = await query<ProfileData>(
       `SELECT
@@ -113,31 +113,29 @@ async function getProfile(id: string, includeSensitive = false): Promise<Profile
        FROM ${TABLE_NAMES.TEAM_PROFILES} tp
        JOIN ${TABLE_NAMES.USERS} u ON tp.user_id = u.id
        WHERE tp.id = $1`,
-      [id]
-    )
+      [id],
+    );
 
-    return result.rows[0] || null
+    return result.rows[0] || null;
   } catch (error) {
-    logger.error('Failed to fetch team profile for edit', { error, profileId: id })
-    return null
+    logger.error('Failed to fetch team profile for edit', { error, profileId: id });
+    return null;
   }
 }
 
 export default async function TeamProfileEditPage({ params }: PageProps) {
-  const session = await requireSection('team')
-  const { id } = await params
+  const session = await requireSection('team');
+  const { id } = await params;
 
-  const currentUserIsSuperAdmin = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
-  const profile = await getProfile(id, currentUserIsSuperAdmin)
+  const currentUserIsSuperAdmin = isSuperAdmin(session.user.email, session.user.isSuperAdmin);
+  const profile = await getProfile(id, currentUserIsSuperAdmin);
 
-  if (!profile) notFound()
+  if (!profile) notFound();
 
   return (
     <div className="mx-auto max-w-4xl">
       <header className="mb-8 border-b border-subtle pb-6">
-        <Eyebrow>
-          {profile.user_name || profile.user_email}
-        </Eyebrow>
+        <Eyebrow>{profile.user_name || profile.user_email}</Eyebrow>
         <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
           Profil bearbeiten
         </Heading>
@@ -150,5 +148,5 @@ export default async function TeamProfileEditPage({ params }: PageProps) {
         isSuperAdmin={currentUserIsSuperAdmin}
       />
     </div>
-  )
+  );
 }

@@ -38,17 +38,17 @@
  *      hours after the building division was deleted.
  */
 
-import { Cpu, GraduationCap, Terminal, Wrench, Factory, type LucideIcon } from 'lucide-react'
-import { ROUTES } from '@/config/routes'
+import { Cpu, GraduationCap, Terminal, Wrench, Factory, type LucideIcon } from 'lucide-react';
+import { ROUTES } from '@/config/routes';
 
-export type PillarId = 'hardware' | 'technicians' | 'software' | 'training' | 'adoption'
+export type PillarId = 'hardware' | 'technicians' | 'software' | 'training' | 'adoption';
 
 export interface Pillar {
   /** URL-safe id AND the stable i18n key under `pillars.items.<id>`. */
-  id: PillarId
+  id: PillarId;
   /** Where the reader acts on this pillar. Every pillar has one — no dead ends. */
-  href: string
-  icon: LucideIcon
+  href: string;
+  icon: LucideIcon;
 }
 
 export const EVIG_PILLARS: readonly Pillar[] = [
@@ -80,4 +80,4 @@ export const EVIG_PILLARS: readonly Pillar[] = [
     href: ROUTES.public.contact,
     icon: Factory,
   },
-]
+];

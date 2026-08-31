@@ -1,36 +1,29 @@
-'use client'
+'use client';
 
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { useSession } from 'next-auth/react'
-import { Link } from '@/i18n/navigation'
-import { Button } from '@/components/ui/button'
-import { useTranslations } from 'next-intl'
-import {
-  Search,
-  Plus,
-  ChevronLeft,
-  ChevronRight,
-  Wrench,
-  Heart,
-} from 'lucide-react'
-import { IT_HILFE } from '@/config/it-hilfe'
-import { RequestCard, RequestCardGrid } from '@/components/it-hilfe/RequestCard'
-import { EmptyState } from '@/components/common/EmptyState'
-import { LoadingSkeleton } from '@/components/common/LoadingState'
-import { ErrorAlert } from '@/components/common/ErrorAlert'
-import { Input } from '@/components/ui/input'
-import { useITHilfeRequests } from '@/hooks/useITHilfeRequests'
-import { useTechnicianProfileStatus } from '@/hooks/useTechnicianProfileStatus'
-import { TechnicianProfileCompletenessBanner } from '@/components/it-hilfe/TechnicianProfileCompletenessBanner'
-import { ROUTES } from '@/config/routes'
-import { ItHilfeFilters } from './ItHilfeFilters'
-import { ArrowLeft } from 'lucide-react'
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { useSession } from 'next-auth/react';
+import { Link } from '@/i18n/navigation';
+import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
+import { Search, Plus, ChevronLeft, ChevronRight, Wrench, Heart } from 'lucide-react';
+import { IT_HILFE } from '@/config/it-hilfe';
+import { RequestCard, RequestCardGrid } from '@/components/it-hilfe/RequestCard';
+import { EmptyState } from '@/components/common/EmptyState';
+import { LoadingSkeleton } from '@/components/common/LoadingState';
+import { ErrorAlert } from '@/components/common/ErrorAlert';
+import { Input } from '@/components/ui/input';
+import { useITHilfeRequests } from '@/hooks/useITHilfeRequests';
+import { useTechnicianProfileStatus } from '@/hooks/useTechnicianProfileStatus';
+import { TechnicianProfileCompletenessBanner } from '@/components/it-hilfe/TechnicianProfileCompletenessBanner';
+import { ROUTES } from '@/config/routes';
+import { ItHilfeFilters } from './ItHilfeFilters';
+import { ArrowLeft } from 'lucide-react';
 
 export default function ITHilfeBrowseRequestsPage() {
-  const { data: session } = useSession()
-  const t = useTranslations('itHelp.browse')
-  const tPage = useTranslations('itHelp.page')
-  const tHub = useTranslations('itHelp.hub')
+  const { data: session } = useSession();
+  const t = useTranslations('itHelp.browse');
+  const tPage = useTranslations('itHelp.page');
+  const tHub = useTranslations('itHelp.hub');
 
   const {
     requests,
@@ -51,10 +44,16 @@ export default function ITHilfeBrowseRequestsPage() {
     goToPage,
     retry,
     limit,
-  } = useITHilfeRequests()
+  } = useITHilfeRequests();
 
-  const { gaps, hasProfile, isMatchReady, loading: profileStatusLoading } = useTechnicianProfileStatus()
-  const showCompletenessBanner = session?.user && hasProfile && gaps.length > 0 && !profileStatusLoading
+  const {
+    gaps,
+    hasProfile,
+    isMatchReady,
+    loading: profileStatusLoading,
+  } = useTechnicianProfileStatus();
+  const showCompletenessBanner =
+    session?.user && hasProfile && gaps.length > 0 && !profileStatusLoading;
 
   return (
     <div className="bg-canvas min-h-screen">
@@ -78,7 +77,11 @@ export default function ITHilfeBrowseRequestsPage() {
             </div>
             <div className="flex flex-wrap gap-3 md:justify-self-end">
               <Link
-                href={session?.user ? IT_HILFE.routes.create : `/auth/login?callbackUrl=${IT_HILFE.routes.create}`}
+                href={
+                  session?.user
+                    ? IT_HILFE.routes.create
+                    : `/auth/login?callbackUrl=${IT_HILFE.routes.create}`
+                }
                 className="ui-public-cta inline-flex items-center gap-2"
               >
                 <Plus className="w-4 h-4" />
@@ -115,14 +118,23 @@ export default function ITHilfeBrowseRequestsPage() {
         {/* Secondary actions for logged-in users */}
         {session?.user && (
           <div className="mb-6 flex flex-wrap gap-3">
-            <Link href={IT_HILFE.routes.register} className="ui-public-cta-ghost inline-flex items-center gap-2">
+            <Link
+              href={IT_HILFE.routes.register}
+              className="ui-public-cta-ghost inline-flex items-center gap-2"
+            >
               <Wrench className="w-4 h-4" />
               {tHub('offerHelp.cta')}
             </Link>
-            <Link href={IT_HILFE.routes.my} className="ui-public-cta-ghost inline-flex items-center gap-2">
+            <Link
+              href={IT_HILFE.routes.my}
+              className="ui-public-cta-ghost inline-flex items-center gap-2"
+            >
               {tPage('myRequests')}
             </Link>
-            <Link href={IT_HILFE.routes.myOffers} className="ui-public-cta-ghost inline-flex items-center gap-2">
+            <Link
+              href={IT_HILFE.routes.myOffers}
+              className="ui-public-cta-ghost inline-flex items-center gap-2"
+            >
               <Heart className="w-4 h-4" />
               {tPage('myOffers')}
             </Link>
@@ -177,7 +189,10 @@ export default function ITHilfeBrowseRequestsPage() {
         )}
 
         {totalPages > 1 && (
-          <nav className="flex items-center justify-center gap-2 pt-10" aria-label={tPage('pagination')}>
+          <nav
+            className="flex items-center justify-center gap-2 pt-10"
+            aria-label={tPage('pagination')}
+          >
             <Button
               variant="outline"
               size="icon"
@@ -222,5 +237,5 @@ export default function ITHilfeBrowseRequestsPage() {
         )}
       </div>
     </div>
-  )
+  );
 }

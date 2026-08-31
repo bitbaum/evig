@@ -43,18 +43,18 @@
  */
 
 jest.mock('lucide-react', () => {
-  const icon = (name: string) => ({ displayName: name })
-  return new Proxy({}, { get: (_t, prop) => icon(prop as string) })
-})
+  const icon = (name: string) => ({ displayName: name });
+  return new Proxy({}, { get: (_t, prop) => icon(prop as string) });
+});
 
 jest.mock('@/config/org', () => ({
   ORG: { name: 'Revamp-IT' },
   CONTACT: { email: 'test@revamp-it.ch' },
-}))
+}));
 
 jest.mock('@/config/swiss-cantons', () => ({
   SWISS_CANTONS: [],
-}))
+}));
 
 import {
   deriveBudgetType,
@@ -68,7 +68,7 @@ import {
   isRequestAcceptingOffers,
   formatBudget,
   REQUEST_STATUS,
-} from '../it-hilfe'
+} from '../it-hilfe';
 
 // ============================================================================
 // deriveBudgetType
@@ -76,25 +76,25 @@ import {
 
 describe('deriveBudgetType', () => {
   it('returns "free" for null', () => {
-    expect(deriveBudgetType(null)).toBe('free')
-  })
+    expect(deriveBudgetType(null)).toBe('free');
+  });
 
   it('returns "free" for undefined', () => {
-    expect(deriveBudgetType(undefined)).toBe('free')
-  })
+    expect(deriveBudgetType(undefined)).toBe('free');
+  });
 
   it('returns "free" for 0 cents', () => {
-    expect(deriveBudgetType(0)).toBe('free')
-  })
+    expect(deriveBudgetType(0)).toBe('free');
+  });
 
   it('returns "fixed" for positive amount', () => {
-    expect(deriveBudgetType(5000)).toBe('fixed')
-  })
+    expect(deriveBudgetType(5000)).toBe('fixed');
+  });
 
   it('returns "fixed" for 1 cent', () => {
-    expect(deriveBudgetType(1)).toBe('fixed')
-  })
-})
+    expect(deriveBudgetType(1)).toBe('fixed');
+  });
+});
 
 // ============================================================================
 // getAllSkills
@@ -102,18 +102,18 @@ describe('deriveBudgetType', () => {
 
 describe('getAllSkills', () => {
   it('returns a non-empty array', () => {
-    const skills = getAllSkills()
-    expect(Array.isArray(skills)).toBe(true)
-    expect(skills.length).toBeGreaterThan(0)
-  })
+    const skills = getAllSkills();
+    expect(Array.isArray(skills)).toBe(true);
+    expect(skills.length).toBeGreaterThan(0);
+  });
 
   it('all skills have id and name', () => {
     for (const skill of getAllSkills()) {
-      expect(skill.id).toBeTruthy()
-      expect(skill.name).toBeTruthy()
+      expect(skill.id).toBeTruthy();
+      expect(skill.name).toBeTruthy();
     }
-  })
-})
+  });
+});
 
 // ============================================================================
 // getSkillsByCategory
@@ -121,14 +121,14 @@ describe('getAllSkills', () => {
 
 describe('getSkillsByCategory', () => {
   it('returns skills for "repair" category', () => {
-    const skills = getSkillsByCategory('repair')
-    expect(skills.length).toBeGreaterThan(0)
-  })
+    const skills = getSkillsByCategory('repair');
+    expect(skills.length).toBeGreaterThan(0);
+  });
 
   it('returns empty array for unknown category', () => {
-    expect(getSkillsByCategory('unknown_cat')).toEqual([])
-  })
-})
+    expect(getSkillsByCategory('unknown_cat')).toEqual([]);
+  });
+});
 
 // ============================================================================
 // getSkillById
@@ -136,15 +136,15 @@ describe('getSkillsByCategory', () => {
 
 describe('getSkillById', () => {
   it('returns skill for known id "hardware_diagnosis"', () => {
-    const skill = getSkillById('hardware_diagnosis')
-    expect(skill).toBeDefined()
-    expect(skill!.id).toBe('hardware_diagnosis')
-  })
+    const skill = getSkillById('hardware_diagnosis');
+    expect(skill).toBeDefined();
+    expect(skill!.id).toBe('hardware_diagnosis');
+  });
 
   it('returns undefined for unknown id', () => {
-    expect(getSkillById('nonexistent_skill')).toBeUndefined()
-  })
-})
+    expect(getSkillById('nonexistent_skill')).toBeUndefined();
+  });
+});
 
 // ============================================================================
 // getServiceCategoryById
@@ -152,15 +152,15 @@ describe('getSkillById', () => {
 
 describe('getServiceCategoryById', () => {
   it('returns service category for "repair"', () => {
-    const cat = getServiceCategoryById('repair')
-    expect(cat).toBeDefined()
-    expect(cat!.id).toBe('repair')
-  })
+    const cat = getServiceCategoryById('repair');
+    expect(cat).toBeDefined();
+    expect(cat!.id).toBe('repair');
+  });
 
   it('returns undefined for unknown id', () => {
-    expect(getServiceCategoryById('unknown')).toBeUndefined()
-  })
-})
+    expect(getServiceCategoryById('unknown')).toBeUndefined();
+  });
+});
 
 // ============================================================================
 // getCategoryById (device category)
@@ -168,15 +168,15 @@ describe('getServiceCategoryById', () => {
 
 describe('getCategoryById', () => {
   it('returns device category for "laptop"', () => {
-    const cat = getCategoryById('laptop')
-    expect(cat).toBeDefined()
-    expect(cat!.id).toBe('laptop')
-  })
+    const cat = getCategoryById('laptop');
+    expect(cat).toBeDefined();
+    expect(cat!.id).toBe('laptop');
+  });
 
   it('returns undefined for unknown id', () => {
-    expect(getCategoryById('unknown_device')).toBeUndefined()
-  })
-})
+    expect(getCategoryById('unknown_device')).toBeUndefined();
+  });
+});
 
 // ============================================================================
 // getBudgetTierById
@@ -184,20 +184,20 @@ describe('getCategoryById', () => {
 
 describe('getBudgetTierById', () => {
   it('returns gratis tier', () => {
-    const tier = getBudgetTierById('gratis')
-    expect(tier).toBeDefined()
-    expect(tier!.multiplier).toBe(0)
-  })
+    const tier = getBudgetTierById('gratis');
+    expect(tier).toBeDefined();
+    expect(tier!.multiplier).toBe(0);
+  });
 
   it('returns kulturlegi tier with multiplier 0.5', () => {
-    const tier = getBudgetTierById('kulturlegi')
-    expect(tier!.multiplier).toBe(0.5)
-  })
+    const tier = getBudgetTierById('kulturlegi');
+    expect(tier!.multiplier).toBe(0.5);
+  });
 
   it('returns undefined for unknown tier', () => {
-    expect(getBudgetTierById('premium')).toBeUndefined()
-  })
-})
+    expect(getBudgetTierById('premium')).toBeUndefined();
+  });
+});
 
 // ============================================================================
 // getSkillsForCategory
@@ -205,22 +205,22 @@ describe('getBudgetTierById', () => {
 
 describe('getSkillsForCategory', () => {
   it('returns skills for "laptop" device category', () => {
-    const skills = getSkillsForCategory('laptop')
-    expect(skills.length).toBeGreaterThan(0)
-  })
+    const skills = getSkillsForCategory('laptop');
+    expect(skills.length).toBeGreaterThan(0);
+  });
 
   it('all returned skills have id and name', () => {
-    const skills = getSkillsForCategory('laptop')
+    const skills = getSkillsForCategory('laptop');
     for (const s of skills) {
-      expect(s.id).toBeTruthy()
-      expect(s.name).toBeTruthy()
+      expect(s.id).toBeTruthy();
+      expect(s.name).toBeTruthy();
     }
-  })
+  });
 
   it('returns empty array for unknown device category', () => {
-    expect(getSkillsForCategory('unknown_device')).toEqual([])
-  })
-})
+    expect(getSkillsForCategory('unknown_device')).toEqual([]);
+  });
+});
 
 // ============================================================================
 // isRequestAcceptingOffers
@@ -228,21 +228,21 @@ describe('getSkillsForCategory', () => {
 
 describe('isRequestAcceptingOffers', () => {
   it('returns true for "open"', () => {
-    expect(isRequestAcceptingOffers(REQUEST_STATUS.OPEN)).toBe(true)
-  })
+    expect(isRequestAcceptingOffers(REQUEST_STATUS.OPEN)).toBe(true);
+  });
 
   it('returns false for "matched"', () => {
-    expect(isRequestAcceptingOffers(REQUEST_STATUS.MATCHED)).toBe(false)
-  })
+    expect(isRequestAcceptingOffers(REQUEST_STATUS.MATCHED)).toBe(false);
+  });
 
   it('returns false for "completed"', () => {
-    expect(isRequestAcceptingOffers(REQUEST_STATUS.COMPLETED)).toBe(false)
-  })
+    expect(isRequestAcceptingOffers(REQUEST_STATUS.COMPLETED)).toBe(false);
+  });
 
   it('returns false for "cancelled"', () => {
-    expect(isRequestAcceptingOffers(REQUEST_STATUS.CANCELLED)).toBe(false)
-  })
-})
+    expect(isRequestAcceptingOffers(REQUEST_STATUS.CANCELLED)).toBe(false);
+  });
+});
 
 // ============================================================================
 // formatBudget
@@ -250,32 +250,32 @@ describe('isRequestAcceptingOffers', () => {
 
 describe('formatBudget', () => {
   it('returns "Gratis (Community-Hilfe)" for gratis tier', () => {
-    expect(formatBudget(null, 'gratis')).toBe('Gratis (Community-Hilfe)')
-  })
+    expect(formatBudget(null, 'gratis')).toBe('Gratis (Community-Hilfe)');
+  });
 
   it('returns KulturLegi label with amount', () => {
-    const result = formatBudget(5000, 'kulturlegi')
-    expect(result).toContain('KulturLegi')
-    expect(result).toContain('50')
-  })
+    const result = formatBudget(5000, 'kulturlegi');
+    expect(result).toContain('KulturLegi');
+    expect(result).toContain('50');
+  });
 
   it('returns "Community-Hilfe (gratis)" for null amount without tier', () => {
-    expect(formatBudget(null)).toBe('Community-Hilfe (gratis)')
-  })
+    expect(formatBudget(null)).toBe('Community-Hilfe (gratis)');
+  });
 
   it('returns "Community-Hilfe (gratis)" for 0 amount without tier', () => {
-    expect(formatBudget(0)).toBe('Community-Hilfe (gratis)')
-  })
+    expect(formatBudget(0)).toBe('Community-Hilfe (gratis)');
+  });
 
   it('returns "bis CHF X" for positive amount without tier', () => {
-    const result = formatBudget(10000)
-    expect(result).toContain('bis CHF')
-    expect(result).toContain('100')
-  })
+    const result = formatBudget(10000);
+    expect(result).toContain('bis CHF');
+    expect(result).toContain('100');
+  });
 
   it('supporter tier format includes amount and emoji', () => {
-    const result = formatBudget(8000, 'supporter')
-    expect(result).toContain('Supporter')
-    expect(result).toContain('80')
-  })
-})
+    const result = formatBudget(8000, 'supporter');
+    expect(result).toContain('Supporter');
+    expect(result).toContain('80');
+  });
+});

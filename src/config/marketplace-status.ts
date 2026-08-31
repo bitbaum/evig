@@ -8,20 +8,25 @@
 export const MARKETPLACE_STATUS = {
   PUBLISHED: 'published',
   DRAFT: 'draft',
-} as const
+} as const;
 
-export type MarketplaceStatus = typeof MARKETPLACE_STATUS[keyof typeof MARKETPLACE_STATUS]
-export const MARKETPLACE_STATUS_VALUES = Object.values(MARKETPLACE_STATUS) as [MarketplaceStatus, ...MarketplaceStatus[]]
+export type MarketplaceStatus = (typeof MARKETPLACE_STATUS)[keyof typeof MARKETPLACE_STATUS];
+export const MARKETPLACE_STATUS_VALUES = Object.values(MARKETPLACE_STATUS) as [
+  MarketplaceStatus,
+  ...MarketplaceStatus[],
+];
 
 export const MARKETPLACE_STATUS_LABELS: Record<string, string> = {
   [MARKETPLACE_STATUS.PUBLISHED]: 'Veröffentlicht',
   [MARKETPLACE_STATUS.DRAFT]: 'Entwurf',
-}
+};
 
 export const MARKETPLACE_STATUS_BADGES: Record<string, string> = {
-  [MARKETPLACE_STATUS.PUBLISHED]: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
-  [MARKETPLACE_STATUS.DRAFT]: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
-}
+  [MARKETPLACE_STATUS.PUBLISHED]:
+    'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
+  [MARKETPLACE_STATUS.DRAFT]:
+    'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
+};
 
 /**
  * Inventory item physical status.
@@ -35,7 +40,8 @@ export const INVENTORY_ITEM_STATUS = {
   MISSING: 'missing',
 } as const;
 
-export type InventoryItemStatus = typeof INVENTORY_ITEM_STATUS[keyof typeof INVENTORY_ITEM_STATUS];
+export type InventoryItemStatus =
+  (typeof INVENTORY_ITEM_STATUS)[keyof typeof INVENTORY_ITEM_STATUS];
 
 /**
  * Inventory product approval status.
@@ -45,35 +51,39 @@ export const PRODUCT_STATUS = {
   APPROVED: 'approved',
   PENDING_REVIEW: 'pending_review',
   REJECTED: 'rejected',
-} as const
+} as const;
 
-export type ProductStatus = typeof PRODUCT_STATUS[keyof typeof PRODUCT_STATUS]
-export const PRODUCT_STATUS_VALUES = Object.values(PRODUCT_STATUS) as [ProductStatus, ...ProductStatus[]]
+export type ProductStatus = (typeof PRODUCT_STATUS)[keyof typeof PRODUCT_STATUS];
+export const PRODUCT_STATUS_VALUES = Object.values(PRODUCT_STATUS) as [
+  ProductStatus,
+  ...ProductStatus[],
+];
 
 export const PRODUCT_STATUS_LABELS: Record<string, string> = {
   [PRODUCT_STATUS.APPROVED]: 'Freigegeben',
   [PRODUCT_STATUS.PENDING_REVIEW]: 'Zur Prüfung',
   [PRODUCT_STATUS.REJECTED]: 'Abgelehnt',
-}
+};
 
 export const PRODUCT_STATUS_BADGES: Record<string, string> = {
-  [PRODUCT_STATUS.APPROVED]: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
+  [PRODUCT_STATUS.APPROVED]:
+    'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
   [PRODUCT_STATUS.PENDING_REVIEW]: 'bg-orange-100 text-orange-800',
   [PRODUCT_STATUS.REJECTED]: 'bg-error-100 text-error-800',
-}
+};
 
 export function getMarketplaceStatusLabel(status: string): string {
-  return MARKETPLACE_STATUS_LABELS[status] ?? status
+  return MARKETPLACE_STATUS_LABELS[status] ?? status;
 }
 
 export function getMarketplaceStatusBadgeColor(status: string): string {
-  return MARKETPLACE_STATUS_BADGES[status] ?? 'bg-neutral-100 text-neutral-800'
+  return MARKETPLACE_STATUS_BADGES[status] ?? 'bg-neutral-100 text-neutral-800';
 }
 
 export function getProductStatusLabel(status: string): string {
-  return PRODUCT_STATUS_LABELS[status] ?? status
+  return PRODUCT_STATUS_LABELS[status] ?? status;
 }
 
 export function getProductStatusBadgeColor(status: string): string {
-  return PRODUCT_STATUS_BADGES[status] ?? 'bg-neutral-100 text-neutral-800'
+  return PRODUCT_STATUS_BADGES[status] ?? 'bg-neutral-100 text-neutral-800';
 }

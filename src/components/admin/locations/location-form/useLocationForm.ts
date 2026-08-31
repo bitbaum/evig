@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import { useMemo } from 'react'
-import { useFormHandler } from '@/hooks/useFormHandler'
-import type { LocationFormData, SubmitResult } from './types'
-import { INITIAL_LOCATION_FORM_DATA } from './types'
+import { useMemo } from 'react';
+import { useFormHandler } from '@/hooks/useFormHandler';
+import type { LocationFormData, SubmitResult } from './types';
+import { INITIAL_LOCATION_FORM_DATA } from './types';
 
 export function useLocationForm() {
   const form = useFormHandler<LocationFormData>({
@@ -14,15 +14,15 @@ export function useLocationForm() {
     createSuccessMessage: 'Ort erfolgreich erstellt und zur Genehmigung eingereicht',
     validate: (data) => {
       if (!data.name || !data.type || !data.city) {
-        return 'Bitte fülle alle erforderlichen Felder aus'
+        return 'Bitte fülle alle erforderlichen Felder aus';
       }
       if (data.postal_code && !/^[0-9]{4}$/.test(data.postal_code)) {
-        return 'Bitte gib eine gültige Schweizer Postleitzahl ein (4 Ziffern)'
+        return 'Bitte gib eine gültige Schweizer Postleitzahl ein (4 Ziffern)';
       }
       if ((data.latitude && !data.longitude) || (!data.latitude && data.longitude)) {
-        return 'Bitte gib beide Koordinaten an oder keine'
+        return 'Bitte gib beide Koordinaten an oder keine';
       }
-      return null
+      return null;
     },
     transformBeforeSubmit: (data) => ({
       ...data,
@@ -35,33 +35,33 @@ export function useLocationForm() {
         parkingAvailable: Boolean(data.accessibility_info.parkingAvailable),
       },
     }),
-  })
+  });
 
   const handleFacilityChange = (facility: string, checked: boolean) => {
-    form.setData(prev => ({
+    form.setData((prev) => ({
       ...prev,
       facilities: checked
         ? [...prev.facilities, facility]
-        : prev.facilities.filter(f => f !== facility),
-    }))
-  }
+        : prev.facilities.filter((f) => f !== facility),
+    }));
+  };
 
   const handleAccessibilityChange = (field: string, value: string | boolean) => {
-    form.setData(prev => ({
+    form.setData((prev) => ({
       ...prev,
       accessibility_info: {
         ...prev.accessibility_info,
         [field]: value,
       },
-    }))
-  }
+    }));
+  };
 
   // Derive submitResult for backward compatibility with consumers
   const submitResult: SubmitResult | null = useMemo(() => {
-    if (form.success) return { success: true, message: form.success }
-    if (form.error) return { success: false, message: form.error }
-    return null
-  }, [form.success, form.error])
+    if (form.success) return { success: true, message: form.success };
+    if (form.error) return { success: false, message: form.error };
+    return null;
+  }, [form.success, form.error]);
 
   return {
     formData: form.data,
@@ -71,5 +71,5 @@ export function useLocationForm() {
     handleFacilityChange,
     handleAccessibilityChange,
     handleSubmit: form.handleSubmit,
-  }
+  };
 }

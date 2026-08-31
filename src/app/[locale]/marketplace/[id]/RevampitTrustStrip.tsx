@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Trust strip for RevampIT (is_revampit) listings — the org's real
@@ -10,24 +10,24 @@
  * REVAMPIT_GUARANTEE — sourced from the intake warranty label + AGB), never
  * invented, and only ever on is_revampit stock (P2P sales carry no guarantee).
  */
-import { ShieldCheck, ShieldAlert, Recycle, BadgeCheck, RotateCcw, ArrowRight } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { Link } from '@/i18n/navigation'
-import { CO2Badge } from '@/components/marketplace/CO2Badge'
-import { REVAMPIT_GUARANTEE } from '@/config/marketplace'
-import { ROUTES } from '@/config/routes'
-import type { ListingDetail } from './types'
+import { ShieldCheck, ShieldAlert, Recycle, BadgeCheck, RotateCcw, ArrowRight } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
+import { CO2Badge } from '@/components/marketplace/CO2Badge';
+import { REVAMPIT_GUARANTEE } from '@/config/marketplace';
+import { ROUTES } from '@/config/routes';
+import type { ListingDetail } from './types';
 
 export function RevampitTrustStrip({
   listing,
   isVerified,
 }: {
-  listing: ListingDetail
-  isVerified: boolean
+  listing: ListingDetail;
+  isVerified: boolean;
 }) {
-  const t = useTranslations('marketplace.listing')
+  const t = useTranslations('marketplace.listing');
 
-  if (!listing.is_revampit) return null
+  if (!listing.is_revampit) return null;
 
   return (
     <div className="card-shell space-y-3 p-4">
@@ -66,5 +66,5 @@ export function RevampitTrustStrip({
         <ArrowRight className="h-4 w-4" aria-hidden="true" />
       </Link>
     </div>
-  )
+  );
 }

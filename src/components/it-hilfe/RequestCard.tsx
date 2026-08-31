@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * RequestCard Component
@@ -7,65 +7,65 @@
  * Eliminates duplicated code across IT-Hilfe pages.
  */
 
-import { Link } from '@/i18n/navigation'
-import { Wrench, MapPin, Users, Clock } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
-import { getCategoryById, getUrgencyById, formatBudget, IT_HILFE } from '@/config/it-hilfe'
-import { formatDateShort } from '@/lib/date-formats'
+import { Link } from '@/i18n/navigation';
+import { Wrench, MapPin, Users, Clock } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/ui/Heading';
+import { getCategoryById, getUrgencyById, formatBudget, IT_HILFE } from '@/config/it-hilfe';
+import { formatDateShort } from '@/lib/date-formats';
 
 type ExpiryState =
   | { expiringSoon: true; type: 'expired' }
   | { expiringSoon: true; type: 'hours'; count: number }
-  | null
+  | null;
 
 function getExpiryState(expiresAt: string): ExpiryState {
-  const now = Date.now()
-  const expires = new Date(expiresAt).getTime()
-  const hoursLeft = (expires - now) / (1000 * 60 * 60)
-  if (hoursLeft <= 0) return { expiringSoon: true, type: 'expired' }
+  const now = Date.now();
+  const expires = new Date(expiresAt).getTime();
+  const hoursLeft = (expires - now) / (1000 * 60 * 60);
+  if (hoursLeft <= 0) return { expiringSoon: true, type: 'expired' };
   if (hoursLeft <= 48) {
-    const h = Math.floor(hoursLeft)
-    return { expiringSoon: true, type: 'hours', count: h }
+    const h = Math.floor(hoursLeft);
+    return { expiringSoon: true, type: 'hours', count: h };
   }
-  return null
+  return null;
 }
 
 export interface RequestCardData {
-  id: string
-  requesterId: string
-  requesterName: string
-  categoryId: string
-  deviceBrand: string | null
-  deviceModel: string | null
-  title: string
-  description: string
-  urgency: string
-  budgetType: string
-  budgetAmountCents: number | null
-  postalCode: string
-  city: string
-  canton: string
-  serviceType: string
-  skillsNeeded: string[]
-  imageUrls: string[]
-  status: string
-  offerCount: number
-  expiresAt: string
-  createdAt: string
+  id: string;
+  requesterId: string;
+  requesterName: string;
+  categoryId: string;
+  deviceBrand: string | null;
+  deviceModel: string | null;
+  title: string;
+  description: string;
+  urgency: string;
+  budgetType: string;
+  budgetAmountCents: number | null;
+  postalCode: string;
+  city: string;
+  canton: string;
+  serviceType: string;
+  skillsNeeded: string[];
+  imageUrls: string[];
+  status: string;
+  offerCount: number;
+  expiresAt: string;
+  createdAt: string;
 }
 
 interface RequestCardProps {
-  request: RequestCardData
-  className?: string
+  request: RequestCardData;
+  className?: string;
 }
 
 export function RequestCard({ request, className = '' }: RequestCardProps) {
-  const t = useTranslations('itHelp.card')
-  const categoryConfig = getCategoryById(request.categoryId)
-  const urgencyConfig = getUrgencyById(request.urgency)
-  const CategoryIcon = categoryConfig?.icon || Wrench
-  const expiryState = getExpiryState(request.expiresAt)
+  const t = useTranslations('itHelp.card');
+  const categoryConfig = getCategoryById(request.categoryId);
+  const urgencyConfig = getUrgencyById(request.urgency);
+  const CategoryIcon = categoryConfig?.icon || Wrench;
+  const expiryState = getExpiryState(request.expiresAt);
 
   const expiryLabel = expiryState
     ? expiryState.type === 'expired'
@@ -73,7 +73,7 @@ export function RequestCard({ request, className = '' }: RequestCardProps) {
       : expiryState.count <= 1
         ? t('timeLeftLessThanHour')
         : t('timeLeftHours', { count: expiryState.count })
-    : null
+    : null;
 
   return (
     <Link
@@ -93,19 +93,22 @@ export function RequestCard({ request, className = '' }: RequestCardProps) {
                 {expiryLabel}
               </span>
             )}
-            <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${urgencyConfig?.badgeClass || 'bg-surface-raised text-text-secondary'}`}>
+            <span
+              className={`px-2.5 py-1 rounded-full text-xs font-medium ${urgencyConfig?.badgeClass || 'bg-surface-raised text-text-secondary'}`}
+            >
               {urgencyConfig?.name || request.urgency}
             </span>
           </div>
         </div>
 
-        <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-action transition-colors line-clamp-2">
+        <Heading
+          level={3}
+          className="font-semibold text-text-primary mb-2 group-hover:text-action transition-colors line-clamp-2"
+        >
           {request.title}
         </Heading>
 
-        <p className="text-sm text-text-secondary line-clamp-2 mb-3">
-          {request.description}
-        </p>
+        <p className="text-sm text-text-secondary line-clamp-2 mb-3">{request.description}</p>
 
         {/* Device info */}
         {(request.deviceBrand || request.deviceModel) && (
@@ -132,20 +135,18 @@ export function RequestCard({ request, className = '' }: RequestCardProps) {
         <span className="text-sm font-medium text-action">
           {formatBudget(request.budgetAmountCents)}
         </span>
-        <span className="text-xs text-text-tertiary">
-          {formatDateShort(request.createdAt)}
-        </span>
+        <span className="text-xs text-text-tertiary">{formatDateShort(request.createdAt)}</span>
       </div>
     </Link>
-  )
+  );
 }
 
 /**
  * RequestCardGrid - Grid container for request cards
  */
 interface RequestCardGridProps {
-  children: React.ReactNode
-  className?: string
+  children: React.ReactNode;
+  className?: string;
 }
 
 export function RequestCardGrid({ children, className = '' }: RequestCardGridProps) {
@@ -153,5 +154,5 @@ export function RequestCardGrid({ children, className = '' }: RequestCardGridPro
     <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ${className}`}>
       {children}
     </div>
-  )
+  );
 }

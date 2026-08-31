@@ -5,8 +5,8 @@
  * import { COLORS, SPACING, TYPOGRAPHY, BUTTONS, LAYOUTS } from '@/config/ui'
  */
 
-export { SPACING } from './spacing'
-export { TYPOGRAPHY } from './typography'
-export { BUTTONS, getButtonClasses } from './buttons'
-export { LAYOUTS } from './layouts'
-export { UI_STATUS, type UiStatusKey } from './status'
+export { SPACING } from './spacing';
+export { TYPOGRAPHY } from './typography';
+export { BUTTONS, getButtonClasses } from './buttons';
+export { LAYOUTS } from './layouts';
+export { UI_STATUS, type UiStatusKey } from './status';

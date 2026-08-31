@@ -6,32 +6,39 @@
  * one adapter file + one entry in `GATEWAYS`.
  */
 
-import { GATEWAY_STATUS } from '@/config/gateway-status'
-import { DEFAULT_PROVIDER_SLUG } from '@/config/payment-providers'
-import { payrexxGateway } from './payrexx'
-import { talerGateway } from './taler'
-import { btcpayGateway } from './btcpay'
-import type { PaymentGateway, CaptureResult } from './types'
+import { GATEWAY_STATUS } from '@/config/gateway-status';
+import { DEFAULT_PROVIDER_SLUG } from '@/config/payment-providers';
+import { payrexxGateway } from './payrexx';
+import { talerGateway } from './taler';
+import { btcpayGateway } from './btcpay';
+import type { PaymentGateway, CaptureResult } from './types';
 
-export type { PaymentGateway, GatewayCreateParams, GatewayResult, CaptureResult, ParsedWebhook, GatewayAmountClaim } from './types'
+export type {
+  PaymentGateway,
+  GatewayCreateParams,
+  GatewayResult,
+  CaptureResult,
+  ParsedWebhook,
+  GatewayAmountClaim,
+} from './types';
 
 const GATEWAYS: Record<string, PaymentGateway> = {
   [payrexxGateway.slug]: payrexxGateway,
   [talerGateway.slug]: talerGateway,
   [btcpayGateway.slug]: btcpayGateway,
-}
+};
 
 export function hasGateway(slug: string): boolean {
-  return slug in GATEWAYS
+  return slug in GATEWAYS;
 }
 
 /** Resolve a gateway adapter. Unknown slug → throws (caller validates first). */
 export function getGateway(slug: string = DEFAULT_PROVIDER_SLUG): PaymentGateway {
-  const gateway = GATEWAYS[slug]
+  const gateway = GATEWAYS[slug];
   if (!gateway) {
-    throw new Error(`Unknown payment provider: ${slug}`)
+    throw new Error(`Unknown payment provider: ${slug}`);
   }
-  return gateway
+  return gateway;
 }
 
 /**
@@ -44,9 +51,9 @@ export async function captureViaGateway(
   providerTxId: string,
   amountCents: number,
 ): Promise<CaptureResult> {
-  const gateway = getGateway(providerSlug)
+  const gateway = getGateway(providerSlug);
   if (gateway.capturesOnPay) {
-    return { id: providerTxId, status: GATEWAY_STATUS.CONFIRMED }
+    return { id: providerTxId, status: GATEWAY_STATUS.CONFIRMED };
   }
-  return gateway.capture(providerTxId, amountCents)
+  return gateway.capture(providerTxId, amountCents);
 }

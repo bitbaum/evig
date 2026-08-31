@@ -1,29 +1,32 @@
-import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
-import { LISTING_STATUS } from '@/config/marketplace'
-import { APP_URL } from '@/config/urls'
-import { ORG } from '@/config/org'
-import { safeJsonLd } from '@/lib/seo/json-ld'
-import { logger } from '@/lib/logger'
+import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
+import { query } from '@/lib/auth/db';
+import { TABLE_NAMES } from '@/config/database';
+import { LISTING_STATUS } from '@/config/marketplace';
+import { APP_URL } from '@/config/urls';
+import { ORG } from '@/config/org';
+import { safeJsonLd } from '@/lib/seo/json-ld';
+import { logger } from '@/lib/logger';
 
 interface ListingMeta {
-  title: string
-  brand: string | null
-  category: string | null
-  price_chf: number | null
-  condition: string | null
-  description: string | null
-  seller_name: string | null
-  image_url: string | null
+  title: string;
+  brand: string | null;
+  category: string | null;
+  price_chf: number | null;
+  condition: string | null;
+  description: string | null;
+  seller_name: string | null;
+  image_url: string | null;
 }
 
 function mapConditionToSchema(condition: string | null): string {
   switch (condition) {
-    case 'new': return 'https://schema.org/NewCondition'
-    case 'defect': return 'https://schema.org/DamagedCondition'
-    default: return 'https://schema.org/UsedCondition'
+    case 'new':
+      return 'https://schema.org/NewCondition';
+    case 'defect':
+      return 'https://schema.org/DamagedCondition';
+    default:
+      return 'https://schema.org/UsedCondition';
   }
 }
 
@@ -36,32 +39,38 @@ async function getListingMeta(id: string) {
        FROM ${TABLE_NAMES.LISTINGS} l
        JOIN ${TABLE_NAMES.USERS} u ON l.seller_id = u.id
        WHERE l.id = $1 AND l.status = '${LISTING_STATUS.ACTIVE}'`,
-      [id]
-    )
-    return result.rows[0] ?? null
+      [id],
+    );
+    return result.rows[0] ?? null;
   } catch (err) {
-    logger.warn('Failed to load listing meta', { error: err, id })
-    return null
+    logger.warn('Failed to load listing meta', { error: err, id });
+    return null;
   }
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: string; id: string }>
+  params: Promise<{ locale: string; id: string }>;
 }): Promise<Metadata> {
-  const { locale, id } = await params
-  const t = await getTranslations({ locale, namespace: 'marketplace.meta' })
-  const listing = await getListingMeta(id)
+  const { locale, id } = await params;
+  const t = await getTranslations({ locale, namespace: 'marketplace.meta' });
+  const listing = await getListingMeta(id);
 
   if (!listing) {
-    return { title: t('notFoundTitle', { orgName: ORG.name }) }
+    return { title: t('notFoundTitle', { orgName: ORG.name }) };
   }
 
-  const price = listing.price_chf ? `CHF ${listing.price_chf}` : t('priceOnRequest')
-  const brand = listing.brand && !listing.title.startsWith(listing.brand) ? `${listing.brand} ` : ''
-  const title = t('detailTitle', { brand, title: listing.title, orgName: ORG.name })
-  const description = t('detailDescription', { brand, title: listing.title, price, orgName: ORG.name })
+  const price = listing.price_chf ? `CHF ${listing.price_chf}` : t('priceOnRequest');
+  const brand =
+    listing.brand && !listing.title.startsWith(listing.brand) ? `${listing.brand} ` : '';
+  const title = t('detailTitle', { brand, title: listing.title, orgName: ORG.name });
+  const description = t('detailDescription', {
+    brand,
+    title: listing.title,
+    price,
+    orgName: ORG.name,
+  });
   return {
     title,
     description,
@@ -73,24 +82,25 @@ export async function generateMetadata({
         images: [{ url: listing.image_url, alt: `${brand}${listing.title}` }],
       }),
     },
-  }
+  };
 }
 
 export default async function MarketplaceDetailLayout({
   children,
   params,
 }: {
-  children: React.ReactNode
-  params: Promise<{ locale: string; id: string }>
+  children: React.ReactNode;
+  params: Promise<{ locale: string; id: string }>;
 }) {
-  const { id } = await params
-  const listing = await getListingMeta(id)
+  const { id } = await params;
+  const listing = await getListingMeta(id);
 
-  if (!listing) return children
+  if (!listing) return children;
 
-  const baseUrl = APP_URL
-  const brand = listing.brand && !listing.title.startsWith(listing.brand) ? `${listing.brand} ` : ''
-  const isGratis = listing.price_chf !== null && Number(listing.price_chf) === 0
+  const baseUrl = APP_URL;
+  const brand =
+    listing.brand && !listing.title.startsWith(listing.brand) ? `${listing.brand} ` : '';
+  const isGratis = listing.price_chf !== null && Number(listing.price_chf) === 0;
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -110,15 +120,12 @@ export default async function MarketplaceDetailLayout({
         seller: { '@type': 'Organization', name: listing.seller_name },
       }),
     },
-  }
+  };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }} />
       {children}
     </>
-  )
+  );
 }

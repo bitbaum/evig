@@ -12,67 +12,63 @@
  * Access: Staff with 'team' permission
  */
 
-import { withAdmin } from '@/lib/api/middleware'
-import { db } from '@/db'
-import { sql, getTableName } from 'drizzle-orm'
-import {
-  apiSuccess,
-  apiError,
-  apiBadRequest,
-} from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { validateDigestFilter } from '@/lib/schemas/activity'
-import { taskCompletions, tasks } from '@/db/schema/misc'
-import { activityUpdates, helpRequests, teamProfiles } from '@/db/schema/team'
-import { users } from '@/db/schema/auth'
+import { withAdmin } from '@/lib/api/middleware';
+import { db } from '@/db';
+import { sql, getTableName } from 'drizzle-orm';
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { validateDigestFilter } from '@/lib/schemas/activity';
+import { taskCompletions, tasks } from '@/db/schema/misc';
+import { activityUpdates, helpRequests, teamProfiles } from '@/db/schema/team';
+import { users } from '@/db/schema/auth';
 
 interface UserStats {
-  user_id: string
-  user_name: string | null
-  user_email: string
-  department: string | null
-  task_completions: number
-  activity_updates: number
-  help_requests_created: number
-  help_requests_resolved: number
-  total_score: number
+  user_id: string;
+  user_name: string | null;
+  user_email: string;
+  department: string | null;
+  task_completions: number;
+  activity_updates: number;
+  help_requests_created: number;
+  help_requests_resolved: number;
+  total_score: number;
 }
 
 interface CategoryStats {
-  category: string
-  count: number
+  category: string;
+  count: number;
 }
 
 interface DigestSummary {
   period: {
-    since: string
-    until: string
-  }
+    since: string;
+    until: string;
+  };
   totals: {
-    task_completions: number
-    activity_updates: number
-    help_requests_created: number
-    help_requests_resolved: number
-    active_users: number
-  }
-  by_user: UserStats[]
-  by_category: CategoryStats[]
-  top_contributors: UserStats[]
+    task_completions: number;
+    activity_updates: number;
+    help_requests_created: number;
+    help_requests_resolved: number;
+    active_users: number;
+  };
+  by_user: UserStats[];
+  by_category: CategoryStats[];
+  top_contributors: UserStats[];
   recent_milestones: {
-    id: string
-    user_name: string | null
-    title: string
-    occurred_at: string
-  }[]
+    id: string;
+    user_name: string | null;
+    title: string;
+    occurred_at: string;
+  }[];
 }
 
 // Reusable row type for aggregate queries
 interface UserCountRow {
-  user_id: string
-  user_name: string | null
-  user_email: string
-  department: string | null
-  count: string
+  user_id: string;
+  user_name: string | null;
+  user_email: string;
+  department: string | null;
+  count: string;
 }
 
 /**
@@ -82,38 +78,38 @@ interface UserCountRow {
 export const GET = withAdmin('team', async (request, session) => {
   try {
     // Parse filters from query params
-    const { searchParams } = new URL(request.url)
+    const { searchParams } = new URL(request.url);
 
     // Default to last 7 days
-    const now = new Date()
-    const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
+    const now = new Date();
+    const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
 
     const filterResult = validateDigestFilter({
       since: searchParams.get('since') || weekAgo.toISOString(),
       until: searchParams.get('until') || now.toISOString(),
       department: searchParams.get('department') || undefined,
-    })
+    });
 
     if (!filterResult.success) {
-      return apiBadRequest(ERROR_MESSAGES.INVALID_FILTER_PARAMS)
+      return apiBadRequest(ERROR_MESSAGES.INVALID_FILTER_PARAMS);
     }
 
-    const filters = filterResult.data
-    const since = filters.since || weekAgo.toISOString()
-    const until = filters.until || now.toISOString()
+    const filters = filterResult.data;
+    const since = filters.since || weekAgo.toISOString();
+    const until = filters.until || now.toISOString();
 
     // Table names for SQL fragments
-    const tcTable = getTableName(taskCompletions)
-    const uTable = getTableName(users)
-    const tpTable = getTableName(teamProfiles)
-    const auTable = getTableName(activityUpdates)
-    const hrTable = getTableName(helpRequests)
-    const tTable = getTableName(tasks)
+    const tcTable = getTableName(taskCompletions);
+    const uTable = getTableName(users);
+    const tpTable = getTableName(teamProfiles);
+    const auTable = getTableName(activityUpdates);
+    const hrTable = getTableName(helpRequests);
+    const tTable = getTableName(tasks);
 
     // Build optional department condition
     const departmentCondition = filters.department
       ? sql`AND tp.department = ${filters.department}`
-      : sql``
+      : sql``;
 
     // All 6 queries are independent — run in parallel to reduce latency from 6×RTT → 1×RTT
     const [
@@ -214,10 +210,10 @@ export const GET = withAdmin('team', async (request, session) => {
         ORDER BY au.occurred_at DESC
         LIMIT 10
       `),
-    ])
+    ]);
 
     // Aggregate user stats
-    const userStatsMap = new Map<string, UserStats>()
+    const userStatsMap = new Map<string, UserStats>();
 
     // Factory function to create empty UserStats
     const createEmptyUserStats = (row: UserCountRow): UserStats => ({
@@ -230,30 +226,30 @@ export const GET = withAdmin('team', async (request, session) => {
       help_requests_created: 0,
       help_requests_resolved: 0,
       total_score: 0,
-    })
+    });
 
     for (const row of taskCompletionsResult.rows as unknown as UserCountRow[]) {
-      const stats = userStatsMap.get(row.user_id) || createEmptyUserStats(row)
-      stats.task_completions = parseInt(row.count, 10)
-      userStatsMap.set(row.user_id, stats)
+      const stats = userStatsMap.get(row.user_id) || createEmptyUserStats(row);
+      stats.task_completions = parseInt(row.count, 10);
+      userStatsMap.set(row.user_id, stats);
     }
 
     for (const row of activityUpdatesResult.rows as unknown as UserCountRow[]) {
-      const stats = userStatsMap.get(row.user_id) || createEmptyUserStats(row)
-      stats.activity_updates = parseInt(row.count, 10)
-      userStatsMap.set(row.user_id, stats)
+      const stats = userStatsMap.get(row.user_id) || createEmptyUserStats(row);
+      stats.activity_updates = parseInt(row.count, 10);
+      userStatsMap.set(row.user_id, stats);
     }
 
     for (const row of helpCreatedResult.rows as unknown as UserCountRow[]) {
-      const stats = userStatsMap.get(row.user_id) || createEmptyUserStats(row)
-      stats.help_requests_created = parseInt(row.count, 10)
-      userStatsMap.set(row.user_id, stats)
+      const stats = userStatsMap.get(row.user_id) || createEmptyUserStats(row);
+      stats.help_requests_created = parseInt(row.count, 10);
+      userStatsMap.set(row.user_id, stats);
     }
 
     for (const row of helpResolvedResult.rows as unknown as UserCountRow[]) {
-      const stats = userStatsMap.get(row.user_id) || createEmptyUserStats(row)
-      stats.help_requests_resolved = parseInt(row.count, 10)
-      userStatsMap.set(row.user_id, stats)
+      const stats = userStatsMap.get(row.user_id) || createEmptyUserStats(row);
+      stats.help_requests_resolved = parseInt(row.count, 10);
+      userStatsMap.set(row.user_id, stats);
     }
 
     // Calculate total score for each user (weighted)
@@ -264,12 +260,12 @@ export const GET = withAdmin('team', async (request, session) => {
         stats.activity_updates * 1 +
         stats.help_requests_created * 1 +
         stats.help_requests_resolved * 3,
-    }))
+    }));
 
     // Sort by total score for top contributors
     const topContributors = [...userStats]
       .sort((a, b) => b.total_score - a.total_score)
-      .slice(0, 10)
+      .slice(0, 10);
 
     // Calculate totals
     const totals = {
@@ -278,7 +274,7 @@ export const GET = withAdmin('team', async (request, session) => {
       help_requests_created: userStats.reduce((sum, u) => sum + u.help_requests_created, 0),
       help_requests_resolved: userStats.reduce((sum, u) => sum + u.help_requests_resolved, 0),
       active_users: userStats.length,
-    }
+    };
 
     const digest: DigestSummary = {
       period: {
@@ -287,16 +283,18 @@ export const GET = withAdmin('team', async (request, session) => {
       },
       totals,
       by_user: userStats.sort((a, b) => b.task_completions - a.task_completions),
-      by_category: (categoryStatsResult.rows as unknown as { category: string; count: string }[]).map((row) => ({
+      by_category: (
+        categoryStatsResult.rows as unknown as { category: string; count: string }[]
+      ).map((row) => ({
         category: row.category,
         count: parseInt(row.count, 10),
       })),
       top_contributors: topContributors,
       recent_milestones: milestonesResult.rows as unknown as DigestSummary['recent_milestones'],
-    }
+    };
 
-    return apiSuccess(digest)
+    return apiSuccess(digest);
   } catch (error) {
-    return apiError(error, 'Wochenübersicht konnte nicht geladen werden')
+    return apiError(error, 'Wochenübersicht konnte nicht geladen werden');
   }
-})
+});

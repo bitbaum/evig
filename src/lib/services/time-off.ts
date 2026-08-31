@@ -5,24 +5,24 @@
  * review-workflow core (lifecycle/review-workflow) — pilot A.
  */
 
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
-import { logger } from '@/lib/logger'
-import { notifyUsers, createNotification } from '@/lib/services/notifications'
-import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
-import { getTimeOffKindLabel, TIME_OFF_STATUSES } from '@/config/time-off'
-import { getTimecardApproverIds } from '@/lib/team/timecard-approvers'
-import { runReviewTransition } from '@/lib/lifecycle/review-workflow'
-import { materializeApprovedTimeOff } from '@/lib/services/time-off-materialize'
-import type { TransitionTable } from '@/lib/lifecycle'
+import { query } from '@/lib/auth/db';
+import { TABLE_NAMES } from '@/config/database';
+import { logger } from '@/lib/logger';
+import { notifyUsers, createNotification } from '@/lib/services/notifications';
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications';
+import { getTimeOffKindLabel, TIME_OFF_STATUSES } from '@/config/time-off';
+import { getTimecardApproverIds } from '@/lib/team/timecard-approvers';
+import { runReviewTransition } from '@/lib/lifecycle/review-workflow';
+import { materializeApprovedTimeOff } from '@/lib/services/time-off-materialize';
+import type { TransitionTable } from '@/lib/lifecycle';
 import type {
   CreateTimeOffInput,
   ReviewTimeOffInput,
   TimeOffRequest,
-} from '@/lib/schemas/time-off'
+} from '@/lib/schemas/time-off';
 
-const T = TABLE_NAMES.TIME_OFF_REQUESTS
-const U = TABLE_NAMES.USERS
+const T = TABLE_NAMES.TIME_OFF_REQUESTS;
+const U = TABLE_NAMES.USERS;
 
 // SELECT projection shared by every read — dates/timestamps cast to strings.
 const SELECT_COLS = `
@@ -32,15 +32,15 @@ const SELECT_COLS = `
   to_char(r.reviewed_at, 'YYYY-MM-DD"T"HH24:MI:SSOF') AS reviewed_at,
   to_char(r.created_at, 'YYYY-MM-DD"T"HH24:MI:SSOF') AS created_at,
   u.name AS user_name, u.email AS user_email,
-  rv.name AS reviewer_name`
+  rv.name AS reviewer_name`;
 
 const FROM_JOINS = `
   FROM ${T} r
   JOIN ${U} u ON u.id = r.user_id
-  LEFT JOIN ${U} rv ON rv.id = r.reviewed_by`
+  LEFT JOIN ${U} rv ON rv.id = r.reviewed_by`;
 
 function formatRange(req: { starts_on: string; ends_on: string }): string {
-  return req.starts_on === req.ends_on ? req.starts_on : `${req.starts_on} – ${req.ends_on}`
+  return req.starts_on === req.ends_on ? req.starts_on : `${req.starts_on} – ${req.ends_on}`;
 }
 
 export async function createTimeOffRequest(
@@ -52,11 +52,11 @@ export async function createTimeOffRequest(
      VALUES ($1, $2, $3, $4, $5, $6)
      RETURNING id`,
     [userId, input.kind, input.starts_on, input.ends_on, input.half_day, input.note ?? null],
-  )
-  const id = insert.rows[0].id
-  const [created] = await getRequestsByIds([id])
+  );
+  const id = insert.rows[0].id;
+  const [created] = await getRequestsByIds([id]);
 
-  const label = getTimeOffKindLabel(input.kind)
+  const label = getTimeOffKindLabel(input.kind);
 
   // Acknowledge the requester (mirrors the timecard-submit confirmation) so a
   // submitted request always leaves a trace on the requester's side, even if the
@@ -68,14 +68,14 @@ export async function createTimeOffRequest(
       content: `Dein Antrag auf ${label} (${formatRange(created)}) wurde eingereicht und wartet auf Freigabe.`,
       related_type: RELATED_TYPES.TIME_OFF,
       related_id: id,
-    })
+    });
   } catch (error) {
-    logger.error('time-off: acknowledge requester failed', { error, requestId: id })
+    logger.error('time-off: acknowledge requester failed', { error, requestId: id });
   }
 
   // Notify approvers (staff with timecards permission) — in-app + email.
   try {
-    const approverIds = await getTimecardApproverIds(userId)
+    const approverIds = await getTimecardApproverIds(userId);
     if (approverIds.length > 0) {
       await notifyUsers(approverIds, {
         type: NOTIFICATION_TYPES.TIME_OFF_REQUESTED,
@@ -83,13 +83,13 @@ export async function createTimeOffRequest(
         content: `${created.user_name || created.user_email || 'Ein Teammitglied'} beantragt ${label} (${formatRange(created)}).`,
         related_type: RELATED_TYPES.TIME_OFF_REVIEW,
         related_id: id,
-      })
+      });
     }
   } catch (error) {
-    logger.error('time-off: notify approvers failed', { error, requestId: id })
+    logger.error('time-off: notify approvers failed', { error, requestId: id });
   }
 
-  return created
+  return created;
 }
 
 export async function listMyTimeOffRequests(userId: string): Promise<TimeOffRequest[]> {
@@ -98,33 +98,33 @@ export async function listMyTimeOffRequests(userId: string): Promise<TimeOffRequ
      WHERE r.user_id = $1
      ORDER BY r.starts_on DESC`,
     [userId],
-  )
-  return result.rows
+  );
+  return result.rows;
 }
 
 export async function listTimeOffRequests(status?: string): Promise<TimeOffRequest[]> {
-  const params: unknown[] = []
-  let where = ''
+  const params: unknown[] = [];
+  let where = '';
   if (status && status !== 'all') {
-    params.push(status)
-    where = `WHERE r.status = $1`
+    params.push(status);
+    where = `WHERE r.status = $1`;
   }
   const result = await query<TimeOffRequest>(
     `SELECT ${SELECT_COLS} ${FROM_JOINS}
      ${where}
      ORDER BY (r.status = 'pending') DESC, r.starts_on ASC`,
     params,
-  )
-  return result.rows
+  );
+  return result.rows;
 }
 
 async function getRequestsByIds(ids: string[]): Promise<TimeOffRequest[]> {
-  if (ids.length === 0) return []
+  if (ids.length === 0) return [];
   const result = await query<TimeOffRequest>(
     `SELECT ${SELECT_COLS} ${FROM_JOINS} WHERE r.id = ANY($1)`,
     [ids],
-  )
-  return result.rows
+  );
+  return result.rows;
 }
 
 /** Requester cancels their own still-pending request. Returns null if not allowed. */
@@ -137,17 +137,17 @@ export async function cancelTimeOffRequest(
      WHERE id = $2 AND user_id = $3 AND status = $4
      RETURNING id`,
     [TIME_OFF_STATUSES.CANCELLED, id, userId, TIME_OFF_STATUSES.PENDING],
-  )
-  if (updated.rows.length === 0) return null
-  const [row] = await getRequestsByIds([id])
-  return row ?? null
+  );
+  if (updated.rows.length === 0) return null;
+  const [row] = await getRequestsByIds([id]);
+  return row ?? null;
 }
 
 // Declarative review transitions — pilot A of the shared review-workflow core.
 const REVIEW_TRANSITIONS: TransitionTable = [
   { action: 'approve', from: TIME_OFF_STATUSES.PENDING, to: TIME_OFF_STATUSES.APPROVED },
   { action: 'reject', from: TIME_OFF_STATUSES.PENDING, to: TIME_OFF_STATUSES.REJECTED },
-]
+];
 
 /** Approver grants or declines a pending request; notifies the requester. */
 export async function reviewTimeOffRequest(
@@ -155,7 +155,7 @@ export async function reviewTimeOffRequest(
   id: string,
   input: ReviewTimeOffInput,
 ): Promise<TimeOffRequest | null> {
-  const action = input.status === TIME_OFF_STATUSES.APPROVED ? 'approve' : 'reject'
+  const action = input.status === TIME_OFF_STATUSES.APPROVED ? 'approve' : 'reject';
 
   const result = await runReviewTransition<{ status: string; user_id: string }>({
     // Column defaults (status/reviewed_by/reviewed_at/review_notes/updated_at)
@@ -169,9 +169,9 @@ export async function reviewTimeOffRequest(
     emit: async (row) => {
       // Re-fetch the joined projection (kind label + formatted range come
       // from the display query, not the locked row).
-      const [full] = await getRequestsByIds([id])
-      if (!full) return null
-      const approved = action === 'approve'
+      const [full] = await getRequestsByIds([id]);
+      if (!full) return null;
+      const approved = action === 'approve';
       return {
         type: NOTIFICATION_TYPES.TIME_OFF_REVIEWED,
         recipients: { userId: String(row.user_id) },
@@ -180,14 +180,14 @@ export async function reviewTimeOffRequest(
           approved ? 'genehmigt' : 'abgelehnt'
         }.${input.review_notes ? ` Hinweis: ${input.review_notes}` : ''}`,
         related: { type: RELATED_TYPES.TIME_OFF, id },
-      }
+      };
     },
-  })
+  });
 
   // Route contract: null → 404 ("kein offener Antrag") for every failure mode
   // (missing row, already reviewed, lost race).
-  if (!result.ok) return null
-  const [row] = await getRequestsByIds([id])
+  if (!result.ok) return null;
+  const [row] = await getRequestsByIds([id]);
 
   // ONE flow: an approved request lands in leave_periods (HR record) and as
   // timecard entries on the scheduled days — the Feriensaldo drops without
@@ -201,8 +201,8 @@ export async function reviewTimeOffRequest(
       endsOn: row.ends_on,
       note: row.note,
       reviewerId: reviewerId,
-    }).catch(err => logger.error('Time-off materialization failed', { error: err, id }))
+    }).catch((err) => logger.error('Time-off materialization failed', { error: err, id }));
   }
 
-  return row ?? null
+  return row ?? null;
 }

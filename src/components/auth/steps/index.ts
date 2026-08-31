@@ -1,2 +1,2 @@
-export { AccountStep } from './AccountStep'
-export { VerifyStep } from './VerifyStep'
+export { AccountStep } from './AccountStep';
+export { VerifyStep } from './VerifyStep';

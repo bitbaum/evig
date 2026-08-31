@@ -7,7 +7,7 @@ import { NextRequest } from 'next/server';
 import { z } from 'zod';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
 import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers';
-import { ERROR_MESSAGES } from '@/config/error-messages'
+import { ERROR_MESSAGES } from '@/config/error-messages';
 import { db } from '@/db';
 import { sellerProfiles, userProfiles } from '@/db/schema';
 import { eq, sql } from 'drizzle-orm';

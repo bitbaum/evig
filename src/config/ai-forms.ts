@@ -9,8 +9,8 @@
  * retype a palette or an enum here.
  */
 
-import { defineFields, type FormTarget } from '@fleet/ai-forms'
-import { UI_COLOR_PALETTE } from '@/config/ui-colors'
+import { defineFields, type FormTarget } from '@fleet/ai-forms';
+import { UI_COLOR_PALETTE } from '@/config/ui-colors';
 
 export const CATEGORY_FORM: FormTarget = {
   key: 'blog-category',
@@ -58,7 +58,7 @@ export const CATEGORY_FORM: FormTarget = {
     'Die Beschreibung ist für Leserinnen und Leser des Blogs, nicht für interne Notizen.',
     'Wähle eine Farbe nur, wenn der Text eine nennt oder klar nahelegt. Sonst die vorhandene lassen.',
   ],
-}
+};
 
 /** Every form the assistant may touch. The client can only name these keys. */
-export const AI_FORMS: readonly FormTarget[] = [CATEGORY_FORM]
+export const AI_FORMS: readonly FormTarget[] = [CATEGORY_FORM];

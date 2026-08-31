@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
-import { adminInteractive } from '@/lib/admin-ui'
+import { useTranslations } from 'next-intl';
+import { adminInteractive } from '@/lib/admin-ui';
 
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { formatDateShort } from '@/lib/date-formats'
-import { LOCATION_STATUS, LOCATION_STATUS_CONFIG } from '@/config/location-status'
-import { ADMIN_CONTENT } from '@/config/admin-content'
-import { AdminStatusBadge } from '@/components/admin/AdminStatusBadge'
-import { Pagination } from '@/components/ui/Pagination'
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import Heading from '@/components/admin/AdminHeading'
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { formatDateShort } from '@/lib/date-formats';
+import { LOCATION_STATUS, LOCATION_STATUS_CONFIG } from '@/config/location-status';
+import { ADMIN_CONTENT } from '@/config/admin-content';
+import { AdminStatusBadge } from '@/components/admin/AdminStatusBadge';
+import { Pagination } from '@/components/ui/Pagination';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import Heading from '@/components/admin/AdminHeading';
 import {
   MapPin,
   Plus,
@@ -23,22 +23,25 @@ import {
   Users,
   Building2,
   Loader2,
-} from 'lucide-react'
-import { AdminFilterBar } from '@/components/admin/AdminFilterBar'
-import { Input } from '@/components/ui/input'
-import { useAdminLocations } from '@/hooks/useAdminLocations'
-import { ROUTES } from '@/config/routes'
+} from 'lucide-react';
+import { AdminFilterBar } from '@/components/admin/AdminFilterBar';
+import { Input } from '@/components/ui/input';
+import { useAdminLocations } from '@/hooks/useAdminLocations';
+import { ROUTES } from '@/config/routes';
 
 function getTypeIcon(type: string) {
   switch (type) {
-    case 'venue': return <Building2 className="w-4 h-4" />
-    case 'online': return <Eye className="w-4 h-4" />
-    default: return <MapPin className="w-4 h-4" />
+    case 'venue':
+      return <Building2 className="w-4 h-4" />;
+    case 'online':
+      return <Eye className="w-4 h-4" />;
+    default:
+      return <MapPin className="w-4 h-4" />;
   }
 }
 
 export default function AdminLocationsPage() {
-  const t = useTranslations('admin.locations')
+  const t = useTranslations('admin.locations');
   const {
     sessionStatus,
     filteredLocations,
@@ -57,7 +60,7 @@ export default function AdminLocationsPage() {
     setCurrentPage,
     setConfirmTarget,
     doApproval,
-  } = useAdminLocations()
+  } = useAdminLocations();
 
   if (sessionStatus === 'loading' || loading) {
     return (
@@ -69,7 +72,7 @@ export default function AdminLocationsPage() {
           ))}
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -94,19 +97,31 @@ export default function AdminLocationsPage() {
             key: 'status',
             label: 'Status',
             value: filters.status,
-            onChange: (value) => setFilters(prev => ({ ...prev, status: value })),
+            onChange: (value) => setFilters((prev) => ({ ...prev, status: value })),
             options: [
-              { value: LOCATION_STATUS.PENDING, label: LOCATION_STATUS_CONFIG[LOCATION_STATUS.PENDING].label },
-              { value: LOCATION_STATUS.APPROVED, label: LOCATION_STATUS_CONFIG[LOCATION_STATUS.APPROVED].label },
-              { value: LOCATION_STATUS.REJECTED, label: LOCATION_STATUS_CONFIG[LOCATION_STATUS.REJECTED].label },
-              { value: LOCATION_STATUS.SUSPENDED, label: LOCATION_STATUS_CONFIG[LOCATION_STATUS.SUSPENDED].label },
+              {
+                value: LOCATION_STATUS.PENDING,
+                label: LOCATION_STATUS_CONFIG[LOCATION_STATUS.PENDING].label,
+              },
+              {
+                value: LOCATION_STATUS.APPROVED,
+                label: LOCATION_STATUS_CONFIG[LOCATION_STATUS.APPROVED].label,
+              },
+              {
+                value: LOCATION_STATUS.REJECTED,
+                label: LOCATION_STATUS_CONFIG[LOCATION_STATUS.REJECTED].label,
+              },
+              {
+                value: LOCATION_STATUS.SUSPENDED,
+                label: LOCATION_STATUS_CONFIG[LOCATION_STATUS.SUSPENDED].label,
+              },
             ],
           },
           {
             key: 'type',
             label: 'Typ',
             value: filters.type,
-            onChange: (value) => setFilters(prev => ({ ...prev, type: value })),
+            onChange: (value) => setFilters((prev) => ({ ...prev, type: value })),
             options: [
               { value: 'venue', label: 'Veranstaltungsort' },
               { value: 'home', label: 'Zu Hause' },
@@ -122,7 +137,7 @@ export default function AdminLocationsPage() {
           <Input
             type="text"
             value={filters.city}
-            onChange={(e) => setFilters(prev => ({ ...prev, city: e.target.value }))}
+            onChange={(e) => setFilters((prev) => ({ ...prev, city: e.target.value }))}
             placeholder="Stadt suchen..."
           />
         </div>
@@ -151,7 +166,10 @@ export default function AdminLocationsPage() {
                     <Heading level={3} className="text-lg font-semibold text-text-primary truncate">
                       {location.name}
                     </Heading>
-                    <AdminStatusBadge status={location.approvalStatus} config={LOCATION_STATUS_CONFIG} />
+                    <AdminStatusBadge
+                      status={location.approvalStatus}
+                      config={LOCATION_STATUS_CONFIG}
+                    />
                   </div>
 
                   <div className="flex flex-wrap items-center gap-4 text-sm text-text-secondary mb-3">
@@ -188,7 +206,13 @@ export default function AdminLocationsPage() {
                   {location.approvalStatus === LOCATION_STATUS.PENDING && (
                     <>
                       <Button
-                        onClick={() => setConfirmTarget({ id: location.id, action: 'approve', name: location.name })}
+                        onClick={() =>
+                          setConfirmTarget({
+                            id: location.id,
+                            action: 'approve',
+                            name: location.name,
+                          })
+                        }
                         disabled={actionLoading}
                         variant="primary"
                         size="sm"
@@ -201,7 +225,13 @@ export default function AdminLocationsPage() {
                         Genehmigen
                       </Button>
                       <Button
-                        onClick={() => setConfirmTarget({ id: location.id, action: 'reject', name: location.name })}
+                        onClick={() =>
+                          setConfirmTarget({
+                            id: location.id,
+                            action: 'reject',
+                            name: location.name,
+                          })
+                        }
                         disabled={actionLoading}
                         variant="destructive"
                         size="sm"
@@ -230,8 +260,8 @@ export default function AdminLocationsPage() {
                 {searchName.trim()
                   ? `Keine Orte für "${searchName}" gefunden.`
                   : filters.status !== 'all'
-                  ? `Keine Orte mit Status "${LOCATION_STATUS_CONFIG[filters.status as keyof typeof LOCATION_STATUS_CONFIG]?.label ?? filters.status}" gefunden.`
-                  : ADMIN_CONTENT.locations.emptyDescription}
+                    ? `Keine Orte mit Status "${LOCATION_STATUS_CONFIG[filters.status as keyof typeof LOCATION_STATUS_CONFIG]?.label ?? filters.status}" gefunden.`
+                    : ADMIN_CONTENT.locations.emptyDescription}
               </p>
               <Button as={Link} href={ROUTES.admin.locationNew} variant="primary">
                 <Plus className="w-4 h-4 mr-2" />
@@ -267,5 +297,5 @@ export default function AdminLocationsPage() {
         onClose={() => setConfirmTarget(null)}
       />
     </AdminPageWrapper>
-  )
+  );
 }

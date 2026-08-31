@@ -1,42 +1,47 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Star, Loader2, AlertCircle } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { apiFetch } from '@/lib/api/client'
-import Heading from '@/components/ui/Heading'
+import { useState } from 'react';
+import { Star, Loader2, AlertCircle } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { apiFetch } from '@/lib/api/client';
+import Heading from '@/components/ui/Heading';
 
 interface ReviewFormProps {
-  targetType: string
-  targetId: string
-  onSubmitted: () => void
-  onCancel: () => void
+  targetType: string;
+  targetId: string;
+  onSubmitted: () => void;
+  onCancel: () => void;
 }
 
-export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel }: ReviewFormProps) {
-  const t = useTranslations('marketplace.review')
-  const [rating, setRating] = useState(0)
-  const [hoverRating, setHoverRating] = useState(0)
-  const [title, setTitle] = useState('')
-  const [content, setContent] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+export default function ReviewForm({
+  targetType,
+  targetId,
+  onSubmitted,
+  onCancel,
+}: ReviewFormProps) {
+  const t = useTranslations('marketplace.review');
+  const [rating, setRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async () => {
     if (rating === 0) {
-      setError(t('errorNoRating'))
-      return
+      setError(t('errorNoRating'));
+      return;
     }
     if (content.trim().length < 10) {
-      setError(t('errorTooShort'))
-      return
+      setError(t('errorTooShort'));
+      return;
     }
 
-    setIsSubmitting(true)
-    setError(null)
+    setIsSubmitting(true);
+    setError(null);
 
     try {
       const result = await apiFetch<void>('/api/reviews', {
@@ -48,23 +53,25 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
           title: title.trim() || null,
           content: content.trim(),
         },
-      })
+      });
 
       if (result.success) {
-        onSubmitted()
+        onSubmitted();
       } else {
-        setError(result.error || t('errorSubmit'))
+        setError(result.error || t('errorSubmit'));
       }
     } catch {
-      setError(t('errorGeneric'))
+      setError(t('errorGeneric'));
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   return (
     <div className="border-t border-subtle pt-4 mt-4 space-y-4">
-      <Heading level={3} className="text-sm font-semibold text-text-primary">{t('heading')}</Heading>
+      <Heading level={3} className="text-sm font-semibold text-text-primary">
+        {t('heading')}
+      </Heading>
 
       {/* Star Rating */}
       <div>
@@ -92,9 +99,7 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
               />
             </Button>
           ))}
-          {rating > 0 && (
-            <span className="ml-2 text-sm text-text-tertiary">{rating}/5</span>
-          )}
+          {rating > 0 && <span className="ml-2 text-sm text-text-tertiary">{rating}/5</span>}
         </div>
       </div>
 
@@ -139,13 +144,9 @@ export default function ReviewForm({ targetType, targetId, onSubmitted, onCancel
           {t('cancelButton')}
         </Button>
         <Button onClick={handleSubmit} disabled={isSubmitting} size="sm" className="flex-1 gap-2">
-          {isSubmitting ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
-          ) : (
-            t('submitButton')
-          )}
+          {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : t('submitButton')}
         </Button>
       </div>
     </div>
-  )
+  );
 }

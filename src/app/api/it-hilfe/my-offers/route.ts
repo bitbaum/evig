@@ -1,12 +1,12 @@
-import { NextRequest } from 'next/server'
-import { withAuth, ValidSession } from '@/lib/api/middleware'
-import { db } from '@/db'
-import { itHilfeOffers, itHilfeRequests, users } from '@/db/schema'
-import { eq, and, sql, desc } from 'drizzle-orm'
-import { apiError, apiSuccess, parsePagination , hasMoreItems} from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { IT_HILFE_PAGINATION } from '@/config/it-hilfe'
-import { logger } from '@/lib/logger'
+import { NextRequest } from 'next/server';
+import { withAuth, ValidSession } from '@/lib/api/middleware';
+import { db } from '@/db';
+import { itHilfeOffers, itHilfeRequests, users } from '@/db/schema';
+import { eq, and, sql, desc } from 'drizzle-orm';
+import { apiError, apiSuccess, parsePagination, hasMoreItems } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { IT_HILFE_PAGINATION } from '@/config/it-hilfe';
+import { logger } from '@/lib/logger';
 
 /**
  * GET /api/it-hilfe/my-offers
@@ -14,17 +14,17 @@ import { logger } from '@/lib/logger'
  */
 export const GET = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
-    const { searchParams } = new URL(request.url)
-    const status = searchParams.get('status')
-    const { limit, offset } = parsePagination(request, IT_HILFE_PAGINATION)
+    const { searchParams } = new URL(request.url);
+    const status = searchParams.get('status');
+    const { limit, offset } = parsePagination(request, IT_HILFE_PAGINATION);
 
-    const conditions = [eq(itHilfeOffers.helperId, session.user.id)]
+    const conditions = [eq(itHilfeOffers.helperId, session.user.id)];
 
     if (status) {
-      conditions.push(eq(itHilfeOffers.status, status))
+      conditions.push(eq(itHilfeOffers.status, status));
     }
 
-    const where = and(...conditions)
+    const where = and(...conditions);
 
     const rows = await db
       .select({
@@ -58,9 +58,9 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
       .where(where)
       .orderBy(desc(itHilfeOffers.createdAt))
       .limit(limit)
-      .offset(offset)
+      .offset(offset);
 
-    const total = Number(rows[0]?._total ?? 0)
+    const total = Number(rows[0]?._total ?? 0);
     const offers = rows.map(({ _total, ...row }) => ({
       id: row.id,
       requestId: row.requestId,
@@ -83,13 +83,13 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
         expiresAt: row.request_expires_at,
         requesterName: row.requester_name,
       },
-    }))
+    }));
 
     logger.info('Fetched user IT-Hilfe offers', {
       userId: session.user.id,
       count: offers.length,
       total,
-    })
+    });
 
     return apiSuccess({
       offers,
@@ -99,9 +99,9 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
         offset,
         hasMore: hasMoreItems(offset, limit, total),
       },
-    })
+    });
   } catch (error) {
-    logger.error('Error fetching user IT-Hilfe offers', { error })
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    logger.error('Error fetching user IT-Hilfe offers', { error });
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
-})
+});

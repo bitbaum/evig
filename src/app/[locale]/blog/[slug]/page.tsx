@@ -1,28 +1,34 @@
-import { Metadata } from 'next'
-import Image from 'next/image'
-import { notFound } from 'next/navigation'
-import { getLocale } from 'next-intl/server'
-import { getPostBySlug, getHiddenSlugs, getDbPostLocales, getDbPostForPreview, getAllCategories } from '@/lib/blog-db'
-import { auth } from '@/auth'
-import { getPostBySlug as getFilePost, isListedPost, getPostLocales } from '@/lib/blog'
-import { canViewPost, filterViewable, type BlogViewer } from '@/lib/blog-access'
-import { getMergedPosts } from '@/lib/blog-merge'
-import { slugifyCategory } from '@/lib/blog-utils'
-import { RETIRED_POST_REDIRECTS } from '@/config/blog'
-import { permanentRedirect } from '@/i18n/navigation'
-import { APP_URL } from '@/config/urls'
-import { ORG } from '@/config/org'
-import { ROUTES } from '@/config/routes'
-import { resolveAuthorProfile } from '@/lib/blog/author'
-import { defaultLocale } from '@/i18n/routing'
-import { isUnlistedUnlocked } from '@/lib/blog-unlisted-auth'
-import BlogPasswordGate from './BlogPasswordGate'
-import BlogUnavailable from './BlogUnavailable'
-import BlogPostHeader from '@/components/blog/BlogPostHeader'
-import BlogPostContent from '@/components/blog/BlogPostContent'
-import BlogPrevNext from '@/components/blog/BlogPrevNext'
-import BlogComments from '@/components/blog/BlogComments'
-import RelatedPosts from '@/components/blog/RelatedPosts'
+import { Metadata } from 'next';
+import Image from 'next/image';
+import { notFound } from 'next/navigation';
+import { getLocale } from 'next-intl/server';
+import {
+  getPostBySlug,
+  getHiddenSlugs,
+  getDbPostLocales,
+  getDbPostForPreview,
+  getAllCategories,
+} from '@/lib/blog-db';
+import { auth } from '@/auth';
+import { getPostBySlug as getFilePost, isListedPost, getPostLocales } from '@/lib/blog';
+import { canViewPost, filterViewable, type BlogViewer } from '@/lib/blog-access';
+import { getMergedPosts } from '@/lib/blog-merge';
+import { slugifyCategory } from '@/lib/blog-utils';
+import { RETIRED_POST_REDIRECTS } from '@/config/blog';
+import { permanentRedirect } from '@/i18n/navigation';
+import { APP_URL } from '@/config/urls';
+import { ORG } from '@/config/org';
+import { ROUTES } from '@/config/routes';
+import { resolveAuthorProfile } from '@/lib/blog/author';
+import { defaultLocale } from '@/i18n/routing';
+import { isUnlistedUnlocked } from '@/lib/blog-unlisted-auth';
+import BlogPasswordGate from './BlogPasswordGate';
+import BlogUnavailable from './BlogUnavailable';
+import BlogPostHeader from '@/components/blog/BlogPostHeader';
+import BlogPostContent from '@/components/blog/BlogPostContent';
+import BlogPrevNext from '@/components/blog/BlogPrevNext';
+import BlogComments from '@/components/blog/BlogComments';
+import RelatedPosts from '@/components/blog/RelatedPosts';
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -33,23 +39,23 @@ interface BlogPostPageProps {
 // Helper to get post from DB or file system (file posts are locale-aware,
 // falling back to the German original when a translation is absent).
 async function getPost(slug: string, locale: string, allowDraft = false) {
-  const dbPost = await getPostBySlug(slug, locale)
-  if (dbPost) return dbPost
+  const dbPost = await getPostBySlug(slug, locale);
+  if (dbPost) return dbPost;
   // Staff previewing an unpublished DB post (draft) — fetch regardless of state.
   if (allowDraft) {
-    const draft = await getDbPostForPreview(slug, locale)
-    if (draft) return draft
+    const draft = await getDbPostForPreview(slug, locale);
+    if (draft) return draft;
   }
   // A file post the admin "deleted" is hidden (its markdown stays as fallback).
-  const file = getFilePost(slug, locale)
-  if (!file) return null
-  const hidden = await getHiddenSlugs()
-  return hidden.has(slug) ? null : file
+  const file = getFilePost(slug, locale);
+  if (!file) return null;
+  const hidden = await getHiddenSlugs();
+  return hidden.has(slug) ? null : file;
 }
 
 // Unified DB + git-file read layer (deduped by slug).
 async function getPosts(locale: string) {
-  return getMergedPosts(locale)
+  return getMergedPosts(locale);
 }
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
@@ -73,16 +79,16 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   }
 
   // Link-only posts (shareable-link or password-gated) stay out of the index.
-  const isNoindex = post.visibility === 'unlisted' || post.visibility === 'link'
-  const canonical = `${APP_URL}/blog/${slug}`
+  const isNoindex = post.visibility === 'unlisted' || post.visibility === 'link';
+  const canonical = `${APP_URL}/blog/${slug}`;
   // Union of file-post locales (sibling .md files) and DB-post locales
   // (translation rows) so hreflang is correct wherever the post lives.
   const localesForSlug = Array.from(
     new Set([...getPostLocales(slug), ...(await getDbPostLocales(slug))]),
-  )
-  const languages: Record<string, string> = {}
+  );
+  const languages: Record<string, string> = {};
   for (const loc of localesForSlug) {
-    languages[loc] = loc === defaultLocale ? canonical : `${APP_URL}/${loc}/blog/${slug}`
+    languages[loc] = loc === defaultLocale ? canonical : `${APP_URL}/${loc}/blog/${slug}`;
   }
 
   return {
@@ -187,17 +193,19 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const listedPosts = viewablePosts.filter(isListedPost);
   const postIndex = listedPosts.findIndex((p) => p.slug === post.slug);
   const newerPost = postIndex > 0 ? listedPosts[postIndex - 1] : null;
-  const olderPost = postIndex >= 0 && postIndex < listedPosts.length - 1 ? listedPosts[postIndex + 1] : null;
+  const olderPost =
+    postIndex >= 0 && postIndex < listedPosts.length - 1 ? listedPosts[postIndex + 1] : null;
 
   // Category link target: the DB category slug when one exists, otherwise the
   // same fallback slug the index generates (SSOT via slugifyCategory).
   let categorySlug: string | undefined;
   if (post.category) {
     const dbCategories = await getAllCategories();
-    categorySlug = dbCategories.find((c) => c.name === post.category)?.slug || slugifyCategory(post.category);
+    categorySlug =
+      dbCategories.find((c) => c.name === post.category)?.slug || slugifyCategory(post.category);
   }
 
-  const author = await resolveAuthorProfile(post.author, post.authorId)
+  const author = await resolveAuthorProfile(post.author, post.authorId);
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -213,7 +221,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     publisher: { '@type': 'Organization', name: ORG.name },
     mainEntityOfPage: `${APP_URL}/blog/${post.slug}`,
     inLanguage: locale,
-  }
+  };
 
   return (
     <main>
@@ -226,7 +234,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       {isDraft && (
         <div className="mx-auto mt-4 max-w-[960px] px-4 sm:px-6">
           <div className="rounded-lg border border-warning-300 bg-warning-50 px-4 py-2.5 text-sm text-warning-800 dark:border-warning-800 dark:bg-warning-900/20 dark:text-warning-200">
-            Entwurf — nur für angemeldete Mitarbeitende sichtbar. Mit „Veröffentlichen" wird der Beitrag öffentlich.
+            Entwurf — nur für angemeldete Mitarbeitende sichtbar. Mit „Veröffentlichen" wird der
+            Beitrag öffentlich.
           </div>
         </div>
       )}

@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { ChevronDown, ChevronUp } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import Heading from '@/components/admin/AdminHeading'
-import { adminInteractive } from '@/lib/admin-ui'
+import { useState } from 'react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Heading from '@/components/admin/AdminHeading';
+import { adminInteractive } from '@/lib/admin-ui';
 
 interface CollapsibleSectionProps {
-  title: string
-  children: React.ReactNode
-  defaultOpen?: boolean
+  title: string;
+  children: React.ReactNode;
+  defaultOpen?: boolean;
 }
 
 export function CollapsibleSection({
@@ -17,7 +17,7 @@ export function CollapsibleSection({
   children,
   defaultOpen = true,
 }: CollapsibleSectionProps) {
-  const [isOpen, setIsOpen] = useState(defaultOpen)
+  const [isOpen, setIsOpen] = useState(defaultOpen);
 
   return (
     <section className="bg-surface-base rounded-xl shadow-xs border border-subtle overflow-hidden">
@@ -27,7 +27,9 @@ export function CollapsibleSection({
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full flex items-center justify-between px-6 py-4 bg-surface-raised ${adminInteractive.rowHover} h-auto rounded-none`}
       >
-        <Heading level={3} className="text-lg text-text-primary">{title}</Heading>
+        <Heading level={3} className="text-lg text-text-primary">
+          {title}
+        </Heading>
         {isOpen ? (
           <ChevronUp className="w-5 h-5 text-text-tertiary" />
         ) : (
@@ -36,5 +38,5 @@ export function CollapsibleSection({
       </Button>
       {isOpen && <div className="p-6 space-y-4">{children}</div>}
     </section>
-  )
+  );
 }

@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Link } from '@/i18n/navigation'
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
-import { Card } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { useState } from 'react';
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/ui/Heading';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import {
   MapPin,
   Clock,
@@ -17,18 +17,18 @@ import {
   Users,
   Pencil,
   Star,
-} from 'lucide-react'
-import { formatDate } from '@/lib/date-formats'
-import { formatBudget, getServiceTypeById, REQUEST_STATUS } from '@/config/it-hilfe'
-import type { ITHilfeRequest } from './types'
-import { ROUTES } from '@/config/routes'
+} from 'lucide-react';
+import { formatDate } from '@/lib/date-formats';
+import { formatBudget, getServiceTypeById, REQUEST_STATUS } from '@/config/it-hilfe';
+import type { ITHilfeRequest } from './types';
+import { ROUTES } from '@/config/routes';
 
 interface RequestSidebarProps {
-  request: ITHilfeRequest
-  conversationId: string | null
-  hasSession: boolean
-  onShowMessages: () => void
-  onStatusChange: (status: string) => void
+  request: ITHilfeRequest;
+  conversationId: string | null;
+  hasSession: boolean;
+  onShowMessages: () => void;
+  onStatusChange: (status: string) => void;
 }
 
 export function RequestSidebar({
@@ -38,31 +38,34 @@ export function RequestSidebar({
   onShowMessages,
   onStatusChange,
 }: RequestSidebarProps) {
-  const t = useTranslations('itHelp.detail')
-  const serviceConfig = getServiceTypeById(request.serviceType)
+  const t = useTranslations('itHelp.detail');
+  const serviceConfig = getServiceTypeById(request.serviceType);
   // Stable snapshot of "now" — Date.now() must not be called directly in render (react-hooks/purity)
-  const [now] = useState(Date.now)
+  const [now] = useState(Date.now);
 
   // Compute time remaining as structured data, then format via t()
   function getTimeRemaining(): string | null {
-    const expires = new Date(request.expiresAt).getTime()
-    const msLeft = expires - now
-    if (msLeft <= 0) return t('expiredStatus')
-    const days = Math.floor(msLeft / (1000 * 60 * 60 * 24))
-    const hours = Math.floor((msLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
-    if (days > 7) return null
-    if (days > 0) return t('timeLeftDays', { count: days })
-    if (hours > 0) return t('timeLeftHours', { count: hours })
-    return t('timeLeftLessThanHour')
+    const expires = new Date(request.expiresAt).getTime();
+    const msLeft = expires - now;
+    if (msLeft <= 0) return t('expiredStatus');
+    const days = Math.floor(msLeft / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((msLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    if (days > 7) return null;
+    if (days > 0) return t('timeLeftDays', { count: days });
+    if (hours > 0) return t('timeLeftHours', { count: hours });
+    return t('timeLeftLessThanHour');
   }
 
-  const timeRemaining = getTimeRemaining()
+  const timeRemaining = getTimeRemaining();
 
   return (
     <div className="space-y-6">
       {/* Request Info */}
       <Card className="p-6">
-        <Heading level={3} className="text-sm font-medium text-text-tertiary uppercase tracking-wider mb-4">
+        <Heading
+          level={3}
+          className="text-sm font-medium text-text-tertiary uppercase tracking-wider mb-4"
+        >
           {t('sidebarDetails')}
         </Heading>
 
@@ -84,9 +87,7 @@ export function RequestSidebar({
             <Wrench className="w-5 h-5 text-text-muted mt-0.5" aria-hidden="true" />
             <div>
               <p className="text-sm text-text-tertiary">{t('budgetLabel')}</p>
-              <p className="font-medium text-action">
-                {formatBudget(request.budgetAmountCents)}
-              </p>
+              <p className="font-medium text-action">{formatBudget(request.budgetAmountCents)}</p>
             </div>
           </div>
 
@@ -117,9 +118,7 @@ export function RequestSidebar({
             <Calendar className="w-5 h-5 text-text-muted mt-0.5" aria-hidden="true" />
             <div>
               <p className="text-sm text-text-tertiary">{t('createdLabel')}</p>
-              <p className="font-medium text-text-primary">
-                {formatDate(request.createdAt)}
-              </p>
+              <p className="font-medium text-text-primary">{formatDate(request.createdAt)}</p>
             </div>
           </div>
 
@@ -128,11 +127,11 @@ export function RequestSidebar({
             <Clock className="w-5 h-5 text-text-muted mt-0.5" aria-hidden="true" />
             <div>
               <p className="text-sm text-text-tertiary">{t('expiresLabel')}</p>
-              <p className="font-medium text-text-primary">
-                {formatDate(request.expiresAt)}
-              </p>
+              <p className="font-medium text-text-primary">{formatDate(request.expiresAt)}</p>
               {timeRemaining && (
-                <p className={`text-xs mt-0.5 ${timeRemaining === t('expiredStatus') ? 'text-error-600 font-medium' : 'text-warning-600'}`}>
+                <p
+                  className={`text-xs mt-0.5 ${timeRemaining === t('expiredStatus') ? 'text-error-600 font-medium' : 'text-warning-600'}`}
+                >
                   {timeRemaining}
                 </p>
               )}
@@ -144,7 +143,10 @@ export function RequestSidebar({
       {/* Preferred technician (owner only) */}
       {request.isOwner && request.preferredTechnicianId && request.preferredTechnicianName && (
         <Card className="p-6">
-          <Heading level={3} className="text-sm font-medium text-text-tertiary uppercase tracking-wider mb-4">
+          <Heading
+            level={3}
+            className="text-sm font-medium text-text-tertiary uppercase tracking-wider mb-4"
+          >
             {t('preferredTechnicianSidebar.title')}
           </Heading>
           <div className="flex items-start gap-3">
@@ -155,7 +157,9 @@ export function RequestSidebar({
                 <p className="text-sm text-text-secondary">{request.preferredTechnicianCity}</p>
               )}
               <p className="text-sm text-text-tertiary mt-1">
-                {t('preferredTechnicianSidebar.description', { name: request.preferredTechnicianName })}
+                {t('preferredTechnicianSidebar.description', {
+                  name: request.preferredTechnicianName,
+                })}
               </p>
               <Link
                 href={ROUTES.public.technicianProfile(request.preferredTechnicianId)}
@@ -170,7 +174,10 @@ export function RequestSidebar({
 
       {/* Requester Info */}
       <Card className="p-6">
-        <Heading level={3} className="text-sm font-medium text-text-tertiary uppercase tracking-wider mb-4">
+        <Heading
+          level={3}
+          className="text-sm font-medium text-text-tertiary uppercase tracking-wider mb-4"
+        >
           {t('requesterSection')}
         </Heading>
         <div className="flex items-center gap-3">
@@ -199,17 +206,26 @@ export function RequestSidebar({
       {/* Owner Actions */}
       {request.isOwner && (
         <Card className="p-6">
-          <Heading level={3} className="text-sm font-medium text-text-tertiary uppercase tracking-wider mb-4">
+          <Heading
+            level={3}
+            className="text-sm font-medium text-text-tertiary uppercase tracking-wider mb-4"
+          >
             {t('actionsSection')}
           </Heading>
           <div className="space-y-2">
             {request.status === REQUEST_STATUS.OPEN && (
-              <Button as={Link} href={`/it-hilfe/${request.id}/edit`} variant="primary" className="w-full justify-center">
+              <Button
+                as={Link}
+                href={`/it-hilfe/${request.id}/edit`}
+                variant="primary"
+                className="w-full justify-center"
+              >
                 <Pencil className="w-4 h-4" />
                 {t('editRequest')}
               </Button>
             )}
-            {(request.status === REQUEST_STATUS.OPEN || request.status === REQUEST_STATUS.MATCHED) && (
+            {(request.status === REQUEST_STATUS.OPEN ||
+              request.status === REQUEST_STATUS.MATCHED) && (
               <Button
                 variant="destructive-ghost"
                 onClick={() => onStatusChange(REQUEST_STATUS.CANCELLED)}
@@ -219,12 +235,17 @@ export function RequestSidebar({
                 {t('cancelRequest')}
               </Button>
             )}
-            <Button as={Link} href={ROUTES.public.itHilfeMy} variant="secondary" className="w-full justify-center">
+            <Button
+              as={Link}
+              href={ROUTES.public.itHilfeMy}
+              variant="secondary"
+              className="w-full justify-center"
+            >
               {t('allMyRequests')}
             </Button>
           </div>
         </Card>
       )}
     </div>
-  )
+  );
 }

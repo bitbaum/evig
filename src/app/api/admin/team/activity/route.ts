@@ -12,32 +12,28 @@
  * Access: Staff with 'team' permission
  */
 
-import { withAdmin } from '@/lib/api/middleware'
-import { db } from '@/db'
-import { sql, SQL, getTableName } from 'drizzle-orm'
-import {
-  apiSuccess,
-  apiError,
-  apiBadRequest,
-} from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { HELP_REQUEST_STATUSES } from '@/config/activity'
-import { validateActivityStreamFilter } from '@/lib/schemas/activity'
-import { taskCompletions, tasks } from '@/db/schema/misc'
-import { activityUpdates, helpRequests } from '@/db/schema/team'
-import { users } from '@/db/schema/auth'
+import { withAdmin } from '@/lib/api/middleware';
+import { db } from '@/db';
+import { sql, SQL, getTableName } from 'drizzle-orm';
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { HELP_REQUEST_STATUSES } from '@/config/activity';
+import { validateActivityStreamFilter } from '@/lib/schemas/activity';
+import { taskCompletions, tasks } from '@/db/schema/misc';
+import { activityUpdates, helpRequests } from '@/db/schema/team';
+import { users } from '@/db/schema/auth';
 
 interface UnifiedActivity {
-  id: string
-  source_type: 'task_completion' | 'activity_update' | 'help_request' | 'focus_update'
-  user_id: string
-  user_name: string | null
-  user_email: string
-  title: string
-  description: string | null
-  category: string | null
-  metadata: Record<string, unknown>
-  occurred_at: string
+  id: string;
+  source_type: 'task_completion' | 'activity_update' | 'help_request' | 'focus_update';
+  user_id: string;
+  user_name: string | null;
+  user_email: string;
+  title: string;
+  description: string | null;
+  category: string | null;
+  metadata: Record<string, unknown>;
+  occurred_at: string;
 }
 
 /**
@@ -47,7 +43,7 @@ interface UnifiedActivity {
 export const GET = withAdmin('team', async (request, session) => {
   try {
     // Parse filters from query params
-    const { searchParams } = new URL(request.url)
+    const { searchParams } = new URL(request.url);
     const filterResult = validateActivityStreamFilter({
       user_id: searchParams.get('user_id') || undefined,
       source_type: searchParams.get('source_type') || undefined,
@@ -56,57 +52,53 @@ export const GET = withAdmin('team', async (request, session) => {
       until: searchParams.get('until') || undefined,
       limit: searchParams.get('limit') || 50,
       offset: searchParams.get('offset') || 0,
-    })
+    });
 
     if (!filterResult.success) {
-      return apiBadRequest(ERROR_MESSAGES.INVALID_FILTER_PARAMS)
+      return apiBadRequest(ERROR_MESSAGES.INVALID_FILTER_PARAMS);
     }
 
-    const filters = filterResult.data
+    const filters = filterResult.data;
 
     // Build source type filter
     const sourceTypes = filters.source_type
       ? [filters.source_type]
-      : ['task_completion', 'activity_update', 'help_request']
+      : ['task_completion', 'activity_update', 'help_request'];
 
     // Table names for raw SQL fragments
-    const tcTable = getTableName(taskCompletions)
-    const uTable = getTableName(users)
-    const tTable = getTableName(tasks)
-    const auTable = getTableName(activityUpdates)
-    const hrTable = getTableName(helpRequests)
+    const tcTable = getTableName(taskCompletions);
+    const uTable = getTableName(users);
+    const tTable = getTableName(tasks);
+    const auTable = getTableName(activityUpdates);
+    const hrTable = getTableName(helpRequests);
 
     // Build dynamic conditions as SQL fragments
-    const buildConditions = (
-      userCol: SQL,
-      categoryCol: SQL,
-      dateCol: SQL
-    ): SQL => {
-      const parts: SQL[] = []
+    const buildConditions = (userCol: SQL, categoryCol: SQL, dateCol: SQL): SQL => {
+      const parts: SQL[] = [];
       if (filters.user_id) {
-        parts.push(sql` AND ${userCol} = ${filters.user_id}`)
+        parts.push(sql` AND ${userCol} = ${filters.user_id}`);
       }
       if (filters.category) {
-        parts.push(sql` AND ${categoryCol} = ${filters.category}`)
+        parts.push(sql` AND ${categoryCol} = ${filters.category}`);
       }
       if (filters.since) {
-        parts.push(sql` AND ${dateCol} >= ${filters.since}`)
+        parts.push(sql` AND ${dateCol} >= ${filters.since}`);
       }
       if (filters.until) {
-        parts.push(sql` AND ${dateCol} <= ${filters.until}`)
+        parts.push(sql` AND ${dateCol} <= ${filters.until}`);
       }
-      return parts.length > 0 ? sql.join(parts, sql``) : sql``
-    }
+      return parts.length > 0 ? sql.join(parts, sql``) : sql``;
+    };
 
-    const unionQueries: SQL[] = []
+    const unionQueries: SQL[] = [];
 
     // Task completions
     if (sourceTypes.includes('task_completion')) {
       const conditions = buildConditions(
         sql.raw(`tc.completed_by`),
         sql.raw(`t.category`),
-        sql.raw(`tc.completed_at`)
-      )
+        sql.raw(`tc.completed_at`),
+      );
       unionQueries.push(sql`
         SELECT
           tc.id::text as id,
@@ -127,7 +119,7 @@ export const GET = withAdmin('team', async (request, session) => {
         JOIN ${sql.raw(uTable)} u ON tc.completed_by = u.id
         JOIN ${sql.raw(tTable)} t ON tc.task_id = t.id
         WHERE 1=1 ${conditions}
-      `)
+      `);
     }
 
     // Activity updates
@@ -135,8 +127,8 @@ export const GET = withAdmin('team', async (request, session) => {
       const conditions = buildConditions(
         sql.raw(`au.user_id`),
         sql.raw(`au.category`),
-        sql.raw(`au.occurred_at`)
-      )
+        sql.raw(`au.occurred_at`),
+      );
       unionQueries.push(sql`
         SELECT
           au.id::text as id,
@@ -155,7 +147,7 @@ export const GET = withAdmin('team', async (request, session) => {
         FROM ${sql.raw(auTable)} au
         JOIN ${sql.raw(uTable)} u ON au.user_id = u.id
         WHERE 1=1 ${conditions}
-      `)
+      `);
     }
 
     // Help requests (both created and resolved)
@@ -164,8 +156,8 @@ export const GET = withAdmin('team', async (request, session) => {
       const createdConditions = buildConditions(
         sql.raw(`hr.requester_id`),
         sql.raw(`hr.category`),
-        sql.raw(`hr.created_at`)
-      )
+        sql.raw(`hr.created_at`),
+      );
       unionQueries.push(sql`
         SELECT
           hr.id::text || '_created' as id,
@@ -187,14 +179,14 @@ export const GET = withAdmin('team', async (request, session) => {
         FROM ${sql.raw(hrTable)} hr
         JOIN ${sql.raw(uTable)} u ON hr.requester_id = u.id
         WHERE 1=1 ${createdConditions}
-      `)
+      `);
 
       // Resolved help requests (show resolver)
       const resolvedConditions = buildConditions(
         sql.raw(`hr.resolved_by`),
         sql.raw(`hr.category`),
-        sql.raw(`hr.resolved_at`)
-      )
+        sql.raw(`hr.resolved_at`),
+      );
       unionQueries.push(sql`
         SELECT
           hr.id::text || '_resolved' as id,
@@ -217,7 +209,7 @@ export const GET = withAdmin('team', async (request, session) => {
         FROM ${sql.raw(hrTable)} hr
         JOIN ${sql.raw(uTable)} u ON hr.resolved_by = u.id
         WHERE hr.resolved_by IS NOT NULL ${resolvedConditions}
-      `)
+      `);
     }
 
     if (unionQueries.length === 0) {
@@ -226,11 +218,11 @@ export const GET = withAdmin('team', async (request, session) => {
         total: 0,
         limit: filters.limit,
         offset: filters.offset,
-      })
+      });
     }
 
     // Combine all queries with UNION ALL
-    const unionSql = sql.join(unionQueries, sql` UNION ALL `)
+    const unionSql = sql.join(unionQueries, sql` UNION ALL `);
 
     const combinedQuery = sql`
       WITH unified_activity AS (
@@ -239,9 +231,9 @@ export const GET = withAdmin('team', async (request, session) => {
       SELECT * FROM unified_activity
       ORDER BY occurred_at DESC
       LIMIT ${filters.limit} OFFSET ${filters.offset}
-    `
+    `;
 
-    const result = await db.execute(combinedQuery)
+    const result = await db.execute(combinedQuery);
 
     // Get total count
     const countQuery = sql`
@@ -249,17 +241,17 @@ export const GET = withAdmin('team', async (request, session) => {
         ${unionSql}
       )
       SELECT COUNT(*) as count FROM unified_activity
-    `
+    `;
 
-    const countResult = await db.execute(countQuery)
+    const countResult = await db.execute(countQuery);
 
     return apiSuccess({
       items: result.rows as unknown as UnifiedActivity[],
       total: parseInt((countResult.rows[0] as { count: string })?.count || '0', 10),
       limit: filters.limit,
       offset: filters.offset,
-    })
+    });
   } catch (error) {
-    return apiError(error, 'Aktivitäten konnten nicht geladen werden')
+    return apiError(error, 'Aktivitäten konnten nicht geladen werden');
   }
-})
+});

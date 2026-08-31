@@ -1,5 +1,5 @@
-const createNextIntlPlugin = require('next-intl/plugin')
-const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
+const createNextIntlPlugin = require('next-intl/plugin');
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -45,9 +45,7 @@ const nextConfig = {
       {
         // Prevent search engines from indexing presentations (unlisted, share-by-link only)
         source: '/presentations/:path*',
-        headers: [
-          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
-        ],
+        headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow' }],
       },
     ];
   },
@@ -241,6 +239,6 @@ const nextConfig = {
   sassOptions: {
     includePaths: ['./src/styles'],
   },
-}
+};
 
-module.exports = withNextIntl(nextConfig)
+module.exports = withNextIntl(nextConfig);

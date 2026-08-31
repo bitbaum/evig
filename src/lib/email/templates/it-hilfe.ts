@@ -4,10 +4,10 @@
  * Templates for IT-Hilfe request confirmation and admin notifications.
  */
 
-import type { EmailContent } from '../types'
-import { BASE_STYLES, COPYRIGHT_TEXT } from './base-styles'
-import { ORG } from '@/config/org'
-import { escapeHtml } from '@/lib/utils/escape-html'
+import type { EmailContent } from '../types';
+import { BASE_STYLES, COPYRIGHT_TEXT } from './base-styles';
+import { ORG } from '@/config/org';
+import { escapeHtml } from '@/lib/utils/escape-html';
 
 // Every `${data}` interpolated into an html: body that comes from a user
 // (userName/helperName/requesterName/requestTitle/aiDiagnosis/offerMessage/
@@ -22,7 +22,7 @@ export const itHilfeRequestConfirmation = (
   requestId: string,
   categoryName: string,
   aiDiagnosis: string | null,
-  requestUrl: string
+  requestUrl: string,
 ): EmailContent => ({
   subject: `Deine IT-Hilfe Anfrage wurde erstellt - ${ORG.name}`,
   html: `
@@ -46,7 +46,9 @@ export const itHilfeRequestConfirmation = (
           <p><strong>Titel:</strong> ${escapeHtml(requestTitle)}</p>
           <p><strong>Kategorie:</strong> ${escapeHtml(categoryName)}</p>
 
-          ${aiDiagnosis ? `
+          ${
+            aiDiagnosis
+              ? `
           <div class="highlight-box">
             <p><strong>Unsere KI-Ersteinschätzung:</strong></p>
             <p>${escapeHtml(aiDiagnosis)}</p>
@@ -54,7 +56,9 @@ export const itHilfeRequestConfirmation = (
               Dies ist eine automatische Ersteinschätzung und ersetzt keine professionelle Diagnose.
             </p>
           </div>
-          ` : ''}
+          `
+              : ''
+          }
 
           <div style="background-color: #f7fee7; padding: 15px; border-radius: 5px; margin: 15px 0;">
             <p><strong>Über ${ORG.name}</strong></p>
@@ -85,12 +89,16 @@ Deine IT-Hilfe Anfrage wurde erfolgreich erstellt!
 
 Titel: ${requestTitle}
 Kategorie: ${categoryName}
-${aiDiagnosis ? `
+${
+  aiDiagnosis
+    ? `
 KI-Ersteinschätzung:
 ${aiDiagnosis}
 
 (Dies ist eine automatische Ersteinschätzung und ersetzt keine professionelle Diagnose.)
-` : ''}
+`
+    : ''
+}
 Was passiert als Nächstes?
 - Techniker aus der Community werden deine Anfrage sehen
 - Du wirst benachrichtigt, wenn jemand ein Angebot macht
@@ -101,7 +109,7 @@ Anfrage ansehen: ${requestUrl}
 Mit freundlichen Grüssen,
 Das ${ORG.name} Team
   `.trim(),
-})
+});
 
 /**
  * Sent to a logged-out visitor who just submitted an IT-Hilfe request
@@ -122,7 +130,7 @@ Das ${ORG.name} Team
  */
 export const itHilfeAnonymousRequestClaim = (
   requestTitle: string,
-  claimUrl: string
+  claimUrl: string,
 ): EmailContent => ({
   subject: `Deine IT-Hilfe Anfrage ist eingereicht — Konto aktivieren - ${ORG.name}`,
   html: `
@@ -186,7 +194,7 @@ Dieser Link ist 7 Tage gültig.
 Mit freundlichen Grüssen,
 Das ${ORG.name} Team
   `.trim(),
-})
+});
 
 /**
  * Notification email sent to matching helpers when a new IT-Hilfe request is created
@@ -199,7 +207,7 @@ export const helperNewMatchingRequest = (
   canton: string,
   serviceTypeName: string,
   matchingSkillNames: string[],
-  requestUrl: string
+  requestUrl: string,
 ): EmailContent => ({
   subject: `Neue passende Anfrage für dich - ${ORG.name} IT-Hilfe`,
   html: `
@@ -245,7 +253,7 @@ export const helperNewMatchingRequest = (
 
           <p><strong>Deine passenden Fähigkeiten:</strong></p>
           <div style="margin: 10px 0;">
-            ${matchingSkillNames.map(skill => `<span style="display: inline-block; background-color: #ecfccb; color: #365314; padding: 4px 12px; border-radius: 12px; font-size: 13px; margin: 3px 2px;">${escapeHtml(skill)}</span>`).join('')}
+            ${matchingSkillNames.map((skill) => `<span style="display: inline-block; background-color: #ecfccb; color: #365314; padding: 4px 12px; border-radius: 12px; font-size: 13px; margin: 3px 2px;">${escapeHtml(skill)}</span>`).join('')}
           </div>
 
           <a href="${requestUrl}" class="button button-green">Anfrage ansehen &amp; Angebot machen</a>
@@ -278,7 +286,7 @@ Du erhältst diese E-Mail, weil deine Fähigkeiten zu dieser Anfrage passen.
 Mit freundlichen Grüssen,
 Das ${ORG.name} Team
   `.trim(),
-})
+});
 
 /**
  * Admin notification email when a new IT-Hilfe request is created
@@ -289,7 +297,7 @@ export const adminNewITHilfeRequest = (
   requestTitle: string,
   categoryName: string,
   urgencyName: string,
-  requestUrl: string
+  requestUrl: string,
 ): EmailContent => ({
   subject: `Neue IT-Hilfe Anfrage - ${ORG.name}`,
   html: `
@@ -356,7 +364,7 @@ Anfrage ansehen: ${requestUrl}
 Mit freundlichen Grüssen,
 ${ORG.name} System
   `.trim(),
-})
+});
 
 /**
  * Notification email sent to the technician when their offer is accepted
@@ -365,7 +373,7 @@ export const itHilfeOfferAccepted = (
   helperName: string,
   requestTitle: string,
   requesterName: string,
-  requestUrl: string
+  requestUrl: string,
 ): EmailContent => ({
   subject: `Dein Angebot wurde angenommen! - ${ORG.name} IT-Hilfe`,
   html: `
@@ -426,7 +434,7 @@ Vielen Dank, dass du der Community hilfst!
 Mit freundlichen Grüssen,
 Das ${ORG.name} Team
   `.trim(),
-})
+});
 
 /**
  * Notification email sent to technicians whose offers were rejected
@@ -446,7 +454,7 @@ export const itHilfeNewOfferReceived = (
   helperName: string,
   offerMessage: string,
   requestUrl: string,
-  acceptUrl?: string
+  acceptUrl?: string,
 ): EmailContent => ({
   subject: `Neues Angebot für deine Anfrage - ${ORG.name} IT-Hilfe`,
   html: `
@@ -476,14 +484,18 @@ export const itHilfeNewOfferReceived = (
             ${escapeHtml(offerMessage.length > 300 ? offerMessage.slice(0, 300) + '...' : offerMessage)}
           </p>
 
-          ${acceptUrl ? `
+          ${
+            acceptUrl
+              ? `
           <a href="${acceptUrl}" class="button button-green">Angebot direkt annehmen</a>
           <p style="margin-top: 16px;">
             <a href="${requestUrl}" style="color: #525252;">Oder zuerst alle Angebote vergleichen →</a>
           </p>
-          ` : `
+          `
+              : `
           <a href="${requestUrl}" class="button button-green">Angebot ansehen</a>
-          `}
+          `
+          }
         </div>
         <div class="footer">
           <p>Du erhältst diese E-Mail, weil jemand ein Angebot für deine Anfrage abgegeben hat.</p>
@@ -503,14 +515,18 @@ ${helperName} hat ein Angebot für deine Anfrage abgegeben:
 Nachricht des Technikers:
 ${offerMessage.length > 300 ? offerMessage.slice(0, 300) + '...' : offerMessage}
 
-${acceptUrl ? `Angebot direkt annehmen: ${acceptUrl}
+${
+  acceptUrl
+    ? `Angebot direkt annehmen: ${acceptUrl}
 
-Alle Angebote ansehen: ${requestUrl}` : `Angebot ansehen: ${requestUrl}`}
+Alle Angebote ansehen: ${requestUrl}`
+    : `Angebot ansehen: ${requestUrl}`
+}
 
 Mit freundlichen Grüssen,
 Das ${ORG.name} Team
   `.trim(),
-})
+});
 
 /**
  * Notification email sent to the requester when the helper marks the repair
@@ -519,7 +535,7 @@ Das ${ORG.name} Team
 export const itHilfeCompleted = (
   requesterName: string,
   requestTitle: string,
-  requestUrl: string
+  requestUrl: string,
 ): EmailContent => ({
   subject: `Hilfe abgeschlossen - bitte bestätigen und bewerten - ${ORG.name}`,
   html: `
@@ -571,7 +587,7 @@ Bestätigen & bewerten: ${requestUrl}
 Mit freundlichen Grüssen,
 Das ${ORG.name} Team
   `.trim(),
-})
+});
 
 /**
  * Notification email sent to the helper when the requester submits a review.
@@ -581,7 +597,7 @@ export const itHilfeReviewReceived = (
   requestTitle: string,
   rating: number,
   reviewText: string,
-  requestUrl: string
+  requestUrl: string,
 ): EmailContent => ({
   subject: `Du hast eine neue Bewertung erhalten - ${ORG.name} IT-Hilfe`,
   html: `
@@ -638,12 +654,12 @@ Bewertung ansehen: ${requestUrl}
 Mit freundlichen Grüssen,
 Das ${ORG.name} Team
   `.trim(),
-})
+});
 
 export const itHilfeOfferRejected = (
   helperName: string,
   requestTitle: string,
-  requestUrl: string
+  requestUrl: string,
 ): EmailContent => ({
   subject: `Anfrage vergeben - ${ORG.name} IT-Hilfe`,
   html: `
@@ -692,4 +708,4 @@ Vielen Dank für dein Angebot! Es gibt bestimmt bald wieder passende Anfragen f�
 Mit freundlichen Grüssen,
 Das ${ORG.name} Team
   `.trim(),
-})
+});

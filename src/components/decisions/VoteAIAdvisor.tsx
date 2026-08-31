@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * VoteAIAdvisor — AI consultation panel for voters.
@@ -8,26 +8,26 @@
  * and how the voting method works — before casting their vote.
  */
 
-import { useState } from 'react'
-import { Sparkles, Loader2, AlertCircle, ChevronDown, ChevronUp, Send } from 'lucide-react'
-import { apiFetch } from '@/lib/api/client'
-import { Textarea } from '@/components/ui/textarea'
-import { Button } from '@/components/ui/button'
-import { VOTING_ADVISOR_PROMPTS } from '@/lib/ai/config/prompts'
+import { useState } from 'react';
+import { Sparkles, Loader2, AlertCircle, ChevronDown, ChevronUp, Send } from 'lucide-react';
+import { apiFetch } from '@/lib/api/client';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
+import { VOTING_ADVISOR_PROMPTS } from '@/lib/ai/config/prompts';
 
 interface Option {
-  label: string
-  description?: string
+  label: string;
+  description?: string;
 }
 
 interface VoteAIAdvisorProps {
-  title: string
-  description: string
-  background?: string | null
-  votingMethod: string
-  options?: Option[]
+  title: string;
+  description: string;
+  background?: string | null;
+  votingMethod: string;
+  options?: Option[];
   /** Start expanded. Defaults to false so it doesn't push the ballot below the fold on mobile. */
-  defaultExpanded?: boolean
+  defaultExpanded?: boolean;
 }
 
 export function VoteAIAdvisor({
@@ -38,17 +38,17 @@ export function VoteAIAdvisor({
   options,
   defaultExpanded = false,
 }: VoteAIAdvisorProps) {
-  const [expanded, setExpanded] = useState(defaultExpanded)
-  const [question, setQuestion] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [analysis, setAnalysis] = useState('')
+  const [expanded, setExpanded] = useState(defaultExpanded);
+  const [question, setQuestion] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [analysis, setAnalysis] = useState('');
 
   async function ask(q: string) {
-    if (!q.trim() || loading) return
-    setLoading(true)
-    setError('')
-    setAnalysis('')
+    if (!q.trim() || loading) return;
+    setLoading(true);
+    setError('');
+    setAnalysis('');
 
     const result = await apiFetch<{ analysis: string }>('/api/ai/vote-advisor', {
       method: 'POST',
@@ -57,31 +57,31 @@ export function VoteAIAdvisor({
         description,
         background: background || undefined,
         votingMethod,
-        options: options?.map(o => ({ label: o.label, description: o.description })),
+        options: options?.map((o) => ({ label: o.label, description: o.description })),
         question: q.trim(),
       },
-    })
+    });
     if (!result.success || !result.data) {
-      setError(result.error || 'Fehler bei der KI-Analyse')
+      setError(result.error || 'Fehler bei der KI-Analyse');
     } else {
-      setAnalysis(result.data.analysis)
-      setQuestion('')
+      setAnalysis(result.data.analysis);
+      setQuestion('');
     }
-    setLoading(false)
+    setLoading(false);
   }
 
   function handleSubmit() {
-    ask(question)
+    ask(question);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleSubmit()
+      e.preventDefault();
+      handleSubmit();
     }
   }
 
-  const quickQuestions = Object.values(VOTING_ADVISOR_PROMPTS.quickQuestions)
+  const quickQuestions = Object.values(VOTING_ADVISOR_PROMPTS.quickQuestions);
 
   return (
     <div className="rounded-lg border border-info-200 bg-info-50 dark:bg-info-900/20">
@@ -97,10 +97,11 @@ export function VoteAIAdvisor({
           <Sparkles className="w-4 h-4 text-info-600 shrink-0" />
           KI-Beratung — Frag die KI zu dieser Abstimmung
         </span>
-        {expanded
-          ? <ChevronUp className="w-4 h-4 text-info-500 shrink-0" />
-          : <ChevronDown className="w-4 h-4 text-info-500 shrink-0" />
-        }
+        {expanded ? (
+          <ChevronUp className="w-4 h-4 text-info-500 shrink-0" />
+        ) : (
+          <ChevronDown className="w-4 h-4 text-info-500 shrink-0" />
+        )}
       </Button>
 
       {expanded && (
@@ -142,10 +143,11 @@ export function VoteAIAdvisor({
               className="bg-info-600 hover:bg-info-700 disabled:bg-info-300 text-white self-end touch-manipulation"
               aria-label="Frage stellen"
             >
-              {loading
-                ? <Loader2 className="w-4 h-4 animate-spin" />
-                : <Send className="w-4 h-4" />
-              }
+              {loading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Send className="w-4 h-4" />
+              )}
             </Button>
           </div>
 
@@ -169,10 +171,11 @@ export function VoteAIAdvisor({
           )}
 
           <p className="text-xs text-info-500">
-            Die KI ist unparteiisch und empfiehlt keine Abstimmungsposition. Sie hilft dir, die Entscheidung besser zu verstehen.
+            Die KI ist unparteiisch und empfiehlt keine Abstimmungsposition. Sie hilft dir, die
+            Entscheidung besser zu verstehen.
           </p>
         </div>
       )}
     </div>
-  )
+  );
 }

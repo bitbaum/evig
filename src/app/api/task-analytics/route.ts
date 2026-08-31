@@ -30,7 +30,7 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
     const rawParams = Object.fromEntries(searchParams.entries());
     const parsed = analyticsQuerySchema.safeParse(rawParams);
     if (!parsed.success) {
-      return apiBadRequest(parsed.error.issues.map(i => i.message).join(', '));
+      return apiBadRequest(parsed.error.issues.map((i) => i.message).join(', '));
     }
     const { days } = parsed.data;
 
@@ -86,7 +86,10 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
           completion_count: sql<string>`COUNT(${taskCompletions.id})`,
         })
         .from(tasks)
-        .leftJoin(taskCompletions, sql`${taskCompletions.taskId} = ${tasks.id} AND ${taskCompletions.completedAt} > NOW() - INTERVAL '1 day' * ${days}`)
+        .leftJoin(
+          taskCompletions,
+          sql`${taskCompletions.taskId} = ${tasks.id} AND ${taskCompletions.completedAt} > NOW() - INTERVAL '1 day' * ${days}`,
+        )
         .groupBy(tasks.category)
         .orderBy(sql`COUNT(${taskCompletions.id}) DESC`),
 
@@ -100,11 +103,16 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
           unique_tasks_completed: sql<string>`COUNT(DISTINCT ${taskCompletions.taskId})`,
         })
         .from(users)
-        .leftJoin(taskCompletions, sql`${taskCompletions.completedBy} = ${users.id} AND ${taskCompletions.completedAt} > NOW() - INTERVAL '1 day' * ${days}`)
-        .where(sql`${users.isStaff} = true OR EXISTS (
+        .leftJoin(
+          taskCompletions,
+          sql`${taskCompletions.completedBy} = ${users.id} AND ${taskCompletions.completedAt} > NOW() - INTERVAL '1 day' * ${days}`,
+        )
+        .where(
+          sql`${users.isStaff} = true OR EXISTS (
           SELECT 1 FROM ${taskCompletions} tc2
           WHERE tc2.completed_by = ${users.id}
-        )`)
+        )`,
+        )
         .groupBy(users.id, users.name, users.email)
         .having(sql`COUNT(${taskCompletions.id}) > 0 OR ${users.isStaff} = true`)
         .orderBy(sql`COUNT(${taskCompletions.id}) DESC`),
@@ -124,11 +132,21 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
 
     logger.info('Task analytics fetched', {
       userId: session.user.id,
-      days
+      days,
     });
 
-    const stats = statsRow || { total_active: '0', needs_attention: '0', requested: '0', in_progress: '0', completed_one_time: '0' };
-    const completions = completionsRow || { total_completions: '0', unique_completers: '0', avg_duration: '0' };
+    const stats = statsRow || {
+      total_active: '0',
+      needs_attention: '0',
+      requested: '0',
+      in_progress: '0',
+      completed_one_time: '0',
+    };
+    const completions = completionsRow || {
+      total_completions: '0',
+      unique_completers: '0',
+      avg_duration: '0',
+    };
 
     return apiSuccess({
       overview: {

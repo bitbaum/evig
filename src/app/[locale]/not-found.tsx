@@ -1,11 +1,11 @@
-import { Link } from '@/i18n/navigation'
-import { Search, Home } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
-import { buttonClass } from '@/components/ui/button-class'
-import { getTranslations } from 'next-intl/server'
+import { Link } from '@/i18n/navigation';
+import { Search, Home } from 'lucide-react';
+import Heading from '@/components/ui/Heading';
+import { buttonClass } from '@/components/ui/button-class';
+import { getTranslations } from 'next-intl/server';
 
 export default async function NotFound() {
-  const t = await getTranslations('notFound')
+  const t = await getTranslations('notFound');
 
   return (
     <div className="flex items-center justify-center py-24 px-4">
@@ -13,15 +13,18 @@ export default async function NotFound() {
         <div className="inline-flex items-center justify-center w-16 h-16 bg-surface-raised rounded-full mb-6">
           <Search className="w-8 h-8 text-text-muted" />
         </div>
-        <Heading level={1} className="text-2xl text-text-primary mb-2">{t('title')}</Heading>
-        <p className="text-text-secondary mb-8">
-          {t('description')}
-        </p>
-        <Link href="/" className={buttonClass({ variant: 'primary', className: 'gap-2 inline-flex' })}>
+        <Heading level={1} className="text-2xl text-text-primary mb-2">
+          {t('title')}
+        </Heading>
+        <p className="text-text-secondary mb-8">{t('description')}</p>
+        <Link
+          href="/"
+          className={buttonClass({ variant: 'primary', className: 'gap-2 inline-flex' })}
+        >
           <Home className="w-4 h-4" />
           {t('goHome')}
         </Link>
       </div>
     </div>
-  )
+  );
 }

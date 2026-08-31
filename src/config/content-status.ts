@@ -6,8 +6,8 @@
 export const CONTENT_PUBLISH_LABELS = {
   published: 'Veröffentlicht',
   draft: 'Entwurf',
-} as const
+} as const;
 
 export function publishStatusLabel(isPublished: boolean | null | undefined): string {
-  return isPublished ? CONTENT_PUBLISH_LABELS.published : CONTENT_PUBLISH_LABELS.draft
+  return isPublished ? CONTENT_PUBLISH_LABELS.published : CONTENT_PUBLISH_LABELS.draft;
 }

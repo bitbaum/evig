@@ -1,7 +1,7 @@
-import packageJson from '../../../../package.json'
-import { apiSuccess } from '@/lib/api/helpers'
+import packageJson from '../../../../package.json';
+import { apiSuccess } from '@/lib/api/helpers';
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   return apiSuccess({
@@ -10,5 +10,5 @@ export async function GET() {
     gitSha: process.env.NEXT_PUBLIC_BUILD_SHA ?? 'unknown',
     buildTime: process.env.NEXT_PUBLIC_BUILD_TIME ?? 'unknown',
     environment: process.env.NODE_ENV ?? 'unknown',
-  })
+  });
 }

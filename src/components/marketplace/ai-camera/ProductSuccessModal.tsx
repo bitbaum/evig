@@ -1,26 +1,26 @@
-"use client"
+'use client';
 
 /**
  * Success modal shown after product is selected
  */
 
-import { motion } from 'framer-motion'
-import { CheckCircle } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import type { ProductSuggestion } from './types'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { useFocusTrap } from '@/hooks/useFocusTrap'
+import { motion } from 'framer-motion';
+import { CheckCircle } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import type { ProductSuggestion } from './types';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
 
 interface ProductSuccessModalProps {
-  suggestion: ProductSuggestion
-  onClose: () => void
+  suggestion: ProductSuggestion;
+  onClose: () => void;
 }
 
 export function ProductSuccessModal({ suggestion, onClose }: ProductSuccessModalProps) {
-  const t = useTranslations('components.productSuccessModal')
-  const dialogRef = useFocusTrap<HTMLDivElement>(true, onClose)
-  const IconComponent = suggestion.icon
+  const t = useTranslations('components.productSuccessModal');
+  const dialogRef = useFocusTrap<HTMLDivElement>(true, onClose);
+  const IconComponent = suggestion.icon;
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -39,12 +39,14 @@ export function ProductSuccessModal({ suggestion, onClose }: ProductSuccessModal
         onClick={(e) => e.stopPropagation()}
       >
         <CheckCircle className="w-16 h-16 text-action mx-auto mb-4" />
-        <Heading level={2} id="product-success-modal-title" className="text-2xl font-bold text-text-primary mb-2">
+        <Heading
+          level={2}
+          id="product-success-modal-title"
+          className="text-2xl font-bold text-text-primary mb-2"
+        >
           {t('title')}
         </Heading>
-        <p className="text-text-secondary mb-6">
-          {t('identified', { name: suggestion.name })}
-        </p>
+        <p className="text-text-secondary mb-6">{t('identified', { name: suggestion.name })}</p>
         <div className="bg-surface-raised rounded-lg p-4 mb-6">
           <div className="flex items-center gap-3 mb-2">
             {IconComponent ? (
@@ -64,5 +66,5 @@ export function ProductSuccessModal({ suggestion, onClose }: ProductSuccessModal
         </Button>
       </motion.div>
     </motion.div>
-  )
+  );
 }

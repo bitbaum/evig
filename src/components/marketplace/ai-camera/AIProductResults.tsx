@@ -1,20 +1,20 @@
-"use client"
+'use client';
 
 /**
  * AI analysis results with product suggestions
  */
 
-import { ProductSuggestionCard } from './ProductSuggestionCard'
-import type { ProductSuggestion } from './types'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
+import { ProductSuggestionCard } from './ProductSuggestionCard';
+import type { ProductSuggestion } from './types';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
 
 interface AIProductResultsProps {
-  capturedImage: string
-  suggestions: ProductSuggestion[]
-  onSelectProduct: (suggestion: ProductSuggestion) => void
-  onRetry: () => void
-  onClose: () => void
+  capturedImage: string;
+  suggestions: ProductSuggestion[];
+  onSelectProduct: (suggestion: ProductSuggestion) => void;
+  onRetry: () => void;
+  onClose: () => void;
 }
 
 export function AIProductResults({
@@ -22,7 +22,7 @@ export function AIProductResults({
   suggestions,
   onSelectProduct,
   onRetry,
-  onClose
+  onClose,
 }: AIProductResultsProps) {
   return (
     <div className="space-y-4">
@@ -57,22 +57,13 @@ export function AIProductResults({
 
       {/* Actions */}
       <div className="flex gap-3 pt-4 border-t border">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onRetry}
-          className="flex-1"
-        >
+        <Button type="button" variant="outline" onClick={onRetry} className="flex-1">
           Neues Foto
         </Button>
-        <Button
-          type="button"
-          variant="ghost"
-          onClick={onClose}
-        >
+        <Button type="button" variant="ghost" onClick={onClose}>
           Manueller Eintrag
         </Button>
       </div>
     </div>
-  )
+  );
 }

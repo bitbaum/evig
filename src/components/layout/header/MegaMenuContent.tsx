@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Mega menu dropdown — x.ai-inspired, design-system strict.
@@ -11,33 +11,33 @@
  * Descriptions come from navigation config + nav.items.*Desc i18n keys.
  */
 
-import { Link } from '@/i18n/navigation'
-import { ExternalLink, ArrowRight } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { cn } from '@/lib/utils'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import type { NavigationItem } from '@/config/navigation'
-import type { NavigationGroup } from './utils'
-import { navItemDescription, navItemLabel, type NavTranslator } from './nav-i18n'
+import { Link } from '@/i18n/navigation';
+import { ExternalLink, ArrowRight } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { cn } from '@/lib/utils';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import type { NavigationItem } from '@/config/navigation';
+import type { NavigationGroup } from './utils';
+import { navItemDescription, navItemLabel, type NavTranslator } from './nav-i18n';
 
 interface MegaMenuContentProps {
-  groups: NavigationGroup[]
-  subItems: NavigationItem[]
-  hasMultipleGroups: boolean
-  onClose: () => void
+  groups: NavigationGroup[];
+  subItems: NavigationItem[];
+  hasMultipleGroups: boolean;
+  onClose: () => void;
 }
 
-type TFn = ReturnType<typeof useTranslations<'nav'>>
+type TFn = ReturnType<typeof useTranslations<'nav'>>;
 
 function getLabel(item: NavigationItem, t: TFn): string {
-  return item.nameKey ? navItemLabel(t as NavTranslator, item.nameKey) : item.name
+  return item.nameKey ? navItemLabel(t as NavTranslator, item.nameKey) : item.name;
 }
 
 function getDescription(item: NavigationItem, t: TFn): string | undefined {
   if (item.descriptionKey) {
-    return navItemDescription(t as NavTranslator, item.descriptionKey)
+    return navItemDescription(t as NavTranslator, item.descriptionKey);
   }
-  return item.description
+  return item.description;
 }
 
 export function MegaMenuContent({
@@ -46,7 +46,7 @@ export function MegaMenuContent({
   hasMultipleGroups,
   onClose,
 }: MegaMenuContentProps) {
-  const t = useTranslations('nav')
+  const t = useTranslations('nav');
 
   return (
     <div
@@ -62,7 +62,7 @@ export function MegaMenuContent({
         <SingleColumnLayout items={subItems} onClose={onClose} t={t} />
       )}
     </div>
-  )
+  );
 }
 
 function MultiColumnLayout({
@@ -70,25 +70,24 @@ function MultiColumnLayout({
   onClose,
   t,
 }: {
-  groups: NavigationGroup[]
-  onClose: () => void
-  t: TFn
+  groups: NavigationGroup[];
+  onClose: () => void;
+  t: TFn;
 }) {
   const gridCols =
-    groups.length >= 3 ? 'lg:grid-cols-3' : groups.length === 2 ? 'lg:grid-cols-2' : 'lg:grid-cols-1'
+    groups.length >= 3
+      ? 'lg:grid-cols-3'
+      : groups.length === 2
+        ? 'lg:grid-cols-2'
+        : 'lg:grid-cols-1';
 
   return (
     <div className={cn('grid divide-y divide-subtle lg:divide-x lg:divide-y-0', gridCols)}>
       {groups.map((group, idx) => (
-        <MegaMenuSection
-          key={idx}
-          group={group}
-          onClose={onClose}
-          t={t}
-        />
+        <MegaMenuSection key={idx} group={group} onClose={onClose} t={t} />
       ))}
     </div>
-  )
+  );
 }
 
 function SingleColumnLayout({
@@ -96,12 +95,12 @@ function SingleColumnLayout({
   onClose,
   t,
 }: {
-  items: NavigationItem[]
-  onClose: () => void
-  t: TFn
+  items: NavigationItem[];
+  onClose: () => void;
+  t: TFn;
 }) {
-  const footerLink = items.find((it) => it.nameKey === 'sectionAllProjects')
-  const links = items.filter((it) => !it.isSection && it.nameKey !== 'sectionAllProjects')
+  const footerLink = items.find((it) => it.nameKey === 'sectionAllProjects');
+  const links = items.filter((it) => !it.isSection && it.nameKey !== 'sectionAllProjects');
 
   return (
     <div>
@@ -112,11 +111,9 @@ function SingleColumnLayout({
           </li>
         ))}
       </ul>
-      {footerLink && (
-        <SectionOverviewLink item={footerLink} onClose={onClose} t={t} />
-      )}
+      {footerLink && <SectionOverviewLink item={footerLink} onClose={onClose} t={t} />}
     </div>
-  )
+  );
 }
 
 function MegaMenuSection({
@@ -124,15 +121,13 @@ function MegaMenuSection({
   onClose,
   t,
 }: {
-  group: NavigationGroup
-  onClose: () => void
-  t: TFn
+  group: NavigationGroup;
+  onClose: () => void;
+  t: TFn;
 }) {
   return (
     <div className="flex flex-col p-4 sm:p-5">
-      {group.section && (
-        <Eyebrow className="mb-4">{getLabel(group.section, t)}</Eyebrow>
-      )}
+      {group.section && <Eyebrow className="mb-4">{getLabel(group.section, t)}</Eyebrow>}
       <ul className="space-y-1">
         {group.items.map((item) => (
           <li key={item.nameKey ?? item.name}>
@@ -140,24 +135,14 @@ function MegaMenuSection({
           </li>
         ))}
       </ul>
-      {group.section && (
-        <SectionOverviewLink item={group.section} onClose={onClose} t={t} />
-      )}
+      {group.section && <SectionOverviewLink item={group.section} onClose={onClose} t={t} />}
     </div>
-  )
+  );
 }
 
-function MegaMenuLink({
-  item,
-  onClose,
-  t,
-}: {
-  item: NavigationItem
-  onClose: () => void
-  t: TFn
-}) {
-  const label = getLabel(item, t)
-  const description = getDescription(item, t)
+function MegaMenuLink({ item, onClose, t }: { item: NavigationItem; onClose: () => void; t: TFn }) {
+  const label = getLabel(item, t);
+  const description = getDescription(item, t);
 
   return (
     <Link
@@ -191,7 +176,7 @@ function MegaMenuLink({
         aria-hidden="true"
       />
     </Link>
-  )
+  );
 }
 
 function SectionOverviewLink({
@@ -199,11 +184,11 @@ function SectionOverviewLink({
   onClose,
   t,
 }: {
-  item: NavigationItem
-  onClose: () => void
-  t: TFn
+  item: NavigationItem;
+  onClose: () => void;
+  t: TFn;
 }) {
-  const overviewLabel = navItemLabel(t as NavTranslator, 'viewSection')
+  const overviewLabel = navItemLabel(t as NavTranslator, 'viewSection');
 
   return (
     <Link
@@ -219,18 +204,22 @@ function SectionOverviewLink({
       {overviewLabel}
       <ArrowRight className="h-3 w-3" aria-hidden="true" />
     </Link>
-  )
+  );
 }
 
 function ItemBadge({ badge }: { badge?: string }) {
-  const t = useTranslations('nav.badge')
-  if (!badge) return null
+  const t = useTranslations('nav.badge');
+  if (!badge) return null;
   const label = ((): string => {
-    try { return t(badge as never) } catch { return badge }
-  })()
+    try {
+      return t(badge as never);
+    } catch {
+      return badge;
+    }
+  })();
   return (
     <span className="inline-flex shrink-0 items-center rounded-full bg-action-muted px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-action">
       {label}
     </span>
-  )
+  );
 }

@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { useState } from 'react'
-import { Link } from '@/i18n/navigation'
-import { Button } from '@/components/ui/button'
-import { Select } from '@/components/ui/select'
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { useState } from 'react';
+import { Link } from '@/i18n/navigation';
+import { Button } from '@/components/ui/button';
+import { Select } from '@/components/ui/select';
 import {
   Calendar,
   Clock,
@@ -15,7 +15,7 @@ import {
   Sparkles,
   BookOpen,
   Plus,
-} from 'lucide-react'
+} from 'lucide-react';
 import {
   WORKSHOP_CATEGORIES,
   WORKSHOP_LEVELS,
@@ -24,17 +24,17 @@ import {
   getLevelBadgeClass,
   normalizeLevelId,
   normalizeCategoryId,
-} from '@/config/workshops'
-import Heading from '@/components/ui/Heading'
-import { formatDateShort } from '@/lib/date-formats'
-import type { WorkshopWithInstances } from '@/components/workshops/types'
-import { ORG } from '@/config/org'
-import { useTranslations } from 'next-intl'
-import { formatCentsToChf } from '@/lib/pricing'
-import { PageShell } from '@/components/layout/PageShell'
+} from '@/config/workshops';
+import Heading from '@/components/ui/Heading';
+import { formatDateShort } from '@/lib/date-formats';
+import type { WorkshopWithInstances } from '@/components/workshops/types';
+import { ORG } from '@/config/org';
+import { useTranslations } from 'next-intl';
+import { formatCentsToChf } from '@/lib/pricing';
+import { PageShell } from '@/components/layout/PageShell';
 
 interface WorkshopBrowseClientProps {
-  workshops: WorkshopWithInstances[]
+  workshops: WorkshopWithInstances[];
 }
 
 /**
@@ -48,25 +48,24 @@ interface WorkshopBrowseClientProps {
 const MEANWHILE_LINKS = [
   { id: 'openSource', href: '/services/open-source-solutions' },
   { id: 'linux', href: '/services/linux-open-source' },
-] as const
+] as const;
 
 export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClientProps) {
-  const t = useTranslations('workshops.browse')
-  const tCat = useTranslations('workshops.categories')
-  const tLvl = useTranslations('workshops.levels')
-  const tEye = useTranslations('workshops.eyebrows')
-  const [categoryFilter, setCategoryFilter] = useState<string>('all')
-  const [levelFilter, setLevelFilter] = useState<string>('all')
+  const t = useTranslations('workshops.browse');
+  const tCat = useTranslations('workshops.categories');
+  const tLvl = useTranslations('workshops.levels');
+  const tEye = useTranslations('workshops.eyebrows');
+  const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [levelFilter, setLevelFilter] = useState<string>('all');
 
-  const filteredWorkshops = workshops.filter(workshop => {
+  const filteredWorkshops = workshops.filter((workshop) => {
     const matchesCategory =
       categoryFilter === 'all' ||
-      (workshop.category || '').toLowerCase() === categoryFilter.toLowerCase()
+      (workshop.category || '').toLowerCase() === categoryFilter.toLowerCase();
     const matchesLevel =
-      levelFilter === 'all' ||
-      (workshop.level || '').toLowerCase() === levelFilter.toLowerCase()
-    return matchesCategory && matchesLevel
-  })
+      levelFilter === 'all' || (workshop.level || '').toLowerCase() === levelFilter.toLowerCase();
+    return matchesCategory && matchesLevel;
+  });
 
   return (
     <>
@@ -75,7 +74,9 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <Heading level={1} className="text-2xl sm:text-3xl font-bold text-text-primary">{t('title')}</Heading>
+              <Heading level={1} className="text-2xl sm:text-3xl font-bold text-text-primary">
+                {t('title')}
+              </Heading>
               <p className="text-sm text-text-secondary mt-1">
                 {t('subtitle', { count: workshops.length, orgName: ORG.name })}
               </p>
@@ -94,7 +95,10 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
           <div className="flex flex-wrap items-center gap-4">
             {/* Category Dropdown */}
             <div>
-              <label htmlFor="filter-category" className="block text-xs font-medium text-text-secondary mb-1">
+              <label
+                htmlFor="filter-category"
+                className="block text-xs font-medium text-text-secondary mb-1"
+              >
                 {t('filterCategory')}
               </label>
               <Select
@@ -103,15 +107,20 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                 onChange={(e) => setCategoryFilter(e.target.value)}
               >
                 <option value="all">{t('allCategories')}</option>
-                {WORKSHOP_CATEGORIES.map(cat => (
-                  <option key={cat.id} value={cat.id}>{tCat(cat.id as never)}</option>
+                {WORKSHOP_CATEGORIES.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {tCat(cat.id as never)}
+                  </option>
                 ))}
               </Select>
             </div>
 
             {/* Level Dropdown */}
             <div>
-              <label htmlFor="filter-level" className="block text-xs font-medium text-text-secondary mb-1">
+              <label
+                htmlFor="filter-level"
+                className="block text-xs font-medium text-text-secondary mb-1"
+              >
                 {t('filterLevel')}
               </label>
               <Select
@@ -120,8 +129,10 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                 onChange={(e) => setLevelFilter(e.target.value)}
               >
                 <option value="all">{t('allLevels')}</option>
-                {WORKSHOP_LEVELS.map(level => (
-                  <option key={level.id} value={level.id}>{tLvl(level.id as never)}</option>
+                {WORKSHOP_LEVELS.map((level) => (
+                  <option key={level.id} value={level.id}>
+                    {tLvl(level.id as never)}
+                  </option>
                 ))}
               </Select>
             </div>
@@ -132,8 +143,8 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                 variant="ghost"
                 size="sm"
                 onClick={() => {
-                  setCategoryFilter('all')
-                  setLevelFilter('all')
+                  setCategoryFilter('all');
+                  setLevelFilter('all');
                 }}
                 className="self-end px-3 py-2 text-sm text-action hover:text-action font-medium"
               >
@@ -152,19 +163,24 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
         {filteredWorkshops.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredWorkshops.map((workshop) => {
-              const IconComponent = getCategoryIcon(workshop.category)
-              const instances = workshop.instances || []
+              const IconComponent = getCategoryIcon(workshop.category);
+              const instances = workshop.instances || [];
               const upcomingInstances = instances.filter(
-                inst => inst.status === WORKSHOP_INSTANCE_STATUS.SCHEDULED && new Date(inst.start_date) > new Date()
-              )
-              const nextInstance = upcomingInstances[0]
-              const maxParticipants = nextInstance?.max_participants ?? workshop.max_participants
+                (inst) =>
+                  inst.status === WORKSHOP_INSTANCE_STATUS.SCHEDULED &&
+                  new Date(inst.start_date) > new Date(),
+              );
+              const nextInstance = upcomingInstances[0];
+              const maxParticipants = nextInstance?.max_participants ?? workshop.max_participants;
               const spotsLeft = nextInstance
                 ? maxParticipants - nextInstance.current_participants
-                : null
+                : null;
 
               return (
-                <div key={workshop.id} className="card-shell overflow-hidden hover:border-strong transition-all flex flex-col">
+                <div
+                  key={workshop.id}
+                  className="card-shell overflow-hidden hover:border-strong transition-all flex flex-col"
+                >
                   {/* Workshop Header */}
                   <div className="p-6 border-b border-subtle flex-1">
                     <div className="flex items-start justify-between mb-4">
@@ -172,13 +188,17 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                         <IconComponent className="w-6 h-6 text-action" />
                       </div>
                       {(() => {
-                        const lvlId = normalizeLevelId(workshop.level)
-                        const lvlText = lvlId ? tLvl(lvlId as never) : (workshop.level || t('allLevelsLabel'))
+                        const lvlId = normalizeLevelId(workshop.level);
+                        const lvlText = lvlId
+                          ? tLvl(lvlId as never)
+                          : workshop.level || t('allLevelsLabel');
                         return (
-                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${getLevelBadgeClass(workshop.level)}`}>
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-medium ${getLevelBadgeClass(workshop.level)}`}
+                          >
                             {lvlText}
                           </span>
-                        )
+                        );
                       })()}
                     </div>
 
@@ -191,18 +211,19 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                     </p>
 
                     {/* Category badge */}
-                    {workshop.category && (() => {
-                      const catId = normalizeCategoryId(workshop.category)
-                      const catText = catId ? tCat(catId as never) : workshop.category
-                      return (
-                        <div className="mb-4">
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-surface-raised text-text-secondary">
-                            <IconComponent className="w-3 h-3 mr-1" />
-                            {catText}
-                          </span>
-                        </div>
-                      )
-                    })()}
+                    {workshop.category &&
+                      (() => {
+                        const catId = normalizeCategoryId(workshop.category);
+                        const catText = catId ? tCat(catId as never) : workshop.category;
+                        return (
+                          <div className="mb-4">
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-surface-raised text-text-secondary">
+                              <IconComponent className="w-3 h-3 mr-1" />
+                              {catText}
+                            </span>
+                          </div>
+                        );
+                      })()}
 
                     <div className="flex items-center gap-4 text-sm text-text-tertiary">
                       {workshop.duration && (
@@ -224,7 +245,9 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                       <div className="mb-4 space-y-2">
                         <div className="flex items-center text-sm text-text-secondary">
                           <Calendar className="w-4 h-4 mr-1 shrink-0" />
-                          <span>{t('nextDate', { date: formatDateShort(nextInstance.start_date) })}</span>
+                          <span>
+                            {t('nextDate', { date: formatDateShort(nextInstance.start_date) })}
+                          </span>
                         </div>
                         {nextInstance.location && (
                           <div className="flex items-center text-sm text-text-secondary">
@@ -235,7 +258,13 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                         {spotsLeft !== null && (
                           <div className="flex items-center text-sm">
                             <Users className="w-4 h-4 mr-1 shrink-0" />
-                            <span className={spotsLeft <= 3 ? 'text-warning-600 font-medium' : 'text-text-secondary'}>
+                            <span
+                              className={
+                                spotsLeft <= 3
+                                  ? 'text-warning-600 font-medium'
+                                  : 'text-text-secondary'
+                              }
+                            >
                               {spotsLeft <= 0 ? t('soldOut') : t('spotsLeft', { count: spotsLeft })}
                             </span>
                           </div>
@@ -267,16 +296,34 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
 
                     {/* Actions */}
                     <div className="flex gap-2">
-                      <Button as={Link} href={`/workshops/${workshop.slug}`} variant="secondary" size="sm" className="flex-1 justify-center">
+                      <Button
+                        as={Link}
+                        href={`/workshops/${workshop.slug}`}
+                        variant="secondary"
+                        size="sm"
+                        className="flex-1 justify-center"
+                      >
                         {t('viewDetails')}
                       </Button>
 
                       {workshop.user_registered ? (
-                        <Button as={Link} href="/dashboard/workshops" variant="primary" size="sm" className="flex-1 justify-center">
+                        <Button
+                          as={Link}
+                          href="/dashboard/workshops"
+                          variant="primary"
+                          size="sm"
+                          className="flex-1 justify-center"
+                        >
                           {t('manage')}
                         </Button>
                       ) : nextInstance && spotsLeft !== null && spotsLeft > 0 ? (
-                        <Button as={Link} href={`/workshops/${workshop.slug}#register`} variant="primary" size="sm" className="flex-1 justify-center">
+                        <Button
+                          as={Link}
+                          href={`/workshops/${workshop.slug}#register`}
+                          variant="primary"
+                          size="sm"
+                          className="flex-1 justify-center"
+                        >
                           {t('registerNow')}
                         </Button>
                       ) : nextInstance && spotsLeft !== null && spotsLeft <= 0 ? (
@@ -291,7 +338,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                     </div>
                   </div>
                 </div>
-              )
+              );
             })}
           </div>
         ) : (
@@ -312,8 +359,8 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                 <Button
                   variant="ghost"
                   onClick={() => {
-                    setCategoryFilter('all')
-                    setLevelFilter('all')
+                    setCategoryFilter('all');
+                    setLevelFilter('all');
                   }}
                   className="text-action hover:text-action font-medium"
                 >
@@ -326,7 +373,10 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                 // "Schau bald wieder vorbei" here told people to wait for
                 // something they could start themselves, with a working
                 // "Workshop vorschlagen" button directly above it.
-                <Link href="/workshops/propose" className="ui-public-cta mt-2 inline-flex items-center gap-2">
+                <Link
+                  href="/workshops/propose"
+                  className="ui-public-cta mt-2 inline-flex items-center gap-2"
+                >
                   {t('emptyAll.cta')}
                   <ArrowRight className="w-4 h-4" />
                 </Link>
@@ -348,9 +398,7 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
                   <Heading level={3} className="ui-public-display-md mt-3">
                     {t('meanwhile.title')}
                   </Heading>
-                  <p className="ui-public-section-lede mt-4 mx-auto">
-                    {t('meanwhile.subtitle')}
-                  </p>
+                  <p className="ui-public-section-lede mt-4 mx-auto">{t('meanwhile.subtitle')}</p>
                 </div>
 
                 <div className="mt-10 grid gap-4 md:grid-cols-2">
@@ -379,7 +427,10 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
           <h2 className="ui-public-display-md mt-3">{t('cta.title')}</h2>
           <p className="ui-public-section-lede mt-4 mx-auto max-w-2xl">{t('cta.subtitle')}</p>
           <div className="mt-8">
-            <Link href="/workshops/propose" className="ui-public-cta inline-flex items-center gap-2">
+            <Link
+              href="/workshops/propose"
+              className="ui-public-cta inline-flex items-center gap-2"
+            >
               {t('cta.button')}
               <ArrowRight className="w-4 h-4" />
             </Link>
@@ -387,5 +438,5 @@ export default function WorkshopBrowseClient({ workshops }: WorkshopBrowseClient
         </div>
       </PageShell>
     </>
-  )
+  );
 }

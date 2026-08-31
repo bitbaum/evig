@@ -1,6 +1,6 @@
-import 'server-only'
-import { createHash, timingSafeEqual } from 'crypto'
-import { cookies } from 'next/headers'
+import 'server-only';
+import { createHash, timingSafeEqual } from 'crypto';
+import { cookies } from 'next/headers';
 
 /**
  * Zugangsschutz für das interne Monitor-Upcycling-Dossier.
@@ -14,29 +14,29 @@ import { cookies } from 'next/headers'
  * kein Klartext-Geheimnis im Repo liegt und die Phrase ohne Deploy änderbar ist.
  */
 
-export const DOSSIER_COOKIE = 'upc_dossier'
-const DOSSIER_PASSWORD = process.env.UPCYCLING_DOSSIER_PASSWORD ?? 'revamp'
+export const DOSSIER_COOKIE = 'upc_dossier';
+const DOSSIER_PASSWORD = process.env.UPCYCLING_DOSSIER_PASSWORD ?? 'revamp';
 
 function tokenFor(password: string): string {
-  return createHash('sha256').update(`upcycling-dossier::${password}`).digest('hex')
+  return createHash('sha256').update(`upcycling-dossier::${password}`).digest('hex');
 }
 
 /** Token, das ein gültiges Cookie tragen muss. */
-export const EXPECTED_TOKEN = tokenFor(DOSSIER_PASSWORD)
+export const EXPECTED_TOKEN = tokenFor(DOSSIER_PASSWORD);
 
 function safeEqual(a: string, b: string): boolean {
-  const ab = Buffer.from(a)
-  const bb = Buffer.from(b)
-  if (ab.length !== bb.length) return false
-  return timingSafeEqual(ab, bb)
+  const ab = Buffer.from(a);
+  const bb = Buffer.from(b);
+  if (ab.length !== bb.length) return false;
+  return timingSafeEqual(ab, bb);
 }
 
 export function passwordMatches(input: string): boolean {
-  return safeEqual(tokenFor(input.trim()), EXPECTED_TOKEN)
+  return safeEqual(tokenFor(input.trim()), EXPECTED_TOKEN);
 }
 
 export async function isDossierUnlocked(): Promise<boolean> {
-  const store = await cookies()
-  const token = store.get(DOSSIER_COOKIE)?.value
-  return typeof token === 'string' && safeEqual(token, EXPECTED_TOKEN)
+  const store = await cookies();
+  const token = store.get(DOSSIER_COOKIE)?.value;
+  return typeof token === 'string' && safeEqual(token, EXPECTED_TOKEN);
 }

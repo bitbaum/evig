@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import { CalendarCheck, Trash2 } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { TIMECARD_ABSENCE_TYPES, type TimecardEntryCategory } from '@/config/timecards'
-import { useTimecardIntl } from '@/hooks/useTimecardIntl'
+import { CalendarCheck, Trash2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { TIMECARD_ABSENCE_TYPES, type TimecardEntryCategory } from '@/config/timecards';
+import { useTimecardIntl } from '@/hooks/useTimecardIntl';
 
 /**
  * TimecardActions — the SSOT action set for applying to a timecard scope. Three
@@ -24,14 +24,14 @@ export function TimecardActions({
   onClear,
   fillLabel,
 }: {
-  onFill: () => void
-  onSetAbsence: (category: TimecardEntryCategory) => void
-  onClear: () => void
+  onFill: () => void;
+  onSetAbsence: (category: TimecardEntryCategory) => void;
+  onClear: () => void;
   /** Override the fill button label per scope (e.g. "Tag aus Plan füllen"). */
-  fillLabel?: string
+  fillLabel?: string;
 }) {
-  const t = useTranslations('admin.timecards')
-  const { categoryLabel } = useTimecardIntl()
+  const t = useTranslations('admin.timecards');
+  const { categoryLabel } = useTimecardIntl();
 
   return (
     // gap-x-4 between the three groups, gap-1.5 within the absence set — the
@@ -45,10 +45,8 @@ export function TimecardActions({
 
       {/* 2 — Mark absent (labelled group) */}
       <div className="flex flex-wrap items-center gap-1.5">
-        <Eyebrow as="span">
-          {t('bulkAbsenceLabel')}
-        </Eyebrow>
-        {TIMECARD_ABSENCE_TYPES.map(absence => (
+        <Eyebrow as="span">{t('bulkAbsenceLabel')}</Eyebrow>
+        {TIMECARD_ABSENCE_TYPES.map((absence) => (
           <Button
             key={absence.value}
             type="button"
@@ -74,5 +72,5 @@ export function TimecardActions({
         {t('bulkClear')}
       </Button>
     </div>
-  )
+  );
 }

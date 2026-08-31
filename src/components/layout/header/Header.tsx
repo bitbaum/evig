@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Header Component - Main navigation header
@@ -10,74 +10,91 @@
  * - Elegant mega menus
  */
 
-import { useState, useRef, useEffect } from 'react'
-import { Menu } from 'lucide-react'
-import { Link } from '@/i18n/navigation'
-import { useTranslations } from 'next-intl'
-import dynamic from 'next/dynamic'
-import { Button } from '@/components/ui/button'
-import { Logo } from '@/components/ui/Logo'
-import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher'
-import { ThemeToggle } from '@/components/ui/ThemeToggle'
-import { cn } from '@/lib/utils'
+import { useState, useRef, useEffect } from 'react';
+import { Menu } from 'lucide-react';
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
+import dynamic from 'next/dynamic';
+import { Button } from '@/components/ui/button';
+import { Logo } from '@/components/ui/Logo';
+import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { cn } from '@/lib/utils';
 
 // Skip SSR — both use useSession which requires SessionProvider (lazy-loaded client-side only)
-const UserMenu = dynamic(() => import('@/components/auth/UserMenu').then(m => ({ default: m.UserMenu })), { ssr: false })
-const UserCommandPalette = dynamic(() => import('@/components/search/UserCommandPalette').then(m => ({ default: m.UserCommandPalette })), { ssr: false })
-const CommandPaletteTrigger = dynamic(() => import('@/components/search/CommandPaletteTrigger').then(m => ({ default: m.CommandPaletteTrigger })), { ssr: false })
-const MobileMenu = dynamic(() => import('../MobileMenu').then(m => ({ default: m.MobileMenu })), { ssr: false })
-import { mainNavigation } from '@/config/navigation'
-import { NavItem } from './NavItem'
-import { navItemLabel, type NavTranslator } from './nav-i18n'
+const UserMenu = dynamic(
+  () => import('@/components/auth/UserMenu').then((m) => ({ default: m.UserMenu })),
+  { ssr: false },
+);
+const UserCommandPalette = dynamic(
+  () =>
+    import('@/components/search/UserCommandPalette').then((m) => ({
+      default: m.UserCommandPalette,
+    })),
+  { ssr: false },
+);
+const CommandPaletteTrigger = dynamic(
+  () =>
+    import('@/components/search/CommandPaletteTrigger').then((m) => ({
+      default: m.CommandPaletteTrigger,
+    })),
+  { ssr: false },
+);
+const MobileMenu = dynamic(() => import('../MobileMenu').then((m) => ({ default: m.MobileMenu })), {
+  ssr: false,
+});
+import { mainNavigation } from '@/config/navigation';
+import { NavItem } from './NavItem';
+import { navItemLabel, type NavTranslator } from './nav-i18n';
 
 export function Header() {
-  const tAccessibility = useTranslations('accessibility')
-  const tNav = useTranslations('nav')
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [anyDropdownOpen, setAnyDropdownOpen] = useState(false)
-  const [isScrolled, setIsScrolled] = useState(false)
+  const tAccessibility = useTranslations('accessibility');
+  const tNav = useTranslations('nav');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [anyDropdownOpen, setAnyDropdownOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   // "headroom" pattern: header hides on scroll DOWN past a threshold,
   // re-appears on scroll UP. Always visible near the top of the page so
   // the brand isn't missing on first paint.
-  const [isHidden, setIsHidden] = useState(false)
-  const headerRef = useRef<HTMLElement>(null)
-  const mobileMenuTriggerRef = useRef<HTMLButtonElement>(null)
-  const lastScrollY = useRef(0)
+  const [isHidden, setIsHidden] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
+  const mobileMenuTriggerRef = useRef<HTMLButtonElement>(null);
+  const lastScrollY = useRef(0);
 
   // Filter navigation - separate main nav from action items
-  const primaryNavItems = mainNavigation.filter(item => !item.highlight)
+  const primaryNavItems = mainNavigation.filter((item) => !item.highlight);
   // Highlighted items (e.g. Kontakt) render as a CTA in the desktop action
   // cluster — previously they were filtered out of the bar with no desktop
   // render path, so the contact CTA was unreachable on desktop.
-  const actionNavItems = mainNavigation.filter(item => item.highlight)
+  const actionNavItems = mainNavigation.filter((item) => item.highlight);
 
   // Scroll detection for header styling + smart hide/show.
   // Threshold of 5px on the delta filters out micro-jitter from trackpads
   // and inertial scrolling; 120px floor below which we never hide so the
   // header always appears near the top of any page.
   useEffect(() => {
-    const REVEAL_FLOOR = 120
-    const DELTA_THRESHOLD = 5
+    const REVEAL_FLOOR = 120;
+    const DELTA_THRESHOLD = 5;
     const handleScroll = () => {
-      const currentY = window.scrollY
-      const delta = currentY - lastScrollY.current
-      setIsScrolled(currentY > 10)
+      const currentY = window.scrollY;
+      const delta = currentY - lastScrollY.current;
+      setIsScrolled(currentY > 10);
       if (currentY < REVEAL_FLOOR) {
-        setIsHidden(false)
+        setIsHidden(false);
       } else if (delta > DELTA_THRESHOLD) {
-        setIsHidden(true)
+        setIsHidden(true);
       } else if (delta < -DELTA_THRESHOLD) {
-        setIsHidden(false)
+        setIsHidden(false);
       }
-      lastScrollY.current = currentY
-    }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+      lastScrollY.current = currentY;
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Never hide the header while a dropdown is open — folding nav out from
   // under the user mid-interaction is disorienting.
-  const effectivelyHidden = isHidden && !anyDropdownOpen && !mobileMenuOpen
+  const effectivelyHidden = isHidden && !anyDropdownOpen && !mobileMenuOpen;
 
   // Publish the current header offset as a CSS custom property on the
   // document root so any sub-nav (sticky strip below the header) can
@@ -88,30 +105,30 @@ export function Header() {
   // leaving a gap above themselves. CSS transition on the consumer side
   // animates the change smoothly.
   useEffect(() => {
-    const root = document.documentElement
+    const root = document.documentElement;
     const publish = () => {
-      const height = headerRef.current?.offsetHeight ?? 64
-      root.style.setProperty('--header-offset', effectivelyHidden ? '0px' : `${height}px`)
-    }
-    publish()
-    window.addEventListener('resize', publish)
+      const height = headerRef.current?.offsetHeight ?? 64;
+      root.style.setProperty('--header-offset', effectivelyHidden ? '0px' : `${height}px`);
+    };
+    publish();
+    window.addEventListener('resize', publish);
     return () => {
-      window.removeEventListener('resize', publish)
+      window.removeEventListener('resize', publish);
       // Reset on unmount so downstream consumers don't see a stale offset.
-      root.style.removeProperty('--header-offset')
-    }
-  }, [effectivelyHidden])
+      root.style.removeProperty('--header-offset');
+    };
+  }, [effectivelyHidden]);
 
   // Escape key to close mobile menu
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        setMobileMenuOpen(false)
+        setMobileMenuOpen(false);
       }
-    }
-    document.addEventListener('keydown', handleEscape)
-    return () => document.removeEventListener('keydown', handleEscape)
-  }, [])
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, []);
 
   return (
     <>
@@ -124,14 +141,14 @@ export function Header() {
           // the two ever visually colliding: when the header is visible the
           // sub-nav sits exactly below it; when it hides, the sub-nav
           // smoothly slides up into the freed space.
-          "fixed top-0 left-0 right-0 z-50",
-          "transition-[transform,background-color,backdrop-filter,border-color] duration-300 ease-out",
-          effectivelyHidden ? "-translate-y-full" : "translate-y-0",
+          'fixed top-0 left-0 right-0 z-50',
+          'transition-[transform,background-color,backdrop-filter,border-color] duration-300 ease-out',
+          effectivelyHidden ? '-translate-y-full' : 'translate-y-0',
           // Scrolled state: border-only (no shadow). Double-cueing scroll
           // with both shadow + border was a calmer-than-x.com signal.
           isScrolled || anyDropdownOpen
-            ? "bg-surface-base/95 backdrop-blur-xl border-b border dark:border-white/6"
-            : "bg-surface-base/80 backdrop-blur-md"
+            ? 'bg-surface-base/95 backdrop-blur-xl border-b border dark:border-white/6'
+            : 'bg-surface-base/80 backdrop-blur-md',
         )}
       >
         <div className="max-w-7xl mx-auto">
@@ -206,8 +223,8 @@ export function Header() {
                   // Boxed like the theme toggle — the bare ghost icon was easy
                   // to miss on phones (thin faint lines at the screen edge).
                   // h-9 w-9 matches every other icon control in the bar.
-                  "relative h-9 w-9 rounded-lg border border-subtle bg-surface-raised",
-                  "text-text-primary hover:border-strong hover:bg-surface-raised"
+                  'relative h-9 w-9 rounded-lg border border-subtle bg-surface-raised',
+                  'text-text-primary hover:border-strong hover:bg-surface-raised',
                 )}
                 onClick={() => setMobileMenuOpen(true)}
                 aria-label={tAccessibility('openMenu')}
@@ -234,5 +251,5 @@ export function Header() {
         navigationItems={mainNavigation}
       />
     </>
-  )
+  );
 }

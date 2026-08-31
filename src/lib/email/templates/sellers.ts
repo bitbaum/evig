@@ -3,10 +3,7 @@ import type { EmailContent } from '../types';
 import { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createTextFooter } from './base-styles';
 import { escapeHtml } from '@/lib/utils/escape-html';
 
-export const sellerApplicationSubmitted = (
-  name: string,
-  applicationId: string
-): EmailContent => {
+export const sellerApplicationSubmitted = (name: string, applicationId: string): EmailContent => {
   const eName = escapeHtml(name);
   const eId = escapeHtml(applicationId);
   return {

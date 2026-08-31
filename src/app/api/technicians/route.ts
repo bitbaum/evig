@@ -6,18 +6,18 @@
  * /api/it-hilfe/helpers (community tier). Both are now rows in repairer_profiles.
  */
 
-import { NextRequest } from 'next/server'
-import { db } from '@/db'
-import { repairerProfiles, userProfiles, userSkills, users } from '@/db/schema'
-import { eq, and, sql, asc, SQL, desc } from 'drizzle-orm'
-import { apiError, apiSuccessCached, apiRateLimited, parsePagination } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { logger } from '@/lib/logger'
-import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
-import { getSkillIds } from '@/config/it-hilfe'
-import { technicianListConditionsForTier } from '@/lib/domain/technician-visibility'
-import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit'
-import { technicianHasSkillMatch } from '@/lib/it-hilfe/sql'
+import { NextRequest } from 'next/server';
+import { db } from '@/db';
+import { repairerProfiles, userProfiles, userSkills, users } from '@/db/schema';
+import { eq, and, sql, asc, SQL, desc } from 'drizzle-orm';
+import { apiError, apiSuccessCached, apiRateLimited, parsePagination } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { logger } from '@/lib/logger';
+import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status';
+import { getSkillIds } from '@/config/it-hilfe';
+import { technicianListConditionsForTier } from '@/lib/domain/technician-visibility';
+import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit';
+import { technicianHasSkillMatch } from '@/lib/it-hilfe/sql';
 
 /**
  * GET /api/technicians
@@ -34,52 +34,52 @@ import { technicianHasSkillMatch } from '@/lib/it-hilfe/sql'
  *   offset        — pagination offset
  */
 export async function GET(request: NextRequest) {
-  const clientIp = getClientIdentifier(request)
-  if (!rateLimiters.listingBrowse(clientIp)) return apiRateLimited()
+  const clientIp = getClientIdentifier(request);
+  if (!rateLimiters.listingBrowse(clientIp)) return apiRateLimited();
 
   try {
-    const { searchParams } = new URL(request.url)
+    const { searchParams } = new URL(request.url);
 
     // --- Parse filters ---
-    const tier = searchParams.get('tier') || ''
-    const q = searchParams.get('q') || ''
-    const canton = searchParams.get('canton') || ''
+    const tier = searchParams.get('tier') || '';
+    const q = searchParams.get('q') || '';
+    const canton = searchParams.get('canton') || '';
 
-    const skillsParam = searchParams.get('skills')
-    const validSkillIds = getSkillIds()
+    const skillsParam = searchParams.get('skills');
+    const validSkillIds = getSkillIds();
     const skills: string[] = (skillsParam ? skillsParam.split(',').filter(Boolean) : []).filter(
-      (s) => validSkillIds.includes(s)
-    )
+      (s) => validSkillIds.includes(s),
+    );
 
-    const acceptsGratis = searchParams.get('acceptsGratis') === 'true'
-    const acceptsKulturlegi = searchParams.get('acceptsKulturlegi') === 'true'
+    const acceptsGratis = searchParams.get('acceptsGratis') === 'true';
+    const acceptsKulturlegi = searchParams.get('acceptsKulturlegi') === 'true';
 
-    const { limit, offset } = parsePagination(request, { defaultLimit: 20, maxLimit: 50 })
+    const { limit, offset } = parsePagination(request, { defaultLimit: 20, maxLimit: 50 });
 
     // --- Build WHERE conditions ---
     //
     // Community profiles: visible when active (no admin verify gate).
     // Professional profiles: active + verified + status active.
     // See lib/domain/technician-visibility.ts
-    const conditions: SQL[] = technicianListConditionsForTier(tier)
+    const conditions: SQL[] = technicianListConditionsForTier(tier);
 
     if (q) {
-      const pattern = `%${q}%`
+      const pattern = `%${q}%`;
       conditions.push(
-        sql`(${users.name} ILIKE ${pattern} OR ${repairerProfiles.description} ILIKE ${pattern} OR ${repairerProfiles.city} ILIKE ${pattern})`
-      )
+        sql`(${users.name} ILIKE ${pattern} OR ${repairerProfiles.description} ILIKE ${pattern} OR ${repairerProfiles.city} ILIKE ${pattern})`,
+      );
     }
 
     // Skills filter via subquery (avoids blowing up GROUP BY)
     if (skills.length > 0) {
-      conditions.push(technicianHasSkillMatch(skills))
+      conditions.push(technicianHasSkillMatch(skills));
     }
 
-    if (canton) conditions.push(eq(repairerProfiles.canton, canton))
-    if (acceptsGratis) conditions.push(eq(repairerProfiles.acceptsGratis, true))
-    if (acceptsKulturlegi) conditions.push(eq(repairerProfiles.acceptsKulturlegi, true))
+    if (canton) conditions.push(eq(repairerProfiles.canton, canton));
+    if (acceptsGratis) conditions.push(eq(repairerProfiles.acceptsGratis, true));
+    if (acceptsKulturlegi) conditions.push(eq(repairerProfiles.acceptsKulturlegi, true));
 
-    const whereCondition = and(...conditions)
+    const whereCondition = and(...conditions);
 
     // --- Main query: join users + aggregate skills ---
     // Field shape must match @/types/technician::Technician — that's the
@@ -105,7 +105,9 @@ export async function GET(request: NextRequest) {
         isActive: repairerProfiles.isActive,
         isVerified: userProfiles.isVerified,
         serviceDeliveryTypes: repairerProfiles.serviceDeliveryTypes,
-        skills: sql<string[]>`ARRAY_AGG(${userSkills.skillId}) FILTER (WHERE ${userSkills.skillId} IS NOT NULL)`,
+        skills: sql<
+          string[]
+        >`ARRAY_AGG(${userSkills.skillId}) FILTER (WHERE ${userSkills.skillId} IS NOT NULL)`,
       })
       .from(repairerProfiles)
       .innerJoin(users, eq(repairerProfiles.userId, users.id))
@@ -132,13 +134,9 @@ export async function GET(request: NextRequest) {
         userProfiles.isVerified,
         repairerProfiles.serviceDeliveryTypes,
       )
-      .orderBy(
-        desc(userProfiles.isVerified),
-        desc(repairerProfiles.averageRating),
-        asc(users.name)
-      )
+      .orderBy(desc(userProfiles.isVerified), desc(repairerProfiles.averageRating), asc(users.name))
       .limit(limit)
-      .offset(offset)
+      .offset(offset);
 
     // --- Count query ---
     const [countRow] = await db
@@ -147,9 +145,9 @@ export async function GET(request: NextRequest) {
       .innerJoin(users, eq(repairerProfiles.userId, users.id))
       .leftJoin(userProfiles, eq(userProfiles.userId, repairerProfiles.userId))
       .leftJoin(userSkills, eq(repairerProfiles.userId, userSkills.userId))
-      .where(whereCondition)
+      .where(whereCondition);
 
-    const total = parseInt(countRow?.total || '0', 10)
+    const total = parseInt(countRow?.total || '0', 10);
 
     const technicians = rows.map((row) => ({
       ...row,
@@ -158,7 +156,7 @@ export async function GET(request: NextRequest) {
       // canonical Technician type (averageRating: number | null) holds at the
       // network boundary instead of crashing TechnicianCard.toFixed().
       averageRating: row.averageRating != null ? Number(row.averageRating) : null,
-    }))
+    }));
 
     logger.info('Technicians search completed', {
       tier,
@@ -167,20 +165,24 @@ export async function GET(request: NextRequest) {
       canton,
       resultsCount: technicians.length,
       total,
-    })
+    });
 
     // Technician listings are semi-static public data — cache 60s, stale 30s
-    return apiSuccessCached({
-      technicians,
-      pagination: {
-        total,
-        limit,
-        offset,
-        hasMore: offset + technicians.length < total,
+    return apiSuccessCached(
+      {
+        technicians,
+        pagination: {
+          total,
+          limit,
+          offset,
+          hasMore: offset + technicians.length < total,
+        },
       },
-    }, 60, 30)
+      60,
+      30,
+    );
   } catch (error) {
-    logger.error('Error fetching technicians', { error })
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    logger.error('Error fetching technicians', { error });
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
 }

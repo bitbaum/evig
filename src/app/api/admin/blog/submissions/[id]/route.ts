@@ -6,18 +6,13 @@
  * DELETE /api/admin/blog/submissions/[id] - Delete submission
  */
 
-import { withAdmin } from '@/lib/api/middleware'
-import { db } from '@/db'
-import { blogSubmissions, blogCategories, users } from '@/db/schema'
-import { eq } from 'drizzle-orm'
-import { logger } from '@/lib/logger'
-import {
-  apiSuccess,
-  apiError,
-  apiNotFound,
-  apiBadRequest,
-} from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
+import { withAdmin } from '@/lib/api/middleware';
+import { db } from '@/db';
+import { blogSubmissions, blogCategories, users } from '@/db/schema';
+import { eq } from 'drizzle-orm';
+import { logger } from '@/lib/logger';
+import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
 import {
   approveSubmission,
   rejectSubmission,
@@ -26,11 +21,11 @@ import {
   editSubmission,
   EditNotAllowedError,
   NoFieldsError,
-} from '@/lib/services/blog-submission'
+} from '@/lib/services/blog-submission';
 
 export const GET = withAdmin<{ id: string }>('content', async (request, session, context) => {
   try {
-    const { id } = context!.params!
+    const { id } = context!.params!;
 
     const aliasedReviewer = db
       .select({
@@ -39,7 +34,7 @@ export const GET = withAdmin<{ id: string }>('content', async (request, session,
         email: users.email,
       })
       .from(users)
-      .as('reviewer')
+      .as('reviewer');
 
     const rows = await db
       .select({
@@ -77,116 +72,113 @@ export const GET = withAdmin<{ id: string }>('content', async (request, session,
       .from(blogSubmissions)
       .leftJoin(blogCategories, eq(blogSubmissions.categoryId, blogCategories.id))
       .leftJoin(aliasedReviewer, eq(blogSubmissions.reviewedBy, aliasedReviewer.id))
-      .where(eq(blogSubmissions.id, id))
+      .where(eq(blogSubmissions.id, id));
 
     if (rows.length === 0) {
-      return apiNotFound('Einreichung')
+      return apiNotFound('Einreichung');
     }
 
     // Flatten to match the old raw SQL output shape (s.*, plus joined fields)
-    const row = rows[0]
+    const row = rows[0];
     return apiSuccess({
       ...row,
       category_label: row.categoryLabel,
       reviewer_name: row.reviewerName,
       reviewer_email: row.reviewerEmail,
-    })
+    });
   } catch (error) {
-    logger.error('Failed to get blog submission', { error })
-    return apiError(error, 'Fehler beim Laden der Einreichung')
+    logger.error('Failed to get blog submission', { error });
+    return apiError(error, 'Fehler beim Laden der Einreichung');
   }
-})
+});
 
 export const PATCH = withAdmin<{ id: string }>('content', async (request, session, context) => {
   try {
-    const { id } = context!.params!
-    const body = await request.json()
-    const { action, review_notes, rejection_reason } = body
+    const { id } = context!.params!;
+    const body = await request.json();
+    const { action, review_notes, rejection_reason } = body;
 
     // Verify submission exists
-    const existingRows = await db
-      .select()
-      .from(blogSubmissions)
-      .where(eq(blogSubmissions.id, id))
+    const existingRows = await db.select().from(blogSubmissions).where(eq(blogSubmissions.id, id));
 
     if (existingRows.length === 0) {
-      return apiNotFound('Einreichung')
+      return apiNotFound('Einreichung');
     }
 
-    const submission = existingRows[0]
-    const reviewerId = session.user.id
+    const submission = existingRows[0];
+    const reviewerId = session.user.id;
 
     switch (action) {
       case 'approve':
-        return apiSuccess(await approveSubmission(submission, reviewerId, review_notes))
+        return apiSuccess(await approveSubmission(submission, reviewerId, review_notes));
 
       case 'reject': {
         if (!rejection_reason) {
-          return apiBadRequest('Ablehnungsgrund ist erforderlich')
+          return apiBadRequest('Ablehnungsgrund ist erforderlich');
         }
-        return apiSuccess(await rejectSubmission(submission, reviewerId, rejection_reason, review_notes))
+        return apiSuccess(
+          await rejectSubmission(submission, reviewerId, rejection_reason, review_notes),
+        );
       }
 
       case 'publish':
-        return apiSuccess(await publishSubmission(submission, reviewerId, review_notes))
+        return apiSuccess(await publishSubmission(submission, reviewerId, review_notes));
 
       case 'request_changes': {
         if (!review_notes) {
-          return apiBadRequest('Änderungshinweise sind erforderlich')
+          return apiBadRequest('Änderungshinweise sind erforderlich');
         }
-        return apiSuccess(await requestChanges(submission, reviewerId, review_notes))
+        return apiSuccess(await requestChanges(submission, reviewerId, review_notes));
       }
 
       case 'edit': {
-        const editorName = session.user.name || session.user.email || 'Admin'
-        const result = await editSubmission(submission, reviewerId, editorName, body.fields)
+        const editorName = session.user.name || session.user.email || 'Admin';
+        const result = await editSubmission(submission, reviewerId, editorName, body.fields);
 
         if ('noChanges' in result) {
-          return apiSuccess({ submission: result.submission, message: 'Keine Änderungen erkannt' })
+          return apiSuccess({ submission: result.submission, message: 'Keine Änderungen erkannt' });
         }
-        return apiSuccess(result)
+        return apiSuccess(result);
       }
 
       default:
-        return apiBadRequest(ERROR_MESSAGES.INVALID_ACTION)
+        return apiBadRequest(ERROR_MESSAGES.INVALID_ACTION);
     }
   } catch (error) {
     if (error instanceof EditNotAllowedError || error instanceof NoFieldsError) {
-      return apiBadRequest(error.message)
+      return apiBadRequest(error.message);
     }
-    logger.error('Failed to update blog submission', { error })
-    return apiError(error, 'Fehler beim Aktualisieren der Einreichung')
+    logger.error('Failed to update blog submission', { error });
+    return apiError(error, 'Fehler beim Aktualisieren der Einreichung');
   }
-})
+});
 
 export const DELETE = withAdmin<{ id: string }>('content', async (request, session, context) => {
   try {
-    const { id } = context!.params!
+    const { id } = context!.params!;
 
     // Check if submission exists
     const existingRows = await db
       .select({ id: blogSubmissions.id, title: blogSubmissions.title })
       .from(blogSubmissions)
-      .where(eq(blogSubmissions.id, id))
+      .where(eq(blogSubmissions.id, id));
 
     if (existingRows.length === 0) {
-      return apiNotFound('Einreichung')
+      return apiNotFound('Einreichung');
     }
 
     // Delete submission
-    await db
-      .delete(blogSubmissions)
-      .where(eq(blogSubmissions.id, id))
+    await db.delete(blogSubmissions).where(eq(blogSubmissions.id, id));
 
     logger.info('Blog submission deleted', {
       submissionId: id,
       title: existingRows[0].title,
       deletedBy: session.user.id,
-    })
+    });
 
-    return apiSuccess({ deleted: true })
+    return apiSuccess({ deleted: true });
   } catch (error) {
-    logger.error('Failed to delete blog submission', { error })
-    return apiError(error, 'Fehler beim Löschen der Einreichung')
+    logger.error('Failed to delete blog submission', { error });
+    return apiError(error, 'Fehler beim Löschen der Einreichung');
   }
-})
+});

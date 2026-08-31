@@ -1,19 +1,19 @@
 // SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { Metadata } from 'next'
-import { Link } from '@/i18n/navigation'
-import { Button } from '@/components/ui/button'
-import { Recycle, Users, Zap, Globe } from 'lucide-react'
-import { ContactLink } from '@/components/ui/contact-link'
-import { PageHero } from '@/components/layout/PageHero'
-import { Section } from '@/components/layout/Section'
-import { ORG } from '@/config/org'
-import { getTranslations } from 'next-intl/server'
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { Metadata } from 'next';
+import { Link } from '@/i18n/navigation';
+import { Button } from '@/components/ui/button';
+import { Recycle, Users, Zap, Globe } from 'lucide-react';
+import { ContactLink } from '@/components/ui/contact-link';
+import { PageHero } from '@/components/layout/PageHero';
+import { Section } from '@/components/layout/Section';
+import { ORG } from '@/config/org';
+import { getTranslations } from 'next-intl/server';
 
 // Structural data — icons and hrefs only (text comes from translations)
-const CORE_VALUE_ICONS = [Recycle, Users, Zap, Globe]
+const CORE_VALUE_ICONS = [Recycle, Users, Zap, Globe];
 
 const INVOLVEMENT_HREFS = [
   '/get-involved/volunteer',
@@ -23,7 +23,7 @@ const INVOLVEMENT_HREFS = [
   '/get-involved/partnerships',
   '/get-involved/donate',
   '/mitglied-werden',
-]
+];
 
 // Partner institution URLs (names come from translations)
 const PARTNER_URLS = [
@@ -31,37 +31,37 @@ const PARTNER_URLS = [
   'https://www.rueti.ch',
   'https://www.heks.ch/',
   'https://www.stadt-zuerich.ch/aoz/de/index.html',
-]
+];
 
 interface GetInvolvedPageProps {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: string }>;
 }
 
 export async function generateMetadata({ params }: GetInvolvedPageProps): Promise<Metadata> {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'getInvolved' })
-  const title = `${t('meta.title')} | ${ORG.name}`
-  const description = t('meta.description')
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'getInvolved' });
+  const title = `${t('meta.title')} | ${ORG.name}`;
+  const description = t('meta.description');
   return {
     title: { absolute: title },
     description,
     openGraph: { title, description, type: 'website' },
-  }
+  };
 }
 
 export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'getInvolved' })
-  const tEye = await getTranslations({ locale, namespace: 'common.eyebrows' })
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'getInvolved' });
+  const tEye = await getTranslations({ locale, namespace: 'common.eyebrows' });
 
-  const coreValueItems = t.raw('coreValues.items') as Array<{ title: string; description: string }>
+  const coreValueItems = t.raw('coreValues.items') as Array<{ title: string; description: string }>;
   const optionItems = t.raw('options.items') as Array<{
-    title: string
-    description: string
-    features: string[]
-    cta: string
-  }>
-  const partnerNames = t.raw('partners.names') as string[]
+    title: string;
+    description: string;
+    features: string[];
+    cta: string;
+  }>;
+  const partnerNames = t.raw('partners.names') as string[];
 
   return (
     <main className="min-h-screen">
@@ -82,7 +82,13 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
       </PageHero>
 
       {/* Core Values Section */}
-      <Section id="learn-more" density="spacious" tone="tinted" contained={false} className="border-y border-subtle">
+      <Section
+        id="learn-more"
+        density="spacious"
+        tone="tinted"
+        contained={false}
+        className="border-y border-subtle"
+      >
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <Eyebrow as="div">{t('coreValues.heading').toUpperCase()}</Eyebrow>
@@ -90,14 +96,14 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {coreValueItems.map((value, index) => {
-              const Icon = CORE_VALUE_ICONS[index]
+              const Icon = CORE_VALUE_ICONS[index];
               return (
                 <article key={index} className="ui-public-card">
                   <Icon className="w-8 h-8 text-action" aria-hidden="true" />
                   <h3 className="ui-public-card-title mt-4">{value.title}</h3>
                   <p className="ui-public-card-body">{value.description}</p>
                 </article>
-              )
+              );
             })}
           </div>
         </div>
@@ -119,14 +125,29 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
                 <ul className="mt-4 space-y-2">
                   {option.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-start text-sm text-text-secondary">
-                      <svg className="w-4 h-4 mr-2 text-action shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      <svg
+                        className="w-4 h-4 mr-2 text-action shrink-0 mt-0.5"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
                       </svg>
                       <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
-                <Button as="a" href={INVOLVEMENT_HREFS[index]} variant="primary" className="w-full mt-6">
+                <Button
+                  as="a"
+                  href={INVOLVEMENT_HREFS[index]}
+                  variant="primary"
+                  className="w-full mt-6"
+                >
                   {option.cta}
                 </Button>
               </article>
@@ -151,8 +172,18 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
                 rel="noopener noreferrer"
                 className="ui-public-card flex-row items-center gap-3 hover:border-strong group"
               >
-                <svg className="w-5 h-5 text-action shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  className="w-5 h-5 text-action shrink-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
                 <span className="ui-public-card-body mt-0 group-hover:text-action transition-colors">
                   {name}
@@ -170,9 +201,7 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
           <h2 className="ui-public-display-lg mt-4">{t('cta.heading')}</h2>
           <p className="ui-public-section-lede mt-6 mx-auto">{t('cta.body')}</p>
           <div className="ui-public-cta-row mt-10">
-            <ContactLink className="ui-public-cta">
-              {t('cta.contactBtn')}
-            </ContactLink>
+            <ContactLink className="ui-public-cta">{t('cta.contactBtn')}</ContactLink>
             <Link href="/workshops" className="ui-public-cta-ghost">
               {t('cta.workshopsBtn')}
             </Link>
@@ -180,5 +209,5 @@ export default async function GetInvolvedPage({ params }: GetInvolvedPageProps) 
         </div>
       </Section>
     </main>
-  )
+  );
 }

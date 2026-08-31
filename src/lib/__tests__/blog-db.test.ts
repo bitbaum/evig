@@ -35,57 +35,73 @@
 // ---------------------------------------------------------------------------
 
 function makeChain(result: unknown = []) {
-  const resolved = Promise.resolve(result)
-  const chain: Record<string, unknown> = {}
-  chain.select = jest.fn().mockReturnValue(chain)
-  chain.from = jest.fn().mockReturnValue(chain)
-  chain.leftJoin = jest.fn().mockReturnValue(chain)
-  chain.innerJoin = jest.fn().mockReturnValue(chain)
-  chain.where = jest.fn().mockReturnValue(chain)
-  chain.orderBy = jest.fn().mockReturnValue(chain)
-  chain.then = (resolved as Promise<unknown>).then.bind(resolved)
-  chain.catch = (resolved as Promise<unknown>).catch.bind(resolved)
-  chain.finally = (resolved as Promise<unknown>).finally.bind(resolved)
-  return chain
+  const resolved = Promise.resolve(result);
+  const chain: Record<string, unknown> = {};
+  chain.select = jest.fn().mockReturnValue(chain);
+  chain.from = jest.fn().mockReturnValue(chain);
+  chain.leftJoin = jest.fn().mockReturnValue(chain);
+  chain.innerJoin = jest.fn().mockReturnValue(chain);
+  chain.where = jest.fn().mockReturnValue(chain);
+  chain.orderBy = jest.fn().mockReturnValue(chain);
+  chain.then = (resolved as Promise<unknown>).then.bind(resolved);
+  chain.catch = (resolved as Promise<unknown>).catch.bind(resolved);
+  chain.finally = (resolved as Promise<unknown>).finally.bind(resolved);
+  return chain;
 }
 
 // ---------------------------------------------------------------------------
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbSelect = jest.fn(() => makeChain([]))
+const mockDbSelect = jest.fn(() => makeChain([]));
 
 jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockDbSelect.apply(null, args),
   },
-}))
+}));
 
 jest.mock('@/db/schema/content', () => ({
   blogPosts: {
-    id: 'bp_id', slug: 'bp_slug', title: 'bp_title', excerpt: 'bp_excerpt',
-    content: 'bp_content', featuredImage: 'bp_featuredImage',
-    categoryId: 'bp_categoryId', createdBy: 'bp_createdBy',
-    tags: 'bp_tags', publishedAt: 'bp_publishedAt', createdAt: 'bp_createdAt',
-    isPublished: 'bp_isPublished', visibility: 'bp_visibility',
-    seoTitle: 'bp_seoTitle', seoDescription: 'bp_seoDescription',
+    id: 'bp_id',
+    slug: 'bp_slug',
+    title: 'bp_title',
+    excerpt: 'bp_excerpt',
+    content: 'bp_content',
+    featuredImage: 'bp_featuredImage',
+    categoryId: 'bp_categoryId',
+    createdBy: 'bp_createdBy',
+    tags: 'bp_tags',
+    publishedAt: 'bp_publishedAt',
+    createdAt: 'bp_createdAt',
+    isPublished: 'bp_isPublished',
+    visibility: 'bp_visibility',
+    seoTitle: 'bp_seoTitle',
+    seoDescription: 'bp_seoDescription',
   },
   blogCategories: {
-    id: 'bc_id', slug: 'bc_slug', name: 'bc_name',
-    description: 'bc_description', color: 'bc_color',
+    id: 'bc_id',
+    slug: 'bc_slug',
+    name: 'bc_name',
+    description: 'bc_description',
+    color: 'bc_color',
   },
   blogHiddenSlugs: { slug: 'bh_slug' },
   blogPostTranslations: {
-    postId: 'bt_postId', locale: 'bt_locale', title: 'bt_title',
-    excerpt: 'bt_excerpt', content: 'bt_content',
-    seoTitle: 'bt_seoTitle', seoDescription: 'bt_seoDescription',
+    postId: 'bt_postId',
+    locale: 'bt_locale',
+    title: 'bt_title',
+    excerpt: 'bt_excerpt',
+    content: 'bt_content',
+    seoTitle: 'bt_seoTitle',
+    seoDescription: 'bt_seoDescription',
     isMachine: 'bt_isMachine',
   },
-}))
+}));
 
 jest.mock('@/db/schema/auth', () => ({
   users: { name: 'u_name', id: 'u_id' },
-}))
+}));
 
 jest.mock('drizzle-orm', () => ({
   ...jest.requireActual('drizzle-orm'),
@@ -94,20 +110,20 @@ jest.mock('drizzle-orm', () => ({
   lte: jest.fn().mockReturnValue({ __lte: true }),
   desc: jest.fn().mockReturnValue({ __desc: true }),
   asc: jest.fn().mockReturnValue({ __asc: true }),
-}))
+}));
 
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
-}))
+}));
 
-jest.mock('@/lib/blog', () => ({}))
+jest.mock('@/lib/blog', () => ({}));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { getAllPosts, getPostBySlug, getAllCategories, getPostsByCategory } from '../blog-db'
-import { DEFAULT_BLOG_AUTHOR } from '@/config/org'
+import { getAllPosts, getPostBySlug, getAllCategories, getPostsByCategory } from '../blog-db';
+import { DEFAULT_BLOG_AUTHOR } from '@/config/org';
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -126,13 +142,13 @@ function makePostRow(overrides: Partial<Record<string, unknown>> = {}) {
     publishedAt: '2026-04-01T12:00:00Z',
     createdAt: '2026-03-28T08:00:00Z',
     ...overrides,
-  }
+  };
 }
 
 beforeEach(() => {
-  jest.clearAllMocks()
-  mockDbSelect.mockImplementation(() => makeChain([]))
-})
+  jest.clearAllMocks();
+  mockDbSelect.mockImplementation(() => makeChain([]));
+});
 
 // ============================================================================
 // getAllPosts
@@ -140,34 +156,34 @@ beforeEach(() => {
 
 describe('getAllPosts', () => {
   it('returns mapped posts from DB', async () => {
-    mockDbSelect.mockReturnValueOnce(makeChain([makePostRow()]))
+    mockDbSelect.mockReturnValueOnce(makeChain([makePostRow()]));
 
-    const posts = await getAllPosts()
+    const posts = await getAllPosts();
 
-    expect(posts).toHaveLength(1)
-    expect(posts[0].slug).toBe('geraet-reparatur')
-    expect(posts[0].title).toBe('Gerät repariert statt weggeworfen')
-    expect(posts[0].published).toBe(true)
-  })
+    expect(posts).toHaveLength(1);
+    expect(posts[0].slug).toBe('geraet-reparatur');
+    expect(posts[0].title).toBe('Gerät repariert statt weggeworfen');
+    expect(posts[0].published).toBe(true);
+  });
 
   it('returns empty array when no posts', async () => {
-    mockDbSelect.mockReturnValueOnce(makeChain([]))
+    mockDbSelect.mockReturnValueOnce(makeChain([]));
 
-    const posts = await getAllPosts()
+    const posts = await getAllPosts();
 
-    expect(posts).toEqual([])
-  })
+    expect(posts).toEqual([]);
+  });
 
   it('returns empty array on DB error (never throws)', async () => {
     mockDbSelect.mockImplementationOnce(() => {
-      throw new Error('DB connection failed')
-    })
+      throw new Error('DB connection failed');
+    });
 
-    const posts = await getAllPosts()
+    const posts = await getAllPosts();
 
-    expect(posts).toEqual([])
-  })
-})
+    expect(posts).toEqual([]);
+  });
+});
 
 // ============================================================================
 // getPostBySlug
@@ -175,32 +191,32 @@ describe('getAllPosts', () => {
 
 describe('getPostBySlug', () => {
   it('returns mapped post when found', async () => {
-    mockDbSelect.mockReturnValueOnce(makeChain([makePostRow()]))
+    mockDbSelect.mockReturnValueOnce(makeChain([makePostRow()]));
 
-    const post = await getPostBySlug('geraet-reparatur')
+    const post = await getPostBySlug('geraet-reparatur');
 
-    expect(post).not.toBeNull()
-    expect(post!.slug).toBe('geraet-reparatur')
-  })
+    expect(post).not.toBeNull();
+    expect(post!.slug).toBe('geraet-reparatur');
+  });
 
   it('returns null when no post matches', async () => {
-    mockDbSelect.mockReturnValueOnce(makeChain([]))
+    mockDbSelect.mockReturnValueOnce(makeChain([]));
 
-    const post = await getPostBySlug('not-found')
+    const post = await getPostBySlug('not-found');
 
-    expect(post).toBeNull()
-  })
+    expect(post).toBeNull();
+  });
 
   it('returns null on DB error', async () => {
     mockDbSelect.mockImplementationOnce(() => {
-      throw new Error('timeout')
-    })
+      throw new Error('timeout');
+    });
 
-    const post = await getPostBySlug('any-slug')
+    const post = await getPostBySlug('any-slug');
 
-    expect(post).toBeNull()
-  })
-})
+    expect(post).toBeNull();
+  });
+});
 
 // ============================================================================
 // getAllCategories
@@ -210,27 +226,33 @@ describe('getAllCategories', () => {
   it('returns mapped categories', async () => {
     mockDbSelect.mockReturnValueOnce(
       makeChain([
-        { id: 'cat-1', slug: 'nachhaltigkeit', name: 'Nachhaltigkeit', description: 'Grün', color: '#00aa00' },
-      ])
-    )
+        {
+          id: 'cat-1',
+          slug: 'nachhaltigkeit',
+          name: 'Nachhaltigkeit',
+          description: 'Grün',
+          color: '#00aa00',
+        },
+      ]),
+    );
 
-    const categories = await getAllCategories()
+    const categories = await getAllCategories();
 
-    expect(categories).toHaveLength(1)
-    expect(categories[0].slug).toBe('nachhaltigkeit')
-    expect(categories[0].isActive).toBe(true)
-  })
+    expect(categories).toHaveLength(1);
+    expect(categories[0].slug).toBe('nachhaltigkeit');
+    expect(categories[0].isActive).toBe(true);
+  });
 
   it('returns empty array on DB error', async () => {
     mockDbSelect.mockImplementationOnce(() => {
-      throw new Error('DB unavailable')
-    })
+      throw new Error('DB unavailable');
+    });
 
-    const cats = await getAllCategories()
+    const cats = await getAllCategories();
 
-    expect(cats).toEqual([])
-  })
-})
+    expect(cats).toEqual([]);
+  });
+});
 
 // ============================================================================
 // getPostsByCategory
@@ -238,26 +260,24 @@ describe('getAllCategories', () => {
 
 describe('getPostsByCategory', () => {
   it('returns posts matching category name', async () => {
-    mockDbSelect.mockReturnValueOnce(
-      makeChain([makePostRow({ categoryName: 'Nachhaltigkeit' })])
-    )
+    mockDbSelect.mockReturnValueOnce(makeChain([makePostRow({ categoryName: 'Nachhaltigkeit' })]));
 
-    const posts = await getPostsByCategory('Nachhaltigkeit')
+    const posts = await getPostsByCategory('Nachhaltigkeit');
 
-    expect(posts).toHaveLength(1)
-    expect(posts[0].category).toBe('Nachhaltigkeit')
-  })
+    expect(posts).toHaveLength(1);
+    expect(posts[0].category).toBe('Nachhaltigkeit');
+  });
 
   it('returns empty array on DB error', async () => {
     mockDbSelect.mockImplementationOnce(() => {
-      throw new Error('query failed')
-    })
+      throw new Error('query failed');
+    });
 
-    const posts = await getPostsByCategory('Test')
+    const posts = await getPostsByCategory('Test');
 
-    expect(posts).toEqual([])
-  })
-})
+    expect(posts).toEqual([]);
+  });
+});
 
 // ============================================================================
 // mapPostFromDb defaults (tested via getAllPosts)
@@ -265,36 +285,38 @@ describe('getPostsByCategory', () => {
 
 describe('mapPostFromDb field defaults', () => {
   it('falls back to the default blog author when authorName is null', async () => {
-    mockDbSelect.mockReturnValueOnce(makeChain([makePostRow({ authorName: null })]))
+    mockDbSelect.mockReturnValueOnce(makeChain([makePostRow({ authorName: null })]));
 
-    const [post] = await getAllPosts()
+    const [post] = await getAllPosts();
 
-    expect(post.author).toBe(DEFAULT_BLOG_AUTHOR)
-  })
+    expect(post.author).toBe(DEFAULT_BLOG_AUTHOR);
+  });
 
   it('falls back to empty array when tags is null', async () => {
-    mockDbSelect.mockReturnValueOnce(makeChain([makePostRow({ tags: null })]))
+    mockDbSelect.mockReturnValueOnce(makeChain([makePostRow({ tags: null })]));
 
-    const [post] = await getAllPosts()
+    const [post] = await getAllPosts();
 
-    expect(post.tags).toEqual([])
-  })
+    expect(post.tags).toEqual([]);
+  });
 
   it('always sets published: true', async () => {
-    mockDbSelect.mockReturnValueOnce(makeChain([makePostRow()]))
+    mockDbSelect.mockReturnValueOnce(makeChain([makePostRow()]));
 
-    const [post] = await getAllPosts()
+    const [post] = await getAllPosts();
 
-    expect(post.published).toBe(true)
-  })
+    expect(post.published).toBe(true);
+  });
 
   it('uses undefined for optional fields when null in DB', async () => {
-    mockDbSelect.mockReturnValueOnce(makeChain([makePostRow({ excerpt: null, featuredImage: null, categoryName: null })]))
+    mockDbSelect.mockReturnValueOnce(
+      makeChain([makePostRow({ excerpt: null, featuredImage: null, categoryName: null })]),
+    );
 
-    const [post] = await getAllPosts()
+    const [post] = await getAllPosts();
 
-    expect(post.excerpt).toBeUndefined()
-    expect(post.featuredImage).toBeUndefined()
-    expect(post.category).toBeUndefined()
-  })
-})
+    expect(post.excerpt).toBeUndefined();
+    expect(post.featuredImage).toBeUndefined();
+    expect(post.category).toBeUndefined();
+  });
+});

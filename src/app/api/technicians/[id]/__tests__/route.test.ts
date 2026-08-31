@@ -7,15 +7,15 @@
  *   GET - 400 (invalid UUID), 404 (not found), 200 with profile
  */
 
-const mockGetTechnicianById = jest.fn()
+const mockGetTechnicianById = jest.fn();
 
 jest.mock('@/lib/services/technician-service', () => ({
   ...jest.requireActual('@/lib/services/technician-service'),
   getTechnicianById: (...args: unknown[]) => mockGetTechnicianById(...args),
-}))
+}));
 
 jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server')
+  const { NextResponse } = jest.requireActual('next/server');
   return {
     apiSuccessCached: (data: unknown, _maxAge?: number, _stale?: number) =>
       NextResponse.json({ success: true, data }),
@@ -25,21 +25,21 @@ jest.mock('@/lib/api/helpers', () => {
       NextResponse.json({ success: false, error: msg }, { status: 400 }),
     apiNotFound: (msg: string) =>
       NextResponse.json({ success: false, error: msg }, { status: 404 }),
-  }
-})
+  };
+});
 
 jest.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Interner Serverfehler' },
-}))
+}));
 
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
-}))
+}));
 
-import { NextRequest } from 'next/server'
-import { GET } from '../route'
+import { NextRequest } from 'next/server';
+import { GET } from '../route';
 
-const VALID_UUID = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+const VALID_UUID = 'a1b2c3d4-e5f6-7890-abcd-ef1234567890';
 
 const MOCK_TECHNICIAN = {
   id: VALID_UUID,
@@ -62,16 +62,16 @@ const MOCK_TECHNICIAN = {
   createdAt: '2024-01-01T00:00:00Z',
   skills: ['hardware'],
   services: [],
-}
+};
 
 function makeRequest(id: string) {
-  const req = new NextRequest(`http://localhost/api/technicians/${id}`)
-  return { req, context: { params: Promise.resolve({ id }) } }
+  const req = new NextRequest(`http://localhost/api/technicians/${id}`);
+  return { req, context: { params: Promise.resolve({ id }) } };
 }
 
 beforeEach(() => {
-  jest.resetAllMocks()
-})
+  jest.resetAllMocks();
+});
 
 // ============================================================================
 // GET — single technician
@@ -79,53 +79,53 @@ beforeEach(() => {
 
 describe('GET /api/technicians/[id]', () => {
   it('returns 400 for non-UUID id', async () => {
-    const { req, context } = makeRequest('not-a-uuid')
-    const response = await GET(req, context)
-    expect(response.status).toBe(400)
-    const body = await response.json()
-    expect(body.success).toBe(false)
-    expect(mockGetTechnicianById).not.toHaveBeenCalled()
-  })
+    const { req, context } = makeRequest('not-a-uuid');
+    const response = await GET(req, context);
+    expect(response.status).toBe(400);
+    const body = await response.json();
+    expect(body.success).toBe(false);
+    expect(mockGetTechnicianById).not.toHaveBeenCalled();
+  });
 
   it('returns 400 for numeric id', async () => {
-    const { req, context } = makeRequest('12345')
-    const response = await GET(req, context)
-    expect(response.status).toBe(400)
-  })
+    const { req, context } = makeRequest('12345');
+    const response = await GET(req, context);
+    expect(response.status).toBe(400);
+  });
 
   it('returns 404 when technician is not found', async () => {
-    mockGetTechnicianById.mockResolvedValue(null)
-    const { req, context } = makeRequest(VALID_UUID)
-    const response = await GET(req, context)
-    expect(response.status).toBe(404)
-    const body = await response.json()
-    expect(body.success).toBe(false)
-  })
+    mockGetTechnicianById.mockResolvedValue(null);
+    const { req, context } = makeRequest(VALID_UUID);
+    const response = await GET(req, context);
+    expect(response.status).toBe(404);
+    const body = await response.json();
+    expect(body.success).toBe(false);
+  });
 
   it('returns 200 with technician profile', async () => {
-    mockGetTechnicianById.mockResolvedValue(MOCK_TECHNICIAN)
-    const { req, context } = makeRequest(VALID_UUID)
-    const response = await GET(req, context)
-    expect(response.status).toBe(200)
-    const body = await response.json()
-    expect(body.success).toBe(true)
-    expect(body.data.technician.id).toBe(VALID_UUID)
-    expect(body.data.technician.name).toBe('Anna Muster')
-  })
+    mockGetTechnicianById.mockResolvedValue(MOCK_TECHNICIAN);
+    const { req, context } = makeRequest(VALID_UUID);
+    const response = await GET(req, context);
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.success).toBe(true);
+    expect(body.data.technician.id).toBe(VALID_UUID);
+    expect(body.data.technician.name).toBe('Anna Muster');
+  });
 
   it('calls getTechnicianById with the correct id', async () => {
-    mockGetTechnicianById.mockResolvedValue(MOCK_TECHNICIAN)
-    const { req, context } = makeRequest(VALID_UUID)
-    await GET(req, context)
-    expect(mockGetTechnicianById).toHaveBeenCalledWith(VALID_UUID)
-  })
+    mockGetTechnicianById.mockResolvedValue(MOCK_TECHNICIAN);
+    const { req, context } = makeRequest(VALID_UUID);
+    await GET(req, context);
+    expect(mockGetTechnicianById).toHaveBeenCalledWith(VALID_UUID);
+  });
 
   it('returns 500 when service throws', async () => {
-    mockGetTechnicianById.mockRejectedValue(new Error('DB error'))
-    const { req, context } = makeRequest(VALID_UUID)
-    const response = await GET(req, context)
-    expect(response.status).toBe(500)
-    const body = await response.json()
-    expect(body.success).toBe(false)
-  })
-})
+    mockGetTechnicianById.mockRejectedValue(new Error('DB error'));
+    const { req, context } = makeRequest(VALID_UUID);
+    const response = await GET(req, context);
+    expect(response.status).toBe(500);
+    const body = await response.json();
+    expect(body.success).toBe(false);
+  });
+});

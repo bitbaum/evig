@@ -16,7 +16,7 @@ export const PublicHirnChatSchema = z.object({
       z.object({
         role: z.enum(['user', 'assistant']),
         content: z.string().max(4000),
-      })
+      }),
     )
     .max(20)
     .optional(),

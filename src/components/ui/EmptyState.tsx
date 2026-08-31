@@ -1,17 +1,17 @@
-import { type LucideIcon } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import Heading from './Heading'
+import { type LucideIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import Heading from './Heading';
 
 interface EmptyStateProps {
-  icon: LucideIcon
+  icon: LucideIcon;
   /** Tailwind bg classes for the icon circle, e.g. "bg-action-muted" (brand token, not primary-*) */
-  iconBg?: string
+  iconBg?: string;
   /** Tailwind text classes for the icon, e.g. "text-action" (brand token, flips in dark) */
-  iconColor?: string
-  title: string
-  description?: string
-  action?: React.ReactNode
-  className?: string
+  iconColor?: string;
+  title: string;
+  description?: string;
+  action?: React.ReactNode;
+  className?: string;
 }
 
 export function EmptyState({
@@ -24,16 +24,11 @@ export function EmptyState({
   className,
 }: EmptyStateProps) {
   return (
-    <div
-      className={cn(
-        'card-shell p-6 sm:p-8 text-center',
-        className
-      )}
-    >
+    <div className={cn('card-shell p-6 sm:p-8 text-center', className)}>
       <div
         className={cn(
           'w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4',
-          iconBg
+          iconBg,
         )}
       >
         <Icon className={cn('w-7 h-7', iconColor)} aria-hidden="true" />
@@ -42,11 +37,9 @@ export function EmptyState({
         {title}
       </Heading>
       {description && (
-        <p className="text-sm text-text-tertiary mb-6 max-w-sm mx-auto">
-          {description}
-        </p>
+        <p className="text-sm text-text-tertiary mb-6 max-w-sm mx-auto">{description}</p>
       )}
       {action}
     </div>
-  )
+  );
 }

@@ -1,33 +1,33 @@
-'use client'
+'use client';
 
 /** Pipeline-header slice — error banner, progress strip, processing spinner, draft input, and raw-transcript source. */
 
-import type { ComponentProps } from 'react'
-import { ProtocolDraftInput, ProtocolProgressStrip } from '@/components/admin/protocols'
-import type { ProtocolDetail, StructuredNotes } from '@/lib/schemas/protocols'
-import { ProtocolErrorBanner } from './ProtocolErrorBanner'
-import { ProtocolProcessingCard } from './ProtocolProcessingCard'
-import { ProtocolTranscriptSource } from './ProtocolTranscriptSource'
+import type { ComponentProps } from 'react';
+import { ProtocolDraftInput, ProtocolProgressStrip } from '@/components/admin/protocols';
+import type { ProtocolDetail, StructuredNotes } from '@/lib/schemas/protocols';
+import { ProtocolErrorBanner } from './ProtocolErrorBanner';
+import { ProtocolProcessingCard } from './ProtocolProcessingCard';
+import { ProtocolTranscriptSource } from './ProtocolTranscriptSource';
 
-type DraftInputProps = ComponentProps<typeof ProtocolDraftInput>
+type DraftInputProps = ComponentProps<typeof ProtocolDraftInput>;
 
 interface ProtocolPipelineHeaderProps {
-  error: string | null
-  initialProcessingError?: { message: string; retryable: boolean } | null
-  reviewChecklist: ComponentProps<typeof ProtocolProgressStrip>['items']
-  isProcessing: boolean
-  isDraft: boolean
-  notes: StructuredNotes | null
-  protocol: ProtocolDetail
-  usesUnifiedPipeline: boolean
-  transcript: string
-  audioFile: File | null
-  processing: boolean
-  canProcess: boolean
-  setTranscript: DraftInputProps['onTranscriptChange']
-  handleAudioFileSelect: DraftInputProps['onAudioFileSelect']
-  handleFileUpload: DraftInputProps['onFileUpload']
-  handleProcess: DraftInputProps['onProcess']
+  error: string | null;
+  initialProcessingError?: { message: string; retryable: boolean } | null;
+  reviewChecklist: ComponentProps<typeof ProtocolProgressStrip>['items'];
+  isProcessing: boolean;
+  isDraft: boolean;
+  notes: StructuredNotes | null;
+  protocol: ProtocolDetail;
+  usesUnifiedPipeline: boolean;
+  transcript: string;
+  audioFile: File | null;
+  processing: boolean;
+  canProcess: boolean;
+  setTranscript: DraftInputProps['onTranscriptChange'];
+  handleAudioFileSelect: DraftInputProps['onAudioFileSelect'];
+  handleFileUpload: DraftInputProps['onFileUpload'];
+  handleProcess: DraftInputProps['onProcess'];
 }
 
 export function ProtocolPipelineHeader({
@@ -87,5 +87,5 @@ export function ProtocolPipelineHeader({
         <ProtocolTranscriptSource protocol={protocol} notes={notes} />
       )}
     </>
-  )
+  );
 }

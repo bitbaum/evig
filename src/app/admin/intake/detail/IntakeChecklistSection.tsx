@@ -1,29 +1,29 @@
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
-import { AlertCircle } from 'lucide-react'
-import type { ChecklistResult } from '@/config/intake-checklist'
-import { INTAKE_STATUS } from '@/config/intake-status'
-import Heading from '@/components/admin/AdminHeading'
-import { ChecklistGroup } from '../ChecklistGroup'
-import type { DetailData } from '../types'
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
+import { AlertCircle } from 'lucide-react';
+import type { ChecklistResult } from '@/config/intake-checklist';
+import { INTAKE_STATUS } from '@/config/intake-status';
+import Heading from '@/components/admin/AdminHeading';
+import { ChecklistGroup } from '../ChecklistGroup';
+import type { DetailData } from '../types';
 
 interface IntakeChecklistSectionProps {
-  detail: DetailData
-  checklistPendingItems: ReadonlySet<string>
+  detail: DetailData;
+  checklistPendingItems: ReadonlySet<string>;
   onSetChecklistResult: (
     itemId: string,
     result: ChecklistResult | null,
     notes?: string,
     options?: { secondPersonOverride?: boolean },
-  ) => void
-  qcGate: boolean
-  publishPrice: number
-  publishing: boolean
-  onStartQc: () => void
-  startingQc: boolean
-  onPublish: (options?: { skipQc?: boolean }) => void
+  ) => void;
+  qcGate: boolean;
+  publishPrice: number;
+  publishing: boolean;
+  onStartQc: () => void;
+  startingQc: boolean;
+  onPublish: (options?: { skipQc?: boolean }) => void;
 }
 
 export function IntakeChecklistSection({
@@ -37,7 +37,7 @@ export function IntakeChecklistSection({
   startingQc,
   onPublish,
 }: IntakeChecklistSectionProps) {
-  const t = useTranslations('admin.intake.detail')
+  const t = useTranslations('admin.intake.detail');
   return (
     <>
       {/* Checklist Groups */}
@@ -57,7 +57,10 @@ export function IntakeChecklistSection({
           checklist: no publishing until the workflow is started */}
       {qcGate && detail.marketplace_status !== INTAKE_STATUS.PUBLISHED && (
         <div className="border-2 border-warning-300 bg-warning-50 dark:bg-warning-900/20 rounded-lg p-4 space-y-3">
-          <Heading level={3} className="font-medium flex items-center gap-2 text-warning-800 dark:text-warning-200">
+          <Heading
+            level={3}
+            className="font-medium flex items-center gap-2 text-warning-800 dark:text-warning-200"
+          >
             <AlertCircle className="w-4 h-4" /> {t('qcGate.heading')}
           </Heading>
           <p className="text-sm text-warning-700 dark:text-warning-200">{t('qcGate.body')}</p>
@@ -87,5 +90,5 @@ export function IntakeChecklistSection({
         </div>
       )}
     </>
-  )
+  );
 }

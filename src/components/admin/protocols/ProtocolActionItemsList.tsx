@@ -1,53 +1,51 @@
-'use client'
+'use client';
 
-import {
-  Loader2,
-  ListChecks,
-  Vote,
-  HelpCircle,
-  Sparkles,
-} from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { ACTION_ITEM_TYPE_LABELS } from '@/config/protocols'
-import { pluralDe } from '@/lib/i18n/plural-de'
-import type { StructuredNotes, ActionLinkRecord } from '@/lib/schemas/protocols'
-import type { ProtocolDecisionSummary } from '@/lib/services/decisions-crud'
-import { BucketHeader } from './action-items/BucketHeader'
-import { AddCustomTaskRow } from './action-items/AddCustomTaskRow'
-import { ActionRow } from './action-items/ActionRow'
+import { Loader2, ListChecks, Vote, HelpCircle, Sparkles } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { ACTION_ITEM_TYPE_LABELS } from '@/config/protocols';
+import { pluralDe } from '@/lib/i18n/plural-de';
+import type { StructuredNotes, ActionLinkRecord } from '@/lib/schemas/protocols';
+import type { ProtocolDecisionSummary } from '@/lib/services/decisions-crud';
+import { BucketHeader } from './action-items/BucketHeader';
+import { AddCustomTaskRow } from './action-items/AddCustomTaskRow';
+import { ActionRow } from './action-items/ActionRow';
 
 interface Props {
-  notes: StructuredNotes
-  actionLinks: ActionLinkRecord[]
-  linkedActionIds: Set<string>
-  unlinkedTaskItems: StructuredNotes['action_items']
-  isReview: boolean
-  isFinalized: boolean
-  protocolId: string
-  protocolTitle: string
-  meetingDate: string
-  attendeeCount: number
-  creatingTask: string | null
-  bulkCreatingTasks: boolean
-  bulkTaskErrors: string[]
+  notes: StructuredNotes;
+  actionLinks: ActionLinkRecord[];
+  linkedActionIds: Set<string>;
+  unlinkedTaskItems: StructuredNotes['action_items'];
+  isReview: boolean;
+  isFinalized: boolean;
+  protocolId: string;
+  protocolTitle: string;
+  meetingDate: string;
+  attendeeCount: number;
+  creatingTask: string | null;
+  bulkCreatingTasks: boolean;
+  bulkTaskErrors: string[];
   // QQ.6 — standalone decisions linked to this protocol's action items.
-  protocolDecisions: ProtocolDecisionSummary[]
-  currentUserId: string
-  isProtocolCreator: boolean
+  protocolDecisions: ProtocolDecisionSummary[];
+  currentUserId: string;
+  isProtocolCreator: boolean;
   /** For the manual add-task assignee select. */
-  teamMembers: Array<{ id: string; name: string }>
-  addingCustomTask: boolean
-  onCreateTask: (actionItem: StructuredNotes['action_items'][0]) => void
-  onCreateAllTasks: () => void
-  onAddCustomTask: (description: string, assignee: { id: string; name: string } | null) => Promise<boolean>
-  onRefresh: () => void
+  teamMembers: Array<{ id: string; name: string }>;
+  addingCustomTask: boolean;
+  onCreateTask: (actionItem: StructuredNotes['action_items'][0]) => void;
+  onCreateAllTasks: () => void;
+  onAddCustomTask: (
+    description: string,
+    assignee: { id: string; name: string } | null,
+  ) => Promise<boolean>;
+  onRefresh: () => void;
 }
 
 // Plural helpers keyed off the label SSOT so the vocabulary lives in one place.
-const pluralTask = (n: number) => pluralDe(n, ACTION_ITEM_TYPE_LABELS.task, 'Aufgaben')
-const pluralDecision = (n: number) => pluralDe(n, ACTION_ITEM_TYPE_LABELS.decision, 'Entscheidungen')
-const pluralInfo = (n: number) => pluralDe(n, ACTION_ITEM_TYPE_LABELS.info, 'Informationen')
+const pluralTask = (n: number) => pluralDe(n, ACTION_ITEM_TYPE_LABELS.task, 'Aufgaben');
+const pluralDecision = (n: number) =>
+  pluralDe(n, ACTION_ITEM_TYPE_LABELS.decision, 'Entscheidungen');
+const pluralInfo = (n: number) => pluralDe(n, ACTION_ITEM_TYPE_LABELS.info, 'Informationen');
 
 export function ProtocolActionItemsList({
   notes,
@@ -72,14 +70,12 @@ export function ProtocolActionItemsList({
   onRefresh,
 }: Props) {
   // Quick lookup: actionItemId → linked standalone decision (if any).
-  const decisionsByActionItem = new Map(
-    protocolDecisions.map((d) => [d.actionItemId, d])
-  )
+  const decisionsByActionItem = new Map(protocolDecisions.map((d) => [d.actionItemId, d]));
   // Provenance: actionItemId's topic → topic title, so each derived item can
   // show which structured-note topic it came from (raw → notes → item chain).
-  const topicTitleById = new Map((notes.topics ?? []).map((t) => [t.id, t.title]))
+  const topicTitleById = new Map((notes.topics ?? []).map((t) => [t.id, t.title]));
 
-  const canAct = isReview || isFinalized
+  const canAct = isReview || isFinalized;
 
   if (!notes.action_items || notes.action_items.length === 0) {
     return (
@@ -87,8 +83,8 @@ export function ProtocolActionItemsList({
         <div>
           <h3 className="text-sm font-semibold text-text-primary mb-1">Keine Aktionen erkannt</h3>
           <p className="text-sm text-text-secondary">
-            Die KI hat keine konkreten Aufgaben oder Entscheidungen extrahiert.
-            Ergänze Aufgaben unten von Hand oder überarbeite den Inhalt und starte die Verarbeitung erneut.
+            Die KI hat keine konkreten Aufgaben oder Entscheidungen extrahiert. Ergänze Aufgaben
+            unten von Hand oder überarbeite den Inhalt und starte die Verarbeitung erneut.
           </p>
         </div>
         {isReview && (
@@ -99,16 +95,16 @@ export function ProtocolActionItemsList({
           />
         )}
       </div>
-    )
+    );
   }
 
-  const tasks = notes.action_items.filter(i => i.item_type === 'task')
-  const decisions = notes.action_items.filter(i => i.item_type === 'decision')
-  const openQuestions = notes.action_items.filter(i => i.item_type === 'info')
+  const tasks = notes.action_items.filter((i) => i.item_type === 'task');
+  const decisions = notes.action_items.filter((i) => i.item_type === 'decision');
+  const openQuestions = notes.action_items.filter((i) => i.item_type === 'info');
   const openDecisionCount = decisions.filter((d) => {
-    const linked = decisionsByActionItem.get(d.id)
-    return !linked || !linked.isClosed
-  }).length
+    const linked = decisionsByActionItem.get(d.id);
+    return !linked || !linked.isClosed;
+  }).length;
 
   return (
     <Card className="overflow-hidden">
@@ -119,22 +115,30 @@ export function ProtocolActionItemsList({
         <div className="flex items-start gap-3">
           <Sparkles className="w-5 h-5 text-action mt-0.5 shrink-0" aria-hidden />
           <div className="flex-1 min-w-0 space-y-1">
-            <h2 className="text-sm font-semibold text-text-primary">
-              Aktionen & Entscheidungen
-            </h2>
+            <h2 className="text-sm font-semibold text-text-primary">Aktionen & Entscheidungen</h2>
             <p className="text-sm text-text-secondary">
               {[
                 tasks.length > 0 ? `${tasks.length} ${pluralTask(tasks.length)}` : null,
-                decisions.length > 0 ? `${decisions.length} ${pluralDecision(decisions.length)}` : null,
-                openQuestions.length > 0 ? `${openQuestions.length} ${pluralInfo(openQuestions.length)}` : null,
-              ].filter(Boolean).join(' · ')}
+                decisions.length > 0
+                  ? `${decisions.length} ${pluralDecision(decisions.length)}`
+                  : null,
+                openQuestions.length > 0
+                  ? `${openQuestions.length} ${pluralInfo(openQuestions.length)}`
+                  : null,
+              ]
+                .filter(Boolean)
+                .join(' · ')}
               {' aus dem Protokoll.'}
             </p>
             {canAct && (
               <p className="text-xs text-text-tertiary">
                 {unlinkedTaskItems.length > 0 && <>Erstelle alle Aufgaben mit einem Klick. </>}
-                {openDecisionCount > 0 && <>Offene Entscheidungen können unten direkt zur Abstimmung.</>}
-                {unlinkedTaskItems.length === 0 && openDecisionCount === 0 && <>Alle Aufgaben verknüpft, alle Entscheidungen geschlossen.</>}
+                {openDecisionCount > 0 && (
+                  <>Offene Entscheidungen können unten direkt zur Abstimmung.</>
+                )}
+                {unlinkedTaskItems.length === 0 && openDecisionCount === 0 && (
+                  <>Alle Aufgaben verknüpft, alle Entscheidungen geschlossen.</>
+                )}
               </p>
             )}
           </div>
@@ -146,10 +150,17 @@ export function ProtocolActionItemsList({
               disabled={bulkCreatingTasks}
               className="shrink-0 gap-2"
             >
-              {bulkCreatingTasks
-                ? <><Loader2 className="w-4 h-4 animate-spin" />Erstellt…</>
-                : <><ListChecks className="w-4 h-4" />Alle {unlinkedTaskItems.length} {pluralTask(unlinkedTaskItems.length)} erstellen</>
-              }
+              {bulkCreatingTasks ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Erstellt…
+                </>
+              ) : (
+                <>
+                  <ListChecks className="w-4 h-4" />
+                  Alle {unlinkedTaskItems.length} {pluralTask(unlinkedTaskItems.length)} erstellen
+                </>
+              )}
             </Button>
           )}
         </div>
@@ -182,7 +193,7 @@ export function ProtocolActionItemsList({
                 item={item}
                 topicTitle={item.topic_id ? topicTitleById.get(item.topic_id) : undefined}
                 isLinked={linkedActionIds.has(item.id)}
-                link={actionLinks.find(l => l.action_item_id === item.id)}
+                link={actionLinks.find((l) => l.action_item_id === item.id)}
                 canAct={canAct}
                 creatingTask={creatingTask}
                 protocolId={protocolId}
@@ -214,7 +225,7 @@ export function ProtocolActionItemsList({
                 item={item}
                 topicTitle={item.topic_id ? topicTitleById.get(item.topic_id) : undefined}
                 isLinked={linkedActionIds.has(item.id)}
-                link={actionLinks.find(l => l.action_item_id === item.id)}
+                link={actionLinks.find((l) => l.action_item_id === item.id)}
                 canAct={canAct}
                 creatingTask={creatingTask}
                 protocolId={protocolId}
@@ -232,7 +243,7 @@ export function ProtocolActionItemsList({
 
       {/* Bucket 3: Info */}
       {openQuestions.length > 0 && (
-        <div className={(tasks.length > 0 || decisions.length > 0) ? 'border-t border-default' : ''}>
+        <div className={tasks.length > 0 || decisions.length > 0 ? 'border-t border-default' : ''}>
           <BucketHeader
             icon={<HelpCircle className="w-3.5 h-3.5 text-text-tertiary" />}
             label={pluralInfo(openQuestions.length)}
@@ -246,7 +257,7 @@ export function ProtocolActionItemsList({
                 item={item}
                 topicTitle={item.topic_id ? topicTitleById.get(item.topic_id) : undefined}
                 isLinked={linkedActionIds.has(item.id)}
-                link={actionLinks.find(l => l.action_item_id === item.id)}
+                link={actionLinks.find((l) => l.action_item_id === item.id)}
                 canAct={canAct}
                 creatingTask={creatingTask}
                 protocolId={protocolId}
@@ -275,5 +286,5 @@ export function ProtocolActionItemsList({
         </div>
       )}
     </Card>
-  )
+  );
 }

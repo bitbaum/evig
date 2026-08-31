@@ -1,32 +1,32 @@
 // SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles.
 // Must be before any import so Turbopack's static analysis picks it up.
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
-import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import {
   getAllAlternatives,
   getAlternativeById,
   getCategoryById,
-} from '@/config/open-source-registry'
-import { AlternativeDetail } from '../components/AlternativeDetail'
-import { ORG } from '@/config/org'
-import { getTranslations } from 'next-intl/server'
+} from '@/config/open-source-registry';
+import { AlternativeDetail } from '../components/AlternativeDetail';
+import { ORG } from '@/config/org';
+import { getTranslations } from 'next-intl/server';
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string; locale: string }>
+  params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
-  const { slug, locale } = await params
-  const t = await getTranslations({ locale, namespace: 'services.openSourceSolutions' })
-  const alternative = getAlternativeById(slug)
+  const { slug, locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'services.openSourceSolutions' });
+  const alternative = getAlternativeById(slug);
 
   if (!alternative) {
-    return { title: { absolute: `${t('detail.notFound')} | ${ORG.name}` } }
+    return { title: { absolute: `${t('detail.notFound')} | ${ORG.name}` } };
   }
 
-  const category = getCategoryById(alternative.categoryId)
+  const category = getCategoryById(alternative.categoryId);
 
   return {
     title: { absolute: `${alternative.name} — ${alternative.tagline} | ${ORG.name}` },
@@ -40,22 +40,22 @@ export async function generateMetadata({
       alternative.name,
       'open source',
       category?.label ?? '',
-      ...alternative.replaces.map(r => r.appId),
+      ...alternative.replaces.map((r) => r.appId),
     ].filter(Boolean),
-  }
+  };
 }
 
 export default async function AlternativeDetailPage({
   params,
 }: {
-  params: Promise<{ slug: string; locale: string }>
+  params: Promise<{ slug: string; locale: string }>;
 }) {
-  const { slug, locale } = await params
-  const alternative = getAlternativeById(slug)
+  const { slug, locale } = await params;
+  const alternative = getAlternativeById(slug);
 
   if (!alternative) {
-    notFound()
+    notFound();
   }
 
-  return <AlternativeDetail alternative={alternative} />
+  return <AlternativeDetail alternative={alternative} />;
 }

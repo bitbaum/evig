@@ -5,13 +5,13 @@
  * Types are derived from schemas (SSOT principle).
  */
 
-import { z } from 'zod'
+import { z } from 'zod';
 import {
   EMPLOYMENT_TYPE_OPTIONS,
   DEPARTMENT_OPTIONS,
   CONTACT_METHOD_OPTIONS,
   EMERGENCY_RELATION_OPTIONS,
-} from '@/config/team'
+} from '@/config/team';
 
 // =============================================================================
 // BASE TEAM PROFILE SCHEMA
@@ -24,7 +24,10 @@ export const teamProfileSchema = z.object({
   // Employment Information
   position: z.string().max(100).optional().nullable(),
   department: z.string().max(50).optional().nullable(),
-  employment_type: z.enum(EMPLOYMENT_TYPE_OPTIONS as [string, ...string[]]).optional().nullable(),
+  employment_type: z
+    .enum(EMPLOYMENT_TYPE_OPTIONS as [string, ...string[]])
+    .optional()
+    .nullable(),
   start_date: z.string().optional().nullable(), // ISO date string
   contract_hours: z.number().int().min(0).max(100).optional().nullable(),
 
@@ -38,13 +41,19 @@ export const teamProfileSchema = z.object({
   // Availability & Contact
   availability: z.string().max(500).optional().nullable(),
   working_hours: z.string().max(5000).optional().nullable(),
-  preferred_contact: z.enum(CONTACT_METHOD_OPTIONS as [string, ...string[]]).optional().default('email'),
+  preferred_contact: z
+    .enum(CONTACT_METHOD_OPTIONS as [string, ...string[]])
+    .optional()
+    .default('email'),
   phone: z.string().max(30).optional().nullable(),
 
   // Emergency Contact
   emergency_contact_name: z.string().max(100).optional().nullable(),
   emergency_contact_phone: z.string().max(30).optional().nullable(),
-  emergency_contact_relation: z.enum(EMERGENCY_RELATION_OPTIONS as [string, ...string[]]).optional().nullable(),
+  emergency_contact_relation: z
+    .enum(EMERGENCY_RELATION_OPTIONS as [string, ...string[]])
+    .optional()
+    .nullable(),
 
   // HR Notes (super admin only)
   hr_notes: z.string().max(5000).optional().nullable(),
@@ -64,49 +73,63 @@ export const teamProfileSchema = z.object({
   canton_tax_code: z.string().max(20).optional().nullable(),
 
   // Explicit work-state machine (added migration 080)
-  work_state: z.enum(['active', 'on_leave', 'unavailable', 'inactive']).optional().default('active'),
+  work_state: z
+    .enum(['active', 'on_leave', 'unavailable', 'inactive'])
+    .optional()
+    .default('active'),
 
   // Status (legacy boolean — new code should prefer work_state)
   is_active: z.boolean().optional().default(true),
 
   /** Show name/role on public About page (named leads only) */
   show_on_about: z.boolean().optional().default(false),
-})
+});
 
 // =============================================================================
 // LEAVE PERIODS + COMPENSATION HISTORY (Phase 4)
 // =============================================================================
 
-export const leavePeriodKindOptions = ['vacation', 'sick', 'parental', 'unpaid', 'military', 'other'] as const
-export type LeavePeriodKind = typeof leavePeriodKindOptions[number]
+export const leavePeriodKindOptions = [
+  'vacation',
+  'sick',
+  'parental',
+  'unpaid',
+  'military',
+  'other',
+] as const;
+export type LeavePeriodKind = (typeof leavePeriodKindOptions)[number];
 
-export const leavePeriodSchema = z.object({
-  team_profile_id: z.string().uuid(),
-  starts_on: z.string().min(1, 'Startdatum erforderlich'),
-  ends_on: z.string().min(1, 'Enddatum erforderlich'),
-  kind: z.enum(leavePeriodKindOptions),
-  notes: z.string().max(1000).optional().nullable(),
-}).refine(d => d.ends_on >= d.starts_on, {
-  message: 'Enddatum darf nicht vor dem Startdatum liegen',
-  path: ['ends_on'],
-})
+export const leavePeriodSchema = z
+  .object({
+    team_profile_id: z.string().uuid(),
+    starts_on: z.string().min(1, 'Startdatum erforderlich'),
+    ends_on: z.string().min(1, 'Enddatum erforderlich'),
+    kind: z.enum(leavePeriodKindOptions),
+    notes: z.string().max(1000).optional().nullable(),
+  })
+  .refine((d) => d.ends_on >= d.starts_on, {
+    message: 'Enddatum darf nicht vor dem Startdatum liegen',
+    path: ['ends_on'],
+  });
 
-export type LeavePeriodInput = z.infer<typeof leavePeriodSchema>
+export type LeavePeriodInput = z.infer<typeof leavePeriodSchema>;
 
-export const compensationHistorySchema = z.object({
-  team_profile_id: z.string().uuid(),
-  hourly_rate_cents: z.number().int().min(0).max(1_000_000).optional().nullable(),
-  salary_chf: z.union([z.number(), z.string()]).optional().nullable(),
-  effective_date: z.string().min(1, 'Wirksamkeitsdatum erforderlich'),
-  reason: z.string().max(500).optional().nullable(),
-}).refine(d => d.hourly_rate_cents != null || d.salary_chf != null, {
-  message: 'Mindestens ein Betrag (Stundenlohn oder Gehalt) ist erforderlich',
-  path: ['hourly_rate_cents'],
-})
+export const compensationHistorySchema = z
+  .object({
+    team_profile_id: z.string().uuid(),
+    hourly_rate_cents: z.number().int().min(0).max(1_000_000).optional().nullable(),
+    salary_chf: z.union([z.number(), z.string()]).optional().nullable(),
+    effective_date: z.string().min(1, 'Wirksamkeitsdatum erforderlich'),
+    reason: z.string().max(500).optional().nullable(),
+  })
+  .refine((d) => d.hourly_rate_cents != null || d.salary_chf != null, {
+    message: 'Mindestens ein Betrag (Stundenlohn oder Gehalt) ist erforderlich',
+    path: ['hourly_rate_cents'],
+  });
 
-export type CompensationHistoryInput = z.infer<typeof compensationHistorySchema>
+export type CompensationHistoryInput = z.infer<typeof compensationHistorySchema>;
 
-export type TeamProfileInput = z.infer<typeof teamProfileSchema>
+export type TeamProfileInput = z.infer<typeof teamProfileSchema>;
 
 // =============================================================================
 // CREATE TEAM PROFILE SCHEMA
@@ -118,9 +141,9 @@ export type TeamProfileInput = z.infer<typeof teamProfileSchema>
  */
 export const createTeamProfileSchema = teamProfileSchema.extend({
   user_id: z.string().uuid('Ungültige Benutzer-ID'),
-})
+});
 
-export type CreateTeamProfileInput = z.infer<typeof createTeamProfileSchema>
+export type CreateTeamProfileInput = z.infer<typeof createTeamProfileSchema>;
 
 // =============================================================================
 // UPDATE TEAM PROFILE SCHEMA
@@ -130,9 +153,9 @@ export type CreateTeamProfileInput = z.infer<typeof createTeamProfileSchema>
  * Schema for updating an existing team profile
  * All fields optional (partial update)
  */
-export const updateTeamProfileSchema = teamProfileSchema.partial()
+export const updateTeamProfileSchema = teamProfileSchema.partial();
 
-export type UpdateTeamProfileInput = z.infer<typeof updateTeamProfileSchema>
+export type UpdateTeamProfileInput = z.infer<typeof updateTeamProfileSchema>;
 
 // =============================================================================
 // TEAM PROFILE RESPONSE TYPE
@@ -142,49 +165,49 @@ export type UpdateTeamProfileInput = z.infer<typeof updateTeamProfileSchema>
  * Full team profile type as returned from database
  */
 export interface TeamProfile {
-  id: string
-  user_id: string
-  position: string | null
-  department: string | null
-  employment_type: string | null
-  start_date: string | null
-  contract_hours: number | null
-  skills: string[]
-  interests: string[]
-  goals: string | null
-  strengths: string | null
-  development_areas: string | null
-  availability: string | null
-  working_hours: string | null
-  preferred_contact: string
-  phone: string | null
-  emergency_contact_name: string | null
-  emergency_contact_phone: string | null
-  emergency_contact_relation: string | null
-  hr_notes: string | null
-  current_focus: string | null
-  current_focus_updated_at: string | null
+  id: string;
+  user_id: string;
+  position: string | null;
+  department: string | null;
+  employment_type: string | null;
+  start_date: string | null;
+  contract_hours: number | null;
+  skills: string[];
+  interests: string[];
+  goals: string | null;
+  strengths: string | null;
+  development_areas: string | null;
+  availability: string | null;
+  working_hours: string | null;
+  preferred_contact: string;
+  phone: string | null;
+  emergency_contact_name: string | null;
+  emergency_contact_phone: string | null;
+  emergency_contact_relation: string | null;
+  hr_notes: string | null;
+  current_focus: string | null;
+  current_focus_updated_at: string | null;
   // Phase 4 — compensation + employment lifecycle (migration 080)
-  hourly_rate_cents: number | null
-  salary_chf: string | number | null
-  salary_effective_date: string | null
-  end_date: string | null
-  exit_reason: string | null
-  ahv_number: string | null
-  canton_tax_code: string | null
-  work_state: string
-  is_active: boolean
-  show_on_about: boolean
-  created_at: string
-  updated_at: string
+  hourly_rate_cents: number | null;
+  salary_chf: string | number | null;
+  salary_effective_date: string | null;
+  end_date: string | null;
+  exit_reason: string | null;
+  ahv_number: string | null;
+  canton_tax_code: string | null;
+  work_state: string;
+  is_active: boolean;
+  show_on_about: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 /**
  * Team profile with user info (joined query result)
  */
 export interface TeamProfileWithUser extends TeamProfile {
-  user_name: string | null
-  user_email: string
+  user_name: string | null;
+  user_email: string;
 }
 
 // =============================================================================
@@ -199,9 +222,9 @@ export const teamProfileFilterSchema = z.object({
   employment_type: z.string().optional(),
   is_active: z.enum(['true', 'false', 'all']).optional().default('all'),
   search: z.string().max(100).optional(),
-})
+});
 
-export type TeamProfileFilter = z.infer<typeof teamProfileFilterSchema>
+export type TeamProfileFilter = z.infer<typeof teamProfileFilterSchema>;
 
 // =============================================================================
 // VALIDATION HELPERS
@@ -211,19 +234,19 @@ export type TeamProfileFilter = z.infer<typeof teamProfileFilterSchema>
  * Validate team profile input
  */
 export function validateTeamProfile(data: unknown) {
-  return teamProfileSchema.safeParse(data)
+  return teamProfileSchema.safeParse(data);
 }
 
 /**
  * Validate create team profile input
  */
 export function validateCreateTeamProfile(data: unknown) {
-  return createTeamProfileSchema.safeParse(data)
+  return createTeamProfileSchema.safeParse(data);
 }
 
 /**
  * Validate update team profile input
  */
 export function validateUpdateTeamProfile(data: unknown) {
-  return updateTeamProfileSchema.safeParse(data)
+  return updateTeamProfileSchema.safeParse(data);
 }

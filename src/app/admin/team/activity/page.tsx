@@ -7,35 +7,35 @@
  * - Help requests
  */
 
-import { Metadata } from 'next'
-import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
-import { canAccessSection } from '@/lib/permissions'
-import { Activity } from 'lucide-react'
-import { ActivityPageClient } from './ActivityPageClient'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { ROUTES } from '@/config/routes'
+import { Metadata } from 'next';
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
+import { canAccessSection } from '@/lib/permissions';
+import { Activity } from 'lucide-react';
+import { ActivityPageClient } from './ActivityPageClient';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import { ROUTES } from '@/config/routes';
 
 export const metadata: Metadata = {
   title: 'Aktivitäten',
   description: 'Team-Aktivitäten und Updates.',
-}
+};
 
 export default async function TeamActivityPage() {
-  const session = await auth()
+  const session = await auth();
 
   if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/team/activity')
+    redirect('/auth/login?callbackUrl=/admin/team/activity');
   }
 
   const user = {
     email: session.user.email,
     is_staff: session.user.isStaff,
     staff_permissions: session.user.staffPermissions,
-  }
+  };
 
   if (!canAccessSection(user, 'team')) {
-    redirect('/admin?error=no_team_access')
+    redirect('/admin?error=no_team_access');
   }
 
   return (
@@ -48,5 +48,5 @@ export default async function TeamActivityPage() {
     >
       <ActivityPageClient />
     </AdminPageWrapper>
-  )
+  );
 }

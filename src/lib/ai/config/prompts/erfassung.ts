@@ -5,10 +5,10 @@
  * Used by: erfassung form, voice intake, bulk import flows.
  */
 
-import { voiceProductDataSchema } from '@/lib/schemas/erfassung'
-import { zodSchemaToPromptString } from '@/lib/ai/schema-to-prompt'
-import { BRAND_CONTEXT } from './shared'
-import { KATEGORIEN } from '@/config/erfassung/categories'
+import { voiceProductDataSchema } from '@/lib/schemas/erfassung';
+import { zodSchemaToPromptString } from '@/lib/ai/schema-to-prompt';
+import { BRAND_CONTEXT } from './shared';
+import { KATEGORIEN } from '@/config/erfassung/categories';
 
 // =============================================================================
 // ERFASSUNG PROMPTS
@@ -17,7 +17,7 @@ import { KATEGORIEN } from '@/config/erfassung/categories'
 // Full category list, derived from the KATEGORIEN SSOT so the model always sees
 // every option. A stale hardcoded subset (missing 70 Komponenten, and 40
 // mislabelled) is why a CPU landed in "Desktop PCs".
-const KATEGORIE_LISTE = KATEGORIEN.map((k) => `${k.value} für ${k.label}`).join(', ')
+const KATEGORIE_LISTE = KATEGORIEN.map((k) => `${k.value} für ${k.label}`).join(', ');
 
 /**
  * SSOT for AI-facing field descriptions used in extraction prompts.
@@ -34,9 +34,12 @@ export const ERFASSUNG_FIELD_DESCRIPTIONS = {
   unterkategorie: '101 für Business Laptops, 102 für Consumer, 103 für Gaming',
   kundenprofile: 'Passende Profile: oma, buero, chiller, gamer, kreativ, dev, student',
   bemerkungen: 'Zusätzliche Hinweise zu Zustand oder Besonderheiten',
-} as const
+} as const;
 
-const ERFASSUNG_SCHEMA = zodSchemaToPromptString(voiceProductDataSchema, ERFASSUNG_FIELD_DESCRIPTIONS)
+const ERFASSUNG_SCHEMA = zodSchemaToPromptString(
+  voiceProductDataSchema,
+  ERFASSUNG_FIELD_DESCRIPTIONS,
+);
 
 export const ERFASSUNG_PROMPTS = {
   /**
@@ -135,23 +138,43 @@ Antworte NUR mit dem JSON-Array, keine Erklärungen.`,
    * Quick action prompts for common refinements
    */
   quickActions: {
-    addSpecs: { label: 'Specs ergänzen', prompt: 'Ergänze die technischen Spezifikationen basierend auf dem bekannten Produktmodell. Füge CPU, RAM, Speicher, Display-Grösse und andere relevante Specs hinzu.' },
-    estimatePrice: { label: 'Preis schätzen', prompt: 'Schätze einen realistischen Verkaufspreis für den Schweizer Markt für gebrauchte Geräte. Berücksichtige Zustand, Alter und aktuelle Marktpreise auf ricardo.ch und tutti.ch.' },
-    improveDescription: { label: 'Beschreibung verbessern', prompt: 'Verbessere die Kurzbeschreibung: Mache sie ansprechender und informativer. Hebe die wichtigsten Verkaufsargumente hervor.' },
-    suggestProfiles: { label: 'Profile vorschlagen', prompt: 'Schlage passende Kundenprofile vor basierend auf den Produkteigenschaften. Berücksichtige Leistung, Portabilität und typische Anwendungsfälle.' },
-    completeData: { label: 'Daten vervollständigen', prompt: 'Vervollständige alle fehlenden Felder mit sinnvollen Werten basierend auf dem Produktmodell und typischen Eigenschaften.' },
+    addSpecs: {
+      label: 'Specs ergänzen',
+      prompt:
+        'Ergänze die technischen Spezifikationen basierend auf dem bekannten Produktmodell. Füge CPU, RAM, Speicher, Display-Grösse und andere relevante Specs hinzu.',
+    },
+    estimatePrice: {
+      label: 'Preis schätzen',
+      prompt:
+        'Schätze einen realistischen Verkaufspreis für den Schweizer Markt für gebrauchte Geräte. Berücksichtige Zustand, Alter und aktuelle Marktpreise auf ricardo.ch und tutti.ch.',
+    },
+    improveDescription: {
+      label: 'Beschreibung verbessern',
+      prompt:
+        'Verbessere die Kurzbeschreibung: Mache sie ansprechender und informativer. Hebe die wichtigsten Verkaufsargumente hervor.',
+    },
+    suggestProfiles: {
+      label: 'Profile vorschlagen',
+      prompt:
+        'Schlage passende Kundenprofile vor basierend auf den Produkteigenschaften. Berücksichtige Leistung, Portabilität und typische Anwendungsfälle.',
+    },
+    completeData: {
+      label: 'Daten vervollständigen',
+      prompt:
+        'Vervollständige alle fehlenden Felder mit sinnvollen Werten basierend auf dem Produktmodell und typischen Eigenschaften.',
+    },
   },
-} as const
+} as const;
 
 // =============================================================================
 // HELPER TYPES & FUNCTIONS
 // =============================================================================
 
-export type ErfassungQuickAction = keyof typeof ERFASSUNG_PROMPTS.quickActions
+export type ErfassungQuickAction = keyof typeof ERFASSUNG_PROMPTS.quickActions;
 
 /**
  * Get an erfassung quick action prompt by key
  */
 export function getErfassungQuickActionPrompt(action: ErfassungQuickAction): string {
-  return ERFASSUNG_PROMPTS.quickActions[action].prompt
+  return ERFASSUNG_PROMPTS.quickActions[action].prompt;
 }

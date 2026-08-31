@@ -1,25 +1,25 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
-import { Link } from '@/i18n/navigation'
-import { AlertCircle, ArrowLeft } from 'lucide-react'
-import { logger } from '@/lib/logger'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { useTranslations } from 'next-intl'
+import { useEffect } from 'react';
+import { Link } from '@/i18n/navigation';
+import { AlertCircle, ArrowLeft } from 'lucide-react';
+import { logger } from '@/lib/logger';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
 
 export default function ServicesError({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
-  const t = useTranslations('errors')
+  const t = useTranslations('errors');
 
   useEffect(() => {
-    logger.error('Services error', { error, digest: error.digest })
-  }, [error])
+    logger.error('Services error', { error, digest: error.digest });
+  }, [error]);
 
   return (
     <div className="flex items-center justify-center py-24">
@@ -28,9 +28,7 @@ export default function ServicesError({
         <Heading level={1} className="text-lg font-medium text-text-primary" role="alert">
           {t('genericTitle')}
         </Heading>
-        <p className="mt-2 text-sm text-text-secondary">
-          {t('services.description')}
-        </p>
+        <p className="mt-2 text-sm text-text-secondary">{t('services.description')}</p>
         <div className="mt-6 flex flex-col gap-3">
           <Button onClick={reset} variant="primary" className="w-full">
             {t('retry')}
@@ -45,5 +43,5 @@ export default function ServicesError({
         </div>
       </div>
     </div>
-  )
+  );
 }

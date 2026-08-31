@@ -1,22 +1,22 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
-import Link from 'next/link'
-import { AlertCircle } from 'lucide-react'
-import { logger } from '@/lib/logger'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
+import { useEffect } from 'react';
+import Link from 'next/link';
+import { AlertCircle } from 'lucide-react';
+import { logger } from '@/lib/logger';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
 
 export default function AppointmentsError({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
   useEffect(() => {
-    logger.error('Appointments error', { error, digest: error.digest })
-  }, [error])
+    logger.error('Appointments error', { error, digest: error.digest });
+  }, [error]);
 
   return (
     <div className="flex items-center justify-center min-h-[400px]">
@@ -41,5 +41,5 @@ export default function AppointmentsError({
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -12,31 +12,27 @@
  * the mission anchor without inventing a track record.
  */
 
-import { getTranslations } from 'next-intl/server'
-import { Link } from '@/i18n/navigation'
-import { Recycle, Leaf, Heart } from 'lucide-react'
-import { fetchImpactStats } from '@/lib/impact-stats'
-import { co2DisplayValue } from '@/config/co2-impact'
-import { cn } from '@/lib/utils'
+import { getTranslations } from 'next-intl/server';
+import { Link } from '@/i18n/navigation';
+import { Recycle, Leaf, Heart } from 'lucide-react';
+import { fetchImpactStats } from '@/lib/impact-stats';
+import { co2DisplayValue } from '@/config/co2-impact';
+import { cn } from '@/lib/utils';
 
 interface MissionStripProps {
   /** Optional className passthrough — defaults to standard section spacing. */
-  className?: string
+  className?: string;
 }
 
 export async function MissionStrip({ className }: MissionStripProps) {
   const [stats, t] = await Promise.all([
     fetchImpactStats(),
     getTranslations('components.missionStrip'),
-  ])
+  ]);
 
   return (
     <section
-      className={cn(
-        'border-y border-subtle',
-        'bg-surface-raised/80',
-        className,
-      )}
+      className={cn('border-y border-subtle', 'bg-surface-raised/80', className)}
       aria-label={t('ariaLabel')}
     >
       <div className="mx-auto max-w-7xl px-4 py-2.5 sm:px-6 sm:py-4 lg:px-8">
@@ -48,9 +44,7 @@ export async function MissionStrip({ className }: MissionStripProps) {
             </div>
             <p className="text-xs leading-snug text-text-secondary sm:text-sm">
               <strong className="text-text-primary">{t('anchor')}</strong>
-              <span className="hidden text-text-muted sm:inline sm:ml-1">
-                {t('subAnchor')}
-              </span>
+              <span className="hidden text-text-muted sm:inline sm:ml-1">{t('subAnchor')}</span>
             </p>
           </div>
 
@@ -67,7 +61,10 @@ export async function MissionStrip({ className }: MissionStripProps) {
               <span className="inline-flex items-center gap-1.5">
                 <Leaf className="h-4 w-4 text-action" aria-hidden="true" />
                 <span className="font-semibold text-text-primary tabular-nums">
-                  {(() => { const d = co2DisplayValue(stats.co2SavedKg); return `~${d.value} ${d.unit}` })()}
+                  {(() => {
+                    const d = co2DisplayValue(stats.co2SavedKg);
+                    return `~${d.value} ${d.unit}`;
+                  })()}
                 </span>
                 <span className="text-text-muted">{t('co2Avoided')}</span>
                 <Link
@@ -78,14 +75,12 @@ export async function MissionStrip({ className }: MissionStripProps) {
                 </Link>
               </span>
               {!stats.live && (
-                <span className="text-xs text-text-tertiary italic">
-                  {t('estimateNote')}
-                </span>
+                <span className="text-xs text-text-tertiary italic">{t('estimateNote')}</span>
               )}
             </div>
           )}
         </div>
       </div>
     </section>
-  )
+  );
 }

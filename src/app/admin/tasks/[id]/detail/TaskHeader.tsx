@@ -3,25 +3,25 @@
  * Presentational server component for the admin task detail page.
  */
 
-import Link from 'next/link'
-import { formatDateShort } from '@/lib/date-formats'
-import { TASK_CATEGORY_LABELS, TASK_TYPE_LABELS } from '@/config/tasks'
-import type { TaskDetail } from '@/lib/schemas/tasks'
-import { ArrowLeft, ClipboardList, Edit, FileText } from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import { ROUTES } from '@/config/routes'
-import type { getTaskProtocolSource } from '@/lib/services/protocol-decision-tasks'
+import Link from 'next/link';
+import { formatDateShort } from '@/lib/date-formats';
+import { TASK_CATEGORY_LABELS, TASK_TYPE_LABELS } from '@/config/tasks';
+import type { TaskDetail } from '@/lib/schemas/tasks';
+import { ArrowLeft, ClipboardList, Edit, FileText } from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import { ROUTES } from '@/config/routes';
+import type { getTaskProtocolSource } from '@/lib/services/protocol-decision-tasks';
 
-type ProtocolSource = Awaited<ReturnType<typeof getTaskProtocolSource>>
+type ProtocolSource = Awaited<ReturnType<typeof getTaskProtocolSource>>;
 
 export function TaskHeader({
   id,
   task,
   protocolSource,
 }: {
-  id: string
-  task: TaskDetail
-  protocolSource: ProtocolSource
+  id: string;
+  task: TaskDetail;
+  protocolSource: ProtocolSource;
 }) {
   return (
     <>
@@ -41,7 +41,9 @@ export function TaskHeader({
               <ClipboardList className="w-5 h-5 text-action" />
             </div>
             <div>
-              <Heading level={1} className="text-2xl font-bold text-text-primary">{task.title}</Heading>
+              <Heading level={1} className="text-2xl font-bold text-text-primary">
+                {task.title}
+              </Heading>
               <p className="text-text-secondary">
                 {TASK_CATEGORY_LABELS[task.category]} · {TASK_TYPE_LABELS[task.task_type]}
               </p>
@@ -76,5 +78,5 @@ export function TaskHeader({
         </div>
       )}
     </>
-  )
+  );
 }

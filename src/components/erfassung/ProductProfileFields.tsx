@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * ProductProfileFields
@@ -7,32 +7,33 @@
  * that users can toggle to indicate target audiences for the product.
  */
 
-import { Users } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
-import { getProfilesByCategory } from '@/config/erfassung'
-import Heading from '@/components/ui/Heading'
+import { Users } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
+import { getProfilesByCategory } from '@/config/erfassung';
+import Heading from '@/components/ui/Heading';
 
 interface ProductProfileFieldsProps {
-  kundenprofile: string[]
-  onProfileToggle: (slug: string) => void
+  kundenprofile: string[];
+  onProfileToggle: (slug: string) => void;
 }
 
 export function ProductProfileFields({
   kundenprofile,
   onProfileToggle,
 }: ProductProfileFieldsProps) {
-  const t = useTranslations('components.erfassung.profileFields')
+  const t = useTranslations('components.erfassung.profileFields');
 
   return (
     <div className="card-shell p-4 sm:p-6">
-      <Heading level={2} className="text-base sm:text-lg font-semibold text-text-primary mb-3 sm:mb-4 flex items-center gap-2">
+      <Heading
+        level={2}
+        className="text-base sm:text-lg font-semibold text-text-primary mb-3 sm:mb-4 flex items-center gap-2"
+      >
         <Users className="w-5 h-5" />
         {t('title')}
       </Heading>
-      <p className="text-sm text-text-secondary mb-3 sm:mb-4 hidden sm:block">
-        {t('hint')}
-      </p>
+      <p className="text-sm text-text-secondary mb-3 sm:mb-4 hidden sm:block">{t('hint')}</p>
 
       {Object.entries(getProfilesByCategory()).map(([categoryName, profiles]) => (
         <div key={categoryName} className="mb-4 last:mb-0">
@@ -40,7 +41,7 @@ export function ProductProfileFields({
             {categoryName}
           </Heading>
           <div className="flex flex-wrap gap-2 sm:gap-2">
-            {profiles.map(profile => (
+            {profiles.map((profile) => (
               <Button
                 key={profile.slug}
                 type="button"
@@ -66,5 +67,5 @@ export function ProductProfileFields({
         </div>
       ))}
     </div>
-  )
+  );
 }

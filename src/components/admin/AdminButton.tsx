@@ -1,22 +1,22 @@
-'use client'
+'use client';
 
-import { forwardRef } from 'react'
-import { Link } from '@/i18n/navigation'
-import { adminBtn, type AdminBtnVariant } from '@/lib/admin-ui'
-import { cn } from '@/lib/utils'
+import { forwardRef } from 'react';
+import { Link } from '@/i18n/navigation';
+import { adminBtn, type AdminBtnVariant } from '@/lib/admin-ui';
+import { cn } from '@/lib/utils';
 
 interface AdminButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: AdminBtnVariant
-  href?: never
+  variant?: AdminBtnVariant;
+  href?: never;
 }
 
 interface AdminLinkProps extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'> {
-  variant?: AdminBtnVariant
+  variant?: AdminBtnVariant;
   /** Render as a Next.js Link instead of a button */
-  href: string
+  href: string;
 }
 
-type Props = AdminButtonProps | AdminLinkProps
+type Props = AdminButtonProps | AdminLinkProps;
 
 /**
  * AdminButton — standard admin action button.
@@ -32,32 +32,29 @@ type Props = AdminButtonProps | AdminLinkProps
  *
  * Pass `href` to render a Next.js Link styled as a button.
  */
-const AdminButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, Props>(
-  function AdminButton({ variant = 'secondary', className, children, ...props }, ref) {
-    const classes = cn(adminBtn[variant], className)
+const AdminButton = forwardRef<HTMLButtonElement | HTMLAnchorElement, Props>(function AdminButton(
+  { variant = 'secondary', className, children, ...props },
+  ref,
+) {
+  const classes = cn(adminBtn[variant], className);
 
-    if ('href' in props && props.href !== undefined) {
-      const { href, ...rest } = props as AdminLinkProps
-      return (
-        <Link href={href} className={classes} {...rest}>
-          {children}
-        </Link>
-      )
-    }
-
-    const { href: _href, ...buttonProps } = props as AdminButtonProps & { href?: undefined }
+  if ('href' in props && props.href !== undefined) {
+    const { href, ...rest } = props as AdminLinkProps;
     return (
-      <button
-        ref={ref as React.Ref<HTMLButtonElement>}
-        className={classes}
-        {...buttonProps}
-      >
+      <Link href={href} className={classes} {...rest}>
         {children}
-      </button>
-    )
+      </Link>
+    );
   }
-)
 
-AdminButton.displayName = 'AdminButton'
+  const { href: _href, ...buttonProps } = props as AdminButtonProps & { href?: undefined };
+  return (
+    <button ref={ref as React.Ref<HTMLButtonElement>} className={classes} {...buttonProps}>
+      {children}
+    </button>
+  );
+});
 
-export { AdminButton }
+AdminButton.displayName = 'AdminButton';
+
+export { AdminButton };

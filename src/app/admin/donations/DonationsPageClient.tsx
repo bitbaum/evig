@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import { Plus, Heart } from 'lucide-react'
+import { Plus, Heart } from 'lucide-react';
 import {
   useDonations,
   DonationStatsCards,
   DonationFilters,
   DonationsTable,
   DonationFormModal,
-} from '@/components/admin/donations'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { Button } from '@/components/ui/button'
-import { adminBtn } from '@/lib/admin-ui'
+} from '@/components/admin/donations';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import { Button } from '@/components/ui/button';
+import { adminBtn } from '@/lib/admin-ui';
 
 export default function DonationsPageClient() {
   const {
@@ -37,20 +37,20 @@ export default function DonationsPageClient() {
     handleClearUser,
     handleMarkThanked,
     handleMarkReceiptSent,
-  } = useDonations()
+  } = useDonations();
 
   if (loading) {
     return (
       <div className="animate-pulse space-y-4">
         <div className="h-8 bg-surface-overlay rounded-sm w-1/4"></div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {[1, 2, 3, 4].map(i => (
+          {[1, 2, 3, 4].map((i) => (
             <div key={i} className="h-24 bg-surface-overlay rounded-sm"></div>
           ))}
         </div>
         <div className="h-64 bg-surface-overlay rounded-sm"></div>
       </div>
-    )
+    );
   }
 
   return (
@@ -101,5 +101,5 @@ export default function DonationsPageClient() {
         />
       )}
     </AdminPageWrapper>
-  )
+  );
 }

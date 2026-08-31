@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import { Loader2 } from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import { Textarea } from '@/components/ui/textarea'
-import { FormField } from '@/components/ui/form-field'
-import { Button } from '@/components/ui/button'
-import { useFocusTrap } from '@/hooks/useFocusTrap'
+import { Loader2 } from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import { Textarea } from '@/components/ui/textarea';
+import { FormField } from '@/components/ui/form-field';
+import { Button } from '@/components/ui/button';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
 
 interface RejectModalProps {
-  rejectionReason: string
-  actionLoading: string | null
-  onReasonChange: (reason: string) => void
-  onConfirm: () => void
-  onClose: () => void
+  rejectionReason: string;
+  actionLoading: string | null;
+  onReasonChange: (reason: string) => void;
+  onConfirm: () => void;
+  onClose: () => void;
 }
 
 export function RejectModal({
@@ -22,10 +22,13 @@ export function RejectModal({
   onConfirm,
   onClose,
 }: RejectModalProps) {
-  const dialogRef = useFocusTrap<HTMLDivElement>(true, onClose)
+  const dialogRef = useFocusTrap<HTMLDivElement>(true, onClose);
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
+    <div
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+      onClick={onClose}
+    >
       <div
         ref={dialogRef}
         role="dialog"
@@ -34,7 +37,11 @@ export function RejectModal({
         className="bg-surface-base rounded-xl p-6 max-w-md w-full"
         onClick={(e) => e.stopPropagation()}
       >
-        <Heading level={3} id="reject-submission-modal-title" className="text-lg text-text-primary mb-4">
+        <Heading
+          level={3}
+          id="reject-submission-modal-title"
+          className="text-lg text-text-primary mb-4"
+        >
           Einreichung ablehnen
         </Heading>
         <FormField label="Ablehnungsgrund" required className="mb-4">
@@ -64,5 +71,5 @@ export function RejectModal({
         </div>
       </div>
     </div>
-  )
+  );
 }

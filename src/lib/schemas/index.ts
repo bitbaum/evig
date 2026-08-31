@@ -62,7 +62,10 @@ export function formatZodErrorsAsRecord(error: ZodError): Record<string, string[
 export function validateBody<T>(schema: z.ZodSchema<T>, body: unknown) {
   const result = schema.safeParse(body);
   if (!result.success) {
-    return { success: false as const, error: apiBadRequest('Ungültige Eingabedaten', formatZodErrorsAsRecord(result.error)) };
+    return {
+      success: false as const,
+      error: apiBadRequest('Ungültige Eingabedaten', formatZodErrorsAsRecord(result.error)),
+    };
   }
   return { success: true as const, data: result.data };
 }
@@ -81,7 +84,10 @@ export function validateQuery<T>(schema: z.ZodSchema<T>, params: Record<string, 
   }
   const result = schema.safeParse(cleaned);
   if (!result.success) {
-    return { success: false as const, error: apiBadRequest('Ungültige Abfrageparameter', formatZodErrorsAsRecord(result.error)) };
+    return {
+      success: false as const,
+      error: apiBadRequest('Ungültige Abfrageparameter', formatZodErrorsAsRecord(result.error)),
+    };
   }
   return { success: true as const, data: result.data };
 }

@@ -1,24 +1,38 @@
-import type { Metadata } from "next";
-import { getLocale } from "next-intl/server";
-import { Space_Grotesk, Inter, IBM_Plex_Mono } from "next/font/google";
-import { Providers } from "@/components/providers/providers";
+import type { Metadata } from 'next';
+import { getLocale } from 'next-intl/server';
+import { Space_Grotesk, Inter, IBM_Plex_Mono } from 'next/font/google';
+import { Providers } from '@/components/providers/providers';
 
 // Brand faces — one SSOT for typography. Space Grotesk = display (headings,
 // wordmark), Inter = body, IBM Plex Mono = labels/eyebrows. Space Grotesk is
 // latin-only; the CSS font stacks (globals.css @theme) carry CJK/Cyrillic
 // system fallbacks for ja/ko, and Inter covers cyrillic for ru.
-const display = Space_Grotesk({ subsets: ["latin"], weight: ["500", "700"], variable: "--font-space-grotesk", display: "swap" });
-const sans = Inter({ subsets: ["latin", "latin-ext", "cyrillic"], variable: "--font-inter", display: "swap" });
-const mono = IBM_Plex_Mono({ subsets: ["latin"], weight: ["400", "500"], variable: "--font-plex-mono", display: "swap" });
-import { ORG } from "@/config/org";
-import { PUBLIC_SITE_URL } from "@/config/urls";
-import { auth } from "@/auth";
+const display = Space_Grotesk({
+  subsets: ['latin'],
+  weight: ['500', '700'],
+  variable: '--font-space-grotesk',
+  display: 'swap',
+});
+const sans = Inter({
+  subsets: ['latin', 'latin-ext', 'cyrillic'],
+  variable: '--font-inter',
+  display: 'swap',
+});
+const mono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-plex-mono',
+  display: 'swap',
+});
+import { ORG } from '@/config/org';
+import { PUBLIC_SITE_URL } from '@/config/urls';
+import { auth } from '@/auth';
 // Side-effect import: runs Zod env-var validation at app startup. If any
 // required env var is missing, the process throws with a clear listing
 // instead of failing later with confusing `undefined` errors deep in
 // the auth/db layer. See src/env.ts for the full schema.
-import "@/env";
-import "./globals.css";
+import '@/env';
+import './globals.css';
 
 export const metadata: Metadata = {
   // Resolve relative metadata (og:image, canonical) against the real public
@@ -30,7 +44,15 @@ export const metadata: Metadata = {
     template: `%s | ${ORG.name}`,
   },
   description: `${ORG.motto} ${ORG.description}`,
-  keywords: ["bezahlbare Computer", "kuratierte Hardware", "refurbished Laptops", "Computer-Reparatur", "Linux", "nachhaltige Technik", "Schweiz"],
+  keywords: [
+    'bezahlbare Computer',
+    'kuratierte Hardware',
+    'refurbished Laptops',
+    'Computer-Reparatur',
+    'Linux',
+    'nachhaltige Technik',
+    'Schweiz',
+  ],
 };
 
 export default async function RootLayout({
@@ -51,11 +73,13 @@ export default async function RootLayout({
   const locale = await getLocale();
 
   return (
-    <html lang={locale} suppressHydrationWarning className={`${display.variable} ${sans.variable} ${mono.variable}`}>
+    <html
+      lang={locale}
+      suppressHydrationWarning
+      className={`${display.variable} ${sans.variable} ${mono.variable}`}
+    >
       <body className="font-sans fix-text-rendering antialiased">
-        <Providers session={session}>
-          {children}
-        </Providers>
+        <Providers session={session}>{children}</Providers>
       </body>
     </html>
   );

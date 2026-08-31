@@ -3,7 +3,7 @@
  * SSOT for deprecation messaging — points callers to /api/technicians.
  */
 
-import { NextResponse } from 'next/server'
+import { NextResponse } from 'next/server';
 
 export function deprecatedApiEndpoint(legacyPath: string, replacement: string) {
   return NextResponse.json(
@@ -19,5 +19,5 @@ export function deprecatedApiEndpoint(legacyPath: string, replacement: string) {
         Link: `<${replacement}>; rel="successor-version"`,
       },
     },
-  )
+  );
 }

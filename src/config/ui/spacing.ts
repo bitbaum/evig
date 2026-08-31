@@ -33,4 +33,4 @@ export const SPACING = {
   mbSmall: 'mb-2 md:mb-3',
   mbMedium: 'mb-4 md:mb-6',
   mbLarge: 'mb-6 md:mb-8',
-} as const
+} as const;

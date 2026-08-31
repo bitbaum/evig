@@ -7,24 +7,24 @@
  * For client-safe types/constants, import from '@/lib/intake/timeline-types'.
  */
 
-import { db } from '@/db'
-import { inventoryItems } from '@/db/schema/inventory'
-import { eq, sql } from 'drizzle-orm'
-import { logger } from '@/lib/logger'
+import { db } from '@/db';
+import { inventoryItems } from '@/db/schema/inventory';
+import { eq, sql } from 'drizzle-orm';
+import { logger } from '@/lib/logger';
 
 // Re-export types so existing server-side imports still work
-export type { IntakeEventType, IntakeEvent, StoredIntakeEvent } from './timeline-types'
-export { EVENT_TYPE_LABELS, EVENT_TYPE_ICONS } from './timeline-types'
+export type { IntakeEventType, IntakeEvent, StoredIntakeEvent } from './timeline-types';
+export { EVENT_TYPE_LABELS, EVENT_TYPE_ICONS } from './timeline-types';
 
-import type { IntakeEvent, StoredIntakeEvent } from './timeline-types'
+import type { IntakeEvent, StoredIntakeEvent } from './timeline-types';
 
-type TimelineExecutor = Pick<typeof db, 'update'>
+type TimelineExecutor = Pick<typeof db, 'update'>;
 
 interface AppendIntakeEventOptions {
   /** Write through the caller's transaction when the event is business-critical. */
-  executor?: TimelineExecutor
+  executor?: TimelineExecutor;
   /** Re-throw so the enclosing transaction rolls back instead of losing audit evidence. */
-  required?: boolean
+  required?: boolean;
 }
 
 // =============================================================================
@@ -43,7 +43,7 @@ export async function appendIntakeEvent(
   const storedEvent: StoredIntakeEvent = {
     ...event,
     timestamp: event.timestamp || new Date().toISOString(),
-  }
+  };
 
   try {
     await (options.executor ?? db)
@@ -51,13 +51,13 @@ export async function appendIntakeEvent(
       .set({
         intakeEvents: sql`COALESCE(${inventoryItems.intakeEvents}, '[]'::jsonb) || ${JSON.stringify([storedEvent])}::jsonb`,
       })
-      .where(eq(inventoryItems.id, inventoryId))
+      .where(eq(inventoryItems.id, inventoryId));
   } catch (error) {
     logger.error('Failed to append intake event', {
       inventoryId,
       eventType: event.type,
       error,
-    })
-    if (options.required) throw error
+    });
+    if (options.required) throw error;
   }
 }

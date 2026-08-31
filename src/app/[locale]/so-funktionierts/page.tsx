@@ -1,33 +1,33 @@
-import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
-import { Recycle, ShoppingBag, HandHeart, Code2 } from 'lucide-react'
-import { EXTERNAL_LINKS, ORG } from '@/config/org'
-import { REVAMPIT_GUARANTEE } from '@/config/marketplace'
-import { PageHero } from '@/components/layout/PageHero'
-import { Section } from '@/components/layout/Section'
-import { Card } from '@/components/ui/card'
-import Heading from '@/components/ui/Heading'
-import { IconBadge } from '@/components/ui/IconBadge'
-import { Button } from '@/components/ui/button'
-import { JOURNEY_PHASES, OUTCOME_PATHS } from './data'
+import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
+import { Recycle, ShoppingBag, HandHeart, Code2 } from 'lucide-react';
+import { EXTERNAL_LINKS, ORG } from '@/config/org';
+import { REVAMPIT_GUARANTEE } from '@/config/marketplace';
+import { PageHero } from '@/components/layout/PageHero';
+import { Section } from '@/components/layout/Section';
+import { Card } from '@/components/ui/card';
+import Heading from '@/components/ui/Heading';
+import { IconBadge } from '@/components/ui/IconBadge';
+import { Button } from '@/components/ui/button';
+import { JOURNEY_PHASES, OUTCOME_PATHS } from './data';
 
 interface PageProps {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'soFunktioniert' })
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'soFunktioniert' });
   return {
     title: t('meta.title'),
     description: t('meta.description'),
     openGraph: { title: t('meta.title'), description: t('meta.description'), type: 'article' },
-  }
+  };
 }
 
 export default async function SoFunktioniertPage({ params }: PageProps) {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'soFunktioniert' })
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'soFunktioniert' });
 
   return (
     <>
@@ -62,7 +62,10 @@ export default async function SoFunktioniertPage({ params }: PageProps) {
                   {t(`phases.${phase.id}.title` as never)}
                 </Heading>
                 <p className="mt-2 text-sm leading-relaxed text-text-secondary">
-                  {t(`phases.${phase.id}.body` as never, { months: REVAMPIT_GUARANTEE.warrantyMonths } as never)}
+                  {t(
+                    `phases.${phase.id}.body` as never,
+                    { months: REVAMPIT_GUARANTEE.warrantyMonths } as never,
+                  )}
                 </p>
               </Card>
             </li>
@@ -111,7 +114,12 @@ export default async function SoFunktioniertPage({ params }: PageProps) {
               <HandHeart className="h-4 w-4" aria-hidden="true" />
               {t('cta.donate')}
             </Button>
-            <Button href={EXTERNAL_LINKS.sourceCode} variant="outline-light" size="lg" className="gap-2">
+            <Button
+              href={EXTERNAL_LINKS.sourceCode}
+              variant="outline-light"
+              size="lg"
+              className="gap-2"
+            >
               <Code2 className="h-4 w-4" aria-hidden="true" />
               {t('cta.source')}
             </Button>
@@ -119,5 +127,5 @@ export default async function SoFunktioniertPage({ params }: PageProps) {
         </div>
       </Section>
     </>
-  )
+  );
 }

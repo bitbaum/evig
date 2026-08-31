@@ -5,7 +5,14 @@
 import { NextRequest } from 'next/server';
 import { apiSuccessCached, apiError, apiNotFound } from '@/lib/api/helpers';
 import { db } from '@/db';
-import { sellerProfiles, listings, users, reviews, reviewResponses, userProfiles } from '@/db/schema';
+import {
+  sellerProfiles,
+  listings,
+  users,
+  reviews,
+  reviewResponses,
+  userProfiles,
+} from '@/db/schema';
 import { eq, and, sql } from 'drizzle-orm';
 import { REVIEW_TARGET_TYPES } from '@/config/database';
 import { REVIEW_STATUS } from '@/config/review-status';
@@ -17,10 +24,7 @@ import { sellerProfileCoreFields } from '@/lib/services/seller-service';
 // GET — Public seller profile
 // ============================================================================
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
     if (!id) return apiNotFound('Verkäuferprofil');
@@ -96,7 +100,10 @@ export async function GET(
         .innerJoin(users, eq(reviews.reviewerId, users.id))
         .leftJoin(
           reviewResponses,
-          and(eq(reviewResponses.reviewId, reviews.id), eq(reviewResponses.status, REVIEW_STATUS.PUBLISHED)),
+          and(
+            eq(reviewResponses.reviewId, reviews.id),
+            eq(reviewResponses.status, REVIEW_STATUS.PUBLISHED),
+          ),
         )
         .where(sellerReviewFilter)
         .orderBy(sql`${reviews.createdAt} DESC`)
@@ -116,16 +123,20 @@ export async function GET(
     const averageRating = totalReviews > 0 ? Math.round((ratingSum / totalReviews) * 100) / 100 : 0;
 
     // Public seller profiles are semi-static — cache 60s, stale 30s
-    return apiSuccessCached({
-      profile,
-      listings: activeListings,
-      review_stats: {
-        average_rating: averageRating,
-        total_reviews: totalReviews,
-        histogram,
+    return apiSuccessCached(
+      {
+        profile,
+        listings: activeListings,
+        review_stats: {
+          average_rating: averageRating,
+          total_reviews: totalReviews,
+          histogram,
+        },
+        reviews: sellerReviews,
       },
-      reviews: sellerReviews,
-    }, 60, 30);
+      60,
+      30,
+    );
   } catch (error) {
     return apiError(error, 'Fehler beim Laden des Verkäuferprofils');
   }

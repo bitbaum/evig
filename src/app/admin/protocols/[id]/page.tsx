@@ -5,15 +5,21 @@
  * Uses service layer with visibility filtering.
  */
 
-import { Metadata } from 'next'
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
-import { auth } from '@/auth'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
-import { isSuperAdmin } from '@/lib/permissions'
-import { adminIconBox, adminIconColor } from '@/lib/admin-ui'
-import { getProtocolById, getActionLinks, getTeamMembers, getDecisionsByProtocolId, recoverStaleProtocolProcessing } from '@/lib/services/protocols'
+import { Metadata } from 'next';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { auth } from '@/auth';
+import { query } from '@/lib/auth/db';
+import { TABLE_NAMES } from '@/config/database';
+import { isSuperAdmin } from '@/lib/permissions';
+import { adminIconBox, adminIconColor } from '@/lib/admin-ui';
+import {
+  getProtocolById,
+  getActionLinks,
+  getTeamMembers,
+  getDecisionsByProtocolId,
+  recoverStaleProtocolProcessing,
+} from '@/lib/services/protocols';
 import {
   MEETING_TYPE_LABELS,
   MEETING_TYPE_COLORS,
@@ -24,65 +30,59 @@ import {
   PROTOCOL_VISIBILITY_LABELS,
   INPUT_METHOD_LABELS,
   INPUT_METHOD_ICON_COMPONENTS,
-} from '@/config/protocols'
-import type { MeetingType, InputMethod } from '@/config/protocols'
-import Heading from '@/components/admin/AdminHeading'
-import { Card } from '@/components/ui/card'
-import {
-  ArrowLeft,
-  FileText,
-  Calendar,
-  User,
-  Eye,
-} from 'lucide-react'
-import ProtocolDetailClient from './ProtocolDetailClient'
-import { ProtocolAttendeesCard } from '@/components/admin/protocols'
-import { formatDateWithWeekday } from '@/lib/date-formats'
-import { ROUTES } from '@/config/routes'
+} from '@/config/protocols';
+import type { MeetingType, InputMethod } from '@/config/protocols';
+import Heading from '@/components/admin/AdminHeading';
+import { Card } from '@/components/ui/card';
+import { ArrowLeft, FileText, Calendar, User, Eye } from 'lucide-react';
+import ProtocolDetailClient from './ProtocolDetailClient';
+import { ProtocolAttendeesCard } from '@/components/admin/protocols';
+import { formatDateWithWeekday } from '@/lib/date-formats';
+import { ROUTES } from '@/config/routes';
 
 export const metadata: Metadata = {
   title: 'Protokoll Details',
   description: 'Sitzungsprotokoll anzeigen und bearbeiten.',
-}
+};
 
 export default async function ProtocolDetailPage({
   params,
   searchParams,
 }: {
-  params: Promise<{ id: string }>
-  searchParams: Promise<{ processing?: string; error?: string; retryable?: string }>
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ processing?: string; error?: string; retryable?: string }>;
 }) {
-  const { id } = await params
-  const qp = await searchParams
+  const { id } = await params;
+  const qp = await searchParams;
 
-  const session = await auth()
+  const session = await auth();
   if (!session?.user?.email) {
-    notFound()
+    notFound();
   }
 
-  const isAdmin = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
+  const isAdmin = isSuperAdmin(session.user.email, session.user.isSuperAdmin);
 
   const userResult = await query<{ id: string }>(
     `SELECT id FROM ${TABLE_NAMES.USERS} WHERE email = $1`,
-    [session.user.email]
-  )
-  const dbUserId = userResult.rows[0]?.id
+    [session.user.email],
+  );
+  const dbUserId = userResult.rows[0]?.id;
   if (!dbUserId) {
-    notFound()
+    notFound();
   }
 
-  let protocol = await getProtocolById(id, dbUserId, isAdmin)
+  let protocol = await getProtocolById(id, dbUserId, isAdmin);
   if (!protocol) {
-    notFound()
+    notFound();
   }
 
   // Self-healing: a protocol stuck in "processing" (server restarted mid-run)
   // is reset to draft on load, so the page always offers a way forward
   // instead of an eternal spinner.
   if (protocol.status === PROTOCOL_STATUSES.PROCESSING) {
-    const recovered = await recoverStaleProtocolProcessing(id)
+    const recovered = await recoverStaleProtocolProcessing(id);
     if (recovered) {
-      protocol = (await getProtocolById(id, dbUserId, isAdmin)) ?? protocol
+      protocol = (await getProtocolById(id, dbUserId, isAdmin)) ?? protocol;
     }
   }
 
@@ -90,20 +90,21 @@ export default async function ProtocolDetailPage({
     getActionLinks(id),
     getTeamMembers(),
     getDecisionsByProtocolId(id),
-  ])
+  ]);
 
   // Resolve attendee UUIDs to display names
-  const attendeeNames: Record<string, string> = {}
+  const attendeeNames: Record<string, string> = {};
   if (protocol.attendees && protocol.attendees.length > 0) {
     for (const member of teamMembers) {
       if (protocol.attendees.includes(member.id)) {
-        attendeeNames[member.id] = member.name
+        attendeeNames[member.id] = member.name;
       }
     }
   }
 
-  const MeetingIcon = MEETING_TYPE_ICON_COMPONENTS[protocol.meeting_type as MeetingType] || FileText
-  const isReview = protocol.status === PROTOCOL_STATUSES.REVIEW
+  const MeetingIcon =
+    MEETING_TYPE_ICON_COMPONENTS[protocol.meeting_type as MeetingType] || FileText;
+  const isReview = protocol.status === PROTOCOL_STATUSES.REVIEW;
 
   return (
     <div className="space-y-5">
@@ -127,7 +128,8 @@ export default async function ProtocolDetailPage({
                 {protocol.title}
               </Heading>
               <p className="text-sm text-text-tertiary">
-                {MEETING_TYPE_LABELS[protocol.meeting_type]} · {formatDateWithWeekday(protocol.meeting_date)}
+                {MEETING_TYPE_LABELS[protocol.meeting_type]} ·{' '}
+                {formatDateWithWeekday(protocol.meeting_date)}
               </p>
             </div>
           </div>
@@ -164,10 +166,14 @@ export default async function ProtocolDetailPage({
             currentUserId={dbUserId}
             isProtocolCreator={protocol.created_by === dbUserId}
             isSuperAdmin={isAdmin}
-            initialProcessingError={qp.processing === 'failed' ? {
-              message: qp.error || 'Die KI-Verarbeitung ist fehlgeschlagen.',
-              retryable: qp.retryable !== 'false',
-            } : null}
+            initialProcessingError={
+              qp.processing === 'failed'
+                ? {
+                    message: qp.error || 'Die KI-Verarbeitung ist fehlgeschlagen.',
+                    retryable: qp.retryable !== 'false',
+                  }
+                : null
+            }
           />
         </div>
 
@@ -175,7 +181,9 @@ export default async function ProtocolDetailPage({
         <div className="space-y-4">
           {/* Protocol Details */}
           <Card className="p-4">
-            <Heading level={2} className="text-sm font-semibold text-text-primary mb-3">Details</Heading>
+            <Heading level={2} className="text-sm font-semibold text-text-primary mb-3">
+              Details
+            </Heading>
             <dl className="space-y-3">
               <div>
                 <dt className="text-xs text-text-muted mb-0.5">Datum</dt>
@@ -209,11 +217,15 @@ export default async function ProtocolDetailPage({
                   <dt className="text-xs text-text-muted mb-0.5">Eingabemethode</dt>
                   <dd className="flex items-center gap-2">
                     {(() => {
-                      const InputIcon = INPUT_METHOD_ICON_COMPONENTS[protocol.input_method as InputMethod]
-                      return InputIcon ? <InputIcon className="w-3.5 h-3.5 text-text-muted" /> : null
+                      const InputIcon =
+                        INPUT_METHOD_ICON_COMPONENTS[protocol.input_method as InputMethod];
+                      return InputIcon ? (
+                        <InputIcon className="w-3.5 h-3.5 text-text-muted" />
+                      ) : null;
                     })()}
                     <span className="text-sm text-text-primary">
-                      {INPUT_METHOD_LABELS[protocol.input_method as InputMethod] || protocol.input_method}
+                      {INPUT_METHOD_LABELS[protocol.input_method as InputMethod] ||
+                        protocol.input_method}
                     </span>
                   </dd>
                 </div>
@@ -246,5 +258,5 @@ export default async function ProtocolDetailPage({
         </div>
       </div>
     </div>
-  )
+  );
 }

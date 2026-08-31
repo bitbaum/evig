@@ -1,22 +1,22 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
-import { useParams, useSearchParams } from 'next/navigation'
-import { Link } from '@/i18n/navigation'
-import { ArrowLeft, AlertCircle, CheckCircle, MessageCircle, Wrench } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
-import { Card } from '@/components/ui/card'
-import { IconBadge } from '@/components/ui/IconBadge'
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
-import { Button } from '@/components/ui/button'
-import { formatDate } from '@/lib/date-formats'
-import { getCategoryById, REQUEST_STATUS } from '@/config/it-hilfe'
-import { ROUTES } from '@/config/routes'
-import { TechnicianMapList } from '@/components/it-hilfe/TechnicianMapList'
-import { MatchedTechnicianCard } from '@/components/it-hilfe/detail/MatchedTechnicianCard'
-import { AIDiagnosisCard } from '@/components/it-hilfe/AIDiagnosisCard'
-import { MessageSidebar } from '@/components/messaging/MessageSidebar'
+import { useEffect } from 'react';
+import { useParams, useSearchParams } from 'next/navigation';
+import { Link } from '@/i18n/navigation';
+import { ArrowLeft, AlertCircle, CheckCircle, MessageCircle, Wrench } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/ui/Heading';
+import { Card } from '@/components/ui/card';
+import { IconBadge } from '@/components/ui/IconBadge';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { Button } from '@/components/ui/button';
+import { formatDate } from '@/lib/date-formats';
+import { getCategoryById, REQUEST_STATUS } from '@/config/it-hilfe';
+import { ROUTES } from '@/config/routes';
+import { TechnicianMapList } from '@/components/it-hilfe/TechnicianMapList';
+import { MatchedTechnicianCard } from '@/components/it-hilfe/detail/MatchedTechnicianCard';
+import { AIDiagnosisCard } from '@/components/it-hilfe/AIDiagnosisCard';
+import { MessageSidebar } from '@/components/messaging/MessageSidebar';
 import {
   RequestHeader,
   OfferForm,
@@ -27,14 +27,14 @@ import {
   ConfirmReviewCard,
   OwnerNoOffersNudge,
   useITHilfeDetail,
-} from '@/components/it-hilfe/detail'
-import { PageShell } from '@/components/layout/PageShell'
+} from '@/components/it-hilfe/detail';
+import { PageShell } from '@/components/layout/PageShell';
 
 export default function ITHilfeDetailPage() {
-  const { id } = useParams<{ id: string }>()
-  const t = useTranslations('itHelp.detail')
-  const detail = useITHilfeDetail(id)
-  const searchParams = useSearchParams()
+  const { id } = useParams<{ id: string }>();
+  const t = useTranslations('itHelp.detail');
+  const detail = useITHilfeDetail(id);
+  const searchParams = useSearchParams();
 
   // One-tap accept flow lands here with ?accepted=1 (from AcceptButton in
   // /it-hilfe/accept). The banner is computed directly from searchParams
@@ -45,42 +45,44 @@ export default function ITHilfeDetailPage() {
   // the lifetime of this render. The state change itself is already
   // visible (request status OPEN → MATCHED, helper info appears), but
   // the explicit confirmation closes the loop the email flow opened.
-  const showAcceptedBanner = searchParams.get('accepted') === '1'
+  const showAcceptedBanner = searchParams.get('accepted') === '1';
   useEffect(() => {
-    if (!showAcceptedBanner) return
-    if (typeof window === 'undefined') return
-    const url = new URL(window.location.href)
-    url.searchParams.delete('accepted')
-    window.history.replaceState({}, '', url.toString())
-  }, [showAcceptedBanner])
+    if (!showAcceptedBanner) return;
+    if (typeof window === 'undefined') return;
+    const url = new URL(window.location.href);
+    url.searchParams.delete('accepted');
+    window.history.replaceState({}, '', url.toString());
+  }, [showAcceptedBanner]);
 
   if (detail.loading) {
     return (
       <div className="flex items-center justify-center py-24">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-action"></div>
       </div>
-    )
+    );
   }
 
   if (detail.error || !detail.request) {
     return (
       <PageShell maxWidth="3xl" py="py-12" className="text-center">
-          <AlertCircle className="w-16 h-16 text-error-500 mx-auto mb-4" aria-hidden="true" />
-          <Heading level={1} className="text-2xl text-text-primary mb-2">{t('error')}</Heading>
-          <p className="text-text-secondary mb-6">{detail.error || t('requestNotFound')}</p>
-          <Button as={Link} href={ROUTES.public.itHilfe} variant="primary" size="lg">
-            <ArrowLeft className="w-4 h-4" aria-hidden="true" />
-            {t('backToList')}
-          </Button>
+        <AlertCircle className="w-16 h-16 text-error-500 mx-auto mb-4" aria-hidden="true" />
+        <Heading level={1} className="text-2xl text-text-primary mb-2">
+          {t('error')}
+        </Heading>
+        <p className="text-text-secondary mb-6">{detail.error || t('requestNotFound')}</p>
+        <Button as={Link} href={ROUTES.public.itHilfe} variant="primary" size="lg">
+          <ArrowLeft className="w-4 h-4" aria-hidden="true" />
+          {t('backToList')}
+        </Button>
       </PageShell>
-    )
+    );
   }
 
-  const { request } = detail
+  const { request } = detail;
 
   return (
     <div className="bg-canvas min-h-screen">
-    <PageShell maxWidth="4xl">
+      <PageShell maxWidth="4xl">
         {/* Back link */}
         <Link
           href={ROUTES.public.itHilfe}
@@ -111,9 +113,7 @@ export default function ITHilfeDetailPage() {
         {showAcceptedBanner && request.status === REQUEST_STATUS.MATCHED && (
           <div className="bg-action-muted border border-strong rounded-xl p-4 mb-6 flex items-center gap-3">
             <CheckCircle className="w-5 h-5 text-action shrink-0" aria-hidden="true" />
-            <p className="text-action text-sm font-medium">
-              {t('acceptedBanner')}
-            </p>
+            <p className="text-action text-sm font-medium">{t('acceptedBanner')}</p>
           </div>
         )}
 
@@ -125,26 +125,30 @@ export default function ITHilfeDetailPage() {
             {/* Matched technician — phone reveal after offer acceptance (PPP.2).
                 API gates matchedHelperPhone behind isOwner, so this card only
                 materializes data the requester is allowed to see. */}
-            {request.status === REQUEST_STATUS.MATCHED
-              && request.matchedHelperId
-              && request.matchedHelperName
-              && request.matchedHelperPhone && (
+            {request.status === REQUEST_STATUS.MATCHED &&
+              request.matchedHelperId &&
+              request.matchedHelperName &&
+              request.matchedHelperPhone && (
                 <MatchedTechnicianCard
                   technicianId={request.matchedHelperId}
                   technicianName={request.matchedHelperName}
                   technicianPhone={request.matchedHelperPhone}
                 />
-            )}
+              )}
 
             {/* AI Diagnosis */}
             {request.aiDiagnosis && (
               <AIDiagnosisCard
                 diagnosis={request.aiDiagnosis}
-                deviceInfo={[
-                  getCategoryById(request.categoryId)?.name,
-                  request.deviceBrand,
-                  request.deviceModel,
-                ].filter(Boolean).join(' - ') || undefined}
+                deviceInfo={
+                  [
+                    getCategoryById(request.categoryId)?.name,
+                    request.deviceBrand,
+                    request.deviceModel,
+                  ]
+                    .filter(Boolean)
+                    .join(' - ') || undefined
+                }
               />
             )}
 
@@ -240,9 +244,7 @@ export default function ITHilfeDetailPage() {
                     <Heading level={3} className="text-base font-medium text-text-primary">
                       {t('becomeTechnicianTitle')}
                     </Heading>
-                    <p className="mt-1 text-sm text-text-secondary">
-                      {t('becomeTechnicianBody')}
-                    </p>
+                    <p className="mt-1 text-sm text-text-secondary">{t('becomeTechnicianBody')}</p>
                     <div className="mt-4 flex flex-wrap gap-3">
                       <Button as={Link} href={ROUTES.public.profilTechniker} variant="primary">
                         {t('becomeTechnicianCta')}
@@ -265,12 +267,12 @@ export default function ITHilfeDetailPage() {
             {/* Owner, open request, zero offers → nudge toward the levers that
                 attract technicians (raise/add compensation, broaden skills,
                 extend, share) instead of a dead "no technicians" line. */}
-            {request.isOwner
-              && request.status === REQUEST_STATUS.OPEN
-              && request.offerCount === 0
-              && !detail.isExpired && (
+            {request.isOwner &&
+              request.status === REQUEST_STATUS.OPEN &&
+              request.offerCount === 0 &&
+              !detail.isExpired && (
                 <OwnerNoOffersNudge requestId={request.id} budgetType={request.budgetType} />
-            )}
+              )}
 
             {/* Offers List (Owner only) */}
             {request.isOwner && (
@@ -309,21 +311,21 @@ export default function ITHilfeDetailPage() {
           />
         </div>
 
-      {/* Message Sidebar */}
-      <MessageSidebar
-        isOpen={detail.showMessages}
-        onClose={() => detail.setShowMessages(false)}
-        initialConversationId={detail.conversationId}
-      />
+        {/* Message Sidebar */}
+        <MessageSidebar
+          isOpen={detail.showMessages}
+          onClose={() => detail.setShowMessages(false)}
+          initialConversationId={detail.conversationId}
+        />
 
-      <ConfirmDialog
-        isOpen={!!detail.pendingConfirm}
-        title={detail.pendingConfirmTitle}
-        message={detail.pendingConfirmMessage}
-        onConfirm={detail.executePendingConfirm}
-        onClose={detail.cancelPendingConfirm}
-      />
-    </PageShell>
+        <ConfirmDialog
+          isOpen={!!detail.pendingConfirm}
+          title={detail.pendingConfirmTitle}
+          message={detail.pendingConfirmMessage}
+          onConfirm={detail.executePendingConfirm}
+          onClose={detail.cancelPendingConfirm}
+        />
+      </PageShell>
     </div>
-  )
+  );
 }

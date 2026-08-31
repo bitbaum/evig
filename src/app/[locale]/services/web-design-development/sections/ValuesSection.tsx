@@ -1,7 +1,7 @@
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import Heading from '@/components/ui/Heading'
-import { Section } from '@/components/layout/Section'
-import { getTranslations } from 'next-intl/server'
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import Heading from '@/components/ui/Heading';
+import { Section } from '@/components/layout/Section';
+import { getTranslations } from 'next-intl/server';
 
 const VALUE_KEYS = [
   'openSource',
@@ -12,18 +12,20 @@ const VALUE_KEYS = [
   'maxAutomation',
   'userExperience',
   'developerExperience',
-] as const
+] as const;
 
 export async function ValuesSection() {
-  const t = await getTranslations('services.webDesign.values')
-  const tEye = await getTranslations('common.eyebrows')
+  const t = await getTranslations('services.webDesign.values');
+  const tEye = await getTranslations('common.eyebrows');
 
   return (
     <Section density="spacious" tone="tinted" contained={false} className="border-y border-subtle">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto text-center mb-14">
           <Eyebrow as="div">{tEye('principles')}</Eyebrow>
-          <Heading level={2} className="ui-public-display-lg mt-4">{t('title')}</Heading>
+          <Heading level={2} className="ui-public-display-lg mt-4">
+            {t('title')}
+          </Heading>
           <p
             className="ui-public-section-lede mt-6 mx-auto"
             dangerouslySetInnerHTML={{ __html: t.raw('subtitle') as string }}
@@ -35,12 +37,14 @@ export async function ValuesSection() {
               <div className="ui-public-card-label font-mono tabular-nums">
                 {String(index + 1).padStart(2, '0')}
               </div>
-              <Heading level={3} className="ui-public-card-title">{t(`${key}.title`)}</Heading>
+              <Heading level={3} className="ui-public-card-title">
+                {t(`${key}.title`)}
+              </Heading>
               <p className="ui-public-card-body">{t(`${key}.description`)}</p>
             </article>
           ))}
         </div>
       </div>
     </Section>
-  )
+  );
 }

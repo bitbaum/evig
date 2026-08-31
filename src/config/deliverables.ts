@@ -18,9 +18,9 @@ export const DELIVERABLE_TYPES = {
   DOCUMENT: 'document',
   LINK: 'link',
   OTHER: 'other',
-} as const
+} as const;
 
-export type DeliverableType = (typeof DELIVERABLE_TYPES)[keyof typeof DELIVERABLE_TYPES]
+export type DeliverableType = (typeof DELIVERABLE_TYPES)[keyof typeof DELIVERABLE_TYPES];
 
 export const DELIVERABLE_TYPE_LABELS: Record<DeliverableType, string> = {
   report: 'Bericht',
@@ -29,7 +29,7 @@ export const DELIVERABLE_TYPE_LABELS: Record<DeliverableType, string> = {
   document: 'Dokument',
   link: 'Link',
   other: 'Sonstiges',
-}
+};
 
 // ---- Deliverable status (review lifecycle) ----------------------------------
 
@@ -38,37 +38,38 @@ export const DELIVERABLE_STATUSES = {
   IN_REVIEW: 'in_review',
   REVISING: 'revising',
   APPROVED: 'approved',
-} as const
+} as const;
 
-export type DeliverableStatus = (typeof DELIVERABLE_STATUSES)[keyof typeof DELIVERABLE_STATUSES]
+export type DeliverableStatus = (typeof DELIVERABLE_STATUSES)[keyof typeof DELIVERABLE_STATUSES];
 
 export const DELIVERABLE_STATUS_LABELS: Record<DeliverableStatus, string> = {
   draft: 'Entwurf',
   in_review: 'In Prüfung',
   revising: 'In Überarbeitung',
   approved: 'Freigegeben',
-}
+};
 
 export const DELIVERABLE_STATUS_COLORS: Record<DeliverableStatus, string> = {
   draft: 'bg-neutral-100 text-neutral-800',
   in_review: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
   revising: 'bg-orange-100 text-orange-800',
   approved: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
-}
+};
 
 // ---- Visibility -------------------------------------------------------------
 
 export const DELIVERABLE_VISIBILITY = {
   TEAM: 'team',
   PUBLIC: 'public',
-} as const
+} as const;
 
-export type DeliverableVisibility = (typeof DELIVERABLE_VISIBILITY)[keyof typeof DELIVERABLE_VISIBILITY]
+export type DeliverableVisibility =
+  (typeof DELIVERABLE_VISIBILITY)[keyof typeof DELIVERABLE_VISIBILITY];
 
 export const DELIVERABLE_VISIBILITY_LABELS: Record<DeliverableVisibility, string> = {
   team: 'Team',
   public: 'Öffentlich',
-}
+};
 
 // ---- Feedback kind ----------------------------------------------------------
 
@@ -76,21 +77,21 @@ export const FEEDBACK_KINDS = {
   COMMENT: 'comment',
   CHANGE_REQUEST: 'change_request',
   APPROVAL: 'approval',
-} as const
+} as const;
 
-export type FeedbackKind = (typeof FEEDBACK_KINDS)[keyof typeof FEEDBACK_KINDS]
+export type FeedbackKind = (typeof FEEDBACK_KINDS)[keyof typeof FEEDBACK_KINDS];
 
 export const FEEDBACK_KIND_LABELS: Record<FeedbackKind, string> = {
   comment: 'Kommentar',
   change_request: 'Änderungswunsch',
   approval: 'Freigabe',
-}
+};
 
 export const FEEDBACK_KIND_COLORS: Record<FeedbackKind, string> = {
   comment: 'bg-neutral-100 text-neutral-800',
   change_request: 'bg-orange-100 text-orange-800',
   approval: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
-}
+};
 
 // ---- Feedback status (change_request lifecycle) -----------------------------
 
@@ -99,32 +100,46 @@ export const FEEDBACK_STATUSES = {
   ADDRESSED: 'addressed',
   WONTFIX: 'wontfix',
   APPROVED: 'approved',
-} as const
+} as const;
 
-export type FeedbackStatus = (typeof FEEDBACK_STATUSES)[keyof typeof FEEDBACK_STATUSES]
+export type FeedbackStatus = (typeof FEEDBACK_STATUSES)[keyof typeof FEEDBACK_STATUSES];
 
 export const FEEDBACK_STATUS_LABELS: Record<FeedbackStatus, string> = {
   open: 'Offen',
   addressed: 'Erledigt',
   wontfix: 'Verworfen',
   approved: 'Freigegeben',
-}
+};
 
 export const FEEDBACK_STATUS_COLORS: Record<FeedbackStatus, string> = {
   open: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
   addressed: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
   wontfix: 'bg-neutral-100 text-neutral-800',
   approved: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
-}
+};
 
 // ---- Files ------------------------------------------------------------------
 
 /** Extensions we can render inline as code / read as text for RAG grounding. */
 export const TEXT_FILE_EXTENSIONS = [
-  'html', 'htm', 'css', 'js', 'ts', 'tsx', 'jsx', 'json', 'md', 'txt', 'csv', 'svg', 'xml', 'yml', 'yaml',
-] as const
+  'html',
+  'htm',
+  'css',
+  'js',
+  'ts',
+  'tsx',
+  'jsx',
+  'json',
+  'md',
+  'txt',
+  'csv',
+  'svg',
+  'xml',
+  'yml',
+  'yaml',
+] as const;
 
 export function isTextFile(name: string): boolean {
-  const ext = name.split('.').pop()?.toLowerCase() ?? ''
-  return (TEXT_FILE_EXTENSIONS as readonly string[]).includes(ext)
+  const ext = name.split('.').pop()?.toLowerCase() ?? '';
+  return (TEXT_FILE_EXTENSIONS as readonly string[]).includes(ext);
 }

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * TeamLeavePeriodsCard — list + add UI for a team profile's leave periods.
@@ -16,99 +16,99 @@
  * date ranges from a phone — desktop is the realistic target.
  */
 
-import { useCallback, useEffect, useState } from 'react'
-import { Plus, Trash2, Calendar, X, RefreshCw } from 'lucide-react'
-import { apiFetch } from '@/lib/api/client'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
-import { formatDateShort } from '@/lib/date-formats'
-import { leavePeriodKindOptions, type LeavePeriodKind } from '@/lib/schemas/team'
+import { useCallback, useEffect, useState } from 'react';
+import { Plus, Trash2, Calendar, X, RefreshCw } from 'lucide-react';
+import { apiFetch } from '@/lib/api/client';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { formatDateShort } from '@/lib/date-formats';
+import { leavePeriodKindOptions, type LeavePeriodKind } from '@/lib/schemas/team';
 import {
   LEAVE_PERIOD_KIND_LABELS,
   LEAVE_PERIOD_KIND_COLORS,
   getLeavePeriodKindLabel,
   getLeavePeriodKindColor,
-} from '@/config/team'
-import { adminInteractive } from '@/lib/admin-ui'
-import { cn } from '@/lib/utils'
+} from '@/config/team';
+import { adminInteractive } from '@/lib/admin-ui';
+import { cn } from '@/lib/utils';
 
 interface LeaveRow {
-  id: string
-  starts_on: string
-  ends_on: string
-  kind: string
-  notes: string | null
+  id: string;
+  starts_on: string;
+  ends_on: string;
+  kind: string;
+  notes: string | null;
 }
 
 interface Props {
-  profileId: string
+  profileId: string;
 }
 
 function todayISO(): string {
-  return new Date().toISOString().slice(0, 10)
+  return new Date().toISOString().slice(0, 10);
 }
 
 function isActiveToday(row: LeaveRow): boolean {
-  const today = todayISO()
-  return row.starts_on <= today && row.ends_on >= today
+  const today = todayISO();
+  return row.starts_on <= today && row.ends_on >= today;
 }
 
 function isPast(row: LeaveRow): boolean {
-  return row.ends_on < todayISO()
+  return row.ends_on < todayISO();
 }
 
 export function TeamLeavePeriodsCard({ profileId }: Props) {
-  const [rows, setRows] = useState<LeaveRow[]>([])
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [showForm, setShowForm] = useState(false)
-  const [formStartsOn, setFormStartsOn] = useState('')
-  const [formEndsOn, setFormEndsOn] = useState('')
-  const [formKind, setFormKind] = useState<LeavePeriodKind>('vacation')
-  const [formNotes, setFormNotes] = useState('')
-  const [submitting, setSubmitting] = useState(false)
+  const [rows, setRows] = useState<LeaveRow[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [showForm, setShowForm] = useState(false);
+  const [formStartsOn, setFormStartsOn] = useState('');
+  const [formEndsOn, setFormEndsOn] = useState('');
+  const [formKind, setFormKind] = useState<LeavePeriodKind>('vacation');
+  const [formNotes, setFormNotes] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   const load = useCallback(async () => {
-    setIsLoading(true)
-    setError(null)
+    setIsLoading(true);
+    setError(null);
     const result = await apiFetch<{ items: LeaveRow[] }>(
       `/api/admin/team/profiles/${profileId}/leave`,
-    )
+    );
     if (result.success && result.data) {
-      setRows(result.data.items)
+      setRows(result.data.items);
     } else {
-      setError(result.error || 'Urlaubsdaten konnten nicht geladen werden.')
+      setError(result.error || 'Urlaubsdaten konnten nicht geladen werden.');
     }
-    setIsLoading(false)
-  }, [profileId])
+    setIsLoading(false);
+  }, [profileId]);
 
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
-    void load()
-  }, [load])
+    void load();
+  }, [load]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
   const resetForm = () => {
-    setFormStartsOn('')
-    setFormEndsOn('')
-    setFormKind('vacation')
-    setFormNotes('')
-    setShowForm(false)
-  }
+    setFormStartsOn('');
+    setFormEndsOn('');
+    setFormKind('vacation');
+    setFormNotes('');
+    setShowForm(false);
+  };
 
   const submit = async () => {
     if (!formStartsOn || !formEndsOn) {
-      setError('Start- und Enddatum sind erforderlich.')
-      return
+      setError('Start- und Enddatum sind erforderlich.');
+      return;
     }
     if (formEndsOn < formStartsOn) {
-      setError('Enddatum darf nicht vor dem Startdatum liegen.')
-      return
+      setError('Enddatum darf nicht vor dem Startdatum liegen.');
+      return;
     }
-    setSubmitting(true)
-    setError(null)
+    setSubmitting(true);
+    setError(null);
     const result = await apiFetch(`/api/admin/team/profiles/${profileId}/leave`, {
       method: 'POST',
       body: {
@@ -117,25 +117,25 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
         kind: formKind,
         notes: formNotes.trim() || null,
       },
-    })
-    setSubmitting(false)
+    });
+    setSubmitting(false);
     if (!result.success) {
-      setError(result.error || 'Urlaub konnte nicht erfasst werden.')
-      return
+      setError(result.error || 'Urlaub konnte nicht erfasst werden.');
+      return;
     }
-    resetForm()
-    await load()
-  }
+    resetForm();
+    await load();
+  };
 
   const remove = async (id: string) => {
-    setError(null)
-    const result = await apiFetch(`/api/admin/team/leave/${id}`, { method: 'DELETE' })
+    setError(null);
+    const result = await apiFetch(`/api/admin/team/leave/${id}`, { method: 'DELETE' });
     if (!result.success) {
-      setError(result.error || 'Eintrag konnte nicht gelöscht werden.')
-      return
+      setError(result.error || 'Eintrag konnte nicht gelöscht werden.');
+      return;
     }
-    setRows(prev => prev.filter(r => r.id !== id))
-  }
+    setRows((prev) => prev.filter((r) => r.id !== id));
+  };
 
   return (
     <div className="rounded-lg border border-subtle bg-surface-base overflow-hidden">
@@ -180,26 +180,41 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <label className="block">
               <span className="text-xs font-medium text-text-secondary mb-1 block">Von</span>
-              <Input type="date" value={formStartsOn} onChange={e => setFormStartsOn(e.target.value)} />
+              <Input
+                type="date"
+                value={formStartsOn}
+                onChange={(e) => setFormStartsOn(e.target.value)}
+              />
             </label>
             <label className="block">
               <span className="text-xs font-medium text-text-secondary mb-1 block">Bis</span>
-              <Input type="date" value={formEndsOn} onChange={e => setFormEndsOn(e.target.value)} />
+              <Input
+                type="date"
+                value={formEndsOn}
+                onChange={(e) => setFormEndsOn(e.target.value)}
+              />
             </label>
             <label className="block">
               <span className="text-xs font-medium text-text-secondary mb-1 block">Art</span>
-              <Select value={formKind} onChange={e => setFormKind(e.target.value as LeavePeriodKind)}>
-                {leavePeriodKindOptions.map(k => (
-                  <option key={k} value={k}>{LEAVE_PERIOD_KIND_LABELS[k]}</option>
+              <Select
+                value={formKind}
+                onChange={(e) => setFormKind(e.target.value as LeavePeriodKind)}
+              >
+                {leavePeriodKindOptions.map((k) => (
+                  <option key={k} value={k}>
+                    {LEAVE_PERIOD_KIND_LABELS[k]}
+                  </option>
                 ))}
               </Select>
             </label>
           </div>
           <label className="block mt-3">
-            <span className="text-xs font-medium text-text-secondary mb-1 block">Notiz (optional)</span>
+            <span className="text-xs font-medium text-text-secondary mb-1 block">
+              Notiz (optional)
+            </span>
             <Textarea
               value={formNotes}
-              onChange={e => setFormNotes(e.target.value)}
+              onChange={(e) => setFormNotes(e.target.value)}
               placeholder="z. B. Sommerurlaub gemeinsam mit Andreas"
               rows={2}
               maxLength={1000}
@@ -235,19 +250,25 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
         </div>
       ) : (
         <ul className="divide-y divide-subtle">
-          {rows.map(row => {
-            const kind = row.kind as LeavePeriodKind
-            const active = isActiveToday(row)
-            const past = isPast(row)
+          {rows.map((row) => {
+            const kind = row.kind as LeavePeriodKind;
+            const active = isActiveToday(row);
+            const past = isPast(row);
             return (
               <li
                 key={row.id}
-                className={cn('px-5 py-3', active && adminInteractive.rowSelected, past && 'opacity-60')}
+                className={cn(
+                  'px-5 py-3',
+                  active && adminInteractive.rowSelected,
+                  past && 'opacity-60',
+                )}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold ${getLeavePeriodKindColor(kind)}`}>
+                      <span
+                        className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold ${getLeavePeriodKindColor(kind)}`}
+                      >
                         {getLeavePeriodKindLabel(kind)}
                       </span>
                       <span className="text-sm font-medium text-text-primary">
@@ -259,9 +280,7 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
                         </span>
                       )}
                     </div>
-                    {row.notes && (
-                      <p className="mt-1 text-xs text-text-secondary">{row.notes}</p>
-                    )}
+                    {row.notes && <p className="mt-1 text-xs text-text-secondary">{row.notes}</p>}
                   </div>
                   <Button
                     variant="destructive-ghost"
@@ -274,10 +293,10 @@ export function TeamLeavePeriodsCard({ profileId }: Props) {
                   </Button>
                 </div>
               </li>
-            )
+            );
           })}
         </ul>
       )}
     </div>
-  )
+  );
 }

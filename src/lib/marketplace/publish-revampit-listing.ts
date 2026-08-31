@@ -13,47 +13,47 @@
  * helper reads everything it needs from the inventory item -> product ->
  * primary image, so callers only pass the inventory item id (+ optional price).
  */
-import { eq, and } from 'drizzle-orm'
-import { db } from '@/db'
-import { listings, listingImages } from '@/db/schema/marketplace'
-import { users } from '@/db/schema/auth'
-import { aiExtractedProducts, inventoryItems, productImages } from '@/db/schema/inventory'
-import { indexListingInSearch } from '@/lib/marketplace/listing-helpers'
-import { removeListing } from '@/lib/search/meilisearch'
+import { eq, and } from 'drizzle-orm';
+import { db } from '@/db';
+import { listings, listingImages } from '@/db/schema/marketplace';
+import { users } from '@/db/schema/auth';
+import { aiExtractedProducts, inventoryItems, productImages } from '@/db/schema/inventory';
+import { indexListingInSearch } from '@/lib/marketplace/listing-helpers';
+import { removeListing } from '@/lib/search/meilisearch';
 import {
   MARKETPLACE_CATEGORY_VALUES,
   LISTING_CONDITIONS,
   LISTING_STATUS,
   REVAMPIT_LISTING_DELIVERY,
-} from '@/config/marketplace'
-import { getBuyerVisibleChecks } from '@/config/intake-checklist'
-import type { ChecklistState, IntakeTier } from '@/config/intake-checklist'
-import { logger } from '@/lib/logger'
+} from '@/config/marketplace';
+import { getBuyerVisibleChecks } from '@/config/intake-checklist';
+import type { ChecklistState, IntakeTier } from '@/config/intake-checklist';
+import { logger } from '@/lib/logger';
 
 /** Drizzle db or transaction object. */
-type DbOrTx = Parameters<Parameters<typeof db.transaction>[0]>[0] | typeof db
+type DbOrTx = Parameters<Parameters<typeof db.transaction>[0]>[0] | typeof db;
 
 /**
  * The RevampIT system seller. A non-login account (no passwordHash) that owns
  * every is_revampit listing, so the org appears as a single seller. The
  * is_revampit flag — not this account's role — is what badges the listing.
  */
-export const REVAMPIT_SELLER_EMAIL = 'shop@revamp-it.ch'
-export const REVAMPIT_SELLER_NAME = 'Revamp-IT'
+export const REVAMPIT_SELLER_EMAIL = 'shop@revamp-it.ch';
+export const REVAMPIT_SELLER_NAME = 'Revamp-IT';
 
-const CATEGORY_FALLBACK = '99' // "Sonstiges"
-const CONDITION_FALLBACK = 'good'
+const CATEGORY_FALLBACK = '99'; // "Sonstiges"
+const CONDITION_FALLBACK = 'good';
 
 function mapCategory(category: string | null | undefined): string {
   return category && (MARKETPLACE_CATEGORY_VALUES as readonly string[]).includes(category)
     ? category
-    : CATEGORY_FALLBACK
+    : CATEGORY_FALLBACK;
 }
 
 function mapCondition(condition: string | null | undefined): string {
   return condition && (LISTING_CONDITIONS as readonly string[]).includes(condition)
     ? condition
-    : CONDITION_FALLBACK
+    : CONDITION_FALLBACK;
 }
 
 /** Get-or-create the RevampIT system seller user; returns its id. */
@@ -62,16 +62,16 @@ export async function getRevampitSellerId(tx: DbOrTx): Promise<string> {
     .select({ id: users.id })
     .from(users)
     .where(eq(users.email, REVAMPIT_SELLER_EMAIL))
-    .limit(1)
+    .limit(1);
 
-  if (existing[0]) return existing[0].id
+  if (existing[0]) return existing[0].id;
 
   const [created] = await tx
     .insert(users)
     .values({ email: REVAMPIT_SELLER_EMAIL, name: REVAMPIT_SELLER_NAME, isStaff: false })
-    .returning({ id: users.id })
+    .returning({ id: users.id });
 
-  return created.id
+  return created.id;
 }
 
 /**
@@ -85,11 +85,11 @@ export async function publishRevampitListing(
   tx: DbOrTx,
   inventoryItemId: string,
   opts?: {
-    priceChf?: string | number
-    title?: string
-    description?: string
+    priceChf?: string | number;
+    title?: string;
+    description?: string;
     /** Staff user who publishes; recorded as verified_by when QC checks are attached. */
-    verifiedBy?: string
+    verifiedBy?: string;
   },
 ): Promise<string | null> {
   const [data] = await tx
@@ -110,33 +110,33 @@ export async function publishRevampitListing(
     .from(inventoryItems)
     .innerJoin(aiExtractedProducts, eq(inventoryItems.aiProductId, aiExtractedProducts.id))
     .where(eq(inventoryItems.id, inventoryItemId))
-    .limit(1)
+    .limit(1);
 
   if (!data) {
-    logger.warn('publishRevampitListing: inventory item not found', { inventoryItemId })
-    return null
+    logger.warn('publishRevampitListing: inventory item not found', { inventoryItemId });
+    return null;
   }
 
   const [img] = await tx
     .select({ filePath: productImages.filePath })
     .from(productImages)
     .where(and(eq(productImages.productId, data.productId), eq(productImages.isPrimary, true)))
-    .limit(1)
-  const imageUrl = img?.filePath ?? null
+    .limit(1);
+  const imageUrl = img?.filePath ?? null;
 
-  const sellerId = await getRevampitSellerId(tx)
+  const sellerId = await getRevampitSellerId(tx);
   const title =
     opts?.title?.trim() ||
     `${data.brand ?? ''} ${data.productName ?? ''}`.trim() ||
-    (data.productName ?? 'Produkt')
-  const description = opts?.description ?? data.shortDescription ?? ''
-  const category = mapCategory(data.category)
+    (data.productName ?? 'Produkt');
+  const description = opts?.description ?? data.shortDescription ?? '';
+  const category = mapCategory(data.category);
   // Granular component code (701 GPU …) for part-matching — stored as-is (no
   // enum coercion; it's the KATEGORIEN sub-code the erfassung captured).
-  const subcategory = data.subcategory ?? null
-  const condition = mapCondition(data.condition)
-  const priceChf = String(opts?.priceChf ?? data.sellingPriceChf ?? data.estimatedPriceChf ?? '0')
-  const nowIso = new Date().toISOString()
+  const subcategory = data.subcategory ?? null;
+  const condition = mapCondition(data.condition);
+  const priceChf = String(opts?.priceChf ?? data.sellingPriceChf ?? data.estimatedPriceChf ?? '0');
+  const nowIso = new Date().toISOString();
 
   // QC provenance — the buyer-facing payoff of the intake checklist. A device
   // that went through the pipeline (tier set, checklist complete) publishes
@@ -144,26 +144,27 @@ export async function publishRevampitListing(
   // "Geprüft von Revamp-IT" verification stamp. Quick-published accessories
   // (no checklist) carry no stamp; an existing manual verification on the
   // listing is never cleared by a re-publish.
-  const tier = data.intakeTier as IntakeTier | null
-  const qcChecks = tier && data.checklistComplete
-    ? getBuyerVisibleChecks((data.intakeChecklist ?? {}) as ChecklistState, tier, data.category)
-    : []
-  const qcVerified = qcChecks.length > 0
+  const tier = data.intakeTier as IntakeTier | null;
+  const qcChecks =
+    tier && data.checklistComplete
+      ? getBuyerVisibleChecks((data.intakeChecklist ?? {}) as ChecklistState, tier, data.category)
+      : [];
+  const qcVerified = qcChecks.length > 0;
   const qcProvenance = qcVerified
     ? { conditionChecks: qcChecks, verifiedAt: nowIso, verifiedBy: opts?.verifiedBy ?? null }
-    : {}
+    : {};
 
   const existing = await tx
     .select({ id: listings.id, verifiedAt: listings.verifiedAt })
     .from(listings)
     .where(eq(listings.inventoryItemId, inventoryItemId))
-    .limit(1)
+    .limit(1);
   // Search doc: QC verification from this publish, or a prior (manual) one.
-  const isVerified = qcVerified || Boolean(existing[0]?.verifiedAt)
+  const isVerified = qcVerified || Boolean(existing[0]?.verifiedAt);
 
-  let listingId: string
+  let listingId: string;
   if (existing[0]) {
-    listingId = existing[0].id
+    listingId = existing[0].id;
     await tx
       .update(listings)
       .set({
@@ -179,7 +180,7 @@ export async function publishRevampitListing(
         updatedAt: nowIso,
         ...qcProvenance,
       })
-      .where(eq(listings.id, listingId))
+      .where(eq(listings.id, listingId));
   } else {
     const [row] = await tx
       .insert(listings)
@@ -202,8 +203,8 @@ export async function publishRevampitListing(
         status: LISTING_STATUS.ACTIVE,
         ...qcProvenance,
       })
-      .returning({ id: listings.id })
-    listingId = row.id
+      .returning({ id: listings.id });
+    listingId = row.id;
   }
 
   if (imageUrl) {
@@ -211,9 +212,11 @@ export async function publishRevampitListing(
       .select({ id: listingImages.id })
       .from(listingImages)
       .where(eq(listingImages.listingId, listingId))
-      .limit(1)
+      .limit(1);
     if (!hasImage[0]) {
-      await tx.insert(listingImages).values({ listingId, url: imageUrl, position: 0, isPrimary: true })
+      await tx
+        .insert(listingImages)
+        .values({ listingId, url: imageUrl, position: 0, isPrimary: true });
     }
   }
 
@@ -238,10 +241,15 @@ export async function publishRevampitListing(
     favorite_count: 0,
     created_at: nowIso,
     thumbnail: imageUrl,
-  })
+  });
 
-  logger.info('Published RevampIT listing', { listingId, inventoryItemId, qcVerified, qcChecksCount: qcChecks.length })
-  return listingId
+  logger.info('Published RevampIT listing', {
+    listingId,
+    inventoryItemId,
+    qcVerified,
+    qcChecksCount: qcChecks.length,
+  });
+  return listingId;
 }
 
 /**
@@ -253,6 +261,6 @@ export async function unpublishRevampitListing(tx: DbOrTx, inventoryItemId: stri
     .update(listings)
     .set({ status: LISTING_STATUS.REMOVED, updatedAt: new Date().toISOString() })
     .where(eq(listings.inventoryItemId, inventoryItemId))
-    .returning({ id: listings.id })
-  for (const row of rows) removeListing(row.id)
+    .returning({ id: listings.id });
+  for (const row of rows) removeListing(row.id);
 }

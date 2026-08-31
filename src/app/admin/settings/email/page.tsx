@@ -1,16 +1,16 @@
-import { Metadata } from 'next'
-import { Mail } from 'lucide-react'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { requireSection } from '@/lib/admin/guards'
-import { EmailDiagnostics } from '@/components/admin/settings/EmailDiagnostics'
+import { Metadata } from 'next';
+import { Mail } from 'lucide-react';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import { requireSection } from '@/lib/admin/guards';
+import { EmailDiagnostics } from '@/components/admin/settings/EmailDiagnostics';
 
 export const metadata: Metadata = {
   title: 'E-Mail-Diagnose',
   description: 'E-Mail-Anbieter, Verbindungstest und Test-Versand.',
-}
+};
 
 export default async function EmailDiagnosticsPage() {
-  await requireSection('settings')
+  await requireSection('settings');
 
   return (
     <AdminPageWrapper
@@ -22,5 +22,5 @@ export default async function EmailDiagnosticsPage() {
     >
       <EmailDiagnostics />
     </AdminPageWrapper>
-  )
+  );
 }

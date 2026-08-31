@@ -14,47 +14,47 @@
  * canonical locale and the assistant mirrors the user's language anyway.
  */
 
-import { getSection } from '@/config/sections'
-import { ROUTES } from '@/config/routes'
-import { locales } from '@/i18n/routing'
+import { getSection } from '@/config/sections';
+import { ROUTES } from '@/config/routes';
+import { locales } from '@/i18n/routing';
 
 export interface HirnPageContext {
   /** Matched against the locale-stripped pathname; first match wins. */
-  pattern: RegExp
+  pattern: RegExp;
   /** Stable identifier for logging/analytics. */
-  area: string
+  area: string;
   /** 1-2 German sentences telling the LLM what the user is looking at. */
-  description: string
+  description: string;
   /** 2-3 short German question chips shown when the chat is empty. */
-  suggestions: string[]
+  suggestions: string[];
   /** Relevant deep links rendered as buttons. */
-  quickActions?: { label: string; href: string }[]
+  quickActions?: { label: string; href: string }[];
   /**
    * Human-facing page guide. The same facts are part of this context object,
    * so Hirn and the interface cannot explain different workflows.
    */
   guide?: {
-    title: string
-    purpose: string
-    steps: { title: string; description: string }[]
-    note?: string
-    learnMore?: { label: string; href: string }
-  }
+    title: string;
+    purpose: string;
+    steps: { title: string; description: string }[];
+    note?: string;
+    learnMore?: { label: string; href: string };
+  };
 }
 
 // ---------------------------------------------------------------------------
 // Public surface
 // ---------------------------------------------------------------------------
 
-const P = ROUTES.public
+const P = ROUTES.public;
 
 // Dashboard paths live in the sections SSOT (no ROUTES.dashboard entries).
 const dashPath = (sectionId: string, fallback: string): string =>
-  getSection(sectionId)?.path ?? fallback
+  getSection(sectionId)?.path ?? fallback;
 const DASH = {
   listings: dashPath('my-listings', '/dashboard/listings'),
   orders: dashPath('my-orders', '/dashboard/orders'),
-}
+};
 
 export const PUBLIC_PAGE_CONTEXTS: HirnPageContext[] = [
   {
@@ -77,10 +77,7 @@ export const PUBLIC_PAGE_CONTEXTS: HirnPageContext[] = [
     area: 'marketplace-checkout',
     description:
       'Die Nutzerin ist im Checkout eines Marktplatz-Inserats und schliesst gerade einen Kauf ab.',
-    suggestions: [
-      'Wie läuft die Bezahlung ab?',
-      'Wie erhalte ich das Gerät?',
-    ],
+    suggestions: ['Wie läuft die Bezahlung ab?', 'Wie erhalte ich das Gerät?'],
     quickActions: [{ label: 'Meine Bestellungen', href: DASH.orders }],
   },
   {
@@ -127,10 +124,7 @@ export const PUBLIC_PAGE_CONTEXTS: HirnPageContext[] = [
     area: 'it-hilfe-techniker',
     description:
       'Die Nutzerin durchstöbert das Techniker-Verzeichnis der IT-Hilfe: Profile von Reparatur-Helfern aus der Community mit Bewertungen und Fachgebieten.',
-    suggestions: [
-      'Wie wähle ich den richtigen Techniker?',
-      'Wie werde ich selbst Techniker?',
-    ],
+    suggestions: ['Wie wähle ich den richtigen Techniker?', 'Wie werde ich selbst Techniker?'],
     quickActions: [
       { label: 'Anfrage erstellen', href: P.itHilfeCreate },
       { label: 'Techniker werden', href: P.profilTechniker },
@@ -183,10 +177,7 @@ export const PUBLIC_PAGE_CONTEXTS: HirnPageContext[] = [
     area: 'dashboard-listings',
     description:
       'Die Nutzerin verwaltet ihre eigenen Marktplatz-Inserate (Status, Bearbeitung, Verkäufe) in ihrem Dashboard.',
-    suggestions: [
-      'Warum ist mein Inserat noch nicht sichtbar?',
-      'Wie bearbeite ich ein Inserat?',
-    ],
+    suggestions: ['Warum ist mein Inserat noch nicht sichtbar?', 'Wie bearbeite ich ein Inserat?'],
     quickActions: [{ label: 'Neues Inserat', href: P.marketplaceSell }],
   },
   {
@@ -215,10 +206,7 @@ export const PUBLIC_PAGE_CONTEXTS: HirnPageContext[] = [
     area: 'dashboard',
     description:
       'Die Nutzerin ist in ihrem persönlichen Dashboard mit Übersicht über Inserate, Bestellungen, Nachrichten und Workshop-Anmeldungen.',
-    suggestions: [
-      'Was kann ich hier alles tun?',
-      'Wie verkaufe ich ein Gerät?',
-    ],
+    suggestions: ['Was kann ich hier alles tun?', 'Wie verkaufe ich ein Gerät?'],
     quickActions: [
       { label: 'Meine Inserate', href: DASH.listings },
       { label: 'Meine Bestellungen', href: DASH.orders },
@@ -256,7 +244,7 @@ export const PUBLIC_PAGE_CONTEXTS: HirnPageContext[] = [
       { label: 'IT-Hilfe', href: P.itHilfe },
     ],
   },
-]
+];
 
 // ---------------------------------------------------------------------------
 // Admin surface — labels/descriptions derive from the sections SSOT
@@ -264,9 +252,9 @@ export const PUBLIC_PAGE_CONTEXTS: HirnPageContext[] = [
 
 /** Build the LLM description from the section config so labels never fork. */
 function adminDescription(sectionId: string, extra: string): string {
-  const s = getSection(sectionId)
-  const base = s ? `Der Admin-Bereich «${s.ui.label}»: ${s.ui.description}.` : ''
-  return [base, extra].filter(Boolean).join(' ')
+  const s = getSection(sectionId);
+  const base = s ? `Der Admin-Bereich «${s.ui.label}»: ${s.ui.description}.` : '';
+  return [base, extra].filter(Boolean).join(' ');
 }
 
 export const ADMIN_PAGE_CONTEXTS: HirnPageContext[] = [
@@ -286,15 +274,35 @@ export const ADMIN_PAGE_CONTEXTS: HirnPageContext[] = [
     ],
     guide: {
       title: 'Produkt aufnehmen',
-      purpose: 'Ein Produkt einmal erfassen und danach bewusst ins Inventar, in die Aufbereitung, zu Ersatzteilen, ins Recycling oder in den Shop weiterleiten.',
+      purpose:
+        'Ein Produkt einmal erfassen und danach bewusst ins Inventar, in die Aufbereitung, zu Ersatzteilen, ins Recycling oder in den Shop weiterleiten.',
       steps: [
-        { title: 'Daten eingeben', description: 'Text schreiben/einfügen, Foto aufnehmen, CSV/Excel hochladen oder Produkt einsprechen.' },
-        { title: 'KI-Vorschlag prüfen', description: 'Die KI füllt das Formular. Hersteller und Produktname sind Pflicht; alles Weitere kann später ergänzt werden.' },
-        { title: 'Nächsten Schritt wählen', description: 'Qualitätsprüfung ist für evig-geprüfte Ware empfohlen. Alternativen bleiben sichtbar und nachvollziehbar.' },
-        { title: 'Weiterarbeiten', description: 'Etikett drucken, Checkliste bearbeiten oder das veröffentlichte Produkt im Shop öffnen.' },
+        {
+          title: 'Daten eingeben',
+          description:
+            'Text schreiben/einfügen, Foto aufnehmen, CSV/Excel hochladen oder Produkt einsprechen.',
+        },
+        {
+          title: 'KI-Vorschlag prüfen',
+          description:
+            'Die KI füllt das Formular. Hersteller und Produktname sind Pflicht; alles Weitere kann später ergänzt werden.',
+        },
+        {
+          title: 'Nächsten Schritt wählen',
+          description:
+            'Qualitätsprüfung ist für evig-geprüfte Ware empfohlen. Alternativen bleiben sichtbar und nachvollziehbar.',
+        },
+        {
+          title: 'Weiterarbeiten',
+          description:
+            'Etikett drucken, Checkliste bearbeiten oder das veröffentlichte Produkt im Shop öffnen.',
+        },
       ],
       note: 'CSV/Excel wird als Stapel importiert und zuerst ins Inventar übernommen. Eine Datei beweist keine physische Qualitätsprüfung.',
-      learnMore: { label: 'Unser offener Aufbereitungsprozess', href: ROUTES.public.soFunktioniert },
+      learnMore: {
+        label: 'Unser offener Aufbereitungsprozess',
+        href: ROUTES.public.soFunktioniert,
+      },
     },
   },
   {
@@ -302,7 +310,7 @@ export const ADMIN_PAGE_CONTEXTS: HirnPageContext[] = [
     area: 'admin-approvals',
     description: adminDescription(
       'approvals',
-      'Die Mitarbeiterin prüft eingereichte Inhalte (Inserate, Blogposts, Workshops, Techniker-Bewerbungen) und gibt sie frei oder lehnt sie ab.'
+      'Die Mitarbeiterin prüft eingereichte Inhalte (Inserate, Blogposts, Workshops, Techniker-Bewerbungen) und gibt sie frei oder lehnt sie ab.',
     ),
     suggestions: [
       'Nach welchen Kriterien gebe ich Inserate frei?',
@@ -315,7 +323,7 @@ export const ADMIN_PAGE_CONTEXTS: HirnPageContext[] = [
     area: 'admin-erfassung',
     description: adminDescription(
       'erfassung',
-      'Die Mitarbeiterin steuert den gesamten Gerätefluss: Eingang, Triage, Qualitätsprüfung, blockierte Geräte und Veröffentlichung. Der Status wird aus demselben Checklistenzustand abgeleitet, der auch die Shop-Verifizierung erzeugt.'
+      'Die Mitarbeiterin steuert den gesamten Gerätefluss: Eingang, Triage, Qualitätsprüfung, blockierte Geräte und Veröffentlichung. Der Status wird aus demselben Checklistenzustand abgeleitet, der auch die Shop-Verifizierung erzeugt.',
     ),
     suggestions: [
       'Welches Gerät braucht als Nächstes Aufmerksamkeit?',
@@ -329,13 +337,32 @@ export const ADMIN_PAGE_CONTEXTS: HirnPageContext[] = [
       title: 'Geräte-Eingang',
       purpose: 'Alle erfassten Geräte vom Eingang bis zum Shop an einer Stelle bearbeiten.',
       steps: [
-        { title: 'Aufnehmen', description: 'Neues Produkt über Text, Foto, Datei oder Sprache erfassen und etikettieren.' },
-        { title: 'Bearbeiten', description: 'Gerät öffnen, Tests und Aufbereitung mit Pass, Fehler oder Nicht anwendbar dokumentieren.' },
-        { title: 'Blockaden lösen', description: 'Fehlgeschlagene Geräte reparieren und erneut testen oder zu Ersatzteilen/Recycling umstufen.' },
-        { title: 'Veröffentlichen', description: 'Vollständige geprüfte Geräte erhalten im Shop automatisch Prüfsiegel und sichtbare Testergebnisse.' },
+        {
+          title: 'Aufnehmen',
+          description:
+            'Neues Produkt über Text, Foto, Datei oder Sprache erfassen und etikettieren.',
+        },
+        {
+          title: 'Bearbeiten',
+          description:
+            'Gerät öffnen, Tests und Aufbereitung mit Pass, Fehler oder Nicht anwendbar dokumentieren.',
+        },
+        {
+          title: 'Blockaden lösen',
+          description:
+            'Fehlgeschlagene Geräte reparieren und erneut testen oder zu Ersatzteilen/Recycling umstufen.',
+        },
+        {
+          title: 'Veröffentlichen',
+          description:
+            'Vollständige geprüfte Geräte erhalten im Shop automatisch Prüfsiegel und sichtbare Testergebnisse.',
+        },
       ],
       note: 'Die Spalten zeigen Arbeitszustände, keine separaten Datenkopien. Ein Gerät bleibt ein Datensatz über den gesamten Prozess.',
-      learnMore: { label: 'Unser offener Aufbereitungsprozess', href: ROUTES.public.soFunktioniert },
+      learnMore: {
+        label: 'Unser offener Aufbereitungsprozess',
+        href: ROUTES.public.soFunktioniert,
+      },
     },
   },
   {
@@ -343,12 +370,9 @@ export const ADMIN_PAGE_CONTEXTS: HirnPageContext[] = [
     area: 'admin-marketplace',
     description: adminDescription(
       'marketplace',
-      'Die Mitarbeiterin verwaltet Marktplatz-Inserate: verifizieren, sperren, Meldungen bearbeiten.'
+      'Die Mitarbeiterin verwaltet Marktplatz-Inserate: verifizieren, sperren, Meldungen bearbeiten.',
     ),
-    suggestions: [
-      'Wie verifiziere ich ein Inserat?',
-      'Zeige mir gemeldete Inserate',
-    ],
+    suggestions: ['Wie verifiziere ich ein Inserat?', 'Zeige mir gemeldete Inserate'],
     quickActions: [{ label: 'Marketplace', href: ROUTES.admin.marketplace }],
   },
   {
@@ -356,12 +380,9 @@ export const ADMIN_PAGE_CONTEXTS: HirnPageContext[] = [
     area: 'admin-it-hilfe',
     description: adminDescription(
       'it-hilfe-admin',
-      'Die Mitarbeiterin betreut die IT-Hilfe: offene Anfragen, Angebote und Techniker-Profile im Blick behalten.'
+      'Die Mitarbeiterin betreut die IT-Hilfe: offene Anfragen, Angebote und Techniker-Profile im Blick behalten.',
     ),
-    suggestions: [
-      'Wie viele Anfragen sind offen?',
-      'Wie funktioniert der IT-Hilfe-Ablauf?',
-    ],
+    suggestions: ['Wie viele Anfragen sind offen?', 'Wie funktioniert der IT-Hilfe-Ablauf?'],
     quickActions: [{ label: 'IT-Hilfe', href: ROUTES.admin.itHilfe }],
   },
   {
@@ -369,7 +390,7 @@ export const ADMIN_PAGE_CONTEXTS: HirnPageContext[] = [
     area: 'admin-workshops',
     description: adminDescription(
       'workshops-admin',
-      'Die Mitarbeiterin verwaltet Workshops: Vorschläge prüfen, Termine planen, Anmeldungen betreuen.'
+      'Die Mitarbeiterin verwaltet Workshops: Vorschläge prüfen, Termine planen, Anmeldungen betreuen.',
     ),
     suggestions: [
       'Wie plane ich einen neuen Workshop-Termin?',
@@ -382,12 +403,9 @@ export const ADMIN_PAGE_CONTEXTS: HirnPageContext[] = [
     area: 'admin-tasks',
     description: adminDescription(
       'tasks',
-      'Die Mitarbeiterin arbeitet mit dem Aufgaben-Board: Aufgaben erstellen, zuweisen und abschliessen.'
+      'Die Mitarbeiterin arbeitet mit dem Aufgaben-Board: Aufgaben erstellen, zuweisen und abschliessen.',
     ),
-    suggestions: [
-      'Erstelle eine Aufgabe',
-      'Welche Aufgaben sind mir zugewiesen?',
-    ],
+    suggestions: ['Erstelle eine Aufgabe', 'Welche Aufgaben sind mir zugewiesen?'],
     quickActions: [{ label: 'Neue Aufgabe', href: ROUTES.admin.taskNew }],
   },
   {
@@ -395,12 +413,9 @@ export const ADMIN_PAGE_CONTEXTS: HirnPageContext[] = [
     area: 'admin-protocols',
     description: adminDescription(
       'protocols',
-      'Die Mitarbeiterin verwaltet Sitzungsprotokolle: erfassen, nachlesen, Beschlüsse dokumentieren.'
+      'Die Mitarbeiterin verwaltet Sitzungsprotokolle: erfassen, nachlesen, Beschlüsse dokumentieren.',
     ),
-    suggestions: [
-      'Erstelle einen Protokoll-Entwurf',
-      'Was stand im letzten Protokoll?',
-    ],
+    suggestions: ['Erstelle einen Protokoll-Entwurf', 'Was stand im letzten Protokoll?'],
     quickActions: [{ label: 'Neues Protokoll', href: ROUTES.admin.protocolNew }],
   },
   {
@@ -408,12 +423,9 @@ export const ADMIN_PAGE_CONTEXTS: HirnPageContext[] = [
     area: 'admin-decisions',
     description: adminDescription(
       'decisions',
-      'Die Mitarbeiterin arbeitet mit Team-Entscheidungen: Vorschläge einbringen, abstimmen, Ergebnisse dokumentieren.'
+      'Die Mitarbeiterin arbeitet mit Team-Entscheidungen: Vorschläge einbringen, abstimmen, Ergebnisse dokumentieren.',
     ),
-    suggestions: [
-      'Erstelle einen Entscheidungs-Entwurf',
-      'Welche Entscheidungen sind offen?',
-    ],
+    suggestions: ['Erstelle einen Entscheidungs-Entwurf', 'Welche Entscheidungen sind offen?'],
     quickActions: [{ label: 'Neue Entscheidung', href: ROUTES.admin.decisionNew }],
   },
   {
@@ -451,7 +463,7 @@ export const ADMIN_PAGE_CONTEXTS: HirnPageContext[] = [
     area: 'admin-team',
     description: adminDescription(
       'team',
-      'Die Mitarbeiterin ist im Team-/HR-Bereich: Teammitglieder, Zeitkarten, Zeiterfassung und Bewerbungen.'
+      'Die Mitarbeiterin ist im Team-/HR-Bereich: Teammitglieder, Zeitkarten, Zeiterfassung und Bewerbungen.',
     ),
     suggestions: [
       'Wie funktioniert der Zeitkarten-Ablauf?',
@@ -464,12 +476,9 @@ export const ADMIN_PAGE_CONTEXTS: HirnPageContext[] = [
     area: 'admin-analyse',
     description: adminDescription(
       'analyse-hub',
-      'Die Mitarbeiterin schaut sich Auswertungen an: Kennzahlen, Finanzen und Wirkungszahlen der Organisation.'
+      'Die Mitarbeiterin schaut sich Auswertungen an: Kennzahlen, Finanzen und Wirkungszahlen der Organisation.',
     ),
-    suggestions: [
-      'Wie berechnen wir unsere CO₂-Einsparung?',
-      'Erkläre die wichtigsten Kennzahlen',
-    ],
+    suggestions: ['Wie berechnen wir unsere CO₂-Einsparung?', 'Erkläre die wichtigsten Kennzahlen'],
     quickActions: [{ label: 'Analyse', href: ROUTES.admin.analyse }],
   },
   {
@@ -477,7 +486,7 @@ export const ADMIN_PAGE_CONTEXTS: HirnPageContext[] = [
     area: 'admin-dashboard',
     description: adminDescription(
       'dashboard',
-      'Die Mitarbeiterin ist auf der Admin-Startseite mit Übersicht über alle Bereiche.'
+      'Die Mitarbeiterin ist auf der Admin-Startseite mit Übersicht über alle Bereiche.',
     ),
     suggestions: [
       'Was gibt es heute zu tun?',
@@ -493,32 +502,25 @@ export const ADMIN_PAGE_CONTEXTS: HirnPageContext[] = [
   {
     pattern: /./,
     area: 'admin-generic',
-    description:
-      'Die Mitarbeiterin ist im Admin-Bereich der evig-Plattform.',
-    suggestions: [
-      'Erstelle eine Aufgabe',
-      'Was weisst du über evig?',
-    ],
+    description: 'Die Mitarbeiterin ist im Admin-Bereich der evig-Plattform.',
+    suggestions: ['Erstelle eine Aufgabe', 'Was weisst du über evig?'],
     quickActions: [{ label: 'Admin-Übersicht', href: ROUTES.admin.dashboard }],
   },
-]
+];
 
 // ---------------------------------------------------------------------------
 // Resolver
 // ---------------------------------------------------------------------------
 
 /** Strips the locale prefix (/en/marketplace → /marketplace). */
-const LOCALE_PREFIX = new RegExp(`^/(${locales.join('|')})(?=/|$)`)
+const LOCALE_PREFIX = new RegExp(`^/(${locales.join('|')})(?=/|$)`);
 
 /**
  * Resolve the page context for a pathname. First regex match wins; the
  * last entry of each list is a catch-all, so this always returns a context.
  */
-export function resolveHirnContext(
-  pathname: string,
-  surface: 'public' | 'admin'
-): HirnPageContext {
-  const path = pathname.replace(LOCALE_PREFIX, '') || '/'
-  const contexts = surface === 'admin' ? ADMIN_PAGE_CONTEXTS : PUBLIC_PAGE_CONTEXTS
-  return contexts.find(c => c.pattern.test(path)) ?? contexts[contexts.length - 1]
+export function resolveHirnContext(pathname: string, surface: 'public' | 'admin'): HirnPageContext {
+  const path = pathname.replace(LOCALE_PREFIX, '') || '/';
+  const contexts = surface === 'admin' ? ADMIN_PAGE_CONTEXTS : PUBLIC_PAGE_CONTEXTS;
+  return contexts.find((c) => c.pattern.test(path)) ?? contexts[contexts.length - 1];
 }

@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { Link } from '@/i18n/navigation'
-import { useTranslations } from 'next-intl'
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
 import {
   CheckCircle2,
   ArrowRight,
@@ -10,24 +10,24 @@ import {
   Search,
   HandHeart,
   type LucideIcon,
-} from 'lucide-react'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { IconBadge } from '@/components/ui/IconBadge'
-import { ORG } from '@/config/org'
-import { ROUTES } from '@/config/routes'
+} from 'lucide-react';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { IconBadge } from '@/components/ui/IconBadge';
+import { ORG } from '@/config/org';
+import { ROUTES } from '@/config/routes';
 
 interface RegistrationCompletionScreenProps {
-  emailVerified: boolean
+  emailVerified: boolean;
 }
 
 interface NextActionCard {
-  href: string
-  icon: LucideIcon
-  titleKey: 'donateHardware' | 'findHelp' | 'offerHelp' | 'browseShop'
-  descKey: 'donateHardwareDesc' | 'findHelpDesc' | 'offerHelpDesc' | 'browseShopDesc'
+  href: string;
+  icon: LucideIcon;
+  titleKey: 'donateHardware' | 'findHelp' | 'offerHelp' | 'browseShop';
+  descKey: 'donateHardwareDesc' | 'findHelpDesc' | 'offerHelpDesc' | 'browseShopDesc';
   /** Visual weight: 'featured' = mission-critical (donate); 'standard' = the rest. */
-  weight: 'featured' | 'standard'
+  weight: 'featured' | 'standard';
 }
 
 /**
@@ -42,7 +42,7 @@ interface NextActionCard {
  * orchestrator stays focused on flow state.
  */
 export function RegistrationCompletionScreen({ emailVerified }: RegistrationCompletionScreenProps) {
-  const t = useTranslations('auth.register')
+  const t = useTranslations('auth.register');
 
   const cards: NextActionCard[] = [
     {
@@ -73,7 +73,7 @@ export function RegistrationCompletionScreen({ emailVerified }: RegistrationComp
       descKey: 'browseShopDesc',
       weight: 'standard',
     },
-  ]
+  ];
 
   return (
     <div className="w-full max-w-md mx-auto">
@@ -92,8 +92,8 @@ export function RegistrationCompletionScreen({ emailVerified }: RegistrationComp
           <p className="text-sm font-medium text-text-secondary mb-3">{t('nextStepsTitle')}</p>
 
           {cards.map((card) => {
-            const Icon = card.icon
-            const featured = card.weight === 'featured'
+            const Icon = card.icon;
+            const featured = card.weight === 'featured';
             return (
               <Link
                 key={card.href}
@@ -128,7 +128,7 @@ export function RegistrationCompletionScreen({ emailVerified }: RegistrationComp
                 </div>
                 <ArrowRight className="w-5 h-5 text-text-tertiary" />
               </Link>
-            )
+            );
           })}
         </div>
 
@@ -140,5 +140,5 @@ export function RegistrationCompletionScreen({ emailVerified }: RegistrationComp
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -1,23 +1,23 @@
-'use client'
-import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
-import { Clock, Eye } from 'lucide-react'
-import { formatDateShort } from '@/lib/date-formats'
-import { apiFetch } from '@/lib/api/client'
-import { logger } from '@/lib/logger'
-import { useListingActions } from './useListingActions'
-import { ListingImageGallery } from './ListingImageGallery'
-import { ListingInfoPanel } from './ListingInfoPanel'
-import { ListingActionButtons } from './ListingActionButtons'
-import { ListingSellerCard } from './ListingSellerCard'
-import { OsInstallHint } from '@/components/marketplace/OsInstallHint'
-import { RevampitTrustStrip } from './RevampitTrustStrip'
-import { AddToCartButton } from '@/components/marketplace/cart/AddToCartButton'
-import { ListingDetails } from './ListingDetails'
-import { ReportModal } from './ReportModal'
-import { SimilarListings } from './SimilarListings'
-import type { ListingDetail, ListingImageData, SimilarListing } from './types'
-import { useTranslations } from 'next-intl'
+'use client';
+import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { Clock, Eye } from 'lucide-react';
+import { formatDateShort } from '@/lib/date-formats';
+import { apiFetch } from '@/lib/api/client';
+import { logger } from '@/lib/logger';
+import { useListingActions } from './useListingActions';
+import { ListingImageGallery } from './ListingImageGallery';
+import { ListingInfoPanel } from './ListingInfoPanel';
+import { ListingActionButtons } from './ListingActionButtons';
+import { ListingSellerCard } from './ListingSellerCard';
+import { OsInstallHint } from '@/components/marketplace/OsInstallHint';
+import { RevampitTrustStrip } from './RevampitTrustStrip';
+import { AddToCartButton } from '@/components/marketplace/cart/AddToCartButton';
+import { ListingDetails } from './ListingDetails';
+import { ReportModal } from './ReportModal';
+import { SimilarListings } from './SimilarListings';
+import type { ListingDetail, ListingImageData, SimilarListing } from './types';
+import { useTranslations } from 'next-intl';
 
 /**
  * Client island for the listing-detail page. All server-fetched data arrives as
@@ -25,44 +25,44 @@ import { useTranslations } from 'next-intl'
  * toggle, contact/report/share) and the below-the-fold similar-listings fetch.
  */
 export function ListingDetailClient({ listing }: { listing: ListingDetail }) {
-  const { data: session } = useSession()
-  const [selectedImage, setSelectedImage] = useState(0)
-  const [isFavorited, setIsFavorited] = useState(listing.is_favorited)
-  const [favoriteCount, setFavoriteCount] = useState(listing.favorite_count)
-  const [similarListings, setSimilarListings] = useState<SimilarListing[]>([])
-  const t = useTranslations('marketplace')
+  const { data: session } = useSession();
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [isFavorited, setIsFavorited] = useState(listing.is_favorited);
+  const [favoriteCount, setFavoriteCount] = useState(listing.favorite_count);
+  const [similarListings, setSimilarListings] = useState<SimilarListing[]>([]);
+  const t = useTranslations('marketplace');
 
-  const sessionUserId = session?.user?.id
+  const sessionUserId = session?.user?.id;
   const actions = useListingActions({
     listing,
     sessionUserId,
     isFavorited,
     setIsFavorited,
     setFavoriteCount,
-  })
+  });
 
   // Similar listings are a below-the-fold enhancement with no SEO value, so they
   // load client-side after paint rather than blocking the server render.
   useEffect(() => {
-    let cancelled = false
+    let cancelled = false;
     apiFetch<SimilarListing[]>(`/api/listings/similar?listing_id=${listing.id}&limit=4`)
       .then((r) => {
-        if (!cancelled && r.success && r.data) setSimilarListings(r.data)
+        if (!cancelled && r.success && r.data) setSimilarListings(r.data);
       })
-      .catch((err) => logger.warn('Failed to load similar listings', { error: err }))
+      .catch((err) => logger.warn('Failed to load similar listings', { error: err }));
     return () => {
-      cancelled = true
-    }
-  }, [listing.id])
+      cancelled = true;
+    };
+  }, [listing.id]);
 
-  const sellerName = listing.seller_display_name || listing.seller_name || ''
+  const sellerName = listing.seller_display_name || listing.seller_name || '';
   const images: ListingImageData[] =
     listing.images.length > 0
       ? listing.images
-      : [{ id: 'placeholder', url: '', position: 0, is_primary: true }]
-  const isOwner = sessionUserId === listing.seller_id
-  const isGratis = Number(listing.price_chf) === 0
-  const isVerified = !!listing.verified_at
+      : [{ id: 'placeholder', url: '', position: 0, is_primary: true }];
+  const isOwner = sessionUserId === listing.seller_id;
+  const isGratis = Number(listing.price_chf) === 0;
+  const isVerified = !!listing.verified_at;
 
   return (
     <>
@@ -111,8 +111,8 @@ export function ListingDetailClient({ listing }: { listing: ListingDetail }) {
             shareConfirm={actions.shareConfirm}
             onShare={actions.handleShare}
             onShowReportModal={() => {
-              actions.clearActionError()
-              actions.setShowReportModal(true)
+              actions.clearActionError();
+              actions.setShowReportModal(true);
             }}
             actionError={actions.actionError}
           />
@@ -155,5 +155,5 @@ export function ListingDetailClient({ listing }: { listing: ListingDetail }) {
 
       <SimilarListings listings={similarListings} />
     </>
-  )
+  );
 }

@@ -1,11 +1,11 @@
 // SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { Metadata } from 'next'
-import Heading from '@/components/ui/Heading'
-import { Card } from '@/components/ui/card'
-import { buttonClass } from '@/components/ui/button-class'
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { Metadata } from 'next';
+import Heading from '@/components/ui/Heading';
+import { Card } from '@/components/ui/card';
+import { buttonClass } from '@/components/ui/button-class';
 import {
   Terminal,
   Shield,
@@ -19,64 +19,70 @@ import {
   HardDrive,
   ArrowRight,
   CheckCircle2,
-  XCircle
-} from 'lucide-react'
-import { Link } from '@/i18n/navigation'
-import { PageHero } from '@/components/layout/PageHero'
-import { ORG, CONTACT } from '@/config/org'
-import { getTranslations } from 'next-intl/server'
-import { Section } from '@/components/layout/Section'
+  XCircle,
+} from 'lucide-react';
+import { Link } from '@/i18n/navigation';
+import { PageHero } from '@/components/layout/PageHero';
+import { ORG, CONTACT } from '@/config/org';
+import { getTranslations } from 'next-intl/server';
+import { Section } from '@/components/layout/Section';
 
 interface LinuxPageProps {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: string }>;
 }
 
 // Icons are positional — parallel to translation arrays
-const BENEFIT_ICONS = [Shield, Zap, Code, Users]
-const SERVICE_ICONS = [Download, Terminal, Users, Server]
-const DISTRO_ICONS = [Laptop, Laptop, Cpu, Server, HardDrive]
+const BENEFIT_ICONS = [Shield, Zap, Code, Users];
+const SERVICE_ICONS = [Download, Terminal, Users, Server];
+const DISTRO_ICONS = [Laptop, Laptop, Cpu, Server, HardDrive];
 const DISTRO_WEBSITES = [
   'https://ubuntu.com',
   'https://linuxmint.com',
   'https://fedoraproject.org',
   'https://www.debian.org',
   'https://mxlinux.org',
-]
-const DISTRO_NAMES = ['Ubuntu', 'Linux Mint', 'Fedora', 'Debian', 'MX Linux']
+];
+const DISTRO_NAMES = ['Ubuntu', 'Linux Mint', 'Fedora', 'Debian', 'MX Linux'];
 
 export async function generateMetadata({ params }: LinuxPageProps): Promise<Metadata> {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'services.linuxOpenSource' })
-  const title = `${t('meta.title')} | ${ORG.name}`
-  const description = t('meta.description')
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'services.linuxOpenSource' });
+  const title = `${t('meta.title')} | ${ORG.name}`;
+  const description = t('meta.description');
   return {
     title: { absolute: title },
     description,
     openGraph: { title, description, type: 'website' },
-  }
+  };
 }
 
 export default async function LinuxPage({ params }: LinuxPageProps) {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'services.linuxOpenSource' })
-  const tEye = await getTranslations({ locale, namespace: 'common.eyebrows' })
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'services.linuxOpenSource' });
+  const tEye = await getTranslations({ locale, namespace: 'common.eyebrows' });
 
-  const serviceItems = t.raw('servicesSection.items') as Array<{ title: string; description: string }>
-  const benefitItems = t.raw('benefitsSection.items') as Array<{ title: string; description: string }>
-  const advantageItems = t.raw('advantages.items') as Array<{ title: string; points: string[] }>
+  const serviceItems = t.raw('servicesSection.items') as Array<{
+    title: string;
+    description: string;
+  }>;
+  const benefitItems = t.raw('benefitsSection.items') as Array<{
+    title: string;
+    description: string;
+  }>;
+  const advantageItems = t.raw('advantages.items') as Array<{ title: string; points: string[] }>;
   const distroItems = t.raw('distrosSection.items') as Array<{
-    description: string
-    useCases: string[]
-    pros: string[]
-    cons: string[]
-  }>
+    description: string;
+    useCases: string[];
+    pros: string[];
+    cons: string[];
+  }>;
   const chooser = t.raw('distrosSection.chooser') as {
-    heading: string
-    subtitle: string
-    recommendedLabel: string
-    items: Array<{ need: string; distro: string; why: string }>
-  }
-  const distroAnchor = (name: string) => `distro-${name.toLowerCase().replace(/\s+/g, '-')}`
+    heading: string;
+    subtitle: string;
+    recommendedLabel: string;
+    items: Array<{ need: string; distro: string; why: string }>;
+  };
+  const distroAnchor = (name: string) => `distro-${name.toLowerCase().replace(/\s+/g, '-')}`;
 
   return (
     <main>
@@ -86,54 +92,59 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
         title={t('hero.title')}
         subtitle={t('hero.subtitle')}
       >
-        <p className="text-lg text-text-secondary max-w-2xl mx-auto mt-6">
-          {t('hero.intro')}
-        </p>
+        <p className="text-lg text-text-secondary max-w-2xl mx-auto mt-6">{t('hero.intro')}</p>
       </PageHero>
 
       {/* Services & Pricing Section */}
       <Section density="default" tone="surface" contained={false}>
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
-            <Heading level={2} className="mb-6">{t('servicesSection.heading')}</Heading>
-            <p className="text-lg text-text-secondary mb-4">
-              {t('servicesSection.subtitle')}
-            </p>
+            <Heading level={2} className="mb-6">
+              {t('servicesSection.heading')}
+            </Heading>
+            <p className="text-lg text-text-secondary mb-4">{t('servicesSection.subtitle')}</p>
             <div className="text-action font-semibold text-xl mb-8">
               {t('servicesSection.priceInfo')}
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {serviceItems.map((service, index) => {
-              const Icon = SERVICE_ICONS[index]
+              const Icon = SERVICE_ICONS[index];
               return (
-                <div key={index} className="bg-surface-raised rounded-xl p-8 border hover:border-strong transition-all duration-300">
+                <div
+                  key={index}
+                  className="bg-surface-raised rounded-xl p-8 border hover:border-strong transition-all duration-300"
+                >
                   <div className="flex items-start">
                     <div className="p-3 bg-action-muted rounded-lg text-action mr-4">
                       <Icon className="w-8 h-8" />
                     </div>
                     <div>
-                      <Heading level={3} className="mb-3">{service.title}</Heading>
+                      <Heading level={3} className="mb-3">
+                        {service.title}
+                      </Heading>
                       <p className="text-text-secondary">{service.description}</p>
                     </div>
                   </div>
                 </div>
-              )
+              );
             })}
           </div>
 
           {/* Value Proposition Section */}
           <div className="mt-20">
             <div className="max-w-3xl mx-auto text-center mb-16">
-              <Heading level={2} className="mb-6">{t('advantages.heading')}</Heading>
-              <p className="text-lg text-text-secondary">
-                {t('advantages.subtitle')}
-              </p>
+              <Heading level={2} className="mb-6">
+                {t('advantages.heading')}
+              </Heading>
+              <p className="text-lg text-text-secondary">{t('advantages.subtitle')}</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {advantageItems.map((adv, index) => (
                 <Card key={index} className="p-8 border-l-4 border-l-primary-600">
-                  <Heading level={3} className="mb-4">{adv.title}</Heading>
+                  <Heading level={3} className="mb-4">
+                    {adv.title}
+                  </Heading>
                   <ul className="space-y-3">
                     {adv.points.map((point, i) => (
                       <li key={i} className="flex items-start">
@@ -149,19 +160,16 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
 
           {/* Quick Contact CTA */}
           <div className="mt-12 bg-surface-raised/50 rounded-xl p-8 text-center">
-            <Heading level={3} className="mb-4">{t('quickCta.heading')}</Heading>
-            <p className="text-text-secondary mb-6 max-w-2xl mx-auto">
-              {t('quickCta.body')}
-            </p>
+            <Heading level={3} className="mb-4">
+              {t('quickCta.heading')}
+            </Heading>
+            <p className="text-text-secondary mb-6 max-w-2xl mx-auto">{t('quickCta.body')}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/contact" className={buttonClass({ variant: 'primary', size: 'lg' })}>
                 {t('quickCta.consult')}
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
-              <Link
-                href={CONTACT.phoneTel}
-                className="ui-public-cta-ghost"
-              >
+              <Link href={CONTACT.phoneTel} className="ui-public-cta-ghost">
                 {t('quickCta.call')}
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
@@ -174,23 +182,25 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
       <Section density="default" tone="tinted" contained={false}>
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-16">
-            <Heading level={2} className="mb-6">{t('benefitsSection.heading')}</Heading>
-            <p className="text-lg text-text-secondary">
-              {t('benefitsSection.subtitle')}
-            </p>
+            <Heading level={2} className="mb-6">
+              {t('benefitsSection.heading')}
+            </Heading>
+            <p className="text-lg text-text-secondary">{t('benefitsSection.subtitle')}</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {benefitItems.map((benefit, index) => {
-              const Icon = BENEFIT_ICONS[index]
+              const Icon = BENEFIT_ICONS[index];
               return (
                 <Card key={index} className="p-8 hover:border-strong transition-all duration-300">
                   <div className="flex items-center mb-4">
                     <Icon className="w-6 h-6 text-action mr-3" />
-                    <Heading level={3} className="">{benefit.title}</Heading>
+                    <Heading level={3} className="">
+                      {benefit.title}
+                    </Heading>
                   </div>
                   <p className="text-text-secondary">{benefit.description}</p>
                 </Card>
-              )
+              );
             })}
           </div>
         </div>
@@ -200,17 +210,19 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
       <Section density="default" tone="surface" contained={false}>
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center mb-12">
-            <Heading level={2} className="mb-6">{t('distrosSection.heading')}</Heading>
-            <p className="text-lg text-text-secondary">
-              {t('distrosSection.subtitle')}
-            </p>
+            <Heading level={2} className="mb-6">
+              {t('distrosSection.heading')}
+            </Heading>
+            <p className="text-lg text-text-secondary">{t('distrosSection.subtitle')}</p>
           </div>
 
           {/* Quick chooser — pick a need, get a recommended starting point.
               Each card jumps to that distro's detail card below. */}
           <div className="max-w-5xl mx-auto mb-16">
             <div className="text-center mb-8">
-              <Heading level={3} className="ui-public-display-md">{chooser.heading}</Heading>
+              <Heading level={3} className="ui-public-display-md">
+                {chooser.heading}
+              </Heading>
               <p className="ui-public-section-lede mx-auto mt-3">{chooser.subtitle}</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -234,15 +246,21 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
 
           <div className="space-y-8">
             {distroItems.map((distro, index) => {
-              const Icon = DISTRO_ICONS[index]
+              const Icon = DISTRO_ICONS[index];
               return (
-                <div key={index} id={distroAnchor(DISTRO_NAMES[index])} className="scroll-mt-24 bg-surface-raised rounded-xl p-8 border hover:border-strong transition-all duration-300">
+                <div
+                  key={index}
+                  id={distroAnchor(DISTRO_NAMES[index])}
+                  className="scroll-mt-24 bg-surface-raised rounded-xl p-8 border hover:border-strong transition-all duration-300"
+                >
                   <div className="flex items-start mb-6">
                     <div className="p-3 bg-action-muted rounded-lg text-action mr-4">
                       <Icon className="w-8 h-8" />
                     </div>
                     <div className="flex-1">
-                      <Heading level={3} className="mb-2">{DISTRO_NAMES[index]}</Heading>
+                      <Heading level={3} className="mb-2">
+                        {DISTRO_NAMES[index]}
+                      </Heading>
                       <a
                         href={DISTRO_WEBSITES[index]}
                         target="_blank"
@@ -254,7 +272,9 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
                       <p className="text-text-secondary mb-4">{distro.description}</p>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                          <Heading level={4} className="mb-2">{t('distrosSection.bestFor')}</Heading>
+                          <Heading level={4} className="mb-2">
+                            {t('distrosSection.bestFor')}
+                          </Heading>
                           <ul className="space-y-2">
                             {distro.useCases.map((useCase, i) => (
                               <li key={i} className="flex items-start">
@@ -267,7 +287,9 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
                           </ul>
                         </div>
                         <div>
-                          <Heading level={4} className="mb-2">{t('distrosSection.pros')}</Heading>
+                          <Heading level={4} className="mb-2">
+                            {t('distrosSection.pros')}
+                          </Heading>
                           <ul className="space-y-2">
                             {distro.pros.map((pro, i) => (
                               <li key={i} className="flex items-start">
@@ -282,7 +304,9 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
                       </div>
                       {distro.cons && distro.cons.length > 0 && (
                         <div className="mt-6">
-                          <Heading level={4} className="mb-2">{t('distrosSection.cons')}</Heading>
+                          <Heading level={4} className="mb-2">
+                            {t('distrosSection.cons')}
+                          </Heading>
                           <ul className="space-y-2">
                             {distro.cons.map((con, i) => (
                               <li key={i} className="flex items-start">
@@ -298,7 +322,7 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
                     </div>
                   </div>
                 </div>
-              )
+              );
             })}
           </div>
         </div>
@@ -321,5 +345,5 @@ export default async function LinuxPage({ params }: LinuxPageProps) {
         </div>
       </Section>
     </main>
-  )
+  );
 }

@@ -28,63 +28,69 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbExecute = jest.fn()
-const mockTxExecute = jest.fn()
-const mockTx = { execute: (...args: unknown[]) => mockTxExecute.apply(null, args) }
-const mockDbTransaction = jest.fn().mockImplementation(
-  async (fn: (tx: typeof mockTx) => Promise<unknown>) => fn(mockTx),
-)
+const mockDbExecute = jest.fn();
+const mockTxExecute = jest.fn();
+const mockTx = { execute: (...args: unknown[]) => mockTxExecute.apply(null, args) };
+const mockDbTransaction = jest
+  .fn()
+  .mockImplementation(async (fn: (tx: typeof mockTx) => Promise<unknown>) => fn(mockTx));
 
 jest.mock('@/db', () => ({
   db: {
     execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
     transaction: (...args: unknown[]) => mockDbTransaction.apply(null, args),
   },
-}))
+}));
 
 jest.mock('drizzle-orm', () => {
-  const sqlFn = jest.fn().mockReturnValue({ __sql: 'mocked' })
-  ;(sqlFn as unknown as Record<string, unknown>).raw = jest.fn().mockReturnValue({ __sql: 'raw' })
-  ;(sqlFn as unknown as Record<string, unknown>).join = jest.fn().mockReturnValue({ __sql: 'joined' })
+  const sqlFn = jest.fn().mockReturnValue({ __sql: 'mocked' });
+  (sqlFn as unknown as Record<string, unknown>).raw = jest.fn().mockReturnValue({ __sql: 'raw' });
+  (sqlFn as unknown as Record<string, unknown>).join = jest
+    .fn()
+    .mockReturnValue({ __sql: 'joined' });
   return {
     ...jest.requireActual('drizzle-orm'),
     sql: sqlFn,
     getTableName: jest.fn().mockReturnValue('mock_table'),
-  }
-})
+  };
+});
 
 jest.mock('@/db/schema/misc', () => ({
   protocolActionLinks: { id: 'protocolActionLinks' },
   tasks: { id: 'tasks' },
   decisions: { id: 'decisions' },
-}))
+}));
 
 jest.mock('@/config/decisions', () => ({
   DECISION_STATUS: { DRAFT: 'draft', DISCUSSION: 'discussion' },
-}))
+}));
 
 jest.mock('@/config/notifications', () => ({
   RELATED_TYPES: { TASK: 'task', DECISION: 'decision', PROTOCOL: 'protocol' },
-}))
+}));
 
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
-}))
+}));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { getActionLinks, linkActionItemToTask, linkActionItemToDecision } from '../protocols-linking'
-import { DECISION_STATUS } from '@/config/decisions'
+import {
+  getActionLinks,
+  linkActionItemToTask,
+  linkActionItemToDecision,
+} from '../protocols-linking';
+import { DECISION_STATUS } from '@/config/decisions';
 
 // ---------------------------------------------------------------------------
 // Fixtures
 // ---------------------------------------------------------------------------
 
-const PROTOCOL_ID = 'proto-1'
-const ACTION_ITEM_ID = 'ai-1'
-const CREATOR_ID = 'creator-1'
+const PROTOCOL_ID = 'proto-1';
+const ACTION_ITEM_ID = 'ai-1';
+const CREATOR_ID = 'creator-1';
 
 function makeActionLinkRow(overrides: Partial<Record<string, unknown>> = {}) {
   return {
@@ -100,15 +106,15 @@ function makeActionLinkRow(overrides: Partial<Record<string, unknown>> = {}) {
     linked_decision_status: null,
     created_at: '2026-01-01T00:00:00Z',
     ...overrides,
-  }
+  };
 }
 
 beforeEach(() => {
-  jest.clearAllMocks()
-  mockDbTransaction.mockImplementation(
-    async (fn: (tx: typeof mockTx) => Promise<unknown>) => fn(mockTx),
-  )
-})
+  jest.clearAllMocks();
+  mockDbTransaction.mockImplementation(async (fn: (tx: typeof mockTx) => Promise<unknown>) =>
+    fn(mockTx),
+  );
+});
 
 // ============================================================================
 // getActionLinks
@@ -116,26 +122,26 @@ beforeEach(() => {
 
 describe('getActionLinks', () => {
   it('returns an empty array when no links exist', async () => {
-    mockDbExecute.mockResolvedValueOnce({ rows: [] })
+    mockDbExecute.mockResolvedValueOnce({ rows: [] });
 
-    const result = await getActionLinks(PROTOCOL_ID)
+    const result = await getActionLinks(PROTOCOL_ID);
 
-    expect(result).toEqual([])
-  })
+    expect(result).toEqual([]);
+  });
 
   it('returns rows with joined task fields when links exist', async () => {
-    mockDbExecute.mockResolvedValueOnce({ rows: [makeActionLinkRow()] })
+    mockDbExecute.mockResolvedValueOnce({ rows: [makeActionLinkRow()] });
 
-    const result = await getActionLinks(PROTOCOL_ID)
+    const result = await getActionLinks(PROTOCOL_ID);
 
-    expect(result).toHaveLength(1)
+    expect(result).toHaveLength(1);
     expect(result[0]).toMatchObject({
       id: 'link-1',
       protocol_id: PROTOCOL_ID,
       linked_task_title: 'Aufgabe erstellen',
       linked_task_status: 'todo',
-    })
-  })
+    });
+  });
 
   it('returns multiple links in order', async () => {
     mockDbExecute.mockResolvedValueOnce({
@@ -143,15 +149,15 @@ describe('getActionLinks', () => {
         makeActionLinkRow({ id: 'link-1' }),
         makeActionLinkRow({ id: 'link-2', action_item_id: 'ai-2' }),
       ],
-    })
+    });
 
-    const result = await getActionLinks(PROTOCOL_ID)
+    const result = await getActionLinks(PROTOCOL_ID);
 
-    expect(result).toHaveLength(2)
-    expect(result[0].id).toBe('link-1')
-    expect(result[1].id).toBe('link-2')
-  })
-})
+    expect(result).toHaveLength(2);
+    expect(result[0].id).toBe('link-1');
+    expect(result[1].id).toBe('link-2');
+  });
+});
 
 // ============================================================================
 // linkActionItemToTask
@@ -160,69 +166,65 @@ describe('getActionLinks', () => {
 describe('linkActionItemToTask', () => {
   it('runs a transaction and returns { taskId, linkId }', async () => {
     mockTxExecute
-      .mockResolvedValueOnce({ rows: [{ id: 'task-abc' }] })  // INSERT task
-      .mockResolvedValueOnce({ rows: [{ id: 'link-xyz' }] })  // INSERT link
+      .mockResolvedValueOnce({ rows: [{ id: 'task-abc' }] }) // INSERT task
+      .mockResolvedValueOnce({ rows: [{ id: 'link-xyz' }] }); // INSERT link
 
     const result = await linkActionItemToTask(
       PROTOCOL_ID,
       ACTION_ITEM_ID,
       { title: 'Neue Aufgabe' },
       CREATOR_ID,
-    )
+    );
 
-    expect(result).toEqual({ taskId: 'task-abc', linkId: 'link-xyz' })
-    expect(mockDbTransaction).toHaveBeenCalledTimes(1)
-  })
+    expect(result).toEqual({ taskId: 'task-abc', linkId: 'link-xyz' });
+    expect(mockDbTransaction).toHaveBeenCalledTimes(1);
+  });
 
   it('makes exactly 2 tx.execute calls (task insert + link insert)', async () => {
     mockTxExecute
       .mockResolvedValueOnce({ rows: [{ id: 'task-1' }] })
-      .mockResolvedValueOnce({ rows: [{ id: 'link-1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 'link-1' }] });
 
-    await linkActionItemToTask(PROTOCOL_ID, ACTION_ITEM_ID, { title: 'T' }, CREATOR_ID)
+    await linkActionItemToTask(PROTOCOL_ID, ACTION_ITEM_ID, { title: 'T' }, CREATOR_ID);
 
-    expect(mockTxExecute).toHaveBeenCalledTimes(2)
-  })
+    expect(mockTxExecute).toHaveBeenCalledTimes(2);
+  });
 
   it('passes title, description, and priority to the INSERT', async () => {
     mockTxExecute
       .mockResolvedValueOnce({ rows: [{ id: 'task-1' }] })
-      .mockResolvedValueOnce({ rows: [{ id: 'link-1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 'link-1' }] });
 
     await linkActionItemToTask(
       PROTOCOL_ID,
       ACTION_ITEM_ID,
       { title: 'Laptop reparieren', description: 'Bildschirm defekt', priority: 'high' },
       CREATOR_ID,
-    )
+    );
 
     // Verify sql was called with the title value (first arg is the template literal)
-    const sqlCalls = (jest.requireMock('drizzle-orm').sql as jest.Mock).mock.calls
-    const callsWithTitle = sqlCalls.filter(
-      (call: unknown[]) => call.includes('Laptop reparieren'),
-    )
-    expect(callsWithTitle.length).toBeGreaterThan(0)
-  })
+    const sqlCalls = (jest.requireMock('drizzle-orm').sql as jest.Mock).mock.calls;
+    const callsWithTitle = sqlCalls.filter((call: unknown[]) => call.includes('Laptop reparieren'));
+    expect(callsWithTitle.length).toBeGreaterThan(0);
+  });
 
   it('passes assigned_to to the task INSERT when provided', async () => {
     mockTxExecute
       .mockResolvedValueOnce({ rows: [{ id: 'task-1' }] })
-      .mockResolvedValueOnce({ rows: [{ id: 'link-1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 'link-1' }] });
 
     await linkActionItemToTask(
       PROTOCOL_ID,
       ACTION_ITEM_ID,
       { title: 'Laptop reparieren', assigned_to: 'user-assigned' },
       CREATOR_ID,
-    )
+    );
 
-    const sqlCalls = (jest.requireMock('drizzle-orm').sql as jest.Mock).mock.calls
-    const callsWithAssignee = sqlCalls.filter(
-      (call: unknown[]) => call.includes('user-assigned'),
-    )
-    expect(callsWithAssignee.length).toBeGreaterThan(0)
-  })
-})
+    const sqlCalls = (jest.requireMock('drizzle-orm').sql as jest.Mock).mock.calls;
+    const callsWithAssignee = sqlCalls.filter((call: unknown[]) => call.includes('user-assigned'));
+    expect(callsWithAssignee.length).toBeGreaterThan(0);
+  });
+});
 
 // ============================================================================
 // linkActionItemToDecision
@@ -231,51 +233,51 @@ describe('linkActionItemToTask', () => {
 describe('linkActionItemToDecision', () => {
   it('runs a transaction and returns { decisionId, linkId }', async () => {
     mockTxExecute
-      .mockResolvedValueOnce({ rows: [{ id: 'dec-abc' }] })  // INSERT decision
-      .mockResolvedValueOnce({ rows: [{ id: 'link-xyz' }] }) // INSERT link
+      .mockResolvedValueOnce({ rows: [{ id: 'dec-abc' }] }) // INSERT decision
+      .mockResolvedValueOnce({ rows: [{ id: 'link-xyz' }] }); // INSERT link
 
     const result = await linkActionItemToDecision(
       PROTOCOL_ID,
       ACTION_ITEM_ID,
       { title: 'Neue Entscheidung', description: 'Beschreibung' },
       CREATOR_ID,
-    )
+    );
 
-    expect(result).toEqual({ decisionId: 'dec-abc', linkId: 'link-xyz' })
-    expect(mockDbTransaction).toHaveBeenCalledTimes(1)
-  })
+    expect(result).toEqual({ decisionId: 'dec-abc', linkId: 'link-xyz' });
+    expect(mockDbTransaction).toHaveBeenCalledTimes(1);
+  });
 
   it('makes exactly 2 tx.execute calls (decision insert + link insert)', async () => {
     mockTxExecute
       .mockResolvedValueOnce({ rows: [{ id: 'dec-1' }] })
-      .mockResolvedValueOnce({ rows: [{ id: 'link-1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 'link-1' }] });
 
     await linkActionItemToDecision(
       PROTOCOL_ID,
       ACTION_ITEM_ID,
       { title: 'D', description: 'D' },
       CREATOR_ID,
-    )
+    );
 
-    expect(mockTxExecute).toHaveBeenCalledTimes(2)
-  })
+    expect(mockTxExecute).toHaveBeenCalledTimes(2);
+  });
 
   it('uses DECISION_STATUS.DRAFT as default initialStatus', async () => {
     mockTxExecute
       .mockResolvedValueOnce({ rows: [{ id: 'dec-1' }] })
-      .mockResolvedValueOnce({ rows: [{ id: 'link-1' }] })
+      .mockResolvedValueOnce({ rows: [{ id: 'link-1' }] });
 
     await linkActionItemToDecision(
       PROTOCOL_ID,
       ACTION_ITEM_ID,
       { title: 'D', description: 'D' },
       CREATOR_ID,
-    )
+    );
 
-    const sqlCalls = (jest.requireMock('drizzle-orm').sql as jest.Mock).mock.calls
-    const callsWithDraft = sqlCalls.filter(
-      (call: unknown[]) => call.includes(DECISION_STATUS.DRAFT),
-    )
-    expect(callsWithDraft.length).toBeGreaterThan(0)
-  })
-})
+    const sqlCalls = (jest.requireMock('drizzle-orm').sql as jest.Mock).mock.calls;
+    const callsWithDraft = sqlCalls.filter((call: unknown[]) =>
+      call.includes(DECISION_STATUS.DRAFT),
+    );
+    expect(callsWithDraft.length).toBeGreaterThan(0);
+  });
+});

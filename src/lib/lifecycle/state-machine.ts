@@ -29,28 +29,27 @@ export interface Transition<
   A extends string = string,
   R extends string = string,
 > {
-  action: A
-  from: S | readonly S[]
-  role?: R | readonly R[]
+  action: A;
+  from: S | readonly S[];
+  role?: R | readonly R[];
   /** Target status. Omit for non-status-changing actions (resolve returns `to: null`). */
-  to?: S
+  to?: S;
 }
 
 export type TransitionTable<
   S extends string = string,
   A extends string = string,
   R extends string = string,
-> = readonly Transition<S, A, R>[]
+> = readonly Transition<S, A, R>[];
 
-export type ResolveReason = 'unknown_action' | 'wrong_role' | 'wrong_state'
+export type ResolveReason = 'unknown_action' | 'wrong_role' | 'wrong_state';
 
 export type ResolveResult<S extends string = string> =
-  | { ok: true; to: S | null }
-  | { ok: false; reason: ResolveReason }
+  { ok: true; to: S | null } | { ok: false; reason: ResolveReason };
 
 function toArray<T>(v: T | readonly T[] | undefined): readonly T[] | undefined {
-  if (v === undefined) return undefined
-  return Array.isArray(v) ? (v as readonly T[]) : ([v] as readonly T[])
+  if (v === undefined) return undefined;
+  return Array.isArray(v) ? (v as readonly T[]) : ([v] as readonly T[]);
 }
 
 function roleMatches<R extends string>(
@@ -58,13 +57,13 @@ function roleMatches<R extends string>(
   actorRole: R | null | undefined,
 ): boolean {
   // A transition with no `role` is open to any actor.
-  if (transitionRole === undefined) return true
-  if (actorRole == null) return false
-  return toArray(transitionRole)!.includes(actorRole)
+  if (transitionRole === undefined) return true;
+  if (actorRole == null) return false;
+  return toArray(transitionRole)!.includes(actorRole);
 }
 
 function fromMatches<S extends string>(from: S | readonly S[], current: S): boolean {
-  return toArray(from)!.includes(current)
+  return toArray(from)!.includes(current);
 }
 
 /**
@@ -83,16 +82,16 @@ export function resolveTransition<S extends string, A extends string, R extends 
   table: TransitionTable<S, A, R>,
   input: { from: S; action: A; role?: R | null },
 ): ResolveResult<S> {
-  const candidates = table.filter((t) => t.action === input.action)
-  if (candidates.length === 0) return { ok: false, reason: 'unknown_action' }
+  const candidates = table.filter((t) => t.action === input.action);
+  if (candidates.length === 0) return { ok: false, reason: 'unknown_action' };
 
-  const roleOk = candidates.filter((t) => roleMatches(t.role, input.role))
-  if (roleOk.length === 0) return { ok: false, reason: 'wrong_role' }
+  const roleOk = candidates.filter((t) => roleMatches(t.role, input.role));
+  if (roleOk.length === 0) return { ok: false, reason: 'wrong_role' };
 
-  const match = roleOk.find((t) => fromMatches(t.from, input.from))
-  if (!match) return { ok: false, reason: 'wrong_state' }
+  const match = roleOk.find((t) => fromMatches(t.from, input.from));
+  if (!match) return { ok: false, reason: 'wrong_state' };
 
-  return { ok: true, to: match.to ?? null }
+  return { ok: true, to: match.to ?? null };
 }
 
 /** Convenience boolean check when the caller doesn't need the reason or target. */
@@ -100,5 +99,5 @@ export function canTransition<S extends string, A extends string, R extends stri
   table: TransitionTable<S, A, R>,
   input: { from: S; action: A; role?: R | null },
 ): boolean {
-  return resolveTransition(table, input).ok
+  return resolveTransition(table, input).ok;
 }

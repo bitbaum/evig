@@ -1,15 +1,15 @@
 /**
  * Centralized Responsive Design System
- * 
+ *
  * This module provides consistent responsive utilities and components
  * to ensure maintainable, mobile-first styling across all pages.
- * 
+ *
  * Created: 2025-01-27
  * Last Modified: 2025-01-27
  * Last Modified Summary: Created centralized responsive design system
  */
 
-import { cn } from './utils'
+import { cn } from './utils';
 
 /**
  * Responsive Typography Classes
@@ -18,26 +18,26 @@ import { cn } from './utils'
 export const responsiveTypography = {
   // Hero headings (h1)
   hero: 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl',
-  
+
   // Section headings (h2)
   section: 'text-2xl sm:text-3xl md:text-4xl',
-  
+
   // Subsection headings (h3)
   subsection: 'text-xl sm:text-2xl',
-  
+
   // Card titles
   cardTitle: 'text-lg sm:text-xl md:text-2xl',
-  
+
   // Body text
   body: 'text-sm sm:text-base',
   bodyLarge: 'text-base sm:text-lg md:text-xl',
-  
+
   // Small text
   small: 'text-xs sm:text-sm',
-  
+
   // Lead text (intro paragraphs)
   lead: 'text-base sm:text-lg md:text-xl',
-}
+};
 
 /**
  * Responsive Spacing Classes
@@ -65,7 +65,7 @@ export const responsiveSpacing = {
   mbSmall: 'mb-2 sm:mb-3 md:mb-4',
   mbMedium: 'mb-6 sm:mb-8 md:mb-10',
   mbLarge: 'mb-8 sm:mb-12 md:mb-16',
-}
+};
 
 /**
  * Responsive Button Classes
@@ -73,17 +73,21 @@ export const responsiveSpacing = {
  */
 export const responsiveButtons = {
   // Primary button
-  primary: 'px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 text-sm sm:text-base md:text-lg rounded-lg font-semibold transition-colors duration-300',
+  primary:
+    'px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4 text-sm sm:text-base md:text-lg rounded-lg font-semibold transition-colors duration-300',
 
   // Secondary button
-  secondary: 'px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 text-sm sm:text-base rounded-lg font-semibold transition-colors duration-300',
+  secondary:
+    'px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 text-sm sm:text-base rounded-lg font-semibold transition-colors duration-300',
 
   // Large button
-  large: 'px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg rounded-lg font-semibold transition-colors duration-300',
+  large:
+    'px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg rounded-lg font-semibold transition-colors duration-300',
 
   // Small button
-  small: 'px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-lg font-semibold transition-colors duration-300',
-}
+  small:
+    'px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm rounded-lg font-semibold transition-colors duration-300',
+};
 
 /**
  * Responsive Grid Classes
@@ -92,17 +96,17 @@ export const responsiveButtons = {
 export const responsiveGrid = {
   // 1 column mobile, 2 columns tablet, 3 columns desktop
   cards: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
-  
+
   // 1 column mobile, 2 columns desktop
   twoColumn: 'grid grid-cols-1 md:grid-cols-2',
-  
+
   // 1 column mobile, 2 columns tablet, 4 columns desktop
   fourColumn: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4',
-}
+};
 
 /**
  * Helper function to combine responsive classes
  */
 export function r(...classes: (string | undefined | null | false)[]): string {
-  return cn(...classes.filter(Boolean))
+  return cn(...classes.filter(Boolean));
 }

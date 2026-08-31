@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Users Table Client Component
@@ -7,14 +7,14 @@
  * Uses extracted sub-components for modularity.
  */
 
-import { isSuperAdmin } from '@/lib/permissions'
-import { UserPermissionsEditor } from '../UserPermissionsEditor'
-import { UserTableRow } from './UserTableRow'
-import { EditProfileModal } from './EditProfileModal'
-import { DeleteUserModal } from './DeleteUserModal'
-import { EmptyState } from '@/components/common/EmptyState'
-import { useUserManagement } from './useUserManagement'
-import type { UsersTableClientProps } from './types'
+import { isSuperAdmin } from '@/lib/permissions';
+import { UserPermissionsEditor } from '../UserPermissionsEditor';
+import { UserTableRow } from './UserTableRow';
+import { EditProfileModal } from './EditProfileModal';
+import { DeleteUserModal } from './DeleteUserModal';
+import { EmptyState } from '@/components/common/EmptyState';
+import { useUserManagement } from './useUserManagement';
+import type { UsersTableClientProps } from './types';
 
 export function UsersTableClient({ users, currentUserIsSuperAdmin }: UsersTableClientProps) {
   const {
@@ -34,11 +34,11 @@ export function UsersTableClient({ users, currentUserIsSuperAdmin }: UsersTableC
     handleCloseModal,
     handleSaveProfile,
     handleDeleteUser,
-  } = useUserManagement()
+  } = useUserManagement();
 
   const handleSaved = () => {
-    window.location.reload()
-  }
+    window.location.reload();
+  };
 
   return (
     <>
@@ -81,7 +81,12 @@ export function UsersTableClient({ users, currentUserIsSuperAdmin }: UsersTableC
           </table>
         </div>
 
-        {users.length === 0 && <EmptyState title="Noch keine Benutzer" message="Es wurden noch keine Benutzer registriert." />}
+        {users.length === 0 && (
+          <EmptyState
+            title="Noch keine Benutzer"
+            message="Es wurden noch keine Benutzer registriert."
+          />
+        )}
       </div>
 
       {/* Permission Editor Modal */}
@@ -124,5 +129,5 @@ export function UsersTableClient({ users, currentUserIsSuperAdmin }: UsersTableC
         />
       )}
     </>
-  )
+  );
 }

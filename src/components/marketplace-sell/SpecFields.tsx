@@ -8,37 +8,39 @@
  * any custom specs the user or AI added that aren't in the template.
  */
 
-import { getSpecTemplate, type SpecTemplate } from '@/config/erfassung/spec-templates'
-import { Input } from '@/components/ui/input'
-import type { SpecFieldData } from './types'
+import { getSpecTemplate, type SpecTemplate } from '@/config/erfassung/spec-templates';
+import { Input } from '@/components/ui/input';
+import type { SpecFieldData } from './types';
 
 interface SpecFieldsProps {
-  categoryValue: string
-  specs: SpecFieldData[]
-  onSpecsChange: (specs: SpecFieldData[]) => void
+  categoryValue: string;
+  specs: SpecFieldData[];
+  onSpecsChange: (specs: SpecFieldData[]) => void;
 }
 
 interface MergedSpec {
-  key: string
-  value: string
-  unit?: string
-  placeholder?: string
+  key: string;
+  value: string;
+  unit?: string;
+  placeholder?: string;
 }
 
 export function SpecFields({ categoryValue, specs, onSpecsChange }: SpecFieldsProps) {
-  if (!categoryValue) return null
+  if (!categoryValue) return null;
 
-  const template = getSpecTemplate(categoryValue)
-  if (!template || template.length === 0) return null
+  const template = getSpecTemplate(categoryValue);
+  if (!template || template.length === 0) return null;
 
-  const mergedSpecs = mergeSpecsWithTemplate(specs, template)
+  const mergedSpecs = mergeSpecsWithTemplate(specs, template);
 
   const handleChange = (key: string, value: string) => {
-    const updated: SpecFieldData[] = mergedSpecs.map(s =>
-      s.key === key ? { key: s.key, value, unit: s.unit } : { key: s.key, value: s.value, unit: s.unit }
-    )
-    onSpecsChange(updated)
-  }
+    const updated: SpecFieldData[] = mergedSpecs.map((s) =>
+      s.key === key
+        ? { key: s.key, value, unit: s.unit }
+        : { key: s.key, value: s.value, unit: s.unit },
+    );
+    onSpecsChange(updated);
+  };
 
   return (
     <div>
@@ -47,9 +49,12 @@ export function SpecFields({ categoryValue, specs, onSpecsChange }: SpecFieldsPr
         <span className="text-xs text-text-tertiary ml-1">(optional)</span>
       </span>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {mergedSpecs.map(spec => (
+        {mergedSpecs.map((spec) => (
           <div key={spec.key} className="flex items-center gap-2">
-            <label htmlFor={`spec-${spec.key}`} className="text-xs font-medium text-text-tertiary w-24 shrink-0 text-right">
+            <label
+              htmlFor={`spec-${spec.key}`}
+              className="text-xs font-medium text-text-tertiary w-24 shrink-0 text-right"
+            >
               {spec.key}
             </label>
             <Input
@@ -64,7 +69,7 @@ export function SpecFields({ categoryValue, specs, onSpecsChange }: SpecFieldsPr
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 /**
@@ -73,23 +78,23 @@ export function SpecFields({ categoryValue, specs, onSpecsChange }: SpecFieldsPr
  * Custom specs (not in template) are appended at the end — never dropped.
  */
 function mergeSpecsWithTemplate(specs: SpecFieldData[], template: SpecTemplate[]): MergedSpec[] {
-  const templateKeys = new Set(template.map(t => t.key))
+  const templateKeys = new Set(template.map((t) => t.key));
 
   // Template specs first — use existing value if present
-  const fromTemplate: MergedSpec[] = template.map(tmpl => {
-    const existing = specs.find(s => s.key === tmpl.key)
+  const fromTemplate: MergedSpec[] = template.map((tmpl) => {
+    const existing = specs.find((s) => s.key === tmpl.key);
     return {
       key: tmpl.key,
       value: existing?.value ?? '',
       unit: existing?.unit,
       placeholder: tmpl.placeholder,
-    }
-  })
+    };
+  });
 
   // Custom specs that aren't in the template — preserve them
   const custom: MergedSpec[] = specs
-    .filter(s => !templateKeys.has(s.key))
-    .map(s => ({ key: s.key, value: s.value, unit: s.unit }))
+    .filter((s) => !templateKeys.has(s.key))
+    .map((s) => ({ key: s.key, value: s.value, unit: s.unit }));
 
-  return [...fromTemplate, ...custom]
+  return [...fromTemplate, ...custom];
 }

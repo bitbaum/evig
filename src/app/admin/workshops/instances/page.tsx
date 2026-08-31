@@ -1,35 +1,35 @@
-'use client'
+'use client';
 
-import { useRouter } from 'next/navigation'
-import { adminInteractive } from '@/lib/admin-ui'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { ArrowLeft, Plus, Loader2 } from 'lucide-react'
+import { useRouter } from 'next/navigation';
+import { adminInteractive } from '@/lib/admin-ui';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, Plus, Loader2 } from 'lucide-react';
 import {
   useWorkshopInstances,
   InstanceFilters,
   InstanceList,
   InstanceFormModal,
-} from '@/components/admin/workshops/instances'
-import Heading from '@/components/admin/AdminHeading'
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
-import { ROUTES } from '@/config/routes'
+} from '@/components/admin/workshops/instances';
+import Heading from '@/components/admin/AdminHeading';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { ROUTES } from '@/config/routes';
 
 export default function AdminWorkshopInstancesPage() {
-  const router = useRouter()
-  const hook = useWorkshopInstances()
+  const router = useRouter();
+  const hook = useWorkshopInstances();
 
   if (hook.loading) {
     return (
       <div className="min-h-screen bg-surface-raised flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-action" />
       </div>
-    )
+    );
   }
 
   if (!hook.session?.user) {
-    router.push('/auth/login')
-    return null
+    router.push('/auth/login');
+    return null;
   }
 
   return (
@@ -38,10 +38,10 @@ export default function AdminWorkshopInstancesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <Heading level={1} className="text-2xl font-bold text-text-primary">Workshop-Termine</Heading>
-              <p className="mt-1 text-sm text-text-secondary">
-                Verwalte Termine für Workshops
-              </p>
+              <Heading level={1} className="text-2xl font-bold text-text-primary">
+                Workshop-Termine
+              </Heading>
+              <p className="mt-1 text-sm text-text-secondary">Verwalte Termine für Workshops</p>
             </div>
             <div className="flex gap-3">
               <Link
@@ -104,5 +104,5 @@ export default function AdminWorkshopInstancesPage() {
         onClose={hook.cancelDelete}
       />
     </div>
-  )
+  );
 }

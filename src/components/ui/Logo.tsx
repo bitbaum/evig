@@ -1,13 +1,13 @@
-import { Link } from '@/i18n/navigation'
-import { cn } from '@/lib/utils'
-import { ORG } from '@/config/org'
-import { EVIG_MARK } from '@/config/brand'
+import { Link } from '@/i18n/navigation';
+import { cn } from '@/lib/utils';
+import { ORG } from '@/config/org';
+import { EVIG_MARK } from '@/config/brand';
 
 interface LogoProps {
-  className?: string
-  href?: string
+  className?: string;
+  href?: string;
   /** Render the "evig" wordmark next to the mark. Off = mark only (compact spots). */
-  showText?: boolean
+  showText?: boolean;
 }
 
 /**
@@ -60,5 +60,5 @@ export function Logo({ className, href = '/', showText = true }: LogoProps) {
         </span>
       )}
     </Link>
-  )
+  );
 }

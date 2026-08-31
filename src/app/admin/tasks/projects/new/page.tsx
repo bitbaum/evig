@@ -1,40 +1,42 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { FolderKanban, Save, Loader2 } from 'lucide-react'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { PROJECT_STATUSES, PROJECT_STATUS_LABELS } from '@/config/tasks'
-import { ROUTES } from '@/config/routes'
-import { apiFetch } from '@/lib/api/client'
-import { cn } from '@/lib/utils'
-import { designPrimitive } from '@/lib/design-system'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { FolderKanban, Save, Loader2 } from 'lucide-react';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import { PROJECT_STATUSES, PROJECT_STATUS_LABELS } from '@/config/tasks';
+import { ROUTES } from '@/config/routes';
+import { apiFetch } from '@/lib/api/client';
+import { cn } from '@/lib/utils';
+import { designPrimitive } from '@/lib/design-system';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 
 export default function NewTaskProjectPage() {
-  const router = useRouter()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({
     title: '',
     description: '',
     status: PROJECT_STATUSES.PLANNING,
     target_date: '',
-  })
+  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
-  }
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+  ) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!form.title.trim()) return
-    setLoading(true)
-    setError(null)
+    e.preventDefault();
+    if (!form.title.trim()) return;
+    setLoading(true);
+    setError(null);
     try {
       // apiFetch attaches the CSRF header — bare fetch() gets 403'd by the
       // csrf middleware on state-changing /api/* requests.
@@ -46,15 +48,15 @@ export default function NewTaskProjectPage() {
           status: form.status,
           target_date: form.target_date || undefined,
         },
-      })
-      if (!res.success) throw new Error(res.error ?? 'Fehler beim Erstellen')
-      router.push(ROUTES.admin.taskProjects)
+      });
+      if (!res.success) throw new Error(res.error ?? 'Fehler beim Erstellen');
+      router.push(ROUTES.admin.taskProjects);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unbekannter Fehler')
+      setError(err instanceof Error ? err.message : 'Unbekannter Fehler');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <AdminPageWrapper
@@ -105,14 +107,11 @@ export default function NewTaskProjectPage() {
               <label htmlFor="status" className={designPrimitive.form.label}>
                 Status
               </label>
-              <Select
-                id="status"
-                name="status"
-                value={form.status}
-                onChange={handleChange}
-              >
+              <Select id="status" name="status" value={form.status} onChange={handleChange}>
                 {Object.entries(PROJECT_STATUS_LABELS).map(([val, label]) => (
-                  <option key={val} value={val}>{label}</option>
+                  <option key={val} value={val}>
+                    {label}
+                  </option>
                 ))}
               </Select>
             </div>
@@ -137,16 +136,12 @@ export default function NewTaskProjectPage() {
               className={cn(
                 designPrimitive.buttonBase,
                 designPrimitive.buttonSize.default,
-                designPrimitive.button.outline
+                designPrimitive.button.outline,
               )}
             >
               Abbrechen
             </Link>
-            <Button
-              type="submit"
-              variant="primary"
-              disabled={loading || !form.title.trim()}
-            >
+            <Button type="submit" variant="primary" disabled={loading || !form.title.trim()}>
               {loading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
@@ -158,5 +153,5 @@ export default function NewTaskProjectPage() {
         </form>
       </div>
     </AdminPageWrapper>
-  )
+  );
 }

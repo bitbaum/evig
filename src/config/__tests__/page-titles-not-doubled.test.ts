@@ -21,35 +21,35 @@
  * each page explains why the template owns the name.
  */
 
-import de from '../../../messages/de.json'
+import de from '../../../messages/de.json';
 
 /** Any title-ish key: `meta.title`, `hero.title`, `layoutTitle`, … */
-const TITLE_KEY = /(^|\.)(meta\.)?(title|layoutTitle|metaTitle)$/i
+const TITLE_KEY = /(^|\.)(meta\.)?(title|layoutTitle|metaTitle)$/i;
 /** "… | evig", "evig | …", "evig — …" at the start — the brand as decoration. */
-const CARRIES_BRAND = /\|\s*evig\b|\bevig\s*\||^\s*evig\s*[—–-]/i
+const CARRIES_BRAND = /\|\s*evig\b|\bevig\s*\||^\s*evig\s*[—–-]/i;
 
 function walk(node: unknown, trail: string[] = []): Array<{ path: string; value: string }> {
-  if (typeof node === 'string') return [{ path: trail.join('.'), value: node }]
-  if (Array.isArray(node)) return node.flatMap((v, i) => walk(v, [...trail, String(i)]))
+  if (typeof node === 'string') return [{ path: trail.join('.'), value: node }];
+  if (Array.isArray(node)) return node.flatMap((v, i) => walk(v, [...trail, String(i)]));
   if (node && typeof node === 'object') {
-    return Object.entries(node).flatMap(([k, v]) => walk(v, [...trail, k]))
+    return Object.entries(node).flatMap(([k, v]) => walk(v, [...trail, k]));
   }
-  return []
+  return [];
 }
 
 describe('page titles do not repeat the org name', () => {
-  const all = walk(de)
-  const titles = all.filter((e) => TITLE_KEY.test(e.path))
+  const all = walk(de);
+  const titles = all.filter((e) => TITLE_KEY.test(e.path));
 
   it('sweeps a non-trivial number of titles', () => {
     // A sweep that matched nothing would pass the assertion below trivially.
-    expect(titles.length).toBeGreaterThan(20)
-  })
+    expect(titles.length).toBeGreaterThan(20);
+  });
 
   it('no title string carries the brand — the layout template appends it', () => {
     const offenders = titles
       .filter((e) => CARRIES_BRAND.test(e.value))
-      .map((e) => `${e.path} :: "${e.value}" — the layout already appends "| evig"`)
-    expect(offenders).toEqual([])
-  })
-})
+      .map((e) => `${e.path} :: "${e.value}" — the layout already appends "| evig"`);
+    expect(offenders).toEqual([]);
+  });
+});

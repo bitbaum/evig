@@ -1,8 +1,8 @@
-import { parseStatutenBody, numberParagraphs } from '@/lib/legal/statuten-body'
+import { parseStatutenBody, numberParagraphs } from '@/lib/legal/statuten-body';
 
 interface StatutenBodyProps {
   /** Raw article body from the `statuten` message namespace. */
-  body: string
+  body: string;
 }
 
 /**
@@ -11,7 +11,7 @@ interface StatutenBodyProps {
  * locale shows identical article structure.
  */
 export function StatutenBody({ body }: StatutenBodyProps) {
-  const blocks = numberParagraphs(parseStatutenBody(body))
+  const blocks = numberParagraphs(parseStatutenBody(body));
 
   return (
     <div className="space-y-4">
@@ -37,8 +37,8 @@ export function StatutenBody({ body }: StatutenBodyProps) {
             </span>
             <span>{block.text}</span>
           </p>
-        )
+        ),
       )}
     </div>
-  )
+  );
 }

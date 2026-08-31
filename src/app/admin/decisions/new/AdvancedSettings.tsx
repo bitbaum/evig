@@ -1,6 +1,11 @@
 'use client';
 
-import { VOTING_METHODS, VOTING_METHOD_CONFIG, DOT_VOTING_DEFAULTS, type VotingMethod } from '@/config/decisions';
+import {
+  VOTING_METHODS,
+  VOTING_METHOD_CONFIG,
+  DOT_VOTING_DEFAULTS,
+  type VotingMethod,
+} from '@/config/decisions';
 import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
 import { FormField } from '@/components/ui/form-field';
@@ -19,17 +24,29 @@ interface Props {
 }
 
 export function AdvancedSettings({
-  votingMethod, onMethodChange,
-  dotCount, onDotCountChange,
-  quorumType, onQuorumTypeChange,
-  quorumValue, onQuorumValueChange,
-  blindVoting, onBlindVotingChange,
+  votingMethod,
+  onMethodChange,
+  dotCount,
+  onDotCountChange,
+  quorumType,
+  onQuorumTypeChange,
+  quorumValue,
+  onQuorumValueChange,
+  blindVoting,
+  onBlindVotingChange,
 }: Props) {
   return (
     <div className="space-y-4">
       <FormField
         htmlFor="decision-voting-method"
-        label={<>Abstimmungsmethode<span className="ml-1.5 font-normal text-text-muted">(wird durch Entscheidungstyp gesetzt)</span></>}
+        label={
+          <>
+            Abstimmungsmethode
+            <span className="ml-1.5 font-normal text-text-muted">
+              (wird durch Entscheidungstyp gesetzt)
+            </span>
+          </>
+        }
         hint={VOTING_METHOD_CONFIG[votingMethod].description}
       >
         <Select

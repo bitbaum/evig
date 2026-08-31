@@ -51,27 +51,27 @@
 // ---------------------------------------------------------------------------
 
 function makeChain(result: unknown = []) {
-  const resolved = Promise.resolve(result)
-  const chain: Record<string, unknown> = {}
-  chain.from = jest.fn().mockReturnValue(chain)
-  chain.where = jest.fn().mockReturnValue(chain)
-  chain.limit = jest.fn().mockReturnValue(chain)
-  chain.values = jest.fn().mockReturnValue(chain)
-  chain.set = jest.fn().mockReturnValue(chain)
-  chain.returning = jest.fn().mockReturnValue(chain)
-  chain.then = (resolved as Promise<unknown>).then.bind(resolved)
-  chain.catch = (resolved as Promise<unknown>).catch.bind(resolved)
-  chain.finally = (resolved as Promise<unknown>).finally.bind(resolved)
-  return chain
+  const resolved = Promise.resolve(result);
+  const chain: Record<string, unknown> = {};
+  chain.from = jest.fn().mockReturnValue(chain);
+  chain.where = jest.fn().mockReturnValue(chain);
+  chain.limit = jest.fn().mockReturnValue(chain);
+  chain.values = jest.fn().mockReturnValue(chain);
+  chain.set = jest.fn().mockReturnValue(chain);
+  chain.returning = jest.fn().mockReturnValue(chain);
+  chain.then = (resolved as Promise<unknown>).then.bind(resolved);
+  chain.catch = (resolved as Promise<unknown>).catch.bind(resolved);
+  chain.finally = (resolved as Promise<unknown>).finally.bind(resolved);
+  return chain;
 }
 
 // ---------------------------------------------------------------------------
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbSelect = jest.fn(() => makeChain([]))
-const mockDbInsert = jest.fn(() => makeChain([]))
-const mockDbUpdate = jest.fn(() => makeChain([]))
+const mockDbSelect = jest.fn(() => makeChain([]));
+const mockDbInsert = jest.fn(() => makeChain([]));
+const mockDbUpdate = jest.fn(() => makeChain([]));
 
 jest.mock('@/db', () => ({
   db: {
@@ -79,7 +79,7 @@ jest.mock('@/db', () => ({
     insert: (...args: unknown[]) => mockDbInsert.apply(null, args),
     update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
   },
-}))
+}));
 
 jest.mock('@/db/schema/auth', () => ({
   users: {
@@ -108,12 +108,12 @@ jest.mock('@/db/schema/auth', () => ({
     createdAt: 'userProfiles_createdAt',
     updatedAt: 'userProfiles_updatedAt',
   },
-}))
+}));
 
 jest.mock('drizzle-orm', () => ({
   ...jest.requireActual('drizzle-orm'),
   eq: jest.fn().mockReturnValue({ __eq: true }),
-}))
+}));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
@@ -126,7 +126,7 @@ import {
   updateUser,
   getOrCreateProfile,
   updateProfile,
-} from '../db-users'
+} from '../db-users';
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -148,7 +148,7 @@ function makeUserRow(overrides: Partial<Record<string, unknown>> = {}) {
     createdAt: '2026-01-01T00:00:00Z',
     updatedAt: '2026-01-01T00:00:00Z',
     ...overrides,
-  }
+  };
 }
 
 function makeProfileRow(overrides: Partial<Record<string, unknown>> = {}) {
@@ -183,15 +183,15 @@ function makeProfileRow(overrides: Partial<Record<string, unknown>> = {}) {
     createdAt: '2026-01-01T00:00:00Z',
     updatedAt: '2026-01-01T00:00:00Z',
     ...overrides,
-  }
+  };
 }
 
 beforeEach(() => {
-  jest.clearAllMocks()
-  mockDbSelect.mockImplementation(() => makeChain([]))
-  mockDbInsert.mockImplementation(() => makeChain([]))
-  mockDbUpdate.mockImplementation(() => makeChain([]))
-})
+  jest.clearAllMocks();
+  mockDbSelect.mockImplementation(() => makeChain([]));
+  mockDbInsert.mockImplementation(() => makeChain([]));
+  mockDbUpdate.mockImplementation(() => makeChain([]));
+});
 
 // ============================================================================
 // mapUserToDbUser — field mapping
@@ -199,83 +199,71 @@ beforeEach(() => {
 
 describe('mapUserToDbUser — via getUserByEmail', () => {
   it('maps core identity fields', async () => {
-    mockDbSelect.mockImplementationOnce(() => makeChain([makeUserRow()]))
+    mockDbSelect.mockImplementationOnce(() => makeChain([makeUserRow()]));
 
-    const result = await getUserByEmail('hans@revamp-it.ch')
+    const result = await getUserByEmail('hans@revamp-it.ch');
 
-    expect(result?.id).toBe('user-1')
-    expect(result?.name).toBe('Hans Müller')
-    expect(result?.email).toBe('hans@revamp-it.ch')
-  })
+    expect(result?.id).toBe('user-1');
+    expect(result?.name).toBe('Hans Müller');
+    expect(result?.email).toBe('hans@revamp-it.ch');
+  });
 
   it('maps emailVerified to a Date when set', async () => {
-    mockDbSelect.mockImplementationOnce(() => makeChain([makeUserRow()]))
+    mockDbSelect.mockImplementationOnce(() => makeChain([makeUserRow()]));
 
-    const result = await getUserByEmail('hans@revamp-it.ch')
+    const result = await getUserByEmail('hans@revamp-it.ch');
 
-    expect(result?.emailVerified).toBeInstanceOf(Date)
-  })
+    expect(result?.emailVerified).toBeInstanceOf(Date);
+  });
 
   it('maps emailVerified to null when not set', async () => {
-    mockDbSelect.mockImplementationOnce(() =>
-      makeChain([makeUserRow({ emailVerified: null })]),
-    )
+    mockDbSelect.mockImplementationOnce(() => makeChain([makeUserRow({ emailVerified: null })]));
 
-    const result = await getUserByEmail('hans@revamp-it.ch')
+    const result = await getUserByEmail('hans@revamp-it.ch');
 
-    expect(result?.emailVerified).toBeNull()
-  })
+    expect(result?.emailVerified).toBeNull();
+  });
 
   it('defaults role to "user" when null', async () => {
-    mockDbSelect.mockImplementationOnce(() =>
-      makeChain([makeUserRow({ role: null })]),
-    )
+    mockDbSelect.mockImplementationOnce(() => makeChain([makeUserRow({ role: null })]));
 
-    const result = await getUserByEmail('hans@revamp-it.ch')
+    const result = await getUserByEmail('hans@revamp-it.ch');
 
-    expect(result?.role).toBe('user')
-  })
+    expect(result?.role).toBe('user');
+  });
 
   it('defaults is_staff to false when null', async () => {
-    mockDbSelect.mockImplementationOnce(() =>
-      makeChain([makeUserRow({ isStaff: null })]),
-    )
+    mockDbSelect.mockImplementationOnce(() => makeChain([makeUserRow({ isStaff: null })]));
 
-    const result = await getUserByEmail('hans@revamp-it.ch')
+    const result = await getUserByEmail('hans@revamp-it.ch');
 
-    expect(result?.is_staff).toBe(false)
-  })
+    expect(result?.is_staff).toBe(false);
+  });
 
   it('defaults staff_permissions to [] when null', async () => {
-    mockDbSelect.mockImplementationOnce(() =>
-      makeChain([makeUserRow({ staffPermissions: null })]),
-    )
+    mockDbSelect.mockImplementationOnce(() => makeChain([makeUserRow({ staffPermissions: null })]));
 
-    const result = await getUserByEmail('hans@revamp-it.ch')
+    const result = await getUserByEmail('hans@revamp-it.ch');
 
-    expect(result?.staff_permissions).toEqual([])
-  })
+    expect(result?.staff_permissions).toEqual([]);
+  });
 
   it('defaults is_super_admin to false when null', async () => {
-    mockDbSelect.mockImplementationOnce(() =>
-      makeChain([makeUserRow({ isSuperAdmin: null })]),
-    )
+    mockDbSelect.mockImplementationOnce(() => makeChain([makeUserRow({ isSuperAdmin: null })]));
 
-    const result = await getUserByEmail('hans@revamp-it.ch')
+    const result = await getUserByEmail('hans@revamp-it.ch');
 
-    expect(result?.is_super_admin).toBe(false)
-  })
+    expect(result?.is_super_admin).toBe(false);
+  });
 
   it('defaults dashboard_mode to "coordinator" when null', async () => {
-    mockDbSelect.mockImplementationOnce(() =>
-      makeChain([makeUserRow({ dashboardMode: null })]),
-    )
+    mockDbSelect.mockImplementationOnce(() => makeChain([makeUserRow({ dashboardMode: null })]));
 
-    const result = await getUserByEmail('hans@revamp-it.ch')
+    const result = await getUserByEmail('hans@revamp-it.ch');
 
-    expect(result?.dashboard_mode).toBe('coordinator')
-  })
-})
+    expect(result?.dashboard_mode).toBe('coordinator');
+  });
+});
 
 // ============================================================================
 // getUserByEmail
@@ -283,22 +271,22 @@ describe('mapUserToDbUser — via getUserByEmail', () => {
 
 describe('getUserByEmail', () => {
   it('returns null when user not found', async () => {
-    mockDbSelect.mockImplementationOnce(() => makeChain([]))
+    mockDbSelect.mockImplementationOnce(() => makeChain([]));
 
-    const result = await getUserByEmail('missing@example.com')
+    const result = await getUserByEmail('missing@example.com');
 
-    expect(result).toBeNull()
-  })
+    expect(result).toBeNull();
+  });
 
   it('returns mapped DbUser when found', async () => {
-    mockDbSelect.mockImplementationOnce(() => makeChain([makeUserRow()]))
+    mockDbSelect.mockImplementationOnce(() => makeChain([makeUserRow()]));
 
-    const result = await getUserByEmail('hans@revamp-it.ch')
+    const result = await getUserByEmail('hans@revamp-it.ch');
 
-    expect(result).not.toBeNull()
-    expect(result?.id).toBe('user-1')
-  })
-})
+    expect(result).not.toBeNull();
+    expect(result?.id).toBe('user-1');
+  });
+});
 
 // ============================================================================
 // getUserById
@@ -306,21 +294,21 @@ describe('getUserByEmail', () => {
 
 describe('getUserById', () => {
   it('returns null when user not found', async () => {
-    mockDbSelect.mockImplementationOnce(() => makeChain([]))
+    mockDbSelect.mockImplementationOnce(() => makeChain([]));
 
-    const result = await getUserById('missing-id')
+    const result = await getUserById('missing-id');
 
-    expect(result).toBeNull()
-  })
+    expect(result).toBeNull();
+  });
 
   it('returns mapped DbUser when found', async () => {
-    mockDbSelect.mockImplementationOnce(() => makeChain([makeUserRow()]))
+    mockDbSelect.mockImplementationOnce(() => makeChain([makeUserRow()]));
 
-    const result = await getUserById('user-1')
+    const result = await getUserById('user-1');
 
-    expect(result?.id).toBe('user-1')
-  })
-})
+    expect(result?.id).toBe('user-1');
+  });
+});
 
 // ============================================================================
 // createUser
@@ -328,34 +316,32 @@ describe('getUserById', () => {
 
 describe('createUser', () => {
   it('returns the inserted user mapped to DbUser', async () => {
-    mockDbInsert.mockImplementationOnce(() => makeChain([makeUserRow()]))
+    mockDbInsert.mockImplementationOnce(() => makeChain([makeUserRow()]));
 
-    const result = await createUser({ email: 'Hans@REVAMP-IT.CH', name: 'Hans Müller' })
+    const result = await createUser({ email: 'Hans@REVAMP-IT.CH', name: 'Hans Müller' });
 
-    expect(result.id).toBe('user-1')
-    expect(result.name).toBe('Hans Müller')
-  })
+    expect(result.id).toBe('user-1');
+    expect(result.name).toBe('Hans Müller');
+  });
 
   it('sets emailVerified in the insert when emailVerified: true', async () => {
     mockDbInsert.mockImplementationOnce(() =>
       makeChain([makeUserRow({ emailVerified: new Date().toISOString() })]),
-    )
+    );
 
-    const result = await createUser({ email: 'test@example.com', emailVerified: true })
+    const result = await createUser({ email: 'test@example.com', emailVerified: true });
 
-    expect(result.emailVerified).toBeInstanceOf(Date)
-  })
+    expect(result.emailVerified).toBeInstanceOf(Date);
+  });
 
   it('leaves emailVerified null when emailVerified is not set', async () => {
-    mockDbInsert.mockImplementationOnce(() =>
-      makeChain([makeUserRow({ emailVerified: null })]),
-    )
+    mockDbInsert.mockImplementationOnce(() => makeChain([makeUserRow({ emailVerified: null })]));
 
-    const result = await createUser({ email: 'test@example.com' })
+    const result = await createUser({ email: 'test@example.com' });
 
-    expect(result.emailVerified).toBeNull()
-  })
-})
+    expect(result.emailVerified).toBeNull();
+  });
+});
 
 // ============================================================================
 // updateUser
@@ -364,33 +350,31 @@ describe('createUser', () => {
 describe('updateUser', () => {
   it('calls getUserById without executing update when no fields provided', async () => {
     // getUserById: one select call
-    mockDbSelect.mockImplementationOnce(() => makeChain([makeUserRow()]))
+    mockDbSelect.mockImplementationOnce(() => makeChain([makeUserRow()]));
 
-    const result = await updateUser('user-1', {})
+    const result = await updateUser('user-1', {});
 
-    expect(result?.id).toBe('user-1')
-    expect(mockDbUpdate).not.toHaveBeenCalled()
-  })
+    expect(result?.id).toBe('user-1');
+    expect(mockDbUpdate).not.toHaveBeenCalled();
+  });
 
   it('executes update and returns mapped row when fields provided', async () => {
-    mockDbUpdate.mockImplementationOnce(() =>
-      makeChain([makeUserRow({ name: 'Neuer Name' })]),
-    )
+    mockDbUpdate.mockImplementationOnce(() => makeChain([makeUserRow({ name: 'Neuer Name' })]));
 
-    const result = await updateUser('user-1', { name: 'Neuer Name' })
+    const result = await updateUser('user-1', { name: 'Neuer Name' });
 
-    expect(result?.name).toBe('Neuer Name')
-    expect(mockDbUpdate).toHaveBeenCalledTimes(1)
-  })
+    expect(result?.name).toBe('Neuer Name');
+    expect(mockDbUpdate).toHaveBeenCalledTimes(1);
+  });
 
   it('returns null when user not found (update returns empty array)', async () => {
-    mockDbUpdate.mockImplementationOnce(() => makeChain([]))
+    mockDbUpdate.mockImplementationOnce(() => makeChain([]));
 
-    const result = await updateUser('missing', { name: 'X' })
+    const result = await updateUser('missing', { name: 'X' });
 
-    expect(result).toBeNull()
-  })
-})
+    expect(result).toBeNull();
+  });
+});
 
 // ============================================================================
 // getOrCreateProfile
@@ -398,25 +382,25 @@ describe('updateUser', () => {
 
 describe('getOrCreateProfile', () => {
   it('returns existing profile when found', async () => {
-    mockDbSelect.mockImplementationOnce(() => makeChain([makeProfileRow()]))
+    mockDbSelect.mockImplementationOnce(() => makeChain([makeProfileRow()]));
 
-    const result = await getOrCreateProfile('user-1')
+    const result = await getOrCreateProfile('user-1');
 
-    expect(result.user_id).toBe('user-1')
-    expect(result.city).toBe('Bern')
-    expect(mockDbInsert).not.toHaveBeenCalled()
-  })
+    expect(result.user_id).toBe('user-1');
+    expect(result.city).toBe('Bern');
+    expect(mockDbInsert).not.toHaveBeenCalled();
+  });
 
   it('creates and returns new profile when not found', async () => {
-    mockDbSelect.mockImplementationOnce(() => makeChain([]))
-    mockDbInsert.mockImplementationOnce(() => makeChain([makeProfileRow()]))
+    mockDbSelect.mockImplementationOnce(() => makeChain([]));
+    mockDbInsert.mockImplementationOnce(() => makeChain([makeProfileRow()]));
 
-    const result = await getOrCreateProfile('user-1')
+    const result = await getOrCreateProfile('user-1');
 
-    expect(result.user_id).toBe('user-1')
-    expect(mockDbInsert).toHaveBeenCalledTimes(1)
-  })
-})
+    expect(result.user_id).toBe('user-1');
+    expect(mockDbInsert).toHaveBeenCalledTimes(1);
+  });
+});
 
 // ============================================================================
 // updateProfile
@@ -425,30 +409,28 @@ describe('getOrCreateProfile', () => {
 describe('updateProfile', () => {
   it('calls getOrCreateProfile when no fields provided', async () => {
     // getOrCreateProfile → select
-    mockDbSelect.mockImplementationOnce(() => makeChain([makeProfileRow()]))
+    mockDbSelect.mockImplementationOnce(() => makeChain([makeProfileRow()]));
 
-    const result = await updateProfile('user-1', {})
+    const result = await updateProfile('user-1', {});
 
-    expect(result?.user_id).toBe('user-1')
-    expect(mockDbUpdate).not.toHaveBeenCalled()
-  })
+    expect(result?.user_id).toBe('user-1');
+    expect(mockDbUpdate).not.toHaveBeenCalled();
+  });
 
   it('maps snake_case field to camelCase Drizzle column and executes update', async () => {
-    mockDbUpdate.mockImplementationOnce(() =>
-      makeChain([makeProfileRow({ city: 'Zürich' })]),
-    )
+    mockDbUpdate.mockImplementationOnce(() => makeChain([makeProfileRow({ city: 'Zürich' })]));
 
-    const result = await updateProfile('user-1', { city: 'Zürich' })
+    const result = await updateProfile('user-1', { city: 'Zürich' });
 
-    expect(result?.city).toBe('Zürich')
-    expect(mockDbUpdate).toHaveBeenCalledTimes(1)
-  })
+    expect(result?.city).toBe('Zürich');
+    expect(mockDbUpdate).toHaveBeenCalledTimes(1);
+  });
 
   it('returns null when profile not found after update', async () => {
-    mockDbUpdate.mockImplementationOnce(() => makeChain([]))
+    mockDbUpdate.mockImplementationOnce(() => makeChain([]));
 
-    const result = await updateProfile('user-1', { city: 'Bern' })
+    const result = await updateProfile('user-1', { city: 'Bern' });
 
-    expect(result).toBeNull()
-  })
-})
+    expect(result).toBeNull();
+  });
+});

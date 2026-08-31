@@ -1,7 +1,7 @@
-import { Server, Code, Globe, Factory } from 'lucide-react'
-import type { FilterConfig } from '@/hooks/useFiltering'
+import { Server, Code, Globe, Factory } from 'lucide-react';
+import type { FilterConfig } from '@/hooks/useFiltering';
 
-export type ServiceCategoryKey = 'software' | 'organisations'
+export type ServiceCategoryKey = 'software' | 'organisations';
 
 /**
  * Where a service appears in the main navigation.
@@ -18,31 +18,31 @@ export type ServiceCategoryKey = 'software' | 'organisations'
  * derive from that one declaration, so a service can never be in two places or
  * in none.
  */
-export type ServiceNavGroup = 'services' | 'learn'
+export type ServiceNavGroup = 'services' | 'learn';
 
 /** Pure config — no translatable strings. Translations come from services.catalog.* */
 export interface ServiceConfig {
-  key: string                  // camelCase i18n key (maps to services.catalog.{key})
-  slug?: string                // booking API slug (only services that support online booking)
-  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
-  href: string
-  available: boolean
-  categoryKey: ServiceCategoryKey
+  key: string; // camelCase i18n key (maps to services.catalog.{key})
+  slug?: string; // booking API slug (only services that support online booking)
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  href: string;
+  available: boolean;
+  categoryKey: ServiceCategoryKey;
   /** Which top-level menu surfaces this service. See ServiceNavGroup. */
-  navGroup: ServiceNavGroup
-  badgeKey?: 'soon'
+  navGroup: ServiceNavGroup;
+  badgeKey?: 'soon';
 }
 
 /** Fully hydrated service with translated strings — built in page.tsx */
 export type Service = ServiceConfig & {
-  title: string
-  description: string
-  features: string[]
-  category: string
-  highlight: string
-  pricing?: string
-  badge?: string
-}
+  title: string;
+  description: string;
+  features: string[];
+  category: string;
+  highlight: string;
+  pricing?: string;
+  badge?: string;
+};
 
 /**
  * What evig offers.
@@ -104,13 +104,13 @@ export const SERVICE_CONFIGS: ServiceConfig[] = [
     categoryKey: 'organisations',
     navGroup: 'services',
   },
-]
+];
 
 /** Category keys in display order — used to build filter options */
-export const SERVICE_CATEGORY_KEYS: ServiceCategoryKey[] = ['software', 'organisations']
+export const SERVICE_CATEGORY_KEYS: ServiceCategoryKey[] = ['software', 'organisations'];
 
 /** Stable filter shape — labels populated from translations in page.tsx */
-export const SERVICE_FILTER_KEY = 'category' as const
+export const SERVICE_FILTER_KEY = 'category' as const;
 
 /** Type-safe filter config builder */
 export function buildServiceFilters(
@@ -121,7 +121,7 @@ export function buildServiceFilters(
     {
       key: SERVICE_FILTER_KEY,
       label: byCategory,
-      options: SERVICE_CATEGORY_KEYS.map(k => categoryLabels[k]),
+      options: SERVICE_CATEGORY_KEYS.map((k) => categoryLabels[k]),
     },
-  ]
+  ];
 }

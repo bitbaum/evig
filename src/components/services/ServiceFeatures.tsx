@@ -1,18 +1,18 @@
 /**
  * ServiceFeatures Component
- * 
+ *
  * Reusable features grid for service pages.
  * Maintains existing beautiful card design.
  */
 
-import type { ServiceFeature } from '@/lib/services'
-import { Card } from '@/components/ui/card'
-import { getTextColor } from '@/lib/design-system'
-import { cn } from '@/lib/utils'
-import { Section } from '@/components/layout/Section'
+import type { ServiceFeature } from '@/lib/services';
+import { Card } from '@/components/ui/card';
+import { getTextColor } from '@/lib/design-system';
+import { cn } from '@/lib/utils';
+import { Section } from '@/components/layout/Section';
 
 interface ServiceFeaturesProps {
-  features: ServiceFeature[]
+  features: ServiceFeature[];
 }
 
 export default function ServiceFeatures({ features }: ServiceFeaturesProps) {
@@ -27,8 +27,17 @@ export default function ServiceFeatures({ features }: ServiceFeaturesProps) {
                   <feature.icon className="w-6 h-6 sm:w-8 sm:h-8" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className={cn('text-xl sm:text-2xl font-bold mb-2 sm:mb-3', getTextColor('white', 'primary'))}>{feature.title}</h3>
-                  <p className={cn('text-sm sm:text-base', getTextColor('white', 'muted'))}>{feature.description}</p>
+                  <h3
+                    className={cn(
+                      'text-xl sm:text-2xl font-bold mb-2 sm:mb-3',
+                      getTextColor('white', 'primary'),
+                    )}
+                  >
+                    {feature.title}
+                  </h3>
+                  <p className={cn('text-sm sm:text-base', getTextColor('white', 'muted'))}>
+                    {feature.description}
+                  </p>
                 </div>
               </div>
             </Card>
@@ -36,6 +45,5 @@ export default function ServiceFeatures({ features }: ServiceFeaturesProps) {
         </div>
       </div>
     </Section>
-  )
+  );
 }
-

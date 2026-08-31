@@ -13,25 +13,30 @@
  * German base when none exists (mirrors the site-wide DE fallback).
  */
 
-import { db } from '@/db'
-import { blogPosts, blogCategories, blogHiddenSlugs, blogPostTranslations } from '@/db/schema/content'
-import { users } from '@/db/schema/auth'
-import { eq, and, lte, desc, asc } from 'drizzle-orm'
-import { logger } from '@/lib/logger'
-import type { BlogPost } from '@/lib/blog'
-import { parseBlogAudience } from '@/config/blog'
-import { resolveBlogAuthor } from '@/config/org'
-import { defaultLocale } from '@/i18n/routing'
+import { db } from '@/db';
+import {
+  blogPosts,
+  blogCategories,
+  blogHiddenSlugs,
+  blogPostTranslations,
+} from '@/db/schema/content';
+import { users } from '@/db/schema/auth';
+import { eq, and, lte, desc, asc } from 'drizzle-orm';
+import { logger } from '@/lib/logger';
+import type { BlogPost } from '@/lib/blog';
+import { parseBlogAudience } from '@/config/blog';
+import { resolveBlogAuthor } from '@/config/org';
+import { defaultLocale } from '@/i18n/routing';
 
-export type { BlogPost }
+export type { BlogPost };
 
 export interface BlogCategory {
-  id: string
-  slug: string
-  name: string
-  description: string | null
-  color: string | null
-  isActive: boolean
+  id: string;
+  slug: string;
+  name: string;
+  description: string | null;
+  color: string | null;
+  isActive: boolean;
 }
 
 /** Columns shared by every public post query (base + translation overlay). */
@@ -58,7 +63,7 @@ const postColumns = {
   tSeoTitle: blogPostTranslations.seoTitle,
   tSeoDescription: blogPostTranslations.seoDescription,
   tIsMachine: blogPostTranslations.isMachine,
-}
+};
 
 /**
  * Locale to overlay. For the default locale (or none) we join on the default
@@ -67,7 +72,7 @@ const postColumns = {
  * overlay column stays null → the German base is used.
  */
 function overlayLocale(locale?: string): string {
-  return locale && locale !== defaultLocale ? locale : defaultLocale
+  return locale && locale !== defaultLocale ? locale : defaultLocale;
 }
 
 /**
@@ -87,13 +92,15 @@ export async function getAllPosts(locale?: string): Promise<BlogPost[]> {
           eq(blogPostTranslations.locale, overlayLocale(locale)),
         ),
       )
-      .where(and(eq(blogPosts.isPublished, true), lte(blogPosts.publishedAt, new Date().toISOString())))
-      .orderBy(desc(blogPosts.publishedAt))
+      .where(
+        and(eq(blogPosts.isPublished, true), lte(blogPosts.publishedAt, new Date().toISOString())),
+      )
+      .orderBy(desc(blogPosts.publishedAt));
 
-    return rows.map(mapPostFromDb)
+    return rows.map(mapPostFromDb);
   } catch (error) {
-    logger.error('Failed to get published posts', { error })
-    return []
+    logger.error('Failed to get published posts', { error });
+    return [];
   }
 }
 
@@ -119,14 +126,14 @@ export async function getPostBySlug(slug: string, locale?: string): Promise<Blog
           eq(blogPosts.slug, slug),
           eq(blogPosts.isPublished, true),
           lte(blogPosts.publishedAt, new Date().toISOString()),
-        )
-      )
+        ),
+      );
 
-    if (rows.length === 0) return null
-    return mapPostFromDb(rows[0])
+    if (rows.length === 0) return null;
+    return mapPostFromDb(rows[0]);
   } catch (error) {
-    logger.error('Failed to get post by slug', { slug, error })
-    return null
+    logger.error('Failed to get post by slug', { slug, error });
+    return null;
   }
 }
 
@@ -149,15 +156,15 @@ export async function getDbPostForPreview(slug: string, locale?: string): Promis
           eq(blogPostTranslations.locale, overlayLocale(locale)),
         ),
       )
-      .where(eq(blogPosts.slug, slug))
+      .where(eq(blogPosts.slug, slug));
 
-    if (rows.length === 0) return null
-    const post = mapPostFromDb(rows[0])
-    post.published = rows[0].isPub ?? false
-    return post
+    if (rows.length === 0) return null;
+    const post = mapPostFromDb(rows[0]);
+    post.published = rows[0].isPub ?? false;
+    return post;
   } catch (error) {
-    logger.error('Failed to get post for preview', { slug, error })
-    return null
+    logger.error('Failed to get post for preview', { slug, error });
+    return null;
   }
 }
 
@@ -170,19 +177,19 @@ export async function getDbPostLocales(slug: string): Promise<string[]> {
     const [base] = await db
       .select({ id: blogPosts.id })
       .from(blogPosts)
-      .where(and(eq(blogPosts.slug, slug), eq(blogPosts.isPublished, true)))
+      .where(and(eq(blogPosts.slug, slug), eq(blogPosts.isPublished, true)));
 
-    if (!base) return []
+    if (!base) return [];
 
     const rows = await db
       .select({ locale: blogPostTranslations.locale })
       .from(blogPostTranslations)
-      .where(eq(blogPostTranslations.postId, base.id))
+      .where(eq(blogPostTranslations.postId, base.id));
 
-    return [defaultLocale, ...rows.map((r) => r.locale)]
+    return [defaultLocale, ...rows.map((r) => r.locale)];
   } catch (error) {
-    logger.error('Failed to get DB post locales', { slug, error })
-    return []
+    logger.error('Failed to get DB post locales', { slug, error });
+    return [];
   }
 }
 
@@ -200,7 +207,7 @@ export async function getAllCategories(): Promise<BlogCategory[]> {
         color: blogCategories.color,
       })
       .from(blogCategories)
-      .orderBy(asc(blogCategories.name))
+      .orderBy(asc(blogCategories.name));
 
     return rows.map((row) => ({
       id: row.id,
@@ -209,17 +216,20 @@ export async function getAllCategories(): Promise<BlogCategory[]> {
       description: row.description,
       color: row.color,
       isActive: true, // Default to true until is_active column is added
-    }))
+    }));
   } catch (error) {
-    logger.error('Failed to get categories', { error })
-    return []
+    logger.error('Failed to get categories', { error });
+    return [];
   }
 }
 
 /**
  * Get posts by category name (for filtering)
  */
-export async function getPostsByCategory(categoryName: string, locale?: string): Promise<BlogPost[]> {
+export async function getPostsByCategory(
+  categoryName: string,
+  locale?: string,
+): Promise<BlogPost[]> {
   try {
     const rows = await db
       .select(postColumns)
@@ -238,14 +248,14 @@ export async function getPostsByCategory(categoryName: string, locale?: string):
           eq(blogCategories.name, categoryName),
           eq(blogPosts.isPublished, true),
           lte(blogPosts.publishedAt, new Date().toISOString()),
-        )
+        ),
       )
-      .orderBy(desc(blogPosts.publishedAt))
+      .orderBy(desc(blogPosts.publishedAt));
 
-    return rows.map(mapPostFromDb)
+    return rows.map(mapPostFromDb);
   } catch (error) {
-    logger.error('Failed to get posts by category', { categoryName, error })
-    return []
+    logger.error('Failed to get posts by category', { categoryName, error });
+    return [];
   }
 }
 
@@ -257,29 +267,29 @@ export async function getPostsByCategory(categoryName: string, locale?: string):
  * the German base) so a translated page never gets a German meta description.
  */
 function mapPostFromDb(row: {
-  slug: string
-  title: string
-  excerpt: string | null
-  content: string
-  seoTitle: string | null
-  seoDescription: string | null
-  featuredImage: string | null
-  authorName: string | null
-  categoryName: string | null
-  tags: string[] | null
-  visibility: string
-  audience: string
-  authorId: string | null
-  publishedAt: string | null
-  createdAt: string | null
-  tTitle?: string | null
-  tExcerpt?: string | null
-  tContent?: string | null
-  tSeoTitle?: string | null
-  tSeoDescription?: string | null
-  tIsMachine?: boolean | null
+  slug: string;
+  title: string;
+  excerpt: string | null;
+  content: string;
+  seoTitle: string | null;
+  seoDescription: string | null;
+  featuredImage: string | null;
+  authorName: string | null;
+  categoryName: string | null;
+  tags: string[] | null;
+  visibility: string;
+  audience: string;
+  authorId: string | null;
+  publishedAt: string | null;
+  createdAt: string | null;
+  tTitle?: string | null;
+  tExcerpt?: string | null;
+  tContent?: string | null;
+  tSeoTitle?: string | null;
+  tSeoDescription?: string | null;
+  tIsMachine?: boolean | null;
 }): BlogPost {
-  const isTranslated = !!row.tContent
+  const isTranslated = !!row.tContent;
   return {
     slug: row.slug,
     title: row.tTitle || row.title,
@@ -299,7 +309,7 @@ function mapPostFromDb(row: {
       row.visibility === 'link' ? 'link' : row.visibility === 'unlisted' ? 'unlisted' : 'public',
     audience: parseBlogAudience(row.audience),
     authorId: row.authorId ?? undefined,
-  }
+  };
 }
 
 /**
@@ -308,10 +318,10 @@ function mapPostFromDb(row: {
  */
 export async function getHiddenSlugs(): Promise<Set<string>> {
   try {
-    const rows = await db.select({ slug: blogHiddenSlugs.slug }).from(blogHiddenSlugs)
-    return new Set(rows.map((r) => r.slug))
+    const rows = await db.select({ slug: blogHiddenSlugs.slug }).from(blogHiddenSlugs);
+    return new Set(rows.map((r) => r.slug));
   } catch (error) {
-    logger.error('Failed to get hidden slugs', { error })
-    return new Set()
+    logger.error('Failed to get hidden slugs', { error });
+    return new Set();
   }
 }

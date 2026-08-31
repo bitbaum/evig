@@ -9,41 +9,41 @@
  * deep-merge — and, defensively, to the config string here if a key is
  * missing entirely (e.g. a freshly added section before its keys land).
  */
-import type { useTranslations } from 'next-intl'
-import type { SectionConfig, SidebarGroup } from '@/config/sections'
+import type { useTranslations } from 'next-intl';
+import type { SectionConfig, SidebarGroup } from '@/config/sections';
 
 /** Translator scoped to `admin.sections` (client `useTranslations` or server
  *  `getTranslations`). */
-export type SectionsT = ReturnType<typeof useTranslations<'admin.sections'>>
-type SectionsKey = Parameters<SectionsT>[0]
+export type SectionsT = ReturnType<typeof useTranslations<'admin.sections'>>;
+type SectionsKey = Parameters<SectionsT>[0];
 
 /** Low-level resolver: message key → translated string, else `fallback`. */
 export function sectionText(
   t: SectionsT,
   sectionId: string,
   field: 'label' | 'description' | 'shortLabel',
-  fallback: string
+  fallback: string,
 ): string {
-  const key = `items.${sectionId}.${field}` as SectionsKey
-  return t.has(key) ? t(key) : fallback
+  const key = `items.${sectionId}.${field}` as SectionsKey;
+  return t.has(key) ? t(key) : fallback;
 }
 
 export function sectionLabel(t: SectionsT, section: SectionConfig): string {
-  return sectionText(t, section.id, 'label', section.ui.label)
+  return sectionText(t, section.id, 'label', section.ui.label);
 }
 
 export function sectionDescription(t: SectionsT, section: SectionConfig): string {
-  return sectionText(t, section.id, 'description', section.ui.description)
+  return sectionText(t, section.id, 'description', section.ui.description);
 }
 
 /** Short label for the mobile bottom nav; falls back to the full label. */
 export function sectionShortLabel(t: SectionsT, section: SectionConfig): string {
-  const key = `items.${section.id}.shortLabel` as SectionsKey
-  if (t.has(key)) return t(key)
-  return section.ui.mobileBottomNavLabel ?? sectionLabel(t, section)
+  const key = `items.${section.id}.shortLabel` as SectionsKey;
+  if (t.has(key)) return t(key);
+  return section.ui.mobileBottomNavLabel ?? sectionLabel(t, section);
 }
 
 export function groupLabel(t: SectionsT, group: Pick<SidebarGroup, 'id' | 'label'>): string {
-  const key = `groups.${group.id}` as SectionsKey
-  return t.has(key) ? t(key) : group.label
+  const key = `groups.${group.id}` as SectionsKey;
+  return t.has(key) ? t(key) : group.label;
 }

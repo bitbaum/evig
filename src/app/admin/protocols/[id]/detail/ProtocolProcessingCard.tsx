@@ -1,6 +1,6 @@
 /** Processing spinner slice — shown while the AI structures the transcript. */
 
-import { Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react';
 
 export function ProtocolProcessingCard() {
   return (
@@ -11,5 +11,5 @@ export function ProtocolProcessingCard() {
         Die KI strukturiert das Transkript. Die Seite aktualisiert sich automatisch.
       </p>
     </div>
-  )
+  );
 }

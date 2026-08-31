@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Activity Card Component
@@ -6,88 +6,92 @@
  * Displays a single activity item from the unified stream
  */
 
-import type { JSX } from 'react'
-import { CheckCircle, Flag, FileText, Megaphone, HelpCircle, Clock } from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
+import type { JSX } from 'react';
+import { CheckCircle, Flag, FileText, Megaphone, HelpCircle, Clock } from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
 import {
   getActivityUpdateTypeColor,
   getActivityCategoryLabel,
   getHelpRequestUrgencyColor,
   ACTIVITY_SOURCE_LABELS,
-} from '@/config/activity'
-import { formatRelativeTime } from '@/lib/utils'
-import { Avatar } from '@/components/ui/Avatar'
-import { Card } from '@/components/ui/card'
-import { URGENCY_DEFAULT } from '@/config/it-hilfe'
-import type { UnifiedActivity } from './types'
+} from '@/config/activity';
+import { formatRelativeTime } from '@/lib/utils';
+import { Avatar } from '@/components/ui/Avatar';
+import { Card } from '@/components/ui/card';
+import { URGENCY_DEFAULT } from '@/config/it-hilfe';
+import type { UnifiedActivity } from './types';
 
 interface ActivityCardProps {
-  activity: UnifiedActivity
+  activity: UnifiedActivity;
 }
 
 function getSourceIcon(sourceType: string): JSX.Element | null {
   switch (sourceType) {
     case 'task_completion':
-      return <CheckCircle className="w-5 h-5 text-action" />
+      return <CheckCircle className="w-5 h-5 text-action" />;
     case 'activity_update':
-      return null // handled separately via getActivityUpdateIcon
+      return null; // handled separately via getActivityUpdateIcon
     case 'help_request':
-      return <HelpCircle className="w-5 h-5 text-warning-500" />
+      return <HelpCircle className="w-5 h-5 text-warning-500" />;
     case 'focus_update':
-      return <Clock className="w-5 h-5 text-action" />
+      return <Clock className="w-5 h-5 text-action" />;
     default:
-      return <FileText className="w-5 h-5 text-text-tertiary" />
+      return <FileText className="w-5 h-5 text-text-tertiary" />;
   }
 }
 
 function getActivityUpdateIcon(updateType: string): JSX.Element {
   switch (updateType) {
     case 'accomplishment':
-      return <CheckCircle className="w-5 h-5 text-action" />
+      return <CheckCircle className="w-5 h-5 text-action" />;
     case 'milestone':
-      return <Flag className="w-5 h-5 text-action" />
+      return <Flag className="w-5 h-5 text-action" />;
     case 'note':
-      return <FileText className="w-5 h-5 text-text-tertiary" />
+      return <FileText className="w-5 h-5 text-text-tertiary" />;
     case 'announcement':
-      return <Megaphone className="w-5 h-5 text-action" />
+      return <Megaphone className="w-5 h-5 text-action" />;
     default:
-      return <FileText className="w-5 h-5 text-text-tertiary" />
+      return <FileText className="w-5 h-5 text-text-tertiary" />;
   }
 }
 
 export function ActivityCard({ activity }: ActivityCardProps) {
-  const displayName = activity.user_name || activity.user_email.split('@')[0]
+  const displayName = activity.user_name || activity.user_email.split('@')[0];
 
   // Extract metadata with type safety
-  const metadata = activity.metadata || {}
-  const updateType = String(metadata.update_type || 'note')
-  const urgency = String(metadata.urgency || URGENCY_DEFAULT)
-  const durationMinutes = metadata.duration_minutes ? Number(metadata.duration_minutes) : null
-  const action = String(metadata.action || '')
+  const metadata = activity.metadata || {};
+  const updateType = String(metadata.update_type || 'note');
+  const urgency = String(metadata.urgency || URGENCY_DEFAULT);
+  const durationMinutes = metadata.duration_minutes ? Number(metadata.duration_minutes) : null;
+  const action = String(metadata.action || '');
 
   // Determine icon based on source type
-  let icon: JSX.Element | null = null
+  let icon: JSX.Element | null = null;
   if (activity.source_type === 'activity_update') {
-    icon = getActivityUpdateIcon(updateType)
+    icon = getActivityUpdateIcon(updateType);
   } else {
-    icon = getSourceIcon(activity.source_type)
+    icon = getSourceIcon(activity.source_type);
   }
 
   // Get badge color
-  let badgeColor = 'bg-surface-raised text-text-primary'
+  let badgeColor = 'bg-surface-raised text-text-primary';
   if (activity.source_type === 'activity_update') {
-    badgeColor = getActivityUpdateTypeColor(updateType)
+    badgeColor = getActivityUpdateTypeColor(updateType);
   } else if (activity.source_type === 'help_request') {
-    badgeColor = getHelpRequestUrgencyColor(urgency)
+    badgeColor = getHelpRequestUrgencyColor(urgency);
   } else if (activity.source_type === 'task_completion') {
-    badgeColor = 'bg-action-muted text-action-muted'
+    badgeColor = 'bg-action-muted text-action-muted';
   }
 
   return (
     <Card className="p-4 hover:border-strong transition-shadow">
       <div className="flex gap-3">
         {/* Avatar */}
-        <Avatar name={activity.user_name || activity.user_email} size="md" colorClassName="bg-action text-action-text" />
+        <Avatar
+          name={activity.user_name || activity.user_email}
+          size="md"
+          colorClassName="bg-action text-action-text"
+        />
 
         {/* Content */}
         <div className="flex-1 min-w-0">
@@ -112,9 +116,7 @@ export function ActivityCard({ activity }: ActivityCardProps) {
 
           {/* Description */}
           {activity.description && (
-            <p className="mt-1 text-sm text-text-secondary line-clamp-2">
-              {activity.description}
-            </p>
+            <p className="mt-1 text-sm text-text-secondary line-clamp-2">{activity.description}</p>
           )}
 
           {/* Metadata */}
@@ -125,17 +127,13 @@ export function ActivityCard({ activity }: ActivityCardProps) {
           )}
 
           {activity.source_type === 'help_request' && action === 'resolved' && (
-            <p className="mt-1 text-xs text-action">
-              Anfrage gelöst
-            </p>
+            <p className="mt-1 text-xs text-action">Anfrage gelöst</p>
           )}
 
           {/* Timestamp */}
-          <p className="mt-2 text-xs text-text-muted">
-            {formatRelativeTime(activity.occurred_at)}
-          </p>
+          <p className="mt-2 text-xs text-text-muted">{formatRelativeTime(activity.occurred_at)}</p>
         </div>
       </div>
     </Card>
-  )
+  );
 }

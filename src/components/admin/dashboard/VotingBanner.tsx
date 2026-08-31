@@ -1,33 +1,33 @@
-import { Link } from '@/i18n/navigation'
-import { Vote, Clock, ArrowRight } from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import { buttonClass } from '@/components/ui/button-class'
-import { getVotingData } from '@/lib/dashboard/voting'
+import { Link } from '@/i18n/navigation';
+import { Vote, Clock, ArrowRight } from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import { buttonClass } from '@/components/ui/button-class';
+import { getVotingData } from '@/lib/dashboard/voting';
 
 interface VotingBannerProps {
-  userId: string
-  isSuper: boolean
-  isMember: boolean
+  userId: string;
+  isSuper: boolean;
+  isMember: boolean;
 }
 
 function formatDeadline(iso: string | null): string | null {
-  if (!iso) return null
-  const diff = new Date(iso).getTime() - Date.now()
-  if (diff < 0) return 'abgelaufen'
-  const hours = Math.floor(diff / (1000 * 60 * 60))
-  if (hours < 24) return `Endet in ${hours} Std.`
-  const days = Math.floor(hours / 24)
-  return `Endet in ${days} Tag${days !== 1 ? 'en' : ''}`
+  if (!iso) return null;
+  const diff = new Date(iso).getTime() - Date.now();
+  if (diff < 0) return 'abgelaufen';
+  const hours = Math.floor(diff / (1000 * 60 * 60));
+  if (hours < 24) return `Endet in ${hours} Std.`;
+  const days = Math.floor(hours / 24);
+  return `Endet in ${days} Tag${days !== 1 ? 'en' : ''}`;
 }
 
 export async function VotingBanner({ userId, isSuper, isMember }: VotingBannerProps) {
-  const pending = await getVotingData(userId, isSuper, isMember)
+  const pending = await getVotingData(userId, isSuper, isMember);
 
-  if (pending.length === 0) return null
+  if (pending.length === 0) return null;
 
-  const first = pending[0]
-  const more = pending.length - 1
-  const deadline = formatDeadline(first.voting_deadline)
+  const first = pending[0];
+  const more = pending.length - 1;
+  const deadline = formatDeadline(first.voting_deadline);
 
   return (
     <div className="bg-action-muted border border-strong rounded-xl overflow-hidden">
@@ -59,11 +59,14 @@ export async function VotingBanner({ userId, isSuper, isMember }: VotingBannerPr
         </div>
 
         {/* CTA — min-h-touch ensures touch target */}
-        <Link href={`/admin/decisions/${first.id}`} className={buttonClass({ variant: 'primary', className: 'shrink-0 self-center' })}>
+        <Link
+          href={`/admin/decisions/${first.id}`}
+          className={buttonClass({ variant: 'primary', className: 'shrink-0 self-center' })}
+        >
           Abstimmen
           <ArrowRight className="w-4 h-4" aria-hidden="true" />
         </Link>
       </div>
     </div>
-  )
+  );
 }

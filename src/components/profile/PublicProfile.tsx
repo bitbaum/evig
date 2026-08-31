@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * PublicProfile — one person, everything they offer.
@@ -13,21 +13,21 @@
  * three render blocks (header · offerings · reputation) each own their own slice.
  */
 
-import { use } from 'react'
-import { Link } from '@/i18n/navigation'
-import { useTranslations } from 'next-intl'
-import { ArrowLeft, Loader2, AlertCircle } from 'lucide-react'
-import { ROUTES } from '@/config/routes'
-import Heading from '@/components/ui/Heading'
-import { useProfileData } from './useProfileData'
-import { ProfileHeader } from './ProfileHeader'
-import { ProfileOfferings } from './ProfileOfferings'
-import { ProfileReputation } from './ProfileReputation'
+import { use } from 'react';
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
+import { ArrowLeft, Loader2, AlertCircle } from 'lucide-react';
+import { ROUTES } from '@/config/routes';
+import Heading from '@/components/ui/Heading';
+import { useProfileData } from './useProfileData';
+import { ProfileHeader } from './ProfileHeader';
+import { ProfileOfferings } from './ProfileOfferings';
+import { ProfileReputation } from './ProfileReputation';
 
 export default function PublicProfile({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params)
-  const t = useTranslations('profile')
-  const { profile, isLoading, error } = useProfileData(id)
+  const { id } = use(params);
+  const t = useTranslations('profile');
+  const { profile, isLoading, error } = useProfileData(id);
 
   if (isLoading) {
     return (
@@ -35,7 +35,7 @@ export default function PublicProfile({ params }: { params: Promise<{ id: string
         <Loader2 className="h-8 w-8 animate-spin text-action" />
         <span className="ml-3 text-text-secondary">{t('loading')}</span>
       </div>
-    )
+    );
   }
 
   if (error || !profile) {
@@ -49,7 +49,7 @@ export default function PublicProfile({ params }: { params: Promise<{ id: string
           {t('backToMarketplace')}
         </Link>
       </div>
-    )
+    );
   }
 
   return (
@@ -66,5 +66,5 @@ export default function PublicProfile({ params }: { params: Promise<{ id: string
       <ProfileOfferings profile={profile} />
       <ProfileReputation profile={profile} />
     </div>
-  )
+  );
 }

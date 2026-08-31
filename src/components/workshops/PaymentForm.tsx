@@ -1,28 +1,24 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useTranslations } from 'next-intl'
-import { Loader2, CreditCard, Shield, ExternalLink } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { Loader2, CreditCard, Shield, ExternalLink } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface PaymentFormProps {
-  paymentUrl: string
-  amount: string
-  currency?: string
+  paymentUrl: string;
+  amount: string;
+  currency?: string;
 }
 
-export function PaymentForm({
-  paymentUrl,
-  amount,
-  currency = 'CHF'
-}: PaymentFormProps) {
-  const t = useTranslations('components.paymentForm')
-  const [isRedirecting, setIsRedirecting] = useState(false)
+export function PaymentForm({ paymentUrl, amount, currency = 'CHF' }: PaymentFormProps) {
+  const t = useTranslations('components.paymentForm');
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
   const handlePay = () => {
-    setIsRedirecting(true)
-    window.location.href = paymentUrl
-  }
+    setIsRedirecting(true);
+    window.location.href = paymentUrl;
+  };
 
   return (
     <div className="space-y-4">
@@ -31,12 +27,7 @@ export function PaymentForm({
         <span className="text-sm text-action">{t('sslNote')}</span>
       </div>
 
-      <Button
-        onClick={handlePay}
-        disabled={isRedirecting}
-        variant="primary"
-        className="w-full"
-      >
+      <Button onClick={handlePay} disabled={isRedirecting} variant="primary" className="w-full">
         {isRedirecting ? (
           <>
             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -51,5 +42,5 @@ export function PaymentForm({
         )}
       </Button>
     </div>
-  )
+  );
 }

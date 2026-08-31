@@ -1,26 +1,26 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
-import { Link } from '@/i18n/navigation'
-import { AlertCircle, ArrowLeft } from 'lucide-react'
-import { logger } from '@/lib/logger'
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { ROUTES } from '@/config/routes'
+import { useEffect } from 'react';
+import { Link } from '@/i18n/navigation';
+import { AlertCircle, ArrowLeft } from 'lucide-react';
+import { logger } from '@/lib/logger';
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { ROUTES } from '@/config/routes';
 
 export default function ITHilfeError({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
-  const t = useTranslations('itHelp.error')
+  const t = useTranslations('itHelp.error');
 
   useEffect(() => {
-    logger.error('IT-Hilfe error', { error, digest: error.digest })
-  }, [error])
+    logger.error('IT-Hilfe error', { error, digest: error.digest });
+  }, [error]);
 
   return (
     <div className="flex items-center justify-center py-24">
@@ -29,9 +29,7 @@ export default function ITHilfeError({
         <Heading level={1} className="text-lg text-text-primary">
           {t('title')}
         </Heading>
-        <p className="mt-2 text-sm text-text-secondary">
-          {t('message')}
-        </p>
+        <p className="mt-2 text-sm text-text-secondary">{t('message')}</p>
         <div className="mt-6 flex flex-col gap-3">
           <Button onClick={reset} variant="primary" className="w-full">
             {t('retry')}
@@ -46,5 +44,5 @@ export default function ITHilfeError({
         </div>
       </div>
     </div>
-  )
+  );
 }

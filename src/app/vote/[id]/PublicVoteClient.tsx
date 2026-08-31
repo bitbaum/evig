@@ -1,45 +1,45 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { CheckCircle, Vote, UserPlus } from 'lucide-react'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { useTranslations } from 'next-intl'
-import { apiFetch } from '@/lib/api/client'
-import { type VotingMethod } from '@/config/decisions'
-import { ERROR_CODES } from '@/config/error-messages'
-import { useVoteState } from '@/hooks/useVoteState'
-import { ConsentVote } from '@/components/decisions/voting/ConsentVote'
-import { ApprovalVote } from '@/components/decisions/voting/ApprovalVote'
-import { DotVote } from '@/components/decisions/voting/DotVote'
-import { ScoreVote } from '@/components/decisions/voting/ScoreVote'
-import { RankedChoiceVote } from '@/components/decisions/voting/RankedChoiceVote'
-import { SimpleMajorityVote } from '@/components/decisions/voting/SimpleMajorityVote'
-import { ThumbsUpDownVote } from '@/components/decisions/voting/ThumbsUpDownVote'
-import { DeadlineCountdown } from '@/components/decisions/voting/DeadlineCountdown'
-import { VoteAIAdvisor } from '@/components/decisions/VoteAIAdvisor'
+import { useState } from 'react';
+import { CheckCircle, Vote, UserPlus } from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useTranslations } from 'next-intl';
+import { apiFetch } from '@/lib/api/client';
+import { type VotingMethod } from '@/config/decisions';
+import { ERROR_CODES } from '@/config/error-messages';
+import { useVoteState } from '@/hooks/useVoteState';
+import { ConsentVote } from '@/components/decisions/voting/ConsentVote';
+import { ApprovalVote } from '@/components/decisions/voting/ApprovalVote';
+import { DotVote } from '@/components/decisions/voting/DotVote';
+import { ScoreVote } from '@/components/decisions/voting/ScoreVote';
+import { RankedChoiceVote } from '@/components/decisions/voting/RankedChoiceVote';
+import { SimpleMajorityVote } from '@/components/decisions/voting/SimpleMajorityVote';
+import { ThumbsUpDownVote } from '@/components/decisions/voting/ThumbsUpDownVote';
+import { DeadlineCountdown } from '@/components/decisions/voting/DeadlineCountdown';
+import { VoteAIAdvisor } from '@/components/decisions/VoteAIAdvisor';
 
 interface Option {
-  id: string
-  label: string
-  description?: string
-  imageUrl?: string
+  id: string;
+  label: string;
+  description?: string;
+  imageUrl?: string;
 }
 
 interface Props {
-  decisionId: string
-  title: string
-  description: string
-  background?: string | null
-  votingMethod: VotingMethod
-  options: Option[]
-  dotCount: number | null
-  votingDeadline: string | null
-  isVotingPhase: boolean
-  allowPublicVoting: boolean
-  registerUrl: string
-  loginUrl: string
+  decisionId: string;
+  title: string;
+  description: string;
+  background?: string | null;
+  votingMethod: VotingMethod;
+  options: Option[];
+  dotCount: number | null;
+  votingDeadline: string | null;
+  isVotingPhase: boolean;
+  allowPublicVoting: boolean;
+  registerUrl: string;
+  loginUrl: string;
 }
 
 export default function PublicVoteClient({
@@ -56,45 +56,46 @@ export default function PublicVoteClient({
   registerUrl,
   loginUrl,
 }: Props) {
-  const t = useTranslations('vote')
-  const [email, setEmail] = useState('')
-  const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState('')
-  const [errorCode, setErrorCode] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
+  const t = useTranslations('vote');
+  const [email, setEmail] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
+  const [errorCode, setErrorCode] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
-  const vote = useVoteState({ votingMethod, options, dotCount })
+  const vote = useVoteState({ votingMethod, options, dotCount });
 
-  const hasImages = options.some((o) => o.imageUrl)
-  const isGalleryMode = hasImages || (
-    options.length > 5 && (votingMethod === 'approval' || votingMethod === 'score' || votingMethod === 'dot')
-  )
+  const hasImages = options.some((o) => o.imageUrl);
+  const isGalleryMode =
+    hasImages ||
+    (options.length > 5 &&
+      (votingMethod === 'approval' || votingMethod === 'score' || votingMethod === 'dot'));
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
+    e.preventDefault();
     if (!email.trim()) {
-      setError(t('emailRequired'))
-      return
+      setError(t('emailRequired'));
+      return;
     }
 
-    setError('')
-    setErrorCode(null)
-    setSubmitting(true)
+    setError('');
+    setErrorCode(null);
+    setSubmitting(true);
 
-    const voteData = vote.buildVoteData()
+    const voteData = vote.buildVoteData();
 
     const result = await apiFetch<unknown>(`/api/vote/${decisionId}`, {
       method: 'POST',
       body: { email: email.trim(), voteData },
-    })
+    });
     if (!result.success) {
-      setError(result.error || t('submitError'))
-      setErrorCode(result.code ?? null)
-      setSubmitting(false)
-      return
+      setError(result.error || t('submitError'));
+      setErrorCode(result.code ?? null);
+      setSubmitting(false);
+      return;
     }
-    setSuccess(true)
-    setSubmitting(false)
+    setSuccess(true);
+    setSubmitting(false);
   }
 
   if (success) {
@@ -112,7 +113,9 @@ export default function PublicVoteClient({
             <UserPlus className="h-5 w-5 text-text-tertiary dark:text-text-muted mt-0.5 shrink-0" />
             <div className="flex-1">
               <p className="font-semibold text-text-primary">{t('successRegisterHeading')}</p>
-              <p className="mt-1 text-sm text-text-secondary dark:text-text-muted">{t('successRegisterDesc')}</p>
+              <p className="mt-1 text-sm text-text-secondary dark:text-text-muted">
+                {t('successRegisterDesc')}
+              </p>
               <Button as={Link} href={registerUrl} variant="primary" size="sm" className="mt-3">
                 {t('successRegisterCta')}
               </Button>
@@ -126,25 +129,23 @@ export default function PublicVoteClient({
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   if (!isVotingPhase) {
     return (
       <div className="rounded-xl bg-warning-50 dark:bg-yellow-500/8 border border-warning-200 dark:border-yellow-500/20 p-6 text-center">
-        <p className="text-warning-800 dark:text-yellow-300 font-medium">{t('notStartedHeading')}</p>
-        <p className="mt-1 text-sm text-warning-700 dark:text-yellow-400">
-          {t('notStartedDesc')}
+        <p className="text-warning-800 dark:text-yellow-300 font-medium">
+          {t('notStartedHeading')}
         </p>
+        <p className="mt-1 text-sm text-warning-700 dark:text-yellow-400">{t('notStartedDesc')}</p>
       </div>
-    )
+    );
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {votingDeadline && (
-        <DeadlineCountdown deadline={votingDeadline} />
-      )}
+      {votingDeadline && <DeadlineCountdown deadline={votingDeadline} />}
 
       {/* AI Advisor — lets voters understand the decision before voting */}
       <VoteAIAdvisor
@@ -152,7 +153,7 @@ export default function PublicVoteClient({
         description={description}
         background={background}
         votingMethod={votingMethod}
-        options={options.map(o => ({ label: o.label, description: o.description }))}
+        options={options.map((o) => ({ label: o.label, description: o.description }))}
       />
 
       {/* Email identification */}
@@ -242,15 +243,10 @@ export default function PublicVoteClient({
         </div>
       )}
 
-      <Button
-        type="submit"
-        disabled={submitting}
-        variant="primary"
-        className="w-full"
-      >
+      <Button type="submit" disabled={submitting} variant="primary" className="w-full">
         <Vote className="h-4 w-4" />
         {submitting ? t('saving') : t('submit')}
       </Button>
     </form>
-  )
+  );
 }

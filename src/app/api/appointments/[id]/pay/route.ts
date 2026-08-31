@@ -1,45 +1,46 @@
-import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
-import { db } from '@/db'
-import { serviceAppointments, serviceTypes, users, paymentTransactions } from '@/db/schema'
-import { eq, and, sql } from 'drizzle-orm'
-import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { logger } from '@/lib/logger'
-import { PAYMENT_STATUS, PAYMENT_TRANSACTION_TYPE } from '@/config/payment-status'
+import { NextRequest } from 'next/server';
+import { auth } from '@/auth';
+import { db } from '@/db';
+import { serviceAppointments, serviceTypes, users, paymentTransactions } from '@/db/schema';
+import { eq, and, sql } from 'drizzle-orm';
+import {
+  apiError,
+  apiSuccess,
+  apiUnauthorized,
+  apiNotFound,
+  apiBadRequest,
+} from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { logger } from '@/lib/logger';
+import { PAYMENT_STATUS, PAYMENT_TRANSACTION_TYPE } from '@/config/payment-status';
 import {
   processPaymentWithoutInvoice,
   centsToDisplay,
-  DEFAULT_AUTO_RELEASE_DAYS
-} from '@/lib/payments/payment-flow'
-import { isPayableBookingStatus } from '@/config/booking-status'
-import { APP_URL } from '@/config/urls'
-import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
-import { validateBody, PayAppointmentSchema } from '@/lib/schemas'
-import { PAYREXX_SETUP_MESSAGE, isPayrexxCheckoutUnavailable } from '@/lib/payments/payrexx-client'
+  DEFAULT_AUTO_RELEASE_DAYS,
+} from '@/lib/payments/payment-flow';
+import { isPayableBookingStatus } from '@/config/booking-status';
+import { APP_URL } from '@/config/urls';
+import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments';
+import { validateBody, PayAppointmentSchema } from '@/lib/schemas';
+import { PAYREXX_SETUP_MESSAGE, isPayrexxCheckoutUnavailable } from '@/lib/payments/payrexx-client';
 
 // POST /api/appointments/[id]/pay - Pay for existing appointment
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth()
+    const session = await auth();
     if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.AUTHENTICATION_REQUIRED)
+      return apiUnauthorized(ERROR_MESSAGES.AUTHENTICATION_REQUIRED);
     }
 
     if (isPayrexxCheckoutUnavailable()) {
-      return apiBadRequest(PAYREXX_SETUP_MESSAGE)
+      return apiBadRequest(PAYREXX_SETUP_MESSAGE);
     }
 
-    const appointmentId = request.nextUrl.pathname.split('/')[3] // Extract ID from URL
-    const body = await request.json()
-    const validation = validateBody(PayAppointmentSchema, body)
-    if (!validation.success) return validation.error
-    const {
-      useEscrow,
-      autoReleaseDays,
-      paymentType,
-      customAmount
-    } = validation.data
+    const appointmentId = request.nextUrl.pathname.split('/')[3]; // Extract ID from URL
+    const body = await request.json();
+    const validation = validateBody(PayAppointmentSchema, body);
+    if (!validation.success) return validation.error;
+    const { useEscrow, autoReleaseDays, paymentType, customAmount } = validation.data;
 
     // Get appointment details
     const [appointment] = await db
@@ -59,30 +60,32 @@ export async function POST(request: NextRequest) {
       .from(serviceAppointments)
       .innerJoin(serviceTypes, eq(serviceAppointments.serviceTypeId, serviceTypes.id))
       .innerJoin(users, eq(serviceAppointments.userId, users.id))
-      .where(eq(serviceAppointments.id, appointmentId))
+      .where(eq(serviceAppointments.id, appointmentId));
 
     if (!appointment) {
-      return apiNotFound('Termin')
+      return apiNotFound('Termin');
     }
 
     // Check ownership - owner or admin can pay
     if (appointment.user_id !== session.user.id && !session.user.isStaff) {
-      return apiUnauthorized('Du kannst nur für deine eigenen Termine bezahlen')
+      return apiUnauthorized('Du kannst nur für deine eigenen Termine bezahlen');
     }
 
     if (!isPayableBookingStatus(appointment.status!)) {
-      return apiBadRequest(`Terminstatus '${appointment.status}' ist nicht zahlbar`)
+      return apiBadRequest(`Terminstatus '${appointment.status}' ist nicht zahlbar`);
     }
 
     // Determine payment amount
-    const quotedCents = appointment.quoted_price_chf != null
-      ? Math.round(Number(appointment.quoted_price_chf) * 100)
-      : null
-    let paymentAmountCents = appointment.price_charged_cents ?? quotedCents ?? appointment.service_price_cents ?? 0
+    const quotedCents =
+      appointment.quoted_price_chf != null
+        ? Math.round(Number(appointment.quoted_price_chf) * 100)
+        : null;
+    let paymentAmountCents =
+      appointment.price_charged_cents ?? quotedCents ?? appointment.service_price_cents ?? 0;
 
     if (paymentType === 'deposit') {
       // 30% deposit
-      paymentAmountCents = Math.round(paymentAmountCents * 0.3)
+      paymentAmountCents = Math.round(paymentAmountCents * 0.3);
     } else if (paymentType === 'remaining') {
       // Calculate remaining balance
       const [paidRow] = await db
@@ -90,34 +93,36 @@ export async function POST(request: NextRequest) {
           total_paid: sql<number>`COALESCE(SUM(${paymentTransactions.amountCents}), 0)`,
         })
         .from(paymentTransactions)
-        .where(and(
-          eq(paymentTransactions.serviceAppointmentId, appointmentId),
-          eq(paymentTransactions.status, PAYMENT_STATUS.SUCCEEDED),
-          eq(paymentTransactions.type, PAYMENT_TRANSACTION_TYPE.PAYMENT)
-        ))
+        .where(
+          and(
+            eq(paymentTransactions.serviceAppointmentId, appointmentId),
+            eq(paymentTransactions.status, PAYMENT_STATUS.SUCCEEDED),
+            eq(paymentTransactions.type, PAYMENT_TRANSACTION_TYPE.PAYMENT),
+          ),
+        );
 
-      const totalPaid = paidRow?.total_paid ?? 0
-      const remaining = paymentAmountCents - totalPaid
+      const totalPaid = paidRow?.total_paid ?? 0;
+      const remaining = paymentAmountCents - totalPaid;
 
       if (remaining <= 0) {
-        return apiBadRequest('Termin ist bereits vollständig bezahlt')
+        return apiBadRequest('Termin ist bereits vollständig bezahlt');
       }
 
-      paymentAmountCents = remaining
+      paymentAmountCents = remaining;
     } else if (customAmount) {
-      paymentAmountCents = Math.round(parseFloat(String(customAmount)) * 100)
+      paymentAmountCents = Math.round(parseFloat(String(customAmount)) * 100);
     }
 
     if (paymentAmountCents <= 0) {
-      return apiBadRequest('Ungültiger Zahlungsbetrag')
+      return apiBadRequest('Ungültiger Zahlungsbetrag');
     }
 
     // Build redirect URLs — use the canonical APP_URL (SSOT) so prod redirects
     // never fall back to localhost when NEXT_PUBLIC_BASE_URL is unset.
-    const baseUrl = APP_URL
+    const baseUrl = APP_URL;
 
     // Capitalize first letter of payment type for description
-    const paymentTypeLabel = paymentType.charAt(0).toUpperCase() + paymentType.slice(1)
+    const paymentTypeLabel = paymentType.charAt(0).toUpperCase() + paymentType.slice(1);
 
     // Process payment using shared utility (without invoice - appointment already has one)
     const paymentResult = await processPaymentWithoutInvoice({
@@ -132,7 +137,7 @@ export async function POST(request: NextRequest) {
         useEscrow: useEscrow.toString(),
         autoReleaseDays: autoReleaseDays.toString(),
         paymentType,
-        appointmentType: 'service_payment'
+        appointmentType: 'service_payment',
       },
       serviceAppointmentId: appointmentId,
       successRedirectUrl: `${baseUrl}${SERVICE_APPOINTMENT_ROUTES.detail(appointmentId)}?payment=success`,
@@ -141,9 +146,9 @@ export async function POST(request: NextRequest) {
       purpose: `${paymentTypeLabel}: ${appointment.service_name}`,
       transactionMetadata: {
         paymentType,
-        originalAppointmentStatus: appointment.status
-      }
-    })
+        originalAppointmentStatus: appointment.status,
+      },
+    });
 
     // Status transitions after payment are handled by the Payrexx webhook.
     return apiSuccess({
@@ -156,11 +161,10 @@ export async function POST(request: NextRequest) {
       escrowEnabled: useEscrow,
       message: useEscrow
         ? `Zahlung autorisiert. Der Betrag wird bis zur Dienstleistungserbringung treuhänderisch verwahrt.`
-        : `Zahlung erfolgreich verarbeitet!`
-    })
-
+        : `Zahlung erfolgreich verarbeitet!`,
+    });
   } catch (error) {
-    logger.error('Pay for appointment error', { error })
-    return apiError(error, 'Zahlung für Termin konnte nicht verarbeitet werden')
+    logger.error('Pay for appointment error', { error });
+    return apiError(error, 'Zahlung für Termin konnte nicht verarbeitet werden');
   }
 }

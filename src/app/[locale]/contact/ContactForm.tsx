@@ -1,30 +1,30 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Mail, MessageSquare, Send, User } from 'lucide-react'
-import { ORG } from '@/config/org'
-import { apiFetch } from '@/lib/api/client'
-import Heading from '@/components/ui/Heading'
-import { Card } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { useTranslations } from 'next-intl'
+import { useState } from 'react';
+import { Mail, MessageSquare, Send, User } from 'lucide-react';
+import { ORG } from '@/config/org';
+import { apiFetch } from '@/lib/api/client';
+import Heading from '@/components/ui/Heading';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { useTranslations } from 'next-intl';
 
 export default function ContactForm() {
-  const t = useTranslations('contact.form')
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [subject, setSubject] = useState('')
-  const [message, setMessage] = useState('')
-  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle')
-  const [error, setError] = useState<string | null>(null)
+  const t = useTranslations('contact.form');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [subject, setSubject] = useState('');
+  const [message, setMessage] = useState('');
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!message.trim()) return
-    setStatus('submitting')
-    setError(null)
+    e.preventDefault();
+    if (!message.trim()) return;
+    setStatus('submitting');
+    setError(null);
     try {
       const payload = {
         suggestion: subject.trim() ? `${subject.trim()}\n\n${message.trim()}` : message.trim(),
@@ -35,36 +35,41 @@ export default function ContactForm() {
         pageSection: 'Contact',
         feedbackScope: 'page',
         selectedElements: [],
-        timestamp: new Date().toISOString()
-      }
+        timestamp: new Date().toISOString(),
+      };
       const { error: apiError } = await apiFetch('/api/suggestions', {
         method: 'POST',
         body: payload,
-      })
+      });
       if (apiError) {
-        throw new Error(apiError)
+        throw new Error(apiError);
       }
-      setStatus('success')
-      setName('')
-      setEmail('')
-      setSubject('')
-      setMessage('')
+      setStatus('success');
+      setName('');
+      setEmail('');
+      setSubject('');
+      setMessage('');
     } catch (err) {
-      setStatus('error')
-      setError(err instanceof Error ? err.message : t('errorFallback'))
+      setStatus('error');
+      setError(err instanceof Error ? err.message : t('errorFallback'));
     }
-  }
+  };
 
   return (
     <Card className="p-8">
-      <Heading level={2} className="text-3xl font-bold mb-6 text-center">{t('title')}</Heading>
+      <Heading level={2} className="text-3xl font-bold mb-6 text-center">
+        {t('title')}
+      </Heading>
       {status === 'success' && (
         <div className="mb-6 rounded-lg border border-strong dark:border-action bg-action-muted px-4 py-3 text-action text-sm">
           {t('successMessage')}
         </div>
       )}
       {status === 'error' && (
-        <div id="contact-error" className="mb-6 rounded-lg border border-error-200 dark:border-error-700/50 bg-error-50 dark:bg-error-900/20 px-4 py-3 text-error-700 dark:text-error-300 text-sm">
+        <div
+          id="contact-error"
+          className="mb-6 rounded-lg border border-error-200 dark:border-error-700/50 bg-error-50 dark:bg-error-900/20 px-4 py-3 text-error-700 dark:text-error-300 text-sm"
+        >
           {error}
         </div>
       )}
@@ -153,5 +158,5 @@ export default function ContactForm() {
         </div>
       </form>
     </Card>
-  )
+  );
 }

@@ -1,22 +1,29 @@
-import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
-import { db } from '@/db'
-import { itHilfeOffers, itHilfeRequests, users, userProfiles, repairerProfiles } from '@/db/schema'
-import { eq, and, sql, desc } from 'drizzle-orm'
-import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { logger } from '@/lib/logger'
-import { REQUEST_STATUS, OFFER_STATUS } from '@/config/it-hilfe'
-import { validateBody, CreateOfferSchema } from '@/lib/schemas'
-import { notifyUsers } from '@/lib/services/notifications'
-import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
-import { signOfferAcceptToken } from '@/lib/it-hilfe/offer-accept-tokens'
-import { getActiveTechnicianProfileId } from '@/lib/it-hilfe/technician'
-import { rateLimiters } from '@/lib/security/rate-limit'
-import { APP_URL } from '@/config/urls'
+import { NextRequest } from 'next/server';
+import { auth } from '@/auth';
+import { db } from '@/db';
+import { itHilfeOffers, itHilfeRequests, users, userProfiles, repairerProfiles } from '@/db/schema';
+import { eq, and, sql, desc } from 'drizzle-orm';
+import {
+  apiError,
+  apiSuccess,
+  apiUnauthorized,
+  apiBadRequest,
+  apiNotFound,
+  apiForbidden,
+} from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { logger } from '@/lib/logger';
+import { REQUEST_STATUS, OFFER_STATUS } from '@/config/it-hilfe';
+import { validateBody, CreateOfferSchema } from '@/lib/schemas';
+import { notifyUsers } from '@/lib/services/notifications';
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications';
+import { signOfferAcceptToken } from '@/lib/it-hilfe/offer-accept-tokens';
+import { getActiveTechnicianProfileId } from '@/lib/it-hilfe/technician';
+import { rateLimiters } from '@/lib/security/rate-limit';
+import { APP_URL } from '@/config/urls';
 
 interface RouteParams {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }
 
 /**
@@ -25,30 +32,30 @@ interface RouteParams {
  */
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
-    const session = await auth()
+    const session = await auth();
     if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
+      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED);
     }
 
-    const { id } = await params
+    const { id } = await params;
 
     // Validate UUID format
     if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) {
-      return apiBadRequest(ERROR_MESSAGES.INVALID_REQUEST_ID)
+      return apiBadRequest(ERROR_MESSAGES.INVALID_REQUEST_ID);
     }
 
     // Check if request exists and user is owner
     const [requestData] = await db
       .select({ requesterId: itHilfeRequests.requesterId, status: itHilfeRequests.status })
       .from(itHilfeRequests)
-      .where(eq(itHilfeRequests.id, id))
+      .where(eq(itHilfeRequests.id, id));
 
     if (!requestData) {
-      return apiNotFound('IT-Hilfe-Anfrage')
+      return apiNotFound('IT-Hilfe-Anfrage');
     }
 
     if (requestData.requesterId !== session.user.id) {
-      return apiForbidden('Du kannst nur Angebote für deine eigenen Anfragen einsehen')
+      return apiForbidden('Du kannst nur Angebote für deine eigenen Anfragen einsehen');
     }
 
     // Get offers with helper details + repairer profile info
@@ -77,9 +84,9 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       .leftJoin(repairerProfiles, eq(itHilfeOffers.repairerProfileId, repairerProfiles.id))
       .leftJoin(userProfiles, eq(userProfiles.userId, repairerProfiles.userId))
       .where(eq(itHilfeOffers.requestId, id))
-      .orderBy(desc(itHilfeOffers.createdAt))
+      .orderBy(desc(itHilfeOffers.createdAt));
 
-    const offers = rows.map(row => ({
+    const offers = rows.map((row) => ({
       id: row.id,
       requestId: row.requestId,
       helperId: row.helperId,
@@ -92,25 +99,27 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       relevantSkills: row.relevantSkills || [],
       status: row.status,
       createdAt: row.createdAt,
-      repairerProfile: row.repairerProfileId ? {
-        id: row.repairerProfileId,
-        businessName: row.repairerBusinessName,
-        isVerified: row.repairerIsVerified,
-        averageRating: row.repairerAverageRating,
-        totalReviews: row.repairerTotalReviews,
-      } : null,
-    }))
+      repairerProfile: row.repairerProfileId
+        ? {
+            id: row.repairerProfileId,
+            businessName: row.repairerBusinessName,
+            isVerified: row.repairerIsVerified,
+            averageRating: row.repairerAverageRating,
+            totalReviews: row.repairerTotalReviews,
+          }
+        : null,
+    }));
 
     logger.info('Fetched offers for request', {
       requestId: id,
       ownerId: session.user.id,
       offerCount: offers.length,
-    })
+    });
 
-    return apiSuccess({ offers })
+    return apiSuccess({ offers });
   } catch (error) {
-    logger.error('Error fetching offers', { error })
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    logger.error('Error fetching offers', { error });
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -120,20 +129,24 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
  */
 export async function POST(request: NextRequest, { params }: RouteParams) {
   try {
-    const session = await auth()
+    const session = await auth();
     if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
+      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED);
     }
 
     if (!rateLimiters.offerCreate(session.user.id + ':offer')) {
-      return apiError(new Error('Rate limit'), 'Zu viele Angebote. Bitte versuche es später erneut.', 429)
+      return apiError(
+        new Error('Rate limit'),
+        'Zu viele Angebote. Bitte versuche es später erneut.',
+        429,
+      );
     }
 
-    const { id } = await params
+    const { id } = await params;
 
     // Validate UUID format
     if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) {
-      return apiBadRequest(ERROR_MESSAGES.INVALID_REQUEST_ID)
+      return apiBadRequest(ERROR_MESSAGES.INVALID_REQUEST_ID);
     }
 
     // Check if request exists and is open
@@ -147,32 +160,29 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       })
       .from(itHilfeRequests)
       .innerJoin(users, eq(itHilfeRequests.requesterId, users.id))
-      .where(eq(itHilfeRequests.id, id))
+      .where(eq(itHilfeRequests.id, id));
 
     if (!requestData) {
-      return apiNotFound('IT-Hilfe-Anfrage')
+      return apiNotFound('IT-Hilfe-Anfrage');
     }
 
     // Cannot offer on own request
     if (requestData.requesterId === session.user.id) {
-      return apiBadRequest('Du kannst kein Angebot für deine eigene Anfrage abgeben')
+      return apiBadRequest('Du kannst kein Angebot für deine eigene Anfrage abgeben');
     }
 
     // Only allow offers on open requests
     if (requestData.status !== REQUEST_STATUS.OPEN) {
-      return apiBadRequest('Diese Anfrage akzeptiert keine neuen Angebote mehr')
+      return apiBadRequest('Diese Anfrage akzeptiert keine neuen Angebote mehr');
     }
 
     // Check if request has expired
     const [expired] = await db
       .select({ id: itHilfeRequests.id })
       .from(itHilfeRequests)
-      .where(and(
-        eq(itHilfeRequests.id, id),
-        sql`${itHilfeRequests.expiresAt} <= NOW()`
-      ))
+      .where(and(eq(itHilfeRequests.id, id), sql`${itHilfeRequests.expiresAt} <= NOW()`));
     if (expired) {
-      return apiBadRequest('Diese Anfrage ist abgelaufen')
+      return apiBadRequest('Diese Anfrage ist abgelaufen');
     }
 
     // Check if user already made an offer. The UNIQUE(request_id, helper_id)
@@ -186,28 +196,29 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     const [existingOffer] = await db
       .select({ id: itHilfeOffers.id, status: itHilfeOffers.status })
       .from(itHilfeOffers)
-      .where(and(
-        eq(itHilfeOffers.requestId, id),
-        eq(itHilfeOffers.helperId, session.user.id)
-      ))
+      .where(and(eq(itHilfeOffers.requestId, id), eq(itHilfeOffers.helperId, session.user.id)));
 
     if (existingOffer && existingOffer.status !== OFFER_STATUS.WITHDRAWN) {
-      return apiBadRequest('Du hast bereits ein Angebot für diese Anfrage abgegeben')
+      return apiBadRequest('Du hast bereits ein Angebot für diese Anfrage abgegeben');
     }
 
-    const withdrawnOfferId = existingOffer?.status === OFFER_STATUS.WITHDRAWN ? existingOffer.id : null
+    const withdrawnOfferId =
+      existingOffer?.status === OFFER_STATUS.WITHDRAWN ? existingOffer.id : null;
 
-    const body = await request.json()
-    const validation = validateBody(CreateOfferSchema, body)
-    if (!validation.success) return validation.error
-    const { message, estimatedTime, proposedCompensation, proposedAmountCents, relevantSkills } = validation.data
+    const body = await request.json();
+    const validation = validateBody(CreateOfferSchema, body);
+    if (!validation.success) return validation.error;
+    const { message, estimatedTime, proposedCompensation, proposedAmountCents, relevantSkills } =
+      validation.data;
 
     // Only registered technicians may respond to help requests. This is the
     // hard boundary — the client also hides the form, but the rule is enforced
     // here regardless of what the UI allowed. Same SSOT drives the detail view.
-    const repairerProfileId = await getActiveTechnicianProfileId(session.user.id)
+    const repairerProfileId = await getActiveTechnicianProfileId(session.user.id);
     if (!repairerProfileId) {
-      return apiForbidden('Nur registrierte Techniker können auf Hilfe-Anfragen antworten. Erstelle zuerst dein Techniker-Profil.')
+      return apiForbidden(
+        'Nur registrierte Techniker können auf Hilfe-Anfragen antworten. Erstelle zuerst dein Techniker-Profil.',
+      );
     }
 
     // Insert OR resurrect a withdrawn offer. UNIQUE(request_id, helper_id)
@@ -220,7 +231,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     // in migration 100. Offer write + count bump run in one transaction so they
     // stay atomic. Request status stays OPEN until an offer is accepted (→ MATCHED).
     const newOffer = await db.transaction(async (tx) => {
-      let offer: { id: string }
+      let offer: { id: string };
       if (withdrawnOfferId) {
         const [updated] = await tx
           .update(itHilfeOffers)
@@ -234,8 +245,8 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
             status: OFFER_STATUS.PENDING,
           })
           .where(eq(itHilfeOffers.id, withdrawnOfferId))
-          .returning({ id: itHilfeOffers.id })
-        offer = updated
+          .returning({ id: itHilfeOffers.id });
+        offer = updated;
       } else {
         const [inserted] = await tx
           .insert(itHilfeOffers)
@@ -249,38 +260,38 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
             relevantSkills: relevantSkills.length > 0 ? relevantSkills : undefined,
             repairerProfileId: repairerProfileId || undefined,
           })
-          .returning({ id: itHilfeOffers.id })
-        offer = inserted
+          .returning({ id: itHilfeOffers.id });
+        offer = inserted;
       }
 
       await tx
         .update(itHilfeRequests)
         .set({ offerCount: sql`${itHilfeRequests.offerCount} + 1` })
-        .where(eq(itHilfeRequests.id, id))
+        .where(eq(itHilfeRequests.id, id));
 
-      return offer
-    })
+      return offer;
+    });
 
     logger.info('Created IT-Hilfe offer', {
       offerId: newOffer.id,
       requestId: id,
       helperId: session.user.id,
-    })
+    });
 
     // Notify requester — in-app + rich email in a single central call. The
     // signed acceptToken powers the one-tap accept flow at
     // /it-hilfe/accept?token=... — HMAC failure only happens if AUTH_SECRET
     // isn't configured (dev). Fall through to view-only email then.
-    const requestUrl = `${APP_URL}/it-hilfe/${id}`
-    let acceptUrl: string | undefined
+    const requestUrl = `${APP_URL}/it-hilfe/${id}`;
+    let acceptUrl: string | undefined;
     try {
-      const acceptToken = signOfferAcceptToken(newOffer.id)
-      acceptUrl = `${APP_URL}/it-hilfe/accept?token=${encodeURIComponent(acceptToken)}`
+      const acceptToken = signOfferAcceptToken(newOffer.id);
+      acceptUrl = `${APP_URL}/it-hilfe/accept?token=${encodeURIComponent(acceptToken)}`;
     } catch (err) {
       logger.warn('Could not sign offer-accept token; email will fall back to view-only link', {
         err,
         offerId: newOffer.id,
-      })
+      });
     }
 
     notifyUsers([requestData.requesterId], {
@@ -297,18 +308,21 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         requestUrl,
         ...(acceptUrl ? { acceptUrl } : {}),
       },
-    }).catch(err => logger.warn('Failed to notify on new offer', { error: err, requestId: id }))
+    }).catch((err) => logger.warn('Failed to notify on new offer', { error: err, requestId: id }));
 
-    return apiSuccess({
-      message: 'Angebot erfolgreich abgegeben',
-      offerId: newOffer.id,
-    }, 201)
+    return apiSuccess(
+      {
+        message: 'Angebot erfolgreich abgegeben',
+        offerId: newOffer.id,
+      },
+      201,
+    );
   } catch (error) {
     // Handle unique constraint violation
     if (error instanceof Error && error.message.includes('unique_offer_per_user_request')) {
-      return apiBadRequest('Du hast bereits ein Angebot für diese Anfrage abgegeben')
+      return apiBadRequest('Du hast bereits ein Angebot für diese Anfrage abgegeben');
     }
-    logger.error('Error creating offer', { error })
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    logger.error('Error creating offer', { error });
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
 }

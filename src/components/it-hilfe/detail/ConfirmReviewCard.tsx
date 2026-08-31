@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Star, Loader2, CheckCircle } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
+import { useState } from 'react';
+import { Star, Loader2, CheckCircle } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 
 interface ConfirmReviewCardProps {
-  requestTitle: string
-  submitting: boolean
-  onSubmit: (params: { rating: number; reviewText: string; recommended: boolean }) => void
+  requestTitle: string;
+  submitting: boolean;
+  onSubmit: (params: { rating: number; reviewText: string; recommended: boolean }) => void;
 }
 
 /**
@@ -18,37 +18,33 @@ interface ConfirmReviewCardProps {
  * as completed. Collects a star rating, optional review text, and a
  * recommend yes/no answer, then submits them together.
  */
-export function ConfirmReviewCard({
-  requestTitle,
-  submitting,
-  onSubmit,
-}: ConfirmReviewCardProps) {
-  const t = useTranslations('itHelp.review')
-  const [rating, setRating] = useState(0)
-  const [hover, setHover] = useState(0)
-  const [reviewText, setReviewText] = useState('')
-  const [recommended, setRecommended] = useState<boolean | null>(null)
-  const [error, setError] = useState('')
+export function ConfirmReviewCard({ requestTitle, submitting, onSubmit }: ConfirmReviewCardProps) {
+  const t = useTranslations('itHelp.review');
+  const [rating, setRating] = useState(0);
+  const [hover, setHover] = useState(0);
+  const [reviewText, setReviewText] = useState('');
+  const [recommended, setRecommended] = useState<boolean | null>(null);
+  const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
+    e.preventDefault();
+    setError('');
 
     if (rating < 1) {
-      setError(t('errorNoStars'))
-      return
+      setError(t('errorNoStars'));
+      return;
     }
     if (recommended === null) {
-      setError(t('errorNoRecommend'))
-      return
+      setError(t('errorNoRecommend'));
+      return;
     }
     if (reviewText && reviewText.trim().length > 0 && reviewText.trim().length < 10) {
-      setError(t('errorTextTooShort'))
-      return
+      setError(t('errorTextTooShort'));
+      return;
     }
 
-    onSubmit({ rating, reviewText: reviewText.trim(), recommended })
-  }
+    onSubmit({ rating, reviewText: reviewText.trim(), recommended });
+  };
 
   return (
     <div className="bg-action-muted rounded-xl border-2 border-strong p-6">
@@ -103,7 +99,10 @@ export function ConfirmReviewCard({
 
         {/* Review text */}
         <div>
-          <label htmlFor="confirm-review-text" className="block text-sm font-medium text-text-secondary mb-1">
+          <label
+            htmlFor="confirm-review-text"
+            className="block text-sm font-medium text-text-secondary mb-1"
+          >
             {t('reviewTextOptionalLabel')}
           </label>
           <Textarea
@@ -167,5 +166,5 @@ export function ConfirmReviewCard({
         </Button>
       </form>
     </div>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Team Filters Component
@@ -7,7 +7,7 @@
  * Uses config from @/config/team for options (SSOT).
  */
 
-import { Search } from 'lucide-react'
+import { Search } from 'lucide-react';
 import {
   DEPARTMENT_OPTIONS,
   DEPARTMENT_LABELS,
@@ -15,11 +15,11 @@ import {
   EMPLOYMENT_TYPE_LABELS,
   type Department,
   type EmploymentType,
-} from '@/config/team'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
-import { Card } from '@/components/ui/card'
-import type { TeamFiltersProps } from './types'
+} from '@/config/team';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { Card } from '@/components/ui/card';
+import type { TeamFiltersProps } from './types';
 
 export function TeamFilters({
   department,
@@ -50,10 +50,7 @@ export function TeamFilters({
 
         {/* Department Filter */}
         <div className="w-full lg:w-48">
-          <Select
-            value={department}
-            onChange={(e) => onDepartmentChange(e.target.value)}
-          >
+          <Select value={department} onChange={(e) => onDepartmentChange(e.target.value)}>
             <option value="">Alle Abteilungen</option>
             {DEPARTMENT_OPTIONS.map((dept) => (
               <option key={dept} value={dept}>
@@ -65,10 +62,7 @@ export function TeamFilters({
 
         {/* Employment Type Filter */}
         <div className="w-full lg:w-48">
-          <Select
-            value={employmentType}
-            onChange={(e) => onEmploymentTypeChange(e.target.value)}
-          >
+          <Select value={employmentType} onChange={(e) => onEmploymentTypeChange(e.target.value)}>
             <option value="">Alle Typen</option>
             {EMPLOYMENT_TYPE_OPTIONS.map((type) => (
               <option key={type} value={type}>
@@ -80,10 +74,7 @@ export function TeamFilters({
 
         {/* Active Status Filter */}
         <div className="w-full lg:w-40">
-          <Select
-            value={isActive}
-            onChange={(e) => onIsActiveChange(e.target.value)}
-          >
+          <Select value={isActive} onChange={(e) => onIsActiveChange(e.target.value)}>
             <option value="all">Alle Status</option>
             <option value="true">Aktiv</option>
             <option value="false">Inaktiv</option>
@@ -91,5 +82,5 @@ export function TeamFilters({
         </div>
       </div>
     </Card>
-  )
+  );
 }

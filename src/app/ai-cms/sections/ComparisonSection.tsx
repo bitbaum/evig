@@ -1,12 +1,20 @@
 export function ComparisonSection() {
   const rows = [
-    { feature: 'Kontext beim Feedback', classic: '❌ Manuell', new: '✅ Automatisch (URL, Screenshot)' },
-    { feature: 'Einreichung für Nutzer', classic: '❌ E-Mail / Formular', new: '✅ Direkt auf der Seite' },
+    {
+      feature: 'Kontext beim Feedback',
+      classic: '❌ Manuell',
+      new: '✅ Automatisch (URL, Screenshot)',
+    },
+    {
+      feature: 'Einreichung für Nutzer',
+      classic: '❌ E-Mail / Formular',
+      new: '✅ Direkt auf der Seite',
+    },
     { feature: 'Redaktioneller Aufwand', classic: '❌ Hoch', new: '✅ Niedrig (KI-Gruppierung)' },
     { feature: 'Anonyme Einreichungen', classic: '✅ Möglich', new: '✅ Möglich' },
     { feature: 'Benachrichtigungen', classic: '❌ Manuell', new: '✅ Automatisch' },
     { feature: 'Datenschutz', classic: '✅ DSGVO-konform', new: '✅ DSGVO-konform' },
-  ]
+  ];
 
   return (
     <section className="py-16 px-4 bg-surface-raised">
@@ -36,5 +44,5 @@ export function ComparisonSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

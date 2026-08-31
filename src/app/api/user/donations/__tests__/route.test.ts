@@ -20,45 +20,58 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn()
+const mockAuth = jest.fn();
 
 jest.mock('@/auth', () => ({
   auth: (...args: unknown[]) => mockAuth.apply(null, args),
-}))
+}));
 
 // The route runs two queries:
 //   1. donations:  select.from(donations).where().orderBy()   → MOCK_DONATIONS
 //   2. linked:     select.from(items).leftJoin().where()  → linked rows
 // mockOrderBy controls the first; mockLinkedWhere controls the second.
-const mockOrderBy = jest.fn()
-const mockLinkedWhere = jest.fn()
+const mockOrderBy = jest.fn();
+const mockLinkedWhere = jest.fn();
 
-const mockSelect = jest.fn()
+const mockSelect = jest.fn();
 
 jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect.apply(null, args),
   },
-}))
+}));
 
 jest.mock('@/db/schema', () => ({
   donations: {
-    id: 'd_id', userId: 'd_userId', donationType: 'd_type',
-    amountCents: 'd_amount', currency: 'd_currency',
-    paymentMethod: 'd_payment', deviceCategory: 'd_category',
-    deviceDescription: 'd_desc', deviceBrand: 'd_brand',
-    deviceModel: 'd_model', deviceCondition: 'd_condition',
-    estimatedValueCents: 'd_value', status: 'd_status',
-    receiptRequested: 'd_receipt_req', receiptSent: 'd_receipt_sent',
+    id: 'd_id',
+    userId: 'd_userId',
+    donationType: 'd_type',
+    amountCents: 'd_amount',
+    currency: 'd_currency',
+    paymentMethod: 'd_payment',
+    deviceCategory: 'd_category',
+    deviceDescription: 'd_desc',
+    deviceBrand: 'd_brand',
+    deviceModel: 'd_model',
+    deviceCondition: 'd_condition',
+    estimatedValueCents: 'd_value',
+    status: 'd_status',
+    receiptRequested: 'd_receipt_req',
+    receiptSent: 'd_receipt_sent',
     createdAt: 'd_created',
   },
   inventoryItems: {
-    id: 'i_id', sourceDonationId: 'i_source', status: 'i_status',
-    intakeTier: 'i_tier', checklistComplete: 'i_checklist',
-    aiProductId: 'i_ai_id', marketplaceStatus: 'i_mkt_status', updatedAt: 'i_updated',
+    id: 'i_id',
+    sourceDonationId: 'i_source',
+    status: 'i_status',
+    intakeTier: 'i_tier',
+    checklistComplete: 'i_checklist',
+    aiProductId: 'i_ai_id',
+    marketplaceStatus: 'i_mkt_status',
+    updatedAt: 'i_updated',
   },
   aiExtractedProducts: { id: 'aep_id', itemUuid: 'aep_uuid' },
-}))
+}));
 
 jest.mock('drizzle-orm', () => ({
   ...jest.requireActual('drizzle-orm'),
@@ -67,82 +80,99 @@ jest.mock('drizzle-orm', () => ({
   // audit.ts calls getTableName(authAuditLog) at module load; the @/db/schema
   // mock returns plain objects (not real Drizzle tables), so override here.
   getTableName: () => 'auth_audit_log',
-}))
+}));
 
 jest.mock('@/lib/api/helpers', () => ({
   apiSuccess: (data: unknown, status = 200) => {
-    const { NextResponse } = jest.requireActual('next/server')
-    return NextResponse.json({ success: true, data }, { status })
+    const { NextResponse } = jest.requireActual('next/server');
+    return NextResponse.json({ success: true, data }, { status });
   },
   apiError: (err: unknown, msg: string, status = 500) => {
-    const { NextResponse } = jest.requireActual('next/server')
-    return NextResponse.json({ success: false, error: msg }, { status })
+    const { NextResponse } = jest.requireActual('next/server');
+    return NextResponse.json({ success: false, error: msg }, { status });
   },
   apiUnauthorized: (msg: string) => {
-    const { NextResponse } = jest.requireActual('next/server')
-    return NextResponse.json({ success: false, error: msg }, { status: 401 })
+    const { NextResponse } = jest.requireActual('next/server');
+    return NextResponse.json({ success: false, error: msg }, { status: 401 });
   },
-}))
+}));
 
 jest.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Internal server error' },
-}))
+}));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server'
-import { GET } from '../route'
+import { NextRequest } from 'next/server';
+import { GET } from '../route';
 
 // ---------------------------------------------------------------------------
 // Fixtures
 // ---------------------------------------------------------------------------
 
 const MOCK_SESSION = {
-  user: { id: 'user-55', email: 'donor@example.com', name: 'Donor', isStaff: false, staffPermissions: [] as string[], isSuperAdmin: false },
+  user: {
+    id: 'user-55',
+    email: 'donor@example.com',
+    name: 'Donor',
+    isStaff: false,
+    staffPermissions: [] as string[],
+    isSuperAdmin: false,
+  },
   expires: '2027-01-01',
-}
+};
 
 const MOCK_DONATIONS = [
   {
-    id: 'don-1', donation_type: 'device', amount_cents: null, currency: 'CHF',
-    payment_method: null, device_category: 'laptop', device_description: 'ThinkPad T14',
-    device_brand: 'Lenovo', device_model: 'T14', device_condition: 'good',
-    estimated_value_cents: 30000, status: 'received', receipt_requested: false,
-    receipt_sent: false, created_at: '2026-04-01',
+    id: 'don-1',
+    donation_type: 'device',
+    amount_cents: null,
+    currency: 'CHF',
+    payment_method: null,
+    device_category: 'laptop',
+    device_description: 'ThinkPad T14',
+    device_brand: 'Lenovo',
+    device_model: 'T14',
+    device_condition: 'good',
+    estimated_value_cents: 30000,
+    status: 'received',
+    receipt_requested: false,
+    receipt_sent: false,
+    created_at: '2026-04-01',
   },
-]
+];
 
 function makeRequest() {
-  return new NextRequest('http://localhost/api/user/donations')
+  return new NextRequest('http://localhost/api/user/donations');
 }
 
 beforeEach(() => {
-  jest.clearAllMocks()
-  mockAuth.mockResolvedValue(MOCK_SESSION)
-  mockOrderBy.mockResolvedValue(MOCK_DONATIONS)
-  mockLinkedWhere.mockResolvedValue([])
+  jest.clearAllMocks();
+  mockAuth.mockResolvedValue(MOCK_SESSION);
+  mockOrderBy.mockResolvedValue(MOCK_DONATIONS);
+  mockLinkedWhere.mockResolvedValue([]);
 
   // First select call returns the donations chain (from → where → orderBy).
   // Subsequent calls return the linked-inventory chain
   // (from → leftJoin → where) — one leftJoin now the marketplace_listings
   // join is gone (listing status comes from inventory_items.marketplace_status).
-  let n = 0
+  let n = 0;
   mockSelect.mockImplementation(() => {
-    n += 1
+    n += 1;
     if (n === 1) {
       return {
         from: () => ({ where: () => ({ orderBy: mockOrderBy }) }),
-      }
+      };
     }
     return {
       from: () => ({
         leftJoin: () => ({ where: mockLinkedWhere }),
       }),
-    }
-  })
-})
+    };
+  });
+});
 
 // ============================================================================
 // GET /api/user/donations
@@ -150,44 +180,44 @@ beforeEach(() => {
 
 describe('GET /api/user/donations — unauthenticated', () => {
   it('returns 401 when session is null', async () => {
-    mockAuth.mockResolvedValueOnce(null)
-    const response = await GET(makeRequest())
-    expect(response.status).toBe(401)
-  })
-})
+    mockAuth.mockResolvedValueOnce(null);
+    const response = await GET(makeRequest());
+    expect(response.status).toBe(401);
+  });
+});
 
 describe('GET /api/user/donations — authenticated', () => {
   it('returns 200 on success', async () => {
-    const response = await GET(makeRequest())
-    expect(response.status).toBe(200)
-  })
+    const response = await GET(makeRequest());
+    expect(response.status).toBe(200);
+  });
 
   it('returns donation rows array', async () => {
-    const response = await GET(makeRequest())
-    const body = await response.json()
-    expect(Array.isArray(body.data)).toBe(true)
-    expect(body.data).toHaveLength(1)
-    expect(body.data[0].device_category).toBe('laptop')
-  })
+    const response = await GET(makeRequest());
+    const body = await response.json();
+    expect(Array.isArray(body.data)).toBe(true);
+    expect(body.data).toHaveLength(1);
+    expect(body.data[0].device_category).toBe('laptop');
+  });
 
   it('returns empty array when user has no donations', async () => {
-    mockOrderBy.mockResolvedValueOnce([])
-    const response = await GET(makeRequest())
-    const body = await response.json()
-    expect(body.data).toEqual([])
-  })
+    mockOrderBy.mockResolvedValueOnce([]);
+    const response = await GET(makeRequest());
+    const body = await response.json();
+    expect(body.data).toEqual([]);
+  });
 
   it('filters by session user id', async () => {
-    await GET(makeRequest())
-    const { eq } = await import('drizzle-orm')
-    expect(eq).toHaveBeenCalledWith(expect.anything(), 'user-55')
-  })
+    await GET(makeRequest());
+    const { eq } = await import('drizzle-orm');
+    expect(eq).toHaveBeenCalledWith(expect.anything(), 'user-55');
+  });
 
   it('returns 500 when DB throws', async () => {
-    mockOrderBy.mockRejectedValueOnce(new Error('DB error'))
-    const response = await GET(makeRequest())
-    expect(response.status).toBe(500)
-    const body = await response.json()
-    expect(body.success).toBe(false)
-  })
-})
+    mockOrderBy.mockRejectedValueOnce(new Error('DB error'));
+    const response = await GET(makeRequest());
+    expect(response.status).toBe(500);
+    const body = await response.json();
+    expect(body.success).toBe(false);
+  });
+});

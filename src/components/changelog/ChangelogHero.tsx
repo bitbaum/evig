@@ -1,10 +1,10 @@
-import { Eyebrow } from '@/components/ui/Eyebrow'
+import { Eyebrow } from '@/components/ui/Eyebrow';
 
 interface ChangelogHeroProps {
-  eyebrow: string
-  badge: string
-  title: string
-  subtitle: string
+  eyebrow: string;
+  badge: string;
+  title: string;
+  subtitle: string;
 }
 
 export function ChangelogHero({ eyebrow, badge, title, subtitle }: ChangelogHeroProps) {
@@ -23,5 +23,5 @@ export function ChangelogHero({ eyebrow, badge, title, subtitle }: ChangelogHero
         </div>
       </div>
     </header>
-  )
+  );
 }

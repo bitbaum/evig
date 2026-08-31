@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * TeamProfileTabs — Phase 3 of the team + timecards rebuild.
@@ -15,77 +15,91 @@
  * Maria's hours"). Defaults to overview.
  */
 
-import { useState, useCallback, useEffect } from 'react'
-import { useRouter, useSearchParams, usePathname } from 'next/navigation'
-import { ArrowLeft, User, Clock, Activity, Edit2, Mail, Calendar, Phone, CheckSquare, Globe } from 'lucide-react'
-import Link from 'next/link'
-import { useTranslations } from 'next-intl'
-import { cn } from '@/lib/utils'
-import { navLinkClass } from '@/lib/design/nav'
-import { adminInteractive } from '@/lib/admin-ui'
-import { Avatar } from '@/components/ui/Avatar'
-import { TeamProfileView } from './TeamProfileView'
-import { TeamProfileTimecardsTab } from './TeamProfileTimecardsTab'
-import { TeamProfileActivityTab } from './TeamProfileActivityTab'
-import { TeamProfileTasksTab } from './TeamProfileTasksTab'
-import { TeamLeavePeriodsCard } from './TeamLeavePeriodsCard'
-import type { TeamProfileWithUser } from '@/lib/schemas/team'
-import { Button } from '@/components/ui/button'
+import { useState, useCallback, useEffect } from 'react';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import {
+  ArrowLeft,
+  User,
+  Clock,
+  Activity,
+  Edit2,
+  Mail,
+  Calendar,
+  Phone,
+  CheckSquare,
+  Globe,
+} from 'lucide-react';
+import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { cn } from '@/lib/utils';
+import { navLinkClass } from '@/lib/design/nav';
+import { adminInteractive } from '@/lib/admin-ui';
+import { Avatar } from '@/components/ui/Avatar';
+import { TeamProfileView } from './TeamProfileView';
+import { TeamProfileTimecardsTab } from './TeamProfileTimecardsTab';
+import { TeamProfileActivityTab } from './TeamProfileActivityTab';
+import { TeamProfileTasksTab } from './TeamProfileTasksTab';
+import { TeamLeavePeriodsCard } from './TeamLeavePeriodsCard';
+import type { TeamProfileWithUser } from '@/lib/schemas/team';
+import { Button } from '@/components/ui/button';
 import {
   getDepartmentColor,
   getDepartmentLabel,
   getEmploymentTypeColor,
   getEmploymentTypeLabel,
-} from '@/config/team'
-import { formatDateShort } from '@/lib/date-formats'
+} from '@/config/team';
+import { formatDateShort } from '@/lib/date-formats';
 
-type TabKey = 'uebersicht' | 'aufgaben' | 'zeiterfassung' | 'aktivitaet'
+type TabKey = 'uebersicht' | 'aufgaben' | 'zeiterfassung' | 'aktivitaet';
 
-const TAB_KEYS: TabKey[] = ['uebersicht', 'aufgaben', 'zeiterfassung', 'aktivitaet']
+const TAB_KEYS: TabKey[] = ['uebersicht', 'aufgaben', 'zeiterfassung', 'aktivitaet'];
 
 interface Props {
-  profile: TeamProfileWithUser
-  isSuperAdmin: boolean
+  profile: TeamProfileWithUser;
+  isSuperAdmin: boolean;
 }
 
 function parseTabKey(value: string | null): TabKey {
-  if (value && TAB_KEYS.includes(value as TabKey)) return value as TabKey
-  return 'uebersicht'
+  if (value && TAB_KEYS.includes(value as TabKey)) return value as TabKey;
+  return 'uebersicht';
 }
 
 export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
-  const t = useTranslations('admin.team')
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  const [tab, setTab] = useState<TabKey>(() => parseTabKey(searchParams?.get('tab') ?? null))
+  const t = useTranslations('admin.team');
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [tab, setTab] = useState<TabKey>(() => parseTabKey(searchParams?.get('tab') ?? null));
 
   // Sync URL ?tab=... when the user clicks a tab. shallow replace — no scroll jump.
-  const goTo = useCallback((next: TabKey) => {
-    setTab(next)
-    const params = new URLSearchParams(searchParams?.toString() ?? '')
-    if (next === 'uebersicht') params.delete('tab')
-    else params.set('tab', next)
-    const qs = params.toString()
-    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false })
-  }, [router, pathname, searchParams])
+  const goTo = useCallback(
+    (next: TabKey) => {
+      setTab(next);
+      const params = new URLSearchParams(searchParams?.toString() ?? '');
+      if (next === 'uebersicht') params.delete('tab');
+      else params.set('tab', next);
+      const qs = params.toString();
+      router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+    },
+    [router, pathname, searchParams],
+  );
 
   // Keep tab state in sync if user uses browser back/forward to a different ?tab.
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
-    const fromUrl = parseTabKey(searchParams?.get('tab') ?? null)
-    if (fromUrl !== tab) setTab(fromUrl)
-  }, [searchParams, tab])
+    const fromUrl = parseTabKey(searchParams?.get('tab') ?? null);
+    if (fromUrl !== tab) setTab(fromUrl);
+  }, [searchParams, tab]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
-  const displayName = profile.user_name || profile.user_email.split('@')[0]
+  const displayName = profile.user_name || profile.user_email.split('@')[0];
 
   const tabMeta: Record<TabKey, { label: string; icon: typeof User }> = {
     uebersicht: { label: t('tabs.overview'), icon: User },
     aufgaben: { label: t('tabs.tasks'), icon: CheckSquare },
     zeiterfassung: { label: t('tabs.timecards'), icon: Clock },
     aktivitaet: { label: t('tabs.activity'), icon: Activity },
-  }
+  };
 
   return (
     <div className="space-y-4">
@@ -107,7 +121,9 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
             <Avatar
               name={profile.user_name || profile.user_email}
               size="lg"
-              colorClassName={profile.is_active ? adminInteractive.avatarActive : adminInteractive.avatarInactive}
+              colorClassName={
+                profile.is_active ? adminInteractive.avatarActive : adminInteractive.avatarInactive
+              }
             />
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
@@ -141,12 +157,22 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
               </div>
               <div className="mt-3 flex flex-wrap gap-1.5">
                 {profile.department && (
-                  <span className={cn('rounded-full px-2.5 py-1 text-xs font-medium', getDepartmentColor(profile.department))}>
+                  <span
+                    className={cn(
+                      'rounded-full px-2.5 py-1 text-xs font-medium',
+                      getDepartmentColor(profile.department),
+                    )}
+                  >
                     {getDepartmentLabel(profile.department)}
                   </span>
                 )}
                 {profile.employment_type && (
-                  <span className={cn('rounded-full px-2.5 py-1 text-xs font-medium', getEmploymentTypeColor(profile.employment_type))}>
+                  <span
+                    className={cn(
+                      'rounded-full px-2.5 py-1 text-xs font-medium',
+                      getEmploymentTypeColor(profile.employment_type),
+                    )}
+                  >
                     {getEmploymentTypeLabel(profile.employment_type)}
                   </span>
                 )}
@@ -178,11 +204,15 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
 
       {/* Tab bar */}
       <div className="flex items-center justify-between gap-3 border-b border">
-        <nav className="flex -mb-px overflow-x-auto scrollbar-hide" role="tablist" aria-label="Profilbereiche">
+        <nav
+          className="flex -mb-px overflow-x-auto scrollbar-hide"
+          role="tablist"
+          aria-label="Profilbereiche"
+        >
           {TAB_KEYS.map((key) => {
-            const meta = tabMeta[key]
-            const Icon = meta.icon
-            const isActive = tab === key
+            const meta = tabMeta[key];
+            const Icon = meta.icon;
+            const isActive = tab === key;
             return (
               <Button
                 key={key}
@@ -191,34 +221,27 @@ export function TeamProfileTabs({ profile, isSuperAdmin }: Props) {
                 onClick={() => goTo(key)}
                 role="tab"
                 aria-selected={isActive}
-                className={navLinkClass('tab', isActive, 'inline-flex items-center gap-2 h-auto rounded-none')}
+                className={navLinkClass(
+                  'tab',
+                  isActive,
+                  'inline-flex items-center gap-2 h-auto rounded-none',
+                )}
               >
                 <Icon className="w-4 h-4" />
                 {meta.label}
               </Button>
-            )
+            );
           })}
         </nav>
       </div>
 
       {/* Tab content */}
       <div className="min-h-[400px]">
-        {tab === 'uebersicht' && (
-          <TeamProfileView
-            profile={profile}
-            isSuperAdmin={isSuperAdmin}
-          />
-        )}
-        {tab === 'aufgaben' && (
-          <TeamProfileTasksTab userId={profile.user_id} />
-        )}
-        {tab === 'zeiterfassung' && (
-          <TeamProfileTimecardsTab userId={profile.user_id} />
-        )}
-        {tab === 'aktivitaet' && (
-          <TeamProfileActivityTab userId={profile.user_id} />
-        )}
+        {tab === 'uebersicht' && <TeamProfileView profile={profile} isSuperAdmin={isSuperAdmin} />}
+        {tab === 'aufgaben' && <TeamProfileTasksTab userId={profile.user_id} />}
+        {tab === 'zeiterfassung' && <TeamProfileTimecardsTab userId={profile.user_id} />}
+        {tab === 'aktivitaet' && <TeamProfileActivityTab userId={profile.user_id} />}
       </div>
     </div>
-  )
+  );
 }

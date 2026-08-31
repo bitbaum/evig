@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { useSession } from 'next-auth/react'
-import { Eyebrow } from '@/components/ui/Eyebrow'
+import { useSession } from 'next-auth/react';
+import { Eyebrow } from '@/components/ui/Eyebrow';
 import {
   MessageSquare,
   Edit3,
@@ -11,43 +11,50 @@ import {
   Clock,
   CheckCircle,
   Eye,
-  EyeOff
-} from 'lucide-react'
-import { StarRating } from '@/components/ui/StarRating'
-import { useTranslations } from 'next-intl'
-import { formatDateShort } from '@/lib/date-formats'
-import { useReviewManagement, type Review } from '@/hooks/useReviewManagement'
-import Heading from '@/components/ui/Heading'
-import { EmptyState } from '@/components/ui/EmptyState'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { FormField } from '@/components/ui/form-field'
-import { REVIEW_STATUS, REVIEW_STATUS_BADGES } from '@/config/review-status'
+  EyeOff,
+} from 'lucide-react';
+import { StarRating } from '@/components/ui/StarRating';
+import { useTranslations } from 'next-intl';
+import { formatDateShort } from '@/lib/date-formats';
+import { useReviewManagement, type Review } from '@/hooks/useReviewManagement';
+import Heading from '@/components/ui/Heading';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { FormField } from '@/components/ui/form-field';
+import { REVIEW_STATUS, REVIEW_STATUS_BADGES } from '@/config/review-status';
 
-const STATUS_STYLES = REVIEW_STATUS_BADGES
+const STATUS_STYLES = REVIEW_STATUS_BADGES;
 
 const STATUS_ICONS: Record<string, React.ReactNode> = {
   [REVIEW_STATUS.PUBLISHED]: <CheckCircle className="w-3 h-3" />,
   [REVIEW_STATUS.PENDING_MODERATION]: <Clock className="w-3 h-3" />,
   [REVIEW_STATUS.HIDDEN]: <EyeOff className="w-3 h-3" />,
-  [REVIEW_STATUS.DELETED]: <Trash2 className="w-3 h-3" />
-}
+  [REVIEW_STATUS.DELETED]: <Trash2 className="w-3 h-3" />,
+};
 
 function StatusBadge({ status }: { status: string }) {
-  const t = useTranslations('dashboard.reviews')
-  const label = status === REVIEW_STATUS.PUBLISHED ? t('statusPublished')
-    : status === REVIEW_STATUS.PENDING_MODERATION ? t('statusPendingModeration')
-    : status === REVIEW_STATUS.HIDDEN ? t('statusHidden')
-    : status === REVIEW_STATUS.DELETED ? t('statusDeleted')
-    : t('statusUnknown')
+  const t = useTranslations('dashboard.reviews');
+  const label =
+    status === REVIEW_STATUS.PUBLISHED
+      ? t('statusPublished')
+      : status === REVIEW_STATUS.PENDING_MODERATION
+        ? t('statusPendingModeration')
+        : status === REVIEW_STATUS.HIDDEN
+          ? t('statusHidden')
+          : status === REVIEW_STATUS.DELETED
+            ? t('statusDeleted')
+            : t('statusUnknown');
   return (
-    <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium gap-1 ${STATUS_STYLES[status] || STATUS_STYLES.published}`}>
+    <span
+      className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium gap-1 ${STATUS_STYLES[status] || STATUS_STYLES.published}`}
+    >
       {STATUS_ICONS[status] || <Eye className="w-3 h-3" />}
       {label}
     </span>
-  )
+  );
 }
 
 function StarRow({ rating, onChange }: { rating: number; onChange?: (r: number) => void }) {
@@ -56,33 +63,59 @@ function StarRow({ rating, onChange }: { rating: number; onChange?: (r: number) 
       <StarRating value={rating} onChange={onChange} />
       <span className="ml-2 text-sm text-text-secondary">{rating}/5</span>
     </div>
-  )
+  );
 }
 
-function ReviewEditForm({ editForm, setEditForm, onSave, onCancel }: {
-  editForm: { overallRating: number; communicationRating: number; professionalismRating: number; qualityRating: number; timelinessRating: number; valueRating: number; title: string; content: string }
-  setEditForm: (form: typeof editForm) => void
-  onSave: () => void
-  onCancel: () => void
+function ReviewEditForm({
+  editForm,
+  setEditForm,
+  onSave,
+  onCancel,
+}: {
+  editForm: {
+    overallRating: number;
+    communicationRating: number;
+    professionalismRating: number;
+    qualityRating: number;
+    timelinessRating: number;
+    valueRating: number;
+    title: string;
+    content: string;
+  };
+  setEditForm: (form: typeof editForm) => void;
+  onSave: () => void;
+  onCancel: () => void;
 }) {
-  const t = useTranslations('dashboard.reviews')
+  const t = useTranslations('dashboard.reviews');
   return (
     <div className="space-y-4">
       <div>
-        <label className="block text-sm font-medium text-text-secondary mb-1">{t('editOverallRating')}</label>
-        <StarRow rating={editForm.overallRating} onChange={(r) => setEditForm({...editForm, overallRating: r})} />
+        <label className="block text-sm font-medium text-text-secondary mb-1">
+          {t('editOverallRating')}
+        </label>
+        <StarRow
+          rating={editForm.overallRating}
+          onChange={(r) => setEditForm({ ...editForm, overallRating: r })}
+        />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        {([
-          { labelKey: 'editCommunication', key: 'communicationRating' as const },
-          { labelKey: 'editProfessionalism', key: 'professionalismRating' as const },
-          { labelKey: 'editQuality', key: 'qualityRating' as const },
-          { labelKey: 'editTimeliness', key: 'timelinessRating' as const },
-        ] as const).map(({ labelKey, key }) => (
+        {(
+          [
+            { labelKey: 'editCommunication', key: 'communicationRating' as const },
+            { labelKey: 'editProfessionalism', key: 'professionalismRating' as const },
+            { labelKey: 'editQuality', key: 'qualityRating' as const },
+            { labelKey: 'editTimeliness', key: 'timelinessRating' as const },
+          ] as const
+        ).map(({ labelKey, key }) => (
           <div key={key}>
-            <label className="block text-sm font-medium text-text-secondary mb-1">{t(labelKey)}</label>
-            <StarRow rating={editForm[key]} onChange={(r) => setEditForm({...editForm, [key]: r})} />
+            <label className="block text-sm font-medium text-text-secondary mb-1">
+              {t(labelKey)}
+            </label>
+            <StarRow
+              rating={editForm[key]}
+              onChange={(r) => setEditForm({ ...editForm, [key]: r })}
+            />
           </div>
         ))}
       </div>
@@ -91,7 +124,7 @@ function ReviewEditForm({ editForm, setEditForm, onSave, onCancel }: {
         <Input
           type="text"
           value={editForm.title}
-          onChange={(e) => setEditForm({...editForm, title: e.target.value})}
+          onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
           placeholder={t('editTitlePlaceholder')}
         />
       </FormField>
@@ -99,35 +132,60 @@ function ReviewEditForm({ editForm, setEditForm, onSave, onCancel }: {
       <FormField label={t('editContent')}>
         <Textarea
           value={editForm.content}
-          onChange={(e) => setEditForm({...editForm, content: e.target.value})}
+          onChange={(e) => setEditForm({ ...editForm, content: e.target.value })}
           rows={4}
           placeholder={t('editContentPlaceholder')}
         />
       </FormField>
 
       <div className="flex gap-2">
-        <Button variant="primary" onClick={onSave}>{t('save')}</Button>
-        <Button variant="outline" onClick={onCancel}>{t('cancel')}</Button>
+        <Button variant="primary" onClick={onSave}>
+          {t('save')}
+        </Button>
+        <Button variant="outline" onClick={onCancel}>
+          {t('cancel')}
+        </Button>
       </div>
     </div>
-  )
+  );
 }
 
-function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSaveEdit, onCancelEdit, onDelete, onVote, getUserVote, canEdit }: {
-  review: Review
-  editingReview: string | null
-  editForm: { overallRating: number; communicationRating: number; professionalismRating: number; qualityRating: number; timelinessRating: number; valueRating: number; title: string; content: string }
-  setEditForm: (form: typeof editForm) => void
-  onEdit: (review: Review) => void
-  onSaveEdit: () => void
-  onCancelEdit: () => void
-  onDelete: (id: string) => void
-  onVote: (id: string, type: 'helpful' | 'unhelpful') => void
-  getUserVote: (id: string) => 'helpful' | 'unhelpful' | undefined
-  canEdit: (createdAt: string) => boolean
+function ReviewCard({
+  review,
+  editingReview,
+  editForm,
+  setEditForm,
+  onEdit,
+  onSaveEdit,
+  onCancelEdit,
+  onDelete,
+  onVote,
+  getUserVote,
+  canEdit,
+}: {
+  review: Review;
+  editingReview: string | null;
+  editForm: {
+    overallRating: number;
+    communicationRating: number;
+    professionalismRating: number;
+    qualityRating: number;
+    timelinessRating: number;
+    valueRating: number;
+    title: string;
+    content: string;
+  };
+  setEditForm: (form: typeof editForm) => void;
+  onEdit: (review: Review) => void;
+  onSaveEdit: () => void;
+  onCancelEdit: () => void;
+  onDelete: (id: string) => void;
+  onVote: (id: string, type: 'helpful' | 'unhelpful') => void;
+  getUserVote: (id: string) => 'helpful' | 'unhelpful' | undefined;
+  canEdit: (createdAt: string) => boolean;
 }) {
-  const t = useTranslations('dashboard.reviews')
-  const tDates = useTranslations('dashboard.dates')
+  const t = useTranslations('dashboard.reviews');
+  const tDates = useTranslations('dashboard.dates');
   return (
     <Card className="overflow-hidden">
       <div className="p-6 border-b border">
@@ -160,7 +218,9 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
             ) : (
               <>
                 {review.title && (
-                  <Heading level={4} className="font-medium text-text-primary mb-2">{review.title}</Heading>
+                  <Heading level={4} className="font-medium text-text-primary mb-2">
+                    {review.title}
+                  </Heading>
                 )}
                 <p className="text-text-secondary mb-3 leading-relaxed">{review.content}</p>
 
@@ -183,7 +243,12 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
           {editingReview !== review.id && (
             <div className="flex flex-col gap-2 ml-4">
               {canEdit(review.createdAt) && review.status === REVIEW_STATUS.PUBLISHED && (
-                <Button onClick={() => onEdit(review)} variant="secondary" size="sm" className="gap-1">
+                <Button
+                  onClick={() => onEdit(review)}
+                  variant="secondary"
+                  size="sm"
+                  className="gap-1"
+                >
                   <Edit3 className="w-3 h-3" />
                   {t('edit')}
                 </Button>
@@ -218,9 +283,11 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
                 onClick={() => onVote(review.id, 'helpful')}
                 variant="ghost"
                 size="sm"
-                className={getUserVote(review.id) === 'helpful'
-                  ? 'bg-action-muted/20 text-action'
-                  : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'}
+                className={
+                  getUserVote(review.id) === 'helpful'
+                    ? 'bg-action-muted/20 text-action'
+                    : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
+                }
               >
                 <ThumbsUp className="w-3 h-3" />
                 {t('helpful', { count: review.helpfulVotes })}
@@ -229,9 +296,11 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
                 onClick={() => onVote(review.id, 'unhelpful')}
                 variant="ghost"
                 size="sm"
-                className={getUserVote(review.id) === 'unhelpful'
-                  ? 'bg-error-100 dark:bg-error-500/20 text-error-700 dark:text-error-400'
-                  : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'}
+                className={
+                  getUserVote(review.id) === 'unhelpful'
+                    ? 'bg-error-100 dark:bg-error-500/20 text-error-700 dark:text-error-400'
+                    : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
+                }
               >
                 <ThumbsDown className="w-3 h-3" />
                 {t('notHelpful')}
@@ -241,12 +310,12 @@ function ReviewCard({ review, editingReview, editForm, setEditForm, onEdit, onSa
         </div>
       </div>
     </Card>
-  )
+  );
 }
 
 export default function UserReviewsPage() {
-  const t = useTranslations('dashboard.reviews')
-  const { status } = useSession()
+  const t = useTranslations('dashboard.reviews');
+  const { status } = useSession();
   const {
     reviews,
     loading,
@@ -261,14 +330,14 @@ export default function UserReviewsPage() {
     cancelEdit,
     getUserVoteForReview,
     canEditReview,
-  } = useReviewManagement(status)
+  } = useReviewManagement(status);
 
   if (status === 'loading' || loading) {
     return (
       <div className="flex items-center justify-center min-h-96">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-action"></div>
       </div>
-    )
+    );
   }
 
   if (error) {
@@ -277,21 +346,21 @@ export default function UserReviewsPage() {
         <div className="flex">
           <div className="text-error-400">⚠️</div>
           <div className="ml-3">
-            <Heading level={3} className="text-sm font-medium text-error-800 dark:text-error-300">{t('loadError')}</Heading>
+            <Heading level={3} className="text-sm font-medium text-error-800 dark:text-error-300">
+              {t('loadError')}
+            </Heading>
             <p className="text-sm text-error-700 dark:text-error-400 mt-1">{error}</p>
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="border-b border-subtle pb-8">
-        <Eyebrow>
-          {t('pageDescription')}
-        </Eyebrow>
+        <Eyebrow>{t('pageDescription')}</Eyebrow>
         <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
           {t('pageTitle')}
         </Heading>
@@ -327,5 +396,5 @@ export default function UserReviewsPage() {
         )}
       </div>
     </div>
-  )
+  );
 }

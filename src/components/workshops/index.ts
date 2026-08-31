@@ -5,8 +5,8 @@
  * Following DRY and separation of concerns principles.
  */
 
-export * from './types'
-export { PaymentForm } from './PaymentForm'
-export { WorkshopLoginPrompt } from './WorkshopLoginPrompt'
-export { WorkshopInstanceCard } from './WorkshopInstanceCard'
-export { RegistrationSuccessCard } from './RegistrationSuccessCard'
+export * from './types';
+export { PaymentForm } from './PaymentForm';
+export { WorkshopLoginPrompt } from './WorkshopLoginPrompt';
+export { WorkshopInstanceCard } from './WorkshopInstanceCard';
+export { RegistrationSuccessCard } from './RegistrationSuccessCard';

@@ -14,16 +14,16 @@
  *   - sustainability_score: Environmental scoring
  */
 
-import { NextRequest } from 'next/server'
-import { db } from '@/db'
-import { aiExtractedProducts, sustainabilityScores, aiProcessingLogs } from '@/db/schema'
-import { auth } from '@/auth'
-import { apiError, apiSuccess, apiUnauthorized, apiRateLimited } from '@/lib/api/helpers'
-import { logger } from '@/lib/logger'
-import { extractProductFromImage } from '@/lib/erfassung/ai-extraction'
-import { validateBody, AnalyzeProductSchema } from '@/lib/schemas'
-import { APPROVAL_STATUS } from '@/config/approval-status'
-import { rateLimiters } from '@/lib/security/rate-limit'
+import { NextRequest } from 'next/server';
+import { db } from '@/db';
+import { aiExtractedProducts, sustainabilityScores, aiProcessingLogs } from '@/db/schema';
+import { auth } from '@/auth';
+import { apiError, apiSuccess, apiUnauthorized, apiRateLimited } from '@/lib/api/helpers';
+import { logger } from '@/lib/logger';
+import { extractProductFromImage } from '@/lib/erfassung/ai-extraction';
+import { validateBody, AnalyzeProductSchema } from '@/lib/schemas';
+import { APPROVAL_STATUS } from '@/config/approval-status';
+import { rateLimiters } from '@/lib/security/rate-limit';
 
 // Map condition values to display format
 const CONDITION_MAP: Record<string, string> = {
@@ -32,40 +32,36 @@ const CONDITION_MAP: Record<string, string> = {
   good: 'good',
   fair: 'fair',
   poor: 'poor',
-}
+};
 
 // Product data interface for sustainability scoring
 interface ProductData {
-  brand?: string
-  category?: string
-  material?: string
+  brand?: string;
+  category?: string;
+  material?: string;
   specifications?: {
-    battery?: string
-    [key: string]: unknown
-  }
-  [key: string]: unknown
+    battery?: string;
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
 }
 
 // Calculate sustainability score based on product analysis
 function calculateSustainabilityScore(productData: ProductData) {
-  let score = 50 // Base score
-  const factors: Record<string, number> = {}
+  let score = 50; // Base score
+  const factors: Record<string, number> = {};
 
   // Brand sustainability factors
-  const sustainableBrands = ['fairphone', 'shift', 'framework']
-  if (
-    sustainableBrands.some((brand) =>
-      productData.brand?.toLowerCase().includes(brand)
-    )
-  ) {
-    score += 25
-    factors.brand_sustainability = 85
+  const sustainableBrands = ['fairphone', 'shift', 'framework'];
+  if (sustainableBrands.some((brand) => productData.brand?.toLowerCase().includes(brand))) {
+    score += 25;
+    factors.brand_sustainability = 85;
   }
 
   // Product type factors
   if (productData.category === 'Laptops' && productData.brand === 'Apple') {
-    score += 10 // Apple has good recycling programs
-    factors.recycling_program = 75
+    score += 10; // Apple has good recycling programs
+    factors.recycling_program = 75;
   }
 
   // Material factors
@@ -73,14 +69,14 @@ function calculateSustainabilityScore(productData: ProductData) {
     productData.material?.toLowerCase().includes('plastic') &&
     !productData.material?.toLowerCase().includes('recycled')
   ) {
-    score -= 15
-    factors.material_sustainability = 40
+    score -= 15;
+    factors.material_sustainability = 40;
   } else if (
     productData.material?.toLowerCase().includes('aluminum') ||
     productData.material?.toLowerCase().includes('titanium')
   ) {
-    score += 10
-    factors.material_recyclability = 80
+    score += 10;
+    factors.material_recyclability = 80;
   }
 
   // Energy efficiency
@@ -88,8 +84,8 @@ function calculateSustainabilityScore(productData: ProductData) {
     productData.specifications?.battery?.includes('up to') ||
     productData.specifications?.battery?.includes('hours')
   ) {
-    score += 5
-    factors.energy_efficiency = 70
+    score += 5;
+    factors.energy_efficiency = 70;
   }
 
   return {
@@ -113,46 +109,42 @@ function calculateSustainabilityScore(productData: ProductData) {
       data_sources: ['brand_reputation', 'material_analysis', 'energy_specs'],
       confidence: 0.78,
     },
-  }
+  };
 }
 
 export async function POST(request: NextRequest) {
-  const startTime = Date.now()
+  const startTime = Date.now();
 
   try {
     // Auth gate — AI inference is expensive, require login
-    const session = await auth()
+    const session = await auth();
     if (!session?.user?.id) {
-      return apiUnauthorized('Anmeldung erforderlich für Produktanalyse')
+      return apiUnauthorized('Anmeldung erforderlich für Produktanalyse');
     }
 
     // Rate limit — 5 AI analyses per hour per user
     if (!rateLimiters.aiAnalyze(session.user.id + ':ai-analyze')) {
-      return apiRateLimited()
+      return apiRateLimited();
     }
 
-    const body = await request.json()
-    const validation = validateBody(AnalyzeProductSchema, body)
-    if (!validation.success) return validation.error
-    const { image, imageUrl, saveToDatabase } = validation.data
+    const body = await request.json();
+    const validation = validateBody(AnalyzeProductSchema, body);
+    if (!validation.success) return validation.error;
+    const { image, imageUrl, saveToDatabase } = validation.data;
 
-    const currentUserId = session.user.id
+    const currentUserId = session.user.id;
 
     // Use shared AI extraction service for image analysis
     // Zod refine guarantees at least one of image/imageUrl is present
-    const extractionResult = await extractProductFromImage((image || imageUrl)!)
+    const extractionResult = await extractProductFromImage((image || imageUrl)!);
 
     if (!extractionResult.success) {
-      logger.error('Image analysis failed', { error: extractionResult.error })
-      return apiError(
-        new Error(extractionResult.error),
-        extractionResult.error,
-        500
-      )
+      logger.error('Image analysis failed', { error: extractionResult.error });
+      return apiError(new Error(extractionResult.error), extractionResult.error, 500);
     }
 
-    const productData = extractionResult.data
-    const processingTime = Date.now() - startTime
+    const productData = extractionResult.data;
+    const processingTime = Date.now() - startTime;
 
     // Convert to analysis result format for compatibility
     const analysisResult = {
@@ -179,10 +171,10 @@ export async function POST(request: NextRequest) {
       condition_confidence: 0.8,
       specifications: productData.specs?.reduce(
         (acc, spec) => {
-          acc[spec.key.toLowerCase()] = spec.value
-          return acc
+          acc[spec.key.toLowerCase()] = spec.value;
+          return acc;
         },
-        {} as Record<string, string>
+        {} as Record<string, string>,
       ),
       specs_confidence: 0.85,
       color: 'Unknown',
@@ -202,9 +194,9 @@ export async function POST(request: NextRequest) {
         confidence: 0.85,
         analysis_details: productData.kurzbeschreibung,
       },
-    }
+    };
 
-    let savedProductId = null
+    let savedProductId = null;
 
     // Save to database if requested
     if (saveToDatabase && currentUserId) {
@@ -244,57 +236,53 @@ export async function POST(request: NextRequest) {
             createdBy: currentUserId,
             status: APPROVAL_STATUS.PENDING,
           })
-          .returning({ id: aiExtractedProducts.id })
+          .returning({ id: aiExtractedProducts.id });
 
-        savedProductId = inserted?.id
+        savedProductId = inserted?.id;
 
         if (savedProductId) {
-          const sustainabilityScore = calculateSustainabilityScore(analysisResult)
-          await db
-            .insert(sustainabilityScores)
-            .values({
-              productId: savedProductId,
-              overallScore: sustainabilityScore.overall_score,
-              environmentalScore: sustainabilityScore.environmental_score,
-              socialScore: sustainabilityScore.social_score,
-              economicScore: sustainabilityScore.economic_score,
-              factors: sustainabilityScore.factors,
-              recommendations: sustainabilityScore.recommendations,
-              improvementSuggestions: sustainabilityScore.improvement_suggestions,
-              aiAnalysis: sustainabilityScore.ai_analysis,
-              assessedBy: 'ai',
-            })
+          const sustainabilityScore = calculateSustainabilityScore(analysisResult);
+          await db.insert(sustainabilityScores).values({
+            productId: savedProductId,
+            overallScore: sustainabilityScore.overall_score,
+            environmentalScore: sustainabilityScore.environmental_score,
+            socialScore: sustainabilityScore.social_score,
+            economicScore: sustainabilityScore.economic_score,
+            factors: sustainabilityScore.factors,
+            recommendations: sustainabilityScore.recommendations,
+            improvementSuggestions: sustainabilityScore.improvement_suggestions,
+            aiAnalysis: sustainabilityScore.ai_analysis,
+            assessedBy: 'ai',
+          });
         }
       } catch (dbError) {
         // DB save failure should not block the analysis response
-        logger.error('Error saving product analysis to DB', { error: dbError })
+        logger.error('Error saving product analysis to DB', { error: dbError });
       }
     }
 
     // Log AI processing for analytics (non-blocking)
     if (currentUserId) {
       try {
-        await db
-          .insert(aiProcessingLogs)
-          .values({
-            requestType: 'image_analysis',
-            provider: 'ai',
-            model: analysisResult.ai_model,
-            inputData: { image_provided: !!image, image_url_provided: !!imageUrl },
-            responseData: analysisResult,
-            processingTimeMs: analysisResult.processing_time_ms,
-            confidenceScore: String(analysisResult.total_confidence),
-            userId: currentUserId,
-          })
+        await db.insert(aiProcessingLogs).values({
+          requestType: 'image_analysis',
+          provider: 'ai',
+          model: analysisResult.ai_model,
+          inputData: { image_provided: !!image, image_url_provided: !!imageUrl },
+          responseData: analysisResult,
+          processingTimeMs: analysisResult.processing_time_ms,
+          confidenceScore: String(analysisResult.total_confidence),
+          userId: currentUserId,
+        });
       } catch (logError) {
-        logger.error('Error logging AI processing', { error: logError })
+        logger.error('Error logging AI processing', { error: logError });
       }
     }
 
     logger.info('Image analysis completed', {
       product: analysisResult.product_name,
       processingTime,
-    })
+    });
 
     return apiSuccess({
       analysis: analysisResult,
@@ -305,9 +293,9 @@ export async function POST(request: NextRequest) {
         processing_time: analysisResult.processing_time_ms,
         ai_model: analysisResult.ai_model,
       },
-    })
+    });
   } catch (error) {
-    logger.error('Image analysis error', { error })
-    return apiError(error, 'Produktbild konnte nicht analysiert werden')
+    logger.error('Image analysis error', { error });
+    return apiError(error, 'Produktbild konnte nicht analysiert werden');
   }
 }

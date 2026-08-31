@@ -24,12 +24,12 @@ export const UPCYCLING_ACTIVE_CITATION_KEYS = [
   'cit17_innosuisse',
   'cit18_iso14044',
   'cit19_werkraum4',
-] as const
+] as const;
 
-export type UpcyclingCitationKey = (typeof UPCYCLING_ACTIVE_CITATION_KEYS)[number]
+export type UpcyclingCitationKey = (typeof UPCYCLING_ACTIVE_CITATION_KEYS)[number];
 
 /** Deliberately excluded from public citations (2023 application archive). */
 export const UPCYCLING_ARCHIVED_CITATION_KEYS = [
   'cit06_qa_swico_2023',
   'cit07_klimast_2023',
-] as const
+] as const;

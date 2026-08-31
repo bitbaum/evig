@@ -33,31 +33,18 @@ interface EditHistoryViewProps {
  *
  * Ground Truth #1 (Serve Humans): Makes edit history transparent and auditable.
  */
-export function EditHistoryView({
-  history,
-  fieldLabels,
-  className = '',
-}: EditHistoryViewProps) {
+export function EditHistoryView({ history, fieldLabels, className = '' }: EditHistoryViewProps) {
   const t = useTranslations('admin.editHistory');
 
   // Handle empty or null history
   if (!history || !Array.isArray(history) || history.length === 0) {
-    return (
-      <div className={`text-sm text-text-tertiary italic ${className}`}>
-        {t('empty')}
-      </div>
-    );
+    return <div className={`text-sm text-text-tertiary italic ${className}`}>{t('empty')}</div>;
   }
 
   return (
     <div className={`space-y-4 ${className}`}>
       {history.map((entry, index) => (
-        <EditHistoryEntryView
-          key={index}
-          entry={entry}
-          fieldLabels={fieldLabels}
-          t={t}
-        />
+        <EditHistoryEntryView key={index} entry={entry} fieldLabels={fieldLabels} t={t} />
       ))}
     </div>
   );
@@ -75,24 +62,19 @@ function EditHistoryEntryView({
   fieldLabels: Record<string, string>;
   t: EditHistoryTranslator;
 }) {
-  const fieldsChangedLabels = entry.fields_changed.map(
-    (field) => fieldLabels[field] || field
-  );
+  const fieldsChangedLabels = entry.fields_changed.map((field) => fieldLabels[field] || field);
 
   return (
     <div className="border-l-2 border-action pl-4 py-2 bg-action-muted/30-muted">
       {/* Header: Editor name and timestamp */}
       <div className="flex items-center justify-between mb-2">
         <span className="font-medium text-text-primary">{entry.editor_name}</span>
-        <span className="text-xs text-text-tertiary">
-          {formatDateTime(entry.timestamp)}
-        </span>
+        <span className="text-xs text-text-tertiary">{formatDateTime(entry.timestamp)}</span>
       </div>
 
       {/* Changed fields summary */}
       <div className="text-sm text-text-secondary mb-2">
-        <strong>{t('changedFields')}</strong>{' '}
-        <span>{fieldsChangedLabels.join(', ')}</span>
+        <strong>{t('changedFields')}</strong> <span>{fieldsChangedLabels.join(', ')}</span>
       </div>
 
       {/* Expandable details showing before/after values */}

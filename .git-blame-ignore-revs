@@ -1,0 +1,2 @@
+# Bulk reformats. `git config blame.ignoreRevsFile .git-blame-ignore-revs`
+68dc0914d70d63eec885d513faf9ae80c35a8ec9  # prettier + CSS comment fix

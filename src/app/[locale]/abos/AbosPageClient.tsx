@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
-import { Plus, Tag } from 'lucide-react'
-import { CATEGORY_EMOJIS } from './types'
-import { PoolCard } from './PoolCard'
-import { CreatePoolModal } from './CreatePoolModal'
-import { useAbosPage } from './useAbosPage'
-import { PageShell } from '@/components/layout/PageShell'
-import { Button } from '@/components/ui/button'
+import { useTranslations } from 'next-intl';
+import { Plus, Tag } from 'lucide-react';
+import { CATEGORY_EMOJIS } from './types';
+import { PoolCard } from './PoolCard';
+import { CreatePoolModal } from './CreatePoolModal';
+import { useAbosPage } from './useAbosPage';
+import { PageShell } from '@/components/layout/PageShell';
+import { Button } from '@/components/ui/button';
 
 export default function AbosPageClient() {
-  const t = useTranslations('abos')
+  const t = useTranslations('abos');
   const {
     session,
     pools,
@@ -25,7 +25,7 @@ export default function AbosPageClient() {
     handleLeave,
     filtered,
     categories,
-  } = useAbosPage()
+  } = useAbosPage();
 
   return (
     <>
@@ -36,13 +36,20 @@ export default function AbosPageClient() {
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <Tag className="w-5 h-5 text-action" />
-                <span className="text-sm font-medium text-action uppercase tracking-wide">{t('tagline')}</span>
+                <span className="text-sm font-medium text-action uppercase tracking-wide">
+                  {t('tagline')}
+                </span>
               </div>
               <h1 className="text-3xl font-bold text-text-primary">{t('title')}</h1>
               <p className="mt-2 text-text-tertiary max-w-lg">{t('subtitle')}</p>
             </div>
             {session?.user && (
-              <Button onClick={() => setShowCreate(true)} variant="primary" size="sm" className="shrink-0">
+              <Button
+                onClick={() => setShowCreate(true)}
+                variant="primary"
+                size="sm"
+                className="shrink-0"
+              >
                 <Plus className="w-4 h-4" />
                 {t('createPool')}
               </Button>
@@ -59,26 +66,30 @@ export default function AbosPageClient() {
               variant="ghost"
               onClick={() => setActiveCategory(null)}
               className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                !activeCategory ? 'bg-action text-action-text' : 'bg-surface-base text-text-secondary hover:bg-surface-raised border'
+                !activeCategory
+                  ? 'bg-action text-action-text'
+                  : 'bg-surface-base text-text-secondary hover:bg-surface-raised border'
               }`}
             >
               {t('filterAll')}
             </Button>
-            {categories.map(cat => {
-              const emoji = CATEGORY_EMOJIS[cat] ?? CATEGORY_EMOJIS.other
+            {categories.map((cat) => {
+              const emoji = CATEGORY_EMOJIS[cat] ?? CATEGORY_EMOJIS.other;
               return (
                 <Button
                   key={cat}
                   variant="ghost"
                   onClick={() => setActiveCategory(cat)}
                   className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                    activeCategory === cat ? 'bg-action text-action-text' : 'bg-surface-base text-text-secondary hover:bg-surface-raised border'
+                    activeCategory === cat
+                      ? 'bg-action text-action-text'
+                      : 'bg-surface-base text-text-secondary hover:bg-surface-raised border'
                   }`}
                 >
                   {/* @ts-expect-error — dynamic category key */}
                   {emoji} {t(`categories.${cat}`)}
                 </Button>
-              )
+              );
             })}
           </div>
         )}
@@ -106,7 +117,7 @@ export default function AbosPageClient() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filtered.map(pool => (
+            {filtered.map((pool) => (
               <PoolCard
                 key={pool.id}
                 pool={pool}
@@ -118,15 +129,9 @@ export default function AbosPageClient() {
             ))}
           </div>
         )}
-
       </PageShell>
 
-      {showCreate && (
-        <CreatePoolModal
-          onClose={() => setShowCreate(false)}
-          onCreate={addPool}
-        />
-      )}
+      {showCreate && <CreatePoolModal onClose={() => setShowCreate(false)} onCreate={addPool} />}
     </>
-  )
+  );
 }

@@ -16,86 +16,89 @@
  *     so they SHOULD carry the brand. Those blocks are stripped before scanning.
  */
 
-import { readFileSync, readdirSync, statSync } from 'node:fs'
-import { join } from 'node:path'
-import { ORG } from '../org'
+import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { join } from 'node:path';
+import { ORG } from '../org';
 
-const APP_DIR = join(__dirname, '../../app')
-const BRAND = ORG.name // "Revamp-IT"
+const APP_DIR = join(__dirname, '../../app');
+const BRAND = ORG.name; // "Revamp-IT"
 
 function walk(dir: string, out: string[]): void {
   for (const entry of readdirSync(dir)) {
-    const full = join(dir, entry)
-    if (statSync(full).isDirectory()) walk(full, out)
-    else if (entry === 'page.tsx' || entry === 'layout.tsx') out.push(full)
+    const full = join(dir, entry);
+    if (statSync(full).isDirectory()) walk(full, out);
+    else if (entry === 'page.tsx' || entry === 'layout.tsx') out.push(full);
   }
 }
 
 /** Remove balanced `openGraph: { … }` / `twitter: { … }` blocks so their
  *  (legitimately branded) titles don't trip the scan. */
 function stripSocialBlocks(src: string): string {
-  let out = src
+  let out = src;
   for (const key of ['openGraph', 'twitter']) {
-    let idx: number
+    let idx: number;
     while ((idx = out.indexOf(`${key}: {`)) !== -1) {
-      const braceStart = out.indexOf('{', idx)
-      let depth = 0
-      let end = braceStart
+      const braceStart = out.indexOf('{', idx);
+      let depth = 0;
+      let end = braceStart;
       for (; end < out.length; end++) {
-        if (out[end] === '{') depth++
-        else if (out[end] === '}' && --depth === 0) break
+        if (out[end] === '{') depth++;
+        else if (out[end] === '}' && --depth === 0) break;
       }
-      out = out.slice(0, idx) + out.slice(end + 1)
+      out = out.slice(0, idx) + out.slice(end + 1);
     }
   }
-  return out
+  return out;
 }
 
 /** Does this metadata source bake the brand into a top-level title/default? */
 function findViolations(src: string): string[] {
-  const scan = stripSocialBlocks(src)
-  const issues: string[] = []
+  const scan = stripSocialBlocks(src);
+  const issues: string[] = [];
 
   // brand embedded directly in a title/default string literal, not absolute.
   // matches: title: `… | ${ORG.name}` / default: `… | Revamp-IT`
   const inline = new RegExp(
     String.raw`(?:title|default):\s*\`[^\`]*\| (?:\$\{ORG\.name\}|${BRAND})[^\`]*\``,
     'g',
-  )
-  if (inline.test(scan)) issues.push('top-level title/default embeds the brand (use { absolute } for title, or drop the brand from default)')
+  );
+  if (inline.test(scan))
+    issues.push(
+      'top-level title/default embeds the brand (use { absolute } for title, or drop the brand from default)',
+    );
 
   // shorthand form: `const title = \`… | ${ORG.name}\`` reused as a bare
   // top-level `title,` (after social blocks are stripped, a remaining bare
   // `title,` means it was returned directly, not wrapped in { absolute }).
-  const constBranded = /const title\s*=\s*`[^`]*\| (?:\$\{ORG\.name\}|Revamp-IT)[^`]*`/.test(src)
-  const bareShorthand = /(?:^|\{|,)\s*title,\s*(?:$|\n|,)/m.test(scan)
+  const constBranded = /const title\s*=\s*`[^`]*\| (?:\$\{ORG\.name\}|Revamp-IT)[^`]*`/.test(src);
+  const bareShorthand = /(?:^|\{|,)\s*title,\s*(?:$|\n|,)/m.test(scan);
   if (constBranded && bareShorthand) {
-    issues.push('branded `const title` returned as bare `title,` — wrap in { absolute: title }')
+    issues.push('branded `const title` returned as bare `title,` — wrap in { absolute: title }');
   }
 
-  return issues
+  return issues;
 }
 
 describe('no doubled title brand', () => {
   it('no page/layout bakes the brand into its top-level title or default', () => {
-    const files: string[] = []
-    walk(APP_DIR, files)
+    const files: string[] = [];
+    walk(APP_DIR, files);
 
-    const offenders: string[] = []
+    const offenders: string[] = [];
     for (const file of files) {
-      const src = readFileSync(file, 'utf8')
-      if (!/generateMetadata|export const metadata/.test(src)) continue
+      const src = readFileSync(file, 'utf8');
+      if (!/generateMetadata|export const metadata/.test(src)) continue;
       // Exempt: a layout that has NO title.template ancestor can legitimately
       // brand its title. In this app the root + [locale] layouts always supply
       // a template, so every descendant is covered — but the root layout itself
       // only defines the template/default (no branded top-level title), so it
       // passes naturally.
-      const issues = findViolations(src)
+      const issues = findViolations(src);
       if (issues.length) {
-        offenders.push(`${file.replace(APP_DIR, 'src/app')}:\n    - ${issues.join('\n    - ')}`)
+        offenders.push(`${file.replace(APP_DIR, 'src/app')}:\n    - ${issues.join('\n    - ')}`);
       }
     }
 
-    expect(offenders).toEqual([])
-  })
-})
+    expect(offenders).toEqual([]);
+  });
+});

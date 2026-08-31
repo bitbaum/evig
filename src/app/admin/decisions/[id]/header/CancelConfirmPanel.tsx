@@ -14,7 +14,7 @@ interface Props {
   setShowCancelInput: (show: boolean) => void;
   onTransition: (
     status: DecisionStatus,
-    extra?: { cancelReason?: string; outcomeSummary?: string }
+    extra?: { cancelReason?: string; outcomeSummary?: string },
   ) => Promise<void>;
 }
 
@@ -26,9 +26,7 @@ export function CancelConfirmPanel({
 }: Props) {
   return (
     <div className="mt-3 rounded-md border border-error-200 dark:border-error-800 bg-error-50 dark:bg-error-900/20 p-3">
-      <label className={cn('mb-1 block', adminType.subTitle)}>
-        Grund für Abbruch
-      </label>
+      <label className={cn('mb-1 block', adminType.subTitle)}>Grund für Abbruch</label>
       <Textarea
         value={cancelReason}
         onChange={(e) => setCancelReason(e.target.value)}

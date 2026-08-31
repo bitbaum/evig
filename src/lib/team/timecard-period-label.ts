@@ -11,13 +11,13 @@
  * which reuses the two locale-aware building blocks below.
  */
 
-import { formatDateShort } from '@/lib/date-formats'
+import { formatDateShort } from '@/lib/date-formats';
 
 /** Inclusive "dd.mm.yyyy–dd.mm.yyyy" range for a week period. */
 export function getTimecardWeekRangeLabel(periodStart: string, periodEnd: string): string {
-  const endInclusive = new Date(`${periodEnd}T00:00:00.000Z`)
-  endInclusive.setUTCDate(endInclusive.getUTCDate() - 1)
-  return `${formatDateShort(periodStart)}–${formatDateShort(endInclusive.toISOString().slice(0, 10))}`
+  const endInclusive = new Date(`${periodEnd}T00:00:00.000Z`);
+  endInclusive.setUTCDate(endInclusive.getUTCDate() - 1);
+  return `${formatDateShort(periodStart)}–${formatDateShort(endInclusive.toISOString().slice(0, 10))}`;
 }
 
 /** Month periods collapse to e.g. "Juli 2026" — the full range adds no information. */
@@ -26,7 +26,7 @@ export function getTimecardMonthLabel(periodStart: string, locale = 'de-CH'): st
     month: 'long',
     year: 'numeric',
     timeZone: 'UTC',
-  })
+  });
 }
 
 export function formatTimecardPeriodLabel(
@@ -35,7 +35,7 @@ export function formatTimecardPeriodLabel(
   periodEnd: string,
 ): string {
   if (periodType === 'week') {
-    return `Woche ${getTimecardWeekRangeLabel(periodStart, periodEnd)}`
+    return `Woche ${getTimecardWeekRangeLabel(periodStart, periodEnd)}`;
   }
-  return getTimecardMonthLabel(periodStart)
+  return getTimecardMonthLabel(periodStart);
 }

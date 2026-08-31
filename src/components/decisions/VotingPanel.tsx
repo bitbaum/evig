@@ -59,9 +59,10 @@ export default function VotingPanel({
 
   // Gallery mode: use card grid when options have images or list is long
   const hasImages = options.some((o) => o.imageUrl);
-  const isGalleryMode = hasImages || (
-    options.length > 5 && (votingMethod === 'approval' || votingMethod === 'score' || votingMethod === 'dot')
-  );
+  const isGalleryMode =
+    hasImages ||
+    (options.length > 5 &&
+      (votingMethod === 'approval' || votingMethod === 'score' || votingMethod === 'dot'));
 
   async function handleSubmit() {
     setError('');
@@ -108,78 +109,83 @@ export default function VotingPanel({
           description={decisionDescription}
           background={decisionBackground}
           votingMethod={votingMethod}
-          options={options.map(o => ({ label: o.label, description: o.description }))}
+          options={options.map((o) => ({ label: o.label, description: o.description }))}
         />
       )}
 
       <Panel title="Deine Stimme" className="p-6">
-      {votingDeadline && status === DECISION_STATUS.VOTING && (
-        <div className="mb-4">
-          <DeadlineCountdown deadline={votingDeadline} />
-        </div>
-      )}
+        {votingDeadline && status === DECISION_STATUS.VOTING && (
+          <div className="mb-4">
+            <DeadlineCountdown deadline={votingDeadline} />
+          </div>
+        )}
 
-      {error && (
-        <div className="mb-4 rounded-md bg-error-50 dark:bg-error-900/20 p-3 text-sm text-error-700 dark:text-error-300">{error}</div>
-      )}
+        {error && (
+          <div className="mb-4 rounded-md bg-error-50 dark:bg-error-900/20 p-3 text-sm text-error-700 dark:text-error-300">
+            {error}
+          </div>
+        )}
 
-      {votingMethod === 'consent' && (
-        <ConsentVote
-          response={vote.consentResponse}
-          rationale={vote.rationale}
-          onResponseChange={vote.setConsentResponse}
-          onRationaleChange={vote.setRationale}
-        />
-      )}
-      {votingMethod === 'approval' && (
-        <ApprovalVote
-          options={options}
-          approvedOptions={vote.approvedOptions}
-          isGalleryMode={isGalleryMode}
-          onToggle={vote.toggleApproval}
-        />
-      )}
-      {votingMethod === 'dot' && (
-        <DotVote
-          options={options}
-          allocations={vote.allocations}
-          maxDots={vote.maxDots}
-          usedDots={vote.usedDots}
-          isGalleryMode={isGalleryMode}
-          onSet={vote.setAllocation}
-        />
-      )}
-      {votingMethod === 'score' && (
-        <ScoreVote
-          options={options}
-          scores={vote.scores}
-          isGalleryMode={isGalleryMode}
-          onSet={vote.setScore}
-        />
-      )}
-      {votingMethod === 'ranked_choice' && (
-        <RankedChoiceVote
-          options={options}
-          ranking={vote.ranking}
-          onMoveUp={vote.moveRankingUp}
-          onMoveDown={vote.moveRankingDown}
-        />
-      )}
-      {votingMethod === 'simple_majority' && (
-        <SimpleMajorityVote response={vote.majorityResponse} onChange={vote.setMajorityResponse} />
-      )}
-      {votingMethod === 'thumbs_up_down' && (
-        <ThumbsUpDownVote choice={vote.thumbsChoice} onChange={vote.setThumbsChoice} />
-      )}
+        {votingMethod === 'consent' && (
+          <ConsentVote
+            response={vote.consentResponse}
+            rationale={vote.rationale}
+            onResponseChange={vote.setConsentResponse}
+            onRationaleChange={vote.setRationale}
+          />
+        )}
+        {votingMethod === 'approval' && (
+          <ApprovalVote
+            options={options}
+            approvedOptions={vote.approvedOptions}
+            isGalleryMode={isGalleryMode}
+            onToggle={vote.toggleApproval}
+          />
+        )}
+        {votingMethod === 'dot' && (
+          <DotVote
+            options={options}
+            allocations={vote.allocations}
+            maxDots={vote.maxDots}
+            usedDots={vote.usedDots}
+            isGalleryMode={isGalleryMode}
+            onSet={vote.setAllocation}
+          />
+        )}
+        {votingMethod === 'score' && (
+          <ScoreVote
+            options={options}
+            scores={vote.scores}
+            isGalleryMode={isGalleryMode}
+            onSet={vote.setScore}
+          />
+        )}
+        {votingMethod === 'ranked_choice' && (
+          <RankedChoiceVote
+            options={options}
+            ranking={vote.ranking}
+            onMoveUp={vote.moveRankingUp}
+            onMoveDown={vote.moveRankingDown}
+          />
+        )}
+        {votingMethod === 'simple_majority' && (
+          <SimpleMajorityVote
+            response={vote.majorityResponse}
+            onChange={vote.setMajorityResponse}
+          />
+        )}
+        {votingMethod === 'thumbs_up_down' && (
+          <ThumbsUpDownVote choice={vote.thumbsChoice} onChange={vote.setThumbsChoice} />
+        )}
 
-      <Button
-        onClick={handleSubmit}
-        disabled={submitting}
-        variant="primary"
-        className="mt-6 w-full"
-      >
-        {submitting ? 'Wird gesendet...' : 'Stimme abgeben'}
-      </Button>
+        <Button
+          onClick={handleSubmit}
+          disabled={submitting}
+          variant="primary"
+          className="mt-6 w-full"
+        >
+          {submitting ? 'Wird gesendet...' : 'Stimme abgeben'}
+        </Button>
       </Panel>
     </div>
   );

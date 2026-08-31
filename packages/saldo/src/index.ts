@@ -2,7 +2,7 @@
  * Saldo — a dependency-free time-balance engine.
  * @see BRAND for the (swappable) product name.
  */
-export { BRAND, type Brand } from './brand'
+export { BRAND, type Brand } from './brand';
 
 export {
   computeTimeSaldo,
@@ -14,7 +14,7 @@ export {
   type TimeEntry,
   type VacationInput,
   type VacationResult,
-} from './saldo'
+} from './saldo';
 
 export {
   WEEKDAY_IDS,
@@ -29,18 +29,18 @@ export {
   getScheduleDayMinutes,
   getScheduleWeeklyMinutes,
   weekdayIdFromDate,
-} from './schedule'
+} from './schedule';
 
 export {
   DEFAULT_CATEGORY_CONFIG,
   categoryConfigFromAbsences,
   type CategoryConfig,
   type AbsenceKind,
-} from './categories'
+} from './categories';
 
 export {
   getPublicHolidays,
   getHolidayDateSet,
   isPublicHoliday,
   type PublicHoliday,
-} from './holidays'
+} from './holidays';

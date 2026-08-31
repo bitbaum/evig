@@ -10,14 +10,14 @@
  * audience as super-admins only.
  */
 
-import type { ContentAudience } from '@/config/content-audience'
-import { isSuperAdmin } from '@/lib/permissions'
+import type { ContentAudience } from '@/config/content-audience';
+import { isSuperAdmin } from '@/lib/permissions';
 
 export interface AudienceViewer {
-  userId?: string | null
-  isStaff?: boolean
-  email?: string | null
-  isSuperAdmin?: boolean
+  userId?: string | null;
+  isStaff?: boolean;
+  email?: string | null;
+  isSuperAdmin?: boolean;
 }
 
 export function canAccessAudience(
@@ -27,14 +27,13 @@ export function canAccessAudience(
 ): boolean {
   switch (audience) {
     case 'team':
-      return Boolean(viewer?.isStaff)
+      return Boolean(viewer?.isStaff);
     case 'author':
       return Boolean(
         viewer &&
-          ((ownerId && viewer.userId === ownerId) ||
-            isSuperAdmin(viewer.email, viewer.isSuperAdmin)),
-      )
+        ((ownerId && viewer.userId === ownerId) || isSuperAdmin(viewer.email, viewer.isSuperAdmin)),
+      );
     default:
-      return true
+      return true;
   }
 }

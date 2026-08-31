@@ -1,14 +1,14 @@
-import { Metadata } from 'next'
-import Link from 'next/link'
-import { ArrowLeft, PackageCheck } from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import { ROUTES } from '@/config/routes'
-import DeliverableFormClient from './DeliverableFormClient'
+import { Metadata } from 'next';
+import Link from 'next/link';
+import { ArrowLeft, PackageCheck } from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import { ROUTES } from '@/config/routes';
+import DeliverableFormClient from './DeliverableFormClient';
 
 export const metadata: Metadata = {
   title: 'Neuer Liefergegenstand',
   description: 'Einen Bericht, eine Präsentation oder ein Mockup erfassen.',
-}
+};
 
 export default function NewDeliverablePage() {
   return (
@@ -27,13 +27,17 @@ export default function NewDeliverablePage() {
             <PackageCheck className="w-5 h-5 text-action" />
           </div>
           <div>
-            <Heading level={1} className="text-2xl font-bold text-text-primary">Neuer Liefergegenstand</Heading>
-            <p className="text-text-secondary">Erfasse ein Arbeitsergebnis und teile es mit dem Team</p>
+            <Heading level={1} className="text-2xl font-bold text-text-primary">
+              Neuer Liefergegenstand
+            </Heading>
+            <p className="text-text-secondary">
+              Erfasse ein Arbeitsergebnis und teile es mit dem Team
+            </p>
           </div>
         </div>
       </div>
 
       <DeliverableFormClient />
     </div>
-  )
+  );
 }

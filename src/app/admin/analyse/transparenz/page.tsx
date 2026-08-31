@@ -7,43 +7,52 @@
  * Moved from /admin/hirn/transparenz
  */
 
-import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
-import { canAccessSection } from '@/lib/permissions'
-import Link from 'next/link'
-import { ArrowLeft, Eye, FileText, Database, GitBranch } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { AnalyseTabs } from '@/components/analyse'
-import Heading from '@/components/admin/AdminHeading'
-import { ROUTES } from '@/config/routes'
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
+import { canAccessSection } from '@/lib/permissions';
+import Link from 'next/link';
+import { ArrowLeft, Eye, FileText, Database, GitBranch } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { AnalyseTabs } from '@/components/analyse';
+import Heading from '@/components/admin/AdminHeading';
+import { ROUTES } from '@/config/routes';
 
 export default async function TransparenzPage() {
-  const session = await auth()
+  const session = await auth();
 
   if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/analyse/transparenz')
+    redirect('/auth/login?callbackUrl=/admin/analyse/transparenz');
   }
 
   // Check permission for transparenz section
-  const hasAccess = canAccessSection({
-    email: session.user.email,
-    is_staff: session.user.isStaff,
-    staff_permissions: session.user.staffPermissions,
-  }, 'transparenz') || canAccessSection({
-    email: session.user.email,
-    is_staff: session.user.isStaff,
-    staff_permissions: session.user.staffPermissions,
-  }, 'hirn')
+  const hasAccess =
+    canAccessSection(
+      {
+        email: session.user.email,
+        is_staff: session.user.isStaff,
+        staff_permissions: session.user.staffPermissions,
+      },
+      'transparenz',
+    ) ||
+    canAccessSection(
+      {
+        email: session.user.email,
+        is_staff: session.user.isStaff,
+        staff_permissions: session.user.staffPermissions,
+      },
+      'hirn',
+    );
 
   if (!hasAccess) {
-    redirect('/admin?error=no_transparenz_access')
+    redirect('/admin?error=no_transparenz_access');
   }
 
   const principles = [
     {
       title: 'Single Source of Truth (SSOT)',
-      description: 'Jede Information hat genau eine kanonische Quelle. Alle anderen Darstellungen sind abgeleitet.',
+      description:
+        'Jede Information hat genau eine kanonische Quelle. Alle anderen Darstellungen sind abgeleitet.',
       examples: [
         'Finanzdaten: Kivitendo-Export als JSON',
         'KPIs: CSV-Dateien in strukturiertem Format',
@@ -52,7 +61,8 @@ export default async function TransparenzPage() {
     },
     {
       title: 'First Principles',
-      description: 'Jeder Bereich definiert sein Ziel, Constraints, Invarianten und Abhängigkeiten.',
+      description:
+        'Jeder Bereich definiert sein Ziel, Constraints, Invarianten und Abhängigkeiten.',
       examples: [
         'Ziel: Was optimieren wir?',
         'Constraints: Rechtlich, Kapazität, Budget',
@@ -68,7 +78,7 @@ export default async function TransparenzPage() {
         'Berechnungsformel bei abgeleiteten Werten',
       ],
     },
-  ]
+  ];
 
   const dataSources = [
     {
@@ -89,7 +99,7 @@ export default async function TransparenzPage() {
       format: 'Markdown + YAML',
       updateFrequency: 'Kontinuierlich',
     },
-  ]
+  ];
 
   return (
     <div className="space-y-6">
@@ -106,10 +116,10 @@ export default async function TransparenzPage() {
             <Eye className="w-6 h-6 text-secondary-600" />
           </div>
           <div>
-            <Heading level={1} className="text-3xl font-bold">Transparenz</Heading>
-            <p className="text-muted-foreground">
-              First Principles und Methodologie
-            </p>
+            <Heading level={1} className="text-3xl font-bold">
+              Transparenz
+            </Heading>
+            <p className="text-muted-foreground">First Principles und Methodologie</p>
           </div>
         </div>
       </div>
@@ -143,7 +153,7 @@ export default async function TransparenzPage() {
 
       {/* Principles */}
       <div className="grid md:grid-cols-3 gap-6">
-        {principles.map(principle => (
+        {principles.map((principle) => (
           <Card key={principle.title}>
             <CardHeader>
               <CardTitle className="text-lg">{principle.title}</CardTitle>
@@ -186,7 +196,7 @@ export default async function TransparenzPage() {
                 </tr>
               </thead>
               <tbody>
-                {dataSources.map(source => (
+                {dataSources.map((source) => (
                   <tr key={source.name} className="border-b">
                     <td className="py-2 px-4 font-medium">{source.name}</td>
                     <td className="py-2 px-4 text-muted-foreground">{source.type}</td>
@@ -214,7 +224,8 @@ export default async function TransparenzPage() {
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground mb-4">
-            Die vollständige Hirn-Dokumentation befindet sich im <code className="bg-surface-raised px-2 py-1 rounded-sm">docs/hirn/</code> Verzeichnis
+            Die vollständige Hirn-Dokumentation befindet sich im{' '}
+            <code className="bg-surface-raised px-2 py-1 rounded-sm">docs/hirn/</code> Verzeichnis
             und enthält:
           </p>
           <ul className="space-y-2 text-sm">
@@ -234,5 +245,5 @@ export default async function TransparenzPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

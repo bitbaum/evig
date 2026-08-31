@@ -1,83 +1,83 @@
-'use client'
+'use client';
 
-import { useState, useEffect, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import Link from 'next/link'
-import { Lock, CheckCircle2, AlertCircle, Loader2, Eye, EyeOff } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { StatusBanner } from '@/components/ui/status-banner'
-import Heading from '@/components/ui/Heading'
-import { IconBadge } from '@/components/ui/IconBadge'
-import { apiFetch } from '@/lib/api/client'
-import { useTranslations } from 'next-intl'
-import { AUTH_CONFIG } from '@/lib/auth/config'
-import { ROUTES } from '@/config/routes'
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import { Lock, CheckCircle2, AlertCircle, Loader2, Eye, EyeOff } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { StatusBanner } from '@/components/ui/status-banner';
+import Heading from '@/components/ui/Heading';
+import { IconBadge } from '@/components/ui/IconBadge';
+import { apiFetch } from '@/lib/api/client';
+import { useTranslations } from 'next-intl';
+import { AUTH_CONFIG } from '@/lib/auth/config';
+import { ROUTES } from '@/config/routes';
 
-const PASSWORD_MIN_LENGTH = AUTH_CONFIG.password.minLength
+const PASSWORD_MIN_LENGTH = AUTH_CONFIG.password.minLength;
 
 function ResetPasswordContent() {
-  const t = useTranslations('auth.resetPassword')
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const token = searchParams.get('token')
+  const t = useTranslations('auth.resetPassword');
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token');
   // Propagated through from the email link so that callers (e.g. the
   // IT-Hilfe anonymous-post claim flow) can land users on a specific
   // page after they sign in — not just the default post-login destination.
-  const callbackUrl = searchParams.get('callbackUrl')
+  const callbackUrl = searchParams.get('callbackUrl');
 
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [success, setSuccess] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError(null)
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
 
     // Derives from AUTH_CONFIG (SSOT). Server-side schema enforces the
     // same rule — this client check is just for fast feedback.
     if (password.length < PASSWORD_MIN_LENGTH) {
-      setError(t('errorTooShort'))
-      setIsLoading(false)
-      return
+      setError(t('errorTooShort'));
+      setIsLoading(false);
+      return;
     }
 
     if (password !== confirmPassword) {
-      setError(t('errorMismatch'))
-      setIsLoading(false)
-      return
+      setError(t('errorMismatch'));
+      setIsLoading(false);
+      return;
     }
 
     try {
       const result = await apiFetch<unknown>('/api/auth/reset-password', {
         method: 'POST',
         body: { token, password },
-      })
+      });
 
       if (!result.success) {
-        throw new Error(result.error || t('errorResetFailed'))
+        throw new Error(result.error || t('errorResetFailed'));
       }
 
-      setSuccess(true)
+      setSuccess(true);
 
       // Redirect to login after 3 seconds, preserving callbackUrl so the
       // user lands on their original destination after signing in.
       setTimeout(() => {
-        const params = new URLSearchParams({ reset: 'success' })
-        if (callbackUrl) params.set('callbackUrl', callbackUrl)
-        router.push(`/auth/login?${params.toString()}`)
-      }, 3000)
+        const params = new URLSearchParams({ reset: 'success' });
+        if (callbackUrl) params.set('callbackUrl', callbackUrl);
+        router.push(`/auth/login?${params.toString()}`);
+      }, 3000);
     } catch (error) {
-      setError(error instanceof Error ? error.message : t('genericError'))
+      setError(error instanceof Error ? error.message : t('genericError'));
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   // No token in the URL → the dedicated invalid-link screen, not the form.
   if (!token) {
@@ -92,9 +92,7 @@ function ResetPasswordContent() {
           <Heading level={2} className="mt-6 text-center text-3xl text-text-primary">
             {t('invalidLink')}
           </Heading>
-          <p className="mt-2 text-center text-sm text-text-secondary">
-            {t('invalidLinkDesc')}
-          </p>
+          <p className="mt-2 text-center text-sm text-text-secondary">{t('invalidLinkDesc')}</p>
         </div>
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -112,7 +110,7 @@ function ResetPasswordContent() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   if (success) {
@@ -125,16 +123,12 @@ function ResetPasswordContent() {
           <Heading level={2} className="mt-6 text-center text-3xl text-text-primary">
             {t('successHeading')}
           </Heading>
-          <p className="mt-2 text-center text-sm text-text-secondary">
-            {t('successDesc')}
-          </p>
+          <p className="mt-2 text-center text-sm text-text-secondary">{t('successDesc')}</p>
         </div>
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-surface-base py-8 px-4 rounded-xl border border-strong sm:px-10 text-center">
-            <p className="text-sm text-text-secondary mb-6">
-              {t('successRedirect')}
-            </p>
+            <p className="text-sm text-text-secondary mb-6">{t('successRedirect')}</p>
             <Button
               as={Link}
               href={
@@ -149,7 +143,7 @@ function ResetPasswordContent() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -163,9 +157,7 @@ function ResetPasswordContent() {
         <Heading level={2} className="mt-6 text-center text-3xl text-text-primary">
           {t('heading')}
         </Heading>
-        <p className="mt-2 text-center text-sm text-text-secondary">
-          {t('subheading')}
-        </p>
+        <p className="mt-2 text-center text-sm text-text-secondary">{t('subheading')}</p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -178,7 +170,10 @@ function ResetPasswordContent() {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-text-secondary mb-1">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-text-secondary mb-1"
+              >
                 {t('newPasswordLabel')}
               </label>
               <div className="relative">
@@ -211,7 +206,10 @@ function ResetPasswordContent() {
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-text-secondary mb-1">
+              <label
+                htmlFor="confirmPassword"
+                className="block text-sm font-medium text-text-secondary mb-1"
+              >
                 {t('confirmPasswordLabel')}
               </label>
               <div className="relative">
@@ -238,7 +236,11 @@ function ResetPasswordContent() {
                   aria-label={showConfirmPassword ? t('hidePassword') : t('showPassword')}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-text-tertiary hover:text-text-secondary"
                 >
-                  {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  {showConfirmPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
                 </Button>
               </div>
             </div>
@@ -246,10 +248,18 @@ function ResetPasswordContent() {
             <div className="text-sm text-text-secondary space-y-1">
               <p className="font-medium">{t('requirementsTitle')}</p>
               <ul className="ml-4 space-y-0.5">
-                <li className={password.length >= PASSWORD_MIN_LENGTH ? 'text-action' : 'text-text-tertiary'}>
+                <li
+                  className={
+                    password.length >= PASSWORD_MIN_LENGTH ? 'text-action' : 'text-text-tertiary'
+                  }
+                >
                   ✓ {t('requirementLength')}
                 </li>
-                <li className={password === confirmPassword && password ? 'text-action' : 'text-text-tertiary'}>
+                <li
+                  className={
+                    password === confirmPassword && password ? 'text-action' : 'text-text-tertiary'
+                  }
+                >
                   ✓ {t('requirementMatch')}
                 </li>
               </ul>
@@ -269,7 +279,7 @@ function ResetPasswordContent() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function ResetPasswordFallback() {
@@ -290,7 +300,7 @@ function ResetPasswordFallback() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default function ResetPasswordPage() {
@@ -298,5 +308,5 @@ export default function ResetPasswordPage() {
     <Suspense fallback={<ResetPasswordFallback />}>
       <ResetPasswordContent />
     </Suspense>
-  )
+  );
 }

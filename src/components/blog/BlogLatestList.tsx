@@ -1,27 +1,27 @@
-import Image from 'next/image'
-import { Link } from '@/i18n/navigation'
-import { Clock } from 'lucide-react'
-import { getLocale, getTranslations } from 'next-intl/server'
-import { BlogPost } from '@/lib/blog'
-import { formatDate } from '@/lib/date-formats'
-import { blogCategoryKey, getReadingTime } from '@/lib/blog-utils'
-import UnlistedBadge from './UnlistedBadge'
-import { Eyebrow } from '@/components/ui/Eyebrow'
+import Image from 'next/image';
+import { Link } from '@/i18n/navigation';
+import { Clock } from 'lucide-react';
+import { getLocale, getTranslations } from 'next-intl/server';
+import { BlogPost } from '@/lib/blog';
+import { formatDate } from '@/lib/date-formats';
+import { blogCategoryKey, getReadingTime } from '@/lib/blog-utils';
+import UnlistedBadge from './UnlistedBadge';
+import { Eyebrow } from '@/components/ui/Eyebrow';
 
 interface BlogLatestListProps {
-  posts: BlogPost[]
+  posts: BlogPost[];
 }
 
 export default async function BlogLatestList({ posts }: BlogLatestListProps) {
-  const t = await getTranslations('blog')
-  const locale = await getLocale()
+  const t = await getTranslations('blog');
+  const locale = await getLocale();
 
   return (
     <div className="grid gap-x-8 gap-y-2 md:grid-cols-2">
       {posts.map((post) => {
-        const readingTime = getReadingTime(post.body)
-        const categoryKey = post.category ? blogCategoryKey(post.category) : null
-        const categoryLabel = categoryKey ? t(`categoryLabels.${categoryKey}`) : post.category
+        const readingTime = getReadingTime(post.body);
+        const categoryKey = post.category ? blogCategoryKey(post.category) : null;
+        const categoryLabel = categoryKey ? t(`categoryLabels.${categoryKey}`) : post.category;
 
         return (
           <Link
@@ -69,8 +69,8 @@ export default async function BlogLatestList({ posts }: BlogLatestListProps) {
               </div>
             </article>
           </Link>
-        )
+        );
       })}
     </div>
-  )
+  );
 }

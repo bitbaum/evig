@@ -1,34 +1,24 @@
-'use client'
+'use client';
 
-import { Link } from '@/i18n/navigation'
-import { Button } from '@/components/ui/button'
-import {
-  ArrowLeft,
-  Truck,
-  MapPin,
-  Shield,
-  Loader2,
-  AlertCircle,
-} from 'lucide-react'
-import { ListingImage } from '@/components/marketplace/ListingImage'
-import Heading from '@/components/ui/Heading'
-import { ShippingAddressFields } from '@/components/marketplace/checkout/ShippingAddressFields'
-import { formatCHF, COMMISSION_RATE } from '@/config/marketplace'
-import { useTranslations } from 'next-intl'
-import { useCheckout, type ListingForCheckout } from '@/hooks/useCheckout'
-import { PaymentReturnBanner } from '@/components/payments/PaymentReturnBanner'
-import { ROUTES } from '@/config/routes'
+import { Link } from '@/i18n/navigation';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, Truck, MapPin, Shield, Loader2, AlertCircle } from 'lucide-react';
+import { ListingImage } from '@/components/marketplace/ListingImage';
+import Heading from '@/components/ui/Heading';
+import { ShippingAddressFields } from '@/components/marketplace/checkout/ShippingAddressFields';
+import { formatCHF, COMMISSION_RATE } from '@/config/marketplace';
+import { useTranslations } from 'next-intl';
+import { useCheckout, type ListingForCheckout } from '@/hooks/useCheckout';
+import { PaymentReturnBanner } from '@/components/payments/PaymentReturnBanner';
+import { ROUTES } from '@/config/routes';
 
 interface CheckoutPageClientProps {
-  initialListing: ListingForCheckout
-  sessionUserId: string
+  initialListing: ListingForCheckout;
+  sessionUserId: string;
 }
 
-export function CheckoutPageClient({
-  initialListing,
-  sessionUserId,
-}: CheckoutPageClientProps) {
-  const t = useTranslations('marketplace.checkout')
+export function CheckoutPageClient({ initialListing, sessionUserId }: CheckoutPageClientProps) {
+  const t = useTranslations('marketplace.checkout');
 
   const {
     listing,
@@ -52,7 +42,7 @@ export function CheckoutPageClient({
   } = useCheckout(initialListing, {
     orderError: t('orderError'),
     networkError: t('networkError'),
-  })
+  });
 
   if (sessionUserId === listing.seller_id) {
     return (
@@ -61,14 +51,15 @@ export function CheckoutPageClient({
         <Heading level={2} className="text-xl text-text-primary mb-2">
           {t('ownListing')}
         </Heading>
-        <p className="text-text-secondary mb-4">
-          {t('ownListingDesc')}
-        </p>
-        <Link href={ROUTES.public.marketplaceListing(listing.id)} className="text-action hover:text-action font-medium">
+        <p className="text-text-secondary mb-4">{t('ownListingDesc')}</p>
+        <Link
+          href={ROUTES.public.marketplaceListing(listing.id)}
+          className="text-action hover:text-action font-medium"
+        >
           {t('backToListing')}
         </Link>
       </div>
-    )
+    );
   }
 
   return (
@@ -77,7 +68,10 @@ export function CheckoutPageClient({
         namespace="marketplace.checkout"
         cleanPath={ROUTES.public.marketplaceCheckout(listing.id)}
       />
-      <nav aria-label={t('title')} className="mb-5 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-text-tertiary">
+      <nav
+        aria-label={t('title')}
+        className="mb-5 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-text-tertiary"
+      >
         <span>{t('summary.title')}</span>
         <span aria-hidden="true">/</span>
         <span className="text-action">{t('delivery.title')}</span>
@@ -92,19 +86,25 @@ export function CheckoutPageClient({
         {t('backToListing')}
       </Link>
 
-      <Heading level={1} className="text-2xl text-text-primary mb-6">{t('title')}</Heading>
+      <Heading level={1} className="text-2xl text-text-primary mb-6">
+        {t('title')}
+      </Heading>
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         <div className="lg:col-span-3 space-y-6">
           {canSelectDelivery && (
             <div className="card-shell p-6">
-              <Heading level={2} className="text-lg text-text-primary mb-4">{t('delivery.title')}</Heading>
+              <Heading level={2} className="text-lg text-text-primary mb-4">
+                {t('delivery.title')}
+              </Heading>
               <div className="space-y-3">
-                <label className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${
-                  deliveryMethod === 'pickup'
-                    ? 'border-action bg-action-muted'
-                    : 'border hover:border-strong'
-                }`}>
+                <label
+                  className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+                    deliveryMethod === 'pickup'
+                      ? 'border-action bg-action-muted'
+                      : 'border hover:border-strong'
+                  }`}
+                >
                   <input
                     type="radio"
                     name="delivery"
@@ -123,11 +123,13 @@ export function CheckoutPageClient({
                   <span className="ml-auto font-medium text-action">{t('delivery.free')}</span>
                 </label>
 
-                <label className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${
-                  deliveryMethod === 'shipping'
-                    ? 'border-action bg-action-muted'
-                    : 'border hover:border-strong'
-                }`}>
+                <label
+                  className={`flex items-center gap-3 p-4 rounded-lg border-2 cursor-pointer transition-colors ${
+                    deliveryMethod === 'shipping'
+                      ? 'border-action bg-action-muted'
+                      : 'border hover:border-strong'
+                  }`}
+                >
                   <input
                     type="radio"
                     name="delivery"
@@ -142,7 +144,9 @@ export function CheckoutPageClient({
                     <p className="text-sm text-text-tertiary">{t('delivery.shippingNationwide')}</p>
                   </div>
                   <span className="ml-auto font-medium text-text-primary">
-                    {listing.shipping_cost_chf ? formatCHF(listing.shipping_cost_chf) : t('delivery.free')}
+                    {listing.shipping_cost_chf
+                      ? formatCHF(listing.shipping_cost_chf)
+                      : t('delivery.free')}
                   </span>
                 </label>
               </div>
@@ -151,7 +155,9 @@ export function CheckoutPageClient({
 
           {deliveryMethod === 'shipping' && (
             <div className="card-shell p-6">
-              <Heading level={2} className="text-lg text-text-primary mb-4">{t('address.title')}</Heading>
+              <Heading level={2} className="text-lg text-text-primary mb-4">
+                {t('address.title')}
+              </Heading>
               <ShippingAddressFields
                 address={shippingAddress}
                 onChange={setShippingAddress}
@@ -163,19 +169,26 @@ export function CheckoutPageClient({
               />
             </div>
           )}
-
         </div>
 
         <div className="lg:col-span-2">
           <div className="card-shell p-6 sticky top-6">
-            <Heading level={2} className="text-lg text-text-primary mb-4">{t('summary.title')}</Heading>
+            <Heading level={2} className="text-lg text-text-primary mb-4">
+              {t('summary.title')}
+            </Heading>
 
             <div className="flex gap-3 mb-4">
               <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-surface-raised">
-                <ListingImage src={listing.thumbnail} alt={listing.title} fallbackIconSize="w-6 h-6" />
+                <ListingImage
+                  src={listing.thumbnail}
+                  alt={listing.title}
+                  fallbackIconSize="w-6 h-6"
+                />
               </div>
               <div className="min-w-0">
-                <Heading level={3} className="text-text-primary text-sm line-clamp-2">{listing.title}</Heading>
+                <Heading level={3} className="text-text-primary text-sm line-clamp-2">
+                  {listing.title}
+                </Heading>
                 <p className="text-xs text-text-tertiary mt-1">
                   {t('summary.seller', { name: listing.seller_name })}
                 </p>
@@ -219,9 +232,14 @@ export function CheckoutPageClient({
             <div className="mt-4 p-3 bg-surface-raised rounded-lg text-xs text-text-tertiary">
               <p className="flex items-center gap-1.5">
                 {deliveryMethod === 'shipping' ? (
-                  <><Truck className="w-3.5 h-3.5" /> {t('summary.shipping')}</>
+                  <>
+                    <Truck className="w-3.5 h-3.5" /> {t('summary.shipping')}
+                  </>
                 ) : (
-                  <><MapPin className="w-3.5 h-3.5" /> {listing.pickup_location || t('summary.pickup')}</>
+                  <>
+                    <MapPin className="w-3.5 h-3.5" />{' '}
+                    {listing.pickup_location || t('summary.pickup')}
+                  </>
                 )}
               </p>
             </div>
@@ -234,7 +252,10 @@ export function CheckoutPageClient({
             </div>
 
             {error && (
-              <div role="alert" className="mt-4 rounded-lg border border-error-500/30 bg-error-500/10 p-3 text-sm text-error-600">
+              <div
+                role="alert"
+                className="mt-4 rounded-lg border border-error-500/30 bg-error-500/10 p-3 text-sm text-error-600"
+              >
                 {error}
               </div>
             )}
@@ -262,5 +283,5 @@ export function CheckoutPageClient({
         </div>
       </div>
     </div>
-  )
+  );
 }

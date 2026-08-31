@@ -1,34 +1,34 @@
-'use client'
+'use client';
 
-import { MapPin } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { responsiveTypography } from '@/lib/responsive'
-import Heading from '@/components/ui/Heading'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
+import { MapPin } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { responsiveTypography } from '@/lib/responsive';
+import Heading from '@/components/ui/Heading';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 
 interface WorkshopLocation {
-  id: string
-  name: string
-  address?: string
-  city?: string
-  canton?: string
-  capacity?: number
-  max_capacity?: number
+  id: string;
+  name: string;
+  address?: string;
+  city?: string;
+  canton?: string;
+  capacity?: number;
+  max_capacity?: number;
 }
 
 interface LocationSectionProps {
-  locationType: 'venue' | 'online' | 'home'
-  selectedLocationId: string
-  proposedLocation: string
-  proposedDate: string
-  proposedTime: string
-  specialRequirements: string
-  availableLocations: WorkshopLocation[]
-  loadingLocations: boolean
-  onChange: (field: string, value: string) => void
-  onLocationSelect: (locationId: string, locationName: string) => void
+  locationType: 'venue' | 'online' | 'home';
+  selectedLocationId: string;
+  proposedLocation: string;
+  proposedDate: string;
+  proposedTime: string;
+  specialRequirements: string;
+  availableLocations: WorkshopLocation[];
+  loadingLocations: boolean;
+  onChange: (field: string, value: string) => void;
+  onLocationSelect: (locationId: string, locationName: string) => void;
 }
 
 export function LocationSection({
@@ -41,13 +41,16 @@ export function LocationSection({
   availableLocations,
   loadingLocations,
   onChange,
-  onLocationSelect
+  onLocationSelect,
 }: LocationSectionProps) {
-  const t = useTranslations('workshops.propose')
+  const t = useTranslations('workshops.propose');
 
   return (
     <div className="mb-8">
-      <Heading level={2} className={`${responsiveTypography.subsection} font-semibold text-text-primary mb-4 flex items-center`}>
+      <Heading
+        level={2}
+        className={`${responsiveTypography.subsection} font-semibold text-text-primary mb-4 flex items-center`}
+      >
         <MapPin className="w-5 h-5 mr-2" />
         {t('sections.location.title')}
       </Heading>
@@ -66,7 +69,9 @@ export function LocationSection({
                 onChange={(e) => onChange('locationType', e.target.value)}
                 className="mr-3 text-action focus:ring-action"
               />
-              <span className="text-sm text-text-secondary">{t('sections.location.typeVenue')}</span>
+              <span className="text-sm text-text-secondary">
+                {t('sections.location.typeVenue')}
+              </span>
             </label>
             <label className="flex items-center">
               <input
@@ -76,7 +81,9 @@ export function LocationSection({
                 onChange={(e) => onChange('locationType', e.target.value)}
                 className="mr-3 text-action focus:ring-action"
               />
-              <span className="text-sm text-text-secondary">{t('sections.location.typeOnline')}</span>
+              <span className="text-sm text-text-secondary">
+                {t('sections.location.typeOnline')}
+              </span>
             </label>
             <label className="flex items-center">
               <input
@@ -106,18 +113,21 @@ export function LocationSection({
                 <Select
                   value={selectedLocationId}
                   onChange={(e) => {
-                    const selectedLocation = availableLocations.find(loc => loc.id === e.target.value)
+                    const selectedLocation = availableLocations.find(
+                      (loc) => loc.id === e.target.value,
+                    );
                     onLocationSelect(
                       e.target.value,
-                      selectedLocation ? `${selectedLocation.name}, ${selectedLocation.city}` : ''
-                    )
+                      selectedLocation ? `${selectedLocation.name}, ${selectedLocation.city}` : '',
+                    );
                   }}
                 >
                   <option value="">{t('sections.location.selectVenue')}</option>
-                  {availableLocations.map(location => (
+                  {availableLocations.map((location) => (
                     <option key={location.id} value={location.id}>
                       {location.name} - {location.city}, {location.canton}
-                      {location.max_capacity && ` (max. ${location.max_capacity} ${t('sections.location.personsCapacity')})`}
+                      {location.max_capacity &&
+                        ` (max. ${location.max_capacity} ${t('sections.location.personsCapacity')})`}
                     </option>
                   ))}
                 </Select>
@@ -220,5 +230,5 @@ export function LocationSection({
         </div>
       </div>
     </div>
-  )
+  );
 }

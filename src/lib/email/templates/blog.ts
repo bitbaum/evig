@@ -9,7 +9,7 @@ import { escapeHtml } from '@/lib/utils/escape-html';
 export const blogSubmissionReceived = (
   name: string,
   articleTitle: string,
-  submissionId: string
+  submissionId: string,
 ): EmailContent => {
   const eName = escapeHtml(name);
   const eTitle = escapeHtml(articleTitle);
@@ -70,10 +70,7 @@ ${createTextFooter()}
   };
 };
 
-export const blogSubmissionApproved = (
-  name: string,
-  articleTitle: string
-): EmailContent => {
+export const blogSubmissionApproved = (name: string, articleTitle: string): EmailContent => {
   const eName = escapeHtml(name);
   const eTitle = escapeHtml(articleTitle);
   return {
@@ -122,7 +119,7 @@ ${createTextFooter()}
 export const blogSubmissionRejected = (
   name: string,
   articleTitle: string,
-  reason: string
+  reason: string,
 ): EmailContent => {
   const eName = escapeHtml(name);
   const eTitle = escapeHtml(articleTitle);
@@ -175,7 +172,7 @@ ${createTextFooter()}
 export const blogSubmissionPublished = (
   name: string,
   articleTitle: string,
-  articleUrl: string
+  articleUrl: string,
 ): EmailContent => {
   const eName = escapeHtml(name);
   const eTitle = escapeHtml(articleTitle);
@@ -227,7 +224,7 @@ ${createTextFooter()}
 export const blogSubmissionChangesRequested = (
   name: string,
   articleTitle: string,
-  notes: string
+  notes: string,
 ): EmailContent => {
   const eName = escapeHtml(name);
   const eTitle = escapeHtml(articleTitle);

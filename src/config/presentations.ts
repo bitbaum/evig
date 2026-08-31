@@ -17,26 +17,27 @@
  * session-checked handler.)
  */
 
-import { CONTENT_AUDIENCE, type ContentAudience } from '@/config/content-audience'
+import { CONTENT_AUDIENCE, type ContentAudience } from '@/config/content-audience';
 
 export interface PresentationDeck {
   /** Folder name under public/presentations/ (= URL slug) */
-  slug: string
-  title: string
-  description: string
+  slug: string;
+  title: string;
+  description: string;
   /** Who the deck was made FOR — a descriptive recipient label (badge + filter). */
-  targetGroup: string
+  targetGroup: string;
   /** WHO may open the deck (access control). Defaults to public. */
-  audience: ContentAudience
+  audience: ContentAudience;
   /** Creation month, ISO format YYYY-MM */
-  createdMonth: string
+  createdMonth: string;
 }
 
 export const PRESENTATION_DECKS: PresentationDeck[] = [
   {
     slug: 'revampit-portal',
     title: 'evig — Die Plattform',
-    description: 'Wie aus drei getrennten Alt-Systemen eine zusammenhängende Plattform wurde — Marktplatz, Werkstatt und Betrieb an einem Ort',
+    description:
+      'Wie aus drei getrennten Alt-Systemen eine zusammenhängende Plattform wurde — Marktplatz, Werkstatt und Betrieb an einem Ort',
     targetGroup: 'Öffentlich',
     audience: CONTENT_AUDIENCE.PUBLIC,
     createdMonth: '2026-07',
@@ -44,7 +45,8 @@ export const PRESENTATION_DECKS: PresentationDeck[] = [
   {
     slug: 'kivvi-plattform',
     title: 'Kivvi — Das ERP der Kreislaufwirtschaft',
-    description: 'Das offene ERP für Betriebe, die Waren ein zweites Leben geben — Spenden, Einzelstücke, Reparatur, Schweizer Buchhaltung',
+    description:
+      'Das offene ERP für Betriebe, die Waren ein zweites Leben geben — Spenden, Einzelstücke, Reparatur, Schweizer Buchhaltung',
     targetGroup: 'Öffentlich',
     audience: CONTENT_AUDIENCE.PUBLIC,
     createdMonth: '2026-07',
@@ -52,7 +54,8 @@ export const PRESENTATION_DECKS: PresentationDeck[] = [
   {
     slug: 'revamp-info-plattform',
     title: 'Revamp-Info — Fundraising & Transparenz',
-    description: 'Transparenz nach aussen, Fundraising-Intelligenz nach innen — findet Stiftungen und erstellt Gesuche',
+    description:
+      'Transparenz nach aussen, Fundraising-Intelligenz nach innen — findet Stiftungen und erstellt Gesuche',
     targetGroup: 'Öffentlich',
     audience: CONTENT_AUDIENCE.PUBLIC,
     createdMonth: '2026-07',
@@ -84,7 +87,8 @@ export const PRESENTATION_DECKS: PresentationDeck[] = [
   {
     slug: 'bewerbung-koch',
     title: 'Bewerbung Kraftwerk1: Siedlung Koch',
-    description: 'Bewerbung für zwei Ladenlokale im Erdgeschoss der Siedlung Koch — für die Vergabekommission Kraftwerk1',
+    description:
+      'Bewerbung für zwei Ladenlokale im Erdgeschoss der Siedlung Koch — für die Vergabekommission Kraftwerk1',
     targetGroup: 'Kraftwerk1',
     audience: CONTENT_AUDIENCE.PUBLIC,
     createdMonth: '2026-07',
@@ -108,7 +112,7 @@ export const PRESENTATION_DECKS: PresentationDeck[] = [
   // NB: the Kivitendo intake mockup is served at /presentations/kivitendo-intake
   // (the rewrite works without a registry entry) but is catalogued as a
   // Deliverable (see /admin/deliverables), not a presentation deck.
-]
+];
 
 /**
  * URL of a deck. Without `base` returns the site-relative path
@@ -116,6 +120,6 @@ export const PRESENTATION_DECKS: PresentationDeck[] = [
  * returns the absolute, shareable URL.
  */
 export function presentationUrl(slug: string, base?: string): string {
-  const path = `/presentations/${slug}`
-  return base ? `${base}${path}` : path
+  const path = `/presentations/${slug}`;
+  return base ? `${base}${path}` : path;
 }

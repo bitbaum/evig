@@ -1,27 +1,35 @@
-import { getRequestConfig } from 'next-intl/server'
-import { cookies } from 'next/headers'
-import { routing } from './routing'
-import { hasLocale } from 'next-intl'
+import { getRequestConfig } from 'next-intl/server';
+import { cookies } from 'next/headers';
+import { routing } from './routing';
+import { hasLocale } from 'next-intl';
 
 /**
  * Deep merge: target (German) is the base, source (requested locale) overrides.
  * Any key missing in the requested locale falls back to German — never shows key names.
  */
 function deepMerge<T extends Record<string, unknown>>(target: T, source: Partial<T>): T {
-  const result = { ...target }
+  const result = { ...target };
   for (const key in source) {
-    const sv = source[key]
-    const tv = target[key]
-    if (sv && typeof sv === 'object' && !Array.isArray(sv) &&
-        tv && typeof tv === 'object' && !Array.isArray(tv)) {
-      result[key] = deepMerge(tv as Record<string, unknown>, sv as Record<string, unknown>) as T[typeof key]
+    const sv = source[key];
+    const tv = target[key];
+    if (
+      sv &&
+      typeof sv === 'object' &&
+      !Array.isArray(sv) &&
+      tv &&
+      typeof tv === 'object' &&
+      !Array.isArray(tv)
+    ) {
+      result[key] = deepMerge(
+        tv as Record<string, unknown>,
+        sv as Record<string, unknown>,
+      ) as T[typeof key];
     } else if (sv !== undefined) {
-      result[key] = sv as T[typeof key]
+      result[key] = sv as T[typeof key];
     }
   }
-  return result
+  return result;
 }
-
 
 export default getRequestConfig(async ({ requestLocale }) => {
   // Resolution order:
@@ -36,29 +44,29 @@ export default getRequestConfig(async ({ requestLocale }) => {
   // false. (BYPASS_INTL routes like /dashboard, /admin, /auth have no URL locale,
   // so the cookie carries the user's actual preference across them — including
   // the admin area, which has its own LocaleSwitcher writing the same cookie.)
-  const requested = await requestLocale
-  let locale: string = routing.defaultLocale
+  const requested = await requestLocale;
+  let locale: string = routing.defaultLocale;
   if (hasLocale(routing.locales, requested)) {
-    locale = requested
+    locale = requested;
   } else {
-    const cookieLocale = (await cookies()).get('NEXT_LOCALE')?.value
+    const cookieLocale = (await cookies()).get('NEXT_LOCALE')?.value;
     if (hasLocale(routing.locales, cookieLocale)) {
-      locale = cookieLocale
+      locale = cookieLocale;
     }
   }
 
   // German is the canonical source of truth
-  const deMessages = (await import(`../../messages/de.json`)).default
+  const deMessages = (await import(`../../messages/de.json`)).default;
 
-  let messages = deMessages
+  let messages = deMessages;
   if (locale !== routing.defaultLocale) {
     try {
-      const localeMessages = (await import(`../../messages/${locale}.json`)).default
+      const localeMessages = (await import(`../../messages/${locale}.json`)).default;
       // Locale messages override German; missing keys fall back to German silently
-      messages = deepMerge(deMessages, localeMessages)
+      messages = deepMerge(deMessages, localeMessages);
     } catch {
       // Message file missing entirely — use German
-      messages = deMessages
+      messages = deMessages;
     }
   }
 
@@ -68,12 +76,12 @@ export default getRequestConfig(async ({ requestLocale }) => {
     // In development, warn about missing keys. In production, fail silently.
     onError(error) {
       if (process.env.NODE_ENV === 'development') {
-        console.warn('[next-intl]', error.message)
+        console.warn('[next-intl]', error.message);
       }
     },
     getMessageFallback({ key, namespace }) {
       // Last-resort fallback: return the key so UI isn't broken
-      return namespace ? `${namespace}.${key}` : key
+      return namespace ? `${namespace}.${key}` : key;
     },
-  }
-})
+  };
+});

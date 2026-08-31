@@ -1,33 +1,46 @@
 // SSR only — lucide-react in server component scope can cause React-null in
 // certain Turbopack SSG bundles (same guard as /space, /transparenz/kennzahlen).
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
-import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
-import { FolderGit2 } from 'lucide-react'
-import { Link } from '@/i18n/navigation'
-import { PageHero } from '@/components/layout/PageHero'
-import { Section } from '@/components/layout/Section'
-import { IconBadge } from '@/components/ui/IconBadge'
-import Heading from '@/components/ui/Heading'
-import { ORG } from '@/config/org'
-import { ROUTES } from '@/config/routes'
-import { EVIG_PROJECTS, PROJECT_STATUS_STYLE } from '@/config/evig-projects'
+import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
+import { FolderGit2 } from 'lucide-react';
+import { Link } from '@/i18n/navigation';
+import { PageHero } from '@/components/layout/PageHero';
+import { Section } from '@/components/layout/Section';
+import { IconBadge } from '@/components/ui/IconBadge';
+import Heading from '@/components/ui/Heading';
+import { ORG } from '@/config/org';
+import { ROUTES } from '@/config/routes';
+import { EVIG_PROJECTS, PROJECT_STATUS_STYLE } from '@/config/evig-projects';
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'projects' })
-  const title = `${t('meta.title')} | ${ORG.name}`
-  const description = t('meta.description')
-  return { title: { absolute: title }, description, openGraph: { title, description, type: 'website' } }
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'projects' });
+  const title = `${t('meta.title')} | ${ORG.name}`;
+  const description = t('meta.description');
+  return {
+    title: { absolute: title },
+    description,
+    openGraph: { title, description, type: 'website' },
+  };
 }
 
 export default async function ProjectsPage() {
-  const t = await getTranslations('projects')
+  const t = await getTranslations('projects');
 
   return (
     <main className="min-h-screen">
-      <PageHero theme="about" icon={FolderGit2} title={t('hero.title')} subtitle={t('hero.subtitle')} />
+      <PageHero
+        theme="about"
+        icon={FolderGit2}
+        title={t('hero.title')}
+        subtitle={t('hero.subtitle')}
+      />
 
       <Section density="default" contained={false}>
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -61,5 +74,5 @@ export default async function ProjectsPage() {
         </div>
       </Section>
     </main>
-  )
+  );
 }

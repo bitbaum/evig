@@ -1,9 +1,9 @@
-import { getTranslations } from 'next-intl/server'
-import { Link } from '@/i18n/navigation'
-import { ORG, ORG_ORIGIN } from '@/config/org'
-import { ROUTES } from '@/config/routes'
-import { EVIG_MARK } from '@/config/brand'
-import type { ReactNode } from 'react'
+import { getTranslations } from 'next-intl/server';
+import { Link } from '@/i18n/navigation';
+import { ORG, ORG_ORIGIN } from '@/config/org';
+import { ROUTES } from '@/config/routes';
+import { EVIG_MARK } from '@/config/brand';
+import type { ReactNode } from 'react';
 
 /**
  * evig — the vision (manifesto).
@@ -13,33 +13,61 @@ import type { ReactNode } from 'react'
  */
 
 // The mark geometry is the brand SSOT (src/config/brand.ts) — no divergence.
-const { loopPath: LOOP, sparkPath: SPARK, loopTransform: TILT } = EVIG_MARK
+const { loopPath: LOOP, sparkPath: SPARK, loopTransform: TILT } = EVIG_MARK;
 
-function Mark({ className, width = EVIG_MARK.strokeWidth }: { className?: string; width?: number }) {
+function Mark({
+  className,
+  width = EVIG_MARK.strokeWidth,
+}: {
+  className?: string;
+  width?: number;
+}) {
   return (
     <svg className={className} viewBox={EVIG_MARK.viewBox} fill="none" aria-hidden="true">
       <g transform={TILT}>
-        <path d={LOOP} stroke="currentColor" strokeWidth={width} strokeLinecap="round" strokeLinejoin="round" />
+        <path
+          d={LOOP}
+          stroke="currentColor"
+          strokeWidth={width}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       </g>
       <path d={SPARK} fill="currentColor" />
     </svg>
-  )
+  );
 }
 
 function HeroLoop({ label }: { label: string }) {
   return (
     <svg className="v-loop" viewBox={EVIG_MARK.viewBox} fill="none" role="img" aria-label={label}>
       <g transform={TILT}>
-        <path className="v-draw" pathLength={100} d={LOOP} stroke="currentColor" strokeWidth={6} strokeLinecap="round" strokeLinejoin="round" />
-        <path className="v-pulse" pathLength={100} d={LOOP} stroke="var(--text-primary)" strokeWidth={6} strokeLinecap="round" strokeLinejoin="round" />
+        <path
+          className="v-draw"
+          pathLength={100}
+          d={LOOP}
+          stroke="currentColor"
+          strokeWidth={6}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          className="v-pulse"
+          pathLength={100}
+          d={LOOP}
+          stroke="var(--text-primary)"
+          strokeWidth={6}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       </g>
       <path d={SPARK} fill="currentColor" />
     </svg>
-  )
+  );
 }
 
 export default async function VisionContent({ locale }: { locale: string }) {
-  const t = await getTranslations({ locale, namespace: 'vision' })
+  const t = await getTranslations({ locale, namespace: 'vision' });
 
   // Rich-text tag handlers shared across paragraphs.
   const tags = {
@@ -49,11 +77,16 @@ export default async function VisionContent({ locale }: { locale: string }) {
     // External link to the origin org (Revamp-IT). close.commercial overrides
     // this with its own internal contact Link via a later spread.
     a: (c: ReactNode) => (
-      <a className="lime underline underline-offset-2" href={ORG_ORIGIN.url} target="_blank" rel="noreferrer">
+      <a
+        className="lime underline underline-offset-2"
+        href={ORG_ORIGIN.url}
+        target="_blank"
+        rel="noreferrer"
+      >
         {c}
       </a>
     ),
-  }
+  };
 
   return (
     <div className="theme-vision">
@@ -219,5 +252,5 @@ export default async function VisionContent({ locale }: { locale: string }) {
         </div>
       </footer>
     </div>
-  )
+  );
 }

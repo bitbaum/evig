@@ -1,38 +1,39 @@
-import { Link } from '@/i18n/navigation'
-import { Users, UserCheck, Wrench, Monitor } from 'lucide-react'
-import type { DashboardStats, MissionDelta } from './types'
-import { ROUTES } from '@/config/routes'
+import { Link } from '@/i18n/navigation';
+import { Users, UserCheck, Wrench, Monitor } from 'lucide-react';
+import type { DashboardStats, MissionDelta } from './types';
+import { ROUTES } from '@/config/routes';
 
 interface MissionMetricsProps {
-  stats: DashboardStats
+  stats: DashboardStats;
 }
 
-const MONTH_LABEL = new Date().toLocaleString('de-CH', { month: 'long' })
+const MONTH_LABEL = new Date().toLocaleString('de-CH', { month: 'long' });
 
 function DeltaBadge({ value }: { value: number }) {
-  if (value === 0) return (
-    <span className="text-xs text-text-muted font-medium">±0</span>
-  )
-  const positive = value > 0
+  if (value === 0) return <span className="text-xs text-text-muted font-medium">±0</span>;
+  const positive = value > 0;
   return (
-    <span className={`text-xs font-semibold ${positive ? 'text-action' : 'text-error-600 dark:text-error-400'}`}>
-      {positive ? '+' : ''}{value}
+    <span
+      className={`text-xs font-semibold ${positive ? 'text-action' : 'text-error-600 dark:text-error-400'}`}
+    >
+      {positive ? '+' : ''}
+      {value}
     </span>
-  )
+  );
 }
 
 export function MissionMetrics({ stats }: MissionMetricsProps) {
-  const { mission, delta } = stats
+  const { mission, delta } = stats;
 
   const missionCards: Array<{
-    value: number
-    delta: number
-    label: string
-    sublabel: string
-    icon: typeof Monitor
-    iconBg: string
-    iconColor: string
-    href: string
+    value: number;
+    delta: number;
+    label: string;
+    sublabel: string;
+    icon: typeof Monitor;
+    iconBg: string;
+    iconColor: string;
+    href: string;
   }> = [
     {
       value: mission.devicesProcessedThisMonth,
@@ -74,14 +75,14 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
       iconColor: 'text-warning-600 dark:text-warning-400',
       href: ROUTES.admin.workshops,
     },
-  ]
+  ];
 
   return (
     <div className="space-y-3">
       {/* Mission / impact cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {missionCards.map((card) => {
-          const Icon = card.icon
+          const Icon = card.icon;
           return (
             <Link
               key={card.href}
@@ -89,7 +90,9 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
               className="bg-surface-base rounded-lg p-4 shadow-xs border border-subtle hover:border-strong transition-colors"
             >
               <div className="flex items-center gap-3">
-                <div className={`w-10 h-10 ${card.iconBg} rounded-lg flex items-center justify-center shrink-0`}>
+                <div
+                  className={`w-10 h-10 ${card.iconBg} rounded-lg flex items-center justify-center shrink-0`}
+                >
                   <Icon className={`w-5 h-5 ${card.iconColor}`} aria-hidden="true" />
                 </div>
                 <div className="min-w-0">
@@ -99,40 +102,62 @@ export function MissionMetrics({ stats }: MissionMetricsProps) {
                     </p>
                     <DeltaBadge value={card.delta} />
                   </div>
-                  <p className="text-xs text-text-tertiary mt-0.5 truncate">
-                    {card.label}
-                  </p>
-                  <p className="text-xs text-text-muted">
-                    {card.sublabel}
-                  </p>
+                  <p className="text-xs text-text-tertiary mt-0.5 truncate">{card.label}</p>
+                  <p className="text-xs text-text-muted">{card.sublabel}</p>
                 </div>
               </div>
             </Link>
-          )
+          );
         })}
       </div>
 
       {/* Reference stats — collapsed into a single compact row */}
       <div className="flex flex-wrap items-center gap-x-5 gap-y-1 rounded-lg border border-subtle bg-surface-raised px-4 py-2.5 text-xs text-text-tertiary">
-        <Link href={ROUTES.admin.users} className="flex items-center gap-1.5 hover:text-text-secondary transition-colors">
+        <Link
+          href={ROUTES.admin.users}
+          className="flex items-center gap-1.5 hover:text-text-secondary transition-colors"
+        >
           <Users className="w-3.5 h-3.5" aria-hidden="true" />
-          <span><strong className="text-text-secondary">{stats.totalUsers}</strong> Benutzer</span>
+          <span>
+            <strong className="text-text-secondary">{stats.totalUsers}</strong> Benutzer
+          </span>
         </Link>
-        <span className="text-text-muted dark:text-text-secondary" aria-hidden="true">·</span>
-        <Link href={ROUTES.admin.team} className="flex items-center gap-1.5 hover:text-text-secondary transition-colors">
+        <span className="text-text-muted dark:text-text-secondary" aria-hidden="true">
+          ·
+        </span>
+        <Link
+          href={ROUTES.admin.team}
+          className="flex items-center gap-1.5 hover:text-text-secondary transition-colors"
+        >
           <UserCheck className="w-3.5 h-3.5" aria-hidden="true" />
-          <span><strong className="text-text-secondary">{stats.totalStaff}</strong> Team</span>
+          <span>
+            <strong className="text-text-secondary">{stats.totalStaff}</strong> Team
+          </span>
         </Link>
-        <span className="text-text-muted dark:text-text-secondary" aria-hidden="true">·</span>
-        <Link href={ROUTES.admin.services} className="flex items-center gap-1.5 hover:text-text-secondary transition-colors">
+        <span className="text-text-muted dark:text-text-secondary" aria-hidden="true">
+          ·
+        </span>
+        <Link
+          href={ROUTES.admin.services}
+          className="flex items-center gap-1.5 hover:text-text-secondary transition-colors"
+        >
           <Wrench className="w-3.5 h-3.5" aria-hidden="true" />
-          <span><strong className="text-text-secondary">{stats.totalTechnicians}</strong> Techniker</span>
+          <span>
+            <strong className="text-text-secondary">{stats.totalTechnicians}</strong> Techniker
+          </span>
         </Link>
-        <span className="text-text-muted dark:text-text-secondary" aria-hidden="true">·</span>
-        <Link href={ROUTES.admin.marketplace} className="flex items-center gap-1.5 hover:text-text-secondary transition-colors">
-          <span><strong className="text-text-secondary">{stats.activeListings}</strong> aktive Inserate</span>
+        <span className="text-text-muted dark:text-text-secondary" aria-hidden="true">
+          ·
+        </span>
+        <Link
+          href={ROUTES.admin.marketplace}
+          className="flex items-center gap-1.5 hover:text-text-secondary transition-colors"
+        >
+          <span>
+            <strong className="text-text-secondary">{stats.activeListings}</strong> aktive Inserate
+          </span>
         </Link>
       </div>
     </div>
-  )
+  );
 }

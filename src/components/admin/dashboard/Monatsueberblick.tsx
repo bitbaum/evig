@@ -1,45 +1,45 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { TrendingUp, ChevronDown } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import Heading from '@/components/admin/AdminHeading'
-import { MissionMetrics } from './MissionMetrics'
-import { WeeklyActivitySection } from './WeeklyActivitySection'
-import type { DashboardStats } from './types'
-import { adminInteractive } from '@/lib/admin-ui'
+import { useState, useEffect } from 'react';
+import { TrendingUp, ChevronDown } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Heading from '@/components/admin/AdminHeading';
+import { MissionMetrics } from './MissionMetrics';
+import { WeeklyActivitySection } from './WeeklyActivitySection';
+import type { DashboardStats } from './types';
+import { adminInteractive } from '@/lib/admin-ui';
 
-const STORAGE_KEY = 'dashboard_monatsueberblick_open'
+const STORAGE_KEY = 'dashboard_monatsueberblick_open';
 
 interface MonatsueberblickProps {
-  stats: DashboardStats
+  stats: DashboardStats;
   /** When true, defaults to expanded (for 'lead' dashboard mode) */
-  defaultOpen?: boolean
+  defaultOpen?: boolean;
   /** Optional extra content (e.g. TeamActivityFeed for 'lead' mode) */
-  children?: React.ReactNode
+  children?: React.ReactNode;
 }
 
 export function Monatsueberblick({ stats, defaultOpen = false, children }: MonatsueberblickProps) {
   // Combined state so useEffect does a single setState call (avoids cascade-render lint warning)
-  const [{ open, hydrated }, setMeta] = useState({ open: defaultOpen, hydrated: false })
+  const [{ open, hydrated }, setMeta] = useState({ open: defaultOpen, hydrated: false });
 
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY)
+    const stored = localStorage.getItem(STORAGE_KEY);
     // Reading localStorage is an external system sync — setState in effect is intentional.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMeta({
       // Stored preference wins; fall back to prop (defaultOpen for 'lead' mode)
       open: stored !== null ? stored === 'true' : defaultOpen,
       hydrated: true,
-    })
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const toggle = () => {
-    const next = !open
-    localStorage.setItem(STORAGE_KEY, String(next))
-    setMeta({ open: next, hydrated: true })
-  }
+    const next = !open;
+    localStorage.setItem(STORAGE_KEY, String(next));
+    setMeta({ open: next, hydrated: true });
+  };
 
   return (
     <div className="bg-surface-base rounded-xl shadow-xs border border-subtle">
@@ -65,15 +65,12 @@ export function Monatsueberblick({ stats, defaultOpen = false, children }: Monat
 
       {/* Content — suppressed before localStorage hydrates to prevent flash */}
       {hydrated && open && (
-        <div
-          id="monatsueberblick-content"
-          className="border-t border-subtle p-4 space-y-4"
-        >
+        <div id="monatsueberblick-content" className="border-t border-subtle p-4 space-y-4">
           <MissionMetrics stats={stats} />
           <WeeklyActivitySection stats={stats} />
           {children}
         </div>
       )}
     </div>
-  )
+  );
 }

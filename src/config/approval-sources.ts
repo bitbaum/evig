@@ -1,4 +1,12 @@
-import { FileText, CalendarPlus, MapPin, Clock, CalendarOff, ShieldCheck, type LucideIcon } from 'lucide-react'
+import {
+  FileText,
+  CalendarPlus,
+  MapPin,
+  Clock,
+  CalendarOff,
+  ShieldCheck,
+  type LucideIcon,
+} from 'lucide-react';
 
 /**
  * SSOT for everything that requires approval ("Freigaben").
@@ -20,20 +28,20 @@ import { FileText, CalendarPlus, MapPin, Clock, CalendarOff, ShieldCheck, type L
  * in src/lib/approvals/counts.ts, keyed by the same `key`.
  */
 
-export type ApprovalReviewMode = 'inline' | 'bulk' | 'page'
+export type ApprovalReviewMode = 'inline' | 'bulk' | 'page';
 
 export interface ApprovalSourceConfig {
-  key: string
-  label: string
-  description: string
-  icon: LucideIcon
-  reviewMode: ApprovalReviewMode
+  key: string;
+  label: string;
+  description: string;
+  icon: LucideIcon;
+  reviewMode: ApprovalReviewMode;
   /** Where the reviewer goes to act (page) or which surface owns it. */
-  reviewHref: string
+  reviewHref: string;
   /** Section permission that gates seeing/acting on this source. */
-  permission: string
+  permission: string;
   /** Only super admins may review (e.g. permission requests). */
-  superAdminOnly?: boolean
+  superAdminOnly?: boolean;
 }
 
 export const APPROVAL_SOURCES: readonly ApprovalSourceConfig[] = [
@@ -94,8 +102,8 @@ export const APPROVAL_SOURCES: readonly ApprovalSourceConfig[] = [
     permission: 'settings',
     superAdminOnly: true,
   },
-] as const
+] as const;
 
 export function getApprovalSource(key: string): ApprovalSourceConfig | undefined {
-  return APPROVAL_SOURCES.find(s => s.key === key)
+  return APPROVAL_SOURCES.find((s) => s.key === key);
 }

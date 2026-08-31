@@ -9,17 +9,17 @@
  * real, verifiable numbers, add them from the org-numbers SSOT — not before.
  */
 
-'use client'
+'use client';
 
-import { Compass } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
-import { ORG, ORG_ORIGIN } from '@/config/org'
-import { Section } from '@/components/layout/Section'
+import { Compass } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/ui/Heading';
+import { ORG, ORG_ORIGIN } from '@/config/org';
+import { Section } from '@/components/layout/Section';
 
 export default function GeschichteSection() {
-  const t = useTranslations('components.geschichteSection')
-  const foundingParams = { orgName: ORG.name, foundingYear: ORG.foundingYear }
+  const t = useTranslations('components.geschichteSection');
+  const foundingParams = { orgName: ORG.name, foundingYear: ORG.foundingYear };
 
   return (
     <Section density="spacious" tone="tinted" contained={false}>
@@ -60,5 +60,5 @@ export default function GeschichteSection() {
         </div>
       </div>
     </Section>
-  )
+  );
 }

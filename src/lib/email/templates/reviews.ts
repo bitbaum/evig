@@ -8,7 +8,7 @@ export const newReviewNotification = (
   reviewerName: string,
   rating: number,
   reviewContent: string,
-  reviewUrl: string
+  reviewUrl: string,
 ): EmailContent => ({
   subject: `Neue Bewertung erhalten - ${ORG.name}`,
   html: `

@@ -28,7 +28,7 @@
 
 jest.mock('@/lib/marketplace/spec-utils', () => ({
   normalizeSpecValue: jest.fn(),
-}))
+}));
 
 import {
   formatPriceCents,
@@ -38,7 +38,7 @@ import {
   supportsSecureCheckout,
   supportsDirectContact,
   resolveCategoryValue,
-} from '../marketplace'
+} from '../marketplace';
 
 // ============================================================================
 // formatPriceCents
@@ -46,33 +46,33 @@ import {
 
 describe('formatPriceCents', () => {
   it('returns "Auf Anfrage" for null', () => {
-    expect(formatPriceCents(null)).toBe('Auf Anfrage')
-  })
+    expect(formatPriceCents(null)).toBe('Auf Anfrage');
+  });
 
   it('returns "Kostenlos" for 0', () => {
-    expect(formatPriceCents(0)).toBe('Kostenlos')
-  })
+    expect(formatPriceCents(0)).toBe('Kostenlos');
+  });
 
   it('returns "CHF 150" (no decimals) for 15000 cents', () => {
-    expect(formatPriceCents(15000)).toBe('CHF 150')
-  })
+    expect(formatPriceCents(15000)).toBe('CHF 150');
+  });
 
   it('returns "CHF 1" for 100 cents', () => {
-    expect(formatPriceCents(100)).toBe('CHF 1')
-  })
+    expect(formatPriceCents(100)).toBe('CHF 1');
+  });
 
   it('returns "CHF 1.50" for 150 cents', () => {
-    expect(formatPriceCents(150)).toBe('CHF 1.50')
-  })
+    expect(formatPriceCents(150)).toBe('CHF 1.50');
+  });
 
   it('returns "CHF 0.99" for 99 cents', () => {
-    expect(formatPriceCents(99)).toBe('CHF 0.99')
-  })
+    expect(formatPriceCents(99)).toBe('CHF 0.99');
+  });
 
   it('returns "CHF 1000" (no decimals) for 100000 cents', () => {
-    expect(formatPriceCents(100000)).toBe('CHF 1000')
-  })
-})
+    expect(formatPriceCents(100000)).toBe('CHF 1000');
+  });
+});
 
 // ============================================================================
 // formatCHF
@@ -80,20 +80,20 @@ describe('formatPriceCents', () => {
 
 describe('formatCHF', () => {
   it('returns "Gratis" for 0', () => {
-    expect(formatCHF(0)).toBe('Gratis')
-  })
+    expect(formatCHF(0)).toBe('Gratis');
+  });
 
   it('returns a CHF-formatted string for positive amount', () => {
-    const result = formatCHF(150)
-    expect(result).toContain('150')
+    const result = formatCHF(150);
+    expect(result).toContain('150');
     // Intl formatter uses locale-specific CHF format
-    expect(result).toBeTruthy()
-  })
+    expect(result).toBeTruthy();
+  });
 
   it('does not return "Gratis" for positive amount', () => {
-    expect(formatCHF(1)).not.toBe('Gratis')
-  })
-})
+    expect(formatCHF(1)).not.toBe('Gratis');
+  });
+});
 
 // ============================================================================
 // getCategoryLabel
@@ -101,21 +101,21 @@ describe('formatCHF', () => {
 
 describe('getCategoryLabel', () => {
   it('returns "Laptops" for category "10"', () => {
-    expect(getCategoryLabel('10')).toBe('Laptops')
-  })
+    expect(getCategoryLabel('10')).toBe('Laptops');
+  });
 
   it('returns "Desktop PCs" for category "20"', () => {
-    expect(getCategoryLabel('20')).toBe('Desktop PCs')
-  })
+    expect(getCategoryLabel('20')).toBe('Desktop PCs');
+  });
 
   it('returns "Sonstiges" for category "99"', () => {
-    expect(getCategoryLabel('99')).toBe('Sonstiges')
-  })
+    expect(getCategoryLabel('99')).toBe('Sonstiges');
+  });
 
   it('falls back to raw value for unknown category', () => {
-    expect(getCategoryLabel('unknown')).toBe('unknown')
-  })
-})
+    expect(getCategoryLabel('unknown')).toBe('unknown');
+  });
+});
 
 // ============================================================================
 // getSpecFiltersForCategory
@@ -123,30 +123,30 @@ describe('getCategoryLabel', () => {
 
 describe('getSpecFiltersForCategory', () => {
   it('returns array for laptops category "10"', () => {
-    const filters = getSpecFiltersForCategory('10')
-    expect(Array.isArray(filters)).toBe(true)
-    expect(filters.length).toBeGreaterThan(0)
-  })
+    const filters = getSpecFiltersForCategory('10');
+    expect(Array.isArray(filters)).toBe(true);
+    expect(filters.length).toBeGreaterThan(0);
+  });
 
   it('each filter has key, label, unit, meiliField, and options', () => {
-    const filters = getSpecFiltersForCategory('10')
+    const filters = getSpecFiltersForCategory('10');
     for (const f of filters) {
-      expect(f.key).toBeTruthy()
-      expect(f.label).toBeTruthy()
-      expect(f.unit).toBeTruthy()
-      expect(f.meiliField).toBeTruthy()
-      expect(Array.isArray(f.options)).toBe(true)
+      expect(f.key).toBeTruthy();
+      expect(f.label).toBeTruthy();
+      expect(f.unit).toBeTruthy();
+      expect(f.meiliField).toBeTruthy();
+      expect(Array.isArray(f.options)).toBe(true);
     }
-  })
+  });
 
   it('returns empty array for unknown category', () => {
-    expect(getSpecFiltersForCategory('unknown')).toEqual([])
-  })
+    expect(getSpecFiltersForCategory('unknown')).toEqual([]);
+  });
 
   it('returns empty array for peripherals category "80" (no spec filters defined)', () => {
-    expect(getSpecFiltersForCategory('80')).toEqual([])
-  })
-})
+    expect(getSpecFiltersForCategory('80')).toEqual([]);
+  });
+});
 
 // ============================================================================
 // Payment mode helpers
@@ -154,54 +154,54 @@ describe('getSpecFiltersForCategory', () => {
 
 describe('supportsSecureCheckout', () => {
   it('returns true for secure and both', () => {
-    expect(supportsSecureCheckout('secure')).toBe(true)
-    expect(supportsSecureCheckout('both')).toBe(true)
-  })
+    expect(supportsSecureCheckout('secure')).toBe(true);
+    expect(supportsSecureCheckout('both')).toBe(true);
+  });
 
   it('returns false for direct', () => {
-    expect(supportsSecureCheckout('direct')).toBe(false)
-  })
-})
+    expect(supportsSecureCheckout('direct')).toBe(false);
+  });
+});
 
 describe('supportsDirectContact', () => {
   it('returns true for direct and both', () => {
-    expect(supportsDirectContact('direct')).toBe(true)
-    expect(supportsDirectContact('both')).toBe(true)
-  })
+    expect(supportsDirectContact('direct')).toBe(true);
+    expect(supportsDirectContact('both')).toBe(true);
+  });
 
   it('returns false for secure-only', () => {
-    expect(supportsDirectContact('secure')).toBe(false)
-  })
-})
+    expect(supportsDirectContact('secure')).toBe(false);
+  });
+});
 
 describe('resolveCategoryValue', () => {
   // SSOT guard: AI-produced and legacy category strings must never leak a
   // non-KATEGORIEN value into listings.category.
   it('passes through a valid KATEGORIEN value unchanged', () => {
-    expect(resolveCategoryValue('10')).toBe('10')
-    expect(resolveCategoryValue('99')).toBe('99')
-  })
+    expect(resolveCategoryValue('10')).toBe('10');
+    expect(resolveCategoryValue('99')).toBe('99');
+  });
 
   it('resolves a German KATEGORIEN label to its value', () => {
-    expect(resolveCategoryValue('Laptops')).toBe('10')
-    expect(resolveCategoryValue('Monitore')).toBe('30')
-  })
+    expect(resolveCategoryValue('Laptops')).toBe('10');
+    expect(resolveCategoryValue('Monitore')).toBe('30');
+  });
 
   it('resolves free-text / AI labels (English + coarse German) via aliases', () => {
-    expect(resolveCategoryValue('Electronics')).toBe('99')
-    expect(resolveCategoryValue('notebook')).toBe('10')
-    expect(resolveCategoryValue('Zubehör')).toBe('80')
-    expect(resolveCategoryValue('storage')).toBe('70')
-  })
+    expect(resolveCategoryValue('Electronics')).toBe('99');
+    expect(resolveCategoryValue('notebook')).toBe('10');
+    expect(resolveCategoryValue('Zubehör')).toBe('80');
+    expect(resolveCategoryValue('storage')).toBe('70');
+  });
 
   it('is case-insensitive and trims whitespace', () => {
-    expect(resolveCategoryValue('  LAPTOP  ')).toBe('10')
-  })
+    expect(resolveCategoryValue('  LAPTOP  ')).toBe('10');
+  });
 
   it('falls back to 99 (Sonstiges) for unknown / empty input', () => {
-    expect(resolveCategoryValue('completely-unknown')).toBe('99')
-    expect(resolveCategoryValue('')).toBe('99')
-    expect(resolveCategoryValue(null)).toBe('99')
-    expect(resolveCategoryValue(undefined)).toBe('99')
-  })
-})
+    expect(resolveCategoryValue('completely-unknown')).toBe('99');
+    expect(resolveCategoryValue('')).toBe('99');
+    expect(resolveCategoryValue(null)).toBe('99');
+    expect(resolveCategoryValue(undefined)).toBe('99');
+  });
+});

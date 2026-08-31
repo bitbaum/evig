@@ -5,7 +5,7 @@
  * and voter consultation (AI advisor during active voting).
  */
 
-import { BRAND_CONTEXT } from './shared'
+import { BRAND_CONTEXT } from './shared';
 
 // =============================================================================
 // VOTING METHOD EXPLANATIONS (used in advisor prompts)
@@ -18,16 +18,21 @@ export const VOTING_METHOD_LABELS: Record<string, string> = {
   score: 'Score-Voting (Punktebewertung)',
   simple_majority: 'Einfache Mehrheit (Ja/Nein)',
   ranked_choice: 'Rangwahl (Reihung)',
-}
+};
 
 export const VOTING_METHOD_EXPLANATIONS: Record<string, string> = {
-  consent: 'Alle Teilnehmenden stimmen zu (Einverstanden, Bedenken, Enthaltung) oder blockieren. Ein Veto blockiert den Entscheid — das Team muss weiterdiskutieren oder den Vorschlag anpassen.',
-  approval: 'Mehrere Optionen können gleichzeitig unterstützt werden. Die Optionen mit den meisten Stimmen gewinnen. Keine Begrenzung der wählbaren Optionen.',
+  consent:
+    'Alle Teilnehmenden stimmen zu (Einverstanden, Bedenken, Enthaltung) oder blockieren. Ein Veto blockiert den Entscheid — das Team muss weiterdiskutieren oder den Vorschlag anpassen.',
+  approval:
+    'Mehrere Optionen können gleichzeitig unterstützt werden. Die Optionen mit den meisten Stimmen gewinnen. Keine Begrenzung der wählbaren Optionen.',
   dot: 'Begrenzte Punkte auf bevorzugte Optionen verteilen. Mehr Punkte für Optionen bedeutet höhere Präferenz. Die Gesamtpunktzahl entscheidet.',
-  score: 'Jede Option wird unabhängig mit einer Punktzahl bewertet. Der Durchschnitt aller Bewertungen bestimmt den Sieger.',
-  simple_majority: 'Einfache Ja/Nein-Abstimmung. Die Mehrheit entscheidet. Enthaltungen zählen nicht zur Mehrheit.',
-  ranked_choice: 'Alle Optionen in Reihenfolge der Präferenz ordnen. Durch Eliminierung schwächerer Optionen wird die Option mit dem stärksten Rückhalt ermittelt.',
-}
+  score:
+    'Jede Option wird unabhängig mit einer Punktzahl bewertet. Der Durchschnitt aller Bewertungen bestimmt den Sieger.',
+  simple_majority:
+    'Einfache Ja/Nein-Abstimmung. Die Mehrheit entscheidet. Enthaltungen zählen nicht zur Mehrheit.',
+  ranked_choice:
+    'Alle Optionen in Reihenfolge der Präferenz ordnen. Durch Eliminierung schwächerer Optionen wird die Option mit dem stärksten Rückhalt ermittelt.',
+};
 
 // =============================================================================
 // VOTING ADVISOR PROMPTS
@@ -94,24 +99,28 @@ Halte die Antwort unter 200 Wörtern. Neutral bleiben — keine Empfehlung, wie 
   quickQuestions: {
     whatIsThis: {
       label: 'Worum geht es?',
-      question: 'Erkläre in einfachen Worten, worum es bei dieser Abstimmung geht und warum sie wichtig ist.',
+      question:
+        'Erkläre in einfachen Worten, worum es bei dieser Abstimmung geht und warum sie wichtig ist.',
     },
     consequences: {
       label: 'Was passiert bei Ja/Zustimmung?',
-      question: 'Was sind die konkreten Konsequenzen, wenn diese Entscheidung angenommen wird? Was ändert sich?',
+      question:
+        'Was sind die konkreten Konsequenzen, wenn diese Entscheidung angenommen wird? Was ändert sich?',
     },
     methodExplain: {
       label: 'Wie funktioniert diese Abstimmungsmethode?',
-      question: 'Erkläre wie die verwendete Abstimmungsmethode funktioniert und was meine Stimme konkret bewirkt.',
+      question:
+        'Erkläre wie die verwendete Abstimmungsmethode funktioniert und was meine Stimme konkret bewirkt.',
     },
     considerations: {
       label: 'Welche Faktoren soll ich beachten?',
-      question: 'Welche wichtigen Faktoren sollte ich als Abstimmende/r bei dieser Entscheidung in Betracht ziehen?',
+      question:
+        'Welche wichtigen Faktoren sollte ich als Abstimmende/r bei dieser Entscheidung in Betracht ziehen?',
     },
   },
-} as const
+} as const;
 
-export type VotingAdvisorQuickQuestion = keyof typeof VOTING_ADVISOR_PROMPTS.quickQuestions
+export type VotingAdvisorQuickQuestion = keyof typeof VOTING_ADVISOR_PROMPTS.quickQuestions;
 
 // =============================================================================
 // PROTOCOL PROMPTS
@@ -306,9 +315,19 @@ Antworte NUR mit dem JSON-Array, keine Erklärungen.`,
    * Quick action prompts for common refinements
    */
   quickActions: {
-    addDetails: { label: 'Details ergänzen', prompt: 'Ergänze die Diskussionspunkte mit mehr Details aus dem Transkript.' },
-    splitTopics: { label: 'Themen aufteilen', prompt: 'Unterteile die Themen feiner — jedes Unterthema als eigenen Eintrag.' },
-    clarifyActions: { label: 'Aufgaben präzisieren', prompt: 'Präzisiere die Aufgaben: Mache Beschreibungen konkreter und füge fehlende Zeithinweise hinzu.' },
+    addDetails: {
+      label: 'Details ergänzen',
+      prompt: 'Ergänze die Diskussionspunkte mit mehr Details aus dem Transkript.',
+    },
+    splitTopics: {
+      label: 'Themen aufteilen',
+      prompt: 'Unterteile die Themen feiner — jedes Unterthema als eigenen Eintrag.',
+    },
+    clarifyActions: {
+      label: 'Aufgaben präzisieren',
+      prompt:
+        'Präzisiere die Aufgaben: Mache Beschreibungen konkreter und füge fehlende Zeithinweise hinzu.',
+    },
   },
 
   /**
@@ -361,17 +380,17 @@ Antworte NUR mit dem JSON-Array, keine Erklärungen.`,
     "estimated_minutes": 30
   }
 ]`,
-} as const
+} as const;
 
 // =============================================================================
 // HELPER TYPES & FUNCTIONS
 // =============================================================================
 
-export type ProtocolQuickAction = keyof typeof PROTOCOL_PROMPTS.quickActions
+export type ProtocolQuickAction = keyof typeof PROTOCOL_PROMPTS.quickActions;
 
 /**
  * Get a protocol quick action prompt by key
  */
 export function getProtocolQuickActionPrompt(action: ProtocolQuickAction): string {
-  return PROTOCOL_PROMPTS.quickActions[action].prompt
+  return PROTOCOL_PROMPTS.quickActions[action].prompt;
 }

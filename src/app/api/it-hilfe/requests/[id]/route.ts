@@ -1,20 +1,32 @@
-import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
-import { db } from '@/db'
-import { itHilfeRequests, repairerProfiles, itHilfeOffers, users } from '@/db/schema'
-import { alias } from 'drizzle-orm/pg-core'
-import { eq, and, sql } from 'drizzle-orm'
-import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { logger } from '@/lib/logger'
-import { REQUEST_STATUS, VALID_REQUEST_TRANSITIONS, OFFER_STATUS, deriveBudgetType } from '@/config/it-hilfe'
-import { validateBody, UpdateITHilfeRequestSchema } from '@/lib/schemas'
-import { type RequestRow, mapRequestDetailRow } from '@/lib/it-hilfe/request-mapper'
-import { getActiveTechnicianProfileId } from '@/lib/it-hilfe/technician'
-import { sendItHilfeNotification } from '@/lib/it-hilfe/notifications'
+import { NextRequest } from 'next/server';
+import { auth } from '@/auth';
+import { db } from '@/db';
+import { itHilfeRequests, repairerProfiles, itHilfeOffers, users } from '@/db/schema';
+import { alias } from 'drizzle-orm/pg-core';
+import { eq, and, sql } from 'drizzle-orm';
+import {
+  apiError,
+  apiSuccess,
+  apiUnauthorized,
+  apiBadRequest,
+  apiNotFound,
+  apiForbidden,
+} from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { logger } from '@/lib/logger';
+import {
+  REQUEST_STATUS,
+  VALID_REQUEST_TRANSITIONS,
+  OFFER_STATUS,
+  deriveBudgetType,
+} from '@/config/it-hilfe';
+import { validateBody, UpdateITHilfeRequestSchema } from '@/lib/schemas';
+import { type RequestRow, mapRequestDetailRow } from '@/lib/it-hilfe/request-mapper';
+import { getActiveTechnicianProfileId } from '@/lib/it-hilfe/technician';
+import { sendItHilfeNotification } from '@/lib/it-hilfe/notifications';
 
 interface RouteParams {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }
 
 /**
@@ -23,11 +35,11 @@ interface RouteParams {
  */
 export async function GET(request: NextRequest, { params }: RouteParams) {
   try {
-    const { id } = await params
+    const { id } = await params;
 
     // Validate UUID format
     if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) {
-      return apiBadRequest(ERROR_MESSAGES.INVALID_REQUEST_ID)
+      return apiBadRequest(ERROR_MESSAGES.INVALID_REQUEST_ID);
     }
 
     // Use explicit snake_case aliases to match the RequestRow mapper interface.
@@ -35,11 +47,11 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     // the matched helper's display name (auth users table) and phone number
     // (repairer profile). The mapper gates phone to isOwner so non-owners
     // never see it in the response.
-    const matchedOffer = alias(itHilfeOffers, 'matched_offer')
-    const helperUser = alias(users, 'matched_helper_user')
-    const helperProfile = alias(repairerProfiles, 'matched_helper_profile')
-    const preferredProfile = alias(repairerProfiles, 'preferred_technician_profile')
-    const preferredUser = alias(users, 'preferred_technician_user')
+    const matchedOffer = alias(itHilfeOffers, 'matched_offer');
+    const helperUser = alias(users, 'matched_helper_user');
+    const helperProfile = alias(repairerProfiles, 'matched_helper_profile');
+    const preferredProfile = alias(repairerProfiles, 'preferred_technician_profile');
+    const preferredUser = alias(users, 'preferred_technician_user');
     const [row] = await db
       .select({
         id: itHilfeRequests.id,
@@ -84,31 +96,31 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       .leftJoin(helperProfile, eq(matchedOffer.helperId, helperProfile.userId))
       .leftJoin(preferredProfile, eq(itHilfeRequests.preferredTechnicianId, preferredProfile.id))
       .leftJoin(preferredUser, eq(preferredProfile.userId, preferredUser.id))
-      .where(eq(itHilfeRequests.id, id))
+      .where(eq(itHilfeRequests.id, id));
 
     if (!row) {
-      return apiNotFound('IT-Hilfe-Anfrage')
+      return apiNotFound('IT-Hilfe-Anfrage');
     }
 
     // Get current user to check ownership + technician eligibility. The client
     // needs viewerIsTechnician to decide whether to show the offer form or a
     // "become a technician" nudge — the same SSOT the offer boundary enforces.
-    const session = await auth()
-    const isOwner = session?.user?.id === row.requester_id
+    const session = await auth();
+    const isOwner = session?.user?.id === row.requester_id;
     const viewerIsTechnician = session?.user?.id
       ? !!(await getActiveTechnicianProfileId(session.user.id))
-      : false
+      : false;
     const requestData = {
       ...mapRequestDetailRow(row as RequestRow, isOwner),
       viewerIsTechnician,
-    }
+    };
 
-    logger.info('Fetched IT-Hilfe request details', { requestId: id })
+    logger.info('Fetched IT-Hilfe request details', { requestId: id });
 
-    return apiSuccess({ request: requestData })
+    return apiSuccess({ request: requestData });
   } catch (error) {
-    logger.error('Error fetching IT-Hilfe request', { error })
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    logger.error('Error fetching IT-Hilfe request', { error });
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
 }
 
@@ -118,16 +130,16 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
  */
 export async function PUT(request: NextRequest, { params }: RouteParams) {
   try {
-    const session = await auth()
+    const session = await auth();
     if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
+      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED);
     }
 
-    const { id } = await params
+    const { id } = await params;
 
     // Validate UUID format
     if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) {
-      return apiBadRequest(ERROR_MESSAGES.INVALID_REQUEST_ID)
+      return apiBadRequest(ERROR_MESSAGES.INVALID_REQUEST_ID);
     }
 
     // Check ownership and current status
@@ -139,19 +151,19 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         matchedOfferId: itHilfeRequests.matchedOfferId,
       })
       .from(itHilfeRequests)
-      .where(eq(itHilfeRequests.id, id))
+      .where(eq(itHilfeRequests.id, id));
 
     if (!existing) {
-      return apiNotFound('IT-Hilfe-Anfrage')
+      return apiNotFound('IT-Hilfe-Anfrage');
     }
 
     if (existing.requesterId !== session.user.id) {
-      return apiForbidden('Du kannst nur deine eigenen Anfragen bearbeiten')
+      return apiForbidden('Du kannst nur deine eigenen Anfragen bearbeiten');
     }
 
-    const body = await request.json()
-    const validation = validateBody(UpdateITHilfeRequestSchema, body)
-    if (!validation.success) return validation.error
+    const body = await request.json();
+    const validation = validateBody(UpdateITHilfeRequestSchema, body);
+    if (!validation.success) return validation.error;
     const {
       categoryId,
       deviceBrand,
@@ -168,51 +180,54 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
       skillsNeeded,
       imageUrls,
       status,
-    } = validation.data
+    } = validation.data;
 
     // Status-only updates (completion, cancellation) are allowed on matched requests
-    const isStatusOnlyUpdate = status && Object.keys(body).length === 1
+    const isStatusOnlyUpdate = status && Object.keys(body).length === 1;
 
     // Only allow editing open requests (unless it's a status transition)
     if (existing.status !== REQUEST_STATUS.OPEN && !isStatusOnlyUpdate) {
-      return apiBadRequest('Diese Anfrage kann nicht mehr bearbeitet werden')
+      return apiBadRequest('Diese Anfrage kann nicht mehr bearbeitet werden');
     }
 
     // Support both old and new field names
-    const effectiveBudgetCents = maxBudgetCents ?? budgetAmountCents
+    const effectiveBudgetCents = maxBudgetCents ?? budgetAmountCents;
 
     // Build dynamic update set
-    const updateSet: Record<string, unknown> = {}
+    const updateSet: Record<string, unknown> = {};
 
-    if (categoryId !== undefined) updateSet.categoryId = categoryId
-    if (deviceBrand !== undefined) updateSet.deviceBrand = deviceBrand || null
-    if (deviceModel !== undefined) updateSet.deviceModel = deviceModel || null
-    if (title !== undefined) updateSet.title = title
-    if (description !== undefined) updateSet.description = description || ''
-    if (urgency !== undefined) updateSet.urgency = urgency
-    if (postalCode !== undefined) updateSet.postalCode = postalCode
-    if (city !== undefined) updateSet.city = city
-    if (canton !== undefined) updateSet.canton = canton
-    if (serviceType !== undefined) updateSet.serviceType = serviceType
-    if (skillsNeeded !== undefined) updateSet.skillsNeeded = skillsNeeded.length > 0 ? skillsNeeded : null
-    if (imageUrls !== undefined) updateSet.imageUrls = imageUrls.length > 0 ? imageUrls : null
+    if (categoryId !== undefined) updateSet.categoryId = categoryId;
+    if (deviceBrand !== undefined) updateSet.deviceBrand = deviceBrand || null;
+    if (deviceModel !== undefined) updateSet.deviceModel = deviceModel || null;
+    if (title !== undefined) updateSet.title = title;
+    if (description !== undefined) updateSet.description = description || '';
+    if (urgency !== undefined) updateSet.urgency = urgency;
+    if (postalCode !== undefined) updateSet.postalCode = postalCode;
+    if (city !== undefined) updateSet.city = city;
+    if (canton !== undefined) updateSet.canton = canton;
+    if (serviceType !== undefined) updateSet.serviceType = serviceType;
+    if (skillsNeeded !== undefined)
+      updateSet.skillsNeeded = skillsNeeded.length > 0 ? skillsNeeded : null;
+    if (imageUrls !== undefined) updateSet.imageUrls = imageUrls.length > 0 ? imageUrls : null;
 
     // Simplified budget: just maxBudget amount (null/0 = free, >0 = paid)
     if (effectiveBudgetCents !== undefined) {
-      const amount = effectiveBudgetCents && effectiveBudgetCents > 0 ? effectiveBudgetCents : null
-      updateSet.budgetAmountCents = amount
-      updateSet.budgetType = deriveBudgetType(amount)
+      const amount = effectiveBudgetCents && effectiveBudgetCents > 0 ? effectiveBudgetCents : null;
+      updateSet.budgetAmountCents = amount;
+      updateSet.budgetType = deriveBudgetType(amount);
     }
 
     // Status transitions
     if (status !== undefined) {
-      const allowed = VALID_REQUEST_TRANSITIONS[existing.status as string] || []
+      const allowed = VALID_REQUEST_TRANSITIONS[existing.status as string] || [];
 
       if (!allowed.includes(status)) {
-        return apiBadRequest(`Status kann nicht von "${existing.status}" auf "${status}" geändert werden`)
+        return apiBadRequest(
+          `Status kann nicht von "${existing.status}" auf "${status}" geändert werden`,
+        );
       }
 
-      updateSet.status = status
+      updateSet.status = status;
 
       // Increment helper's total_helps_completed when completing
       if (status === REQUEST_STATUS.COMPLETED) {
@@ -224,9 +239,9 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
               SELECT o.helper_id FROM ${itHilfeOffers} o
               JOIN ${itHilfeRequests} r ON r.matched_offer_id = o.id
               WHERE r.id = ${id}
-            )`)
+            )`);
         } catch (err) {
-          logger.error('Error incrementing total_helps_completed', { error: err, requestId: id })
+          logger.error('Error incrementing total_helps_completed', { error: err, requestId: id });
         }
 
         // Notify matched helper about completion
@@ -239,12 +254,15 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
                 sendItHilfeNotification({
                   recipientIds: [offer.helperId],
                   title: `Anfrage "${existing.title}" abgeschlossen`,
-                  content: 'Die Anfrage wurde als abgeschlossen markiert. Vielen Dank für deine Hilfe!',
+                  content:
+                    'Die Anfrage wurde als abgeschlossen markiert. Vielen Dank für deine Hilfe!',
                   requestId: id,
-                })
+                });
               }
             })
-            .catch(err => logger.error('Failed to notify helper on completion', { error: err, requestId: id }))
+            .catch((err) =>
+              logger.error('Failed to notify helper on completion', { error: err, requestId: id }),
+            );
         }
       }
 
@@ -256,28 +274,29 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
           const pendingOffers = await db
             .select({ id: itHilfeOffers.id, helperId: itHilfeOffers.helperId })
             .from(itHilfeOffers)
-            .where(and(
-              eq(itHilfeOffers.requestId, id),
-              eq(itHilfeOffers.status, OFFER_STATUS.PENDING),
-            ))
+            .where(
+              and(eq(itHilfeOffers.requestId, id), eq(itHilfeOffers.status, OFFER_STATUS.PENDING)),
+            );
 
           if (pendingOffers.length > 0) {
             await db
               .update(itHilfeOffers)
               .set({ status: OFFER_STATUS.REJECTED })
-              .where(and(
-                eq(itHilfeOffers.requestId, id),
-                eq(itHilfeOffers.status, OFFER_STATUS.PENDING),
-              ))
+              .where(
+                and(
+                  eq(itHilfeOffers.requestId, id),
+                  eq(itHilfeOffers.status, OFFER_STATUS.PENDING),
+                ),
+              );
           }
 
-          const recipientIds = new Set(pendingOffers.map(o => o.helperId))
+          const recipientIds = new Set(pendingOffers.map((o) => o.helperId));
           if (existing.matchedOfferId) {
             const [matched] = await db
               .select({ helperId: itHilfeOffers.helperId })
               .from(itHilfeOffers)
-              .where(eq(itHilfeOffers.id, existing.matchedOfferId))
-            if (matched) recipientIds.add(matched.helperId)
+              .where(eq(itHilfeOffers.id, existing.matchedOfferId));
+            if (matched) recipientIds.add(matched.helperId);
           }
 
           if (recipientIds.size > 0) {
@@ -285,37 +304,35 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
             sendItHilfeNotification({
               recipientIds: [...recipientIds],
               title: `Anfrage "${existing.title}" wurde storniert`,
-              content: 'Die Anfrage wurde vom Ersteller storniert. Dein Angebot ist damit hinfällig.',
+              content:
+                'Die Anfrage wurde vom Ersteller storniert. Dein Angebot ist damit hinfällig.',
               requestId: id,
-            })
+            });
           }
         } catch (err) {
           // Never block the cancellation itself on the cleanup side effects.
-          logger.error('Error handling cancellation side effects', { error: err, requestId: id })
+          logger.error('Error handling cancellation side effects', { error: err, requestId: id });
         }
       }
     }
 
     if (Object.keys(updateSet).length === 0) {
-      return apiBadRequest(ERROR_MESSAGES.NO_CHANGES_SPECIFIED)
+      return apiBadRequest(ERROR_MESSAGES.NO_CHANGES_SPECIFIED);
     }
 
-    await db
-      .update(itHilfeRequests)
-      .set(updateSet)
-      .where(eq(itHilfeRequests.id, id))
+    await db.update(itHilfeRequests).set(updateSet).where(eq(itHilfeRequests.id, id));
 
     logger.info('Updated IT-Hilfe request', {
       requestId: id,
       userId: session.user.id,
       updates: Object.keys(updateSet).length,
-    })
+    });
 
     return apiSuccess({
       message: 'IT-Hilfe-Anfrage erfolgreich aktualisiert',
-    })
+    });
   } catch (error) {
-    logger.error('Error updating IT-Hilfe request', { error })
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    logger.error('Error updating IT-Hilfe request', { error });
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
 }

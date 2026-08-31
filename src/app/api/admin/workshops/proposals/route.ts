@@ -1,36 +1,36 @@
-import { NextRequest } from 'next/server'
-import { db } from '@/db'
-import { workshopProposals, users, locations } from '@/db/schema'
-import { eq, desc, sql, ilike } from 'drizzle-orm'
-import type { SQL } from 'drizzle-orm'
-import { withAdmin } from '@/lib/api/middleware'
-import { apiError, apiSuccess, parsePagination , hasMoreItems} from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { APPROVAL_STATUS } from '@/config/approval-status'
+import { NextRequest } from 'next/server';
+import { db } from '@/db';
+import { workshopProposals, users, locations } from '@/db/schema';
+import { eq, desc, sql, ilike } from 'drizzle-orm';
+import type { SQL } from 'drizzle-orm';
+import { withAdmin } from '@/lib/api/middleware';
+import { apiError, apiSuccess, parsePagination, hasMoreItems } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { APPROVAL_STATUS } from '@/config/approval-status';
 
 // GET /api/admin/workshops/proposals - List workshop proposals with filtering
 export const GET = withAdmin('workshops-admin', async (request, session) => {
   try {
-    const { searchParams } = new URL(request.url)
-    const status = searchParams.get('status') || APPROVAL_STATUS.PENDING
-    const category = searchParams.get('category')
-    const q = searchParams.get('q')
-    const { limit, offset } = parsePagination(request)
+    const { searchParams } = new URL(request.url);
+    const status = searchParams.get('status') || APPROVAL_STATUS.PENDING;
+    const category = searchParams.get('category');
+    const q = searchParams.get('q');
+    const { limit, offset } = parsePagination(request);
 
-    const conditions: SQL[] = []
-    if (status !== 'all') conditions.push(eq(workshopProposals.status, status))
-    if (category) conditions.push(eq(workshopProposals.category, category))
-    if (q) conditions.push(ilike(workshopProposals.title, `%${q}%`))
+    const conditions: SQL[] = [];
+    if (status !== 'all') conditions.push(eq(workshopProposals.status, status));
+    if (category) conditions.push(eq(workshopProposals.category, category));
+    if (q) conditions.push(ilike(workshopProposals.title, `%${q}%`));
 
-    const where = conditions.length > 0 ? sql`${sql.join(conditions, sql` AND `)}` : undefined
+    const where = conditions.length > 0 ? sql`${sql.join(conditions, sql` AND `)}` : undefined;
 
     // Count total
     const [countRow] = await db
       .select({ count: sql<number>`count(*)` })
       .from(workshopProposals)
-      .where(where)
+      .where(where);
 
-    const total = Number(countRow?.count ?? 0)
+    const total = Number(countRow?.count ?? 0);
 
     // Fetch proposals
     const rows = await db
@@ -74,7 +74,7 @@ export const GET = withAdmin('workshops-admin', async (request, session) => {
       .where(where)
       .orderBy(desc(workshopProposals.createdAt))
       .limit(limit)
-      .offset(offset)
+      .offset(offset);
 
     return apiSuccess({
       items: rows,
@@ -84,9 +84,8 @@ export const GET = withAdmin('workshops-admin', async (request, session) => {
         offset,
         hasMore: hasMoreItems(offset, limit, total),
       },
-    })
-
+    });
   } catch (error) {
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
-})
+});

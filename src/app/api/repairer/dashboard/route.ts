@@ -3,57 +3,64 @@
  * GET /api/repairer/dashboard - Get repairer dashboard stats and bookings
  */
 
-import { NextRequest } from 'next/server'
-import { db } from '@/db'
-import { serviceAppointments, serviceTypes, users, repairerProfiles, repairerReviews, repairerServices } from '@/db/schema'
-import { eq, sql, desc, and, isNull } from 'drizzle-orm'
-import { alias } from 'drizzle-orm/pg-core'
-import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers'
-import { logger } from '@/lib/logger'
-import { APPOINTMENT_STATUS } from '@/config/appointment-status'
-import { REVIEW_STATUS } from '@/config/review-status'
-import { URGENCY_DEFAULT } from '@/config/it-hilfe'
-import { auth } from '@/auth'
-import { ROLES } from '@/lib/constants'
+import { NextRequest } from 'next/server';
+import { db } from '@/db';
+import {
+  serviceAppointments,
+  serviceTypes,
+  users,
+  repairerProfiles,
+  repairerReviews,
+  repairerServices,
+} from '@/db/schema';
+import { eq, sql, desc, and, isNull } from 'drizzle-orm';
+import { alias } from 'drizzle-orm/pg-core';
+import { apiError, apiSuccess, apiUnauthorized } from '@/lib/api/helpers';
+import { logger } from '@/lib/logger';
+import { APPOINTMENT_STATUS } from '@/config/appointment-status';
+import { REVIEW_STATUS } from '@/config/review-status';
+import { URGENCY_DEFAULT } from '@/config/it-hilfe';
+import { auth } from '@/auth';
+import { ROLES } from '@/lib/constants';
 
-const customerUser = alias(users, 'customer')
+const customerUser = alias(users, 'customer');
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await auth()
+    const session = await auth();
 
     if (!session?.user) {
-      return apiUnauthorized('Anmeldung erforderlich')
+      return apiUnauthorized('Anmeldung erforderlich');
     }
 
-    const userRole = session.user.role as string
+    const userRole = session.user.role as string;
 
     // Access granted if: repairer role OR staff
-    const hasAccess = userRole === ROLES.REPAIRER || session.user.isStaff
+    const hasAccess = userRole === ROLES.REPAIRER || session.user.isStaff;
 
     if (!hasAccess) {
-      return apiUnauthorized('Repairer-Berechtigung erforderlich')
+      return apiUnauthorized('Repairer-Berechtigung erforderlich');
     }
 
-    const userId = session.user.id
+    const userId = session.user.id;
 
     // Get repairer profile
-    let repairerId: string | null = null
+    let repairerId: string | null = null;
     try {
       const [profile] = await db
         .select({ id: repairerProfiles.id })
         .from(repairerProfiles)
-        .where(eq(repairerProfiles.userId, userId))
-      repairerId = profile?.id || null
+        .where(eq(repairerProfiles.userId, userId));
+      repairerId = profile?.id || null;
     } catch {
-      logger.debug('Repairer profile query failed, continuing with user_id')
+      logger.debug('Repairer profile query failed, continuing with user_id');
     }
 
     // Fetch bookings assigned to this repairer
-    const isAdmin = userRole === ROLES.REVAMPIT_ADMIN
+    const isAdmin = userRole === ROLES.REVAMPIT_ADMIN;
     const bookingCondition = isAdmin
       ? sql`(${serviceAppointments.repairerId} = ${userId} OR ${serviceAppointments.repairerId} IS NULL)`
-      : eq(serviceAppointments.repairerId, userId)
+      : eq(serviceAppointments.repairerId, userId);
 
     const bookingRows = await db
       .select({
@@ -75,7 +82,7 @@ export async function GET(request: NextRequest) {
       .innerJoin(serviceTypes, eq(serviceAppointments.serviceTypeId, serviceTypes.id))
       .where(bookingCondition)
       .orderBy(desc(serviceAppointments.createdAt))
-      .limit(10)
+      .limit(10);
 
     // Fetch stats
     const [stats] = await db
@@ -87,10 +94,10 @@ export async function GET(request: NextRequest) {
         total_revenue: sql<string>`COALESCE(SUM(${serviceAppointments.priceChargedCents}), 0)`,
       })
       .from(serviceAppointments)
-      .where(eq(serviceAppointments.repairerId, userId))
+      .where(eq(serviceAppointments.repairerId, userId));
 
     // Fetch rating info from repairer reviews
-    let ratingInfo = { average_rating: '0', review_count: '0' }
+    let ratingInfo = { average_rating: '0', review_count: '0' };
     try {
       if (repairerId) {
         const [ratingRow] = await db
@@ -99,20 +106,26 @@ export async function GET(request: NextRequest) {
             review_count: sql<string>`COUNT(*)`,
           })
           .from(repairerReviews)
-          .where(and(
-            eq(repairerReviews.repairerId, repairerId),
-            eq(repairerReviews.isPublic, true)
-          ))
+          .where(
+            and(eq(repairerReviews.repairerId, repairerId), eq(repairerReviews.isPublic, true)),
+          );
         if (ratingRow) {
-          ratingInfo = ratingRow
+          ratingInfo = ratingRow;
         }
       }
     } catch {
-      logger.debug('Repairer reviews query failed')
+      logger.debug('Repairer reviews query failed');
     }
 
     // Fetch services offered by this repairer
-    let serviceRows: { id: string; service_name: string; description: string | null; base_price_cents: number | null; hourly_rate_cents: number | null; is_active: boolean | null }[] = []
+    let serviceRows: {
+      id: string;
+      service_name: string;
+      description: string | null;
+      base_price_cents: number | null;
+      hourly_rate_cents: number | null;
+      is_active: boolean | null;
+    }[] = [];
     try {
       if (repairerId) {
         serviceRows = await db
@@ -126,10 +139,10 @@ export async function GET(request: NextRequest) {
           })
           .from(repairerServices)
           .where(eq(repairerServices.repairerId, repairerId))
-          .orderBy(desc(repairerServices.isActive), repairerServices.serviceName)
+          .orderBy(desc(repairerServices.isActive), repairerServices.serviceName);
       }
     } catch {
-      logger.debug('Repairer services query failed')
+      logger.debug('Repairer services query failed');
     }
 
     const statsData = stats || {
@@ -138,10 +151,10 @@ export async function GET(request: NextRequest) {
       pending_bookings: '0',
       confirmed_bookings: '0',
       total_revenue: '0',
-    }
+    };
 
     // Transform bookings
-    const bookings = bookingRows.map(row => ({
+    const bookings = bookingRows.map((row) => ({
       id: row.id,
       customer: row.customer_name || row.customer_email?.split('@')[0] || 'Kunde',
       service: row.service_name,
@@ -153,17 +166,17 @@ export async function GET(request: NextRequest) {
       deviceInfo: row.device_info,
       price: row.price_charged_cents ? row.price_charged_cents / 100 : null,
       createdAt: row.created_at,
-    }))
+    }));
 
     // Transform services (fix column name bug: was base_price_chf, now correctly base_price_cents)
-    const formattedServices = serviceRows.map(row => ({
+    const formattedServices = serviceRows.map((row) => ({
       id: row.id,
       name: row.service_name,
       description: row.description,
       basePrice: (row.base_price_cents || 0) / 100,
       hourlyRate: (row.hourly_rate_cents || 0) / 100,
       isActive: row.is_active,
-    }))
+    }));
 
     return apiSuccess({
       stats: {
@@ -178,9 +191,9 @@ export async function GET(request: NextRequest) {
       bookings,
       services: formattedServices,
       repairerId,
-    })
+    });
   } catch (error) {
-    logger.error('Failed to fetch repairer dashboard', { error })
-    return apiError(error, 'Dashboard konnte nicht geladen werden')
+    logger.error('Failed to fetch repairer dashboard', { error });
+    return apiError(error, 'Dashboard konnte nicht geladen werden');
   }
 }

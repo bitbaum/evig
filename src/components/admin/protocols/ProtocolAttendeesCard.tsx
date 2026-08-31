@@ -1,26 +1,26 @@
-'use client'
+'use client';
 
-import { useState, useMemo } from 'react'
-import { Users, Pencil, X, Check, Loader2 } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { apiFetch } from '@/lib/api/client'
-import { getErrorMessage } from '@/lib/utils/error'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { adminInteractive } from '@/lib/admin-ui'
+import { useState, useMemo } from 'react';
+import { Users, Pencil, X, Check, Loader2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { apiFetch } from '@/lib/api/client';
+import { getErrorMessage } from '@/lib/utils/error';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { adminInteractive } from '@/lib/admin-ui';
 
 interface TeamMember {
-  id: string
-  name: string
+  id: string;
+  name: string;
 }
 
 interface ProtocolAttendeesCardProps {
-  protocolId: string
-  attendees: string[]
-  attendeeNames: Record<string, string>
-  teamMembers: TeamMember[]
-  isReview: boolean
+  protocolId: string;
+  attendees: string[];
+  attendeeNames: Record<string, string>;
+  teamMembers: TeamMember[];
+  isReview: boolean;
 }
 
 export function ProtocolAttendeesCard({
@@ -30,34 +30,34 @@ export function ProtocolAttendeesCard({
   teamMembers,
   isReview,
 }: ProtocolAttendeesCardProps) {
-  const router = useRouter()
-  const [editing, setEditing] = useState(false)
-  const [selected, setSelected] = useState<string[]>(attendees)
-  const [search, setSearch] = useState('')
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const router = useRouter();
+  const [editing, setEditing] = useState(false);
+  const [selected, setSelected] = useState<string[]>(attendees);
+  const [search, setSearch] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
-    if (!search.trim()) return teamMembers
-    const q = search.toLowerCase()
-    return teamMembers.filter(m => m.name.toLowerCase().includes(q))
-  }, [teamMembers, search])
+    if (!search.trim()) return teamMembers;
+    const q = search.toLowerCase();
+    return teamMembers.filter((m) => m.name.toLowerCase().includes(q));
+  }, [teamMembers, search]);
 
   async function save() {
-    setSaving(true)
-    setError(null)
+    setSaving(true);
+    setError(null);
     try {
       const result = await apiFetch<unknown>(`/api/protocols/${protocolId}`, {
         method: 'PATCH',
         body: { attendees: selected },
-      })
-      if (!result.success) throw new Error(result.error || 'Fehler beim Speichern')
-      setEditing(false)
-      router.refresh()
+      });
+      if (!result.success) throw new Error(result.error || 'Fehler beim Speichern');
+      setEditing(false);
+      router.refresh();
     } catch (err) {
-      setError(getErrorMessage(err))
+      setError(getErrorMessage(err));
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
   }
 
@@ -74,7 +74,11 @@ export function ProtocolAttendeesCard({
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => { setSelected(attendees); setSearch(''); setEditing(true) }}
+            onClick={() => {
+              setSelected(attendees);
+              setSearch('');
+              setEditing(true);
+            }}
             className="flex items-center gap-1 text-xs text-action hover:text-action h-auto px-0 bg-transparent hover:bg-transparent"
           >
             <Pencil className="w-3 h-3" />
@@ -93,7 +97,11 @@ export function ProtocolAttendeesCard({
               Abbrechen
             </Button>
             <Button onClick={save} disabled={saving} size="sm" className="gap-1 text-xs h-7 px-2">
-              {saving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Check className="w-3 h-3" />}
+              {saving ? (
+                <Loader2 className="w-3 h-3 animate-spin" />
+              ) : (
+                <Check className="w-3 h-3" />
+              )}
               Speichern
             </Button>
           </div>
@@ -102,21 +110,23 @@ export function ProtocolAttendeesCard({
 
       {!editing && (
         <div className="flex flex-wrap gap-1">
-          {attendees.length > 0
-            ? attendees.map((uid) => (
-                <span
-                  key={uid}
-                  className="inline-flex px-2 py-0.5 text-xs rounded-full bg-surface-raised dark:bg-surface-base/6 text-text-secondary"
-                >
-                  {attendeeNames[uid] || 'Unbekannt'}
-                </span>
-              ))
-            : (
-              <p className="text-xs text-text-muted">
-                Keine Teilnehmer eingetragen{isReview ? ' — Personen, die du unter «Wer war dabei?» zuordnest, erscheinen hier automatisch.' : ''}
-              </p>
-            )
-          }
+          {attendees.length > 0 ? (
+            attendees.map((uid) => (
+              <span
+                key={uid}
+                className="inline-flex px-2 py-0.5 text-xs rounded-full bg-surface-raised dark:bg-surface-base/6 text-text-secondary"
+              >
+                {attendeeNames[uid] || 'Unbekannt'}
+              </span>
+            ))
+          ) : (
+            <p className="text-xs text-text-muted">
+              Keine Teilnehmer eingetragen
+              {isReview
+                ? ' — Personen, die du unter «Wer war dabei?» zuordnest, erscheinen hier automatisch.'
+                : ''}
+            </p>
+          )}
         </div>
       )}
 
@@ -138,10 +148,10 @@ export function ProtocolAttendeesCard({
                   type="checkbox"
                   checked={selected.includes(member.id)}
                   onChange={() =>
-                    setSelected(prev =>
+                    setSelected((prev) =>
                       prev.includes(member.id)
-                        ? prev.filter(id => id !== member.id)
-                        : [...prev, member.id]
+                        ? prev.filter((id) => id !== member.id)
+                        : [...prev, member.id],
                     )
                   }
                   className="rounded-sm border-default text-action focus:ring-action"
@@ -157,5 +167,5 @@ export function ProtocolAttendeesCard({
         </div>
       )}
     </Card>
-  )
+  );
 }

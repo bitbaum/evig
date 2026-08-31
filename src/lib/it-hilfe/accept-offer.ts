@@ -18,47 +18,47 @@
  * commits — never throws into the caller.
  */
 
-import { db } from '@/db'
-import { sql, eq, and, ne, getTableName } from 'drizzle-orm'
-import { itHilfeRequests, itHilfeOffers } from '@/db/schema/itHilfe'
-import { users } from '@/db/schema/auth'
-import { logger } from '@/lib/logger'
-import { REQUEST_STATUS, OFFER_STATUS } from '@/config/it-hilfe'
-import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
-import { notifyUsers } from '@/lib/services/notifications'
-import { findOrCreateItHilfeConversation } from './conversation'
-import { guardedTransition } from '@/lib/lifecycle'
-import { APP_URL } from '@/config/urls'
+import { db } from '@/db';
+import { sql, eq, and, ne, getTableName } from 'drizzle-orm';
+import { itHilfeRequests, itHilfeOffers } from '@/db/schema/itHilfe';
+import { users } from '@/db/schema/auth';
+import { logger } from '@/lib/logger';
+import { REQUEST_STATUS, OFFER_STATUS } from '@/config/it-hilfe';
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications';
+import { notifyUsers } from '@/lib/services/notifications';
+import { findOrCreateItHilfeConversation } from './conversation';
+import { guardedTransition } from '@/lib/lifecycle';
+import { APP_URL } from '@/config/urls';
 
 export type AcceptOfferReason =
   | 'request_not_found'
   | 'offer_not_found'
   | 'not_authorized'
   | 'request_not_open'
-  | 'offer_not_pending'
+  | 'offer_not_pending';
 
 export type AcceptOfferResult =
   | { ok: true; requestId: string; offerId: string; helperId: string }
-  | { ok: false; reason: AcceptOfferReason }
+  | { ok: false; reason: AcceptOfferReason };
 
 interface RequestRow {
-  requester_id: string
-  requester_name: string | null
-  status: string
-  title: string
+  requester_id: string;
+  requester_name: string | null;
+  status: string;
+  title: string;
 }
 
 interface OfferRow {
-  id: string
-  helper_id: string
-  helper_name: string | null
-  helper_email: string
-  status: string
+  id: string;
+  helper_id: string;
+  helper_name: string | null;
+  helper_email: string;
+  status: string;
 }
 
-const reqTable = getTableName(itHilfeRequests)
-const offTable = getTableName(itHilfeOffers)
-const uTable = getTableName(users)
+const reqTable = getTableName(itHilfeRequests);
+const offTable = getTableName(itHilfeOffers);
+const uTable = getTableName(users);
 
 /**
  * Resolve an offer's parent requestId. Returns null if the offer doesn't
@@ -69,9 +69,9 @@ const uTable = getTableName(users)
 export async function lookupOfferRequestId(offerId: string): Promise<string | null> {
   const result = await db.execute(sql`
     SELECT request_id FROM ${sql.raw(offTable)} WHERE id = ${offerId}
-  `)
-  if (result.rows.length === 0) return null
-  return (result.rows[0] as unknown as { request_id: string }).request_id
+  `);
+  if (result.rows.length === 0) return null;
+  return (result.rows[0] as unknown as { request_id: string }).request_id;
 }
 
 /**
@@ -83,11 +83,11 @@ export async function lookupOfferRequestId(offerId: string): Promise<string | nu
  *   by signed-token possession, not session).
  */
 export async function acceptOffer(params: {
-  requestId: string
-  offerId: string
-  acceptingUserId: string | null
+  requestId: string;
+  offerId: string;
+  acceptingUserId: string | null;
 }): Promise<AcceptOfferResult> {
-  const { requestId, offerId, acceptingUserId } = params
+  const { requestId, offerId, acceptingUserId } = params;
 
   const [requestResult, offerResult] = await Promise.all([
     db.execute(sql`
@@ -102,28 +102,28 @@ export async function acceptOffer(params: {
       JOIN ${sql.raw(uTable)} u ON o.helper_id = u.id
       WHERE o.id = ${offerId} AND o.request_id = ${requestId}
     `),
-  ])
+  ]);
 
   if (requestResult.rows.length === 0) {
-    return { ok: false, reason: 'request_not_found' }
+    return { ok: false, reason: 'request_not_found' };
   }
-  const requestData = requestResult.rows[0] as unknown as RequestRow
+  const requestData = requestResult.rows[0] as unknown as RequestRow;
 
   if (acceptingUserId !== null && requestData.requester_id !== acceptingUserId) {
-    return { ok: false, reason: 'not_authorized' }
+    return { ok: false, reason: 'not_authorized' };
   }
 
   if (requestData.status !== REQUEST_STATUS.OPEN) {
-    return { ok: false, reason: 'request_not_open' }
+    return { ok: false, reason: 'request_not_open' };
   }
 
   if (offerResult.rows.length === 0) {
-    return { ok: false, reason: 'offer_not_found' }
+    return { ok: false, reason: 'offer_not_found' };
   }
-  const offerData = offerResult.rows[0] as unknown as OfferRow
+  const offerData = offerResult.rows[0] as unknown as OfferRow;
 
   if (offerData.status !== OFFER_STATUS.PENDING) {
-    return { ok: false, reason: 'offer_not_pending' }
+    return { ok: false, reason: 'offer_not_pending' };
   }
 
   // The pre-transaction SELECT above is a fast-fail check. Re-verify
@@ -148,32 +148,35 @@ export async function acceptOffer(params: {
     // acquisition order and invite deadlocks. We still re-read it so a
     // separate (non-acceptance) path that WITHDREW the offer aborts here.
     check: async (lockedReq, tx) => {
-      if (lockedReq.status !== REQUEST_STATUS.OPEN) return false
+      if (lockedReq.status !== REQUEST_STATUS.OPEN) return false;
       const lockedOff = await tx.execute(sql`
         SELECT status FROM ${sql.raw(offTable)}
         WHERE id = ${offerId}
-      `)
-      const lockedOffStatus = (lockedOff.rows[0] as { status?: string } | undefined)?.status
-      return lockedOffStatus === OFFER_STATUS.PENDING
+      `);
+      const lockedOffStatus = (lockedOff.rows[0] as { status?: string } | undefined)?.status;
+      return lockedOffStatus === OFFER_STATUS.PENDING;
     },
     apply: async (tx) => {
-      await tx.update(itHilfeOffers)
+      await tx
+        .update(itHilfeOffers)
         .set({ status: OFFER_STATUS.ACCEPTED })
-        .where(eq(itHilfeOffers.id, offerId))
+        .where(eq(itHilfeOffers.id, offerId));
 
-      await tx.update(itHilfeOffers)
+      await tx
+        .update(itHilfeOffers)
         .set({ status: OFFER_STATUS.REJECTED })
         .where(
           and(
             eq(itHilfeOffers.requestId, requestId),
             ne(itHilfeOffers.id, offerId),
-            eq(itHilfeOffers.status, OFFER_STATUS.PENDING)
-          )
-        )
+            eq(itHilfeOffers.status, OFFER_STATUS.PENDING),
+          ),
+        );
 
-      await tx.update(itHilfeRequests)
+      await tx
+        .update(itHilfeRequests)
         .set({ status: REQUEST_STATUS.MATCHED, matchedOfferId: offerId })
-        .where(eq(itHilfeRequests.id, requestId))
+        .where(eq(itHilfeRequests.id, requestId));
 
       // Ensure the requester ↔ helper conversation exists (shared with the
       // pre-acceptance "ask a question" flow).
@@ -182,16 +185,16 @@ export async function acceptOffer(params: {
         userA: requestData.requester_id,
         userB: offerData.helper_id,
         requestTitle: requestData.title,
-      })
+      });
     },
-  })
+  });
 
   if (!applied.ok) {
     // Map to the most accurate reason. We can't distinguish here whether
     // the request was already matched vs the offer was withdrawn out-of-
     // band; surface the request-side reason since that's what the
     // typical race shape (concurrent accept) produces.
-    return { ok: false, reason: 'request_not_open' }
+    return { ok: false, reason: 'request_not_open' };
   }
 
   logger.info('Accepted peer repair offer', {
@@ -200,7 +203,7 @@ export async function acceptOffer(params: {
     requesterId: requestData.requester_id,
     helperId: offerData.helper_id,
     acceptedViaSession: acceptingUserId !== null,
-  })
+  });
 
   fireNotifications({
     requestId,
@@ -212,9 +215,9 @@ export async function acceptOffer(params: {
       name: offerData.helper_name || 'Techniker',
       email: offerData.helper_email,
     },
-  })
+  });
 
-  return { ok: true, requestId, offerId, helperId: offerData.helper_id }
+  return { ok: true, requestId, offerId, helperId: offerData.helper_id };
 }
 
 /**
@@ -225,14 +228,14 @@ export async function acceptOffer(params: {
  * email-preference checks. Errors are logged, never thrown.
  */
 function fireNotifications(params: {
-  requestId: string
-  offerId: string
-  requestTitle: string
-  requesterName: string
-  acceptedHelper: { id: string; name: string; email: string }
+  requestId: string;
+  offerId: string;
+  requestTitle: string;
+  requesterName: string;
+  acceptedHelper: { id: string; name: string; email: string };
 }) {
-  const { requestId, offerId, requestTitle, requesterName, acceptedHelper } = params
-  const requestUrl = `${APP_URL}/it-hilfe/${requestId}`
+  const { requestId, offerId, requestTitle, requesterName, acceptedHelper } = params;
+  const requestUrl = `${APP_URL}/it-hilfe/${requestId}`;
 
   // Accepted helper — single call: in-app row + rich HTML email
   notifyUsers([acceptedHelper.id], {
@@ -247,28 +250,36 @@ function fireNotifications(params: {
       requesterName,
       requestUrl,
     },
-  }).catch(err => logger.error('Failed to send accept notification', { err, helperId: acceptedHelper.id }))
+  }).catch((err) =>
+    logger.error('Failed to send accept notification', { err, helperId: acceptedHelper.id }),
+  );
 
   // Rejected helpers — discover from DB, then single notifyUsers call
-  db.execute(sql`
+  db.execute(
+    sql`
     SELECT o.helper_id
     FROM ${sql.raw(offTable)} o
     WHERE o.request_id = ${requestId} AND o.status = ${OFFER_STATUS.REJECTED} AND o.id != ${offerId}
-  `).then(result => {
-    const rejectedIds = (result.rows as unknown as { helper_id: string }[]).map(r => r.helper_id)
-    if (rejectedIds.length > 0) {
-      notifyUsers(rejectedIds, {
-        type: NOTIFICATION_TYPES.IT_HILFE_OFFER_REJECTED,
-        title: `Anfrage "${requestTitle}" vergeben`,
-        content: 'Die Anfrage wurde an einen anderen Techniker vergeben. Danke für dein Angebot!',
-        related_type: RELATED_TYPES.IT_HILFE,
-        related_id: requestId,
-        metadata: {
-          helperName: 'Techniker',  // per-user names not fetched; template falls back
-          requestTitle,
-          requestUrl,
-        },
-      }).catch(err => logger.error('Failed to send reject notifications', { err }))
-    }
-  }).catch(err => logger.error('Failed to fetch rejected offers for notification', { err }))
+  `,
+  )
+    .then((result) => {
+      const rejectedIds = (result.rows as unknown as { helper_id: string }[]).map(
+        (r) => r.helper_id,
+      );
+      if (rejectedIds.length > 0) {
+        notifyUsers(rejectedIds, {
+          type: NOTIFICATION_TYPES.IT_HILFE_OFFER_REJECTED,
+          title: `Anfrage "${requestTitle}" vergeben`,
+          content: 'Die Anfrage wurde an einen anderen Techniker vergeben. Danke für dein Angebot!',
+          related_type: RELATED_TYPES.IT_HILFE,
+          related_id: requestId,
+          metadata: {
+            helperName: 'Techniker', // per-user names not fetched; template falls back
+            requestTitle,
+            requestUrl,
+          },
+        }).catch((err) => logger.error('Failed to send reject notifications', { err }));
+      }
+    })
+    .catch((err) => logger.error('Failed to fetch rejected offers for notification', { err }));
 }

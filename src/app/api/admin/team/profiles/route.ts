@@ -7,22 +7,18 @@
  * Access: Staff with 'team' permission
  */
 
-import { NextRequest } from 'next/server'
-import { db } from '@/db'
-import { teamProfiles, users } from '@/db/schema'
-import { eq, and, or, ilike, asc, sql } from 'drizzle-orm'
-import type { SQL } from 'drizzle-orm'
-import { withAdmin } from '@/lib/api/middleware'
-import { isSuperAdmin } from '@/lib/permissions'
-import { logger } from '@/lib/logger'
-import {
-  apiSuccess,
-  apiError,
-  apiBadRequest,
-} from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { validateCreateTeamProfile, teamProfileFilterSchema } from '@/lib/schemas/team'
-import { createTeamProfileManual, findTeamProfileIdByUserId } from '@/lib/services/team-profiles'
+import { NextRequest } from 'next/server';
+import { db } from '@/db';
+import { teamProfiles, users } from '@/db/schema';
+import { eq, and, or, ilike, asc, sql } from 'drizzle-orm';
+import type { SQL } from 'drizzle-orm';
+import { withAdmin } from '@/lib/api/middleware';
+import { isSuperAdmin } from '@/lib/permissions';
+import { logger } from '@/lib/logger';
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { validateCreateTeamProfile, teamProfileFilterSchema } from '@/lib/schemas/team';
+import { createTeamProfileManual, findTeamProfileIdByUserId } from '@/lib/services/team-profiles';
 
 /**
  * GET /api/admin/team/profiles
@@ -31,36 +27,38 @@ import { createTeamProfileManual, findTeamProfileIdByUserId } from '@/lib/servic
 export const GET = withAdmin('team', async (request, session) => {
   try {
     // Parse and validate query params
-    const { searchParams } = new URL(request.url)
+    const { searchParams } = new URL(request.url);
     const filterResult = teamProfileFilterSchema.safeParse({
       department: searchParams.get('department') || undefined,
       employment_type: searchParams.get('employment_type') || undefined,
       is_active: searchParams.get('is_active') || 'all',
       search: searchParams.get('search') || undefined,
-    })
+    });
 
     if (!filterResult.success) {
-      return apiBadRequest(ERROR_MESSAGES.INVALID_FILTER_PARAMS)
+      return apiBadRequest(ERROR_MESSAGES.INVALID_FILTER_PARAMS);
     }
 
-    const filters = filterResult.data
-    const isSuperAdminUser = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
+    const filters = filterResult.data;
+    const isSuperAdminUser = isSuperAdmin(session.user.email, session.user.isSuperAdmin);
 
     // Build dynamic filters
-    const conditions: SQL[] = []
-    if (filters.department) conditions.push(eq(teamProfiles.department, filters.department))
-    if (filters.employment_type) conditions.push(eq(teamProfiles.employmentType, filters.employment_type))
-    if (filters.is_active !== 'all') conditions.push(eq(teamProfiles.isActive, filters.is_active === 'true'))
+    const conditions: SQL[] = [];
+    if (filters.department) conditions.push(eq(teamProfiles.department, filters.department));
+    if (filters.employment_type)
+      conditions.push(eq(teamProfiles.employmentType, filters.employment_type));
+    if (filters.is_active !== 'all')
+      conditions.push(eq(teamProfiles.isActive, filters.is_active === 'true'));
     if (filters.search) {
       conditions.push(
         or(
           ilike(users.name, `%${filters.search}%`),
-          ilike(teamProfiles.position, `%${filters.search}%`)
-        )!
-      )
+          ilike(teamProfiles.position, `%${filters.search}%`),
+        )!,
+      );
     }
 
-    const where = conditions.length > 0 ? and(...conditions) : undefined
+    const where = conditions.length > 0 ? and(...conditions) : undefined;
 
     // Always select all columns including hr_notes; strip for non-super-admins
     const rows = await db
@@ -94,18 +92,16 @@ export const GET = withAdmin('team', async (request, session) => {
       .from(teamProfiles)
       .innerJoin(users, eq(teamProfiles.userId, users.id))
       .where(where)
-      .orderBy(asc(users.name), asc(users.email))
+      .orderBy(asc(users.name), asc(users.email));
 
     // Strip hr_notes for non-super-admins
-    const result = isSuperAdminUser
-      ? rows
-      : rows.map(({ hr_notes, ...rest }) => rest)
+    const result = isSuperAdminUser ? rows : rows.map(({ hr_notes, ...rest }) => rest);
 
-    return apiSuccess(result)
+    return apiSuccess(result);
   } catch (error) {
-    return apiError(error, 'Team-Profile konnten nicht geladen werden')
+    return apiError(error, 'Team-Profile konnten nicht geladen werden');
   }
-})
+});
 
 /**
  * POST /api/admin/team/profiles
@@ -113,59 +109,56 @@ export const GET = withAdmin('team', async (request, session) => {
  */
 export const POST = withAdmin('team', async (request, session) => {
   try {
-    const body = await request.json()
+    const body = await request.json();
 
     // Validate input
-    const validation = validateCreateTeamProfile(body)
+    const validation = validateCreateTeamProfile(body);
     if (!validation.success) {
       return apiBadRequest(
         ERROR_MESSAGES.VALIDATION_ERROR,
-        validation.error.flatten().fieldErrors as Record<string, string[]>
-      )
+        validation.error.flatten().fieldErrors as Record<string, string[]>,
+      );
     }
 
-    const data = validation.data
-    const isSuperAdminUser = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
+    const data = validation.data;
+    const isSuperAdminUser = isSuperAdmin(session.user.email, session.user.isSuperAdmin);
 
     // Sensitive fields are super-admin-only: hr_notes, compensation (hourly/salary),
     // AHV/canton. Strip them from the payload if the requester is not super admin
     // (rather than failing, since the form may surface these conditionally and we
     // don't want to bounce the whole insert for one disallowed field).
     if (!isSuperAdminUser) {
-      const d = data as Record<string, unknown>
-      delete d.hr_notes
-      delete d.hourly_rate_cents
-      delete d.salary_chf
-      delete d.salary_effective_date
-      delete d.ahv_number
-      delete d.canton_tax_code
+      const d = data as Record<string, unknown>;
+      delete d.hr_notes;
+      delete d.hourly_rate_cents;
+      delete d.salary_chf;
+      delete d.salary_effective_date;
+      delete d.ahv_number;
+      delete d.canton_tax_code;
     }
 
     // Check if user exists
-    const [user] = await db
-      .select({ id: users.id })
-      .from(users)
-      .where(eq(users.id, data.user_id))
+    const [user] = await db.select({ id: users.id }).from(users).where(eq(users.id, data.user_id));
 
     if (!user) {
-      return apiBadRequest(ERROR_MESSAGES.USER_NOT_FOUND)
+      return apiBadRequest(ERROR_MESSAGES.USER_NOT_FOUND);
     }
 
-    const existingProfileId = await findTeamProfileIdByUserId(data.user_id)
+    const existingProfileId = await findTeamProfileIdByUserId(data.user_id);
     if (existingProfileId) {
-      return apiBadRequest('Für diesen Benutzer existiert bereits ein Team-Profil')
+      return apiBadRequest('Für diesen Benutzer existiert bereits ein Team-Profil');
     }
 
-    const created = await createTeamProfileManual(data, { stripSensitive: !isSuperAdminUser })
+    const created = await createTeamProfileManual(data, { stripSensitive: !isSuperAdminUser });
 
     logger.info('Team profile created', {
       profileId: created.id,
       userId: data.user_id,
       createdBy: session.user.email,
-    })
+    });
 
-    return apiSuccess({ id: created.id, message: 'Team-Profil erstellt' }, 201)
+    return apiSuccess({ id: created.id, message: 'Team-Profil erstellt' }, 201);
   } catch (error) {
-    return apiError(error, 'Team-Profil konnte nicht erstellt werden')
+    return apiError(error, 'Team-Profil konnte nicht erstellt werden');
   }
-})
+});

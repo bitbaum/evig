@@ -11,28 +11,28 @@
  * auto-on-publish trigger (fillMissingTranslations).
  */
 
-import { withAdmin } from '@/lib/api/middleware'
-import { logger } from '@/lib/logger'
-import { apiSuccess, apiError, apiNotFound } from '@/lib/api/helpers'
-import { fillMissingTranslations } from '@/lib/services/blog-translate'
+import { withAdmin } from '@/lib/api/middleware';
+import { logger } from '@/lib/logger';
+import { apiSuccess, apiError, apiNotFound } from '@/lib/api/helpers';
+import { fillMissingTranslations } from '@/lib/services/blog-translate';
 
 export const POST = withAdmin<{ id: string }>('content', async (request, session, context) => {
-  const { id: postId } = context!.params!
+  const { id: postId } = context!.params!;
 
   try {
-    const body = await request.json().catch(() => ({}))
-    const overwrite = body?.overwrite === true
-    const requested: string[] | undefined = Array.isArray(body?.locales) ? body.locales : undefined
+    const body = await request.json().catch(() => ({}));
+    const overwrite = body?.overwrite === true;
+    const requested: string[] | undefined = Array.isArray(body?.locales) ? body.locales : undefined;
 
-    const result = await fillMissingTranslations(postId, { overwrite, locales: requested })
-    if (result.notFound) return apiNotFound('Blog-Artikel')
+    const result = await fillMissingTranslations(postId, { overwrite, locales: requested });
+    if (result.notFound) return apiNotFound('Blog-Artikel');
 
     logger.info('Blog post translated', {
       postId,
       userId: session.user.id,
       translated: result.translated,
       failed: result.failed,
-    })
+    });
 
     return apiSuccess({
       translated: result.translated,
@@ -41,10 +41,12 @@ export const POST = withAdmin<{ id: string }>('content', async (request, session
         result.translated.length === 0 && result.failed.length === 0
           ? 'Alle Sprachen sind bereits übersetzt'
           : `${result.translated.length} Sprache(n) übersetzt` +
-            (result.failed.length ? `, ${result.failed.length} fehlgeschlagen (${result.failed.join(', ')})` : ''),
-    })
+            (result.failed.length
+              ? `, ${result.failed.length} fehlgeschlagen (${result.failed.join(', ')})`
+              : ''),
+    });
   } catch (error) {
-    logger.error('Failed to translate blog post', { postId, error })
-    return apiError(error, 'Übersetzung fehlgeschlagen')
+    logger.error('Failed to translate blog post', { postId, error });
+    return apiError(error, 'Übersetzung fehlgeschlagen');
   }
-})
+});

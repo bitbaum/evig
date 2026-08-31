@@ -3,9 +3,14 @@
 import Heading from '@/components/admin/AdminHeading';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { PARTICIPANT_SCOPES, PARTICIPANT_SCOPE_CONFIG, PARTICIPANT_SCOPE, type ParticipantScope } from '@/config/decisions';
+import {
+  PARTICIPANT_SCOPES,
+  PARTICIPANT_SCOPE_CONFIG,
+  PARTICIPANT_SCOPE,
+  type ParticipantScope,
+} from '@/config/decisions';
 import { type TeamMember } from './useDecisionForm';
-import { adminInteractive } from '@/lib/admin-ui'
+import { adminInteractive } from '@/lib/admin-ui';
 
 interface Props {
   participantScope: ParticipantScope;
@@ -19,15 +24,24 @@ interface Props {
 }
 
 export function ParticipantSelector({
-  participantScope, onScopeChange,
-  teamMembers, selectedParticipants, onToggle,
-  participantSearch, onSearchChange, filteredMembers,
+  participantScope,
+  onScopeChange,
+  teamMembers,
+  selectedParticipants,
+  onToggle,
+  participantSearch,
+  onSearchChange,
+  filteredMembers,
 }: Props) {
   return (
     <div className="rounded-lg border border bg-surface-raised p-4 space-y-3">
       <div>
-        <Heading level={3} className="text-sm font-medium text-text-primary">Abstimmungsberechtigt</Heading>
-        <p className="mt-0.5 text-xs text-text-tertiary">Wer darf an dieser Abstimmung teilnehmen?</p>
+        <Heading level={3} className="text-sm font-medium text-text-primary">
+          Abstimmungsberechtigt
+        </Heading>
+        <p className="mt-0.5 text-xs text-text-tertiary">
+          Wer darf an dieser Abstimmung teilnehmen?
+        </p>
       </div>
 
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -82,7 +96,9 @@ export function ParticipantSelector({
             </div>
           )}
           {selectedParticipants.size > 0 && (
-            <p className="text-xs text-text-tertiary">{selectedParticipants.size} Personen eingeladen</p>
+            <p className="text-xs text-text-tertiary">
+              {selectedParticipants.size} Personen eingeladen
+            </p>
           )}
         </div>
       )}

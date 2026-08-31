@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * DeviceJourney — renders the post-donation journey of a device donation
@@ -8,24 +8,32 @@
  * API response either).
  */
 
-import { useTranslations } from 'next-intl'
-import { CheckCircle2, Package, Wrench, ShoppingBag, Home, Recycle, ExternalLink } from 'lucide-react'
-import Link from 'next/link'
+import { useTranslations } from 'next-intl';
+import {
+  CheckCircle2,
+  Package,
+  Wrench,
+  ShoppingBag,
+  Home,
+  Recycle,
+  ExternalLink,
+} from 'lucide-react';
+import Link from 'next/link';
 import {
   DONATION_JOURNEY_STAGES,
   DONATION_JOURNEY_STAGE_ORDER,
   type DonationJourneyStage,
-} from '@/config/donations'
+} from '@/config/donations';
 
 export interface JourneyItem {
-  stage: DonationJourneyStage
-  listing_url: string | null
-  sold_at: string | null
+  stage: DonationJourneyStage;
+  listing_url: string | null;
+  sold_at: string | null;
 }
 
 export interface DeviceJourneyProps {
-  totalItems: number
-  items: JourneyItem[]
+  totalItems: number;
+  items: JourneyItem[];
 }
 
 // Headline progression: stages shown left→right on the stepper.
@@ -36,7 +44,7 @@ const STEPPER_STAGES: DonationJourneyStage[] = [
   DONATION_JOURNEY_STAGES.REFURBISHED,
   DONATION_JOURNEY_STAGES.LISTED,
   DONATION_JOURNEY_STAGES.REHOMED,
-]
+];
 
 const STAGE_ICONS: Record<DonationJourneyStage, typeof Package> = {
   [DONATION_JOURNEY_STAGES.AWAITING]: Package,
@@ -46,19 +54,17 @@ const STAGE_ICONS: Record<DonationJourneyStage, typeof Package> = {
   [DONATION_JOURNEY_STAGES.REHOMED]: Home,
   [DONATION_JOURNEY_STAGES.PARTS]: Recycle,
   [DONATION_JOURNEY_STAGES.RECYCLED]: Recycle,
-}
+};
 
 export function DeviceJourney({ totalItems, items }: DeviceJourneyProps) {
-  const t = useTranslations('dashboard.donations.journey')
+  const t = useTranslations('dashboard.donations.journey');
 
   if (totalItems === 0) {
     return (
       <div className="mt-4 pt-4 border-t border">
-        <p className="text-sm text-text-secondary">
-          {t('awaiting')}
-        </p>
+        <p className="text-sm text-text-secondary">{t('awaiting')}</p>
       </div>
-    )
+    );
   }
 
   // Count items at each stage, plus a "max reached" per item (for the stepper).
@@ -70,28 +76,27 @@ export function DeviceJourney({ totalItems, items }: DeviceJourneyProps) {
     [DONATION_JOURNEY_STAGES.REHOMED]: 0,
     [DONATION_JOURNEY_STAGES.PARTS]: 0,
     [DONATION_JOURNEY_STAGES.RECYCLED]: 0,
-  }
+  };
   for (const item of items) {
-    counts[item.stage] += 1
+    counts[item.stage] += 1;
   }
 
-  const listingLinks = items
-    .filter(i => i.listing_url)
-    .map(i => i.listing_url!) as string[]
+  const listingLinks = items.filter((i) => i.listing_url).map((i) => i.listing_url!) as string[];
 
   // Summary line — the donor's headline takeaway.
-  const summaryParts: string[] = []
-  if (counts.rehomed > 0) summaryParts.push(t('countRehomed', { count: counts.rehomed }))
-  if (counts.listed > 0) summaryParts.push(t('countListed', { count: counts.listed }))
-  if (counts.refurbished > 0) summaryParts.push(t('countRefurbished', { count: counts.refurbished }))
-  if (counts.received > 0) summaryParts.push(t('countReceived', { count: counts.received }))
-  if (counts.parts > 0) summaryParts.push(t('countParts', { count: counts.parts }))
-  if (counts.recycled > 0) summaryParts.push(t('countRecycled', { count: counts.recycled }))
+  const summaryParts: string[] = [];
+  if (counts.rehomed > 0) summaryParts.push(t('countRehomed', { count: counts.rehomed }));
+  if (counts.listed > 0) summaryParts.push(t('countListed', { count: counts.listed }));
+  if (counts.refurbished > 0)
+    summaryParts.push(t('countRefurbished', { count: counts.refurbished }));
+  if (counts.received > 0) summaryParts.push(t('countReceived', { count: counts.received }));
+  if (counts.parts > 0) summaryParts.push(t('countParts', { count: counts.parts }));
+  if (counts.recycled > 0) summaryParts.push(t('countRecycled', { count: counts.recycled }));
 
   // For the stepper: a stage is "reached" if any item has reached it or beyond.
   function stageReached(stage: DonationJourneyStage): boolean {
-    const stageRank = DONATION_JOURNEY_STAGE_ORDER[stage]
-    return items.some(i => DONATION_JOURNEY_STAGE_ORDER[i.stage] >= stageRank)
+    const stageRank = DONATION_JOURNEY_STAGE_ORDER[stage];
+    return items.some((i) => DONATION_JOURNEY_STAGE_ORDER[i.stage] >= stageRank);
   }
 
   return (
@@ -103,9 +108,9 @@ export function DeviceJourney({ totalItems, items }: DeviceJourneyProps) {
       {/* Horizontal stepper */}
       <div className="flex items-center gap-1 sm:gap-2 mb-3" aria-label={t('heading')}>
         {STEPPER_STAGES.map((stage, idx) => {
-          const Icon = STAGE_ICONS[stage]
-          const reached = stageReached(stage)
-          const isLast = idx === STEPPER_STAGES.length - 1
+          const Icon = STAGE_ICONS[stage];
+          const reached = stageReached(stage);
+          const isLast = idx === STEPPER_STAGES.length - 1;
           return (
             <div key={stage} className="flex items-center flex-1 last:flex-none">
               <div className="flex flex-col items-center flex-1">
@@ -117,11 +122,7 @@ export function DeviceJourney({ totalItems, items }: DeviceJourneyProps) {
                   }
                   aria-current={reached ? 'step' : undefined}
                 >
-                  {reached ? (
-                    <CheckCircle2 className="w-4 h-4" />
-                  ) : (
-                    <Icon className="w-4 h-4" />
-                  )}
+                  {reached ? <CheckCircle2 className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
                 </div>
                 <span
                   className={
@@ -144,7 +145,7 @@ export function DeviceJourney({ totalItems, items }: DeviceJourneyProps) {
                 />
               )}
             </div>
-          )
+          );
         })}
       </div>
 
@@ -164,12 +165,14 @@ export function DeviceJourney({ totalItems, items }: DeviceJourneyProps) {
               href={url}
               className="inline-flex items-center gap-1 text-sm text-action hover:text-action underline"
             >
-              {listingLinks.length === 1 ? t('viewInShop') : t('viewInShopNumbered', { index: i + 1 })}
+              {listingLinks.length === 1
+                ? t('viewInShop')
+                : t('viewInShopNumbered', { index: i + 1 })}
               <ExternalLink className="w-3 h-3" aria-hidden="true" />
             </Link>
           ))}
         </div>
       )}
     </div>
-  )
+  );
 }

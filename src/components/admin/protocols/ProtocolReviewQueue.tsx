@@ -1,18 +1,18 @@
-import { Link } from '@/i18n/navigation'
-import { AlertCircle, ArrowRight, ListChecks } from 'lucide-react'
-import { getTranslations } from 'next-intl/server'
-import { PROTOCOL_STATUS_COLORS, PROTOCOL_STATUS_LABELS } from '@/config/protocols'
-import { getProtocolWorkflowStep, PROTOCOL_WORKFLOW_STEPS } from '@/lib/protocols/workflow'
-import type { ProtocolListItem } from '@/lib/schemas/protocols'
-import { formatDateShort } from '@/lib/date-formats'
-import { adminSurface, adminType } from '@/lib/admin-ui'
-import { cn } from '@/lib/utils'
-import { AdminButton } from '@/components/admin/AdminButton'
-import { AdminSectionHeader } from '@/components/admin/AdminSectionHeader'
-import { ROUTES } from '@/config/routes'
+import { Link } from '@/i18n/navigation';
+import { AlertCircle, ArrowRight, ListChecks } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
+import { PROTOCOL_STATUS_COLORS, PROTOCOL_STATUS_LABELS } from '@/config/protocols';
+import { getProtocolWorkflowStep, PROTOCOL_WORKFLOW_STEPS } from '@/lib/protocols/workflow';
+import type { ProtocolListItem } from '@/lib/schemas/protocols';
+import { formatDateShort } from '@/lib/date-formats';
+import { adminSurface, adminType } from '@/lib/admin-ui';
+import { cn } from '@/lib/utils';
+import { AdminButton } from '@/components/admin/AdminButton';
+import { AdminSectionHeader } from '@/components/admin/AdminSectionHeader';
+import { ROUTES } from '@/config/routes';
 
 interface ProtocolReviewQueueProps {
-  protocols: ProtocolListItem[]
+  protocols: ProtocolListItem[];
 }
 
 function getWorkflowLabel(protocol: ProtocolListItem) {
@@ -20,16 +20,16 @@ function getWorkflowLabel(protocol: ProtocolListItem) {
     status: protocol.status,
     hasStructuredNotes: protocol.has_structured_notes,
     unlinkedTaskCount: protocol.unlinked_action_item_count,
-  })
-  return PROTOCOL_WORKFLOW_STEPS.find((step) => step.id === stepId)?.label ?? 'Review'
+  });
+  return PROTOCOL_WORKFLOW_STEPS.find((step) => step.id === stepId)?.label ?? 'Review';
 }
 
 export async function ProtocolReviewQueue({ protocols }: ProtocolReviewQueueProps) {
-  const t = await getTranslations('admin.protocols')
+  const t = await getTranslations('admin.protocols');
   // The page renders this only when there are items; guard anyway so it's never
   // shown empty. No "new protocol" CTA here — the page header owns that action;
   // this is a review surface, not a create surface.
-  if (protocols.length === 0) return null
+  if (protocols.length === 0) return null;
 
   return (
     <section className={cn(adminSurface.card, 'p-5')}>
@@ -40,54 +40,65 @@ export async function ProtocolReviewQueue({ protocols }: ProtocolReviewQueueProp
       />
 
       <div className="mt-5 grid gap-3">
-          {protocols.map((protocol) => {
-            const needsTasks = protocol.unlinked_action_item_count > 0
-            return (
-              <article
-                key={protocol.id}
-                className="rounded-lg border border-default bg-surface-base p-4 transition-colors hover:border-strong hover:bg-action-muted/40"
-              >
-                <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                  <div className="min-w-0">
-                    <div className="mb-2 flex flex-wrap items-center gap-2">
-                      <span className={cn('inline-flex rounded-full px-3 py-1 text-sm font-medium', PROTOCOL_STATUS_COLORS[protocol.status])}>
-                        {PROTOCOL_STATUS_LABELS[protocol.status]}
-                      </span>
-                      <span className="inline-flex rounded-full bg-surface-raised px-3 py-1 text-sm font-medium text-text-secondary">
-                        {getWorkflowLabel(protocol)}
-                      </span>
-                      {needsTasks && (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-warning-100 dark:bg-warning-900/30 px-3 py-1 text-sm font-medium text-warning-800 dark:text-warning-200">
-                          <AlertCircle className="h-4 w-4" />
-                          {protocol.unlinked_action_item_count} {t('open')}
-                        </span>
+        {protocols.map((protocol) => {
+          const needsTasks = protocol.unlinked_action_item_count > 0;
+          return (
+            <article
+              key={protocol.id}
+              className="rounded-lg border border-default bg-surface-base p-4 transition-colors hover:border-strong hover:bg-action-muted/40"
+            >
+              <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                <div className="min-w-0">
+                  <div className="mb-2 flex flex-wrap items-center gap-2">
+                    <span
+                      className={cn(
+                        'inline-flex rounded-full px-3 py-1 text-sm font-medium',
+                        PROTOCOL_STATUS_COLORS[protocol.status],
                       )}
-                    </div>
-                    <Link
-                      href={ROUTES.admin.protocol(protocol.id)}
-                      className="block truncate text-lg font-semibold text-text-primary underline-offset-2 hover:text-action hover:underline"
                     >
-                      {protocol.title}
-                    </Link>
-                    <p className="mt-1 text-base text-text-secondary">
-                      {formatDateShort(protocol.meeting_date)}
-                      {protocol.created_by_name ? ` · ${t('by')} ${protocol.created_by_name}` : ''}
-                    </p>
-                    <p className="mt-2 text-base text-text-secondary">
-                      {protocol.action_item_count} {t('recognizedActions')}
-                      {needsTasks ? `, ${protocol.unlinked_action_item_count} ${t('notInTaskSystem')}` : `, ${t('readyToClose')}`}
-                    </p>
+                      {PROTOCOL_STATUS_LABELS[protocol.status]}
+                    </span>
+                    <span className="inline-flex rounded-full bg-surface-raised px-3 py-1 text-sm font-medium text-text-secondary">
+                      {getWorkflowLabel(protocol)}
+                    </span>
+                    {needsTasks && (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-warning-100 dark:bg-warning-900/30 px-3 py-1 text-sm font-medium text-warning-800 dark:text-warning-200">
+                        <AlertCircle className="h-4 w-4" />
+                        {protocol.unlinked_action_item_count} {t('open')}
+                      </span>
+                    )}
                   </div>
-
-                  <AdminButton href={ROUTES.admin.protocol(protocol.id)} variant={needsTasks ? 'action' : 'secondary'} className="md:mt-1">
-                    {t('openReview')}
-                    <ArrowRight className="h-4 w-4" />
-                  </AdminButton>
+                  <Link
+                    href={ROUTES.admin.protocol(protocol.id)}
+                    className="block truncate text-lg font-semibold text-text-primary underline-offset-2 hover:text-action hover:underline"
+                  >
+                    {protocol.title}
+                  </Link>
+                  <p className="mt-1 text-base text-text-secondary">
+                    {formatDateShort(protocol.meeting_date)}
+                    {protocol.created_by_name ? ` · ${t('by')} ${protocol.created_by_name}` : ''}
+                  </p>
+                  <p className="mt-2 text-base text-text-secondary">
+                    {protocol.action_item_count} {t('recognizedActions')}
+                    {needsTasks
+                      ? `, ${protocol.unlinked_action_item_count} ${t('notInTaskSystem')}`
+                      : `, ${t('readyToClose')}`}
+                  </p>
                 </div>
-              </article>
-            )
-          })}
-        </div>
+
+                <AdminButton
+                  href={ROUTES.admin.protocol(protocol.id)}
+                  variant={needsTasks ? 'action' : 'secondary'}
+                  className="md:mt-1"
+                >
+                  {t('openReview')}
+                  <ArrowRight className="h-4 w-4" />
+                </AdminButton>
+              </div>
+            </article>
+          );
+        })}
+      </div>
     </section>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Device QR Label — the physical↔digital link of the intake pipeline.
@@ -12,63 +12,63 @@
  * workshop, not a localized UI surface.
  */
 
-import { useEffect, useState } from 'react'
-import Link from 'next/link'
-import { useParams } from 'next/navigation'
-import QRCode from 'qrcode'
-import { ArrowLeft, Package, Printer } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import Heading from '@/components/admin/AdminHeading'
-import { ROUTES } from '@/config/routes'
-import { QR_BG_COLOR, QR_FG_COLOR } from '@/config/integrations'
-import { ORG } from '@/config/org'
-import { getConditionLabel } from '@/config/erfassung'
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import QRCode from 'qrcode';
+import { ArrowLeft, Package, Printer } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Heading from '@/components/admin/AdminHeading';
+import { ROUTES } from '@/config/routes';
+import { QR_BG_COLOR, QR_FG_COLOR } from '@/config/integrations';
+import { ORG } from '@/config/org';
+import { getConditionLabel } from '@/config/erfassung';
 import {
   INTAKE_TIER_LABELS,
   QUICK_CAPTURE_LABEL,
   type IntakeTier,
-} from '@/config/intake-checklist'
-import { PRINT_PREVIEW_SHADOW } from '@/config/ui-colors'
-import { formatDateShort } from '@/lib/date-formats'
-import { apiFetch } from '@/lib/api/client'
+} from '@/config/intake-checklist';
+import { PRINT_PREVIEW_SHADOW } from '@/config/ui-colors';
+import { formatDateShort } from '@/lib/date-formats';
+import { apiFetch } from '@/lib/api/client';
 
 interface LabelData {
-  id: string
-  item_uuid: string
-  brand: string
-  product_name: string
-  condition: string
-  intake_tier: IntakeTier | null
-  created_at: string
+  id: string;
+  item_uuid: string;
+  brand: string;
+  product_name: string;
+  condition: string;
+  intake_tier: IntakeTier | null;
+  created_at: string;
 }
 
 export default function IntakeLabelPage() {
-  const params = useParams()
-  const inventoryId = params.id as string
-  const [device, setDevice] = useState<LabelData | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [qrDataUrl, setQrDataUrl] = useState<string | null>(null)
+  const params = useParams();
+  const inventoryId = params.id as string;
+  const [device, setDevice] = useState<LabelData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchDevice() {
-      const result = await apiFetch<LabelData>(`/api/admin/intake/${inventoryId}`)
+      const result = await apiFetch<LabelData>(`/api/admin/intake/${inventoryId}`);
       if (result.success && result.data) {
-        setDevice(result.data)
+        setDevice(result.data);
       } else {
-        setError(result.error || 'Gerät nicht gefunden')
+        setError(result.error || 'Gerät nicht gefunden');
       }
-      setLoading(false)
+      setLoading(false);
     }
-    if (inventoryId) fetchDevice()
-  }, [inventoryId])
+    if (inventoryId) fetchDevice();
+  }, [inventoryId]);
 
   // Generate locally in the browser. The previous implementation sent the
   // internal admin detail URL to a public QR-image service and made label
   // printing depend on that service being online.
   useEffect(() => {
-    if (!device) return
-    const detailUrl = `${window.location.origin}${ROUTES.admin.intakeDetail(device.id)}`
+    if (!device) return;
+    const detailUrl = `${window.location.origin}${ROUTES.admin.intakeDetail(device.id)}`;
     void QRCode.toDataURL(detailUrl, {
       width: 300,
       margin: 1,
@@ -76,15 +76,15 @@ export default function IntakeLabelPage() {
       color: { dark: `#${QR_FG_COLOR}`, light: `#${QR_BG_COLOR}` },
     })
       .then(setQrDataUrl)
-      .catch(() => setError('QR-Code konnte nicht erstellt werden'))
-  }, [device])
+      .catch(() => setError('QR-Code konnte nicht erstellt werden'));
+  }, [device]);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-surface-raised">
         <div className="animate-spin rounded-full h-12 w-12 border-4 border-action border-t-transparent"></div>
       </div>
-    )
+    );
   }
 
   if (error || !device) {
@@ -97,10 +97,10 @@ export default function IntakeLabelPage() {
           </Heading>
         </div>
       </div>
-    )
+    );
   }
 
-  const deviceName = `${device.brand ?? ''} ${device.product_name ?? ''}`.trim()
+  const deviceName = `${device.brand ?? ''} ${device.product_name ?? ''}`.trim();
 
   return (
     <>
@@ -132,12 +132,17 @@ export default function IntakeLabelPage() {
               className="intake-label-qr shrink-0"
             />
           ) : (
-            <div className="intake-label-qr shrink-0 animate-pulse bg-surface-overlay" aria-label="QR-Code wird erstellt" />
+            <div
+              className="intake-label-qr shrink-0 animate-pulse bg-surface-overlay"
+              aria-label="QR-Code wird erstellt"
+            />
           )}
           <div className="flex flex-col justify-between min-w-0 py-0.5">
             <div>
               <div className="font-mono font-bold text-base leading-tight">{device.item_uuid}</div>
-              <div className="text-xs leading-snug text-text-primary line-clamp-2">{deviceName || '—'}</div>
+              <div className="text-xs leading-snug text-text-primary line-clamp-2">
+                {deviceName || '—'}
+              </div>
             </div>
             <div className="text-[10px] leading-tight text-text-secondary">
               <div>
@@ -145,7 +150,9 @@ export default function IntakeLabelPage() {
                 {' · '}
                 {getConditionLabel(device.condition)}
               </div>
-              <div>{ORG.name} · {formatDateShort(device.created_at)}</div>
+              <div>
+                {ORG.name} · {formatDateShort(device.created_at)}
+              </div>
             </div>
           </div>
         </div>
@@ -167,7 +174,8 @@ export default function IntakeLabelPage() {
             size: 62mm 34mm;
             margin: 0;
           }
-          html, body {
+          html,
+          body {
             margin: 0;
             padding: 0;
             -webkit-print-color-adjust: exact !important;
@@ -187,5 +195,5 @@ export default function IntakeLabelPage() {
         }
       `}</style>
     </>
-  )
+  );
 }

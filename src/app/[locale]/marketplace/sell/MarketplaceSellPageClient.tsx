@@ -1,37 +1,46 @@
-'use client'
+'use client';
 
-import { Suspense } from 'react'
-import { Link } from '@/i18n/navigation'
-import NextLink from 'next/link'
-import { ArrowLeft, Eye, Package, Loader2, Camera, Info } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { ImageUploadGrid } from '@/components/marketplace-sell/ImageUploadGrid'
-import { ListingFormFields } from '@/components/marketplace-sell/ListingFormFields'
-import { ListingPreview } from '@/components/marketplace-sell/ListingPreview'
-import dynamic from 'next/dynamic'
-import { ErrorAlert } from '@/components/common/ErrorAlert'
-import Heading from '@/components/ui/Heading'
-import { AIFormAssist } from '@/components/ai/AIFormAssist'
-import { useTranslations } from 'next-intl'
-import { useListingSellForm } from '@/hooks/useListingSellForm'
-import { ROUTES } from '@/config/routes'
+import { Suspense } from 'react';
+import { Link } from '@/i18n/navigation';
+import NextLink from 'next/link';
+import { ArrowLeft, Eye, Package, Loader2, Camera, Info } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { ImageUploadGrid } from '@/components/marketplace-sell/ImageUploadGrid';
+import { ListingFormFields } from '@/components/marketplace-sell/ListingFormFields';
+import { ListingPreview } from '@/components/marketplace-sell/ListingPreview';
+import dynamic from 'next/dynamic';
+import { ErrorAlert } from '@/components/common/ErrorAlert';
+import Heading from '@/components/ui/Heading';
+import { AIFormAssist } from '@/components/ai/AIFormAssist';
+import { useTranslations } from 'next-intl';
+import { useListingSellForm } from '@/hooks/useListingSellForm';
+import { ROUTES } from '@/config/routes';
 
 // framer-motion is heavy — load the camera flow lazily, only when opened.
 const AICameraProductListing = dynamic(
-  () => import('@/components/marketplace/ai-camera/AICameraProductListing').then(m => m.AICameraProductListing),
-  { ssr: false }
-)
+  () =>
+    import('@/components/marketplace/ai-camera/AICameraProductListing').then(
+      (m) => m.AICameraProductListing,
+    ),
+  { ssr: false },
+);
 
 function SellPageContent() {
-  const t = useTranslations('marketplace.sell')
+  const t = useTranslations('marketplace.sell');
   const {
-    session, status,
-    step, setStep,
-    isSubmitting, isUploading,
+    session,
+    status,
+    step,
+    setStep,
+    isSubmitting,
+    isUploading,
     error,
-    editId, isLoadingEdit,
-    formData, setFormData,
-    showCamera, setShowCamera,
+    editId,
+    isLoadingEdit,
+    formData,
+    setFormData,
+    showCamera,
+    setShowCamera,
     success,
     handleAIFieldsFilled,
     handleImageUpload,
@@ -39,40 +48,46 @@ function SellPageContent() {
     handlePreview,
     handleSubmit,
     handleCameraProductDetected,
-  } = useListingSellForm()
+  } = useListingSellForm();
 
   if (status === 'loading' || isLoadingEdit) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader2 className="w-8 h-8 text-action animate-spin" />
       </div>
-    )
+    );
   }
 
   if (!session?.user) {
     // Return to the sell page after auth so a first-time seller doesn't lose
     // their place, and lead with "create account" — most people listing an item
     // don't have one yet.
-    const callback = encodeURIComponent(ROUTES.public.marketplaceSell)
+    const callback = encodeURIComponent(ROUTES.public.marketplaceSell);
     return (
       <div className="max-w-2xl mx-auto py-12 text-center">
         <Package className="w-16 h-16 text-text-muted mx-auto mb-4" />
         <Heading level={2} className="text-xl text-text-primary mb-2">
           {t('loginRequired')}
         </Heading>
-        <p className="text-text-secondary mb-6">
-          {t('loginRequiredDesc')}
-        </p>
+        <p className="text-text-secondary mb-6">{t('loginRequiredDesc')}</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <Button as={Link} href={`${ROUTES.public.register}?callbackUrl=${callback}`} variant="primary">
+          <Button
+            as={Link}
+            href={`${ROUTES.public.register}?callbackUrl=${callback}`}
+            variant="primary"
+          >
             {t('createAccount')}
           </Button>
-          <Button as={Link} href={`${ROUTES.public.login}?callbackUrl=${callback}`} variant="outline">
+          <Button
+            as={Link}
+            href={`${ROUTES.public.login}?callbackUrl=${callback}`}
+            variant="outline"
+          >
             {t('login')}
           </Button>
         </div>
       </div>
-    )
+    );
   }
 
   if (step === 'preview') {
@@ -86,7 +101,7 @@ function SellPageContent() {
         onEdit={() => setStep('form')}
         onSubmit={handleSubmit}
       />
-    )
+    );
   }
 
   return (
@@ -102,12 +117,16 @@ function SellPageContent() {
       {/* Step indicator */}
       <div className="flex items-center gap-0 mb-6">
         <div className="flex items-center gap-2">
-          <span className="w-7 h-7 rounded-full bg-action text-action-text text-xs font-bold flex items-center justify-center">1</span>
+          <span className="w-7 h-7 rounded-full bg-action text-action-text text-xs font-bold flex items-center justify-center">
+            1
+          </span>
           <span className="text-sm font-semibold text-action">{t('stepDetails')}</span>
         </div>
         <div className="flex-1 h-px bg-surface-overlay mx-3" />
         <div className="flex items-center gap-2">
-          <span className="w-7 h-7 rounded-full bg-surface-overlay text-text-tertiary text-xs font-bold flex items-center justify-center">2</span>
+          <span className="w-7 h-7 rounded-full bg-surface-overlay text-text-tertiary text-xs font-bold flex items-center justify-center">
+            2
+          </span>
           <span className="text-sm text-text-tertiary">{t('stepPreview')}</span>
         </div>
       </div>
@@ -121,15 +140,20 @@ function SellPageContent() {
           <Info className="w-5 h-5 shrink-0 mt-0.5 text-text-tertiary" aria-hidden />
           <div className="min-w-0">
             <p className="text-text-primary">
-              Du erstellst ein <span className="font-semibold">Community-Inserat</span> (Privatverkauf) — kein evig-Lagerbestand.
+              Du erstellst ein <span className="font-semibold">Community-Inserat</span>{' '}
+              (Privatverkauf) — kein evig-Lagerbestand.
             </p>
             {session.user.isStaff && (
               <p className="text-text-secondary mt-1">
                 Ist das evig-Lagerbestand? Dann über{' '}
-                <NextLink href="/admin/intake/capture" className="font-medium text-action underline underline-offset-2 hover:text-action">
+                <NextLink
+                  href="/admin/intake/capture"
+                  className="font-medium text-action underline underline-offset-2 hover:text-action"
+                >
                   Produkt aufnehmen → Erfassung
                 </NextLink>{' '}
-                erfassen — wird als evig-Produkt mit Inventar gelistet. Nicht zwingend: persönliche Verkäufe gehören hierher.
+                erfassen — wird als evig-Produkt mit Inventar gelistet. Nicht zwingend: persönliche
+                Verkäufe gehören hierher.
               </p>
             )}
           </div>
@@ -147,7 +171,16 @@ function SellPageContent() {
         <div className="space-y-3 mb-6">
           <AIFormAssist
             formType="marketplace"
-            currentData={{ title: formData.title, description: formData.description, price: formData.price, category: formData.category, condition: formData.condition, brand: formData.brand, model: formData.model, specs: formData.specs }}
+            currentData={{
+              title: formData.title,
+              description: formData.description,
+              price: formData.price,
+              category: formData.category,
+              condition: formData.condition,
+              brand: formData.brand,
+              model: formData.model,
+              specs: formData.specs,
+            }}
             onFieldsFilled={handleAIFieldsFilled}
             placeholder={t('aiPlaceholder')}
             defaultExpanded={false}
@@ -204,7 +237,9 @@ function SellPageContent() {
             </Button>
             <Button
               onClick={handlePreview}
-              disabled={!formData.title.trim() || !formData.description.trim() || !formData.category}
+              disabled={
+                !formData.title.trim() || !formData.description.trim() || !formData.category
+              }
               className="flex-1 gap-2 px-6 py-2.5"
             >
               <Eye className="w-4 h-4" />
@@ -214,17 +249,19 @@ function SellPageContent() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default function SellPage() {
   return (
-    <Suspense fallback={
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 text-action animate-spin" />
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          <Loader2 className="w-8 h-8 text-action animate-spin" />
+        </div>
+      }
+    >
       <SellPageContent />
     </Suspense>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * MatchedTechnicianCard
@@ -13,24 +13,26 @@
  * irrelevant.
  */
 
-import { Link } from '@/i18n/navigation'
-import { Phone, User } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { ROUTES } from '@/config/routes'
-import { Eyebrow } from '@/components/ui/Eyebrow'
+import { Link } from '@/i18n/navigation';
+import { Phone, User } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { ROUTES } from '@/config/routes';
+import { Eyebrow } from '@/components/ui/Eyebrow';
 
 interface Props {
-  technicianId: string
-  technicianName: string
-  technicianPhone: string
+  technicianId: string;
+  technicianName: string;
+  technicianPhone: string;
 }
 
 export function MatchedTechnicianCard({ technicianId, technicianName, technicianPhone }: Props) {
-  const t = useTranslations('itHelp.detail.matchedTechnician')
+  const t = useTranslations('itHelp.detail.matchedTechnician');
 
   return (
     <div className="card-shell p-6">
-      <Eyebrow as="div" className="mb-3">{t('eyebrow')}</Eyebrow>
+      <Eyebrow as="div" className="mb-3">
+        {t('eyebrow')}
+      </Eyebrow>
 
       <div className="flex items-start justify-between gap-4">
         <div>
@@ -44,9 +46,7 @@ export function MatchedTechnicianCard({ technicianId, technicianName, technician
             </Link>
           </div>
 
-          <p className="ui-public-meta mt-3 text-text-secondary text-sm">
-            {t('description')}
-          </p>
+          <p className="ui-public-meta mt-3 text-text-secondary text-sm">{t('description')}</p>
         </div>
 
         <a
@@ -59,5 +59,5 @@ export function MatchedTechnicianCard({ technicianId, technicianName, technician
         </a>
       </div>
     </div>
-  )
+  );
 }

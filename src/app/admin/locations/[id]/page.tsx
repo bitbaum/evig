@@ -1,19 +1,23 @@
-'use client'
+'use client';
 
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { useParams } from 'next/navigation'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { formatDateShort } from '@/lib/date-formats'
-import Heading from '@/components/admin/AdminHeading'
-import { LOCATION_STATUS, LOCATION_STATUS_COLORS, getLocationStatusLabel } from '@/config/location-status'
-import { getBookingStatusBadge } from '@/config/booking-status'
-import { APPROVAL_STATUS, APPROVAL_STATUS_LABELS } from '@/config/approval-status'
-import { LOCATION_TYPES } from '@/components/admin/locations/location-form'
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
-import { useLocationDetail } from '@/hooks/useLocationDetail'
-import { ROUTES } from '@/config/routes'
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { formatDateShort } from '@/lib/date-formats';
+import Heading from '@/components/admin/AdminHeading';
+import {
+  LOCATION_STATUS,
+  LOCATION_STATUS_COLORS,
+  getLocationStatusLabel,
+} from '@/config/location-status';
+import { getBookingStatusBadge } from '@/config/booking-status';
+import { APPROVAL_STATUS, APPROVAL_STATUS_LABELS } from '@/config/approval-status';
+import { LOCATION_TYPES } from '@/components/admin/locations/location-form';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { useLocationDetail } from '@/hooks/useLocationDetail';
+import { ROUTES } from '@/config/routes';
 import {
   MapPin,
   Users,
@@ -27,42 +31,44 @@ import {
   Mail,
   User,
   Loader2,
-} from 'lucide-react'
+} from 'lucide-react';
 
 const STATUS_ICONS: Record<string, typeof CheckCircle> = {
   [LOCATION_STATUS.APPROVED]: CheckCircle,
   [LOCATION_STATUS.PENDING]: Clock,
   [LOCATION_STATUS.REJECTED]: XCircle,
   [LOCATION_STATUS.SUSPENDED]: AlertCircle,
-}
+};
 
 function getStatusBadge(status: string) {
-  const Icon = STATUS_ICONS[status] ?? AlertCircle
-  const className = LOCATION_STATUS_COLORS[status] ?? 'bg-surface-raised text-text-primary'
+  const Icon = STATUS_ICONS[status] ?? AlertCircle;
+  const className = LOCATION_STATUS_COLORS[status] ?? 'bg-surface-raised text-text-primary';
   return (
-    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${className}`}>
+    <span
+      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${className}`}
+    >
       <Icon className="w-4 h-4" />
       {getLocationStatusLabel(status)}
     </span>
-  )
+  );
 }
 
 function getTypeLabel(type: string) {
-  const found = LOCATION_TYPES.find((t) => t.id === type)
-  const Icon = found?.icon ?? MapPin
-  const label = found?.label ?? type
+  const found = LOCATION_TYPES.find((t) => t.id === type);
+  const Icon = found?.icon ?? MapPin;
+  const label = found?.label ?? type;
   return (
     <span className="inline-flex items-center gap-1.5 text-sm text-text-secondary">
       <Icon className="w-4 h-4" />
       {label}
     </span>
-  )
+  );
 }
 
 export default function LocationDetailPage() {
-  const router = useRouter()
-  const params = useParams()
-  const locationId = params.id as string
+  const router = useRouter();
+  const params = useParams();
+  const locationId = params.id as string;
 
   const {
     location,
@@ -75,7 +81,7 @@ export default function LocationDetailPage() {
     handleApproval,
     confirmApproval,
     cancelApproval,
-  } = useLocationDetail(locationId)
+  } = useLocationDetail(locationId);
 
   if (sessionStatus === 'loading' || loading) {
     return (
@@ -94,12 +100,12 @@ export default function LocationDetailPage() {
           </Card>
         </div>
       </div>
-    )
+    );
   }
 
   if (sessionStatus === 'unauthenticated') {
-    router.push('/auth/login')
-    return null
+    router.push('/auth/login');
+    return null;
   }
 
   if (error && !location) {
@@ -108,7 +114,9 @@ export default function LocationDetailPage() {
         <div className="max-w-4xl mx-auto px-4">
           <Card className="p-8 text-center">
             <AlertCircle className="w-12 h-12 text-error-400 mx-auto mb-4" />
-            <Heading level={2} className="text-lg font-medium text-text-primary mb-2">{error}</Heading>
+            <Heading level={2} className="text-lg font-medium text-text-primary mb-2">
+              {error}
+            </Heading>
             <Link
               href={ROUTES.admin.locations}
               className="inline-flex items-center text-action hover:text-action mt-4"
@@ -119,14 +127,15 @@ export default function LocationDetailPage() {
           </Card>
         </div>
       </div>
-    )
+    );
   }
 
-  if (!location) return null
+  if (!location) return null;
 
-  const accessibilityInfo = typeof location.accessibility_info === 'string'
-    ? JSON.parse(location.accessibility_info)
-    : location.accessibility_info
+  const accessibilityInfo =
+    typeof location.accessibility_info === 'string'
+      ? JSON.parse(location.accessibility_info)
+      : location.accessibility_info;
 
   return (
     <div className="min-h-screen bg-surface-raised">
@@ -142,14 +151,17 @@ export default function LocationDetailPage() {
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </Link>
-                <Heading level={1} className="text-2xl font-bold text-text-primary">{location.name}</Heading>
+                <Heading level={1} className="text-2xl font-bold text-text-primary">
+                  {location.name}
+                </Heading>
                 {getStatusBadge(location.approval_status)}
               </div>
               <div className="flex items-center gap-4 ml-8">
                 {getTypeLabel(location.type)}
                 {location.city && (
                   <span className="text-sm text-text-tertiary">
-                    {location.city}{location.canton ? `, ${location.canton}` : ''}
+                    {location.city}
+                    {location.canton ? `, ${location.canton}` : ''}
                   </span>
                 )}
               </div>
@@ -163,7 +175,11 @@ export default function LocationDetailPage() {
                   variant="primary"
                   size="sm"
                 >
-                  {actionLoading ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : <CheckCircle className="w-4 h-4 mr-1" />}
+                  {actionLoading ? (
+                    <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+                  ) : (
+                    <CheckCircle className="w-4 h-4 mr-1" />
+                  )}
                   Genehmigen
                 </Button>
                 <Button
@@ -172,7 +188,11 @@ export default function LocationDetailPage() {
                   variant="destructive"
                   size="sm"
                 >
-                  {actionLoading ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : <XCircle className="w-4 h-4 mr-1" />}
+                  {actionLoading ? (
+                    <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+                  ) : (
+                    <XCircle className="w-4 h-4 mr-1" />
+                  )}
                   Ablehnen
                 </Button>
               </div>
@@ -191,7 +211,9 @@ export default function LocationDetailPage() {
 
         {/* Basic Info */}
         <div className="bg-surface-base rounded-xl shadow-xs border p-6">
-          <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Grundinformationen</Heading>
+          <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">
+            Grundinformationen
+          </Heading>
           <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {location.description && (
               <div className="sm:col-span-2">
@@ -217,11 +239,15 @@ export default function LocationDetailPage() {
             </div>
             <div>
               <dt className="text-sm font-medium text-text-tertiary">Erstellt am</dt>
-              <dd className="mt-1 text-sm text-text-primary">{formatDateShort(location.created_at)}</dd>
+              <dd className="mt-1 text-sm text-text-primary">
+                {formatDateShort(location.created_at)}
+              </dd>
             </div>
             <div>
               <dt className="text-sm font-medium text-text-tertiary">Aktualisiert am</dt>
-              <dd className="mt-1 text-sm text-text-primary">{formatDateShort(location.updated_at)}</dd>
+              <dd className="mt-1 text-sm text-text-primary">
+                {formatDateShort(location.updated_at)}
+              </dd>
             </div>
           </dl>
         </div>
@@ -229,7 +255,10 @@ export default function LocationDetailPage() {
         {/* Address */}
         {(location.address_line1 || location.city) && (
           <div className="bg-surface-base rounded-xl shadow-xs border p-6">
-            <Heading level={2} className="text-lg font-semibold text-text-primary mb-4 flex items-center gap-2">
+            <Heading
+              level={2}
+              className="text-lg font-semibold text-text-primary mb-4 flex items-center gap-2"
+            >
               <MapPin className="w-5 h-5 text-text-muted" />
               Adresse
             </Heading>
@@ -249,10 +278,15 @@ export default function LocationDetailPage() {
         {/* Facilities */}
         {location.facilities && location.facilities.length > 0 && (
           <div className="bg-surface-base rounded-xl shadow-xs border p-6">
-            <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Ausstattung</Heading>
+            <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">
+              Ausstattung
+            </Heading>
             <div className="flex flex-wrap gap-2">
               {location.facilities.map((facility, i) => (
-                <span key={i} className="px-3 py-1 bg-surface-raised text-text-secondary rounded-full text-sm">
+                <span
+                  key={i}
+                  className="px-3 py-1 bg-surface-raised text-text-secondary rounded-full text-sm"
+                >
                   {facility}
                 </span>
               ))}
@@ -263,7 +297,9 @@ export default function LocationDetailPage() {
         {/* Accessibility */}
         {accessibilityInfo && (
           <div className="bg-surface-base rounded-xl shadow-xs border p-6">
-            <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Barrierefreiheit</Heading>
+            <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">
+              Barrierefreiheit
+            </Heading>
             <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <dt className="text-sm font-medium text-text-tertiary">Rollstuhlgerecht</dt>
@@ -280,13 +316,19 @@ export default function LocationDetailPage() {
               {accessibilityInfo.publicTransport && (
                 <div className="sm:col-span-2">
                   <dt className="text-sm font-medium text-text-tertiary">Öffentlicher Verkehr</dt>
-                  <dd className="mt-1 text-sm text-text-primary">{accessibilityInfo.publicTransport}</dd>
+                  <dd className="mt-1 text-sm text-text-primary">
+                    {accessibilityInfo.publicTransport}
+                  </dd>
                 </div>
               )}
               {accessibilityInfo.additionalInfo && (
                 <div className="sm:col-span-2">
-                  <dt className="text-sm font-medium text-text-tertiary">Zusätzliche Informationen</dt>
-                  <dd className="mt-1 text-sm text-text-primary">{accessibilityInfo.additionalInfo}</dd>
+                  <dt className="text-sm font-medium text-text-tertiary">
+                    Zusätzliche Informationen
+                  </dt>
+                  <dd className="mt-1 text-sm text-text-primary">
+                    {accessibilityInfo.additionalInfo}
+                  </dd>
                 </div>
               )}
             </dl>
@@ -296,7 +338,9 @@ export default function LocationDetailPage() {
         {/* Contact */}
         {(location.contact_name || location.contact_phone || location.contact_email) && (
           <div className="bg-surface-base rounded-xl shadow-xs border p-6">
-            <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Kontakt</Heading>
+            <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">
+              Kontakt
+            </Heading>
             <dl className="space-y-3">
               {location.contact_name && (
                 <div className="flex items-center gap-2 text-sm">
@@ -322,13 +366,17 @@ export default function LocationDetailPage() {
 
         {/* Creator Info */}
         <div className="bg-surface-base rounded-xl shadow-xs border p-6">
-          <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Erstellt von</Heading>
+          <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">
+            Erstellt von
+          </Heading>
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-surface-raised rounded-full flex items-center justify-center">
               <User className="w-5 h-5 text-text-tertiary" />
             </div>
             <div>
-              <p className="text-sm font-medium text-text-primary">{location.creator_name || 'Unbekannt'}</p>
+              <p className="text-sm font-medium text-text-primary">
+                {location.creator_name || 'Unbekannt'}
+              </p>
               <p className="text-sm text-text-tertiary">{location.creator_email}</p>
             </div>
           </div>
@@ -337,11 +385,19 @@ export default function LocationDetailPage() {
         {/* Review History */}
         {location.last_approval_action && (
           <div className="bg-surface-base rounded-xl shadow-xs border p-6">
-            <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Letzte Prüfung</Heading>
+            <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">
+              Letzte Prüfung
+            </Heading>
             <div className="text-sm text-text-secondary space-y-2">
               <p>
                 <span className="font-medium">Aktion:</span>{' '}
-                {APPROVAL_STATUS_LABELS[location.last_approval_action === 'approve' ? APPROVAL_STATUS.APPROVED : APPROVAL_STATUS.REJECTED]}
+                {
+                  APPROVAL_STATUS_LABELS[
+                    location.last_approval_action === 'approve'
+                      ? APPROVAL_STATUS.APPROVED
+                      : APPROVAL_STATUS.REJECTED
+                  ]
+                }
               </p>
               {location.last_reviewed_at && (
                 <p>
@@ -351,8 +407,7 @@ export default function LocationDetailPage() {
               )}
               {location.last_review_notes && (
                 <p>
-                  <span className="font-medium">Notizen:</span>{' '}
-                  {location.last_review_notes}
+                  <span className="font-medium">Notizen:</span> {location.last_review_notes}
                 </p>
               )}
             </div>
@@ -362,7 +417,9 @@ export default function LocationDetailPage() {
         {/* Upcoming Bookings */}
         {bookings.length > 0 && (
           <div className="bg-surface-base rounded-xl shadow-xs border p-6">
-            <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Bevorstehende Buchungen</Heading>
+            <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">
+              Bevorstehende Buchungen
+            </Heading>
             <div className="divide-y divide-neutral-200">
               {bookings.map((booking) => (
                 <div key={booking.id} className="py-3 flex items-center justify-between">
@@ -378,12 +435,12 @@ export default function LocationDetailPage() {
                     )}
                   </div>
                   {(() => {
-                    const badge = getBookingStatusBadge(booking.status)
+                    const badge = getBookingStatusBadge(booking.status);
                     return (
                       <span className={`px-2 py-1 rounded-full text-xs font-medium ${badge.color}`}>
                         {badge.label}
                       </span>
-                    )
+                    );
                   })()}
                 </div>
               ))}
@@ -402,5 +459,5 @@ export default function LocationDetailPage() {
         onClose={cancelApproval}
       />
     </div>
-  )
+  );
 }

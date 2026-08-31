@@ -34,7 +34,7 @@
  * is genuinely empty, which the UI should treat as "no value".
  */
 
-type I18nMap = Record<string, string> | null | undefined
+type I18nMap = Record<string, string> | null | undefined;
 
 export function pickI18n(
   canonical: string | null | undefined,
@@ -42,13 +42,13 @@ export function pickI18n(
   locale: string,
 ): string | null {
   if (locale === 'de' || !translations) {
-    return canonical ?? null
+    return canonical ?? null;
   }
-  const translated = translations[locale]
+  const translated = translations[locale];
   if (typeof translated === 'string' && translated.trim() !== '') {
-    return translated
+    return translated;
   }
-  return canonical ?? null
+  return canonical ?? null;
 }
 
 /**
@@ -68,17 +68,14 @@ export function pickRowI18n<T extends Record<string, unknown>>(
   locale: string,
   mapping: { [canonicalKey in keyof T]?: keyof T },
 ): T {
-  if (locale === 'de') return row
-  const out = { ...row }
-  for (const [canonKey, i18nKey] of Object.entries(mapping) as Array<[
-    keyof T,
-    keyof T,
-  ]>) {
-    const canonical = row[canonKey]
-    const translations = row[i18nKey] as I18nMap
-    if (typeof canonical !== 'string' && canonical !== null && canonical !== undefined) continue
-    const picked = pickI18n(canonical as string | null, translations, locale)
-    if (picked !== null) out[canonKey] = picked as T[keyof T]
+  if (locale === 'de') return row;
+  const out = { ...row };
+  for (const [canonKey, i18nKey] of Object.entries(mapping) as Array<[keyof T, keyof T]>) {
+    const canonical = row[canonKey];
+    const translations = row[i18nKey] as I18nMap;
+    if (typeof canonical !== 'string' && canonical !== null && canonical !== undefined) continue;
+    const picked = pickI18n(canonical as string | null, translations, locale);
+    if (picked !== null) out[canonKey] = picked as T[keyof T];
   }
-  return out
+  return out;
 }

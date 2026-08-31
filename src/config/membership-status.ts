@@ -10,16 +10,16 @@ export const MEMBERSHIP_APPLICATION_STATUS = {
   PENDING: 'pending',
   APPROVED: 'approved',
   REJECTED: 'rejected',
-} as const
+} as const;
 
 export type MembershipApplicationStatus =
-  (typeof MEMBERSHIP_APPLICATION_STATUS)[keyof typeof MEMBERSHIP_APPLICATION_STATUS]
+  (typeof MEMBERSHIP_APPLICATION_STATUS)[keyof typeof MEMBERSHIP_APPLICATION_STATUS];
 
 export const MEMBERSHIP_APPLICATION_STATUS_LABELS: Record<MembershipApplicationStatus, string> = {
   pending: 'Ausstehend',
   approved: 'Genehmigt',
   rejected: 'Abgelehnt',
-}
+};
 
 // Matches the users.member_type CHECK constraint (migration 062):
 // regular | reduced | honorary. The public form offers regular/reduced;
@@ -28,12 +28,12 @@ export const MEMBERSHIP_TYPE = {
   REGULAR: 'regular',
   REDUCED: 'reduced',
   HONORARY: 'honorary',
-} as const
+} as const;
 
-export type MembershipType = (typeof MEMBERSHIP_TYPE)[keyof typeof MEMBERSHIP_TYPE]
+export type MembershipType = (typeof MEMBERSHIP_TYPE)[keyof typeof MEMBERSHIP_TYPE];
 
 export const MEMBERSHIP_TYPE_LABELS: Record<MembershipType, string> = {
   regular: 'Ordentliches Mitglied',
   reduced: 'Ermässigtes Mitglied',
   honorary: 'Ehrenmitglied',
-}
+};

@@ -1,43 +1,46 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import Heading from '@/components/ui/Heading'
-import { useState } from 'react'
-import { User, Bell, Shield, Save, Loader2, CheckCircle2, ArrowLeft } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { SETTINGS_CONFIG } from '@/config/profile'
-import { useTranslations } from 'next-intl'
+import Link from 'next/link';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import Heading from '@/components/ui/Heading';
+import { useState } from 'react';
+import { User, Bell, Shield, Save, Loader2, CheckCircle2, ArrowLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { SETTINGS_CONFIG } from '@/config/profile';
+import { useTranslations } from 'next-intl';
 
 // Hooks (reuse from profile)
-import { useProfileData } from '../profile/hooks/useProfileData'
-import { useProfileForm } from '../profile/hooks/useProfileForm'
+import { useProfileData } from '../profile/hooks/useProfileData';
+import { useProfileForm } from '../profile/hooks/useProfileForm';
 
 // Components
-import { ProfileSkeleton } from '@/components/profile/ProfileSkeleton'
-import { AccountSection } from './components/AccountSection'
-import { NotificationsSection } from './components/NotificationsSection'
-import { PrivacySection } from './components/PrivacySection'
+import { ProfileSkeleton } from '@/components/profile/ProfileSkeleton';
+import { AccountSection } from './components/AccountSection';
+import { NotificationsSection } from './components/NotificationsSection';
+import { PrivacySection } from './components/PrivacySection';
 
-type TabId = 'account' | 'notifications' | 'privacy'
+type TabId = 'account' | 'notifications' | 'privacy';
 
 export default function SettingsPage() {
-  const { session, status, isLoading, profile, setProfile } = useProfileData()
-  const { isSaving, saveSuccess, error, handleSubmit, handleChange } = useProfileForm({ profile, setProfile })
+  const { session, status, isLoading, profile, setProfile } = useProfileData();
+  const { isSaving, saveSuccess, error, handleSubmit, handleChange } = useProfileForm({
+    profile,
+    setProfile,
+  });
 
-  const [activeTab, setActiveTab] = useState<TabId>('account')
-  const t = useTranslations('dashboard.settings')
+  const [activeTab, setActiveTab] = useState<TabId>('account');
+  const t = useTranslations('dashboard.settings');
 
-  const labels = SETTINGS_CONFIG.labels
+  const labels = SETTINGS_CONFIG.labels;
 
   const tabs = [
     { id: 'account' as const, label: labels.tabs.account, icon: User },
     { id: 'notifications' as const, label: labels.tabs.notifications, icon: Bell },
     { id: 'privacy' as const, label: labels.tabs.privacy, icon: Shield },
-  ]
+  ];
 
   if (status === 'loading' || isLoading) {
-    return <ProfileSkeleton />
+    return <ProfileSkeleton />;
   }
 
   return (
@@ -53,10 +56,11 @@ export default function SettingsPage() {
               <ArrowLeft className="mr-1.5 h-3 w-3" />
               {t('backToDashboard')}
             </Link>
-            <Eyebrow>
-              {labels.pageDescription}
-            </Eyebrow>
-            <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
+            <Eyebrow>{labels.pageDescription}</Eyebrow>
+            <Heading
+              level={1}
+              className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl"
+            >
               {labels.pageTitle}
             </Heading>
           </div>
@@ -71,7 +75,7 @@ export default function SettingsPage() {
 
         {/* Tabs — segmented control on neutral background */}
         <div className="flex flex-wrap gap-1 rounded-lg bg-surface-raised p-1">
-          {tabs.map(tab => (
+          {tabs.map((tab) => (
             <Button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
@@ -140,5 +144,5 @@ export default function SettingsPage() {
         </form>
       </article>
     </main>
-  )
+  );
 }

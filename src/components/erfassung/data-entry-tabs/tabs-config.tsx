@@ -1,23 +1,23 @@
-'use client'
+'use client';
 
 /** Entry-mode tab configuration and shared state types for DataEntryTabs. */
 
-import { Mic, Camera, Zap, FileUp } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { Mic, Camera, Zap, FileUp } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
-export type EntryMode = 'speech' | 'picture' | 'form' | 'file'
+export type EntryMode = 'speech' | 'picture' | 'form' | 'file';
 
 export interface TabConfig {
-  id: EntryMode
-  label: string
-  icon: React.ReactNode
-  description: string
+  id: EntryMode;
+  label: string;
+  icon: React.ReactNode;
+  description: string;
 }
 
-export type QuickEntryState = 'idle' | 'loading' | 'success' | 'error'
+export type QuickEntryState = 'idle' | 'loading' | 'success' | 'error';
 
 export function useCoreTabs(): TabConfig[] {
-  const t = useTranslations('components.erfassung.dataEntryTabs')
+  const t = useTranslations('components.erfassung.dataEntryTabs');
 
   return [
     {
@@ -44,5 +44,5 @@ export function useCoreTabs(): TabConfig[] {
       icon: <Mic className="w-4 h-4" />,
       description: t('tabSpeechDesc'),
     },
-  ]
+  ];
 }

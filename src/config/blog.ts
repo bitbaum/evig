@@ -3,10 +3,10 @@
  */
 
 /** Posts per page in the index "latest" section (hero + featured are extra on page 1). */
-export const BLOG_PAGE_SIZE = 12
+export const BLOG_PAGE_SIZE = 12;
 
 /** Posts per page in the admin blog list. */
-export const ADMIN_BLOG_PAGE_SIZE = 50
+export const ADMIN_BLOG_PAGE_SIZE = 50;
 
 /**
  * Category KEYS (frontmatter/DB names slugified via `slugifyCategory`) that
@@ -22,8 +22,8 @@ export const BLOG_CATEGORY_KEYS = [
   'produkt',
   'sustainability',
   'technik',
-] as const
-export type BlogCategoryKey = (typeof BLOG_CATEGORY_KEYS)[number]
+] as const;
+export type BlogCategoryKey = (typeof BLOG_CATEGORY_KEYS)[number];
 
 /**
  * Retired post slugs that may still be linked externally → permanent redirect
@@ -33,7 +33,7 @@ export type BlogCategoryKey = (typeof BLOG_CATEGORY_KEYS)[number]
 export const RETIRED_POST_REDIRECTS: Record<string, string> = {
   // Retired 2026-08 (commit 9159b4ff1) — superseded by `gebaut-nicht-gewollt`.
   'die-revamp-it-plattform': '/blog',
-}
+};
 
 // AUDIENCE — access-control axis. The SSOT lives in `@/config/content-audience`
 // (shared with presentation decks). Re-exported here under the blog-specific
@@ -43,5 +43,5 @@ export {
   CONTENT_AUDIENCE_VALUES as BLOG_AUDIENCE_VALUES,
   CONTENT_AUDIENCE_LABELS as BLOG_AUDIENCE_LABELS,
   parseContentAudience as parseBlogAudience,
-} from './content-audience'
-export type { ContentAudience as BlogAudience } from './content-audience'
+} from './content-audience';
+export type { ContentAudience as BlogAudience } from './content-audience';

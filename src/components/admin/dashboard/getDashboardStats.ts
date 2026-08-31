@@ -1,45 +1,51 @@
-import { db } from '@/db'
-import { sql, getTableName } from 'drizzle-orm'
+import { db } from '@/db';
+import { sql, getTableName } from 'drizzle-orm';
 import {
-  users, serviceAppointments, repairerProfiles, listings,
-  tasks, decisions, itHilfeRequests,
-  inventoryItems, workshopRegistrations,
-} from '@/db/schema'
-import { jobApplications } from '@/db/schema/hr-vacancies'
-import { blogPosts } from '@/db/schema/content'
-import { APPROVAL_STATUS } from '@/config/approval-status'
-import { LISTING_STATUS } from '@/config/marketplace'
-import { REQUEST_STATUS, URGENCY } from '@/config/it-hilfe'
-import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
-import { APPLICATION_STATUS } from '@/config/hr-application-status'
-import { DECISION_STATUS } from '@/config/decisions'
-import { INVENTORY_ITEM_STATUS } from '@/config/marketplace-status'
-import { logger } from '@/lib/logger'
-import type { DashboardStats } from './types'
+  users,
+  serviceAppointments,
+  repairerProfiles,
+  listings,
+  tasks,
+  decisions,
+  itHilfeRequests,
+  inventoryItems,
+  workshopRegistrations,
+} from '@/db/schema';
+import { jobApplications } from '@/db/schema/hr-vacancies';
+import { blogPosts } from '@/db/schema/content';
+import { APPROVAL_STATUS } from '@/config/approval-status';
+import { LISTING_STATUS } from '@/config/marketplace';
+import { REQUEST_STATUS, URGENCY } from '@/config/it-hilfe';
+import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status';
+import { APPLICATION_STATUS } from '@/config/hr-application-status';
+import { DECISION_STATUS } from '@/config/decisions';
+import { INVENTORY_ITEM_STATUS } from '@/config/marketplace-status';
+import { logger } from '@/lib/logger';
+import type { DashboardStats } from './types';
 
 // Table name refs
-const usersTable = getTableName(users)
-const saTable = getTableName(serviceAppointments)
-const rpTable = getTableName(repairerProfiles)
-const blogTable = getTableName(blogPosts)
-const listingsTable = getTableName(listings)
-const itHilfeTable = getTableName(itHilfeRequests)
-const jobApplicationsTable = getTableName(jobApplications)
-const tasksTable = getTableName(tasks)
-const decisionsTable = getTableName(decisions)
-const inventoryTable = getTableName(inventoryItems)
-const workshopRegTable = getTableName(workshopRegistrations)
+const usersTable = getTableName(users);
+const saTable = getTableName(serviceAppointments);
+const rpTable = getTableName(repairerProfiles);
+const blogTable = getTableName(blogPosts);
+const listingsTable = getTableName(listings);
+const itHilfeTable = getTableName(itHilfeRequests);
+const jobApplicationsTable = getTableName(jobApplications);
+const tasksTable = getTableName(tasks);
+const decisionsTable = getTableName(decisions);
+const inventoryTable = getTableName(inventoryItems);
+const workshopRegTable = getTableName(workshopRegistrations);
 
 // ---- helpers ----------------------------------------------------------------
 
-type Row = Record<string, unknown>
+type Row = Record<string, unknown>;
 
 function rowCount(result: PromiseSettledResult<{ rows: unknown[] }>, label: string): number {
   if (result.status === 'rejected') {
-    logger.warn(`Dashboard stat query failed: ${label}`, { error: result.reason })
-    return 0
+    logger.warn(`Dashboard stat query failed: ${label}`, { error: result.reason });
+    return 0;
   }
-  return parseInt(String((result.value.rows as Row[])[0]?.count ?? '0'), 10)
+  return parseInt(String((result.value.rows as Row[])[0]?.count ?? '0'), 10);
 }
 
 function rowCountAndOldest(
@@ -47,33 +53,33 @@ function rowCountAndOldest(
   label: string,
 ): { count: number; oldest: string | null } {
   if (result.status === 'rejected') {
-    logger.warn(`Dashboard stat query failed: ${label}`, { error: result.reason })
-    return { count: 0, oldest: null }
+    logger.warn(`Dashboard stat query failed: ${label}`, { error: result.reason });
+    return { count: 0, oldest: null };
   }
-  const row = (result.value.rows as Row[])[0] ?? {}
+  const row = (result.value.rows as Row[])[0] ?? {};
   return {
     count: parseInt(String(row.count ?? '0'), 10),
     oldest: (row.oldest as string | null) ?? null,
-  }
+  };
 }
 
 // ---- main -------------------------------------------------------------------
 
 export async function getDashboardStats(isSuper: boolean): Promise<DashboardStats> {
-  const weekAgo = new Date()
-  weekAgo.setDate(weekAgo.getDate() - 7)
-  const weekAgoISO = weekAgo.toISOString()
+  const weekAgo = new Date();
+  weekAgo.setDate(weekAgo.getDate() - 7);
+  const weekAgoISO = weekAgo.toISOString();
 
-  const monthStart = new Date()
-  monthStart.setDate(1)
-  monthStart.setHours(0, 0, 0, 0)
-  const monthStartISO = monthStart.toISOString()
+  const monthStart = new Date();
+  monthStart.setDate(1);
+  monthStart.setHours(0, 0, 0, 0);
+  const monthStartISO = monthStart.toISOString();
 
-  const prevMonthEnd = new Date(monthStart)
-  const prevMonthStart = new Date(monthStart)
-  prevMonthStart.setMonth(prevMonthStart.getMonth() - 1)
-  const prevMonthStartISO = prevMonthStart.toISOString()
-  const prevMonthEndISO = prevMonthEnd.toISOString()
+  const prevMonthEnd = new Date(monthStart);
+  const prevMonthStart = new Date(monthStart);
+  prevMonthStart.setMonth(prevMonthStart.getMonth() - 1);
+  const prevMonthStartISO = prevMonthStart.toISOString();
+  const prevMonthEndISO = prevMonthEnd.toISOString();
 
   // Fire all queries in parallel — wall time = max latency, not sum
   const [
@@ -101,7 +107,9 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
     // Reference counts
     db.execute(sql`SELECT COUNT(*) AS count FROM ${sql.raw(usersTable)}`),
     db.execute(sql`SELECT COUNT(*) AS count FROM ${sql.raw(usersTable)} WHERE is_staff = true`),
-    db.execute(sql`SELECT COUNT(*) AS count FROM ${sql.raw(rpTable)} WHERE is_active = true AND profile_tier = ${REPAIRER_PROFILE_TIER.COMMUNITY}`),
+    db.execute(
+      sql`SELECT COUNT(*) AS count FROM ${sql.raw(rpTable)} WHERE is_active = true AND profile_tier = ${REPAIRER_PROFILE_TIER.COMMUNITY}`,
+    ),
 
     // Action items — count + oldest unresolved. NOTE: approval-type counts
     // (blog/workshop proposals/locations/timecards/absences/permission requests)
@@ -205,28 +213,28 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
       ORDER BY created_at ASC
       LIMIT 1
     `),
-  ])
+  ]);
 
   // Extract non-approval action items (approval-type counts come from the SSOT
   // `getApprovalCounts()` engine, not from here).
-  const appointments = rowCountAndOldest(appointmentsRes, 'pendingAppointments')
-  const itHilfe = rowCountAndOldest(itHilfeRes, 'urgentItHilfe')
-  const jobApps = rowCountAndOldest(jobApplicationsRes, 'pendingJobApplications')
-  const overdueTasksData = rowCountAndOldest(tasksRes, 'overdueTasks')
+  const appointments = rowCountAndOldest(appointmentsRes, 'pendingAppointments');
+  const itHilfe = rowCountAndOldest(itHilfeRes, 'urgentItHilfe');
+  const jobApps = rowCountAndOldest(jobApplicationsRes, 'pendingJobApplications');
+  const overdueTasksData = rowCountAndOldest(tasksRes, 'overdueTasks');
 
   // Listings (special shape)
-  let unverifiedListings = 0
-  let unverifiedListingsOldest: string | null = null
-  let totalListings = 0
-  let activeListings = 0
+  let unverifiedListings = 0;
+  let unverifiedListingsOldest: string | null = null;
+  let totalListings = 0;
+  let activeListings = 0;
   if (listingsRes.status === 'rejected') {
-    logger.warn('Dashboard stat query failed: listings', { error: listingsRes.reason })
+    logger.warn('Dashboard stat query failed: listings', { error: listingsRes.reason });
   } else {
-    const lr = (listingsRes.value.rows as Row[])[0] ?? {}
-    totalListings = parseInt(String(lr.total ?? '0'), 10)
-    activeListings = parseInt(String(lr.active ?? '0'), 10)
-    unverifiedListings = parseInt(String(lr.unverified ?? '0'), 10)
-    unverifiedListingsOldest = (lr.unverified_oldest as string | null) ?? null
+    const lr = (listingsRes.value.rows as Row[])[0] ?? {};
+    totalListings = parseInt(String(lr.total ?? '0'), 10);
+    activeListings = parseInt(String(lr.active ?? '0'), 10);
+    unverifiedListings = parseInt(String(lr.unverified ?? '0'), 10);
+    unverifiedListingsOldest = (lr.unverified_oldest as string | null) ?? null;
   }
 
   return {
@@ -269,9 +277,9 @@ export async function getDashboardStats(isSuper: boolean): Promise<DashboardStat
         rowCount(prevWorkshopAttendeesRes, 'prevWorkshopAttendees'),
     },
     topUnverifiedListing: (() => {
-      if (topListingRes.status !== 'fulfilled') return null
-      const r = (topListingRes.value.rows as Row[])[0]
-      return r ? { id: String(r.id), label: String(r.label) } : null
+      if (topListingRes.status !== 'fulfilled') return null;
+      const r = (topListingRes.value.rows as Row[])[0];
+      return r ? { id: String(r.id), label: String(r.label) } : null;
     })(),
-  }
+  };
 }

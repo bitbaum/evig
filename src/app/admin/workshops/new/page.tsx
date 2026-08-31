@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation'
+import { redirect } from 'next/navigation';
 
 /**
  * Workshops are created through the proposal flow (Vorschlag → Freigabe →
@@ -8,5 +8,5 @@ import { redirect } from 'next/navigation'
  * redirect stub for old email deep links — avoid the double hop).
  */
 export default function AdminWorkshopNewRedirect() {
-  redirect('/admin/workshops')
+  redirect('/admin/workshops');
 }

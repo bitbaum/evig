@@ -5,83 +5,85 @@
  * Accepts a CSV or Excel file upload and returns parsed BulkProduct array.
  */
 
-import { NextRequest } from 'next/server'
-import { withAdmin } from '@/lib/api/middleware'
-import { logger } from '@/lib/logger'
-import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
-import { parseCSV, parseExcel } from '@/lib/erfassung/file-parser'
-import { BULK_LIMITS } from '@/config/erfassung'
-import { FILE_SIZE_LIMITS } from '@/config/limits'
+import { NextRequest } from 'next/server';
+import { withAdmin } from '@/lib/api/middleware';
+import { logger } from '@/lib/logger';
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
+import { parseCSV, parseExcel } from '@/lib/erfassung/file-parser';
+import { BULK_LIMITS } from '@/config/erfassung';
+import { FILE_SIZE_LIMITS } from '@/config/limits';
 
 export const POST = withAdmin('products', async (request, session) => {
   try {
-    const formData = await request.formData()
-    const file = formData.get('file') as File | null
+    const formData = await request.formData();
+    const file = formData.get('file') as File | null;
 
     if (!file) {
-      return apiBadRequest('Keine Datei hochgeladen')
+      return apiBadRequest('Keine Datei hochgeladen');
     }
 
     // Validate file type
-    const allowedTypes = ['.csv', '.tsv', '.txt', '.xlsx', '.xls']
-    const fileName = file.name.toLowerCase()
-    if (!allowedTypes.some(ext => fileName.endsWith(ext))) {
-      return apiBadRequest('Nur CSV-, TSV-, TXT- und Excel-Dateien (.xlsx, .xls) werden unterstützt')
+    const allowedTypes = ['.csv', '.tsv', '.txt', '.xlsx', '.xls'];
+    const fileName = file.name.toLowerCase();
+    if (!allowedTypes.some((ext) => fileName.endsWith(ext))) {
+      return apiBadRequest(
+        'Nur CSV-, TSV-, TXT- und Excel-Dateien (.xlsx, .xls) werden unterstützt',
+      );
     }
 
     // Cap before reading the file into memory — protects the serverless
     // function from OOM on a multi-GB upload.
     if (file.size > FILE_SIZE_LIMITS.CSV_MAX) {
-      const limitMb = Math.round(FILE_SIZE_LIMITS.CSV_MAX / (1024 * 1024))
-      return apiBadRequest(`Datei zu gross (max ${limitMb} MB)`)
+      const limitMb = Math.round(FILE_SIZE_LIMITS.CSV_MAX / (1024 * 1024));
+      return apiBadRequest(`Datei zu gross (max ${limitMb} MB)`);
     }
 
-    const isExcel = fileName.endsWith('.xlsx') || fileName.endsWith('.xls')
+    const isExcel = fileName.endsWith('.xlsx') || fileName.endsWith('.xls');
 
     logger.info('Bulk upload started', {
       userId: session.user.id,
       fileName: file.name,
       fileSize: file.size,
       isExcel,
-    })
+    });
 
-    let products, unmappedColumns
+    let products, unmappedColumns;
 
     if (isExcel) {
-      const buffer = await file.arrayBuffer()
+      const buffer = await file.arrayBuffer();
       if (buffer.byteLength === 0) {
-        return apiBadRequest('Datei ist leer')
+        return apiBadRequest('Datei ist leer');
       }
-      ;({ products, unmappedColumns } = await parseExcel(buffer))
+      ({ products, unmappedColumns } = await parseExcel(buffer));
     } else {
-      const content = await file.text()
+      const content = await file.text();
       if (!content.trim()) {
-        return apiBadRequest('Datei ist leer')
+        return apiBadRequest('Datei ist leer');
       }
-      ;({ products, unmappedColumns } = parseCSV(content))
+      ({ products, unmappedColumns } = parseCSV(content));
     }
 
     if (products.length === 0) {
-      return apiBadRequest('Keine Produkte in der Datei gefunden')
+      return apiBadRequest('Keine Produkte in der Datei gefunden');
     }
 
     if (products.length > BULK_LIMITS.maxProducts) {
       return apiBadRequest(
-        `Datei enthält ${products.length} Produkte. Maximal ${BULK_LIMITS.maxProducts} erlaubt.`
-      )
+        `Datei enthält ${products.length} Produkte. Maximal ${BULK_LIMITS.maxProducts} erlaubt.`,
+      );
     }
 
     logger.info('Bulk upload parsed', {
       userId: session.user.id,
       productCount: products.length,
       unmappedColumns,
-    })
+    });
 
     return apiSuccess({
       products,
       unmappedColumns,
-    })
+    });
   } catch (error) {
-    return apiError(error, 'Fehler beim Verarbeiten der Datei')
+    return apiError(error, 'Fehler beim Verarbeiten der Datei');
   }
-})
+});

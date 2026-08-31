@@ -1,14 +1,11 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { Button } from '@/components/ui/button'
-import { useTranslations } from 'next-intl'
-import {
-  APPROVAL_STATUS,
-  APPROVAL_STATUS_BADGES,
-} from '@/config/approval-status'
-import { formatDate } from '@/lib/date-formats'
+import Link from 'next/link';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
+import { APPROVAL_STATUS, APPROVAL_STATUS_BADGES } from '@/config/approval-status';
+import { formatDate } from '@/lib/date-formats';
 import {
   ArrowLeft,
   ExternalLink,
@@ -18,15 +15,15 @@ import {
   XCircle,
   Clock,
   PenSquare,
-} from 'lucide-react'
-import Heading from '@/components/ui/Heading'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { useBlogSubmissions, type MySubmission } from '@/hooks/useBlogSubmissions'
-import { ROUTES } from '@/config/routes'
+} from 'lucide-react';
+import Heading from '@/components/ui/Heading';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { useBlogSubmissions, type MySubmission } from '@/hooks/useBlogSubmissions';
+import { ROUTES } from '@/config/routes';
 
 export default function BlogSubmissionsClient() {
-  const t = useTranslations('dashboard.blogSubmissions')
+  const t = useTranslations('dashboard.blogSubmissions');
 
   const {
     submissions,
@@ -48,7 +45,7 @@ export default function BlogSubmissionsClient() {
     loadError: t('loadError'),
     emptyContent: t('emptyContent'),
     resubmitError: t('resubmitError'),
-  })
+  });
 
   if (loading) {
     return (
@@ -63,7 +60,7 @@ export default function BlogSubmissionsClient() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -78,9 +75,7 @@ export default function BlogSubmissionsClient() {
             <ArrowLeft className="mr-1.5 h-3 w-3" />
             {t('backToDashboard')}
           </Link>
-          <Eyebrow>
-            {t('pageSubtitle')}
-          </Eyebrow>
+          <Eyebrow>{t('pageSubtitle')}</Eyebrow>
           <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
             {t('pageTitle')}
           </Heading>
@@ -96,10 +91,30 @@ export default function BlogSubmissionsClient() {
         {/* Stats */}
         {submissions.length > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
-            <StatCard icon={<Clock className="w-5 h-5" />} label={t('statPending')} value={stats.pending} tone="yellow" />
-            <StatCard icon={<CheckCircle2 className="w-5 h-5" />} label={t('statPublished')} value={stats.published} tone="blue" />
-            <StatCard icon={<PenSquare className="w-5 h-5" />} label={t('statRevise')} value={stats.requiresChanges} tone="orange" />
-            <StatCard icon={<XCircle className="w-5 h-5" />} label={t('statRejected')} value={stats.rejected} tone="red" />
+            <StatCard
+              icon={<Clock className="w-5 h-5" />}
+              label={t('statPending')}
+              value={stats.pending}
+              tone="yellow"
+            />
+            <StatCard
+              icon={<CheckCircle2 className="w-5 h-5" />}
+              label={t('statPublished')}
+              value={stats.published}
+              tone="blue"
+            />
+            <StatCard
+              icon={<PenSquare className="w-5 h-5" />}
+              label={t('statRevise')}
+              value={stats.requiresChanges}
+              tone="orange"
+            />
+            <StatCard
+              icon={<XCircle className="w-5 h-5" />}
+              label={t('statRejected')}
+              value={stats.rejected}
+              tone="red"
+            />
           </div>
         )}
 
@@ -111,9 +126,9 @@ export default function BlogSubmissionsClient() {
             {submissions.map((submission) => {
               const badge =
                 APPROVAL_STATUS_BADGES[submission.status] ??
-                APPROVAL_STATUS_BADGES[APPROVAL_STATUS.PENDING]
-              const isEditing = editingId === submission.id
-              const feedbackShown = expandedFeedback.has(submission.id)
+                APPROVAL_STATUS_BADGES[APPROVAL_STATUS.PENDING];
+              const isEditing = editingId === submission.id;
+              const feedbackShown = expandedFeedback.has(submission.id);
 
               return (
                 <SubmissionCard
@@ -132,13 +147,13 @@ export default function BlogSubmissionsClient() {
                   onEditTitleChange={setEditTitle}
                   onEditContentChange={setEditContent}
                 />
-              )
+              );
             })}
           </div>
         )}
       </div>
     </div>
-  )
+  );
 }
 
 // ---- sub components --------------------------------------------------------
@@ -158,43 +173,48 @@ function SubmissionCard({
   onEditTitleChange,
   onEditContentChange,
 }: {
-  submission: MySubmission
-  badge: { bg: string; color: string; label: string }
-  isEditing: boolean
-  feedbackShown: boolean
-  editTitle: string
-  editContent: string
-  saving: boolean
-  onToggleFeedback: () => void
-  onStartEditing: () => void
-  onCancelEditing: () => void
-  onResubmit: () => void
-  onEditTitleChange: (v: string) => void
-  onEditContentChange: (v: string) => void
+  submission: MySubmission;
+  badge: { bg: string; color: string; label: string };
+  isEditing: boolean;
+  feedbackShown: boolean;
+  editTitle: string;
+  editContent: string;
+  saving: boolean;
+  onToggleFeedback: () => void;
+  onStartEditing: () => void;
+  onCancelEditing: () => void;
+  onResubmit: () => void;
+  onEditTitleChange: (v: string) => void;
+  onEditContentChange: (v: string) => void;
 }) {
-  const t = useTranslations('dashboard.blogSubmissions')
+  const t = useTranslations('dashboard.blogSubmissions');
   return (
     <div className="bg-surface-base rounded-xl p-4 sm:p-6 border border-subtle">
       {/* Header row */}
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
         <div className="flex-1 min-w-0">
-          <Heading level={3} className="text-lg sm:text-xl font-semibold text-text-primary mb-1 wrap-break-word">
+          <Heading
+            level={3}
+            className="text-lg sm:text-xl font-semibold text-text-primary mb-1 wrap-break-word"
+          >
             {submission.title}
           </Heading>
           <p className="text-xs sm:text-sm text-text-tertiary">
-            {t('submittedOn', { date: formatDate(submission.submittedAt || submission.createdAt || '') })}
+            {t('submittedOn', {
+              date: formatDate(submission.submittedAt || submission.createdAt || ''),
+            })}
           </p>
         </div>
-        <span className={`inline-flex items-center self-start px-3 py-1 rounded-full text-xs font-medium ${badge.bg} ${badge.color}`}>
+        <span
+          className={`inline-flex items-center self-start px-3 py-1 rounded-full text-xs font-medium ${badge.bg} ${badge.color}`}
+        >
           {badge.label}
         </span>
       </div>
 
       {/* Next action hint */}
       {submission.nextAction && (
-        <p className="text-sm text-text-secondary mb-3">
-          {submission.nextAction}
-        </p>
+        <p className="text-sm text-text-secondary mb-3">{submission.nextAction}</p>
       )}
 
       {/* Published link */}
@@ -239,12 +259,7 @@ function SubmissionCard({
           )}
 
           {!isEditing ? (
-            <Button
-              onClick={onStartEditing}
-              variant="warning"
-              size="sm"
-              className="gap-2"
-            >
+            <Button onClick={onStartEditing} variant="warning" size="sm" className="gap-2">
               <PenSquare className="w-4 h-4" />
               {t('reviseButton')}
             </Button>
@@ -272,20 +287,10 @@ function SubmissionCard({
                 />
               </div>
               <div className="flex gap-2">
-                <Button
-                  onClick={onResubmit}
-                  disabled={saving}
-                  variant="primary"
-                  size="sm"
-                >
+                <Button onClick={onResubmit} disabled={saving} variant="primary" size="sm">
                   {saving ? t('submitting') : t('resubmit')}
                 </Button>
-                <Button
-                  onClick={onCancelEditing}
-                  disabled={saving}
-                  variant="outline"
-                  size="sm"
-                >
+                <Button onClick={onCancelEditing} disabled={saving} variant="outline" size="sm">
                   {t('cancel')}
                 </Button>
               </div>
@@ -294,7 +299,7 @@ function SubmissionCard({
         </div>
       )}
     </div>
-  )
+  );
 }
 
 function StatCard({
@@ -303,17 +308,19 @@ function StatCard({
   value,
   tone,
 }: {
-  icon: React.ReactNode
-  label: string
-  value: number
-  tone: 'yellow' | 'blue' | 'orange' | 'red'
+  icon: React.ReactNode;
+  label: string;
+  value: number;
+  tone: 'yellow' | 'blue' | 'orange' | 'red';
 }) {
   const tones: Record<string, string> = {
-    yellow: 'bg-warning-50 dark:bg-warning-900/20 text-warning-800 dark:text-warning-300 border-warning-200 dark:border-warning-800',
+    yellow:
+      'bg-warning-50 dark:bg-warning-900/20 text-warning-800 dark:text-warning-300 border-warning-200 dark:border-warning-800',
     blue: 'bg-action-muted text-action border-strong',
-    orange: 'bg-warning-50 dark:bg-warning-900/20 text-warning-800 dark:text-warning-300 border-warning-200 dark:border-warning-800',
+    orange:
+      'bg-warning-50 dark:bg-warning-900/20 text-warning-800 dark:text-warning-300 border-warning-200 dark:border-warning-800',
     red: 'bg-error-50 dark:bg-error-900/20 text-error-800 dark:text-error-300 border-error-200 dark:border-error-800',
-  }
+  };
   return (
     <div className={`rounded-lg border-2 p-3 sm:p-4 ${tones[tone]}`}>
       <div className="flex items-center gap-2 mb-1">
@@ -322,23 +329,21 @@ function StatCard({
       </div>
       <p className="text-2xl font-bold">{value}</p>
     </div>
-  )
+  );
 }
 
 function EmptyState() {
-  const t = useTranslations('dashboard.blogSubmissions')
+  const t = useTranslations('dashboard.blogSubmissions');
   return (
     <div className="bg-surface-base rounded-xl p-8 text-center border border-subtle">
       <FileText className="w-16 h-16 text-text-muted dark:text-text-secondary mx-auto mb-4" />
       <Heading level={3} className="text-xl font-semibold text-text-primary mb-2">
         {t('emptyTitle')}
       </Heading>
-      <p className="text-text-secondary mb-6">
-        {t('emptyDesc')}
-      </p>
+      <p className="text-text-secondary mb-6">{t('emptyDesc')}</p>
       <Button as={Link} href={ROUTES.public.blogSubmit} variant="primary">
         {t('submitNow')}
       </Button>
     </div>
-  )
+  );
 }

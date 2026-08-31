@@ -1,8 +1,8 @@
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
-import ItHilfePageClient from '../ItHilfePageClient'
+import ItHilfePageClient from '../ItHilfePageClient';
 
 /** Browse open repair requests — for technicians offering help. */
 export default function ITHilfeBrowseRequestsPage() {
-  return <ItHilfePageClient />
+  return <ItHilfePageClient />;
 }

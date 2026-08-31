@@ -17,16 +17,16 @@
  *   node scripts/i18n-leaks.mjs
  */
 
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs'
-import { join, dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
-const ROOT = join(__dirname, '..')
-const MESSAGES_DIR = join(ROOT, 'messages')
-const OUT_DIR = join(MESSAGES_DIR, '_missing')
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const ROOT = join(__dirname, '..');
+const MESSAGES_DIR = join(ROOT, 'messages');
+const OUT_DIR = join(MESSAGES_DIR, '_missing');
 
-const LOCALES = ['fr', 'es', 'it', 'ja', 'ko', 'ru']
+const LOCALES = ['fr', 'es', 'it', 'ja', 'ko', 'ru'];
 
 /**
  * Recursively flatten nested objects AND arrays to a single-level map of
@@ -35,30 +35,30 @@ const LOCALES = ['fr', 'es', 'it', 'ja', 'ko', 'ru']
  * approach.cards[].description / etc. were invisible to the audit.
  */
 function flatten(obj, prefix = '') {
-  const out = {}
+  const out = {};
   if (Array.isArray(obj)) {
     obj.forEach((item, i) => {
-      const p = `${prefix}[${i}]`
+      const p = `${prefix}[${i}]`;
       if (item && typeof item === 'object') {
-        Object.assign(out, flatten(item, p))
+        Object.assign(out, flatten(item, p));
       } else if (typeof item === 'string') {
-        out[p] = item
+        out[p] = item;
       }
-    })
-    return out
+    });
+    return out;
   }
   for (const [k, v] of Object.entries(obj)) {
-    const p = prefix ? `${prefix}.${k}` : k
+    const p = prefix ? `${prefix}.${k}` : k;
     if (v && typeof v === 'object') {
-      Object.assign(out, flatten(v, p))
+      Object.assign(out, flatten(v, p));
     } else if (typeof v === 'string') {
-      out[p] = v
+      out[p] = v;
     }
   }
-  return out
+  return out;
 }
 
-const stripPlaceholders = (s) => s.replace(/\{[^}]+\}/g, '').replace(/<[^>]+>/g, '')
+const stripPlaceholders = (s) => s.replace(/\{[^}]+\}/g, '').replace(/<[^>]+>/g, '');
 
 /**
  * A "real content" leak is a value where:
@@ -69,87 +69,87 @@ const stripPlaceholders = (s) => s.replace(/\{[^}]+\}/g, '').replace(/<[^>]+>/g,
  *   - It's not a URL/path
  */
 function isRealContentLeak(deValue, leakValue) {
-  if (!deValue || typeof deValue !== 'string' || deValue.trim() === '') return false
-  if (typeof leakValue !== 'string' || leakValue.trim() === '') return false
-  const cleaned = stripPlaceholders(leakValue).trim()
-  if (cleaned.length < 6) return false
-  if (/^https?:\/\//.test(cleaned)) return false
-  if (/^[A-Z][a-zA-Z]+(-[A-Z][a-zA-Z]+)*$/.test(cleaned)) return false // "Revamp-IT"
-  const words = cleaned.match(/[A-Za-zÀ-ÿ]+/g) || []
-  if (words.length < 2) return false
-  if (!/[a-z]/.test(cleaned)) return false
-  return true
+  if (!deValue || typeof deValue !== 'string' || deValue.trim() === '') return false;
+  if (typeof leakValue !== 'string' || leakValue.trim() === '') return false;
+  const cleaned = stripPlaceholders(leakValue).trim();
+  if (cleaned.length < 6) return false;
+  if (/^https?:\/\//.test(cleaned)) return false;
+  if (/^[A-Z][a-zA-Z]+(-[A-Z][a-zA-Z]+)*$/.test(cleaned)) return false; // "Revamp-IT"
+  const words = cleaned.match(/[A-Za-zÀ-ÿ]+/g) || [];
+  if (words.length < 2) return false;
+  if (!/[a-z]/.test(cleaned)) return false;
+  return true;
 }
 
-const de = flatten(JSON.parse(readFileSync(join(MESSAGES_DIR, 'de.json'), 'utf8')))
-const en = flatten(JSON.parse(readFileSync(join(MESSAGES_DIR, 'en.json'), 'utf8')))
+const de = flatten(JSON.parse(readFileSync(join(MESSAGES_DIR, 'de.json'), 'utf8')));
+const en = flatten(JSON.parse(readFileSync(join(MESSAGES_DIR, 'en.json'), 'utf8')));
 
-if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true })
+if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true });
 
 // CI-gate mode: when called as `i18n-leaks.mjs --check`, exit non-zero if
 // any locale grows ABOVE its baseline count. Baseline accepts known false
 // positives (Swiss NGO names, file paths, brand tokens like Strapi/Tina,
 // English-style email placeholders). Run with `--update-baseline` after a
 // real fix lands to rebaseline.
-const isCheck = process.argv.includes('--check')
-const isUpdateBaseline = process.argv.includes('--update-baseline')
-const BASELINE_PATH = join(__dirname, 'baselines', 'i18n-leaks.json')
+const isCheck = process.argv.includes('--check');
+const isUpdateBaseline = process.argv.includes('--update-baseline');
+const BASELINE_PATH = join(__dirname, 'baselines', 'i18n-leaks.json');
 
 const baseline = (() => {
   try {
-    return JSON.parse(readFileSync(BASELINE_PATH, 'utf8'))
+    return JSON.parse(readFileSync(BASELINE_PATH, 'utf8'));
   } catch {
-    return {}
+    return {};
   }
-})()
+})();
 
-let total = 0
-const counts = {}
+let total = 0;
+const counts = {};
 for (const loc of LOCALES) {
-  const data = flatten(JSON.parse(readFileSync(join(MESSAGES_DIR, `${loc}.json`), 'utf8')))
-  const leaks = {}
+  const data = flatten(JSON.parse(readFileSync(join(MESSAGES_DIR, `${loc}.json`), 'utf8')));
+  const leaks = {};
   for (const [k, v] of Object.entries(data)) {
-    const deV = de[k]
-    const enV = en[k]
-    if (!deV) continue
+    const deV = de[k];
+    const enV = en[k];
+    if (!deV) continue;
     // Identical to EN translation (and EN differs from DE — otherwise it's the
     // same brand/proper-noun across locales, not a leak)
-    const isEnLeak = enV && v === enV && enV !== deV
+    const isEnLeak = enV && v === enV && enV !== deV;
     // Identical to DE source (DE leaked into the locale instead of translating)
-    const isDeLeak = v === deV && /[ÄÖÜäöüß]|sind|der|die|das|und|für/.test(deV)
+    const isDeLeak = v === deV && /[ÄÖÜäöüß]|sind|der|die|das|und|für/.test(deV);
     if ((isEnLeak || isDeLeak) && isRealContentLeak(deV, v)) {
-      leaks[k] = { de: deV, current: v, translation: null }
+      leaks[k] = { de: deV, current: v, translation: null };
     }
   }
-  const count = Object.keys(leaks).length
-  total += count
-  counts[loc] = count
-  const outPath = join(OUT_DIR, `${loc}-leaks.json`)
-  writeFileSync(outPath, JSON.stringify(leaks, null, 2) + '\n', 'utf8')
-  console.log(`  ${loc}: ${count} leak(s) → ${outPath.replace(ROOT + '/', '')}`)
+  const count = Object.keys(leaks).length;
+  total += count;
+  counts[loc] = count;
+  const outPath = join(OUT_DIR, `${loc}-leaks.json`);
+  writeFileSync(outPath, JSON.stringify(leaks, null, 2) + '\n', 'utf8');
+  console.log(`  ${loc}: ${count} leak(s) → ${outPath.replace(ROOT + '/', '')}`);
 }
-console.log(`\nTotal leaks across ${LOCALES.length} locales: ${total}`)
+console.log(`\nTotal leaks across ${LOCALES.length} locales: ${total}`);
 
 if (isUpdateBaseline) {
-  writeFileSync(BASELINE_PATH, JSON.stringify(counts, null, 2) + '\n', 'utf8')
-  console.log(`\n✓ Baseline updated: ${BASELINE_PATH.replace(ROOT + '/', '')}`)
-  process.exit(0)
+  writeFileSync(BASELINE_PATH, JSON.stringify(counts, null, 2) + '\n', 'utf8');
+  console.log(`\n✓ Baseline updated: ${BASELINE_PATH.replace(ROOT + '/', '')}`);
+  process.exit(0);
 }
 
 if (isCheck) {
-  const regressions = []
+  const regressions = [];
   for (const loc of LOCALES) {
-    const base = baseline[loc] ?? 0
+    const base = baseline[loc] ?? 0;
     if (counts[loc] > base) {
-      regressions.push(`  ${loc}: ${counts[loc]} > baseline ${base} (+${counts[loc] - base})`)
+      regressions.push(`  ${loc}: ${counts[loc]} > baseline ${base} (+${counts[loc] - base})`);
     }
   }
   if (regressions.length > 0) {
-    console.error(`\n✗ i18n leak regression vs baseline:`)
-    regressions.forEach((r) => console.error(r))
-    console.error(`\n  Fix the new German leaks, or after a deliberate baseline shift run:`)
-    console.error(`    npm run compliance:i18n-leaks -- --update-baseline`)
-    process.exit(1)
+    console.error(`\n✗ i18n leak regression vs baseline:`);
+    regressions.forEach((r) => console.error(r));
+    console.error(`\n  Fix the new German leaks, or after a deliberate baseline shift run:`);
+    console.error(`    npm run compliance:i18n-leaks -- --update-baseline`);
+    process.exit(1);
   }
-  console.log(`\n✓ No i18n leak regressions vs baseline.`)
+  console.log(`\n✓ No i18n leak regressions vs baseline.`);
 }

@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import type { Workshop, InstanceFiltersState } from './types'
-import { WORKSHOP_INSTANCE_STATUS, WORKSHOP_INSTANCE_STATUS_LABELS } from '@/config/workshops'
-import { Select } from '@/components/ui/select'
-import { FormField } from '@/components/ui/form-field'
-import { adminInteractive } from '@/lib/admin-ui'
+import type { Workshop, InstanceFiltersState } from './types';
+import { WORKSHOP_INSTANCE_STATUS, WORKSHOP_INSTANCE_STATUS_LABELS } from '@/config/workshops';
+import { Select } from '@/components/ui/select';
+import { FormField } from '@/components/ui/form-field';
+import { adminInteractive } from '@/lib/admin-ui';
 
 interface InstanceFiltersProps {
-  filters: InstanceFiltersState
-  setFilters: React.Dispatch<React.SetStateAction<InstanceFiltersState>>
-  workshops: Workshop[]
+  filters: InstanceFiltersState;
+  setFilters: React.Dispatch<React.SetStateAction<InstanceFiltersState>>;
+  workshops: Workshop[];
 }
 
 export function InstanceFilters({ filters, setFilters, workshops }: InstanceFiltersProps) {
@@ -20,11 +20,13 @@ export function InstanceFilters({ filters, setFilters, workshops }: InstanceFilt
           <FormField label="Workshop">
             <Select
               value={filters.workshopId}
-              onChange={(e) => setFilters(prev => ({ ...prev, workshopId: e.target.value }))}
+              onChange={(e) => setFilters((prev) => ({ ...prev, workshopId: e.target.value }))}
             >
               <option value="">Alle Workshops</option>
-              {workshops.map(w => (
-                <option key={w.id} value={w.id}>{w.title}</option>
+              {workshops.map((w) => (
+                <option key={w.id} value={w.id}>
+                  {w.title}
+                </option>
               ))}
             </Select>
           </FormField>
@@ -34,22 +36,30 @@ export function InstanceFilters({ filters, setFilters, workshops }: InstanceFilt
           <FormField label="Status">
             <Select
               value={filters.status}
-              onChange={(e) => setFilters(prev => ({ ...prev, status: e.target.value }))}
+              onChange={(e) => setFilters((prev) => ({ ...prev, status: e.target.value }))}
             >
               <option value="all">Alle</option>
-              <option value={WORKSHOP_INSTANCE_STATUS.SCHEDULED}>{WORKSHOP_INSTANCE_STATUS_LABELS[WORKSHOP_INSTANCE_STATUS.SCHEDULED]}</option>
-              <option value={WORKSHOP_INSTANCE_STATUS.CANCELLED}>{WORKSHOP_INSTANCE_STATUS_LABELS[WORKSHOP_INSTANCE_STATUS.CANCELLED]}</option>
-              <option value={WORKSHOP_INSTANCE_STATUS.COMPLETED}>{WORKSHOP_INSTANCE_STATUS_LABELS[WORKSHOP_INSTANCE_STATUS.COMPLETED]}</option>
+              <option value={WORKSHOP_INSTANCE_STATUS.SCHEDULED}>
+                {WORKSHOP_INSTANCE_STATUS_LABELS[WORKSHOP_INSTANCE_STATUS.SCHEDULED]}
+              </option>
+              <option value={WORKSHOP_INSTANCE_STATUS.CANCELLED}>
+                {WORKSHOP_INSTANCE_STATUS_LABELS[WORKSHOP_INSTANCE_STATUS.CANCELLED]}
+              </option>
+              <option value={WORKSHOP_INSTANCE_STATUS.COMPLETED}>
+                {WORKSHOP_INSTANCE_STATUS_LABELS[WORKSHOP_INSTANCE_STATUS.COMPLETED]}
+              </option>
             </Select>
           </FormField>
         </div>
 
         <div className="flex items-end">
-          <label className={`inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer ${adminInteractive.rowHover}`}>
+          <label
+            className={`inline-flex items-center px-4 py-2 border rounded-lg cursor-pointer ${adminInteractive.rowHover}`}
+          >
             <input
               type="checkbox"
               checked={filters.upcoming}
-              onChange={(e) => setFilters(prev => ({ ...prev, upcoming: e.target.checked }))}
+              onChange={(e) => setFilters((prev) => ({ ...prev, upcoming: e.target.checked }))}
               className="mr-2"
             />
             Nur zukünftige
@@ -57,5 +67,5 @@ export function InstanceFilters({ filters, setFilters, workshops }: InstanceFilt
         </div>
       </div>
     </div>
-  )
+  );
 }

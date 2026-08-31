@@ -7,8 +7,8 @@
  * Ground Truth #2: One source of truth for every piece of data
  */
 
-import { FILE_SIZE_LIMITS } from '@/config/limits'
-import { CONTACT } from '@/config/org'
+import { FILE_SIZE_LIMITS } from '@/config/limits';
+import { CONTACT } from '@/config/org';
 
 // ============================================================================
 // PROFILE CONFIGURATION (Public View)
@@ -276,13 +276,35 @@ export const SETTINGS_CONFIG = {
 // ============================================================================
 
 export const SWISS_CANTONS = [
-  'AG', 'AI', 'AR', 'BE', 'BL', 'BS', 'FR', 'GE',
-  'GL', 'GR', 'JU', 'LU', 'NE', 'NW', 'OW', 'SG',
-  'SH', 'SO', 'SZ', 'TG', 'TI', 'UR', 'VD', 'VS',
-  'ZG', 'ZH'
+  'AG',
+  'AI',
+  'AR',
+  'BE',
+  'BL',
+  'BS',
+  'FR',
+  'GE',
+  'GL',
+  'GR',
+  'JU',
+  'LU',
+  'NE',
+  'NW',
+  'OW',
+  'SG',
+  'SH',
+  'SO',
+  'SZ',
+  'TG',
+  'TI',
+  'UR',
+  'VD',
+  'VS',
+  'ZG',
+  'ZH',
 ] as const;
 
-export const CANTON_NAMES: Record<typeof SWISS_CANTONS[number], string> = {
+export const CANTON_NAMES: Record<(typeof SWISS_CANTONS)[number], string> = {
   AG: 'Aargau',
   AI: 'Appenzell Innerrhoden',
   AR: 'Appenzell Ausserrhoden',
@@ -316,5 +338,5 @@ export const CANTON_NAMES: Record<typeof SWISS_CANTONS[number], string> = {
 // ============================================================================
 
 export type ProfileVisibility = 'public' | 'private';
-export type SwissCanton = typeof SWISS_CANTONS[number];
-export type AvatarFileType = typeof PROFILE_CONFIG.avatar.allowedTypes[number];
+export type SwissCanton = (typeof SWISS_CANTONS)[number];
+export type AvatarFileType = (typeof PROFILE_CONFIG.avatar.allowedTypes)[number];

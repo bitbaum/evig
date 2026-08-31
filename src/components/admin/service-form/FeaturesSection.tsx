@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import { Plus, Trash2, GripVertical } from 'lucide-react'
-import { IconPicker } from '../IconPicker'
-import { CollapsibleSection } from './CollapsibleSection'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import type { Feature } from './types'
+import { Plus, Trash2, GripVertical } from 'lucide-react';
+import { IconPicker } from '../IconPicker';
+import { CollapsibleSection } from './CollapsibleSection';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import type { Feature } from './types';
 
 interface FeaturesSectionProps {
-  features: Feature[]
-  onAdd: () => void
-  onUpdate: (index: number, field: keyof Feature, value: string) => void
-  onRemove: (index: number) => void
+  features: Feature[];
+  onAdd: () => void;
+  onUpdate: (index: number, field: keyof Feature, value: string) => void;
+  onRemove: (index: number) => void;
 }
 
 export function FeaturesSection({ features, onAdd, onUpdate, onRemove }: FeaturesSectionProps) {
@@ -20,10 +20,7 @@ export function FeaturesSection({ features, onAdd, onUpdate, onRemove }: Feature
     <CollapsibleSection title="Features" defaultOpen={false}>
       <div className="space-y-4">
         {features.map((feature, index) => (
-          <div
-            key={index}
-            className="p-4 bg-surface-raised rounded-lg space-y-3"
-          >
+          <div key={index} className="p-4 bg-surface-raised rounded-lg space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-text-muted">
                 <GripVertical className="w-4 h-4" />
@@ -46,10 +43,7 @@ export function FeaturesSection({ features, onAdd, onUpdate, onRemove }: Feature
                 onChange={(e) => onUpdate(index, 'title', e.target.value)}
                 placeholder="Titel"
               />
-              <IconPicker
-                value={feature.icon}
-                onChange={(icon) => onUpdate(index, 'icon', icon)}
-              />
+              <IconPicker value={feature.icon} onChange={(icon) => onUpdate(index, 'icon', icon)} />
             </div>
             <Textarea
               value={feature.description}
@@ -70,5 +64,5 @@ export function FeaturesSection({ features, onAdd, onUpdate, onRemove }: Feature
         </Button>
       </div>
     </CollapsibleSection>
-  )
+  );
 }

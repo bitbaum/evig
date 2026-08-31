@@ -1,18 +1,18 @@
-import { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
-import { FileText } from 'lucide-react'
-import Link from 'next/link'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import Heading from '@/components/admin/AdminHeading'
-import { ROUTES } from '@/config/routes'
+import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
+import { FileText } from 'lucide-react';
+import Link from 'next/link';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import Heading from '@/components/admin/AdminHeading';
+import { ROUTES } from '@/config/routes';
 
 export const metadata: Metadata = {
   title: 'Inhalte',
   description: 'Blog-Artikel, Seiten und Medien verwalten.',
-}
+};
 
 export default async function ContentPage() {
-  const t = await getTranslations('admin.content')
+  const t = await getTranslations('admin.content');
   return (
     <AdminPageWrapper
       title={t('pageTitle')}
@@ -25,7 +25,12 @@ export default async function ContentPage() {
           href={ROUTES.admin.contentSubmissions}
           className="card-shell p-6 hover:border-warning-500 transition-colors relative group"
         >
-          <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-warning-600 dark:group-hover:text-warning-400 transition-colors">Einreichungen</Heading>
+          <Heading
+            level={3}
+            className="font-semibold text-text-primary mb-2 group-hover:text-warning-600 dark:group-hover:text-warning-400 transition-colors"
+          >
+            Einreichungen
+          </Heading>
           <p className="text-sm text-text-secondary">
             Benutzer-Einreichungen prüfen und veröffentlichen
           </p>
@@ -36,27 +41,38 @@ export default async function ContentPage() {
           href={ROUTES.admin.contentBlog}
           className="card-shell p-6 hover:border-action transition-colors group"
         >
-          <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-action dark:group-hover:text-action transition-colors">Blog-Artikel</Heading>
-          <p className="text-sm text-text-secondary">
-            News, Tutorials und Ankündigungen
-          </p>
+          <Heading
+            level={3}
+            className="font-semibold text-text-primary mb-2 group-hover:text-action dark:group-hover:text-action transition-colors"
+          >
+            Blog-Artikel
+          </Heading>
+          <p className="text-sm text-text-secondary">News, Tutorials und Ankündigungen</p>
         </Link>
 
         <Link
           href={ROUTES.admin.categories}
           className="card-shell p-6 hover:border-action transition-colors group"
         >
-          <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-action dark:group-hover:text-action transition-colors">Kategorien</Heading>
-          <p className="text-sm text-text-secondary">
-            Blog-Kategorien verwalten
-          </p>
+          <Heading
+            level={3}
+            className="font-semibold text-text-primary mb-2 group-hover:text-action dark:group-hover:text-action transition-colors"
+          >
+            Kategorien
+          </Heading>
+          <p className="text-sm text-text-secondary">Blog-Kategorien verwalten</p>
         </Link>
 
         <Link
           href={ROUTES.admin.contentPages}
           className="card-shell p-6 hover:border-action transition-colors group"
         >
-          <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-action dark:group-hover:text-action transition-colors">Seiten</Heading>
+          <Heading
+            level={3}
+            className="font-semibold text-text-primary mb-2 group-hover:text-action dark:group-hover:text-action transition-colors"
+          >
+            Seiten
+          </Heading>
           <p className="text-sm text-text-secondary">
             Statische Seiten wie Über uns, Kontakt, etc.
           </p>
@@ -66,10 +82,13 @@ export default async function ContentPage() {
           href={ROUTES.admin.contentMedia}
           className="card-shell p-6 hover:border-action transition-colors group"
         >
-          <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-action dark:group-hover:text-action transition-colors">Medien</Heading>
-          <p className="text-sm text-text-secondary">
-            Bilder, Videos und Dokumente
-          </p>
+          <Heading
+            level={3}
+            className="font-semibold text-text-primary mb-2 group-hover:text-action dark:group-hover:text-action transition-colors"
+          >
+            Medien
+          </Heading>
+          <p className="text-sm text-text-secondary">Bilder, Videos und Dokumente</p>
         </Link>
       </div>
 
@@ -79,5 +98,5 @@ export default async function ContentPage() {
         </p>
       </div>
     </AdminPageWrapper>
-  )
+  );
 }

@@ -15,10 +15,10 @@ import {
   ChecklistUpdateSchema,
   IntakePublishSchema,
   IntakeQuerySchema,
-} from '../intake'
+} from '../intake';
 
-import { INTAKE_TIERS } from '@/config/intake-checklist'
-import { CAPTURE_DESTINATIONS } from '@/config/intake-workflow'
+import { INTAKE_TIERS } from '@/config/intake-checklist';
+import { CAPTURE_DESTINATIONS } from '@/config/intake-workflow';
 
 // ============================================================================
 // IntakeCreateSchema
@@ -30,88 +30,98 @@ describe('IntakeCreateSchema', () => {
     produktname: 'ThinkPad T480',
     zustand: 'gut',
     intake_tier: INTAKE_TIERS.REFURBISH,
-  }
+  };
 
   it('accepts minimal valid intake', () => {
-    const result = IntakeCreateSchema.safeParse(valid)
-    expect(result.success).toBe(true)
-  })
+    const result = IntakeCreateSchema.safeParse(valid);
+    expect(result.success).toBe(true);
+  });
 
   it('defaults is_donation to false', () => {
-    const result = IntakeCreateSchema.safeParse(valid)
-    if (result.success) expect(result.data.is_donation).toBe(false)
-  })
+    const result = IntakeCreateSchema.safeParse(valid);
+    if (result.success) expect(result.data.is_donation).toBe(false);
+  });
 
   it('rejects empty hersteller', () => {
-    const result = IntakeCreateSchema.safeParse({ ...valid, hersteller: '' })
-    expect(result.success).toBe(false)
-  })
+    const result = IntakeCreateSchema.safeParse({ ...valid, hersteller: '' });
+    expect(result.success).toBe(false);
+  });
 
   it('rejects missing hersteller', () => {
-    const { hersteller, ...rest } = valid
-    const result = IntakeCreateSchema.safeParse(rest)
-    expect(result.success).toBe(false)
-  })
+    const { hersteller, ...rest } = valid;
+    const result = IntakeCreateSchema.safeParse(rest);
+    expect(result.success).toBe(false);
+  });
 
   it('rejects empty produktname', () => {
-    const result = IntakeCreateSchema.safeParse({ ...valid, produktname: '' })
-    expect(result.success).toBe(false)
-  })
+    const result = IntakeCreateSchema.safeParse({ ...valid, produktname: '' });
+    expect(result.success).toBe(false);
+  });
 
   it('rejects empty zustand', () => {
-    const result = IntakeCreateSchema.safeParse({ ...valid, zustand: '' })
-    expect(result.success).toBe(false)
-  })
+    const result = IntakeCreateSchema.safeParse({ ...valid, zustand: '' });
+    expect(result.success).toBe(false);
+  });
 
   it('accepts all valid intake tiers', () => {
     for (const intake_tier of Object.values(INTAKE_TIERS)) {
-      const result = IntakeCreateSchema.safeParse({ ...valid, intake_tier })
-      expect(result.success).toBe(true)
+      const result = IntakeCreateSchema.safeParse({ ...valid, intake_tier });
+      expect(result.success).toBe(true);
     }
-  })
+  });
 
   it('rejects invalid intake tier', () => {
-    const result = IntakeCreateSchema.safeParse({ ...valid, intake_tier: 'landfill' })
-    expect(result.success).toBe(false)
-  })
+    const result = IntakeCreateSchema.safeParse({ ...valid, intake_tier: 'landfill' });
+    expect(result.success).toBe(false);
+  });
 
   it('rejects a request with neither destination nor legacy intake_tier', () => {
-    const { intake_tier, ...rest } = valid
-    const result = IntakeCreateSchema.safeParse(rest)
-    expect(result.success).toBe(false)
-  })
+    const { intake_tier, ...rest } = valid;
+    const result = IntakeCreateSchema.safeParse(rest);
+    expect(result.success).toBe(false);
+  });
 
   it('accepts the canonical quality destination without a legacy tier', () => {
-    const { intake_tier, ...rest } = valid
+    const { intake_tier, ...rest } = valid;
     const result = IntakeCreateSchema.safeParse({
       ...rest,
       destination: CAPTURE_DESTINATIONS.QUALITY,
-    })
-    expect(result.success).toBe(true)
-  })
+    });
+    expect(result.success).toBe(true);
+  });
 
   it('requires a meaningful reason and price for untested shop publication', () => {
-    const { intake_tier, ...rest } = valid
+    const { intake_tier, ...rest } = valid;
     const base = {
       ...rest,
       destination: CAPTURE_DESTINATIONS.SHOP_UNTESTED,
       verkaufspreis: 120,
-    }
+    };
 
-    expect(IntakeCreateSchema.safeParse({ ...base, qc_skip_reason: 'too short' }).success).toBe(false)
-    expect(IntakeCreateSchema.safeParse({ ...base, qc_skip_reason: 'sealed accessory' }).success).toBe(true)
-    expect(IntakeCreateSchema.safeParse({ ...base, qc_skip_reason: 'sealed accessory', verkaufspreis: 0 }).success).toBe(false)
-  })
+    expect(IntakeCreateSchema.safeParse({ ...base, qc_skip_reason: 'too short' }).success).toBe(
+      false,
+    );
+    expect(
+      IntakeCreateSchema.safeParse({ ...base, qc_skip_reason: 'sealed accessory' }).success,
+    ).toBe(true);
+    expect(
+      IntakeCreateSchema.safeParse({
+        ...base,
+        qc_skip_reason: 'sealed accessory',
+        verkaufspreis: 0,
+      }).success,
+    ).toBe(false);
+  });
 
   it('rejects negative verkaufspreis', () => {
-    const result = IntakeCreateSchema.safeParse({ ...valid, verkaufspreis: -1 })
-    expect(result.success).toBe(false)
-  })
+    const result = IntakeCreateSchema.safeParse({ ...valid, verkaufspreis: -1 });
+    expect(result.success).toBe(false);
+  });
 
   it('accepts verkaufspreis of 0', () => {
-    const result = IntakeCreateSchema.safeParse({ ...valid, verkaufspreis: 0 })
-    expect(result.success).toBe(true)
-  })
+    const result = IntakeCreateSchema.safeParse({ ...valid, verkaufspreis: 0 });
+    expect(result.success).toBe(true);
+  });
 
   it('accepts donation details', () => {
     const result = IntakeCreateSchema.safeParse({
@@ -119,20 +129,20 @@ describe('IntakeCreateSchema', () => {
       is_donation: true,
       donor_name: 'Max Muster',
       donor_email: 'max@example.com',
-    })
-    expect(result.success).toBe(true)
-  })
+    });
+    expect(result.success).toBe(true);
+  });
 
   it('rejects invalid donor_email', () => {
-    const result = IntakeCreateSchema.safeParse({ ...valid, donor_email: 'not-an-email' })
-    expect(result.success).toBe(false)
-  })
+    const result = IntakeCreateSchema.safeParse({ ...valid, donor_email: 'not-an-email' });
+    expect(result.success).toBe(false);
+  });
 
   it('accepts empty string donor_email (optional field)', () => {
-    const result = IntakeCreateSchema.safeParse({ ...valid, donor_email: '' })
-    expect(result.success).toBe(true)
-  })
-})
+    const result = IntakeCreateSchema.safeParse({ ...valid, donor_email: '' });
+    expect(result.success).toBe(true);
+  });
+});
 
 // ============================================================================
 // IntakeUpdateSchema
@@ -140,35 +150,35 @@ describe('IntakeCreateSchema', () => {
 
 describe('IntakeUpdateSchema', () => {
   it('accepts empty update (all optional)', () => {
-    const result = IntakeUpdateSchema.safeParse({})
-    expect(result.success).toBe(true)
-  })
+    const result = IntakeUpdateSchema.safeParse({});
+    expect(result.success).toBe(true);
+  });
 
   it('accepts partial update with one field', () => {
-    const result = IntakeUpdateSchema.safeParse({ zustand: 'neuwertig' })
-    expect(result.success).toBe(true)
-  })
+    const result = IntakeUpdateSchema.safeParse({ zustand: 'neuwertig' });
+    expect(result.success).toBe(true);
+  });
 
   it('rejects empty hersteller if provided', () => {
-    const result = IntakeUpdateSchema.safeParse({ hersteller: '' })
-    expect(result.success).toBe(false)
-  })
+    const result = IntakeUpdateSchema.safeParse({ hersteller: '' });
+    expect(result.success).toBe(false);
+  });
 
   it('accepts valid intake_tier update', () => {
-    const result = IntakeUpdateSchema.safeParse({ intake_tier: INTAKE_TIERS.PARTS })
-    expect(result.success).toBe(true)
-  })
+    const result = IntakeUpdateSchema.safeParse({ intake_tier: INTAKE_TIERS.PARTS });
+    expect(result.success).toBe(true);
+  });
 
   it('rejects invalid intake_tier if provided', () => {
-    const result = IntakeUpdateSchema.safeParse({ intake_tier: 'scrap' })
-    expect(result.success).toBe(false)
-  })
+    const result = IntakeUpdateSchema.safeParse({ intake_tier: 'scrap' });
+    expect(result.success).toBe(false);
+  });
 
   it('rejects negative verkaufspreis if provided', () => {
-    const result = IntakeUpdateSchema.safeParse({ verkaufspreis: -5 })
-    expect(result.success).toBe(false)
-  })
-})
+    const result = IntakeUpdateSchema.safeParse({ verkaufspreis: -5 });
+    expect(result.success).toBe(false);
+  });
+});
 
 // ============================================================================
 // ChecklistUpdateSchema
@@ -179,81 +189,90 @@ describe('ChecklistUpdateSchema', () => {
     const result = ChecklistUpdateSchema.safeParse({
       item_id: 'check-battery',
       result: 'pass',
-    })
-    expect(result.success).toBe(true)
-  })
+    });
+    expect(result.success).toBe(true);
+  });
 
   it("accepts an 'n.a.' verdict", () => {
     const result = ChecklistUpdateSchema.safeParse({
       item_id: 'check-camera',
       result: 'na',
-    })
-    expect(result.success).toBe(true)
-  })
+    });
+    expect(result.success).toBe(true);
+  });
 
   it('accepts result: null (reset to open)', () => {
     const result = ChecklistUpdateSchema.safeParse({
       item_id: 'check-keyboard',
       result: null,
-    })
-    expect(result.success).toBe(true)
-  })
+    });
+    expect(result.success).toBe(true);
+  });
 
   it('accepts a fail verdict WITH notes', () => {
     const result = ChecklistUpdateSchema.safeParse({
       item_id: 'check-battery',
       result: 'fail',
       notes: 'Akku hält nur 20 Minuten',
-    })
-    expect(result.success).toBe(true)
-  })
+    });
+    expect(result.success).toBe(true);
+  });
 
   it('rejects a fail verdict without notes (reason required)', () => {
-    expect(ChecklistUpdateSchema.safeParse({ item_id: 'check-battery', result: 'fail' }).success).toBe(false)
-    expect(ChecklistUpdateSchema.safeParse({ item_id: 'check-battery', result: 'fail', notes: '   ' }).success).toBe(false)
-  })
+    expect(
+      ChecklistUpdateSchema.safeParse({ item_id: 'check-battery', result: 'fail' }).success,
+    ).toBe(false);
+    expect(
+      ChecklistUpdateSchema.safeParse({ item_id: 'check-battery', result: 'fail', notes: '   ' })
+        .success,
+    ).toBe(false);
+  });
 
   it('rejects unknown verdicts', () => {
-    const result = ChecklistUpdateSchema.safeParse({ item_id: 'check-screen', result: 'maybe' })
-    expect(result.success).toBe(false)
-  })
+    const result = ChecklistUpdateSchema.safeParse({ item_id: 'check-screen', result: 'maybe' });
+    expect(result.success).toBe(false);
+  });
 
   it('rejects empty item_id', () => {
-    const result = ChecklistUpdateSchema.safeParse({ item_id: '', result: 'pass' })
-    expect(result.success).toBe(false)
-  })
+    const result = ChecklistUpdateSchema.safeParse({ item_id: '', result: 'pass' });
+    expect(result.success).toBe(false);
+  });
 
   it('rejects missing item_id', () => {
-    const result = ChecklistUpdateSchema.safeParse({ result: 'pass' })
-    expect(result.success).toBe(false)
-  })
+    const result = ChecklistUpdateSchema.safeParse({ result: 'pass' });
+    expect(result.success).toBe(false);
+  });
 
   it('rejects missing result', () => {
-    const result = ChecklistUpdateSchema.safeParse({ item_id: 'check-screen' })
-    expect(result.success).toBe(false)
-  })
+    const result = ChecklistUpdateSchema.safeParse({ item_id: 'check-screen' });
+    expect(result.success).toBe(false);
+  });
 
   it('defaults notes to empty string', () => {
-    const result = ChecklistUpdateSchema.safeParse({ item_id: 'check-screen', result: 'pass' })
-    if (result.success) expect(result.data.notes).toBe('')
-  })
+    const result = ChecklistUpdateSchema.safeParse({ item_id: 'check-screen', result: 'pass' });
+    if (result.success) expect(result.data.notes).toBe('');
+  });
 
   it('requires a reason of at least 10 characters for a second-person override', () => {
-    expect(ChecklistUpdateSchema.safeParse({
-      item_id: 'final_qa',
-      result: 'pass',
-      second_person_override: true,
-      notes: 'zu kurz',
-    }).success).toBe(false)
+    expect(
+      ChecklistUpdateSchema.safeParse({
+        item_id: 'final_qa',
+        result: 'pass',
+        second_person_override: true,
+        notes: 'zu kurz',
+      }).success,
+    ).toBe(false);
 
-    expect(ChecklistUpdateSchema.safeParse({
-      item_id: 'final_qa',
-      result: 'pass',
-      second_person_override: true,
-      notes: 'allein im Dienst',
-    }).success).toBe(true)
-  })
-})
+    expect(
+      ChecklistUpdateSchema.safeParse({
+        item_id: 'final_qa',
+        result: 'pass',
+        second_person_override: true,
+        notes: 'allein im Dienst',
+      }).success,
+    ).toBe(true);
+  });
+});
 
 // ============================================================================
 // IntakePublishSchema
@@ -261,34 +280,34 @@ describe('ChecklistUpdateSchema', () => {
 
 describe('IntakePublishSchema', () => {
   it('accepts valid publish with price', () => {
-    const result = IntakePublishSchema.safeParse({ price_chf: 120 })
-    expect(result.success).toBe(true)
-  })
+    const result = IntakePublishSchema.safeParse({ price_chf: 120 });
+    expect(result.success).toBe(true);
+  });
 
   it('accepts price_chf of 0 (free item)', () => {
-    const result = IntakePublishSchema.safeParse({ price_chf: 0 })
-    expect(result.success).toBe(true)
-  })
+    const result = IntakePublishSchema.safeParse({ price_chf: 0 });
+    expect(result.success).toBe(true);
+  });
 
   it('rejects negative price_chf', () => {
-    const result = IntakePublishSchema.safeParse({ price_chf: -1 })
-    expect(result.success).toBe(false)
-  })
+    const result = IntakePublishSchema.safeParse({ price_chf: -1 });
+    expect(result.success).toBe(false);
+  });
 
   it('rejects missing price_chf', () => {
-    const result = IntakePublishSchema.safeParse({})
-    expect(result.success).toBe(false)
-  })
+    const result = IntakePublishSchema.safeParse({});
+    expect(result.success).toBe(false);
+  });
 
   it('accepts optional title and description', () => {
     const result = IntakePublishSchema.safeParse({
       price_chf: 80,
       title: 'Laptop in gutem Zustand',
       description: 'Inkl. Netzteil.',
-    })
-    expect(result.success).toBe(true)
-  })
-})
+    });
+    expect(result.success).toBe(true);
+  });
+});
 
 // ============================================================================
 // IntakeQuerySchema
@@ -296,22 +315,22 @@ describe('IntakePublishSchema', () => {
 
 describe('IntakeQuerySchema', () => {
   it('accepts empty query (defaults applied)', () => {
-    const result = IntakeQuerySchema.safeParse({})
-    expect(result.success).toBe(true)
-  })
+    const result = IntakeQuerySchema.safeParse({});
+    expect(result.success).toBe(true);
+  });
 
   it('accepts optional tier filter', () => {
-    const result = IntakeQuerySchema.safeParse({ tier: INTAKE_TIERS.RECYCLE })
-    expect(result.success).toBe(true)
-  })
+    const result = IntakeQuerySchema.safeParse({ tier: INTAKE_TIERS.RECYCLE });
+    expect(result.success).toBe(true);
+  });
 
   it('accepts optional status filter', () => {
-    const result = IntakeQuerySchema.safeParse({ status: 'in_progress' })
-    expect(result.success).toBe(true)
-  })
+    const result = IntakeQuerySchema.safeParse({ status: 'in_progress' });
+    expect(result.success).toBe(true);
+  });
 
   it('accepts optional search string', () => {
-    const result = IntakeQuerySchema.safeParse({ search: 'ThinkPad' })
-    expect(result.success).toBe(true)
-  })
-})
+    const result = IntakeQuerySchema.safeParse({ search: 'ThinkPad' });
+    expect(result.success).toBe(true);
+  });
+});

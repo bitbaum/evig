@@ -30,31 +30,36 @@
 
 // Lucide icons are React components — mock them as plain strings to keep tests lightweight
 jest.mock('lucide-react', () => {
-  const icon = (name: string) => ({ displayName: name })
-  return new Proxy({}, { get: (_t, prop) => icon(prop as string) })
-})
+  const icon = (name: string) => ({ displayName: name });
+  return new Proxy({}, { get: (_t, prop) => icon(prop as string) });
+});
 
 const mockFormatPriceCents = jest.fn((cents: number | null) =>
-  cents === null ? 'Auf Anfrage' : `CHF ${(cents / 100).toFixed(2)}`
-)
+  cents === null ? 'Auf Anfrage' : `CHF ${(cents / 100).toFixed(2)}`,
+);
 
 jest.mock('@/config/marketplace', () => ({
-  formatPriceCents: (...args: unknown[]) => mockFormatPriceCents(...args as [number | null]),
-}))
+  formatPriceCents: (...args: unknown[]) => mockFormatPriceCents(...(args as [number | null])),
+}));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { getServicePresentation, getServicePricing, servicePresentation, defaultPresentation } from '../presentation'
+import {
+  getServicePresentation,
+  getServicePricing,
+  servicePresentation,
+  defaultPresentation,
+} from '../presentation';
 
 // ---------------------------------------------------------------------------
 // Setup
 // ---------------------------------------------------------------------------
 
 beforeEach(() => {
-  jest.clearAllMocks()
-})
+  jest.clearAllMocks();
+});
 
 // ============================================================================
 // getServicePresentation
@@ -62,20 +67,20 @@ beforeEach(() => {
 
 describe('getServicePresentation', () => {
   it('returns config for computer-repair-upgrades', () => {
-    const result = getServicePresentation('computer-repair-upgrades')
+    const result = getServicePresentation('computer-repair-upgrades');
 
-    expect(result).not.toBe(defaultPresentation)
-    expect(result.hero.title).toContain('Computerreparatur')
-    expect(result.features.length).toBeGreaterThan(0)
-    expect(result.icon).toBeDefined()
-  })
+    expect(result).not.toBe(defaultPresentation);
+    expect(result.hero.title).toContain('Computerreparatur');
+    expect(result.features.length).toBeGreaterThan(0);
+    expect(result.icon).toBeDefined();
+  });
 
   it('returns config for data-recovery-transfer', () => {
-    const result = getServicePresentation('data-recovery-transfer')
+    const result = getServicePresentation('data-recovery-transfer');
 
-    expect(result).not.toBe(defaultPresentation)
-    expect(result.hero.title).toContain('Datenrettung')
-  })
+    expect(result).not.toBe(defaultPresentation);
+    expect(result.hero.title).toContain('Datenrettung');
+  });
 
   it('falls back to defaultPresentation for bespoke static-page services', () => {
     // hardware-recycling, linux-open-source and web-design-development each
@@ -90,41 +95,41 @@ describe('getServicePresentation', () => {
       'web-design-development',
       'consultation',
     ]) {
-      expect(getServicePresentation(slug)).toBe(defaultPresentation)
+      expect(getServicePresentation(slug)).toBe(defaultPresentation);
     }
-  })
+  });
 
   it('returns config for custom-build', () => {
-    const result = getServicePresentation('custom-build')
+    const result = getServicePresentation('custom-build');
 
-    expect(result).not.toBe(defaultPresentation)
-    expect(result.hero.title).toContain('Massgeschneiderter PC')
-  })
+    expect(result).not.toBe(defaultPresentation);
+    expect(result.hero.title).toContain('Massgeschneiderter PC');
+  });
 
   it('falls back to defaultPresentation for unknown slug', () => {
-    const result = getServicePresentation('this-does-not-exist')
+    const result = getServicePresentation('this-does-not-exist');
 
-    expect(result).toBe(defaultPresentation)
-    expect(result.hero.title).toBe('Service')
-    expect(result.features).toEqual([])
-  })
+    expect(result).toBe(defaultPresentation);
+    expect(result.hero.title).toBe('Service');
+    expect(result.features).toEqual([]);
+  });
 
   it('defaultPresentation has icon, hero, and empty features', () => {
-    expect(defaultPresentation.icon).toBeDefined()
-    expect(defaultPresentation.hero.title).toBeDefined()
-    expect(defaultPresentation.hero.subtitle).toBeDefined()
-    expect(Array.isArray(defaultPresentation.features)).toBe(true)
-  })
+    expect(defaultPresentation.icon).toBeDefined();
+    expect(defaultPresentation.hero.title).toBeDefined();
+    expect(defaultPresentation.hero.subtitle).toBeDefined();
+    expect(Array.isArray(defaultPresentation.features)).toBe(true);
+  });
 
   it('all known service slugs have icon, hero, and features', () => {
     for (const [slug, config] of Object.entries(servicePresentation)) {
-      expect(config.icon).toBeDefined()
-      expect(config.hero.title).toBeTruthy()
-      expect(Array.isArray(config.features)).toBe(true)
-      expect(config.features.length).toBeGreaterThan(0)
+      expect(config.icon).toBeDefined();
+      expect(config.hero.title).toBeTruthy();
+      expect(Array.isArray(config.features)).toBe(true);
+      expect(config.features.length).toBeGreaterThan(0);
     }
-  })
-})
+  });
+});
 
 // ============================================================================
 // getServicePricing
@@ -132,56 +137,56 @@ describe('getServicePresentation', () => {
 
 describe('getServicePricing', () => {
   it('returns pricingOverride.base when the service has one (does not call formatPriceCents)', () => {
-    const result = getServicePricing('computer-repair-upgrades', 7000)
+    const result = getServicePricing('computer-repair-upgrades', 7000);
 
-    expect(result.base).toBe('CHF 70/Stunde + Teile')
-    expect(mockFormatPriceCents).not.toHaveBeenCalled()
-  })
+    expect(result.base).toBe('CHF 70/Stunde + Teile');
+    expect(mockFormatPriceCents).not.toHaveBeenCalled();
+  });
 
   it('pricingOverride details are non-empty for computer-repair-upgrades', () => {
-    const result = getServicePricing('computer-repair-upgrades', null)
+    const result = getServicePricing('computer-repair-upgrades', null);
 
-    expect(result.details.length).toBeGreaterThan(0)
-  })
+    expect(result.details.length).toBeGreaterThan(0);
+  });
 
   it('falls back to formatPriceCents when no pricingOverride', () => {
     // 'consultation' has no pricingOverride
-    mockFormatPriceCents.mockReturnValueOnce('CHF 70.00')
+    mockFormatPriceCents.mockReturnValueOnce('CHF 70.00');
 
-    const result = getServicePricing('consultation', 7000)
+    const result = getServicePricing('consultation', 7000);
 
-    expect(mockFormatPriceCents).toHaveBeenCalledWith(7000)
-    expect(result.base).toBe('CHF 70.00')
-    expect(result.details).toEqual([])
-  })
+    expect(mockFormatPriceCents).toHaveBeenCalledWith(7000);
+    expect(result.base).toBe('CHF 70.00');
+    expect(result.details).toEqual([]);
+  });
 
   it('passes null priceCents to formatPriceCents for free/on-request services', () => {
-    mockFormatPriceCents.mockReturnValueOnce('Auf Anfrage')
+    mockFormatPriceCents.mockReturnValueOnce('Auf Anfrage');
 
-    const result = getServicePricing('consultation', null)
+    const result = getServicePricing('consultation', null);
 
-    expect(mockFormatPriceCents).toHaveBeenCalledWith(null)
-    expect(result.base).toBe('Auf Anfrage')
-  })
+    expect(mockFormatPriceCents).toHaveBeenCalledWith(null);
+    expect(result.base).toBe('Auf Anfrage');
+  });
 
   it('unknown slug falls through to formatPriceCents (no override)', () => {
-    mockFormatPriceCents.mockReturnValueOnce('CHF 50.00')
+    mockFormatPriceCents.mockReturnValueOnce('CHF 50.00');
 
-    const result = getServicePricing('unknown-service', 5000)
+    const result = getServicePricing('unknown-service', 5000);
 
-    expect(mockFormatPriceCents).toHaveBeenCalledWith(5000)
-    expect(result.base).toBe('CHF 50.00')
-  })
+    expect(mockFormatPriceCents).toHaveBeenCalledWith(5000);
+    expect(result.base).toBe('CHF 50.00');
+  });
 
   it('bespoke service (hardware-recycling) has no override → falls through to formatPriceCents', () => {
     // hardware-recycling renders via its own static page; its presentation
     // (and pricingOverride) was removed in the dedupe refactor, so pricing
     // now falls through to the DB-derived value via formatPriceCents.
-    mockFormatPriceCents.mockReturnValueOnce('Auf Anfrage')
+    mockFormatPriceCents.mockReturnValueOnce('Auf Anfrage');
 
-    const result = getServicePricing('hardware-recycling', null)
+    const result = getServicePricing('hardware-recycling', null);
 
-    expect(mockFormatPriceCents).toHaveBeenCalledWith(null)
-    expect(result.base).toBe('Auf Anfrage')
-  })
-})
+    expect(mockFormatPriceCents).toHaveBeenCalledWith(null);
+    expect(result.base).toBe('Auf Anfrage');
+  });
+});

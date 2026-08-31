@@ -4,8 +4,8 @@ describe('Marketplace Page - Basic Structure', () => {
     // complex mocking of Next.js components and auth that would be better
     // tested with E2E tests using Playwright
 
-    expect(true).toBe(true)
-  })
+    expect(true).toBe(true);
+  });
 
   it('should validate marketplace concept', () => {
     // Test that our marketplace concept includes:
@@ -19,13 +19,13 @@ describe('Marketplace Page - Basic Structure', () => {
       'community_products',
       'product_filtering',
       'search_functionality',
-      'role_based_access'
-    ]
+      'role_based_access',
+    ];
 
-    expect(marketplaceFeatures).toContain('official_products')
-    expect(marketplaceFeatures).toContain('community_products')
-    expect(marketplaceFeatures).toContain('product_filtering')
-    expect(marketplaceFeatures).toContain('search_functionality')
-    expect(marketplaceFeatures).toContain('role_based_access')
-  })
-})
+    expect(marketplaceFeatures).toContain('official_products');
+    expect(marketplaceFeatures).toContain('community_products');
+    expect(marketplaceFeatures).toContain('product_filtering');
+    expect(marketplaceFeatures).toContain('search_functionality');
+    expect(marketplaceFeatures).toContain('role_based_access');
+  });
+});

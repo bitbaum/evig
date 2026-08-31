@@ -1,10 +1,28 @@
 export function WorkflowSection() {
   const steps = [
-    { step: '1', title: 'Verbesserung entdecken', description: 'Nutzer klickt auf das Feedback-Symbol auf einer beliebigen Seite.' },
-    { step: '2', title: 'Vorschlag einreichen', description: 'Kurze Beschreibung, Typ (Fehler, Inhalt, Idee) und Screenshot werden automatisch erfasst.' },
-    { step: '3', title: 'Prüfung durch Redaktion', description: 'Das Team bewertet Vorschläge im Admin-Bereich und entscheidet über Umsetzung.' },
-    { step: '4', title: 'Umsetzung & Bestätigung', description: 'Umgesetzte Vorschläge werden als erledigt markiert — der Einreichende erhält eine Benachrichtigung.' },
-  ]
+    {
+      step: '1',
+      title: 'Verbesserung entdecken',
+      description: 'Nutzer klickt auf das Feedback-Symbol auf einer beliebigen Seite.',
+    },
+    {
+      step: '2',
+      title: 'Vorschlag einreichen',
+      description:
+        'Kurze Beschreibung, Typ (Fehler, Inhalt, Idee) und Screenshot werden automatisch erfasst.',
+    },
+    {
+      step: '3',
+      title: 'Prüfung durch Redaktion',
+      description: 'Das Team bewertet Vorschläge im Admin-Bereich und entscheidet über Umsetzung.',
+    },
+    {
+      step: '4',
+      title: 'Umsetzung & Bestätigung',
+      description:
+        'Umgesetzte Vorschläge werden als erledigt markiert — der Einreichende erhält eine Benachrichtigung.',
+    },
+  ];
 
   return (
     <section id="workflow" className="py-16 px-4 bg-surface-raised">
@@ -30,5 +48,5 @@ export function WorkflowSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

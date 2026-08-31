@@ -24,57 +24,57 @@
  * than literal keys. Acceptable interim state, not silent failure.
  */
 
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs'
-import { join, dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
-const ROOT = join(__dirname, '..')
-const MESSAGES_DIR = join(ROOT, 'messages')
-const OUT_DIR = join(MESSAGES_DIR, '_missing')
-const LOCALES = ['en', 'fr', 'es', 'it', 'ja', 'ko', 'ru']
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const ROOT = join(__dirname, '..');
+const MESSAGES_DIR = join(ROOT, 'messages');
+const OUT_DIR = join(MESSAGES_DIR, '_missing');
+const LOCALES = ['en', 'fr', 'es', 'it', 'ja', 'ko', 'ru'];
 
 function flatten(obj, prefix = '') {
-  const out = {}
+  const out = {};
   for (const [k, v] of Object.entries(obj)) {
-    const path = prefix ? `${prefix}.${k}` : k
+    const path = prefix ? `${prefix}.${k}` : k;
     if (v && typeof v === 'object' && !Array.isArray(v)) {
-      Object.assign(out, flatten(v, path))
+      Object.assign(out, flatten(v, path));
     } else {
-      out[path] = v
+      out[path] = v;
     }
   }
-  return out
+  return out;
 }
 
-const de = flatten(JSON.parse(readFileSync(join(MESSAGES_DIR, 'de.json'), 'utf8')))
-const deKeys = new Set(Object.keys(de))
+const de = flatten(JSON.parse(readFileSync(join(MESSAGES_DIR, 'de.json'), 'utf8')));
+const deKeys = new Set(Object.keys(de));
 
-if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true })
+if (!existsSync(OUT_DIR)) mkdirSync(OUT_DIR, { recursive: true });
 
-let totalMissing = 0
-const summary = []
+let totalMissing = 0;
+const summary = [];
 
 for (const loc of LOCALES) {
-  const path = join(MESSAGES_DIR, `${loc}.json`)
-  const data = flatten(JSON.parse(readFileSync(path, 'utf8')))
-  const localeKeys = new Set(Object.keys(data))
+  const path = join(MESSAGES_DIR, `${loc}.json`);
+  const data = flatten(JSON.parse(readFileSync(path, 'utf8')));
+  const localeKeys = new Set(Object.keys(data));
 
-  const missing = {}
+  const missing = {};
   for (const k of deKeys) {
     if (!localeKeys.has(k) || data[k] === '' || data[k] === null) {
-      missing[k] = { de: de[k], translation: null }
+      missing[k] = { de: de[k], translation: null };
     }
   }
 
-  const count = Object.keys(missing).length
-  totalMissing += count
-  summary.push({ locale: loc, missing: count })
+  const count = Object.keys(missing).length;
+  totalMissing += count;
+  summary.push({ locale: loc, missing: count });
 
-  const outPath = join(OUT_DIR, `${loc}.json`)
-  writeFileSync(outPath, JSON.stringify(missing, null, 2), 'utf8')
-  console.log(`  ${loc}: ${count} missing → ${outPath.replace(ROOT + '/', '')}`)
+  const outPath = join(OUT_DIR, `${loc}.json`);
+  writeFileSync(outPath, JSON.stringify(missing, null, 2), 'utf8');
+  console.log(`  ${loc}: ${count} missing → ${outPath.replace(ROOT + '/', '')}`);
 }
 
-console.log(`\nTotal missing across ${LOCALES.length} locales: ${totalMissing}`)
-console.log(`\nNext: send messages/_missing/<locale>.json files to a translator.`)
+console.log(`\nTotal missing across ${LOCALES.length} locales: ${totalMissing}`);
+console.log(`\nNext: send messages/_missing/<locale>.json files to a translator.`);

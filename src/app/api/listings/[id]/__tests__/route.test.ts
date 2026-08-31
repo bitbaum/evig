@@ -25,35 +25,34 @@
 // Auth mock
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn()
+const mockAuth = jest.fn();
 
 jest.mock('@/auth', () => ({
   auth: (...args: unknown[]) => mockAuth.apply(null, args),
-}))
+}));
 
 jest.mock('@/lib/api/middleware', () => ({
-  withAuth: (handler: unknown) =>
-    (req: Request, context?: { params?: Promise<{ id: string }> }) =>
-      mockAuth().then(async (session: unknown) => {
-        if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server')
-          return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
-        }
-        const resolvedContext = context?.params ? { params: await context.params } : undefined
-        return (handler as (...a: unknown[]) => unknown)(req, session, resolvedContext)
-      }),
-}))
+  withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<{ id: string }> }) =>
+    mockAuth().then(async (session: unknown) => {
+      if (!session || !(session as { user?: { id?: string } }).user?.id) {
+        const { NextResponse } = jest.requireActual('next/server');
+        return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+      }
+      const resolvedContext = context?.params ? { params: await context.params } : undefined;
+      return (handler as (...a: unknown[]) => unknown)(req, session, resolvedContext);
+    }),
+}));
 
 // ---------------------------------------------------------------------------
 // Schema + validation mocks
 // ---------------------------------------------------------------------------
 
-const mockValidateBody = jest.fn()
+const mockValidateBody = jest.fn();
 
 jest.mock('@/lib/schemas', () => ({
   validateBody: (...args: unknown[]) => mockValidateBody.apply(null, args),
   UpdateListingSchema: {},
-}))
+}));
 
 // ---------------------------------------------------------------------------
 // Config mocks
@@ -62,14 +61,14 @@ jest.mock('@/lib/schemas', () => ({
 jest.mock('@/config/marketplace', () => ({
   LISTING_STATUS: { ACTIVE: 'active', REMOVED: 'removed', DRAFT: 'draft', SOLD: 'sold' },
   normalizeSpecValue: jest.fn().mockReturnValue(null),
-}))
+}));
 
 // ---------------------------------------------------------------------------
 // Helper mocks
 // ---------------------------------------------------------------------------
 
 jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server')
+  const { NextResponse } = jest.requireActual('next/server');
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -81,8 +80,8 @@ jest.mock('@/lib/api/helpers', () => {
       NextResponse.json({ success: false, error: msg }, { status: 400 }),
     apiForbidden: (msg: string) =>
       NextResponse.json({ success: false, error: msg }, { status: 403 }),
-  }
-})
+  };
+});
 
 // ---------------------------------------------------------------------------
 // Logger mock
@@ -90,17 +89,17 @@ jest.mock('@/lib/api/helpers', () => {
 
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
-}))
+}));
 
 // ---------------------------------------------------------------------------
 // Permissions mock
 // ---------------------------------------------------------------------------
 
-const mockIsStaffEmail = jest.fn().mockReturnValue(false)
+const mockIsStaffEmail = jest.fn().mockReturnValue(false);
 
 jest.mock('@/lib/permissions', () => ({
   isStaffEmail: (...args: unknown[]) => mockIsStaffEmail(...args),
-}))
+}));
 
 // ---------------------------------------------------------------------------
 // Search mocks
@@ -109,12 +108,12 @@ jest.mock('@/lib/permissions', () => ({
 jest.mock('@/lib/search/meilisearch', () => ({
   indexListing: jest.fn().mockResolvedValue(undefined),
   removeListing: jest.fn().mockResolvedValue(undefined),
-}))
+}));
 
 jest.mock('@/lib/marketplace/listing-helpers', () => ({
   listingThumbnailSubquery: { __sql: 'thumbnail_subquery' },
   buildMeiliSpecs: jest.fn().mockReturnValue({}),
-}))
+}));
 
 // ---------------------------------------------------------------------------
 // drizzle-orm mock
@@ -126,12 +125,11 @@ jest.mock('drizzle-orm', () => ({
   ne: (a: unknown, b: unknown) => ({ __ne: [a, b] }),
   asc: (a: unknown) => ({ __asc: a }),
   desc: (a: unknown) => ({ __desc: a }),
-  sql: Object.assign(
-    (_s: TemplateStringsArray, ..._v: unknown[]) => ({ __sql: true }),
-    { raw: (s: string) => ({ __raw: s }) }
-  ),
+  sql: Object.assign((_s: TemplateStringsArray, ..._v: unknown[]) => ({ __sql: true }), {
+    raw: (s: string) => ({ __raw: s }),
+  }),
   inArray: (a: unknown, b: unknown) => ({ __inArray: [a, b] }),
-}))
+}));
 
 // ---------------------------------------------------------------------------
 // DB Schema mock
@@ -139,70 +137,120 @@ jest.mock('drizzle-orm', () => ({
 
 jest.mock('@/db/schema', () => ({
   listings: {
-    id: 'l_id', sellerId: 'l_sellerId', title: 'l_title', status: 'l_status',
-    priceChf: 'l_priceChf', category: 'l_category', condition: 'l_condition',
-    isRevampit: 'l_isRevampit', viewCount: 'l_viewCount', favoriteCount: 'l_favoriteCount',
-    createdAt: 'l_createdAt', updatedAt: 'l_updatedAt', deliveryOptions: 'l_deliveryOptions',
-    paymentMode: 'l_paymentMode', pickupLocation: 'l_pickupLocation', brand: 'l_brand',
-    model: 'l_model', description: 'l_description', shippingCostChf: 'l_shippingCostChf',
-    conditionChecks: 'l_conditionChecks', verifiedAt: 'l_verifiedAt', verifiedBy: 'l_verifiedBy',
+    id: 'l_id',
+    sellerId: 'l_sellerId',
+    title: 'l_title',
+    status: 'l_status',
+    priceChf: 'l_priceChf',
+    category: 'l_category',
+    condition: 'l_condition',
+    isRevampit: 'l_isRevampit',
+    viewCount: 'l_viewCount',
+    favoriteCount: 'l_favoriteCount',
+    createdAt: 'l_createdAt',
+    updatedAt: 'l_updatedAt',
+    deliveryOptions: 'l_deliveryOptions',
+    paymentMode: 'l_paymentMode',
+    pickupLocation: 'l_pickupLocation',
+    brand: 'l_brand',
+    model: 'l_model',
+    description: 'l_description',
+    shippingCostChf: 'l_shippingCostChf',
+    conditionChecks: 'l_conditionChecks',
+    verifiedAt: 'l_verifiedAt',
+    verifiedBy: 'l_verifiedBy',
     verificationNotes: 'l_verificationNotes',
   },
   listingImages: {
-    id: 'li_id', listingId: 'li_listingId', url: 'li_url',
-    position: 'li_position', isPrimary: 'li_isPrimary',
+    id: 'li_id',
+    listingId: 'li_listingId',
+    url: 'li_url',
+    position: 'li_position',
+    isPrimary: 'li_isPrimary',
   },
   listingSpecs: {
-    id: 'ls_id', listingId: 'ls_listingId', specKey: 'ls_specKey',
-    specValue: 'ls_specValue', specUnit: 'ls_specUnit', normalizedValue: 'ls_normalizedValue',
+    id: 'ls_id',
+    listingId: 'ls_listingId',
+    specKey: 'ls_specKey',
+    specValue: 'ls_specValue',
+    specUnit: 'ls_specUnit',
+    normalizedValue: 'ls_normalizedValue',
   },
   listingFavorites: {
-    id: 'lf_id', userId: 'lf_userId', listingId: 'lf_listingId', createdAt: 'lf_createdAt',
+    id: 'lf_id',
+    userId: 'lf_userId',
+    listingId: 'lf_listingId',
+    createdAt: 'lf_createdAt',
   },
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
-  userProfiles: { userId: 'up_userId', displayName: 'up_displayName', bio: 'up_bio', avatarUrl: 'up_avatarUrl', isVerified: 'up_isVerified' },
-  sellerProfiles: {
-    id: 'sp_id', userId: 'sp_userId', displayName: 'sp_displayName', city: 'sp_city',
-    averageRating: 'sp_averageRating', bio: 'sp_bio', avatarUrl: 'sp_avatarUrl',
-    canton: 'sp_canton', totalSold: 'sp_totalSold', totalReviews: 'sp_totalReviews',
+  userProfiles: {
+    userId: 'up_userId',
+    displayName: 'up_displayName',
+    bio: 'up_bio',
+    avatarUrl: 'up_avatarUrl',
+    isVerified: 'up_isVerified',
   },
-}))
+  sellerProfiles: {
+    id: 'sp_id',
+    userId: 'sp_userId',
+    displayName: 'sp_displayName',
+    city: 'sp_city',
+    averageRating: 'sp_averageRating',
+    bio: 'sp_bio',
+    avatarUrl: 'sp_avatarUrl',
+    canton: 'sp_canton',
+    totalSold: 'sp_totalSold',
+    totalReviews: 'sp_totalReviews',
+  },
+}));
 
 // ---------------------------------------------------------------------------
 // Drizzle chain mocks
 // ---------------------------------------------------------------------------
 
-const mockSelect = jest.fn()
-const mockFrom = jest.fn()
-const mockInnerJoin = jest.fn()
-const mockLeftJoin = jest.fn()
-const mockWhere = jest.fn()
-const mockOrderBy = jest.fn()
-const mockUpdate = jest.fn()
-const mockSet = jest.fn()
-const mockUpdateWhere = jest.fn()
-const mockInsert = jest.fn()
-const mockValues = jest.fn()
-const mockDelete = jest.fn()
-const mockDeleteWhere = jest.fn()
-const mockTransactionFn = jest.fn()
+const mockSelect = jest.fn();
+const mockFrom = jest.fn();
+const mockInnerJoin = jest.fn();
+const mockLeftJoin = jest.fn();
+const mockWhere = jest.fn();
+const mockOrderBy = jest.fn();
+const mockUpdate = jest.fn();
+const mockSet = jest.fn();
+const mockUpdateWhere = jest.fn();
+const mockInsert = jest.fn();
+const mockValues = jest.fn();
+const mockDelete = jest.fn();
+const mockDeleteWhere = jest.fn();
+const mockTransactionFn = jest.fn();
 
 jest.mock('@/db', () => ({
   db: {
-    select: (...args: unknown[]) => { mockSelect(...args); return { from: mockFrom } },
-    update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
-    insert: (...args: unknown[]) => { mockInsert(...args); return { values: mockValues } },
-    delete: (...args: unknown[]) => { mockDelete(...args); return { where: mockDeleteWhere } },
+    select: (...args: unknown[]) => {
+      mockSelect(...args);
+      return { from: mockFrom };
+    },
+    update: (...args: unknown[]) => {
+      mockUpdate(...args);
+      return { set: mockSet };
+    },
+    insert: (...args: unknown[]) => {
+      mockInsert(...args);
+      return { values: mockValues };
+    },
+    delete: (...args: unknown[]) => {
+      mockDelete(...args);
+      return { where: mockDeleteWhere };
+    },
     transaction: (...args: unknown[]) => mockTransactionFn(...args),
   },
-}))
+}));
 
 // ---------------------------------------------------------------------------
 // Imports (after all mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server'
-import { GET, PATCH, DELETE } from '../route'
+import { NextRequest } from 'next/server';
+import { GET, PATCH, DELETE } from '../route';
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -218,7 +266,7 @@ const MOCK_SESSION = {
     isSuperAdmin: false,
   },
   expires: '2027-01-01',
-}
+};
 
 const MOCK_STAFF_SESSION = {
   user: {
@@ -230,7 +278,7 @@ const MOCK_STAFF_SESSION = {
     isSuperAdmin: true,
   },
   expires: '2027-01-01',
-}
+};
 
 const MOCK_LISTING = {
   id: 'listing-1',
@@ -265,14 +313,14 @@ const MOCK_LISTING = {
   seller_rating: null,
   seller_total_sold: 0,
   seller_total_reviews: 0,
-}
+};
 
 function makeGetRequest(id = 'listing-1') {
-  return new NextRequest(`http://localhost/api/listings/${id}`)
+  return new NextRequest(`http://localhost/api/listings/${id}`);
 }
 
 function makeContext(id = 'listing-1') {
-  return { params: Promise.resolve({ id }) }
+  return { params: Promise.resolve({ id }) };
 }
 
 function makePatchRequest(id = 'listing-1', body: Record<string, unknown> = { title: 'Updated' }) {
@@ -280,11 +328,11 @@ function makePatchRequest(id = 'listing-1', body: Record<string, unknown> = { ti
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
-  })
+  });
 }
 
 function makeDeleteRequest(id = 'listing-1') {
-  return new NextRequest(`http://localhost/api/listings/${id}`, { method: 'DELETE' })
+  return new NextRequest(`http://localhost/api/listings/${id}`, { method: 'DELETE' });
 }
 
 // ---------------------------------------------------------------------------
@@ -292,30 +340,30 @@ function makeDeleteRequest(id = 'listing-1') {
 // ---------------------------------------------------------------------------
 
 beforeEach(() => {
-  jest.resetAllMocks()
-  mockAuth.mockResolvedValue(null) // default: no session (GET is public)
-  mockIsStaffEmail.mockReturnValue(false)
+  jest.resetAllMocks();
+  mockAuth.mockResolvedValue(null); // default: no session (GET is public)
+  mockIsStaffEmail.mockReturnValue(false);
 
   // Default validation: success
   mockValidateBody.mockReturnValue({
     success: true,
     data: { title: 'Updated Title', images: [], specs: [] },
-  })
+  });
 
   // Set up update chain
-  mockSet.mockReturnValue({ where: mockUpdateWhere })
-  mockUpdateWhere.mockResolvedValue(undefined)
+  mockSet.mockReturnValue({ where: mockUpdateWhere });
+  mockUpdateWhere.mockResolvedValue(undefined);
 
   // Set up insert chain
-  mockValues.mockReturnValue({ returning: jest.fn().mockResolvedValue([{ id: 'listing-1' }]) })
+  mockValues.mockReturnValue({ returning: jest.fn().mockResolvedValue([{ id: 'listing-1' }]) });
 
   // Set up delete chain
-  mockDeleteWhere.mockResolvedValue(undefined)
+  mockDeleteWhere.mockResolvedValue(undefined);
 
   // Re-wire fire-and-forget search mocks after resetAllMocks()
-  const { removeListing, indexListing } = require('@/lib/search/meilisearch')
-  removeListing.mockResolvedValue(undefined)
-  indexListing.mockResolvedValue(undefined)
+  const { removeListing, indexListing } = require('@/lib/search/meilisearch');
+  removeListing.mockResolvedValue(undefined);
+  indexListing.mockResolvedValue(undefined);
 
   // Default transaction: success
   mockTransactionFn.mockImplementation(async (callback: (tx: unknown) => unknown) => {
@@ -329,10 +377,10 @@ beforeEach(() => {
         set: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue(undefined) }),
       }),
       delete: jest.fn().mockReturnValue({ where: jest.fn().mockResolvedValue(undefined) }),
-    }
-    return callback(tx)
-  })
-})
+    };
+    return callback(tx);
+  });
+});
 
 // ============================================================================
 // GET /api/listings/[id]
@@ -342,130 +390,144 @@ describe('GET /api/listings/[id] — not found', () => {
   it('returns 404 when listing not found', async () => {
     // First batch: listing query (where terminal) + auth() in parallel
     // listing query: from → innerJoin → leftJoin → where → resolves to []
-    const mockListingWhere = jest.fn().mockResolvedValue([])
-    const mockListingLeftJoin: jest.Mock = jest.fn(() => ({ leftJoin: mockListingLeftJoin, where: mockListingWhere }))
-    const mockListingInnerJoin = jest.fn().mockReturnValue({ leftJoin: mockListingLeftJoin, where: mockListingWhere })
-    mockFrom.mockReturnValueOnce({ innerJoin: mockListingInnerJoin, where: mockListingWhere })
+    const mockListingWhere = jest.fn().mockResolvedValue([]);
+    const mockListingLeftJoin: jest.Mock = jest.fn(() => ({
+      leftJoin: mockListingLeftJoin,
+      where: mockListingWhere,
+    }));
+    const mockListingInnerJoin = jest
+      .fn()
+      .mockReturnValue({ leftJoin: mockListingLeftJoin, where: mockListingWhere });
+    mockFrom.mockReturnValueOnce({ innerJoin: mockListingInnerJoin, where: mockListingWhere });
 
     // update (fire-and-forget) uses mockUpdateWhere
-    mockSet.mockReturnValue({ where: mockUpdateWhere })
-    mockUpdateWhere.mockResolvedValue(undefined)
+    mockSet.mockReturnValue({ where: mockUpdateWhere });
+    mockUpdateWhere.mockResolvedValue(undefined);
 
-    const response = await GET(makeGetRequest(), makeContext())
-    expect(response.status).toBe(404)
-    const body = await response.json()
-    expect(body.success).toBe(false)
-  })
-})
+    const response = await GET(makeGetRequest(), makeContext());
+    expect(response.status).toBe(404);
+    const body = await response.json();
+    expect(body.success).toBe(false);
+  });
+});
 
 describe('GET /api/listings/[id] — success (no session)', () => {
   beforeEach(() => {
     // No session → auth() returns null
-    mockAuth.mockResolvedValue(null)
+    mockAuth.mockResolvedValue(null);
 
     // Update chain (fire-and-forget view count increment)
-    mockSet.mockReturnValue({ where: mockUpdateWhere })
-    mockUpdateWhere.mockResolvedValue(undefined)
-  })
+    mockSet.mockReturnValue({ where: mockUpdateWhere });
+    mockUpdateWhere.mockResolvedValue(undefined);
+  });
 
   it('returns 200 with full listing data and is_favorited: false', async () => {
     // 1st select: listing query — terminal: where
-    const mockListingWhere = jest.fn().mockResolvedValue([MOCK_LISTING])
-    const mockListingLeftJoin: jest.Mock = jest.fn(() => ({ leftJoin: mockListingLeftJoin, where: mockListingWhere }))
+    const mockListingWhere = jest.fn().mockResolvedValue([MOCK_LISTING]);
+    const mockListingLeftJoin: jest.Mock = jest.fn(() => ({
+      leftJoin: mockListingLeftJoin,
+      where: mockListingWhere,
+    }));
     const mockListingInnerJoin = jest.fn().mockReturnValue({
       leftJoin: mockListingLeftJoin,
       where: mockListingWhere,
-    })
+    });
     // 2nd select: images — terminal: orderBy
-    const mockImagesOrderBy = jest.fn().mockResolvedValue([])
-    const mockImagesWhere = jest.fn().mockReturnValue({ orderBy: mockImagesOrderBy })
+    const mockImagesOrderBy = jest.fn().mockResolvedValue([]);
+    const mockImagesWhere = jest.fn().mockReturnValue({ orderBy: mockImagesOrderBy });
     // 3rd select: specs — terminal: orderBy
-    const mockSpecsOrderBy = jest.fn().mockResolvedValue([])
-    const mockSpecsWhere = jest.fn().mockReturnValue({ orderBy: mockSpecsOrderBy })
+    const mockSpecsOrderBy = jest.fn().mockResolvedValue([]);
+    const mockSpecsWhere = jest.fn().mockReturnValue({ orderBy: mockSpecsOrderBy });
     // No 4th select for favorites (no session → Promise.resolve([]))
 
     mockFrom
       .mockReturnValueOnce({ innerJoin: mockListingInnerJoin, where: mockListingWhere }) // listing
-      .mockReturnValueOnce({ where: mockImagesWhere })  // images
-      .mockReturnValueOnce({ where: mockSpecsWhere })   // specs
+      .mockReturnValueOnce({ where: mockImagesWhere }) // images
+      .mockReturnValueOnce({ where: mockSpecsWhere }); // specs
 
-    const response = await GET(makeGetRequest(), makeContext())
-    expect(response.status).toBe(200)
-    const body = await response.json()
-    expect(body.success).toBe(true)
-    expect(body.data.id).toBe('listing-1')
-    expect(body.data.images).toEqual([])
-    expect(body.data.specs).toEqual([])
-    expect(body.data.is_favorited).toBe(false)
-  })
-})
+    const response = await GET(makeGetRequest(), makeContext());
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.success).toBe(true);
+    expect(body.data.id).toBe('listing-1');
+    expect(body.data.images).toEqual([]);
+    expect(body.data.specs).toEqual([]);
+    expect(body.data.is_favorited).toBe(false);
+  });
+});
 
 describe('GET /api/listings/[id] — success (with session)', () => {
   it('returns is_favorited: true when session and favorite row exists', async () => {
-    mockAuth.mockResolvedValue(MOCK_SESSION)
+    mockAuth.mockResolvedValue(MOCK_SESSION);
 
     // Update chain (fire-and-forget)
-    mockSet.mockReturnValue({ where: mockUpdateWhere })
-    mockUpdateWhere.mockResolvedValue(undefined)
+    mockSet.mockReturnValue({ where: mockUpdateWhere });
+    mockUpdateWhere.mockResolvedValue(undefined);
 
     // 1st select: listing
-    const mockListingWhere = jest.fn().mockResolvedValue([MOCK_LISTING])
-    const mockListingLeftJoin: jest.Mock = jest.fn(() => ({ leftJoin: mockListingLeftJoin, where: mockListingWhere }))
+    const mockListingWhere = jest.fn().mockResolvedValue([MOCK_LISTING]);
+    const mockListingLeftJoin: jest.Mock = jest.fn(() => ({
+      leftJoin: mockListingLeftJoin,
+      where: mockListingWhere,
+    }));
     const mockListingInnerJoin = jest.fn().mockReturnValue({
       leftJoin: mockListingLeftJoin,
       where: mockListingWhere,
-    })
+    });
     // 2nd select: images
-    const mockImagesOrderBy = jest.fn().mockResolvedValue([])
-    const mockImagesWhere = jest.fn().mockReturnValue({ orderBy: mockImagesOrderBy })
+    const mockImagesOrderBy = jest.fn().mockResolvedValue([]);
+    const mockImagesWhere = jest.fn().mockReturnValue({ orderBy: mockImagesOrderBy });
     // 3rd select: specs
-    const mockSpecsOrderBy = jest.fn().mockResolvedValue([])
-    const mockSpecsWhere = jest.fn().mockReturnValue({ orderBy: mockSpecsOrderBy })
+    const mockSpecsOrderBy = jest.fn().mockResolvedValue([]);
+    const mockSpecsWhere = jest.fn().mockReturnValue({ orderBy: mockSpecsOrderBy });
     // 4th select: favorites — terminal: where → returns a row (favorited)
-    const mockFavWhere = jest.fn().mockResolvedValue([{ id: 'fav-1' }])
-    const mockFavFrom = jest.fn().mockReturnValue({ where: mockFavWhere })
+    const mockFavWhere = jest.fn().mockResolvedValue([{ id: 'fav-1' }]);
+    const mockFavFrom = jest.fn().mockReturnValue({ where: mockFavWhere });
 
     mockFrom
       .mockReturnValueOnce({ innerJoin: mockListingInnerJoin, where: mockListingWhere })
       .mockReturnValueOnce({ where: mockImagesWhere })
       .mockReturnValueOnce({ where: mockSpecsWhere })
-      .mockReturnValueOnce({ where: mockFavWhere })
+      .mockReturnValueOnce({ where: mockFavWhere });
 
-    const response = await GET(makeGetRequest(), makeContext())
-    expect(response.status).toBe(200)
-    const body = await response.json()
-    expect(body.data.is_favorited).toBe(true)
-  })
+    const response = await GET(makeGetRequest(), makeContext());
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.data.is_favorited).toBe(true);
+  });
 
   it('returns is_favorited: false when session but no favorite row', async () => {
-    mockAuth.mockResolvedValue(MOCK_SESSION)
+    mockAuth.mockResolvedValue(MOCK_SESSION);
 
-    mockSet.mockReturnValue({ where: mockUpdateWhere })
-    mockUpdateWhere.mockResolvedValue(undefined)
+    mockSet.mockReturnValue({ where: mockUpdateWhere });
+    mockUpdateWhere.mockResolvedValue(undefined);
 
-    const mockListingWhere = jest.fn().mockResolvedValue([MOCK_LISTING])
-    const mockListingLeftJoin: jest.Mock = jest.fn(() => ({ leftJoin: mockListingLeftJoin, where: mockListingWhere }))
+    const mockListingWhere = jest.fn().mockResolvedValue([MOCK_LISTING]);
+    const mockListingLeftJoin: jest.Mock = jest.fn(() => ({
+      leftJoin: mockListingLeftJoin,
+      where: mockListingWhere,
+    }));
     const mockListingInnerJoin = jest.fn().mockReturnValue({
       leftJoin: mockListingLeftJoin,
       where: mockListingWhere,
-    })
-    const mockImagesOrderBy = jest.fn().mockResolvedValue([])
-    const mockImagesWhere = jest.fn().mockReturnValue({ orderBy: mockImagesOrderBy })
-    const mockSpecsOrderBy = jest.fn().mockResolvedValue([])
-    const mockSpecsWhere = jest.fn().mockReturnValue({ orderBy: mockSpecsOrderBy })
-    const mockFavWhere = jest.fn().mockResolvedValue([]) // not favorited
+    });
+    const mockImagesOrderBy = jest.fn().mockResolvedValue([]);
+    const mockImagesWhere = jest.fn().mockReturnValue({ orderBy: mockImagesOrderBy });
+    const mockSpecsOrderBy = jest.fn().mockResolvedValue([]);
+    const mockSpecsWhere = jest.fn().mockReturnValue({ orderBy: mockSpecsOrderBy });
+    const mockFavWhere = jest.fn().mockResolvedValue([]); // not favorited
 
     mockFrom
       .mockReturnValueOnce({ innerJoin: mockListingInnerJoin, where: mockListingWhere })
       .mockReturnValueOnce({ where: mockImagesWhere })
       .mockReturnValueOnce({ where: mockSpecsWhere })
-      .mockReturnValueOnce({ where: mockFavWhere })
+      .mockReturnValueOnce({ where: mockFavWhere });
 
-    const response = await GET(makeGetRequest(), makeContext())
-    const body = await response.json()
-    expect(body.data.is_favorited).toBe(false)
-  })
-})
+    const response = await GET(makeGetRequest(), makeContext());
+    const body = await response.json();
+    expect(body.data.is_favorited).toBe(false);
+  });
+});
 
 // ============================================================================
 // PATCH /api/listings/[id]
@@ -473,41 +535,43 @@ describe('GET /api/listings/[id] — success (with session)', () => {
 
 describe('PATCH /api/listings/[id] — authentication', () => {
   it('returns 401 when not authenticated', async () => {
-    mockAuth.mockResolvedValueOnce(null)
-    const response = await PATCH(makePatchRequest(), makeContext())
-    expect(response.status).toBe(401)
-  })
-})
+    mockAuth.mockResolvedValueOnce(null);
+    const response = await PATCH(makePatchRequest(), makeContext());
+    expect(response.status).toBe(401);
+  });
+});
 
 describe('PATCH /api/listings/[id] — ownership checks', () => {
   beforeEach(() => {
-    mockAuth.mockResolvedValue(MOCK_SESSION)
-  })
+    mockAuth.mockResolvedValue(MOCK_SESSION);
+  });
 
   it('returns 404 when listing not found', async () => {
     // Ownership check: select → where → resolves []
-    const mockOwnerWhere = jest.fn().mockResolvedValue([])
-    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
-    mockInnerJoin.mockReturnValue({ leftJoin: mockLeftJoin, where: mockOwnerWhere })
-    mockLeftJoin.mockReturnValue({ where: mockOwnerWhere })
+    const mockOwnerWhere = jest.fn().mockResolvedValue([]);
+    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere });
+    mockInnerJoin.mockReturnValue({ leftJoin: mockLeftJoin, where: mockOwnerWhere });
+    mockLeftJoin.mockReturnValue({ where: mockOwnerWhere });
 
-    const response = await PATCH(makePatchRequest(), makeContext())
-    expect(response.status).toBe(404)
-  })
+    const response = await PATCH(makePatchRequest(), makeContext());
+    expect(response.status).toBe(404);
+  });
 
   it('returns 403 when not owner', async () => {
     // Ownership check: sellerId is different user
-    const mockOwnerWhere = jest.fn().mockResolvedValue([{ sellerId: 'other-user', currentStatus: 'active' }])
-    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
-    mockInnerJoin.mockReturnValue({ leftJoin: mockLeftJoin, where: mockOwnerWhere })
-    mockLeftJoin.mockReturnValue({ where: mockOwnerWhere })
+    const mockOwnerWhere = jest
+      .fn()
+      .mockResolvedValue([{ sellerId: 'other-user', currentStatus: 'active' }]);
+    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere });
+    mockInnerJoin.mockReturnValue({ leftJoin: mockLeftJoin, where: mockOwnerWhere });
+    mockLeftJoin.mockReturnValue({ where: mockOwnerWhere });
 
-    const response = await PATCH(makePatchRequest(), makeContext())
-    expect(response.status).toBe(403)
-    const body = await response.json()
-    expect(body.success).toBe(false)
-  })
-})
+    const response = await PATCH(makePatchRequest(), makeContext());
+    expect(response.status).toBe(403);
+    const body = await response.json();
+    expect(body.success).toBe(false);
+  });
+});
 
 describe('PATCH /api/listings/[id] — owner status-transition gate', () => {
   // Bug class: same shape as the PUT /api/invoices/[id] fix at b740abca.
@@ -519,148 +583,170 @@ describe('PATCH /api/listings/[id] — owner status-transition gate', () => {
   // Gate: only DRAFT and ACTIVE are owner-manageable; current AND target
   // must be in that set.
   beforeEach(() => {
-    mockAuth.mockResolvedValue(MOCK_SESSION)
-  })
+    mockAuth.mockResolvedValue(MOCK_SESSION);
+  });
 
   it('returns 403 when owner tries ACTIVE → SOLD (off-book sale)', async () => {
-    const mockOwnerWhere = jest.fn().mockResolvedValue([
-      { sellerId: 'user-1', currentStatus: 'active' },
-    ])
-    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
-    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'sold' } })
+    const mockOwnerWhere = jest
+      .fn()
+      .mockResolvedValue([{ sellerId: 'user-1', currentStatus: 'active' }]);
+    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere });
+    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'sold' } });
 
-    const response = await PATCH(makePatchRequest(undefined, { status: 'sold' }), makeContext())
-    expect(response.status).toBe(403)
-    expect(mockTransactionFn).not.toHaveBeenCalled()
-  })
+    const response = await PATCH(makePatchRequest(undefined, { status: 'sold' }), makeContext());
+    expect(response.status).toBe(403);
+    expect(mockTransactionFn).not.toHaveBeenCalled();
+  });
 
   it('returns 403 when owner tries RESERVED → ACTIVE (double-sale)', async () => {
     // Buyer's order is mid-flight (listing is RESERVED). Owner tries to
     // flip it back to ACTIVE so other buyers can also purchase. Blocked.
-    const mockOwnerWhere = jest.fn().mockResolvedValue([
-      { sellerId: 'user-1', currentStatus: 'reserved' },
-    ])
-    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
-    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'active' } })
+    const mockOwnerWhere = jest
+      .fn()
+      .mockResolvedValue([{ sellerId: 'user-1', currentStatus: 'reserved' }]);
+    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere });
+    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'active' } });
 
-    const response = await PATCH(makePatchRequest(undefined, { status: 'active' }), makeContext())
-    expect(response.status).toBe(403)
-    expect(mockTransactionFn).not.toHaveBeenCalled()
-  })
+    const response = await PATCH(makePatchRequest(undefined, { status: 'active' }), makeContext());
+    expect(response.status).toBe(403);
+    expect(mockTransactionFn).not.toHaveBeenCalled();
+  });
 
   it('returns 403 when owner tries to set REMOVED via PATCH (must use DELETE endpoint)', async () => {
-    const mockOwnerWhere = jest.fn().mockResolvedValue([
-      { sellerId: 'user-1', currentStatus: 'active' },
-    ])
-    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
-    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'removed' } })
+    const mockOwnerWhere = jest
+      .fn()
+      .mockResolvedValue([{ sellerId: 'user-1', currentStatus: 'active' }]);
+    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere });
+    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'removed' } });
 
-    const response = await PATCH(makePatchRequest(undefined, { status: 'removed' }), makeContext())
-    expect(response.status).toBe(403)
-    expect(mockTransactionFn).not.toHaveBeenCalled()
-  })
+    const response = await PATCH(makePatchRequest(undefined, { status: 'removed' }), makeContext());
+    expect(response.status).toBe(403);
+    expect(mockTransactionFn).not.toHaveBeenCalled();
+  });
 
   it('returns 403 on PATCH against SOLD listing trying to set anything (system-managed state)', async () => {
     // Listing already SOLD. Owner can't PATCH status — needs admin/system intervention.
-    const mockOwnerWhere = jest.fn().mockResolvedValue([
-      { sellerId: 'user-1', currentStatus: 'sold' },
-    ])
-    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
-    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'active' } })
+    const mockOwnerWhere = jest
+      .fn()
+      .mockResolvedValue([{ sellerId: 'user-1', currentStatus: 'sold' }]);
+    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere });
+    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'active' } });
 
-    const response = await PATCH(makePatchRequest(undefined, { status: 'active' }), makeContext())
-    expect(response.status).toBe(403)
-    expect(mockTransactionFn).not.toHaveBeenCalled()
-  })
+    const response = await PATCH(makePatchRequest(undefined, { status: 'active' }), makeContext());
+    expect(response.status).toBe(403);
+    expect(mockTransactionFn).not.toHaveBeenCalled();
+  });
 
   it('allows DRAFT → ACTIVE (legitimate publish flow)', async () => {
-    const mockOwnerWhere = jest.fn().mockResolvedValue([
-      { sellerId: 'user-1', currentStatus: 'draft' },
-    ])
-    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
-    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'active' } })
+    const mockOwnerWhere = jest
+      .fn()
+      .mockResolvedValue([{ sellerId: 'user-1', currentStatus: 'draft' }]);
+    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere });
+    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'active' } });
 
     // Fire-and-forget Meilisearch select chain
     const mockMeiliWhere = jest.fn().mockReturnValue({
       then: jest.fn().mockResolvedValue(undefined),
       catch: jest.fn().mockResolvedValue(undefined),
-    })
-    const mockMeiliLeftJoin = jest.fn().mockReturnValue({ where: mockMeiliWhere })
-    const mockMeiliInnerJoin = jest.fn().mockReturnValue({ leftJoin: mockMeiliLeftJoin, where: mockMeiliWhere })
-    mockFrom.mockReturnValue({ innerJoin: mockMeiliInnerJoin, leftJoin: mockMeiliLeftJoin, where: mockMeiliWhere })
+    });
+    const mockMeiliLeftJoin = jest.fn().mockReturnValue({ where: mockMeiliWhere });
+    const mockMeiliInnerJoin = jest
+      .fn()
+      .mockReturnValue({ leftJoin: mockMeiliLeftJoin, where: mockMeiliWhere });
+    mockFrom.mockReturnValue({
+      innerJoin: mockMeiliInnerJoin,
+      leftJoin: mockMeiliLeftJoin,
+      where: mockMeiliWhere,
+    });
 
-    const response = await PATCH(makePatchRequest(undefined, { status: 'active' }), makeContext())
-    expect(response.status).toBe(200)
-    expect(mockTransactionFn).toHaveBeenCalled()
-  })
+    const response = await PATCH(makePatchRequest(undefined, { status: 'active' }), makeContext());
+    expect(response.status).toBe(200);
+    expect(mockTransactionFn).toHaveBeenCalled();
+  });
 
   it('allows ACTIVE → DRAFT (legitimate unpublish flow)', async () => {
-    const mockOwnerWhere = jest.fn().mockResolvedValue([
-      { sellerId: 'user-1', currentStatus: 'active' },
-    ])
-    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
-    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'draft' } })
+    const mockOwnerWhere = jest
+      .fn()
+      .mockResolvedValue([{ sellerId: 'user-1', currentStatus: 'active' }]);
+    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere });
+    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'draft' } });
 
     // PATCH to draft removes from Meili (route line 252); no Meili select needed.
-    const response = await PATCH(makePatchRequest(undefined, { status: 'draft' }), makeContext())
-    expect(response.status).toBe(200)
-    expect(mockTransactionFn).toHaveBeenCalled()
-  })
+    const response = await PATCH(makePatchRequest(undefined, { status: 'draft' }), makeContext());
+    expect(response.status).toBe(200);
+    expect(mockTransactionFn).toHaveBeenCalled();
+  });
 
   it('allows non-status PATCH on RESERVED listing (only status field is gated)', async () => {
     // Important: the gate ONLY blocks the status field. An owner can
     // still update title/description/etc. on a RESERVED listing. This
     // matters so an owner with a mid-flight order can correct a typo
     // in the description without admin intervention.
-    const mockOwnerWhere = jest.fn().mockResolvedValue([
-      { sellerId: 'user-1', currentStatus: 'reserved' },
-    ])
-    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
-    mockValidateBody.mockReturnValueOnce({ success: true, data: { title: 'Corrected title' } })
+    const mockOwnerWhere = jest
+      .fn()
+      .mockResolvedValue([{ sellerId: 'user-1', currentStatus: 'reserved' }]);
+    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere });
+    mockValidateBody.mockReturnValueOnce({ success: true, data: { title: 'Corrected title' } });
 
     // Fire-and-forget Meilisearch select chain (status not provided, falls through to indexListing branch)
     const mockMeiliWhere = jest.fn().mockReturnValue({
       then: jest.fn().mockResolvedValue(undefined),
       catch: jest.fn().mockResolvedValue(undefined),
-    })
-    const mockMeiliLeftJoin = jest.fn().mockReturnValue({ where: mockMeiliWhere })
-    const mockMeiliInnerJoin = jest.fn().mockReturnValue({ leftJoin: mockMeiliLeftJoin, where: mockMeiliWhere })
-    mockFrom.mockReturnValue({ innerJoin: mockMeiliInnerJoin, leftJoin: mockMeiliLeftJoin, where: mockMeiliWhere })
+    });
+    const mockMeiliLeftJoin = jest.fn().mockReturnValue({ where: mockMeiliWhere });
+    const mockMeiliInnerJoin = jest
+      .fn()
+      .mockReturnValue({ leftJoin: mockMeiliLeftJoin, where: mockMeiliWhere });
+    mockFrom.mockReturnValue({
+      innerJoin: mockMeiliInnerJoin,
+      leftJoin: mockMeiliLeftJoin,
+      where: mockMeiliWhere,
+    });
 
-    const response = await PATCH(makePatchRequest(undefined, { title: 'Corrected title' }), makeContext())
-    expect(response.status).toBe(200)
-    expect(mockTransactionFn).toHaveBeenCalled()
-  })
-})
+    const response = await PATCH(
+      makePatchRequest(undefined, { title: 'Corrected title' }),
+      makeContext(),
+    );
+    expect(response.status).toBe(200);
+    expect(mockTransactionFn).toHaveBeenCalled();
+  });
+});
 
 describe('PATCH /api/listings/[id] — validation', () => {
   beforeEach(() => {
-    mockAuth.mockResolvedValue(MOCK_SESSION)
+    mockAuth.mockResolvedValue(MOCK_SESSION);
     // Owner is current user
-    const mockOwnerWhere = jest.fn().mockResolvedValue([{ sellerId: 'user-1', currentStatus: 'active' }])
-    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
-  })
+    const mockOwnerWhere = jest
+      .fn()
+      .mockResolvedValue([{ sellerId: 'user-1', currentStatus: 'active' }]);
+    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere });
+  });
 
   it('returns 400 when validation fails', async () => {
-    const { NextResponse } = jest.requireActual('next/server')
+    const { NextResponse } = jest.requireActual('next/server');
     mockValidateBody.mockReturnValueOnce({
       success: false,
-      error: NextResponse.json({ success: false, error: 'Ungültige Eingabedaten' }, { status: 400 }),
-    })
-    const response = await PATCH(makePatchRequest(), makeContext())
-    expect(response.status).toBe(400)
-  })
-})
+      error: NextResponse.json(
+        { success: false, error: 'Ungültige Eingabedaten' },
+        { status: 400 },
+      ),
+    });
+    const response = await PATCH(makePatchRequest(), makeContext());
+    expect(response.status).toBe(400);
+  });
+});
 
 describe('PATCH /api/listings/[id] — success', () => {
   beforeEach(() => {
-    mockAuth.mockResolvedValue(MOCK_SESSION)
-  })
+    mockAuth.mockResolvedValue(MOCK_SESSION);
+  });
 
   it('returns 200 on successful update', async () => {
     // Ownership check
-    const mockOwnerWhere = jest.fn().mockResolvedValue([{ sellerId: 'user-1', currentStatus: 'active' }])
-    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
+    const mockOwnerWhere = jest
+      .fn()
+      .mockResolvedValue([{ sellerId: 'user-1', currentStatus: 'active' }]);
+    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere });
 
     // Transaction
     mockTransactionFn.mockImplementation(async (callback: (tx: unknown) => unknown) => {
@@ -674,9 +760,9 @@ describe('PATCH /api/listings/[id] — success', () => {
             returning: jest.fn().mockResolvedValue([{ id: 'listing-1' }]),
           }),
         }),
-      }
-      return callback(tx)
-    })
+      };
+      return callback(tx);
+    });
 
     // Fire-and-forget Meilisearch select chain (status is not removed/sold/draft)
     // The route does a fire-and-forget db.select chain with .then()
@@ -684,17 +770,23 @@ describe('PATCH /api/listings/[id] — success', () => {
     const mockMeiliWhere = jest.fn().mockReturnValue({
       then: jest.fn().mockResolvedValue(undefined),
       catch: jest.fn().mockResolvedValue(undefined),
-    })
-    const mockMeiliLeftJoin = jest.fn().mockReturnValue({ where: mockMeiliWhere })
-    const mockMeiliInnerJoin = jest.fn().mockReturnValue({ leftJoin: mockMeiliLeftJoin, where: mockMeiliWhere })
-    mockFrom.mockReturnValue({ innerJoin: mockMeiliInnerJoin, leftJoin: mockMeiliLeftJoin, where: mockMeiliWhere })
+    });
+    const mockMeiliLeftJoin = jest.fn().mockReturnValue({ where: mockMeiliWhere });
+    const mockMeiliInnerJoin = jest
+      .fn()
+      .mockReturnValue({ leftJoin: mockMeiliLeftJoin, where: mockMeiliWhere });
+    mockFrom.mockReturnValue({
+      innerJoin: mockMeiliInnerJoin,
+      leftJoin: mockMeiliLeftJoin,
+      where: mockMeiliWhere,
+    });
 
-    const response = await PATCH(makePatchRequest(), makeContext())
-    expect(response.status).toBe(200)
-    const body = await response.json()
-    expect(body.data.id).toBe('listing-1')
-  })
-})
+    const response = await PATCH(makePatchRequest(), makeContext());
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.data.id).toBe('listing-1');
+  });
+});
 
 // ============================================================================
 // DELETE /api/listings/[id]
@@ -702,71 +794,71 @@ describe('PATCH /api/listings/[id] — success', () => {
 
 describe('DELETE /api/listings/[id] — authentication', () => {
   it('returns 401 when not authenticated', async () => {
-    mockAuth.mockResolvedValueOnce(null)
-    const response = await DELETE(makeDeleteRequest(), makeContext())
-    expect(response.status).toBe(401)
-  })
-})
+    mockAuth.mockResolvedValueOnce(null);
+    const response = await DELETE(makeDeleteRequest(), makeContext());
+    expect(response.status).toBe(401);
+  });
+});
 
 describe('DELETE /api/listings/[id] — ownership checks', () => {
   beforeEach(() => {
-    mockAuth.mockResolvedValue(MOCK_SESSION)
-  })
+    mockAuth.mockResolvedValue(MOCK_SESSION);
+  });
 
   it('returns 404 when listing not found', async () => {
-    const mockOwnerWhere = jest.fn().mockResolvedValue([])
-    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
+    const mockOwnerWhere = jest.fn().mockResolvedValue([]);
+    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere });
 
-    const response = await DELETE(makeDeleteRequest(), makeContext())
-    expect(response.status).toBe(404)
-  })
+    const response = await DELETE(makeDeleteRequest(), makeContext());
+    expect(response.status).toBe(404);
+  });
 
   it('returns 403 when not owner and not staff', async () => {
-    const mockOwnerWhere = jest.fn().mockResolvedValue([{ sellerId: 'other-user' }])
-    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
-    mockIsStaffEmail.mockReturnValue(false)
+    const mockOwnerWhere = jest.fn().mockResolvedValue([{ sellerId: 'other-user' }]);
+    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere });
+    mockIsStaffEmail.mockReturnValue(false);
 
-    const response = await DELETE(makeDeleteRequest(), makeContext())
-    expect(response.status).toBe(403)
-    const body = await response.json()
-    expect(body.success).toBe(false)
-  })
-})
+    const response = await DELETE(makeDeleteRequest(), makeContext());
+    expect(response.status).toBe(403);
+    const body = await response.json();
+    expect(body.success).toBe(false);
+  });
+});
 
 describe('DELETE /api/listings/[id] — success', () => {
   it('returns 200 when owner deletes own listing', async () => {
-    mockAuth.mockResolvedValue(MOCK_SESSION)
+    mockAuth.mockResolvedValue(MOCK_SESSION);
 
     // Ownership check: sellerId matches session user
-    const mockOwnerWhere = jest.fn().mockResolvedValue([{ sellerId: 'user-1' }])
-    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
+    const mockOwnerWhere = jest.fn().mockResolvedValue([{ sellerId: 'user-1' }]);
+    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere });
 
     // Update: set status to removed
-    mockSet.mockReturnValue({ where: mockUpdateWhere })
-    mockUpdateWhere.mockResolvedValue(undefined)
+    mockSet.mockReturnValue({ where: mockUpdateWhere });
+    mockUpdateWhere.mockResolvedValue(undefined);
 
-    const response = await DELETE(makeDeleteRequest(), makeContext())
-    expect(response.status).toBe(200)
-    const body = await response.json()
-    expect(body.data.status).toBe('removed')
-    expect(body.data.id).toBe('listing-1')
-  })
+    const response = await DELETE(makeDeleteRequest(), makeContext());
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.data.status).toBe('removed');
+    expect(body.data.id).toBe('listing-1');
+  });
 
   it('returns 200 when staff deletes non-owned listing', async () => {
-    mockAuth.mockResolvedValue(MOCK_STAFF_SESSION)
+    mockAuth.mockResolvedValue(MOCK_STAFF_SESSION);
 
     // Ownership check: sellerId is someone else's
-    const mockOwnerWhere = jest.fn().mockResolvedValue([{ sellerId: 'other-user' }])
-    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
+    const mockOwnerWhere = jest.fn().mockResolvedValue([{ sellerId: 'other-user' }]);
+    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere });
 
-    mockSet.mockReturnValue({ where: mockUpdateWhere })
-    mockUpdateWhere.mockResolvedValue(undefined)
+    mockSet.mockReturnValue({ where: mockUpdateWhere });
+    mockUpdateWhere.mockResolvedValue(undefined);
 
-    const response = await DELETE(makeDeleteRequest(), makeContext())
-    expect(response.status).toBe(200)
-    const body = await response.json()
-    expect(body.data.status).toBe('removed')
-  })
+    const response = await DELETE(makeDeleteRequest(), makeContext());
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.data.status).toBe('removed');
+  });
 
   it('returns 403 for a non-staff session user even with a staff-looking email (no domain-based bypass)', async () => {
     // SECURITY regression test: session.user.isStaff (the revocable DB flag)
@@ -775,13 +867,13 @@ describe('DELETE /api/listings/[id] — success', () => {
     mockAuth.mockResolvedValue({
       ...MOCK_SESSION,
       user: { ...MOCK_SESSION.user, isStaff: false, email: 'someone@revamp-it.ch' },
-    })
-    mockIsStaffEmail.mockReturnValue(true)
+    });
+    mockIsStaffEmail.mockReturnValue(true);
 
-    const mockOwnerWhere = jest.fn().mockResolvedValue([{ sellerId: 'other-user' }])
-    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere })
+    const mockOwnerWhere = jest.fn().mockResolvedValue([{ sellerId: 'other-user' }]);
+    mockFrom.mockReturnValueOnce({ where: mockOwnerWhere });
 
-    const response = await DELETE(makeDeleteRequest(), makeContext())
-    expect(response.status).toBe(403)
-  })
-})
+    const response = await DELETE(makeDeleteRequest(), makeContext());
+    expect(response.status).toBe(403);
+  });
+});

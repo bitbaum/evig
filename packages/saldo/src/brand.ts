@@ -18,6 +18,6 @@ export const BRAND = {
     en: 'A dependency-free engine for Soll/Ist time balances, vacation, and honest monthly reports.',
     de: 'Ein abhängigkeitsfreier Motor für Soll-/Ist-Saldi, Ferien und ehrliche Monatsrapporte.',
   },
-} as const
+} as const;
 
-export type Brand = typeof BRAND
+export type Brand = typeof BRAND;

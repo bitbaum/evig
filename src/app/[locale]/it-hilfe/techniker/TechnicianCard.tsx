@@ -7,43 +7,43 @@
  * hourly rate) is conveyed inline in the monospace meta line.
  */
 
-'use client'
+'use client';
 
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { Link } from '@/i18n/navigation'
-import { useTranslations } from 'next-intl'
-import { getSkillById } from '@/config/it-hilfe'
-import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
-import { formatCentsToChf } from '@/lib/pricing'
-import { ROUTES } from '@/config/routes'
-import type { Technician } from '@/hooks/useTechnicianList'
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
+import { getSkillById } from '@/config/it-hilfe';
+import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status';
+import { formatCentsToChf } from '@/lib/pricing';
+import { ROUTES } from '@/config/routes';
+import type { Technician } from '@/hooks/useTechnicianList';
 
-const MAX_SKILLS_SHOWN = 4
+const MAX_SKILLS_SHOWN = 4;
 
 export function TechnicianCard({ technician }: { technician: Technician }) {
-  const t = useTranslations('techniker')
-  const displayedSkills = technician.skills.slice(0, MAX_SKILLS_SHOWN)
-  const remaining = technician.skills.length - MAX_SKILLS_SHOWN
-  const isPro = technician.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL
+  const t = useTranslations('techniker');
+  const displayedSkills = technician.skills.slice(0, MAX_SKILLS_SHOWN);
+  const remaining = technician.skills.length - MAX_SKILLS_SHOWN;
+  const isPro = technician.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL;
 
   // Eyebrow meta — single monospace line. Order: tier · location · verified.
   const eyebrowParts = [
     isPro ? t('list.professional').toUpperCase() : t('list.community').toUpperCase(),
     technician.city ? technician.city.toUpperCase() : null,
     technician.isVerified ? t('list.verified').toUpperCase() : null,
-  ].filter(Boolean) as string[]
+  ].filter(Boolean) as string[];
 
   // Pricing meta — single monospace line. "GRATIS · KULTURLEGI · CHF 80/H"
   const pricingParts = [
     technician.acceptsGratis ? t('list.gratis').toUpperCase() : null,
     technician.acceptsKulturlegi ? t('list.kulturlegi').toUpperCase() : null,
     technician.hourlyRateCents ? `${formatCentsToChf(technician.hourlyRateCents)}/h` : null,
-  ].filter(Boolean) as string[]
+  ].filter(Boolean) as string[];
 
   // Stats meta — rating · jobs count
-  const rating = technician.averageRating
-  const hasRating = rating != null && rating > 0
-  const hasStats = hasRating || technician.totalJobsCompleted > 0
+  const rating = technician.averageRating;
+  const hasRating = rating != null && rating > 0;
+  const hasStats = hasRating || technician.totalJobsCompleted > 0;
 
   return (
     <Link
@@ -99,5 +99,5 @@ export function TechnicianCard({ technician }: { technician: Technician }) {
         </div>
       )}
     </Link>
-  )
+  );
 }

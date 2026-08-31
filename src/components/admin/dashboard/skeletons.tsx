@@ -9,11 +9,11 @@ function Shimmer({ className }: { className?: string }) {
       className={`animate-pulse bg-surface-overlay rounded-lg ${className ?? ''}`}
       aria-hidden="true"
     />
-  )
+  );
 }
 
 export function BannerSkeleton() {
-  return <Shimmer className="h-16 rounded-xl" />
+  return <Shimmer className="h-16 rounded-xl" />;
 }
 
 export function PersonalSectionSkeleton() {
@@ -23,7 +23,7 @@ export function PersonalSectionSkeleton() {
       <Shimmer className="h-10" />
       <Shimmer className="h-10" />
     </div>
-  )
+  );
 }
 
 export function UnifiedQueueSkeleton() {
@@ -34,5 +34,5 @@ export function UnifiedQueueSkeleton() {
       <Shimmer className="h-14" />
       <Shimmer className="h-14" />
     </div>
-  )
+  );
 }

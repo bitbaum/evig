@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import { CheckCircle } from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { FormField } from '@/components/ui/form-field'
-import type { LocationFormData } from './types'
+import { CheckCircle } from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { FormField } from '@/components/ui/form-field';
+import type { LocationFormData } from './types';
 
 interface Props {
-  formData: LocationFormData
-  onAccessibilityChange: (field: string, value: string | boolean) => void
+  formData: LocationFormData;
+  onAccessibilityChange: (field: string, value: string | boolean) => void;
 }
 
 export function LocationAccessibilitySection({ formData, onAccessibilityChange }: Props) {
@@ -26,7 +26,12 @@ export function LocationAccessibilitySection({ formData, onAccessibilityChange }
             type="checkbox"
             id="wheelchair"
             checked={formData.accessibility_info.wheelchairAccessible}
-            onChange={() => onAccessibilityChange('wheelchairAccessible', !formData.accessibility_info.wheelchairAccessible)}
+            onChange={() =>
+              onAccessibilityChange(
+                'wheelchairAccessible',
+                !formData.accessibility_info.wheelchairAccessible,
+              )
+            }
             className="mr-3 text-action focus:ring-action"
           />
           <label htmlFor="wheelchair" className="text-sm font-medium text-text-secondary">
@@ -39,7 +44,12 @@ export function LocationAccessibilitySection({ formData, onAccessibilityChange }
             type="checkbox"
             id="parking"
             checked={formData.accessibility_info.parkingAvailable}
-            onChange={() => onAccessibilityChange('parkingAvailable', !formData.accessibility_info.parkingAvailable)}
+            onChange={() =>
+              onAccessibilityChange(
+                'parkingAvailable',
+                !formData.accessibility_info.parkingAvailable,
+              )
+            }
             className="mr-3 text-action focus:ring-action"
           />
           <label htmlFor="parking" className="text-sm font-medium text-text-secondary">
@@ -66,5 +76,5 @@ export function LocationAccessibilitySection({ formData, onAccessibilityChange }
         </FormField>
       </div>
     </div>
-  )
+  );
 }

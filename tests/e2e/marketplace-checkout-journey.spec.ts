@@ -7,13 +7,13 @@
  * Run: npm run test:e2e:marketplace:journey
  */
 
-import { test, expect } from '@playwright/test'
+import { test, expect } from '@playwright/test';
 import {
   getRequesterCredentials,
   getTechnicianCredentials,
   hasDualPersonaCredentials,
   loginWithCredentials,
-} from './helpers/auth'
+} from './helpers/auth';
 import {
   cancelMarketplaceOrder,
   createMarketplaceListing,
@@ -26,75 +26,62 @@ import {
   isHostedPayrexxUrl,
   isMockPayrexxUrl,
   simulatePayrexxReservedWebhook,
-} from './helpers/marketplace'
-import { prepareE2EPage } from './helpers/ui'
+} from './helpers/marketplace';
+import { prepareE2EPage } from './helpers/ui';
 
 test.describe('Marketplace dual-persona checkout journey', () => {
-  test.setTimeout(180000)
+  test.setTimeout(180000);
 
   test.skip(
     !hasDualPersonaCredentials(),
     'Set AUTH_TEST_USER_PASSWORD + AUTH_TEST_ADMIN_PASSWORD (different accounts)',
-  )
+  );
 
   test('user lists → admin checkout → Payrexx → both see paid order', async ({ page }) => {
-    await prepareE2EPage(page)
+    await prepareE2EPage(page);
 
-    const seller = getTechnicianCredentials()
-    const buyer = getRequesterCredentials()
+    const seller = getTechnicianCredentials();
+    const buyer = getRequesterCredentials();
 
-    let listingId = ''
-    let orderId = ''
+    let listingId = '';
+    let orderId = '';
 
     try {
       // 1. User (seller) creates listing
-      await loginWithCredentials(page, '/dashboard/listings', seller.email, seller.password)
-      ;({ listingId } = await createMarketplaceListing(page.request))
+      await loginWithCredentials(page, '/dashboard/listings', seller.email, seller.password);
+      ({ listingId } = await createMarketplaceListing(page.request));
 
       // 2. Admin (buyer) sees buy CTA on listing detail
-      await loginWithCredentials(
-        page,
-        `/marketplace/${listingId}`,
-        buyer.email,
-        buyer.password,
-      )
-      const buyNow = page.getByRole('button', { name: /Jetzt kaufen|Buy now/i })
-      await expect(buyNow).toBeVisible({ timeout: 15000 })
-      await buyNow.click()
+      await loginWithCredentials(page, `/marketplace/${listingId}`, buyer.email, buyer.password);
+      const buyNow = page.getByRole('button', { name: /Jetzt kaufen|Buy now/i });
+      await expect(buyNow).toBeVisible({ timeout: 15000 });
+      await buyNow.click();
       await page.waitForURL(new RegExp(`/marketplace/checkout/${listingId}`), {
         timeout: 15000,
-      })
+      });
 
       // 2b. Public Q&A — buyer asks, seller answers
-      await loginWithCredentials(
-        page,
-        `/marketplace/${listingId}`,
-        buyer.email,
-        buyer.password,
-      )
-      await page.getByRole('button', { name: /Frage stellen|Ask a question/i }).click()
-      const testQuestion = 'Ist das Gerät noch verfügbar für Abholung?'
-      await page.getByPlaceholder(/Akku|battery|included/i).fill(testQuestion)
-      await page.getByRole('button', { name: /Frage senden|Send question/i }).click()
-      await expect(page.getByText(testQuestion)).toBeVisible({ timeout: 15000 })
+      await loginWithCredentials(page, `/marketplace/${listingId}`, buyer.email, buyer.password);
+      await page.getByRole('button', { name: /Frage stellen|Ask a question/i }).click();
+      const testQuestion = 'Ist das Gerät noch verfügbar für Abholung?';
+      await page.getByPlaceholder(/Akku|battery|included/i).fill(testQuestion);
+      await page.getByRole('button', { name: /Frage senden|Send question/i }).click();
+      await expect(page.getByText(testQuestion)).toBeVisible({ timeout: 15000 });
 
-      const questionsBeforeAnswer = await fetchListingQuestions(page.request, listingId)
-      const openQuestion = questionsBeforeAnswer.find((q) => q.question === testQuestion)
-      expect(openQuestion?.status).toBe('open')
+      const questionsBeforeAnswer = await fetchListingQuestions(page.request, listingId);
+      const openQuestion = questionsBeforeAnswer.find((q) => q.question === testQuestion);
+      expect(openQuestion?.status).toBe('open');
 
-      await loginWithCredentials(
-        page,
-        `/marketplace/${listingId}`,
-        seller.email,
-        seller.password,
-      )
-      const testAnswer = 'Ja, Abholung in Zürich ist jederzeit möglich.'
-      const answerField = page.getByPlaceholder(/öffentliche Antwort|public answer/i)
-      await answerField.fill(testAnswer)
-      const publishAnswer = page.getByRole('button', { name: /Antwort veröffentlichen|Publish answer/i })
-      await expect(publishAnswer).toBeEnabled({ timeout: 5000 })
-      await publishAnswer.click()
-      await expect(page.getByText(testAnswer)).toBeVisible({ timeout: 15000 })
+      await loginWithCredentials(page, `/marketplace/${listingId}`, seller.email, seller.password);
+      const testAnswer = 'Ja, Abholung in Zürich ist jederzeit möglich.';
+      const answerField = page.getByPlaceholder(/öffentliche Antwort|public answer/i);
+      await answerField.fill(testAnswer);
+      const publishAnswer = page.getByRole('button', {
+        name: /Antwort veröffentlichen|Publish answer/i,
+      });
+      await expect(publishAnswer).toBeEnabled({ timeout: 5000 });
+      await publishAnswer.click();
+      await expect(page.getByText(testAnswer)).toBeVisible({ timeout: 15000 });
 
       // The UI confirms the answer above, but the question-status write can lag the
       // read by a beat — poll the API until it reflects 'answered' instead of a
@@ -102,12 +89,12 @@ test.describe('Marketplace dual-persona checkout journey', () => {
       await expect
         .poll(
           async () => {
-            const qs = await fetchListingQuestions(page.request, listingId)
-            return qs.find((q) => q.question === testQuestion)?.status
+            const qs = await fetchListingQuestions(page.request, listingId);
+            return qs.find((q) => q.question === testQuestion)?.status;
           },
           { timeout: 15000 },
         )
-        .toBe('answered')
+        .toBe('answered');
 
       // 2c. Seller cannot buy own listing (must run while listing is still active)
       await loginWithCredentials(
@@ -115,10 +102,12 @@ test.describe('Marketplace dual-persona checkout journey', () => {
         `/marketplace/checkout/${listingId}`,
         seller.email,
         seller.password,
-      )
-      await expect(page.getByRole('heading', { name: /Eigenes Inserat|Own listing/i })).toBeVisible({
-        timeout: 15_000,
-      })
+      );
+      await expect(page.getByRole('heading', { name: /Eigenes Inserat|Own listing/i })).toBeVisible(
+        {
+          timeout: 15_000,
+        },
+      );
 
       // 3. Admin (buyer) opens checkout (direct URL after buy CTA smoke)
       await loginWithCredentials(
@@ -126,10 +115,10 @@ test.describe('Marketplace dual-persona checkout journey', () => {
         `/marketplace/checkout/${listingId}`,
         buyer.email,
         buyer.password,
-      )
+      );
       await expect(page.getByRole('heading', { name: /Sichere Zahlung/i })).toBeVisible({
         timeout: 15000,
-      })
+      });
 
       // Order create via API (same contract as checkout UI); page load confirms checkout route.
       // Creating an order needs an ACTIVE payment provider. CI runs a production
@@ -137,68 +126,74 @@ test.describe('Marketplace dual-persona checkout journey', () => {
       // rejects with "Payrexx ist noch nicht aktiv". That's an environment limit,
       // not a product bug — skip the paid flow with a reason rather than fail CI.
       // The prod E2E run (real Payrexx) still exercises this path end-to-end.
-      let created: Awaited<ReturnType<typeof createMarketplaceOrder>>
+      let created: Awaited<ReturnType<typeof createMarketplaceOrder>>;
       try {
-        created = await createMarketplaceOrder(page.request, listingId)
+        created = await createMarketplaceOrder(page.request, listingId);
       } catch (err) {
-        if (err instanceof Error && /Payrexx ist noch nicht aktiv|Online-Zahlung wird gerade eingerichtet/i.test(err.message)) {
-          test.skip(true, 'No active payment provider in this environment — paid checkout flow not testable')
-          return
+        if (
+          err instanceof Error &&
+          /Payrexx ist noch nicht aktiv|Online-Zahlung wird gerade eingerichtet/i.test(err.message)
+        ) {
+          test.skip(
+            true,
+            'No active payment provider in this environment — paid checkout flow not testable',
+          );
+          return;
         }
-        throw err
+        throw err;
       }
-      const { orderId: createdOrderId, paymentUrl } = created
-      orderId = createdOrderId
+      const { orderId: createdOrderId, paymentUrl } = created;
+      orderId = createdOrderId;
 
-      let order = await fetchMarketplaceOrder(page.request, orderId)
-      expect(order.status).toBe('pending_payment')
+      let order = await fetchMarketplaceOrder(page.request, orderId);
+      expect(order.status).toBe('pending_payment');
 
       // 3. Complete payment — mock page, webhook simulation, or gateway smoke
       if (isMockPayrexxUrl(paymentUrl)) {
-        await page.goto(paymentUrl)
-        await page.getByRole('button', { name: 'Jetzt bezahlen' }).click()
-        await page.waitForURL(/\/marketplace\/checkout\/success/, { timeout: 60_000 })
+        await page.goto(paymentUrl);
+        await page.getByRole('button', { name: 'Jetzt bezahlen' }).click();
+        await page.waitForURL(/\/marketplace\/checkout\/success/, { timeout: 60_000 });
         await expect(page.getByRole('heading', { name: /Bestellung erfolgreich/i })).toBeVisible({
           timeout: 15_000,
-        })
+        });
       } else if (process.env.PAYREXX_WEBHOOK_SECRET) {
-        await simulatePayrexxReservedWebhook(page.request, orderId, 100)
-        await page.goto(`/marketplace/checkout/success?orderId=${orderId}`)
+        await simulatePayrexxReservedWebhook(page.request, orderId, 100);
+        await page.goto(`/marketplace/checkout/success?orderId=${orderId}`);
         await expect(page.getByRole('heading', { name: /Bestellung erfolgreich/i })).toBeVisible({
           timeout: 15_000,
-        })
+        });
       } else if (isHostedPayrexxUrl(paymentUrl)) {
-        await page.goto(paymentUrl)
-        await expect(page).toHaveURL(/payrexx/i, { timeout: 30_000 })
-        order = await fetchMarketplaceOrder(page.request, orderId)
-        expect(order.status).toBe('pending_payment')
-        await cancelMarketplaceOrder(page.request, orderId)
-        orderId = ''
-        return
+        await page.goto(paymentUrl);
+        await expect(page).toHaveURL(/payrexx/i, { timeout: 30_000 });
+        order = await fetchMarketplaceOrder(page.request, orderId);
+        expect(order.status).toBe('pending_payment');
+        await cancelMarketplaceOrder(page.request, orderId);
+        orderId = '';
+        return;
       } else {
-        throw new Error(`Unexpected payment URL: ${paymentUrl}`)
+        throw new Error(`Unexpected payment URL: ${paymentUrl}`);
       }
 
-      order = await fetchMarketplaceOrder(page.request, orderId)
-      expect(order.status).toBe('paid')
+      order = await fetchMarketplaceOrder(page.request, orderId);
+      expect(order.status).toBe('paid');
 
       // 4. Buyer sees order
-      await loginWithCredentials(page, '/dashboard/orders', buyer.email, buyer.password)
+      await loginWithCredentials(page, '/dashboard/orders', buyer.email, buyer.password);
       await expect(page.getByText(/Bestellung|Order|pending|Bezahlt|paid/i).first()).toBeVisible({
         timeout: 15_000,
-      })
+      });
 
       // 5. Seller sees order
-      await loginWithCredentials(page, '/dashboard/seller', seller.email, seller.password)
+      await loginWithCredentials(page, '/dashboard/seller', seller.email, seller.password);
       await expect(page.locator('body')).toContainText(/Bestellung|Order|Verkauf|paid|Bezahlt/i, {
         timeout: 15_000,
-      })
+      });
     } finally {
       if (orderId) {
         try {
-          const status = (await fetchMarketplaceOrder(page.request, orderId)).status
+          const status = (await fetchMarketplaceOrder(page.request, orderId)).status;
           if (status === 'pending_payment' || status === 'paid') {
-            await cancelMarketplaceOrder(page.request, orderId)
+            await cancelMarketplaceOrder(page.request, orderId);
           }
         } catch {
           /* best-effort cleanup */
@@ -206,11 +201,11 @@ test.describe('Marketplace dual-persona checkout journey', () => {
       }
       if (listingId) {
         try {
-          await deleteMarketplaceListing(page.request, listingId)
+          await deleteMarketplaceListing(page.request, listingId);
         } catch {
           /* listing may stay reserved until order cancelled */
         }
       }
     }
-  })
-})
+  });
+});

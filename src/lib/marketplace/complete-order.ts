@@ -1,6 +1,6 @@
-import { and, eq, inArray, sql } from 'drizzle-orm'
-import { listings, marketplaceOrderItems, marketplaceOrders, sellerProfiles } from '@/db/schema'
-import { LISTING_STATUS, ORDER_STATUS } from '@/config/marketplace'
+import { and, eq, inArray, sql } from 'drizzle-orm';
+import { listings, marketplaceOrderItems, marketplaceOrders, sellerProfiles } from '@/db/schema';
+import { LISTING_STATUS, ORDER_STATUS } from '@/config/marketplace';
 
 /**
  * Everything that must happen when a marketplace order completes.
@@ -23,19 +23,19 @@ import { LISTING_STATUS, ORDER_STATUS } from '@/config/marketplace'
  * listings and the seller's counter always move together.
  */
 
-type Tx = Parameters<Parameters<typeof import('@/db').db.transaction>[0]>[0]
+type Tx = Parameters<Parameters<typeof import('@/db').db.transaction>[0]>[0];
 
 /** Listing ids belonging to an order: single-item orders carry listingId, cart orders use order items. */
 export async function listingIdsForOrder(
   tx: Tx,
-  order: { id: string; listingId: string | null }
+  order: { id: string; listingId: string | null },
 ): Promise<string[]> {
-  if (order.listingId) return [order.listingId]
+  if (order.listingId) return [order.listingId];
   const items = await tx
     .select({ listingId: marketplaceOrderItems.listingId })
     .from(marketplaceOrderItems)
-    .where(eq(marketplaceOrderItems.orderId, order.id))
-  return items.map((i) => i.listingId)
+    .where(eq(marketplaceOrderItems.orderId, order.id));
+  return items.map((i) => i.listingId);
 }
 
 /**
@@ -47,9 +47,9 @@ export async function listingIdsForOrder(
  */
 export async function applyOrderCompletion(
   tx: Tx,
-  params: { orderId: string; sellerId: string; listingIds: string[] }
+  params: { orderId: string; sellerId: string; listingIds: string[] },
 ): Promise<void> {
-  const { orderId, sellerId, listingIds } = params
+  const { orderId, sellerId, listingIds } = params;
 
   await tx
     .update(marketplaceOrders)
@@ -59,19 +59,19 @@ export async function applyOrderCompletion(
       completedAt: sql`NOW()`,
       updatedAt: sql`NOW()`,
     })
-    .where(eq(marketplaceOrders.id, orderId))
+    .where(eq(marketplaceOrders.id, orderId));
 
-  if (listingIds.length === 0) return
+  if (listingIds.length === 0) return;
 
   // Only RESERVED listings flip to SOLD: a listing the seller already resolved
   // by hand must not be dragged back by a late webhook.
   await tx
     .update(listings)
     .set({ status: LISTING_STATUS.SOLD })
-    .where(and(inArray(listings.id, listingIds), eq(listings.status, LISTING_STATUS.RESERVED)))
+    .where(and(inArray(listings.id, listingIds), eq(listings.status, LISTING_STATUS.RESERVED)));
 
   await tx
     .update(sellerProfiles)
     .set({ totalSold: sql`COALESCE(${sellerProfiles.totalSold}, 0) + ${listingIds.length}` })
-    .where(eq(sellerProfiles.userId, sellerId))
+    .where(eq(sellerProfiles.userId, sellerId));
 }

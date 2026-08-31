@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useTranslations } from 'next-intl'
-import { navLinkClass } from '@/lib/design/nav'
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { navLinkClass } from '@/lib/design/nav';
 
 /**
  * One Freigaben, tabbed. The admin used to have separate sidebar entries for
@@ -14,15 +14,15 @@ import { navLinkClass } from '@/lib/design/nav'
 const TABS = [
   { href: '/admin/approvals', labelKey: 'tabContent' },
   { href: '/admin/team/approvals', labelKey: 'tabTimecards' },
-] as const
+] as const;
 
 export function ApprovalTabs() {
-  const t = useTranslations('admin.approvals')
-  const pathname = usePathname()
+  const t = useTranslations('admin.approvals');
+  const pathname = usePathname();
   return (
     <nav className="mb-6 flex flex-wrap gap-1 border-b border-subtle" aria-label={t('tabsAria')}>
-      {TABS.map(tab => {
-        const active = pathname === tab.href
+      {TABS.map((tab) => {
+        const active = pathname === tab.href;
         return (
           <Link
             key={tab.href}
@@ -32,8 +32,8 @@ export function ApprovalTabs() {
           >
             {t(tab.labelKey)}
           </Link>
-        )
+        );
       })}
     </nav>
-  )
+  );
 }

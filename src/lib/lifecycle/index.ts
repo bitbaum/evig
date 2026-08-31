@@ -17,7 +17,7 @@ export {
   type DbOrTx,
   type GuardedTransitionOptions,
   type GuardedTransitionResult,
-} from './guarded-transition'
+} from './guarded-transition';
 
 export {
   resolveTransition,
@@ -26,7 +26,7 @@ export {
   type TransitionTable,
   type ResolveReason,
   type ResolveResult,
-} from './state-machine'
+} from './state-machine';
 
 // review-workflow + dispatch are intentionally NOT re-exported here: they
 // transitively import the notification/audit services, and pulling those into

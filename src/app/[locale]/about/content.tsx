@@ -1,25 +1,20 @@
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import Image from 'next/image'
-import { Link } from '@/i18n/navigation'
-import { PageHero } from '@/components/layout/PageHero'
-import { GeschichteSection } from '@/components/about'
-import { Cpu, Wrench, Recycle, Quote, Leaf } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
-import { getTranslations } from 'next-intl/server'
-import { Section } from '@/components/layout/Section'
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import Image from 'next/image';
+import { Link } from '@/i18n/navigation';
+import { PageHero } from '@/components/layout/PageHero';
+import { GeschichteSection } from '@/components/about';
+import { Cpu, Wrench, Recycle, Quote, Leaf } from 'lucide-react';
+import Heading from '@/components/ui/Heading';
+import { getTranslations } from 'next-intl/server';
+import { Section } from '@/components/layout/Section';
 
 export default async function AboutContent() {
-  const t = await getTranslations('about')
-  const tEye = await getTranslations('common.eyebrows')
+  const t = await getTranslations('about');
+  const tEye = await getTranslations('common.eyebrows');
 
   return (
     <main className="min-h-screen">
-      <PageHero
-        theme="about"
-        icon={Leaf}
-        title={t('hero.title')}
-        subtitle={t('hero.subtitle')}
-      />
+      <PageHero theme="about" icon={Leaf} title={t('hero.title')} subtitle={t('hero.subtitle')} />
 
       {/* Mission Section - Redesigned */}
       <Section density="default" contained={false}>
@@ -77,10 +72,10 @@ export default async function AboutContent() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           {/* Section Header */}
           <div className="text-center mb-12">
-            <Heading level={2} className="ui-public-display-lg mb-4">{t('impactAreas.title')}</Heading>
-            <p className="ui-public-section-lede mx-auto">
-              {t('impactAreas.subtitle')}
-            </p>
+            <Heading level={2} className="ui-public-display-lg mb-4">
+              {t('impactAreas.title')}
+            </Heading>
+            <p className="ui-public-section-lede mx-auto">{t('impactAreas.subtitle')}</p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-4">
@@ -90,9 +85,7 @@ export default async function AboutContent() {
                 <Cpu className="h-7 w-7 text-action group-hover:text-action-text transition-colors" />
               </div>
               <h3 className="ui-public-card-title">{t('impactAreas.hardware.title')}</h3>
-              <p className="ui-public-card-body">
-                {t('impactAreas.hardware.description')}
-              </p>
+              <p className="ui-public-card-body">{t('impactAreas.hardware.description')}</p>
             </article>
 
             {/* Card 2 - Accessible repair */}
@@ -101,9 +94,7 @@ export default async function AboutContent() {
                 <Wrench className="h-7 w-7 text-action group-hover:text-action-text transition-colors" />
               </div>
               <h3 className="ui-public-card-title">{t('impactAreas.openSource.title')}</h3>
-              <p className="ui-public-card-body">
-                {t('impactAreas.openSource.description')}
-              </p>
+              <p className="ui-public-card-body">{t('impactAreas.openSource.description')}</p>
             </article>
 
             {/* Card 3 - Circular marketplace */}
@@ -112,9 +103,7 @@ export default async function AboutContent() {
                 <Recycle className="h-7 w-7 text-action group-hover:text-action-text transition-colors" />
               </div>
               <h3 className="ui-public-card-title">{t('impactAreas.community.title')}</h3>
-              <p className="ui-public-card-body">
-                {t('impactAreas.community.description')}
-              </p>
+              <p className="ui-public-card-body">{t('impactAreas.community.description')}</p>
             </article>
           </div>
         </div>
@@ -138,5 +127,5 @@ export default async function AboutContent() {
         </div>
       </Section>
     </main>
-  )
+  );
 }

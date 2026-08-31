@@ -14,11 +14,11 @@
 
 export interface DownscaleOptions {
   /** Longest edge in pixels after scaling. Labels stay legible at ~1600. */
-  maxEdge?: number
+  maxEdge?: number;
   /** JPEG quality 0–1 for the first encode pass. */
-  quality?: number
+  quality?: number;
   /** Target byte ceiling for the encoded image; quality steps down to meet it. */
-  maxBytes?: number
+  maxBytes?: number;
 }
 
 const DEFAULTS: Required<DownscaleOptions> = {
@@ -27,32 +27,32 @@ const DEFAULTS: Required<DownscaleOptions> = {
   // ~2.6 MB of base64 ≈ ~1.9 MB binary — comfortably under the vision
   // providers' base64 image limits with headroom for the JSON envelope.
   maxBytes: 2_600_000,
-}
+};
 
 /** Approximate decoded byte length of a base64 data URL without allocating it. */
 function dataUrlByteLength(dataUrl: string): number {
-  const comma = dataUrl.indexOf(',')
-  const b64 = comma >= 0 ? dataUrl.slice(comma + 1) : dataUrl
+  const comma = dataUrl.indexOf(',');
+  const b64 = comma >= 0 ? dataUrl.slice(comma + 1) : dataUrl;
   // 4 base64 chars -> 3 bytes; ignore padding for an estimate.
-  return Math.floor((b64.length * 3) / 4)
+  return Math.floor((b64.length * 3) / 4);
 }
 
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
-    const img = new Image()
-    img.onload = () => resolve(img)
-    img.onerror = () => reject(new Error('decode-failed'))
-    img.src = src
-  })
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error('decode-failed'));
+    img.src = src;
+  });
 }
 
 function readAsDataUrl(input: Blob): Promise<string> {
   return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = () => resolve(reader.result as string)
-    reader.onerror = () => reject(new Error('read-failed'))
-    reader.readAsDataURL(input)
-  })
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = () => reject(new Error('read-failed'));
+    reader.readAsDataURL(input);
+  });
 }
 
 /**
@@ -67,61 +67,61 @@ export async function downscaleImage(
   input: Blob | string,
   options: DownscaleOptions = {},
 ): Promise<string> {
-  const opts = { ...DEFAULTS, ...options }
+  const opts = { ...DEFAULTS, ...options };
 
   // Normalise to a data URL up front so every return path yields something
   // uploadable, even when canvas/DOM isn't available (SSR, tests).
-  let originalDataUrl: string
+  let originalDataUrl: string;
   try {
-    originalDataUrl = typeof input === 'string' ? input : await readAsDataUrl(input)
+    originalDataUrl = typeof input === 'string' ? input : await readAsDataUrl(input);
   } catch {
     // Can't even read it — hand back whatever we were given.
-    return typeof input === 'string' ? input : ''
+    return typeof input === 'string' ? input : '';
   }
 
   // Only raster images are downscalable; anything else passes through.
   if (typeof document === 'undefined' || !originalDataUrl.startsWith('data:image/')) {
-    return originalDataUrl
+    return originalDataUrl;
   }
 
   try {
-    const img = await loadImage(originalDataUrl)
-    const width = img.naturalWidth || img.width
-    const height = img.naturalHeight || img.height
-    if (!width || !height) return originalDataUrl
+    const img = await loadImage(originalDataUrl);
+    const width = img.naturalWidth || img.width;
+    const height = img.naturalHeight || img.height;
+    if (!width || !height) return originalDataUrl;
 
-    const longest = Math.max(width, height)
-    const scale = longest > opts.maxEdge ? opts.maxEdge / longest : 1
+    const longest = Math.max(width, height);
+    const scale = longest > opts.maxEdge ? opts.maxEdge / longest : 1;
 
     // Nothing to gain: already small and already a JPEG within budget.
-    const alreadyJpeg = originalDataUrl.startsWith('data:image/jpeg')
+    const alreadyJpeg = originalDataUrl.startsWith('data:image/jpeg');
     if (scale === 1 && alreadyJpeg && dataUrlByteLength(originalDataUrl) <= opts.maxBytes) {
-      return originalDataUrl
+      return originalDataUrl;
     }
 
-    const targetW = Math.max(1, Math.round(width * scale))
-    const targetH = Math.max(1, Math.round(height * scale))
+    const targetW = Math.max(1, Math.round(width * scale));
+    const targetH = Math.max(1, Math.round(height * scale));
 
-    const canvas = document.createElement('canvas')
-    canvas.width = targetW
-    canvas.height = targetH
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return originalDataUrl
-    ctx.drawImage(img, 0, 0, targetW, targetH)
+    const canvas = document.createElement('canvas');
+    canvas.width = targetW;
+    canvas.height = targetH;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return originalDataUrl;
+    ctx.drawImage(img, 0, 0, targetW, targetH);
 
     // Encode, then step quality down until under the byte budget (floor 0.5
     // so labels stay readable). Guarantees a bounded upload regardless of
     // how noisy the source photo is.
-    let quality = opts.quality
-    let out = canvas.toDataURL('image/jpeg', quality)
+    let quality = opts.quality;
+    let out = canvas.toDataURL('image/jpeg', quality);
     while (dataUrlByteLength(out) > opts.maxBytes && quality > 0.5) {
-      quality -= 0.12
-      out = canvas.toDataURL('image/jpeg', quality)
+      quality -= 0.12;
+      out = canvas.toDataURL('image/jpeg', quality);
     }
 
     // Never return something larger than we started with.
-    return dataUrlByteLength(out) < dataUrlByteLength(originalDataUrl) ? out : originalDataUrl
+    return dataUrlByteLength(out) < dataUrlByteLength(originalDataUrl) ? out : originalDataUrl;
   } catch {
-    return originalDataUrl
+    return originalDataUrl;
   }
 }

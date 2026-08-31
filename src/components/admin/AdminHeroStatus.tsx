@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * AdminHeroStatus — single-action landing primitive for admin sections.
@@ -19,8 +19,8 @@
  * SoC: this file knows about colors + layout, nothing else.
  */
 
-import { ComponentType, ReactNode } from 'react'
-import Link from 'next/link'
+import { ComponentType, ReactNode } from 'react';
+import Link from 'next/link';
 import {
   ArrowRight,
   CheckCircle2,
@@ -30,8 +30,8 @@ import {
   AlertTriangle,
   HelpCircle,
   Image as ImageIcon,
-} from 'lucide-react'
-import { Button } from '@/components/ui/button'
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 /**
  * Icon registry — a Server Component CANNOT pass an icon *component* across the
@@ -48,40 +48,40 @@ const HERO_ICONS = {
   alert: AlertTriangle,
   help: HelpCircle,
   image: ImageIcon,
-} as const
+} as const;
 
-export type HeroIconName = keyof typeof HERO_ICONS
+export type HeroIconName = keyof typeof HERO_ICONS;
 
-export type HeroTone = 'urgent' | 'attention' | 'empty' | 'healthy'
+export type HeroTone = 'urgent' | 'attention' | 'empty' | 'healthy';
 
 export interface HeroKpi {
-  label: string
-  value: number | string
+  label: string;
+  value: number | string;
 }
 
 interface CtaOnClick {
-  label: string
-  onClick: () => void
+  label: string;
+  onClick: () => void;
 }
 interface CtaLink {
-  label: string
-  href: string
+  label: string;
+  href: string;
 }
-export type HeroCta = CtaOnClick | CtaLink
+export type HeroCta = CtaOnClick | CtaLink;
 
 export interface AdminHeroStatusProps {
-  tone: HeroTone
+  tone: HeroTone;
   /**
    * Icon to render. Server Components MUST pass a {@link HeroIconName} string
    * (e.g. "check"); Client Components may pass a component directly.
    */
-  icon: HeroIconName | ComponentType<{ className?: string }>
-  headline: string
-  sub: string
-  cta?: HeroCta
-  kpis: HeroKpi[]
+  icon: HeroIconName | ComponentType<{ className?: string }>;
+  headline: string;
+  sub: string;
+  cta?: HeroCta;
+  kpis: HeroKpi[];
   /** Optional extra content slot below the KPI strip (e.g. inline action chips). */
-  children?: ReactNode
+  children?: ReactNode;
 }
 
 const TONE_SURFACE: Record<HeroTone, string> = {
@@ -89,17 +89,17 @@ const TONE_SURFACE: Record<HeroTone, string> = {
   attention: 'bg-warning-50 dark:bg-warning-900/20 border-warning-200 dark:border-warning-800',
   empty: 'bg-surface-raised border-strong',
   healthy: 'bg-surface-raised border-subtle',
-}
+};
 
 const TONE_ICON: Record<HeroTone, string> = {
   urgent: 'text-error-600 dark:text-error-400',
   attention: 'text-warning-600 dark:text-warning-400',
   empty: 'text-text-tertiary',
   healthy: 'text-action',
-}
+};
 
 function isLinkCta(cta: HeroCta): cta is CtaLink {
-  return 'href' in cta
+  return 'href' in cta;
 }
 
 export function AdminHeroStatus({
@@ -111,12 +111,14 @@ export function AdminHeroStatus({
   kpis,
   children,
 }: AdminHeroStatusProps) {
-  const Icon = typeof icon === 'string' ? HERO_ICONS[icon] : icon
+  const Icon = typeof icon === 'string' ? HERO_ICONS[icon] : icon;
   return (
     <div className={`rounded-xl border p-5 sm:p-6 ${TONE_SURFACE[tone]}`}>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
         <div className="flex min-w-0 flex-1 items-start gap-4">
-          <div className={`shrink-0 rounded-lg p-2 bg-surface-base/60 dark:bg-surface-base/30 ${TONE_ICON[tone]}`}>
+          <div
+            className={`shrink-0 rounded-lg p-2 bg-surface-base/60 dark:bg-surface-base/30 ${TONE_ICON[tone]}`}
+          >
             <Icon className="w-6 h-6" />
           </div>
           <div className="min-w-0 flex-1">
@@ -126,23 +128,35 @@ export function AdminHeroStatus({
             <p className="mt-1 text-sm text-text-secondary">{sub}</p>
           </div>
         </div>
-        {cta && (
-          isLinkCta(cta) ? (
-            <Button as={Link} href={cta.href} variant="primary" size="sm" className="w-full shrink-0 items-center gap-2 sm:w-auto">
+        {cta &&
+          (isLinkCta(cta) ? (
+            <Button
+              as={Link}
+              href={cta.href}
+              variant="primary"
+              size="sm"
+              className="w-full shrink-0 items-center gap-2 sm:w-auto"
+            >
               {cta.label}
               <ArrowRight className="w-4 h-4" />
             </Button>
           ) : (
-            <Button onClick={cta.onClick} variant="primary" size="sm" className="w-full shrink-0 items-center gap-2 sm:w-auto">
+            <Button
+              onClick={cta.onClick}
+              variant="primary"
+              size="sm"
+              className="w-full shrink-0 items-center gap-2 sm:w-auto"
+            >
               {cta.label}
               <ArrowRight className="w-4 h-4" />
             </Button>
-          )
-        )}
+          ))}
       </div>
 
       {kpis.length > 0 && (
-        <dl className={`mt-5 grid gap-3 text-sm ${kpis.length <= 2 ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-4'}`}>
+        <dl
+          className={`mt-5 grid gap-3 text-sm ${kpis.length <= 2 ? 'grid-cols-2' : 'grid-cols-2 sm:grid-cols-4'}`}
+        >
           {kpis.map((k) => (
             <div key={k.label} className="flex flex-col">
               <dt className="text-xs text-text-tertiary">{k.label}</dt>
@@ -154,5 +168,5 @@ export function AdminHeroStatus({
 
       {children}
     </div>
-  )
+  );
 }

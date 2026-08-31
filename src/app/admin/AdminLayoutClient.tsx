@@ -1,47 +1,43 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { usePathname } from '@/i18n/navigation'
-import { AdminSidebar } from './AdminSidebar'
-import { HirnFloatingButton } from '@/components/admin/HirnFloatingButton'
-import { AdminTopBar } from '@/components/admin/AdminTopBar'
-import { MobileBottomNav } from '@/components/admin/MobileBottomNav'
-import { getHirnSection } from '@/config/sections'
+import { useState, useEffect } from 'react';
+import { usePathname } from '@/i18n/navigation';
+import { AdminSidebar } from './AdminSidebar';
+import { HirnFloatingButton } from '@/components/admin/HirnFloatingButton';
+import { AdminTopBar } from '@/components/admin/AdminTopBar';
+import { MobileBottomNav } from '@/components/admin/MobileBottomNav';
+import { getHirnSection } from '@/config/sections';
 
 interface AdminLayoutClientProps {
-  children: React.ReactNode
+  children: React.ReactNode;
   user: {
-    name: string | null
-    email: string
-    isStaff: boolean
-    staffPermissions: string[]
-  } | null
-  accessibleSections: string[]
+    name: string | null;
+    email: string;
+    isStaff: boolean;
+    staffPermissions: string[];
+  } | null;
+  accessibleSections: string[];
 }
 
-export function AdminLayoutClient({
-  children,
-  user,
-  accessibleSections,
-}: AdminLayoutClientProps) {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const pathname = usePathname()
+export function AdminLayoutClient({ children, user, accessibleSections }: AdminLayoutClientProps) {
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   // Body scroll lock when mobile sidebar is open
   useEffect(() => {
     if (mobileMenuOpen) {
-      document.body.style.overflow = 'hidden'
+      document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = ''
+      document.body.style.overflow = '';
     }
     return () => {
-      document.body.style.overflow = ''
-    }
-  }, [mobileMenuOpen])
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
 
-  const hirnSection = getHirnSection()
-  const hasHirnAccess = hirnSection && accessibleSections.includes(hirnSection.id)
+  const hirnSection = getHirnSection();
+  const hasHirnAccess = hirnSection && accessibleSections.includes(hirnSection.id);
 
   return (
     <div className="has-bottom-nav min-h-screen bg-surface-raised">
@@ -85,5 +81,5 @@ export function AdminLayoutClient({
 
       <HirnFloatingButton hasAccess={!!hasHirnAccess} />
     </div>
-  )
+  );
 }

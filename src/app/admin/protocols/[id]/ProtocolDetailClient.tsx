@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Protocol Detail Client Component
@@ -16,7 +16,7 @@
  *   9. Erneut verarbeiten / Abschliessen / Löschen
  */
 
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo } from 'react';
 import {
   useProtocolDetail,
   ProtocolReprocessSection,
@@ -24,19 +24,27 @@ import {
   ProtocolActionItemsList,
   ProtocolFollowUps,
   ProtocolAIChat,
-} from '@/components/admin/protocols'
-import type { ProtocolDetailProps } from '@/components/admin/protocols'
-import { PROTOCOL_STATUSES } from '@/config/protocols'
-import { useRouter } from 'next/navigation'
-import { getProtocolReviewChecklist, getProtocolReviewCounts } from '@/lib/protocols/review'
-import { ProtocolPipelineHeader } from './detail/ProtocolPipelineHeader'
-import { ProtocolSummaryCard } from './detail/ProtocolSummaryCard'
-import { ProtocolAttendeeMapping } from './detail/ProtocolAttendeeMapping'
-import { ProtocolDetailFooter } from './detail/ProtocolDetailFooter'
+} from '@/components/admin/protocols';
+import type { ProtocolDetailProps } from '@/components/admin/protocols';
+import { PROTOCOL_STATUSES } from '@/config/protocols';
+import { useRouter } from 'next/navigation';
+import { getProtocolReviewChecklist, getProtocolReviewCounts } from '@/lib/protocols/review';
+import { ProtocolPipelineHeader } from './detail/ProtocolPipelineHeader';
+import { ProtocolSummaryCard } from './detail/ProtocolSummaryCard';
+import { ProtocolAttendeeMapping } from './detail/ProtocolAttendeeMapping';
+import { ProtocolDetailFooter } from './detail/ProtocolDetailFooter';
 
 export default function ProtocolDetailClient(props: ProtocolDetailProps) {
-  const router = useRouter()
-  const { protocol, actionLinks, teamMembers, protocolDecisions, currentUserId, isProtocolCreator, isSuperAdmin } = props
+  const router = useRouter();
+  const {
+    protocol,
+    actionLinks,
+    teamMembers,
+    protocolDecisions,
+    currentUserId,
+    isProtocolCreator,
+    isSuperAdmin,
+  } = props;
 
   const {
     notes,
@@ -80,15 +88,19 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
     showDeleteDialog,
     setShowDeleteDialog,
     handleDelete,
-  } = useProtocolDetail(props)
+  } = useProtocolDetail(props);
 
-  const reviewChecklist = useMemo(() => getProtocolReviewChecklist({
-    status: protocol.status,
-    hasRawInput: Boolean(protocol.raw_transcript),
-    notes,
-    actionLinks,
-    protocolDecisions,
-  }), [protocol.status, protocol.raw_transcript, notes, actionLinks, protocolDecisions])
+  const reviewChecklist = useMemo(
+    () =>
+      getProtocolReviewChecklist({
+        status: protocol.status,
+        hasRawInput: Boolean(protocol.raw_transcript),
+        notes,
+        actionLinks,
+        protocolDecisions,
+      }),
+    [protocol.status, protocol.raw_transcript, notes, actionLinks, protocolDecisions],
+  );
 
   /**
    * Finalize blockers — enumerate the open prerequisites so the confirm
@@ -99,15 +111,19 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
    * up-front lets them act intentionally rather than by surprise.
    */
   const finalizeBlockers = useMemo(() => {
-    const counts = getProtocolReviewCounts(notes, actionLinks, protocolDecisions)
+    const counts = getProtocolReviewCounts(notes, actionLinks, protocolDecisions);
     return {
       unlinkedTasks: counts.unlinkedTasks,
       openDecisions: counts.openDecisions,
       closedDecisionsWithoutTask: counts.closedDecisionsWithoutTask,
       unresolvedAssignees: counts.unresolvedAssignees,
-      hasAny: counts.unlinkedTasks > 0 || counts.openDecisions > 0 || counts.closedDecisionsWithoutTask > 0 || counts.unresolvedAssignees > 0,
-    }
-  }, [notes, actionLinks, protocolDecisions])
+      hasAny:
+        counts.unlinkedTasks > 0 ||
+        counts.openDecisions > 0 ||
+        counts.closedDecisionsWithoutTask > 0 ||
+        counts.unresolvedAssignees > 0,
+    };
+  }, [notes, actionLinks, protocolDecisions]);
 
   // Detected attendees that aren't yet mapped to a team member.
   // Dep on `notes` directly (not `notes?.detected_attendees`) — the
@@ -119,20 +135,20 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
   // change together in practice (the parent owns the whole `notes`
   // object's identity).
   const unmappedAttendees = useMemo(() => {
-    if (!notes?.detected_attendees) return []
-    return notes.detected_attendees.filter(name => !attendeeMapping[name])
-  }, [notes, attendeeMapping])
+    if (!notes?.detected_attendees) return [];
+    return notes.detected_attendees.filter((name) => !attendeeMapping[name]);
+  }, [notes, attendeeMapping]);
 
-  const allMapped = unmappedAttendees.length === 0 && (notes?.detected_attendees?.length ?? 0) > 0
+  const allMapped = unmappedAttendees.length === 0 && (notes?.detected_attendees?.length ?? 0) > 0;
 
   // While the AI runs, refresh until the status flips — the user should never
   // have to reload by hand to see their structured notes appear.
-  const isProcessing = protocol.status === PROTOCOL_STATUSES.PROCESSING
+  const isProcessing = protocol.status === PROTOCOL_STATUSES.PROCESSING;
   useEffect(() => {
-    if (!isProcessing) return
-    const timer = setInterval(() => router.refresh(), 5000)
-    return () => clearInterval(timer)
-  }, [isProcessing, router])
+    if (!isProcessing) return;
+    const timer = setInterval(() => router.refresh(), 5000);
+    return () => clearInterval(timer);
+  }, [isProcessing, router]);
 
   return (
     <div className="space-y-4">
@@ -265,5 +281,5 @@ export default function ProtocolDetailClient(props: ProtocolDetailProps) {
         handleDelete={handleDelete}
       />
     </div>
-  )
+  );
 }

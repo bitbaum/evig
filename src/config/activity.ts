@@ -80,7 +80,7 @@ export const HELP_REQUEST_STATUSES = {
 } as const;
 
 /** Alias for HELP_REQUEST_STATUSES — prefer this name for consistency with other *_STATUS constants */
-export const HELP_REQUEST_STATUS = HELP_REQUEST_STATUSES
+export const HELP_REQUEST_STATUS = HELP_REQUEST_STATUSES;
 
 export const HELP_REQUEST_STATUS_LABELS: Record<HelpRequestStatus, string> = {
   open: 'Offen',
@@ -145,11 +145,23 @@ export type ActivitySourceType = (typeof ACTIVITY_SOURCE_TYPES)[keyof typeof ACT
 export type ActivityCategory = (typeof ACTIVITY_CATEGORIES)[keyof typeof ACTIVITY_CATEGORIES];
 
 // Options arrays for forms (derived from constants)
-export const ACTIVITY_UPDATE_TYPE_OPTIONS = Object.values(ACTIVITY_UPDATE_TYPES) as [string, ...string[]];
+export const ACTIVITY_UPDATE_TYPE_OPTIONS = Object.values(ACTIVITY_UPDATE_TYPES) as [
+  string,
+  ...string[],
+];
 export const VISIBILITY_OPTIONS = Object.values(VISIBILITY_LEVELS) as [string, ...string[]];
-export const HELP_REQUEST_URGENCY_OPTIONS = Object.values(HELP_REQUEST_URGENCY) as [string, ...string[]];
-export const HELP_REQUEST_STATUS_OPTIONS = Object.values(HELP_REQUEST_STATUSES) as [string, ...string[]];
-export const ACTIVITY_CATEGORY_OPTIONS = Object.values(ACTIVITY_CATEGORIES) as [string, ...string[]];
+export const HELP_REQUEST_URGENCY_OPTIONS = Object.values(HELP_REQUEST_URGENCY) as [
+  string,
+  ...string[],
+];
+export const HELP_REQUEST_STATUS_OPTIONS = Object.values(HELP_REQUEST_STATUSES) as [
+  string,
+  ...string[],
+];
+export const ACTIVITY_CATEGORY_OPTIONS = Object.values(ACTIVITY_CATEGORIES) as [
+  string,
+  ...string[],
+];
 
 // Helper functions
 export function getActivityUpdateTypeLabel(type: string | null): string {
@@ -159,7 +171,9 @@ export function getActivityUpdateTypeLabel(type: string | null): string {
 
 export function getActivityUpdateTypeColor(type: string | null): string {
   if (!type) return 'bg-neutral-100 text-neutral-800';
-  return ACTIVITY_UPDATE_TYPE_COLORS[type as ActivityUpdateType] || 'bg-neutral-100 text-neutral-800';
+  return (
+    ACTIVITY_UPDATE_TYPE_COLORS[type as ActivityUpdateType] || 'bg-neutral-100 text-neutral-800'
+  );
 }
 
 export function getVisibilityLabel(visibility: string | null): string {
@@ -174,7 +188,9 @@ export function getHelpRequestUrgencyLabel(urgency: string | null): string {
 
 export function getHelpRequestUrgencyColor(urgency: string | null): string {
   if (!urgency) return 'bg-neutral-100 text-neutral-800';
-  return HELP_REQUEST_URGENCY_COLORS[urgency as HelpRequestUrgency] || 'bg-neutral-100 text-neutral-800';
+  return (
+    HELP_REQUEST_URGENCY_COLORS[urgency as HelpRequestUrgency] || 'bg-neutral-100 text-neutral-800'
+  );
 }
 
 export function getHelpRequestStatusLabel(status: string | null): string {
@@ -183,8 +199,12 @@ export function getHelpRequestStatusLabel(status: string | null): string {
 }
 
 export function getHelpRequestStatusColor(status: string | null): string {
-  if (!status) return 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200';
-  return HELP_REQUEST_STATUS_COLORS[status as HelpRequestStatus] || 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200';
+  if (!status)
+    return 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200';
+  return (
+    HELP_REQUEST_STATUS_COLORS[status as HelpRequestStatus] ||
+    'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200'
+  );
 }
 
 export function getActivityCategoryLabel(category: string | null): string {

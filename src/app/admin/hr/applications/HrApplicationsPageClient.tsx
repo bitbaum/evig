@@ -1,34 +1,30 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { FileText, UserCheck, Briefcase, Inbox } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminListShell } from '@/components/admin/AdminListShell'
-import { AdminStatsStrip } from '@/components/admin/AdminStatsStrip'
-import { AdminFilterBar } from '@/components/admin/AdminFilterBar'
-import { Button } from '@/components/ui/button'
-import { ROUTES } from '@/config/routes'
+import Link from 'next/link';
+import { FileText, UserCheck, Briefcase, Inbox } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import { AdminListShell } from '@/components/admin/AdminListShell';
+import { AdminStatsStrip } from '@/components/admin/AdminStatsStrip';
+import { AdminFilterBar } from '@/components/admin/AdminFilterBar';
+import { Button } from '@/components/ui/button';
+import { ROUTES } from '@/config/routes';
 import {
   APPLICATION_STATUS,
   APPLICATION_STATUS_OPTIONS,
   APPLICATION_STATUS_LABELS,
   type ApplicationStatus,
-} from '@/config/hr-application-status'
-import type { HrFunnelStats } from '@/lib/types/hr'
-import {
-  ApplicationActionDialog,
-  ApplicationCard,
-  useHrApplications,
-} from '@/components/admin/hr'
+} from '@/config/hr-application-status';
+import type { HrFunnelStats } from '@/lib/types/hr';
+import { ApplicationActionDialog, ApplicationCard, useHrApplications } from '@/components/admin/hr';
 
 interface Props {
-  stats: HrFunnelStats
-  initialPostingFilter?: string
+  stats: HrFunnelStats;
+  initialPostingFilter?: string;
 }
 
 export default function HrApplicationsPageClient({ stats, initialPostingFilter }: Props) {
-  const t = useTranslations('admin.hr.applications')
+  const t = useTranslations('admin.hr.applications');
   const {
     applications,
     loading,
@@ -51,9 +47,9 @@ export default function HrApplicationsPageClient({ stats, initialPostingFilter }
     closeDialog,
     submitAction,
     fetchApplications,
-  } = useHrApplications(initialPostingFilter)
+  } = useHrApplications(initialPostingFilter);
 
-  const hasActiveFilters = statusFilter !== 'all' || Boolean(searchQuery) || Boolean(postingFilter)
+  const hasActiveFilters = statusFilter !== 'all' || Boolean(searchQuery) || Boolean(postingFilter);
 
   return (
     <AdminPageWrapper
@@ -143,8 +139,8 @@ export default function HrApplicationsPageClient({ stats, initialPostingFilter }
               ]}
               hasActiveFilters={hasActiveFilters}
               onClearFilters={() => {
-                setStatusFilter(APPLICATION_STATUS.NEW)
-                setSearchQuery('')
+                setStatusFilter(APPLICATION_STATUS.NEW);
+                setSearchQuery('');
               }}
             />
           }
@@ -173,5 +169,5 @@ export default function HrApplicationsPageClient({ stats, initialPostingFilter }
         </AdminListShell>
       </div>
     </AdminPageWrapper>
-  )
+  );
 }

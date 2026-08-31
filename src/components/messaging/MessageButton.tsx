@@ -1,46 +1,46 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { MessageSquare } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
-import { MessageSidebar } from './MessageSidebar'
-import { apiFetch } from '@/lib/api/client'
+import { useState, useEffect } from 'react';
+import { MessageSquare } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
+import { MessageSidebar } from './MessageSidebar';
+import { apiFetch } from '@/lib/api/client';
 
 interface Conversation {
-  id: string
-  unread_count: number
+  id: string;
+  unread_count: number;
 }
 
 export function MessageButton() {
-  const t = useTranslations('components.messageButton')
-  const [isOpen, setIsOpen] = useState(false)
-  const [unreadCount, setUnreadCount] = useState(0)
+  const t = useTranslations('components.messageButton');
+  const [isOpen, setIsOpen] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
     // Poll for unread messages every 30 seconds
     const fetchUnreadCount = async () => {
       try {
         const { data } = await apiFetch<{ conversations: Conversation[] }>(
-          '/api/messages/conversations?limit=1'
-        )
+          '/api/messages/conversations?limit=1',
+        );
         if (data?.conversations) {
           const totalUnread = data.conversations.reduce(
             (sum: number, conv: Conversation) => sum + (conv.unread_count || 0),
-            0
-          )
-          setUnreadCount(totalUnread)
+            0,
+          );
+          setUnreadCount(totalUnread);
         }
       } catch {
         // Silently ignore polling errors
       }
-    }
+    };
 
-    fetchUnreadCount()
-    const interval = setInterval(fetchUnreadCount, 30000) // 30 seconds
+    fetchUnreadCount();
+    const interval = setInterval(fetchUnreadCount, 30000); // 30 seconds
 
-    return () => clearInterval(interval)
-  }, [])
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <>
@@ -59,8 +59,5 @@ export function MessageButton() {
 
       <MessageSidebar isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </>
-  )
+  );
 }
-
-
-

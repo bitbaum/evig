@@ -46,12 +46,14 @@ export async function GET(request: NextRequest) {
         thumbnail: listingThumbnailSubquery,
       })
       .from(listings)
-      .where(and(
-        ne(listings.id, listingId),
-        eq(listings.status, LISTING_STATUS.ACTIVE),
-        eq(listings.category, source.category),
-        sql`${listings.priceChf}::numeric BETWEEN ${Math.max(0, price - priceRange)} AND ${price + priceRange}`
-      ))
+      .where(
+        and(
+          ne(listings.id, listingId),
+          eq(listings.status, LISTING_STATUS.ACTIVE),
+          eq(listings.category, source.category),
+          sql`${listings.priceChf}::numeric BETWEEN ${Math.max(0, price - priceRange)} AND ${price + priceRange}`,
+        ),
+      )
       .orderBy(desc(listings.viewCount))
       .limit(limit);
 

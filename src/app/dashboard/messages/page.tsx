@@ -1,62 +1,62 @@
-'use client'
+'use client';
 
-import { useState, useEffect, Suspense } from 'react'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { useSession } from 'next-auth/react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { MessageSquare, Loader2 } from 'lucide-react'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import ConversationList from '@/components/messages/ConversationList'
-import type { Conversation } from '@/components/messages/ConversationList'
-import MessageThread from '@/components/messages/MessageThread'
-import { useSwrFetch } from '@/lib/api/swr'
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
-import { EmptyState } from '@/components/ui/EmptyState'
-import { ROUTES } from '@/config/routes'
+import { useState, useEffect, Suspense } from 'react';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { useSession } from 'next-auth/react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { MessageSquare, Loader2 } from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import ConversationList from '@/components/messages/ConversationList';
+import type { Conversation } from '@/components/messages/ConversationList';
+import MessageThread from '@/components/messages/MessageThread';
+import { useSwrFetch } from '@/lib/api/swr';
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/ui/Heading';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { ROUTES } from '@/config/routes';
 
 function MessagesContent() {
-  const t = useTranslations('dashboard.messages')
-  const { data: session, status: sessionStatus } = useSession()
-  const router = useRouter()
-  const searchParams = useSearchParams()
+  const t = useTranslations('dashboard.messages');
+  const { data: session, status: sessionStatus } = useSession();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   // The deep-link param seeds the initial selection; the SWR fetch is gated on
   // an authenticated session (null key = no request).
   const [selectedConvId, setSelectedConvId] = useState<string | null>(
-    searchParams.get('conversation')
-  )
+    searchParams.get('conversation'),
+  );
 
   const { data, isLoading } = useSwrFetch<{ conversations: Conversation[] }>(
     session?.user ? '/api/messages' : null,
-  )
-  const conversations = data?.conversations ?? []
+  );
+  const conversations = data?.conversations ?? [];
 
   // Track the selected conversation's details for the thread
-  const selectedConv = conversations.find(c => c.id === selectedConvId)
+  const selectedConv = conversations.find((c) => c.id === selectedConvId);
 
   useEffect(() => {
-    if (sessionStatus === 'loading') return
+    if (sessionStatus === 'loading') return;
     if (!session?.user) {
-      router.push('/auth/login')
+      router.push('/auth/login');
     }
-  }, [session, sessionStatus, router])
+  }, [session, sessionStatus, router]);
 
   const handleSelectConversation = (id: string) => {
-    setSelectedConvId(id)
+    setSelectedConvId(id);
     // Update URL without navigation
-    const url = new URL(window.location.href)
-    url.searchParams.set('conversation', id)
-    window.history.replaceState({}, '', url.toString())
-  }
+    const url = new URL(window.location.href);
+    url.searchParams.set('conversation', id);
+    window.history.replaceState({}, '', url.toString());
+  };
 
   const handleBack = () => {
-    setSelectedConvId(null)
-    const url = new URL(window.location.href)
-    url.searchParams.delete('conversation')
-    window.history.replaceState({}, '', url.toString())
-  }
+    setSelectedConvId(null);
+    const url = new URL(window.location.href);
+    url.searchParams.delete('conversation');
+    window.history.replaceState({}, '', url.toString());
+  };
 
   // !session?.user: keep the spinner while the login redirect is in flight
   if (sessionStatus === 'loading' || isLoading || !session?.user) {
@@ -64,15 +64,13 @@ function MessagesContent() {
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader2 className="w-8 h-8 text-action animate-spin" aria-hidden="true" />
       </div>
-    )
+    );
   }
 
   return (
     <div className="space-y-6">
       <header className="border-b border-subtle pb-6">
-        <Eyebrow>
-          {t('pageSubtitle')}
-        </Eyebrow>
+        <Eyebrow>{t('pageSubtitle')}</Eyebrow>
         <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
           {t('pageTitle')}
         </Heading>
@@ -92,12 +90,17 @@ function MessagesContent() {
           }
         />
       ) : (
-        <Card className="overflow-hidden" style={{ height: 'calc(100vh - 220px)', minHeight: '500px' }}>
+        <Card
+          className="overflow-hidden"
+          style={{ height: 'calc(100vh - 220px)', minHeight: '500px' }}
+        >
           <div className="flex h-full">
             {/* Conversation list — hidden on mobile when thread is open */}
-            <div className={`w-full lg:w-80 lg:border-r border overflow-y-auto shrink-0 ${
-              selectedConvId ? 'hidden lg:block' : 'block'
-            }`}>
+            <div
+              className={`w-full lg:w-80 lg:border-r border overflow-y-auto shrink-0 ${
+                selectedConvId ? 'hidden lg:block' : 'block'
+              }`}
+            >
               <ConversationList
                 conversations={conversations}
                 selectedId={selectedConvId}
@@ -106,9 +109,11 @@ function MessagesContent() {
             </div>
 
             {/* Message thread */}
-            <div className={`flex-1 ${
-              selectedConvId ? 'block' : 'hidden lg:flex lg:items-center lg:justify-center'
-            }`}>
+            <div
+              className={`flex-1 ${
+                selectedConvId ? 'block' : 'hidden lg:flex lg:items-center lg:justify-center'
+              }`}
+            >
               {selectedConvId && selectedConv && session?.user?.id ? (
                 <MessageThread
                   conversationId={selectedConvId}
@@ -130,17 +135,19 @@ function MessagesContent() {
         </Card>
       )}
     </div>
-  )
+  );
 }
 
 export default function MessagesPage() {
   return (
-    <Suspense fallback={
-      <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 text-action animate-spin" aria-hidden="true" />
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Loader2 className="w-8 h-8 text-action animate-spin" aria-hidden="true" />
+        </div>
+      }
+    >
       <MessagesContent />
     </Suspense>
-  )
+  );
 }

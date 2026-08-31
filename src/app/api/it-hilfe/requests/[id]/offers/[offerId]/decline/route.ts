@@ -1,17 +1,24 @@
-import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
-import { db } from '@/db'
-import { itHilfeOffers, itHilfeRequests } from '@/db/schema/itHilfe'
-import { users } from '@/db/schema/auth'
-import { eq, and, sql } from 'drizzle-orm'
-import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { logger } from '@/lib/logger'
-import { OFFER_STATUS } from '@/config/it-hilfe'
-import { notifyOfferDeclined } from '@/lib/it-hilfe/notifications'
+import { NextRequest } from 'next/server';
+import { auth } from '@/auth';
+import { db } from '@/db';
+import { itHilfeOffers, itHilfeRequests } from '@/db/schema/itHilfe';
+import { users } from '@/db/schema/auth';
+import { eq, and, sql } from 'drizzle-orm';
+import {
+  apiError,
+  apiSuccess,
+  apiUnauthorized,
+  apiBadRequest,
+  apiNotFound,
+  apiForbidden,
+} from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { logger } from '@/lib/logger';
+import { OFFER_STATUS } from '@/config/it-hilfe';
+import { notifyOfferDeclined } from '@/lib/it-hilfe/notifications';
 
 interface RouteParams {
-  params: Promise<{ id: string; offerId: string }>
+  params: Promise<{ id: string; offerId: string }>;
 }
 
 /**
@@ -20,17 +27,17 @@ interface RouteParams {
  */
 export async function POST(request: NextRequest, { params }: RouteParams) {
   try {
-    const session = await auth()
+    const session = await auth();
     if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
+      return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED);
     }
 
-    const { id, offerId } = await params
+    const { id, offerId } = await params;
 
     // Validate UUID formats
-    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(id) || !uuidRegex.test(offerId)) {
-      return apiBadRequest(ERROR_MESSAGES.INVALID_ID)
+      return apiBadRequest(ERROR_MESSAGES.INVALID_ID);
     }
 
     // Verify request ownership
@@ -40,14 +47,14 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
         title: itHilfeRequests.title,
       })
       .from(itHilfeRequests)
-      .where(eq(itHilfeRequests.id, id))
+      .where(eq(itHilfeRequests.id, id));
 
     if (!requestData) {
-      return apiNotFound('IT-Hilfe-Anfrage')
+      return apiNotFound('IT-Hilfe-Anfrage');
     }
 
     if (requestData.requesterId !== session.user.id) {
-      return apiForbidden('Du kannst nur Angebote für deine eigenen Anfragen ablehnen')
+      return apiForbidden('Du kannst nur Angebote für deine eigenen Anfragen ablehnen');
     }
 
     // Get offer with helper info
@@ -61,50 +68,47 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       })
       .from(itHilfeOffers)
       .innerJoin(users, eq(itHilfeOffers.helperId, users.id))
-      .where(and(
-        eq(itHilfeOffers.id, offerId),
-        eq(itHilfeOffers.requestId, id)
-      ))
+      .where(and(eq(itHilfeOffers.id, offerId), eq(itHilfeOffers.requestId, id)));
 
     if (!offer) {
-      return apiNotFound('Angebot')
+      return apiNotFound('Angebot');
     }
 
     if (offer.status !== OFFER_STATUS.PENDING) {
-      return apiBadRequest('Nur ausstehende Angebote können abgelehnt werden')
+      return apiBadRequest('Nur ausstehende Angebote können abgelehnt werden');
     }
 
     // Set offer status to rejected
     await db
       .update(itHilfeOffers)
       .set({ status: OFFER_STATUS.REJECTED })
-      .where(eq(itHilfeOffers.id, offerId))
+      .where(eq(itHilfeOffers.id, offerId));
 
     // Decrement offer count
     await db
       .update(itHilfeRequests)
       .set({ offerCount: sql`GREATEST(${itHilfeRequests.offerCount} - 1, 0)` })
-      .where(eq(itHilfeRequests.id, id))
+      .where(eq(itHilfeRequests.id, id));
 
     logger.info('Declined IT-Hilfe offer', {
       offerId,
       requestId: id,
       requesterId: session.user.id,
       helperId: offer.helperId,
-    })
+    });
 
     notifyOfferDeclined({
       recipientIds: [offer.helperId],
       requestId: id,
       helperName: offer.helperName || 'Techniker',
       requestTitle: requestData.title,
-    })
+    });
 
     return apiSuccess({
       message: 'Angebot erfolgreich abgelehnt',
-    })
+    });
   } catch (error) {
-    logger.error('Error declining offer', { error })
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    logger.error('Error declining offer', { error });
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
 }

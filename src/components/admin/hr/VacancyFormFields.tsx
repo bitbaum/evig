@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import {
   ROLE_TRACK_OPTIONS,
@@ -7,18 +7,18 @@ import {
   VACANCY_STATUS_LABELS,
   type RoleTrack,
   type VacancyStatus,
-} from '@/config/hr-vacancies'
-import { DEPARTMENT_OPTIONS, DEPARTMENT_LABELS, type Department } from '@/config/team'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Select } from '@/components/ui/select'
-import { FormField } from '@/components/ui/form-field'
+} from '@/config/hr-vacancies';
+import { DEPARTMENT_OPTIONS, DEPARTMENT_LABELS, type Department } from '@/config/team';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select } from '@/components/ui/select';
+import { FormField } from '@/components/ui/form-field';
 
 interface Props {
-  statusFilter: string
-  searchQuery: string
-  onStatusChange: (value: string) => void
-  onSearchChange: (value: string) => void
+  statusFilter: string;
+  searchQuery: string;
+  onStatusChange: (value: string) => void;
+  onSearchChange: (value: string) => void;
 }
 
 export function VacancyFilters({
@@ -49,28 +49,28 @@ export function VacancyFilters({
         className="flex-1"
       />
     </div>
-  )
+  );
 }
 
 interface FormProps {
   form: {
-    title: string
-    summary: string
-    description: string
-    role_track: RoleTrack
-    department: string
-    location: string
-    remote_ok: boolean
-    hours_per_week: string
-    start_date: string
-    application_deadline: string
-    compensation_public_text: string
-    show_on_get_involved: boolean
-    seo_title: string
-    seo_description: string
-  }
-  onChange: (field: string, value: string | boolean) => void
-  showAdvanced?: boolean
+    title: string;
+    summary: string;
+    description: string;
+    role_track: RoleTrack;
+    department: string;
+    location: string;
+    remote_ok: boolean;
+    hours_per_week: string;
+    start_date: string;
+    application_deadline: string;
+    compensation_public_text: string;
+    show_on_get_involved: boolean;
+    seo_title: string;
+    seo_description: string;
+  };
+  onChange: (field: string, value: string | boolean) => void;
+  showAdvanced?: boolean;
 }
 
 export function VacancyFormFields({ form, onChange, showAdvanced = false }: FormProps) {
@@ -222,5 +222,5 @@ export function VacancyFormFields({ form, onChange, showAdvanced = false }: Form
         </>
       )}
     </div>
-  )
+  );
 }

@@ -9,7 +9,7 @@ export const HELPER_STATUS = {
   SUSPENDED: 'suspended',
 } as const;
 
-export type HelperStatus = typeof HELPER_STATUS[keyof typeof HELPER_STATUS];
+export type HelperStatus = (typeof HELPER_STATUS)[keyof typeof HELPER_STATUS];
 
 export const HELPER_STATUS_LABELS: Record<HelperStatus, string> = {
   active: 'Aktiv',

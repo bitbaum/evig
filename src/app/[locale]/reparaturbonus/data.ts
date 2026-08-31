@@ -14,8 +14,8 @@ import {
   Recycle,
   Leaf,
   Ticket,
-} from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 /**
  * Reparaturbonus Zürich — SSOT for the language-independent STRUCTURE and the
@@ -58,11 +58,11 @@ export const REPARATURBONUS = {
   /** Registration page for repair businesses. */
   businessRegistrationUrl:
     'https://www.stadt-zuerich.ch/de/umwelt-und-energie/klima/kreislaufwirtschaft/reparaturfoerderung/registrierung-reparaturbetriebe.html',
-} as const
+} as const;
 
 export interface IconItem {
-  id: string
-  icon: LucideIcon
+  id: string;
+  icon: LucideIcon;
 }
 
 /** The four headline figures. Strings: reparaturbonus.facts.{id}.{value,label,detail}. */
@@ -71,7 +71,7 @@ export const KEY_FACTS: IconItem[] = [
   { id: 'coverage', icon: Percent },
   { id: 'categories', icon: Boxes },
   { id: 'pilot', icon: CalendarClock },
-]
+];
 
 /** How a resident uses the bonus, in order. Strings: reparaturbonus.steps.{id}.{title,body}. */
 export const STEPS: IconItem[] = [
@@ -79,28 +79,28 @@ export const STEPS: IconItem[] = [
   { id: 'find', icon: Search },
   { id: 'repair', icon: Wrench },
   { id: 'redeem', icon: CircleDollarSign },
-]
+];
 
 /** What qualifies at pilot start. Strings: reparaturbonus.eligible.{id}.{title,body}. */
 export const ELIGIBLE: IconItem[] = [
   { id: 'electronics', icon: Laptop },
   { id: 'textiles', icon: Shirt },
   { id: 'more', icon: Sparkles },
-]
+];
 
 /** Why repairs at Revamp-IT fit the bonus. Strings: reparaturbonus.fit.{id}.{title,body}. */
 export const REVAMPIT_FIT: IconItem[] = [
   { id: 'category', icon: Cpu },
   { id: 'location', icon: MapPin },
   { id: 'mission', icon: Recycle },
-]
+];
 
 /** Context / impact of the programme. Strings: reparaturbonus.impact.{id}.{title,body}. */
 export const IMPACT: IconItem[] = [
   { id: 'coupons', icon: Ticket },
   { id: 'repairs', icon: Wrench },
   { id: 'climate', icon: Leaf },
-]
+];
 
 /** FAQ entries. Strings: reparaturbonus.faq.{id}.{q,a}. */
-export const FAQ_IDS = ['who', 'howMuch', 'carryOver', 'what', 'devices', 'revampit'] as const
+export const FAQ_IDS = ['who', 'howMuch', 'carryOver', 'what', 'devices', 'revampit'] as const;

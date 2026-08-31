@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import { Phone } from 'lucide-react'
-import { CONTACT } from '@/config/org'
-import Heading from '@/components/admin/AdminHeading'
-import { Input } from '@/components/ui/input'
-import { FormField } from '@/components/ui/form-field'
-import type { LocationFormData } from './types'
+import { Phone } from 'lucide-react';
+import { CONTACT } from '@/config/org';
+import Heading from '@/components/admin/AdminHeading';
+import { Input } from '@/components/ui/input';
+import { FormField } from '@/components/ui/form-field';
+import type { LocationFormData } from './types';
 
 interface Props {
-  formData: LocationFormData
-  onFieldChange: <K extends keyof LocationFormData>(field: K, value: LocationFormData[K]) => void
+  formData: LocationFormData;
+  onFieldChange: <K extends keyof LocationFormData>(field: K, value: LocationFormData[K]) => void;
 }
 
 export function LocationContactSection({ formData, onFieldChange }: Props) {
@@ -52,5 +52,5 @@ export function LocationContactSection({ formData, onFieldChange }: Props) {
         </FormField>
       </div>
     </div>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * AiFormBar — the one control for AI form assistance.
@@ -16,34 +16,34 @@
  * same primitives as the rest of the admin forms.
  */
 
-import { useState } from 'react'
-import { Sparkles, Loader2, Undo2 } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import type { UseAiForm } from '@fleet/ai-forms/react'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
+import { useState } from 'react';
+import { Sparkles, Loader2, Undo2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import type { UseAiForm } from '@fleet/ai-forms/react';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 
 interface AiFormBarProps {
-  form: UseAiForm
+  form: UseAiForm;
   /** What to describe, shown while the form is still empty. */
-  fillPlaceholder: string
+  fillPlaceholder: string;
   /** What to change, shown once the form has content. */
-  refinePlaceholder: string
+  refinePlaceholder: string;
 }
 
 export function AiFormBar({ form, fillPlaceholder, refinePlaceholder }: AiFormBarProps) {
-  const [instruction, setInstruction] = useState('')
-  const t = useTranslations('aiForm')
+  const [instruction, setInstruction] = useState('');
+  const t = useTranslations('aiForm');
 
-  const isRefining = !form.isEmpty
+  const isRefining = !form.isEmpty;
 
   const submit = async () => {
-    const text = instruction.trim()
-    if (!text || form.busy) return
-    const result = await form.ask(text)
+    const text = instruction.trim();
+    if (!text || form.busy) return;
+    const result = await form.ask(text);
     // Keep the text on failure so the user can edit it instead of retyping.
-    if (result.ok) setInstruction('')
-  }
+    if (result.ok) setInstruction('');
+  };
 
   return (
     <div className="space-y-2 rounded-lg border border-primary/30 bg-primary/5 p-4">
@@ -64,8 +64,8 @@ export function AiFormBar({ form, fillPlaceholder, refinePlaceholder }: AiFormBa
         rows={3}
         onKeyDown={(e) => {
           if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
-            e.preventDefault()
-            void submit()
+            e.preventDefault();
+            void submit();
           }
         }}
       />
@@ -93,13 +93,7 @@ export function AiFormBar({ form, fillPlaceholder, refinePlaceholder }: AiFormBa
 
         {/* An AI edit the user cannot take back is one they cannot safely try. */}
         {form.canUndo ? (
-          <Button
-            type="button"
-            size="sm"
-            variant="ghost"
-            onClick={form.undo}
-            disabled={form.busy}
-          >
+          <Button type="button" size="sm" variant="ghost" onClick={form.undo} disabled={form.busy}>
             <Undo2 className="h-3.5 w-3.5" />
             {t('undo')}
           </Button>
@@ -112,5 +106,5 @@ export function AiFormBar({ form, fillPlaceholder, refinePlaceholder }: AiFormBa
         ) : null}
       </div>
     </div>
-  )
+  );
 }

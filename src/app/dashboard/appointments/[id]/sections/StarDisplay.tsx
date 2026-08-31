@@ -1,8 +1,8 @@
 /** Read-only 1–5 star rating row used by the rating card and rating form. */
 
-'use client'
+'use client';
 
-import { Star } from 'lucide-react'
+import { Star } from 'lucide-react';
 
 export function StarDisplay({ rating }: { rating: number }) {
   return (
@@ -14,5 +14,5 @@ export function StarDisplay({ rating }: { rating: number }) {
         />
       ))}
     </div>
-  )
+  );
 }

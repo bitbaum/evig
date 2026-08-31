@@ -1,9 +1,9 @@
-import type { NavigationItem } from '@/config/navigation'
+import type { NavigationItem } from '@/config/navigation';
 import {
   SERVICE_CONFIGS,
   type ServiceCategoryKey,
   type ServiceNavGroup,
-} from '@/app/[locale]/services/data'
+} from '@/app/[locale]/services/data';
 
 /**
  * Service links for the main navigation — derived from SERVICE_CONFIGS (the
@@ -22,10 +22,10 @@ import {
  */
 
 /** Categories shown under Dienstleistungen, in display order. */
-const SERVICES_MENU_CATEGORIES: ServiceCategoryKey[] = ['organisations']
+const SERVICES_MENU_CATEGORIES: ServiceCategoryKey[] = ['organisations'];
 
 function servicesInGroup(group: ServiceNavGroup) {
-  return SERVICE_CONFIGS.filter((s) => s.navGroup === group && s.available)
+  return SERVICE_CONFIGS.filter((s) => s.navGroup === group && s.available);
 }
 
 function link(service: (typeof SERVICE_CONFIGS)[number]): NavigationItem {
@@ -34,16 +34,16 @@ function link(service: (typeof SERVICE_CONFIGS)[number]): NavigationItem {
     nameKey: service.key,
     href: service.href,
     descriptionKey: `${service.key}Desc`,
-  }
+  };
 }
 
 /** Dienstleistungen mega-menu — what evig does FOR organisations. */
 export function buildServicesNavigationItems(): NavigationItem[] {
-  const items: NavigationItem[] = []
+  const items: NavigationItem[] = [];
 
   for (const categoryKey of SERVICES_MENU_CATEGORIES) {
-    const inCategory = servicesInGroup('services').filter((s) => s.categoryKey === categoryKey)
-    if (inCategory.length === 0) continue
+    const inCategory = servicesInGroup('services').filter((s) => s.categoryKey === categoryKey);
+    if (inCategory.length === 0) continue;
 
     // Section eyebrow — label + overview link resolve from nav.items.{category}.
     items.push({
@@ -51,11 +51,11 @@ export function buildServicesNavigationItems(): NavigationItem[] {
       nameKey: categoryKey,
       href: '/services',
       isSection: true,
-    })
-    items.push(...inCategory.map(link))
+    });
+    items.push(...inCategory.map(link));
   }
 
-  return items
+  return items;
 }
 
 /**
@@ -67,5 +67,5 @@ export function buildServicesNavigationItems(): NavigationItem[] {
  * where nobody looking to learn would find them.
  */
 export function buildLearnServiceNavigationItems(): NavigationItem[] {
-  return servicesInGroup('learn').map(link)
+  return servicesInGroup('learn').map(link);
 }

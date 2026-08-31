@@ -59,7 +59,7 @@ export const WORKSHOP_PROPOSAL_EDITABLE_FIELDS = {
   category: {
     label: 'Kategorie',
     type: 'select',
-    options: WORKSHOP_CATEGORIES.map(cat => ({ id: cat.id, name: cat.name })),
+    options: WORKSHOP_CATEGORIES.map((cat) => ({ id: cat.id, name: cat.name })),
   },
   duration_minutes: {
     label: 'Dauer (Minuten)',
@@ -72,7 +72,7 @@ export const WORKSHOP_PROPOSAL_EDITABLE_FIELDS = {
   level: {
     label: 'Level',
     type: 'select',
-    options: WORKSHOP_LEVELS.map(level => ({ id: level.id, name: level.name })),
+    options: WORKSHOP_LEVELS.map((level) => ({ id: level.id, name: level.name })),
   },
   max_participants: {
     label: 'Max. Teilnehmer',
@@ -172,11 +172,10 @@ export type BlogSubmissionEditableField = keyof typeof BLOG_SUBMISSION_EDITABLE_
  */
 export function getFieldLabel(
   field: WorkshopProposalEditableField | BlogSubmissionEditableField,
-  type: 'workshop' | 'blog'
+  type: 'workshop' | 'blog',
 ): string {
-  const config = type === 'workshop'
-    ? WORKSHOP_PROPOSAL_EDITABLE_FIELDS
-    : BLOG_SUBMISSION_EDITABLE_FIELDS;
+  const config =
+    type === 'workshop' ? WORKSHOP_PROPOSAL_EDITABLE_FIELDS : BLOG_SUBMISSION_EDITABLE_FIELDS;
   return (config as Record<string, { label: string }>)[field]?.label || field;
 }
 
@@ -184,11 +183,8 @@ export function getFieldLabel(
  * Helper: Get all editable field labels for a type
  */
 export function getEditableFieldLabels(type: 'workshop' | 'blog'): Record<string, string> {
-  const config = type === 'workshop'
-    ? WORKSHOP_PROPOSAL_EDITABLE_FIELDS
-    : BLOG_SUBMISSION_EDITABLE_FIELDS;
+  const config =
+    type === 'workshop' ? WORKSHOP_PROPOSAL_EDITABLE_FIELDS : BLOG_SUBMISSION_EDITABLE_FIELDS;
 
-  return Object.fromEntries(
-    Object.entries(config).map(([key, value]) => [key, value.label])
-  );
+  return Object.fromEntries(Object.entries(config).map(([key, value]) => [key, value.label]));
 }

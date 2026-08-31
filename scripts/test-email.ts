@@ -91,7 +91,7 @@ async function checkSenderDomain(from: string, relayHost: string): Promise<boole
   console.log(
     foundSelectors.length
       ? `  DKIM  : ${foundSelectors.join(', ')}`
-      : `  DKIM  : none of the known selectors (${DKIM_SELECTORS.join(', ')})`
+      : `  DKIM  : none of the known selectors (${DKIM_SELECTORS.join(', ')})`,
   );
 
   // Only claim a domain is unauthenticated where the evidence is conclusive:
@@ -106,7 +106,9 @@ async function checkSenderDomain(from: string, relayHost: string): Promise<boole
 
   if (problems.length > 0) {
     console.log('');
-    console.log(`  ⚠ ${domain} does not authenticate mail through this relay: ${problems.join('; ')}.`);
+    console.log(
+      `  ⚠ ${domain} does not authenticate mail through this relay: ${problems.join('; ')}.`,
+    );
     console.log('    The relay will still answer 250 and the message will vanish.');
     console.log('    Fix: authenticate the sending domain with the provider and');
     console.log('    publish the SPF + DKIM records it gives you, then re-run.');

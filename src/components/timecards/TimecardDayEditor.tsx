@@ -1,24 +1,24 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { ChevronRight } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { useState } from 'react';
+import { ChevronRight } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import {
   TIMECARD_ENTRY_CATEGORY_OPTIONS,
   TIMECARD_MANUAL_DEFAULT,
   isAbsenceCategory,
   type TimecardEntryCategory,
-} from '@/config/timecards'
-import { useTimecardIntl } from '@/hooks/useTimecardIntl'
-import type { TimecardEntryInput } from '@/lib/schemas/timecards'
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { HourRangePicker } from './HourRangePicker'
-import { TimecardActions } from './TimecardActions'
+} from '@/config/timecards';
+import { useTimecardIntl } from '@/hooks/useTimecardIntl';
+import type { TimecardEntryInput } from '@/lib/schemas/timecards';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { HourRangePicker } from './HourRangePicker';
+import { TimecardActions } from './TimecardActions';
 
 /**
  * Day view — fine edits for ONE day, ordered by what the user came to do:
@@ -45,36 +45,36 @@ export function TimecardDayEditor({
   onSetAbsence,
   onClearDay,
 }: {
-  selectedDate: string
-  selectedEntry: TimecardEntryInput | undefined
+  selectedDate: string;
+  selectedEntry: TimecardEntryInput | undefined;
   /** Whether this date's weekday has plan hours (drives the fill label). */
-  dayHasPlan: boolean
-  onPatch: (patch: Partial<TimecardEntryInput>) => void
-  onFillDay: () => void
-  onSetAbsence: (category: TimecardEntryCategory) => void
-  onClearDay: () => void
+  dayHasPlan: boolean;
+  onPatch: (patch: Partial<TimecardEntryInput>) => void;
+  onFillDay: () => void;
+  onSetAbsence: (category: TimecardEntryCategory) => void;
+  onClearDay: () => void;
 }) {
-  const t = useTranslations('admin.timecards')
-  const { categoryLabel, duration } = useTimecardIntl()
-  const hasEntry = !!selectedEntry
-  const isAbsence = hasEntry && isAbsenceCategory(selectedEntry.category)
+  const t = useTranslations('admin.timecards');
+  const { categoryLabel, duration } = useTimecardIntl();
+  const hasEntry = !!selectedEntry;
+  const isAbsence = hasEntry && isAbsenceCategory(selectedEntry.category);
 
   // Hour grid disclosure. null = no user choice yet → the DEFAULT comes from
   // CSS (hidden on phones, open from lg), so SSR/client render identically and
   // desktop needs no effect-driven flicker. The first toggle resolves null
   // against the actual viewport.
-  const [gridOpen, setGridOpen] = useState<boolean | null>(null)
+  const [gridOpen, setGridOpen] = useState<boolean | null>(null);
   const toggleGrid = () =>
-    setGridOpen(prev =>
+    setGridOpen((prev) =>
       prev === null ? !window.matchMedia('(min-width: 1024px)').matches : !prev,
-    )
+    );
 
   const fillLabel = dayHasPlan
     ? t('dayFill')
     : t('dayFillDefault', {
         start: TIMECARD_MANUAL_DEFAULT.start,
         end: TIMECARD_MANUAL_DEFAULT.end,
-      })
+      });
 
   return (
     <section className="space-y-5">
@@ -101,8 +101,8 @@ export function TimecardDayEditor({
             onClear={onClearDay}
           />
           <p className="border-t border-subtle pt-5 text-sm text-text-secondary">
-            {categoryLabel(selectedEntry.category)} —{' '}
-            {duration(selectedEntry.duration_minutes)} {t('dayAbsenceCounted')}
+            {categoryLabel(selectedEntry.category)} — {duration(selectedEntry.duration_minutes)}{' '}
+            {t('dayAbsenceCounted')}
           </p>
         </>
       ) : (
@@ -170,7 +170,7 @@ export function TimecardDayEditor({
         </div>
       )}
     </section>
-  )
+  );
 }
 
 /**
@@ -182,17 +182,17 @@ function TimeFields({
   entry,
   onPatch,
 }: {
-  entry: TimecardEntryInput | undefined
-  onPatch: (patch: Partial<TimecardEntryInput>) => void
+  entry: TimecardEntryInput | undefined;
+  onPatch: (patch: Partial<TimecardEntryInput>) => void;
 }) {
-  const t = useTranslations('admin.timecards')
+  const t = useTranslations('admin.timecards');
   return (
     <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
       <Field label={t('fieldStart')}>
         <Input
           type="time"
           value={entry?.start_time ?? ''}
-          onChange={e => onPatch({ start_time: e.target.value || null })}
+          onChange={(e) => onPatch({ start_time: e.target.value || null })}
           className="h-11 text-base tabular-nums"
         />
       </Field>
@@ -200,7 +200,7 @@ function TimeFields({
         <Input
           type="time"
           value={entry?.end_time ?? ''}
-          onChange={e => onPatch({ end_time: e.target.value || null })}
+          onChange={(e) => onPatch({ end_time: e.target.value || null })}
           className="h-11 text-base tabular-nums"
         />
       </Field>
@@ -211,34 +211,34 @@ function TimeFields({
           step={5}
           inputMode="numeric"
           value={entry?.break_minutes ?? 0}
-          onChange={e => {
-            const parsed = Number.parseInt(e.target.value, 10)
-            onPatch({ break_minutes: Number.isNaN(parsed) ? 0 : Math.max(0, parsed) })
+          onChange={(e) => {
+            const parsed = Number.parseInt(e.target.value, 10);
+            onPatch({ break_minutes: Number.isNaN(parsed) ? 0 : Math.max(0, parsed) });
           }}
           className="h-11 text-base tabular-nums"
         />
       </Field>
     </div>
-  )
+  );
 }
 
 function DetailFields({
   entry,
   onPatch,
 }: {
-  entry: TimecardEntryInput
-  onPatch: (patch: Partial<TimecardEntryInput>) => void
+  entry: TimecardEntryInput;
+  onPatch: (patch: Partial<TimecardEntryInput>) => void;
 }) {
-  const t = useTranslations('admin.timecards')
-  const { categoryLabel } = useTimecardIntl()
+  const t = useTranslations('admin.timecards');
+  const { categoryLabel } = useTimecardIntl();
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       <Field label={t('fieldCategory')}>
         <Select
           value={entry.category ?? 'other'}
-          onChange={e => onPatch({ category: e.target.value as TimecardEntryCategory })}
+          onChange={(e) => onPatch({ category: e.target.value as TimecardEntryCategory })}
         >
-          {TIMECARD_ENTRY_CATEGORY_OPTIONS.map(category => (
+          {TIMECARD_ENTRY_CATEGORY_OPTIONS.map((category) => (
             <option key={category} value={category}>
               {categoryLabel(category)}
             </option>
@@ -249,13 +249,13 @@ function DetailFields({
         <Textarea
           rows={2}
           value={entry.description ?? ''}
-          onChange={e => onPatch({ description: e.target.value })}
+          onChange={(e) => onPatch({ description: e.target.value })}
           placeholder={t('fieldNotePlaceholder')}
           className="resize-none"
         />
       </Field>
     </div>
-  )
+  );
 }
 
 function Field({
@@ -263,14 +263,19 @@ function Field({
   className,
   children,
 }: {
-  label: string
-  className?: string
-  children: React.ReactNode
+  label: string;
+  className?: string;
+  children: React.ReactNode;
 }) {
   return (
-    <label className={cn('block text-xs font-medium uppercase tracking-wide text-text-tertiary', className)}>
+    <label
+      className={cn(
+        'block text-xs font-medium uppercase tracking-wide text-text-tertiary',
+        className,
+      )}
+    >
       {label}
       <div className="mt-1">{children}</div>
     </label>
-  )
+  );
 }

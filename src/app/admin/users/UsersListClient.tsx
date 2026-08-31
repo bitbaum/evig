@@ -1,16 +1,13 @@
-'use client'
+'use client';
 
-import { Users } from 'lucide-react'
-import {
-  UsersTableClient,
-  UserFilters,
-} from '@/components/admin/users'
-import { Pagination } from '@/components/ui/Pagination'
-import { AdminListShell } from '@/components/admin/AdminListShell'
-import { useUsersList } from '@/hooks/useUsersList'
+import { Users } from 'lucide-react';
+import { UsersTableClient, UserFilters } from '@/components/admin/users';
+import { Pagination } from '@/components/ui/Pagination';
+import { AdminListShell } from '@/components/admin/AdminListShell';
+import { useUsersList } from '@/hooks/useUsersList';
 
 interface UsersListClientProps {
-  currentUserIsSuperAdmin: boolean
+  currentUserIsSuperAdmin: boolean;
 }
 
 export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProps) {
@@ -25,7 +22,7 @@ export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProp
     handlePageChange,
     resetFilters,
     hasActiveFilters,
-  } = useUsersList()
+  } = useUsersList();
 
   return (
     <AdminListShell
@@ -54,10 +51,7 @@ export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProp
       onResetFilters={resetFilters}
       resultsLabel={`${pagination.total} Benutzer gefunden`}
     >
-      <UsersTableClient
-        users={users}
-        currentUserIsSuperAdmin={currentUserIsSuperAdmin}
-      />
+      <UsersTableClient users={users} currentUserIsSuperAdmin={currentUserIsSuperAdmin} />
       <Pagination
         currentPage={pagination.page}
         totalPages={pagination.pages}
@@ -66,5 +60,5 @@ export function UsersListClient({ currentUserIsSuperAdmin }: UsersListClientProp
         onPageChange={handlePageChange}
       />
     </AdminListShell>
-  )
+  );
 }

@@ -1,10 +1,10 @@
-import { NextRequest } from 'next/server'
-import { withAuth, ValidSession } from '@/lib/api/middleware'
-import { db } from '@/db'
-import { workshopRegistrations, workshopInstances, workshops } from '@/db/schema'
-import { eq, desc } from 'drizzle-orm'
-import { apiError, apiSuccess } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
+import { NextRequest } from 'next/server';
+import { withAuth, ValidSession } from '@/lib/api/middleware';
+import { db } from '@/db';
+import { workshopRegistrations, workshopInstances, workshops } from '@/db/schema';
+import { eq, desc } from 'drizzle-orm';
+import { apiError, apiSuccess } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
 
 export const GET = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
@@ -20,14 +20,16 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
         updated_at: workshopRegistrations.updatedAt,
       })
       .from(workshopRegistrations)
-      .innerJoin(workshopInstances, eq(workshopRegistrations.workshopInstanceId, workshopInstances.id))
+      .innerJoin(
+        workshopInstances,
+        eq(workshopRegistrations.workshopInstanceId, workshopInstances.id),
+      )
       .innerJoin(workshops, eq(workshopInstances.workshopId, workshops.id))
       .where(eq(workshopRegistrations.userId, session.user.id))
-      .orderBy(desc(workshopRegistrations.createdAt))
+      .orderBy(desc(workshopRegistrations.createdAt));
 
-    return apiSuccess({ registrations: rows })
-
+    return apiSuccess({ registrations: rows });
   } catch (error) {
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
-})
+});

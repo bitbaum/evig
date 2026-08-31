@@ -7,65 +7,69 @@
  * - Repairer review notification emails
  */
 
-import { db } from '@/db'
+import { db } from '@/db';
 import {
-  repairerProfiles, userProfiles, listings, workshops, reviews,
-  itHilfeRequests, users,
-} from '@/db/schema'
-import { eq, and } from 'drizzle-orm'
-import { REVIEW_TARGET_TYPES } from '@/config/database'
-import { APP_URL } from '@/config/urls'
-import { sendEmail } from '@/lib/email'
-import { logger } from '@/lib/logger'
-import { REQUEST_STATUS } from '@/config/it-hilfe'
+  repairerProfiles,
+  userProfiles,
+  listings,
+  workshops,
+  reviews,
+  itHilfeRequests,
+  users,
+} from '@/db/schema';
+import { eq, and } from 'drizzle-orm';
+import { REVIEW_TARGET_TYPES } from '@/config/database';
+import { APP_URL } from '@/config/urls';
+import { sendEmail } from '@/lib/email';
+import { logger } from '@/lib/logger';
+import { REQUEST_STATUS } from '@/config/it-hilfe';
 
 // ─── Target Validation ─────────────────────────────────────────────
 
 /**
  * Verify that the review target exists in the database.
  */
-export async function validateReviewTarget(
-  targetType: string,
-  targetId: string
-): Promise<boolean> {
+export async function validateReviewTarget(targetType: string, targetId: string): Promise<boolean> {
   if (targetType === REVIEW_TARGET_TYPES.REPAIRER) {
     const result = await db
       .select({ id: repairerProfiles.id })
       .from(repairerProfiles)
       .leftJoin(userProfiles, eq(userProfiles.userId, repairerProfiles.userId))
-      .where(and(eq(repairerProfiles.id, targetId), eq(userProfiles.isVerified, true)))
-    return result.length > 0
+      .where(and(eq(repairerProfiles.id, targetId), eq(userProfiles.isVerified, true)));
+    return result.length > 0;
   }
 
   if (targetType === REVIEW_TARGET_TYPES.LISTING) {
     const result = await db
       .select({ id: listings.id })
       .from(listings)
-      .where(eq(listings.id, targetId))
-    return result.length > 0
+      .where(eq(listings.id, targetId));
+    return result.length > 0;
   }
 
   if (targetType === REVIEW_TARGET_TYPES.SERVICE) {
-    return true // Placeholder until services table exists
+    return true; // Placeholder until services table exists
   }
 
   if (targetType === REVIEW_TARGET_TYPES.WORKSHOP) {
     const result = await db
       .select({ id: workshops.id })
       .from(workshops)
-      .where(eq(workshops.id, targetId))
-    return result.length > 0
+      .where(eq(workshops.id, targetId));
+    return result.length > 0;
   }
 
   if (targetType === REVIEW_TARGET_TYPES.IT_HILFE) {
     const result = await db
       .select({ id: itHilfeRequests.id })
       .from(itHilfeRequests)
-      .where(and(eq(itHilfeRequests.id, targetId), eq(itHilfeRequests.status, REQUEST_STATUS.COMPLETED)))
-    return result.length > 0
+      .where(
+        and(eq(itHilfeRequests.id, targetId), eq(itHilfeRequests.status, REQUEST_STATUS.COMPLETED)),
+      );
+    return result.length > 0;
   }
 
-  return false
+  return false;
 }
 
 // ─── Repairer Notification ──────────────────────────────────────────
@@ -78,7 +82,7 @@ export async function notifyRepairerOfReview(
   reviewId: string,
   reviewerName: string,
   overallRating: number,
-  content: string
+  content: string,
 ): Promise<void> {
   try {
     const repairerResult = await db
@@ -89,12 +93,12 @@ export async function notifyRepairerOfReview(
       })
       .from(repairerProfiles)
       .innerJoin(users, eq(repairerProfiles.userId, users.id))
-      .where(eq(repairerProfiles.id, targetId))
+      .where(eq(repairerProfiles.id, targetId));
 
-    if (repairerResult.length === 0) return
+    if (repairerResult.length === 0) return;
 
-    const repairer = repairerResult[0]
-    const reviewUrl = `${APP_URL}/dashboard/reviews`
+    const repairer = repairerResult[0];
+    const reviewUrl = `${APP_URL}/dashboard/reviews`;
 
     const result = await sendEmail(
       repairer.email,
@@ -103,17 +107,17 @@ export async function notifyRepairerOfReview(
       reviewerName,
       overallRating,
       content,
-      reviewUrl
-    )
+      reviewUrl,
+    );
 
     if (!result.success) {
       logger.warn('Failed to send new review notification', {
         reviewId,
         repairerEmail: repairer.email,
         error: result.error,
-      })
+      });
     }
   } catch (error) {
-    logger.error('Error sending review notification', { error, reviewId })
+    logger.error('Error sending review notification', { error, reviewId });
   }
 }

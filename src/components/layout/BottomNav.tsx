@@ -1,25 +1,25 @@
-'use client'
+'use client';
 
-import type { LucideIcon } from 'lucide-react'
-import { Menu } from 'lucide-react'
-import { Link } from '@/i18n/navigation'
-import { Button } from '@/components/ui/button'
-import { navLinkClass } from '@/lib/design/nav'
+import type { LucideIcon } from 'lucide-react';
+import { Menu } from 'lucide-react';
+import { Link } from '@/i18n/navigation';
+import { Button } from '@/components/ui/button';
+import { navLinkClass } from '@/lib/design/nav';
 
 export interface BottomNavItem {
-  key: string
-  href: string
-  label: string
-  icon: LucideIcon
-  active: boolean
+  key: string;
+  href: string;
+  label: string;
+  icon: LucideIcon;
+  active: boolean;
 }
 
 interface BottomNavProps {
-  items: BottomNavItem[]
+  items: BottomNavItem[];
   /** Accessible name for the <nav>. */
-  ariaLabel: string
+  ariaLabel: string;
   /** Optional trailing "more" button (opens a sheet or the full sidebar). */
-  more?: { label: string; ariaLabel: string; onClick: () => void; expanded?: boolean }
+  more?: { label: string; ariaLabel: string; onClick: () => void; expanded?: boolean };
 }
 
 /**
@@ -41,8 +41,8 @@ export function BottomNav({ items, ariaLabel, more }: BottomNavProps) {
       aria-label={ariaLabel}
       className="fixed bottom-0 left-0 right-0 z-50 flex border-t border bg-surface-base safe-area-inset-bottom lg:hidden"
     >
-      {items.map(item => {
-        const Icon = item.icon
+      {items.map((item) => {
+        const Icon = item.icon;
         return (
           <Link
             key={item.key}
@@ -53,7 +53,7 @@ export function BottomNav({ items, ariaLabel, more }: BottomNavProps) {
             <Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
             <span className="max-w-full truncate px-1">{item.label}</span>
           </Link>
-        )
+        );
       })}
 
       {more && (
@@ -69,5 +69,5 @@ export function BottomNav({ items, ariaLabel, more }: BottomNavProps) {
         </Button>
       )}
     </nav>
-  )
+  );
 }

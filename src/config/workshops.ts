@@ -17,7 +17,7 @@ import {
   Smartphone,
   RefreshCw,
   LucideIcon,
-} from "lucide-react";
+} from 'lucide-react';
 
 /**
  * Workshop category configuration
@@ -62,84 +62,75 @@ export interface WorkshopLevel {
  */
 export const WORKSHOP_CATEGORIES: WorkshopCategory[] = [
   {
-    id: "retraining",
-    name: "Umschulung & Karriere",
+    id: 'retraining',
+    name: 'Umschulung & Karriere',
     description:
-      "Neue Fähigkeiten für die Arbeitswelt von morgen. Werde 10x produktiver mit AI-Tools und Automatisierung.",
+      'Neue Fähigkeiten für die Arbeitswelt von morgen. Werde 10x produktiver mit AI-Tools und Automatisierung.',
     icon: RefreshCw,
-    color: "bg-orange-500",
+    color: 'bg-orange-500',
   },
   {
-    id: "linux",
-    name: "Linux & Open Source",
-    description:
-      "Betriebssysteme, Terminal, Server-Administration und Open-Source-Tools.",
+    id: 'linux',
+    name: 'Linux & Open Source',
+    description: 'Betriebssysteme, Terminal, Server-Administration und Open-Source-Tools.',
     icon: BookOpen,
-    color: "bg-success-500",
+    color: 'bg-success-500',
   },
   {
-    id: "hardware",
-    name: "Hardware-Reparatur",
-    description:
-      "Computer reparieren, aufrüsten und warten. Löten, Diagnose, Fehlersuche.",
+    id: 'hardware',
+    name: 'Hardware-Reparatur',
+    description: 'Computer reparieren, aufrüsten und warten. Löten, Diagnose, Fehlersuche.',
     icon: HardDrive,
-    color: "bg-neutral-500",
+    color: 'bg-neutral-500',
   },
   {
-    id: "development",
-    name: "Programmierung",
-    description:
-      "Programmieren lernen: Python, JavaScript, Webentwicklung und mehr.",
+    id: 'development',
+    name: 'Programmierung',
+    description: 'Programmieren lernen: Python, JavaScript, Webentwicklung und mehr.',
     icon: Code,
-    color: "bg-purple-500",
+    color: 'bg-purple-500',
   },
   {
-    id: "web",
-    name: "Webentwicklung",
-    description:
-      "Websites erstellen mit modernen Tools: HTML, CSS, React, Next.js.",
+    id: 'web',
+    name: 'Webentwicklung',
+    description: 'Websites erstellen mit modernen Tools: HTML, CSS, React, Next.js.',
     icon: Globe,
-    color: "bg-teal-500",
+    color: 'bg-teal-500',
   },
   {
-    id: "ai",
-    name: "KI & Machine Learning",
-    description:
-      "Künstliche Intelligenz verstehen und nutzen. ChatGPT, Automatisierung, AI-Tools.",
+    id: 'ai',
+    name: 'KI & Machine Learning',
+    description: 'Künstliche Intelligenz verstehen und nutzen. ChatGPT, Automatisierung, AI-Tools.',
     icon: Brain,
-    color: "bg-pink-500",
+    color: 'bg-pink-500',
   },
   {
-    id: "blockchain",
-    name: "Blockchain & Web3",
-    description:
-      "Kryptowährungen, dezentrale Anwendungen und Blockchain-Technologie.",
+    id: 'blockchain',
+    name: 'Blockchain & Web3',
+    description: 'Kryptowährungen, dezentrale Anwendungen und Blockchain-Technologie.',
     icon: Bitcoin,
-    color: "bg-warning-500",
+    color: 'bg-warning-500',
   },
   {
-    id: "privacy",
-    name: "Datenschutz & Sicherheit",
-    description:
-      "Online-Sicherheit, Verschlüsselung, Passwort-Management und Privatsphäre.",
+    id: 'privacy',
+    name: 'Datenschutz & Sicherheit',
+    description: 'Online-Sicherheit, Verschlüsselung, Passwort-Management und Privatsphäre.',
     icon: Shield,
-    color: "bg-error-500",
+    color: 'bg-error-500',
   },
   {
-    id: "sustainability",
-    name: "Nachhaltigkeit",
-    description:
-      "Nachhaltige IT: Reparieren statt wegwerfen, Energie sparen, E-Waste vermeiden.",
+    id: 'sustainability',
+    name: 'Nachhaltigkeit',
+    description: 'Nachhaltige IT: Reparieren statt wegwerfen, Energie sparen, E-Waste vermeiden.',
     icon: Leaf,
-    color: "bg-success-500",
+    color: 'bg-success-500',
   },
   {
-    id: "digital-skills",
-    name: "Digital Skills",
-    description:
-      "Grundlegende digitale Kompetenzen für Alltag und Beruf.",
+    id: 'digital-skills',
+    name: 'Digital Skills',
+    description: 'Grundlegende digitale Kompetenzen für Alltag und Beruf.',
     icon: Smartphone,
-    color: "bg-indigo-500",
+    color: 'bg-indigo-500',
   },
 ];
 
@@ -148,24 +139,24 @@ export const WORKSHOP_CATEGORIES: WorkshopCategory[] = [
  */
 export const WORKSHOP_LEVELS: WorkshopLevel[] = [
   {
-    id: "beginner",
-    name: "Anfänger",
-    badgeClass: "bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300",
+    id: 'beginner',
+    name: 'Anfänger',
+    badgeClass: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
   },
   {
-    id: "intermediate",
-    name: "Fortgeschrittene",
-    badgeClass: "bg-neutral-100 text-neutral-800",
+    id: 'intermediate',
+    name: 'Fortgeschrittene',
+    badgeClass: 'bg-neutral-100 text-neutral-800',
   },
   {
-    id: "advanced",
-    name: "Experten",
-    badgeClass: "bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300",
+    id: 'advanced',
+    name: 'Experten',
+    badgeClass: 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300',
   },
   {
-    id: "all",
-    name: "Alle Stufen",
-    badgeClass: "bg-neutral-100 text-neutral-800",
+    id: 'all',
+    name: 'Alle Stufen',
+    badgeClass: 'bg-neutral-100 text-neutral-800',
   },
 ];
 
@@ -179,7 +170,8 @@ export const WORKSHOP_INSTANCE_STATUS = {
   COMPLETED: 'completed',
 } as const;
 
-export type WorkshopInstanceStatus = typeof WORKSHOP_INSTANCE_STATUS[keyof typeof WORKSHOP_INSTANCE_STATUS];
+export type WorkshopInstanceStatus =
+  (typeof WORKSHOP_INSTANCE_STATUS)[keyof typeof WORKSHOP_INSTANCE_STATUS];
 
 export const WORKSHOP_INSTANCE_STATUS_LABELS: Record<WorkshopInstanceStatus, string> = {
   [WORKSHOP_INSTANCE_STATUS.SCHEDULED]: 'Geplant',
@@ -188,9 +180,11 @@ export const WORKSHOP_INSTANCE_STATUS_LABELS: Record<WorkshopInstanceStatus, str
 };
 
 export const WORKSHOP_INSTANCE_STATUS_COLORS: Record<WorkshopInstanceStatus, string> = {
-  [WORKSHOP_INSTANCE_STATUS.SCHEDULED]: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
+  [WORKSHOP_INSTANCE_STATUS.SCHEDULED]:
+    'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
   [WORKSHOP_INSTANCE_STATUS.CANCELLED]: 'bg-error-100 text-error-800',
-  [WORKSHOP_INSTANCE_STATUS.COMPLETED]: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
+  [WORKSHOP_INSTANCE_STATUS.COMPLETED]:
+    'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
 };
 
 /**
@@ -204,7 +198,7 @@ export const PROPOSAL_STATUS = {
   REQUIRES_CHANGES: 'requires_changes',
 } as const;
 
-export type ProposalStatus = typeof PROPOSAL_STATUS[keyof typeof PROPOSAL_STATUS];
+export type ProposalStatus = (typeof PROPOSAL_STATUS)[keyof typeof PROPOSAL_STATUS];
 
 /**
  * Status labels for UI display
@@ -221,7 +215,7 @@ export const PROPOSAL_STATUS_LABELS: Record<ProposalStatus, string> = {
  */
 export function getCategoryById(id: string): WorkshopCategory | undefined {
   return WORKSHOP_CATEGORIES.find(
-    (cat) => cat.id === id || cat.name.toLowerCase() === id.toLowerCase()
+    (cat) => cat.id === id || cat.name.toLowerCase() === id.toLowerCase(),
   );
 }
 
@@ -238,9 +232,7 @@ export function getCategoryIcon(categoryName: string | null | undefined): Lucide
 
   // Check by name (partial match for flexibility)
   const byName = WORKSHOP_CATEGORIES.find(
-    (cat) =>
-      cat.name.toLowerCase().includes(normalizedName) ||
-      normalizedName.includes(cat.id)
+    (cat) => cat.name.toLowerCase().includes(normalizedName) || normalizedName.includes(cat.id),
   );
   if (byName) return byName.icon;
 
@@ -250,7 +242,7 @@ export function getCategoryIcon(categoryName: string | null | undefined): Lucide
     entwicklung: Code,
     web: Globe,
     blockchain: Bitcoin,
-    "ki & ml": Brain,
+    'ki & ml': Brain,
   };
 
   return legacyMap[normalizedName] || BookOpen;
@@ -260,12 +252,12 @@ export function getCategoryIcon(categoryName: string | null | undefined): Lucide
  * Get level badge class by level name
  */
 export function getLevelBadgeClass(levelName: string | null | undefined): string {
-  if (!levelName) return "bg-neutral-100 text-neutral-800";
+  if (!levelName) return 'bg-neutral-100 text-neutral-800';
   const normalizedName = levelName.toLowerCase();
   const level = WORKSHOP_LEVELS.find(
-    (l) => l.id === normalizedName || l.name.toLowerCase() === normalizedName
+    (l) => l.id === normalizedName || l.name.toLowerCase() === normalizedName,
   );
-  return level?.badgeClass || "bg-neutral-100 text-neutral-800";
+  return level?.badgeClass || 'bg-neutral-100 text-neutral-800';
 }
 
 /**
@@ -289,8 +281,9 @@ export function normalizeLevelId(value: string | null | undefined): string | nul
   if (byLabel) return byLabel.id;
 
   // Common DB free-form values (legacy) — match-strings against existing DB content, not UI labels
-  if (v === "anfänger bis fortgeschrittene" || v === "anfänger bis experten") return "beginner_to_advanced"; // i18n-ok
-  if (v === "fortgeschrittene bis experten") return "advanced"; // i18n-ok
+  // prettier-ignore
+  if (v === 'anfänger bis fortgeschrittene' || v === 'anfänger bis experten') return 'beginner_to_advanced'; // i18n-ok
+  if (v === 'fortgeschrittene bis experten') return 'advanced'; // i18n-ok
 
   return null;
 }
@@ -316,12 +309,12 @@ export function normalizeCategoryId(value: string | null | undefined): string | 
 
   // Legacy DB free-form values that don't match any canonical ID
   const legacyMap: Record<string, string> = {
-    betriebssysteme: "linux",
-    entwicklung: "development",
-    web: "web",
-    blockchain: "blockchain",
-    "ki & ml": "ai",
-    "kreativ": "development",
+    betriebssysteme: 'linux',
+    entwicklung: 'development',
+    web: 'web',
+    blockchain: 'blockchain',
+    'ki & ml': 'ai',
+    kreativ: 'development',
   };
   return legacyMap[v] ?? null;
 }
@@ -334,7 +327,7 @@ export function getCategoryNames(): string[] {
 }
 
 /** Valid max-participants options for workshop proposal form */
-export const WORKSHOP_MAX_PARTICIPANTS_OPTIONS = [5, 8, 10, 12, 15, 20, 25, 30] as const
+export const WORKSHOP_MAX_PARTICIPANTS_OPTIONS = [5, 8, 10, 12, 15, 20, 25, 30] as const;
 
 /** Valid duration options (hours) for workshop proposal form */
-export const WORKSHOP_DURATION_OPTIONS = [2, 3, 4, 5, 6, 8, 10] as const
+export const WORKSHOP_DURATION_OPTIONS = [2, 3, 4, 5, 6, 8, 10] as const;

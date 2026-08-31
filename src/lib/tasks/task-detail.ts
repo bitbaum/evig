@@ -5,15 +5,15 @@
  * Created: 2026-02-05 (moved to lib: 2026-07-29)
  */
 
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
-import { logger } from '@/lib/logger'
+import { query } from '@/lib/auth/db';
+import { TABLE_NAMES } from '@/config/database';
+import { logger } from '@/lib/logger';
 import type {
   TaskDetail,
   TaskCompletion,
   TaskAttentionFlag,
   TaskRequestRecord,
-} from '@/lib/schemas/tasks'
+} from '@/lib/schemas/tasks';
 
 export async function getTask(id: string): Promise<TaskDetail | null> {
   try {
@@ -27,12 +27,12 @@ export async function getTask(id: string): Promise<TaskDetail | null> {
       LEFT JOIN ${TABLE_NAMES.USERS} u ON t.created_by = u.id
       LEFT JOIN ${TABLE_NAMES.USERS} au ON t.assigned_to = au.id
       WHERE t.id = $1`,
-      [id]
-    )
-    return result.rows[0] || null
+      [id],
+    );
+    return result.rows[0] || null;
   } catch (error) {
-    logger.error('Error fetching task', { error, taskId: id })
-    return null
+    logger.error('Error fetching task', { error, taskId: id });
+    return null;
   }
 }
 
@@ -48,12 +48,12 @@ export async function getCompletions(taskId: string): Promise<TaskCompletion[]> 
       WHERE tc.task_id = $1
       ORDER BY tc.completed_at DESC
       LIMIT 50`,
-      [taskId]
-    )
-    return result.rows
+      [taskId],
+    );
+    return result.rows;
   } catch (error) {
-    logger.error('Error fetching completions', { error, taskId })
-    return []
+    logger.error('Error fetching completions', { error, taskId });
+    return [];
   }
 }
 
@@ -67,12 +67,12 @@ export async function getAttentionFlags(taskId: string): Promise<TaskAttentionFl
       LEFT JOIN ${TABLE_NAMES.USERS} u ON f.flagged_by = u.id
       WHERE f.task_id = $1
       ORDER BY f.created_at DESC`,
-      [taskId]
-    )
-    return result.rows
+      [taskId],
+    );
+    return result.rows;
   } catch (error) {
-    logger.error('Error fetching attention flags', { error, taskId })
-    return []
+    logger.error('Error fetching attention flags', { error, taskId });
+    return [];
   }
 }
 
@@ -88,11 +88,11 @@ export async function getRequests(taskId: string): Promise<TaskRequestRecord[]> 
       LEFT JOIN ${TABLE_NAMES.USERS} ru ON r.requested_user_id = ru.id
       WHERE r.task_id = $1
       ORDER BY r.created_at DESC`,
-      [taskId]
-    )
-    return result.rows
+      [taskId],
+    );
+    return result.rows;
   } catch (error) {
-    logger.error('Error fetching task requests', { error, taskId })
-    return []
+    logger.error('Error fetching task requests', { error, taskId });
+    return [];
   }
 }

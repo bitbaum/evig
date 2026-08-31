@@ -46,7 +46,11 @@ export interface ListingReviewData extends MarketplaceEmailData {
 /**
  * Listing published confirmation email
  */
-export function listingPublishedConfirmation(data: ListingPublishedData): { subject: string; html: string; text: string } {
+export function listingPublishedConfirmation(data: ListingPublishedData): {
+  subject: string;
+  html: string;
+  text: string;
+} {
   return {
     subject: `Dein Inserat "${data.listingTitle}" ist jetzt live`,
     text: `Hallo ${data.recipientName}, dein Inserat "${data.listingTitle}" wurde erfolgreich veröffentlicht. Ansehen: ${data.listingUrl}`,
@@ -71,7 +75,11 @@ export function listingPublishedConfirmation(data: ListingPublishedData): { subj
 /**
  * New marketplace message notification
  */
-export function newMarketplaceMessage(data: NewMarketplaceMessageData): { subject: string; html: string; text: string } {
+export function newMarketplaceMessage(data: NewMarketplaceMessageData): {
+  subject: string;
+  html: string;
+  text: string;
+} {
   return {
     subject: `Neue Nachricht zu "${data.listingTitle}"`,
     text: `Hallo ${data.recipientName}, ${data.senderName} hat dir eine Nachricht zu "${data.listingTitle}" geschickt: "${data.messagePreview}" Antworten: ${data.conversationUrl}`,
@@ -98,7 +106,11 @@ export function newMarketplaceMessage(data: NewMarketplaceMessageData): { subjec
 /**
  * New public listing question notification (Ricardo-style Q&A)
  */
-export function newListingQuestion(data: NewListingQuestionData): { subject: string; html: string; text: string } {
+export function newListingQuestion(data: NewListingQuestionData): {
+  subject: string;
+  html: string;
+  text: string;
+} {
   return {
     subject: `Neue Frage zu "${data.listingTitle}"`,
     text: `Hallo ${data.recipientName}, ${data.askerName} hat eine Frage zu "${data.listingTitle}": "${data.questionPreview}" Antworten: ${data.listingUrl}`,
@@ -160,7 +172,11 @@ export interface OrderStatusUpdateData extends MarketplaceEmailData {
 /**
  * Order confirmation email for buyer
  */
-export function orderConfirmationBuyer(data: OrderConfirmationBuyerData): { subject: string; html: string; text: string } {
+export function orderConfirmationBuyer(data: OrderConfirmationBuyerData): {
+  subject: string;
+  html: string;
+  text: string;
+} {
   return {
     subject: `Bestellung aufgegeben: "${data.listingTitle}"`,
     text: `Hallo ${data.recipientName}, deine Bestellung für "${data.listingTitle}" (${data.amountChf}) wurde aufgegeben. Lieferart: ${data.deliveryMethod}. Details: ${data.orderUrl}`,
@@ -192,7 +208,11 @@ export function orderConfirmationBuyer(data: OrderConfirmationBuyerData): { subj
 /**
  * New order notification for seller
  */
-export function newOrderNotificationSeller(data: NewOrderNotificationSellerData): { subject: string; html: string; text: string } {
+export function newOrderNotificationSeller(data: NewOrderNotificationSellerData): {
+  subject: string;
+  html: string;
+  text: string;
+} {
   return {
     subject: `Neue Bestellung: "${data.listingTitle}"`,
     text: `Hallo ${data.recipientName}, ${data.buyerName} hat "${data.listingTitle}" bestellt. Auszahlung: ${data.payoutAmountChf}. Lieferart: ${data.deliveryMethod}. Details: ${data.orderUrl}`,
@@ -223,7 +243,11 @@ export function newOrderNotificationSeller(data: NewOrderNotificationSellerData)
 /**
  * Order status update email
  */
-export function orderStatusUpdate(data: OrderStatusUpdateData): { subject: string; html: string; text: string } {
+export function orderStatusUpdate(data: OrderStatusUpdateData): {
+  subject: string;
+  html: string;
+  text: string;
+} {
   return {
     subject: `Bestellstatus: ${data.newStatusLabel} — "${data.listingTitle}"`,
     text: `Hallo ${data.recipientName}, der Status deiner Bestellung "${data.listingTitle}" wurde aktualisiert: ${data.newStatusLabel}. ${data.actionHint} Details: ${data.orderUrl}`,
@@ -273,7 +297,11 @@ export interface OrderReviewReceivedData extends MarketplaceEmailData {
 /**
  * Notify seller that the buyer confirmed receipt of the item.
  */
-export function orderReceiptConfirmed(data: OrderReceiptConfirmedData): { subject: string; html: string; text: string } {
+export function orderReceiptConfirmed(data: OrderReceiptConfirmedData): {
+  subject: string;
+  html: string;
+  text: string;
+} {
   return {
     subject: `Empfang bestätigt: "${data.listingTitle}"`,
     text: `Hallo ${data.recipientName}, der Käufer hat den Erhalt von "${data.listingTitle}" bestätigt. Die Zahlung wurde freigegeben. Details: ${data.orderUrl}`,
@@ -298,7 +326,11 @@ export function orderReceiptConfirmed(data: OrderReceiptConfirmedData): { subjec
 /**
  * Thank-you and review prompt sent to buyer after delivery confirmation.
  */
-export function orderReviewPrompt(data: OrderReviewPromptData): { subject: string; html: string; text: string } {
+export function orderReviewPrompt(data: OrderReviewPromptData): {
+  subject: string;
+  html: string;
+  text: string;
+} {
   return {
     subject: `Wie war dein Kauf von "${data.listingTitle}"?`,
     text: `Hallo ${data.recipientName}, vielen Dank für deinen Kauf von "${data.listingTitle}". Teile deine Erfahrung mit einer Bewertung: ${data.reviewUrl}`,
@@ -323,7 +355,11 @@ export function orderReviewPrompt(data: OrderReviewPromptData): { subject: strin
 /**
  * Notify seller that their order received a review.
  */
-export function orderReviewReceived(data: OrderReviewReceivedData): { subject: string; html: string; text: string } {
+export function orderReviewReceived(data: OrderReviewReceivedData): {
+  subject: string;
+  html: string;
+  text: string;
+} {
   const stars = '★'.repeat(data.rating) + '☆'.repeat(5 - data.rating);
   return {
     subject: `Neue Bewertung (${data.rating}/5) für "${data.listingTitle}"`,
@@ -352,7 +388,11 @@ export function orderReviewReceived(data: OrderReviewReceivedData): { subject: s
   };
 }
 
-export function listingReviewNotification(data: ListingReviewData): { subject: string; html: string; text: string } {
+export function listingReviewNotification(data: ListingReviewData): {
+  subject: string;
+  html: string;
+  text: string;
+} {
   const stars = '★'.repeat(data.rating) + '☆'.repeat(5 - data.rating);
   return {
     subject: `Neue Bewertung für "${data.listingTitle}"`,

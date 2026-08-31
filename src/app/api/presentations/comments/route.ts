@@ -1,27 +1,27 @@
-import { NextRequest } from 'next/server'
-import { inArray } from 'drizzle-orm'
-import { auth } from '@/auth'
-import { db } from '@/db'
-import { presentationComments, users } from '@/db/schema'
-import { apiSuccess, apiError, apiBadRequest, apiRateLimited } from '@/lib/api/helpers'
-import { logger } from '@/lib/logger'
-import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit'
-import { PRESENTATION_DECKS } from '@/config/presentations'
-import { canAccessAudience } from '@/lib/content-access'
-import { SUPER_ADMIN_EMAILS, isStaffEmail } from '@/lib/permissions'
-import { createNotification } from '@/lib/services/notifications'
+import { NextRequest } from 'next/server';
+import { inArray } from 'drizzle-orm';
+import { auth } from '@/auth';
+import { db } from '@/db';
+import { presentationComments, users } from '@/db/schema';
+import { apiSuccess, apiError, apiBadRequest, apiRateLimited } from '@/lib/api/helpers';
+import { logger } from '@/lib/logger';
+import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit';
+import { PRESENTATION_DECKS } from '@/config/presentations';
+import { canAccessAudience } from '@/lib/content-access';
+import { SUPER_ADMIN_EMAILS, isStaffEmail } from '@/lib/permissions';
+import { createNotification } from '@/lib/services/notifications';
 
-const BODY_MIN = 2
-const BODY_MAX = 2000
-const NAME_MAX = 80
+const BODY_MIN = 2;
+const BODY_MAX = 2000;
+const NAME_MAX = 80;
 
 /**
  * GET = "who am I" for the comment form, so a signed-in reader doesn't retype
  * their name and we can show "Kommentar als <Name>".
  */
 export async function GET() {
-  const session = await auth()
-  return apiSuccess({ signedIn: !!session?.user, name: session?.user?.name ?? null })
+  const session = await auth();
+  return apiSuccess({ signedIn: !!session?.user, name: session?.user?.name ?? null });
 }
 
 /**
@@ -32,36 +32,40 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     // CSRF-exempt public endpoint → rate-limit per IP to blunt spam.
-    if (!rateLimiters.apiGeneral(getClientIdentifier(req))) return apiRateLimited()
+    if (!rateLimiters.apiGeneral(getClientIdentifier(req))) return apiRateLimited();
 
-    const json = (await req.json().catch(() => ({}))) as Record<string, unknown>
+    const json = (await req.json().catch(() => ({}))) as Record<string, unknown>;
 
     // Honeypot: bots fill hidden fields. Pretend success, store nothing.
-    if (typeof json.hp === 'string' && json.hp.trim() !== '') return apiSuccess({ ok: true })
+    if (typeof json.hp === 'string' && json.hp.trim() !== '') return apiSuccess({ ok: true });
 
-    const slug = String(json.slug ?? '')
-    const deck = PRESENTATION_DECKS.find(d => d.slug === slug)
-    if (!deck) return apiBadRequest('Unbekannte Präsentation.')
+    const slug = String(json.slug ?? '');
+    const deck = PRESENTATION_DECKS.find((d) => d.slug === slug);
+    if (!deck) return apiBadRequest('Unbekannte Präsentation.');
 
-    const slideIndex = Number(json.slideIndex)
+    const slideIndex = Number(json.slideIndex);
     if (!Number.isInteger(slideIndex) || slideIndex < 0 || slideIndex > 500) {
-      return apiBadRequest('Ungültige Folie.')
+      return apiBadRequest('Ungültige Folie.');
     }
 
-    const body = String(json.body ?? '').trim()
+    const body = String(json.body ?? '').trim();
     if (body.length < BODY_MIN || body.length > BODY_MAX) {
-      return apiBadRequest(`Kommentar muss zwischen ${BODY_MIN} und ${BODY_MAX} Zeichen lang sein.`)
+      return apiBadRequest(
+        `Kommentar muss zwischen ${BODY_MIN} und ${BODY_MAX} Zeichen lang sein.`,
+      );
     }
 
-    const slideTitle = json.slideTitle ? String(json.slideTitle).slice(0, 200) : null
+    const slideTitle = json.slideTitle ? String(json.slideTitle).slice(0, 200) : null;
 
-    const session = await auth()
-    const uid = session?.user?.id ?? null
-    const signedIn = !!uid
+    const session = await auth();
+    const uid = session?.user?.id ?? null;
+    const signedIn = !!uid;
     const authorName = signedIn
       ? (session?.user?.name ?? null)
-      : (json.name ? (String(json.name).trim().slice(0, NAME_MAX) || null) : null)
-    const isStaff = signedIn ? isStaffEmail(session?.user?.email ?? '') : false
+      : json.name
+        ? String(json.name).trim().slice(0, NAME_MAX) || null
+        : null;
+    const isStaff = signedIn ? isStaffEmail(session?.user?.email ?? '') : false;
 
     // A restricted deck (team/author) only accepts comments from someone
     // entitled to open it — don't leak its existence to the unentitled.
@@ -73,9 +77,9 @@ export async function POST(req: NextRequest) {
             email: session.user.email,
             isSuperAdmin: session.user.isSuperAdmin,
           }
-        : null
+        : null;
       if (!canAccessAudience(deck.audience, viewer, null)) {
-        return apiBadRequest('Unbekannte Präsentation.')
+        return apiBadRequest('Unbekannte Präsentation.');
       }
     }
 
@@ -87,17 +91,17 @@ export async function POST(req: NextRequest) {
       authorName,
       authorUserId: uid,
       isStaff,
-    })
+    });
 
     // Notify super admins in-app (email skipped — bell survives deliverability).
     try {
       const admins = await db
         .select({ id: users.id })
         .from(users)
-        .where(inArray(users.email, [...SUPER_ADMIN_EMAILS]))
-      const who = authorName || (signedIn ? 'Angemeldete:r' : 'Anonym')
+        .where(inArray(users.email, [...SUPER_ADMIN_EMAILS]));
+      const who = authorName || (signedIn ? 'Angemeldete:r' : 'Anonym');
       await Promise.all(
-        admins.map(a =>
+        admins.map((a) =>
           createNotification(
             a.id,
             {
@@ -110,14 +114,14 @@ export async function POST(req: NextRequest) {
             { skipEmail: true },
           ),
         ),
-      )
+      );
     } catch (e) {
-      logger.error('presentation comment notify failed', { error: e })
+      logger.error('presentation comment notify failed', { error: e });
     }
 
-    return apiSuccess({ ok: true })
+    return apiSuccess({ ok: true });
   } catch (error) {
-    logger.error('presentation comment POST failed', { error })
-    return apiError(null, 'Kommentar konnte nicht gespeichert werden', 500)
+    logger.error('presentation comment POST failed', { error });
+    return apiError(null, 'Kommentar konnte nicht gespeichert werden', 500);
   }
 }

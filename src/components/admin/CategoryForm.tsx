@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * CategoryForm - Reusable form for creating/editing blog categories
@@ -6,44 +6,41 @@
  * Used by both /admin/content/categories/new and /admin/content/categories/[id]
  */
 
-import { useState } from 'react'
-import { useAiForm } from '@fleet/ai-forms/react'
-import { useRouter } from 'next/navigation'
-import Heading from '@/components/admin/AdminHeading'
-import { Tag, Save, ArrowLeft, Trash2 } from 'lucide-react'
-import { Link } from '@/i18n/navigation'
-import { useTranslations } from 'next-intl'
-import { useBlogCategories } from '@/hooks/useBlogCategories'
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { FormField } from '@/components/ui/form-field'
-import type { CategoryFormData } from '@/hooks/useBlogCategories'
-import { DEFAULT_CATEGORY_COLOR, UI_COLOR_PALETTE } from '@/config/ui-colors'
-import { generateSlug } from '@/lib/utils/slug'
-import { UI_FEEDBACK_MS } from '@/config/limits'
-import { ROUTES } from '@/config/routes'
-import { adminInteractive } from '@/lib/admin-ui'
-import { AiFormBar } from '@/components/ui/AiFormBar'
-import { CATEGORY_FORM } from '@/config/ai-forms'
+import { useState } from 'react';
+import { useAiForm } from '@fleet/ai-forms/react';
+import { useRouter } from 'next/navigation';
+import Heading from '@/components/admin/AdminHeading';
+import { Tag, Save, ArrowLeft, Trash2 } from 'lucide-react';
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
+import { useBlogCategories } from '@/hooks/useBlogCategories';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { FormField } from '@/components/ui/form-field';
+import type { CategoryFormData } from '@/hooks/useBlogCategories';
+import { DEFAULT_CATEGORY_COLOR, UI_COLOR_PALETTE } from '@/config/ui-colors';
+import { generateSlug } from '@/lib/utils/slug';
+import { UI_FEEDBACK_MS } from '@/config/limits';
+import { ROUTES } from '@/config/routes';
+import { adminInteractive } from '@/lib/admin-ui';
+import { AiFormBar } from '@/components/ui/AiFormBar';
+import { CATEGORY_FORM } from '@/config/ai-forms';
 
 interface CategoryFormProps {
-  initialData?: Partial<CategoryFormData>
-  isEdit?: boolean
+  initialData?: Partial<CategoryFormData>;
+  isEdit?: boolean;
 }
 
-const COLOR_PALETTE = UI_COLOR_PALETTE
+const COLOR_PALETTE = UI_COLOR_PALETTE;
 
-export default function CategoryForm({
-  initialData,
-  isEdit = false,
-}: CategoryFormProps) {
-  const router = useRouter()
-  const t = useTranslations('admin.categories')
-  const { saving, deleting, error, success, saveCategory, deleteCategory } = useBlogCategories()
-  const [confirmDelete, setConfirmDelete] = useState(false)
-  const [slugManuallyEdited, setSlugManuallyEdited] = useState(isEdit)
+export default function CategoryForm({ initialData, isEdit = false }: CategoryFormProps) {
+  const router = useRouter();
+  const t = useTranslations('admin.categories');
+  const { saving, deleting, error, success, saveCategory, deleteCategory } = useBlogCategories();
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [slugManuallyEdited, setSlugManuallyEdited] = useState(isEdit);
 
   // One store, written by both the user and the assistant — that is what lets a
   // follow-up instruction ("Beschreibung kürzer") revise what is already here
@@ -63,35 +60,35 @@ export default function CategoryForm({
     // writes still has to produce one, exactly as typing a name does. Without
     // this, an AI-filled form would save with an empty slug.
     onApplied: (values, changed) => {
-      if (slugManuallyEdited || !changed.includes('name')) return
-      const name = String(values.name ?? '')
-      if (name) assist.setValue('slug', generateSlug(name))
+      if (slugManuallyEdited || !changed.includes('name')) return;
+      const name = String(values.name ?? '');
+      if (name) assist.setValue('slug', generateSlug(name));
     },
-  })
+  });
 
-  const formData = assist.values as unknown as CategoryFormData
+  const formData = assist.values as unknown as CategoryFormData;
 
   // Auto-generate slug from name — computed during name change, not via effect
   const updateName = (name: string) => {
-    assist.setValue('name', name)
-    if (!slugManuallyEdited && name) assist.setValue('slug', generateSlug(name))
-  }
+    assist.setValue('name', name);
+    if (!slugManuallyEdited && name) assist.setValue('slug', generateSlug(name));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    const saved = await saveCategory(formData, { isEdit, id: initialData?.id })
+    e.preventDefault();
+    const saved = await saveCategory(formData, { isEdit, id: initialData?.id });
     if (saved) {
-      setTimeout(() => router.push(ROUTES.admin.categories), UI_FEEDBACK_MS.REDIRECT)
+      setTimeout(() => router.push(ROUTES.admin.categories), UI_FEEDBACK_MS.REDIRECT);
     }
-  }
+  };
 
   const doDelete = async () => {
-    setConfirmDelete(false)
-    const deleted = await deleteCategory(initialData?.id || '')
+    setConfirmDelete(false);
+    const deleted = await deleteCategory(initialData?.id || '');
     if (deleted) {
-      router.push(ROUTES.admin.categories)
+      router.push(ROUTES.admin.categories);
     }
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -115,9 +112,7 @@ export default function CategoryForm({
               <Heading level={1} className="text-2xl text-text-primary">
                 {isEdit ? t('titleEdit') : t('titleNew')}
               </Heading>
-              <p className="text-text-secondary">
-                {isEdit ? t('subtitleEdit') : t('subtitleNew')}
-              </p>
+              <p className="text-text-secondary">{isEdit ? t('subtitleEdit') : t('subtitleNew')}</p>
             </div>
           </div>
         </div>
@@ -147,7 +142,10 @@ export default function CategoryForm({
 
       {/* Status Messages */}
       {error && (
-        <div id="category-form-error" className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 text-error-700 dark:text-error-300 px-4 py-3 rounded-lg">
+        <div
+          id="category-form-error"
+          className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 text-error-700 dark:text-error-300 px-4 py-3 rounded-lg"
+        >
           {error}
         </div>
       )}
@@ -185,14 +183,19 @@ export default function CategoryForm({
             </FormField>
 
             {/* Slug */}
-            <FormField label="Slug" required htmlFor="category-slug" hint="URL-freundlicher Name (automatisch generiert)">
+            <FormField
+              label="Slug"
+              required
+              htmlFor="category-slug"
+              hint="URL-freundlicher Name (automatisch generiert)"
+            >
               <Input
                 id="category-slug"
                 type="text"
                 value={formData.slug}
                 onChange={(e) => {
-                  setSlugManuallyEdited(true)
-                  assist.setValue('slug', e.target.value)
+                  setSlugManuallyEdited(true);
+                  assist.setValue('slug', e.target.value);
                 }}
                 placeholder="z.B. nachhaltigkeit"
                 className="font-mono text-sm"
@@ -207,9 +210,7 @@ export default function CategoryForm({
             <FormField label="Beschreibung" className="md:col-span-2">
               <Textarea
                 value={formData.description}
-                onChange={(e) =>
-                  assist.setValue('description', e.target.value)
-                }
+                onChange={(e) => assist.setValue('description', e.target.value)}
                 placeholder="Kurze Beschreibung der Kategorie..."
                 rows={3}
                 className="resize-none"
@@ -218,25 +219,19 @@ export default function CategoryForm({
 
             {/* Color */}
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-2">
-                Farbe
-              </label>
+              <label className="block text-sm font-medium text-text-secondary mb-2">Farbe</label>
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
                   <input
                     type="color"
                     value={formData.color}
-                    onChange={(e) =>
-                      assist.setValue('color', e.target.value)
-                    }
+                    onChange={(e) => assist.setValue('color', e.target.value)}
                     className="w-10 h-10 rounded-sm cursor-pointer border-0"
                   />
                   <Input
                     type="text"
                     value={formData.color}
-                    onChange={(e) =>
-                      assist.setValue('color', e.target.value)
-                    }
+                    onChange={(e) => assist.setValue('color', e.target.value)}
                     className="flex-1 font-mono text-sm"
                     placeholder={DEFAULT_CATEGORY_COLOR}
                   />
@@ -247,9 +242,7 @@ export default function CategoryForm({
                       key={color}
                       type="button"
                       variant="ghost"
-                      onClick={() =>
-                        assist.setValue('color', color)
-                      }
+                      onClick={() => assist.setValue('color', color)}
                       className={`w-8 h-8 p-0 rounded-full border-2 hover:scale-110 ${
                         formData.color === color
                           ? 'border-strong dark:border-white scale-110'
@@ -265,14 +258,16 @@ export default function CategoryForm({
 
             {/* Sort Order & Active Status */}
             <div className="space-y-4">
-              <FormField label="Sortierung" htmlFor="sort-order" hint="Niedrigere Zahlen erscheinen zuerst">
+              <FormField
+                label="Sortierung"
+                htmlFor="sort-order"
+                hint="Niedrigere Zahlen erscheinen zuerst"
+              >
                 <Input
                   id="sort-order"
                   type="number"
                   value={formData.sort_order}
-                  onChange={(e) =>
-                    assist.setValue('sort_order', parseInt(e.target.value) || 0)
-                  }
+                  onChange={(e) => assist.setValue('sort_order', parseInt(e.target.value) || 0)}
                   min={0}
                 />
               </FormField>
@@ -282,15 +277,10 @@ export default function CategoryForm({
                   type="checkbox"
                   id="is_active"
                   checked={formData.is_active}
-                  onChange={(e) =>
-                    assist.setValue('is_active', e.target.checked)
-                  }
+                  onChange={(e) => assist.setValue('is_active', e.target.checked)}
                   className="w-5 h-5 rounded-sm border-default text-action focus:ring-action"
                 />
-                <label
-                  htmlFor="is_active"
-                  className="text-sm font-medium text-text-secondary"
-                >
+                <label htmlFor="is_active" className="text-sm font-medium text-text-secondary">
                   Aktiv (in Kategorie-Auswahl sichtbar)
                 </label>
               </div>
@@ -331,5 +321,5 @@ export default function CategoryForm({
         onClose={() => setConfirmDelete(false)}
       />
     </div>
-  )
+  );
 }

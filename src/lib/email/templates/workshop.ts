@@ -20,7 +20,7 @@ export const workshopRegistrationConfirmation = (
   workshopDate: string,
   workshopLocation: string,
   priceCents: number,
-  workshopUrl: string
+  workshopUrl: string,
 ): EmailContent => ({
   subject: `Workshop-Anmeldung bestätigt - ${ORG.name}`,
   html: `
@@ -83,8 +83,11 @@ export const workshopRegistrationStatusUpdate = (
   name: string,
   workshopTitle: string,
   workshopDate: string,
-  newStatus: typeof WORKSHOP_REGISTRATION_STATUS.CONFIRMED | typeof WORKSHOP_REGISTRATION_STATUS.CANCELLED | typeof WORKSHOP_REGISTRATION_STATUS.WAITLIST,
-  reason?: string
+  newStatus:
+    | typeof WORKSHOP_REGISTRATION_STATUS.CONFIRMED
+    | typeof WORKSHOP_REGISTRATION_STATUS.CANCELLED
+    | typeof WORKSHOP_REGISTRATION_STATUS.WAITLIST,
+  reason?: string,
 ): EmailContent => ({
   subject: `Workshop-Anmeldung ${newStatus === WORKSHOP_REGISTRATION_STATUS.CONFIRMED ? 'bestätigt' : newStatus === WORKSHOP_REGISTRATION_STATUS.CANCELLED ? 'storniert' : 'Warteliste'} - ${ORG.name}`,
   html: `
@@ -144,7 +147,7 @@ export const workshopReminder = (
   workshopTime: string,
   workshopLocation: string,
   instructor: string | null,
-  workshopUrl: string
+  workshopUrl: string,
 ): EmailContent => ({
   subject: `Erinnerung: Workshop morgen - ${workshopTitle} - ${ORG.name}`,
   html: `
@@ -218,7 +221,7 @@ export const workshopCancellation = (
   workshopTitle: string,
   workshopDate: string,
   reason: string | null,
-  refundInfo: string | null
+  refundInfo: string | null,
 ): EmailContent => ({
   subject: `Workshop abgesagt: ${workshopTitle} - ${ORG.name}`,
   html: `
@@ -279,7 +282,7 @@ export const workshopFeedbackRequest = (
   name: string,
   workshopTitle: string,
   workshopDate: string,
-  feedbackUrl: string
+  feedbackUrl: string,
 ): EmailContent => ({
   subject: `Wie war der Workshop? Ihr Feedback zählt! - ${ORG.name}`,
   html: `
@@ -331,7 +334,7 @@ ${createTextFooter()}
 export const workshopProposalSubmitted = (
   name: string,
   workshopTitle: string,
-  proposalId: string
+  proposalId: string,
 ): EmailContent => ({
   subject: `Workshop-Vorschlag eingereicht - ${ORG.name}`,
   html: `
@@ -387,10 +390,7 @@ ${createTextFooter()}
   `.trim(),
 });
 
-export const workshopProposalApproved = (
-  name: string,
-  workshopTitle: string
-): EmailContent => ({
+export const workshopProposalApproved = (name: string, workshopTitle: string): EmailContent => ({
   subject: `Workshop-Vorschlag genehmigt - ${ORG.name}`,
   html: `
     <!DOCTYPE html>
@@ -438,7 +438,7 @@ ${createTextFooter()}
 export const workshopProposalRejected = (
   name: string,
   workshopTitle: string,
-  reason: string
+  reason: string,
 ): EmailContent => ({
   subject: `Workshop-Vorschlag abgelehnt - ${ORG.name}`,
   html: `
@@ -486,7 +486,7 @@ ${createTextFooter()}
 export const workshopProposalChangesRequested = (
   name: string,
   workshopTitle: string,
-  notes: string
+  notes: string,
 ): EmailContent => ({
   subject: `Änderungen für Workshop-Vorschlag angefragt - ${ORG.name}`,
   html: `

@@ -21,10 +21,7 @@ import { and, eq, sql } from 'drizzle-orm';
 import { REVIEW_TARGET_TYPES } from '@/config/database';
 import { REVIEW_STATUS } from '@/config/review-status';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
     if (!id) return apiNotFound('Profil');
@@ -72,7 +69,7 @@ export async function GET(
       .from(reviews)
       .leftJoin(
         listings,
-        and(eq(reviews.targetId, listings.id), eq(reviews.targetType, REVIEW_TARGET_TYPES.LISTING))
+        and(eq(reviews.targetId, listings.id), eq(reviews.targetType, REVIEW_TARGET_TYPES.LISTING)),
       )
       .where(and(eq(reviews.reviewerId, id), eq(reviews.status, REVIEW_STATUS.PUBLISHED)))
       .orderBy(sql`${reviews.createdAt} DESC`)
@@ -113,7 +110,7 @@ export async function GET(
         },
       },
       60,
-      30
+      30,
     );
   } catch (error) {
     return apiError(error, 'Fehler beim Laden des Profils');

@@ -1,21 +1,21 @@
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl';
 
-import { Button } from '@/components/ui/button'
-import { formatDateShort } from '@/lib/date-formats'
+import { Button } from '@/components/ui/button';
+import { formatDateShort } from '@/lib/date-formats';
 import {
   type ReviewStatus,
   REVIEW_STATUS,
   REVIEW_STATUS_CONFIG,
   getReviewFilterLabel,
   getReviewActionLabel,
-} from '@/config/review-status'
-import { ADMIN_CONTENT } from '@/config/admin-content'
-import { AdminStatusBadge } from '@/components/admin/AdminStatusBadge'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { Modal } from '@/components/ui/Modal'
-import { Textarea } from '@/components/ui/textarea'
+} from '@/config/review-status';
+import { ADMIN_CONTENT } from '@/config/admin-content';
+import { AdminStatusBadge } from '@/components/admin/AdminStatusBadge';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import { Modal } from '@/components/ui/Modal';
+import { Textarea } from '@/components/ui/textarea';
 import {
   EyeOff,
   Trash2,
@@ -28,10 +28,10 @@ import {
   Flag,
   RefreshCw,
   Loader2,
-} from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import { AdminFilterBar } from '@/components/admin/AdminFilterBar'
-import { useAdminReviews } from '@/hooks/useAdminReviews'
+} from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import { AdminFilterBar } from '@/components/admin/AdminFilterBar';
+import { useAdminReviews } from '@/hooks/useAdminReviews';
 
 function renderStars(rating: number) {
   return (
@@ -44,24 +44,36 @@ function renderStars(rating: number) {
       ))}
       <span className="ml-2 text-sm text-text-secondary">{rating}/5</span>
     </div>
-  )
+  );
 }
 
 export default function AdminReviewsPage() {
-  const t = useTranslations('admin.reviews')
+  const t = useTranslations('admin.reviews');
   const {
-    filteredReviews, loading, error,
-    selectedStatus, searchQuery, moderatingId, moderatingAction, moderationReason, actionInProgress,
-    setSelectedStatus, setSearchQuery, setModerationReason,
-    startModeration, cancelModeration, handleModerate, loadReviews,
-  } = useAdminReviews()
+    filteredReviews,
+    loading,
+    error,
+    selectedStatus,
+    searchQuery,
+    moderatingId,
+    moderatingAction,
+    moderationReason,
+    actionInProgress,
+    setSelectedStatus,
+    setSearchQuery,
+    setModerationReason,
+    startModeration,
+    cancelModeration,
+    handleModerate,
+    loadReviews,
+  } = useAdminReviews();
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-96">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-action"></div>
       </div>
-    )
+    );
   }
 
   if (error && filteredReviews.length === 0) {
@@ -70,12 +82,14 @@ export default function AdminReviewsPage() {
         <div className="flex">
           <XCircle className="w-5 h-5 text-error-400" />
           <div className="ml-3">
-            <Heading level={3} className="text-sm font-medium text-error-800 dark:text-error-400">Fehler beim Laden</Heading>
+            <Heading level={3} className="text-sm font-medium text-error-800 dark:text-error-400">
+              Fehler beim Laden
+            </Heading>
             <p className="text-sm text-error-700 dark:text-error-400 mt-1">{error}</p>
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -142,7 +156,10 @@ export default function AdminReviewsPage() {
           </div>
         ) : (
           filteredReviews.map((review) => (
-            <div key={review.id} className="bg-surface-base rounded-lg shadow-xs border border overflow-hidden">
+            <div
+              key={review.id}
+              className="bg-surface-base rounded-lg shadow-xs border border overflow-hidden"
+            >
               <div className="p-6 border-b border">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
@@ -165,7 +182,9 @@ export default function AdminReviewsPage() {
                       <span>{formatDateShort(review.createdAt)}</span>
                     </div>
                     {review.title && (
-                      <Heading level={4} className="font-medium text-text-primary mb-2">{review.title}</Heading>
+                      <Heading level={4} className="font-medium text-text-primary mb-2">
+                        {review.title}
+                      </Heading>
                     )}
                     <p className="text-text-secondary text-sm leading-relaxed">{review.content}</p>
 
@@ -176,7 +195,9 @@ export default function AdminReviewsPage() {
                           <span className="text-sm font-medium text-text-primary">
                             Antwort von {review.response.responderName}
                           </span>
-                          <span className="text-xs text-text-secondary">{formatDateShort(review.response.createdAt)}</span>
+                          <span className="text-xs text-text-secondary">
+                            {formatDateShort(review.response.createdAt)}
+                          </span>
                         </div>
                         <p className="text-text-primary text-sm">{review.response.content}</p>
                       </div>
@@ -258,7 +279,9 @@ export default function AdminReviewsPage() {
                 <div className="flex items-center gap-4 mt-4 text-sm text-text-tertiary">
                   <span>{review.helpfulVotes} hilfreiche Stimmen</span>
                   {review.moderationReason && (
-                    <span className="text-error-600">Moderationsgrund: {review.moderationReason}</span>
+                    <span className="text-error-600">
+                      Moderationsgrund: {review.moderationReason}
+                    </span>
                   )}
                   {review.moderatedAt && (
                     <span>Moderiert am {formatDateShort(review.moderatedAt)}</span>
@@ -302,5 +325,5 @@ export default function AdminReviewsPage() {
         </div>
       </Modal>
     </AdminPageWrapper>
-  )
+  );
 }

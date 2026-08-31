@@ -1,6 +1,6 @@
-import 'server-only'
-import { createHash, timingSafeEqual } from 'crypto'
-import { cookies } from 'next/headers'
+import 'server-only';
+import { createHash, timingSafeEqual } from 'crypto';
+import { cookies } from 'next/headers';
 
 /**
  * Shared-password gate for UNLISTED ("closed") blog posts.
@@ -15,29 +15,29 @@ import { cookies } from 'next/headers'
  * is changeable without a deploy and no plaintext secret lives in the repo.
  * Mirrors the upcycling-dossier gate (src/lib/upcycling/dossier-auth.ts).
  */
-export const BLOG_UNLISTED_COOKIE = 'blog_unlisted'
-const BLOG_UNLISTED_PASSWORD = process.env.BLOG_UNLISTED_PASSWORD ?? 'revamp'
+export const BLOG_UNLISTED_COOKIE = 'blog_unlisted';
+const BLOG_UNLISTED_PASSWORD = process.env.BLOG_UNLISTED_PASSWORD ?? 'revamp';
 
 function tokenFor(password: string): string {
-  return createHash('sha256').update(`blog-unlisted::${password}`).digest('hex')
+  return createHash('sha256').update(`blog-unlisted::${password}`).digest('hex');
 }
 
 /** Token a valid cookie must carry. */
-export const EXPECTED_TOKEN = tokenFor(BLOG_UNLISTED_PASSWORD)
+export const EXPECTED_TOKEN = tokenFor(BLOG_UNLISTED_PASSWORD);
 
 function safeEqual(a: string, b: string): boolean {
-  const ab = Buffer.from(a)
-  const bb = Buffer.from(b)
-  if (ab.length !== bb.length) return false
-  return timingSafeEqual(ab, bb)
+  const ab = Buffer.from(a);
+  const bb = Buffer.from(b);
+  if (ab.length !== bb.length) return false;
+  return timingSafeEqual(ab, bb);
 }
 
 export function passwordMatches(input: string): boolean {
-  return safeEqual(tokenFor(input.trim()), EXPECTED_TOKEN)
+  return safeEqual(tokenFor(input.trim()), EXPECTED_TOKEN);
 }
 
 export async function isUnlistedUnlocked(): Promise<boolean> {
-  const store = await cookies()
-  const token = store.get(BLOG_UNLISTED_COOKIE)?.value
-  return typeof token === 'string' && safeEqual(token, EXPECTED_TOKEN)
+  const store = await cookies();
+  const token = store.get(BLOG_UNLISTED_COOKIE)?.value;
+  return typeof token === 'string' && safeEqual(token, EXPECTED_TOKEN);
 }

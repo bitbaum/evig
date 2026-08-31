@@ -1,22 +1,22 @@
-import { withAdmin } from '@/lib/api/middleware'
-import { db } from '@/db'
-import { refunds, paymentTransactions, paymentProviders, users } from '@/db/schema'
-import { eq, sql } from 'drizzle-orm'
-import { alias } from 'drizzle-orm/pg-core'
-import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
-import { logger } from '@/lib/logger'
-import { validateBody, RefundActionSchema } from '@/lib/schemas'
-import { REFUND_STATUS } from '@/config/refund'
-import { PAYMENT_TRANSACTION_TYPE } from '@/config/payment-status'
-import { refundTransaction } from '@/lib/payments/payrexx-client'
+import { withAdmin } from '@/lib/api/middleware';
+import { db } from '@/db';
+import { refunds, paymentTransactions, paymentProviders, users } from '@/db/schema';
+import { eq, sql } from 'drizzle-orm';
+import { alias } from 'drizzle-orm/pg-core';
+import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers';
+import { logger } from '@/lib/logger';
+import { validateBody, RefundActionSchema } from '@/lib/schemas';
+import { REFUND_STATUS } from '@/config/refund';
+import { PAYMENT_TRANSACTION_TYPE } from '@/config/payment-status';
+import { refundTransaction } from '@/lib/payments/payrexx-client';
 
-const approvedByUser = alias(users, 'approved_by_user')
-const requestedByUser = alias(users, 'requested_by_user')
-const processedByUser = alias(users, 'processed_by_user')
+const approvedByUser = alias(users, 'approved_by_user');
+const requestedByUser = alias(users, 'requested_by_user');
+const processedByUser = alias(users, 'processed_by_user');
 
 // GET /api/admin/refunds/[id] - Get refund details
 export const GET = withAdmin<{ id: string }>('finanzen', async (request, session, context) => {
-  const { id: refundId } = context!.params!
+  const { id: refundId } = context!.params!;
   try {
     const [refund] = await db
       .select({
@@ -53,28 +53,27 @@ export const GET = withAdmin<{ id: string }>('finanzen', async (request, session
       .leftJoin(approvedByUser, eq(refunds.approvedBy, approvedByUser.id))
       .leftJoin(requestedByUser, eq(refunds.requestedBy, requestedByUser.id))
       .leftJoin(processedByUser, eq(refunds.processedBy, processedByUser.id))
-      .where(eq(refunds.id, refundId))
+      .where(eq(refunds.id, refundId));
 
     if (!refund) {
-      return apiNotFound('Refund not found')
+      return apiNotFound('Refund not found');
     }
 
-    return apiSuccess({ refund })
-
+    return apiSuccess({ refund });
   } catch (error) {
-    logger.error('Get admin refund error', { error })
-    return apiError(error, 'Failed to retrieve refund')
+    logger.error('Get admin refund error', { error });
+    return apiError(error, 'Failed to retrieve refund');
   }
-})
+});
 
 // PUT /api/admin/refunds/[id] - Approve/reject/process refund
 export const PUT = withAdmin<{ id: string }>('finanzen', async (request, session, context) => {
-  const { id: refundId } = context!.params!
+  const { id: refundId } = context!.params!;
   try {
-    const body = await request.json()
-    const validation = validateBody(RefundActionSchema, body)
-    if (!validation.success) return validation.error
-    const { action, notes } = validation.data
+    const body = await request.json();
+    const validation = validateBody(RefundActionSchema, body);
+    if (!validation.success) return validation.error;
+    const { action, notes } = validation.data;
 
     // Get refund details with provider info
     const [refund] = await db
@@ -94,15 +93,15 @@ export const PUT = withAdmin<{ id: string }>('finanzen', async (request, session
       .from(refunds)
       .innerJoin(paymentTransactions, eq(refunds.originalTransactionId, paymentTransactions.id))
       .innerJoin(paymentProviders, eq(paymentTransactions.providerId, paymentProviders.id))
-      .where(eq(refunds.id, refundId))
+      .where(eq(refunds.id, refundId));
 
     if (!refund) {
-      return apiNotFound('Refund not found')
+      return apiNotFound('Refund not found');
     }
 
     if (action === 'approve') {
       if (refund.status !== REFUND_STATUS.REQUESTED) {
-        return apiBadRequest('Refund is not in requested status')
+        return apiBadRequest('Refund is not in requested status');
       }
 
       await db
@@ -116,11 +115,10 @@ export const PUT = withAdmin<{ id: string }>('finanzen', async (request, session
             : refunds.internalNotes,
           updatedAt: sql`CURRENT_TIMESTAMP`,
         })
-        .where(eq(refunds.id, refundId))
-
+        .where(eq(refunds.id, refundId));
     } else if (action === 'reject') {
       if (refund.status !== REFUND_STATUS.REQUESTED && refund.status !== REFUND_STATUS.APPROVED) {
-        return apiBadRequest('Refund cannot be rejected in current status')
+        return apiBadRequest('Refund cannot be rejected in current status');
       }
 
       await db
@@ -134,18 +132,17 @@ export const PUT = withAdmin<{ id: string }>('finanzen', async (request, session
             : refunds.internalNotes,
           updatedAt: sql`CURRENT_TIMESTAMP`,
         })
-        .where(eq(refunds.id, refundId))
-
+        .where(eq(refunds.id, refundId));
     } else if (action === 'process') {
       if (refund.status !== REFUND_STATUS.APPROVED) {
-        return apiBadRequest('Refund must be approved before processing')
+        return apiBadRequest('Refund must be approved before processing');
       }
 
       try {
         const payrexxRefund = await refundTransaction(
           refund.provider_transaction_id!,
-          Number(refund.amountCents)
-        )
+          Number(refund.amountCents),
+        );
 
         // Update refund with Payrexx refund details
         await db
@@ -160,25 +157,23 @@ export const PUT = withAdmin<{ id: string }>('finanzen', async (request, session
             internalNotes: sql`COALESCE(${refunds.internalNotes}, '') || ${`\n[${new Date().toISOString()}] Processed via Payrexx: ${payrexxRefund.id}`}`,
             updatedAt: sql`CURRENT_TIMESTAMP`,
           })
-          .where(eq(refunds.id, refundId))
+          .where(eq(refunds.id, refundId));
 
         // Create refund transaction record
-        await db
-          .insert(paymentTransactions)
-          .values({
-            userId: refund.requestedBy,
-            providerId: refund.provider_id,
-            providerTransactionId: String(payrexxRefund.id),
-            type: PAYMENT_TRANSACTION_TYPE.REFUND,
-            status: REFUND_STATUS.PROCESSING,
-            amountCents: Number(refund.amountCents),
-            currency: refund.currency,
-            description: `Refund for transaction ${refund.provider_transaction_id}`,
-          })
-
+        await db.insert(paymentTransactions).values({
+          userId: refund.requestedBy,
+          providerId: refund.provider_id,
+          providerTransactionId: String(payrexxRefund.id),
+          type: PAYMENT_TRANSACTION_TYPE.REFUND,
+          status: REFUND_STATUS.PROCESSING,
+          amountCents: Number(refund.amountCents),
+          currency: refund.currency,
+          description: `Refund for transaction ${refund.provider_transaction_id}`,
+        });
       } catch (refundError: unknown) {
-        logger.error('Payrexx refund processing error', { error: refundError })
-        const errorMessage = refundError instanceof Error ? refundError.message : 'Unknown refund error'
+        logger.error('Payrexx refund processing error', { error: refundError });
+        const errorMessage =
+          refundError instanceof Error ? refundError.message : 'Unknown refund error';
 
         await db
           .update(refunds)
@@ -189,9 +184,9 @@ export const PUT = withAdmin<{ id: string }>('finanzen', async (request, session
             internalNotes: sql`COALESCE(${refunds.internalNotes}, '') || ${`\n[${new Date().toISOString()}] Processing failed: ${errorMessage}`}`,
             updatedAt: sql`CURRENT_TIMESTAMP`,
           })
-          .where(eq(refunds.id, refundId))
+          .where(eq(refunds.id, refundId));
 
-        return apiError(refundError, 'Refund processing failed')
+        return apiError(refundError, 'Refund processing failed');
       }
     }
 
@@ -213,15 +208,14 @@ export const PUT = withAdmin<{ id: string }>('finanzen', async (request, session
       })
       .from(refunds)
       .innerJoin(users, eq(refunds.requestedBy, users.id))
-      .where(eq(refunds.id, refundId))
+      .where(eq(refunds.id, refundId));
 
     return apiSuccess({
       refund: updated,
-      message: `Refund ${action}d successfully`
-    })
-
+      message: `Refund ${action}d successfully`,
+    });
   } catch (error) {
-    logger.error('Admin refund action error', { error })
-    return apiError(error, 'Failed to process refund action')
+    logger.error('Admin refund action error', { error });
+    return apiError(error, 'Failed to process refund action');
   }
-})
+});

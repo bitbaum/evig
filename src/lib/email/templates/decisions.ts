@@ -5,10 +5,10 @@
  */
 
 import { ORG } from '@\/config\/org';
-import type { EmailContent } from '../types'
-import { createEmailLayout, createTextFooter } from './base-styles'
-import { APP_URL } from '@/config/urls'
-import { escapeHtml } from '@/lib/utils/escape-html'
+import type { EmailContent } from '../types';
+import { createEmailLayout, createTextFooter } from './base-styles';
+import { APP_URL } from '@/config/urls';
+import { escapeHtml } from '@/lib/utils/escape-html';
 
 // `title` is the decision title — staff-entered text that flows into the
 // HTML body. Date interpolation comes from `new Date().toLocaleDateString`
@@ -20,10 +20,10 @@ import { escapeHtml } from '@/lib/utils/escape-html'
  *  - default        → /dashboard/decisions/:id (staff login required)
  */
 function decisionUrl(decisionId?: string, isAdmin = false, isPublic = false): string {
-  if (!decisionId) return `${APP_URL}/admin/decisions`
-  if (isPublic) return `${APP_URL}/vote/${decisionId}`
-  const base = isAdmin ? '/admin/decisions' : '/dashboard/decisions'
-  return `${APP_URL}${base}/${decisionId}`
+  if (!decisionId) return `${APP_URL}/admin/decisions`;
+  if (isPublic) return `${APP_URL}/vote/${decisionId}`;
+  const base = isAdmin ? '/admin/decisions' : '/dashboard/decisions';
+  return `${APP_URL}${base}/${decisionId}`;
 }
 
 export const decisionVotingOpened = (
@@ -34,12 +34,12 @@ export const decisionVotingOpened = (
 ): EmailContent => {
   const deadlineText = deadline
     ? `<p><strong>Frist:</strong> ${new Date(deadline).toLocaleDateString('de-CH', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>`
-    : ''
+    : '';
   const deadlinePlain = deadline
     ? `Frist: ${new Date(deadline).toLocaleDateString('de-CH', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}\n`
-    : ''
+    : '';
 
-  const link = decisionUrl(decisionId, false, allowPublicVoting)
+  const link = decisionUrl(decisionId, false, allowPublicVoting);
 
   const html = createEmailLayout(
     'Abstimmung geöffnet',
@@ -54,17 +54,17 @@ export const decisionVotingOpened = (
           Zur Abstimmung
         </a>
       </p>
-    `
-  )
+    `,
+  );
 
-  const text = `Abstimmung geöffnet\n\nEine neue Abstimmung wartet auf deine Stimme:\n${title}\n${deadlinePlain}\nZur Abstimmung: ${link}\n${createTextFooter()}`
+  const text = `Abstimmung geöffnet\n\nEine neue Abstimmung wartet auf deine Stimme:\n${title}\n${deadlinePlain}\nZur Abstimmung: ${link}\n${createTextFooter()}`;
 
   return {
     subject: `Abstimmung geöffnet: ${title} - ${ORG.name}`,
     html,
     text,
-  }
-}
+  };
+};
 
 export const decisionDeadlineReminder = (
   title: string,
@@ -77,9 +77,9 @@ export const decisionDeadlineReminder = (
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
-  })
+  });
 
-  const link = decisionUrl(decisionId)
+  const link = decisionUrl(decisionId);
 
   const html = createEmailLayout(
     'Abstimmung endet bald',
@@ -95,23 +95,20 @@ export const decisionDeadlineReminder = (
           Jetzt abstimmen
         </a>
       </p>
-    `
-  )
+    `,
+  );
 
-  const text = `Erinnerung: Abstimmung endet bald\n\nDie folgende Abstimmung endet morgen:\n${title}\nFrist: ${deadlineFormatted}\n\nFalls du noch nicht abgestimmt hast, gib bitte noch deine Stimme ab.\n\nJetzt abstimmen: ${link}\n${createTextFooter()}`
+  const text = `Erinnerung: Abstimmung endet bald\n\nDie folgende Abstimmung endet morgen:\n${title}\nFrist: ${deadlineFormatted}\n\nFalls du noch nicht abgestimmt hast, gib bitte noch deine Stimme ab.\n\nJetzt abstimmen: ${link}\n${createTextFooter()}`;
 
   return {
     subject: `Abstimmung endet morgen: ${title} - ${ORG.name}`,
     html,
     text,
-  }
-}
+  };
+};
 
-export const decisionClosed = (
-  title: string,
-  decisionId?: string,
-): EmailContent => {
-  const link = decisionUrl(decisionId)
+export const decisionClosed = (title: string, decisionId?: string): EmailContent => {
+  const link = decisionUrl(decisionId);
 
   const html = createEmailLayout(
     'Abstimmung abgeschlossen',
@@ -126,14 +123,14 @@ export const decisionClosed = (
           Ergebnis ansehen
         </a>
       </p>
-    `
-  )
+    `,
+  );
 
-  const text = `Abstimmung abgeschlossen\n\nDie folgende Abstimmung wurde abgeschlossen:\n${title}\n\nDas Ergebnis steht jetzt fest.\n\nErgebnis ansehen: ${link}\n${createTextFooter()}`
+  const text = `Abstimmung abgeschlossen\n\nDie folgende Abstimmung wurde abgeschlossen:\n${title}\n\nDas Ergebnis steht jetzt fest.\n\nErgebnis ansehen: ${link}\n${createTextFooter()}`;
 
   return {
     subject: `Abstimmung abgeschlossen: ${title} - ${ORG.name}`,
     html,
     text,
-  }
-}
+  };
+};

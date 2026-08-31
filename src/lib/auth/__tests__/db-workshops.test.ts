@@ -24,32 +24,32 @@
 // ---------------------------------------------------------------------------
 
 function makeChain(result: unknown = []) {
-  const resolved = Promise.resolve(result)
-  const chain: Record<string, unknown> = {}
-  chain.select = jest.fn().mockReturnValue(chain)
-  chain.from = jest.fn().mockReturnValue(chain)
-  chain.where = jest.fn().mockReturnValue(chain)
-  chain.limit = jest.fn().mockReturnValue(chain)
-  chain.innerJoin = jest.fn().mockReturnValue(chain)
-  chain.leftJoin = jest.fn().mockReturnValue(chain)
-  chain.orderBy = jest.fn().mockReturnValue(chain)
-  chain.then = (resolved as Promise<unknown>).then.bind(resolved)
-  chain.catch = (resolved as Promise<unknown>).catch.bind(resolved)
-  chain.finally = (resolved as Promise<unknown>).finally.bind(resolved)
-  return chain
+  const resolved = Promise.resolve(result);
+  const chain: Record<string, unknown> = {};
+  chain.select = jest.fn().mockReturnValue(chain);
+  chain.from = jest.fn().mockReturnValue(chain);
+  chain.where = jest.fn().mockReturnValue(chain);
+  chain.limit = jest.fn().mockReturnValue(chain);
+  chain.innerJoin = jest.fn().mockReturnValue(chain);
+  chain.leftJoin = jest.fn().mockReturnValue(chain);
+  chain.orderBy = jest.fn().mockReturnValue(chain);
+  chain.then = (resolved as Promise<unknown>).then.bind(resolved);
+  chain.catch = (resolved as Promise<unknown>).catch.bind(resolved);
+  chain.finally = (resolved as Promise<unknown>).finally.bind(resolved);
+  return chain;
 }
 
 // ---------------------------------------------------------------------------
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbSelect = jest.fn(() => makeChain([]))
+const mockDbSelect = jest.fn(() => makeChain([]));
 
 jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockDbSelect.apply(null, args),
   },
-}))
+}));
 
 jest.mock('@/db/schema', () => ({
   workshops: {
@@ -87,7 +87,7 @@ jest.mock('@/db/schema', () => ({
     createdAt: 'wr_createdAt',
     updatedAt: 'wr_updatedAt',
   },
-}))
+}));
 
 jest.mock('drizzle-orm', () => ({
   ...jest.requireActual('drizzle-orm'),
@@ -95,7 +95,7 @@ jest.mock('drizzle-orm', () => ({
   and: jest.fn().mockReturnValue({ __and: true }),
   ne: jest.fn().mockReturnValue({ __ne: true }),
   desc: jest.fn().mockReturnValue({ __desc: true }),
-}))
+}));
 
 jest.mock('@/config/workshop-registration-status', () => ({
   WORKSHOP_REGISTRATION_STATUS: {
@@ -103,7 +103,7 @@ jest.mock('@/config/workshop-registration-status', () => ({
     CANCELLED: 'cancelled',
     PENDING: 'pending',
   },
-}))
+}));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
@@ -114,7 +114,7 @@ import {
   getWorkshopsForUser,
   getUserWorkshopRegistrations,
   isUserRegisteredForWorkshop,
-} from '../db-workshops'
+} from '../db-workshops';
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -135,7 +135,7 @@ function makeWorkshopRow(overrides: Partial<Record<string, unknown>> = {}) {
     created_at: '2026-03-01T00:00:00Z',
     updated_at: '2026-03-01T00:00:00Z',
     ...overrides,
-  }
+  };
 }
 
 function makeRegistrationRow(overrides: Partial<Record<string, unknown>> = {}) {
@@ -158,13 +158,13 @@ function makeRegistrationRow(overrides: Partial<Record<string, unknown>> = {}) {
     workshop_title: 'Linux-Grundkurs',
     workshop_slug: 'linux-basics',
     ...overrides,
-  }
+  };
 }
 
 beforeEach(() => {
-  jest.clearAllMocks()
-  mockDbSelect.mockImplementation(() => makeChain([]))
-})
+  jest.clearAllMocks();
+  mockDbSelect.mockImplementation(() => makeChain([]));
+});
 
 // ============================================================================
 // getWorkshopBySlug
@@ -172,22 +172,22 @@ beforeEach(() => {
 
 describe('getWorkshopBySlug', () => {
   it('returns null when workshop not found', async () => {
-    mockDbSelect.mockImplementationOnce(() => makeChain([]))
+    mockDbSelect.mockImplementationOnce(() => makeChain([]));
 
-    const result = await getWorkshopBySlug('missing-slug')
+    const result = await getWorkshopBySlug('missing-slug');
 
-    expect(result).toBeNull()
-  })
+    expect(result).toBeNull();
+  });
 
   it('returns DbWorkshop when found', async () => {
-    mockDbSelect.mockImplementationOnce(() => makeChain([makeWorkshopRow()]))
+    mockDbSelect.mockImplementationOnce(() => makeChain([makeWorkshopRow()]));
 
-    const result = await getWorkshopBySlug('linux-basics')
+    const result = await getWorkshopBySlug('linux-basics');
 
-    expect(result?.id).toBe('ws-1')
-    expect(result?.title).toBe('Linux-Grundkurs')
-  })
-})
+    expect(result?.id).toBe('ws-1');
+    expect(result?.title).toBe('Linux-Grundkurs');
+  });
+});
 
 // ============================================================================
 // getWorkshopsForUser
@@ -195,12 +195,12 @@ describe('getWorkshopBySlug', () => {
 
 describe('getWorkshopsForUser', () => {
   it('returns empty array when no active workshops', async () => {
-    mockDbSelect.mockImplementationOnce(() => makeChain([]))
+    mockDbSelect.mockImplementationOnce(() => makeChain([]));
 
-    const result = await getWorkshopsForUser('user-1')
+    const result = await getWorkshopsForUser('user-1');
 
-    expect(result).toEqual([])
-  })
+    expect(result).toEqual([]);
+  });
 
   it('returns workshop rows with optional registration_status', async () => {
     mockDbSelect.mockImplementationOnce(() =>
@@ -208,15 +208,15 @@ describe('getWorkshopsForUser', () => {
         makeWorkshopRow({ registration_status: 'confirmed' }),
         makeWorkshopRow({ id: 'ws-2', slug: 'repair-basics', registration_status: null }),
       ]),
-    )
+    );
 
-    const result = await getWorkshopsForUser('user-1')
+    const result = await getWorkshopsForUser('user-1');
 
-    expect(result).toHaveLength(2)
-    expect(result[0].registration_status).toBe('confirmed')
-    expect(result[1].registration_status).toBeNull()
-  })
-})
+    expect(result).toHaveLength(2);
+    expect(result[0].registration_status).toBe('confirmed');
+    expect(result[1].registration_status).toBeNull();
+  });
+});
 
 // ============================================================================
 // getUserWorkshopRegistrations
@@ -224,24 +224,24 @@ describe('getWorkshopsForUser', () => {
 
 describe('getUserWorkshopRegistrations', () => {
   it('returns empty array when no registrations', async () => {
-    mockDbSelect.mockImplementationOnce(() => makeChain([]))
+    mockDbSelect.mockImplementationOnce(() => makeChain([]));
 
-    const result = await getUserWorkshopRegistrations('user-1')
+    const result = await getUserWorkshopRegistrations('user-1');
 
-    expect(result).toEqual([])
-  })
+    expect(result).toEqual([]);
+  });
 
   it('returns registration rows with workshop title and slug', async () => {
-    mockDbSelect.mockImplementationOnce(() => makeChain([makeRegistrationRow()]))
+    mockDbSelect.mockImplementationOnce(() => makeChain([makeRegistrationRow()]));
 
-    const result = await getUserWorkshopRegistrations('user-1')
+    const result = await getUserWorkshopRegistrations('user-1');
 
-    expect(result).toHaveLength(1)
-    expect(result[0].id).toBe('reg-1')
-    expect(result[0].workshop_title).toBe('Linux-Grundkurs')
-    expect(result[0].workshop_slug).toBe('linux-basics')
-  })
-})
+    expect(result).toHaveLength(1);
+    expect(result[0].id).toBe('reg-1');
+    expect(result[0].workshop_title).toBe('Linux-Grundkurs');
+    expect(result[0].workshop_slug).toBe('linux-basics');
+  });
+});
 
 // ============================================================================
 // isUserRegisteredForWorkshop
@@ -249,18 +249,18 @@ describe('getUserWorkshopRegistrations', () => {
 
 describe('isUserRegisteredForWorkshop', () => {
   it('returns false when user is not registered', async () => {
-    mockDbSelect.mockImplementationOnce(() => makeChain([]))
+    mockDbSelect.mockImplementationOnce(() => makeChain([]));
 
-    const result = await isUserRegisteredForWorkshop('user-1', 'linux-basics')
+    const result = await isUserRegisteredForWorkshop('user-1', 'linux-basics');
 
-    expect(result).toBe(false)
-  })
+    expect(result).toBe(false);
+  });
 
   it('returns true when an active registration exists', async () => {
-    mockDbSelect.mockImplementationOnce(() => makeChain([{ id: 'reg-1' }]))
+    mockDbSelect.mockImplementationOnce(() => makeChain([{ id: 'reg-1' }]));
 
-    const result = await isUserRegisteredForWorkshop('user-1', 'linux-basics')
+    const result = await isUserRegisteredForWorkshop('user-1', 'linux-basics');
 
-    expect(result).toBe(true)
-  })
-})
+    expect(result).toBe(true);
+  });
+});

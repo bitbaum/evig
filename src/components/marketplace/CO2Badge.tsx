@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * CO2Badge — estimated CO₂ savings for a reused device.
@@ -13,28 +13,28 @@
  * headline figure.
  */
 
-import { Leaf } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { Link } from '@/i18n/navigation'
-import { estimateCO2Savings } from '@/config/co2-impact'
-import { cn } from '@/lib/utils'
+import { Leaf } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Link } from '@/i18n/navigation';
+import { estimateCO2Savings } from '@/config/co2-impact';
+import { cn } from '@/lib/utils';
 
 interface CO2BadgeProps {
-  category: string
-  className?: string
+  category: string;
+  className?: string;
   /**
    * Compact chip for listing cards: leaf + "~X kg CO₂ vermieden", no
    * methodology link (the card is already a link; the full linked badge lives
    * on the detail page it navigates to). Same honest null-hiding + `~` prefix.
    */
-  compact?: boolean
+  compact?: boolean;
 }
 
 export function CO2Badge({ category, className = '', compact = false }: CO2BadgeProps) {
-  const t = useTranslations('components.co2Badge')
-  const co2Saved = estimateCO2Savings(category)
+  const t = useTranslations('components.co2Badge');
+  const co2Saved = estimateCO2Savings(category);
 
-  if (co2Saved == null || co2Saved <= 0) return null
+  if (co2Saved == null || co2Saved <= 0) return null;
 
   if (compact) {
     return (
@@ -45,7 +45,7 @@ export function CO2Badge({ category, className = '', compact = false }: CO2Badge
         <Leaf className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
         {t('saved', { amount: co2Saved })}
       </span>
-    )
+    );
   }
 
   return (
@@ -60,9 +60,7 @@ export function CO2Badge({ category, className = '', compact = false }: CO2Badge
     >
       <span className="inline-flex items-center gap-1.5">
         <Leaf className="w-4 h-4 text-action shrink-0" aria-hidden="true" />
-        <span className="text-action font-medium">
-          {t('saved', { amount: co2Saved })}
-        </span>
+        <span className="text-action font-medium">{t('saved', { amount: co2Saved })}</span>
       </span>
       <Link
         href="/transparenz/co2"
@@ -71,5 +69,5 @@ export function CO2Badge({ category, className = '', compact = false }: CO2Badge
         {t('estimate')} — {t('methodologyLink')}
       </Link>
     </div>
-  )
+  );
 }

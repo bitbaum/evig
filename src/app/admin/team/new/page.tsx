@@ -4,29 +4,29 @@
  * Server component that fetches available users and passes to form.
  */
 
-import { Metadata } from 'next'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { isSuperAdmin } from '@/lib/permissions'
-import { requireSection } from '@/lib/admin/guards'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
-import { logger } from '@/lib/logger'
-import { TeamProfileForm } from '@/components/admin/team'
-import Heading from '@/components/admin/AdminHeading'
+import { Metadata } from 'next';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { isSuperAdmin } from '@/lib/permissions';
+import { requireSection } from '@/lib/admin/guards';
+import { query } from '@/lib/auth/db';
+import { TABLE_NAMES } from '@/config/database';
+import { logger } from '@/lib/logger';
+import { TeamProfileForm } from '@/components/admin/team';
+import Heading from '@/components/admin/AdminHeading';
 
 export const metadata: Metadata = {
   title: 'Neues Team-Profil',
   description: 'Neues Team-Profil erstellen',
-}
+};
 
 interface PageProps {
-  searchParams: Promise<{ user_id?: string }>
+  searchParams: Promise<{ user_id?: string }>;
 }
 
 interface StaffUser {
-  id: string
-  name: string | null
-  email: string
+  id: string;
+  name: string | null;
+  email: string;
 }
 
 async function getStaffWithoutProfiles(): Promise<StaffUser[]> {
@@ -36,28 +36,28 @@ async function getStaffWithoutProfiles(): Promise<StaffUser[]> {
        FROM ${TABLE_NAMES.USERS} u
        LEFT JOIN ${TABLE_NAMES.TEAM_PROFILES} tp ON u.id = tp.user_id
        WHERE u.is_staff = true AND tp.id IS NULL
-       ORDER BY u.name ASC NULLS LAST, u.email ASC`
-    )
-    return result.rows
+       ORDER BY u.name ASC NULLS LAST, u.email ASC`,
+    );
+    return result.rows;
   } catch (error) {
-    logger.error('Failed to fetch staff without profiles', { error })
-    return []
+    logger.error('Failed to fetch staff without profiles', { error });
+    return [];
   }
 }
 
 export default async function NewTeamProfilePage({ searchParams }: PageProps) {
-  const session = await requireSection('team')
-  const { user_id: preselectedUserId } = await searchParams
+  const session = await requireSection('team');
+  const { user_id: preselectedUserId } = await searchParams;
 
-  const currentUserIsSuperAdmin = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
-  const availableUsers = await getStaffWithoutProfiles()
+  const currentUserIsSuperAdmin = isSuperAdmin(session.user.email, session.user.isSuperAdmin);
+  const availableUsers = await getStaffWithoutProfiles();
 
   // Check if preselected user is valid — chip from /admin/team passes
   // the user_id directly, so this lands on the form with the user
   // already locked in (one fewer click).
   const validPreselection = preselectedUserId
-    ? availableUsers.find(u => u.id === preselectedUserId)
-    : null
+    ? availableUsers.find((u) => u.id === preselectedUserId)
+    : null;
 
   return (
     <div className="mx-auto max-w-4xl">
@@ -89,5 +89,5 @@ export default async function NewTeamProfilePage({ searchParams }: PageProps) {
         />
       )}
     </div>
-  )
+  );
 }

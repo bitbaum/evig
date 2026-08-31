@@ -1,7 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { DECISION_CATEGORIES, DECISION_CATEGORY_LABELS, DECISION_STATUS, type DecisionCategory } from '@/config/decisions';
+import {
+  DECISION_CATEGORIES,
+  DECISION_CATEGORY_LABELS,
+  DECISION_STATUS,
+  type DecisionCategory,
+} from '@/config/decisions';
 import { AIFormAssist } from '@/components/ai/AIFormAssist';
 import Heading from '@/components/admin/AdminHeading';
 import DecisionTemplateSelector from '@/components/decisions/DecisionTemplateSelector';
@@ -25,7 +30,9 @@ export default function DecisionFormClient() {
   return (
     <form onSubmit={form.handleSubmit} className="space-y-6">
       {form.error && (
-        <div className="rounded-md bg-error-50 dark:bg-error-900/20 p-3 text-sm text-error-700 dark:text-error-300">{form.error}</div>
+        <div className="rounded-md bg-error-50 dark:bg-error-900/20 p-3 text-sm text-error-700 dark:text-error-300">
+          {form.error}
+        </div>
       )}
 
       {/* AI Assistant — open by default, reduces blank-page anxiety */}
@@ -34,7 +41,12 @@ export default function DecisionFormClient() {
         placeholder="Beschreibe was entschieden werden soll – z.B. 'Wir möchten eine Solaranlage aufs Dach installieren lassen und brauchen eine Entscheidung ob wir das Budget von 8000 CHF dafür freigeben.' Die KI strukturiert den Vorschlag und empfiehlt die passende Abstimmungsmethode."
         defaultExpanded={true}
         onFieldsFilled={form.handleAIFieldsFilled}
-        currentData={{ title: form.title, description: form.description, background: form.background, options: form.options }}
+        currentData={{
+          title: form.title,
+          description: form.description,
+          background: form.background,
+          options: form.options,
+        }}
       />
 
       {/* Template Selector */}
@@ -50,7 +62,12 @@ export default function DecisionFormClient() {
         </Button>
         {showTemplates && (
           <div className="mt-3">
-            <DecisionTemplateSelector onSelect={(t) => { form.handleTemplateSelect(t); setShowTemplates(false); }} />
+            <DecisionTemplateSelector
+              onSelect={(t) => {
+                form.handleTemplateSelect(t);
+                setShowTemplates(false);
+              }}
+            />
           </div>
         )}
       </div>
@@ -58,7 +75,9 @@ export default function DecisionFormClient() {
       {/* AI Recommendation Banner */}
       {form.aiRecommendationReason && (
         <div className="flex items-start justify-between gap-3 rounded-md border border-strong bg-action-muted px-4 py-3 text-sm text-action">
-          <span><strong>KI-Empfehlung:</strong> {form.aiRecommendationReason}</span>
+          <span>
+            <strong>KI-Empfehlung:</strong> {form.aiRecommendationReason}
+          </span>
           <Button
             type="button"
             variant="ghost"
@@ -99,7 +118,12 @@ export default function DecisionFormClient() {
       {/* Background / Rationale */}
       <FormField
         htmlFor="background"
-        label={<>Begründung &amp; Hintergrund <span className="ml-1 font-normal text-text-muted">(optional)</span></>}
+        label={
+          <>
+            Begründung &amp; Hintergrund{' '}
+            <span className="ml-1 font-normal text-text-muted">(optional)</span>
+          </>
+        }
       >
         <Textarea
           id="background"
@@ -142,7 +166,9 @@ export default function DecisionFormClient() {
           <div className="mt-4 space-y-6">
             {/* Fristen & Kategorie */}
             <div className="rounded-lg border border bg-surface-raised p-4 space-y-4">
-              <Heading level={3} className="text-sm font-medium text-text-primary">Fristen &amp; Kategorie</Heading>
+              <Heading level={3} className="text-sm font-medium text-text-primary">
+                Fristen &amp; Kategorie
+              </Heading>
 
               <FormField htmlFor="decision-category" label="Kategorie">
                 <Select
@@ -151,7 +177,9 @@ export default function DecisionFormClient() {
                   onChange={(e) => form.setCategory(e.target.value as DecisionCategory)}
                 >
                   {Object.values(DECISION_CATEGORIES).map((cat) => (
-                    <option key={cat} value={cat}>{DECISION_CATEGORY_LABELS[cat]}</option>
+                    <option key={cat} value={cat}>
+                      {DECISION_CATEGORY_LABELS[cat]}
+                    </option>
                   ))}
                 </Select>
               </FormField>
@@ -192,7 +220,9 @@ export default function DecisionFormClient() {
             />
 
             <div className="rounded-lg border border bg-surface-raised p-4">
-              <Heading level={3} className="text-sm font-medium text-text-primary mb-4">Abstimmungseinstellungen</Heading>
+              <Heading level={3} className="text-sm font-medium text-text-primary mb-4">
+                Abstimmungseinstellungen
+              </Heading>
               <AdvancedSettings
                 votingMethod={form.votingMethod}
                 onMethodChange={form.setVotingMethod}
@@ -219,9 +249,12 @@ export default function DecisionFormClient() {
           className="mt-0.5 rounded-sm border-action text-action focus:ring-action"
         />
         <div>
-          <span className="text-sm font-medium text-action-text">Mit Link teilen — kein Konto nötig</span>
+          <span className="text-sm font-medium text-action-text">
+            Mit Link teilen — kein Konto nötig
+          </span>
           <p className="text-xs text-action mt-0.5">
-            Abstimmungslink kann per E-Mail oder Messenger geteilt werden. Jede Person mit dem Link kann abstimmen.
+            Abstimmungslink kann per E-Mail oder Messenger geteilt werden. Jede Person mit dem Link
+            kann abstimmen.
           </p>
         </div>
       </label>
@@ -231,7 +264,9 @@ export default function DecisionFormClient() {
         <Button
           type="submit"
           disabled={form.submitting}
-          onClick={() => { form.setInitialStatus(DECISION_STATUS.VOTING); }}
+          onClick={() => {
+            form.setInitialStatus(DECISION_STATUS.VOTING);
+          }}
           variant="primary"
         >
           {form.submitting ? 'Wird erstellt…' : 'Abstimmung starten →'}
@@ -239,7 +274,9 @@ export default function DecisionFormClient() {
         <Button
           type="submit"
           disabled={form.submitting}
-          onClick={() => { form.setInitialStatus(DECISION_STATUS.DRAFT); }}
+          onClick={() => {
+            form.setInitialStatus(DECISION_STATUS.DRAFT);
+          }}
           variant="ghost"
           size="sm"
         >

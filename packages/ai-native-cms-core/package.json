@@ -13,7 +13,7 @@
     },
     "./types": {
       "import": "./dist/types/index.esm.js",
-      "require": "./dist/types/index.js", 
+      "require": "./dist/types/index.js",
       "types": "./dist/types/index.d.ts"
     }
   },

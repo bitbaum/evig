@@ -1,23 +1,23 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
-import Link from 'next/link'
-import { AlertCircle } from 'lucide-react'
-import { logger } from '@/lib/logger'
-import Heading from '@/components/admin/AdminHeading'
-import { Button } from '@/components/ui/button'
-import { ROUTES } from '@/config/routes'
+import { useEffect } from 'react';
+import Link from 'next/link';
+import { AlertCircle } from 'lucide-react';
+import { logger } from '@/lib/logger';
+import Heading from '@/components/admin/AdminHeading';
+import { Button } from '@/components/ui/button';
+import { ROUTES } from '@/config/routes';
 
 export default function TaskDetailError({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
   useEffect(() => {
-    logger.error('Task detail error', { error, digest: error.digest })
-  }, [error])
+    logger.error('Task detail error', { error, digest: error.digest });
+  }, [error]);
 
   return (
     <div className="flex items-center justify-center min-h-[400px]">
@@ -42,5 +42,5 @@ export default function TaskDetailError({
         </div>
       </div>
     </div>
-  )
+  );
 }

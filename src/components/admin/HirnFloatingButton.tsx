@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useTranslations } from 'next-intl'
-import { Brain } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { HirnSlideOver } from './HirnSlideOver'
+import { useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { Brain } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { HirnSlideOver } from './HirnSlideOver';
 
 interface HirnFloatingButtonProps {
   /** Whether user has access to Hirn */
-  hasAccess: boolean
+  hasAccess: boolean;
 }
 
 /**
@@ -16,11 +16,11 @@ interface HirnFloatingButtonProps {
  * Positioned in bottom-right corner of admin layout
  */
 export function HirnFloatingButton({ hasAccess }: HirnFloatingButtonProps) {
-  const t = useTranslations('admin.hirn.floatingButton')
-  const [isOpen, setIsOpen] = useState(false)
+  const t = useTranslations('admin.hirn.floatingButton');
+  const [isOpen, setIsOpen] = useState(false);
 
   if (!hasAccess) {
-    return null
+    return null;
   }
 
   return (
@@ -44,5 +44,5 @@ export function HirnFloatingButton({ hasAccess }: HirnFloatingButtonProps) {
       {/* Slide Over Panel */}
       <HirnSlideOver isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </>
-  )
+  );
 }

@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import { useState, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
-import { useTranslations } from 'next-intl'
-import { ChevronRight, Check } from 'lucide-react'
-import { apiFetch } from '@/lib/api/client'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { cn } from '@/lib/utils'
-import { useTimecardIntl } from '@/hooks/useTimecardIntl'
+import { useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { ChevronRight, Check } from 'lucide-react';
+import { apiFetch } from '@/lib/api/client';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { cn } from '@/lib/utils';
+import { useTimecardIntl } from '@/hooks/useTimecardIntl';
 import {
   parseWeeklySchedule,
   serializeWeeklySchedule,
@@ -17,7 +17,7 @@ import {
   WEEKDAY_IDS,
   type WeeklySchedule,
   type WeekdayId,
-} from '@/lib/team/schedule'
+} from '@/lib/team/schedule';
 
 /**
  * Inline "Mein Arbeitsplan" editor — lets a team member set their own weekly
@@ -30,52 +30,55 @@ import {
  * in one tap.
  */
 export function WeeklyScheduleEditor({ workingHours }: { workingHours: string | null }) {
-  const t = useTranslations('admin.timecards')
-  const { weekdayLabel, scheduleSummary } = useTimecardIntl()
-  const router = useRouter()
-  const [open, setOpen] = useState(false)
-  const [schedule, setSchedule] = useState<WeeklySchedule>(() => parseWeeklySchedule(workingHours))
-  const [saving, setSaving] = useState(false)
-  const [saved, setSaved] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const t = useTranslations('admin.timecards');
+  const { weekdayLabel, scheduleSummary } = useTimecardIntl();
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [schedule, setSchedule] = useState<WeeklySchedule>(() => parseWeeklySchedule(workingHours));
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const patchDay = useCallback((day: WeekdayId, patch: Partial<WeeklySchedule['days'][WeekdayId]>) => {
-    setSaved(false)
-    setSchedule(prev => ({
-      ...prev,
-      days: { ...prev.days, [day]: { ...prev.days[day], ...patch } },
-    }))
-  }, [])
+  const patchDay = useCallback(
+    (day: WeekdayId, patch: Partial<WeeklySchedule['days'][WeekdayId]>) => {
+      setSaved(false);
+      setSchedule((prev) => ({
+        ...prev,
+        days: { ...prev.days, [day]: { ...prev.days[day], ...patch } },
+      }));
+    },
+    [],
+  );
 
   const useStandard = useCallback(() => {
-    setSaved(false)
-    setSchedule(() => parseWeeklySchedule(serializeWeeklySchedule(STANDARD_WEEKLY_SCHEDULE)))
-  }, [])
+    setSaved(false);
+    setSchedule(() => parseWeeklySchedule(serializeWeeklySchedule(STANDARD_WEEKLY_SCHEDULE)));
+  }, []);
 
   const save = useCallback(async () => {
-    setSaving(true)
-    setError(null)
+    setSaving(true);
+    setError(null);
     try {
       const result = await apiFetch<{ workingHours: string }>('/api/team/schedule', {
         method: 'PUT',
         body: { schedule },
-      })
-      if (!result.success) throw new Error(result.error || 'save_failed')
-      setSaved(true)
-      router.refresh()
+      });
+      if (!result.success) throw new Error(result.error || 'save_failed');
+      setSaved(true);
+      router.refresh();
     } catch {
-      setError(t('scheduleSaveError'))
+      setError(t('scheduleSaveError'));
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
-  }, [schedule, router, t])
+  }, [schedule, router, t]);
 
   return (
     <section className="rounded-xl border border-subtle bg-surface-base">
       <Button
         type="button"
         variant="ghost"
-        onClick={() => setOpen(o => !o)}
+        onClick={() => setOpen((o) => !o)}
         className="flex h-auto w-full items-center justify-between rounded-xl px-4 py-3 text-left"
       >
         <span className="min-w-0">
@@ -86,31 +89,48 @@ export function WeeklyScheduleEditor({ workingHours }: { workingHours: string | 
             {scheduleSummary(schedule)}
           </span>
         </span>
-        <ChevronRight className={cn('h-4 w-4 shrink-0 text-text-tertiary transition-transform', open && 'rotate-90')} aria-hidden="true" />
+        <ChevronRight
+          className={cn(
+            'h-4 w-4 shrink-0 text-text-tertiary transition-transform',
+            open && 'rotate-90',
+          )}
+          aria-hidden="true"
+        />
       </Button>
 
       {open && (
         <div className="space-y-3 border-t border-subtle px-4 py-4">
           <div className="flex items-center justify-between">
             <p className="text-xs text-text-tertiary">{t('scheduleHint')}</p>
-            <Button type="button" variant="ghost" size="sm" onClick={useStandard} className="text-xs text-action hover:text-action">
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={useStandard}
+              className="text-xs text-action hover:text-action"
+            >
               {t('scheduleStandardButton')}
             </Button>
           </div>
 
           <div className="space-y-1.5">
-            {WEEKDAY_IDS.map(day => {
-              const d = schedule.days[day]
+            {WEEKDAY_IDS.map((day) => {
+              const d = schedule.days[day];
               return (
                 <div key={day} className="flex items-center gap-3">
                   <label className="flex w-20 shrink-0 items-center gap-2 text-sm">
                     <input
                       type="checkbox"
                       checked={d.enabled}
-                      onChange={e => patchDay(day, { enabled: e.target.checked })}
+                      onChange={(e) => patchDay(day, { enabled: e.target.checked })}
                       className="h-4 w-4 rounded border-strong text-action focus:ring-action"
                     />
-                    <span className={cn('font-medium', d.enabled ? 'text-text-primary' : 'text-text-tertiary')}>
+                    <span
+                      className={cn(
+                        'font-medium',
+                        d.enabled ? 'text-text-primary' : 'text-text-tertiary',
+                      )}
+                    >
                       {weekdayLabel(day)}
                     </span>
                   </label>
@@ -118,7 +138,7 @@ export function WeeklyScheduleEditor({ workingHours }: { workingHours: string | 
                     type="time"
                     value={d.start}
                     disabled={!d.enabled}
-                    onChange={e => patchDay(day, { start: e.target.value })}
+                    onChange={(e) => patchDay(day, { start: e.target.value })}
                     className="w-28 disabled:opacity-40"
                   />
                   <span className="text-text-tertiary">–</span>
@@ -126,11 +146,11 @@ export function WeeklyScheduleEditor({ workingHours }: { workingHours: string | 
                     type="time"
                     value={d.end}
                     disabled={!d.enabled}
-                    onChange={e => patchDay(day, { end: e.target.value })}
+                    onChange={(e) => patchDay(day, { end: e.target.value })}
                     className="w-28 disabled:opacity-40"
                   />
                 </div>
-              )
+              );
             })}
           </div>
 
@@ -148,5 +168,5 @@ export function WeeklyScheduleEditor({ workingHours }: { workingHours: string | 
         </div>
       )}
     </section>
-  )
+  );
 }

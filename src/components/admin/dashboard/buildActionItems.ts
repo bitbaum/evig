@@ -1,24 +1,24 @@
-import type { DashboardStats, ActionItem } from './types'
-import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
-import type { AdminSection } from '@/lib/permissions'
-import { APPROVAL_SOURCES } from '@/config/approval-sources'
-import type { ApprovalCounts } from '@/lib/approvals/counts'
+import type { DashboardStats, ActionItem } from './types';
+import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments';
+import type { AdminSection } from '@/lib/permissions';
+import { APPROVAL_SOURCES } from '@/config/approval-sources';
+import type { ApprovalCounts } from '@/lib/approvals/counts';
 
 /** A pending approval older than this reads as urgent (matches the hub hero). */
-const APPROVAL_STALE_DAYS = 7
+const APPROVAL_STALE_DAYS = 7;
 
 function daysSince(iso: string | null): number | null {
-  if (!iso) return null
-  return Math.floor((Date.now() - Date.parse(iso)) / 86_400_000)
+  if (!iso) return null;
+  return Math.floor((Date.now() - Date.parse(iso)) / 86_400_000);
 }
 
 export function buildActionItems(
   stats: DashboardStats,
   approvalCounts: ApprovalCounts,
   isSuper: boolean,
-  canAccessSection: (section: AdminSection) => boolean
+  canAccessSection: (section: AdminSection) => boolean,
 ): ActionItem[] {
-  const items: ActionItem[] = []
+  const items: ActionItem[] = [];
 
   // Approval sources — ONE count engine (`getApprovalCounts` over the
   // APPROVAL_SOURCES SSOT), the SAME one the /admin/approvals hub reads. This
@@ -27,11 +27,11 @@ export function buildActionItems(
   // longer disagree. Each row routes to its own review surface (`reviewHref`) and
   // is gated by its own section permission — add a source and it appears here.
   for (const source of APPROVAL_SOURCES) {
-    const count = approvalCounts[source.key]
-    if (!count || count.failed || count.pending === 0) continue
-    if (source.superAdminOnly && !isSuper) continue
-    if (!canAccessSection(source.permission as AdminSection)) continue
-    const age = daysSince(count.oldestAt)
+    const count = approvalCounts[source.key];
+    if (!count || count.failed || count.pending === 0) continue;
+    if (source.superAdminOnly && !isSuper) continue;
+    if (!canAccessSection(source.permission as AdminSection)) continue;
+    const age = daysSince(count.oldestAt);
     items.push({
       type: age !== null && age >= APPROVAL_STALE_DAYS ? 'urgent' : 'warning',
       label: `${source.label} zur Freigabe`,
@@ -39,7 +39,7 @@ export function buildActionItems(
       href: source.reviewHref,
       actionLabel: 'Prüfen',
       oldestAt: count.oldestAt,
-    })
+    });
   }
 
   if (stats.pendingAppointments > 0 && canAccessSection('appointments-admin')) {
@@ -50,7 +50,7 @@ export function buildActionItems(
       href: SERVICE_APPOINTMENT_ROUTES.adminList,
       actionLabel: 'Ansehen',
       oldestAt: stats.pendingAppointmentsOldest,
-    })
+    });
   }
 
   if (stats.unverifiedListings > 0) {
@@ -62,9 +62,13 @@ export function buildActionItems(
       actionLabel: 'Prüfen',
       oldestAt: stats.unverifiedListingsOldest,
       inlineAction: stats.topUnverifiedListing
-        ? { itemId: stats.topUnverifiedListing.id, itemLabel: stats.topUnverifiedListing.label, actionType: 'verify_listing' }
+        ? {
+            itemId: stats.topUnverifiedListing.id,
+            itemLabel: stats.topUnverifiedListing.label,
+            actionType: 'verify_listing',
+          }
         : undefined,
-    })
+    });
   }
 
   if (stats.urgentItHilfe > 0 && canAccessSection('it-hilfe-admin')) {
@@ -75,7 +79,7 @@ export function buildActionItems(
       href: '/admin/it-hilfe',
       actionLabel: 'Ansehen',
       oldestAt: stats.urgentItHilfeOldest,
-    })
+    });
   }
 
   if (stats.overdueTasks > 0) {
@@ -86,7 +90,7 @@ export function buildActionItems(
       href: '/admin/tasks',
       actionLabel: 'Ansehen',
       oldestAt: stats.overdueTasksOldest,
-    })
+    });
   }
 
   if (stats.pendingJobApplications > 0 && canAccessSection('hr-applications')) {
@@ -97,7 +101,7 @@ export function buildActionItems(
       href: '/admin/hr/applications',
       actionLabel: 'Prüfen',
       oldestAt: stats.pendingJobApplicationsOldest,
-    })
+    });
   }
 
   if (stats.openDecisions > 0) {
@@ -107,8 +111,8 @@ export function buildActionItems(
       count: stats.openDecisions,
       href: '/admin/decisions',
       actionLabel: 'Abstimmen',
-    })
+    });
   }
 
-  return items
+  return items;
 }

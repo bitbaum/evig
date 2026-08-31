@@ -26,7 +26,7 @@ import { notifyUsers } from '@/lib/services/notifications';
  * @returns The database user ID, or an error response
  */
 export async function getDbUserId(
-  session: ValidSession
+  session: ValidSession,
 ): Promise<{ dbUserId: string } | { error: NextResponse }> {
   const [user] = await db
     .select({ id: users.id })
@@ -46,8 +46,11 @@ export async function getDbUserId(
  * @returns The active task row, or an error response
  */
 export async function getActiveTask(
-  taskId: string
-): Promise<{ task: { id: string; title: string; created_by: string; is_archived: boolean } } | { error: NextResponse }> {
+  taskId: string,
+): Promise<
+  | { task: { id: string; title: string; created_by: string; is_archived: boolean } }
+  | { error: NextResponse }
+> {
   const [taskRow] = await db
     .select({
       id: tasks.id,
@@ -70,11 +73,11 @@ export async function getActiveTask(
 }
 
 interface InAppNotificationInput {
-  recipientIds: string[]
-  title: string
-  content: string
-  relatedType?: string
-  relatedId?: string
+  recipientIds: string[];
+  title: string;
+  content: string;
+  relatedType?: string;
+  relatedId?: string;
 }
 
 /**
@@ -89,10 +92,10 @@ export async function createInAppNotifications({
   relatedType,
   relatedId,
 }: InAppNotificationInput): Promise<void> {
-  const uniqueRecipientIds = Array.from(new Set(recipientIds.filter(Boolean)))
+  const uniqueRecipientIds = Array.from(new Set(recipientIds.filter(Boolean)));
 
   if (uniqueRecipientIds.length === 0) {
-    return
+    return;
   }
 
   try {
@@ -102,14 +105,14 @@ export async function createInAppNotifications({
       content,
       related_type: relatedType,
       related_id: relatedId,
-    })
+    });
   } catch (error) {
     logger.warn('Failed to create in-app notifications', {
       error,
       recipientCount: uniqueRecipientIds.length,
       relatedType,
       relatedId,
-    })
+    });
   }
 }
 

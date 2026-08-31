@@ -25,34 +25,32 @@
 // ---------------------------------------------------------------------------
 
 function makeChain(result: unknown = []) {
-  const resolved = Array.isArray(result)
-    ? Promise.resolve(result)
-    : Promise.resolve(result)
-  const chain: Record<string, unknown> = {}
-  chain.from = jest.fn().mockReturnValue(chain)
-  chain.where = jest.fn().mockReturnValue(chain)
-  chain.values = jest.fn().mockReturnValue(chain)
-  chain.returning = jest.fn().mockReturnValue(chain)
-  chain.set = jest.fn().mockReturnValue(chain)
-  chain.then = (resolved as Promise<unknown>).then.bind(resolved)
-  chain.catch = (resolved as Promise<unknown>).catch.bind(resolved)
-  chain.finally = (resolved as Promise<unknown>).finally.bind(resolved)
-  return chain
+  const resolved = Array.isArray(result) ? Promise.resolve(result) : Promise.resolve(result);
+  const chain: Record<string, unknown> = {};
+  chain.from = jest.fn().mockReturnValue(chain);
+  chain.where = jest.fn().mockReturnValue(chain);
+  chain.values = jest.fn().mockReturnValue(chain);
+  chain.returning = jest.fn().mockReturnValue(chain);
+  chain.set = jest.fn().mockReturnValue(chain);
+  chain.then = (resolved as Promise<unknown>).then.bind(resolved);
+  chain.catch = (resolved as Promise<unknown>).catch.bind(resolved);
+  chain.finally = (resolved as Promise<unknown>).finally.bind(resolved);
+  return chain;
 }
 
-const mockTxSelect = jest.fn(() => makeChain([]))
-const mockTxInsert = jest.fn(() => makeChain([]))
-const mockTxUpdate = jest.fn(() => makeChain([]))
+const mockTxSelect = jest.fn(() => makeChain([]));
+const mockTxInsert = jest.fn(() => makeChain([]));
+const mockTxUpdate = jest.fn(() => makeChain([]));
 
 const mockTx = {
   select: (...args: unknown[]) => mockTxSelect.apply(null, args),
   insert: (...args: unknown[]) => mockTxInsert.apply(null, args),
   update: (...args: unknown[]) => mockTxUpdate.apply(null, args),
-}
+};
 
-const mockDbTransaction = jest.fn().mockImplementation(
-  async (fn: (tx: typeof mockTx) => Promise<unknown>) => fn(mockTx),
-)
+const mockDbTransaction = jest
+  .fn()
+  .mockImplementation(async (fn: (tx: typeof mockTx) => Promise<unknown>) => fn(mockTx));
 
 // ---------------------------------------------------------------------------
 // Mocks
@@ -62,7 +60,7 @@ jest.mock('@/db', () => ({
   db: {
     transaction: (...args: unknown[]) => mockDbTransaction.apply(null, args),
   },
-}))
+}));
 
 jest.mock('@/db/schema/messaging', () => ({
   conversations: {
@@ -85,7 +83,7 @@ jest.mock('@/db/schema/messaging', () => ({
     content: 'content',
     createdAt: 'messages_createdAt',
   },
-}))
+}));
 
 jest.mock('@/db/schema', () => ({
   serviceAppointments: {
@@ -93,7 +91,7 @@ jest.mock('@/db/schema', () => ({
     messagesCount: 'messagesCount',
     lastContactAt: 'lastContactAt',
   },
-}))
+}));
 
 jest.mock('drizzle-orm', () => ({
   ...jest.requireActual('drizzle-orm'),
@@ -103,49 +101,49 @@ jest.mock('drizzle-orm', () => ({
   sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'mocked' }), {
     raw: jest.fn().mockReturnValue({ __raw: true }),
   }),
-}))
+}));
 
 jest.mock('@/config/database', () => ({
   CONVERSATION_TYPES: {
     APPOINTMENT: 'appointment',
     DIRECT: 'direct',
   },
-}))
+}));
 
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
-}))
+}));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { sendMessageInConversation } from '../send-message'
+import { sendMessageInConversation } from '../send-message';
 
 // ---------------------------------------------------------------------------
 // Fixtures
 // ---------------------------------------------------------------------------
 
 // Ordered so SENDER_A < SENDER_B (string comparison)
-const SENDER_A = 'aaa-user-1'
-const SENDER_B = 'bbb-user-2'
+const SENDER_A = 'aaa-user-1';
+const SENDER_B = 'bbb-user-2';
 
 const BASE_PARAMS = {
   senderId: SENDER_A,
   recipientId: SENDER_B,
   content: 'Hallo, ist der Laptop noch verfügbar?',
   type: 'direct',
-}
+};
 
 beforeEach(() => {
-  jest.clearAllMocks()
-  mockDbTransaction.mockImplementation(
-    async (fn: (tx: typeof mockTx) => Promise<unknown>) => fn(mockTx),
-  )
-  mockTxSelect.mockImplementation(() => makeChain([]))
-  mockTxInsert.mockImplementation(() => makeChain([]))
-  mockTxUpdate.mockImplementation(() => makeChain([]))
-})
+  jest.clearAllMocks();
+  mockDbTransaction.mockImplementation(async (fn: (tx: typeof mockTx) => Promise<unknown>) =>
+    fn(mockTx),
+  );
+  mockTxSelect.mockImplementation(() => makeChain([]));
+  mockTxInsert.mockImplementation(() => makeChain([]));
+  mockTxUpdate.mockImplementation(() => makeChain([]));
+});
 
 /** Helper: set up the standard "find conversation + insert message" chain. */
 function mockConversationFlow({
@@ -157,19 +155,17 @@ function mockConversationFlow({
   // 1st select: find existing conversation
   mockTxSelect.mockImplementationOnce(() =>
     makeChain(existingConvId ? [{ id: existingConvId }] : []),
-  )
+  );
 
   if (!existingConvId) {
     // 1st insert: create conversation
-    mockTxInsert.mockImplementationOnce(() => makeChain([{ id: newConvId }]))
+    mockTxInsert.mockImplementationOnce(() => makeChain([{ id: newConvId }]));
   }
 
   // next insert: message
-  mockTxInsert.mockImplementationOnce(() =>
-    makeChain([{ id: messageId, createdAt }]),
-  )
+  mockTxInsert.mockImplementationOnce(() => makeChain([{ id: messageId, createdAt }]));
   // update conversations (metadata)
-  mockTxUpdate.mockImplementationOnce(() => makeChain([]))
+  mockTxUpdate.mockImplementationOnce(() => makeChain([]));
 }
 
 // ============================================================================
@@ -179,36 +175,36 @@ function mockConversationFlow({
 describe('participant ordering', () => {
   it('uses the lexicographically lower UUID as participant1 when sender < recipient', async () => {
     // SENDER_A ('aaa...') < SENDER_B ('bbb...') so participant1 = SENDER_A
-    mockConversationFlow()
-    mockTxUpdate.mockImplementation(() => makeChain([]))
+    mockConversationFlow();
+    mockTxUpdate.mockImplementation(() => makeChain([]));
 
     await sendMessageInConversation({
       senderId: SENDER_A,
       recipientId: SENDER_B,
       content: 'Hi',
       type: 'direct',
-    })
+    });
 
     // The select chain .where() should be called with participant1 = SENDER_A
     // (we can't inspect the exact argument due to eq mock, but the chain ran)
-    expect(mockTxSelect).toHaveBeenCalledTimes(1)
-  })
+    expect(mockTxSelect).toHaveBeenCalledTimes(1);
+  });
 
   it('uses recipient as participant1 when sender > recipient', async () => {
     // SENDER_B ('bbb...') > SENDER_A ('aaa...') so participant1 = SENDER_A still
-    mockConversationFlow()
-    mockTxUpdate.mockImplementation(() => makeChain([]))
+    mockConversationFlow();
+    mockTxUpdate.mockImplementation(() => makeChain([]));
 
     await sendMessageInConversation({
       senderId: SENDER_B,
       recipientId: SENDER_A,
       content: 'Hi',
       type: 'direct',
-    })
+    });
 
-    expect(mockTxSelect).toHaveBeenCalledTimes(1)
-  })
-})
+    expect(mockTxSelect).toHaveBeenCalledTimes(1);
+  });
+});
 
 // ============================================================================
 // Find-or-create conversation
@@ -216,29 +212,29 @@ describe('participant ordering', () => {
 
 describe('find-or-create conversation', () => {
   it('reuses existing conversation (isNewConversation = false)', async () => {
-    mockConversationFlow({ existingConvId: 'conv-existing' })
-    mockTxUpdate.mockImplementation(() => makeChain([]))
+    mockConversationFlow({ existingConvId: 'conv-existing' });
+    mockTxUpdate.mockImplementation(() => makeChain([]));
 
-    const result = await sendMessageInConversation(BASE_PARAMS)
+    const result = await sendMessageInConversation(BASE_PARAMS);
 
-    expect(result.conversationId).toBe('conv-existing')
-    expect(result.isNewConversation).toBe(false)
+    expect(result.conversationId).toBe('conv-existing');
+    expect(result.isNewConversation).toBe(false);
     // Only one insert (message), no conversation insert
-    expect(mockTxInsert).toHaveBeenCalledTimes(1)
-  })
+    expect(mockTxInsert).toHaveBeenCalledTimes(1);
+  });
 
   it('creates a new conversation when none exists (isNewConversation = true)', async () => {
-    mockConversationFlow({ newConvId: 'conv-brand-new' })
-    mockTxUpdate.mockImplementation(() => makeChain([]))
+    mockConversationFlow({ newConvId: 'conv-brand-new' });
+    mockTxUpdate.mockImplementation(() => makeChain([]));
 
-    const result = await sendMessageInConversation(BASE_PARAMS)
+    const result = await sendMessageInConversation(BASE_PARAMS);
 
-    expect(result.conversationId).toBe('conv-brand-new')
-    expect(result.isNewConversation).toBe(true)
+    expect(result.conversationId).toBe('conv-brand-new');
+    expect(result.isNewConversation).toBe(true);
     // Two inserts: conversation + message
-    expect(mockTxInsert).toHaveBeenCalledTimes(2)
-  })
-})
+    expect(mockTxInsert).toHaveBeenCalledTimes(2);
+  });
+});
 
 // ============================================================================
 // Message insert
@@ -246,25 +242,25 @@ describe('find-or-create conversation', () => {
 
 describe('message insert', () => {
   it('returns correct messageId and createdAt from the insert', async () => {
-    mockConversationFlow({ messageId: 'msg-abc', createdAt: '2026-01-15T08:30:00Z' })
-    mockTxUpdate.mockImplementation(() => makeChain([]))
+    mockConversationFlow({ messageId: 'msg-abc', createdAt: '2026-01-15T08:30:00Z' });
+    mockTxUpdate.mockImplementation(() => makeChain([]));
 
-    const result = await sendMessageInConversation(BASE_PARAMS)
+    const result = await sendMessageInConversation(BASE_PARAMS);
 
-    expect(result.messageId).toBe('msg-abc')
-    expect(result.createdAt).toBe('2026-01-15T08:30:00Z')
-  })
+    expect(result.messageId).toBe('msg-abc');
+    expect(result.createdAt).toBe('2026-01-15T08:30:00Z');
+  });
 
   it('falls back to current ISO string when createdAt is null', async () => {
-    mockConversationFlow({ messageId: 'msg-1', createdAt: null as unknown as string })
-    mockTxUpdate.mockImplementation(() => makeChain([]))
+    mockConversationFlow({ messageId: 'msg-1', createdAt: null as unknown as string });
+    mockTxUpdate.mockImplementation(() => makeChain([]));
 
-    const result = await sendMessageInConversation(BASE_PARAMS)
+    const result = await sendMessageInConversation(BASE_PARAMS);
 
-    expect(typeof result.createdAt).toBe('string')
-    expect(result.createdAt.length).toBeGreaterThan(10)
-  })
-})
+    expect(typeof result.createdAt).toBe('string');
+    expect(result.createdAt.length).toBeGreaterThan(10);
+  });
+});
 
 // ============================================================================
 // Unread count
@@ -272,15 +268,15 @@ describe('message insert', () => {
 
 describe('unread count increment', () => {
   it('calls update once for conversation metadata', async () => {
-    mockConversationFlow()
-    mockTxUpdate.mockImplementation(() => makeChain([]))
+    mockConversationFlow();
+    mockTxUpdate.mockImplementation(() => makeChain([]));
 
-    await sendMessageInConversation(BASE_PARAMS)
+    await sendMessageInConversation(BASE_PARAMS);
 
     // Minimum 1 update call (conversation metadata)
-    expect(mockTxUpdate).toHaveBeenCalledTimes(1)
-  })
-})
+    expect(mockTxUpdate).toHaveBeenCalledTimes(1);
+  });
+});
 
 // ============================================================================
 // Appointment context update
@@ -288,47 +284,47 @@ describe('unread count increment', () => {
 
 describe('appointment context update', () => {
   it('fires a second update when type is APPOINTMENT and contextId is present', async () => {
-    mockConversationFlow()
+    mockConversationFlow();
     // Two updates: conversation metadata + appointment
     mockTxUpdate
       .mockImplementationOnce(() => makeChain([]))
-      .mockImplementationOnce(() => makeChain([]))
+      .mockImplementationOnce(() => makeChain([]));
 
     await sendMessageInConversation({
       ...BASE_PARAMS,
       type: 'appointment',
       contextId: 'appt-123',
-    })
+    });
 
-    expect(mockTxUpdate).toHaveBeenCalledTimes(2)
-  })
+    expect(mockTxUpdate).toHaveBeenCalledTimes(2);
+  });
 
   it('does NOT fire appointment update when type is not APPOINTMENT', async () => {
-    mockConversationFlow()
-    mockTxUpdate.mockImplementation(() => makeChain([]))
+    mockConversationFlow();
+    mockTxUpdate.mockImplementation(() => makeChain([]));
 
     await sendMessageInConversation({
       ...BASE_PARAMS,
       type: 'direct',
       contextId: 'some-id',
-    })
+    });
 
-    expect(mockTxUpdate).toHaveBeenCalledTimes(1)
-  })
+    expect(mockTxUpdate).toHaveBeenCalledTimes(1);
+  });
 
   it('does NOT fire appointment update when contextId is absent', async () => {
-    mockConversationFlow()
-    mockTxUpdate.mockImplementation(() => makeChain([]))
+    mockConversationFlow();
+    mockTxUpdate.mockImplementation(() => makeChain([]));
 
     await sendMessageInConversation({
       ...BASE_PARAMS,
       type: 'appointment',
       contextId: null,
-    })
+    });
 
-    expect(mockTxUpdate).toHaveBeenCalledTimes(1)
-  })
-})
+    expect(mockTxUpdate).toHaveBeenCalledTimes(1);
+  });
+});
 
 // ============================================================================
 // Return shape
@@ -336,14 +332,14 @@ describe('appointment context update', () => {
 
 describe('return shape', () => {
   it('returns all required fields', async () => {
-    mockConversationFlow({ existingConvId: 'conv-1', messageId: 'msg-1' })
-    mockTxUpdate.mockImplementation(() => makeChain([]))
+    mockConversationFlow({ existingConvId: 'conv-1', messageId: 'msg-1' });
+    mockTxUpdate.mockImplementation(() => makeChain([]));
 
-    const result = await sendMessageInConversation(BASE_PARAMS)
+    const result = await sendMessageInConversation(BASE_PARAMS);
 
-    expect(result).toHaveProperty('conversationId')
-    expect(result).toHaveProperty('messageId')
-    expect(result).toHaveProperty('createdAt')
-    expect(result).toHaveProperty('isNewConversation')
-  })
-})
+    expect(result).toHaveProperty('conversationId');
+    expect(result).toHaveProperty('messageId');
+    expect(result).toHaveProperty('createdAt');
+    expect(result).toHaveProperty('isNewConversation');
+  });
+});

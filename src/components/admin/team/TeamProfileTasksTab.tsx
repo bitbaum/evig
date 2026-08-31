@@ -1,53 +1,53 @@
-'use client'
+'use client';
 
-import { useCallback, useEffect, useState } from 'react'
-import Link from 'next/link'
-import { CheckSquare, ExternalLink, RefreshCw } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { apiFetch } from '@/lib/api/client'
-import { adminInteractive } from '@/lib/admin-ui'
-import { ROUTES } from '@/config/routes'
-import { TASK_STATUS_LABELS, type TaskStatus } from '@/config/tasks'
-import { cn } from '@/lib/utils'
+import { useCallback, useEffect, useState } from 'react';
+import Link from 'next/link';
+import { CheckSquare, ExternalLink, RefreshCw } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { apiFetch } from '@/lib/api/client';
+import { adminInteractive } from '@/lib/admin-ui';
+import { ROUTES } from '@/config/routes';
+import { TASK_STATUS_LABELS, type TaskStatus } from '@/config/tasks';
+import { cn } from '@/lib/utils';
 
 interface TaskRow {
-  id: string
-  title: string
-  current_status: string
-  is_completed: boolean
-  due_date: string | null
-  priority: string
+  id: string;
+  title: string;
+  current_status: string;
+  is_completed: boolean;
+  due_date: string | null;
+  priority: string;
 }
 
 interface Props {
-  userId: string
+  userId: string;
 }
 
 export function TeamProfileTasksTab({ userId }: Props) {
-  const [rows, setRows] = useState<TaskRow[]>([])
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [rows, setRows] = useState<TaskRow[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const load = useCallback(async () => {
-    setIsLoading(true)
-    setError(null)
-    const params = new URLSearchParams({ assigned_to: userId })
-    const result = await apiFetch<TaskRow[]>(`/api/tasks?${params}`)
+    setIsLoading(true);
+    setError(null);
+    const params = new URLSearchParams({ assigned_to: userId });
+    const result = await apiFetch<TaskRow[]>(`/api/tasks?${params}`);
     if (result.success && result.data) {
-      setRows(Array.isArray(result.data) ? result.data : [])
+      setRows(Array.isArray(result.data) ? result.data : []);
     } else {
-      setError(result.error || 'Aufgaben konnten nicht geladen werden.')
+      setError(result.error || 'Aufgaben konnten nicht geladen werden.');
     }
-    setIsLoading(false)
-  }, [userId])
+    setIsLoading(false);
+  }, [userId]);
 
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
-    void load()
-  }, [load])
+    void load();
+  }, [load]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
-  const openCount = rows.filter((r) => !r.is_completed).length
+  const openCount = rows.filter((r) => !r.is_completed).length;
 
   return (
     <div className="space-y-3">
@@ -83,9 +83,12 @@ export function TeamProfileTasksTab({ userId }: Props) {
           <ul className="divide-y divide-subtle">
             {rows.map((row) => {
               const statusLabel =
-                TASK_STATUS_LABELS[row.current_status as TaskStatus] ?? row.current_status
+                TASK_STATUS_LABELS[row.current_status as TaskStatus] ?? row.current_status;
               return (
-                <li key={row.id} className={cn('px-4 sm:px-5 py-3', adminInteractive.rowHoverFaint)}>
+                <li
+                  key={row.id}
+                  className={cn('px-4 sm:px-5 py-3', adminInteractive.rowHoverFaint)}
+                >
                   <div className="flex items-start gap-3">
                     <CheckSquare className="w-4 h-4 mt-0.5 text-text-tertiary shrink-0" />
                     <div className="min-w-0 flex-1">
@@ -103,11 +106,11 @@ export function TeamProfileTasksTab({ userId }: Props) {
                     </div>
                   </div>
                 </li>
-              )
+              );
             })}
           </ul>
         </div>
       )}
     </div>
-  )
+  );
 }

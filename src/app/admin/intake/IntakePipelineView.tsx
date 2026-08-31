@@ -1,45 +1,54 @@
-'use client'
+'use client';
 
-import { useEffect, useRef } from 'react'
-import { useTranslations } from 'next-intl'
-import {
-  Plus, Search, Filter, Check, Package, Wrench, Send, AlertTriangle,
-} from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Select } from '@/components/ui/select'
-import { Input } from '@/components/ui/input'
+import { useEffect, useRef } from 'react';
+import { useTranslations } from 'next-intl';
+import { Plus, Search, Filter, Check, Package, Wrench, Send, AlertTriangle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Select } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
 
-type IntakePipelineTranslator = ReturnType<typeof useTranslations>
+type IntakePipelineTranslator = ReturnType<typeof useTranslations>;
 import {
   getIntakeTierOptions,
   QUICK_CAPTURE_TIER,
   QUICK_CAPTURE_LABEL,
   QUICK_CAPTURE_ICON,
-} from '@/config/intake-checklist'
-import { KATEGORIEN } from '@/config/erfassung/categories'
-import { INTAKE_STATUS, INTAKE_STATUS_LABELS } from '@/config/intake-status'
-import { Pagination } from '@/components/ui/Pagination'
-import type { PipelineItem } from './types'
-import { IntakePipelineCards } from './IntakePipelineCards'
-import { IntakeKanban } from './IntakeKanban'
-import { AdminHeroStatus, type HeroTone, type HeroKpi, type HeroCta } from '@/components/admin/AdminHeroStatus'
-import { ROUTES } from '@/config/routes'
+} from '@/config/intake-checklist';
+import { KATEGORIEN } from '@/config/erfassung/categories';
+import { INTAKE_STATUS, INTAKE_STATUS_LABELS } from '@/config/intake-status';
+import { Pagination } from '@/components/ui/Pagination';
+import type { PipelineItem } from './types';
+import { IntakePipelineCards } from './IntakePipelineCards';
+import { IntakeKanban } from './IntakeKanban';
+import {
+  AdminHeroStatus,
+  type HeroTone,
+  type HeroKpi,
+  type HeroCta,
+} from '@/components/admin/AdminHeroStatus';
+import { ROUTES } from '@/config/routes';
 
 interface IntakePipelineViewProps {
-  items: PipelineItem[]
-  loading: boolean
-  pagination: { total: number; limit: number; offset: number; hasMore: boolean }
-  statusCounts: { inProgress: number; failed: number; ready: number; published: number; total: number }
-  tierFilter: string
-  statusFilter: string
-  categoryFilter: string
-  searchFilter: string
-  onTierFilterChange: (v: string) => void
-  onStatusFilterChange: (v: string) => void
-  onCategoryFilterChange: (v: string) => void
-  onSearchFilterChange: (v: string) => void
-  onOpenDetail: (id: string) => void
-  onPageChange: (offset: number) => void
+  items: PipelineItem[];
+  loading: boolean;
+  pagination: { total: number; limit: number; offset: number; hasMore: boolean };
+  statusCounts: {
+    inProgress: number;
+    failed: number;
+    ready: number;
+    published: number;
+    total: number;
+  };
+  tierFilter: string;
+  statusFilter: string;
+  categoryFilter: string;
+  searchFilter: string;
+  onTierFilterChange: (v: string) => void;
+  onStatusFilterChange: (v: string) => void;
+  onCategoryFilterChange: (v: string) => void;
+  onSearchFilterChange: (v: string) => void;
+  onOpenDetail: (id: string) => void;
+  onPageChange: (offset: number) => void;
 }
 
 export function IntakePipelineView({
@@ -58,15 +67,20 @@ export function IntakePipelineView({
   onOpenDetail,
   onPageChange,
 }: IntakePipelineViewProps) {
-  const t = useTranslations('admin.intake.pipeline')
-  const rootRef = useRef<HTMLDivElement>(null)
-  useEffect(() => { rootRef.current?.setAttribute('data-intake-ready', 'true') }, [])
+  const t = useTranslations('admin.intake.pipeline');
+  const rootRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    rootRef.current?.setAttribute('data-intake-ready', 'true');
+  }, []);
   return (
     <div ref={rootRef} className="space-y-4" data-intake-ready="false">
       {/* Until counts arrive the hero would confidently claim "Pipeline ist
           leer" on every page load — render a quiet placeholder instead. */}
       {loading && statusCounts.total === 0 ? (
-        <div className="h-28 animate-pulse rounded-lg border border-subtle bg-surface-raised" aria-hidden="true" />
+        <div
+          className="h-28 animate-pulse rounded-lg border border-subtle bg-surface-raised"
+          aria-hidden="true"
+        />
       ) : (
         <IntakeHero statusCounts={statusCounts} onStatusFilter={onStatusFilterChange} t={t} />
       )}
@@ -87,10 +101,14 @@ export function IntakePipelineView({
           className="w-auto"
         >
           <option value="">{t('filters.allTiers')}</option>
-          {getIntakeTierOptions().map(o => (
-            <option key={o.value} value={o.value}>{o.icon} {o.label}</option>
+          {getIntakeTierOptions().map((o) => (
+            <option key={o.value} value={o.value}>
+              {o.icon} {o.label}
+            </option>
           ))}
-          <option value={QUICK_CAPTURE_TIER}>{QUICK_CAPTURE_ICON} {QUICK_CAPTURE_LABEL}</option>
+          <option value={QUICK_CAPTURE_TIER}>
+            {QUICK_CAPTURE_ICON} {QUICK_CAPTURE_LABEL}
+          </option>
         </Select>
 
         <Select
@@ -99,8 +117,10 @@ export function IntakePipelineView({
           className="w-auto"
         >
           <option value="">{t('filters.allStatus')}</option>
-          {Object.values(INTAKE_STATUS).map(status => (
-            <option key={status} value={status}>{INTAKE_STATUS_LABELS[status]}</option>
+          {Object.values(INTAKE_STATUS).map((status) => (
+            <option key={status} value={status}>
+              {INTAKE_STATUS_LABELS[status]}
+            </option>
           ))}
         </Select>
 
@@ -110,8 +130,10 @@ export function IntakePipelineView({
           className="w-auto"
         >
           <option value="">{t('filters.allCategories')}</option>
-          {KATEGORIEN.map(k => (
-            <option key={k.value} value={k.value}>{k.icon} {k.label}</option>
+          {KATEGORIEN.map((k) => (
+            <option key={k.value} value={k.value}>
+              {k.icon} {k.label}
+            </option>
           ))}
         </Select>
 
@@ -169,7 +191,7 @@ export function IntakePipelineView({
         </>
       )}
     </div>
-  )
+  );
 }
 
 // ─── IntakeHero ─────────────────────────────────────────────────────────────
@@ -181,11 +203,11 @@ export function IntakePipelineView({
 // ─────────────────────────────────────────────────────────────────────────────
 
 interface IntakeStatusCounts {
-  inProgress: number
-  failed: number
-  ready: number
-  published: number
-  total: number
+  inProgress: number;
+  failed: number;
+  ready: number;
+  published: number;
+  total: number;
 }
 
 export function deriveIntakeHeroState(
@@ -193,12 +215,12 @@ export function deriveIntakeHeroState(
   onStatusFilter: (v: string) => void,
   t: IntakePipelineTranslator,
 ): {
-  tone: HeroTone
-  icon: typeof Package
-  headline: string
-  sub: string
-  cta?: HeroCta
-  kpis: HeroKpi[]
+  tone: HeroTone;
+  icon: typeof Package;
+  headline: string;
+  sub: string;
+  cta?: HeroCta;
+  kpis: HeroKpi[];
 } {
   const kpis: HeroKpi[] = [
     { label: t('hero.kpis.total'), value: counts.total },
@@ -206,7 +228,7 @@ export function deriveIntakeHeroState(
     { label: t('hero.kpis.failed'), value: counts.failed },
     { label: t('hero.kpis.ready'), value: counts.ready },
     { label: t('hero.kpis.published'), value: counts.published },
-  ]
+  ];
 
   if (counts.failed > 0) {
     return {
@@ -219,7 +241,7 @@ export function deriveIntakeHeroState(
         onClick: () => onStatusFilter(INTAKE_STATUS.FAILED),
       },
       kpis,
-    }
+    };
   }
   if (counts.ready > 0) {
     return {
@@ -232,7 +254,7 @@ export function deriveIntakeHeroState(
         onClick: () => onStatusFilter(INTAKE_STATUS.READY),
       },
       kpis,
-    }
+    };
   }
   if (counts.inProgress > 0) {
     return {
@@ -245,7 +267,7 @@ export function deriveIntakeHeroState(
         onClick: () => onStatusFilter(INTAKE_STATUS.IN_PROGRESS),
       },
       kpis,
-    }
+    };
   }
   if (counts.total === 0) {
     return {
@@ -254,7 +276,7 @@ export function deriveIntakeHeroState(
       headline: t('hero.empty.headline'),
       sub: t('hero.empty.sub'),
       kpis,
-    }
+    };
   }
   return {
     tone: 'healthy',
@@ -262,7 +284,7 @@ export function deriveIntakeHeroState(
     headline: t('hero.healthy.headline'),
     sub: t('hero.healthy.sub', { published: counts.published }),
     kpis,
-  }
+  };
 }
 
 function IntakeHero({
@@ -270,11 +292,11 @@ function IntakeHero({
   onStatusFilter,
   t,
 }: {
-  statusCounts: IntakeStatusCounts
-  onStatusFilter: (v: string) => void
-  t: IntakePipelineTranslator
+  statusCounts: IntakeStatusCounts;
+  onStatusFilter: (v: string) => void;
+  t: IntakePipelineTranslator;
 }) {
-  const s = deriveIntakeHeroState(statusCounts, onStatusFilter, t)
+  const s = deriveIntakeHeroState(statusCounts, onStatusFilter, t);
   return (
     <AdminHeroStatus
       tone={s.tone}
@@ -284,5 +306,5 @@ function IntakeHero({
       cta={s.cta}
       kpis={s.kpis}
     />
-  )
+  );
 }

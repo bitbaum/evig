@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * ProductForm Component
@@ -10,29 +10,29 @@
  * - BulkDetailPanel (bulk mode, for editing individual products)
  */
 
-import { ChevronDown, ChevronUp } from 'lucide-react'
-import type { ErfassungFormData, AIFieldMetadata } from '@/types/erfassung'
-import { Button } from '@/components/ui/button'
-import { KATEGORIEN } from '@/config/erfassung'
-import { ProductImageSection } from './ProductImageSection'
-import { ProductBasicFields } from './ProductBasicFields'
-import { ProductSpecFields } from './ProductSpecFields'
-import { ProductDimensionFields } from './ProductDimensionFields'
-import { ProductProfileFields } from './ProductProfileFields'
+import { ChevronDown, ChevronUp } from 'lucide-react';
+import type { ErfassungFormData, AIFieldMetadata } from '@/types/erfassung';
+import { Button } from '@/components/ui/button';
+import { KATEGORIEN } from '@/config/erfassung';
+import { ProductImageSection } from './ProductImageSection';
+import { ProductBasicFields } from './ProductBasicFields';
+import { ProductSpecFields } from './ProductSpecFields';
+import { ProductDimensionFields } from './ProductDimensionFields';
+import { ProductProfileFields } from './ProductProfileFields';
 
 interface ProductFormProps {
-  formData: ErfassungFormData
-  aiMetadata: AIFieldMetadata
-  showAdvanced: boolean
-  isEditMode: boolean
-  onFieldChange: (field: keyof ErfassungFormData, value: string | string[]) => void
-  onSpecChange: (index: number, field: 'key' | 'value', value: string) => void
-  onCategoryChange: (kategorie: string) => void
-  onProfileToggle: (slug: string) => void
-  onSpecAdd: () => void
-  onSpecRemove: (index: number) => void
-  onImageChange: (image: string | null) => void
-  onToggleAdvanced: () => void
+  formData: ErfassungFormData;
+  aiMetadata: AIFieldMetadata;
+  showAdvanced: boolean;
+  isEditMode: boolean;
+  onFieldChange: (field: keyof ErfassungFormData, value: string | string[]) => void;
+  onSpecChange: (index: number, field: 'key' | 'value', value: string) => void;
+  onCategoryChange: (kategorie: string) => void;
+  onProfileToggle: (slug: string) => void;
+  onSpecAdd: () => void;
+  onSpecRemove: (index: number) => void;
+  onImageChange: (image: string | null) => void;
+  onToggleAdvanced: () => void;
 }
 
 export function ProductForm({
@@ -49,7 +49,7 @@ export function ProductForm({
   onImageChange,
   onToggleAdvanced,
 }: ProductFormProps) {
-  const subcategories = KATEGORIEN.find(k => k.value === formData.hauptkategorie)?.subs || []
+  const subcategories = KATEGORIEN.find((k) => k.value === formData.hauptkategorie)?.subs || [];
 
   return (
     <>
@@ -64,10 +64,7 @@ export function ProductForm({
         onCategoryChange={onCategoryChange}
       />
 
-      <ProductImageSection
-        image={formData.image}
-        onImageChange={onImageChange}
-      />
+      <ProductImageSection image={formData.image} onImageChange={onImageChange} />
 
       {/* Progressive disclosure on every viewport. The capture decision is
           brand/model/category; specs, dimensions and storage are enrichment,
@@ -109,5 +106,5 @@ export function ProductForm({
         />
       </div>
     </>
-  )
+  );
 }

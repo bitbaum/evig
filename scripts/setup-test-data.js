@@ -59,12 +59,15 @@ async function setupTestData() {
     const bcrypt = require('bcryptjs');
     const adminPassword = await bcrypt.hash('Admin123!', 12);
 
-    const adminResult = await client.query(`
+    const adminResult = await client.query(
+      `
       INSERT INTO users (email, password_hash, first_name, last_name, role)
       VALUES ($1, $2, $3, $4, $5)
       ON CONFLICT (email) DO NOTHING
       RETURNING id
-    `, ['admin@revampit.ch', adminPassword, 'Admin', 'RevampIT', 'admin']);
+    `,
+      ['admin@revampit.ch', adminPassword, 'Admin', 'RevampIT', 'admin'],
+    );
 
     if (adminResult.rows.length > 0) {
       console.log('👤 Admin user created');
@@ -77,9 +80,10 @@ async function setupTestData() {
       {
         slug: 'about',
         title: 'About RevampIT',
-        content: '<h2>Our Mission</h2><p>At RevampIT, we believe in giving technology a second life.</p>',
+        content:
+          '<h2>Our Mission</h2><p>At RevampIT, we believe in giving technology a second life.</p>',
         seo_title: 'About Us - RevampIT',
-        seo_description: 'Learn about RevampIT\'s mission to extend the life of IT devices.',
+        seo_description: "Learn about RevampIT's mission to extend the life of IT devices.",
         is_published: true,
       },
       {
@@ -93,11 +97,21 @@ async function setupTestData() {
     ];
 
     for (const page of pages) {
-      const result = await client.query(`
+      const result = await client.query(
+        `
         INSERT INTO static_pages (slug, title, content, seo_title, seo_description, is_published, published_at)
         VALUES ($1, $2, $3, $4, $5, $6, CURRENT_TIMESTAMP)
         ON CONFLICT (slug) DO NOTHING
-      `, [page.slug, page.title, page.content, page.seo_title, page.seo_description, page.is_published]);
+      `,
+        [
+          page.slug,
+          page.title,
+          page.content,
+          page.seo_title,
+          page.seo_description,
+          page.is_published,
+        ],
+      );
 
       if (result.rowCount > 0) {
         console.log(`📄 Created page: ${page.title}`);
@@ -112,7 +126,6 @@ async function setupTestData() {
     console.log('   - Sample pages: About, Contact');
     console.log('   - Frontend: http://localhost:3001');
     console.log('   - Admin: http://localhost:3001/admin');
-
   } catch (error) {
     console.error('❌ Setup failed:', error);
   } finally {

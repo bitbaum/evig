@@ -3,46 +3,47 @@
  * POST /api/auth/forgot-password
  */
 
-import { NextRequest } from 'next/server'
-import { getUserByEmail, createPasswordResetToken } from '@/lib/auth/db'
-import { sendEmail } from '@/lib/email'
-import { apiError, apiSuccess, apiRateLimited } from '@/lib/api/helpers'
-import { logger } from '@/lib/logger'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
-import { validateBody, ForgotPasswordSchema } from '@/lib/schemas'
-import { ORG, CONTACT } from '@/config/org'
-import { getPasswordResetUrl } from '@/config/urls'
+import { NextRequest } from 'next/server';
+import { getUserByEmail, createPasswordResetToken } from '@/lib/auth/db';
+import { sendEmail } from '@/lib/email';
+import { apiError, apiSuccess, apiRateLimited } from '@/lib/api/helpers';
+import { logger } from '@/lib/logger';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter';
+import { validateBody, ForgotPasswordSchema } from '@/lib/schemas';
+import { ORG, CONTACT } from '@/config/org';
+import { getPasswordResetUrl } from '@/config/urls';
 
 export async function POST(request: NextRequest) {
   try {
     // Rate limiting - prevent password reset abuse
-    const clientIp = getClientIp(request.headers)
-    const rateLimitResult = checkRateLimit(clientIp, 'passwordReset')
+    const clientIp = getClientIp(request.headers);
+    const rateLimitResult = checkRateLimit(clientIp, 'passwordReset');
 
     if (!rateLimitResult.allowed) {
-      logger.warn('Password reset rate limit exceeded', { ip: clientIp })
+      logger.warn('Password reset rate limit exceeded', { ip: clientIp });
       return apiRateLimited(ERROR_MESSAGES.RATE_LIMITED, {
         retryAfter: rateLimitResult.retryAfter,
-      })
+      });
     }
 
-    const body = await request.json()
-    const validation = validateBody(ForgotPasswordSchema, body)
-    if (!validation.success) return validation.error
-    const { email } = validation.data
+    const body = await request.json();
+    const validation = validateBody(ForgotPasswordSchema, body);
+    if (!validation.success) return validation.error;
+    const { email } = validation.data;
 
     // Check if user exists
-    const user = await getUserByEmail(email)
+    const user = await getUserByEmail(email);
     if (!user) {
       // Don't reveal if email exists or not for security
       return apiSuccess({
-        message: 'Falls ein Konto mit dieser E-Mail-Adresse existiert, haben wir dir einen Reset-Link gesendet.',
-      })
+        message:
+          'Falls ein Konto mit dieser E-Mail-Adresse existiert, haben wir dir einen Reset-Link gesendet.',
+      });
     }
 
     // Create reset token
-    const resetToken = await createPasswordResetToken(email)
+    const resetToken = await createPasswordResetToken(email);
 
     // Send reset email.
     //
@@ -56,29 +57,29 @@ export async function POST(request: NextRequest) {
     // (older callsites used to throw). Both paths log error and fall
     // through to the same generic success response — enumeration
     // protection requires not surfacing the failure to the caller.
-    const resetUrl = getPasswordResetUrl(resetToken)
-    let emailDelivered = false
+    const resetUrl = getPasswordResetUrl(resetToken);
+    let emailDelivered = false;
     try {
       const sendResult = await sendEmail(
         email,
         'passwordReset',
         user.name || `${ORG.name} Benutzer`,
         resetUrl,
-      )
+      );
       if (sendResult.success) {
-        emailDelivered = true
-        logger.info('Password reset email sent', { email })
+        emailDelivered = true;
+        logger.info('Password reset email sent', { email });
       } else {
         logger.error('Failed to send password reset email (resolved)', {
           email,
           error: sendResult.error,
-        })
+        });
       }
     } catch (emailError) {
       logger.error('Failed to send password reset email (rejected)', {
         error: emailError,
         email,
-      })
+      });
     }
 
     if (!emailDelivered) {
@@ -93,13 +94,14 @@ export async function POST(request: NextRequest) {
         // guaranteed to be monitored.
         `E-Mail konnte nicht gesendet werden. Bitte versuche es später erneut oder kontaktiere uns unter ${CONTACT.email}.`,
         503,
-      )
+      );
     }
 
     return apiSuccess({
-      message: 'Falls ein Konto mit dieser E-Mail-Adresse existiert, haben wir dir einen Reset-Link gesendet.',
-    })
+      message:
+        'Falls ein Konto mit dieser E-Mail-Adresse existiert, haben wir dir einen Reset-Link gesendet.',
+    });
   } catch (error) {
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
 }

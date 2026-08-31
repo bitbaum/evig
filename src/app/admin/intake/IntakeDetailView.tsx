@@ -1,51 +1,49 @@
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
-import {
-  requiresQualityControl,
-} from '@/config/intake-checklist'
-import type { IntakeTier, ChecklistResult } from '@/config/intake-checklist'
-import { INTAKE_TIERS } from '@/config/intake-checklist'
-import { INTAKE_STATUS } from '@/config/intake-status'
-import { Stepper } from '@/components/ui/Stepper'
-import type { DetailData } from './types'
-import { IntakeHeader } from './detail/IntakeHeader'
-import { IntakeDeviceSummary } from './detail/IntakeDeviceSummary'
-import { IntakeQcStatus } from './detail/IntakeQcStatus'
-import { IntakeChecklistSection } from './detail/IntakeChecklistSection'
-import { IntakePublishSection } from './detail/IntakePublishSection'
-import { IntakeTierChangeDialog } from './detail/IntakeTierChangeDialog'
-import { IntakeTimeline } from './detail/IntakeTimeline'
+import { useTranslations } from 'next-intl';
+import { requiresQualityControl } from '@/config/intake-checklist';
+import type { IntakeTier, ChecklistResult } from '@/config/intake-checklist';
+import { INTAKE_TIERS } from '@/config/intake-checklist';
+import { INTAKE_STATUS } from '@/config/intake-status';
+import { Stepper } from '@/components/ui/Stepper';
+import type { DetailData } from './types';
+import { IntakeHeader } from './detail/IntakeHeader';
+import { IntakeDeviceSummary } from './detail/IntakeDeviceSummary';
+import { IntakeQcStatus } from './detail/IntakeQcStatus';
+import { IntakeChecklistSection } from './detail/IntakeChecklistSection';
+import { IntakePublishSection } from './detail/IntakePublishSection';
+import { IntakeTierChangeDialog } from './detail/IntakeTierChangeDialog';
+import { IntakeTimeline } from './detail/IntakeTimeline';
 
 interface IntakeDetailViewProps {
-  detail: DetailData | null
-  detailLoading: boolean
-  publishPrice: number
-  setPublishPrice: (price: number) => void
-  publishing: boolean
-  showTierChange: boolean
-  setShowTierChange: (show: boolean) => void
-  newTier: IntakeTier
-  setNewTier: (tier: IntakeTier) => void
-  tierChangeReason: string
-  setTierChangeReason: (reason: string) => void
-  tierChanging: boolean
-  onBack: () => void
-  onRefresh: () => void
-  checklistError: string | null
-  checklistPendingItems: ReadonlySet<string>
+  detail: DetailData | null;
+  detailLoading: boolean;
+  publishPrice: number;
+  setPublishPrice: (price: number) => void;
+  publishing: boolean;
+  showTierChange: boolean;
+  setShowTierChange: (show: boolean) => void;
+  newTier: IntakeTier;
+  setNewTier: (tier: IntakeTier) => void;
+  tierChangeReason: string;
+  setTierChangeReason: (reason: string) => void;
+  tierChanging: boolean;
+  onBack: () => void;
+  onRefresh: () => void;
+  checklistError: string | null;
+  checklistPendingItems: ReadonlySet<string>;
   onSetChecklistResult: (
     itemId: string,
     result: ChecklistResult | null,
     notes?: string,
     options?: { secondPersonOverride?: boolean },
-  ) => void
-  onMarkAllRequired: () => void
-  markingAll: boolean
-  onStartQc: () => void
-  startingQc: boolean
-  onPublish: (options?: { skipQc?: boolean }) => void
-  onTierChange: () => void
+  ) => void;
+  onMarkAllRequired: () => void;
+  markingAll: boolean;
+  onStartQc: () => void;
+  startingQc: boolean;
+  onPublish: (options?: { skipQc?: boolean }) => void;
+  onTierChange: () => void;
 }
 
 export function IntakeDetailView({
@@ -73,32 +71,30 @@ export function IntakeDetailView({
   onPublish,
   onTierChange,
 }: IntakeDetailViewProps) {
-  const t = useTranslations('admin.intake.detail')
-  const pipelineSteps = t.raw('pipelineSteps') as { label: string; description: string }[]
+  const t = useTranslations('admin.intake.detail');
+  const pipelineSteps = t.raw('pipelineSteps') as { label: string; description: string }[];
   if (detailLoading || !detail) {
-    return <div className="text-center py-8 text-text-tertiary">{t('loading')}</div>
+    return <div className="text-center py-8 text-text-tertiary">{t('loading')}</div>;
   }
 
-  const progress = detail.checklist_progress
+  const progress = detail.checklist_progress;
   // What EXACTLY is still open? A generic "alle Pflichtpunkte müssen abgehakt
   // sein" leaves people hunting through 18 items — name the gap instead.
   const openRequired = detail.checklist_grouped
-    .flatMap(g => g.items)
-    .filter(i => i.required && i.state.result === null)
-  const openBulkable = openRequired.filter(i => !i.requiresSecondPerson)
-  const finalQaItems = openRequired.filter(i => i.requiresSecondPerson)
+    .flatMap((g) => g.items)
+    .filter((i) => i.required && i.state.result === null);
+  const openBulkable = openRequired.filter((i) => !i.requiresSecondPerson);
+  const finalQaItems = openRequired.filter((i) => i.requiresSecondPerson);
   // Everything testable is done — only the Vier-Augen sign-off is left.
-  const onlyFinalQaLeft = openRequired.length > 0 && openBulkable.length === 0
+  const onlyFinalQaLeft = openRequired.length > 0 && openBulkable.length === 0;
   // Quick capture of a QC-required device category: publishing is blocked
   // until the checklist workflow is started (tier assigned).
-  const qcGate = detail.intake_tier === null && requiresQualityControl(detail.category)
+  const qcGate = detail.intake_tier === null && requiresQualityControl(detail.category);
 
   // Pipeline stage — must tell the truth: 0 = QC in progress, 1 = QC done /
   // ready to publish, 2 = publishing, 3 (= steps.length) = published, all done.
   const pipelineStep =
-    detail.marketplace_status === INTAKE_STATUS.PUBLISHED ? 3
-    : detail.checklist_complete ? 2
-    : 1
+    detail.marketplace_status === INTAKE_STATUS.PUBLISHED ? 3 : detail.checklist_complete ? 2 : 1;
 
   return (
     <div className="space-y-6">
@@ -174,5 +170,5 @@ export function IntakeDetailView({
 
       <IntakeTimeline detail={detail} />
     </div>
-  )
+  );
 }

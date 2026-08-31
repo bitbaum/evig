@@ -52,14 +52,18 @@ export type AdminApprovalActionInput = z.infer<typeof AdminApprovalActionSchema>
 // =============================================================================
 
 export const AdminWorkshopRegistrationUpdateSchema = z.object({
-  status: z
-    .enum(WORKSHOP_REGISTRATION_STATUS_VALUES)
-    .optional(),
+  status: z.enum(WORKSHOP_REGISTRATION_STATUS_VALUES).optional(),
   attended: z.boolean().optional(),
-  notes: z.string().max(2000, 'Notizen dürfen maximal 2000 Zeichen enthalten').optional().nullable(),
+  notes: z
+    .string()
+    .max(2000, 'Notizen dürfen maximal 2000 Zeichen enthalten')
+    .optional()
+    .nullable(),
 });
 
-export type AdminWorkshopRegistrationUpdateInput = z.infer<typeof AdminWorkshopRegistrationUpdateSchema>;
+export type AdminWorkshopRegistrationUpdateInput = z.infer<
+  typeof AdminWorkshopRegistrationUpdateSchema
+>;
 
 // =============================================================================
 // WORKSHOP COMMUNICATIONS
@@ -93,7 +97,10 @@ export type AdminSendRemindersInput = z.infer<typeof AdminSendRemindersSchema>;
 
 export const AdminCreateServiceSchema = z.object({
   name: z.string().min(1, 'Name ist erforderlich').max(200),
-  slug: z.string().min(1, 'Slug ist erforderlich').regex(/^[a-z0-9-]+$/, 'Slug darf nur Kleinbuchstaben, Zahlen und Bindestriche enthalten'),
+  slug: z
+    .string()
+    .min(1, 'Slug ist erforderlich')
+    .regex(/^[a-z0-9-]+$/, 'Slug darf nur Kleinbuchstaben, Zahlen und Bindestriche enthalten'),
   description: z.string().max(5000).optional().nullable(),
   category: z.string().max(100).optional().nullable(),
   durationMinutes: z.coerce.number().int().positive().optional().default(60),
@@ -121,9 +128,7 @@ export type AdminCreateServiceInput = z.infer<typeof AdminCreateServiceSchema>;
 // =============================================================================
 
 export const BulkSaveSchema = z.object({
-  products: z
-    .array(z.record(z.string(), z.unknown()))
-    .min(1, 'Keine Produkte zum Speichern'),
+  products: z.array(z.record(z.string(), z.unknown())).min(1, 'Keine Produkte zum Speichern'),
   action: z.enum(['draft', 'erfassen', 'publish']),
 });
 
@@ -140,7 +145,7 @@ export const BulkEnrichSchema = z.object({
         hauptkategorie: z.string().optional(),
         zustand: z.string().optional(),
         verkaufspreis: z.string().optional(),
-      })
+      }),
     )
     .min(1, 'Keine Produkte zum Anreichern'),
 });
@@ -173,22 +178,24 @@ export type ErfassungCreateInput = z.infer<typeof ErfassungCreateSchema>;
 // ADMIN PRODUCT MANAGEMENT
 // =============================================================================
 
-export const AdminCreateProductSchema = z.object({
-  title: z.string().max(500).optional(),
-  product_name: z.string().max(500).optional(),
-  brand: z.string().max(200).optional().default(''),
-  description: z.string().max(5000).optional(),
-  short_description: z.string().max(5000).optional(),
-  price: z.coerce.number().min(0).optional(),
-  estimated_price_chf: z.coerce.number().min(0).optional(),
-  condition: z.string().max(100).optional().default('unknown'),
-  category: z.string().max(100).optional().nullable(),
-  subcategory: z.string().max(100).optional().nullable(),
-  quantity: z.coerce.number().int().min(1).optional().default(1),
-}).refine(
-  data => !!(data.title || data.product_name),
-  { message: 'Produktname oder Titel ist erforderlich', path: ['product_name'] }
-);
+export const AdminCreateProductSchema = z
+  .object({
+    title: z.string().max(500).optional(),
+    product_name: z.string().max(500).optional(),
+    brand: z.string().max(200).optional().default(''),
+    description: z.string().max(5000).optional(),
+    short_description: z.string().max(5000).optional(),
+    price: z.coerce.number().min(0).optional(),
+    estimated_price_chf: z.coerce.number().min(0).optional(),
+    condition: z.string().max(100).optional().default('unknown'),
+    category: z.string().max(100).optional().nullable(),
+    subcategory: z.string().max(100).optional().nullable(),
+    quantity: z.coerce.number().int().min(1).optional().default(1),
+  })
+  .refine((data) => !!(data.title || data.product_name), {
+    message: 'Produktname oder Titel ist erforderlich',
+    path: ['product_name'],
+  });
 
 export type AdminCreateProductInput = z.infer<typeof AdminCreateProductSchema>;
 

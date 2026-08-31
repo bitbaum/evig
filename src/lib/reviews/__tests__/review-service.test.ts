@@ -36,37 +36,37 @@
 // ---------------------------------------------------------------------------
 
 function makeSelectChain(result: unknown[] = []) {
-  const resolved = Promise.resolve(result)
-  const chain: Record<string, unknown> = {}
-  chain.from = jest.fn().mockReturnValue(chain)
-  chain.where = jest.fn().mockReturnValue(chain)
-  chain.innerJoin = jest.fn().mockReturnValue(chain)
-  chain.leftJoin = jest.fn().mockReturnValue(chain)
-  chain.limit = jest.fn().mockReturnValue(chain)
-  chain.then = resolved.then.bind(resolved)
-  chain.catch = resolved.catch.bind(resolved)
-  chain.finally = resolved.finally.bind(resolved)
-  return chain
+  const resolved = Promise.resolve(result);
+  const chain: Record<string, unknown> = {};
+  chain.from = jest.fn().mockReturnValue(chain);
+  chain.where = jest.fn().mockReturnValue(chain);
+  chain.innerJoin = jest.fn().mockReturnValue(chain);
+  chain.leftJoin = jest.fn().mockReturnValue(chain);
+  chain.limit = jest.fn().mockReturnValue(chain);
+  chain.then = resolved.then.bind(resolved);
+  chain.catch = resolved.catch.bind(resolved);
+  chain.finally = resolved.finally.bind(resolved);
+  return chain;
 }
 
 function makeUpdateChain(result: unknown[] = []) {
-  const resolved = Promise.resolve(result)
-  const chain: Record<string, unknown> = {}
-  chain.set = jest.fn().mockReturnValue(chain)
-  chain.where = jest.fn().mockReturnValue(chain)
-  chain.then = resolved.then.bind(resolved)
-  chain.catch = resolved.catch.bind(resolved)
-  chain.finally = resolved.finally.bind(resolved)
-  return chain
+  const resolved = Promise.resolve(result);
+  const chain: Record<string, unknown> = {};
+  chain.set = jest.fn().mockReturnValue(chain);
+  chain.where = jest.fn().mockReturnValue(chain);
+  chain.then = resolved.then.bind(resolved);
+  chain.catch = resolved.catch.bind(resolved);
+  chain.finally = resolved.finally.bind(resolved);
+  return chain;
 }
 
 // ---------------------------------------------------------------------------
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbSelect = jest.fn(() => makeSelectChain([]))
-const mockDbExecute = jest.fn()
-const mockDbUpdate = jest.fn(() => makeUpdateChain([]))
+const mockDbSelect = jest.fn(() => makeSelectChain([]));
+const mockDbExecute = jest.fn();
+const mockDbUpdate = jest.fn(() => makeUpdateChain([]));
 
 jest.mock('@/db', () => ({
   db: {
@@ -74,10 +74,15 @@ jest.mock('@/db', () => ({
     execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
     update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
   },
-}))
+}));
 
 jest.mock('@/db/schema', () => ({
-  repairerProfiles: { id: 'repairerProfiles', isVerified: 'isVerified', userId: 'userId', businessName: 'businessName' },
+  repairerProfiles: {
+    id: 'repairerProfiles',
+    isVerified: 'isVerified',
+    userId: 'userId',
+    businessName: 'businessName',
+  },
   userProfiles: { userId: 'up_userId', isVerified: 'up_isVerified' },
   listings: { id: 'listings' },
   workshops: { id: 'workshops' },
@@ -86,7 +91,7 @@ jest.mock('@/db/schema', () => ({
   itHilfeOffers: { id: 'itHilfeOffers', helperId: 'helperId' },
   helperProfiles: { userId: 'helperProfiles_userId', averageRating: 'averageRating' },
   users: { id: 'users', email: 'email', name: 'name' },
-}))
+}));
 
 jest.mock('drizzle-orm', () => ({
   ...jest.requireActual('drizzle-orm'),
@@ -97,7 +102,7 @@ jest.mock('drizzle-orm', () => ({
     join: jest.fn().mockReturnValue({ __sql: 'joined' }),
   }),
   getTableName: jest.fn().mockReturnValue('mock_table'),
-}))
+}));
 
 jest.mock('@/config/database', () => ({
   REVIEW_TARGET_TYPES: {
@@ -107,49 +112,49 @@ jest.mock('@/config/database', () => ({
     WORKSHOP: 'workshop',
     IT_HILFE: 'it_hilfe',
   },
-}))
+}));
 
 jest.mock('@/config/urls', () => ({
   APP_URL: 'https://revamp-it.ch',
-}))
+}));
 
-const mockSendEmail = jest.fn().mockResolvedValue({ success: true })
+const mockSendEmail = jest.fn().mockResolvedValue({ success: true });
 jest.mock('@/lib/email', () => ({
   sendEmail: (...args: unknown[]) => mockSendEmail.apply(null, args),
-}))
+}));
 
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
-}))
+}));
 
 jest.mock('@/config/it-hilfe', () => ({
   REQUEST_STATUS: { COMPLETED: 'completed', OPEN: 'open' },
-}))
+}));
 
 jest.mock('@/config/review-status', () => ({
   REVIEW_STATUS: { PUBLISHED: 'published', PENDING: 'pending' },
-}))
+}));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { validateReviewTarget, notifyRepairerOfReview } from '../review-service'
-import { REVIEW_TARGET_TYPES } from '@/config/database'
+import { validateReviewTarget, notifyRepairerOfReview } from '../review-service';
+import { REVIEW_TARGET_TYPES } from '@/config/database';
 
 // ---------------------------------------------------------------------------
 // Fixtures
 // ---------------------------------------------------------------------------
 
-const TARGET_ID = 'target-1'
-const REVIEW_ID = 'review-1'
+const TARGET_ID = 'target-1';
+const REVIEW_ID = 'review-1';
 
 beforeEach(() => {
-  jest.resetAllMocks()
-  mockDbSelect.mockImplementation(() => makeSelectChain([]))
-  mockDbUpdate.mockImplementation(() => makeUpdateChain([]))
-  mockSendEmail.mockResolvedValue({ success: true })
-})
+  jest.resetAllMocks();
+  mockDbSelect.mockImplementation(() => makeSelectChain([]));
+  mockDbUpdate.mockImplementation(() => makeUpdateChain([]));
+  mockSendEmail.mockResolvedValue({ success: true });
+});
 
 // ============================================================================
 // validateReviewTarget
@@ -157,75 +162,75 @@ beforeEach(() => {
 
 describe('validateReviewTarget', () => {
   it('returns true for REPAIRER when found and verified', async () => {
-    mockDbSelect.mockReturnValueOnce(makeSelectChain([{ id: TARGET_ID }]))
+    mockDbSelect.mockReturnValueOnce(makeSelectChain([{ id: TARGET_ID }]));
 
-    const result = await validateReviewTarget(REVIEW_TARGET_TYPES.REPAIRER, TARGET_ID)
+    const result = await validateReviewTarget(REVIEW_TARGET_TYPES.REPAIRER, TARGET_ID);
 
-    expect(result).toBe(true)
-  })
+    expect(result).toBe(true);
+  });
 
   it('returns false for REPAIRER when not found', async () => {
-    mockDbSelect.mockReturnValueOnce(makeSelectChain([]))
+    mockDbSelect.mockReturnValueOnce(makeSelectChain([]));
 
-    const result = await validateReviewTarget(REVIEW_TARGET_TYPES.REPAIRER, 'missing')
+    const result = await validateReviewTarget(REVIEW_TARGET_TYPES.REPAIRER, 'missing');
 
-    expect(result).toBe(false)
-  })
+    expect(result).toBe(false);
+  });
 
   it('returns true for LISTING when found', async () => {
-    mockDbSelect.mockReturnValueOnce(makeSelectChain([{ id: TARGET_ID }]))
+    mockDbSelect.mockReturnValueOnce(makeSelectChain([{ id: TARGET_ID }]));
 
-    const result = await validateReviewTarget(REVIEW_TARGET_TYPES.LISTING, TARGET_ID)
+    const result = await validateReviewTarget(REVIEW_TARGET_TYPES.LISTING, TARGET_ID);
 
-    expect(result).toBe(true)
-  })
+    expect(result).toBe(true);
+  });
 
   it('returns false for LISTING when not found', async () => {
-    mockDbSelect.mockReturnValueOnce(makeSelectChain([]))
+    mockDbSelect.mockReturnValueOnce(makeSelectChain([]));
 
-    const result = await validateReviewTarget(REVIEW_TARGET_TYPES.LISTING, 'missing')
+    const result = await validateReviewTarget(REVIEW_TARGET_TYPES.LISTING, 'missing');
 
-    expect(result).toBe(false)
-  })
+    expect(result).toBe(false);
+  });
 
   it('returns true for SERVICE (placeholder — always)', async () => {
-    const result = await validateReviewTarget(REVIEW_TARGET_TYPES.SERVICE, 'any-id')
+    const result = await validateReviewTarget(REVIEW_TARGET_TYPES.SERVICE, 'any-id');
 
-    expect(result).toBe(true)
-    expect(mockDbSelect).not.toHaveBeenCalled()
-  })
+    expect(result).toBe(true);
+    expect(mockDbSelect).not.toHaveBeenCalled();
+  });
 
   it('returns true for WORKSHOP when found', async () => {
-    mockDbSelect.mockReturnValueOnce(makeSelectChain([{ id: TARGET_ID }]))
+    mockDbSelect.mockReturnValueOnce(makeSelectChain([{ id: TARGET_ID }]));
 
-    const result = await validateReviewTarget(REVIEW_TARGET_TYPES.WORKSHOP, TARGET_ID)
+    const result = await validateReviewTarget(REVIEW_TARGET_TYPES.WORKSHOP, TARGET_ID);
 
-    expect(result).toBe(true)
-  })
+    expect(result).toBe(true);
+  });
 
   it('returns true for IT_HILFE when request is COMPLETED', async () => {
-    mockDbSelect.mockReturnValueOnce(makeSelectChain([{ id: TARGET_ID }]))
+    mockDbSelect.mockReturnValueOnce(makeSelectChain([{ id: TARGET_ID }]));
 
-    const result = await validateReviewTarget(REVIEW_TARGET_TYPES.IT_HILFE, TARGET_ID)
+    const result = await validateReviewTarget(REVIEW_TARGET_TYPES.IT_HILFE, TARGET_ID);
 
-    expect(result).toBe(true)
-  })
+    expect(result).toBe(true);
+  });
 
   it('returns false for IT_HILFE when not found', async () => {
-    mockDbSelect.mockReturnValueOnce(makeSelectChain([]))
+    mockDbSelect.mockReturnValueOnce(makeSelectChain([]));
 
-    const result = await validateReviewTarget(REVIEW_TARGET_TYPES.IT_HILFE, 'missing')
+    const result = await validateReviewTarget(REVIEW_TARGET_TYPES.IT_HILFE, 'missing');
 
-    expect(result).toBe(false)
-  })
+    expect(result).toBe(false);
+  });
 
   it('returns false for unknown target type', async () => {
-    const result = await validateReviewTarget('unknown_type', TARGET_ID)
+    const result = await validateReviewTarget('unknown_type', TARGET_ID);
 
-    expect(result).toBe(false)
-    expect(mockDbSelect).not.toHaveBeenCalled()
-  })
-})
+    expect(result).toBe(false);
+    expect(mockDbSelect).not.toHaveBeenCalled();
+  });
+});
 
 // ============================================================================
 // notifyRepairerOfReview
@@ -233,23 +238,25 @@ describe('validateReviewTarget', () => {
 
 describe('notifyRepairerOfReview', () => {
   it('returns early (no-op) when repairer not found', async () => {
-    mockDbSelect.mockReturnValueOnce(makeSelectChain([]))
+    mockDbSelect.mockReturnValueOnce(makeSelectChain([]));
 
-    await notifyRepairerOfReview(TARGET_ID, REVIEW_ID, 'Reviewer', 5, 'Toll!')
+    await notifyRepairerOfReview(TARGET_ID, REVIEW_ID, 'Reviewer', 5, 'Toll!');
 
-    expect(mockSendEmail).not.toHaveBeenCalled()
-  })
+    expect(mockSendEmail).not.toHaveBeenCalled();
+  });
 
   it('sends email when repairer found', async () => {
     mockDbSelect.mockReturnValueOnce(
-      makeSelectChain([{
-        businessName: 'Fix-It GmbH',
-        email: 'tech@example.com',
-        repairerName: 'Hans Müller',
-      }]),
-    )
+      makeSelectChain([
+        {
+          businessName: 'Fix-It GmbH',
+          email: 'tech@example.com',
+          repairerName: 'Hans Müller',
+        },
+      ]),
+    );
 
-    await notifyRepairerOfReview(TARGET_ID, REVIEW_ID, 'Alice', 5, 'Sehr gut!')
+    await notifyRepairerOfReview(TARGET_ID, REVIEW_ID, 'Alice', 5, 'Sehr gut!');
 
     expect(mockSendEmail).toHaveBeenCalledWith(
       'tech@example.com',
@@ -259,28 +266,30 @@ describe('notifyRepairerOfReview', () => {
       5,
       'Sehr gut!',
       expect.stringContaining('revamp-it.ch'),
-    )
-  })
+    );
+  });
 
   it('logs warning when sendEmail returns { success: false }', async () => {
     mockDbSelect.mockReturnValueOnce(
-      makeSelectChain([{
-        businessName: 'Fix-It GmbH',
-        email: 'tech@example.com',
-        repairerName: null,
-      }]),
-    )
-    mockSendEmail.mockResolvedValueOnce({ success: false, error: 'SMTP down' })
+      makeSelectChain([
+        {
+          businessName: 'Fix-It GmbH',
+          email: 'tech@example.com',
+          repairerName: null,
+        },
+      ]),
+    );
+    mockSendEmail.mockResolvedValueOnce({ success: false, error: 'SMTP down' });
 
-    const { logger } = jest.requireMock('@/lib/logger')
+    const { logger } = jest.requireMock('@/lib/logger');
 
-    await notifyRepairerOfReview(TARGET_ID, REVIEW_ID, 'Bob', 4, 'OK')
+    await notifyRepairerOfReview(TARGET_ID, REVIEW_ID, 'Bob', 4, 'OK');
 
     expect(logger.warn).toHaveBeenCalledWith(
       expect.stringContaining('review notification'),
       expect.anything(),
-    )
-  })
+    );
+  });
 
   it('silently logs on unexpected error and does not throw', async () => {
     mockDbSelect.mockReturnValueOnce({
@@ -290,10 +299,10 @@ describe('notifyRepairerOfReview', () => {
           where: jest.fn().mockReturnValue(Promise.reject(new Error('Unexpected'))),
         }),
       }),
-    })
+    });
 
     await expect(
       notifyRepairerOfReview(TARGET_ID, REVIEW_ID, 'Carol', 3, 'OK'),
-    ).resolves.toBeUndefined()
-  })
-})
+    ).resolves.toBeUndefined();
+  });
+});

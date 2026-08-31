@@ -4,84 +4,88 @@
  * POST /api/decisions/[id]/transition - Change decision status
  */
 
-import { NextRequest } from 'next/server'
-import { withAdmin, ValidSession } from '@/lib/api/middleware'
-import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
-import { getDbUserId } from '@/lib/api/task-helpers'
-import { transitionDecisionSchema } from '@/lib/schemas/decisions'
-import { transitionDecision } from '@/lib/services/decisions'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { notifyAllStaff } from '@/lib/services/notifications'
-import { logger } from '@/lib/logger'
-import { DECISION_STATUS } from '@/config/decisions'
-import { RELATED_TYPES, NOTIFICATION_TYPES } from '@/config/notifications'
+import { NextRequest } from 'next/server';
+import { withAdmin, ValidSession } from '@/lib/api/middleware';
+import { apiSuccess, apiError, apiNotFound, apiBadRequest } from '@/lib/api/helpers';
+import { getDbUserId } from '@/lib/api/task-helpers';
+import { transitionDecisionSchema } from '@/lib/schemas/decisions';
+import { transitionDecision } from '@/lib/services/decisions';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { notifyAllStaff } from '@/lib/services/notifications';
+import { logger } from '@/lib/logger';
+import { DECISION_STATUS } from '@/config/decisions';
+import { RELATED_TYPES, NOTIFICATION_TYPES } from '@/config/notifications';
 
-type RouteParams = { id: string }
+type RouteParams = { id: string };
 
-export const POST = withAdmin<RouteParams>(async (
-  request: NextRequest,
-  session: ValidSession,
-  context,
-) => {
-  try {
-    const decisionId = context?.params?.id
-    if (!decisionId) return apiBadRequest(ERROR_MESSAGES.DECISION_ID_REQUIRED)
+export const POST = withAdmin<RouteParams>(
+  async (request: NextRequest, session: ValidSession, context) => {
+    try {
+      const decisionId = context?.params?.id;
+      if (!decisionId) return apiBadRequest(ERROR_MESSAGES.DECISION_ID_REQUIRED);
 
-    const body = await request.json()
-    const parsed = transitionDecisionSchema.safeParse(body)
+      const body = await request.json();
+      const parsed = transitionDecisionSchema.safeParse(body);
 
-    if (!parsed.success) {
-      return apiBadRequest(
-        parsed.error.issues[0]?.message || ERROR_MESSAGES.ALL_FIELDS_REQUIRED
-      )
+      if (!parsed.success) {
+        return apiBadRequest(parsed.error.issues[0]?.message || ERROR_MESSAGES.ALL_FIELDS_REQUIRED);
+      }
+
+      const userLookup = await getDbUserId(session);
+      if ('error' in userLookup) return userLookup.error;
+      const { dbUserId } = userLookup;
+
+      const result = await transitionDecision(decisionId, parsed.data.status, dbUserId, {
+        cancelReason: parsed.data.cancelReason,
+        outcomeSummary: parsed.data.outcomeSummary,
+      });
+
+      if ('error' in result) {
+        if (result.error === 'not_found') return apiNotFound('Entscheidung');
+        if (result.error === 'invalid_transition')
+          return apiBadRequest(ERROR_MESSAGES.DECISION_INVALID_TRANSITION);
+        if (result.error === 'quorum_not_met')
+          return apiBadRequest((result as { error: string; message: string }).message);
+        return apiBadRequest(String(result.error));
+      }
+
+      const decision = (result as { decision: { title: string } }).decision;
+
+      logger.info('Decision transitioned', {
+        decisionId,
+        newStatus: parsed.data.status,
+        userId: dbUserId,
+      });
+
+      // Notify team on key transitions
+      if (parsed.data.status === DECISION_STATUS.VOTING) {
+        await notifyAllStaff(
+          {
+            type: NOTIFICATION_TYPES.DECISION_VOTING,
+            title: `Neue Abstimmung: ${decision.title}`,
+            content: 'Eine neue Entscheidung wartet auf deine Stimme.',
+            related_type: RELATED_TYPES.DECISION,
+            related_id: decisionId,
+          },
+          dbUserId,
+        );
+      } else if (parsed.data.status === DECISION_STATUS.CLOSED) {
+        await notifyAllStaff(
+          {
+            type: NOTIFICATION_TYPES.DECISION_CLOSED,
+            title: `Entscheidung getroffen: ${decision.title}`,
+            content: parsed.data.outcomeSummary || 'Die Abstimmung wurde abgeschlossen.',
+            related_type: RELATED_TYPES.DECISION,
+            related_id: decisionId,
+          },
+          dbUserId,
+        );
+      }
+
+      return apiSuccess(decision);
+    } catch (error) {
+      logger.error('Error transitioning decision', { error, userId: session.user.id });
+      return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
     }
-
-    const userLookup = await getDbUserId(session)
-    if ('error' in userLookup) return userLookup.error
-    const { dbUserId } = userLookup
-
-    const result = await transitionDecision(decisionId, parsed.data.status, dbUserId, {
-      cancelReason: parsed.data.cancelReason,
-      outcomeSummary: parsed.data.outcomeSummary,
-    })
-
-    if ('error' in result) {
-      if (result.error === 'not_found') return apiNotFound('Entscheidung')
-      if (result.error === 'invalid_transition') return apiBadRequest(ERROR_MESSAGES.DECISION_INVALID_TRANSITION)
-      if (result.error === 'quorum_not_met') return apiBadRequest((result as { error: string; message: string }).message)
-      return apiBadRequest(String(result.error))
-    }
-
-    const decision = (result as { decision: { title: string } }).decision
-
-    logger.info('Decision transitioned', {
-      decisionId,
-      newStatus: parsed.data.status,
-      userId: dbUserId,
-    })
-
-    // Notify team on key transitions
-    if (parsed.data.status === DECISION_STATUS.VOTING) {
-      await notifyAllStaff({
-        type: NOTIFICATION_TYPES.DECISION_VOTING,
-        title: `Neue Abstimmung: ${decision.title}`,
-        content: 'Eine neue Entscheidung wartet auf deine Stimme.',
-        related_type: RELATED_TYPES.DECISION,
-        related_id: decisionId,
-      }, dbUserId)
-    } else if (parsed.data.status === DECISION_STATUS.CLOSED) {
-      await notifyAllStaff({
-        type: NOTIFICATION_TYPES.DECISION_CLOSED,
-        title: `Entscheidung getroffen: ${decision.title}`,
-        content: parsed.data.outcomeSummary || 'Die Abstimmung wurde abgeschlossen.',
-        related_type: RELATED_TYPES.DECISION,
-        related_id: decisionId,
-      }, dbUserId)
-    }
-
-    return apiSuccess(decision)
-  } catch (error) {
-    logger.error('Error transitioning decision', { error, userId: session.user.id })
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
-  }
-})
+  },
+);

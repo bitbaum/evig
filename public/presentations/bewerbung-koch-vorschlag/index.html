@@ -1,1151 +1,2434 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
-<head>
-<meta charset="UTF-8">
-<meta name="robots" content="noindex, nofollow">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>revamp-it — Bewerbung Siedlung Koch (Gestaltung)</title>
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bg: #0a0a0a; --surface: #141414; --text: #f5f5f5; --dim: #9ca3af;
-  --hairline: rgba(255,255,255,.09); --green: #22c55e; --radius: 10px;
-  --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
-}
-html, body { height: 100dvh; width: 100vw; overflow: hidden; }
-body { font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>revamp-it — Bewerbung Siedlung Koch (Gestaltung)</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --bg: #0a0a0a;
+        --surface: #141414;
+        --text: #f5f5f5;
+        --dim: #9ca3af;
+        --hairline: rgba(255, 255, 255, 0.09);
+        --green: #22c55e;
+        --radius: 10px;
+        --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+      html,
+      body {
+        height: 100dvh;
+        width: 100vw;
+        overflow: hidden;
+      }
+      body {
+        font-family:
+          Inter,
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          Roboto,
+          sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+      }
 
-.deck { position: relative; height: 100dvh; width: 100vw; }
-.slide { position: absolute; inset: 0; display: none; flex-direction: column;
-  justify-content: center; padding: clamp(2rem,6vmin,5rem) clamp(2rem,7vmin,6.5rem);
-  opacity: 0; transition: opacity .25s ease; }
-.slide.active { display: flex; opacity: 1; }
-  .slide.active .eyebrow, .slide.active h1, .slide.active h2, .slide.active .facts li,
-  .slide.active .stat, .slide.active .card, .slide.active .subtitle, .slide.active .bleed-fact,
-  .slide.active .sources, .slide.active .hairline {
-    animation: rise .55s cubic-bezier(.2,.7,.2,1) both; }
-  .slide.active h1, .slide.active h2 { animation-delay: .08s; }
-  .slide.active .subtitle { animation-delay: .16s; }
-  .slide.active .facts li:nth-child(1), .slide.active .card:nth-child(1), .slide.active .stat:nth-child(1) { animation-delay: .16s; }
-  .slide.active .facts li:nth-child(2), .slide.active .card:nth-child(2), .slide.active .stat:nth-child(2) { animation-delay: .24s; }
-  .slide.active .facts li:nth-child(3), .slide.active .card:nth-child(3), .slide.active .stat:nth-child(3) { animation-delay: .32s; }
-  .slide.active .facts li:nth-child(4), .slide.active .stat:nth-child(4) { animation-delay: .40s; }
-  .slide.active .facts li:nth-child(5) { animation-delay: .48s; }
-  .slide.active .facts li:nth-child(6) { animation-delay: .56s; }
-  .slide.active .bleed-fact { animation-delay: .3s; }
-  .slide.active .sources { animation-delay: .5s; }
-  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-  @media (prefers-reduced-motion: reduce) { .slide.active * { animation: none !important; } }
-  .dots { position: fixed; bottom: 2.6rem; left: 50%; transform: translateX(-50%); display: flex; gap: .35rem; z-index: 55; }
-  .dots span { width: 5px; height: 5px; border-radius: 999px; background: rgba(255,255,255,.18); transition: background .2s, width .2s; }
-  .dots span.on { background: var(--green); width: 14px; }
+      .deck {
+        position: relative;
+        height: 100dvh;
+        width: 100vw;
+      }
+      .slide {
+        position: absolute;
+        inset: 0;
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        padding: clamp(2rem, 6vmin, 5rem) clamp(2rem, 7vmin, 6.5rem);
+        opacity: 0;
+        transition: opacity 0.25s ease;
+      }
+      .slide.active {
+        display: flex;
+        opacity: 1;
+      }
+      .slide.active .eyebrow,
+      .slide.active h1,
+      .slide.active h2,
+      .slide.active .facts li,
+      .slide.active .stat,
+      .slide.active .card,
+      .slide.active .subtitle,
+      .slide.active .bleed-fact,
+      .slide.active .sources,
+      .slide.active .hairline {
+        animation: rise 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+      }
+      .slide.active h1,
+      .slide.active h2 {
+        animation-delay: 0.08s;
+      }
+      .slide.active .subtitle {
+        animation-delay: 0.16s;
+      }
+      .slide.active .facts li:nth-child(1),
+      .slide.active .card:nth-child(1),
+      .slide.active .stat:nth-child(1) {
+        animation-delay: 0.16s;
+      }
+      .slide.active .facts li:nth-child(2),
+      .slide.active .card:nth-child(2),
+      .slide.active .stat:nth-child(2) {
+        animation-delay: 0.24s;
+      }
+      .slide.active .facts li:nth-child(3),
+      .slide.active .card:nth-child(3),
+      .slide.active .stat:nth-child(3) {
+        animation-delay: 0.32s;
+      }
+      .slide.active .facts li:nth-child(4),
+      .slide.active .stat:nth-child(4) {
+        animation-delay: 0.4s;
+      }
+      .slide.active .facts li:nth-child(5) {
+        animation-delay: 0.48s;
+      }
+      .slide.active .facts li:nth-child(6) {
+        animation-delay: 0.56s;
+      }
+      .slide.active .bleed-fact {
+        animation-delay: 0.3s;
+      }
+      .slide.active .sources {
+        animation-delay: 0.5s;
+      }
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .slide.active * {
+          animation: none !important;
+        }
+      }
+      .dots {
+        position: fixed;
+        bottom: 2.6rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 0.35rem;
+        z-index: 55;
+      }
+      .dots span {
+        width: 5px;
+        height: 5px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.18);
+        transition:
+          background 0.2s,
+          width 0.2s;
+      }
+      .dots span.on {
+        background: var(--green);
+        width: 14px;
+      }
 
-/* typography — x.ai discipline: big, tight, left-aligned */
-.eyebrow { font-family: var(--mono); font-size: clamp(.65rem,1.3vmin,.85rem);
-  letter-spacing: .22em; text-transform: uppercase; color: var(--dim); margin-bottom: 1.2rem; }
-h1 { font-size: clamp(2.8rem,8.5vmin,7rem); font-weight: 650; letter-spacing: -.025em; line-height: 1.02; }
-h2 { font-size: clamp(2rem,5.2vmin,4.2rem); font-weight: 650; letter-spacing: -.02em; line-height: 1.06; margin-bottom: clamp(1rem,3vmin,2rem); }
-h3 { font-size: clamp(1.05rem,2.2vmin,1.6rem); font-weight: 600; letter-spacing: -.01em; margin-bottom: .4rem; }
-p, li { font-size: clamp(1rem,2vmin,1.5rem); line-height: 1.55; color: var(--dim); }
-strong { color: var(--text); font-weight: 600; }
-.accent { color: var(--green); }
-.subtitle { color: var(--dim); font-size: clamp(1rem,2.1vmin,1.55rem); max-width: 62ch; }
-ul { list-style: none; }
-ul li { padding-left: 1.4em; position: relative; margin-bottom: .65em; }
-ul li::before { content: ""; position: absolute; left: 0; top: .62em; width: .7em; height: 1.5px; background: var(--green); }
+      /* typography — x.ai discipline: big, tight, left-aligned */
+      .eyebrow {
+        font-family: var(--mono);
+        font-size: clamp(0.65rem, 1.3vmin, 0.85rem);
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--dim);
+        margin-bottom: 1.2rem;
+      }
+      h1 {
+        font-size: clamp(2.8rem, 8.5vmin, 7rem);
+        font-weight: 650;
+        letter-spacing: -0.025em;
+        line-height: 1.02;
+      }
+      h2 {
+        font-size: clamp(2rem, 5.2vmin, 4.2rem);
+        font-weight: 650;
+        letter-spacing: -0.02em;
+        line-height: 1.06;
+        margin-bottom: clamp(1rem, 3vmin, 2rem);
+      }
+      h3 {
+        font-size: clamp(1.05rem, 2.2vmin, 1.6rem);
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        margin-bottom: 0.4rem;
+      }
+      p,
+      li {
+        font-size: clamp(1rem, 2vmin, 1.5rem);
+        line-height: 1.55;
+        color: var(--dim);
+      }
+      strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+      .accent {
+        color: var(--green);
+      }
+      .subtitle {
+        color: var(--dim);
+        font-size: clamp(1rem, 2.1vmin, 1.55rem);
+        max-width: 62ch;
+      }
+      ul {
+        list-style: none;
+      }
+      ul li {
+        padding-left: 1.4em;
+        position: relative;
+        margin-bottom: 0.65em;
+      }
+      ul li::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0.62em;
+        width: 0.7em;
+        height: 1.5px;
+        background: var(--green);
+      }
 
-/* layout primitives */
-.split { display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(1.5rem,4vmin,4rem); align-items: center; }
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1rem,2.5vmin,2rem); }
-.grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: clamp(1rem,2.5vmin,2rem); }
-.grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: clamp(.8rem,2vmin,1.5rem); }
-.card { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius); padding: clamp(1rem,2.6vmin,1.8rem); text-align: left; }
-.card p { font-size: clamp(.85rem,1.7vmin,1.2rem); }
-.hairline { border: 0; border-top: 1px solid var(--hairline); margin: clamp(1rem,3vmin,2rem) 0; }
+      /* layout primitives */
+      .split {
+        display: grid;
+        grid-template-columns: 1.05fr 1fr;
+        gap: clamp(1.5rem, 4vmin, 4rem);
+        align-items: center;
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(1rem, 2.5vmin, 2rem);
+      }
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: clamp(1rem, 2.5vmin, 2rem);
+      }
+      .grid-4 {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: clamp(0.8rem, 2vmin, 1.5rem);
+      }
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--hairline);
+        border-radius: var(--radius);
+        padding: clamp(1rem, 2.6vmin, 1.8rem);
+        text-align: left;
+      }
+      .card p {
+        font-size: clamp(0.85rem, 1.7vmin, 1.2rem);
+      }
+      .hairline {
+        border: 0;
+        border-top: 1px solid var(--hairline);
+        margin: clamp(1rem, 3vmin, 2rem) 0;
+      }
 
-/* photos */
-figure { position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--hairline); background: var(--surface); }
-figure img { display: block; width: 100%; height: 100%; object-fit: cover; }
-figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: .6rem .9rem;
-  background: linear-gradient(transparent, rgba(0,0,0,.78)); font-family: var(--mono);
-  font-size: clamp(.6rem,1.2vmin,.8rem); letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.85); }
-.ph { height: clamp(200px,42vmin,520px); }
-.ph-tall { height: clamp(260px,56vmin,640px); }
+      /* photos */
+      figure {
+        position: relative;
+        border-radius: var(--radius);
+        overflow: hidden;
+        border: 1px solid var(--hairline);
+        background: var(--surface);
+      }
+      figure img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      figcaption {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 0.6rem 0.9rem;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.78));
+        font-family: var(--mono);
+        font-size: clamp(0.6rem, 1.2vmin, 0.8rem);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.85);
+      }
+      .ph {
+        height: clamp(200px, 42vmin, 520px);
+      }
+      .ph-tall {
+        height: clamp(260px, 56vmin, 640px);
+      }
 
-/* full-bleed slides */
-.slide--bleed { padding: 0; justify-content: flex-end; }
-.slide--bleed .bleed-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.slide--bleed .bleed-scrim { position: absolute; inset: 0;
-  background: linear-gradient(200deg, rgba(10,10,10,.15) 0%, rgba(10,10,10,.72) 62%, rgba(10,10,10,.94) 100%); }
-.slide--bleed .bleed-content { position: relative; padding: clamp(2rem,7vmin,6.5rem); padding-bottom: clamp(4rem,10vmin,7.5rem); max-width: 1100px; }
+      /* full-bleed slides */
+      .slide--bleed {
+        padding: 0;
+        justify-content: flex-end;
+      }
+      .slide--bleed .bleed-img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .slide--bleed .bleed-scrim {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          200deg,
+          rgba(10, 10, 10, 0.15) 0%,
+          rgba(10, 10, 10, 0.72) 62%,
+          rgba(10, 10, 10, 0.94) 100%
+        );
+      }
+      .slide--bleed .bleed-content {
+        position: relative;
+        padding: clamp(2rem, 7vmin, 6.5rem);
+        padding-bottom: clamp(4rem, 10vmin, 7.5rem);
+        max-width: 1100px;
+      }
 
-/* stats */
-.stats { display: grid; grid-template-columns: repeat(4,1fr); gap: clamp(1rem,3vmin,2.5rem); }
-.stat .n { font-size: clamp(2.6rem,7.5vmin,6rem); font-weight: 650; letter-spacing: -.03em; line-height: 1; color: var(--text); }
-.stat .n em { font-style: normal; color: var(--green); }
-.stat .l { font-family: var(--mono); font-size: clamp(.6rem,1.25vmin,.8rem); letter-spacing: .16em; text-transform: uppercase; color: var(--dim); margin-top: .6rem; }
-.sources { margin-top: clamp(1rem,2.5vmin,1.6rem); font-size: clamp(.7rem,1.4vmin,.95rem); color: #6b7280; line-height: 1.5; }
-.sources a { color: #6b7280; }
+      /* stats */
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: clamp(1rem, 3vmin, 2.5rem);
+      }
+      .stat .n {
+        font-size: clamp(2.6rem, 7.5vmin, 6rem);
+        font-weight: 650;
+        letter-spacing: -0.03em;
+        line-height: 1;
+        color: var(--text);
+      }
+      .stat .n em {
+        font-style: normal;
+        color: var(--green);
+      }
+      .stat .l {
+        font-family: var(--mono);
+        font-size: clamp(0.6rem, 1.25vmin, 0.8rem);
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--dim);
+        margin-top: 0.6rem;
+      }
+      .sources {
+        margin-top: clamp(1rem, 2.5vmin, 1.6rem);
+        font-size: clamp(0.7rem, 1.4vmin, 0.95rem);
+        color: #6b7280;
+        line-height: 1.5;
+      }
+      .sources a {
+        color: #6b7280;
+      }
 
-/* chrome: progress, counter, arrows, toolbar, notes */
-.progress { position: fixed; top: 0; left: 0; height: 2px; background: var(--green); width: 0%; z-index: 60; transition: width .25s ease; }
-.counter { position: fixed; bottom: 1rem; right: 1.25rem; font-family: var(--mono); font-size: .75rem; color: var(--dim); z-index: 60; }
-.watermark { display: none; }
-.nav-arrow { position: fixed; top: 0; bottom: 0; width: 12vw; min-width: 64px; background: none; border: 0; color: transparent;
-  font-size: 3rem; cursor: pointer; z-index: 50; }
-.nav-arrow:hover, .nav-arrow:focus-visible { color: rgba(255,255,255,.35); outline: none; }
-.nav-arrow--left { left: 0; text-align: left; padding-left: .6rem; }
-.nav-arrow--right { right: 0; text-align: right; padding-right: .6rem; }
-.toolbar { position: fixed; bottom: .9rem; left: 50%; transform: translateX(-50%); display: flex; gap: .4rem; z-index: 60; }
-.toolbar-btn { font-family: var(--mono); font-size: .7rem; letter-spacing: .06em; color: var(--dim);
-  background: rgba(20,20,20,.85); border: 1px solid var(--hairline); border-radius: 8px; padding: .45rem .7rem; cursor: pointer; }
-.toolbar-btn:hover { color: var(--text); border-color: rgba(255,255,255,.25); }
-.notes-panel { position: fixed; right: 1rem; bottom: 3.6rem; width: min(430px, 92vw); max-height: 62vh; display: none;
-  flex-direction: column; background: rgba(16,16,16,.97); border: 1px solid var(--hairline); border-radius: 12px; z-index: 70; }
-.notes-panel.open { display: flex; }
-.notes-header { display: flex; justify-content: space-between; align-items: center; padding: .7rem 1rem; border-bottom: 1px solid var(--hairline); }
-.notes-header-left { display: flex; gap: .8rem; align-items: center; font-family: var(--mono); font-size: .75rem; color: var(--dim); }
-.notes-timer { cursor: pointer; }
-.notes-close { background: none; border: 0; color: var(--dim); font-size: 1.3rem; cursor: pointer; }
-.notes-close:hover { color: var(--text); }
-.notes-body { padding: 1rem; overflow-y: auto; }
-.notes-text { font-size: .95rem; line-height: 1.6; color: var(--text); white-space: pre-wrap; }
-.notes-next { margin-top: 1rem; padding-top: .7rem; border-top: 1px solid var(--hairline); }
-.notes-next-label { display: block; font-family: var(--mono); font-size: .65rem; letter-spacing: .15em; text-transform: uppercase; color: #6b7280; }
-.notes-next-title { color: var(--dim); font-size: .9rem; }
-.has-notes::after { content: ""; }
+      /* chrome: progress, counter, arrows, toolbar, notes */
+      .progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 2px;
+        background: var(--green);
+        width: 0%;
+        z-index: 60;
+        transition: width 0.25s ease;
+      }
+      .counter {
+        position: fixed;
+        bottom: 1rem;
+        right: 1.25rem;
+        font-family: var(--mono);
+        font-size: 0.75rem;
+        color: var(--dim);
+        z-index: 60;
+      }
+      .watermark {
+        display: none;
+      }
+      .nav-arrow {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        width: 12vw;
+        min-width: 64px;
+        background: none;
+        border: 0;
+        color: transparent;
+        font-size: 3rem;
+        cursor: pointer;
+        z-index: 50;
+      }
+      .nav-arrow:hover,
+      .nav-arrow:focus-visible {
+        color: rgba(255, 255, 255, 0.35);
+        outline: none;
+      }
+      .nav-arrow--left {
+        left: 0;
+        text-align: left;
+        padding-left: 0.6rem;
+      }
+      .nav-arrow--right {
+        right: 0;
+        text-align: right;
+        padding-right: 0.6rem;
+      }
+      .toolbar {
+        position: fixed;
+        bottom: 0.9rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 0.4rem;
+        z-index: 60;
+      }
+      .toolbar-btn {
+        font-family: var(--mono);
+        font-size: 0.7rem;
+        letter-spacing: 0.06em;
+        color: var(--dim);
+        background: rgba(20, 20, 20, 0.85);
+        border: 1px solid var(--hairline);
+        border-radius: 8px;
+        padding: 0.45rem 0.7rem;
+        cursor: pointer;
+      }
+      .toolbar-btn:hover {
+        color: var(--text);
+        border-color: rgba(255, 255, 255, 0.25);
+      }
+      .notes-panel {
+        position: fixed;
+        right: 1rem;
+        bottom: 3.6rem;
+        width: min(430px, 92vw);
+        max-height: 62vh;
+        display: none;
+        flex-direction: column;
+        background: rgba(16, 16, 16, 0.97);
+        border: 1px solid var(--hairline);
+        border-radius: 12px;
+        z-index: 70;
+      }
+      .notes-panel.open {
+        display: flex;
+      }
+      .notes-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.7rem 1rem;
+        border-bottom: 1px solid var(--hairline);
+      }
+      .notes-header-left {
+        display: flex;
+        gap: 0.8rem;
+        align-items: center;
+        font-family: var(--mono);
+        font-size: 0.75rem;
+        color: var(--dim);
+      }
+      .notes-timer {
+        cursor: pointer;
+      }
+      .notes-close {
+        background: none;
+        border: 0;
+        color: var(--dim);
+        font-size: 1.3rem;
+        cursor: pointer;
+      }
+      .notes-close:hover {
+        color: var(--text);
+      }
+      .notes-body {
+        padding: 1rem;
+        overflow-y: auto;
+      }
+      .notes-text {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: var(--text);
+        white-space: pre-wrap;
+      }
+      .notes-next {
+        margin-top: 1rem;
+        padding-top: 0.7rem;
+        border-top: 1px solid var(--hairline);
+      }
+      .notes-next-label {
+        display: block;
+        font-family: var(--mono);
+        font-size: 0.65rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: #6b7280;
+      }
+      .notes-next-title {
+        color: var(--dim);
+        font-size: 0.9rem;
+      }
+      .has-notes::after {
+        content: '';
+      }
 
-/* fullscreen scale-up */
-:fullscreen h1 { font-size: clamp(3.5rem,10vmin,9rem); }
-:fullscreen h2 { font-size: clamp(2.5rem,6vmin,5rem); }
-:fullscreen p, :fullscreen li { font-size: clamp(1.2rem,2.4vmin,1.9rem); }
+      /* fullscreen scale-up */
+      :fullscreen h1 {
+        font-size: clamp(3.5rem, 10vmin, 9rem);
+      }
+      :fullscreen h2 {
+        font-size: clamp(2.5rem, 6vmin, 5rem);
+      }
+      :fullscreen p,
+      :fullscreen li {
+        font-size: clamp(1.2rem, 2.4vmin, 1.9rem);
+      }
 
-@media (max-width: 760px) {
-  .split, .grid-2, .grid-3, .grid-4, .stats { grid-template-columns: 1fr; }
-  .ph, .ph-tall { height: 34vh; }
-  .slide { overflow-y: auto; justify-content: flex-start; padding-top: 3.5rem; }
-}
-@media print {
-  html, body { overflow: visible; height: auto; }
-  .deck { height: auto; }
-  .slide { position: relative; display: flex !important; opacity: 1 !important; page-break-after: always; height: 100vh; }
-  .progress, .counter, .nav-arrow, .toolbar, .watermark, .notes-panel { display: none !important; }
-}
+      @media (max-width: 760px) {
+        .split,
+        .grid-2,
+        .grid-3,
+        .grid-4,
+        .stats {
+          grid-template-columns: 1fr;
+        }
+        .ph,
+        .ph-tall {
+          height: 34vh;
+        }
+        .slide {
+          overflow-y: auto;
+          justify-content: flex-start;
+          padding-top: 3.5rem;
+        }
+      }
+      @media print {
+        html,
+        body {
+          overflow: visible;
+          height: auto;
+        }
+        .deck {
+          height: auto;
+        }
+        .slide {
+          position: relative;
+          display: flex !important;
+          opacity: 1 !important;
+          page-break-after: always;
+          height: 100vh;
+        }
+        .progress,
+        .counter,
+        .nav-arrow,
+        .toolbar,
+        .watermark,
+        .notes-panel {
+          display: none !important;
+        }
+      }
 
-/* statement bleeds + fact chips */
-.bleed-fact { display: inline-block; margin-top: 1.2rem; font-family: var(--mono);
-  font-size: clamp(.65rem,1.3vmin,.85rem); letter-spacing: .16em; text-transform: uppercase;
-  color: rgba(255,255,255,.82); border: 1px solid rgba(255,255,255,.22); border-radius: 999px;
-  padding: .45rem .9rem; backdrop-filter: blur(4px); }
-.statement h1 { font-size: clamp(2.6rem,7.5vmin,6.2rem); }
-.facts { max-width: 62rem; }
-.facts li { font-size: clamp(1.1rem,2.3vmin,1.75rem); margin-bottom: 1em; }
+      /* statement bleeds + fact chips */
+      .bleed-fact {
+        display: inline-block;
+        margin-top: 1.2rem;
+        font-family: var(--mono);
+        font-size: clamp(0.65rem, 1.3vmin, 0.85rem);
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.82);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 999px;
+        padding: 0.45rem 0.9rem;
+        backdrop-filter: blur(4px);
+      }
+      .statement h1 {
+        font-size: clamp(2.6rem, 7.5vmin, 6.2rem);
+      }
+      .facts {
+        max-width: 62rem;
+      }
+      .facts li {
+        font-size: clamp(1.1rem, 2.3vmin, 1.75rem);
+        margin-bottom: 1em;
+      }
 
-.link { color: var(--text); text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--green); text-decoration-thickness: 1.5px; }
-.link:hover { color: var(--green); }
-.uc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(.8rem, 2vmin, 1.4rem); }
-.uc-grid figure { height: clamp(150px, 32vmin, 340px); }
-body.exporting .slide, body.exporting .slide * { animation: none !important; transition: none !important; }
-body.exporting .progress, body.exporting .counter, body.exporting .nav-arrow, body.exporting .toolbar, body.exporting .dots, body.exporting .notes-panel { display: none !important; }
-@media (max-width:760px){ .uc-grid { grid-template-columns: 1fr 1fr; } }
-</style>
-</head>
-<body>
+      .link {
+        color: var(--text);
+        text-decoration: underline;
+        text-underline-offset: 4px;
+        text-decoration-color: var(--green);
+        text-decoration-thickness: 1.5px;
+      }
+      .link:hover {
+        color: var(--green);
+      }
+      .uc-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: clamp(0.8rem, 2vmin, 1.4rem);
+      }
+      .uc-grid figure {
+        height: clamp(150px, 32vmin, 340px);
+      }
+      body.exporting .slide,
+      body.exporting .slide * {
+        animation: none !important;
+        transition: none !important;
+      }
+      body.exporting .progress,
+      body.exporting .counter,
+      body.exporting .nav-arrow,
+      body.exporting .toolbar,
+      body.exporting .dots,
+      body.exporting .notes-panel {
+        display: none !important;
+      }
+      @media (max-width: 760px) {
+        .uc-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="progress" id="progress"></div>
+    <div class="counter" id="counter"></div>
+    <img
+      class="watermark"
+      id="watermark"
+      src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+      alt=""
+    />
 
-<div class="progress" id="progress"></div>
-<div class="counter" id="counter"></div>
-<img class="watermark" id="watermark" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="">
+    <button class="nav-arrow nav-arrow--left" id="nav-left" aria-label="Vorherige Folie">
+      &#8249;
+    </button>
+    <button class="nav-arrow nav-arrow--right" id="nav-right" aria-label="Nächste Folie">
+      &#8250;
+    </button>
 
-<button class="nav-arrow nav-arrow--left" id="nav-left" aria-label="Vorherige Folie">&#8249;</button>
-<button class="nav-arrow nav-arrow--right" id="nav-right" aria-label="Nächste Folie">&#8250;</button>
-
-<div class="toolbar">
-  <button class="toolbar-btn" id="btn-fullscreen" title="Vollbild (F)">Vollbild</button>
-  <button class="toolbar-btn" id="btn-notes" title="Sprechernotizen (S)">Notizen</button>
-  <button class="toolbar-btn" id="btn-print" title="PDF herunterladen">PDF</button>
-  <button class="toolbar-btn" id="btn-pptx" title="PowerPoint herunterladen">PPTX</button>
-</div>
-
-<div class="notes-panel" id="notes-panel">
-  <div class="notes-header">
-    <div class="notes-header-left">
-      <span class="notes-slide-num" id="notes-num"></span>
-      <span class="notes-timer" id="notes-timer" title="Klick zum Starten/Pausieren">00:00</span>
+    <div class="toolbar">
+      <button class="toolbar-btn" id="btn-fullscreen" title="Vollbild (F)">Vollbild</button>
+      <button class="toolbar-btn" id="btn-notes" title="Sprechernotizen (S)">Notizen</button>
+      <button class="toolbar-btn" id="btn-print" title="PDF herunterladen">PDF</button>
+      <button class="toolbar-btn" id="btn-pptx" title="PowerPoint herunterladen">PPTX</button>
     </div>
-    <button class="notes-close" id="notes-close" title="Schliessen">&times;</button>
-  </div>
-  <div class="notes-body">
-    <div class="notes-text" id="notes-text"></div>
-    <div class="notes-next">
-      <span class="notes-next-label">Nächste Folie</span>
-      <span class="notes-next-title" id="notes-next-title"></span>
+
+    <div class="notes-panel" id="notes-panel">
+      <div class="notes-header">
+        <div class="notes-header-left">
+          <span class="notes-slide-num" id="notes-num"></span>
+          <span class="notes-timer" id="notes-timer" title="Klick zum Starten/Pausieren"
+            >00:00</span
+          >
+        </div>
+        <button class="notes-close" id="notes-close" title="Schliessen">&times;</button>
+      </div>
+      <div class="notes-body">
+        <div class="notes-text" id="notes-text"></div>
+        <div class="notes-next">
+          <span class="notes-next-label">Nächste Folie</span>
+          <span class="notes-next-title" id="notes-next-title"></span>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-<div class="deck" id="deck">
-
-  <!-- V2 · GLEICHE INHALTE WIE DAS TEAM-DECK (Wortlaut Folien 1-8, 15-17), nur neu
+    <div class="deck" id="deck">
+      <!-- V2 · GLEICHE INHALTE WIE DAS TEAM-DECK (Wortlaut Folien 1-8, 15-17), nur neu
        gestaltet + mit grossen Fotos. Abweichung ggü. Original: die vier unfertigen
        Vorlagen-Folien (2 Beispiel-Diagramme, leeres Baumdiagramm, «Lorem Ipsum»-
        Budget) und die leeren Jahres-Sechsecke 2016/2020 sind weggelassen — sie
        enthalten im Original keinen Inhalt. Sonst Wortlaut wie im Team-Deck. -->
-  <style>
-    /* Foto-Panel: grosses Foto rechts, Inhalt links auf ruhiger Fläche */
-    .pv2{position:absolute;inset:0;display:grid;grid-template-columns:0.9fr 1fr}
-    .pv2-text{padding:clamp(1.6rem,4.5vw,4.2rem);display:flex;flex-direction:column;justify-content:center;min-width:0}
-    .pv2-text h2{font-size:clamp(1.7rem,4vmin,3rem);margin-bottom:clamp(.8rem,2.4vmin,1.5rem)}
-    .pv2-text .facts{max-width:none}
-    .pv2-text .facts li{font-size:clamp(.92rem,1.7vmin,1.32rem);margin-bottom:.72em}
-    .pv2-img{width:100%;height:100%;object-fit:cover;min-width:0}
-    @media (max-width:820px){.pv2{grid-template-columns:1fr;grid-template-rows:1.1fr 1fr}}
-  </style>
-
-  <!-- 01 · TITEL (Foto: Laden, vollflächig) -->
-  <div class="slide slide--bleed statement" data-no-watermark data-notes="Guten Tag, wir sind revamp-it und bewerben uns für die Ladenlokale im Erdgeschoss der Siedlung Koch. Wir stellen uns kurz vor — wer wir sind und was wir tun. (Gestaltung neu, Inhalt wie im Team-Deck; gegenüber dem Original weggelassen sind nur die vier unfertigen Platzhalter-Folien ohne Inhalt.)">
-    <img class="bleed-img" style="object-position:50% 55%" src="/presentations/_assets/revampit/shopfront-front.jpg" alt="Ladenfront revamp-it an der Birmensdorferstrasse">
-    <div class="bleed-scrim"></div>
-    <div class="bleed-content">
-      <p class="eyebrow">Bewerbung · Gewerbeflächen Siedlung Koch</p>
-      <h1>Revamp-<span class="accent">IT</span></h1>
-    </div>
-  </div>
-
-  <!-- 02 · WIR SIND (Wortlaut Team-Deck) + grosses Foto -->
-  <div class="slide" style="padding:0" data-notes="Kurz zu uns: Wir sind ein gemeinnütziger sozialer Verein und seit über zwanzig Jahren im Einsatz für einen nachhaltigen, verantwortungsvollen Umgang mit IT. Unser Team besteht aus fest Angestellten, engagierten Pensionierten und Freiwilligen — viele aus dem zweiten Arbeitsmarkt oder aus schwierigen Lebenssituationen. Wir sind selbstverwaltet: Entscheide fallen gemeinsam an den 14-täglichen Team-Sitzungen. Vorfinanziert sind wir durch das Förderprogramm KLIMUP der Stadt Zürich.">
-    <div class="pv2">
-      <div class="pv2-text">
-        <p class="eyebrow">Wir sind …</p>
-        <h2>Wir <span class="accent">sind</span>:</h2>
-        <ul class="facts">
-          <li>… ein gemeinnütziger sozialer Verein</li>
-          <li>… seit über 20 Jahren im Einsatz</li>
-          <li>… engagiert für einen nachhaltigen und verantwortungsvollen Umgang mit IT</li>
-          <li>… ein Team aus fest Angestellten, engagierten Pensionierten sowie Freiwilligen aus dem 2. Arbeitsmarkt oder aus schwierigen Lebenssituationen</li>
-          <li>… ein selbstverwalteter Betrieb — Entscheide fallen an den 14-täglichen Team-Sitzungen gemeinsam</li>
-          <li>… vorfinanziert durch das Förderprogramm KLIMUP der Stadt Zürich</li>
-        </ul>
-      </div>
-      <img class="pv2-img" style="object-position:50% 30%" src="/presentations/_assets/revampit/werkstatt-team.jpg" alt="Zwei Personen prüfen gemeinsam eine Hauptplatine">
-    </div>
-  </div>
-
-  <!-- 03 · MISSION (Wortlaut Team-Deck) + grosses Foto -->
-  <div class="slide" style="padding:0" data-notes="Unsere Mission verbindet Ökologie und sozialen Mehrwert: Wir fördern die Kreislaufwirtschaft im IT-Bereich — sammeln ausrangierte Geräte, reparieren bei Bedarf und verkaufen Second-Hand. Wir setzen auf freie Software und Open-Source-Betriebssysteme, damit Nachhaltigkeit auch auf der Software-Ebene gilt. Und wir vermitteln Wissen über Workshops und Schulungen, die ökologische, technische und soziale Themen verbinden.">
-    <div class="pv2">
-      <div class="pv2-text">
-        <p class="eyebrow">Unsere Mission: ökologisches Engagement & sozialer Mehrwert</p>
-        <h2>Ökologisches Engagement & sozialer <span class="accent">Mehrwert</span></h2>
-        <ul class="facts">
-          <li>Die aktive Förderung von Kreislaufwirtschaft im IT-Bereich: Sammeln ausrangierter Geräte, Reparatur bei Bedarf und Second-Hand-Verkauf</li>
-          <li>Der Einsatz freier Software-Lösungen und Open-Source-Betriebssysteme für nachhaltige Strukturen auch auf der Software-Ebene</li>
-          <li>Die Vermittlung von Wissen und Kompetenzen über Workshops und Schulungen, die ökologische, technische und soziale Themen verbinden</li>
-        </ul>
-      </div>
-      <img class="pv2-img" style="object-position:50% 60%" src="/presentations/_assets/revampit/refurbished.jpg" alt="Aufbereitete Laptops auf einem warmen Holztisch">
-    </div>
-  </div>
-
-  <!-- 04 · MITGLIED BEI (Wortlaut Team-Deck) -->
-  <div class="slide" data-notes="Wir sind gut vernetzt und Mitglied bei zahlreichen Organisationen — unter anderem der digitalen Gesellschaft Schweiz, CH Open, Openki und dem Verein Linuxola; bei Swico Recycling, Circular Economy Switzerland, Tauschen am Fluss und zuerich.repair; sowie bei öbu, der Energiegenossenschaft Schweiz, Talent Schweiz und in der Kivitendo-Partnerschaft.">
-    <p class="eyebrow">Wir sind Mitglied bei …</p>
-    <h2>Wir sind Mitglied <span class="accent">bei</span> …</h2>
-    <ul class="facts">
-      <li>digitale Gesellschaft Schweiz · CH Open · Openki · Verein Linuxola</li>
-      <li>Swico Recycling · Circular Economy Switzerland · Tauschen am Fluss · zuerich.repair</li>
-      <li>öbu · Energiegenossenschaft Schweiz · Talent Schweiz · Kivitendo-Partnerschaft</li>
-    </ul>
-  </div>
-
-  <!-- 05 · WAS WIR ANBIETEN (Wortlaut Team-Deck) + grosses Foto -->
-  <div class="slide" style="padding:0" data-notes="Was wir anbieten: Reparatur, Aufbereitung und Verkauf von Computern, Druckern und Laptops. Wissensvermittlung, Support, Beratung und Entwicklung rund um Linux und nachhaltige Software. Sinnvolle Beschäftigung und soziale Integration an unseren Arbeitsplätzen. Und die Konzeption und Durchführung von Upcycling-Projekten und Workshops.">
-    <div class="pv2">
-      <div class="pv2-text">
-        <p class="eyebrow">Was wir anbieten</p>
-        <h2>Was wir <span class="accent">anbieten</span>:</h2>
-        <ul class="facts">
-          <li>Reparatur, Aufbereitung und Verkauf von Computern, Druckern und Laptops</li>
-          <li>Wissensvermittlung, Support, Beratung und Entwicklung im Bereich Linux und nachhaltiger Software</li>
-          <li>Sinnvolle Beschäftigung und soziale Integration bei unseren Arbeitsplätzen</li>
-          <li>Konzeption und Durchführung von Upcycling-Projekten und Workshops</li>
-        </ul>
-      </div>
-      <img class="pv2-img" style="object-position:50% 40%" src="/presentations/_assets/revampit/reparatur.jpg" alt="Teammitglied repariert konzentriert ein Gerät">
-    </div>
-  </div>
-
-  <!-- 06 · KUNDSCHAFT (Wortlaut Team-Deck) + grosses Foto -->
-  <div class="slide" style="padding:0" data-notes="Unsere Kundschaft ist breit: Privatpersonen, Kleinfirmen und Organisationen, KMU sowie öffentliche Verwaltungen — zum Beispiel die OIZ, die Organisation und Informatik der Stadt Zürich.">
-    <div class="pv2">
-      <div class="pv2-text">
-        <p class="eyebrow">Unsere Kundschaft</p>
-        <h2>Unsere <span class="accent">Kundschaft</span></h2>
-        <ul class="facts">
-          <li>Privatpersonen, Kleinfirmen und Organisationen</li>
-          <li>KMUs</li>
-          <li>Öffentliche Verwaltungen, wie die OIZ (Organisation Informatik der Stadt Zürich)</li>
-        </ul>
-      </div>
-      <img class="pv2-img" style="object-position:50% 50%" src="/presentations/_assets/revampit/support-desk.jpg" alt="Support-Desk bei revamp-it: zwei Personen im Gespräch">
-    </div>
-  </div>
-
-  <!-- 07 · ANLÄSSE (Wortlaut Team-Deck) -->
-  <div class="slide" data-notes="Wir sind auch mit Anlässen präsent: Repair Thursday, Linux Presentation Day und die Informatiktage Zürich; der SecondHand Day und das MoveTheDate Festival; sowie «Zürich lernt» und der Nationale Zukunftstag.">
-    <p class="eyebrow">Unsere Anlässe</p>
-    <h2>Unsere <span class="accent">Anlässe</span></h2>
-    <ul class="facts">
-      <li>Repair Thursday · Linux Presentation Day · Informatiktage Zürich</li>
-      <li>SecondHand Day · MoveTheDate Festival</li>
-      <li>Zürich lernt · Nationaler Zukunftstag</li>
-    </ul>
-  </div>
-
-  <!-- 08 · PROJEKTE (Wortlaut Team-Deck) -->
-  <div class="slide" data-notes="Einige unserer Projekte: die Ersatzteilgewinnung aus entsorgten Laptops mit einer öffentlichen Ersatzteil-Datenbank; ein Nachhaltigkeitsprojekt mit der OIZ mit Vorschlägen zum Netto-Null-Ziel der Stadt Zürich; Monitor-Upcycling zusammen mit der ZHAW; Linux-Workshops für die Bevölkerung im Netto-Null-Pilotquartier; und unser Engagement für digitale Souveränität, unter anderem mit einem eigenen Mastodon-Server.">
-    <p class="eyebrow">Unsere Projekte</p>
-    <h2>Unsere <span class="accent">Projekte</span></h2>
-    <ul class="facts">
-      <li>Projekt Ersatzteilgewinnung aus entsorgten Laptops und Veröffentlichung einer Datenbank mit verfügbaren Ersatzteilen</li>
-      <li>Projekt Nachhaltigkeit bei der OIZ und Erarbeitung von Vorschlägen zum Erreichen des NettoNull-Ziels der Stadt Zürich</li>
-      <li>Projekt Monitor-Upcycling in Zusammenarbeit mit der Zürcher Hochschule für angewandte Wissenschaften ZHAW</li>
-      <li>Projekt Linux-Workshops für die Bevölkerung im Rahmen des NettoNull-Pilotquartier-Projekts der Stadt Zürich</li>
-      <li>Engagement für digitale Souveränität, u.a. durch Betreiben eines eigenen Mastodon-Servers</li>
-    </ul>
-  </div>
-
-  <!-- 09 · NUTZUNG DER RÄUMLICHKEITEN (Wortlaut Team-Deck) + grosses Foto -->
-  <div class="slide" style="padding:0" data-notes="So würden wir die Räume nutzen: Schaufenster und Ladengestelle für Verkauf und Vermietung von Second-Hand-IT-Geräten, Reparaturarbeitsplätze, Büroarbeitsplätze und einen Kundenbereich für den Software-Support.">
-    <div class="pv2">
-      <div class="pv2-text">
-        <p class="eyebrow">Unsere Nutzung der Räumlichkeiten</p>
-        <h2>Nutzung der <span class="accent">Räumlichkeiten</span></h2>
-        <ul class="facts">
-          <li>Schaufenster und Ladengestelle für den Verkauf und die Vermietung von SecondHand-IT-Geräten</li>
-          <li>Reparaturarbeitsplätze</li>
-          <li>Büroarbeitsplätze</li>
-          <li>Kundenbereich für Software-Support</li>
-        </ul>
-      </div>
-      <img class="pv2-img" style="object-position:50% 50%" src="/presentations/_assets/revampit/geraete.jpg" alt="Aufbereitete Geräte auf einem Tisch">
-    </div>
-  </div>
-
-  <!-- 10 · UNSER VERSPRECHEN (Wortlaut Team-Deck), vollflächiges Foto -->
-  <div class="slide slide--bleed statement" data-notes="Unser Versprechen: Als selbstverwaltete Organisation seit der Gründung bringen wir langjährige Erfahrung mit Community-Strukturen mit. Das Engagement für die Genossenschaft gehört für uns selbstverständlich dazu.">
-    <img class="bleed-img" style="object-position:50% 55%" src="/presentations/_assets/revampit/kabel.jpg" alt="Netzwerkkabel und Orchidee auf einem Holztisch">
-    <div class="bleed-scrim"></div>
-    <div class="bleed-content">
-      <p class="eyebrow">Unser Versprechen</p>
-      <h1>Unser <span class="accent">Versprechen</span></h1>
-      <hr class="hairline" style="max-width:8rem">
-      <p class="subtitle">Als selbstverwaltete Organisation seit der Gründung bringen wir langjährige Erfahrung mit Community-Strukturen mit: Unser Engagement für die Genossenschaft gehört für uns selbstverständlich dazu.</p>
-    </div>
-  </div>
-
-  <!-- 11 · DANKE (Foto: Pinguine, vollflächig) -->
-  <div class="slide slide--bleed statement" data-no-watermark data-notes="Vielen Dank für Eure Aufmerksamkeit — wir freuen uns auf Eure Fragen und das persönliche Gespräch.">
-    <img class="bleed-img" style="object-position:50% 42%" src="/presentations/_assets/revampit/pinguine.jpg" alt="Linux-Pinguin-Plüschtiere im Laden revamp-it">
-    <div class="bleed-scrim"></div>
-    <div class="bleed-content">
-      <p class="eyebrow">revamp-it</p>
-      <h1>Vielen Dank<br>für Eure <span class="accent">Aufmerksamkeit</span></h1>
-    </div>
-  </div>
-
-</div>
-
-<script>
-(function() {
-  const slides = document.querySelectorAll('.slide');
-  const counter = document.getElementById('counter');
-  const progress = document.getElementById('progress');
-  const watermark = document.getElementById('watermark');
-  const total = slides.length;
-  let current = 0;
-
-  var show = function(idx) {
-    if (idx < 0 || idx >= total) return;
-    slides[current].classList.remove('active');
-    current = idx;
-    slides[current].classList.add('active');
-    counter.textContent = (current + 1) + ' / ' + total;
-    progress.style.width = ((current + 1) / total * 100) + '%';
-    // Hide watermark on title slide
-    watermark.style.display = slides[current].hasAttribute('data-no-watermark') ? 'none' : 'block';
-  };
-
-  function next() { show(current + 1); }
-  function prev() { show(current - 1); }
-
-  // Keyboard
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
-    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
-    else if (e.key === 'Home') { e.preventDefault(); show(0); }
-    else if (e.key === 'End') { e.preventDefault(); show(total - 1); }
-    else if (e.key === 'f' || e.key === 'F') { toggleFullscreen(); }
-  });
-
-  // Touch swipe
-  let touchStartX = 0;
-  document.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].screenX; });
-  document.addEventListener('touchend', function(e) {
-    const dx = e.changedTouches[0].screenX - touchStartX;
-    if (Math.abs(dx) > 50) { dx < 0 ? next() : prev(); }
-  });
-
-  // Arrow buttons
-  document.getElementById('nav-left').addEventListener('click', function(e) { e.stopPropagation(); prev(); });
-  document.getElementById('nav-right').addEventListener('click', function(e) { e.stopPropagation(); next(); });
-
-  // Fullscreen
-  function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(function() {});
-    } else {
-      document.exitFullscreen();
-    }
-  }
-  document.getElementById('btn-fullscreen').addEventListener('click', function(e) {
-    e.stopPropagation();
-    toggleFullscreen();
-  });
-
-  // PDF Export — programmatic capture with html2canvas + jsPDF
-  var pdfLibState = 'idle';
-
-  function loadPdfLibs() {
-    if (pdfLibState !== 'idle') return;
-    if (typeof html2canvas !== 'undefined' && typeof jspdf !== 'undefined') { pdfLibState = 'ready'; return; }
-    pdfLibState = 'loading';
-    var loaded = 0;
-    function checkDone() { loaded++; if (loaded >= 2) pdfLibState = 'ready'; }
-
-    function loadScript(primary, fallback, cb) {
-      var s = document.createElement('script');
-      s.src = primary;
-      s.onload = cb;
-      s.onerror = function() {
-        var s2 = document.createElement('script');
-        s2.src = fallback;
-        s2.onload = cb;
-        s2.onerror = function() { pdfLibState = 'failed'; };
-        document.head.appendChild(s2);
-      };
-      document.head.appendChild(s);
-    }
-
-    loadScript(
-      'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
-      'https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js',
-      checkDone
-    );
-    loadScript(
-      'https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js',
-      'https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js',
-      checkDone
-    );
-  }
-
-  async function doExportPdf(btn) {
-    var jsPDF = jspdf.jsPDF;
-    var pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [1920, 1080] });
-
-    // Create an offscreen container to render slides at fixed size
-    var container = document.createElement('div');
-    container.style.cssText = 'position:fixed;left:-9999px;top:0;width:1920px;height:1080px;overflow:hidden;z-index:-1;';
-    document.body.appendChild(container);
-
-    for (var i = 0; i < total; i++) {
-      btn.textContent = '\u23F3 ' + (i + 1) + '/' + total + '\u2026';
-
-      // Clone the slide
-      var clone = slides[i].cloneNode(true);
-      clone.style.cssText = 'position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:2rem 3rem;text-align:center;opacity:1;background:#0f172a;width:1920px;height:1080px;';
-      container.innerHTML = '';
-      container.appendChild(clone);
-
-      // Wait a frame for rendering
-      await new Promise(function(r) { requestAnimationFrame(function() { requestAnimationFrame(r); }); });
-
-      var canvas = await html2canvas(container, {
-        width: 1920,
-        height: 1080,
-        scale: 1,
-        backgroundColor: '#0f172a',
-        useCORS: true,
-        logging: false
-      });
-
-      if (i > 0) pdf.addPage([1920, 1080], 'landscape');
-      pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 1920, 1080);
-    }
-
-    document.body.removeChild(container);
-    pdf.save('bewerbung-koch-vorschlag.pdf');
-    btn.textContent = '\uD83D\uDDB6 PDF';
-    btn.disabled = false;
-  }
-
-  document.getElementById('btn-print').addEventListener('click', function(e) {
-    e.stopPropagation();
-
-    // Shift+click = fallback to window.print()
-    if (e.shiftKey) { window.print(); return; }
-
-    var btn = document.getElementById('btn-print');
-
-    if (pdfLibState === 'ready') {
-      btn.textContent = '\u23F3 Laden\u2026';
-      btn.disabled = true;
-      doExportPdf(btn);
-      return;
-    }
-
-    if (pdfLibState === 'failed') { pdfLibState = 'idle'; }
-    loadPdfLibs();
-
-    btn.textContent = '\u23F3 Laden\u2026';
-    btn.disabled = true;
-    var attempts = 0;
-    var poll = setInterval(function() {
-      attempts++;
-      if (pdfLibState === 'ready') {
-        clearInterval(poll);
-        doExportPdf(btn);
-      } else if (pdfLibState === 'failed' || attempts > 60) {
-        clearInterval(poll);
-        btn.textContent = '\uD83D\uDDB6 PDF';
-        btn.disabled = false;
-        alert('PDF-Bibliotheken konnten nicht geladen werden. Versuche Shift+Klick f\u00FCr Browser-Druck.');
-      }
-    }, 250);
-  });
-
-
-
-  // Speaker notes — inline panel
-  var notesPanel = document.getElementById('notes-panel');
-  var notesOpen = false;
-  var notesTimerInterval = null, notesTimerSeconds = 0, notesTimerRunning = false;
-
-  function toggleNotes() {
-    notesOpen = !notesOpen;
-    notesPanel.classList.toggle('open', notesOpen);
-    document.getElementById('deck').classList.toggle('notes-open', notesOpen);
-    if (notesOpen) updateNotesPanel();
-  }
-
-  function updateNotesPanel() {
-    if (!notesOpen) return;
-    var s = slides[current];
-    var note = s.getAttribute('data-notes') || 'Keine Notizen für diese Folie.';
-    var nextTitle = '(Ende)';
-    if (current + 1 < total) {
-      var nh = slides[current + 1].querySelector('h1') || slides[current + 1].querySelector('h2');
-      nextTitle = nh ? nh.textContent.trim() : '';
-    }
-    document.getElementById('notes-num').textContent = (current + 1) + ' / ' + total;
-    document.getElementById('notes-text').textContent = note;
-    document.getElementById('notes-next-title').textContent = nextTitle;
-  }
-
-  // Timer toggle on click
-  document.getElementById('notes-timer').addEventListener('click', function() {
-    if (notesTimerRunning) {
-      clearInterval(notesTimerInterval);
-      notesTimerRunning = false;
-    } else {
-      notesTimerInterval = setInterval(function() {
-        notesTimerSeconds++;
-        var m = Math.floor(notesTimerSeconds / 60), s = notesTimerSeconds % 60;
-        document.getElementById('notes-timer').textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
-      }, 1000);
-      notesTimerRunning = true;
-    }
-  });
-
-  document.getElementById('notes-close').addEventListener('click', function(e) {
-    e.stopPropagation();
-    toggleNotes();
-  });
-
-  // Patch show() to update notes panel
-  var _origShow = show;
-  show = function(idx) {
-    _origShow(idx);
-    updateNotesPanel();
-  };
-
-  // Keyboard shortcut
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && notesOpen) { e.preventDefault(); toggleNotes(); }
-    else if (e.key === 's' || e.key === 'S') { if (!e.ctrlKey && !e.metaKey) { e.preventDefault(); toggleNotes(); } }
-  });
-
-  document.getElementById('btn-notes').addEventListener('click', function(e) {
-    e.stopPropagation();
-    toggleNotes();
-  });
-
-  // PPTX Export — eagerly pre-load, CDN fallback, improved quality
-  var pptxState = 'idle'; // idle -> loading -> ready | failed
-
-  function loadPptxLib() {
-    if (pptxState !== 'idle') return;
-    if (typeof PptxGenJS !== 'undefined') { pptxState = 'ready'; return; }
-    pptxState = 'loading';
-    var s1 = document.createElement('script');
-    s1.src = '/presentations/_assets/pptxgen.bundle.js';
-    s1.onload = function() { pptxState = 'ready'; };
-    s1.onerror = function() {
-      // Fallback to CDN if local file not found
-      var s2 = document.createElement('script');
-      s2.src = 'https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js';
-      s2.onload = function() { pptxState = 'ready'; };
-      s2.onerror = function() { pptxState = 'failed'; };
-      document.head.appendChild(s2);
-    };
-    document.head.appendChild(s1);
-  }
-
-  if (document.readyState === 'complete') { loadPptxLib(); } else { window.addEventListener('load', loadPptxLib); }
-
-  function getInnerText(el) {
-    // Convert <br> to newlines, then get text content
-    var clone = el.cloneNode(true);
-    var brs = clone.querySelectorAll('br');
-    brs.forEach(function(br) { br.replaceWith('\n'); });
-    return clone.textContent.trim();
-  }
-
-  function doExportPptx(btn) {
-    var pptx = new PptxGenJS();
-    pptx.defineLayout({ name: 'WIDE', width: 13.33, height: 7.5 });
-    pptx.layout = 'WIDE';
-
-    var bgColor = '0f172a';
-    var cardBg = '1e293b';
-    var green = '22c55e';
-    var orange = 'F7931A';
-    var textColor = 'f1f5f9';
-    var dimColor = '94a3b8';
-    var borderColor = '334155';
-    var W = 11.53;
-    var LX = 0.8;
-    var F = 'Arial';
-
-    slides.forEach(function(slideEl, idx) {
-      var s = pptx.addSlide();
-      s.background = { color: bgColor };
-      s.addText((idx + 1) + ' / ' + total + '  |  RevampIT', { x: 0.5, y: 7.0, w: 12.33, h: 0.35, fontSize: 9, color: '64748b', align: 'right', fontFace: F });
-
-      var contentDiv = slideEl.querySelector('.content');
-      var h1 = slideEl.querySelector('h1');
-      var h2 = slideEl.querySelector('h2');
-
-      // Get title text WITHOUT inline subtitles (span.subtitle inside h2)
-      var titleText = '';
-      var inlineSubtitle = '';
-      if (h1) {
-        titleText = h1.textContent.trim();
-      } else if (h2) {
-        var subSpan = h2.querySelector('.subtitle');
-        if (subSpan) {
-          inlineSubtitle = subSpan.textContent.trim();
-          var h2Clone = h2.cloneNode(true);
-          var subClone = h2Clone.querySelector('.subtitle');
-          if (subClone) subClone.remove();
-          titleText = h2Clone.textContent.trim();
-        } else {
-          titleText = h2.textContent.trim();
+      <style>
+        /* Foto-Panel: grosses Foto rechts, Inhalt links auf ruhiger Fläche */
+        .pv2 {
+          position: absolute;
+          inset: 0;
+          display: grid;
+          grid-template-columns: 0.9fr 1fr;
         }
-      }
+        .pv2-text {
+          padding: clamp(1.6rem, 4.5vw, 4.2rem);
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          min-width: 0;
+        }
+        .pv2-text h2 {
+          font-size: clamp(1.7rem, 4vmin, 3rem);
+          margin-bottom: clamp(0.8rem, 2.4vmin, 1.5rem);
+        }
+        .pv2-text .facts {
+          max-width: none;
+        }
+        .pv2-text .facts li {
+          font-size: clamp(0.92rem, 1.7vmin, 1.32rem);
+          margin-bottom: 0.72em;
+        }
+        .pv2-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          min-width: 0;
+        }
+        @media (max-width: 820px) {
+          .pv2 {
+            grid-template-columns: 1fr;
+            grid-template-rows: 1.1fr 1fr;
+          }
+        }
+      </style>
 
-      if (idx === 0) {
-        // === TITLE SLIDE ===
-        s.addText('RevampIT', { x: 0.5, y: 1.5, w: 12.33, h: 0.8, fontSize: 28, color: green, align: 'center', bold: true, fontFace: F });
-        s.addText(titleText, { x: 0.5, y: 2.5, w: 12.33, h: 1.5, fontSize: 44, color: textColor, align: 'center', bold: true, fontFace: F });
-        var subs = slideEl.querySelectorAll('.subtitle');
-        var subY = 4.2;
-        subs.forEach(function(sub) {
-          s.addText(sub.textContent.trim(), { x: 0.5, y: subY, w: 12.33, h: 0.5, fontSize: 20, color: dimColor, align: 'center', fontFace: F });
-          subY += 0.55;
+      <!-- 01 · TITEL (Foto: Laden, vollflächig) -->
+      <div
+        class="slide slide--bleed statement"
+        data-no-watermark
+        data-notes="Guten Tag, wir sind revamp-it und bewerben uns für die Ladenlokale im Erdgeschoss der Siedlung Koch. Wir stellen uns kurz vor — wer wir sind und was wir tun. (Gestaltung neu, Inhalt wie im Team-Deck; gegenüber dem Original weggelassen sind nur die vier unfertigen Platzhalter-Folien ohne Inhalt.)"
+      >
+        <img
+          class="bleed-img"
+          style="object-position: 50% 55%"
+          src="/presentations/_assets/revampit/shopfront-front.jpg"
+          alt="Ladenfront revamp-it an der Birmensdorferstrasse"
+        />
+        <div class="bleed-scrim"></div>
+        <div class="bleed-content">
+          <p class="eyebrow">Bewerbung · Gewerbeflächen Siedlung Koch</p>
+          <h1>Revamp-<span class="accent">IT</span></h1>
+        </div>
+      </div>
+
+      <!-- 02 · WIR SIND (Wortlaut Team-Deck) + grosses Foto -->
+      <div
+        class="slide"
+        style="padding: 0"
+        data-notes="Kurz zu uns: Wir sind ein gemeinnütziger sozialer Verein und seit über zwanzig Jahren im Einsatz für einen nachhaltigen, verantwortungsvollen Umgang mit IT. Unser Team besteht aus fest Angestellten, engagierten Pensionierten und Freiwilligen — viele aus dem zweiten Arbeitsmarkt oder aus schwierigen Lebenssituationen. Wir sind selbstverwaltet: Entscheide fallen gemeinsam an den 14-täglichen Team-Sitzungen. Vorfinanziert sind wir durch das Förderprogramm KLIMUP der Stadt Zürich."
+      >
+        <div class="pv2">
+          <div class="pv2-text">
+            <p class="eyebrow">Wir sind …</p>
+            <h2>Wir <span class="accent">sind</span>:</h2>
+            <ul class="facts">
+              <li>… ein gemeinnütziger sozialer Verein</li>
+              <li>… seit über 20 Jahren im Einsatz</li>
+              <li>… engagiert für einen nachhaltigen und verantwortungsvollen Umgang mit IT</li>
+              <li>
+                … ein Team aus fest Angestellten, engagierten Pensionierten sowie Freiwilligen aus
+                dem 2. Arbeitsmarkt oder aus schwierigen Lebenssituationen
+              </li>
+              <li>
+                … ein selbstverwalteter Betrieb — Entscheide fallen an den 14-täglichen
+                Team-Sitzungen gemeinsam
+              </li>
+              <li>… vorfinanziert durch das Förderprogramm KLIMUP der Stadt Zürich</li>
+            </ul>
+          </div>
+          <img
+            class="pv2-img"
+            style="object-position: 50% 30%"
+            src="/presentations/_assets/revampit/werkstatt-team.jpg"
+            alt="Zwei Personen prüfen gemeinsam eine Hauptplatine"
+          />
+        </div>
+      </div>
+
+      <!-- 03 · MISSION (Wortlaut Team-Deck) + grosses Foto -->
+      <div
+        class="slide"
+        style="padding: 0"
+        data-notes="Unsere Mission verbindet Ökologie und sozialen Mehrwert: Wir fördern die Kreislaufwirtschaft im IT-Bereich — sammeln ausrangierte Geräte, reparieren bei Bedarf und verkaufen Second-Hand. Wir setzen auf freie Software und Open-Source-Betriebssysteme, damit Nachhaltigkeit auch auf der Software-Ebene gilt. Und wir vermitteln Wissen über Workshops und Schulungen, die ökologische, technische und soziale Themen verbinden."
+      >
+        <div class="pv2">
+          <div class="pv2-text">
+            <p class="eyebrow">Unsere Mission: ökologisches Engagement & sozialer Mehrwert</p>
+            <h2>Ökologisches Engagement & sozialer <span class="accent">Mehrwert</span></h2>
+            <ul class="facts">
+              <li>
+                Die aktive Förderung von Kreislaufwirtschaft im IT-Bereich: Sammeln ausrangierter
+                Geräte, Reparatur bei Bedarf und Second-Hand-Verkauf
+              </li>
+              <li>
+                Der Einsatz freier Software-Lösungen und Open-Source-Betriebssysteme für nachhaltige
+                Strukturen auch auf der Software-Ebene
+              </li>
+              <li>
+                Die Vermittlung von Wissen und Kompetenzen über Workshops und Schulungen, die
+                ökologische, technische und soziale Themen verbinden
+              </li>
+            </ul>
+          </div>
+          <img
+            class="pv2-img"
+            style="object-position: 50% 60%"
+            src="/presentations/_assets/revampit/refurbished.jpg"
+            alt="Aufbereitete Laptops auf einem warmen Holztisch"
+          />
+        </div>
+      </div>
+
+      <!-- 04 · MITGLIED BEI (Wortlaut Team-Deck) -->
+      <div
+        class="slide"
+        data-notes="Wir sind gut vernetzt und Mitglied bei zahlreichen Organisationen — unter anderem der digitalen Gesellschaft Schweiz, CH Open, Openki und dem Verein Linuxola; bei Swico Recycling, Circular Economy Switzerland, Tauschen am Fluss und zuerich.repair; sowie bei öbu, der Energiegenossenschaft Schweiz, Talent Schweiz und in der Kivitendo-Partnerschaft."
+      >
+        <p class="eyebrow">Wir sind Mitglied bei …</p>
+        <h2>Wir sind Mitglied <span class="accent">bei</span> …</h2>
+        <ul class="facts">
+          <li>digitale Gesellschaft Schweiz · CH Open · Openki · Verein Linuxola</li>
+          <li>
+            Swico Recycling · Circular Economy Switzerland · Tauschen am Fluss · zuerich.repair
+          </li>
+          <li>öbu · Energiegenossenschaft Schweiz · Talent Schweiz · Kivitendo-Partnerschaft</li>
+        </ul>
+      </div>
+
+      <!-- 05 · WAS WIR ANBIETEN (Wortlaut Team-Deck) + grosses Foto -->
+      <div
+        class="slide"
+        style="padding: 0"
+        data-notes="Was wir anbieten: Reparatur, Aufbereitung und Verkauf von Computern, Druckern und Laptops. Wissensvermittlung, Support, Beratung und Entwicklung rund um Linux und nachhaltige Software. Sinnvolle Beschäftigung und soziale Integration an unseren Arbeitsplätzen. Und die Konzeption und Durchführung von Upcycling-Projekten und Workshops."
+      >
+        <div class="pv2">
+          <div class="pv2-text">
+            <p class="eyebrow">Was wir anbieten</p>
+            <h2>Was wir <span class="accent">anbieten</span>:</h2>
+            <ul class="facts">
+              <li>Reparatur, Aufbereitung und Verkauf von Computern, Druckern und Laptops</li>
+              <li>
+                Wissensvermittlung, Support, Beratung und Entwicklung im Bereich Linux und
+                nachhaltiger Software
+              </li>
+              <li>Sinnvolle Beschäftigung und soziale Integration bei unseren Arbeitsplätzen</li>
+              <li>Konzeption und Durchführung von Upcycling-Projekten und Workshops</li>
+            </ul>
+          </div>
+          <img
+            class="pv2-img"
+            style="object-position: 50% 40%"
+            src="/presentations/_assets/revampit/reparatur.jpg"
+            alt="Teammitglied repariert konzentriert ein Gerät"
+          />
+        </div>
+      </div>
+
+      <!-- 06 · KUNDSCHAFT (Wortlaut Team-Deck) + grosses Foto -->
+      <div
+        class="slide"
+        style="padding: 0"
+        data-notes="Unsere Kundschaft ist breit: Privatpersonen, Kleinfirmen und Organisationen, KMU sowie öffentliche Verwaltungen — zum Beispiel die OIZ, die Organisation und Informatik der Stadt Zürich."
+      >
+        <div class="pv2">
+          <div class="pv2-text">
+            <p class="eyebrow">Unsere Kundschaft</p>
+            <h2>Unsere <span class="accent">Kundschaft</span></h2>
+            <ul class="facts">
+              <li>Privatpersonen, Kleinfirmen und Organisationen</li>
+              <li>KMUs</li>
+              <li>
+                Öffentliche Verwaltungen, wie die OIZ (Organisation Informatik der Stadt Zürich)
+              </li>
+            </ul>
+          </div>
+          <img
+            class="pv2-img"
+            style="object-position: 50% 50%"
+            src="/presentations/_assets/revampit/support-desk.jpg"
+            alt="Support-Desk bei revamp-it: zwei Personen im Gespräch"
+          />
+        </div>
+      </div>
+
+      <!-- 07 · ANLÄSSE (Wortlaut Team-Deck) -->
+      <div
+        class="slide"
+        data-notes="Wir sind auch mit Anlässen präsent: Repair Thursday, Linux Presentation Day und die Informatiktage Zürich; der SecondHand Day und das MoveTheDate Festival; sowie «Zürich lernt» und der Nationale Zukunftstag."
+      >
+        <p class="eyebrow">Unsere Anlässe</p>
+        <h2>Unsere <span class="accent">Anlässe</span></h2>
+        <ul class="facts">
+          <li>Repair Thursday · Linux Presentation Day · Informatiktage Zürich</li>
+          <li>SecondHand Day · MoveTheDate Festival</li>
+          <li>Zürich lernt · Nationaler Zukunftstag</li>
+        </ul>
+      </div>
+
+      <!-- 08 · PROJEKTE (Wortlaut Team-Deck) -->
+      <div
+        class="slide"
+        data-notes="Einige unserer Projekte: die Ersatzteilgewinnung aus entsorgten Laptops mit einer öffentlichen Ersatzteil-Datenbank; ein Nachhaltigkeitsprojekt mit der OIZ mit Vorschlägen zum Netto-Null-Ziel der Stadt Zürich; Monitor-Upcycling zusammen mit der ZHAW; Linux-Workshops für die Bevölkerung im Netto-Null-Pilotquartier; und unser Engagement für digitale Souveränität, unter anderem mit einem eigenen Mastodon-Server."
+      >
+        <p class="eyebrow">Unsere Projekte</p>
+        <h2>Unsere <span class="accent">Projekte</span></h2>
+        <ul class="facts">
+          <li>
+            Projekt Ersatzteilgewinnung aus entsorgten Laptops und Veröffentlichung einer Datenbank
+            mit verfügbaren Ersatzteilen
+          </li>
+          <li>
+            Projekt Nachhaltigkeit bei der OIZ und Erarbeitung von Vorschlägen zum Erreichen des
+            NettoNull-Ziels der Stadt Zürich
+          </li>
+          <li>
+            Projekt Monitor-Upcycling in Zusammenarbeit mit der Zürcher Hochschule für angewandte
+            Wissenschaften ZHAW
+          </li>
+          <li>
+            Projekt Linux-Workshops für die Bevölkerung im Rahmen des
+            NettoNull-Pilotquartier-Projekts der Stadt Zürich
+          </li>
+          <li>
+            Engagement für digitale Souveränität, u.a. durch Betreiben eines eigenen
+            Mastodon-Servers
+          </li>
+        </ul>
+      </div>
+
+      <!-- 09 · NUTZUNG DER RÄUMLICHKEITEN (Wortlaut Team-Deck) + grosses Foto -->
+      <div
+        class="slide"
+        style="padding: 0"
+        data-notes="So würden wir die Räume nutzen: Schaufenster und Ladengestelle für Verkauf und Vermietung von Second-Hand-IT-Geräten, Reparaturarbeitsplätze, Büroarbeitsplätze und einen Kundenbereich für den Software-Support."
+      >
+        <div class="pv2">
+          <div class="pv2-text">
+            <p class="eyebrow">Unsere Nutzung der Räumlichkeiten</p>
+            <h2>Nutzung der <span class="accent">Räumlichkeiten</span></h2>
+            <ul class="facts">
+              <li>
+                Schaufenster und Ladengestelle für den Verkauf und die Vermietung von
+                SecondHand-IT-Geräten
+              </li>
+              <li>Reparaturarbeitsplätze</li>
+              <li>Büroarbeitsplätze</li>
+              <li>Kundenbereich für Software-Support</li>
+            </ul>
+          </div>
+          <img
+            class="pv2-img"
+            style="object-position: 50% 50%"
+            src="/presentations/_assets/revampit/geraete.jpg"
+            alt="Aufbereitete Geräte auf einem Tisch"
+          />
+        </div>
+      </div>
+
+      <!-- 10 · UNSER VERSPRECHEN (Wortlaut Team-Deck), vollflächiges Foto -->
+      <div
+        class="slide slide--bleed statement"
+        data-notes="Unser Versprechen: Als selbstverwaltete Organisation seit der Gründung bringen wir langjährige Erfahrung mit Community-Strukturen mit. Das Engagement für die Genossenschaft gehört für uns selbstverständlich dazu."
+      >
+        <img
+          class="bleed-img"
+          style="object-position: 50% 55%"
+          src="/presentations/_assets/revampit/kabel.jpg"
+          alt="Netzwerkkabel und Orchidee auf einem Holztisch"
+        />
+        <div class="bleed-scrim"></div>
+        <div class="bleed-content">
+          <p class="eyebrow">Unser Versprechen</p>
+          <h1>Unser <span class="accent">Versprechen</span></h1>
+          <hr class="hairline" style="max-width: 8rem" />
+          <p class="subtitle">
+            Als selbstverwaltete Organisation seit der Gründung bringen wir langjährige Erfahrung
+            mit Community-Strukturen mit: Unser Engagement für die Genossenschaft gehört für uns
+            selbstverständlich dazu.
+          </p>
+        </div>
+      </div>
+
+      <!-- 11 · DANKE (Foto: Pinguine, vollflächig) -->
+      <div
+        class="slide slide--bleed statement"
+        data-no-watermark
+        data-notes="Vielen Dank für Eure Aufmerksamkeit — wir freuen uns auf Eure Fragen und das persönliche Gespräch."
+      >
+        <img
+          class="bleed-img"
+          style="object-position: 50% 42%"
+          src="/presentations/_assets/revampit/pinguine.jpg"
+          alt="Linux-Pinguin-Plüschtiere im Laden revamp-it"
+        />
+        <div class="bleed-scrim"></div>
+        <div class="bleed-content">
+          <p class="eyebrow">revamp-it</p>
+          <h1>Vielen Dank<br />für Eure <span class="accent">Aufmerksamkeit</span></h1>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const slides = document.querySelectorAll('.slide');
+        const counter = document.getElementById('counter');
+        const progress = document.getElementById('progress');
+        const watermark = document.getElementById('watermark');
+        const total = slides.length;
+        let current = 0;
+
+        var show = function (idx) {
+          if (idx < 0 || idx >= total) return;
+          slides[current].classList.remove('active');
+          current = idx;
+          slides[current].classList.add('active');
+          counter.textContent = current + 1 + ' / ' + total;
+          progress.style.width = ((current + 1) / total) * 100 + '%';
+          // Hide watermark on title slide
+          watermark.style.display = slides[current].hasAttribute('data-no-watermark')
+            ? 'none'
+            : 'block';
+        };
+
+        function next() {
+          show(current + 1);
+        }
+        function prev() {
+          show(current - 1);
+        }
+
+        // Keyboard
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+            e.preventDefault();
+            next();
+          } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+            e.preventDefault();
+            prev();
+          } else if (e.key === 'Home') {
+            e.preventDefault();
+            show(0);
+          } else if (e.key === 'End') {
+            e.preventDefault();
+            show(total - 1);
+          } else if (e.key === 'f' || e.key === 'F') {
+            toggleFullscreen();
+          }
         });
-      } else {
-        // === CONTENT SLIDES ===
-        var yPos = 0.3;
 
-        // Check if subtitle <p> appears BEFORE h2 (like "Lokale KI" slide)
-        var hasSubtitleBeforeTitle = false;
-        if (contentDiv) {
-          var firstChild = contentDiv.children[0];
-          if (firstChild && firstChild.classList && firstChild.classList.contains('subtitle') && firstChild.tagName !== 'SPAN') {
-            s.addText(firstChild.textContent.trim(), { x: LX, y: yPos, w: W, h: 0.4, fontSize: 16, color: dimColor, fontFace: F });
-            yPos += 0.45;
-            hasSubtitleBeforeTitle = true;
+        // Touch swipe
+        let touchStartX = 0;
+        document.addEventListener('touchstart', function (e) {
+          touchStartX = e.changedTouches[0].screenX;
+        });
+        document.addEventListener('touchend', function (e) {
+          const dx = e.changedTouches[0].screenX - touchStartX;
+          if (Math.abs(dx) > 50) {
+            dx < 0 ? next() : prev();
+          }
+        });
+
+        // Arrow buttons
+        document.getElementById('nav-left').addEventListener('click', function (e) {
+          e.stopPropagation();
+          prev();
+        });
+        document.getElementById('nav-right').addEventListener('click', function (e) {
+          e.stopPropagation();
+          next();
+        });
+
+        // Fullscreen
+        function toggleFullscreen() {
+          if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(function () {});
+          } else {
+            document.exitFullscreen();
           }
         }
+        document.getElementById('btn-fullscreen').addEventListener('click', function (e) {
+          e.stopPropagation();
+          toggleFullscreen();
+        });
 
-        // Title
-        s.addText(titleText, { x: 0.5, y: yPos, w: 12.33, h: 0.9, fontSize: 32, color: textColor, bold: true, fontFace: F });
-        yPos += 0.85;
+        // PDF Export — programmatic capture with html2canvas + jsPDF
+        var pdfLibState = 'idle';
 
-        // Inline subtitle (e.g. "(Frontier-Modell)" next to title)
-        if (inlineSubtitle) {
-          s.addText(inlineSubtitle, { x: LX, y: yPos, w: W, h: 0.35, fontSize: 16, color: dimColor, fontFace: F });
-          yPos += 0.35;
+        function loadPdfLibs() {
+          if (pdfLibState !== 'idle') return;
+          if (typeof html2canvas !== 'undefined' && typeof jspdf !== 'undefined') {
+            pdfLibState = 'ready';
+            return;
+          }
+          pdfLibState = 'loading';
+          var loaded = 0;
+          function checkDone() {
+            loaded++;
+            if (loaded >= 2) pdfLibState = 'ready';
+          }
+
+          function loadScript(primary, fallback, cb) {
+            var s = document.createElement('script');
+            s.src = primary;
+            s.onload = cb;
+            s.onerror = function () {
+              var s2 = document.createElement('script');
+              s2.src = fallback;
+              s2.onload = cb;
+              s2.onerror = function () {
+                pdfLibState = 'failed';
+              };
+              document.head.appendChild(s2);
+            };
+            document.head.appendChild(s);
+          }
+
+          loadScript(
+            'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
+            'https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js',
+            checkDone,
+          );
+          loadScript(
+            'https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js',
+            'https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js',
+            checkDone,
+          );
         }
 
-        // Green accent underline
-        s.addShape(pptx.ShapeType.rect, { x: 0.5, y: yPos, w: 2.5, h: 0.04, fill: { color: green } });
-        yPos += 0.25;
+        async function doExportPdf(btn) {
+          var jsPDF = jspdf.jsPDF;
+          var pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [1920, 1080] });
 
-        // Subtitle paragraphs (direct children, skip the one already rendered before title)
-        if (contentDiv) {
-          contentDiv.querySelectorAll(':scope > p.subtitle').forEach(function(sub) {
-            if (hasSubtitleBeforeTitle && sub === contentDiv.children[0]) return;
-            s.addText(sub.textContent.trim(), { x: LX, y: yPos, w: W, h: 0.45, fontSize: 16, color: dimColor, fontFace: F });
-            yPos += 0.5;
-          });
-        }
+          // Create an offscreen container to render slides at fixed size
+          var container = document.createElement('div');
+          container.style.cssText =
+            'position:fixed;left:-9999px;top:0;width:1920px;height:1080px;overflow:hidden;z-index:-1;';
+          document.body.appendChild(container);
 
-        // Body paragraphs - use getInnerText to preserve <br> as newlines
-        if (contentDiv) {
-          contentDiv.querySelectorAll(':scope > p:not(.subtitle)').forEach(function(p) {
-            var fs = 16; var col = dimColor; var al = 'left';
-            var style = p.getAttribute('style') || '';
-            if (style.indexOf('3vw') > -1 || style.indexOf('1.8rem') > -1) {
-              fs = 24; col = textColor; al = 'center';
-            }
-            var txt = getInnerText(p);
-            var lines = txt.split('\n').length;
-            var pH = Math.max(0.6, lines * 0.45);
-            s.addText(txt, { x: LX, y: yPos, w: W, h: pH, fontSize: fs, color: col, align: al, fontFace: F, lineSpacing: fs * 1.4 });
-            yPos += pH + 0.1;
-          });
-        }
+          for (var i = 0; i < total; i++) {
+            btn.textContent = '\u23F3 ' + (i + 1) + '/' + total + '\u2026';
 
-        // List items (not questions)
-        var items = slideEl.querySelectorAll('ul:not(.questions) li');
-        if (items.length > 0) {
-          var bullets = [];
-          items.forEach(function(li) {
-            bullets.push({ text: li.textContent.trim().replace(/^\u2192\s*/, ''), options: { bullet: { code: '2192', color: green }, color: textColor, fontSize: 20, breakLine: true, fontFace: F, lineSpacing: 28 } });
-          });
-          s.addText(bullets, { x: LX, y: yPos, w: W, h: items.length * 0.7, valign: 'top' });
-          yPos += items.length * 0.65 + 0.3;
-        }
+            // Clone the slide
+            var clone = slides[i].cloneNode(true);
+            clone.style.cssText =
+              'position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:2rem 3rem;text-align:center;opacity:1;background:#0f172a;width:1920px;height:1080px;';
+            container.innerHTML = '';
+            container.appendChild(clone);
 
-        // Discussion questions
-        var qItems = slideEl.querySelectorAll('.questions li');
-        if (qItems.length > 0) {
-          var qBullets = [];
-          qItems.forEach(function(li) {
-            qBullets.push({ text: li.textContent.trim(), options: { bullet: { code: '2022', color: orange }, color: textColor, fontSize: 20, breakLine: true, fontFace: F, lineSpacing: 32 } });
-          });
-          s.addText(qBullets, { x: LX, y: yPos, w: W, h: qItems.length * 0.9, valign: 'top' });
-          yPos += qItems.length * 0.85 + 0.3;
-        }
-
-        // Terminal mockup
-        var terminal = slideEl.querySelector('.terminal');
-        if (terminal) {
-          var termH = 1.5;
-          s.addShape(pptx.ShapeType.rect, { x: 1.5, y: yPos, w: 10.33, h: termH, fill: { color: '0d1117' }, line: { color: '30363d', width: 0.5 }, rectRadius: 0.08 });
-          s.addText('\u25CF \u25CF \u25CF', { x: 1.7, y: yPos + 0.05, w: 2, h: 0.3, fontSize: 8, color: '6e7681', fontFace: F });
-          s.addText(getInnerText(terminal), { x: 1.7, y: yPos + 0.3, w: 9.93, h: termH - 0.4, fontSize: 13, color: green, fontFace: 'Consolas', valign: 'top', lineSpacing: 22 });
-          yPos += termH + 0.3;
-        }
-
-        // Prompt boxes
-        var prompts = slideEl.querySelectorAll('.prompt');
-        if (prompts.length > 0) {
-          prompts.forEach(function(pr) {
-            var txt = pr.textContent.trim();
-            var prH = txt.length > 100 ? 0.95 : (txt.length > 60 ? 0.8 : 0.65);
-            s.addShape(pptx.ShapeType.rect, { x: LX, y: yPos, w: W, h: prH, fill: { color: cardBg }, line: { color: borderColor, width: 0.5 }, rectRadius: 0.08 });
-            s.addText('\u201C' + txt + '\u201D', { x: LX + 0.2, y: yPos + 0.05, w: W - 0.4, h: prH - 0.1, fontSize: 15, color: textColor, italic: true, valign: 'middle', fontFace: F });
-            yPos += prH + 0.15;
-          });
-        }
-
-        // Cards and vector-cards
-        var cards = slideEl.querySelectorAll('.card, .vector-card');
-        if (cards.length > 0) {
-          var cardY = Math.max(yPos, 1.5);
-          var numCols = 3;
-          if (slideEl.querySelector('.grid-2')) numCols = 2;
-          else if (slideEl.querySelector('.grid-3')) numCols = 3;
-          var gap = 0.25;
-          var cardW = (W - gap * (numCols - 1)) / numCols;
-          var hasButtons = slideEl.querySelector('.card .demo-btn');
-          var cardH = hasButtons ? 1.5 : (numCols === 2 ? 1.5 : 1.8);
-          cards.forEach(function(card, ci) {
-            var col = ci % numCols;
-            var row = Math.floor(ci / numCols);
-            var cx = LX + col * (cardW + gap);
-            var cy = cardY + row * (cardH + 0.25);
-            var ch3 = card.querySelector('h3');
-            var allPs = card.querySelectorAll('p');
-            s.addShape(pptx.ShapeType.rect, { x: cx, y: cy, w: cardW, h: cardH, fill: { color: cardBg }, line: { color: borderColor, width: 0.5 }, rectRadius: 0.08 });
-            if (ch3) s.addText(ch3.textContent.trim(), { x: cx + 0.15, y: cy + 0.1, w: cardW - 0.3, h: 0.4, fontSize: 16, color: green, bold: true, fontFace: F });
-            var pY = cy + 0.5;
-            allPs.forEach(function(cp, pi) {
-              var pFS = pi === 0 ? 13 : 11;
-              var pH = pi === 0 ? 0.6 : 0.35;
-              s.addText(cp.textContent.trim(), { x: cx + 0.15, y: pY, w: cardW - 0.3, h: pH, fontSize: pFS, color: dimColor, valign: 'top', fontFace: F, lineSpacing: 18 });
-              pY += pH;
+            // Wait a frame for rendering
+            await new Promise(function (r) {
+              requestAnimationFrame(function () {
+                requestAnimationFrame(r);
+              });
             });
-            var demoBtn = card.querySelector('.demo-btn');
-            if (demoBtn) {
-              s.addShape(pptx.ShapeType.rect, { x: cx + 0.15, y: pY, w: cardW - 0.3, h: 0.35, fill: { color: orange }, rectRadius: 0.04 });
-              s.addText(demoBtn.textContent.trim(), { x: cx + 0.15, y: pY, w: cardW - 0.3, h: 0.35, fontSize: 11, color: '000000', bold: true, align: 'center', valign: 'middle', fontFace: F });
-            }
-          });
-          var totalRows = Math.ceil(cards.length / numCols);
-          yPos = cardY + totalRows * (cardH + 0.25);
-        }
 
-        // Standalone demo button (direct child of .content)
-        if (contentDiv) {
-          contentDiv.querySelectorAll(':scope > a.demo-btn').forEach(function(b) {
-            s.addShape(pptx.ShapeType.rect, { x: 4.5, y: yPos, w: 4.33, h: 0.45, fill: { color: orange }, rectRadius: 0.06 });
-            s.addText(b.textContent.trim(), { x: 4.5, y: yPos, w: 4.33, h: 0.45, fontSize: 14, color: '000000', bold: true, align: 'center', valign: 'middle', fontFace: F });
-            yPos += 0.6;
-          });
-        }
+            var canvas = await html2canvas(container, {
+              width: 1920,
+              height: 1080,
+              scale: 1,
+              backgroundColor: '#0f172a',
+              useCORS: true,
+              logging: false,
+            });
 
-        // Timeline items
-        var timelineItems = slideEl.querySelectorAll('.timeline-item');
-        if (timelineItems.length > 0) {
-          var tlY = Math.max(yPos, 1.6);
-          var tlW = 4.5;
-          var tlH = 1.8;
-          timelineItems.forEach(function(ti, i) {
-            var th3 = ti.querySelector('h3');
-            var tp = ti.querySelector('p');
-            var tx = 1.5 + i * 5.5;
-            s.addShape(pptx.ShapeType.rect, { x: tx, y: tlY, w: tlW, h: tlH, fill: { color: cardBg }, line: { color: borderColor, width: 0.5 }, rectRadius: 0.08 });
-            if (th3) s.addText(th3.textContent.trim(), { x: tx, y: tlY + 0.15, w: tlW, h: 0.5, fontSize: 18, color: i === 0 ? orange : green, bold: true, align: 'center', fontFace: F });
-            if (tp) s.addText(getInnerText(tp), { x: tx + 0.2, y: tlY + 0.6, w: tlW - 0.4, h: 1.1, fontSize: 14, color: dimColor, align: 'center', fontFace: F, lineSpacing: 20 });
-          });
-          if (timelineItems.length === 2) {
-            s.addText('\u2192', { x: 5.9, y: tlY + 0.4, w: 1.0, h: 0.6, fontSize: 32, color: green, align: 'center', bold: true, fontFace: F });
+            if (i > 0) pdf.addPage([1920, 1080], 'landscape');
+            pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 1920, 1080);
           }
-          yPos = tlY + tlH + 0.3;
+
+          document.body.removeChild(container);
+          pdf.save('bewerbung-koch-vorschlag.pdf');
+          btn.textContent = '\uD83D\uDDB6 PDF';
+          btn.disabled = false;
         }
 
-        // Takeaway box
-        var takeaway = slideEl.querySelector('.takeaway p');
-        if (takeaway) {
-          var tY = Math.max(yPos, 5.0);
-          if (tY > 6.3) tY = 6.3;
-          var twText = takeaway.textContent.trim();
-          var twH = twText.length > 80 ? 0.85 : 0.7;
-          s.addShape(pptx.ShapeType.rect, { x: LX, y: tY, w: W, h: twH, fill: { color: '1a3a2a' }, rectRadius: 0.06 });
-          s.addShape(pptx.ShapeType.rect, { x: LX, y: tY, w: 0.06, h: twH, fill: { color: green } });
-          s.addText(twText, { x: LX + 0.3, y: tY + 0.05, w: W - 0.5, h: twH - 0.1, fontSize: 15, color: textColor, bold: true, valign: 'middle', fontFace: F });
-          yPos = tY + twH + 0.1;
+        document.getElementById('btn-print').addEventListener('click', function (e) {
+          e.stopPropagation();
+
+          // Shift+click = fallback to window.print()
+          if (e.shiftKey) {
+            window.print();
+            return;
+          }
+
+          var btn = document.getElementById('btn-print');
+
+          if (pdfLibState === 'ready') {
+            btn.textContent = '\u23F3 Laden\u2026';
+            btn.disabled = true;
+            doExportPdf(btn);
+            return;
+          }
+
+          if (pdfLibState === 'failed') {
+            pdfLibState = 'idle';
+          }
+          loadPdfLibs();
+
+          btn.textContent = '\u23F3 Laden\u2026';
+          btn.disabled = true;
+          var attempts = 0;
+          var poll = setInterval(function () {
+            attempts++;
+            if (pdfLibState === 'ready') {
+              clearInterval(poll);
+              doExportPdf(btn);
+            } else if (pdfLibState === 'failed' || attempts > 60) {
+              clearInterval(poll);
+              btn.textContent = '\uD83D\uDDB6 PDF';
+              btn.disabled = false;
+              alert(
+                'PDF-Bibliotheken konnten nicht geladen werden. Versuche Shift+Klick f\u00FCr Browser-Druck.',
+              );
+            }
+          }, 250);
+        });
+
+        // Speaker notes — inline panel
+        var notesPanel = document.getElementById('notes-panel');
+        var notesOpen = false;
+        var notesTimerInterval = null,
+          notesTimerSeconds = 0,
+          notesTimerRunning = false;
+
+        function toggleNotes() {
+          notesOpen = !notesOpen;
+          notesPanel.classList.toggle('open', notesOpen);
+          document.getElementById('deck').classList.toggle('notes-open', notesOpen);
+          if (notesOpen) updateNotesPanel();
         }
 
-        // Sources
-        var sources = slideEl.querySelector('.sources');
-        if (sources) {
-          var srcY = Math.max(yPos, 6.5);
-          if (srcY > 6.8) srcY = 6.8;
-          var srcText = sources.textContent.trim().replace(/\s+/g, ' ');
-          s.addText(srcText, { x: LX, y: srcY, w: W, h: 0.3, fontSize: 8, color: '64748b', fontFace: F });
+        function updateNotesPanel() {
+          if (!notesOpen) return;
+          var s = slides[current];
+          var note = s.getAttribute('data-notes') || 'Keine Notizen für diese Folie.';
+          var nextTitle = '(Ende)';
+          if (current + 1 < total) {
+            var nh =
+              slides[current + 1].querySelector('h1') || slides[current + 1].querySelector('h2');
+            nextTitle = nh ? nh.textContent.trim() : '';
+          }
+          document.getElementById('notes-num').textContent = current + 1 + ' / ' + total;
+          document.getElementById('notes-text').textContent = note;
+          document.getElementById('notes-next-title').textContent = nextTitle;
         }
-      }
 
-      // Speaker notes
-      var note = slideEl.getAttribute('data-notes');
-      if (note) s.addNotes(note);
-    });
+        // Timer toggle on click
+        document.getElementById('notes-timer').addEventListener('click', function () {
+          if (notesTimerRunning) {
+            clearInterval(notesTimerInterval);
+            notesTimerRunning = false;
+          } else {
+            notesTimerInterval = setInterval(function () {
+              notesTimerSeconds++;
+              var m = Math.floor(notesTimerSeconds / 60),
+                s = notesTimerSeconds % 60;
+              document.getElementById('notes-timer').textContent =
+                (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+            }, 1000);
+            notesTimerRunning = true;
+          }
+        });
 
-    btn.textContent = '\u23F3 Erstellen\u2026';
-    pptx.writeFile({ fileName: 'bewerbung-koch-vorschlag.pptx' }).then(function() {
-      btn.textContent = '\u2B07 PPTX';
-      btn.disabled = false;
-    });
-  }
+        document.getElementById('notes-close').addEventListener('click', function (e) {
+          e.stopPropagation();
+          toggleNotes();
+        });
 
-  document.getElementById('btn-pptx').addEventListener('click', function(e) {
-    e.stopPropagation();
-    var btn = document.getElementById('btn-pptx');
+        // Patch show() to update notes panel
+        var _origShow = show;
+        show = function (idx) {
+          _origShow(idx);
+          updateNotesPanel();
+        };
 
-    if (pptxState === 'ready') {
-      btn.textContent = '\u23F3 Erstellen\u2026';
-      btn.disabled = true;
-      setTimeout(function() { doExportPptx(btn); }, 50);
-      return;
-    }
+        // Keyboard shortcut
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && notesOpen) {
+            e.preventDefault();
+            toggleNotes();
+          } else if (e.key === 's' || e.key === 'S') {
+            if (!e.ctrlKey && !e.metaKey) {
+              e.preventDefault();
+              toggleNotes();
+            }
+          }
+        });
 
-    if (pptxState === 'failed') { pptxState = 'idle'; loadPptxLib(); }
-    if (pptxState === 'idle') { loadPptxLib(); }
+        document.getElementById('btn-notes').addEventListener('click', function (e) {
+          e.stopPropagation();
+          toggleNotes();
+        });
 
-    btn.textContent = '\u23F3 Laden\u2026';
-    btn.disabled = true;
-    var attempts = 0;
-    var poll = setInterval(function() {
-      attempts++;
-      if (pptxState === 'ready') {
-        clearInterval(poll);
-        doExportPptx(btn);
-      } else if (pptxState === 'failed' || attempts > 60) {
-        clearInterval(poll);
-        btn.textContent = '\u2B07 PPTX';
-        btn.disabled = false;
-        alert('PptxGenJS konnte nicht geladen werden. Bitte Internetverbindung pr\u00FCfen.');
-      }
-    }, 250);
-  });
+        // PPTX Export — eagerly pre-load, CDN fallback, improved quality
+        var pptxState = 'idle'; // idle -> loading -> ready | failed
 
-  // Init
-  show(0);
-})();
-</script>
-<script>
-(function () {
-  // Slide dots
-  var slides = document.querySelectorAll('.slide');
-  var dots = document.createElement('div'); dots.className = 'dots';
-  slides.forEach(function () { dots.appendChild(document.createElement('span')); });
-  document.body.appendChild(dots);
-  function syncDots() {
-    var act = document.querySelector('.slide.active');
-    var idx = Array.prototype.indexOf.call(slides, act);
-    dots.querySelectorAll('span').forEach(function (d, i) { d.classList.toggle('on', i === idx); });
-  }
-  // Count-up for .stat .n numbers when their slide activates
-  function countUp(el) {
-    var raw = el.getAttribute('data-count'); if (!raw) return;
-    var target = parseFloat(raw); var dec = (raw.split('.')[1] || '').length;
-    var t0 = null;
-    function step(ts) {
-      if (!t0) t0 = ts;
-      var p = Math.min((ts - t0) / 900, 1);
-      var eased = 1 - Math.pow(1 - p, 3);
-      el.childNodes[0].nodeValue = (target * eased).toFixed(dec);
-      if (p < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }
-  var mo = new MutationObserver(function () {
-    syncDots();
-    var act = document.querySelector('.slide.active');
-    if (act) act.querySelectorAll('[data-count]').forEach(countUp);
-  });
-  slides.forEach(function (sl) { mo.observe(sl, { attributes: true, attributeFilter: ['class'] }); });
-  syncDots();
-})();
-</script>
-<script>
-/* WYSIWYG-Export: PDF und PPTX entstehen aus Pixel-Snapshots der echten
+        function loadPptxLib() {
+          if (pptxState !== 'idle') return;
+          if (typeof PptxGenJS !== 'undefined') {
+            pptxState = 'ready';
+            return;
+          }
+          pptxState = 'loading';
+          var s1 = document.createElement('script');
+          s1.src = '/presentations/_assets/pptxgen.bundle.js';
+          s1.onload = function () {
+            pptxState = 'ready';
+          };
+          s1.onerror = function () {
+            // Fallback to CDN if local file not found
+            var s2 = document.createElement('script');
+            s2.src = 'https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js';
+            s2.onload = function () {
+              pptxState = 'ready';
+            };
+            s2.onerror = function () {
+              pptxState = 'failed';
+            };
+            document.head.appendChild(s2);
+          };
+          document.head.appendChild(s1);
+        }
+
+        if (document.readyState === 'complete') {
+          loadPptxLib();
+        } else {
+          window.addEventListener('load', loadPptxLib);
+        }
+
+        function getInnerText(el) {
+          // Convert <br> to newlines, then get text content
+          var clone = el.cloneNode(true);
+          var brs = clone.querySelectorAll('br');
+          brs.forEach(function (br) {
+            br.replaceWith('\n');
+          });
+          return clone.textContent.trim();
+        }
+
+        function doExportPptx(btn) {
+          var pptx = new PptxGenJS();
+          pptx.defineLayout({ name: 'WIDE', width: 13.33, height: 7.5 });
+          pptx.layout = 'WIDE';
+
+          var bgColor = '0f172a';
+          var cardBg = '1e293b';
+          var green = '22c55e';
+          var orange = 'F7931A';
+          var textColor = 'f1f5f9';
+          var dimColor = '94a3b8';
+          var borderColor = '334155';
+          var W = 11.53;
+          var LX = 0.8;
+          var F = 'Arial';
+
+          slides.forEach(function (slideEl, idx) {
+            var s = pptx.addSlide();
+            s.background = { color: bgColor };
+            s.addText(idx + 1 + ' / ' + total + '  |  RevampIT', {
+              x: 0.5,
+              y: 7.0,
+              w: 12.33,
+              h: 0.35,
+              fontSize: 9,
+              color: '64748b',
+              align: 'right',
+              fontFace: F,
+            });
+
+            var contentDiv = slideEl.querySelector('.content');
+            var h1 = slideEl.querySelector('h1');
+            var h2 = slideEl.querySelector('h2');
+
+            // Get title text WITHOUT inline subtitles (span.subtitle inside h2)
+            var titleText = '';
+            var inlineSubtitle = '';
+            if (h1) {
+              titleText = h1.textContent.trim();
+            } else if (h2) {
+              var subSpan = h2.querySelector('.subtitle');
+              if (subSpan) {
+                inlineSubtitle = subSpan.textContent.trim();
+                var h2Clone = h2.cloneNode(true);
+                var subClone = h2Clone.querySelector('.subtitle');
+                if (subClone) subClone.remove();
+                titleText = h2Clone.textContent.trim();
+              } else {
+                titleText = h2.textContent.trim();
+              }
+            }
+
+            if (idx === 0) {
+              // === TITLE SLIDE ===
+              s.addText('RevampIT', {
+                x: 0.5,
+                y: 1.5,
+                w: 12.33,
+                h: 0.8,
+                fontSize: 28,
+                color: green,
+                align: 'center',
+                bold: true,
+                fontFace: F,
+              });
+              s.addText(titleText, {
+                x: 0.5,
+                y: 2.5,
+                w: 12.33,
+                h: 1.5,
+                fontSize: 44,
+                color: textColor,
+                align: 'center',
+                bold: true,
+                fontFace: F,
+              });
+              var subs = slideEl.querySelectorAll('.subtitle');
+              var subY = 4.2;
+              subs.forEach(function (sub) {
+                s.addText(sub.textContent.trim(), {
+                  x: 0.5,
+                  y: subY,
+                  w: 12.33,
+                  h: 0.5,
+                  fontSize: 20,
+                  color: dimColor,
+                  align: 'center',
+                  fontFace: F,
+                });
+                subY += 0.55;
+              });
+            } else {
+              // === CONTENT SLIDES ===
+              var yPos = 0.3;
+
+              // Check if subtitle <p> appears BEFORE h2 (like "Lokale KI" slide)
+              var hasSubtitleBeforeTitle = false;
+              if (contentDiv) {
+                var firstChild = contentDiv.children[0];
+                if (
+                  firstChild &&
+                  firstChild.classList &&
+                  firstChild.classList.contains('subtitle') &&
+                  firstChild.tagName !== 'SPAN'
+                ) {
+                  s.addText(firstChild.textContent.trim(), {
+                    x: LX,
+                    y: yPos,
+                    w: W,
+                    h: 0.4,
+                    fontSize: 16,
+                    color: dimColor,
+                    fontFace: F,
+                  });
+                  yPos += 0.45;
+                  hasSubtitleBeforeTitle = true;
+                }
+              }
+
+              // Title
+              s.addText(titleText, {
+                x: 0.5,
+                y: yPos,
+                w: 12.33,
+                h: 0.9,
+                fontSize: 32,
+                color: textColor,
+                bold: true,
+                fontFace: F,
+              });
+              yPos += 0.85;
+
+              // Inline subtitle (e.g. "(Frontier-Modell)" next to title)
+              if (inlineSubtitle) {
+                s.addText(inlineSubtitle, {
+                  x: LX,
+                  y: yPos,
+                  w: W,
+                  h: 0.35,
+                  fontSize: 16,
+                  color: dimColor,
+                  fontFace: F,
+                });
+                yPos += 0.35;
+              }
+
+              // Green accent underline
+              s.addShape(pptx.ShapeType.rect, {
+                x: 0.5,
+                y: yPos,
+                w: 2.5,
+                h: 0.04,
+                fill: { color: green },
+              });
+              yPos += 0.25;
+
+              // Subtitle paragraphs (direct children, skip the one already rendered before title)
+              if (contentDiv) {
+                contentDiv.querySelectorAll(':scope > p.subtitle').forEach(function (sub) {
+                  if (hasSubtitleBeforeTitle && sub === contentDiv.children[0]) return;
+                  s.addText(sub.textContent.trim(), {
+                    x: LX,
+                    y: yPos,
+                    w: W,
+                    h: 0.45,
+                    fontSize: 16,
+                    color: dimColor,
+                    fontFace: F,
+                  });
+                  yPos += 0.5;
+                });
+              }
+
+              // Body paragraphs - use getInnerText to preserve <br> as newlines
+              if (contentDiv) {
+                contentDiv.querySelectorAll(':scope > p:not(.subtitle)').forEach(function (p) {
+                  var fs = 16;
+                  var col = dimColor;
+                  var al = 'left';
+                  var style = p.getAttribute('style') || '';
+                  if (style.indexOf('3vw') > -1 || style.indexOf('1.8rem') > -1) {
+                    fs = 24;
+                    col = textColor;
+                    al = 'center';
+                  }
+                  var txt = getInnerText(p);
+                  var lines = txt.split('\n').length;
+                  var pH = Math.max(0.6, lines * 0.45);
+                  s.addText(txt, {
+                    x: LX,
+                    y: yPos,
+                    w: W,
+                    h: pH,
+                    fontSize: fs,
+                    color: col,
+                    align: al,
+                    fontFace: F,
+                    lineSpacing: fs * 1.4,
+                  });
+                  yPos += pH + 0.1;
+                });
+              }
+
+              // List items (not questions)
+              var items = slideEl.querySelectorAll('ul:not(.questions) li');
+              if (items.length > 0) {
+                var bullets = [];
+                items.forEach(function (li) {
+                  bullets.push({
+                    text: li.textContent.trim().replace(/^\u2192\s*/, ''),
+                    options: {
+                      bullet: { code: '2192', color: green },
+                      color: textColor,
+                      fontSize: 20,
+                      breakLine: true,
+                      fontFace: F,
+                      lineSpacing: 28,
+                    },
+                  });
+                });
+                s.addText(bullets, { x: LX, y: yPos, w: W, h: items.length * 0.7, valign: 'top' });
+                yPos += items.length * 0.65 + 0.3;
+              }
+
+              // Discussion questions
+              var qItems = slideEl.querySelectorAll('.questions li');
+              if (qItems.length > 0) {
+                var qBullets = [];
+                qItems.forEach(function (li) {
+                  qBullets.push({
+                    text: li.textContent.trim(),
+                    options: {
+                      bullet: { code: '2022', color: orange },
+                      color: textColor,
+                      fontSize: 20,
+                      breakLine: true,
+                      fontFace: F,
+                      lineSpacing: 32,
+                    },
+                  });
+                });
+                s.addText(qBullets, {
+                  x: LX,
+                  y: yPos,
+                  w: W,
+                  h: qItems.length * 0.9,
+                  valign: 'top',
+                });
+                yPos += qItems.length * 0.85 + 0.3;
+              }
+
+              // Terminal mockup
+              var terminal = slideEl.querySelector('.terminal');
+              if (terminal) {
+                var termH = 1.5;
+                s.addShape(pptx.ShapeType.rect, {
+                  x: 1.5,
+                  y: yPos,
+                  w: 10.33,
+                  h: termH,
+                  fill: { color: '0d1117' },
+                  line: { color: '30363d', width: 0.5 },
+                  rectRadius: 0.08,
+                });
+                s.addText('\u25CF \u25CF \u25CF', {
+                  x: 1.7,
+                  y: yPos + 0.05,
+                  w: 2,
+                  h: 0.3,
+                  fontSize: 8,
+                  color: '6e7681',
+                  fontFace: F,
+                });
+                s.addText(getInnerText(terminal), {
+                  x: 1.7,
+                  y: yPos + 0.3,
+                  w: 9.93,
+                  h: termH - 0.4,
+                  fontSize: 13,
+                  color: green,
+                  fontFace: 'Consolas',
+                  valign: 'top',
+                  lineSpacing: 22,
+                });
+                yPos += termH + 0.3;
+              }
+
+              // Prompt boxes
+              var prompts = slideEl.querySelectorAll('.prompt');
+              if (prompts.length > 0) {
+                prompts.forEach(function (pr) {
+                  var txt = pr.textContent.trim();
+                  var prH = txt.length > 100 ? 0.95 : txt.length > 60 ? 0.8 : 0.65;
+                  s.addShape(pptx.ShapeType.rect, {
+                    x: LX,
+                    y: yPos,
+                    w: W,
+                    h: prH,
+                    fill: { color: cardBg },
+                    line: { color: borderColor, width: 0.5 },
+                    rectRadius: 0.08,
+                  });
+                  s.addText('\u201C' + txt + '\u201D', {
+                    x: LX + 0.2,
+                    y: yPos + 0.05,
+                    w: W - 0.4,
+                    h: prH - 0.1,
+                    fontSize: 15,
+                    color: textColor,
+                    italic: true,
+                    valign: 'middle',
+                    fontFace: F,
+                  });
+                  yPos += prH + 0.15;
+                });
+              }
+
+              // Cards and vector-cards
+              var cards = slideEl.querySelectorAll('.card, .vector-card');
+              if (cards.length > 0) {
+                var cardY = Math.max(yPos, 1.5);
+                var numCols = 3;
+                if (slideEl.querySelector('.grid-2')) numCols = 2;
+                else if (slideEl.querySelector('.grid-3')) numCols = 3;
+                var gap = 0.25;
+                var cardW = (W - gap * (numCols - 1)) / numCols;
+                var hasButtons = slideEl.querySelector('.card .demo-btn');
+                var cardH = hasButtons ? 1.5 : numCols === 2 ? 1.5 : 1.8;
+                cards.forEach(function (card, ci) {
+                  var col = ci % numCols;
+                  var row = Math.floor(ci / numCols);
+                  var cx = LX + col * (cardW + gap);
+                  var cy = cardY + row * (cardH + 0.25);
+                  var ch3 = card.querySelector('h3');
+                  var allPs = card.querySelectorAll('p');
+                  s.addShape(pptx.ShapeType.rect, {
+                    x: cx,
+                    y: cy,
+                    w: cardW,
+                    h: cardH,
+                    fill: { color: cardBg },
+                    line: { color: borderColor, width: 0.5 },
+                    rectRadius: 0.08,
+                  });
+                  if (ch3)
+                    s.addText(ch3.textContent.trim(), {
+                      x: cx + 0.15,
+                      y: cy + 0.1,
+                      w: cardW - 0.3,
+                      h: 0.4,
+                      fontSize: 16,
+                      color: green,
+                      bold: true,
+                      fontFace: F,
+                    });
+                  var pY = cy + 0.5;
+                  allPs.forEach(function (cp, pi) {
+                    var pFS = pi === 0 ? 13 : 11;
+                    var pH = pi === 0 ? 0.6 : 0.35;
+                    s.addText(cp.textContent.trim(), {
+                      x: cx + 0.15,
+                      y: pY,
+                      w: cardW - 0.3,
+                      h: pH,
+                      fontSize: pFS,
+                      color: dimColor,
+                      valign: 'top',
+                      fontFace: F,
+                      lineSpacing: 18,
+                    });
+                    pY += pH;
+                  });
+                  var demoBtn = card.querySelector('.demo-btn');
+                  if (demoBtn) {
+                    s.addShape(pptx.ShapeType.rect, {
+                      x: cx + 0.15,
+                      y: pY,
+                      w: cardW - 0.3,
+                      h: 0.35,
+                      fill: { color: orange },
+                      rectRadius: 0.04,
+                    });
+                    s.addText(demoBtn.textContent.trim(), {
+                      x: cx + 0.15,
+                      y: pY,
+                      w: cardW - 0.3,
+                      h: 0.35,
+                      fontSize: 11,
+                      color: '000000',
+                      bold: true,
+                      align: 'center',
+                      valign: 'middle',
+                      fontFace: F,
+                    });
+                  }
+                });
+                var totalRows = Math.ceil(cards.length / numCols);
+                yPos = cardY + totalRows * (cardH + 0.25);
+              }
+
+              // Standalone demo button (direct child of .content)
+              if (contentDiv) {
+                contentDiv.querySelectorAll(':scope > a.demo-btn').forEach(function (b) {
+                  s.addShape(pptx.ShapeType.rect, {
+                    x: 4.5,
+                    y: yPos,
+                    w: 4.33,
+                    h: 0.45,
+                    fill: { color: orange },
+                    rectRadius: 0.06,
+                  });
+                  s.addText(b.textContent.trim(), {
+                    x: 4.5,
+                    y: yPos,
+                    w: 4.33,
+                    h: 0.45,
+                    fontSize: 14,
+                    color: '000000',
+                    bold: true,
+                    align: 'center',
+                    valign: 'middle',
+                    fontFace: F,
+                  });
+                  yPos += 0.6;
+                });
+              }
+
+              // Timeline items
+              var timelineItems = slideEl.querySelectorAll('.timeline-item');
+              if (timelineItems.length > 0) {
+                var tlY = Math.max(yPos, 1.6);
+                var tlW = 4.5;
+                var tlH = 1.8;
+                timelineItems.forEach(function (ti, i) {
+                  var th3 = ti.querySelector('h3');
+                  var tp = ti.querySelector('p');
+                  var tx = 1.5 + i * 5.5;
+                  s.addShape(pptx.ShapeType.rect, {
+                    x: tx,
+                    y: tlY,
+                    w: tlW,
+                    h: tlH,
+                    fill: { color: cardBg },
+                    line: { color: borderColor, width: 0.5 },
+                    rectRadius: 0.08,
+                  });
+                  if (th3)
+                    s.addText(th3.textContent.trim(), {
+                      x: tx,
+                      y: tlY + 0.15,
+                      w: tlW,
+                      h: 0.5,
+                      fontSize: 18,
+                      color: i === 0 ? orange : green,
+                      bold: true,
+                      align: 'center',
+                      fontFace: F,
+                    });
+                  if (tp)
+                    s.addText(getInnerText(tp), {
+                      x: tx + 0.2,
+                      y: tlY + 0.6,
+                      w: tlW - 0.4,
+                      h: 1.1,
+                      fontSize: 14,
+                      color: dimColor,
+                      align: 'center',
+                      fontFace: F,
+                      lineSpacing: 20,
+                    });
+                });
+                if (timelineItems.length === 2) {
+                  s.addText('\u2192', {
+                    x: 5.9,
+                    y: tlY + 0.4,
+                    w: 1.0,
+                    h: 0.6,
+                    fontSize: 32,
+                    color: green,
+                    align: 'center',
+                    bold: true,
+                    fontFace: F,
+                  });
+                }
+                yPos = tlY + tlH + 0.3;
+              }
+
+              // Takeaway box
+              var takeaway = slideEl.querySelector('.takeaway p');
+              if (takeaway) {
+                var tY = Math.max(yPos, 5.0);
+                if (tY > 6.3) tY = 6.3;
+                var twText = takeaway.textContent.trim();
+                var twH = twText.length > 80 ? 0.85 : 0.7;
+                s.addShape(pptx.ShapeType.rect, {
+                  x: LX,
+                  y: tY,
+                  w: W,
+                  h: twH,
+                  fill: { color: '1a3a2a' },
+                  rectRadius: 0.06,
+                });
+                s.addShape(pptx.ShapeType.rect, {
+                  x: LX,
+                  y: tY,
+                  w: 0.06,
+                  h: twH,
+                  fill: { color: green },
+                });
+                s.addText(twText, {
+                  x: LX + 0.3,
+                  y: tY + 0.05,
+                  w: W - 0.5,
+                  h: twH - 0.1,
+                  fontSize: 15,
+                  color: textColor,
+                  bold: true,
+                  valign: 'middle',
+                  fontFace: F,
+                });
+                yPos = tY + twH + 0.1;
+              }
+
+              // Sources
+              var sources = slideEl.querySelector('.sources');
+              if (sources) {
+                var srcY = Math.max(yPos, 6.5);
+                if (srcY > 6.8) srcY = 6.8;
+                var srcText = sources.textContent.trim().replace(/\s+/g, ' ');
+                s.addText(srcText, {
+                  x: LX,
+                  y: srcY,
+                  w: W,
+                  h: 0.3,
+                  fontSize: 8,
+                  color: '64748b',
+                  fontFace: F,
+                });
+              }
+            }
+
+            // Speaker notes
+            var note = slideEl.getAttribute('data-notes');
+            if (note) s.addNotes(note);
+          });
+
+          btn.textContent = '\u23F3 Erstellen\u2026';
+          pptx.writeFile({ fileName: 'bewerbung-koch-vorschlag.pptx' }).then(function () {
+            btn.textContent = '\u2B07 PPTX';
+            btn.disabled = false;
+          });
+        }
+
+        document.getElementById('btn-pptx').addEventListener('click', function (e) {
+          e.stopPropagation();
+          var btn = document.getElementById('btn-pptx');
+
+          if (pptxState === 'ready') {
+            btn.textContent = '\u23F3 Erstellen\u2026';
+            btn.disabled = true;
+            setTimeout(function () {
+              doExportPptx(btn);
+            }, 50);
+            return;
+          }
+
+          if (pptxState === 'failed') {
+            pptxState = 'idle';
+            loadPptxLib();
+          }
+          if (pptxState === 'idle') {
+            loadPptxLib();
+          }
+
+          btn.textContent = '\u23F3 Laden\u2026';
+          btn.disabled = true;
+          var attempts = 0;
+          var poll = setInterval(function () {
+            attempts++;
+            if (pptxState === 'ready') {
+              clearInterval(poll);
+              doExportPptx(btn);
+            } else if (pptxState === 'failed' || attempts > 60) {
+              clearInterval(poll);
+              btn.textContent = '\u2B07 PPTX';
+              btn.disabled = false;
+              alert('PptxGenJS konnte nicht geladen werden. Bitte Internetverbindung pr\u00FCfen.');
+            }
+          }, 250);
+        });
+
+        // Init
+        show(0);
+      })();
+    </script>
+    <script>
+      (function () {
+        // Slide dots
+        var slides = document.querySelectorAll('.slide');
+        var dots = document.createElement('div');
+        dots.className = 'dots';
+        slides.forEach(function () {
+          dots.appendChild(document.createElement('span'));
+        });
+        document.body.appendChild(dots);
+        function syncDots() {
+          var act = document.querySelector('.slide.active');
+          var idx = Array.prototype.indexOf.call(slides, act);
+          dots.querySelectorAll('span').forEach(function (d, i) {
+            d.classList.toggle('on', i === idx);
+          });
+        }
+        // Count-up for .stat .n numbers when their slide activates
+        function countUp(el) {
+          var raw = el.getAttribute('data-count');
+          if (!raw) return;
+          var target = parseFloat(raw);
+          var dec = (raw.split('.')[1] || '').length;
+          var t0 = null;
+          function step(ts) {
+            if (!t0) t0 = ts;
+            var p = Math.min((ts - t0) / 900, 1);
+            var eased = 1 - Math.pow(1 - p, 3);
+            el.childNodes[0].nodeValue = (target * eased).toFixed(dec);
+            if (p < 1) requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
+        }
+        var mo = new MutationObserver(function () {
+          syncDots();
+          var act = document.querySelector('.slide.active');
+          if (act) act.querySelectorAll('[data-count]').forEach(countUp);
+        });
+        slides.forEach(function (sl) {
+          mo.observe(sl, { attributes: true, attributeFilter: ['class'] });
+        });
+        syncDots();
+      })();
+    </script>
+    <script>
+      /* WYSIWYG-Export: PDF und PPTX entstehen aus Pixel-Snapshots der echten
    Folien (html2canvas) — identisches Design statt Text-Rekonstruktion. */
-(function () {
-  var W = 1600, H = 900;
-  function loadScript(src) {
-    return new Promise(function (res, rej) {
-      var sc = document.createElement('script');
-      sc.src = src; sc.onload = res; sc.onerror = rej;
-      document.head.appendChild(sc);
-    });
-  }
-  function ensureH2C() {
-    return window.html2canvas ? Promise.resolve() :
-      loadScript('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js');
-  }
-  function ensureJsPDF() {
-    return (window.jspdf && window.jspdf.jsPDF) ? Promise.resolve() :
-      loadScript('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js');
-  }
-  function ensurePptx() {
-    return window.PptxGenJS ? Promise.resolve() :
-      loadScript('/presentations/_assets/pptxgen.bundle.js').catch(function () {
-        return loadScript('https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js');
-      });
-  }
-  async function snapshotAll(progressCb) {
-    var deck = document.getElementById('deck');
-    var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
-    var prevActive = document.querySelector('.slide.active');
-    document.body.classList.add('exporting');
-    var prevStyle = deck.getAttribute('style') || '';
-    deck.setAttribute('style', 'position:fixed;left:0;top:0;width:' + W + 'px;height:' + H + 'px;overflow:hidden;z-index:1;');
-    var shots = [];
-    for (var i = 0; i < slides.length; i++) {
-      slides.forEach(function (sl) { sl.classList.remove('active'); });
-      slides[i].classList.add('active');
-      await new Promise(function (r) { setTimeout(r, 60); });
-      await Promise.all(Array.prototype.map.call(slides[i].querySelectorAll('img'), function (im) {
-        return (im.complete ? Promise.resolve() : new Promise(function (r) { im.onload = im.onerror = r; }));
-      }));
-      var canvas = await window.html2canvas(slides[i], {
-        width: W, height: H, scale: 1.2, useCORS: true, backgroundColor: '#0a0a0a', logging: false
-      });
-      shots.push({ data: canvas.toDataURL('image/jpeg', 0.92), notes: slides[i].getAttribute('data-notes') || '' });
-      if (progressCb) progressCb(i + 1, slides.length);
-    }
-    deck.setAttribute('style', prevStyle);
-    slides.forEach(function (sl) { sl.classList.remove('active'); });
-    (prevActive || slides[0]).classList.add('active');
-    document.body.classList.remove('exporting');
-    return shots;
-  }
-  function busy(btn, label) { btn.dataset.orig = btn.textContent; btn.textContent = label; btn.disabled = true; }
-  function done(btn) { btn.textContent = btn.dataset.orig; btn.disabled = false; }
-  function swapHandler(id, fn) {
-    var old = document.getElementById(id);
-    if (!old) return;
-    var neu = old.cloneNode(true);
-    old.parentNode.replaceChild(neu, old);
-    neu.addEventListener('click', function (e) { e.preventDefault(); fn(neu); });
-  }
-  swapHandler('btn-print', async function (btn) {
-    try {
-      busy(btn, '0%');
-      await ensureH2C(); await ensureJsPDF();
-      var shots = await snapshotAll(function (i, n) { btn.textContent = Math.round(i / n * 100) + '%'; });
-      var pdf = new window.jspdf.jsPDF({ orientation: 'landscape', unit: 'px', format: [W, H], compress: true });
-      shots.forEach(function (sh, i) {
-        if (i > 0) pdf.addPage([W, H], 'landscape');
-        pdf.addImage(sh.data, 'JPEG', 0, 0, W, H);
-      });
-      pdf.save('bewerbung-koch-vorschlag.pdf');
-    } catch (err) { alert('PDF-Export fehlgeschlagen: ' + err); }
-    done(btn);
-  });
-  swapHandler('btn-pptx', async function (btn) {
-    try {
-      busy(btn, '0%');
-      await ensureH2C(); await ensurePptx();
-      var shots = await snapshotAll(function (i, n) { btn.textContent = Math.round(i / n * 100) + '%'; });
-      var pptx = new window.PptxGenJS();
-      pptx.defineLayout({ name: 'W16x9', width: 13.33, height: 7.5 });
-      pptx.layout = 'W16x9';
-      shots.forEach(function (sh) {
-        var slide = pptx.addSlide();
-        slide.background = { color: '0a0a0a' };
-        slide.addImage({ data: sh.data, x: 0, y: 0, w: 13.33, h: 7.5 });
-        if (sh.notes) slide.addNotes(sh.notes);
-      });
-      pptx.writeFile({ fileName: 'bewerbung-koch-vorschlag.pptx' });
-    } catch (err) { alert('PPTX-Export fehlgeschlagen: ' + err); }
-    done(btn);
-  });
-})();
-</script>
-<!-- ============ PER-SLIDE COMMENTING (server-backed) ============
+      (function () {
+        var W = 1600,
+          H = 900;
+        function loadScript(src) {
+          return new Promise(function (res, rej) {
+            var sc = document.createElement('script');
+            sc.src = src;
+            sc.onload = res;
+            sc.onerror = rej;
+            document.head.appendChild(sc);
+          });
+        }
+        function ensureH2C() {
+          return window.html2canvas
+            ? Promise.resolve()
+            : loadScript('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js');
+        }
+        function ensureJsPDF() {
+          return window.jspdf && window.jspdf.jsPDF
+            ? Promise.resolve()
+            : loadScript('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js');
+        }
+        function ensurePptx() {
+          return window.PptxGenJS
+            ? Promise.resolve()
+            : loadScript('/presentations/_assets/pptxgen.bundle.js').catch(function () {
+                return loadScript(
+                  'https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js',
+                );
+              });
+        }
+        async function snapshotAll(progressCb) {
+          var deck = document.getElementById('deck');
+          var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+          var prevActive = document.querySelector('.slide.active');
+          document.body.classList.add('exporting');
+          var prevStyle = deck.getAttribute('style') || '';
+          deck.setAttribute(
+            'style',
+            'position:fixed;left:0;top:0;width:' +
+              W +
+              'px;height:' +
+              H +
+              'px;overflow:hidden;z-index:1;',
+          );
+          var shots = [];
+          for (var i = 0; i < slides.length; i++) {
+            slides.forEach(function (sl) {
+              sl.classList.remove('active');
+            });
+            slides[i].classList.add('active');
+            await new Promise(function (r) {
+              setTimeout(r, 60);
+            });
+            await Promise.all(
+              Array.prototype.map.call(slides[i].querySelectorAll('img'), function (im) {
+                return im.complete
+                  ? Promise.resolve()
+                  : new Promise(function (r) {
+                      im.onload = im.onerror = r;
+                    });
+              }),
+            );
+            var canvas = await window.html2canvas(slides[i], {
+              width: W,
+              height: H,
+              scale: 1.2,
+              useCORS: true,
+              backgroundColor: '#0a0a0a',
+              logging: false,
+            });
+            shots.push({
+              data: canvas.toDataURL('image/jpeg', 0.92),
+              notes: slides[i].getAttribute('data-notes') || '',
+            });
+            if (progressCb) progressCb(i + 1, slides.length);
+          }
+          deck.setAttribute('style', prevStyle);
+          slides.forEach(function (sl) {
+            sl.classList.remove('active');
+          });
+          (prevActive || slides[0]).classList.add('active');
+          document.body.classList.remove('exporting');
+          return shots;
+        }
+        function busy(btn, label) {
+          btn.dataset.orig = btn.textContent;
+          btn.textContent = label;
+          btn.disabled = true;
+        }
+        function done(btn) {
+          btn.textContent = btn.dataset.orig;
+          btn.disabled = false;
+        }
+        function swapHandler(id, fn) {
+          var old = document.getElementById(id);
+          if (!old) return;
+          var neu = old.cloneNode(true);
+          old.parentNode.replaceChild(neu, old);
+          neu.addEventListener('click', function (e) {
+            e.preventDefault();
+            fn(neu);
+          });
+        }
+        swapHandler('btn-print', async function (btn) {
+          try {
+            busy(btn, '0%');
+            await ensureH2C();
+            await ensureJsPDF();
+            var shots = await snapshotAll(function (i, n) {
+              btn.textContent = Math.round((i / n) * 100) + '%';
+            });
+            var pdf = new window.jspdf.jsPDF({
+              orientation: 'landscape',
+              unit: 'px',
+              format: [W, H],
+              compress: true,
+            });
+            shots.forEach(function (sh, i) {
+              if (i > 0) pdf.addPage([W, H], 'landscape');
+              pdf.addImage(sh.data, 'JPEG', 0, 0, W, H);
+            });
+            pdf.save('bewerbung-koch-vorschlag.pdf');
+          } catch (err) {
+            alert('PDF-Export fehlgeschlagen: ' + err);
+          }
+          done(btn);
+        });
+        swapHandler('btn-pptx', async function (btn) {
+          try {
+            busy(btn, '0%');
+            await ensureH2C();
+            await ensurePptx();
+            var shots = await snapshotAll(function (i, n) {
+              btn.textContent = Math.round((i / n) * 100) + '%';
+            });
+            var pptx = new window.PptxGenJS();
+            pptx.defineLayout({ name: 'W16x9', width: 13.33, height: 7.5 });
+            pptx.layout = 'W16x9';
+            shots.forEach(function (sh) {
+              var slide = pptx.addSlide();
+              slide.background = { color: '0a0a0a' };
+              slide.addImage({ data: sh.data, x: 0, y: 0, w: 13.33, h: 7.5 });
+              if (sh.notes) slide.addNotes(sh.notes);
+            });
+            pptx.writeFile({ fileName: 'bewerbung-koch-vorschlag.pptx' });
+          } catch (err) {
+            alert('PPTX-Export fehlgeschlagen: ' + err);
+          }
+          done(btn);
+        });
+      })();
+    </script>
+    <!-- ============ PER-SLIDE COMMENTING (server-backed) ============
      Any reader — signed in OR anonymous — can comment on the current slide.
      Comments POST to /api/presentations/comments and land in
      /admin/presentations/feedback for staff to collect. Hidden while
      presenting (fullscreen) and in print/export. -->
-<style>
-  .pc-btn{position:fixed;top:.6rem;right:1.2rem;z-index:120;font-family:var(--mono);font-size:.72rem;
-    letter-spacing:.04em;font-weight:700;background:var(--green);color:#04120a;border:0;border-radius:8px;
-    padding:.5rem .8rem;cursor:pointer}
-  .pc-btn:hover{filter:brightness(1.08)}
-  .pc-ref{position:fixed;bottom:1rem;left:1.25rem;z-index:70;font-family:var(--mono);font-size:.7rem;
-    color:var(--dim);pointer-events:none;max-width:52vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .pc-panel{position:fixed;top:3rem;right:1.2rem;z-index:130;width:min(370px,92vw);background:var(--surface);
-    border:1px solid var(--hairline);border-radius:12px;padding:1.1rem;display:none;flex-direction:column;gap:.6rem}
-  .pc-panel.open{display:flex}
-  .pc-slide{font-family:var(--mono);font-size:.68rem;color:var(--green);letter-spacing:.06em}
-  .pc-panel h3{font-size:1.02rem;font-weight:650;color:var(--text);margin:0}
-  .pc-panel textarea{width:100%;min-height:4.6rem;background:var(--bg);color:var(--text);
-    border:1px solid var(--hairline);border-radius:8px;padding:.6rem;font:inherit;font-size:.9rem;resize:vertical}
-  .pc-panel input[type=text].pc-name{width:100%;background:var(--bg);color:var(--text);border:1px solid var(--hairline);
-    border-radius:8px;padding:.5rem .6rem;font:inherit;font-size:.85rem}
-  .pc-panel textarea:focus,.pc-panel input:focus{outline:none;border-color:var(--green)}
-  .pc-who{font-size:.74rem;color:var(--dim);line-height:1.4}
-  .pc-row{display:flex;gap:.6rem;justify-content:flex-end;align-items:center;margin-top:.1rem}
-  .pc-send{background:var(--green);color:#04120a;border:0;border-radius:8px;padding:.5rem .9rem;
-    font-family:var(--mono);font-size:.72rem;font-weight:700;cursor:pointer}
-  .pc-send:disabled{opacity:.5;cursor:wait}
-  .pc-cancel{background:none;border:0;color:var(--dim);font-family:var(--mono);font-size:.72rem;cursor:pointer}
-  .pc-cancel:hover{color:var(--text)}
-  .pc-msg{font-size:.78rem;min-height:1rem}
-  .pc-hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;opacity:0}
-  :fullscreen .pc-btn,:fullscreen .pc-ref{display:none!important}
-  body.exporting .pc-btn,body.exporting .pc-panel,body.exporting .pc-ref{display:none!important}
-  @media print{.pc-btn,.pc-panel,.pc-ref{display:none!important}}
-</style>
-<button class="pc-btn" id="pc-btn" title="Kommentar zu dieser Folie">💬 Kommentar</button>
-<div class="pc-ref" id="pc-ref"></div>
-<div class="pc-panel" id="pc-panel" role="dialog" aria-label="Kommentar zu dieser Folie">
-  <div class="pc-slide" id="pc-slide"></div>
-  <h3>Feedback zu dieser Folie</h3>
-  <textarea id="pc-body" placeholder="Was denkst du? Was sollte geändert werden?"></textarea>
-  <div id="pc-name-wrap"><input type="text" class="pc-name" id="pc-name" placeholder="Dein Name (optional)"></div>
-  <div class="pc-who" id="pc-who"></div>
-  <input type="text" class="pc-hp" id="pc-hp" tabindex="-1" autocomplete="off" aria-hidden="true" placeholder="Website">
-  <div class="pc-msg" id="pc-msg"></div>
-  <div class="pc-row">
-    <button class="pc-cancel" id="pc-cancel">Abbrechen</button>
-    <button class="pc-send" id="pc-send">Senden</button>
-  </div>
-</div>
-<script>
-(function(){
-  var slides=[].slice.call(document.querySelectorAll('.slide'));
-  if(!slides.length) return;
-  var mm=location.pathname.match(/presentations\/([^\/]+)/);
-  var slug=mm?mm[1]:'';
-  function titleOf(s,i){
-    var h=s.querySelector('h1,h2'); var t=h?h.textContent.replace(/\s+/g,' ').trim():'';
-    if(!t){var im=s.querySelector('img[alt]'); t=(im&&im.alt)?im.alt.replace(/\s+/g,' ').trim():'';}
-    if(!t){var e=s.querySelector('.eyebrow'); t=e?e.textContent.replace(/\s+/g,' ').trim():'';}
-    return t||('Folie '+(i+1));
-  }
-  var titles=slides.map(titleOf);
-  function curIdx(){var a=document.querySelector('.slide.active'); var i=slides.indexOf(a); return i<0?0:i;}
-  var ref=document.getElementById('pc-ref');
-  function updateRef(){var i=curIdx(); ref.textContent='Folie '+(i+1)+' / '+slides.length+' · '+titles[i];}
-  var mo=new MutationObserver(updateRef); slides.forEach(function(s){mo.observe(s,{attributes:true,attributeFilter:['class']})}); updateRef();
+    <style>
+      .pc-btn {
+        position: fixed;
+        top: 0.6rem;
+        right: 1.2rem;
+        z-index: 120;
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        letter-spacing: 0.04em;
+        font-weight: 700;
+        background: var(--green);
+        color: #04120a;
+        border: 0;
+        border-radius: 8px;
+        padding: 0.5rem 0.8rem;
+        cursor: pointer;
+      }
+      .pc-btn:hover {
+        filter: brightness(1.08);
+      }
+      .pc-ref {
+        position: fixed;
+        bottom: 1rem;
+        left: 1.25rem;
+        z-index: 70;
+        font-family: var(--mono);
+        font-size: 0.7rem;
+        color: var(--dim);
+        pointer-events: none;
+        max-width: 52vw;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .pc-panel {
+        position: fixed;
+        top: 3rem;
+        right: 1.2rem;
+        z-index: 130;
+        width: min(370px, 92vw);
+        background: var(--surface);
+        border: 1px solid var(--hairline);
+        border-radius: 12px;
+        padding: 1.1rem;
+        display: none;
+        flex-direction: column;
+        gap: 0.6rem;
+      }
+      .pc-panel.open {
+        display: flex;
+      }
+      .pc-slide {
+        font-family: var(--mono);
+        font-size: 0.68rem;
+        color: var(--green);
+        letter-spacing: 0.06em;
+      }
+      .pc-panel h3 {
+        font-size: 1.02rem;
+        font-weight: 650;
+        color: var(--text);
+        margin: 0;
+      }
+      .pc-panel textarea {
+        width: 100%;
+        min-height: 4.6rem;
+        background: var(--bg);
+        color: var(--text);
+        border: 1px solid var(--hairline);
+        border-radius: 8px;
+        padding: 0.6rem;
+        font: inherit;
+        font-size: 0.9rem;
+        resize: vertical;
+      }
+      .pc-panel input[type='text'].pc-name {
+        width: 100%;
+        background: var(--bg);
+        color: var(--text);
+        border: 1px solid var(--hairline);
+        border-radius: 8px;
+        padding: 0.5rem 0.6rem;
+        font: inherit;
+        font-size: 0.85rem;
+      }
+      .pc-panel textarea:focus,
+      .pc-panel input:focus {
+        outline: none;
+        border-color: var(--green);
+      }
+      .pc-who {
+        font-size: 0.74rem;
+        color: var(--dim);
+        line-height: 1.4;
+      }
+      .pc-row {
+        display: flex;
+        gap: 0.6rem;
+        justify-content: flex-end;
+        align-items: center;
+        margin-top: 0.1rem;
+      }
+      .pc-send {
+        background: var(--green);
+        color: #04120a;
+        border: 0;
+        border-radius: 8px;
+        padding: 0.5rem 0.9rem;
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        font-weight: 700;
+        cursor: pointer;
+      }
+      .pc-send:disabled {
+        opacity: 0.5;
+        cursor: wait;
+      }
+      .pc-cancel {
+        background: none;
+        border: 0;
+        color: var(--dim);
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        cursor: pointer;
+      }
+      .pc-cancel:hover {
+        color: var(--text);
+      }
+      .pc-msg {
+        font-size: 0.78rem;
+        min-height: 1rem;
+      }
+      .pc-hp {
+        position: absolute !important;
+        left: -9999px !important;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+      }
+      :fullscreen .pc-btn,
+      :fullscreen .pc-ref {
+        display: none !important;
+      }
+      body.exporting .pc-btn,
+      body.exporting .pc-panel,
+      body.exporting .pc-ref {
+        display: none !important;
+      }
+      @media print {
+        .pc-btn,
+        .pc-panel,
+        .pc-ref {
+          display: none !important;
+        }
+      }
+    </style>
+    <button class="pc-btn" id="pc-btn" title="Kommentar zu dieser Folie">💬 Kommentar</button>
+    <div class="pc-ref" id="pc-ref"></div>
+    <div class="pc-panel" id="pc-panel" role="dialog" aria-label="Kommentar zu dieser Folie">
+      <div class="pc-slide" id="pc-slide"></div>
+      <h3>Feedback zu dieser Folie</h3>
+      <textarea id="pc-body" placeholder="Was denkst du? Was sollte geändert werden?"></textarea>
+      <div id="pc-name-wrap">
+        <input type="text" class="pc-name" id="pc-name" placeholder="Dein Name (optional)" />
+      </div>
+      <div class="pc-who" id="pc-who"></div>
+      <input
+        type="text"
+        class="pc-hp"
+        id="pc-hp"
+        tabindex="-1"
+        autocomplete="off"
+        aria-hidden="true"
+        placeholder="Website"
+      />
+      <div class="pc-msg" id="pc-msg"></div>
+      <div class="pc-row">
+        <button class="pc-cancel" id="pc-cancel">Abbrechen</button>
+        <button class="pc-send" id="pc-send">Senden</button>
+      </div>
+    </div>
+    <script>
+      (function () {
+        var slides = [].slice.call(document.querySelectorAll('.slide'));
+        if (!slides.length) return;
+        var mm = location.pathname.match(/presentations\/([^\/]+)/);
+        var slug = mm ? mm[1] : '';
+        function titleOf(s, i) {
+          var h = s.querySelector('h1,h2');
+          var t = h ? h.textContent.replace(/\s+/g, ' ').trim() : '';
+          if (!t) {
+            var im = s.querySelector('img[alt]');
+            t = im && im.alt ? im.alt.replace(/\s+/g, ' ').trim() : '';
+          }
+          if (!t) {
+            var e = s.querySelector('.eyebrow');
+            t = e ? e.textContent.replace(/\s+/g, ' ').trim() : '';
+          }
+          return t || 'Folie ' + (i + 1);
+        }
+        var titles = slides.map(titleOf);
+        function curIdx() {
+          var a = document.querySelector('.slide.active');
+          var i = slides.indexOf(a);
+          return i < 0 ? 0 : i;
+        }
+        var ref = document.getElementById('pc-ref');
+        function updateRef() {
+          var i = curIdx();
+          ref.textContent = 'Folie ' + (i + 1) + ' / ' + slides.length + ' · ' + titles[i];
+        }
+        var mo = new MutationObserver(updateRef);
+        slides.forEach(function (s) {
+          mo.observe(s, { attributes: true, attributeFilter: ['class'] });
+        });
+        updateRef();
 
-  var panel=document.getElementById('pc-panel');
-  // who am I (so signed-in readers don't retype their name)
-  fetch('/api/presentations/comments',{credentials:'same-origin'}).then(function(r){return r.json()}).then(function(j){
-    var d=(j&&j.data)||{};
-    if(d.signedIn){document.getElementById('pc-name-wrap').style.display='none';
-      document.getElementById('pc-who').textContent='Angemeldet als '+(d.name||'dir')+' — dein Kommentar wird dir zugeordnet.';}
-    else{document.getElementById('pc-who').textContent='Nicht angemeldet — Kommentar wird anonym gesendet (Name optional).';}
-  }).catch(function(){});
+        var panel = document.getElementById('pc-panel');
+        // who am I (so signed-in readers don't retype their name)
+        fetch('/api/presentations/comments', { credentials: 'same-origin' })
+          .then(function (r) {
+            return r.json();
+          })
+          .then(function (j) {
+            var d = (j && j.data) || {};
+            if (d.signedIn) {
+              document.getElementById('pc-name-wrap').style.display = 'none';
+              document.getElementById('pc-who').textContent =
+                'Angemeldet als ' + (d.name || 'dir') + ' — dein Kommentar wird dir zugeordnet.';
+            } else {
+              document.getElementById('pc-who').textContent =
+                'Nicht angemeldet — Kommentar wird anonym gesendet (Name optional).';
+            }
+          })
+          .catch(function () {});
 
-  function open(){var i=curIdx();document.getElementById('pc-slide').textContent='FOLIE '+(i+1)+' · '+titles[i];
-    document.getElementById('pc-msg').textContent='';panel.classList.add('open');document.getElementById('pc-body').focus();}
-  function close(){panel.classList.remove('open');}
-  document.getElementById('pc-btn').onclick=function(){panel.classList.contains('open')?close():open();};
-  document.getElementById('pc-cancel').onclick=close;
-  // Keys typed inside the form must NOT reach the deck's arrow/space navigation
-  // (the nav listens on document; without this, typing arrows/space in the
-  // textarea would switch slides). Bubble-phase stopPropagation keeps normal
-  // typing intact while shielding the deck nav; Escape still closes the panel.
-  panel.addEventListener('keydown',function(e){e.stopPropagation();if(e.key==='Escape')close();});
+        function open() {
+          var i = curIdx();
+          document.getElementById('pc-slide').textContent = 'FOLIE ' + (i + 1) + ' · ' + titles[i];
+          document.getElementById('pc-msg').textContent = '';
+          panel.classList.add('open');
+          document.getElementById('pc-body').focus();
+        }
+        function close() {
+          panel.classList.remove('open');
+        }
+        document.getElementById('pc-btn').onclick = function () {
+          panel.classList.contains('open') ? close() : open();
+        };
+        document.getElementById('pc-cancel').onclick = close;
+        // Keys typed inside the form must NOT reach the deck's arrow/space navigation
+        // (the nav listens on document; without this, typing arrows/space in the
+        // textarea would switch slides). Bubble-phase stopPropagation keeps normal
+        // typing intact while shielding the deck nav; Escape still closes the panel.
+        panel.addEventListener('keydown', function (e) {
+          e.stopPropagation();
+          if (e.key === 'Escape') close();
+        });
 
-  document.getElementById('pc-send').onclick=function(){
-    var body=document.getElementById('pc-body').value.trim();
-    var msg=document.getElementById('pc-msg');
-    if(body.length<2){msg.style.color='#f87171';msg.textContent='Bitte etwas mehr schreiben.';return;}
-    var btn=document.getElementById('pc-send'); btn.disabled=true;
-    var i=curIdx();
-    var payload={slug:slug,slideIndex:i,slideTitle:titles[i],body:body,
-      name:document.getElementById('pc-name').value,hp:document.getElementById('pc-hp').value};
-    fetch('/api/presentations/comments',{method:'POST',credentials:'same-origin',
-      headers:{'content-type':'application/json'},body:JSON.stringify(payload)})
-      .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j}})})
-      .then(function(res){
-        btn.disabled=false;
-        if(res.ok&&res.j&&res.j.success){msg.style.color='var(--green)';msg.textContent='Danke! Kommentar gesendet.';
-          document.getElementById('pc-body').value='';setTimeout(close,1200);}
-        else{msg.style.color='#f87171';msg.textContent=(res.j&&res.j.error)||'Fehler beim Senden.';}
-      }).catch(function(){btn.disabled=false;msg.style.color='#f87171';msg.textContent='Netzwerkfehler.';});
-  };
-})();
-</script>
-</body>
+        document.getElementById('pc-send').onclick = function () {
+          var body = document.getElementById('pc-body').value.trim();
+          var msg = document.getElementById('pc-msg');
+          if (body.length < 2) {
+            msg.style.color = '#f87171';
+            msg.textContent = 'Bitte etwas mehr schreiben.';
+            return;
+          }
+          var btn = document.getElementById('pc-send');
+          btn.disabled = true;
+          var i = curIdx();
+          var payload = {
+            slug: slug,
+            slideIndex: i,
+            slideTitle: titles[i],
+            body: body,
+            name: document.getElementById('pc-name').value,
+            hp: document.getElementById('pc-hp').value,
+          };
+          fetch('/api/presentations/comments', {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(payload),
+          })
+            .then(function (r) {
+              return r.json().then(function (j) {
+                return { ok: r.ok, j: j };
+              });
+            })
+            .then(function (res) {
+              btn.disabled = false;
+              if (res.ok && res.j && res.j.success) {
+                msg.style.color = 'var(--green)';
+                msg.textContent = 'Danke! Kommentar gesendet.';
+                document.getElementById('pc-body').value = '';
+                setTimeout(close, 1200);
+              } else {
+                msg.style.color = '#f87171';
+                msg.textContent = (res.j && res.j.error) || 'Fehler beim Senden.';
+              }
+            })
+            .catch(function () {
+              btn.disabled = false;
+              msg.style.color = '#f87171';
+              msg.textContent = 'Netzwerkfehler.';
+            });
+        };
+      })();
+    </script>
+  </body>
 </html>

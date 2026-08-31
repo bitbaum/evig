@@ -11,16 +11,13 @@ import { eq, and, ne, sql } from 'drizzle-orm';
 import { LISTING_STATUS } from '@/config/marketplace';
 import { listingThumbnailSubquery } from '@/lib/marketplace/listing-helpers';
 
-export const GET = withAuth(async (
-  request: NextRequest,
-  session: ValidSession
-) => {
+export const GET = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
     const { limit, offset } = parsePagination(request, { defaultLimit: 20, maxLimit: 100 });
 
     const where = and(
       eq(listingFavorites.userId, session.user.id),
-      ne(listings.status, LISTING_STATUS.REMOVED)
+      ne(listings.status, LISTING_STATUS.REMOVED),
     );
 
     const rows = await db

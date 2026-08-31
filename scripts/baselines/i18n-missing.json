@@ -1,15 +1,7 @@
 {
   "description": "Known missing translation keys. The audit fails only on regressions beyond this baseline.",
   "defaultLocale": "de",
-  "locales": [
-    "fr",
-    "en",
-    "it",
-    "es",
-    "ja",
-    "ko",
-    "ru"
-  ],
+  "locales": ["fr", "en", "it", "es", "ja", "ko", "ru"],
   "missing": {
     "fr": [
       "footer.vision",

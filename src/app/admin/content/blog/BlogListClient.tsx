@@ -1,95 +1,86 @@
-'use client'
+'use client';
 
-import { useState, useMemo } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Select } from '@/components/ui/select'
-import { Input } from '@/components/ui/input'
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
-import { apiFetch } from '@/lib/api/client'
-import { toast } from 'sonner'
-import { formatDateNumeric } from '@/lib/date-formats'
-import {
-  Search,
-  FileText,
-  Eye,
-  EyeOff,
-  Edit,
-  Trash2,
-  Calendar,
-  GitBranch,
-} from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import { AudienceBadge } from '@/components/admin/AudienceBadge'
-import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
-import { importFilePostForEdit, hideFilePost } from './actions'
-import { publishStatusLabel } from '@/config/content-status'
+import { useState, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Select } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { apiFetch } from '@/lib/api/client';
+import { toast } from 'sonner';
+import { formatDateNumeric } from '@/lib/date-formats';
+import { Search, FileText, Eye, EyeOff, Edit, Trash2, Calendar, GitBranch } from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import { AudienceBadge } from '@/components/admin/AudienceBadge';
+import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable';
+import { importFilePostForEdit, hideFilePost } from './actions';
+import { publishStatusLabel } from '@/config/content-status';
 
 interface BlogPost {
-  id: string
-  slug: string
-  title: string
-  excerpt: string | null
-  is_published: boolean
-  published_at: string | null
-  created_at: string
-  updated_at: string
-  category_name: string | null
-  source: 'db' | 'file'
-  visibility: 'public' | 'unlisted' | 'link'
-  audience: 'public' | 'team' | 'author'
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string | null;
+  is_published: boolean;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+  category_name: string | null;
+  source: 'db' | 'file';
+  visibility: 'public' | 'unlisted' | 'link';
+  audience: 'public' | 'team' | 'author';
 }
 
 const sourceBadgeClass =
-  'inline-flex items-center gap-1 rounded-full border border-default px-2 py-0.5 text-[10px] font-mono uppercase tracking-wide text-text-tertiary'
+  'inline-flex items-center gap-1 rounded-full border border-default px-2 py-0.5 text-[10px] font-mono uppercase tracking-wide text-text-tertiary';
 
 interface BlogListClientProps {
-  posts: BlogPost[]
+  posts: BlogPost[];
 }
 
 export function BlogListClient({ posts }: BlogListClientProps) {
-  const router = useRouter()
-  const [search, setSearch] = useState('')
-  const [statusFilter, setStatusFilter] = useState<'' | 'published' | 'draft'>('')
-  const [deleteTarget, setDeleteTarget] = useState<BlogPost | null>(null)
-  const [deleting, setDeleting] = useState(false)
+  const router = useRouter();
+  const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState<'' | 'published' | 'draft'>('');
+  const [deleteTarget, setDeleteTarget] = useState<BlogPost | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   const handleDelete = async () => {
-    if (!deleteTarget) return
-    setDeleting(true)
+    if (!deleteTarget) return;
+    setDeleting(true);
     try {
       if (deleteTarget.source === 'file') {
         // Git/file post: hide the slug (the markdown stays as a fallback).
-        await hideFilePost(deleteTarget.slug)
-        toast.success('Artikel entfernt')
-        setDeleteTarget(null)
-        router.refresh()
+        await hideFilePost(deleteTarget.slug);
+        toast.success('Artikel entfernt');
+        setDeleteTarget(null);
+        router.refresh();
       } else {
-        const result = await apiFetch(`/api/admin/blog/${deleteTarget.id}`, { method: 'DELETE' })
+        const result = await apiFetch(`/api/admin/blog/${deleteTarget.id}`, { method: 'DELETE' });
         if (result.success) {
-          toast.success('Artikel gelöscht')
-          setDeleteTarget(null)
-          router.refresh()
+          toast.success('Artikel gelöscht');
+          setDeleteTarget(null);
+          router.refresh();
         } else {
-          toast.error(result.error || 'Artikel konnte nicht gelöscht werden')
+          toast.error(result.error || 'Artikel konnte nicht gelöscht werden');
         }
       }
     } catch {
-      toast.error('Artikel konnte nicht entfernt werden')
+      toast.error('Artikel konnte nicht entfernt werden');
     } finally {
-      setDeleting(false)
+      setDeleting(false);
     }
-  }
+  };
 
   const filtered = useMemo(() => {
-    return posts.filter(p => {
-      if (search.trim() && !p.title.toLowerCase().includes(search.toLowerCase())) return false
-      if (statusFilter === 'published' && !p.is_published) return false
-      if (statusFilter === 'draft' && p.is_published) return false
-      return true
-    })
-  }, [posts, search, statusFilter])
+    return posts.filter((p) => {
+      if (search.trim() && !p.title.toLowerCase().includes(search.toLowerCase())) return false;
+      if (statusFilter === 'published' && !p.is_published) return false;
+      if (statusFilter === 'draft' && p.is_published) return false;
+      return true;
+    });
+  }, [posts, search, statusFilter]);
 
   const columns: AdminTableColumn<BlogPost>[] = [
     {
@@ -124,7 +115,9 @@ export function BlogListClient({ posts }: BlogListClientProps) {
     {
       header: 'Kategorie',
       className: 'whitespace-nowrap',
-      cell: (post) => <span className="text-sm text-text-primary">{post.category_name || '-'}</span>,
+      cell: (post) => (
+        <span className="text-sm text-text-primary">{post.category_name || '-'}</span>
+      ),
     },
     {
       header: 'Status',
@@ -222,7 +215,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
         </div>
       ),
     },
-  ]
+  ];
 
   return (
     <div className="space-y-5">
@@ -235,13 +228,13 @@ export function BlogListClient({ posts }: BlogListClientProps) {
               type="text"
               placeholder="Titel suchen..."
               value={search}
-              onChange={e => setSearch(e.target.value)}
+              onChange={(e) => setSearch(e.target.value)}
               className="pl-10 pr-4"
             />
           </div>
           <Select
             value={statusFilter}
-            onChange={e => setStatusFilter(e.target.value as '' | 'published' | 'draft')}
+            onChange={(e) => setStatusFilter(e.target.value as '' | 'published' | 'draft')}
             className="w-auto"
           >
             <option value="">Alle Status</option>
@@ -274,5 +267,5 @@ export function BlogListClient({ posts }: BlogListClientProps) {
         onClose={() => setDeleteTarget(null)}
       />
     </div>
-  )
+  );
 }

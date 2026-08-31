@@ -33,7 +33,7 @@ import {
   getDepartmentColor,
   EMPLOYMENT_TYPES,
   DEPARTMENTS,
-} from '../team'
+} from '../team';
 
 // ============================================================================
 // getEmploymentTypeLabel
@@ -41,33 +41,33 @@ import {
 
 describe('getEmploymentTypeLabel', () => {
   it('returns "Angestellte/r" for employee', () => {
-    expect(getEmploymentTypeLabel(EMPLOYMENT_TYPES.EMPLOYEE)).toBe('Angestellte/r')
-  })
+    expect(getEmploymentTypeLabel(EMPLOYMENT_TYPES.EMPLOYEE)).toBe('Angestellte/r');
+  });
 
   it('returns "Freiwillige/r" for volunteer', () => {
-    expect(getEmploymentTypeLabel(EMPLOYMENT_TYPES.VOLUNTEER)).toBe('Freiwillige/r')
-  })
+    expect(getEmploymentTypeLabel(EMPLOYMENT_TYPES.VOLUNTEER)).toBe('Freiwillige/r');
+  });
 
   it('returns "Praktikant/in" for intern', () => {
-    expect(getEmploymentTypeLabel(EMPLOYMENT_TYPES.INTERN)).toBe('Praktikant/in')
-  })
+    expect(getEmploymentTypeLabel(EMPLOYMENT_TYPES.INTERN)).toBe('Praktikant/in');
+  });
 
   it('returns "Auftragnehmer/in" for contractor', () => {
-    expect(getEmploymentTypeLabel(EMPLOYMENT_TYPES.CONTRACTOR)).toBe('Auftragnehmer/in')
-  })
+    expect(getEmploymentTypeLabel(EMPLOYMENT_TYPES.CONTRACTOR)).toBe('Auftragnehmer/in');
+  });
 
   it('returns "Unbekannt" for null', () => {
-    expect(getEmploymentTypeLabel(null)).toBe('Unbekannt')
-  })
+    expect(getEmploymentTypeLabel(null)).toBe('Unbekannt');
+  });
 
   it('returns "Unbekannt" for undefined', () => {
-    expect(getEmploymentTypeLabel(undefined)).toBe('Unbekannt')
-  })
+    expect(getEmploymentTypeLabel(undefined)).toBe('Unbekannt');
+  });
 
   it('falls back to raw value for unknown type', () => {
-    expect(getEmploymentTypeLabel('freelancer')).toBe('freelancer')
-  })
-})
+    expect(getEmploymentTypeLabel('freelancer')).toBe('freelancer');
+  });
+});
 
 // ============================================================================
 // getDepartmentLabel
@@ -75,29 +75,29 @@ describe('getEmploymentTypeLabel', () => {
 
 describe('getDepartmentLabel', () => {
   it('returns "IT & Technik" for IT', () => {
-    expect(getDepartmentLabel(DEPARTMENTS.IT)).toBe('IT & Technik')
-  })
+    expect(getDepartmentLabel(DEPARTMENTS.IT)).toBe('IT & Technik');
+  });
 
   it('returns "Werkstatt & Reparatur" for Werkstatt', () => {
-    expect(getDepartmentLabel(DEPARTMENTS.WERKSTATT)).toBe('Werkstatt & Reparatur')
-  })
+    expect(getDepartmentLabel(DEPARTMENTS.WERKSTATT)).toBe('Werkstatt & Reparatur');
+  });
 
   it('returns "Bildung & Workshops" for Bildung', () => {
-    expect(getDepartmentLabel(DEPARTMENTS.BILDUNG)).toBe('Bildung & Workshops')
-  })
+    expect(getDepartmentLabel(DEPARTMENTS.BILDUNG)).toBe('Bildung & Workshops');
+  });
 
   it('returns "Nicht zugewiesen" for null', () => {
-    expect(getDepartmentLabel(null)).toBe('Nicht zugewiesen')
-  })
+    expect(getDepartmentLabel(null)).toBe('Nicht zugewiesen');
+  });
 
   it('returns "Nicht zugewiesen" for undefined', () => {
-    expect(getDepartmentLabel(undefined)).toBe('Nicht zugewiesen')
-  })
+    expect(getDepartmentLabel(undefined)).toBe('Nicht zugewiesen');
+  });
 
   it('falls back to raw value for unknown department', () => {
-    expect(getDepartmentLabel('Buchhaltung')).toBe('Buchhaltung')
-  })
-})
+    expect(getDepartmentLabel('Buchhaltung')).toBe('Buchhaltung');
+  });
+});
 
 // ============================================================================
 // getEmploymentTypeColor
@@ -105,21 +105,21 @@ describe('getDepartmentLabel', () => {
 
 describe('getEmploymentTypeColor', () => {
   it('returns neutral class for employee', () => {
-    expect(getEmploymentTypeColor(EMPLOYMENT_TYPES.EMPLOYEE)).toContain('neutral')
-  })
+    expect(getEmploymentTypeColor(EMPLOYMENT_TYPES.EMPLOYEE)).toContain('neutral');
+  });
 
   it('returns green class for volunteer', () => {
-    expect(getEmploymentTypeColor(EMPLOYMENT_TYPES.VOLUNTEER)).toContain('success')
-  })
+    expect(getEmploymentTypeColor(EMPLOYMENT_TYPES.VOLUNTEER)).toContain('success');
+  });
 
   it('returns gray fallback for null', () => {
-    expect(getEmploymentTypeColor(null)).toContain('neutral')
-  })
+    expect(getEmploymentTypeColor(null)).toContain('neutral');
+  });
 
   it('returns gray fallback for unknown type', () => {
-    expect(getEmploymentTypeColor('unknown_type')).toContain('neutral')
-  })
-})
+    expect(getEmploymentTypeColor('unknown_type')).toContain('neutral');
+  });
+});
 
 // ============================================================================
 // getDepartmentColor
@@ -127,18 +127,18 @@ describe('getEmploymentTypeColor', () => {
 
 describe('getDepartmentColor', () => {
   it('returns indigo class for IT', () => {
-    expect(getDepartmentColor(DEPARTMENTS.IT)).toContain('indigo')
-  })
+    expect(getDepartmentColor(DEPARTMENTS.IT)).toContain('indigo');
+  });
 
   it('returns amber class for Werkstatt', () => {
-    expect(getDepartmentColor(DEPARTMENTS.WERKSTATT)).toContain('warning')
-  })
+    expect(getDepartmentColor(DEPARTMENTS.WERKSTATT)).toContain('warning');
+  });
 
   it('returns gray fallback for null', () => {
-    expect(getDepartmentColor(null)).toContain('neutral')
-  })
+    expect(getDepartmentColor(null)).toContain('neutral');
+  });
 
   it('returns gray fallback for unknown department', () => {
-    expect(getDepartmentColor('unknown_dept')).toContain('neutral')
-  })
-})
+    expect(getDepartmentColor('unknown_dept')).toContain('neutral');
+  });
+});

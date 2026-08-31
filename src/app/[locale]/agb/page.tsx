@@ -1,34 +1,36 @@
-import { Metadata } from 'next'
-import { Link } from '@/i18n/navigation'
-import { ORG, BASE_REGION, CONTACT } from '@/config/org'
-import Heading from '@/components/ui/Heading'
-import { getTranslations } from 'next-intl/server'
+import { Metadata } from 'next';
+import { Link } from '@/i18n/navigation';
+import { ORG, BASE_REGION, CONTACT } from '@/config/org';
+import Heading from '@/components/ui/Heading';
+import { getTranslations } from 'next-intl/server';
 
 interface AGBPageProps {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: string }>;
 }
 
 export async function generateMetadata({ params }: AGBPageProps): Promise<Metadata> {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'agb' })
-  const title = `${t('meta.title')} | ${ORG.name}`
-  const description = t('meta.description')
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'agb' });
+  const title = `${t('meta.title')} | ${ORG.name}`;
+  const description = t('meta.description');
   return {
     title: { absolute: title },
     description,
     openGraph: { title, description, type: 'website' },
-  }
+  };
 }
 
 export default async function AGBPage({ params }: AGBPageProps) {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'agb' })
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'agb' });
 
-  const section2Items = t.raw('section2.items') as string[]
+  const section2Items = t.raw('section2.items') as string[];
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-16 min-h-screen">
-      <Heading level={1} className="mb-8 text-3xl">{t('title')}</Heading>
+      <Heading level={1} className="mb-8 text-3xl">
+        {t('title')}
+      </Heading>
 
       <section className="prose prose-neutral dark:prose-invert max-w-none space-y-6">
         <Heading level={2}>{t('section1.title')}</Heading>
@@ -37,7 +39,9 @@ export default async function AGBPage({ params }: AGBPageProps) {
         <Heading level={2}>{t('section2.title')}</Heading>
         <p>{t('section2.intro', { orgName: ORG.name })}</p>
         <ul>
-          {section2Items.map((item, i) => <li key={i}>{item}</li>)}
+          {section2Items.map((item, i) => (
+            <li key={i}>{item}</li>
+          ))}
         </ul>
 
         <Heading level={2}>{t('section3.title')}</Heading>
@@ -48,9 +52,11 @@ export default async function AGBPage({ params }: AGBPageProps) {
 
         <Heading level={2}>{t('section5.title')}</Heading>
         <p>
-          {t('section5.body')}{' '}
-          {t('section5.contactLabel')}{' '}
-          <a href={`mailto:${CONTACT.email}`} className="text-action underline">{CONTACT.email}</a>.
+          {t('section5.body')} {t('section5.contactLabel')}{' '}
+          <a href={`mailto:${CONTACT.email}`} className="text-action underline">
+            {CONTACT.email}
+          </a>
+          .
         </p>
 
         <Heading level={2}>{t('section6.title')}</Heading>
@@ -75,11 +81,12 @@ export default async function AGBPage({ params }: AGBPageProps) {
           {t('section10.body', { orgName: ORG.name })}{' '}
           <Link href="/impressum" className="text-action underline">
             {t('section10.impressumLinkLabel')}
-          </Link>.
+          </Link>
+          .
         </p>
 
         <p className="mt-12 text-sm text-text-tertiary">{t('asOf')}</p>
       </section>
     </main>
-  )
+  );
 }

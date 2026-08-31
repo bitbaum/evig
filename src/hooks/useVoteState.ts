@@ -23,12 +23,12 @@ export function useVoteState({ votingMethod, options, dotCount }: UseVoteStatePr
   const [rationale, setRationale] = useState('');
   const [approvedOptions, setApprovedOptions] = useState<Set<string>>(new Set());
   const maxDots = dotCount || 5;
-  const [allocations, setAllocationsState] = useState<Record<string, number>>(
-    () => Object.fromEntries(options.map((o) => [o.id, 0]))
+  const [allocations, setAllocationsState] = useState<Record<string, number>>(() =>
+    Object.fromEntries(options.map((o) => [o.id, 0])),
   );
   const usedDots = Object.values(allocations).reduce((a, b) => a + b, 0);
-  const [scores, setScoresState] = useState<Record<string, number>>(
-    () => Object.fromEntries(options.map((o) => [o.id, 0]))
+  const [scores, setScoresState] = useState<Record<string, number>>(() =>
+    Object.fromEntries(options.map((o) => [o.id, 0])),
   );
   const [majorityResponse, setMajorityResponse] = useState<SimpleMajorityResponse>('yes');
   const [ranking, setRanking] = useState<string[]>(() => options.map((o) => o.id));
@@ -73,13 +73,20 @@ export function useVoteState({ votingMethod, options, dotCount }: UseVoteStatePr
 
   function buildVoteData(): unknown {
     switch (votingMethod) {
-      case 'consent':         return { response: consentResponse, rationale: rationale || undefined };
-      case 'approval':        return { approved_options: Array.from(approvedOptions) };
-      case 'dot':             return { allocations };
-      case 'score':           return { scores };
-      case 'simple_majority': return { response: majorityResponse };
-      case 'ranked_choice':   return { ranking };
-      case 'thumbs_up_down':  return thumbsChoice ? { choice: thumbsChoice } : undefined;
+      case 'consent':
+        return { response: consentResponse, rationale: rationale || undefined };
+      case 'approval':
+        return { approved_options: Array.from(approvedOptions) };
+      case 'dot':
+        return { allocations };
+      case 'score':
+        return { scores };
+      case 'simple_majority':
+        return { response: majorityResponse };
+      case 'ranked_choice':
+        return { ranking };
+      case 'thumbs_up_down':
+        return thumbsChoice ? { choice: thumbsChoice } : undefined;
       default: {
         // A method in VOTING_METHODS with no case here used to fall through to
         // `undefined`, which the UI rendered as an empty ballot and the server
@@ -92,14 +99,25 @@ export function useVoteState({ votingMethod, options, dotCount }: UseVoteStatePr
   }
 
   return {
-    consentResponse, setConsentResponse,
-    rationale, setRationale,
-    approvedOptions, toggleApproval,
-    maxDots, allocations, usedDots, setAllocation,
-    scores, setScore,
-    majorityResponse, setMajorityResponse,
-    ranking, moveRankingUp, moveRankingDown,
-    thumbsChoice, setThumbsChoice,
+    consentResponse,
+    setConsentResponse,
+    rationale,
+    setRationale,
+    approvedOptions,
+    toggleApproval,
+    maxDots,
+    allocations,
+    usedDots,
+    setAllocation,
+    scores,
+    setScore,
+    majorityResponse,
+    setMajorityResponse,
+    ranking,
+    moveRankingUp,
+    moveRankingDown,
+    thumbsChoice,
+    setThumbsChoice,
     buildVoteData,
   };
 }

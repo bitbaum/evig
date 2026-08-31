@@ -9,32 +9,32 @@
  * 'workshop' → workshops; any other target type falls back to a readable
  * label so the row never renders blank.
  */
-import { NextRequest } from 'next/server'
-import { withAdmin } from '@/lib/api/middleware'
-import { db } from '@/db'
-import { reviews, reviewResponses } from '@/db/schema/reviews'
-import { users } from '@/db/schema/auth'
-import { repairerProfiles } from '@/db/schema/services'
-import { workshops } from '@/db/schema/workshops'
-import { eq, and, desc, sql } from 'drizzle-orm'
-import { apiSuccess, apiError } from '@/lib/api/helpers'
-import { REVIEW_STATUS, REVIEW_STATUS_VALUES, type ReviewStatus } from '@/config/review-status'
-import { REVIEW_TARGET_TYPES } from '@/config/database'
+import { NextRequest } from 'next/server';
+import { withAdmin } from '@/lib/api/middleware';
+import { db } from '@/db';
+import { reviews, reviewResponses } from '@/db/schema/reviews';
+import { users } from '@/db/schema/auth';
+import { repairerProfiles } from '@/db/schema/services';
+import { workshops } from '@/db/schema/workshops';
+import { eq, and, desc, sql } from 'drizzle-orm';
+import { apiSuccess, apiError } from '@/lib/api/helpers';
+import { REVIEW_STATUS, REVIEW_STATUS_VALUES, type ReviewStatus } from '@/config/review-status';
+import { REVIEW_TARGET_TYPES } from '@/config/database';
 
 export const GET = withAdmin('reviews', async (request: NextRequest) => {
   try {
-    const { searchParams } = new URL(request.url)
+    const { searchParams } = new URL(request.url);
 
-    const statusParam = searchParams.get('status')
+    const statusParam = searchParams.get('status');
     const status: ReviewStatus =
       statusParam && (REVIEW_STATUS_VALUES as readonly string[]).includes(statusParam)
         ? (statusParam as ReviewStatus)
-        : REVIEW_STATUS.PENDING_MODERATION
+        : REVIEW_STATUS.PENDING_MODERATION;
 
-    const limit = Math.min(Math.max(parseInt(searchParams.get('limit') || '50', 10) || 50, 1), 100)
+    const limit = Math.min(Math.max(parseInt(searchParams.get('limit') || '50', 10) || 50, 1), 100);
 
     // Author of the (published) response, if any.
-    const responder = db.select({ id: users.id, name: users.name }).from(users).as('responder')
+    const responder = db.select({ id: users.id, name: users.name }).from(users).as('responder');
 
     const rows = await db
       .select({
@@ -65,22 +65,31 @@ export const GET = withAdmin('reviews', async (request: NextRequest) => {
       .innerJoin(users, eq(reviews.reviewerId, users.id))
       .leftJoin(
         repairerProfiles,
-        and(eq(reviews.targetType, REVIEW_TARGET_TYPES.REPAIRER), eq(reviews.targetId, repairerProfiles.id))
+        and(
+          eq(reviews.targetType, REVIEW_TARGET_TYPES.REPAIRER),
+          eq(reviews.targetId, repairerProfiles.id),
+        ),
       )
       .leftJoin(
         workshops,
-        and(eq(reviews.targetType, REVIEW_TARGET_TYPES.WORKSHOP), eq(reviews.targetId, workshops.id))
+        and(
+          eq(reviews.targetType, REVIEW_TARGET_TYPES.WORKSHOP),
+          eq(reviews.targetId, workshops.id),
+        ),
       )
       .leftJoin(
         reviewResponses,
-        and(eq(reviewResponses.reviewId, reviews.id), eq(reviewResponses.status, REVIEW_STATUS.PUBLISHED))
+        and(
+          eq(reviewResponses.reviewId, reviews.id),
+          eq(reviewResponses.status, REVIEW_STATUS.PUBLISHED),
+        ),
       )
       .leftJoin(responder, eq(reviewResponses.responderId, responder.id))
       .where(eq(reviews.status, status))
       .orderBy(desc(reviews.createdAt))
-      .limit(limit)
+      .limit(limit);
 
-    const reviewsList = rows.map(r => ({
+    const reviewsList = rows.map((r) => ({
       id: r.id,
       reviewerId: r.reviewerId,
       reviewerName: r.reviewerName ?? '',
@@ -107,10 +116,10 @@ export const GET = withAdmin('reviews', async (request: NextRequest) => {
             createdAt: r.responseCreatedAt,
           }
         : undefined,
-    }))
+    }));
 
-    return apiSuccess({ reviews: reviewsList })
+    return apiSuccess({ reviews: reviewsList });
   } catch (error) {
-    return apiError(error, 'Bewertungen konnten nicht geladen werden')
+    return apiError(error, 'Bewertungen konnten nicht geladen werden');
   }
-})
+});

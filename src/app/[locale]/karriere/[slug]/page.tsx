@@ -1,27 +1,27 @@
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
-import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
-import { ORG } from '@/config/org'
-import { getVacancyBySlug } from '@/lib/services/hr-vacancies'
-import { PUBLIC_VACANCY_STATUSES, type VacancyStatus } from '@/config/hr-vacancies'
-import { publicVacancyUrl } from '@/lib/hr/public-urls'
-import CareerDetailClient from './CareerDetailClient'
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { ORG } from '@/config/org';
+import { getVacancyBySlug } from '@/lib/services/hr-vacancies';
+import { PUBLIC_VACANCY_STATUSES, type VacancyStatus } from '@/config/hr-vacancies';
+import { publicVacancyUrl } from '@/lib/hr/public-urls';
+import CareerDetailClient from './CareerDetailClient';
 
 interface PageProps {
-  params: Promise<{ locale: string; slug: string }>
+  params: Promise<{ locale: string; slug: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params
-  const posting = await getVacancyBySlug(slug)
+  const { slug } = await params;
+  const posting = await getVacancyBySlug(slug);
   if (!posting || !PUBLIC_VACANCY_STATUSES.includes(posting.status as VacancyStatus)) {
-    return { title: 'Stelle nicht gefunden' }
+    return { title: 'Stelle nicht gefunden' };
   }
 
-  const title = posting.seo_title ?? posting.title
-  const description = posting.seo_description ?? posting.summary ?? posting.title
-  const url = publicVacancyUrl(slug)
+  const title = posting.seo_title ?? posting.title;
+  const description = posting.seo_description ?? posting.summary ?? posting.title;
+  const url = publicVacancyUrl(slug);
 
   return {
     title: { absolute: `${title} | ${ORG.name}` },
@@ -52,15 +52,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         employmentType: posting.role_track,
       }),
     },
-  }
+  };
 }
 
 export default async function CareerDetailPage({ params }: PageProps) {
-  const { slug } = await params
-  const posting = await getVacancyBySlug(slug)
+  const { slug } = await params;
+  const posting = await getVacancyBySlug(slug);
 
   if (!posting || !PUBLIC_VACANCY_STATUSES.includes(posting.status as VacancyStatus)) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -69,5 +69,5 @@ export default async function CareerDetailPage({ params }: PageProps) {
         <CareerDetailClient posting={posting} />
       </div>
     </main>
-  )
+  );
 }

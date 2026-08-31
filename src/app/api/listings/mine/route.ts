@@ -56,12 +56,13 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
     // Tuple comparison: (created_at, id) < (cursorTs, cursorId).
     // Expressed in normal SQL: created_at < cursorTs
     //                       OR (created_at = cursorTs AND id < cursorId).
-    const cursorCondition = afterCreatedAt && after
-      ? or(
-          lt(listings.createdAt, afterCreatedAt),
-          and(eq(listings.createdAt, afterCreatedAt), lt(listings.id, after)),
-        )
-      : undefined;
+    const cursorCondition =
+      afterCreatedAt && after
+        ? or(
+            lt(listings.createdAt, afterCreatedAt),
+            and(eq(listings.createdAt, afterCreatedAt), lt(listings.id, after)),
+          )
+        : undefined;
 
     const where = cursorCondition
       ? and(...baseConditions, cursorCondition)

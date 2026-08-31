@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Activity Feed Component
@@ -6,37 +6,37 @@
  * Main feed component that displays unified activity stream with filters
  */
 
-import { useState } from 'react'
-import { adminInteractive } from '@/lib/admin-ui'
-import { Plus, Filter, RefreshCw, Loader2 } from 'lucide-react'
-import { Select } from '@/components/ui/select'
-import { FormField } from '@/components/ui/form-field'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import Heading from '@/components/admin/AdminHeading'
+import { useState } from 'react';
+import { adminInteractive } from '@/lib/admin-ui';
+import { Plus, Filter, RefreshCw, Loader2 } from 'lucide-react';
+import { Select } from '@/components/ui/select';
+import { FormField } from '@/components/ui/form-field';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import Heading from '@/components/admin/AdminHeading';
 import {
   ACTIVITY_SOURCE_LABELS,
   ACTIVITY_CATEGORY_OPTIONS,
   ACTIVITY_CATEGORY_LABELS,
   type ActivityCategory,
   type ActivitySourceType,
-} from '@/config/activity'
-import { useActivityStream } from './useActivityStream'
-import { ActivityCard } from './ActivityCard'
-import { AddActivityModal } from './AddActivityModal'
+} from '@/config/activity';
+import { useActivityStream } from './useActivityStream';
+import { ActivityCard } from './ActivityCard';
+import { AddActivityModal } from './AddActivityModal';
 
 interface TeamMemberOption {
-  id: string
-  name: string | null
-  email: string
+  id: string;
+  name: string | null;
+  email: string;
 }
 
 interface ActivityFeedProps {
-  userId?: string
-  showAddButton?: boolean
-  showFilters?: boolean
-  compact?: boolean
-  teamMembers?: TeamMemberOption[]
+  userId?: string;
+  showAddButton?: boolean;
+  showFilters?: boolean;
+  compact?: boolean;
+  teamMembers?: TeamMemberOption[];
 }
 
 export function ActivityFeed({
@@ -46,17 +46,17 @@ export function ActivityFeed({
   compact = false,
   teamMembers = [],
 }: ActivityFeedProps) {
-  const [showAddModal, setShowAddModal] = useState(false)
-  const [showFilterPanel, setShowFilterPanel] = useState(false)
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showFilterPanel, setShowFilterPanel] = useState(false);
 
   const { activities, loading, error, total, filters, setFilters, refetch } = useActivityStream({
     user_id: userId,
     limit: compact ? 10 : 50,
-  })
+  });
 
   const handleFilterChange = (key: string, value: string) => {
-    setFilters({ [key]: value || undefined, offset: 0 })
-  }
+    setFilters({ [key]: value || undefined, offset: 0 });
+  };
 
   const clearFilters = () => {
     setFilters({
@@ -66,10 +66,11 @@ export function ActivityFeed({
       since: undefined,
       until: undefined,
       offset: 0,
-    })
-  }
+    });
+  };
 
-  const hasActiveFilters = filters.source_type || filters.category || filters.user_id || filters.since || filters.until
+  const hasActiveFilters =
+    filters.source_type || filters.category || filters.user_id || filters.since || filters.until;
 
   return (
     <div className="space-y-4">
@@ -79,9 +80,7 @@ export function ActivityFeed({
           <Heading level={2} className="text-lg text-text-primary">
             Aktivitäten
           </Heading>
-          {!loading && (
-            <span className="text-sm text-text-tertiary">({total})</span>
-          )}
+          {!loading && <span className="text-sm text-text-tertiary">({total})</span>}
         </div>
 
         <div className="flex items-center gap-2">
@@ -116,7 +115,8 @@ export function ActivityFeed({
             <Button
               onClick={() => setShowAddModal(true)}
               size="sm"
-              variant="primary" className="gap-2"
+              variant="primary"
+              className="gap-2"
             >
               <Plus className="w-4 h-4" />
               Aktivität
@@ -205,10 +205,7 @@ export function ActivityFeed({
       {loading && (
         <div className="space-y-4">
           {[...Array(compact ? 3 : 5)].map((_, i) => (
-            <Card
-              key={i}
-              className="p-4 animate-pulse"
-            >
+            <Card key={i} className="p-4 animate-pulse">
               <div className="flex gap-3">
                 <div className="w-10 h-10 bg-surface-overlay rounded-full" />
                 <div className="flex-1 space-y-2">
@@ -269,11 +266,8 @@ export function ActivityFeed({
 
       {/* Add Modal */}
       {showAddModal && (
-        <AddActivityModal
-          onClose={() => setShowAddModal(false)}
-          onSuccess={() => refetch()}
-        />
+        <AddActivityModal onClose={() => setShowAddModal(false)} onSuccess={() => refetch()} />
       )}
     </div>
-  )
+  );
 }

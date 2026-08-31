@@ -1,24 +1,24 @@
-import Image from 'next/image'
-import { Link } from '@/i18n/navigation'
-import { Clock } from 'lucide-react'
-import { getLocale, getTranslations } from 'next-intl/server'
-import { BlogPost } from '@/lib/blog'
-import { formatDate } from '@/lib/date-formats'
-import { blogCategoryKey, getReadingTime } from '@/lib/blog-utils'
-import UnlistedBadge from './UnlistedBadge'
-import BlogByline from './BlogByline'
-import { Eyebrow } from '@/components/ui/Eyebrow'
+import Image from 'next/image';
+import { Link } from '@/i18n/navigation';
+import { Clock } from 'lucide-react';
+import { getLocale, getTranslations } from 'next-intl/server';
+import { BlogPost } from '@/lib/blog';
+import { formatDate } from '@/lib/date-formats';
+import { blogCategoryKey, getReadingTime } from '@/lib/blog-utils';
+import UnlistedBadge from './UnlistedBadge';
+import BlogByline from './BlogByline';
+import { Eyebrow } from '@/components/ui/Eyebrow';
 
 interface BlogHeroProps {
-  post: BlogPost
+  post: BlogPost;
 }
 
 export default async function BlogHero({ post }: BlogHeroProps) {
-  const t = await getTranslations('blog')
-  const locale = await getLocale()
-  const readingTime = getReadingTime(post.body)
-  const categoryKey = post.category ? blogCategoryKey(post.category) : null
-  const categoryLabel = categoryKey ? t(`categoryLabels.${categoryKey}`) : post.category
+  const t = await getTranslations('blog');
+  const locale = await getLocale();
+  const readingTime = getReadingTime(post.body);
+  const categoryKey = post.category ? blogCategoryKey(post.category) : null;
+  const categoryLabel = categoryKey ? t(`categoryLabels.${categoryKey}`) : post.category;
 
   return (
     <Link href={`/blog/${post.slug}`} className="group block">
@@ -58,7 +58,11 @@ export default async function BlogHero({ post }: BlogHeroProps) {
           )}
 
           <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs uppercase tracking-[0.08em] text-text-tertiary">
-            <BlogByline author={post.author} authorId={post.authorId} className="text-text-secondary" />
+            <BlogByline
+              author={post.author}
+              authorId={post.authorId}
+              className="text-text-secondary"
+            />
             <span aria-hidden="true">·</span>
             <time>{formatDate(post.publishedAt || post.createdAt, locale)}</time>
             <span aria-hidden="true">·</span>
@@ -70,5 +74,5 @@ export default async function BlogHero({ post }: BlogHeroProps) {
         </div>
       </article>
     </Link>
-  )
+  );
 }

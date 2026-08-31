@@ -4,51 +4,49 @@
  * Server component that fetches service data and passes to form.
  */
 
-import { Metadata } from 'next'
-import { redirect, notFound } from 'next/navigation'
-import { auth } from '@/auth'
-import { canAccessSection } from '@/lib/permissions'
-import { getAdminServiceById } from '@/lib/services'
-import { ServiceForm } from '@/components/admin/ServiceForm'
+import { Metadata } from 'next';
+import { redirect, notFound } from 'next/navigation';
+import { auth } from '@/auth';
+import { canAccessSection } from '@/lib/permissions';
+import { getAdminServiceById } from '@/lib/services';
+import { ServiceForm } from '@/components/admin/ServiceForm';
 
 interface PageProps {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { id } = await params
-  const service = await getAdminServiceById(id)
+  const { id } = await params;
+  const service = await getAdminServiceById(id);
 
   return {
-    title: service
-      ? `${service.name} bearbeiten`
-      : 'Dienstleistung bearbeiten | evig Admin',
+    title: service ? `${service.name} bearbeiten` : 'Dienstleistung bearbeiten | evig Admin',
     description: 'Dienstleistung bearbeiten',
-  }
+  };
 }
 
 export default async function AdminServiceEditPage({ params }: PageProps) {
-  const session = await auth()
-  const { id } = await params
+  const session = await auth();
+  const { id } = await params;
 
   if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/services')
+    redirect('/auth/login?callbackUrl=/admin/services');
   }
 
   const user = {
     email: session.user.email,
     is_staff: session.user.isStaff,
     staff_permissions: session.user.staffPermissions,
-  }
+  };
 
   if (!canAccessSection(user, 'services')) {
-    redirect('/admin')
+    redirect('/admin');
   }
 
-  const service = await getAdminServiceById(id)
+  const service = await getAdminServiceById(id);
 
   if (!service) {
-    notFound()
+    notFound();
   }
 
   // Transform DB format to form format
@@ -75,11 +73,11 @@ export default async function AdminServiceEditPage({ params }: PageProps) {
     pricingBase: service.pricing_base || '',
     pricingDetails: service.pricing_details || [],
     pricingMediaPrices: service.pricing_media_prices || null,
-  }
+  };
 
   return (
     <div className="max-w-4xl mx-auto">
       <ServiceForm initialData={formData} isEdit />
     </div>
-  )
+  );
 }

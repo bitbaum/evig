@@ -13,67 +13,82 @@
  * - /api/marketplace/cart/checkout
  */
 
-import { logger } from '@/lib/logger'
-import { createGateway } from '@/lib/payments/payrexx-client'
-import type { SupportedCurrency } from '@/lib/payments/currency'
+import { logger } from '@/lib/logger';
+import { createGateway } from '@/lib/payments/payrexx-client';
+import type { SupportedCurrency } from '@/lib/payments/currency';
 
 // Re-export everything from sub-modules for backward compatibility
-export { DEFAULT_CURRENCY, DEFAULT_AUTO_RELEASE_DAYS, calculateFees, calculateSwissVAT, centsToDisplay } from './payments-fees'
-export type { PaymentProvider, FeeCalculation } from './payments-fees'
+export {
+  DEFAULT_CURRENCY,
+  DEFAULT_AUTO_RELEASE_DAYS,
+  calculateFees,
+  calculateSwissVAT,
+  centsToDisplay,
+} from './payments-fees';
+export type { PaymentProvider, FeeCalculation } from './payments-fees';
 
-export { DEFAULT_PAYMENT_PROVIDER, getPaymentProvider, createTransaction, updateTransactionGatewayId } from './payments-gateway'
-export type { TransactionParams, TransactionResult } from './payments-gateway'
+export {
+  DEFAULT_PAYMENT_PROVIDER,
+  getPaymentProvider,
+  createTransaction,
+  updateTransactionGatewayId,
+} from './payments-gateway';
+export type { TransactionParams, TransactionResult } from './payments-gateway';
 
-export { createEscrowAccount } from './payments-escrow'
-export type { EscrowParams } from './payments-escrow'
+export { createEscrowAccount } from './payments-escrow';
+export type { EscrowParams } from './payments-escrow';
 
-export { createInvoice, buildInvoiceLineItem } from './payments-invoice'
-export type { InvoiceParams, InvoiceLineItem, InvoiceResult } from './payments-invoice'
+export { createInvoice, buildInvoiceLineItem } from './payments-invoice';
+export type { InvoiceParams, InvoiceLineItem, InvoiceResult } from './payments-invoice';
 
 // Import what we need for the orchestrator functions
-import { DEFAULT_CURRENCY, DEFAULT_AUTO_RELEASE_DAYS, calculateFees } from './payments-fees'
-import { getPaymentProvider, createTransaction, updateTransactionGatewayId } from './payments-gateway'
-import { createEscrowAccount } from './payments-escrow'
-import { createInvoice } from './payments-invoice'
+import { DEFAULT_CURRENCY, DEFAULT_AUTO_RELEASE_DAYS, calculateFees } from './payments-fees';
+import {
+  getPaymentProvider,
+  createTransaction,
+  updateTransactionGatewayId,
+} from './payments-gateway';
+import { createEscrowAccount } from './payments-escrow';
+import { createInvoice } from './payments-invoice';
 
 // ============================================================================
 // Types
 // ============================================================================
 
 export interface ProcessPaymentParams {
-  userId: string
-  baseAmountCents: number
-  currency?: SupportedCurrency
-  useEscrow: boolean
-  autoReleaseDays?: number
-  paymentDescription: string
-  paymentMetadata: Record<string, string>
+  userId: string;
+  baseAmountCents: number;
+  currency?: SupportedCurrency;
+  useEscrow: boolean;
+  autoReleaseDays?: number;
+  paymentDescription: string;
+  paymentMetadata: Record<string, string>;
   // Payrexx redirect URLs
-  successRedirectUrl: string
-  failedRedirectUrl: string
-  cancelRedirectUrl: string
+  successRedirectUrl: string;
+  failedRedirectUrl: string;
+  cancelRedirectUrl: string;
   /** Purpose shown on payment page */
-  purpose?: string
+  purpose?: string;
   // One of these contexts should be provided
-  serviceAppointmentId?: string
-  workshopRegistrationId?: string
+  serviceAppointmentId?: string;
+  workshopRegistrationId?: string;
   // Invoice details
-  invoiceLineItems: import('./payments-invoice').InvoiceLineItem[]
-  invoiceNotes: string
-  invoicePaymentTerms: string
+  invoiceLineItems: import('./payments-invoice').InvoiceLineItem[];
+  invoiceNotes: string;
+  invoicePaymentTerms: string;
   // Additional transaction metadata
-  transactionMetadata?: Record<string, unknown>
+  transactionMetadata?: Record<string, unknown>;
 }
 
 export interface ProcessPaymentResult {
-  gatewayId: number
-  paymentUrl: string
-  transactionId: string
-  invoiceId: string
-  invoiceNumber: string
-  totalAmountCents: number
-  feeCents: number
-  currency: SupportedCurrency
+  gatewayId: number;
+  paymentUrl: string;
+  transactionId: string;
+  invoiceId: string;
+  invoiceNumber: string;
+  totalAmountCents: number;
+  feeCents: number;
+  currency: SupportedCurrency;
 }
 
 // ============================================================================
@@ -90,20 +105,18 @@ export interface ProcessPaymentResult {
  * 6. Create escrow account (if enabled)
  * 7. Create invoice
  */
-export async function processPayment(
-  params: ProcessPaymentParams
-): Promise<ProcessPaymentResult> {
-  const currency = params.currency || DEFAULT_CURRENCY
-  const autoReleaseDays = params.autoReleaseDays || DEFAULT_AUTO_RELEASE_DAYS
+export async function processPayment(params: ProcessPaymentParams): Promise<ProcessPaymentResult> {
+  const currency = params.currency || DEFAULT_CURRENCY;
+  const autoReleaseDays = params.autoReleaseDays || DEFAULT_AUTO_RELEASE_DAYS;
 
   // 1. Get payment provider
-  const provider = await getPaymentProvider()
+  const provider = await getPaymentProvider();
   if (!provider) {
-    throw new Error('Payment provider not available')
+    throw new Error('Payment provider not available');
   }
 
   // 2. Calculate fees
-  const fees = calculateFees(params.baseAmountCents, provider, currency)
+  const fees = calculateFees(params.baseAmountCents, provider, currency);
 
   // 3. Create payment transaction record first (need ID as referenceId)
   const transaction = await createTransaction({
@@ -118,8 +131,8 @@ export async function processPayment(
     autoReleaseDays,
     serviceAppointmentId: params.serviceAppointmentId,
     workshopRegistrationId: params.workshopRegistrationId,
-    metadata: params.transactionMetadata
-  })
+    metadata: params.transactionMetadata,
+  });
 
   // 4. Create Payrexx gateway
   const gateway = await createGateway({
@@ -130,10 +143,10 @@ export async function processPayment(
     successRedirectUrl: params.successRedirectUrl,
     failedRedirectUrl: params.failedRedirectUrl,
     cancelRedirectUrl: params.cancelRedirectUrl,
-  })
+  });
 
   // 5. Update transaction with gateway ID
-  await updateTransactionGatewayId(transaction.transactionId, gateway.id)
+  await updateTransactionGatewayId(transaction.transactionId, gateway.id);
 
   // 6. Create escrow account if enabled
   if (params.useEscrow) {
@@ -142,8 +155,8 @@ export async function processPayment(
       totalAmountCents: fees.totalAmountCents,
       currency,
       autoReleaseDays,
-      buyerId: params.userId
-    })
+      buyerId: params.userId,
+    });
   }
 
   // 7. Create invoice
@@ -156,16 +169,16 @@ export async function processPayment(
     notes: params.invoiceNotes,
     paymentTerms: params.invoicePaymentTerms,
     serviceAppointmentId: params.serviceAppointmentId,
-    workshopRegistrationId: params.workshopRegistrationId
-  })
+    workshopRegistrationId: params.workshopRegistrationId,
+  });
 
   logger.info('Payment flow completed', {
     gatewayId: gateway.id,
     transactionId: transaction.transactionId,
     invoiceId: invoice.invoiceId,
     totalAmount: fees.totalAmountCents,
-    escrowEnabled: params.useEscrow
-  })
+    escrowEnabled: params.useEscrow,
+  });
 
   return {
     gatewayId: gateway.id,
@@ -175,8 +188,8 @@ export async function processPayment(
     invoiceNumber: invoice.invoiceNumber,
     totalAmountCents: fees.totalAmountCents,
     feeCents: fees.feeCents,
-    currency
-  }
+    currency,
+  };
 }
 
 /**
@@ -184,19 +197,19 @@ export async function processPayment(
  * Used for scenarios like paying for existing appointments where invoice already exists
  */
 export async function processPaymentWithoutInvoice(
-  params: Omit<ProcessPaymentParams, 'invoiceLineItems' | 'invoiceNotes' | 'invoicePaymentTerms'>
+  params: Omit<ProcessPaymentParams, 'invoiceLineItems' | 'invoiceNotes' | 'invoicePaymentTerms'>,
 ): Promise<Omit<ProcessPaymentResult, 'invoiceId' | 'invoiceNumber'>> {
-  const currency = params.currency || DEFAULT_CURRENCY
-  const autoReleaseDays = params.autoReleaseDays || DEFAULT_AUTO_RELEASE_DAYS
+  const currency = params.currency || DEFAULT_CURRENCY;
+  const autoReleaseDays = params.autoReleaseDays || DEFAULT_AUTO_RELEASE_DAYS;
 
   // 1. Get payment provider
-  const provider = await getPaymentProvider()
+  const provider = await getPaymentProvider();
   if (!provider) {
-    throw new Error('Payment provider not available')
+    throw new Error('Payment provider not available');
   }
 
   // 2. Calculate fees
-  const fees = calculateFees(params.baseAmountCents, provider, currency)
+  const fees = calculateFees(params.baseAmountCents, provider, currency);
 
   // 3. Create payment transaction record first (need ID as referenceId)
   const transaction = await createTransaction({
@@ -211,8 +224,8 @@ export async function processPaymentWithoutInvoice(
     autoReleaseDays,
     serviceAppointmentId: params.serviceAppointmentId,
     workshopRegistrationId: params.workshopRegistrationId,
-    metadata: params.transactionMetadata
-  })
+    metadata: params.transactionMetadata,
+  });
 
   // 4. Create Payrexx gateway
   const gateway = await createGateway({
@@ -223,10 +236,10 @@ export async function processPaymentWithoutInvoice(
     successRedirectUrl: params.successRedirectUrl,
     failedRedirectUrl: params.failedRedirectUrl,
     cancelRedirectUrl: params.cancelRedirectUrl,
-  })
+  });
 
   // 5. Update transaction with gateway ID
-  await updateTransactionGatewayId(transaction.transactionId, gateway.id)
+  await updateTransactionGatewayId(transaction.transactionId, gateway.id);
 
   // 6. Create escrow account if enabled
   if (params.useEscrow) {
@@ -235,8 +248,8 @@ export async function processPaymentWithoutInvoice(
       totalAmountCents: fees.totalAmountCents,
       currency,
       autoReleaseDays,
-      buyerId: params.userId
-    })
+      buyerId: params.userId,
+    });
   }
 
   return {
@@ -245,6 +258,6 @@ export async function processPaymentWithoutInvoice(
     transactionId: transaction.transactionId,
     totalAmountCents: fees.totalAmountCents,
     feeCents: fees.feeCents,
-    currency
-  }
+    currency,
+  };
 }

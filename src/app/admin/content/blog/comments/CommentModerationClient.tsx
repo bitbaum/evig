@@ -1,78 +1,80 @@
-'use client'
+'use client';
 
-import { useState, useMemo } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Select } from '@/components/ui/select'
-import { Input } from '@/components/ui/input'
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
-import { apiFetch } from '@/lib/api/client'
-import { toast } from 'sonner'
-import { formatDateNumeric } from '@/lib/date-formats'
-import { Search, MessageSquare, Eye, EyeOff, Trash2, ExternalLink } from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
-import { COMMENT_STATUS } from '@/config/blog-comments'
+import { useState, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Select } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { apiFetch } from '@/lib/api/client';
+import { toast } from 'sonner';
+import { formatDateNumeric } from '@/lib/date-formats';
+import { Search, MessageSquare, Eye, EyeOff, Trash2, ExternalLink } from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable';
+import { COMMENT_STATUS } from '@/config/blog-comments';
 
 export interface ModComment {
-  id: string
-  postSlug: string
-  body: string
-  status: 'visible' | 'hidden'
-  createdAt: string
-  authorName: string | null
-  authorEmail: string | null
+  id: string;
+  postSlug: string;
+  body: string;
+  status: 'visible' | 'hidden';
+  createdAt: string;
+  authorName: string | null;
+  authorEmail: string | null;
 }
 
 export function CommentModerationClient({ comments }: { comments: ModComment[] }) {
-  const router = useRouter()
-  const [search, setSearch] = useState('')
-  const [statusFilter, setStatusFilter] = useState<'' | 'visible' | 'hidden'>('')
-  const [deleteTarget, setDeleteTarget] = useState<ModComment | null>(null)
-  const [busyId, setBusyId] = useState<string | null>(null)
+  const router = useRouter();
+  const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState<'' | 'visible' | 'hidden'>('');
+  const [deleteTarget, setDeleteTarget] = useState<ModComment | null>(null);
+  const [busyId, setBusyId] = useState<string | null>(null);
 
   const setStatus = async (c: ModComment, status: 'visible' | 'hidden') => {
-    setBusyId(c.id)
-    const res = await apiFetch(`/api/blog/comments/${c.id}`, { method: 'PATCH', body: { status } })
+    setBusyId(c.id);
+    const res = await apiFetch(`/api/blog/comments/${c.id}`, { method: 'PATCH', body: { status } });
     if (res.success) {
-      toast.success(status === COMMENT_STATUS.HIDDEN ? 'Kommentar ausgeblendet' : 'Kommentar sichtbar')
-      router.refresh()
+      toast.success(
+        status === COMMENT_STATUS.HIDDEN ? 'Kommentar ausgeblendet' : 'Kommentar sichtbar',
+      );
+      router.refresh();
     } else {
-      toast.error(res.error || 'Aktion fehlgeschlagen')
+      toast.error(res.error || 'Aktion fehlgeschlagen');
     }
-    setBusyId(null)
-  }
+    setBusyId(null);
+  };
 
   const handleDelete = async () => {
-    if (!deleteTarget) return
-    setBusyId(deleteTarget.id)
-    const res = await apiFetch(`/api/blog/comments/${deleteTarget.id}`, { method: 'DELETE' })
+    if (!deleteTarget) return;
+    setBusyId(deleteTarget.id);
+    const res = await apiFetch(`/api/blog/comments/${deleteTarget.id}`, { method: 'DELETE' });
     if (res.success) {
-      toast.success('Kommentar gelöscht')
-      setDeleteTarget(null)
-      router.refresh()
+      toast.success('Kommentar gelöscht');
+      setDeleteTarget(null);
+      router.refresh();
     } else {
-      toast.error(res.error || 'Kommentar konnte nicht gelöscht werden')
+      toast.error(res.error || 'Kommentar konnte nicht gelöscht werden');
     }
-    setBusyId(null)
-  }
+    setBusyId(null);
+  };
 
   const filtered = useMemo(() => {
     return comments.filter((c) => {
-      if (statusFilter && c.status !== statusFilter) return false
+      if (statusFilter && c.status !== statusFilter) return false;
       if (search.trim()) {
-        const q = search.toLowerCase()
+        const q = search.toLowerCase();
         return (
           c.body.toLowerCase().includes(q) ||
           c.postSlug.toLowerCase().includes(q) ||
           (c.authorName ?? '').toLowerCase().includes(q) ||
           (c.authorEmail ?? '').toLowerCase().includes(q)
-        )
+        );
       }
-      return true
-    })
-  }, [comments, search, statusFilter])
+      return true;
+    });
+  }, [comments, search, statusFilter]);
 
   const columns: AdminTableColumn<ModComment>[] = [
     {
@@ -88,7 +90,9 @@ export function CommentModerationClient({ comments }: { comments: ModComment[] }
     {
       header: 'Kommentar',
       cell: (c) => (
-        <p className={`max-w-md text-sm ${c.status === 'hidden' ? 'text-text-tertiary line-through' : 'text-text-secondary'}`}>
+        <p
+          className={`max-w-md text-sm ${c.status === 'hidden' ? 'text-text-tertiary line-through' : 'text-text-secondary'}`}
+        >
           {c.body}
         </p>
       ),
@@ -126,7 +130,9 @@ export function CommentModerationClient({ comments }: { comments: ModComment[] }
     {
       header: 'Datum',
       className: 'whitespace-nowrap align-top',
-      cell: (c) => <span className="text-sm text-text-primary">{formatDateNumeric(c.createdAt)}</span>,
+      cell: (c) => (
+        <span className="text-sm text-text-primary">{formatDateNumeric(c.createdAt)}</span>
+      ),
     },
     {
       header: 'Aktionen',
@@ -170,7 +176,7 @@ export function CommentModerationClient({ comments }: { comments: ModComment[] }
         </div>
       ),
     },
-  ]
+  ];
 
   return (
     <div className="space-y-5">
@@ -220,5 +226,5 @@ export function CommentModerationClient({ comments }: { comments: ModComment[] }
         onClose={() => setDeleteTarget(null)}
       />
     </div>
-  )
+  );
 }

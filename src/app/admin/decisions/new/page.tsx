@@ -2,21 +2,21 @@
  * New Decision Page - Server Component
  */
 
-import { Metadata } from 'next'
-import { auth } from '@/auth'
-import { Vote } from 'lucide-react'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import DecisionFormClient from './DecisionFormClient'
+import { Metadata } from 'next';
+import { auth } from '@/auth';
+import { Vote } from 'lucide-react';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import DecisionFormClient from './DecisionFormClient';
 
 export const metadata: Metadata = {
   title: 'Neuer Vorschlag',
   description: 'Neue Entscheidung erstellen',
-}
+};
 
 export default async function NewDecisionPage() {
-  const session = await auth()
+  const session = await auth();
   if (!session?.user?.email) {
-    return null
+    return null;
   }
 
   return (
@@ -29,5 +29,5 @@ export default async function NewDecisionPage() {
     >
       <DecisionFormClient />
     </AdminPageWrapper>
-  )
+  );
 }

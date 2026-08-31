@@ -1,54 +1,54 @@
-'use client'
+'use client';
 
-import { useEffect, useState, Suspense } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { CheckCircle, XCircle, Loader2, Mail } from 'lucide-react'
-import Link from 'next/link'
-import Heading from '@/components/ui/Heading'
-import { IconBadge } from '@/components/ui/IconBadge'
-import { apiFetch } from '@/lib/api/client'
-import { useTranslations } from 'next-intl'
-import { ROUTES } from '@/config/routes'
-import { Button } from '@/components/ui/button'
+import { useEffect, useState, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { CheckCircle, XCircle, Loader2, Mail } from 'lucide-react';
+import Link from 'next/link';
+import Heading from '@/components/ui/Heading';
+import { IconBadge } from '@/components/ui/IconBadge';
+import { apiFetch } from '@/lib/api/client';
+import { useTranslations } from 'next-intl';
+import { ROUTES } from '@/config/routes';
+import { Button } from '@/components/ui/button';
 
 function VerifyEmailContent() {
-  const t = useTranslations('auth.verifyEmail')
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
-  const [message, setMessage] = useState('')
+  const t = useTranslations('auth.verifyEmail');
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     const verifyEmail = async () => {
-      const token = searchParams.get('token')
+      const token = searchParams.get('token');
 
       if (!token) {
-        setStatus('error')
-        setMessage(t('noToken'))
-        return
+        setStatus('error');
+        setMessage(t('noToken'));
+        return;
       }
 
       const result = await apiFetch<{ message: string }>('/api/auth/verify-email', {
         method: 'POST',
         body: { token },
-      })
+      });
 
       if (result.success && result.data) {
-        setStatus('success')
-        setMessage(result.data.message)
+        setStatus('success');
+        setMessage(result.data.message);
 
         // Redirect to login after 3 seconds
         setTimeout(() => {
-          router.push('/auth/login?verified=true')
-        }, 3000)
+          router.push('/auth/login?verified=true');
+        }, 3000);
       } else {
-        setStatus('error')
-        setMessage(result.error || t('genericError'))
+        setStatus('error');
+        setMessage(result.error || t('genericError'));
       }
-    }
+    };
 
-    verifyEmail()
-  }, [searchParams, router, t])
+    verifyEmail();
+  }, [searchParams, router, t]);
 
   return (
     <div className="min-h-screen bg-surface-raised flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -59,9 +59,7 @@ function VerifyEmailContent() {
         <Heading level={2} className="mt-6 text-center text-3xl text-text-primary">
           {t('heading')}
         </Heading>
-        <p className="mt-2 text-center text-sm text-text-secondary">
-          {t('subheading')}
-        </p>
+        <p className="mt-2 text-center text-sm text-text-secondary">{t('subheading')}</p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -81,9 +79,7 @@ function VerifyEmailContent() {
                   {t('successHeading')}
                 </Heading>
                 <p className="text-text-secondary mb-4">{message}</p>
-                <p className="text-sm text-text-tertiary">
-                  {t('successRedirect')}
-                </p>
+                <p className="text-sm text-text-tertiary">{t('successRedirect')}</p>
                 <div className="mt-6">
                   <Link
                     href={ROUTES.public.login}
@@ -123,7 +119,7 @@ function VerifyEmailContent() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function VerifyEmailFallback() {
@@ -142,7 +138,7 @@ function VerifyEmailFallback() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default function VerifyEmailPage() {
@@ -150,5 +146,5 @@ export default function VerifyEmailPage() {
     <Suspense fallback={<VerifyEmailFallback />}>
       <VerifyEmailContent />
     </Suspense>
-  )
+  );
 }

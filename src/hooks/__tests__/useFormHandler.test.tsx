@@ -21,33 +21,33 @@
  *   - isSubmitting true during async, false after (success or failure)
  */
 
-const mockRouterPush = jest.fn()
-const mockRouterRefresh = jest.fn()
-const mockApiFetch = jest.fn()
+const mockRouterPush = jest.fn();
+const mockRouterRefresh = jest.fn();
+const mockApiFetch = jest.fn();
 
 jest.mock('next/navigation', () => ({
   useRouter: () => ({ push: mockRouterPush, refresh: mockRouterRefresh }),
-}))
+}));
 
 jest.mock('@/lib/api/client', () => ({
   apiFetch: (...args: unknown[]) => mockApiFetch.apply(null, args),
-}))
+}));
 
-import { renderHook, act, waitFor } from '@testing-library/react'
-import { useFormHandler } from '../useFormHandler'
+import { renderHook, act, waitFor } from '@testing-library/react';
+import { useFormHandler } from '../useFormHandler';
 
 interface SampleData {
-  name: string
-  count: number
+  name: string;
+  count: number;
 }
 
-const initialData: SampleData = { name: '', count: 0 }
+const initialData: SampleData = { name: '', count: 0 };
 
 beforeEach(() => {
-  mockRouterPush.mockReset()
-  mockRouterRefresh.mockReset()
-  mockApiFetch.mockReset()
-})
+  mockRouterPush.mockReset();
+  mockRouterRefresh.mockReset();
+  mockApiFetch.mockReset();
+});
 
 // ============================================================================
 // Initial state
@@ -60,14 +60,14 @@ describe('useFormHandler — initial state', () => {
         initialData,
         apiEndpoint: '/api/test',
       }),
-    )
+    );
 
-    expect(result.current.data).toEqual(initialData)
-    expect(result.current.error).toBe('')
-    expect(result.current.success).toBe('')
-    expect(result.current.isSubmitting).toBe(false)
-  })
-})
+    expect(result.current.data).toEqual(initialData);
+    expect(result.current.error).toBe('');
+    expect(result.current.success).toBe('');
+    expect(result.current.isSubmitting).toBe(false);
+  });
+});
 
 // ============================================================================
 // updateField
@@ -80,44 +80,44 @@ describe('updateField', () => {
         initialData: { name: 'Anna', count: 5 },
         apiEndpoint: '/api/test',
       }),
-    )
+    );
 
     act(() => {
-      result.current.updateField('name', 'Bob')
-    })
+      result.current.updateField('name', 'Bob');
+    });
 
-    expect(result.current.data).toEqual({ name: 'Bob', count: 5 })
-  })
+    expect(result.current.data).toEqual({ name: 'Bob', count: 5 });
+  });
 
   it('does not mutate the initialData reference', () => {
-    const initial = { name: 'Anna', count: 5 }
+    const initial = { name: 'Anna', count: 5 };
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({ initialData: initial, apiEndpoint: '/api/test' }),
-    )
+    );
 
     act(() => {
-      result.current.updateField('name', 'Bob')
-    })
+      result.current.updateField('name', 'Bob');
+    });
 
     // initialData reference must remain unchanged
-    expect(initial).toEqual({ name: 'Anna', count: 5 })
-  })
+    expect(initial).toEqual({ name: 'Anna', count: 5 });
+  });
 
   it('multiple updates compose correctly', () => {
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({ initialData, apiEndpoint: '/api/test' }),
-    )
+    );
 
     act(() => {
-      result.current.updateField('name', 'Anna')
-    })
+      result.current.updateField('name', 'Anna');
+    });
     act(() => {
-      result.current.updateField('count', 42)
-    })
+      result.current.updateField('count', 42);
+    });
 
-    expect(result.current.data).toEqual({ name: 'Anna', count: 42 })
-  })
-})
+    expect(result.current.data).toEqual({ name: 'Anna', count: 42 });
+  });
+});
 
 // ============================================================================
 // handleSubmit — happy path (create)
@@ -125,30 +125,30 @@ describe('updateField', () => {
 
 describe('handleSubmit — create mode', () => {
   it('POSTs to apiEndpoint and sets success message on success', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: true, data: { id: 'new-1' } })
+    mockApiFetch.mockResolvedValueOnce({ success: true, data: { id: 'new-1' } });
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({
         initialData: { name: 'Anna', count: 5 },
         apiEndpoint: '/api/services',
       }),
-    )
+    );
 
     await act(async () => {
-      await result.current.handleSubmit()
-    })
+      await result.current.handleSubmit();
+    });
 
     expect(mockApiFetch).toHaveBeenCalledWith('/api/services', {
       method: 'POST',
       body: { name: 'Anna', count: 5 },
-    })
-    expect(result.current.success).toBe('Erfolgreich erstellt!')
-    expect(result.current.error).toBe('')
-    expect(result.current.isSubmitting).toBe(false)
-  })
+    });
+    expect(result.current.success).toBe('Erfolgreich erstellt!');
+    expect(result.current.error).toBe('');
+    expect(result.current.isSubmitting).toBe(false);
+  });
 
   it('uses custom createMethod when provided (e.g. PUT for upsert)', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: true })
+    mockApiFetch.mockResolvedValueOnce({ success: true });
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({
@@ -156,17 +156,17 @@ describe('handleSubmit — create mode', () => {
         apiEndpoint: '/api/test',
         createMethod: 'PUT',
       }),
-    )
+    );
 
     await act(async () => {
-      await result.current.handleSubmit()
-    })
+      await result.current.handleSubmit();
+    });
 
-    expect(mockApiFetch.mock.calls[0][1].method).toBe('PUT')
-  })
+    expect(mockApiFetch.mock.calls[0][1].method).toBe('PUT');
+  });
 
   it('uses custom createSuccessMessage when provided', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: true })
+    mockApiFetch.mockResolvedValueOnce({ success: true });
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({
@@ -174,15 +174,15 @@ describe('handleSubmit — create mode', () => {
         apiEndpoint: '/api/test',
         createSuccessMessage: 'Workshop angelegt!',
       }),
-    )
+    );
 
     await act(async () => {
-      await result.current.handleSubmit()
-    })
+      await result.current.handleSubmit();
+    });
 
-    expect(result.current.success).toBe('Workshop angelegt!')
-  })
-})
+    expect(result.current.success).toBe('Workshop angelegt!');
+  });
+});
 
 // ============================================================================
 // handleSubmit — edit mode
@@ -190,7 +190,7 @@ describe('handleSubmit — create mode', () => {
 
 describe('handleSubmit — edit mode', () => {
   it('appends editId to URL and uses PUT by default', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: true })
+    mockApiFetch.mockResolvedValueOnce({ success: true });
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({
@@ -199,21 +199,21 @@ describe('handleSubmit — edit mode', () => {
         isEdit: true,
         editId: 'svc-123',
       }),
-    )
+    );
 
     await act(async () => {
-      await result.current.handleSubmit()
-    })
+      await result.current.handleSubmit();
+    });
 
     expect(mockApiFetch).toHaveBeenCalledWith('/api/services/svc-123', {
       method: 'PUT',
       body: { name: 'Anna', count: 5 },
-    })
-    expect(result.current.success).toBe('Erfolgreich gespeichert!')
-  })
+    });
+    expect(result.current.success).toBe('Erfolgreich gespeichert!');
+  });
 
   it('uses custom editMethod (e.g. PATCH for partial updates)', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: true })
+    mockApiFetch.mockResolvedValueOnce({ success: true });
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({
@@ -223,17 +223,17 @@ describe('handleSubmit — edit mode', () => {
         editId: 'x-1',
         editMethod: 'PATCH',
       }),
-    )
+    );
 
     await act(async () => {
-      await result.current.handleSubmit()
-    })
+      await result.current.handleSubmit();
+    });
 
-    expect(mockApiFetch.mock.calls[0][1].method).toBe('PATCH')
-  })
+    expect(mockApiFetch.mock.calls[0][1].method).toBe('PATCH');
+  });
 
   it('falls back to create-mode URL if isEdit=true but editId missing', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: true })
+    mockApiFetch.mockResolvedValueOnce({ success: true });
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({
@@ -242,16 +242,16 @@ describe('handleSubmit — edit mode', () => {
         isEdit: true,
         editId: undefined, // bug guard — should not crash
       }),
-    )
+    );
 
     await act(async () => {
-      await result.current.handleSubmit()
-    })
+      await result.current.handleSubmit();
+    });
 
     // URL has no /undefined suffix
-    expect(mockApiFetch.mock.calls[0][0]).toBe('/api/test')
-  })
-})
+    expect(mockApiFetch.mock.calls[0][0]).toBe('/api/test');
+  });
+});
 
 // ============================================================================
 // validate — early return
@@ -259,7 +259,7 @@ describe('handleSubmit — edit mode', () => {
 
 describe('handleSubmit — validation', () => {
   it('runs validate before apiFetch and short-circuits on error', async () => {
-    const validate = jest.fn().mockReturnValue('Name ist erforderlich')
+    const validate = jest.fn().mockReturnValue('Name ist erforderlich');
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({
@@ -267,20 +267,20 @@ describe('handleSubmit — validation', () => {
         apiEndpoint: '/api/test',
         validate,
       }),
-    )
+    );
 
     await act(async () => {
-      await result.current.handleSubmit()
-    })
+      await result.current.handleSubmit();
+    });
 
-    expect(validate).toHaveBeenCalledWith({ name: '', count: 0 })
-    expect(mockApiFetch).not.toHaveBeenCalled()
-    expect(result.current.error).toBe('Name ist erforderlich')
-  })
+    expect(validate).toHaveBeenCalledWith({ name: '', count: 0 });
+    expect(mockApiFetch).not.toHaveBeenCalled();
+    expect(result.current.error).toBe('Name ist erforderlich');
+  });
 
   it('proceeds with apiFetch when validate returns null', async () => {
-    const validate = jest.fn().mockReturnValue(null)
-    mockApiFetch.mockResolvedValueOnce({ success: true })
+    const validate = jest.fn().mockReturnValue(null);
+    mockApiFetch.mockResolvedValueOnce({ success: true });
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({
@@ -288,16 +288,16 @@ describe('handleSubmit — validation', () => {
         apiEndpoint: '/api/test',
         validate,
       }),
-    )
+    );
 
     await act(async () => {
-      await result.current.handleSubmit()
-    })
+      await result.current.handleSubmit();
+    });
 
-    expect(mockApiFetch).toHaveBeenCalled()
-    expect(result.current.success).toBe('Erfolgreich erstellt!')
-  })
-})
+    expect(mockApiFetch).toHaveBeenCalled();
+    expect(result.current.success).toBe('Erfolgreich erstellt!');
+  });
+});
 
 // ============================================================================
 // transformBeforeSubmit
@@ -305,7 +305,7 @@ describe('handleSubmit — validation', () => {
 
 describe('handleSubmit — transformBeforeSubmit', () => {
   it('applies transform to data before sending', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: true })
+    mockApiFetch.mockResolvedValueOnce({ success: true });
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({
@@ -316,35 +316,35 @@ describe('handleSubmit — transformBeforeSubmit', () => {
           countDoubled: data.count * 2,
         }),
       }),
-    )
+    );
 
     await act(async () => {
-      await result.current.handleSubmit()
-    })
+      await result.current.handleSubmit();
+    });
 
     expect(mockApiFetch.mock.calls[0][1].body).toEqual({
       name: 'ANNA',
       countDoubled: 10,
-    })
-  })
+    });
+  });
 
   it('sends raw data when transformBeforeSubmit not provided', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: true })
+    mockApiFetch.mockResolvedValueOnce({ success: true });
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({
         initialData: { name: 'anna', count: 5 },
         apiEndpoint: '/api/test',
       }),
-    )
+    );
 
     await act(async () => {
-      await result.current.handleSubmit()
-    })
+      await result.current.handleSubmit();
+    });
 
-    expect(mockApiFetch.mock.calls[0][1].body).toEqual({ name: 'anna', count: 5 })
-  })
-})
+    expect(mockApiFetch.mock.calls[0][1].body).toEqual({ name: 'anna', count: 5 });
+  });
+});
 
 // ============================================================================
 // preventDefault on form event
@@ -352,35 +352,35 @@ describe('handleSubmit — transformBeforeSubmit', () => {
 
 describe('handleSubmit — preventDefault', () => {
   it('calls preventDefault when a form event is passed', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: true })
-    const preventDefault = jest.fn()
-    const fakeEvent = { preventDefault } as unknown as React.FormEvent
+    mockApiFetch.mockResolvedValueOnce({ success: true });
+    const preventDefault = jest.fn();
+    const fakeEvent = { preventDefault } as unknown as React.FormEvent;
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({ initialData, apiEndpoint: '/api/test' }),
-    )
+    );
 
     await act(async () => {
-      await result.current.handleSubmit(fakeEvent)
-    })
+      await result.current.handleSubmit(fakeEvent);
+    });
 
-    expect(preventDefault).toHaveBeenCalledTimes(1)
-  })
+    expect(preventDefault).toHaveBeenCalledTimes(1);
+  });
 
   it('handles undefined event without crashing (programmatic submit)', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: true })
+    mockApiFetch.mockResolvedValueOnce({ success: true });
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({ initialData, apiEndpoint: '/api/test' }),
-    )
+    );
 
     await act(async () => {
-      await result.current.handleSubmit() // no event
-    })
+      await result.current.handleSubmit(); // no event
+    });
 
-    expect(mockApiFetch).toHaveBeenCalled()
-  })
-})
+    expect(mockApiFetch).toHaveBeenCalled();
+  });
+});
 
 // ============================================================================
 // Failure paths
@@ -388,62 +388,62 @@ describe('handleSubmit — preventDefault', () => {
 
 describe('handleSubmit — failure', () => {
   it('sets error from result.error on apiFetch failure', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: false, error: 'Slug bereits vergeben' })
+    mockApiFetch.mockResolvedValueOnce({ success: false, error: 'Slug bereits vergeben' });
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({ initialData, apiEndpoint: '/api/test' }),
-    )
+    );
 
     await act(async () => {
-      await result.current.handleSubmit()
-    })
+      await result.current.handleSubmit();
+    });
 
-    expect(result.current.error).toBe('Slug bereits vergeben')
-    expect(result.current.success).toBe('')
-  })
+    expect(result.current.error).toBe('Slug bereits vergeben');
+    expect(result.current.success).toBe('');
+  });
 
   it('uses Swiss-German fallback when result.error is missing', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: false })
+    mockApiFetch.mockResolvedValueOnce({ success: false });
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({ initialData, apiEndpoint: '/api/test' }),
-    )
+    );
 
     await act(async () => {
-      await result.current.handleSubmit()
-    })
+      await result.current.handleSubmit();
+    });
 
-    expect(result.current.error).toBe('Speichern fehlgeschlagen')
-  })
+    expect(result.current.error).toBe('Speichern fehlgeschlagen');
+  });
 
   it('catches thrown exceptions and sets generic German error', async () => {
-    mockApiFetch.mockRejectedValueOnce(new Error('Network unreachable'))
+    mockApiFetch.mockRejectedValueOnce(new Error('Network unreachable'));
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({ initialData, apiEndpoint: '/api/test' }),
-    )
+    );
 
     await act(async () => {
-      await result.current.handleSubmit()
-    })
+      await result.current.handleSubmit();
+    });
 
-    expect(result.current.error).toBe('Ein unerwarteter Fehler ist aufgetreten')
-  })
+    expect(result.current.error).toBe('Ein unerwarteter Fehler ist aufgetreten');
+  });
 
   it('isSubmitting flips back to false after failure', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: false, error: 'x' })
+    mockApiFetch.mockResolvedValueOnce({ success: false, error: 'x' });
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({ initialData, apiEndpoint: '/api/test' }),
-    )
+    );
 
     await act(async () => {
-      await result.current.handleSubmit()
-    })
+      await result.current.handleSubmit();
+    });
 
-    expect(result.current.isSubmitting).toBe(false)
-  })
-})
+    expect(result.current.isSubmitting).toBe(false);
+  });
+});
 
 // ============================================================================
 // onSuccess callback
@@ -451,8 +451,8 @@ describe('handleSubmit — failure', () => {
 
 describe('handleSubmit — onSuccess callback', () => {
   it('invokes onSuccess with response data', async () => {
-    const onSuccess = jest.fn()
-    mockApiFetch.mockResolvedValueOnce({ success: true, data: { id: 'new-1' } })
+    const onSuccess = jest.fn();
+    mockApiFetch.mockResolvedValueOnce({ success: true, data: { id: 'new-1' } });
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({
@@ -460,18 +460,18 @@ describe('handleSubmit — onSuccess callback', () => {
         apiEndpoint: '/api/test',
         onSuccess,
       }),
-    )
+    );
 
     await act(async () => {
-      await result.current.handleSubmit()
-    })
+      await result.current.handleSubmit();
+    });
 
-    expect(onSuccess).toHaveBeenCalledWith({ id: 'new-1' })
-  })
+    expect(onSuccess).toHaveBeenCalledWith({ id: 'new-1' });
+  });
 
   it('does NOT invoke onSuccess when apiFetch fails', async () => {
-    const onSuccess = jest.fn()
-    mockApiFetch.mockResolvedValueOnce({ success: false, error: 'x' })
+    const onSuccess = jest.fn();
+    mockApiFetch.mockResolvedValueOnce({ success: false, error: 'x' });
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({
@@ -479,15 +479,15 @@ describe('handleSubmit — onSuccess callback', () => {
         apiEndpoint: '/api/test',
         onSuccess,
       }),
-    )
+    );
 
     await act(async () => {
-      await result.current.handleSubmit()
-    })
+      await result.current.handleSubmit();
+    });
 
-    expect(onSuccess).not.toHaveBeenCalled()
-  })
-})
+    expect(onSuccess).not.toHaveBeenCalled();
+  });
+});
 
 // ============================================================================
 // Redirect
@@ -495,25 +495,25 @@ describe('handleSubmit — onSuccess callback', () => {
 
 describe('handleSubmit — redirect', () => {
   it('does NOT redirect when redirectTo is omitted', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: true })
-    jest.useFakeTimers()
+    mockApiFetch.mockResolvedValueOnce({ success: true });
+    jest.useFakeTimers();
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({ initialData, apiEndpoint: '/api/test' }),
-    )
+    );
 
     await act(async () => {
-      await result.current.handleSubmit()
-    })
+      await result.current.handleSubmit();
+    });
 
-    jest.runAllTimers()
-    expect(mockRouterPush).not.toHaveBeenCalled()
-    jest.useRealTimers()
-  })
+    jest.runAllTimers();
+    expect(mockRouterPush).not.toHaveBeenCalled();
+    jest.useRealTimers();
+  });
 
   it('redirects to redirectTo after redirectDelay (default 1000ms)', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: true })
-    jest.useFakeTimers()
+    mockApiFetch.mockResolvedValueOnce({ success: true });
+    jest.useFakeTimers();
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({
@@ -521,27 +521,27 @@ describe('handleSubmit — redirect', () => {
         apiEndpoint: '/api/test',
         redirectTo: '/admin/services',
       }),
-    )
+    );
 
     await act(async () => {
-      await result.current.handleSubmit()
-    })
+      await result.current.handleSubmit();
+    });
 
     // Before delay → no push yet
-    expect(mockRouterPush).not.toHaveBeenCalled()
+    expect(mockRouterPush).not.toHaveBeenCalled();
 
     act(() => {
-      jest.advanceTimersByTime(1000)
-    })
+      jest.advanceTimersByTime(1000);
+    });
 
-    expect(mockRouterPush).toHaveBeenCalledWith('/admin/services')
-    expect(mockRouterRefresh).toHaveBeenCalledTimes(1)
-    jest.useRealTimers()
-  })
+    expect(mockRouterPush).toHaveBeenCalledWith('/admin/services');
+    expect(mockRouterRefresh).toHaveBeenCalledTimes(1);
+    jest.useRealTimers();
+  });
 
   it('honors custom redirectDelay', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: true })
-    jest.useFakeTimers()
+    mockApiFetch.mockResolvedValueOnce({ success: true });
+    jest.useFakeTimers();
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({
@@ -550,27 +550,27 @@ describe('handleSubmit — redirect', () => {
         redirectTo: '/admin/x',
         redirectDelay: 3000,
       }),
-    )
+    );
 
     await act(async () => {
-      await result.current.handleSubmit()
-    })
+      await result.current.handleSubmit();
+    });
 
     act(() => {
-      jest.advanceTimersByTime(2999)
-    })
-    expect(mockRouterPush).not.toHaveBeenCalled()
+      jest.advanceTimersByTime(2999);
+    });
+    expect(mockRouterPush).not.toHaveBeenCalled();
 
     act(() => {
-      jest.advanceTimersByTime(1)
-    })
-    expect(mockRouterPush).toHaveBeenCalled()
-    jest.useRealTimers()
-  })
+      jest.advanceTimersByTime(1);
+    });
+    expect(mockRouterPush).toHaveBeenCalled();
+    jest.useRealTimers();
+  });
 
   it('does NOT redirect on failure', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: false, error: 'x' })
-    jest.useFakeTimers()
+    mockApiFetch.mockResolvedValueOnce({ success: false, error: 'x' });
+    jest.useFakeTimers();
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({
@@ -578,17 +578,17 @@ describe('handleSubmit — redirect', () => {
         apiEndpoint: '/api/test',
         redirectTo: '/admin/x',
       }),
-    )
+    );
 
     await act(async () => {
-      await result.current.handleSubmit()
-    })
+      await result.current.handleSubmit();
+    });
 
-    jest.runAllTimers()
-    expect(mockRouterPush).not.toHaveBeenCalled()
-    jest.useRealTimers()
-  })
-})
+    jest.runAllTimers();
+    expect(mockRouterPush).not.toHaveBeenCalled();
+    jest.useRealTimers();
+  });
+});
 
 // ============================================================================
 // submitCustom — bypasses transformBeforeSubmit
@@ -596,7 +596,7 @@ describe('handleSubmit — redirect', () => {
 
 describe('submitCustom', () => {
   it('sends caller-supplied payload, ignoring data and transformBeforeSubmit', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: true })
+    mockApiFetch.mockResolvedValueOnce({ success: true });
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({
@@ -604,37 +604,37 @@ describe('submitCustom', () => {
         apiEndpoint: '/api/test',
         transformBeforeSubmit: () => ({ shouldNotAppear: true }),
       }),
-    )
+    );
 
     await act(async () => {
-      await result.current.submitCustom({ custom: 'payload' })
-    })
+      await result.current.submitCustom({ custom: 'payload' });
+    });
 
-    expect(mockApiFetch.mock.calls[0][1].body).toEqual({ custom: 'payload' })
-  })
+    expect(mockApiFetch.mock.calls[0][1].body).toEqual({ custom: 'payload' });
+  });
 
   it('returns true on success, false on failure', async () => {
     mockApiFetch
       .mockResolvedValueOnce({ success: true })
-      .mockResolvedValueOnce({ success: false, error: 'x' })
+      .mockResolvedValueOnce({ success: false, error: 'x' });
 
     const { result } = renderHook(() =>
       useFormHandler<SampleData>({ initialData, apiEndpoint: '/api/test' }),
-    )
+    );
 
-    let okResult: boolean | undefined
+    let okResult: boolean | undefined;
     await act(async () => {
-      okResult = await result.current.submitCustom({})
-    })
-    expect(okResult).toBe(true)
+      okResult = await result.current.submitCustom({});
+    });
+    expect(okResult).toBe(true);
 
-    let failResult: boolean | undefined
+    let failResult: boolean | undefined;
     await act(async () => {
-      failResult = await result.current.submitCustom({})
-    })
-    expect(failResult).toBe(false)
-  })
-})
+      failResult = await result.current.submitCustom({});
+    });
+    expect(failResult).toBe(false);
+  });
+});
 
 // ============================================================================
 // reset
@@ -647,22 +647,22 @@ describe('reset', () => {
         initialData: { name: 'initial', count: 0 },
         apiEndpoint: '/api/test',
       }),
-    )
+    );
 
     act(() => {
-      result.current.updateField('name', 'changed')
-      result.current.setError('something broke')
-      result.current.setSuccess('something worked')
-    })
+      result.current.updateField('name', 'changed');
+      result.current.setError('something broke');
+      result.current.setSuccess('something worked');
+    });
 
-    expect(result.current.data.name).toBe('changed')
+    expect(result.current.data.name).toBe('changed');
 
     act(() => {
-      result.current.reset()
-    })
+      result.current.reset();
+    });
 
-    expect(result.current.data).toEqual({ name: 'initial', count: 0 })
-    expect(result.current.error).toBe('')
-    expect(result.current.success).toBe('')
-  })
-})
+    expect(result.current.data).toEqual({ name: 'initial', count: 0 });
+    expect(result.current.error).toBe('');
+    expect(result.current.success).toBe('');
+  });
+});

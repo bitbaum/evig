@@ -11,10 +11,10 @@
  * - Token rotation on sensitive operations
  */
 
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server';
 // cookie v2 renamed the exports: serialize → stringifySetCookie (now taking
 // {name, value, ...options} as one object), parse → parseCookie.
-import { stringifySetCookie, parseCookie } from 'cookie'
+import { stringifySetCookie, parseCookie } from 'cookie';
 
 // =============================================================================
 // Edge-compatible crypto utilities (Web Crypto API)
@@ -26,20 +26,20 @@ import { stringifySetCookie, parseCookie } from 'cookie'
  */
 function constantTimeCompareEdge(a: string, b: string): boolean {
   if (a.length !== b.length) {
-    return false
+    return false;
   }
-  let result = 0
+  let result = 0;
   for (let i = 0; i < a.length; i++) {
-    result |= a.charCodeAt(i) ^ b.charCodeAt(i)
+    result |= a.charCodeAt(i) ^ b.charCodeAt(i);
   }
-  return result === 0
+  return result === 0;
 }
 
 // =============================================================================
 // Configuration
 // =============================================================================
 
-const isProduction = process.env.NODE_ENV === 'production'
+const isProduction = process.env.NODE_ENV === 'production';
 
 const CSRF_CONFIG = {
   // __Host- prefix requires Secure (HTTPS). Use plain name on localhost HTTP.
@@ -54,15 +54,15 @@ const CSRF_CONFIG = {
   // All other routes are protected via Double Submit Cookie pattern
   // (CSRF_SCRIPT patches window.fetch to send the token automatically).
   excludedPaths: [
-    '/api/webhooks/',                // External webhook callers
+    '/api/webhooks/', // External webhook callers
     '/api/payments/payrexx-webhook', // External Payrexx webhook
-    '/api/payments/webhook',         // External payment webhook
+    '/api/payments/webhook', // External payment webhook
     '/api/it-hilfe/accept-offer-via-token', // HMAC token in body = auth (email magic link)
-    '/api/presentations/comments',   // Public: posted from STATIC decks (served outside
-                                     // middleware, so no CSRF cookie exists). Anonymous
-                                     // comment creation — protected by honeypot + rate limit.
+    '/api/presentations/comments', // Public: posted from STATIC decks (served outside
+    // middleware, so no CSRF cookie exists). Anonymous
+    // comment creation — protected by honeypot + rate limit.
   ],
-}
+};
 
 // =============================================================================
 // Token Generation and Validation
@@ -72,9 +72,9 @@ const CSRF_CONFIG = {
  * Generate a CSRF token using Web Crypto API (Edge-compatible)
  */
 export function generateCsrfToken(): string {
-  const bytes = new Uint8Array(CSRF_CONFIG.tokenLength)
-  crypto.getRandomValues(bytes)
-  return Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('')
+  const bytes = new Uint8Array(CSRF_CONFIG.tokenLength);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
 }
 
 /**
@@ -82,19 +82,19 @@ export function generateCsrfToken(): string {
  * Note: This is async due to Web Crypto API requirements
  */
 export async function hashCsrfToken(token: string): Promise<string> {
-  const encoder = new TextEncoder()
-  const data = encoder.encode(token)
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data)
-  const hashArray = Array.from(new Uint8Array(hashBuffer))
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
+  const encoder = new TextEncoder();
+  const data = encoder.encode(token);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
 /**
  * Validate a CSRF token against its hash
  */
 export async function validateCsrfToken(token: string, hash: string): Promise<boolean> {
-  const tokenHash = await hashCsrfToken(token)
-  return constantTimeCompareEdge(tokenHash, hash)
+  const tokenHash = await hashCsrfToken(token);
+  return constantTimeCompareEdge(tokenHash, hash);
 }
 
 // =============================================================================
@@ -113,16 +113,16 @@ export function createCsrfCookie(token: string): string {
     sameSite: 'strict',
     path: '/',
     maxAge: CSRF_CONFIG.cookieMaxAge,
-  })
+  });
 }
 
 /**
  * Get CSRF token from cookies
  */
 export function getCsrfFromCookies(cookieHeader: string | null): string | null {
-  if (!cookieHeader) return null
-  const cookies = parseCookie(cookieHeader)
-  return cookies[CSRF_CONFIG.cookieName] || null
+  if (!cookieHeader) return null;
+  const cookies = parseCookie(cookieHeader);
+  return cookies[CSRF_CONFIG.cookieName] || null;
 }
 
 // =============================================================================
@@ -134,17 +134,17 @@ export function getCsrfFromCookies(cookieHeader: string | null): string | null {
  */
 export async function getCsrfFromRequest(request: NextRequest): Promise<string | null> {
   // First check header
-  const headerToken = request.headers.get(CSRF_CONFIG.headerName)
-  if (headerToken) return headerToken
+  const headerToken = request.headers.get(CSRF_CONFIG.headerName);
+  if (headerToken) return headerToken;
 
   // Then check form body for POST requests
-  const contentType = request.headers.get('content-type') || ''
+  const contentType = request.headers.get('content-type') || '';
 
   if (contentType.includes('application/x-www-form-urlencoded')) {
     try {
-      const formData = await request.formData()
-      const formToken = formData.get(CSRF_CONFIG.formFieldName)
-      if (typeof formToken === 'string') return formToken
+      const formData = await request.formData();
+      const formToken = formData.get(CSRF_CONFIG.formFieldName);
+      if (typeof formToken === 'string') return formToken;
     } catch {
       // Ignore parsing errors
     }
@@ -152,30 +152,28 @@ export async function getCsrfFromRequest(request: NextRequest): Promise<string |
 
   if (contentType.includes('application/json')) {
     try {
-      const body = await request.clone().json()
-      if (body && typeof body._csrf === 'string') return body._csrf
+      const body = await request.clone().json();
+      if (body && typeof body._csrf === 'string') return body._csrf;
     } catch {
       // Ignore parsing errors
     }
   }
 
-  return null
+  return null;
 }
 
 /**
  * Check if request path is excluded from CSRF protection
  */
 export function isExcludedPath(pathname: string): boolean {
-  return CSRF_CONFIG.excludedPaths.some(path =>
-    pathname.startsWith(path)
-  )
+  return CSRF_CONFIG.excludedPaths.some((path) => pathname.startsWith(path));
 }
 
 /**
  * Check if request method requires CSRF protection
  */
 export function requiresCsrfProtection(method: string): boolean {
-  return CSRF_CONFIG.protectedMethods.includes(method.toUpperCase())
+  return CSRF_CONFIG.protectedMethods.includes(method.toUpperCase());
 }
 
 // =============================================================================
@@ -183,47 +181,47 @@ export function requiresCsrfProtection(method: string): boolean {
 // =============================================================================
 
 interface CsrfValidationResult {
-  valid: boolean
-  error?: string
-  newToken?: string  // For token rotation
+  valid: boolean;
+  error?: string;
+  newToken?: string; // For token rotation
 }
 
 /**
  * Validate CSRF token for a request
  */
 export async function validateCsrf(request: NextRequest): Promise<CsrfValidationResult> {
-  const { pathname } = request.nextUrl
-  const method = request.method
+  const { pathname } = request.nextUrl;
+  const method = request.method;
 
   // Skip for non-protected methods
   if (!requiresCsrfProtection(method)) {
-    return { valid: true }
+    return { valid: true };
   }
 
   // Skip for excluded paths
   if (isExcludedPath(pathname)) {
-    return { valid: true }
+    return { valid: true };
   }
 
   // Get token from cookie
-  const cookieToken = getCsrfFromCookies(request.headers.get('cookie'))
+  const cookieToken = getCsrfFromCookies(request.headers.get('cookie'));
   if (!cookieToken) {
-    return { valid: false, error: 'Missing CSRF cookie' }
+    return { valid: false, error: 'Missing CSRF cookie' };
   }
 
   // Get token from request
-  const requestToken = await getCsrfFromRequest(request)
+  const requestToken = await getCsrfFromRequest(request);
   if (!requestToken) {
-    return { valid: false, error: 'Missing CSRF token in request' }
+    return { valid: false, error: 'Missing CSRF token in request' };
   }
 
   // Validate using Double Submit Cookie pattern
   // In this pattern, the cookie and request token should match
   if (!constantTimeCompareEdge(cookieToken, requestToken)) {
-    return { valid: false, error: 'Invalid CSRF token' }
+    return { valid: false, error: 'Invalid CSRF token' };
   }
 
-  return { valid: true }
+  return { valid: true };
 }
 
 // =============================================================================
@@ -234,20 +232,17 @@ export async function validateCsrf(request: NextRequest): Promise<CsrfValidation
  * Create a CSRF-protected handler
  */
 export function withCsrfProtection(
-  handler: (request: NextRequest) => Promise<NextResponse>
+  handler: (request: NextRequest) => Promise<NextResponse>,
 ): (request: NextRequest) => Promise<NextResponse> {
   return async (request: NextRequest) => {
-    const validation = await validateCsrf(request)
+    const validation = await validateCsrf(request);
 
     if (!validation.valid) {
-      return NextResponse.json(
-        { error: validation.error },
-        { status: 403 }
-      )
+      return NextResponse.json({ error: validation.error }, { status: 403 });
     }
 
-    return handler(request)
-  }
+    return handler(request);
+  };
 }
 
 // =============================================================================
@@ -260,17 +255,17 @@ export function withCsrfProtection(
  */
 export function handleCsrfTokenRequest(request: NextRequest): NextResponse {
   // Check for existing token in cookie
-  let token = getCsrfFromCookies(request.headers.get('cookie'))
+  let token = getCsrfFromCookies(request.headers.get('cookie'));
 
   // Generate new token if none exists
   if (!token) {
-    token = generateCsrfToken()
+    token = generateCsrfToken();
   }
 
-  const response = NextResponse.json({ csrfToken: token })
-  response.headers.set('Set-Cookie', createCsrfCookie(token))
+  const response = NextResponse.json({ csrfToken: token });
+  response.headers.set('Set-Cookie', createCsrfCookie(token));
 
-  return response
+  return response;
 }
 
 // =============================================================================
@@ -304,7 +299,7 @@ export const CSRF_SCRIPT = `
 
     return originalFetch.call(this, url, options);
   };
-`
+`;
 
 // =============================================================================
 // Middleware for Next.js
@@ -315,30 +310,27 @@ export const CSRF_SCRIPT = `
  * Add this to your middleware.ts file
  */
 export function csrfMiddleware(request: NextRequest): NextResponse | null {
-  const method = request.method
-  const { pathname } = request.nextUrl
+  const method = request.method;
+  const { pathname } = request.nextUrl;
 
   // Skip for non-protected methods
   if (!requiresCsrfProtection(method)) {
-    return null // Continue to next middleware
+    return null; // Continue to next middleware
   }
 
   // Skip for excluded paths
   if (isExcludedPath(pathname)) {
-    return null
+    return null;
   }
 
   // Get tokens
-  const cookieToken = getCsrfFromCookies(request.headers.get('cookie'))
-  const headerToken = request.headers.get(CSRF_CONFIG.headerName)
+  const cookieToken = getCsrfFromCookies(request.headers.get('cookie'));
+  const headerToken = request.headers.get(CSRF_CONFIG.headerName);
 
   // Validate
   if (!cookieToken || !headerToken || !constantTimeCompareEdge(cookieToken, headerToken)) {
-    return NextResponse.json(
-      { error: 'CSRF validation failed' },
-      { status: 403 }
-    )
+    return NextResponse.json({ error: 'CSRF validation failed' }, { status: 403 });
   }
 
-  return null // Continue to next middleware
+  return null; // Continue to next middleware
 }

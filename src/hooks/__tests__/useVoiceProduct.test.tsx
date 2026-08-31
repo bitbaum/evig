@@ -17,20 +17,20 @@
  *   - isProcessing lifecycle (true mid-flight, false after via finally)
  */
 
-const mockApiFetch = jest.fn()
+const mockApiFetch = jest.fn();
 
 jest.mock('@/lib/api/client', () => ({
   apiFetch: (...args: unknown[]) => mockApiFetch.apply(null, args),
-}))
+}));
 
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
-}))
+}));
 
-import { renderHook, act, waitFor } from '@testing-library/react'
-import { useVoiceProduct } from '../useVoiceProduct'
+import { renderHook, act, waitFor } from '@testing-library/react';
+import { useVoiceProduct } from '../useVoiceProduct';
 
-const mockBlob = new Blob(['fake audio'], { type: 'audio/webm' })
+const mockBlob = new Blob(['fake audio'], { type: 'audio/webm' });
 
 const okResult = {
   success: true,
@@ -38,11 +38,11 @@ const okResult = {
     transcription: 'Apple MacBook Pro vierzehn Zoll',
     data: { produktname: 'MacBook Pro 14"', hersteller: 'Apple' },
   },
-}
+};
 
 beforeEach(() => {
-  mockApiFetch.mockReset()
-})
+  mockApiFetch.mockReset();
+});
 
 // ============================================================================
 // Initial state
@@ -50,11 +50,11 @@ beforeEach(() => {
 
 describe('useVoiceProduct — initial state', () => {
   it('starts not processing with no error', () => {
-    const { result } = renderHook(() => useVoiceProduct())
-    expect(result.current.isProcessing).toBe(false)
-    expect(result.current.error).toBeNull()
-  })
-})
+    const { result } = renderHook(() => useVoiceProduct());
+    expect(result.current.isProcessing).toBe(false);
+    expect(result.current.error).toBeNull();
+  });
+});
 
 // ============================================================================
 // Happy path
@@ -62,59 +62,59 @@ describe('useVoiceProduct — initial state', () => {
 
 describe('processRecording — happy path', () => {
   it('POSTs to /api/admin/erfassung/voice as FormData with audio', async () => {
-    mockApiFetch.mockResolvedValueOnce(okResult)
-    const { result } = renderHook(() => useVoiceProduct())
+    mockApiFetch.mockResolvedValueOnce(okResult);
+    const { result } = renderHook(() => useVoiceProduct());
 
     await act(async () => {
-      await result.current.processRecording(mockBlob)
-    })
+      await result.current.processRecording(mockBlob);
+    });
 
-    const [url, options] = mockApiFetch.mock.calls[0]
-    expect(url).toBe('/api/admin/erfassung/voice')
-    expect(options.method).toBe('POST')
-    expect(options.formData).toBe(true)
-    expect(options.body).toBeInstanceOf(FormData)
-  })
+    const [url, options] = mockApiFetch.mock.calls[0];
+    expect(url).toBe('/api/admin/erfassung/voice');
+    expect(options.method).toBe('POST');
+    expect(options.formData).toBe(true);
+    expect(options.body).toBeInstanceOf(FormData);
+  });
 
   it('appends audio with filename "recording.webm" (whisper API contract)', async () => {
-    mockApiFetch.mockResolvedValueOnce(okResult)
-    const { result } = renderHook(() => useVoiceProduct())
+    mockApiFetch.mockResolvedValueOnce(okResult);
+    const { result } = renderHook(() => useVoiceProduct());
 
     await act(async () => {
-      await result.current.processRecording(mockBlob)
-    })
+      await result.current.processRecording(mockBlob);
+    });
 
-    const fd = mockApiFetch.mock.calls[0][1].body as FormData
-    const file = fd.get('audio') as File
-    expect(file.name).toBe('recording.webm')
-  })
+    const fd = mockApiFetch.mock.calls[0][1].body as FormData;
+    const file = fd.get('audio') as File;
+    expect(file.name).toBe('recording.webm');
+  });
 
   it('returns { transcription, data } on success', async () => {
-    mockApiFetch.mockResolvedValueOnce(okResult)
-    const { result } = renderHook(() => useVoiceProduct())
+    mockApiFetch.mockResolvedValueOnce(okResult);
+    const { result } = renderHook(() => useVoiceProduct());
 
-    let voiceResult: Awaited<ReturnType<typeof result.current.processRecording>> = null
+    let voiceResult: Awaited<ReturnType<typeof result.current.processRecording>> = null;
     await act(async () => {
-      voiceResult = await result.current.processRecording(mockBlob)
-    })
+      voiceResult = await result.current.processRecording(mockBlob);
+    });
 
     expect(voiceResult).toEqual({
       transcription: 'Apple MacBook Pro vierzehn Zoll',
       data: { produktname: 'MacBook Pro 14"', hersteller: 'Apple' },
-    })
-  })
+    });
+  });
 
   it('error is null after success', async () => {
-    mockApiFetch.mockResolvedValueOnce(okResult)
-    const { result } = renderHook(() => useVoiceProduct())
+    mockApiFetch.mockResolvedValueOnce(okResult);
+    const { result } = renderHook(() => useVoiceProduct());
 
     await act(async () => {
-      await result.current.processRecording(mockBlob)
-    })
+      await result.current.processRecording(mockBlob);
+    });
 
-    expect(result.current.error).toBeNull()
-  })
-})
+    expect(result.current.error).toBeNull();
+  });
+});
 
 // ============================================================================
 // Failure paths
@@ -122,64 +122,66 @@ describe('processRecording — happy path', () => {
 
 describe('processRecording — failure paths', () => {
   it('success=false → returns null and sets error from result.error', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: false, error: 'Audio invalid' })
-    const { result } = renderHook(() => useVoiceProduct())
+    mockApiFetch.mockResolvedValueOnce({ success: false, error: 'Audio invalid' });
+    const { result } = renderHook(() => useVoiceProduct());
 
-    let voiceResult: Awaited<ReturnType<typeof result.current.processRecording>> = undefined as never
+    let voiceResult: Awaited<ReturnType<typeof result.current.processRecording>> =
+      undefined as never;
     await act(async () => {
-      voiceResult = await result.current.processRecording(mockBlob)
-    })
+      voiceResult = await result.current.processRecording(mockBlob);
+    });
 
-    expect(voiceResult).toBeNull()
-    expect(result.current.error).toBe('Audio invalid')
-  })
+    expect(voiceResult).toBeNull();
+    expect(result.current.error).toBe('Audio invalid');
+  });
 
   it('success=false without error → "Unbekannter Fehler" Swiss-German fallback', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: false })
-    const { result } = renderHook(() => useVoiceProduct())
+    mockApiFetch.mockResolvedValueOnce({ success: false });
+    const { result } = renderHook(() => useVoiceProduct());
 
     await act(async () => {
-      await result.current.processRecording(mockBlob)
-    })
+      await result.current.processRecording(mockBlob);
+    });
 
-    expect(result.current.error).toBe('Unbekannter Fehler')
-  })
+    expect(result.current.error).toBe('Unbekannter Fehler');
+  });
 
   it('success=true but data missing → returns null with fallback error (defensive guard)', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: true })
-    const { result } = renderHook(() => useVoiceProduct())
+    mockApiFetch.mockResolvedValueOnce({ success: true });
+    const { result } = renderHook(() => useVoiceProduct());
 
-    let voiceResult: Awaited<ReturnType<typeof result.current.processRecording>> = undefined as never
+    let voiceResult: Awaited<ReturnType<typeof result.current.processRecording>> =
+      undefined as never;
     await act(async () => {
-      voiceResult = await result.current.processRecording(mockBlob)
-    })
+      voiceResult = await result.current.processRecording(mockBlob);
+    });
 
-    expect(voiceResult).toBeNull()
-    expect(result.current.error).toBe('Unbekannter Fehler')
-  })
+    expect(voiceResult).toBeNull();
+    expect(result.current.error).toBe('Unbekannter Fehler');
+  });
 
   it('thrown Error → preserves message in error state', async () => {
-    mockApiFetch.mockRejectedValueOnce(new Error('Network unreachable'))
-    const { result } = renderHook(() => useVoiceProduct())
+    mockApiFetch.mockRejectedValueOnce(new Error('Network unreachable'));
+    const { result } = renderHook(() => useVoiceProduct());
 
     await act(async () => {
-      await result.current.processRecording(mockBlob)
-    })
+      await result.current.processRecording(mockBlob);
+    });
 
-    expect(result.current.error).toBe('Network unreachable')
-  })
+    expect(result.current.error).toBe('Network unreachable');
+  });
 
   it('non-Error throw → "Verarbeitung fehlgeschlagen" Swiss-German fallback', async () => {
-    mockApiFetch.mockRejectedValueOnce('weird non-Error throw')
-    const { result } = renderHook(() => useVoiceProduct())
+    mockApiFetch.mockRejectedValueOnce('weird non-Error throw');
+    const { result } = renderHook(() => useVoiceProduct());
 
     await act(async () => {
-      await result.current.processRecording(mockBlob)
-    })
+      await result.current.processRecording(mockBlob);
+    });
 
-    expect(result.current.error).toBe('Verarbeitung fehlgeschlagen')
-  })
-})
+    expect(result.current.error).toBe('Verarbeitung fehlgeschlagen');
+  });
+});
 
 // ============================================================================
 // State management
@@ -189,48 +191,52 @@ describe('processRecording — state management', () => {
   it('clears previous error on new attempt', async () => {
     mockApiFetch
       .mockResolvedValueOnce({ success: false, error: 'first error' })
-      .mockResolvedValueOnce(okResult)
-    const { result } = renderHook(() => useVoiceProduct())
+      .mockResolvedValueOnce(okResult);
+    const { result } = renderHook(() => useVoiceProduct());
 
     await act(async () => {
-      await result.current.processRecording(mockBlob)
-    })
-    expect(result.current.error).toBe('first error')
+      await result.current.processRecording(mockBlob);
+    });
+    expect(result.current.error).toBe('first error');
 
     await act(async () => {
-      await result.current.processRecording(mockBlob)
-    })
-    expect(result.current.error).toBeNull()
-  })
+      await result.current.processRecording(mockBlob);
+    });
+    expect(result.current.error).toBeNull();
+  });
 
   it('isProcessing flips true mid-flight, false after success', async () => {
-    let resolveRequest!: (val: unknown) => void
-    mockApiFetch.mockReturnValueOnce(new Promise(r => { resolveRequest = r }))
-    const { result } = renderHook(() => useVoiceProduct())
+    let resolveRequest!: (val: unknown) => void;
+    mockApiFetch.mockReturnValueOnce(
+      new Promise((r) => {
+        resolveRequest = r;
+      }),
+    );
+    const { result } = renderHook(() => useVoiceProduct());
 
-    let processPromise!: Promise<unknown>
+    let processPromise!: Promise<unknown>;
     act(() => {
-      processPromise = result.current.processRecording(mockBlob)
-    })
+      processPromise = result.current.processRecording(mockBlob);
+    });
 
-    await waitFor(() => expect(result.current.isProcessing).toBe(true))
+    await waitFor(() => expect(result.current.isProcessing).toBe(true));
 
     await act(async () => {
-      resolveRequest(okResult)
-      await processPromise
-    })
+      resolveRequest(okResult);
+      await processPromise;
+    });
 
-    expect(result.current.isProcessing).toBe(false)
-  })
+    expect(result.current.isProcessing).toBe(false);
+  });
 
   it('isProcessing flips back to false even after error (finally)', async () => {
-    mockApiFetch.mockRejectedValueOnce(new Error('boom'))
-    const { result } = renderHook(() => useVoiceProduct())
+    mockApiFetch.mockRejectedValueOnce(new Error('boom'));
+    const { result } = renderHook(() => useVoiceProduct());
 
     await act(async () => {
-      await result.current.processRecording(mockBlob)
-    })
+      await result.current.processRecording(mockBlob);
+    });
 
-    expect(result.current.isProcessing).toBe(false)
-  })
-})
+    expect(result.current.isProcessing).toBe(false);
+  });
+});

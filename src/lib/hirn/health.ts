@@ -16,32 +16,32 @@
  * horizontally this becomes per-instance and wants a shared store.
  */
 
-import { createHealthTracker } from 'ai-kit'
+import { createHealthTracker } from 'ai-kit';
 
-const tracker = createHealthTracker({ downAfter: 3 })
+const tracker = createHealthTracker({ downAfter: 3 });
 
 /** Call after a chat completion that produced usable content. */
 export function recordLLMSuccess(): void {
-  tracker.recordSuccess()
+  tracker.recordSuccess();
 }
 
 /** Call when provider selection or generation threw. */
 export function recordLLMFailure(error: unknown): void {
-  tracker.recordFailure(error)
+  tracker.recordFailure(error);
 }
 
 export function getLLMHealth() {
-  const health = tracker.getHealth()
+  const health = tracker.getHealth();
   return {
     status: health.status,
     consecutiveFailures: health.consecutiveFailures,
     lastError: health.lastError,
     lastSuccessAt: health.lastSuccessAt ? new Date(health.lastSuccessAt).toISOString() : null,
     lastFailureAt: health.lastFailureAt ? new Date(health.lastFailureAt).toISOString() : null,
-  }
+  };
 }
 
 /** Test seam. */
 export function resetLLMHealth(): void {
-  tracker.reset()
+  tracker.reset();
 }

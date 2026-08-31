@@ -4,10 +4,10 @@
  * Used by the notification service to email users about in-app notifications.
  */
 
-import { createEmailLayout, createTextFooter } from './base-styles'
-import type { EmailContent } from '../types'
-import { APP_URL } from '@/config/urls'
-import { escapeHtml } from '@/lib/utils/escape-html'
+import { createEmailLayout, createTextFooter } from './base-styles';
+import type { EmailContent } from '../types';
+import { APP_URL } from '@/config/urls';
+import { escapeHtml } from '@/lib/utils/escape-html';
 
 export function notificationEmail(title: string, content: string): EmailContent {
   // Generic notification — the triggering caller may pass user-supplied
@@ -23,14 +23,14 @@ export function notificationEmail(title: string, content: string): EmailContent 
           Im Dashboard ansehen
         </a>
       </p>
-    `
-  )
+    `,
+  );
 
-  const text = `${title}\n\n${content}\n\nIm Dashboard ansehen: ${APP_URL}/dashboard\n${createTextFooter()}`
+  const text = `${title}\n\n${content}\n\nIm Dashboard ansehen: ${APP_URL}/dashboard\n${createTextFooter()}`;
 
   return {
     subject: title,
     html,
     text,
-  }
+  };
 }

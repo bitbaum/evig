@@ -15,7 +15,9 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const rawParams: Record<string, string | null> = {};
-    searchParams.forEach((value, key) => { rawParams[key] = value; });
+    searchParams.forEach((value, key) => {
+      rawParams[key] = value;
+    });
 
     const validation = validateQuery(ListingsQuerySchema, rawParams);
     if (!validation.success) return validation.error;
@@ -36,28 +38,36 @@ export async function GET(request: NextRequest) {
       },
       filters.sort,
       page,
-      filters.limit
+      filters.limit,
     );
 
     if (!result) {
       // Meilisearch unavailable — redirect client to standard API
-      return apiSuccessCached({
-        items: [],
-        pagination: { total: 0, limit: filters.limit, offset: filters.offset },
-        fallback: true,
-      }, 15, 10);
+      return apiSuccessCached(
+        {
+          items: [],
+          pagination: { total: 0, limit: filters.limit, offset: filters.offset },
+          fallback: true,
+        },
+        15,
+        10,
+      );
     }
 
     // Cache identical search queries for 15s to reduce Meilisearch load
-    return apiSuccessCached({
-      items: result.hits,
-      pagination: {
-        total: result.estimatedTotalHits,
-        limit: filters.limit,
-        offset: filters.offset,
+    return apiSuccessCached(
+      {
+        items: result.hits,
+        pagination: {
+          total: result.estimatedTotalHits,
+          limit: filters.limit,
+          offset: filters.offset,
+        },
+        facets: result.facetDistribution || null,
       },
-      facets: result.facetDistribution || null,
-    }, 15, 10);
+      15,
+      10,
+    );
   } catch (error) {
     logger.error('Search error', { error });
     return apiError(error, 'Fehler bei der Suche');

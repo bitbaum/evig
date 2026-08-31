@@ -1,20 +1,20 @@
-'use client'
+'use client';
 
-import { Wrench } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
-import { Card } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { useTranslations } from 'next-intl'
-import type { ProfileData } from '../hooks/useProfileData'
+import { Wrench } from 'lucide-react';
+import Heading from '@/components/ui/Heading';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { useTranslations } from 'next-intl';
+import type { ProfileData } from '../hooks/useProfileData';
 
 interface ServiceProviderSectionProps {
-  profile: ProfileData
-  handleChange: (field: keyof ProfileData, value: string | boolean | string[] | number) => void
+  profile: ProfileData;
+  handleChange: (field: keyof ProfileData, value: string | boolean | string[] | number) => void;
 }
 
 export function ServiceProviderSection({ profile, handleChange }: ServiceProviderSectionProps) {
-  const t = useTranslations('dashboard.profile.serviceProvider')
+  const t = useTranslations('dashboard.profile.serviceProvider');
   return (
     <Card className="p-6">
       <div className="flex items-center gap-3 mb-6">
@@ -64,7 +64,15 @@ export function ServiceProviderSection({ profile, handleChange }: ServiceProvide
           <Input
             type="text"
             value={(profile.skills || []).join(', ')}
-            onChange={(e) => handleChange('skills', e.target.value.split(',').map(s => s.trim()).filter(s => s))}
+            onChange={(e) =>
+              handleChange(
+                'skills',
+                e.target.value
+                  .split(',')
+                  .map((s) => s.trim())
+                  .filter((s) => s),
+              )
+            }
             placeholder={t('skillsPlaceholder')}
           />
           <p className="text-xs text-text-tertiary mt-1">{t('skillsHint')}</p>
@@ -78,7 +86,15 @@ export function ServiceProviderSection({ profile, handleChange }: ServiceProvide
           <Input
             type="text"
             value={(profile.expertise_areas || []).join(', ')}
-            onChange={(e) => handleChange('expertise_areas', e.target.value.split(',').map(s => s.trim()).filter(s => s))}
+            onChange={(e) =>
+              handleChange(
+                'expertise_areas',
+                e.target.value
+                  .split(',')
+                  .map((s) => s.trim())
+                  .filter((s) => s),
+              )
+            }
             placeholder={t('expertisePlaceholder')}
           />
           <p className="text-xs text-text-tertiary mt-1">{t('expertiseHint')}</p>
@@ -100,5 +116,5 @@ export function ServiceProviderSection({ profile, handleChange }: ServiceProvide
         </div>
       </div>
     </Card>
-  )
+  );
 }

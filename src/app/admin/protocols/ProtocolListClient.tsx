@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Protocol List Filters Client Component
@@ -7,38 +7,35 @@
  * Created: 2026-02-10
  */
 
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useTranslations } from 'next-intl'
-import { Filter, Search } from 'lucide-react'
-import { Select } from '@/components/ui/select'
-import { Input } from '@/components/ui/input'
-import { Card } from '@/components/ui/card'
-import {
-  MEETING_TYPE_LABELS,
-  PROTOCOL_STATUS_LABELS,
-} from '@/config/protocols'
-import { PROTOCOL_WORKFLOW_STEPS } from '@/lib/protocols/workflow'
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { Filter, Search } from 'lucide-react';
+import { Select } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { Card } from '@/components/ui/card';
+import { MEETING_TYPE_LABELS, PROTOCOL_STATUS_LABELS } from '@/config/protocols';
+import { PROTOCOL_WORKFLOW_STEPS } from '@/lib/protocols/workflow';
 
 interface ProtocolListClientProps {
-  teamMembers: Array<{ id: string; name: string }>
+  teamMembers: Array<{ id: string; name: string }>;
 }
 
 export default function ProtocolListClient({ teamMembers }: ProtocolListClientProps) {
-  const t = useTranslations('admin.protocols.filters')
-  const router = useRouter()
-  const searchParams = useSearchParams()
+  const t = useTranslations('admin.protocols.filters');
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const handleFilterChange = (key: string, value: string) => {
-    const params = new URLSearchParams(searchParams.toString())
+    const params = new URLSearchParams(searchParams.toString());
     if (value) {
-      params.set(key, value)
+      params.set(key, value);
     } else {
-      params.delete(key)
+      params.delete(key);
     }
     // Reset to page 1 when any filter changes
-    params.delete('page')
-    router.push(`/admin/protocols?${params.toString()}`)
-  }
+    params.delete('page');
+    router.push(`/admin/protocols?${params.toString()}`);
+  };
 
   return (
     <Card className="p-4">
@@ -55,13 +52,13 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
             defaultValue={searchParams.get('q') || ''}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
-                handleFilterChange('q', (e.target as HTMLInputElement).value)
+                handleFilterChange('q', (e.target as HTMLInputElement).value);
               }
             }}
             onBlur={(e) => {
-              const currentQ = searchParams.get('q') || ''
+              const currentQ = searchParams.get('q') || '';
               if (e.target.value !== currentQ) {
-                handleFilterChange('q', e.target.value)
+                handleFilterChange('q', e.target.value);
               }
             }}
           />
@@ -136,5 +133,5 @@ export default function ProtocolListClient({ teamMembers }: ProtocolListClientPr
         </div>
       </div>
     </Card>
-  )
+  );
 }

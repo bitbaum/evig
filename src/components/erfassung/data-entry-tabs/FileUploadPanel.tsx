@@ -1,18 +1,22 @@
-'use client'
+'use client';
 
 /** File-upload panel for DataEntryTabs — CSV dropzone label plus unmapped-column warning. */
 
-import { Loader2, AlertCircle, FileUp } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { Loader2, AlertCircle, FileUp } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 interface FileUploadPanelProps {
-  isUploading: boolean
-  unmappedColumns: string[]
-  onFileUpload: (file: File) => void
+  isUploading: boolean;
+  unmappedColumns: string[];
+  onFileUpload: (file: File) => void;
 }
 
-export function FileUploadPanel({ isUploading, unmappedColumns, onFileUpload }: FileUploadPanelProps) {
-  const t = useTranslations('components.erfassung.dataEntryTabs')
+export function FileUploadPanel({
+  isUploading,
+  unmappedColumns,
+  onFileUpload,
+}: FileUploadPanelProps) {
+  const t = useTranslations('components.erfassung.dataEntryTabs');
 
   return (
     <div className="space-y-4">
@@ -35,8 +39,8 @@ export function FileUploadPanel({ isUploading, unmappedColumns, onFileUpload }: 
           className="hidden"
           disabled={isUploading}
           onChange={(e) => {
-            const file = e.target.files?.[0]
-            if (file) onFileUpload(file)
+            const file = e.target.files?.[0];
+            if (file) onFileUpload(file);
           }}
         />
       </label>
@@ -45,11 +49,10 @@ export function FileUploadPanel({ isUploading, unmappedColumns, onFileUpload }: 
         <div className="flex items-start gap-2 py-2 px-4 bg-warning-50 dark:bg-warning-900/20 rounded-lg text-warning-700 dark:text-warning-400 text-sm">
           <AlertCircle className="w-4 h-4 mt-0.5 shrink-0" />
           <div>
-            <span className="font-medium">{t('unmappedColumns')}</span>{' '}
-            {unmappedColumns.join(', ')}
+            <span className="font-medium">{t('unmappedColumns')}</span> {unmappedColumns.join(', ')}
           </div>
         </div>
       )}
     </div>
-  )
+  );
 }

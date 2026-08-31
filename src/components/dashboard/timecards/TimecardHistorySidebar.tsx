@@ -7,45 +7,43 @@
  * single most-important thing to surface, since the user has to act on them.
  */
 
-import Link from 'next/link'
-import { useLocale, useTranslations } from 'next-intl'
-import { TIMECARD_STATUS_COLORS, TIMECARD_STATUSES } from '@/config/timecards'
-import type { TimecardStatus } from '@/config/timecards'
-import { ROUTES } from '@/config/routes'
-import { Card } from '@/components/ui/card'
-import { formatDateShort } from '@/lib/date-formats'
-import { Clock } from 'lucide-react'
-import { TIMECARD_STATUS_ICONS } from '@/lib/team/timecard-display'
-import { timecardStatusLabel, formatTimecardPeriodIntl } from '@/lib/team/timecard-intl'
+import Link from 'next/link';
+import { useLocale, useTranslations } from 'next-intl';
+import { TIMECARD_STATUS_COLORS, TIMECARD_STATUSES } from '@/config/timecards';
+import type { TimecardStatus } from '@/config/timecards';
+import { ROUTES } from '@/config/routes';
+import { Card } from '@/components/ui/card';
+import { formatDateShort } from '@/lib/date-formats';
+import { Clock } from 'lucide-react';
+import { TIMECARD_STATUS_ICONS } from '@/lib/team/timecard-display';
+import { timecardStatusLabel, formatTimecardPeriodIntl } from '@/lib/team/timecard-intl';
 
 interface HistoryRow {
-  id: string
-  periodType: string
-  periodStart: string
-  periodEnd: string
-  status: string
-  submittedAt: string | null
-  reviewedAt: string | null
-  reviewNotes: string | null
+  id: string;
+  periodType: string;
+  periodStart: string;
+  periodEnd: string;
+  status: string;
+  submittedAt: string | null;
+  reviewedAt: string | null;
+  reviewNotes: string | null;
 }
 
 interface Props {
-  history: HistoryRow[]
+  history: HistoryRow[];
 }
 
 export function TimecardHistorySidebar({ history }: Props) {
-  const t = useTranslations('admin.timecards')
-  const locale = useLocale()
+  const t = useTranslations('admin.timecards');
+  const locale = useLocale();
 
   if (history.length === 0) {
     return (
       <Card className="p-5">
         <h2 className="text-sm font-semibold text-text-primary mb-2">{t('historyTitle')}</h2>
-        <p className="text-sm text-text-tertiary">
-          {t('historyEmpty')}
-        </p>
+        <p className="text-sm text-text-tertiary">{t('historyEmpty')}</p>
       </Card>
-    )
+    );
   }
 
   return (
@@ -57,13 +55,16 @@ export function TimecardHistorySidebar({ history }: Props) {
         </p>
       </div>
       <ul className="divide-y divide-subtle">
-        {history.map(row => {
-          const status = row.status as TimecardStatus
-          const Icon = TIMECARD_STATUS_ICONS[status] ?? Clock
-          const statusColor = TIMECARD_STATUS_COLORS[status] ?? ''
-          const dateRef = row.reviewedAt || row.submittedAt
+        {history.map((row) => {
+          const status = row.status as TimecardStatus;
+          const Icon = TIMECARD_STATUS_ICONS[status] ?? Clock;
+          const statusColor = TIMECARD_STATUS_COLORS[status] ?? '';
+          const dateRef = row.reviewedAt || row.submittedAt;
           return (
-            <li key={row.id} className="hover:bg-surface-raised dark:hover:bg-surface-base/2 transition-colors">
+            <li
+              key={row.id}
+              className="hover:bg-surface-raised dark:hover:bg-surface-base/2 transition-colors"
+            >
               {/* Each row opens its period in the editor — a submitted card
                   stays editable there until approved (edit auto-reverts it to
                   draft; resubmitting sends it for approval again). */}
@@ -75,7 +76,13 @@ export function TimecardHistorySidebar({ history }: Props) {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-sm font-medium text-text-primary truncate">
-                      {formatTimecardPeriodIntl(t, locale, row.periodType, row.periodStart, row.periodEnd)}
+                      {formatTimecardPeriodIntl(
+                        t,
+                        locale,
+                        row.periodType,
+                        row.periodStart,
+                        row.periodEnd,
+                      )}
                     </span>
                     <span
                       className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold whitespace-nowrap ${statusColor}`}
@@ -98,9 +105,9 @@ export function TimecardHistorySidebar({ history }: Props) {
                 </div>
               </Link>
             </li>
-          )
+          );
         })}
       </ul>
     </Card>
-  )
+  );
 }

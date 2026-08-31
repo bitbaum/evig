@@ -1,4 +1,4 @@
-import { PageShell } from '@/components/layout/PageShell'
+import { PageShell } from '@/components/layout/PageShell';
 
 export default function WorkshopsLoading() {
   return (
@@ -25,7 +25,7 @@ export default function WorkshopsLoading() {
 
         {/* Grid skeleton */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {[1, 2, 3, 4, 5, 6].map(i => (
+          {[1, 2, 3, 4, 5, 6].map((i) => (
             <div key={i} className="card-shell overflow-hidden">
               <div className="p-6 border-b border-subtle">
                 <div className="flex items-start justify-between mb-4">
@@ -50,5 +50,5 @@ export default function WorkshopsLoading() {
         </div>
       </PageShell>
     </>
-  )
+  );
 }

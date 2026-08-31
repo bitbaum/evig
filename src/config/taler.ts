@@ -10,7 +10,7 @@
  * Setup guide: `docs/operations/TALER_SETUP.md`
  */
 
-export const TALER_PROVIDER_SLUG = 'taler'
+export const TALER_PROVIDER_SLUG = 'taler';
 
 /** Environment variable names (Settings → prod `.env` / GitHub `SELFHOST_ENV`). */
 export const TALER_ENV = {
@@ -20,22 +20,22 @@ export const TALER_ENV = {
   API_TOKEN: 'TALER_API_TOKEN',
   /** Optional shared secret Taler signs webhook deliveries with. */
   WEBHOOK_SECRET: 'TALER_WEBHOOK_SECRET',
-} as const
+} as const;
 
 /** Taler amounts are `CURRENCY:decimal` strings; we settle in CHF. */
-export const TALER_SETTLEMENT_CURRENCY = 'CHF'
+export const TALER_SETTLEMENT_CURRENCY = 'CHF';
 
-export const TALER_WEBHOOK_PATH = '/api/payments/webhook/taler'
+export const TALER_WEBHOOK_PATH = '/api/payments/webhook/taler';
 
 /** Shown when Taler is offered but not yet provisioned. */
 export const TALER_SETUP_MESSAGE =
-  'Bezahlung mit Taler wird gerade eingerichtet und ist noch nicht aktiv.'
+  'Bezahlung mit Taler wird gerade eingerichtet und ist noch nicht aktiv.';
 
 /** Requires a reachable backend + an API token to create and settle orders. */
 export function isTalerConfigured(): boolean {
-  return !!(process.env[TALER_ENV.BACKEND_URL] && process.env[TALER_ENV.API_TOKEN])
+  return !!(process.env[TALER_ENV.BACKEND_URL] && process.env[TALER_ENV.API_TOKEN]);
 }
 
 export function isTalerWebhookSecretSet(): boolean {
-  return !!process.env[TALER_ENV.WEBHOOK_SECRET]
+  return !!process.env[TALER_ENV.WEBHOOK_SECRET];
 }

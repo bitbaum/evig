@@ -1,42 +1,42 @@
 // SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
-import { ORG } from '@/config/org'
-import { WORKSHOP_INSTANCE_STATUS, normalizeCategoryId } from '@/config/workshops'
-import WorkshopRegistrationForm from '@/components/workshops/WorkshopRegistrationForm'
-import WorkshopReviews from '@/components/workshops/WorkshopReviews'
-import WorkshopMaterials from '@/components/workshops/WorkshopMaterials'
-import Heading from '@/components/ui/Heading'
-import { getTranslations } from 'next-intl/server'
-import { PageShell } from '@/components/layout/PageShell'
-import { getWorkshop, getWorkshopInstances } from './data'
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { ORG } from '@/config/org';
+import { WORKSHOP_INSTANCE_STATUS, normalizeCategoryId } from '@/config/workshops';
+import WorkshopRegistrationForm from '@/components/workshops/WorkshopRegistrationForm';
+import WorkshopReviews from '@/components/workshops/WorkshopReviews';
+import WorkshopMaterials from '@/components/workshops/WorkshopMaterials';
+import Heading from '@/components/ui/Heading';
+import { getTranslations } from 'next-intl/server';
+import { PageShell } from '@/components/layout/PageShell';
+import { getWorkshop, getWorkshopInstances } from './data';
 import {
   WorkshopHeader,
   WorkshopDetailsCard,
   WorkshopInstancesList,
   WorkshopStatsCard,
   NoUpcomingDatesNotice,
-} from './sections'
+} from './sections';
 
 interface Props {
-  params: Promise<{ slug: string; locale: string }>
+  params: Promise<{ slug: string; locale: string }>;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { slug, locale } = await params
-  const t = await getTranslations({ locale, namespace: 'workshops' })
-  const workshop = await getWorkshop(slug)
+  const { slug, locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'workshops' });
+  const workshop = await getWorkshop(slug);
 
   if (!workshop) {
     return {
       title: { absolute: `${t('detail.notFound')} | ${ORG.name}` },
-    }
+    };
   }
 
-  const description = workshop.short_description || workshop.description || undefined
+  const description = workshop.short_description || workshop.description || undefined;
 
   return {
     title: { absolute: `${workshop.title} | ${ORG.name} ${t('meta.title')}` },
@@ -46,23 +46,24 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       type: 'website',
     },
-  }
+  };
 }
 
 export default async function WorkshopDetailPage({ params }: Props) {
-  const { slug, locale } = await params
-  const t = await getTranslations({ locale, namespace: 'workshops' })
-  const workshop = await getWorkshop(slug)
+  const { slug, locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'workshops' });
+  const workshop = await getWorkshop(slug);
 
-  if (!workshop) notFound()
+  if (!workshop) notFound();
 
-  const instances = await getWorkshopInstances(workshop.id)
+  const instances = await getWorkshopInstances(workshop.id);
   const upcomingInstances = instances.filter(
-    (inst) => inst.status === WORKSHOP_INSTANCE_STATUS.SCHEDULED && new Date(inst.start_date) > new Date()
-  )
-  const nextInstance = upcomingInstances[0]
-  const catId = normalizeCategoryId(workshop.category)
-  const categoryName = catId ? t(`categories.${catId}` as never) : (workshop.category ?? null)
+    (inst) =>
+      inst.status === WORKSHOP_INSTANCE_STATUS.SCHEDULED && new Date(inst.start_date) > new Date(),
+  );
+  const nextInstance = upcomingInstances[0];
+  const catId = normalizeCategoryId(workshop.category);
+  const categoryName = catId ? t(`categories.${catId}` as never) : (workshop.category ?? null);
 
   const workshopForForm = {
     id: workshop.id,
@@ -77,7 +78,7 @@ export default async function WorkshopDetailPage({ params }: Props) {
     is_active: workshop.is_active,
     created_at: workshop.created_at,
     updated_at: workshop.updated_at,
-  }
+  };
 
   return (
     <>
@@ -88,7 +89,11 @@ export default async function WorkshopDetailPage({ params }: Props) {
           {/* Main column */}
           <div className="lg:col-span-2 space-y-8">
             <WorkshopDetailsCard workshop={workshop} categoryName={categoryName} t={t} />
-            <WorkshopInstancesList instances={upcomingInstances} fallbackMax={workshop.max_participants} t={t} />
+            <WorkshopInstancesList
+              instances={upcomingInstances}
+              fallbackMax={workshop.max_participants}
+              t={t}
+            />
           </div>
 
           {/* Sidebar */}
@@ -110,18 +115,22 @@ export default async function WorkshopDetailPage({ params }: Props) {
 
             <div className="card-shell p-6">
               <Eyebrow as="div">{t('detail.materials').toUpperCase()}</Eyebrow>
-              <Heading level={3} className="font-semibold text-text-primary mt-3 mb-4">{t('detail.materials')}</Heading>
+              <Heading level={3} className="font-semibold text-text-primary mt-3 mb-4">
+                {t('detail.materials')}
+              </Heading>
               <WorkshopMaterials workshopSlug={workshop.slug} />
             </div>
 
             <div className="card-shell p-6">
               <Eyebrow as="div">{t('detail.reviews').toUpperCase()}</Eyebrow>
-              <Heading level={3} className="font-semibold text-text-primary mt-3 mb-4">{t('detail.reviews')}</Heading>
+              <Heading level={3} className="font-semibold text-text-primary mt-3 mb-4">
+                {t('detail.reviews')}
+              </Heading>
               <WorkshopReviews workshopSlug={workshop.slug} />
             </div>
           </div>
         </div>
       </PageShell>
     </>
-  )
+  );
 }

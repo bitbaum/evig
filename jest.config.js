@@ -9,14 +9,14 @@
 // result. Pinning here rather than in each npm script keeps one source of
 // truth: test, test:watch, test:coverage and test:i18n all load this config,
 // and jest's worker processes inherit the env set at config-load time.
-process.env.TZ = 'Europe/Zurich'
+process.env.TZ = 'Europe/Zurich';
 
-const nextJest = require('next/jest')
+const nextJest = require('next/jest');
 
 const createJestConfig = nextJest({
   // Provide the path to your Next.js app to load next.config.js and .env files
   dir: './',
-})
+});
 
 // Add any custom config to be passed to Jest
 const customJestConfig = {
@@ -50,15 +50,11 @@ const customJestConfig = {
     '^next-intl$': '<rootDir>/__mocks__/next-intl.js',
     '^next-intl/(.*)$': '<rootDir>/__mocks__/next-intl.js',
   },
-  testPathIgnorePatterns: [
-    '<rootDir>/.next/',
-    '<rootDir>/node_modules/',
-    '<rootDir>/cms-api/',
-  ],
-}
+  testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/', '<rootDir>/cms-api/'],
+};
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-const buildConfig = createJestConfig(customJestConfig)
+const buildConfig = createJestConfig(customJestConfig);
 
 // next/jest PREPENDS its own transformIgnorePatterns, and patterns are OR'd —
 // if any one matches, the file is never transformed. So an allowlist entry in
@@ -68,9 +64,11 @@ const buildConfig = createJestConfig(customJestConfig)
 // ai-kit is the same shape, imported by src/lib/hirn/health.ts and
 // src/lib/ai/health.ts.
 module.exports = async () => {
-  const config = await buildConfig()
+  const config = await buildConfig();
   config.transformIgnorePatterns = config.transformIgnorePatterns.map((pattern) =>
-    pattern.includes('(?!(next-auth|') ? pattern.replace('(?!(next-auth|', '(?!(ai-kit|cookie|next-auth|') : pattern
-  )
-  return config
-}
+    pattern.includes('(?!(next-auth|')
+      ? pattern.replace('(?!(next-auth|', '(?!(ai-kit|cookie|next-auth|')
+      : pattern,
+  );
+  return config;
+};

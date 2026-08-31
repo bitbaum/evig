@@ -1,4 +1,4 @@
-import { CUSTOMER_PROFILE_COLORS } from '@/config/ui-colors'
+import { CUSTOMER_PROFILE_COLORS } from '@/config/ui-colors';
 
 /**
  * Customer Profiles Configuration
@@ -28,17 +28,17 @@ import { CUSTOMER_PROFILE_COLORS } from '@/config/ui-colors'
 
 export interface CustomerProfile {
   /** Unique identifier (used in database) */
-  slug: string
+  slug: string;
   /** German display name */
-  name_de: string
+  name_de: string;
   /** Emoji icon */
-  icon: string
+  icon: string;
   /** Brand color (hex) */
-  color: string
+  color: string;
   /** Short description of use case */
-  description: string
+  description: string;
   /** Specific requirements (helps staff understand what fits) */
-  requirements?: string[]
+  requirements?: string[];
 }
 
 /**
@@ -99,12 +99,7 @@ export const CUSTOMER_PROFILES: CustomerProfile[] = [
     icon: '🎓',
     color: CUSTOMER_PROFILE_COLORS.student,
     description: 'Preis-Leistung, mobil, Akkulaufzeit',
-    requirements: [
-      'Leicht und tragbar',
-      'Gute Akkulaufzeit',
-      'Günstig',
-      'Office-tauglich',
-    ],
+    requirements: ['Leicht und tragbar', 'Gute Akkulaufzeit', 'Günstig', 'Office-tauglich'],
   },
 
   // === Power Users ===
@@ -189,13 +184,13 @@ export const CUSTOMER_PROFILES: CustomerProfile[] = [
       'Schnelle SSD + grosse HDD für Projekte',
     ],
   },
-]
+];
 
 /**
  * Get profile by slug
  */
 export function getProfileBySlug(slug: string): CustomerProfile | undefined {
-  return CUSTOMER_PROFILES.find(p => p.slug === slug)
+  return CUSTOMER_PROFILES.find((p) => p.slug === slug);
 }
 
 /**
@@ -203,29 +198,29 @@ export function getProfileBySlug(slug: string): CustomerProfile | undefined {
  */
 export function getProfilesBySlugs(slugs: string[]): CustomerProfile[] {
   return slugs
-    .map(slug => getProfileBySlug(slug))
-    .filter((p): p is CustomerProfile => p !== undefined)
+    .map((slug) => getProfileBySlug(slug))
+    .filter((p): p is CustomerProfile => p !== undefined);
 }
 
 /**
  * Validate profile slugs (filter out invalid ones)
  */
 export function validateProfileSlugs(slugs: string[]): string[] {
-  const validSlugs = new Set(CUSTOMER_PROFILES.map(p => p.slug))
-  return slugs.filter(slug => validSlugs.has(slug))
+  const validSlugs = new Set(CUSTOMER_PROFILES.map((p) => p.slug));
+  return slugs.filter((slug) => validSlugs.has(slug));
 }
 
 /**
  * Group profiles by category for UI display
  */
 export function getProfilesByCategory(): Record<string, CustomerProfile[]> {
-  const basicSlugs = ['oma', 'buero', 'chiller', 'student']
-  const powerSlugs = ['gamer', 'dev', 'kreativ', 'musik']
-  const proSlugs = ['grafiker', 'video']
+  const basicSlugs = ['oma', 'buero', 'chiller', 'student'];
+  const powerSlugs = ['gamer', 'dev', 'kreativ', 'musik'];
+  const proSlugs = ['grafiker', 'video'];
 
   return {
-    'Basis-Nutzer': CUSTOMER_PROFILES.filter(p => basicSlugs.includes(p.slug)),
-    'Power-Nutzer': CUSTOMER_PROFILES.filter(p => powerSlugs.includes(p.slug)),
-    'Professionell': CUSTOMER_PROFILES.filter(p => proSlugs.includes(p.slug)),
-  }
+    'Basis-Nutzer': CUSTOMER_PROFILES.filter((p) => basicSlugs.includes(p.slug)),
+    'Power-Nutzer': CUSTOMER_PROFILES.filter((p) => powerSlugs.includes(p.slug)),
+    Professionell: CUSTOMER_PROFILES.filter((p) => proSlugs.includes(p.slug)),
+  };
 }

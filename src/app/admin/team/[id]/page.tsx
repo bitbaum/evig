@@ -4,72 +4,70 @@
  * Server component that fetches profile data and passes to view component.
  */
 
-import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
-import { isSuperAdmin } from '@/lib/permissions'
-import { requireSection } from '@/lib/admin/guards'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
-import { logger } from '@/lib/logger'
-import { TeamProfileDetailClient } from './TeamProfileDetailClient'
-import MemberTeamsCard from '@/components/admin/team/MemberTeamsCard'
-import { getMembershipsForUser, listTeams } from '@/lib/services/teams'
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { isSuperAdmin } from '@/lib/permissions';
+import { requireSection } from '@/lib/admin/guards';
+import { query } from '@/lib/auth/db';
+import { TABLE_NAMES } from '@/config/database';
+import { logger } from '@/lib/logger';
+import { TeamProfileDetailClient } from './TeamProfileDetailClient';
+import MemberTeamsCard from '@/components/admin/team/MemberTeamsCard';
+import { getMembershipsForUser, listTeams } from '@/lib/services/teams';
 
 interface PageProps {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { id } = await params
-  const profile = await getProfile(id)
+  const { id } = await params;
+  const profile = await getProfile(id);
 
   return {
-    title: profile
-      ? `${profile.user_name || profile.user_email} | Team`
-      : 'Team-Profil',
+    title: profile ? `${profile.user_name || profile.user_email} | Team` : 'Team-Profil',
     description: 'Team-Profil Details',
-  }
+  };
 }
 
 interface ProfileData {
-  id: string
-  user_id: string
-  user_name: string | null
-  user_email: string
-  user_created_at: string
-  position: string | null
-  department: string | null
-  employment_type: string | null
-  start_date: string | null
-  contract_hours: number | null
-  skills: string[]
-  interests: string[]
-  goals: string | null
-  strengths: string | null
-  development_areas: string | null
-  availability: string | null
-  working_hours: string | null
-  preferred_contact: string
-  phone: string | null
-  emergency_contact_name: string | null
-  emergency_contact_phone: string | null
-  emergency_contact_relation: string | null
-  hr_notes: string | null
-  current_focus: string | null
-  current_focus_updated_at: string | null
+  id: string;
+  user_id: string;
+  user_name: string | null;
+  user_email: string;
+  user_created_at: string;
+  position: string | null;
+  department: string | null;
+  employment_type: string | null;
+  start_date: string | null;
+  contract_hours: number | null;
+  skills: string[];
+  interests: string[];
+  goals: string | null;
+  strengths: string | null;
+  development_areas: string | null;
+  availability: string | null;
+  working_hours: string | null;
+  preferred_contact: string;
+  phone: string | null;
+  emergency_contact_name: string | null;
+  emergency_contact_phone: string | null;
+  emergency_contact_relation: string | null;
+  hr_notes: string | null;
+  current_focus: string | null;
+  current_focus_updated_at: string | null;
   // Phase 4 (migration 080)
-  hourly_rate_cents: number | null
-  salary_chf: string | number | null
-  salary_effective_date: string | null
-  end_date: string | null
-  exit_reason: string | null
-  ahv_number: string | null
-  canton_tax_code: string | null
-  work_state: string
-  is_active: boolean
-  show_on_about: boolean
-  created_at: string
-  updated_at: string
+  hourly_rate_cents: number | null;
+  salary_chf: string | number | null;
+  salary_effective_date: string | null;
+  end_date: string | null;
+  exit_reason: string | null;
+  ahv_number: string | null;
+  canton_tax_code: string | null;
+  work_state: string;
+  is_active: boolean;
+  show_on_about: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 async function getProfile(id: string, includeHrNotes = false): Promise<ProfileData | null> {
@@ -80,7 +78,7 @@ async function getProfile(id: string, includeHrNotes = false): Promise<ProfileDa
     // financially sensitive.
     const sensitiveColumns = includeHrNotes
       ? ', tp.hr_notes, tp.hourly_rate_cents, tp.salary_chf, tp.salary_effective_date, tp.ahv_number, tp.canton_tax_code'
-      : ''
+      : '';
 
     const result = await query<ProfileData>(
       `SELECT
@@ -119,46 +117,43 @@ async function getProfile(id: string, includeHrNotes = false): Promise<ProfileDa
        FROM ${TABLE_NAMES.TEAM_PROFILES} tp
        JOIN ${TABLE_NAMES.USERS} u ON tp.user_id = u.id
        WHERE tp.id = $1`,
-      [id]
-    )
+      [id],
+    );
 
-    return result.rows[0] || null
+    return result.rows[0] || null;
   } catch (error) {
-    logger.error('Failed to fetch team profile', { error, profileId: id })
-    return null
+    logger.error('Failed to fetch team profile', { error, profileId: id });
+    return null;
   }
 }
 
 export default async function TeamProfilePage({ params }: PageProps) {
-  const session = await requireSection('team')
-  const { id } = await params
-  const currentUserIsSuperAdmin = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
-  const profile = await getProfile(id, currentUserIsSuperAdmin)
+  const session = await requireSection('team');
+  const { id } = await params;
+  const currentUserIsSuperAdmin = isSuperAdmin(session.user.email, session.user.isSuperAdmin);
+  const profile = await getProfile(id, currentUserIsSuperAdmin);
 
   if (!profile) {
-    notFound()
+    notFound();
   }
 
   // Teammate view: which teams this person is on (with join/leave).
   const [memberships, teams] = await Promise.all([
     getMembershipsForUser(profile.user_id).catch((error) => {
-      logger.error('Failed to load member teams', { error, userId: profile.user_id })
-      return []
+      logger.error('Failed to load member teams', { error, userId: profile.user_id });
+      return [];
     }),
     listTeams().catch(() => []),
-  ])
+  ]);
 
   return (
     <div className="space-y-5">
-      <TeamProfileDetailClient
-        profile={profile}
-        isSuperAdmin={currentUserIsSuperAdmin}
-      />
+      <TeamProfileDetailClient profile={profile} isSuperAdmin={currentUserIsSuperAdmin} />
       <MemberTeamsCard
         person={{ userId: profile.user_id, name: profile.user_name, avatarUrl: null }}
         memberships={memberships}
         allTeams={teams.map((t) => ({ id: t.id, name: t.name, slug: t.slug, accent: t.accent }))}
       />
     </div>
-  )
+  );
 }

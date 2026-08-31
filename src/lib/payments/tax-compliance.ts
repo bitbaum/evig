@@ -1,58 +1,58 @@
 // Tax Compliance & VAT Handling for RevampIT
 // Implements Swiss and EU tax regulations for digital services
 
-export type TaxRegime = 'swiss' | 'eu' | 'reverse_charge'
+export type TaxRegime = 'swiss' | 'eu' | 'reverse_charge';
 
 export interface TaxConfig {
-  regime: TaxRegime
-  country: string
-  vatRate: number
-  currency: 'CHF' | 'EUR'
-  requiresVAT: boolean
-  reverseChargeEligible: boolean
-  taxId?: string
+  regime: TaxRegime;
+  country: string;
+  vatRate: number;
+  currency: 'CHF' | 'EUR';
+  requiresVAT: boolean;
+  reverseChargeEligible: boolean;
+  taxId?: string;
 }
 
 export interface TaxCalculation {
-  subtotal: number
-  vatAmount: number
-  total: number
-  vatRate: number
-  regime: TaxRegime
-  currency: 'CHF' | 'EUR'
+  subtotal: number;
+  vatAmount: number;
+  total: number;
+  vatRate: number;
+  regime: TaxRegime;
+  currency: 'CHF' | 'EUR';
   breakdown: {
-    taxableAmount: number
-    vatExemptAmount: number
-    reverseChargeAmount: number
-  }
+    taxableAmount: number;
+    vatExemptAmount: number;
+    reverseChargeAmount: number;
+  };
 }
 
 // Transaction type for tax calculations
 export interface TaxTransaction {
-  id: string
-  amount_cents: number
-  currency: 'CHF' | 'EUR'
-  created_at: string | Date
-  serviceType?: 'digital' | 'physical' | 'service'
-  customerVatId?: string
-  customerType?: 'business' | 'consumer'
+  id: string;
+  amount_cents: number;
+  currency: 'CHF' | 'EUR';
+  created_at: string | Date;
+  serviceType?: 'digital' | 'physical' | 'service';
+  customerVatId?: string;
+  customerType?: 'business' | 'consumer';
 }
 
 // Tax report transaction entry
 export interface TaxReportTransaction {
-  id: string
-  date: string | Date
-  amount: number
-  vat: number
-  total: number
-  regime: TaxRegime
-  customerCountry: string
+  id: string;
+  date: string | Date;
+  amount: number;
+  vat: number;
+  total: number;
+  regime: TaxRegime;
+  customerCountry: string;
 }
 
 // Rates live in @/config/tax — see the note there on the 2024-01-01 increase.
 // Re-exported so existing importers keep working, but there is one definition.
-import { SWISS_VAT_RATES, EU_VAT_RATES } from '@/config/tax'
-export { SWISS_VAT_RATES, EU_VAT_RATES }
+import { SWISS_VAT_RATES, EU_VAT_RATES } from '@/config/tax';
+export { SWISS_VAT_RATES, EU_VAT_RATES };
 
 // Tax configurations by country/region
 export const TAX_CONFIGURATIONS: Record<string, TaxConfig> = {
@@ -63,7 +63,7 @@ export const TAX_CONFIGURATIONS: Record<string, TaxConfig> = {
     vatRate: SWISS_VAT_RATES.standard,
     currency: 'CHF',
     requiresVAT: true,
-    reverseChargeEligible: false
+    reverseChargeEligible: false,
   },
 
   // EU Countries (simplified - each country has different rates)
@@ -73,7 +73,7 @@ export const TAX_CONFIGURATIONS: Record<string, TaxConfig> = {
     vatRate: EU_VAT_RATES.standard,
     currency: 'EUR',
     requiresVAT: true,
-    reverseChargeEligible: true
+    reverseChargeEligible: true,
   },
   FR: {
     regime: 'eu',
@@ -81,7 +81,7 @@ export const TAX_CONFIGURATIONS: Record<string, TaxConfig> = {
     vatRate: EU_VAT_RATES.standard,
     currency: 'EUR',
     requiresVAT: true,
-    reverseChargeEligible: true
+    reverseChargeEligible: true,
   },
   AT: {
     regime: 'eu',
@@ -89,7 +89,7 @@ export const TAX_CONFIGURATIONS: Record<string, TaxConfig> = {
     vatRate: EU_VAT_RATES.standard,
     currency: 'EUR',
     requiresVAT: true,
-    reverseChargeEligible: true
+    reverseChargeEligible: true,
   },
   IT: {
     regime: 'eu',
@@ -97,7 +97,7 @@ export const TAX_CONFIGURATIONS: Record<string, TaxConfig> = {
     vatRate: EU_VAT_RATES.standard,
     currency: 'EUR',
     requiresVAT: true,
-    reverseChargeEligible: true
+    reverseChargeEligible: true,
   },
   ES: {
     regime: 'eu',
@@ -105,7 +105,7 @@ export const TAX_CONFIGURATIONS: Record<string, TaxConfig> = {
     vatRate: EU_VAT_RATES.standard,
     currency: 'EUR',
     requiresVAT: true,
-    reverseChargeEligible: true
+    reverseChargeEligible: true,
   },
 
   // Default for other countries (no VAT)
@@ -115,9 +115,9 @@ export const TAX_CONFIGURATIONS: Record<string, TaxConfig> = {
     vatRate: 0,
     currency: 'CHF',
     requiresVAT: false,
-    reverseChargeEligible: false
-  }
-}
+    reverseChargeEligible: false,
+  },
+};
 
 /**
  * Determine tax configuration based on customer location
@@ -125,10 +125,10 @@ export const TAX_CONFIGURATIONS: Record<string, TaxConfig> = {
 export function getTaxConfig(
   countryCode: string,
   customerType: 'business' | 'consumer' = 'consumer',
-  serviceType: 'digital' | 'physical' | 'service' = 'service'
+  serviceType: 'digital' | 'physical' | 'service' = 'service',
 ): TaxConfig {
   // Get base configuration
-  const config = TAX_CONFIGURATIONS[countryCode] || TAX_CONFIGURATIONS.DEFAULT
+  const config = TAX_CONFIGURATIONS[countryCode] || TAX_CONFIGURATIONS.DEFAULT;
 
   // Apply special rules
   if (config.regime === 'eu' && customerType === 'business' && config.reverseChargeEligible) {
@@ -136,11 +136,11 @@ export function getTaxConfig(
     return {
       ...config,
       regime: 'reverse_charge' as TaxRegime,
-      vatRate: 0 // No VAT charged, customer accounts for it
-    }
+      vatRate: 0, // No VAT charged, customer accounts for it
+    };
   }
 
-  return config
+  return config;
 }
 
 /**
@@ -151,27 +151,27 @@ export function calculateTaxes(
   countryCode: string,
   customerType: 'business' | 'consumer' = 'consumer',
   serviceType: 'digital' | 'physical' | 'service' = 'service',
-  currency: 'CHF' | 'EUR' = 'CHF'
+  currency: 'CHF' | 'EUR' = 'CHF',
 ): TaxCalculation {
-  const config = getTaxConfig(countryCode, customerType, serviceType)
+  const config = getTaxConfig(countryCode, customerType, serviceType);
 
-  const subtotal = amount
-  let vatAmount = 0
-  let regime = config.regime
+  const subtotal = amount;
+  let vatAmount = 0;
+  let regime = config.regime;
 
   // Apply tax rules
   if (config.requiresVAT && config.vatRate > 0) {
     if (regime === 'reverse_charge') {
       // Reverse charge: no VAT charged, but tracked
-      vatAmount = subtotal * config.vatRate
-      regime = 'reverse_charge'
+      vatAmount = subtotal * config.vatRate;
+      regime = 'reverse_charge';
     } else {
       // Standard VAT application
-      vatAmount = subtotal * config.vatRate
+      vatAmount = subtotal * config.vatRate;
     }
   }
 
-  const total = subtotal + (regime === 'reverse_charge' ? 0 : vatAmount)
+  const total = subtotal + (regime === 'reverse_charge' ? 0 : vatAmount);
 
   return {
     subtotal: Math.round(subtotal * 100) / 100,
@@ -183,9 +183,9 @@ export function calculateTaxes(
     breakdown: {
       taxableAmount: subtotal,
       vatExemptAmount: 0,
-      reverseChargeAmount: regime === 'reverse_charge' ? vatAmount : 0
-    }
-  }
+      reverseChargeAmount: regime === 'reverse_charge' ? vatAmount : 0,
+    },
+  };
 }
 
 /**
@@ -194,15 +194,15 @@ export function calculateTaxes(
 export function generateTaxInvoiceData(
   transaction: TaxTransaction,
   customerLocation: { countryCode: string; vatId?: string },
-  businessType: 'business' | 'consumer' = 'consumer'
+  businessType: 'business' | 'consumer' = 'consumer',
 ) {
   const taxCalculation = calculateTaxes(
     transaction.amount_cents / 100,
     customerLocation.countryCode,
     businessType,
     'digital', // Assuming digital services for RevampIT
-    transaction.currency
-  )
+    transaction.currency,
+  );
 
   return {
     invoice: {
@@ -212,21 +212,21 @@ export function generateTaxInvoiceData(
       vatRate: taxCalculation.vatRate,
       currency: taxCalculation.currency,
       taxRegime: taxCalculation.regime,
-      taxExempt: taxCalculation.regime === 'reverse_charge'
+      taxExempt: taxCalculation.regime === 'reverse_charge',
     },
     compliance: {
       country: customerLocation.countryCode,
       vatId: customerLocation.vatId,
       regime: taxCalculation.regime,
       reverseChargeApplied: taxCalculation.regime === 'reverse_charge',
-      vatReportingRequired: taxCalculation.vatAmount > 0
+      vatReportingRequired: taxCalculation.vatAmount > 0,
     },
     legal: {
       taxAuthority: getTaxAuthority(customerLocation.countryCode),
       reportingPeriod: getReportingPeriod(customerLocation.countryCode),
-      retentionPeriod: 10 // 10 years for Swiss/EU tax records
-    }
-  }
+      retentionPeriod: 10, // 10 years for Swiss/EU tax records
+    },
+  };
 }
 
 /**
@@ -239,10 +239,10 @@ function getTaxAuthority(countryCode: string): string {
     FR: 'Direction générale des Finances publiques',
     AT: 'Bundesministerium für Finanzen',
     IT: 'Agenzia delle Entrate',
-    ES: 'Agencia Tributaria'
-  }
+    ES: 'Agencia Tributaria',
+  };
 
-  return authorities[countryCode] || 'Local Tax Authority'
+  return authorities[countryCode] || 'Local Tax Authority';
 }
 
 /**
@@ -256,17 +256,17 @@ function getReportingPeriod(countryCode: string): string {
     FR: 'Monthly',
     AT: 'Monthly',
     IT: 'Monthly',
-    ES: 'Monthly'
-  }
+    ES: 'Monthly',
+  };
 
-  return periods[countryCode] || 'Monthly'
+  return periods[countryCode] || 'Monthly';
 }
 
 /**
  * Validate VAT ID format (basic validation)
  */
 export function validateVATId(vatId: string, countryCode: string): boolean {
-  if (!vatId) return false
+  if (!vatId) return false;
 
   // Basic format validation (simplified)
   const patterns: Record<string, RegExp> = {
@@ -275,11 +275,11 @@ export function validateVATId(vatId: string, countryCode: string): boolean {
     FR: /^FR\d{11}$/, // French VAT format (simplified)
     AT: /^ATU\d{8}$/, // Austrian VAT format
     IT: /^IT\d{11}$/, // Italian VAT format
-    ES: /^[A-Z]\d{8}$/ // Spanish VAT format (simplified)
-  }
+    ES: /^[A-Z]\d{8}$/, // Spanish VAT format (simplified)
+  };
 
-  const pattern = patterns[countryCode]
-  return pattern ? pattern.test(vatId) : false
+  const pattern = patterns[countryCode];
+  return pattern ? pattern.test(vatId) : false;
 }
 
 /**
@@ -298,7 +298,7 @@ export function validateVATId(vatId: string, countryCode: string): boolean {
 export function generateTaxReport(
   transactions: TaxTransaction[],
   period: { start: string; end: string },
-  countryCode: string = 'CH'
+  countryCode: string = 'CH',
 ) {
   const report = {
     period: {
@@ -310,25 +310,25 @@ export function generateTaxReport(
       totalTransactions: transactions.length,
       totalAmount: 0,
       totalVAT: 0,
-      currency: 'CHF'
+      currency: 'CHF',
     },
     transactions: [] as TaxReportTransaction[],
     compliance: {
       reportingRequired: true,
       deadline: calculateReportingDeadline(period.end, countryCode),
-      authority: getTaxAuthority(countryCode)
-    }
-  }
+      authority: getTaxAuthority(countryCode),
+    },
+  };
 
-  transactions.forEach(transaction => {
+  transactions.forEach((transaction) => {
     const taxData = generateTaxInvoiceData(
       transaction,
       { countryCode, vatId: transaction.customerVatId },
-      transaction.customerType || 'consumer'
-    )
+      transaction.customerType || 'consumer',
+    );
 
-    report.summary.totalAmount += taxData.invoice.subtotal
-    report.summary.totalVAT += taxData.invoice.vatAmount
+    report.summary.totalAmount += taxData.invoice.subtotal;
+    report.summary.totalVAT += taxData.invoice.vatAmount;
 
     report.transactions.push({
       id: transaction.id,
@@ -337,14 +337,14 @@ export function generateTaxReport(
       vat: taxData.invoice.vatAmount,
       total: taxData.invoice.total,
       regime: taxData.compliance.regime,
-      customerCountry: countryCode
-    })
-  })
+      customerCountry: countryCode,
+    });
+  });
 
-  report.summary.totalAmount = Math.round(report.summary.totalAmount * 100) / 100
-  report.summary.totalVAT = Math.round(report.summary.totalVAT * 100) / 100
+  report.summary.totalAmount = Math.round(report.summary.totalAmount * 100) / 100;
+  report.summary.totalVAT = Math.round(report.summary.totalVAT * 100) / 100;
 
-  return report
+  return report;
 }
 
 /**
@@ -353,11 +353,11 @@ export function generateTaxReport(
  * use Date.UTC so the day-shift isn't perturbed by the host's local tz.
  */
 function calculateReportingDeadline(periodEnd: string, countryCode: string): string {
-  const [y, m, d] = periodEnd.split('-').map(Number)
+  const [y, m, d] = periodEnd.split('-').map(Number);
   // Add reporting period (typically 30-90 days after period end)
-  const daysToAdd = countryCode === 'CH' ? 60 : 30 // Switzerland has longer deadline
-  const dt = new Date(Date.UTC(y, m - 1, d + daysToAdd))
-  return `${dt.getUTCFullYear()}-${String(dt.getUTCMonth() + 1).padStart(2, '0')}-${String(dt.getUTCDate()).padStart(2, '0')}`
+  const daysToAdd = countryCode === 'CH' ? 60 : 30; // Switzerland has longer deadline
+  const dt = new Date(Date.UTC(y, m - 1, d + daysToAdd));
+  return `${dt.getUTCFullYear()}-${String(dt.getUTCMonth() + 1).padStart(2, '0')}-${String(dt.getUTCDate()).padStart(2, '0')}`;
 }
 
 /**
@@ -365,30 +365,58 @@ function calculateReportingDeadline(periodEnd: string, countryCode: string): str
  */
 export function requiresTaxReporting(
   transaction: TaxTransaction,
-  customerCountry: string
+  customerCountry: string,
 ): boolean {
   // EU digital services require reporting regardless of customer location
   if (transaction.serviceType === 'digital' && isEUCountry(customerCountry)) {
-    return true
+    return true;
   }
 
   // Swiss transactions always require reporting
   if (customerCountry === 'CH') {
-    return true
+    return true;
   }
 
   // High-value transactions may require reporting
   if (transaction.amount_cents / 100 > 1000) {
-    return true
+    return true;
   }
 
-  return false
+  return false;
 }
 
 /**
  * Check if country is in EU
  */
 function isEUCountry(countryCode: string): boolean {
-  const euCountries = ['DE', 'FR', 'AT', 'IT', 'ES', 'BE', 'NL', 'LU', 'DK', 'SE', 'FI', 'PT', 'IE', 'GR', 'PL', 'CZ', 'HU', 'SI', 'SK', 'EE', 'LV', 'LT', 'MT', 'CY', 'HR', 'BG', 'RO']
-  return euCountries.includes(countryCode)
+  const euCountries = [
+    'DE',
+    'FR',
+    'AT',
+    'IT',
+    'ES',
+    'BE',
+    'NL',
+    'LU',
+    'DK',
+    'SE',
+    'FI',
+    'PT',
+    'IE',
+    'GR',
+    'PL',
+    'CZ',
+    'HU',
+    'SI',
+    'SK',
+    'EE',
+    'LV',
+    'LT',
+    'MT',
+    'CY',
+    'HR',
+    'BG',
+    'RO',
+  ];
+  return euCountries.includes(countryCode);
 }

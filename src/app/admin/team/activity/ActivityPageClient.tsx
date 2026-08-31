@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Activity Page Client Component
@@ -7,35 +7,37 @@
  * Fetches team members for per-person filtering.
  */
 
-import { useState, useEffect } from 'react'
-import { ActivityFeed } from '@/components/admin/team/activity'
-import { apiFetch } from '@/lib/api/client'
+import { useState, useEffect } from 'react';
+import { ActivityFeed } from '@/components/admin/team/activity';
+import { apiFetch } from '@/lib/api/client';
 
 interface TeamMemberOption {
-  id: string
-  name: string | null
-  email: string
+  id: string;
+  name: string | null;
+  email: string;
 }
 
 export function ActivityPageClient() {
-  const [teamMembers, setTeamMembers] = useState<TeamMemberOption[]>([])
+  const [teamMembers, setTeamMembers] = useState<TeamMemberOption[]>([]);
 
   useEffect(() => {
     async function fetchTeamMembers() {
-      const result = await apiFetch<Array<{ user_id: string; user_name: string | null; user_email: string }>>(
-        '/api/admin/team/profiles',
-      )
+      const result = await apiFetch<
+        Array<{ user_id: string; user_name: string | null; user_email: string }>
+      >('/api/admin/team/profiles');
       if (result.success && result.data) {
-        setTeamMembers(result.data.map(m => ({
-          id: m.user_id,
-          name: m.user_name,
-          email: m.user_email,
-        })))
+        setTeamMembers(
+          result.data.map((m) => ({
+            id: m.user_id,
+            name: m.user_name,
+            email: m.user_email,
+          })),
+        );
       }
       // Team members are optional — filter just won't appear on failure
     }
-    fetchTeamMembers()
-  }, [])
+    fetchTeamMembers();
+  }, []);
 
   return (
     <div className="max-w-4xl">
@@ -46,5 +48,5 @@ export function ActivityPageClient() {
         teamMembers={teamMembers}
       />
     </div>
-  )
+  );
 }

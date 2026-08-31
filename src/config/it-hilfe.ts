@@ -23,7 +23,7 @@ import {
   HelpCircle,
   Shield,
   LucideIcon,
-} from 'lucide-react'
+} from 'lucide-react';
 
 // ============================================================================
 // FEATURE IDENTITY (SSOT)
@@ -62,7 +62,7 @@ export const IT_HILFE = {
     /** Self-service community/professional profile edit */
     technicianProfile: '/api/user/technician-profile',
   },
-} as const
+} as const;
 
 // ============================================================================
 // REQUEST LIFECYCLE CONSTANTS (SSOT — referenced by API + migration comments)
@@ -74,7 +74,7 @@ export const IT_HILFE = {
  * `it_hilfe_requests.expires_at`. Current schema default is set in
  * scripts/db/migrations/010_peer_repair_system.sql (NOW() + 30 days).
  */
-export const REQUEST_EXPIRY_DAYS = 30
+export const REQUEST_EXPIRY_DAYS = 30;
 
 /**
  * How long the email-claim token stays valid when an anonymous user posts
@@ -82,8 +82,8 @@ export const REQUEST_EXPIRY_DAYS = 30
  * request is still publicly browsable but the user can no longer claim
  * ownership via the magic-link email.
  */
-export const CLAIM_TOKEN_TTL_DAYS = 7
-export const CLAIM_TOKEN_TTL_MS = CLAIM_TOKEN_TTL_DAYS * 24 * 60 * 60 * 1000
+export const CLAIM_TOKEN_TTL_DAYS = 7;
+export const CLAIM_TOKEN_TTL_MS = CLAIM_TOKEN_TTL_DAYS * 24 * 60 * 60 * 1000;
 
 /**
  * Pagination policy for every IT-Hilfe list endpoint
@@ -93,7 +93,7 @@ export const CLAIM_TOKEN_TTL_MS = CLAIM_TOKEN_TTL_DAYS * 24 * 60 * 60 * 1000
 export const IT_HILFE_PAGINATION = {
   defaultLimit: 20,
   maxLimit: 50,
-} as const
+} as const;
 
 /**
  * Content length policies for IT-Hilfe free-text fields.
@@ -106,10 +106,10 @@ export const IT_HILFE_PAGINATION = {
  * Edit once, every surface updates. Error messages are templated from
  * the constant so the human-readable copy never drifts from the limit.
  */
-export const OFFER_MIN_CHARS = 20
-export const OFFER_MAX_CHARS = 2000
-export const REVIEW_MIN_CHARS = 10
-export const REVIEW_MAX_CHARS = 5000
+export const OFFER_MIN_CHARS = 20;
+export const OFFER_MAX_CHARS = 2000;
+export const REVIEW_MIN_CHARS = 10;
+export const REVIEW_MAX_CHARS = 5000;
 
 // ============================================================================
 // NOTIFICATION EMAIL — Derived from SSOT: @/config/org
@@ -118,9 +118,9 @@ export const REVIEW_MAX_CHARS = 5000
 // org address.
 // ============================================================================
 
-import { CONTACT } from '@/config/org'
+import { CONTACT } from '@/config/org';
 
-export const REVAMPIT_NOTIFICATION_EMAIL = process.env.NOTIFICATION_EMAIL || CONTACT.email
+export const REVAMPIT_NOTIFICATION_EMAIL = process.env.NOTIFICATION_EMAIL || CONTACT.email;
 
 export const MATCH_SCORES = {
   PER_SKILL: 20,
@@ -128,18 +128,18 @@ export const MATCH_SCORES = {
   SAME_CANTON: 15,
   BUDGET_COMPATIBLE: 10,
   SERVICE_TYPE_MATCH: 5,
-} as const
+} as const;
 
 // ============================================================================
 // SERVICE CATEGORIES (Expanded beyond repairs)
 // ============================================================================
 
 export interface ServiceCategory {
-  id: string
-  name: string
-  description: string
-  icon: LucideIcon
-  color: string
+  id: string;
+  name: string;
+  description: string;
+  icon: LucideIcon;
+  color: string;
 }
 
 export const SERVICE_CATEGORIES: ServiceCategory[] = [
@@ -178,61 +178,177 @@ export const SERVICE_CATEGORIES: ServiceCategory[] = [
     icon: Wifi,
     color: 'bg-cyan-500',
   },
-]
+];
 
 // ============================================================================
 // IT SKILLS (Grouped by service category)
 // ============================================================================
 
 export interface ITSkill {
-  id: string
-  name: string
-  description: string
+  id: string;
+  name: string;
+  description: string;
 }
 
 export const IT_SKILLS: Record<string, ITSkill[]> = {
   repair: [
-    { id: 'hardware_diagnosis', name: 'Hardware-Diagnose', description: 'Fehlersuche und Identifikation von Hardware-Problemen' },
-    { id: 'screen_repair', name: 'Bildschirm-Reparatur', description: 'Austausch und Reparatur von Displays' },
-    { id: 'battery_replacement', name: 'Akku-Wechsel', description: 'Austausch von Akkus und Batterien' },
-    { id: 'ssd_upgrade', name: 'SSD/RAM-Upgrade', description: 'Einbau und Konfiguration von SSD und RAM' },
-    { id: 'keyboard_repair', name: 'Tastatur-Reparatur', description: 'Reparatur und Austausch von Tastaturen' },
+    {
+      id: 'hardware_diagnosis',
+      name: 'Hardware-Diagnose',
+      description: 'Fehlersuche und Identifikation von Hardware-Problemen',
+    },
+    {
+      id: 'screen_repair',
+      name: 'Bildschirm-Reparatur',
+      description: 'Austausch und Reparatur von Displays',
+    },
+    {
+      id: 'battery_replacement',
+      name: 'Akku-Wechsel',
+      description: 'Austausch von Akkus und Batterien',
+    },
+    {
+      id: 'ssd_upgrade',
+      name: 'SSD/RAM-Upgrade',
+      description: 'Einbau und Konfiguration von SSD und RAM',
+    },
+    {
+      id: 'keyboard_repair',
+      name: 'Tastatur-Reparatur',
+      description: 'Reparatur und Austausch von Tastaturen',
+    },
     { id: 'soldering', name: 'Löten', description: 'Löten von Komponenten, Kabeln und Platinen' },
-    { id: 'cleaning', name: 'Reinigung & Wartung', description: 'Professionelle Reinigung und Wärmeleitpaste-Erneuerung' },
-    { id: 'power_supply', name: 'Netzteil-Reparatur', description: 'Diagnose und Reparatur von Stromversorgung' },
-    { id: 'motherboard_repair', name: 'Mainboard-Reparatur', description: 'Reparatur von Hauptplatinen und Komponenten' },
-    { id: 'connector_repair', name: 'Anschluss-Reparatur', description: 'Reparatur von USB, Ladeanschlüssen und anderen Ports' },
+    {
+      id: 'cleaning',
+      name: 'Reinigung & Wartung',
+      description: 'Professionelle Reinigung und Wärmeleitpaste-Erneuerung',
+    },
+    {
+      id: 'power_supply',
+      name: 'Netzteil-Reparatur',
+      description: 'Diagnose und Reparatur von Stromversorgung',
+    },
+    {
+      id: 'motherboard_repair',
+      name: 'Mainboard-Reparatur',
+      description: 'Reparatur von Hauptplatinen und Komponenten',
+    },
+    {
+      id: 'connector_repair',
+      name: 'Anschluss-Reparatur',
+      description: 'Reparatur von USB, Ladeanschlüssen und anderen Ports',
+    },
   ],
   setup: [
-    { id: 'os_installation', name: 'Betriebssystem-Installation', description: 'Installation von Windows, macOS, Linux' },
-    { id: 'linux_install', name: 'Linux-Installation', description: 'Installation und Konfiguration von Linux-Distributionen' },
-    { id: 'dual_boot', name: 'Dual-Boot Setup', description: 'Einrichtung von Multi-Boot-Systemen' },
-    { id: 'software_setup', name: 'Software-Einrichtung', description: 'Installation und Konfiguration von Anwendungen' },
-    { id: 'printer_setup', name: 'Drucker-Einrichtung', description: 'Installation und Konfiguration von Druckern' },
-    { id: 'email_setup', name: 'E-Mail-Einrichtung', description: 'Einrichtung von E-Mail-Clients und -Konten' },
-    { id: 'driver_installation', name: 'Treiber-Installation', description: 'Installation und Aktualisierung von Treibern' },
+    {
+      id: 'os_installation',
+      name: 'Betriebssystem-Installation',
+      description: 'Installation von Windows, macOS, Linux',
+    },
+    {
+      id: 'linux_install',
+      name: 'Linux-Installation',
+      description: 'Installation und Konfiguration von Linux-Distributionen',
+    },
+    {
+      id: 'dual_boot',
+      name: 'Dual-Boot Setup',
+      description: 'Einrichtung von Multi-Boot-Systemen',
+    },
+    {
+      id: 'software_setup',
+      name: 'Software-Einrichtung',
+      description: 'Installation und Konfiguration von Anwendungen',
+    },
+    {
+      id: 'printer_setup',
+      name: 'Drucker-Einrichtung',
+      description: 'Installation und Konfiguration von Druckern',
+    },
+    {
+      id: 'email_setup',
+      name: 'E-Mail-Einrichtung',
+      description: 'Einrichtung von E-Mail-Clients und -Konten',
+    },
+    {
+      id: 'driver_installation',
+      name: 'Treiber-Installation',
+      description: 'Installation und Aktualisierung von Treibern',
+    },
   ],
   support: [
-    { id: 'troubleshooting', name: 'Fehlersuche', description: 'Diagnose und Behebung von Software-Problemen' },
-    { id: 'ai_consulting', name: 'KI-Beratung', description: 'Beratung zu KI-Tools und deren Nutzung' },
-    { id: 'tech_advice', name: 'Kaufberatung', description: 'Beratung bei Hardware- und Software-Kauf' },
-    { id: 'training', name: 'Schulung & Einweisung', description: 'Einführung in neue Software oder Geräte' },
+    {
+      id: 'troubleshooting',
+      name: 'Fehlersuche',
+      description: 'Diagnose und Behebung von Software-Problemen',
+    },
+    {
+      id: 'ai_consulting',
+      name: 'KI-Beratung',
+      description: 'Beratung zu KI-Tools und deren Nutzung',
+    },
+    {
+      id: 'tech_advice',
+      name: 'Kaufberatung',
+      description: 'Beratung bei Hardware- und Software-Kauf',
+    },
+    {
+      id: 'training',
+      name: 'Schulung & Einweisung',
+      description: 'Einführung in neue Software oder Geräte',
+    },
     { id: 'remote_support', name: 'Fernwartung', description: 'Remote-Hilfe per Video/Telefon' },
   ],
   data: [
-    { id: 'data_recovery', name: 'Datenrettung', description: 'Wiederherstellung verlorener Daten' },
-    { id: 'backup_setup', name: 'Backup-Einrichtung', description: 'Einrichtung von Backup-Lösungen' },
-    { id: 'virus_removal', name: 'Virenentfernung', description: 'Entfernung von Malware und Systemwiederherstellung' },
-    { id: 'encryption', name: 'Verschlüsselung', description: 'Einrichtung von Festplatten- und Datenverschlüsselung' },
-    { id: 'data_migration', name: 'Datenmigration', description: 'Übertragung von Daten auf neue Geräte' },
+    {
+      id: 'data_recovery',
+      name: 'Datenrettung',
+      description: 'Wiederherstellung verlorener Daten',
+    },
+    {
+      id: 'backup_setup',
+      name: 'Backup-Einrichtung',
+      description: 'Einrichtung von Backup-Lösungen',
+    },
+    {
+      id: 'virus_removal',
+      name: 'Virenentfernung',
+      description: 'Entfernung von Malware und Systemwiederherstellung',
+    },
+    {
+      id: 'encryption',
+      name: 'Verschlüsselung',
+      description: 'Einrichtung von Festplatten- und Datenverschlüsselung',
+    },
+    {
+      id: 'data_migration',
+      name: 'Datenmigration',
+      description: 'Übertragung von Daten auf neue Geräte',
+    },
   ],
   network: [
-    { id: 'wifi_setup', name: 'WLAN-Einrichtung', description: 'Einrichtung und Optimierung von WLAN' },
-    { id: 'router_config', name: 'Router-Konfiguration', description: 'Konfiguration von Routern und Firewalls' },
-    { id: 'network_troubleshooting', name: 'Netzwerk-Fehlersuche', description: 'Diagnose und Behebung von Netzwerk-Problemen' },
-    { id: 'smart_home', name: 'Smart-Home Setup', description: 'Einrichtung von Smart-Home-Geräten' },
+    {
+      id: 'wifi_setup',
+      name: 'WLAN-Einrichtung',
+      description: 'Einrichtung und Optimierung von WLAN',
+    },
+    {
+      id: 'router_config',
+      name: 'Router-Konfiguration',
+      description: 'Konfiguration von Routern und Firewalls',
+    },
+    {
+      id: 'network_troubleshooting',
+      name: 'Netzwerk-Fehlersuche',
+      description: 'Diagnose und Behebung von Netzwerk-Problemen',
+    },
+    {
+      id: 'smart_home',
+      name: 'Smart-Home Setup',
+      description: 'Einrichtung von Smart-Home-Geräten',
+    },
   ],
-}
+};
 
 // ============================================================================
 // BUDGET TIERS - Solidarity Pricing Model
@@ -250,20 +366,19 @@ export const BUDGET_TIER = {
   KULTURLEGI: 'kulturlegi',
   NORMAL: 'normal',
   SUPPORTER: 'supporter',
-} as const
+} as const;
 
-export type BudgetTierId = typeof BUDGET_TIER[keyof typeof BUDGET_TIER]
+export type BudgetTierId = (typeof BUDGET_TIER)[keyof typeof BUDGET_TIER];
 
 export interface BudgetTier {
-  id: string
-  name: string
-  description: string
-  icon: string
-  requiresAmount: boolean
-  multiplier: number
-  badgeClass: string
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  requiresAmount: boolean;
+  multiplier: number;
+  badgeClass: string;
 }
-
 
 export const BUDGET_TIERS: BudgetTier[] = [
   {
@@ -302,21 +417,21 @@ export const BUDGET_TIERS: BudgetTier[] = [
     multiplier: 1.5,
     badgeClass: 'bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-300',
   },
-]
+];
 
 // ============================================================================
 // DEVICE CATEGORIES
 // ============================================================================
 
 export interface DeviceCategory {
-  id: string
-  name: string
-  description: string
-  icon: LucideIcon
-  color: string
-  suggestedSkills: string[]
-  defaultTitle: string
-  defaultDescription: string
+  id: string;
+  name: string;
+  description: string;
+  icon: LucideIcon;
+  color: string;
+  suggestedSkills: string[];
+  defaultTitle: string;
+  defaultDescription: string;
 }
 
 export const DEVICE_CATEGORIES: DeviceCategory[] = [
@@ -326,7 +441,14 @@ export const DEVICE_CATEGORIES: DeviceCategory[] = [
     description: 'Notebooks, MacBooks, Ultrabooks',
     icon: Laptop,
     color: 'bg-success-500',
-    suggestedSkills: ['hardware_diagnosis', 'screen_repair', 'battery_replacement', 'keyboard_repair', 'ssd_upgrade', 'os_installation'],
+    suggestedSkills: [
+      'hardware_diagnosis',
+      'screen_repair',
+      'battery_replacement',
+      'keyboard_repair',
+      'ssd_upgrade',
+      'os_installation',
+    ],
     defaultTitle: 'Laptop-Hilfe benötigt',
     defaultDescription: 'Mein Laptop hat folgendes Problem:\n\n- \n\nMarke/Modell: \nAlter: ca. ',
   },
@@ -336,9 +458,15 @@ export const DEVICE_CATEGORIES: DeviceCategory[] = [
     description: 'iPhones, Android-Handys',
     icon: Smartphone,
     color: 'bg-purple-500',
-    suggestedSkills: ['hardware_diagnosis', 'screen_repair', 'battery_replacement', 'troubleshooting'],
+    suggestedSkills: [
+      'hardware_diagnosis',
+      'screen_repair',
+      'battery_replacement',
+      'troubleshooting',
+    ],
     defaultTitle: 'Smartphone-Hilfe benötigt',
-    defaultDescription: 'Mein Smartphone hat folgendes Problem:\n\n- \n\nMarke/Modell: \nAlter: ca. ',
+    defaultDescription:
+      'Mein Smartphone hat folgendes Problem:\n\n- \n\nMarke/Modell: \nAlter: ca. ',
   },
   {
     id: 'tablet',
@@ -346,7 +474,12 @@ export const DEVICE_CATEGORIES: DeviceCategory[] = [
     description: 'iPads, Android-Tablets, E-Reader',
     icon: Tablet,
     color: 'bg-indigo-500',
-    suggestedSkills: ['hardware_diagnosis', 'screen_repair', 'battery_replacement', 'troubleshooting'],
+    suggestedSkills: [
+      'hardware_diagnosis',
+      'screen_repair',
+      'battery_replacement',
+      'troubleshooting',
+    ],
     defaultTitle: 'Tablet-Hilfe benötigt',
     defaultDescription: 'Mein Tablet hat folgendes Problem:\n\n- \n\nMarke/Modell: \nAlter: ca. ',
   },
@@ -356,7 +489,13 @@ export const DEVICE_CATEGORIES: DeviceCategory[] = [
     description: 'Tower-PCs, Workstations, All-in-Ones',
     icon: Monitor,
     color: 'bg-neutral-600',
-    suggestedSkills: ['hardware_diagnosis', 'ssd_upgrade', 'os_installation', 'cleaning', 'virus_removal'],
+    suggestedSkills: [
+      'hardware_diagnosis',
+      'ssd_upgrade',
+      'os_installation',
+      'cleaning',
+      'virus_removal',
+    ],
     defaultTitle: 'PC-Hilfe benötigt',
     defaultDescription: 'Mein PC hat folgendes Problem:\n\n- \n\nKonfiguration: \nAlter: ca. ',
   },
@@ -416,21 +555,27 @@ export const DEVICE_CATEGORIES: DeviceCategory[] = [
     description: 'Router, Switches, Access Points, Modems',
     icon: Wifi,
     color: 'bg-cyan-500',
-    suggestedSkills: ['wifi_setup', 'router_config', 'network_troubleshooting', 'hardware_diagnosis'],
+    suggestedSkills: [
+      'wifi_setup',
+      'router_config',
+      'network_troubleshooting',
+      'hardware_diagnosis',
+    ],
     defaultTitle: 'Netzwerk-Hilfe benötigt',
-    defaultDescription: 'Ich brauche Hilfe mit meinem Netzwerk:\n\n- \n\nRouter/Gerät: \nProvider: ',
+    defaultDescription:
+      'Ich brauche Hilfe mit meinem Netzwerk:\n\n- \n\nRouter/Gerät: \nProvider: ',
   },
-]
+];
 
 // ============================================================================
 // URGENCY LEVELS
 // ============================================================================
 
 export interface UrgencyLevel {
-  id: string
-  name: string
-  description: string
-  badgeClass: string
+  id: string;
+  name: string;
+  description: string;
+  badgeClass: string;
 }
 
 export const URGENCY = {
@@ -438,26 +583,46 @@ export const URGENCY = {
   NORMAL: 'normal',
   HIGH: 'high',
   URGENT: 'urgent',
-} as const
+} as const;
 
-export const URGENCY_DEFAULT = URGENCY.NORMAL
-export type UrgencyValue = typeof URGENCY[keyof typeof URGENCY]
-export const URGENCY_VALUES = Object.values(URGENCY) as [UrgencyValue, ...UrgencyValue[]]
+export const URGENCY_DEFAULT = URGENCY.NORMAL;
+export type UrgencyValue = (typeof URGENCY)[keyof typeof URGENCY];
+export const URGENCY_VALUES = Object.values(URGENCY) as [UrgencyValue, ...UrgencyValue[]];
 
 export const URGENCY_LEVELS: UrgencyLevel[] = [
-  { id: URGENCY.LOW, name: 'Niedrig', description: 'Keine Eile, kann warten', badgeClass: 'bg-neutral-100 text-neutral-700' },
-  { id: URGENCY.NORMAL, name: 'Normal', description: 'Zeitnah, aber nicht dringend', badgeClass: 'bg-neutral-100 text-neutral-700' },
-  { id: URGENCY.HIGH, name: 'Hoch', description: 'Möglichst bald benötigt', badgeClass: 'bg-orange-100 text-orange-700' },
-  { id: URGENCY.URGENT, name: 'Dringend', description: 'Wird dringend für Arbeit/Studium benötigt', badgeClass: 'bg-error-100 text-error-700' },
-]
+  {
+    id: URGENCY.LOW,
+    name: 'Niedrig',
+    description: 'Keine Eile, kann warten',
+    badgeClass: 'bg-neutral-100 text-neutral-700',
+  },
+  {
+    id: URGENCY.NORMAL,
+    name: 'Normal',
+    description: 'Zeitnah, aber nicht dringend',
+    badgeClass: 'bg-neutral-100 text-neutral-700',
+  },
+  {
+    id: URGENCY.HIGH,
+    name: 'Hoch',
+    description: 'Möglichst bald benötigt',
+    badgeClass: 'bg-orange-100 text-orange-700',
+  },
+  {
+    id: URGENCY.URGENT,
+    name: 'Dringend',
+    description: 'Wird dringend für Arbeit/Studium benötigt',
+    badgeClass: 'bg-error-100 text-error-700',
+  },
+];
 
 // ============================================================================
 // SORT OPTIONS
 // ============================================================================
 
 export interface SortOption {
-  value: string
-  label: string
+  value: string;
+  label: string;
 }
 
 export const SORT_OPTIONS: SortOption[] = [
@@ -465,16 +630,16 @@ export const SORT_OPTIONS: SortOption[] = [
   { value: 'urgent', label: 'Dringlichste zuerst' },
   { value: 'budget_high', label: 'Höchstes Budget' },
   { value: 'offers', label: 'Meiste Angebote' },
-]
+];
 
 // ============================================================================
 // SERVICE TYPES (How help is delivered)
 // ============================================================================
 
 export interface ServiceType {
-  id: string
-  name: string
-  description: string
+  id: string;
+  name: string;
+  description: string;
 }
 
 export const SERVICE_TYPE = {
@@ -483,9 +648,9 @@ export const SERVICE_TYPE = {
   ONSITE: 'onsite',
   PICKUP: 'pickup',
   DROPOFF: 'dropoff',
-} as const
+} as const;
 
-export const SERVICE_TYPE_DEFAULT = SERVICE_TYPE.FLEXIBLE
+export const SERVICE_TYPE_DEFAULT = SERVICE_TYPE.FLEXIBLE;
 
 export const SERVICE_TYPES: ServiceType[] = [
   { id: SERVICE_TYPE.FLEXIBLE, name: 'Flexibel', description: 'Offen für verschiedene Optionen' },
@@ -493,17 +658,17 @@ export const SERVICE_TYPES: ServiceType[] = [
   { id: SERVICE_TYPE.ONSITE, name: 'Vor Ort', description: 'Hilfe vor Ort beim Kunden' },
   { id: SERVICE_TYPE.PICKUP, name: 'Abholung', description: 'Gerät wird abgeholt' },
   { id: SERVICE_TYPE.DROPOFF, name: 'Bringen', description: 'Gerät wird vorbeigebracht' },
-]
+];
 
 // ============================================================================
 // REQUEST STATUSES
 // ============================================================================
 
 export interface RequestStatus {
-  id: string
-  name: string
-  description: string
-  badgeClass: string
+  id: string;
+  name: string;
+  description: string;
+  badgeClass: string;
 }
 
 export const REQUEST_STATUS = {
@@ -517,7 +682,7 @@ export const REQUEST_STATUS = {
   EXPIRED: 'expired',
 } as const;
 
-export type RequestStatusId = typeof REQUEST_STATUS[keyof typeof REQUEST_STATUS];
+export type RequestStatusId = (typeof REQUEST_STATUS)[keyof typeof REQUEST_STATUS];
 
 /** Valid status transitions (SSOT) — used in user + admin routes */
 //
@@ -530,29 +695,54 @@ export type RequestStatusId = typeof REQUEST_STATUS[keyof typeof REQUEST_STATUS]
 export const VALID_REQUEST_TRANSITIONS: Record<string, string[]> = {
   [REQUEST_STATUS.OPEN]: [REQUEST_STATUS.CANCELLED],
   [REQUEST_STATUS.MATCHED]: [REQUEST_STATUS.COMPLETED, REQUEST_STATUS.CANCELLED],
-}
+};
 
 /** Derive budgetType from amount — used in request creation and updates */
 export function deriveBudgetType(amountCents: number | null | undefined): 'free' | 'fixed' {
-  return (amountCents && amountCents > 0) ? 'fixed' : 'free'
+  return amountCents && amountCents > 0 ? 'fixed' : 'free';
 }
 
 export const REQUEST_STATUSES: RequestStatus[] = [
-  { id: REQUEST_STATUS.OPEN, name: 'Offen', description: 'Anfrage ist offen für Angebote', badgeClass: 'bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-300' },
-  { id: REQUEST_STATUS.MATCHED, name: 'Vergeben', description: 'Angebot akzeptiert, Hilfe läuft', badgeClass: 'bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-300' },
-  { id: REQUEST_STATUS.COMPLETED, name: 'Abgeschlossen', description: 'Erfolgreich abgeschlossen', badgeClass: 'bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-300' },
-  { id: REQUEST_STATUS.CANCELLED, name: 'Abgebrochen', description: 'Anfrage wurde abgebrochen', badgeClass: 'bg-neutral-100 text-neutral-500' },
-  { id: REQUEST_STATUS.EXPIRED, name: 'Abgelaufen', description: 'Frist abgelaufen — keine Angebote erhalten', badgeClass: 'bg-neutral-100 text-neutral-500' },
-]
+  {
+    id: REQUEST_STATUS.OPEN,
+    name: 'Offen',
+    description: 'Anfrage ist offen für Angebote',
+    badgeClass: 'bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-300',
+  },
+  {
+    id: REQUEST_STATUS.MATCHED,
+    name: 'Vergeben',
+    description: 'Angebot akzeptiert, Hilfe läuft',
+    badgeClass: 'bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-300',
+  },
+  {
+    id: REQUEST_STATUS.COMPLETED,
+    name: 'Abgeschlossen',
+    description: 'Erfolgreich abgeschlossen',
+    badgeClass: 'bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-300',
+  },
+  {
+    id: REQUEST_STATUS.CANCELLED,
+    name: 'Abgebrochen',
+    description: 'Anfrage wurde abgebrochen',
+    badgeClass: 'bg-neutral-100 text-neutral-500',
+  },
+  {
+    id: REQUEST_STATUS.EXPIRED,
+    name: 'Abgelaufen',
+    description: 'Frist abgelaufen — keine Angebote erhalten',
+    badgeClass: 'bg-neutral-100 text-neutral-500',
+  },
+];
 
 // ============================================================================
 // OFFER STATUSES
 // ============================================================================
 
 export interface OfferStatus {
-  id: string
-  name: string
-  badgeClass: string
+  id: string;
+  name: string;
+  badgeClass: string;
 }
 
 export const OFFER_STATUS = {
@@ -562,20 +752,32 @@ export const OFFER_STATUS = {
   WITHDRAWN: 'withdrawn',
 } as const;
 
-export type OfferStatusId = typeof OFFER_STATUS[keyof typeof OFFER_STATUS];
+export type OfferStatusId = (typeof OFFER_STATUS)[keyof typeof OFFER_STATUS];
 
 export const OFFER_STATUSES: OfferStatus[] = [
-  { id: OFFER_STATUS.PENDING, name: 'Ausstehend', badgeClass: 'bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-200' },
-  { id: OFFER_STATUS.ACCEPTED, name: 'Akzeptiert', badgeClass: 'bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-300' },
+  {
+    id: OFFER_STATUS.PENDING,
+    name: 'Ausstehend',
+    badgeClass: 'bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-200',
+  },
+  {
+    id: OFFER_STATUS.ACCEPTED,
+    name: 'Akzeptiert',
+    badgeClass: 'bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-300',
+  },
   { id: OFFER_STATUS.REJECTED, name: 'Abgelehnt', badgeClass: 'bg-error-100 text-error-700' },
-  { id: OFFER_STATUS.WITHDRAWN, name: 'Zurückgezogen', badgeClass: 'bg-neutral-100 text-neutral-500' },
-]
+  {
+    id: OFFER_STATUS.WITHDRAWN,
+    name: 'Zurückgezogen',
+    badgeClass: 'bg-neutral-100 text-neutral-500',
+  },
+];
 
 // ============================================================================
 // SWISS CANTONS — re-exported from SSOT
 // ============================================================================
 
-export { SWISS_CANTONS, type SwissCanton } from '@/config/swiss-cantons'
+export { SWISS_CANTONS, type SwissCanton } from '@/config/swiss-cantons';
 
 // ============================================================================
 // HELPER FUNCTIONS
@@ -583,76 +785,76 @@ export { SWISS_CANTONS, type SwissCanton } from '@/config/swiss-cantons'
 
 /** Get all skills as flat array */
 export function getAllSkills(): ITSkill[] {
-  return Object.values(IT_SKILLS).flat()
+  return Object.values(IT_SKILLS).flat();
 }
 
 /** Get skills by category ID */
 export function getSkillsByCategory(categoryId: string): ITSkill[] {
-  return IT_SKILLS[categoryId] || []
+  return IT_SKILLS[categoryId] || [];
 }
 
 /** Get skill by ID */
 export function getSkillById(id: string): ITSkill | undefined {
-  return getAllSkills().find(s => s.id === id)
+  return getAllSkills().find((s) => s.id === id);
 }
 
 /** Get all skill IDs */
 export function getSkillIds(): string[] {
-  return getAllSkills().map(s => s.id)
+  return getAllSkills().map((s) => s.id);
 }
 
 /** Get service category by ID */
 export function getServiceCategoryById(id: string): ServiceCategory | undefined {
-  return SERVICE_CATEGORIES.find(c => c.id === id)
+  return SERVICE_CATEGORIES.find((c) => c.id === id);
 }
 
 /** Get device category by ID */
 export function getCategoryById(id: string): DeviceCategory | undefined {
-  return DEVICE_CATEGORIES.find(cat => cat.id === id)
+  return DEVICE_CATEGORIES.find((cat) => cat.id === id);
 }
 
 /** Get all category IDs */
 export function getCategoryIds(): string[] {
-  return DEVICE_CATEGORIES.map(cat => cat.id)
+  return DEVICE_CATEGORIES.map((cat) => cat.id);
 }
 
 /** Get skills suggested for a device category */
 export function getSkillsForCategory(categoryId: string): ITSkill[] {
-  const category = getCategoryById(categoryId)
-  if (!category) return []
+  const category = getCategoryById(categoryId);
+  if (!category) return [];
   return category.suggestedSkills
-    .map(skillId => getSkillById(skillId))
-    .filter((skill): skill is ITSkill => skill !== undefined)
+    .map((skillId) => getSkillById(skillId))
+    .filter((skill): skill is ITSkill => skill !== undefined);
 }
 
 /** Get budget tier by ID */
 export function getBudgetTierById(id: string): BudgetTier | undefined {
-  return BUDGET_TIERS.find(t => t.id === id)
+  return BUDGET_TIERS.find((t) => t.id === id);
 }
 
 /** Get urgency level by ID */
 export function getUrgencyById(id: string): UrgencyLevel | undefined {
-  return URGENCY_LEVELS.find(u => u.id === id)
+  return URGENCY_LEVELS.find((u) => u.id === id);
 }
 
 /** Get service type by ID */
 export function getServiceTypeById(id: string): ServiceType | undefined {
-  return SERVICE_TYPES.find(st => st.id === id)
+  return SERVICE_TYPES.find((st) => st.id === id);
 }
 
 /** Get request status by ID */
 export function getRequestStatusById(id: string): RequestStatus | undefined {
-  return REQUEST_STATUSES.find(s => s.id === id)
+  return REQUEST_STATUSES.find((s) => s.id === id);
 }
 
 /** Get offer status by ID */
 export function getOfferStatusById(id: string): OfferStatus | undefined {
-  return OFFER_STATUSES.find(s => s.id === id)
+  return OFFER_STATUSES.find((s) => s.id === id);
 }
 
 /** Check if a request status allows new offers */
 export function isRequestAcceptingOffers(status: string): boolean {
-  return status === REQUEST_STATUS.OPEN
+  return status === REQUEST_STATUS.OPEN;
 }
 
 /**
@@ -662,30 +864,33 @@ export function isRequestAcceptingOffers(status: string): boolean {
  */
 export function formatBudget(maxBudgetCents: number | null, budgetTier?: string): string {
   if (budgetTier) {
-    const tier = getBudgetTierById(budgetTier)
+    const tier = getBudgetTierById(budgetTier);
     if (tier) {
       if (tier.id === 'gratis') {
-        return 'Gratis (Community-Hilfe)'
+        return 'Gratis (Community-Hilfe)';
       }
       if (tier.id === 'kulturlegi' && maxBudgetCents) {
-        return `bis CHF ${(maxBudgetCents / 100).toFixed(0)} (KulturLegi)`
+        return `bis CHF ${(maxBudgetCents / 100).toFixed(0)} (KulturLegi)`;
       }
       if (tier.id === 'supporter' && maxBudgetCents) {
-        return `ab CHF ${(maxBudgetCents / 100).toFixed(0)} (Supporter 💚)`
+        return `ab CHF ${(maxBudgetCents / 100).toFixed(0)} (Supporter 💚)`;
       }
     }
   }
 
   if (maxBudgetCents === null || maxBudgetCents === 0) {
-    return 'Community-Hilfe (gratis)'
+    return 'Community-Hilfe (gratis)';
   }
-  return `bis CHF ${(maxBudgetCents / 100).toFixed(0)}`
+  return `bis CHF ${(maxBudgetCents / 100).toFixed(0)}`;
 }
 
 /** Get skills grouped by their categories (for UI display) */
-export function getSkillsGroupedByCategory(): Array<{ category: ServiceCategory; skills: ITSkill[] }> {
-  return SERVICE_CATEGORIES.map(category => ({
+export function getSkillsGroupedByCategory(): Array<{
+  category: ServiceCategory;
+  skills: ITSkill[];
+}> {
+  return SERVICE_CATEGORIES.map((category) => ({
     category,
     skills: IT_SKILLS[category.id] || [],
-  }))
+  }));
 }

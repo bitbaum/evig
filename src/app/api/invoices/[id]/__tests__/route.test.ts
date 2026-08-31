@@ -9,56 +9,73 @@
  *   DELETE - 401, 404, 401 (not owner), 400 (not draft), 200
  */
 
-const mockAuth = jest.fn()
+const mockAuth = jest.fn();
 
 jest.mock('@/auth', () => ({
   auth: (...args: unknown[]) => mockAuth.apply(null, args),
-}))
+}));
 
 jest.mock('@/lib/api/middleware', () => ({
-  withAuth: (handler: unknown) =>
-    (req: Request, context?: { params?: Promise<unknown> }) =>
-      mockAuth().then(async (session: unknown) => {
-        if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server')
-          return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
-        }
-        const resolvedContext = context?.params ? { params: await context.params } : undefined
-        return (handler as (...a: unknown[]) => unknown)(req, session, resolvedContext)
-      }),
-}))
+  withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<unknown> }) =>
+    mockAuth().then(async (session: unknown) => {
+      if (!session || !(session as { user?: { id?: string } }).user?.id) {
+        const { NextResponse } = jest.requireActual('next/server');
+        return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+      }
+      const resolvedContext = context?.params ? { params: await context.params } : undefined;
+      return (handler as (...a: unknown[]) => unknown)(req, session, resolvedContext);
+    }),
+}));
 
-const mockSelect = jest.fn()
-const mockFrom = jest.fn()
-const mockInnerJoin = jest.fn()
-const mockWhere = jest.fn()
-const mockUpdate = jest.fn()
-const mockSet = jest.fn()
-const mockUpdateWhere = jest.fn()
-const mockDelete = jest.fn()
-const mockDeleteWhere = jest.fn()
-const mockReturning = jest.fn()
+const mockSelect = jest.fn();
+const mockFrom = jest.fn();
+const mockInnerJoin = jest.fn();
+const mockWhere = jest.fn();
+const mockUpdate = jest.fn();
+const mockSet = jest.fn();
+const mockUpdateWhere = jest.fn();
+const mockDelete = jest.fn();
+const mockDeleteWhere = jest.fn();
+const mockReturning = jest.fn();
 
 jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
-    update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
-    delete: (...args: unknown[]) => { mockDelete(...args); return { where: mockDeleteWhere } },
+    update: (...args: unknown[]) => {
+      mockUpdate(...args);
+      return { set: mockSet };
+    },
+    delete: (...args: unknown[]) => {
+      mockDelete(...args);
+      return { where: mockDeleteWhere };
+    },
   },
-}))
+}));
 
 jest.mock('@/db/schema', () => ({
   invoices: {
-    id: 'inv_id', invoiceNumber: 'inv_number', type: 'inv_type', status: 'inv_status',
-    userId: 'inv_userId', totalCents: 'inv_totalCents', subtotalCents: 'inv_subtotalCents',
-    taxCents: 'inv_taxCents', currency: 'inv_currency', taxRate: 'inv_taxRate',
-    lineItems: 'inv_lineItems', notes: 'inv_notes', dueDate: 'inv_dueDate',
-    issueDate: 'inv_issueDate', billingAddress: 'inv_billingAddress',
-    shippingAddress: 'inv_shippingAddress', paymentTerms: 'inv_paymentTerms',
-    createdAt: 'inv_createdAt', updatedAt: 'inv_updatedAt',
+    id: 'inv_id',
+    invoiceNumber: 'inv_number',
+    type: 'inv_type',
+    status: 'inv_status',
+    userId: 'inv_userId',
+    totalCents: 'inv_totalCents',
+    subtotalCents: 'inv_subtotalCents',
+    taxCents: 'inv_taxCents',
+    currency: 'inv_currency',
+    taxRate: 'inv_taxRate',
+    lineItems: 'inv_lineItems',
+    notes: 'inv_notes',
+    dueDate: 'inv_dueDate',
+    issueDate: 'inv_issueDate',
+    billingAddress: 'inv_billingAddress',
+    shippingAddress: 'inv_shippingAddress',
+    paymentTerms: 'inv_paymentTerms',
+    createdAt: 'inv_createdAt',
+    updatedAt: 'inv_updatedAt',
   },
   users: { id: 'u_id', name: 'u_name', email: 'u_email' },
-}))
+}));
 
 jest.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
@@ -67,7 +84,7 @@ jest.mock('drizzle-orm', () => ({
     raw: (s: string) => ({ __raw: s }),
   }),
   desc: (a: unknown) => ({ __desc: a }),
-}))
+}));
 
 jest.mock('@/config/invoice-status', () => ({
   INVOICE_STATUS: {
@@ -77,34 +94,40 @@ jest.mock('@/config/invoice-status', () => ({
     OVERDUE: 'overdue',
     CANCELLED: 'cancelled',
   },
-}))
+}));
 
-const mockValidateBody = jest.fn()
+const mockValidateBody = jest.fn();
 
 jest.mock('@/lib/schemas', () => ({
   validateBody: (...args: unknown[]) => mockValidateBody.apply(null, args),
   UpdateInvoiceSchema: {},
-}))
+}));
 
 jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server')
+  const { NextResponse } = jest.requireActual('next/server');
   return {
-    apiSuccess: (data: unknown, status = 200) => NextResponse.json({ success: true, data }, { status }),
-    apiError: (_err: unknown, msg: string, status = 500) => NextResponse.json({ success: false, error: msg }, { status }),
-    apiBadRequest: (msg: string, details?: unknown) => NextResponse.json({ success: false, error: msg, details }, { status: 400 }),
-    apiNotFound: (msg: string) => NextResponse.json({ success: false, error: msg }, { status: 404 }),
-    apiForbidden: (msg: string) => NextResponse.json({ success: false, error: msg }, { status: 403 }),
-    apiUnauthorized: (msg: string) => NextResponse.json({ success: false, error: msg }, { status: 401 }),
+    apiSuccess: (data: unknown, status = 200) =>
+      NextResponse.json({ success: true, data }, { status }),
+    apiError: (_err: unknown, msg: string, status = 500) =>
+      NextResponse.json({ success: false, error: msg }, { status }),
+    apiBadRequest: (msg: string, details?: unknown) =>
+      NextResponse.json({ success: false, error: msg, details }, { status: 400 }),
+    apiNotFound: (msg: string) =>
+      NextResponse.json({ success: false, error: msg }, { status: 404 }),
+    apiForbidden: (msg: string) =>
+      NextResponse.json({ success: false, error: msg }, { status: 403 }),
+    apiUnauthorized: (msg: string) =>
+      NextResponse.json({ success: false, error: msg }, { status: 401 }),
     parsePagination: (_req: unknown) => ({ limit: 20, offset: 0 }),
-  }
-})
+  };
+});
 
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
-}))
+}));
 
-import { NextRequest } from 'next/server'
-import { GET, PUT, DELETE } from '../route'
+import { NextRequest } from 'next/server';
+import { GET, PUT, DELETE } from '../route';
 
 const MOCK_SESSION = {
   user: {
@@ -116,7 +139,7 @@ const MOCK_SESSION = {
     isSuperAdmin: false,
   },
   expires: '2027-01-01',
-}
+};
 
 const MOCK_STAFF_SESSION = {
   user: {
@@ -128,7 +151,7 @@ const MOCK_STAFF_SESSION = {
     isSuperAdmin: true,
   },
   expires: '2027-01-01',
-}
+};
 
 const MOCK_INVOICE_DETAIL = {
   id: 'invoice-1',
@@ -155,17 +178,17 @@ const MOCK_INVOICE_DETAIL = {
   total: '107.70',
   subtotal: '100.00',
   tax: '7.70',
-}
+};
 
 // Minimal invoice for ownership/status checks
 const MOCK_INVOICE_STUB = {
   id: 'invoice-1',
   userId: 'user-1',
   status: 'draft',
-}
+};
 
 function makeContext(id = 'invoice-1') {
-  return { params: Promise.resolve({ id }) }
+  return { params: Promise.resolve({ id }) };
 }
 
 function makeRequest(method = 'GET', body?: unknown) {
@@ -173,29 +196,29 @@ function makeRequest(method = 'GET', body?: unknown) {
     method,
     body: body ? JSON.stringify(body) : undefined,
     headers: body ? { 'Content-Type': 'application/json' } : undefined,
-  })
+  });
 }
 
 beforeEach(() => {
-  jest.resetAllMocks()
-  mockAuth.mockResolvedValue(MOCK_SESSION)
+  jest.resetAllMocks();
+  mockAuth.mockResolvedValue(MOCK_SESSION);
 
   mockValidateBody.mockReturnValue({
     success: true,
     data: { status: 'sent' },
-  })
+  });
 
-  mockSet.mockReturnValue({ where: mockUpdateWhere })
-  mockUpdateWhere.mockReturnValue({ returning: mockReturning })
-  mockReturning.mockResolvedValue([MOCK_INVOICE_DETAIL])
-  mockDeleteWhere.mockResolvedValue(undefined)
+  mockSet.mockReturnValue({ where: mockUpdateWhere });
+  mockUpdateWhere.mockReturnValue({ returning: mockReturning });
+  mockReturning.mockResolvedValue([MOCK_INVOICE_DETAIL]);
+  mockDeleteWhere.mockResolvedValue(undefined);
 
   // Default select chain: supports both detail and stub fetches
-  mockWhere.mockResolvedValue([MOCK_INVOICE_DETAIL])
-  mockInnerJoin.mockReturnValue({ where: mockWhere })
-  mockFrom.mockReturnValue({ innerJoin: mockInnerJoin, where: mockWhere })
-  mockSelect.mockReturnValue({ from: mockFrom })
-})
+  mockWhere.mockResolvedValue([MOCK_INVOICE_DETAIL]);
+  mockInnerJoin.mockReturnValue({ where: mockWhere });
+  mockFrom.mockReturnValue({ innerJoin: mockInnerJoin, where: mockWhere });
+  mockSelect.mockReturnValue({ from: mockFrom });
+});
 
 // ============================================================================
 // GET /api/invoices/[id] — unauthenticated
@@ -203,12 +226,12 @@ beforeEach(() => {
 
 describe('GET /api/invoices/[id] — unauthenticated', () => {
   it('returns 401 when session is null', async () => {
-    mockAuth.mockResolvedValueOnce(null)
-    const req = makeRequest('GET')
-    const response = await GET(req, makeContext())
-    expect(response.status).toBe(401)
-  })
-})
+    mockAuth.mockResolvedValueOnce(null);
+    const req = makeRequest('GET');
+    const response = await GET(req, makeContext());
+    expect(response.status).toBe(401);
+  });
+});
 
 // ============================================================================
 // GET /api/invoices/[id] — not found / forbidden
@@ -216,19 +239,19 @@ describe('GET /api/invoices/[id] — unauthenticated', () => {
 
 describe('GET /api/invoices/[id] — not found / forbidden', () => {
   it('returns 404 when invoice does not exist', async () => {
-    mockWhere.mockResolvedValueOnce([])
-    const req = makeRequest('GET')
-    const response = await GET(req, makeContext())
-    expect(response.status).toBe(404)
-  })
+    mockWhere.mockResolvedValueOnce([]);
+    const req = makeRequest('GET');
+    const response = await GET(req, makeContext());
+    expect(response.status).toBe(404);
+  });
 
   it('returns 401 when user does not own invoice', async () => {
-    mockWhere.mockResolvedValueOnce([{ ...MOCK_INVOICE_DETAIL, user_id: 'other-user' }])
-    const req = makeRequest('GET')
-    const response = await GET(req, makeContext())
-    expect(response.status).toBe(401)
-  })
-})
+    mockWhere.mockResolvedValueOnce([{ ...MOCK_INVOICE_DETAIL, user_id: 'other-user' }]);
+    const req = makeRequest('GET');
+    const response = await GET(req, makeContext());
+    expect(response.status).toBe(401);
+  });
+});
 
 // ============================================================================
 // GET /api/invoices/[id] — success
@@ -236,21 +259,21 @@ describe('GET /api/invoices/[id] — not found / forbidden', () => {
 
 describe('GET /api/invoices/[id] — success', () => {
   it('returns 200 with invoice detail for owner', async () => {
-    const req = makeRequest('GET')
-    const response = await GET(req, makeContext())
-    expect(response.status).toBe(200)
-    const body = await response.json()
-    expect(body.data.invoice.invoice_number).toBe('INV-2026-001')
-  })
+    const req = makeRequest('GET');
+    const response = await GET(req, makeContext());
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.data.invoice.invoice_number).toBe('INV-2026-001');
+  });
 
   it('returns 200 for admin viewing another users invoice', async () => {
-    mockAuth.mockResolvedValueOnce(MOCK_STAFF_SESSION)
-    mockWhere.mockResolvedValueOnce([{ ...MOCK_INVOICE_DETAIL, user_id: 'other-user' }])
-    const req = makeRequest('GET')
-    const response = await GET(req, makeContext())
-    expect(response.status).toBe(200)
-  })
-})
+    mockAuth.mockResolvedValueOnce(MOCK_STAFF_SESSION);
+    mockWhere.mockResolvedValueOnce([{ ...MOCK_INVOICE_DETAIL, user_id: 'other-user' }]);
+    const req = makeRequest('GET');
+    const response = await GET(req, makeContext());
+    expect(response.status).toBe(200);
+  });
+});
 
 // ============================================================================
 // PUT /api/invoices/[id] — unauthenticated
@@ -258,12 +281,12 @@ describe('GET /api/invoices/[id] — success', () => {
 
 describe('PUT /api/invoices/[id] — unauthenticated', () => {
   it('returns 401 when session is null', async () => {
-    mockAuth.mockResolvedValueOnce(null)
-    const req = makeRequest('PUT', { status: 'sent' })
-    const response = await PUT(req, makeContext())
-    expect(response.status).toBe(401)
-  })
-})
+    mockAuth.mockResolvedValueOnce(null);
+    const req = makeRequest('PUT', { status: 'sent' });
+    const response = await PUT(req, makeContext());
+    expect(response.status).toBe(401);
+  });
+});
 
 // ============================================================================
 // PUT /api/invoices/[id] — validation
@@ -271,38 +294,38 @@ describe('PUT /api/invoices/[id] — unauthenticated', () => {
 
 describe('PUT /api/invoices/[id] — validation', () => {
   it('returns 400 when body validation fails', async () => {
-    const { NextResponse } = jest.requireActual('next/server')
+    const { NextResponse } = jest.requireActual('next/server');
     mockValidateBody.mockReturnValueOnce({
       success: false,
       error: NextResponse.json({ success: false, error: 'Invalid body' }, { status: 400 }),
-    })
-    const req = makeRequest('PUT', {})
-    const response = await PUT(req, makeContext())
-    expect(response.status).toBe(400)
-  })
+    });
+    const req = makeRequest('PUT', {});
+    const response = await PUT(req, makeContext());
+    expect(response.status).toBe(400);
+  });
 
   it('returns 404 when invoice not found', async () => {
-    mockWhere.mockResolvedValueOnce([])
-    const req = makeRequest('PUT', { status: 'sent' })
-    const response = await PUT(req, makeContext())
-    expect(response.status).toBe(404)
-  })
+    mockWhere.mockResolvedValueOnce([]);
+    const req = makeRequest('PUT', { status: 'sent' });
+    const response = await PUT(req, makeContext());
+    expect(response.status).toBe(404);
+  });
 
   it('returns 401 when user does not own invoice', async () => {
-    mockWhere.mockResolvedValueOnce([{ ...MOCK_INVOICE_STUB, userId: 'other-user' }])
-    const req = makeRequest('PUT', { status: 'sent' })
-    const response = await PUT(req, makeContext())
-    expect(response.status).toBe(401)
-  })
+    mockWhere.mockResolvedValueOnce([{ ...MOCK_INVOICE_STUB, userId: 'other-user' }]);
+    const req = makeRequest('PUT', { status: 'sent' });
+    const response = await PUT(req, makeContext());
+    expect(response.status).toBe(401);
+  });
 
   it('returns 400 when no valid fields to update', async () => {
-    mockWhere.mockResolvedValueOnce([MOCK_INVOICE_STUB])
-    mockValidateBody.mockReturnValueOnce({ success: true, data: {} })
-    const req = makeRequest('PUT', {})
-    const response = await PUT(req, makeContext())
-    expect(response.status).toBe(400)
-  })
-})
+    mockWhere.mockResolvedValueOnce([MOCK_INVOICE_STUB]);
+    mockValidateBody.mockReturnValueOnce({ success: true, data: {} });
+    const req = makeRequest('PUT', {});
+    const response = await PUT(req, makeContext());
+    expect(response.status).toBe(400);
+  });
+});
 
 // ============================================================================
 // PUT /api/invoices/[id] — success
@@ -311,28 +334,28 @@ describe('PUT /api/invoices/[id] — validation', () => {
 describe('PUT /api/invoices/[id] — success', () => {
   it('returns 200 with updated invoice when admin updates status', async () => {
     // Admin can update status; owners cannot (separate test below).
-    mockAuth.mockResolvedValueOnce(MOCK_STAFF_SESSION)
+    mockAuth.mockResolvedValueOnce(MOCK_STAFF_SESSION);
     mockWhere
-      .mockResolvedValueOnce([MOCK_INVOICE_STUB])   // ownership check
-      .mockResolvedValueOnce([MOCK_INVOICE_DETAIL])  // fetch updated
-    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'sent' } })
-    const req = makeRequest('PUT', { status: 'sent' })
-    const response = await PUT(req, makeContext())
-    expect(response.status).toBe(200)
-    expect(mockUpdate).toHaveBeenCalled()
-  })
+      .mockResolvedValueOnce([MOCK_INVOICE_STUB]) // ownership check
+      .mockResolvedValueOnce([MOCK_INVOICE_DETAIL]); // fetch updated
+    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'sent' } });
+    const req = makeRequest('PUT', { status: 'sent' });
+    const response = await PUT(req, makeContext());
+    expect(response.status).toBe(200);
+    expect(mockUpdate).toHaveBeenCalled();
+  });
 
   it('returns 200 when owner updates safe metadata (notes)', async () => {
     mockWhere
       .mockResolvedValueOnce([MOCK_INVOICE_STUB])
-      .mockResolvedValueOnce([MOCK_INVOICE_DETAIL])
-    mockValidateBody.mockReturnValueOnce({ success: true, data: { notes: 'Updated note' } })
-    const req = makeRequest('PUT', { notes: 'Updated note' })
-    const response = await PUT(req, makeContext())
-    expect(response.status).toBe(200)
-    expect(mockUpdate).toHaveBeenCalled()
-  })
-})
+      .mockResolvedValueOnce([MOCK_INVOICE_DETAIL]);
+    mockValidateBody.mockReturnValueOnce({ success: true, data: { notes: 'Updated note' } });
+    const req = makeRequest('PUT', { notes: 'Updated note' });
+    const response = await PUT(req, makeContext());
+    expect(response.status).toBe(200);
+    expect(mockUpdate).toHaveBeenCalled();
+  });
+});
 
 // ============================================================================
 // PUT /api/invoices/[id] — owner cannot self-mark as paid (auth/authorization)
@@ -347,15 +370,15 @@ describe('PUT /api/invoices/[id] — owner cannot self-mark as paid', () => {
     // entirely. Now `status` is admin-only — owner requests with only
     // status field get silently dropped, leaving hasUpdates=false and
     // returning the existing "no valid fields" 400.
-    mockWhere.mockResolvedValueOnce([MOCK_INVOICE_STUB])  // owner of invoice-1
-    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'paid' } })
-    const req = makeRequest('PUT', { status: 'paid' })
-    const response = await PUT(req, makeContext())
-    expect(response.status).toBe(400)
+    mockWhere.mockResolvedValueOnce([MOCK_INVOICE_STUB]); // owner of invoice-1
+    mockValidateBody.mockReturnValueOnce({ success: true, data: { status: 'paid' } });
+    const req = makeRequest('PUT', { status: 'paid' });
+    const response = await PUT(req, makeContext());
+    expect(response.status).toBe(400);
     // Critical: no UPDATE statement fired at all (silently dropping
     // status from an empty allowlist means hasUpdates=false).
-    expect(mockSet).not.toHaveBeenCalled()
-  })
+    expect(mockSet).not.toHaveBeenCalled();
+  });
 
   it('owner update with mixed fields strips admin-only fields and applies only owner-allowed ones', async () => {
     // Realistic attack: owner submits both an allowed field (notes) and
@@ -365,37 +388,37 @@ describe('PUT /api/invoices/[id] — owner cannot self-mark as paid', () => {
     // hijack attempt is silently dropped.
     mockWhere
       .mockResolvedValueOnce([MOCK_INVOICE_STUB])
-      .mockResolvedValueOnce([MOCK_INVOICE_DETAIL])
+      .mockResolvedValueOnce([MOCK_INVOICE_DETAIL]);
     mockValidateBody.mockReturnValueOnce({
       success: true,
       data: { status: 'paid', notes: 'Self-claimed paid' },
-    })
-    const req = makeRequest('PUT', { status: 'paid', notes: 'Self-claimed paid' })
-    const response = await PUT(req, makeContext())
-    expect(response.status).toBe(200)
+    });
+    const req = makeRequest('PUT', { status: 'paid', notes: 'Self-claimed paid' });
+    const response = await PUT(req, makeContext());
+    expect(response.status).toBe(200);
     // mockSet receives the SQL update set. Must contain notes, must
     // NOT contain status (the admin-only field).
-    const setArgs = mockSet.mock.calls[0]?.[0] as Record<string, unknown> | undefined
-    expect(setArgs).toBeDefined()
-    expect(setArgs).toHaveProperty('notes', 'Self-claimed paid')
-    expect(setArgs).not.toHaveProperty('status')
-  })
+    const setArgs = mockSet.mock.calls[0]?.[0] as Record<string, unknown> | undefined;
+    expect(setArgs).toBeDefined();
+    expect(setArgs).toHaveProperty('notes', 'Self-claimed paid');
+    expect(setArgs).not.toHaveProperty('status');
+  });
 
   it('owner cannot modify line_items either — same admin-only restriction', async () => {
     // line_items drive the displayed invoice breakdown; letting an
     // owner overwrite them would produce a PDF/email that doesn't
     // match what was actually billed.
-    mockWhere.mockResolvedValueOnce([MOCK_INVOICE_STUB])
+    mockWhere.mockResolvedValueOnce([MOCK_INVOICE_STUB]);
     mockValidateBody.mockReturnValueOnce({
       success: true,
       data: { line_items: [{ desc: 'free thing', amount: 0 }] },
-    })
-    const req = makeRequest('PUT', { line_items: [{ desc: 'free thing', amount: 0 }] })
-    const response = await PUT(req, makeContext())
-    expect(response.status).toBe(400)
-    expect(mockSet).not.toHaveBeenCalled()
-  })
-})
+    });
+    const req = makeRequest('PUT', { line_items: [{ desc: 'free thing', amount: 0 }] });
+    const response = await PUT(req, makeContext());
+    expect(response.status).toBe(400);
+    expect(mockSet).not.toHaveBeenCalled();
+  });
+});
 
 // ============================================================================
 // DELETE /api/invoices/[id] — unauthenticated
@@ -403,12 +426,12 @@ describe('PUT /api/invoices/[id] — owner cannot self-mark as paid', () => {
 
 describe('DELETE /api/invoices/[id] — unauthenticated', () => {
   it('returns 401 when session is null', async () => {
-    mockAuth.mockResolvedValueOnce(null)
-    const req = makeRequest('DELETE')
-    const response = await DELETE(req, makeContext())
-    expect(response.status).toBe(401)
-  })
-})
+    mockAuth.mockResolvedValueOnce(null);
+    const req = makeRequest('DELETE');
+    const response = await DELETE(req, makeContext());
+    expect(response.status).toBe(401);
+  });
+});
 
 // ============================================================================
 // DELETE /api/invoices/[id] — validation
@@ -416,26 +439,26 @@ describe('DELETE /api/invoices/[id] — unauthenticated', () => {
 
 describe('DELETE /api/invoices/[id] — validation', () => {
   it('returns 404 when invoice not found', async () => {
-    mockWhere.mockResolvedValueOnce([])
-    const req = makeRequest('DELETE')
-    const response = await DELETE(req, makeContext())
-    expect(response.status).toBe(404)
-  })
+    mockWhere.mockResolvedValueOnce([]);
+    const req = makeRequest('DELETE');
+    const response = await DELETE(req, makeContext());
+    expect(response.status).toBe(404);
+  });
 
   it('returns 401 when user does not own invoice', async () => {
-    mockWhere.mockResolvedValueOnce([{ ...MOCK_INVOICE_STUB, userId: 'other-user' }])
-    const req = makeRequest('DELETE')
-    const response = await DELETE(req, makeContext())
-    expect(response.status).toBe(401)
-  })
+    mockWhere.mockResolvedValueOnce([{ ...MOCK_INVOICE_STUB, userId: 'other-user' }]);
+    const req = makeRequest('DELETE');
+    const response = await DELETE(req, makeContext());
+    expect(response.status).toBe(401);
+  });
 
   it('returns 400 when invoice is not in draft status', async () => {
-    mockWhere.mockResolvedValueOnce([{ ...MOCK_INVOICE_STUB, status: 'sent' }])
-    const req = makeRequest('DELETE')
-    const response = await DELETE(req, makeContext())
-    expect(response.status).toBe(400)
-  })
-})
+    mockWhere.mockResolvedValueOnce([{ ...MOCK_INVOICE_STUB, status: 'sent' }]);
+    const req = makeRequest('DELETE');
+    const response = await DELETE(req, makeContext());
+    expect(response.status).toBe(400);
+  });
+});
 
 // ============================================================================
 // DELETE /api/invoices/[id] — success
@@ -443,18 +466,18 @@ describe('DELETE /api/invoices/[id] — validation', () => {
 
 describe('DELETE /api/invoices/[id] — success', () => {
   it('returns 200 when owner deletes draft invoice', async () => {
-    mockWhere.mockResolvedValueOnce([MOCK_INVOICE_STUB])
-    const req = makeRequest('DELETE')
-    const response = await DELETE(req, makeContext())
-    expect(response.status).toBe(200)
-    expect(mockDelete).toHaveBeenCalled()
-  })
+    mockWhere.mockResolvedValueOnce([MOCK_INVOICE_STUB]);
+    const req = makeRequest('DELETE');
+    const response = await DELETE(req, makeContext());
+    expect(response.status).toBe(200);
+    expect(mockDelete).toHaveBeenCalled();
+  });
 
   it('allows admin to delete another users draft invoice', async () => {
-    mockAuth.mockResolvedValueOnce(MOCK_STAFF_SESSION)
-    mockWhere.mockResolvedValueOnce([{ ...MOCK_INVOICE_STUB, userId: 'other-user' }])
-    const req = makeRequest('DELETE')
-    const response = await DELETE(req, makeContext())
-    expect(response.status).toBe(200)
-  })
-})
+    mockAuth.mockResolvedValueOnce(MOCK_STAFF_SESSION);
+    mockWhere.mockResolvedValueOnce([{ ...MOCK_INVOICE_STUB, userId: 'other-user' }]);
+    const req = makeRequest('DELETE');
+    const response = await DELETE(req, makeContext());
+    expect(response.status).toBe(200);
+  });
+});

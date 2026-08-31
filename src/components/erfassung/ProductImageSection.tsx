@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * ProductImageSection
@@ -7,24 +7,27 @@
  * Handles image preview, upload via file input, and removal.
  */
 
-import Image from 'next/image'
-import { Camera, X } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
-import Heading from '@/components/ui/Heading'
-import { downscaleImage } from '@/lib/images/downscale'
+import Image from 'next/image';
+import { Camera, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
+import Heading from '@/components/ui/Heading';
+import { downscaleImage } from '@/lib/images/downscale';
 
 interface ProductImageSectionProps {
-  image: string | null
-  onImageChange: (image: string | null) => void
+  image: string | null;
+  onImageChange: (image: string | null) => void;
 }
 
 export function ProductImageSection({ image, onImageChange }: ProductImageSectionProps) {
-  const t = useTranslations('components.erfassung.productImage')
+  const t = useTranslations('components.erfassung.productImage');
 
   return (
     <div className="card-shell p-6">
-      <Heading level={2} className="text-lg font-semibold text-text-primary mb-4 flex items-center gap-2">
+      <Heading
+        level={2}
+        className="text-lg font-semibold text-text-primary mb-4 flex items-center gap-2"
+      >
         <Camera className="w-5 h-5" />
         {t('title')}
       </Heading>
@@ -53,27 +56,27 @@ export function ProductImageSection({ image, onImageChange }: ProductImageSectio
           <label className="flex flex-col items-center justify-center w-48 h-36 border-2 border-dashed border-default rounded-lg cursor-pointer hover:border-action hover:bg-action-muted transition-colors">
             <Camera className="w-8 h-8 text-text-tertiary mb-2" />
             <span className="text-sm text-text-secondary">{t('upload')}</span>
-            <span className="text-xs text-text-tertiary dark:text-text-tertiary mt-1">{t('drag')}</span>
+            <span className="text-xs text-text-tertiary dark:text-text-tertiary mt-1">
+              {t('drag')}
+            </span>
             <input
               type="file"
               accept="image/*"
               className="hidden"
               onChange={async (e) => {
-                const file = e.target.files?.[0]
+                const file = e.target.files?.[0];
                 if (file) {
                   // Downscale so the stored/uploaded image is a bounded JPEG,
                   // not a raw multi-megabyte phone photo.
-                  const base64 = await downscaleImage(file)
-                  if (base64) onImageChange(base64)
+                  const base64 = await downscaleImage(file);
+                  if (base64) onImageChange(base64);
                 }
               }}
             />
           </label>
         )}
       </div>
-      <p className="mt-2 text-xs text-text-secondary">
-        {t('hint')}
-      </p>
+      <p className="mt-2 text-xs text-text-secondary">{t('hint')}</p>
     </div>
-  )
+  );
 }

@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { CheckCircle, XCircle, Loader2, X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { useState } from 'react';
+import { CheckCircle, XCircle, Loader2, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 /**
  * Shared approve/reject row actions for the Freigaben hub — one decision UX
@@ -16,21 +16,21 @@ export function InlineDecisionActions({
   onDecide,
   rejectReasonRequired = false,
 }: {
-  onDecide: (decision: 'approve' | 'reject', reason: string) => Promise<string | null>
-  rejectReasonRequired?: boolean
+  onDecide: (decision: 'approve' | 'reject', reason: string) => Promise<string | null>;
+  rejectReasonRequired?: boolean;
 }) {
-  const [rejecting, setRejecting] = useState(false)
-  const [reason, setReason] = useState('')
-  const [busy, setBusy] = useState<'approve' | 'reject' | null>(null)
-  const [error, setError] = useState<string | null>(null)
+  const [rejecting, setRejecting] = useState(false);
+  const [reason, setReason] = useState('');
+  const [busy, setBusy] = useState<'approve' | 'reject' | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const decide = async (decision: 'approve' | 'reject') => {
-    setBusy(decision)
-    setError(null)
-    const err = await onDecide(decision, reason.trim())
-    setBusy(null)
-    if (err) setError(err)
-  }
+    setBusy(decision);
+    setError(null);
+    const err = await onDecide(decision, reason.trim());
+    setBusy(null);
+    if (err) setError(err);
+  };
 
   if (rejecting) {
     return (
@@ -38,7 +38,7 @@ export function InlineDecisionActions({
         <Input
           type="text"
           value={reason}
-          onChange={e => setReason(e.target.value)}
+          onChange={(e) => setReason(e.target.value)}
           placeholder={rejectReasonRequired ? 'Begründung (erforderlich)' : 'Begründung (optional)'}
           maxLength={1000}
           className="h-8 w-56 text-sm"
@@ -52,22 +52,33 @@ export function InlineDecisionActions({
           disabled={busy !== null || (rejectReasonRequired && reason.trim().length === 0)}
           className="flex items-center gap-1"
         >
-          {busy === 'reject' ? <Loader2 className="w-3 h-3 animate-spin" /> : <XCircle className="w-3 h-3" />}
+          {busy === 'reject' ? (
+            <Loader2 className="w-3 h-3 animate-spin" />
+          ) : (
+            <XCircle className="w-3 h-3" />
+          )}
           Ablehnen
         </Button>
         <Button
           type="button"
           variant="ghost"
           size="sm"
-          onClick={() => { setRejecting(false); setError(null) }}
+          onClick={() => {
+            setRejecting(false);
+            setError(null);
+          }}
           disabled={busy !== null}
           aria-label="Abbrechen"
         >
           <X className="w-3.5 h-3.5" />
         </Button>
-        {error && <span className="w-full text-right text-xs text-error-600 dark:text-error-400">{error}</span>}
+        {error && (
+          <span className="w-full text-right text-xs text-error-600 dark:text-error-400">
+            {error}
+          </span>
+        )}
       </div>
-    )
+    );
   }
 
   return (
@@ -79,7 +90,11 @@ export function InlineDecisionActions({
         size="sm"
         className="flex items-center gap-1"
       >
-        {busy === 'approve' ? <Loader2 className="w-3 h-3 animate-spin" /> : <CheckCircle className="w-3 h-3" />}
+        {busy === 'approve' ? (
+          <Loader2 className="w-3 h-3 animate-spin" />
+        ) : (
+          <CheckCircle className="w-3 h-3" />
+        )}
         Genehmigen
       </Button>
       <Button
@@ -93,7 +108,11 @@ export function InlineDecisionActions({
         <XCircle className="w-3 h-3" />
         Ablehnen
       </Button>
-      {error && <span className="w-full text-right text-xs text-error-600 dark:text-error-400">{error}</span>}
+      {error && (
+        <span className="w-full text-right text-xs text-error-600 dark:text-error-400">
+          {error}
+        </span>
+      )}
     </div>
-  )
+  );
 }

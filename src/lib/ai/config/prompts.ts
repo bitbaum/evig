@@ -11,4 +11,4 @@
  *   prompts/index.ts      — FORM_AI_REGISTRY + barrel
  */
 
-export * from './prompts/index'
+export * from './prompts/index';

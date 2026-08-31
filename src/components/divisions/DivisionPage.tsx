@@ -1,18 +1,18 @@
-import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
-import { ArrowRight } from 'lucide-react'
-import { Link } from '@/i18n/navigation'
-import { PageHero } from '@/components/layout/PageHero'
-import { Section } from '@/components/layout/Section'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import Heading from '@/components/ui/Heading'
+import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
+import { ArrowRight } from 'lucide-react';
+import { Link } from '@/i18n/navigation';
+import { PageHero } from '@/components/layout/PageHero';
+import { Section } from '@/components/layout/Section';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import Heading from '@/components/ui/Heading';
 import {
   DIVISION_PAGES,
   DIVISION_STATUS_STYLE,
   getDivisionPage,
   type Division,
   type DivisionPageId,
-} from '@/config/divisions'
+} from '@/config/divisions';
 
 /**
  * Shared metadata for a division page. The brand half of the title comes from
@@ -20,11 +20,15 @@ import {
  * the org's name — only the translatable half after the dash.
  */
 export async function divisionMetadata(locale: string, id: DivisionPageId): Promise<Metadata> {
-  const t = await getTranslations({ locale, namespace: 'divisions' })
-  const title = `${getDivisionPage(id).wordmark} — ${t(`pages.${id}.meta.title` as never)}`
-  const description = t(`pages.${id}.meta.description` as never)
+  const t = await getTranslations({ locale, namespace: 'divisions' });
+  const title = `${getDivisionPage(id).wordmark} — ${t(`pages.${id}.meta.title` as never)}`;
+  const description = t(`pages.${id}.meta.description` as never);
 
-  return { title: { absolute: title }, description, openGraph: { title, description, type: 'website' } }
+  return {
+    title: { absolute: title },
+    description,
+    openGraph: { title, description, type: 'website' },
+  };
 }
 
 /**
@@ -43,15 +47,15 @@ export async function DivisionPage({
   locale,
   division,
 }: {
-  locale: string
-  division: Division & { id: DivisionPageId }
+  locale: string;
+  division: Division & { id: DivisionPageId };
 }) {
-  const { strands, strandLinks, boundaries, ctaHref } = DIVISION_PAGES[division.id]
-  const t = await getTranslations({ locale, namespace: 'divisions' })
+  const { strands, strandLinks, boundaries, ctaHref } = DIVISION_PAGES[division.id];
+  const t = await getTranslations({ locale, namespace: 'divisions' });
 
   // Page copy is namespaced by division id; next-intl's key union can't see the
   // dynamic segment, hence the cast (same pattern as /projects).
-  const k = (suffix: string) => t(`pages.${division.id}.${suffix}` as never)
+  const k = (suffix: string) => t(`pages.${division.id}.${suffix}` as never);
 
   return (
     <main className="min-h-screen">
@@ -84,7 +88,12 @@ export async function DivisionPage({
       </Section>
 
       {/* ── Strands — the actual work, numbered ──────────────────────── */}
-      <Section density="spacious" tone="tinted" contained={false} className="border-y border-subtle">
+      <Section
+        density="spacious"
+        tone="tinted"
+        contained={false}
+        className="border-y border-subtle"
+      >
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <Eyebrow as="div">{k('strands.eyebrow')}</Eyebrow>
           <Heading level={2} className="ui-public-display-lg mt-4">
@@ -155,5 +164,5 @@ export async function DivisionPage({
         </div>
       </Section>
     </main>
-  )
+  );
 }

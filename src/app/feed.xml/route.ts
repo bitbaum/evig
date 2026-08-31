@@ -1,17 +1,18 @@
-import { getMergedPosts } from '@/lib/blog-merge'
-import { isListedPost } from '@/lib/blog'
-import { canViewPost } from '@/lib/blog-access'
-import { APP_URL } from '@/config/urls'
-import { ORG } from '@/config/org'
-import { defaultLocale } from '@/i18n/routing'
+import { getMergedPosts } from '@/lib/blog-merge';
+import { isListedPost } from '@/lib/blog';
+import { canViewPost } from '@/lib/blog-access';
+import { APP_URL } from '@/config/urls';
+import { ORG } from '@/config/org';
+import { defaultLocale } from '@/i18n/routing';
 
 // Refresh hourly; posts change on deploy, not per-request.
-export const revalidate = 3600
+export const revalidate = 3600;
 
 function escapeXml(s: string): string {
-  return s.replace(/[<>&'"]/g, (c) =>
-    ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&apos;', '"': '&quot;' })[c] as string,
-  )
+  return s.replace(
+    /[<>&'"]/g,
+    (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&apos;', '"': '&quot;' })[c] as string,
+  );
 }
 
 /** RSS 2.0 feed of the public blog (unlisted posts are never included). */
@@ -19,20 +20,20 @@ export async function GET(): Promise<Response> {
   // Anonymous feed → public audience only (team/author posts never syndicate).
   const posts = (await getMergedPosts(defaultLocale))
     .filter((p) => isListedPost(p) && canViewPost(p, null))
-    .slice(0, 50)
+    .slice(0, 50);
 
   const items = posts
     .map((p) => {
-      const link = `${APP_URL}/blog/${p.slug}`
-      const date = p.publishedAt || p.createdAt
+      const link = `${APP_URL}/blog/${p.slug}`;
+      const date = p.publishedAt || p.createdAt;
       return `    <item>
       <title>${escapeXml(p.title)}</title>
       <link>${link}</link>
       <guid isPermaLink="true">${link}</guid>${date ? `\n      <pubDate>${new Date(date).toUTCString()}</pubDate>` : ''}
       <description>${escapeXml(p.excerpt || '')}</description>
-    </item>`
+    </item>`;
     })
-    .join('\n')
+    .join('\n');
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -44,9 +45,9 @@ export async function GET(): Promise<Response> {
     <language>${defaultLocale}</language>
 ${items}
   </channel>
-</rss>`
+</rss>`;
 
   return new Response(xml, {
     headers: { 'Content-Type': 'application/rss+xml; charset=utf-8' },
-  })
+  });
 }

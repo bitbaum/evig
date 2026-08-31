@@ -1,9 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { logger } from '@/lib/logger'
-import { verifyOfferAcceptToken } from '@/lib/it-hilfe/offer-accept-tokens'
-import { acceptOffer, lookupOfferRequestId, type AcceptOfferReason } from '@/lib/it-hilfe/accept-offer'
+import { NextRequest, NextResponse } from 'next/server';
+import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { logger } from '@/lib/logger';
+import { verifyOfferAcceptToken } from '@/lib/it-hilfe/offer-accept-tokens';
+import {
+  acceptOffer,
+  lookupOfferRequestId,
+  type AcceptOfferReason,
+} from '@/lib/it-hilfe/accept-offer';
 
 /**
  * POST /api/it-hilfe/accept-offer-via-token
@@ -23,53 +27,52 @@ import { acceptOffer, lookupOfferRequestId, type AcceptOfferReason } from '@/lib
  */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json().catch(() => null)
-    const token = body && typeof body.token === 'string' ? body.token : null
+    const body = await request.json().catch(() => null);
+    const token = body && typeof body.token === 'string' ? body.token : null;
     if (!token) {
-      return apiBadRequest('Token fehlt')
+      return apiBadRequest('Token fehlt');
     }
 
-    const verifyResult = verifyOfferAcceptToken(token)
+    const verifyResult = verifyOfferAcceptToken(token);
     if (!verifyResult.ok) {
-      return badRequestForVerifyReason(verifyResult.reason)
+      return badRequestForVerifyReason(verifyResult.reason);
     }
 
-    const { offerId } = verifyResult
-    const requestId = await lookupOfferRequestId(offerId)
+    const { offerId } = verifyResult;
+    const requestId = await lookupOfferRequestId(offerId);
     if (!requestId) {
-      return apiNotFound('Angebot')
+      return apiNotFound('Angebot');
     }
 
     const result = await acceptOffer({
       requestId,
       offerId,
       acceptingUserId: null, // token-driven; auth established by signature
-    })
+    });
 
     if (!result.ok) {
-      return badRequestForAcceptReason(result.reason)
+      return badRequestForAcceptReason(result.reason);
     }
 
-    logger.info('Accepted offer via token', { requestId, offerId, helperId: result.helperId })
-    return apiSuccess({ requestId: result.requestId, helperId: result.helperId })
+    logger.info('Accepted offer via token', { requestId, offerId, helperId: result.helperId });
+    return apiSuccess({ requestId: result.requestId, helperId: result.helperId });
   } catch (error) {
-    logger.error('Error accepting offer via token', { error })
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    logger.error('Error accepting offer via token', { error });
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
 }
 
-function badRequestForVerifyReason(reason: 'malformed' | 'expired' | 'invalid_signature'): NextResponse {
+function badRequestForVerifyReason(
+  reason: 'malformed' | 'expired' | 'invalid_signature',
+): NextResponse {
   // 410 Gone for expired; 400 for the rest. Lets the page route distinguish.
   const messages: Record<typeof reason, string> = {
     malformed: 'Token ungültig',
     expired: 'Dieser Link ist abgelaufen',
     invalid_signature: 'Token ungültig',
-  }
-  const status = reason === 'expired' ? 410 : 400
-  return NextResponse.json(
-    { success: false, error: messages[reason], reason },
-    { status }
-  )
+  };
+  const status = reason === 'expired' ? 410 : 400;
+  return NextResponse.json({ success: false, error: messages[reason], reason }, { status });
 }
 
 function badRequestForAcceptReason(reason: AcceptOfferReason): NextResponse {
@@ -81,27 +84,27 @@ function badRequestForAcceptReason(reason: AcceptOfferReason): NextResponse {
     case 'request_not_found':
       return NextResponse.json(
         { success: false, error: 'Anfrage nicht gefunden', reason },
-        { status: 404 }
-      )
+        { status: 404 },
+      );
     case 'offer_not_found':
       return NextResponse.json(
         { success: false, error: 'Angebot nicht gefunden', reason },
-        { status: 404 }
-      )
+        { status: 404 },
+      );
     case 'not_authorized':
       return NextResponse.json(
         { success: false, error: 'Nicht berechtigt', reason },
-        { status: 403 }
-      )
+        { status: 403 },
+      );
     case 'request_not_open':
       return NextResponse.json(
         { success: false, error: 'Diese Anfrage kann keine Angebote mehr akzeptieren', reason },
-        { status: 409 }
-      )
+        { status: 409 },
+      );
     case 'offer_not_pending':
       return NextResponse.json(
         { success: false, error: 'Dieses Angebot wurde bereits bearbeitet', reason },
-        { status: 409 }
-      )
+        { status: 409 },
+      );
   }
 }

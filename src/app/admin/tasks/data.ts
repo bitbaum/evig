@@ -5,36 +5,37 @@
  * orchestration and TaskTable focused on presentation.
  */
 
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
-import { logger } from '@/lib/logger'
+import { query } from '@/lib/auth/db';
+import { TABLE_NAMES } from '@/config/database';
+import { logger } from '@/lib/logger';
 import {
   TASK_STATUSES,
   TASK_PRIORITIES,
   REQUEST_STATUSES,
   TASK_LIST_FILTERS,
   TASK_LIST_DEFAULT_FILTER,
-} from '@/config/tasks'
-import type { TaskListItem } from '@/lib/schemas/tasks'
-import { PAGINATION } from '@/config/pagination'
+} from '@/config/tasks';
+import type { TaskListItem } from '@/lib/schemas/tasks';
+import { PAGINATION } from '@/config/pagination';
 
-export const TASKS_PAGE_SIZE = PAGINATION.PUBLIC
+export const TASKS_PAGE_SIZE = PAGINATION.PUBLIC;
 
 export interface TaskStats {
-  total: number
-  needsAttention: number
-  requested: number
-  completedToday: number
+  total: number;
+  needsAttention: number;
+  requested: number;
+  completedToday: number;
 }
 
 export async function getTaskStats(): Promise<TaskStats> {
   try {
     const result = await query<{
-      total: string
-      needs_attention: string
-      requested: string
-      completed_today: string
-    }>(`
+      total: string;
+      needs_attention: string;
+      requested: string;
+      completed_today: string;
+    }>(
+      `
       SELECT
         COUNT(*) FILTER (WHERE NOT is_archived) as total,
         COUNT(*) FILTER (WHERE current_status = $1 AND NOT is_archived) as needs_attention,
@@ -45,27 +46,29 @@ export async function getTaskStats(): Promise<TaskStats> {
           WHERE DATE(completed_at) = CURRENT_DATE
         ) as completed_today
       FROM ${TABLE_NAMES.TASKS}
-    `, [TASK_STATUSES.NEEDS_ATTENTION, TASK_STATUSES.REQUESTED])
+    `,
+      [TASK_STATUSES.NEEDS_ATTENTION, TASK_STATUSES.REQUESTED],
+    );
 
-    const row = result.rows[0]
+    const row = result.rows[0];
     return {
-      total:          parseInt(row?.total ?? '0', 10),
+      total: parseInt(row?.total ?? '0', 10),
       needsAttention: parseInt(row?.needs_attention ?? '0', 10),
-      requested:      parseInt(row?.requested ?? '0', 10),
+      requested: parseInt(row?.requested ?? '0', 10),
       completedToday: parseInt(row?.completed_today ?? '0', 10),
-    }
+    };
   } catch (error) {
-    logger.error('Error fetching task stats', { error })
-    return { total: 0, needsAttention: 0, requested: 0, completedToday: 0 }
+    logger.error('Error fetching task stats', { error });
+    return { total: 0, needsAttention: 0, requested: 0, completedToday: 0 };
   }
 }
 
 export interface TasksQuery {
-  category?: string
-  status?: string
-  q?: string
-  priority?: string
-  page?: number
+  category?: string;
+  status?: string;
+  q?: string;
+  priority?: string;
+  page?: number;
 }
 
 /**
@@ -74,9 +77,9 @@ export interface TasksQuery {
  */
 export function resolveTaskListStatus(status: string | undefined): string {
   if (status === undefined || status === '') {
-    return TASK_LIST_DEFAULT_FILTER
+    return TASK_LIST_DEFAULT_FILTER;
   }
-  return status
+  return status;
 }
 
 function applyStatusFilter(
@@ -85,49 +88,60 @@ function applyStatusFilter(
   params: (string | number)[],
   paramIndex: number,
 ): { filterClause: string; params: (string | number)[]; paramIndex: number } {
-  const effective = resolveTaskListStatus(status)
+  const effective = resolveTaskListStatus(status);
   if (effective === TASK_LIST_FILTERS.ALL) {
-    return { filterClause, params, paramIndex }
+    return { filterClause, params, paramIndex };
   }
   if (effective === TASK_LIST_FILTERS.ACTION_NEEDED) {
     return {
       filterClause: `${filterClause} AND t.current_status IN ($${paramIndex++}, $${paramIndex++})`,
       params: [...params, TASK_STATUSES.NEEDS_ATTENTION, TASK_STATUSES.REQUESTED],
       paramIndex,
-    }
+    };
   }
   return {
     filterClause: `${filterClause} AND t.current_status = $${paramIndex++}`,
     params: [...params, effective],
     paramIndex,
-  }
+  };
 }
 
 export async function getTasks(
   filters: TasksQuery = {},
 ): Promise<{ rows: TaskListItem[]; total: number }> {
-  const { category, status, q, priority, page = 1 } = filters
+  const { category, status, q, priority, page = 1 } = filters;
 
-  let filterClause = `WHERE NOT t.is_archived`
-  let params: (string | number)[] = []
-  let paramIndex = 1
+  let filterClause = `WHERE NOT t.is_archived`;
+  let params: (string | number)[] = [];
+  let paramIndex = 1;
 
-  if (category) { filterClause += ` AND t.category = $${paramIndex++}`; params.push(category) }
-  ;({ filterClause, params, paramIndex } = applyStatusFilter(status, filterClause, params, paramIndex))
-  if (q) {
-    filterClause += ` AND (t.title ILIKE $${paramIndex} OR t.description ILIKE $${paramIndex})`
-    params.push(`%${q}%`)
-    paramIndex++
+  if (category) {
+    filterClause += ` AND t.category = $${paramIndex++}`;
+    params.push(category);
   }
-  if (priority) { filterClause += ` AND t.priority = $${paramIndex++}`; params.push(priority) }
+  ({ filterClause, params, paramIndex } = applyStatusFilter(
+    status,
+    filterClause,
+    params,
+    paramIndex,
+  ));
+  if (q) {
+    filterClause += ` AND (t.title ILIKE $${paramIndex} OR t.description ILIKE $${paramIndex})`;
+    params.push(`%${q}%`);
+    paramIndex++;
+  }
+  if (priority) {
+    filterClause += ` AND t.priority = $${paramIndex++}`;
+    params.push(priority);
+  }
 
-  const offset = (page - 1) * TASKS_PAGE_SIZE
+  const offset = (page - 1) * TASKS_PAGE_SIZE;
 
   const countText = `
     SELECT COUNT(*)::text as total
     FROM ${TABLE_NAMES.TASKS} t
     ${filterClause}
-  `
+  `;
 
   // CASE/WHEN values below are compile-time constants from config, not
   // user input — SQL CASE expressions can't be parameterized.
@@ -181,17 +195,17 @@ export async function getTasks(
       END,
       t.created_at DESC
     LIMIT $${paramIndex++} OFFSET $${paramIndex++}
-  `
+  `;
 
   const [countResult, listResult] = await Promise.all([
     query<{ total: string }>(countText, params),
     query<TaskListItem>(listText, [...params, TASKS_PAGE_SIZE, offset]),
-  ])
+  ]);
 
   return {
     rows: listResult.rows,
     total: parseInt(countResult.rows[0]?.total ?? '0', 10),
-  }
+  };
 }
 
 /**
@@ -199,11 +213,11 @@ export async function getTasks(
  * links. Keeps filter SSOT in one place so callers can't drift.
  */
 export function buildTasksHrefBase(basePath: string, filters: TasksQuery): string {
-  const p = new URLSearchParams()
-  if (filters.category) p.set('category', filters.category)
-  p.set('status', resolveTaskListStatus(filters.status))
-  if (filters.q)        p.set('q',        filters.q)
-  if (filters.priority) p.set('priority', filters.priority)
-  const qs = p.toString()
-  return `${basePath}${qs ? `?${qs}` : ''}`
+  const p = new URLSearchParams();
+  if (filters.category) p.set('category', filters.category);
+  p.set('status', resolveTaskListStatus(filters.status));
+  if (filters.q) p.set('q', filters.q);
+  if (filters.priority) p.set('priority', filters.priority);
+  const qs = p.toString();
+  return `${basePath}${qs ? `?${qs}` : ''}`;
 }

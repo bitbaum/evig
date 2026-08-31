@@ -1,12 +1,32 @@
 export function SuggestionTypesSection() {
   const types = [
-    { label: 'Fehler', emoji: '🐛', description: 'Etwas funktioniert nicht oder zeigt falsche Informationen an.' },
-    { label: 'Inhalt', emoji: '✏️', description: 'Text ist veraltet, unvollständig oder missverständlich.' },
+    {
+      label: 'Fehler',
+      emoji: '🐛',
+      description: 'Etwas funktioniert nicht oder zeigt falsche Informationen an.',
+    },
+    {
+      label: 'Inhalt',
+      emoji: '✏️',
+      description: 'Text ist veraltet, unvollständig oder missverständlich.',
+    },
     { label: 'Idee', emoji: '💡', description: 'Neue Funktion oder Verbesserungsvorschlag.' },
-    { label: 'Rechtschreibung', emoji: '🔤', description: 'Schreibfehler, Grammatik oder Formatierungsprobleme.' },
-    { label: 'Barrierefreiheit', emoji: '♿', description: 'Problem mit Screenreader, Kontrast oder Tastaturnavigation.' },
-    { label: 'Sonstiges', emoji: '📌', description: 'Allgemeines Feedback, das in keine Kategorie passt.' },
-  ]
+    {
+      label: 'Rechtschreibung',
+      emoji: '🔤',
+      description: 'Schreibfehler, Grammatik oder Formatierungsprobleme.',
+    },
+    {
+      label: 'Barrierefreiheit',
+      emoji: '♿',
+      description: 'Problem mit Screenreader, Kontrast oder Tastaturnavigation.',
+    },
+    {
+      label: 'Sonstiges',
+      emoji: '📌',
+      description: 'Allgemeines Feedback, das in keine Kategorie passt.',
+    },
+  ];
 
   return (
     <section className="py-16 px-4 bg-surface-base">
@@ -19,7 +39,10 @@ export function SuggestionTypesSection() {
         </p>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
           {types.map((t) => (
-            <div key={t.label} className="flex items-start gap-3 p-4 bg-surface-raised rounded-lg border border-strong">
+            <div
+              key={t.label}
+              className="flex items-start gap-3 p-4 bg-surface-raised rounded-lg border border-strong"
+            >
               <span className="text-2xl shrink-0">{t.emoji}</span>
               <div>
                 <div className="font-semibold text-text-primary text-sm">{t.label}</div>
@@ -30,5 +53,5 @@ export function SuggestionTypesSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

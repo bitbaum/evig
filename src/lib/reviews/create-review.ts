@@ -5,29 +5,29 @@
  * Handles: duplicate check, insert, and target rating update.
  */
 
-import { db } from '@/db'
-import { reviews } from '@/db/schema/reviews'
-import { sellerProfiles } from '@/db/schema/marketplace'
-import { eq, and, sql } from 'drizzle-orm'
-import { logger } from '@/lib/logger'
-import { REVIEW_STATUS } from '@/config/review-status'
-import { REVIEW_TARGET_TYPES, TABLE_NAMES } from '@/config/database'
-import { OFFER_STATUS } from '@/config/it-hilfe'
+import { db } from '@/db';
+import { reviews } from '@/db/schema/reviews';
+import { sellerProfiles } from '@/db/schema/marketplace';
+import { eq, and, sql } from 'drizzle-orm';
+import { logger } from '@/lib/logger';
+import { REVIEW_STATUS } from '@/config/review-status';
+import { REVIEW_TARGET_TYPES, TABLE_NAMES } from '@/config/database';
+import { OFFER_STATUS } from '@/config/it-hilfe';
 
 interface CreateReviewParams {
-  reviewerId: string
-  targetType: string
-  targetId: string
-  overallRating: number
-  content?: string | null
-  bookingId?: string | null
-  isVerifiedPurchase?: boolean
-  title?: string | null
-  communicationRating?: number | null
-  professionalismRating?: number | null
-  qualityRating?: number | null
-  timelinessRating?: number | null
-  valueRating?: number | null
+  reviewerId: string;
+  targetType: string;
+  targetId: string;
+  overallRating: number;
+  content?: string | null;
+  bookingId?: string | null;
+  isVerifiedPurchase?: boolean;
+  title?: string | null;
+  communicationRating?: number | null;
+  professionalismRating?: number | null;
+  qualityRating?: number | null;
+  timelinessRating?: number | null;
+  valueRating?: number | null;
 }
 
 /**
@@ -43,17 +43,17 @@ export async function findDuplicateReview(
     eq(reviews.reviewerId, reviewerId),
     eq(reviews.targetType, targetType),
     eq(reviews.targetId, targetId),
-  ]
+  ];
   if (bookingId) {
-    conditions.push(eq(reviews.bookingId, bookingId))
+    conditions.push(eq(reviews.bookingId, bookingId));
   }
 
   const existing = await db
     .select({ id: reviews.id })
     .from(reviews)
-    .where(and(...conditions))
+    .where(and(...conditions));
 
-  return existing.length > 0
+  return existing.length > 0;
 }
 
 /**
@@ -79,14 +79,18 @@ export async function createReview(params: CreateReviewParams): Promise<{ review
       isVerifiedPurchase: params.isVerifiedPurchase ?? false,
       status: REVIEW_STATUS.PUBLISHED,
     })
-    .returning({ id: reviews.id })
+    .returning({ id: reviews.id });
 
   // Update target's average rating (fire-and-forget)
-  updateTargetRating(params.targetType, params.targetId).catch(err =>
-    logger.warn('Failed to update target rating', { error: err, targetType: params.targetType, targetId: params.targetId })
-  )
+  updateTargetRating(params.targetType, params.targetId).catch((err) =>
+    logger.warn('Failed to update target rating', {
+      error: err,
+      targetType: params.targetType,
+      targetId: params.targetId,
+    }),
+  );
 
-  return { reviewId: inserted.id }
+  return { reviewId: inserted.id };
 }
 
 /**
@@ -101,25 +105,25 @@ async function updateTargetRating(targetType: string, targetId: string): Promise
       const rows = await db.execute<{ helper_id: string }>(sql`
         SELECT helper_id FROM ${sql.raw(TABLE_NAMES.IT_HILFE_OFFERS)}
         WHERE request_id = ${targetId} AND status = ${OFFER_STATUS.ACCEPTED} LIMIT 1
-      `)
-      const helperId = rows.rows[0]?.helper_id
-      if (helperId) await recomputeTechnicianAggregate(helperId)
-      break
+      `);
+      const helperId = rows.rows[0]?.helper_id;
+      if (helperId) await recomputeTechnicianAggregate(helperId);
+      break;
     }
     case 'listing':
-      await updateSellerRatingFromListing(targetId)
-      break
+      await updateSellerRatingFromListing(targetId);
+      break;
     case 'repairer': {
       // target_id is the repairer_profiles.id — resolve its user, recompute.
       const rows = await db.execute<{ user_id: string }>(sql`
         SELECT user_id FROM ${sql.raw(TABLE_NAMES.REPAIRER_PROFILES)} WHERE id = ${targetId} LIMIT 1
-      `)
-      const userId = rows.rows[0]?.user_id
-      if (userId) await recomputeTechnicianAggregate(userId)
-      break
+      `);
+      const userId = rows.rows[0]?.user_id;
+      if (userId) await recomputeTechnicianAggregate(userId);
+      break;
     }
     default:
-      logger.info('No rating update for target type', { targetType })
+      logger.info('No rating update for target type', { targetType });
   }
 }
 
@@ -158,8 +162,8 @@ export async function recomputeTechnicianAggregate(technicianUserId: string): Pr
       GROUP BY u
     ) sub ON sub.user_id = base.user_id
     WHERE p.user_id = base.user_id
-  `)
-  logger.info('Recomputed technician aggregate', { technicianUserId, rows: result.rowCount })
+  `);
+  logger.info('Recomputed technician aggregate', { technicianUserId, rows: result.rowCount });
 }
 
 /** Update seller_profiles average rating from all listing reviews for that seller */
@@ -180,6 +184,6 @@ async function updateSellerRatingFromListing(listingId: string): Promise<void> {
     ) sub
     WHERE ${sql.raw(TABLE_NAMES.SELLER_PROFILES)}.user_id = sub.seller_id
     AND sub.seller_id = (SELECT seller_id FROM ${sql.raw(TABLE_NAMES.LISTINGS)} WHERE id = ${listingId})
-  `)
-  logger.info('Updated seller rating from listing', { listingId, rows: result.rowCount })
+  `);
+  logger.info('Updated seller rating from listing', { listingId, rows: result.rowCount });
 }

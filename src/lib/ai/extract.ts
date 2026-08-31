@@ -6,42 +6,42 @@
  * and the universal /api/ai/extract endpoint.
  */
 
-import { logger } from '@/lib/logger'
-import { callWithFallback, extractJson } from '@/lib/ai/providers'
-import { FORM_AI_REGISTRY, fillPromptTemplate, type FormAIConfig } from '@/lib/ai/config/prompts'
+import { logger } from '@/lib/logger';
+import { callWithFallback, extractJson } from '@/lib/ai/providers';
+import { FORM_AI_REGISTRY, fillPromptTemplate, type FormAIConfig } from '@/lib/ai/config/prompts';
 
 // =============================================================================
 // TYPES
 // =============================================================================
 
 export interface AIExtractionConfig {
-  formType: string
-  systemPrompt: string
-  userPrompt: string
-  parseResponse: (raw: unknown) => Record<string, unknown>
+  formType: string;
+  systemPrompt: string;
+  userPrompt: string;
+  parseResponse: (raw: unknown) => Record<string, unknown>;
 }
 
 export interface SuggestedAction {
-  label: string
-  prompt: string
+  label: string;
+  prompt: string;
 }
 
 export interface AIExtractionResult {
-  success: true
-  data: Record<string, unknown>
-  model: string
-  provider: string
-  confidence: Record<string, number>
-  suggestedActions: SuggestedAction[]
+  success: true;
+  data: Record<string, unknown>;
+  model: string;
+  provider: string;
+  confidence: Record<string, number>;
+  suggestedActions: SuggestedAction[];
 }
 
 export interface AIExtractionError {
-  success: false
-  error: string
-  rawResponse?: string
+  success: false;
+  error: string;
+  rawResponse?: string;
 }
 
-export type ExtractResult = AIExtractionResult | AIExtractionError
+export type ExtractResult = AIExtractionResult | AIExtractionError;
 
 // =============================================================================
 // ROBUST JSON PARSER
@@ -52,25 +52,25 @@ export type ExtractResult = AIExtractionResult | AIExtractionError
  * Handles: markdown code blocks, literal newlines in strings, malformed JSON.
  */
 export function robustJsonExtract<T = Record<string, unknown>>(text: string): T | null {
-  if (!text) return null
+  if (!text) return null;
 
   // Limit input to prevent ReDoS on extremely large responses
-  const maxLen = 100_000
-  const bounded = text.length > maxLen ? text.substring(0, maxLen) : text
+  const maxLen = 100_000;
+  const bounded = text.length > maxLen ? text.substring(0, maxLen) : text;
 
   // 1. Strip markdown code block wrappers
-  let cleaned = bounded
-  const codeBlockMatch = bounded.match(/```(?:json)?\s*([\s\S]*?)```/)
+  let cleaned = bounded;
+  const codeBlockMatch = bounded.match(/```(?:json)?\s*([\s\S]*?)```/);
   if (codeBlockMatch) {
-    cleaned = codeBlockMatch[1].trim()
+    cleaned = codeBlockMatch[1].trim();
   }
 
   // 2. Try standard JSON.parse on the first object found
-  const jsonMatch = cleaned.match(/\{[\s\S]*\}/)
-  if (!jsonMatch) return null
+  const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) return null;
 
   try {
-    return JSON.parse(jsonMatch[0]) as T
+    return JSON.parse(jsonMatch[0]) as T;
   } catch {
     // Continue to fallback
   }
@@ -78,72 +78,72 @@ export function robustJsonExtract<T = Record<string, unknown>>(text: string): T 
   // 3. Handle literal newlines in string values (common with markdown content)
   // Replace actual newlines inside JSON string values with \n
   try {
-    const fixed = jsonMatch[0].replace(
-      /("(?:[^"\\]|\\.)*")|(\n)/g,
-      (match, quoted, newline) => {
-        if (quoted) return quoted
-        return '\\n'
-      }
-    )
-    return JSON.parse(fixed) as T
+    const fixed = jsonMatch[0].replace(/("(?:[^"\\]|\\.)*")|(\n)/g, (match, quoted, newline) => {
+      if (quoted) return quoted;
+      return '\\n';
+    });
+    return JSON.parse(fixed) as T;
   } catch {
     // Continue to field extraction
   }
 
   // 4. Regex fallback: extract key-value pairs from malformed JSON
   try {
-    const result: Record<string, unknown> = {}
-    const raw = jsonMatch[0]
-    const MAX_ITERATIONS = 500  // Safety bound
+    const result: Record<string, unknown> = {};
+    const raw = jsonMatch[0];
+    const MAX_ITERATIONS = 500; // Safety bound
 
     // Extract string fields
-    const stringPattern = /"(\w+)"\s*:\s*"((?:[^"\\]|\\.)*)"/g
-    let match
-    let iterations = 0
+    const stringPattern = /"(\w+)"\s*:\s*"((?:[^"\\]|\\.)*)"/g;
+    let match;
+    let iterations = 0;
     while ((match = stringPattern.exec(raw)) !== null && ++iterations < MAX_ITERATIONS) {
-      result[match[1]] = match[2].replace(/\\n/g, '\n').replace(/\\"/g, '"').replace(/\\t/g, '\t')
+      result[match[1]] = match[2].replace(/\\n/g, '\n').replace(/\\"/g, '"').replace(/\\t/g, '\t');
     }
 
     // Extract array fields
-    const arrayPattern = /"(\w+)"\s*:\s*\[((?:[^\]])*)\]/g
-    iterations = 0
+    const arrayPattern = /"(\w+)"\s*:\s*\[((?:[^\]])*)\]/g;
+    iterations = 0;
     while ((match = arrayPattern.exec(raw)) !== null && ++iterations < MAX_ITERATIONS) {
-      const items: string[] = []
-      const itemPattern = /"([^"]+)"/g
-      let itemMatch
-      let innerIterations = 0
-      while ((itemMatch = itemPattern.exec(match[2])) !== null && ++innerIterations < MAX_ITERATIONS) {
-        items.push(itemMatch[1])
+      const items: string[] = [];
+      const itemPattern = /"([^"]+)"/g;
+      let itemMatch;
+      let innerIterations = 0;
+      while (
+        (itemMatch = itemPattern.exec(match[2])) !== null &&
+        ++innerIterations < MAX_ITERATIONS
+      ) {
+        items.push(itemMatch[1]);
       }
-      result[match[1]] = items
+      result[match[1]] = items;
     }
 
     // Extract number fields
-    const numPattern = /"(\w+)"\s*:\s*(\d+(?:\.\d+)?)/g
-    iterations = 0
+    const numPattern = /"(\w+)"\s*:\s*(\d+(?:\.\d+)?)/g;
+    iterations = 0;
     while ((match = numPattern.exec(raw)) !== null && ++iterations < MAX_ITERATIONS) {
       if (!(match[1] in result)) {
-        result[match[1]] = Number(match[2])
+        result[match[1]] = Number(match[2]);
       }
     }
 
     // Extract boolean fields
-    const boolPattern = /"(\w+)"\s*:\s*(true|false)/g
-    iterations = 0
+    const boolPattern = /"(\w+)"\s*:\s*(true|false)/g;
+    iterations = 0;
     while ((match = boolPattern.exec(raw)) !== null && ++iterations < MAX_ITERATIONS) {
       if (!(match[1] in result)) {
-        result[match[1]] = match[2] === 'true'
+        result[match[1]] = match[2] === 'true';
       }
     }
 
     if (Object.keys(result).length > 0) {
-      return result as T
+      return result as T;
     }
   } catch {
     // All parsing failed
   }
 
-  return null
+  return null;
 }
 
 // =============================================================================
@@ -155,100 +155,104 @@ export function robustJsonExtract<T = Record<string, unknown>>(text: string): T 
  */
 export function calculateGenericConfidence(
   inputText: string,
-  data: Record<string, unknown>
+  data: Record<string, unknown>,
 ): Record<string, number> {
-  const inputLower = inputText.toLowerCase()
-  const confidence: Record<string, number> = {}
+  const inputLower = inputText.toLowerCase();
+  const confidence: Record<string, number> = {};
 
   for (const [key, value] of Object.entries(data)) {
     if (value === null || value === undefined || value === '') {
-      continue
+      continue;
     }
 
     if (typeof value === 'string') {
       // Check if significant words from the value appear in input
-      const words = value.toLowerCase().split(/\s+/).filter(w => w.length > 2)
-      const mentionedCount = words.filter(w => inputLower.includes(w)).length
-      confidence[key] = words.length > 0
-        ? Math.min(0.95, 0.5 + (mentionedCount / words.length) * 0.45)
-        : 0.6
+      const words = value
+        .toLowerCase()
+        .split(/\s+/)
+        .filter((w) => w.length > 2);
+      const mentionedCount = words.filter((w) => inputLower.includes(w)).length;
+      confidence[key] =
+        words.length > 0 ? Math.min(0.95, 0.5 + (mentionedCount / words.length) * 0.45) : 0.6;
     } else if (Array.isArray(value)) {
-      confidence[key] = 0.65
+      confidence[key] = 0.65;
     } else {
-      confidence[key] = 0.7
+      confidence[key] = 0.7;
     }
   }
 
-  return confidence
+  return confidence;
 }
 
 // =============================================================================
 // REGISTRY-BASED EXTRACTION
 // =============================================================================
 
-export type ExtractMode = 'extract' | 'generate' | 'refine'
+export type ExtractMode = 'extract' | 'generate' | 'refine';
 
 interface RegistryExtractOptions {
-  formType: string
-  text: string
-  mode?: ExtractMode
-  currentData?: Record<string, unknown>
-  instruction?: string
-  quickAction?: string
+  formType: string;
+  text: string;
+  mode?: ExtractMode;
+  currentData?: Record<string, unknown>;
+  instruction?: string;
+  quickAction?: string;
 }
 
 /**
  * Extract/generate/refine form data using the FORM_AI_REGISTRY.
  * Looks up prompts by formType, calls AI, returns parsed data with confidence.
  */
-export async function registryExtract(
-  opts: RegistryExtractOptions
-): Promise<ExtractResult> {
-  const config = FORM_AI_REGISTRY[opts.formType]
+export async function registryExtract(opts: RegistryExtractOptions): Promise<ExtractResult> {
+  const config = FORM_AI_REGISTRY[opts.formType];
   if (!config) {
-    return { success: false, error: `Unbekannter Formulartyp: ${opts.formType}` }
+    return { success: false, error: `Unbekannter Formulartyp: ${opts.formType}` };
   }
 
-  const mode = opts.mode || 'extract'
+  const mode = opts.mode || 'extract';
 
   // Safely serialize currentData with size bound
   const safeCurrentData = (() => {
     try {
-      const json = JSON.stringify(opts.currentData || {}, null, 2)
-      return json.length > 10_000 ? json.substring(0, 10_000) + '\n...(abgeschnitten)' : json
+      const json = JSON.stringify(opts.currentData || {}, null, 2);
+      return json.length > 10_000 ? json.substring(0, 10_000) + '\n...(abgeschnitten)' : json;
     } catch {
-      return '{}'
+      return '{}';
     }
-  })()
+  })();
 
   // Build the user prompt based on mode
-  let userPrompt: string
+  let userPrompt: string;
   if (mode === 'refine' && config.refine && opts.instruction) {
     userPrompt = fillPromptTemplate(config.refine, {
       currentData: safeCurrentData,
       instruction: opts.instruction,
-    })
+    });
   } else if (mode === 'refine' && opts.quickAction && config.quickActions?.[opts.quickAction]) {
     userPrompt = fillPromptTemplate(config.refine || config.extract, {
       currentData: safeCurrentData,
       instruction: config.quickActions[opts.quickAction].prompt,
-    })
+    });
   } else {
     userPrompt = fillPromptTemplate(config.extract, {
       text: opts.text,
       schema: config.schema || '',
-    })
+    });
   }
 
   // Refine must be surgical: a user asking for a longer description must not
   // get a silently "improved" price back (that happened). The model only
   // touches what the instruction covers; everything else passes through.
-  const refineGuard = mode === 'refine'
-    ? `\n\nWICHTIG: Ändere AUSSCHLIESSLICH die Felder, die die Anweisung ausdrücklich betrifft. Alle anderen Felder übernimmst du EXAKT und UNVERÄNDERT aus den aktuellen Daten — auch wenn du sie für verbesserbar hältst (Verbesserungen gehören in suggestedActions, nicht in die Daten).`
-    : ''
+  const refineGuard =
+    mode === 'refine'
+      ? `\n\nWICHTIG: Ändere AUSSCHLIESSLICH die Felder, die die Anweisung ausdrücklich betrifft. Alle anderen Felder übernimmst du EXAKT und UNVERÄNDERT aus den aktuellen Daten — auch wenn du sie für verbesserbar hältst (Verbesserungen gehören in suggestedActions, nicht in die Daten).`
+      : '';
 
   // Append suggestion instruction to system prompt — AI returns suggestedActions alongside data
-  const systemWithSuggestions = config.system + refineGuard + `\n\nWICHTIG: Füge in deiner JSON-Antwort ein Feld "suggestedActions" hinzu — ein Array mit 2-3 konkreten Verbesserungsvorschlägen für die Daten. Jeder Eintrag hat "label" (kurz, max 4 Wörter) und "prompt" (was genau verbessert werden soll). Beispiel: [{"label": "Beschreibung erweitern", "prompt": "Ergänze mehr Details zur Zielgruppe und zum erwarteten Nutzen"}]. Passe die Vorschläge an den Kontext an — was fehlt, was ist dünn, was könnte besser sein.`
+  const systemWithSuggestions =
+    config.system +
+    refineGuard +
+    `\n\nWICHTIG: Füge in deiner JSON-Antwort ein Feld "suggestedActions" hinzu — ein Array mit 2-3 konkreten Verbesserungsvorschlägen für die Daten. Jeder Eintrag hat "label" (kurz, max 4 Wörter) und "prompt" (was genau verbessert werden soll). Beispiel: [{"label": "Beschreibung erweitern", "prompt": "Ergänze mehr Details zur Zielgruppe und zum erwarteten Nutzen"}]. Passe die Vorschläge an den Kontext an — was fehlt, was ist dünn, was könnte besser sein.`;
 
   const result = await callWithFallback({
     systemPrompt: systemWithSuggestions,
@@ -256,36 +260,40 @@ export async function registryExtract(
     temperature: config.temperature ?? 0.3,
     maxTokens: config.maxTokens ?? 1024,
     timeoutMs: 15000,
-  })
+  });
 
   if (!result) {
-    return { success: false, error: 'Kein KI-Service erreichbar. Bitte prüfe die Konfiguration.' }
+    return { success: false, error: 'Kein KI-Service erreichbar. Bitte prüfe die Konfiguration.' };
   }
 
-  const parsed = robustJsonExtract(result.text)
+  const parsed = robustJsonExtract(result.text);
   if (!parsed) {
     logger.warn('No JSON in AI extraction response', {
       formType: opts.formType,
       provider: result.provider,
       responsePreview: result.text.substring(0, 200),
-    })
-    return { success: false, error: 'KI-Antwort enthielt kein gültiges JSON.', rawResponse: result.text.substring(0, 500) }
+    });
+    return {
+      success: false,
+      error: 'KI-Antwort enthielt kein gültiges JSON.',
+      rawResponse: result.text.substring(0, 500),
+    };
   }
 
-  const data = parsed as Record<string, unknown>
+  const data = parsed as Record<string, unknown>;
 
   // Extract suggestedActions from AI response (if present) and remove from data
-  const suggestedActions: SuggestedAction[] = []
+  const suggestedActions: SuggestedAction[] = [];
   if (Array.isArray(data.suggestedActions)) {
     for (const action of data.suggestedActions) {
       if (action && typeof action === 'object' && 'label' in action && 'prompt' in action) {
-        suggestedActions.push({ label: String(action.label), prompt: String(action.prompt) })
+        suggestedActions.push({ label: String(action.label), prompt: String(action.prompt) });
       }
     }
-    delete data.suggestedActions
+    delete data.suggestedActions;
   }
 
-  const confidence = calculateGenericConfidence(opts.text, data)
+  const confidence = calculateGenericConfidence(opts.text, data);
 
   logger.info('Registry extraction successful', {
     formType: opts.formType,
@@ -294,7 +302,7 @@ export async function registryExtract(
     model: result.model,
     fieldCount: Object.keys(data).length,
     suggestedActionsCount: suggestedActions.length,
-  })
+  });
 
   return {
     success: true,
@@ -303,7 +311,7 @@ export async function registryExtract(
     provider: result.provider,
     confidence,
     suggestedActions,
-  }
+  };
 }
 
 // =============================================================================
@@ -313,45 +321,54 @@ export async function registryExtract(
 /**
  * Try providers in cascade: Groq → OpenRouter → Ollama → null
  */
-export async function extractWithFallback(
-  config: AIExtractionConfig,
-): Promise<ExtractResult> {
+export async function extractWithFallback(config: AIExtractionConfig): Promise<ExtractResult> {
   const result = await callWithFallback({
     systemPrompt: config.systemPrompt,
     userPrompt: config.userPrompt,
     maxTokens: 1024,
     timeoutMs: 15000,
-  })
+  });
 
   if (!result) {
-    return { success: false, error: 'Kein KI-Service erreichbar. Bitte prüfe die Konfiguration.' }
+    return { success: false, error: 'Kein KI-Service erreichbar. Bitte prüfe die Konfiguration.' };
   }
 
-  const raw = extractJson(result.text, /\{[\s\S]*\}/)
+  const raw = extractJson(result.text, /\{[\s\S]*\}/);
   if (!raw) {
     logger.warn('No JSON in AI extraction response', {
       formType: config.formType,
       provider: result.provider,
       responsePreview: result.text.substring(0, 200),
-    })
-    return { success: false, error: 'KI-Antwort enthielt kein gültiges JSON.', rawResponse: result.text.substring(0, 500) }
+    });
+    return {
+      success: false,
+      error: 'KI-Antwort enthielt kein gültiges JSON.',
+      rawResponse: result.text.substring(0, 500),
+    };
   }
 
   try {
-    const data = config.parseResponse(raw)
+    const data = config.parseResponse(raw);
     logger.info('AI extraction successful', {
       formType: config.formType,
       provider: result.provider,
       model: result.model,
       fallbacks: result.failedProviders.length,
-    })
-    return { success: true, data, model: result.model, provider: result.provider, confidence: {}, suggestedActions: [] }
+    });
+    return {
+      success: true,
+      data,
+      model: result.model,
+      provider: result.provider,
+      confidence: {},
+      suggestedActions: [],
+    };
   } catch (error) {
     logger.warn('Failed to parse AI response', {
       error,
       formType: config.formType,
       provider: result.provider,
-    })
-    return { success: false, error: 'KI-Antwort konnte nicht verarbeitet werden.' }
+    });
+    return { success: false, error: 'KI-Antwort konnte nicht verarbeitet werden.' };
   }
 }

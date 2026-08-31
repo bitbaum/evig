@@ -1,8 +1,8 @@
 /** Empty state slice — no structured notes exist and nothing is processing. */
 
-import { FileText } from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import { Card } from '@/components/ui/card'
+import { FileText } from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import { Card } from '@/components/ui/card';
 
 export function ProtocolEmptyState() {
   return (
@@ -15,5 +15,5 @@ export function ProtocolEmptyState() {
         Füge ein Transkript hinzu, um es von der KI verarbeiten zu lassen.
       </p>
     </Card>
-  )
+  );
 }

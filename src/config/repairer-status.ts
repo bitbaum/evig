@@ -7,26 +7,27 @@ export const REPAIRER_STATUS = {
   INACTIVE: 'inactive',
   SUSPENDED: 'suspended',
   PENDING: 'pending',
-} as const
+} as const;
 
-export type RepairerStatus = (typeof REPAIRER_STATUS)[keyof typeof REPAIRER_STATUS]
+export type RepairerStatus = (typeof REPAIRER_STATUS)[keyof typeof REPAIRER_STATUS];
 
 export const REPAIRER_STATUS_LABELS: Record<RepairerStatus, string> = {
   active: 'Aktiv',
   inactive: 'Inaktiv',
   suspended: 'Gesperrt',
   pending: 'Ausstehend',
-}
+};
 
 /**
  * Profile tier: distinguishes self-registered helpers from vetted professionals.
  */
 export const REPAIRER_PROFILE_TIER = {
-  COMMUNITY: 'community',       // self-registered via /profil/techniker
+  COMMUNITY: 'community', // self-registered via /profil/techniker
   PROFESSIONAL: 'professional', // vetted via repairer application flow
 } as const;
 
-export type RepairerProfileTier = typeof REPAIRER_PROFILE_TIER[keyof typeof REPAIRER_PROFILE_TIER];
+export type RepairerProfileTier =
+  (typeof REPAIRER_PROFILE_TIER)[keyof typeof REPAIRER_PROFILE_TIER];
 
 /**
  * Availability slot types for repairer_availability table.
@@ -38,4 +39,5 @@ export const REPAIRER_AVAILABILITY_TYPE = {
   BLOCKED: 'blocked',
 } as const;
 
-export type RepairerAvailabilityType = typeof REPAIRER_AVAILABILITY_TYPE[keyof typeof REPAIRER_AVAILABILITY_TYPE];
+export type RepairerAvailabilityType =
+  (typeof REPAIRER_AVAILABILITY_TYPE)[keyof typeof REPAIRER_AVAILABILITY_TYPE];

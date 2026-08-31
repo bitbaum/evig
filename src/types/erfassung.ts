@@ -26,7 +26,7 @@ export type {
   BulkSaveRequest,
   BulkSaveResponse,
   ErfassungAction,
-} from '@/lib/schemas/erfassung'
+} from '@/lib/schemas/erfassung';
 
 // Re-export schemas for validation use
 export {
@@ -39,7 +39,7 @@ export {
   bulkProductSchema,
   bulkSaveRequestSchema,
   bulkSaveResponseSchema,
-} from '@/lib/schemas/erfassung'
+} from '@/lib/schemas/erfassung';
 
 // Import types needed for utility functions
 import type {
@@ -48,7 +48,7 @@ import type {
   BulkProduct,
   AIFieldMetadata,
   ErfassungPayload,
-} from '@/lib/schemas/erfassung'
+} from '@/lib/schemas/erfassung';
 
 // =============================================================================
 // UTILITY FUNCTIONS
@@ -76,15 +76,12 @@ export const DEFAULT_FORM_DATA: ErfassungFormData = {
   unterkategorie: '',
   kundenprofile: [],
   image: null,
-}
+};
 
 /**
  * Create a default BulkProduct from a source type
  */
-export function createDefaultBulkProduct(
-  source: BulkProductSource,
-  tempId?: string,
-): BulkProduct {
+export function createDefaultBulkProduct(source: BulkProductSource, tempId?: string): BulkProduct {
   return {
     ...DEFAULT_FORM_DATA,
     _tempId: tempId || `bulk-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
@@ -92,7 +89,7 @@ export function createDefaultBulkProduct(
     _status: 'warning',
     _errors: [],
     _selected: true,
-  }
+  };
 }
 
 /**
@@ -112,7 +109,7 @@ export function formDataToBulkProduct(
     _errors: [],
     _selected: true,
     _aiMetadata: metadata,
-  }
+  };
 }
 
 /**
@@ -123,12 +120,12 @@ export function formDataToPayload(
   data: ErfassungFormData,
   action: 'draft' | 'erfassen' | 'publish',
 ): ErfassungPayload {
-  const specifications: Record<string, string> = {}
-  data.specs.forEach(spec => {
+  const specifications: Record<string, string> = {};
+  data.specs.forEach((spec) => {
     if (spec.key && spec.value) {
-      specifications[spec.key] = spec.value
+      specifications[spec.key] = spec.value;
     }
-  })
+  });
 
   return {
     hersteller: data.hersteller,
@@ -150,5 +147,5 @@ export function formDataToPayload(
     kundenprofile: data.kundenprofile,
     image: data.image,
     action,
-  }
+  };
 }

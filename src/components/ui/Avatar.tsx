@@ -1,5 +1,5 @@
-import Image from 'next/image'
-import { cn } from '@/lib/utils'
+import Image from 'next/image';
+import { cn } from '@/lib/utils';
 
 const BOX_PX: Record<NonNullable<AvatarProps['size']>, number> = {
   xs: 32,
@@ -7,29 +7,29 @@ const BOX_PX: Record<NonNullable<AvatarProps['size']>, number> = {
   md: 40,
   lg: 48,
   xl: 80,
-}
+};
 
 /** Optimizer only accepts whitelisted hosts (next.config remotePatterns);
  *  OAuth avatars (Google/GitHub/…) pass through unoptimized to avoid a runtime throw. */
 function isOptimizableHost(src: string): boolean {
-  return /\.r2\.dev\//.test(src) || /\.amazonaws\.com\//.test(src)
+  return /\.r2\.dev\//.test(src) || /\.amazonaws\.com\//.test(src);
 }
 
 interface AvatarProps {
   /** Image URL (user_profiles.avatar_url / users.image). Absent → initials tile. */
-  src?: string | null
+  src?: string | null;
   /** Display name (or email) — drives alt text + the initials fallback. */
-  name?: string | null
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-  shape?: 'circle' | 'rounded'
+  name?: string | null;
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  shape?: 'circle' | 'rounded';
   /** Show the subtle border (default off — most chrome avatars have none). */
-  bordered?: boolean
+  bordered?: boolean;
   /** Colors for the initials tile. Override for state (active/inactive, super-admin, …). */
-  colorClassName?: string
+  colorClassName?: string;
   /** Max initials letters (default 2 → "Georgy Butaev" = "GB"). */
-  maxInitials?: number
+  maxInitials?: number;
   /** Layout extras (margins, ring, font-family, …). */
-  className?: string
+  className?: string;
 }
 
 const BOX: Record<NonNullable<AvatarProps['size']>, string> = {
@@ -38,19 +38,22 @@ const BOX: Record<NonNullable<AvatarProps['size']>, string> = {
   md: 'h-10 w-10',
   lg: 'h-12 w-12',
   xl: 'h-20 w-20',
-}
+};
 const TEXT: Record<NonNullable<AvatarProps['size']>, string> = {
   xs: 'text-xs',
   sm: 'text-sm',
   md: 'text-sm',
   lg: 'text-base',
   xl: 'text-3xl',
-}
+};
 
 function initialsFrom(name: string | null | undefined, max: number): string {
-  const parts = (name ?? '').trim().split(/\s+/).filter(Boolean)
-  if (parts.length === 0) return '?'
-  return parts.slice(0, max).map((p) => p[0]!.toUpperCase()).join('')
+  const parts = (name ?? '').trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return '?';
+  return parts
+    .slice(0, max)
+    .map((p) => p[0]!.toUpperCase())
+    .join('');
 }
 
 /**
@@ -68,8 +71,8 @@ export function Avatar({
   maxInitials = 2,
   className,
 }: AvatarProps) {
-  const radius = shape === 'circle' ? 'rounded-full' : 'rounded-lg'
-  const border = bordered ? 'border border-subtle' : ''
+  const radius = shape === 'circle' ? 'rounded-full' : 'rounded-lg';
+  const border = bordered ? 'border border-subtle' : '';
 
   if (src) {
     return (
@@ -81,7 +84,7 @@ export function Avatar({
         unoptimized={!isOptimizableHost(src)}
         className={cn('shrink-0 object-cover', radius, border, BOX[size], className)}
       />
-    )
+    );
   }
 
   return (
@@ -99,5 +102,5 @@ export function Avatar({
     >
       {initialsFrom(name, maxInitials)}
     </div>
-  )
+  );
 }

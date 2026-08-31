@@ -6,19 +6,19 @@
  * four byline sites (post header, hero, featured grid, related) stay one-liners.
  */
 
-import { Link } from '@/i18n/navigation'
-import { ROUTES } from '@/config/routes'
-import { resolveAuthorProfile } from '@/lib/blog/author'
+import { Link } from '@/i18n/navigation';
+import { ROUTES } from '@/config/routes';
+import { resolveAuthorProfile } from '@/lib/blog/author';
 
 interface BlogBylineProps {
-  author: string
-  authorId?: string | null
+  author: string;
+  authorId?: string | null;
   /** Text styling to match the surrounding meta row. */
-  className?: string
+  className?: string;
 }
 
 export default async function BlogByline({ author, authorId, className }: BlogBylineProps) {
-  const { name, profileId } = await resolveAuthorProfile(author, authorId)
+  const { name, profileId } = await resolveAuthorProfile(author, authorId);
 
   if (profileId) {
     return (
@@ -28,8 +28,8 @@ export default async function BlogByline({ author, authorId, className }: BlogBy
       >
         {name}
       </Link>
-    )
+    );
   }
 
-  return <span className={className}>{name}</span>
+  return <span className={className}>{name}</span>;
 }

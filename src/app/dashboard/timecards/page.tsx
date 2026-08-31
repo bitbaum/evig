@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation'
+import { redirect } from 'next/navigation';
 
 /**
  * Zeiterfassung is an employee tool and lives in the admin area now
@@ -6,5 +6,5 @@ import { redirect } from 'next/navigation'
  * route only redirects legacy links/bookmarks there.
  */
 export default function DashboardTimecardsRedirect() {
-  redirect('/admin/zeiterfassung')
+  redirect('/admin/zeiterfassung');
 }

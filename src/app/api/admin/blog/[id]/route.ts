@@ -6,19 +6,19 @@
  * DELETE /api/admin/blog/[id] - Delete post
  */
 
-import { NextRequest } from 'next/server'
-import { db } from '@/db'
-import { blogPosts, blogCategories } from '@/db/schema'
-import { eq, and, ne, sql } from 'drizzle-orm'
-import { withAdmin } from '@/lib/api/middleware'
-import { logger } from '@/lib/logger'
-import { apiSuccess, apiError, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
-import { syncPostTranslations, getPostTranslations } from '@/lib/services/blog-translations'
-import { fillMissingTranslations } from '@/lib/services/blog-translate'
-import { parseBlogAudience } from '@/config/blog'
+import { NextRequest } from 'next/server';
+import { db } from '@/db';
+import { blogPosts, blogCategories } from '@/db/schema';
+import { eq, and, ne, sql } from 'drizzle-orm';
+import { withAdmin } from '@/lib/api/middleware';
+import { logger } from '@/lib/logger';
+import { apiSuccess, apiError, apiBadRequest, apiNotFound } from '@/lib/api/helpers';
+import { syncPostTranslations, getPostTranslations } from '@/lib/services/blog-translations';
+import { fillMissingTranslations } from '@/lib/services/blog-translate';
+import { parseBlogAudience } from '@/config/blog';
 
 export const GET = withAdmin<{ id: string }>('content', async (request, session, context) => {
-  const { id: postId } = context!.params!
+  const { id: postId } = context!.params!;
 
   try {
     const [post] = await db
@@ -44,26 +44,26 @@ export const GET = withAdmin<{ id: string }>('content', async (request, session,
       })
       .from(blogPosts)
       .leftJoin(blogCategories, eq(blogPosts.categoryId, blogCategories.id))
-      .where(eq(blogPosts.id, postId))
+      .where(eq(blogPosts.id, postId));
 
     if (!post) {
-      return apiNotFound('Blog-Artikel')
+      return apiNotFound('Blog-Artikel');
     }
 
-    const translations = await getPostTranslations(postId)
+    const translations = await getPostTranslations(postId);
 
-    return apiSuccess({ ...post, translations })
+    return apiSuccess({ ...post, translations });
   } catch (error) {
-    logger.error('Failed to get blog post', { postId, error })
-    return apiError(error, 'Blog-Artikel konnte nicht geladen werden')
+    logger.error('Failed to get blog post', { postId, error });
+    return apiError(error, 'Blog-Artikel konnte nicht geladen werden');
   }
-})
+});
 
 export const PATCH = withAdmin<{ id: string }>('content', async (request, session, context) => {
-  const { id: postId } = context!.params!
+  const { id: postId } = context!.params!;
 
   try {
-    const body = await request.json()
+    const body = await request.json();
     const {
       title,
       slug,
@@ -79,15 +79,15 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
       autoTranslate,
       visibility,
       audience,
-    } = body
+    } = body;
 
     // Required fields, when explicitly provided, must not be blanked out —
     // an accidental empty title/body would break a live post's rendering + SEO.
     if (title !== undefined && !String(title).trim()) {
-      return apiBadRequest('Titel darf nicht leer sein')
+      return apiBadRequest('Titel darf nicht leer sein');
     }
     if (content !== undefined && !String(content).trim()) {
-      return apiBadRequest('Inhalt darf nicht leer sein')
+      return apiBadRequest('Inhalt darf nicht leer sein');
     }
 
     // Check if post exists
@@ -99,108 +99,108 @@ export const PATCH = withAdmin<{ id: string }>('content', async (request, sessio
         autoTranslate: blogPosts.autoTranslate,
       })
       .from(blogPosts)
-      .where(eq(blogPosts.id, postId))
+      .where(eq(blogPosts.id, postId));
 
     if (!existing) {
-      return apiNotFound('Blog-Artikel')
+      return apiNotFound('Blog-Artikel');
     }
 
-    const wasPublished = existing.isPublished
+    const wasPublished = existing.isPublished;
 
     // If slug is changed, check uniqueness
     if (slug) {
       const [slugConflict] = await db
         .select({ id: blogPosts.id })
         .from(blogPosts)
-        .where(and(eq(blogPosts.slug, slug), ne(blogPosts.id, postId)))
+        .where(and(eq(blogPosts.slug, slug), ne(blogPosts.id, postId)));
 
       if (slugConflict) {
-        return apiBadRequest('Ein Artikel mit diesem Slug existiert bereits')
+        return apiBadRequest('Ein Artikel mit diesem Slug existiert bereits');
       }
     }
 
     // Build update object
-    const update: Record<string, unknown> = {}
-    if (title !== undefined) update.title = title
-    if (slug !== undefined) update.slug = slug
-    if (excerpt !== undefined) update.excerpt = excerpt || null
-    if (content !== undefined) update.content = content
-    if (featuredImage !== undefined) update.featuredImage = featuredImage || null
-    if (categoryId !== undefined) update.categoryId = categoryId || null
-    if (tags !== undefined) update.tags = tags
+    const update: Record<string, unknown> = {};
+    if (title !== undefined) update.title = title;
+    if (slug !== undefined) update.slug = slug;
+    if (excerpt !== undefined) update.excerpt = excerpt || null;
+    if (content !== undefined) update.content = content;
+    if (featuredImage !== undefined) update.featuredImage = featuredImage || null;
+    if (categoryId !== undefined) update.categoryId = categoryId || null;
+    if (tags !== undefined) update.tags = tags;
     if (isPublished !== undefined) {
-      update.isPublished = isPublished
+      update.isPublished = isPublished;
       // Set published_at when publishing (first time or if missing)
       if (isPublished && (!wasPublished || !existing.publishedAt)) {
-        update.publishedAt = new Date().toISOString()
+        update.publishedAt = new Date().toISOString();
       }
     }
-    if (seoTitle !== undefined) update.seoTitle = seoTitle || null
-    if (seoDescription !== undefined) update.seoDescription = seoDescription || null
-    if (autoTranslate !== undefined) update.autoTranslate = autoTranslate === true
+    if (seoTitle !== undefined) update.seoTitle = seoTitle || null;
+    if (seoDescription !== undefined) update.seoDescription = seoDescription || null;
+    if (autoTranslate !== undefined) update.autoTranslate = autoTranslate === true;
     if (visibility !== undefined && ['public', 'unlisted', 'link'].includes(visibility)) {
-      update.visibility = visibility
+      update.visibility = visibility;
     }
-    if (audience !== undefined) update.audience = parseBlogAudience(audience)
-    if (audience !== undefined) update.audience = parseBlogAudience(audience)
-    if (audience !== undefined) update.audience = parseBlogAudience(audience)
+    if (audience !== undefined) update.audience = parseBlogAudience(audience);
+    if (audience !== undefined) update.audience = parseBlogAudience(audience);
+    if (audience !== undefined) update.audience = parseBlogAudience(audience);
 
     // Always update updated_by
-    update.updatedBy = session.user.id
-    update.updatedAt = sql`NOW()`
+    update.updatedBy = session.user.id;
+    update.updatedAt = sql`NOW()`;
 
     // Sync translations first so an "only translations changed" edit persists
     // even when no base field changed.
     if (translations !== undefined) {
-      const result = await syncPostTranslations(postId, translations)
-      if (!result.success) return apiBadRequest(result.error!)
+      const result = await syncPostTranslations(postId, translations);
+      if (!result.success) return apiBadRequest(result.error!);
     }
 
     // Touch the base row only when a base field actually changed (beyond the
     // always-set updatedBy/updatedAt).
     if (Object.keys(update).length > 2) {
-      await db.update(blogPosts).set(update).where(eq(blogPosts.id, postId))
+      await db.update(blogPosts).set(update).where(eq(blogPosts.id, postId));
     } else if (translations === undefined) {
-      return apiSuccess({ message: 'Keine Änderungen' })
+      return apiSuccess({ message: 'Keine Änderungen' });
     }
 
-    logger.info('Blog post updated', { postId, userId: session.user.id })
+    logger.info('Blog post updated', { postId, userId: session.user.id });
 
     // Fill missing locales in the background when the post is (now) published
     // and auto-translate is on. Fire-and-forget; never overwrites a human tab.
-    const nowPublished = isPublished !== undefined ? !!isPublished : existing.isPublished
-    const autoOn = autoTranslate !== undefined ? autoTranslate !== false : existing.autoTranslate
+    const nowPublished = isPublished !== undefined ? !!isPublished : existing.isPublished;
+    const autoOn = autoTranslate !== undefined ? autoTranslate !== false : existing.autoTranslate;
     if (nowPublished && autoOn) {
       void fillMissingTranslations(postId).catch((err) =>
         logger.error('Auto-translate on update failed', { postId, err }),
-      )
+      );
     }
 
-    return apiSuccess({ message: 'Artikel aktualisiert' })
+    return apiSuccess({ message: 'Artikel aktualisiert' });
   } catch (error) {
-    logger.error('Failed to update blog post', { postId, error })
-    return apiError(error, 'Blog-Artikel konnte nicht aktualisiert werden')
+    logger.error('Failed to update blog post', { postId, error });
+    return apiError(error, 'Blog-Artikel konnte nicht aktualisiert werden');
   }
-})
+});
 
 export const DELETE = withAdmin<{ id: string }>('content', async (request, session, context) => {
-  const { id: postId } = context!.params!
+  const { id: postId } = context!.params!;
 
   try {
     const [deleted] = await db
       .delete(blogPosts)
       .where(eq(blogPosts.id, postId))
-      .returning({ id: blogPosts.id })
+      .returning({ id: blogPosts.id });
 
     if (!deleted) {
-      return apiNotFound('Blog-Artikel')
+      return apiNotFound('Blog-Artikel');
     }
 
-    logger.info('Blog post deleted', { postId, userId: session.user.id })
+    logger.info('Blog post deleted', { postId, userId: session.user.id });
 
-    return apiSuccess({ message: 'Artikel gelöscht' })
+    return apiSuccess({ message: 'Artikel gelöscht' });
   } catch (error) {
-    logger.error('Failed to delete blog post', { postId, error })
-    return apiError(error, 'Blog-Artikel konnte nicht gelöscht werden')
+    logger.error('Failed to delete blog post', { postId, error });
+    return apiError(error, 'Blog-Artikel konnte nicht gelöscht werden');
   }
-})
+});

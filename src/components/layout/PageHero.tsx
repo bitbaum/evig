@@ -1,7 +1,7 @@
-import { LucideIcon } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
-import { DESIGN_TOKENS, ThemeKey } from '@/lib/design/tokens'
-import { cn } from '@/lib/utils'
+import { LucideIcon } from 'lucide-react';
+import Heading from '@/components/ui/Heading';
+import { DESIGN_TOKENS, ThemeKey } from '@/lib/design/tokens';
+import { cn } from '@/lib/utils';
 
 /**
  * Reusable page hero.
@@ -15,16 +15,16 @@ import { cn } from '@/lib/utils'
  */
 
 interface PageHeroProps {
-  theme: ThemeKey
+  theme: ThemeKey;
   /** Optional — omit for pages where an icon would be noise. */
-  icon?: LucideIcon
-  title: string
-  subtitle?: string
+  icon?: LucideIcon;
+  title: string;
+  subtitle?: string;
   /** Use `display` for landing/marketing heroes that should hit hard. */
-  size?: 'site' | 'display'
+  size?: 'site' | 'display';
   /** Render content (CTAs, etc.) below the subtitle. */
-  children?: React.ReactNode
-  className?: string
+  children?: React.ReactNode;
+  className?: string;
 }
 
 export function PageHero({
@@ -36,8 +36,8 @@ export function PageHero({
   children,
   className = '',
 }: PageHeroProps) {
-  const iconBadge = DESIGN_TOKENS.iconBadges[theme]
-  const isDisplay = size === 'display'
+  const iconBadge = DESIGN_TOKENS.iconBadges[theme];
+  const isDisplay = size === 'display';
 
   return (
     <div
@@ -53,17 +53,18 @@ export function PageHero({
         <div className={cn('text-center mx-auto', isDisplay ? 'max-w-4xl' : 'max-w-3xl')}>
           {Icon && (
             <div className="flex justify-center mb-6">
-              <div className={cn('flex h-12 w-12 items-center justify-center rounded-xl', iconBadge.bg)}>
+              <div
+                className={cn(
+                  'flex h-12 w-12 items-center justify-center rounded-xl',
+                  iconBadge.bg,
+                )}
+              >
                 <Icon className={cn('h-6 w-6', iconBadge.text)} aria-hidden="true" />
               </div>
             </div>
           )}
 
-          <Heading
-            level={1}
-            variant={isDisplay ? 'display' : 'site'}
-            className="text-text-primary"
-          >
+          <Heading level={1} variant={isDisplay ? 'display' : 'site'} className="text-text-primary">
             {title}
           </Heading>
 
@@ -84,5 +85,5 @@ export function PageHero({
         </div>
       </div>
     </div>
-  )
+  );
 }

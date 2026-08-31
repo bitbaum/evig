@@ -1,21 +1,43 @@
-import { Card } from '@/components/ui/card'
+import { Card } from '@/components/ui/card';
 
 export function FeaturesSection() {
   const features = [
-    { icon: '🗺️', title: 'Seitenkontext automatisch', description: 'URL, Screenshot und Seitentitel werden beim Einreichen automatisch erfasst.' },
-    { icon: '🏷️', title: 'Kategorisierung', description: 'Vorschläge nach Typ: Fehler, Inhalt, Idee, Rechtschreibung, Barrierefreiheit.' },
-    { icon: '🔔', title: 'Benachrichtigungen', description: 'Nutzer werden informiert, wenn ihr Vorschlag umgesetzt oder kommentiert wird.' },
-    { icon: '🤖', title: 'KI-Zusammenfassung', description: 'Ähnliche Vorschläge werden automatisch gruppiert, um Duplikate zu reduzieren.' },
-    { icon: '📊', title: 'Auswertung', description: 'Das Staff-Dashboard zeigt Trends und häufig gemeldete Bereiche.' },
-    { icon: '🔒', title: 'Datenschutzkonform', description: 'Anonyme Einreichungen möglich — keine Pflichtangaben.' },
-  ]
+    {
+      icon: '🗺️',
+      title: 'Seitenkontext automatisch',
+      description: 'URL, Screenshot und Seitentitel werden beim Einreichen automatisch erfasst.',
+    },
+    {
+      icon: '🏷️',
+      title: 'Kategorisierung',
+      description: 'Vorschläge nach Typ: Fehler, Inhalt, Idee, Rechtschreibung, Barrierefreiheit.',
+    },
+    {
+      icon: '🔔',
+      title: 'Benachrichtigungen',
+      description: 'Nutzer werden informiert, wenn ihr Vorschlag umgesetzt oder kommentiert wird.',
+    },
+    {
+      icon: '🤖',
+      title: 'KI-Zusammenfassung',
+      description: 'Ähnliche Vorschläge werden automatisch gruppiert, um Duplikate zu reduzieren.',
+    },
+    {
+      icon: '📊',
+      title: 'Auswertung',
+      description: 'Das Staff-Dashboard zeigt Trends und häufig gemeldete Bereiche.',
+    },
+    {
+      icon: '🔒',
+      title: 'Datenschutzkonform',
+      description: 'Anonyme Einreichungen möglich — keine Pflichtangaben.',
+    },
+  ];
 
   return (
     <section className="py-16 px-4 bg-surface-raised">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold text-text-primary text-center mb-12">
-          Funktionen
-        </h2>
+        <h2 className="text-3xl font-bold text-text-primary text-center mb-12">Funktionen</h2>
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
           {features.map((f) => (
             <Card key={f.title} className="border-strong p-6">
@@ -27,5 +49,5 @@ export function FeaturesSection() {
         </div>
       </div>
     </section>
-  )
+  );
 }

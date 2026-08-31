@@ -62,7 +62,11 @@ function Bar({
         </div>
       ) : (
         isWinner !== undefined && (
-          <span className={`text-sm ${isWinner ? 'font-bold text-warning-500' : 'text-transparent'}`}>★</span>
+          <span
+            className={`text-sm ${isWinner ? 'font-bold text-warning-500' : 'text-transparent'}`}
+          >
+            ★
+          </span>
         )
       )}
       <span className="w-28 truncate text-sm text-text-secondary">{label}</span>
@@ -98,13 +102,17 @@ function WinnerCard({ opt, metric }: { opt: RankedOption; metric: string }) {
   );
 }
 
-export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, aiOutcomeNarrative }: Props) {
+export default function ResultsPanel({
+  outcome,
+  outcomeSummary,
+  votingMethod,
+  aiOutcomeNarrative,
+}: Props) {
   const data = outcome as OutcomeData | null;
   if (!data) return null;
 
   return (
     <Panel title="Ergebnis" className="p-6">
-
       {/* AI Outcome Narrative — Beschluss hero */}
       {aiOutcomeNarrative && (
         <div className="mb-6 rounded-lg border-2 border-strong bg-action-muted p-4">
@@ -122,7 +130,9 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
         <div className="mb-4">
           <span
             className={`rounded-full px-3 py-1 text-sm font-medium ${
-              data.passed ? 'bg-action-muted text-action' : 'bg-error-100 dark:bg-error-900/30 text-error-700 dark:text-error-300'
+              data.passed
+                ? 'bg-action-muted text-action'
+                : 'bg-error-100 dark:bg-error-900/30 text-error-700 dark:text-error-300'
             }`}
           >
             {data.passed ? 'Angenommen' : 'Abgelehnt'}
@@ -141,16 +151,21 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
               value={count}
               max={data.totalVotes || 0}
               color={
-                key === 'agree' ? 'bg-action'
-                  : key === 'block' ? 'bg-error-400'
-                  : key === 'disagree' ? 'bg-warning-400'
-                  : 'bg-surface-overlay'
+                key === 'agree'
+                  ? 'bg-action'
+                  : key === 'block'
+                    ? 'bg-error-400'
+                    : key === 'disagree'
+                      ? 'bg-warning-400'
+                      : 'bg-surface-overlay'
               }
             />
           ))}
           {data.blocks && data.blocks.length > 0 && (
             <div className="mt-3 rounded-md bg-error-50 dark:bg-error-900/20 p-3">
-              <p className="text-sm font-medium text-error-700 dark:text-error-300">Blockierungen:</p>
+              <p className="text-sm font-medium text-error-700 dark:text-error-300">
+                Blockierungen:
+              </p>
               {data.blocks.map((b, i) => (
                 <p key={i} className="mt-1 text-sm text-error-600 dark:text-error-400">
                   &bull; {b.rationale || '(Keine Begründung)'}
@@ -165,10 +180,7 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
       {votingMethod === 'approval' && data.ranked && (
         <div className="space-y-2">
           {data.ranked[0] && (
-            <WinnerCard
-              opt={data.ranked[0]}
-              metric={`${data.ranked[0].votes || 0} Stimmen`}
-            />
+            <WinnerCard opt={data.ranked[0]} metric={`${data.ranked[0].votes || 0} Stimmen`} />
           )}
           {data.ranked.map((opt, i) => (
             <Bar
@@ -188,10 +200,7 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
       {votingMethod === 'dot' && data.ranked && (
         <div className="space-y-2">
           {data.ranked[0] && (
-            <WinnerCard
-              opt={data.ranked[0]}
-              metric={`${data.ranked[0].dots || 0} Punkte`}
-            />
+            <WinnerCard opt={data.ranked[0]} metric={`${data.ranked[0].dots || 0} Punkte`} />
           )}
           {data.ranked.map((opt, i) => (
             <Bar
@@ -233,15 +242,19 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
       {/* Simple majority results */}
       {votingMethod === 'simple_majority' && data.counts && (
         <div className="space-y-2">
-          {(Object.entries(data.counts) as [SimpleMajorityResponse, number][]).map(([key, count]) => (
-            <Bar
-              key={key}
-              label={SIMPLE_MAJORITY_RESPONSE_CONFIG[key]?.label || key}
-              value={count}
-              max={data.totalVotes || 0}
-              color={key === 'yes' ? 'bg-action' : key === 'no' ? 'bg-error-400' : 'bg-surface-overlay'}
-            />
-          ))}
+          {(Object.entries(data.counts) as [SimpleMajorityResponse, number][]).map(
+            ([key, count]) => (
+              <Bar
+                key={key}
+                label={SIMPLE_MAJORITY_RESPONSE_CONFIG[key]?.label || key}
+                value={count}
+                max={data.totalVotes || 0}
+                color={
+                  key === 'yes' ? 'bg-action' : key === 'no' ? 'bg-error-400' : 'bg-surface-overlay'
+                }
+              />
+            ),
+          )}
         </div>
       )}
 
@@ -255,9 +268,13 @@ export default function ResultsPanel({ outcome, outcomeSummary, votingMethod, ai
             />
           )}
           {data.ranked.map((opt, i) => {
-            const bp = (opt as RankedOption & { bordaPoints?: number; scorePercent?: number }).bordaPoints ?? 0;
+            const bp =
+              (opt as RankedOption & { bordaPoints?: number; scorePercent?: number }).bordaPoints ??
+              0;
             const sp = (opt as RankedOption & { scorePercent?: number }).scorePercent ?? 0;
-            const maxBp = (data.ranked?.[0] as (RankedOption & { bordaPoints?: number }) | undefined)?.bordaPoints ?? 1;
+            const maxBp =
+              (data.ranked?.[0] as (RankedOption & { bordaPoints?: number }) | undefined)
+                ?.bordaPoints ?? 1;
             return (
               <Bar
                 key={opt.id}

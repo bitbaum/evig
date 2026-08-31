@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import { Mail, Smartphone, ShoppingBag, Calendar } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import Heading from '@/components/ui/Heading'
-import { SETTINGS_CONFIG } from '@/config/profile'
-import type { ProfileData } from '../../profile/hooks/useProfileData'
+import { Mail, Smartphone, ShoppingBag, Calendar } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Heading from '@/components/ui/Heading';
+import { SETTINGS_CONFIG } from '@/config/profile';
+import type { ProfileData } from '../../profile/hooks/useProfileData';
 
 interface NotificationsSectionProps {
-  profile: ProfileData
-  handleChange: (field: keyof ProfileData, value: boolean) => void
+  profile: ProfileData;
+  handleChange: (field: keyof ProfileData, value: boolean) => void;
 }
 
 export function NotificationsSection({ profile, handleChange }: NotificationsSectionProps) {
-  const labels = SETTINGS_CONFIG.labels.notifications
+  const labels = SETTINGS_CONFIG.labels.notifications;
 
   const notificationOptions = [
     {
@@ -43,7 +43,7 @@ export function NotificationsSection({ profile, handleChange }: NotificationsSec
       description: labels.workshopRemindersDescription,
       value: profile.workshop_reminders ?? true,
     },
-  ]
+  ];
 
   return (
     <div className="space-y-6">
@@ -51,9 +51,7 @@ export function NotificationsSection({ profile, handleChange }: NotificationsSec
         <Heading level={3} className="text-lg font-semibold text-text-primary mb-2">
           {labels.title}
         </Heading>
-        <p className="text-sm text-text-secondary mb-6">
-          {labels.description}
-        </p>
+        <p className="text-sm text-text-secondary mb-6">{labels.description}</p>
       </div>
 
       <div className="space-y-4">
@@ -90,13 +88,11 @@ export function NotificationsSection({ profile, handleChange }: NotificationsSec
                   />
                 </Button>
               </div>
-              <p className="text-sm text-text-secondary">
-                {option.description}
-              </p>
+              <p className="text-sm text-text-secondary">{option.description}</p>
             </div>
           </div>
         ))}
       </div>
     </div>
-  )
+  );
 }

@@ -1,8 +1,8 @@
-import { Loader2, Wand2, Upload, Mic } from 'lucide-react'
-import { Card } from '@/components/ui/card'
-import Heading from '@/components/admin/AdminHeading'
-import { Textarea } from '@/components/ui/textarea'
-import { Button } from '@/components/ui/button'
+import { Loader2, Wand2, Upload, Mic } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import Heading from '@/components/admin/AdminHeading';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
 
 /**
  * ProtocolDraftInput — a draft protocol has no structured notes yet (its
@@ -12,17 +12,17 @@ import { Button } from '@/components/ui/button'
  */
 interface Props {
   /** Audio uploads are supported for the unified pipeline only. */
-  allowAudio: boolean
+  allowAudio: boolean;
   /** A transcript is already stored (e.g. transcription succeeded but structuring failed). */
-  hasTranscript?: boolean
-  transcript: string
-  audioFile: File | null
-  processing: boolean
-  canProcess: boolean
-  onTranscriptChange: (value: string) => void
-  onAudioFileSelect: (e: React.ChangeEvent<HTMLInputElement>) => void
-  onFileUpload: (e: React.ChangeEvent<HTMLInputElement>) => void
-  onProcess: () => void
+  hasTranscript?: boolean;
+  transcript: string;
+  audioFile: File | null;
+  processing: boolean;
+  canProcess: boolean;
+  onTranscriptChange: (value: string) => void;
+  onAudioFileSelect: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onFileUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onProcess: () => void;
 }
 
 export function ProtocolDraftInput({
@@ -81,12 +81,7 @@ export function ProtocolDraftInput({
           <label className="flex items-center gap-1.5 text-sm text-action hover:opacity-80 cursor-pointer">
             <Upload className="w-3.5 h-3.5" />
             .txt hochladen
-            <input
-              type="file"
-              accept=".txt,.md,.text"
-              onChange={onFileUpload}
-              className="hidden"
-            />
+            <input type="file" accept=".txt,.md,.text" onChange={onFileUpload} className="hidden" />
           </label>
         </div>
         <Textarea
@@ -121,5 +116,5 @@ export function ProtocolDraftInput({
         </Button>
       </div>
     </Card>
-  )
+  );
 }

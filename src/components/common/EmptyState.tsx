@@ -1,26 +1,20 @@
-import { type LucideIcon, Package } from 'lucide-react'
-import { EmptyState as UIEmptyState } from '@/components/ui/EmptyState'
-import { Button } from '@/components/ui/button'
+import { type LucideIcon, Package } from 'lucide-react';
+import { EmptyState as UIEmptyState } from '@/components/ui/EmptyState';
+import { Button } from '@/components/ui/button';
 
 interface EmptyStateProps {
-  icon?: LucideIcon
-  title: string
-  message: string
+  icon?: LucideIcon;
+  title: string;
+  message: string;
   action?: {
-    label: string
-    onClick?: () => void
-    href?: string
-  }
-  className?: string
+    label: string;
+    onClick?: () => void;
+    href?: string;
+  };
+  className?: string;
 }
 
-export function EmptyState({
-  icon = Package,
-  title,
-  message,
-  action,
-  className,
-}: EmptyStateProps) {
+export function EmptyState({ icon = Package, title, message, action, className }: EmptyStateProps) {
   const actionNode = action ? (
     action.href ? (
       <Button as="a" href={action.href} variant="primary" className="mt-4">
@@ -31,7 +25,7 @@ export function EmptyState({
         {action.label}
       </Button>
     )
-  ) : undefined
+  ) : undefined;
 
   return (
     <UIEmptyState
@@ -41,5 +35,5 @@ export function EmptyState({
       action={actionNode}
       className={className}
     />
-  )
+  );
 }

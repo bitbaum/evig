@@ -1,8 +1,8 @@
 /**
  * @jest-environment node
  */
-import { readFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 /**
  * Order completion happens in exactly one place.
@@ -25,43 +25,48 @@ const PATHS = {
   webhook: join(process.cwd(), 'src', 'lib', 'services', 'payment-webhook.ts'),
   patch: join(process.cwd(), 'src', 'app', 'api', 'marketplace', 'orders', '[id]', 'route.ts'),
   receipt: join(
-    process.cwd(), 'src', 'app', 'api', 'marketplace', 'orders', '[id]', 'confirm-receipt', 'route.ts',
+    process.cwd(),
+    'src',
+    'app',
+    'api',
+    'marketplace',
+    'orders',
+    '[id]',
+    'confirm-receipt',
+    'route.ts',
   ),
-}
+};
 
 function read(p: string): string {
-  return readFileSync(p, 'utf8')
+  return readFileSync(p, 'utf8');
 }
 
 describe('marketplace order completion is centralized', () => {
   it.each(Object.entries(PATHS))('%s uses applyOrderCompletion', (_name, path) => {
-    expect(read(path)).toMatch(/applyOrderCompletion/)
-  })
+    expect(read(path)).toMatch(/applyOrderCompletion/);
+  });
 
-  it.each(Object.entries(PATHS))(
-    '%s does not hand-roll the SOLD write',
-    (_name, path) => {
-      const source = read(path)
-      // Strip comments: several of these files legitimately DISCUSS the SOLD
-      // transition in prose.
-      const code = source
-        .replace(/\/\*[\s\S]*?\*\//g, '')
-        .split('\n')
-        .filter((l) => !l.trim().startsWith('//') && !l.trim().startsWith('*'))
-        .join('\n')
+  it.each(Object.entries(PATHS))('%s does not hand-roll the SOLD write', (_name, path) => {
+    const source = read(path);
+    // Strip comments: several of these files legitimately DISCUSS the SOLD
+    // transition in prose.
+    const code = source
+      .replace(/\/\*[\s\S]*?\*\//g, '')
+      .split('\n')
+      .filter((l) => !l.trim().startsWith('//') && !l.trim().startsWith('*'))
+      .join('\n');
 
-      // A completion path must not set LISTING_STATUS.SOLD itself; the shared
-      // helper owns it, together with the timestamps and the seller counter.
-      expect(code).not.toMatch(/status:\s*LISTING_STATUS\.SOLD/)
-    },
-  )
+    // A completion path must not set LISTING_STATUS.SOLD itself; the shared
+    // helper owns it, together with the timestamps and the seller counter.
+    expect(code).not.toMatch(/status:\s*LISTING_STATUS\.SOLD/);
+  });
 
   it('the helper writes all four effects', () => {
-    const helper = read(join(process.cwd(), 'src', 'lib', 'marketplace', 'complete-order.ts'))
-    expect(helper).toMatch(/ORDER_STATUS\.COMPLETED/)
-    expect(helper).toMatch(/completedAt/)
-    expect(helper).toMatch(/deliveredAt/)
-    expect(helper).toMatch(/LISTING_STATUS\.SOLD/)
-    expect(helper).toMatch(/totalSold/)
-  })
-})
+    const helper = read(join(process.cwd(), 'src', 'lib', 'marketplace', 'complete-order.ts'));
+    expect(helper).toMatch(/ORDER_STATUS\.COMPLETED/);
+    expect(helper).toMatch(/completedAt/);
+    expect(helper).toMatch(/deliveredAt/);
+    expect(helper).toMatch(/LISTING_STATUS\.SOLD/);
+    expect(helper).toMatch(/totalSold/);
+  });
+});

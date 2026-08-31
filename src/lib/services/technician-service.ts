@@ -5,54 +5,53 @@
  * Used by both the API route and server components to avoid HTTP loopback.
  */
 
-import { db } from '@/db'
-import { repairerProfiles, repairerServices, userSkills, users, userProfiles } from '@/db/schema'
-import { eq, and, sql } from 'drizzle-orm'
-import { logger } from '@/lib/logger'
-import { REPAIRER_PROFILE_TIER, REPAIRER_STATUS } from '@/config/repairer-status'
-import { IT_SKILLS } from '@/config/it-hilfe'
-import type { TechnicianProfileInput } from '@/lib/schemas'
+import { db } from '@/db';
+import { repairerProfiles, repairerServices, userSkills, users, userProfiles } from '@/db/schema';
+import { eq, and, sql } from 'drizzle-orm';
+import { logger } from '@/lib/logger';
+import { REPAIRER_PROFILE_TIER, REPAIRER_STATUS } from '@/config/repairer-status';
+import { IT_SKILLS } from '@/config/it-hilfe';
+import type { TechnicianProfileInput } from '@/lib/schemas';
 
-export const TECHNICIAN_UUID_RE =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+export const TECHNICIAN_UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 // ============================================================================
 // Types
 // ============================================================================
 
 export interface TechnicianService {
-  id: string
-  serviceCategory: string
-  serviceName: string
-  description: string | null
-  basePriceCents: number | null
-  hourlyRateCents: number | null
-  estimatedHours: string | null
+  id: string;
+  serviceCategory: string;
+  serviceName: string;
+  description: string | null;
+  basePriceCents: number | null;
+  hourlyRateCents: number | null;
+  estimatedHours: string | null;
 }
 
 export interface TechnicianDetail {
-  id: string
-  userId: string
-  name: string | null
-  avatarUrl: string | null
-  bio: string | null
-  hourlyRateCents: number | null
-  averageRating: number | null
-  totalJobsCompleted: number   // coerced: default 0
-  totalReviews: number          // coerced: default 0
-  profileTier: string           // coerced: default 'community'
-  city: string | null
-  postalCode: string | null
-  canton: string | null
-  acceptsGratis: boolean        // coerced: default false
-  acceptsKulturlegi: boolean    // coerced: default false
-  isVerified: boolean           // coerced: default false
-  serviceDeliveryTypes: string[] | null
-  maxTravelKm: number | null
-  responseTimeHours: number | null
-  createdAt: string | null
-  skills: string[]
-  services: TechnicianService[]
+  id: string;
+  userId: string;
+  name: string | null;
+  avatarUrl: string | null;
+  bio: string | null;
+  hourlyRateCents: number | null;
+  averageRating: number | null;
+  totalJobsCompleted: number; // coerced: default 0
+  totalReviews: number; // coerced: default 0
+  profileTier: string; // coerced: default 'community'
+  city: string | null;
+  postalCode: string | null;
+  canton: string | null;
+  acceptsGratis: boolean; // coerced: default false
+  acceptsKulturlegi: boolean; // coerced: default false
+  isVerified: boolean; // coerced: default false
+  serviceDeliveryTypes: string[] | null;
+  maxTravelKm: number | null;
+  responseTimeHours: number | null;
+  createdAt: string | null;
+  skills: string[];
+  services: TechnicianService[];
 }
 
 // ============================================================================
@@ -86,18 +85,15 @@ export async function getTechnicianById(id: string): Promise<TechnicianDetail | 
       maxTravelKm: repairerProfiles.maxTravelKm,
       responseTimeHours: repairerProfiles.responseTimeHours,
       createdAt: repairerProfiles.createdAt,
-      skills: sql<string[]>`ARRAY_AGG(${userSkills.skillId}) FILTER (WHERE ${userSkills.skillId} IS NOT NULL)`,
+      skills: sql<
+        string[]
+      >`ARRAY_AGG(${userSkills.skillId}) FILTER (WHERE ${userSkills.skillId} IS NOT NULL)`,
     })
     .from(repairerProfiles)
     .innerJoin(users, eq(repairerProfiles.userId, users.id))
     .leftJoin(userProfiles, eq(userProfiles.userId, users.id))
     .leftJoin(userSkills, eq(repairerProfiles.userId, userSkills.userId))
-    .where(
-      and(
-        eq(repairerProfiles.id, id),
-        eq(repairerProfiles.isActive, true)
-      )
-    )
+    .where(and(eq(repairerProfiles.id, id), eq(repairerProfiles.isActive, true)))
     .groupBy(
       repairerProfiles.id,
       repairerProfiles.userId,
@@ -119,11 +115,11 @@ export async function getTechnicianById(id: string): Promise<TechnicianDetail | 
       repairerProfiles.maxTravelKm,
       repairerProfiles.responseTimeHours,
       repairerProfiles.createdAt,
-    )
+    );
 
-  if (!profile) return null
+  if (!profile) return null;
 
-  let services: TechnicianService[] = []
+  let services: TechnicianService[] = [];
 
   if (profile.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL) {
     services = await db
@@ -137,15 +133,10 @@ export async function getTechnicianById(id: string): Promise<TechnicianDetail | 
         estimatedHours: repairerServices.estimatedHours,
       })
       .from(repairerServices)
-      .where(
-        and(
-          eq(repairerServices.repairerId, id),
-          eq(repairerServices.isActive, true)
-        )
-      )
+      .where(and(eq(repairerServices.repairerId, id), eq(repairerServices.isActive, true)));
   }
 
-  logger.info('Fetched technician profile', { technicianId: id, tier: profile.profileTier })
+  logger.info('Fetched technician profile', { technicianId: id, tier: profile.profileTier });
 
   return {
     ...profile,
@@ -162,7 +153,7 @@ export async function getTechnicianById(id: string): Promise<TechnicianDetail | 
     profileTier: profile.profileTier ?? REPAIRER_PROFILE_TIER.COMMUNITY,
     skills: profile.skills || [],
     services,
-  }
+  };
 }
 
 /**
@@ -170,16 +161,16 @@ export async function getTechnicianById(id: string): Promise<TechnicianDetail | 
  * Public URLs and create-flow query params MUST use profile id.
  */
 export async function getTechnicianByIdOrUserId(id: string): Promise<TechnicianDetail | null> {
-  const byProfileId = await getTechnicianById(id)
-  if (byProfileId) return byProfileId
+  const byProfileId = await getTechnicianById(id);
+  if (byProfileId) return byProfileId;
 
   const [profile] = await db
     .select({ profileId: repairerProfiles.id })
     .from(repairerProfiles)
-    .where(and(eq(repairerProfiles.userId, id), eq(repairerProfiles.isActive, true)))
+    .where(and(eq(repairerProfiles.userId, id), eq(repairerProfiles.isActive, true)));
 
-  if (!profile) return null
-  return getTechnicianById(profile.profileId)
+  if (!profile) return null;
+  return getTechnicianById(profile.profileId);
 }
 
 // ============================================================================
@@ -187,18 +178,18 @@ export async function getTechnicianByIdOrUserId(id: string): Promise<TechnicianD
 // ============================================================================
 
 export interface TechnicianSelfProfile {
-  skills: string[]
-  bio: string
-  hourlyRateCents: number | null
-  acceptsGratis: boolean
-  acceptsKulturlegi: boolean
-  serviceTypes: string[]
-  postalCode: string
-  city: string
-  canton: string
-  maxTravelKm: number
-  isActive: boolean
-  profileTier: string | null
+  skills: string[];
+  bio: string;
+  hourlyRateCents: number | null;
+  acceptsGratis: boolean;
+  acceptsKulturlegi: boolean;
+  serviceTypes: string[];
+  postalCode: string;
+  city: string;
+  canton: string;
+  maxTravelKm: number;
+  isActive: boolean;
+  profileTier: string | null;
 }
 
 /**
@@ -225,15 +216,15 @@ export async function getTechnicianSelfProfile(
       profileTier: repairerProfiles.profileTier,
     })
     .from(repairerProfiles)
-    .where(eq(repairerProfiles.userId, userId))
+    .where(eq(repairerProfiles.userId, userId));
 
   const skillRows = await db
     .select({ skillId: userSkills.skillId })
     .from(userSkills)
-    .where(eq(userSkills.userId, userId))
-  const skills = skillRows.map((r) => r.skillId)
+    .where(eq(userSkills.userId, userId));
+  const skills = skillRows.map((r) => r.skillId);
 
-  let profile: TechnicianSelfProfile | null = null
+  let profile: TechnicianSelfProfile | null = null;
   if (profileRow) {
     profile = {
       skills,
@@ -248,7 +239,7 @@ export async function getTechnicianSelfProfile(
       maxTravelKm: profileRow.maxTravelKm ?? 10,
       isActive: profileRow.isActive ?? false,
       profileTier: profileRow.profileTier,
-    }
+    };
   } else if (skills.length > 0) {
     profile = {
       skills,
@@ -263,20 +254,20 @@ export async function getTechnicianSelfProfile(
       maxTravelKm: 10,
       isActive: false,
       profileTier: REPAIRER_PROFILE_TIER.COMMUNITY,
-    }
+    };
   }
 
-  return { profile, hasProfile: !!profileRow }
+  return { profile, hasProfile: !!profileRow };
 }
 
 /** Resolve a skill id to its IT_SKILLS category (for user_skills.category_id). */
 function getCategoryForSkill(skillId: string): string {
   for (const [categoryId, skills] of Object.entries(IT_SKILLS)) {
     if ((skills as Array<{ id: string }>).some((s) => s.id === skillId)) {
-      return categoryId
+      return categoryId;
     }
   }
-  return 'other'
+  return 'other';
 }
 
 /**
@@ -290,9 +281,18 @@ export async function upsertTechnicianProfile(
   input: TechnicianProfileInput,
 ): Promise<void> {
   const {
-    skills, bio, hourlyRateCents, acceptsGratis, acceptsKulturlegi,
-    serviceTypes, postalCode, city, canton, maxTravelKm, isActive,
-  } = input
+    skills,
+    bio,
+    hourlyRateCents,
+    acceptsGratis,
+    acceptsKulturlegi,
+    serviceTypes,
+    postalCode,
+    city,
+    canton,
+    maxTravelKm,
+    isActive,
+  } = input;
 
   await db
     .insert(repairerProfiles)
@@ -330,10 +330,10 @@ export async function upsertTechnicianProfile(
         profileTier: sql`CASE WHEN ${repairerProfiles.profileTier} = ${REPAIRER_PROFILE_TIER.PROFESSIONAL} THEN ${REPAIRER_PROFILE_TIER.PROFESSIONAL} ELSE ${REPAIRER_PROFILE_TIER.COMMUNITY} END`,
         updatedAt: sql`NOW()`,
       },
-    })
+    });
 
   // Replace skills: delete existing, insert new.
-  await db.delete(userSkills).where(eq(userSkills.userId, userId))
+  await db.delete(userSkills).where(eq(userSkills.userId, userId));
   if (skills.length > 0) {
     await db.insert(userSkills).values(
       skills.map((skillId) => ({
@@ -341,7 +341,7 @@ export async function upsertTechnicianProfile(
         skillId,
         categoryId: getCategoryForSkill(skillId),
       })),
-    )
+    );
   }
 }
 
@@ -352,11 +352,14 @@ export async function upsertTechnicianProfile(
  * offering help (the offer boundary checks is_active). Returns the new state,
  * or null if the user has no profile.
  */
-export async function setTechnicianActive(userId: string, isActive: boolean): Promise<boolean | null> {
+export async function setTechnicianActive(
+  userId: string,
+  isActive: boolean,
+): Promise<boolean | null> {
   const updated = await db
     .update(repairerProfiles)
     .set({ isActive, updatedAt: sql`NOW()` })
     .where(eq(repairerProfiles.userId, userId))
-    .returning({ isActive: repairerProfiles.isActive })
-  return updated[0]?.isActive ?? null
+    .returning({ isActive: repairerProfiles.isActive });
+  return updated[0]?.isActive ?? null;
 }

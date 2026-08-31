@@ -1,25 +1,25 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
-import { Link } from '@/i18n/navigation'
-import { AlertTriangle, RefreshCw, Home } from 'lucide-react'
-import { logger } from '@/lib/logger'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { useTranslations } from 'next-intl'
+import { useEffect } from 'react';
+import { Link } from '@/i18n/navigation';
+import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
+import { logger } from '@/lib/logger';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
 
 export default function Error({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
-  const t = useTranslations('error')
+  const t = useTranslations('error');
 
   useEffect(() => {
-    logger.error('Application error', { error, digest: error.digest })
-  }, [error])
+    logger.error('Application error', { error, digest: error.digest });
+  }, [error]);
 
   return (
     <div className="flex items-center justify-center py-24 px-4">
@@ -30,9 +30,7 @@ export default function Error({
         <Heading level={1} className="text-2xl text-text-primary mb-2" role="alert">
           {t('title')}
         </Heading>
-        <p className="text-text-secondary mb-8">
-          {t('description')}
-        </p>
+        <p className="text-text-secondary mb-8">{t('description')}</p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button onClick={reset} variant="primary">
             <RefreshCw className="w-4 h-4" />
@@ -45,5 +43,5 @@ export default function Error({
         </div>
       </div>
     </div>
-  )
+  );
 }

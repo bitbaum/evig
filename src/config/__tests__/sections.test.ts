@@ -41,9 +41,9 @@
  */
 
 jest.mock('lucide-react', () => {
-  const icon = (name: string) => ({ displayName: name })
-  return new Proxy({}, { get: (_t, prop) => icon(prop as string) })
-})
+  const icon = (name: string) => ({ displayName: name });
+  return new Proxy({}, { get: (_t, prop) => icon(prop as string) });
+});
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
@@ -61,7 +61,7 @@ import {
   getHirnSection,
   SECTIONS,
   SENSITIVE_SECTION_IDS,
-} from '../sections'
+} from '../sections';
 
 // ============================================================================
 // getAdminSections
@@ -69,32 +69,32 @@ import {
 
 describe('getAdminSections', () => {
   it('returns at least one section', () => {
-    expect(getAdminSections().length).toBeGreaterThan(0)
-  })
+    expect(getAdminSections().length).toBeGreaterThan(0);
+  });
 
   it('only returns sections with visibility.admin=true', () => {
-    const sections = getAdminSections()
+    const sections = getAdminSections();
 
     for (const s of sections) {
-      expect(s.visibility.admin).toBe(true)
+      expect(s.visibility.admin).toBe(true);
     }
-  })
+  });
 
   it('sections are sorted by priority (ascending)', () => {
-    const sections = getAdminSections()
+    const sections = getAdminSections();
 
     for (let i = 1; i < sections.length; i++) {
-      expect(sections[i].priority).toBeGreaterThanOrEqual(sections[i - 1].priority)
+      expect(sections[i].priority).toBeGreaterThanOrEqual(sections[i - 1].priority);
     }
-  })
+  });
 
   it('includes the dashboard section', () => {
-    const sections = getAdminSections()
-    const ids = sections.map(s => s.id)
+    const sections = getAdminSections();
+    const ids = sections.map((s) => s.id);
 
-    expect(ids).toContain('dashboard')
-  })
-})
+    expect(ids).toContain('dashboard');
+  });
+});
 
 // ============================================================================
 // getDashboardSections
@@ -102,17 +102,17 @@ describe('getAdminSections', () => {
 
 describe('getDashboardSections', () => {
   it('only returns sections with visibility.dashboard=true', () => {
-    const sections = getDashboardSections()
+    const sections = getDashboardSections();
 
     for (const s of sections) {
-      expect(s.visibility.dashboard).toBe(true)
+      expect(s.visibility.dashboard).toBe(true);
     }
-  })
+  });
 
   it('returns at least one section', () => {
-    expect(getDashboardSections().length).toBeGreaterThan(0)
-  })
-})
+    expect(getDashboardSections().length).toBeGreaterThan(0);
+  });
+});
 
 // ============================================================================
 // getSection
@@ -120,25 +120,25 @@ describe('getDashboardSections', () => {
 
 describe('getSection', () => {
   it('returns section for known ID', () => {
-    const section = getSection('dashboard')
+    const section = getSection('dashboard');
 
-    expect(section).toBeDefined()
-    expect(section!.id).toBe('dashboard')
-  })
+    expect(section).toBeDefined();
+    expect(section!.id).toBe('dashboard');
+  });
 
   it('returns undefined for unknown ID', () => {
-    expect(getSection('does-not-exist')).toBeUndefined()
-  })
+    expect(getSection('does-not-exist')).toBeUndefined();
+  });
 
   it('returns section with expected fields', () => {
-    const section = getSection('dashboard')
+    const section = getSection('dashboard');
 
-    expect(section).toBeDefined()
-    expect(section!.ui.label).toBeTruthy()
-    expect(section!.path).toMatch(/^\//)
-    expect(section!.priority).toBeGreaterThanOrEqual(0)
-  })
-})
+    expect(section).toBeDefined();
+    expect(section!.ui.label).toBeTruthy();
+    expect(section!.path).toMatch(/^\//);
+    expect(section!.priority).toBeGreaterThanOrEqual(0);
+  });
+});
 
 // ============================================================================
 // isSensitiveSection
@@ -146,28 +146,30 @@ describe('getSection', () => {
 
 describe('isSensitiveSection', () => {
   it('returns true for known sensitive sections', () => {
-    expect(isSensitiveSection('users')).toBe(true)
-    expect(isSensitiveSection('hirn')).toBe(true)
-    expect(isSensitiveSection('settings')).toBe(true)
-  })
+    expect(isSensitiveSection('users')).toBe(true);
+    expect(isSensitiveSection('hirn')).toBe(true);
+    expect(isSensitiveSection('settings')).toBe(true);
+  });
 
   it('returns false for non-sensitive sections', () => {
-    expect(isSensitiveSection('dashboard')).toBe(false)
-    expect(isSensitiveSection('products')).toBe(false)
-  })
+    expect(isSensitiveSection('dashboard')).toBe(false);
+    expect(isSensitiveSection('products')).toBe(false);
+  });
 
   it('returns false for unknown section ID', () => {
-    expect(isSensitiveSection('nonexistent')).toBe(false)
-  })
+    expect(isSensitiveSection('nonexistent')).toBe(false);
+  });
 
   it('sensitive sections have visibility.sensitive=true in SECTIONS', () => {
     // Cross-verify: every section flagged as sensitive should be in SECTIONS
     for (const id of SENSITIVE_SECTION_IDS) {
-      expect('sensitive' in SECTIONS[id].visibility && SECTIONS[id].visibility.sensitive).toBe(true)
-      expect(isSensitiveSection(id)).toBe(true)
+      expect('sensitive' in SECTIONS[id].visibility && SECTIONS[id].visibility.sensitive).toBe(
+        true,
+      );
+      expect(isSensitiveSection(id)).toBe(true);
     }
-  })
-})
+  });
+});
 
 // ============================================================================
 // getSensitivityReason
@@ -175,21 +177,21 @@ describe('isSensitiveSection', () => {
 
 describe('getSensitivityReason', () => {
   it('returns a string for users section', () => {
-    expect(typeof getSensitivityReason('users')).toBe('string')
-  })
+    expect(typeof getSensitivityReason('users')).toBe('string');
+  });
 
   it('returns a string for hirn section', () => {
-    expect(typeof getSensitivityReason('hirn')).toBe('string')
-  })
+    expect(typeof getSensitivityReason('hirn')).toBe('string');
+  });
 
   it('returns undefined for unknown section', () => {
-    expect(getSensitivityReason('unknown-section')).toBeUndefined()
-  })
+    expect(getSensitivityReason('unknown-section')).toBeUndefined();
+  });
 
   it('returns undefined for non-sensitive sections', () => {
-    expect(getSensitivityReason('products')).toBeUndefined()
-  })
-})
+    expect(getSensitivityReason('products')).toBeUndefined();
+  });
+});
 
 // ============================================================================
 // getSectionsByCategory
@@ -197,27 +199,27 @@ describe('getSensitivityReason', () => {
 
 describe('getSectionsByCategory', () => {
   it('returns sections matching the given category', () => {
-    const result = getSectionsByCategory('management')
+    const result = getSectionsByCategory('management');
 
     for (const s of result) {
-      expect(s.category).toBe('management')
+      expect(s.category).toBe('management');
     }
-  })
+  });
 
   it('returns results sorted by priority', () => {
-    const result = getSectionsByCategory('management')
+    const result = getSectionsByCategory('management');
 
     for (let i = 1; i < result.length; i++) {
-      expect(result[i].priority).toBeGreaterThanOrEqual(result[i - 1].priority)
+      expect(result[i].priority).toBeGreaterThanOrEqual(result[i - 1].priority);
     }
-  })
+  });
 
   it('returns empty array for category with no sections', () => {
     // 'ai' category might have sections but we test the return type is always an array
-    const result = getSectionsByCategory('ai' as Parameters<typeof getSectionsByCategory>[0])
-    expect(Array.isArray(result)).toBe(true)
-  })
-})
+    const result = getSectionsByCategory('ai' as Parameters<typeof getSectionsByCategory>[0]);
+    expect(Array.isArray(result)).toBe(true);
+  });
+});
 
 // ============================================================================
 // getSidebarGroupsWithSections
@@ -225,34 +227,36 @@ describe('getSectionsByCategory', () => {
 
 describe('getSidebarGroupsWithSections', () => {
   it('returns at least one group', () => {
-    expect(getSidebarGroupsWithSections().length).toBeGreaterThan(0)
-  })
+    expect(getSidebarGroupsWithSections().length).toBeGreaterThan(0);
+  });
 
   it('every returned group has at least one section', () => {
-    const groups = getSidebarGroupsWithSections()
+    const groups = getSidebarGroupsWithSections();
 
     for (const g of groups) {
-      expect(g.sections.length).toBeGreaterThan(0)
+      expect(g.sections.length).toBeGreaterThan(0);
     }
-  })
+  });
 
   it('each group has a group and sections property', () => {
-    const groups = getSidebarGroupsWithSections()
+    const groups = getSidebarGroupsWithSections();
 
     for (const g of groups) {
-      expect(g.group).toBeDefined()
-      expect(Array.isArray(g.sections)).toBe(true)
+      expect(g.group).toBeDefined();
+      expect(Array.isArray(g.sections)).toBe(true);
     }
-  })
+  });
 
   it('shows one device-workflow home instead of a competing capture destination', () => {
-    const ids = getSidebarGroupsWithSections().flatMap(group => group.sections.map(section => section.id))
-    expect(ids).toContain('intake')
-    expect(ids).not.toContain('erfassung')
+    const ids = getSidebarGroupsWithSections().flatMap((group) =>
+      group.sections.map((section) => section.id),
+    );
+    expect(ids).toContain('intake');
+    expect(ids).not.toContain('erfassung');
     // The advanced route remains an admin permission key.
-    expect(SECTIONS.erfassung.visibility.admin).toBe(true)
-  })
-})
+    expect(SECTIONS.erfassung.visibility.admin).toBe(true);
+  });
+});
 
 // ============================================================================
 // getHirnSection
@@ -260,9 +264,9 @@ describe('getSidebarGroupsWithSections', () => {
 
 describe('getHirnSection', () => {
   it('returns the hirn section (not undefined)', () => {
-    const hirn = getHirnSection()
+    const hirn = getHirnSection();
 
-    expect(hirn).toBeDefined()
-    expect(hirn!.id).toBe('hirn')
-  })
-})
+    expect(hirn).toBeDefined();
+    expect(hirn!.id).toBe('hirn');
+  });
+});

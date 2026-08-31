@@ -1,32 +1,31 @@
-'use client'
+'use client';
 
-import { TrendingUp, TrendingDown, Minus, AlertCircle, Info } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
-import type { MetricDefinition } from '@/config/analyse/metrics'
-import { formatCHF, formatPercent, formatNumber } from '@/lib/hirn/format'
+import { TrendingUp, TrendingDown, Minus, AlertCircle, Info } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import type { MetricDefinition } from '@/config/analyse/metrics';
+import { formatCHF, formatPercent, formatNumber } from '@/lib/hirn/format';
 
 interface KPICardProps {
-  metric: MetricDefinition
-  value?: number | string
-  previousValue?: number
-  showTrend?: boolean
-  formatValue?: (value: number) => string
+  metric: MetricDefinition;
+  value?: number | string;
+  previousValue?: number;
+  showTrend?: boolean;
+  formatValue?: (value: number) => string;
 }
 
 function formatDefaultValue(value: number, unit: string): string {
-  if (unit === 'CHF') return formatCHF(value)
-  if (unit === '%') return formatPercent(value)
-  if (value >= 1000) return formatNumber(value)
-  return String(value)
+  if (unit === 'CHF') return formatCHF(value);
+  if (unit === '%') return formatPercent(value);
+  if (value >= 1000) return formatNumber(value);
+  return String(value);
 }
 
 function TrendIndicator({ current, previous }: { current: number; previous: number }) {
-  const percentChange = previous !== 0
-    ? ((current - previous) / previous) * 100
-    : current > 0 ? 100 : 0
+  const percentChange =
+    previous !== 0 ? ((current - previous) / previous) * 100 : current > 0 ? 100 : 0;
 
-  const isUp = percentChange > 5
-  const isDown = percentChange < -5
+  const isUp = percentChange > 5;
+  const isDown = percentChange < -5;
 
   if (isUp) {
     return (
@@ -34,7 +33,7 @@ function TrendIndicator({ current, previous }: { current: number; previous: numb
         <TrendingUp className="w-4 h-4" />
         <span className="text-sm font-medium">+{percentChange.toFixed(1)}%</span>
       </div>
-    )
+    );
   }
 
   if (isDown) {
@@ -43,7 +42,7 @@ function TrendIndicator({ current, previous }: { current: number; previous: numb
         <TrendingDown className="w-4 h-4" />
         <span className="text-sm font-medium">{percentChange.toFixed(1)}%</span>
       </div>
-    )
+    );
   }
 
   return (
@@ -51,7 +50,7 @@ function TrendIndicator({ current, previous }: { current: number; previous: numb
       <Minus className="w-4 h-4" />
       <span className="text-sm">stabil</span>
     </div>
-  )
+  );
 }
 
 /**
@@ -64,14 +63,16 @@ export function KPICard({
   showTrend = true,
   formatValue,
 }: KPICardProps) {
-  const needsData = metric.status === 'needs_data' && value === undefined
-  const numericValue = typeof value === 'number' ? value : undefined
+  const needsData = metric.status === 'needs_data' && value === undefined;
+  const numericValue = typeof value === 'number' ? value : undefined;
 
   const displayValue = needsData
     ? '[TBD]'
     : numericValue !== undefined
-      ? (formatValue ? formatValue(numericValue) : formatDefaultValue(numericValue, metric.unit))
-      : String(value ?? '—')
+      ? formatValue
+        ? formatValue(numericValue)
+        : formatDefaultValue(numericValue, metric.unit)
+      : String(value ?? '—');
 
   return (
     <Card className="relative group">
@@ -111,15 +112,18 @@ export function KPICard({
         )}
 
         {metric.target && (
-          <div className="mt-2 text-xs text-muted-foreground">
-            Ziel: {metric.target}
-          </div>
+          <div className="mt-2 text-xs text-muted-foreground">Ziel: {metric.target}</div>
         )}
 
         <div className="mt-2 text-xs text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity">
-          Quelle: {metric.source === 'kivitendo' ? 'Kivitendo' : metric.source === 'calculated' ? 'Berechnet' : 'Manuell'}
+          Quelle:{' '}
+          {metric.source === 'kivitendo'
+            ? 'Kivitendo'
+            : metric.source === 'calculated'
+              ? 'Berechnet'
+              : 'Manuell'}
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

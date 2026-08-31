@@ -19,53 +19,53 @@
 // ---------------------------------------------------------------------------
 
 function makeChain(result: unknown = undefined) {
-  const resolved = Promise.resolve(result)
-  const chain: Record<string, unknown> = {}
-  chain.update = jest.fn().mockReturnValue(chain)
-  chain.set = jest.fn().mockReturnValue(chain)
-  chain.where = jest.fn().mockReturnValue(chain)
-  chain.then = (resolved as Promise<unknown>).then.bind(resolved)
-  chain.catch = (resolved as Promise<unknown>).catch.bind(resolved)
-  chain.finally = (resolved as Promise<unknown>).finally.bind(resolved)
-  return chain
+  const resolved = Promise.resolve(result);
+  const chain: Record<string, unknown> = {};
+  chain.update = jest.fn().mockReturnValue(chain);
+  chain.set = jest.fn().mockReturnValue(chain);
+  chain.where = jest.fn().mockReturnValue(chain);
+  chain.then = (resolved as Promise<unknown>).then.bind(resolved);
+  chain.catch = (resolved as Promise<unknown>).catch.bind(resolved);
+  chain.finally = (resolved as Promise<unknown>).finally.bind(resolved);
+  return chain;
 }
 
 // ---------------------------------------------------------------------------
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbUpdate = jest.fn(() => makeChain())
+const mockDbUpdate = jest.fn(() => makeChain());
 
 jest.mock('@/db', () => ({
   db: {
     update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
   },
-}))
+}));
 
 jest.mock('@/db/schema/inventory', () => ({
   inventoryItems: {
-    id: 'ii_id', intakeEvents: 'ii_intakeEvents',
+    id: 'ii_id',
+    intakeEvents: 'ii_intakeEvents',
   },
-}))
+}));
 
 jest.mock('drizzle-orm', () => ({
   ...jest.requireActual('drizzle-orm'),
   eq: jest.fn().mockReturnValue({ __eq: true }),
-  sql: Object.assign(
-    jest.fn().mockReturnValue({ __sql: 'mocked' }),
-    { raw: jest.fn().mockReturnValue({ __raw: true }) },
-  ),
-}))
+  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'mocked' }), {
+    raw: jest.fn().mockReturnValue({ __raw: true }),
+  }),
+}));
 
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
-}))
+}));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { appendIntakeEvent } from '../timeline'
+import { appendIntakeEvent } from '../timeline';
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -76,12 +76,12 @@ const BASE_EVENT = {
   description: 'Gerät erfasst',
   userId: 'user-1',
   userEmail: 'tech@revamp-it.ch',
-}
+};
 
 beforeEach(() => {
-  jest.clearAllMocks()
-  mockDbUpdate.mockImplementation(() => makeChain())
-})
+  jest.clearAllMocks();
+  mockDbUpdate.mockImplementation(() => makeChain());
+});
 
 // ============================================================================
 // appendIntakeEvent
@@ -89,80 +89,82 @@ beforeEach(() => {
 
 describe('appendIntakeEvent', () => {
   it('calls db.update once', async () => {
-    await appendIntakeEvent('inv-1', BASE_EVENT)
+    await appendIntakeEvent('inv-1', BASE_EVENT);
 
-    expect(mockDbUpdate).toHaveBeenCalledTimes(1)
-  })
+    expect(mockDbUpdate).toHaveBeenCalledTimes(1);
+  });
 
   it('passes the inventory ID to eq for WHERE clause', async () => {
-    const { eq } = jest.requireMock('drizzle-orm') as { eq: jest.Mock }
+    const { eq } = jest.requireMock('drizzle-orm') as { eq: jest.Mock };
 
-    await appendIntakeEvent('inv-abc', BASE_EVENT)
+    await appendIntakeEvent('inv-abc', BASE_EVENT);
 
-    const call = eq.mock.calls.find(([, v]: [unknown, string]) => v === 'inv-abc')
-    expect(call).toBeDefined()
-  })
+    const call = eq.mock.calls.find(([, v]: [unknown, string]) => v === 'inv-abc');
+    expect(call).toBeDefined();
+  });
 
   it('adds ISO timestamp when event has no timestamp', async () => {
-    const { sql } = jest.requireMock('drizzle-orm') as { sql: jest.Mock }
-    const before = new Date().toISOString().slice(0, 10)  // YYYY-MM-DD
+    const { sql } = jest.requireMock('drizzle-orm') as { sql: jest.Mock };
+    const before = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
 
-    await appendIntakeEvent('inv-1', { ...BASE_EVENT, timestamp: undefined })
+    await appendIntakeEvent('inv-1', { ...BASE_EVENT, timestamp: undefined });
 
-    const sqlCall = sql.mock.calls[0]
+    const sqlCall = sql.mock.calls[0];
     // The serialized event JSON is passed to sql — find the one with timestamp
-    const serialized = JSON.stringify(sqlCall).toLowerCase()
-    expect(serialized).toContain(before)
-  })
+    const serialized = JSON.stringify(sqlCall).toLowerCase();
+    expect(serialized).toContain(before);
+  });
 
   it('preserves provided timestamp when present', async () => {
-    const { sql } = jest.requireMock('drizzle-orm') as { sql: jest.Mock }
-    const fixedTs = '2026-01-15T10:00:00.000Z'
+    const { sql } = jest.requireMock('drizzle-orm') as { sql: jest.Mock };
+    const fixedTs = '2026-01-15T10:00:00.000Z';
 
-    await appendIntakeEvent('inv-1', { ...BASE_EVENT, timestamp: fixedTs })
+    await appendIntakeEvent('inv-1', { ...BASE_EVENT, timestamp: fixedTs });
 
-    const sqlCall = JSON.stringify(sql.mock.calls[0])
-    expect(sqlCall).toContain(fixedTs)
-  })
+    const sqlCall = JSON.stringify(sql.mock.calls[0]);
+    expect(sqlCall).toContain(fixedTs);
+  });
 
   it('never throws on DB error (swallows and logs)', async () => {
     mockDbUpdate.mockImplementationOnce(() => {
-      throw new Error('DB connection lost')
-    })
+      throw new Error('DB connection lost');
+    });
 
-    await expect(appendIntakeEvent('inv-1', BASE_EVENT)).resolves.toBeUndefined()
-  })
+    await expect(appendIntakeEvent('inv-1', BASE_EVENT)).resolves.toBeUndefined();
+  });
 
   it('does not throw when DB update rejects', async () => {
     mockDbUpdate.mockImplementationOnce(() => {
-      const chain = makeChain(Promise.reject(new Error('update failed')))
-      return chain
-    })
+      const chain = makeChain(Promise.reject(new Error('update failed')));
+      return chain;
+    });
 
     // Should not throw
-    await expect(appendIntakeEvent('inv-1', BASE_EVENT)).resolves.toBeUndefined()
-  })
+    await expect(appendIntakeEvent('inv-1', BASE_EVENT)).resolves.toBeUndefined();
+  });
 
   it('uses a supplied transaction executor for atomic audit writes', async () => {
-    const update = jest.fn().mockImplementation(() => makeChain())
+    const update = jest.fn().mockImplementation(() => makeChain());
 
     await appendIntakeEvent('inv-1', BASE_EVENT, {
       executor: { update } as never,
       required: true,
-    })
+    });
 
-    expect(update).toHaveBeenCalledTimes(1)
-    expect(mockDbUpdate).not.toHaveBeenCalled()
-  })
+    expect(update).toHaveBeenCalledTimes(1);
+    expect(mockDbUpdate).not.toHaveBeenCalled();
+  });
 
   it('rethrows required audit failures so the caller can roll back', async () => {
     const update = jest.fn(() => {
-      throw new Error('transaction update failed')
-    })
+      throw new Error('transaction update failed');
+    });
 
-    await expect(appendIntakeEvent('inv-1', BASE_EVENT, {
-      executor: { update } as never,
-      required: true,
-    })).rejects.toThrow('transaction update failed')
-  })
-})
+    await expect(
+      appendIntakeEvent('inv-1', BASE_EVENT, {
+        executor: { update } as never,
+        required: true,
+      }),
+    ).rejects.toThrow('transaction update failed');
+  });
+});

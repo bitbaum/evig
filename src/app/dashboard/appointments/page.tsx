@@ -1,79 +1,105 @@
-'use client'
+'use client';
 
-import { Calendar, Clock, Wrench, AlertCircle, CheckCircle, XCircle, ArrowLeft } from 'lucide-react'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { EmptyState } from '@/components/ui/EmptyState'
-import Link from 'next/link'
-import { useTranslations } from 'next-intl'
-import { formatDateTime } from '@/lib/date-formats'
-import { BOOKING_STATUS, getBookingStatusLabel } from '@/config/booking-status'
-import { URGENCY } from '@/config/it-hilfe'
-import { Modal } from '@/components/ui/Modal'
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { FormField } from '@/components/ui/form-field'
-import { PaymentReturnBanner } from '@/components/payments/PaymentReturnBanner'
-import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
-import { useAppointments, type ServiceAppointment } from '@/hooks/useAppointments'
+import {
+  Calendar,
+  Clock,
+  Wrench,
+  AlertCircle,
+  CheckCircle,
+  XCircle,
+  ArrowLeft,
+} from 'lucide-react';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { EmptyState } from '@/components/ui/EmptyState';
+import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { formatDateTime } from '@/lib/date-formats';
+import { BOOKING_STATUS, getBookingStatusLabel } from '@/config/booking-status';
+import { URGENCY } from '@/config/it-hilfe';
+import { Modal } from '@/components/ui/Modal';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { FormField } from '@/components/ui/form-field';
+import { PaymentReturnBanner } from '@/components/payments/PaymentReturnBanner';
+import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments';
+import { useAppointments, type ServiceAppointment } from '@/hooks/useAppointments';
 
 function getStatusIcon(status: string) {
   switch (status) {
     case BOOKING_STATUS.COMPLETED:
-      return <CheckCircle className="w-5 h-5 text-action" />
+      return <CheckCircle className="w-5 h-5 text-action" />;
     case BOOKING_STATUS.IN_PROGRESS:
     case BOOKING_STATUS.ACCEPTED:
     case BOOKING_STATUS.QUOTE_APPROVED:
-      return <CheckCircle className="w-5 h-5 text-success-600" />
+      return <CheckCircle className="w-5 h-5 text-success-600" />;
     case BOOKING_STATUS.QUOTED:
-      return <AlertCircle className="w-5 h-5 text-warning-600" />
+      return <AlertCircle className="w-5 h-5 text-warning-600" />;
     case BOOKING_STATUS.CANCELLED:
     case BOOKING_STATUS.REJECTED:
-      return <XCircle className="w-5 h-5 text-error-600" />
+      return <XCircle className="w-5 h-5 text-error-600" />;
     default:
-      return <AlertCircle className="w-5 h-5 text-warning-600" />
+      return <AlertCircle className="w-5 h-5 text-warning-600" />;
   }
 }
 
 function getUrgencyColor(urgency: string) {
   switch (urgency) {
     case URGENCY.URGENT:
-    case URGENCY.HIGH: return 'text-error-700 dark:text-error-400 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30'
-    case URGENCY.NORMAL: return 'text-warning-700 dark:text-warning-400 bg-warning-50 border border-warning-200'
-    case URGENCY.LOW: return 'text-success-700 bg-success-50 border border-success-200'
-    default: return 'text-text-secondary bg-surface-raised border border'
+    case URGENCY.HIGH:
+      return 'text-error-700 dark:text-error-400 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30';
+    case URGENCY.NORMAL:
+      return 'text-warning-700 dark:text-warning-400 bg-warning-50 border border-warning-200';
+    case URGENCY.LOW:
+      return 'text-success-700 bg-success-50 border border-success-200';
+    default:
+      return 'text-text-secondary bg-surface-raised border border';
   }
 }
 
 export default function AppointmentsDashboard() {
-  const t = useTranslations('dashboard.appointments')
+  const t = useTranslations('dashboard.appointments');
 
   const {
-    appointments, loading, error,
-    editingId, pendingCancelId, editDescription, editPreferredDate, saving,
+    appointments,
+    loading,
+    error,
+    editingId,
+    pendingCancelId,
+    editDescription,
+    editPreferredDate,
+    saving,
     sessionStatus,
-    setEditingId, setPendingCancelId,
-    setEditDescription, setEditPreferredDate,
-    doCancel, openEdit, saveEdit,
+    setEditingId,
+    setPendingCancelId,
+    setEditDescription,
+    setEditPreferredDate,
+    doCancel,
+    openEdit,
+    saveEdit,
     isRepairerView,
   } = useAppointments({
     loadError: t('loadError'),
     cancelFailed: t('cancelFailed'),
     saveError: t('saveError'),
-  })
+  });
 
   function getStatusText(status: string) {
-    return getBookingStatusLabel(status)
+    return getBookingStatusLabel(status);
   }
 
   function getUrgencyLabel(urgency: string) {
     switch (urgency) {
-      case URGENCY.URGENT: return t('urgencyUrgent')
-      case URGENCY.HIGH: return t('urgencyHigh')
-      case URGENCY.NORMAL: return t('urgencyNormal')
-      default: return t('urgencyLow')
+      case URGENCY.URGENT:
+        return t('urgencyUrgent');
+      case URGENCY.HIGH:
+        return t('urgencyHigh');
+      case URGENCY.NORMAL:
+        return t('urgencyNormal');
+      default:
+        return t('urgencyLow');
     }
   }
 
@@ -93,7 +119,7 @@ export default function AppointmentsDashboard() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -107,15 +133,16 @@ export default function AppointmentsDashboard() {
             <ArrowLeft className="mr-1.5 h-3 w-3" />
             {t('backToDashboard')}
           </Link>
-          <Eyebrow>
-            {isRepairerView ? t('pageSubtitleRepairer') : t('pageSubtitle')}
-          </Eyebrow>
+          <Eyebrow>{isRepairerView ? t('pageSubtitleRepairer') : t('pageSubtitle')}</Eyebrow>
           <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
             {t('pageTitle')}
           </Heading>
         </div>
 
-        <PaymentReturnBanner namespace="dashboard.appointments" cleanPath={SERVICE_APPOINTMENT_ROUTES.list} />
+        <PaymentReturnBanner
+          namespace="dashboard.appointments"
+          cleanPath={SERVICE_APPOINTMENT_ROUTES.list}
+        />
 
         {error && (
           <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 rounded-lg p-4 mb-6">
@@ -133,7 +160,10 @@ export default function AppointmentsDashboard() {
                       <Wrench className="w-5 h-5 sm:w-6 sm:h-6 text-text-secondary" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <Heading level={3} className="text-lg sm:text-xl font-semibold text-text-primary mb-2">
+                      <Heading
+                        level={3}
+                        className="text-lg sm:text-xl font-semibold text-text-primary mb-2"
+                      >
                         {appointment.service_name}
                       </Heading>
                       <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-text-secondary mb-3">
@@ -146,12 +176,16 @@ export default function AppointmentsDashboard() {
                           <span className="hidden sm:inline">{t('requestedOn')} </span>
                           <span>{formatDateTime(appointment.created_at)}</span>
                         </div>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getUrgencyColor(appointment.urgency)}`}>
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs font-medium ${getUrgencyColor(appointment.urgency)}`}
+                        >
                           {getUrgencyLabel(appointment.urgency)}
                         </span>
                       </div>
                       {appointment.description && (
-                        <p className="text-text-secondary mb-3 text-sm sm:text-base">{appointment.description}</p>
+                        <p className="text-text-secondary mb-3 text-sm sm:text-base">
+                          {appointment.description}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -161,20 +195,28 @@ export default function AppointmentsDashboard() {
                   <div className="bg-warning-50 dark:bg-warning-500/10 border-2 border-warning-200 dark:border-warning-500/30 rounded-lg p-3 sm:p-4">
                     <div className="flex items-center text-warning-800 dark:text-warning-300">
                       <AlertCircle className="w-5 h-5 mr-2 shrink-0" />
-                      <span className="font-medium text-sm sm:text-base">{t('requestedTitle')}</span>
+                      <span className="font-medium text-sm sm:text-base">
+                        {t('requestedTitle')}
+                      </span>
                     </div>
-                    <p className="text-warning-700 dark:text-warning-400 text-xs sm:text-sm mt-1 ml-7">{t('requestedDesc')}</p>
+                    <p className="text-warning-700 dark:text-warning-400 text-xs sm:text-sm mt-1 ml-7">
+                      {t('requestedDesc')}
+                    </p>
                   </div>
                 )}
 
-                {(appointment.status === BOOKING_STATUS.ACCEPTED
-                  || appointment.status === BOOKING_STATUS.QUOTE_APPROVED) && (
+                {(appointment.status === BOOKING_STATUS.ACCEPTED ||
+                  appointment.status === BOOKING_STATUS.QUOTE_APPROVED) && (
                   <div className="bg-success-50 dark:bg-success-500/10 border-2 border-success-200 dark:border-success-500/30 rounded-lg p-3 sm:p-4">
                     <div className="flex items-center text-success-800 dark:text-success-300">
                       <CheckCircle className="w-5 h-5 mr-2 shrink-0" />
-                      <span className="font-medium text-sm sm:text-base">{t('confirmedTitle')}</span>
+                      <span className="font-medium text-sm sm:text-base">
+                        {t('confirmedTitle')}
+                      </span>
                     </div>
-                    <p className="text-success-700 dark:text-success-400 text-xs sm:text-sm mt-1 ml-7">{t('confirmedDesc')}</p>
+                    <p className="text-success-700 dark:text-success-400 text-xs sm:text-sm mt-1 ml-7">
+                      {t('confirmedDesc')}
+                    </p>
                   </div>
                 )}
 
@@ -182,9 +224,13 @@ export default function AppointmentsDashboard() {
                   <div className="bg-warning-50 dark:bg-warning-500/10 border-2 border-warning-200 dark:border-warning-500/30 rounded-lg p-3 sm:p-4">
                     <div className="flex items-center text-warning-800 dark:text-warning-300">
                       <AlertCircle className="w-5 h-5 mr-2 shrink-0" />
-                      <span className="font-medium text-sm sm:text-base">{t('statusRequested')}</span>
+                      <span className="font-medium text-sm sm:text-base">
+                        {t('statusRequested')}
+                      </span>
                     </div>
-                    <p className="text-warning-700 dark:text-warning-400 text-xs sm:text-sm mt-1 ml-7">{t('confirmedDesc')}</p>
+                    <p className="text-warning-700 dark:text-warning-400 text-xs sm:text-sm mt-1 ml-7">
+                      {t('confirmedDesc')}
+                    </p>
                   </div>
                 )}
 
@@ -192,7 +238,9 @@ export default function AppointmentsDashboard() {
                   <div className="bg-action-muted/10 border border-subtle dark:border-action/30 rounded-lg p-3 sm:p-4">
                     <div className="flex items-center text-action">
                       <Clock className="w-5 h-5 mr-2 shrink-0" />
-                      <span className="font-medium text-sm sm:text-base">{t('statusInProgress')}</span>
+                      <span className="font-medium text-sm sm:text-base">
+                        {t('statusInProgress')}
+                      </span>
                     </div>
                   </div>
                 )}
@@ -201,10 +249,14 @@ export default function AppointmentsDashboard() {
                   <div className="bg-action-muted/10 border border-subtle dark:border-action/30 rounded-lg p-3 sm:p-4">
                     <div className="flex items-center text-action">
                       <CheckCircle className="w-5 h-5 mr-2 shrink-0" />
-                      <span className="font-medium text-sm sm:text-base">{t('completedTitle')}</span>
+                      <span className="font-medium text-sm sm:text-base">
+                        {t('completedTitle')}
+                      </span>
                     </div>
                     {appointment.outcome_notes && (
-                      <p className="text-action text-xs sm:text-sm mt-1 ml-7">{appointment.outcome_notes}</p>
+                      <p className="text-action text-xs sm:text-sm mt-1 ml-7">
+                        {appointment.outcome_notes}
+                      </p>
                     )}
                   </div>
                 )}
@@ -213,13 +265,20 @@ export default function AppointmentsDashboard() {
                   <div className="bg-error-50 dark:bg-error-500/10 border-2 border-error-200 dark:border-error-500/30 rounded-lg p-3 sm:p-4">
                     <div className="flex items-center text-error-800 dark:text-error-300">
                       <XCircle className="w-5 h-5 mr-2 shrink-0" />
-                      <span className="font-medium text-sm sm:text-base">{t('cancelledTitle')}</span>
+                      <span className="font-medium text-sm sm:text-base">
+                        {t('cancelledTitle')}
+                      </span>
                     </div>
                   </div>
                 )}
 
                 <div className="mt-4 flex flex-wrap gap-3">
-                  <Button as={Link} href={SERVICE_APPOINTMENT_ROUTES.detail(appointment.id)} variant="primary" size="sm">
+                  <Button
+                    as={Link}
+                    href={SERVICE_APPOINTMENT_ROUTES.detail(appointment.id)}
+                    variant="primary"
+                    size="sm"
+                  >
                     {t('viewDetails')}
                   </Button>
                   {appointment.status !== BOOKING_STATUS.CANCELLED && (
@@ -232,11 +291,7 @@ export default function AppointmentsDashboard() {
                         {t('cancelButton')}
                       </Button>
                       {appointment.status === BOOKING_STATUS.REQUESTED && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => openEdit(appointment)}
-                        >
+                        <Button variant="outline" size="sm" onClick={() => openEdit(appointment)}>
                           {t('editButton')}
                         </Button>
                       )}
@@ -296,10 +351,12 @@ export default function AppointmentsDashboard() {
         isOpen={!!pendingCancelId}
         title={t('cancelButton')}
         message={t('confirmCancel')}
-        itemName={appointments.find((a: ServiceAppointment) => a.id === pendingCancelId)?.service_name}
+        itemName={
+          appointments.find((a: ServiceAppointment) => a.id === pendingCancelId)?.service_name
+        }
         onConfirm={doCancel}
         onClose={() => setPendingCancelId(null)}
       />
     </div>
-  )
+  );
 }

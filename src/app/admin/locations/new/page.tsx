@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import Heading from '@/components/admin/AdminHeading'
-import { Button } from '@/components/ui/button'
-import { IconBadge } from '@/components/ui/IconBadge'
-import { MapPin, ArrowLeft, Save, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
-import { ROUTES } from '@/config/routes'
+import Link from 'next/link';
+import Heading from '@/components/admin/AdminHeading';
+import { Button } from '@/components/ui/button';
+import { IconBadge } from '@/components/ui/IconBadge';
+import { MapPin, ArrowLeft, Save, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
+import { ROUTES } from '@/config/routes';
 import {
   useLocationForm,
   LocationBasicInfoSection,
@@ -13,7 +13,7 @@ import {
   LocationFacilitiesSection,
   LocationAccessibilitySection,
   LocationContactSection,
-} from '@/components/admin/locations/location-form'
+} from '@/components/admin/locations/location-form';
 
 export default function NewLocationPage() {
   const {
@@ -24,7 +24,7 @@ export default function NewLocationPage() {
     handleFacilityChange,
     handleAccessibilityChange,
     handleSubmit,
-  } = useLocationForm()
+  } = useLocationForm();
 
   return (
     <div className="min-h-screen bg-surface-raised py-8">
@@ -54,10 +54,11 @@ export default function NewLocationPage() {
           <div
             id={submitResult.success ? undefined : 'location-form-error'}
             className={`mb-8 p-6 rounded-xl border ${
-            submitResult.success
-              ? 'bg-action-muted border-strong text-action'
-              : 'bg-error-50 dark:bg-error-900/20 border-error-200 dark:border-error-800 text-error-800 dark:text-error-400'
-          }`}>
+              submitResult.success
+                ? 'bg-action-muted border-strong text-action'
+                : 'bg-error-50 dark:bg-error-900/20 border-error-200 dark:border-error-800 text-error-800 dark:text-error-400'
+            }`}
+          >
             <div className="flex items-center">
               {submitResult.success ? (
                 <CheckCircle className="w-6 h-6 mr-3" />
@@ -75,19 +76,26 @@ export default function NewLocationPage() {
         )}
 
         <form onSubmit={handleSubmit} className="card-shell p-8">
-          <LocationBasicInfoSection formData={formData} submitResult={submitResult} onFieldChange={handleFieldChange} />
+          <LocationBasicInfoSection
+            formData={formData}
+            submitResult={submitResult}
+            onFieldChange={handleFieldChange}
+          />
           <LocationAddressSection formData={formData} onFieldChange={handleFieldChange} />
-          <LocationFacilitiesSection formData={formData} onFieldChange={handleFieldChange} onFacilityChange={handleFacilityChange} />
-          <LocationAccessibilitySection formData={formData} onAccessibilityChange={handleAccessibilityChange} />
+          <LocationFacilitiesSection
+            formData={formData}
+            onFieldChange={handleFieldChange}
+            onFacilityChange={handleFacilityChange}
+          />
+          <LocationAccessibilitySection
+            formData={formData}
+            onAccessibilityChange={handleAccessibilityChange}
+          />
           <LocationContactSection formData={formData} onFieldChange={handleFieldChange} />
 
           {/* Submit Button */}
           <div className="text-center">
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              variant="primary"
-            >
+            <Button type="submit" disabled={isSubmitting} variant="primary">
               {isSubmitting ? (
                 <>
                   <Loader2 className="w-5 h-5 mr-2 animate-spin" />
@@ -102,11 +110,12 @@ export default function NewLocationPage() {
             </Button>
 
             <p className="text-sm text-text-secondary mt-4">
-              Nach Erstellung wird der Ort zur Genehmigung eingereicht und muss von einem Administrator freigegeben werden.
+              Nach Erstellung wird der Ort zur Genehmigung eingereicht und muss von einem
+              Administrator freigegeben werden.
             </p>
           </div>
         </form>
       </div>
     </div>
-  )
+  );
 }

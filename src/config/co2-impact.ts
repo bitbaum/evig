@@ -30,9 +30,9 @@
 
 /** Citable source attached to every factor. */
 export interface Co2Source {
-  name: string
-  url: string
-  year: number
+  name: string;
+  url: string;
+  year: number;
 }
 
 export const CO2_SOURCES = {
@@ -56,7 +56,7 @@ export const CO2_SOURCES = {
     url: 'https://www.refurbed.ch/sustainability/',
     year: 2024,
   },
-} as const satisfies Record<string, Co2Source>
+} as const satisfies Record<string, Co2Source>;
 
 /**
  * Refurbishment overhead deducted from the avoided new-device production:
@@ -66,19 +66,19 @@ export const CO2_SOURCES = {
  * shipping; we deduct 15% — conservative for RevampIT's local,
  * low-transport operation in Zürich.
  */
-export const REFURB_OVERHEAD_SHARE = 0.15
+export const REFURB_OVERHEAD_SHARE = 0.15;
 
 /** Per-category factor — every field required, every entry citable. */
 export interface Co2CategoryFactor {
   /** kg CO₂e, FULL life cycle of an average comparable new device (ADEME). */
-  newDeviceLifecycleKg: number
+  newDeviceLifecycleKg: number;
   /** kg CO₂e, production + distribution phases only (ADEME phase split). */
-  newDeviceProductionKg: number
+  newDeviceProductionKg: number;
   /** Which ADEME dataset entry the numbers come from. */
-  ademeItem: string
-  source: Co2Source
+  ademeItem: string;
+  source: Co2Source;
   /** Set when the mapping needs an explicit judgment call. */
-  note?: string
+  note?: string;
 }
 
 const LAPTOP: Co2CategoryFactor = {
@@ -86,7 +86,7 @@ const LAPTOP: Co2CategoryFactor = {
   newDeviceProductionKg: 182.3,
   ademeItem: 'Ordinateur portable',
   source: CO2_SOURCES.ademe,
-}
+};
 
 const DESKTOP: Co2CategoryFactor = {
   newDeviceLifecycleKg: 259.2,
@@ -95,7 +95,7 @@ const DESKTOP: Co2CategoryFactor = {
   source: CO2_SOURCES.ademe,
   // ADEME lists 300 kg for consumer desktops — we use the LOWER
   // professional value for every desktop class (conservative).
-}
+};
 
 /**
  * CO₂ factors by KATEGORIEN code (config/erfassung/categories.ts).
@@ -157,16 +157,16 @@ export const CATEGORY_CO2_FACTORS: Record<string, Co2CategoryFactor> = {
   // '60' Drucker & Scanner, '70' Komponenten, '80' Peripherie:
   // intentionally no factor — no open per-category LCA we can stand
   // behind. No claim beats a guess.
-}
+};
 
 /**
  * Average weight (kg) for a generic IT device when no category data is
  * available. Used ONLY for e-waste tonnage estimates — never for CO₂.
  */
-export const AVG_DEVICE_WEIGHT_KG = 2.5
+export const AVG_DEVICE_WEIGHT_KG = 2.5;
 
 /** Fallback weight (kg) for listings with unknown category (≈ laptop). */
-export const FALLBACK_DEVICE_WEIGHT_KG = 2.0
+export const FALLBACK_DEVICE_WEIGHT_KG = 2.0;
 
 /**
  * Default weight estimates (kg) by category — e-waste tonnage only.
@@ -174,24 +174,36 @@ export const FALLBACK_DEVICE_WEIGHT_KG = 2.0
  * indefensible numbers like 340 kg for a printer; removed 2026-07).
  */
 export const CATEGORY_WEIGHT_KG: Record<string, number> = {
-  '10': 2.0,   // Laptops
-  '20': 8.0,   // Desktop PCs
-  '30': 5.0,   // Monitore
-  '40': 0.5,   // Tablets
-  '50': 0.2,   // Smartphones
-  '60': 6.0,   // Drucker & Scanner
-  '70': 0.5,   // Komponenten (avg)
-  '80': 0.3,   // Peripherie (avg)
-  '90': 1.0,   // Netzwerk
-  '101': 2.0, '102': 1.8, '103': 2.5, '104': 1.2, '105': 1.5,
-  '201': 7.0, '202': 12.0, '203': 15.0, '204': 1.5,
-  '701': 1.0, '702': 0.05, '703': 0.1, '704': 0.05,
-  '801': 0.5, '802': 0.1, '805': 0.3,
-}
+  '10': 2.0, // Laptops
+  '20': 8.0, // Desktop PCs
+  '30': 5.0, // Monitore
+  '40': 0.5, // Tablets
+  '50': 0.2, // Smartphones
+  '60': 6.0, // Drucker & Scanner
+  '70': 0.5, // Komponenten (avg)
+  '80': 0.3, // Peripherie (avg)
+  '90': 1.0, // Netzwerk
+  '101': 2.0,
+  '102': 1.8,
+  '103': 2.5,
+  '104': 1.2,
+  '105': 1.5,
+  '201': 7.0,
+  '202': 12.0,
+  '203': 15.0,
+  '204': 1.5,
+  '701': 1.0,
+  '702': 0.05,
+  '703': 0.1,
+  '704': 0.05,
+  '801': 0.5,
+  '802': 0.1,
+  '805': 0.3,
+};
 
 /** Conservative rounding: DOWN to the nearest 5 kg. */
 function floorTo5(kg: number): number {
-  return Math.floor(kg / 5) * 5
+  return Math.floor(kg / 5) * 5;
 }
 
 /**
@@ -205,14 +217,14 @@ function floorTo5(kg: number): number {
  * consumes the same electricity as a new one).
  */
 export function estimateCO2Savings(category: string): number | null {
-  const factor = CATEGORY_CO2_FACTORS[category]
-  if (!factor) return null
-  return floorTo5(factor.newDeviceProductionKg * (1 - REFURB_OVERHEAD_SHARE))
+  const factor = CATEGORY_CO2_FACTORS[category];
+  if (!factor) return null;
+  return floorTo5(factor.newDeviceProductionKg * (1 - REFURB_OVERHEAD_SHARE));
 }
 
 /** Which mode produced the estimate — kept for the methodology page. */
 export function estimateCO2Source(category: string): 'direct' | null {
-  return CATEGORY_CO2_FACTORS[category] ? 'direct' : null
+  return CATEGORY_CO2_FACTORS[category] ? 'direct' : null;
 }
 
 /**
@@ -220,6 +232,6 @@ export function estimateCO2Source(category: string): 'direct' | null {
  * Below 1 t the number is shown in kg (rounded down to 10 kg).
  */
 export function co2DisplayValue(kg: number): { value: number; unit: 'kg' | 't' } {
-  if (kg < 1000) return { value: Math.floor(kg / 10) * 10, unit: 'kg' }
-  return { value: Math.round((kg / 1000) * 10) / 10, unit: 't' }
+  if (kg < 1000) return { value: Math.floor(kg / 10) * 10, unit: 'kg' };
+  return { value: Math.round((kg / 1000) * 10) / 10, unit: 't' };
 }

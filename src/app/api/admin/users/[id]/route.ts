@@ -8,17 +8,17 @@
  * Only super admins can access these endpoints.
  */
 
-import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/db'
-import { users, sessions, accounts, userProfiles } from '@/db/schema'
-import { eq, and, ne, sql } from 'drizzle-orm'
-import { withAdmin } from '@/lib/api/middleware'
-import { isSuperAdmin, SUPER_ADMIN_EMAILS } from '@/lib/permissions'
-import { logger } from '@/lib/logger'
-import { logUserDeletion } from '@/lib/auth/audit'
-import { apiSuccess, apiError, apiForbidden, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { validateBody, AdminUpdateUserSchema } from '@/lib/schemas'
+import { NextRequest, NextResponse } from 'next/server';
+import { db } from '@/db';
+import { users, sessions, accounts, userProfiles } from '@/db/schema';
+import { eq, and, ne, sql } from 'drizzle-orm';
+import { withAdmin } from '@/lib/api/middleware';
+import { isSuperAdmin, SUPER_ADMIN_EMAILS } from '@/lib/permissions';
+import { logger } from '@/lib/logger';
+import { logUserDeletion } from '@/lib/auth/audit';
+import { apiSuccess, apiError, apiForbidden, apiNotFound, apiBadRequest } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { validateBody, AdminUpdateUserSchema } from '@/lib/schemas';
 
 /**
  * GET /api/admin/users/[id]
@@ -27,10 +27,10 @@ import { validateBody, AdminUpdateUserSchema } from '@/lib/schemas'
 export const GET = withAdmin<{ id: string }>('users', async (request, session, context) => {
   try {
     if (!isSuperAdmin(session.user.email, session.user.isSuperAdmin)) {
-      return apiForbidden('Nur Super-Admins können Benutzerdetails einsehen')
+      return apiForbidden('Nur Super-Admins können Benutzerdetails einsehen');
     }
 
-    const { id } = context!.params!
+    const { id } = context!.params!;
 
     const rows = await db
       .select({
@@ -47,17 +47,17 @@ export const GET = withAdmin<{ id: string }>('users', async (request, session, c
       })
       .from(users)
       .leftJoin(userProfiles, eq(userProfiles.userId, users.id))
-      .where(eq(users.id, id))
+      .where(eq(users.id, id));
 
     if (rows.length === 0) {
-      return apiNotFound('Benutzer')
+      return apiNotFound('Benutzer');
     }
 
-    return apiSuccess({ user: rows[0] })
+    return apiSuccess({ user: rows[0] });
   } catch (error) {
-    return apiError(error, 'Benutzer konnte nicht geladen werden')
+    return apiError(error, 'Benutzer konnte nicht geladen werden');
   }
-})
+});
 
 /**
  * PATCH /api/admin/users/[id]
@@ -66,23 +66,23 @@ export const GET = withAdmin<{ id: string }>('users', async (request, session, c
 export const PATCH = withAdmin<{ id: string }>('users', async (request, session, context) => {
   try {
     if (!isSuperAdmin(session.user.email, session.user.isSuperAdmin)) {
-      return apiForbidden('Nur Super-Admins können Benutzer bearbeiten')
+      return apiForbidden('Nur Super-Admins können Benutzer bearbeiten');
     }
 
-    const { id } = context!.params!
-    const body = await request.json()
-    const validation = validateBody(AdminUpdateUserSchema, body)
-    if (!validation.success) return validation.error
-    const { name, email, phone, address, is_staff } = validation.data
+    const { id } = context!.params!;
+    const body = await request.json();
+    const validation = validateBody(AdminUpdateUserSchema, body);
+    if (!validation.success) return validation.error;
+    const { name, email, phone, address, is_staff } = validation.data;
 
     // Check if user exists
     const existingRows = await db
       .select({ id: users.id, email: users.email })
       .from(users)
-      .where(eq(users.id, id))
+      .where(eq(users.id, id));
 
     if (existingRows.length === 0) {
-      return apiNotFound('Benutzer')
+      return apiNotFound('Benutzer');
     }
 
     // If changing email, check if new email already exists
@@ -90,18 +90,18 @@ export const PATCH = withAdmin<{ id: string }>('users', async (request, session,
       const emailConflict = await db
         .select({ id: users.id })
         .from(users)
-        .where(and(eq(users.email, email), ne(users.id, id)))
+        .where(and(eq(users.email, email), ne(users.id, id)));
 
       if (emailConflict.length > 0) {
-        return apiBadRequest('E-Mail wird bereits von einem anderen Benutzer verwendet')
+        return apiBadRequest('E-Mail wird bereits von einem anderen Benutzer verwendet');
       }
     }
 
     // Build user table update
-    const userUpdate: Record<string, unknown> = {}
-    if (name !== undefined) userUpdate.name = name
-    if (email !== undefined) userUpdate.email = email
-    if (is_staff !== undefined) userUpdate.isStaff = is_staff
+    const userUpdate: Record<string, unknown> = {};
+    if (name !== undefined) userUpdate.name = name;
+    if (email !== undefined) userUpdate.email = email;
+    if (is_staff !== undefined) userUpdate.isStaff = is_staff;
 
     // Bump tokenVersion if a JWT-relevant field changed. Forces the
     // Auth.js jwt callback to re-fetch permissions on the user's next
@@ -112,23 +112,23 @@ export const PATCH = withAdmin<{ id: string }>('users', async (request, session,
     // a no-op for cosmetic changes (name, email, phone, address)
     // because the token doesn't store those.
     if (is_staff !== undefined) {
-      userUpdate.tokenVersion = sql`${users.tokenVersion} + 1`
+      userUpdate.tokenVersion = sql`${users.tokenVersion} + 1`;
     }
 
     // Build profile table update (phone and address live on user_profiles)
-    const profileUpdate: Record<string, unknown> = {}
-    if (phone !== undefined) profileUpdate.phone = phone
-    if (address !== undefined) profileUpdate.addressLine1 = address
+    const profileUpdate: Record<string, unknown> = {};
+    if (phone !== undefined) profileUpdate.phone = phone;
+    if (address !== undefined) profileUpdate.addressLine1 = address;
 
-    const hasUserUpdate = Object.keys(userUpdate).length > 0
-    const hasProfileUpdate = Object.keys(profileUpdate).length > 0
+    const hasUserUpdate = Object.keys(userUpdate).length > 0;
+    const hasProfileUpdate = Object.keys(profileUpdate).length > 0;
 
     if (!hasUserUpdate && !hasProfileUpdate) {
-      return apiBadRequest(ERROR_MESSAGES.NO_FIELDS_TO_UPDATE)
+      return apiBadRequest(ERROR_MESSAGES.NO_FIELDS_TO_UPDATE);
     }
 
     if (hasUserUpdate) {
-      await db.update(users).set(userUpdate).where(eq(users.id, id))
+      await db.update(users).set(userUpdate).where(eq(users.id, id));
     }
 
     if (hasProfileUpdate) {
@@ -139,20 +139,20 @@ export const PATCH = withAdmin<{ id: string }>('users', async (request, session,
         .onConflictDoUpdate({
           target: userProfiles.userId,
           set: profileUpdate,
-        })
+        });
     }
 
     logger.info('User updated by admin', {
       adminId: session.user.id,
       targetUserId: id,
       fields: Object.keys(body),
-    })
+    });
 
-    return apiSuccess({ message: 'Benutzer erfolgreich aktualisiert' })
+    return apiSuccess({ message: 'Benutzer erfolgreich aktualisiert' });
   } catch (error) {
-    return apiError(error, 'Benutzer konnte nicht aktualisiert werden')
+    return apiError(error, 'Benutzer konnte nicht aktualisiert werden');
   }
-})
+});
 
 /**
  * DELETE /api/admin/users/[id]
@@ -161,31 +161,35 @@ export const PATCH = withAdmin<{ id: string }>('users', async (request, session,
 export const DELETE = withAdmin<{ id: string }>('users', async (request, session, context) => {
   try {
     if (!isSuperAdmin(session.user.email, session.user.isSuperAdmin)) {
-      return apiForbidden('Nur Super-Admins können Benutzer löschen')
+      return apiForbidden('Nur Super-Admins können Benutzer löschen');
     }
 
-    const { id } = context!.params!
+    const { id } = context!.params!;
 
     // Get user to check if they exist and for logging
     const userRows = await db
       .select({ id: users.id, email: users.email, name: users.name })
       .from(users)
-      .where(eq(users.id, id))
+      .where(eq(users.id, id));
 
     if (userRows.length === 0) {
-      return apiNotFound('Benutzer')
+      return apiNotFound('Benutzer');
     }
 
-    const targetUser = userRows[0]
+    const targetUser = userRows[0];
 
     // Prevent deleting super admins from the hardcoded list
-    if (SUPER_ADMIN_EMAILS.includes(targetUser.email.toLowerCase() as typeof SUPER_ADMIN_EMAILS[number])) {
-      return apiForbidden('Kern-Super-Admins können nicht gelöscht werden')
+    if (
+      SUPER_ADMIN_EMAILS.includes(
+        targetUser.email.toLowerCase() as (typeof SUPER_ADMIN_EMAILS)[number],
+      )
+    ) {
+      return apiForbidden('Kern-Super-Admins können nicht gelöscht werden');
     }
 
     // Prevent self-deletion
     if (targetUser.id === session.user.id) {
-      return apiBadRequest('Du kannst dich nicht selbst löschen')
+      return apiBadRequest('Du kannst dich nicht selbst löschen');
     }
 
     // Delete related data first (FK constraints), then the user row, all
@@ -199,23 +203,23 @@ export const DELETE = withAdmin<{ id: string }>('users', async (request, session
     // partial failures roll back to a consistent state.
     try {
       await db.transaction(async (tx) => {
-        await tx.delete(sessions).where(eq(sessions.userId, id))
-        await tx.delete(accounts).where(eq(accounts.userId, id))
-        await tx.delete(users).where(eq(users.id, id))
-      })
+        await tx.delete(sessions).where(eq(sessions.userId, id));
+        await tx.delete(accounts).where(eq(accounts.userId, id));
+        await tx.delete(users).where(eq(users.id, id));
+      });
     } catch (error) {
       // Migration 077 changed payment_transactions.user_id to ON DELETE
       // RESTRICT so financial audit trail can't silently vanish. If the
       // user has payment history, surface that as a clear 409 with
       // operator-actionable text rather than the generic 500 the previous
       // implementation produced. Postgres error code 23503 = foreign_key_violation.
-      const pgCode = (error as { code?: string })?.code
+      const pgCode = (error as { code?: string })?.code;
       if (pgCode === '23503') {
         logger.info('User delete blocked by FK constraint', {
           adminId: session.user.id,
           targetUserId: id,
           targetUserEmail: targetUser.email,
-        })
+        });
         return NextResponse.json(
           {
             success: false,
@@ -224,9 +228,9 @@ export const DELETE = withAdmin<{ id: string }>('users', async (request, session
               'Anonymisiere das Konto stattdessen (E-Mail/Name entfernen, als inaktiv markieren), statt es zu löschen.',
           },
           { status: 409 },
-        )
+        );
       }
-      throw error
+      throw error;
     }
 
     logger.info('User deleted by admin', {
@@ -235,7 +239,7 @@ export const DELETE = withAdmin<{ id: string }>('users', async (request, session
       deletedUserId: id,
       deletedUserEmail: targetUser.email,
       deletedUserName: targetUser.name,
-    })
+    });
 
     // Compliance audit (DSG / GDPR Art. 17) — sync write so the proof
     // is durable before the response goes back. Logged AFTER the delete
@@ -243,16 +247,17 @@ export const DELETE = withAdmin<{ id: string }>('users', async (request, session
     await logUserDeletion(
       {
         userId: session.user.id,
-        ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
+        ipAddress:
+          request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown',
         userAgent: request.headers.get('user-agent') || 'unknown',
       },
       id,
       targetUser.email,
       'admin_delete',
-    )
+    );
 
-    return apiSuccess({ message: `Benutzer ${targetUser.email} wurde gelöscht` })
+    return apiSuccess({ message: `Benutzer ${targetUser.email} wurde gelöscht` });
   } catch (error) {
-    return apiError(error, 'Benutzer konnte nicht gelöscht werden')
+    return apiError(error, 'Benutzer konnte nicht gelöscht werden');
   }
-})
+});

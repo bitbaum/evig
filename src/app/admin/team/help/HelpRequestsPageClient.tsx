@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Help Requests Page Client Component
@@ -6,13 +6,13 @@
  * Client-side rendering for help requests list with filters and actions
  */
 
-import { useState } from 'react'
-import { adminInteractive } from '@/lib/admin-ui'
-import { Plus, Filter, RefreshCw } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Select } from '@/components/ui/select'
-import { FormField } from '@/components/ui/form-field'
+import { useState } from 'react';
+import { adminInteractive } from '@/lib/admin-ui';
+import { Plus, Filter, RefreshCw } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Select } from '@/components/ui/select';
+import { FormField } from '@/components/ui/form-field';
 import {
   HELP_REQUEST_STATUS_OPTIONS,
   HELP_REQUEST_URGENCY_OPTIONS,
@@ -21,60 +21,60 @@ import {
   type HelpRequestStatus,
   type HelpRequestUrgency,
   HELP_REQUEST_STATUS,
-} from '@/config/activity'
+} from '@/config/activity';
 import {
   useHelpRequests,
   useHelpRequestMutations,
   HelpRequestCard,
   CreateHelpRequestModal,
-} from '@/components/admin/team/activity'
-import Heading from '@/components/admin/AdminHeading'
+} from '@/components/admin/team/activity';
+import Heading from '@/components/admin/AdminHeading';
 
 interface TeamMemberOption {
-  id: string
-  user_id: string
-  user_name: string | null
-  user_email: string
+  id: string;
+  user_id: string;
+  user_name: string | null;
+  user_email: string;
 }
 
 interface HelpRequestsPageClientProps {
-  teamMembers: TeamMemberOption[]
-  currentUserEmail: string
+  teamMembers: TeamMemberOption[];
+  currentUserEmail: string;
 }
 
 export function HelpRequestsPageClient({
   teamMembers,
   currentUserEmail,
 }: HelpRequestsPageClientProps) {
-  const [showCreateModal, setShowCreateModal] = useState(false)
-  const [showFilters, setShowFilters] = useState(false)
-  const [resolvingId, setResolvingId] = useState<string | null>(null)
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+  const [resolvingId, setResolvingId] = useState<string | null>(null);
 
   const { requests, loading, error, total, filters, setFilters, refetch } = useHelpRequests({
     limit: 50,
-  })
+  });
 
-  const { resolveRequest, updateRequest } = useHelpRequestMutations()
+  const { resolveRequest, updateRequest } = useHelpRequestMutations();
 
   const handleResolve = async (id: string) => {
-    setResolvingId(id)
-    const success = await resolveRequest(id)
+    setResolvingId(id);
+    const success = await resolveRequest(id);
     if (success) {
-      refetch()
+      refetch();
     }
-    setResolvingId(null)
-  }
+    setResolvingId(null);
+  };
 
   const handleTakeOn = async (id: string) => {
-    const success = await updateRequest(id, { status: HELP_REQUEST_STATUS.IN_PROGRESS })
+    const success = await updateRequest(id, { status: HELP_REQUEST_STATUS.IN_PROGRESS });
     if (success) {
-      refetch()
+      refetch();
     }
-  }
+  };
 
   const handleFilterChange = (key: string, value: string | boolean | undefined) => {
-    setFilters({ [key]: value, offset: 0 })
-  }
+    setFilters({ [key]: value, offset: 0 });
+  };
 
   const clearFilters = () => {
     setFilters({
@@ -82,15 +82,17 @@ export function HelpRequestsPageClient({
       urgency: undefined,
       is_broadcast: undefined,
       offset: 0,
-    })
-  }
+    });
+  };
 
-  const hasActiveFilters = filters.status || filters.urgency || filters.is_broadcast !== undefined
+  const hasActiveFilters = filters.status || filters.urgency || filters.is_broadcast !== undefined;
 
   // Separate requests by status
-  const openRequests = requests.filter((r) => r.status === HELP_REQUEST_STATUS.OPEN)
-  const inProgressRequests = requests.filter((r) => r.status === HELP_REQUEST_STATUS.IN_PROGRESS)
-  const resolvedRequests = requests.filter((r) => r.status === HELP_REQUEST_STATUS.RESOLVED || r.status === HELP_REQUEST_STATUS.CANCELLED)
+  const openRequests = requests.filter((r) => r.status === HELP_REQUEST_STATUS.OPEN);
+  const inProgressRequests = requests.filter((r) => r.status === HELP_REQUEST_STATUS.IN_PROGRESS);
+  const resolvedRequests = requests.filter(
+    (r) => r.status === HELP_REQUEST_STATUS.RESOLVED || r.status === HELP_REQUEST_STATUS.CANCELLED,
+  );
 
   return (
     <div className="space-y-6">
@@ -129,7 +131,12 @@ export function HelpRequestsPageClient({
           )}
         </div>
 
-        <Button onClick={() => setShowCreateModal(true)} size="sm" variant="primary" className="gap-2">
+        <Button
+          onClick={() => setShowCreateModal(true)}
+          size="sm"
+          variant="primary"
+          className="gap-2"
+        >
           <Plus className="w-4 h-4" />
           Hilfe anfordern
         </Button>
@@ -176,7 +183,7 @@ export function HelpRequestsPageClient({
                 onChange={(e) =>
                   handleFilterChange(
                     'is_broadcast',
-                    e.target.value === '' ? undefined : e.target.value === 'true'
+                    e.target.value === '' ? undefined : e.target.value === 'true',
                   )
                 }
               >
@@ -209,10 +216,7 @@ export function HelpRequestsPageClient({
       {loading && (
         <div className="space-y-4">
           {[...Array(3)].map((_, i) => (
-            <Card
-              key={i}
-              className="p-4 animate-pulse"
-            >
+            <Card key={i} className="p-4 animate-pulse">
               <div className="flex gap-3">
                 <div className="w-10 h-10 bg-surface-overlay rounded-full" />
                 <div className="flex-1 space-y-2">
@@ -235,11 +239,7 @@ export function HelpRequestsPageClient({
               : 'Noch keine Hilfsanfragen vorhanden.'}
           </p>
           {!hasActiveFilters && (
-            <Button
-              onClick={() => setShowCreateModal(true)}
-              variant="primary"
-              size="sm"
-            >
+            <Button onClick={() => setShowCreateModal(true)} variant="primary" size="sm">
               <Plus className="w-4 h-4" />
               Erste Anfrage erstellen
             </Button>
@@ -319,10 +319,19 @@ export function HelpRequestsPageClient({
             <HelpRequestCard
               key={request.id}
               request={request}
-              onResolve={request.status !== HELP_REQUEST_STATUS.RESOLVED ? handleResolve : undefined}
-              onTakeOn={request.status === HELP_REQUEST_STATUS.OPEN && request.is_broadcast ? handleTakeOn : undefined}
+              onResolve={
+                request.status !== HELP_REQUEST_STATUS.RESOLVED ? handleResolve : undefined
+              }
+              onTakeOn={
+                request.status === HELP_REQUEST_STATUS.OPEN && request.is_broadcast
+                  ? handleTakeOn
+                  : undefined
+              }
               isResolving={resolvingId === request.id}
-              showActions={request.status !== HELP_REQUEST_STATUS.RESOLVED && request.status !== HELP_REQUEST_STATUS.CANCELLED}
+              showActions={
+                request.status !== HELP_REQUEST_STATUS.RESOLVED &&
+                request.status !== HELP_REQUEST_STATUS.CANCELLED
+              }
               currentUserEmail={currentUserEmail}
             />
           ))}
@@ -338,5 +347,5 @@ export function HelpRequestsPageClient({
         />
       )}
     </div>
-  )
+  );
 }

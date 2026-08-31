@@ -1,64 +1,66 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { CheckCircle, Loader2, AlertCircle, ArrowLeft } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { apiFetch } from '@/lib/api/client'
-import { Link } from '@/i18n/navigation'
-import { Textarea } from '@/components/ui/textarea'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { IconBadge } from '@/components/ui/IconBadge'
+import { useState } from 'react';
+import { CheckCircle, Loader2, AlertCircle, ArrowLeft } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { apiFetch } from '@/lib/api/client';
+import { Link } from '@/i18n/navigation';
+import { Textarea } from '@/components/ui/textarea';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { IconBadge } from '@/components/ui/IconBadge';
 
 interface InquiryFormProps {
-  defaultThema?: string
-  topicLabel?: string
+  defaultThema?: string;
+  topicLabel?: string;
 }
 
 export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps) {
-  const t = useTranslations('getInvolved.kontakt.form')
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [message, setMessage] = useState('')
-  const [submitting, setSubmitting] = useState(false)
-  const [success, setSuccess] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const t = useTranslations('getInvolved.kontakt.form');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const resolvedTopic = topicLabel ?? t('submit')
+  const resolvedTopic = topicLabel ?? t('submit');
 
   const canSubmit =
     !submitting &&
     name.trim().length >= 2 &&
     /\S+@\S+\.\S+/.test(email) &&
-    message.trim().length >= 20
+    message.trim().length >= 20;
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!canSubmit) return
+    e.preventDefault();
+    if (!canSubmit) return;
 
-    setSubmitting(true)
-    setError(null)
+    setSubmitting(true);
+    setError(null);
 
-    const { error: apiError } = await apiFetch<{ message: string }>(
-      '/api/inquiry',
-      { method: 'POST', body: { name, email, message, topic: resolvedTopic } }
-    )
+    const { error: apiError } = await apiFetch<{ message: string }>('/api/inquiry', {
+      method: 'POST',
+      body: { name, email, message, topic: resolvedTopic },
+    });
 
-    setSubmitting(false)
+    setSubmitting(false);
 
     if (apiError) {
-      setError(apiError)
+      setError(apiError);
     } else {
-      setSuccess(true)
+      setSuccess(true);
     }
-  }
+  };
 
   if (success) {
     return (
       <div className="text-center py-12 px-4">
         <IconBadge icon={CheckCircle} shape="circle" size="lg" className="mb-4" />
-        <Heading level={2} className="text-text-primary mb-2">{t('successHeading', { name })}</Heading>
+        <Heading level={2} className="text-text-primary mb-2">
+          {t('successHeading', { name })}
+        </Heading>
         <p className="text-text-secondary mb-6 max-w-md mx-auto">
           {t('successText', { topic: resolvedTopic })}
         </p>
@@ -70,7 +72,7 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
           {t('successBackLink')}
         </Link>
       </div>
-    )
+    );
   }
 
   return (
@@ -78,14 +80,17 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
       <input type="hidden" name="topic" value={defaultThema} />
 
       <div>
-        <label htmlFor="inquiry-name" className="block text-sm font-medium text-text-secondary mb-1">
+        <label
+          htmlFor="inquiry-name"
+          className="block text-sm font-medium text-text-secondary mb-1"
+        >
           {t('nameLabel')} <span className="text-error-500">*</span>
         </label>
         <Input
           id="inquiry-name"
           type="text"
           value={name}
-          onChange={e => setName(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
           required
           minLength={2}
           className="rounded-lg border-default"
@@ -94,14 +99,17 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
       </div>
 
       <div>
-        <label htmlFor="inquiry-email" className="block text-sm font-medium text-text-secondary mb-1">
+        <label
+          htmlFor="inquiry-email"
+          className="block text-sm font-medium text-text-secondary mb-1"
+        >
           {t('emailLabel')} <span className="text-error-500">*</span>
         </label>
         <Input
           id="inquiry-email"
           type="email"
           value={email}
-          onChange={e => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
           required
           className="rounded-lg border-default"
           placeholder={t('emailPlaceholder')}
@@ -109,13 +117,16 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
       </div>
 
       <div>
-        <label htmlFor="inquiry-message" className="block text-sm font-medium text-text-secondary mb-1">
+        <label
+          htmlFor="inquiry-message"
+          className="block text-sm font-medium text-text-secondary mb-1"
+        >
           {t('messageLabel')} <span className="text-error-500">*</span>
         </label>
         <Textarea
           id="inquiry-message"
           value={message}
-          onChange={e => setMessage(e.target.value)}
+          onChange={(e) => setMessage(e.target.value)}
           required
           minLength={20}
           rows={5}
@@ -132,12 +143,7 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
         </div>
       )}
 
-      <Button
-        type="submit"
-        disabled={!canSubmit}
-        variant="primary"
-        className="w-full"
-      >
+      <Button type="submit" disabled={!canSubmit} variant="primary" className="w-full">
         {submitting ? (
           <>
             <Loader2 className="w-4 h-4 animate-spin" />
@@ -148,9 +154,7 @@ export function InquiryForm({ defaultThema = '', topicLabel }: InquiryFormProps)
         )}
       </Button>
 
-      <p className="text-xs text-text-muted text-center">
-        {t('responseNote')}
-      </p>
+      <p className="text-xs text-text-muted text-center">{t('responseNote')}</p>
     </form>
-  )
+  );
 }

@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import React, { useState } from 'react'
-import { Link } from '@/i18n/navigation'
-import { useTranslations } from 'next-intl'
-import { Mail, Lock, User, ArrowRight, ArrowLeft, Eye, EyeOff, Loader2 } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { AUTH_CONFIG } from '@/lib/auth/config'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import React, { useState } from 'react';
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
+import { Mail, Lock, User, ArrowRight, ArrowLeft, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { AUTH_CONFIG } from '@/lib/auth/config';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 // Single source: same config the server's RegisterSchema derives from
 // (lib/schemas/auth.ts:createPasswordSchema). If the policy changes —
@@ -16,23 +16,23 @@ import { Input } from '@/components/ui/input'
 // automatically. Note: we deliberately don't surface complexity hints
 // even if AUTH_CONFIG grows them, because forced complexity makes
 // password creation worse, not safer. See bcrypt + zxcvbn literature.
-const PASSWORD_MIN_LENGTH = AUTH_CONFIG.password.minLength
+const PASSWORD_MIN_LENGTH = AUTH_CONFIG.password.minLength;
 
 interface AccountStepProps {
-  name: string
-  email: string
-  password: string
-  confirmPassword: string
-  acceptTerms: boolean
-  onNameChange: (name: string) => void
-  onEmailChange: (email: string) => void
-  onPasswordChange: (password: string) => void
-  onConfirmPasswordChange: (confirmPassword: string) => void
-  onAcceptTermsChange: (accept: boolean) => void
-  onNext: () => void
-  onBack?: () => void
-  isLoading?: boolean
-  errors?: string[]
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  acceptTerms: boolean;
+  onNameChange: (name: string) => void;
+  onEmailChange: (email: string) => void;
+  onPasswordChange: (password: string) => void;
+  onConfirmPasswordChange: (confirmPassword: string) => void;
+  onAcceptTermsChange: (accept: boolean) => void;
+  onNext: () => void;
+  onBack?: () => void;
+  isLoading?: boolean;
+  errors?: string[];
 }
 
 export function AccountStep({
@@ -49,27 +49,27 @@ export function AccountStep({
   onNext,
   onBack,
   isLoading = false,
-  errors = []
+  errors = [],
 }: AccountStepProps) {
-  const t = useTranslations('auth.register')
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const t = useTranslations('auth.register');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Derived from AUTH_CONFIG (SSOT). One check by design — RevampIT's
   // password policy is intentionally simple (8 chars, no complexity rules).
   const passwordChecks = {
     length: password.length >= PASSWORD_MIN_LENGTH,
-  }
-  const passwordValid = passwordChecks.length
-  const passwordsMatch = password === confirmPassword
-  const isValid = email && passwordValid && passwordsMatch && acceptTerms
+  };
+  const passwordValid = passwordChecks.length;
+  const passwordsMatch = password === confirmPassword;
+  const isValid = email && passwordValid && passwordsMatch && acceptTerms;
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (isValid && !isLoading) {
-      onNext()
+      onNext();
     }
-  }
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
@@ -77,14 +77,15 @@ export function AccountStep({
         <Heading level={2} className="text-xl font-bold text-text-primary mb-2">
           {t('heading')}
         </Heading>
-        <p className="text-text-secondary dark:text-text-muted">
-          {t('subtitle')}
-        </p>
+        <p className="text-text-secondary dark:text-text-muted">{t('subtitle')}</p>
       </div>
 
       {/* Error Messages */}
       {errors.length > 0 && (
-        <div id="account-errors" className="p-4 rounded-lg border-2 bg-error-50 dark:bg-error-900/20 border-error-200 dark:border-error-800/30">
+        <div
+          id="account-errors"
+          className="p-4 rounded-lg border-2 bg-error-50 dark:bg-error-900/20 border-error-200 dark:border-error-800/30"
+        >
           <ul className="text-sm text-error-700 dark:text-error-400 space-y-1">
             {errors.map((error, index) => (
               <li key={index}>{error}</li>
@@ -186,7 +187,10 @@ export function AccountStep({
 
       {/* Confirm Password */}
       <div>
-        <label htmlFor="confirmPassword" className="block text-sm font-medium mb-1.5 text-text-secondary">
+        <label
+          htmlFor="confirmPassword"
+          className="block text-sm font-medium mb-1.5 text-text-secondary"
+        >
           {t('confirmPassword')} *
         </label>
         <div className="relative">
@@ -200,10 +204,12 @@ export function AccountStep({
             autoComplete="new-password"
             placeholder={t('confirmPasswordPlaceholder')}
             aria-invalid={!!(confirmPassword && !passwordsMatch)}
-            aria-describedby={confirmPassword && !passwordsMatch ? 'confirmPassword-error' : undefined}
+            aria-describedby={
+              confirmPassword && !passwordsMatch ? 'confirmPassword-error' : undefined
+            }
             className={cn(
               'pl-11 pr-12 py-3 border-2 rounded-lg',
-              confirmPassword && !passwordsMatch ? 'border-error-500' : 'border-default'
+              confirmPassword && !passwordsMatch ? 'border-error-500' : 'border-default',
             )}
           />
           <Button
@@ -218,7 +224,9 @@ export function AccountStep({
           </Button>
         </div>
         {confirmPassword && !passwordsMatch && (
-          <p id="confirmPassword-error" className="mt-1 text-xs text-error-500">{t('passwordMismatch')}</p>
+          <p id="confirmPassword-error" className="mt-1 text-xs text-error-500">
+            {t('passwordMismatch')}
+          </p>
         )}
       </div>
 
@@ -280,5 +288,5 @@ export function AccountStep({
         </Button>
       </div>
     </form>
-  )
+  );
 }

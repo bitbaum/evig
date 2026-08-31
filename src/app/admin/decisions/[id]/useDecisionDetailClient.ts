@@ -26,7 +26,7 @@ export function useDecisionDetailClient(decisionId: string) {
 
   async function handleTransition(
     newStatus: DecisionStatus,
-    extra?: { cancelReason?: string; outcomeSummary?: string }
+    extra?: { cancelReason?: string; outcomeSummary?: string },
   ) {
     setActionError('');
     const result = await apiFetch<void>(`/api/decisions/${decisionId}/transition`, {

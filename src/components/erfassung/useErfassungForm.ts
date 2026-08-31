@@ -1,43 +1,43 @@
-import { useState, useCallback, useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useTranslations } from 'next-intl'
-import { logger } from '@/lib/logger'
-import { apiFetch } from '@/lib/api/client'
-import { sanitizeReturnTo } from '@/lib/utils/safe-redirect'
-import type { ErfassungFormData, AIFieldMetadata } from '@/types/erfassung'
-import { DEFAULT_FORM_DATA, formDataToPayload } from '@/types/erfassung'
-import { SPEC_TEMPLATES, templateToSpecFields } from '@/config/erfassung'
-import { ROUTES } from '@/config/routes'
-import {
-  CAPTURE_DESTINATIONS,
-  type CaptureDestination,
-} from '@/config/intake-workflow'
+import { useState, useCallback, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { logger } from '@/lib/logger';
+import { apiFetch } from '@/lib/api/client';
+import { sanitizeReturnTo } from '@/lib/utils/safe-redirect';
+import type { ErfassungFormData, AIFieldMetadata } from '@/types/erfassung';
+import { DEFAULT_FORM_DATA, formDataToPayload } from '@/types/erfassung';
+import { SPEC_TEMPLATES, templateToSpecFields } from '@/config/erfassung';
+import { ROUTES } from '@/config/routes';
+import { CAPTURE_DESTINATIONS, type CaptureDestination } from '@/config/intake-workflow';
 
 /**
  * Merge partial AI/refined data into existing form data.
  * Skips empty/null/undefined values so existing data is preserved.
  * Adding a new field to ErfassungFormData = this handles it automatically.
  */
-function mergeFormData(prev: ErfassungFormData, data: Partial<ErfassungFormData>): ErfassungFormData {
-  const updated = { ...prev }
+function mergeFormData(
+  prev: ErfassungFormData,
+  data: Partial<ErfassungFormData>,
+): ErfassungFormData {
+  const updated = { ...prev };
   for (const key of Object.keys(data) as Array<keyof ErfassungFormData>) {
-    const value = data[key]
-    if (value === undefined || value === null) continue
-    if (Array.isArray(value) && value.length === 0) continue
-    if (typeof value === 'string' && value === '') continue
-    ;(updated as Record<string, unknown>)[key] = value
+    const value = data[key];
+    if (value === undefined || value === null) continue;
+    if (Array.isArray(value) && value.length === 0) continue;
+    if (typeof value === 'string' && value === '') continue;
+    (updated as Record<string, unknown>)[key] = value;
   }
-  return updated
+  return updated;
 }
 
 /** Donation provenance attached to the canonical inventory item. */
 export interface DonationState {
-  isDonation: boolean
-  donorName: string
-  donorEmail: string
-  donorNotes: string
+  isDonation: boolean;
+  donorName: string;
+  donorEmail: string;
+  donorNotes: string;
   /** Set when opened from an existing donation row (/admin/donations). */
-  existingDonationId: string | null
+  existingDonationId: string | null;
 }
 
 const DEFAULT_DONATION: DonationState = {
@@ -46,82 +46,91 @@ const DEFAULT_DONATION: DonationState = {
   donorEmail: '',
   donorNotes: '',
   existingDonationId: null,
-}
+};
 
 export function useErfassungForm() {
-  const t = useTranslations('components.erfassung.formErrors')
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const editId = searchParams.get('edit')
+  const t = useTranslations('components.erfassung.formErrors');
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const editId = searchParams.get('edit');
   // Prevent open-redirect: only same-origin paths
-  const returnTo = sanitizeReturnTo(searchParams.get('returnTo'), '/admin/intake')
-  const [isLoading, setIsLoading] = useState(false)
-  const [isLoadingProduct, setIsLoadingProduct] = useState(false)
-  const [savedItemUUID, setSavedItemUUID] = useState<string | null>(null)
-  const [savedProductId, setSavedProductId] = useState<string | null>(null)
-  const [savedInventoryId, setSavedInventoryId] = useState<string | null>(null)
-  const [savedAction, setSavedAction] = useState<'draft' | 'erfassen' | 'publish'>('draft')
-  const [savedListingId, setSavedListingId] = useState<string | null>(null)
-  const [savedQcRequired, setSavedQcRequired] = useState(false)
-  const [showAdvanced, setShowAdvanced] = useState(false)
-  const [isEditMode, setIsEditMode] = useState(false)
-  const [formData, setFormData] = useState<ErfassungFormData>(DEFAULT_FORM_DATA)
-  const [aiMetadata, setAiMetadata] = useState<AIFieldMetadata>({})
-  const [donation, setDonation] = useState<DonationState>(DEFAULT_DONATION)
-  const [destination, setDestination] = useState<CaptureDestination>(CAPTURE_DESTINATIONS.QUALITY)
-  const [qcSkipReason, setQcSkipReason] = useState('')
+  const returnTo = sanitizeReturnTo(searchParams.get('returnTo'), '/admin/intake');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingProduct, setIsLoadingProduct] = useState(false);
+  const [savedItemUUID, setSavedItemUUID] = useState<string | null>(null);
+  const [savedProductId, setSavedProductId] = useState<string | null>(null);
+  const [savedInventoryId, setSavedInventoryId] = useState<string | null>(null);
+  const [savedAction, setSavedAction] = useState<'draft' | 'erfassen' | 'publish'>('draft');
+  const [savedListingId, setSavedListingId] = useState<string | null>(null);
+  const [savedQcRequired, setSavedQcRequired] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [formData, setFormData] = useState<ErfassungFormData>(DEFAULT_FORM_DATA);
+  const [aiMetadata, setAiMetadata] = useState<AIFieldMetadata>({});
+  const [donation, setDonation] = useState<DonationState>(DEFAULT_DONATION);
+  const [destination, setDestination] = useState<CaptureDestination>(CAPTURE_DESTINATIONS.QUALITY);
+  const [qcSkipReason, setQcSkipReason] = useState('');
 
   // Donation cross-link prefill (forwarded by /admin/intake and /admin/donations)
   useEffect(() => {
-    if (editId) return
-    const donorName = searchParams.get('donor_name')
-    const donorEmail = searchParams.get('donor_email')
-    const donationId = searchParams.get('donation_id')
+    if (editId) return;
+    const donorName = searchParams.get('donor_name');
+    const donorEmail = searchParams.get('donor_email');
+    const donationId = searchParams.get('donation_id');
     if (donorName || donorEmail || donationId) {
       // One-shot prefill of donation fields from query params into editable
       // form state.
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setDonation(prev => ({
+      setDonation((prev) => ({
         ...prev,
         isDonation: true,
         donorName: donorName || prev.donorName,
         donorEmail: donorEmail || prev.donorEmail,
         existingDonationId: donationId || prev.existingDonationId,
-      }))
+      }));
     }
-   
-  }, [editId, searchParams])
+  }, [editId, searchParams]);
 
-  const [reviewStarted, setReviewStarted] = useState(false)
-  const [saveError, setSaveError] = useState('')
-  const [dataEntryCollapsed, setDataEntryCollapsed] = useState(false)
+  const [reviewStarted, setReviewStarted] = useState(false);
+  const [saveError, setSaveError] = useState('');
+  const [dataEntryCollapsed, setDataEntryCollapsed] = useState(false);
 
   useEffect(() => {
     if (editId) {
       // One-shot edit-mode prefill from the API into editable form state.
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setIsEditMode(true)
-      setIsLoadingProduct(true)
-      setShowAdvanced(true)
+      setIsEditMode(true);
+      setIsLoadingProduct(true);
+      setShowAdvanced(true);
 
-      apiFetch<{ product: {
-        brand?: string; product_name?: string; short_description?: string
-        specifications?: Record<string, unknown>
-        dimensions?: { laenge_mm?: number; breite_mm?: number; hoehe_mm?: number }
-        weight_grams?: number; estimated_price_chf?: number; condition?: string
-        location?: string; box_id?: string; quantity_available?: number
-        category?: string; subcategory?: string; customer_profiles?: string[]
-        image_url?: string | null
-      } }>(`/api/admin/inventory/${editId}`)
-        .then(result => {
+      apiFetch<{
+        product: {
+          brand?: string;
+          product_name?: string;
+          short_description?: string;
+          specifications?: Record<string, unknown>;
+          dimensions?: { laenge_mm?: number; breite_mm?: number; hoehe_mm?: number };
+          weight_grams?: number;
+          estimated_price_chf?: number;
+          condition?: string;
+          location?: string;
+          box_id?: string;
+          quantity_available?: number;
+          category?: string;
+          subcategory?: string;
+          customer_profiles?: string[];
+          image_url?: string | null;
+        };
+      }>(`/api/admin/inventory/${editId}`)
+        .then((result) => {
           if (result.success && result.data?.product) {
-            const p = result.data.product
+            const p = result.data.product;
             const specsArray = p.specifications
               ? Object.entries(p.specifications).map(([key, value]) => ({
                   key,
                   value: String(value),
                 }))
-              : [{ key: '', value: '' }]
+              : [{ key: '', value: '' }];
 
             setFormData({
               hersteller: p.brand || '',
@@ -143,75 +152,78 @@ export function useErfassungForm() {
               unterkategorie: p.subcategory || '',
               kundenprofile: p.customer_profiles || [],
               image: p.image_url || null,
-            })
+            });
           } else if (!result.success) {
-            logger.error('Failed to load product for edit', { error: result.error, editId })
+            logger.error('Failed to load product for edit', { error: result.error, editId });
           }
         })
         .finally(() => {
-          setIsLoadingProduct(false)
-        })
+          setIsLoadingProduct(false);
+        });
     }
-  }, [editId])
+  }, [editId]);
 
   const handleChange = (field: keyof ErfassungFormData, value: string | string[]) => {
-    setFormData(prev => ({ ...prev, [field]: value }))
-    setAiMetadata(prev => {
-      const updated = { ...prev }
-      delete updated[field]
-      return updated
-    })
-  }
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    setAiMetadata((prev) => {
+      const updated = { ...prev };
+      delete updated[field];
+      return updated;
+    });
+  };
 
   const handleKategorieChange = (kategorie: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       hauptkategorie: kategorie,
       unterkategorie: '',
       specs: templateToSpecFields(SPEC_TEMPLATES[kategorie] || SPEC_TEMPLATES.default),
-    }))
-  }
+    }));
+  };
 
   const handleSpecChange = (index: number, field: 'key' | 'value', value: string) => {
-    const newSpecs = [...formData.specs]
-    newSpecs[index] = { ...newSpecs[index], [field]: value }
-    setFormData(prev => ({ ...prev, specs: newSpecs }))
-  }
+    const newSpecs = [...formData.specs];
+    newSpecs[index] = { ...newSpecs[index], [field]: value };
+    setFormData((prev) => ({ ...prev, specs: newSpecs }));
+  };
 
   const addSpecField = () => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       specs: [...prev.specs, { key: '', value: '' }],
-    }))
-  }
+    }));
+  };
 
   const removeSpecField = (index: number) => {
     if (formData.specs.length > 1) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         specs: prev.specs.filter((_, i) => i !== index),
-      }))
+      }));
     }
-  }
+  };
 
   const toggleProfile = (slug: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       kundenprofile: prev.kundenprofile.includes(slug)
-        ? prev.kundenprofile.filter(p => p !== slug)
+        ? prev.kundenprofile.filter((p) => p !== slug)
         : [...prev.kundenprofile, slug],
-    }))
-  }
+    }));
+  };
 
-  const handleProductData = useCallback((data: Partial<ErfassungFormData>, metadata?: AIFieldMetadata) => {
-    logger.info('Product data received', { product: data.produktname, hasMetadata: !!metadata })
+  const handleProductData = useCallback(
+    (data: Partial<ErfassungFormData>, metadata?: AIFieldMetadata) => {
+      logger.info('Product data received', { product: data.produktname, hasMetadata: !!metadata });
 
-    setFormData(prev => mergeFormData(prev, data))
+      setFormData((prev) => mergeFormData(prev, data));
 
-    if (metadata) {
-      setAiMetadata(prev => ({ ...prev, ...metadata }))
-    }
-  }, [])
+      if (metadata) {
+        setAiMetadata((prev) => ({ ...prev, ...metadata }));
+      }
+    },
+    [],
+  );
 
   /**
    * Bridge AIFormAssist output → erfassung form state.
@@ -222,64 +234,70 @@ export function useErfassungForm() {
    * the metadata into the erfassung `AIFieldSource` shape (type 'text') that
    * the field indicators render.
    */
-  const handleAssistFields = useCallback((
-    data: Partial<ErfassungFormData>,
-    metadataEntries: Record<string, { confidence: number; model: string; timestamp: number }>,
-  ) => {
-    const clean: Partial<ErfassungFormData> = {}
-    for (const key of Object.keys(DEFAULT_FORM_DATA) as Array<keyof ErfassungFormData>) {
-      if (!(key in data)) continue
-      const value = (data as Record<string, unknown>)[key]
-      // Arrays (specs, kundenprofile) pass through; every other field is a
-      // string input, so coerce scalars — the refine model may emit a numeric
-      // price, and a raw number would drift from the form's string typing.
-      ;(clean as Record<string, unknown>)[key] =
-        Array.isArray(value) || value === null || value === undefined ? value : String(value)
-    }
+  const handleAssistFields = useCallback(
+    (
+      data: Partial<ErfassungFormData>,
+      metadataEntries: Record<string, { confidence: number; model: string; timestamp: number }>,
+    ) => {
+      const clean: Partial<ErfassungFormData> = {};
+      for (const key of Object.keys(DEFAULT_FORM_DATA) as Array<keyof ErfassungFormData>) {
+        if (!(key in data)) continue;
+        const value = (data as Record<string, unknown>)[key];
+        // Arrays (specs, kundenprofile) pass through; every other field is a
+        // string input, so coerce scalars — the refine model may emit a numeric
+        // price, and a raw number would drift from the form's string typing.
+        (clean as Record<string, unknown>)[key] =
+          Array.isArray(value) || value === null || value === undefined ? value : String(value);
+      }
 
-    const meta: AIFieldMetadata = {}
-    for (const [key, entry] of Object.entries(metadataEntries)) {
-      if (key in DEFAULT_FORM_DATA) {
-        meta[key as keyof ErfassungFormData] = {
-          type: 'text',
-          confidence: entry.confidence,
-          model: entry.model,
-          timestamp: entry.timestamp,
+      const meta: AIFieldMetadata = {};
+      for (const [key, entry] of Object.entries(metadataEntries)) {
+        if (key in DEFAULT_FORM_DATA) {
+          meta[key as keyof ErfassungFormData] = {
+            type: 'text',
+            confidence: entry.confidence,
+            model: entry.model,
+            timestamp: entry.timestamp,
+          };
         }
       }
-    }
 
-    setFormData(prev => mergeFormData(prev, clean))
-    setAiMetadata(prev => ({ ...prev, ...meta }))
-  }, [])
+      setFormData((prev) => mergeFormData(prev, clean));
+      setAiMetadata((prev) => ({ ...prev, ...meta }));
+    },
+    [],
+  );
 
   const handleImageCapture = useCallback((imageBase64: string) => {
-    setFormData(prev => ({ ...prev, image: imageBase64 }))
-  }, [])
+    setFormData((prev) => ({ ...prev, image: imageBase64 }));
+  }, []);
 
   const handleDataFilled = useCallback(() => {
-    setDataEntryCollapsed(true)
-    setReviewStarted(true)
-  }, [])
+    setDataEntryCollapsed(true);
+    setReviewStarted(true);
+  }, []);
 
   const handleManualEntry = useCallback(() => {
-    setDataEntryCollapsed(true)
-    setReviewStarted(true)
-  }, [])
+    setDataEntryCollapsed(true);
+    setReviewStarted(true);
+  }, []);
 
   // SyntheticEvent — accepts both <form onSubmit> (FormEvent) and inline button clicks (MouseEvent)
-  const handleSubmit = async (e: React.SyntheticEvent, action: 'draft' | 'erfassen' | 'publish' = 'draft') => {
-    e.preventDefault()
-    setIsLoading(true)
-    setSaveError('')
+  const handleSubmit = async (
+    e: React.SyntheticEvent,
+    action: 'draft' | 'erfassen' | 'publish' = 'draft',
+  ) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setSaveError('');
 
     try {
-      const specifications: Record<string, string> = {}
-      formData.specs.forEach(spec => {
+      const specifications: Record<string, string> = {};
+      formData.specs.forEach((spec) => {
         if (spec.key && spec.value) {
-          specifications[spec.key] = spec.value
+          specifications[spec.key] = spec.value;
         }
-      })
+      });
 
       if (isEditMode && editId) {
         const updatePayload = {
@@ -300,82 +318,81 @@ export function useErfassungForm() {
           location: formData.location,
           box_id: formData.box_id,
           quantity_available: parseInt(formData.auf_lager) || 1,
-        }
+        };
 
         const result = await apiFetch<void>(`/api/admin/inventory/${editId}`, {
           method: 'PUT',
           body: updatePayload,
-        })
+        });
 
         if (!result.success) {
-          throw new Error(result.error || t('updateFailed'))
+          throw new Error(result.error || t('updateFailed'));
         }
 
-        router.push(returnTo)
+        router.push(returnTo);
       } else {
         // Every input channel converges here. Destination is the only workflow
         // decision; the API maps it to checklist, inventory or an explicitly
         // untested listing while keeping donation provenance attached.
-        const payload = formDataToPayload(formData, 'erfassen')
+        const payload = formDataToPayload(formData, 'erfassen');
 
         const result = await apiFetch<{
-          item_uuid: string
-          product_id: string
-          inventory_id: string
-          listing_id: string | null
-          published: boolean
+          item_uuid: string;
+          product_id: string;
+          inventory_id: string;
+          listing_id: string | null;
+          published: boolean;
         }>('/api/admin/intake', {
           method: 'POST',
           body: {
             ...payload,
             destination,
-            qc_skip_reason: destination === CAPTURE_DESTINATIONS.SHOP_UNTESTED
-              ? qcSkipReason.trim()
-              : undefined,
+            qc_skip_reason:
+              destination === CAPTURE_DESTINATIONS.SHOP_UNTESTED ? qcSkipReason.trim() : undefined,
             is_donation: donation.isDonation,
             donor_name: donation.donorName || undefined,
             donor_email: donation.donorEmail || undefined,
             donor_notes: donation.donorNotes || undefined,
             existing_donation_id: donation.existingDonationId || undefined,
           },
-        })
+        });
 
         if (!result.success) {
-          throw new Error(result.error || t('saveFailed'))
+          throw new Error(result.error || t('saveFailed'));
         }
 
         if (result.data) {
-          setSavedItemUUID(result.data.item_uuid)
-          setSavedProductId(result.data.product_id)
-          setSavedInventoryId(result.data.inventory_id)
-          setSavedAction(result.data.published ? 'publish' : 'erfassen')
-          setSavedListingId(result.data.listing_id || null)
-          setSavedQcRequired(destination === CAPTURE_DESTINATIONS.QUALITY)
+          setSavedItemUUID(result.data.item_uuid);
+          setSavedProductId(result.data.product_id);
+          setSavedInventoryId(result.data.inventory_id);
+          setSavedAction(result.data.published ? 'publish' : 'erfassen');
+          setSavedListingId(result.data.listing_id || null);
+          setSavedQcRequired(destination === CAPTURE_DESTINATIONS.QUALITY);
         }
       }
     } catch (error) {
-      logger.error('Error saving product', { error })
-      setSaveError(error instanceof Error ? error.message : t('genericSaveError'))
+      logger.error('Error saving product', { error });
+      setSaveError(error instanceof Error ? error.message : t('genericSaveError'));
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleReset = useCallback(() => {
-    setSavedItemUUID(null)
-    setSavedProductId(null)
-    setSavedInventoryId(null)
-    setSavedAction('draft')
-    setSavedListingId(null)
-    setSavedQcRequired(false)
-    setFormData(DEFAULT_FORM_DATA)
-    setDonation(DEFAULT_DONATION)
-    setDestination(CAPTURE_DESTINATIONS.QUALITY)
-    setQcSkipReason('')
-    setAiMetadata({})
-    setReviewStarted(false)
-    setDataEntryCollapsed(false)
-  }, [])
+    setSavedItemUUID(null);
+    setSavedProductId(null);
+    setSavedInventoryId(null);
+    setSavedAction('draft');
+    setSavedListingId(null);
+    setSavedQcRequired(false);
+    setFormData(DEFAULT_FORM_DATA);
+    setDonation(DEFAULT_DONATION);
+    setDestination(CAPTURE_DESTINATIONS.QUALITY);
+    setQcSkipReason('');
+    setAiMetadata({});
+    setReviewStarted(false);
+    setDataEntryCollapsed(false);
+  }, []);
 
   return {
     formData,
@@ -414,5 +431,5 @@ export function useErfassungForm() {
     handleReset,
     setShowAdvanced,
     setFormData,
-  }
+  };
 }

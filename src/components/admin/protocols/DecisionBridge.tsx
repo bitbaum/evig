@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Decision Bridge — protocol action item ↔ standalone decision (QQ.6)
@@ -16,9 +16,9 @@
  *   4. Task linked → link to /admin/tasks/[id]
  */
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   ArrowRight,
   CheckCircle2,
@@ -26,32 +26,35 @@ import {
   ListChecks,
   Loader2,
   Sparkles,
-} from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { StatusBadge } from '@/components/ui/status-badge'
-import { apiFetch } from '@/lib/api/client'
-import { getErrorMessage } from '@/lib/utils/error'
-import { DECISION_STATUS, DECISION_STATUS_CONFIG, type DecisionStatus } from '@/config/decisions'
-import type { ProtocolDecisionSummary } from '@/lib/services/decisions-crud'
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { StatusBadge } from '@/components/ui/status-badge';
+import { apiFetch } from '@/lib/api/client';
+import { getErrorMessage } from '@/lib/utils/error';
+import { DECISION_STATUS, DECISION_STATUS_CONFIG, type DecisionStatus } from '@/config/decisions';
+import type { ProtocolDecisionSummary } from '@/lib/services/decisions-crud';
 
 interface DecisionBridgeProps {
-  protocolId: string
-  actionItemId: string
-  actionItemDescription: string
-  linkedDecision: ProtocolDecisionSummary | undefined
-  isProtocolCreator: boolean
-  onRefresh: () => void
+  protocolId: string;
+  actionItemId: string;
+  actionItemDescription: string;
+  linkedDecision: ProtocolDecisionSummary | undefined;
+  isProtocolCreator: boolean;
+  onRefresh: () => void;
 }
 
-type DecisionStatusToken = DecisionStatus
+type DecisionStatusToken = DecisionStatus;
 
-const STATUS_BADGE_VARIANT: Record<DecisionStatusToken, 'warning' | 'success' | 'neutral' | 'info'> = {
+const STATUS_BADGE_VARIANT: Record<
+  DecisionStatusToken,
+  'warning' | 'success' | 'neutral' | 'info'
+> = {
   draft: 'neutral',
   discussion: 'info',
   voting: 'warning',
   closed: 'success',
   cancelled: 'neutral',
-}
+};
 
 export default function DecisionBridge({
   protocolId,
@@ -61,10 +64,10 @@ export default function DecisionBridge({
   isProtocolCreator,
   onRefresh,
 }: DecisionBridgeProps) {
-  const router = useRouter()
-  const [creating, setCreating] = useState(false)
-  const [creatingTask, setCreatingTask] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const router = useRouter();
+  const [creating, setCreating] = useState(false);
+  const [creatingTask, setCreatingTask] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   if (linkedDecision?.linkedTaskId) {
     return (
@@ -76,37 +79,38 @@ export default function DecisionBridge({
         Aufgabe verknüpft
         <ExternalLink className="w-3 h-3" />
       </Link>
-    )
+    );
   }
 
   if (linkedDecision) {
-    const status = linkedDecision.status as DecisionStatusToken
-    const statusConfig = DECISION_STATUS_CONFIG[status]
-    const isThumbs = linkedDecision.votingMethod === 'thumbs_up_down'
-    const canCreateTask = linkedDecision.isClosed
-      && linkedDecision.status !== DECISION_STATUS.CANCELLED
-      && linkedDecision.outcomePassed !== false
-      && isProtocolCreator
+    const status = linkedDecision.status as DecisionStatusToken;
+    const statusConfig = DECISION_STATUS_CONFIG[status];
+    const isThumbs = linkedDecision.votingMethod === 'thumbs_up_down';
+    const canCreateTask =
+      linkedDecision.isClosed &&
+      linkedDecision.status !== DECISION_STATUS.CANCELLED &&
+      linkedDecision.outcomePassed !== false &&
+      isProtocolCreator;
 
     const handleCreateTask = async () => {
-      setCreatingTask(true)
-      setError(null)
+      setCreatingTask(true);
+      setError(null);
       try {
         const res = await apiFetch<{ taskId: string }>(
           `/api/decisions/${linkedDecision.id}/create-task`,
           { method: 'POST' },
-        )
+        );
         if (!res.success) {
-          throw new Error(res.error || 'Aufgabe konnte nicht erstellt werden')
+          throw new Error(res.error || 'Aufgabe konnte nicht erstellt werden');
         }
-        onRefresh()
-        router.refresh()
+        onRefresh();
+        router.refresh();
       } catch (err) {
-        setError(getErrorMessage(err))
+        setError(getErrorMessage(err));
       } finally {
-        setCreatingTask(false)
+        setCreatingTask(false);
       }
-    }
+    };
 
     return (
       <div className="space-y-1">
@@ -136,18 +140,21 @@ export default function DecisionBridge({
             size="sm"
             className="inline-flex items-center gap-1 text-xs text-action hover:text-action h-auto px-0 bg-transparent hover:bg-transparent"
           >
-            {creatingTask
-              ? <Loader2 className="w-3.5 h-3.5 animate-spin" />
-              : <ListChecks className="w-3.5 h-3.5" />
-            }
+            {creatingTask ? (
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            ) : (
+              <ListChecks className="w-3.5 h-3.5" />
+            )}
             Aufgabe erstellen
           </Button>
         )}
         {linkedDecision.isClosed && linkedDecision.outcomePassed === false && (
-          <p className="text-xs text-text-tertiary">Abgelehnt — keine Folgeaufgabe vorgeschlagen.</p>
+          <p className="text-xs text-text-tertiary">
+            Abgelehnt — keine Folgeaufgabe vorgeschlagen.
+          </p>
         )}
       </div>
-    )
+    );
   }
 
   if (!isProtocolCreator) {
@@ -155,15 +162,15 @@ export default function DecisionBridge({
       <p className="text-xs text-text-tertiary">
         Noch keine Entscheidung. Nur die Protokoll-Erstellerin kann eine ableiten.
       </p>
-    )
+    );
   }
 
   const handleCreate = async () => {
-    setCreating(true)
-    setError(null)
+    setCreating(true);
+    setError(null);
 
-    const trimmed = actionItemDescription.trim().replace(/[.;…]+$/, '')
-    const title = trimmed.length <= 80 ? trimmed : `${trimmed.slice(0, 77)}…`
+    const trimmed = actionItemDescription.trim().replace(/[.;…]+$/, '');
+    const title = trimmed.length <= 80 ? trimmed : `${trimmed.slice(0, 77)}…`;
 
     try {
       const res = await apiFetch<{ id: string }>('/api/decisions', {
@@ -177,20 +184,20 @@ export default function DecisionBridge({
           actionItemId,
           initialStatus: 'voting',
         },
-      })
+      });
 
       if (!res.success) {
-        throw new Error(res.error || 'Entscheidung konnte nicht erstellt werden')
+        throw new Error(res.error || 'Entscheidung konnte nicht erstellt werden');
       }
 
-      onRefresh()
-      router.refresh()
+      onRefresh();
+      router.refresh();
     } catch (err) {
-      setError(getErrorMessage(err))
+      setError(getErrorMessage(err));
     } finally {
-      setCreating(false)
+      setCreating(false);
     }
-  }
+  };
 
   return (
     <div className="space-y-1">
@@ -202,13 +209,9 @@ export default function DecisionBridge({
         size="sm"
         className="inline-flex items-center gap-1.5"
       >
-        {creating ? (
-          <Loader2 className="w-3 h-3 animate-spin" />
-        ) : (
-          <Sparkles className="w-3 h-3" />
-        )}
+        {creating ? <Loader2 className="w-3 h-3 animate-spin" /> : <Sparkles className="w-3 h-3" />}
         Als Entscheidung verschieben
       </Button>
     </div>
-  )
+  );
 }

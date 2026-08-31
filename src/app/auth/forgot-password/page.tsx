@@ -1,46 +1,46 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { Mail, ArrowLeft, CheckCircle2, Loader2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { StatusBanner } from '@/components/ui/status-banner'
-import Heading from '@/components/ui/Heading'
-import { IconBadge } from '@/components/ui/IconBadge'
-import { apiFetch } from '@/lib/api/client'
-import { useTranslations } from 'next-intl'
-import { ROUTES } from '@/config/routes'
+import { useState } from 'react';
+import Link from 'next/link';
+import { Mail, ArrowLeft, CheckCircle2, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { StatusBanner } from '@/components/ui/status-banner';
+import Heading from '@/components/ui/Heading';
+import { IconBadge } from '@/components/ui/IconBadge';
+import { apiFetch } from '@/lib/api/client';
+import { useTranslations } from 'next-intl';
+import { ROUTES } from '@/config/routes';
 
 export default function ForgotPasswordPage() {
-  const t = useTranslations('auth.forgotPassword')
-  const [email, setEmail] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [success, setSuccess] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const t = useTranslations('auth.forgotPassword');
+  const [email, setEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError(null)
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
 
     try {
       const result = await apiFetch<unknown>('/api/auth/forgot-password', {
         method: 'POST',
         body: { email },
-      })
+      });
 
       if (!result.success) {
-        throw new Error(result.error || t('resetFailed'))
+        throw new Error(result.error || t('resetFailed'));
       }
 
-      setSuccess(true)
+      setSuccess(true);
     } catch (error) {
-      setError(error instanceof Error ? error.message : t('genericError'))
+      setError(error instanceof Error ? error.message : t('genericError'));
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   if (success) {
     return (
@@ -52,17 +52,13 @@ export default function ForgotPasswordPage() {
           <Heading level={2} className="mt-6 text-center text-3xl text-text-primary">
             {t('successHeading')}
           </Heading>
-          <p className="mt-2 text-center text-sm text-text-secondary">
-            {t('successSubheading')}
-          </p>
+          <p className="mt-2 text-center text-sm text-text-secondary">{t('successSubheading')}</p>
         </div>
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="bg-surface-base py-8 px-4 rounded-xl border border-strong sm:px-10">
             <div className="text-center">
-              <p className="text-sm text-text-secondary mb-6">
-                {t('successInstructions')}
-              </p>
+              <p className="text-sm text-text-secondary mb-6">{t('successInstructions')}</p>
 
               <div className="space-y-3">
                 <Button as={Link} href={ROUTES.public.login} variant="primary">
@@ -83,7 +79,7 @@ export default function ForgotPasswordPage() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -97,9 +93,7 @@ export default function ForgotPasswordPage() {
         <Heading level={2} className="mt-6 text-center text-3xl text-text-primary">
           {t('heading')}
         </Heading>
-        <p className="mt-2 text-center text-sm text-text-secondary">
-          {t('subheading')}
-        </p>
+        <p className="mt-2 text-center text-sm text-text-secondary">{t('subheading')}</p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
@@ -156,7 +150,10 @@ export default function ForgotPasswordPage() {
           <div className="mt-6 text-center">
             <p className="text-sm text-text-secondary">
               {t('rememberPassword')}{' '}
-              <Link href={ROUTES.public.login} className="font-medium text-action hover:text-action">
+              <Link
+                href={ROUTES.public.login}
+                className="font-medium text-action hover:text-action"
+              >
                 {t('loginLink')}
               </Link>
             </p>
@@ -164,5 +161,5 @@ export default function ForgotPasswordPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

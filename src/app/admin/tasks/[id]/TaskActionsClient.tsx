@@ -1,25 +1,19 @@
-'use client'
+'use client';
 
-import {
-  CheckCircle2,
-  AlertTriangle,
-  Send,
-  Loader2,
-  Archive,
-} from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Select } from '@/components/ui/select'
-import { FormField } from '@/components/ui/form-field'
-import { useTaskActions } from '@/hooks/useTaskActions'
+import { CheckCircle2, AlertTriangle, Send, Loader2, Archive } from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select } from '@/components/ui/select';
+import { FormField } from '@/components/ui/form-field';
+import { useTaskActions } from '@/hooks/useTaskActions';
 
 interface TaskActionsClientProps {
-  taskId: string
-  taskTitle: string
-  isArchived?: boolean
+  taskId: string;
+  taskTitle: string;
+  isArchived?: boolean;
 }
 
 export default function TaskActionsClient({
@@ -51,11 +45,13 @@ export default function TaskActionsClient({
     handleFlagAttention,
     handleRequest,
     handleArchive,
-  } = useTaskActions(taskId)
+  } = useTaskActions(taskId);
 
   return (
     <Card className="p-6">
-      <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">Aktionen</Heading>
+      <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">
+        Aktionen
+      </Heading>
 
       {error && (
         <div className="mb-4 p-3 bg-error-50 dark:bg-error-900/20 border border-error-200 rounded-lg text-error-700 dark:text-error-300 text-sm">
@@ -69,10 +65,7 @@ export default function TaskActionsClient({
           Als erledigt markieren
         </Button>
 
-        <Button
-          onClick={() => setShowAttentionForm(!showAttentionForm)}
-          variant="destructive"
-        >
+        <Button onClick={() => setShowAttentionForm(!showAttentionForm)} variant="destructive">
           <AlertTriangle className="w-4 h-4" />
           Aufmerksamkeit nötig
         </Button>
@@ -113,19 +106,11 @@ export default function TaskActionsClient({
               />
             </FormField>
             <div className="flex gap-2">
-              <Button
-                onClick={handleComplete}
-                disabled={loading === 'complete'}
-                variant="primary"
-              >
+              <Button onClick={handleComplete} disabled={loading === 'complete'} variant="primary">
                 {loading === 'complete' && <Loader2 className="w-4 h-4 animate-spin" />}
                 Bestätigen
               </Button>
-              <Button
-                onClick={() => setShowCompleteForm(false)}
-                variant="ghost"
-                size="sm"
-              >
+              <Button onClick={() => setShowCompleteForm(false)} variant="ghost" size="sm">
                 Abbrechen
               </Button>
             </div>
@@ -158,11 +143,7 @@ export default function TaskActionsClient({
                 {loading === 'attention' && <Loader2 className="w-4 h-4 animate-spin" />}
                 Markieren
               </Button>
-              <Button
-                onClick={() => setShowAttentionForm(false)}
-                variant="ghost"
-                size="sm"
-              >
+              <Button onClick={() => setShowAttentionForm(false)} variant="ghost" size="sm">
                 Abbrechen
               </Button>
             </div>
@@ -173,7 +154,9 @@ export default function TaskActionsClient({
       {/* Request Form */}
       {showRequestForm && (
         <div className="mt-4 p-4 bg-warning-50 dark:bg-warning-900/20 rounded-lg border border-warning-200">
-          <Heading level={3} className="font-medium text-warning-800 dark:text-warning-200 mb-3">Um Hilfe bitten</Heading>
+          <Heading level={3} className="font-medium text-warning-800 dark:text-warning-200 mb-3">
+            Um Hilfe bitten
+          </Heading>
           <div className="space-y-3">
             <FormField label="An wen?" htmlFor="request-target">
               <Select
@@ -208,11 +191,7 @@ export default function TaskActionsClient({
                 {loading === 'request' && <Loader2 className="w-4 h-4 animate-spin" />}
                 {selectedUserId ? 'Anfrage senden' : 'An alle senden'}
               </Button>
-              <Button
-                onClick={() => setShowRequestForm(false)}
-                variant="ghost"
-                size="sm"
-              >
+              <Button onClick={() => setShowRequestForm(false)} variant="ghost" size="sm">
                 Abbrechen
               </Button>
             </div>
@@ -236,7 +215,8 @@ export default function TaskActionsClient({
           ) : (
             <div className="p-4 bg-error-50 dark:bg-error-900/20 rounded-lg border border-error-200">
               <p className="text-sm text-error-700 dark:text-error-300 mb-3">
-                Aufgabe &ldquo;{taskTitle}&rdquo; wirklich archivieren? Diese wird aus der Liste entfernt.
+                Aufgabe &ldquo;{taskTitle}&rdquo; wirklich archivieren? Diese wird aus der Liste
+                entfernt.
               </p>
               <div className="flex gap-2">
                 <Button
@@ -247,11 +227,7 @@ export default function TaskActionsClient({
                   {loading === 'archive' && <Loader2 className="w-4 h-4 animate-spin" />}
                   Archivieren
                 </Button>
-                <Button
-                  onClick={() => setShowArchiveConfirm(false)}
-                  variant="ghost"
-                  size="sm"
-                >
+                <Button onClick={() => setShowArchiveConfirm(false)} variant="ghost" size="sm">
                   Abbrechen
                 </Button>
               </div>
@@ -260,5 +236,5 @@ export default function TaskActionsClient({
         </div>
       )}
     </Card>
-  )
+  );
 }

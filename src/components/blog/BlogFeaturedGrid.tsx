@@ -1,28 +1,28 @@
-import Image from 'next/image'
-import { Link } from '@/i18n/navigation'
-import { Clock } from 'lucide-react'
-import { getLocale, getTranslations } from 'next-intl/server'
-import { BlogPost } from '@/lib/blog'
-import { formatDate } from '@/lib/date-formats'
-import { blogCategoryKey, getReadingTime } from '@/lib/blog-utils'
-import UnlistedBadge from './UnlistedBadge'
-import BlogByline from './BlogByline'
-import { Eyebrow } from '@/components/ui/Eyebrow'
+import Image from 'next/image';
+import { Link } from '@/i18n/navigation';
+import { Clock } from 'lucide-react';
+import { getLocale, getTranslations } from 'next-intl/server';
+import { BlogPost } from '@/lib/blog';
+import { formatDate } from '@/lib/date-formats';
+import { blogCategoryKey, getReadingTime } from '@/lib/blog-utils';
+import UnlistedBadge from './UnlistedBadge';
+import BlogByline from './BlogByline';
+import { Eyebrow } from '@/components/ui/Eyebrow';
 
 interface BlogFeaturedGridProps {
-  posts: BlogPost[]
+  posts: BlogPost[];
 }
 
 export default async function BlogFeaturedGrid({ posts }: BlogFeaturedGridProps) {
-  const t = await getTranslations('blog')
-  const locale = await getLocale()
+  const t = await getTranslations('blog');
+  const locale = await getLocale();
 
   return (
     <div className="grid gap-8 md:grid-cols-3">
       {posts.map((post) => {
-        const readingTime = getReadingTime(post.body)
-        const categoryKey = post.category ? blogCategoryKey(post.category) : null
-        const categoryLabel = categoryKey ? t(`categoryLabels.${categoryKey}`) : post.category
+        const readingTime = getReadingTime(post.body);
+        const categoryKey = post.category ? blogCategoryKey(post.category) : null;
+        const categoryLabel = categoryKey ? t(`categoryLabels.${categoryKey}`) : post.category;
 
         return (
           <Link key={post.slug} href={`/blog/${post.slug}`} className="group">
@@ -60,7 +60,11 @@ export default async function BlogFeaturedGrid({ posts }: BlogFeaturedGridProps)
               )}
 
               <div className="mt-3 flex flex-wrap items-center gap-x-2.5 gap-y-1 font-mono text-[11px] uppercase tracking-[0.08em] text-text-tertiary">
-                <BlogByline author={post.author} authorId={post.authorId} className="text-text-secondary" />
+                <BlogByline
+                  author={post.author}
+                  authorId={post.authorId}
+                  className="text-text-secondary"
+                />
                 <span aria-hidden="true">·</span>
                 <time>{formatDate(post.publishedAt || post.createdAt, locale)}</time>
                 <span aria-hidden="true">·</span>
@@ -71,8 +75,8 @@ export default async function BlogFeaturedGrid({ posts }: BlogFeaturedGridProps)
               </div>
             </article>
           </Link>
-        )
+        );
       })}
     </div>
-  )
+  );
 }

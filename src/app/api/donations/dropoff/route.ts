@@ -9,38 +9,38 @@
  * against the visitor-typed device list.
  */
 
-import { NextRequest } from 'next/server'
-import { apiError, apiSuccess, apiBadRequest, apiRateLimited } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { logger } from '@/lib/logger'
-import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter'
-import { sendCustomEmail } from '@/lib/email'
+import { NextRequest } from 'next/server';
+import { apiError, apiSuccess, apiBadRequest, apiRateLimited } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { logger } from '@/lib/logger';
+import { checkRateLimit, getClientIp } from '@/lib/auth/rate-limiter';
+import { sendCustomEmail } from '@/lib/email';
 import {
   donationDropoffNotification,
   donationDropoffConfirmation,
-} from '@/lib/email/templates/donation-dropoff'
-import { CONTACT } from '@/config/org'
-import { DonationDropoffSchema } from '@/lib/schemas/donations'
+} from '@/lib/email/templates/donation-dropoff';
+import { CONTACT } from '@/config/org';
+import { DonationDropoffSchema } from '@/lib/schemas/donations';
 
 export async function POST(request: NextRequest) {
   try {
-    const clientIp = getClientIp(request.headers)
-    const rateLimit = checkRateLimit(clientIp, 'submission')
+    const clientIp = getClientIp(request.headers);
+    const rateLimit = checkRateLimit(clientIp, 'submission');
     if (!rateLimit.allowed) {
       return apiRateLimited(ERROR_MESSAGES.RATE_LIMITED, {
         retryAfter: rateLimit.retryAfter,
         remaining: rateLimit.remaining,
         resetAt: rateLimit.resetAt,
-      })
+      });
     }
 
-    const body = await request.json()
-    const result = DonationDropoffSchema.safeParse(body)
+    const body = await request.json();
+    const result = DonationDropoffSchema.safeParse(body);
     if (!result.success) {
-      return apiBadRequest(ERROR_MESSAGES.INVALID_INPUT, result.error.flatten().fieldErrors)
+      return apiBadRequest(ERROR_MESSAGES.INVALID_INPUT, result.error.flatten().fieldErrors);
     }
 
-    const fields = result.data
+    const fields = result.data;
 
     // Both emails fire-and-forget so a transient SMTP failure doesn't
     // surface as a 500 to a donor who just filled out the form correctly.
@@ -53,25 +53,44 @@ export async function POST(request: NextRequest) {
     // pattern as src/lib/it-hilfe/notifications.ts and the 11+ prior
     // swallow fixes in this codebase.
     sendCustomEmail(CONTACT.email, donationDropoffNotification(fields))
-      .then(r => {
+      .then((r) => {
         if (!r.success) {
-          logger.warn('Failed to send donation drop-off notification (resolved)', { error: r.error, donorEmail: fields.email })
+          logger.warn('Failed to send donation drop-off notification (resolved)', {
+            error: r.error,
+            donorEmail: fields.email,
+          });
         }
       })
-      .catch(err => logger.warn('Failed to send donation drop-off notification (rejected)', { error: err, donorEmail: fields.email }))
+      .catch((err) =>
+        logger.warn('Failed to send donation drop-off notification (rejected)', {
+          error: err,
+          donorEmail: fields.email,
+        }),
+      );
 
     sendCustomEmail(fields.email, donationDropoffConfirmation(fields))
-      .then(r => {
+      .then((r) => {
         if (!r.success) {
-          logger.warn('Failed to send donation drop-off confirmation (resolved)', { error: r.error, donorEmail: fields.email })
+          logger.warn('Failed to send donation drop-off confirmation (resolved)', {
+            error: r.error,
+            donorEmail: fields.email,
+          });
         }
       })
-      .catch(err => logger.warn('Failed to send donation drop-off confirmation (rejected)', { error: err, donorEmail: fields.email }))
+      .catch((err) =>
+        logger.warn('Failed to send donation drop-off confirmation (rejected)', {
+          error: err,
+          donorEmail: fields.email,
+        }),
+      );
 
-    logger.info('Donation drop-off announced', { donorEmail: fields.email, hasPreferredDate: !!fields.preferredDate })
+    logger.info('Donation drop-off announced', {
+      donorEmail: fields.email,
+      hasPreferredDate: !!fields.preferredDate,
+    });
 
-    return apiSuccess({ message: 'Drop-off announcement received' })
+    return apiSuccess({ message: 'Drop-off announcement received' });
   } catch (error) {
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
 }

@@ -1,23 +1,23 @@
-'use client'
+'use client';
 
 /**
  * Individual user row in the users table
  */
 
-import { Edit, Crown, Shield, UserCheck, Mail, Trash2, Pencil } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { isSuperAdmin, isStaffEmail } from '@/lib/permissions'
-import { formatDateShort } from '@/lib/date-formats'
-import type { UserRow } from './types'
-import { adminTable } from '@/lib/admin-ui'
-import { Avatar } from '@/components/ui/Avatar'
+import { Edit, Crown, Shield, UserCheck, Mail, Trash2, Pencil } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { isSuperAdmin, isStaffEmail } from '@/lib/permissions';
+import { formatDateShort } from '@/lib/date-formats';
+import type { UserRow } from './types';
+import { adminTable } from '@/lib/admin-ui';
+import { Avatar } from '@/components/ui/Avatar';
 
 interface UserTableRowProps {
-  user: UserRow
-  currentUserIsSuperAdmin: boolean
-  onEditProfile: (user: UserRow) => void
-  onEditPermissions: (user: UserRow) => void
-  onDelete: (user: UserRow) => void
+  user: UserRow;
+  currentUserIsSuperAdmin: boolean;
+  onEditProfile: (user: UserRow) => void;
+  onEditPermissions: (user: UserRow) => void;
+  onDelete: (user: UserRow) => void;
 }
 
 export function UserTableRow({
@@ -27,10 +27,10 @@ export function UserTableRow({
   onEditPermissions,
   onDelete,
 }: UserTableRowProps) {
-  const userIsSuperAdmin = isSuperAdmin(user.email)
-  const userIsStaff = user.is_staff || isStaffEmail(user.email)
-  const permissions = user.staff_permissions || []
-  const hasFullAccess = permissions.includes('*')
+  const userIsSuperAdmin = isSuperAdmin(user.email);
+  const userIsStaff = user.is_staff || isStaffEmail(user.email);
+  const permissions = user.staff_permissions || [];
+  const hasFullAccess = permissions.includes('*');
 
   return (
     <tr className={adminTable.tr}>
@@ -57,7 +57,7 @@ export function UserTableRow({
         />
       )}
     </tr>
-  )
+  );
 }
 
 function UserInfoCell({
@@ -65,22 +65,21 @@ function UserInfoCell({
   userIsSuperAdmin,
   userIsStaff,
 }: {
-  user: UserRow
-  userIsSuperAdmin: boolean
-  userIsStaff: boolean
+  user: UserRow;
+  userIsSuperAdmin: boolean;
+  userIsStaff: boolean;
 }) {
-  const avatarColor = userIsSuperAdmin || userIsStaff
-    ? 'bg-action text-action-text'
-    : 'bg-surface-overlay text-text-primary'
+  const avatarColor =
+    userIsSuperAdmin || userIsStaff
+      ? 'bg-action text-action-text'
+      : 'bg-surface-overlay text-text-primary';
 
   return (
     <td className="px-6 py-4 whitespace-nowrap">
       <div className="flex items-center">
         <Avatar name={user.name || user.email} size="md" colorClassName={avatarColor} />
         <div className="ml-4">
-          <div className="text-sm font-medium text-text-primary">
-            {user.name || 'Kein Name'}
-          </div>
+          <div className="text-sm font-medium text-text-primary">{user.name || 'Kein Name'}</div>
           <div className="text-sm text-text-tertiary flex items-center gap-1">
             <Mail className="w-3 h-3" />
             {user.email}
@@ -88,7 +87,7 @@ function UserInfoCell({
         </div>
       </div>
     </td>
-  )
+  );
 }
 
 function StatusCell({
@@ -96,9 +95,9 @@ function StatusCell({
   userIsStaff,
   emailVerified,
 }: {
-  userIsSuperAdmin: boolean
-  userIsStaff: boolean
-  emailVerified: string | null
+  userIsSuperAdmin: boolean;
+  userIsStaff: boolean;
+  emailVerified: string | null;
 }) {
   return (
     <td className="px-6 py-4 whitespace-nowrap">
@@ -128,7 +127,7 @@ function StatusCell({
         )}
       </div>
     </td>
-  )
+  );
 }
 
 function PermissionsCell({
@@ -136,26 +135,24 @@ function PermissionsCell({
   hasFullAccess,
   permissions,
 }: {
-  userIsStaff: boolean
-  hasFullAccess: boolean
-  permissions: string[]
+  userIsStaff: boolean;
+  hasFullAccess: boolean;
+  permissions: string[];
 }) {
   if (!userIsStaff) {
     return (
       <td className="px-6 py-4">
         <span className="text-sm text-text-tertiary">-</span>
       </td>
-    )
+    );
   }
 
   if (hasFullAccess) {
     return (
       <td className="px-6 py-4">
-        <span className="text-sm text-action font-medium">
-          Voller Zugriff
-        </span>
+        <span className="text-sm text-action font-medium">Voller Zugriff</span>
       </td>
-    )
+    );
   }
 
   if (permissions.length === 0) {
@@ -163,35 +160,31 @@ function PermissionsCell({
       <td className="px-6 py-4">
         <span className="text-sm text-text-tertiary">Keine Berechtigungen</span>
       </td>
-    )
+    );
   }
 
   return (
     <td className="px-6 py-4">
       <div className="flex flex-wrap gap-1 max-w-xs">
-        {permissions.slice(0, 3).map(p => (
+        {permissions.slice(0, 3).map((p) => (
           <span key={p} className="inline-flex px-2 py-0.5 text-xs bg-surface-raised rounded-sm">
             {p}
           </span>
         ))}
         {permissions.length > 3 && (
-          <span className="text-xs text-text-tertiary">
-            +{permissions.length - 3} mehr
-          </span>
+          <span className="text-xs text-text-tertiary">+{permissions.length - 3} mehr</span>
         )}
       </div>
     </td>
-  )
+  );
 }
 
 function DateCell({ date }: { date: string }) {
   return (
     <td className="px-6 py-4 whitespace-nowrap">
-      <div className="text-sm text-text-primary">
-        {formatDateShort(date)}
-      </div>
+      <div className="text-sm text-text-primary">{formatDateShort(date)}</div>
     </td>
-  )
+  );
 }
 
 function ActionsCell({
@@ -202,12 +195,12 @@ function ActionsCell({
   onEditPermissions,
   onDelete,
 }: {
-  user: UserRow
-  userIsStaff: boolean
-  userIsSuperAdmin: boolean
-  onEditProfile: (user: UserRow) => void
-  onEditPermissions: (user: UserRow) => void
-  onDelete: (user: UserRow) => void
+  user: UserRow;
+  userIsStaff: boolean;
+  userIsSuperAdmin: boolean;
+  onEditProfile: (user: UserRow) => void;
+  onEditPermissions: (user: UserRow) => void;
+  onDelete: (user: UserRow) => void;
 }) {
   return (
     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
@@ -245,5 +238,5 @@ function ActionsCell({
         )}
       </div>
     </td>
-  )
+  );
 }

@@ -2,28 +2,24 @@
  * Edit Decision Page - Server Component
  */
 
-import { Metadata } from 'next'
-import { auth } from '@/auth'
-import { Vote } from 'lucide-react'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import DecisionEditFormClient from './DecisionEditFormClient'
+import { Metadata } from 'next';
+import { auth } from '@/auth';
+import { Vote } from 'lucide-react';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import DecisionEditFormClient from './DecisionEditFormClient';
 
 export const metadata: Metadata = {
   title: 'Entscheidung bearbeiten',
   description: 'Entscheidung bearbeiten',
-}
+};
 
-export default async function EditDecisionPage({
-  params,
-}: {
-  params: Promise<{ id: string }>
-}) {
-  const session = await auth()
+export default async function EditDecisionPage({ params }: { params: Promise<{ id: string }> }) {
+  const session = await auth();
   if (!session?.user?.email) {
-    return null
+    return null;
   }
 
-  const { id } = await params
+  const { id } = await params;
 
   return (
     <AdminPageWrapper
@@ -34,5 +30,5 @@ export default async function EditDecisionPage({
     >
       <DecisionEditFormClient decisionId={id} />
     </AdminPageWrapper>
-  )
+  );
 }

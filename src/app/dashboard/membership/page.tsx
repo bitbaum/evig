@@ -1,38 +1,44 @@
-import { Metadata } from 'next'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
-import Link from 'next/link'
-import { buttonClass } from '@/components/ui/button-class'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
-import { BadgeCheck, CheckCircle, AlertCircle, ArrowRight, CreditCard, Calendar } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
-import { Card } from '@/components/ui/card'
-import { EmptyState } from '@/components/ui/EmptyState'
-import { IconBadge } from '@/components/ui/IconBadge'
-import { MEMBERSHIP, ORG } from '@/config/org'
-import { MEMBERSHIP_TYPE_LABELS } from '@/config/membership-status'
-import { formatDate } from '@/lib/date-formats'
-import { logger } from '@/lib/logger'
-import { getTranslations, getLocale } from 'next-intl/server'
+import { Metadata } from 'next';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
+import Link from 'next/link';
+import { buttonClass } from '@/components/ui/button-class';
+import { query } from '@/lib/auth/db';
+import { TABLE_NAMES } from '@/config/database';
+import {
+  BadgeCheck,
+  CheckCircle,
+  AlertCircle,
+  ArrowRight,
+  CreditCard,
+  Calendar,
+} from 'lucide-react';
+import Heading from '@/components/ui/Heading';
+import { Card } from '@/components/ui/card';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { IconBadge } from '@/components/ui/IconBadge';
+import { MEMBERSHIP, ORG } from '@/config/org';
+import { MEMBERSHIP_TYPE_LABELS } from '@/config/membership-status';
+import { formatDate } from '@/lib/date-formats';
+import { logger } from '@/lib/logger';
+import { getTranslations, getLocale } from 'next-intl/server';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale()
-  const t = await getTranslations({ locale, namespace: 'dashboard.meta' })
+  const locale = await getLocale();
+  const t = await getTranslations({ locale, namespace: 'dashboard.meta' });
   return {
     title: { absolute: `${t('membershipTitle')} | ${ORG.name} Dashboard` },
     description: t('membershipDesc'),
-  }
+  };
 }
 
 interface MemberRow {
-  is_member: boolean
-  member_since: string | null
-  member_type: string | null
-  member_paid_until: string | null
+  is_member: boolean;
+  member_since: string | null;
+  member_type: string | null;
+  member_paid_until: string | null;
 }
-
 
 async function getMembership(userId: string): Promise<MemberRow | null> {
   try {
@@ -40,38 +46,37 @@ async function getMembership(userId: string): Promise<MemberRow | null> {
       `SELECT is_member, member_since, member_type, member_paid_until
        FROM ${TABLE_NAMES.USERS}
        WHERE id = $1`,
-      [userId]
-    )
-    return result.rows[0] ?? null
+      [userId],
+    );
+    return result.rows[0] ?? null;
   } catch (error) {
-    logger.error('Failed to fetch membership status', { userId, error })
-    return null
+    logger.error('Failed to fetch membership status', { userId, error });
+    return null;
   }
 }
 
 function isPaid(paidUntil: string | null): boolean {
-  if (!paidUntil) return false
-  return new Date(paidUntil) > new Date()
+  if (!paidUntil) return false;
+  return new Date(paidUntil) > new Date();
 }
 
 export default async function MembershipPage() {
-  const t = await getTranslations('dashboard.membership')
-  const session = await auth()
+  const t = await getTranslations('dashboard.membership');
+  const session = await auth();
   if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/dashboard/membership')
+    redirect('/auth/login?callbackUrl=/dashboard/membership');
   }
 
-  const membership = await getMembership(session.user.id!)
-  const isMember = membership?.is_member ?? false
-  const paid = isPaid(membership?.member_paid_until ?? null)
-  const fee = membership?.member_type === 'reduced' ? MEMBERSHIP.fees.reduced : MEMBERSHIP.fees.regular
+  const membership = await getMembership(session.user.id!);
+  const isMember = membership?.is_member ?? false;
+  const paid = isPaid(membership?.member_paid_until ?? null);
+  const fee =
+    membership?.member_type === 'reduced' ? MEMBERSHIP.fees.reduced : MEMBERSHIP.fees.regular;
 
   return (
     <article className="mx-auto max-w-3xl space-y-6 px-4 py-12 sm:px-6 lg:px-8">
       <header className="border-b border-subtle pb-8">
-        <Eyebrow>
-          {t('pageSubtitle', { orgName: ORG.legalName })}
-        </Eyebrow>
+        <Eyebrow>{t('pageSubtitle', { orgName: ORG.legalName })}</Eyebrow>
         <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
           {t('pageTitle')}
         </Heading>
@@ -87,7 +92,9 @@ export default async function MembershipPage() {
                 <div className="flex items-center gap-2 flex-wrap">
                   <Heading level={2} className="text-lg font-semibold text-text-primary">
                     {membership?.member_type
-                      ? (MEMBERSHIP_TYPE_LABELS[membership.member_type as keyof typeof MEMBERSHIP_TYPE_LABELS] ?? t('memberLabel'))
+                      ? (MEMBERSHIP_TYPE_LABELS[
+                          membership.member_type as keyof typeof MEMBERSHIP_TYPE_LABELS
+                        ] ?? t('memberLabel'))
                       : t('memberLabel')}
                   </Heading>
                   {paid ? (
@@ -114,7 +121,10 @@ export default async function MembershipPage() {
 
           {/* Payment details */}
           <Card className="p-6">
-            <Heading level={3} className="text-base font-semibold text-text-primary mb-4 flex items-center gap-2">
+            <Heading
+              level={3}
+              className="text-base font-semibold text-text-primary mb-4 flex items-center gap-2"
+            >
               <CreditCard className="w-4 h-4 text-text-tertiary" aria-hidden="true" />
               {t('annualFee')}
             </Heading>
@@ -128,7 +138,9 @@ export default async function MembershipPage() {
               {membership?.member_paid_until && (
                 <div className="flex justify-between items-center py-2 border-b border-subtle">
                   <span className="text-text-secondary">{t('paidUntilLabel')}</span>
-                  <span className={`font-medium ${paid ? 'text-action' : 'text-warning-700 dark:text-warning-400'}`}>
+                  <span
+                    className={`font-medium ${paid ? 'text-action' : 'text-warning-700 dark:text-warning-400'}`}
+                  >
                     {formatDate(membership.member_paid_until)}
                   </span>
                 </div>
@@ -152,7 +164,10 @@ export default async function MembershipPage() {
 
           {/* What membership means */}
           <div className="bg-surface-raised rounded-xl p-6 border">
-            <Heading level={3} className="text-sm font-semibold text-text-secondary uppercase tracking-wide mb-3">
+            <Heading
+              level={3}
+              className="text-sm font-semibold text-text-secondary uppercase tracking-wide mb-3"
+            >
               {t('benefitsTitle')}
             </Heading>
             <ul className="space-y-2 text-sm text-text-secondary">
@@ -177,7 +192,11 @@ export default async function MembershipPage() {
           iconBg="bg-action-muted"
           iconColor="text-action"
           title={t('notMemberTitle')}
-          description={t('notMemberDesc', { orgName: ORG.legalName, currency: MEMBERSHIP.currency, fee: MEMBERSHIP.fees.regular })}
+          description={t('notMemberDesc', {
+            orgName: ORG.legalName,
+            currency: MEMBERSHIP.currency,
+            fee: MEMBERSHIP.fees.regular,
+          })}
           action={
             <Link href="/mitglied-werden" className={buttonClass({ variant: 'primary' })}>
               {t('becomeMember')}
@@ -187,5 +206,5 @@ export default async function MembershipPage() {
         />
       )}
     </article>
-  )
+  );
 }

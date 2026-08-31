@@ -3,8 +3,8 @@
  * PATCH /api/notifications — mark all as read
  */
 
-import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
+import { NextRequest } from 'next/server';
+import { auth } from '@/auth';
 
 // Mock Drizzle db with chainable API
 const mockSelectChain = {
@@ -13,39 +13,45 @@ const mockSelectChain = {
   where: jest.fn().mockReturnThis(),
   orderBy: jest.fn().mockReturnThis(),
   limit: jest.fn().mockResolvedValue([]),
-}
+};
 const mockUpdateChain = {
   set: jest.fn().mockReturnThis(),
   where: jest.fn().mockResolvedValue(undefined),
-}
+};
 
 jest.mock('@/db', () => ({
   db: {
     select: jest.fn(() => mockSelectChain),
     update: jest.fn(() => mockUpdateChain),
   },
-}))
+}));
 jest.mock('@/db/schema', () => ({
   notifications: {
-    id: 'n.id', type: 'n.type', title: 'n.title', content: 'n.content',
-    relatedType: 'n.related_type', relatedId: 'n.related_id',
-    isRead: 'n.is_read', readAt: 'n.read_at', createdAt: 'n.created_at',
+    id: 'n.id',
+    type: 'n.type',
+    title: 'n.title',
+    content: 'n.content',
+    relatedType: 'n.related_type',
+    relatedId: 'n.related_id',
+    isRead: 'n.is_read',
+    readAt: 'n.read_at',
+    createdAt: 'n.created_at',
     userId: 'n.user_id',
   },
-}))
+}));
 jest.mock('drizzle-orm', () => ({
   eq: jest.fn(),
   and: jest.fn(),
   asc: jest.fn(),
   desc: jest.fn(),
   sql: jest.fn(),
-}))
-jest.mock('@/auth', () => ({ auth: jest.fn() }))
+}));
+jest.mock('@/auth', () => ({ auth: jest.fn() }));
 jest.mock('@/lib/permissions', () => ({
   canAccessSection: jest.fn(() => true),
   toStaffUser: jest.fn(),
   ADMIN_SECTIONS: {},
-}))
+}));
 jest.mock('@/lib/api/helpers', () => ({
   apiSuccess: jest.fn((data) => ({
     status: 200,
@@ -63,35 +69,38 @@ jest.mock('@/lib/api/helpers', () => ({
     status: 403,
     json: () => Promise.resolve({ success: false, error: msg || 'Forbidden' }),
   })),
-}))
+}));
 jest.mock('@/lib/logger', () => ({
   logger: { error: jest.fn(), info: jest.fn(), warn: jest.fn() },
-}))
+}));
 
 // Must import AFTER mocks are set up
-import { GET, PATCH } from '../route'
-import { db } from '@/db'
+import { GET, PATCH } from '../route';
+import { db } from '@/db';
 
-const mockAuth = auth as jest.Mock
-const mockRequest = {} as NextRequest
+const mockAuth = auth as jest.Mock;
+const mockRequest = {} as NextRequest;
 
 beforeEach(() => {
-  jest.clearAllMocks()
+  jest.clearAllMocks();
   // Reset default chain behavior
-  mockSelectChain.limit.mockResolvedValue([])
-  mockUpdateChain.where.mockResolvedValue(undefined)
-})
+  mockSelectChain.limit.mockResolvedValue([]);
+  mockUpdateChain.where.mockResolvedValue(undefined);
+});
 
 function mockSession(id = 'user-123', email = 'user@revamp-it.ch') {
-  mockAuth.mockResolvedValue({ user: { id, email, isStaff: false, staffPermissions: [] }, expires: '2099-01-01' })
+  mockAuth.mockResolvedValue({
+    user: { id, email, isStaff: false, staffPermissions: [] },
+    expires: '2099-01-01',
+  });
 }
 
 function mockNoSession() {
-  mockAuth.mockResolvedValue(null)
+  mockAuth.mockResolvedValue(null);
 }
 
 async function json(response: Response) {
-  return response.json() as Promise<Record<string, unknown>>
+  return response.json() as Promise<Record<string, unknown>>;
 }
 
 // ---------------------------------------------------------------------------
@@ -100,58 +109,78 @@ async function json(response: Response) {
 
 describe('GET /api/notifications', () => {
   it('returns 401 when not authenticated', async () => {
-    mockNoSession()
+    mockNoSession();
 
-    const res = await GET(mockRequest)
-    const body = await json(res)
+    const res = await GET(mockRequest);
+    const body = await json(res);
 
-    expect(res.status).toBe(401)
-    expect(body.success).toBe(false)
-  })
+    expect(res.status).toBe(401);
+    expect(body.success).toBe(false);
+  });
 
   it('returns notifications with correct unreadCount', async () => {
-    mockSession()
+    mockSession();
 
     const notificationsResult = [
-      { id: 'n1', type: 'decision_voting', title: 'Abstimmung', content: '...', related_type: 'decision', related_id: 'dec-1', is_read: false, read_at: null, created_at: '2026-01-01T00:00:00Z' },
-      { id: 'n2', type: 'protocol_finalized', title: 'Protokoll', content: '...', related_type: 'protocol', related_id: 'proto-1', is_read: true, read_at: '2026-01-02T00:00:00Z', created_at: '2025-12-01T00:00:00Z' },
-    ]
-    mockSelectChain.limit.mockResolvedValue(notificationsResult)
+      {
+        id: 'n1',
+        type: 'decision_voting',
+        title: 'Abstimmung',
+        content: '...',
+        related_type: 'decision',
+        related_id: 'dec-1',
+        is_read: false,
+        read_at: null,
+        created_at: '2026-01-01T00:00:00Z',
+      },
+      {
+        id: 'n2',
+        type: 'protocol_finalized',
+        title: 'Protokoll',
+        content: '...',
+        related_type: 'protocol',
+        related_id: 'proto-1',
+        is_read: true,
+        read_at: '2026-01-02T00:00:00Z',
+        created_at: '2025-12-01T00:00:00Z',
+      },
+    ];
+    mockSelectChain.limit.mockResolvedValue(notificationsResult);
 
-    const res = await GET(mockRequest)
-    const body = await json(res)
+    const res = await GET(mockRequest);
+    const body = await json(res);
 
-    expect(res.status).toBe(200)
-    expect(body.success).toBe(true)
-    const data = body.data as { notifications: unknown[]; unreadCount: number }
-    expect(data.notifications).toHaveLength(2)
-    expect(data.unreadCount).toBe(1)
-  })
+    expect(res.status).toBe(200);
+    expect(body.success).toBe(true);
+    const data = body.data as { notifications: unknown[]; unreadCount: number };
+    expect(data.notifications).toHaveLength(2);
+    expect(data.unreadCount).toBe(1);
+  });
 
   it('returns empty notifications with unreadCount 0 when table is empty', async () => {
-    mockSession()
-    mockSelectChain.limit.mockResolvedValue([])
+    mockSession();
+    mockSelectChain.limit.mockResolvedValue([]);
 
-    const res = await GET(mockRequest)
-    const body = await json(res)
+    const res = await GET(mockRequest);
+    const body = await json(res);
 
-    expect(res.status).toBe(200)
-    const data = body.data as { notifications: unknown[]; unreadCount: number }
-    expect(data.notifications).toHaveLength(0)
-    expect(data.unreadCount).toBe(0)
-  })
+    expect(res.status).toBe(200);
+    const data = body.data as { notifications: unknown[]; unreadCount: number };
+    expect(data.notifications).toHaveLength(0);
+    expect(data.unreadCount).toBe(0);
+  });
 
   it('returns 500 when a database error occurs', async () => {
-    mockSession()
-    mockSelectChain.limit.mockRejectedValue(new Error('DB connection lost'))
+    mockSession();
+    mockSelectChain.limit.mockRejectedValue(new Error('DB connection lost'));
 
-    const res = await GET(mockRequest)
-    const body = await json(res)
+    const res = await GET(mockRequest);
+    const body = await json(res);
 
-    expect(res.status).toBe(500)
-    expect(body.success).toBe(false)
-  })
-})
+    expect(res.status).toBe(500);
+    expect(body.success).toBe(false);
+  });
+});
 
 // ---------------------------------------------------------------------------
 // PATCH /api/notifications — mark all as read
@@ -159,37 +188,37 @@ describe('GET /api/notifications', () => {
 
 describe('PATCH /api/notifications', () => {
   it('returns 401 when not authenticated', async () => {
-    mockNoSession()
+    mockNoSession();
 
-    const res = await PATCH(mockRequest)
-    const body = await json(res)
+    const res = await PATCH(mockRequest);
+    const body = await json(res);
 
-    expect(res.status).toBe(401)
-    expect(body.success).toBe(false)
-  })
+    expect(res.status).toBe(401);
+    expect(body.success).toBe(false);
+  });
 
   it('marks all unread notifications as read and returns success', async () => {
-    mockSession()
-    mockUpdateChain.where.mockResolvedValue(undefined)
+    mockSession();
+    mockUpdateChain.where.mockResolvedValue(undefined);
 
-    const res = await PATCH(mockRequest)
-    const body = await json(res)
+    const res = await PATCH(mockRequest);
+    const body = await json(res);
 
-    expect(res.status).toBe(200)
-    expect(body.success).toBe(true)
-    expect(db.update).toHaveBeenCalled()
-    expect(mockUpdateChain.set).toHaveBeenCalled()
-    expect(mockUpdateChain.where).toHaveBeenCalled()
-  })
+    expect(res.status).toBe(200);
+    expect(body.success).toBe(true);
+    expect(db.update).toHaveBeenCalled();
+    expect(mockUpdateChain.set).toHaveBeenCalled();
+    expect(mockUpdateChain.where).toHaveBeenCalled();
+  });
 
   it('returns 500 when a database error occurs', async () => {
-    mockSession()
-    mockUpdateChain.where.mockRejectedValue(new Error('DB error'))
+    mockSession();
+    mockUpdateChain.where.mockRejectedValue(new Error('DB error'));
 
-    const res = await PATCH(mockRequest)
-    const body = await json(res)
+    const res = await PATCH(mockRequest);
+    const body = await json(res);
 
-    expect(res.status).toBe(500)
-    expect(body.success).toBe(false)
-  })
-})
+    expect(res.status).toBe(500);
+    expect(body.success).toBe(false);
+  });
+});

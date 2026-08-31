@@ -1,7 +1,7 @@
 'use client';
 
 import { OptionCard, type VotingOption } from './OptionCard';
-import { adminInteractive } from '@/lib/admin-ui'
+import { adminInteractive } from '@/lib/admin-ui';
 
 interface Props {
   options: VotingOption[];

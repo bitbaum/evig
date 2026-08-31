@@ -1,27 +1,29 @@
-'use client'
+'use client';
 
-import { Link } from '@/i18n/navigation'
-import { CheckCircle, FileText } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
+import { Link } from '@/i18n/navigation';
+import { CheckCircle, FileText } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
 
 interface RegistrationSuccessCardProps {
-  requiresPayment: boolean
-  isPaymentSuccess: boolean
-  invoiceNumber?: string
+  requiresPayment: boolean;
+  isPaymentSuccess: boolean;
+  invoiceNumber?: string;
 }
 
 export function RegistrationSuccessCard({
   requiresPayment,
   isPaymentSuccess,
-  invoiceNumber
+  invoiceNumber,
 }: RegistrationSuccessCardProps) {
-  const t = useTranslations('workshops.detail')
+  const t = useTranslations('workshops.detail');
 
   return (
     <div>
-      <Heading level={3} className="text-lg font-semibold text-text-primary mb-4">{t('successHeading')}</Heading>
+      <Heading level={3} className="text-lg font-semibold text-text-primary mb-4">
+        {t('successHeading')}
+      </Heading>
 
       <div className="bg-action-muted border border-strong rounded-lg p-4 mb-4">
         <div className="flex items-center text-action mb-2">
@@ -29,11 +31,8 @@ export function RegistrationSuccessCard({
           <span className="font-medium">{t('successTitle')}</span>
         </div>
         <p className="text-action text-sm">
-          {requiresPayment && isPaymentSuccess
-            ? t('successPayment')
-            : t('successRegistered')
-          }
-          {' '}{t('successDashboard')}
+          {requiresPayment && isPaymentSuccess ? t('successPayment') : t('successRegistered')}{' '}
+          {t('successDashboard')}
         </p>
       </div>
 
@@ -50,5 +49,5 @@ export function RegistrationSuccessCard({
         {t('dashboardLink')}
       </Button>
     </div>
-  )
+  );
 }

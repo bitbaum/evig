@@ -1,140 +1,147 @@
-'use client'
+'use client';
 
 // Command palette shell (⌘K): dialog state, fetch/debounce, keyboard nav. Rows +
 // registry live in ./command-bar/.
 
-import { useEffect, useRef, useState, useCallback, useMemo, useSyncExternalStore } from 'react'
-import { createPortal } from 'react-dom'
-import { useTranslations } from 'next-intl'
-import { useRouter } from 'next/navigation'
-import { apiFetch } from '@/lib/api/client'
-import { Search } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { buildResults } from './command-bar/build-results'
-import { ResultsList } from './command-bar/ResultsList'
-import type { SearchIndex, ResultItem } from './command-bar/types'
+import { useEffect, useRef, useState, useCallback, useMemo, useSyncExternalStore } from 'react';
+import { createPortal } from 'react-dom';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { apiFetch } from '@/lib/api/client';
+import { Search } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { buildResults } from './command-bar/build-results';
+import { ResultsList } from './command-bar/ResultsList';
+import type { SearchIndex, ResultItem } from './command-bar/types';
 
 // ---------------------------------------------------------------------------
 // CommandBar component
 // ---------------------------------------------------------------------------
 
 export function CommandBar() {
-  const t = useTranslations('admin.commandBar')
-  const tSections = useTranslations('admin.sections')
-  const [open, setOpen] = useState(false)
-  const [query, setQuery] = useState('')
-  const [index, setIndex] = useState<SearchIndex | null>(null)
-  const [activeIdx, setActiveIdx] = useState(0)
-  const [loading, setLoading] = useState(false)
+  const t = useTranslations('admin.commandBar');
+  const tSections = useTranslations('admin.sections');
+  const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const [index, setIndex] = useState<SearchIndex | null>(null);
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [loading, setLoading] = useState(false);
   // Portal target only exists after mount (SSR has no document) — the
   // subscribe-to-nothing store reads false on the server, true on the client.
   const mounted = useSyncExternalStore(
     () => () => {},
     () => true,
     () => false,
-  )
-  const dialogRef = useRef<HTMLDialogElement>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
-  const router = useRouter()
+  );
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
   // Debounce the query so we search the server (not just a prefetched slice)
   // on a settled term rather than every keystroke.
-  const [debouncedQuery, setDebouncedQuery] = useState('')
+  const [debouncedQuery, setDebouncedQuery] = useState('');
   useEffect(() => {
-    const id = setTimeout(() => setDebouncedQuery(query.trim()), 180)
-    return () => clearTimeout(id)
-  }, [query])
+    const id = setTimeout(() => setDebouncedQuery(query.trim()), 180);
+    return () => clearTimeout(id);
+  }, [query]);
 
   // Fetch server-side matches whenever open or the debounced term changes.
   // The `cancelled` guard drops out-of-order responses from fast typing.
   useEffect(() => {
-    if (!open) return
-    let cancelled = false
-    const qs = debouncedQuery ? `?q=${encodeURIComponent(debouncedQuery)}` : ''
+    if (!open) return;
+    let cancelled = false;
+    const qs = debouncedQuery ? `?q=${encodeURIComponent(debouncedQuery)}` : '';
     // eslint-disable-next-line react-hooks/set-state-in-effect -- loading flag for the fetch below
-    setLoading(true)
+    setLoading(true);
     apiFetch<SearchIndex>(`/api/admin/search-index${qs}`)
-      .then(result => {
-        if (cancelled) return
-        if (result.success && result.data) setIndex(result.data)
+      .then((result) => {
+        if (cancelled) return;
+        if (result.success && result.data) setIndex(result.data);
       })
-      .finally(() => { if (!cancelled) setLoading(false) })
-    return () => { cancelled = true }
-  }, [open, debouncedQuery])
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [open, debouncedQuery]);
 
   // Global keyboard shortcut
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault()
-        setOpen(prev => !prev)
+        e.preventDefault();
+        setOpen((prev) => !prev);
       }
-    }
-    window.addEventListener('keydown', handler)
-    return () => window.removeEventListener('keydown', handler)
-  }, [])
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
 
   // Dialog open/close
   useEffect(() => {
-    const dialog = dialogRef.current
-    if (!dialog) return
+    const dialog = dialogRef.current;
+    if (!dialog) return;
     if (open) {
-      dialog.showModal()
+      dialog.showModal();
       // eslint-disable-next-line react-hooks/set-state-in-effect -- reset search when dialog opens
-      setQuery('')
-      setActiveIdx(0)
-      setTimeout(() => inputRef.current?.focus(), 0)
+      setQuery('');
+      setActiveIdx(0);
+      setTimeout(() => inputRef.current?.focus(), 0);
     } else {
-      dialog.close()
+      dialog.close();
     }
-  }, [open])
+  }, [open]);
 
-  const close = useCallback(() => setOpen(false), [])
+  const close = useCallback(() => setOpen(false), []);
 
   // Close on backdrop click
   useEffect(() => {
-    const dialog = dialogRef.current
-    if (!dialog) return
+    const dialog = dialogRef.current;
+    if (!dialog) return;
     const handler = (e: MouseEvent) => {
-      if (e.target === dialog) close()
-    }
-    dialog.addEventListener('click', handler)
-    return () => dialog.removeEventListener('click', handler)
-  }, [close])
+      if (e.target === dialog) close();
+    };
+    dialog.addEventListener('click', handler);
+    return () => dialog.removeEventListener('click', handler);
+  }, [close]);
 
-  const results = useMemo(() => buildResults(index, query, t, tSections), [index, query, t, tSections])
+  const results = useMemo(
+    () => buildResults(index, query, t, tSections),
+    [index, query, t, tSections],
+  );
 
   // Group results
   const groups = useMemo(() => {
-    const map = new Map<string, ResultItem[]>()
+    const map = new Map<string, ResultItem[]>();
     for (const item of results) {
-      const g = map.get(item.group) ?? []
-      g.push(item)
-      map.set(item.group, g)
+      const g = map.get(item.group) ?? [];
+      g.push(item);
+      map.set(item.group, g);
     }
-    return map
-  }, [results])
+    return map;
+  }, [results]);
 
   // Navigate with arrow keys
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown') {
-      e.preventDefault()
-      setActiveIdx(i => Math.min(i + 1, results.length - 1))
+      e.preventDefault();
+      setActiveIdx((i) => Math.min(i + 1, results.length - 1));
     } else if (e.key === 'ArrowUp') {
-      e.preventDefault()
-      setActiveIdx(i => Math.max(i - 1, 0))
+      e.preventDefault();
+      setActiveIdx((i) => Math.max(i - 1, 0));
     } else if (e.key === 'Enter') {
-      e.preventDefault()
-      const item = results[activeIdx]
+      e.preventDefault();
+      const item = results[activeIdx];
       if (item) {
-        router.push(item.href)
-        close()
+        router.push(item.href);
+        close();
       }
     } else if (e.key === 'Escape') {
-      close()
+      close();
     }
-  }
+  };
 
   return (
     <>
@@ -158,62 +165,75 @@ export function CommandBar() {
           containing block that otherwise pins this showModal() dialog to the
           top-left instead of the viewport. Top-anchored (~12vh) + centered,
           matching command-palette convention (Spotlight/VSCode/Linear). */}
-      {mounted && createPortal(
-      <dialog
-        ref={dialogRef}
-        className="fixed left-1/2 top-[12vh] m-0 w-full max-w-xl -translate-x-1/2 rounded-xl border border bg-surface-base p-0 shadow-xs backdrop:bg-black/60"
-        onKeyDown={handleKeyDown}
-        onClose={close}
-        aria-label={t('openShortcut')}
-      >
-        {/* Search input */}
-        <div className="flex items-center gap-3 border-b border px-4 py-3">
-          <Search className="w-4 h-4 text-text-muted shrink-0" aria-hidden="true" />
-          <Input
-            ref={inputRef}
-            type="search"
-            placeholder={t('placeholder')}
-            value={query}
-            onChange={e => { setQuery(e.target.value); setActiveIdx(0) }}
-            className="flex-1 bg-transparent border-0 focus:ring-0 focus-visible:ring-0 px-0"
-            autoComplete="off"
-            spellCheck={false}
-          />
-          <kbd className="shrink-0 rounded-sm bg-surface-raised px-1.5 py-0.5 font-mono text-xs leading-none text-text-tertiary dark:bg-surface-base/6">
-            Esc
-          </kbd>
-        </div>
+      {mounted &&
+        createPortal(
+          <dialog
+            ref={dialogRef}
+            className="fixed left-1/2 top-[12vh] m-0 w-full max-w-xl -translate-x-1/2 rounded-xl border border bg-surface-base p-0 shadow-xs backdrop:bg-black/60"
+            onKeyDown={handleKeyDown}
+            onClose={close}
+            aria-label={t('openShortcut')}
+          >
+            {/* Search input */}
+            <div className="flex items-center gap-3 border-b border px-4 py-3">
+              <Search className="w-4 h-4 text-text-muted shrink-0" aria-hidden="true" />
+              <Input
+                ref={inputRef}
+                type="search"
+                placeholder={t('placeholder')}
+                value={query}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setActiveIdx(0);
+                }}
+                className="flex-1 bg-transparent border-0 focus:ring-0 focus-visible:ring-0 px-0"
+                autoComplete="off"
+                spellCheck={false}
+              />
+              <kbd className="shrink-0 rounded-sm bg-surface-raised px-1.5 py-0.5 font-mono text-xs leading-none text-text-tertiary dark:bg-surface-base/6">
+                Esc
+              </kbd>
+            </div>
 
-        {/* Results */}
-        <ResultsList
-          results={results}
-          groups={groups}
-          activeIdx={activeIdx}
-          loading={loading}
-          query={query}
-          t={t}
-          onSelect={item => { router.push(item.href); close() }}
-          onHover={setActiveIdx}
-        />
+            {/* Results */}
+            <ResultsList
+              results={results}
+              groups={groups}
+              activeIdx={activeIdx}
+              loading={loading}
+              query={query}
+              t={t}
+              onSelect={(item) => {
+                router.push(item.href);
+                close();
+              }}
+              onHover={setActiveIdx}
+            />
 
-        {/* Footer hint */}
-        <div className="flex items-center gap-4 border-t border-subtle px-4 py-2 text-xs text-text-muted">
-          <span className="flex items-center gap-1">
-            <kbd className="rounded-sm bg-surface-raised px-1 py-0.5 font-mono dark:bg-surface-base/6">↑↓</kbd>
-            Navigieren
-          </span>
-          <span className="flex items-center gap-1">
-            <kbd className="rounded-sm bg-surface-raised px-1 py-0.5 font-mono dark:bg-surface-base/6">↵</kbd>
-            Öffnen
-          </span>
-          <span className="flex items-center gap-1">
-            <kbd className="rounded-sm bg-surface-raised px-1 py-0.5 font-mono dark:bg-surface-base/6">Esc</kbd>
-            Schliessen
-          </span>
-        </div>
-      </dialog>,
-      document.body,
-      )}
+            {/* Footer hint */}
+            <div className="flex items-center gap-4 border-t border-subtle px-4 py-2 text-xs text-text-muted">
+              <span className="flex items-center gap-1">
+                <kbd className="rounded-sm bg-surface-raised px-1 py-0.5 font-mono dark:bg-surface-base/6">
+                  ↑↓
+                </kbd>
+                Navigieren
+              </span>
+              <span className="flex items-center gap-1">
+                <kbd className="rounded-sm bg-surface-raised px-1 py-0.5 font-mono dark:bg-surface-base/6">
+                  ↵
+                </kbd>
+                Öffnen
+              </span>
+              <span className="flex items-center gap-1">
+                <kbd className="rounded-sm bg-surface-raised px-1 py-0.5 font-mono dark:bg-surface-base/6">
+                  Esc
+                </kbd>
+                Schliessen
+              </span>
+            </div>
+          </dialog>,
+          document.body,
+        )}
     </>
-  )
+  );
 }

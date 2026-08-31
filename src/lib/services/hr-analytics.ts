@@ -2,14 +2,14 @@
  * HR funnel analytics — admin stats
  */
 
-import { db } from '@/db'
-import { jobApplications, jobPostings } from '@/db/schema/hr-vacancies'
-import { eq, count } from 'drizzle-orm'
-import { VACANCY_STATUS } from '@/config/hr-vacancies'
-import { APPLICATION_STATUS } from '@/config/hr-application-status'
-import type { HrFunnelStats } from '@/lib/types/hr'
+import { db } from '@/db';
+import { jobApplications, jobPostings } from '@/db/schema/hr-vacancies';
+import { eq, count } from 'drizzle-orm';
+import { VACANCY_STATUS } from '@/config/hr-vacancies';
+import { APPLICATION_STATUS } from '@/config/hr-application-status';
+import type { HrFunnelStats } from '@/lib/types/hr';
 
-export type { HrFunnelStats } from '@/lib/types/hr'
+export type { HrFunnelStats } from '@/lib/types/hr';
 
 export async function getHrFunnelStats(): Promise<HrFunnelStats> {
   const [
@@ -50,16 +50,16 @@ export async function getHrFunnelStats(): Promise<HrFunnelStats> {
       .select({ cnt: count() })
       .from(jobPostings)
       .where(eq(jobPostings.status, VACANCY_STATUS.FILLED)),
-  ])
+  ]);
 
-  const byStatus: Record<string, number> = {}
-  for (const row of statusRows) byStatus[row.status] = Number(row.cnt)
+  const byStatus: Record<string, number> = {};
+  for (const row of statusRows) byStatus[row.status] = Number(row.cnt);
 
-  const byTrack: Record<string, number> = {}
-  for (const row of trackRows) byTrack[row.track] = Number(row.cnt)
+  const byTrack: Record<string, number> = {};
+  for (const row of trackRows) byTrack[row.track] = Number(row.cnt);
 
-  const bySource: Record<string, number> = {}
-  for (const row of sourceRows) bySource[row.source] = Number(row.cnt)
+  const bySource: Record<string, number> = {};
+  for (const row of sourceRows) bySource[row.source] = Number(row.cnt);
 
   return {
     byStatus,
@@ -69,15 +69,15 @@ export async function getHrFunnelStats(): Promise<HrFunnelStats> {
     pendingApplications: Number(pendingRow[0]?.cnt ?? 0),
     draftVacancies: Number(draftVacanciesRow[0]?.cnt ?? 0),
     filledVacancies: Number(filledVacanciesRow[0]?.cnt ?? 0),
-  }
+  };
 }
 
 export async function countSubmittedTimecardsPendingReview(): Promise<number> {
-  const { timecards } = await import('@/db/schema/timecards')
-  const { TIMECARD_STATUSES } = await import('@/config/timecards')
+  const { timecards } = await import('@/db/schema/timecards');
+  const { TIMECARD_STATUSES } = await import('@/config/timecards');
   const [row] = await db
     .select({ cnt: count() })
     .from(timecards)
-    .where(eq(timecards.status, TIMECARD_STATUSES.SUBMITTED))
-  return Number(row?.cnt ?? 0)
+    .where(eq(timecards.status, TIMECARD_STATUSES.SUBMITTED));
+  return Number(row?.cnt ?? 0);
 }

@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import { Users } from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import { Input } from '@/components/ui/input'
-import { FormField } from '@/components/ui/form-field'
-import type { LocationFormData } from './types'
-import { FACILITIES } from './types'
+import { Users } from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import { Input } from '@/components/ui/input';
+import { FormField } from '@/components/ui/form-field';
+import type { LocationFormData } from './types';
+import { FACILITIES } from './types';
 
 interface Props {
-  formData: LocationFormData
-  onFieldChange: <K extends keyof LocationFormData>(field: K, value: LocationFormData[K]) => void
-  onFacilityChange: (facility: string, checked: boolean) => void
+  formData: LocationFormData;
+  onFieldChange: <K extends keyof LocationFormData>(field: K, value: LocationFormData[K]) => void;
+  onFacilityChange: (facility: string, checked: boolean) => void;
 }
 
 export function LocationFacilitiesSection({ formData, onFieldChange, onFacilityChange }: Props) {
@@ -37,7 +37,7 @@ export function LocationFacilitiesSection({ formData, onFieldChange, onFacilityC
             Verfügbare Einrichtungen
           </label>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {FACILITIES.map(facility => (
+            {FACILITIES.map((facility) => (
               <label key={facility} className="flex items-center">
                 <input
                   type="checkbox"
@@ -54,5 +54,5 @@ export function LocationFacilitiesSection({ formData, onFieldChange, onFacilityC
         </div>
       </div>
     </div>
-  )
+  );
 }

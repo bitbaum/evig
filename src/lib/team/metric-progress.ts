@@ -11,10 +11,10 @@ export function metricProgress(
   target: string | number | null,
   higherIsBetter: boolean,
 ): number | null {
-  const c = current == null ? null : Number(current)
-  const t = target == null ? null : Number(target)
-  if (c == null || t == null || Number.isNaN(c) || Number.isNaN(t) || t === 0) return null
-  const raw = higherIsBetter ? c / t : t / c
-  if (!Number.isFinite(raw) || raw < 0) return 0
-  return Math.min(100, Math.round(raw * 100))
+  const c = current == null ? null : Number(current);
+  const t = target == null ? null : Number(target);
+  if (c == null || t == null || Number.isNaN(c) || Number.isNaN(t) || t === 0) return null;
+  const raw = higherIsBetter ? c / t : t / c;
+  if (!Number.isFinite(raw) || raw < 0) return 0;
+  return Math.min(100, Math.round(raw * 100));
 }

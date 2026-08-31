@@ -1,25 +1,30 @@
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
-import { AlertTriangle, Clock, Loader2, ShoppingBag } from 'lucide-react'
-import { useMarketplaceAdmin } from './useMarketplaceAdmin'
-import { TABS } from './types'
-import { ListingsTab } from './ListingsTab'
-import { ReportsTab } from './ReportsTab'
-import { OrdersTab } from './OrdersTab'
-import { QuestionsTab } from './QuestionsTab'
-import { EditListingModal } from './EditListingModal'
-import { HandleReportModal } from './HandleReportModal'
-import { Button } from '@/components/ui/button'
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
-import { AdminHeroStatus, type HeroTone, type HeroKpi, type HeroCta } from '@/components/admin/AdminHeroStatus'
-import type { Stats as MarketplaceStats } from './types'
+import { useTranslations } from 'next-intl';
+import { AlertTriangle, Clock, Loader2, ShoppingBag } from 'lucide-react';
+import { useMarketplaceAdmin } from './useMarketplaceAdmin';
+import { TABS } from './types';
+import { ListingsTab } from './ListingsTab';
+import { ReportsTab } from './ReportsTab';
+import { OrdersTab } from './OrdersTab';
+import { QuestionsTab } from './QuestionsTab';
+import { EditListingModal } from './EditListingModal';
+import { HandleReportModal } from './HandleReportModal';
+import { Button } from '@/components/ui/button';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import {
+  AdminHeroStatus,
+  type HeroTone,
+  type HeroKpi,
+  type HeroCta,
+} from '@/components/admin/AdminHeroStatus';
+import type { Stats as MarketplaceStats } from './types';
 
-type MarketplaceTranslator = ReturnType<typeof useTranslations>
+type MarketplaceTranslator = ReturnType<typeof useTranslations>;
 
 export default function MarketplaceAdminClient() {
-  const t = useTranslations('admin.marketplace')
-  const m = useMarketplaceAdmin()
+  const t = useTranslations('admin.marketplace');
+  const m = useMarketplaceAdmin();
 
   return (
     <div className="space-y-6">
@@ -28,7 +33,7 @@ export default function MarketplaceAdminClient() {
 
       {/* Tab Navigation */}
       <div className="flex gap-1 border-b border">
-        {TABS.map(tabDef => (
+        {TABS.map((tabDef) => (
           <Button
             key={tabDef.id}
             variant="ghost"
@@ -136,10 +141,10 @@ export default function MarketplaceAdminClient() {
         onClose={m.cancelRemove}
       />
     </div>
-  )
+  );
 }
 
-type MarketplaceTab = 'listings' | 'reports' | 'orders' | 'questions'
+type MarketplaceTab = 'listings' | 'reports' | 'orders' | 'questions';
 
 /**
  * Compute the Marketplace hero state from stats. Pure function.
@@ -150,23 +155,23 @@ function deriveHeroState(
   onJumpTo: (tab: MarketplaceTab) => void,
   t: MarketplaceTranslator,
 ): {
-  tone: HeroTone
-  icon: typeof AlertTriangle
-  headline: string
-  sub: string
-  cta?: HeroCta
-  kpis: HeroKpi[]
+  tone: HeroTone;
+  icon: typeof AlertTriangle;
+  headline: string;
+  sub: string;
+  cta?: HeroCta;
+  kpis: HeroKpi[];
 } {
-  const activeListings = stats.byStatus.active ?? 0
-  const unverified = stats.unverified
-  const openReports = stats.openReports
+  const activeListings = stats.byStatus.active ?? 0;
+  const unverified = stats.unverified;
+  const openReports = stats.openReports;
 
   const kpis: HeroKpi[] = [
     { label: t('hero.kpis.active'), value: activeListings },
     { label: t('hero.kpis.unverified'), value: unverified },
     { label: t('hero.kpis.openReports'), value: openReports },
     { label: t('hero.kpis.revampit'), value: stats.revampit },
-  ]
+  ];
 
   if (openReports > 0) {
     return {
@@ -176,7 +181,7 @@ function deriveHeroState(
       sub: t('hero.urgent.sub'),
       cta: { label: t('hero.urgent.cta'), onClick: () => onJumpTo('reports') },
       kpis,
-    }
+    };
   }
   if (unverified > 0) {
     return {
@@ -186,7 +191,7 @@ function deriveHeroState(
       sub: t('hero.attention.sub'),
       cta: { label: t('hero.attention.cta'), onClick: () => onJumpTo('listings') },
       kpis,
-    }
+    };
   }
   return {
     tone: 'healthy',
@@ -194,7 +199,7 @@ function deriveHeroState(
     headline: t('hero.healthy.headline'),
     sub: t('hero.healthy.sub', { active: activeListings }),
     kpis,
-  }
+  };
 }
 
 function HeroStatus({
@@ -202,11 +207,11 @@ function HeroStatus({
   onJumpTo,
   t,
 }: {
-  stats: MarketplaceStats
-  onJumpTo: (tab: MarketplaceTab) => void
-  t: MarketplaceTranslator
+  stats: MarketplaceStats;
+  onJumpTo: (tab: MarketplaceTab) => void;
+  t: MarketplaceTranslator;
 }) {
-  const s = deriveHeroState(stats, onJumpTo, t)
+  const s = deriveHeroState(stats, onJumpTo, t);
   return (
     <AdminHeroStatus
       tone={s.tone}
@@ -216,7 +221,7 @@ function HeroStatus({
       cta={s.cta}
       kpis={s.kpis}
     />
-  )
+  );
 }
 
-export { deriveHeroState as __test__deriveHeroState }
+export { deriveHeroState as __test__deriveHeroState };

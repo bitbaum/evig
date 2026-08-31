@@ -6,44 +6,42 @@
  * Created: 2026-02-10
  */
 
-import { NextRequest } from 'next/server'
-import { withAdmin, ValidSession } from '@/lib/api/middleware'
-import { apiSuccess, apiError, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { finalizeProtocol } from '@/lib/services/protocols'
-import { logger } from '@/lib/logger'
+import { NextRequest } from 'next/server';
+import { withAdmin, ValidSession } from '@/lib/api/middleware';
+import { apiSuccess, apiError, apiBadRequest, apiNotFound } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { finalizeProtocol } from '@/lib/services/protocols';
+import { logger } from '@/lib/logger';
 
-type RouteParams = { id: string }
+type RouteParams = { id: string };
 
 /**
  * POST /api/protocols/[id]/finalize
  */
-export const POST = withAdmin<RouteParams>(async (
-  request: NextRequest,
-  session: ValidSession,
-  context
-) => {
-  try {
-    const protocolId = context?.params?.id
-    if (!protocolId) return apiBadRequest(ERROR_MESSAGES.PROTOCOL_ID_REQUIRED)
+export const POST = withAdmin<RouteParams>(
+  async (request: NextRequest, session: ValidSession, context) => {
+    try {
+      const protocolId = context?.params?.id;
+      if (!protocolId) return apiBadRequest(ERROR_MESSAGES.PROTOCOL_ID_REQUIRED);
 
-    const success = await finalizeProtocol(protocolId)
+      const success = await finalizeProtocol(protocolId);
 
-    if (!success) {
-      return apiNotFound('Protokoll (oder nicht im Status "review")')
+      if (!success) {
+        return apiNotFound('Protokoll (oder nicht im Status "review")');
+      }
+
+      logger.info('Protocol finalized', {
+        protocolId,
+        userId: session.user.id,
+      });
+
+      // Attendee notification fires inside finalizeProtocol (the service) —
+      // a second notifyAllStaff here double-notified every staff member.
+
+      return apiSuccess({ finalized: true });
+    } catch (error) {
+      logger.error('Error finalizing protocol', { error, userId: session.user.id });
+      return apiError(error, 'Fehler beim Abschliessen des Protokolls');
     }
-
-    logger.info('Protocol finalized', {
-      protocolId,
-      userId: session.user.id,
-    })
-
-    // Attendee notification fires inside finalizeProtocol (the service) —
-    // a second notifyAllStaff here double-notified every staff member.
-
-    return apiSuccess({ finalized: true })
-  } catch (error) {
-    logger.error('Error finalizing protocol', { error, userId: session.user.id })
-    return apiError(error, 'Fehler beim Abschliessen des Protokolls')
-  }
-})
+  },
+);

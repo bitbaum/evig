@@ -1,15 +1,15 @@
-import { useState } from 'react'
-import { SuggestionWidget, AINativeCMSProvider } from '@ai-native-cms/react'
-import { createDefaultConfig } from '@ai-native-cms/core'
-import '@ai-native-cms/react/styles'
+import { useState } from 'react';
+import { SuggestionWidget, AINativeCMSProvider } from '@ai-native-cms/react';
+import { createDefaultConfig } from '@ai-native-cms/core';
+import '@ai-native-cms/react/styles';
 
 // Configure AI-Native CMS
 const cmsConfig = createDefaultConfig({
   name: 'My Next.js Website',
   domain: 'localhost:3000',
   framework: 'nextjs',
-  aiProvider: 'template'
-})
+  aiProvider: 'template',
+});
 
 // Override with production settings
 cmsConfig.storage = {
@@ -19,16 +19,16 @@ cmsConfig.storage = {
     port: parseInt(process.env.DB_PORT || '5432'),
     database: process.env.DB_NAME || 'ai_cms',
     username: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD || 'password'
-  }
-}
+    password: process.env.DB_PASSWORD || 'password',
+  },
+};
 
 cmsConfig.notifications = {
   providers: [
     {
       name: 'console',
       config: { verbose: true },
-      enabled: process.env.NODE_ENV === 'development'
+      enabled: process.env.NODE_ENV === 'development',
     },
     {
       name: 'email',
@@ -37,28 +37,28 @@ cmsConfig.notifications = {
         port: parseInt(process.env.EMAIL_PORT || '587'),
         auth: {
           user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS
+          pass: process.env.EMAIL_PASS,
         },
         from: process.env.EMAIL_FROM || 'AI CMS <noreply@example.com>',
-        to: process.env.EMAIL_TO?.split(',') || ['admin@example.com']
+        to: process.env.EMAIL_TO?.split(',') || ['admin@example.com'],
       },
-      enabled: !!process.env.EMAIL_USER
-    }
-  ]
-}
+      enabled: !!process.env.EMAIL_USER,
+    },
+  ],
+};
 
 export default function HomePage() {
-  const [feedback, setFeedback] = useState<string>('')
+  const [feedback, setFeedback] = useState<string>('');
 
   return (
-    <AINativeCMSProvider 
+    <AINativeCMSProvider
       config={cmsConfig}
       onInitialized={(cms) => {
-        console.log('AI-Native CMS initialized!', cms)
+        console.log('AI-Native CMS initialized!', cms);
       }}
       onError={(error) => {
-        console.error('CMS initialization failed:', error)
-        setFeedback('CMS initialization failed. Using fallback mode.')
+        console.error('CMS initialization failed:', error);
+        setFeedback('CMS initialization failed. Using fallback mode.');
       }}
     >
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -67,15 +67,21 @@ export default function HomePage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center py-6">
               <div className="flex items-center">
-                <h1 className="text-2xl font-bold text-gray-900">
-                  My Next.js Website
-                </h1>
+                <h1 className="text-2xl font-bold text-gray-900">My Next.js Website</h1>
               </div>
               <nav className="hidden md:flex space-x-8">
-                <a href="#" className="text-gray-500 hover:text-gray-900">Home</a>
-                <a href="#about" className="text-gray-500 hover:text-gray-900">About</a>
-                <a href="#services" className="text-gray-500 hover:text-gray-900">Services</a>
-                <a href="#contact" className="text-gray-500 hover:text-gray-900">Contact</a>
+                <a href="#" className="text-gray-500 hover:text-gray-900">
+                  Home
+                </a>
+                <a href="#about" className="text-gray-500 hover:text-gray-900">
+                  About
+                </a>
+                <a href="#services" className="text-gray-500 hover:text-gray-900">
+                  Services
+                </a>
+                <a href="#contact" className="text-gray-500 hover:text-gray-900">
+                  Contact
+                </a>
               </nav>
             </div>
           </div>
@@ -88,8 +94,8 @@ export default function HomePage() {
               Welcome to AI-Native CMS
             </h2>
             <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-              This website is powered by AI-Native CMS. Click the suggestion button to propose changes,
-              and our AI will generate implementation instructions for developers!
+              This website is powered by AI-Native CMS. Click the suggestion button to propose
+              changes, and our AI will generate implementation instructions for developers!
             </p>
             <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
               <div className="rounded-md shadow">
@@ -115,8 +121,9 @@ export default function HomePage() {
                 Revolutionary Content Management
               </p>
               <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
-                AI-Native CMS transforms how websites are maintained. Instead of complex admin panels,
-                users suggest changes in plain English, and AI generates technical implementation steps.
+                AI-Native CMS transforms how websites are maintained. Instead of complex admin
+                panels, users suggest changes in plain English, and AI generates technical
+                implementation steps.
               </p>
             </div>
 
@@ -132,7 +139,8 @@ export default function HomePage() {
                     </p>
                   </dt>
                   <dd className="mt-2 ml-16 text-base text-gray-500">
-                    Convert user suggestions into detailed, actionable instructions for AI agents like Claude Code or Cursor.
+                    Convert user suggestions into detailed, actionable instructions for AI agents
+                    like Claude Code or Cursor.
                   </dd>
                 </div>
 
@@ -146,7 +154,8 @@ export default function HomePage() {
                     </p>
                   </dt>
                   <dd className="mt-2 ml-16 text-base text-gray-500">
-                    Modular architecture with pluggable storage adapters and notification providers for maximum performance.
+                    Modular architecture with pluggable storage adapters and notification providers
+                    for maximum performance.
                   </dd>
                 </div>
 
@@ -160,7 +169,8 @@ export default function HomePage() {
                     </p>
                   </dt>
                   <dd className="mt-2 ml-16 text-base text-gray-500">
-                    Works with Next.js, React, Vue, or any web framework. Smart templates adapt to your tech stack.
+                    Works with Next.js, React, Vue, or any web framework. Smart templates adapt to
+                    your tech stack.
                   </dd>
                 </div>
 
@@ -174,7 +184,8 @@ export default function HomePage() {
                     </p>
                   </dt>
                   <dd className="mt-2 ml-16 text-base text-gray-500">
-                    Built-in rate limiting, multiple notification channels, and robust error handling for production use.
+                    Built-in rate limiting, multiple notification channels, and robust error
+                    handling for production use.
                   </dd>
                 </div>
               </dl>
@@ -199,28 +210,32 @@ export default function HomePage() {
                 <div className="bg-white p-6 rounded-lg shadow">
                   <h3 className="text-lg font-medium text-gray-900">Web Development</h3>
                   <p className="mt-2 text-base text-gray-500">
-                    Modern, responsive websites built with the latest technologies and best practices.
+                    Modern, responsive websites built with the latest technologies and best
+                    practices.
                   </p>
                 </div>
 
                 <div className="bg-white p-6 rounded-lg shadow">
                   <h3 className="text-lg font-medium text-gray-900">AI Integration</h3>
                   <p className="mt-2 text-base text-gray-500">
-                    Seamlessly integrate AI capabilities into your existing workflow and applications.
+                    Seamlessly integrate AI capabilities into your existing workflow and
+                    applications.
                   </p>
                 </div>
 
                 <div className="bg-white p-6 rounded-lg shadow">
                   <h3 className="text-lg font-medium text-gray-900">CMS Solutions</h3>
                   <p className="mt-2 text-base text-gray-500">
-                    Revolutionary content management systems that work with AI agents for effortless updates.
+                    Revolutionary content management systems that work with AI agents for effortless
+                    updates.
                   </p>
                 </div>
 
                 <div className="bg-white p-6 rounded-lg shadow">
                   <h3 className="text-lg font-medium text-gray-900">Consultation</h3>
                   <p className="mt-2 text-base text-gray-500">
-                    Expert advice on technology choices, architecture, and implementation strategies.
+                    Expert advice on technology choices, architecture, and implementation
+                    strategies.
                   </p>
                 </div>
               </div>
@@ -232,18 +247,18 @@ export default function HomePage() {
         <section id="demo" className="py-12 bg-indigo-700">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-              <h2 className="text-3xl font-extrabold text-white">
-                Try AI-Native CMS
-              </h2>
+              <h2 className="text-3xl font-extrabold text-white">Try AI-Native CMS</h2>
               <p className="mt-4 text-xl text-indigo-200">
                 Click the floating suggestion button to propose a change to this page!
               </p>
               <div className="mt-8">
                 <div className="inline-flex rounded-md shadow">
-                  <button 
+                  <button
                     onClick={() => {
-                      const widget = document.querySelector('.ai-cms-suggestion-button') as HTMLElement
-                      if (widget) widget.click()
+                      const widget = document.querySelector(
+                        '.ai-cms-suggestion-button',
+                      ) as HTMLElement;
+                      if (widget) widget.click();
                     }}
                     className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-white hover:bg-indigo-50"
                   >
@@ -340,7 +355,10 @@ export default function HomePage() {
               <p>&copy; 2024 AI-Native CMS Example. All rights reserved.</p>
               <p className="mt-2 text-sm">
                 Powered by{' '}
-                <a href="https://github.com/your-org/ai-native-cms" className="text-indigo-400 hover:text-indigo-300">
+                <a
+                  href="https://github.com/your-org/ai-native-cms"
+                  className="text-indigo-400 hover:text-indigo-300"
+                >
                   AI-Native CMS
                 </a>
               </p>
@@ -352,18 +370,18 @@ export default function HomePage() {
         <SuggestionWidget
           config={cmsConfig}
           onSubmit={async (suggestion) => {
-            console.log('Suggestion submitted:', suggestion)
-            setFeedback('Thank you! Your suggestion has been submitted.')
-            setTimeout(() => setFeedback(''), 5000)
+            console.log('Suggestion submitted:', suggestion);
+            setFeedback('Thank you! Your suggestion has been submitted.');
+            setTimeout(() => setFeedback(''), 5000);
           }}
           onError={(error) => {
-            console.error('Suggestion failed:', error)
-            setFeedback('Sorry, there was an error submitting your suggestion.')
-            setTimeout(() => setFeedback(''), 5000)
+            console.error('Suggestion failed:', error);
+            setFeedback('Sorry, there was an error submitting your suggestion.');
+            setTimeout(() => setFeedback(''), 5000);
           }}
           placeholder="What would you like to change on this page? E.g., 'Make the header bigger', 'Add a blog section', 'Change the color scheme'..."
         />
       </div>
     </AINativeCMSProvider>
-  )
+  );
 }

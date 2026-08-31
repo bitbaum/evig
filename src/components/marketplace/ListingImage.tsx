@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import Image from 'next/image'
-import { ImageIcon } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { useState } from 'react';
+import Image from 'next/image';
+import { ImageIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface ListingImageProps {
-  src: string | null | undefined
-  alt: string
-  className?: string
-  fallbackIconSize?: string
+  src: string | null | undefined;
+  alt: string;
+  className?: string;
+  fallbackIconSize?: string;
 }
 
 /**
@@ -18,8 +18,13 @@ interface ListingImageProps {
  * - src is null/undefined/empty (no image provided)
  * - image fails to load (broken URL, 404, network error)
  */
-export function ListingImage({ src, alt, className = 'w-full h-full object-cover', fallbackIconSize = 'w-12 h-12' }: ListingImageProps) {
-  const [hasError, setHasError] = useState(false)
+export function ListingImage({
+  src,
+  alt,
+  className = 'w-full h-full object-cover',
+  fallbackIconSize = 'w-12 h-12',
+}: ListingImageProps) {
+  const [hasError, setHasError] = useState(false);
 
   if (!src || hasError) {
     return (
@@ -28,7 +33,7 @@ export function ListingImage({ src, alt, className = 'w-full h-full object-cover
           <ImageIcon className={cn('text-text-tertiary', fallbackIconSize)} aria-hidden="true" />
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -42,5 +47,5 @@ export function ListingImage({ src, alt, className = 'w-full h-full object-cover
         onError={() => setHasError(true)}
       />
     </div>
-  )
+  );
 }

@@ -1,13 +1,13 @@
-import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
-import { ORG } from '@/config/org'
+import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
+import { ORG } from '@/config/org';
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
-  const { locale } = await params
+  const { locale } = await params;
   // No `title` here on purpose, and specifically no `title.absolute`.
   //
   // This layout used to set `{ absolute: `${layoutTitle} | evig` }`, which
@@ -20,8 +20,8 @@ export async function generateMetadata({
   //
   // Dropping it lets the root template apply to every page below, and the hub
   // now sets its own title in page.tsx like any other page.
-  const t = await getTranslations({ locale, namespace: 'services.meta' })
-  const description = t('description')
+  const t = await getTranslations({ locale, namespace: 'services.meta' });
+  const description = t('description');
   return {
     description,
     openGraph: {
@@ -29,13 +29,9 @@ export async function generateMetadata({
       type: 'website',
       url: `${ORG.website}/services`,
     },
-  }
+  };
 }
 
-export default function ServicesLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  return <>{children}</>
+export default function ServicesLayout({ children }: { children: React.ReactNode }) {
+  return <>{children}</>;
 }

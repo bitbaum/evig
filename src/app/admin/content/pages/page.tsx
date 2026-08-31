@@ -5,74 +5,65 @@
  * Data comes from the static_pages table.
  */
 
-import { Metadata } from 'next'
-import { publishStatusLabel } from '@/config/content-status'
-import Link from 'next/link'
-import { auth } from '@/auth'
-import { formatDateNumeric } from '@/lib/date-formats'
-import { redirect } from 'next/navigation'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
-import {
-  Plus,
-  FileText,
-  Eye,
-  Edit,
-  CheckCircle,
-  Clock,
-  Globe,
-  AlertTriangle,
-} from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminStatsStrip, type StatItem } from '@/components/admin/AdminStatsStrip'
-import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
-import { AdminButton } from '@/components/admin/AdminButton'
-import { ROUTES } from '@/config/routes'
+import { Metadata } from 'next';
+import { publishStatusLabel } from '@/config/content-status';
+import Link from 'next/link';
+import { auth } from '@/auth';
+import { formatDateNumeric } from '@/lib/date-formats';
+import { redirect } from 'next/navigation';
+import { query } from '@/lib/auth/db';
+import { TABLE_NAMES } from '@/config/database';
+import { Plus, FileText, Eye, Edit, CheckCircle, Clock, Globe, AlertTriangle } from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import { AdminStatsStrip, type StatItem } from '@/components/admin/AdminStatsStrip';
+import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable';
+import { AdminButton } from '@/components/admin/AdminButton';
+import { ROUTES } from '@/config/routes';
 
 export const metadata: Metadata = {
   title: 'Statische Seiten',
   description: 'Statische Seiten erstellen und verwalten.',
-}
+};
 
 interface StaticPage {
-  id: string
-  slug: string
-  title: string
-  is_published: boolean
-  published_at: string | null
-  created_at: string
-  updated_at: string
+  id: string;
+  slug: string;
+  title: string;
+  is_published: boolean;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
 interface PageStats {
-  totalPages: number
-  publishedPages: number
-  draftPages: number
+  totalPages: number;
+  publishedPages: number;
+  draftPages: number;
 }
 
 async function getPageStats(): Promise<PageStats> {
-  let totalPages = 0
-  let publishedPages = 0
-  let draftPages = 0
+  let totalPages = 0;
+  let publishedPages = 0;
+  let draftPages = 0;
 
   try {
     const totalResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.STATIC_PAGES}`
-    )
-    totalPages = parseInt(totalResult.rows[0]?.count || '0')
+      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.STATIC_PAGES}`,
+    );
+    totalPages = parseInt(totalResult.rows[0]?.count || '0');
 
     const publishedResult = await query<{ count: string }>(
-      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.STATIC_PAGES} WHERE is_published = true`
-    )
-    publishedPages = parseInt(publishedResult.rows[0]?.count || '0')
+      `SELECT COUNT(*) as count FROM ${TABLE_NAMES.STATIC_PAGES} WHERE is_published = true`,
+    );
+    publishedPages = parseInt(publishedResult.rows[0]?.count || '0');
 
-    draftPages = totalPages - publishedPages
+    draftPages = totalPages - publishedPages;
   } catch {
     // Table might not exist
   }
 
-  return { totalPages, publishedPages, draftPages }
+  return { totalPages, publishedPages, draftPages };
 }
 
 async function getStaticPages(): Promise<StaticPage[]> {
@@ -87,12 +78,12 @@ async function getStaticPages(): Promise<StaticPage[]> {
         created_at,
         updated_at
        FROM ${TABLE_NAMES.STATIC_PAGES}
-       ORDER BY title ASC`
-    )
-    return result.rows
+       ORDER BY title ASC`,
+    );
+    return result.rows;
   } catch {
     // Table might not exist
-    return []
+    return [];
   }
 }
 
@@ -111,14 +102,15 @@ function HalfWiredWarning() {
             Hinweis: Diese Seiten sind aktuell nicht öffentlich verknüpft
           </p>
           <p className="text-warning-800 dark:text-warning-300">
-            Die öffentlichen Seiten (Über uns, FAQ, Impressum, Datenschutz) werden derzeit aus festen
-            React-Komponenten gerendert, nicht aus dieser Datenbank. Hier gespeicherte Inhalte erscheinen
-            nicht automatisch auf der öffentlichen Website. Die Anbindung wird in einem späteren Schritt nachgezogen.
+            Die öffentlichen Seiten (Über uns, FAQ, Impressum, Datenschutz) werden derzeit aus
+            festen React-Komponenten gerendert, nicht aus dieser Datenbank. Hier gespeicherte
+            Inhalte erscheinen nicht automatisch auf der öffentlichen Website. Die Anbindung wird in
+            einem späteren Schritt nachgezogen.
           </p>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 const SUGGESTED_PAGES = [
@@ -130,23 +122,23 @@ const SUGGESTED_PAGES = [
   { title: 'AGB', slug: 'agb' },
   { title: 'Team', slug: 'team' },
   { title: 'Partner', slug: 'partner' },
-] as const
+] as const;
 
 export default async function AdminPagesPage() {
-  const session = await auth()
+  const session = await auth();
 
   if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/content/pages')
+    redirect('/auth/login?callbackUrl=/admin/content/pages');
   }
 
-  const [stats, pages] = await Promise.all([getPageStats(), getStaticPages()])
+  const [stats, pages] = await Promise.all([getPageStats(), getStaticPages()]);
 
   const createAction = (
     <AdminButton href={ROUTES.admin.contentPageNew} variant="primary" className="gap-2">
       <Plus className="w-4 h-4" />
       Neue Seite
     </AdminButton>
-  )
+  );
 
   // No pages yet → warning + a "recommended pages" quick-create grid as the
   // empty state (no dead stats grid).
@@ -161,7 +153,9 @@ export default async function AdminPagesPage() {
       >
         <HalfWiredWarning />
         <div className="rounded-lg border border-default bg-surface-base p-8">
-          <Heading level={3} className="font-medium text-text-primary mb-1">Noch keine Seiten</Heading>
+          <Heading level={3} className="font-medium text-text-primary mb-1">
+            Noch keine Seiten
+          </Heading>
           <p className="text-text-secondary mb-4">Erstelle eine der empfohlenen Seiten:</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-3">
             {SUGGESTED_PAGES.map((s) => (
@@ -177,31 +171,40 @@ export default async function AdminPagesPage() {
           </div>
         </div>
       </AdminPageWrapper>
-    )
+    );
   }
 
   const statCards: StatItem[] = [
     { icon: Globe, color: 'gray', label: 'Gesamt Seiten', value: stats.totalPages },
     { icon: CheckCircle, color: 'green', label: 'Veröffentlicht', value: stats.publishedPages },
     { icon: Clock, color: 'gray', label: 'Entwürfe', value: stats.draftPages },
-  ]
+  ];
 
   const columns: AdminTableColumn<StaticPage>[] = [
-    { header: 'Seite', cell: (p) => <span className="text-sm font-medium text-text-primary">{p.title}</span> },
+    {
+      header: 'Seite',
+      cell: (p) => <span className="text-sm font-medium text-text-primary">{p.title}</span>,
+    },
     {
       header: 'URL',
       className: 'whitespace-nowrap',
-      cell: (p) => <code className="text-sm text-text-secondary bg-surface-raised px-2 py-1 rounded-sm">/{p.slug}</code>,
+      cell: (p) => (
+        <code className="text-sm text-text-secondary bg-surface-raised px-2 py-1 rounded-sm">
+          /{p.slug}
+        </code>
+      ),
     },
     {
       header: 'Status',
       className: 'whitespace-nowrap',
       cell: (p) => (
-        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-          p.is_published
-            ? 'bg-action-muted text-action'
-            : 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-300'
-        }`}>
+        <span
+          className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+            p.is_published
+              ? 'bg-action-muted text-action'
+              : 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-300'
+          }`}
+        >
           {publishStatusLabel(p.is_published)}
         </span>
       ),
@@ -209,14 +212,22 @@ export default async function AdminPagesPage() {
     {
       header: 'Aktualisiert',
       className: 'whitespace-nowrap',
-      cell: (p) => <span className="text-sm text-text-primary">{p.updated_at ? formatDateNumeric(p.updated_at) : '-'}</span>,
+      cell: (p) => (
+        <span className="text-sm text-text-primary">
+          {p.updated_at ? formatDateNumeric(p.updated_at) : '-'}
+        </span>
+      ),
     },
     {
       header: 'Aktionen',
       className: 'whitespace-nowrap',
       cell: (p) => (
         <div className="flex items-center gap-2">
-          <Link href={`/${p.slug}`} className="text-text-secondary hover:text-text-primary" target="_blank">
+          <Link
+            href={`/${p.slug}`}
+            className="text-text-secondary hover:text-text-primary"
+            target="_blank"
+          >
             <Eye className="w-4 h-4" />
           </Link>
           <Link href={ROUTES.admin.contentPage(p.id)} className="text-action hover:text-action">
@@ -225,7 +236,7 @@ export default async function AdminPagesPage() {
         </div>
       ),
     },
-  ]
+  ];
 
   return (
     <AdminPageWrapper
@@ -239,5 +250,5 @@ export default async function AdminPagesPage() {
       <AdminStatsStrip items={statCards} />
       <AdminTable columns={columns} rows={pages} rowKey={(p) => p.id} />
     </AdminPageWrapper>
-  )
+  );
 }

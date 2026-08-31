@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { useMemo, useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useMemo, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
   TASK_TYPES,
   TASK_TYPE_LABELS,
@@ -9,35 +9,37 @@ import {
   TASK_CATEGORY_LABELS,
   TASK_PRIORITIES,
   TASK_PRIORITY_LABELS,
-} from '@/config/tasks'
-import type { TaskEditItem } from '@/lib/schemas/tasks'
-import { Loader2, Save, Info, ChevronRight } from 'lucide-react'
-import { AIFormAssist } from '@/components/ai/AIFormAssist'
-import { useTaskForm } from '@/hooks/useTaskForm'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Select } from '@/components/ui/select'
-import { FormField } from '@/components/ui/form-field'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { cn } from '@/lib/utils'
+} from '@/config/tasks';
+import type { TaskEditItem } from '@/lib/schemas/tasks';
+import { Loader2, Save, Info, ChevronRight } from 'lucide-react';
+import { AIFormAssist } from '@/components/ai/AIFormAssist';
+import { useTaskForm } from '@/hooks/useTaskForm';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select } from '@/components/ui/select';
+import { FormField } from '@/components/ui/form-field';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
 interface Props {
-  task?: TaskEditItem
+  task?: TaskEditItem;
 }
 
 export default function TaskFormClient({ task }: Props) {
-  const router = useRouter()
-  const searchParams = useSearchParams()
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const source = searchParams.get('source')
-  const prefill = task ? undefined : {
-    title: searchParams.get('title') ?? undefined,
-    description: searchParams.get('description') ?? undefined,
-    priority: searchParams.get('priority') ?? undefined,
-    // Coming from a team space page ("Neue Aufgabe" there) preselects the team.
-    team_id: searchParams.get('team') ?? undefined,
-  }
+  const source = searchParams.get('source');
+  const prefill = task
+    ? undefined
+    : {
+        title: searchParams.get('title') ?? undefined,
+        description: searchParams.get('description') ?? undefined,
+        priority: searchParams.get('priority') ?? undefined,
+        // Coming from a team space page ("Neue Aufgabe" there) preselects the team.
+        team_id: searchParams.get('team') ?? undefined,
+      };
 
   const {
     isEdit,
@@ -49,19 +51,23 @@ export default function TaskFormClient({ task }: Props) {
     handleChange,
     handleAIFieldsFilled,
     handleSubmit,
-  } = useTaskForm(task, prefill)
+  } = useTaskForm(task, prefill);
 
-  const errorId = isEdit ? 'task-edit-error' : 'task-form-error'
+  const errorId = isEdit ? 'task-edit-error' : 'task-form-error';
 
-  const hasAdvancedValues = useMemo(() => Boolean(
-    formData.assigned_to ||
-    formData.instructions ||
-    formData.estimated_minutes ||
-    formData.due_date ||
-    formData.tags.trim(),
-  ), [formData])
+  const hasAdvancedValues = useMemo(
+    () =>
+      Boolean(
+        formData.assigned_to ||
+        formData.instructions ||
+        formData.estimated_minutes ||
+        formData.due_date ||
+        formData.tags.trim(),
+      ),
+    [formData],
+  );
 
-  const [advancedOpen, setAdvancedOpen] = useState(isEdit && hasAdvancedValues)
+  const [advancedOpen, setAdvancedOpen] = useState(isEdit && hasAdvancedValues);
 
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl">
@@ -72,7 +78,10 @@ export default function TaskFormClient({ task }: Props) {
         </div>
       )}
       {error && (
-        <div id={errorId} className="mb-6 p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 rounded-lg text-error-700 dark:text-error-300">
+        <div
+          id={errorId}
+          className="mb-6 p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 rounded-lg text-error-700 dark:text-error-300"
+        >
           {error}
         </div>
       )}
@@ -88,11 +97,7 @@ export default function TaskFormClient({ task }: Props) {
           />
         )}
 
-        <FormField
-          label="Titel"
-          required
-          htmlFor="title"
-        >
+        <FormField label="Titel" required htmlFor="title">
           <Input
             type="text"
             id="title"
@@ -113,13 +118,21 @@ export default function TaskFormClient({ task }: Props) {
           required
           htmlFor="task_type"
           hint={
-            formData.task_type === TASK_TYPES.ONE_TIME ? 'Wird nach Erledigung als abgeschlossen markiert'
-            : formData.task_type === TASK_TYPES.RECURRING_SCHEDULED ? 'Wiederholt sich nach einem festen Zeitplan'
-            : formData.task_type === TASK_TYPES.RECURRING_AS_NEEDED ? 'Wird bei Bedarf erledigt, kein fester Zeitplan'
-            : undefined
+            formData.task_type === TASK_TYPES.ONE_TIME
+              ? 'Wird nach Erledigung als abgeschlossen markiert'
+              : formData.task_type === TASK_TYPES.RECURRING_SCHEDULED
+                ? 'Wiederholt sich nach einem festen Zeitplan'
+                : formData.task_type === TASK_TYPES.RECURRING_AS_NEEDED
+                  ? 'Wird bei Bedarf erledigt, kein fester Zeitplan'
+                  : undefined
           }
         >
-          <Select id="task_type" name="task_type" value={formData.task_type} onChange={handleChange}>
+          <Select
+            id="task_type"
+            name="task_type"
+            value={formData.task_type}
+            onChange={handleChange}
+          >
             {Object.entries(TASK_TYPES).map(([, value]) => (
               <option key={value} value={value}>
                 {TASK_TYPE_LABELS[value as keyof typeof TASK_TYPE_LABELS]}
@@ -161,7 +174,11 @@ export default function TaskFormClient({ task }: Props) {
         </FormField>
 
         {teams.length > 0 && (
-          <FormField label="Team" htmlFor="team_id" hint="Optional — die Aufgabe erscheint auf der Team-Seite">
+          <FormField
+            label="Team"
+            htmlFor="team_id"
+            hint="Optional — die Aufgabe erscheint auf der Team-Seite"
+          >
             <Select id="team_id" name="team_id" value={formData.team_id} onChange={handleChange}>
               <option value="">Kein Team</option>
               {teams.map((t) => (
@@ -190,7 +207,7 @@ export default function TaskFormClient({ task }: Props) {
           <Button
             type="button"
             variant="ghost"
-            onClick={() => setAdvancedOpen(o => !o)}
+            onClick={() => setAdvancedOpen((o) => !o)}
             className="inline-flex items-center gap-2 text-sm font-medium text-text-secondary hover:text-text-primary h-auto px-0"
           >
             <ChevronRight
@@ -207,11 +224,17 @@ export default function TaskFormClient({ task }: Props) {
             <div className="mt-4 space-y-6">
               {teamMembers.length > 0 && (
                 <FormField label="Zuweisen an" htmlFor="assigned_to">
-                  <Select id="assigned_to" name="assigned_to" value={formData.assigned_to} onChange={handleChange}>
+                  <Select
+                    id="assigned_to"
+                    name="assigned_to"
+                    value={formData.assigned_to}
+                    onChange={handleChange}
+                  >
                     <option value="">Nicht zugewiesen</option>
                     {teamMembers.map((member) => (
                       <option key={member.user_id} value={member.user_id}>
-                        {member.name}{member.position ? ` (${member.position})` : ''}
+                        {member.name}
+                        {member.position ? ` (${member.position})` : ''}
                       </option>
                     ))}
                   </Select>
@@ -253,11 +276,7 @@ export default function TaskFormClient({ task }: Props) {
                 />
               </FormField>
 
-              <FormField
-                label="Tags"
-                htmlFor="tags"
-                hint="Mehrere Tags mit Komma trennen"
-              >
+              <FormField label="Tags" htmlFor="tags" hint="Mehrere Tags mit Komma trennen">
                 <Input
                   type="text"
                   id="tags"
@@ -287,5 +306,5 @@ export default function TaskFormClient({ task }: Props) {
         </div>
       </Card>
     </form>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Team Member Card Component
@@ -7,22 +7,22 @@
  * Uses config for labels and colors (SSOT).
  */
 
-import { Link } from '@/i18n/navigation'
-import { Mail, Calendar, Eye, Edit2 } from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
+import { Link } from '@/i18n/navigation';
+import { Mail, Calendar, Eye, Edit2 } from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
 import {
   getEmploymentTypeLabel,
   getEmploymentTypeColor,
   getDepartmentLabel,
   getDepartmentColor,
-} from '@/config/team'
-import { formatDateShort } from '@/lib/date-formats'
-import { adminInteractive } from '@/lib/admin-ui'
-import { Avatar } from '@/components/ui/Avatar'
-import type { TeamMemberCardProps } from './types'
+} from '@/config/team';
+import { formatDateShort } from '@/lib/date-formats';
+import { adminInteractive } from '@/lib/admin-ui';
+import { Avatar } from '@/components/ui/Avatar';
+import type { TeamMemberCardProps } from './types';
 
 export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) {
-  const displayName = member.user_name || member.user_email.split('@')[0]
+  const displayName = member.user_name || member.user_email.split('@')[0];
 
   return (
     <div className="rounded-lg border border-subtle bg-surface-base p-5 transition-colors hover:border-strong">
@@ -31,7 +31,9 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
         <Avatar
           name={member.user_name || member.user_email}
           size="lg"
-          colorClassName={member.is_active ? adminInteractive.avatarActive : adminInteractive.avatarInactive}
+          colorClassName={
+            member.is_active ? adminInteractive.avatarActive : adminInteractive.avatarInactive
+          }
         />
 
         {/* Info */}
@@ -48,9 +50,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
           </div>
 
           {member.position && (
-            <p className="text-sm text-text-secondary mt-0.5">
-              {member.position}
-            </p>
+            <p className="text-sm text-text-secondary mt-0.5">{member.position}</p>
           )}
 
           <div className="flex items-center gap-2 mt-1 text-xs text-text-tertiary">
@@ -61,12 +61,16 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
           {/* Badges */}
           <div className="flex flex-wrap gap-1.5 mt-3">
             {member.department && (
-              <span className={`px-2 py-0.5 text-xs rounded-sm ${getDepartmentColor(member.department)}`}>
+              <span
+                className={`px-2 py-0.5 text-xs rounded-sm ${getDepartmentColor(member.department)}`}
+              >
                 {getDepartmentLabel(member.department)}
               </span>
             )}
             {member.employment_type && (
-              <span className={`px-2 py-0.5 text-xs rounded-sm ${getEmploymentTypeColor(member.employment_type)}`}>
+              <span
+                className={`px-2 py-0.5 text-xs rounded-sm ${getEmploymentTypeColor(member.employment_type)}`}
+              >
                 {getEmploymentTypeLabel(member.employment_type)}
               </span>
             )}
@@ -95,9 +99,7 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
           {member.start_date && (
             <div className="flex items-center gap-1 mt-2 text-xs text-text-muted">
               <Calendar className="w-3 h-3" />
-              <span>
-                Seit {formatDateShort(member.start_date)}
-              </span>
+              <span>Seit {formatDateShort(member.start_date)}</span>
             </div>
           )}
         </div>
@@ -123,5 +125,5 @@ export function TeamMemberCard({ member, onView, onEdit }: TeamMemberCardProps) 
         </Link>
       </div>
     </div>
-  )
+  );
 }

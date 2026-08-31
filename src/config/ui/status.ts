@@ -14,6 +14,6 @@ export const UI_STATUS = {
   neutral: 'bg-neutral-100 text-neutral-700 dark:bg-neutral-700 dark:text-neutral-300',
   purple: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300',
   teal: 'bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-300',
-} as const
+} as const;
 
-export type UiStatusKey = keyof typeof UI_STATUS
+export type UiStatusKey = keyof typeof UI_STATUS;

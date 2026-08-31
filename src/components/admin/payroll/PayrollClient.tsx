@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * PayrollClient
@@ -12,133 +12,139 @@
  * they're closing, not whatever they typed last time.
  */
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { adminInteractive } from '@/lib/admin-ui'
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { adminInteractive } from '@/lib/admin-ui';
 import {
-  Calendar, Lock, Download, AlertTriangle, CheckCircle2,
-  RefreshCw, FileText, Loader2,
-} from 'lucide-react'
-import { apiFetch } from '@/lib/api/client'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { formatTimecardDuration } from '@/config/timecards'
-import { formatDateShort } from '@/lib/date-formats'
+  Calendar,
+  Lock,
+  Download,
+  AlertTriangle,
+  CheckCircle2,
+  RefreshCw,
+  FileText,
+  Loader2,
+} from 'lucide-react';
+import { apiFetch } from '@/lib/api/client';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { formatTimecardDuration } from '@/config/timecards';
+import { formatDateShort } from '@/lib/date-formats';
 
 interface PendingPreview {
-  pending_count: number
-  pending_minutes: number
+  pending_count: number;
+  pending_minutes: number;
 }
 
 interface BatchRow {
-  id: string
-  period_start: string
-  period_end: string
-  closed_at: string | null
-  closed_by_name: string | null
-  closed_by_email: string | null
-  exported_at: string | null
-  notes: string | null
-  timecard_count: number
-  total_minutes: number
+  id: string;
+  period_start: string;
+  period_end: string;
+  closed_at: string | null;
+  closed_by_name: string | null;
+  closed_by_email: string | null;
+  exported_at: string | null;
+  notes: string | null;
+  timecard_count: number;
+  total_minutes: number;
 }
 
 interface CloseResponse {
-  batchId: string
-  linkedCount: number
+  batchId: string;
+  linkedCount: number;
 }
 
 function monthBounds(monthInput: string): { start: string; end: string } | null {
   // monthInput from <input type="month"> is YYYY-MM
-  const match = /^(\d{4})-(\d{2})$/.exec(monthInput)
-  if (!match) return null
-  const year = Number(match[1])
-  const month = Number(match[2]) // 1..12
-  const start = `${match[1]}-${match[2]}-01`
+  const match = /^(\d{4})-(\d{2})$/.exec(monthInput);
+  if (!match) return null;
+  const year = Number(match[1]);
+  const month = Number(match[2]); // 1..12
+  const start = `${match[1]}-${match[2]}-01`;
   // Last day of the month: day 0 of next month
-  const next = new Date(Date.UTC(year, month, 0))
-  const end = `${next.getUTCFullYear()}-${String(next.getUTCMonth() + 1).padStart(2, '0')}-${String(next.getUTCDate()).padStart(2, '0')}`
-  return { start, end }
+  const next = new Date(Date.UTC(year, month, 0));
+  const end = `${next.getUTCFullYear()}-${String(next.getUTCMonth() + 1).padStart(2, '0')}-${String(next.getUTCDate()).padStart(2, '0')}`;
+  return { start, end };
 }
 
 function currentMonthInput(): string {
-  const d = new Date()
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
 }
 
 function formatPeriod(s: string, e: string): string {
-  return `${formatDateShort(s)} – ${formatDateShort(e)}`
+  return `${formatDateShort(s)} – ${formatDateShort(e)}`;
 }
 
 export function PayrollClient() {
   const [monthInput, setMonthInput] = useState<string>(() => {
     // Default to LAST month — HR closes May at the start of June.
-    const d = new Date()
-    d.setMonth(d.getMonth() - 1)
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
-  })
-  const [notes, setNotes] = useState('')
-  const [preview, setPreview] = useState<PendingPreview | null>(null)
-  const [previewLoading, setPreviewLoading] = useState(false)
-  const [batches, setBatches] = useState<BatchRow[]>([])
-  const [batchesLoading, setBatchesLoading] = useState(false)
-  const [closing, setClosing] = useState(false)
-  const [message, setMessage] = useState<string | null>(null)
-  const [error, setError] = useState<string | null>(null)
+    const d = new Date();
+    d.setMonth(d.getMonth() - 1);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+  });
+  const [notes, setNotes] = useState('');
+  const [preview, setPreview] = useState<PendingPreview | null>(null);
+  const [previewLoading, setPreviewLoading] = useState(false);
+  const [batches, setBatches] = useState<BatchRow[]>([]);
+  const [batchesLoading, setBatchesLoading] = useState(false);
+  const [closing, setClosing] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   // Memoized — a fresh object every render changed loadPreview's identity each
   // time, so the effect below re-fired after every setPreview: the page polled
   // /api/admin/payroll/close continuously while open.
-  const bounds = useMemo(() => monthBounds(monthInput), [monthInput])
+  const bounds = useMemo(() => monthBounds(monthInput), [monthInput]);
 
   const loadPreview = useCallback(async () => {
     if (!bounds) {
-      setPreview(null)
-      return
+      setPreview(null);
+      return;
     }
-    setPreviewLoading(true)
-    setError(null)
+    setPreviewLoading(true);
+    setError(null);
     const params = new URLSearchParams({
       period_start: bounds.start,
       period_end: bounds.end,
-    })
-    const result = await apiFetch<PendingPreview>(`/api/admin/payroll/close?${params}`)
-    setPreviewLoading(false)
+    });
+    const result = await apiFetch<PendingPreview>(`/api/admin/payroll/close?${params}`);
+    setPreviewLoading(false);
     if (result.success && result.data) {
-      setPreview(result.data)
+      setPreview(result.data);
     } else {
-      setError(result.error || 'Vorschau fehlgeschlagen.')
-      setPreview(null)
+      setError(result.error || 'Vorschau fehlgeschlagen.');
+      setPreview(null);
     }
-  }, [bounds])
+  }, [bounds]);
 
   const loadBatches = useCallback(async () => {
-    setBatchesLoading(true)
-    const result = await apiFetch<{ items: BatchRow[] }>('/api/admin/payroll/batches')
-    setBatchesLoading(false)
+    setBatchesLoading(true);
+    const result = await apiFetch<{ items: BatchRow[] }>('/api/admin/payroll/batches');
+    setBatchesLoading(false);
     if (result.success && result.data) {
-      setBatches(result.data.items)
+      setBatches(result.data.items);
     }
-  }, [])
+  }, []);
 
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
-    void loadPreview()
-  }, [loadPreview])
+    void loadPreview();
+  }, [loadPreview]);
   useEffect(() => {
-    void loadBatches()
-  }, [loadBatches])
+    void loadBatches();
+  }, [loadBatches]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
   const close = async () => {
-    if (!bounds) return
+    if (!bounds) return;
     if (!preview || preview.pending_count === 0) {
-      setError('Es gibt keine offenen genehmigten Zeitkarten in diesem Zeitraum.')
-      return
+      setError('Es gibt keine offenen genehmigten Zeitkarten in diesem Zeitraum.');
+      return;
     }
-    setClosing(true)
-    setError(null)
-    setMessage(null)
+    setClosing(true);
+    setError(null);
+    setMessage(null);
     const result = await apiFetch<CloseResponse>('/api/admin/payroll/close', {
       method: 'POST',
       body: {
@@ -146,17 +152,17 @@ export function PayrollClient() {
         period_end: bounds.end,
         notes: notes.trim() || null,
       },
-    })
-    setClosing(false)
+    });
+    setClosing(false);
     if (!result.success || !result.data) {
-      setError(result.error || 'Lohnlauf konnte nicht abgeschlossen werden.')
-      return
+      setError(result.error || 'Lohnlauf konnte nicht abgeschlossen werden.');
+      return;
     }
-    setMessage(`Lohnlauf erstellt — ${result.data.linkedCount} Zeitkarten verbucht.`)
-    setNotes('')
-    await loadPreview()
-    await loadBatches()
-  }
+    setMessage(`Lohnlauf erstellt — ${result.data.linkedCount} Zeitkarten verbucht.`);
+    setNotes('');
+    await loadPreview();
+    await loadBatches();
+  };
 
   return (
     <div className="space-y-6">
@@ -167,20 +173,19 @@ export function PayrollClient() {
           <div>
             <h2 className="text-lg font-semibold text-text-primary">Monat abschliessen</h2>
             <p className="text-sm text-text-tertiary">
-              Sperrt alle genehmigten Zeitkarten dieses Monats und friert den Stundensatz pro Person ein.
+              Sperrt alle genehmigten Zeitkarten dieses Monats und friert den Stundensatz pro Person
+              ein.
             </p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
           <label className="block">
-            <span className="text-xs font-medium text-text-secondary mb-1 block">
-              Monat
-            </span>
+            <span className="text-xs font-medium text-text-secondary mb-1 block">Monat</span>
             <Input
               type="month"
               value={monthInput}
-              onChange={e => setMonthInput(e.target.value)}
+              onChange={(e) => setMonthInput(e.target.value)}
               max={currentMonthInput()}
             />
           </label>
@@ -192,10 +197,9 @@ export function PayrollClient() {
                 </span>
               ) : preview ? (
                 <span className="text-sm text-text-secondary">
+                  <span className="font-semibold text-text-primary">{preview.pending_count}</span>{' '}
+                  Karten ·{' '}
                   <span className="font-semibold text-text-primary">
-                    {preview.pending_count}
-                  </span>{' '}
-                  Karten · <span className="font-semibold text-text-primary">
                     {formatTimecardDuration(preview.pending_minutes)}
                   </span>{' '}
                   bereit
@@ -213,7 +217,7 @@ export function PayrollClient() {
           </span>
           <Textarea
             value={notes}
-            onChange={e => setNotes(e.target.value)}
+            onChange={(e) => setNotes(e.target.value)}
             placeholder="z. B. Mai 2026 – Schlussbatch nach Q2 Bonus-Anpassung"
             rows={2}
             maxLength={1000}
@@ -249,9 +253,7 @@ export function PayrollClient() {
         <div className="px-5 py-3.5 border-b border flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Calendar className="w-4 h-4 text-text-tertiary" />
-            <h2 className="text-sm font-semibold text-text-primary">
-              Vergangene Lohnläufe
-            </h2>
+            <h2 className="text-sm font-semibold text-text-primary">Vergangene Lohnläufe</h2>
           </div>
           <Button
             variant="outline"
@@ -271,8 +273,11 @@ export function PayrollClient() {
           </div>
         ) : (
           <ul className="divide-y divide-subtle">
-            {batches.map(batch => (
-              <li key={batch.id} className={`px-5 py-4 flex items-start gap-3 ${adminInteractive.rowHoverFaint} transition-colors`}>
+            {batches.map((batch) => (
+              <li
+                key={batch.id}
+                className={`px-5 py-4 flex items-start gap-3 ${adminInteractive.rowHoverFaint} transition-colors`}
+              >
                 <FileText className="w-4 h-4 mt-1 text-text-muted shrink-0" />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -286,17 +291,12 @@ export function PayrollClient() {
                     )}
                   </div>
                   <p className="mt-0.5 text-xs text-text-tertiary">
-                    {batch.timecard_count} Karten · {formatTimecardDuration(Number(batch.total_minutes) || 0)}
-                    {batch.closed_by_name && (
-                      <> · abgeschlossen von {batch.closed_by_name}</>
-                    )}
-                    {batch.closed_at && (
-                      <> · {formatDateShort(batch.closed_at)}</>
-                    )}
+                    {batch.timecard_count} Karten ·{' '}
+                    {formatTimecardDuration(Number(batch.total_minutes) || 0)}
+                    {batch.closed_by_name && <> · abgeschlossen von {batch.closed_by_name}</>}
+                    {batch.closed_at && <> · {formatDateShort(batch.closed_at)}</>}
                   </p>
-                  {batch.notes && (
-                    <p className="mt-1 text-xs text-text-secondary">{batch.notes}</p>
-                  )}
+                  {batch.notes && <p className="mt-1 text-xs text-text-secondary">{batch.notes}</p>}
                 </div>
                 <a
                   href={`/api/admin/payroll/batches/${batch.id}/export.csv`}
@@ -311,5 +311,5 @@ export function PayrollClient() {
         )}
       </div>
     </div>
-  )
+  );
 }

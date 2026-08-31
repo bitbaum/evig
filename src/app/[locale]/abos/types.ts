@@ -1,16 +1,16 @@
 export interface Pool {
-  id: string
-  serviceName: string
-  serviceCategory: string
-  maxMembers: number
-  monthlyCostChf: string
-  costPerMemberChf: string
-  description: string | null
-  rules: string | null
-  ownerName: string | null
-  memberCount: number
-  spotsLeft: number
-  createdAt: string
+  id: string;
+  serviceName: string;
+  serviceCategory: string;
+  maxMembers: number;
+  monthlyCostChf: string;
+  costPerMemberChf: string;
+  description: string | null;
+  rules: string | null;
+  ownerName: string | null;
+  memberCount: number;
+  spotsLeft: number;
+  createdAt: string;
 }
 
 /**
@@ -27,15 +27,15 @@ export interface Pool {
  * form iterate this object.
  */
 export const CATEGORY_EMOJIS: Record<string, string> = {
-  ai:        '🤖',
-  software:  '💻',
-  cloud:     '☁️',
-  music:     '🎵',
-  news:      '📰',
+  ai: '🤖',
+  software: '💻',
+  cloud: '☁️',
+  music: '🎵',
+  news: '📰',
   streaming: '📺',
-  gaming:    '🎮',
-  other:     '📦',
-}
+  gaming: '🎮',
+  other: '📦',
+};
 
 /** Default selection in the create form — see the ordering note above. */
-export const DEFAULT_CATEGORY = 'ai'
+export const DEFAULT_CATEGORY = 'ai';

@@ -2,38 +2,38 @@
  * Meeting Protocols — CRUD & Query Operations
  */
 
-import { db } from '@/db'
-import { sql, getTableName } from 'drizzle-orm'
-import { meetingProtocols, protocolActionLinks } from '@/db/schema/misc'
-import { users } from '@/db/schema/auth'
-import { tasks } from '@/db/schema/tasks'
-import { PROTOCOL_STATUS } from '@/config/protocol-status'
-import { SUCCESS_MESSAGES } from '@/config/error-messages'
-import { notifyUsers, fireNotification } from '@/lib/services/notifications'
-import { RELATED_TYPES } from '@/config/notifications'
-import { logger } from '@/lib/logger'
+import { db } from '@/db';
+import { sql, getTableName } from 'drizzle-orm';
+import { meetingProtocols, protocolActionLinks } from '@/db/schema/misc';
+import { users } from '@/db/schema/auth';
+import { tasks } from '@/db/schema/tasks';
+import { PROTOCOL_STATUS } from '@/config/protocol-status';
+import { SUCCESS_MESSAGES } from '@/config/error-messages';
+import { notifyUsers, fireNotification } from '@/lib/services/notifications';
+import { RELATED_TYPES } from '@/config/notifications';
+import { logger } from '@/lib/logger';
 import type {
   ProtocolListItem,
   ProtocolDetail,
   CreateProtocolInput,
   UpdateProtocolInput,
-} from '@/lib/schemas/protocols'
+} from '@/lib/schemas/protocols';
 
 // Table name refs
-const mpTable = getTableName(meetingProtocols)
-const palTable = getTableName(protocolActionLinks)
-const uTable = getTableName(users)
-const tTable = getTableName(tasks)
+const mpTable = getTableName(meetingProtocols);
+const palTable = getTableName(protocolActionLinks);
+const uTable = getTableName(users);
+const tTable = getTableName(tasks);
 
 // =============================================================================
 // QUERIES
 // =============================================================================
 
 interface ProtocolStats {
-  total: number
-  draft: number
-  review: number
-  finalized: number
+  total: number;
+  draft: number;
+  review: number;
+  finalized: number;
 }
 
 /**
@@ -56,21 +56,24 @@ export async function getProtocolStats(
       OR mp.attendees @> to_jsonb(${userId}::text)
       OR ${isSuperAdmin} = true
     )
-  `)
+  `);
 
-  const row = result.rows[0] as unknown as { total: string; draft: string; review: string; finalized: string } | undefined
+  const row = result.rows[0] as unknown as
+    { total: string; draft: string; review: string; finalized: string } | undefined;
   return {
     total: parseInt(row?.total || '0'),
     draft: parseInt(row?.draft || '0'),
     review: parseInt(row?.review || '0'),
     finalized: parseInt(row?.finalized || '0'),
-  }
+  };
 }
 
 /**
  * Get team members for attendee mapping
  */
-export async function getTeamMembers(): Promise<Array<{ id: string; name: string; open_task_count: number }>> {
+export async function getTeamMembers(): Promise<
+  Array<{ id: string; name: string; open_task_count: number }>
+> {
   const result = await db.execute(sql`
     SELECT
       u.id,
@@ -81,8 +84,8 @@ export async function getTeamMembers(): Promise<Array<{ id: string; name: string
     WHERE u.name IS NOT NULL
     GROUP BY u.id, u.name
     ORDER BY open_task_count ASC, u.name ASC
-  `)
-  return result.rows as unknown as Array<{ id: string; name: string; open_task_count: number }>
+  `);
+  return result.rows as unknown as Array<{ id: string; name: string; open_task_count: number }>;
 }
 
 /**
@@ -91,11 +94,18 @@ export async function getTeamMembers(): Promise<Array<{ id: string; name: string
 export async function getProtocols(
   userId: string,
   isSuperAdmin: boolean,
-  filters?: { meeting_type?: string; status?: string; q?: string; attendee?: string; page?: number; limit?: number }
+  filters?: {
+    meeting_type?: string;
+    status?: string;
+    q?: string;
+    attendee?: string;
+    page?: number;
+    limit?: number;
+  },
 ): Promise<{ protocols: ProtocolListItem[]; total: number }> {
-  const page = filters?.page ?? 1
-  const limit = filters?.limit ?? 20
-  const offset = (page - 1) * limit
+  const page = filters?.page ?? 1;
+  const limit = filters?.limit ?? 20;
+  const offset = (page - 1) * limit;
 
   // Build dynamic filter conditions
   const conditions: ReturnType<typeof sql>[] = [
@@ -104,26 +114,26 @@ export async function getProtocols(
       OR mp.created_by = ${userId}
       OR mp.attendees @> to_jsonb(${userId}::text)
       OR ${isSuperAdmin} = true
-    )`
-  ]
+    )`,
+  ];
 
   if (filters?.meeting_type) {
-    conditions.push(sql`mp.meeting_type = ${filters.meeting_type}`)
+    conditions.push(sql`mp.meeting_type = ${filters.meeting_type}`);
   }
   if (filters?.status) {
-    conditions.push(sql`mp.status = ${filters.status}`)
+    conditions.push(sql`mp.status = ${filters.status}`);
   }
   if (filters?.q) {
-    conditions.push(sql`mp.title ILIKE '%' || ${filters.q} || '%'`)
+    conditions.push(sql`mp.title ILIKE '%' || ${filters.q} || '%'`);
   }
   if (filters?.attendee) {
-    conditions.push(sql`mp.attendees @> to_jsonb(${filters.attendee}::text)`)
+    conditions.push(sql`mp.attendees @> to_jsonb(${filters.attendee}::text)`);
   }
 
   // Join conditions with AND
-  let whereClause = conditions[0]
+  let whereClause = conditions[0];
   for (let i = 1; i < conditions.length; i++) {
-    whereClause = sql`${whereClause} AND ${conditions[i]}`
+    whereClause = sql`${whereClause} AND ${conditions[i]}`;
   }
 
   // Single query with COUNT(*) OVER() for pagination
@@ -165,15 +175,18 @@ export async function getProtocols(
     WHERE ${whereClause}
     ORDER BY mp.meeting_date DESC, mp.created_at DESC
     LIMIT ${limit} OFFSET ${offset}
-  `)
+  `);
 
-  const total = parseInt((listResult.rows[0] as unknown as { _total_count: string })?._total_count || '0', 10)
+  const total = parseInt(
+    (listResult.rows[0] as unknown as { _total_count: string })?._total_count || '0',
+    10,
+  );
   // Strip _total_count from response rows
-  const protocols = (listResult.rows as unknown as (ProtocolListItem & { _total_count?: string })[]).map(
-    ({ _total_count, ...row }) => row
-  )
+  const protocols = (
+    listResult.rows as unknown as (ProtocolListItem & { _total_count?: string })[]
+  ).map(({ _total_count, ...row }) => row);
 
-  return { protocols, total }
+  return { protocols, total };
 }
 
 export async function getProtocolReviewQueue(
@@ -185,13 +198,13 @@ export async function getProtocolReviewQueue(
     status: PROTOCOL_STATUS.REVIEW,
     page: 1,
     limit,
-  })
+  });
 
   return protocols.sort((a, b) => {
-    const taskDelta = b.unlinked_action_item_count - a.unlinked_action_item_count
-    if (taskDelta !== 0) return taskDelta
-    return new Date(b.meeting_date).getTime() - new Date(a.meeting_date).getTime()
-  })
+    const taskDelta = b.unlinked_action_item_count - a.unlinked_action_item_count;
+    if (taskDelta !== 0) return taskDelta;
+    return new Date(b.meeting_date).getTime() - new Date(a.meeting_date).getTime();
+  });
 }
 
 /**
@@ -216,8 +229,8 @@ export async function getProtocolById(
       OR mp.attendees @> to_jsonb(${userId}::text)
       OR ${isSuperAdmin} = true
     )
-  `)
-  return (result.rows[0] as unknown as ProtocolDetail) || null
+  `);
+  return (result.rows[0] as unknown as ProtocolDetail) || null;
 }
 
 // =============================================================================
@@ -229,7 +242,7 @@ export async function getProtocolById(
  */
 export async function createProtocol(
   data: CreateProtocolInput,
-  createdBy: string
+  createdBy: string,
 ): Promise<{ id: string }> {
   const result = await db.execute(sql`
     INSERT INTO ${sql.raw(mpTable)} (
@@ -245,8 +258,8 @@ export async function createProtocol(
       ${createdBy}
     )
     RETURNING id
-  `)
-  return result.rows[0] as unknown as { id: string }
+  `);
+  return result.rows[0] as unknown as { id: string };
 }
 
 /**
@@ -260,46 +273,46 @@ export async function updateProtocol(
   // Verify protocol exists and is editable
   const existing = await db.execute(sql`
     SELECT status, created_by FROM ${sql.raw(mpTable)} WHERE id = ${id}
-  `)
+  `);
 
-  if (existing.rows.length === 0) return null
+  if (existing.rows.length === 0) return null;
 
-  const { status } = existing.rows[0] as unknown as { status: string; created_by: string }
+  const { status } = existing.rows[0] as unknown as { status: string; created_by: string };
   if (status !== PROTOCOL_STATUS.DRAFT && status !== PROTOCOL_STATUS.REVIEW) {
-    throw new Error('PROTOCOL_NOT_EDITABLE')
+    throw new Error('PROTOCOL_NOT_EDITABLE');
   }
 
   // Build dynamic update
-  const setClauses: ReturnType<typeof sql>[] = []
+  const setClauses: ReturnType<typeof sql>[] = [];
 
   if (data.title !== undefined) {
-    setClauses.push(sql`title = ${data.title}`)
+    setClauses.push(sql`title = ${data.title}`);
   }
   if (data.meeting_date !== undefined) {
-    setClauses.push(sql`meeting_date = ${data.meeting_date}`)
+    setClauses.push(sql`meeting_date = ${data.meeting_date}`);
   }
   if (data.meeting_type !== undefined) {
-    setClauses.push(sql`meeting_type = ${data.meeting_type}`)
+    setClauses.push(sql`meeting_type = ${data.meeting_type}`);
   }
   if (data.visibility !== undefined) {
-    setClauses.push(sql`visibility = ${data.visibility}`)
+    setClauses.push(sql`visibility = ${data.visibility}`);
   }
   if (data.attendees !== undefined) {
-    setClauses.push(sql`attendees = ${JSON.stringify(data.attendees)}::jsonb`)
+    setClauses.push(sql`attendees = ${JSON.stringify(data.attendees)}::jsonb`);
   }
   if (data.team_id !== undefined) {
-    setClauses.push(sql`team_id = ${data.team_id}`)
+    setClauses.push(sql`team_id = ${data.team_id}`);
   }
   if (data.structured_notes !== undefined) {
-    setClauses.push(sql`structured_notes = ${JSON.stringify(data.structured_notes)}::jsonb`)
+    setClauses.push(sql`structured_notes = ${JSON.stringify(data.structured_notes)}::jsonb`);
   }
 
-  if (setClauses.length === 0) return null
+  if (setClauses.length === 0) return null;
 
   // Join SET clauses with commas
-  let setFragment = setClauses[0]
+  let setFragment = setClauses[0];
   for (let i = 1; i < setClauses.length; i++) {
-    setFragment = sql`${setFragment}, ${setClauses[i]}`
+    setFragment = sql`${setFragment}, ${setClauses[i]}`;
   }
 
   const result = await db.execute(sql`
@@ -307,9 +320,9 @@ export async function updateProtocol(
     SET ${setFragment}
     WHERE id = ${id}
     RETURNING *
-  `)
+  `);
 
-  return (result.rows[0] as unknown as ProtocolDetail) || null
+  return (result.rows[0] as unknown as ProtocolDetail) || null;
 }
 
 // =============================================================================
@@ -327,28 +340,28 @@ export async function deleteProtocol(
 ): Promise<{ deleted: true } | { error: 'not_found' | 'not_authorized' }> {
   const existing = await db.execute(sql`
     SELECT id, created_by FROM ${sql.raw(mpTable)} WHERE id = ${protocolId}
-  `)
+  `);
 
   if (existing.rows.length === 0) {
-    return { error: 'not_found' }
+    return { error: 'not_found' };
   }
 
-  const row = existing.rows[0] as unknown as { id: string; created_by: string }
+  const row = existing.rows[0] as unknown as { id: string; created_by: string };
   if (row.created_by !== userId && !isSuperAdmin) {
-    return { error: 'not_authorized' }
+    return { error: 'not_authorized' };
   }
 
   await db.transaction(async (tx) => {
     await tx.execute(sql`
       DELETE FROM ${sql.raw(palTable)} WHERE protocol_id = ${protocolId}
-    `)
+    `);
     await tx.execute(sql`
       DELETE FROM ${sql.raw(mpTable)} WHERE id = ${protocolId}
-    `)
-  })
+    `);
+  });
 
-  logger.info('Protocol deleted', { protocolId, userId })
-  return { deleted: true }
+  logger.info('Protocol deleted', { protocolId, userId });
+  return { deleted: true };
 }
 
 // =============================================================================
@@ -358,33 +371,36 @@ export async function deleteProtocol(
 /**
  * Mark protocol as finalized
  */
-export async function finalizeProtocol(
-  id: string,
-): Promise<boolean> {
+export async function finalizeProtocol(id: string): Promise<boolean> {
   const result = await db.execute(sql`
     UPDATE ${sql.raw(mpTable)}
     SET status = ${PROTOCOL_STATUS.FINALIZED}
     WHERE id = ${id} AND status = ${PROTOCOL_STATUS.REVIEW}
     RETURNING id, title, attendees
-  `)
+  `);
 
-  if (result.rows.length === 0) return false
+  if (result.rows.length === 0) return false;
 
-  const { title, attendees } = result.rows[0] as unknown as { id: string; title: string; attendees: string[] }
+  const { title, attendees } = result.rows[0] as unknown as {
+    id: string;
+    title: string;
+    attendees: string[];
+  };
 
   // Notify all attendees that the protocol is available
   if (attendees && attendees.length > 0) {
     fireNotification(
-      () => notifyUsers(attendees, {
-        type: 'protocol_finalized',
-        title: SUCCESS_MESSAGES.PROTOCOL_FINALIZED,
-        content: `Das Protokoll "${title}" ist jetzt verfügbar.`,
-        related_type: RELATED_TYPES.PROTOCOL,
-        related_id: id,
-      }),
-      `protocol_finalized:${id}`
-    )
+      () =>
+        notifyUsers(attendees, {
+          type: 'protocol_finalized',
+          title: SUCCESS_MESSAGES.PROTOCOL_FINALIZED,
+          content: `Das Protokoll "${title}" ist jetzt verfügbar.`,
+          related_type: RELATED_TYPES.PROTOCOL,
+          related_id: id,
+        }),
+      `protocol_finalized:${id}`,
+    );
   }
 
-  return true
+  return true;
 }

@@ -6,39 +6,35 @@
  * DELETE /api/admin/services/[id] - Soft delete service
  */
 
-import { NextRequest } from 'next/server'
-import { withAdmin } from '@/lib/api/middleware'
-import { logger } from '@/lib/logger'
-import { apiSuccess, apiError, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import {
-  getAdminServiceById,
-  updateServiceType,
-  deleteServiceType,
-} from '@/lib/services'
+import { NextRequest } from 'next/server';
+import { withAdmin } from '@/lib/api/middleware';
+import { logger } from '@/lib/logger';
+import { apiSuccess, apiError, apiBadRequest, apiNotFound } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { getAdminServiceById, updateServiceType, deleteServiceType } from '@/lib/services';
 
 export const GET = withAdmin<{ id: string }>('services', async (request, session, context) => {
   try {
-    const { id } = context!.params!
+    const { id } = context!.params!;
 
-    const service = await getAdminServiceById(id)
+    const service = await getAdminServiceById(id);
 
     if (!service) {
-      return apiNotFound(ERROR_MESSAGES.DIENSTLEISTUNG_NOT_FOUND)
+      return apiNotFound(ERROR_MESSAGES.DIENSTLEISTUNG_NOT_FOUND);
     }
 
-    return apiSuccess(service)
+    return apiSuccess(service);
   } catch (error) {
-    logger.error('Failed to get service', { error })
-    return apiError(error, 'Dienstleistung konnte nicht geladen werden')
+    logger.error('Failed to get service', { error });
+    return apiError(error, 'Dienstleistung konnte nicht geladen werden');
   }
-})
+});
 
 export const PUT = withAdmin<{ id: string }>('services', async (request, session, context) => {
   try {
-    const { id } = context!.params!
+    const { id } = context!.params!;
 
-    const body = await request.json()
+    const body = await request.json();
     const {
       name,
       slug,
@@ -61,73 +57,77 @@ export const PUT = withAdmin<{ id: string }>('services', async (request, session
       pricingBase,
       pricingDetails,
       pricingMediaPrices,
-    } = body
+    } = body;
 
     // Validate slug format if provided
     if (slug && !/^[a-z0-9-]+$/.test(slug)) {
-      return apiBadRequest('Slug darf nur Kleinbuchstaben, Zahlen und Bindestriche enthalten')
+      return apiBadRequest('Slug darf nur Kleinbuchstaben, Zahlen und Bindestriche enthalten');
     }
 
     // Build update data (only include defined fields)
-    const updateData: Record<string, unknown> = {}
+    const updateData: Record<string, unknown> = {};
 
-    if (name !== undefined) updateData.name = name
-    if (slug !== undefined) updateData.slug = slug
-    if (description !== undefined) updateData.description = description
-    if (category !== undefined) updateData.category = category
-    if (durationMinutes !== undefined) updateData.duration_minutes = durationMinutes
-    if (priceCents !== undefined) updateData.price_cents = priceCents
-    if (requiresApproval !== undefined) updateData.requires_approval = requiresApproval
-    if (isActive !== undefined) updateData.is_active = isActive
-    if (isBookable !== undefined) updateData.is_bookable = isBookable
-    if (isFeatured !== undefined) updateData.is_featured = isFeatured
-    if (displayOrder !== undefined) updateData.display_order = displayOrder
+    if (name !== undefined) updateData.name = name;
+    if (slug !== undefined) updateData.slug = slug;
+    if (description !== undefined) updateData.description = description;
+    if (category !== undefined) updateData.category = category;
+    if (durationMinutes !== undefined) updateData.duration_minutes = durationMinutes;
+    if (priceCents !== undefined) updateData.price_cents = priceCents;
+    if (requiresApproval !== undefined) updateData.requires_approval = requiresApproval;
+    if (isActive !== undefined) updateData.is_active = isActive;
+    if (isBookable !== undefined) updateData.is_bookable = isBookable;
+    if (isFeatured !== undefined) updateData.is_featured = isFeatured;
+    if (displayOrder !== undefined) updateData.display_order = displayOrder;
 
     // Presentation fields
-    if (iconName !== undefined) updateData.icon_name = iconName
-    if (heroTitle !== undefined) updateData.hero_title = heroTitle
-    if (heroSubtitle !== undefined) updateData.hero_subtitle = heroSubtitle
-    if (heroDescription !== undefined) updateData.hero_description = heroDescription
-    if (features !== undefined) updateData.features_json = features
-    if (process !== undefined) updateData.process_json = process
-    if (pricingBase !== undefined) updateData.pricing_base = pricingBase
-    if (pricingDetails !== undefined) updateData.pricing_details = pricingDetails
-    if (pricingMediaPrices !== undefined) updateData.pricing_media_prices = pricingMediaPrices
+    if (iconName !== undefined) updateData.icon_name = iconName;
+    if (heroTitle !== undefined) updateData.hero_title = heroTitle;
+    if (heroSubtitle !== undefined) updateData.hero_subtitle = heroSubtitle;
+    if (heroDescription !== undefined) updateData.hero_description = heroDescription;
+    if (features !== undefined) updateData.features_json = features;
+    if (process !== undefined) updateData.process_json = process;
+    if (pricingBase !== undefined) updateData.pricing_base = pricingBase;
+    if (pricingDetails !== undefined) updateData.pricing_details = pricingDetails;
+    if (pricingMediaPrices !== undefined) updateData.pricing_media_prices = pricingMediaPrices;
 
-    const service = await updateServiceType(id, updateData)
+    const service = await updateServiceType(id, updateData);
 
     if (!service) {
-      return apiNotFound(ERROR_MESSAGES.DIENSTLEISTUNG_NOT_FOUND)
+      return apiNotFound(ERROR_MESSAGES.DIENSTLEISTUNG_NOT_FOUND);
     }
 
-    logger.info('Service updated', { serviceId: id, userId: session.user.id, fields: Object.keys(updateData) })
+    logger.info('Service updated', {
+      serviceId: id,
+      userId: session.user.id,
+      fields: Object.keys(updateData),
+    });
 
-    return apiSuccess(service)
+    return apiSuccess(service);
   } catch (error) {
     // Check for unique constraint violation
     if (error instanceof Error && error.message.includes('duplicate key')) {
-      return apiBadRequest('Ein Service mit diesem Slug existiert bereits')
+      return apiBadRequest('Ein Service mit diesem Slug existiert bereits');
     }
-    logger.error('Failed to update service', { error })
-    return apiError(error, 'Dienstleistung konnte nicht aktualisiert werden')
+    logger.error('Failed to update service', { error });
+    return apiError(error, 'Dienstleistung konnte nicht aktualisiert werden');
   }
-})
+});
 
 export const DELETE = withAdmin<{ id: string }>('services', async (request, session, context) => {
   try {
-    const { id } = context!.params!
+    const { id } = context!.params!;
 
-    const success = await deleteServiceType(id)
+    const success = await deleteServiceType(id);
 
     if (!success) {
-      return apiNotFound(ERROR_MESSAGES.DIENSTLEISTUNG_NOT_FOUND)
+      return apiNotFound(ERROR_MESSAGES.DIENSTLEISTUNG_NOT_FOUND);
     }
 
-    logger.info('Service deleted', { serviceId: id, userId: session.user.id })
+    logger.info('Service deleted', { serviceId: id, userId: session.user.id });
 
-    return apiSuccess({ deleted: true })
+    return apiSuccess({ deleted: true });
   } catch (error) {
-    logger.error('Failed to delete service', { error })
-    return apiError(error, 'Dienstleistung konnte nicht gelöscht werden')
+    logger.error('Failed to delete service', { error });
+    return apiError(error, 'Dienstleistung konnte nicht gelöscht werden');
   }
-})
+});

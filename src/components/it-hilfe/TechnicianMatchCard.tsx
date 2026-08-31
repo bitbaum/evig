@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * TechnicianMatchCard — request-context variant of the technician card.
@@ -13,19 +13,19 @@
  * "helper" entity, only Technicians with profileTier='community'.
  */
 
-import { useState } from 'react'
-import { Link } from '@/i18n/navigation'
-import { MapPin, Euro, Users, Sparkles, Star, CheckCircle } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { useTranslations } from 'next-intl'
-import { getSkillById, getBudgetTierById, BUDGET_TIER } from '@/config/it-hilfe'
-import { logger } from '@/lib/logger'
-import { apiFetch } from '@/lib/api/client'
-import { formatCentsToChf } from '@/lib/pricing'
-import { CONVERSATION_TYPES } from '@/config/database'
-import { ROUTES } from '@/config/routes'
-import type { Technician } from '@/types/technician'
+import { useState } from 'react';
+import { Link } from '@/i18n/navigation';
+import { MapPin, Euro, Users, Sparkles, Star, CheckCircle } from 'lucide-react';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
+import { getSkillById, getBudgetTierById, BUDGET_TIER } from '@/config/it-hilfe';
+import { logger } from '@/lib/logger';
+import { apiFetch } from '@/lib/api/client';
+import { formatCentsToChf } from '@/lib/pricing';
+import { CONVERSATION_TYPES } from '@/config/database';
+import { ROUTES } from '@/config/routes';
+import type { Technician } from '@/types/technician';
 
 /**
  * Narrow shape accepted by TechnicianMatchCard. Pick of the canonical
@@ -33,78 +33,97 @@ import type { Technician } from '@/types/technician'
  * alias for the same data as Technician.serviceDeliveryTypes (matches API
  * still ships the old key, will be normalized in QQQ.3).
  */
-export type TechnicianMatchInput = Pick<Technician,
-  | 'id' | 'userId' | 'name' | 'bio'
-  | 'hourlyRateCents' | 'acceptsGratis' | 'acceptsKulturlegi'
-  | 'postalCode' | 'city' | 'canton' | 'maxTravelKm'
+export type TechnicianMatchInput = Pick<
+  Technician,
+  | 'id'
+  | 'userId'
+  | 'name'
+  | 'bio'
+  | 'hourlyRateCents'
+  | 'acceptsGratis'
+  | 'acceptsKulturlegi'
+  | 'postalCode'
+  | 'city'
+  | 'canton'
+  | 'maxTravelKm'
   | 'skills'
 > & {
-  serviceTypes: string[]
-  averageRating?: number | null
-  totalJobsCompleted?: number
-  totalReviews?: number
-}
+  serviceTypes: string[];
+  averageRating?: number | null;
+  totalJobsCompleted?: number;
+  totalReviews?: number;
+};
 
 interface TechnicianMatchCardProps {
   /** Match-shape technician returned by /api/it-hilfe/requests/[id]/matches. */
-  technician: TechnicianMatchInput
+  technician: TechnicianMatchInput;
   /** ID of the open request — pre-fills the contact message. */
-  requestId?: string
+  requestId?: string;
   /** Title of the open request — pre-fills the contact message. */
-  requestTitle?: string
+  requestTitle?: string;
 }
 
-export function TechnicianMatchCard({ technician, requestId, requestTitle }: TechnicianMatchCardProps) {
+export function TechnicianMatchCard({
+  technician,
+  requestId,
+  requestTitle,
+}: TechnicianMatchCardProps) {
   // Local alias keeps the historical variable name in the function body
   // so the diff stays manageable. Future cleanup can rename throughout.
-  const helper = technician
-  const t = useTranslations('components.technicianMatchCard')
-  const [isContacting, setIsContacting] = useState(false)
-  const [contactSuccess, setContactSuccess] = useState(false)
+  const helper = technician;
+  const t = useTranslations('components.technicianMatchCard');
+  const [isContacting, setIsContacting] = useState(false);
+  const [contactSuccess, setContactSuccess] = useState(false);
 
-  const displayedSkills = helper.skills.slice(0, 5)
-  const remainingSkillsCount = helper.skills.length - 5
+  const displayedSkills = helper.skills.slice(0, 5);
+  const remainingSkillsCount = helper.skills.length - 5;
 
   async function handleContact() {
-    setIsContacting(true)
+    setIsContacting(true);
 
     try {
       // Prepare initial message
-      let initialMessage = `Hallo ${helper.name},\n\n`
+      let initialMessage = `Hallo ${helper.name},\n\n`;
 
       if (requestId && requestTitle) {
-        initialMessage += `ich habe deine Fähigkeiten gesehen und denke, du könntest mir helfen: "${requestTitle}"\n\nLink: ${window.location.origin}/it-hilfe/${requestId}\n\n`
+        initialMessage += `ich habe deine Fähigkeiten gesehen und denke, du könntest mir helfen: "${requestTitle}"\n\nLink: ${window.location.origin}/it-hilfe/${requestId}\n\n`;
       } else {
-        initialMessage += `ich brauche IT-Hilfe und habe gesehen, dass du folgende Fähigkeiten hast:\n\n${displayedSkills.map(skillId => {
-          const skill = getSkillById(skillId)
-          return skill ? `- ${skill.name}` : ''
-        }).filter(Boolean).join('\n')}\n\nKönntest du mir helfen?`
+        initialMessage += `ich brauche IT-Hilfe und habe gesehen, dass du folgende Fähigkeiten hast:\n\n${displayedSkills
+          .map((skillId) => {
+            const skill = getSkillById(skillId);
+            return skill ? `- ${skill.name}` : '';
+          })
+          .filter(Boolean)
+          .join('\n')}\n\nKönntest du mir helfen?`;
       }
 
-      const { data, error: apiError } = await apiFetch<{ conversation_id: string }>('/api/messages', {
-        method: 'POST',
-        body: {
-          recipient_id: helper.userId,
-          content: initialMessage,
-          context_type: CONVERSATION_TYPES.IT_HILFE,
-          context_id: requestId || null,
+      const { data, error: apiError } = await apiFetch<{ conversation_id: string }>(
+        '/api/messages',
+        {
+          method: 'POST',
+          body: {
+            recipient_id: helper.userId,
+            content: initialMessage,
+            context_type: CONVERSATION_TYPES.IT_HILFE,
+            context_id: requestId || null,
+          },
         },
-      })
+      );
 
       if (apiError) {
-        throw new Error(apiError)
+        throw new Error(apiError);
       }
 
       logger.info('Contacted helper', {
         helperId: helper.userId,
         conversationId: data?.conversation_id,
-      })
+      });
 
-      setContactSuccess(true)
+      setContactSuccess(true);
     } catch (error) {
-      logger.error('Error contacting helper', { error, helperId: helper.userId })
+      logger.error('Error contacting helper', { error, helperId: helper.userId });
     } finally {
-      setIsContacting(false)
+      setIsContacting(false);
     }
   }
 
@@ -113,7 +132,9 @@ export function TechnicianMatchCard({ technician, requestId, requestTitle }: Tec
       {/* Helper Info */}
       <div className="mb-4">
         <Link href={ROUTES.public.technicianProfile(helper.id)} className="hover:underline">
-          <Heading level={3} className="text-lg font-semibold text-text-primary mb-2">{helper.name}</Heading>
+          <Heading level={3} className="text-lg font-semibold text-text-primary mb-2">
+            {helper.name}
+          </Heading>
         </Link>
         {helper.bio && (
           <p className="text-text-secondary text-sm line-clamp-2 mb-3">{helper.bio}</p>
@@ -121,7 +142,7 @@ export function TechnicianMatchCard({ technician, requestId, requestTitle }: Tec
       </div>
 
       {/* Rating & Help Count */}
-      {(helper.averageRating || helper.totalJobsCompleted) ? (
+      {helper.averageRating || helper.totalJobsCompleted ? (
         <div className="flex items-center gap-3 text-sm text-text-secondary mb-3">
           {helper.averageRating && Number(helper.averageRating) > 0 && (
             <span className="flex items-center gap-1">
@@ -154,8 +175,8 @@ export function TechnicianMatchCard({ technician, requestId, requestTitle }: Tec
       <div className="mb-4">
         <div className="flex flex-wrap gap-2">
           {displayedSkills.map((skillId) => {
-            const skill = getSkillById(skillId)
-            if (!skill) return null
+            const skill = getSkillById(skillId);
+            if (!skill) return null;
             return (
               <span
                 key={skillId}
@@ -163,7 +184,7 @@ export function TechnicianMatchCard({ technician, requestId, requestTitle }: Tec
               >
                 {skill.name}
               </span>
-            )
+            );
           })}
           {remainingSkillsCount > 0 && (
             <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-surface-raised text-text-secondary">
@@ -176,13 +197,17 @@ export function TechnicianMatchCard({ technician, requestId, requestTitle }: Tec
       {/* Pricing Info */}
       <div className="flex flex-wrap gap-2 mb-4">
         {helper.acceptsGratis && (
-          <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${getBudgetTierById(BUDGET_TIER.GRATIS)?.badgeClass ?? ''}`}>
+          <span
+            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${getBudgetTierById(BUDGET_TIER.GRATIS)?.badgeClass ?? ''}`}
+          >
             <Users className="w-3 h-3" />
             {t('gratis')}
           </span>
         )}
         {helper.acceptsKulturlegi && (
-          <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${getBudgetTierById(BUDGET_TIER.KULTURLEGI)?.badgeClass ?? ''}`}>
+          <span
+            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium ${getBudgetTierById(BUDGET_TIER.KULTURLEGI)?.badgeClass ?? ''}`}
+          >
             <Sparkles className="w-3 h-3" />
             KulturLegi
           </span>
@@ -202,10 +227,15 @@ export function TechnicianMatchCard({ technician, requestId, requestTitle }: Tec
           {t('messageSent', { name: helper.name })}
         </div>
       ) : (
-        <Button onClick={handleContact} disabled={isContacting} variant="primary" className="w-full">
+        <Button
+          onClick={handleContact}
+          disabled={isContacting}
+          variant="primary"
+          className="w-full"
+        >
           {isContacting ? t('contacting') : t('contact')}
         </Button>
       )}
     </div>
-  )
+  );
 }

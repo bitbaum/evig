@@ -5,13 +5,13 @@
  * Provides a gallery view for media management.
  */
 
-import { Metadata } from 'next'
-import { adminInteractive } from '@/lib/admin-ui'
-import Link from 'next/link'
-import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Metadata } from 'next';
+import { adminInteractive } from '@/lib/admin-ui';
+import Link from 'next/link';
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Plus,
   Image as ImageIcon,
@@ -24,21 +24,21 @@ import {
   Grid,
   List,
   Filter,
-} from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import { AdminHeroStatus } from '@/components/admin/AdminHeroStatus'
-import { ROUTES } from '@/config/routes'
+} from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import { AdminHeroStatus } from '@/components/admin/AdminHeroStatus';
+import { ROUTES } from '@/config/routes';
 
 export const metadata: Metadata = {
   title: 'Medienbibliothek',
   description: 'Bilder, Videos und Dokumente verwalten.',
-}
+};
 
 export default async function AdminMediaPage() {
-  const session = await auth()
+  const session = await auth();
 
   if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/content/media')
+    redirect('/auth/login?callbackUrl=/admin/content/media');
   }
 
   return (
@@ -56,9 +56,7 @@ export default async function AdminMediaPage() {
             <Heading level={1} className="text-2xl font-bold text-text-primary">
               Medienbibliothek
             </Heading>
-            <p className="text-text-secondary mt-1">
-              Bilder, Videos und Dokumente verwalten
-            </p>
+            <p className="text-text-secondary mt-1">Bilder, Videos und Dokumente verwalten</p>
           </div>
         </div>
         <Button variant="primary">
@@ -89,27 +87,29 @@ export default async function AdminMediaPage() {
           {/* Search */}
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
-            <Input
-              type="text"
-              placeholder="Medien suchen..."
-              className="pl-10"
-            />
+            <Input type="text" placeholder="Medien suchen..." className="pl-10" />
           </div>
 
           {/* Filters and View Toggle */}
           <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" className={`flex items-center gap-2 px-3 py-2 border border rounded-lg ${adminInteractive.rowHover} transition-colors`}>
+            <Button
+              variant="outline"
+              size="sm"
+              className={`flex items-center gap-2 px-3 py-2 border border rounded-lg ${adminInteractive.rowHover} transition-colors`}
+            >
               <Filter className="w-4 h-4 text-text-secondary" />
-              <span className="text-sm text-text-secondary">
-                Filter
-              </span>
+              <span className="text-sm text-text-secondary">Filter</span>
             </Button>
 
             <div className="flex border border rounded-lg overflow-hidden">
               <Button variant="ghost" size="icon" className="p-2 bg-action-muted text-action">
                 <Grid className="w-4 h-4" />
               </Button>
-              <Button variant="ghost" size="icon" className={`p-2 ${adminInteractive.rowHover} text-text-secondary`}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className={`p-2 ${adminInteractive.rowHover} text-text-secondary`}
+              >
                 <List className="w-4 h-4" />
               </Button>
             </div>
@@ -127,8 +127,8 @@ export default async function AdminMediaPage() {
             Noch keine Medien hochgeladen
           </Heading>
           <p className="text-text-secondary mb-6 max-w-md mx-auto">
-            Lade Bilder, Videos und Dokumente hoch, um sie in Ihren
-            Blog-Artikeln und Seiten zu verwenden.
+            Lade Bilder, Videos und Dokumente hoch, um sie in Ihren Blog-Artikeln und Seiten zu
+            verwenden.
           </p>
 
           {/* Upload Area */}
@@ -136,10 +136,8 @@ export default async function AdminMediaPage() {
             <div className="border-2 border-dashed border-default rounded-xl p-8 hover:border-action dark:hover:border-action transition-colors cursor-pointer">
               <Upload className="w-8 h-8 text-text-muted mx-auto mb-3" />
               <p className="text-sm text-text-secondary mb-2">
-                <span className="text-action font-medium">
-                  Klicken zum Hochladen
-                </span>{' '}
-                oder Dateien hierher ziehen
+                <span className="text-action font-medium">Klicken zum Hochladen</span> oder Dateien
+                hierher ziehen
               </p>
               <p className="text-xs text-text-tertiary dark:text-text-tertiary">
                 PNG, JPG, GIF, PDF, MP4 bis zu 50MB
@@ -158,12 +156,8 @@ export default async function AdminMediaPage() {
               Bilder
             </Heading>
           </div>
-          <p className="text-sm text-text-secondary">
-            JPG, PNG, GIF, WebP, SVG
-          </p>
-          <p className="text-xs text-text-secondary mt-1">
-            Max. 10 MB pro Datei
-          </p>
+          <p className="text-sm text-text-secondary">JPG, PNG, GIF, WebP, SVG</p>
+          <p className="text-xs text-text-secondary mt-1">Max. 10 MB pro Datei</p>
         </div>
 
         <div className="bg-action-muted border border-strong rounded-xl p-5">
@@ -173,12 +167,8 @@ export default async function AdminMediaPage() {
               Videos
             </Heading>
           </div>
-          <p className="text-sm text-action">
-            MP4, WebM, MOV
-          </p>
-          <p className="text-xs text-action mt-1">
-            Max. 50 MB pro Datei
-          </p>
+          <p className="text-sm text-action">MP4, WebM, MOV</p>
+          <p className="text-xs text-action mt-1">Max. 50 MB pro Datei</p>
         </div>
 
         <div className="bg-secondary-50 dark:bg-secondary-900/20 border border-secondary-200 dark:border-secondary-800 rounded-xl p-5">
@@ -208,14 +198,13 @@ export default async function AdminMediaPage() {
               In Entwicklung
             </Heading>
             <p className="text-sm text-warning-700 dark:text-warning-300 mt-1">
-              Die Medienbibliothek wird gerade entwickelt. Bald kannst du hier
-              Bilder und Dokumente hochladen, organisieren und in deinen Inhalten
-              verwenden. Für Produktbilder nutze bitte weiterhin die
-              Produkterfassung.
+              Die Medienbibliothek wird gerade entwickelt. Bald kannst du hier Bilder und Dokumente
+              hochladen, organisieren und in deinen Inhalten verwenden. Für Produktbilder nutze
+              bitte weiterhin die Produkterfassung.
             </p>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

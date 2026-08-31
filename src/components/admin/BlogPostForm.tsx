@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Blog Post Form
@@ -7,32 +7,21 @@
  * Used by /admin/content/blog/new and /admin/content/blog/[id]
  */
 
-import { useTranslations } from 'next-intl'
-import { adminInteractive } from '@/lib/admin-ui'
-import { Link } from '@/i18n/navigation'
-import Heading from '@/components/admin/AdminHeading'
-import {
-  ArrowLeft,
-  Save,
-  Eye,
-  Loader2,
-  Send,
-} from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import {
-  useBlogPostForm,
-  BlogPostEditor,
-  BlogPostSidebar,
-  BlogTranslationTabs,
-} from './blog'
-import type { BlogPostFormProps } from './blog'
-import { AIFormAssist } from '@/components/ai/AIFormAssist'
-import { generateSlug } from '@/lib/utils/slug'
-import { ROUTES } from '@/config/routes'
+import { useTranslations } from 'next-intl';
+import { adminInteractive } from '@/lib/admin-ui';
+import { Link } from '@/i18n/navigation';
+import Heading from '@/components/admin/AdminHeading';
+import { ArrowLeft, Save, Eye, Loader2, Send } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useBlogPostForm, BlogPostEditor, BlogPostSidebar, BlogTranslationTabs } from './blog';
+import type { BlogPostFormProps } from './blog';
+import { AIFormAssist } from '@/components/ai/AIFormAssist';
+import { generateSlug } from '@/lib/utils/slug';
+import { ROUTES } from '@/config/routes';
 
 export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps) {
-  const t = useTranslations('admin.blog.form')
-  const tForms = useTranslations('admin.forms')
+  const t = useTranslations('admin.blog.form');
+  const tForms = useTranslations('admin.forms');
   const {
     formData,
     setFormData,
@@ -59,7 +48,7 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
     translateAll,
     autoTranslate,
     setAutoTranslate,
-  } = useBlogPostForm({ initialData, isEdit })
+  } = useBlogPostForm({ initialData, isEdit });
 
   return (
     <div className="space-y-6">
@@ -93,7 +82,8 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
               title={t('previewTitle')}
             >
               <Eye className="w-4 h-4" />
-              {t('preview')}{!formData.isPublished && ' (Entwurf)'}
+              {t('preview')}
+              {!formData.isPublished && ' (Entwurf)'}
             </Link>
           )}
           <Button
@@ -176,22 +166,23 @@ export function BlogPostForm({ initialData, isEdit = false }: BlogPostFormProps)
           seoDescription: formData.seoDescription,
         }}
         onFieldsFilled={(data) => {
-          setFormData(prev => {
-            const updated = { ...prev }
+          setFormData((prev) => {
+            const updated = { ...prev };
             if (data.title) {
-              updated.title = String(data.title)
-              updated.slug = generateSlug(String(data.title))
+              updated.title = String(data.title);
+              updated.slug = generateSlug(String(data.title));
             }
-            if (data.excerpt) updated.excerpt = String(data.excerpt)
-            if (data.content) updated.content = String(data.content)
-            if (Array.isArray(data.tags) && data.tags.length > 0) updated.tags = data.tags.map(String)
-            if (data.seoTitle) updated.seoTitle = String(data.seoTitle)
-            if (data.seoDescription) updated.seoDescription = String(data.seoDescription)
-            return updated
-          })
+            if (data.excerpt) updated.excerpt = String(data.excerpt);
+            if (data.content) updated.content = String(data.content);
+            if (Array.isArray(data.tags) && data.tags.length > 0)
+              updated.tags = data.tags.map(String);
+            if (data.seoTitle) updated.seoTitle = String(data.seoTitle);
+            if (data.seoDescription) updated.seoDescription = String(data.seoDescription);
+            return updated;
+          });
         }}
         placeholder={isEdit ? t('aiPlaceholderEdit') : t('aiPlaceholderNew')}
       />
     </div>
-  )
+  );
 }

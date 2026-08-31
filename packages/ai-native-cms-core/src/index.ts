@@ -1,59 +1,59 @@
 // Main entry point for AI-Native CMS Core
-import { AINativeCMS } from './core/AINativeCMS'
-export { AINativeCMS } from './core/AINativeCMS'
+import { AINativeCMS } from './core/AINativeCMS';
+export { AINativeCMS } from './core/AINativeCMS';
 
 // Core types
-export * from './types'
+export * from './types';
 
 // Storage adapters
-export * from './storage'
+export * from './storage';
 
 // AI instruction generators
-export * from './ai'
+export * from './ai';
 
 // Notification providers
-export * from './notifications'
+export * from './notifications';
 
 // Utilities
-export { RateLimiter } from './utils/RateLimiter'
+export { RateLimiter } from './utils/RateLimiter';
 
 // Default configuration helper
-import { AINativeCMSConfig, SiteConfig } from './types'
+import { AINativeCMSConfig, SiteConfig } from './types';
 
 export function createDefaultConfig(siteConfig: SiteConfig): AINativeCMSConfig {
   return {
     storage: {
       adapter: 'memory',
-      config: {}
+      config: {},
     },
     notifications: {
       providers: [
         {
           name: 'console',
           config: { verbose: true },
-          enabled: true
-        }
-      ]
+          enabled: true,
+        },
+      ],
     },
     aiInstructions: {
       provider: 'template',
-      config: {}
+      config: {},
     },
     rateLimit: {
       windowMs: 5 * 60 * 1000, // 5 minutes
-      maxRequests: 3 // 3 requests per window
+      maxRequests: 3, // 3 requests per window
     },
     site: siteConfig,
     ui: {
       theme: 'auto',
-      position: 'bottom-right'
-    }
-  }
+      position: 'bottom-right',
+    },
+  };
 }
 
 // Factory function for quick setup
 export async function createAINativeCMS(config: AINativeCMSConfig) {
-  const cms = new AINativeCMS(config)
-  await cms.init()
-  return cms
+  const cms = new AINativeCMS(config);
+  await cms.init();
+  return cms;
 }

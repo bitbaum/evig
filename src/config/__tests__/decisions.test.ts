@@ -26,7 +26,7 @@ import {
   EDITABLE_STATUSES,
   COMMENTABLE_STATUSES,
   VALID_TRANSITIONS,
-} from '../decisions'
+} from '../decisions';
 
 // ============================================================================
 // isStatusEditable
@@ -34,31 +34,31 @@ import {
 
 describe('isStatusEditable', () => {
   it('returns true for "draft"', () => {
-    expect(isStatusEditable(DECISION_STATUS.DRAFT)).toBe(true)
-  })
+    expect(isStatusEditable(DECISION_STATUS.DRAFT)).toBe(true);
+  });
 
   it('returns true for "discussion"', () => {
-    expect(isStatusEditable(DECISION_STATUS.DISCUSSION)).toBe(true)
-  })
+    expect(isStatusEditable(DECISION_STATUS.DISCUSSION)).toBe(true);
+  });
 
   it('returns false for "voting"', () => {
-    expect(isStatusEditable(DECISION_STATUS.VOTING)).toBe(false)
-  })
+    expect(isStatusEditable(DECISION_STATUS.VOTING)).toBe(false);
+  });
 
   it('returns false for "closed"', () => {
-    expect(isStatusEditable(DECISION_STATUS.CLOSED)).toBe(false)
-  })
+    expect(isStatusEditable(DECISION_STATUS.CLOSED)).toBe(false);
+  });
 
   it('returns false for "cancelled"', () => {
-    expect(isStatusEditable(DECISION_STATUS.CANCELLED)).toBe(false)
-  })
+    expect(isStatusEditable(DECISION_STATUS.CANCELLED)).toBe(false);
+  });
 
   it('EDITABLE_STATUSES contains exactly draft and discussion', () => {
-    expect(EDITABLE_STATUSES).toContain('draft')
-    expect(EDITABLE_STATUSES).toContain('discussion')
-    expect(EDITABLE_STATUSES).toHaveLength(2)
-  })
-})
+    expect(EDITABLE_STATUSES).toContain('draft');
+    expect(EDITABLE_STATUSES).toContain('discussion');
+    expect(EDITABLE_STATUSES).toHaveLength(2);
+  });
+});
 
 // ============================================================================
 // isStatusCommentable
@@ -66,31 +66,31 @@ describe('isStatusEditable', () => {
 
 describe('isStatusCommentable', () => {
   it('returns true for "discussion"', () => {
-    expect(isStatusCommentable(DECISION_STATUS.DISCUSSION)).toBe(true)
-  })
+    expect(isStatusCommentable(DECISION_STATUS.DISCUSSION)).toBe(true);
+  });
 
   it('returns true for "voting"', () => {
-    expect(isStatusCommentable(DECISION_STATUS.VOTING)).toBe(true)
-  })
+    expect(isStatusCommentable(DECISION_STATUS.VOTING)).toBe(true);
+  });
 
   it('returns true for "closed"', () => {
-    expect(isStatusCommentable(DECISION_STATUS.CLOSED)).toBe(true)
-  })
+    expect(isStatusCommentable(DECISION_STATUS.CLOSED)).toBe(true);
+  });
 
   it('returns false for "draft"', () => {
-    expect(isStatusCommentable(DECISION_STATUS.DRAFT)).toBe(false)
-  })
+    expect(isStatusCommentable(DECISION_STATUS.DRAFT)).toBe(false);
+  });
 
   it('returns false for "cancelled"', () => {
-    expect(isStatusCommentable(DECISION_STATUS.CANCELLED)).toBe(false)
-  })
+    expect(isStatusCommentable(DECISION_STATUS.CANCELLED)).toBe(false);
+  });
 
   it('COMMENTABLE_STATUSES contains discussion, voting, closed', () => {
-    expect(COMMENTABLE_STATUSES).toContain('discussion')
-    expect(COMMENTABLE_STATUSES).toContain('voting')
-    expect(COMMENTABLE_STATUSES).toContain('closed')
-  })
-})
+    expect(COMMENTABLE_STATUSES).toContain('discussion');
+    expect(COMMENTABLE_STATUSES).toContain('voting');
+    expect(COMMENTABLE_STATUSES).toContain('closed');
+  });
+});
 
 // ============================================================================
 // DECISION_STATUS constants
@@ -98,13 +98,13 @@ describe('isStatusCommentable', () => {
 
 describe('DECISION_STATUS', () => {
   it('defines expected status values', () => {
-    expect(DECISION_STATUS.DRAFT).toBe('draft')
-    expect(DECISION_STATUS.DISCUSSION).toBe('discussion')
-    expect(DECISION_STATUS.VOTING).toBe('voting')
-    expect(DECISION_STATUS.CLOSED).toBe('closed')
-    expect(DECISION_STATUS.CANCELLED).toBe('cancelled')
-  })
-})
+    expect(DECISION_STATUS.DRAFT).toBe('draft');
+    expect(DECISION_STATUS.DISCUSSION).toBe('discussion');
+    expect(DECISION_STATUS.VOTING).toBe('voting');
+    expect(DECISION_STATUS.CLOSED).toBe('closed');
+    expect(DECISION_STATUS.CANCELLED).toBe('cancelled');
+  });
+});
 
 // ============================================================================
 // VALID_TRANSITIONS
@@ -112,14 +112,14 @@ describe('DECISION_STATUS', () => {
 
 describe('VALID_TRANSITIONS', () => {
   it('draft can transition to discussion', () => {
-    expect(VALID_TRANSITIONS['draft']).toContain('discussion')
-  })
+    expect(VALID_TRANSITIONS['draft']).toContain('discussion');
+  });
 
   it('discussion can transition to voting', () => {
-    expect(VALID_TRANSITIONS['discussion']).toContain('voting')
-  })
+    expect(VALID_TRANSITIONS['discussion']).toContain('voting');
+  });
 
   it('closed status has no outgoing transitions', () => {
-    expect(VALID_TRANSITIONS['closed']).toHaveLength(0)
-  })
-})
+    expect(VALID_TRANSITIONS['closed']).toHaveLength(0);
+  });
+});

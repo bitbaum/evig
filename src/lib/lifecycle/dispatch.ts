@@ -21,67 +21,71 @@
  * this) — emails must never fire under a row lock or for a rolled-back write.
  */
 
-import { and, eq } from 'drizzle-orm'
-import { db } from '@/db'
-import { notifications } from '@/db/schema'
-import { logger } from '@/lib/logger'
-import { notifyUsers, notifyAllStaff } from '@/lib/services/notifications'
-import { logActivity, type ActivityAction } from '@/lib/activity'
-import { logContentDecision, type AuditContext } from '@/lib/auth/audit'
+import { and, eq } from 'drizzle-orm';
+import { db } from '@/db';
+import { notifications } from '@/db/schema';
+import { logger } from '@/lib/logger';
+import { notifyUsers, notifyAllStaff } from '@/lib/services/notifications';
+import { logActivity, type ActivityAction } from '@/lib/activity';
+import { logContentDecision, type AuditContext } from '@/lib/auth/audit';
 
 export type WorkflowRecipients =
   | { userId: string }
   | { userIds: string[] }
   /** Resolved at dispatch time, e.g. () => getTimecardApproverIds(ownerId). */
   | { resolve: () => Promise<string[]> }
-  | { allStaff: true; excludeUserId?: string }
+  | { allStaff: true; excludeUserId?: string };
 
 export interface WorkflowEvent {
   /** NOTIFICATION_TYPES value. */
-  type: string
-  recipients?: WorkflowRecipients
-  title?: string
-  content?: string
-  related?: { type: string; id: string }
+  type: string;
+  recipients?: WorkflowRecipients;
+  title?: string;
+  content?: string;
+  related?: { type: string; id: string };
   /** Template args for getEmailContent's type-specific email branches. */
-  metadata?: Record<string, string>
+  metadata?: Record<string, string>;
   /** Delete stale rows matching (relatedId, type) before inserting. */
-  dedupe?: { relatedId: string; type: string }
+  dedupe?: { relatedId: string; type: string };
   activity?: {
-    actorId: string
-    action: ActivityAction
-    subjectType?: string
-    subjectId?: string
-    subjectLabel?: string
-  }
+    actorId: string;
+    action: ActivityAction;
+    subjectType?: string;
+    subjectId?: string;
+    subjectLabel?: string;
+  };
   audit?:
     | {
-        kind: 'content_decision'
-        ctx: AuditContext
-        contentType: string
-        contentId: string
-        decision: 'approved' | 'rejected' | 'edited'
+        kind: 'content_decision';
+        ctx: AuditContext;
+        contentType: string;
+        contentId: string;
+        decision: 'approved' | 'rejected' | 'edited';
       }
-    | { kind: 'custom'; log: () => void }
+    | { kind: 'custom'; log: () => void };
 }
 
 async function resolveRecipients(recipients: WorkflowRecipients): Promise<string[] | 'all-staff'> {
-  if ('allStaff' in recipients) return 'all-staff'
-  if ('userId' in recipients) return [recipients.userId]
-  if ('userIds' in recipients) return recipients.userIds
-  return recipients.resolve()
+  if ('allStaff' in recipients) return 'all-staff';
+  if ('userId' in recipients) return [recipients.userId];
+  if ('userIds' in recipients) return recipients.userIds;
+  return recipients.resolve();
 }
 
 export async function dispatchWorkflowEvent(event: WorkflowEvent): Promise<void> {
   // 1. Dedupe — unconditional, before any insert (see file header).
   if (event.dedupe) {
     try {
-      await db.delete(notifications).where(and(
-        eq(notifications.relatedId, event.dedupe.relatedId),
-        eq(notifications.type, event.dedupe.type),
-      ))
+      await db
+        .delete(notifications)
+        .where(
+          and(
+            eq(notifications.relatedId, event.dedupe.relatedId),
+            eq(notifications.type, event.dedupe.type),
+          ),
+        );
     } catch (error) {
-      logger.warn('workflow event channel failed', { type: event.type, channel: 'dedupe', error })
+      logger.warn('workflow event channel failed', { type: event.type, channel: 'dedupe', error });
     }
   }
 
@@ -95,25 +99,30 @@ export async function dispatchWorkflowEvent(event: WorkflowEvent): Promise<void>
         related_type: event.related?.type,
         related_id: event.related?.id,
         metadata: event.metadata,
-      }
-      const resolved = await resolveRecipients(event.recipients)
+      };
+      const resolved = await resolveRecipients(event.recipients);
       if (resolved === 'all-staff') {
-        const exclude = 'excludeUserId' in event.recipients ? event.recipients.excludeUserId : undefined
-        await notifyAllStaff(payload, exclude)
+        const exclude =
+          'excludeUserId' in event.recipients ? event.recipients.excludeUserId : undefined;
+        await notifyAllStaff(payload, exclude);
       } else if (resolved.length > 0) {
-        await notifyUsers(resolved, payload)
+        await notifyUsers(resolved, payload);
       }
     } catch (error) {
-      logger.warn('workflow event channel failed', { type: event.type, channel: 'notify', error })
+      logger.warn('workflow event channel failed', { type: event.type, channel: 'notify', error });
     }
   }
 
   // 3. Activity feed (logActivity is already fire-and-forget internally).
   if (event.activity) {
     try {
-      logActivity(event.activity)
+      logActivity(event.activity);
     } catch (error) {
-      logger.warn('workflow event channel failed', { type: event.type, channel: 'activity', error })
+      logger.warn('workflow event channel failed', {
+        type: event.type,
+        channel: 'activity',
+        error,
+      });
     }
   }
 
@@ -126,12 +135,12 @@ export async function dispatchWorkflowEvent(event: WorkflowEvent): Promise<void>
           event.audit.contentType,
           event.audit.contentId,
           event.audit.decision,
-        )
+        );
       } else {
-        event.audit.log()
+        event.audit.log();
       }
     } catch (error) {
-      logger.warn('workflow event channel failed', { type: event.type, channel: 'audit', error })
+      logger.warn('workflow event channel failed', { type: event.type, channel: 'audit', error });
     }
   }
 }

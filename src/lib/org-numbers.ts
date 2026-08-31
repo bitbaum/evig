@@ -11,40 +11,37 @@
  * Source: revamp-info NUMBERS_REGISTRY (audited 2026-02-16)
  */
 
-import 'server-only'
+import 'server-only';
 
-import { eq, asc } from 'drizzle-orm'
-import { db } from '@/db'
-import { orgNumbers } from '@/db/schema'
-import { logger } from '@/lib/logger'
+import { eq, asc } from 'drizzle-orm';
+import { db } from '@/db';
+import { orgNumbers } from '@/db/schema';
+import { logger } from '@/lib/logger';
 
 // Re-export everything from client-safe defaults for backward compatibility
 // in server components that already import from this file
-export type { OrgNumber, OrgNumberCategory, OrgNumberConfidence } from './org-numbers.defaults'
-export { ORG_NUMBERS_DEFAULTS, getDefaultNumeric, getDefaultValue } from './org-numbers.defaults'
+export type { OrgNumber, OrgNumberCategory, OrgNumberConfidence } from './org-numbers.defaults';
+export { ORG_NUMBERS_DEFAULTS, getDefaultNumeric, getDefaultValue } from './org-numbers.defaults';
 
 // ============================================================================
 // Server-side DB queries
 // ============================================================================
 
-import type { OrgNumber, OrgNumberCategory } from './org-numbers.defaults'
-import { ORG_NUMBERS_DEFAULTS } from './org-numbers.defaults'
+import type { OrgNumber, OrgNumberCategory } from './org-numbers.defaults';
+import { ORG_NUMBERS_DEFAULTS } from './org-numbers.defaults';
 
 /**
  * Get a single org number by key. Returns null if not found.
  */
 export async function getOrgNumber(key: string): Promise<OrgNumber | null> {
   try {
-    const [row] = await db
-      .select()
-      .from(orgNumbers)
-      .where(eq(orgNumbers.key, key))
+    const [row] = await db.select().from(orgNumbers).where(eq(orgNumbers.key, key));
 
-    if (!row) return null
-    return mapRow(row)
+    if (!row) return null;
+    return mapRow(row);
   } catch (error) {
-    logger.error('Failed to get org number', { key, error })
-    return null
+    logger.error('Failed to get org number', { key, error });
+    return null;
   }
 }
 
@@ -53,16 +50,16 @@ export async function getOrgNumber(key: string): Promise<OrgNumber | null> {
  */
 export async function getOrgNumbers(category?: OrgNumberCategory): Promise<OrgNumber[]> {
   try {
-    const query = db.select().from(orgNumbers)
+    const query = db.select().from(orgNumbers);
 
     const rows = category
       ? await query.where(eq(orgNumbers.category, category)).orderBy(asc(orgNumbers.key))
-      : await query.orderBy(asc(orgNumbers.key))
+      : await query.orderBy(asc(orgNumbers.key));
 
-    return rows.map(mapRow)
+    return rows.map(mapRow);
   } catch (error) {
-    logger.error('Failed to get org numbers', { category, error })
-    return []
+    logger.error('Failed to get org numbers', { category, error });
+    return [];
   }
 }
 
@@ -70,16 +67,16 @@ export async function getOrgNumbers(category?: OrgNumberCategory): Promise<OrgNu
  * Get the numeric_value for a key. Falls back to defaults on DB failure.
  */
 export async function getNumericValue(key: string): Promise<number> {
-  const fromDb = await getOrgNumber(key)
-  if (fromDb?.numericValue != null) return fromDb.numericValue
+  const fromDb = await getOrgNumber(key);
+  if (fromDb?.numericValue != null) return fromDb.numericValue;
 
-  const fallback = ORG_NUMBERS_DEFAULTS[key]
-  if (fallback?.numericValue != null) return fallback.numericValue
+  const fallback = ORG_NUMBERS_DEFAULTS[key];
+  if (fallback?.numericValue != null) return fallback.numericValue;
 
-  throw new Error(`Org number "${key}" not found or not numeric`)
+  throw new Error(`Org number "${key}" not found or not numeric`);
 }
 
-type OrgNumberRow = typeof orgNumbers.$inferSelect
+type OrgNumberRow = typeof orgNumbers.$inferSelect;
 
 function mapRow(row: OrgNumberRow): OrgNumber {
   return {
@@ -95,5 +92,5 @@ function mapRow(row: OrgNumberRow): OrgNumber {
     externalLink: row.externalLink || null,
     lastVerified: String(row.lastVerified),
     updatedAt: String(row.updatedAt),
-  }
+  };
 }

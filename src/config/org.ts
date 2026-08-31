@@ -18,7 +18,7 @@ export const ORG_IMAGES = {
   logo: '/images/logo/evig-logo.png',
   /** Square evig app-icon (near-black tile + green mark) for compact UI + structured data. */
   favicon: '/images/logo/evig-favicon.png',
-} as const
+} as const;
 
 export const ORG = {
   /** Official organization name — use this everywhere */
@@ -51,7 +51,7 @@ export const ORG = {
    * hardcode 'Europe/Zurich'.
    */
   timezone: 'Europe/Zurich',
-} as const
+} as const;
 
 /**
  * Origin org (SSOT) — the Zürich circular-IT non-profit evig grew out of.
@@ -68,14 +68,14 @@ export const ORG_ORIGIN = {
   /** Revamp-IT's own founding year — theirs, not evig's. */
   since: 2003,
   url: 'https://www.revamp-it.ch',
-} as const
+} as const;
 
 /**
  * Default blog author (SSOT). The personal author behind the platform's
  * content. DB posts with a real `created_by` user show that user's name; this
  * is the author for everything else.
  */
-export const DEFAULT_BLOG_AUTHOR = 'Georgy Butaev'
+export const DEFAULT_BLOG_AUTHOR = 'Georgy Butaev';
 
 /**
  * Legacy generic "team" author placeholders. These are treated as "no real
@@ -88,13 +88,13 @@ const GENERIC_AUTHOR_ALIASES = new Set([
   'revamp-it team',
   'revampit ops',
   'revamp-it ops',
-])
+]);
 
 /** Resolve a raw author string to the name shown to readers (SSOT). */
 export function resolveBlogAuthor(raw?: string | null): string {
-  const v = (raw ?? '').trim()
-  if (!v || GENERIC_AUTHOR_ALIASES.has(v.toLowerCase())) return DEFAULT_BLOG_AUTHOR
-  return v
+  const v = (raw ?? '').trim();
+  if (!v || GENERIC_AUTHOR_ALIASES.has(v.toLowerCase())) return DEFAULT_BLOG_AUTHOR;
+  return v;
 }
 
 // ============================================================================
@@ -114,7 +114,7 @@ export const BASE_REGION = {
   region: 'ZH',
   /** Pre-formatted "City, Country" line for display / structured data. */
   full: 'Zürich, Schweiz',
-} as const
+} as const;
 
 // ============================================================================
 // CONTACT
@@ -135,7 +135,7 @@ export const BASE_REGION = {
  * When evig.ch is registered and its mail is authenticated (Brevo SPF+DKIM),
  * change this ONE line back — everything user-facing reads it from here.
  */
-const DEFAULT_CONTACT_EMAIL = 'butaeff@gmail.com' as const
+const DEFAULT_CONTACT_EMAIL = 'butaeff@gmail.com' as const;
 
 export const CONTACT = {
   email: DEFAULT_CONTACT_EMAIL,
@@ -147,7 +147,7 @@ export const CONTACT = {
   /** Canonical placeholders for user phone input fields */
   phonePlaceholder: '+41 79 123 45 67',
   phonePlaceholderLandline: '+41 44 123 45 67',
-} as const
+} as const;
 
 // ============================================================================
 // BANK & PAYMENT (SSOT for all payment references)
@@ -161,7 +161,7 @@ export const BANK = {
   iban: '',
   bic: '',
   accountHolder: 'evig',
-} as const
+} as const;
 
 /**
  * evig payment identity (SSOT) — BTC-native + OrangeCat maker profile.
@@ -172,7 +172,7 @@ export const PAYMENT = {
   btcAddress: '',
   /** evig's OrangeCat maker profile (how to help / participate). */
   orangeCatUrl: '',
-} as const
+} as const;
 
 export const MEMBERSHIP = {
   fees: {
@@ -182,7 +182,7 @@ export const MEMBERSHIP = {
   currency: 'CHF',
   /** Payment reference prefix for bank transfers */
   referencePrefix: 'MITGLIED',
-} as const
+} as const;
 
 // ============================================================================
 // EXTERNAL LINKS
@@ -196,4 +196,4 @@ export const EXTERNAL_LINKS = {
   wiki: '',
   /** Open implementation of the platform and its operational workflow. */
   sourceCode: 'https://github.com/bitbaum/evig',
-} as const
+} as const;

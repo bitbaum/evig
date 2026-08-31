@@ -1,39 +1,39 @@
-import { RateLimitConfig, RateLimitResult } from '../types'
+import { RateLimitConfig, RateLimitResult } from '../types';
 
 interface RateLimitEntry {
-  count: number
-  firstRequest: number
-  lastRequest: number
+  count: number;
+  firstRequest: number;
+  lastRequest: number;
 }
 
 export class RateLimiter {
-  private store = new Map<string, RateLimitEntry>()
-  private cleanupInterval: NodeJS.Timeout | null = null
+  private store = new Map<string, RateLimitEntry>();
+  private cleanupInterval: NodeJS.Timeout | null = null;
 
   constructor(private config: RateLimitConfig) {
     // Start cleanup interval to remove expired entries
     this.cleanupInterval = setInterval(() => {
-      this.cleanup()
-    }, this.config.windowMs / 2)
+      this.cleanup();
+    }, this.config.windowMs / 2);
   }
 
   async checkRateLimit(key: string): Promise<RateLimitResult> {
-    const now = Date.now()
-    const entry = this.store.get(key)
+    const now = Date.now();
+    const entry = this.store.get(key);
 
     if (!entry) {
       // First request from this key
       this.store.set(key, {
         count: 1,
         firstRequest: now,
-        lastRequest: now
-      })
+        lastRequest: now,
+      });
 
       return {
         allowed: true,
         remaining: this.config.maxRequests - 1,
-        resetTime: now + this.config.windowMs
-      }
+        resetTime: now + this.config.windowMs,
+      };
     }
 
     // Check if window has expired
@@ -42,14 +42,14 @@ export class RateLimiter {
       this.store.set(key, {
         count: 1,
         firstRequest: now,
-        lastRequest: now
-      })
+        lastRequest: now,
+      });
 
       return {
         allowed: true,
         remaining: this.config.maxRequests - 1,
-        resetTime: now + this.config.windowMs
-      }
+        resetTime: now + this.config.windowMs,
+      };
     }
 
     // Within the window, check if limit exceeded
@@ -57,55 +57,55 @@ export class RateLimiter {
       return {
         allowed: false,
         remaining: 0,
-        resetTime: entry.firstRequest + this.config.windowMs
-      }
+        resetTime: entry.firstRequest + this.config.windowMs,
+      };
     }
 
     // Increment count
-    entry.count++
-    entry.lastRequest = now
+    entry.count++;
+    entry.lastRequest = now;
 
     return {
       allowed: true,
       remaining: this.config.maxRequests - entry.count,
-      resetTime: entry.firstRequest + this.config.windowMs
-    }
+      resetTime: entry.firstRequest + this.config.windowMs,
+    };
   }
 
   getAttempts(key: string): number {
-    const entry = this.store.get(key)
-    return entry ? entry.count : 0
+    const entry = this.store.get(key);
+    return entry ? entry.count : 0;
   }
 
   reset(key?: string): void {
     if (key) {
-      this.store.delete(key)
+      this.store.delete(key);
     } else {
-      this.store.clear()
+      this.store.clear();
     }
   }
 
   private cleanup(): void {
-    const now = Date.now()
-    const expiredKeys: string[] = []
+    const now = Date.now();
+    const expiredKeys: string[] = [];
 
     for (const [key, entry] of this.store) {
       if (now - entry.firstRequest >= this.config.windowMs) {
-        expiredKeys.push(key)
+        expiredKeys.push(key);
       }
     }
 
     for (const key of expiredKeys) {
-      this.store.delete(key)
+      this.store.delete(key);
     }
   }
 
   destroy(): void {
     if (this.cleanupInterval) {
-      clearInterval(this.cleanupInterval)
-      this.cleanupInterval = null
+      clearInterval(this.cleanupInterval);
+      this.cleanupInterval = null;
     }
-    this.store.clear()
+    this.store.clear();
   }
 
   // For monitoring/debugging
@@ -116,8 +116,8 @@ export class RateLimiter {
         key,
         count: entry.count,
         age: Date.now() - entry.firstRequest,
-        remainingTime: Math.max(0, (entry.firstRequest + this.config.windowMs) - Date.now())
-      }))
-    }
+        remainingTime: Math.max(0, entry.firstRequest + this.config.windowMs - Date.now()),
+      })),
+    };
   }
 }

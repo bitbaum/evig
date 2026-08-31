@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
 /** Status banner slice: bulk-result message + error banners (Fragment — siblings inside the page's space-y). */
 
-import { AlertTriangle } from 'lucide-react'
+import { AlertTriangle } from 'lucide-react';
 
 export function ApprovalsBanners({
   message,
   error,
 }: {
-  message: string | null
-  error: string | null
+  message: string | null;
+  error: string | null;
 }) {
   return (
     <>
@@ -25,5 +25,5 @@ export function ApprovalsBanners({
         </div>
       )}
     </>
-  )
+  );
 }

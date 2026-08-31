@@ -1,15 +1,19 @@
-'use client'
+'use client';
 
 // Owns a single sub-item row inside a mobile nav group (internal button or external link, with badge + description).
 
-import { ExternalLink } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { usePathname } from '@/i18n/navigation'
-import { NavigationItem } from '@/config/navigation'
-import { Button } from '@/components/ui/button'
-import { NAV_STATE } from '@/lib/design/nav'
-import { cn } from '@/lib/utils'
-import { navItemDescription, navItemLabel, type NavTranslator } from '@/components/layout/header/nav-i18n'
+import { ExternalLink } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { usePathname } from '@/i18n/navigation';
+import { NavigationItem } from '@/config/navigation';
+import { Button } from '@/components/ui/button';
+import { NAV_STATE } from '@/lib/design/nav';
+import { cn } from '@/lib/utils';
+import {
+  navItemDescription,
+  navItemLabel,
+  type NavTranslator,
+} from '@/components/layout/header/nav-i18n';
 
 export function MobileSubLink({
   subItem,
@@ -18,18 +22,20 @@ export function MobileSubLink({
   onNavigate,
   onClose,
 }: {
-  subItem: NavigationItem
-  t: ReturnType<typeof useTranslations<'nav'>>
-  badgeLabel: (key: string | undefined) => string | null
-  onNavigate: (href: string) => void
-  onClose: () => void
+  subItem: NavigationItem;
+  t: ReturnType<typeof useTranslations<'nav'>>;
+  badgeLabel: (key: string | undefined) => string | null;
+  onNavigate: (href: string) => void;
+  onClose: () => void;
 }) {
-  const pathname = usePathname()
-  const isCurrent = !subItem.external && pathname === subItem.href
-  const subLabel = subItem.nameKey ? navItemLabel(t as NavTranslator, subItem.nameKey) : subItem.name
+  const pathname = usePathname();
+  const isCurrent = !subItem.external && pathname === subItem.href;
+  const subLabel = subItem.nameKey
+    ? navItemLabel(t as NavTranslator, subItem.nameKey)
+    : subItem.name;
   const subDescription = subItem.descriptionKey
     ? navItemDescription(t as NavTranslator, subItem.descriptionKey)
-    : subItem.description
+    : subItem.description;
 
   if (subItem.external) {
     return (
@@ -60,7 +66,7 @@ export function MobileSubLink({
           )}
         </a>
       </li>
-    )
+    );
   }
 
   return (
@@ -77,7 +83,12 @@ export function MobileSubLink({
         onClick={() => onNavigate(subItem.href)}
       >
         {/* Label inherits the row's NAV_STATE active color when current */}
-        <span className={cn('flex items-center gap-2 text-sm font-medium', !isCurrent && 'text-text-primary')}>
+        <span
+          className={cn(
+            'flex items-center gap-2 text-sm font-medium',
+            !isCurrent && 'text-text-primary',
+          )}
+        >
           {subLabel}
           {subItem.badge && (
             <span className="rounded-full bg-action-muted px-1.5 py-0.5 text-[10px] font-semibold uppercase text-action">
@@ -92,5 +103,5 @@ export function MobileSubLink({
         )}
       </Button>
     </li>
-  )
+  );
 }

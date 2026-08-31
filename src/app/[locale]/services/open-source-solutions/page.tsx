@@ -1,48 +1,48 @@
 // SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
-import { Code2 } from 'lucide-react'
-import { ORG } from '@/config/org'
-import { PageHero } from '@/components/layout/PageHero'
-import { RegistrySearch } from './components/RegistrySearch'
+import { Code2 } from 'lucide-react';
+import { ORG } from '@/config/org';
+import { PageHero } from '@/components/layout/PageHero';
+import { RegistrySearch } from './components/RegistrySearch';
 import {
   getAllAlternatives,
   getAllCategories,
   getAllProprietaryApps,
-} from '@/config/open-source-registry'
-import { getTranslations } from 'next-intl/server'
-import type { Metadata } from 'next'
-import { Section } from '@/components/layout/Section'
+} from '@/config/open-source-registry';
+import { getTranslations } from 'next-intl/server';
+import type { Metadata } from 'next';
+import { Section } from '@/components/layout/Section';
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'services.openSourceSolutions' })
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'services.openSourceSolutions' });
 
-  const title = `${t('meta.title')} | ${ORG.name}`
-  const description = t('meta.description')
+  const title = `${t('meta.title')} | ${ORG.name}`;
+  const description = t('meta.description');
   return {
     title: { absolute: title },
     description,
     keywords: t.raw('meta.keywords') as string[],
     openGraph: { title, description, type: 'website' },
-  }
+  };
 }
 
 export default async function OpenSourceSolutionsPage({
   params,
 }: {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'services.openSourceSolutions' })
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'services.openSourceSolutions' });
 
-  const alternatives = getAllAlternatives()
-  const categories = getAllCategories()
-  const proprietaryApps = getAllProprietaryApps()
+  const alternatives = getAllAlternatives();
+  const categories = getAllCategories();
+  const proprietaryApps = getAllProprietaryApps();
 
   return (
     <main>
@@ -54,24 +54,24 @@ export default async function OpenSourceSolutionsPage({
       />
 
       <Section density="default" tone="tinted">
-          {/* Quick stats */}
-          <div className="flex flex-wrap justify-center gap-6 sm:gap-10 mb-10 text-center">
-            <div>
-              <p className="text-3xl font-bold text-text-primary">{alternatives.length}</p>
-              <p className="text-sm text-text-tertiary">{t('stats.alternativesLabel')}</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-text-primary">{proprietaryApps.length}</p>
-              <p className="text-sm text-text-tertiary">{t('stats.proprietaryLabel')}</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-text-primary">{categories.length}</p>
-              <p className="text-sm text-text-tertiary">{t('stats.categoriesLabel')}</p>
-            </div>
+        {/* Quick stats */}
+        <div className="flex flex-wrap justify-center gap-6 sm:gap-10 mb-10 text-center">
+          <div>
+            <p className="text-3xl font-bold text-text-primary">{alternatives.length}</p>
+            <p className="text-sm text-text-tertiary">{t('stats.alternativesLabel')}</p>
           </div>
+          <div>
+            <p className="text-3xl font-bold text-text-primary">{proprietaryApps.length}</p>
+            <p className="text-sm text-text-tertiary">{t('stats.proprietaryLabel')}</p>
+          </div>
+          <div>
+            <p className="text-3xl font-bold text-text-primary">{categories.length}</p>
+            <p className="text-sm text-text-tertiary">{t('stats.categoriesLabel')}</p>
+          </div>
+        </div>
 
-          <RegistrySearch alternatives={alternatives} categories={categories} />
+        <RegistrySearch alternatives={alternatives} categories={categories} />
       </Section>
     </main>
-  )
+  );
 }

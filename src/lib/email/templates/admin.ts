@@ -18,7 +18,7 @@ export const adminNewWorkshopProposal = (
   proposerName: string,
   proposerEmail: string,
   workshopTitle: string,
-  adminDashboardUrl: string
+  adminDashboardUrl: string,
 ): EmailContent => {
   const eName = escapeHtml(proposerName);
   const eEmail = escapeHtml(proposerEmail);
@@ -75,7 +75,7 @@ export const adminNewBlogSubmission = (
   submitterName: string,
   submitterEmail: string,
   articleTitle: string,
-  adminDashboardUrl: string
+  adminDashboardUrl: string,
 ): EmailContent => {
   const eName = escapeHtml(submitterName);
   const eEmail = escapeHtml(submitterEmail);
@@ -131,7 +131,7 @@ ${ORG.name} System
 export const adminNewSellerApplication = (
   applicantName: string,
   applicantEmail: string,
-  adminDashboardUrl: string
+  adminDashboardUrl: string,
 ): EmailContent => {
   const eName = escapeHtml(applicantName);
   const eEmail = escapeHtml(applicantEmail);

@@ -62,8 +62,13 @@ async function main() {
       body: JSON.stringify({
         searchableAttributes: ['title', 'description', 'brand', 'model'],
         filterableAttributes: [
-          'category', 'condition', 'delivery_options', 'payment_mode',
-          'status', 'price_chf', 'is_revampit',
+          'category',
+          'condition',
+          'delivery_options',
+          'payment_mode',
+          'status',
+          'price_chf',
+          'is_revampit',
         ],
         sortableAttributes: ['price_chf', 'created_at', 'view_count', 'favorite_count'],
       }),

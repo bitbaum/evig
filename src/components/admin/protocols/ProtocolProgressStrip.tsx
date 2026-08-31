@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import { CheckCircle2, Circle, CircleAlert, Clock } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { Card } from '@/components/ui/card'
-import type { ProtocolReviewChecklistItem } from '@/lib/protocols/review'
+import { CheckCircle2, Circle, CircleAlert, Clock } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Card } from '@/components/ui/card';
+import type { ProtocolReviewChecklistItem } from '@/lib/protocols/review';
 
 interface ProtocolProgressStripProps {
-  items: ProtocolReviewChecklistItem[]
+  items: ProtocolReviewChecklistItem[];
 }
 
 const SHORT_LABELS: Record<string, string> = {
@@ -16,7 +16,7 @@ const SHORT_LABELS: Record<string, string> = {
   decisions: 'Entscheide',
   tasks: 'Aufgaben',
   finalize: 'Abschliessen',
-}
+};
 
 const STATE_CONFIG = {
   done: {
@@ -43,10 +43,10 @@ const STATE_CONFIG = {
     labelClass: 'text-text-muted',
     lineClass: 'bg-surface-overlay',
   },
-}
+};
 
 export function ProtocolProgressStrip({ items }: ProtocolProgressStripProps) {
-  const activeItem = items.find(i => i.state === 'active' || i.state === 'blocked')
+  const activeItem = items.find((i) => i.state === 'active' || i.state === 'blocked');
 
   // Pure status indicator — the steps have no navigation target, so they are
   // NOT interactive (the old version rendered disabled buttons that looked
@@ -56,38 +56,45 @@ export function ProtocolProgressStrip({ items }: ProtocolProgressStripProps) {
       {/* Step dots row */}
       <div className="flex items-center">
         {items.map((item, idx) => {
-          const config = STATE_CONFIG[item.state]
-          const Icon = config.icon
-          const isLast = idx === items.length - 1
+          const config = STATE_CONFIG[item.state];
+          const Icon = config.icon;
+          const isLast = idx === items.length - 1;
 
           return (
             <div key={item.id} className="flex items-center flex-1 min-w-0">
               <div className="flex flex-col items-center gap-1 min-w-0">
-                <div className={cn('w-7 h-7 rounded-full flex items-center justify-center shrink-0', config.dotClass)}>
+                <div
+                  className={cn(
+                    'w-7 h-7 rounded-full flex items-center justify-center shrink-0',
+                    config.dotClass,
+                  )}
+                >
                   <Icon className="w-3.5 h-3.5" />
                 </div>
                 <span className={cn('text-xs truncate max-w-[56px]', config.labelClass)}>
                   {SHORT_LABELS[item.id] ?? item.label}
                 </span>
               </div>
-              {!isLast && (
-                <div className={cn('flex-1 h-0.5 mx-1 mt-[-12px]', config.lineClass)} />
-              )}
+              {!isLast && <div className={cn('flex-1 h-0.5 mx-1 mt-[-12px]', config.lineClass)} />}
             </div>
-          )
+          );
         })}
       </div>
 
       {/* Active step hint */}
       {activeItem && (
-        <div className={cn(
-          'mt-3 pt-3 border-t border-subtle text-xs',
-          activeItem.state === 'blocked' ? 'text-error-600' : 'text-warning-700 dark:text-warning-400'
-        )}>
+        <div
+          className={cn(
+            'mt-3 pt-3 border-t border-subtle text-xs',
+            activeItem.state === 'blocked'
+              ? 'text-error-600'
+              : 'text-warning-700 dark:text-warning-400',
+          )}
+        >
           <span className="font-medium">{activeItem.label}: </span>
           {activeItem.description}
         </div>
       )}
     </Card>
-  )
+  );
 }

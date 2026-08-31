@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import { getTimecardStatusColor } from '@/config/timecards'
-import { useTimecardIntl } from '@/hooks/useTimecardIntl'
-import { useTranslations } from 'next-intl'
-import { cn } from '@/lib/utils'
+import { getTimecardStatusColor } from '@/config/timecards';
+import { useTimecardIntl } from '@/hooks/useTimecardIntl';
+import { useTranslations } from 'next-intl';
+import { cn } from '@/lib/utils';
 
 /**
  * Compact month header for the timecard editor: month + status badge on the
@@ -18,14 +18,14 @@ export function TimecardHeader({
   entryCount,
   status,
 }: {
-  monthLabel: string
-  totalMinutes: number
-  entryCount: number
+  monthLabel: string;
+  totalMinutes: number;
+  entryCount: number;
   /** SERVER status of the card — not the keystroke-level local draft status. */
-  status: string
+  status: string;
 }) {
-  const t = useTranslations('admin.timecards')
-  const { statusLabel, duration } = useTimecardIntl()
+  const t = useTranslations('admin.timecards');
+  const { statusLabel, duration } = useTimecardIntl();
 
   return (
     <header className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-subtle pb-3">
@@ -44,5 +44,5 @@ export function TimecardHeader({
         {entryCount} {t('headerDaysSuffix')} · {duration(totalMinutes)}
       </p>
     </header>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * PaymentMethodPicker — lets the customer choose a payment rail.
@@ -13,56 +13,63 @@
  * group) + semantic design tokens only.
  */
 
-import { useEffect, useState } from 'react'
-import { useTranslations } from 'next-intl'
-import { apiFetch } from '@/lib/api/client'
-import { logger } from '@/lib/logger'
-import { DEFAULT_PROVIDER_SLUG } from '@/config/payment-providers'
+import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { apiFetch } from '@/lib/api/client';
+import { logger } from '@/lib/logger';
+import { DEFAULT_PROVIDER_SLUG } from '@/config/payment-providers';
 
 interface ProviderOption {
-  slug: string
-  label: string
-  descriptionKey: string
-  supportsEscrow: boolean
+  slug: string;
+  label: string;
+  descriptionKey: string;
+  supportsEscrow: boolean;
 }
 
 interface PaymentMethodPickerProps {
-  value: string | undefined
-  onChange: (slug: string) => void
+  value: string | undefined;
+  onChange: (slug: string) => void;
   /** True for escrow flows (P2P marketplace) → hides capture-on-pay rails. */
-  escrow?: boolean
-  disabled?: boolean
+  escrow?: boolean;
+  disabled?: boolean;
 }
 
-export function PaymentMethodPicker({ value, onChange, escrow = false, disabled = false }: PaymentMethodPickerProps) {
-  const t = useTranslations('payment')
-  const [providers, setProviders] = useState<ProviderOption[]>([])
+export function PaymentMethodPicker({
+  value,
+  onChange,
+  escrow = false,
+  disabled = false,
+}: PaymentMethodPickerProps) {
+  const t = useTranslations('payment');
+  const [providers, setProviders] = useState<ProviderOption[]>([]);
 
   useEffect(() => {
-    let active = true
-    apiFetch<{ providers: ProviderOption[] }>(`/api/payments/providers?escrow=${escrow ? '1' : '0'}`)
+    let active = true;
+    apiFetch<{ providers: ProviderOption[] }>(
+      `/api/payments/providers?escrow=${escrow ? '1' : '0'}`,
+    )
       .then((res) => {
-        if (!active) return
-        const list = res.data?.providers ?? []
-        setProviders(list)
+        if (!active) return;
+        const list = res.data?.providers ?? [];
+        setProviders(list);
         // Default the selection to the first available rail (Payrexx first).
         if (list.length > 1 && !value) {
-          const preferred = list.find((p) => p.slug === DEFAULT_PROVIDER_SLUG) ?? list[0]
-          onChange(preferred.slug)
+          const preferred = list.find((p) => p.slug === DEFAULT_PROVIDER_SLUG) ?? list[0];
+          onChange(preferred.slug);
         }
       })
-      .catch((err) => logger.error('Failed to load payment providers', { error: err }))
+      .catch((err) => logger.error('Failed to load payment providers', { error: err }));
     return () => {
-      active = false
-    }
+      active = false;
+    };
     // Refetch only when the escrow requirement changes.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [escrow])
+  }, [escrow]);
 
   // Nothing to choose → render nothing (checkout unchanged).
-  if (providers.length < 2) return null
+  if (providers.length < 2) return null;
 
-  const selected = value ?? DEFAULT_PROVIDER_SLUG
+  const selected = value ?? DEFAULT_PROVIDER_SLUG;
 
   return (
     <fieldset className="mb-4" disabled={disabled}>
@@ -70,12 +77,14 @@ export function PaymentMethodPicker({ value, onChange, escrow = false, disabled 
       <p className="text-xs text-text-tertiary mb-3">{t('method.subtitle')}</p>
       <div className="space-y-2">
         {providers.map((p) => {
-          const isActive = p.slug === selected
+          const isActive = p.slug === selected;
           return (
             <label
               key={p.slug}
               className={`flex items-start gap-3 rounded-lg border p-3 cursor-pointer transition-colors ${
-                isActive ? 'border-action bg-action-muted' : 'border-neutral-200 hover:border-neutral-300'
+                isActive
+                  ? 'border-action bg-action-muted'
+                  : 'border-neutral-200 hover:border-neutral-300'
               }`}
             >
               <input
@@ -88,14 +97,16 @@ export function PaymentMethodPicker({ value, onChange, escrow = false, disabled 
               />
               <span className="flex flex-col">
                 <span className="text-sm font-medium text-text-primary">{p.label}</span>
-                <span className="text-xs text-text-secondary">{t(`method.${p.slug}` as never)}</span>
+                <span className="text-xs text-text-secondary">
+                  {t(`method.${p.slug}` as never)}
+                </span>
               </span>
             </label>
-          )
+          );
         })}
       </div>
     </fieldset>
-  )
+  );
 }
 
-export default PaymentMethodPicker
+export default PaymentMethodPicker;

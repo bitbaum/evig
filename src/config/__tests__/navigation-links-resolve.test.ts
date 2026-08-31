@@ -20,42 +20,42 @@
  * SERVICE_CONFIGS or CUSTOMER_JOURNEYS fails here too.
  */
 
-import { mainNavigation, type NavigationItem } from '@/config/navigation'
+import { mainNavigation, type NavigationItem } from '@/config/navigation';
 
 /** Flatten the tree so sub-items are checked alongside their parents. */
 function allItems(items: readonly NavigationItem[]): NavigationItem[] {
-  return items.flatMap((item) => [item, ...allItems(item.subItems ?? [])])
+  return items.flatMap((item) => [item, ...allItems(item.subItems ?? [])]);
 }
 
-const label = (i: NavigationItem) => i.nameKey ?? i.name
+const label = (i: NavigationItem) => i.nameKey ?? i.name;
 
 describe('navigation links resolve', () => {
-  const items = allItems(mainNavigation)
+  const items = allItems(mainNavigation);
 
   it('sweeps a non-trivial tree', () => {
     // A sweep over an empty tree passes trivially. Fail loudly instead.
-    expect(items.length).toBeGreaterThan(15)
-  })
+    expect(items.length).toBeGreaterThan(15);
+  });
 
   it('every href is present and non-empty', () => {
     const empty = items
       .filter((i) => typeof i.href !== 'string' || i.href.trim() === '')
-      .map((i) => `${label(i)} → renders as <a href="">, which goes nowhere`)
-    expect(empty).toEqual([])
-  })
+      .map((i) => `${label(i)} → renders as <a href="">, which goes nowhere`);
+    expect(empty).toEqual([]);
+  });
 
   it('every href is an internal path or an absolute URL', () => {
     const malformed = items
       .filter((i) => typeof i.href === 'string' && i.href.trim() !== '')
       .filter((i) => !/^(\/|https?:\/\/)/.test(i.href))
-      .map((i) => `${label(i)} → "${i.href}" is neither an internal path nor an absolute URL`)
-    expect(malformed).toEqual([])
-  })
+      .map((i) => `${label(i)} → "${i.href}" is neither an internal path nor an absolute URL`);
+    expect(malformed).toEqual([]);
+  });
 
   it('nothing marked external points at an internal path', () => {
     const wrong = items
       .filter((i) => i.external && i.href.startsWith('/'))
-      .map((i) => `${label(i)} → ${i.href} is marked external but is internal`)
-    expect(wrong).toEqual([])
-  })
-})
+      .map((i) => `${label(i)} → ${i.href} is marked external but is internal`);
+    expect(wrong).toEqual([]);
+  });
+});

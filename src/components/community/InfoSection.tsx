@@ -5,15 +5,15 @@
  * Used across all get-involved pages for features, requirements, etc.
  */
 
-import { responsiveTypography, responsiveSpacing } from '@/lib/responsive'
-import { ListItem } from '@/config/community'
-import Heading from '@/components/ui/Heading'
+import { responsiveTypography, responsiveSpacing } from '@/lib/responsive';
+import { ListItem } from '@/config/community';
+import Heading from '@/components/ui/Heading';
 
 interface InfoSectionProps {
-  title: string
-  items: ListItem[]
-  description?: string
-  className?: string
+  title: string;
+  items: ListItem[];
+  description?: string;
+  className?: string;
 }
 
 export function InfoSection({ title, items, description, className = '' }: InfoSectionProps) {
@@ -23,7 +23,9 @@ export function InfoSection({ title, items, description, className = '' }: InfoS
         {title}
       </Heading>
       {description && (
-        <p className={`${responsiveTypography.lead} text-text-secondary leading-relaxed ${responsiveSpacing.mbMedium}`}>
+        <p
+          className={`${responsiveTypography.lead} text-text-secondary leading-relaxed ${responsiveSpacing.mbMedium}`}
+        >
           {description}
         </p>
       )}
@@ -32,13 +34,15 @@ export function InfoSection({ title, items, description, className = '' }: InfoS
           {items.map((item, index) => (
             <li key={index} className="flex items-start">
               <span className="text-action mr-3">•</span>
-              <span className={`${responsiveTypography.body} text-text-secondary`}>{item.text}</span>
+              <span className={`${responsiveTypography.body} text-text-secondary`}>
+                {item.text}
+              </span>
             </li>
           ))}
         </ul>
       </div>
     </section>
-  )
+  );
 }
 
 /**
@@ -49,9 +53,9 @@ export function InfoSection({ title, items, description, className = '' }: InfoS
  */
 
 interface NumberedStepsProps {
-  title: string
-  steps: ListItem[]
-  className?: string
+  title: string;
+  steps: ListItem[];
+  className?: string;
 }
 
 export function NumberedSteps({ title, steps, className = '' }: NumberedStepsProps) {
@@ -65,13 +69,15 @@ export function NumberedSteps({ title, steps, className = '' }: NumberedStepsPro
           {steps.map((step, index) => (
             <li key={index} className="flex items-start">
               <span className="text-action font-semibold mr-3">{index + 1}.</span>
-              <span className={`${responsiveTypography.body} text-text-secondary`}>{step.text}</span>
+              <span className={`${responsiveTypography.body} text-text-secondary`}>
+                {step.text}
+              </span>
             </li>
           ))}
         </ol>
       </div>
     </section>
-  )
+  );
 }
 
 /**
@@ -82,20 +88,25 @@ export function NumberedSteps({ title, steps, className = '' }: NumberedStepsPro
  */
 
 interface CalloutProps {
-  title: string
-  content: string
-  className?: string
+  title: string;
+  content: string;
+  className?: string;
 }
 
 export function Callout({ title, content, className = '' }: CalloutProps) {
   return (
-    <section className={`bg-action-muted rounded-xl ${responsiveSpacing.cardPadding} space-y-4 ${className}`}>
-      <Heading level={3} className={`${responsiveTypography.cardTitle} font-semibold text-text-primary`}>
+    <section
+      className={`bg-action-muted rounded-xl ${responsiveSpacing.cardPadding} space-y-4 ${className}`}
+    >
+      <Heading
+        level={3}
+        className={`${responsiveTypography.cardTitle} font-semibold text-text-primary`}
+      >
         {title}
       </Heading>
       <p className={`${responsiveTypography.body} text-text-secondary leading-relaxed`}>
         {content}
       </p>
     </section>
-  )
+  );
 }

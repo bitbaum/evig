@@ -5,29 +5,29 @@
  * Lives in types/ to avoid circular dependency (domain ↔ components).
  */
 
-import { URGENCY_DEFAULT } from '@/config/it-hilfe'
+import { URGENCY_DEFAULT } from '@/config/it-hilfe';
 
 export interface ITHilfeCreateFormData {
-  categoryId: string
-  deviceBrand: string
-  deviceModel: string
-  title: string
-  description: string
-  urgency: string
-  budgetTier: string
-  maxBudget: string
-  postalCode: string
-  city: string
-  canton: string
-  serviceType: string
-  skillsNeeded: string[]
-  imageUrls: string[]
-  aiDiagnosis: string
-  preferredTechnicianId: string
+  categoryId: string;
+  deviceBrand: string;
+  deviceModel: string;
+  title: string;
+  description: string;
+  urgency: string;
+  budgetTier: string;
+  maxBudget: string;
+  postalCode: string;
+  city: string;
+  canton: string;
+  serviceType: string;
+  skillsNeeded: string[];
+  imageUrls: string[];
+  aiDiagnosis: string;
+  preferredTechnicianId: string;
   // For anonymous (logged-out) submissions: the user supplies their email
   // and the backend provisions an account + sends a claim link. Empty
   // when the user is already authenticated.
-  submitterEmail: string
+  submitterEmail: string;
 }
 
 export const INITIAL_IT_HILFE_FORM: ITHilfeCreateFormData = {
@@ -48,4 +48,4 @@ export const INITIAL_IT_HILFE_FORM: ITHilfeCreateFormData = {
   aiDiagnosis: '',
   preferredTechnicianId: '',
   submitterEmail: '',
-}
+};

@@ -16,24 +16,24 @@
  * Free catalogues rot. When this id dies, replace it with another `:free` one —
  * never by dropping the suffix, which is how it broke the first time.
  */
-import { OpenRouterProvider } from '../providers/openrouter'
+import { OpenRouterProvider } from '../providers/openrouter';
 
 describe('OpenRouter default model', () => {
-  const originalEnv = process.env.OPENROUTER_MODEL
+  const originalEnv = process.env.OPENROUTER_MODEL;
 
   afterEach(() => {
-    if (originalEnv === undefined) delete process.env.OPENROUTER_MODEL
-    else process.env.OPENROUTER_MODEL = originalEnv
-  })
+    if (originalEnv === undefined) delete process.env.OPENROUTER_MODEL;
+    else process.env.OPENROUTER_MODEL = originalEnv;
+  });
 
   it('is a :free id, so the default never bills', () => {
-    const provider = new OpenRouterProvider({ apiKey: 'test-key' })
-    expect(provider.getDefaultModel()).toMatch(/:free$/)
-  })
+    const provider = new OpenRouterProvider({ apiKey: 'test-key' });
+    expect(provider.getDefaultModel()).toMatch(/:free$/);
+  });
 
   it('is never an Anthropic model', () => {
     // Standing fleet rule: Anthropic is paid and is not a default or fallback.
-    const provider = new OpenRouterProvider({ apiKey: 'test-key' })
-    expect(provider.getDefaultModel()).not.toMatch(/anthropic/i)
-  })
-})
+    const provider = new OpenRouterProvider({ apiKey: 'test-key' });
+    expect(provider.getDefaultModel()).not.toMatch(/anthropic/i);
+  });
+});

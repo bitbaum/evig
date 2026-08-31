@@ -9,10 +9,10 @@
  * Column definition for the bulk review table
  */
 export interface BulkTableColumn {
-  key: keyof import('@/types/erfassung').ErfassungFormData
-  label: string
-  width: string
-  editable?: boolean
+  key: keyof import('@/types/erfassung').ErfassungFormData;
+  label: string;
+  width: string;
+  editable?: boolean;
 }
 
 /**
@@ -24,7 +24,7 @@ export const BULK_TABLE_COLUMNS: BulkTableColumn[] = [
   { key: 'hauptkategorie', label: 'Kategorie', width: '120px', editable: true },
   { key: 'zustand', label: 'Zustand', width: '100px', editable: true },
   { key: 'verkaufspreis', label: 'Preis (CHF)', width: '100px', editable: true },
-]
+];
 
 /**
  * Limits for bulk operations
@@ -38,7 +38,7 @@ export const BULK_LIMITS = {
   aiChunkSize: 15,
   /** Products per database save chunk */
   saveChunkSize: 50,
-} as const
+} as const;
 
 /**
  * CSV column aliases for auto-detection
@@ -48,72 +48,72 @@ export const BULK_LIMITS = {
  */
 export const CSV_COLUMN_ALIASES: Record<string, string> = {
   // Hersteller
-  'hersteller': 'hersteller',
-  'marke': 'hersteller',
-  'brand': 'hersteller',
-  'manufacturer': 'hersteller',
-  'firma': 'hersteller',
+  hersteller: 'hersteller',
+  marke: 'hersteller',
+  brand: 'hersteller',
+  manufacturer: 'hersteller',
+  firma: 'hersteller',
 
   // Produktname
-  'produktname': 'produktname',
-  'produkt': 'produktname',
-  'modell': 'produktname',
-  'model': 'produktname',
-  'product': 'produktname',
-  'name': 'produktname',
-  'product_name': 'produktname',
-  'artikel': 'produktname',
+  produktname: 'produktname',
+  produkt: 'produktname',
+  modell: 'produktname',
+  model: 'produktname',
+  product: 'produktname',
+  name: 'produktname',
+  product_name: 'produktname',
+  artikel: 'produktname',
 
   // Kurzbeschreibung
-  'kurzbeschreibung': 'kurzbeschreibung',
-  'beschreibung': 'kurzbeschreibung',
-  'description': 'kurzbeschreibung',
+  kurzbeschreibung: 'kurzbeschreibung',
+  beschreibung: 'kurzbeschreibung',
+  description: 'kurzbeschreibung',
 
   // Preis
-  'verkaufspreis': 'verkaufspreis',
-  'preis': 'verkaufspreis',
-  'price': 'verkaufspreis',
-  'vk': 'verkaufspreis',
+  verkaufspreis: 'verkaufspreis',
+  preis: 'verkaufspreis',
+  price: 'verkaufspreis',
+  vk: 'verkaufspreis',
   'vk-preis': 'verkaufspreis',
-  'chf': 'verkaufspreis',
+  chf: 'verkaufspreis',
 
   // Zustand
-  'zustand': 'zustand',
-  'condition': 'zustand',
+  zustand: 'zustand',
+  condition: 'zustand',
 
   // Kategorie
-  'hauptkategorie': 'hauptkategorie',
-  'kategorie': 'hauptkategorie',
-  'category': 'hauptkategorie',
+  hauptkategorie: 'hauptkategorie',
+  kategorie: 'hauptkategorie',
+  category: 'hauptkategorie',
 
   // Unterkategorie
-  'unterkategorie': 'unterkategorie',
-  'subcategory': 'unterkategorie',
+  unterkategorie: 'unterkategorie',
+  subcategory: 'unterkategorie',
 
   // Lager
-  'location': 'location',
-  'lagerort': 'location',
-  'standort': 'location',
-  'box_id': 'box_id',
-  'box': 'box_id',
-  'auf_lager': 'auf_lager',
-  'menge': 'auf_lager',
-  'anzahl': 'auf_lager',
-  'quantity': 'auf_lager',
+  location: 'location',
+  lagerort: 'location',
+  standort: 'location',
+  box_id: 'box_id',
+  box: 'box_id',
+  auf_lager: 'auf_lager',
+  menge: 'auf_lager',
+  anzahl: 'auf_lager',
+  quantity: 'auf_lager',
 
   // Dimensionen
-  'laenge_mm': 'laenge_mm',
-  'laenge': 'laenge_mm',
-  'länge': 'laenge_mm',
-  'length': 'laenge_mm',
-  'breite_mm': 'breite_mm',
-  'breite': 'breite_mm',
-  'width': 'breite_mm',
-  'hoehe_mm': 'hoehe_mm',
-  'hoehe': 'hoehe_mm',
-  'höhe': 'hoehe_mm',
-  'height': 'hoehe_mm',
-  'gewicht_kg': 'gewicht_kg',
-  'gewicht': 'gewicht_kg',
-  'weight': 'gewicht_kg',
-}
+  laenge_mm: 'laenge_mm',
+  laenge: 'laenge_mm',
+  länge: 'laenge_mm',
+  length: 'laenge_mm',
+  breite_mm: 'breite_mm',
+  breite: 'breite_mm',
+  width: 'breite_mm',
+  hoehe_mm: 'hoehe_mm',
+  hoehe: 'hoehe_mm',
+  höhe: 'hoehe_mm',
+  height: 'hoehe_mm',
+  gewicht_kg: 'gewicht_kg',
+  gewicht: 'gewicht_kg',
+  weight: 'gewicht_kg',
+};

@@ -1,29 +1,20 @@
-'use client'
+'use client';
 
-import { Link } from '@/i18n/navigation'
-import { adminInteractive } from '@/lib/admin-ui'
-import {
-  Calendar,
-  Plus,
-  GraduationCap,
-  Eye,
-  Edit,
-  Trash2,
-  Users,
-  MapPin,
-} from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import { Button } from '@/components/ui/button'
-import type { WorkshopInstanceWithDetails } from './types'
-import { formatDateTime } from '@/lib/date-formats'
+import { Link } from '@/i18n/navigation';
+import { adminInteractive } from '@/lib/admin-ui';
+import { Calendar, Plus, GraduationCap, Eye, Edit, Trash2, Users, MapPin } from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import { Button } from '@/components/ui/button';
+import type { WorkshopInstanceWithDetails } from './types';
+import { formatDateTime } from '@/lib/date-formats';
 
 interface InstanceListProps {
-  instances: WorkshopInstanceWithDetails[]
-  loading: boolean
-  onEdit: (instance: WorkshopInstanceWithDetails) => void
-  onDelete: (instanceId: string) => void
-  onCreateNew: () => void
-  getStatusBadge: (status: string) => { label: string; className: string }
+  instances: WorkshopInstanceWithDetails[];
+  loading: boolean;
+  onEdit: (instance: WorkshopInstanceWithDetails) => void;
+  onDelete: (instanceId: string) => void;
+  onCreateNew: () => void;
+  getStatusBadge: (status: string) => { label: string; className: string };
 }
 
 export function InstanceList({
@@ -44,7 +35,7 @@ export function InstanceList({
 
       <div className="divide-y divide-neutral-200">
         {instances.map((instance) => {
-          const badge = getStatusBadge(instance.status)
+          const badge = getStatusBadge(instance.status);
           return (
             <div key={instance.id} className={`p-6 ${adminInteractive.rowHover}`}>
               <div className="flex items-start justify-between">
@@ -54,7 +45,9 @@ export function InstanceList({
                     <Heading level={3} className="text-lg text-text-primary truncate">
                       {instance.workshop_title}
                     </Heading>
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${badge.className}`}>
+                    <span
+                      className={`px-2 py-1 text-xs font-medium rounded-full ${badge.className}`}
+                    >
                       {badge.label}
                     </span>
                   </div>
@@ -67,11 +60,19 @@ export function InstanceList({
 
                     <div className="flex items-center gap-1">
                       <Users className="w-4 h-4" />
-                      <span className={instance.current_participants >= (instance.max_participants || 10) ? 'text-error-600 font-medium' : ''}>
+                      <span
+                        className={
+                          instance.current_participants >= (instance.max_participants || 10)
+                            ? 'text-error-600 font-medium'
+                            : ''
+                        }
+                      >
                         {instance.current_participants}/{instance.max_participants || '\u221E'}
                       </span>
                       {instance.pending_count > 0 && (
-                        <span className="text-warning-600">({instance.pending_count} ausstehend)</span>
+                        <span className="text-warning-600">
+                          ({instance.pending_count} ausstehend)
+                        </span>
                       )}
                     </div>
 
@@ -83,24 +84,31 @@ export function InstanceList({
                     )}
 
                     {instance.instructor && (
-                      <div className="text-text-tertiary">
-                        Leitung: {instance.instructor}
-                      </div>
+                      <div className="text-text-tertiary">Leitung: {instance.instructor}</div>
                     )}
                   </div>
 
-                  {instance.notes && (
-                    <p className="text-sm text-text-tertiary">{instance.notes}</p>
-                  )}
+                  {instance.notes && <p className="text-sm text-text-tertiary">{instance.notes}</p>}
                 </div>
 
                 <div className="flex items-center gap-2 ml-4">
-                  <Button as={Link} href={`/admin/workshops/instances/${instance.id}`} variant="outline" size="sm" className="gap-1">
+                  <Button
+                    as={Link}
+                    href={`/admin/workshops/instances/${instance.id}`}
+                    variant="outline"
+                    size="sm"
+                    className="gap-1"
+                  >
                     <Eye className="w-4 h-4" />
                     Details
                   </Button>
 
-                  <Button onClick={() => onEdit(instance)} variant="outline" size="sm" className="gap-1">
+                  <Button
+                    onClick={() => onEdit(instance)}
+                    variant="outline"
+                    size="sm"
+                    className="gap-1"
+                  >
                     <Edit className="w-4 h-4" />
                     Bearbeiten
                   </Button>
@@ -117,13 +125,15 @@ export function InstanceList({
                 </div>
               </div>
             </div>
-          )
+          );
         })}
 
         {instances.length === 0 && !loading && (
           <div className="px-6 py-12 text-center">
             <Calendar className="w-12 h-12 text-text-muted mx-auto mb-4" />
-            <Heading level={3} className="text-lg text-text-primary mb-2">Keine Termine gefunden</Heading>
+            <Heading level={3} className="text-lg text-text-primary mb-2">
+              Keine Termine gefunden
+            </Heading>
             <p className="text-text-secondary mb-4">
               Erstelle einen neuen Termin für einen Workshop.
             </p>
@@ -135,5 +145,5 @@ export function InstanceList({
         )}
       </div>
     </div>
-  )
+  );
 }

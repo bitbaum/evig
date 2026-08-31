@@ -4,10 +4,10 @@
  * Used when someone submits an interest/inquiry form from a Mitmachen page.
  */
 
-import type { EmailContent } from '../types'
-import { createEmailLayout, createTextFooter } from './base-styles'
-import { ORG } from '@/config/org'
-import { escapeHtml } from '@/lib/utils/escape-html'
+import type { EmailContent } from '../types';
+import { createEmailLayout, createTextFooter } from './base-styles';
+import { ORG } from '@/config/org';
+import { escapeHtml } from '@/lib/utils/escape-html';
 
 /**
  * Notification to admin — someone submitted an inquiry.
@@ -16,14 +16,14 @@ export const inquiryNotification = (
   name: string,
   email: string,
   topic: string,
-  message: string
+  message: string,
 ): EmailContent => {
   // Inquiry form is publicly reachable — every interpolated field is
   // attacker-controlled and must be escaped before reaching the HTML body.
-  const eName = escapeHtml(name)
-  const eEmail = escapeHtml(email)
-  const eTopic = escapeHtml(topic)
-  const eMessageHtml = escapeHtml(message).replace(/\n/g, '<br>')
+  const eName = escapeHtml(name);
+  const eEmail = escapeHtml(email);
+  const eTopic = escapeHtml(topic);
+  const eMessageHtml = escapeHtml(message).replace(/\n/g, '<br>');
 
   return {
     subject: `Neue Anfrage: ${topic} — ${name}`,
@@ -44,21 +44,18 @@ export const inquiryNotification = (
       <p style="margin-top:24px;">
         <a href="mailto:${eEmail}" class="button button-green">Direkt antworten</a>
       </p>
-    `
+    `,
     ),
     text: `Neue Anfrage: ${topic}\n\nName: ${name}\nE-Mail: ${email}\n\nNachricht:\n${message}\n\n${createTextFooter()}`,
-  }
-}
+  };
+};
 
 /**
  * Confirmation to the person who submitted the inquiry.
  */
-export const inquiryConfirmation = (
-  name: string,
-  topic: string
-): EmailContent => {
-  const eName = escapeHtml(name)
-  const eTopic = escapeHtml(topic)
+export const inquiryConfirmation = (name: string, topic: string): EmailContent => {
+  const eName = escapeHtml(name);
+  const eTopic = escapeHtml(topic);
 
   return {
     subject: `Deine Anfrage bei ${ORG.name} — ${topic}`,
@@ -79,8 +76,8 @@ export const inquiryConfirmation = (
       </div>
       <p>In der Zwischenzeit kannst du mehr über uns erfahren auf <a href="${ORG.website}">${ORG.emailDomain}</a>.</p>
       <p>Bis bald!<br>Das evig Team</p>
-    `
+    `,
     ),
     text: `Hallo ${name},\n\nvielen Dank für dein Interesse an ${topic} bei ${ORG.name}!\n\nWir haben deine Nachricht erhalten und melden uns in Kürze bei dir.\n\n${createTextFooter()}`,
-  }
-}
+  };
+};

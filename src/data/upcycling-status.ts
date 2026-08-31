@@ -21,18 +21,12 @@
  * until then the page renders the disclaimer string from i18n.
  */
 
-export type MilestoneStatus = 'done' | 'active' | 'upcoming'
+export type MilestoneStatus = 'done' | 'active' | 'upcoming';
 
 /** Stable per-milestone identifiers — must match the `key` field of the
  *  corresponding entry in messages.projects.upcycling.status.timeline.items. */
 export type MilestoneKey =
-  | 'kickoff'
-  | 'prototype'
-  | 'lca-start'
-  | 'series'
-  | 'swico'
-  | 'lca-final'
-  | 'scale'
+  'kickoff' | 'prototype' | 'lca-start' | 'series' | 'swico' | 'lca-final' | 'scale';
 
 export const UPCYCLING_STATUS = {
   /** ISO date of the snapshot — used for the "Stand: <date>" header. */
@@ -66,13 +60,13 @@ export const UPCYCLING_STATUS = {
 
   /** Milestone statuses keyed by the same slug as the i18n timeline.items. */
   milestoneStatuses: {
-    'kickoff':   'done',
-    'prototype': 'done',
+    kickoff: 'done',
+    prototype: 'done',
     'lca-start': 'done',
-    'series':    'active',
-    'swico':     'upcoming',
+    series: 'active',
+    swico: 'upcoming',
     'lca-final': 'upcoming',
-    'scale':     'upcoming',
+    scale: 'upcoming',
   } satisfies Record<MilestoneKey, MilestoneStatus>,
 
   /**
@@ -82,13 +76,13 @@ export const UPCYCLING_STATUS = {
    * stay null — a countdown to a vague target overstates certainty.
    */
   milestoneDeadlines: {
-    'kickoff':   null,
-    'prototype': null,
+    kickoff: null,
+    prototype: null,
     'lca-start': null,
-    'series':    null,
+    series: null,
     // Etappe-2-Bericht to Swico — per Swico letter 12.03.2026 (businessplan §15).
-    'lca-final': '2026-06-18',  // ZHAW LCA Schlussbericht — businessplan KPI
-    'swico':     '2026-07-03',  // Schlusspräsentation Lagerstrasse 33, Zürich 09:00
-    'scale':     null,
+    'lca-final': '2026-06-18', // ZHAW LCA Schlussbericht — businessplan KPI
+    swico: '2026-07-03', // Schlusspräsentation Lagerstrasse 33, Zürich 09:00
+    scale: null,
   } satisfies Record<MilestoneKey, string | null>,
-}
+};

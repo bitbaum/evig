@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server'
-import { timingSafeEqual } from 'node:crypto'
-import { logger } from '@/lib/logger'
+import { NextResponse } from 'next/server';
+import { timingSafeEqual } from 'node:crypto';
+import { logger } from '@/lib/logger';
 
 /**
  * The one place a cron request is authorised.
@@ -26,41 +26,38 @@ import { logger } from '@/lib/logger'
  * scripts/ops/run-cron.sh already reads.
  */
 
-export type CronAuthResult =
-  | { ok: true }
-  | { ok: false; response: NextResponse }
+export type CronAuthResult = { ok: true } | { ok: false; response: NextResponse };
 
-const unauthorized = () =>
-  NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+const unauthorized = () => NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
 /** Constant-time compare. Over TLS this is close to unexploitable, so it is not
  *  the point — a helper that is obviously correct removes the need for anyone to
  *  reason about whether it matters here. */
 function secretsMatch(provided: string, expected: string): boolean {
-  const a = Buffer.from(provided)
-  const b = Buffer.from(expected)
+  const a = Buffer.from(provided);
+  const b = Buffer.from(expected);
   // timingSafeEqual throws on a length mismatch, which would leak the length.
-  if (a.length !== b.length) return false
-  return timingSafeEqual(a, b)
+  if (a.length !== b.length) return false;
+  return timingSafeEqual(a, b);
 }
 
 export function requireCronAuth(request: Request): CronAuthResult {
-  const expected = process.env.CRON_SECRET
+  const expected = process.env.CRON_SECRET;
 
   // Fail closed. An unconfigured secret is a broken deployment, not an open door.
   if (!expected || expected.trim().length === 0) {
     logger.error(
       'CRON_SECRET is not set — refusing every cron request. Set it in the environment; the timers will fail loudly until you do.',
-    )
-    return { ok: false, response: unauthorized() }
+    );
+    return { ok: false, response: unauthorized() };
   }
 
-  const header = request.headers.get('authorization')
+  const header = request.headers.get('authorization');
   if (!header || !header.startsWith('Bearer ')) {
-    return { ok: false, response: unauthorized() }
+    return { ok: false, response: unauthorized() };
   }
 
   return secretsMatch(header.slice('Bearer '.length), expected)
     ? { ok: true }
-    : { ok: false, response: unauthorized() }
+    : { ok: false, response: unauthorized() };
 }

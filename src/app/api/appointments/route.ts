@@ -1,39 +1,41 @@
-import { NextRequest } from 'next/server'
-import { db } from '@/db'
-import { serviceAppointments, serviceTypes } from '@/db/schema'
-import { eq, sql } from 'drizzle-orm'
-import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers'
-import { withAuth, ValidSession } from '@/lib/api/middleware'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { logger } from '@/lib/logger'
-import { validateBody, validateQuery, CreateAppointmentSchema, GetAppointmentsQuerySchema } from '@/lib/schemas'
-import { sendCustomEmail, appointmentUnassignedAlert } from '@/lib/email'
-import { REVAMPIT_NOTIFICATION_EMAIL, URGENCY_DEFAULT } from '@/config/it-hilfe'
-import { BOOKING_STATUS } from '@/config/booking-status'
-import { ROLES } from '@/lib/constants'
-import { APP_URL } from '@/config/urls'
-import { ROUTES } from '@/config/routes'
-import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
-import { TABLE_NAMES } from '@/config/database'
-import { listAppointments, notifyRepairerOfAssignment } from '@/lib/services/appointments'
-import { notifyAllStaff, createNotification } from '@/lib/services/notifications'
-import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
+import { NextRequest } from 'next/server';
+import { db } from '@/db';
+import { serviceAppointments, serviceTypes } from '@/db/schema';
+import { eq, sql } from 'drizzle-orm';
+import { apiError, apiSuccess, apiBadRequest } from '@/lib/api/helpers';
+import { withAuth, ValidSession } from '@/lib/api/middleware';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { logger } from '@/lib/logger';
+import {
+  validateBody,
+  validateQuery,
+  CreateAppointmentSchema,
+  GetAppointmentsQuerySchema,
+} from '@/lib/schemas';
+import { sendCustomEmail, appointmentUnassignedAlert } from '@/lib/email';
+import { REVAMPIT_NOTIFICATION_EMAIL, URGENCY_DEFAULT } from '@/config/it-hilfe';
+import { BOOKING_STATUS } from '@/config/booking-status';
+import { ROLES } from '@/lib/constants';
+import { APP_URL } from '@/config/urls';
+import { ROUTES } from '@/config/routes';
+import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments';
+import { TABLE_NAMES } from '@/config/database';
+import { listAppointments, notifyRepairerOfAssignment } from '@/lib/services/appointments';
+import { notifyAllStaff, createNotification } from '@/lib/services/notifications';
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications';
 
 // GET /api/appointments - Get appointments for current user (as customer or repairer)
-export const GET = withAuth(async (
-  request: NextRequest,
-  session: ValidSession
-) => {
+export const GET = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
-    const { searchParams } = new URL(request.url)
+    const { searchParams } = new URL(request.url);
     const queryValidation = validateQuery(GetAppointmentsQuerySchema, {
       role: searchParams.get('role'),
       status: searchParams.get('status'),
       limit: searchParams.get('limit'),
       offset: searchParams.get('offset'),
-    })
-    if (!queryValidation.success) return queryValidation.error
-    const { role, status, limit, offset } = queryValidation.data
+    });
+    if (!queryValidation.success) return queryValidation.error;
+    const { role, status, limit, offset } = queryValidation.data;
 
     // User scope: customer sees rows they booked; repairer sees rows assigned
     // to them. Admin listing lives at /api/admin/appointments and uses the
@@ -45,30 +47,27 @@ export const GET = withAuth(async (
       status: status || undefined,
       limit,
       offset,
-    })
+    });
 
     logger.info('Appointments fetched', {
       userId: session.user.id,
       role,
       count: data.appointments.length,
-    })
+    });
 
-    return apiSuccess(data)
+    return apiSuccess(data);
   } catch (error) {
-    logger.error('Error fetching appointments', { error })
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    logger.error('Error fetching appointments', { error });
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
-})
+});
 
 // POST /api/appointments - Create a new service appointment
-export const POST = withAuth(async (
-  request: NextRequest,
-  session: ValidSession
-) => {
+export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
-    const body = await request.json()
-    const validation = validateBody(CreateAppointmentSchema, body)
-    if (!validation.success) return validation.error
+    const body = await request.json();
+    const validation = validateBody(CreateAppointmentSchema, body);
+    if (!validation.success) return validation.error;
     const {
       repairer_id,
       repairer_profile_id,
@@ -82,27 +81,30 @@ export const POST = withAuth(async (
       is_home_visit,
       visit_address,
       visit_city,
-    } = validation.data
+    } = validation.data;
 
     // Normalize field names (accept both snake_case and camelCase)
-    const preferred_date = rawPreferredDate || camelPreferredDate || null
+    const preferred_date = rawPreferredDate || camelPreferredDate || null;
 
     // Resolve service_type_id from serviceSlug if needed
-    let service_type_id = rawServiceTypeId
+    let service_type_id = rawServiceTypeId;
     if (!service_type_id && serviceSlug) {
       const [serviceRow] = await db
         .select({ id: serviceTypes.id })
         .from(serviceTypes)
         .where(eq(serviceTypes.slug, serviceSlug))
-        .limit(1)
+        .limit(1);
       if (serviceRow) {
-        service_type_id = serviceRow.id
+        service_type_id = serviceRow.id;
       } else {
         // A slug was provided but matched no service type. Fail loudly rather
         // than silently inserting an appointment with NULL service_type_id
         // (which loses price/name/approval). Catches config↔DB slug drift.
-        logger.warn('Appointment booking: unknown serviceSlug', { serviceSlug, userId: session.user.id })
-        return apiBadRequest('Unbekannte Dienstleistung')
+        logger.warn('Appointment booking: unknown serviceSlug', {
+          serviceSlug,
+          userId: session.user.id,
+        });
+        return apiBadRequest('Unbekannte Dienstleistung');
       }
     }
 
@@ -118,8 +120,8 @@ export const POST = withAuth(async (
           ${device_info || null}, ${preferred_date || null},
           ${visit_address || null}, ${visit_city || null})
         RETURNING *
-      `)
-      const createdAppointment = result.rows[0] as Record<string, unknown> | undefined
+      `);
+      const createdAppointment = result.rows[0] as Record<string, unknown> | undefined;
 
       notifyAdminsOfNewBooking(
         createdAppointment?.id as string | undefined,
@@ -127,13 +129,22 @@ export const POST = withAuth(async (
         description,
         urgency,
         repairer_id,
-      )
-      notifyCustomerOfBooking(createdAppointment?.id as string | undefined, session.user.id, description)
+      );
+      notifyCustomerOfBooking(
+        createdAppointment?.id as string | undefined,
+        session.user.id,
+        description,
+      );
       if (repairer_id && createdAppointment?.id) {
-        notifyRepairerOfAssignment(repairer_id, createdAppointment.id as string, description).catch(() => {})
+        notifyRepairerOfAssignment(repairer_id, createdAppointment.id as string, description).catch(
+          () => {},
+        );
       }
 
-      return apiSuccess({ message: 'Termin erfolgreich erstellt', appointment: createdAppointment }, 201)
+      return apiSuccess(
+        { message: 'Termin erfolgreich erstellt', appointment: createdAppointment },
+        201,
+      );
     }
 
     const [createdAppointment] = await db
@@ -152,30 +163,32 @@ export const POST = withAuth(async (
         visitAddress: visit_address || undefined,
         visitCity: visit_city || undefined,
       })
-      .returning()
+      .returning();
 
     logger.info('Appointment created', {
       appointmentId: createdAppointment?.id,
       userId: session.user.id,
       repairerId: repairer_id,
-    })
+    });
 
-    notifyAdminsOfNewBooking(createdAppointment?.id, session, description, urgency, repairer_id)
-    notifyCustomerOfBooking(createdAppointment?.id, session.user.id, description)
+    notifyAdminsOfNewBooking(createdAppointment?.id, session, description, urgency, repairer_id);
+    notifyCustomerOfBooking(createdAppointment?.id, session.user.id, description);
     if (repairer_id && createdAppointment?.id) {
-      notifyRepairerOfAssignment(repairer_id, createdAppointment.id, description).catch(() => {})
+      notifyRepairerOfAssignment(repairer_id, createdAppointment.id, description).catch(() => {});
     }
 
-    return apiSuccess({
-      message: 'Termin erfolgreich erstellt',
-      appointment: createdAppointment,
-    }, 201)
-
+    return apiSuccess(
+      {
+        message: 'Termin erfolgreich erstellt',
+        appointment: createdAppointment,
+      },
+      201,
+    );
   } catch (error) {
-    logger.error('Error creating appointment', { error })
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    logger.error('Error creating appointment', { error });
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
-})
+});
 
 /**
  * Fire-and-forget admin notification for a new booking.
@@ -200,14 +213,14 @@ function notifyCustomerOfBooking(
   userId: string,
   description: string,
 ) {
-  if (!appointmentId) return
+  if (!appointmentId) return;
   createNotification(userId, {
     type: NOTIFICATION_TYPES.APPOINTMENT,
     title: 'Terminanfrage erhalten',
     content: `Wir haben deine Terminanfrage erhalten und melden uns bald bei dir.${description ? ` (${description.slice(0, 80)})` : ''}`,
     related_type: RELATED_TYPES.APPOINTMENT,
     related_id: appointmentId,
-  }).catch(() => {})
+  }).catch(() => {});
 }
 
 function notifyAdminsOfNewBooking(
@@ -217,7 +230,7 @@ function notifyAdminsOfNewBooking(
   urgency: string | undefined,
   repairerId: string | null | undefined,
 ) {
-  if (!appointmentId) return
+  if (!appointmentId) return;
 
   notifyAllStaff({
     type: NOTIFICATION_TYPES.SYSTEM,
@@ -225,7 +238,7 @@ function notifyAdminsOfNewBooking(
     content: `${session.user.name || session.user.email} hat einen Termin angefragt: ${description?.slice(0, 100)}`,
     related_type: RELATED_TYPES.APPOINTMENT,
     related_id: appointmentId,
-  }).catch(() => {})
+  }).catch(() => {});
 
   if (!repairerId) {
     const emailContent = appointmentUnassignedAlert(
@@ -235,15 +248,23 @@ function notifyAdminsOfNewBooking(
       description,
       urgency || URGENCY_DEFAULT,
       APP_URL + SERVICE_APPOINTMENT_ROUTES.adminList,
-    )
+    );
     // sendCustomEmail resolves { success: false } on failure rather than
     // throw — catch both modes per the documented swallow pattern.
     sendCustomEmail(REVAMPIT_NOTIFICATION_EMAIL, emailContent)
-      .then(r => {
+      .then((r) => {
         if (!r.success) {
-          logger.warn('Failed to send unassigned booking alert (resolved)', { error: r.error, appointmentId })
+          logger.warn('Failed to send unassigned booking alert (resolved)', {
+            error: r.error,
+            appointmentId,
+          });
         }
       })
-      .catch(err => logger.warn('Failed to send unassigned booking alert (rejected)', { error: err, appointmentId }))
+      .catch((err) =>
+        logger.warn('Failed to send unassigned booking alert (rejected)', {
+          error: err,
+          appointmentId,
+        }),
+      );
   }
 }

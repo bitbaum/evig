@@ -1,8 +1,8 @@
-import Link from 'next/link'
-import { ClipboardList, AlertTriangle, CircleDot } from 'lucide-react'
-import { Avatar } from '@/components/ui/Avatar'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { WORK_STATE_LABELS, WORK_STATE_COLORS, type WorkState } from '@/config/team'
+import Link from 'next/link';
+import { ClipboardList, AlertTriangle, CircleDot } from 'lucide-react';
+import { Avatar } from '@/components/ui/Avatar';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { WORK_STATE_LABELS, WORK_STATE_COLORS, type WorkState } from '@/config/team';
 import {
   TASK_STATUS_LABELS,
   TASK_STATUS_COLORS,
@@ -10,40 +10,40 @@ import {
   TASK_PRIORITY_COLORS,
   type TaskStatus,
   type TaskPriority,
-} from '@/config/tasks'
-import { focusFreshness } from '@/lib/team/focus-freshness'
-import { formatDateShort } from '@/lib/date-formats'
+} from '@/config/tasks';
+import { focusFreshness } from '@/lib/team/focus-freshness';
+import { formatDateShort } from '@/lib/date-formats';
 
 export interface BoardTask {
-  id: string
-  title: string
-  current_status: string
-  priority: string
-  due_date: string | null
+  id: string;
+  title: string;
+  current_status: string;
+  priority: string;
+  due_date: string | null;
 }
 
 export interface BoardMemberCard {
-  profile_id: string
-  user_id: string
-  user_name: string | null
-  user_email: string
-  display_name: string | null
-  avatar_url: string | null
-  position: string | null
-  work_state: string
-  current_focus: string | null
-  current_focus_updated_at: string | null
-  tasks: BoardTask[]
-  activeTaskCount: number
-  lastActivity: { title: string; occurred_at: string | null } | null
-  isStaleFocus: boolean
+  profile_id: string;
+  user_id: string;
+  user_name: string | null;
+  user_email: string;
+  display_name: string | null;
+  avatar_url: string | null;
+  position: string | null;
+  work_state: string;
+  current_focus: string | null;
+  current_focus_updated_at: string | null;
+  tasks: BoardTask[];
+  activeTaskCount: number;
+  lastActivity: { title: string; occurred_at: string | null } | null;
+  isStaleFocus: boolean;
 }
 
 function workStateLabel(state: string): string {
-  return WORK_STATE_LABELS[state as WorkState] ?? state
+  return WORK_STATE_LABELS[state as WorkState] ?? state;
 }
 function workStateColor(state: string): string {
-  return WORK_STATE_COLORS[state as WorkState] ?? WORK_STATE_COLORS.inactive
+  return WORK_STATE_COLORS[state as WorkState] ?? WORK_STATE_COLORS.inactive;
 }
 
 /**
@@ -52,8 +52,8 @@ function workStateColor(state: string): string {
  * Team context comes from the swimlane it sits in, so the card omits it.
  */
 export function MemberBoardCard({ card }: { card: BoardMemberCard }) {
-  const name = card.display_name || card.user_name || card.user_email
-  const fresh = focusFreshness(card.current_focus_updated_at)
+  const name = card.display_name || card.user_name || card.user_email;
+  const fresh = focusFreshness(card.current_focus_updated_at);
 
   return (
     <Link
@@ -67,7 +67,9 @@ export function MemberBoardCard({ card }: { card: BoardMemberCard }) {
           <p className="truncate font-semibold text-text-primary">{name}</p>
           {card.position && <p className="truncate text-xs text-text-tertiary">{card.position}</p>}
         </div>
-        <span className={`inline-flex shrink-0 items-center rounded-full px-2 py-0.5 text-[11px] font-medium ${workStateColor(card.work_state)}`}>
+        <span
+          className={`inline-flex shrink-0 items-center rounded-full px-2 py-0.5 text-[11px] font-medium ${workStateColor(card.work_state)}`}
+        >
           {workStateLabel(card.work_state)}
         </span>
       </div>
@@ -99,7 +101,9 @@ export function MemberBoardCard({ card }: { card: BoardMemberCard }) {
       <div className="min-w-0">
         <Eyebrow as="div" className="mb-1.5 flex items-center gap-1.5">
           <ClipboardList className="h-3 w-3" />
-          {card.activeTaskCount > 0 ? `${card.activeTaskCount} aktive Aufgaben` : 'Keine offenen Aufgaben'}
+          {card.activeTaskCount > 0
+            ? `${card.activeTaskCount} aktive Aufgaben`
+            : 'Keine offenen Aufgaben'}
         </Eyebrow>
         {card.tasks.slice(0, 2).map((t) => (
           <div key={t.id} className="flex items-center gap-2 py-0.5">
@@ -110,13 +114,17 @@ export function MemberBoardCard({ card }: { card: BoardMemberCard }) {
               {TASK_PRIORITY_LABELS[t.priority as TaskPriority] ?? t.priority}
             </span>
             <span className="min-w-0 flex-1 truncate text-sm text-text-secondary">{t.title}</span>
-            <span className={`inline-flex shrink-0 items-center rounded px-1.5 py-0.5 text-[10px] font-medium ${TASK_STATUS_COLORS[t.current_status as TaskStatus] ?? ''}`}>
+            <span
+              className={`inline-flex shrink-0 items-center rounded px-1.5 py-0.5 text-[10px] font-medium ${TASK_STATUS_COLORS[t.current_status as TaskStatus] ?? ''}`}
+            >
               {TASK_STATUS_LABELS[t.current_status as TaskStatus] ?? t.current_status}
             </span>
           </div>
         ))}
         {card.activeTaskCount > 2 && (
-          <p className="mt-0.5 text-[11px] text-text-tertiary">+{card.activeTaskCount - 2} weitere</p>
+          <p className="mt-0.5 text-[11px] text-text-tertiary">
+            +{card.activeTaskCount - 2} weitere
+          </p>
         )}
       </div>
 
@@ -131,5 +139,5 @@ export function MemberBoardCard({ card }: { card: BoardMemberCard }) {
         </div>
       )}
     </Link>
-  )
+  );
 }

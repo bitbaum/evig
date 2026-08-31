@@ -16,7 +16,7 @@
  * Last Updated: 2026-08-05
  */
 
-import { ORG } from '@/config/org'
+import { ORG } from '@/config/org';
 import {
   SECTIONS,
   ADMIN_SECTION_IDS,
@@ -26,7 +26,7 @@ import {
   isSensitiveSection as checkSensitive,
   type SectionConfig,
   type SectionId,
-} from '@/config/sections'
+} from '@/config/sections';
 
 // =============================================================================
 // ADMIN SECTIONS - Derived from SSOT (sections.ts)
@@ -37,7 +37,7 @@ import {
  * This replaces the manually defined ADMIN_SECTIONS
  */
 export const ADMIN_SECTIONS = Object.fromEntries(
-  getAdminSections().map(section => [
+  getAdminSections().map((section) => [
     section.id,
     {
       label: section.ui.label,
@@ -45,13 +45,10 @@ export const ADMIN_SECTIONS = Object.fromEntries(
       sensitive: section.visibility.sensitive ?? false,
       description: section.ui.description,
     },
-  ])
-) as Record<
-  string,
-  { label: string; path: string; sensitive: boolean; description: string }
->
+  ]),
+) as Record<string, { label: string; path: string; sensitive: boolean; description: string }>;
 
-export type AdminSection = SectionId
+export type AdminSection = SectionId;
 
 // =============================================================================
 // STAFF EMAIL DOMAIN
@@ -62,8 +59,8 @@ export type AdminSection = SectionId
  * domains stay listed until the infra cutover, because existing accounts
  * (including the owner's) still log in with them.
  */
-export const STAFF_EMAIL_DOMAIN = ORG.emailDomain
-export const LEGACY_STAFF_EMAIL_DOMAINS = ['revamp-it.ch', 'revampit.ch'] as const
+export const STAFF_EMAIL_DOMAIN = ORG.emailDomain;
+export const LEGACY_STAFF_EMAIL_DOMAINS = ['revamp-it.ch', 'revampit.ch'] as const;
 
 /**
  * COSMETIC ONLY — picks the welcome-email template at registration.
@@ -71,12 +68,12 @@ export const LEGACY_STAFF_EMAIL_DOMAINS = ['revamp-it.ch', 'revampit.ch'] as con
  * set by a super admin. Never use this as an authorization check.
  */
 export function isStaffEmail(email: string | null | undefined): boolean {
-  if (!email) return false
-  const normalized = email.toLowerCase()
+  if (!email) return false;
+  const normalized = email.toLowerCase();
   return (
     normalized.endsWith(`@${STAFF_EMAIL_DOMAIN}`) ||
-    LEGACY_STAFF_EMAIL_DOMAINS.some(domain => normalized.endsWith(`@${domain}`))
-  )
+    LEGACY_STAFF_EMAIL_DOMAINS.some((domain) => normalized.endsWith(`@${domain}`))
+  );
 }
 
 // =============================================================================
@@ -100,7 +97,7 @@ export function isStaffEmail(email: string | null | undefined): boolean {
  * Layer B: the owner's login is still `@revamp-it.ch` (see .claude/CLAUDE.md).
  * Add the evig address here at infra cutover, do not swap it before.
  */
-export const SUPER_ADMIN_EMAILS = ['georgy.butaev@revamp-it.ch'] as const
+export const SUPER_ADMIN_EMAILS = ['georgy.butaev@revamp-it.ch'] as const;
 
 /**
  * Check if a user is a super admin
@@ -110,13 +107,11 @@ export const SUPER_ADMIN_EMAILS = ['georgy.butaev@revamp-it.ch'] as const
  */
 export function isSuperAdmin(
   email: string | null | undefined,
-  isSuperAdminFromDb?: boolean
+  isSuperAdminFromDb?: boolean,
 ): boolean {
-  if (isSuperAdminFromDb === true) return true
-  if (!email) return false
-  return SUPER_ADMIN_EMAILS.includes(
-    email.toLowerCase() as (typeof SUPER_ADMIN_EMAILS)[number]
-  )
+  if (isSuperAdminFromDb === true) return true;
+  if (!email) return false;
+  return SUPER_ADMIN_EMAILS.includes(email.toLowerCase() as (typeof SUPER_ADMIN_EMAILS)[number]);
 }
 
 // =============================================================================
@@ -124,10 +119,10 @@ export function isSuperAdmin(
 // =============================================================================
 
 export interface StaffUser {
-  email: string
-  is_staff: boolean
-  staff_permissions: string[] // Array of section keys, or ['*'] for all
-  is_super_admin?: boolean // From database/session
+  email: string;
+  is_staff: boolean;
+  staff_permissions: string[]; // Array of section keys, or ['*'] for all
+  is_super_admin?: boolean; // From database/session
 }
 
 /**
@@ -147,60 +142,58 @@ const PERMISSION_ALIASES: Partial<Record<AdminSection, string>> = {
   // that editor too; otherwise the visible intake flow leads to 403s.
   products: 'intake',
   'analyse-hub': 'finanzen',
-}
+};
 
 /**
  * Check if a user can access a specific admin section
  */
 export function canAccessSection(
   user: StaffUser | null | undefined,
-  section: AdminSection
+  section: AdminSection,
 ): boolean {
-  if (!user) return false
+  if (!user) return false;
 
   // Super admins always have full access — checked BEFORE the is_staff gate so
   // that a cleared `is_staff` flag can never lock the owner out of admin.
-  if (isSuperAdmin(user.email, user.is_super_admin)) return true
+  if (isSuperAdmin(user.email, user.is_super_admin)) return true;
 
-  if (!user.is_staff) return false
+  if (!user.is_staff) return false;
 
   // Personal staff tools (own Zeiterfassung, …) are open to every staff
   // member — permission narrowing never removes someone's own tools.
-  if (STAFF_UNIVERSAL_SECTION_IDS.includes(section)) return true
+  if (STAFF_UNIVERSAL_SECTION_IDS.includes(section)) return true;
 
   // Wildcard permission = full access
-  if (user.staff_permissions.includes('*')) return true
+  if (user.staff_permissions.includes('*')) return true;
 
   // Check specific permission (with alias support)
-  if (user.staff_permissions.includes(section)) return true
+  if (user.staff_permissions.includes(section)) return true;
 
   // Check alias
-  const alias = PERMISSION_ALIASES[section]
-  if (alias && user.staff_permissions.includes(alias)) return true
+  const alias = PERMISSION_ALIASES[section];
+  if (alias && user.staff_permissions.includes(alias)) return true;
 
   // Check reverse alias (if user has old permission, grant access to new section)
-  const reverseAlias = Object.entries(PERMISSION_ALIASES).find(([, v]) => v === section)
-  if (reverseAlias && user.staff_permissions.includes(reverseAlias[0])) return true
+  const reverseAlias = Object.entries(PERMISSION_ALIASES).find(([, v]) => v === section);
+  if (reverseAlias && user.staff_permissions.includes(reverseAlias[0])) return true;
 
   // Analyse hub is also reachable for Hirn-only staff (matches requireAnySection on /admin/analyse)
-  if (section === 'analyse-hub' && user.staff_permissions.includes('hirn')) return true
+  if (section === 'analyse-hub' && user.staff_permissions.includes('hirn')) return true;
 
-  return false
+  return false;
 }
 
 /**
  * Check if a user can access any sensitive section
  */
 export function canAccessSensitive(user: StaffUser | null | undefined): boolean {
-  if (!user) return false
-  if (isSuperAdmin(user.email, user.is_super_admin)) return true
-  if (!user.is_staff) return false
-  if (user.staff_permissions.includes('*')) return true
+  if (!user) return false;
+  if (isSuperAdmin(user.email, user.is_super_admin)) return true;
+  if (!user.is_staff) return false;
+  if (user.staff_permissions.includes('*')) return true;
 
   // Check if they have permission for any sensitive section
-  return SENSITIVE_SECTION_IDS.some(section =>
-    user.staff_permissions.includes(section)
-  )
+  return SENSITIVE_SECTION_IDS.some((section) => user.staff_permissions.includes(section));
 }
 
 /**
@@ -208,17 +201,17 @@ export function canAccessSensitive(user: StaffUser | null | undefined): boolean 
  * Used by middleware to bridge session shape to permission checks.
  */
 export function toStaffUser(sessionUser: {
-  email: string
-  isStaff: boolean
-  staffPermissions: string[]
-  isSuperAdmin?: boolean
+  email: string;
+  isStaff: boolean;
+  staffPermissions: string[];
+  isSuperAdmin?: boolean;
 }): StaffUser {
   return {
     email: sessionUser.email,
     is_staff: sessionUser.isStaff,
     staff_permissions: sessionUser.staffPermissions,
     is_super_admin: sessionUser.isSuperAdmin,
-  }
+  };
 }
 
 /**
@@ -238,41 +231,39 @@ export function canAccessFinance(
   sessionUser:
     | { email: string; isStaff: boolean; staffPermissions: string[]; isSuperAdmin?: boolean }
     | null
-    | undefined
+    | undefined,
 ): boolean {
-  if (!sessionUser) return false
-  return canAccessSection(toStaffUser(sessionUser), 'finanzen')
+  if (!sessionUser) return false;
+  return canAccessSection(toStaffUser(sessionUser), 'finanzen');
 }
 
 /**
  * Get all sections a user can access
  */
-export function getAccessibleSections(
-  user: StaffUser | null | undefined
-): AdminSection[] {
-  if (!user) return []
+export function getAccessibleSections(user: StaffUser | null | undefined): AdminSection[] {
+  if (!user) return [];
 
   // Super admins or wildcard = all sections. Super admin is checked before the
   // is_staff gate for the same lockout reason as canAccessSection.
-  if (isSuperAdmin(user.email, user.is_super_admin)) return ADMIN_SECTION_IDS
-  if (!user.is_staff) return []
-  if (user.staff_permissions.includes('*')) return ADMIN_SECTION_IDS
+  if (isSuperAdmin(user.email, user.is_super_admin)) return ADMIN_SECTION_IDS;
+  if (!user.is_staff) return [];
+  if (user.staff_permissions.includes('*')) return ADMIN_SECTION_IDS;
 
   // Filter to permitted sections, checking aliases for backward compat.
   // Personal staff tools (alwaysForStaff) are included for every staff member.
-  return ADMIN_SECTION_IDS.filter(sectionId => {
-    if (STAFF_UNIVERSAL_SECTION_IDS.includes(sectionId)) return true
-    if (user.staff_permissions.includes(sectionId)) return true
-    const aliasedPerm = PERMISSION_ALIASES[sectionId]
-    return !!(aliasedPerm && user.staff_permissions.includes(aliasedPerm))
-  })
+  return ADMIN_SECTION_IDS.filter((sectionId) => {
+    if (STAFF_UNIVERSAL_SECTION_IDS.includes(sectionId)) return true;
+    if (user.staff_permissions.includes(sectionId)) return true;
+    const aliasedPerm = PERMISSION_ALIASES[sectionId];
+    return !!(aliasedPerm && user.staff_permissions.includes(aliasedPerm));
+  });
 }
 
 /**
  * Check if a section is sensitive (derived from SSOT)
  */
 export function isSensitiveSection(section: AdminSection): boolean {
-  return checkSensitive(section)
+  return checkSensitive(section);
 }
 
 // =============================================================================
@@ -284,17 +275,17 @@ export function isSensitiveSection(section: AdminSection): boolean {
  * They get access to non-sensitive sections by default
  */
 export const DEFAULT_STAFF_PERMISSIONS: AdminSection[] = ADMIN_SECTION_IDS.filter(
-  id => !SENSITIVE_SECTION_IDS.includes(id)
-)
+  (id) => !SENSITIVE_SECTION_IDS.includes(id),
+);
 
 /**
  * Get initial permissions for a new staff member
  */
 export function getInitialStaffPermissions(email: string): string[] {
   if (isSuperAdmin(email)) {
-    return ['*'] // Full access
+    return ['*']; // Full access
   }
-  return [...DEFAULT_STAFF_PERMISSIONS]
+  return [...DEFAULT_STAFF_PERMISSIONS];
 }
 
 // =============================================================================
@@ -310,9 +301,9 @@ export const CONTENT_STATUS = {
   APPROVED: 'approved', // Approved and visible
   REJECTED: 'rejected', // Rejected with reason
   ARCHIVED: 'archived', // No longer active
-} as const
+} as const;
 
-export type ContentStatus = (typeof CONTENT_STATUS)[keyof typeof CONTENT_STATUS]
+export type ContentStatus = (typeof CONTENT_STATUS)[keyof typeof CONTENT_STATUS];
 
 // =============================================================================
 // RE-EXPORTS FROM SSOT
@@ -328,12 +319,12 @@ export {
   getSectionsByCategory,
   CATEGORIES,
   getSortedCategories,
-} from '@/config/sections'
+} from '@/config/sections';
 
-export type { SectionConfig, SectionCategory, SectionColor } from '@/config/sections'
+export type { SectionConfig, SectionCategory, SectionColor } from '@/config/sections';
 
 // =============================================================================
 // TYPE EXPORTS
 // =============================================================================
 
-export type { AdminSection as AdminSectionType }
+export type { AdminSection as AdminSectionType };

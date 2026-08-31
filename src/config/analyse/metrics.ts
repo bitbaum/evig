@@ -10,23 +10,23 @@
  * - 'calculated': Derived from other metrics
  */
 
-export type MetricStatus = 'available' | 'needs_data' | 'calculated'
-export type MetricSource = 'kivitendo' | 'manual' | 'calculated'
-export type MetricCategory = 'financial' | 'environmental' | 'social' | 'digital'
+export type MetricStatus = 'available' | 'needs_data' | 'calculated';
+export type MetricSource = 'kivitendo' | 'manual' | 'calculated';
+export type MetricCategory = 'financial' | 'environmental' | 'social' | 'digital';
 
 export interface MetricDefinition {
-  id: string
-  category: MetricCategory
-  name: string
-  description: string
-  source: MetricSource
-  status: MetricStatus
-  unit: string
-  target?: string
-  formula?: string
+  id: string;
+  category: MetricCategory;
+  name: string;
+  description: string;
+  source: MetricSource;
+  status: MetricStatus;
+  unit: string;
+  target?: string;
+  formula?: string;
   // For needs_data status
-  dataNeeded?: string
-  responsibleTeam?: string
+  dataNeeded?: string;
+  responsibleTeam?: string;
 }
 
 /**
@@ -255,44 +255,44 @@ export const METRICS: Record<string, MetricDefinition> = {
     dataNeeded: 'Beratungs-Tracking',
     responsibleTeam: 'Support',
   },
-}
+};
 
 /**
  * Get metrics by category
  */
 export function getMetricsByCategory(category: MetricCategory): MetricDefinition[] {
-  return Object.values(METRICS).filter(m => m.category === category)
+  return Object.values(METRICS).filter((m) => m.category === category);
 }
 
 /**
  * Get metrics by status
  */
 export function getMetricsByStatus(status: MetricStatus): MetricDefinition[] {
-  return Object.values(METRICS).filter(m => m.status === status)
+  return Object.values(METRICS).filter((m) => m.status === status);
 }
 
 /**
  * Get all metrics that need data input
  */
 export function getMissingDataMetrics(): MetricDefinition[] {
-  return Object.values(METRICS).filter(m => m.status === 'needs_data')
+  return Object.values(METRICS).filter((m) => m.status === 'needs_data');
 }
 
 /**
  * Get metrics grouped by responsible team
  */
 export function getMetricsByResponsibleTeam(): Record<string, MetricDefinition[]> {
-  const grouped: Record<string, MetricDefinition[]> = {}
+  const grouped: Record<string, MetricDefinition[]> = {};
 
   for (const metric of getMissingDataMetrics()) {
-    const team = metric.responsibleTeam || 'Unbekannt'
+    const team = metric.responsibleTeam || 'Unbekannt';
     if (!grouped[team]) {
-      grouped[team] = []
+      grouped[team] = [];
     }
-    grouped[team].push(metric)
+    grouped[team].push(metric);
   }
 
-  return grouped
+  return grouped;
 }
 
 // Category labels for display
@@ -301,12 +301,16 @@ export const CATEGORY_LABELS: Record<MetricCategory, string> = {
   environmental: 'Umwelt',
   social: 'Soziales',
   digital: 'Digitale Souveränität',
-}
+};
 
 // Category colors for display
 export const CATEGORY_COLORS: Record<MetricCategory, { bg: string; text: string; icon: string }> = {
   financial: { bg: 'bg-neutral-100', text: 'text-neutral-700', icon: 'text-neutral-600' },
-  environmental: { bg: 'bg-success-100 dark:bg-success-900/30', text: 'text-success-700 dark:text-success-300', icon: 'text-success-600 dark:text-success-400' },
+  environmental: {
+    bg: 'bg-success-100 dark:bg-success-900/30',
+    text: 'text-success-700 dark:text-success-300',
+    icon: 'text-success-600 dark:text-success-400',
+  },
   social: { bg: 'bg-purple-100', text: 'text-purple-700', icon: 'text-purple-600' },
   digital: { bg: 'bg-orange-100', text: 'text-orange-700', icon: 'text-orange-600' },
-}
+};

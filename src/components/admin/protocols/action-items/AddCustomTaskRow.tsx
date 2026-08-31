@@ -1,31 +1,31 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Loader2, Plus } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
+import { useState } from 'react';
+import { Loader2, Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
 
 interface AddCustomTaskRowProps {
-  teamMembers: Array<{ id: string; name: string }>
-  adding: boolean
-  onAdd: (description: string, assignee: { id: string; name: string } | null) => Promise<boolean>
+  teamMembers: Array<{ id: string; name: string }>;
+  adding: boolean;
+  onAdd: (description: string, assignee: { id: string; name: string } | null) => Promise<boolean>;
 }
 
 export function AddCustomTaskRow({ teamMembers, adding, onAdd }: AddCustomTaskRowProps) {
-  const [open, setOpen] = useState(false)
-  const [description, setDescription] = useState('')
-  const [assigneeId, setAssigneeId] = useState('')
+  const [open, setOpen] = useState(false);
+  const [description, setDescription] = useState('');
+  const [assigneeId, setAssigneeId] = useState('');
 
   const submit = async () => {
-    const member = teamMembers.find((m) => m.id === assigneeId)
-    const ok = await onAdd(description, member ? { id: member.id, name: member.name } : null)
+    const member = teamMembers.find((m) => m.id === assigneeId);
+    const ok = await onAdd(description, member ? { id: member.id, name: member.name } : null);
     if (ok) {
-      setDescription('')
-      setAssigneeId('')
-      setOpen(false)
+      setDescription('');
+      setAssigneeId('');
+      setOpen(false);
     }
-  }
+  };
 
   if (!open) {
     return (
@@ -38,7 +38,7 @@ export function AddCustomTaskRow({ teamMembers, adding, onAdd }: AddCustomTaskRo
         <Plus className="w-4 h-4" />
         Aufgabe ergänzen — etwas wurde nicht erkannt?
       </Button>
-    )
+    );
   }
 
   return (
@@ -48,7 +48,7 @@ export function AddCustomTaskRow({ teamMembers, adding, onAdd }: AddCustomTaskRo
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && description.trim() && !adding) submit()
+            if (e.key === 'Enter' && description.trim() && !adding) submit();
           }}
           placeholder="Was ist zu tun?"
           className="flex-1"
@@ -62,7 +62,9 @@ export function AddCustomTaskRow({ teamMembers, adding, onAdd }: AddCustomTaskRo
         >
           <option value="">— Niemand zugewiesen —</option>
           {teamMembers.map((m) => (
-            <option key={m.id} value={m.id}>{m.name}</option>
+            <option key={m.id} value={m.id}>
+              {m.name}
+            </option>
           ))}
         </Select>
       </div>
@@ -74,7 +76,11 @@ export function AddCustomTaskRow({ teamMembers, adding, onAdd }: AddCustomTaskRo
           disabled={adding || !description.trim()}
           className="gap-1.5"
         >
-          {adding ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Plus className="w-3.5 h-3.5" />}
+          {adding ? (
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+          ) : (
+            <Plus className="w-3.5 h-3.5" />
+          )}
           Aufgabe erstellen
         </Button>
         <Button
@@ -87,5 +93,5 @@ export function AddCustomTaskRow({ teamMembers, adding, onAdd }: AddCustomTaskRo
         </Button>
       </div>
     </div>
-  )
+  );
 }

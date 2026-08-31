@@ -1,17 +1,17 @@
-import { Filter } from 'lucide-react'
+import { Filter } from 'lucide-react';
 import {
   getDonationTypeOptions,
   getDonationStatusOptions,
   type DonationType,
   type DonationStatus,
-} from '@/config/donations'
-import { Card } from '@/components/ui/card'
-import { Select } from '@/components/ui/select'
-import type { DonationFiltersState } from './types'
+} from '@/config/donations';
+import { Card } from '@/components/ui/card';
+import { Select } from '@/components/ui/select';
+import type { DonationFiltersState } from './types';
 
 interface Props {
-  filters: DonationFiltersState
-  onFiltersChange: (filters: DonationFiltersState) => void
+  filters: DonationFiltersState;
+  onFiltersChange: (filters: DonationFiltersState) => void;
 }
 
 export function DonationFilters({ filters, onFiltersChange }: Props) {
@@ -24,23 +24,31 @@ export function DonationFilters({ filters, onFiltersChange }: Props) {
         </div>
         <Select
           value={filters.donation_type}
-          onChange={(e) => onFiltersChange({ ...filters, donation_type: e.target.value as DonationType | 'all' })}
+          onChange={(e) =>
+            onFiltersChange({ ...filters, donation_type: e.target.value as DonationType | 'all' })
+          }
         >
           <option value="all">Alle Typen</option>
-          {getDonationTypeOptions().map(opt => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          {getDonationTypeOptions().map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
           ))}
         </Select>
         <Select
           value={filters.status}
-          onChange={(e) => onFiltersChange({ ...filters, status: e.target.value as DonationStatus | 'all' })}
+          onChange={(e) =>
+            onFiltersChange({ ...filters, status: e.target.value as DonationStatus | 'all' })
+          }
         >
           <option value="all">Alle Status</option>
-          {getDonationStatusOptions().map(opt => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          {getDonationStatusOptions().map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
           ))}
         </Select>
       </div>
     </Card>
-  )
+  );
 }

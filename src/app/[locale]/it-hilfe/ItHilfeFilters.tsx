@@ -6,13 +6,13 @@
  * a UI detail, not request state.
  */
 
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useTranslations } from 'next-intl'
-import { SlidersHorizontal, X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Select } from '@/components/ui/select'
+import { useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { SlidersHorizontal, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Select } from '@/components/ui/select';
 import {
   DEVICE_CATEGORIES,
   URGENCY_LEVELS,
@@ -21,20 +21,20 @@ import {
   getAllSkills,
   SERVICE_TYPES,
   SERVICE_TYPE,
-} from '@/config/it-hilfe'
-import type { ITHilfeFilters as ITHilfeFiltersValue } from '@/hooks/useITHilfeRequests'
+} from '@/config/it-hilfe';
+import type { ITHilfeFilters as ITHilfeFiltersValue } from '@/hooks/useITHilfeRequests';
 
 interface Props {
-  sort: string
-  setSort: (sort: string) => void
-  filters: ITHilfeFiltersValue
-  setFilter: (key: keyof ITHilfeFiltersValue, value: string | boolean) => void
-  hasActiveFilters: boolean
-  clearFilters: () => void
+  sort: string;
+  setSort: (sort: string) => void;
+  filters: ITHilfeFiltersValue;
+  setFilter: (key: keyof ITHilfeFiltersValue, value: string | boolean) => void;
+  hasActiveFilters: boolean;
+  clearFilters: () => void;
   /** When true, filter panel starts expanded (browse page default). */
-  defaultExpanded?: boolean
+  defaultExpanded?: boolean;
   /** Show "match my skills" toggle for logged-in technicians. */
-  matchMySkillsAvailable?: boolean
+  matchMySkillsAvailable?: boolean;
 }
 
 export function ItHilfeFilters({
@@ -47,13 +47,13 @@ export function ItHilfeFilters({
   defaultExpanded = false,
   matchMySkillsAvailable = false,
 }: Props) {
-  const t = useTranslations('itHelp.page')
-  const [showFilters, setShowFilters] = useState(defaultExpanded)
+  const t = useTranslations('itHelp.page');
+  const [showFilters, setShowFilters] = useState(defaultExpanded);
 
-  const skillOptions = getAllSkills().map((s) => ({ value: s.id, label: s.name }))
-  const serviceTypeOptions = SERVICE_TYPES
-    .filter((st) => st.id !== SERVICE_TYPE.FLEXIBLE)
-    .map((st) => ({ value: st.id, label: st.name }))
+  const skillOptions = getAllSkills().map((s) => ({ value: s.id, label: s.name }));
+  const serviceTypeOptions = SERVICE_TYPES.filter((st) => st.id !== SERVICE_TYPE.FLEXIBLE).map(
+    (st) => ({ value: st.id, label: st.name }),
+  );
 
   return (
     <div className="mb-6 card-shell p-4">
@@ -67,7 +67,10 @@ export function ItHilfeFilters({
           <SlidersHorizontal className="w-4 h-4" />
           {t('filterButton')}
           {hasActiveFilters && (
-            <span className="w-2 h-2 rounded-full bg-text-primary" aria-label={t('activeFiltersIndicator')} />
+            <span
+              className="w-2 h-2 rounded-full bg-text-primary"
+              aria-label={t('activeFiltersIndicator')}
+            />
           )}
         </Button>
 
@@ -78,7 +81,9 @@ export function ItHilfeFilters({
           aria-label={t('sortLabel')}
         >
           {SORT_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>{option.label}</option>
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
           ))}
         </Select>
 
@@ -163,18 +168,18 @@ export function ItHilfeFilters({
         </div>
       )}
     </div>
-  )
+  );
 }
 
 /* ── DRY helper for the identical select+label blocks ── */
 
 interface FilterSelectProps {
-  id: string
-  label: string
-  labelAll: string
-  value: string
-  onChange: (v: string) => void
-  options: Array<{ value: string; label: string }>
+  id: string;
+  label: string;
+  labelAll: string;
+  value: string;
+  onChange: (v: string) => void;
+  options: Array<{ value: string; label: string }>;
 }
 
 function FilterSelect({ id, label, labelAll, value, onChange, options }: FilterSelectProps) {
@@ -186,9 +191,11 @@ function FilterSelect({ id, label, labelAll, value, onChange, options }: FilterS
       <Select id={id} value={value} onChange={(e) => onChange(e.target.value)}>
         <option value="">{labelAll}</option>
         {options.map((opt) => (
-          <option key={opt.value} value={opt.value}>{opt.label}</option>
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
+          </option>
         ))}
       </Select>
     </div>
-  )
+  );
 }

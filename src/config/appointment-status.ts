@@ -13,9 +13,9 @@ export const APPOINTMENT_STATUS = {
   IN_PROGRESS: 'in_progress',
   CANCELLED: 'cancelled',
   COMPLETED: 'completed',
-} as const
+} as const;
 
-export type AppointmentStatus = typeof APPOINTMENT_STATUS[keyof typeof APPOINTMENT_STATUS]
+export type AppointmentStatus = (typeof APPOINTMENT_STATUS)[keyof typeof APPOINTMENT_STATUS];
 
 export const APPOINTMENT_STATUS_LABELS: Record<string, string> = {
   [APPOINTMENT_STATUS.PENDING_APPROVAL]: 'Genehmigung ausstehend',
@@ -24,8 +24,8 @@ export const APPOINTMENT_STATUS_LABELS: Record<string, string> = {
   [APPOINTMENT_STATUS.IN_PROGRESS]: 'In Bearbeitung',
   [APPOINTMENT_STATUS.CANCELLED]: 'Storniert',
   [APPOINTMENT_STATUS.COMPLETED]: 'Abgeschlossen',
-}
+};
 
 export function getAppointmentStatusLabel(status: string): string {
-  return APPOINTMENT_STATUS_LABELS[status] ?? status
+  return APPOINTMENT_STATUS_LABELS[status] ?? status;
 }

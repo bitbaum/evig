@@ -95,7 +95,7 @@ async function meiliWriteWithRetry(path: string, options: RequestInit): Promise<
       lastError = error;
     }
     if (attempt < MAX_RETRIES) {
-      await new Promise(resolve => setTimeout(resolve, RETRY_DELAY_MS * (attempt + 1)));
+      await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS * (attempt + 1)));
     }
   }
   throw lastError;
@@ -122,9 +122,17 @@ export async function configureListingsIndex(): Promise<void> {
     await meiliRequest(`/indexes/${LISTINGS_INDEX}/settings/filterable-attributes`, {
       method: 'PUT',
       body: JSON.stringify([
-        'category', 'condition', 'delivery_options', 'payment_mode',
-        'status', 'price_chf', 'is_revampit', 'is_verified',
-        'spec_ram_gb', 'spec_storage_gb', 'spec_display_inches',
+        'category',
+        'condition',
+        'delivery_options',
+        'payment_mode',
+        'status',
+        'price_chf',
+        'is_revampit',
+        'is_verified',
+        'spec_ram_gb',
+        'spec_storage_gb',
+        'spec_display_inches',
       ]),
     });
 
@@ -150,7 +158,10 @@ export async function indexListing(listing: MeilisearchDocument): Promise<void> 
       body: JSON.stringify([listing]),
     });
   } catch (error) {
-    logger.warn('Failed to index listing in Meilisearch after retries', { listingId: listing.id, error });
+    logger.warn('Failed to index listing in Meilisearch after retries', {
+      listingId: listing.id,
+      error,
+    });
   }
 }
 
@@ -163,7 +174,10 @@ export async function removeListing(id: string): Promise<void> {
       method: 'DELETE',
     });
   } catch (error) {
-    logger.warn('Failed to remove listing from Meilisearch after retries', { listingId: id, error });
+    logger.warn('Failed to remove listing from Meilisearch after retries', {
+      listingId: id,
+      error,
+    });
   }
 }
 
@@ -175,7 +189,7 @@ export async function searchListings(
   filters: SearchFilters,
   sort: string,
   page: number,
-  limit: number
+  limit: number,
 ): Promise<SearchResult | null> {
   try {
     // Build filter array
@@ -191,22 +205,34 @@ export async function searchListings(
     }
     if (filters.price_min !== undefined) filterParts.push(`price_chf >= ${filters.price_min}`);
     if (filters.price_max !== undefined) filterParts.push(`price_chf <= ${filters.price_max}`);
-    if (filters.seller_type === MARKETPLACE_SELLER_TYPE.REVAMPIT) filterParts.push('is_revampit = true');
-    if (filters.seller_type === MARKETPLACE_SELLER_TYPE.COMMUNITY) filterParts.push('is_revampit = false');
+    if (filters.seller_type === MARKETPLACE_SELLER_TYPE.REVAMPIT)
+      filterParts.push('is_revampit = true');
+    if (filters.seller_type === MARKETPLACE_SELLER_TYPE.COMMUNITY)
+      filterParts.push('is_revampit = false');
     if (filters.gratis_only) filterParts.push('price_chf = 0');
     if (filters.verified_only) filterParts.push('is_verified = true');
     // Spec filters
-    if (filters.spec_ram_min !== undefined) filterParts.push(`spec_ram_gb >= ${filters.spec_ram_min}`);
-    if (filters.spec_storage_min !== undefined) filterParts.push(`spec_storage_gb >= ${filters.spec_storage_min}`);
-    if (filters.spec_display_min !== undefined) filterParts.push(`spec_display_inches >= ${filters.spec_display_min}`);
+    if (filters.spec_ram_min !== undefined)
+      filterParts.push(`spec_ram_gb >= ${filters.spec_ram_min}`);
+    if (filters.spec_storage_min !== undefined)
+      filterParts.push(`spec_storage_gb >= ${filters.spec_storage_min}`);
+    if (filters.spec_display_min !== undefined)
+      filterParts.push(`spec_display_inches >= ${filters.spec_display_min}`);
 
     // Map sort option to Meilisearch format
     let sortArray: string[] = [];
     switch (sort) {
-      case 'price_asc': sortArray = ['price_chf:asc']; break;
-      case 'price_desc': sortArray = ['price_chf:desc']; break;
-      case 'popular': sortArray = ['view_count:desc']; break;
-      default: sortArray = ['created_at:desc'];
+      case 'price_asc':
+        sortArray = ['price_chf:asc'];
+        break;
+      case 'price_desc':
+        sortArray = ['price_chf:desc'];
+        break;
+      case 'popular':
+        sortArray = ['view_count:desc'];
+        break;
+      default:
+        sortArray = ['created_at:desc'];
     }
 
     const response = await meiliRequest(`/indexes/${LISTINGS_INDEX}/search`, {
@@ -222,7 +248,7 @@ export async function searchListings(
     });
 
     if (!response.ok) return null;
-    return await response.json() as SearchResult;
+    return (await response.json()) as SearchResult;
   } catch (error) {
     logger.warn('Meilisearch search failed, falling back to SQL', { error });
     return null;

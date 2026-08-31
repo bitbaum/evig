@@ -1,44 +1,52 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useSession } from 'next-auth/react'
-import { useTranslations } from 'next-intl'
-import { CheckCircle, Loader2, AlertCircle, Copy, Check } from 'lucide-react'
-import { apiFetch } from '@/lib/api/client'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { IconBadge } from '@/components/ui/IconBadge'
-import { BANK, MEMBERSHIP, ORG } from '@/config/org'
-import { UI_FEEDBACK_MS } from '@/config/limits'
+import { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
+import { CheckCircle, Loader2, AlertCircle, Copy, Check } from 'lucide-react';
+import { apiFetch } from '@/lib/api/client';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { IconBadge } from '@/components/ui/IconBadge';
+import { BANK, MEMBERSHIP, ORG } from '@/config/org';
+import { UI_FEEDBACK_MS } from '@/config/limits';
 
-function CopyButton({ value, label, copiedLabel }: { value: string; label: string; copiedLabel: string }) {
-  const [copied, setCopied] = useState(false)
+function CopyButton({
+  value,
+  label,
+  copiedLabel,
+}: {
+  value: string;
+  label: string;
+  copiedLabel: string;
+}) {
+  const [copied, setCopied] = useState(false);
   return (
     <Button
       type="button"
       variant="ghost"
       size="sm"
       onClick={() => {
-        navigator.clipboard.writeText(value.replace(/\s/g, ''))
-        setCopied(true)
-        setTimeout(() => setCopied(false), UI_FEEDBACK_MS.COPY)
+        navigator.clipboard.writeText(value.replace(/\s/g, ''));
+        setCopied(true);
+        setTimeout(() => setCopied(false), UI_FEEDBACK_MS.COPY);
       }}
       className="inline-flex items-center gap-1 text-xs text-action hover:text-action font-medium"
     >
       {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
       {copied ? copiedLabel : label}
     </Button>
-  )
+  );
 }
 
 export function MembershipApplicationForm() {
-  const { data: session } = useSession()
-  const t = useTranslations('membership.form')
-  const [submitting, setSubmitting] = useState(false)
-  const [success, setSuccess] = useState(false)
-  const [memberType, setMemberType] = useState<'regular' | 'reduced'>('regular')
-  const [error, setError] = useState<string | null>(null)
+  const { data: session } = useSession();
+  const t = useTranslations('membership.form');
+  const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [memberType, setMemberType] = useState<'regular' | 'reduced'>('regular');
+  const [error, setError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     applicantName: session?.user?.name || '',
@@ -46,7 +54,7 @@ export function MembershipApplicationForm() {
     addressStreet: '',
     addressPostalCode: '',
     addressCity: '',
-  })
+  });
 
   const canSubmit =
     !submitting &&
@@ -54,32 +62,32 @@ export function MembershipApplicationForm() {
     /\S+@\S+\.\S+/.test(formData.applicantEmail) &&
     formData.addressStreet.trim().length >= 2 &&
     /^\d{4}$/.test(formData.addressPostalCode) &&
-    formData.addressCity.trim().length >= 2
+    formData.addressCity.trim().length >= 2;
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!canSubmit) return
+    e.preventDefault();
+    if (!canSubmit) return;
 
-    setSubmitting(true)
-    setError(null)
+    setSubmitting(true);
+    setError(null);
 
     const { data, error: apiError } = await apiFetch<{ id: string; memberType: string }>(
       '/api/membership/apply',
-      { method: 'POST', body: { ...formData, memberType } }
-    )
+      { method: 'POST', body: { ...formData, memberType } },
+    );
 
-    setSubmitting(false)
+    setSubmitting(false);
 
     if (apiError) {
-      setError(apiError)
-      return
+      setError(apiError);
+      return;
     }
 
-    if (data?.id) setSuccess(true)
-  }
+    if (data?.id) setSuccess(true);
+  };
 
-  const fee = memberType === 'reduced' ? MEMBERSHIP.fees.reduced : MEMBERSHIP.fees.regular
-  const paymentRef = `${MEMBERSHIP.referencePrefix}-${formData.applicantName.split(' ')[0].toUpperCase()}`
+  const fee = memberType === 'reduced' ? MEMBERSHIP.fees.reduced : MEMBERSHIP.fees.regular;
+  const paymentRef = `${MEMBERSHIP.referencePrefix}-${formData.applicantName.split(' ')[0].toUpperCase()}`;
 
   if (success) {
     return (
@@ -90,9 +98,7 @@ export function MembershipApplicationForm() {
           <Heading level={3} className="text-xl text-action mb-2">
             {t('welcome')}
           </Heading>
-          <p className="text-action">
-            {t('welcomeDesc', { orgName: ORG.name })}
-          </p>
+          <p className="text-action">{t('welcomeDesc', { orgName: ORG.name })}</p>
         </div>
 
         {/* Payment instructions */}
@@ -133,16 +139,20 @@ export function MembershipApplicationForm() {
             <div className="flex justify-between items-center">
               <div>
                 <span className="text-text-tertiary">{t('amountLabel')}</span>
-                <p className="font-bold text-action">{MEMBERSHIP.currency} {fee}</p>
+                <p className="font-bold text-action">
+                  {MEMBERSHIP.currency} {fee}
+                </p>
               </div>
             </div>
           </div>
           <p className="text-xs text-text-tertiary mt-3">
-            {t('twintNote', { suffix: session?.user?.email ? t('twintNoteEmail') : t('twintNoteNoEmail') })}
+            {t('twintNote', {
+              suffix: session?.user?.email ? t('twintNoteEmail') : t('twintNoteNoEmail'),
+            })}
           </p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -161,7 +171,9 @@ export function MembershipApplicationForm() {
           variant="ghost"
           onClick={() => setMemberType('regular')}
           className={`h-auto px-4 py-3 rounded-lg border-2 text-left flex-col items-start ${
-            memberType === 'regular' ? 'border-action bg-action-muted' : 'border-strong hover:border-strong'
+            memberType === 'regular'
+              ? 'border-action bg-action-muted'
+              : 'border-strong hover:border-strong'
           }`}
         >
           <div className="font-semibold text-text-primary">{t('regularLabel')}</div>
@@ -172,7 +184,9 @@ export function MembershipApplicationForm() {
           variant="ghost"
           onClick={() => setMemberType('reduced')}
           className={`h-auto px-4 py-3 rounded-lg border-2 text-left flex-col items-start ${
-            memberType === 'reduced' ? 'border-action bg-action-muted' : 'border-strong hover:border-strong'
+            memberType === 'reduced'
+              ? 'border-action bg-action-muted'
+              : 'border-strong hover:border-strong'
           }`}
         >
           <div className="font-semibold text-text-primary">{t('reducedLabel')}</div>
@@ -184,7 +198,9 @@ export function MembershipApplicationForm() {
       {/* Name + Email */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-text-secondary mb-1">{t('nameLabel')} *</label>
+          <label htmlFor="name" className="block text-sm font-medium text-text-secondary mb-1">
+            {t('nameLabel')} *
+          </label>
           <Input
             id="name"
             type="text"
@@ -195,7 +211,9 @@ export function MembershipApplicationForm() {
           />
         </div>
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-text-secondary mb-1">{t('emailLabel')} *</label>
+          <label htmlFor="email" className="block text-sm font-medium text-text-secondary mb-1">
+            {t('emailLabel')} *
+          </label>
           <Input
             id="email"
             type="email"
@@ -209,7 +227,9 @@ export function MembershipApplicationForm() {
 
       {/* Address */}
       <div>
-        <label htmlFor="street" className="block text-sm font-medium text-text-secondary mb-1">{t('streetLabel')} *</label>
+        <label htmlFor="street" className="block text-sm font-medium text-text-secondary mb-1">
+          {t('streetLabel')} *
+        </label>
         <Input
           id="street"
           type="text"
@@ -222,7 +242,9 @@ export function MembershipApplicationForm() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div>
-          <label htmlFor="plz" className="block text-sm font-medium text-text-secondary mb-1">{t('plzLabel')} *</label>
+          <label htmlFor="plz" className="block text-sm font-medium text-text-secondary mb-1">
+            {t('plzLabel')} *
+          </label>
           <Input
             id="plz"
             type="text"
@@ -235,7 +257,9 @@ export function MembershipApplicationForm() {
           />
         </div>
         <div className="sm:col-span-2">
-          <label htmlFor="city" className="block text-sm font-medium text-text-secondary mb-1">{t('cityLabel')} *</label>
+          <label htmlFor="city" className="block text-sm font-medium text-text-secondary mb-1">
+            {t('cityLabel')} *
+          </label>
           <Input
             id="city"
             type="text"
@@ -248,12 +272,7 @@ export function MembershipApplicationForm() {
       </div>
 
       {/* Submit */}
-      <Button
-        type="submit"
-        disabled={!canSubmit}
-        variant="primary"
-        className="w-full sm:w-auto"
-      >
+      <Button type="submit" disabled={!canSubmit} variant="primary" className="w-full sm:w-auto">
         {submitting ? (
           <>
             <Loader2 className="w-5 h-5 animate-spin" />
@@ -263,9 +282,7 @@ export function MembershipApplicationForm() {
           t('submitButton', { currency: MEMBERSHIP.currency, fee })
         )}
       </Button>
-      <p className="text-xs text-text-tertiary">
-        {t('legalNote')}
-      </p>
+      <p className="text-xs text-text-tertiary">{t('legalNote')}</p>
     </form>
-  )
+  );
 }

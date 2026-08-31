@@ -5,10 +5,10 @@
  * State + actions live in useBookingDetail.
  */
 
-export { StarDisplay } from './sections/StarDisplay'
-export { BookingHeaderCard } from './sections/BookingHeaderCard'
-export { ServiceDetailsCard } from './sections/ServiceDetailsCard'
-export { TechnicianCard } from './sections/TechnicianCard'
-export { DatesCard } from './sections/DatesCard'
-export { LocationCard } from './sections/LocationCard'
-export { RatingCard } from './sections/RatingCard'
+export { StarDisplay } from './sections/StarDisplay';
+export { BookingHeaderCard } from './sections/BookingHeaderCard';
+export { ServiceDetailsCard } from './sections/ServiceDetailsCard';
+export { TechnicianCard } from './sections/TechnicianCard';
+export { DatesCard } from './sections/DatesCard';
+export { LocationCard } from './sections/LocationCard';
+export { RatingCard } from './sections/RatingCard';

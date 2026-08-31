@@ -1,9 +1,9 @@
-import { getTranslations } from 'next-intl/server'
-import { Link } from '@/i18n/navigation'
-import type { QuickAction } from './types'
+import { getTranslations } from 'next-intl/server';
+import { Link } from '@/i18n/navigation';
+import type { QuickAction } from './types';
 
 interface CreateStripProps {
-  actions: QuickAction[]
+  actions: QuickAction[];
 }
 
 /**
@@ -16,8 +16,8 @@ interface CreateStripProps {
  * lines on narrow viewports.
  */
 export async function CreateStrip({ actions }: CreateStripProps) {
-  if (actions.length === 0) return null
-  const t = await getTranslations('admin.dashboard')
+  if (actions.length === 0) return null;
+  const t = await getTranslations('admin.dashboard');
 
   return (
     <section aria-labelledby="dashboard-create-title">
@@ -28,8 +28,8 @@ export async function CreateStrip({ actions }: CreateStripProps) {
         {t('quickCreateTitle')}
       </h2>
       <div className="mt-3 flex flex-wrap gap-2">
-        {actions.map(action => {
-          const Icon = action.icon
+        {actions.map((action) => {
+          const Icon = action.icon;
           return (
             <Link
               key={action.href}
@@ -39,9 +39,9 @@ export async function CreateStrip({ actions }: CreateStripProps) {
               <Icon className="h-4 w-4" aria-hidden="true" />
               {action.label}
             </Link>
-          )
+          );
         })}
       </div>
     </section>
-  )
+  );
 }

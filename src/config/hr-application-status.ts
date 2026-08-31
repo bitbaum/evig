@@ -10,11 +10,11 @@ export const APPLICATION_STATUS = {
   HIRED: 'hired',
   REJECTED: 'rejected',
   WITHDRAWN: 'withdrawn',
-} as const
+} as const;
 
-export type ApplicationStatus = typeof APPLICATION_STATUS[keyof typeof APPLICATION_STATUS]
+export type ApplicationStatus = (typeof APPLICATION_STATUS)[keyof typeof APPLICATION_STATUS];
 
-export const APPLICATION_STATUS_OPTIONS = Object.values(APPLICATION_STATUS)
+export const APPLICATION_STATUS_OPTIONS = Object.values(APPLICATION_STATUS);
 
 export const APPLICATION_STATUS_LABELS: Record<ApplicationStatus, string> = {
   new: 'Neu',
@@ -24,7 +24,7 @@ export const APPLICATION_STATUS_LABELS: Record<ApplicationStatus, string> = {
   hired: 'Eingestellt',
   rejected: 'Abgelehnt',
   withdrawn: 'Zurückgezogen',
-}
+};
 
 const APPLICATION_STATUS_BADGE_STYLES: Record<ApplicationStatus, { color: string; bg: string }> = {
   new: {
@@ -55,7 +55,7 @@ const APPLICATION_STATUS_BADGE_STYLES: Record<ApplicationStatus, { color: string
     color: 'text-neutral-700 dark:text-neutral-400',
     bg: 'bg-neutral-100 dark:bg-neutral-800',
   },
-}
+};
 
 export const APPLICATION_STATUS_BADGES: Record<
   ApplicationStatus,
@@ -68,7 +68,7 @@ export const APPLICATION_STATUS_BADGES: Record<
       ...APPLICATION_STATUS_BADGE_STYLES[status],
     },
   ]),
-) as Record<ApplicationStatus, { label: string; color: string; bg: string }>
+) as Record<ApplicationStatus, { label: string; color: string; bg: string }>;
 
 /** Pipeline statuses (not terminal) — retention, hire eligibility */
 export const OPEN_APPLICATION_STATUSES: ApplicationStatus[] = [
@@ -76,20 +76,20 @@ export const OPEN_APPLICATION_STATUSES: ApplicationStatus[] = [
   APPLICATION_STATUS.SCREENING,
   APPLICATION_STATUS.INTERVIEW,
   APPLICATION_STATUS.OFFER,
-]
+];
 
-export const HIREABLE_APPLICATION_STATUSES = OPEN_APPLICATION_STATUSES
+export const HIREABLE_APPLICATION_STATUSES = OPEN_APPLICATION_STATUSES;
 
 export function isTerminalApplicationStatus(status: ApplicationStatus): boolean {
-  return TERMINAL_APPLICATION_STATUSES.includes(status)
+  return TERMINAL_APPLICATION_STATUSES.includes(status);
 }
 
 export function isHireableApplicationStatus(status: ApplicationStatus): boolean {
-  return HIREABLE_APPLICATION_STATUSES.includes(status)
+  return HIREABLE_APPLICATION_STATUSES.includes(status);
 }
 
 export function isOpenApplicationStatus(status: ApplicationStatus): boolean {
-  return OPEN_APPLICATION_STATUSES.includes(status)
+  return OPEN_APPLICATION_STATUSES.includes(status);
 }
 
 /** Forward pipeline (admin advance) */
@@ -101,18 +101,18 @@ export const APPLICATION_FORWARD_TRANSITIONS: Record<ApplicationStatus, Applicat
   hired: [],
   rejected: [],
   withdrawn: [],
-}
+};
 
 export const TERMINAL_APPLICATION_STATUSES: ApplicationStatus[] = [
   APPLICATION_STATUS.HIRED,
   APPLICATION_STATUS.REJECTED,
   APPLICATION_STATUS.WITHDRAWN,
-]
+];
 
 export function getApplicationStatusLabel(status: string): string {
-  return APPLICATION_STATUS_LABELS[status as ApplicationStatus] ?? status
+  return APPLICATION_STATUS_LABELS[status as ApplicationStatus] ?? status;
 }
 
 export function getApplicationStatusBadge(status: string) {
-  return APPLICATION_STATUS_BADGES[status as ApplicationStatus] ?? APPLICATION_STATUS_BADGES.new
+  return APPLICATION_STATUS_BADGES[status as ApplicationStatus] ?? APPLICATION_STATUS_BADGES.new;
 }

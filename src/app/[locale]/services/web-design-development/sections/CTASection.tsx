@@ -1,11 +1,11 @@
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { Link } from '@/i18n/navigation'
-import { getTranslations } from 'next-intl/server'
-import { Section } from '@/components/layout/Section'
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { Link } from '@/i18n/navigation';
+import { getTranslations } from 'next-intl/server';
+import { Section } from '@/components/layout/Section';
 
 export async function CTASection() {
-  const t = await getTranslations('services.webDesign.cta')
-  const tEye = await getTranslations('common.eyebrows')
+  const t = await getTranslations('services.webDesign.cta');
+  const tEye = await getTranslations('common.eyebrows');
 
   return (
     <Section density="spacious" contained={false} className="border-t border-subtle text-center">
@@ -23,5 +23,5 @@ export async function CTASection() {
         </div>
       </div>
     </Section>
-  )
+  );
 }

@@ -18,7 +18,7 @@ export {
   updateProtocol,
   deleteProtocol,
   finalizeProtocol,
-} from './protocols-queries'
+} from './protocols-queries';
 
 // AI processing (transcript, notes, task import)
 export {
@@ -26,17 +26,17 @@ export {
   processNotes,
   importTasks,
   recoverStaleProtocolProcessing,
-} from './protocols-processing'
+} from './protocols-processing';
 
 // Action item linking (tasks & decisions)
 export {
   getActionLinks,
   linkActionItemToTask,
   linkActionItemToDecision,
-} from './protocols-linking'
+} from './protocols-linking';
 
 // QQ.6 — standalone decisions linked back to a protocol action item.
-export { getDecisionsByProtocolId, type ProtocolDecisionSummary } from './decisions-crud'
+export { getDecisionsByProtocolId, type ProtocolDecisionSummary } from './decisions-crud';
 
 // Protocol decision → task bridge (post-QQ.6)
 export {
@@ -44,4 +44,4 @@ export {
   getTaskProtocolSource,
   getDecisionOutcomePassed,
   buildFollowUpTaskPayload,
-} from './protocol-decision-tasks'
+} from './protocol-decision-tasks';

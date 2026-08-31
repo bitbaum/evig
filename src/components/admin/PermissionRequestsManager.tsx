@@ -1,45 +1,50 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useTranslations } from 'next-intl'
-import { Shield, Check, X, Clock, User, RefreshCw } from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Textarea } from '@/components/ui/textarea'
-import { apiFetch } from '@/lib/api/client'
-import { useSwrFetch } from '@/lib/api/swr'
-import { getSection } from '@/config/sections'
-import { sectionText } from '@/lib/section-labels'
-import { formatDateTimeNumeric } from '@/lib/date-formats'
+import { useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { Shield, Check, X, Clock, User, RefreshCw } from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Textarea } from '@/components/ui/textarea';
+import { apiFetch } from '@/lib/api/client';
+import { useSwrFetch } from '@/lib/api/swr';
+import { getSection } from '@/config/sections';
+import { sectionText } from '@/lib/section-labels';
+import { formatDateTimeNumeric } from '@/lib/date-formats';
 
 interface PermissionRequest {
-  id: string
-  user_id: string
-  user_name: string | null
-  user_email: string
-  requested_sections: string[]
-  reason: string
-  status: string
-  created_at: string
+  id: string;
+  user_id: string;
+  user_name: string | null;
+  user_email: string;
+  requested_sections: string[];
+  reason: string;
+  status: string;
+  created_at: string;
 }
 
 export function PermissionRequestsManager() {
-  const t = useTranslations('admin.permissions.manager')
-  const tForms = useTranslations('admin.forms')
-  const tSections = useTranslations('admin.sections')
+  const t = useTranslations('admin.permissions.manager');
+  const tForms = useTranslations('admin.forms');
+  const tSections = useTranslations('admin.sections');
   // Localized section labels; config's German string is the fallback.
   const sectionLabelFor = (id: string): string =>
-    sectionText(tSections, id, 'label', getSection(id)?.ui.label ?? id)
-  const [actionError, setActionError] = useState('')
-  const [processingId, setProcessingId] = useState<string | null>(null)
-  const [rejectingId, setRejectingId] = useState<string | null>(null)
-  const [rejectionNotes, setRejectionNotes] = useState('')
+    sectionText(tSections, id, 'label', getSection(id)?.ui.label ?? id);
+  const [actionError, setActionError] = useState('');
+  const [processingId, setProcessingId] = useState<string | null>(null);
+  const [rejectingId, setRejectingId] = useState<string | null>(null);
+  const [rejectionNotes, setRejectionNotes] = useState('');
 
-  const { data, error: loadError, isLoading: loading, mutate } = useSwrFetch<{
-    requests: PermissionRequest[]
-  }>('/api/admin/permissions/requests?status=pending')
-  const requests = data?.requests ?? []
+  const {
+    data,
+    error: loadError,
+    isLoading: loading,
+    mutate,
+  } = useSwrFetch<{
+    requests: PermissionRequest[];
+  }>('/api/admin/permissions/requests?status=pending');
+  const requests = data?.requests ?? [];
   // One error surface: action errors win (they're the fresher user feedback).
   const error =
     actionError ||
@@ -47,47 +52,59 @@ export function PermissionRequestsManager() {
       ? loadError instanceof Error && loadError.message
         ? loadError.message
         : t('unknownError')
-      : '')
+      : '');
 
-  const fetchRequests = () => mutate()
+  const fetchRequests = () => mutate();
 
   const handleApprove = async (requestId: string) => {
-    setProcessingId(requestId)
+    setProcessingId(requestId);
     try {
-      const result = await apiFetch<{ message: string }>(`/api/admin/permissions/requests/${requestId}`, {
-        method: 'POST',
-        body: { action: 'approve', notes: null },
-      })
+      const result = await apiFetch<{ message: string }>(
+        `/api/admin/permissions/requests/${requestId}`,
+        {
+          method: 'POST',
+          body: { action: 'approve', notes: null },
+        },
+      );
       if (!result.success) {
-        throw new Error(result.error || t('processError'))
+        throw new Error(result.error || t('processError'));
       }
-      mutate(current => current && { requests: current.requests.filter(r => r.id !== requestId) }, { revalidate: false })
+      mutate(
+        (current) => current && { requests: current.requests.filter((r) => r.id !== requestId) },
+        { revalidate: false },
+      );
     } catch (err) {
-      setActionError(err instanceof Error ? err.message : t('genericError'))
+      setActionError(err instanceof Error ? err.message : t('genericError'));
     } finally {
-      setProcessingId(null)
+      setProcessingId(null);
     }
-  }
+  };
 
   const handleReject = async (requestId: string) => {
-    setProcessingId(requestId)
+    setProcessingId(requestId);
     try {
-      const result = await apiFetch<{ message: string }>(`/api/admin/permissions/requests/${requestId}`, {
-        method: 'POST',
-        body: { action: 'reject', notes: rejectionNotes || null },
-      })
+      const result = await apiFetch<{ message: string }>(
+        `/api/admin/permissions/requests/${requestId}`,
+        {
+          method: 'POST',
+          body: { action: 'reject', notes: rejectionNotes || null },
+        },
+      );
       if (!result.success) {
-        throw new Error(result.error || t('processError'))
+        throw new Error(result.error || t('processError'));
       }
-      setRejectingId(null)
-      setRejectionNotes('')
-      mutate(current => current && { requests: current.requests.filter(r => r.id !== requestId) }, { revalidate: false })
+      setRejectingId(null);
+      setRejectionNotes('');
+      mutate(
+        (current) => current && { requests: current.requests.filter((r) => r.id !== requestId) },
+        { revalidate: false },
+      );
     } catch (err) {
-      setActionError(err instanceof Error ? err.message : t('genericError'))
+      setActionError(err instanceof Error ? err.message : t('genericError'));
     } finally {
-      setProcessingId(null)
+      setProcessingId(null);
     }
-  }
+  };
 
   if (loading) {
     return (
@@ -100,7 +117,7 @@ export function PermissionRequestsManager() {
           </div>
         </div>
       </Card>
-    )
+    );
   }
 
   if (error) {
@@ -116,7 +133,7 @@ export function PermissionRequestsManager() {
           {t('retry')}
         </Button>
       </div>
-    )
+    );
   }
 
   if (requests.length === 0) {
@@ -127,7 +144,7 @@ export function PermissionRequestsManager() {
           <span>{t('empty')}</span>
         </div>
       </Card>
-    )
+    );
   }
 
   return (
@@ -150,7 +167,7 @@ export function PermissionRequestsManager() {
       </div>
 
       <div className="divide-y divide-neutral-200 dark:divide-white/4">
-        {requests.map(request => (
+        {requests.map((request) => (
           <div key={request.id} className="p-4">
             <div className="flex items-start justify-between">
               <div className="flex-1">
@@ -159,13 +176,11 @@ export function PermissionRequestsManager() {
                   <span className="font-medium text-text-primary">
                     {request.user_name || request.user_email}
                   </span>
-                  <span className="text-sm text-text-tertiary">
-                    {request.user_email}
-                  </span>
+                  <span className="text-sm text-text-tertiary">{request.user_email}</span>
                 </div>
 
                 <div className="flex flex-wrap gap-1 mb-2">
-                  {request.requested_sections.map(section => (
+                  {request.requested_sections.map((section) => (
                     <span
                       key={section}
                       className="px-2 py-0.5 bg-surface-raised text-text-secondary text-xs rounded-sm"
@@ -175,9 +190,7 @@ export function PermissionRequestsManager() {
                   ))}
                 </div>
 
-                <p className="text-sm text-text-secondary">
-                  {request.reason}
-                </p>
+                <p className="text-sm text-text-secondary">{request.reason}</p>
 
                 <div className="flex items-center gap-2 mt-2 text-xs text-text-muted">
                   <Clock className="w-3 h-3" />
@@ -196,7 +209,10 @@ export function PermissionRequestsManager() {
                   {t('approve')}
                 </Button>
                 <Button
-                  onClick={() => { setRejectingId(request.id); setRejectionNotes('') }}
+                  onClick={() => {
+                    setRejectingId(request.id);
+                    setRejectionNotes('');
+                  }}
                   disabled={processingId === request.id}
                   variant="destructive"
                   size="sm"
@@ -210,7 +226,10 @@ export function PermissionRequestsManager() {
 
             {rejectingId === request.id && (
               <div className="mt-3 p-3 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg">
-                <label htmlFor={`rejection-notes-${request.id}`} className="block text-sm font-medium text-error-800 dark:text-error-300 mb-1">
+                <label
+                  htmlFor={`rejection-notes-${request.id}`}
+                  className="block text-sm font-medium text-error-800 dark:text-error-300 mb-1"
+                >
                   {t('rejectionLabel')}
                 </label>
                 <Textarea
@@ -231,7 +250,10 @@ export function PermissionRequestsManager() {
                     {t('confirmReject')}
                   </Button>
                   <Button
-                    onClick={() => { setRejectingId(null); setRejectionNotes('') }}
+                    onClick={() => {
+                      setRejectingId(null);
+                      setRejectionNotes('');
+                    }}
                     variant="outline"
                     size="sm"
                   >
@@ -244,5 +266,5 @@ export function PermissionRequestsManager() {
         ))}
       </div>
     </Card>
-  )
+  );
 }

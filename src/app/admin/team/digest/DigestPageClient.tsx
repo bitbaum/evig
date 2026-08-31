@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Digest Page Client Component
@@ -6,9 +6,9 @@
  * Client-side rendering for the weekly digest
  */
 
-import { useState } from 'react'
-import { adminInteractive } from '@/lib/admin-ui'
-import { formatDateNumeric } from '@/lib/date-formats'
+import { useState } from 'react';
+import { adminInteractive } from '@/lib/admin-ui';
+import { formatDateNumeric } from '@/lib/date-formats';
 import {
   RefreshCw,
   Trophy,
@@ -18,26 +18,25 @@ import {
   Users,
   Flag,
   Calendar,
-} from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import { useDigest } from '@/components/admin/team/activity'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { TASK_CATEGORY_LABELS, type TaskCategory } from '@/config/tasks'
-import { formatRelativeTime } from '@/lib/utils'
-
+} from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import { useDigest } from '@/components/admin/team/activity';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { TASK_CATEGORY_LABELS, type TaskCategory } from '@/config/tasks';
+import { formatRelativeTime } from '@/lib/utils';
 
 export function DigestPageClient() {
-  const [dateRange, setDateRange] = useState<'week' | 'month'>('week')
+  const [dateRange, setDateRange] = useState<'week' | 'month'>('week');
 
-  const now = new Date()
-  const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
-  const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
+  const now = new Date();
+  const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
-  const since = dateRange === 'week' ? weekAgo.toISOString() : monthAgo.toISOString()
-  const until = now.toISOString()
+  const since = dateRange === 'week' ? weekAgo.toISOString() : monthAgo.toISOString();
+  const until = now.toISOString();
 
-  const { digest, loading, error, refetch } = useDigest(since, until)
+  const { digest, loading, error, refetch } = useDigest(since, until);
 
   return (
     <div className="space-y-6">
@@ -94,10 +93,7 @@ export function DigestPageClient() {
         <div className="space-y-6">
           <div className="grid md:grid-cols-4 gap-4">
             {[...Array(4)].map((_, i) => (
-              <Card
-                key={i}
-                className="p-4 animate-pulse"
-              >
+              <Card key={i} className="p-4 animate-pulse">
                 <div className="h-8 bg-surface-overlay rounded-sm w-16 mb-2" />
                 <div className="h-4 bg-surface-overlay rounded-sm w-24" />
               </Card>
@@ -204,7 +200,9 @@ export function DigestPageClient() {
             <Card className="p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Trophy className="w-5 h-5 text-warning-500" />
-                <Heading level={3} className="font-semibold text-text-primary">Top Beiträger</Heading>
+                <Heading level={3} className="font-semibold text-text-primary">
+                  Top Beiträger
+                </Heading>
               </div>
 
               {digest.top_contributors.length === 0 ? (
@@ -240,9 +238,7 @@ export function DigestPageClient() {
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="text-lg font-bold text-text-primary">
-                          {user.total_score}
-                        </p>
+                        <p className="text-lg font-bold text-text-primary">{user.total_score}</p>
                         <p className="text-xs text-text-tertiary">Punkte</p>
                       </div>
                     </div>
@@ -275,11 +271,10 @@ export function DigestPageClient() {
                         <Flag className="w-4 h-4 text-action" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-text-primary">
-                          {milestone.title}
-                        </p>
+                        <p className="font-medium text-text-primary">{milestone.title}</p>
                         <p className="text-xs text-text-tertiary">
-                          {milestone.user_name || 'Unbekannt'} • {formatRelativeTime(milestone.occurred_at)}
+                          {milestone.user_name || 'Unbekannt'} •{' '}
+                          {formatRelativeTime(milestone.occurred_at)}
                         </p>
                       </div>
                     </div>
@@ -297,13 +292,8 @@ export function DigestPageClient() {
               </Heading>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {digest.by_category.map((cat) => (
-                  <div
-                    key={cat.category}
-                    className="p-3 bg-surface-raised rounded-lg"
-                  >
-                    <p className="text-2xl font-bold text-text-primary">
-                      {cat.count}
-                    </p>
+                  <div key={cat.category} className="p-3 bg-surface-raised rounded-lg">
+                    <p className="text-2xl font-bold text-text-primary">{cat.count}</p>
                     <p className="text-sm text-text-secondary">
                       {TASK_CATEGORY_LABELS[cat.category as TaskCategory] || cat.category}
                     </p>
@@ -323,9 +313,7 @@ export function DigestPageClient() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border">
-                      <th className="text-left py-2 px-3 font-medium text-text-secondary">
-                        Name
-                      </th>
+                      <th className="text-left py-2 px-3 font-medium text-text-secondary">Name</th>
                       <th className="text-center py-2 px-3 font-medium text-text-secondary">
                         Aufgaben
                       </th>
@@ -378,5 +366,5 @@ export function DigestPageClient() {
         </>
       )}
     </div>
-  )
+  );
 }

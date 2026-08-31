@@ -6,8 +6,12 @@
  * Runs periodically to maintain PCI compliance
  */
 
-const { Client } = require('pg')
-const { cleanupExpiredData, PCI_COMPLIANCE, maskSensitiveData } = require('../src/lib/payments/security')
+const { Client } = require('pg');
+const {
+  cleanupExpiredData,
+  PCI_COMPLIANCE,
+  maskSensitiveData,
+} = require('../src/lib/payments/security');
 
 // Database configuration
 const dbConfig = {
@@ -16,24 +20,25 @@ const dbConfig = {
   database: process.env.DB_NAME || 'revampit_cms',
   user: process.env.DB_USER || 'postgres',
   password: process.env.DB_PASSWORD || 'postgres',
-}
+};
 
 async function cleanupPCIData() {
-  const client = new Client(dbConfig)
+  const client = new Client(dbConfig);
 
   try {
-    await client.connect()
-    console.log('Connected to database for PCI cleanup')
+    await client.connect();
+    console.log('Connected to database for PCI cleanup');
 
-    const cutoffDate = new Date()
-    cutoffDate.setDate(cutoffDate.getDate() - PCI_COMPLIANCE.DATA_RETENTION.CARD_DATA_MAX_DAYS)
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - PCI_COMPLIANCE.DATA_RETENTION.CARD_DATA_MAX_DAYS);
 
-    console.log(`Cleaning up payment data older than ${cutoffDate.toISOString()}`)
+    console.log(`Cleaning up payment data older than ${cutoffDate.toISOString()}`);
 
     // 1. Anonymize old payment transaction metadata
-    console.log('Step 1: Anonymizing old transaction metadata...')
+    console.log('Step 1: Anonymizing old transaction metadata...');
 
-    const anonymizeResult = await client.query(`
+    const anonymizeResult = await client.query(
+      `
       UPDATE payment_transactions
       SET metadata = jsonb_build_object(
         'anonymized', true,
@@ -44,14 +49,17 @@ async function cleanupPCIData() {
       WHERE created_at < $1
         AND (metadata->>'anonymized') IS NULL
         AND type = 'payment'
-    `, [cutoffDate, new Date().toISOString()])
+    `,
+      [cutoffDate, new Date().toISOString()],
+    );
 
-    console.log(`✓ Anonymized ${anonymizeResult.rowCount} transaction records`)
+    console.log(`✓ Anonymized ${anonymizeResult.rowCount} transaction records`);
 
     // 2. Clean up old webhook logs (keep only essential info)
-    console.log('Step 2: Cleaning webhook response data...')
+    console.log('Step 2: Cleaning webhook response data...');
 
-    const webhookCleanupResult = await client.query(`
+    const webhookCleanupResult = await client.query(
+      `
       UPDATE payment_transactions
       SET provider_response = jsonb_build_object(
         'event_type', provider_response->'type',
@@ -62,12 +70,14 @@ async function cleanupPCIData() {
       WHERE created_at < $1
         AND jsonb_typeof(provider_response) = 'object'
         AND (provider_response->>'anonymized') IS NULL
-    `, [cutoffDate])
+    `,
+      [cutoffDate],
+    );
 
-    console.log(`✓ Cleaned ${webhookCleanupResult.rowCount} webhook records`)
+    console.log(`✓ Cleaned ${webhookCleanupResult.rowCount} webhook records`);
 
     // 3. Archive old refund data (move to archive table)
-    console.log('Step 3: Archiving old refund data...')
+    console.log('Step 3: Archiving old refund data...');
 
     // Create archive table if it doesn't exist
     await client.query(`
@@ -75,9 +85,10 @@ async function cleanupPCIData() {
         LIKE refunds INCLUDING ALL,
         archived_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       )
-    `)
+    `);
 
-    const archiveResult = await client.query(`
+    const archiveResult = await client.query(
+      `
       WITH moved_rows AS (
         DELETE FROM refunds
         WHERE created_at < $1
@@ -86,17 +97,20 @@ async function cleanupPCIData() {
       )
       INSERT INTO archived_refunds
       SELECT *, CURRENT_TIMESTAMP FROM moved_rows
-    `, [cutoffDate])
+    `,
+      [cutoffDate],
+    );
 
-    console.log(`✓ Archived ${archiveResult.rowCount} old refund records`)
+    console.log(`✓ Archived ${archiveResult.rowCount} old refund records`);
 
     // 4. Clean up old payment analytics (keep summary data only)
-    console.log('Step 4: Cleaning payment analytics...')
+    console.log('Step 4: Cleaning payment analytics...');
 
-    const analyticsCutoff = new Date()
-    analyticsCutoff.setMonth(analyticsCutoff.getMonth() - 6) // Keep 6 months of detailed analytics
+    const analyticsCutoff = new Date();
+    analyticsCutoff.setMonth(analyticsCutoff.getMonth() - 6); // Keep 6 months of detailed analytics
 
-    const analyticsCleanupResult = await client.query(`
+    const analyticsCleanupResult = await client.query(
+      `
       UPDATE payment_analytics
       SET type_breakdown = jsonb_build_object(
         'total_processed', (type_breakdown->>'payment')::int + (type_breakdown->>'refund')::int,
@@ -104,18 +118,20 @@ async function cleanupPCIData() {
       )
       WHERE date < $1
         AND (type_breakdown->>'anonymized') IS NULL
-    `, [analyticsCutoff])
+    `,
+      [analyticsCutoff],
+    );
 
-    console.log(`✓ Cleaned ${analyticsCleanupResult.rowCount} analytics records`)
+    console.log(`✓ Cleaned ${analyticsCleanupResult.rowCount} analytics records`);
 
     // 5. Remove old temporary data (in-memory cleanup simulation)
-    console.log('Step 5: Simulating in-memory cleanup...')
+    console.log('Step 5: Simulating in-memory cleanup...');
 
-    const memoryCleanup = await cleanupExpiredData()
-    console.log(`✓ Memory cleanup completed:`, memoryCleanup)
+    const memoryCleanup = await cleanupExpiredData();
+    console.log(`✓ Memory cleanup completed:`, memoryCleanup);
 
     // 6. Generate compliance report
-    console.log('Step 6: Generating compliance report...')
+    console.log('Step 6: Generating compliance report...');
 
     const complianceReport = await client.query(`
       SELECT
@@ -143,21 +159,20 @@ async function cleanupPCIData() {
       WHERE created_at >= CURRENT_DATE - INTERVAL '30 days'
         AND status = 'succeeded'
         AND type = 'payment'
-    `)
+    `);
 
-    console.log('📊 PCI Compliance Report:')
-    complianceReport.rows.forEach(row => {
-      console.log(`  ${row.metric}: ${row.value}`)
-    })
+    console.log('📊 PCI Compliance Report:');
+    complianceReport.rows.forEach((row) => {
+      console.log(`  ${row.metric}: ${row.value}`);
+    });
 
-    console.log('\n✅ PCI DSS data cleanup completed successfully')
-
+    console.log('\n✅ PCI DSS data cleanup completed successfully');
   } catch (error) {
-    console.error('PCI cleanup script error:', error)
-    process.exit(1)
+    console.error('PCI cleanup script error:', error);
+    process.exit(1);
   } finally {
-    await client.end()
-    console.log('Database connection closed')
+    await client.end();
+    console.log('Database connection closed');
   }
 }
 
@@ -165,13 +180,13 @@ async function cleanupPCIData() {
 if (require.main === module) {
   cleanupPCIData()
     .then(() => {
-      console.log('PCI data cleanup script completed successfully')
-      process.exit(0)
+      console.log('PCI data cleanup script completed successfully');
+      process.exit(0);
     })
     .catch((error) => {
-      console.error('PCI data cleanup script failed:', error)
-      process.exit(1)
-    })
+      console.error('PCI data cleanup script failed:', error);
+      process.exit(1);
+    });
 }
 
-module.exports = { cleanupPCIData }
+module.exports = { cleanupPCIData };

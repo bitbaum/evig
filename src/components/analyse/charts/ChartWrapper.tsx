@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import { ReactNode } from 'react'
-import { ResponsiveContainer } from 'recharts'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { ReactNode } from 'react';
+import { ResponsiveContainer } from 'recharts';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
 interface ChartWrapperProps {
-  title: string
-  description?: string
-  source?: string
-  sourceDate?: string
-  height?: number
-  children: ReactNode
+  title: string;
+  description?: string;
+  source?: string;
+  sourceDate?: string;
+  height?: number;
+  children: ReactNode;
 }
 
 /**
@@ -45,5 +45,5 @@ export function ChartWrapper({
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

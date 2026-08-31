@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import { useState, useRef, useEffect } from 'react'
-import { useSession, signOut } from 'next-auth/react'
-import { Link } from '@/i18n/navigation'
+import { useState, useRef, useEffect } from 'react';
+import { useSession, signOut } from 'next-auth/react';
+import { Link } from '@/i18n/navigation';
 import {
   User,
   LogOut,
@@ -19,14 +19,14 @@ import {
   Gift,
   Wrench,
   Handshake,
-} from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { useTranslations } from 'next-intl'
-import { ROUTES } from '@/config/routes'
-import { Button } from '@/components/ui/button'
-import { Avatar } from '@/components/ui/Avatar'
-import { NotificationBell } from '@/components/admin/NotificationBell'
-import { useTechnicianProfileStatus } from '@/hooks/useTechnicianProfileStatus'
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
+import { ROUTES } from '@/config/routes';
+import { Button } from '@/components/ui/button';
+import { Avatar } from '@/components/ui/Avatar';
+import { NotificationBell } from '@/components/admin/NotificationBell';
+import { useTechnicianProfileStatus } from '@/hooks/useTechnicianProfileStatus';
 
 /**
  * UserMenu Component
@@ -35,41 +35,41 @@ import { useTechnicianProfileStatus } from '@/hooks/useTechnicianProfileStatus'
  * - Elegant dropdown when logged in
  */
 export function UserMenu() {
-  const t = useTranslations('components.userMenu')
+  const t = useTranslations('components.userMenu');
   // Use session hook with non-blocking configuration
   // This ensures buttons show immediately even if session check is slow
   // Critical for local hosting where DB connections can be slow
   const { data: session, status } = useSession({
     required: false, // Don't require session for this component
-  })
+  });
   // Role-aware nav: a technician (has a technician profile) gets their helper-
   // side links surfaced here. SWR-cached and only fetched when logged in, so it
   // adds no cost for anonymous visitors and dedupes with other usages.
-  const { isActiveTechnician: isTechnician } = useTechnicianProfileStatus()
-  const [isOpen, setIsOpen] = useState(false)
-  const menuRef = useRef<HTMLDivElement>(null)
+  const { isActiveTechnician: isTechnician } = useTechnicianProfileStatus();
+  const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   // Close menu when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsOpen(false)
+        setIsOpen(false);
       }
     }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Close on escape
   useEffect(() => {
     function handleEscape(event: KeyboardEvent) {
       if (event.key === 'Escape') {
-        setIsOpen(false)
+        setIsOpen(false);
       }
     }
-    document.addEventListener('keydown', handleEscape)
-    return () => document.removeEventListener('keydown', handleEscape)
-  }, [])
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, []);
 
   // CRITICAL: Always show buttons immediately - don't wait for session check
   // Session check happens in background and UI updates when ready
@@ -83,11 +83,11 @@ export function UserMenu() {
         {t('login')}
         <ArrowRight className="w-3.5 h-3.5" />
       </Button>
-    )
+    );
   }
 
   // Build menu item groups - include admin link for staff members
-  const isStaff = session.user.isStaff
+  const isStaff = session.user.isStaff;
 
   // Groups are rendered with visual separators between them
   const menuGroups = [
@@ -107,140 +107,152 @@ export function UserMenu() {
     ],
     // IT-Hilfe — helper side, only for technicians (role-aware)
     ...(isTechnician
-      ? [[
-          { href: ROUTES.public.itHilfeBrowseRequests, icon: Wrench, label: t('browseRequests') },
-          { href: ROUTES.public.itHilfeMyOffers, icon: Handshake, label: t('myOffers') },
-        ]]
+      ? [
+          [
+            { href: ROUTES.public.itHilfeBrowseRequests, icon: Wrench, label: t('browseRequests') },
+            { href: ROUTES.public.itHilfeMyOffers, icon: Handshake, label: t('myOffers') },
+          ],
+        ]
       : []),
     // Services
     [
       { href: '/dashboard/appointments', icon: Calendar, label: t('myAppointments') },
       { href: '/dashboard/workshops', icon: Calendar, label: t('myWorkshops') },
     ],
-  ]
+  ];
 
   return (
     <div className="flex items-center gap-1">
       {/* Notification bell — visible to every logged-in user, not just staff */}
       <NotificationBell />
       <div className="relative" ref={menuRef}>
-      <Button
-        variant="ghost"
-        onClick={() => setIsOpen(!isOpen)}
-        className={cn(
-          // No always-on ring halo — on phones the pale ring read as a large
-          // green blob next to the compact icon buttons. Feedback on hover/open.
-          "flex items-center gap-2 p-1 rounded-full h-auto",
-          isOpen
-            ? "bg-action-muted/10 ring-2 ring-action/20 dark:ring-action/30"
-            : "hover:bg-action-muted/10 hover:ring-2 hover:ring-action/20 dark:hover:ring-action/30"
-        )}
-        aria-expanded={isOpen}
-        aria-haspopup="true"
-        title={`${session.user.name || session.user.email} - ${t('accountMenu')}`}
-      >
-        <Avatar src={session.user.image} name={session.user.name || session.user.email} size="xs" />
-        {/* Chevron is decorative — hidden on phones where header width is scarce */}
-        <ChevronDown
+        <Button
+          variant="ghost"
+          onClick={() => setIsOpen(!isOpen)}
           className={cn(
-            "hidden sm:block w-4 h-4 text-text-tertiary transition-transform duration-200",
-            isOpen && "rotate-180 text-action"
+            // No always-on ring halo — on phones the pale ring read as a large
+            // green blob next to the compact icon buttons. Feedback on hover/open.
+            'flex items-center gap-2 p-1 rounded-full h-auto',
+            isOpen
+              ? 'bg-action-muted/10 ring-2 ring-action/20 dark:ring-action/30'
+              : 'hover:bg-action-muted/10 hover:ring-2 hover:ring-action/20 dark:hover:ring-action/30',
           )}
-        />
-      </Button>
+          aria-expanded={isOpen}
+          aria-haspopup="true"
+          title={`${session.user.name || session.user.email} - ${t('accountMenu')}`}
+        >
+          <Avatar
+            src={session.user.image}
+            name={session.user.name || session.user.email}
+            size="xs"
+          />
+          {/* Chevron is decorative — hidden on phones where header width is scarce */}
+          <ChevronDown
+            className={cn(
+              'hidden sm:block w-4 h-4 text-text-tertiary transition-transform duration-200',
+              isOpen && 'rotate-180 text-action',
+            )}
+          />
+        </Button>
 
-      {/* Dropdown Menu */}
-      <div
-        className={cn(
-          "absolute right-0 mt-2 w-72 max-w-[calc(100vw-1rem)]",
-          "transition-all duration-200 ease-out origin-top-right",
-          isOpen 
-            ? "opacity-100 scale-100 pointer-events-auto" 
-            : "opacity-0 scale-95 pointer-events-none"
-        )}
-      >
-        <div className="bg-surface-base rounded-2xl shadow-xs border border-subtle overflow-hidden">
-          {/* User Info Header */}
-          <div className="px-5 py-4 bg-surface-raised border-b border-subtle dark:border-white/6">
-            <div className="flex items-center gap-3">
-              <Avatar src={session.user.image} name={session.user.name || session.user.email} size="md" />
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-text-primary truncate">
-                  {session.user.name || t('user')}
-                </p>
-                <p className="text-xs text-text-tertiary dark:text-text-muted truncate">
-                  {session.user.email}
-                </p>
+        {/* Dropdown Menu */}
+        <div
+          className={cn(
+            'absolute right-0 mt-2 w-72 max-w-[calc(100vw-1rem)]',
+            'transition-all duration-200 ease-out origin-top-right',
+            isOpen
+              ? 'opacity-100 scale-100 pointer-events-auto'
+              : 'opacity-0 scale-95 pointer-events-none',
+          )}
+        >
+          <div className="bg-surface-base rounded-2xl shadow-xs border border-subtle overflow-hidden">
+            {/* User Info Header */}
+            <div className="px-5 py-4 bg-surface-raised border-b border-subtle dark:border-white/6">
+              <div className="flex items-center gap-3">
+                <Avatar
+                  src={session.user.image}
+                  name={session.user.name || session.user.email}
+                  size="md"
+                />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-text-primary truncate">
+                    {session.user.name || t('user')}
+                  </p>
+                  <p className="text-xs text-text-tertiary dark:text-text-muted truncate">
+                    {session.user.email}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Menu Items */}
-          <div className="py-2">
-            {menuGroups.map((group, groupIndex) => (
-              <div key={groupIndex}>
-                {groupIndex > 0 && (
-                  <div className="my-1 mx-3 border-t border-subtle dark:border-white/6" />
+            {/* Menu Items */}
+            <div className="py-2">
+              {menuGroups.map((group, groupIndex) => (
+                <div key={groupIndex}>
+                  {groupIndex > 0 && (
+                    <div className="my-1 mx-3 border-t border-subtle dark:border-white/6" />
+                  )}
+                  {group.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setIsOpen(false)}
+                      className={cn(
+                        'group flex items-center gap-3 px-5 py-2.5',
+                        'text-sm transition-colors duration-150',
+                        'highlight' in item && item.highlight
+                          ? 'text-warning-700 dark:text-warning-400 bg-warning-50 dark:bg-warning-500/10 hover:bg-warning-100 dark:hover:bg-warning-500/20 font-medium'
+                          : 'text-text-secondary hover:text-text-primary hover:bg-surface-raised dark:hover:bg-surface-base/4',
+                      )}
+                    >
+                      <item.icon
+                        className={cn(
+                          'w-4 h-4 transition-colors',
+                          'highlight' in item && item.highlight
+                            ? 'text-warning-600 dark:text-warning-400'
+                            : 'text-text-muted dark:text-text-tertiary group-hover:text-action dark:group-hover:text-action',
+                        )}
+                      />
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              ))}
+            </div>
+
+            {/* Settings & Logout */}
+            <div className="py-2 border-t border-subtle dark:border-white/6">
+              <Link
+                href="/dashboard/settings"
+                onClick={() => setIsOpen(false)}
+                className={cn(
+                  'group flex items-center gap-3 px-5 py-2.5',
+                  'text-sm text-text-secondary hover:text-text-primary',
+                  'hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors duration-150',
                 )}
-                {group.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={() => setIsOpen(false)}
-                    className={cn(
-                      "group flex items-center gap-3 px-5 py-2.5",
-                      "text-sm transition-colors duration-150",
-                      'highlight' in item && item.highlight
-                        ? "text-warning-700 dark:text-warning-400 bg-warning-50 dark:bg-warning-500/10 hover:bg-warning-100 dark:hover:bg-warning-500/20 font-medium"
-                        : "text-text-secondary hover:text-text-primary hover:bg-surface-raised dark:hover:bg-surface-base/4"
-                    )}
-                  >
-                    <item.icon className={cn(
-                      "w-4 h-4 transition-colors",
-                      'highlight' in item && item.highlight
-                        ? "text-warning-600 dark:text-warning-400"
-                        : "text-text-muted dark:text-text-tertiary group-hover:text-action dark:group-hover:text-action"
-                    )} />
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
-            ))}
-          </div>
-
-          {/* Settings & Logout */}
-          <div className="py-2 border-t border-subtle dark:border-white/6">
-            <Link
-              href="/dashboard/settings"
-              onClick={() => setIsOpen(false)}
-              className={cn(
-                "group flex items-center gap-3 px-5 py-2.5",
-                "text-sm text-text-secondary hover:text-text-primary",
-                "hover:bg-surface-raised dark:hover:bg-surface-base/4 transition-colors duration-150"
-              )}
-            >
-              <Settings className="w-4 h-4 text-text-tertiary dark:text-text-tertiary group-hover:text-action dark:group-hover:text-action transition-colors" />
-              {t('settings')}
-            </Link>
-            <Button
-              variant="ghost"
-              onClick={() => {
-                setIsOpen(false)
-                signOut({ callbackUrl: '/' })
-              }}
-              className={cn(
-                "group flex items-center gap-3 w-full px-5 py-2.5 h-auto justify-start rounded-none",
-                "text-sm text-text-secondary hover:text-error-600 dark:hover:text-error-400",
-                "hover:bg-error-50 dark:hover:bg-error-500/10"
-              )}
-            >
-              <LogOut className="w-4 h-4 text-text-tertiary dark:text-text-tertiary group-hover:text-error-500 dark:group-hover:text-error-400 transition-colors" />
-              {t('logout')}
-            </Button>
+              >
+                <Settings className="w-4 h-4 text-text-tertiary dark:text-text-tertiary group-hover:text-action dark:group-hover:text-action transition-colors" />
+                {t('settings')}
+              </Link>
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  setIsOpen(false);
+                  signOut({ callbackUrl: '/' });
+                }}
+                className={cn(
+                  'group flex items-center gap-3 w-full px-5 py-2.5 h-auto justify-start rounded-none',
+                  'text-sm text-text-secondary hover:text-error-600 dark:hover:text-error-400',
+                  'hover:bg-error-50 dark:hover:bg-error-500/10',
+                )}
+              >
+                <LogOut className="w-4 h-4 text-text-tertiary dark:text-text-tertiary group-hover:text-error-500 dark:group-hover:text-error-400 transition-colors" />
+                {t('logout')}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
-      </div>
     </div>
-  )
+  );
 }

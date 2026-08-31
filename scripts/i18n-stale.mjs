@@ -24,90 +24,97 @@
  * it fresh and commit the baseline. A later DE edit re-flags the affected keys.
  */
 
-import { readFileSync, writeFileSync, existsSync } from 'node:fs'
-import { createHash } from 'node:crypto'
-import { join, dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const MESSAGES_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', 'messages')
-const BASELINE_PATH = join(MESSAGES_DIR, '_source-baseline.json')
-const SOURCE_LOCALE = 'de'
+const MESSAGES_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', 'messages');
+const BASELINE_PATH = join(MESSAGES_DIR, '_source-baseline.json');
+const SOURCE_LOCALE = 'de';
 
-const sha1 = (s) => createHash('sha1').update(s, 'utf8').digest('hex').slice(0, 12)
+const sha1 = (s) => createHash('sha1').update(s, 'utf8').digest('hex').slice(0, 12);
 
 /** Flatten an object tree to { 'a.b.c': value } for STRING leaves only. */
 function flatten(obj, prefix, out) {
-  if (obj === null || typeof obj !== 'object') return out
+  if (obj === null || typeof obj !== 'object') return out;
   for (const [k, v] of Object.entries(obj)) {
-    const key = prefix ? `${prefix}.${k}` : k
-    if (typeof v === 'string') out[key] = v
-    else if (v && typeof v === 'object') flatten(v, key, out)
+    const key = prefix ? `${prefix}.${k}` : k;
+    if (typeof v === 'string') out[key] = v;
+    else if (v && typeof v === 'object') flatten(v, key, out);
   }
-  return out
+  return out;
 }
 
 function loadLocale(locale) {
-  return flatten(JSON.parse(readFileSync(join(MESSAGES_DIR, `${locale}.json`), 'utf8')), '', {})
+  return flatten(JSON.parse(readFileSync(join(MESSAGES_DIR, `${locale}.json`), 'utf8')), '', {});
 }
 
-const localeFiles = (await import('node:fs')).readdirSync(MESSAGES_DIR)
+const localeFiles = (await import('node:fs'))
+  .readdirSync(MESSAGES_DIR)
   .filter((f) => /^[a-z]{2}\.json$/.test(f) && f !== `${SOURCE_LOCALE}.json`)
-  .map((f) => f.replace('.json', ''))
+  .map((f) => f.replace('.json', ''));
 
-const de = loadLocale(SOURCE_LOCALE)
-const args = process.argv.slice(2)
-const isUpdate = args.includes('--update')
-const updateLocale = isUpdate ? args[args.indexOf('--update') + 1]?.replace(/^--/, '') || null : null
+const de = loadLocale(SOURCE_LOCALE);
+const args = process.argv.slice(2);
+const isUpdate = args.includes('--update');
+const updateLocale = isUpdate
+  ? args[args.indexOf('--update') + 1]?.replace(/^--/, '') || null
+  : null;
 
-const baseline = existsSync(BASELINE_PATH) ? JSON.parse(readFileSync(BASELINE_PATH, 'utf8')) : {}
+const baseline = existsSync(BASELINE_PATH) ? JSON.parse(readFileSync(BASELINE_PATH, 'utf8')) : {};
 
 if (isUpdate) {
-  const targets = updateLocale && !updateLocale.startsWith('-') ? [updateLocale] : localeFiles
+  const targets = updateLocale && !updateLocale.startsWith('-') ? [updateLocale] : localeFiles;
   for (const locale of targets) {
-    const loc = loadLocale(locale)
-    const snap = {}
+    const loc = loadLocale(locale);
+    const snap = {};
     // Record DE hash for every key this locale actually defines (i.e. translates),
     // and whose value differs from DE (a real translation, not a copied fallback).
     for (const key of Object.keys(loc)) {
-      if (key in de && loc[key] !== de[key]) snap[key] = sha1(de[key])
+      if (key in de && loc[key] !== de[key]) snap[key] = sha1(de[key]);
     }
-    baseline[locale] = snap
-    console.log(`  ${locale}: snapshotted ${Object.keys(snap).length} translated keys as fresh`)
+    baseline[locale] = snap;
+    console.log(`  ${locale}: snapshotted ${Object.keys(snap).length} translated keys as fresh`);
   }
-  writeFileSync(BASELINE_PATH, JSON.stringify(baseline, null, 2) + '\n', 'utf8')
-  console.log(`\nWrote ${BASELINE_PATH}`)
-  process.exit(0)
+  writeFileSync(BASELINE_PATH, JSON.stringify(baseline, null, 2) + '\n', 'utf8');
+  console.log(`\nWrote ${BASELINE_PATH}`);
+  process.exit(0);
 }
 
 // Check mode
-let totalStale = 0
-const report = []
+let totalStale = 0;
+const report = [];
 for (const locale of localeFiles) {
-  const recorded = baseline[locale]
-  if (!recorded) continue
-  const loc = loadLocale(locale)
-  const stale = []
+  const recorded = baseline[locale];
+  if (!recorded) continue;
+  const loc = loadLocale(locale);
+  const stale = [];
   for (const [key, recordedHash] of Object.entries(recorded)) {
-    if (!(key in de)) continue // DE removed the key — not stale, just gone
-    if (!(key in loc)) continue // locale dropped its translation — falls back to DE
-    if (sha1(de[key]) !== recordedHash) stale.push(key)
+    if (!(key in de)) continue; // DE removed the key — not stale, just gone
+    if (!(key in loc)) continue; // locale dropped its translation — falls back to DE
+    if (sha1(de[key]) !== recordedHash) stale.push(key);
   }
   if (stale.length) {
-    report.push({ locale, stale })
-    totalStale += stale.length
+    report.push({ locale, stale });
+    totalStale += stale.length;
   }
 }
 
 if (totalStale === 0) {
-  console.log('✓ No stale translations — every recorded translation still matches its DE source.')
-  process.exit(0)
+  console.log('✓ No stale translations — every recorded translation still matches its DE source.');
+  process.exit(0);
 }
 
-console.error(`✗ ${totalStale} stale translation(s) — DE source changed since these were translated:\n`)
+console.error(
+  `✗ ${totalStale} stale translation(s) — DE source changed since these were translated:\n`,
+);
 for (const { locale, stale } of report) {
-  console.error(`  ${locale}: ${stale.length} stale`)
-  for (const key of stale.slice(0, 12)) console.error(`     • ${key}`)
-  if (stale.length > 12) console.error(`     … and ${stale.length - 12} more`)
+  console.error(`  ${locale}: ${stale.length} stale`);
+  for (const key of stale.slice(0, 12)) console.error(`     • ${key}`);
+  if (stale.length > 12) console.error(`     … and ${stale.length - 12} more`);
 }
-console.error(`\nRe-translate the keys above, then run: node scripts/i18n-stale.mjs --update <locale>`)
-process.exit(1)
+console.error(
+  `\nRe-translate the keys above, then run: node scripts/i18n-stale.mjs --update <locale>`,
+);
+process.exit(1);

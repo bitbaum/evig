@@ -1,25 +1,25 @@
-import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
-import { Coins, ArrowRight, Wrench, ExternalLink, HelpCircle, Info } from 'lucide-react'
-import { ORG, BASE_REGION } from '@/config/org'
-import { PageHero } from '@/components/layout/PageHero'
-import { Section } from '@/components/layout/Section'
-import { Card } from '@/components/ui/card'
-import Heading from '@/components/ui/Heading'
-import { IconBadge } from '@/components/ui/IconBadge'
-import { Button } from '@/components/ui/button'
-import { REPARATURBONUS, KEY_FACTS, STEPS, ELIGIBLE, REVAMPIT_FIT, IMPACT, FAQ_IDS } from './data'
+import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
+import { Coins, ArrowRight, Wrench, ExternalLink, HelpCircle, Info } from 'lucide-react';
+import { ORG, BASE_REGION } from '@/config/org';
+import { PageHero } from '@/components/layout/PageHero';
+import { Section } from '@/components/layout/Section';
+import { Card } from '@/components/ui/card';
+import Heading from '@/components/ui/Heading';
+import { IconBadge } from '@/components/ui/IconBadge';
+import { Button } from '@/components/ui/button';
+import { REPARATURBONUS, KEY_FACTS, STEPS, ELIGIBLE, REVAMPIT_FIT, IMPACT, FAQ_IDS } from './data';
 
 interface PageProps {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: string }>;
 }
 
 /** Swiss grouping (40'000) — independent of the next-intl UI locale ('de'). */
-const nf = (n: number) => n.toLocaleString('de-CH')
+const nf = (n: number) => n.toLocaleString('de-CH');
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'reparaturbonus' })
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'reparaturbonus' });
   return {
     title: t('meta.title'),
     description: t('meta.description', {
@@ -29,17 +29,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       title: t('meta.title'),
       description: t('meta.description', {
-      max: REPARATURBONUS.maxBonusChf,
-      percent: REPARATURBONUS.coveragePercent,
-    }),
+        max: REPARATURBONUS.maxBonusChf,
+        percent: REPARATURBONUS.coveragePercent,
+      }),
       type: 'article',
     },
-  }
+  };
 }
 
 export default async function ReparaturbonusPage({ params }: PageProps) {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'reparaturbonus' })
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'reparaturbonus' });
 
   // Programme figures (SSOT: REPARATURBONUS) shared as ICU args across strings.
   // Numbers that must render verbatim (year, decimal budget) are passed as
@@ -54,7 +54,7 @@ export default async function ReparaturbonusPage({ params }: PageProps) {
     platform: REPARATURBONUS.platformName,
     city: BASE_REGION.city,
     org: ORG.name,
-  }
+  };
 
   return (
     <>
@@ -178,7 +178,11 @@ export default async function ReparaturbonusPage({ params }: PageProps) {
             {t('fit.heading', { org: ORG.name })}
           </Heading>
           <p className="mt-3 text-text-secondary">
-            {t('fit.intro', { org: ORG.name, year: String(ORG.foundingYear), city: BASE_REGION.city })}
+            {t('fit.intro', {
+              org: ORG.name,
+              year: String(ORG.foundingYear),
+              city: BASE_REGION.city,
+            })}
           </p>
         </div>
 
@@ -190,7 +194,10 @@ export default async function ReparaturbonusPage({ params }: PageProps) {
                 {t(`fit.${item.id}.title` as never)}
               </Heading>
               <p className="mt-2 text-sm leading-relaxed text-text-secondary">
-                {t(`fit.${item.id}.body` as never, { org: ORG.name, address: BASE_REGION.full } as never)}
+                {t(
+                  `fit.${item.id}.body` as never,
+                  { org: ORG.name, address: BASE_REGION.full } as never,
+                )}
               </p>
             </Card>
           ))}
@@ -279,7 +286,12 @@ export default async function ReparaturbonusPage({ params }: PageProps) {
               <ExternalLink className="h-4 w-4" aria-hidden="true" />
               {t('cta.platform', figures)}
             </Button>
-            <Button href="/services/computer-repair-upgrades" variant="outline-light" size="lg" className="gap-2">
+            <Button
+              href="/services/computer-repair-upgrades"
+              variant="outline-light"
+              size="lg"
+              className="gap-2"
+            >
               <Wrench className="h-4 w-4" aria-hidden="true" />
               {t('cta.repair', { org: ORG.name })}
             </Button>
@@ -335,5 +347,5 @@ export default async function ReparaturbonusPage({ params }: PageProps) {
         </div>
       </Section>
     </>
-  )
+  );
 }

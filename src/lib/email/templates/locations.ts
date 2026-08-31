@@ -12,10 +12,22 @@ export const locationApprovalNotification = (
   name: string,
   locationName: string,
   action: 'approve' | 'reject' | 'suspend' | 'reinstate',
-  reviewNotes: string | null
+  reviewNotes: string | null,
 ): EmailContent => {
-  const headerColor = action === 'approve' || action === 'reinstate' ? 'header-green' : action === 'reject' ? 'header-red' : 'header-orange';
-  const statusText = action === 'approve' ? 'Genehmigt' : action === 'reject' ? 'Abgelehnt' : action === 'suspend' ? 'Suspendiert' : 'Wiederhergestellt';
+  const headerColor =
+    action === 'approve' || action === 'reinstate'
+      ? 'header-green'
+      : action === 'reject'
+        ? 'header-red'
+        : 'header-orange';
+  const statusText =
+    action === 'approve'
+      ? 'Genehmigt'
+      : action === 'reject'
+        ? 'Abgelehnt'
+        : action === 'suspend'
+          ? 'Suspendiert'
+          : 'Wiederhergestellt';
   const eName = escapeHtml(name);
   const eLocationName = escapeHtml(locationName);
   const eReviewNotes = reviewNotes ? escapeHtml(reviewNotes) : null;
@@ -70,7 +82,7 @@ ${createTextFooter()}
 export const locationSubmissionConfirmation = (
   name: string,
   locationName: string,
-  city: string
+  city: string,
 ): EmailContent => {
   const eName = escapeHtml(name);
   const eLocationName = escapeHtml(locationName);

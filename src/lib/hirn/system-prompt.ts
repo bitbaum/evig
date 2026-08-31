@@ -9,13 +9,13 @@
  * since they don't change with data updates.
  */
 
-import { getDefaultValue, getDefaultNumeric } from '@/lib/org-numbers.defaults'
-import { HOURLY_RATE, ASSESSMENT_FEE, MEDIA_PRICES } from '@/data/pricing'
-import { HIRN_ACTION_INSTRUCTION } from './action-cockpit'
-import { ORG, BASE_REGION, CONTACT } from '@/config/org'
-import { getSidebarGroupsWithSections } from '@/config/sections'
-import { ROUTES } from '@/config/routes'
-import { localeLabels, type Locale } from '@/i18n/routing'
+import { getDefaultValue, getDefaultNumeric } from '@/lib/org-numbers.defaults';
+import { HOURLY_RATE, ASSESSMENT_FEE, MEDIA_PRICES } from '@/data/pricing';
+import { HIRN_ACTION_INSTRUCTION } from './action-cockpit';
+import { ORG, BASE_REGION, CONTACT } from '@/config/org';
+import { getSidebarGroupsWithSections } from '@/config/sections';
+import { ROUTES } from '@/config/routes';
+import { localeLabels, type Locale } from '@/i18n/routing';
 
 /**
  * Real page directory (SSOT: sections.ts + routes.ts) — Hirn may ONLY link
@@ -24,13 +24,13 @@ import { localeLabels, type Locale } from '@/i18n/routing'
  */
 function buildNavigationDirectory(): string {
   const adminLines = getSidebarGroupsWithSections().flatMap(({ group, sections }) =>
-    sections.map(s => `- ${s.path} — «${s.ui.label}» (${group.label}): ${s.ui.description}`)
-  )
+    sections.map((s) => `- ${s.path} — «${s.ui.label}» (${group.label}): ${s.ui.description}`),
+  );
   // Real admin pages that are not their own sidebar section.
   const extraAdminLines = [
     '- /admin/team/approvals — «Zeitkarten & Abwesenheit» (Freigaben): eingereichte Zeitkarten und Abwesenheitsanträge prüfen, genehmigen, zurückweisen; genehmigte Karten im Tab «Genehmigt» einsehen/bearbeiten/wieder öffnen',
-  ]
-  const p = ROUTES.public
+  ];
+  const p = ROUTES.public;
   const publicLines = [
     `- ${p.home} — Startseite`,
     `- ${p.marketplace} — Marktplatz/Shop (refurbished Geräte + P2P-Inserate)`,
@@ -41,12 +41,12 @@ function buildNavigationDirectory(): string {
     `- ${p.services} — Dienstleistungen`,
     `- ${p.soFunktioniert} — So funktioniert unser Aufbereitungsprozess`,
     `- ${p.blog} — Blog`,
-  ]
+  ];
   return `Admin-Seiten (nur für Mitarbeitende):
 ${[...adminLines, ...extraAdminLines].join('\n')}
 
 Öffentliche Seiten:
-${publicLines.join('\n')}`
+${publicLines.join('\n')}`;
 }
 
 // Derived from org-numbers SSOT
@@ -76,9 +76,9 @@ const n = {
   donationInternship: getDefaultNumeric('donation_impact_internship_chf'),
   donationDataRecovery: getDefaultNumeric('donation_impact_data_recovery_chf'),
   annualBudget: getDefaultNumeric('annual_budget_chf'),
-}
+};
 
-const mediaPriceList = MEDIA_PRICES.join('\n- ')
+const mediaPriceList = MEDIA_PRICES.join('\n- ');
 
 export const SYSTEM_PROMPT = `Du bist Hirn, der KI-Assistent von ${ORG.name}. Du hast umfassendes Wissen über die Organisation und antwortest präzise, freundlich und kompetent.
 
@@ -284,7 +284,7 @@ ${buildNavigationDirectory()}
 10. ACTION COCKPIT (interne Aktionen)
 ═══════════════════════════════════════════════════════════════
 
-${HIRN_ACTION_INSTRUCTION}`
+${HIRN_ACTION_INSTRUCTION}`;
 
 /**
  * Build the admin system prompt, optionally enriched with the page context
@@ -294,8 +294,8 @@ ${HIRN_ACTION_INSTRUCTION}`
 export function buildSystemPrompt(pageContext?: string, uiLocale?: string): string {
   const localeLine = uiLocale
     ? `Oberflächensprache der Nutzerin: ${localeLabels[uiLocale as Locale] ?? uiLocale}. Antworte in dieser Sprache, ausser sie schreibt erkennbar in einer anderen.`
-    : ''
-  if (!pageContext && !localeLine) return SYSTEM_PROMPT
+    : '';
+  if (!pageContext && !localeLine) return SYSTEM_PROMPT;
   return `${SYSTEM_PROMPT}
 
 ═══════════════════════════════════════════════════════════════
@@ -303,5 +303,5 @@ export function buildSystemPrompt(pageContext?: string, uiLocale?: string): stri
 ═══════════════════════════════════════════════════════════════
 
 ${[pageContext, localeLine].filter(Boolean).join('\n\n')}
-Beziehe dich, wo hilfreich, auf diesen Kontext.`
+Beziehe dich, wo hilfreich, auf diesen Kontext.`;
 }

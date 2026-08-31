@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import { ReactNode } from 'react'
-import { Header } from './header'
-import Footer from './Footer'
-import { HirnPublicFab } from '@/components/hirn/HirnPublicFab'
-import { FleetCrownFeedbackEmbed } from '@/components/feedback/FleetCrownFeedbackEmbed'
+import { ReactNode } from 'react';
+import { Header } from './header';
+import Footer from './Footer';
+import { HirnPublicFab } from '@/components/hirn/HirnPublicFab';
+import { FleetCrownFeedbackEmbed } from '@/components/feedback/FleetCrownFeedbackEmbed';
 
 interface MainLayoutProps {
-  children: ReactNode
+  children: ReactNode;
   /** Skip assistant + suggestion widgets on task-focused pages. */
-  leanChrome?: boolean
+  leanChrome?: boolean;
 }
 
 export default function MainLayout({ children, leanChrome = false }: MainLayoutProps) {
@@ -17,9 +17,7 @@ export default function MainLayout({ children, leanChrome = false }: MainLayoutP
     <div className="min-h-screen bg-canvas">
       <Header />
 
-      <main>
-        {children}
-      </main>
+      <main>{children}</main>
 
       <Footer />
 
@@ -30,5 +28,5 @@ export default function MainLayout({ children, leanChrome = false }: MainLayoutP
         </>
       )}
     </div>
-  )
+  );
 }

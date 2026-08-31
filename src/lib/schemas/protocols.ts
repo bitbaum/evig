@@ -8,11 +8,7 @@
  */
 
 import { z } from 'zod';
-import {
-  MEETING_TYPES,
-  PROTOCOL_VISIBILITY,
-  INPUT_METHODS,
-} from '@/config/protocols';
+import { MEETING_TYPES, PROTOCOL_VISIBILITY, INPUT_METHODS } from '@/config/protocols';
 import type {
   MeetingType,
   ProtocolStatus,
@@ -33,26 +29,38 @@ const inputMethods = Object.values(INPUT_METHODS) as [string, ...string[]];
 export const structuredNotesSchema = z.object({
   summary: z.string().default(''),
   detected_attendees: z.array(z.string()).default([]),
-  topics: z.array(z.object({
-    id: z.string(),
-    title: z.string(),
-    discussion: z.string(),
-    outcome: z.string().nullable().default(null),
-  })).default([]),
-  action_items: z.array(z.object({
-    id: z.string(),
-    description: z.string(),
-    assigned_to_name: z.string().nullable().default(null),
-    assigned_to_id: z.string().nullable().default(null),
-    due_hint: z.string().nullable().default(null),
-    item_type: z.enum(['task', 'decision', 'info']).default('info'),
-    topic_id: z.string().nullable().default(null),
-    priority_hint: z.enum(['low', 'normal', 'high']).nullable().default(null),
-  })).default([]),
-  follow_ups: z.array(z.object({
-    description: z.string(),
-    status: z.string().nullable().default(null),
-  })).default([]),
+  topics: z
+    .array(
+      z.object({
+        id: z.string(),
+        title: z.string(),
+        discussion: z.string(),
+        outcome: z.string().nullable().default(null),
+      }),
+    )
+    .default([]),
+  action_items: z
+    .array(
+      z.object({
+        id: z.string(),
+        description: z.string(),
+        assigned_to_name: z.string().nullable().default(null),
+        assigned_to_id: z.string().nullable().default(null),
+        due_hint: z.string().nullable().default(null),
+        item_type: z.enum(['task', 'decision', 'info']).default('info'),
+        topic_id: z.string().nullable().default(null),
+        priority_hint: z.enum(['low', 'normal', 'high']).nullable().default(null),
+      }),
+    )
+    .default([]),
+  follow_ups: z
+    .array(
+      z.object({
+        description: z.string(),
+        status: z.string().nullable().default(null),
+      }),
+    )
+    .default([]),
 });
 
 export type StructuredNotes = z.infer<typeof structuredNotesSchema>;
@@ -65,19 +73,11 @@ export type StructuredNotes = z.infer<typeof structuredNotesSchema>;
  * Protocol creation schema
  */
 export const createProtocolSchema = z.object({
-  title: z
-    .string()
-    .min(1, 'Titel erforderlich')
-    .max(200, 'Titel zu lang (max 200 Zeichen)'),
-  meeting_date: z
-    .string()
-    .min(1, 'Datum erforderlich'),
+  title: z.string().min(1, 'Titel erforderlich').max(200, 'Titel zu lang (max 200 Zeichen)'),
+  meeting_date: z.string().min(1, 'Datum erforderlich'),
   meeting_type: z.enum(meetingTypes),
   visibility: z.enum(visibilityOptions),
-  attendees: z
-    .array(z.string().uuid())
-    .optional()
-    .default([]),
+  attendees: z.array(z.string().uuid()).optional().default([]),
   input_method: z.enum(inputMethods).optional().default('transcript'),
   team_id: z.string().uuid().optional().nullable(),
 });
@@ -96,7 +96,7 @@ export const processTranscriptSchema = z.object({
   raw_transcript: z
     .string()
     .min(50, 'Transkript zu kurz (min 50 Zeichen)')
-    .max(100000, 'Transkript zu lang (max 100\'000 Zeichen)'),
+    .max(100000, "Transkript zu lang (max 100'000 Zeichen)"),
 });
 
 /**
@@ -135,21 +135,25 @@ export type ImportTasksInput = z.infer<typeof importTasksSchema>;
 export const linkActionSchema = z.object({
   action_item_id: z.string().min(1, 'Action Item ID erforderlich'),
   link_type: z.enum(['task', 'decision']),
-  task_data: z.object({
-    title: z.string().min(1).max(200),
-    description: z.string().max(2000).optional().nullable(),
-    task_type: z.string().default('one_time'),
-    category: z.string().default('admin'),
-    priority: z.string().default('normal'),
-    assigned_to: z.string().uuid().optional().nullable(),
-  }).optional(),
-  decision_data: z.object({
-    title: z.string().min(1).max(200),
-    description: z.string().min(1).max(2000),
-    decisionType: z.string().default('sense_check'),
-    votingMethod: z.string().default('simple_majority'),
-    initialStatus: z.string().default('draft'),
-  }).optional(),
+  task_data: z
+    .object({
+      title: z.string().min(1).max(200),
+      description: z.string().max(2000).optional().nullable(),
+      task_type: z.string().default('one_time'),
+      category: z.string().default('admin'),
+      priority: z.string().default('normal'),
+      assigned_to: z.string().uuid().optional().nullable(),
+    })
+    .optional(),
+  decision_data: z
+    .object({
+      title: z.string().min(1).max(200),
+      description: z.string().min(1).max(2000),
+      decisionType: z.string().default('sense_check'),
+      votingMethod: z.string().default('simple_majority'),
+      initialStatus: z.string().default('draft'),
+    })
+    .optional(),
 });
 
 // Derived types from schemas

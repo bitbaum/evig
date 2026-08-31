@@ -34,7 +34,9 @@ export function ScoreVote({ options, scores, isGalleryMode, onSet }: Props) {
                         onSet(opt.id, n);
                       }}
                       className={`text-lg transition ${
-                        (scores[opt.id] || 0) >= n ? 'text-warning-400' : 'text-text-muted hover:text-warning-300'
+                        (scores[opt.id] || 0) >= n
+                          ? 'text-warning-400'
+                          : 'text-text-muted hover:text-warning-300'
                       }`}
                     >
                       ★
@@ -56,17 +58,14 @@ export function ScoreVote({ options, scores, isGalleryMode, onSet }: Props) {
             Bewerte jede Option von {SCORE_RANGE.min} bis {SCORE_RANGE.max}:
           </p>
           {options.map((opt) => (
-            <div
-              key={opt.id}
-              className="flex items-center gap-3 rounded-md border border p-3"
-            >
+            <div key={opt.id} className="flex items-center gap-3 rounded-md border border p-3">
               <div className="flex-1">
                 <span className="font-medium text-text-primary">{opt.label}</span>
               </div>
               <div className="flex gap-1">
                 {Array.from(
                   { length: SCORE_RANGE.max - SCORE_RANGE.min + 1 },
-                  (_, i) => SCORE_RANGE.min + i
+                  (_, i) => SCORE_RANGE.min + i,
                 ).map((n) => (
                   <Button
                     key={n}

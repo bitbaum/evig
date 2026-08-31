@@ -1,18 +1,18 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import ProtocolDetailClient from '../ProtocolDetailClient'
-import type { ProtocolDetail } from '@/lib/schemas/protocols'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import ProtocolDetailClient from '../ProtocolDetailClient';
+import type { ProtocolDetail } from '@/lib/schemas/protocols';
 
-const refreshMock = jest.fn()
+const refreshMock = jest.fn();
 
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
     refresh: refreshMock,
     push: jest.fn(),
   }),
-}))
+}));
 
 describe('ProtocolDetailClient', () => {
-  const scrollIntoViewMock = jest.fn()
+  const scrollIntoViewMock = jest.fn();
 
   const baseProtocol: ProtocolDetail = {
     id: 'p-1',
@@ -37,17 +37,17 @@ describe('ProtocolDetailClient', () => {
     created_by_email: 'admin@example.com',
     created_at: '2026-02-17T00:00:00.000Z',
     updated_at: '2026-02-17T00:00:00.000Z',
-  }
+  };
 
   beforeEach(() => {
-    refreshMock.mockReset()
-    scrollIntoViewMock.mockReset()
-    Element.prototype.scrollIntoView = scrollIntoViewMock
+    refreshMock.mockReset();
+    scrollIntoViewMock.mockReset();
+    Element.prototype.scrollIntoView = scrollIntoViewMock;
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
       json: async () => ({ success: true }),
-    }) as jest.Mock
-  })
+    }) as jest.Mock;
+  });
 
   it('uses notes reprocess endpoint and body (content) in review mode', async () => {
     render(
@@ -56,17 +56,17 @@ describe('ProtocolDetailClient', () => {
         actionLinks={[]}
         teamMembers={[]}
         protocolDecisions={[]}
-        
+
         currentUserId="u-1"
         isProtocolCreator
         isSuperAdmin={false}
-      />
-    )
+      />,
+    );
 
-    fireEvent.click(screen.getByText(/Nicht zufrieden\?/i))
+    fireEvent.click(screen.getByText(/Nicht zufrieden\?/i));
 
-    const button = screen.getByRole('button', { name: /Erneut verarbeiten/i })
-    fireEvent.click(button)
+    const button = screen.getByRole('button', { name: /Erneut verarbeiten/i });
+    fireEvent.click(button);
 
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith(
@@ -74,12 +74,12 @@ describe('ProtocolDetailClient', () => {
         expect.objectContaining({
           method: 'POST',
           body: JSON.stringify({ content: baseProtocol.raw_transcript }),
-        })
-      )
-    })
+        }),
+      );
+    });
 
-    expect(refreshMock).toHaveBeenCalled()
-  })
+    expect(refreshMock).toHaveBeenCalled();
+  });
 
   it('creates all unlinked task action items in bulk', async () => {
     const protocolWithTasks: ProtocolDetail = {
@@ -102,7 +102,7 @@ describe('ProtocolDetailClient', () => {
         ],
         follow_ups: [],
       },
-    }
+    };
 
     render(
       <ProtocolDetailClient
@@ -110,22 +110,22 @@ describe('ProtocolDetailClient', () => {
         actionLinks={[]}
         teamMembers={[]}
         protocolDecisions={[]}
-        
+
         currentUserId="u-1"
         isProtocolCreator
         isSuperAdmin={false}
-      />
-    )
+      />,
+    );
 
-    fireEvent.click(screen.getByRole('button', { name: /Alle 1 Aufgabe erstellen/i }))
+    fireEvent.click(screen.getByRole('button', { name: /Alle 1 Aufgabe erstellen/i }));
 
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith(
         '/api/protocols/p-1/actions',
-        expect.objectContaining({ method: 'POST' })
-      )
-    })
-  })
+        expect.objectContaining({ method: 'POST' }),
+      );
+    });
+  });
 
   it('shows workflow stepper with next-step guidance', () => {
     render(
@@ -134,16 +134,16 @@ describe('ProtocolDetailClient', () => {
         actionLinks={[]}
         teamMembers={[]}
         protocolDecisions={[]}
-        
+
         currentUserId="u-1"
         isProtocolCreator
         isSuperAdmin={false}
-      />
-    )
+      />,
+    );
 
     // Progress strip is shown in review mode; active step hint label is rendered
-    expect(screen.getByText('KI-Struktur prüfen:')).toBeInTheDocument()
-  })
+    expect(screen.getByText('KI-Struktur prüfen:')).toBeInTheDocument();
+  });
 
   it('shows progress strip in review mode', () => {
     render(
@@ -152,16 +152,16 @@ describe('ProtocolDetailClient', () => {
         actionLinks={[]}
         teamMembers={[]}
         protocolDecisions={[]}
-        
+
         currentUserId="u-1"
         isProtocolCreator
         isSuperAdmin={false}
-      />
-    )
+      />,
+    );
 
     // All step labels appear in the progress strip
-    expect(screen.getByText('Abschliessen')).toBeInTheDocument()
-  })
+    expect(screen.getByText('Abschliessen')).toBeInTheDocument();
+  });
 
   it('shows actionable empty state when no action items were extracted', () => {
     render(
@@ -170,16 +170,16 @@ describe('ProtocolDetailClient', () => {
         actionLinks={[]}
         teamMembers={[]}
         protocolDecisions={[]}
-        
+
         currentUserId="u-1"
         isProtocolCreator
         isSuperAdmin={false}
-      />
-    )
+      />,
+    );
 
-    expect(screen.getByText('Keine Aktionen erkannt')).toBeInTheDocument()
+    expect(screen.getByText('Keine Aktionen erkannt')).toBeInTheDocument();
     // Empty state is actionable: manual add is offered alongside reprocessing.
-    expect(screen.getByText(/Ergänze Aufgaben unten von Hand/i)).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /Aufgabe ergänzen/i })).toBeInTheDocument()
-  })
-})
+    expect(screen.getByText(/Ergänze Aufgaben unten von Hand/i)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Aufgabe ergänzen/i })).toBeInTheDocument();
+  });
+});

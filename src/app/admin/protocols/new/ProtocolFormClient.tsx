@@ -1,46 +1,62 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Loader2, FileText, Mic, Users, ChevronDown, ChevronUp, Check } from 'lucide-react'
-import { MEETING_TYPE_LABELS, PROTOCOL_VISIBILITY_LABELS } from '@/config/protocols'
-import type { MeetingType, ProtocolVisibility } from '@/config/protocols'
-import Heading from '@/components/admin/AdminHeading'
-import { AIFormAssist } from '@/components/ai/AIFormAssist'
-import { useProtocolForm } from '@/hooks/useProtocolForm'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Select } from '@/components/ui/select'
-import { FormField } from '@/components/ui/form-field'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { StatusBanner } from '@/components/ui/status-banner'
-import { SourceUploader } from '@/components/admin/protocols/SourceUploader'
-import { RecordButton } from '@/components/admin/protocols/RecordButton'
-import { ProtocolConsent } from '@/components/admin/protocols/ProtocolConsent'
-import { CaptureAlternatives } from '@/components/admin/protocols/CaptureAlternatives'
-import { adminInteractive } from '@/lib/admin-ui'
+import { useState } from 'react';
+import { Loader2, FileText, Mic, Users, ChevronDown, ChevronUp, Check } from 'lucide-react';
+import { MEETING_TYPE_LABELS, PROTOCOL_VISIBILITY_LABELS } from '@/config/protocols';
+import type { MeetingType, ProtocolVisibility } from '@/config/protocols';
+import Heading from '@/components/admin/AdminHeading';
+import { AIFormAssist } from '@/components/ai/AIFormAssist';
+import { useProtocolForm } from '@/hooks/useProtocolForm';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select } from '@/components/ui/select';
+import { FormField } from '@/components/ui/form-field';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { StatusBanner } from '@/components/ui/status-banner';
+import { SourceUploader } from '@/components/admin/protocols/SourceUploader';
+import { RecordButton } from '@/components/admin/protocols/RecordButton';
+import { ProtocolConsent } from '@/components/admin/protocols/ProtocolConsent';
+import { CaptureAlternatives } from '@/components/admin/protocols/CaptureAlternatives';
+import { adminInteractive } from '@/lib/admin-ui';
 
 interface ProtocolFormClientProps {
-  teamMembers: Array<{ id: string; name: string }>
+  teamMembers: Array<{ id: string; name: string }>;
   /** Active teams for the optional owning-team select. */
-  teams?: Array<{ id: string; name: string }>
+  teams?: Array<{ id: string; name: string }>;
   /** Preselected team (from a team space "Neues Protokoll" link). */
-  initialTeamId?: string
+  initialTeamId?: string;
 }
 
-export default function ProtocolFormClient({ teamMembers, teams = [], initialTeamId }: ProtocolFormClientProps) {
+export default function ProtocolFormClient({
+  teamMembers,
+  teams = [],
+  initialTeamId,
+}: ProtocolFormClientProps) {
   const {
-    meetingType, setMeetingType,
-    title, setTitle,
-    meetingDate, setMeetingDate,
-    visibility, setVisibility,
-    teamId, setTeamId,
+    meetingType,
+    setMeetingType,
+    title,
+    setTitle,
+    meetingDate,
+    setMeetingDate,
+    visibility,
+    setVisibility,
+    teamId,
+    setTeamId,
     selectedAttendees,
-    showAttendees, setShowAttendees,
-    attendeeSearch, setAttendeeSearch,
-    content, setContent,
-    sources, setSources,
-    loading, processing, error, setError,
+    showAttendees,
+    setShowAttendees,
+    attendeeSearch,
+    setAttendeeSearch,
+    content,
+    setContent,
+    sources,
+    setSources,
+    loading,
+    processing,
+    error,
+    setError,
     canSubmit,
     contentFormat,
     filteredTeamMembers,
@@ -48,14 +64,14 @@ export default function ProtocolFormClient({ teamMembers, teams = [], initialTea
     toggleAttendee,
     selectAllAttendees,
     handleSubmit,
-  } = useProtocolForm(teamMembers, initialTeamId)
+  } = useProtocolForm(teamMembers, initialTeamId);
 
-  const hasAudio = sources.audio !== null
-  const hasTextFiles = sources.textFiles.length > 0
-  const hasTypedText = content.trim().length > 0
+  const hasAudio = sources.audio !== null;
+  const hasTextFiles = sources.textFiles.length > 0;
+  const hasTypedText = content.trim().length > 0;
   // Meeting details are optional (the AI fills type/title/attendees from the
   // recording), so keep them collapsed by default — the upload is the hero.
-  const [showDetails, setShowDetails] = useState(false)
+  const [showDetails, setShowDetails] = useState(false);
 
   return (
     <div className="max-w-3xl space-y-6">
@@ -66,10 +82,12 @@ export default function ProtocolFormClient({ teamMembers, teams = [], initialTea
           record live (secondary), type notes (tertiary). */}
       <Card className="p-6 space-y-5">
         <div>
-          <Heading level={2} className="text-lg font-semibold text-text-primary">Inhalt</Heading>
+          <Heading level={2} className="text-lg font-semibold text-text-primary">
+            Inhalt
+          </Heading>
           <p className="text-sm text-text-secondary mt-1">
-            Audio, Dateien oder Notizen — die KI strukturiert alles in einem
-            Durchgang und ergänzt Titel, Typ und Teilnehmer selbst.
+            Audio, Dateien oder Notizen — die KI strukturiert alles in einem Durchgang und ergänzt
+            Titel, Typ und Teilnehmer selbst.
           </p>
         </div>
 
@@ -95,7 +113,9 @@ export default function ProtocolFormClient({ teamMembers, teams = [], initialTea
                 <span className="text-xs px-2 py-0.5 rounded-full bg-action-muted text-action">
                   JSON erkannt
                 </span>
-              ) : <span />}
+              ) : (
+                <span />
+              )}
               <span className="text-xs text-text-tertiary">{content.length} Zeichen</span>
             </div>
           )}
@@ -114,9 +134,15 @@ export default function ProtocolFormClient({ teamMembers, teams = [], initialTea
         >
           <span className="text-lg font-semibold text-text-primary">
             Sitzungsdetails{' '}
-            <span className="text-sm font-normal text-text-tertiary">— optional, die KI ergänzt fehlende Angaben</span>
+            <span className="text-sm font-normal text-text-tertiary">
+              — optional, die KI ergänzt fehlende Angaben
+            </span>
           </span>
-          {showDetails ? <ChevronUp className="w-5 h-5 text-text-tertiary" /> : <ChevronDown className="w-5 h-5 text-text-tertiary" />}
+          {showDetails ? (
+            <ChevronUp className="w-5 h-5 text-text-tertiary" />
+          ) : (
+            <ChevronDown className="w-5 h-5 text-text-tertiary" />
+          )}
         </Button>
 
         {showDetails && (
@@ -127,7 +153,12 @@ export default function ProtocolFormClient({ teamMembers, teams = [], initialTea
               variant="bar"
               defaultExpanded={true}
               placeholder="z.B. Vorstandssitzung März 2026 mit Andreas und Maria..."
-              currentData={{ title, meeting_type: meetingType, meeting_date: meetingDate, visibility }}
+              currentData={{
+                title,
+                meeting_type: meetingType,
+                meeting_date: meetingDate,
+                visibility,
+              }}
               onFieldsFilled={handleAIFieldsFilled}
             />
 
@@ -140,7 +171,9 @@ export default function ProtocolFormClient({ teamMembers, teams = [], initialTea
                 >
                   <option value="">Typ wählen...</option>
                   {Object.entries(MEETING_TYPE_LABELS).map(([key, label]) => (
-                    <option key={key} value={key}>{label}</option>
+                    <option key={key} value={key}>
+                      {label}
+                    </option>
                   ))}
                 </Select>
               </FormField>
@@ -173,13 +206,19 @@ export default function ProtocolFormClient({ teamMembers, teams = [], initialTea
                   onChange={(e) => setVisibility(e.target.value as ProtocolVisibility)}
                 >
                   {Object.entries(PROTOCOL_VISIBILITY_LABELS).map(([key, label]) => (
-                    <option key={key} value={key}>{label}</option>
+                    <option key={key} value={key}>
+                      {label}
+                    </option>
                   ))}
                 </Select>
               </FormField>
 
               {teams.length > 0 && (
-                <FormField label="Team" htmlFor="protocol-team" hint="Optional — erscheint auf der Team-Seite">
+                <FormField
+                  label="Team"
+                  htmlFor="protocol-team"
+                  hint="Optional — erscheint auf der Team-Seite"
+                >
                   <Select
                     id="protocol-team"
                     value={teamId}
@@ -187,7 +226,9 @@ export default function ProtocolFormClient({ teamMembers, teams = [], initialTea
                   >
                     <option value="">Kein Team</option>
                     {teams.map((t) => (
-                      <option key={t.id} value={t.id}>{t.name}</option>
+                      <option key={t.id} value={t.id}>
+                        {t.name}
+                      </option>
                     ))}
                   </Select>
                 </FormField>
@@ -205,7 +246,11 @@ export default function ProtocolFormClient({ teamMembers, teams = [], initialTea
               >
                 <Users className="w-4 h-4" />
                 Teilnehmer ({selectedAttendees.length}/{teamMembers.length})
-                {showAttendees ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                {showAttendees ? (
+                  <ChevronUp className="w-4 h-4" />
+                ) : (
+                  <ChevronDown className="w-4 h-4" />
+                )}
               </Button>
 
               {showAttendees && (
@@ -225,7 +270,9 @@ export default function ProtocolFormClient({ teamMembers, teams = [], initialTea
                       onClick={selectAllAttendees}
                       className="text-xs text-action hover:text-action font-medium whitespace-nowrap"
                     >
-                      {selectedAttendees.length === teamMembers.length ? 'Keine auswählen' : 'Alle auswählen'}
+                      {selectedAttendees.length === teamMembers.length
+                        ? 'Keine auswählen'
+                        : 'Alle auswählen'}
                     </Button>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 max-h-64 overflow-y-auto">
@@ -244,7 +291,9 @@ export default function ProtocolFormClient({ teamMembers, teams = [], initialTea
                       </label>
                     ))}
                     {filteredTeamMembers.length === 0 && (
-                      <p className="text-sm text-text-tertiary px-2 py-1">Keine Teilnehmer gefunden</p>
+                      <p className="text-sm text-text-tertiary px-2 py-1">
+                        Keine Teilnehmer gefunden
+                      </p>
                     )}
                   </div>
                 </div>
@@ -284,7 +333,7 @@ export default function ProtocolFormClient({ teamMembers, teams = [], initialTea
           size="lg"
           className="flex items-center gap-2"
         >
-          {(loading || processing) ? (
+          {loading || processing ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin" />
               {processing ? 'KI verarbeitet...' : 'Erstellt...'}
@@ -303,7 +352,7 @@ export default function ProtocolFormClient({ teamMembers, teams = [], initialTea
           lives at the very bottom as a collapsed disclosure. */}
       <CaptureAlternatives />
     </div>
-  )
+  );
 }
 
 /**
@@ -319,18 +368,18 @@ export default function ProtocolFormClient({ teamMembers, teams = [], initialTea
  * "remember me" persists via ProtocolConsent's localStorage handler.
  */
 interface CaptureControlsProps {
-  sources: ReturnType<typeof useProtocolForm>['sources']
-  setSources: ReturnType<typeof useProtocolForm>['setSources']
-  setError: (msg: string | null) => void
-  disabled?: boolean
+  sources: ReturnType<typeof useProtocolForm>['sources'];
+  setSources: ReturnType<typeof useProtocolForm>['setSources'];
+  setError: (msg: string | null) => void;
+  disabled?: boolean;
 }
 
 function CaptureControls({ sources, setSources, setError, disabled }: CaptureControlsProps) {
-  const [consented, setConsented] = useState(false)
+  const [consented, setConsented] = useState(false);
 
   const handleRecorded = (audioFile: File) => {
-    setSources({ ...sources, audio: audioFile })
-  }
+    setSources({ ...sources, audio: audioFile });
+  };
 
   return (
     <div className="space-y-4">
@@ -346,5 +395,5 @@ function CaptureControls({ sources, setSources, setError, disabled }: CaptureCon
         <ProtocolConsent value={consented} onChange={setConsented} />
       </div>
     </div>
-  )
+  );
 }

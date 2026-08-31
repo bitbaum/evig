@@ -35,4 +35,4 @@ export const TYPOGRAPHY = {
   button: 'text-sm sm:text-base font-semibold',
   buttonLarge: 'text-base sm:text-lg font-semibold',
   buttonSmall: 'text-xs sm:text-sm font-semibold',
-} as const
+} as const;

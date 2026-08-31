@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import { Link } from '@/i18n/navigation'
-import { Briefcase, MapPin, Clock } from 'lucide-react'
-import { Card } from '@/components/ui/card'
+import { Link } from '@/i18n/navigation';
+import { Briefcase, MapPin, Clock } from 'lucide-react';
+import { Card } from '@/components/ui/card';
 import {
   getRoleTrackLabel,
   getVacancyStatusLabel,
@@ -10,27 +10,27 @@ import {
   VACANCY_STATUS,
   type RoleTrack,
   type VacancyStatus,
-} from '@/config/hr-vacancies'
-import { ROUTES } from '@/config/routes'
-import { cn } from '@/lib/utils'
+} from '@/config/hr-vacancies';
+import { ROUTES } from '@/config/routes';
+import { cn } from '@/lib/utils';
 
 export interface PublicVacancyItem {
-  id: string
-  slug: string
-  title: string
-  summary: string | null
-  role_track: string
-  department: string | null
-  location: string | null
-  remote_ok: boolean
-  hours_per_week: number | null
-  status: string
-  application_deadline: string | null
+  id: string;
+  slug: string;
+  title: string;
+  summary: string | null;
+  role_track: string;
+  department: string | null;
+  location: string | null;
+  remote_ok: boolean;
+  hours_per_week: number | null;
+  status: string;
+  application_deadline: string | null;
 }
 
 interface Props {
-  postings: PublicVacancyItem[]
-  activeTrack: string | null
+  postings: PublicVacancyItem[];
+  activeTrack: string | null;
 }
 
 const TRACK_FILTERS: { value: string; label: string }[] = [
@@ -40,15 +40,17 @@ const TRACK_FILTERS: { value: string; label: string }[] = [
   { value: 'employee', label: 'Anstellung' },
   { value: 'reintegration', label: 'Wiedereinstieg' },
   { value: 'contractor', label: 'Auftrag' },
-]
+];
 
 export default function CareersListClient({ postings, activeTrack }: Props) {
   return (
     <div className="space-y-8">
       <div className="flex flex-wrap gap-2">
         {TRACK_FILTERS.map((f) => {
-          const href = f.value ? `${ROUTES.public.careers}?track=${f.value}` : ROUTES.public.careers
-          const active = (activeTrack ?? '') === f.value
+          const href = f.value
+            ? `${ROUTES.public.careers}?track=${f.value}`
+            : ROUTES.public.careers;
+          const active = (activeTrack ?? '') === f.value;
           return (
             <Link
               key={f.value || 'all'}
@@ -62,7 +64,7 @@ export default function CareersListClient({ postings, activeTrack }: Props) {
             >
               {f.label}
             </Link>
-          )
+          );
         })}
       </div>
 
@@ -70,16 +72,19 @@ export default function CareersListClient({ postings, activeTrack }: Props) {
         <div className="text-center py-16 text-text-muted">
           <Briefcase className="w-12 h-12 mx-auto mb-4 opacity-50" />
           <p>Aktuell keine offenen Stellen in dieser Kategorie.</p>
-          <Link href="/get-involved/kontakt" className="text-action underline text-sm mt-2 inline-block">
+          <Link
+            href="/get-involved/kontakt"
+            className="text-action underline text-sm mt-2 inline-block"
+          >
             Initiativbewerbung senden
           </Link>
         </div>
       ) : (
         <div className="grid gap-4">
           {postings.map((p) => {
-            const status = p.status as VacancyStatus
-            const paused = status === VACANCY_STATUS.FROZEN
-            const filled = status === VACANCY_STATUS.FILLED
+            const status = p.status as VacancyStatus;
+            const paused = status === VACANCY_STATUS.FROZEN;
+            const filled = status === VACANCY_STATUS.FILLED;
             return (
               <Card key={p.id} className="p-5 hover:border-neutral-300 transition-colors">
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
@@ -131,10 +136,10 @@ export default function CareersListClient({ postings, activeTrack }: Props) {
                   </Link>
                 </div>
               </Card>
-            )
+            );
           })}
         </div>
       )}
     </div>
-  )
+  );
 }

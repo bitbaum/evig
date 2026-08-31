@@ -11,49 +11,48 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockAuth = jest.fn()
+const mockAuth = jest.fn();
 
 jest.mock('@/auth', () => ({
   auth: (...args: unknown[]) => mockAuth.apply(null, args),
-}))
+}));
 
 jest.mock('@/lib/api/middleware', () => ({
-  withAuth: (handler: unknown) =>
-    (req: Request, context?: { params?: Promise<unknown> }) =>
-      mockAuth().then(async (session: unknown) => {
-        if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server')
-          return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
-        }
-        const resolvedContext = context?.params ? { params: await context.params } : undefined
-        return (handler as (...a: unknown[]) => unknown)(req, session, resolvedContext)
-      }),
+  withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<unknown> }) =>
+    mockAuth().then(async (session: unknown) => {
+      if (!session || !(session as { user?: { id?: string } }).user?.id) {
+        const { NextResponse } = jest.requireActual('next/server');
+        return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+      }
+      const resolvedContext = context?.params ? { params: await context.params } : undefined;
+      return (handler as (...a: unknown[]) => unknown)(req, session, resolvedContext);
+    }),
   parsePagination: () => ({ limit: 20, offset: 0 }),
-}))
+}));
 
-const mockSelect = jest.fn()
-const mockInsert = jest.fn()
-const mockValues = jest.fn()
-const mockReturning = jest.fn()
+const mockSelect = jest.fn();
+const mockInsert = jest.fn();
+const mockValues = jest.fn();
+const mockReturning = jest.fn();
 
 jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
     insert: (...args: unknown[]) => {
-      mockInsert(...args)
-      return { values: mockValues }
+      mockInsert(...args);
+      return { values: mockValues };
     },
   },
-}))
+}));
 
-const mockValidateBody = jest.fn()
+const mockValidateBody = jest.fn();
 jest.mock('@/lib/schemas', () => ({
   validateBody: (...args: unknown[]) => mockValidateBody.apply(null, args),
   CreateConversationSchema: {},
-}))
+}));
 
 jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server')
+  const { NextResponse } = jest.requireActual('next/server');
   return {
     apiSuccess: (data: unknown, status = 200) =>
       NextResponse.json({ success: true, data }, { status }),
@@ -62,27 +61,27 @@ jest.mock('@/lib/api/helpers', () => {
     apiBadRequest: (msg: string) =>
       NextResponse.json({ success: false, error: msg }, { status: 400 }),
     parsePagination: () => ({ limit: 20, offset: 0 }),
-  }
-})
+  };
+});
 
 jest.mock('@/lib/messaging/send-message', () => ({
   sendMessageInConversation: jest.fn().mockResolvedValue({
     conversationId: 'conv-1',
     messageId: 'msg-1',
   }),
-}))
+}));
 
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
-}))
+}));
 
 jest.mock('@/config/database', () => ({
   TABLE_NAMES: { USERS: 'users' },
-}))
+}));
 
 jest.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Server error' },
-}))
+}));
 
 jest.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
@@ -92,7 +91,7 @@ jest.mock('drizzle-orm', () => ({
     raw: (s: string) => ({ __raw: s }),
   }),
   desc: (a: unknown) => ({ __desc: a }),
-}))
+}));
 
 jest.mock('@/db/schema', () => ({
   conversations: {
@@ -111,7 +110,7 @@ jest.mock('@/db/schema', () => ({
     unreadCount2: 'c_uc2',
   },
   users: { id: 'u_id', name: 'u_name', email: 'u_email', role: 'u_role' },
-}))
+}));
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -126,7 +125,7 @@ const MOCK_SESSION = {
     staffPermissions: [] as string[],
   },
   expires: '2027-01-01',
-}
+};
 
 const MOCK_CONV_ROW = {
   id: 'conv-1',
@@ -142,27 +141,32 @@ const MOCK_CONV_ROW = {
   updated_at: new Date(),
   unread_count_1: 0,
   unread_count_2: 1,
-  other_participant: { id: 'user-2', name: 'Test Seller', email: 'seller@example.com', role: 'user' },
+  other_participant: {
+    id: 'user-2',
+    name: 'Test Seller',
+    email: 'seller@example.com',
+    role: 'user',
+  },
   unread_count: 1,
-}
+};
 
 // ---------------------------------------------------------------------------
 // Helper
 // ---------------------------------------------------------------------------
 
 function makeChain(terminal: 'where' | 'offset' | 'limit' | 'returning', result: unknown[]) {
-  const terminalFn = jest.fn().mockResolvedValue(result)
-  const chain: Record<string, unknown> = {}
-  chain.from = jest.fn().mockReturnValue(chain)
-  chain.innerJoin = jest.fn().mockReturnValue(chain)
-  chain.leftJoin = jest.fn().mockReturnValue(chain)
-  chain.where = terminal === 'where' ? terminalFn : jest.fn().mockReturnValue(chain)
-  chain.orderBy = jest.fn().mockReturnValue(chain)
-  chain.limit = terminal === 'limit' ? terminalFn : jest.fn().mockReturnValue(chain)
-  chain.offset = terminal === 'offset' ? terminalFn : jest.fn().mockReturnValue(chain)
-  chain.returning = terminal === 'returning' ? terminalFn : jest.fn().mockReturnValue(chain)
-  chain.as = jest.fn().mockReturnValue(chain)
-  return chain
+  const terminalFn = jest.fn().mockResolvedValue(result);
+  const chain: Record<string, unknown> = {};
+  chain.from = jest.fn().mockReturnValue(chain);
+  chain.innerJoin = jest.fn().mockReturnValue(chain);
+  chain.leftJoin = jest.fn().mockReturnValue(chain);
+  chain.where = terminal === 'where' ? terminalFn : jest.fn().mockReturnValue(chain);
+  chain.orderBy = jest.fn().mockReturnValue(chain);
+  chain.limit = terminal === 'limit' ? terminalFn : jest.fn().mockReturnValue(chain);
+  chain.offset = terminal === 'offset' ? terminalFn : jest.fn().mockReturnValue(chain);
+  chain.returning = terminal === 'returning' ? terminalFn : jest.fn().mockReturnValue(chain);
+  chain.as = jest.fn().mockReturnValue(chain);
+  return chain;
 }
 
 function makeRequest(method = 'GET', body?: unknown) {
@@ -170,65 +174,69 @@ function makeRequest(method = 'GET', body?: unknown) {
     method,
     headers: { 'Content-Type': 'application/json' },
     body: body ? JSON.stringify(body) : undefined,
-  })
+  });
 }
 
 // ---------------------------------------------------------------------------
 // Import under test
 // ---------------------------------------------------------------------------
 
-import { GET, POST } from '../route'
+import { GET, POST } from '../route';
 
 // ---------------------------------------------------------------------------
 // Tests
 // ---------------------------------------------------------------------------
 
 beforeEach(() => {
-  jest.clearAllMocks()
-  mockAuth.mockResolvedValue(MOCK_SESSION)
-})
+  jest.clearAllMocks();
+  mockAuth.mockResolvedValue(MOCK_SESSION);
+});
 
 describe('GET /api/messages/conversations', () => {
   it('returns 401 when not authenticated', async () => {
-    mockAuth.mockResolvedValue(null)
-    const res = await GET(makeRequest() as never)
-    expect(res.status).toBe(401)
-  })
+    mockAuth.mockResolvedValue(null);
+    const res = await GET(makeRequest() as never);
+    expect(res.status).toBe(401);
+  });
 
   it('returns 200 with conversations list', async () => {
-    mockSelect.mockReturnValue(makeChain('offset', [MOCK_CONV_ROW]))
-    const res = await GET(makeRequest() as never)
-    const body = await res.json()
-    expect(res.status).toBe(200)
-    expect(body.success).toBe(true)
-    expect(Array.isArray(body.data.conversations)).toBe(true)
-    expect(body.data.conversations).toHaveLength(1)
-  })
+    mockSelect.mockReturnValue(makeChain('offset', [MOCK_CONV_ROW]));
+    const res = await GET(makeRequest() as never);
+    const body = await res.json();
+    expect(res.status).toBe(200);
+    expect(body.success).toBe(true);
+    expect(Array.isArray(body.data.conversations)).toBe(true);
+    expect(body.data.conversations).toHaveLength(1);
+  });
 
   it('returns 200 with empty list when no conversations exist', async () => {
-    mockSelect.mockReturnValue(makeChain('offset', []))
-    const res = await GET(makeRequest() as never)
-    const body = await res.json()
-    expect(res.status).toBe(200)
-    expect(body.data.conversations).toHaveLength(0)
-  })
-})
+    mockSelect.mockReturnValue(makeChain('offset', []));
+    const res = await GET(makeRequest() as never);
+    const body = await res.json();
+    expect(res.status).toBe(200);
+    expect(body.data.conversations).toHaveLength(0);
+  });
+});
 
 describe('POST /api/messages/conversations', () => {
   it('returns 401 when not authenticated', async () => {
-    mockAuth.mockResolvedValue(null)
-    const res = await POST(makeRequest('POST', { participantId: 'user-2', type: 'marketplace' }) as never)
-    expect(res.status).toBe(401)
-  })
+    mockAuth.mockResolvedValue(null);
+    const res = await POST(
+      makeRequest('POST', { participantId: 'user-2', type: 'marketplace' }) as never,
+    );
+    expect(res.status).toBe(401);
+  });
 
   it('returns 400 when validation fails', async () => {
     mockValidateBody.mockReturnValue({
       success: false,
-      error: new Response(JSON.stringify({ success: false, error: 'Ungültige Eingabedaten' }), { status: 400 }),
-    })
-    const res = await POST(makeRequest('POST', {}) as never)
-    expect(res.status).toBe(400)
-  })
+      error: new Response(JSON.stringify({ success: false, error: 'Ungültige Eingabedaten' }), {
+        status: 400,
+      }),
+    });
+    const res = await POST(makeRequest('POST', {}) as never);
+    expect(res.status).toBe(400);
+  });
 
   it('returns 200 with conversationId when initial message is provided', async () => {
     mockValidateBody.mockReturnValue({
@@ -239,26 +247,26 @@ describe('POST /api/messages/conversations', () => {
         contextId: 'listing-1',
         initialMessage: 'Hallo, ist das noch verfügbar?',
       },
-    })
-    const res = await POST(makeRequest('POST', {}) as never)
-    const body = await res.json()
-    expect(res.status).toBe(200)
-    expect(body.success).toBe(true)
-    expect(body.data.conversation.id).toBe('conv-1')
-    expect(body.data.message_id).toBe('msg-1')
-  })
+    });
+    const res = await POST(makeRequest('POST', {}) as never);
+    const body = await res.json();
+    expect(res.status).toBe(200);
+    expect(body.success).toBe(true);
+    expect(body.data.conversation.id).toBe('conv-1');
+    expect(body.data.message_id).toBe('msg-1');
+  });
 
   it('returns 200 with existing conversation when no initial message', async () => {
     mockValidateBody.mockReturnValue({
       success: true,
       data: { participantId: 'user-2', type: 'marketplace', contextId: null, initialMessage: null },
-    })
+    });
     // select returns existing conversation
-    mockSelect.mockReturnValue(makeChain('where', [{ id: 'conv-existing' }]))
-    const res = await POST(makeRequest('POST', {}) as never)
-    const body = await res.json()
-    expect(res.status).toBe(200)
-    expect(body.success).toBe(true)
-    expect(body.data.conversation.id).toBe('conv-existing')
-  })
-})
+    mockSelect.mockReturnValue(makeChain('where', [{ id: 'conv-existing' }]));
+    const res = await POST(makeRequest('POST', {}) as never);
+    const body = await res.json();
+    expect(res.status).toBe(200);
+    expect(body.success).toBe(true);
+    expect(body.data.conversation.id).toBe('conv-existing');
+  });
+});

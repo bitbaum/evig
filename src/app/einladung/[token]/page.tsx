@@ -1,21 +1,21 @@
-import { Metadata } from 'next'
-import { Users } from 'lucide-react'
-import ClaimForm from './ClaimForm'
-import { Card } from '@/components/ui/card'
-import { getClaimInvite } from '@/lib/services/team-invites'
-import { getTeamRoleColor } from '@/config/teams'
+import { Metadata } from 'next';
+import { Users } from 'lucide-react';
+import ClaimForm from './ClaimForm';
+import { Card } from '@/components/ui/card';
+import { getClaimInvite } from '@/lib/services/team-invites';
+import { getTeamRoleColor } from '@/config/teams';
 
-export const metadata: Metadata = { title: 'Einladung – evig' }
+export const metadata: Metadata = { title: 'Einladung – evig' };
 
 interface PageProps {
-  params: Promise<{ token: string }>
-  searchParams: Promise<{ email?: string }>
+  params: Promise<{ token: string }>;
+  searchParams: Promise<{ email?: string }>;
 }
 
 export default async function ClaimInvitePage({ params, searchParams }: PageProps) {
-  const { token } = await params
-  const { email } = await searchParams
-  const invite = await getClaimInvite(token)
+  const { token } = await params;
+  const { email } = await searchParams;
+  const invite = await getClaimInvite(token);
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-surface-raised p-4">
@@ -33,8 +33,8 @@ export default async function ClaimInvitePage({ params, searchParams }: PageProp
             <div className="text-center mb-6">
               <h1 className="text-xl font-semibold text-text-primary">Willkommen bei evig</h1>
               <p className="text-sm text-text-secondary mt-1">
-                Du wurdest eingeladen, dein Konto zu übernehmen. Setze deinen Namen, deine E-Mail und
-                ein Passwort — deine Teams bleiben erhalten.
+                Du wurdest eingeladen, dein Konto zu übernehmen. Setze deinen Namen, deine E-Mail
+                und ein Passwort — deine Teams bleiben erhalten.
               </p>
             </div>
 
@@ -46,9 +46,14 @@ export default async function ClaimInvitePage({ params, searchParams }: PageProp
                 </p>
                 <ul className="flex flex-wrap gap-1.5">
                   {invite.teams.map((t) => (
-                    <li key={t.name} className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-raised text-sm text-text-primary">
+                    <li
+                      key={t.name}
+                      className="inline-flex items-center gap-1.5 px-2 py-1 rounded-full bg-surface-raised text-sm text-text-primary"
+                    >
                       {t.name}
-                      <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-medium ${getTeamRoleColor(t.role)}`}>
+                      <span
+                        className={`px-1.5 py-0.5 rounded-full text-[10px] font-medium ${getTeamRoleColor(t.role)}`}
+                      >
                         {t.roleLabel}
                       </span>
                     </li>
@@ -57,10 +62,14 @@ export default async function ClaimInvitePage({ params, searchParams }: PageProp
               </div>
             )}
 
-            <ClaimForm token={token} suggestedName={invite.currentName} suggestedEmail={email ?? null} />
+            <ClaimForm
+              token={token}
+              suggestedName={invite.currentName}
+              suggestedEmail={email ?? null}
+            />
           </>
         )}
       </Card>
     </main>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Team Profile View Component
@@ -7,38 +7,26 @@
  * Shows all profile sections with appropriate visibility.
  */
 
-import { useState } from 'react'
-import {
-  Phone,
-  Clock,
-  User,
-  Target,
-  Star,
-  AlertCircle,
-  FileText,
-  Activity,
-} from 'lucide-react'
-import { Link } from '@/i18n/navigation'
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/admin/AdminHeading'
+import { useState } from 'react';
+import { Phone, Clock, User, Target, Star, AlertCircle, FileText, Activity } from 'lucide-react';
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/admin/AdminHeading';
 import {
   CONTACT_METHOD_LABELS,
   EMERGENCY_RELATION_LABELS,
   type ContactMethod,
   type EmergencyRelation,
-} from '@/config/team'
-import { CurrentFocusInput } from './activity/CurrentFocusInput'
-import { WorkingHoursDisplay } from './WorkingHoursDisplay'
-import { formatDateShort } from '@/lib/date-formats'
-import type { TeamProfileViewProps } from './types'
-import { ROUTES } from '@/config/routes'
+} from '@/config/team';
+import { CurrentFocusInput } from './activity/CurrentFocusInput';
+import { WorkingHoursDisplay } from './WorkingHoursDisplay';
+import { formatDateShort } from '@/lib/date-formats';
+import type { TeamProfileViewProps } from './types';
+import { ROUTES } from '@/config/routes';
 
-export function TeamProfileView({
-  profile,
-  isSuperAdmin,
-}: TeamProfileViewProps) {
-  const [currentFocus, setCurrentFocus] = useState(profile.current_focus)
-  const t = useTranslations('admin.team')
+export function TeamProfileView({ profile, isSuperAdmin }: TeamProfileViewProps) {
+  const [currentFocus, setCurrentFocus] = useState(profile.current_focus);
+  const t = useTranslations('admin.team');
 
   return (
     <div className="space-y-6">
@@ -57,7 +45,9 @@ export function TeamProfileView({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Activity className="w-5 h-5 text-action" />
-              <Heading level={3} className="text-text-primary">{t('activities')}</Heading>
+              <Heading level={3} className="text-text-primary">
+                {t('activities')}
+              </Heading>
             </div>
             <Link
               href={ROUTES.admin.teamActivity}
@@ -66,9 +56,7 @@ export function TeamProfileView({
               {t('viewTeamActivities')}
             </Link>
           </div>
-          <p className="mt-2 text-sm text-text-secondary">
-            {t('activitiesDescription')}
-          </p>
+          <p className="mt-2 text-sm text-text-secondary">{t('activitiesDescription')}</p>
         </div>
       </div>
 
@@ -134,9 +122,7 @@ export function TeamProfileView({
                 <Heading level={3} className="text-sm text-text-secondary mb-1">
                   {t('goals')}
                 </Heading>
-                <p className="text-text-secondary text-sm whitespace-pre-wrap">
-                  {profile.goals}
-                </p>
+                <p className="text-text-secondary text-sm whitespace-pre-wrap">{profile.goals}</p>
               </div>
             )}
 
@@ -214,7 +200,8 @@ export function TeamProfileView({
                   {t('preferredContact')}
                 </Heading>
                 <p className="text-text-secondary text-sm">
-                  {CONTACT_METHOD_LABELS[profile.preferred_contact as ContactMethod] || profile.preferred_contact}
+                  {CONTACT_METHOD_LABELS[profile.preferred_contact as ContactMethod] ||
+                    profile.preferred_contact}
                 </p>
               </div>
             </div>
@@ -236,7 +223,11 @@ export function TeamProfileView({
                       {profile.emergency_contact_name}
                       {profile.emergency_contact_relation && (
                         <span className="text-text-muted ml-2">
-                          ({EMERGENCY_RELATION_LABELS[profile.emergency_contact_relation as EmergencyRelation] || profile.emergency_contact_relation})
+                          (
+                          {EMERGENCY_RELATION_LABELS[
+                            profile.emergency_contact_relation as EmergencyRelation
+                          ] || profile.emergency_contact_relation}
+                          )
                         </span>
                       )}
                     </span>
@@ -245,9 +236,7 @@ export function TeamProfileView({
                 {profile.emergency_contact_phone && (
                   <div className="flex items-center gap-2">
                     <Phone className="w-4 h-4 text-text-muted" />
-                    <span className="text-text-secondary">
-                      {profile.emergency_contact_phone}
-                    </span>
+                    <span className="text-text-secondary">{profile.emergency_contact_phone}</span>
                   </div>
                 )}
               </div>
@@ -257,7 +246,10 @@ export function TeamProfileView({
           {/* HR Notes - Super Admin Only */}
           {isSuperAdmin && profile.hr_notes && (
             <div className="rounded-lg border border-warning-200 bg-warning-50 p-5 dark:border-warning-800 dark:bg-warning-900/20">
-              <Heading level={2} className="text-warning-900 dark:text-warning-200 mb-4 flex items-center gap-2">
+              <Heading
+                level={2}
+                className="text-warning-900 dark:text-warning-200 mb-4 flex items-center gap-2"
+              >
                 <FileText className="w-5 h-5" />
                 {t('hrNotes')}
               </Heading>
@@ -271,9 +263,13 @@ export function TeamProfileView({
 
       {/* Meta Info */}
       <div className="text-xs text-text-muted flex gap-4">
-        <span>{t('createdAt')}: {formatDateShort(profile.created_at)}</span>
-        <span>{t('updatedAt')}: {formatDateShort(profile.updated_at)}</span>
+        <span>
+          {t('createdAt')}: {formatDateShort(profile.created_at)}
+        </span>
+        <span>
+          {t('updatedAt')}: {formatDateShort(profile.updated_at)}
+        </span>
       </div>
     </div>
-  )
+  );
 }

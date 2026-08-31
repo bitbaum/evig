@@ -1,20 +1,20 @@
-'use client'
+'use client';
 
 /**
  * Confirmation modal for deleting a user
  */
 
-import { Loader2 } from 'lucide-react'
-import { Modal } from '@/components/ui/Modal'
-import { Button } from '@/components/ui/button'
-import type { UserRow } from './types'
+import { Loader2 } from 'lucide-react';
+import { Modal } from '@/components/ui/Modal';
+import { Button } from '@/components/ui/button';
+import type { UserRow } from './types';
 
 interface DeleteUserModalProps {
-  user: UserRow
-  isDeleting: boolean
-  error: string | null
-  onConfirm: () => void
-  onClose: () => void
+  user: UserRow;
+  isDeleting: boolean;
+  error: string | null;
+  onConfirm: () => void;
+  onClose: () => void;
 }
 
 export function DeleteUserModal({
@@ -37,15 +37,12 @@ export function DeleteUserModal({
           Bist du sicher, dass du diesen Benutzer löschen möchten?
         </p>
         <div className="p-3 bg-surface-raised rounded-lg">
-          <p className="font-medium text-text-primary">
-            {user.name || 'Kein Name'}
-          </p>
-          <p className="text-sm text-text-tertiary">
-            {user.email}
-          </p>
+          <p className="font-medium text-text-primary">{user.name || 'Kein Name'}</p>
+          <p className="text-sm text-text-tertiary">{user.email}</p>
         </div>
         <p className="mt-3 text-sm text-error-600 dark:text-error-400">
-          Diese Aktion kann nicht rückgängig gemacht werden. Alle Daten des Benutzers werden permanent gelöscht.
+          Diese Aktion kann nicht rückgängig gemacht werden. Alle Daten des Benutzers werden
+          permanent gelöscht.
         </p>
       </div>
 
@@ -65,5 +62,5 @@ export function DeleteUserModal({
         </Button>
       </div>
     </Modal>
-  )
+  );
 }

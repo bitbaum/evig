@@ -26,7 +26,7 @@ interface NarrativeParams {
 function buildTallySummary(
   method: string,
   outcome: Record<string, unknown>,
-  options: DecisionOption[]
+  options: DecisionOption[],
 ): string {
   const totalVotes = (outcome.totalVotes as number) ?? 0;
 
@@ -52,20 +52,24 @@ function buildTallySummary(
     case 'dot':
     case 'score':
     case 'ranked_choice': {
-      const ranked = (outcome.ranked as Array<{
-        label: string;
-        votes?: number;
-        dots?: number;
-        averageScore?: number;
-        bordaPoints?: number;
-      }>) ?? [];
+      const ranked =
+        (outcome.ranked as Array<{
+          label: string;
+          votes?: number;
+          dots?: number;
+          averageScore?: number;
+          bordaPoints?: number;
+        }>) ?? [];
       const top3 = ranked.slice(0, 3).map((o, i) => {
         const metric = o.votes ?? o.dots ?? o.bordaPoints ?? o.averageScore ?? 0;
         const unit =
-          method === 'approval' ? 'Stimmen'
-          : method === 'dot' ? 'Punkte'
-          : method === 'ranked_choice' ? 'Borda-Punkte'
-          : 'Ø Sterne';
+          method === 'approval'
+            ? 'Stimmen'
+            : method === 'dot'
+              ? 'Punkte'
+              : method === 'ranked_choice'
+                ? 'Borda-Punkte'
+                : 'Ø Sterne';
         return `${i + 1}. ${o.label}: ${metric} ${unit}`;
       });
       return `${totalVotes} Stimmen. Rangfolge: ${top3.join(', ')}.`;
@@ -88,9 +92,7 @@ const CATEGORY_LABELS: Record<string, string> = {
  * Generate a formal narrative describing the outcome of a closed decision.
  * Returns null if the AI is unavailable or times out.
  */
-export async function generateOutcomeNarrative(
-  params: NarrativeParams
-): Promise<string | null> {
+export async function generateOutcomeNarrative(params: NarrativeParams): Promise<string | null> {
   try {
     const { title, votingMethod, options, outcome, outcomeSummary, category } = params;
     const tallySummary = buildTallySummary(votingMethod, outcome, options);

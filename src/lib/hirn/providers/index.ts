@@ -5,14 +5,14 @@
  * Handles provider selection, fallbacks, and configuration.
  */
 
-import { db } from '@/db'
-import { hirnProviderSettings } from '@/db/schema'
-import { eq, and, desc, isNull, sql } from 'drizzle-orm'
-import { logger } from '@/lib/logger'
-import { GroqProvider } from './groq'
-import { OllamaProvider } from './ollama'
-import { OpenRouterProvider } from './openrouter'
-import { recordLLMFailure, recordLLMSuccess } from '../health'
+import { db } from '@/db';
+import { hirnProviderSettings } from '@/db/schema';
+import { eq, and, desc, isNull, sql } from 'drizzle-orm';
+import { logger } from '@/lib/logger';
+import { GroqProvider } from './groq';
+import { OllamaProvider } from './ollama';
+import { OpenRouterProvider } from './openrouter';
+import { recordLLMFailure, recordLLMSuccess } from '../health';
 import type {
   AIProvider,
   ProviderConfig,
@@ -21,9 +21,9 @@ import type {
   ChatCompletionResponse,
   EmbeddingOptions,
   EmbeddingResponse,
-} from './types'
+} from './types';
 
-export * from './types'
+export * from './types';
 
 /**
  * Create a provider instance by name
@@ -31,13 +31,13 @@ export * from './types'
 export function createProvider(name: ProviderName, config: ProviderConfig = {}): AIProvider {
   switch (name) {
     case 'ollama':
-      return new OllamaProvider(config)
+      return new OllamaProvider(config);
     case 'groq':
-      return new GroqProvider(config)
+      return new GroqProvider(config);
     case 'openrouter':
-      return new OpenRouterProvider(config)
+      return new OpenRouterProvider(config);
     default:
-      throw new Error(`Unknown provider: ${name}`)
+      throw new Error(`Unknown provider: ${name}`);
   }
 }
 
@@ -45,16 +45,16 @@ export function createProvider(name: ProviderName, config: ProviderConfig = {}):
  * Provider settings from database
  */
 interface ProviderSettings {
-  provider: ProviderName
-  is_enabled: boolean
-  is_default: boolean
+  provider: ProviderName;
+  is_enabled: boolean;
+  is_default: boolean;
   settings: {
-    api_key?: string
-    base_url?: string
-    model?: string
-    embedding_model?: string
-    [key: string]: unknown
-  }
+    api_key?: string;
+    base_url?: string;
+    model?: string;
+    embedding_model?: string;
+    [key: string]: unknown;
+  };
 }
 
 /**
@@ -62,11 +62,11 @@ interface ProviderSettings {
  */
 export async function getProviderSettings(
   scope: 'system' | 'user' = 'system',
-  userId?: string
+  userId?: string,
 ): Promise<ProviderSettings[]> {
   const userCondition = userId
     ? eq(hirnProviderSettings.userId, userId)
-    : isNull(hirnProviderSettings.userId)
+    : isNull(hirnProviderSettings.userId);
 
   const rows = await db
     .select({
@@ -77,14 +77,14 @@ export async function getProviderSettings(
     })
     .from(hirnProviderSettings)
     .where(and(eq(hirnProviderSettings.scope, scope), userCondition))
-    .orderBy(desc(hirnProviderSettings.isDefault), hirnProviderSettings.provider)
+    .orderBy(desc(hirnProviderSettings.isDefault), hirnProviderSettings.provider);
 
-  return rows.map(r => ({
+  return rows.map((r) => ({
     provider: r.provider as ProviderName,
     is_enabled: r.is_enabled ?? true,
     is_default: r.is_default ?? false,
     settings: (r.settings ?? {}) as ProviderSettings['settings'],
-  }))
+  }));
 }
 
 /**
@@ -94,31 +94,31 @@ export async function getProviderSettings(
 export async function getDefaultChatProvider(userId?: string): Promise<AIProvider> {
   // Try user settings first
   if (userId) {
-    const userSettings = await getProviderSettings('user', userId)
-    const userDefault = userSettings.find(s => s.is_default && s.is_enabled)
+    const userSettings = await getProviderSettings('user', userId);
+    const userDefault = userSettings.find((s) => s.is_default && s.is_enabled);
     if (userDefault) {
       const provider = createProvider(userDefault.provider, {
         apiKey: userDefault.settings.api_key,
         baseUrl: userDefault.settings.base_url,
         model: userDefault.settings.model,
-      })
+      });
       if (await provider.isAvailable()) {
-        return provider
+        return provider;
       }
     }
   }
 
   // Try system settings
-  const systemSettings = await getProviderSettings('system')
-  const systemDefault = systemSettings.find(s => s.is_default && s.is_enabled)
+  const systemSettings = await getProviderSettings('system');
+  const systemDefault = systemSettings.find((s) => s.is_default && s.is_enabled);
   if (systemDefault) {
     const provider = createProvider(systemDefault.provider, {
       apiKey: systemDefault.settings.api_key,
       baseUrl: systemDefault.settings.base_url,
       model: systemDefault.settings.model,
-    })
+    });
     if (await provider.isAvailable()) {
-      return provider
+      return provider;
     }
     // Default is configured but its credentials are dead. Log loudly so
     // the failure surfaces in the app logs — the previous silent fall-
@@ -129,33 +129,36 @@ export async function getDefaultChatProvider(userId?: string): Promise<AIProvide
     logger.error('Default chat provider unavailable — credentials likely revoked', {
       provider: systemDefault.provider,
       hint: 'Update the API key for this provider in /admin/hirn or via env (e.g. GROQ_API_KEY).',
-    })
+    });
   }
 
   // Try any other available provider — explicit chain so the next-best
   // pick is logged. Skip the default we already tried.
-  for (const settings of systemSettings.filter(s => s.is_enabled && !s.is_default)) {
+  for (const settings of systemSettings.filter((s) => s.is_enabled && !s.is_default)) {
     const provider = createProvider(settings.provider, {
       apiKey: settings.settings.api_key,
       baseUrl: settings.settings.base_url,
       model: settings.settings.model,
-    })
+    });
     if (await provider.isAvailable()) {
       logger.warn('Using fallback chat provider — default was unavailable', {
         fallback: settings.provider,
         defaultProvider: systemDefault?.provider ?? null,
-      })
-      return provider
+      });
+      return provider;
     }
   }
 
   // Build a more actionable error than "No available AI providers
   // configured" — the prior message led users to think the providers
   // were missing entirely, when in practice the keys were just dead.
-  const tried = systemSettings.filter(s => s.is_enabled).map(s => s.provider).join(', ')
+  const tried = systemSettings
+    .filter((s) => s.is_enabled)
+    .map((s) => s.provider)
+    .join(', ');
   throw new Error(
     `Kein KI-Anbieter verfügbar. Geprüft: ${tried || 'keiner'}. Aktualisiere den API-Key (z.B. GROQ_API_KEY) oder die Anbieter-Einstellungen in /admin/hirn.`,
-  )
+  );
 }
 
 /**
@@ -172,13 +175,13 @@ export async function getChatResponse(
   userId?: string,
 ): Promise<ChatCompletionResponse> {
   try {
-    const provider = await getDefaultChatProvider(userId)
-    const response = await provider.chat(options)
-    recordLLMSuccess()
-    return response
+    const provider = await getDefaultChatProvider(userId);
+    const response = await provider.chat(options);
+    recordLLMSuccess();
+    return response;
   } catch (error) {
-    recordLLMFailure(error)
-    throw error
+    recordLLMFailure(error);
+    throw error;
   }
 }
 
@@ -189,29 +192,27 @@ export async function getChatResponse(
  */
 export async function getEmbeddingProvider(): Promise<AIProvider> {
   // Try Ollama first (preferred for embeddings - local and free)
-  const ollama = new OllamaProvider()
+  const ollama = new OllamaProvider();
   if (await ollama.isAvailable()) {
-    return ollama
+    return ollama;
   }
 
   // Try OpenRouter as fallback
-  const openrouter = new OpenRouterProvider()
+  const openrouter = new OpenRouterProvider();
   if (await openrouter.isAvailable()) {
-    logger.warn('Using OpenRouter for embeddings (Ollama unavailable)')
-    return openrouter
+    logger.warn('Using OpenRouter for embeddings (Ollama unavailable)');
+    return openrouter;
   }
 
-  throw new Error('No embedding provider available. Please start Ollama or configure OpenRouter.')
+  throw new Error('No embedding provider available. Please start Ollama or configure OpenRouter.');
 }
 
 /**
  * Generate embeddings using the best available provider
  */
-export async function generateEmbeddings(
-  options: EmbeddingOptions
-): Promise<EmbeddingResponse> {
-  const provider = await getEmbeddingProvider()
-  return provider.embed(options)
+export async function generateEmbeddings(options: EmbeddingOptions): Promise<EmbeddingResponse> {
+  const provider = await getEmbeddingProvider();
+  return provider.embed(options);
 }
 
 /**
@@ -221,11 +222,11 @@ export async function updateProviderSettings(
   provider: ProviderName,
   settings: Partial<ProviderSettings['settings']>,
   scope: 'system' | 'user' = 'system',
-  userId?: string
+  userId?: string,
 ): Promise<void> {
   const userCondition = userId
     ? eq(hirnProviderSettings.userId, userId)
-    : isNull(hirnProviderSettings.userId)
+    : isNull(hirnProviderSettings.userId);
 
   await db
     .update(hirnProviderSettings)
@@ -238,10 +239,9 @@ export async function updateProviderSettings(
         eq(hirnProviderSettings.provider, provider),
         eq(hirnProviderSettings.scope, scope),
         userCondition,
-      )
-    )
+      ),
+    );
 }
-
 
 /**
  * Enable or disable a provider.
@@ -250,11 +250,11 @@ export async function setProviderEnabled(
   provider: ProviderName,
   isEnabled: boolean,
   scope: 'system' | 'user' = 'system',
-  userId?: string
+  userId?: string,
 ): Promise<void> {
   const userCondition = userId
     ? eq(hirnProviderSettings.userId, userId)
-    : isNull(hirnProviderSettings.userId)
+    : isNull(hirnProviderSettings.userId);
 
   await db
     .update(hirnProviderSettings)
@@ -264,8 +264,8 @@ export async function setProviderEnabled(
         eq(hirnProviderSettings.provider, provider),
         eq(hirnProviderSettings.scope, scope),
         userCondition,
-      )
-    )
+      ),
+    );
 }
 
 /**
@@ -274,17 +274,17 @@ export async function setProviderEnabled(
 export async function setDefaultProvider(
   provider: ProviderName,
   scope: 'system' | 'user' = 'system',
-  userId?: string
+  userId?: string,
 ): Promise<void> {
   const userCondition = userId
     ? eq(hirnProviderSettings.userId, userId)
-    : isNull(hirnProviderSettings.userId)
+    : isNull(hirnProviderSettings.userId);
 
   // First, unset all defaults for this scope
   await db
     .update(hirnProviderSettings)
     .set({ isDefault: false, updatedAt: sql`NOW()` })
-    .where(and(eq(hirnProviderSettings.scope, scope), userCondition))
+    .where(and(eq(hirnProviderSettings.scope, scope), userCondition));
 
   // Then set the new default
   await db
@@ -295,8 +295,8 @@ export async function setDefaultProvider(
         eq(hirnProviderSettings.provider, provider),
         eq(hirnProviderSettings.scope, scope),
         userCondition,
-      )
-    )
+      ),
+    );
 }
 
 /**
@@ -306,7 +306,7 @@ export async function addUserProvider(
   userId: string,
   provider: ProviderName,
   settings: ProviderSettings['settings'],
-  isDefault: boolean = false
+  isDefault: boolean = false,
 ): Promise<void> {
   await db
     .insert(hirnProviderSettings)
@@ -319,11 +319,15 @@ export async function addUserProvider(
       settings,
     })
     .onConflictDoUpdate({
-      target: [hirnProviderSettings.scope, hirnProviderSettings.userId, hirnProviderSettings.provider],
+      target: [
+        hirnProviderSettings.scope,
+        hirnProviderSettings.userId,
+        hirnProviderSettings.provider,
+      ],
       set: {
         settings,
         isDefault: isDefault,
         updatedAt: sql`NOW()`,
       },
-    })
+    });
 }

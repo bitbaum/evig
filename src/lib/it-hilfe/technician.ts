@@ -1,6 +1,6 @@
-import { db } from '@/db'
-import { repairerProfiles } from '@/db/schema'
-import { and, eq } from 'drizzle-orm'
+import { db } from '@/db';
+import { repairerProfiles } from '@/db/schema';
+import { and, eq } from 'drizzle-orm';
 
 /**
  * SSOT for "is this user a registered technician who may offer IT-Hilfe".
@@ -19,6 +19,6 @@ export async function getActiveTechnicianProfileId(userId: string): Promise<stri
   const rows = await db
     .select({ id: repairerProfiles.id })
     .from(repairerProfiles)
-    .where(and(eq(repairerProfiles.userId, userId), eq(repairerProfiles.isActive, true)))
-  return rows[0]?.id ?? null
+    .where(and(eq(repairerProfiles.userId, userId), eq(repairerProfiles.isActive, true)));
+  return rows[0]?.id ?? null;
 }

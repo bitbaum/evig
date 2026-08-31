@@ -8,21 +8,17 @@
  * barrel — both resolve here).
  */
 
-export { BRAND_CONTEXT } from './shared'
+export { BRAND_CONTEXT } from './shared';
 
 export {
   ERFASSUNG_FIELD_DESCRIPTIONS,
   ERFASSUNG_PROMPTS,
   getErfassungQuickActionPrompt,
-} from './erfassung'
-export type { ErfassungQuickAction } from './erfassung'
+} from './erfassung';
+export type { ErfassungQuickAction } from './erfassung';
 
-export {
-  BLOG_PROMPTS,
-  IT_HILFE_PROMPTS,
-  getBlogQuickActionPrompt,
-} from './content'
-export type { BlogQuickAction } from './content'
+export { BLOG_PROMPTS, IT_HILFE_PROMPTS, getBlogQuickActionPrompt } from './content';
+export type { BlogQuickAction } from './content';
 
 export {
   PROTOCOL_PROMPTS,
@@ -30,41 +26,43 @@ export {
   VOTING_METHOD_LABELS,
   VOTING_METHOD_EXPLANATIONS,
   getProtocolQuickActionPrompt,
-} from './decisions'
-export type { ProtocolQuickAction, VotingAdvisorQuickQuestion } from './decisions'
+} from './decisions';
+export type { ProtocolQuickAction, VotingAdvisorQuickQuestion } from './decisions';
 
 // =============================================================================
 // FORM AI REGISTRY
 // =============================================================================
 
-import { BRAND_CONTEXT } from './shared'
-import { ERFASSUNG_PROMPTS } from './erfassung'
-import { BLOG_PROMPTS, IT_HILFE_PROMPTS } from './content'
-import { PROTOCOL_PROMPTS } from './decisions'
-import { BASE_REGION } from '@/config/org'
-import { KATEGORIEN } from '@/config/erfassung/categories'
-import { TEAM_ACCENT_OPTIONS, TEAM_ACCENT_LABELS } from '@/config/teams'
+import { BRAND_CONTEXT } from './shared';
+import { ERFASSUNG_PROMPTS } from './erfassung';
+import { BLOG_PROMPTS, IT_HILFE_PROMPTS } from './content';
+import { PROTOCOL_PROMPTS } from './decisions';
+import { BASE_REGION } from '@/config/org';
+import { KATEGORIEN } from '@/config/erfassung/categories';
+import { TEAM_ACCENT_OPTIONS, TEAM_ACCENT_LABELS } from '@/config/teams';
 
 // Category options for AI extraction, derived from the KATEGORIEN SSOT — the
 // same source the marketplace category dropdown and resolveCategoryValue() use.
 // The marketplace prompt previously hardcoded a stale list that had even
 // INVERTED 70/90 (claimed 70=Netzwerk / 90=Komponenten while the SSOT is
 // 70=Komponenten / 90=Netzwerk), so hard drives were filed under Netzwerk.
-const KATEGORIE_LISTE = KATEGORIEN.map((k) => `${k.value}=${k.label}`).join(', ')
+const KATEGORIE_LISTE = KATEGORIEN.map((k) => `${k.value}=${k.label}`).join(', ');
 
 // Team accent options for AI extraction, derived from the teams config SSOT —
 // the same source the /admin/teams form select uses.
-const TEAM_ACCENT_LISTE = TEAM_ACCENT_OPTIONS.map((a) => `${a}=${TEAM_ACCENT_LABELS[a]}`).join(', ')
+const TEAM_ACCENT_LISTE = TEAM_ACCENT_OPTIONS.map((a) => `${a}=${TEAM_ACCENT_LABELS[a]}`).join(
+  ', ',
+);
 
 export interface FormAIConfig {
-  system: string
-  extract: string
-  schema: string | null
-  refine?: string
-  quickActions?: Record<string, { label: string; prompt: string }>
-  maxTokens?: number
-  temperature?: number
-  auth?: 'user' | 'staff'
+  system: string;
+  extract: string;
+  schema: string | null;
+  refine?: string;
+  quickActions?: Record<string, { label: string; prompt: string }>;
+  maxTokens?: number;
+  temperature?: number;
+  auth?: 'user' | 'staff';
 }
 
 /**
@@ -111,8 +109,14 @@ ANWEISUNG:
 
 Antworte NUR mit dem verbesserten JSON (gleiche Felder wie oben).`,
     quickActions: {
-      strengths: { label: 'Stärken ausformulieren', prompt: 'Formuliere die Stärken klar und wertschätzend aus.' },
-      goals: { label: 'Lernziele vorschlagen', prompt: 'Schlage 2-3 sinnvolle Entwicklungsziele vor.' },
+      strengths: {
+        label: 'Stärken ausformulieren',
+        prompt: 'Formuliere die Stärken klar und wertschätzend aus.',
+      },
+      goals: {
+        label: 'Lernziele vorschlagen',
+        prompt: 'Schlage 2-3 sinnvolle Entwicklungsziele vor.',
+      },
     },
     auth: 'staff',
   },
@@ -149,11 +153,14 @@ ANWEISUNG:
 
 Antworte NUR mit dem verbesserten JSON (gleiche Felder wie oben).`,
     quickActions: {
-      purpose: { label: 'Zweck ausformulieren', prompt: 'Formuliere den Zweck klar und knapp aus (1-3 Sätze).' },
+      purpose: {
+        label: 'Zweck ausformulieren',
+        prompt: 'Formuliere den Zweck klar und knapp aus (1-3 Sätze).',
+      },
     },
     auth: 'staff',
   },
-  'erfassung': {
+  erfassung: {
     system: ERFASSUNG_PROMPTS.system,
     extract: ERFASSUNG_PROMPTS.extract,
     schema: ERFASSUNG_PROMPTS.schema,
@@ -166,8 +173,16 @@ Antworte NUR mit dem verbesserten JSON (gleiche Felder wie oben).`,
     extract: IT_HILFE_PROMPTS.extract,
     schema: IT_HILFE_PROMPTS.schema,
     quickActions: {
-      diagnoseTips: { label: 'Diagnose-Tipps', prompt: 'Generiere 2-3 mögliche Ursachen und erste Diagnoseschritte basierend auf der Problembeschreibung. Berücksichtige häufige Ursachen für das beschriebene Gerät.' },
-      suggestSkills: { label: 'Benötigte Skills', prompt: 'Schlage die wahrscheinlich benötigten Reparatur-Skills vor basierend auf dem beschriebenen Problem.' },
+      diagnoseTips: {
+        label: 'Diagnose-Tipps',
+        prompt:
+          'Generiere 2-3 mögliche Ursachen und erste Diagnoseschritte basierend auf der Problembeschreibung. Berücksichtige häufige Ursachen für das beschriebene Gerät.',
+      },
+      suggestSkills: {
+        label: 'Benötigte Skills',
+        prompt:
+          'Schlage die wahrscheinlich benötigten Reparatur-Skills vor basierend auf dem beschriebenen Problem.',
+      },
     },
     auth: 'user',
   },
@@ -178,15 +193,27 @@ Antworte NUR mit dem verbesserten JSON (gleiche Felder wie oben).`,
     refine: BLOG_PROMPTS.refine,
     quickActions: {
       ...BLOG_PROMPTS.quickActions,
-      improveContent: { label: 'Inhalt verbessern', prompt: 'Verbessere den Text: klarere Struktur, besserer Lesefluss, ansprechendere Formulierungen.' },
-      addExamples: { label: 'Beispiele hinzufügen', prompt: 'Ergänze konkrete Beispiele und Praxistipps, die den Artikel für die Community wertvoller machen.' },
-      seoOptimize: { label: 'SEO optimieren', prompt: 'Optimiere Titel, Beschreibung und Struktur für Suchmaschinen. Schlage einen SEO-Titel und eine Meta-Beschreibung vor.' },
+      improveContent: {
+        label: 'Inhalt verbessern',
+        prompt:
+          'Verbessere den Text: klarere Struktur, besserer Lesefluss, ansprechendere Formulierungen.',
+      },
+      addExamples: {
+        label: 'Beispiele hinzufügen',
+        prompt:
+          'Ergänze konkrete Beispiele und Praxistipps, die den Artikel für die Community wertvoller machen.',
+      },
+      seoOptimize: {
+        label: 'SEO optimieren',
+        prompt:
+          'Optimiere Titel, Beschreibung und Struktur für Suchmaschinen. Schlage einen SEO-Titel und eine Meta-Beschreibung vor.',
+      },
     },
     maxTokens: 4096,
     temperature: 0.7,
     auth: 'staff',
   },
-  'protocol': {
+  protocol: {
     system: PROTOCOL_PROMPTS.system,
     extract: PROTOCOL_PROMPTS.extract,
     schema: PROTOCOL_PROMPTS.schema,
@@ -194,7 +221,7 @@ Antworte NUR mit dem verbesserten JSON (gleiche Felder wie oben).`,
     maxTokens: 4096,
     auth: 'staff',
   },
-  'marketplace': {
+  marketplace: {
     system: `${BRAND_CONTEXT}
 
 Du bist ein Assistent für den evig Marketplace.
@@ -248,13 +275,25 @@ ANWEISUNG:
 
 Antworte NUR mit dem verbesserten JSON (gleiche Felder wie bei der Extraktion, inkl. specs-Array).`,
     quickActions: {
-      improveDescription: { label: 'Beschreibung verbessern', prompt: 'Verbessere die Beschreibung: Mache sie ansprechender und hebe Verkaufsargumente hervor.' },
-      suggestPrice: { label: 'Preis vorschlagen', prompt: 'Schätze einen realistischen Preis basierend auf dem Schweizer Gebrauchtmarkt (ricardo.ch, tutti.ch).' },
-      extractSpecs: { label: 'Specs erkennen', prompt: 'Ergänze die technischen Spezifikationen basierend auf dem Produktmodell. Füge CPU, RAM, Speicher, Display und andere relevante Specs hinzu. Nutze die aktuellen Daten (brand, model, title) um fehlende Specs zu recherchieren.' },
+      improveDescription: {
+        label: 'Beschreibung verbessern',
+        prompt:
+          'Verbessere die Beschreibung: Mache sie ansprechender und hebe Verkaufsargumente hervor.',
+      },
+      suggestPrice: {
+        label: 'Preis vorschlagen',
+        prompt:
+          'Schätze einen realistischen Preis basierend auf dem Schweizer Gebrauchtmarkt (ricardo.ch, tutti.ch).',
+      },
+      extractSpecs: {
+        label: 'Specs erkennen',
+        prompt:
+          'Ergänze die technischen Spezifikationen basierend auf dem Produktmodell. Füge CPU, RAM, Speicher, Display und andere relevante Specs hinzu. Nutze die aktuellen Daten (brand, model, title) um fehlende Specs zu recherchieren.',
+      },
     },
     auth: 'user',
   },
-  'workshop': {
+  workshop: {
     system: `${BRAND_CONTEXT}
 
 Du bist ein Assistent für Workshop-Vorschläge bei evig.
@@ -301,12 +340,18 @@ ANWEISUNG:
 
 Antworte NUR mit dem verbesserten JSON (gleiche Felder wie oben).`,
     quickActions: {
-      addObjectives: { label: 'Lernziele vorschlagen', prompt: 'Ergänze 2-3 weitere konkrete, messbare Lernziele.' },
-      suggestPrerequisites: { label: 'Voraussetzungen', prompt: 'Schlage sinnvolle Voraussetzungen und benötigte Materialien vor.' },
+      addObjectives: {
+        label: 'Lernziele vorschlagen',
+        prompt: 'Ergänze 2-3 weitere konkrete, messbare Lernziele.',
+      },
+      suggestPrerequisites: {
+        label: 'Voraussetzungen',
+        prompt: 'Schlage sinnvolle Voraussetzungen und benötigte Materialien vor.',
+      },
     },
     auth: 'user',
   },
-  'service': {
+  service: {
     system: `${BRAND_CONTEXT}
 
 Du bist ein Assistent für die Erstellung von Dienstleistungs-Seiten bei evig.
@@ -361,12 +406,18 @@ ANWEISUNG:
 
 Antworte NUR mit dem verbesserten JSON (gleiche Felder wie oben).`,
     quickActions: {
-      addFeatures: { label: 'Features generieren', prompt: 'Ergänze 2-3 weitere überzeugende Features/Vorteile.' },
-      generateSteps: { label: 'Prozessschritte', prompt: 'Erstelle einen klaren 3-5 Schritte Prozessablauf.' },
+      addFeatures: {
+        label: 'Features generieren',
+        prompt: 'Ergänze 2-3 weitere überzeugende Features/Vorteile.',
+      },
+      generateSteps: {
+        label: 'Prozessschritte',
+        prompt: 'Erstelle einen klaren 3-5 Schritte Prozessablauf.',
+      },
     },
     auth: 'staff',
   },
-  'task': {
+  task: {
     system: `${BRAND_CONTEXT}
 
 Du bist ein Assistent für die Aufgabenverwaltung bei evig.
@@ -398,12 +449,20 @@ Antworte NUR mit folgendem JSON:
 Wichtig: Schweizer Deutsch (ss statt ß). Anleitungen klar und für Freiwillige verständlich formulieren.`,
     schema: null,
     quickActions: {
-      estimateTime: { label: 'Zeitschätzung', prompt: 'Schätze den realistischen Zeitaufwand für diese Aufgabe. Berücksichtige, dass Freiwillige arbeiten und oft weniger Erfahrung haben.' },
-      addSteps: { label: 'Schritte strukturieren', prompt: 'Teile die Aufgabe in 3-5 konkrete, umsetzbare Schritte auf. Jeder Schritt sollte für Freiwillige verständlich sein.' },
+      estimateTime: {
+        label: 'Zeitschätzung',
+        prompt:
+          'Schätze den realistischen Zeitaufwand für diese Aufgabe. Berücksichtige, dass Freiwillige arbeiten und oft weniger Erfahrung haben.',
+      },
+      addSteps: {
+        label: 'Schritte strukturieren',
+        prompt:
+          'Teile die Aufgabe in 3-5 konkrete, umsetzbare Schritte auf. Jeder Schritt sollte für Freiwillige verständlich sein.',
+      },
     },
     auth: 'staff',
   },
-  'timecard': {
+  timecard: {
     system: `${BRAND_CONTEXT}
 
 Du bist ein Assistent für Zeitkarten bei evig.
@@ -479,13 +538,23 @@ Antworte NUR mit JSON (work_date als echtes Datum aus dem Kontext):
 Gib NUR die Tage zurück, die sich ändern (sie überschreiben bestehende Tage am
 gleichen Datum). Löse relative Angaben über die calendar-Karte auf. Erfinde keine Tage.`,
     quickActions: {
-      normalWeek: { label: 'Normale Woche', prompt: 'Fülle die aktuelle Woche mit dem Arbeitsplan (schedule_days) als normale Arbeitstage.' },
-      sickWeek: { label: 'Diese Woche krank', prompt: 'Markiere alle geplanten Arbeitstage dieser Woche als krank.' },
-      leftEarly: { label: 'Heute früher gegangen', prompt: 'Ich bin heute zwei Stunden früher gegangen. Passe den heutigen Tag an.' },
+      normalWeek: {
+        label: 'Normale Woche',
+        prompt:
+          'Fülle die aktuelle Woche mit dem Arbeitsplan (schedule_days) als normale Arbeitstage.',
+      },
+      sickWeek: {
+        label: 'Diese Woche krank',
+        prompt: 'Markiere alle geplanten Arbeitstage dieser Woche als krank.',
+      },
+      leftEarly: {
+        label: 'Heute früher gegangen',
+        prompt: 'Ich bin heute zwei Stunden früher gegangen. Passe den heutigen Tag an.',
+      },
     },
     auth: 'staff',
   },
-  'decision': {
+  decision: {
     system: `${BRAND_CONTEXT}
 
 Du bist ein Assistent für die Entscheidungsfindung bei evig.
@@ -549,19 +618,23 @@ Schweizer Deutsch (ss statt ß, korrekte Umlaute).`,
     quickActions: {
       prosAndCons: {
         label: 'Pro/Contra analysieren',
-        prompt: 'Erstelle eine ausgewogene Pro/Contra-Analyse für den Vorschlag. Berücksichtige: Kosten und Ressourcen für den Verein, Nutzen für Community und Mission, Machbarkeit mit Freiwilligen, mögliche Risiken oder Nebenwirkungen. Aktualisiere die Beschreibung um diese Analyse.',
+        prompt:
+          'Erstelle eine ausgewogene Pro/Contra-Analyse für den Vorschlag. Berücksichtige: Kosten und Ressourcen für den Verein, Nutzen für Community und Mission, Machbarkeit mit Freiwilligen, mögliche Risiken oder Nebenwirkungen. Aktualisiere die Beschreibung um diese Analyse.',
       },
       suggestOptions: {
         label: 'Abstimmungsoptionen verbessern',
-        prompt: 'Überprüfe und verbessere die Abstimmungsoptionen: Sind sie klar formuliert, präzise und unterscheidbar? Schlage ggf. eine Enthaltungsoption oder eine "weiter diskutieren"-Option vor. Optionen sollen für Abstimmende ohne Vorwissen verständlich sein.',
+        prompt:
+          'Überprüfe und verbessere die Abstimmungsoptionen: Sind sie klar formuliert, präzise und unterscheidbar? Schlage ggf. eine Enthaltungsoption oder eine "weiter diskutieren"-Option vor. Optionen sollen für Abstimmende ohne Vorwissen verständlich sein.',
       },
       clarifyQuestion: {
         label: 'Fragestellung schärfen',
-        prompt: 'Überprüfe ob die Fragestellung präzise und eindeutig ist. Formuliere Titel und Beschreibung so, dass klar ist WAS entschieden wird, WARUM jetzt und WAS die Konsequenz der Entscheidung ist. Vermeide Mehrdeutigkeiten.',
+        prompt:
+          'Überprüfe ob die Fragestellung präzise und eindeutig ist. Formuliere Titel und Beschreibung so, dass klar ist WAS entschieden wird, WARUM jetzt und WAS die Konsequenz der Entscheidung ist. Vermeide Mehrdeutigkeiten.',
       },
       discussionPrompts: {
         label: 'Diskussionsfragen vorschlagen',
-        prompt: 'Schlage 3-4 Diskussionsfragen vor, die das Team vor der Abstimmung klären sollte. Nutze die Beschreibung als Kontext. Fragen sollen verschiedene Perspektiven beleuchten (Kosten, Nutzen, Risiko, Alternativen).',
+        prompt:
+          'Schlage 3-4 Diskussionsfragen vor, die das Team vor der Abstimmung klären sollte. Nutze die Beschreibung als Kontext. Fragen sollen verschiedene Perspektiven beleuchten (Kosten, Nutzen, Risiko, Alternativen).',
       },
     },
     auth: 'staff',
@@ -607,8 +680,14 @@ ANWEISUNG:
 
 Antworte NUR mit dem verbesserten JSON (gleiche Felder wie oben).`,
     quickActions: {
-      improveWriting: { label: 'Schreibstil verbessern', prompt: 'Verbessere den Schreibstil: Klarer, ansprechender, mit besserer Struktur.' },
-      suggestTitle: { label: 'Titel vorschlagen', prompt: 'Schlage 3 alternative, SEO-freundliche Titel vor.' },
+      improveWriting: {
+        label: 'Schreibstil verbessern',
+        prompt: 'Verbessere den Schreibstil: Klarer, ansprechender, mit besserer Struktur.',
+      },
+      suggestTitle: {
+        label: 'Titel vorschlagen',
+        prompt: 'Schlage 3 alternative, SEO-freundliche Titel vor.',
+      },
     },
     maxTokens: 4096,
     temperature: 0.7,
@@ -653,7 +732,7 @@ Antworte NUR mit folgendem JSON:
     temperature: 0.3,
     auth: 'staff',
   },
-} as const satisfies Record<string, FormAIConfig>
+} as const satisfies Record<string, FormAIConfig>;
 
 // =============================================================================
 // TEMPLATE HELPER
@@ -662,13 +741,10 @@ Antworte NUR mit folgendem JSON:
 /**
  * Fill template placeholders in a prompt string
  */
-export function fillPromptTemplate(
-  template: string,
-  values: Record<string, string>
-): string {
-  let result = template
+export function fillPromptTemplate(template: string, values: Record<string, string>): string {
+  let result = template;
   for (const [key, value] of Object.entries(values)) {
-    result = result.replace(new RegExp(`\\{${key}\\}`, 'g'), value)
+    result = result.replace(new RegExp(`\\{${key}\\}`, 'g'), value);
   }
-  return result
+  return result;
 }

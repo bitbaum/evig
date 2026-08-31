@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Help Request Card Component
@@ -6,9 +6,9 @@
  * Displays a single help request with status and actions
  */
 
-import { Users, User, CheckCircle, Clock, AlertTriangle, Loader2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import Heading from '@/components/admin/AdminHeading'
+import { Users, User, CheckCircle, Clock, AlertTriangle, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Heading from '@/components/admin/AdminHeading';
 import {
   getHelpRequestUrgencyLabel,
   getHelpRequestUrgencyColor,
@@ -16,29 +16,29 @@ import {
   getHelpRequestStatusColor,
   getActivityCategoryLabel,
   HELP_REQUEST_STATUSES,
-} from '@/config/activity'
-import { URGENCY } from '@/config/it-hilfe'
-import { formatRelativeTime } from '@/lib/utils'
-import type { HelpRequest } from './types'
+} from '@/config/activity';
+import { URGENCY } from '@/config/it-hilfe';
+import { formatRelativeTime } from '@/lib/utils';
+import type { HelpRequest } from './types';
 
 interface HelpRequestCardProps {
-  request: HelpRequest
-  onResolve?: (id: string) => void
-  onTakeOn?: (id: string) => void
-  isResolving?: boolean
-  isTakingOn?: boolean
-  showActions?: boolean
-  currentUserEmail?: string
+  request: HelpRequest;
+  onResolve?: (id: string) => void;
+  onTakeOn?: (id: string) => void;
+  isResolving?: boolean;
+  isTakingOn?: boolean;
+  showActions?: boolean;
+  currentUserEmail?: string;
 }
 
 function getUrgencyIcon(urgency: string) {
   switch (urgency) {
     case 'urgent':
-      return <AlertTriangle className="w-4 h-4 text-error-500" />
+      return <AlertTriangle className="w-4 h-4 text-error-500" />;
     case 'high':
-      return <AlertTriangle className="w-4 h-4 text-secondary-500" />
+      return <AlertTriangle className="w-4 h-4 text-secondary-500" />;
     default:
-      return null
+      return null;
   }
 }
 
@@ -57,18 +57,18 @@ export function HelpRequestCard({
         .map((n) => n[0])
         .join('')
         .substring(0, 2)
-    : request.requester_email[0].toUpperCase()
+    : request.requester_email[0].toUpperCase();
 
-  const requesterDisplayName = request.requester_name || request.requester_email.split('@')[0]
+  const requesterDisplayName = request.requester_name || request.requester_email.split('@')[0];
 
-  const isOpen = request.status === HELP_REQUEST_STATUSES.OPEN
-  const isInProgress = request.status === HELP_REQUEST_STATUSES.IN_PROGRESS
-  const isResolved = request.status === HELP_REQUEST_STATUSES.RESOLVED
-  const canResolve = (isOpen || isInProgress) && onResolve
-  const canTakeOn = isOpen && request.is_broadcast && onTakeOn
+  const isOpen = request.status === HELP_REQUEST_STATUSES.OPEN;
+  const isInProgress = request.status === HELP_REQUEST_STATUSES.IN_PROGRESS;
+  const isResolved = request.status === HELP_REQUEST_STATUSES.RESOLVED;
+  const canResolve = (isOpen || isInProgress) && onResolve;
+  const canTakeOn = isOpen && request.is_broadcast && onTakeOn;
 
   // Check if current user is the requester
-  const isOwnRequest = currentUserEmail && request.requester_email === currentUserEmail
+  const isOwnRequest = currentUserEmail && request.requester_email === currentUserEmail;
 
   return (
     <div
@@ -87,9 +87,7 @@ export function HelpRequestCard({
         {/* Icon */}
         <div
           className={`shrink-0 w-10 h-10 rounded-full flex items-center justify-center ${
-            request.is_broadcast
-              ? 'bg-warning-100 dark:bg-warning-900/30'
-              : 'bg-action-muted'
+            request.is_broadcast ? 'bg-warning-100 dark:bg-warning-900/30' : 'bg-action-muted'
           }`}
         >
           {request.is_broadcast ? (
@@ -104,38 +102,38 @@ export function HelpRequestCard({
           {/* Title with urgency */}
           <div className="flex items-center gap-2 flex-wrap">
             {getUrgencyIcon(request.urgency)}
-            <Heading level={4} className="text-text-primary">{request.title}</Heading>
+            <Heading level={4} className="text-text-primary">
+              {request.title}
+            </Heading>
           </div>
 
           {/* Requester */}
           <p className="text-sm text-text-secondary mt-0.5">
-            Von{' '}
-            <span className="font-medium">
-              {isOwnRequest ? 'dir' : requesterDisplayName}
-            </span>
+            Von <span className="font-medium">{isOwnRequest ? 'dir' : requesterDisplayName}</span>
             {request.is_broadcast ? (
               <span className="ml-1 text-warning-600 dark:text-warning-400">an alle</span>
             ) : request.requested_user_name ? (
               <span className="ml-1">
-                an{' '}
-                <span className="font-medium">{request.requested_user_name}</span>
+                an <span className="font-medium">{request.requested_user_name}</span>
               </span>
             ) : null}
           </p>
 
           {/* Description */}
           {request.description && (
-            <p className="mt-2 text-sm text-text-secondary line-clamp-2">
-              {request.description}
-            </p>
+            <p className="mt-2 text-sm text-text-secondary line-clamp-2">{request.description}</p>
           )}
 
           {/* Badges */}
           <div className="flex flex-wrap gap-1.5 mt-3">
-            <span className={`px-2 py-0.5 text-xs rounded-full ${getHelpRequestStatusColor(request.status)}`}>
+            <span
+              className={`px-2 py-0.5 text-xs rounded-full ${getHelpRequestStatusColor(request.status)}`}
+            >
               {getHelpRequestStatusLabel(request.status)}
             </span>
-            <span className={`px-2 py-0.5 text-xs rounded-full ${getHelpRequestUrgencyColor(request.urgency)}`}>
+            <span
+              className={`px-2 py-0.5 text-xs rounded-full ${getHelpRequestUrgencyColor(request.urgency)}`}
+            >
               {getHelpRequestUrgencyLabel(request.urgency)}
             </span>
             {request.category && (
@@ -153,9 +151,7 @@ export function HelpRequestCard({
                 Gelöst von {request.resolved_by_name}
               </p>
               {request.resolution_notes && (
-                <p className="mt-1 text-xs text-action">
-                  {request.resolution_notes}
-                </p>
+                <p className="mt-1 text-xs text-action">{request.resolution_notes}</p>
               )}
             </div>
           )}
@@ -206,5 +202,5 @@ export function HelpRequestCard({
         </div>
       )}
     </div>
-  )
+  );
 }

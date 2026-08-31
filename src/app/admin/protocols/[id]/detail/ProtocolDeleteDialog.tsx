@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
 /** Delete confirm dialog slice — irreversible protocol deletion. */
 
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
-import type { ProtocolDetail } from '@/lib/schemas/protocols'
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import type { ProtocolDetail } from '@/lib/schemas/protocols';
 
 interface ProtocolDeleteDialogProps {
-  protocol: ProtocolDetail
-  showDeleteDialog: boolean
-  setShowDeleteDialog: (open: boolean) => void
-  deleting: boolean
-  handleDelete: () => void
+  protocol: ProtocolDetail;
+  showDeleteDialog: boolean;
+  setShowDeleteDialog: (open: boolean) => void;
+  deleting: boolean;
+  handleDelete: () => void;
 }
 
 export function ProtocolDeleteDialog({
@@ -33,5 +33,5 @@ export function ProtocolDeleteDialog({
       onConfirm={handleDelete}
       onClose={() => setShowDeleteDialog(false)}
     />
-  )
+  );
 }

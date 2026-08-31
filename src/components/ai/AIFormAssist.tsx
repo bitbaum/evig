@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * AIFormAssist — Unified AI form assistance component (SSOT).
@@ -13,29 +13,29 @@
  * 2. Drop <AIFormAssist formType="xxx" /> in the component
  */
 
-import { useState, type KeyboardEvent } from 'react'
-import { Sparkles, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { useAIFormAssist, type AIFieldMetadataEntry } from '@/hooks/useAIFormAssist'
-import { FORM_AI_REGISTRY } from '@/lib/ai/config/prompts'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
+import { useState, type KeyboardEvent } from 'react';
+import { Sparkles, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useAIFormAssist, type AIFieldMetadataEntry } from '@/hooks/useAIFormAssist';
+import { FORM_AI_REGISTRY } from '@/lib/ai/config/prompts';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 
 interface AIFormAssistProps<T = Record<string, unknown>> {
-  formType: string
-  currentData?: Record<string, unknown>
-  onFieldsFilled: (data: Partial<T>, metadata: Record<string, AIFieldMetadataEntry>) => void
-  placeholder?: string
-  defaultExpanded?: boolean
-  variant?: 'bar' | 'section'
-  className?: string
+  formType: string;
+  currentData?: Record<string, unknown>;
+  onFieldsFilled: (data: Partial<T>, metadata: Record<string, AIFieldMetadataEntry>) => void;
+  placeholder?: string;
+  defaultExpanded?: boolean;
+  variant?: 'bar' | 'section';
+  className?: string;
   /**
    * Override the auto extract-vs-refine decision. Set by structured forms
    * (e.g. erfassung) whose populated fields are too short for the default
    * length heuristic to recognise as "the form already has a record".
    * Undefined = use the built-in heuristic (unchanged for existing callers).
    */
-  hasContentOverride?: boolean
+  hasContentOverride?: boolean;
 }
 
 export function AIFormAssist<T = Record<string, unknown>>({
@@ -48,27 +48,37 @@ export function AIFormAssist<T = Record<string, unknown>>({
   className = '',
   hasContentOverride,
 }: AIFormAssistProps<T>) {
-  const t = useTranslations('ai.formAssist')
-  const [isExpanded, setIsExpanded] = useState(defaultExpanded)
-  const [inputText, setInputText] = useState('')
-  const [filledCount, setFilledCount] = useState(0)
+  const t = useTranslations('ai.formAssist');
+  const [isExpanded, setIsExpanded] = useState(defaultExpanded);
+  const [inputText, setInputText] = useState('');
+  const [filledCount, setFilledCount] = useState(0);
 
-  const wrappedOnFieldsFilled = (data: Partial<T>, metadata: Record<string, AIFieldMetadataEntry>) => {
+  const wrappedOnFieldsFilled = (
+    data: Partial<T>,
+    metadata: Record<string, AIFieldMetadataEntry>,
+  ) => {
     // Count how many fields were actually filled
-    const count = Object.keys(metadata).length
-    setFilledCount(count)
-    onFieldsFilled(data, metadata)
-  }
+    const count = Object.keys(metadata).length;
+    setFilledCount(count);
+    onFieldsFilled(data, metadata);
+  };
 
-  const { extractFromText, refineFields, runQuickAction, isExtracting, error, success, suggestedActions } =
-    useAIFormAssist<T>({ formType, onFieldsFilled: wrappedOnFieldsFilled })
+  const {
+    extractFromText,
+    refineFields,
+    runQuickAction,
+    isExtracting,
+    error,
+    success,
+    suggestedActions,
+  } = useAIFormAssist<T>({ formType, onFieldsFilled: wrappedOnFieldsFilled });
 
-  const config = FORM_AI_REGISTRY[formType]
-  if (!config) return null
+  const config = FORM_AI_REGISTRY[formType];
+  if (!config) return null;
 
   const quickActions = config.quickActions
     ? Object.entries(config.quickActions).map(([key, { label }]) => ({ key, label }))
-    : []
+    : [];
 
   // Does the form already hold a record? If so, plain-language input is a
   // REFINE ("change the price to 80"), not a fresh extraction that would
@@ -77,44 +87,46 @@ export function AIFormAssist<T = Record<string, unknown>>({
   // "Roomba 600 Series") pass hasContentOverride so a filled record still
   // refines — without that override the auto-heuristic (unchanged for the
   // other forms, which carry short default fields) governs.
-  const autoHasContent = Boolean(currentData && Object.values(currentData).some(v =>
-    typeof v === 'string' && v.trim().length > 20
-  ))
-  const hasContent = hasContentOverride ?? autoHasContent
+  const autoHasContent = Boolean(
+    currentData &&
+    Object.values(currentData).some((v) => typeof v === 'string' && v.trim().length > 20),
+  );
+  const hasContent = hasContentOverride ?? autoHasContent;
 
   const handleSubmit = () => {
-    if (!inputText.trim() || isExtracting) return
+    if (!inputText.trim() || isExtracting) return;
     if (hasContent && currentData) {
-      refineFields(currentData, inputText)
+      refineFields(currentData, inputText);
     } else {
-      extractFromText(inputText)
+      extractFromText(inputText);
     }
-    setInputText('')
-  }
+    setInputText('');
+  };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleSubmit()
+      e.preventDefault();
+      handleSubmit();
     }
-  }
+  };
 
   const handleQuickAction = (actionKey: string) => {
-    if (isExtracting || !hasContent || !currentData) return
-    runQuickAction(currentData, actionKey)
-  }
+    if (isExtracting || !hasContent || !currentData) return;
+    runQuickAction(currentData, actionKey);
+  };
 
   const handleSuggestedAction = (prompt: string) => {
-    if (isExtracting || !currentData) return
-    refineFields(currentData, prompt)
-  }
+    if (isExtracting || !currentData) return;
+    refineFields(currentData, prompt);
+  };
 
   // Styles — neutral surface; green only on submit button
-  const containerClass = variant === 'section'
-    ? 'rounded-xl border border-subtle bg-surface-raised'
-    : 'rounded-lg border border-subtle bg-surface-raised'
+  const containerClass =
+    variant === 'section'
+      ? 'rounded-xl border border-subtle bg-surface-raised'
+      : 'rounded-lg border border-subtle bg-surface-raised';
 
-  const padding = variant === 'section' ? 'px-4 sm:px-6' : 'px-4'
+  const padding = variant === 'section' ? 'px-4 sm:px-6' : 'px-4';
 
   return (
     <div className={`${containerClass} ${className}`}>
@@ -129,7 +141,12 @@ export function AIFormAssist<T = Record<string, unknown>>({
           <Sparkles className="w-4 h-4 text-action" />
           {t('heading')}
         </span>
-        <svg className={`w-4 h-4 text-text-tertiary transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg
+          className={`w-4 h-4 text-text-tertiary transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </Button>
@@ -149,9 +166,7 @@ export function AIFormAssist<T = Record<string, unknown>>({
             <div className="flex items-center gap-2 border border-subtle bg-surface-base text-text-primary px-3 py-2 rounded-lg text-sm">
               <CheckCircle2 className="w-4 h-4 shrink-0" />
               <span>
-                {filledCount > 0
-                  ? t('successCount', { count: filledCount })
-                  : t('successGeneric')}
+                {filledCount > 0 ? t('successCount', { count: filledCount }) : t('successGeneric')}
               </span>
             </div>
           )}
@@ -162,9 +177,8 @@ export function AIFormAssist<T = Record<string, unknown>>({
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder={hasContent
-                ? t('placeholderRefine')
-                : (placeholder || t('placeholderEmpty'))
+              placeholder={
+                hasContent ? t('placeholderRefine') : placeholder || t('placeholderEmpty')
               }
               rows={2}
               disabled={isExtracting}
@@ -178,10 +192,11 @@ export function AIFormAssist<T = Record<string, unknown>>({
               className="self-end"
               aria-label={isExtracting ? t('ariaProcessing') : t('ariaRun')}
             >
-              {isExtracting
-                ? <Loader2 className="w-5 h-5 animate-spin" />
-                : <Sparkles className="w-5 h-5" />
-              }
+              {isExtracting ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <Sparkles className="w-5 h-5" />
+              )}
             </Button>
           </div>
 
@@ -215,12 +230,11 @@ export function AIFormAssist<T = Record<string, unknown>>({
                     >
                       {action.label}
                     </Button>
-                  ))
-              }
+                  ))}
             </div>
           )}
         </div>
       )}
     </div>
-  )
+  );
 }

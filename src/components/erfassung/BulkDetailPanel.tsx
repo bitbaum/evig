@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * BulkDetailPanel Component
@@ -7,94 +7,91 @@
  * Renders ProductForm with the selected product's data.
  */
 
-import { useState } from 'react'
-import { X } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
-import { ProductForm } from '@/components/erfassung/ProductForm'
-import type { BulkProduct, ErfassungFormData } from '@/types/erfassung'
-import Heading from '@/components/ui/Heading'
-import { SPEC_TEMPLATES, templateToSpecFields } from '@/config/erfassung'
-import { useFocusTrap } from '@/hooks/useFocusTrap'
+import { useState } from 'react';
+import { X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
+import { ProductForm } from '@/components/erfassung/ProductForm';
+import type { BulkProduct, ErfassungFormData } from '@/types/erfassung';
+import Heading from '@/components/ui/Heading';
+import { SPEC_TEMPLATES, templateToSpecFields } from '@/config/erfassung';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
 
 interface BulkDetailPanelProps {
-  product: BulkProduct
-  onUpdate: (updates: Partial<BulkProduct>) => void
-  onClose: () => void
+  product: BulkProduct;
+  onUpdate: (updates: Partial<BulkProduct>) => void;
+  onClose: () => void;
 }
 
 export function BulkDetailPanel({ product, onUpdate, onClose }: BulkDetailPanelProps) {
-  const t = useTranslations('components.erfassung.bulkDetail')
-  const [localData, setLocalData] = useState<BulkProduct>({ ...product })
-  const [showAdvanced, setShowAdvanced] = useState(false)
+  const t = useTranslations('components.erfassung.bulkDetail');
+  const [localData, setLocalData] = useState<BulkProduct>({ ...product });
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
   // Escape-to-close, initial focus, focus restore and the Tab trap all live in
   // the shared hook; attach its ref to the panel below.
-  const panelRef = useFocusTrap<HTMLDivElement>(true, onClose)
+  const panelRef = useFocusTrap<HTMLDivElement>(true, onClose);
 
   const handleFieldChange = (field: keyof ErfassungFormData, value: string | string[]) => {
-    setLocalData(prev => ({ ...prev, [field]: value }))
-  }
+    setLocalData((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handleCategoryChange = (kategorie: string) => {
-    setLocalData(prev => ({
+    setLocalData((prev) => ({
       ...prev,
       hauptkategorie: kategorie,
       unterkategorie: '',
       specs: templateToSpecFields(SPEC_TEMPLATES[kategorie] || SPEC_TEMPLATES.default),
-    }))
-  }
+    }));
+  };
 
   const handleSpecChange = (index: number, field: 'key' | 'value', value: string) => {
-    const newSpecs = [...localData.specs]
-    newSpecs[index] = { ...newSpecs[index], [field]: value }
-    setLocalData(prev => ({ ...prev, specs: newSpecs }))
-  }
+    const newSpecs = [...localData.specs];
+    newSpecs[index] = { ...newSpecs[index], [field]: value };
+    setLocalData((prev) => ({ ...prev, specs: newSpecs }));
+  };
 
   const handleSpecAdd = () => {
-    setLocalData(prev => ({
+    setLocalData((prev) => ({
       ...prev,
-      specs: [...prev.specs, { key: '', value: '' }]
-    }))
-  }
+      specs: [...prev.specs, { key: '', value: '' }],
+    }));
+  };
 
   const handleSpecRemove = (index: number) => {
     if (localData.specs.length > 1) {
-      setLocalData(prev => ({
+      setLocalData((prev) => ({
         ...prev,
-        specs: prev.specs.filter((_, i) => i !== index)
-      }))
+        specs: prev.specs.filter((_, i) => i !== index),
+      }));
     }
-  }
+  };
 
   const handleProfileToggle = (slug: string) => {
-    setLocalData(prev => ({
+    setLocalData((prev) => ({
       ...prev,
       kundenprofile: prev.kundenprofile.includes(slug)
-        ? prev.kundenprofile.filter(p => p !== slug)
-        : [...prev.kundenprofile, slug]
-    }))
-  }
+        ? prev.kundenprofile.filter((p) => p !== slug)
+        : [...prev.kundenprofile, slug],
+    }));
+  };
 
   const handleApply = () => {
-    const hasRequired = localData.hersteller && localData.produktname
-    const status = hasRequired ? 'valid' : 'warning'
+    const hasRequired = localData.hersteller && localData.produktname;
+    const status = hasRequired ? 'valid' : 'warning';
 
     onUpdate({
       ...localData,
       _status: status,
       _errors: hasRequired ? [] : [t('validationError')],
-    })
-    onClose()
-  }
+    });
+    onClose();
+  };
 
   return (
     <>
       {/* Overlay backdrop */}
-      <div
-        className="fixed inset-0 bg-black/30 z-40"
-        onClick={onClose}
-      />
+      <div className="fixed inset-0 bg-black/30 z-40" onClick={onClose} />
 
       {/* Panel — tabIndex=-1 so the trap can focus it when no child is focusable. */}
       <div
@@ -112,7 +109,8 @@ export function BulkDetailPanel({ product, onUpdate, onClose }: BulkDetailPanelP
               {localData.hersteller || 'Produkt'} {localData.produktname || t('editLabel')}
             </Heading>
             <p className="text-xs text-text-tertiary">
-              {t('sourcePrefix')}{localData._source}
+              {t('sourcePrefix')}
+              {localData._source}
             </p>
           </div>
           <Button
@@ -133,7 +131,9 @@ export function BulkDetailPanel({ product, onUpdate, onClose }: BulkDetailPanelP
           {localData._errors.length > 0 && (
             <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg p-3">
               {localData._errors.map((err, i) => (
-                <p key={i} className="text-sm text-error-700 dark:text-error-300">{err}</p>
+                <p key={i} className="text-sm text-error-700 dark:text-error-300">
+                  {err}
+                </p>
               ))}
             </div>
           )}
@@ -149,7 +149,7 @@ export function BulkDetailPanel({ product, onUpdate, onClose }: BulkDetailPanelP
             onProfileToggle={handleProfileToggle}
             onSpecAdd={handleSpecAdd}
             onSpecRemove={handleSpecRemove}
-            onImageChange={(image) => setLocalData(prev => ({ ...prev, image }))}
+            onImageChange={(image) => setLocalData((prev) => ({ ...prev, image }))}
             onToggleAdvanced={() => setShowAdvanced(!showAdvanced)}
           />
         </div>
@@ -165,5 +165,5 @@ export function BulkDetailPanel({ product, onUpdate, onClose }: BulkDetailPanelP
         </div>
       </div>
     </>
-  )
+  );
 }

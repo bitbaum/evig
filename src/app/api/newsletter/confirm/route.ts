@@ -1,35 +1,32 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { logger } from '@/lib/logger'
-import { db } from '@/db'
-import { newsletterSubscriptions } from '@/db/schema'
-import { eq, and, sql } from 'drizzle-orm'
-import { ORG } from '@/config/org'
-import { APP_URL } from '@/config/urls'
-import { NEWSLETTER_CONFIRMATION_COLORS as COLORS } from '@/config/ui-colors'
+import { NextRequest, NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
+import { db } from '@/db';
+import { newsletterSubscriptions } from '@/db/schema';
+import { eq, and, sql } from 'drizzle-orm';
+import { ORG } from '@/config/org';
+import { APP_URL } from '@/config/urls';
+import { NEWSLETTER_CONFIRMATION_COLORS as COLORS } from '@/config/ui-colors';
 
-type Outcome = 'missing' | 'invalid' | 'success' | 'error'
+type Outcome = 'missing' | 'invalid' | 'success' | 'error';
 
 function htmlResponse(outcome: Outcome): NextResponse {
-  const isSuccess = outcome === 'success'
-  const status = outcome === 'success' ? 200 : outcome === 'error' ? 500 : 400
+  const isSuccess = outcome === 'success';
+  const status = outcome === 'success' ? 200 : outcome === 'error' ? 500 : 400;
 
-  const title = isSuccess
-    ? 'Anmeldung bestätigt'
-    : 'Bestätigung fehlgeschlagen'
+  const title = isSuccess ? 'Anmeldung bestätigt' : 'Bestätigung fehlgeschlagen';
 
-  const heading = isSuccess
-    ? 'Newsletter-Anmeldung bestätigt!'
-    : 'Bestätigung fehlgeschlagen'
+  const heading = isSuccess ? 'Newsletter-Anmeldung bestätigt!' : 'Bestätigung fehlgeschlagen';
 
-  const body = outcome === 'success'
-    ? 'Du erhältst ab sofort unsere Neuigkeiten zu nachhaltiger IT, Workshops und Events.'
-    : outcome === 'missing'
-    ? 'Der Bestätigungstoken fehlt in der URL. Bitte verwende den vollständigen Link aus deiner E-Mail.'
-    : outcome === 'invalid'
-    ? 'Dieser Bestätigungslink ist ungültig oder wurde bereits verwendet. Falls du dich neu anmelden möchtest, registriere dich bitte erneut.'
-    : 'Bei der Bestätigung ist ein Fehler aufgetreten. Bitte versuche es später erneut.'
+  const body =
+    outcome === 'success'
+      ? 'Du erhältst ab sofort unsere Neuigkeiten zu nachhaltiger IT, Workshops und Events.'
+      : outcome === 'missing'
+        ? 'Der Bestätigungstoken fehlt in der URL. Bitte verwende den vollständigen Link aus deiner E-Mail.'
+        : outcome === 'invalid'
+          ? 'Dieser Bestätigungslink ist ungültig oder wurde bereits verwendet. Falls du dich neu anmelden möchtest, registriere dich bitte erneut.'
+          : 'Bei der Bestätigung ist ein Fehler aufgetreten. Bitte versuche es später erneut.';
 
-  const headerColor = isSuccess ? COLORS.success : COLORS.error
+  const headerColor = isSuccess ? COLORS.success : COLORS.error;
 
   const html = `<!DOCTYPE html>
 <html lang="de">
@@ -62,21 +59,21 @@ function htmlResponse(outcome: Outcome): NextResponse {
     </div>
   </div>
 </body>
-</html>`
+</html>`;
 
   return new NextResponse(html, {
     status,
     headers: { 'Content-Type': 'text/html; charset=utf-8' },
-  })
+  });
 }
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url)
-    const token = searchParams.get('token')
+    const { searchParams } = new URL(request.url);
+    const token = searchParams.get('token');
 
     if (!token) {
-      return htmlResponse('missing')
+      return htmlResponse('missing');
     }
 
     const [confirmed] = await db
@@ -86,20 +83,22 @@ export async function GET(request: NextRequest) {
         confirmedAt: sql`NOW()`,
         confirmToken: null,
       })
-      .where(and(
-        eq(newsletterSubscriptions.confirmToken, token),
-        eq(newsletterSubscriptions.isActive, false),
-      ))
-      .returning({ email: newsletterSubscriptions.email })
+      .where(
+        and(
+          eq(newsletterSubscriptions.confirmToken, token),
+          eq(newsletterSubscriptions.isActive, false),
+        ),
+      )
+      .returning({ email: newsletterSubscriptions.email });
 
     if (!confirmed) {
-      return htmlResponse('invalid')
+      return htmlResponse('invalid');
     }
 
-    logger.info('Newsletter subscription confirmed', { email: confirmed.email })
-    return htmlResponse('success')
+    logger.info('Newsletter subscription confirmed', { email: confirmed.email });
+    return htmlResponse('success');
   } catch (error) {
-    logger.error('Newsletter confirmation error', { error })
-    return htmlResponse('error')
+    logger.error('Newsletter confirmation error', { error });
+    return htmlResponse('error');
   }
 }

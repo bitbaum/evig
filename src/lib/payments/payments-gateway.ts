@@ -5,43 +5,43 @@
  * Handles provider lookup, transaction creation, and transaction updates.
  */
 
-import { db } from '@/db'
-import { paymentProviders, paymentTransactions } from '@/db/schema'
-import { eq, and, sql } from 'drizzle-orm'
-import { PAYMENT_STATUS, PAYMENT_TRANSACTION_TYPE } from '@/config/payment-status'
-import { logger } from '@/lib/logger'
-import type { SupportedCurrency } from '@/lib/payments/currency'
-import type { PaymentProvider } from './payments-fees'
+import { db } from '@/db';
+import { paymentProviders, paymentTransactions } from '@/db/schema';
+import { eq, and, sql } from 'drizzle-orm';
+import { PAYMENT_STATUS, PAYMENT_TRANSACTION_TYPE } from '@/config/payment-status';
+import { logger } from '@/lib/logger';
+import type { SupportedCurrency } from '@/lib/payments/currency';
+import type { PaymentProvider } from './payments-fees';
 
 // ============================================================================
 // Constants
 // ============================================================================
 
-export const DEFAULT_PAYMENT_PROVIDER = 'payrexx'
+export const DEFAULT_PAYMENT_PROVIDER = 'payrexx';
 
 // ============================================================================
 // Types
 // ============================================================================
 
 export interface TransactionParams {
-  userId: string
-  providerId: string
-  providerTransactionId?: string
-  amountCents: number
-  feeCents: number
-  netAmountCents: number
-  currency: SupportedCurrency
-  description: string
-  useEscrow: boolean
-  autoReleaseDays: number
+  userId: string;
+  providerId: string;
+  providerTransactionId?: string;
+  amountCents: number;
+  feeCents: number;
+  netAmountCents: number;
+  currency: SupportedCurrency;
+  description: string;
+  useEscrow: boolean;
+  autoReleaseDays: number;
   // One of these should be provided
-  serviceAppointmentId?: string
-  workshopRegistrationId?: string
-  metadata?: Record<string, unknown>
+  serviceAppointmentId?: string;
+  workshopRegistrationId?: string;
+  metadata?: Record<string, unknown>;
 }
 
 export interface TransactionResult {
-  transactionId: string
+  transactionId: string;
 }
 
 // ============================================================================
@@ -52,7 +52,7 @@ export interface TransactionResult {
  * Fetch active payment provider by slug
  */
 export async function getPaymentProvider(
-  providerSlug: string = DEFAULT_PAYMENT_PROVIDER
+  providerSlug: string = DEFAULT_PAYMENT_PROVIDER,
 ): Promise<PaymentProvider | null> {
   const rows = await db
     .select({
@@ -62,25 +62,20 @@ export async function getPaymentProvider(
       fee_fixed_cents: paymentProviders.feeFixedCents,
     })
     .from(paymentProviders)
-    .where(
-      and(
-        eq(paymentProviders.slug, providerSlug),
-        eq(paymentProviders.isActive, true),
-      )
-    )
+    .where(and(eq(paymentProviders.slug, providerSlug), eq(paymentProviders.isActive, true)));
 
   if (rows.length === 0) {
-    logger.warn('Payment provider not found or inactive', { providerSlug })
-    return null
+    logger.warn('Payment provider not found or inactive', { providerSlug });
+    return null;
   }
 
-  const row = rows[0]
+  const row = rows[0];
   return {
     id: row.id,
     slug: row.slug,
     fee_percentage: Number(row.fee_percentage ?? 0),
     fee_fixed_cents: row.fee_fixed_cents ?? 0,
-  }
+  };
 }
 
 // ============================================================================
@@ -90,9 +85,7 @@ export async function getPaymentProvider(
 /**
  * Create a payment transaction record
  */
-export async function createTransaction(
-  params: TransactionParams
-): Promise<TransactionResult> {
+export async function createTransaction(params: TransactionParams): Promise<TransactionResult> {
   const rows = await db
     .insert(paymentTransactions)
     .values({
@@ -113,18 +106,18 @@ export async function createTransaction(
         : null,
       metadata: params.metadata ? params.metadata : {},
     })
-    .returning({ id: paymentTransactions.id })
+    .returning({ id: paymentTransactions.id });
 
-  const transactionId = rows[0].id
+  const transactionId = rows[0].id;
 
   logger.info('Payment transaction created', {
     transactionId,
     userId: params.userId,
     amount: params.amountCents,
-    useEscrow: params.useEscrow
-  })
+    useEscrow: params.useEscrow,
+  });
 
-  return { transactionId }
+  return { transactionId };
 }
 
 /**
@@ -132,10 +125,10 @@ export async function createTransaction(
  */
 export async function updateTransactionGatewayId(
   transactionId: string,
-  gatewayId: number
+  gatewayId: number,
 ): Promise<void> {
   await db
     .update(paymentTransactions)
     .set({ providerTransactionId: String(gatewayId) })
-    .where(eq(paymentTransactions.id, transactionId))
+    .where(eq(paymentTransactions.id, transactionId));
 }

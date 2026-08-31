@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
 /** Footer actions slice — delete (creator/super-admin) and finalize (review) buttons. */
 
-import { CheckCircle2, Trash2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { CheckCircle2, Trash2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface ProtocolFooterActionsProps {
-  isReview: boolean
-  isProtocolCreator: boolean
-  isSuperAdmin: boolean
-  setShowDeleteDialog: (open: boolean) => void
-  setShowFinalizeDialog: (open: boolean) => void
+  isReview: boolean;
+  isProtocolCreator: boolean;
+  isSuperAdmin: boolean;
+  setShowDeleteDialog: (open: boolean) => void;
+  setShowFinalizeDialog: (open: boolean) => void;
 }
 
 export function ProtocolFooterActions({
@@ -36,14 +36,11 @@ export function ProtocolFooterActions({
         )}
       </div>
       {isReview && (
-        <Button
-          onClick={() => setShowFinalizeDialog(true)}
-          className="gap-2 px-6"
-        >
+        <Button onClick={() => setShowFinalizeDialog(true)} className="gap-2 px-6">
           <CheckCircle2 className="w-4 h-4" />
           Protokoll abschliessen
         </Button>
       )}
     </div>
-  )
+  );
 }

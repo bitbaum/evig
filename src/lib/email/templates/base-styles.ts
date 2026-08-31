@@ -27,12 +27,13 @@ export const BASE_STYLES = `
 `;
 
 export const COPYRIGHT_TEXT = `© ${new Date().getFullYear()} ${ORG.name} - Die Zukunft der IT durch nachhaltige Aufarbeitung`;
-export const AUTO_GENERATED_TEXT = 'Diese E-Mail wurde automatisch generiert. Bitte antworte nicht darauf.';
+export const AUTO_GENERATED_TEXT =
+  'Diese E-Mail wurde automatisch generiert. Bitte antworte nicht darauf.';
 
 export const createEmailLayout = (
   headerText: string,
   headerClass: string,
-  content: string
+  content: string,
 ): string => `
 <!DOCTYPE html>
 <html lang="de">

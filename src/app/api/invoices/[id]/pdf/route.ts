@@ -1,28 +1,28 @@
-import { NextResponse } from 'next/server'
-import { withAuth } from '@/lib/api/middleware'
-import { db } from '@/db'
-import { invoices, users, userProfiles } from '@/db/schema'
-import { eq, sql } from 'drizzle-orm'
-import { apiError, apiSuccess, apiUnauthorized, apiNotFound } from '@/lib/api/helpers'
-import { logger } from '@/lib/logger'
-import { canAccessFinance } from '@/lib/permissions'
-import { generateInvoicePDF, type InvoiceData } from '@/lib/invoices/pdf-template'
+import { NextResponse } from 'next/server';
+import { withAuth } from '@/lib/api/middleware';
+import { db } from '@/db';
+import { invoices, users, userProfiles } from '@/db/schema';
+import { eq, sql } from 'drizzle-orm';
+import { apiError, apiSuccess, apiUnauthorized, apiNotFound } from '@/lib/api/helpers';
+import { logger } from '@/lib/logger';
+import { canAccessFinance } from '@/lib/permissions';
+import { generateInvoicePDF, type InvoiceData } from '@/lib/invoices/pdf-template';
 
 // GET /api/invoices/[id]/pdf - Generate and return PDF
 export const GET = withAuth<{ id: string }>(async (request, session, context) => {
   try {
-    const { id: invoiceId } = context!.params!
-    const invoice = await fetchInvoice(invoiceId)
+    const { id: invoiceId } = context!.params!;
+    const invoice = await fetchInvoice(invoiceId);
 
     if (!invoice) {
-      return apiNotFound('Rechnung')
+      return apiNotFound('Rechnung');
     }
 
     if (invoice.user_id !== session.user.id && !canAccessFinance(session.user)) {
-      return apiUnauthorized('Sie haben keine Berechtigung, diese Rechnung anzuzeigen')
+      return apiUnauthorized('Sie haben keine Berechtigung, diese Rechnung anzuzeigen');
     }
 
-    const pdfBuffer = await generateInvoicePDF(invoice)
+    const pdfBuffer = await generateInvoicePDF(invoice);
 
     await db
       .update(invoices)
@@ -30,37 +30,39 @@ export const GET = withAuth<{ id: string }>(async (request, session, context) =>
         pdfGeneratedAt: sql`CURRENT_TIMESTAMP`,
         updatedAt: sql`CURRENT_TIMESTAMP`,
       })
-      .where(eq(invoices.id, invoiceId))
+      .where(eq(invoices.id, invoiceId));
 
     return new NextResponse(new Uint8Array(pdfBuffer), {
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="invoice-${invoice.invoice_number}.pdf"`,
       },
-    })
+    });
   } catch (error) {
-    logger.error('Generate PDF error', { error })
-    return apiError(error, 'PDF konnte nicht generiert werden')
+    logger.error('Generate PDF error', { error });
+    return apiError(error, 'PDF konnte nicht generiert werden');
   }
-})
+});
 
 // POST /api/invoices/[id]/pdf - Generate and store PDF URL
 export const POST = withAuth<{ id: string }>(async (request, session, context) => {
   try {
-    const { id: invoiceId } = context!.params!
-    const invoice = await fetchInvoice(invoiceId)
+    const { id: invoiceId } = context!.params!;
+    const invoice = await fetchInvoice(invoiceId);
 
     if (!invoice) {
-      return apiNotFound('Rechnung')
+      return apiNotFound('Rechnung');
     }
 
     if (invoice.user_id !== session.user.id && !canAccessFinance(session.user)) {
-      return apiUnauthorized('Sie haben keine Berechtigung, ein PDF für diese Rechnung zu generieren')
+      return apiUnauthorized(
+        'Sie haben keine Berechtigung, ein PDF für diese Rechnung zu generieren',
+      );
     }
 
-    await generateInvoicePDF(invoice)
+    await generateInvoicePDF(invoice);
 
-    const pdfUrl = `/api/invoices/${invoiceId}/pdf`
+    const pdfUrl = `/api/invoices/${invoiceId}/pdf`;
 
     await db
       .update(invoices)
@@ -69,14 +71,14 @@ export const POST = withAuth<{ id: string }>(async (request, session, context) =
         pdfGeneratedAt: sql`CURRENT_TIMESTAMP`,
         updatedAt: sql`CURRENT_TIMESTAMP`,
       })
-      .where(eq(invoices.id, invoiceId))
+      .where(eq(invoices.id, invoiceId));
 
-    return apiSuccess({ pdfUrl, message: 'PDF erfolgreich generiert' })
+    return apiSuccess({ pdfUrl, message: 'PDF erfolgreich generiert' });
   } catch (error) {
-    logger.error('Generate PDF error', { error })
-    return apiError(error, 'PDF konnte nicht generiert werden')
+    logger.error('Generate PDF error', { error });
+    return apiError(error, 'PDF konnte nicht generiert werden');
   }
-})
+});
 
 // ─── Helpers ────────────────────────────────────────────────────────
 
@@ -126,7 +128,7 @@ async function fetchInvoice(invoiceId: string): Promise<InvoiceData | null> {
     .from(invoices)
     .innerJoin(users, eq(invoices.userId, users.id))
     .leftJoin(userProfiles, eq(users.id, userProfiles.userId))
-    .where(eq(invoices.id, invoiceId))
+    .where(eq(invoices.id, invoiceId));
 
-  return row ? (row as unknown as InvoiceData) : null
+  return row ? (row as unknown as InvoiceData) : null;
 }

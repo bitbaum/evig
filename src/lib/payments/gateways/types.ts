@@ -6,31 +6,31 @@
  * Adding a rail = implement `PaymentGateway` + register it in `./index.ts`.
  */
 
-import type { GatewayStatus } from '@/config/gateway-status'
+import type { GatewayStatus } from '@/config/gateway-status';
 
 export interface GatewayCreateParams {
   /** Amount in the currency's smallest unit (Rappen for CHF). */
-  amount: number
-  currency: string
+  amount: number;
+  currency: string;
   /** Our payment reference (marketplace order id / payment transaction id). */
-  referenceId: string
-  successRedirectUrl: string
-  failedRedirectUrl: string
-  cancelRedirectUrl: string
+  referenceId: string;
+  successRedirectUrl: string;
+  failedRedirectUrl: string;
+  cancelRedirectUrl: string;
   /** Purpose / description shown on the payment page. */
-  purpose?: string
+  purpose?: string;
 }
 
 export interface GatewayResult {
   /** Provider-side id (gateway / order / invoice), always stringified. */
-  id: string
+  id: string;
   /** Hosted payment page URL to redirect the customer to. */
-  link: string
+  link: string;
 }
 
 export interface CaptureResult {
-  id: string
-  status: GatewayStatus
+  id: string;
+  status: GatewayStatus;
 }
 
 /**
@@ -42,28 +42,28 @@ export interface CaptureResult {
  */
 export interface GatewayAmountClaim {
   /** Amount in smallest unit (e.g. Rappen). null if the provider omitted it. */
-  amount: number | null
+  amount: number | null;
   /** ISO 4217 code (e.g. "CHF"). null if omitted. */
-  currency: string | null
+  currency: string | null;
 }
 
 export interface ParsedWebhook {
-  referenceId: string | null
-  providerTxId: string | null
+  referenceId: string | null;
+  providerTxId: string | null;
   /** Normalized gateway status (a `GATEWAY_STATUS` value). */
-  status: string
-  amountClaim: GatewayAmountClaim
+  status: string;
+  amountClaim: GatewayAmountClaim;
 }
 
 export interface PaymentGateway {
-  slug: string
+  slug: string;
   /** True → value is captured at checkout; no authorize-then-capture hold. */
-  capturesOnPay: boolean
-  createGateway(params: GatewayCreateParams): Promise<GatewayResult>
+  capturesOnPay: boolean;
+  createGateway(params: GatewayCreateParams): Promise<GatewayResult>;
   /** Capture reserved funds. No-op for capture-on-pay rails. */
-  capture(providerTxId: string, amountCents: number): Promise<CaptureResult>
+  capture(providerTxId: string, amountCents: number): Promise<CaptureResult>;
   /** Authenticate a webhook delivery. Returns false → reject (fail closed). */
-  verifyWebhook(rawBody: string, headers: Headers): Promise<boolean>
+  verifyWebhook(rawBody: string, headers: Headers): Promise<boolean>;
   /** Extract our reference + normalized status + verified amount from a delivery. */
-  parseWebhook(rawBody: string): Promise<ParsedWebhook>
+  parseWebhook(rawBody: string): Promise<ParsedWebhook>;
 }

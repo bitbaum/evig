@@ -7,29 +7,29 @@
  * Usage: npx tsx scripts/db/seed-org-numbers.ts
  */
 
-import { Pool } from 'pg'
+import { Pool } from 'pg';
 
-const DATABASE_URL = process.env.DATABASE_URL
+const DATABASE_URL = process.env.DATABASE_URL;
 
 if (!DATABASE_URL) {
-  console.error('DATABASE_URL environment variable is required')
-  process.exit(1)
+  console.error('DATABASE_URL environment variable is required');
+  process.exit(1);
 }
 
-const pool = new Pool({ connectionString: DATABASE_URL })
+const pool = new Pool({ connectionString: DATABASE_URL });
 
 interface OrgNumberRow {
-  key: string
-  value: string
-  numeric_value: number | null
-  label: string
-  category: 'impact' | 'social' | 'economic' | 'operations'
-  confidence: 'high' | 'medium' | 'estimated' | 'target'
-  methodology: string | null
-  calculation: string | null
-  source_document: string | null
-  external_link: string | null
-  last_verified: string
+  key: string;
+  value: string;
+  numeric_value: number | null;
+  label: string;
+  category: 'impact' | 'social' | 'economic' | 'operations';
+  confidence: 'high' | 'medium' | 'estimated' | 'target';
+  methodology: string | null;
+  calculation: string | null;
+  source_document: string | null;
+  external_link: string | null;
+  last_verified: string;
 }
 
 const numbers: OrgNumberRow[] = [
@@ -54,7 +54,8 @@ const numbers: OrgNumberRow[] = [
     label: 'kg CO₂ Refurbishment',
     category: 'impact',
     confidence: 'high',
-    methodology: 'Fraunhofer IZM 2023: CO₂ für Aufbereitung inkl. Transport, Reinigung, Softwareinstallation',
+    methodology:
+      'Fraunhofer IZM 2023: CO₂ für Aufbereitung inkl. Transport, Reinigung, Softwareinstallation',
     calculation: null,
     source_document: 'fraunhofer-izm-2023-co2-lifecycle.pdf',
     external_link: null,
@@ -93,7 +94,8 @@ const numbers: OrgNumberRow[] = [
     label: 'Geräte pro Jahr verarbeitet (inkl. Recycling, Teile, Spenden)',
     category: 'impact',
     confidence: 'estimated',
-    methodology: 'Schätzung inkl. Recycling, Ersatzteilgewinnung, Gratis-Abgaben. Nicht systematisch erfasst.',
+    methodology:
+      'Schätzung inkl. Recycling, Ersatzteilgewinnung, Gratis-Abgaben. Nicht systematisch erfasst.',
     calculation: 'Verkauf ~150 + Recycling + Teile + Spenden ≈ ~1000 verarbeitete Geräte',
     source_document: null,
     external_link: null,
@@ -119,7 +121,8 @@ const numbers: OrgNumberRow[] = [
     label: 'Wiederverwendungsrate',
     category: 'impact',
     confidence: 'estimated',
-    methodology: 'Interne Auswertung: Anteil der eingegangenen Geräte, die wieder in Umlauf gebracht werden',
+    methodology:
+      'Interne Auswertung: Anteil der eingegangenen Geräte, die wieder in Umlauf gebracht werden',
     calculation: '~75% refurbished und verkauft/gespendet, ~25% Ersatzteilgewinnung oder Recycling',
     source_document: null,
     external_link: null,
@@ -132,7 +135,8 @@ const numbers: OrgNumberRow[] = [
     label: 'Jahre zusätzliche Nutzungsdauer',
     category: 'impact',
     confidence: 'estimated',
-    methodology: 'Erfahrungswerte aus 20+ Jahren Refurbishing: Linux verlängert Lebensdauer älterer Hardware signifikant',
+    methodology:
+      'Erfahrungswerte aus 20+ Jahren Refurbishing: Linux verlängert Lebensdauer älterer Hardware signifikant',
     calculation: null,
     source_document: null,
     external_link: null,
@@ -173,7 +177,8 @@ const numbers: OrgNumberRow[] = [
     label: 'Menschen begleitet seit 2003',
     category: 'social',
     confidence: 'medium',
-    methodology: 'Praktikanten + Volunteers + Workshop-Teilnehmer (nicht systematisch erfasst vor 2024)',
+    methodology:
+      'Praktikanten + Volunteers + Workshop-Teilnehmer (nicht systematisch erfasst vor 2024)',
     calculation: 'Geschätzt basierend auf durchschnittlich 4-5 Personen/Jahr seit 2003',
     source_document: null,
     external_link: null,
@@ -294,7 +299,8 @@ const numbers: OrgNumberRow[] = [
     label: 'CHF Bewertungsgebühr',
     category: 'economic',
     confidence: 'high',
-    methodology: 'Pauschale für professionelle Geräte-Bewertung, wird in Reparaturkosten angerechnet',
+    methodology:
+      'Pauschale für professionelle Geräte-Bewertung, wird in Reparaturkosten angerechnet',
     calculation: null,
     source_document: null,
     external_link: null,
@@ -308,7 +314,8 @@ const numbers: OrgNumberRow[] = [
     category: 'economic',
     confidence: 'estimated',
     methodology: 'Differenz Neugerätepreis - Reparaturkosten',
-    calculation: 'CHF 950 (vergleichbares Neugerät) - CHF 150 (durchschnittliche Reparaturkosten) = CHF 800',
+    calculation:
+      'CHF 950 (vergleichbares Neugerät) - CHF 150 (durchschnittliche Reparaturkosten) = CHF 800',
     source_document: null,
     external_link: null,
     last_verified: '2026-02-16',
@@ -386,17 +393,17 @@ const numbers: OrgNumberRow[] = [
     category: 'economic',
     confidence: 'high',
     methodology: 'Kivitendo Erfolgsrechnung 2025 (Volljahr)',
-    calculation: 'Gesamteinnahmen: CHF 60\'402 (Warenverkauf 22k + Dienstleistungen 28k + Rest)',
+    calculation: "Gesamteinnahmen: CHF 60'402 (Warenverkauf 22k + Dienstleistungen 28k + Rest)",
     source_document: null,
     external_link: null,
     last_verified: '2026-02-16',
   },
-]
+];
 
 async function seed() {
-  const client = await pool.connect()
+  const client = await pool.connect();
   try {
-    await client.query('BEGIN')
+    await client.query('BEGIN');
 
     for (const row of numbers) {
       await client.query(
@@ -426,20 +433,20 @@ async function seed() {
           row.source_document,
           row.external_link,
           row.last_verified,
-        ]
-      )
+        ],
+      );
     }
 
-    await client.query('COMMIT')
-    console.log(`Seeded ${numbers.length} org_numbers successfully.`)
+    await client.query('COMMIT');
+    console.log(`Seeded ${numbers.length} org_numbers successfully.`);
   } catch (error) {
-    await client.query('ROLLBACK')
-    console.error('Seed failed:', error)
-    process.exit(1)
+    await client.query('ROLLBACK');
+    console.error('Seed failed:', error);
+    process.exit(1);
   } finally {
-    client.release()
-    await pool.end()
+    client.release();
+    await pool.end();
   }
 }
 
-seed()
+seed();

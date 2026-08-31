@@ -16,32 +16,32 @@
 // ---------------------------------------------------------------------------
 
 function makeChain(result: unknown = []) {
-  const resolved = Promise.resolve(result)
-  const chain: Record<string, unknown> = {}
-  chain.select = jest.fn().mockReturnValue(chain)
-  chain.from = jest.fn().mockReturnValue(chain)
-  chain.where = jest.fn().mockReturnValue(chain)
-  chain.limit = jest.fn().mockReturnValue(chain)
-  chain.innerJoin = jest.fn().mockReturnValue(chain)
-  chain.leftJoin = jest.fn().mockReturnValue(chain)
-  chain.orderBy = jest.fn().mockReturnValue(chain)
-  chain.then = (resolved as Promise<unknown>).then.bind(resolved)
-  chain.catch = (resolved as Promise<unknown>).catch.bind(resolved)
-  chain.finally = (resolved as Promise<unknown>).finally.bind(resolved)
-  return chain
+  const resolved = Promise.resolve(result);
+  const chain: Record<string, unknown> = {};
+  chain.select = jest.fn().mockReturnValue(chain);
+  chain.from = jest.fn().mockReturnValue(chain);
+  chain.where = jest.fn().mockReturnValue(chain);
+  chain.limit = jest.fn().mockReturnValue(chain);
+  chain.innerJoin = jest.fn().mockReturnValue(chain);
+  chain.leftJoin = jest.fn().mockReturnValue(chain);
+  chain.orderBy = jest.fn().mockReturnValue(chain);
+  chain.then = (resolved as Promise<unknown>).then.bind(resolved);
+  chain.catch = (resolved as Promise<unknown>).catch.bind(resolved);
+  chain.finally = (resolved as Promise<unknown>).finally.bind(resolved);
+  return chain;
 }
 
 // ---------------------------------------------------------------------------
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbSelect = jest.fn(() => makeChain([]))
+const mockDbSelect = jest.fn(() => makeChain([]));
 
 jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockDbSelect.apply(null, args),
   },
-}))
+}));
 
 jest.mock('@/db/schema', () => ({
   serviceAppointments: {
@@ -64,7 +64,7 @@ jest.mock('@/db/schema', () => ({
     name: 'st_name',
     slug: 'st_slug',
   },
-}))
+}));
 
 jest.mock('drizzle-orm', () => ({
   ...jest.requireActual('drizzle-orm'),
@@ -72,7 +72,7 @@ jest.mock('drizzle-orm', () => ({
   and: jest.fn().mockReturnValue({ __and: true }),
   inArray: jest.fn().mockReturnValue({ __inArray: true }),
   desc: jest.fn().mockReturnValue({ __desc: true }),
-}))
+}));
 
 jest.mock('@/config/appointment-status', () => ({
   APPOINTMENT_STATUS: {
@@ -80,16 +80,13 @@ jest.mock('@/config/appointment-status', () => ({
     CONFIRMED: 'confirmed',
     CANCELLED: 'cancelled',
   },
-}))
+}));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import {
-  getUserServiceAppointments,
-  hasPendingAppointmentForService,
-} from '../db-services'
+import { getUserServiceAppointments, hasPendingAppointmentForService } from '../db-services';
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -113,13 +110,13 @@ function makeAppointmentRow(overrides: Partial<Record<string, unknown>> = {}) {
     service_name: 'Laptop-Reparatur',
     service_slug: 'laptop-repair',
     ...overrides,
-  }
+  };
 }
 
 beforeEach(() => {
-  jest.clearAllMocks()
-  mockDbSelect.mockImplementation(() => makeChain([]))
-})
+  jest.clearAllMocks();
+  mockDbSelect.mockImplementation(() => makeChain([]));
+});
 
 // ============================================================================
 // getUserServiceAppointments
@@ -127,24 +124,24 @@ beforeEach(() => {
 
 describe('getUserServiceAppointments', () => {
   it('returns empty array when no appointments', async () => {
-    mockDbSelect.mockImplementationOnce(() => makeChain([]))
+    mockDbSelect.mockImplementationOnce(() => makeChain([]));
 
-    const result = await getUserServiceAppointments('user-1')
+    const result = await getUserServiceAppointments('user-1');
 
-    expect(result).toEqual([])
-  })
+    expect(result).toEqual([]);
+  });
 
   it('returns appointment rows with service name and slug', async () => {
-    mockDbSelect.mockImplementationOnce(() => makeChain([makeAppointmentRow()]))
+    mockDbSelect.mockImplementationOnce(() => makeChain([makeAppointmentRow()]));
 
-    const result = await getUserServiceAppointments('user-1')
+    const result = await getUserServiceAppointments('user-1');
 
-    expect(result).toHaveLength(1)
-    expect(result[0].id).toBe('appt-1')
-    expect(result[0].service_name).toBe('Laptop-Reparatur')
-    expect(result[0].service_slug).toBe('laptop-repair')
-  })
-})
+    expect(result).toHaveLength(1);
+    expect(result[0].id).toBe('appt-1');
+    expect(result[0].service_name).toBe('Laptop-Reparatur');
+    expect(result[0].service_slug).toBe('laptop-repair');
+  });
+});
 
 // ============================================================================
 // hasPendingAppointmentForService
@@ -152,18 +149,18 @@ describe('getUserServiceAppointments', () => {
 
 describe('hasPendingAppointmentForService', () => {
   it('returns false when no pending appointment exists', async () => {
-    mockDbSelect.mockImplementationOnce(() => makeChain([]))
+    mockDbSelect.mockImplementationOnce(() => makeChain([]));
 
-    const result = await hasPendingAppointmentForService('user-1', 'laptop-repair')
+    const result = await hasPendingAppointmentForService('user-1', 'laptop-repair');
 
-    expect(result).toBe(false)
-  })
+    expect(result).toBe(false);
+  });
 
   it('returns true when a pending appointment exists', async () => {
-    mockDbSelect.mockImplementationOnce(() => makeChain([{ id: 'appt-1' }]))
+    mockDbSelect.mockImplementationOnce(() => makeChain([{ id: 'appt-1' }]));
 
-    const result = await hasPendingAppointmentForService('user-1', 'laptop-repair')
+    const result = await hasPendingAppointmentForService('user-1', 'laptop-repair');
 
-    expect(result).toBe(true)
-  })
-})
+    expect(result).toBe(true);
+  });
+});

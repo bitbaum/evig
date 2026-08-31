@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 
 /**
  * Scroll-spy for TOC rails: returns the id of the section currently in view.
@@ -16,30 +16,30 @@ import { useEffect, useState } from 'react'
  * `aria-current="location"` instead of hand-rolling an IntersectionObserver.
  */
 export function useScrollSpy(ids: string[], rootMargin = '-80px 0px -60% 0px'): string {
-  const [activeId, setActiveId] = useState('')
+  const [activeId, setActiveId] = useState('');
 
   useEffect(() => {
     const els = ids
       .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => el !== null)
-    if (els.length === 0) return
+      .filter((el): el is HTMLElement => el !== null);
+    if (els.length === 0) return;
 
-    const visible = new Set<string>()
+    const visible = new Set<string>();
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          if (entry.isIntersecting) visible.add(entry.target.id)
-          else visible.delete(entry.target.id)
+          if (entry.isIntersecting) visible.add(entry.target.id);
+          else visible.delete(entry.target.id);
         }
-        const current = ids.find((id) => visible.has(id))
-        if (current) setActiveId(current)
+        const current = ids.find((id) => visible.has(id));
+        if (current) setActiveId(current);
       },
       { rootMargin },
-    )
-    els.forEach((el) => observer.observe(el))
-    return () => observer.disconnect()
+    );
+    els.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps -- re-observe when the id LIST changes, not the array identity
-  }, [ids.join('|'), rootMargin])
+  }, [ids.join('|'), rootMargin]);
 
-  return activeId
+  return activeId;
 }

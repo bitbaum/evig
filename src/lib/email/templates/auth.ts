@@ -5,7 +5,13 @@
  */
 
 import type { EmailContent } from '../types';
-import { createEmailLayout, createTextFooter, BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT } from './base-styles';
+import {
+  createEmailLayout,
+  createTextFooter,
+  BASE_STYLES,
+  COPYRIGHT_TEXT,
+  AUTO_GENERATED_TEXT,
+} from './base-styles';
 import { CONTACT, ORG } from '@/config/org';
 import { escapeHtml } from '@/lib/utils/escape-html';
 

@@ -1,21 +1,21 @@
-'use client'
+'use client';
 
-import { BookOpen } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { WORKSHOP_CATEGORIES, WORKSHOP_LEVELS } from '@/config/workshops'
-import { responsiveTypography } from '@/lib/responsive'
-import Heading from '@/components/ui/Heading'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
+import { BookOpen } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { WORKSHOP_CATEGORIES, WORKSHOP_LEVELS } from '@/config/workshops';
+import { responsiveTypography } from '@/lib/responsive';
+import Heading from '@/components/ui/Heading';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 
 interface BasicInfoSectionProps {
-  title: string
-  category: string
-  level: 'beginner' | 'intermediate' | 'advanced'
-  shortDescription: string
-  description: string
-  onChange: (field: string, value: string) => void
+  title: string;
+  category: string;
+  level: 'beginner' | 'intermediate' | 'advanced';
+  shortDescription: string;
+  description: string;
+  onChange: (field: string, value: string) => void;
 }
 
 export function BasicInfoSection({
@@ -24,13 +24,16 @@ export function BasicInfoSection({
   level,
   shortDescription,
   description,
-  onChange
+  onChange,
 }: BasicInfoSectionProps) {
-  const t = useTranslations('workshops.propose')
+  const t = useTranslations('workshops.propose');
 
   return (
     <div className="mb-8">
-      <Heading level={2} className={`${responsiveTypography.subsection} font-semibold text-text-primary mb-4 flex items-center`}>
+      <Heading
+        level={2}
+        className={`${responsiveTypography.subsection} font-semibold text-text-primary mb-4 flex items-center`}
+      >
         <BookOpen className="w-5 h-5 mr-2" />
         {t('sections.basicInfo.title')}
       </Heading>
@@ -61,8 +64,10 @@ export function BasicInfoSection({
             aria-required="true"
           >
             <option value="">{t('sections.basicInfo.categoryPlaceholder')}</option>
-            {WORKSHOP_CATEGORIES.map(cat => (
-              <option key={cat.id} value={cat.name}>{cat.name}</option>
+            {WORKSHOP_CATEGORIES.map((cat) => (
+              <option key={cat.id} value={cat.name}>
+                {cat.name}
+              </option>
             ))}
           </Select>
         </div>
@@ -77,8 +82,10 @@ export function BasicInfoSection({
             required
             aria-required="true"
           >
-            {WORKSHOP_LEVELS.filter(l => l.id !== 'all').map(lvl => (
-              <option key={lvl.id} value={lvl.id}>{lvl.name}</option>
+            {WORKSHOP_LEVELS.filter((l) => l.id !== 'all').map((lvl) => (
+              <option key={lvl.id} value={lvl.id}>
+                {lvl.name}
+              </option>
             ))}
           </Select>
         </div>
@@ -112,5 +119,5 @@ export function BasicInfoSection({
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -116,10 +116,7 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
       case 'select':
         if (field === 'category') {
           return (
-            <Select
-              value={value || ''}
-              onChange={(e) => handleFieldChange(field, e.target.value)}
-            >
+            <Select value={value || ''} onChange={(e) => handleFieldChange(field, e.target.value)}>
               <option value="">Wählen...</option>
               {WORKSHOP_CATEGORIES.map((cat) => (
                 <option key={cat.id} value={cat.name}>
@@ -130,10 +127,7 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
           );
         } else if (field === 'level') {
           return (
-            <Select
-              value={value || ''}
-              onChange={(e) => handleFieldChange(field, e.target.value)}
-            >
+            <Select value={value || ''} onChange={(e) => handleFieldChange(field, e.target.value)}>
               <option value="">Wählen...</option>
               {WORKSHOP_LEVELS.map((level) => (
                 <option key={level.id} value={level.id}>
@@ -172,7 +166,10 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
+    <div
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+      onClick={onClose}
+    >
       <div
         ref={dialogRef}
         role="dialog"
@@ -183,7 +180,9 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
       >
         {/* Header */}
         <div className="sticky top-0 bg-surface-base border-b px-6 py-4 flex items-center justify-between">
-          <Heading level={2} id="edit-proposal-modal-title" className="text-2xl">Vorschlag bearbeiten</Heading>
+          <Heading level={2} id="edit-proposal-modal-title" className="text-2xl">
+            Vorschlag bearbeiten
+          </Heading>
           <Button
             variant="ghost"
             size="icon"
@@ -215,7 +214,7 @@ export function EditProposalModal({ proposal, onClose, onSaved }: EditProposalMo
                   {renderField(field)}
                 </FormField>
               );
-            }
+            },
           )}
         </div>
 

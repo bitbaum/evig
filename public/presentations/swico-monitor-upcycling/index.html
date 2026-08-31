@@ -1,1079 +1,2277 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
-<head>
-<meta charset="UTF-8">
-<meta name="robots" content="noindex, nofollow">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Monitor-Upcycling — Abschlusspräsentation Swico</title>
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root {
-  --bg: #0a0a0a; --surface: #141414; --text: #f5f5f5; --dim: #9ca3af;
-  --hairline: rgba(255,255,255,.09); --green: #22c55e; --radius: 10px;
-  --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
-}
-html, body { height: 100dvh; width: 100vw; overflow: hidden; }
-body { font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
-
-.deck { position: relative; height: 100dvh; width: 100vw; }
-.slide { position: absolute; inset: 0; display: none; flex-direction: column;
-  justify-content: center; padding: clamp(2rem,6vmin,5rem) clamp(2rem,7vmin,6.5rem);
-  opacity: 0; transition: opacity .25s ease; }
-.slide.active { display: flex; opacity: 1; }
-  .slide.active .eyebrow, .slide.active h1, .slide.active h2, .slide.active .facts li,
-  .slide.active .stat, .slide.active .card, .slide.active .subtitle, .slide.active .bleed-fact,
-  .slide.active .sources, .slide.active .hairline {
-    animation: rise .55s cubic-bezier(.2,.7,.2,1) both; }
-  .slide.active h1, .slide.active h2 { animation-delay: .08s; }
-  .slide.active .subtitle { animation-delay: .16s; }
-  .slide.active .facts li:nth-child(1), .slide.active .card:nth-child(1), .slide.active .stat:nth-child(1) { animation-delay: .16s; }
-  .slide.active .facts li:nth-child(2), .slide.active .card:nth-child(2), .slide.active .stat:nth-child(2) { animation-delay: .24s; }
-  .slide.active .facts li:nth-child(3), .slide.active .card:nth-child(3), .slide.active .stat:nth-child(3) { animation-delay: .32s; }
-  .slide.active .facts li:nth-child(4), .slide.active .stat:nth-child(4) { animation-delay: .40s; }
-  .slide.active .facts li:nth-child(5) { animation-delay: .48s; }
-  .slide.active .facts li:nth-child(6) { animation-delay: .56s; }
-  .slide.active .bleed-fact { animation-delay: .3s; }
-  .slide.active .sources { animation-delay: .5s; }
-  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-  @media (prefers-reduced-motion: reduce) { .slide.active * { animation: none !important; } }
-  .dots { position: fixed; bottom: 2.6rem; left: 50%; transform: translateX(-50%); display: flex; gap: .35rem; z-index: 55; }
-  .dots span { width: 5px; height: 5px; border-radius: 999px; background: rgba(255,255,255,.18); transition: background .2s, width .2s; }
-  .dots span.on { background: var(--green); width: 14px; }
-
-/* typography — x.ai discipline: big, tight, left-aligned */
-.eyebrow { font-family: var(--mono); font-size: clamp(.65rem,1.3vmin,.85rem);
-  letter-spacing: .22em; text-transform: uppercase; color: var(--dim); margin-bottom: 1.2rem; }
-h1 { font-size: clamp(2.8rem,8.5vmin,7rem); font-weight: 650; letter-spacing: -.025em; line-height: 1.02; }
-h2 { font-size: clamp(2rem,5.2vmin,4.2rem); font-weight: 650; letter-spacing: -.02em; line-height: 1.06; margin-bottom: clamp(1rem,3vmin,2rem); }
-h3 { font-size: clamp(1.05rem,2.2vmin,1.6rem); font-weight: 600; letter-spacing: -.01em; margin-bottom: .4rem; }
-p, li { font-size: clamp(1rem,2vmin,1.5rem); line-height: 1.55; color: var(--dim); }
-strong { color: var(--text); font-weight: 600; }
-.accent { color: var(--green); }
-.subtitle { color: var(--dim); font-size: clamp(1rem,2.1vmin,1.55rem); max-width: 62ch; }
-ul { list-style: none; }
-ul li { padding-left: 1.4em; position: relative; margin-bottom: .65em; }
-ul li::before { content: ""; position: absolute; left: 0; top: .62em; width: .7em; height: 1.5px; background: var(--green); }
-
-/* layout primitives */
-.split { display: grid; grid-template-columns: 1.05fr 1fr; gap: clamp(1.5rem,4vmin,4rem); align-items: center; }
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1rem,2.5vmin,2rem); }
-.grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: clamp(1rem,2.5vmin,2rem); }
-.grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: clamp(.8rem,2vmin,1.5rem); }
-.card { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--radius); padding: clamp(1rem,2.6vmin,1.8rem); text-align: left; }
-.card p { font-size: clamp(.85rem,1.7vmin,1.2rem); }
-.hairline { border: 0; border-top: 1px solid var(--hairline); margin: clamp(1rem,3vmin,2rem) 0; }
-
-/* photos */
-figure { position: relative; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--hairline); background: var(--surface); }
-figure img { display: block; width: 100%; height: 100%; object-fit: cover; }
-figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: .6rem .9rem;
-  background: linear-gradient(transparent, rgba(0,0,0,.78)); font-family: var(--mono);
-  font-size: clamp(.6rem,1.2vmin,.8rem); letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.85); }
-.ph { height: clamp(200px,42vmin,520px); }
-.ph-tall { height: clamp(260px,56vmin,640px); }
-
-/* full-bleed slides */
-.slide--bleed { padding: 0; justify-content: flex-end; }
-.slide--bleed .bleed-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.slide--bleed .bleed-scrim { position: absolute; inset: 0;
-  background: linear-gradient(200deg, rgba(10,10,10,.15) 0%, rgba(10,10,10,.72) 62%, rgba(10,10,10,.94) 100%); }
-.slide--bleed .bleed-content { position: relative; padding: clamp(2rem,7vmin,6.5rem); padding-bottom: clamp(4rem,10vmin,7.5rem); max-width: 1100px; }
-
-/* stats */
-.stats { display: grid; grid-template-columns: repeat(4,1fr); gap: clamp(1rem,3vmin,2.5rem); }
-.stat .n { font-size: clamp(2.6rem,7.5vmin,6rem); font-weight: 650; letter-spacing: -.03em; line-height: 1; color: var(--text); }
-.stat .n em { font-style: normal; color: var(--green); }
-.stat .l { font-family: var(--mono); font-size: clamp(.6rem,1.25vmin,.8rem); letter-spacing: .16em; text-transform: uppercase; color: var(--dim); margin-top: .6rem; }
-.sources { margin-top: clamp(1rem,2.5vmin,1.6rem); font-size: clamp(.7rem,1.4vmin,.95rem); color: #6b7280; line-height: 1.5; }
-.sources a { color: #6b7280; }
-
-/* chrome: progress, counter, arrows, toolbar, notes */
-.progress { position: fixed; top: 0; left: 0; height: 2px; background: var(--green); width: 0%; z-index: 60; transition: width .25s ease; }
-.counter { position: fixed; bottom: 1rem; right: 1.25rem; font-family: var(--mono); font-size: .75rem; color: var(--dim); z-index: 60; }
-.watermark { display: none; }
-.nav-arrow { position: fixed; top: 0; bottom: 0; width: 12vw; min-width: 64px; background: none; border: 0; color: transparent;
-  font-size: 3rem; cursor: pointer; z-index: 50; }
-.nav-arrow:hover, .nav-arrow:focus-visible { color: rgba(255,255,255,.35); outline: none; }
-.nav-arrow--left { left: 0; text-align: left; padding-left: .6rem; }
-.nav-arrow--right { right: 0; text-align: right; padding-right: .6rem; }
-.toolbar { position: fixed; bottom: .9rem; left: 50%; transform: translateX(-50%); display: flex; gap: .4rem; z-index: 60; }
-.toolbar-btn { font-family: var(--mono); font-size: .7rem; letter-spacing: .06em; color: var(--dim);
-  background: rgba(20,20,20,.85); border: 1px solid var(--hairline); border-radius: 8px; padding: .45rem .7rem; cursor: pointer; }
-.toolbar-btn:hover { color: var(--text); border-color: rgba(255,255,255,.25); }
-.notes-panel { position: fixed; right: 1rem; bottom: 3.6rem; width: min(430px, 92vw); max-height: 62vh; display: none;
-  flex-direction: column; background: rgba(16,16,16,.97); border: 1px solid var(--hairline); border-radius: 12px; z-index: 70; }
-.notes-panel.open { display: flex; }
-.notes-header { display: flex; justify-content: space-between; align-items: center; padding: .7rem 1rem; border-bottom: 1px solid var(--hairline); }
-.notes-header-left { display: flex; gap: .8rem; align-items: center; font-family: var(--mono); font-size: .75rem; color: var(--dim); }
-.notes-timer { cursor: pointer; }
-.notes-close { background: none; border: 0; color: var(--dim); font-size: 1.3rem; cursor: pointer; }
-.notes-close:hover { color: var(--text); }
-.notes-body { padding: 1rem; overflow-y: auto; }
-.notes-text { font-size: .95rem; line-height: 1.6; color: var(--text); white-space: pre-wrap; }
-.notes-next { margin-top: 1rem; padding-top: .7rem; border-top: 1px solid var(--hairline); }
-.notes-next-label { display: block; font-family: var(--mono); font-size: .65rem; letter-spacing: .15em; text-transform: uppercase; color: #6b7280; }
-.notes-next-title { color: var(--dim); font-size: .9rem; }
-.has-notes::after { content: ""; }
-
-/* fullscreen scale-up */
-:fullscreen h1 { font-size: clamp(3.5rem,10vmin,9rem); }
-:fullscreen h2 { font-size: clamp(2.5rem,6vmin,5rem); }
-:fullscreen p, :fullscreen li { font-size: clamp(1.2rem,2.4vmin,1.9rem); }
-
-@media (max-width: 760px) {
-  .split, .grid-2, .grid-3, .grid-4, .stats { grid-template-columns: 1fr; }
-  .ph, .ph-tall { height: 34vh; }
-  .slide { overflow-y: auto; justify-content: flex-start; padding-top: 3.5rem; }
-}
-@media print {
-  html, body { overflow: visible; height: auto; }
-  .deck { height: auto; }
-  .slide { position: relative; display: flex !important; opacity: 1 !important; page-break-after: always; height: 100vh; }
-  .progress, .counter, .nav-arrow, .toolbar, .watermark, .notes-panel { display: none !important; }
-}
-
-/* statement bleeds + fact chips */
-.bleed-fact { display: inline-block; margin-top: 1.2rem; font-family: var(--mono);
-  font-size: clamp(.65rem,1.3vmin,.85rem); letter-spacing: .16em; text-transform: uppercase;
-  color: rgba(255,255,255,.82); border: 1px solid rgba(255,255,255,.22); border-radius: 999px;
-  padding: .45rem .9rem; backdrop-filter: blur(4px); }
-.statement h1 { font-size: clamp(2.6rem,7.5vmin,6.2rem); }
-.facts { max-width: 62rem; }
-.facts li { font-size: clamp(1.1rem,2.3vmin,1.75rem); margin-bottom: 1em; }
-
-.link { color: var(--text); text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--green); text-decoration-thickness: 1.5px; }
-.link:hover { color: var(--green); }
-.uc-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(.8rem, 2vmin, 1.4rem); }
-.uc-grid figure { height: clamp(150px, 32vmin, 340px); }
-body.exporting .slide, body.exporting .slide * { animation: none !important; transition: none !important; }
-body.exporting .progress, body.exporting .counter, body.exporting .nav-arrow, body.exporting .toolbar, body.exporting .dots, body.exporting .notes-panel { display: none !important; }
-@media (max-width:760px){ .uc-grid { grid-template-columns: 1fr 1fr; } }
-</style>
-</head>
-<body>
-
-<div class="progress" id="progress"></div>
-<div class="counter" id="counter"></div>
-<img class="watermark" id="watermark" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="">
-
-<button class="nav-arrow nav-arrow--left" id="nav-left" aria-label="Vorherige Folie">&#8249;</button>
-<button class="nav-arrow nav-arrow--right" id="nav-right" aria-label="Nächste Folie">&#8250;</button>
-
-<div class="toolbar">
-  <button class="toolbar-btn" id="btn-fullscreen" title="Vollbild (F)">Vollbild</button>
-  <button class="toolbar-btn" id="btn-notes" title="Sprechernotizen (S)">Notizen</button>
-  <button class="toolbar-btn" id="btn-print" title="PDF herunterladen">PDF</button>
-  <button class="toolbar-btn" id="btn-pptx" title="PowerPoint herunterladen">PPTX</button>
-</div>
-
-<div class="notes-panel" id="notes-panel">
-  <div class="notes-header">
-    <div class="notes-header-left">
-      <span class="notes-slide-num" id="notes-num"></span>
-      <span class="notes-timer" id="notes-timer" title="Klick zum Starten/Pausieren">00:00</span>
-    </div>
-    <button class="notes-close" id="notes-close" title="Schliessen">&times;</button>
-  </div>
-  <div class="notes-body">
-    <div class="notes-text" id="notes-text"></div>
-    <div class="notes-next">
-      <span class="notes-next-label">Nächste Folie</span>
-      <span class="notes-next-title" id="notes-next-title"></span>
-    </div>
-  </div>
-</div>
-
-<div class="deck" id="deck">
-
-  <!-- 01 · TITEL (full-bleed) -->
-  <div class="slide slide--bleed active" data-notes="Begrüssung. Abschlusspräsentation des Swico-Projekts 2023-02-01 'Funktionelle Kreislaufnutzung von IT-Geräten'. Dieses Foto ist keine Visualisierung: Das ist ein entsorgter Curved-Monitor — heute die Werkstattleuchte im RepairHub von zuerich.repair, fotografiert im Juli 2026." data-no-watermark>
-    <img class="bleed-img" style="object-position:50% 38%" src="/projects/upcycling/installs/werkbank-curved-3.jpg" alt="Curved-Upcycling-Leuchte über der Werkbank im RepairHub">
-    <div class="bleed-scrim"></div>
-    <div class="bleed-content">
-      <p class="eyebrow">Projekt 2023-02-01 · revamp-it × Swico × ZHAW</p>
-      <h1>Monitor-<span class="accent">Upcycling</span></h1>
-      <hr class="hairline" style="max-width:8rem">
-      <p class="subtitle">Abschlusspräsentation · Juli 2026</p>
-      <span class="bleed-fact">Foto: entsorgter Monitor, heute Werkstattleuchte · RepairHub zuerich.repair</span>
-    </div>
-  </div>
-
-  <!-- 02 · MISSION (full-bleed) -->
-  <div class="slide slide--bleed statement" data-notes="Der Satz, der alles trägt: Wir machen aus Abfall Licht. Und wir zeigen allen, wie es geht — denn wir glauben an offene Hardware genauso, wie wir an Open-Source-Software glauben. Jede Anleitung ist frei. Jede Werkstatt, die sie nutzt, vergrössert die Wirkung. Das Foto: Wandleuchten in unserem Laden — ehemalige Monitore." data-no-watermark>
-    <img class="bleed-img" style="object-position:30% 18%" src="/projects/upcycling/installs/laden-wand-1.jpg" alt="Upcycling-Wandleuchten im Laden revamp-it">
-    <div class="bleed-scrim"></div>
-    <div class="bleed-content">
-      <p class="eyebrow">Unsere Mission</p>
-      <h1>Wir machen aus Abfall <span class="accent">Licht</span>.</h1>
-      <hr class="hairline" style="max-width:8rem">
-      <p class="subtitle">Und zeigen offen, wie es geht — Hardware so offen wie Software.</p>
-      <span class="bleed-fact">Foto: Wandleuchten · Laden revamp-it, Zürich · Juli 2026</span>
-    </div>
-  </div>
-
-  <!-- 03 · PROBLEM (Fakten) -->
-  <div class="slide" data-notes="Warum das nötig ist — drei Fakten aus dem Abschlussbericht: Erstens sind Monitore nach Grösse und Stückzahl ein wichtiger Anteil im IT-Recycling-Mix — es geht um relevante Mengen. Zweitens der entscheidende technische Punkt: Ein defektes Display heisst fast nie defektes Backlight. Kratzer, Pixelfehler, Darstellungsfehler — die Lichtquelle dahinter funktioniert. Genau diese Geräte, die niemand mehr als Bildschirm will, sind unser Rohstoff. Drittens läuft parallel eine Neuproduktion: Jeder Um- und Neubau braucht Wand- und Deckenleuchten in Stückzahlen — mit vollem Rohstoff-, Energie- und Transportaufwand.">
-    <p class="eyebrow">Das Problem</p>
-    <h2>Funktionierende Technik<br>wird <span class="accent">geschreddert</span>.</h2>
-    <ul class="facts">
-      <li><strong>Monitore</strong> sind nach Grösse und Stückzahl ein wichtiger Anteil im IT-Recycling-Mix</li>
-      <li>Defektes Display <strong>&ne;</strong> defektes Backlight — Kratzer und Pixelfehler lassen die Lichtquelle intakt</li>
-      <li>Parallel dazu: Jeder Um- und Neubau braucht <strong>neue Leuchten</strong> — volle Neuproduktion aus Rohstoffen, Energie, Transport</li>
-    </ul>
-    <p class="sources">Quelle: Abschlussbericht Projekt 2023-02-01, Abschnitte A + B</p>
-  </div>
-
-  <!-- 04 · DIE IDEE (Fakten) -->
-  <div class="slide" data-notes="Die Kernidee, technisch präzise: In jedem Flachbildschirm steckt eine fertige Leuchte. Wir entfernen die Bildoberfläche und die Bild-Elektronik — was bleibt, ist das LED-Backlight mit Diffusor: ein fertiges, gleichmässiges Flächenlicht, schattenfrei. Der Realitäts-Check aus dem Handel: Ein vergleichbares neues 24-Watt-LED-Panel kostet CHF 79.95 — Foto-Beleg auf unserer Wirkungs-Seite. Der Unterschied: Unser Panel ist bereits produziert. Schwerpunkt bewusst auf LED-Backlights: tieferer Verbrauch als Leuchtstoffröhren, heller, kaum Zusatzmaterial, beste Ökobilanz.">
-    <p class="eyebrow">Die Idee</p>
-    <h2>In jedem Flachbildschirm steckt<br>eine <span class="accent">fertige Leuchte</span>.</h2>
-    <ul class="facts">
-      <li>Bildoberfläche + Bild-Elektronik raus → das <strong>LED-Backlight</strong> bleibt: fertiges, schattenfreies Flächenlicht</li>
-      <li>Neuware-Vergleich: 24-W-LED-Panel im Handel <strong>CHF 79.95</strong> — volle Neuproduktion. Unser Panel ist schon produziert</li>
-      <li>Schwerpunkt LED statt CCFL: <strong>tieferer Verbrauch, heller, kaum Zusatzmaterial</strong></li>
-    </ul>
-    <p class="sources">Foto-Beleg Neuware-Vergleich: revampit.orangecat.ch/de/projects/upcycling/wirkung · Abschlussbericht Abschnitt A</p>
-  </div>
-
-  <!-- 05 · HARD PART (full-bleed macro) -->
-  <div class="slide slide--bleed statement" data-notes="Die härteste technische Hürde — gelöst und geteilt. Viele Monitore fallen Minuten nach dem Einschalten in den Standby. Für eine Leuchte inakzeptabel. Elektroniker Benjamin Ernst hat die Lösung entwickelt: ein Spannungsteiler im Niedervoltbereich des Netzteils, verpackt als kleiner Stecker. Das Foto zeigt ihn: zwei Widerstände, Gehäuse aus dem 3D-Drucker — in der geschützten Werkstatt selbst fertigbar. Pro Monitor-Typ dokumentiert. Auch die Montage ist gelöste offene Hardware: VESA-Standard, Wandhalterung aus Bettlagerbeschlägen, 3D-druckbare Deckenhalterung, Leisten für ganze Reihen. Ehrliches Learning für die Kompetenz-Frage: Bei EIZO fiel die Kleinserie trotz erfolgreichem Prototyp zurück in den Standby — Serie gestoppt, wird nachuntersucht. So arbeiten wir." data-no-watermark>
-    <img class="bleed-img" src="/projects/upcycling/installs/standby-dongle.jpg" alt="Der Standby-Fix: Spannungsteiler-Stecker im 3D-gedruckten Gehäuse">
-    <div class="bleed-scrim"></div>
-    <div class="bleed-content">
-      <p class="eyebrow">Die härteste Hürde</p>
-      <h1>Standby: <span class="accent">gelöst</span>.</h1>
-      <hr class="hairline" style="max-width:8rem">
-      <p class="subtitle">Spannungsteiler-Stecker, Gehäuse aus dem 3D-Drucker — in der Werkstatt selbst fertigbar, pro Monitor-Typ dokumentiert, als offene Hardware geteilt.</p>
-      <span class="bleed-fact">Foto: der Stecker · Entwicklung Benjamin Ernst · Werkstatt-fertigbar</span>
-    </div>
-  </div>
-
-  <!-- 06 · KOMPETENZ / UMBAU (Fakten) -->
-  <div class="slide" data-notes="Warum uns das jemand glauben darf — der Prozess ist Industriearbeit, kein Bastelprojekt: Definierte Eignungskriterien — Kratzer, Pixelfehler, Darstellungsfehler sind ok; defekte Stromversorgung und starker Gehäusebruch nicht. Reproduzierbarer Umbau mit dokumentierter Anleitung pro Monitor-Typ, ohne Spezialausrüstung — deshalb funktioniert er in geschützten Werkstätten. Kleinserien liefen bei Werkraum4, Schwerpunkt Dell und HP. Montage über VESA-Standard MIS-D, dazu unsere offenen Halterungslösungen. Und das EIZO-Learning zeigen wir offen: Serie gestoppt statt schöngeredet.">
-    <p class="eyebrow">Kompetenz</p>
-    <h2>Reproduzierbar.<br>Nicht <span class="accent">gebastelt</span>.</h2>
-    <ul class="facts">
-      <li><strong>Eignungskriterien definiert</strong>: Kratzer/Pixelfehler ok · defekte Stromversorgung, Gehäusebruch nicht</li>
-      <li><strong>Anleitung pro Monitor-Typ</strong> — Umbau ohne Spezialausrüstung, werkstatt-tauglich</li>
-      <li><strong>Kleinserien erprobt</strong> bei Werkraum4 · Schwerpunkt Dell &amp; HP</li>
-      <li><strong>Montage gelöst</strong>: VESA MIS-D · Wandbeschläge · 3D-Deckenhalterung · Leisten für Reihen</li>
-      <li><strong>Keine Blend- oder Stroboskopeffekte</strong> — gleichmässiges Licht, wenig Schattenwurf</li>
-      <li>Ehrlich dokumentiert: <strong>EIZO-Serie gestoppt</strong> (Standby-Rückfall) — wird nachuntersucht</li>
-    </ul>
-    <p class="sources">Abschlussbericht Abschnitte B + C · Anleitungen: monitor-upcycling.org + revampit.orangecat.ch/de/projects/upcycling</p>
-  </div>
-
-  <!-- 07 · USE CASE LADEN (full-bleed) -->
-  <div class="slide slide--bleed statement" data-notes="Einsatz Nummer eins zum Anfassen: unser eigener Laden an der Birmensdorferstrasse. Im Eingangsbereich haben wir zwei bestehende Deckenleuchten durch Upcycling-Leuchten ersetzt — die im Foto. Die Reaktionen der Kundinnen und Kunden: durchweg positiv. Im Büro läuft eine weitere Leuchte seit über einem Jahr täglich, einwandfrei. Der Laden ist gleichzeitig Showroom: Wer fragt, bekommt die Geschichte — und die Anleitung." data-no-watermark>
-    <img class="bleed-img" style="object-position:50% 22%" src="/projects/upcycling/installs/laden-decke-2.jpg" alt="Upcycling-Deckenleuchten im Eingangsbereich des Ladens revamp-it">
-    <div class="bleed-scrim"></div>
-    <div class="bleed-content">
-      <p class="eyebrow">Im Einsatz · 01</p>
-      <h1>Laden <span class="accent">revamp-it</span>, Zürich.</h1>
-      <hr class="hairline" style="max-width:8rem">
-      <span class="bleed-fact">2 Neuleuchten ersetzt · Kundenreaktionen durchweg positiv · Büro-Leuchte: 1+ Jahr einwandfrei</span>
-    </div>
-  </div>
-
-  <!-- 08 · TRAKTION (Fakten/Stats) -->
-  <div class="slide" data-notes="Die Zahlen nach einem Jahr Feldbetrieb — gemessen, nicht versprochen: Fünf reale Standorte. Werkraum4 ist der Härtetest der Stückzahl: rund 20 Leuchten, ein Jahr täglicher Einsatz — genau EIN Ausfall. Ein Netzteil, durch einfachen Austausch repariert; die LED-Backlights selbst: null Probleme. RecreaZZZ in der ehemaligen Zentralwäscherei ist der Schalt-Härtetest: bei jedem WC-Besuch ein und aus, seit über einem Jahr störungsfrei, Feedback per Strichliste überwiegend positiv. Dazu der RepairHub, das Lager AmbossRampe und unser Laden. Ehrlich gesagt — und so steht es auch in der Team-Präsentation: Die Standortsuche war schwieriger als erwartet. Umso mehr zählt, dass diese fünf Installationen seit einem Jahr real laufen.">
-    <p class="eyebrow">Traktion · gemessen, nicht versprochen</p>
-    <h2>Ein Jahr <span class="accent">Feldbetrieb</span>.</h2>
-    <div class="stats">
-      <div class="stat"><div class="n">5</div><div class="l">Reale Standorte</div></div>
-      <div class="stat"><div class="n">~20</div><div class="l">Leuchten · Werkraum4</div></div>
-      <div class="stat"><div class="n">1<em> Jahr</em></div><div class="l">Täglicher Einsatz</div></div>
-      <div class="stat"><div class="n"><em>1</em></div><div class="l">Ausfall — repariert</div></div>
-    </div>
-    <hr class="hairline">
-    <p class="subtitle">Werkraum4 · RepairHub zuerich.repair · RecreaZZZ (Dauerschalttest, 1+ Jahr störungsfrei) · Lager AmbossRampe · Laden revamp-it</p>
-    <p class="sources">Abschlussbericht Abschnitt D — Durchgeführte Installationen und erste Erfahrungen</p>
-  </div>
-
-  <!-- 09 · USE CASE REPAIRHUB (full-bleed) -->
-  <div class="slide slide--bleed statement" data-notes="Einsatz Nummer zwei — und die schönste Pointe des Projekts: Im RepairHub von zuerich.repair hängt ein grosser Curved-Monitor mit gebrochenem Display als Werkstattleuchte. Das breitflächige Licht wirft keine Schatten — genau das, was man bei feinen Reparaturarbeiten braucht. Die Reparateur*innen schätzen es täglich, und für Besucher*innen ist die Leuchte ein Blickfang, der das Thema Upcycling von selbst ins Gespräch bringt. Eine Reparatur-Werkstatt, beleuchtet von einem reparierten Gerät." data-no-watermark>
-    <img class="bleed-img" style="object-position:45% 42%" src="/projects/upcycling/installs/werkbank-curved-1.jpg" alt="Curved-Upcycling-Leuchte über der Werkbank, Vogelperspektive">
-    <div class="bleed-scrim"></div>
-    <div class="bleed-content">
-      <p class="eyebrow">Im Einsatz · 02</p>
-      <h1>RepairHub · <span class="accent">zuerich.repair</span></h1>
-      <hr class="hairline" style="max-width:8rem">
-      <span class="bleed-fact">Curved-Monitor, Display gebrochen → schattenfreies Arbeitslicht + Blickfang</span>
-    </div>
-  </div>
-
-  
-  <!-- 09b · USE-CASES (Visualisierungen) -->
-  <div class="slide" data-notes="Wo überall Licht entstehen kann — vier Visualisierungen aus unserer Szenarien-Arbeit, klar als solche gekennzeichnet: Schaufenster, Parkgarage, Club und Treppenhaus. Die ZHAW-Akzeptanzumfrage bestätigt genau diese Richtung: Korridor, Treppenhaus, Werkstatt und Labor gelten als geeignet bis sehr geeignet. Grosse Flächen, lange Brenndauern, funktionales Licht — überall dort spielt die Monitorleuchte ihre Stärken aus. Und jeder dieser Orte ist heute mit neu produzierten Panels beleuchtet. Über Leuchten hinaus: Leuchttische und Lightboards, Leuchtrahmen für Werbung, künstlerische Installationen, beleuchtete Bilderrahmen — die standardisierten Montagelöcher eröffnen zusätzliches Potenzial.">
-    <p class="eyebrow">Einsatzorte · Visualisierungen</p>
-    <h2>Überall, wo <span class="accent">Licht</span> gebraucht wird.</h2>
-    <div class="uc-grid">
-      <figure><img src="/projects/upcycling/szenarien/schaufenster.jpg" alt="Visualisierung: Monitorleuchte im Schaufenster"><figcaption>Schaufenster</figcaption></figure>
-      <figure><img src="/projects/upcycling/szenarien/garage.jpg" alt="Visualisierung: Monitorleuchten in der Parkgarage"><figcaption>Parkgarage</figcaption></figure>
-      <figure><img src="/projects/upcycling/szenarien/party.jpg" alt="Visualisierung: Monitorleuchten im Club"><figcaption>Club / Bar</figcaption></figure>
-      <figure><img src="/projects/upcycling/szenarien/treppenhaus.jpg" alt="Visualisierung: Monitorleuchte im Treppenhaus"><figcaption>Treppenhaus</figcaption></figure>
-    </div>
-    <p class="sources">Visualisierungen · ZHAW-Umfrage: Korridor, Treppenhaus, Werkstatt, Labor «geeignet bis sehr geeignet» · Mehr als Leuchten: Leuchttische, Leuchtrahmen für Werbung, künstlerische Installationen, beleuchtete Bilderrahmen</p>
-  </div>
-
-  <!-- 10 · WISSENSCHAFT (ZHAW-Resultate) -->
-  <div class="slide" data-notes="Der wissenschaftliche Kern — und die stärkste Folie des Abends. Die ZHAW, Institut für Nachhaltige Entwicklung an der School of Engineering — Corinna Baumgartner und Mirjam Grünholz — erstellt die komparative Ökobilanz nach ISO 14040/44: cradle-to-grave, funktionelle Einheit ist die abgegebene Lichtmenge über die Zeit, in Megalumen-Stunden. Verglichen wird unsere Monitorleuchte mit einer herkömmlichen LED-Leuchte. Die vorläufigen Resultate, Zwischenstand 28. Mai 2026: 82.7 Prozent weniger Treibhausgasemissionen im Durchschnittsszenario. Nach der Methode der ökologischen Knappheit — der Schweizer Methode über alle Umweltwirkungen — 84.8 Prozent weniger. Und über sämtliche Lebensdauer-Szenarien hinweg bleibt die Reduktion zwischen 52 und 86 Prozent. Das Fazit der ZHAW wörtlich: 'Unter aktueller Modellierung ist die Monitorleuchte in jedem Fall besser als die LED-Leuchte.' Wichtig für die Glaubwürdigkeit: vorläufige Zahlen, der finale Bericht folgt — aber die Richtung ist über alle Szenarien eindeutig. Dazu die CE-Frage, geklärt durch das Gutachten der Barologic GmbH.">
-    <p class="eyebrow">Wissenschaft · ZHAW-Ökobilanz (ISO 14040/44) · vorläufig, Stand 28.05.2026</p>
-    <h2>«In jedem Fall <span class="accent">besser</span>.»</h2>
-    <div class="stats" style="grid-template-columns:repeat(3,1fr)">
-      <div class="stat"><div class="n"><em>−82.7%</em></div><div class="l">Treibhausgase · Durchschnittsszenario</div></div>
-      <div class="stat"><div class="n"><em>−84.8%</em></div><div class="l">Gesamt-Umweltwirkung · ökol. Knappheit</div></div>
-      <div class="stat"><div class="n">52–86%</div><div class="l">THG-Reduktion · alle Szenarien (ökol. Knappheit: 78.5–85%)</div></div>
-    </div>
-    <hr class="hairline">
-    <ul class="facts">
-      <li>Vergleich pro <strong>Megalumen-Stunde</strong> (cradle-to-grave) gegen eine herkömmliche LED-Leuchte — ZHAW-Fazit: «Die Monitorleuchte ist <strong>in jedem Fall besser</strong>»</li>
-      <li><strong>CE-Konformität geklärt</strong> — Gutachten Barologic GmbH, Winterthur</li>
-    </ul>
-    <p class="sources">ZHAW School of Engineering, Institut für Nachhaltige Entwicklung — C. Baumgartner, M. Grünholz · Zwischenstand Innoscheck 28.05.2026 · Treibhauspotential kg CO₂-eq/Mlmh (IPCC) + Methode der ökologischen Knappheit · finaler Bericht folgt</p>
-  </div>
-
-  <!-- 10b · ÖKONOMIE (Messwerte + Markt) -->
-  <div class="slide" data-notes="Die Zahlen zur Wirtschaftlichkeit — alles gemessen oder erhoben, nichts geschätzt: Unsere Referenzleuchte, ein umgebauter DELL U2412b, zieht gemessene 13.6 Watt und liefert rund 965 Lumen — bei 50'000 Stunden erwarteter Lebensdauer. Auf die Leuchtfläche gerechnet ist die Monitorleuchte konkurrenzlos: Selbst bei einem Verkaufspreis von 100 Franken liegt sie bei 5 Franken pro Quadratdezimeter — kommerzielle Panels im Handel kosten 4.90 bis 11.20. Bei 50 Franken sind es 2.50. Und die ZHAW-Akzeptanzumfrage zeigt eine Zahlungsbereitschaft von 20 bis 150 Franken, im Schnitt 80 — wir können also kostendeckend UND unter Neuware-Preis verkaufen. Ehrlich dazu: n gleich 6, die Umfrage läuft weiter. Die bevorzugten Einsatzorte aus der Umfrage decken sich mit unseren Piloten: Korridor, Treppenhaus, Werkstatt, Labor — plus neue Ideen wie Leuchttische für die grafische Industrie und Plakat-Hinterleuchtung.">
-    <p class="eyebrow">Ökonomie · gemessen und erhoben</p>
-    <h2>Konkurrenzfähig — <span class="accent">gemessen</span>.</h2>
-    <div class="stats" style="grid-template-columns:repeat(4,1fr)">
-      <div class="stat"><div class="n">13.6<em> W</em></div><div class="l">Verbrauch · gemessen (DELL U2412b)</div></div>
-      <div class="stat"><div class="n">~965<em> lm</em></div><div class="l">Lichtstrom · gemessen</div></div>
-      <div class="stat"><div class="n">Ø 80<em> CHF</em></div><div class="l">Zahlungsbereitschaft (n=6, ZHAW)</div></div>
-      <div class="stat"><div class="n">2.5–5<em> CHF</em></div><div class="l">pro dm² — Neuware: 4.90–11.20</div></div>
-    </div>
-    <hr class="hairline">
-    <ul class="facts">
-      <li>Bevorzugte Einsatzorte (ZHAW-Umfrage): <strong>Korridor, Treppenhaus, Werkstatt, Labor</strong> — deckt sich mit unseren Piloten</li>
-      <li>Neue Anwendungsideen aus der Umfrage: <strong>Leuchttische</strong> (grafische Industrie), Plakat-Hinterleuchtung, Kellerabteile</li>
-    </ul>
-    <p class="sources">ZHAW Akzeptanzumfrage + Preisvergleich, Zwischenstand 28.05.2026 · Lumen-Messung: 8 Messpunkte, Ø 4'785 Lux × 0.2016 m² · Lebensdauer-Annahme 50'000 h</p>
-  </div>
-
-  <!-- 11 · WISSEN TEILEN (full-bleed) -->
-  <div class="slide slide--bleed statement" data-notes="Der Kern unserer Haltung — und warum eine Non-Profit hier sitzt: Wir teilen unser Wissen, statt es zu verkaufen. Alle Umbau-Anleitungen sind öffentlich — im Team-Wiki monitor-upcycling.org unter Creative Commons, auch kommerziell frei nutzbar, und auf unserer Projekt-Plattform mit Businessplan, Wirkungsdaten und Selbstbau-Guides. Das heisst konkret: Jede Person, jede Werkstatt, jedes Unternehmen — überall auf der Welt — kann diese Leuchten nachbauen oder in Serie fertigen. Genau das wollen wir. Denn für uns zählt vermiedener Abfall, nicht Verkauf und Gewinn. Das Foto: Studierende der HSLU im Modul 'Local Loops — Circularity locally made' beim Entwerfen eigener Leuchten aus unseren Monitoren — 14 Studierende, interdisziplinär. Wissen, das sich vermehrt, wenn man es teilt." data-no-watermark>
-    <img class="bleed-img" style="object-position:50% 60%" src="/projects/upcycling/installs/hslu-workshop-1.jpg" alt="HSLU-Studierende entwerfen Leuchten aus Monitoren">
-    <div class="bleed-scrim"></div>
-    <div class="bleed-content">
-      <p class="eyebrow">Open-Source-Hardware · Non-Profit</p>
-      <h1>Wissen teilen<br>statt <span class="accent">verkaufen</span>.</h1>
-      <hr class="hairline" style="max-width:8rem">
-      <p class="subtitle">Alle Anleitungen öffentlich: <a class="link" href="https://monitor-upcycling.org" target="_blank" rel="noopener noreferrer">monitor-upcycling.org</a> (CC-BY-SA) und <a class="link" href="https://revampit.orangecat.ch/de/projects/upcycling" target="_blank" rel="noopener noreferrer">unsere Projekt-Plattform</a>. Jede Person, überall, kann bauen — oder in Serie fertigen. Uns zählt vermiedener Abfall, nicht Gewinn.</p>
-      <span class="bleed-fact">Foto: HSLU-Modul «Local Loops — Circularity locally made» · 14 Studierende</span>
-    </div>
-  </div>
-
-  <!-- 12 · SKALIERUNG (Fakten) -->
-  <div class="slide" data-notes="Der Ausblick — bewusst entlang der drei Achsen des Swico Innovationsfonds formuliert: effizienter, umweltfreundlicher, rentabler. Effizienter: Monitore, deren Backlight funktioniert, werden VOR dem Schreddern abgezweigt — in Absprache mit Swico Recycling klären wir mit ERZ Stadt Zürich die Umnutzung aus dem städtischen Entsorgungsstrom; das ist der Hebel für Stückzahlen. Umweltfreundlicher: Die ZHAW-Zahlen — 52 bis 86 Prozent weniger Treibhausgase — werden mit dem finalen Bericht abgeschlossen; dazu Energiemessungen weiterer Modelle. Rentabler: Die Zahlungsbereitschaft von durchschnittlich 80 Franken über den Fertigungskosten in geschützten Werkstätten plus 2.5 bis 5 Franken pro Quadratdezimeter gegenüber 4.90 bis 11.20 bei Neuware — Absatz- und Verkaufsabklärungen laufen. Und als Verstärker: weitere Prototypen, weitere Testinstallationen, und jede neue Anleitung wird auf monitor-upcycling.org veröffentlicht — Skalierung durch Offenheit, im Ökosystem von Swico.">
-    <p class="eyebrow">Ausblick · effizienter — umweltfreundlicher — rentabler</p>
-    <h2>Vom Pilot zur <span class="accent">Stückzahl</span>.</h2>
-    <ul class="facts">
-      <li><strong>Effizienter</strong>: Funktionierende Backlights vor dem Schreddern abzweigen — mit Swico Recycling: Abklärung ERZ Stadt Zürich (städtischer Entsorgungsstrom)</li>
-      <li><strong>Umweltfreundlicher</strong>: ZHAW-Studie abschliessen (Innocheque) · Energiemessung weiterer Modelle</li>
-      <li><strong>Rentabler</strong>: Absatz-/Verkaufsabklärungen — Ø 80 CHF Zahlungsbereitschaft · Fertigung in geschützten Werkstätten</li>
-      <li><strong>Verstärker</strong>: weitere Prototypen + Testinstallationen · jede Anleitung öffentlich auf monitor-upcycling.org</li>
-    </ul>
-    <p class="sources">Abschlussbericht Abschnitt F · Team-Präsentation «Ausblick» · Achsen des Swico Innovationsfonds</p>
-  </div>
-
-  <!-- 13 · DANKE (full-bleed) -->
-  <div class="slide slide--bleed statement" data-notes="Danke an Swico für die Projektförderung — und an alle Beteiligten: Werkraum4, Benjamin Ernst, zuerich.repair, RecreaZZZ, AmbossRampe und die ZHAW. Der Prototyp steht seit Mai 2024 am Swico-Geschäftssitz an der Lagerstrasse. Alle Details, die Filmdokumentation des Umbaus und jede Anleitung: auf der Minisite und im Wiki. Fragen und Diskussion." data-no-watermark>
-    <img class="bleed-img" style="object-position:50% 15%" src="/projects/upcycling/installs/laden-decke-1.jpg" alt="Upcycling-Deckenleuchte im Laden revamp-it">
-    <div class="bleed-scrim"></div>
-    <div class="bleed-content">
-      <p class="eyebrow">Danke</p>
-      <h1>Merci, <span class="accent">Swico</span>.</h1>
-      <hr class="hairline" style="max-width:8rem">
-      <p class="subtitle"><a class="link" href="https://revampit.orangecat.ch/de/projects/upcycling" target="_blank" rel="noopener noreferrer">revampit.orangecat.ch/de/projects/upcycling</a><br><a class="link" href="https://monitor-upcycling.org" target="_blank" rel="noopener noreferrer">monitor-upcycling.org</a><br><a class="link" href="mailto:empfang@revamp-it.ch">empfang@revamp-it.ch</a> · 043 960 32 64</p>
-    </div>
-  </div>
-
-</div>
-
-<script>
-(function() {
-  const slides = document.querySelectorAll('.slide');
-  const counter = document.getElementById('counter');
-  const progress = document.getElementById('progress');
-  const watermark = document.getElementById('watermark');
-  const total = slides.length;
-  let current = 0;
-
-  var show = function(idx) {
-    if (idx < 0 || idx >= total) return;
-    slides[current].classList.remove('active');
-    current = idx;
-    slides[current].classList.add('active');
-    counter.textContent = (current + 1) + ' / ' + total;
-    progress.style.width = ((current + 1) / total * 100) + '%';
-    // Hide watermark on title slide
-    watermark.style.display = slides[current].hasAttribute('data-no-watermark') ? 'none' : 'block';
-  };
-
-  function next() { show(current + 1); }
-  function prev() { show(current - 1); }
-
-  // Keyboard
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); next(); }
-    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); prev(); }
-    else if (e.key === 'Home') { e.preventDefault(); show(0); }
-    else if (e.key === 'End') { e.preventDefault(); show(total - 1); }
-    else if (e.key === 'f' || e.key === 'F') { toggleFullscreen(); }
-  });
-
-  // Touch swipe
-  let touchStartX = 0;
-  document.addEventListener('touchstart', function(e) { touchStartX = e.changedTouches[0].screenX; });
-  document.addEventListener('touchend', function(e) {
-    const dx = e.changedTouches[0].screenX - touchStartX;
-    if (Math.abs(dx) > 50) { dx < 0 ? next() : prev(); }
-  });
-
-  // Arrow buttons
-  document.getElementById('nav-left').addEventListener('click', function(e) { e.stopPropagation(); prev(); });
-  document.getElementById('nav-right').addEventListener('click', function(e) { e.stopPropagation(); next(); });
-
-  // Fullscreen
-  function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen().catch(function() {});
-    } else {
-      document.exitFullscreen();
-    }
-  }
-  document.getElementById('btn-fullscreen').addEventListener('click', function(e) {
-    e.stopPropagation();
-    toggleFullscreen();
-  });
-
-  // PDF Export — programmatic capture with html2canvas + jsPDF
-  var pdfLibState = 'idle';
-
-  function loadPdfLibs() {
-    if (pdfLibState !== 'idle') return;
-    if (typeof html2canvas !== 'undefined' && typeof jspdf !== 'undefined') { pdfLibState = 'ready'; return; }
-    pdfLibState = 'loading';
-    var loaded = 0;
-    function checkDone() { loaded++; if (loaded >= 2) pdfLibState = 'ready'; }
-
-    function loadScript(primary, fallback, cb) {
-      var s = document.createElement('script');
-      s.src = primary;
-      s.onload = cb;
-      s.onerror = function() {
-        var s2 = document.createElement('script');
-        s2.src = fallback;
-        s2.onload = cb;
-        s2.onerror = function() { pdfLibState = 'failed'; };
-        document.head.appendChild(s2);
-      };
-      document.head.appendChild(s);
-    }
-
-    loadScript(
-      'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
-      'https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js',
-      checkDone
-    );
-    loadScript(
-      'https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js',
-      'https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js',
-      checkDone
-    );
-  }
-
-  async function doExportPdf(btn) {
-    var jsPDF = jspdf.jsPDF;
-    var pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [1920, 1080] });
-
-    // Create an offscreen container to render slides at fixed size
-    var container = document.createElement('div');
-    container.style.cssText = 'position:fixed;left:-9999px;top:0;width:1920px;height:1080px;overflow:hidden;z-index:-1;';
-    document.body.appendChild(container);
-
-    for (var i = 0; i < total; i++) {
-      btn.textContent = '\u23F3 ' + (i + 1) + '/' + total + '\u2026';
-
-      // Clone the slide
-      var clone = slides[i].cloneNode(true);
-      clone.style.cssText = 'position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:2rem 3rem;text-align:center;opacity:1;background:#0f172a;width:1920px;height:1080px;';
-      container.innerHTML = '';
-      container.appendChild(clone);
-
-      // Wait a frame for rendering
-      await new Promise(function(r) { requestAnimationFrame(function() { requestAnimationFrame(r); }); });
-
-      var canvas = await html2canvas(container, {
-        width: 1920,
-        height: 1080,
-        scale: 1,
-        backgroundColor: '#0f172a',
-        useCORS: true,
-        logging: false
-      });
-
-      if (i > 0) pdf.addPage([1920, 1080], 'landscape');
-      pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 1920, 1080);
-    }
-
-    document.body.removeChild(container);
-    pdf.save('KI-im-Kontext-der-Nachhaltigkeit-RevampIT.pdf');
-    btn.textContent = '\uD83D\uDDB6 PDF';
-    btn.disabled = false;
-  }
-
-  document.getElementById('btn-print').addEventListener('click', function(e) {
-    e.stopPropagation();
-
-    // Shift+click = fallback to window.print()
-    if (e.shiftKey) { window.print(); return; }
-
-    var btn = document.getElementById('btn-print');
-
-    if (pdfLibState === 'ready') {
-      btn.textContent = '\u23F3 Laden\u2026';
-      btn.disabled = true;
-      doExportPdf(btn);
-      return;
-    }
-
-    if (pdfLibState === 'failed') { pdfLibState = 'idle'; }
-    loadPdfLibs();
-
-    btn.textContent = '\u23F3 Laden\u2026';
-    btn.disabled = true;
-    var attempts = 0;
-    var poll = setInterval(function() {
-      attempts++;
-      if (pdfLibState === 'ready') {
-        clearInterval(poll);
-        doExportPdf(btn);
-      } else if (pdfLibState === 'failed' || attempts > 60) {
-        clearInterval(poll);
-        btn.textContent = '\uD83D\uDDB6 PDF';
-        btn.disabled = false;
-        alert('PDF-Bibliotheken konnten nicht geladen werden. Versuche Shift+Klick f\u00FCr Browser-Druck.');
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Monitor-Upcycling — Abschlusspräsentation Swico</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
       }
-    }, 250);
-  });
+      :root {
+        --bg: #0a0a0a;
+        --surface: #141414;
+        --text: #f5f5f5;
+        --dim: #9ca3af;
+        --hairline: rgba(255, 255, 255, 0.09);
+        --green: #22c55e;
+        --radius: 10px;
+        --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+      html,
+      body {
+        height: 100dvh;
+        width: 100vw;
+        overflow: hidden;
+      }
+      body {
+        font-family:
+          Inter,
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          Roboto,
+          sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
+      }
 
+      .deck {
+        position: relative;
+        height: 100dvh;
+        width: 100vw;
+      }
+      .slide {
+        position: absolute;
+        inset: 0;
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        padding: clamp(2rem, 6vmin, 5rem) clamp(2rem, 7vmin, 6.5rem);
+        opacity: 0;
+        transition: opacity 0.25s ease;
+      }
+      .slide.active {
+        display: flex;
+        opacity: 1;
+      }
+      .slide.active .eyebrow,
+      .slide.active h1,
+      .slide.active h2,
+      .slide.active .facts li,
+      .slide.active .stat,
+      .slide.active .card,
+      .slide.active .subtitle,
+      .slide.active .bleed-fact,
+      .slide.active .sources,
+      .slide.active .hairline {
+        animation: rise 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+      }
+      .slide.active h1,
+      .slide.active h2 {
+        animation-delay: 0.08s;
+      }
+      .slide.active .subtitle {
+        animation-delay: 0.16s;
+      }
+      .slide.active .facts li:nth-child(1),
+      .slide.active .card:nth-child(1),
+      .slide.active .stat:nth-child(1) {
+        animation-delay: 0.16s;
+      }
+      .slide.active .facts li:nth-child(2),
+      .slide.active .card:nth-child(2),
+      .slide.active .stat:nth-child(2) {
+        animation-delay: 0.24s;
+      }
+      .slide.active .facts li:nth-child(3),
+      .slide.active .card:nth-child(3),
+      .slide.active .stat:nth-child(3) {
+        animation-delay: 0.32s;
+      }
+      .slide.active .facts li:nth-child(4),
+      .slide.active .stat:nth-child(4) {
+        animation-delay: 0.4s;
+      }
+      .slide.active .facts li:nth-child(5) {
+        animation-delay: 0.48s;
+      }
+      .slide.active .facts li:nth-child(6) {
+        animation-delay: 0.56s;
+      }
+      .slide.active .bleed-fact {
+        animation-delay: 0.3s;
+      }
+      .slide.active .sources {
+        animation-delay: 0.5s;
+      }
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .slide.active * {
+          animation: none !important;
+        }
+      }
+      .dots {
+        position: fixed;
+        bottom: 2.6rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 0.35rem;
+        z-index: 55;
+      }
+      .dots span {
+        width: 5px;
+        height: 5px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.18);
+        transition:
+          background 0.2s,
+          width 0.2s;
+      }
+      .dots span.on {
+        background: var(--green);
+        width: 14px;
+      }
 
+      /* typography — x.ai discipline: big, tight, left-aligned */
+      .eyebrow {
+        font-family: var(--mono);
+        font-size: clamp(0.65rem, 1.3vmin, 0.85rem);
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--dim);
+        margin-bottom: 1.2rem;
+      }
+      h1 {
+        font-size: clamp(2.8rem, 8.5vmin, 7rem);
+        font-weight: 650;
+        letter-spacing: -0.025em;
+        line-height: 1.02;
+      }
+      h2 {
+        font-size: clamp(2rem, 5.2vmin, 4.2rem);
+        font-weight: 650;
+        letter-spacing: -0.02em;
+        line-height: 1.06;
+        margin-bottom: clamp(1rem, 3vmin, 2rem);
+      }
+      h3 {
+        font-size: clamp(1.05rem, 2.2vmin, 1.6rem);
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        margin-bottom: 0.4rem;
+      }
+      p,
+      li {
+        font-size: clamp(1rem, 2vmin, 1.5rem);
+        line-height: 1.55;
+        color: var(--dim);
+      }
+      strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+      .accent {
+        color: var(--green);
+      }
+      .subtitle {
+        color: var(--dim);
+        font-size: clamp(1rem, 2.1vmin, 1.55rem);
+        max-width: 62ch;
+      }
+      ul {
+        list-style: none;
+      }
+      ul li {
+        padding-left: 1.4em;
+        position: relative;
+        margin-bottom: 0.65em;
+      }
+      ul li::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0.62em;
+        width: 0.7em;
+        height: 1.5px;
+        background: var(--green);
+      }
 
-  // Speaker notes — inline panel
-  var notesPanel = document.getElementById('notes-panel');
-  var notesOpen = false;
-  var notesTimerInterval = null, notesTimerSeconds = 0, notesTimerRunning = false;
+      /* layout primitives */
+      .split {
+        display: grid;
+        grid-template-columns: 1.05fr 1fr;
+        gap: clamp(1.5rem, 4vmin, 4rem);
+        align-items: center;
+      }
+      .grid-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(1rem, 2.5vmin, 2rem);
+      }
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: clamp(1rem, 2.5vmin, 2rem);
+      }
+      .grid-4 {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: clamp(0.8rem, 2vmin, 1.5rem);
+      }
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--hairline);
+        border-radius: var(--radius);
+        padding: clamp(1rem, 2.6vmin, 1.8rem);
+        text-align: left;
+      }
+      .card p {
+        font-size: clamp(0.85rem, 1.7vmin, 1.2rem);
+      }
+      .hairline {
+        border: 0;
+        border-top: 1px solid var(--hairline);
+        margin: clamp(1rem, 3vmin, 2rem) 0;
+      }
 
-  function toggleNotes() {
-    notesOpen = !notesOpen;
-    notesPanel.classList.toggle('open', notesOpen);
-    document.getElementById('deck').classList.toggle('notes-open', notesOpen);
-    if (notesOpen) updateNotesPanel();
-  }
+      /* photos */
+      figure {
+        position: relative;
+        border-radius: var(--radius);
+        overflow: hidden;
+        border: 1px solid var(--hairline);
+        background: var(--surface);
+      }
+      figure img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      figcaption {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        padding: 0.6rem 0.9rem;
+        background: linear-gradient(transparent, rgba(0, 0, 0, 0.78));
+        font-family: var(--mono);
+        font-size: clamp(0.6rem, 1.2vmin, 0.8rem);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.85);
+      }
+      .ph {
+        height: clamp(200px, 42vmin, 520px);
+      }
+      .ph-tall {
+        height: clamp(260px, 56vmin, 640px);
+      }
 
-  function updateNotesPanel() {
-    if (!notesOpen) return;
-    var s = slides[current];
-    var note = s.getAttribute('data-notes') || 'Keine Notizen für diese Folie.';
-    var nextTitle = '(Ende)';
-    if (current + 1 < total) {
-      var nh = slides[current + 1].querySelector('h1') || slides[current + 1].querySelector('h2');
-      nextTitle = nh ? nh.textContent.trim() : '';
-    }
-    document.getElementById('notes-num').textContent = (current + 1) + ' / ' + total;
-    document.getElementById('notes-text').textContent = note;
-    document.getElementById('notes-next-title').textContent = nextTitle;
-  }
+      /* full-bleed slides */
+      .slide--bleed {
+        padding: 0;
+        justify-content: flex-end;
+      }
+      .slide--bleed .bleed-img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .slide--bleed .bleed-scrim {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          200deg,
+          rgba(10, 10, 10, 0.15) 0%,
+          rgba(10, 10, 10, 0.72) 62%,
+          rgba(10, 10, 10, 0.94) 100%
+        );
+      }
+      .slide--bleed .bleed-content {
+        position: relative;
+        padding: clamp(2rem, 7vmin, 6.5rem);
+        padding-bottom: clamp(4rem, 10vmin, 7.5rem);
+        max-width: 1100px;
+      }
 
-  // Timer toggle on click
-  document.getElementById('notes-timer').addEventListener('click', function() {
-    if (notesTimerRunning) {
-      clearInterval(notesTimerInterval);
-      notesTimerRunning = false;
-    } else {
-      notesTimerInterval = setInterval(function() {
-        notesTimerSeconds++;
-        var m = Math.floor(notesTimerSeconds / 60), s = notesTimerSeconds % 60;
-        document.getElementById('notes-timer').textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
-      }, 1000);
-      notesTimerRunning = true;
-    }
-  });
+      /* stats */
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: clamp(1rem, 3vmin, 2.5rem);
+      }
+      .stat .n {
+        font-size: clamp(2.6rem, 7.5vmin, 6rem);
+        font-weight: 650;
+        letter-spacing: -0.03em;
+        line-height: 1;
+        color: var(--text);
+      }
+      .stat .n em {
+        font-style: normal;
+        color: var(--green);
+      }
+      .stat .l {
+        font-family: var(--mono);
+        font-size: clamp(0.6rem, 1.25vmin, 0.8rem);
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--dim);
+        margin-top: 0.6rem;
+      }
+      .sources {
+        margin-top: clamp(1rem, 2.5vmin, 1.6rem);
+        font-size: clamp(0.7rem, 1.4vmin, 0.95rem);
+        color: #6b7280;
+        line-height: 1.5;
+      }
+      .sources a {
+        color: #6b7280;
+      }
 
-  document.getElementById('notes-close').addEventListener('click', function(e) {
-    e.stopPropagation();
-    toggleNotes();
-  });
+      /* chrome: progress, counter, arrows, toolbar, notes */
+      .progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 2px;
+        background: var(--green);
+        width: 0%;
+        z-index: 60;
+        transition: width 0.25s ease;
+      }
+      .counter {
+        position: fixed;
+        bottom: 1rem;
+        right: 1.25rem;
+        font-family: var(--mono);
+        font-size: 0.75rem;
+        color: var(--dim);
+        z-index: 60;
+      }
+      .watermark {
+        display: none;
+      }
+      .nav-arrow {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        width: 12vw;
+        min-width: 64px;
+        background: none;
+        border: 0;
+        color: transparent;
+        font-size: 3rem;
+        cursor: pointer;
+        z-index: 50;
+      }
+      .nav-arrow:hover,
+      .nav-arrow:focus-visible {
+        color: rgba(255, 255, 255, 0.35);
+        outline: none;
+      }
+      .nav-arrow--left {
+        left: 0;
+        text-align: left;
+        padding-left: 0.6rem;
+      }
+      .nav-arrow--right {
+        right: 0;
+        text-align: right;
+        padding-right: 0.6rem;
+      }
+      .toolbar {
+        position: fixed;
+        bottom: 0.9rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 0.4rem;
+        z-index: 60;
+      }
+      .toolbar-btn {
+        font-family: var(--mono);
+        font-size: 0.7rem;
+        letter-spacing: 0.06em;
+        color: var(--dim);
+        background: rgba(20, 20, 20, 0.85);
+        border: 1px solid var(--hairline);
+        border-radius: 8px;
+        padding: 0.45rem 0.7rem;
+        cursor: pointer;
+      }
+      .toolbar-btn:hover {
+        color: var(--text);
+        border-color: rgba(255, 255, 255, 0.25);
+      }
+      .notes-panel {
+        position: fixed;
+        right: 1rem;
+        bottom: 3.6rem;
+        width: min(430px, 92vw);
+        max-height: 62vh;
+        display: none;
+        flex-direction: column;
+        background: rgba(16, 16, 16, 0.97);
+        border: 1px solid var(--hairline);
+        border-radius: 12px;
+        z-index: 70;
+      }
+      .notes-panel.open {
+        display: flex;
+      }
+      .notes-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.7rem 1rem;
+        border-bottom: 1px solid var(--hairline);
+      }
+      .notes-header-left {
+        display: flex;
+        gap: 0.8rem;
+        align-items: center;
+        font-family: var(--mono);
+        font-size: 0.75rem;
+        color: var(--dim);
+      }
+      .notes-timer {
+        cursor: pointer;
+      }
+      .notes-close {
+        background: none;
+        border: 0;
+        color: var(--dim);
+        font-size: 1.3rem;
+        cursor: pointer;
+      }
+      .notes-close:hover {
+        color: var(--text);
+      }
+      .notes-body {
+        padding: 1rem;
+        overflow-y: auto;
+      }
+      .notes-text {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: var(--text);
+        white-space: pre-wrap;
+      }
+      .notes-next {
+        margin-top: 1rem;
+        padding-top: 0.7rem;
+        border-top: 1px solid var(--hairline);
+      }
+      .notes-next-label {
+        display: block;
+        font-family: var(--mono);
+        font-size: 0.65rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: #6b7280;
+      }
+      .notes-next-title {
+        color: var(--dim);
+        font-size: 0.9rem;
+      }
+      .has-notes::after {
+        content: '';
+      }
 
-  // Patch show() to update notes panel
-  var _origShow = show;
-  show = function(idx) {
-    _origShow(idx);
-    updateNotesPanel();
-  };
+      /* fullscreen scale-up */
+      :fullscreen h1 {
+        font-size: clamp(3.5rem, 10vmin, 9rem);
+      }
+      :fullscreen h2 {
+        font-size: clamp(2.5rem, 6vmin, 5rem);
+      }
+      :fullscreen p,
+      :fullscreen li {
+        font-size: clamp(1.2rem, 2.4vmin, 1.9rem);
+      }
 
-  // Keyboard shortcut
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && notesOpen) { e.preventDefault(); toggleNotes(); }
-    else if (e.key === 's' || e.key === 'S') { if (!e.ctrlKey && !e.metaKey) { e.preventDefault(); toggleNotes(); } }
-  });
-
-  document.getElementById('btn-notes').addEventListener('click', function(e) {
-    e.stopPropagation();
-    toggleNotes();
-  });
-
-  // PPTX Export — eagerly pre-load, CDN fallback, improved quality
-  var pptxState = 'idle'; // idle -> loading -> ready | failed
-
-  function loadPptxLib() {
-    if (pptxState !== 'idle') return;
-    if (typeof PptxGenJS !== 'undefined') { pptxState = 'ready'; return; }
-    pptxState = 'loading';
-    var s1 = document.createElement('script');
-    s1.src = '/presentations/_assets/pptxgen.bundle.js';
-    s1.onload = function() { pptxState = 'ready'; };
-    s1.onerror = function() {
-      // Fallback to CDN if local file not found
-      var s2 = document.createElement('script');
-      s2.src = 'https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js';
-      s2.onload = function() { pptxState = 'ready'; };
-      s2.onerror = function() { pptxState = 'failed'; };
-      document.head.appendChild(s2);
-    };
-    document.head.appendChild(s1);
-  }
-
-  if (document.readyState === 'complete') { loadPptxLib(); } else { window.addEventListener('load', loadPptxLib); }
-
-  function getInnerText(el) {
-    // Convert <br> to newlines, then get text content
-    var clone = el.cloneNode(true);
-    var brs = clone.querySelectorAll('br');
-    brs.forEach(function(br) { br.replaceWith('\n'); });
-    return clone.textContent.trim();
-  }
-
-  function doExportPptx(btn) {
-    var pptx = new PptxGenJS();
-    pptx.defineLayout({ name: 'WIDE', width: 13.33, height: 7.5 });
-    pptx.layout = 'WIDE';
-
-    var bgColor = '0f172a';
-    var cardBg = '1e293b';
-    var green = '22c55e';
-    var orange = 'F7931A';
-    var textColor = 'f1f5f9';
-    var dimColor = '94a3b8';
-    var borderColor = '334155';
-    var W = 11.53;
-    var LX = 0.8;
-    var F = 'Arial';
-
-    slides.forEach(function(slideEl, idx) {
-      var s = pptx.addSlide();
-      s.background = { color: bgColor };
-      s.addText((idx + 1) + ' / ' + total + '  |  RevampIT', { x: 0.5, y: 7.0, w: 12.33, h: 0.35, fontSize: 9, color: '64748b', align: 'right', fontFace: F });
-
-      var contentDiv = slideEl.querySelector('.content');
-      var h1 = slideEl.querySelector('h1');
-      var h2 = slideEl.querySelector('h2');
-
-      // Get title text WITHOUT inline subtitles (span.subtitle inside h2)
-      var titleText = '';
-      var inlineSubtitle = '';
-      if (h1) {
-        titleText = h1.textContent.trim();
-      } else if (h2) {
-        var subSpan = h2.querySelector('.subtitle');
-        if (subSpan) {
-          inlineSubtitle = subSpan.textContent.trim();
-          var h2Clone = h2.cloneNode(true);
-          var subClone = h2Clone.querySelector('.subtitle');
-          if (subClone) subClone.remove();
-          titleText = h2Clone.textContent.trim();
-        } else {
-          titleText = h2.textContent.trim();
+      @media (max-width: 760px) {
+        .split,
+        .grid-2,
+        .grid-3,
+        .grid-4,
+        .stats {
+          grid-template-columns: 1fr;
+        }
+        .ph,
+        .ph-tall {
+          height: 34vh;
+        }
+        .slide {
+          overflow-y: auto;
+          justify-content: flex-start;
+          padding-top: 3.5rem;
+        }
+      }
+      @media print {
+        html,
+        body {
+          overflow: visible;
+          height: auto;
+        }
+        .deck {
+          height: auto;
+        }
+        .slide {
+          position: relative;
+          display: flex !important;
+          opacity: 1 !important;
+          page-break-after: always;
+          height: 100vh;
+        }
+        .progress,
+        .counter,
+        .nav-arrow,
+        .toolbar,
+        .watermark,
+        .notes-panel {
+          display: none !important;
         }
       }
 
-      if (idx === 0) {
-        // === TITLE SLIDE ===
-        s.addText('RevampIT', { x: 0.5, y: 1.5, w: 12.33, h: 0.8, fontSize: 28, color: green, align: 'center', bold: true, fontFace: F });
-        s.addText(titleText, { x: 0.5, y: 2.5, w: 12.33, h: 1.5, fontSize: 44, color: textColor, align: 'center', bold: true, fontFace: F });
-        var subs = slideEl.querySelectorAll('.subtitle');
-        var subY = 4.2;
-        subs.forEach(function(sub) {
-          s.addText(sub.textContent.trim(), { x: 0.5, y: subY, w: 12.33, h: 0.5, fontSize: 20, color: dimColor, align: 'center', fontFace: F });
-          subY += 0.55;
+      /* statement bleeds + fact chips */
+      .bleed-fact {
+        display: inline-block;
+        margin-top: 1.2rem;
+        font-family: var(--mono);
+        font-size: clamp(0.65rem, 1.3vmin, 0.85rem);
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.82);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 999px;
+        padding: 0.45rem 0.9rem;
+        backdrop-filter: blur(4px);
+      }
+      .statement h1 {
+        font-size: clamp(2.6rem, 7.5vmin, 6.2rem);
+      }
+      .facts {
+        max-width: 62rem;
+      }
+      .facts li {
+        font-size: clamp(1.1rem, 2.3vmin, 1.75rem);
+        margin-bottom: 1em;
+      }
+
+      .link {
+        color: var(--text);
+        text-decoration: underline;
+        text-underline-offset: 4px;
+        text-decoration-color: var(--green);
+        text-decoration-thickness: 1.5px;
+      }
+      .link:hover {
+        color: var(--green);
+      }
+      .uc-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: clamp(0.8rem, 2vmin, 1.4rem);
+      }
+      .uc-grid figure {
+        height: clamp(150px, 32vmin, 340px);
+      }
+      body.exporting .slide,
+      body.exporting .slide * {
+        animation: none !important;
+        transition: none !important;
+      }
+      body.exporting .progress,
+      body.exporting .counter,
+      body.exporting .nav-arrow,
+      body.exporting .toolbar,
+      body.exporting .dots,
+      body.exporting .notes-panel {
+        display: none !important;
+      }
+      @media (max-width: 760px) {
+        .uc-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="progress" id="progress"></div>
+    <div class="counter" id="counter"></div>
+    <img
+      class="watermark"
+      id="watermark"
+      src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+      alt=""
+    />
+
+    <button class="nav-arrow nav-arrow--left" id="nav-left" aria-label="Vorherige Folie">
+      &#8249;
+    </button>
+    <button class="nav-arrow nav-arrow--right" id="nav-right" aria-label="Nächste Folie">
+      &#8250;
+    </button>
+
+    <div class="toolbar">
+      <button class="toolbar-btn" id="btn-fullscreen" title="Vollbild (F)">Vollbild</button>
+      <button class="toolbar-btn" id="btn-notes" title="Sprechernotizen (S)">Notizen</button>
+      <button class="toolbar-btn" id="btn-print" title="PDF herunterladen">PDF</button>
+      <button class="toolbar-btn" id="btn-pptx" title="PowerPoint herunterladen">PPTX</button>
+    </div>
+
+    <div class="notes-panel" id="notes-panel">
+      <div class="notes-header">
+        <div class="notes-header-left">
+          <span class="notes-slide-num" id="notes-num"></span>
+          <span class="notes-timer" id="notes-timer" title="Klick zum Starten/Pausieren"
+            >00:00</span
+          >
+        </div>
+        <button class="notes-close" id="notes-close" title="Schliessen">&times;</button>
+      </div>
+      <div class="notes-body">
+        <div class="notes-text" id="notes-text"></div>
+        <div class="notes-next">
+          <span class="notes-next-label">Nächste Folie</span>
+          <span class="notes-next-title" id="notes-next-title"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="deck" id="deck">
+      <!-- 01 · TITEL (full-bleed) -->
+      <div
+        class="slide slide--bleed active"
+        data-notes="Begrüssung. Abschlusspräsentation des Swico-Projekts 2023-02-01 'Funktionelle Kreislaufnutzung von IT-Geräten'. Dieses Foto ist keine Visualisierung: Das ist ein entsorgter Curved-Monitor — heute die Werkstattleuchte im RepairHub von zuerich.repair, fotografiert im Juli 2026."
+        data-no-watermark
+      >
+        <img
+          class="bleed-img"
+          style="object-position: 50% 38%"
+          src="/projects/upcycling/installs/werkbank-curved-3.jpg"
+          alt="Curved-Upcycling-Leuchte über der Werkbank im RepairHub"
+        />
+        <div class="bleed-scrim"></div>
+        <div class="bleed-content">
+          <p class="eyebrow">Projekt 2023-02-01 · revamp-it × Swico × ZHAW</p>
+          <h1>Monitor-<span class="accent">Upcycling</span></h1>
+          <hr class="hairline" style="max-width: 8rem" />
+          <p class="subtitle">Abschlusspräsentation · Juli 2026</p>
+          <span class="bleed-fact"
+            >Foto: entsorgter Monitor, heute Werkstattleuchte · RepairHub zuerich.repair</span
+          >
+        </div>
+      </div>
+
+      <!-- 02 · MISSION (full-bleed) -->
+      <div
+        class="slide slide--bleed statement"
+        data-notes="Der Satz, der alles trägt: Wir machen aus Abfall Licht. Und wir zeigen allen, wie es geht — denn wir glauben an offene Hardware genauso, wie wir an Open-Source-Software glauben. Jede Anleitung ist frei. Jede Werkstatt, die sie nutzt, vergrössert die Wirkung. Das Foto: Wandleuchten in unserem Laden — ehemalige Monitore."
+        data-no-watermark
+      >
+        <img
+          class="bleed-img"
+          style="object-position: 30% 18%"
+          src="/projects/upcycling/installs/laden-wand-1.jpg"
+          alt="Upcycling-Wandleuchten im Laden revamp-it"
+        />
+        <div class="bleed-scrim"></div>
+        <div class="bleed-content">
+          <p class="eyebrow">Unsere Mission</p>
+          <h1>Wir machen aus Abfall <span class="accent">Licht</span>.</h1>
+          <hr class="hairline" style="max-width: 8rem" />
+          <p class="subtitle">Und zeigen offen, wie es geht — Hardware so offen wie Software.</p>
+          <span class="bleed-fact">Foto: Wandleuchten · Laden revamp-it, Zürich · Juli 2026</span>
+        </div>
+      </div>
+
+      <!-- 03 · PROBLEM (Fakten) -->
+      <div
+        class="slide"
+        data-notes="Warum das nötig ist — drei Fakten aus dem Abschlussbericht: Erstens sind Monitore nach Grösse und Stückzahl ein wichtiger Anteil im IT-Recycling-Mix — es geht um relevante Mengen. Zweitens der entscheidende technische Punkt: Ein defektes Display heisst fast nie defektes Backlight. Kratzer, Pixelfehler, Darstellungsfehler — die Lichtquelle dahinter funktioniert. Genau diese Geräte, die niemand mehr als Bildschirm will, sind unser Rohstoff. Drittens läuft parallel eine Neuproduktion: Jeder Um- und Neubau braucht Wand- und Deckenleuchten in Stückzahlen — mit vollem Rohstoff-, Energie- und Transportaufwand."
+      >
+        <p class="eyebrow">Das Problem</p>
+        <h2>Funktionierende Technik<br />wird <span class="accent">geschreddert</span>.</h2>
+        <ul class="facts">
+          <li>
+            <strong>Monitore</strong> sind nach Grösse und Stückzahl ein wichtiger Anteil im
+            IT-Recycling-Mix
+          </li>
+          <li>
+            Defektes Display <strong>&ne;</strong> defektes Backlight — Kratzer und Pixelfehler
+            lassen die Lichtquelle intakt
+          </li>
+          <li>
+            Parallel dazu: Jeder Um- und Neubau braucht <strong>neue Leuchten</strong> — volle
+            Neuproduktion aus Rohstoffen, Energie, Transport
+          </li>
+        </ul>
+        <p class="sources">Quelle: Abschlussbericht Projekt 2023-02-01, Abschnitte A + B</p>
+      </div>
+
+      <!-- 04 · DIE IDEE (Fakten) -->
+      <div
+        class="slide"
+        data-notes="Die Kernidee, technisch präzise: In jedem Flachbildschirm steckt eine fertige Leuchte. Wir entfernen die Bildoberfläche und die Bild-Elektronik — was bleibt, ist das LED-Backlight mit Diffusor: ein fertiges, gleichmässiges Flächenlicht, schattenfrei. Der Realitäts-Check aus dem Handel: Ein vergleichbares neues 24-Watt-LED-Panel kostet CHF 79.95 — Foto-Beleg auf unserer Wirkungs-Seite. Der Unterschied: Unser Panel ist bereits produziert. Schwerpunkt bewusst auf LED-Backlights: tieferer Verbrauch als Leuchtstoffröhren, heller, kaum Zusatzmaterial, beste Ökobilanz."
+      >
+        <p class="eyebrow">Die Idee</p>
+        <h2>
+          In jedem Flachbildschirm steckt<br />eine <span class="accent">fertige Leuchte</span>.
+        </h2>
+        <ul class="facts">
+          <li>
+            Bildoberfläche + Bild-Elektronik raus → das <strong>LED-Backlight</strong> bleibt:
+            fertiges, schattenfreies Flächenlicht
+          </li>
+          <li>
+            Neuware-Vergleich: 24-W-LED-Panel im Handel <strong>CHF 79.95</strong> — volle
+            Neuproduktion. Unser Panel ist schon produziert
+          </li>
+          <li>
+            Schwerpunkt LED statt CCFL:
+            <strong>tieferer Verbrauch, heller, kaum Zusatzmaterial</strong>
+          </li>
+        </ul>
+        <p class="sources">
+          Foto-Beleg Neuware-Vergleich: revampit.orangecat.ch/de/projects/upcycling/wirkung ·
+          Abschlussbericht Abschnitt A
+        </p>
+      </div>
+
+      <!-- 05 · HARD PART (full-bleed macro) -->
+      <div
+        class="slide slide--bleed statement"
+        data-notes="Die härteste technische Hürde — gelöst und geteilt. Viele Monitore fallen Minuten nach dem Einschalten in den Standby. Für eine Leuchte inakzeptabel. Elektroniker Benjamin Ernst hat die Lösung entwickelt: ein Spannungsteiler im Niedervoltbereich des Netzteils, verpackt als kleiner Stecker. Das Foto zeigt ihn: zwei Widerstände, Gehäuse aus dem 3D-Drucker — in der geschützten Werkstatt selbst fertigbar. Pro Monitor-Typ dokumentiert. Auch die Montage ist gelöste offene Hardware: VESA-Standard, Wandhalterung aus Bettlagerbeschlägen, 3D-druckbare Deckenhalterung, Leisten für ganze Reihen. Ehrliches Learning für die Kompetenz-Frage: Bei EIZO fiel die Kleinserie trotz erfolgreichem Prototyp zurück in den Standby — Serie gestoppt, wird nachuntersucht. So arbeiten wir."
+        data-no-watermark
+      >
+        <img
+          class="bleed-img"
+          src="/projects/upcycling/installs/standby-dongle.jpg"
+          alt="Der Standby-Fix: Spannungsteiler-Stecker im 3D-gedruckten Gehäuse"
+        />
+        <div class="bleed-scrim"></div>
+        <div class="bleed-content">
+          <p class="eyebrow">Die härteste Hürde</p>
+          <h1>Standby: <span class="accent">gelöst</span>.</h1>
+          <hr class="hairline" style="max-width: 8rem" />
+          <p class="subtitle">
+            Spannungsteiler-Stecker, Gehäuse aus dem 3D-Drucker — in der Werkstatt selbst fertigbar,
+            pro Monitor-Typ dokumentiert, als offene Hardware geteilt.
+          </p>
+          <span class="bleed-fact"
+            >Foto: der Stecker · Entwicklung Benjamin Ernst · Werkstatt-fertigbar</span
+          >
+        </div>
+      </div>
+
+      <!-- 06 · KOMPETENZ / UMBAU (Fakten) -->
+      <div
+        class="slide"
+        data-notes="Warum uns das jemand glauben darf — der Prozess ist Industriearbeit, kein Bastelprojekt: Definierte Eignungskriterien — Kratzer, Pixelfehler, Darstellungsfehler sind ok; defekte Stromversorgung und starker Gehäusebruch nicht. Reproduzierbarer Umbau mit dokumentierter Anleitung pro Monitor-Typ, ohne Spezialausrüstung — deshalb funktioniert er in geschützten Werkstätten. Kleinserien liefen bei Werkraum4, Schwerpunkt Dell und HP. Montage über VESA-Standard MIS-D, dazu unsere offenen Halterungslösungen. Und das EIZO-Learning zeigen wir offen: Serie gestoppt statt schöngeredet."
+      >
+        <p class="eyebrow">Kompetenz</p>
+        <h2>Reproduzierbar.<br />Nicht <span class="accent">gebastelt</span>.</h2>
+        <ul class="facts">
+          <li>
+            <strong>Eignungskriterien definiert</strong>: Kratzer/Pixelfehler ok · defekte
+            Stromversorgung, Gehäusebruch nicht
+          </li>
+          <li>
+            <strong>Anleitung pro Monitor-Typ</strong> — Umbau ohne Spezialausrüstung,
+            werkstatt-tauglich
+          </li>
+          <li><strong>Kleinserien erprobt</strong> bei Werkraum4 · Schwerpunkt Dell &amp; HP</li>
+          <li>
+            <strong>Montage gelöst</strong>: VESA MIS-D · Wandbeschläge · 3D-Deckenhalterung ·
+            Leisten für Reihen
+          </li>
+          <li>
+            <strong>Keine Blend- oder Stroboskopeffekte</strong> — gleichmässiges Licht, wenig
+            Schattenwurf
+          </li>
+          <li>
+            Ehrlich dokumentiert: <strong>EIZO-Serie gestoppt</strong> (Standby-Rückfall) — wird
+            nachuntersucht
+          </li>
+        </ul>
+        <p class="sources">
+          Abschlussbericht Abschnitte B + C · Anleitungen: monitor-upcycling.org +
+          revampit.orangecat.ch/de/projects/upcycling
+        </p>
+      </div>
+
+      <!-- 07 · USE CASE LADEN (full-bleed) -->
+      <div
+        class="slide slide--bleed statement"
+        data-notes="Einsatz Nummer eins zum Anfassen: unser eigener Laden an der Birmensdorferstrasse. Im Eingangsbereich haben wir zwei bestehende Deckenleuchten durch Upcycling-Leuchten ersetzt — die im Foto. Die Reaktionen der Kundinnen und Kunden: durchweg positiv. Im Büro läuft eine weitere Leuchte seit über einem Jahr täglich, einwandfrei. Der Laden ist gleichzeitig Showroom: Wer fragt, bekommt die Geschichte — und die Anleitung."
+        data-no-watermark
+      >
+        <img
+          class="bleed-img"
+          style="object-position: 50% 22%"
+          src="/projects/upcycling/installs/laden-decke-2.jpg"
+          alt="Upcycling-Deckenleuchten im Eingangsbereich des Ladens revamp-it"
+        />
+        <div class="bleed-scrim"></div>
+        <div class="bleed-content">
+          <p class="eyebrow">Im Einsatz · 01</p>
+          <h1>Laden <span class="accent">revamp-it</span>, Zürich.</h1>
+          <hr class="hairline" style="max-width: 8rem" />
+          <span class="bleed-fact"
+            >2 Neuleuchten ersetzt · Kundenreaktionen durchweg positiv · Büro-Leuchte: 1+ Jahr
+            einwandfrei</span
+          >
+        </div>
+      </div>
+
+      <!-- 08 · TRAKTION (Fakten/Stats) -->
+      <div
+        class="slide"
+        data-notes="Die Zahlen nach einem Jahr Feldbetrieb — gemessen, nicht versprochen: Fünf reale Standorte. Werkraum4 ist der Härtetest der Stückzahl: rund 20 Leuchten, ein Jahr täglicher Einsatz — genau EIN Ausfall. Ein Netzteil, durch einfachen Austausch repariert; die LED-Backlights selbst: null Probleme. RecreaZZZ in der ehemaligen Zentralwäscherei ist der Schalt-Härtetest: bei jedem WC-Besuch ein und aus, seit über einem Jahr störungsfrei, Feedback per Strichliste überwiegend positiv. Dazu der RepairHub, das Lager AmbossRampe und unser Laden. Ehrlich gesagt — und so steht es auch in der Team-Präsentation: Die Standortsuche war schwieriger als erwartet. Umso mehr zählt, dass diese fünf Installationen seit einem Jahr real laufen."
+      >
+        <p class="eyebrow">Traktion · gemessen, nicht versprochen</p>
+        <h2>Ein Jahr <span class="accent">Feldbetrieb</span>.</h2>
+        <div class="stats">
+          <div class="stat">
+            <div class="n">5</div>
+            <div class="l">Reale Standorte</div>
+          </div>
+          <div class="stat">
+            <div class="n">~20</div>
+            <div class="l">Leuchten · Werkraum4</div>
+          </div>
+          <div class="stat">
+            <div class="n">1<em> Jahr</em></div>
+            <div class="l">Täglicher Einsatz</div>
+          </div>
+          <div class="stat">
+            <div class="n"><em>1</em></div>
+            <div class="l">Ausfall — repariert</div>
+          </div>
+        </div>
+        <hr class="hairline" />
+        <p class="subtitle">
+          Werkraum4 · RepairHub zuerich.repair · RecreaZZZ (Dauerschalttest, 1+ Jahr störungsfrei) ·
+          Lager AmbossRampe · Laden revamp-it
+        </p>
+        <p class="sources">
+          Abschlussbericht Abschnitt D — Durchgeführte Installationen und erste Erfahrungen
+        </p>
+      </div>
+
+      <!-- 09 · USE CASE REPAIRHUB (full-bleed) -->
+      <div
+        class="slide slide--bleed statement"
+        data-notes="Einsatz Nummer zwei — und die schönste Pointe des Projekts: Im RepairHub von zuerich.repair hängt ein grosser Curved-Monitor mit gebrochenem Display als Werkstattleuchte. Das breitflächige Licht wirft keine Schatten — genau das, was man bei feinen Reparaturarbeiten braucht. Die Reparateur*innen schätzen es täglich, und für Besucher*innen ist die Leuchte ein Blickfang, der das Thema Upcycling von selbst ins Gespräch bringt. Eine Reparatur-Werkstatt, beleuchtet von einem reparierten Gerät."
+        data-no-watermark
+      >
+        <img
+          class="bleed-img"
+          style="object-position: 45% 42%"
+          src="/projects/upcycling/installs/werkbank-curved-1.jpg"
+          alt="Curved-Upcycling-Leuchte über der Werkbank, Vogelperspektive"
+        />
+        <div class="bleed-scrim"></div>
+        <div class="bleed-content">
+          <p class="eyebrow">Im Einsatz · 02</p>
+          <h1>RepairHub · <span class="accent">zuerich.repair</span></h1>
+          <hr class="hairline" style="max-width: 8rem" />
+          <span class="bleed-fact"
+            >Curved-Monitor, Display gebrochen → schattenfreies Arbeitslicht + Blickfang</span
+          >
+        </div>
+      </div>
+
+      <!-- 09b · USE-CASES (Visualisierungen) -->
+      <div
+        class="slide"
+        data-notes="Wo überall Licht entstehen kann — vier Visualisierungen aus unserer Szenarien-Arbeit, klar als solche gekennzeichnet: Schaufenster, Parkgarage, Club und Treppenhaus. Die ZHAW-Akzeptanzumfrage bestätigt genau diese Richtung: Korridor, Treppenhaus, Werkstatt und Labor gelten als geeignet bis sehr geeignet. Grosse Flächen, lange Brenndauern, funktionales Licht — überall dort spielt die Monitorleuchte ihre Stärken aus. Und jeder dieser Orte ist heute mit neu produzierten Panels beleuchtet. Über Leuchten hinaus: Leuchttische und Lightboards, Leuchtrahmen für Werbung, künstlerische Installationen, beleuchtete Bilderrahmen — die standardisierten Montagelöcher eröffnen zusätzliches Potenzial."
+      >
+        <p class="eyebrow">Einsatzorte · Visualisierungen</p>
+        <h2>Überall, wo <span class="accent">Licht</span> gebraucht wird.</h2>
+        <div class="uc-grid">
+          <figure>
+            <img
+              src="/projects/upcycling/szenarien/schaufenster.jpg"
+              alt="Visualisierung: Monitorleuchte im Schaufenster"
+            />
+            <figcaption>Schaufenster</figcaption>
+          </figure>
+          <figure>
+            <img
+              src="/projects/upcycling/szenarien/garage.jpg"
+              alt="Visualisierung: Monitorleuchten in der Parkgarage"
+            />
+            <figcaption>Parkgarage</figcaption>
+          </figure>
+          <figure>
+            <img
+              src="/projects/upcycling/szenarien/party.jpg"
+              alt="Visualisierung: Monitorleuchten im Club"
+            />
+            <figcaption>Club / Bar</figcaption>
+          </figure>
+          <figure>
+            <img
+              src="/projects/upcycling/szenarien/treppenhaus.jpg"
+              alt="Visualisierung: Monitorleuchte im Treppenhaus"
+            />
+            <figcaption>Treppenhaus</figcaption>
+          </figure>
+        </div>
+        <p class="sources">
+          Visualisierungen · ZHAW-Umfrage: Korridor, Treppenhaus, Werkstatt, Labor «geeignet bis
+          sehr geeignet» · Mehr als Leuchten: Leuchttische, Leuchtrahmen für Werbung, künstlerische
+          Installationen, beleuchtete Bilderrahmen
+        </p>
+      </div>
+
+      <!-- 10 · WISSENSCHAFT (ZHAW-Resultate) -->
+      <div
+        class="slide"
+        data-notes="Der wissenschaftliche Kern — und die stärkste Folie des Abends. Die ZHAW, Institut für Nachhaltige Entwicklung an der School of Engineering — Corinna Baumgartner und Mirjam Grünholz — erstellt die komparative Ökobilanz nach ISO 14040/44: cradle-to-grave, funktionelle Einheit ist die abgegebene Lichtmenge über die Zeit, in Megalumen-Stunden. Verglichen wird unsere Monitorleuchte mit einer herkömmlichen LED-Leuchte. Die vorläufigen Resultate, Zwischenstand 28. Mai 2026: 82.7 Prozent weniger Treibhausgasemissionen im Durchschnittsszenario. Nach der Methode der ökologischen Knappheit — der Schweizer Methode über alle Umweltwirkungen — 84.8 Prozent weniger. Und über sämtliche Lebensdauer-Szenarien hinweg bleibt die Reduktion zwischen 52 und 86 Prozent. Das Fazit der ZHAW wörtlich: 'Unter aktueller Modellierung ist die Monitorleuchte in jedem Fall besser als die LED-Leuchte.' Wichtig für die Glaubwürdigkeit: vorläufige Zahlen, der finale Bericht folgt — aber die Richtung ist über alle Szenarien eindeutig. Dazu die CE-Frage, geklärt durch das Gutachten der Barologic GmbH."
+      >
+        <p class="eyebrow">
+          Wissenschaft · ZHAW-Ökobilanz (ISO 14040/44) · vorläufig, Stand 28.05.2026
+        </p>
+        <h2>«In jedem Fall <span class="accent">besser</span>.»</h2>
+        <div class="stats" style="grid-template-columns: repeat(3, 1fr)">
+          <div class="stat">
+            <div class="n"><em>−82.7%</em></div>
+            <div class="l">Treibhausgase · Durchschnittsszenario</div>
+          </div>
+          <div class="stat">
+            <div class="n"><em>−84.8%</em></div>
+            <div class="l">Gesamt-Umweltwirkung · ökol. Knappheit</div>
+          </div>
+          <div class="stat">
+            <div class="n">52–86%</div>
+            <div class="l">THG-Reduktion · alle Szenarien (ökol. Knappheit: 78.5–85%)</div>
+          </div>
+        </div>
+        <hr class="hairline" />
+        <ul class="facts">
+          <li>
+            Vergleich pro <strong>Megalumen-Stunde</strong> (cradle-to-grave) gegen eine
+            herkömmliche LED-Leuchte — ZHAW-Fazit: «Die Monitorleuchte ist
+            <strong>in jedem Fall besser</strong>»
+          </li>
+          <li><strong>CE-Konformität geklärt</strong> — Gutachten Barologic GmbH, Winterthur</li>
+        </ul>
+        <p class="sources">
+          ZHAW School of Engineering, Institut für Nachhaltige Entwicklung — C. Baumgartner, M.
+          Grünholz · Zwischenstand Innoscheck 28.05.2026 · Treibhauspotential kg CO₂-eq/Mlmh (IPCC)
+          + Methode der ökologischen Knappheit · finaler Bericht folgt
+        </p>
+      </div>
+
+      <!-- 10b · ÖKONOMIE (Messwerte + Markt) -->
+      <div
+        class="slide"
+        data-notes="Die Zahlen zur Wirtschaftlichkeit — alles gemessen oder erhoben, nichts geschätzt: Unsere Referenzleuchte, ein umgebauter DELL U2412b, zieht gemessene 13.6 Watt und liefert rund 965 Lumen — bei 50'000 Stunden erwarteter Lebensdauer. Auf die Leuchtfläche gerechnet ist die Monitorleuchte konkurrenzlos: Selbst bei einem Verkaufspreis von 100 Franken liegt sie bei 5 Franken pro Quadratdezimeter — kommerzielle Panels im Handel kosten 4.90 bis 11.20. Bei 50 Franken sind es 2.50. Und die ZHAW-Akzeptanzumfrage zeigt eine Zahlungsbereitschaft von 20 bis 150 Franken, im Schnitt 80 — wir können also kostendeckend UND unter Neuware-Preis verkaufen. Ehrlich dazu: n gleich 6, die Umfrage läuft weiter. Die bevorzugten Einsatzorte aus der Umfrage decken sich mit unseren Piloten: Korridor, Treppenhaus, Werkstatt, Labor — plus neue Ideen wie Leuchttische für die grafische Industrie und Plakat-Hinterleuchtung."
+      >
+        <p class="eyebrow">Ökonomie · gemessen und erhoben</p>
+        <h2>Konkurrenzfähig — <span class="accent">gemessen</span>.</h2>
+        <div class="stats" style="grid-template-columns: repeat(4, 1fr)">
+          <div class="stat">
+            <div class="n">13.6<em> W</em></div>
+            <div class="l">Verbrauch · gemessen (DELL U2412b)</div>
+          </div>
+          <div class="stat">
+            <div class="n">~965<em> lm</em></div>
+            <div class="l">Lichtstrom · gemessen</div>
+          </div>
+          <div class="stat">
+            <div class="n">Ø 80<em> CHF</em></div>
+            <div class="l">Zahlungsbereitschaft (n=6, ZHAW)</div>
+          </div>
+          <div class="stat">
+            <div class="n">2.5–5<em> CHF</em></div>
+            <div class="l">pro dm² — Neuware: 4.90–11.20</div>
+          </div>
+        </div>
+        <hr class="hairline" />
+        <ul class="facts">
+          <li>
+            Bevorzugte Einsatzorte (ZHAW-Umfrage):
+            <strong>Korridor, Treppenhaus, Werkstatt, Labor</strong> — deckt sich mit unseren
+            Piloten
+          </li>
+          <li>
+            Neue Anwendungsideen aus der Umfrage: <strong>Leuchttische</strong> (grafische
+            Industrie), Plakat-Hinterleuchtung, Kellerabteile
+          </li>
+        </ul>
+        <p class="sources">
+          ZHAW Akzeptanzumfrage + Preisvergleich, Zwischenstand 28.05.2026 · Lumen-Messung: 8
+          Messpunkte, Ø 4'785 Lux × 0.2016 m² · Lebensdauer-Annahme 50'000 h
+        </p>
+      </div>
+
+      <!-- 11 · WISSEN TEILEN (full-bleed) -->
+      <div
+        class="slide slide--bleed statement"
+        data-notes="Der Kern unserer Haltung — und warum eine Non-Profit hier sitzt: Wir teilen unser Wissen, statt es zu verkaufen. Alle Umbau-Anleitungen sind öffentlich — im Team-Wiki monitor-upcycling.org unter Creative Commons, auch kommerziell frei nutzbar, und auf unserer Projekt-Plattform mit Businessplan, Wirkungsdaten und Selbstbau-Guides. Das heisst konkret: Jede Person, jede Werkstatt, jedes Unternehmen — überall auf der Welt — kann diese Leuchten nachbauen oder in Serie fertigen. Genau das wollen wir. Denn für uns zählt vermiedener Abfall, nicht Verkauf und Gewinn. Das Foto: Studierende der HSLU im Modul 'Local Loops — Circularity locally made' beim Entwerfen eigener Leuchten aus unseren Monitoren — 14 Studierende, interdisziplinär. Wissen, das sich vermehrt, wenn man es teilt."
+        data-no-watermark
+      >
+        <img
+          class="bleed-img"
+          style="object-position: 50% 60%"
+          src="/projects/upcycling/installs/hslu-workshop-1.jpg"
+          alt="HSLU-Studierende entwerfen Leuchten aus Monitoren"
+        />
+        <div class="bleed-scrim"></div>
+        <div class="bleed-content">
+          <p class="eyebrow">Open-Source-Hardware · Non-Profit</p>
+          <h1>Wissen teilen<br />statt <span class="accent">verkaufen</span>.</h1>
+          <hr class="hairline" style="max-width: 8rem" />
+          <p class="subtitle">
+            Alle Anleitungen öffentlich:
+            <a
+              class="link"
+              href="https://monitor-upcycling.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              >monitor-upcycling.org</a
+            >
+            (CC-BY-SA) und
+            <a
+              class="link"
+              href="https://revampit.orangecat.ch/de/projects/upcycling"
+              target="_blank"
+              rel="noopener noreferrer"
+              >unsere Projekt-Plattform</a
+            >. Jede Person, überall, kann bauen — oder in Serie fertigen. Uns zählt vermiedener
+            Abfall, nicht Gewinn.
+          </p>
+          <span class="bleed-fact"
+            >Foto: HSLU-Modul «Local Loops — Circularity locally made» · 14 Studierende</span
+          >
+        </div>
+      </div>
+
+      <!-- 12 · SKALIERUNG (Fakten) -->
+      <div
+        class="slide"
+        data-notes="Der Ausblick — bewusst entlang der drei Achsen des Swico Innovationsfonds formuliert: effizienter, umweltfreundlicher, rentabler. Effizienter: Monitore, deren Backlight funktioniert, werden VOR dem Schreddern abgezweigt — in Absprache mit Swico Recycling klären wir mit ERZ Stadt Zürich die Umnutzung aus dem städtischen Entsorgungsstrom; das ist der Hebel für Stückzahlen. Umweltfreundlicher: Die ZHAW-Zahlen — 52 bis 86 Prozent weniger Treibhausgase — werden mit dem finalen Bericht abgeschlossen; dazu Energiemessungen weiterer Modelle. Rentabler: Die Zahlungsbereitschaft von durchschnittlich 80 Franken über den Fertigungskosten in geschützten Werkstätten plus 2.5 bis 5 Franken pro Quadratdezimeter gegenüber 4.90 bis 11.20 bei Neuware — Absatz- und Verkaufsabklärungen laufen. Und als Verstärker: weitere Prototypen, weitere Testinstallationen, und jede neue Anleitung wird auf monitor-upcycling.org veröffentlicht — Skalierung durch Offenheit, im Ökosystem von Swico."
+      >
+        <p class="eyebrow">Ausblick · effizienter — umweltfreundlicher — rentabler</p>
+        <h2>Vom Pilot zur <span class="accent">Stückzahl</span>.</h2>
+        <ul class="facts">
+          <li>
+            <strong>Effizienter</strong>: Funktionierende Backlights vor dem Schreddern abzweigen —
+            mit Swico Recycling: Abklärung ERZ Stadt Zürich (städtischer Entsorgungsstrom)
+          </li>
+          <li>
+            <strong>Umweltfreundlicher</strong>: ZHAW-Studie abschliessen (Innocheque) ·
+            Energiemessung weiterer Modelle
+          </li>
+          <li>
+            <strong>Rentabler</strong>: Absatz-/Verkaufsabklärungen — Ø 80 CHF Zahlungsbereitschaft
+            · Fertigung in geschützten Werkstätten
+          </li>
+          <li>
+            <strong>Verstärker</strong>: weitere Prototypen + Testinstallationen · jede Anleitung
+            öffentlich auf monitor-upcycling.org
+          </li>
+        </ul>
+        <p class="sources">
+          Abschlussbericht Abschnitt F · Team-Präsentation «Ausblick» · Achsen des Swico
+          Innovationsfonds
+        </p>
+      </div>
+
+      <!-- 13 · DANKE (full-bleed) -->
+      <div
+        class="slide slide--bleed statement"
+        data-notes="Danke an Swico für die Projektförderung — und an alle Beteiligten: Werkraum4, Benjamin Ernst, zuerich.repair, RecreaZZZ, AmbossRampe und die ZHAW. Der Prototyp steht seit Mai 2024 am Swico-Geschäftssitz an der Lagerstrasse. Alle Details, die Filmdokumentation des Umbaus und jede Anleitung: auf der Minisite und im Wiki. Fragen und Diskussion."
+        data-no-watermark
+      >
+        <img
+          class="bleed-img"
+          style="object-position: 50% 15%"
+          src="/projects/upcycling/installs/laden-decke-1.jpg"
+          alt="Upcycling-Deckenleuchte im Laden revamp-it"
+        />
+        <div class="bleed-scrim"></div>
+        <div class="bleed-content">
+          <p class="eyebrow">Danke</p>
+          <h1>Merci, <span class="accent">Swico</span>.</h1>
+          <hr class="hairline" style="max-width: 8rem" />
+          <p class="subtitle">
+            <a
+              class="link"
+              href="https://revampit.orangecat.ch/de/projects/upcycling"
+              target="_blank"
+              rel="noopener noreferrer"
+              >revampit.orangecat.ch/de/projects/upcycling</a
+            ><br /><a
+              class="link"
+              href="https://monitor-upcycling.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              >monitor-upcycling.org</a
+            ><br /><a class="link" href="mailto:empfang@revamp-it.ch">empfang@revamp-it.ch</a> · 043
+            960 32 64
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      (function () {
+        const slides = document.querySelectorAll('.slide');
+        const counter = document.getElementById('counter');
+        const progress = document.getElementById('progress');
+        const watermark = document.getElementById('watermark');
+        const total = slides.length;
+        let current = 0;
+
+        var show = function (idx) {
+          if (idx < 0 || idx >= total) return;
+          slides[current].classList.remove('active');
+          current = idx;
+          slides[current].classList.add('active');
+          counter.textContent = current + 1 + ' / ' + total;
+          progress.style.width = ((current + 1) / total) * 100 + '%';
+          // Hide watermark on title slide
+          watermark.style.display = slides[current].hasAttribute('data-no-watermark')
+            ? 'none'
+            : 'block';
+        };
+
+        function next() {
+          show(current + 1);
+        }
+        function prev() {
+          show(current - 1);
+        }
+
+        // Keyboard
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+            e.preventDefault();
+            next();
+          } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+            e.preventDefault();
+            prev();
+          } else if (e.key === 'Home') {
+            e.preventDefault();
+            show(0);
+          } else if (e.key === 'End') {
+            e.preventDefault();
+            show(total - 1);
+          } else if (e.key === 'f' || e.key === 'F') {
+            toggleFullscreen();
+          }
         });
-      } else {
-        // === CONTENT SLIDES ===
-        var yPos = 0.3;
 
-        // Check if subtitle <p> appears BEFORE h2 (like "Lokale KI" slide)
-        var hasSubtitleBeforeTitle = false;
-        if (contentDiv) {
-          var firstChild = contentDiv.children[0];
-          if (firstChild && firstChild.classList && firstChild.classList.contains('subtitle') && firstChild.tagName !== 'SPAN') {
-            s.addText(firstChild.textContent.trim(), { x: LX, y: yPos, w: W, h: 0.4, fontSize: 16, color: dimColor, fontFace: F });
-            yPos += 0.45;
-            hasSubtitleBeforeTitle = true;
+        // Touch swipe
+        let touchStartX = 0;
+        document.addEventListener('touchstart', function (e) {
+          touchStartX = e.changedTouches[0].screenX;
+        });
+        document.addEventListener('touchend', function (e) {
+          const dx = e.changedTouches[0].screenX - touchStartX;
+          if (Math.abs(dx) > 50) {
+            dx < 0 ? next() : prev();
+          }
+        });
+
+        // Arrow buttons
+        document.getElementById('nav-left').addEventListener('click', function (e) {
+          e.stopPropagation();
+          prev();
+        });
+        document.getElementById('nav-right').addEventListener('click', function (e) {
+          e.stopPropagation();
+          next();
+        });
+
+        // Fullscreen
+        function toggleFullscreen() {
+          if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(function () {});
+          } else {
+            document.exitFullscreen();
           }
         }
+        document.getElementById('btn-fullscreen').addEventListener('click', function (e) {
+          e.stopPropagation();
+          toggleFullscreen();
+        });
 
-        // Title
-        s.addText(titleText, { x: 0.5, y: yPos, w: 12.33, h: 0.9, fontSize: 32, color: textColor, bold: true, fontFace: F });
-        yPos += 0.85;
+        // PDF Export — programmatic capture with html2canvas + jsPDF
+        var pdfLibState = 'idle';
 
-        // Inline subtitle (e.g. "(Frontier-Modell)" next to title)
-        if (inlineSubtitle) {
-          s.addText(inlineSubtitle, { x: LX, y: yPos, w: W, h: 0.35, fontSize: 16, color: dimColor, fontFace: F });
-          yPos += 0.35;
+        function loadPdfLibs() {
+          if (pdfLibState !== 'idle') return;
+          if (typeof html2canvas !== 'undefined' && typeof jspdf !== 'undefined') {
+            pdfLibState = 'ready';
+            return;
+          }
+          pdfLibState = 'loading';
+          var loaded = 0;
+          function checkDone() {
+            loaded++;
+            if (loaded >= 2) pdfLibState = 'ready';
+          }
+
+          function loadScript(primary, fallback, cb) {
+            var s = document.createElement('script');
+            s.src = primary;
+            s.onload = cb;
+            s.onerror = function () {
+              var s2 = document.createElement('script');
+              s2.src = fallback;
+              s2.onload = cb;
+              s2.onerror = function () {
+                pdfLibState = 'failed';
+              };
+              document.head.appendChild(s2);
+            };
+            document.head.appendChild(s);
+          }
+
+          loadScript(
+            'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
+            'https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js',
+            checkDone,
+          );
+          loadScript(
+            'https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js',
+            'https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js',
+            checkDone,
+          );
         }
 
-        // Green accent underline
-        s.addShape(pptx.ShapeType.rect, { x: 0.5, y: yPos, w: 2.5, h: 0.04, fill: { color: green } });
-        yPos += 0.25;
+        async function doExportPdf(btn) {
+          var jsPDF = jspdf.jsPDF;
+          var pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [1920, 1080] });
 
-        // Subtitle paragraphs (direct children, skip the one already rendered before title)
-        if (contentDiv) {
-          contentDiv.querySelectorAll(':scope > p.subtitle').forEach(function(sub) {
-            if (hasSubtitleBeforeTitle && sub === contentDiv.children[0]) return;
-            s.addText(sub.textContent.trim(), { x: LX, y: yPos, w: W, h: 0.45, fontSize: 16, color: dimColor, fontFace: F });
-            yPos += 0.5;
-          });
-        }
+          // Create an offscreen container to render slides at fixed size
+          var container = document.createElement('div');
+          container.style.cssText =
+            'position:fixed;left:-9999px;top:0;width:1920px;height:1080px;overflow:hidden;z-index:-1;';
+          document.body.appendChild(container);
 
-        // Body paragraphs - use getInnerText to preserve <br> as newlines
-        if (contentDiv) {
-          contentDiv.querySelectorAll(':scope > p:not(.subtitle)').forEach(function(p) {
-            var fs = 16; var col = dimColor; var al = 'left';
-            var style = p.getAttribute('style') || '';
-            if (style.indexOf('3vw') > -1 || style.indexOf('1.8rem') > -1) {
-              fs = 24; col = textColor; al = 'center';
-            }
-            var txt = getInnerText(p);
-            var lines = txt.split('\n').length;
-            var pH = Math.max(0.6, lines * 0.45);
-            s.addText(txt, { x: LX, y: yPos, w: W, h: pH, fontSize: fs, color: col, align: al, fontFace: F, lineSpacing: fs * 1.4 });
-            yPos += pH + 0.1;
-          });
-        }
+          for (var i = 0; i < total; i++) {
+            btn.textContent = '\u23F3 ' + (i + 1) + '/' + total + '\u2026';
 
-        // List items (not questions)
-        var items = slideEl.querySelectorAll('ul:not(.questions) li');
-        if (items.length > 0) {
-          var bullets = [];
-          items.forEach(function(li) {
-            bullets.push({ text: li.textContent.trim().replace(/^\u2192\s*/, ''), options: { bullet: { code: '2192', color: green }, color: textColor, fontSize: 20, breakLine: true, fontFace: F, lineSpacing: 28 } });
-          });
-          s.addText(bullets, { x: LX, y: yPos, w: W, h: items.length * 0.7, valign: 'top' });
-          yPos += items.length * 0.65 + 0.3;
-        }
+            // Clone the slide
+            var clone = slides[i].cloneNode(true);
+            clone.style.cssText =
+              'position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:2rem 3rem;text-align:center;opacity:1;background:#0f172a;width:1920px;height:1080px;';
+            container.innerHTML = '';
+            container.appendChild(clone);
 
-        // Discussion questions
-        var qItems = slideEl.querySelectorAll('.questions li');
-        if (qItems.length > 0) {
-          var qBullets = [];
-          qItems.forEach(function(li) {
-            qBullets.push({ text: li.textContent.trim(), options: { bullet: { code: '2022', color: orange }, color: textColor, fontSize: 20, breakLine: true, fontFace: F, lineSpacing: 32 } });
-          });
-          s.addText(qBullets, { x: LX, y: yPos, w: W, h: qItems.length * 0.9, valign: 'top' });
-          yPos += qItems.length * 0.85 + 0.3;
-        }
-
-        // Terminal mockup
-        var terminal = slideEl.querySelector('.terminal');
-        if (terminal) {
-          var termH = 1.5;
-          s.addShape(pptx.ShapeType.rect, { x: 1.5, y: yPos, w: 10.33, h: termH, fill: { color: '0d1117' }, line: { color: '30363d', width: 0.5 }, rectRadius: 0.08 });
-          s.addText('\u25CF \u25CF \u25CF', { x: 1.7, y: yPos + 0.05, w: 2, h: 0.3, fontSize: 8, color: '6e7681', fontFace: F });
-          s.addText(getInnerText(terminal), { x: 1.7, y: yPos + 0.3, w: 9.93, h: termH - 0.4, fontSize: 13, color: green, fontFace: 'Consolas', valign: 'top', lineSpacing: 22 });
-          yPos += termH + 0.3;
-        }
-
-        // Prompt boxes
-        var prompts = slideEl.querySelectorAll('.prompt');
-        if (prompts.length > 0) {
-          prompts.forEach(function(pr) {
-            var txt = pr.textContent.trim();
-            var prH = txt.length > 100 ? 0.95 : (txt.length > 60 ? 0.8 : 0.65);
-            s.addShape(pptx.ShapeType.rect, { x: LX, y: yPos, w: W, h: prH, fill: { color: cardBg }, line: { color: borderColor, width: 0.5 }, rectRadius: 0.08 });
-            s.addText('\u201C' + txt + '\u201D', { x: LX + 0.2, y: yPos + 0.05, w: W - 0.4, h: prH - 0.1, fontSize: 15, color: textColor, italic: true, valign: 'middle', fontFace: F });
-            yPos += prH + 0.15;
-          });
-        }
-
-        // Cards and vector-cards
-        var cards = slideEl.querySelectorAll('.card, .vector-card');
-        if (cards.length > 0) {
-          var cardY = Math.max(yPos, 1.5);
-          var numCols = 3;
-          if (slideEl.querySelector('.grid-2')) numCols = 2;
-          else if (slideEl.querySelector('.grid-3')) numCols = 3;
-          var gap = 0.25;
-          var cardW = (W - gap * (numCols - 1)) / numCols;
-          var hasButtons = slideEl.querySelector('.card .demo-btn');
-          var cardH = hasButtons ? 1.5 : (numCols === 2 ? 1.5 : 1.8);
-          cards.forEach(function(card, ci) {
-            var col = ci % numCols;
-            var row = Math.floor(ci / numCols);
-            var cx = LX + col * (cardW + gap);
-            var cy = cardY + row * (cardH + 0.25);
-            var ch3 = card.querySelector('h3');
-            var allPs = card.querySelectorAll('p');
-            s.addShape(pptx.ShapeType.rect, { x: cx, y: cy, w: cardW, h: cardH, fill: { color: cardBg }, line: { color: borderColor, width: 0.5 }, rectRadius: 0.08 });
-            if (ch3) s.addText(ch3.textContent.trim(), { x: cx + 0.15, y: cy + 0.1, w: cardW - 0.3, h: 0.4, fontSize: 16, color: green, bold: true, fontFace: F });
-            var pY = cy + 0.5;
-            allPs.forEach(function(cp, pi) {
-              var pFS = pi === 0 ? 13 : 11;
-              var pH = pi === 0 ? 0.6 : 0.35;
-              s.addText(cp.textContent.trim(), { x: cx + 0.15, y: pY, w: cardW - 0.3, h: pH, fontSize: pFS, color: dimColor, valign: 'top', fontFace: F, lineSpacing: 18 });
-              pY += pH;
+            // Wait a frame for rendering
+            await new Promise(function (r) {
+              requestAnimationFrame(function () {
+                requestAnimationFrame(r);
+              });
             });
-            var demoBtn = card.querySelector('.demo-btn');
-            if (demoBtn) {
-              s.addShape(pptx.ShapeType.rect, { x: cx + 0.15, y: pY, w: cardW - 0.3, h: 0.35, fill: { color: orange }, rectRadius: 0.04 });
-              s.addText(demoBtn.textContent.trim(), { x: cx + 0.15, y: pY, w: cardW - 0.3, h: 0.35, fontSize: 11, color: '000000', bold: true, align: 'center', valign: 'middle', fontFace: F });
-            }
-          });
-          var totalRows = Math.ceil(cards.length / numCols);
-          yPos = cardY + totalRows * (cardH + 0.25);
-        }
 
-        // Standalone demo button (direct child of .content)
-        if (contentDiv) {
-          contentDiv.querySelectorAll(':scope > a.demo-btn').forEach(function(b) {
-            s.addShape(pptx.ShapeType.rect, { x: 4.5, y: yPos, w: 4.33, h: 0.45, fill: { color: orange }, rectRadius: 0.06 });
-            s.addText(b.textContent.trim(), { x: 4.5, y: yPos, w: 4.33, h: 0.45, fontSize: 14, color: '000000', bold: true, align: 'center', valign: 'middle', fontFace: F });
-            yPos += 0.6;
-          });
-        }
+            var canvas = await html2canvas(container, {
+              width: 1920,
+              height: 1080,
+              scale: 1,
+              backgroundColor: '#0f172a',
+              useCORS: true,
+              logging: false,
+            });
 
-        // Timeline items
-        var timelineItems = slideEl.querySelectorAll('.timeline-item');
-        if (timelineItems.length > 0) {
-          var tlY = Math.max(yPos, 1.6);
-          var tlW = 4.5;
-          var tlH = 1.8;
-          timelineItems.forEach(function(ti, i) {
-            var th3 = ti.querySelector('h3');
-            var tp = ti.querySelector('p');
-            var tx = 1.5 + i * 5.5;
-            s.addShape(pptx.ShapeType.rect, { x: tx, y: tlY, w: tlW, h: tlH, fill: { color: cardBg }, line: { color: borderColor, width: 0.5 }, rectRadius: 0.08 });
-            if (th3) s.addText(th3.textContent.trim(), { x: tx, y: tlY + 0.15, w: tlW, h: 0.5, fontSize: 18, color: i === 0 ? orange : green, bold: true, align: 'center', fontFace: F });
-            if (tp) s.addText(getInnerText(tp), { x: tx + 0.2, y: tlY + 0.6, w: tlW - 0.4, h: 1.1, fontSize: 14, color: dimColor, align: 'center', fontFace: F, lineSpacing: 20 });
-          });
-          if (timelineItems.length === 2) {
-            s.addText('\u2192', { x: 5.9, y: tlY + 0.4, w: 1.0, h: 0.6, fontSize: 32, color: green, align: 'center', bold: true, fontFace: F });
+            if (i > 0) pdf.addPage([1920, 1080], 'landscape');
+            pdf.addImage(canvas.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, 1920, 1080);
           }
-          yPos = tlY + tlH + 0.3;
+
+          document.body.removeChild(container);
+          pdf.save('KI-im-Kontext-der-Nachhaltigkeit-RevampIT.pdf');
+          btn.textContent = '\uD83D\uDDB6 PDF';
+          btn.disabled = false;
         }
 
-        // Takeaway box
-        var takeaway = slideEl.querySelector('.takeaway p');
-        if (takeaway) {
-          var tY = Math.max(yPos, 5.0);
-          if (tY > 6.3) tY = 6.3;
-          var twText = takeaway.textContent.trim();
-          var twH = twText.length > 80 ? 0.85 : 0.7;
-          s.addShape(pptx.ShapeType.rect, { x: LX, y: tY, w: W, h: twH, fill: { color: '1a3a2a' }, rectRadius: 0.06 });
-          s.addShape(pptx.ShapeType.rect, { x: LX, y: tY, w: 0.06, h: twH, fill: { color: green } });
-          s.addText(twText, { x: LX + 0.3, y: tY + 0.05, w: W - 0.5, h: twH - 0.1, fontSize: 15, color: textColor, bold: true, valign: 'middle', fontFace: F });
-          yPos = tY + twH + 0.1;
+        document.getElementById('btn-print').addEventListener('click', function (e) {
+          e.stopPropagation();
+
+          // Shift+click = fallback to window.print()
+          if (e.shiftKey) {
+            window.print();
+            return;
+          }
+
+          var btn = document.getElementById('btn-print');
+
+          if (pdfLibState === 'ready') {
+            btn.textContent = '\u23F3 Laden\u2026';
+            btn.disabled = true;
+            doExportPdf(btn);
+            return;
+          }
+
+          if (pdfLibState === 'failed') {
+            pdfLibState = 'idle';
+          }
+          loadPdfLibs();
+
+          btn.textContent = '\u23F3 Laden\u2026';
+          btn.disabled = true;
+          var attempts = 0;
+          var poll = setInterval(function () {
+            attempts++;
+            if (pdfLibState === 'ready') {
+              clearInterval(poll);
+              doExportPdf(btn);
+            } else if (pdfLibState === 'failed' || attempts > 60) {
+              clearInterval(poll);
+              btn.textContent = '\uD83D\uDDB6 PDF';
+              btn.disabled = false;
+              alert(
+                'PDF-Bibliotheken konnten nicht geladen werden. Versuche Shift+Klick f\u00FCr Browser-Druck.',
+              );
+            }
+          }, 250);
+        });
+
+        // Speaker notes — inline panel
+        var notesPanel = document.getElementById('notes-panel');
+        var notesOpen = false;
+        var notesTimerInterval = null,
+          notesTimerSeconds = 0,
+          notesTimerRunning = false;
+
+        function toggleNotes() {
+          notesOpen = !notesOpen;
+          notesPanel.classList.toggle('open', notesOpen);
+          document.getElementById('deck').classList.toggle('notes-open', notesOpen);
+          if (notesOpen) updateNotesPanel();
         }
 
-        // Sources
-        var sources = slideEl.querySelector('.sources');
-        if (sources) {
-          var srcY = Math.max(yPos, 6.5);
-          if (srcY > 6.8) srcY = 6.8;
-          var srcText = sources.textContent.trim().replace(/\s+/g, ' ');
-          s.addText(srcText, { x: LX, y: srcY, w: W, h: 0.3, fontSize: 8, color: '64748b', fontFace: F });
+        function updateNotesPanel() {
+          if (!notesOpen) return;
+          var s = slides[current];
+          var note = s.getAttribute('data-notes') || 'Keine Notizen für diese Folie.';
+          var nextTitle = '(Ende)';
+          if (current + 1 < total) {
+            var nh =
+              slides[current + 1].querySelector('h1') || slides[current + 1].querySelector('h2');
+            nextTitle = nh ? nh.textContent.trim() : '';
+          }
+          document.getElementById('notes-num').textContent = current + 1 + ' / ' + total;
+          document.getElementById('notes-text').textContent = note;
+          document.getElementById('notes-next-title').textContent = nextTitle;
         }
-      }
 
-      // Speaker notes
-      var note = slideEl.getAttribute('data-notes');
-      if (note) s.addNotes(note);
-    });
+        // Timer toggle on click
+        document.getElementById('notes-timer').addEventListener('click', function () {
+          if (notesTimerRunning) {
+            clearInterval(notesTimerInterval);
+            notesTimerRunning = false;
+          } else {
+            notesTimerInterval = setInterval(function () {
+              notesTimerSeconds++;
+              var m = Math.floor(notesTimerSeconds / 60),
+                s = notesTimerSeconds % 60;
+              document.getElementById('notes-timer').textContent =
+                (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+            }, 1000);
+            notesTimerRunning = true;
+          }
+        });
 
-    btn.textContent = '\u23F3 Erstellen\u2026';
-    pptx.writeFile({ fileName: 'Monitor-Upcycling-Swico.pptx' }).then(function() {
-      btn.textContent = '\u2B07 PPTX';
-      btn.disabled = false;
-    });
-  }
+        document.getElementById('notes-close').addEventListener('click', function (e) {
+          e.stopPropagation();
+          toggleNotes();
+        });
 
-  document.getElementById('btn-pptx').addEventListener('click', function(e) {
-    e.stopPropagation();
-    var btn = document.getElementById('btn-pptx');
+        // Patch show() to update notes panel
+        var _origShow = show;
+        show = function (idx) {
+          _origShow(idx);
+          updateNotesPanel();
+        };
 
-    if (pptxState === 'ready') {
-      btn.textContent = '\u23F3 Erstellen\u2026';
-      btn.disabled = true;
-      setTimeout(function() { doExportPptx(btn); }, 50);
-      return;
-    }
+        // Keyboard shortcut
+        document.addEventListener('keydown', function (e) {
+          if (e.key === 'Escape' && notesOpen) {
+            e.preventDefault();
+            toggleNotes();
+          } else if (e.key === 's' || e.key === 'S') {
+            if (!e.ctrlKey && !e.metaKey) {
+              e.preventDefault();
+              toggleNotes();
+            }
+          }
+        });
 
-    if (pptxState === 'failed') { pptxState = 'idle'; loadPptxLib(); }
-    if (pptxState === 'idle') { loadPptxLib(); }
+        document.getElementById('btn-notes').addEventListener('click', function (e) {
+          e.stopPropagation();
+          toggleNotes();
+        });
 
-    btn.textContent = '\u23F3 Laden\u2026';
-    btn.disabled = true;
-    var attempts = 0;
-    var poll = setInterval(function() {
-      attempts++;
-      if (pptxState === 'ready') {
-        clearInterval(poll);
-        doExportPptx(btn);
-      } else if (pptxState === 'failed' || attempts > 60) {
-        clearInterval(poll);
-        btn.textContent = '\u2B07 PPTX';
-        btn.disabled = false;
-        alert('PptxGenJS konnte nicht geladen werden. Bitte Internetverbindung pr\u00FCfen.');
-      }
-    }, 250);
-  });
+        // PPTX Export — eagerly pre-load, CDN fallback, improved quality
+        var pptxState = 'idle'; // idle -> loading -> ready | failed
 
-  // Init
-  show(0);
-})();
-</script>
-<script>
-(function () {
-  // Slide dots
-  var slides = document.querySelectorAll('.slide');
-  var dots = document.createElement('div'); dots.className = 'dots';
-  slides.forEach(function () { dots.appendChild(document.createElement('span')); });
-  document.body.appendChild(dots);
-  function syncDots() {
-    var act = document.querySelector('.slide.active');
-    var idx = Array.prototype.indexOf.call(slides, act);
-    dots.querySelectorAll('span').forEach(function (d, i) { d.classList.toggle('on', i === idx); });
-  }
-  // Count-up for .stat .n numbers when their slide activates
-  function countUp(el) {
-    var raw = el.getAttribute('data-count'); if (!raw) return;
-    var target = parseFloat(raw); var dec = (raw.split('.')[1] || '').length;
-    var t0 = null;
-    function step(ts) {
-      if (!t0) t0 = ts;
-      var p = Math.min((ts - t0) / 900, 1);
-      var eased = 1 - Math.pow(1 - p, 3);
-      el.childNodes[0].nodeValue = (target * eased).toFixed(dec);
-      if (p < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }
-  var mo = new MutationObserver(function () {
-    syncDots();
-    var act = document.querySelector('.slide.active');
-    if (act) act.querySelectorAll('[data-count]').forEach(countUp);
-  });
-  slides.forEach(function (sl) { mo.observe(sl, { attributes: true, attributeFilter: ['class'] }); });
-  syncDots();
-})();
-</script>
-<script>
-/* WYSIWYG-Export: PDF und PPTX entstehen aus Pixel-Snapshots der echten
+        function loadPptxLib() {
+          if (pptxState !== 'idle') return;
+          if (typeof PptxGenJS !== 'undefined') {
+            pptxState = 'ready';
+            return;
+          }
+          pptxState = 'loading';
+          var s1 = document.createElement('script');
+          s1.src = '/presentations/_assets/pptxgen.bundle.js';
+          s1.onload = function () {
+            pptxState = 'ready';
+          };
+          s1.onerror = function () {
+            // Fallback to CDN if local file not found
+            var s2 = document.createElement('script');
+            s2.src = 'https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js';
+            s2.onload = function () {
+              pptxState = 'ready';
+            };
+            s2.onerror = function () {
+              pptxState = 'failed';
+            };
+            document.head.appendChild(s2);
+          };
+          document.head.appendChild(s1);
+        }
+
+        if (document.readyState === 'complete') {
+          loadPptxLib();
+        } else {
+          window.addEventListener('load', loadPptxLib);
+        }
+
+        function getInnerText(el) {
+          // Convert <br> to newlines, then get text content
+          var clone = el.cloneNode(true);
+          var brs = clone.querySelectorAll('br');
+          brs.forEach(function (br) {
+            br.replaceWith('\n');
+          });
+          return clone.textContent.trim();
+        }
+
+        function doExportPptx(btn) {
+          var pptx = new PptxGenJS();
+          pptx.defineLayout({ name: 'WIDE', width: 13.33, height: 7.5 });
+          pptx.layout = 'WIDE';
+
+          var bgColor = '0f172a';
+          var cardBg = '1e293b';
+          var green = '22c55e';
+          var orange = 'F7931A';
+          var textColor = 'f1f5f9';
+          var dimColor = '94a3b8';
+          var borderColor = '334155';
+          var W = 11.53;
+          var LX = 0.8;
+          var F = 'Arial';
+
+          slides.forEach(function (slideEl, idx) {
+            var s = pptx.addSlide();
+            s.background = { color: bgColor };
+            s.addText(idx + 1 + ' / ' + total + '  |  RevampIT', {
+              x: 0.5,
+              y: 7.0,
+              w: 12.33,
+              h: 0.35,
+              fontSize: 9,
+              color: '64748b',
+              align: 'right',
+              fontFace: F,
+            });
+
+            var contentDiv = slideEl.querySelector('.content');
+            var h1 = slideEl.querySelector('h1');
+            var h2 = slideEl.querySelector('h2');
+
+            // Get title text WITHOUT inline subtitles (span.subtitle inside h2)
+            var titleText = '';
+            var inlineSubtitle = '';
+            if (h1) {
+              titleText = h1.textContent.trim();
+            } else if (h2) {
+              var subSpan = h2.querySelector('.subtitle');
+              if (subSpan) {
+                inlineSubtitle = subSpan.textContent.trim();
+                var h2Clone = h2.cloneNode(true);
+                var subClone = h2Clone.querySelector('.subtitle');
+                if (subClone) subClone.remove();
+                titleText = h2Clone.textContent.trim();
+              } else {
+                titleText = h2.textContent.trim();
+              }
+            }
+
+            if (idx === 0) {
+              // === TITLE SLIDE ===
+              s.addText('RevampIT', {
+                x: 0.5,
+                y: 1.5,
+                w: 12.33,
+                h: 0.8,
+                fontSize: 28,
+                color: green,
+                align: 'center',
+                bold: true,
+                fontFace: F,
+              });
+              s.addText(titleText, {
+                x: 0.5,
+                y: 2.5,
+                w: 12.33,
+                h: 1.5,
+                fontSize: 44,
+                color: textColor,
+                align: 'center',
+                bold: true,
+                fontFace: F,
+              });
+              var subs = slideEl.querySelectorAll('.subtitle');
+              var subY = 4.2;
+              subs.forEach(function (sub) {
+                s.addText(sub.textContent.trim(), {
+                  x: 0.5,
+                  y: subY,
+                  w: 12.33,
+                  h: 0.5,
+                  fontSize: 20,
+                  color: dimColor,
+                  align: 'center',
+                  fontFace: F,
+                });
+                subY += 0.55;
+              });
+            } else {
+              // === CONTENT SLIDES ===
+              var yPos = 0.3;
+
+              // Check if subtitle <p> appears BEFORE h2 (like "Lokale KI" slide)
+              var hasSubtitleBeforeTitle = false;
+              if (contentDiv) {
+                var firstChild = contentDiv.children[0];
+                if (
+                  firstChild &&
+                  firstChild.classList &&
+                  firstChild.classList.contains('subtitle') &&
+                  firstChild.tagName !== 'SPAN'
+                ) {
+                  s.addText(firstChild.textContent.trim(), {
+                    x: LX,
+                    y: yPos,
+                    w: W,
+                    h: 0.4,
+                    fontSize: 16,
+                    color: dimColor,
+                    fontFace: F,
+                  });
+                  yPos += 0.45;
+                  hasSubtitleBeforeTitle = true;
+                }
+              }
+
+              // Title
+              s.addText(titleText, {
+                x: 0.5,
+                y: yPos,
+                w: 12.33,
+                h: 0.9,
+                fontSize: 32,
+                color: textColor,
+                bold: true,
+                fontFace: F,
+              });
+              yPos += 0.85;
+
+              // Inline subtitle (e.g. "(Frontier-Modell)" next to title)
+              if (inlineSubtitle) {
+                s.addText(inlineSubtitle, {
+                  x: LX,
+                  y: yPos,
+                  w: W,
+                  h: 0.35,
+                  fontSize: 16,
+                  color: dimColor,
+                  fontFace: F,
+                });
+                yPos += 0.35;
+              }
+
+              // Green accent underline
+              s.addShape(pptx.ShapeType.rect, {
+                x: 0.5,
+                y: yPos,
+                w: 2.5,
+                h: 0.04,
+                fill: { color: green },
+              });
+              yPos += 0.25;
+
+              // Subtitle paragraphs (direct children, skip the one already rendered before title)
+              if (contentDiv) {
+                contentDiv.querySelectorAll(':scope > p.subtitle').forEach(function (sub) {
+                  if (hasSubtitleBeforeTitle && sub === contentDiv.children[0]) return;
+                  s.addText(sub.textContent.trim(), {
+                    x: LX,
+                    y: yPos,
+                    w: W,
+                    h: 0.45,
+                    fontSize: 16,
+                    color: dimColor,
+                    fontFace: F,
+                  });
+                  yPos += 0.5;
+                });
+              }
+
+              // Body paragraphs - use getInnerText to preserve <br> as newlines
+              if (contentDiv) {
+                contentDiv.querySelectorAll(':scope > p:not(.subtitle)').forEach(function (p) {
+                  var fs = 16;
+                  var col = dimColor;
+                  var al = 'left';
+                  var style = p.getAttribute('style') || '';
+                  if (style.indexOf('3vw') > -1 || style.indexOf('1.8rem') > -1) {
+                    fs = 24;
+                    col = textColor;
+                    al = 'center';
+                  }
+                  var txt = getInnerText(p);
+                  var lines = txt.split('\n').length;
+                  var pH = Math.max(0.6, lines * 0.45);
+                  s.addText(txt, {
+                    x: LX,
+                    y: yPos,
+                    w: W,
+                    h: pH,
+                    fontSize: fs,
+                    color: col,
+                    align: al,
+                    fontFace: F,
+                    lineSpacing: fs * 1.4,
+                  });
+                  yPos += pH + 0.1;
+                });
+              }
+
+              // List items (not questions)
+              var items = slideEl.querySelectorAll('ul:not(.questions) li');
+              if (items.length > 0) {
+                var bullets = [];
+                items.forEach(function (li) {
+                  bullets.push({
+                    text: li.textContent.trim().replace(/^\u2192\s*/, ''),
+                    options: {
+                      bullet: { code: '2192', color: green },
+                      color: textColor,
+                      fontSize: 20,
+                      breakLine: true,
+                      fontFace: F,
+                      lineSpacing: 28,
+                    },
+                  });
+                });
+                s.addText(bullets, { x: LX, y: yPos, w: W, h: items.length * 0.7, valign: 'top' });
+                yPos += items.length * 0.65 + 0.3;
+              }
+
+              // Discussion questions
+              var qItems = slideEl.querySelectorAll('.questions li');
+              if (qItems.length > 0) {
+                var qBullets = [];
+                qItems.forEach(function (li) {
+                  qBullets.push({
+                    text: li.textContent.trim(),
+                    options: {
+                      bullet: { code: '2022', color: orange },
+                      color: textColor,
+                      fontSize: 20,
+                      breakLine: true,
+                      fontFace: F,
+                      lineSpacing: 32,
+                    },
+                  });
+                });
+                s.addText(qBullets, {
+                  x: LX,
+                  y: yPos,
+                  w: W,
+                  h: qItems.length * 0.9,
+                  valign: 'top',
+                });
+                yPos += qItems.length * 0.85 + 0.3;
+              }
+
+              // Terminal mockup
+              var terminal = slideEl.querySelector('.terminal');
+              if (terminal) {
+                var termH = 1.5;
+                s.addShape(pptx.ShapeType.rect, {
+                  x: 1.5,
+                  y: yPos,
+                  w: 10.33,
+                  h: termH,
+                  fill: { color: '0d1117' },
+                  line: { color: '30363d', width: 0.5 },
+                  rectRadius: 0.08,
+                });
+                s.addText('\u25CF \u25CF \u25CF', {
+                  x: 1.7,
+                  y: yPos + 0.05,
+                  w: 2,
+                  h: 0.3,
+                  fontSize: 8,
+                  color: '6e7681',
+                  fontFace: F,
+                });
+                s.addText(getInnerText(terminal), {
+                  x: 1.7,
+                  y: yPos + 0.3,
+                  w: 9.93,
+                  h: termH - 0.4,
+                  fontSize: 13,
+                  color: green,
+                  fontFace: 'Consolas',
+                  valign: 'top',
+                  lineSpacing: 22,
+                });
+                yPos += termH + 0.3;
+              }
+
+              // Prompt boxes
+              var prompts = slideEl.querySelectorAll('.prompt');
+              if (prompts.length > 0) {
+                prompts.forEach(function (pr) {
+                  var txt = pr.textContent.trim();
+                  var prH = txt.length > 100 ? 0.95 : txt.length > 60 ? 0.8 : 0.65;
+                  s.addShape(pptx.ShapeType.rect, {
+                    x: LX,
+                    y: yPos,
+                    w: W,
+                    h: prH,
+                    fill: { color: cardBg },
+                    line: { color: borderColor, width: 0.5 },
+                    rectRadius: 0.08,
+                  });
+                  s.addText('\u201C' + txt + '\u201D', {
+                    x: LX + 0.2,
+                    y: yPos + 0.05,
+                    w: W - 0.4,
+                    h: prH - 0.1,
+                    fontSize: 15,
+                    color: textColor,
+                    italic: true,
+                    valign: 'middle',
+                    fontFace: F,
+                  });
+                  yPos += prH + 0.15;
+                });
+              }
+
+              // Cards and vector-cards
+              var cards = slideEl.querySelectorAll('.card, .vector-card');
+              if (cards.length > 0) {
+                var cardY = Math.max(yPos, 1.5);
+                var numCols = 3;
+                if (slideEl.querySelector('.grid-2')) numCols = 2;
+                else if (slideEl.querySelector('.grid-3')) numCols = 3;
+                var gap = 0.25;
+                var cardW = (W - gap * (numCols - 1)) / numCols;
+                var hasButtons = slideEl.querySelector('.card .demo-btn');
+                var cardH = hasButtons ? 1.5 : numCols === 2 ? 1.5 : 1.8;
+                cards.forEach(function (card, ci) {
+                  var col = ci % numCols;
+                  var row = Math.floor(ci / numCols);
+                  var cx = LX + col * (cardW + gap);
+                  var cy = cardY + row * (cardH + 0.25);
+                  var ch3 = card.querySelector('h3');
+                  var allPs = card.querySelectorAll('p');
+                  s.addShape(pptx.ShapeType.rect, {
+                    x: cx,
+                    y: cy,
+                    w: cardW,
+                    h: cardH,
+                    fill: { color: cardBg },
+                    line: { color: borderColor, width: 0.5 },
+                    rectRadius: 0.08,
+                  });
+                  if (ch3)
+                    s.addText(ch3.textContent.trim(), {
+                      x: cx + 0.15,
+                      y: cy + 0.1,
+                      w: cardW - 0.3,
+                      h: 0.4,
+                      fontSize: 16,
+                      color: green,
+                      bold: true,
+                      fontFace: F,
+                    });
+                  var pY = cy + 0.5;
+                  allPs.forEach(function (cp, pi) {
+                    var pFS = pi === 0 ? 13 : 11;
+                    var pH = pi === 0 ? 0.6 : 0.35;
+                    s.addText(cp.textContent.trim(), {
+                      x: cx + 0.15,
+                      y: pY,
+                      w: cardW - 0.3,
+                      h: pH,
+                      fontSize: pFS,
+                      color: dimColor,
+                      valign: 'top',
+                      fontFace: F,
+                      lineSpacing: 18,
+                    });
+                    pY += pH;
+                  });
+                  var demoBtn = card.querySelector('.demo-btn');
+                  if (demoBtn) {
+                    s.addShape(pptx.ShapeType.rect, {
+                      x: cx + 0.15,
+                      y: pY,
+                      w: cardW - 0.3,
+                      h: 0.35,
+                      fill: { color: orange },
+                      rectRadius: 0.04,
+                    });
+                    s.addText(demoBtn.textContent.trim(), {
+                      x: cx + 0.15,
+                      y: pY,
+                      w: cardW - 0.3,
+                      h: 0.35,
+                      fontSize: 11,
+                      color: '000000',
+                      bold: true,
+                      align: 'center',
+                      valign: 'middle',
+                      fontFace: F,
+                    });
+                  }
+                });
+                var totalRows = Math.ceil(cards.length / numCols);
+                yPos = cardY + totalRows * (cardH + 0.25);
+              }
+
+              // Standalone demo button (direct child of .content)
+              if (contentDiv) {
+                contentDiv.querySelectorAll(':scope > a.demo-btn').forEach(function (b) {
+                  s.addShape(pptx.ShapeType.rect, {
+                    x: 4.5,
+                    y: yPos,
+                    w: 4.33,
+                    h: 0.45,
+                    fill: { color: orange },
+                    rectRadius: 0.06,
+                  });
+                  s.addText(b.textContent.trim(), {
+                    x: 4.5,
+                    y: yPos,
+                    w: 4.33,
+                    h: 0.45,
+                    fontSize: 14,
+                    color: '000000',
+                    bold: true,
+                    align: 'center',
+                    valign: 'middle',
+                    fontFace: F,
+                  });
+                  yPos += 0.6;
+                });
+              }
+
+              // Timeline items
+              var timelineItems = slideEl.querySelectorAll('.timeline-item');
+              if (timelineItems.length > 0) {
+                var tlY = Math.max(yPos, 1.6);
+                var tlW = 4.5;
+                var tlH = 1.8;
+                timelineItems.forEach(function (ti, i) {
+                  var th3 = ti.querySelector('h3');
+                  var tp = ti.querySelector('p');
+                  var tx = 1.5 + i * 5.5;
+                  s.addShape(pptx.ShapeType.rect, {
+                    x: tx,
+                    y: tlY,
+                    w: tlW,
+                    h: tlH,
+                    fill: { color: cardBg },
+                    line: { color: borderColor, width: 0.5 },
+                    rectRadius: 0.08,
+                  });
+                  if (th3)
+                    s.addText(th3.textContent.trim(), {
+                      x: tx,
+                      y: tlY + 0.15,
+                      w: tlW,
+                      h: 0.5,
+                      fontSize: 18,
+                      color: i === 0 ? orange : green,
+                      bold: true,
+                      align: 'center',
+                      fontFace: F,
+                    });
+                  if (tp)
+                    s.addText(getInnerText(tp), {
+                      x: tx + 0.2,
+                      y: tlY + 0.6,
+                      w: tlW - 0.4,
+                      h: 1.1,
+                      fontSize: 14,
+                      color: dimColor,
+                      align: 'center',
+                      fontFace: F,
+                      lineSpacing: 20,
+                    });
+                });
+                if (timelineItems.length === 2) {
+                  s.addText('\u2192', {
+                    x: 5.9,
+                    y: tlY + 0.4,
+                    w: 1.0,
+                    h: 0.6,
+                    fontSize: 32,
+                    color: green,
+                    align: 'center',
+                    bold: true,
+                    fontFace: F,
+                  });
+                }
+                yPos = tlY + tlH + 0.3;
+              }
+
+              // Takeaway box
+              var takeaway = slideEl.querySelector('.takeaway p');
+              if (takeaway) {
+                var tY = Math.max(yPos, 5.0);
+                if (tY > 6.3) tY = 6.3;
+                var twText = takeaway.textContent.trim();
+                var twH = twText.length > 80 ? 0.85 : 0.7;
+                s.addShape(pptx.ShapeType.rect, {
+                  x: LX,
+                  y: tY,
+                  w: W,
+                  h: twH,
+                  fill: { color: '1a3a2a' },
+                  rectRadius: 0.06,
+                });
+                s.addShape(pptx.ShapeType.rect, {
+                  x: LX,
+                  y: tY,
+                  w: 0.06,
+                  h: twH,
+                  fill: { color: green },
+                });
+                s.addText(twText, {
+                  x: LX + 0.3,
+                  y: tY + 0.05,
+                  w: W - 0.5,
+                  h: twH - 0.1,
+                  fontSize: 15,
+                  color: textColor,
+                  bold: true,
+                  valign: 'middle',
+                  fontFace: F,
+                });
+                yPos = tY + twH + 0.1;
+              }
+
+              // Sources
+              var sources = slideEl.querySelector('.sources');
+              if (sources) {
+                var srcY = Math.max(yPos, 6.5);
+                if (srcY > 6.8) srcY = 6.8;
+                var srcText = sources.textContent.trim().replace(/\s+/g, ' ');
+                s.addText(srcText, {
+                  x: LX,
+                  y: srcY,
+                  w: W,
+                  h: 0.3,
+                  fontSize: 8,
+                  color: '64748b',
+                  fontFace: F,
+                });
+              }
+            }
+
+            // Speaker notes
+            var note = slideEl.getAttribute('data-notes');
+            if (note) s.addNotes(note);
+          });
+
+          btn.textContent = '\u23F3 Erstellen\u2026';
+          pptx.writeFile({ fileName: 'Monitor-Upcycling-Swico.pptx' }).then(function () {
+            btn.textContent = '\u2B07 PPTX';
+            btn.disabled = false;
+          });
+        }
+
+        document.getElementById('btn-pptx').addEventListener('click', function (e) {
+          e.stopPropagation();
+          var btn = document.getElementById('btn-pptx');
+
+          if (pptxState === 'ready') {
+            btn.textContent = '\u23F3 Erstellen\u2026';
+            btn.disabled = true;
+            setTimeout(function () {
+              doExportPptx(btn);
+            }, 50);
+            return;
+          }
+
+          if (pptxState === 'failed') {
+            pptxState = 'idle';
+            loadPptxLib();
+          }
+          if (pptxState === 'idle') {
+            loadPptxLib();
+          }
+
+          btn.textContent = '\u23F3 Laden\u2026';
+          btn.disabled = true;
+          var attempts = 0;
+          var poll = setInterval(function () {
+            attempts++;
+            if (pptxState === 'ready') {
+              clearInterval(poll);
+              doExportPptx(btn);
+            } else if (pptxState === 'failed' || attempts > 60) {
+              clearInterval(poll);
+              btn.textContent = '\u2B07 PPTX';
+              btn.disabled = false;
+              alert('PptxGenJS konnte nicht geladen werden. Bitte Internetverbindung pr\u00FCfen.');
+            }
+          }, 250);
+        });
+
+        // Init
+        show(0);
+      })();
+    </script>
+    <script>
+      (function () {
+        // Slide dots
+        var slides = document.querySelectorAll('.slide');
+        var dots = document.createElement('div');
+        dots.className = 'dots';
+        slides.forEach(function () {
+          dots.appendChild(document.createElement('span'));
+        });
+        document.body.appendChild(dots);
+        function syncDots() {
+          var act = document.querySelector('.slide.active');
+          var idx = Array.prototype.indexOf.call(slides, act);
+          dots.querySelectorAll('span').forEach(function (d, i) {
+            d.classList.toggle('on', i === idx);
+          });
+        }
+        // Count-up for .stat .n numbers when their slide activates
+        function countUp(el) {
+          var raw = el.getAttribute('data-count');
+          if (!raw) return;
+          var target = parseFloat(raw);
+          var dec = (raw.split('.')[1] || '').length;
+          var t0 = null;
+          function step(ts) {
+            if (!t0) t0 = ts;
+            var p = Math.min((ts - t0) / 900, 1);
+            var eased = 1 - Math.pow(1 - p, 3);
+            el.childNodes[0].nodeValue = (target * eased).toFixed(dec);
+            if (p < 1) requestAnimationFrame(step);
+          }
+          requestAnimationFrame(step);
+        }
+        var mo = new MutationObserver(function () {
+          syncDots();
+          var act = document.querySelector('.slide.active');
+          if (act) act.querySelectorAll('[data-count]').forEach(countUp);
+        });
+        slides.forEach(function (sl) {
+          mo.observe(sl, { attributes: true, attributeFilter: ['class'] });
+        });
+        syncDots();
+      })();
+    </script>
+    <script>
+      /* WYSIWYG-Export: PDF und PPTX entstehen aus Pixel-Snapshots der echten
    Folien (html2canvas) — identisches Design statt Text-Rekonstruktion. */
-(function () {
-  var W = 1600, H = 900;
-  function loadScript(src) {
-    return new Promise(function (res, rej) {
-      var sc = document.createElement('script');
-      sc.src = src; sc.onload = res; sc.onerror = rej;
-      document.head.appendChild(sc);
-    });
-  }
-  function ensureH2C() {
-    return window.html2canvas ? Promise.resolve() :
-      loadScript('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js');
-  }
-  function ensureJsPDF() {
-    return (window.jspdf && window.jspdf.jsPDF) ? Promise.resolve() :
-      loadScript('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js');
-  }
-  function ensurePptx() {
-    return window.PptxGenJS ? Promise.resolve() :
-      loadScript('/presentations/_assets/pptxgen.bundle.js').catch(function () {
-        return loadScript('https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js');
-      });
-  }
-  async function snapshotAll(progressCb) {
-    var deck = document.getElementById('deck');
-    var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
-    var prevActive = document.querySelector('.slide.active');
-    document.body.classList.add('exporting');
-    var prevStyle = deck.getAttribute('style') || '';
-    deck.setAttribute('style', 'position:fixed;left:0;top:0;width:' + W + 'px;height:' + H + 'px;overflow:hidden;z-index:1;');
-    var shots = [];
-    for (var i = 0; i < slides.length; i++) {
-      slides.forEach(function (sl) { sl.classList.remove('active'); });
-      slides[i].classList.add('active');
-      await new Promise(function (r) { setTimeout(r, 60); });
-      await Promise.all(Array.prototype.map.call(slides[i].querySelectorAll('img'), function (im) {
-        return (im.complete ? Promise.resolve() : new Promise(function (r) { im.onload = im.onerror = r; }));
-      }));
-      var canvas = await window.html2canvas(slides[i], {
-        width: W, height: H, scale: 1.2, useCORS: true, backgroundColor: '#0a0a0a', logging: false
-      });
-      shots.push({ data: canvas.toDataURL('image/jpeg', 0.92), notes: slides[i].getAttribute('data-notes') || '' });
-      if (progressCb) progressCb(i + 1, slides.length);
-    }
-    deck.setAttribute('style', prevStyle);
-    slides.forEach(function (sl) { sl.classList.remove('active'); });
-    (prevActive || slides[0]).classList.add('active');
-    document.body.classList.remove('exporting');
-    return shots;
-  }
-  function busy(btn, label) { btn.dataset.orig = btn.textContent; btn.textContent = label; btn.disabled = true; }
-  function done(btn) { btn.textContent = btn.dataset.orig; btn.disabled = false; }
-  function swapHandler(id, fn) {
-    var old = document.getElementById(id);
-    if (!old) return;
-    var neu = old.cloneNode(true);
-    old.parentNode.replaceChild(neu, old);
-    neu.addEventListener('click', function (e) { e.preventDefault(); fn(neu); });
-  }
-  swapHandler('btn-print', async function (btn) {
-    try {
-      busy(btn, '0%');
-      await ensureH2C(); await ensureJsPDF();
-      var shots = await snapshotAll(function (i, n) { btn.textContent = Math.round(i / n * 100) + '%'; });
-      var pdf = new window.jspdf.jsPDF({ orientation: 'landscape', unit: 'px', format: [W, H], compress: true });
-      shots.forEach(function (sh, i) {
-        if (i > 0) pdf.addPage([W, H], 'landscape');
-        pdf.addImage(sh.data, 'JPEG', 0, 0, W, H);
-      });
-      pdf.save('Monitor-Upcycling-Swico.pdf');
-    } catch (err) { alert('PDF-Export fehlgeschlagen: ' + err); }
-    done(btn);
-  });
-  swapHandler('btn-pptx', async function (btn) {
-    try {
-      busy(btn, '0%');
-      await ensureH2C(); await ensurePptx();
-      var shots = await snapshotAll(function (i, n) { btn.textContent = Math.round(i / n * 100) + '%'; });
-      var pptx = new window.PptxGenJS();
-      pptx.defineLayout({ name: 'W16x9', width: 13.33, height: 7.5 });
-      pptx.layout = 'W16x9';
-      shots.forEach(function (sh) {
-        var slide = pptx.addSlide();
-        slide.background = { color: '0a0a0a' };
-        slide.addImage({ data: sh.data, x: 0, y: 0, w: 13.33, h: 7.5 });
-        if (sh.notes) slide.addNotes(sh.notes);
-      });
-      pptx.writeFile({ fileName: 'Monitor-Upcycling-Swico.pptx' });
-    } catch (err) { alert('PPTX-Export fehlgeschlagen: ' + err); }
-    done(btn);
-  });
-})();
-</script>
-</body>
+      (function () {
+        var W = 1600,
+          H = 900;
+        function loadScript(src) {
+          return new Promise(function (res, rej) {
+            var sc = document.createElement('script');
+            sc.src = src;
+            sc.onload = res;
+            sc.onerror = rej;
+            document.head.appendChild(sc);
+          });
+        }
+        function ensureH2C() {
+          return window.html2canvas
+            ? Promise.resolve()
+            : loadScript('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js');
+        }
+        function ensureJsPDF() {
+          return window.jspdf && window.jspdf.jsPDF
+            ? Promise.resolve()
+            : loadScript('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js');
+        }
+        function ensurePptx() {
+          return window.PptxGenJS
+            ? Promise.resolve()
+            : loadScript('/presentations/_assets/pptxgen.bundle.js').catch(function () {
+                return loadScript(
+                  'https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js',
+                );
+              });
+        }
+        async function snapshotAll(progressCb) {
+          var deck = document.getElementById('deck');
+          var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+          var prevActive = document.querySelector('.slide.active');
+          document.body.classList.add('exporting');
+          var prevStyle = deck.getAttribute('style') || '';
+          deck.setAttribute(
+            'style',
+            'position:fixed;left:0;top:0;width:' +
+              W +
+              'px;height:' +
+              H +
+              'px;overflow:hidden;z-index:1;',
+          );
+          var shots = [];
+          for (var i = 0; i < slides.length; i++) {
+            slides.forEach(function (sl) {
+              sl.classList.remove('active');
+            });
+            slides[i].classList.add('active');
+            await new Promise(function (r) {
+              setTimeout(r, 60);
+            });
+            await Promise.all(
+              Array.prototype.map.call(slides[i].querySelectorAll('img'), function (im) {
+                return im.complete
+                  ? Promise.resolve()
+                  : new Promise(function (r) {
+                      im.onload = im.onerror = r;
+                    });
+              }),
+            );
+            var canvas = await window.html2canvas(slides[i], {
+              width: W,
+              height: H,
+              scale: 1.2,
+              useCORS: true,
+              backgroundColor: '#0a0a0a',
+              logging: false,
+            });
+            shots.push({
+              data: canvas.toDataURL('image/jpeg', 0.92),
+              notes: slides[i].getAttribute('data-notes') || '',
+            });
+            if (progressCb) progressCb(i + 1, slides.length);
+          }
+          deck.setAttribute('style', prevStyle);
+          slides.forEach(function (sl) {
+            sl.classList.remove('active');
+          });
+          (prevActive || slides[0]).classList.add('active');
+          document.body.classList.remove('exporting');
+          return shots;
+        }
+        function busy(btn, label) {
+          btn.dataset.orig = btn.textContent;
+          btn.textContent = label;
+          btn.disabled = true;
+        }
+        function done(btn) {
+          btn.textContent = btn.dataset.orig;
+          btn.disabled = false;
+        }
+        function swapHandler(id, fn) {
+          var old = document.getElementById(id);
+          if (!old) return;
+          var neu = old.cloneNode(true);
+          old.parentNode.replaceChild(neu, old);
+          neu.addEventListener('click', function (e) {
+            e.preventDefault();
+            fn(neu);
+          });
+        }
+        swapHandler('btn-print', async function (btn) {
+          try {
+            busy(btn, '0%');
+            await ensureH2C();
+            await ensureJsPDF();
+            var shots = await snapshotAll(function (i, n) {
+              btn.textContent = Math.round((i / n) * 100) + '%';
+            });
+            var pdf = new window.jspdf.jsPDF({
+              orientation: 'landscape',
+              unit: 'px',
+              format: [W, H],
+              compress: true,
+            });
+            shots.forEach(function (sh, i) {
+              if (i > 0) pdf.addPage([W, H], 'landscape');
+              pdf.addImage(sh.data, 'JPEG', 0, 0, W, H);
+            });
+            pdf.save('Monitor-Upcycling-Swico.pdf');
+          } catch (err) {
+            alert('PDF-Export fehlgeschlagen: ' + err);
+          }
+          done(btn);
+        });
+        swapHandler('btn-pptx', async function (btn) {
+          try {
+            busy(btn, '0%');
+            await ensureH2C();
+            await ensurePptx();
+            var shots = await snapshotAll(function (i, n) {
+              btn.textContent = Math.round((i / n) * 100) + '%';
+            });
+            var pptx = new window.PptxGenJS();
+            pptx.defineLayout({ name: 'W16x9', width: 13.33, height: 7.5 });
+            pptx.layout = 'W16x9';
+            shots.forEach(function (sh) {
+              var slide = pptx.addSlide();
+              slide.background = { color: '0a0a0a' };
+              slide.addImage({ data: sh.data, x: 0, y: 0, w: 13.33, h: 7.5 });
+              if (sh.notes) slide.addNotes(sh.notes);
+            });
+            pptx.writeFile({ fileName: 'Monitor-Upcycling-Swico.pptx' });
+          } catch (err) {
+            alert('PPTX-Export fehlgeschlagen: ' + err);
+          }
+          done(btn);
+        });
+      })();
+    </script>
+  </body>
 </html>

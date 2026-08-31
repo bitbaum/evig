@@ -1,29 +1,29 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { apiFetch } from '@/lib/api/client'
+import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { apiFetch } from '@/lib/api/client';
 
 export interface ServiceAppointment {
-  id: string
-  service_name: string
-  service_slug: string
-  description: string | null
-  urgency: string
-  status: string
-  preferred_date: string | null
-  confirmed_date: string | null
-  price_charged_cents: number | null
-  outcome_notes: string | null
-  created_at: string
-  updated_at: string
+  id: string;
+  service_name: string;
+  service_slug: string;
+  description: string | null;
+  urgency: string;
+  status: string;
+  preferred_date: string | null;
+  confirmed_date: string | null;
+  price_charged_cents: number | null;
+  outcome_notes: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
 interface ErrorMessages {
-  loadError: string
-  cancelFailed: string
-  saveError: string
+  loadError: string;
+  cancelFailed: string;
+  saveError: string;
 }
 
 // Forward the ?role=repairer query param to /api/appointments so the API
@@ -37,106 +37,107 @@ interface ErrorMessages {
 // (the API's default), so a stray ?role=garbage doesn't break the page.
 function buildAppointmentsUrl(roleParam: string | null): string {
   if (roleParam === 'repairer') {
-    return '/api/appointments?role=repairer'
+    return '/api/appointments?role=repairer';
   }
-  return '/api/appointments'
+  return '/api/appointments';
 }
 
 export function useAppointments(errors: ErrorMessages) {
-  const { data: session, status: sessionStatus } = useSession()
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const roleParam = searchParams.get('role')
-  const apiUrl = buildAppointmentsUrl(roleParam)
-  const callbackUrl = roleParam === 'repairer'
-    ? '/dashboard/appointments?role=repairer'
-    : '/dashboard/appointments'
+  const { data: session, status: sessionStatus } = useSession();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const roleParam = searchParams.get('role');
+  const apiUrl = buildAppointmentsUrl(roleParam);
+  const callbackUrl =
+    roleParam === 'repairer' ? '/dashboard/appointments?role=repairer' : '/dashboard/appointments';
 
-  const [appointments, setAppointments] = useState<ServiceAppointment[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
-  const [editingId, setEditingId] = useState<string | null>(null)
-  const [pendingCancelId, setPendingCancelId] = useState<string | null>(null)
-  const [editDescription, setEditDescription] = useState('')
-  const [editPreferredDate, setEditPreferredDate] = useState('')
-  const [saving, setSaving] = useState(false)
+  const [appointments, setAppointments] = useState<ServiceAppointment[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [pendingCancelId, setPendingCancelId] = useState<string | null>(null);
+  const [editDescription, setEditDescription] = useState('');
+  const [editPreferredDate, setEditPreferredDate] = useState('');
+  const [saving, setSaving] = useState(false);
 
   const fetchAppointments = async () => {
-    const result = await apiFetch<{ appointments: ServiceAppointment[] }>(apiUrl)
+    const result = await apiFetch<{ appointments: ServiceAppointment[] }>(apiUrl);
     if (result.success && result.data) {
-      setAppointments(result.data.appointments || [])
+      setAppointments(result.data.appointments || []);
     } else {
-      setError(result.error || errors.loadError)
+      setError(result.error || errors.loadError);
     }
-    setLoading(false)
-  }
+    setLoading(false);
+  };
 
   useEffect(() => {
     if (sessionStatus === 'unauthenticated') {
-      router.push(`/auth/login?callbackUrl=${encodeURIComponent(callbackUrl)}`)
-      return
+      router.push(`/auth/login?callbackUrl=${encodeURIComponent(callbackUrl)}`);
+      return;
     }
-    if (!session?.user) return
-    let cancelled = false
+    if (!session?.user) return;
+    let cancelled = false;
     async function load() {
-      const result = await apiFetch<{ appointments: ServiceAppointment[] }>(apiUrl)
-      if (cancelled) return
+      const result = await apiFetch<{ appointments: ServiceAppointment[] }>(apiUrl);
+      if (cancelled) return;
       if (result.success && result.data) {
-        setAppointments(result.data.appointments || [])
+        setAppointments(result.data.appointments || []);
       } else {
-        setError(result.error || errors.loadError)
+        setError(result.error || errors.loadError);
       }
-      setLoading(false)
+      setLoading(false);
     }
-    load()
-    return () => { cancelled = true }
-  }, [session, sessionStatus, router, errors.loadError, apiUrl, callbackUrl])
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, [session, sessionStatus, router, errors.loadError, apiUrl, callbackUrl]);
 
   const doCancel = async () => {
-    if (!pendingCancelId) return
-    const id = pendingCancelId
-    setPendingCancelId(null)
+    if (!pendingCancelId) return;
+    const id = pendingCancelId;
+    setPendingCancelId(null);
     const result = await apiFetch<void>(`/api/appointments/${id}`, {
       method: 'PATCH',
       body: { action: 'cancel' },
-    })
+    });
     if (result.success) {
-      fetchAppointments()
+      fetchAppointments();
     } else {
-      setError(result.error || errors.cancelFailed)
+      setError(result.error || errors.cancelFailed);
     }
-  }
+  };
 
   const openEdit = (apt: ServiceAppointment) => {
-    setEditingId(apt.id)
-    setEditDescription(apt.description || '')
+    setEditingId(apt.id);
+    setEditDescription(apt.description || '');
     setEditPreferredDate(
-      apt.preferred_date ? new Date(apt.preferred_date).toISOString().slice(0, 16) : ''
-    )
-  }
+      apt.preferred_date ? new Date(apt.preferred_date).toISOString().slice(0, 16) : '',
+    );
+  };
 
   const saveEdit = async () => {
-    if (!editingId) return
-    setSaving(true)
+    if (!editingId) return;
+    setSaving(true);
     const payload: { action: string; description: string; preferred_date?: string } = {
       action: 'update',
       description: editDescription,
-    }
+    };
     if (editPreferredDate) {
-      payload.preferred_date = new Date(editPreferredDate).toISOString()
+      payload.preferred_date = new Date(editPreferredDate).toISOString();
     }
     const result = await apiFetch<void>(`/api/appointments/${editingId}`, {
       method: 'PATCH',
       body: payload,
-    })
+    });
     if (result.success) {
-      setEditingId(null)
-      fetchAppointments()
+      setEditingId(null);
+      fetchAppointments();
     } else {
-      setError(result.error || errors.saveError)
+      setError(result.error || errors.saveError);
     }
-    setSaving(false)
-  }
+    setSaving(false);
+  };
 
   return {
     appointments,
@@ -160,5 +161,5 @@ export function useAppointments(errors: ErrorMessages) {
     // misleads a repairer who arrives from the appointment notification
     // email — they're the service provider, not the booker).
     isRepairerView: roleParam === 'repairer',
-  }
+  };
 }

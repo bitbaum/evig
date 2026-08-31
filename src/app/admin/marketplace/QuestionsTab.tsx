@@ -1,23 +1,23 @@
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
-import { ExternalLink } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Select } from '@/components/ui/select'
-import { formatDateShort } from '@/lib/date-formats'
-import { LISTING_QUESTION_STATUS } from '@/config/marketplace'
-import { adminInteractive } from '@/lib/admin-ui'
-import { StatusBadge } from '@/components/ui/status-badge'
-import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
-import type { PaginatedResponse, QuestionRow } from './types'
+import { useTranslations } from 'next-intl';
+import { ExternalLink } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Select } from '@/components/ui/select';
+import { formatDateShort } from '@/lib/date-formats';
+import { LISTING_QUESTION_STATUS } from '@/config/marketplace';
+import { adminInteractive } from '@/lib/admin-ui';
+import { StatusBadge } from '@/components/ui/status-badge';
+import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable';
+import type { PaginatedResponse, QuestionRow } from './types';
 
 interface QuestionsTabProps {
-  questions: PaginatedResponse<QuestionRow> | null
-  filter: { status: string }
-  setFilter: React.Dispatch<React.SetStateAction<{ status: string }>>
-  offset: number
-  setOffset: React.Dispatch<React.SetStateAction<number>>
-  onModerate: (id: string, action: 'hide' | 'restore') => void
+  questions: PaginatedResponse<QuestionRow> | null;
+  filter: { status: string };
+  setFilter: React.Dispatch<React.SetStateAction<{ status: string }>>;
+  offset: number;
+  setOffset: React.Dispatch<React.SetStateAction<number>>;
+  onModerate: (id: string, action: 'hide' | 'restore') => void;
 }
 
 export function QuestionsTab({
@@ -28,18 +28,25 @@ export function QuestionsTab({
   setOffset,
   onModerate,
 }: QuestionsTabProps) {
-  const t = useTranslations('admin.marketplace.questions')
-  const tPag = useTranslations('admin.pagination')
+  const t = useTranslations('admin.marketplace.questions');
+  const tPag = useTranslations('admin.pagination');
 
   const columns: AdminTableColumn<QuestionRow>[] = [
     {
       header: t('columns.listing'),
       cell: (q) => (
         <>
-          <a href={`/marketplace/${q.listing_id}`} target="_blank" rel="noopener noreferrer" className="font-medium text-text-primary hover:text-action flex items-center gap-1">
+          <a
+            href={`/marketplace/${q.listing_id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium text-text-primary hover:text-action flex items-center gap-1"
+          >
             {q.listing_title} <ExternalLink className="w-3 h-3" />
           </a>
-          <p className="text-xs text-text-tertiary">{t('sellerLabel', { name: q.seller_name || q.seller_email })}</p>
+          <p className="text-xs text-text-tertiary">
+            {t('sellerLabel', { name: q.seller_name || q.seller_email })}
+          </p>
         </>
       ),
     },
@@ -100,16 +107,16 @@ export function QuestionsTab({
           </Button>
         ),
     },
-  ]
+  ];
 
   return (
     <div className="space-y-4">
       <div className="flex gap-3">
         <Select
           value={filter.status}
-          onChange={e => {
-            setFilter({ status: e.target.value })
-            setOffset(0)
+          onChange={(e) => {
+            setFilter({ status: e.target.value });
+            setOffset(0);
           }}
           className="w-auto"
         >
@@ -121,20 +128,38 @@ export function QuestionsTab({
       </div>
 
       {questions && questions.items.length === 0 ? (
-        <div className="rounded-lg border border-default bg-surface-base p-8 text-center text-text-tertiary">{t('empty')}</div>
+        <div className="rounded-lg border border-default bg-surface-base p-8 text-center text-text-tertiary">
+          {t('empty')}
+        </div>
       ) : (
         <AdminTable columns={columns} rows={questions?.items ?? []} rowKey={(q) => q.id} />
       )}
 
       {questions && questions.pagination.total > 50 && (
         <div className="flex items-center justify-between">
-          <span className="text-sm text-text-tertiary">{t('countLabel', { count: questions.pagination.total })}</span>
+          <span className="text-sm text-text-tertiary">
+            {t('countLabel', { count: questions.pagination.total })}
+          </span>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" disabled={offset === 0} onClick={() => setOffset(o => Math.max(0, o - 50))}>{tPag('prev')}</Button>
-            <Button variant="outline" size="sm" disabled={!questions.pagination.hasMore} onClick={() => setOffset(o => o + 50)}>{tPag('next')}</Button>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={offset === 0}
+              onClick={() => setOffset((o) => Math.max(0, o - 50))}
+            >
+              {tPag('prev')}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={!questions.pagination.hasMore}
+              onClick={() => setOffset((o) => o + 50)}
+            >
+              {tPag('next')}
+            </Button>
           </div>
         </div>
       )}
     </div>
-  )
+  );
 }

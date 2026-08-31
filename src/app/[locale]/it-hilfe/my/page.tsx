@@ -1,23 +1,14 @@
-'use client'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { useState, useEffect, useCallback } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { Link } from '@/i18n/navigation'
-import { Button } from '@/components/ui/button'
-import { apiFetch } from '@/lib/api/client'
-import { logger } from '@/lib/logger'
-import { formatDateShort } from '@/lib/date-formats'
-import {
-  Plus,
-  MapPin,
-  Clock,
-  Users,
-  ArrowRight,
-  Wrench,
-  Heart,
-  FileText,
-} from 'lucide-react'
+'use client';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { useState, useEffect, useCallback } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { Link } from '@/i18n/navigation';
+import { Button } from '@/components/ui/button';
+import { apiFetch } from '@/lib/api/client';
+import { logger } from '@/lib/logger';
+import { formatDateShort } from '@/lib/date-formats';
+import { Plus, MapPin, Clock, Users, ArrowRight, Wrench, Heart, FileText } from 'lucide-react';
 import {
   getCategoryById,
   getUrgencyById,
@@ -25,68 +16,68 @@ import {
   getRequestStatusById,
   REQUEST_STATUS,
   REQUEST_STATUSES,
-} from '@/config/it-hilfe'
-import type { ITHilfeRequest } from '@/components/it-hilfe/detail/types'
-import Heading from '@/components/ui/Heading'
-import { Card } from '@/components/ui/card'
-import { useTranslations } from 'next-intl'
-import { StatusBadge } from '@/components/ui/status-badge'
-import { ROUTES } from '@/config/routes'
-import { PageShell } from '@/components/layout/PageShell'
+} from '@/config/it-hilfe';
+import type { ITHilfeRequest } from '@/components/it-hilfe/detail/types';
+import Heading from '@/components/ui/Heading';
+import { Card } from '@/components/ui/card';
+import { useTranslations } from 'next-intl';
+import { StatusBadge } from '@/components/ui/status-badge';
+import { ROUTES } from '@/config/routes';
+import { PageShell } from '@/components/layout/PageShell';
 
 export default function MyRequestsPage() {
-  const { data: session, status } = useSession()
-  const router = useRouter()
-  const t = useTranslations('itHelp.myRequests')
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const t = useTranslations('itHelp.myRequests');
 
-  const [requests, setRequests] = useState<ITHilfeRequest[]>([])
-  const [loading, setLoading] = useState(true)
-  const [total, setTotal] = useState(0)
-  const [statusFilter, setStatusFilter] = useState('')
-  const [fetchError, setFetchError] = useState(false)
+  const [requests, setRequests] = useState<ITHilfeRequest[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [total, setTotal] = useState(0);
+  const [statusFilter, setStatusFilter] = useState('');
+  const [fetchError, setFetchError] = useState(false);
 
   // Redirect if not authenticated
   useEffect(() => {
     if (status === 'unauthenticated') {
-      router.push('/auth/login?callbackUrl=/it-hilfe/my')
+      router.push('/auth/login?callbackUrl=/it-hilfe/my');
     }
-  }, [status, router])
+  }, [status, router]);
 
   const fetchRequests = useCallback(async () => {
     try {
-      setLoading(true)
-      setFetchError(false)
-      const params = new URLSearchParams()
-      if (statusFilter) params.set('status', statusFilter)
+      setLoading(true);
+      setFetchError(false);
+      const params = new URLSearchParams();
+      if (statusFilter) params.set('status', statusFilter);
 
       const result = await apiFetch<{ requests: ITHilfeRequest[]; total: number }>(
         `/api/it-hilfe/my-requests?${params}`,
-      )
+      );
 
       if (result.success && result.data) {
-        setRequests(result.data.requests)
-        setTotal(result.data.total)
+        setRequests(result.data.requests);
+        setTotal(result.data.total);
       } else {
-        logger.warn('Error fetching my IT-Hilfe requests', { error: result.error })
-        setFetchError(true)
+        logger.warn('Error fetching my IT-Hilfe requests', { error: result.error });
+        setFetchError(true);
       }
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }, [statusFilter])
+  }, [statusFilter]);
 
   useEffect(() => {
     if (session?.user) {
-      fetchRequests()
+      fetchRequests();
     }
-  }, [session?.user, fetchRequests])
+  }, [session?.user, fetchRequests]);
 
   if (status === 'loading' || (status === 'authenticated' && loading)) {
     return (
       <div className="flex items-center justify-center py-24">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-action"></div>
       </div>
-    )
+    );
   }
 
   return (
@@ -104,7 +95,10 @@ export default function MyRequestsPage() {
                 <Heart className="w-4 h-4" aria-hidden="true" />
                 {t('myOffersButton')}
               </Button>
-              <Link href={ROUTES.public.itHilfeCreate} className="ui-public-cta inline-flex items-center gap-2">
+              <Link
+                href={ROUTES.public.itHilfeCreate}
+                className="ui-public-cta inline-flex items-center gap-2"
+              >
                 <Plus className="w-4 h-4" aria-hidden="true" />
                 {t('newRequestButton')}
               </Link>
@@ -114,7 +108,6 @@ export default function MyRequestsPage() {
       </section>
 
       <PageShell maxWidth="5xl" py="py-8 sm:py-12">
-
         {/* Status Filter */}
         <Card className="p-4 mb-6">
           <div className="flex flex-wrap gap-2">
@@ -160,9 +153,14 @@ export default function MyRequestsPage() {
             <h3 className="ui-public-display-md mb-2">
               {statusFilter ? t('emptyFiltered') : t('emptyNoFilter')}
             </h3>
-            <p className="ui-public-section-lede mb-6">{statusFilter ? t('emptyFilteredMessage') : t('emptyNoFilterMessage')}</p>
+            <p className="ui-public-section-lede mb-6">
+              {statusFilter ? t('emptyFilteredMessage') : t('emptyNoFilterMessage')}
+            </p>
             {!statusFilter && (
-              <Link href={ROUTES.public.itHilfeCreate} className="ui-public-cta inline-flex items-center gap-2">
+              <Link
+                href={ROUTES.public.itHilfeCreate}
+                className="ui-public-cta inline-flex items-center gap-2"
+              >
                 <Plus className="w-5 h-5" aria-hidden="true" />
                 {t('createButton')}
               </Link>
@@ -171,10 +169,10 @@ export default function MyRequestsPage() {
         ) : (
           <div className="space-y-4">
             {requests.map((req) => {
-              const categoryConfig = getCategoryById(req.categoryId)
-              const urgencyConfig = getUrgencyById(req.urgency)
-              const statusConfig = getRequestStatusById(req.status)
-              const CategoryIcon = categoryConfig?.icon || Wrench
+              const categoryConfig = getCategoryById(req.categoryId);
+              const urgencyConfig = getUrgencyById(req.urgency);
+              const statusConfig = getRequestStatusById(req.status);
+              const CategoryIcon = categoryConfig?.icon || Wrench;
               // An "Abgelaufen" request is still status=open in the DB but
               // past its expires_at — the public browse silently filters it
               // out and the API rejects new offers, so without this badge
@@ -183,7 +181,7 @@ export default function MyRequestsPage() {
               const isExpired =
                 req.status === REQUEST_STATUS.OPEN &&
                 req.expiresAt != null &&
-                new Date(req.expiresAt) < new Date()
+                new Date(req.expiresAt) < new Date();
 
               return (
                 <Link
@@ -192,26 +190,38 @@ export default function MyRequestsPage() {
                   className="block card-shell p-6 hover:border-strong transition-all group"
                 >
                   <div className="flex items-start gap-4">
-                    <div className={`p-3 ${categoryConfig?.color || 'bg-surface-overlay'} rounded-xl`}>
+                    <div
+                      className={`p-3 ${categoryConfig?.color || 'bg-surface-overlay'} rounded-xl`}
+                    >
                       <CategoryIcon className="w-6 h-6 text-white" />
                     </div>
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1 flex-wrap">
-                        <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusConfig?.badgeClass || 'bg-surface-raised text-text-secondary'}`}>
+                        <span
+                          className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusConfig?.badgeClass || 'bg-surface-raised text-text-secondary'}`}
+                        >
                           {statusConfig?.name || req.status}
                         </span>
                         {isExpired && (
-                          <StatusBadge variant="warning" title={`Abgelaufen am ${formatDateShort(req.expiresAt)}`}>
+                          <StatusBadge
+                            variant="warning"
+                            title={`Abgelaufen am ${formatDateShort(req.expiresAt)}`}
+                          >
                             Abgelaufen
                           </StatusBadge>
                         )}
-                        <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${urgencyConfig?.badgeClass || 'bg-surface-raised text-text-secondary'}`}>
+                        <span
+                          className={`px-2.5 py-1 rounded-full text-xs font-medium ${urgencyConfig?.badgeClass || 'bg-surface-raised text-text-secondary'}`}
+                        >
                           {urgencyConfig?.name || req.urgency}
                         </span>
                       </div>
 
-                      <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-action transition-colors">
+                      <Heading
+                        level={3}
+                        className="font-semibold text-text-primary mb-2 group-hover:text-action transition-colors"
+                      >
                         {req.title}
                       </Heading>
 
@@ -243,11 +253,11 @@ export default function MyRequestsPage() {
                     <ArrowRight className="w-5 h-5 text-text-tertiary group-hover:text-action transition-colors" />
                   </div>
                 </Link>
-              )
+              );
             })}
           </div>
         )}
       </PageShell>
     </div>
-  )
+  );
 }

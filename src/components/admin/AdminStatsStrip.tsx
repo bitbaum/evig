@@ -1,32 +1,38 @@
-import Link from 'next/link'
-import type { LucideIcon } from 'lucide-react'
-import { adminIconBox, adminIconColor, adminInteractive, adminType, type AdminIconColorKey } from '@/lib/admin-ui'
-import { cn } from '@/lib/utils'
+import Link from 'next/link';
+import type { LucideIcon } from 'lucide-react';
+import {
+  adminIconBox,
+  adminIconColor,
+  adminInteractive,
+  adminType,
+  type AdminIconColorKey,
+} from '@/lib/admin-ui';
+import { cn } from '@/lib/utils';
 
 export interface StatItem {
-  icon: LucideIcon
+  icon: LucideIcon;
   /** Semantic color key from adminIconColor */
-  color?: AdminIconColorKey
-  label: string
-  value: number | string
+  color?: AdminIconColorKey;
+  label: string;
+  value: number | string;
   /** Optional override for the value text color */
-  valueColor?: string
+  valueColor?: string;
   /** Optional trend or secondary text after the label */
-  trend?: string
-  trendColor?: 'green' | 'red' | 'amber'
+  trend?: string;
+  trendColor?: 'green' | 'red' | 'amber';
   /** When set, the entire pill becomes a Link to this href (quick-filter UX) */
-  href?: string
+  href?: string;
 }
 
 interface AdminStatsStripProps {
-  items: StatItem[]
+  items: StatItem[];
 }
 
 const TREND_COLOR = {
   green: 'text-action',
-  red:   'text-error-600 dark:text-error-400',
+  red: 'text-error-600 dark:text-error-400',
   amber: 'text-warning-600 dark:text-warning-400',
-}
+};
 
 /**
  * AdminStatsStrip — compact one-line stat summary for admin list pages.
@@ -41,13 +47,13 @@ export function AdminStatsStrip({ items }: AdminStatsStripProps) {
   return (
     <div className="flex flex-wrap gap-2">
       {items.map((item, index) => {
-        const Icon = item.icon
-        const colorClasses = adminIconColor[item.color ?? 'gray']
+        const Icon = item.icon;
+        const colorClasses = adminIconColor[item.color ?? 'gray'];
 
         const pillClass = cn(
           'inline-flex items-center gap-2 rounded-lg border border bg-surface-base py-1.5 pl-1.5 pr-3',
-          item.href && `transition-colors hover:border-strong ${adminInteractive.rowHover}`
-        )
+          item.href && `transition-colors hover:border-strong ${adminInteractive.rowHover}`,
+        );
 
         const body = (
           <>
@@ -57,19 +63,28 @@ export function AdminStatsStrip({ items }: AdminStatsStripProps) {
             <span className={cn(adminType.stat, item.valueColor)}>{item.value}</span>
             <span className={adminType.statLabel}>{item.label}</span>
             {item.trend && (
-              <span className={cn('text-xs', item.trendColor ? TREND_COLOR[item.trendColor] : 'text-text-muted')}>
+              <span
+                className={cn(
+                  'text-xs',
+                  item.trendColor ? TREND_COLOR[item.trendColor] : 'text-text-muted',
+                )}
+              >
                 {item.trend}
               </span>
             )}
           </>
-        )
+        );
 
         return item.href ? (
-          <Link key={index} href={item.href} className={pillClass}>{body}</Link>
+          <Link key={index} href={item.href} className={pillClass}>
+            {body}
+          </Link>
         ) : (
-          <div key={index} className={pillClass}>{body}</div>
-        )
+          <div key={index} className={pillClass}>
+            {body}
+          </div>
+        );
       })}
     </div>
-  )
+  );
 }

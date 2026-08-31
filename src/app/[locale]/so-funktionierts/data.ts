@@ -7,8 +7,8 @@ import {
   Home,
   Recycle,
   Puzzle,
-} from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
 /**
  * "Der Weg deines Geräts" — SSOT for the language-independent STRUCTURE of the
@@ -24,8 +24,8 @@ import type { LucideIcon } from 'lucide-react'
  */
 
 export interface JourneyPhase {
-  id: string
-  icon: LucideIcon
+  id: string;
+  icon: LucideIcon;
 }
 
 /** The device journey, in order. Strings: soFunktioniert.phases.{id}.{title,body}. */
@@ -36,11 +36,11 @@ export const JOURNEY_PHASES: JourneyPhase[] = [
   { id: 'refurbish', icon: Wrench },
   { id: 'quality', icon: BadgeCheck },
   { id: 'rehome', icon: Home },
-]
+];
 
 export interface OutcomePath {
-  id: string
-  icon: LucideIcon
+  id: string;
+  icon: LucideIcon;
 }
 
 /**
@@ -51,4 +51,4 @@ export const OUTCOME_PATHS: OutcomePath[] = [
   { id: 'refurbish', icon: Wrench },
   { id: 'parts', icon: Puzzle },
   { id: 'recycle', icon: Recycle },
-]
+];

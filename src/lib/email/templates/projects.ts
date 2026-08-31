@@ -6,10 +6,10 @@
  * carries the project + need context staff need to triage.
  */
 
-import type { EmailContent } from '../types'
-import { createEmailLayout, createTextFooter } from './base-styles'
-import { ORG } from '@/config/org'
-import { escapeHtml } from '@/lib/utils/escape-html'
+import type { EmailContent } from '../types';
+import { createEmailLayout, createTextFooter } from './base-styles';
+import { ORG } from '@/config/org';
+import { escapeHtml } from '@/lib/utils/escape-html';
 
 /**
  * Notification to staff — someone offered to help with a project need.
@@ -21,15 +21,15 @@ export const projectContributionNotification = (
   email: string,
   phone: string | null,
   organization: string | null,
-  message: string
+  message: string,
 ): EmailContent => {
-  const eProject = escapeHtml(projectTitle)
-  const eNeed = needTitle ? escapeHtml(needTitle) : 'Allgemeines Interesse'
-  const eName = escapeHtml(name)
-  const eEmail = escapeHtml(email)
-  const ePhone = phone ? escapeHtml(phone) : '—'
-  const eOrg = organization ? escapeHtml(organization) : '—'
-  const eMessageHtml = escapeHtml(message).replace(/\n/g, '<br>')
+  const eProject = escapeHtml(projectTitle);
+  const eNeed = needTitle ? escapeHtml(needTitle) : 'Allgemeines Interesse';
+  const eName = escapeHtml(name);
+  const eEmail = escapeHtml(email);
+  const ePhone = phone ? escapeHtml(phone) : '—';
+  const eOrg = organization ? escapeHtml(organization) : '—';
+  const eMessageHtml = escapeHtml(message).replace(/\n/g, '<br>');
 
   return {
     subject: `Neuer Projekt-Beitrag: ${projectTitle} — ${needTitle ?? 'Interesse'}`,
@@ -53,21 +53,21 @@ export const projectContributionNotification = (
       <p style="margin-top:24px;">
         <a href="mailto:${eEmail}" class="button button-green">Direkt antworten</a>
       </p>
-    `
+    `,
     ),
     text: `Neuer Projekt-Beitrag\n\nProjekt: ${projectTitle}\nBedarf: ${needTitle ?? 'Allgemein'}\nName: ${name}\nE-Mail: ${email}\nTelefon: ${phone ?? '—'}\nOrganisation: ${organization ?? '—'}\n\nNachricht:\n${message}\n\n${createTextFooter()}`,
-  }
-}
+  };
+};
 
 /**
  * Confirmation to the visitor who offered help.
  */
 export const projectContributionConfirmation = (
   name: string,
-  projectTitle: string
+  projectTitle: string,
 ): EmailContent => {
-  const eName = escapeHtml(name)
-  const eProject = escapeHtml(projectTitle)
+  const eName = escapeHtml(name);
+  const eProject = escapeHtml(projectTitle);
 
   return {
     subject: `Dein Beitrag zu ${projectTitle} bei ${ORG.name}`,
@@ -88,8 +88,8 @@ export const projectContributionConfirmation = (
       </div>
       <p>Falls du in der Zwischenzeit weitere Details ergänzen willst, antworte einfach auf diese E-Mail.</p>
       <p>Bis bald!<br>Das evig Team</p>
-    `
+    `,
     ),
     text: `Hallo ${name},\n\nvielen Dank, dass du das Projekt ${projectTitle} bei ${ORG.name} unterstützen willst!\n\nWir haben dein Angebot erhalten und melden uns in Kürze bei dir.\n\n${createTextFooter()}`,
-  }
-}
+  };
+};

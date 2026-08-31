@@ -13,32 +13,32 @@
  * Deliberately in-process — see `../hirn/health.ts` for why.
  */
 
-import { createHealthTracker } from 'ai-kit'
+import { createHealthTracker } from 'ai-kit';
 
-const tracker = createHealthTracker({ downAfter: 3 })
+const tracker = createHealthTracker({ downAfter: 3 });
 
 /** Call after `callWithFallback`/`callVisionWithFallback` returns a result. */
 export function recordAIToolsSuccess(): void {
-  tracker.recordSuccess()
+  tracker.recordSuccess();
 }
 
 /** Call when every provider in the cascade failed (a `null` return). */
 export function recordAIToolsFailure(error: unknown): void {
-  tracker.recordFailure(error)
+  tracker.recordFailure(error);
 }
 
 export function getAIToolsHealth() {
-  const health = tracker.getHealth()
+  const health = tracker.getHealth();
   return {
     status: health.status,
     consecutiveFailures: health.consecutiveFailures,
     lastError: health.lastError,
     lastSuccessAt: health.lastSuccessAt ? new Date(health.lastSuccessAt).toISOString() : null,
     lastFailureAt: health.lastFailureAt ? new Date(health.lastFailureAt).toISOString() : null,
-  }
+  };
 }
 
 /** Test seam. */
 export function resetAIToolsHealth(): void {
-  tracker.reset()
+  tracker.reset();
 }

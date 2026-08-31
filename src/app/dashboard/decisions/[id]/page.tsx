@@ -1,11 +1,11 @@
-import { Metadata } from 'next'
-import { auth } from '@/auth'
-import { redirect, notFound } from 'next/navigation'
-import { db } from '@/db'
-import { users } from '@/db/schema'
-import { eq } from 'drizzle-orm'
-import { getDecisionById } from '@/lib/services/decisions'
-import { getParticipationStatus } from '@/lib/services/decisions-voting'
+import { Metadata } from 'next';
+import { auth } from '@/auth';
+import { redirect, notFound } from 'next/navigation';
+import { db } from '@/db';
+import { users } from '@/db/schema';
+import { eq } from 'drizzle-orm';
+import { getDecisionById } from '@/lib/services/decisions';
+import { getParticipationStatus } from '@/lib/services/decisions-voting';
 import {
   DECISION_STATUS,
   DECISION_TYPE_CONFIG,
@@ -16,80 +16,83 @@ import {
   type DecisionStatus,
   type DecisionType,
   type ParticipantScope,
-} from '@/config/decisions'
-import { formatDateShort } from '@/lib/date-formats'
-import Heading from '@/components/ui/Heading'
-import DashboardVotingClient from './DashboardVotingClient'
-import BackgroundSection from './BackgroundSection'
-import { getTranslations, getLocale } from 'next-intl/server'
-import { ORG } from '@/config/org'
-import { ROUTES } from '@/config/routes'
+} from '@/config/decisions';
+import { formatDateShort } from '@/lib/date-formats';
+import Heading from '@/components/ui/Heading';
+import DashboardVotingClient from './DashboardVotingClient';
+import BackgroundSection from './BackgroundSection';
+import { getTranslations, getLocale } from 'next-intl/server';
+import { ORG } from '@/config/org';
+import { ROUTES } from '@/config/routes';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const locale = await getLocale()
-  const t = await getTranslations({ locale, namespace: 'dashboard.meta' })
-  return { title: { absolute: `${t('decisionDetailTitle')} | ${ORG.name} Dashboard` } }
+  const locale = await getLocale();
+  const t = await getTranslations({ locale, namespace: 'dashboard.meta' });
+  return { title: { absolute: `${t('decisionDetailTitle')} | ${ORG.name} Dashboard` } };
 }
 
-type Props = { params: Promise<{ id: string }> }
+type Props = { params: Promise<{ id: string }> };
 
 export default async function DashboardDecisionPage({ params }: Props) {
-  const { id } = await params
-  const session = await auth()
+  const { id } = await params;
+  const session = await auth();
   if (!session?.user?.email) {
-    redirect(`${ROUTES.public.login}?callbackUrl=${encodeURIComponent(`/dashboard/decisions/${id}`)}`)
+    redirect(
+      `${ROUTES.public.login}?callbackUrl=${encodeURIComponent(`/dashboard/decisions/${id}`)}`,
+    );
   }
 
   const [userRow] = await db
     .select({ id: users.id })
     .from(users)
-    .where(eq(users.email, session.user.email))
+    .where(eq(users.email, session.user.email));
 
   if (!userRow) {
-    redirect(`${ROUTES.public.login}?callbackUrl=${encodeURIComponent(`/dashboard/decisions/${id}`)}`)
+    redirect(
+      `${ROUTES.public.login}?callbackUrl=${encodeURIComponent(`/dashboard/decisions/${id}`)}`,
+    );
   }
 
-  const decision = await getDecisionById(id, userRow.id)
-  if (!decision) notFound()
+  const decision = await getDecisionById(id, userRow.id);
+  if (!decision) notFound();
 
   // Only show voting/discussion decisions here
-  const decisionStatus = decision.status as DecisionStatus
+  const decisionStatus = decision.status as DecisionStatus;
   if (decisionStatus !== DECISION_STATUS.VOTING && decisionStatus !== DECISION_STATUS.DISCUSSION) {
-    redirect('/dashboard/decisions')
+    redirect('/dashboard/decisions');
   }
 
-  const participation = await getParticipationStatus(id)
-  const statusConf = DECISION_STATUS_CONFIG[decisionStatus]
-  const methodConf = VOTING_METHOD_CONFIG[decision.votingMethod as VotingMethod]
-  const typeConf = DECISION_TYPE_CONFIG[decision.decisionType as DecisionType]
-  const scopeConf = PARTICIPANT_SCOPE_CONFIG[decision.participantScope as ParticipantScope]
+  const participation = await getParticipationStatus(id);
+  const statusConf = DECISION_STATUS_CONFIG[decisionStatus];
+  const methodConf = VOTING_METHOD_CONFIG[decision.votingMethod as VotingMethod];
+  const typeConf = DECISION_TYPE_CONFIG[decision.decisionType as DecisionType];
+  const scopeConf = PARTICIPANT_SCOPE_CONFIG[decision.participantScope as ParticipantScope];
 
   // Time remaining calculation
-  let timeRemaining: string | null = null
+  let timeRemaining: string | null = null;
   if (decision.votingDeadline) {
     // eslint-disable-next-line react-hooks/purity -- server component, Date.now() is safe here
-    const msLeft = new Date(decision.votingDeadline).getTime() - Date.now()
+    const msLeft = new Date(decision.votingDeadline).getTime() - Date.now();
     if (msLeft > 0) {
-      const hoursLeft = Math.floor(msLeft / (1000 * 60 * 60))
+      const hoursLeft = Math.floor(msLeft / (1000 * 60 * 60));
       if (hoursLeft >= 48) {
-        timeRemaining = `${Math.floor(hoursLeft / 24)} Tage`
+        timeRemaining = `${Math.floor(hoursLeft / 24)} Tage`;
       } else if (hoursLeft >= 1) {
-        timeRemaining = `${hoursLeft} Stunden`
+        timeRemaining = `${hoursLeft} Stunden`;
       } else {
-        timeRemaining = 'weniger als 1 Stunde'
+        timeRemaining = 'weniger als 1 Stunde';
       }
     }
   }
 
-  const participationPct = participation?.progressPercent ?? 0
-  const votedCount = participation?.voted.length ?? 0
-  const totalCount = participation?.total ?? 0
-  const quorumTarget = participation?.quorumTarget ?? 0
-  const quorumMet = participation?.quorumMet ?? false
+  const participationPct = participation?.progressPercent ?? 0;
+  const votedCount = participation?.voted.length ?? 0;
+  const totalCount = participation?.total ?? 0;
+  const quorumTarget = participation?.quorumTarget ?? 0;
+  const quorumMet = participation?.quorumMet ?? false;
 
   return (
     <article className="mx-auto max-w-2xl px-4 py-12 sm:px-6 lg:px-8">
-
       {/* Status row */}
       <div className="mb-4 flex flex-wrap items-center gap-2">
         <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusConf.color}`}>
@@ -118,32 +121,30 @@ export default async function DashboardDecisionPage({ params }: Props) {
 
       {/* Description — what we're deciding */}
       {decision.description && (
-        <p className="mb-4 text-sm leading-relaxed text-text-secondary">
-          {decision.description}
-        </p>
+        <p className="mb-4 text-sm leading-relaxed text-text-secondary">{decision.description}</p>
       )}
 
       {/* Background / rationale — collapsible */}
-      {decision.background && (
-        <BackgroundSection background={decision.background} />
-      )}
+      {decision.background && <BackgroundSection background={decision.background} />}
 
       {/* Meta row: creator, deadline, time left */}
       <div className="mb-6 flex flex-wrap gap-x-4 gap-y-1 text-xs text-text-muted">
         <span>
           Erstellt von{' '}
-          <span className="text-text-secondary">{decision.creator.name ?? decision.creator.email}</span>
-          {' '}am {formatDateShort(decision.createdAt)}
+          <span className="text-text-secondary">
+            {decision.creator.name ?? decision.creator.email}
+          </span>{' '}
+          am {formatDateShort(decision.createdAt)}
         </span>
         {decision.votingDeadline && (
           <span>
             Frist:{' '}
-            <span className={timeRemaining ? 'text-warning-600 font-medium' : 'text-text-secondary'}>
+            <span
+              className={timeRemaining ? 'text-warning-600 font-medium' : 'text-text-secondary'}
+            >
               {formatDateShort(decision.votingDeadline)}
             </span>
-            {timeRemaining && (
-              <span className="ml-1 text-warning-500">(noch {timeRemaining})</span>
-            )}
+            {timeRemaining && <span className="ml-1 text-warning-500">(noch {timeRemaining})</span>}
           </span>
         )}
       </div>
@@ -152,15 +153,11 @@ export default async function DashboardDecisionPage({ params }: Props) {
       {decisionStatus === DECISION_STATUS.VOTING && totalCount > 0 && (
         <div className="mb-6 rounded-lg border border bg-surface-raised p-4">
           <div className="mb-2 flex items-center justify-between text-xs">
-            <span className="font-medium text-text-secondary">
-              Beteiligung
-            </span>
+            <span className="font-medium text-text-secondary">Beteiligung</span>
             <span className={quorumMet ? 'text-action font-semibold' : 'text-text-tertiary'}>
               {votedCount} / {totalCount} Stimmen
               {quorumTarget > 0 && (
-                <span className="ml-1.5 font-normal text-text-muted">
-                  (Quorum: {quorumTarget})
-                </span>
+                <span className="ml-1.5 font-normal text-text-muted">(Quorum: {quorumTarget})</span>
               )}
             </span>
           </div>
@@ -172,33 +169,38 @@ export default async function DashboardDecisionPage({ params }: Props) {
           </div>
           {!quorumMet && quorumTarget > 0 && (
             <p className="mt-1.5 text-xs text-text-muted">
-              {quorumTarget - votedCount} weitere Stimme{quorumTarget - votedCount !== 1 ? 'n' : ''} für Quorum nötig
+              {quorumTarget - votedCount} weitere Stimme{quorumTarget - votedCount !== 1 ? 'n' : ''}{' '}
+              für Quorum nötig
             </p>
           )}
         </div>
       )}
 
       {/* Options preview (for informational context, shown before ballot) */}
-      {decision.options.length > 0 && decisionStatus === DECISION_STATUS.VOTING && !decision.hasUserVoted && (
-        <div className="mb-4 rounded-lg border border bg-surface-base p-4">
-          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-text-muted">
-            Zur Auswahl stehen
-          </p>
-          <ul className="space-y-1.5">
-            {decision.options.map((opt) => (
-              <li key={opt.id} className="flex items-start gap-2 text-sm text-text-secondary">
-                <span className="mt-0.5 shrink-0 text-text-muted dark:text-text-secondary">—</span>
-                <span>
-                  <span className="font-medium">{opt.label}</span>
-                  {opt.description && (
-                    <span className="ml-1 text-text-muted">{opt.description}</span>
-                  )}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {decision.options.length > 0 &&
+        decisionStatus === DECISION_STATUS.VOTING &&
+        !decision.hasUserVoted && (
+          <div className="mb-4 rounded-lg border border bg-surface-base p-4">
+            <p className="mb-2 text-xs font-medium uppercase tracking-wide text-text-muted">
+              Zur Auswahl stehen
+            </p>
+            <ul className="space-y-1.5">
+              {decision.options.map((opt) => (
+                <li key={opt.id} className="flex items-start gap-2 text-sm text-text-secondary">
+                  <span className="mt-0.5 shrink-0 text-text-muted dark:text-text-secondary">
+                    —
+                  </span>
+                  <span>
+                    <span className="font-medium">{opt.label}</span>
+                    {opt.description && (
+                      <span className="ml-1 text-text-muted">{opt.description}</span>
+                    )}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
       {/* Voting Panel */}
       {decisionStatus === DECISION_STATUS.VOTING && (
@@ -206,7 +208,9 @@ export default async function DashboardDecisionPage({ params }: Props) {
           decisionId={decision.id}
           votingMethod={decision.votingMethod as VotingMethod}
           options={decision.options.flatMap((o) =>
-            o.id ? [{ id: o.id, label: o.label, description: o.description, imageUrl: o.imageUrl }] : []
+            o.id
+              ? [{ id: o.id, label: o.label, description: o.description, imageUrl: o.imageUrl }]
+              : [],
           )}
           dotCount={decision.dotCount}
           hasUserVoted={decision.hasUserVoted}
@@ -219,9 +223,10 @@ export default async function DashboardDecisionPage({ params }: Props) {
 
       {decisionStatus === DECISION_STATUS.DISCUSSION && (
         <div className="rounded-lg border border-subtle bg-surface-raised p-4 text-sm text-text-secondary">
-          Diese Abstimmung befindet sich noch in der Diskussionsphase. Du wirst per E-Mail benachrichtigt, wenn die Abstimmung geöffnet wird.
+          Diese Abstimmung befindet sich noch in der Diskussionsphase. Du wirst per E-Mail
+          benachrichtigt, wenn die Abstimmung geöffnet wird.
         </div>
       )}
     </article>
-  )
+  );
 }

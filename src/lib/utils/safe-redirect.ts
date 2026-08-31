@@ -11,16 +11,16 @@
  * Returns the input when safe, otherwise the supplied fallback.
  */
 export function sanitizeReturnTo(value: string | null | undefined, fallback: string): string {
-  if (!value || typeof value !== 'string') return fallback
+  if (!value || typeof value !== 'string') return fallback;
 
   // Reject control characters (\r, \n, \t, NUL) — used in header-injection-style bypasses
-  if (/[\x00-\x1f]/.test(value)) return fallback
+  if (/[\x00-\x1f]/.test(value)) return fallback;
 
   // Must start with a single forward slash
-  if (!value.startsWith('/')) return fallback
+  if (!value.startsWith('/')) return fallback;
 
   // Reject `//evil.com` (protocol-relative) and `/\evil.com` (browser normalises \ → /)
-  if (value.startsWith('//') || value.startsWith('/\\')) return fallback
+  if (value.startsWith('//') || value.startsWith('/\\')) return fallback;
 
-  return value
+  return value;
 }

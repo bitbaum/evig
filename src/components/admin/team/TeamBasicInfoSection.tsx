@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import {
   DEPARTMENT_OPTIONS,
@@ -7,15 +7,15 @@ import {
   EMPLOYMENT_TYPE_LABELS,
   type Department,
   type EmploymentType,
-} from '@/config/team'
-import type { TeamProfileFormState } from './useTeamProfileForm'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
-import { FormField } from '@/components/ui/form-field'
+} from '@/config/team';
+import type { TeamProfileFormState } from './useTeamProfileForm';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { FormField } from '@/components/ui/form-field';
 
 interface Props {
-  form: TeamProfileFormState
-  onChange: (field: string, value: string | boolean) => void
+  form: TeamProfileFormState;
+  onChange: (field: string, value: string | boolean) => void;
 }
 
 export function TeamBasicInfoSection({ form, onChange }: Props) {
@@ -38,7 +38,7 @@ export function TeamBasicInfoSection({ form, onChange }: Props) {
           onChange={(e) => onChange('department', e.target.value)}
         >
           <option value="">Keine Abteilung</option>
-          {DEPARTMENT_OPTIONS.map(dept => (
+          {DEPARTMENT_OPTIONS.map((dept) => (
             <option key={dept} value={dept}>
               {DEPARTMENT_LABELS[dept as Department]}
             </option>
@@ -53,7 +53,7 @@ export function TeamBasicInfoSection({ form, onChange }: Props) {
           onChange={(e) => onChange('employment_type', e.target.value)}
         >
           <option value="">Auswählen...</option>
-          {EMPLOYMENT_TYPE_OPTIONS.map(type => (
+          {EMPLOYMENT_TYPE_OPTIONS.map((type) => (
             <option key={type} value={type}>
               {EMPLOYMENT_TYPE_LABELS[type as EmploymentType]}
             </option>
@@ -112,5 +112,5 @@ export function TeamBasicInfoSection({ form, onChange }: Props) {
         </p>
       </div>
     </div>
-  )
+  );
 }

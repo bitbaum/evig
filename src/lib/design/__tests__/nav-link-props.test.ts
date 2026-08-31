@@ -9,38 +9,38 @@
  * looks like at the margin, so `navLinkProps` returns both together and the two
  * decisions cannot drift apart.
  */
-import { navLinkClass, navLinkProps, NAV_STATE } from '@/lib/design/nav'
+import { navLinkClass, navLinkProps, NAV_STATE } from '@/lib/design/nav';
 
 describe('navLinkProps', () => {
   it('announces the active link as the current page', () => {
-    expect(navLinkProps('sidebar', true)['aria-current']).toBe('page')
-  })
+    expect(navLinkProps('sidebar', true)['aria-current']).toBe('page');
+  });
 
   it('leaves aria-current off inactive links rather than setting it false', () => {
     // `aria-current="false"` is a valid token meaning "not current", but it is
     // noise in the accessibility tree — omit the attribute instead.
-    expect(navLinkProps('sidebar', false)['aria-current']).toBeUndefined()
-  })
+    expect(navLinkProps('sidebar', false)['aria-current']).toBeUndefined();
+  });
 
   it('returns exactly the className navLinkClass would have', () => {
     for (const shape of Object.keys(NAV_STATE) as (keyof typeof NAV_STATE)[]) {
       for (const active of [true, false]) {
-        expect(navLinkProps(shape, active).className).toBe(navLinkClass(shape, active))
+        expect(navLinkProps(shape, active).className).toBe(navLinkClass(shape, active));
       }
     }
-  })
+  });
 
   it('passes an extra className through unchanged', () => {
     expect(navLinkProps('sidebar', true, 'justify-center').className).toBe(
       navLinkClass('sidebar', true, 'justify-center'),
-    )
-  })
+    );
+  });
 
   it('marks the active state for every nav shape, not just the sidebar', () => {
     // The bug was one surface forgetting. A helper that only worked for the
     // shape that happened to be broken would not close the class.
     for (const shape of Object.keys(NAV_STATE) as (keyof typeof NAV_STATE)[]) {
-      expect(navLinkProps(shape, true)['aria-current']).toBe('page')
+      expect(navLinkProps(shape, true)['aria-current']).toBe('page');
     }
-  })
-})
+  });
+});

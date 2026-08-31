@@ -7,58 +7,58 @@
  * Last reconciled: 2026-02-16
  */
 
-import { getDefaultValue, getDefaultNumeric } from '@/lib/org-numbers.defaults'
-import { ORG } from '@/config/org'
+import { getDefaultValue, getDefaultNumeric } from '@/lib/org-numbers.defaults';
+import { ORG } from '@/config/org';
 
 export interface AboutMetric {
-  value: string
-  label: string
+  value: string;
+  label: string;
 }
 
 export interface AboutMetricGroup {
-  title: string
-  metrics: AboutMetric[]
+  title: string;
+  metrics: AboutMetric[];
 }
 
 export interface AboutCard {
-  title: string
-  description: string
-  features?: string[]
+  title: string;
+  description: string;
+  features?: string[];
 }
 
 export interface AboutSection {
-  title: string
-  description?: string
-  backgroundColor: 'white' | 'gray'
-  layout: 'single' | 'grid-2' | 'grid-3'
-  cards: AboutCard[]
+  title: string;
+  description?: string;
+  backgroundColor: 'white' | 'gray';
+  layout: 'single' | 'grid-2' | 'grid-3';
+  cards: AboutCard[];
 }
 
 export interface AboutHero {
-  title: string
-  description: string
-  backgroundColor: string
+  title: string;
+  description: string;
+  backgroundColor: string;
   ctas: Array<{
-    text: string
-    href: string
-    variant: 'primary' | 'outline'
-  }>
+    text: string;
+    href: string;
+    variant: 'primary' | 'outline';
+  }>;
 }
 
 export interface AboutPageConfig {
-  hero: AboutHero
-  sections: AboutSection[]
-  metrics: AboutMetricGroup[]
+  hero: AboutHero;
+  sections: AboutSection[];
+  metrics: AboutMetricGroup[];
   image: {
-    src: string
-    alt: string
-  }
+    src: string;
+    alt: string;
+  };
   cta: {
-    title: string
-    description: string
-    buttonText: string
-    href: string
-  }
+    title: string;
+    description: string;
+    buttonText: string;
+    href: string;
+  };
 }
 
 export const aboutConfig: AboutPageConfig = {
@@ -70,14 +70,14 @@ export const aboutConfig: AboutPageConfig = {
       {
         text: 'Mitmachen',
         href: '/get-involved',
-        variant: 'primary'
+        variant: 'primary',
       },
       {
         text: 'FAQ',
         href: '/faq',
-        variant: 'outline'
-      }
-    ]
+        variant: 'outline',
+      },
+    ],
   },
   sections: [
     {
@@ -93,10 +93,10 @@ export const aboutConfig: AboutPageConfig = {
             'Gemeinnütziger Verein seit 2003',
             'Nachhaltige IT-Lösungen für alle',
             'Reparatur statt Entsorgung',
-            'Offene Türen für die Community'
-          ]
-        }
-      ]
+            'Offene Türen für die Community',
+          ],
+        },
+      ],
     },
     {
       title: 'Unsere Wirkung',
@@ -106,36 +106,39 @@ export const aboutConfig: AboutPageConfig = {
       cards: [
         {
           title: 'Hardware-Recycling',
-          description: 'Wir reparieren und überholen IT-Geräte jeden Alters und schenken ihnen ein zweites Leben. So reduzieren wir Elektroschrott und ermöglichen Zugang zu Technik für alle.',
+          description:
+            'Wir reparieren und überholen IT-Geräte jeden Alters und schenken ihnen ein zweites Leben. So reduzieren wir Elektroschrott und ermöglichen Zugang zu Technik für alle.',
           features: [
             'Von alten MacBooks bis zu Vintage-Computern',
             'Jedes Gerät verdient eine zweite Chance',
             'Reduzierung von Elektroschrott',
-            'Zugang zu Technik für alle'
-          ]
+            'Zugang zu Technik für alle',
+          ],
         },
         {
           title: 'Open Source-Software',
-          description: 'Wir setzen ausschliesslich auf Linux und andere Open‑Source‑Lösungen. Diese Technologien halten ältere Geräte effizient am Laufen und bieten Sicherheit durch Kontrolle über das eigene System.',
+          description:
+            'Wir setzen ausschliesslich auf Linux und andere Open‑Source‑Lösungen. Diese Technologien halten ältere Geräte effizient am Laufen und bieten Sicherheit durch Kontrolle über das eigene System.',
           features: [
             'Linux und Open Source-Lösungen',
             'Keine Installation von Windows oder macOS',
             'Sicherheit durch Kontrolle',
             'Workshops zu nachhaltiger IT',
-            'Praxisnahes Wissen vermitteln'
-          ]
+            'Praxisnahes Wissen vermitteln',
+          ],
         },
         {
           title: 'Gemeinschaft & Soziales',
-          description: 'Wir schaffen sinnvolle Arbeitsplätze für Menschen, die es auf dem regulären Arbeitsmarkt schwer haben. Mit unserem Tauschsystem kann man Dienstleistungen gegen Technik tauschen.',
+          description:
+            'Wir schaffen sinnvolle Arbeitsplätze für Menschen, die es auf dem regulären Arbeitsmarkt schwer haben. Mit unserem Tauschsystem kann man Dienstleistungen gegen Technik tauschen.',
           features: [
             'Arbeitsplätze schaffen',
             'Tauschsystem für Technik',
             'Hosting für Schweizer KMU',
-            'Daten bleiben in der Schweiz'
-          ]
-        }
-      ]
+            'Daten bleiben in der Schweiz',
+          ],
+        },
+      ],
     },
     {
       title: 'Zahlen & Fakten',
@@ -149,8 +152,8 @@ export const aboutConfig: AboutPageConfig = {
           features: [
             'Mehrjährige Lebensdauerverlängerung pro Gerät',
             'Zahlreiche Geräte jährlich vor dem Entsorgen gerettet',
-            'Hoher Anteil erfolgreich wiederverwendeter gespendeter Geräte'
-          ]
+            'Hoher Anteil erfolgreich wiederverwendeter gespendeter Geräte',
+          ],
         },
         {
           title: 'Soziale Wirkung',
@@ -158,10 +161,10 @@ export const aboutConfig: AboutPageConfig = {
           features: [
             `${getDefaultValue('people_helped_total')} Menschen seit der Gründung geschult und engagiert`,
             'Ein bedeutender Teil der Praktikant:innen findet den Einstieg in die IT',
-            'Zahlreiche erfolgreiche Wiedereinstiege ins Berufsleben'
-          ]
-        }
-      ]
+            'Zahlreiche erfolgreiche Wiedereinstiege ins Berufsleben',
+          ],
+        },
+      ],
     },
     {
       title: 'Unsere Geschichte',
@@ -176,11 +179,11 @@ export const aboutConfig: AboutPageConfig = {
             `Gegründet ${getDefaultNumeric('founding_year')} in der Toni Molkerei`,
             'Heute eine Bewegung für nachhaltige IT',
             `Team aus ${getDefaultValue('team_size_community')} engagierten Menschen`,
-            'Anlaufstelle für Privatpersonen und Unternehmen'
-          ]
-        }
-      ]
-    }
+            'Anlaufstelle für Privatpersonen und Unternehmen',
+          ],
+        },
+      ],
+    },
   ],
   metrics: [
     {
@@ -188,33 +191,43 @@ export const aboutConfig: AboutPageConfig = {
       metrics: [
         { value: 'Mehrere Jahre', label: 'Durchschnittliche Lebensdauerverlängerung pro Gerät' },
         { value: 'Zahlreiche', label: 'Geräte, die wir jährlich vor dem Entsorgen retten' },
-        { value: 'Hoher Anteil', label: 'Gespendete Geräte, die wir erfolgreich wiederverwenden' }
-      ]
+        { value: 'Hoher Anteil', label: 'Gespendete Geräte, die wir erfolgreich wiederverwenden' },
+      ],
     },
     {
       title: 'Soziale Wirkung',
       metrics: [
-        { value: getDefaultValue('people_helped_total'), label: 'Menschen seit der Gründung geschult/engagiert' },
-        { value: 'Viele', label: 'Praktikant:innen finden den Einstieg in die IT oder eine Weiterbildung' },
-        { value: 'Zahlreiche', label: 'Erfolgreiche Wiedereinstiege ins Berufsleben durch unser Programm' }
-      ]
-    }
+        {
+          value: getDefaultValue('people_helped_total'),
+          label: 'Menschen seit der Gründung geschult/engagiert',
+        },
+        {
+          value: 'Viele',
+          label: 'Praktikant:innen finden den Einstieg in die IT oder eine Weiterbildung',
+        },
+        {
+          value: 'Zahlreiche',
+          label: 'Erfolgreiche Wiedereinstiege ins Berufsleben durch unser Programm',
+        },
+      ],
+    },
   ],
   image: {
     src: '/images/Article Pics/storefront.webp',
-    alt: `${ORG.name} Schaufenster mit Computern und Geräten`
+    alt: `${ORG.name} Schaufenster mit Computern und Geräten`,
   },
   cta: {
     title: 'Werde Teil unserer Mission',
-    description: 'Ob du ein Gerät reparieren lassen möchtest, mehr über nachhaltige IT erfahren willst oder unsere Sache unterstützen möchtest – bei uns bist du willkommen. Gemeinsam machen wir Technik nachhaltiger und zugänglicher für alle.',
+    description:
+      'Ob du ein Gerät reparieren lassen möchtest, mehr über nachhaltige IT erfahren willst oder unsere Sache unterstützen möchtest – bei uns bist du willkommen. Gemeinsam machen wir Technik nachhaltiger und zugänglicher für alle.',
     buttonText: 'Mitmachen',
-    href: '/get-involved'
-  }
-}
+    href: '/get-involved',
+  },
+};
 
 /**
  * Get about page configuration
  */
 export function getAboutConfig(): AboutPageConfig {
-  return aboutConfig
+  return aboutConfig;
 }

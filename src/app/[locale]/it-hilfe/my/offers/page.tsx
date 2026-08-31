@@ -1,19 +1,12 @@
-'use client'
+'use client';
 
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { Link } from '@/i18n/navigation'
-import { Button } from '@/components/ui/button'
-import {
-  ArrowRight,
-  MapPin,
-  Clock,
-  Heart,
-  FileText,
-  Wrench,
-} from 'lucide-react'
-import Heading from '@/components/ui/Heading'
-import { useTranslations } from 'next-intl'
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { Link } from '@/i18n/navigation';
+import { Button } from '@/components/ui/button';
+import { ArrowRight, MapPin, Clock, Heart, FileText, Wrench } from 'lucide-react';
+import Heading from '@/components/ui/Heading';
+import { useTranslations } from 'next-intl';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import {
   getCategoryById,
   getOfferStatusById,
@@ -21,14 +14,14 @@ import {
   OFFER_STATUSES,
   OFFER_STATUS,
   REQUEST_STATUS,
-} from '@/config/it-hilfe'
-import { useMyOffers } from '@/hooks/useMyOffers'
-import { ROUTES } from '@/config/routes'
-import { PageShell } from '@/components/layout/PageShell'
-import { StatusBadge } from '@/components/ui/status-badge'
+} from '@/config/it-hilfe';
+import { useMyOffers } from '@/hooks/useMyOffers';
+import { ROUTES } from '@/config/routes';
+import { PageShell } from '@/components/layout/PageShell';
+import { StatusBadge } from '@/components/ui/status-badge';
 
 export default function MyOffersPage() {
-  const t = useTranslations('itHelp.myOffers')
+  const t = useTranslations('itHelp.myOffers');
 
   const {
     sessionStatus,
@@ -45,14 +38,14 @@ export default function MyOffersPage() {
   } = useMyOffers({
     errorMessage: t('errorMessage'),
     withdrawError: t('withdrawError'),
-  })
+  });
 
   if (sessionStatus === 'loading' || (sessionStatus === 'authenticated' && loading)) {
     return (
       <div className="flex items-center justify-center py-24">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-action"></div>
       </div>
-    )
+    );
   }
 
   return (
@@ -70,7 +63,10 @@ export default function MyOffersPage() {
                 <FileText className="w-4 h-4" aria-hidden="true" />
                 {t('myRequestsButton')}
               </Button>
-              <Link href={ROUTES.public.itHilfe} className="ui-public-cta inline-flex items-center gap-2">
+              <Link
+                href={ROUTES.public.itHilfe}
+                className="ui-public-cta inline-flex items-center gap-2"
+              >
                 <Heart className="w-4 h-4" aria-hidden="true" />
                 {t('browseRequests')}
               </Link>
@@ -80,7 +76,6 @@ export default function MyOffersPage() {
       </section>
 
       <PageShell maxWidth="5xl" py="py-8 sm:py-12">
-
         <div className="card-shell p-4 mb-6">
           <div className="flex flex-wrap gap-2">
             <Button
@@ -127,7 +122,10 @@ export default function MyOffersPage() {
               {statusFilter ? t('emptyFilteredMessage') : t('emptyNoFilterMessage')}
             </p>
             {!statusFilter && (
-              <Link href={ROUTES.public.itHilfe} className="ui-public-cta inline-flex items-center gap-2">
+              <Link
+                href={ROUTES.public.itHilfe}
+                className="ui-public-cta inline-flex items-center gap-2"
+              >
                 <Heart className="w-5 h-5" aria-hidden="true" />
                 {t('browseRequests')}
               </Link>
@@ -136,10 +134,10 @@ export default function MyOffersPage() {
         ) : (
           <div className="space-y-4">
             {offers.map((offer) => {
-              const categoryConfig = getCategoryById(offer.request.categoryId)
-              const offerStatusConfig = getOfferStatusById(offer.status)
-              const requestStatusConfig = getRequestStatusById(offer.request.status)
-              const CategoryIcon = categoryConfig?.icon || Wrench
+              const categoryConfig = getCategoryById(offer.request.categoryId);
+              const offerStatusConfig = getOfferStatusById(offer.status);
+              const requestStatusConfig = getRequestStatusById(offer.request.status);
+              const CategoryIcon = categoryConfig?.icon || Wrench;
               // Helper-side mirror of 627fc731 on /it-hilfe/my (requester-side):
               // when the underlying request has silently expired (status='open'
               // AND expires_at past), the helper's PENDING offer effectively
@@ -148,25 +146,28 @@ export default function MyOffersPage() {
               const requestExpired =
                 offer.request.status === REQUEST_STATUS.OPEN &&
                 offer.request.expiresAt != null &&
-                new Date(offer.request.expiresAt) < new Date()
+                new Date(offer.request.expiresAt) < new Date();
 
               return (
-                <div
-                  key={offer.id}
-                  className="card-shell hover:border-strong transition-all"
-                >
+                <div key={offer.id} className="card-shell hover:border-strong transition-all">
                   <Link href={`/it-hilfe/${offer.requestId}`} className="block p-6 group">
                     <div className="flex items-start gap-4">
-                      <div className={`p-3 ${categoryConfig?.color || 'bg-surface-overlay'} rounded-xl`}>
+                      <div
+                        className={`p-3 ${categoryConfig?.color || 'bg-surface-overlay'} rounded-xl`}
+                      >
                         <CategoryIcon className="w-6 h-6 text-white" />
                       </div>
 
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1 flex-wrap">
-                          <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${offerStatusConfig?.badgeClass || 'bg-surface-raised text-text-secondary'}`}>
+                          <span
+                            className={`px-2.5 py-1 rounded-full text-xs font-medium ${offerStatusConfig?.badgeClass || 'bg-surface-raised text-text-secondary'}`}
+                          >
                             {t('offerLabel')} {offerStatusConfig?.name || offer.status}
                           </span>
-                          <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${requestStatusConfig?.badgeClass || 'bg-surface-raised text-text-secondary'}`}>
+                          <span
+                            className={`px-2.5 py-1 rounded-full text-xs font-medium ${requestStatusConfig?.badgeClass || 'bg-surface-raised text-text-secondary'}`}
+                          >
                             {t('requestLabel')} {requestStatusConfig?.name || offer.request.status}
                           </span>
                           {requestExpired && (
@@ -174,7 +175,10 @@ export default function MyOffersPage() {
                           )}
                         </div>
 
-                        <Heading level={3} className="font-semibold text-text-primary mb-2 group-hover:text-action transition-colors">
+                        <Heading
+                          level={3}
+                          className="font-semibold text-text-primary mb-2 group-hover:text-action transition-colors"
+                        >
                           {offer.request.title}
                         </Heading>
 
@@ -187,7 +191,9 @@ export default function MyOffersPage() {
                         <div className="flex flex-wrap items-center gap-4 text-sm text-text-tertiary">
                           <div className="flex items-center gap-1">
                             <MapPin className="w-4 h-4" />
-                            <span>{offer.request.city}, {offer.request.canton}</span>
+                            <span>
+                              {offer.request.city}, {offer.request.canton}
+                            </span>
                           </div>
                           {offer.estimatedTime && (
                             <div className="flex items-center gap-1">
@@ -223,20 +229,20 @@ export default function MyOffersPage() {
                     </div>
                   )}
                 </div>
-              )
+              );
             })}
           </div>
         )}
 
-      <ConfirmDialog
-        isOpen={!!pendingWithdraw}
-        title={t('withdrawButton')}
-        message={t('withdrawConfirm')}
-        itemName={pendingWithdraw?.request.title}
-        onConfirm={doWithdraw}
-        onClose={() => setPendingWithdraw(null)}
-      />
+        <ConfirmDialog
+          isOpen={!!pendingWithdraw}
+          title={t('withdrawButton')}
+          message={t('withdrawConfirm')}
+          itemName={pendingWithdraw?.request.title}
+          onConfirm={doWithdraw}
+          onClose={() => setPendingWithdraw(null)}
+        />
       </PageShell>
     </div>
-  )
+  );
 }

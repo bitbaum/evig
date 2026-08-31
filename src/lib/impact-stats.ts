@@ -13,24 +13,24 @@
  * page, and the commerce strip all show the same number.
  */
 
-import 'server-only'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
-import { LISTING_STATUS } from '@/config/marketplace'
-import { estimateCO2Savings } from '@/config/co2-impact'
-import { logger } from '@/lib/logger'
+import 'server-only';
+import { query } from '@/lib/auth/db';
+import { TABLE_NAMES } from '@/config/database';
+import { LISTING_STATUS } from '@/config/marketplace';
+import { estimateCO2Savings } from '@/config/co2-impact';
+import { logger } from '@/lib/logger';
 
 export interface ImpactStats {
-  totalDevices: number
-  soldDevices: number
+  totalDevices: number;
+  soldDevices: number;
   /** Tonnes CO₂e avoided, rounded to 1 decimal. */
-  co2SavedTons: number
+  co2SavedTons: number;
   /** Exact kg CO₂e avoided — use with co2DisplayValue() so small totals show as kg, not "0 t". */
-  co2SavedKg: number
-  repairs: number
-  users: number
+  co2SavedKg: number;
+  repairs: number;
+  users: number;
   /** `true` when computed live from the DB; `false` when DB was unavailable and defaults were used. */
-  live: boolean
+  live: boolean;
 }
 
 export async function fetchImpactStats(): Promise<ImpactStats> {
@@ -42,27 +42,23 @@ export async function fetchImpactStats(): Promise<ImpactStats> {
          WHERE status != '${LISTING_STATUS.REMOVED}'
          GROUP BY category, status`,
       ),
-      query<{ count: string }>(
-        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.IT_HILFE_REQUESTS}`,
-      ),
-      query<{ count: string }>(
-        `SELECT COUNT(*) as count FROM ${TABLE_NAMES.USERS}`,
-      ),
-    ])
+      query<{ count: string }>(`SELECT COUNT(*) as count FROM ${TABLE_NAMES.IT_HILFE_REQUESTS}`),
+      query<{ count: string }>(`SELECT COUNT(*) as count FROM ${TABLE_NAMES.USERS}`),
+    ]);
 
-    let totalDevices = 0
-    let soldDevices = 0
-    let co2SavedKg = 0
+    let totalDevices = 0;
+    let soldDevices = 0;
+    let co2SavedKg = 0;
 
     for (const row of listingRows.rows) {
-      const count = Number(row.count)
-      totalDevices += count
+      const count = Number(row.count);
+      totalDevices += count;
       if (row.status === LISTING_STATUS.SOLD) {
-        soldDevices += count
+        soldDevices += count;
         // SSOT: ADEME-based per-category factor. Categories without a
         // defensible factor contribute NOTHING (conservative under-count).
-        const perDevice = estimateCO2Savings(row.category)
-        if (perDevice) co2SavedKg += count * perDevice
+        const perDevice = estimateCO2Savings(row.category);
+        if (perDevice) co2SavedKg += count * perDevice;
       }
     }
 
@@ -74,9 +70,9 @@ export async function fetchImpactStats(): Promise<ImpactStats> {
       repairs: Number(repairRows.rows[0]?.count || 0),
       users: Number(userRows.rows[0]?.count || 0),
       live: true,
-    }
+    };
   } catch (error) {
-    logger.warn('fetchImpactStats: DB unavailable, returning zeros', { error })
+    logger.warn('fetchImpactStats: DB unavailable, returning zeros', { error });
     return {
       totalDevices: 0,
       soldDevices: 0,
@@ -85,6 +81,6 @@ export async function fetchImpactStats(): Promise<ImpactStats> {
       repairs: 0,
       users: 0,
       live: false,
-    }
+    };
   }
 }

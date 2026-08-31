@@ -1,16 +1,16 @@
-import { useState } from 'react'
-import Link from 'next/link'
-import { AdminDashboard, AINativeCMSProvider } from '@ai-native-cms/react'
-import { createDefaultConfig } from '@ai-native-cms/core'
-import '@ai-native-cms/react/styles'
+import { useState } from 'react';
+import Link from 'next/link';
+import { AdminDashboard, AINativeCMSProvider } from '@ai-native-cms/react';
+import { createDefaultConfig } from '@ai-native-cms/core';
+import '@ai-native-cms/react/styles';
 
 // Configure AI-Native CMS
 const cmsConfig = createDefaultConfig({
   name: 'My Next.js Website',
   domain: 'localhost:3000',
   framework: 'nextjs',
-  aiProvider: 'template'
-})
+  aiProvider: 'template',
+});
 
 // Override with production settings
 cmsConfig.storage = {
@@ -20,18 +20,18 @@ cmsConfig.storage = {
     port: parseInt(process.env.DB_PORT || '5432'),
     database: process.env.DB_NAME || 'ai_cms',
     username: process.env.DB_USER || 'postgres',
-    password: process.env.DB_PASSWORD || 'password'
-  }
-}
+    password: process.env.DB_PASSWORD || 'password',
+  },
+};
 
 export default function AdminPage() {
-  const [selectedSuggestion, setSelectedSuggestion] = useState<any>(null)
+  const [selectedSuggestion, setSelectedSuggestion] = useState<any>(null);
 
   return (
-    <AINativeCMSProvider 
+    <AINativeCMSProvider
       config={cmsConfig}
       onError={(error) => {
-        console.error('CMS initialization failed:', error)
+        console.error('CMS initialization failed:', error);
       }}
     >
       <div className="min-h-screen bg-gray-100">
@@ -40,9 +40,7 @@ export default function AdminPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center py-6">
               <div className="flex items-center">
-                <h1 className="text-3xl font-bold text-gray-900">
-                  Admin Dashboard
-                </h1>
+                <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
               </div>
               <nav className="flex space-x-4">
                 <Link
@@ -72,11 +70,11 @@ export default function AdminPage() {
                 showFilters={true}
                 pageSize={10}
                 onSuggestionSelect={(suggestion) => {
-                  setSelectedSuggestion(suggestion)
-                  console.log('Selected suggestion:', suggestion)
+                  setSelectedSuggestion(suggestion);
+                  console.log('Selected suggestion:', suggestion);
                 }}
                 onStatusUpdate={(suggestionId, newStatus) => {
-                  console.log(`Updated suggestion ${suggestionId} to ${newStatus}`)
+                  console.log(`Updated suggestion ${suggestionId} to ${newStatus}`);
                 }}
               />
             </div>
@@ -89,19 +87,22 @@ export default function AdminPage() {
             <div className="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
               <div className="mt-3">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-medium text-gray-900">
-                    Suggestion Details
-                  </h3>
+                  <h3 className="text-lg font-medium text-gray-900">Suggestion Details</h3>
                   <button
                     onClick={() => setSelectedSuggestion(null)}
                     className="text-gray-400 hover:text-gray-600"
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
                     </svg>
                   </button>
                 </div>
-                
+
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -114,15 +115,11 @@ export default function AdminPage() {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Page
-                      </label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Page</label>
                       <p className="text-gray-900">{selectedSuggestion.page}</p>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Status
-                      </label>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
                       <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">
                         {selectedSuggestion.status}
                       </span>
@@ -130,19 +127,15 @@ export default function AdminPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Contact
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Contact</label>
                     <p className="text-gray-900">{selectedSuggestion.contact || 'Anonymous'}</p>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      URL
-                    </label>
-                    <a 
-                      href={selectedSuggestion.url} 
-                      target="_blank" 
+                    <label className="block text-sm font-medium text-gray-700 mb-1">URL</label>
+                    <a
+                      href={selectedSuggestion.url}
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="text-indigo-600 hover:text-indigo-800 underline"
                     >
@@ -171,8 +164,8 @@ export default function AdminPage() {
                       </div>
                       <button
                         onClick={() => {
-                          navigator.clipboard.writeText(selectedSuggestion.aiInstructions)
-                          alert('Instructions copied to clipboard!')
+                          navigator.clipboard.writeText(selectedSuggestion.aiInstructions);
+                          alert('Instructions copied to clipboard!');
                         }}
                         className="mt-2 inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200"
                       >
@@ -206,5 +199,5 @@ export default function AdminPage() {
         )}
       </div>
     </AINativeCMSProvider>
-  )
+  );
 }

@@ -10,8 +10,8 @@
  *   const result = await db.select().from(users).where(eq(users.email, email))
  */
 
-import { drizzle } from 'drizzle-orm/node-postgres'
-import { getPool } from '@/lib/auth/db-connection'
-import * as schema from './schema'
+import { drizzle } from 'drizzle-orm/node-postgres';
+import { getPool } from '@/lib/auth/db-connection';
+import * as schema from './schema';
 
-export const db = drizzle(getPool(), { schema })
+export const db = drizzle(getPool(), { schema });

@@ -1,5 +1,5 @@
-import { z } from 'zod'
-import { swissPostalCodeSchema } from './common'
+import { z } from 'zod';
+import { swissPostalCodeSchema } from './common';
 
 // NOTE: empty profile columns come back from GET /api/user/profile as `null`, so
 // every optional field must also accept `null` (= "empty/cleared") — otherwise
@@ -13,7 +13,12 @@ export const UpdateProfileSchema = z.object({
 
   // Public profile
   avatar_url: z.string().url('Ungültige URL').or(z.literal('')).nullish(),
-  display_name: z.string().min(2, 'Anzeigename muss mindestens 2 Zeichen lang sein').max(50).or(z.literal('')).nullish(),
+  display_name: z
+    .string()
+    .min(2, 'Anzeigename muss mindestens 2 Zeichen lang sein')
+    .max(50)
+    .or(z.literal(''))
+    .nullish(),
   bio: z.string().max(500, 'Bio darf maximal 500 Zeichen lang sein').nullish(),
   profile_visibility: z.enum(['public', 'private']).nullish(),
 
@@ -49,10 +54,15 @@ export const UpdateProfileSchema = z.object({
   skills: z.array(z.string()).nullish(),
   expertise_areas: z.array(z.string()).nullish(),
   service_radius_km: z.number().int().min(0).nullish(),
-  availability: z.record(z.string(), z.object({
-    available: z.boolean(),
-    hours: z.string().optional(),
-  })).nullish(),
-})
+  availability: z
+    .record(
+      z.string(),
+      z.object({
+        available: z.boolean(),
+        hours: z.string().optional(),
+      }),
+    )
+    .nullish(),
+});
 
-export type UpdateProfileInput = z.infer<typeof UpdateProfileSchema>
+export type UpdateProfileInput = z.infer<typeof UpdateProfileSchema>;

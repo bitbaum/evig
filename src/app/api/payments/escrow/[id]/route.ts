@@ -1,49 +1,55 @@
-import { withAuth } from '@/lib/api/middleware'
-import { captureTransaction, cancelTransaction } from '@/lib/payments/payrexx-client'
-import { db } from '@/db'
-import { escrowAccounts, escrowReleases, paymentTransactions, users } from '@/db/schema'
-import { eq, and, sql } from 'drizzle-orm'
-import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
-import { PAYMENT_STATUS, ESCROW_STATUS, PAYMENT_TRANSACTION_TYPE } from '@/config/payment-status'
-import { logger } from '@/lib/logger'
-import { canAccessFinance } from '@/lib/permissions'
-import { validateBody, EscrowReleaseSchema } from '@/lib/schemas'
+import { withAuth } from '@/lib/api/middleware';
+import { captureTransaction, cancelTransaction } from '@/lib/payments/payrexx-client';
+import { db } from '@/db';
+import { escrowAccounts, escrowReleases, paymentTransactions, users } from '@/db/schema';
+import { eq, and, sql } from 'drizzle-orm';
+import {
+  apiError,
+  apiSuccess,
+  apiUnauthorized,
+  apiNotFound,
+  apiBadRequest,
+} from '@/lib/api/helpers';
+import { PAYMENT_STATUS, ESCROW_STATUS, PAYMENT_TRANSACTION_TYPE } from '@/config/payment-status';
+import { logger } from '@/lib/logger';
+import { canAccessFinance } from '@/lib/permissions';
+import { validateBody, EscrowReleaseSchema } from '@/lib/schemas';
 
 interface EscrowRow {
-  [key: string]: unknown
-  id: string
-  transaction_id: string
-  buyer_id: string
-  seller_id: string | null
-  total_amount_cents: number
-  held_amount_cents: number
-  released_amount_cents: number
-  currency: string
-  status: string
-  auto_release_days: number
-  release_deadline: string
-  created_at: string
-  released_at: string | null
-  provider_transaction_id: string
-  transaction_amount: number
-  buyer_name: string
-  buyer_email: string
-  seller_name: string | null
-  seller_email: string | null
+  [key: string]: unknown;
+  id: string;
+  transaction_id: string;
+  buyer_id: string;
+  seller_id: string | null;
+  total_amount_cents: number;
+  held_amount_cents: number;
+  released_amount_cents: number;
+  currency: string;
+  status: string;
+  auto_release_days: number;
+  release_deadline: string;
+  created_at: string;
+  released_at: string | null;
+  provider_transaction_id: string;
+  transaction_amount: number;
+  buyer_name: string;
+  buyer_email: string;
+  seller_name: string | null;
+  seller_email: string | null;
   releases: Array<{
-    id: string
-    amount_cents: number
-    release_type: string
-    reason: string
-    released_at: string
-    released_by: string
-  }> | null
+    id: string;
+    amount_cents: number;
+    release_type: string;
+    reason: string;
+    released_at: string;
+    released_by: string;
+  }> | null;
 }
 
 // GET /api/payments/escrow/[id] - Get escrow account details
 export const GET = withAuth<{ id: string }>(async (request, session, context) => {
   try {
-    const { id: escrowId } = context!.params!
+    const { id: escrowId } = context!.params!;
 
     // Complex query with ARRAY_AGG — use raw SQL via Drizzle sql template
     const escrowResult = await db.execute<EscrowRow>(sql`
@@ -73,19 +79,19 @@ export const GET = withAuth<{ id: string }>(async (request, session, context) =>
       LEFT JOIN ${escrowReleases} er ON ea.id = er.escrow_account_id
       WHERE ea.id = ${escrowId}
       GROUP BY ea.id, pt.provider_transaction_id, pt.amount_cents, pt.currency, b.name, b.email, s.name, s.email
-    `)
+    `);
 
     if (escrowResult.rows.length === 0) {
-      return apiNotFound('Treuhandkonto nicht gefunden')
+      return apiNotFound('Treuhandkonto nicht gefunden');
     }
 
-    const escrow = escrowResult.rows[0]
+    const escrow = escrowResult.rows[0];
 
     // Check permissions - buyer, seller, or admin can view
-    const isAdmin = canAccessFinance(session.user)
+    const isAdmin = canAccessFinance(session.user);
 
     if (escrow.buyer_id !== session.user.id && escrow.seller_id !== session.user.id && !isAdmin) {
-      return apiUnauthorized('Keine Berechtigung, dieses Treuhandkonto einzusehen')
+      return apiUnauthorized('Keine Berechtigung, dieses Treuhandkonto einzusehen');
     }
 
     return apiSuccess({
@@ -103,46 +109,48 @@ export const GET = withAuth<{ id: string }>(async (request, session, context) =>
         buyer: {
           id: escrow.buyer_id,
           name: escrow.buyer_name,
-          email: escrow.buyer_email
+          email: escrow.buyer_email,
         },
-        seller: escrow.seller_id ? {
-          id: escrow.seller_id,
-          name: escrow.seller_name,
-          email: escrow.seller_email
-        } : null,
+        seller: escrow.seller_id
+          ? {
+              id: escrow.seller_id,
+              name: escrow.seller_name,
+              email: escrow.seller_email,
+            }
+          : null,
         transactionId: escrow.provider_transaction_id,
-        releases: escrow.releases || []
-      }
-    })
+        releases: escrow.releases || [],
+      },
+    });
   } catch (error) {
-    logger.error('Get escrow error', { error })
-    return apiError(error, 'Treuhandkonto konnte nicht abgerufen werden')
+    logger.error('Get escrow error', { error });
+    return apiError(error, 'Treuhandkonto konnte nicht abgerufen werden');
   }
-})
+});
 
 // Simpler escrow row for release operations
 interface EscrowReleaseRow {
-  id: string
-  transactionId: string
-  buyerId: string
-  sellerId: string | null
-  totalAmountCents: number
-  releasedAmountCents: number
-  currency: string
-  status: string
-  providerId: string
-  providerTransactionId: string
-  transactionAmount: number
+  id: string;
+  transactionId: string;
+  buyerId: string;
+  sellerId: string | null;
+  totalAmountCents: number;
+  releasedAmountCents: number;
+  currency: string;
+  status: string;
+  providerId: string;
+  providerTransactionId: string;
+  transactionAmount: number;
 }
 
 // POST /api/payments/escrow/[id]/release - Release escrow funds
 export const POST = withAuth<{ id: string }>(async (request, session, context) => {
   try {
-    const { id: escrowId } = context!.params!
-    const body = await request.json()
-    const validation = validateBody(EscrowReleaseSchema, body)
-    if (!validation.success) return validation.error
-    const { amount, reason, releaseType } = validation.data
+    const { id: escrowId } = context!.params!;
+    const body = await request.json();
+    const validation = validateBody(EscrowReleaseSchema, body);
+    if (!validation.success) return validation.error;
+    const { amount, reason, releaseType } = validation.data;
 
     // Get escrow account with transaction details
     const escrowRows = await db
@@ -161,43 +169,40 @@ export const POST = withAuth<{ id: string }>(async (request, session, context) =
       })
       .from(escrowAccounts)
       .innerJoin(paymentTransactions, eq(escrowAccounts.transactionId, paymentTransactions.id))
-      .where(
-        and(
-          eq(escrowAccounts.id, escrowId),
-          eq(escrowAccounts.status, ESCROW_STATUS.ACTIVE)
-        )
-      )
+      .where(and(eq(escrowAccounts.id, escrowId), eq(escrowAccounts.status, ESCROW_STATUS.ACTIVE)));
 
     if (escrowRows.length === 0) {
-      return apiNotFound('Aktives Treuhandkonto nicht gefunden')
+      return apiNotFound('Aktives Treuhandkonto nicht gefunden');
     }
 
-    const escrow = escrowRows[0] as EscrowReleaseRow
+    const escrow = escrowRows[0] as EscrowReleaseRow;
 
     // Check permissions - only buyer or admin can release funds
-    const isAdmin = canAccessFinance(session.user)
+    const isAdmin = canAccessFinance(session.user);
 
     if (escrow.buyerId !== session.user.id && !isAdmin) {
-      return apiUnauthorized('Nur der Käufer kann Treuhandgelder freigeben')
+      return apiUnauthorized('Nur der Käufer kann Treuhandgelder freigeben');
     }
 
-    const releaseAmountCents = Math.round(amount * 100)
-    const availableAmount = escrow.totalAmountCents - escrow.releasedAmountCents
+    const releaseAmountCents = Math.round(amount * 100);
+    const availableAmount = escrow.totalAmountCents - escrow.releasedAmountCents;
 
     if (releaseAmountCents > availableAmount) {
-      return apiBadRequest(`Freigabebetrag übersteigt verfügbares Guthaben. Maximum: ${(availableAmount / 100).toFixed(2)} ${escrow.currency}`)
+      return apiBadRequest(
+        `Freigabebetrag übersteigt verfügbares Guthaben. Maximum: ${(availableAmount / 100).toFixed(2)} ${escrow.currency}`,
+      );
     }
 
     // Determine if this is a full release
-    const isFullRelease = releaseType === 'full' || releaseAmountCents >= availableAmount
+    const isFullRelease = releaseType === 'full' || releaseAmountCents >= availableAmount;
 
     try {
       if (isFullRelease) {
         // Capture the full payment via Payrexx
         await captureTransaction(
           escrow.providerTransactionId!,
-          escrow.totalAmountCents - escrow.releasedAmountCents
-        )
+          escrow.totalAmountCents - escrow.releasedAmountCents,
+        );
 
         // Update escrow status to released
         await db
@@ -209,14 +214,10 @@ export const POST = withAuth<{ id: string }>(async (request, session, context) =
             releaseNotes: reason || 'Funds released by buyer',
             updatedAt: sql`CURRENT_TIMESTAMP`,
           })
-          .where(eq(escrowAccounts.id, escrowId))
-
+          .where(eq(escrowAccounts.id, escrowId));
       } else {
         // Partial release - capture partial amount
-        await captureTransaction(
-          escrow.providerTransactionId!,
-          releaseAmountCents
-        )
+        await captureTransaction(escrow.providerTransactionId!, releaseAmountCents);
 
         // Update escrow released amount
         await db
@@ -225,48 +226,45 @@ export const POST = withAuth<{ id: string }>(async (request, session, context) =
             releasedAmountCents: sql`${escrowAccounts.releasedAmountCents} + ${releaseAmountCents}`,
             updatedAt: sql`CURRENT_TIMESTAMP`,
           })
-          .where(eq(escrowAccounts.id, escrowId))
+          .where(eq(escrowAccounts.id, escrowId));
       }
 
       // Create escrow release record
-      await db
-        .insert(escrowReleases)
-        .values({
-          escrowAccountId: escrowId,
-          transactionId: escrow.transactionId,
-          amountCents: releaseAmountCents,
-          releaseType: isFullRelease ? 'full' : 'partial',
-          reason: reason || 'Released by buyer',
-          releasedBy: session.user.id,
-        })
+      await db.insert(escrowReleases).values({
+        escrowAccountId: escrowId,
+        transactionId: escrow.transactionId,
+        amountCents: releaseAmountCents,
+        releaseType: isFullRelease ? 'full' : 'partial',
+        reason: reason || 'Released by buyer',
+        releasedBy: session.user.id,
+      });
 
       // Create payment transaction record for the release
-      await db
-        .insert(paymentTransactions)
-        .values({
-          userId: escrow.sellerId || escrow.buyerId,
-          providerId: escrow.providerId,
-          providerTransactionId: `release_${escrow.providerTransactionId}_${Date.now()}`,
-          type: PAYMENT_TRANSACTION_TYPE.TRANSFER,
-          status: PAYMENT_STATUS.SUCCEEDED,
-          amountCents: releaseAmountCents,
-          currency: escrow.currency,
-          description: `Escrow release: ${reason || 'Released by buyer'}`,
-        })
+      await db.insert(paymentTransactions).values({
+        userId: escrow.sellerId || escrow.buyerId,
+        providerId: escrow.providerId,
+        providerTransactionId: `release_${escrow.providerTransactionId}_${Date.now()}`,
+        type: PAYMENT_TRANSACTION_TYPE.TRANSFER,
+        status: PAYMENT_STATUS.SUCCEEDED,
+        amountCents: releaseAmountCents,
+        currency: escrow.currency,
+        description: `Escrow release: ${reason || 'Released by buyer'}`,
+      });
 
       return apiSuccess({
-        message: isFullRelease ? 'Treuhandgelder vollständig freigegeben' : 'Treuhandgelder teilweise freigegeben',
+        message: isFullRelease
+          ? 'Treuhandgelder vollständig freigegeben'
+          : 'Treuhandgelder teilweise freigegeben',
         releasedAmount: releaseAmountCents / 100,
         currency: escrow.currency,
-        remainingBalance: (availableAmount - releaseAmountCents) / 100
-      })
+        remainingBalance: (availableAmount - releaseAmountCents) / 100,
+      });
     } catch (payrexxError: unknown) {
-      logger.error('Payrexx capture error', { error: payrexxError })
-      return apiError(payrexxError, 'Treuhandgelder konnten nicht freigegeben werden')
+      logger.error('Payrexx capture error', { error: payrexxError });
+      return apiError(payrexxError, 'Treuhandgelder konnten nicht freigegeben werden');
     }
-
   } catch (error) {
-    logger.error('Escrow release error', { error })
-    return apiError(error, 'Treuhandgelder konnten nicht freigegeben werden')
+    logger.error('Escrow release error', { error });
+    return apiError(error, 'Treuhandgelder konnten nicht freigegeben werden');
   }
-})
+});

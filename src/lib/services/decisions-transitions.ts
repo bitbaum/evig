@@ -18,10 +18,7 @@ import {
   type VotingMethod,
   type DecisionStatus,
 } from '@/config/decisions';
-import {
-  type VoteData,
-  type DecisionOption,
-} from '@/lib/schemas/decisions';
+import { type VoteData, type DecisionOption } from '@/lib/schemas/decisions';
 import { type DbDecisionRow, asArray, asObject } from './decisions-crud';
 import { computeTallies, resolveEligibleUserIds } from './decisions-voting';
 import { generateOutcomeNarrative } from '@/lib/ai/decisions-narrative';
@@ -38,7 +35,7 @@ export async function transitionDecision(
   id: string,
   newStatus: DecisionStatus,
   userId: string,
-  extra?: { cancelReason?: string; outcomeSummary?: string }
+  extra?: { cancelReason?: string; outcomeSummary?: string },
 ) {
   const existing = await db.execute(sql`
     SELECT * FROM ${sql.raw(dTable)} WHERE id = ${id}
@@ -68,7 +65,10 @@ export async function transitionDecision(
 
   if (newStatus === DECISION_STATUS.CLOSED) {
     // Enforce quorum before closing
-    const quorumConfig = asObject<{ type: string; value: number }>(decision.quorum, { type: 'percentage', value: 50 });
+    const quorumConfig = asObject<{ type: string; value: number }>(decision.quorum, {
+      type: 'percentage',
+      value: 50,
+    });
     const invitedParticipants = asArray<string>(decision.invited_participants, []);
     const participantScope = (decision.participant_scope as string) || PARTICIPANT_SCOPE_DEFAULT;
 
@@ -79,12 +79,16 @@ export async function transitionDecision(
     const voteCountResult = await db.execute(sql`
       SELECT COUNT(*) AS cnt FROM ${sql.raw(dvTable)} WHERE decision_id = ${id}
     `);
-    const actualVotes = parseInt((voteCountResult.rows[0] as unknown as { cnt: string }).cnt || '0', 10);
+    const actualVotes = parseInt(
+      (voteCountResult.rows[0] as unknown as { cnt: string }).cnt || '0',
+      10,
+    );
 
     // Calculate required votes based on quorum config
-    const requiredVotes = quorumConfig.type === 'percentage'
-      ? Math.ceil((quorumConfig.value / 100) * totalEligible)
-      : quorumConfig.value;
+    const requiredVotes =
+      quorumConfig.type === 'percentage'
+        ? Math.ceil((quorumConfig.value / 100) * totalEligible)
+        : quorumConfig.value;
 
     if (actualVotes < requiredVotes) {
       const pct = totalEligible > 0 ? Math.round((actualVotes / totalEligible) * 100) : 0;
@@ -102,8 +106,8 @@ export async function transitionDecision(
       const options = asArray<DecisionOption>(decision.options, []);
       const tallies = computeTallies(
         decision.voting_method as VotingMethod,
-        (votesResult.rows as unknown as Array<{ vote_data: VoteData }>).map(v => v.vote_data),
-        options
+        (votesResult.rows as unknown as Array<{ vote_data: VoteData }>).map((v) => v.vote_data),
+        options,
       );
 
       const updated = await tx.execute(sql`
@@ -127,42 +131,40 @@ export async function transitionDecision(
 
     // Notify the creator when decision closes
     fireNotification(
-      () => createNotification(txResult.created_by, {
-        type: NOTIFICATION_TYPES.DECISION_CLOSED,
-        title: 'Entscheidung abgeschlossen',
-        content: `"${txResult.title}" wurde abgeschlossen.`,
-        related_type: RELATED_TYPES.DECISION,
-        related_id: txResult.id,
-        metadata: { decisionId: txResult.id },
-      }),
-      `decision_closed:${txResult.id}`
+      () =>
+        createNotification(txResult.created_by, {
+          type: NOTIFICATION_TYPES.DECISION_CLOSED,
+          title: 'Entscheidung abgeschlossen',
+          content: `"${txResult.title}" wurde abgeschlossen.`,
+          related_type: RELATED_TYPES.DECISION,
+          related_id: txResult.id,
+          metadata: { decisionId: txResult.id },
+        }),
+      `decision_closed:${txResult.id}`,
     );
 
     // Generate AI outcome narrative asynchronously (non-blocking)
-    fireNotification(
-      async () => {
-        const options = asArray<DecisionOption>(txResult.options, []);
-        const outcome = (txResult.outcome || {}) as Record<string, unknown>;
-        const narrative = await generateOutcomeNarrative({
-          title: txResult.title,
-          description: txResult.description,
-          votingMethod: txResult.voting_method,
-          options,
-          outcome,
-          outcomeSummary: txResult.outcome_summary,
-          participantScope: (txResult.participant_scope as string) || PARTICIPANT_SCOPE_DEFAULT,
-          category: txResult.category || 'operativ',
-        });
-        if (narrative) {
-          await db.execute(sql`
+    fireNotification(async () => {
+      const options = asArray<DecisionOption>(txResult.options, []);
+      const outcome = (txResult.outcome || {}) as Record<string, unknown>;
+      const narrative = await generateOutcomeNarrative({
+        title: txResult.title,
+        description: txResult.description,
+        votingMethod: txResult.voting_method,
+        options,
+        outcome,
+        outcomeSummary: txResult.outcome_summary,
+        participantScope: (txResult.participant_scope as string) || PARTICIPANT_SCOPE_DEFAULT,
+        category: txResult.category || 'operativ',
+      });
+      if (narrative) {
+        await db.execute(sql`
             UPDATE ${sql.raw(dTable)}
             SET ai_outcome_narrative = ${narrative}
             WHERE id = ${txResult.id}
           `);
-        }
-      },
-      `decision_narrative:${txResult.id}`
-    );
+      }
+    }, `decision_narrative:${txResult.id}`);
 
     return { decision: txResult };
   }
@@ -188,22 +190,23 @@ export async function transitionDecision(
       : '';
 
     fireNotification(
-      () => notifyUsers(
-        eligibleIds.filter(id => id !== userId),
-        {
-          type: NOTIFICATION_TYPES.DECISION_VOTING,
-          title: 'Abstimmung geöffnet',
-          content: `"${updatedDecision.title}" wartet auf deine Stimme.${deadlineInfo}`,
-          related_type: RELATED_TYPES.DECISION,
-          related_id: updatedDecision.id,
-          metadata: {
-            decisionId: updatedDecision.id,
-            votingDeadline: updatedDecision.voting_deadline ?? '',
-            allowPublicVoting: String(updatedDecision.allow_public_voting ?? false),
+      () =>
+        notifyUsers(
+          eligibleIds.filter((id) => id !== userId),
+          {
+            type: NOTIFICATION_TYPES.DECISION_VOTING,
+            title: 'Abstimmung geöffnet',
+            content: `"${updatedDecision.title}" wartet auf deine Stimme.${deadlineInfo}`,
+            related_type: RELATED_TYPES.DECISION,
+            related_id: updatedDecision.id,
+            metadata: {
+              decisionId: updatedDecision.id,
+              votingDeadline: updatedDecision.voting_deadline ?? '',
+              allowPublicVoting: String(updatedDecision.allow_public_voting ?? false),
+            },
           },
-        },
-      ),
-      `decision_voting:${updatedDecision.id}`
+        ),
+      `decision_voting:${updatedDecision.id}`,
     );
   }
 

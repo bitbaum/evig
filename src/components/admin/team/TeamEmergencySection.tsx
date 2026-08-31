@@ -1,19 +1,19 @@
-'use client'
+'use client';
 
 import {
   EMERGENCY_RELATION_OPTIONS,
   EMERGENCY_RELATION_LABELS,
   type EmergencyRelation,
-} from '@/config/team'
-import { CONTACT } from '@/config/org'
-import type { TeamProfileFormState } from './useTeamProfileForm'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
-import { FormField } from '@/components/ui/form-field'
+} from '@/config/team';
+import { CONTACT } from '@/config/org';
+import type { TeamProfileFormState } from './useTeamProfileForm';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { FormField } from '@/components/ui/form-field';
 
 interface Props {
-  form: TeamProfileFormState
-  onChange: (field: string, value: string) => void
+  form: TeamProfileFormState;
+  onChange: (field: string, value: string) => void;
 }
 
 export function TeamEmergencySection({ form, onChange }: Props) {
@@ -46,7 +46,7 @@ export function TeamEmergencySection({ form, onChange }: Props) {
           onChange={(e) => onChange('emergency_contact_relation', e.target.value)}
         >
           <option value="">Auswählen...</option>
-          {EMERGENCY_RELATION_OPTIONS.map(relation => (
+          {EMERGENCY_RELATION_OPTIONS.map((relation) => (
             <option key={relation} value={relation}>
               {EMERGENCY_RELATION_LABELS[relation as EmergencyRelation]}
             </option>
@@ -54,5 +54,5 @@ export function TeamEmergencySection({ form, onChange }: Props) {
         </Select>
       </FormField>
     </div>
-  )
+  );
 }

@@ -1,24 +1,24 @@
 // SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
-import type { Metadata } from 'next'
-import { Link } from '@/i18n/navigation'
-import { buttonClass } from '@/components/ui/button-class'
-import { Eye, Target, BarChart3, Briefcase, FileText, Users } from 'lucide-react'
-import { PageHero } from '@/components/layout/PageHero'
-import Heading from '@/components/ui/Heading'
-import { IconBadge } from '@/components/ui/IconBadge'
-import { ORG, CONTACT } from '@/config/org'
-import { ROUTES } from '@/config/routes'
-import { getTranslations } from 'next-intl/server'
+import type { Metadata } from 'next';
+import { Link } from '@/i18n/navigation';
+import { buttonClass } from '@/components/ui/button-class';
+import { Eye, Target, BarChart3, Briefcase, FileText, Users } from 'lucide-react';
+import { PageHero } from '@/components/layout/PageHero';
+import Heading from '@/components/ui/Heading';
+import { IconBadge } from '@/components/ui/IconBadge';
+import { ORG, CONTACT } from '@/config/org';
+import { ROUTES } from '@/config/routes';
+import { getTranslations } from 'next-intl/server';
 
 interface TransparenzPageProps {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: string }>;
 }
 
 export async function generateMetadata({ params }: TransparenzPageProps): Promise<Metadata> {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'transparenz' })
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'transparenz' });
   return {
     title: { absolute: `${t('meta.title')} | ${ORG.name}` },
     description: t('meta.description', { orgName: ORG.name }),
@@ -29,23 +29,22 @@ export async function generateMetadata({ params }: TransparenzPageProps): Promis
       url: `${ORG.website}/transparenz`,
       siteName: ORG.name,
     },
-  }
+  };
 }
 
 export default async function TransparenzPage({ params }: TransparenzPageProps) {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'transparenz' })
-  const platforms = t.raw('platforms') as Array<{ title: string; description: string; href: string }>
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'transparenz' });
+  const platforms = t.raw('platforms') as Array<{
+    title: string;
+    description: string;
+    href: string;
+  }>;
 
   return (
     <div className="bg-surface-base">
       {/* Hero */}
-      <PageHero
-        theme="about"
-        icon={Eye}
-        title={t('hero.title')}
-        subtitle={t('hero.subtitle')}
-      />
+      <PageHero theme="about" icon={Eye} title={t('hero.title')} subtitle={t('hero.subtitle')} />
 
       {/* Section 1: Mission */}
       <div className="py-12 sm:py-16 lg:py-20">
@@ -97,7 +96,10 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10 sm:mb-12">
             <div className="flex items-center justify-center gap-3 mb-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-raised" aria-hidden="true">
+              <div
+                className="flex h-10 w-10 items-center justify-center rounded-lg bg-surface-raised"
+                aria-hidden="true"
+              >
                 <Briefcase className="h-5 w-5 text-text-secondary" />
               </div>
             </div>
@@ -116,7 +118,10 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
                 href={platform.href}
                 className="card-shell-inset rounded-xl p-6 hover:border-strong transition-colors group"
               >
-                <Heading level={3} className="text-lg font-bold text-text-primary group-hover:text-action transition-colors">
+                <Heading
+                  level={3}
+                  className="text-lg font-bold text-text-primary group-hover:text-action transition-colors"
+                >
                   {platform.title}
                 </Heading>
                 <p className="mt-2 text-sm text-text-secondary">{platform.description}</p>
@@ -138,9 +143,7 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
               {t('finances.title')}
             </Heading>
           </div>
-          <p className="text-lg text-text-secondary leading-8">
-            {t('finances.body')}
-          </p>
+          <p className="text-lg text-text-secondary leading-8">{t('finances.body')}</p>
           <div className="mt-6">
             <Link
               href="/mitglied-werden"
@@ -172,7 +175,10 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row gap-4">
-            <Link href="/mitglied-werden" className={buttonClass({ variant: 'primary', size: 'sm' })}>
+            <Link
+              href="/mitglied-werden"
+              className={buttonClass({ variant: 'primary', size: 'sm' })}
+            >
               {t('board.joinBtn')}
             </Link>
             <Link
@@ -185,5 +191,5 @@ export default async function TransparenzPage({ params }: TransparenzPageProps) 
         </div>
       </div>
     </div>
-  )
+  );
 }

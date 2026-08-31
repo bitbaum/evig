@@ -1,22 +1,22 @@
-'use client'
+'use client';
 
-import { Clock } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { responsiveTypography } from '@/lib/responsive'
-import Heading from '@/components/ui/Heading'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
-import { WORKSHOP_MAX_PARTICIPANTS_OPTIONS, WORKSHOP_DURATION_OPTIONS } from '@/config/workshops'
+import { Clock } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { responsiveTypography } from '@/lib/responsive';
+import Heading from '@/components/ui/Heading';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { WORKSHOP_MAX_PARTICIPANTS_OPTIONS, WORKSHOP_DURATION_OPTIONS } from '@/config/workshops';
 
 interface PracticalDetailsSectionProps {
-  durationHours: string
-  pricePerPerson: string
-  maxParticipants: string
-  minParticipants: string
-  targetAudience: string
-  prerequisites: string
-  onChange: (field: string, value: string) => void
+  durationHours: string;
+  pricePerPerson: string;
+  maxParticipants: string;
+  minParticipants: string;
+  targetAudience: string;
+  prerequisites: string;
+  onChange: (field: string, value: string) => void;
 }
 
 export function PracticalDetailsSection({
@@ -26,13 +26,16 @@ export function PracticalDetailsSection({
   minParticipants,
   targetAudience,
   prerequisites,
-  onChange
+  onChange,
 }: PracticalDetailsSectionProps) {
-  const t = useTranslations('workshops.propose')
+  const t = useTranslations('workshops.propose');
 
   return (
     <div className="mb-8">
-      <Heading level={2} className={`${responsiveTypography.subsection} font-semibold text-text-primary mb-4 flex items-center`}>
+      <Heading
+        level={2}
+        className={`${responsiveTypography.subsection} font-semibold text-text-primary mb-4 flex items-center`}
+      >
         <Clock className="w-5 h-5 mr-2" />
         {t('sections.practicalDetails.title')}
       </Heading>
@@ -79,8 +82,10 @@ export function PracticalDetailsSection({
             required
             aria-required="true"
           >
-            {WORKSHOP_MAX_PARTICIPANTS_OPTIONS.map(num => (
-              <option key={num} value={num}>{num}</option>
+            {WORKSHOP_MAX_PARTICIPANTS_OPTIONS.map((num) => (
+              <option key={num} value={num}>
+                {num}
+              </option>
             ))}
           </Select>
         </div>
@@ -95,8 +100,10 @@ export function PracticalDetailsSection({
             required
             aria-required="true"
           >
-            {WORKSHOP_DURATION_OPTIONS.map(num => (
-              <option key={num} value={num}>{num}</option>
+            {WORKSHOP_DURATION_OPTIONS.map((num) => (
+              <option key={num} value={num}>
+                {num}
+              </option>
             ))}
           </Select>
         </div>
@@ -126,5 +133,5 @@ export function PracticalDetailsSection({
         </div>
       </div>
     </div>
-  )
+  );
 }

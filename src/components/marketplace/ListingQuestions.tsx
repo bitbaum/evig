@@ -1,114 +1,120 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { HelpCircle, Loader2, MessageCircleQuestion, Send } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import { apiFetch } from '@/lib/api/client'
-import { useSwrFetch } from '@/lib/api/swr'
-import { formatDateShort } from '@/lib/date-formats'
-import { LISTING_QUESTION_STATUS } from '@/config/marketplace'
+import { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { HelpCircle, Loader2, MessageCircleQuestion, Send } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { apiFetch } from '@/lib/api/client';
+import { useSwrFetch } from '@/lib/api/swr';
+import { formatDateShort } from '@/lib/date-formats';
+import { LISTING_QUESTION_STATUS } from '@/config/marketplace';
 
 interface ListingQuestion {
-  id: string
-  question: string
-  answer: string | null
-  status: string
-  created_at: string
-  answered_at: string | null
-  asker_id: string
-  asker_name: string
-  can_answer: boolean
+  id: string;
+  question: string;
+  answer: string | null;
+  status: string;
+  created_at: string;
+  answered_at: string | null;
+  asker_id: string;
+  asker_name: string;
+  can_answer: boolean;
 }
 
 interface ListingQuestionsProps {
-  listingId: string
-  sellerId: string
+  listingId: string;
+  sellerId: string;
 }
 
 export default function ListingQuestions({ listingId, sellerId }: ListingQuestionsProps) {
-  const { data: session } = useSession()
-  const router = useRouter()
-  const t = useTranslations('marketplace.questions')
+  const { data: session } = useSession();
+  const router = useRouter();
+  const t = useTranslations('marketplace.questions');
 
-  const [newQuestion, setNewQuestion] = useState('')
-  const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [showAskForm, setShowAskForm] = useState(false)
-  const [answerDrafts, setAnswerDrafts] = useState<Record<string, string>>({})
-  const [answeringId, setAnsweringId] = useState<string | null>(null)
+  const [newQuestion, setNewQuestion] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [showAskForm, setShowAskForm] = useState(false);
+  const [answerDrafts, setAnswerDrafts] = useState<Record<string, string>>({});
+  const [answeringId, setAnsweringId] = useState<string | null>(null);
 
-  const isOwner = session?.user?.id === sellerId
+  const isOwner = session?.user?.id === sellerId;
 
   // Load errors intentionally render as an empty section — questions are
   // non-critical to the listing page.
-  const { data, isLoading: loading, mutate: loadQuestions } = useSwrFetch<{
-    questions: ListingQuestion[]
-    can_ask: boolean
-  }>(`/api/listings/${listingId}/questions`)
-  const questions = data?.questions ?? []
-  const canAsk = data?.can_ask ?? false
+  const {
+    data,
+    isLoading: loading,
+    mutate: loadQuestions,
+  } = useSwrFetch<{
+    questions: ListingQuestion[];
+    can_ask: boolean;
+  }>(`/api/listings/${listingId}/questions`);
+  const questions = data?.questions ?? [];
+  const canAsk = data?.can_ask ?? false;
 
   const handleAsk = async () => {
-    if (!newQuestion.trim() || submitting) return
+    if (!newQuestion.trim() || submitting) return;
 
     if (!session?.user) {
-      router.push(`/auth/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`)
-      return
+      router.push(`/auth/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`);
+      return;
     }
 
-    setSubmitting(true)
-    setError(null)
+    setSubmitting(true);
+    setError(null);
 
     const result = await apiFetch<{ id: string }>(`/api/listings/${listingId}/questions`, {
       method: 'POST',
       body: { question: newQuestion.trim() },
-    })
+    });
 
     if (result.success) {
-      setNewQuestion('')
-      setShowAskForm(false)
-      await loadQuestions()
+      setNewQuestion('');
+      setShowAskForm(false);
+      await loadQuestions();
     } else {
-      setError(result.error || t('errorAsk'))
+      setError(result.error || t('errorAsk'));
     }
 
-    setSubmitting(false)
-  }
+    setSubmitting(false);
+  };
 
   const handleAnswer = async (questionId: string) => {
-    const answer = answerDrafts[questionId]?.trim()
-    if (!answer || answeringId) return
+    const answer = answerDrafts[questionId]?.trim();
+    if (!answer || answeringId) return;
 
-    setAnsweringId(questionId)
-    setError(null)
+    setAnsweringId(questionId);
+    setError(null);
 
     const result = await apiFetch<void>(
       `/api/listings/${listingId}/questions/${questionId}/answer`,
       { method: 'POST', body: { answer } },
-    )
+    );
 
     if (result.success) {
       setAnswerDrafts((prev) => {
-        const next = { ...prev }
-        delete next[questionId]
-        return next
-      })
-      await loadQuestions()
+        const next = { ...prev };
+        delete next[questionId];
+        return next;
+      });
+      await loadQuestions();
     } else {
-      setError(result.error || t('errorAnswer'))
+      setError(result.error || t('errorAnswer'));
     }
 
-    setAnsweringId(null)
-  }
+    setAnsweringId(null);
+  };
 
   const visibleCount = questions.filter(
-    (q) => q.status === LISTING_QUESTION_STATUS.ANSWERED || (isOwner && q.status === LISTING_QUESTION_STATUS.OPEN),
-  ).length
+    (q) =>
+      q.status === LISTING_QUESTION_STATUS.ANSWERED ||
+      (isOwner && q.status === LISTING_QUESTION_STATUS.OPEN),
+  ).length;
 
   return (
     <div className="card-shell p-6">
@@ -174,7 +180,7 @@ export default function ListingQuestions({ listingId, sellerId }: ListingQuestio
                   <Button
                     size="sm"
                     variant="primary"
-                    disabled={answeringId === q.id || !(answerDrafts[q.id]?.trim())}
+                    disabled={answeringId === q.id || !answerDrafts[q.id]?.trim()}
                     onClick={() => void handleAnswer(q.id)}
                     className="gap-2"
                   >
@@ -219,9 +225,9 @@ export default function ListingQuestions({ listingId, sellerId }: ListingQuestio
                     <Button
                       variant="outline"
                       onClick={() => {
-                        setShowAskForm(false)
-                        setNewQuestion('')
-                        setError(null)
+                        setShowAskForm(false);
+                        setNewQuestion('');
+                        setError(null);
                       }}
                     >
                       {t('cancel')}
@@ -229,7 +235,11 @@ export default function ListingQuestions({ listingId, sellerId }: ListingQuestio
                   </div>
                 </div>
               ) : (
-                <Button variant="outline" className="w-full gap-2" onClick={() => setShowAskForm(true)}>
+                <Button
+                  variant="outline"
+                  className="w-full gap-2"
+                  onClick={() => setShowAskForm(true)}
+                >
                   <HelpCircle className="w-4 h-4" aria-hidden="true" />
                   {t('askButton')}
                 </Button>
@@ -242,10 +252,12 @@ export default function ListingQuestions({ listingId, sellerId }: ListingQuestio
           )}
 
           {error && (
-            <p className="text-sm text-error-600" role="alert">{error}</p>
+            <p className="text-sm text-error-600" role="alert">
+              {error}
+            </p>
           )}
         </div>
       )}
     </div>
-  )
+  );
 }

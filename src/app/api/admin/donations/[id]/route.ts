@@ -1,16 +1,16 @@
-import { NextRequest } from 'next/server'
-import { db } from '@/db'
-import { donations, users } from '@/db/schema'
-import { eq, sql } from 'drizzle-orm'
-import { alias } from 'drizzle-orm/pg-core'
-import { withAdmin } from '@/lib/api/middleware'
-import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { UpdateDonationSchema } from '@/lib/schemas/donations'
-import { DONATION_STATUSES } from '@/config/donations'
-import { logger } from '@/lib/logger'
+import { NextRequest } from 'next/server';
+import { db } from '@/db';
+import { donations, users } from '@/db/schema';
+import { eq, sql } from 'drizzle-orm';
+import { alias } from 'drizzle-orm/pg-core';
+import { withAdmin } from '@/lib/api/middleware';
+import { apiError, apiSuccess, apiBadRequest, apiNotFound } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { UpdateDonationSchema } from '@/lib/schemas/donations';
+import { DONATION_STATUSES } from '@/config/donations';
+import { logger } from '@/lib/logger';
 
-const recorder = alias(users, 'recorder')
+const recorder = alias(users, 'recorder');
 
 /**
  * GET /api/admin/donations/[id]
@@ -18,7 +18,7 @@ const recorder = alias(users, 'recorder')
  */
 export const GET = withAdmin<{ id: string }>('donations', async (request, session, context) => {
   try {
-    const { id } = context!.params!
+    const { id } = context!.params!;
 
     const [d] = await db
       .select({
@@ -59,19 +59,18 @@ export const GET = withAdmin<{ id: string }>('donations', async (request, sessio
       .from(donations)
       .leftJoin(users, eq(donations.userId, users.id))
       .leftJoin(recorder, eq(donations.recordedBy, recorder.id))
-      .where(eq(donations.id, id))
+      .where(eq(donations.id, id));
 
     if (!d) {
-      return apiNotFound('Spende')
+      return apiNotFound('Spende');
     }
 
-    return apiSuccess(d)
-
+    return apiSuccess(d);
   } catch (error) {
-    logger.error('Failed to fetch donation', { error })
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    logger.error('Failed to fetch donation', { error });
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
-})
+});
 
 /**
  * PATCH /api/admin/donations/[id]
@@ -79,60 +78,61 @@ export const GET = withAdmin<{ id: string }>('donations', async (request, sessio
  */
 export const PATCH = withAdmin<{ id: string }>('donations', async (request, session, context) => {
   try {
-    const { id } = context!.params!
-    const body = await request.json()
-    const parsed = UpdateDonationSchema.safeParse(body)
+    const { id } = context!.params!;
+    const body = await request.json();
+    const parsed = UpdateDonationSchema.safeParse(body);
 
     if (!parsed.success) {
-      return apiBadRequest('Ungültige Daten', parsed.error.flatten().fieldErrors)
+      return apiBadRequest('Ungültige Daten', parsed.error.flatten().fieldErrors);
     }
 
     // Check donation exists
     const [existing] = await db
       .select({ id: donations.id })
       .from(donations)
-      .where(eq(donations.id, id))
+      .where(eq(donations.id, id));
 
     if (!existing) {
-      return apiNotFound('Spende')
+      return apiNotFound('Spende');
     }
 
-    const data = parsed.data
-    const update: Record<string, unknown> = {}
+    const data = parsed.data;
+    const update: Record<string, unknown> = {};
 
-    if (data.status !== undefined) update.status = data.status
-    if (data.notes !== undefined) update.notes = data.notes
-    if (data.estimated_value_cents !== undefined) update.estimatedValueCents = data.estimated_value_cents
-    if (data.user_id !== undefined) update.userId = data.user_id
+    if (data.status !== undefined) update.status = data.status;
+    if (data.notes !== undefined) update.notes = data.notes;
+    if (data.estimated_value_cents !== undefined)
+      update.estimatedValueCents = data.estimated_value_cents;
+    if (data.user_id !== undefined) update.userId = data.user_id;
 
     if (data.thank_you_sent !== undefined) {
-      update.thankYouSent = data.thank_you_sent
-      if (data.thank_you_sent) update.thankYouSentAt = sql`NOW()`
+      update.thankYouSent = data.thank_you_sent;
+      if (data.thank_you_sent) update.thankYouSentAt = sql`NOW()`;
     }
 
     if (data.receipt_sent !== undefined) {
-      update.receiptSent = data.receipt_sent
-      if (data.receipt_sent) update.receiptSentAt = sql`NOW()`
+      update.receiptSent = data.receipt_sent;
+      if (data.receipt_sent) update.receiptSentAt = sql`NOW()`;
     }
 
     if (Object.keys(update).length === 0) {
-      return apiBadRequest(ERROR_MESSAGES.NO_CHANGES_SPECIFIED)
+      return apiBadRequest(ERROR_MESSAGES.NO_CHANGES_SPECIFIED);
     }
 
-    await db
-      .update(donations)
-      .set(update)
-      .where(eq(donations.id, id))
+    await db.update(donations).set(update).where(eq(donations.id, id));
 
-    logger.info('Donation updated', { donationId: id, updatedBy: session.user.id, fields: Object.keys(data) })
+    logger.info('Donation updated', {
+      donationId: id,
+      updatedBy: session.user.id,
+      fields: Object.keys(data),
+    });
 
-    return apiSuccess({ id, updated: true })
-
+    return apiSuccess({ id, updated: true });
   } catch (error) {
-    logger.error('Failed to update donation', { error })
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    logger.error('Failed to update donation', { error });
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
-})
+});
 
 /**
  * DELETE /api/admin/donations/[id]
@@ -140,16 +140,16 @@ export const PATCH = withAdmin<{ id: string }>('donations', async (request, sess
  */
 export const DELETE = withAdmin<{ id: string }>('donations', async (request, session, context) => {
   try {
-    const { id } = context!.params!
+    const { id } = context!.params!;
 
     // Check donation exists
     const [existing] = await db
       .select({ id: donations.id })
       .from(donations)
-      .where(eq(donations.id, id))
+      .where(eq(donations.id, id));
 
     if (!existing) {
-      return apiNotFound('Spende')
+      return apiNotFound('Spende');
     }
 
     // Soft delete by setting status to 'archived'
@@ -159,14 +159,13 @@ export const DELETE = withAdmin<{ id: string }>('donations', async (request, ses
         status: DONATION_STATUSES.ARCHIVED,
         notes: sql`COALESCE(${donations.notes}, '') || ${` [Archiviert am ${new Date().toISOString()} durch ${session.user.email}]`}`,
       })
-      .where(eq(donations.id, id))
+      .where(eq(donations.id, id));
 
-    logger.info('Donation archived', { donationId: id, archivedBy: session.user.id })
+    logger.info('Donation archived', { donationId: id, archivedBy: session.user.id });
 
-    return apiSuccess({ id, deleted: true })
-
+    return apiSuccess({ id, deleted: true });
   } catch (error) {
-    logger.error('Failed to delete donation', { error })
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    logger.error('Failed to delete donation', { error });
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
-})
+});

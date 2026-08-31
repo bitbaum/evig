@@ -1,27 +1,27 @@
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
-import { SERVICE_CATEGORIES, IT_SKILLS } from '@/config/it-hilfe'
-import { Button } from '@/components/ui/button'
-import Heading from '@/components/ui/Heading'
+import { useTranslations } from 'next-intl';
+import { SERVICE_CATEGORIES, IT_SKILLS } from '@/config/it-hilfe';
+import { Button } from '@/components/ui/button';
+import Heading from '@/components/ui/Heading';
 
 interface Props {
-  skillsNeeded: string[]
-  onSkillToggle: (skillId: string) => void
+  skillsNeeded: string[];
+  onSkillToggle: (skillId: string) => void;
 }
 
 export function SkillsSection({ skillsNeeded, onSkillToggle }: Props) {
-  const t = useTranslations('components.skillsSection')
+  const t = useTranslations('components.skillsSection');
   return (
     <div className="card-shell p-6">
-      <Heading level={2} className="text-lg font-semibold text-text-primary mb-2">{t('title')}</Heading>
-      <p className="text-sm text-text-secondary mb-4">
-        {t('hint')}
-      </p>
+      <Heading level={2} className="text-lg font-semibold text-text-primary mb-2">
+        {t('title')}
+      </Heading>
+      <p className="text-sm text-text-secondary mb-4">{t('hint')}</p>
 
       {SERVICE_CATEGORIES.map((serviceCategory) => {
-        const skills = IT_SKILLS[serviceCategory.id] || []
-        if (skills.length === 0) return null
+        const skills = IT_SKILLS[serviceCategory.id] || [];
+        if (skills.length === 0) return null;
         return (
           <div key={serviceCategory.id} className="mb-4">
             <Heading level={3} className="text-sm font-medium text-text-secondary mb-2">
@@ -46,8 +46,8 @@ export function SkillsSection({ skillsNeeded, onSkillToggle }: Props) {
               ))}
             </div>
           </div>
-        )
+        );
       })}
     </div>
-  )
+  );
 }

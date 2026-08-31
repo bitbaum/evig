@@ -69,7 +69,7 @@ export async function getPublicDecision(id: string): Promise<PublicDecision | nu
   const rawOptions = asArray<DecisionOption>(d.options, []);
   const options: PublicDecisionOption[] = rawOptions
     .filter((o): o is DecisionOption & { id: string } => typeof o.id === 'string')
-    .map(o => ({ id: o.id, label: o.label, description: o.description, imageUrl: o.imageUrl }));
+    .map((o) => ({ id: o.id, label: o.label, description: o.description, imageUrl: o.imageUrl }));
 
   return {
     id: d.id,

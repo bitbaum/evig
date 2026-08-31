@@ -4,32 +4,32 @@
  * to all other locales. Run after editing messages/de.json businessPlan block.
  */
 
-import { readFileSync, writeFileSync } from 'node:fs'
-import { resolve, dirname } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { readFileSync, writeFileSync } from 'node:fs';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const LOCALES = ['en', 'fr', 'it', 'es', 'ja', 'ko', 'ru']
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const LOCALES = ['en', 'fr', 'it', 'es', 'ja', 'ko', 'ru'];
 
-const de = JSON.parse(readFileSync(resolve(ROOT, 'messages/de.json'), 'utf8'))
-const deBp = de.projects.upcycling.businessPlan
+const de = JSON.parse(readFileSync(resolve(ROOT, 'messages/de.json'), 'utf8'));
+const deBp = de.projects.upcycling.businessPlan;
 
 /** Copy invariant subtree from DE (dates, amounts, URLs, paths, proper nouns). */
 function invariantsFromDe(obj, deObj) {
-  if (deObj === null || deObj === undefined) return obj
+  if (deObj === null || deObj === undefined) return obj;
   if (Array.isArray(deObj)) {
-    return deObj.map((v, i) => invariantsFromDe(Array.isArray(obj) ? obj[i] : undefined, v))
+    return deObj.map((v, i) => invariantsFromDe(Array.isArray(obj) ? obj[i] : undefined, v));
   }
   if (typeof deObj === 'object') {
-    const out = { ...(typeof obj === 'object' && obj && !Array.isArray(obj) ? obj : {}) }
+    const out = { ...(typeof obj === 'object' && obj && !Array.isArray(obj) ? obj : {}) };
     for (const [k, dv] of Object.entries(deObj)) {
-      if (typeof dv === 'string' && isInvariant(dv)) out[k] = dv
-      else if (typeof dv === 'object') out[k] = invariantsFromDe(out[k], dv)
-      else if (!(k in out)) out[k] = dv
+      if (typeof dv === 'string' && isInvariant(dv)) out[k] = dv;
+      else if (typeof dv === 'object') out[k] = invariantsFromDe(out[k], dv);
+      else if (!(k in out)) out[k] = dv;
     }
-    return out
+    return out;
   }
-  return obj
+  return obj;
 }
 
 function isInvariant(s) {
@@ -43,7 +43,7 @@ function isInvariant(s) {
     s === '132.351 INNO-EE' ||
     s === '15.06.2026' ||
     s === 'Monitor-Upcycling zu Wand- und Deckenleuchten'
-  )
+  );
 }
 
 const PATCHES = {
@@ -479,51 +479,51 @@ const PATCHES = {
       'Моделирование SimaPro и презентация результатов в ZHAW завершены в мае 2026. Письменный отчёт будет финализирован до 18.06.2026.',
     statusScale: 'Фаза масштабирования II — модели и продажи',
   },
-}
+};
 
 function applyPatch(bp, p) {
   // Nav: insert zusammenfassung if missing
-  const hasZ = bp.nav.items.some((i) => i.id === 'zusammenfassung')
+  const hasZ = bp.nav.items.some((i) => i.id === 'zusammenfassung');
   if (!hasZ) {
-    bp.nav.items.unshift({ id: 'zusammenfassung', label: p.navZusammenfassung })
+    bp.nav.items.unshift({ id: 'zusammenfassung', label: p.navZusammenfassung });
   } else {
-    bp.nav.items.find((i) => i.id === 'zusammenfassung').label = p.navZusammenfassung
+    bp.nav.items.find((i) => i.id === 'zusammenfassung').label = p.navZusammenfassung;
   }
 
-  bp.documentMeta = { ...deBp.documentMeta, ...p.documentMeta }
-  bp.hero.eyebrow = p.hero.eyebrow
-  bp.hero.intro = p.hero.intro
-  bp.executiveSummary = invariantsFromDe(p.executiveSummary, deBp.executiveSummary)
+  bp.documentMeta = { ...deBp.documentMeta, ...p.documentMeta };
+  bp.hero.eyebrow = p.hero.eyebrow;
+  bp.hero.intro = p.hero.intro;
+  bp.executiveSummary = invariantsFromDe(p.executiveSummary, deBp.executiveSummary);
 
-  bp.status.intro = p.statusIntro
+  bp.status.intro = p.statusIntro;
 
-  bp.lieferanten.title = p.lieferanten.title
-  bp.lieferanten.intro = p.lieferanten.intro
-  bp.lieferanten.stockBreakdown.title = p.lieferanten.stockBreakdown.title
-  bp.lieferanten.stockBreakdown.subtitle = p.lieferanten.stockBreakdown.subtitle
-  bp.lieferanten.stockBreakdown.rows = p.lieferanten.stockBreakdown.rows
-  bp.lieferanten.inventoryFootnote = p.lieferanten.inventoryFootnote
-  bp.lieferanten.channels.items[0].body = p.lieferanten.channelBody
+  bp.lieferanten.title = p.lieferanten.title;
+  bp.lieferanten.intro = p.lieferanten.intro;
+  bp.lieferanten.stockBreakdown.title = p.lieferanten.stockBreakdown.title;
+  bp.lieferanten.stockBreakdown.subtitle = p.lieferanten.stockBreakdown.subtitle;
+  bp.lieferanten.stockBreakdown.rows = p.lieferanten.stockBreakdown.rows;
+  bp.lieferanten.inventoryFootnote = p.lieferanten.inventoryFootnote;
+  bp.lieferanten.channels.items[0].body = p.lieferanten.channelBody;
 
-  const phase = bp.wissenschaft.timeline.phases.find((x) => x.date === '25.05. – 31.05.2026')
-  if (phase) phase.label = p.wissenschaftPhase
+  const phase = bp.wissenschaft.timeline.phases.find((x) => x.date === '25.05. – 31.05.2026');
+  if (phase) phase.label = p.wissenschaftPhase;
 
-  const risk = bp.risiken.items.find((x) => x.cite === 'cit05_zhaw_gantt')
-  if (risk) risk.body = p.risikenZhaw
+  const risk = bp.risiken.items.find((x) => x.cite === 'cit05_zhaw_gantt');
+  if (risk) risk.body = p.risikenZhaw;
 }
 
 for (const lc of LOCALES) {
-  const file = resolve(ROOT, 'messages', `${lc}.json`)
-  const data = JSON.parse(readFileSync(file, 'utf8'))
-  const bp = data.projects.upcycling.businessPlan
-  applyPatch(bp, PATCHES[lc])
+  const file = resolve(ROOT, 'messages', `${lc}.json`);
+  const data = JSON.parse(readFileSync(file, 'utf8'));
+  const bp = data.projects.upcycling.businessPlan;
+  applyPatch(bp, PATCHES[lc]);
 
   // Status page milestone label
-  const scale = data.projects.upcycling.status?.timeline?.items?.find((i) => i.key === 'scale')
-  if (scale) scale.label = PATCHES[lc].statusScale
+  const scale = data.projects.upcycling.status?.timeline?.items?.find((i) => i.key === 'scale');
+  if (scale) scale.label = PATCHES[lc].statusScale;
 
-  writeFileSync(file, JSON.stringify(data, null, 2) + '\n')
-  console.log('synced', lc)
+  writeFileSync(file, JSON.stringify(data, null, 2) + '\n');
+  console.log('synced', lc);
 }
 
-console.log('Done. Run npm run i18n:businessplan to verify parity.')
+console.log('Done. Run npm run i18n:businessplan to verify parity.');

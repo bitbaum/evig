@@ -1,11 +1,11 @@
-import { db } from '@/db'
-import { notifications, teamProfiles, timecards, timecardEntries, users } from '@/db/schema'
-import { and, asc, eq, gte, lte, or, sql } from 'drizzle-orm'
-import { logger } from '@/lib/logger'
-import { createNotification, notifyUsers } from '@/lib/services/notifications'
-import { logActivity } from '@/lib/activity'
-import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
-import { TIMECARD_STATUSES, type TimecardStatus } from '@/config/timecards'
+import { db } from '@/db';
+import { notifications, teamProfiles, timecards, timecardEntries, users } from '@/db/schema';
+import { and, asc, eq, gte, lte, or, sql } from 'drizzle-orm';
+import { logger } from '@/lib/logger';
+import { createNotification, notifyUsers } from '@/lib/services/notifications';
+import { logActivity } from '@/lib/activity';
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications';
+import { TIMECARD_STATUSES, type TimecardStatus } from '@/config/timecards';
 import {
   buildTimecardEntriesForMonth,
   buildTimecardEntriesFromSchedule,
@@ -13,12 +13,12 @@ import {
   getNextMonthStart,
   parseWeeklySchedule,
   type WeeklySchedule,
-} from '@/lib/team/schedule'
-import { normalizeTimeToHHMM } from '@/lib/team/timecard-utils'
-import { formatTimecardPeriodLabel } from '@/lib/team/timecard-period-label'
-import { runReviewTransition, type ReviewGuard } from '@/lib/lifecycle/review-workflow'
-import type { TransitionTable } from '@/lib/lifecycle'
-import type { WorkflowEvent } from '@/lib/lifecycle/dispatch'
+} from '@/lib/team/schedule';
+import { normalizeTimeToHHMM } from '@/lib/team/timecard-utils';
+import { formatTimecardPeriodLabel } from '@/lib/team/timecard-period-label';
+import { runReviewTransition, type ReviewGuard } from '@/lib/lifecycle/review-workflow';
+import type { TransitionTable } from '@/lib/lifecycle';
+import type { WorkflowEvent } from '@/lib/lifecycle/dispatch';
 import {
   timecardPeriodQuerySchema,
   timecardSaveSchema,
@@ -28,40 +28,48 @@ import {
   type TimecardPeriodQuery,
   type TimecardSaveInput,
   type TimecardReviewActionInput,
-} from '@/lib/schemas/timecards'
-import { getTimecardApproverIds } from '@/lib/team/timecard-approvers'
+} from '@/lib/schemas/timecards';
+import { getTimecardApproverIds } from '@/lib/team/timecard-approvers';
 
 export interface TimecardWithEntries extends Timecard {
-  entries: TimecardEntry[]
+  entries: TimecardEntry[];
 }
 
 export interface TimecardPeriodRange {
-  periodType: 'week' | 'month'
-  periodStart: string
-  periodEnd: string
+  periodType: 'week' | 'month';
+  periodStart: string;
+  periodEnd: string;
 }
 
-type TimecardDbClient = Pick<typeof db, 'select' | 'insert' | 'update' | 'delete'>
+type TimecardDbClient = Pick<typeof db, 'select' | 'insert' | 'update' | 'delete'>;
 
 interface TimecardReviewRow extends Record<string, unknown> {
-  status: string
-  user_id: string
-  period_type: string
-  period_start: string
-  period_end: string
-  payroll_batch_id: string | null
+  status: string;
+  user_id: string;
+  period_type: string;
+  period_start: string;
+  period_end: string;
+  payroll_batch_id: string | null;
 }
 
 const TIMECARD_REVIEW_TRANSITIONS: TransitionTable = [
-  { action: TIMECARD_STATUSES.APPROVED, from: TIMECARD_STATUSES.SUBMITTED, to: TIMECARD_STATUSES.APPROVED },
-  { action: TIMECARD_STATUSES.REJECTED, from: TIMECARD_STATUSES.SUBMITTED, to: TIMECARD_STATUSES.REJECTED },
-]
+  {
+    action: TIMECARD_STATUSES.APPROVED,
+    from: TIMECARD_STATUSES.SUBMITTED,
+    to: TIMECARD_STATUSES.APPROVED,
+  },
+  {
+    action: TIMECARD_STATUSES.REJECTED,
+    from: TIMECARD_STATUSES.SUBMITTED,
+    to: TIMECARD_STATUSES.REJECTED,
+  },
+];
 
 const TIMECARD_REOPEN_TRANSITIONS: TransitionTable = [
   { action: 'reopen', from: TIMECARD_STATUSES.SUBMITTED, to: TIMECARD_STATUSES.DRAFT },
   { action: 'reopen', from: TIMECARD_STATUSES.APPROVED, to: TIMECARD_STATUSES.DRAFT },
   { action: 'reopen', from: TIMECARD_STATUSES.REJECTED, to: TIMECARD_STATUSES.DRAFT },
-]
+];
 
 const TIMECARD_REVIEW_GUARDS: readonly ReviewGuard<TimecardReviewRow>[] = [
   {
@@ -70,61 +78,62 @@ const TIMECARD_REVIEW_GUARDS: readonly ReviewGuard<TimecardReviewRow>[] = [
   },
   {
     code: 'payroll_locked',
-    check: row => row.payroll_batch_id == null,
+    check: (row) => row.payroll_batch_id == null,
   },
-]
+];
 
 const TIMECARD_PAYROLL_GUARD: readonly ReviewGuard<TimecardReviewRow>[] = [
   {
     code: 'payroll_locked',
-    check: row => row.payroll_batch_id == null,
+    check: (row) => row.payroll_batch_id == null,
   },
-]
+];
 
 function startOfWeek(date: Date): Date {
-  const next = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()))
-  const day = next.getUTCDay()
-  const diff = day === 0 ? -6 : 1 - day
-  next.setUTCDate(next.getUTCDate() + diff)
-  return next
+  const next = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const day = next.getUTCDay();
+  const diff = day === 0 ? -6 : 1 - day;
+  next.setUTCDate(next.getUTCDate() + diff);
+  return next;
 }
 
 function addDays(date: Date, days: number): Date {
-  const next = new Date(date)
-  next.setUTCDate(next.getUTCDate() + days)
-  return next
+  const next = new Date(date);
+  next.setUTCDate(next.getUTCDate() + days);
+  return next;
 }
 
 function toISODate(date: Date): string {
-  return date.toISOString().slice(0, 10)
+  return date.toISOString().slice(0, 10);
 }
 
 function parseDate(value: string): Date {
-  return new Date(`${value}T00:00:00.000Z`)
+  return new Date(`${value}T00:00:00.000Z`);
 }
 
 export function resolveTimecardPeriod(input?: TimecardPeriodQuery | null): TimecardPeriodRange {
-  const parsed = timecardPeriodQuerySchema.safeParse(input ?? {})
+  const parsed = timecardPeriodQuerySchema.safeParse(input ?? {});
   const periodType: 'week' | 'month' = parsed.success
     ? (parsed.data.period_type as 'week' | 'month')
-    : 'month'
-  const ref = parsed.success && parsed.data.period_date ? parseDate(parsed.data.period_date) : new Date()
+    : 'month';
+  const ref =
+    parsed.success && parsed.data.period_date ? parseDate(parsed.data.period_date) : new Date();
 
   if (periodType === 'week') {
-    const weekStart = startOfWeek(ref)
+    const weekStart = startOfWeek(ref);
     return {
       periodType,
       periodStart: toISODate(weekStart),
       periodEnd: toISODate(addDays(weekStart, 7)),
-    }
+    };
   }
 
-  const monthStart = getMonthStart(ref)
+  const monthStart = getMonthStart(ref);
   return {
     periodType,
     periodStart: toISODate(monthStart),
     periodEnd: toISODate(getNextMonthStart(ref)),
-  }
+  };
 }
 
 async function getScheduleForUser(userId: string): Promise<WeeklySchedule> {
@@ -132,12 +141,15 @@ async function getScheduleForUser(userId: string): Promise<WeeklySchedule> {
     .select({ workingHours: teamProfiles.workingHours })
     .from(teamProfiles)
     .where(eq(teamProfiles.userId, userId))
-    .limit(1)
+    .limit(1);
 
-  return parseWeeklySchedule(profile?.workingHours ?? null)
+  return parseWeeklySchedule(profile?.workingHours ?? null);
 }
 
-async function fetchTimecardWithEntries(client: TimecardDbClient, timecardId: string): Promise<TimecardWithEntries | null> {
+async function fetchTimecardWithEntries(
+  client: TimecardDbClient,
+  timecardId: string,
+): Promise<TimecardWithEntries | null> {
   const timecardRows = await client
     .select({
       id: timecards.id,
@@ -159,10 +171,10 @@ async function fetchTimecardWithEntries(client: TimecardDbClient, timecardId: st
     .from(timecards)
     .innerJoin(users, eq(timecards.userId, users.id))
     .where(eq(timecards.id, timecardId))
-    .limit(1)
-  const timecard = (timecardRows as Array<Record<string, any>>)[0]
+    .limit(1);
+  const timecard = (timecardRows as Array<Record<string, any>>)[0];
 
-  if (!timecard) return null
+  if (!timecard) return null;
 
   const entryRows = await client
     .select({
@@ -184,8 +196,8 @@ async function fetchTimecardWithEntries(client: TimecardDbClient, timecardId: st
     })
     .from(timecardEntries)
     .where(eq(timecardEntries.timecardId, timecardId))
-    .orderBy(asc(timecardEntries.workDate), asc(timecardEntries.createdAt))
-  const entries: TimecardEntry[] = (entryRows as Array<Record<string, any>>).map(entry => ({
+    .orderBy(asc(timecardEntries.workDate), asc(timecardEntries.createdAt));
+  const entries: TimecardEntry[] = (entryRows as Array<Record<string, any>>).map((entry) => ({
     id: entry.id,
     timecard_id: entry.timecard_id,
     user_id: entry.user_id,
@@ -201,15 +213,15 @@ async function fetchTimecardWithEntries(client: TimecardDbClient, timecardId: st
     source: entry.source,
     created_at: entry.created_at ?? '',
     updated_at: entry.updated_at ?? '',
-  }))
+  }));
 
   const reviewerName = timecard.reviewed_by
     ? await client
-      .select({ name: users.name })
-      .from(users)
-      .where(eq(users.id, timecard.reviewed_by))
-      .then(rows => rows[0]?.name ?? null)
-    : null
+        .select({ name: users.name })
+        .from(users)
+        .where(eq(users.id, timecard.reviewed_by))
+        .then((rows) => rows[0]?.name ?? null)
+    : null;
 
   return {
     id: timecard.id,
@@ -230,32 +242,38 @@ async function fetchTimecardWithEntries(client: TimecardDbClient, timecardId: st
     created_at: timecard.created_at,
     updated_at: timecard.updated_at,
     entries,
-  }
+  };
 }
 
-async function createDraftForPeriod(userId: string, period: TimecardPeriodRange): Promise<TimecardWithEntries> {
-  const schedule = await getScheduleForUser(userId)
+async function createDraftForPeriod(
+  userId: string,
+  period: TimecardPeriodRange,
+): Promise<TimecardWithEntries> {
+  const schedule = await getScheduleForUser(userId);
 
   return db.transaction(async (tx) => {
     const existingRows = await tx
       .select({ id: timecards.id })
       .from(timecards)
-      .where(and(
-        eq(timecards.userId, userId),
-        eq(timecards.periodStart, period.periodStart),
-        eq(timecards.periodEnd, period.periodEnd),
-      ))
-      .limit(1)
-    const existing = existingRows[0]
+      .where(
+        and(
+          eq(timecards.userId, userId),
+          eq(timecards.periodStart, period.periodStart),
+          eq(timecards.periodEnd, period.periodEnd),
+        ),
+      )
+      .limit(1);
+    const existing = existingRows[0];
 
     if (existing) {
-      const current = await fetchTimecardWithEntries(tx, existing.id)
-      if (current) return current
+      const current = await fetchTimecardWithEntries(tx, existing.id);
+      if (current) return current;
     }
 
-    const templateEntries = period.periodType === 'month'
-      ? buildTimecardEntriesForMonth(schedule, parseDate(period.periodStart))
-      : buildTimecardEntriesFromSchedule(schedule, period.periodStart)
+    const templateEntries =
+      period.periodType === 'month'
+        ? buildTimecardEntriesForMonth(schedule, parseDate(period.periodStart))
+        : buildTimecardEntriesFromSchedule(schedule, period.periodStart);
 
     // Two first-hits for the same period race past the SELECT above (page
     // widget + direct API call); the UNIQUE(user_id, period_start, period_end)
@@ -273,30 +291,30 @@ async function createDraftForPeriod(userId: string, period: TimecardPeriodRange)
       .onConflictDoNothing({
         target: [timecards.userId, timecards.periodStart, timecards.periodEnd],
       })
-      .returning({ id: timecards.id })
-    const created = createdRows[0]
+      .returning({ id: timecards.id });
+    const created = createdRows[0];
 
     if (!created) {
       // Lost the race — the concurrent request created the row; serve it.
       const raced = await tx
         .select({ id: timecards.id })
         .from(timecards)
-        .where(and(
-          eq(timecards.userId, userId),
-          eq(timecards.periodStart, period.periodStart),
-          eq(timecards.periodEnd, period.periodEnd),
-        ))
-        .limit(1)
-      const racedExisting = raced[0]
-        ? await fetchTimecardWithEntries(tx, raced[0].id)
-        : null
-      if (!racedExisting) throw new Error('timecard_creation_failed')
-      return racedExisting
+        .where(
+          and(
+            eq(timecards.userId, userId),
+            eq(timecards.periodStart, period.periodStart),
+            eq(timecards.periodEnd, period.periodEnd),
+          ),
+        )
+        .limit(1);
+      const racedExisting = raced[0] ? await fetchTimecardWithEntries(tx, raced[0].id) : null;
+      if (!racedExisting) throw new Error('timecard_creation_failed');
+      return racedExisting;
     }
 
     if (templateEntries.length > 0) {
       await tx.insert(timecardEntries).values(
-        templateEntries.map(entry => ({
+        templateEntries.map((entry) => ({
           timecardId: created.id,
           userId,
           workDate: entry.work_date,
@@ -309,49 +327,53 @@ async function createDraftForPeriod(userId: string, period: TimecardPeriodRange)
           taskId: entry.task_id ?? null,
           protocolId: entry.protocol_id ?? null,
           source: entry.source ?? 'template',
-        }))
-      )
+        })),
+      );
     }
 
-    const ensured = await fetchTimecardWithEntries(tx, created.id)
-    if (!ensured) throw new Error('timecard_creation_failed')
-    return ensured
-  })
+    const ensured = await fetchTimecardWithEntries(tx, created.id);
+    if (!ensured) throw new Error('timecard_creation_failed');
+    return ensured;
+  });
 }
 
 export async function getOrCreateTimecardForUser(
   userId: string,
-  periodInput?: TimecardPeriodQuery | null
+  periodInput?: TimecardPeriodQuery | null,
 ): Promise<TimecardWithEntries> {
-  const period = resolveTimecardPeriod(periodInput)
+  const period = resolveTimecardPeriod(periodInput);
   const existingRows = await db
     .select({ id: timecards.id })
     .from(timecards)
-    .where(and(
-      eq(timecards.userId, userId),
-      eq(timecards.periodStart, period.periodStart),
-      eq(timecards.periodEnd, period.periodEnd),
-    ))
-    .limit(1)
-  const existing = existingRows[0]
+    .where(
+      and(
+        eq(timecards.userId, userId),
+        eq(timecards.periodStart, period.periodStart),
+        eq(timecards.periodEnd, period.periodEnd),
+      ),
+    )
+    .limit(1);
+  const existing = existingRows[0];
 
   if (existing) {
-      const current = await fetchTimecardWithEntries(db, existing.id)
-    if (current) return current
+    const current = await fetchTimecardWithEntries(db, existing.id);
+    if (current) return current;
   }
 
-  return createDraftForPeriod(userId, period)
+  return createDraftForPeriod(userId, period);
 }
 
-export async function listTimecards(params: {
-  userId?: string
-  status?: string
-  periodType?: 'week' | 'month'
-  periodStart?: string
-  periodEnd?: string
-  limit?: number
-  offset?: number
-} = {}) {
+export async function listTimecards(
+  params: {
+    userId?: string;
+    status?: string;
+    periodType?: 'week' | 'month';
+    periodStart?: string;
+    periodEnd?: string;
+    limit?: number;
+    offset?: number;
+  } = {},
+) {
   // LEFT JOIN team_profiles so the admin approval queue can show
   // department + position next to each name without a second round trip.
   // Some users (e.g. external buyers) won't have a profile; those rows
@@ -382,23 +404,23 @@ export async function listTimecards(params: {
     .from(timecards)
     .innerJoin(users, eq(timecards.userId, users.id))
     .leftJoin(teamProfiles, eq(teamProfiles.userId, timecards.userId))
-    .leftJoin(timecardEntries, eq(timecardEntries.timecardId, timecards.id))
+    .leftJoin(timecardEntries, eq(timecardEntries.timecardId, timecards.id));
 
-  const conditions = []
+  const conditions = [];
   if (params.userId) {
-    conditions.push(eq(timecards.userId, params.userId))
+    conditions.push(eq(timecards.userId, params.userId));
   }
   if (params.status && params.status !== 'all') {
-    conditions.push(eq(timecards.status, params.status))
+    conditions.push(eq(timecards.status, params.status));
   }
   if (params.periodType) {
-    conditions.push(eq(timecards.periodType, params.periodType))
+    conditions.push(eq(timecards.periodType, params.periodType));
   }
   if (params.periodStart) {
-    conditions.push(gte(timecards.periodStart, params.periodStart))
+    conditions.push(gte(timecards.periodStart, params.periodStart));
   }
   if (params.periodEnd) {
-    conditions.push(lte(timecards.periodEnd, params.periodEnd))
+    conditions.push(lte(timecards.periodEnd, params.periodEnd));
   }
 
   const rows = await query
@@ -414,9 +436,9 @@ export async function listTimecards(params: {
     )
     .orderBy(asc(timecards.periodStart), asc(timecards.createdAt))
     .limit(params.limit ?? 50)
-    .offset(params.offset ?? 0)
+    .offset(params.offset ?? 0);
 
-  return rows
+  return rows;
 }
 
 export async function saveTimecardDraft(
@@ -424,32 +446,34 @@ export async function saveTimecardDraft(
   input: TimecardSaveInput,
   options: { keepSubmitted?: boolean; allowApproved?: boolean } = {},
 ): Promise<TimecardWithEntries> {
-  const parsed = timecardSaveSchema.safeParse(input)
+  const parsed = timecardSaveSchema.safeParse(input);
   if (!parsed.success) {
-    throw new Error('invalid_timecard_payload')
+    throw new Error('invalid_timecard_payload');
   }
 
   return db.transaction(async (tx) => {
     const rowRows = await tx
       .select()
       .from(timecards)
-      .where(and(
-        eq(timecards.userId, userId),
-        eq(timecards.periodStart, parsed.data.period_start),
-        eq(timecards.periodEnd, parsed.data.period_end),
-      ))
-      .limit(1)
-    const row = rowRows[0] as Record<string, any> | undefined
+      .where(
+        and(
+          eq(timecards.userId, userId),
+          eq(timecards.periodStart, parsed.data.period_start),
+          eq(timecards.periodEnd, parsed.data.period_end),
+        ),
+      )
+      .limit(1);
+    const row = rowRows[0] as Record<string, any> | undefined;
 
     // Owners can't edit an approved card; approvers can (allowApproved, via
     // the audited review-edit path) — the real edit boundary is payroll below.
     if (row && row.status === TIMECARD_STATUSES.APPROVED && !options.allowApproved) {
-      throw new Error('approved_timecard_locked')
+      throw new Error('approved_timecard_locked');
     }
     // Once a payroll batch references the card, its hours are financial
     // history — edits would desync the payroll snapshot.
     if (row && row.payrollBatchId != null) {
-      throw new Error('timecard_payroll_locked')
+      throw new Error('timecard_payroll_locked');
     }
 
     // Any content edit invalidates a pending submission: the card drops back
@@ -459,7 +483,7 @@ export async function saveTimecardDraft(
     const demoteToDraft =
       row !== undefined &&
       (row.status === TIMECARD_STATUSES.REJECTED ||
-        (row.status === TIMECARD_STATUSES.SUBMITTED && !options.keepSubmitted))
+        (row.status === TIMECARD_STATUSES.SUBMITTED && !options.keepSubmitted));
 
     const returnedRows = row
       ? await tx
@@ -483,18 +507,18 @@ export async function saveTimecardDraft(
             notes: parsed.data.notes ?? null,
             status: TIMECARD_STATUSES.DRAFT,
           })
-          .returning({ id: timecards.id })
+          .returning({ id: timecards.id });
 
-    const timecardRow = returnedRows[0]
+    const timecardRow = returnedRows[0];
     if (!timecardRow) {
-      throw new Error('timecard_save_failed')
+      throw new Error('timecard_save_failed');
     }
 
-    await tx.delete(timecardEntries).where(eq(timecardEntries.timecardId, timecardRow.id))
+    await tx.delete(timecardEntries).where(eq(timecardEntries.timecardId, timecardRow.id));
 
     if (parsed.data.entries.length > 0) {
       await tx.insert(timecardEntries).values(
-        parsed.data.entries.map(entry => ({
+        parsed.data.entries.map((entry) => ({
           timecardId: timecardRow.id,
           userId,
           workDate: entry.work_date,
@@ -507,21 +531,24 @@ export async function saveTimecardDraft(
           taskId: entry.task_id ?? null,
           protocolId: entry.protocol_id ?? null,
           source: entry.source ?? 'manual',
-        }))
-      )
+        })),
+      );
     }
 
-    const result = await fetchTimecardWithEntries(tx, timecardRow.id)
-    if (!result) throw new Error('timecard_save_failed')
-    return result
-  })
+    const result = await fetchTimecardWithEntries(tx, timecardRow.id);
+    if (!result) throw new Error('timecard_save_failed');
+    return result;
+  });
 }
 
-export async function submitTimecard(userId: string, input: TimecardSaveInput): Promise<TimecardWithEntries> {
-  const saved = await saveTimecardDraft(userId, input)
+export async function submitTimecard(
+  userId: string,
+  input: TimecardSaveInput,
+): Promise<TimecardWithEntries> {
+  const saved = await saveTimecardDraft(userId, input);
 
   if (saved.status === TIMECARD_STATUSES.APPROVED) {
-    throw new Error('approved_timecard_locked')
+    throw new Error('approved_timecard_locked');
   }
 
   await db
@@ -531,9 +558,13 @@ export async function submitTimecard(userId: string, input: TimecardSaveInput): 
       submittedAt: sql`NOW()`,
       updatedAt: sql`NOW()`,
     })
-    .where(eq(timecards.id, saved.id))
+    .where(eq(timecards.id, saved.id));
 
-  const periodLabel = formatTimecardPeriodLabel(saved.period_type, saved.period_start, saved.period_end)
+  const periodLabel = formatTimecardPeriodLabel(
+    saved.period_type,
+    saved.period_start,
+    saved.period_end,
+  );
 
   logActivity({
     actorId: userId,
@@ -541,10 +572,10 @@ export async function submitTimecard(userId: string, input: TimecardSaveInput): 
     subjectType: 'timecard',
     subjectId: saved.id,
     subjectLabel: periodLabel,
-  })
+  });
 
-  const submitted = (await fetchTimecardWithEntries(db, saved.id)) ?? saved
-  const displayName = submitted.user_name || submitted.user_email || 'Ein Teammitglied'
+  const submitted = (await fetchTimecardWithEntries(db, saved.id)) ?? saved;
+  const displayName = submitted.user_name || submitted.user_email || 'Ein Teammitglied';
 
   // Two notifications on submit, each with its own email:
   //   1. every OTHER approver → "a timecard needs your review"
@@ -555,17 +586,21 @@ export async function submitTimecard(userId: string, input: TimecardSaveInput): 
   // Resubmits REPLACE the previous entries for this card (delete by related_id
   // + type) instead of stacking, so there's exactly one live entry per kind.
   try {
-    const allApproverIds = await getTimecardApproverIds()
-    const otherApproverIds = allApproverIds.filter((id) => id !== userId)
-    const submitterIsApprover = allApproverIds.includes(userId)
+    const allApproverIds = await getTimecardApproverIds();
+    const otherApproverIds = allApproverIds.filter((id) => id !== userId);
+    const submitterIsApprover = allApproverIds.includes(userId);
 
-    await db.delete(notifications).where(and(
-      eq(notifications.relatedId, submitted.id),
-      or(
-        eq(notifications.type, NOTIFICATION_TYPES.TIMECARD_SUBMITTED),
-        eq(notifications.type, NOTIFICATION_TYPES.TIMECARD_SUBMIT_CONFIRMED),
-      ),
-    ))
+    await db
+      .delete(notifications)
+      .where(
+        and(
+          eq(notifications.relatedId, submitted.id),
+          or(
+            eq(notifications.type, NOTIFICATION_TYPES.TIMECARD_SUBMITTED),
+            eq(notifications.type, NOTIFICATION_TYPES.TIMECARD_SUBMIT_CONFIRMED),
+          ),
+        ),
+      );
 
     if (otherApproverIds.length > 0) {
       await notifyUsers(otherApproverIds, {
@@ -574,28 +609,34 @@ export async function submitTimecard(userId: string, input: TimecardSaveInput): 
         content: `${displayName} hat die Zeitkarte für ${periodLabel} zur Prüfung eingereicht.`,
         related_type: RELATED_TYPES.TIMECARD_REVIEW,
         related_id: submitted.id,
-      })
+      });
     }
 
     await createNotification(userId, {
       type: NOTIFICATION_TYPES.TIMECARD_SUBMIT_CONFIRMED,
       title: 'Zeitkarte eingereicht',
-      content: submitterIsApprover && otherApproverIds.length === 0
-        ? `Deine Zeitkarte für ${periodLabel} wurde eingereicht. Als Freigabeberechtigte:r kannst du sie selbst freigeben.`
-        : `Deine Zeitkarte für ${periodLabel} wurde zur Freigabe eingereicht.`,
+      content:
+        submitterIsApprover && otherApproverIds.length === 0
+          ? `Deine Zeitkarte für ${periodLabel} wurde eingereicht. Als Freigabeberechtigte:r kannst du sie selbst freigeben.`
+          : `Deine Zeitkarte für ${periodLabel} wurde zur Freigabe eingereicht.`,
       related_type: submitterIsApprover ? RELATED_TYPES.TIMECARD_REVIEW : RELATED_TYPES.TIMECARD,
       related_id: submitted.id,
-    })
+    });
   } catch (error) {
-    logger.warn('Failed to send timecard submission notifications', { error, timecardId: saved.id })
+    logger.warn('Failed to send timecard submission notifications', {
+      error,
+      timecardId: saved.id,
+    });
   }
 
-  return submitted
+  return submitted;
 }
 
 /** Fetch one timecard with its entries for approver review (by card id). */
-export async function getTimecardByIdForReview(timecardId: string): Promise<TimecardWithEntries | null> {
-  return fetchTimecardWithEntries(db, timecardId)
+export async function getTimecardByIdForReview(
+  timecardId: string,
+): Promise<TimecardWithEntries | null> {
+  return fetchTimecardWithEntries(db, timecardId);
 }
 
 /**
@@ -614,14 +655,21 @@ export async function saveTimecardEntriesForReview(
     .select({ userId: timecards.userId })
     .from(timecards)
     .where(eq(timecards.id, timecardId))
-    .limit(1)
-  const owner = rows[0]
-  if (!owner) throw new Error('timecard_not_found')
+    .limit(1);
+  const owner = rows[0];
+  if (!owner) throw new Error('timecard_not_found');
 
-  const result = await saveTimecardDraft(owner.userId, input, { keepSubmitted: true, allowApproved: true })
+  const result = await saveTimecardDraft(owner.userId, input, {
+    keepSubmitted: true,
+    allowApproved: true,
+  });
 
   if (owner.userId !== reviewerId) {
-    const periodLabel = formatTimecardPeriodLabel(result.period_type, result.period_start, result.period_end)
+    const periodLabel = formatTimecardPeriodLabel(
+      result.period_type,
+      result.period_start,
+      result.period_end,
+    );
 
     logActivity({
       actorId: reviewerId,
@@ -629,14 +677,14 @@ export async function saveTimecardEntriesForReview(
       subjectType: 'timecard',
       subjectId: timecardId,
       subjectLabel: periodLabel,
-    })
+    });
 
     const reviewerRows = await db
       .select({ name: users.name, email: users.email })
       .from(users)
       .where(eq(users.id, reviewerId))
-      .limit(1)
-    const reviewerName = reviewerRows[0]?.name || reviewerRows[0]?.email || 'Ein Teammitglied'
+      .limit(1);
+    const reviewerName = reviewerRows[0]?.name || reviewerRows[0]?.email || 'Ein Teammitglied';
 
     await createNotification(owner.userId, {
       type: NOTIFICATION_TYPES.TIMECARD_REVIEWED,
@@ -644,10 +692,15 @@ export async function saveTimecardEntriesForReview(
       content: `${reviewerName} hat deine Zeitkarte für ${periodLabel} angepasst. Bitte sieh dir die Einträge an.`,
       related_type: RELATED_TYPES.TIMECARD,
       related_id: timecardId,
-    }).catch(err => logger.warn('Failed to notify timecard owner about approver edit', { error: err, timecardId }))
+    }).catch((err) =>
+      logger.warn('Failed to notify timecard owner about approver edit', {
+        error: err,
+        timecardId,
+      }),
+    );
   }
 
-  return result
+  return result;
 }
 
 /**
@@ -658,7 +711,10 @@ export async function saveTimecardEntriesForReview(
  * (that history is closed; corrections go through a new batch). Authorization
  * is enforced at the route (withAdmin('timecards')).
  */
-export async function reopenTimecard(timecardId: string, actorId: string): Promise<TimecardWithEntries> {
+export async function reopenTimecard(
+  timecardId: string,
+  actorId: string,
+): Promise<TimecardWithEntries> {
   const result = await runReviewTransition<TimecardReviewRow>({
     target: {
       table: 'timecards',
@@ -677,7 +733,11 @@ export async function reopenTimecard(timecardId: string, actorId: string): Promi
       },
     },
     emit: (row): WorkflowEvent => {
-      const periodLabel = formatTimecardPeriodLabel(row.period_type, row.period_start, row.period_end)
+      const periodLabel = formatTimecardPeriodLabel(
+        row.period_type,
+        row.period_start,
+        row.period_end,
+      );
       const event: WorkflowEvent = {
         type: NOTIFICATION_TYPES.TIMECARD_REVIEWED,
         related: { type: RELATED_TYPES.TIMECARD, id: timecardId },
@@ -688,38 +748,39 @@ export async function reopenTimecard(timecardId: string, actorId: string): Promi
           subjectId: timecardId,
           subjectLabel: periodLabel,
         },
-      }
+      };
 
       if (row.user_id !== actorId) {
-        event.recipients = { userId: row.user_id }
-        event.title = 'Zeitkarte wieder geöffnet'
-        event.content = `Deine Zeitkarte für ${periodLabel} wurde wieder geöffnet und kann angepasst werden.`
+        event.recipients = { userId: row.user_id };
+        event.title = 'Zeitkarte wieder geöffnet';
+        event.content = `Deine Zeitkarte für ${periodLabel} wurde wieder geöffnet und kann angepasst werden.`;
       }
 
-      return event
+      return event;
     },
-  })
+  });
 
   if (!result.ok) {
-    if (result.code === 'not_found') throw new Error('timecard_not_found')
-    if (result.code === 'guard_failed' && result.guard === 'payroll_locked') throw new Error('timecard_payroll_locked')
-    throw new Error('timecard_not_submitted')
+    if (result.code === 'not_found') throw new Error('timecard_not_found');
+    if (result.code === 'guard_failed' && result.guard === 'payroll_locked')
+      throw new Error('timecard_payroll_locked');
+    throw new Error('timecard_not_submitted');
   }
 
-  const reopened = await fetchTimecardWithEntries(db, timecardId)
-  if (!reopened) throw new Error('timecard_not_found')
-  return reopened
+  const reopened = await fetchTimecardWithEntries(db, timecardId);
+  if (!reopened) throw new Error('timecard_not_found');
+  return reopened;
 }
 
 export async function reviewTimecard(
   reviewerId: string,
   timecardId: string,
   input: TimecardReviewActionInput,
-  opts?: { allowSelfReview?: boolean }
+  opts?: { allowSelfReview?: boolean },
 ): Promise<TimecardWithEntries> {
-  const parsed = timecardReviewActionSchema.safeParse(input)
+  const parsed = timecardReviewActionSchema.safeParse(input);
   if (!parsed.success) {
-    throw new Error('invalid_timecard_review')
+    throw new Error('invalid_timecard_review');
   }
 
   // Super-admins may approve their OWN timecards — in a small org they're often
@@ -728,7 +789,7 @@ export async function reviewTimecard(
   // colleague: the self_review guard stays for them.
   const guards = opts?.allowSelfReview
     ? TIMECARD_REVIEW_GUARDS.filter((g) => g.code !== 'self_review')
-    : TIMECARD_REVIEW_GUARDS
+    : TIMECARD_REVIEW_GUARDS;
 
   const result = await runReviewTransition<TimecardReviewRow>({
     target: {
@@ -742,8 +803,12 @@ export async function reviewTimecard(
     guards,
     reason: parsed.data.review_notes ?? null,
     emit: (row): WorkflowEvent => {
-      const reviewPeriodLabel = formatTimecardPeriodLabel(row.period_type, row.period_start, row.period_end)
-      const approved = parsed.data.status === TIMECARD_STATUSES.APPROVED
+      const reviewPeriodLabel = formatTimecardPeriodLabel(
+        row.period_type,
+        row.period_start,
+        row.period_end,
+      );
+      const approved = parsed.data.status === TIMECARD_STATUSES.APPROVED;
       return {
         type: NOTIFICATION_TYPES.TIMECARD_REVIEWED,
         recipients: { userId: row.user_id },
@@ -759,18 +824,20 @@ export async function reviewTimecard(
           subjectId: timecardId,
           subjectLabel: reviewPeriodLabel,
         },
-      }
+      };
     },
-  })
+  });
 
   if (!result.ok) {
-    if (result.code === 'not_found') throw new Error('timecard_not_found')
-    if (result.code === 'guard_failed' && result.guard === 'self_review') throw new Error('timecard_self_review')
-    if (result.code === 'guard_failed' && result.guard === 'payroll_locked') throw new Error('timecard_payroll_locked')
-    throw new Error('timecard_not_submitted')
+    if (result.code === 'not_found') throw new Error('timecard_not_found');
+    if (result.code === 'guard_failed' && result.guard === 'self_review')
+      throw new Error('timecard_self_review');
+    if (result.code === 'guard_failed' && result.guard === 'payroll_locked')
+      throw new Error('timecard_payroll_locked');
+    throw new Error('timecard_not_submitted');
   }
 
-  const reviewed = await fetchTimecardWithEntries(db, timecardId)
-  if (!reviewed) throw new Error('timecard_review_failed')
-  return reviewed
+  const reviewed = await fetchTimecardWithEntries(db, timecardId);
+  if (!reviewed) throw new Error('timecard_review_failed');
+  return reviewed;
 }

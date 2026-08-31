@@ -1,23 +1,23 @@
-'use client'
+'use client';
 
-import { Calendar, MapPin, Users } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { formatDateTimeWithWeekday } from '@/lib/date-formats'
-import type { WorkshopInstance } from './types'
-import { formatCentsToChf } from '@/lib/pricing'
+import { Calendar, MapPin, Users } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { formatDateTimeWithWeekday } from '@/lib/date-formats';
+import type { WorkshopInstance } from './types';
+import { formatCentsToChf } from '@/lib/pricing';
 
 interface WorkshopInstanceCardProps {
-  instance: WorkshopInstance
-  spotsLeft: number
-  priceCents: number
+  instance: WorkshopInstance;
+  spotsLeft: number;
+  priceCents: number;
 }
 
 export function WorkshopInstanceCard({
   instance,
   spotsLeft,
-  priceCents
+  priceCents,
 }: WorkshopInstanceCardProps) {
-  const t = useTranslations('components.workshopInstanceCard')
+  const t = useTranslations('components.workshopInstanceCard');
   return (
     <>
       {/* Workshop Details */}
@@ -45,10 +45,8 @@ export function WorkshopInstanceCard({
         <div className="text-2xl font-bold text-action">
           {priceCents === 0 ? t('free') : formatCentsToChf(priceCents)}
         </div>
-        {priceCents > 0 && (
-          <div className="text-sm text-text-tertiary">{t('vatIncluded')}</div>
-        )}
+        {priceCents > 0 && <div className="text-sm text-text-tertiary">{t('vatIncluded')}</div>}
       </div>
     </>
-  )
+  );
 }

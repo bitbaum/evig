@@ -8,24 +8,23 @@
  *          200 (re-join — reactivates left membership), 201 (new membership)
  */
 
-const mockAuth = jest.fn()
+const mockAuth = jest.fn();
 
 jest.mock('@/auth', () => ({
   auth: (...args: unknown[]) => mockAuth.apply(null, args),
-}))
+}));
 
 jest.mock('@/lib/api/middleware', () => ({
-  withAuth: (handler: unknown) =>
-    (req: Request, context?: { params?: Promise<{ id: string }> }) =>
-      mockAuth().then(async (session: unknown) => {
-        if (!session || !(session as { user?: { id?: string } }).user?.id) {
-          const { NextResponse } = jest.requireActual('next/server')
-          return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 })
-        }
-        const resolvedContext = context?.params ? { params: await context.params } : undefined
-        return (handler as (...a: unknown[]) => unknown)(req, session, resolvedContext)
-      }),
-}))
+  withAuth: (handler: unknown) => (req: Request, context?: { params?: Promise<{ id: string }> }) =>
+    mockAuth().then(async (session: unknown) => {
+      if (!session || !(session as { user?: { id?: string } }).user?.id) {
+        const { NextResponse } = jest.requireActual('next/server');
+        return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+      }
+      const resolvedContext = context?.params ? { params: await context.params } : undefined;
+      return (handler as (...a: unknown[]) => unknown)(req, session, resolvedContext);
+    }),
+}));
 
 // Route runs the whole pool-lock + capacity-check + existing-membership-
 // check + insert/reactivate flow inside `db.transaction(async tx => ...)`.
@@ -33,182 +32,219 @@ jest.mock('@/lib/api/middleware', () => ({
 // rest go through tx.select/insert/update. The mock delegates each tx method
 // to a top-level stub so per-test configuration is independent of the
 // transaction wrapper.
-const mockSelect = jest.fn()
-const mockUpdate = jest.fn()
-const mockSet = jest.fn()
-const mockUpdateWhere = jest.fn()
-const mockUpdateReturning = jest.fn()
-const mockInsert = jest.fn()
-const mockValues = jest.fn()
-const mockInsertReturning = jest.fn()
-const mockExecute = jest.fn()
-const mockTransaction = jest.fn()
+const mockSelect = jest.fn();
+const mockUpdate = jest.fn();
+const mockSet = jest.fn();
+const mockUpdateWhere = jest.fn();
+const mockUpdateReturning = jest.fn();
+const mockInsert = jest.fn();
+const mockValues = jest.fn();
+const mockInsertReturning = jest.fn();
+const mockExecute = jest.fn();
+const mockTransaction = jest.fn();
 
 jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
-    update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
-    insert: (...args: unknown[]) => { mockInsert(...args); return { values: mockValues } },
+    update: (...args: unknown[]) => {
+      mockUpdate(...args);
+      return { set: mockSet };
+    },
+    insert: (...args: unknown[]) => {
+      mockInsert(...args);
+      return { values: mockValues };
+    },
     transaction: (cb: (tx: unknown) => unknown) => mockTransaction(cb),
   },
-}))
+}));
 
 jest.mock('@/db/schema', () => ({
-  subscriptionPools: { id: 'sp_id', maxMembers: 'sp_maxMembers', status: 'sp_status', ownerId: 'sp_ownerId' },
-  poolMemberships: { id: 'pm_id', poolId: 'pm_poolId', userId: 'pm_userId', role: 'pm_role', status: 'pm_status', leftAt: 'pm_leftAt' },
-}))
+  subscriptionPools: {
+    id: 'sp_id',
+    maxMembers: 'sp_maxMembers',
+    status: 'sp_status',
+    ownerId: 'sp_ownerId',
+  },
+  poolMemberships: {
+    id: 'pm_id',
+    poolId: 'pm_poolId',
+    userId: 'pm_userId',
+    role: 'pm_role',
+    status: 'pm_status',
+    leftAt: 'pm_leftAt',
+  },
+}));
 
 jest.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
-  sql: Object.assign(
-    (_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }),
-    { raw: (s: string) => ({ __raw: s }) }
-  ),
-}))
+  sql: Object.assign((_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }), {
+    raw: (s: string) => ({ __raw: s }),
+  }),
+}));
 
 jest.mock('@/config/database', () => ({
   TABLE_NAMES: { POOL_MEMBERSHIPS: 'pool_memberships' },
   POOL_STATUS: { ACTIVE: 'active', CLOSED: 'closed' },
   POOL_MEMBERSHIP_STATUS: { ACTIVE: 'active', LEFT: 'left' },
-}))
+}));
 
 jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server')
+  const { NextResponse } = jest.requireActual('next/server');
   return {
-    apiSuccess: (data: unknown, status = 200) => NextResponse.json({ success: true, data }, { status }),
-    apiError: (_err: unknown, msg: string, status = 500) => NextResponse.json({ success: false, error: msg }, { status }),
-    apiBadRequest: (msg: string) => NextResponse.json({ success: false, error: msg }, { status: 400 }),
-    apiNotFound: (msg: string) => NextResponse.json({ success: false, error: msg }, { status: 404 }),
-  }
-})
+    apiSuccess: (data: unknown, status = 200) =>
+      NextResponse.json({ success: true, data }, { status }),
+    apiError: (_err: unknown, msg: string, status = 500) =>
+      NextResponse.json({ success: false, error: msg }, { status }),
+    apiBadRequest: (msg: string) =>
+      NextResponse.json({ success: false, error: msg }, { status: 400 }),
+    apiNotFound: (msg: string) =>
+      NextResponse.json({ success: false, error: msg }, { status: 404 }),
+  };
+});
 
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
-}))
+}));
 
-import { NextRequest } from 'next/server'
-import { POST } from '../route'
+import { NextRequest } from 'next/server';
+import { POST } from '../route';
 
 const MOCK_SESSION = {
-  user: { id: 'user-1', email: 'user@example.com', name: 'Test User', isStaff: false, staffPermissions: [] as string[] },
+  user: {
+    id: 'user-1',
+    email: 'user@example.com',
+    name: 'Test User',
+    isStaff: false,
+    staffPermissions: [] as string[],
+  },
   expires: '2027-01-01',
-}
+};
 
 // Pool row shape matches what the raw `tx.execute(SELECT ... FOR UPDATE)`
 // would return: snake_case columns, not the Drizzle camelCase mapping.
-const MOCK_POOL_ROW = { id: 'pool-1', max_members: 5, status: 'active' }
-const MOCK_MEMBERSHIP = { id: 'mem-1', poolId: 'pool-1', userId: 'user-1', role: 'member', status: 'active' }
+const MOCK_POOL_ROW = { id: 'pool-1', max_members: 5, status: 'active' };
+const MOCK_MEMBERSHIP = {
+  id: 'mem-1',
+  poolId: 'pool-1',
+  userId: 'user-1',
+  role: 'member',
+  status: 'active',
+};
 
 function makeContext(id = 'pool-1') {
-  return { params: Promise.resolve({ id }) }
+  return { params: Promise.resolve({ id }) };
 }
 
 function makeRequest() {
-  return new NextRequest('http://localhost/api/pools/pool-1/join', { method: 'POST' })
+  return new NextRequest('http://localhost/api/pools/pool-1/join', { method: 'POST' });
 }
 
 // Persistent mock references so tests can override specific step results.
 // mockMemberLimit drives the existing-membership lookup; mockCountWhere
 // drives the COUNT(*) query for capacity.
-let mockMemberLimit: jest.Mock
-let mockCountWhere: jest.Mock
+let mockMemberLimit: jest.Mock;
+let mockCountWhere: jest.Mock;
 
 beforeEach(() => {
-  jest.resetAllMocks()
-  mockAuth.mockResolvedValue(MOCK_SESSION)
+  jest.resetAllMocks();
+  mockAuth.mockResolvedValue(MOCK_SESSION);
 
   // Default: pool found and active.
-  mockExecute.mockResolvedValue({ rows: [MOCK_POOL_ROW] })
+  mockExecute.mockResolvedValue({ rows: [MOCK_POOL_ROW] });
 
   // Count query chain: tx.select({count}).from().where() → [{ count }]
   // Default: 2 active members (well below max of 5).
-  mockCountWhere = jest.fn().mockResolvedValue([{ count: 2 }])
-  const countFrom = jest.fn().mockReturnValue({ where: mockCountWhere })
+  mockCountWhere = jest.fn().mockResolvedValue([{ count: 2 }]);
+  const countFrom = jest.fn().mockReturnValue({ where: mockCountWhere });
 
   // Membership lookup chain: tx.select(...).from().where().limit(1) → [row?]
   // Default: no existing membership.
-  mockMemberLimit = jest.fn().mockResolvedValue([])
-  const memberWhere = jest.fn().mockReturnValue({ limit: mockMemberLimit })
-  const memberFrom = jest.fn().mockReturnValue({ where: memberWhere })
+  mockMemberLimit = jest.fn().mockResolvedValue([]);
+  const memberWhere = jest.fn().mockReturnValue({ limit: mockMemberLimit });
+  const memberFrom = jest.fn().mockReturnValue({ where: memberWhere });
 
   // First select() in tx is the COUNT, second is the membership lookup.
-  mockSelect
-    .mockReturnValueOnce({ from: countFrom })
-    .mockReturnValue({ from: memberFrom })
+  mockSelect.mockReturnValueOnce({ from: countFrom }).mockReturnValue({ from: memberFrom });
 
   // Update chain (reactivate left membership)
-  mockSet.mockReturnValue({ where: mockUpdateWhere })
-  mockUpdateWhere.mockReturnValue({ returning: mockUpdateReturning })
-  mockUpdateReturning.mockResolvedValue([MOCK_MEMBERSHIP])
+  mockSet.mockReturnValue({ where: mockUpdateWhere });
+  mockUpdateWhere.mockReturnValue({ returning: mockUpdateReturning });
+  mockUpdateReturning.mockResolvedValue([MOCK_MEMBERSHIP]);
 
   // Insert chain (new membership)
-  mockValues.mockReturnValue({ returning: mockInsertReturning })
-  mockInsertReturning.mockResolvedValue([MOCK_MEMBERSHIP])
+  mockValues.mockReturnValue({ returning: mockInsertReturning });
+  mockInsertReturning.mockResolvedValue([MOCK_MEMBERSHIP]);
 
   mockTransaction.mockImplementation(async (cb: (tx: unknown) => Promise<unknown>) => {
     const tx = {
       execute: (...args: unknown[]) => mockExecute(...args),
       select: (...args: unknown[]) => mockSelect(...args),
-      update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
-      insert: (...args: unknown[]) => { mockInsert(...args); return { values: mockValues } },
-    }
-    return await cb(tx)
-  })
-})
+      update: (...args: unknown[]) => {
+        mockUpdate(...args);
+        return { set: mockSet };
+      },
+      insert: (...args: unknown[]) => {
+        mockInsert(...args);
+        return { values: mockValues };
+      },
+    };
+    return await cb(tx);
+  });
+});
 
 describe('POST /api/pools/[id]/join — unauthenticated', () => {
   it('returns 401 when session is null', async () => {
-    mockAuth.mockResolvedValueOnce(null)
-    const response = await POST(makeRequest(), makeContext())
-    expect(response.status).toBe(401)
-  })
-})
+    mockAuth.mockResolvedValueOnce(null);
+    const response = await POST(makeRequest(), makeContext());
+    expect(response.status).toBe(401);
+  });
+});
 
 describe('POST /api/pools/[id]/join — validation', () => {
   it('returns 404 when pool not found', async () => {
-    mockExecute.mockResolvedValueOnce({ rows: [] })
-    const response = await POST(makeRequest(), makeContext())
-    expect(response.status).toBe(404)
-  })
+    mockExecute.mockResolvedValueOnce({ rows: [] });
+    const response = await POST(makeRequest(), makeContext());
+    expect(response.status).toBe(404);
+  });
 
   it('returns 400 when pool is not active', async () => {
-    mockExecute.mockResolvedValueOnce({ rows: [{ ...MOCK_POOL_ROW, status: 'closed' }] })
-    const response = await POST(makeRequest(), makeContext())
-    expect(response.status).toBe(400)
-    const body = await response.json()
-    expect(body.error).toMatch(/nicht aktiv/i)
-  })
+    mockExecute.mockResolvedValueOnce({ rows: [{ ...MOCK_POOL_ROW, status: 'closed' }] });
+    const response = await POST(makeRequest(), makeContext());
+    expect(response.status).toBe(400);
+    const body = await response.json();
+    expect(body.error).toMatch(/nicht aktiv/i);
+  });
 
   it('returns 400 when pool is full', async () => {
     // Active member count meets/exceeds max_members → capacity check fails.
-    mockCountWhere.mockResolvedValueOnce([{ count: 5 }])
-    const response = await POST(makeRequest(), makeContext())
-    expect(response.status).toBe(400)
-    const body = await response.json()
-    expect(body.error).toMatch(/voll/i)
-  })
+    mockCountWhere.mockResolvedValueOnce([{ count: 5 }]);
+    const response = await POST(makeRequest(), makeContext());
+    expect(response.status).toBe(400);
+    const body = await response.json();
+    expect(body.error).toMatch(/voll/i);
+  });
 
   it('returns 400 when already an active member', async () => {
-    mockMemberLimit.mockResolvedValueOnce([{ id: 'mem-1', status: 'active' }])
-    const response = await POST(makeRequest(), makeContext())
-    expect(response.status).toBe(400)
-    const body = await response.json()
-    expect(body.error).toMatch(/bereits Mitglied/i)
-  })
-})
+    mockMemberLimit.mockResolvedValueOnce([{ id: 'mem-1', status: 'active' }]);
+    const response = await POST(makeRequest(), makeContext());
+    expect(response.status).toBe(400);
+    const body = await response.json();
+    expect(body.error).toMatch(/bereits Mitglied/i);
+  });
+});
 
 describe('POST /api/pools/[id]/join — success', () => {
   it('returns 200 (reactivates left membership)', async () => {
-    mockMemberLimit.mockResolvedValueOnce([{ id: 'mem-1', status: 'left' }])
-    const response = await POST(makeRequest(), makeContext())
-    expect(response.status).toBe(200)
-    expect(mockUpdate).toHaveBeenCalled()
-  })
+    mockMemberLimit.mockResolvedValueOnce([{ id: 'mem-1', status: 'left' }]);
+    const response = await POST(makeRequest(), makeContext());
+    expect(response.status).toBe(200);
+    expect(mockUpdate).toHaveBeenCalled();
+  });
 
   it('returns 201 (new membership created)', async () => {
-    const response = await POST(makeRequest(), makeContext())
-    expect(response.status).toBe(201)
-    expect(mockInsert).toHaveBeenCalled()
-  })
-})
+    const response = await POST(makeRequest(), makeContext());
+    expect(response.status).toBe(201);
+    expect(mockInsert).toHaveBeenCalled();
+  });
+});

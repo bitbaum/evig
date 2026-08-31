@@ -14,35 +14,39 @@
  * appearing mid-sentence ("Support RevampIT") is fine and not flagged.
  */
 
-import { readdirSync, readFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
-const MESSAGES_DIR = join(__dirname, '../../../messages')
-const BRAND_SUFFIX = /\| (?:RevampIT|Revamp-IT)\s*$/
+const MESSAGES_DIR = join(__dirname, '../../../messages');
+const BRAND_SUFFIX = /\| (?:RevampIT|Revamp-IT)\s*$/;
 
-function collectMetaTitles(obj: unknown, path: string, out: Array<{ path: string; value: string }>): void {
-  if (obj === null || typeof obj !== 'object') return
+function collectMetaTitles(
+  obj: unknown,
+  path: string,
+  out: Array<{ path: string; value: string }>,
+): void {
+  if (obj === null || typeof obj !== 'object') return;
   for (const [key, val] of Object.entries(obj as Record<string, unknown>)) {
-    const next = path ? `${path}.${key}` : key
+    const next = path ? `${path}.${key}` : key;
     if (key === 'title' && typeof val === 'string' && path.endsWith('.meta')) {
-      out.push({ path: next, value: val })
+      out.push({ path: next, value: val });
     }
-    collectMetaTitles(val, next, out)
+    collectMetaTitles(val, next, out);
   }
 }
 
 describe('no brand suffix in message titles', () => {
-  const localeFiles = readdirSync(MESSAGES_DIR).filter((f) => /^[a-z]{2}\.json$/.test(f))
+  const localeFiles = readdirSync(MESSAGES_DIR).filter((f) => /^[a-z]{2}\.json$/.test(f));
 
   it.each(localeFiles)('%s: no *.meta.title ends with a brand suffix', (file) => {
-    const messages = JSON.parse(readFileSync(join(MESSAGES_DIR, file), 'utf8'))
-    const titles: Array<{ path: string; value: string }> = []
-    collectMetaTitles(messages, '', titles)
+    const messages = JSON.parse(readFileSync(join(MESSAGES_DIR, file), 'utf8'));
+    const titles: Array<{ path: string; value: string }> = [];
+    collectMetaTitles(messages, '', titles);
 
     const offenders = titles
       .filter((t) => BRAND_SUFFIX.test(t.value))
-      .map((t) => `${t.path} = ${JSON.stringify(t.value)}`)
+      .map((t) => `${t.path} = ${JSON.stringify(t.value)}`);
 
-    expect(offenders).toEqual([])
-  })
-})
+    expect(offenders).toEqual([]);
+  });
+});

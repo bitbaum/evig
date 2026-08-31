@@ -1,31 +1,85 @@
-import { getTranslations } from 'next-intl/server'
-import { TechnologiesClient } from './TechnologiesClient'
+import { getTranslations } from 'next-intl/server';
+import { TechnologiesClient } from './TechnologiesClient';
 
 export interface TechItem {
-  name: string
-  description: string
-  iconKey: string
-  category: string
-  benefits: string[]
-  url: string
+  name: string;
+  description: string;
+  iconKey: string;
+  category: string;
+  benefits: string[];
+  url: string;
 }
 
 const TECH_DEFS = [
-  { name: 'Next.js & React', iconKey: 'Code', category: 'Frontend', url: 'https://nextjs.org', tKey: 'nextjs' },
-  { name: 'Tailwind CSS', iconKey: 'Palette', category: 'Frontend', url: 'https://tailwindcss.com', tKey: 'tailwind' },
-  { name: 'Supabase', iconKey: 'Database', category: 'Backend', url: 'https://supabase.com', tKey: 'supabase' },
+  {
+    name: 'Next.js & React',
+    iconKey: 'Code',
+    category: 'Frontend',
+    url: 'https://nextjs.org',
+    tKey: 'nextjs',
+  },
+  {
+    name: 'Tailwind CSS',
+    iconKey: 'Palette',
+    category: 'Frontend',
+    url: 'https://tailwindcss.com',
+    tKey: 'tailwind',
+  },
+  {
+    name: 'Supabase',
+    iconKey: 'Database',
+    category: 'Backend',
+    url: 'https://supabase.com',
+    tKey: 'supabase',
+  },
   { name: 'Strapi', iconKey: 'Layers', category: 'CMS', url: 'https://strapi.io', tKey: 'strapi' },
-  { name: 'Payload CMS', iconKey: 'Shield', category: 'CMS', url: 'https://payloadcms.com', tKey: 'payload' },
+  {
+    name: 'Payload CMS',
+    iconKey: 'Shield',
+    category: 'CMS',
+    url: 'https://payloadcms.com',
+    tKey: 'payload',
+  },
   { name: 'Tina CMS', iconKey: 'Code', category: 'CMS', url: 'https://tina.io', tKey: 'tina' },
-  { name: 'WordPress', iconKey: 'Globe', category: 'CMS', url: 'https://wordpress.org', tKey: 'wordpress' },
-  { name: 'Joomla', iconKey: 'Globe', category: 'CMS', url: 'https://www.joomla.org', tKey: 'joomla' },
-  { name: 'WooCommerce', iconKey: 'Globe', category: 'E-Commerce', url: 'https://woocommerce.com', tKey: 'woocommerce' },
-  { name: 'Shopware 6', iconKey: 'Globe', category: 'E-Commerce', url: 'https://www.shopware.com', tKey: 'shopware' },
-  { name: '', iconKey: 'Cloud', category: 'Infrastruktur', url: 'https://www.hetzner.com', tKey: 'hosting' },
-] as const
+  {
+    name: 'WordPress',
+    iconKey: 'Globe',
+    category: 'CMS',
+    url: 'https://wordpress.org',
+    tKey: 'wordpress',
+  },
+  {
+    name: 'Joomla',
+    iconKey: 'Globe',
+    category: 'CMS',
+    url: 'https://www.joomla.org',
+    tKey: 'joomla',
+  },
+  {
+    name: 'WooCommerce',
+    iconKey: 'Globe',
+    category: 'E-Commerce',
+    url: 'https://woocommerce.com',
+    tKey: 'woocommerce',
+  },
+  {
+    name: 'Shopware 6',
+    iconKey: 'Globe',
+    category: 'E-Commerce',
+    url: 'https://www.shopware.com',
+    tKey: 'shopware',
+  },
+  {
+    name: '',
+    iconKey: 'Cloud',
+    category: 'Infrastruktur',
+    url: 'https://www.hetzner.com',
+    tKey: 'hosting',
+  },
+] as const;
 
 export async function TechnologiesSection() {
-  const t = await getTranslations('services.webDesign.technologies')
+  const t = await getTranslations('services.webDesign.technologies');
 
   const technologies: TechItem[] = TECH_DEFS.map((def) => ({
     name: def.tKey === 'hosting' ? t('items.hosting.name') : def.name,
@@ -34,10 +88,13 @@ export async function TechnologiesSection() {
     category: def.category,
     benefits: t.raw(`items.${def.tKey}.benefits`) as string[],
     url: def.url,
-  }))
+  }));
 
-  const allLabel = t('allCategories')
-  const uniqueCategories = [allLabel, ...Array.from(new Set(technologies.map(tech => tech.category))).sort()]
+  const allLabel = t('allCategories');
+  const uniqueCategories = [
+    allLabel,
+    ...Array.from(new Set(technologies.map((tech) => tech.category))).sort(),
+  ];
 
   return (
     <TechnologiesClient
@@ -53,5 +110,5 @@ export async function TechnologiesSection() {
         showing: t('showing', { count: technologies.length, total: technologies.length }),
       }}
     />
-  )
+  );
 }

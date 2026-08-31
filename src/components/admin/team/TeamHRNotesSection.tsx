@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import { FileText, ChevronDown, ChevronRight } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
+import { FileText, ChevronDown, ChevronRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 
 interface Props {
-  hrNotes: string
-  isOpen: boolean
-  onToggle: () => void
-  onChange: (field: string, value: string) => void
+  hrNotes: string;
+  isOpen: boolean;
+  onToggle: () => void;
+  onChange: (field: string, value: string) => void;
 }
 
 export function TeamHRNotesSection({ hrNotes, isOpen, onToggle, onChange }: Props) {
@@ -47,5 +47,5 @@ export function TeamHRNotesSection({ hrNotes, isOpen, onToggle, onChange }: Prop
         </div>
       )}
     </div>
-  )
+  );
 }

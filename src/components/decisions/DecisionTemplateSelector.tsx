@@ -31,7 +31,7 @@ export default function DecisionTemplateSelector({ onSelect }: Props) {
             onClick={() => onSelect(template)}
             className={cn(
               adminSurface.card,
-              'p-4 text-left hover:border-action dark:hover:border-action cursor-pointer w-full h-auto flex-col items-start'
+              'p-4 text-left hover:border-action dark:hover:border-action cursor-pointer w-full h-auto flex-col items-start',
             )}
           >
             <p className={cn(adminType.sectionTitle, 'mb-1')}>{template.label}</p>

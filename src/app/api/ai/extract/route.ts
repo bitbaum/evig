@@ -6,16 +6,16 @@
  * Dispatches to form-specific prompts via FORM_AI_REGISTRY.
  */
 
-import { NextRequest, NextResponse } from 'next/server'
-import { withAuth, ValidSession } from '@/lib/api/middleware'
-import { z } from 'zod'
-import { logger } from '@/lib/logger'
-import { apiBadRequest, apiForbidden, apiError } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { registryExtract, type ExtractMode } from '@/lib/ai/extract'
-import { FORM_AI_REGISTRY } from '@/lib/ai/config/prompts'
+import { NextRequest, NextResponse } from 'next/server';
+import { withAuth, ValidSession } from '@/lib/api/middleware';
+import { z } from 'zod';
+import { logger } from '@/lib/logger';
+import { apiBadRequest, apiForbidden, apiError } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { registryExtract, type ExtractMode } from '@/lib/ai/extract';
+import { FORM_AI_REGISTRY } from '@/lib/ai/config/prompts';
 
-const VALID_FORM_TYPES = Object.keys(FORM_AI_REGISTRY)
+const VALID_FORM_TYPES = Object.keys(FORM_AI_REGISTRY);
 
 /**
  * Char-limit policy for the AI extractor endpoint. Single edit-point if
@@ -23,43 +23,46 @@ const VALID_FORM_TYPES = Object.keys(FORM_AI_REGISTRY)
  * Local to this file because no other consumer needs these — adding
  * them to a shared config would be premature abstraction.
  */
-const AI_EXTRACT_TEXT_MIN_CHARS = 3
-const AI_EXTRACT_TEXT_MAX_CHARS = 5000
-const AI_EXTRACT_INSTRUCTION_MAX_CHARS = 2000
-const AI_EXTRACT_QUICK_ACTION_MAX_CHARS = 100
+const AI_EXTRACT_TEXT_MIN_CHARS = 3;
+const AI_EXTRACT_TEXT_MAX_CHARS = 5000;
+const AI_EXTRACT_INSTRUCTION_MAX_CHARS = 2000;
+const AI_EXTRACT_QUICK_ACTION_MAX_CHARS = 100;
 
 const extractRequestSchema = z.object({
-  formType: z.string().refine(v => VALID_FORM_TYPES.includes(v), {
+  formType: z.string().refine((v) => VALID_FORM_TYPES.includes(v), {
     message: `Gültiger formType erforderlich: ${VALID_FORM_TYPES.join(', ')}`,
   }),
-  text: z.string().min(AI_EXTRACT_TEXT_MIN_CHARS, 'Text zu kurz').max(AI_EXTRACT_TEXT_MAX_CHARS, 'Text zu lang'),
+  text: z
+    .string()
+    .min(AI_EXTRACT_TEXT_MIN_CHARS, 'Text zu kurz')
+    .max(AI_EXTRACT_TEXT_MAX_CHARS, 'Text zu lang'),
   mode: z.enum(['extract', 'generate', 'refine']).optional(),
   currentData: z.record(z.string(), z.unknown()).optional(),
   instruction: z.string().max(AI_EXTRACT_INSTRUCTION_MAX_CHARS).optional(),
   quickAction: z.string().max(AI_EXTRACT_QUICK_ACTION_MAX_CHARS).optional(),
-})
+});
 
 export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
-    let body: unknown
+    let body: unknown;
     try {
-      body = await request.json()
+      body = await request.json();
     } catch {
-      return apiBadRequest('Ungültiger JSON-Body')
+      return apiBadRequest('Ungültiger JSON-Body');
     }
 
-    const result = extractRequestSchema.safeParse(body)
+    const result = extractRequestSchema.safeParse(body);
 
     if (!result.success) {
-      return apiBadRequest(ERROR_MESSAGES.INVALID_REQUEST, result.error.flatten().fieldErrors)
+      return apiBadRequest(ERROR_MESSAGES.INVALID_REQUEST, result.error.flatten().fieldErrors);
     }
 
-    const { formType, text, mode, currentData, instruction, quickAction } = result.data
+    const { formType, text, mode, currentData, instruction, quickAction } = result.data;
 
     // Check auth level from registry
-    const config = FORM_AI_REGISTRY[formType]
+    const config = FORM_AI_REGISTRY[formType];
     if (config.auth === 'staff' && !session.user.isStaff) {
-      return apiForbidden('Nur für Staff-Mitglieder verfügbar')
+      return apiForbidden('Nur für Staff-Mitglieder verfügbar');
     }
 
     logger.info('AI extraction requested', {
@@ -67,7 +70,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       mode: mode || 'extract',
       textLength: text.length,
       userId: session.user.id,
-    })
+    });
 
     // registryExtract calls callWithFallback with timeoutMs: 15_000 per
     // provider — the cascade (Groq → OpenRouter → Ollama) caps at ~45s
@@ -80,12 +83,12 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       currentData,
       instruction,
       quickAction,
-    })
+    });
 
     // Return extraction result directly — it already has { success, data, model, confidence }
     // Don't wrap with apiSuccess() which would double-nest: { success, data: { success, data, ... } }
-    return NextResponse.json(extractionResult)
+    return NextResponse.json(extractionResult);
   } catch (error) {
-    return apiError(error, 'Fehler bei der KI-Extraktion')
+    return apiError(error, 'Fehler bei der KI-Extraktion');
   }
-})
+});

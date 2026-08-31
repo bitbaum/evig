@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
-import { cn } from '@/lib/utils'
-import { Eyebrow } from '@/components/ui/Eyebrow'
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { cn } from '@/lib/utils';
+import { Eyebrow } from '@/components/ui/Eyebrow';
 
 /**
  * ContextMenu — a small, reusable cursor-positioned menu (SSOT for right-click
@@ -15,18 +15,18 @@ import { Eyebrow } from '@/components/ui/Eyebrow'
  */
 
 export interface ContextMenuItem {
-  label: string
-  onSelect: () => void
-  icon?: ReactNode
-  tone?: 'default' | 'danger'
-  disabled?: boolean
+  label: string;
+  onSelect: () => void;
+  icon?: ReactNode;
+  tone?: 'default' | 'danger';
+  disabled?: boolean;
   /** Draw a divider above this item. */
-  separatorBefore?: boolean
+  separatorBefore?: boolean;
 }
 
 export interface ContextMenuPosition {
-  x: number
-  y: number
+  x: number;
+  y: number;
 }
 
 export function ContextMenu({
@@ -35,14 +35,14 @@ export function ContextMenu({
   onClose,
   header,
 }: {
-  position: ContextMenuPosition | null
-  items: ContextMenuItem[]
-  onClose: () => void
+  position: ContextMenuPosition | null;
+  items: ContextMenuItem[];
+  onClose: () => void;
   /** Optional muted label at the top (e.g. "3 Tage"). */
-  header?: string
+  header?: string;
 }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [coords, setCoords] = useState<ContextMenuPosition | null>(position)
+  const ref = useRef<HTMLDivElement>(null);
+  const [coords, setCoords] = useState<ContextMenuPosition | null>(position);
 
   // Keep local coords in sync, then clamp to the viewport once measured.
   // (Measuring requires a post-render pass, so a setState in this layout
@@ -50,43 +50,45 @@ export function ContextMenu({
   /* eslint-disable react-hooks/set-state-in-effect */
   useLayoutEffect(() => {
     if (!position) {
-      setCoords(null)
-      return
+      setCoords(null);
+      return;
     }
-    const el = ref.current
-    const margin = 8
-    let { x, y } = position
+    const el = ref.current;
+    const margin = 8;
+    let { x, y } = position;
     if (el) {
-      const { width, height } = el.getBoundingClientRect()
-      if (x + width + margin > window.innerWidth) x = Math.max(margin, window.innerWidth - width - margin)
-      if (y + height + margin > window.innerHeight) y = Math.max(margin, window.innerHeight - height - margin)
+      const { width, height } = el.getBoundingClientRect();
+      if (x + width + margin > window.innerWidth)
+        x = Math.max(margin, window.innerWidth - width - margin);
+      if (y + height + margin > window.innerHeight)
+        y = Math.max(margin, window.innerHeight - height - margin);
     }
-    setCoords({ x, y })
-  }, [position])
+    setCoords({ x, y });
+  }, [position]);
   /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
-    if (!position) return
+    if (!position) return;
     const onPointerDown = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) onClose()
-    }
+      if (ref.current && !ref.current.contains(e.target as Node)) onClose();
+    };
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
-    }
+      if (e.key === 'Escape') onClose();
+    };
     // Capture-phase pointerdown so a click anywhere (incl. another cell) closes first.
-    window.addEventListener('mousedown', onPointerDown, true)
-    window.addEventListener('keydown', onKey)
-    window.addEventListener('scroll', onClose, true)
-    window.addEventListener('resize', onClose)
+    window.addEventListener('mousedown', onPointerDown, true);
+    window.addEventListener('keydown', onKey);
+    window.addEventListener('scroll', onClose, true);
+    window.addEventListener('resize', onClose);
     return () => {
-      window.removeEventListener('mousedown', onPointerDown, true)
-      window.removeEventListener('keydown', onKey)
-      window.removeEventListener('scroll', onClose, true)
-      window.removeEventListener('resize', onClose)
-    }
-  }, [position, onClose])
+      window.removeEventListener('mousedown', onPointerDown, true);
+      window.removeEventListener('keydown', onKey);
+      window.removeEventListener('scroll', onClose, true);
+      window.removeEventListener('resize', onClose);
+    };
+  }, [position, onClose]);
 
-  if (!position || !coords) return null
+  if (!position || !coords) return null;
 
   return (
     <div
@@ -95,9 +97,7 @@ export function ContextMenu({
       style={{ top: coords.y, left: coords.x }}
       className="fixed z-50 min-w-[12rem] overflow-hidden rounded-lg border border-strong bg-surface-base py-1 shadow-md"
     >
-      {header && (
-        <Eyebrow className="px-3 py-1.5">{header}</Eyebrow>
-      )}
+      {header && <Eyebrow className="px-3 py-1.5">{header}</Eyebrow>}
       {items.map((item, i) => (
         <div key={`${item.label}-${i}`}>
           {item.separatorBefore && <div className="my-1 border-t border-subtle" />}
@@ -106,8 +106,8 @@ export function ContextMenu({
             role="menuitem"
             disabled={item.disabled}
             onClick={() => {
-              item.onSelect()
-              onClose()
+              item.onSelect();
+              onClose();
             }}
             className={cn(
               'flex w-full items-center gap-2.5 px-3 py-2 text-left text-sm transition-colors',
@@ -123,5 +123,5 @@ export function ContextMenu({
         </div>
       ))}
     </div>
-  )
+  );
 }

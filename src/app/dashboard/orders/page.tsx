@@ -1,85 +1,84 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { useSwrFetch } from '@/lib/api/swr'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import Image from 'next/image'
+import { useState, useEffect } from 'react';
+import { useSwrFetch } from '@/lib/api/swr';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import Image from 'next/image';
+import { ShoppingBag, Package, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
 import {
-  ShoppingBag,
-  Package,
-  Loader2,
-  ChevronLeft,
-  ChevronRight,
-} from 'lucide-react'
-import { ORDER_STATUS_CONFIG, ORDER_STATUS, MARKETPLACE_LIMITS, formatCHF } from '@/config/marketplace'
-import type { OrderStatus } from '@/config/marketplace'
-import { formatDateShort } from '@/lib/date-formats'
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
-import { EmptyState } from '@/components/ui/EmptyState'
-import { ROUTES } from '@/config/routes'
+  ORDER_STATUS_CONFIG,
+  ORDER_STATUS,
+  MARKETPLACE_LIMITS,
+  formatCHF,
+} from '@/config/marketplace';
+import type { OrderStatus } from '@/config/marketplace';
+import { formatDateShort } from '@/lib/date-formats';
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/ui/Heading';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { ROUTES } from '@/config/routes';
 
 interface OrderItem {
-  id: string
-  listingId: string | null
-  listingTitle: string
-  thumbnail: string | null
-  itemCount: number
-  amountChf: number
-  status: string
-  deliveryMethod: string
-  counterpartyName: string | null
-  counterpartyId: string
-  createdAt: string
+  id: string;
+  listingId: string | null;
+  listingTitle: string;
+  thumbnail: string | null;
+  itemCount: number;
+  amountChf: number;
+  status: string;
+  deliveryMethod: string;
+  counterpartyName: string | null;
+  counterpartyId: string;
+  createdAt: string;
 }
 
-const PAGE_SIZE = MARKETPLACE_LIMITS.DEFAULT_PAGE_SIZE
+const PAGE_SIZE = MARKETPLACE_LIMITS.DEFAULT_PAGE_SIZE;
 
 export default function DashboardOrdersPage() {
-  const t = useTranslations('dashboard.orders')
-  const { data: session, status: sessionStatus } = useSession()
-  const router = useRouter()
+  const t = useTranslations('dashboard.orders');
+  const { data: session, status: sessionStatus } = useSession();
+  const router = useRouter();
   const TABS = [
     { key: '', label: t('tabAll') },
     { key: ORDER_STATUS.PENDING_PAYMENT, label: t('tabPending') },
     { key: ORDER_STATUS.PAID, label: t('tabPaid') },
     { key: ORDER_STATUS.SHIPPED, label: t('tabShipped') },
     { key: ORDER_STATUS.COMPLETED, label: t('tabCompleted') },
-  ]
-  const [activeTab, setActiveTab] = useState('')
-  const [role, setRole] = useState<'buyer' | 'seller'>('buyer')
-  const [offset, setOffset] = useState(0)
+  ];
+  const [activeTab, setActiveTab] = useState('');
+  const [role, setRole] = useState<'buyer' | 'seller'>('buyer');
+  const [offset, setOffset] = useState(0);
 
   // Role/tab/offset are encoded in the SWR key (fetch gated on an
   // authenticated session) — any change refetches automatically.
-  const params = new URLSearchParams({ role, limit: String(PAGE_SIZE), offset: String(offset) })
-  if (activeTab) params.set('status', activeTab)
+  const params = new URLSearchParams({ role, limit: String(PAGE_SIZE), offset: String(offset) });
+  if (activeTab) params.set('status', activeTab);
 
   const { data, isLoading } = useSwrFetch<{
-    items: OrderItem[]
-    pagination: { total: number; limit: number; offset: number }
-  }>(sessionStatus === 'authenticated' ? `/api/marketplace/orders?${params}` : null)
+    items: OrderItem[];
+    pagination: { total: number; limit: number; offset: number };
+  }>(sessionStatus === 'authenticated' ? `/api/marketplace/orders?${params}` : null);
 
-  const orders = data?.items ?? []
-  const total = data?.pagination.total ?? 0
-  const limit = data?.pagination.limit ?? PAGE_SIZE
+  const orders = data?.items ?? [];
+  const total = data?.pagination.total ?? 0;
+  const limit = data?.pagination.limit ?? PAGE_SIZE;
 
   useEffect(() => {
     if (sessionStatus === 'unauthenticated') {
-      router.push('/auth/login')
+      router.push('/auth/login');
     }
-  }, [sessionStatus, router])
+  }, [sessionStatus, router]);
 
   if (sessionStatus === 'loading') {
     return (
       <div className="flex items-center justify-center min-h-[300px]">
         <Loader2 className="w-8 h-8 text-action animate-spin" />
       </div>
-    )
+    );
   }
 
   return (
@@ -96,22 +95,32 @@ export default function DashboardOrdersPage() {
         {/* Role toggle */}
         <div className="flex bg-surface-raised rounded-lg p-1">
           <Button
-            onClick={() => { setRole('buyer'); setOffset(0) }}
+            onClick={() => {
+              setRole('buyer');
+              setOffset(0);
+            }}
             variant="ghost"
             size="sm"
-            className={role === 'buyer'
-              ? 'bg-surface-base text-text-primary'
-              : 'text-text-tertiary hover:text-text-secondary'}
+            className={
+              role === 'buyer'
+                ? 'bg-surface-base text-text-primary'
+                : 'text-text-tertiary hover:text-text-secondary'
+            }
           >
             {t('roleBuyer')}
           </Button>
           <Button
-            onClick={() => { setRole('seller'); setOffset(0) }}
+            onClick={() => {
+              setRole('seller');
+              setOffset(0);
+            }}
             variant="ghost"
             size="sm"
-            className={role === 'seller'
-              ? 'bg-surface-base text-text-primary'
-              : 'text-text-tertiary hover:text-text-secondary'}
+            className={
+              role === 'seller'
+                ? 'bg-surface-base text-text-primary'
+                : 'text-text-tertiary hover:text-text-secondary'
+            }
           >
             {t('roleSeller')}
           </Button>
@@ -120,10 +129,13 @@ export default function DashboardOrdersPage() {
 
       {/* Status tabs */}
       <div className="flex gap-2 mb-6 overflow-x-auto">
-        {TABS.map(tab => (
+        {TABS.map((tab) => (
           <Button
             key={tab.key}
-            onClick={() => { setActiveTab(tab.key); setOffset(0) }}
+            onClick={() => {
+              setActiveTab(tab.key);
+              setOffset(0);
+            }}
             variant="ghost"
             size="sm"
             className={`rounded-full ${
@@ -159,8 +171,8 @@ export default function DashboardOrdersPage() {
         />
       ) : (
         <div className="space-y-3">
-          {orders.map(order => {
-            const statusConfig = ORDER_STATUS_CONFIG[order.status as OrderStatus]
+          {orders.map((order) => {
+            const statusConfig = ORDER_STATUS_CONFIG[order.status as OrderStatus];
             return (
               <Link
                 key={order.id}
@@ -169,7 +181,13 @@ export default function DashboardOrdersPage() {
               >
                 <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 bg-surface-raised">
                   {order.thumbnail ? (
-                    <Image src={order.thumbnail} alt={order.listingTitle || t('itemImage')} width={56} height={56} className="w-full h-full object-cover" />
+                    <Image
+                      src={order.thumbnail}
+                      alt={order.listingTitle || t('itemImage')}
+                      width={56}
+                      height={56}
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
                       <Package className="w-6 h-6 text-text-muted" />
@@ -181,19 +199,29 @@ export default function DashboardOrdersPage() {
                   <Heading level={3} className="font-medium text-text-primary truncate">
                     {order.listingTitle}
                     {order.itemCount > 1 && (
-                      <span className="text-text-tertiary font-normal"> {t('moreItems', { count: order.itemCount - 1 })}</span>
+                      <span className="text-text-tertiary font-normal">
+                        {' '}
+                        {t('moreItems', { count: order.itemCount - 1 })}
+                      </span>
                     )}
                   </Heading>
                   <div className="flex items-center gap-3 mt-1 text-sm text-text-tertiary">
-                    <span>{role === 'buyer' ? t('counterpartySeller') : t('counterpartyBuyer')}: {order.counterpartyName}</span>
+                    <span>
+                      {role === 'buyer' ? t('counterpartySeller') : t('counterpartyBuyer')}:{' '}
+                      {order.counterpartyName}
+                    </span>
                     <span>{formatDateShort(order.createdAt)}</span>
                   </div>
                 </div>
 
                 <div className="text-right shrink-0">
-                  <p className="font-bold text-text-primary">{formatCHF(Number(order.amountChf))}</p>
+                  <p className="font-bold text-text-primary">
+                    {formatCHF(Number(order.amountChf))}
+                  </p>
                   {statusConfig && (
-                    <span className={`inline-flex mt-1 px-2 py-0.5 text-xs font-medium rounded-full ${statusConfig.color}`}>
+                    <span
+                      className={`inline-flex mt-1 px-2 py-0.5 text-xs font-medium rounded-full ${statusConfig.color}`}
+                    >
                       {statusConfig.label}
                     </span>
                   )}
@@ -201,7 +229,7 @@ export default function DashboardOrdersPage() {
 
                 <ChevronRight className="w-5 h-5 text-text-muted shrink-0" />
               </Link>
-            )
+            );
           })}
         </div>
       )}
@@ -209,9 +237,7 @@ export default function DashboardOrdersPage() {
       {/* Pagination — mirrors /dashboard/listings */}
       {!isLoading && total > limit && (
         <div className="flex items-center justify-between pt-2">
-          <Eyebrow>
-            {t('paginationCurrentPage', { page: Math.floor(offset / limit) + 1 })}
-          </Eyebrow>
+          <Eyebrow>{t('paginationCurrentPage', { page: Math.floor(offset / limit) + 1 })}</Eyebrow>
           <div className="flex items-center gap-2">
             <Button
               onClick={() => setOffset(Math.max(0, offset - limit))}
@@ -235,5 +261,5 @@ export default function DashboardOrdersPage() {
         </div>
       )}
     </article>
-  )
+  );
 }

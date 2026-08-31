@@ -1,30 +1,30 @@
-'use client'
+'use client';
 
-import { Send } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { getAllSkills, OFFER_MIN_CHARS, OFFER_MAX_CHARS } from '@/config/it-hilfe'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
+import { Send } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { getAllSkills, OFFER_MIN_CHARS, OFFER_MAX_CHARS } from '@/config/it-hilfe';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 
 interface OfferFormProps {
-  showForm: boolean
-  onShowForm: () => void
-  offerMessage: string
-  onMessageChange: (value: string) => void
-  offerEstimatedTime: string
-  onEstimatedTimeChange: (value: string) => void
-  offerCompensation: string
-  onCompensationChange: (value: string) => void
-  offerAmount: string
-  onAmountChange: (value: string) => void
-  offerSkills: string[]
-  onSkillToggle: (skillId: string) => void
-  submitting: boolean
-  error: string
-  onSubmit: (e: React.FormEvent) => void
-  onCancel: () => void
+  showForm: boolean;
+  onShowForm: () => void;
+  offerMessage: string;
+  onMessageChange: (value: string) => void;
+  offerEstimatedTime: string;
+  onEstimatedTimeChange: (value: string) => void;
+  offerCompensation: string;
+  onCompensationChange: (value: string) => void;
+  offerAmount: string;
+  onAmountChange: (value: string) => void;
+  offerSkills: string[];
+  onSkillToggle: (skillId: string) => void;
+  submitting: boolean;
+  error: string;
+  onSubmit: (e: React.FormEvent) => void;
+  onCancel: () => void;
 }
 
 export function OfferForm({
@@ -45,7 +45,7 @@ export function OfferForm({
   onSubmit,
   onCancel,
 }: OfferFormProps) {
-  const t = useTranslations('itHelp.offer')
+  const t = useTranslations('itHelp.offer');
 
   return (
     <div className="card-shell p-6">
@@ -56,17 +56,25 @@ export function OfferForm({
         </Button>
       ) : (
         <form onSubmit={onSubmit}>
-          <Heading level={3} className="text-lg font-semibold text-text-primary mb-4">{t('heading')}</Heading>
+          <Heading level={3} className="text-lg font-semibold text-text-primary mb-4">
+            {t('heading')}
+          </Heading>
 
           {error && (
-            <div id="offer-error" className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 rounded-lg p-3 mb-4 text-sm text-error-700 dark:text-error-400">
+            <div
+              id="offer-error"
+              className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 rounded-lg p-3 mb-4 text-sm text-error-700 dark:text-error-400"
+            >
               {error}
             </div>
           )}
 
           <div className="space-y-4">
             <div>
-              <label htmlFor="offer-message" className="block text-sm font-medium text-text-secondary mb-1">
+              <label
+                htmlFor="offer-message"
+                className="block text-sm font-medium text-text-secondary mb-1"
+              >
                 {t('messageLabel')} <span className="text-error-500">*</span>
               </label>
               <Textarea
@@ -86,7 +94,10 @@ export function OfferForm({
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="offer-estimated-time" className="block text-sm font-medium text-text-secondary mb-1">
+                <label
+                  htmlFor="offer-estimated-time"
+                  className="block text-sm font-medium text-text-secondary mb-1"
+                >
                   {t('estimatedTimeLabel')}
                 </label>
                 <Input
@@ -98,7 +109,10 @@ export function OfferForm({
                 />
               </div>
               <div>
-                <label htmlFor="offer-amount" className="block text-sm font-medium text-text-secondary mb-1">
+                <label
+                  htmlFor="offer-amount"
+                  className="block text-sm font-medium text-text-secondary mb-1"
+                >
                   {t('amountLabel')}
                 </label>
                 <div className="flex items-center gap-2">
@@ -117,7 +131,10 @@ export function OfferForm({
             </div>
 
             <div>
-              <label htmlFor="offer-compensation" className="block text-sm font-medium text-text-secondary mb-1">
+              <label
+                htmlFor="offer-compensation"
+                className="block text-sm font-medium text-text-secondary mb-1"
+              >
                 {t('compensationLabel')}
               </label>
               <Input
@@ -158,12 +175,16 @@ export function OfferForm({
             <Button type="button" onClick={onCancel} variant="secondary">
               {t('cancelButton')}
             </Button>
-            <Button type="submit" variant="primary" disabled={submitting || offerMessage.length < 20}>
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={submitting || offerMessage.length < 20}
+            >
               {submitting ? t('submittingButton') : t('sendButton')}
             </Button>
           </div>
         </form>
       )}
     </div>
-  )
+  );
 }

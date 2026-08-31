@@ -1,4 +1,4 @@
-import { designPrimitive } from '@/lib/design-system'
+import { designPrimitive } from '@/lib/design-system';
 
 export const BUTTONS = {
   // Base button styles (size + spacing)
@@ -15,7 +15,8 @@ export const BUTTONS = {
   marketplace: {
     primary: `${designPrimitive.button.primary} focus-visible:ring-action`,
     secondary: `${designPrimitive.button.outline} focus-visible:ring-action`,
-    outline: 'bg-transparent text-action border border-action hover:bg-action-muted focus-visible:ring-action',
+    outline:
+      'bg-transparent text-action border border-action hover:bg-action-muted focus-visible:ring-action',
     ghost: 'bg-transparent text-action hover:bg-action-muted focus-visible:ring-action',
   },
 
@@ -23,7 +24,8 @@ export const BUTTONS = {
   itHilfe: {
     primary: `${designPrimitive.button.primary} focus-visible:ring-action`,
     secondary: `${designPrimitive.button.outline} focus-visible:ring-action`,
-    outline: 'bg-transparent text-action border border-action hover:bg-action-muted focus-visible:ring-action',
+    outline:
+      'bg-transparent text-action border border-action hover:bg-action-muted focus-visible:ring-action',
     ghost: 'bg-transparent text-action hover:bg-action-muted focus-visible:ring-action',
   },
 
@@ -42,9 +44,9 @@ export const BUTTONS = {
     outlineLight: designPrimitive.button.outlineLight,
     secondary: designPrimitive.button.secondary,
     ghost: designPrimitive.button.ghost,
-    destructive:        designPrimitive.button.destructive,
-    'destructive-ghost':    designPrimitive.button['destructive-ghost'],
-    'destructive-outline':  designPrimitive.button['destructive-outline'],
+    destructive: designPrimitive.button.destructive,
+    'destructive-ghost': designPrimitive.button['destructive-ghost'],
+    'destructive-outline': designPrimitive.button['destructive-outline'],
     warning: designPrimitive.button.warning,
   },
 
@@ -54,26 +56,27 @@ export const BUTTONS = {
     destructive: designPrimitive.badge.destructive,
     outline: designPrimitive.badge.outline,
   },
-} as const
+} as const;
 
 /**
  * Helper function to get button classes
  */
 export function getButtonClasses(
-  variant: keyof typeof BUTTONS.marketplace | keyof typeof BUTTONS.itHilfe | keyof typeof BUTTONS.common,
+  variant:
+    keyof typeof BUTTONS.marketplace | keyof typeof BUTTONS.itHilfe | keyof typeof BUTTONS.common,
   size: keyof typeof BUTTONS.sizes = 'medium',
-  theme: 'marketplace' | 'itHilfe' | 'common' = 'common'
+  theme: 'marketplace' | 'itHilfe' | 'common' = 'common',
 ): string {
-  const sizeClass = BUTTONS.sizes[size]
-  let variantClass: string
+  const sizeClass = BUTTONS.sizes[size];
+  let variantClass: string;
 
   if (theme === 'common') {
-    variantClass = BUTTONS.common[variant as keyof typeof BUTTONS.common]
+    variantClass = BUTTONS.common[variant as keyof typeof BUTTONS.common];
   } else if (theme === 'marketplace') {
-    variantClass = BUTTONS.marketplace[variant as keyof typeof BUTTONS.marketplace]
+    variantClass = BUTTONS.marketplace[variant as keyof typeof BUTTONS.marketplace];
   } else {
-    variantClass = BUTTONS.itHilfe[variant as keyof typeof BUTTONS.itHilfe]
+    variantClass = BUTTONS.itHilfe[variant as keyof typeof BUTTONS.itHilfe];
   }
 
-  return `${BUTTONS.base} ${sizeClass} ${variantClass}`
+  return `${BUTTONS.base} ${sizeClass} ${variantClass}`;
 }

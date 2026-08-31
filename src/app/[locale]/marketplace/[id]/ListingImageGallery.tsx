@@ -1,46 +1,51 @@
-'use client'
+'use client';
 
-import { useState, useEffect, useCallback } from 'react'
-import { ListingImage } from '@/components/marketplace/ListingImage'
-import { Button } from '@/components/ui/button'
-import { ZoomIn, X, ChevronLeft, ChevronRight } from 'lucide-react'
-import type { ListingImageData } from './types'
-import { useTranslations } from 'next-intl'
-import { useFocusTrap } from '@/hooks/useFocusTrap'
+import { useState, useEffect, useCallback } from 'react';
+import { ListingImage } from '@/components/marketplace/ListingImage';
+import { Button } from '@/components/ui/button';
+import { ZoomIn, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import type { ListingImageData } from './types';
+import { useTranslations } from 'next-intl';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
 
 interface ListingImageGalleryProps {
-  images: ListingImageData[]
-  title: string
-  selectedImage: number
-  onSelectImage: (idx: number) => void
+  images: ListingImageData[];
+  title: string;
+  selectedImage: number;
+  onSelectImage: (idx: number) => void;
 }
 
-export function ListingImageGallery({ images, title, selectedImage, onSelectImage }: ListingImageGalleryProps) {
-  const t = useTranslations('marketplace.listing')
-  const [zoomed, setZoomed] = useState(false)
+export function ListingImageGallery({
+  images,
+  title,
+  selectedImage,
+  onSelectImage,
+}: ListingImageGalleryProps) {
+  const t = useTranslations('marketplace.listing');
+  const [zoomed, setZoomed] = useState(false);
 
-  const current = images[selectedImage]
-  const hasImage = Boolean(current?.url)
+  const current = images[selectedImage];
+  const hasImage = Boolean(current?.url);
 
   const step = useCallback(
     (delta: number) => onSelectImage((selectedImage + delta + images.length) % images.length),
     [selectedImage, images.length, onSelectImage],
-  )
+  );
 
   // Esc-to-close, initial focus, focus restore and the Tab trap live in the
   // shared hook; attach its ref to the lightbox below.
-  const lightboxRef = useFocusTrap<HTMLDivElement>(zoomed, () => setZoomed(false))
+  const lightboxRef = useFocusTrap<HTMLDivElement>(zoomed, () => setZoomed(false));
 
   // Arrow keys navigate between images while zoomed.
   useEffect(() => {
-    if (!zoomed) return
+    if (!zoomed) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight') step(1)
-      else if (e.key === 'ArrowLeft') step(-1)
-    }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
-  }, [zoomed, step])
+      if (e.key === 'ArrowRight') step(1);
+      else if (e.key === 'ArrowLeft') step(-1);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [zoomed, step]);
 
   return (
     <div className="space-y-3">
@@ -117,8 +122,13 @@ export function ListingImageGallery({ images, title, selectedImage, onSelectImag
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={(e) => { e.stopPropagation(); step(-1) }}
-                aria-label={t('imageAriaLabel', { n: ((selectedImage - 1 + images.length) % images.length) + 1 })}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  step(-1);
+                }}
+                aria-label={t('imageAriaLabel', {
+                  n: ((selectedImage - 1 + images.length) % images.length) + 1,
+                })}
                 className="absolute left-2 sm:left-4 text-white/80 hover:text-white"
               >
                 <ChevronLeft className="h-9 w-9" aria-hidden="true" />
@@ -126,7 +136,10 @@ export function ListingImageGallery({ images, title, selectedImage, onSelectImag
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={(e) => { e.stopPropagation(); step(1) }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  step(1);
+                }}
                 aria-label={t('imageAriaLabel', { n: ((selectedImage + 1) % images.length) + 1 })}
                 className="absolute right-2 sm:right-4 text-white/80 hover:text-white"
               >
@@ -144,5 +157,5 @@ export function ListingImageGallery({ images, title, selectedImage, onSelectImag
         </div>
       )}
     </div>
-  )
+  );
 }

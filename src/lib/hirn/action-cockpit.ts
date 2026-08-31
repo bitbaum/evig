@@ -1,11 +1,11 @@
-import { z } from 'zod'
+import { z } from 'zod';
 
 const actionTypeSchema = z.enum([
   'create_task',
   'create_decision_draft',
   'create_protocol_draft',
   'navigate',
-])
+]);
 
 const baseActionSchema = z.object({
   id: z.string().min(1).max(80),
@@ -15,41 +15,44 @@ const baseActionSchema = z.object({
   cta: z.string().min(1).max(60),
   risky: z.boolean().default(false),
   payload: z.record(z.string(), z.unknown()),
-})
+});
 
 const actionEnvelopeSchema = z.object({
   version: z.literal('1.0'),
   actions: z.array(baseActionSchema).max(4),
-})
+});
 
-export type HirnActionType = z.infer<typeof actionTypeSchema>
-export type HirnActionCard = z.infer<typeof baseActionSchema>
-export type HirnActionEnvelope = z.infer<typeof actionEnvelopeSchema>
+export type HirnActionType = z.infer<typeof actionTypeSchema>;
+export type HirnActionCard = z.infer<typeof baseActionSchema>;
+export type HirnActionEnvelope = z.infer<typeof actionEnvelopeSchema>;
 
-const ACTION_BLOCK_REGEX = /```hirn-actions\n([\s\S]*?)\n```/i
+const ACTION_BLOCK_REGEX = /```hirn-actions\n([\s\S]*?)\n```/i;
 
 export function stripActionBlock(content: string): string {
-  return content.replace(ACTION_BLOCK_REGEX, '').trim()
+  return content.replace(ACTION_BLOCK_REGEX, '').trim();
 }
 
 export function parseActionEnvelope(content: string): {
-  actions: HirnActionCard[]
-  parsingError?: string
+  actions: HirnActionCard[];
+  parsingError?: string;
 } {
-  const match = content.match(ACTION_BLOCK_REGEX)
-  if (!match) return { actions: [] }
+  const match = content.match(ACTION_BLOCK_REGEX);
+  if (!match) return { actions: [] };
 
   try {
-    const raw = JSON.parse(match[1])
-    const parsed = actionEnvelopeSchema.safeParse(raw)
+    const raw = JSON.parse(match[1]);
+    const parsed = actionEnvelopeSchema.safeParse(raw);
 
     if (!parsed.success) {
-      return { actions: [], parsingError: parsed.error.issues[0]?.message || 'Ungültiges Aktions-Format' }
+      return {
+        actions: [],
+        parsingError: parsed.error.issues[0]?.message || 'Ungültiges Aktions-Format',
+      };
     }
 
-    return { actions: parsed.data.actions }
+    return { actions: parsed.data.actions };
   } catch {
-    return { actions: [], parsingError: 'Aktions-Block konnte nicht gelesen werden' }
+    return { actions: [], parsingError: 'Aktions-Block konnte nicht gelesen werden' };
   }
 }
 
@@ -74,4 +77,4 @@ Regeln:
 - Für Workshop-Verwaltung: navigate mit url="/admin/workshops" und cta="Workshops verwalten".
 - Für Marketplace: navigate mit url="/marketplace/sell" und cta="Inserat erstellen".
 - Text ausserhalb des Blocks bleibt normal menschlich.
-`.trim()
+`.trim();

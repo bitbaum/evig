@@ -1,12 +1,16 @@
-import Link from 'next/link'
-import { ClipboardList, FileText, Plus } from 'lucide-react'
-import { Panel } from '@/components/ui/Panel'
-import { buttonClass } from '@/components/ui/button-class'
-import { ROUTES } from '@/config/routes'
-import { TASK_PRIORITY_LABELS, TASK_PRIORITY_COLORS, type TaskPriority } from '@/config/tasks'
-import { PROTOCOL_STATUS_LABELS, PROTOCOL_STATUS_COLORS, type ProtocolStatus } from '@/config/protocols'
-import { formatDate } from '@/lib/date-formats'
-import type { TeamOpenTask, TeamProtocolItem } from '@/lib/services/team-space'
+import Link from 'next/link';
+import { ClipboardList, FileText, Plus } from 'lucide-react';
+import { Panel } from '@/components/ui/Panel';
+import { buttonClass } from '@/components/ui/button-class';
+import { ROUTES } from '@/config/routes';
+import { TASK_PRIORITY_LABELS, TASK_PRIORITY_COLORS, type TaskPriority } from '@/config/tasks';
+import {
+  PROTOCOL_STATUS_LABELS,
+  PROTOCOL_STATUS_COLORS,
+  type ProtocolStatus,
+} from '@/config/protocols';
+import { formatDate } from '@/lib/date-formats';
+import type { TeamOpenTask, TeamProtocolItem } from '@/lib/services/team-space';
 
 /**
  * The team space work panels: open tasks + recent protocols, side by side.
@@ -14,10 +18,14 @@ import type { TeamOpenTask, TeamProtocolItem } from '@/lib/services/team-space'
  * forms, entered with the team preselected via ?team=.
  */
 
-export function TeamTasksPanel({ teamId, tasks, total }: {
-  teamId: string
-  tasks: TeamOpenTask[]
-  total: number
+export function TeamTasksPanel({
+  teamId,
+  tasks,
+  total,
+}: {
+  teamId: string;
+  tasks: TeamOpenTask[];
+  total: number;
 }) {
   return (
     <Panel
@@ -46,10 +54,7 @@ export function TeamTasksPanel({ teamId, tasks, total }: {
         <ul className="divide-y divide-subtle">
           {tasks.map((t) => (
             <li key={t.id}>
-              <Link
-                href={ROUTES.admin.task(t.id)}
-                className="flex items-center gap-3 py-2 group"
-              >
+              <Link href={ROUTES.admin.task(t.id)} className="flex items-center gap-3 py-2 group">
                 <span className="min-w-0 flex-1 text-sm text-text-primary truncate group-hover:underline">
                   {t.title}
                 </span>
@@ -63,7 +68,9 @@ export function TeamTasksPanel({ teamId, tasks, total }: {
                     {formatDate(t.due_date)}
                   </span>
                 )}
-                <span className={`shrink-0 px-1.5 py-0.5 rounded-full text-[10px] font-medium ${TASK_PRIORITY_COLORS[t.priority as TaskPriority] ?? ''}`}>
+                <span
+                  className={`shrink-0 px-1.5 py-0.5 rounded-full text-[10px] font-medium ${TASK_PRIORITY_COLORS[t.priority as TaskPriority] ?? ''}`}
+                >
                   {TASK_PRIORITY_LABELS[t.priority as TaskPriority] ?? t.priority}
                 </span>
               </Link>
@@ -72,12 +79,15 @@ export function TeamTasksPanel({ teamId, tasks, total }: {
         </ul>
       )}
     </Panel>
-  )
+  );
 }
 
-export function TeamProtocolsPanel({ teamId, protocols }: {
-  teamId: string
-  protocols: TeamProtocolItem[]
+export function TeamProtocolsPanel({
+  teamId,
+  protocols,
+}: {
+  teamId: string;
+  protocols: TeamProtocolItem[];
 }) {
   return (
     <Panel
@@ -95,7 +105,8 @@ export function TeamProtocolsPanel({ teamId, protocols }: {
     >
       {protocols.length === 0 ? (
         <p className="text-sm text-text-tertiary">
-          Noch keine Protokolle — Sitzungsnotizen landen hier, wenn beim Protokoll dieses Team gewählt ist.
+          Noch keine Protokolle — Sitzungsnotizen landen hier, wenn beim Protokoll dieses Team
+          gewählt ist.
         </p>
       ) : (
         <ul className="divide-y divide-subtle">
@@ -111,7 +122,9 @@ export function TeamProtocolsPanel({ teamId, protocols }: {
                 <span className="text-xs text-text-secondary tabular-nums shrink-0">
                   {formatDate(p.meeting_date)}
                 </span>
-                <span className={`shrink-0 px-1.5 py-0.5 rounded-full text-[10px] font-medium ${PROTOCOL_STATUS_COLORS[p.status as ProtocolStatus] ?? ''}`}>
+                <span
+                  className={`shrink-0 px-1.5 py-0.5 rounded-full text-[10px] font-medium ${PROTOCOL_STATUS_COLORS[p.status as ProtocolStatus] ?? ''}`}
+                >
                   {PROTOCOL_STATUS_LABELS[p.status as ProtocolStatus] ?? p.status}
                 </span>
               </Link>
@@ -120,5 +133,5 @@ export function TeamProtocolsPanel({ teamId, protocols }: {
         </ul>
       )}
     </Panel>
-  )
+  );
 }

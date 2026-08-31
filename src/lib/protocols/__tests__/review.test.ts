@@ -1,6 +1,6 @@
-import { getProtocolReviewChecklist, getProtocolReviewCounts } from '../review'
-import { PROTOCOL_STATUSES } from '@/config/protocols'
-import type { ActionLinkRecord, StructuredNotes } from '@/lib/schemas/protocols'
+import { getProtocolReviewChecklist, getProtocolReviewCounts } from '../review';
+import { PROTOCOL_STATUSES } from '@/config/protocols';
+import type { ActionLinkRecord, StructuredNotes } from '@/lib/schemas/protocols';
 
 const notes: StructuredNotes = {
   summary: 'Summary',
@@ -39,15 +39,15 @@ const notes: StructuredNotes = {
     },
   ],
   follow_ups: [{ description: 'Check later', status: null }],
-}
+};
 
 const taskLink = {
   action_item_id: 'task-1',
-} as ActionLinkRecord
+} as ActionLinkRecord;
 
 describe('protocol review helpers', () => {
   it('derives review counts from structured notes and links', () => {
-    const counts = getProtocolReviewCounts(notes, [taskLink])
+    const counts = getProtocolReviewCounts(notes, [taskLink]);
 
     expect(counts).toMatchObject({
       topics: 1,
@@ -60,8 +60,8 @@ describe('protocol review helpers', () => {
       closedDecisionsWithoutTask: 0,
       unresolvedAssignees: 1,
       followUps: 1,
-    })
-  })
+    });
+  });
 
   it('marks task and people review active while unresolved work remains', () => {
     const checklist = getProtocolReviewChecklist({
@@ -70,10 +70,10 @@ describe('protocol review helpers', () => {
       notes,
       actionLinks: [taskLink],
       protocolDecisions: [],
-    })
+    });
 
-    expect(checklist.find((item) => item.id === 'people')?.state).toBe('active')
-    expect(checklist.find((item) => item.id === 'tasks')?.state).toBe('active')
-    expect(checklist.find((item) => item.id === 'finalize')?.state).toBe('pending')
-  })
-})
+    expect(checklist.find((item) => item.id === 'people')?.state).toBe('active');
+    expect(checklist.find((item) => item.id === 'tasks')?.state).toBe('active');
+    expect(checklist.find((item) => item.id === 'finalize')?.state).toBe('pending');
+  });
+});

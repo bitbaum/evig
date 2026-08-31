@@ -13,47 +13,50 @@
  * Idempotent — running twice in the same window is a no-op.
  */
 
-import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/db'
-import { authAuditLog } from '@/db/schema'
-import { and, lt, ne, sql } from 'drizzle-orm'
-import { logger } from '@/lib/logger'
-import { requireCronAuth } from '@/lib/api/cron-auth'
+import { NextRequest, NextResponse } from 'next/server';
+import { db } from '@/db';
+import { authAuditLog } from '@/db/schema';
+import { and, lt, ne, sql } from 'drizzle-orm';
+import { logger } from '@/lib/logger';
+import { requireCronAuth } from '@/lib/api/cron-auth';
 
-const RETENTION_DAYS = 180
+const RETENTION_DAYS = 180;
 
 export async function GET(request: NextRequest) {
-  const auth = requireCronAuth(request)
-  if (!auth.ok) return auth.response
+  const auth = requireCronAuth(request);
+  if (!auth.ok) return auth.response;
 
   try {
     const result = await db
       .delete(authAuditLog)
       .where(
         and(
-          lt(authAuditLog.createdAt, sql`NOW() - INTERVAL '${sql.raw(String(RETENTION_DAYS))} days'`),
+          lt(
+            authAuditLog.createdAt,
+            sql`NOW() - INTERVAL '${sql.raw(String(RETENTION_DAYS))} days'`,
+          ),
           // Preserve critical events forever — super-admin changes, deletions,
           // any future compliance event we flag as severity='critical'.
           ne(authAuditLog.severity, 'critical'),
         ),
       )
-      .returning({ id: authAuditLog.id })
+      .returning({ id: authAuditLog.id });
 
     logger.info('Audit log pruned', {
       retentionDays: RETENTION_DAYS,
       rowsDeleted: result.length,
-    })
+    });
 
     return NextResponse.json({
       success: true,
       pruned: result.length,
       retentionDays: RETENTION_DAYS,
-    })
+    });
   } catch (error) {
-    logger.error('Audit log prune failed', { error })
+    logger.error('Audit log prune failed', { error });
     return NextResponse.json(
       { error: 'prune_failed', detail: error instanceof Error ? error.message : 'unknown' },
       { status: 500 },
-    )
+    );
   }
 }

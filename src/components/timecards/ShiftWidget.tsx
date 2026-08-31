@@ -1,18 +1,15 @@
-'use client'
+'use client';
 
-import { useEffect, useState, useCallback, useMemo } from 'react'
-import { useTranslations } from 'next-intl'
-import { Play, Square, Clock } from 'lucide-react'
-import {
-  TIMECARD_ENTRY_CATEGORY_OPTIONS,
-  type TimecardEntryCategory,
-} from '@/config/timecards'
-import { useTimecardIntl } from '@/hooks/useTimecardIntl'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { cn } from '@/lib/utils'
+import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useTranslations } from 'next-intl';
+import { Play, Square, Clock } from 'lucide-react';
+import { TIMECARD_ENTRY_CATEGORY_OPTIONS, type TimecardEntryCategory } from '@/config/timecards';
+import { useTimecardIntl } from '@/hooks/useTimecardIntl';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { cn } from '@/lib/utils';
 
 /**
  * Clock-in / clock-out, embedded INTO the timecard tool (not a separate
@@ -25,91 +22,95 @@ import { cn } from '@/lib/utils'
  */
 
 export interface ClockedShift {
-  work_date: string
-  start_time: string
-  end_time: string
-  minutes: number
-  category: TimecardEntryCategory
-  description?: string
+  work_date: string;
+  start_time: string;
+  end_time: string;
+  minutes: number;
+  category: TimecardEntryCategory;
+  description?: string;
 }
 
-const STORAGE_KEY = 'revampit:active-shift:v1'
+const STORAGE_KEY = 'revampit:active-shift:v1';
 
 interface ActiveShift {
-  startedAt: string
-  category: TimecardEntryCategory
+  startedAt: string;
+  category: TimecardEntryCategory;
 }
 
 function readActive(): ActiveShift | null {
-  if (typeof window === 'undefined') return null
+  if (typeof window === 'undefined') return null;
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY)
-    if (!raw) return null
-    const parsed = JSON.parse(raw)
-    if (typeof parsed?.startedAt !== 'string') return null
-    return { startedAt: parsed.startedAt, category: parsed.category || 'other' }
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (typeof parsed?.startedAt !== 'string') return null;
+    return { startedAt: parsed.startedAt, category: parsed.category || 'other' };
   } catch {
-    return null
+    return null;
   }
 }
 
 function writeActive(shift: ActiveShift | null) {
-  if (typeof window === 'undefined') return
-  if (shift) window.localStorage.setItem(STORAGE_KEY, JSON.stringify(shift))
-  else window.localStorage.removeItem(STORAGE_KEY)
+  if (typeof window === 'undefined') return;
+  if (shift) window.localStorage.setItem(STORAGE_KEY, JSON.stringify(shift));
+  else window.localStorage.removeItem(STORAGE_KEY);
 }
 
 function formatElapsed(startMs: number, nowMs: number): string {
-  const total = Math.max(0, Math.floor((nowMs - startMs) / 1000))
-  const h = Math.floor(total / 3600)
-  const m = Math.floor((total % 3600) / 60)
-  const s = total % 60
-  if (h > 0) return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
-  return `${m}:${String(s).padStart(2, '0')}`
+  const total = Math.max(0, Math.floor((nowMs - startMs) / 1000));
+  const h = Math.floor(total / 3600);
+  const m = Math.floor((total % 3600) / 60);
+  const s = total % 60;
+  if (h > 0) return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  return `${m}:${String(s).padStart(2, '0')}`;
 }
 
 function hhmm(date: Date): string {
-  return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`
+  return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
 }
 
-export function ShiftWidget({ onClockOut }: { onClockOut: (shift: ClockedShift) => void | Promise<void> }) {
-  const t = useTranslations('admin.timecards')
-  const { categoryLabel } = useTimecardIntl()
-  const [active, setActive] = useState<ActiveShift | null>(null)
-  const [now, setNow] = useState<number>(() => Date.now())
-  const [submitting, setSubmitting] = useState(false)
-  const [category, setCategory] = useState<TimecardEntryCategory>('other')
-  const [description, setDescription] = useState('')
+export function ShiftWidget({
+  onClockOut,
+}: {
+  onClockOut: (shift: ClockedShift) => void | Promise<void>;
+}) {
+  const t = useTranslations('admin.timecards');
+  const { categoryLabel } = useTimecardIntl();
+  const [active, setActive] = useState<ActiveShift | null>(null);
+  const [now, setNow] = useState<number>(() => Date.now());
+  const [submitting, setSubmitting] = useState(false);
+  const [category, setCategory] = useState<TimecardEntryCategory>('other');
+  const [description, setDescription] = useState('');
 
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
-    const stored = readActive()
+    const stored = readActive();
     if (stored) {
-      setActive(stored)
-      setCategory(stored.category)
+      setActive(stored);
+      setCategory(stored.category);
     }
-  }, [])
+  }, []);
   /* eslint-enable react-hooks/set-state-in-effect */
 
   useEffect(() => {
-    if (!active) return
-    const id = window.setInterval(() => setNow(Date.now()), 1000)
-    return () => window.clearInterval(id)
-  }, [active])
+    if (!active) return;
+    const id = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(id);
+  }, [active]);
 
   const handleStart = useCallback(() => {
-    const shift: ActiveShift = { startedAt: new Date().toISOString(), category }
-    writeActive(shift)
-    setActive(shift)
-    setNow(Date.now())
-  }, [category])
+    const shift: ActiveShift = { startedAt: new Date().toISOString(), category };
+    writeActive(shift);
+    setActive(shift);
+    setNow(Date.now());
+  }, [category]);
 
   const handleStop = useCallback(async () => {
-    if (!active || submitting) return
-    setSubmitting(true)
-    const start = new Date(active.startedAt)
-    const end = new Date()
-    const minutes = Math.max(1, Math.round((end.getTime() - start.getTime()) / 60000))
+    if (!active || submitting) return;
+    setSubmitting(true);
+    const start = new Date(active.startedAt);
+    const end = new Date();
+    const minutes = Math.max(1, Math.round((end.getTime() - start.getTime()) / 60000));
     try {
       await onClockOut({
         // A shift bills to the day it STARTED (crosses-midnight convention).
@@ -119,25 +120,25 @@ export function ShiftWidget({ onClockOut }: { onClockOut: (shift: ClockedShift) 
         minutes,
         category: active.category,
         description: description.trim() || undefined,
-      })
-      writeActive(null)
-      setActive(null)
-      setDescription('')
+      });
+      writeActive(null);
+      setActive(null);
+      setDescription('');
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
-  }, [active, submitting, description, onClockOut])
+  }, [active, submitting, description, onClockOut]);
 
   const handleCancel = useCallback(() => {
-    writeActive(null)
-    setActive(null)
-  }, [])
+    writeActive(null);
+    setActive(null);
+  }, []);
 
-  const startedAtMs = active ? new Date(active.startedAt).getTime() : 0
+  const startedAtMs = active ? new Date(active.startedAt).getTime() : 0;
   const elapsedLabel = useMemo(
     () => (active ? formatElapsed(startedAtMs, now) : null),
     [active, startedAtMs, now],
-  )
+  );
 
   return (
     <section
@@ -152,9 +153,12 @@ export function ShiftWidget({ onClockOut }: { onClockOut: (shift: ClockedShift) 
             <Eyebrow className="flex items-center gap-1.5 text-action">
               <Clock className="h-3.5 w-3.5" aria-hidden="true" /> {t('shiftRunning')}
             </Eyebrow>
-            <p className="mt-1 font-mono text-3xl tabular-nums leading-none text-text-primary">{elapsedLabel}</p>
+            <p className="mt-1 font-mono text-3xl tabular-nums leading-none text-text-primary">
+              {elapsedLabel}
+            </p>
             <p className="mt-1 text-xs text-text-tertiary">
-              {t('shiftStartedAt', { time: hhmm(new Date(active.startedAt)) })} · {categoryLabel(active.category)}
+              {t('shiftStartedAt', { time: hhmm(new Date(active.startedAt)) })} ·{' '}
+              {categoryLabel(active.category)}
             </p>
           </div>
           {/* Controls share one height (min-h-touch) so the row reads as one unit. */}
@@ -162,17 +166,29 @@ export function ShiftWidget({ onClockOut }: { onClockOut: (shift: ClockedShift) 
             <Input
               type="text"
               value={description}
-              onChange={e => setDescription(e.target.value)}
+              onChange={(e) => setDescription(e.target.value)}
               placeholder={t('shiftPlaceholder')}
               maxLength={500}
               className="min-h-touch"
             />
             <div className="flex gap-2">
-              <Button type="button" variant="primary" onClick={handleStop} disabled={submitting} className="flex-1 gap-2">
+              <Button
+                type="button"
+                variant="primary"
+                onClick={handleStop}
+                disabled={submitting}
+                className="flex-1 gap-2"
+              >
                 <Square className="h-4 w-4" aria-hidden="true" />
                 {submitting ? t('saving') : t('shiftStop')}
               </Button>
-              <Button type="button" variant="ghost" onClick={handleCancel} disabled={submitting} className="text-text-tertiary">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={handleCancel}
+                disabled={submitting}
+                className="text-text-tertiary"
+              >
                 {t('cancel')}
               </Button>
             </div>
@@ -191,15 +207,22 @@ export function ShiftWidget({ onClockOut }: { onClockOut: (shift: ClockedShift) 
               <span className="sr-only">{t('fieldCategory')}</span>
               <Select
                 value={category}
-                onChange={e => setCategory(e.target.value as TimecardEntryCategory)}
+                onChange={(e) => setCategory(e.target.value as TimecardEntryCategory)}
                 className="min-h-touch w-full sm:w-48"
               >
-                {TIMECARD_ENTRY_CATEGORY_OPTIONS.map(c => (
-                  <option key={c} value={c}>{categoryLabel(c)}</option>
+                {TIMECARD_ENTRY_CATEGORY_OPTIONS.map((c) => (
+                  <option key={c} value={c}>
+                    {categoryLabel(c)}
+                  </option>
                 ))}
               </Select>
             </label>
-            <Button type="button" variant="primary" onClick={handleStart} className="w-full justify-center gap-2 whitespace-nowrap sm:w-auto">
+            <Button
+              type="button"
+              variant="primary"
+              onClick={handleStart}
+              className="w-full justify-center gap-2 whitespace-nowrap sm:w-auto"
+            >
               <Play className="h-4 w-4" aria-hidden="true" />
               {t('shiftStart')}
             </Button>
@@ -207,5 +230,5 @@ export function ShiftWidget({ onClockOut }: { onClockOut: (shift: ClockedShift) 
         </div>
       )}
     </section>
-  )
+  );
 }

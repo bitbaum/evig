@@ -2,12 +2,12 @@
  * Team profiles — shared create/update for HR hire flow and admin CRUD.
  */
 
-import { db } from '@/db'
-import { teamProfiles, users } from '@/db/schema'
-import { eq } from 'drizzle-orm'
-import type { CreateTeamProfileInput, UpdateTeamProfileInput } from '@/lib/schemas/team'
+import { db } from '@/db';
+import { teamProfiles, users } from '@/db/schema';
+import { eq } from 'drizzle-orm';
+import type { CreateTeamProfileInput, UpdateTeamProfileInput } from '@/lib/schemas/team';
 
-export type { CreateTeamProfileInput }
+export type { CreateTeamProfileInput };
 
 /**
  * Map validated update data → a Drizzle column set. Sensitive fields
@@ -20,57 +20,61 @@ export function mapTeamProfileUpdate(
   data: UpdateTeamProfileInput,
   includeSensitive: boolean,
 ): Record<string, unknown> {
-  const update: Record<string, unknown> = {}
+  const update: Record<string, unknown> = {};
 
-  if (data.position !== undefined) update.position = data.position
-  if (data.department !== undefined) update.department = data.department
-  if (data.employment_type !== undefined) update.employmentType = data.employment_type
-  if (data.start_date !== undefined) update.startDate = data.start_date
-  if (data.contract_hours !== undefined) update.contractHours = data.contract_hours
-  if (data.skills !== undefined) update.skills = data.skills
-  if (data.interests !== undefined) update.interests = data.interests
-  if (data.goals !== undefined) update.goals = data.goals
-  if (data.strengths !== undefined) update.strengths = data.strengths
-  if (data.development_areas !== undefined) update.developmentAreas = data.development_areas
-  if (data.availability !== undefined) update.availability = data.availability
-  if (data.working_hours !== undefined) update.workingHours = data.working_hours
-  if (data.preferred_contact !== undefined) update.preferredContact = data.preferred_contact
-  if (data.phone !== undefined) update.phone = data.phone
-  if (data.emergency_contact_name !== undefined) update.emergencyContactName = data.emergency_contact_name
-  if (data.emergency_contact_phone !== undefined) update.emergencyContactPhone = data.emergency_contact_phone
-  if (data.emergency_contact_relation !== undefined) update.emergencyContactRelation = data.emergency_contact_relation
-  if (data.is_active !== undefined) update.isActive = data.is_active
-  if (data.show_on_about !== undefined) update.showOnAbout = data.show_on_about
+  if (data.position !== undefined) update.position = data.position;
+  if (data.department !== undefined) update.department = data.department;
+  if (data.employment_type !== undefined) update.employmentType = data.employment_type;
+  if (data.start_date !== undefined) update.startDate = data.start_date;
+  if (data.contract_hours !== undefined) update.contractHours = data.contract_hours;
+  if (data.skills !== undefined) update.skills = data.skills;
+  if (data.interests !== undefined) update.interests = data.interests;
+  if (data.goals !== undefined) update.goals = data.goals;
+  if (data.strengths !== undefined) update.strengths = data.strengths;
+  if (data.development_areas !== undefined) update.developmentAreas = data.development_areas;
+  if (data.availability !== undefined) update.availability = data.availability;
+  if (data.working_hours !== undefined) update.workingHours = data.working_hours;
+  if (data.preferred_contact !== undefined) update.preferredContact = data.preferred_contact;
+  if (data.phone !== undefined) update.phone = data.phone;
+  if (data.emergency_contact_name !== undefined)
+    update.emergencyContactName = data.emergency_contact_name;
+  if (data.emergency_contact_phone !== undefined)
+    update.emergencyContactPhone = data.emergency_contact_phone;
+  if (data.emergency_contact_relation !== undefined)
+    update.emergencyContactRelation = data.emergency_contact_relation;
+  if (data.is_active !== undefined) update.isActive = data.is_active;
+  if (data.show_on_about !== undefined) update.showOnAbout = data.show_on_about;
 
   // Lifecycle — admin-level (not just super admin)
-  if (data.end_date !== undefined) update.endDate = data.end_date
-  if (data.exit_reason !== undefined) update.exitReason = data.exit_reason
-  if (data.work_state !== undefined) update.workState = data.work_state
+  if (data.end_date !== undefined) update.endDate = data.end_date;
+  if (data.exit_reason !== undefined) update.exitReason = data.exit_reason;
+  if (data.work_state !== undefined) update.workState = data.work_state;
 
   // Sensitive — super admin ONLY (compensation, AHV, hr_notes)
   if (includeSensitive) {
-    if (data.hr_notes !== undefined) update.hrNotes = data.hr_notes
-    if (data.hourly_rate_cents !== undefined) update.hourlyRateCents = data.hourly_rate_cents
-    if (data.salary_chf !== undefined) update.salaryChf = data.salary_chf
-    if (data.salary_effective_date !== undefined) update.salaryEffectiveDate = data.salary_effective_date
-    if (data.ahv_number !== undefined) update.ahvNumber = data.ahv_number
-    if (data.canton_tax_code !== undefined) update.cantonTaxCode = data.canton_tax_code
+    if (data.hr_notes !== undefined) update.hrNotes = data.hr_notes;
+    if (data.hourly_rate_cents !== undefined) update.hourlyRateCents = data.hourly_rate_cents;
+    if (data.salary_chf !== undefined) update.salaryChf = data.salary_chf;
+    if (data.salary_effective_date !== undefined)
+      update.salaryEffectiveDate = data.salary_effective_date;
+    if (data.ahv_number !== undefined) update.ahvNumber = data.ahv_number;
+    if (data.canton_tax_code !== undefined) update.cantonTaxCode = data.canton_tax_code;
   }
 
-  return update
+  return update;
 }
 
 export interface HireTeamProfileInput {
-  userId: string
-  position: string
-  department?: string | null
-  employmentType: string
-  startDate?: string | null
-  contractHours?: number | null
-  skills: string[]
-  goals?: string | null
-  developmentAreas?: string | null
-  phone?: string | null
+  userId: string;
+  position: string;
+  department?: string | null;
+  employmentType: string;
+  startDate?: string | null;
+  contractHours?: number | null;
+  skills: string[];
+  goals?: string | null;
+  developmentAreas?: string | null;
+  phone?: string | null;
 }
 
 export async function findTeamProfileIdByUserId(userId: string): Promise<string | null> {
@@ -78,18 +82,20 @@ export async function findTeamProfileIdByUserId(userId: string): Promise<string 
     .select({ id: teamProfiles.id })
     .from(teamProfiles)
     .where(eq(teamProfiles.userId, userId))
-    .limit(1)
-  return row?.id ?? null
+    .limit(1);
+  return row?.id ?? null;
 }
 
 export async function promoteUserToStaff(userId: string): Promise<void> {
   await db
     .update(users)
     .set({ isStaff: true, updatedAt: new Date().toISOString() })
-    .where(eq(users.id, userId))
+    .where(eq(users.id, userId));
 }
 
-export async function createTeamProfileForHire(input: HireTeamProfileInput): Promise<{ id: string }> {
+export async function createTeamProfileForHire(
+  input: HireTeamProfileInput,
+): Promise<{ id: string }> {
   const [profile] = await db
     .insert(teamProfiles)
     .values({
@@ -106,9 +112,9 @@ export async function createTeamProfileForHire(input: HireTeamProfileInput): Pro
       isActive: true,
       workState: 'active',
     })
-    .returning({ id: teamProfiles.id })
+    .returning({ id: teamProfiles.id });
 
-  return { id: profile.id }
+  return { id: profile.id };
 }
 
 /** Map validated admin form payload → Drizzle insert row. */
@@ -116,17 +122,17 @@ export function buildManualTeamProfileValues(
   data: CreateTeamProfileInput,
   options?: { stripSensitive?: boolean },
 ): typeof teamProfiles.$inferInsert {
-  const payload = { ...data } as Record<string, unknown>
+  const payload = { ...data } as Record<string, unknown>;
   if (options?.stripSensitive) {
-    delete payload.hr_notes
-    delete payload.hourly_rate_cents
-    delete payload.salary_chf
-    delete payload.salary_effective_date
-    delete payload.ahv_number
-    delete payload.canton_tax_code
+    delete payload.hr_notes;
+    delete payload.hourly_rate_cents;
+    delete payload.salary_chf;
+    delete payload.salary_effective_date;
+    delete payload.ahv_number;
+    delete payload.canton_tax_code;
   }
 
-  const d = payload as CreateTeamProfileInput
+  const d = payload as CreateTeamProfileInput;
 
   return {
     userId: d.user_id,
@@ -158,14 +164,14 @@ export function buildManualTeamProfileValues(
     salaryEffectiveDate: d.salary_effective_date || null,
     ahvNumber: d.ahv_number || null,
     cantonTaxCode: d.canton_tax_code || null,
-  }
+  };
 }
 
 export async function createTeamProfileManual(
   data: CreateTeamProfileInput,
   options?: { stripSensitive?: boolean },
 ): Promise<{ id: string }> {
-  const values = buildManualTeamProfileValues(data, options)
-  const [created] = await db.insert(teamProfiles).values(values).returning({ id: teamProfiles.id })
-  return { id: created.id }
+  const values = buildManualTeamProfileValues(data, options);
+  const [created] = await db.insert(teamProfiles).values(values).returning({ id: teamProfiles.id });
+  return { id: created.id };
 }

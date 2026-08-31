@@ -5,8 +5,8 @@
  * widget inside the timecard tool (/admin/zeiterfassung). This route now
  * permanently redirects there so old links/bookmarks keep working.
  */
-import { redirect } from 'next/navigation'
+import { redirect } from 'next/navigation';
 
 export default function ShiftPage() {
-  redirect('/admin/zeiterfassung')
+  redirect('/admin/zeiterfassung');
 }

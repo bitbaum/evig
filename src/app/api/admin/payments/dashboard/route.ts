@@ -1,103 +1,109 @@
-import { NextRequest } from 'next/server'
-import { withAdmin } from '@/lib/api/middleware'
-import { db } from '@/db'
-import { sql, getTableName, SQL } from 'drizzle-orm'
-import { paymentTransactions, paymentProviders, escrowAccounts, refunds, paymentDisputes } from '@/db/schema/payments'
-import { users } from '@/db/schema/auth'
-import { apiError, apiSuccess } from '@/lib/api/helpers'
-import { logger } from '@/lib/logger'
-import { PAYMENT_STATUS, ESCROW_STATUS, PAYMENT_DISPUTE_STATUS } from '@/config/payment-status'
-import { REFUND_STATUS } from '@/config/refund'
+import { NextRequest } from 'next/server';
+import { withAdmin } from '@/lib/api/middleware';
+import { db } from '@/db';
+import { sql, getTableName, SQL } from 'drizzle-orm';
+import {
+  paymentTransactions,
+  paymentProviders,
+  escrowAccounts,
+  refunds,
+  paymentDisputes,
+} from '@/db/schema/payments';
+import { users } from '@/db/schema/auth';
+import { apiError, apiSuccess } from '@/lib/api/helpers';
+import { logger } from '@/lib/logger';
+import { PAYMENT_STATUS, ESCROW_STATUS, PAYMENT_DISPUTE_STATUS } from '@/config/payment-status';
+import { REFUND_STATUS } from '@/config/refund';
 
 interface OverviewRow {
-  total_transactions: number
-  successful_transactions: number
-  failed_transactions: number
-  total_volume_cents: number
-  total_fees_cents: number
-  total_refunds_cents: number
-  avg_processing_time_minutes: number | null
+  total_transactions: number;
+  successful_transactions: number;
+  failed_transactions: number;
+  total_volume_cents: number;
+  total_fees_cents: number;
+  total_refunds_cents: number;
+  avg_processing_time_minutes: number | null;
 }
 
 interface CurrencyRow {
-  currency: string
-  transaction_count: string
-  volume_cents: number
+  currency: string;
+  transaction_count: string;
+  volume_cents: number;
 }
 
 interface ProviderRow {
-  provider_name: string
-  transaction_count: string
-  volume_cents: number
-  avg_fee_cents: number
+  provider_name: string;
+  transaction_count: string;
+  volume_cents: number;
+  avg_fee_cents: number;
 }
 
 interface DailyRow {
-  date: string
-  transaction_count: string
-  volume_cents: number
+  date: string;
+  transaction_count: string;
+  volume_cents: number;
 }
 
 interface TransactionRow {
-  id: string
-  provider_transaction_id: string
-  type: string
-  status: string
-  amount: number
-  currency: string
-  created_at: string
-  description: string
-  customer_name: string
-  provider_name: string
+  id: string;
+  provider_transaction_id: string;
+  type: string;
+  status: string;
+  amount: number;
+  currency: string;
+  created_at: string;
+  description: string;
+  customer_name: string;
+  provider_name: string;
 }
 
 interface EscrowRow {
-  total_escrows: string
-  active_escrows: string
-  released_escrows: string
-  total_escrow_amount_cents: number
-  total_released_amount_cents: number
+  total_escrows: string;
+  active_escrows: string;
+  released_escrows: string;
+  total_escrow_amount_cents: number;
+  total_released_amount_cents: number;
 }
 
 interface RefundSummaryRow {
-  total_refunds: string
-  completed_refunds: string
-  pending_refunds: string
-  total_refund_amount_cents: number
+  total_refunds: string;
+  completed_refunds: string;
+  pending_refunds: string;
+  total_refund_amount_cents: number;
 }
 
 interface DisputeRow {
-  total_disputes: string
-  open_disputes: string
-  lost_disputes: string
-  total_dispute_amount_cents: number
+  total_disputes: string;
+  open_disputes: string;
+  lost_disputes: string;
+  total_dispute_amount_cents: number;
 }
 
 // Table name refs
-const ptTable = getTableName(paymentTransactions)
-const ppTable = getTableName(paymentProviders)
-const uTable = getTableName(users)
-const eaTable = getTableName(escrowAccounts)
-const rTable = getTableName(refunds)
-const pdTable = getTableName(paymentDisputes)
+const ptTable = getTableName(paymentTransactions);
+const ppTable = getTableName(paymentProviders);
+const uTable = getTableName(users);
+const eaTable = getTableName(escrowAccounts);
+const rTable = getTableName(refunds);
+const pdTable = getTableName(paymentDisputes);
 
 // GET /api/admin/payments/dashboard - Get payment dashboard data
 export const GET = withAdmin('finanzen', async (request: NextRequest) => {
   try {
-    const { searchParams } = new URL(request.url)
-    const periodRaw = searchParams.get('period') || '30' // days
-    const startDate = searchParams.get('startDate')
-    const endDate = searchParams.get('endDate')
+    const { searchParams } = new URL(request.url);
+    const periodRaw = searchParams.get('period') || '30'; // days
+    const startDate = searchParams.get('startDate');
+    const endDate = searchParams.get('endDate');
 
     // Validate and sanitize period to prevent SQL injection
-    const period = Math.max(1, Math.min(365, parseInt(periodRaw, 10) || 30))
+    const period = Math.max(1, Math.min(365, parseInt(periodRaw, 10) || 30));
 
     // Calculate date filter as SQL fragment
-    let dateFilter: SQL
+    let dateFilter: SQL;
     if (startDate && endDate) {
-      dateFilter = sql`AND pt.created_at >= ${startDate} AND pt.created_at <= ${endDate}`
+      dateFilter = sql`AND pt.created_at >= ${startDate} AND pt.created_at <= ${endDate}`;
     } else {
-      dateFilter = sql`AND pt.created_at >= CURRENT_DATE - INTERVAL '1 day' * ${period}`
+      dateFilter = sql`AND pt.created_at >= CURRENT_DATE - INTERVAL '1 day' * ${period}`;
     }
 
     // All 8 queries are independent — run in parallel to reduce latency from 8×RTT → 1×RTT
@@ -215,20 +221,22 @@ export const GET = withAdmin('finanzen', async (request: NextRequest) => {
         FROM ${sql.raw(pdTable)} pd
         WHERE created_at >= CURRENT_DATE - INTERVAL '30 days'
       `),
-    ])
+    ]);
 
-    const overview = overviewResult.rows[0] as unknown as OverviewRow
+    const overview = overviewResult.rows[0] as unknown as OverviewRow;
 
     // Calculate key metrics
-    const successRate = overview.total_transactions > 0
-      ? (overview.successful_transactions / overview.total_transactions * 100).toFixed(2)
-      : '0.00'
+    const successRate =
+      overview.total_transactions > 0
+        ? ((overview.successful_transactions / overview.total_transactions) * 100).toFixed(2)
+        : '0.00';
 
-    const netVolume = overview.total_volume_cents - overview.total_fees_cents - overview.total_refunds_cents
+    const netVolume =
+      overview.total_volume_cents - overview.total_fees_cents - overview.total_refunds_cents;
 
-    const escrow = escrowResult.rows[0] as unknown as EscrowRow
-    const refundSummary = refundResult.rows[0] as unknown as RefundSummaryRow
-    const dispute = disputeResult.rows[0] as unknown as DisputeRow
+    const escrow = escrowResult.rows[0] as unknown as EscrowRow;
+    const refundSummary = refundResult.rows[0] as unknown as RefundSummaryRow;
+    const dispute = disputeResult.rows[0] as unknown as DisputeRow;
 
     return apiSuccess({
       overview: {
@@ -241,59 +249,60 @@ export const GET = withAdmin('finanzen', async (request: NextRequest) => {
         totalRefunds: Number(overview.total_refunds_cents) / 100,
         netVolume: netVolume / 100,
         avgProcessingTime: overview.avg_processing_time_minutes || 0,
-        currency: 'CHF' // Primary currency
+        currency: 'CHF', // Primary currency
       },
-      currencyBreakdown: (currencyResult.rows as unknown as CurrencyRow[]).map(row => ({
+      currencyBreakdown: (currencyResult.rows as unknown as CurrencyRow[]).map((row) => ({
         currency: row.currency,
         transactions: parseInt(row.transaction_count),
-        volume: Number(row.volume_cents) / 100
+        volume: Number(row.volume_cents) / 100,
       })),
-      providerBreakdown: (providerResult.rows as unknown as ProviderRow[]).map(row => ({
+      providerBreakdown: (providerResult.rows as unknown as ProviderRow[]).map((row) => ({
         provider: row.provider_name,
         transactions: parseInt(row.transaction_count),
         volume: Number(row.volume_cents) / 100,
-        avgFee: Number(row.avg_fee_cents) / 100
+        avgFee: Number(row.avg_fee_cents) / 100,
       })),
-      dailyVolume: (dailyVolumeResult.rows as unknown as DailyRow[]).map(row => ({
+      dailyVolume: (dailyVolumeResult.rows as unknown as DailyRow[]).map((row) => ({
         date: row.date,
         transactions: parseInt(row.transaction_count),
-        volume: Number(row.volume_cents) / 100
+        volume: Number(row.volume_cents) / 100,
       })),
-      recentTransactions: (recentTransactionsResult.rows as unknown as TransactionRow[]).map(row => ({
-        id: row.id,
-        transactionId: row.provider_transaction_id,
-        type: row.type,
-        status: row.status,
-        amount: row.amount,
-        currency: row.currency,
-        date: row.created_at,
-        description: row.description,
-        customer: row.customer_name,
-        provider: row.provider_name
-      })),
+      recentTransactions: (recentTransactionsResult.rows as unknown as TransactionRow[]).map(
+        (row) => ({
+          id: row.id,
+          transactionId: row.provider_transaction_id,
+          type: row.type,
+          status: row.status,
+          amount: row.amount,
+          currency: row.currency,
+          date: row.created_at,
+          description: row.description,
+          customer: row.customer_name,
+          provider: row.provider_name,
+        }),
+      ),
       escrow: {
         totalEscrows: parseInt(escrow.total_escrows),
         activeEscrows: parseInt(escrow.active_escrows),
         releasedEscrows: parseInt(escrow.released_escrows),
         totalEscrowAmount: Number(escrow.total_escrow_amount_cents) / 100,
-        totalReleasedAmount: Number(escrow.total_released_amount_cents) / 100
+        totalReleasedAmount: Number(escrow.total_released_amount_cents) / 100,
       },
       refunds: {
         totalRefunds: parseInt(refundSummary.total_refunds),
         completedRefunds: parseInt(refundSummary.completed_refunds),
         pendingRefunds: parseInt(refundSummary.pending_refunds),
-        totalRefundAmount: Number(refundSummary.total_refund_amount_cents) / 100
+        totalRefundAmount: Number(refundSummary.total_refund_amount_cents) / 100,
       },
       disputes: {
         totalDisputes: parseInt(dispute.total_disputes),
         openDisputes: parseInt(dispute.open_disputes),
         lostDisputes: parseInt(dispute.lost_disputes),
-        totalDisputeAmount: Number(dispute.total_dispute_amount_cents) / 100
-      }
-    })
-
+        totalDisputeAmount: Number(dispute.total_dispute_amount_cents) / 100,
+      },
+    });
   } catch (error) {
-    logger.error('Payment dashboard error', { error })
-    return apiError(error, 'Failed to load payment dashboard data')
+    logger.error('Payment dashboard error', { error });
+    return apiError(error, 'Failed to load payment dashboard data');
   }
-})
+});

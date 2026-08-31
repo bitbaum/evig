@@ -21,4 +21,4 @@ evig's Mission:
 Schweizer Schreibweise:
 - Verwende immer "ss" statt "ß" (z.B. "Strasse" statt "Straße")
 - Schweizer Vokabular bevorzugen (z.B. "Velo" statt "Fahrrad")
-- Preise in CHF`
+- Preise in CHF`;

@@ -1,67 +1,72 @@
-import { NotificationProvider, NotificationPayload } from '../types'
+import { NotificationProvider, NotificationPayload } from '../types';
 
 export interface EmailConfig {
-  host: string
-  port: number
-  secure?: boolean
+  host: string;
+  port: number;
+  secure?: boolean;
   auth: {
-    user: string
-    pass: string
-  }
-  from: string
-  to: string | string[]
-  cc?: string | string[]
-  bcc?: string | string[]
+    user: string;
+    pass: string;
+  };
+  from: string;
+  to: string | string[];
+  cc?: string | string[];
+  bcc?: string | string[];
 }
 
 export class EmailNotificationProvider implements NotificationProvider {
-  public readonly name = 'email'
-  private config: EmailConfig
-  private transporter: any = null
+  public readonly name = 'email';
+  private config: EmailConfig;
+  private transporter: any = null;
 
   constructor(config: EmailConfig) {
-    this.config = config
+    this.config = config;
   }
 
   configure(config: Record<string, any>): void {
-    this.config = { ...this.config, ...config }
+    this.config = { ...this.config, ...config };
   }
 
   async init(): Promise<void> {
     try {
       // Dynamic import to avoid requiring nodemailer as peer dependency
-      const nodemailer = await import('nodemailer')
-      
+      const nodemailer = await import('nodemailer');
+
       this.transporter = nodemailer.createTransport({
         host: this.config.host,
         port: this.config.port,
         secure: this.config.secure || false,
-        auth: this.config.auth
-      })
+        auth: this.config.auth,
+      });
 
       // Verify connection
-      await this.transporter.verify()
+      await this.transporter.verify();
     } catch (error) {
       const err = error instanceof Error ? error : new Error(String(error));
       if ('code' in err && err.code === 'MODULE_NOT_FOUND') {
-        throw new Error('nodemailer package is required for email notifications. Install it with: npm install nodemailer @types/nodemailer')
+        throw new Error(
+          'nodemailer package is required for email notifications. Install it with: npm install nodemailer @types/nodemailer',
+        );
       }
-      throw new Error(`Failed to initialize email provider: ${err.message}`)
+      throw new Error(`Failed to initialize email provider: ${err.message}`);
     }
   }
 
   async send(notification: NotificationPayload): Promise<boolean> {
     if (!this.transporter) {
-      await this.init()
+      await this.init();
     }
 
     try {
-      const emailHtml = this.generateEmailHTML(notification)
-      const emailText = this.generateEmailText(notification)
+      const emailHtml = this.generateEmailHTML(notification);
+      const emailText = this.generateEmailText(notification);
 
-      const recipients = notification.recipients.length > 0 
-        ? notification.recipients 
-        : (Array.isArray(this.config.to) ? this.config.to : [this.config.to])
+      const recipients =
+        notification.recipients.length > 0
+          ? notification.recipients
+          : Array.isArray(this.config.to)
+            ? this.config.to
+            : [this.config.to];
 
       const mailOptions = {
         from: this.config.from,
@@ -71,23 +76,23 @@ export class EmailNotificationProvider implements NotificationProvider {
         subject: notification.subject,
         text: emailText,
         html: emailHtml,
-        attachments: this.generateAttachments(notification)
-      }
+        attachments: this.generateAttachments(notification),
+      };
 
-      await this.transporter.sendMail(mailOptions)
-      return true
+      await this.transporter.sendMail(mailOptions);
+      return true;
     } catch (error) {
-      console.error('Email notification failed:', error)
-      return false
+      console.error('Email notification failed:', error);
+      return false;
     }
   }
 
   private generateEmailHTML(notification: NotificationPayload): string {
-    const { suggestion, type } = notification
-    
-    const statusColor = this.getStatusColor(suggestion.status)
-    const typeIcon = this.getTypeIcon(type)
-    
+    const { suggestion, type } = notification;
+
+    const statusColor = this.getStatusColor(suggestion.status);
+    const typeIcon = this.getTypeIcon(type);
+
     return `
 <!DOCTYPE html>
 <html>
@@ -135,12 +140,16 @@ export class EmailNotificationProvider implements NotificationProvider {
         <tr><td>ID:</td><td><code>${suggestion.id}</code></td></tr>
       </table>
       
-      ${suggestion.aiInstructions ? `
+      ${
+        suggestion.aiInstructions
+          ? `
       <div class="ai-instructions">
         <h3>🤖 AI-Generated Instructions:</h3>
         <pre>${this.escapeHtml(suggestion.aiInstructions)}</pre>
       </div>
-      ` : ''}
+      `
+          : ''
+      }
       
       <p>
         <a href="${suggestion.url}" class="button">View Page</a>
@@ -155,48 +164,48 @@ export class EmailNotificationProvider implements NotificationProvider {
   </div>
 </body>
 </html>
-    `.trim()
+    `.trim();
   }
 
   private generateEmailText(notification: NotificationPayload): string {
-    const { suggestion } = notification
-    
-    let text = `${notification.subject}\n${'='.repeat(notification.subject.length)}\n\n`
-    text += `User Suggestion: "${suggestion.content}"\n\n`
-    text += `Details:\n`
-    text += `- Status: ${suggestion.status.replace('_', ' ').toUpperCase()}\n`
-    text += `- Page: ${suggestion.page}\n`
-    text += `- URL: ${suggestion.url}\n`
-    text += `- Contact: ${suggestion.contact || 'Anonymous'}\n`
-    text += `- Time: ${new Date(suggestion.timestamp).toLocaleString()}\n`
-    text += `- ID: ${suggestion.id}\n\n`
-    
+    const { suggestion } = notification;
+
+    let text = `${notification.subject}\n${'='.repeat(notification.subject.length)}\n\n`;
+    text += `User Suggestion: "${suggestion.content}"\n\n`;
+    text += `Details:\n`;
+    text += `- Status: ${suggestion.status.replace('_', ' ').toUpperCase()}\n`;
+    text += `- Page: ${suggestion.page}\n`;
+    text += `- URL: ${suggestion.url}\n`;
+    text += `- Contact: ${suggestion.contact || 'Anonymous'}\n`;
+    text += `- Time: ${new Date(suggestion.timestamp).toLocaleString()}\n`;
+    text += `- ID: ${suggestion.id}\n\n`;
+
     if (suggestion.aiInstructions) {
-      text += `AI-Generated Instructions:\n`
-      text += `${'-'.repeat(25)}\n`
-      text += `${suggestion.aiInstructions}\n`
-      text += `${'-'.repeat(25)}\n\n`
+      text += `AI-Generated Instructions:\n`;
+      text += `${'-'.repeat(25)}\n`;
+      text += `${suggestion.aiInstructions}\n`;
+      text += `${'-'.repeat(25)}\n\n`;
     }
-    
-    text += `View the page: ${suggestion.url}\n\n`
-    text += `This notification was sent by AI-Native CMS`
-    
-    return text
+
+    text += `View the page: ${suggestion.url}\n\n`;
+    text += `This notification was sent by AI-Native CMS`;
+
+    return text;
   }
 
   private generateAttachments(notification: NotificationPayload): any[] {
-    const attachments: any[] = []
-    
+    const attachments: any[] = [];
+
     // If AI instructions exist, attach them as a text file
     if (notification.suggestion.aiInstructions) {
       attachments.push({
         filename: `ai-instructions-${notification.suggestion.id}.txt`,
         content: notification.suggestion.aiInstructions,
-        contentType: 'text/plain'
-      })
+        contentType: 'text/plain',
+      });
     }
-    
-    return attachments
+
+    return attachments;
   }
 
   private getStatusColor(status: string): string {
@@ -206,30 +215,30 @@ export class EmailNotificationProvider implements NotificationProvider {
       ai_generated: '#28a745',
       in_progress: '#17a2b8',
       completed: '#28a745',
-      rejected: '#dc3545'
-    }
-    return colors[status] || '#6c757d'
+      rejected: '#dc3545',
+    };
+    return colors[status] || '#6c757d';
   }
 
   private getTypeIcon(type: string): string {
     const icons: Record<string, string> = {
       new_suggestion: '💡',
       status_update: '🔄',
-      ai_generated: '🤖'
-    }
-    return icons[type] || '📝'
+      ai_generated: '🤖',
+    };
+    return icons[type] || '📝';
   }
 
   private escapeHtml(text: string): string {
-    const div = document.createElement('div')
-    div.textContent = text
-    return div.innerHTML
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
   }
 
   async destroy(): Promise<void> {
     if (this.transporter) {
-      this.transporter.close()
-      this.transporter = null
+      this.transporter.close();
+      this.transporter = null;
     }
   }
 
@@ -237,12 +246,12 @@ export class EmailNotificationProvider implements NotificationProvider {
   async testConnection(): Promise<boolean> {
     try {
       if (!this.transporter) {
-        await this.init()
+        await this.init();
       }
-      await this.transporter.verify()
-      return true
+      await this.transporter.verify();
+      return true;
     } catch (error) {
-      return false
+      return false;
     }
   }
 }

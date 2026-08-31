@@ -1,5 +1,5 @@
-import { z } from 'zod'
-import { swissPostalCodeSchema, phoneSchema } from './common'
+import { z } from 'zod';
+import { swissPostalCodeSchema, phoneSchema } from './common';
 
 export const SellerApplicationSchema = z.object({
   businessName: z.string().optional().nullable(),
@@ -13,6 +13,6 @@ export const SellerApplicationSchema = z.object({
   productTypes: z.array(z.string()).min(1, 'Mindestens ein Produkttyp ist erforderlich'),
   motivation: z.string().optional().nullable(),
   termsAccepted: z.literal(true, { error: 'AGB müssen akzeptiert werden' }),
-})
+});
 
-export type SellerApplicationInput = z.infer<typeof SellerApplicationSchema>
+export type SellerApplicationInput = z.infer<typeof SellerApplicationSchema>;

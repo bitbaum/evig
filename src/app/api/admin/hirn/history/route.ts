@@ -11,43 +11,43 @@
  * Delete a chat session.
  */
 
-import { NextRequest } from 'next/server'
-import { withAdmin } from '@/lib/api/middleware'
-import { getChatHistory, getUserSessions, deleteSession } from '@/lib/hirn'
-import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
+import { NextRequest } from 'next/server';
+import { withAdmin } from '@/lib/api/middleware';
+import { getChatHistory, getUserSessions, deleteSession } from '@/lib/hirn';
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
 
 export const GET = withAdmin('hirn', async (request: NextRequest, session) => {
   try {
-    const { searchParams } = new URL(request.url)
-    const sessionId = searchParams.get('sessionId')
+    const { searchParams } = new URL(request.url);
+    const sessionId = searchParams.get('sessionId');
 
     if (sessionId) {
       // Get history for specific session
-      const history = await getChatHistory(sessionId, session.user.id)
-      return apiSuccess(history)
+      const history = await getChatHistory(sessionId, session.user.id);
+      return apiSuccess(history);
     } else {
       // Get all sessions for user
-      const sessions = await getUserSessions(session.user.id)
-      return apiSuccess(sessions)
+      const sessions = await getUserSessions(session.user.id);
+      return apiSuccess(sessions);
     }
   } catch (error) {
-    return apiError(error, 'Chat-Verlauf konnte nicht geladen werden')
+    return apiError(error, 'Chat-Verlauf konnte nicht geladen werden');
   }
-})
+});
 
 export const DELETE = withAdmin('hirn', async (request: NextRequest, session) => {
   try {
-    const { searchParams } = new URL(request.url)
-    const sessionId = searchParams.get('sessionId')
+    const { searchParams } = new URL(request.url);
+    const sessionId = searchParams.get('sessionId');
 
     if (!sessionId) {
-      return apiBadRequest('Session-ID ist erforderlich')
+      return apiBadRequest('Session-ID ist erforderlich');
     }
 
-    await deleteSession(sessionId, session.user.id)
+    await deleteSession(sessionId, session.user.id);
 
-    return apiSuccess({ message: 'Session gelöscht' })
+    return apiSuccess({ message: 'Session gelöscht' });
   } catch (error) {
-    return apiError(error, 'Session konnte nicht gelöscht werden')
+    return apiError(error, 'Session konnte nicht gelöscht werden');
   }
-})
+});

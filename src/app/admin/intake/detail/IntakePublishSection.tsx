@@ -1,25 +1,25 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { useTranslations } from 'next-intl'
-import { adminInteractive } from '@/lib/admin-ui'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { ExternalLink, AlertCircle, ClipboardList } from 'lucide-react'
-import { ROUTES } from '@/config/routes'
-import { INTAKE_TIERS } from '@/config/intake-checklist'
-import { INTAKE_STATUS } from '@/config/intake-status'
-import Heading from '@/components/admin/AdminHeading'
-import type { DetailData, ChecklistItemWithState } from '../types'
+import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { adminInteractive } from '@/lib/admin-ui';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { ExternalLink, AlertCircle, ClipboardList } from 'lucide-react';
+import { ROUTES } from '@/config/routes';
+import { INTAKE_TIERS } from '@/config/intake-checklist';
+import { INTAKE_STATUS } from '@/config/intake-status';
+import Heading from '@/components/admin/AdminHeading';
+import type { DetailData, ChecklistItemWithState } from '../types';
 
 interface IntakePublishSectionProps {
-  detail: DetailData
-  qcGate: boolean
-  openRequired: ChecklistItemWithState[]
-  publishPrice: number
-  setPublishPrice: (price: number) => void
-  publishing: boolean
-  onPublish: (options?: { skipQc?: boolean }) => void
+  detail: DetailData;
+  qcGate: boolean;
+  openRequired: ChecklistItemWithState[];
+  publishPrice: number;
+  setPublishPrice: (price: number) => void;
+  publishing: boolean;
+  onPublish: (options?: { skipQc?: boolean }) => void;
 }
 
 export function IntakePublishSection({
@@ -31,20 +31,24 @@ export function IntakePublishSection({
   publishing,
   onPublish,
 }: IntakePublishSectionProps) {
-  const t = useTranslations('admin.intake.detail')
+  const t = useTranslations('admin.intake.detail');
 
   // Publish Section — refurbish-tier items (checklist-gated) and quick
   // captures of accessory categories (no QC required)
-  if (!(!detail.checklist_complete && (detail.intake_tier === INTAKE_TIERS.REFURBISH || (detail.intake_tier === null && !qcGate)) && detail.marketplace_status !== INTAKE_STATUS.PUBLISHED)) {
-    return null
+  if (!(
+    !detail.checklist_complete &&
+    (detail.intake_tier === INTAKE_TIERS.REFURBISH || (detail.intake_tier === null && !qcGate)) &&
+    detail.marketplace_status !== INTAKE_STATUS.PUBLISHED
+  )) {
+    return null;
   }
 
   return (
-    <div className={`border-2 rounded-lg p-4 ${
-      detail.checklist_complete
-        ? 'border-strong bg-action-muted'
-        : 'border bg-surface-raised'
-    }`}>
+    <div
+      className={`border-2 rounded-lg p-4 ${
+        detail.checklist_complete ? 'border-strong bg-action-muted' : 'border bg-surface-raised'
+      }`}
+    >
       <Heading level={3} className="font-medium mb-3 flex items-center gap-2">
         <ExternalLink className="w-4 h-4" />
         {t('publishHeading')}
@@ -56,7 +60,10 @@ export function IntakePublishSection({
           <span>
             {t('publishGate')}
             {openRequired.length > 0 && (
-              <> {t('publishGateMissing', { items: openRequired.map(i => i.label).join(', ') })}</>
+              <>
+                {' '}
+                {t('publishGateMissing', { items: openRequired.map((i) => i.label).join(', ') })}
+              </>
             )}
           </span>
         </div>
@@ -106,5 +113,5 @@ export function IntakePublishSection({
         )}
       </div>
     </div>
-  )
+  );
 }

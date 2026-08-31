@@ -1,28 +1,29 @@
-'use client'
+'use client';
 
+import { MapPin, Truck, CreditCard, ShieldCheck, ShieldAlert } from 'lucide-react';
+import Heading from '@/components/ui/Heading';
+import { getConditionBadge } from '@/config/erfassung/conditions';
 import {
-  MapPin,
-  Truck,
-  CreditCard,
-  ShieldCheck,
-  ShieldAlert,
-} from 'lucide-react'
-import Heading from '@/components/ui/Heading'
-import { getConditionBadge } from '@/config/erfassung/conditions'
-import { DELIVERY_LABELS, PAYMENT_MODE_LABELS, formatCHF, getCategoryLabel, GRATIS_CONFIG, VERIFICATION_CONFIG } from '@/config/marketplace'
-import type { DeliveryOption, PaymentMode } from '@/config/marketplace'
-import type { ListingDetail } from './types'
-import { useTranslations } from 'next-intl'
+  DELIVERY_LABELS,
+  PAYMENT_MODE_LABELS,
+  formatCHF,
+  getCategoryLabel,
+  GRATIS_CONFIG,
+  VERIFICATION_CONFIG,
+} from '@/config/marketplace';
+import type { DeliveryOption, PaymentMode } from '@/config/marketplace';
+import type { ListingDetail } from './types';
+import { useTranslations } from 'next-intl';
 
 interface ListingInfoPanelProps {
-  listing: ListingDetail
-  isVerified: boolean
-  isGratis: boolean
+  listing: ListingDetail;
+  isVerified: boolean;
+  isGratis: boolean;
 }
 
 export function ListingInfoPanel({ listing, isVerified, isGratis }: ListingInfoPanelProps) {
-  const t = useTranslations('marketplace.listing')
-  const conditionBadge = getConditionBadge(listing.condition)
+  const t = useTranslations('marketplace.listing');
+  const conditionBadge = getConditionBadge(listing.condition);
 
   return (
     <>
@@ -35,7 +36,9 @@ export function ListingInfoPanel({ listing, isVerified, isGratis }: ListingInfoP
           {getCategoryLabel(listing.category)}
         </span>
         {isVerified && (
-          <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${VERIFICATION_CONFIG.badge.color}`}>
+          <span
+            className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${VERIFICATION_CONFIG.badge.color}`}
+          >
             <ShieldCheck className="w-3.5 h-3.5" aria-hidden="true" />
             {VERIFICATION_CONFIG.badge.label}
           </span>
@@ -82,13 +85,16 @@ export function ListingInfoPanel({ listing, isVerified, isGratis }: ListingInfoP
             <Truck className="w-3.5 h-3.5" aria-hidden="true" /> {t('delivery')}
           </span>
           <span className="font-medium text-text-primary">
-            {DELIVERY_LABELS[listing.delivery_options as DeliveryOption] || listing.delivery_options}
+            {DELIVERY_LABELS[listing.delivery_options as DeliveryOption] ||
+              listing.delivery_options}
           </span>
         </div>
         {listing.shipping_cost_chf != null && listing.delivery_options !== 'pickup' && (
           <div className="flex justify-between text-sm">
             <span className="text-text-tertiary">{t('shippingCost')}</span>
-            <span className="font-medium text-text-primary">{formatCHF(Number(listing.shipping_cost_chf))}</span>
+            <span className="font-medium text-text-primary">
+              {formatCHF(Number(listing.shipping_cost_chf))}
+            </span>
           </div>
         )}
         <div className="flex justify-between text-sm">
@@ -109,5 +115,5 @@ export function ListingInfoPanel({ listing, isVerified, isGratis }: ListingInfoP
         )}
       </div>
     </>
-  )
+  );
 }

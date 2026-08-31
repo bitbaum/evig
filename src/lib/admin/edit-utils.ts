@@ -43,7 +43,7 @@ export function createEditSnapshot(
   currentRecord: Record<string, any>,
   updatedFields: Record<string, any>,
   editorId: string,
-  editorName: string
+  editorName: string,
 ): EditHistoryEntry {
   const snapshot: Record<string, any> = {};
 
@@ -85,7 +85,7 @@ export function createEditSnapshot(
  */
 export function appendEditHistory(
   existingHistory: EditHistoryEntry[] | null | undefined,
-  newEntry: EditHistoryEntry
+  newEntry: EditHistoryEntry,
 ): EditHistoryEntry[] {
   const history = Array.isArray(existingHistory) ? existingHistory : [];
   return [...history, newEntry];
@@ -112,7 +112,9 @@ function valuesAreEqual(a: unknown, b: unknown): boolean {
     const keysA = Object.keys(a);
     const keysB = Object.keys(b);
     if (keysA.length !== keysB.length) return false;
-    return keysA.every(key => valuesAreEqual((a as Record<string, unknown>)[key], (b as Record<string, unknown>)[key]));
+    return keysA.every((key) =>
+      valuesAreEqual((a as Record<string, unknown>)[key], (b as Record<string, unknown>)[key]),
+    );
   }
 
   // Primitives (already checked === above)
@@ -126,12 +128,10 @@ function valuesAreEqual(a: unknown, b: unknown): boolean {
  */
 export function formatEditHistory(
   history: EditHistoryEntry[],
-  fieldLabels: Record<string, string>
+  fieldLabels: Record<string, string>,
 ): string[] {
-  return history.map(entry => {
-    const fields = entry.fields_changed
-      .map(f => fieldLabels[f] || f)
-      .join(', ');
+  return history.map((entry) => {
+    const fields = entry.fields_changed.map((f) => fieldLabels[f] || f).join(', ');
     const date = new Date(entry.timestamp).toLocaleString('de-CH');
     return `${date} - ${entry.editor_name}: ${fields}`;
   });
@@ -141,7 +141,7 @@ export function formatEditHistory(
  * Get the most recent editor from history
  */
 export function getLastEditor(
-  history: EditHistoryEntry[] | null | undefined
+  history: EditHistoryEntry[] | null | undefined,
 ): { name: string; timestamp: string } | null {
   if (!Array.isArray(history) || history.length === 0) {
     return null;

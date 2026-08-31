@@ -51,7 +51,7 @@ export function apiSuccess<T>(data: T, status = 200): NextResponse {
 export function apiSuccessCached<T>(
   data: T,
   maxAge = 300,
-  staleWhileRevalidate = 60
+  staleWhileRevalidate = 60,
 ): NextResponse {
   return NextResponse.json(
     { success: true, data },
@@ -60,7 +60,7 @@ export function apiSuccessCached<T>(
       headers: {
         'Cache-Control': `public, s-maxage=${maxAge}, stale-while-revalidate=${staleWhileRevalidate}`,
       },
-    }
+    },
   );
 }
 
@@ -71,16 +71,9 @@ export function apiSuccessCached<T>(
  * @param message - User-friendly error message
  * @param status - HTTP status code (default: 500)
  */
-export function apiError(
-  error: unknown,
-  message: string,
-  status = 500
-): NextResponse {
+export function apiError(error: unknown, message: string, status = 500): NextResponse {
   logger.error(message, { error });
-  return NextResponse.json(
-    { success: false, error: message },
-    { status }
-  );
+  return NextResponse.json({ success: false, error: message }, { status });
 }
 
 /**
@@ -92,30 +85,21 @@ export function apiError(
 export function apiNotFound(resource: string): NextResponse {
   const alreadyFull = /nicht gefunden|not found/i.test(resource);
   const message = alreadyFull ? resource : `${resource} ${ERROR_MESSAGES.NOT_FOUND}`;
-  return NextResponse.json(
-    { success: false, error: message },
-    { status: 404 }
-  );
+  return NextResponse.json({ success: false, error: message }, { status: 404 });
 }
 
 /**
  * Unauthorized response helper
  */
 export function apiUnauthorized(message: string = ERROR_MESSAGES.UNAUTHORIZED): NextResponse {
-  return NextResponse.json(
-    { success: false, error: message },
-    { status: 401 }
-  );
+  return NextResponse.json({ success: false, error: message }, { status: 401 });
 }
 
 /**
  * Forbidden response helper
  */
 export function apiForbidden(message = 'Forbidden'): NextResponse {
-  return NextResponse.json(
-    { success: false, error: message },
-    { status: 403 }
-  );
+  return NextResponse.json({ success: false, error: message }, { status: 403 });
 }
 
 /**
@@ -125,23 +109,23 @@ export function apiForbidden(message = 'Forbidden'): NextResponse {
  */
 export function apiRateLimited(
   message: string = ERROR_MESSAGES.RATE_LIMITED,
-  options?: { retryAfter?: number; remaining?: number; resetAt?: number }
+  options?: { retryAfter?: number; remaining?: number; resetAt?: number },
 ): NextResponse {
-  const retryAfter = options?.retryAfter || 60
+  const retryAfter = options?.retryAfter || 60;
   const headers: Record<string, string> = {
     'Retry-After': String(retryAfter),
-  }
+  };
   if (options?.remaining !== undefined) {
-    headers['X-RateLimit-Remaining'] = String(options.remaining)
+    headers['X-RateLimit-Remaining'] = String(options.remaining);
   }
   if (options?.resetAt !== undefined) {
-    headers['X-RateLimit-Reset'] = String(options.resetAt)
+    headers['X-RateLimit-Reset'] = String(options.resetAt);
   }
 
   return NextResponse.json(
     { success: false, error: message, retryAfter },
-    { status: 429, headers }
-  )
+    { status: 429, headers },
+  );
 }
 
 /**
@@ -155,7 +139,7 @@ export function apiRateLimited(
 export function apiBadRequest(
   message: string,
   errors?: Record<string, string[]>,
-  code?: string
+  code?: string,
 ): NextResponse {
   return NextResponse.json(
     {
@@ -164,7 +148,7 @@ export function apiBadRequest(
       ...(errors && { errors }),
       ...(code && { code }),
     },
-    { status: 400 }
+    { status: 400 },
   );
 }
 
@@ -173,9 +157,9 @@ export function apiBadRequest(
 // ============================================================================
 
 export interface PaginationParams {
-  limit: number
-  offset: number
-  page: number
+  limit: number;
+  offset: number;
+  page: number;
 }
 
 /**
@@ -191,35 +175,32 @@ export interface PaginationParams {
  *   const { limit, offset } = parsePagination(request, { defaultLimit: 20, maxLimit: 50 })
  */
 export function parsePagination(
-
   request: NextRequest | URLSearchParams,
-  defaults?: { defaultLimit?: number; maxLimit?: number }
+  defaults?: { defaultLimit?: number; maxLimit?: number },
 ): PaginationParams {
-  const searchParams = request instanceof URLSearchParams
-    ? request
-    : new URL(request.url).searchParams
+  const searchParams =
+    request instanceof URLSearchParams ? request : new URL(request.url).searchParams;
 
-  const defaultLimit = defaults?.defaultLimit ?? API_DEFAULTS.PAGINATION_LIMIT
-  const maxLimit = defaults?.maxLimit ?? API_DEFAULTS.PAGINATION_MAX_LIMIT
+  const defaultLimit = defaults?.defaultLimit ?? API_DEFAULTS.PAGINATION_LIMIT;
+  const maxLimit = defaults?.maxLimit ?? API_DEFAULTS.PAGINATION_MAX_LIMIT;
 
-  const rawLimit = parseInt(searchParams.get('limit') || String(defaultLimit), 10)
-  const limit = Math.min(Math.max(1, isNaN(rawLimit) ? defaultLimit : rawLimit), maxLimit)
+  const rawLimit = parseInt(searchParams.get('limit') || String(defaultLimit), 10);
+  const limit = Math.min(Math.max(1, isNaN(rawLimit) ? defaultLimit : rawLimit), maxLimit);
 
-  const rawOffset = parseInt(searchParams.get('offset') || '0', 10)
-  const offset = Math.max(0, isNaN(rawOffset) ? 0 : rawOffset)
+  const rawOffset = parseInt(searchParams.get('offset') || '0', 10);
+  const offset = Math.max(0, isNaN(rawOffset) ? 0 : rawOffset);
 
-  const rawPage = parseInt(searchParams.get('page') || '0', 10)
-  const page = Math.max(1, isNaN(rawPage) ? 1 : rawPage)
+  const rawPage = parseInt(searchParams.get('page') || '0', 10);
+  const page = Math.max(1, isNaN(rawPage) ? 1 : rawPage);
 
   // If page param is provided and offset is not, derive offset from page
-  const finalOffset = searchParams.has('page') && !searchParams.has('offset')
-    ? (page - 1) * limit
-    : offset
+  const finalOffset =
+    searchParams.has('page') && !searchParams.has('offset') ? (page - 1) * limit : offset;
 
-  return { limit, offset: finalOffset, page }
+  return { limit, offset: finalOffset, page };
 }
 
 /** Returns true when there are more pages after the current one. */
 export function hasMoreItems(offset: number, limit: number, total: number): boolean {
-  return offset + limit < total
+  return offset + limit < total;
 }

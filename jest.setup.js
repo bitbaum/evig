@@ -1,9 +1,9 @@
-import { TextEncoder, TextDecoder } from 'util'
-import '@testing-library/jest-dom'
+import { TextEncoder, TextDecoder } from 'util';
+import '@testing-library/jest-dom';
 
 // Polyfill TextEncoder/TextDecoder for jsdom environment (needed by pg/Drizzle)
-global.TextEncoder = TextEncoder
-global.TextDecoder = TextDecoder
+global.TextEncoder = TextEncoder;
+global.TextDecoder = TextDecoder;
 
 // Mock Next.js router
 jest.mock('next/router', () => ({
@@ -24,9 +24,9 @@ jest.mock('next/router', () => ({
         off: jest.fn(),
         emit: jest.fn(),
       },
-    }
+    };
   },
-}))
+}));
 
 // Mock next-auth
 jest.mock('next-auth/react', () => ({
@@ -37,15 +37,15 @@ jest.mock('next-auth/react', () => ({
   signIn: jest.fn(),
   signOut: jest.fn(),
   getSession: jest.fn(),
-}))
+}));
 
 // Mock next-auth (server-side)
 jest.mock('next-auth', () => ({
   auth: jest.fn(() => Promise.resolve(null)),
-}))
+}));
 
 // Mock fetch
-global.fetch = jest.fn()
+global.fetch = jest.fn();
 
 // Browser-only mocks (skip in node environment for API route tests)
 if (typeof window !== 'undefined') {
@@ -56,19 +56,19 @@ if (typeof window !== 'undefined') {
   if (typeof window.PointerEvent === 'undefined') {
     class PointerEventPolyfill extends MouseEvent {
       constructor(type, init = {}) {
-        super(type, init)
-        this.pointerType = init.pointerType ?? ''
-        this.pointerId = init.pointerId ?? 1
-        this.isPrimary = init.isPrimary ?? true
+        super(type, init);
+        this.pointerType = init.pointerType ?? '';
+        this.pointerId = init.pointerId ?? 1;
+        this.isPrimary = init.isPrimary ?? true;
       }
     }
-    window.PointerEvent = PointerEventPolyfill
+    window.PointerEvent = PointerEventPolyfill;
   }
 
   // Mock window.matchMedia
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
-    value: jest.fn().mockImplementation(query => ({
+    value: jest.fn().mockImplementation((query) => ({
       matches: false,
       media: query,
       onchange: null,
@@ -78,25 +78,19 @@ if (typeof window !== 'undefined') {
       removeEventListener: jest.fn(),
       dispatchEvent: jest.fn(),
     })),
-  })
+  });
 
   // Mock IntersectionObserver
   global.IntersectionObserver = class IntersectionObserver {
     constructor() {}
     observe() {
-      return null
+      return null;
     }
     disconnect() {
-      return null
+      return null;
     }
     unobserve() {
-      return null
+      return null;
     }
-  }
+  };
 }
-
-
-
-
-
-

@@ -1,46 +1,42 @@
-'use client'
+'use client';
 
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-} from 'recharts'
-import { ChartWrapper } from './ChartWrapper'
-import { formatCHF } from '@/lib/hirn/format'
-import { REVENUE_CATEGORY_COLORS, REVENUE_CATEGORY_LABELS } from '@/config/ui-colors'
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { ChartWrapper } from './ChartWrapper';
+import { formatCHF } from '@/lib/hirn/format';
+import { REVENUE_CATEGORY_COLORS, REVENUE_CATEGORY_LABELS } from '@/config/ui-colors';
 
 interface RevenueDataPoint {
-  year: number
-  warenverkauf: number
-  dienstleistungen: number
-  integration: number
-  spenden: number
-  aufstockung: number
-  total: number
+  year: number;
+  warenverkauf: number;
+  dienstleistungen: number;
+  integration: number;
+  spenden: number;
+  aufstockung: number;
+  total: number;
 }
 
 interface RevenueAreaChartProps {
-  data: RevenueDataPoint[]
-  source?: string
-  sourceDate?: string
+  data: RevenueDataPoint[];
+  source?: string;
+  sourceDate?: string;
 }
 
-const CHART_COLORS = REVENUE_CATEGORY_COLORS
+const CHART_COLORS = REVENUE_CATEGORY_COLORS;
 
-const CATEGORY_LABELS = REVENUE_CATEGORY_LABELS
+const CATEGORY_LABELS = REVENUE_CATEGORY_LABELS;
 
-function CustomTooltip({ active, payload, label }: {
-  active?: boolean
-  payload?: Array<{ name: string; value: number; color: string }>
-  label?: string
+function CustomTooltip({
+  active,
+  payload,
+  label,
+}: {
+  active?: boolean;
+  payload?: Array<{ name: string; value: number; color: string }>;
+  label?: string;
 }) {
-  if (!active || !payload) return null
+  if (!active || !payload) return null;
 
-  const total = payload.reduce((sum, entry) => sum + entry.value, 0)
+  const total = payload.reduce((sum, entry) => sum + entry.value, 0);
 
   return (
     <div className="card-shell p-3">
@@ -58,7 +54,7 @@ function CustomTooltip({ active, payload, label }: {
         <span>{formatCHF(total)}</span>
       </div>
     </div>
-  )
+  );
 }
 
 /**
@@ -67,7 +63,7 @@ function CustomTooltip({ active, payload, label }: {
  */
 export function RevenueAreaChart({ data, source, sourceDate }: RevenueAreaChartProps) {
   // Sort data by year ascending for proper time series display
-  const sortedData = [...data].sort((a, b) => a.year - b.year)
+  const sortedData = [...data].sort((a, b) => a.year - b.year);
 
   return (
     <ChartWrapper
@@ -77,16 +73,12 @@ export function RevenueAreaChart({ data, source, sourceDate }: RevenueAreaChartP
       sourceDate={sourceDate}
       height={350}
     >
-      <AreaChart
-        data={sortedData}
-        margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-      >
-        <CartesianGrid strokeDasharray="3 3" className="stroke-neutral-200 dark:stroke-neutral-700" />
-        <XAxis
-          dataKey="year"
-          tick={{ fontSize: 12 }}
-          className="text-muted-foreground"
+      <AreaChart data={sortedData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+        <CartesianGrid
+          strokeDasharray="3 3"
+          className="stroke-neutral-200 dark:stroke-neutral-700"
         />
+        <XAxis dataKey="year" tick={{ fontSize: 12 }} className="text-muted-foreground" />
         <YAxis
           tickFormatter={(value) => `${Math.round(value / 1000)}k`}
           tick={{ fontSize: 12 }}
@@ -138,5 +130,5 @@ export function RevenueAreaChart({ data, source, sourceDate }: RevenueAreaChartP
         />
       </AreaChart>
     </ChartWrapper>
-  )
+  );
 }

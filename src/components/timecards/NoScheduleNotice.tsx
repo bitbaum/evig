@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { Sparkles } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { ROUTES } from '@/config/routes'
-import { apiFetch } from '@/lib/api/client'
-import { Button } from '@/components/ui/button'
+import { useState } from 'react';
+import Link from 'next/link';
+import { Sparkles } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { ROUTES } from '@/config/routes';
+import { apiFetch } from '@/lib/api/client';
+import { Button } from '@/components/ui/button';
 
 /**
  * Inline "set up my schedule" prompt.
@@ -22,26 +22,25 @@ import { Button } from '@/components/ui/button'
  * reloads so the page re-reads workingHours.
  */
 export function NoScheduleNotice({ hasSchedule }: { hasSchedule: boolean }) {
-  const t = useTranslations('admin.timecards')
-  const [isApplying, setIsApplying] = useState(false)
-  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const t = useTranslations('admin.timecards');
+  const [isApplying, setIsApplying] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  if (hasSchedule) return null
+  if (hasSchedule) return null;
 
   const applyDefault = async () => {
-    setIsApplying(true)
-    setErrorMessage(null)
-    const result = await apiFetch<{ applied: boolean }>(
-      '/api/admin/team/profiles/me/bootstrap',
-      { method: 'POST' },
-    )
+    setIsApplying(true);
+    setErrorMessage(null);
+    const result = await apiFetch<{ applied: boolean }>('/api/admin/team/profiles/me/bootstrap', {
+      method: 'POST',
+    });
     if (!result.success) {
-      setErrorMessage(result.error || t('scheduleApplyFailed'))
-      setIsApplying(false)
-      return
+      setErrorMessage(result.error || t('scheduleApplyFailed'));
+      setIsApplying(false);
+      return;
     }
-    window.location.reload()
-  }
+    window.location.reload();
+  };
 
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg border border-subtle bg-surface-raised px-4 py-3">
@@ -63,9 +62,7 @@ export function NoScheduleNotice({ hasSchedule }: { hasSchedule: boolean }) {
       >
         {t('setOwnSchedule')}
       </Link>
-      {errorMessage && (
-        <p className="basis-full text-xs text-error-700">{errorMessage}</p>
-      )}
+      {errorMessage && <p className="basis-full text-xs text-error-700">{errorMessage}</p>}
     </div>
-  )
+  );
 }

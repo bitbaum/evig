@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Team Profile Form Component
@@ -9,8 +9,8 @@
  * Edit mode auto-expands sections that already contain data.
  */
 
-import { useTranslations } from 'next-intl'
-import { adminInteractive } from '@/lib/admin-ui'
+import { useTranslations } from 'next-intl';
+import { adminInteractive } from '@/lib/admin-ui';
 import {
   ArrowLeft,
   Save,
@@ -23,27 +23,26 @@ import {
   Clock,
   AlertCircle,
   Wallet,
-} from 'lucide-react'
-import type { TeamProfileFormProps } from './types'
-import { useTeamProfileForm } from './useTeamProfileForm'
-import { AIFormAssist } from '@/components/ai/AIFormAssist'
-import { TeamBasicInfoSection } from './TeamBasicInfoSection'
-import { TeamTalentSection } from './TeamTalentSection'
-import { TeamAvailabilitySection } from './TeamAvailabilitySection'
-import { TeamEmergencySection } from './TeamEmergencySection'
-import { TeamHRNotesSection } from './TeamHRNotesSection'
-import { TeamCompensationSection } from './TeamCompensationSection'
-import { Select } from '@/components/ui/select'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import Heading from '@/components/admin/AdminHeading'
+} from 'lucide-react';
+import type { TeamProfileFormProps } from './types';
+import { useTeamProfileForm } from './useTeamProfileForm';
+import { AIFormAssist } from '@/components/ai/AIFormAssist';
+import { TeamBasicInfoSection } from './TeamBasicInfoSection';
+import { TeamTalentSection } from './TeamTalentSection';
+import { TeamAvailabilitySection } from './TeamAvailabilitySection';
+import { TeamEmergencySection } from './TeamEmergencySection';
+import { TeamHRNotesSection } from './TeamHRNotesSection';
+import { TeamCompensationSection } from './TeamCompensationSection';
+import { Select } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import Heading from '@/components/admin/AdminHeading';
 
 interface FormSection {
-  id: string
-  label: string
-  icon: React.ReactNode
+  id: string;
+  label: string;
+  icon: React.ReactNode;
 }
-
 
 export function TeamProfileForm({
   initialData,
@@ -54,15 +53,27 @@ export function TeamProfileForm({
   onCancel,
   isSuperAdmin,
 }: TeamProfileFormProps) {
-  const tForm = useTranslations('admin.forms')
-  const tSection = useTranslations('admin.team.form')
+  const tForm = useTranslations('admin.forms');
+  const tSection = useTranslations('admin.team.form');
   const FORM_SECTIONS: FormSection[] = [
-    { id: 'basic',         label: tSection('sectionBasic'),         icon: <Briefcase className="w-5 h-5" /> },
-    { id: 'compensation',  label: tSection('sectionCompensation'),  icon: <Wallet className="w-5 h-5" /> },
-    { id: 'talent',        label: tSection('sectionTalent'),        icon: <Star className="w-5 h-5" /> },
-    { id: 'availability',  label: tSection('sectionAvailability'),  icon: <Clock className="w-5 h-5" /> },
-    { id: 'emergency',     label: tSection('sectionEmergency'),     icon: <AlertCircle className="w-5 h-5" /> },
-  ]
+    { id: 'basic', label: tSection('sectionBasic'), icon: <Briefcase className="w-5 h-5" /> },
+    {
+      id: 'compensation',
+      label: tSection('sectionCompensation'),
+      icon: <Wallet className="w-5 h-5" />,
+    },
+    { id: 'talent', label: tSection('sectionTalent'), icon: <Star className="w-5 h-5" /> },
+    {
+      id: 'availability',
+      label: tSection('sectionAvailability'),
+      icon: <Clock className="w-5 h-5" />,
+    },
+    {
+      id: 'emergency',
+      label: tSection('sectionEmergency'),
+      icon: <AlertCircle className="w-5 h-5" />,
+    },
+  ];
   const {
     form,
     saving,
@@ -82,7 +93,7 @@ export function TeamProfileForm({
     addInterest,
     removeInterest,
     handleSubmit,
-  } = useTeamProfileForm({ initialData, isEdit, profileId, onSuccess, isSuperAdmin })
+  } = useTeamProfileForm({ initialData, isEdit, profileId, onSuccess, isSuperAdmin });
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -110,7 +121,10 @@ export function TeamProfileForm({
 
       {/* Error */}
       {error && (
-        <div id="team-profile-error" className="p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg text-error-700 dark:text-error-300">
+        <div
+          id="team-profile-error"
+          className="p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg text-error-700 dark:text-error-300"
+        >
           {error}
         </div>
       )}
@@ -128,7 +142,9 @@ export function TeamProfileForm({
         <Card className="p-6">
           <div className="flex items-center gap-3 mb-4">
             <User className="w-5 h-5 text-text-tertiary" />
-            <Heading level={2} className="text-text-primary">{tSection('userSelectTitle')}</Heading>
+            <Heading level={2} className="text-text-primary">
+              {tSection('userSelectTitle')}
+            </Heading>
           </div>
           <Select
             value={form.user_id}
@@ -139,7 +155,7 @@ export function TeamProfileForm({
             aria-describedby={error ? 'team-profile-error' : undefined}
           >
             <option value="">{tSection('userSelectPlaceholder')}</option>
-            {users.map(user => (
+            {users.map((user) => (
               <option key={user.id} value={user.id}>
                 {user.name || user.email} ({user.email})
               </option>
@@ -149,11 +165,8 @@ export function TeamProfileForm({
       )}
 
       {/* Form Sections */}
-      {FORM_SECTIONS.map(section => (
-        <Card
-          key={section.id}
-          className="overflow-hidden"
-        >
+      {FORM_SECTIONS.map((section) => (
+        <Card key={section.id} className="overflow-hidden">
           <Button
             type="button"
             variant="ghost"
@@ -191,7 +204,11 @@ export function TeamProfileForm({
               ) : section.id === 'basic' ? (
                 <TeamBasicInfoSection form={form} onChange={handleChange} />
               ) : section.id === 'compensation' ? (
-                <TeamCompensationSection form={form} onChange={handleChange} isSuperAdmin={!!isSuperAdmin} />
+                <TeamCompensationSection
+                  form={form}
+                  onChange={handleChange}
+                  isSuperAdmin={!!isSuperAdmin}
+                />
               ) : section.id === 'availability' ? (
                 <TeamAvailabilitySection form={form} onChange={handleChange} />
               ) : section.id === 'emergency' ? (
@@ -212,5 +229,5 @@ export function TeamProfileForm({
         />
       )}
     </form>
-  )
+  );
 }

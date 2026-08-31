@@ -1,16 +1,16 @@
 /** Rating display card: submitted customer stars + optional review text. */
 
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
-import type { AppointmentDetail } from '../useBookingDetail'
-import { CARD_CLASS, SECTION_TITLE_CLASS } from './shared'
-import { StarDisplay } from './StarDisplay'
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/ui/Heading';
+import type { AppointmentDetail } from '../useBookingDetail';
+import { CARD_CLASS, SECTION_TITLE_CLASS } from './shared';
+import { StarDisplay } from './StarDisplay';
 
 export function RatingCard({ appointment }: { appointment: AppointmentDetail }) {
-  const td = useTranslations('dashboard.bookings.detail')
-  if (!appointment.customer_rating) return null
+  const td = useTranslations('dashboard.bookings.detail');
+  if (!appointment.customer_rating) return null;
   return (
     <div className={CARD_CLASS}>
       <Heading level={2} className={`${SECTION_TITLE_CLASS} mb-4`}>
@@ -21,5 +21,5 @@ export function RatingCard({ appointment }: { appointment: AppointmentDetail }) 
         <p className="text-text-secondary text-sm mt-2">{appointment.customer_review}</p>
       )}
     </div>
-  )
+  );
 }

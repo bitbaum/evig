@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Download, Code2, ChevronDown, Loader2, FileText } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { isTextFile } from '@/config/deliverables'
+import { useState } from 'react';
+import { Download, Code2, ChevronDown, Loader2, FileText } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { isTextFile } from '@/config/deliverables';
 
 interface DeliverableFile {
-  name: string
-  url: string
+  name: string;
+  url: string;
 }
 
 /**
@@ -17,7 +17,7 @@ interface DeliverableFile {
  * Used on both the admin detail page and the public share page.
  */
 export default function DeliverableFiles({ files }: { files: DeliverableFile[] }) {
-  if (!files || files.length === 0) return null
+  if (!files || files.length === 0) return null;
   return (
     <Card className="p-5">
       <h2 className="flex items-center gap-2 font-semibold text-text-primary mb-4">
@@ -30,30 +30,30 @@ export default function DeliverableFiles({ files }: { files: DeliverableFile[] }
         ))}
       </ul>
     </Card>
-  )
+  );
 }
 
 function FileRow({ file }: { file: DeliverableFile }) {
-  const [open, setOpen] = useState(false)
-  const [code, setCode] = useState<string | null>(null)
-  const [loading, setLoading] = useState(false)
-  const canView = isTextFile(file.name)
+  const [open, setOpen] = useState(false);
+  const [code, setCode] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const canView = isTextFile(file.name);
 
   async function toggle() {
     if (open) {
-      setOpen(false)
-      return
+      setOpen(false);
+      return;
     }
-    setOpen(true)
+    setOpen(true);
     if (code === null) {
-      setLoading(true)
+      setLoading(true);
       try {
-        const res = await fetch(file.url)
-        setCode(res.ok ? await res.text() : 'Datei konnte nicht geladen werden.')
+        const res = await fetch(file.url);
+        setCode(res.ok ? await res.text() : 'Datei konnte nicht geladen werden.');
       } catch {
-        setCode('Datei konnte nicht geladen werden.')
+        setCode('Datei konnte nicht geladen werden.');
       }
-      setLoading(false)
+      setLoading(false);
     }
   }
 
@@ -72,7 +72,9 @@ function FileRow({ file }: { file: DeliverableFile }) {
             >
               <Code2 className="w-3.5 h-3.5" />
               Code
-              <ChevronDown className={`w-3.5 h-3.5 transition-transform ${open ? 'rotate-180' : ''}`} />
+              <ChevronDown
+                className={`w-3.5 h-3.5 transition-transform ${open ? 'rotate-180' : ''}`}
+              />
             </Button>
           )}
           <a
@@ -92,10 +94,12 @@ function FileRow({ file }: { file: DeliverableFile }) {
               <Loader2 className="w-4 h-4 animate-spin" /> Lädt…
             </div>
           ) : (
-            <pre className="p-3 text-xs text-text-primary whitespace-pre overflow-x-auto"><code>{code}</code></pre>
+            <pre className="p-3 text-xs text-text-primary whitespace-pre overflow-x-auto">
+              <code>{code}</code>
+            </pre>
           )}
         </div>
       )}
     </li>
-  )
+  );
 }

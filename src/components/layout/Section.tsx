@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils';
 
 /**
  * Section — page-section primitive with vertical rhythm SSOT.
@@ -19,28 +19,28 @@ import { cn } from '@/lib/utils'
  *   inverse  = brand band for emphasis (CTAs)
  */
 
-type Density = 'compact' | 'default' | 'spacious'
-type Tone = 'canvas' | 'surface' | 'tinted' | 'inverse'
+type Density = 'compact' | 'default' | 'spacious';
+type Tone = 'canvas' | 'surface' | 'tinted' | 'inverse';
 
 interface SectionProps extends React.HTMLAttributes<HTMLElement> {
-  density?: Density
-  tone?: Tone
+  density?: Density;
+  tone?: Tone;
   /** Full-bleed background, content stays in max-w-7xl container. Default true. */
-  contained?: boolean
+  contained?: boolean;
 }
 
 const densityClass: Record<Density, string> = {
-  compact:  'py-12 sm:py-16',
-  default:  'py-16 sm:py-20 lg:py-24',
+  compact: 'py-12 sm:py-16',
+  default: 'py-16 sm:py-20 lg:py-24',
   spacious: 'py-24 sm:py-32 lg:py-40',
-}
+};
 
 const toneClass: Record<Tone, string> = {
-  canvas:  '',                    // transparent — keeps the page canvas (--surface-page)
+  canvas: '', // transparent — keeps the page canvas (--surface-page)
   surface: 'bg-surface-base',
-  tinted:  'bg-surface-raised',
+  tinted: 'bg-surface-raised',
   inverse: 'bg-action text-action-text',
-}
+};
 
 export function Section({
   density = 'default',
@@ -51,15 +51,12 @@ export function Section({
   ...rest
 }: SectionProps) {
   return (
-    <section
-      className={cn(densityClass[density], toneClass[tone], className)}
-      {...rest}
-    >
+    <section className={cn(densityClass[density], toneClass[tone], className)} {...rest}>
       {contained ? (
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">{children}</div>
       ) : (
         children
       )}
     </section>
-  )
+  );
 }

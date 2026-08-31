@@ -3,9 +3,9 @@
  * Stats that matter live on /admin/tasks stat cards + /admin/analyse.
  */
 
-import { redirect } from 'next/navigation'
-import { ROUTES } from '@/config/routes'
+import { redirect } from 'next/navigation';
+import { ROUTES } from '@/config/routes';
 
 export default function TaskAnalyticsRedirectPage() {
-  redirect(ROUTES.admin.tasks)
+  redirect(ROUTES.admin.tasks);
 }

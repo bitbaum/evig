@@ -1,15 +1,15 @@
 // SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
-import { Metadata } from 'next'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import Heading from '@/components/ui/Heading'
-import { Link } from '@/i18n/navigation'
-import { PageHero } from '@/components/layout/PageHero'
-import { Section } from '@/components/layout/Section'
-import { ROUTES } from '@/config/routes'
-import { getTranslations } from 'next-intl/server'
-import { Factory } from 'lucide-react'
+import { Metadata } from 'next';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import Heading from '@/components/ui/Heading';
+import { Link } from '@/i18n/navigation';
+import { PageHero } from '@/components/layout/PageHero';
+import { Section } from '@/components/layout/Section';
+import { ROUTES } from '@/config/routes';
+import { getTranslations } from 'next-intl/server';
+import { Factory } from 'lucide-react';
 
 /**
  * Pillar 5 — putting AI and robotics to work inside an organisation.
@@ -29,26 +29,26 @@ import { Factory } from 'lucide-react'
  */
 
 interface Props {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: string }>;
 }
 
 /** Ordered step ids → `services.aiAdoption.steps.<id>.{title,body}`. */
-const STEPS = ['look', 'pick', 'build', 'handover'] as const
+const STEPS = ['look', 'pick', 'build', 'handover'] as const;
 /** Ordered boundary ids → `services.aiAdoption.boundary.<id>.{title,body}`. */
-const BOUNDARIES = ['noMagic', 'noLockIn', 'noHeadcount'] as const
+const BOUNDARIES = ['noMagic', 'noLockIn', 'noHeadcount'] as const;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'services.aiAdoption' })
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'services.aiAdoption' });
   return {
     title: t('meta.title'),
     description: t('meta.description'),
-  }
+  };
 }
 
 export default async function AiRoboticsPage({ params }: Props) {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'services.aiAdoption' })
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'services.aiAdoption' });
 
   return (
     <main className="min-h-screen">
@@ -136,5 +136,5 @@ export default async function AiRoboticsPage({ params }: Props) {
         </div>
       </Section>
     </main>
-  )
+  );
 }

@@ -14,7 +14,7 @@
  *   normalized to null (so the JSON envelope is consistent)
  */
 
-import { mapRequestListRow, mapRequestDetailRow, type RequestRow } from '../request-mapper'
+import { mapRequestListRow, mapRequestDetailRow, type RequestRow } from '../request-mapper';
 
 const baseRow: RequestRow = {
   id: 'req-1',
@@ -47,7 +47,7 @@ const baseRow: RequestRow = {
   expires_at: '2026-12-31T23:59:59Z',
   created_at: '2026-01-01T10:00:00Z',
   updated_at: '2026-01-01T10:00:00Z',
-}
+};
 
 // ============================================================================
 // mapRequestListRow
@@ -55,76 +55,76 @@ const baseRow: RequestRow = {
 
 describe('mapRequestListRow', () => {
   it('maps every snake_case field to its camelCase counterpart', () => {
-    const result = mapRequestListRow(baseRow)
-    expect(result.id).toBe('req-1')
-    expect(result.requesterId).toBe('user-1')
-    expect(result.requesterName).toBe('Anna')
-    expect(result.categoryId).toBe('electronics')
-    expect(result.deviceBrand).toBe('Lenovo')
-    expect(result.deviceModel).toBe('T480')
-    expect(result.title).toBe(baseRow.title)
-    expect(result.description).toBe(baseRow.description)
-    expect(result.urgency).toBe('normal')
-    expect(result.budgetType).toBe('flexible')
-    expect(result.budgetAmountCents).toBe(5000)
-    expect(result.postalCode).toBe('8004')
-    expect(result.city).toBe('Zürich')
-    expect(result.canton).toBe('Zürich')
-    expect(result.serviceType).toBe('flexible')
-    expect(result.status).toBe('open')
-    expect(result.matchedOfferId).toBeNull()
-    expect(result.preferredTechnicianId).toBe('tech-profile-1')
-    expect(result.preferredTechnicianName).toBeNull()
-    expect(result.preferredTechnicianCity).toBeNull()
-    expect(result.offerCount).toBe(3)
-    expect(result.expiresAt).toBe('2026-12-31T23:59:59Z')
-    expect(result.createdAt).toBe('2026-01-01T10:00:00Z')
-    expect(result.updatedAt).toBe('2026-01-01T10:00:00Z')
-  })
+    const result = mapRequestListRow(baseRow);
+    expect(result.id).toBe('req-1');
+    expect(result.requesterId).toBe('user-1');
+    expect(result.requesterName).toBe('Anna');
+    expect(result.categoryId).toBe('electronics');
+    expect(result.deviceBrand).toBe('Lenovo');
+    expect(result.deviceModel).toBe('T480');
+    expect(result.title).toBe(baseRow.title);
+    expect(result.description).toBe(baseRow.description);
+    expect(result.urgency).toBe('normal');
+    expect(result.budgetType).toBe('flexible');
+    expect(result.budgetAmountCents).toBe(5000);
+    expect(result.postalCode).toBe('8004');
+    expect(result.city).toBe('Zürich');
+    expect(result.canton).toBe('Zürich');
+    expect(result.serviceType).toBe('flexible');
+    expect(result.status).toBe('open');
+    expect(result.matchedOfferId).toBeNull();
+    expect(result.preferredTechnicianId).toBe('tech-profile-1');
+    expect(result.preferredTechnicianName).toBeNull();
+    expect(result.preferredTechnicianCity).toBeNull();
+    expect(result.offerCount).toBe(3);
+    expect(result.expiresAt).toBe('2026-12-31T23:59:59Z');
+    expect(result.createdAt).toBe('2026-01-01T10:00:00Z');
+    expect(result.updatedAt).toBe('2026-01-01T10:00:00Z');
+  });
 
   it('maps preferred technician display fields when present', () => {
     const result = mapRequestListRow({
       ...baseRow,
       preferred_technician_name: 'George',
       preferred_technician_city: 'Zürich',
-    })
-    expect(result.preferredTechnicianName).toBe('George')
-    expect(result.preferredTechnicianCity).toBe('Zürich')
-  })
+    });
+    expect(result.preferredTechnicianName).toBe('George');
+    expect(result.preferredTechnicianCity).toBe('Zürich');
+  });
 
   it('does NOT expose requester_email (list route is public to all helpers)', () => {
-    const result = mapRequestListRow(baseRow) as Record<string, unknown>
-    expect(result.requesterEmail).toBeUndefined()
-    expect(result.email).toBeUndefined()
-  })
+    const result = mapRequestListRow(baseRow) as Record<string, unknown>;
+    expect(result.requesterEmail).toBeUndefined();
+    expect(result.email).toBeUndefined();
+  });
 
   it('does NOT expose ai_diagnosis (detail-only field)', () => {
-    const result = mapRequestListRow(baseRow) as Record<string, unknown>
-    expect(result.aiDiagnosis).toBeUndefined()
-  })
+    const result = mapRequestListRow(baseRow) as Record<string, unknown>;
+    expect(result.aiDiagnosis).toBeUndefined();
+  });
 
   it('coerces null skills_needed to an empty array', () => {
-    const result = mapRequestListRow({ ...baseRow, skills_needed: null })
-    expect(result.skillsNeeded).toEqual([])
-  })
+    const result = mapRequestListRow({ ...baseRow, skills_needed: null });
+    expect(result.skillsNeeded).toEqual([]);
+  });
 
   it('coerces null image_urls to an empty array', () => {
-    const result = mapRequestListRow({ ...baseRow, image_urls: null })
-    expect(result.imageUrls).toEqual([])
-  })
+    const result = mapRequestListRow({ ...baseRow, image_urls: null });
+    expect(result.imageUrls).toEqual([]);
+  });
 
   it('preserves an existing skills_needed array', () => {
-    const skills = ['hardware_diagnosis', 'software_install']
-    const result = mapRequestListRow({ ...baseRow, skills_needed: skills })
-    expect(result.skillsNeeded).toEqual(skills)
-  })
+    const skills = ['hardware_diagnosis', 'software_install'];
+    const result = mapRequestListRow({ ...baseRow, skills_needed: skills });
+    expect(result.skillsNeeded).toEqual(skills);
+  });
 
   it('normalizes undefined optional matched_helper_id to null', () => {
-    const { matched_helper_id, ...rowWithoutHelper } = baseRow
-    void matched_helper_id // explicit drop
-    const result = mapRequestListRow(rowWithoutHelper as RequestRow)
-    expect(result.matchedHelperId).toBeNull()
-  })
+    const { matched_helper_id, ...rowWithoutHelper } = baseRow;
+    void matched_helper_id; // explicit drop
+    const result = mapRequestListRow(rowWithoutHelper as RequestRow);
+    expect(result.matchedHelperId).toBeNull();
+  });
 
   it('normalizes undefined completed_at / completed_by / reviewed_at to null', () => {
     const result = mapRequestListRow({
@@ -132,11 +132,11 @@ describe('mapRequestListRow', () => {
       completed_at: undefined,
       completed_by: undefined,
       reviewed_at: undefined,
-    } as RequestRow)
-    expect(result.completedAt).toBeNull()
-    expect(result.completedBy).toBeNull()
-    expect(result.reviewedAt).toBeNull()
-  })
+    } as RequestRow);
+    expect(result.completedAt).toBeNull();
+    expect(result.completedBy).toBeNull();
+    expect(result.reviewedAt).toBeNull();
+  });
 
   it('passes through populated lifecycle timestamps', () => {
     const result = mapRequestListRow({
@@ -144,23 +144,23 @@ describe('mapRequestListRow', () => {
       completed_at: '2026-02-01T12:00:00Z',
       completed_by: 'helper-42',
       reviewed_at: '2026-02-02T08:00:00Z',
-    })
-    expect(result.completedAt).toBe('2026-02-01T12:00:00Z')
-    expect(result.completedBy).toBe('helper-42')
-    expect(result.reviewedAt).toBe('2026-02-02T08:00:00Z')
-  })
+    });
+    expect(result.completedAt).toBe('2026-02-01T12:00:00Z');
+    expect(result.completedBy).toBe('helper-42');
+    expect(result.reviewedAt).toBe('2026-02-02T08:00:00Z');
+  });
 
   it('preserves null device fields (optional in real data)', () => {
-    const result = mapRequestListRow({ ...baseRow, device_brand: null, device_model: null })
-    expect(result.deviceBrand).toBeNull()
-    expect(result.deviceModel).toBeNull()
-  })
+    const result = mapRequestListRow({ ...baseRow, device_brand: null, device_model: null });
+    expect(result.deviceBrand).toBeNull();
+    expect(result.deviceModel).toBeNull();
+  });
 
   it('preserves null budget_amount_cents (optional)', () => {
-    const result = mapRequestListRow({ ...baseRow, budget_amount_cents: null })
-    expect(result.budgetAmountCents).toBeNull()
-  })
-})
+    const result = mapRequestListRow({ ...baseRow, budget_amount_cents: null });
+    expect(result.budgetAmountCents).toBeNull();
+  });
+});
 
 // ============================================================================
 // mapRequestDetailRow
@@ -168,44 +168,44 @@ describe('mapRequestListRow', () => {
 
 describe('mapRequestDetailRow', () => {
   it('includes requester_email when isOwner=true', () => {
-    const result = mapRequestDetailRow(baseRow, true)
-    expect(result.requesterEmail).toBe('anna@example.com')
-    expect(result.isOwner).toBe(true)
-  })
+    const result = mapRequestDetailRow(baseRow, true);
+    expect(result.requesterEmail).toBe('anna@example.com');
+    expect(result.isOwner).toBe(true);
+  });
 
   it('omits requester_email when isOwner=false (anti-leak)', () => {
-    const result = mapRequestDetailRow(baseRow, false)
-    expect(result.requesterEmail).toBeUndefined()
-    expect(result.isOwner).toBe(false)
-  })
+    const result = mapRequestDetailRow(baseRow, false);
+    expect(result.requesterEmail).toBeUndefined();
+    expect(result.isOwner).toBe(false);
+  });
 
   it('exposes ai_diagnosis to non-owners (helpers can see it to inform their offers)', () => {
-    const result = mapRequestDetailRow(baseRow, false)
-    expect(result.aiDiagnosis).toBe('Likely a power supply issue.')
-  })
+    const result = mapRequestDetailRow(baseRow, false);
+    expect(result.aiDiagnosis).toBe('Likely a power supply issue.');
+  });
 
   it('exposes ai_diagnosis to owner too', () => {
-    const result = mapRequestDetailRow(baseRow, true)
-    expect(result.aiDiagnosis).toBe('Likely a power supply issue.')
-  })
+    const result = mapRequestDetailRow(baseRow, true);
+    expect(result.aiDiagnosis).toBe('Likely a power supply issue.');
+  });
 
   it('inherits all the list-row fields', () => {
-    const result = mapRequestDetailRow(baseRow, true)
-    expect(result.id).toBe('req-1')
-    expect(result.title).toBe(baseRow.title)
-    expect(result.skillsNeeded).toEqual(['hardware_diagnosis'])
-    expect(result.matchedHelperId).toBeNull()
-  })
+    const result = mapRequestDetailRow(baseRow, true);
+    expect(result.id).toBe('req-1');
+    expect(result.title).toBe(baseRow.title);
+    expect(result.skillsNeeded).toEqual(['hardware_diagnosis']);
+    expect(result.matchedHelperId).toBeNull();
+  });
 
   it('handles row without requester_email gracefully when isOwner=true', () => {
-    const { requester_email, ...rowWithoutEmail } = baseRow
-    void requester_email
-    const result = mapRequestDetailRow(rowWithoutEmail as RequestRow, true)
-    expect(result.requesterEmail).toBeUndefined()
-  })
+    const { requester_email, ...rowWithoutEmail } = baseRow;
+    void requester_email;
+    const result = mapRequestDetailRow(rowWithoutEmail as RequestRow, true);
+    expect(result.requesterEmail).toBeUndefined();
+  });
 
   it('passes through ai_diagnosis null when DB column is null', () => {
-    const result = mapRequestDetailRow({ ...baseRow, ai_diagnosis: null }, true)
-    expect(result.aiDiagnosis).toBeNull()
-  })
-})
+    const result = mapRequestDetailRow({ ...baseRow, ai_diagnosis: null }, true);
+    expect(result.aiDiagnosis).toBeNull();
+  });
+});

@@ -11,9 +11,13 @@ export const WORKSHOP_REGISTRATION_STATUS = {
   NO_SHOW: 'no_show',
 } as const;
 
-export type WorkshopRegistrationStatus = typeof WORKSHOP_REGISTRATION_STATUS[keyof typeof WORKSHOP_REGISTRATION_STATUS];
+export type WorkshopRegistrationStatus =
+  (typeof WORKSHOP_REGISTRATION_STATUS)[keyof typeof WORKSHOP_REGISTRATION_STATUS];
 
-export const WORKSHOP_REGISTRATION_STATUS_VALUES = Object.values(WORKSHOP_REGISTRATION_STATUS) as [WorkshopRegistrationStatus, ...WorkshopRegistrationStatus[]];
+export const WORKSHOP_REGISTRATION_STATUS_VALUES = Object.values(WORKSHOP_REGISTRATION_STATUS) as [
+  WorkshopRegistrationStatus,
+  ...WorkshopRegistrationStatus[],
+];
 
 export const WORKSHOP_REGISTRATION_STATUS_LABELS: Record<string, string> = {
   [WORKSHOP_REGISTRATION_STATUS.PENDING]: 'Ausstehend',
@@ -25,10 +29,13 @@ export const WORKSHOP_REGISTRATION_STATUS_LABELS: Record<string, string> = {
 };
 
 export const WORKSHOP_REGISTRATION_STATUS_COLORS: Record<string, string> = {
-  [WORKSHOP_REGISTRATION_STATUS.CONFIRMED]: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
-  [WORKSHOP_REGISTRATION_STATUS.PENDING]: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
+  [WORKSHOP_REGISTRATION_STATUS.CONFIRMED]:
+    'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
+  [WORKSHOP_REGISTRATION_STATUS.PENDING]:
+    'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
   [WORKSHOP_REGISTRATION_STATUS.CANCELLED]: 'bg-error-100 text-error-800',
-  [WORKSHOP_REGISTRATION_STATUS.ATTENDED]: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
+  [WORKSHOP_REGISTRATION_STATUS.ATTENDED]:
+    'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
   [WORKSHOP_REGISTRATION_STATUS.NO_SHOW]: 'bg-neutral-100 text-neutral-800',
   [WORKSHOP_REGISTRATION_STATUS.WAITLIST]: 'bg-neutral-100 text-neutral-600',
 };
@@ -48,7 +55,8 @@ export const WORKSHOP_PAYMENT_STATUS = {
   REFUNDED: 'refunded',
 } as const;
 
-export type WorkshopPaymentStatus = typeof WORKSHOP_PAYMENT_STATUS[keyof typeof WORKSHOP_PAYMENT_STATUS];
+export type WorkshopPaymentStatus =
+  (typeof WORKSHOP_PAYMENT_STATUS)[keyof typeof WORKSHOP_PAYMENT_STATUS];
 
 export const WORKSHOP_PAYMENT_STATUS_LABELS: Record<string, string> = {
   [WORKSHOP_PAYMENT_STATUS.PAID]: 'Bezahlt',
@@ -58,8 +66,10 @@ export const WORKSHOP_PAYMENT_STATUS_LABELS: Record<string, string> = {
 };
 
 export const WORKSHOP_PAYMENT_STATUS_COLORS: Record<string, string> = {
-  [WORKSHOP_PAYMENT_STATUS.PAID]: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
-  [WORKSHOP_PAYMENT_STATUS.PENDING]: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
+  [WORKSHOP_PAYMENT_STATUS.PAID]:
+    'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
+  [WORKSHOP_PAYMENT_STATUS.PENDING]:
+    'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
   [WORKSHOP_PAYMENT_STATUS.REFUNDED]: 'bg-purple-100 text-purple-800',
   [WORKSHOP_PAYMENT_STATUS.NOT_REQUIRED]: 'bg-neutral-100 text-neutral-600',
 };
@@ -74,4 +84,5 @@ export const WORKSHOP_MATERIAL_ACCESS_TYPE = {
   ATTENDED: 'attended',
 } as const;
 
-export type WorkshopMaterialAccessType = typeof WORKSHOP_MATERIAL_ACCESS_TYPE[keyof typeof WORKSHOP_MATERIAL_ACCESS_TYPE];
+export type WorkshopMaterialAccessType =
+  (typeof WORKSHOP_MATERIAL_ACCESS_TYPE)[keyof typeof WORKSHOP_MATERIAL_ACCESS_TYPE];

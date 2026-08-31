@@ -10,7 +10,8 @@ import { ORG } from '@/config/org';
 export const MARKETPLACE_CONTENT = {
   page: {
     title: 'Marketplace',
-    description: 'Kaufe und verkaufe gebrauchte IT-Geräte in der Community — fair, nachhaltig und lokal.',
+    description:
+      'Kaufe und verkaufe gebrauchte IT-Geräte in der Community — fair, nachhaltig und lokal.',
   },
   sellerTypes: {
     all: 'Alle',
@@ -49,7 +50,7 @@ export const MARKETPLACE_CONTENT = {
     loadFailed: 'Fehler beim Laden der Inserate',
     tryAgain: 'Erneut versuchen',
   },
-} as const
+} as const;
 
 export const IT_HILFE_CONTENT = {
   page: {
@@ -88,4 +89,4 @@ export const IT_HILFE_CONTENT = {
     loadFailed: 'Fehler beim Laden',
     tryAgain: 'Erneut versuchen',
   },
-} as const
+} as const;

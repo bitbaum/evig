@@ -41,7 +41,7 @@ export async function getComments(decisionId: string) {
     ORDER BY dc.created_at ASC
   `);
 
-  return (result.rows as unknown as DbCommentRow[]).map(c => ({
+  return (result.rows as unknown as DbCommentRow[]).map((c) => ({
     id: c.id,
     decision_id: c.decision_id,
     content: c.content,
@@ -58,7 +58,12 @@ export async function getComments(decisionId: string) {
 export async function createComment(
   decisionId: string,
   userId: string,
-  data: { content: string; position: string; optionId?: string | null; parentCommentId?: string | null }
+  data: {
+    content: string;
+    position: string;
+    optionId?: string | null;
+    parentCommentId?: string | null;
+  },
 ) {
   // Verify decision exists and is commentable
   const existing = await db.execute(sql`
@@ -84,7 +89,10 @@ export async function createComment(
     JOIN ${sql.raw(uTable)} u ON u.id = i.user_id
   `);
 
-  const c = result.rows[0] as unknown as DbCommentRow & { user_email: string; user_name: string | null };
+  const c = result.rows[0] as unknown as DbCommentRow & {
+    user_email: string;
+    user_name: string | null;
+  };
   return {
     comment: {
       ...c,
@@ -93,11 +101,7 @@ export async function createComment(
   };
 }
 
-export async function updateComment(
-  commentId: string,
-  userId: string,
-  content: string
-) {
+export async function updateComment(commentId: string, userId: string, content: string) {
   const existing = await db.execute(sql`
     SELECT id, user_id FROM ${sql.raw(dcTable)} WHERE id = ${commentId}
   `);
@@ -114,7 +118,10 @@ export async function updateComment(
       (SELECT name FROM ${sql.raw(uTable)} WHERE id = user_id) AS user_name
   `);
 
-  const c = result.rows[0] as unknown as DbCommentRow & { user_email: string; user_name: string | null };
+  const c = result.rows[0] as unknown as DbCommentRow & {
+    user_email: string;
+    user_name: string | null;
+  };
   return {
     comment: {
       ...c,

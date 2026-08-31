@@ -14,29 +14,29 @@
  * each one exists under `nav.items` in messages/de.json.
  */
 
-import deMessages from '../../../messages/de.json'
-import { mainNavigation, type NavigationItem } from '../navigation'
-import { buildMarktplatzNavigationItems } from '../customer-journeys'
+import deMessages from '../../../messages/de.json';
+import { mainNavigation, type NavigationItem } from '../navigation';
+import { buildMarktplatzNavigationItems } from '../customer-journeys';
 
 function collectKeys(items: NavigationItem[], acc: Set<string>): void {
   for (const item of items) {
-    if (item.nameKey) acc.add(item.nameKey)
-    if (item.descriptionKey) acc.add(item.descriptionKey)
-    if (item.subItems?.length) collectKeys(item.subItems, acc)
+    if (item.nameKey) acc.add(item.nameKey);
+    if (item.descriptionKey) acc.add(item.descriptionKey);
+    if (item.subItems?.length) collectKeys(item.subItems, acc);
   }
 }
 
 describe('navigation i18n keys', () => {
   it('every nameKey/descriptionKey resolves in the canonical de locale', () => {
-    const referenced = new Set<string>()
-    collectKeys(mainNavigation, referenced)
+    const referenced = new Set<string>();
+    collectKeys(mainNavigation, referenced);
     // The marketplace mega-menu is built lazily; include it explicitly in case
     // it is ever detached from mainNavigation's subItems.
-    collectKeys(buildMarktplatzNavigationItems(), referenced)
+    collectKeys(buildMarktplatzNavigationItems(), referenced);
 
-    const navItems = (deMessages as { nav?: { items?: Record<string, string> } }).nav?.items ?? {}
-    const missing = [...referenced].filter((k) => !(k in navItems)).sort()
+    const navItems = (deMessages as { nav?: { items?: Record<string, string> } }).nav?.items ?? {};
+    const missing = [...referenced].filter((k) => !(k in navItems)).sort();
 
-    expect(missing).toEqual([])
-  })
-})
+    expect(missing).toEqual([]);
+  });
+});

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Service Form Component
@@ -9,33 +9,33 @@
  * Sub-components extracted to service-form/ directory.
  */
 
-import { Link } from '@/i18n/navigation'
-import { adminInteractive } from '@/lib/admin-ui'
-import { ArrowLeft, Save, Loader2 } from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Select } from '@/components/ui/select'
-import { FormField } from '@/components/ui/form-field'
-import { IconPicker } from './IconPicker'
-import { SERVICE_CATEGORIES } from '@/config/database'
-import { SERVICE_CATEGORY_LABELS } from '@/config/service-categories'
+import { Link } from '@/i18n/navigation';
+import { adminInteractive } from '@/lib/admin-ui';
+import { ArrowLeft, Save, Loader2 } from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select } from '@/components/ui/select';
+import { FormField } from '@/components/ui/form-field';
+import { IconPicker } from './IconPicker';
+import { SERVICE_CATEGORIES } from '@/config/database';
+import { SERVICE_CATEGORY_LABELS } from '@/config/service-categories';
 import {
   CollapsibleSection,
   FeaturesSection,
   ProcessSection,
   PricingSection,
-} from './service-form'
-import type { Feature, ProcessStep, ServiceFormData } from './service-form'
-import { AIFormAssist } from '@/components/ai/AIFormAssist'
-import { generateSlug } from '@/lib/utils/slug'
-import { useFormHandler } from '@/hooks/useFormHandler'
-import { ROUTES } from '@/config/routes'
+} from './service-form';
+import type { Feature, ProcessStep, ServiceFormData } from './service-form';
+import { AIFormAssist } from '@/components/ai/AIFormAssist';
+import { generateSlug } from '@/lib/utils/slug';
+import { useFormHandler } from '@/hooks/useFormHandler';
+import { ROUTES } from '@/config/routes';
 
 interface ServiceFormProps {
-  initialData?: Partial<ServiceFormData>
-  isEdit?: boolean
+  initialData?: Partial<ServiceFormData>;
+  isEdit?: boolean;
 }
 
 export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
@@ -69,61 +69,104 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
     redirectTo: ROUTES.admin.services,
     createSuccessMessage: 'Dienstleistung erstellt!',
     editSuccessMessage: 'Dienstleistung gespeichert!',
-  })
+  });
 
-  const { data: formData, setData: setFormData, updateField, isSubmitting: saving, error, success, handleSubmit } = form
+  const {
+    data: formData,
+    setData: setFormData,
+    updateField,
+    isSubmitting: saving,
+    error,
+    success,
+    handleSubmit,
+  } = form;
 
   const handleAIFieldsFilled = (data: Partial<Record<string, unknown>>) => {
-    setFormData(prev => {
-      const updated = { ...prev }
-      if (data.name) updated.name = String(data.name)
-      if (data.description) updated.description = String(data.description)
-      if (data.heroTitle) updated.heroTitle = String(data.heroTitle)
-      if (data.heroSubtitle) updated.heroSubtitle = String(data.heroSubtitle)
-      if (data.heroDescription) updated.heroDescription = String(data.heroDescription)
-      if (Array.isArray(data.features)) updated.features = data.features as Feature[]
-      if (Array.isArray(data.process)) updated.process = data.process as ProcessStep[]
-      return updated
-    })
-  }
+    setFormData((prev) => {
+      const updated = { ...prev };
+      if (data.name) updated.name = String(data.name);
+      if (data.description) updated.description = String(data.description);
+      if (data.heroTitle) updated.heroTitle = String(data.heroTitle);
+      if (data.heroSubtitle) updated.heroSubtitle = String(data.heroSubtitle);
+      if (data.heroDescription) updated.heroDescription = String(data.heroDescription);
+      if (Array.isArray(data.features)) updated.features = data.features as Feature[];
+      if (Array.isArray(data.process)) updated.process = data.process as ProcessStep[];
+      return updated;
+    });
+  };
 
   // Feature management
-  const addFeature = () => updateField('features', [...formData.features, { title: '', description: '', icon: 'Wrench' }])
+  const addFeature = () =>
+    updateField('features', [...formData.features, { title: '', description: '', icon: 'Wrench' }]);
   const updateFeature = (index: number, field: keyof Feature, value: string) => {
-    updateField('features', formData.features.map((f, i) => (i === index ? { ...f, [field]: value } : f)))
-  }
-  const removeFeature = (index: number) => updateField('features', formData.features.filter((_, i) => i !== index))
+    updateField(
+      'features',
+      formData.features.map((f, i) => (i === index ? { ...f, [field]: value } : f)),
+    );
+  };
+  const removeFeature = (index: number) =>
+    updateField(
+      'features',
+      formData.features.filter((_, i) => i !== index),
+    );
 
   // Process step management
-  const addProcessStep = () => updateField('process', [...formData.process, { step: formData.process.length + 1, title: '', description: '' }])
+  const addProcessStep = () =>
+    updateField('process', [
+      ...formData.process,
+      { step: formData.process.length + 1, title: '', description: '' },
+    ]);
   const updateProcessStep = (index: number, field: keyof ProcessStep, value: string | number) => {
-    updateField('process', formData.process.map((p, i) => (i === index ? { ...p, [field]: value } : p)))
-  }
+    updateField(
+      'process',
+      formData.process.map((p, i) => (i === index ? { ...p, [field]: value } : p)),
+    );
+  };
   const removeProcessStep = (index: number) => {
-    updateField('process', formData.process.filter((_, i) => i !== index).map((p, i) => ({ ...p, step: i + 1 })))
-  }
+    updateField(
+      'process',
+      formData.process.filter((_, i) => i !== index).map((p, i) => ({ ...p, step: i + 1 })),
+    );
+  };
 
   // Pricing management
-  const addPricingDetail = () => updateField('pricingDetails', [...formData.pricingDetails, ''])
+  const addPricingDetail = () => updateField('pricingDetails', [...formData.pricingDetails, '']);
   const updatePricingDetail = (index: number, value: string) => {
-    updateField('pricingDetails', formData.pricingDetails.map((d, i) => (i === index ? value : d)))
-  }
-  const removePricingDetail = (index: number) => updateField('pricingDetails', formData.pricingDetails.filter((_, i) => i !== index))
+    updateField(
+      'pricingDetails',
+      formData.pricingDetails.map((d, i) => (i === index ? value : d)),
+    );
+  };
+  const removePricingDetail = (index: number) =>
+    updateField(
+      'pricingDetails',
+      formData.pricingDetails.filter((_, i) => i !== index),
+    );
 
-  const addMediaPrice = () => updateField('pricingMediaPrices', [...(formData.pricingMediaPrices || []), ''])
+  const addMediaPrice = () =>
+    updateField('pricingMediaPrices', [...(formData.pricingMediaPrices || []), '']);
   const updateMediaPrice = (index: number, value: string) => {
-    updateField('pricingMediaPrices', (formData.pricingMediaPrices || []).map((p, i) => (i === index ? value : p)))
-  }
+    updateField(
+      'pricingMediaPrices',
+      (formData.pricingMediaPrices || []).map((p, i) => (i === index ? value : p)),
+    );
+  };
   const removeMediaPrice = (index: number) => {
-    updateField('pricingMediaPrices', (formData.pricingMediaPrices || []).filter((_, i) => i !== index))
-  }
+    updateField(
+      'pricingMediaPrices',
+      (formData.pricingMediaPrices || []).filter((_, i) => i !== index),
+    );
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link href={ROUTES.admin.services} className={`p-2 ${adminInteractive.rowHover} rounded-lg transition-colors`}>
+          <Link
+            href={ROUTES.admin.services}
+            className={`p-2 ${adminInteractive.rowHover} rounded-lg transition-colors`}
+          >
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
           <div>
@@ -141,12 +184,19 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
 
       {/* Alerts */}
       {error && (
-        <div id="service-form-error" role="alert" className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 text-error-700 dark:text-error-300 px-4 py-3 rounded-lg">
+        <div
+          id="service-form-error"
+          role="alert"
+          className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 text-error-700 dark:text-error-300 px-4 py-3 rounded-lg"
+        >
           {error}
         </div>
       )}
       {success && (
-        <div role="status" className="bg-action-muted border border-strong text-action px-4 py-3 rounded-lg">
+        <div
+          role="status"
+          className="bg-action-muted border border-strong text-action px-4 py-3 rounded-lg"
+        >
           {success}
         </div>
       )}
@@ -173,7 +223,11 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
               aria-describedby={error ? 'service-form-error' : undefined}
               value={formData.name}
               onChange={(e) => {
-                setFormData((prev) => ({ ...prev, name: e.target.value, slug: !isEdit ? generateSlug(e.target.value) : prev.slug }))
+                setFormData((prev) => ({
+                  ...prev,
+                  name: e.target.value,
+                  slug: !isEdit ? generateSlug(e.target.value) : prev.slug,
+                }));
               }}
             />
           </FormField>
@@ -207,7 +261,9 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
               onChange={(e) => updateField('category', e.target.value)}
             >
               {Object.values(SERVICE_CATEGORIES).map((cat) => (
-                <option key={cat} value={cat}>{SERVICE_CATEGORY_LABELS[cat as keyof typeof SERVICE_CATEGORY_LABELS]}</option>
+                <option key={cat} value={cat}>
+                  {SERVICE_CATEGORY_LABELS[cat as keyof typeof SERVICE_CATEGORY_LABELS]}
+                </option>
               ))}
             </Select>
           </FormField>
@@ -226,7 +282,9 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
               type="number"
               min={0}
               value={formData.priceCents ?? ''}
-              onChange={(e) => updateField('priceCents', e.target.value ? parseInt(e.target.value) : null)}
+              onChange={(e) =>
+                updateField('priceCents', e.target.value ? parseInt(e.target.value) : null)
+              }
               placeholder="Leer = Auf Anfrage"
             />
           </FormField>
@@ -266,7 +324,10 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
       {/* Hero */}
       <CollapsibleSection title="Hero-Bereich" defaultOpen={true}>
         <FormField label="Icon">
-          <IconPicker value={formData.iconName} onChange={(iconName) => updateField('iconName', iconName)} />
+          <IconPicker
+            value={formData.iconName}
+            onChange={(iconName) => updateField('iconName', iconName)}
+          />
         </FormField>
         <FormField label="Hero-Titel" htmlFor="hero-title">
           <Input
@@ -298,8 +359,18 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
       </CollapsibleSection>
 
       {/* Extracted Sections */}
-      <FeaturesSection features={formData.features} onAdd={addFeature} onUpdate={updateFeature} onRemove={removeFeature} />
-      <ProcessSection steps={formData.process} onAdd={addProcessStep} onUpdate={updateProcessStep} onRemove={removeProcessStep} />
+      <FeaturesSection
+        features={formData.features}
+        onAdd={addFeature}
+        onUpdate={updateFeature}
+        onRemove={removeFeature}
+      />
+      <ProcessSection
+        steps={formData.process}
+        onAdd={addProcessStep}
+        onUpdate={updateProcessStep}
+        onRemove={removeProcessStep}
+      />
       <PricingSection
         pricingBase={formData.pricingBase}
         pricingDetails={formData.pricingDetails}
@@ -313,5 +384,5 @@ export function ServiceForm({ initialData, isEdit = false }: ServiceFormProps) {
         onMediaPriceRemove={removeMediaPrice}
       />
     </form>
-  )
+  );
 }

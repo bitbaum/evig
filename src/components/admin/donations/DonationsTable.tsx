@@ -1,9 +1,9 @@
-import { Link } from '@/i18n/navigation'
-import { Heart, Package, CheckCircle, Clock, Receipt, ArrowRight } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable'
-import { ADMIN_CONTENT } from '@/config/admin-content'
-import { formatDateNumeric } from '@/lib/date-formats'
+import { Link } from '@/i18n/navigation';
+import { Heart, Package, CheckCircle, Clock, Receipt, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { AdminTable, type AdminTableColumn } from '@/components/admin/AdminTable';
+import { ADMIN_CONTENT } from '@/config/admin-content';
+import { formatDateNumeric } from '@/lib/date-formats';
 import {
   DONATION_TYPES,
   DONATION_STATUSES,
@@ -11,42 +11,45 @@ import {
   getDeviceCategoryLabel,
   getDonationStatusLabel,
   type DonationType,
-} from '@/config/donations'
-import type { Donation } from './types'
+} from '@/config/donations';
+import type { Donation } from './types';
 
 interface Props {
-  donations: Donation[]
-  onMarkThanked: (id: string) => void
-  onMarkReceiptSent: (id: string) => void
+  donations: Donation[];
+  onMarkThanked: (id: string) => void;
+  onMarkReceiptSent: (id: string) => void;
 }
 
 function getDonationIcon(type: DonationType) {
-  return type === DONATION_TYPES.DEVICE
-    ? <Package className="w-5 h-5" />
-    : <Heart className="w-5 h-5" />
+  return type === DONATION_TYPES.DEVICE ? (
+    <Package className="w-5 h-5" />
+  ) : (
+    <Heart className="w-5 h-5" />
+  );
 }
 
 function getDonationValue(donation: Donation): string {
-  if (donation.donation_type === DONATION_TYPES.MONETARY) return formatAmountCHF(donation.amount_cents)
-  if (donation.estimated_value_cents) return `~${formatAmountCHF(donation.estimated_value_cents)}`
-  return '-'
+  if (donation.donation_type === DONATION_TYPES.MONETARY)
+    return formatAmountCHF(donation.amount_cents);
+  if (donation.estimated_value_cents) return `~${formatAmountCHF(donation.estimated_value_cents)}`;
+  return '-';
 }
 
 function getDeviceTitle(donation: Donation): string {
-  const parts: string[] = []
-  if (donation.device_brand) parts.push(donation.device_brand)
-  if (donation.device_model) parts.push(donation.device_model)
-  if (parts.length > 0) return parts.join(' ')
-  if (donation.device_category) return getDeviceCategoryLabel(donation.device_category)
-  return 'Sachspende'
+  const parts: string[] = [];
+  if (donation.device_brand) parts.push(donation.device_brand);
+  if (donation.device_model) parts.push(donation.device_model);
+  if (parts.length > 0) return parts.join(' ');
+  if (donation.device_category) return getDeviceCategoryLabel(donation.device_category);
+  return 'Sachspende';
 }
 
 function getDonorDisplay(donation: Donation): string {
-  if (donation.user_name) return donation.user_name
-  if (donation.donor_name) return donation.donor_name
-  if (donation.user_email) return donation.user_email
-  if (donation.donor_email) return donation.donor_email
-  return 'Anonym'
+  if (donation.user_name) return donation.user_name;
+  if (donation.donor_name) return donation.donor_name;
+  if (donation.user_email) return donation.user_email;
+  if (donation.donor_email) return donation.donor_email;
+  return 'Anonym';
 }
 
 export function DonationsTable({ donations, onMarkThanked, onMarkReceiptSent }: Props) {
@@ -57,7 +60,7 @@ export function DonationsTable({ donations, onMarkThanked, onMarkReceiptSent }: 
         <p className="font-medium text-text-primary">{ADMIN_CONTENT.donations.emptyTitle}</p>
         <p className="text-text-secondary mt-1">{ADMIN_CONTENT.donations.emptyDescription}</p>
       </div>
-    )
+    );
   }
 
   const columns: AdminTableColumn<Donation>[] = [
@@ -112,13 +115,15 @@ export function DonationsTable({ donations, onMarkThanked, onMarkReceiptSent }: 
     {
       header: 'Status',
       cell: (donation) => (
-        <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
-          donation.status === DONATION_STATUSES.RECEIPT_SENT
-            ? 'bg-action-muted text-action'
-            : donation.status === DONATION_STATUSES.THANKED
-            ? 'bg-action-muted text-action'
-            : 'bg-surface-raised text-text-primary'
-        }`}>
+        <span
+          className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
+            donation.status === DONATION_STATUSES.RECEIPT_SENT
+              ? 'bg-action-muted text-action'
+              : donation.status === DONATION_STATUSES.THANKED
+                ? 'bg-action-muted text-action'
+                : 'bg-surface-raised text-text-primary'
+          }`}
+        >
           {donation.status === DONATION_STATUSES.RECEIPT_SENT && <Receipt className="w-3 h-3" />}
           {donation.status === DONATION_STATUSES.THANKED && <CheckCircle className="w-3 h-3" />}
           {donation.status === DONATION_STATUSES.RECORDED && <Clock className="w-3 h-3" />}
@@ -164,7 +169,7 @@ export function DonationsTable({ donations, onMarkThanked, onMarkReceiptSent }: 
         </div>
       ),
     },
-  ]
+  ];
 
-  return <AdminTable columns={columns} rows={donations} rowKey={(d) => d.id} />
+  return <AdminTable columns={columns} rows={donations} rowKey={(d) => d.id} />;
 }

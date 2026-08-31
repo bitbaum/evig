@@ -6,11 +6,11 @@
  * keep this file minimal (no integrations, default tracing).
  */
 
-import * as Sentry from '@sentry/nextjs'
+import * as Sentry from '@sentry/nextjs';
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   environment: process.env.NODE_ENV || 'development',
   release: process.env.NEXT_PUBLIC_BUILD_SHA,
   tracesSampleRate: 0.1,
-})
+});

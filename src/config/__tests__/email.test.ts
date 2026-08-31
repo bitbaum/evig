@@ -30,27 +30,27 @@ jest.mock('@/config/org', () => ({
     name: 'Revamp-IT',
     emailDomain: 'revamp-it.ch',
   },
-}))
+}));
 
 // Helper to isolate env vars for each test
 function withEnv(vars: Record<string, string | undefined>, fn: () => void) {
-  const saved: Record<string, string | undefined> = {}
+  const saved: Record<string, string | undefined> = {};
   for (const key of Object.keys(vars)) {
-    saved[key] = process.env[key]
+    saved[key] = process.env[key];
     if (vars[key] === undefined) {
-      delete process.env[key]
+      delete process.env[key];
     } else {
-      process.env[key] = vars[key]
+      process.env[key] = vars[key];
     }
   }
   try {
-    fn()
+    fn();
   } finally {
     for (const key of Object.keys(saved)) {
       if (saved[key] === undefined) {
-        delete process.env[key]
+        delete process.env[key];
       } else {
-        process.env[key] = saved[key]
+        process.env[key] = saved[key];
       }
     }
   }
@@ -63,94 +63,106 @@ function withEnv(vars: Record<string, string | undefined>, fn: () => void) {
 describe('getEmailProvider', () => {
   it('returns "smtp" when LISTMONK_ENABLED is not set', () => {
     // Import fresh in each test to avoid cross-contamination
-    jest.resetModules()
+    jest.resetModules();
     withEnv({ LISTMONK_ENABLED: undefined }, () => {
-      const { getEmailProvider } = require('../email')
-      expect(getEmailProvider()).toBe('smtp')
-    })
-  })
+      const { getEmailProvider } = require('../email');
+      expect(getEmailProvider()).toBe('smtp');
+    });
+  });
 
   it('returns "listmonk" when LISTMONK_ENABLED=true', () => {
-    jest.resetModules()
+    jest.resetModules();
     withEnv({ LISTMONK_ENABLED: 'true' }, () => {
-      const { getEmailProvider } = require('../email')
-      expect(getEmailProvider()).toBe('listmonk')
-    })
-  })
+      const { getEmailProvider } = require('../email');
+      expect(getEmailProvider()).toBe('listmonk');
+    });
+  });
 
   it('returns "smtp" when LISTMONK_ENABLED=false', () => {
-    jest.resetModules()
+    jest.resetModules();
     withEnv({ LISTMONK_ENABLED: 'false' }, () => {
-      const { getEmailProvider } = require('../email')
-      expect(getEmailProvider()).toBe('smtp')
-    })
-  })
-})
+      const { getEmailProvider } = require('../email');
+      expect(getEmailProvider()).toBe('smtp');
+    });
+  });
+});
 
 describe('isEmailConfigured', () => {
   it('returns true when LISTMONK_ENABLED=true', () => {
-    jest.resetModules()
+    jest.resetModules();
     withEnv({ LISTMONK_ENABLED: 'true' }, () => {
-      const { isEmailConfigured } = require('../email')
-      expect(isEmailConfigured()).toBe(true)
-    })
-  })
+      const { isEmailConfigured } = require('../email');
+      expect(isEmailConfigured()).toBe(true);
+    });
+  });
 
   it('returns true when EMAIL_USER and EMAIL_PASS are both set', () => {
-    jest.resetModules()
-    withEnv({
-      LISTMONK_ENABLED: undefined,
-      EMAIL_USER: 'test@example.com',
-      EMAIL_PASS: 'secret',
-    }, () => {
-      const { isEmailConfigured } = require('../email')
-      expect(isEmailConfigured()).toBe(true)
-    })
-  })
+    jest.resetModules();
+    withEnv(
+      {
+        LISTMONK_ENABLED: undefined,
+        EMAIL_USER: 'test@example.com',
+        EMAIL_PASS: 'secret',
+      },
+      () => {
+        const { isEmailConfigured } = require('../email');
+        expect(isEmailConfigured()).toBe(true);
+      },
+    );
+  });
 
   it('returns false when neither listmonk nor SMTP credentials are set', () => {
-    jest.resetModules()
-    withEnv({
-      LISTMONK_ENABLED: undefined,
-      EMAIL_USER: undefined,
-      EMAIL_PASS: undefined,
-    }, () => {
-      const { isEmailConfigured } = require('../email')
-      expect(isEmailConfigured()).toBe(false)
-    })
-  })
-})
+    jest.resetModules();
+    withEnv(
+      {
+        LISTMONK_ENABLED: undefined,
+        EMAIL_USER: undefined,
+        EMAIL_PASS: undefined,
+      },
+      () => {
+        const { isEmailConfigured } = require('../email');
+        expect(isEmailConfigured()).toBe(false);
+      },
+    );
+  });
+});
 
 describe('validateEmailConfig', () => {
   it('throws when SMTP is used without EMAIL_USER', () => {
-    jest.resetModules()
-    withEnv({
-      LISTMONK_ENABLED: undefined,
-      EMAIL_USER: undefined,
-      EMAIL_PASS: 'secret',
-    }, () => {
-      const { validateEmailConfig } = require('../email')
-      expect(() => validateEmailConfig()).toThrow(/EMAIL_USER/)
-    })
-  })
+    jest.resetModules();
+    withEnv(
+      {
+        LISTMONK_ENABLED: undefined,
+        EMAIL_USER: undefined,
+        EMAIL_PASS: 'secret',
+      },
+      () => {
+        const { validateEmailConfig } = require('../email');
+        expect(() => validateEmailConfig()).toThrow(/EMAIL_USER/);
+      },
+    );
+  });
 
   it('throws when SMTP is used without EMAIL_PASS', () => {
-    jest.resetModules()
-    withEnv({
-      LISTMONK_ENABLED: undefined,
-      EMAIL_USER: 'test@example.com',
-      EMAIL_PASS: undefined,
-    }, () => {
-      const { validateEmailConfig } = require('../email')
-      expect(() => validateEmailConfig()).toThrow(/EMAIL_PASS/)
-    })
-  })
+    jest.resetModules();
+    withEnv(
+      {
+        LISTMONK_ENABLED: undefined,
+        EMAIL_USER: 'test@example.com',
+        EMAIL_PASS: undefined,
+      },
+      () => {
+        const { validateEmailConfig } = require('../email');
+        expect(() => validateEmailConfig()).toThrow(/EMAIL_PASS/);
+      },
+    );
+  });
 
   it('does not throw when LISTMONK_ENABLED=true', () => {
-    jest.resetModules()
+    jest.resetModules();
     withEnv({ LISTMONK_ENABLED: 'true' }, () => {
-      const { validateEmailConfig } = require('../email')
-      expect(() => validateEmailConfig()).not.toThrow()
-    })
-  })
-})
+      const { validateEmailConfig } = require('../email');
+      expect(() => validateEmailConfig()).not.toThrow();
+    });
+  });
+});

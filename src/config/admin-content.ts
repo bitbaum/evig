@@ -59,7 +59,7 @@ export const ADMIN_CONTENT = {
     emptyDescription: 'Es sind noch keine Spenden erfasst.',
     errorMessage: 'Fehler beim Laden der Spenden',
   },
-} as const
+} as const;
 
 export const ADMIN_COMMON = {
   retry: 'Erneut versuchen',
@@ -72,4 +72,4 @@ export const ADMIN_COMMON = {
     next: 'Weiter',
     pageOf: (current: number, total: number) => `Seite ${current} von ${total}`,
   },
-} as const
+} as const;

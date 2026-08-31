@@ -1,21 +1,21 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { UI_FEEDBACK_MS } from '@/config/limits'
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { UI_FEEDBACK_MS } from '@/config/limits';
 
 interface CopyButtonProps {
-  value: string
-  label?: string
+  value: string;
+  label?: string;
 }
 
 export function CopyButton({ value, label = 'Kopieren' }: CopyButtonProps) {
-  const [copied, setCopied] = useState(false)
+  const [copied, setCopied] = useState(false);
 
   async function handleCopy() {
-    await navigator.clipboard.writeText(value)
-    setCopied(true)
-    setTimeout(() => setCopied(false), UI_FEEDBACK_MS.COPY)
+    await navigator.clipboard.writeText(value);
+    setCopied(true);
+    setTimeout(() => setCopied(false), UI_FEEDBACK_MS.COPY);
   }
 
   return (
@@ -27,5 +27,5 @@ export function CopyButton({ value, label = 'Kopieren' }: CopyButtonProps) {
     >
       {copied ? 'Kopiert!' : label}
     </Button>
-  )
+  );
 }

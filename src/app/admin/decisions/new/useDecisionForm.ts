@@ -43,13 +43,14 @@ export function useDecisionForm() {
 
   // Core form state
   const [decisionType, setDecisionType] = useState<DecisionType>('sense_check');
-  const [participantScope, setParticipantScope] = useState<ParticipantScope>(PARTICIPANT_SCOPE_DEFAULT);
+  const [participantScope, setParticipantScope] =
+    useState<ParticipantScope>(PARTICIPANT_SCOPE_DEFAULT);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [background, setBackground] = useState('');
   const [category, setCategory] = useState<DecisionCategory>('operativ');
   const [votingMethod, setVotingMethod] = useState<VotingMethod>(
-    DECISION_TYPE_DEFAULTS.sense_check.votingMethod
+    DECISION_TYPE_DEFAULTS.sense_check.votingMethod,
   );
   const [options, setOptions] = useState<OptionItem[]>([
     { id: crypto.randomUUID(), label: '', description: '', imageUrl: '' },
@@ -80,16 +81,22 @@ export function useDecisionForm() {
   useEffect(() => {
     // Fetch team members (staff) and Verein members — needed for 'invited' scope.
     Promise.all([
-      apiFetch<Array<{ user_id: string; user_name: string | null; user_email: string }>>('/api/admin/team/profiles'),
-      apiFetch<Array<{ id: string; name: string | null; email: string }>>('/api/admin/membership/members'),
+      apiFetch<Array<{ user_id: string; user_name: string | null; user_email: string }>>(
+        '/api/admin/team/profiles',
+      ),
+      apiFetch<Array<{ id: string; name: string | null; email: string }>>(
+        '/api/admin/membership/members',
+      ),
     ]).then(([teamResult, memberResult]) => {
-      const teamList: TeamMember[] = teamResult.success && teamResult.data
-        ? teamResult.data.map((m) => ({ id: m.user_id, name: m.user_name, email: m.user_email }))
-        : [];
+      const teamList: TeamMember[] =
+        teamResult.success && teamResult.data
+          ? teamResult.data.map((m) => ({ id: m.user_id, name: m.user_name, email: m.user_email }))
+          : [];
 
-      const memberList: TeamMember[] = memberResult.success && memberResult.data
-        ? memberResult.data.map((m) => ({ id: m.id, name: m.name, email: m.email }))
-        : [];
+      const memberList: TeamMember[] =
+        memberResult.success && memberResult.data
+          ? memberResult.data.map((m) => ({ id: m.id, name: m.name, email: m.email }))
+          : [];
 
       const byId = new Map<string, TeamMember>();
       for (const p of [...teamList, ...memberList]) byId.set(p.id, p);
@@ -121,9 +128,14 @@ export function useDecisionForm() {
     setQuorumValue(template.quorum.value);
     setBlindVoting(DECISION_TYPE_DEFAULTS[template.decisionType].blindVoting);
     if (template.sampleOptions && template.sampleOptions.length > 0) {
-      setOptions(template.sampleOptions.map((o) => ({
-        id: crypto.randomUUID(), label: o.label, description: o.description || '', imageUrl: '',
-      })));
+      setOptions(
+        template.sampleOptions.map((o) => ({
+          id: crypto.randomUUID(),
+          label: o.label,
+          description: o.description || '',
+          imageUrl: '',
+        })),
+      );
     }
   }
 
@@ -132,10 +144,17 @@ export function useDecisionForm() {
     if (data.description) setDescription(String(data.description));
     if (data.background) setBackground(String(data.background));
     if (Array.isArray(data.options)) {
-      setOptions(data.options.map((opt: unknown) => {
-        const o = opt as Record<string, string>;
-        return { id: crypto.randomUUID(), label: o.label || '', description: o.description || '', imageUrl: o.imageUrl || '' };
-      }));
+      setOptions(
+        data.options.map((opt: unknown) => {
+          const o = opt as Record<string, string>;
+          return {
+            id: crypto.randomUUID(),
+            label: o.label || '',
+            description: o.description || '',
+            imageUrl: o.imageUrl || '',
+          };
+        }),
+      );
     }
     if (data.recommendedDecisionType) {
       const t = data.recommendedDecisionType as DecisionType;
@@ -165,7 +184,10 @@ export function useDecisionForm() {
   }
 
   function addOption() {
-    setOptions((prev) => [...prev, { id: crypto.randomUUID(), label: '', description: '', imageUrl: '' }]);
+    setOptions((prev) => [
+      ...prev,
+      { id: crypto.randomUUID(), label: '', description: '', imageUrl: '' },
+    ]);
   }
 
   function removeOption(id: string) {
@@ -193,18 +215,24 @@ export function useDecisionForm() {
 
     const needsOptions = METHODS_REQUIRING_OPTIONS.includes(votingMethod);
     const payload = {
-      title, description,
+      title,
+      description,
       background: background.trim() || null,
-      category, decisionType, votingMethod,
+      category,
+      decisionType,
+      votingMethod,
       options: needsOptions
-        ? options.filter((o) => o.label.trim()).map((o) => ({ ...o, imageUrl: o.imageUrl.trim() || undefined }))
+        ? options
+            .filter((o) => o.label.trim())
+            .map((o) => ({ ...o, imageUrl: o.imageUrl.trim() || undefined }))
         : [],
       quorum: { type: quorumType, value: quorumValue },
       blindVoting,
       allowPublicVoting,
       dotCount: votingMethod === 'dot' ? dotCount : null,
       participantScope,
-      invitedParticipants: participantScope === PARTICIPANT_SCOPE.INVITED ? Array.from(selectedParticipants) : [],
+      invitedParticipants:
+        participantScope === PARTICIPANT_SCOPE.INVITED ? Array.from(selectedParticipants) : [],
       discussionDeadline: discussionDeadline ? new Date(discussionDeadline).toISOString() : null,
       votingDeadline: votingDeadline ? new Date(votingDeadline).toISOString() : null,
       initialStatus: initialStatusRef.current,
@@ -224,7 +252,8 @@ export function useDecisionForm() {
 
   return {
     // Submit state
-    submitting, error,
+    submitting,
+    error,
     handleSubmit,
     setInitialStatus,
     // AI
@@ -232,31 +261,52 @@ export function useDecisionForm() {
     setAiRecommendationReason,
     handleAIFieldsFilled,
     // Decision type
-    decisionType, handleTypeChange,
+    decisionType,
+    handleTypeChange,
     // Core fields
-    title, setTitle,
-    description, setDescription,
-    background, setBackground,
-    category, setCategory,
+    title,
+    setTitle,
+    description,
+    setDescription,
+    background,
+    setBackground,
+    category,
+    setCategory,
     // Options
-    options, showImageUrls, setShowImageUrls,
-    addOption, removeOption, updateOption,
+    options,
+    showImageUrls,
+    setShowImageUrls,
+    addOption,
+    removeOption,
+    updateOption,
     needsOptions: METHODS_REQUIRING_OPTIONS.includes(votingMethod),
     // Deadlines
-    discussionDeadline, setDiscussionDeadline,
-    votingDeadline, setVotingDeadline,
+    discussionDeadline,
+    setDiscussionDeadline,
+    votingDeadline,
+    setVotingDeadline,
     // Participant scope
-    participantScope, setParticipantScope,
-    teamMembers, selectedParticipants, toggleParticipant,
-    participantSearch, setParticipantSearch,
+    participantScope,
+    setParticipantScope,
+    teamMembers,
+    selectedParticipants,
+    toggleParticipant,
+    participantSearch,
+    setParticipantSearch,
     filteredMembers,
     // Advanced
-    votingMethod, setVotingMethod,
-    dotCount, setDotCount,
-    quorumType, setQuorumType,
-    quorumValue, setQuorumValue,
-    blindVoting, setBlindVoting,
-    allowPublicVoting, setAllowPublicVoting,
+    votingMethod,
+    setVotingMethod,
+    dotCount,
+    setDotCount,
+    quorumType,
+    setQuorumType,
+    quorumValue,
+    setQuorumValue,
+    blindVoting,
+    setBlindVoting,
+    allowPublicVoting,
+    setAllowPublicVoting,
     // Template
     handleTemplateSelect,
   };

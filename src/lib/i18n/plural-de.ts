@@ -16,5 +16,5 @@
  * is hardcoded German per the codebase's convention).
  */
 export function pluralDe(count: number, singular: string, plural: string): string {
-  return count === 1 ? singular : plural
+  return count === 1 ? singular : plural;
 }

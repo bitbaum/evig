@@ -15,9 +15,9 @@
  * vs `border-action …` vs bare `text-action`). Add a shape here rather than
  * hand-rolling a sixth.
  */
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils';
 
-export type NavShape = 'sidebar' | 'bottomTab' | 'pill' | 'tab' | 'segmented' | 'chip' | 'rail'
+export type NavShape = 'sidebar' | 'bottomTab' | 'pill' | 'tab' | 'segmented' | 'chip' | 'rail';
 
 /**
  * base     — layout/shape classes shared by both states
@@ -42,8 +42,7 @@ export const NAV_STATE: Record<NavShape, { base: string; active: string; inactiv
   pill: {
     base: 'flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm transition-colors',
     active: 'border-action bg-action-muted text-action',
-    inactive:
-      'border-subtle text-text-secondary hover:border-strong hover:text-text-primary',
+    inactive: 'border-subtle text-text-secondary hover:border-strong hover:text-text-primary',
   },
   /** Horizontal underline tab (in a `border-b` tablist). Sits on a bottom rule
    *  via -mb-px. Was hand-rolled 5 ways (border-primary-600 / border-primary /
@@ -51,8 +50,7 @@ export const NAV_STATE: Record<NavShape, { base: string; active: string; inactiv
   tab: {
     base: '-mb-px whitespace-nowrap border-b-2 px-4 py-2.5 text-sm font-medium transition-colors',
     active: 'border-action text-action',
-    inactive:
-      'border-transparent text-text-tertiary hover:border-strong hover:text-text-secondary',
+    inactive: 'border-transparent text-text-tertiary hover:border-strong hover:text-text-secondary',
   },
   /** Segment inside a raised-track segmented control (`bg-surface-raised p-1
    *  rounded-lg` track). The active segment lifts to the base surface. */
@@ -75,15 +73,14 @@ export const NAV_STATE: Record<NavShape, { base: string; active: string; inactiv
   rail: {
     base: '-ml-px block border-l-2 py-1 pl-4 leading-snug transition-colors',
     active: 'border-action font-medium text-text-primary',
-    inactive:
-      'border-transparent text-text-tertiary hover:border-subtle hover:text-text-secondary',
+    inactive: 'border-transparent text-text-tertiary hover:border-subtle hover:text-text-secondary',
   },
-}
+};
 
 /** Resolve the full class string for a nav item of the given shape + state. */
 export function navLinkClass(shape: NavShape, active: boolean, className?: string): string {
-  const s = NAV_STATE[shape]
-  return cn(s.base, active ? s.active : s.inactive, className)
+  const s = NAV_STATE[shape];
+  return cn(s.base, active ? s.active : s.inactive, className);
 }
 
 /**
@@ -108,5 +105,5 @@ export function navLinkProps(
   return {
     className: navLinkClass(shape, active, className),
     'aria-current': active ? 'page' : undefined,
-  }
+  };
 }

@@ -1,20 +1,20 @@
-'use client'
+'use client';
 
-import { User, Building2, MapPin } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
-import { Card } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import type { ProfileData } from '../hooks/useProfileData'
+import { User, Building2, MapPin } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/ui/Heading';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import type { ProfileData } from '../hooks/useProfileData';
 
 interface PersonalInfoSectionProps {
-  profile: ProfileData
-  handleChange: (field: keyof ProfileData, value: string | boolean | string[] | number) => void
+  profile: ProfileData;
+  handleChange: (field: keyof ProfileData, value: string | boolean | string[] | number) => void;
 }
 
 export function PersonalInfoSection({ profile, handleChange }: PersonalInfoSectionProps) {
-  const t = useTranslations('dashboard.profile.personalInfo')
-  const tAddr = useTranslations('dashboard.profile.address')
+  const t = useTranslations('dashboard.profile.personalInfo');
+  const tAddr = useTranslations('dashboard.profile.address');
 
   return (
     <Card className="p-6">
@@ -107,7 +107,9 @@ export function PersonalInfoSection({ profile, handleChange }: PersonalInfoSecti
               autoComplete="postal-code"
               maxLength={4}
               value={profile.postal_code}
-              onChange={(e) => handleChange('postal_code', e.target.value.replace(/\D/g, '').slice(0, 4))}
+              onChange={(e) =>
+                handleChange('postal_code', e.target.value.replace(/\D/g, '').slice(0, 4))
+              }
               placeholder="8000"
             />
           </div>
@@ -126,5 +128,5 @@ export function PersonalInfoSection({ profile, handleChange }: PersonalInfoSecti
         </div>
       </div>
     </Card>
-  )
+  );
 }

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * ProtocolConsent — Swiss legal: recording a meeting requires explicit
@@ -12,57 +12,57 @@
  * consented).
  */
 
-import { useEffect, useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
-const STORAGE_KEY = 'protocol-consent-acknowledged'
+const STORAGE_KEY = 'protocol-consent-acknowledged';
 
 interface Props {
   /** Current value. Parent owns the truth so the form can reset on submit. */
-  value: boolean
-  onChange: (next: boolean) => void
+  value: boolean;
+  onChange: (next: boolean) => void;
 }
 
 export function ProtocolConsent({ value, onChange }: Props) {
-  const t = useTranslations('admin.protocols.consent')
-  const [remember, setRemember] = useState(false)
+  const t = useTranslations('admin.protocols.consent');
+  const [remember, setRemember] = useState(false);
 
   // Restore from localStorage on mount. Only auto-tick the visible
   // consent box if the user has previously asked to remember it.
   useEffect(() => {
-    if (typeof window === 'undefined') return
+    if (typeof window === 'undefined') return;
     if (window.localStorage.getItem(STORAGE_KEY) === 'true') {
       // localStorage hydration must run client-side after mount (SSR-safe).
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setRemember(true)
-      onChange(true)
+      setRemember(true);
+      onChange(true);
     }
     // onChange intentionally not in deps — parent re-rendering must
     // not retrigger restore.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   const handleToggle = (next: boolean) => {
-    onChange(next)
+    onChange(next);
     if (typeof window !== 'undefined') {
       if (next && remember) {
-        window.localStorage.setItem(STORAGE_KEY, 'true')
+        window.localStorage.setItem(STORAGE_KEY, 'true');
       } else if (!next) {
         // Clear sticky state when user unchecks.
-        window.localStorage.removeItem(STORAGE_KEY)
+        window.localStorage.removeItem(STORAGE_KEY);
       }
     }
-  }
+  };
 
   const handleRememberToggle = (next: boolean) => {
-    setRemember(next)
-    if (typeof window === 'undefined') return
+    setRemember(next);
+    if (typeof window === 'undefined') return;
     if (next && value) {
-      window.localStorage.setItem(STORAGE_KEY, 'true')
+      window.localStorage.setItem(STORAGE_KEY, 'true');
     } else if (!next) {
-      window.localStorage.removeItem(STORAGE_KEY)
+      window.localStorage.removeItem(STORAGE_KEY);
     }
-  }
+  };
 
   return (
     <div className="space-y-2">
@@ -88,5 +88,5 @@ export function ProtocolConsent({ value, onChange }: Props) {
         </label>
       )}
     </div>
-  )
+  );
 }

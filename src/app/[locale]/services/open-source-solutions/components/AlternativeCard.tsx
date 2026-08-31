@@ -1,18 +1,22 @@
-'use client'
+'use client';
 
-import { Link } from '@/i18n/navigation'
-import { cn } from '@/lib/utils'
-import { type OSSAlternative, getProprietaryAppById, getCategoryById } from '@/config/open-source-registry'
-import { MaturityBadge } from './MaturityBadge'
-import { PlatformIcons } from './PlatformIcons'
-import Heading from '@/components/ui/Heading'
+import { Link } from '@/i18n/navigation';
+import { cn } from '@/lib/utils';
+import {
+  type OSSAlternative,
+  getProprietaryAppById,
+  getCategoryById,
+} from '@/config/open-source-registry';
+import { MaturityBadge } from './MaturityBadge';
+import { PlatformIcons } from './PlatformIcons';
+import Heading from '@/components/ui/Heading';
 
 interface AlternativeCardProps {
-  alternative: OSSAlternative
+  alternative: OSSAlternative;
 }
 
 export function AlternativeCard({ alternative }: AlternativeCardProps) {
-  const category = getCategoryById(alternative.categoryId)
+  const category = getCategoryById(alternative.categoryId);
 
   return (
     <Link
@@ -20,13 +24,16 @@ export function AlternativeCard({ alternative }: AlternativeCardProps) {
       className={cn(
         'group block bg-surface-base rounded-xl border-2 border',
         'hover:border-strong transition-all duration-200',
-        'p-5 sm:p-6'
+        'p-5 sm:p-6',
       )}
     >
       {/* Header: Name + Category */}
       <div className="flex items-start justify-between mb-3">
         <div className="min-w-0 flex-1">
-          <Heading level={3} className="text-lg font-bold text-text-primary group-hover:text-action transition-colors truncate">
+          <Heading
+            level={3}
+            className="text-lg font-bold text-text-primary group-hover:text-action transition-colors truncate"
+          >
             {alternative.name}
           </Heading>
           {category && (
@@ -39,16 +46,14 @@ export function AlternativeCard({ alternative }: AlternativeCardProps) {
       </div>
 
       {/* Tagline */}
-      <p className="text-sm text-text-secondary mb-3 line-clamp-2">
-        {alternative.tagline}
-      </p>
+      <p className="text-sm text-text-secondary mb-3 line-clamp-2">{alternative.tagline}</p>
 
       {/* Replaces badges */}
       {alternative.replaces.length > 0 && (
         <div className="flex flex-wrap gap-1.5 mb-3">
-          {alternative.replaces.map(r => {
-            const app = getProprietaryAppById(r.appId)
-            if (!app) return null
+          {alternative.replaces.map((r) => {
+            const app = getProprietaryAppById(r.appId);
+            if (!app) return null;
             return (
               <span
                 key={r.appId}
@@ -56,7 +61,7 @@ export function AlternativeCard({ alternative }: AlternativeCardProps) {
               >
                 Ersetzt {app.name}
               </span>
-            )
+            );
           })}
         </div>
       )}
@@ -64,11 +69,8 @@ export function AlternativeCard({ alternative }: AlternativeCardProps) {
       {/* Footer: Platforms + License */}
       <div className="flex items-center justify-between pt-3 border-t border-subtle">
         <PlatformIcons platforms={alternative.platforms} />
-        <span className="text-xs text-text-tertiary font-medium">
-          {alternative.license}
-        </span>
+        <span className="text-xs text-text-tertiary font-medium">{alternative.license}</span>
       </div>
     </Link>
-  )
+  );
 }
-

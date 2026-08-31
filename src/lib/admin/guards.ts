@@ -1,7 +1,7 @@
-import 'server-only'
-import { redirect } from 'next/navigation'
-import { auth } from '@/auth'
-import { canAccessSection, toStaffUser, type AdminSection } from '@/lib/permissions'
+import 'server-only';
+import { redirect } from 'next/navigation';
+import { auth } from '@/auth';
+import { canAccessSection, toStaffUser, type AdminSection } from '@/lib/permissions';
 
 /**
  * Server-side guard for admin section pages.
@@ -33,20 +33,20 @@ import { canAccessSection, toStaffUser, type AdminSection } from '@/lib/permissi
  * defensive "if someone calls requireSection from outside /admin/*" path.
  */
 export async function requireSection(section: AdminSection) {
-  const session = await auth()
+  const session = await auth();
   if (!session?.user) {
-    redirect(`/auth/login?callbackUrl=/admin/${section}`)
+    redirect(`/auth/login?callbackUrl=/admin/${section}`);
   }
   const staffUser = toStaffUser({
     email: session.user.email,
     isStaff: session.user.isStaff,
     staffPermissions: session.user.staffPermissions,
     isSuperAdmin: session.user.isSuperAdmin,
-  })
+  });
   if (!canAccessSection(staffUser, section)) {
-    redirect(`/admin?error=no_${section}_access`)
+    redirect(`/admin?error=no_${section}_access`);
   }
-  return session
+  return session;
 }
 
 /**
@@ -58,18 +58,18 @@ export async function requireSection(section: AdminSection) {
  * `?error=no_<key>_access` key — the caller passes the URL slug.
  */
 export async function requireAnySection(sections: AdminSection[], errorKey: string) {
-  const session = await auth()
+  const session = await auth();
   if (!session?.user) {
-    redirect(`/auth/login?callbackUrl=/admin/${errorKey}`)
+    redirect(`/auth/login?callbackUrl=/admin/${errorKey}`);
   }
   const staffUser = toStaffUser({
     email: session.user.email,
     isStaff: session.user.isStaff,
     staffPermissions: session.user.staffPermissions,
     isSuperAdmin: session.user.isSuperAdmin,
-  })
-  if (!sections.some(section => canAccessSection(staffUser, section))) {
-    redirect(`/admin?error=no_${errorKey}_access`)
+  });
+  if (!sections.some((section) => canAccessSection(staffUser, section))) {
+    redirect(`/admin?error=no_${errorKey}_access`);
   }
-  return session
+  return session;
 }

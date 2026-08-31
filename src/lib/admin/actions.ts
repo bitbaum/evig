@@ -1,14 +1,14 @@
-'use server'
+'use server';
 
-import { revalidatePath } from 'next/cache'
-import { auth } from '@/auth'
-import { db } from '@/db'
-import { userContentSubmissions, listings } from '@/db/schema'
-import { eq, sql } from 'drizzle-orm'
-import { APPROVAL_STATUS } from '@/config/approval-status'
-import { logActivity } from '@/lib/activity'
-import { logger } from '@/lib/logger'
-import { canAccessSection, toStaffUser, type AdminSection } from '@/lib/permissions'
+import { revalidatePath } from 'next/cache';
+import { auth } from '@/auth';
+import { db } from '@/db';
+import { userContentSubmissions, listings } from '@/db/schema';
+import { eq, sql } from 'drizzle-orm';
+import { APPROVAL_STATUS } from '@/config/approval-status';
+import { logActivity } from '@/lib/activity';
+import { logger } from '@/lib/logger';
+import { canAccessSection, toStaffUser, type AdminSection } from '@/lib/permissions';
 
 // ---------------------------------------------------------------------------
 // Guard: require staff session WITH the section permission. Server actions are
@@ -18,15 +18,15 @@ import { canAccessSection, toStaffUser, type AdminSection } from '@/lib/permissi
 // ---------------------------------------------------------------------------
 
 async function requireAdmin(section: AdminSection) {
-  const session = await auth()
+  const session = await auth();
   if (!session?.user?.isStaff && !session?.user?.isSuperAdmin) {
-    throw new Error('Unauthorized')
+    throw new Error('Unauthorized');
   }
-  const staffUser = toStaffUser(session.user)
+  const staffUser = toStaffUser(session.user);
   if (!canAccessSection(staffUser, section)) {
-    throw new Error('Unauthorized')
+    throw new Error('Unauthorized');
   }
-  return session.user
+  return session.user;
 }
 
 // ---------------------------------------------------------------------------
@@ -34,7 +34,7 @@ async function requireAdmin(section: AdminSection) {
 // ---------------------------------------------------------------------------
 
 export async function approveBlogSubmissionAction(submissionId: string) {
-  const user = await requireAdmin('approvals')
+  const user = await requireAdmin('approvals');
 
   try {
     await db
@@ -45,22 +45,22 @@ export async function approveBlogSubmissionAction(submissionId: string) {
         reviewedAt: sql`NOW()`,
         updatedAt: sql`NOW()`,
       })
-      .where(eq(userContentSubmissions.id, submissionId))
+      .where(eq(userContentSubmissions.id, submissionId));
 
     logActivity({
       actorId: user.id,
       action: 'approved_blog',
       subjectType: 'content_submission',
       subjectId: submissionId,
-    })
+    });
 
-    logger.info('Inline: content submission approved', { submissionId, actorId: user.id })
+    logger.info('Inline: content submission approved', { submissionId, actorId: user.id });
   } catch (error) {
-    logger.error('Inline approveBlogSubmissionAction failed', { error, submissionId })
-    throw error
+    logger.error('Inline approveBlogSubmissionAction failed', { error, submissionId });
+    throw error;
   }
 
-  revalidatePath('/admin')
+  revalidatePath('/admin');
 }
 
 // ---------------------------------------------------------------------------
@@ -68,7 +68,7 @@ export async function approveBlogSubmissionAction(submissionId: string) {
 // ---------------------------------------------------------------------------
 
 export async function verifyListingAction(listingId: string) {
-  const user = await requireAdmin('marketplace')
+  const user = await requireAdmin('marketplace');
 
   try {
     await db
@@ -77,21 +77,20 @@ export async function verifyListingAction(listingId: string) {
         verifiedAt: sql`NOW()`,
         verifiedBy: user.id,
       })
-      .where(eq(listings.id, listingId))
+      .where(eq(listings.id, listingId));
 
     logActivity({
       actorId: user.id,
       action: 'approved_listing',
       subjectType: 'listing',
       subjectId: listingId,
-    })
+    });
 
-    logger.info('Inline: listing verified', { listingId, actorId: user.id })
+    logger.info('Inline: listing verified', { listingId, actorId: user.id });
   } catch (error) {
-    logger.error('Inline verifyListingAction failed', { error, listingId })
-    throw error
+    logger.error('Inline verifyListingAction failed', { error, listingId });
+    throw error;
   }
 
-  revalidatePath('/admin')
+  revalidatePath('/admin');
 }
-

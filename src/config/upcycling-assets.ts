@@ -5,12 +5,12 @@
  *   find public/projects/upcycling -type f
  */
 
-import { UPCYCLING_BASE, UPCYCLING_GALLERY_ASSET_BASE } from '@/config/upcycling-routes'
+import { UPCYCLING_BASE, UPCYCLING_GALLERY_ASSET_BASE } from '@/config/upcycling-routes';
 
-const BUSINESSPLAN = `${UPCYCLING_BASE}/businessplan` as const
-const LENOVO = `${UPCYCLING_BASE}/lenovo-l2251pwd` as const
-const INSTALLS = `${UPCYCLING_BASE}/installs` as const
-const SZENARIEN = `${UPCYCLING_BASE}/szenarien` as const
+const BUSINESSPLAN = `${UPCYCLING_BASE}/businessplan` as const;
+const LENOVO = `${UPCYCLING_BASE}/lenovo-l2251pwd` as const;
+const INSTALLS = `${UPCYCLING_BASE}/installs` as const;
+const SZENARIEN = `${UPCYCLING_BASE}/szenarien` as const;
 
 /** Real installation + engineering photography (Juli 2026) — see upcycling-installations.ts */
 const INSTALL_ASSETS = {
@@ -40,7 +40,7 @@ const INSTALL_ASSETS = {
   hsluKreativ1: `${INSTALLS}/hslu-kreativ-1.jpg`,
   /** Kreativ-Leuchte aus der Werkstatt. */
   kreativLeuchte1: `${INSTALLS}/kreativ-leuchte-1.jpg`,
-} as const
+} as const;
 
 /**
  * Szenarien-Kompositionen — VISUALISIERUNGEN, keine echten Fotos.
@@ -56,7 +56,7 @@ const SZENARIEN_ASSETS = {
   buero: `${SZENARIEN}/buero.jpg`,
   korridor: `${SZENARIEN}/korridor.jpg`,
   werkstatt: `${SZENARIEN}/werkstatt.jpg`,
-} as const
+} as const;
 
 export const UPCYCLING_ASSETS = {
   installs: INSTALL_ASSETS,
@@ -85,4 +85,4 @@ export const UPCYCLING_ASSETS = {
     gallery: INSTALL_ASSETS.curvedRepairhub,
     buildYourOwn: INSTALL_ASSETS.standbyDongle,
   },
-} as const
+} as const;

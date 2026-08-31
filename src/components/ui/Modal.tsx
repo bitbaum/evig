@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Shared Modal wrapper component
@@ -9,26 +9,26 @@
  * Tab trap) via the shared `useFocusTrap` hook.
  */
 
-import { type ReactNode } from 'react'
-import { X } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
-import { useFocusTrap } from '@/hooks/useFocusTrap'
+import { type ReactNode } from 'react';
+import { X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/ui/Heading';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
 
 const SIZE_CLASSES = {
   sm: 'max-w-sm',
   md: 'max-w-lg',
   lg: 'max-w-2xl',
   xl: 'max-w-4xl',
-} as const
+} as const;
 
 interface ModalProps {
-  isOpen: boolean
-  onClose: () => void
-  title: string
-  children: ReactNode
-  className?: string
-  size?: keyof typeof SIZE_CLASSES
+  isOpen: boolean;
+  onClose: () => void;
+  title: string;
+  children: ReactNode;
+  className?: string;
+  size?: keyof typeof SIZE_CLASSES;
 }
 
 export function Modal({
@@ -39,20 +39,16 @@ export function Modal({
   className = '',
   size = 'md',
 }: ModalProps) {
-  const t = useTranslations('common')
-  const dialogRef = useFocusTrap<HTMLDivElement>(isOpen, onClose)
+  const t = useTranslations('common');
+  const dialogRef = useFocusTrap<HTMLDivElement>(isOpen, onClose);
 
-  if (!isOpen) return null
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex min-h-full items-center justify-center p-4">
         {/* Backdrop */}
-        <div
-          className="fixed inset-0 bg-black/50"
-          aria-hidden="true"
-          onClick={onClose}
-        />
+        <div className="fixed inset-0 bg-black/50" aria-hidden="true" onClick={onClose} />
 
         {/* Dialog — tabIndex=-1 so it can receive focus programmatically
             but isn't part of normal tab order. */}
@@ -83,5 +79,5 @@ export function Modal({
         </div>
       </div>
     </div>
-  )
+  );
 }

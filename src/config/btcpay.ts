@@ -12,7 +12,7 @@
  * Setup guide: `docs/operations/BTCPAY_SETUP.md`
  */
 
-export const BTCPAY_PROVIDER_SLUG = 'btcpay'
+export const BTCPAY_PROVIDER_SLUG = 'btcpay';
 
 /** Environment variable names (Settings → prod `.env` / GitHub `SELFHOST_ENV`). */
 export const BTCPAY_ENV = {
@@ -24,16 +24,16 @@ export const BTCPAY_ENV = {
   STORE_ID: 'BTCPAY_STORE_ID',
   /** Webhook signing secret (BTCPay-Sig: sha256=<hex>). */
   WEBHOOK_SECRET: 'BTCPAY_WEBHOOK_SECRET',
-} as const
+} as const;
 
 /** Invoices are denominated in CHF; BTCPay converts to BTC at pay time. */
-export const BTCPAY_INVOICE_CURRENCY = 'CHF'
+export const BTCPAY_INVOICE_CURRENCY = 'CHF';
 
-export const BTCPAY_WEBHOOK_PATH = '/api/payments/webhook/btcpay'
+export const BTCPAY_WEBHOOK_PATH = '/api/payments/webhook/btcpay';
 
 /** Shown when Bitcoin payment is offered but not yet provisioned. */
 export const BTCPAY_SETUP_MESSAGE =
-  'Bezahlung mit Bitcoin wird gerade eingerichtet und ist noch nicht aktiv.'
+  'Bezahlung mit Bitcoin wird gerade eingerichtet und ist noch nicht aktiv.';
 
 /** Requires a server URL, an API key, and a store id to create invoices. */
 export function isBtcpayConfigured(): boolean {
@@ -41,9 +41,9 @@ export function isBtcpayConfigured(): boolean {
     process.env[BTCPAY_ENV.SERVER_URL] &&
     process.env[BTCPAY_ENV.API_KEY] &&
     process.env[BTCPAY_ENV.STORE_ID]
-  )
+  );
 }
 
 export function isBtcpayWebhookSecretSet(): boolean {
-  return !!process.env[BTCPAY_ENV.WEBHOOK_SECRET]
+  return !!process.env[BTCPAY_ENV.WEBHOOK_SECRET];
 }

@@ -1,13 +1,19 @@
-'use client'
+'use client';
 
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 /**
  * Small, safe markdown renderer for deliverable descriptions / instructions.
  * Styled to sit inline on the share + detail pages.
  */
-export default function Markdown({ children, className = '' }: { children: string; className?: string }) {
+export default function Markdown({
+  children,
+  className = '',
+}: {
+  children: string;
+  className?: string;
+}) {
   return (
     <div
       className={
@@ -21,5 +27,5 @@ export default function Markdown({ children, className = '' }: { children: strin
     >
       <ReactMarkdown remarkPlugins={[remarkGfm]}>{children}</ReactMarkdown>
     </div>
-  )
+  );
 }

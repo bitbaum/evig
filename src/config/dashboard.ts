@@ -10,8 +10,8 @@
  * Last Updated: 2026-01-26
  */
 
-import type { LucideIcon } from 'lucide-react'
-import { Shield } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react';
+import { Shield } from 'lucide-react';
 import {
   SECTIONS,
   getDashboardSections,
@@ -19,51 +19,46 @@ import {
   type SectionConfig,
   type SectionCategory,
   type SectionColor,
-} from '@/config/sections'
+} from '@/config/sections';
 
 // =============================================================================
 // LEGACY COMPATIBILITY - Types for existing components
 // =============================================================================
 
 export interface DashboardCard {
-  id: string
-  title: string
-  description: string
-  href: string
+  id: string;
+  title: string;
+  description: string;
+  href: string;
   /** lucide icon from the section SSOT (section.ui.icon) — never an emoji. */
-  icon: LucideIcon
-  category: DashboardCategory
+  icon: LucideIcon;
+  category: DashboardCategory;
   /** Show only for users with this community role */
-  requiredRole?: CommunityRole
+  requiredRole?: CommunityRole;
   /** Hide for users with this role */
-  hiddenForRoles?: CommunityRole[]
+  hiddenForRoles?: CommunityRole[];
   /** Show only for staff (mirrors section.visibility.requiresStaff) */
-  requiresStaff?: boolean
-  badge?: string
-  color: 'info' | 'success' | 'warning' | 'error' | 'secondary' | 'neutral'
-  priority: number
+  requiresStaff?: boolean;
+  badge?: string;
+  color: 'info' | 'success' | 'warning' | 'error' | 'secondary' | 'neutral';
+  priority: number;
   /** Position in the mobile bottom nav (1-4); undefined → only in "Mehr". */
-  bottomNavOrder?: number
+  bottomNavOrder?: number;
   /** Short label for the bottom-nav bar (falls back to title). */
-  shortLabel?: string
+  shortLabel?: string;
 }
 
 /** Community roles (not staff roles) */
-export type CommunityRole = 'seller' | 'repairer' | 'techniker'
+export type CommunityRole = 'seller' | 'repairer' | 'techniker';
 
 export type DashboardCategory =
-  | 'account'
-  | 'activities'
-  | 'commerce'
-  | 'services'
-  | 'content'
-  | 'admin'
+  'account' | 'activities' | 'commerce' | 'services' | 'content' | 'admin';
 
 export interface DashboardCategoryConfig {
-  id: DashboardCategory
-  title: string
-  description: string
-  priority: number
+  id: DashboardCategory;
+  title: string;
+  description: string;
+  priority: number;
 }
 
 // =============================================================================
@@ -80,7 +75,7 @@ const categoryMapping: Record<SectionCategory, DashboardCategory> = {
   sensitive: 'admin',
   system: 'admin',
   analyse: 'admin',
-}
+};
 
 const colorMapping: Record<SectionColor, DashboardCard['color']> = {
   primary: 'info',
@@ -90,7 +85,7 @@ const colorMapping: Record<SectionColor, DashboardCard['color']> = {
   error: 'error',
   info: 'info',
   neutral: 'neutral',
-}
+};
 
 // =============================================================================
 // DASHBOARD CATEGORIES - Derived from SSOT
@@ -133,7 +128,7 @@ export const DASHBOARD_CATEGORIES: Record<DashboardCategory, DashboardCategoryCo
     description: 'System verwalten',
     priority: 10,
   },
-}
+};
 
 // =============================================================================
 // =============================================================================
@@ -142,13 +137,17 @@ export const DASHBOARD_CATEGORIES: Record<DashboardCategory, DashboardCategoryCo
 // UnifiedQueue (label "Info") — the labels had drifted apart. One source now.
 // =============================================================================
 
-export type UrgencyTone = 'urgent' | 'warning' | 'success'
+export type UrgencyTone = 'urgent' | 'warning' | 'success';
 
 export const URGENCY_TONES: Record<UrgencyTone, { dot: string; label: string; text: string }> = {
-  urgent:  { dot: 'bg-error-500',   label: 'Dringend',    text: 'text-error-700 dark:text-error-400' },
-  warning: { dot: 'bg-warning-500', label: 'Ausstehend',  text: 'text-warning-700 dark:text-warning-400' },
-  success: { dot: 'bg-action',      label: 'Information',  text: 'text-action' },
-}
+  urgent: { dot: 'bg-error-500', label: 'Dringend', text: 'text-error-700 dark:text-error-400' },
+  warning: {
+    dot: 'bg-warning-500',
+    label: 'Ausstehend',
+    text: 'text-warning-700 dark:text-warning-400',
+  },
+  success: { dot: 'bg-action', label: 'Information', text: 'text-action' },
+};
 
 // =============================================================================
 // DASHBOARD ROUTES - Derived from SSOT
@@ -159,7 +158,7 @@ export const DASHBOARD_ROUTES = {
   PROFILE: SECTIONS.profile?.path ?? '/dashboard/profile',
   WORKSHOPS: SECTIONS.workshops?.path ?? '/dashboard/workshops',
   APPOINTMENTS: SECTIONS.appointments?.path ?? '/dashboard/appointments',
-    SELLER: SECTIONS['my-listings']?.path ?? '/dashboard/listings',
+  SELLER: SECTIONS['my-listings']?.path ?? '/dashboard/listings',
   REPAIRER: SECTIONS['repairer-dashboard']?.path ?? '/profil/techniker',
   TECHNICIAN_HUB: '/dashboard/techniker',
   REPAIRER_BOOKINGS: '/dashboard/appointments',
@@ -167,7 +166,7 @@ export const DASHBOARD_ROUTES = {
   REPAIRER_ONBOARDING: SECTIONS['repairer-onboarding']?.path ?? '/profil/techniker',
   ADMIN: '/admin',
   BLOG_SUBMIT: SECTIONS['blog-submit']?.path ?? '/blog/submit',
-} as const
+} as const;
 
 // =============================================================================
 // DASHBOARD CARDS - Derived from SSOT sections
@@ -188,28 +187,28 @@ function sectionToCard(section: SectionConfig): DashboardCard {
     priority: section.priority,
     bottomNavOrder: section.dashboardBottomNavOrder,
     shortLabel: section.ui.mobileBottomNavLabel,
-  }
+  };
 
   // Handle community role visibility
   if (section.visibility.communityRole) {
-    card.requiredRole = section.visibility.communityRole
+    card.requiredRole = section.visibility.communityRole;
   }
 
   if (section.visibility.requiresStaff) {
-    card.requiresStaff = true
+    card.requiresStaff = true;
   }
 
   if (section.visibility.hideIfRole) {
-    card.hiddenForRoles = [section.visibility.hideIfRole]
+    card.hiddenForRoles = [section.visibility.hideIfRole];
   }
 
-  return card
+  return card;
 }
 
 /**
  * Dashboard cards derived from SSOT
  */
-export const DASHBOARD_CARDS: DashboardCard[] = getDashboardSections().map(sectionToCard)
+export const DASHBOARD_CARDS: DashboardCard[] = getDashboardSections().map(sectionToCard);
 
 // =============================================================================
 // USER INFO & FILTERING
@@ -217,13 +216,13 @@ export const DASHBOARD_CARDS: DashboardCard[] = getDashboardSections().map(secti
 
 export interface DashboardUserInfo {
   /** Legacy role field (deprecated, use communityRoles) */
-  role?: string | null
+  role?: string | null;
   /** Community roles the user has */
-  communityRoles?: CommunityRole[]
+  communityRoles?: CommunityRole[];
   /** Is user a staff member */
-  isStaff?: boolean
+  isStaff?: boolean;
   /** Is user a super admin */
-  isSuperAdmin?: boolean
+  isSuperAdmin?: boolean;
 }
 
 /**
@@ -234,71 +233,71 @@ export interface DashboardUserInfo {
  */
 export function getDashboardCardsForRole(
   userRole: string | null = null,
-  userInfo?: DashboardUserInfo
+  userInfo?: DashboardUserInfo,
 ): DashboardCard[] {
-  const communityRoles = userInfo?.communityRoles ?? []
-  const isStaff = userInfo?.isStaff ?? false
-  const isSuperAdmin = userInfo?.isSuperAdmin ?? false
+  const communityRoles = userInfo?.communityRoles ?? [];
+  const isStaff = userInfo?.isStaff ?? false;
+  const isSuperAdmin = userInfo?.isSuperAdmin ?? false;
 
   // Legacy: Extract community roles from old role field
-  const legacyRole = userInfo?.role ?? userRole
+  const legacyRole = userInfo?.role ?? userRole;
   if (legacyRole && !communityRoles.includes(legacyRole as CommunityRole)) {
     if (['seller', 'repairer', 'techniker'].includes(legacyRole)) {
-      communityRoles.push(legacyRole as CommunityRole)
+      communityRoles.push(legacyRole as CommunityRole);
     }
   }
 
-  return DASHBOARD_CARDS.filter(card => {
+  return DASHBOARD_CARDS.filter((card) => {
     // Staff-only cards (e.g. Zeiterfassung) never show for regular users
     if (card.requiresStaff && !isStaff && !isSuperAdmin) {
-      return false
+      return false;
     }
 
     // Hide if user has a role that should hide this card
-    if (card.hiddenForRoles?.some(role => communityRoles.includes(role))) {
-      return false
+    if (card.hiddenForRoles?.some((role) => communityRoles.includes(role))) {
+      return false;
     }
 
     // Show if no role requirement
     if (!card.requiredRole) {
-      return true
+      return true;
     }
 
     // Show if user has required community role
     if (communityRoles.includes(card.requiredRole)) {
-      return true
+      return true;
     }
 
-    return false
-  })
+    return false;
+  });
 }
 
 /**
  * Group dashboard cards by category
  */
 export function groupCardsByCategory(
-  cards: DashboardCard[]
+  cards: DashboardCard[],
 ): Map<DashboardCategory, DashboardCard[]> {
-  const grouped = new Map<DashboardCategory, DashboardCard[]>()
+  const grouped = new Map<DashboardCategory, DashboardCard[]>();
 
   // Initialize all categories
-  Object.keys(DASHBOARD_CATEGORIES).forEach(category => {
-    grouped.set(category as DashboardCategory, [])
-  })
+  Object.keys(DASHBOARD_CATEGORIES).forEach((category) => {
+    grouped.set(category as DashboardCategory, []);
+  });
 
   // Group cards
-  cards.forEach(card => {
-    const categoryCards = grouped.get(card.category) || []
-    categoryCards.push(card)
-    grouped.set(card.category, categoryCards)
-  })
+  cards.forEach((card) => {
+    const categoryCards = grouped.get(card.category) || [];
+    categoryCards.push(card);
+    grouped.set(card.category, categoryCards);
+  });
 
   // Sort cards within each category by priority
-  grouped.forEach(categoryCards => {
-    categoryCards.sort((a, b) => a.priority - b.priority)
-  })
+  grouped.forEach((categoryCards) => {
+    categoryCards.sort((a, b) => a.priority - b.priority);
+  });
 
-  return grouped
+  return grouped;
 }
 
 // =============================================================================
@@ -318,19 +317,19 @@ export function getAdminCard(): DashboardCard {
     category: 'admin',
     color: 'error',
     priority: 1000,
-  }
+  };
 }
 
 /**
  * Get all dashboard cards including admin card if applicable
  */
 export function getAllDashboardCards(userInfo: DashboardUserInfo): DashboardCard[] {
-  const cards = getDashboardCardsForRole(null, userInfo)
+  const cards = getDashboardCardsForRole(null, userInfo);
 
   // Add admin card for staff users
   if (userInfo.isStaff || userInfo.isSuperAdmin) {
-    cards.push(getAdminCard())
+    cards.push(getAdminCard());
   }
 
-  return cards
+  return cards;
 }

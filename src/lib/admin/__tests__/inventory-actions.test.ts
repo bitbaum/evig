@@ -30,29 +30,29 @@
 // ---------------------------------------------------------------------------
 
 function makeChain(result: unknown = []) {
-  const resolved = Promise.resolve(result)
-  const chain: Record<string, unknown> = {}
-  chain.select = jest.fn().mockReturnValue(chain)
-  chain.from = jest.fn().mockReturnValue(chain)
-  chain.innerJoin = jest.fn().mockReturnValue(chain)
-  chain.where = jest.fn().mockReturnValue(chain)
-  chain.update = jest.fn().mockReturnValue(chain)
-  chain.set = jest.fn().mockReturnValue(chain)
-  chain.insert = jest.fn().mockReturnValue(chain)
-  chain.values = jest.fn().mockReturnValue(chain)
-  chain.then = (resolved as Promise<unknown>).then.bind(resolved)
-  chain.catch = (resolved as Promise<unknown>).catch.bind(resolved)
-  chain.finally = (resolved as Promise<unknown>).finally.bind(resolved)
-  return chain
+  const resolved = Promise.resolve(result);
+  const chain: Record<string, unknown> = {};
+  chain.select = jest.fn().mockReturnValue(chain);
+  chain.from = jest.fn().mockReturnValue(chain);
+  chain.innerJoin = jest.fn().mockReturnValue(chain);
+  chain.where = jest.fn().mockReturnValue(chain);
+  chain.update = jest.fn().mockReturnValue(chain);
+  chain.set = jest.fn().mockReturnValue(chain);
+  chain.insert = jest.fn().mockReturnValue(chain);
+  chain.values = jest.fn().mockReturnValue(chain);
+  chain.then = (resolved as Promise<unknown>).then.bind(resolved);
+  chain.catch = (resolved as Promise<unknown>).catch.bind(resolved);
+  chain.finally = (resolved as Promise<unknown>).finally.bind(resolved);
+  return chain;
 }
 
 // ---------------------------------------------------------------------------
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbSelect = jest.fn(() => makeChain([]))
-const mockDbUpdate = jest.fn(() => makeChain())
-const mockDbInsert = jest.fn(() => makeChain())
+const mockDbSelect = jest.fn(() => makeChain([]));
+const mockDbUpdate = jest.fn(() => makeChain());
+const mockDbInsert = jest.fn(() => makeChain());
 
 jest.mock('@/db', () => ({
   db: {
@@ -60,86 +60,108 @@ jest.mock('@/db', () => ({
     update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
     insert: (...args: unknown[]) => mockDbInsert.apply(null, args),
   },
-}))
+}));
 
 jest.mock('@/db/schema/inventory', () => ({
   aiExtractedProducts: {
-    id: 'aep_id', brand: 'aep_brand', productName: 'aep_productName',
-    shortDescription: 'aep_shortDesc', estimatedPriceChf: 'aep_estimatedPriceChf',
-    itemUuid: 'aep_itemUuid', status: 'aep_status', updatedAt: 'aep_updatedAt',
+    id: 'aep_id',
+    brand: 'aep_brand',
+    productName: 'aep_productName',
+    shortDescription: 'aep_shortDesc',
+    estimatedPriceChf: 'aep_estimatedPriceChf',
+    itemUuid: 'aep_itemUuid',
+    status: 'aep_status',
+    updatedAt: 'aep_updatedAt',
     category: 'aep_category',
   },
   inventoryItems: {
-    id: 'ii_id', aiProductId: 'ii_aiProductId',
-    intakeTier: 'ii_intakeTier', intakeChecklist: 'ii_intakeChecklist',
+    id: 'ii_id',
+    aiProductId: 'ii_aiProductId',
+    intakeTier: 'ii_intakeTier',
+    intakeChecklist: 'ii_intakeChecklist',
   },
   marketplaceListings: {
-    id: 'ml_id', inventoryItemId: 'ml_inventoryItemId',
-    platform: 'ml_platform', status: 'ml_status',
-    publishedAt: 'ml_publishedAt', updatedAt: 'ml_updatedAt',
-    title: 'ml_title', description: 'ml_description',
-    priceChf: 'ml_priceChf', createdBy: 'ml_createdBy',
+    id: 'ml_id',
+    inventoryItemId: 'ml_inventoryItemId',
+    platform: 'ml_platform',
+    status: 'ml_status',
+    publishedAt: 'ml_publishedAt',
+    updatedAt: 'ml_updatedAt',
+    title: 'ml_title',
+    description: 'ml_description',
+    priceChf: 'ml_priceChf',
+    createdBy: 'ml_createdBy',
   },
   productImages: {
-    id: 'pi_id', productId: 'pi_productId', isPrimary: 'pi_isPrimary',
-    filePath: 'pi_filePath', filename: 'pi_filename', updatedAt: 'pi_updatedAt',
-    uploadedBy: 'pi_uploadedBy', uploadStatus: 'pi_uploadStatus',
+    id: 'pi_id',
+    productId: 'pi_productId',
+    isPrimary: 'pi_isPrimary',
+    filePath: 'pi_filePath',
+    filename: 'pi_filename',
+    updatedAt: 'pi_updatedAt',
+    uploadedBy: 'pi_uploadedBy',
+    uploadStatus: 'pi_uploadStatus',
   },
-}))
+}));
 
 jest.mock('drizzle-orm', () => ({
   ...jest.requireActual('drizzle-orm'),
   eq: jest.fn().mockReturnValue({ __eq: true }),
   and: jest.fn().mockReturnValue({ __and: true }),
-}))
+}));
 
-const mockUploadImage = jest.fn()
-const mockDeleteImage = jest.fn()
+const mockUploadImage = jest.fn();
+const mockDeleteImage = jest.fn();
 
 jest.mock('@/lib/storage/image-upload', () => ({
   uploadImage: (...args: unknown[]) => mockUploadImage.apply(null, args),
   deleteImage: (...args: unknown[]) => mockDeleteImage.apply(null, args),
-}))
+}));
 
 jest.mock('@/config/marketplace-status', () => ({
   PRODUCT_STATUS: { APPROVED: 'approved' },
   MARKETPLACE_STATUS: { PUBLISHED: 'published', DRAFT: 'draft' },
-}))
+}));
 
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
-}))
+}));
 
 // publishProduct/unpublishProduct now delegate the actual listing create/refresh/
 // remove to the unified-marketplace helpers (the old inline marketplace_listings
 // insert/update is gone). Those helpers have their own tests; here we only assert
 // the orchestration: inventory lookup → delegate (or skip when not found).
-const mockPublishRevampitListing = jest.fn().mockResolvedValue('listing-1')
-const mockUnpublishRevampitListing = jest.fn().mockResolvedValue(undefined)
+const mockPublishRevampitListing = jest.fn().mockResolvedValue('listing-1');
+const mockUnpublishRevampitListing = jest.fn().mockResolvedValue(undefined);
 
 jest.mock('@/lib/marketplace/publish-revampit-listing', () => ({
   publishRevampitListing: (...args: unknown[]) => mockPublishRevampitListing.apply(null, args),
   unpublishRevampitListing: (...args: unknown[]) => mockUnpublishRevampitListing.apply(null, args),
-}))
+}));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { publishProduct, unpublishProduct, updateProductImage, QcGateError } from '../inventory-actions'
+import {
+  publishProduct,
+  unpublishProduct,
+  updateProductImage,
+  QcGateError,
+} from '../inventory-actions';
 
 // ---------------------------------------------------------------------------
 // Setup
 // ---------------------------------------------------------------------------
 
 beforeEach(() => {
-  jest.clearAllMocks()
-  mockDbSelect.mockImplementation(() => makeChain([]))
-  mockDbUpdate.mockImplementation(() => makeChain())
-  mockDbInsert.mockImplementation(() => makeChain())
-  mockUploadImage.mockResolvedValue({ success: true, url: 'https://cdn.example.com/product.jpg' })
-  mockDeleteImage.mockResolvedValue(undefined)
-})
+  jest.clearAllMocks();
+  mockDbSelect.mockImplementation(() => makeChain([]));
+  mockDbUpdate.mockImplementation(() => makeChain());
+  mockDbInsert.mockImplementation(() => makeChain());
+  mockUploadImage.mockResolvedValue({ success: true, url: 'https://cdn.example.com/product.jpg' });
+  mockDeleteImage.mockResolvedValue(undefined);
+});
 
 // ============================================================================
 // publishProduct
@@ -148,52 +170,69 @@ beforeEach(() => {
 describe('publishProduct', () => {
   it('skips approval and publishing when inventoryItem not found', async () => {
     // First (and only) select is the inventory-item lookup → not found.
-    mockDbSelect.mockReturnValueOnce(makeChain([]))
+    mockDbSelect.mockReturnValueOnce(makeChain([]));
 
-    await publishProduct('product-1', 'user-1')
+    await publishProduct('product-1', 'user-1');
 
     // Nothing to publish → neither status approval nor listing creation runs.
-    expect(mockDbUpdate).not.toHaveBeenCalled()
-    expect(mockPublishRevampitListing).not.toHaveBeenCalled()
-  })
+    expect(mockDbUpdate).not.toHaveBeenCalled();
+    expect(mockPublishRevampitListing).not.toHaveBeenCalled();
+  });
 
   it('delegates to publishRevampitListing when inventoryItem found (no QC required)', async () => {
     // Accessory category '80' → no QC gate for tier-NULL items.
-    mockDbSelect.mockReturnValueOnce(makeChain([{ id: 'inv-1', intakeTier: null, intakeChecklist: null, category: '80' }]))
+    mockDbSelect.mockReturnValueOnce(
+      makeChain([{ id: 'inv-1', intakeTier: null, intakeChecklist: null, category: '80' }]),
+    );
 
-    await publishProduct('product-1', 'user-1')
+    await publishProduct('product-1', 'user-1');
 
-    expect(mockDbUpdate).toHaveBeenCalledTimes(1) // status approval
-    expect(mockPublishRevampitListing).toHaveBeenCalledTimes(1)
-    expect(mockPublishRevampitListing).toHaveBeenCalledWith(expect.anything(), 'inv-1', { verifiedBy: 'user-1' })
-  })
+    expect(mockDbUpdate).toHaveBeenCalledTimes(1); // status approval
+    expect(mockPublishRevampitListing).toHaveBeenCalledTimes(1);
+    expect(mockPublishRevampitListing).toHaveBeenCalledWith(expect.anything(), 'inv-1', {
+      verifiedBy: 'user-1',
+    });
+  });
 
   it('throws QcGateError for a tier-NULL device of a QC-required category', async () => {
     // Laptops ('10') require the checklist before sale.
-    mockDbSelect.mockReturnValueOnce(makeChain([{ id: 'inv-1', intakeTier: null, intakeChecklist: null, category: '10' }]))
+    mockDbSelect.mockReturnValueOnce(
+      makeChain([{ id: 'inv-1', intakeTier: null, intakeChecklist: null, category: '10' }]),
+    );
 
-    await expect(publishProduct('product-1', 'user-1')).rejects.toThrow(QcGateError)
-    expect(mockDbUpdate).not.toHaveBeenCalled()
-    expect(mockPublishRevampitListing).not.toHaveBeenCalled()
-  })
+    await expect(publishProduct('product-1', 'user-1')).rejects.toThrow(QcGateError);
+    expect(mockDbUpdate).not.toHaveBeenCalled();
+    expect(mockPublishRevampitListing).not.toHaveBeenCalled();
+  });
 
   it('throws QcGateError when the checklist is incomplete', async () => {
-    mockDbSelect.mockReturnValueOnce(makeChain([{ id: 'inv-1', intakeTier: 'refurbish', intakeChecklist: {}, category: '10' }]))
+    mockDbSelect.mockReturnValueOnce(
+      makeChain([{ id: 'inv-1', intakeTier: 'refurbish', intakeChecklist: {}, category: '10' }]),
+    );
 
-    await expect(publishProduct('product-1', 'user-1')).rejects.toThrow(QcGateError)
-    expect(mockPublishRevampitListing).not.toHaveBeenCalled()
-  })
+    await expect(publishProduct('product-1', 'user-1')).rejects.toThrow(QcGateError);
+    expect(mockPublishRevampitListing).not.toHaveBeenCalled();
+  });
 
   it('throws QcGateError when a required checklist item failed', async () => {
     const checklist = {
-      power_test: { result: 'fail', completedBy: 'u', completedAt: '2026-01-01', notes: 'Startet nicht' },
-    }
-    mockDbSelect.mockReturnValueOnce(makeChain([{ id: 'inv-1', intakeTier: 'refurbish', intakeChecklist: checklist, category: '10' }]))
+      power_test: {
+        result: 'fail',
+        completedBy: 'u',
+        completedAt: '2026-01-01',
+        notes: 'Startet nicht',
+      },
+    };
+    mockDbSelect.mockReturnValueOnce(
+      makeChain([
+        { id: 'inv-1', intakeTier: 'refurbish', intakeChecklist: checklist, category: '10' },
+      ]),
+    );
 
-    await expect(publishProduct('product-1', 'user-1')).rejects.toThrow(QcGateError)
-    expect(mockPublishRevampitListing).not.toHaveBeenCalled()
-  })
-})
+    await expect(publishProduct('product-1', 'user-1')).rejects.toThrow(QcGateError);
+    expect(mockPublishRevampitListing).not.toHaveBeenCalled();
+  });
+});
 
 // ============================================================================
 // unpublishProduct
@@ -201,22 +240,22 @@ describe('publishProduct', () => {
 
 describe('unpublishProduct', () => {
   it('delegates to unpublishRevampitListing when inventory item found', async () => {
-    mockDbSelect.mockReturnValueOnce(makeChain([{ id: 'inv-1' }]))
+    mockDbSelect.mockReturnValueOnce(makeChain([{ id: 'inv-1' }]));
 
-    await unpublishProduct('product-1', 'user-1')
+    await unpublishProduct('product-1', 'user-1');
 
-    expect(mockUnpublishRevampitListing).toHaveBeenCalledTimes(1)
-    expect(mockUnpublishRevampitListing).toHaveBeenCalledWith(expect.anything(), 'inv-1')
-  })
+    expect(mockUnpublishRevampitListing).toHaveBeenCalledTimes(1);
+    expect(mockUnpublishRevampitListing).toHaveBeenCalledWith(expect.anything(), 'inv-1');
+  });
 
   it('skips unpublish when inventory item not found', async () => {
-    mockDbSelect.mockReturnValueOnce(makeChain([]))
+    mockDbSelect.mockReturnValueOnce(makeChain([]));
 
-    await unpublishProduct('product-1', 'user-1')
+    await unpublishProduct('product-1', 'user-1');
 
-    expect(mockUnpublishRevampitListing).not.toHaveBeenCalled()
-  })
-})
+    expect(mockUnpublishRevampitListing).not.toHaveBeenCalled();
+  });
+});
 
 // ============================================================================
 // updateProductImage
@@ -224,64 +263,64 @@ describe('unpublishProduct', () => {
 
 describe('updateProductImage', () => {
   it('returns null when upload fails', async () => {
-    mockUploadImage.mockResolvedValueOnce({ success: false })
+    mockUploadImage.mockResolvedValueOnce({ success: false });
     // existing image: none, product info
     mockDbSelect
-      .mockReturnValueOnce(makeChain([]))  // no existing image
-      .mockReturnValueOnce(makeChain([{ itemUuid: 'I-240101-0001' }]))
+      .mockReturnValueOnce(makeChain([])) // no existing image
+      .mockReturnValueOnce(makeChain([{ itemUuid: 'I-240101-0001' }]));
 
-    const result = await updateProductImage('prod-1', 'base64data', 'user-1')
+    const result = await updateProductImage('prod-1', 'base64data', 'user-1');
 
-    expect(result).toBeNull()
-    expect(mockDbInsert).not.toHaveBeenCalled()
-  })
+    expect(result).toBeNull();
+    expect(mockDbInsert).not.toHaveBeenCalled();
+  });
 
   it('inserts new image record when no existing image', async () => {
     mockDbSelect
-      .mockReturnValueOnce(makeChain([]))                          // no existing image
-      .mockReturnValueOnce(makeChain([{ itemUuid: 'I-240101-0001' }]))
+      .mockReturnValueOnce(makeChain([])) // no existing image
+      .mockReturnValueOnce(makeChain([{ itemUuid: 'I-240101-0001' }]));
 
-    const result = await updateProductImage('prod-1', 'base64data', 'user-1')
+    const result = await updateProductImage('prod-1', 'base64data', 'user-1');
 
-    expect(result).toBe('https://cdn.example.com/product.jpg')
-    expect(mockDbInsert).toHaveBeenCalledTimes(1)
-    expect(mockDbUpdate).not.toHaveBeenCalled()
-  })
+    expect(result).toBe('https://cdn.example.com/product.jpg');
+    expect(mockDbInsert).toHaveBeenCalledTimes(1);
+    expect(mockDbUpdate).not.toHaveBeenCalled();
+  });
 
   it('updates existing image record when one exists', async () => {
     mockDbSelect
       .mockReturnValueOnce(makeChain([{ id: 'img-1', filePath: 'https://other.com/old.jpg' }]))
-      .mockReturnValueOnce(makeChain([{ itemUuid: 'I-240101-0001' }]))
+      .mockReturnValueOnce(makeChain([{ itemUuid: 'I-240101-0001' }]));
 
-    const result = await updateProductImage('prod-1', 'base64data', 'user-1')
+    const result = await updateProductImage('prod-1', 'base64data', 'user-1');
 
-    expect(result).toBe('https://cdn.example.com/product.jpg')
-    expect(mockDbUpdate).toHaveBeenCalledTimes(1)
-    expect(mockDbInsert).not.toHaveBeenCalled()
-  })
+    expect(result).toBe('https://cdn.example.com/product.jpg');
+    expect(mockDbUpdate).toHaveBeenCalledTimes(1);
+    expect(mockDbInsert).not.toHaveBeenCalled();
+  });
 
   it('deletes the old object when the new upload lands at a different URL', async () => {
     // Upload resolves to cdn.example.com/product.jpg (beforeEach default); old key differs.
-    const oldUrl = 'https://other-cdn.com/old.jpg'
+    const oldUrl = 'https://other-cdn.com/old.jpg';
     mockDbSelect
       .mockReturnValueOnce(makeChain([{ id: 'img-1', filePath: oldUrl }]))
-      .mockReturnValueOnce(makeChain([{ itemUuid: 'I-240101-0001' }]))
+      .mockReturnValueOnce(makeChain([{ itemUuid: 'I-240101-0001' }]));
 
-    await updateProductImage('prod-1', 'base64data', 'user-1')
+    await updateProductImage('prod-1', 'base64data', 'user-1');
 
-    expect(mockDeleteImage).toHaveBeenCalledWith(oldUrl)
-  })
+    expect(mockDeleteImage).toHaveBeenCalledWith(oldUrl);
+  });
 
   it('does NOT call deleteImage when the re-upload overwrites the same URL', async () => {
     // Deterministic <itemUuid>.jpg keys mean a re-upload usually returns the same
     // URL — no stale object to clean up.
-    const sameUrl = 'https://cdn.example.com/product.jpg'
+    const sameUrl = 'https://cdn.example.com/product.jpg';
     mockDbSelect
       .mockReturnValueOnce(makeChain([{ id: 'img-1', filePath: sameUrl }]))
-      .mockReturnValueOnce(makeChain([{ itemUuid: 'I-240101-0001' }]))
+      .mockReturnValueOnce(makeChain([{ itemUuid: 'I-240101-0001' }]));
 
-    await updateProductImage('prod-1', 'base64data', 'user-1')
+    await updateProductImage('prod-1', 'base64data', 'user-1');
 
-    expect(mockDeleteImage).not.toHaveBeenCalled()
-  })
-})
+    expect(mockDeleteImage).not.toHaveBeenCalled();
+  });
+});

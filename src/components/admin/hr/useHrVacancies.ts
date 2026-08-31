@@ -1,107 +1,105 @@
-'use client'
+'use client';
 
-import { useCallback, useState } from 'react'
-import { apiFetch } from '@/lib/api/client'
-import { useSwrFetch } from '@/lib/api/swr'
-import { UI_FEEDBACK_MS } from '@/config/limits'
-import { VACANCY_STATUS, type VacancyStatus } from '@/config/hr-vacancies'
-import { publicVacancyUrl } from '@/lib/hr/public-urls'
-import { buildVacancyShareText } from '@/config/hr-vacancies'
-import type { VacancyFormData, VacancyListItem } from './types'
-import { logger } from '@/lib/logger'
+import { useCallback, useState } from 'react';
+import { apiFetch } from '@/lib/api/client';
+import { useSwrFetch } from '@/lib/api/swr';
+import { UI_FEEDBACK_MS } from '@/config/limits';
+import { VACANCY_STATUS, type VacancyStatus } from '@/config/hr-vacancies';
+import { publicVacancyUrl } from '@/lib/hr/public-urls';
+import { buildVacancyShareText } from '@/config/hr-vacancies';
+import type { VacancyFormData, VacancyListItem } from './types';
+import { logger } from '@/lib/logger';
 
 export function useHrVacancies() {
-  const [actionError, setError] = useState<string | null>(null)
-  const [statusFilter, setStatusFilter] = useState<string>('')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [actionLoading, setActionLoading] = useState<string | null>(null)
-  const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [actionError, setError] = useState<string | null>(null);
+  const [statusFilter, setStatusFilter] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const showSuccess = (msg: string) => {
-    setSuccessMessage(msg)
-    setTimeout(() => setSuccessMessage(null), UI_FEEDBACK_MS.SUCCESS)
-  }
+    setSuccessMessage(msg);
+    setTimeout(() => setSuccessMessage(null), UI_FEEDBACK_MS.SUCCESS);
+  };
 
   // Filters are encoded in the SWR key — changing them refetches.
-  const params = new URLSearchParams()
-  if (statusFilter) params.set('status', statusFilter)
-  if (searchQuery) params.set('search', searchQuery)
-  const qs = params.toString()
+  const params = new URLSearchParams();
+  if (statusFilter) params.set('status', statusFilter);
+  if (searchQuery) params.set('search', searchQuery);
+  const qs = params.toString();
 
   const {
     data,
     error: loadError,
     isLoading: loading,
     mutate,
-  } = useSwrFetch<{ postings: VacancyListItem[] }>(
-    `/api/admin/hr/vacancies${qs ? `?${qs}` : ''}`,
-  )
-  const postings = data?.postings ?? []
+  } = useSwrFetch<{ postings: VacancyListItem[] }>(`/api/admin/hr/vacancies${qs ? `?${qs}` : ''}`);
+  const postings = data?.postings ?? [];
   // One error surface: action errors win (they're the fresher user feedback).
-  const error = actionError ?? (loadError instanceof Error ? loadError.message : null)
+  const error = actionError ?? (loadError instanceof Error ? loadError.message : null);
 
   const fetchPostings = useCallback(async () => {
-    await mutate()
-  }, [mutate])
+    await mutate();
+  }, [mutate]);
 
   const transitionStatus = async (id: string, status: VacancyStatus) => {
-    setActionLoading(id)
+    setActionLoading(id);
     try {
       const result = await apiFetch(`/api/admin/hr/vacancies/${id}/transition`, {
         method: 'POST',
         body: JSON.stringify({ status }),
-      })
-      if (!result.success) throw new Error(result.error || 'Statuswechsel fehlgeschlagen')
-      showSuccess('Status aktualisiert')
-      await fetchPostings()
+      });
+      if (!result.success) throw new Error(result.error || 'Statuswechsel fehlgeschlagen');
+      showSuccess('Status aktualisiert');
+      await fetchPostings();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Statuswechsel fehlgeschlagen')
+      setError(err instanceof Error ? err.message : 'Statuswechsel fehlgeschlagen');
     } finally {
-      setActionLoading(null)
+      setActionLoading(null);
     }
-  }
+  };
 
   const duplicateVacancy = async (id: string) => {
-    setActionLoading(id)
+    setActionLoading(id);
     try {
       const result = await apiFetch<VacancyListItem>(`/api/admin/hr/vacancies/${id}/duplicate`, {
         method: 'POST',
-      })
-      if (!result.success) throw new Error(result.error || 'Duplizieren fehlgeschlagen')
-      showSuccess('Stelle dupliziert (Entwurf)')
-      await fetchPostings()
-      return result.data
+      });
+      if (!result.success) throw new Error(result.error || 'Duplizieren fehlgeschlagen');
+      showSuccess('Stelle dupliziert (Entwurf)');
+      await fetchPostings();
+      return result.data;
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Duplizieren fehlgeschlagen')
-      return null
+      setError(err instanceof Error ? err.message : 'Duplizieren fehlgeschlagen');
+      return null;
     } finally {
-      setActionLoading(null)
+      setActionLoading(null);
     }
-  }
+  };
 
   const copyPublicLink = async (slug: string) => {
-    const url = publicVacancyUrl(slug)
+    const url = publicVacancyUrl(slug);
     try {
-      await navigator.clipboard.writeText(url)
-      showSuccess('Link kopiert')
+      await navigator.clipboard.writeText(url);
+      showSuccess('Link kopiert');
     } catch {
-      setError('Link konnte nicht kopiert werden')
+      setError('Link konnte nicht kopiert werden');
     }
-  }
+  };
 
   const shareVacancy = async (title: string, slug: string) => {
-    const url = publicVacancyUrl(slug)
-    const text = buildVacancyShareText(title, url)
+    const url = publicVacancyUrl(slug);
+    const text = buildVacancyShareText(title, url);
     if (navigator.share) {
       try {
-        await navigator.share({ title, text, url })
-        return
+        await navigator.share({ title, text, url });
+        return;
       } catch (err) {
-        logger.info('Web Share cancelled or failed', { error: err })
+        logger.info('Web Share cancelled or failed', { error: err });
       }
     }
-    await copyPublicLink(slug)
-  }
+    await copyPublicLink(slug);
+  };
 
   const createVacancy = async (data: VacancyFormData, publish: boolean) => {
     const payload = {
@@ -122,15 +120,15 @@ export function useHrVacancies() {
       seo_title: data.seo_title || null,
       seo_description: data.seo_description || null,
       initial_status: publish ? VACANCY_STATUS.PUBLISHED : VACANCY_STATUS.DRAFT,
-    }
+    };
 
     const result = await apiFetch<VacancyListItem>('/api/admin/hr/vacancies', {
       method: 'POST',
       body: JSON.stringify(payload),
-    })
-    if (!result.success) throw new Error(result.error || 'Erstellen fehlgeschlagen')
-    return result.data
-  }
+    });
+    if (!result.success) throw new Error(result.error || 'Erstellen fehlgeschlagen');
+    return result.data;
+  };
 
   const updateVacancy = async (id: string, data: VacancyFormData) => {
     const payload = {
@@ -150,15 +148,15 @@ export function useHrVacancies() {
       show_on_get_involved: data.show_on_get_involved,
       seo_title: data.seo_title || null,
       seo_description: data.seo_description || null,
-    }
+    };
 
     const result = await apiFetch<VacancyListItem>(`/api/admin/hr/vacancies/${id}`, {
       method: 'PATCH',
       body: JSON.stringify(payload),
-    })
-    if (!result.success) throw new Error(result.error || 'Speichern fehlgeschlagen')
-    return result.data
-  }
+    });
+    if (!result.success) throw new Error(result.error || 'Speichern fehlgeschlagen');
+    return result.data;
+  };
 
   return {
     postings,
@@ -178,5 +176,5 @@ export function useHrVacancies() {
     shareVacancy,
     createVacancy,
     updateVacancy,
-  }
+  };
 }

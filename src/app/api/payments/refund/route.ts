@@ -1,27 +1,27 @@
-import { withAuth } from '@/lib/api/middleware'
-import { refundTransaction } from '@/lib/payments/payrexx-client'
-import { db } from '@/db'
-import { paymentTransactions, paymentProviders, refunds, users } from '@/db/schema'
-import { eq, and, sql, inArray } from 'drizzle-orm'
-import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound } from '@/lib/api/helpers'
-import { PAYMENT_STATUS, PAYMENT_TRANSACTION_TYPE } from '@/config/payment-status'
-import { REFUND_STATUS } from '@/config/refund'
-import { logger } from '@/lib/logger'
-import { canAccessFinance } from '@/lib/permissions'
-import { validateBody, RefundSchema } from '@/lib/schemas'
+import { withAuth } from '@/lib/api/middleware';
+import { refundTransaction } from '@/lib/payments/payrexx-client';
+import { db } from '@/db';
+import { paymentTransactions, paymentProviders, refunds, users } from '@/db/schema';
+import { eq, and, sql, inArray } from 'drizzle-orm';
+import {
+  apiError,
+  apiSuccess,
+  apiUnauthorized,
+  apiBadRequest,
+  apiNotFound,
+} from '@/lib/api/helpers';
+import { PAYMENT_STATUS, PAYMENT_TRANSACTION_TYPE } from '@/config/payment-status';
+import { REFUND_STATUS } from '@/config/refund';
+import { logger } from '@/lib/logger';
+import { canAccessFinance } from '@/lib/permissions';
+import { validateBody, RefundSchema } from '@/lib/schemas';
 
 export const POST = withAuth(async (request, session) => {
   try {
-    const body = await request.json()
-    const validation = validateBody(RefundSchema, body)
-    if (!validation.success) return validation.error
-    const {
-      transactionId,
-      amount,
-      reason,
-      reasonDetails,
-      customerNotes
-    } = validation.data
+    const body = await request.json();
+    const validation = validateBody(RefundSchema, body);
+    if (!validation.success) return validation.error;
+    const { transactionId, amount, reason, reasonDetails, customerNotes } = validation.data;
 
     // Get transaction details with provider and user info
     const transactionRows = await db
@@ -42,27 +42,29 @@ export const POST = withAuth(async (request, session) => {
       .where(
         and(
           eq(paymentTransactions.id, transactionId),
-          eq(paymentTransactions.status, PAYMENT_STATUS.SUCCEEDED)
-        )
-      )
+          eq(paymentTransactions.status, PAYMENT_STATUS.SUCCEEDED),
+        ),
+      );
 
     if (transactionRows.length === 0) {
-      return apiNotFound('Transaktion nicht gefunden oder nicht erstattungsfähig')
+      return apiNotFound('Transaktion nicht gefunden oder nicht erstattungsfähig');
     }
 
-    const txn = transactionRows[0]
+    const txn = transactionRows[0];
 
     // Check if user owns the transaction or is admin
-    const isAdmin = canAccessFinance(session.user)
+    const isAdmin = canAccessFinance(session.user);
 
     if (txn.userId !== session.user.id && !isAdmin) {
-      return apiUnauthorized('Du kannst nur eigene Transaktionen erstatten')
+      return apiUnauthorized('Du kannst nur eigene Transaktionen erstatten');
     }
 
-    const refundAmountCents = Math.round(amount * 100)
+    const refundAmountCents = Math.round(amount * 100);
 
     if (refundAmountCents > txn.amountCents) {
-      return apiBadRequest('Erstattungsbetrag darf den ursprünglichen Transaktionsbetrag nicht übersteigen')
+      return apiBadRequest(
+        'Erstattungsbetrag darf den ursprünglichen Transaktionsbetrag nicht übersteigen',
+      );
     }
 
     // Check for existing refunds on this transaction
@@ -74,15 +76,21 @@ export const POST = withAuth(async (request, session) => {
       .where(
         and(
           eq(refunds.originalTransactionId, transactionId),
-          inArray(refunds.status, [REFUND_STATUS.APPROVED, REFUND_STATUS.PROCESSING, REFUND_STATUS.COMPLETED])
-        )
-      )
+          inArray(refunds.status, [
+            REFUND_STATUS.APPROVED,
+            REFUND_STATUS.PROCESSING,
+            REFUND_STATUS.COMPLETED,
+          ]),
+        ),
+      );
 
-    const totalRefunded = Number(existingRefundsResult[0]?.totalRefunded ?? 0)
-    const remainingAmount = txn.amountCents - totalRefunded
+    const totalRefunded = Number(existingRefundsResult[0]?.totalRefunded ?? 0);
+    const remainingAmount = txn.amountCents - totalRefunded;
 
     if (refundAmountCents > remainingAmount) {
-      return apiBadRequest(`Erstattungsbetrag übersteigt das verbleibende Guthaben. Maximal erstattbar: ${(remainingAmount / 100).toFixed(2)} ${txn.currency}`)
+      return apiBadRequest(
+        `Erstattungsbetrag übersteigt das verbleibende Guthaben. Maximal erstattbar: ${(remainingAmount / 100).toFixed(2)} ${txn.currency}`,
+      );
     }
 
     // Create refund record using database function for refund_number
@@ -99,18 +107,18 @@ export const POST = withAuth(async (request, session) => {
         customerNotes: customerNotes || null,
         status: isAdmin ? REFUND_STATUS.APPROVED : REFUND_STATUS.REQUESTED,
       })
-      .returning({ id: refunds.id, refundNumber: refunds.refundNumber })
+      .returning({ id: refunds.id, refundNumber: refunds.refundNumber });
 
-    const refundId = refundRow.id
-    const refundNumber = refundRow.refundNumber
+    const refundId = refundRow.id;
+    const refundNumber = refundRow.refundNumber;
 
     // If admin requested, process immediately via Payrexx
     if (isAdmin) {
       try {
         const payrexxRefund = await refundTransaction(
           txn.providerTransactionId!,
-          refundAmountCents
-        )
+          refundAmountCents,
+        );
 
         // Wrap refund record update + transaction insert in DB transaction
         await db.transaction(async (tx) => {
@@ -125,26 +133,24 @@ export const POST = withAuth(async (request, session) => {
               approvedAt: sql`CURRENT_TIMESTAMP`,
               approvedBy: session.user.id,
             })
-            .where(eq(refunds.id, refundId))
+            .where(eq(refunds.id, refundId));
 
           // Create refund transaction record
-          await tx
-            .insert(paymentTransactions)
-            .values({
-              userId: txn.userId,
-              providerId: txn.providerId,
-              providerTransactionId: String(payrexxRefund.id),
-              type: PAYMENT_TRANSACTION_TYPE.REFUND,
-              status: REFUND_STATUS.PROCESSING,
-              amountCents: refundAmountCents,
-              currency: txn.currency,
-              description: `Refund for transaction ${txn.providerTransactionId}`,
-            })
-        })
-
+          await tx.insert(paymentTransactions).values({
+            userId: txn.userId,
+            providerId: txn.providerId,
+            providerTransactionId: String(payrexxRefund.id),
+            type: PAYMENT_TRANSACTION_TYPE.REFUND,
+            status: REFUND_STATUS.PROCESSING,
+            amountCents: refundAmountCents,
+            currency: txn.currency,
+            description: `Refund for transaction ${txn.providerTransactionId}`,
+          });
+        });
       } catch (refundError: unknown) {
-        logger.error('Payrexx refund error', { error: refundError })
-        const errorMessage = refundError instanceof Error ? refundError.message : 'Unknown refund error'
+        logger.error('Payrexx refund error', { error: refundError });
+        const errorMessage =
+          refundError instanceof Error ? refundError.message : 'Unknown refund error';
 
         // Mark refund as rejected
         await db
@@ -154,9 +160,9 @@ export const POST = withAuth(async (request, session) => {
             processedAt: sql`CURRENT_TIMESTAMP`,
             internalNotes: errorMessage,
           })
-          .where(eq(refunds.id, refundId))
+          .where(eq(refunds.id, refundId));
 
-        return apiError(refundError, 'Erstattung konnte nicht verarbeitet werden')
+        return apiError(refundError, 'Erstattung konnte nicht verarbeitet werden');
       }
     }
 
@@ -164,10 +170,12 @@ export const POST = withAuth(async (request, session) => {
       refundId,
       refundNumber,
       status: isAdmin ? REFUND_STATUS.PROCESSING : REFUND_STATUS.REQUESTED,
-      message: isAdmin ? 'Erstattung erfolgreich verarbeitet' : 'Erstattungsantrag zur Genehmigung eingereicht'
-    })
+      message: isAdmin
+        ? 'Erstattung erfolgreich verarbeitet'
+        : 'Erstattungsantrag zur Genehmigung eingereicht',
+    });
   } catch (error) {
-    logger.error('Refund creation error', { error })
-    return apiError(error, 'Erstattungsantrag konnte nicht erstellt werden')
+    logger.error('Refund creation error', { error });
+    return apiError(error, 'Erstattungsantrag konnte nicht erstellt werden');
   }
-})
+});

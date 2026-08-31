@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils'
+import { cn } from '@/lib/utils';
 
 const MAX_WIDTH = {
   '2xl': 'max-w-2xl',
@@ -6,13 +6,13 @@ const MAX_WIDTH = {
   '4xl': 'max-w-4xl',
   '5xl': 'max-w-5xl',
   '7xl': 'max-w-7xl',
-} as const
+} as const;
 
 interface PageShellProps {
-  children: React.ReactNode
-  maxWidth?: keyof typeof MAX_WIDTH
-  py?: string
-  className?: string
+  children: React.ReactNode;
+  maxWidth?: keyof typeof MAX_WIDTH;
+  py?: string;
+  className?: string;
 }
 
 export function PageShell({
@@ -25,5 +25,5 @@ export function PageShell({
     <div className={cn(MAX_WIDTH[maxWidth], 'mx-auto px-4 sm:px-6 lg:px-8', py, className)}>
       {children}
     </div>
-  )
+  );
 }

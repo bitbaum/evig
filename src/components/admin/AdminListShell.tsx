@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import type { ReactNode } from 'react'
-import type { LucideIcon } from 'lucide-react'
-import { RefreshCw } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import Heading from '@/components/admin/AdminHeading'
+import type { ReactNode } from 'react';
+import type { LucideIcon } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Heading from '@/components/admin/AdminHeading';
 
 /**
  * AdminListShell — shared scaffolding for admin list pages.
@@ -16,27 +16,27 @@ import Heading from '@/components/admin/AdminHeading'
  */
 export interface AdminListShellProps {
   /** Filter UI, rendered above the state area (always visible). */
-  filters?: ReactNode
-  loading: boolean
+  filters?: ReactNode;
+  loading: boolean;
   /** Optional custom loading UI (e.g. a skeleton grid). Defaults to a spinner. */
-  loadingSlot?: ReactNode
-  error?: string | null
+  loadingSlot?: ReactNode;
+  error?: string | null;
   /** Retry handler for the error state and the results-header refresh button. */
-  onRetry?: () => void
+  onRetry?: () => void;
   /** True when there are no items to show (and not loading/error). */
-  isEmpty: boolean
-  emptyIcon: LucideIcon
-  emptyTitle: string
-  emptyDescription?: string
+  isEmpty: boolean;
+  emptyIcon: LucideIcon;
+  emptyTitle: string;
+  emptyDescription?: string;
   /** Optional CTA in the empty state (e.g. a "create the first one" button). */
-  emptyAction?: ReactNode
+  emptyAction?: ReactNode;
   /** When filters are active, the empty state offers a reset link. */
-  hasActiveFilters?: boolean
-  onResetFilters?: () => void
+  hasActiveFilters?: boolean;
+  onResetFilters?: () => void;
   /** e.g. "42 Benutzer gefunden" — shown in the results header. */
-  resultsLabel?: ReactNode
+  resultsLabel?: ReactNode;
   /** Table + pagination; rendered only when there is data. */
-  children: ReactNode
+  children: ReactNode;
 }
 
 export function AdminListShell({
@@ -77,12 +77,15 @@ export function AdminListShell({
           </div>
         </div>
       ) : loading ? (
-        loadingSlot ?? (
+        (loadingSlot ?? (
           <div className="rounded-xl border border-subtle bg-surface-base p-8 text-center">
-            <RefreshCw className="mx-auto mb-4 h-8 w-8 animate-spin text-text-tertiary" aria-hidden="true" />
+            <RefreshCw
+              className="mx-auto mb-4 h-8 w-8 animate-spin text-text-tertiary"
+              aria-hidden="true"
+            />
             <p className="text-text-tertiary">Wird geladen …</p>
           </div>
-        )
+        ))
       ) : isEmpty ? (
         <div className="rounded-xl border border-subtle bg-surface-base p-12 text-center">
           <EmptyIcon className="mx-auto mb-4 h-12 w-12 text-text-muted" aria-hidden="true" />
@@ -124,5 +127,5 @@ export function AdminListShell({
         </>
       )}
     </div>
-  )
+  );
 }

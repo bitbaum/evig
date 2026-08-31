@@ -21,7 +21,7 @@ import { TASK_PRIORITIES } from '@/config/tasks';
 const assignedUser = alias(users, 'assigned_user');
 import { createTaskSchema } from '@/lib/schemas/tasks';
 import { notifyUsers } from '@/lib/services/notifications';
-import { RELATED_TYPES, NOTIFICATION_TYPES } from '@/config/notifications'
+import { RELATED_TYPES, NOTIFICATION_TYPES } from '@/config/notifications';
 import { logger } from '@/lib/logger';
 
 /**
@@ -107,15 +107,15 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
           WHEN '${sql.raw(TASK_PRIORITIES.NORMAL)}' THEN 2
           WHEN '${sql.raw(TASK_PRIORITIES.LOW)}' THEN 3
         END`,
-        desc(tasks.createdAt)
+        desc(tasks.createdAt),
       )
       .limit(limit)
-      .offset(offset)
+      .offset(offset);
 
     logger.info('Tasks fetched', {
       userId: session.user.id,
       count: taskRows.length,
-      filters: { category, status, taskType, projectId }
+      filters: { category, status, taskType, projectId },
     });
 
     return apiSuccess(taskRows);
@@ -163,12 +163,12 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
         teamId: data.team_id || undefined,
         createdBy: dbUserId,
       })
-      .returning()
+      .returning();
 
     logger.info('Task created', {
       taskId: task.id,
       userId: dbUserId,
-      title: data.title
+      title: data.title,
     });
 
     // Notify assignee if assigned
@@ -179,7 +179,9 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
         content: `Dir wurde eine Aufgabe zugewiesen: ${data.title}`,
         related_type: RELATED_TYPES.TASK,
         related_id: task.id,
-      }).catch(err => logger.error('Failed to notify task assignee', { error: err, taskId: task.id }));
+      }).catch((err) =>
+        logger.error('Failed to notify task assignee', { error: err, taskId: task.id }),
+      );
     }
 
     return apiSuccess(task, 201);

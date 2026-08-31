@@ -24,23 +24,23 @@
  *   - delegate to the logger singleton
  */
 
-import { logger, logDebug, logInfo, logWarn, logError } from '../logger'
+import { logger, logDebug, logInfo, logWarn, logError } from '../logger';
 
-let consoleLog: jest.SpyInstance
-let consoleWarn: jest.SpyInstance
-let consoleError: jest.SpyInstance
+let consoleLog: jest.SpyInstance;
+let consoleWarn: jest.SpyInstance;
+let consoleError: jest.SpyInstance;
 
 beforeEach(() => {
-  consoleLog = jest.spyOn(console, 'log').mockImplementation(() => {})
-  consoleWarn = jest.spyOn(console, 'warn').mockImplementation(() => {})
-  consoleError = jest.spyOn(console, 'error').mockImplementation(() => {})
-})
+  consoleLog = jest.spyOn(console, 'log').mockImplementation(() => {});
+  consoleWarn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+  consoleError = jest.spyOn(console, 'error').mockImplementation(() => {});
+});
 
 afterEach(() => {
-  consoleLog.mockRestore()
-  consoleWarn.mockRestore()
-  consoleError.mockRestore()
-})
+  consoleLog.mockRestore();
+  consoleWarn.mockRestore();
+  consoleError.mockRestore();
+});
 
 // ============================================================================
 // debug
@@ -50,38 +50,38 @@ describe('logger.debug', () => {
   // jest forces NODE_ENV=test, where debug() is a no-op. shouldLog() reads
   // NODE_ENV lazily, so flipping it to 'development' here exercises the active
   // branch; we restore it afterwards so other suites see the original value.
-  let originalNodeEnv: string | undefined
+  let originalNodeEnv: string | undefined;
 
   beforeEach(() => {
-    originalNodeEnv = process.env.NODE_ENV
-  })
+    originalNodeEnv = process.env.NODE_ENV;
+  });
 
   afterEach(() => {
-    (process.env as Record<string, string | undefined>).NODE_ENV = originalNodeEnv
-  })
+    (process.env as Record<string, string | undefined>).NODE_ENV = originalNodeEnv;
+  });
 
   it('is a no-op in non-development env (NODE_ENV=test)', () => {
-    (process.env as Record<string, string | undefined>).NODE_ENV = 'test'
-    logger.debug('debug message')
+    (process.env as Record<string, string | undefined>).NODE_ENV = 'test';
+    logger.debug('debug message');
 
-    expect(consoleLog).not.toHaveBeenCalled()
-  })
+    expect(consoleLog).not.toHaveBeenCalled();
+  });
 
   it('calls console.log in development environment', () => {
-    (process.env as Record<string, string | undefined>).NODE_ENV = 'development'
-    logger.debug('debug message')
+    (process.env as Record<string, string | undefined>).NODE_ENV = 'development';
+    logger.debug('debug message');
 
-    expect(consoleLog).toHaveBeenCalledTimes(1)
-  })
+    expect(consoleLog).toHaveBeenCalledTimes(1);
+  });
 
   it('includes [DEBUG] prefix in output (development)', () => {
-    (process.env as Record<string, string | undefined>).NODE_ENV = 'development'
-    logger.debug('trace message')
+    (process.env as Record<string, string | undefined>).NODE_ENV = 'development';
+    logger.debug('trace message');
 
-    const firstArg = consoleLog.mock.calls[0][0] as string
-    expect(firstArg).toContain('[DEBUG]')
-  })
-})
+    const firstArg = consoleLog.mock.calls[0][0] as string;
+    expect(firstArg).toContain('[DEBUG]');
+  });
+});
 
 // ============================================================================
 // info
@@ -89,32 +89,32 @@ describe('logger.debug', () => {
 
 describe('logger.info', () => {
   it('calls console.log', () => {
-    logger.info('test info')
+    logger.info('test info');
 
-    expect(consoleLog).toHaveBeenCalledTimes(1)
-  })
+    expect(consoleLog).toHaveBeenCalledTimes(1);
+  });
 
   it('includes [INFO] prefix in the output', () => {
-    logger.info('hello world')
+    logger.info('hello world');
 
-    const firstArg = consoleLog.mock.calls[0][0] as string
-    expect(firstArg).toContain('[INFO]')
-  })
+    const firstArg = consoleLog.mock.calls[0][0] as string;
+    expect(firstArg).toContain('[INFO]');
+  });
 
   it('includes the message in the output', () => {
-    logger.info('my important message')
+    logger.info('my important message');
 
-    const firstArg = consoleLog.mock.calls[0][0] as string
-    expect(firstArg).toContain('my important message')
-  })
+    const firstArg = consoleLog.mock.calls[0][0] as string;
+    expect(firstArg).toContain('my important message');
+  });
 
   it('passes data as second argument when provided', () => {
-    logger.info('with data', { userId: '123' })
+    logger.info('with data', { userId: '123' });
 
-    const secondArg = consoleLog.mock.calls[0][1]
-    expect(secondArg).toEqual({ userId: '123' })
-  })
-})
+    const secondArg = consoleLog.mock.calls[0][1];
+    expect(secondArg).toEqual({ userId: '123' });
+  });
+});
 
 // ============================================================================
 // warn
@@ -122,25 +122,25 @@ describe('logger.info', () => {
 
 describe('logger.warn', () => {
   it('calls console.warn', () => {
-    logger.warn('test warning')
+    logger.warn('test warning');
 
-    expect(consoleWarn).toHaveBeenCalledTimes(1)
-  })
+    expect(consoleWarn).toHaveBeenCalledTimes(1);
+  });
 
   it('includes [WARN] prefix', () => {
-    logger.warn('something odd')
+    logger.warn('something odd');
 
-    const firstArg = consoleWarn.mock.calls[0][0] as string
-    expect(firstArg).toContain('[WARN]')
-  })
+    const firstArg = consoleWarn.mock.calls[0][0] as string;
+    expect(firstArg).toContain('[WARN]');
+  });
 
   it('includes the message', () => {
-    logger.warn('disk space low')
+    logger.warn('disk space low');
 
-    const firstArg = consoleWarn.mock.calls[0][0] as string
-    expect(firstArg).toContain('disk space low')
-  })
-})
+    const firstArg = consoleWarn.mock.calls[0][0] as string;
+    expect(firstArg).toContain('disk space low');
+  });
+});
 
 // ============================================================================
 // error
@@ -148,32 +148,32 @@ describe('logger.warn', () => {
 
 describe('logger.error', () => {
   it('calls console.error', () => {
-    logger.error('something failed')
+    logger.error('something failed');
 
-    expect(consoleError).toHaveBeenCalledTimes(1)
-  })
+    expect(consoleError).toHaveBeenCalledTimes(1);
+  });
 
   it('includes [ERROR] prefix', () => {
-    logger.error('fatal error')
+    logger.error('fatal error');
 
-    const firstArg = consoleError.mock.calls[0][0] as string
-    expect(firstArg).toContain('[ERROR]')
-  })
+    const firstArg = consoleError.mock.calls[0][0] as string;
+    expect(firstArg).toContain('[ERROR]');
+  });
 
   it('includes the message', () => {
-    logger.error('db connection lost')
+    logger.error('db connection lost');
 
-    const firstArg = consoleError.mock.calls[0][0] as string
-    expect(firstArg).toContain('db connection lost')
-  })
+    const firstArg = consoleError.mock.calls[0][0] as string;
+    expect(firstArg).toContain('db connection lost');
+  });
 
   it('passes error object as second argument when provided', () => {
-    const err = new Error('boom')
-    logger.error('caught error', err)
+    const err = new Error('boom');
+    logger.error('caught error', err);
 
-    expect(consoleError.mock.calls[0][1]).toBe(err)
-  })
-})
+    expect(consoleError.mock.calls[0][1]).toBe(err);
+  });
+});
 
 // ============================================================================
 // convenience functions
@@ -181,43 +181,43 @@ describe('logger.error', () => {
 
 describe('logInfo convenience function', () => {
   it('calls console.log', () => {
-    logInfo('via convenience')
+    logInfo('via convenience');
 
-    expect(consoleLog).toHaveBeenCalledTimes(1)
-  })
-})
+    expect(consoleLog).toHaveBeenCalledTimes(1);
+  });
+});
 
 describe('logWarn convenience function', () => {
   it('calls console.warn', () => {
-    logWarn('via convenience')
+    logWarn('via convenience');
 
-    expect(consoleWarn).toHaveBeenCalledTimes(1)
-  })
-})
+    expect(consoleWarn).toHaveBeenCalledTimes(1);
+  });
+});
 
 describe('logError convenience function', () => {
   it('calls console.error', () => {
-    logError('via convenience')
+    logError('via convenience');
 
-    expect(consoleError).toHaveBeenCalledTimes(1)
-  })
-})
+    expect(consoleError).toHaveBeenCalledTimes(1);
+  });
+});
 
 describe('logDebug convenience function', () => {
-  let originalNodeEnv: string | undefined
+  let originalNodeEnv: string | undefined;
 
   beforeEach(() => {
-    originalNodeEnv = process.env.NODE_ENV
-  })
+    originalNodeEnv = process.env.NODE_ENV;
+  });
 
   afterEach(() => {
-    (process.env as Record<string, string | undefined>).NODE_ENV = originalNodeEnv
-  })
+    (process.env as Record<string, string | undefined>).NODE_ENV = originalNodeEnv;
+  });
 
   it('calls console.log in development environment', () => {
-    (process.env as Record<string, string | undefined>).NODE_ENV = 'development'
-    logDebug('via convenience')
+    (process.env as Record<string, string | undefined>).NODE_ENV = 'development';
+    logDebug('via convenience');
 
-    expect(consoleLog).toHaveBeenCalledTimes(1)
-  })
-})
+    expect(consoleLog).toHaveBeenCalledTimes(1);
+  });
+});

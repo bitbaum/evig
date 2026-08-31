@@ -6,7 +6,7 @@ import { escapeHtml } from '@/lib/utils/escape-html';
 export const contentSubmissionApproved = (
   name: string,
   title: string,
-  contentType: string
+  contentType: string,
 ): EmailContent => ({
   subject: `Einreichung genehmigt - ${ORG.name}`,
   html: `
@@ -55,7 +55,7 @@ export const contentSubmissionRejected = (
   name: string,
   title: string,
   contentType: string,
-  reason?: string
+  reason?: string,
 ): EmailContent => ({
   subject: `Einreichung abgelehnt - ${ORG.name}`,
   html: `

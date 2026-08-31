@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Personal monthly reminder — one quiet row: «Erinnere mich jeweils am X.»
@@ -6,37 +6,38 @@
  * + e-mail nudge on that day if the month isn't submitted yet.
  */
 
-import { useState } from 'react'
-import { useTranslations } from 'next-intl'
-import { BellRing, Check } from 'lucide-react'
-import { Select } from '@/components/ui/select'
-import { apiFetch } from '@/lib/api/client'
+import { useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { BellRing, Check } from 'lucide-react';
+import { Select } from '@/components/ui/select';
+import { apiFetch } from '@/lib/api/client';
 
-const DAY_OPTIONS = [1, 5, 10, 15, 20, 25, 28]
+const DAY_OPTIONS = [1, 5, 10, 15, 20, 25, 28];
 
 export function ReminderSetting({ initialDay }: { initialDay: number | null }) {
-  const t = useTranslations('admin.timecards')
-  const [day, setDay] = useState<number | null>(initialDay)
-  const [saved, setSaved] = useState(false)
-  const [error, setError] = useState(false)
+  const t = useTranslations('admin.timecards');
+  const [day, setDay] = useState<number | null>(initialDay);
+  const [saved, setSaved] = useState(false);
+  const [error, setError] = useState(false);
 
   const save = async (next: number | null) => {
-    setDay(next)
-    setSaved(false)
-    setError(false)
-    const res = await apiFetch('/api/team/reminder', { method: 'PUT', body: { day: next } })
+    setDay(next);
+    setSaved(false);
+    setError(false);
+    const res = await apiFetch('/api/team/reminder', { method: 'PUT', body: { day: next } });
     if (res.success) {
-      setSaved(true)
-      window.setTimeout(() => setSaved(false), 2500)
+      setSaved(true);
+      window.setTimeout(() => setSaved(false), 2500);
     } else {
-      setError(true)
+      setError(true);
     }
-  }
+  };
 
   // Keep a nonstandard stored day (e.g. set by HR) selectable.
-  const options = day !== null && !DAY_OPTIONS.includes(day)
-    ? [...DAY_OPTIONS, day].sort((a, b) => a - b)
-    : DAY_OPTIONS
+  const options =
+    day !== null && !DAY_OPTIONS.includes(day)
+      ? [...DAY_OPTIONS, day].sort((a, b) => a - b)
+      : DAY_OPTIONS;
 
   return (
     <div className="flex flex-wrap items-center gap-2 text-sm text-text-tertiary">
@@ -47,12 +48,14 @@ export function ReminderSetting({ initialDay }: { initialDay: number | null }) {
       <Select
         id="zeiterfassung-reminder"
         value={day === null ? '' : String(day)}
-        onChange={e => save(e.target.value === '' ? null : Number(e.target.value))}
+        onChange={(e) => save(e.target.value === '' ? null : Number(e.target.value))}
         className="h-8 w-auto min-w-28 py-1 text-sm"
       >
         <option value="">{t('reminderOff')}</option>
-        {options.map(d => (
-          <option key={d} value={d}>{t('reminderDayOption', { day: d })}</option>
+        {options.map((d) => (
+          <option key={d} value={d}>
+            {t('reminderDayOption', { day: d })}
+          </option>
         ))}
       </Select>
       {saved && (
@@ -62,5 +65,5 @@ export function ReminderSetting({ initialDay }: { initialDay: number | null }) {
       )}
       {error && <span className="text-error-600">{t('reminderError')}</span>}
     </div>
-  )
+  );
 }

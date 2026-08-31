@@ -26,7 +26,6 @@ const decision3opts = {
 // ─── validateVoteData ─────────────────────────────────────────────────────────
 
 describe('validateVoteData', () => {
-
   // ── consent ────────────────────────────────────────────────────────────────
 
   describe('consent', () => {
@@ -48,7 +47,11 @@ describe('validateVoteData', () => {
     });
 
     it('accepts block with rationale', () => {
-      const r = validateVoteData('consent', { response: 'block', rationale: 'This violates our values' }, dec);
+      const r = validateVoteData(
+        'consent',
+        { response: 'block', rationale: 'This violates our values' },
+        dec,
+      );
       expect(r.success).toBe(true);
     });
 
@@ -303,7 +306,6 @@ describe('validateVoteData', () => {
 // ─── computeTallies ───────────────────────────────────────────────────────────
 
 describe('computeTallies', () => {
-
   // ── consent ────────────────────────────────────────────────────────────────
 
   describe('consent', () => {
@@ -322,10 +324,7 @@ describe('computeTallies', () => {
     });
 
     it('fails when there is a block', () => {
-      const votes = [
-        { response: 'agree' },
-        { response: 'block', rationale: 'Safety concern' },
-      ];
+      const votes = [{ response: 'agree' }, { response: 'block', rationale: 'Safety concern' }];
       const result = computeTallies('consent', votes as never, []);
       expect(result.passed).toBe(false);
       // @ts-expect-error
@@ -419,9 +418,7 @@ describe('computeTallies', () => {
     });
 
     it('ranks by total dots descending', () => {
-      const votes = [
-        { allocations: { 'opt-a': 1, 'opt-b': 4 } },
-      ];
+      const votes = [{ allocations: { 'opt-a': 1, 'opt-b': 4 } }];
       const result = computeTallies('dot', votes as never, THREE_OPTIONS);
       // @ts-expect-error
       expect(result.ranked[0].id).toBe('opt-b');
@@ -447,9 +444,11 @@ describe('computeTallies', () => {
       ];
       const result = computeTallies('score', votes as never, [OPT_A, OPT_B]);
       // @ts-expect-error
-      const optA = result.ranked.find((r: { id?: string }) => r.id === 'opt-a') as { averageScore: number } | undefined;
+      const optA = result.ranked.find((r: { id?: string }) => r.id === 'opt-a') as
+        { averageScore: number } | undefined;
       // @ts-expect-error
-      const optB = result.ranked.find((r: { id?: string }) => r.id === 'opt-b') as { averageScore: number } | undefined;
+      const optB = result.ranked.find((r: { id?: string }) => r.id === 'opt-b') as
+        { averageScore: number } | undefined;
       expect(optA?.averageScore).toBe(3);
       expect(optB?.averageScore).toBe(3);
     });
@@ -481,7 +480,8 @@ describe('computeTallies', () => {
       const votes = [{ scores: { 'opt-a': 5 } }];
       const result = computeTallies('score', votes as never, [OPT_A, OPT_B]);
       // @ts-expect-error
-      const optB = result.ranked.find((r: { id?: string }) => r.id === 'opt-b') as { averageScore: number } | undefined;
+      const optB = result.ranked.find((r: { id?: string }) => r.id === 'opt-b') as
+        { averageScore: number } | undefined;
       expect(optB?.averageScore).toBe(0);
     });
   });
@@ -490,40 +490,26 @@ describe('computeTallies', () => {
 
   describe('simple_majority', () => {
     it('passes when yes > no', () => {
-      const votes = [
-        { response: 'yes' },
-        { response: 'yes' },
-        { response: 'no' },
-      ];
+      const votes = [{ response: 'yes' }, { response: 'yes' }, { response: 'no' }];
       const result = computeTallies('simple_majority', votes as never, []);
       expect(result.counts).toEqual({ yes: 2, no: 1, abstain: 0 });
       expect(result.passed).toBe(true);
     });
 
     it('fails when no >= yes', () => {
-      const votes = [
-        { response: 'yes' },
-        { response: 'no' },
-      ];
+      const votes = [{ response: 'yes' }, { response: 'no' }];
       const result = computeTallies('simple_majority', votes as never, []);
       expect(result.passed).toBe(false);
     });
 
     it('fails on tie (yes === no)', () => {
-      const votes = [
-        { response: 'yes' },
-        { response: 'no' },
-        { response: 'abstain' },
-      ];
+      const votes = [{ response: 'yes' }, { response: 'no' }, { response: 'abstain' }];
       const result = computeTallies('simple_majority', votes as never, []);
       expect(result.passed).toBe(false);
     });
 
     it('handles all abstain votes', () => {
-      const votes = [
-        { response: 'abstain' },
-        { response: 'abstain' },
-      ];
+      const votes = [{ response: 'abstain' }, { response: 'abstain' }];
       const result = computeTallies('simple_majority', votes as never, []);
       // @ts-expect-error
       expect(result.counts.abstain).toBe(2);
@@ -584,10 +570,7 @@ describe('computeTallies', () => {
     });
 
     it('computes maxPossiblePoints = voters × (N-1)', () => {
-      const votes = [
-        { ranking: ['opt-a', 'opt-b'] },
-        { ranking: ['opt-a', 'opt-b'] },
-      ];
+      const votes = [{ ranking: ['opt-a', 'opt-b'] }, { ranking: ['opt-a', 'opt-b'] }];
       const result = computeTallies('ranked_choice', votes as never, [OPT_A, OPT_B]);
       // With 2 options and 2 voters: max = 2 voters × (2-1) = 2
       expect(result.maxPossiblePoints).toBe(2);
@@ -616,7 +599,11 @@ describe('computeTallies', () => {
   describe('thumbs_up_down', () => {
     it('counts up votes', () => {
       const votes = [{ choice: 'up' }, { choice: 'up' }, { choice: 'up' }];
-      const result = computeTallies('thumbs_up_down', votes as never, []) as { counts: { up: number; down: number }; passed: boolean; totalVotes: number };
+      const result = computeTallies('thumbs_up_down', votes as never, []) as {
+        counts: { up: number; down: number };
+        passed: boolean;
+        totalVotes: number;
+      };
       expect(result.counts.up).toBe(3);
       expect(result.counts.down).toBe(0);
       expect(result.passed).toBe(true);
@@ -625,7 +612,10 @@ describe('computeTallies', () => {
 
     it('counts down votes', () => {
       const votes = [{ choice: 'down' }, { choice: 'down' }];
-      const result = computeTallies('thumbs_up_down', votes as never, []) as { counts: { up: number; down: number }; passed: boolean };
+      const result = computeTallies('thumbs_up_down', votes as never, []) as {
+        counts: { up: number; down: number };
+        passed: boolean;
+      };
       expect(result.counts.down).toBe(2);
       expect(result.passed).toBe(false);
     });
@@ -637,7 +627,11 @@ describe('computeTallies', () => {
     });
 
     it('handles zero votes', () => {
-      const result = computeTallies('thumbs_up_down', [], []) as { counts: { up: number; down: number }; passed: boolean; totalVotes: number };
+      const result = computeTallies('thumbs_up_down', [], []) as {
+        counts: { up: number; down: number };
+        passed: boolean;
+        totalVotes: number;
+      };
       expect(result.totalVotes).toBe(0);
       expect(result.counts.up).toBe(0);
       expect(result.passed).toBe(false);
@@ -645,11 +639,19 @@ describe('computeTallies', () => {
 
     it('mixed: 5 up, 2 down → passes', () => {
       const votes = [
-        { choice: 'up' }, { choice: 'up' }, { choice: 'up' },
-        { choice: 'up' }, { choice: 'up' },
-        { choice: 'down' }, { choice: 'down' },
+        { choice: 'up' },
+        { choice: 'up' },
+        { choice: 'up' },
+        { choice: 'up' },
+        { choice: 'up' },
+        { choice: 'down' },
+        { choice: 'down' },
       ];
-      const result = computeTallies('thumbs_up_down', votes as never, []) as { counts: { up: number; down: number }; passed: boolean; totalVotes: number };
+      const result = computeTallies('thumbs_up_down', votes as never, []) as {
+        counts: { up: number; down: number };
+        passed: boolean;
+        totalVotes: number;
+      };
       expect(result.counts.up).toBe(5);
       expect(result.counts.down).toBe(2);
       expect(result.passed).toBe(true);

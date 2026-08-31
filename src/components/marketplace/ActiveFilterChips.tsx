@@ -1,33 +1,33 @@
-'use client'
+'use client';
 
-import { X } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
+import { X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
 import {
   CATEGORY_ICONS,
   MARKETPLACE_SELLER_TYPE,
   getSpecFiltersForCategory,
   type DeliveryOption,
   type PaymentMode,
-} from '@/config/marketplace'
-import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
-import { ORG } from '@/config/org'
-import type { FiltersObj } from './MarketplaceFilterSidebar'
+} from '@/config/marketplace';
+import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions';
+import { ORG } from '@/config/org';
+import type { FiltersObj } from './MarketplaceFilterSidebar';
 
-type Translator = ReturnType<typeof useTranslations<'marketplace'>>
+type Translator = ReturnType<typeof useTranslations<'marketplace'>>;
 
 interface ActiveFilterChipsProps {
-  filters: FiltersObj
-  resetOffset: () => void
-  clearFilters: () => void
+  filters: FiltersObj;
+  resetOffset: () => void;
+  clearFilters: () => void;
   /** When true, omit source/category chips (shown as pills in MarketplaceFilterBar). */
-  hidePrimary?: boolean
+  hidePrimary?: boolean;
 }
 
 interface Chip {
-  key: string
-  label: string
-  onRemove: () => void
+  key: string;
+  label: string;
+  onRemove: () => void;
 }
 
 function buildChips(
@@ -37,16 +37,19 @@ function buildChips(
   t: Translator,
   hidePrimary: boolean,
 ): Chip[] {
-  const chips: Chip[] = []
+  const chips: Chip[] = [];
 
   if (!hidePrimary && filters.category) {
-    const icon = CATEGORY_ICONS[filters.category]
-    const label = t(`categories.${filters.category}` as never)
+    const icon = CATEGORY_ICONS[filters.category];
+    const label = t(`categories.${filters.category}` as never);
     chips.push({
       key: 'category',
       label: `${icon ? icon + ' ' : ''}${label}`,
-      onRemove: () => { filters.setCategory(''); resetOffset() },
-    })
+      onRemove: () => {
+        filters.setCategory('');
+        resetOffset();
+      },
+    });
   }
 
   if (!hidePrimary && filters.sellerType) {
@@ -56,17 +59,23 @@ function buildChips(
         filters.sellerType === MARKETPLACE_SELLER_TYPE.REVAMPIT
           ? t('chips.orgDevices', { orgName })
           : t('chips.community'),
-      onRemove: () => { filters.setSellerType(''); resetOffset() },
-    })
+      onRemove: () => {
+        filters.setSellerType('');
+        resetOffset();
+      },
+    });
   }
 
   if (filters.condition) {
-    const opt = ZUSTAND_OPTIONS.find((o) => o.value === filters.condition)
+    const opt = ZUSTAND_OPTIONS.find((o) => o.value === filters.condition);
     chips.push({
       key: 'condition',
       label: opt ? t(`conditions.${opt.value}` as never) : filters.condition,
-      onRemove: () => { filters.setCondition(''); resetOffset() },
-    })
+      onRemove: () => {
+        filters.setCondition('');
+        resetOffset();
+      },
+    });
   }
 
   if (filters.priceMin && filters.priceMax) {
@@ -74,88 +83,113 @@ function buildChips(
       key: 'price',
       label: `CHF ${filters.priceMin} – ${filters.priceMax}`,
       onRemove: () => {
-        filters.setPriceMin('')
-        filters.setPriceMax('')
-        resetOffset()
+        filters.setPriceMin('');
+        filters.setPriceMax('');
+        resetOffset();
       },
-    })
+    });
   } else if (filters.priceMin) {
     chips.push({
       key: 'priceMin',
       label: t('chips.priceFrom', { min: filters.priceMin }),
-      onRemove: () => { filters.setPriceMin(''); resetOffset() },
-    })
+      onRemove: () => {
+        filters.setPriceMin('');
+        resetOffset();
+      },
+    });
   } else if (filters.priceMax) {
     chips.push({
       key: 'priceMax',
       label: t('chips.priceTo', { max: filters.priceMax }),
-      onRemove: () => { filters.setPriceMax(''); resetOffset() },
-    })
+      onRemove: () => {
+        filters.setPriceMax('');
+        resetOffset();
+      },
+    });
   }
 
   if (filters.delivery) {
     chips.push({
       key: 'delivery',
       label: t(`delivery.${filters.delivery as DeliveryOption}` as never),
-      onRemove: () => { filters.setDelivery(''); resetOffset() },
-    })
+      onRemove: () => {
+        filters.setDelivery('');
+        resetOffset();
+      },
+    });
   }
 
   if (filters.payment) {
     chips.push({
       key: 'payment',
       label: t(`payment.${filters.payment as PaymentMode}` as never),
-      onRemove: () => { filters.setPayment(''); resetOffset() },
-    })
+      onRemove: () => {
+        filters.setPayment('');
+        resetOffset();
+      },
+    });
   }
 
   if (filters.gratisOnly) {
     chips.push({
       key: 'gratis',
       label: t('chips.gratis'),
-      onRemove: () => { filters.setGratisOnly(false); resetOffset() },
-    })
+      onRemove: () => {
+        filters.setGratisOnly(false);
+        resetOffset();
+      },
+    });
   }
 
   if (filters.verifiedOnly) {
     chips.push({
       key: 'verified',
       label: t('chips.verified'),
-      onRemove: () => { filters.setVerifiedOnly(false); resetOffset() },
-    })
+      onRemove: () => {
+        filters.setVerifiedOnly(false);
+        resetOffset();
+      },
+    });
   }
 
   // Spec filters — look up label from spec options
-  const specDefs = getSpecFiltersForCategory(filters.category)
+  const specDefs = getSpecFiltersForCategory(filters.category);
   const specMap: Array<{ field: string; value: string; clear: () => void }> = [
     {
       field: 'spec_ram_gb',
       value: filters.specRamMin,
-      clear: () => { filters.setSpecRamMin(''); resetOffset() },
+      clear: () => {
+        filters.setSpecRamMin('');
+        resetOffset();
+      },
     },
     {
       field: 'spec_storage_gb',
       value: filters.specStorageMin,
-      clear: () => { filters.setSpecStorageMin(''); resetOffset() },
+      clear: () => {
+        filters.setSpecStorageMin('');
+        resetOffset();
+      },
     },
     {
       field: 'spec_display_inches',
       value: filters.specDisplayMin,
-      clear: () => { filters.setSpecDisplayMin(''); resetOffset() },
+      clear: () => {
+        filters.setSpecDisplayMin('');
+        resetOffset();
+      },
     },
-  ]
+  ];
 
   for (const { field, value, clear } of specMap) {
-    if (!value) continue
-    const spec = specDefs.find((s) => s.meiliField === field)
-    const opt = spec?.options.find((o) => String(o.value) === value)
-    const label = opt
-      ? `${spec!.label}: ${opt.label}`
-      : `${field}: ${value}`
-    chips.push({ key: field, label, onRemove: clear })
+    if (!value) continue;
+    const spec = specDefs.find((s) => s.meiliField === field);
+    const opt = spec?.options.find((o) => String(o.value) === value);
+    const label = opt ? `${spec!.label}: ${opt.label}` : `${field}: ${value}`;
+    chips.push({ key: field, label, onRemove: clear });
   }
 
-  return chips
+  return chips;
 }
 
 export function ActiveFilterChips({
@@ -164,10 +198,10 @@ export function ActiveFilterChips({
   clearFilters,
   hidePrimary = false,
 }: ActiveFilterChipsProps) {
-  const t = useTranslations('marketplace')
-  const chips = buildChips(filters, resetOffset, ORG.name, t, hidePrimary)
+  const t = useTranslations('marketplace');
+  const chips = buildChips(filters, resetOffset, ORG.name, t, hidePrimary);
 
-  if (chips.length === 0) return null
+  if (chips.length === 0) return null;
 
   return (
     <div className="flex flex-wrap items-center gap-2 mb-4" aria-label={t('filters.activeFilters')}>
@@ -201,5 +235,5 @@ export function ActiveFilterChips({
         </Button>
       )}
     </div>
-  )
+  );
 }

@@ -1,31 +1,31 @@
-'use client'
+'use client';
 
-import React from 'react'
-import { useTranslations } from 'next-intl'
-import { FilterBar } from './FilterBar'
-import { FilterableGrid } from './FilterableGrid'
-import { useFiltering, FilterConfig, FilterableItem } from '@/hooks/useFiltering'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
+import React from 'react';
+import { useTranslations } from 'next-intl';
+import { FilterBar } from './FilterBar';
+import { FilterableGrid } from './FilterableGrid';
+import { useFiltering, FilterConfig, FilterableItem } from '@/hooks/useFiltering';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
 
 interface FilterableSectionProps<T extends FilterableItem> {
-  title: string
-  description?: string
-  items: T[]
-  filters: FilterConfig[]
-  renderItem: (item: T, index: number) => React.ReactNode
-  keyExtractor: (item: T, index: number) => string
-  noResultsMessage?: string
-  showResultsCount?: boolean
+  title: string;
+  description?: string;
+  items: T[];
+  filters: FilterConfig[];
+  renderItem: (item: T, index: number) => React.ReactNode;
+  keyExtractor: (item: T, index: number) => string;
+  noResultsMessage?: string;
+  showResultsCount?: boolean;
   /** Override the "All" label for the filter buttons. Defaults to common.all translation. */
-  allLabel?: string
-  className?: string
+  allLabel?: string;
+  className?: string;
   gridColumns?: {
-    sm?: number
-    md?: number
-    lg?: number
-    xl?: number
-  }
+    sm?: number;
+    md?: number;
+    lg?: number;
+    xl?: number;
+  };
 }
 
 export function FilterableSection<T extends FilterableItem>({
@@ -39,12 +39,12 @@ export function FilterableSection<T extends FilterableItem>({
   showResultsCount = true,
   allLabel,
   className = '',
-  gridColumns = { sm: 1, md: 2, lg: 3 }
+  gridColumns = { sm: 1, md: 2, lg: 3 },
 }: FilterableSectionProps<T>) {
-  const t = useTranslations('common')
+  const t = useTranslations('common');
 
-  const resolvedAllLabel = allLabel ?? t('all')
-  const resolvedNoResults = noResultsMessage ?? t('noResults')
+  const resolvedAllLabel = allLabel ?? t('all');
+  const resolvedNoResults = noResultsMessage ?? t('noResults');
 
   const {
     filterState,
@@ -54,21 +54,21 @@ export function FilterableSection<T extends FilterableItem>({
     toggleFilter,
     resetFilters,
     getFilterSummary,
-    hasActiveFilters
+    hasActiveFilters,
   } = useFiltering({
     items,
     filters,
-    allLabel: resolvedAllLabel
-  })
+    allLabel: resolvedAllLabel,
+  });
 
   return (
     <section className={`py-20 ${className}`}>
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-12">
-          <Heading level={2} className="text-3xl font-bold mb-6">{title}</Heading>
-          {description && (
-            <p className="text-lg text-text-secondary mb-8">{description}</p>
-          )}
+          <Heading level={2} className="text-3xl font-bold mb-6">
+            {title}
+          </Heading>
+          {description && <p className="text-lg text-text-secondary mb-8">{description}</p>}
 
           <FilterBar
             filters={filterOptions}
@@ -109,5 +109,5 @@ export function FilterableSection<T extends FilterableItem>({
         )}
       </div>
     </section>
-  )
+  );
 }

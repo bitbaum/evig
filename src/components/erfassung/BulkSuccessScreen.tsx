@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * BulkSuccessScreen Component
@@ -7,46 +7,43 @@
  * with options to retry failed, download results, or start new erfassung.
  */
 
-import { CheckCircle2, AlertCircle, Download, RotateCcw, Plus } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { IconBadge } from '@/components/ui/IconBadge'
-import type { BulkSaveResponse } from '@/types/erfassung'
+import { CheckCircle2, AlertCircle, Download, RotateCcw, Plus } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { IconBadge } from '@/components/ui/IconBadge';
+import type { BulkSaveResponse } from '@/types/erfassung';
 
 interface BulkSuccessScreenProps {
-  result: BulkSaveResponse
-  onRetryFailed: () => void
-  onReset: () => void
+  result: BulkSaveResponse;
+  onRetryFailed: () => void;
+  onReset: () => void;
 }
 
 export function BulkSuccessScreen({ result, onRetryFailed, onReset }: BulkSuccessScreenProps) {
-  const t = useTranslations('components.erfassung.bulkSuccess')
-  const hasFailures = result.failed > 0
+  const t = useTranslations('components.erfassung.bulkSuccess');
+  const hasFailures = result.failed > 0;
 
   const handleDownloadCSV = () => {
-    const headers = ['#', 'Status', 'Produkt-ID', 'Item-UUID', 'Fehler']
+    const headers = ['#', 'Status', 'Produkt-ID', 'Item-UUID', 'Fehler'];
     const rows = result.results.map((r, i) => [
       i + 1,
       r.success ? t('successLabel') : t('failedLabel'),
       r.productId || '-',
       r.itemUUID || '-',
       r.error || '-',
-    ])
+    ]);
 
-    const csv = [
-      headers.join(';'),
-      ...rows.map(row => row.join(';')),
-    ].join('\n')
+    const csv = [headers.join(';'), ...rows.map((row) => row.join(';'))].join('\n');
 
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = `erfassung-ergebnis-${new Date().toISOString().slice(0, 10)}.csv`
-    link.click()
-    URL.revokeObjectURL(url)
-  }
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `erfassung-ergebnis-${new Date().toISOString().slice(0, 10)}.csv`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div className="min-h-[60vh] flex items-center justify-center p-4">
@@ -81,7 +78,9 @@ export function BulkSuccessScreen({ result, onRetryFailed, onReset }: BulkSucces
           </div>
           {hasFailures && (
             <div className="text-center">
-              <div className="text-3xl font-bold text-error-600 dark:text-error-400">{result.failed}</div>
+              <div className="text-3xl font-bold text-error-600 dark:text-error-400">
+                {result.failed}
+              </div>
               <div className="text-sm text-text-secondary">{t('failedLabel')}</div>
             </div>
           )}
@@ -92,12 +91,14 @@ export function BulkSuccessScreen({ result, onRetryFailed, onReset }: BulkSucces
         </div>
 
         {/* Item UUIDs list for successful saves */}
-        {result.results.some(r => r.success && r.itemUUID) && (
+        {result.results.some((r) => r.success && r.itemUUID) && (
           <div className="bg-surface-raised rounded-lg p-4 text-left max-h-48 overflow-y-auto">
-            <Heading level={3} className="text-sm font-medium text-text-secondary mb-2">{t('createdIds')}</Heading>
+            <Heading level={3} className="text-sm font-medium text-text-secondary mb-2">
+              {t('createdIds')}
+            </Heading>
             <div className="space-y-1">
               {result.results
-                .filter(r => r.success && r.itemUUID)
+                .filter((r) => r.success && r.itemUUID)
                 .map((r, i) => (
                   <div key={i} className="text-sm text-text-secondary font-mono">
                     {r.itemUUID}
@@ -110,11 +111,7 @@ export function BulkSuccessScreen({ result, onRetryFailed, onReset }: BulkSucces
         {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           {hasFailures && (
-            <Button
-              type="button"
-              onClick={onRetryFailed}
-              variant="warning"
-            >
+            <Button type="button" onClick={onRetryFailed} variant="warning">
               <RotateCcw className="w-4 h-4" />
               {t('retryFailed')}
             </Button>
@@ -130,16 +127,12 @@ export function BulkSuccessScreen({ result, onRetryFailed, onReset }: BulkSucces
             {t('downloadCsv')}
           </Button>
 
-          <Button
-            type="button"
-            onClick={onReset}
-            variant="primary"
-          >
+          <Button type="button" onClick={onReset} variant="primary">
             <Plus className="w-4 h-4" />
             {t('newCapture')}
           </Button>
         </div>
       </div>
     </div>
-  )
+  );
 }

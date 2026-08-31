@@ -14,7 +14,7 @@
  */
 
 /** The locale whose wording is legally binding. */
-export const STATUTEN_AUTHORITATIVE_LOCALE = 'de' as const
+export const STATUTEN_AUTHORITATIVE_LOCALE = 'de' as const;
 
 /**
  * Adoption state. evig is `in Gründung` — these statutes are a DRAFT and have
@@ -23,30 +23,30 @@ export const STATUTEN_AUTHORITATIVE_LOCALE = 'de' as const
  * Until that happens the page renders an unmistakable draft banner.
  */
 export const STATUTEN_STATUS: {
-  state: 'draft' | 'adopted'
+  state: 'draft' | 'adopted';
   /** ISO date of the founding assembly. Null while `state` is 'draft'. */
-  adoptedOn: string | null
+  adoptedOn: string | null;
 } = {
   state: 'draft',
   adoptedOn: null,
-}
+};
 
 /** Public source of the document, so anyone can diff every revision. */
 export const STATUTEN_SOURCE_URL =
-  'https://github.com/bitbaum/evig/blob/main/docs/legal/STATUTEN.md'
+  'https://github.com/bitbaum/evig/blob/main/docs/legal/STATUTEN.md';
 
 export interface StatutenSection {
-  id: string
+  id: string;
   /** Roman numeral as printed in the document. */
-  numeral: string
+  numeral: string;
 }
 
 export interface StatutenArticle {
-  id: string
+  id: string;
   /** Article number as printed ("Art. 1"). */
-  num: number
+  num: number;
   /** Owning section id. */
-  section: string
+  section: string;
 }
 
 export const STATUTEN_SECTIONS = [
@@ -56,7 +56,7 @@ export const STATUTEN_SECTIONS = [
   { id: 'organe', numeral: 'IV' },
   { id: 'transparenz', numeral: 'V' },
   { id: 'schluss', numeral: 'VI' },
-] as const satisfies readonly StatutenSection[]
+] as const satisfies readonly StatutenSection[];
 
 export const STATUTEN_ARTICLES = [
   { id: 'name-sitz', num: 1, section: 'name' },
@@ -77,19 +77,17 @@ export const STATUTEN_ARTICLES = [
   { id: 'statutenaenderung', num: 16, section: 'schluss' },
   { id: 'aufloesung', num: 17, section: 'schluss' },
   { id: 'inkrafttreten', num: 18, section: 'schluss' },
-] as const satisfies readonly StatutenArticle[]
+] as const satisfies readonly StatutenArticle[];
 
-export type StatutenSectionId = (typeof STATUTEN_SECTIONS)[number]['id']
-export type StatutenArticleId = (typeof STATUTEN_ARTICLES)[number]['id']
+export type StatutenSectionId = (typeof STATUTEN_SECTIONS)[number]['id'];
+export type StatutenArticleId = (typeof STATUTEN_ARTICLES)[number]['id'];
 
 /** Articles of one section, in document order. */
-export function getStatutenArticlesBySection(
-  sectionId: string
-): readonly StatutenArticle[] {
-  return STATUTEN_ARTICLES.filter(article => article.section === sectionId)
+export function getStatutenArticlesBySection(sectionId: string): readonly StatutenArticle[] {
+  return STATUTEN_ARTICLES.filter((article) => article.section === sectionId);
 }
 
 /** Stable anchor for deep-linking a single article. */
 export function getStatutenAnchor(article: StatutenArticle): string {
-  return `art-${article.num}`
+  return `art-${article.num}`;
 }

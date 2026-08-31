@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useIntakePipeline } from './useIntakePipeline'
-import { useIntakeDetail } from './useIntakeDetail'
-import { IntakePipelineView } from './IntakePipelineView'
-import { IntakeDetailView } from './IntakeDetailView'
-import { ROUTES } from '@/config/routes'
+import { useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useIntakePipeline } from './useIntakePipeline';
+import { useIntakeDetail } from './useIntakeDetail';
+import { IntakePipelineView } from './IntakePipelineView';
+import { IntakeDetailView } from './IntakeDetailView';
+import { ROUTES } from '@/config/routes';
 
 /**
  * Geräte-Eingang — one operational home for capture, triage, QC and publish.
@@ -15,12 +15,12 @@ import { ROUTES } from '@/config/routes'
  * converge on one product record before the operator chooses its destination.
  */
 export default function IntakeClient() {
-  const searchParams = useSearchParams()
-  const router = useRouter()
-  const view = searchParams.has('detail') ? 'detail' : 'pipeline'
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const view = searchParams.has('detail') ? 'detail' : 'pipeline';
 
-  const pipeline = useIntakePipeline(view === 'pipeline')
-  const detail = useIntakeDetail()
+  const pipeline = useIntakePipeline(view === 'pipeline');
+  const detail = useIntakeDetail();
 
   // URL params: donation cross-links open capture with donor prefill;
   // ?capture=1 preserves old bookmarks; ?detail=
@@ -30,29 +30,29 @@ export default function IntakeClient() {
       searchParams.get('capture') === '1' ||
       searchParams.has('donation_id') ||
       searchParams.has('donor_name') ||
-      searchParams.has('donor_email')
+      searchParams.has('donor_email');
     if (isLegacyCapture) {
-      const forwarded = new URLSearchParams(searchParams.toString())
-      forwarded.delete('capture')
-      const query = forwarded.toString()
-      router.replace(`${ROUTES.admin.intakeCapture}${query ? `?${query}` : ''}`)
-      return
+      const forwarded = new URLSearchParams(searchParams.toString());
+      forwarded.delete('capture');
+      const query = forwarded.toString();
+      router.replace(`${ROUTES.admin.intakeCapture}${query ? `?${query}` : ''}`);
+      return;
     }
-    const detailId = searchParams.get('detail')
+    const detailId = searchParams.get('detail');
     if (detailId) {
-      detail.openDetail(detailId)
+      detail.openDetail(detailId);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   const handleOpenDetail = (id: string) => {
-    router.push(ROUTES.admin.intakeDetail(id))
-  }
+    router.push(ROUTES.admin.intakeDetail(id));
+  };
 
   const handleBackToPipeline = () => {
-    detail.clearDetail()
-    router.push(ROUTES.admin.intake)
-  }
+    detail.clearDetail();
+    router.push(ROUTES.admin.intake);
+  };
 
   return (
     <div>
@@ -103,5 +103,5 @@ export default function IntakeClient() {
         />
       )}
     </div>
-  )
+  );
 }

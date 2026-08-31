@@ -9,53 +9,65 @@
  * Each source is fetched defensively so one missing table never breaks the page.
  */
 
-import { Metadata } from 'next'
-import Link from 'next/link'
-import { Inbox } from 'lucide-react'
-import { desc, eq } from 'drizzle-orm'
-import { db } from '@/db'
-import { siteSuggestions, presentationComments, deliverableFeedback, deliverables, users } from '@/db/schema'
-import { requireAnySection } from '@/lib/admin/guards'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminStatsStrip } from '@/components/admin/AdminStatsStrip'
-import { Card } from '@/components/ui/card'
-import { FEEDBACK_KIND_LABELS, type FeedbackKind } from '@/config/deliverables'
-import { formatDateTimeNumeric } from '@/lib/date-formats'
-import { logger } from '@/lib/logger'
+import { Metadata } from 'next';
+import Link from 'next/link';
+import { Inbox } from 'lucide-react';
+import { desc, eq } from 'drizzle-orm';
+import { db } from '@/db';
+import {
+  siteSuggestions,
+  presentationComments,
+  deliverableFeedback,
+  deliverables,
+  users,
+} from '@/db/schema';
+import { requireAnySection } from '@/lib/admin/guards';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import { AdminStatsStrip } from '@/components/admin/AdminStatsStrip';
+import { Card } from '@/components/ui/card';
+import { FEEDBACK_KIND_LABELS, type FeedbackKind } from '@/config/deliverables';
+import { formatDateTimeNumeric } from '@/lib/date-formats';
+import { logger } from '@/lib/logger';
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Rückmeldungen',
   description: 'Alle Rückmeldungen an einem Ort.',
-}
+};
 
-type Source = 'website' | 'presentation' | 'deliverable'
+type Source = 'website' | 'presentation' | 'deliverable';
 
 interface Item {
-  key: string
-  source: Source
-  kindLabel: string
-  summary: string
-  context: string
-  author: string | null
-  createdAt: string
-  open: boolean
-  href: string
+  key: string;
+  source: Source;
+  kindLabel: string;
+  summary: string;
+  context: string;
+  author: string | null;
+  createdAt: string;
+  open: boolean;
+  href: string;
 }
 
 const SOURCE_META: Record<Source, { label: string; cls: string }> = {
-  website: { label: 'Website', cls: 'bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-info-200' },
-  presentation: { label: 'Präsentation', cls: 'bg-secondary-100 text-secondary-800 dark:bg-secondary-900/30 dark:text-secondary-200' },
+  website: {
+    label: 'Website',
+    cls: 'bg-info-100 text-info-800 dark:bg-info-900/30 dark:text-info-200',
+  },
+  presentation: {
+    label: 'Präsentation',
+    cls: 'bg-secondary-100 text-secondary-800 dark:bg-secondary-900/30 dark:text-secondary-200',
+  },
   deliverable: { label: 'Liefergegenstand', cls: 'bg-action-muted text-action' },
-}
+};
 
 function snippet(s: string, n = 160): string {
-  return s.length > n ? s.slice(0, n).trimEnd() + '…' : s
+  return s.length > n ? s.slice(0, n).trimEnd() + '…' : s;
 }
 
 async function fetchAll(): Promise<Item[]> {
-  const items: Item[] = []
+  const items: Item[] = [];
 
   // Website feedback
   try {
@@ -71,7 +83,7 @@ async function fetchAll(): Promise<Item[]> {
       })
       .from(siteSuggestions)
       .orderBy(desc(siteSuggestions.createdAt))
-      .limit(200)
+      .limit(200);
     for (const r of rows) {
       items.push({
         key: `w-${r.id}`,
@@ -83,10 +95,10 @@ async function fetchAll(): Promise<Item[]> {
         createdAt: r.createdAt ?? '',
         open: !r.resolved,
         href: '/admin/feedback',
-      })
+      });
     }
   } catch (error) {
-    logger.warn('Rückmeldungen: website source failed', { error })
+    logger.warn('Rückmeldungen: website source failed', { error });
   }
 
   // Presentation slide comments
@@ -104,9 +116,9 @@ async function fetchAll(): Promise<Item[]> {
       })
       .from(presentationComments)
       .orderBy(desc(presentationComments.createdAt))
-      .limit(200)
+      .limit(200);
     for (const r of rows) {
-      const ctx = `${r.deckSlug} · Folie ${r.slideIndex + 1}${r.slideTitle ? ` · ${r.slideTitle}` : ''}`
+      const ctx = `${r.deckSlug} · Folie ${r.slideIndex + 1}${r.slideTitle ? ` · ${r.slideTitle}` : ''}`;
       items.push({
         key: `p-${r.id}`,
         source: 'presentation',
@@ -117,10 +129,10 @@ async function fetchAll(): Promise<Item[]> {
         createdAt: r.createdAt ?? '',
         open: !r.resolved,
         href: '/admin/presentations/feedback',
-      })
+      });
     }
   } catch (error) {
-    logger.warn('Rückmeldungen: presentation source failed', { error })
+    logger.warn('Rückmeldungen: presentation source failed', { error });
   }
 
   // Deliverable feedback
@@ -141,7 +153,7 @@ async function fetchAll(): Promise<Item[]> {
       .leftJoin(deliverables, eq(deliverableFeedback.deliverableId, deliverables.id))
       .leftJoin(users, eq(deliverableFeedback.authorUserId, users.id))
       .orderBy(desc(deliverableFeedback.createdAt))
-      .limit(200)
+      .limit(200);
     for (const r of rows) {
       items.push({
         key: `d-${r.id}`,
@@ -153,14 +165,14 @@ async function fetchAll(): Promise<Item[]> {
         createdAt: r.createdAt ?? '',
         open: r.status === 'open',
         href: r.dId ? `/admin/deliverables/${r.dId}` : '/admin/deliverables',
-      })
+      });
     }
   } catch (error) {
-    logger.warn('Rückmeldungen: deliverable source failed', { error })
+    logger.warn('Rückmeldungen: deliverable source failed', { error });
   }
 
   // Newest first (ISO timestamps sort lexicographically)
-  return items.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
+  return items.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
 }
 
 const FILTERS: { key: string; label: string }[] = [
@@ -168,35 +180,35 @@ const FILTERS: { key: string; label: string }[] = [
   { key: 'website', label: 'Website' },
   { key: 'presentation', label: 'Präsentationen' },
   { key: 'deliverable', label: 'Liefergegenstände' },
-]
+];
 
 export default async function RueckmeldungenPage({
   searchParams,
 }: {
-  searchParams: Promise<{ source?: string; open?: string }>
+  searchParams: Promise<{ source?: string; open?: string }>;
 }) {
-  await requireAnySection(['feedbackOverview'], 'rueckmeldungen')
-  const params = await searchParams
-  const all = await fetchAll()
+  await requireAnySection(['feedbackOverview'], 'rueckmeldungen');
+  const params = await searchParams;
+  const all = await fetchAll();
 
-  const openCount = all.filter((i) => i.open).length
-  const perSource = (s: Source) => all.filter((i) => i.source === s).length
+  const openCount = all.filter((i) => i.open).length;
+  const perSource = (s: Source) => all.filter((i) => i.source === s).length;
 
-  const activeSource = params.source && params.source !== 'all' ? params.source : 'all'
-  const openOnly = params.open === '1'
-  let rows = all
-  if (activeSource !== 'all') rows = rows.filter((i) => i.source === activeSource)
-  if (openOnly) rows = rows.filter((i) => i.open)
+  const activeSource = params.source && params.source !== 'all' ? params.source : 'all';
+  const openOnly = params.open === '1';
+  let rows = all;
+  if (activeSource !== 'all') rows = rows.filter((i) => i.source === activeSource);
+  if (openOnly) rows = rows.filter((i) => i.open);
 
   const qs = (patch: Record<string, string | undefined>) => {
-    const sp = new URLSearchParams()
-    const source = patch.source ?? activeSource
-    const open = 'open' in patch ? patch.open : openOnly ? '1' : undefined
-    if (source && source !== 'all') sp.set('source', source)
-    if (open) sp.set('open', '1')
-    const s = sp.toString()
-    return s ? `?${s}` : ''
-  }
+    const sp = new URLSearchParams();
+    const source = patch.source ?? activeSource;
+    const open = 'open' in patch ? patch.open : openOnly ? '1' : undefined;
+    if (source && source !== 'all') sp.set('source', source);
+    if (open) sp.set('open', '1');
+    const s = sp.toString();
+    return s ? `?${s}` : '';
+  };
 
   return (
     <AdminPageWrapper
@@ -210,7 +222,12 @@ export default async function RueckmeldungenPage({
           { icon: Inbox, color: 'gray', label: 'Gesamt', value: all.length },
           { icon: Inbox, color: 'amber', label: 'Offen', value: openCount },
           { icon: Inbox, color: 'blue', label: 'Website', value: perSource('website') },
-          { icon: Inbox, color: 'green', label: 'Liefergegenstände', value: perSource('deliverable') },
+          {
+            icon: Inbox,
+            color: 'green',
+            label: 'Liefergegenstände',
+            value: perSource('deliverable'),
+          },
         ]}
       />
 
@@ -220,7 +237,9 @@ export default async function RueckmeldungenPage({
             key={f.key}
             href={`/admin/rueckmeldungen${qs({ source: f.key })}`}
             className={`text-sm rounded-full px-3 py-1.5 border transition-colors ${
-              activeSource === f.key ? 'bg-action text-action-text border-action' : 'text-text-secondary hover:text-action'
+              activeSource === f.key
+                ? 'bg-action text-action-text border-action'
+                : 'text-text-secondary hover:text-action'
             }`}
           >
             {f.label}
@@ -230,7 +249,9 @@ export default async function RueckmeldungenPage({
         <Link
           href={`/admin/rueckmeldungen${qs({ open: openOnly ? undefined : '1' })}`}
           className={`text-sm rounded-full px-3 py-1.5 border transition-colors ${
-            openOnly ? 'bg-action text-action-text border-action' : 'text-text-secondary hover:text-action'
+            openOnly
+              ? 'bg-action text-action-text border-action'
+              : 'text-text-secondary hover:text-action'
           }`}
         >
           Nur offene
@@ -241,7 +262,9 @@ export default async function RueckmeldungenPage({
         <Card className="p-10 text-center">
           <Inbox className="w-10 h-10 mx-auto text-text-secondary mb-3" />
           <p className="text-text-primary font-medium">Keine Rückmeldungen</p>
-          <p className="text-text-secondary text-sm mt-1">Hier erscheinen Rückmeldungen aus allen drei Quellen.</p>
+          <p className="text-text-secondary text-sm mt-1">
+            Hier erscheinen Rückmeldungen aus allen drei Quellen.
+          </p>
         </Card>
       ) : (
         <Card className="overflow-hidden">
@@ -261,21 +284,33 @@ export default async function RueckmeldungenPage({
                 {rows.map((i) => (
                   <tr key={i.key} className="hover:bg-surface-raised transition-colors align-top">
                     <td className="px-4 py-3">
-                      <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium whitespace-nowrap ${SOURCE_META[i.source].cls}`}>
+                      <span
+                        className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium whitespace-nowrap ${SOURCE_META[i.source].cls}`}
+                      >
                         {SOURCE_META[i.source].label}
                       </span>
                       <div className="text-xs text-text-secondary mt-1">{i.kindLabel}</div>
                     </td>
                     <td className="px-4 py-3">
-                      <Link href={i.href} className="text-text-primary hover:text-action">{i.summary}</Link>
+                      <Link href={i.href} className="text-text-primary hover:text-action">
+                        {i.summary}
+                      </Link>
                     </td>
                     <td className="px-4 py-3 text-text-secondary">{i.context}</td>
-                    <td className="px-4 py-3 text-text-secondary whitespace-nowrap">{i.author ?? '—'}</td>
-                    <td className="px-4 py-3 text-text-secondary whitespace-nowrap">{i.createdAt ? formatDateTimeNumeric(i.createdAt) : '—'}</td>
+                    <td className="px-4 py-3 text-text-secondary whitespace-nowrap">
+                      {i.author ?? '—'}
+                    </td>
+                    <td className="px-4 py-3 text-text-secondary whitespace-nowrap">
+                      {i.createdAt ? formatDateTimeNumeric(i.createdAt) : '—'}
+                    </td>
                     <td className="px-4 py-3">
-                      <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium whitespace-nowrap ${
-                        i.open ? 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-200' : 'bg-action-muted text-action'
-                      }`}>
+                      <span
+                        className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium whitespace-nowrap ${
+                          i.open
+                            ? 'bg-warning-100 text-warning-800 dark:bg-warning-900/30 dark:text-warning-200'
+                            : 'bg-action-muted text-action'
+                        }`}
+                      >
                         {i.open ? 'Offen' : 'Erledigt'}
                       </span>
                     </td>
@@ -287,5 +322,5 @@ export default async function RueckmeldungenPage({
         </Card>
       )}
     </AdminPageWrapper>
-  )
+  );
 }

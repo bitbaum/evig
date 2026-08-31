@@ -1,23 +1,23 @@
-'use client'
+'use client';
 
-import { Mail, Trash2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import Heading from '@/components/ui/Heading'
-import { Input } from '@/components/ui/input'
-import { SETTINGS_CONFIG } from '@/config/profile'
-import { CONTACT } from '@/config/org'
-import { useTranslations } from 'next-intl'
-import type { ProfileData } from '../../profile/hooks/useProfileData'
+import { Mail, Trash2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Heading from '@/components/ui/Heading';
+import { Input } from '@/components/ui/input';
+import { SETTINGS_CONFIG } from '@/config/profile';
+import { CONTACT } from '@/config/org';
+import { useTranslations } from 'next-intl';
+import type { ProfileData } from '../../profile/hooks/useProfileData';
 
 interface AccountSectionProps {
-  profile: ProfileData
-  email: string
-  handleChange: (field: keyof ProfileData, value: string) => void
+  profile: ProfileData;
+  email: string;
+  handleChange: (field: keyof ProfileData, value: string) => void;
 }
 
 export function AccountSection({ profile, email, handleChange }: AccountSectionProps) {
-  const labels = SETTINGS_CONFIG.labels.account
-  const t = useTranslations('dashboard.settings.account')
+  const labels = SETTINGS_CONFIG.labels.account;
+  const t = useTranslations('dashboard.settings.account');
 
   return (
     <div className="space-y-8">
@@ -26,13 +26,14 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
         <Heading level={3} className="text-lg font-semibold text-text-primary mb-4">
           {labels.title}
         </Heading>
-        <p className="text-sm text-text-secondary mb-6">
-          {labels.description}
-        </p>
+        <p className="text-sm text-text-secondary mb-6">{labels.description}</p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="first_name" className="block text-sm font-medium text-text-secondary mb-2">
+            <label
+              htmlFor="first_name"
+              className="block text-sm font-medium text-text-secondary mb-2"
+            >
               {labels.firstName}
             </label>
             <Input
@@ -45,7 +46,10 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
           </div>
 
           <div>
-            <label htmlFor="last_name" className="block text-sm font-medium text-text-secondary mb-2">
+            <label
+              htmlFor="last_name"
+              className="block text-sm font-medium text-text-secondary mb-2"
+            >
               {labels.lastName}
             </label>
             <Input
@@ -61,23 +65,14 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
 
       {/* Email (Read-only) */}
       <div>
-        <label className="block text-sm font-medium text-text-secondary mb-2">
-          {labels.email}
-        </label>
+        <label className="block text-sm font-medium text-text-secondary mb-2">{labels.email}</label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <Mail className="h-5 w-5 text-text-muted" />
           </div>
-          <Input
-            type="email"
-            value={email}
-            readOnly
-            className="pl-10 cursor-not-allowed"
-          />
+          <Input type="email" value={email} readOnly className="pl-10 cursor-not-allowed" />
         </div>
-        <p className="mt-2 text-sm text-text-tertiary">
-          {labels.emailDescription}
-        </p>
+        <p className="mt-2 text-sm text-text-tertiary">{labels.emailDescription}</p>
       </div>
 
       {/* Password Change Link */}
@@ -85,22 +80,19 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
         <Heading level={4} className="text-base font-semibold text-text-primary mb-2">
           {labels.password}
         </Heading>
-        <p className="text-sm text-text-secondary mb-4">
-          {labels.passwordDescription}
-        </p>
-        <p className="text-sm text-text-secondary">
-          {t('passwordNote')}
-        </p>
+        <p className="text-sm text-text-secondary mb-4">{labels.passwordDescription}</p>
+        <p className="text-sm text-text-secondary">{t('passwordNote')}</p>
       </div>
 
       {/* Danger Zone */}
       <div className="border-t-2 border-error-200 dark:border-error-900 pt-6">
-        <Heading level={4} className="text-base font-semibold text-error-600 dark:text-error-400 mb-2">
+        <Heading
+          level={4}
+          className="text-base font-semibold text-error-600 dark:text-error-400 mb-2"
+        >
           {labels.deleteAccount}
         </Heading>
-        <p className="text-sm text-text-secondary mb-4">
-          {labels.deleteAccountWarning}
-        </p>
+        <p className="text-sm text-text-secondary mb-4">{labels.deleteAccountWarning}</p>
         {/* Account deletion is handled manually by staff (no self-serve cascade
             delete yet). The button opens a pre-filled deletion request to
             support so it performs a real action instead of being inert. */}
@@ -114,5 +106,5 @@ export function AccountSection({ profile, email, handleChange }: AccountSectionP
         </Button>
       </div>
     </div>
-  )
+  );
 }

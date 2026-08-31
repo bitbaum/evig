@@ -1,114 +1,115 @@
-'use client'
+'use client';
 
-import { useSession } from 'next-auth/react'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { useEffect, useState } from 'react'
-import { useTranslations } from 'next-intl'
-import { Heart, Package, ArrowLeft, CheckCircle, Clock, Receipt, LogIn } from 'lucide-react'
-import { EmptyState } from '@/components/ui/EmptyState'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { apiFetch } from '@/lib/api/client'
-import Heading from '@/components/ui/Heading'
-import { cn } from '@/lib/utils'
-import { formatDate } from '@/lib/date-formats'
-import { CONTACT } from '@/config/org'
+import { useSession } from 'next-auth/react';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { Heart, Package, ArrowLeft, CheckCircle, Clock, Receipt, LogIn } from 'lucide-react';
+import { EmptyState } from '@/components/ui/EmptyState';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { apiFetch } from '@/lib/api/client';
+import Heading from '@/components/ui/Heading';
+import { cn } from '@/lib/utils';
+import { formatDate } from '@/lib/date-formats';
+import { CONTACT } from '@/config/org';
 import {
   getDonationTypeLabel,
   getDeviceCategoryLabel,
   getDonationStatusLabel,
   formatAmountCHF,
   DONATION_TYPES,
-} from '@/config/donations'
-import { DeviceJourney, type JourneyItem } from '@/components/dashboard/DeviceJourney'
+} from '@/config/donations';
+import { DeviceJourney, type JourneyItem } from '@/components/dashboard/DeviceJourney';
 
 interface Donation {
-  id: string
-  donation_type: 'monetary' | 'device'
+  id: string;
+  donation_type: 'monetary' | 'device';
   // Monetary
-  amount_cents: number | null
-  currency: string
-  payment_method: string | null
+  amount_cents: number | null;
+  currency: string;
+  payment_method: string | null;
   // Device
-  device_category: string | null
-  device_description: string | null
-  device_brand: string | null
-  device_model: string | null
-  device_condition: string | null
-  estimated_value_cents: number | null
+  device_category: string | null;
+  device_description: string | null;
+  device_brand: string | null;
+  device_model: string | null;
+  device_condition: string | null;
+  estimated_value_cents: number | null;
   // Status
-  status: string
-  receipt_requested: boolean
-  receipt_sent: boolean
+  status: string;
+  receipt_requested: boolean;
+  receipt_sent: boolean;
   // Dates
-  created_at: string
+  created_at: string;
   // Journey (device donations only)
   journey?: {
-    total_items: number
-    items: JourneyItem[]
-  }
+    total_items: number;
+    items: JourneyItem[];
+  };
 }
 
 export default function DonationsDashboard() {
-  const t = useTranslations('dashboard.donations')
-  const { data: session, status } = useSession()
-  const [donations, setDonations] = useState<Donation[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string>('')
+  const t = useTranslations('dashboard.donations');
+  const { data: session, status } = useSession();
+  const [donations, setDonations] = useState<Donation[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
-    if (!session?.user) return
-    let cancelled = false
+    if (!session?.user) return;
+    let cancelled = false;
     async function fetchDonations() {
-      const result = await apiFetch<Donation[]>('/api/user/donations')
-      if (cancelled) return
+      const result = await apiFetch<Donation[]>('/api/user/donations');
+      if (cancelled) return;
       if (result.success && result.data) {
-        setDonations(result.data)
+        setDonations(result.data);
       } else {
-        setError(result.error || t('loadError'))
+        setError(result.error || t('loadError'));
       }
-      setLoading(false)
+      setLoading(false);
     }
-    fetchDonations()
-    return () => { cancelled = true }
-  }, [session, t])
-
+    fetchDonations();
+    return () => {
+      cancelled = true;
+    };
+  }, [session, t]);
 
   const getStatusIcon = (donation: Donation) => {
     if (donation.receipt_sent) {
-      return <Receipt className="w-5 h-5 text-success-500" />
+      return <Receipt className="w-5 h-5 text-success-500" />;
     }
     if (donation.status === 'thanked') {
-      return <CheckCircle className="w-5 h-5 text-success-500" />
+      return <CheckCircle className="w-5 h-5 text-success-500" />;
     }
-    return <Clock className="w-5 h-5 text-warning-500" />
-  }
+    return <Clock className="w-5 h-5 text-warning-500" />;
+  };
 
   const getDonationIcon = (type: string) => {
     if (type === DONATION_TYPES.DEVICE) {
-      return <Package className="w-6 h-6" />
+      return <Package className="w-6 h-6" />;
     }
-    return <Heart className="w-6 h-6" />
-  }
+    return <Heart className="w-6 h-6" />;
+  };
 
   const getDonationValue = (donation: Donation): string => {
     if (donation.donation_type === DONATION_TYPES.MONETARY) {
-      return formatAmountCHF(donation.amount_cents)
+      return formatAmountCHF(donation.amount_cents);
     }
     if (donation.estimated_value_cents) {
-      return `~${formatAmountCHF(donation.estimated_value_cents)}`
+      return `~${formatAmountCHF(donation.estimated_value_cents)}`;
     }
-    return '-'
-  }
+    return '-';
+  };
 
   const getDeviceTitle = (donation: Donation): string => {
-    const parts: string[] = []
-    if (donation.device_brand) parts.push(donation.device_brand)
-    if (donation.device_model) parts.push(donation.device_model)
-    if (parts.length > 0) return parts.join(' ')
-    if (donation.device_category) return getDeviceCategoryLabel(donation.device_category)
-    return t('deviceFallback')
-  }
+    const parts: string[] = [];
+    if (donation.device_brand) parts.push(donation.device_brand);
+    if (donation.device_model) parts.push(donation.device_model);
+    if (parts.length > 0) return parts.join(' ');
+    if (donation.device_category) return getDeviceCategoryLabel(donation.device_category);
+    return t('deviceFallback');
+  };
 
   if (status === 'loading' || loading) {
     return (
@@ -126,7 +127,7 @@ export default function DonationsDashboard() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   if (!session?.user) {
@@ -145,7 +146,7 @@ export default function DonationsDashboard() {
           />
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -160,9 +161,7 @@ export default function DonationsDashboard() {
             <ArrowLeft className="mr-1.5 h-3 w-3" />
             {t('backToDashboard')}
           </Link>
-          <Eyebrow>
-            {t('pageSubtitle')}
-          </Eyebrow>
+          <Eyebrow>{t('pageSubtitle')}</Eyebrow>
           <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
             {t('pageTitle')}
           </Heading>
@@ -179,18 +178,17 @@ export default function DonationsDashboard() {
         {donations.length > 0 ? (
           <div className="space-y-4">
             {donations.map((donation) => (
-              <div
-                key={donation.id}
-                className="card-shell p-4 sm:p-6"
-              >
+              <div key={donation.id} className="card-shell p-4 sm:p-6">
                 <div className="flex items-start gap-4">
                   {/* Type Icon */}
-                  <div className={cn(
-                    'w-12 h-12 rounded-lg flex items-center justify-center shrink-0',
-                    donation.donation_type === DONATION_TYPES.MONETARY
-                      ? 'bg-success-100 dark:bg-success-900/30 text-success-600 dark:text-success-400'
-                      : 'bg-surface-raised text-text-secondary'
-                  )}>
+                  <div
+                    className={cn(
+                      'w-12 h-12 rounded-lg flex items-center justify-center shrink-0',
+                      donation.donation_type === DONATION_TYPES.MONETARY
+                        ? 'bg-success-100 dark:bg-success-900/30 text-success-600 dark:text-success-400'
+                        : 'bg-surface-raised text-text-secondary',
+                    )}
+                  >
                     {getDonationIcon(donation.donation_type)}
                   </div>
 
@@ -201,11 +199,11 @@ export default function DonationsDashboard() {
                         <Heading level={3} className="text-lg font-semibold text-text-primary">
                           {donation.donation_type === DONATION_TYPES.MONETARY
                             ? t('monetaryDonation')
-                            : getDeviceTitle(donation)
-                          }
+                            : getDeviceTitle(donation)}
                         </Heading>
                         <p className="text-sm text-text-secondary">
-                          {getDonationTypeLabel(donation.donation_type)} • {formatDate(donation.created_at)}
+                          {getDonationTypeLabel(donation.donation_type)} •{' '}
+                          {formatDate(donation.created_at)}
                         </p>
                       </div>
                       <div className="text-right">
@@ -216,18 +214,21 @@ export default function DonationsDashboard() {
                     </div>
 
                     {/* Device Description */}
-                    {donation.donation_type === DONATION_TYPES.DEVICE && donation.device_description && (
-                      <p className="mt-2 text-sm text-text-secondary">
-                        {donation.device_description}
-                      </p>
-                    )}
+                    {donation.donation_type === DONATION_TYPES.DEVICE &&
+                      donation.device_description && (
+                        <p className="mt-2 text-sm text-text-secondary">
+                          {donation.device_description}
+                        </p>
+                      )}
 
                     {/* Status */}
                     <div className="mt-3 flex items-center gap-2">
                       {getStatusIcon(donation)}
                       <span className="text-sm text-text-secondary">
                         {getDonationStatusLabel(donation.status)}
-                        {donation.receipt_requested && !donation.receipt_sent && ` • ${t('receiptRequested')}`}
+                        {donation.receipt_requested &&
+                          !donation.receipt_sent &&
+                          ` • ${t('receiptRequested')}`}
                         {donation.receipt_sent && ` • ${t('receiptSent')}`}
                       </span>
                     </div>
@@ -266,10 +267,16 @@ export default function DonationsDashboard() {
           </Heading>
           <p className="text-sm text-text-secondary">
             {t('receiptInfoText')}{' '}
-            <a href={`mailto:${CONTACT.email}`} className="underline text-text-primary hover:text-text-primary">{CONTACT.email}</a>.
+            <a
+              href={`mailto:${CONTACT.email}`}
+              className="underline text-text-primary hover:text-text-primary"
+            >
+              {CONTACT.email}
+            </a>
+            .
           </p>
         </div>
       </div>
     </div>
-  )
+  );
 }

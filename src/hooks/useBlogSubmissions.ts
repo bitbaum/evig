@@ -1,33 +1,33 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { apiFetch } from '@/lib/api/client'
-import { useSwrFetch } from '@/lib/api/swr'
-import { APPROVAL_STATUS } from '@/config/approval-status'
+import { useState } from 'react';
+import { apiFetch } from '@/lib/api/client';
+import { useSwrFetch } from '@/lib/api/swr';
+import { APPROVAL_STATUS } from '@/config/approval-status';
 
 export interface MySubmission {
-  id: string
-  title: string
-  slug: string | null
-  status: string
-  statusLabel: string
-  submissionType: string
-  reviewNotes: string | null
-  rejectionReason: string | null
-  adminFeedback: string | null
-  nextAction: string | null
-  publishedPostId: string | null
-  publishedPostSlug: string | null
-  publishedAt: string | null
-  submittedAt: string | null
-  createdAt: string | null
-  updatedAt: string | null
+  id: string;
+  title: string;
+  slug: string | null;
+  status: string;
+  statusLabel: string;
+  submissionType: string;
+  reviewNotes: string | null;
+  rejectionReason: string | null;
+  adminFeedback: string | null;
+  nextAction: string | null;
+  publishedPostId: string | null;
+  publishedPostSlug: string | null;
+  publishedAt: string | null;
+  submittedAt: string | null;
+  createdAt: string | null;
+  updatedAt: string | null;
 }
 
 interface UseBlogSubmissionsErrors {
-  loadError: string
-  emptyContent: string
-  resubmitError: string
+  loadError: string;
+  emptyContent: string;
+  resubmitError: string;
 }
 
 export function useBlogSubmissions(errors: UseBlogSubmissionsErrors) {
@@ -40,63 +40,63 @@ export function useBlogSubmissions(errors: UseBlogSubmissionsErrors) {
     error: swrError,
     isLoading,
     mutate,
-  } = useSwrFetch<{ submissions: MySubmission[] }>('/api/blog/my-submissions')
+  } = useSwrFetch<{ submissions: MySubmission[] }>('/api/blog/my-submissions');
 
-  const submissions = data?.submissions ?? []
+  const submissions = data?.submissions ?? [];
 
   // Local UI state that's independent of the fetch
-  const [error, setError] = useState('')
-  const [editingId, setEditingId] = useState<string | null>(null)
-  const [editTitle, setEditTitle] = useState('')
-  const [editContent, setEditContent] = useState('')
-  const [saving, setSaving] = useState(false)
-  const [expandedFeedback, setExpandedFeedback] = useState<Set<string>>(new Set())
+  const [error, setError] = useState('');
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editContent, setEditContent] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [expandedFeedback, setExpandedFeedback] = useState<Set<string>>(new Set());
 
   // Surface SWR fetch errors via the same `error` field consumers
   // already check. Falls back to the localized loadError message.
-  const displayError = error || (swrError ? errors.loadError : '')
+  const displayError = error || (swrError ? errors.loadError : '');
 
   const toggleFeedback = (id: string) => {
     setExpandedFeedback((prev) => {
-      const next = new Set(prev)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      return next
-    })
-  }
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
 
   const startEditing = (submission: MySubmission) => {
-    setEditingId(submission.id)
-    setEditTitle(submission.title)
-    setEditContent('')
-  }
+    setEditingId(submission.id);
+    setEditTitle(submission.title);
+    setEditContent('');
+  };
 
   const cancelEditing = () => {
-    setEditingId(null)
-    setEditTitle('')
-    setEditContent('')
-  }
+    setEditingId(null);
+    setEditTitle('');
+    setEditContent('');
+  };
 
   const resubmit = async (id: string) => {
     if (!editContent.trim()) {
-      setError(errors.emptyContent)
-      return
+      setError(errors.emptyContent);
+      return;
     }
-    setSaving(true)
+    setSaving(true);
     const result = await apiFetch<{ id: string; status: string }>(
       `/api/blog/submissions/${id}/resubmit`,
       { method: 'POST', body: { title: editTitle, content: editContent } },
-    )
-    setSaving(false)
+    );
+    setSaving(false);
     if (result.success) {
-      cancelEditing()
+      cancelEditing();
       // Revalidate SWR cache so the list reflects the resubmitted entry's
       // updated status without a full re-mount.
-      await mutate()
+      await mutate();
     } else {
-      setError(result.error || errors.resubmitError)
+      setError(result.error || errors.resubmitError);
     }
-  }
+  };
 
   const stats = {
     pending: submissions.filter(
@@ -104,8 +104,9 @@ export function useBlogSubmissions(errors: UseBlogSubmissionsErrors) {
     ).length,
     published: submissions.filter((s) => s.status === APPROVAL_STATUS.PUBLISHED).length,
     rejected: submissions.filter((s) => s.status === APPROVAL_STATUS.REJECTED).length,
-    requiresChanges: submissions.filter((s) => s.status === APPROVAL_STATUS.REQUIRES_CHANGES).length,
-  }
+    requiresChanges: submissions.filter((s) => s.status === APPROVAL_STATUS.REQUIRES_CHANGES)
+      .length,
+  };
 
   return {
     submissions,
@@ -123,5 +124,5 @@ export function useBlogSubmissions(errors: UseBlogSubmissionsErrors) {
     startEditing,
     cancelEditing,
     resubmit,
-  }
+  };
 }

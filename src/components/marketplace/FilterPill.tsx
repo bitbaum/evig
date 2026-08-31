@@ -1,24 +1,18 @@
-'use client'
+'use client';
 
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 interface FilterPillProps {
-  active: boolean
-  onClick: () => void
-  children: React.ReactNode
-  className?: string
-  ariaLabel?: string
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+  className?: string;
+  ariaLabel?: string;
 }
 
 /** Monochrome filter pill — x.ai / fleetcrown discipline. Green only on primary CTAs. */
-export function FilterPill({
-  active,
-  onClick,
-  children,
-  className,
-  ariaLabel,
-}: FilterPillProps) {
+export function FilterPill({ active, onClick, children, className, ariaLabel }: FilterPillProps) {
   return (
     <Button
       type="button"
@@ -36,5 +30,5 @@ export function FilterPill({
     >
       {children}
     </Button>
-  )
+  );
 }

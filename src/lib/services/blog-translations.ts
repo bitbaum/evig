@@ -7,16 +7,16 @@
  * for which locales a post exists in.
  */
 
-import { db } from '@/db'
-import { blogPostTranslations } from '@/db/schema/content'
-import { eq, and, notInArray } from 'drizzle-orm'
-import { BlogTranslationsSchema, type BlogTranslationInput } from '@/lib/schemas/blog'
-import { logger } from '@/lib/logger'
+import { db } from '@/db';
+import { blogPostTranslations } from '@/db/schema/content';
+import { eq, and, notInArray } from 'drizzle-orm';
+import { BlogTranslationsSchema, type BlogTranslationInput } from '@/lib/schemas/blog';
+import { logger } from '@/lib/logger';
 
 export interface SyncTranslationsResult {
-  success: boolean
-  error?: string
-  count?: number
+  success: boolean;
+  error?: string;
+  count?: number;
 }
 
 /**
@@ -28,12 +28,12 @@ export async function syncPostTranslations(
   postId: string,
   translations: unknown,
 ): Promise<SyncTranslationsResult> {
-  const parsed = BlogTranslationsSchema.safeParse(translations ?? [])
+  const parsed = BlogTranslationsSchema.safeParse(translations ?? []);
   if (!parsed.success) {
-    return { success: false, error: parsed.error.issues[0]?.message || 'Ungültige Übersetzungen' }
+    return { success: false, error: parsed.error.issues[0]?.message || 'Ungültige Übersetzungen' };
   }
-  const rows: BlogTranslationInput[] = parsed.data
-  const keepLocales = rows.map((r) => r.locale)
+  const rows: BlogTranslationInput[] = parsed.data;
+  const keepLocales = rows.map((r) => r.locale);
 
   try {
     await db.transaction(async (tx) => {
@@ -42,14 +42,17 @@ export async function syncPostTranslations(
         await tx
           .delete(blogPostTranslations)
           .where(
-            and(eq(blogPostTranslations.postId, postId), notInArray(blogPostTranslations.locale, keepLocales)),
-          )
+            and(
+              eq(blogPostTranslations.postId, postId),
+              notInArray(blogPostTranslations.locale, keepLocales),
+            ),
+          );
       } else {
-        await tx.delete(blogPostTranslations).where(eq(blogPostTranslations.postId, postId))
+        await tx.delete(blogPostTranslations).where(eq(blogPostTranslations.postId, postId));
       }
 
       for (const t of rows) {
-        const isMachine = t.isMachine === true
+        const isMachine = t.isMachine === true;
         await tx
           .insert(blogPostTranslations)
           .values({
@@ -73,13 +76,13 @@ export async function syncPostTranslations(
               isMachine,
               updatedAt: new Date().toISOString(),
             },
-          })
+          });
       }
-    })
-    return { success: true, count: rows.length }
+    });
+    return { success: true, count: rows.length };
   } catch (error) {
-    logger.error('Failed to sync blog post translations', { postId, error })
-    return { success: false, error: 'Übersetzungen konnten nicht gespeichert werden' }
+    logger.error('Failed to sync blog post translations', { postId, error });
+    return { success: false, error: 'Übersetzungen konnten nicht gespeichert werden' };
   }
 }
 
@@ -97,7 +100,7 @@ export async function getPostTranslations(postId: string): Promise<BlogTranslati
         isMachine: blogPostTranslations.isMachine,
       })
       .from(blogPostTranslations)
-      .where(eq(blogPostTranslations.postId, postId))
+      .where(eq(blogPostTranslations.postId, postId));
     return rows.map((r) => ({
       locale: r.locale,
       title: r.title,
@@ -106,9 +109,9 @@ export async function getPostTranslations(postId: string): Promise<BlogTranslati
       seoTitle: r.seoTitle,
       seoDescription: r.seoDescription,
       isMachine: r.isMachine,
-    }))
+    }));
   } catch (error) {
-    logger.error('Failed to read blog post translations', { postId, error })
-    return []
+    logger.error('Failed to read blog post translations', { postId, error });
+    return [];
   }
 }

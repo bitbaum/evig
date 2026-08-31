@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server'
-import fs from 'fs/promises'
-import path from 'path'
+import { NextResponse } from 'next/server';
+import fs from 'fs/promises';
+import path from 'path';
 
 /**
  * Serves the Saldo product landing at the pretty URL `/saldo`.
@@ -16,16 +16,16 @@ import path from 'path'
  */
 export async function GET() {
   try {
-    const file = path.join(process.cwd(), 'public', 'saldo', 'index.html')
-    const html = await fs.readFile(file, 'utf8')
+    const file = path.join(process.cwd(), 'public', 'saldo', 'index.html');
+    const html = await fs.readFile(file, 'utf8');
     return new NextResponse(html, {
       status: 200,
       headers: {
         'Content-Type': 'text/html; charset=utf-8',
         'Cache-Control': 'public, max-age=600',
       },
-    })
+    });
   } catch {
-    return new NextResponse('Not found', { status: 404 })
+    return new NextResponse('Not found', { status: 404 });
   }
 }

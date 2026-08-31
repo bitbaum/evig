@@ -1,23 +1,20 @@
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
-import {
-  MARKETPLACE_CATEGORY_VALUES,
-  MARKETPLACE_SELLER_TYPE,
-} from '@/config/marketplace'
-import { ORG } from '@/config/org'
-import type { FiltersObj } from '@/components/marketplace/MarketplaceFilterSidebar'
-import { FilterPill } from '@/components/marketplace/FilterPill'
-import { Eyebrow } from '@/components/ui/Eyebrow'
+import { useTranslations } from 'next-intl';
+import { MARKETPLACE_CATEGORY_VALUES, MARKETPLACE_SELLER_TYPE } from '@/config/marketplace';
+import { ORG } from '@/config/org';
+import type { FiltersObj } from '@/components/marketplace/MarketplaceFilterSidebar';
+import { FilterPill } from '@/components/marketplace/FilterPill';
+import { Eyebrow } from '@/components/ui/Eyebrow';
 
 interface MarketplaceBrowseFacetsProps {
-  filters: FiltersObj
-  resetOffset: () => void
+  filters: FiltersObj;
+  resetOffset: () => void;
   /**
    * `horizontal` — scroll rows for the mobile top strip.
    * `vertical`   — hairline-divided wrapped groups for the desktop filter rail.
    */
-  orientation: 'horizontal' | 'vertical'
+  orientation: 'horizontal' | 'vertical';
 }
 
 /**
@@ -31,21 +28,24 @@ export function MarketplaceBrowseFacets({
   resetOffset,
   orientation,
 }: MarketplaceBrowseFacetsProps) {
-  const t = useTranslations('marketplace')
-  const isVertical = orientation === 'vertical'
+  const t = useTranslations('marketplace');
+  const isVertical = orientation === 'vertical';
 
   const sourceOptions = [
     { value: '', label: t('sellerTypes.all') },
-    { value: MARKETPLACE_SELLER_TYPE.REVAMPIT, label: t('sellerTypes.revampit', { orgName: ORG.name }) },
+    {
+      value: MARKETPLACE_SELLER_TYPE.REVAMPIT,
+      label: t('sellerTypes.revampit', { orgName: ORG.name }),
+    },
     { value: MARKETPLACE_SELLER_TYPE.COMMUNITY, label: t('sellerTypes.community') },
-  ] as const
+  ] as const;
 
   // Vertical shares the rail's group treatment (hairline + wrap); horizontal is
   // a compact scroll row for the mobile strip.
-  const blockClass = isVertical ? 'border-t border-subtle pt-5' : ''
+  const blockClass = isVertical ? 'border-t border-subtle pt-5' : '';
   const rowClass = isVertical
     ? 'flex flex-wrap gap-1.5'
-    : 'flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-thin'
+    : 'flex gap-2 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-thin';
 
   return (
     <>
@@ -57,7 +57,10 @@ export function MarketplaceBrowseFacets({
             <FilterPill
               key={opt.value || 'all'}
               active={filters.sellerType === opt.value}
-              onClick={() => { filters.setSellerType(opt.value); resetOffset() }}
+              onClick={() => {
+                filters.setSellerType(opt.value);
+                resetOffset();
+              }}
             >
               {opt.label}
             </FilterPill>
@@ -71,7 +74,10 @@ export function MarketplaceBrowseFacets({
         <div className={rowClass} role="group" aria-label={t('filters.categoryAriaLabel')}>
           <FilterPill
             active={!filters.category}
-            onClick={() => { filters.setCategory(''); resetOffset() }}
+            onClick={() => {
+              filters.setCategory('');
+              resetOffset();
+            }}
           >
             {t('categories.all')}
           </FilterPill>
@@ -79,7 +85,10 @@ export function MarketplaceBrowseFacets({
             <FilterPill
               key={val}
               active={filters.category === val}
-              onClick={() => { filters.setCategory(val); resetOffset() }}
+              onClick={() => {
+                filters.setCategory(val);
+                resetOffset();
+              }}
             >
               {t(`categories.${val}` as never)}
             </FilterPill>
@@ -87,5 +96,5 @@ export function MarketplaceBrowseFacets({
         </div>
       </div>
     </>
-  )
+  );
 }

@@ -31,14 +31,14 @@ import {
   FileCode,
   Package,
   type LucideIcon,
-} from 'lucide-react'
+} from 'lucide-react';
 
 /**
  * Icon configuration with German labels
  */
 export interface ServiceIconConfig {
-  icon: LucideIcon
-  label: string
+  icon: LucideIcon;
+  label: string;
 }
 
 /**
@@ -77,35 +77,35 @@ export const SERVICE_ICONS: Record<string, ServiceIconConfig> = {
   Clock: { icon: Clock, label: 'Zeit/Beratung' },
   CheckCircle2: { icon: CheckCircle2, label: 'Erledigt/Erfolg' },
   Package: { icon: Package, label: 'Paket/Produkt' },
-} as const
+} as const;
 
 /**
  * Get icon component by name
  * Returns Wrench as fallback if icon not found
  */
 export function getIconByName(iconName: string | null): LucideIcon {
-  if (!iconName) return Wrench
-  return SERVICE_ICONS[iconName]?.icon ?? Wrench
+  if (!iconName) return Wrench;
+  return SERVICE_ICONS[iconName]?.icon ?? Wrench;
 }
 
 /**
  * Get icon label by name
  */
 export function getIconLabel(iconName: string | null): string {
-  if (!iconName) return 'Werkzeug'
-  return SERVICE_ICONS[iconName]?.label ?? 'Unbekannt'
+  if (!iconName) return 'Werkzeug';
+  return SERVICE_ICONS[iconName]?.label ?? 'Unbekannt';
 }
 
 /**
  * Get all icon names for dropdown/picker
  */
 export function getIconNames(): string[] {
-  return Object.keys(SERVICE_ICONS)
+  return Object.keys(SERVICE_ICONS);
 }
 
 /**
  * Validate if an icon name exists
  */
 export function isValidIconName(iconName: string): boolean {
-  return iconName in SERVICE_ICONS
+  return iconName in SERVICE_ICONS;
 }

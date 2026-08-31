@@ -53,5 +53,5 @@ export default function BlogLoading() {
         </div>
       </div>
     </main>
-  )
+  );
 }

@@ -1,72 +1,72 @@
-import type { DonationType, DonationStatus } from '@/config/donations'
+import type { DonationType, DonationStatus } from '@/config/donations';
 
 export interface Donation {
-  id: string
-  user_id: string | null
-  user_name: string | null
-  user_email: string | null
-  donation_type: DonationType
+  id: string;
+  user_id: string | null;
+  user_name: string | null;
+  user_email: string | null;
+  donation_type: DonationType;
   // Monetary
-  amount_cents: number | null
-  currency: string
-  payment_method: string | null
+  amount_cents: number | null;
+  currency: string;
+  payment_method: string | null;
   // Device
-  device_category: string | null
-  device_description: string | null
-  device_brand: string | null
-  device_model: string | null
-  device_condition: string | null
-  estimated_value_cents: number | null
+  device_category: string | null;
+  device_description: string | null;
+  device_brand: string | null;
+  device_model: string | null;
+  device_condition: string | null;
+  estimated_value_cents: number | null;
   // Anonymous
-  donor_name: string | null
-  donor_email: string | null
+  donor_name: string | null;
+  donor_email: string | null;
   // Status
-  status: string
-  recorded_by_name: string | null
-  receipt_requested: boolean
-  receipt_sent: boolean
-  thank_you_sent: boolean
-  notes: string | null
+  status: string;
+  recorded_by_name: string | null;
+  receipt_requested: boolean;
+  receipt_sent: boolean;
+  thank_you_sent: boolean;
+  notes: string | null;
   // Timestamps
-  created_at: string
+  created_at: string;
 }
 
 export interface DonationStats {
-  total: number
-  monetary: number
-  device: number
-  pendingThanks: number
-  pendingReceipts: number
-  totalValueCents: number
+  total: number;
+  monetary: number;
+  device: number;
+  pendingThanks: number;
+  pendingReceipts: number;
+  totalValueCents: number;
 }
 
 export interface DonationFormData {
   // Monetary
-  amount_chf: string
-  payment_method: string
+  amount_chf: string;
+  payment_method: string;
   // Device
-  device_category: string
-  device_brand: string
-  device_model: string
-  device_description: string
-  device_condition: string
-  estimated_value_chf: string
+  device_category: string;
+  device_brand: string;
+  device_model: string;
+  device_description: string;
+  device_condition: string;
+  estimated_value_chf: string;
   // Common
-  donor_name: string
-  donor_email: string
-  receipt_requested: boolean
-  notes: string
+  donor_name: string;
+  donor_email: string;
+  receipt_requested: boolean;
+  notes: string;
 }
 
 export interface DonationFiltersState {
-  donation_type: DonationType | 'all'
-  status: DonationStatus | 'all'
+  donation_type: DonationType | 'all';
+  status: DonationStatus | 'all';
 }
 
 export interface UserResult {
-  id: string
-  name: string | null
-  email: string
+  id: string;
+  name: string | null;
+  email: string;
 }
 
 export const DEFAULT_FORM_DATA: DonationFormData = {
@@ -82,4 +82,4 @@ export const DEFAULT_FORM_DATA: DonationFormData = {
   donor_email: '',
   receipt_requested: false,
   notes: '',
-}
+};

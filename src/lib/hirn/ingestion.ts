@@ -9,68 +9,68 @@
  * 5. Store in database
  */
 
-import * as crypto from 'crypto'
-import * as fs from 'fs/promises'
-import * as path from 'path'
-import { db } from '@/db'
-import { hirnDocuments, hirnChunks } from '@/db/schema'
-import { eq, sql, count, max } from 'drizzle-orm'
-import { logger } from '@/lib/logger'
-import { chunkText, chunkMarkdown, chunkCode, type Chunk } from './chunking'
-import { generateEmbeddings } from './providers'
+import * as crypto from 'crypto';
+import * as fs from 'fs/promises';
+import * as path from 'path';
+import { db } from '@/db';
+import { hirnDocuments, hirnChunks } from '@/db/schema';
+import { eq, sql, count, max } from 'drizzle-orm';
+import { logger } from '@/lib/logger';
+import { chunkText, chunkMarkdown, chunkCode, type Chunk } from './chunking';
+import { generateEmbeddings } from './providers';
 
 export interface DocumentInput {
-  sourcePath: string
-  sourceType: 'markdown' | 'code' | 'text' | 'json'
-  title?: string
-  content: string
-  metadata?: Record<string, unknown>
+  sourcePath: string;
+  sourceType: 'markdown' | 'code' | 'text' | 'json';
+  title?: string;
+  content: string;
+  metadata?: Record<string, unknown>;
 }
 
 export interface IngestResult {
-  documentId: string
-  chunksCreated: number
-  wasUpdated: boolean
+  documentId: string;
+  chunksCreated: number;
+  wasUpdated: boolean;
 }
 
 /**
  * Generate SHA256 hash of content
  */
 function hashContent(content: string): string {
-  return crypto.createHash('sha256').update(content).digest('hex')
+  return crypto.createHash('sha256').update(content).digest('hex');
 }
 
 /**
  * Ingest a single document
  */
 export async function ingestDocument(input: DocumentInput): Promise<IngestResult> {
-  const contentHash = hashContent(input.content)
+  const contentHash = hashContent(input.content);
 
   // Check if document exists and if content changed
   const existing = await db
     .select({ id: hirnDocuments.id, contentHash: hirnDocuments.contentHash })
     .from(hirnDocuments)
-    .where(eq(hirnDocuments.sourcePath, input.sourcePath))
+    .where(eq(hirnDocuments.sourcePath, input.sourcePath));
 
-  let documentId: string
-  let wasUpdated = false
+  let documentId: string;
+  let wasUpdated = false;
 
   if (existing.length > 0) {
-    const doc = existing[0]
+    const doc = existing[0];
 
     // If content hasn't changed, skip re-indexing
     if (doc.contentHash === contentHash) {
-      logger.debug('Document unchanged, skipping', { sourcePath: input.sourcePath })
+      logger.debug('Document unchanged, skipping', { sourcePath: input.sourcePath });
       return {
         documentId: doc.id,
         chunksCreated: 0,
         wasUpdated: false,
-      }
+      };
     }
 
     // Content changed - update document and delete old chunks
-    documentId = doc.id
-    wasUpdated = true
+    documentId = doc.id;
+    wasUpdated = true;
 
     await db
       .update(hirnDocuments)
@@ -82,10 +82,10 @@ export async function ingestDocument(input: DocumentInput): Promise<IngestResult
         updatedAt: sql`NOW()`,
         indexedAt: null,
       })
-      .where(eq(hirnDocuments.id, documentId))
+      .where(eq(hirnDocuments.id, documentId));
 
     // Delete old chunks
-    await db.delete(hirnChunks).where(eq(hirnChunks.documentId, documentId))
+    await db.delete(hirnChunks).where(eq(hirnChunks.documentId, documentId));
   } else {
     // Create new document
     const [result] = await db
@@ -98,19 +98,19 @@ export async function ingestDocument(input: DocumentInput): Promise<IngestResult
         contentHash,
         metadata: input.metadata || {},
       })
-      .returning({ id: hirnDocuments.id })
+      .returning({ id: hirnDocuments.id });
 
-    documentId = result.id
+    documentId = result.id;
   }
 
   // Chunk the content based on type
-  let chunks: Chunk[]
+  let chunks: Chunk[];
   switch (input.sourceType) {
     case 'markdown':
-      chunks = chunkMarkdown(input.content)
-      break
+      chunks = chunkMarkdown(input.content);
+      break;
     case 'code':
-      const ext = path.extname(input.sourcePath).slice(1)
+      const ext = path.extname(input.sourcePath).slice(1);
       const langMap: Record<string, string> = {
         ts: 'typescript',
         tsx: 'typescript',
@@ -118,43 +118,43 @@ export async function ingestDocument(input: DocumentInput): Promise<IngestResult
         jsx: 'javascript',
         py: 'python',
         sql: 'sql',
-      }
-      chunks = chunkCode(input.content, langMap[ext] || 'text')
-      break
+      };
+      chunks = chunkCode(input.content, langMap[ext] || 'text');
+      break;
     default:
-      chunks = chunkText(input.content)
+      chunks = chunkText(input.content);
   }
 
   // Generate embeddings and store chunks
   if (chunks.length > 0) {
-    const texts = chunks.map(c => c.content)
+    const texts = chunks.map((c) => c.content);
 
     // Generate embeddings in batches to avoid overwhelming the API
-    const BATCH_SIZE = 10
-    const allEmbeddings: number[][] = []
+    const BATCH_SIZE = 10;
+    const allEmbeddings: number[][] = [];
 
     for (let i = 0; i < texts.length; i += BATCH_SIZE) {
-      const batch = texts.slice(i, i + BATCH_SIZE)
-      const response = await generateEmbeddings({ input: batch })
-      allEmbeddings.push(...response.embeddings)
+      const batch = texts.slice(i, i + BATCH_SIZE);
+      const response = await generateEmbeddings({ input: batch });
+      allEmbeddings.push(...response.embeddings);
     }
 
     // Insert chunks with embeddings (use raw SQL for vector column)
     for (let i = 0; i < chunks.length; i++) {
-      const chunk = chunks[i]
-      const embedding = allEmbeddings[i]
+      const chunk = chunks[i];
+      const embedding = allEmbeddings[i];
 
       await db.execute(sql`
         INSERT INTO ${hirnChunks} (document_id, content, chunk_index, embedding, metadata)
         VALUES (${documentId}, ${chunk.content}, ${chunk.index}, ${`[${embedding.join(',')}]`}::vector, ${JSON.stringify(chunk.metadata || {})}::jsonb)
-      `)
+      `);
     }
 
     // Mark document as indexed
     await db
       .update(hirnDocuments)
       .set({ indexedAt: sql`NOW()` })
-      .where(eq(hirnDocuments.id, documentId))
+      .where(eq(hirnDocuments.id, documentId));
   }
 
   logger.info('Document ingested', {
@@ -162,22 +162,22 @@ export async function ingestDocument(input: DocumentInput): Promise<IngestResult
     documentId,
     chunksCreated: chunks.length,
     wasUpdated,
-  })
+  });
 
   return {
     documentId,
     chunksCreated: chunks.length,
     wasUpdated,
-  }
+  };
 }
 
 /**
  * Ingest a file from disk
  */
 export async function ingestFile(filePath: string): Promise<IngestResult> {
-  const content = await fs.readFile(filePath, 'utf-8')
-  const ext = path.extname(filePath).toLowerCase()
-  const basename = path.basename(filePath, ext)
+  const content = await fs.readFile(filePath, 'utf-8');
+  const ext = path.extname(filePath).toLowerCase();
+  const basename = path.basename(filePath, ext);
 
   // Determine source type from extension
   const typeMap: Record<string, DocumentInput['sourceType']> = {
@@ -191,16 +191,16 @@ export async function ingestFile(filePath: string): Promise<IngestResult> {
     '.sql': 'code',
     '.json': 'json',
     '.txt': 'text',
-  }
+  };
 
-  const sourceType = typeMap[ext] || 'text'
+  const sourceType = typeMap[ext] || 'text';
 
   // Extract title from markdown frontmatter or first heading
-  let title = basename
+  let title = basename;
   if (sourceType === 'markdown') {
-    const titleMatch = content.match(/^#\s+(.+)$/m)
+    const titleMatch = content.match(/^#\s+(.+)$/m);
     if (titleMatch) {
-      title = titleMatch[1]
+      title = titleMatch[1];
     }
   }
 
@@ -213,7 +213,7 @@ export async function ingestFile(filePath: string): Promise<IngestResult> {
       extension: ext,
       basename,
     },
-  })
+  });
 }
 
 /**
@@ -222,95 +222,93 @@ export async function ingestFile(filePath: string): Promise<IngestResult> {
 export async function ingestDirectory(
   dirPath: string,
   options: {
-    extensions?: string[]
-    exclude?: string[]
-    recursive?: boolean
-  } = {}
+    extensions?: string[];
+    exclude?: string[];
+    recursive?: boolean;
+  } = {},
 ): Promise<{ total: number; ingested: number; skipped: number; errors: string[] }> {
   const {
     extensions = ['.md', '.mdx', '.ts', '.tsx', '.js', '.jsx', '.py', '.sql', '.txt'],
     exclude = ['node_modules', '.git', 'dist', 'build', '.next'],
     recursive = true,
-  } = options
+  } = options;
 
   const results = {
     total: 0,
     ingested: 0,
     skipped: 0,
     errors: [] as string[],
-  }
+  };
 
   async function processDir(dir: string) {
-    const entries = await fs.readdir(dir, { withFileTypes: true })
+    const entries = await fs.readdir(dir, { withFileTypes: true });
 
     for (const entry of entries) {
-      const fullPath = path.join(dir, entry.name)
+      const fullPath = path.join(dir, entry.name);
 
       // Skip excluded directories
       if (exclude.includes(entry.name)) {
-        continue
+        continue;
       }
 
       if (entry.isDirectory() && recursive) {
-        await processDir(fullPath)
+        await processDir(fullPath);
       } else if (entry.isFile()) {
-        const ext = path.extname(entry.name).toLowerCase()
+        const ext = path.extname(entry.name).toLowerCase();
         if (!extensions.includes(ext)) {
-          continue
+          continue;
         }
 
-        results.total++
+        results.total++;
 
         try {
-          const result = await ingestFile(fullPath)
+          const result = await ingestFile(fullPath);
           if (result.chunksCreated > 0 || result.wasUpdated) {
-            results.ingested++
+            results.ingested++;
           } else {
-            results.skipped++
+            results.skipped++;
           }
         } catch (error) {
-          const errorMsg = error instanceof Error ? error.message : String(error)
-          results.errors.push(`${fullPath}: ${errorMsg}`)
-          logger.error('Failed to ingest file', { path: fullPath, error })
+          const errorMsg = error instanceof Error ? error.message : String(error);
+          results.errors.push(`${fullPath}: ${errorMsg}`);
+          logger.error('Failed to ingest file', { path: fullPath, error });
         }
       }
     }
   }
 
-  await processDir(dirPath)
+  await processDir(dirPath);
 
   logger.info('Directory ingestion complete', {
     dirPath,
     ...results,
-  })
+  });
 
-  return results
+  return results;
 }
 
 /**
  * Get ingestion stats
  */
 export async function getIngestionStats(): Promise<{
-  totalDocuments: number
-  totalChunks: number
-  lastIndexed: string | null
-  byType: Record<string, number>
+  totalDocuments: number;
+  totalChunks: number;
+  lastIndexed: string | null;
+  byType: Record<string, number>;
 }> {
-  const [docsCount] = await db.select({ count: count() }).from(hirnDocuments)
-  const [chunksCount] = await db.select({ count: count() }).from(hirnChunks)
-  const [lastIndexed] = await db.select({ max: max(hirnDocuments.indexedAt) }).from(hirnDocuments)
+  const [docsCount] = await db.select({ count: count() }).from(hirnDocuments);
+  const [chunksCount] = await db.select({ count: count() }).from(hirnChunks);
+  const [lastIndexed] = await db.select({ max: max(hirnDocuments.indexedAt) }).from(hirnDocuments);
 
   const byTypeRows = await db
     .select({ sourceType: hirnDocuments.sourceType, count: count() })
     .from(hirnDocuments)
-    .groupBy(hirnDocuments.sourceType)
+    .groupBy(hirnDocuments.sourceType);
 
   return {
     totalDocuments: docsCount?.count ?? 0,
     totalChunks: chunksCount?.count ?? 0,
     lastIndexed: lastIndexed?.max || null,
-    byType: Object.fromEntries(
-      byTypeRows.map(r => [r.sourceType, r.count])
-    ),
-  }
+    byType: Object.fromEntries(byTypeRows.map((r) => [r.sourceType, r.count])),
+  };
 }

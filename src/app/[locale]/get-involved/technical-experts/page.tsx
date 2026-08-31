@@ -1,48 +1,51 @@
 // SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
-import { Metadata } from 'next'
-import { InvolvementPageLayout } from '../involvement-page-layout'
-import { BenefitCard, BenefitCardGrid } from '@/components/community/BenefitCard'
-import { InfoSection, NumberedSteps, Callout } from '@/components/community/InfoSection'
-import { PageSection } from '@/components/community/PageSection'
-import { responsiveTypography } from '@/lib/responsive'
-import { ORG } from '@/config/org'
-import Heading from '@/components/ui/Heading'
-import { getTranslations } from 'next-intl/server'
-import { Code, Cpu, Users, Lightbulb } from 'lucide-react'
+import { Metadata } from 'next';
+import { InvolvementPageLayout } from '../involvement-page-layout';
+import { BenefitCard, BenefitCardGrid } from '@/components/community/BenefitCard';
+import { InfoSection, NumberedSteps, Callout } from '@/components/community/InfoSection';
+import { PageSection } from '@/components/community/PageSection';
+import { responsiveTypography } from '@/lib/responsive';
+import { ORG } from '@/config/org';
+import Heading from '@/components/ui/Heading';
+import { getTranslations } from 'next-intl/server';
+import { Code, Cpu, Users, Lightbulb } from 'lucide-react';
 
 interface TechnicalExpertsPageProps {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: string }>;
 }
 
 // Benefit icons are positional — parallel to translations array
-const BENEFIT_ICONS = [Code, Cpu, Users, Lightbulb]
+const BENEFIT_ICONS = [Code, Cpu, Users, Lightbulb];
 
 export async function generateMetadata({ params }: TechnicalExpertsPageProps): Promise<Metadata> {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'getInvolved' })
-  const title = `${t('technicalExperts.meta.title')} | ${ORG.name}`
-  const description = t('technicalExperts.meta.description')
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'getInvolved' });
+  const title = `${t('technicalExperts.meta.title')} | ${ORG.name}`;
+  const description = t('technicalExperts.meta.description');
   return {
     title: { absolute: title },
     description,
     openGraph: { title, description, type: 'website' },
-  }
+  };
 }
 
 export default async function TechnicalExpertsPage({ params }: TechnicalExpertsPageProps) {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'getInvolved' })
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'getInvolved' });
 
-  const benefits = t.raw('technicalExperts.benefits') as Array<{ title: string; description: string }>
+  const benefits = t.raw('technicalExperts.benefits') as Array<{
+    title: string;
+    description: string;
+  }>;
   const sections = t.raw('technicalExperts.sections') as Array<{
-    title: string
-    items: string[]
-    description?: string
-  }>
-  const callouts = t.raw('technicalExperts.callouts') as Array<{ title: string; content: string }>
-  const howToStartSteps = t.raw('technicalExperts.howToStart.steps') as string[]
+    title: string;
+    items: string[];
+    description?: string;
+  }>;
+  const callouts = t.raw('technicalExperts.callouts') as Array<{ title: string; content: string }>;
+  const howToStartSteps = t.raw('technicalExperts.howToStart.steps') as string[];
 
   return (
     <InvolvementPageLayout
@@ -65,8 +68,8 @@ export default async function TechnicalExpertsPage({ params }: TechnicalExpertsP
           </Heading>
           <BenefitCardGrid>
             {BENEFIT_ICONS.map((Icon, index) => {
-              const benefit = benefits[index]
-              if (!benefit) return null
+              const benefit = benefits[index];
+              if (!benefit) return null;
               return (
                 <BenefitCard
                   key={index}
@@ -74,7 +77,7 @@ export default async function TechnicalExpertsPage({ params }: TechnicalExpertsP
                   title={benefit.title}
                   description={benefit.description}
                 />
-              )
+              );
             })}
           </BenefitCardGrid>
         </section>
@@ -91,11 +94,7 @@ export default async function TechnicalExpertsPage({ params }: TechnicalExpertsP
 
         {/* Callouts */}
         {callouts.map((callout, index) => (
-          <Callout
-            key={index}
-            title={callout.title}
-            content={callout.content}
-          />
+          <Callout key={index} title={callout.title} content={callout.content} />
         ))}
 
         {/* How to Get Started */}
@@ -105,5 +104,5 @@ export default async function TechnicalExpertsPage({ params }: TechnicalExpertsP
         />
       </div>
     </InvolvementPageLayout>
-  )
+  );
 }

@@ -5,7 +5,7 @@
  * Types derived from schemas
  */
 
-import { z } from 'zod'
+import { z } from 'zod';
 import {
   DONATION_TYPES,
   DEVICE_CATEGORIES,
@@ -15,17 +15,17 @@ import {
   DROPOFF_DEVICES_MIN_CHARS,
   DROPOFF_DEVICES_MAX_CHARS,
   DONATION_NOTES_MAX_CHARS,
-} from '@/config/donations'
+} from '@/config/donations';
 
 // =============================================================================
 // DERIVED ENUMS FROM CONFIG (SSOT)
 // =============================================================================
 
-const donationTypes = Object.values(DONATION_TYPES) as [string, ...string[]]
-const deviceCategories = Object.values(DEVICE_CATEGORIES) as [string, ...string[]]
-const deviceConditions = Object.values(DEVICE_CONDITIONS) as [string, ...string[]]
-const paymentMethods = Object.values(PAYMENT_METHODS) as [string, ...string[]]
-const donationStatuses = Object.values(DONATION_STATUSES) as [string, ...string[]]
+const donationTypes = Object.values(DONATION_TYPES) as [string, ...string[]];
+const deviceCategories = Object.values(DEVICE_CATEGORIES) as [string, ...string[]];
+const deviceConditions = Object.values(DEVICE_CONDITIONS) as [string, ...string[]];
+const paymentMethods = Object.values(PAYMENT_METHODS) as [string, ...string[]];
+const donationStatuses = Object.values(DONATION_STATUSES) as [string, ...string[]];
 
 // =============================================================================
 // BASE SCHEMAS
@@ -38,7 +38,8 @@ export const CreateMonetaryDonationSchema = z.object({
   donation_type: z.literal(DONATION_TYPES.MONETARY),
 
   // Required for monetary
-  amount_cents: z.number()
+  amount_cents: z
+    .number()
     .int('Betrag muss eine ganze Zahl sein')
     .min(100, 'Mindestbetrag ist CHF 1.00'),
   currency: z.string().default('CHF'),
@@ -61,7 +62,7 @@ export const CreateMonetaryDonationSchema = z.object({
 
   // Admin notes
   notes: z.string().max(DONATION_NOTES_MAX_CHARS).optional().nullable(),
-})
+});
 
 /**
  * Device donation schema
@@ -93,7 +94,7 @@ export const CreateDeviceDonationSchema = z.object({
 
   // Admin notes
   notes: z.string().max(DONATION_NOTES_MAX_CHARS).optional().nullable(),
-})
+});
 
 /**
  * Discriminated union for creating any donation type
@@ -101,7 +102,7 @@ export const CreateDeviceDonationSchema = z.object({
 export const CreateDonationSchema = z.discriminatedUnion('donation_type', [
   CreateMonetaryDonationSchema,
   CreateDeviceDonationSchema,
-])
+]);
 
 /**
  * Public donation drop-off announcement (form on /get-involved/donate).
@@ -119,16 +120,22 @@ export const DonationDropoffSchema = z.object({
   name: z.string().trim().min(2, 'Name muss mindestens 2 Zeichen haben').max(200),
   email: z.string().email('Ungültige E-Mail-Adresse'),
   phone: z.string().trim().min(3).max(30).optional(),
-  preferredDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Datum im Format YYYY-MM-DD').optional(),
+  preferredDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Datum im Format YYYY-MM-DD')
+    .optional(),
   devices: z
     .string()
     .trim()
-    .min(DROPOFF_DEVICES_MIN_CHARS, `Bitte beschreibe, welche Geräte du bringen möchtest (mind. ${DROPOFF_DEVICES_MIN_CHARS} Zeichen)`)
+    .min(
+      DROPOFF_DEVICES_MIN_CHARS,
+      `Bitte beschreibe, welche Geräte du bringen möchtest (mind. ${DROPOFF_DEVICES_MIN_CHARS} Zeichen)`,
+    )
     .max(DROPOFF_DEVICES_MAX_CHARS),
   notes: z.string().trim().max(DONATION_NOTES_MAX_CHARS).optional(),
-})
+});
 
-export type DonationDropoffInput = z.infer<typeof DonationDropoffSchema>
+export type DonationDropoffInput = z.infer<typeof DonationDropoffSchema>;
 
 /**
  * Schema for updating a donation
@@ -147,7 +154,7 @@ export const UpdateDonationSchema = z.object({
 
   // User link updates
   user_id: z.string().uuid().optional().nullable(),
-})
+});
 
 /**
  * Schema for querying donations
@@ -169,14 +176,14 @@ export const GetDonationsQuerySchema = z.object({
   // Sorting
   sort_by: z.enum(['created_at', 'amount_cents', 'status']).default('created_at'),
   sort_order: z.enum(['asc', 'desc']).default('desc'),
-})
+});
 
 // =============================================================================
 // DERIVED TYPES
 // =============================================================================
 
-export type CreateMonetaryDonationInput = z.infer<typeof CreateMonetaryDonationSchema>
-export type CreateDeviceDonationInput = z.infer<typeof CreateDeviceDonationSchema>
-export type CreateDonationInput = z.infer<typeof CreateDonationSchema>
-export type UpdateDonationInput = z.infer<typeof UpdateDonationSchema>
-export type GetDonationsQuery = z.infer<typeof GetDonationsQuerySchema>
+export type CreateMonetaryDonationInput = z.infer<typeof CreateMonetaryDonationSchema>;
+export type CreateDeviceDonationInput = z.infer<typeof CreateDeviceDonationSchema>;
+export type CreateDonationInput = z.infer<typeof CreateDonationSchema>;
+export type UpdateDonationInput = z.infer<typeof UpdateDonationSchema>;
+export type GetDonationsQuery = z.infer<typeof GetDonationsQuerySchema>;

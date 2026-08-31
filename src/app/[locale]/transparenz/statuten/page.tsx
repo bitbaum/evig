@@ -1,17 +1,23 @@
 // SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
-import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
-import { ScrollText, AlertTriangle, Languages, GitCommitHorizontal, ExternalLink } from 'lucide-react'
+import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
+import {
+  ScrollText,
+  AlertTriangle,
+  Languages,
+  GitCommitHorizontal,
+  ExternalLink,
+} from 'lucide-react';
 
-import { PageHero } from '@/components/layout/PageHero'
-import { Section } from '@/components/layout/Section'
-import Heading from '@/components/ui/Heading'
-import { Card } from '@/components/ui/card'
-import { IconBadge } from '@/components/ui/IconBadge'
-import { StatutenBody } from '@/components/legal/StatutenBody'
-import { ORG } from '@/config/org'
+import { PageHero } from '@/components/layout/PageHero';
+import { Section } from '@/components/layout/Section';
+import Heading from '@/components/ui/Heading';
+import { Card } from '@/components/ui/card';
+import { IconBadge } from '@/components/ui/IconBadge';
+import { StatutenBody } from '@/components/legal/StatutenBody';
+import { ORG } from '@/config/org';
 import {
   STATUTEN_SECTIONS,
   STATUTEN_STATUS,
@@ -19,17 +25,17 @@ import {
   STATUTEN_AUTHORITATIVE_LOCALE,
   getStatutenArticlesBySection,
   getStatutenAnchor,
-} from '@/config/statuten'
+} from '@/config/statuten';
 
 interface PageProps {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'statuten' })
-  const title = `${t('meta.title')} | ${ORG.name}`
-  const description = t('meta.description', { orgName: ORG.name })
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'statuten' });
+  const title = `${t('meta.title')} | ${ORG.name}`;
+  const description = t('meta.description', { orgName: ORG.name });
 
   return {
     title: { absolute: title },
@@ -41,15 +47,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       url: `${ORG.website}/transparenz/statuten`,
       siteName: ORG.name,
     },
-  }
+  };
 }
 
 export default async function StatutenPage({ params }: PageProps) {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'statuten' })
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'statuten' });
 
-  const isDraft = STATUTEN_STATUS.state === 'draft'
-  const isTranslation = locale !== STATUTEN_AUTHORITATIVE_LOCALE
+  const isDraft = STATUTEN_STATUS.state === 'draft';
+  const isTranslation = locale !== STATUTEN_AUTHORITATIVE_LOCALE;
 
   return (
     <div className="bg-surface-base">
@@ -66,14 +72,16 @@ export default async function StatutenPage({ params }: PageProps) {
               document read as though it already governs an existing one. */}
           <Card
             className={
-              isDraft
-                ? 'border-warning-500 bg-warning-50 p-5 dark:bg-warning-500/10'
-                : 'p-5'
+              isDraft ? 'border-warning-500 bg-warning-50 p-5 dark:bg-warning-500/10' : 'p-5'
             }
           >
             <div className="flex items-start gap-3">
               <AlertTriangle
-                className={isDraft ? 'mt-0.5 size-5 shrink-0 text-warning-600' : 'mt-0.5 size-5 shrink-0 text-action'}
+                className={
+                  isDraft
+                    ? 'mt-0.5 size-5 shrink-0 text-warning-600'
+                    : 'mt-0.5 size-5 shrink-0 text-action'
+                }
                 aria-hidden="true"
               />
               <div>
@@ -112,13 +120,13 @@ export default async function StatutenPage({ params }: PageProps) {
             {t('toc.title')}
           </Heading>
           <ol className="space-y-6">
-            {STATUTEN_SECTIONS.map(section => (
+            {STATUTEN_SECTIONS.map((section) => (
               <li key={section.id}>
                 <p className="mb-2 font-mono text-sm uppercase tracking-wider text-text-muted">
                   {section.numeral}. {t(`sections.${section.id}` as never)}
                 </p>
                 <ul className="space-y-1">
-                  {getStatutenArticlesBySection(section.id).map(article => (
+                  {getStatutenArticlesBySection(section.id).map((article) => (
                     <li key={article.id}>
                       <a
                         href={`#${getStatutenAnchor(article)}`}
@@ -141,7 +149,7 @@ export default async function StatutenPage({ params }: PageProps) {
       {/* The statutes themselves */}
       <Section density="default" tone="canvas">
         <div className="mx-auto max-w-3xl space-y-14">
-          {STATUTEN_SECTIONS.map(section => (
+          {STATUTEN_SECTIONS.map((section) => (
             <section key={section.id} aria-labelledby={`section-${section.id}`}>
               <Heading
                 level={2}
@@ -153,7 +161,7 @@ export default async function StatutenPage({ params }: PageProps) {
               </Heading>
 
               <div className="space-y-10">
-                {getStatutenArticlesBySection(section.id).map(article => (
+                {getStatutenArticlesBySection(section.id).map((article) => (
                   <article
                     key={article.id}
                     id={getStatutenAnchor(article)}
@@ -166,7 +174,10 @@ export default async function StatutenPage({ params }: PageProps) {
                       {t(`articles.${article.id}.title` as never)}
                     </Heading>
                     <StatutenBody
-                      body={t(`articles.${article.id}.body` as never, { orgName: ORG.name } as never)}
+                      body={t(
+                        `articles.${article.id}.body` as never,
+                        { orgName: ORG.name } as never,
+                      )}
                     />
                   </article>
                 ))}
@@ -204,5 +215,5 @@ export default async function StatutenPage({ params }: PageProps) {
         </div>
       </Section>
     </div>
-  )
+  );
 }

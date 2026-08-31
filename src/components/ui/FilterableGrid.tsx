@@ -1,5 +1,5 @@
-import React from 'react'
-import { FilterableItem } from '@/hooks/useFiltering'
+import React from 'react';
+import { FilterableItem } from '@/hooks/useFiltering';
 
 // Explicit class maps — Tailwind JIT cannot detect dynamically-interpolated strings
 // (e.g. `grid-cols-${n}` is invisible to the scanner). All class names must appear
@@ -9,38 +9,38 @@ const BASE_COLS: Record<number, string> = {
   2: 'grid-cols-2',
   3: 'grid-cols-3',
   4: 'grid-cols-4',
-}
+};
 const MD_COLS: Record<number, string> = {
   1: 'md:grid-cols-1',
   2: 'md:grid-cols-2',
   3: 'md:grid-cols-3',
   4: 'md:grid-cols-4',
-}
+};
 const LG_COLS: Record<number, string> = {
   1: 'lg:grid-cols-1',
   2: 'lg:grid-cols-2',
   3: 'lg:grid-cols-3',
   4: 'lg:grid-cols-4',
-}
+};
 const XL_COLS: Record<number, string> = {
   1: 'xl:grid-cols-1',
   2: 'xl:grid-cols-2',
   3: 'xl:grid-cols-3',
   4: 'xl:grid-cols-4',
-}
+};
 
 interface FilterableGridProps<T extends FilterableItem> {
-  items: T[]
-  renderItem: (item: T, index: number) => React.ReactNode
-  keyExtractor: (item: T, index: number) => string
+  items: T[];
+  renderItem: (item: T, index: number) => React.ReactNode;
+  keyExtractor: (item: T, index: number) => string;
   columns?: {
-    sm?: number
-    md?: number
-    lg?: number
-    xl?: number
-  }
-  animationDelay?: number
-  className?: string
+    sm?: number;
+    md?: number;
+    lg?: number;
+    xl?: number;
+  };
+  animationDelay?: number;
+  className?: string;
 }
 
 export function FilterableGrid<T extends FilterableItem>({
@@ -49,7 +49,7 @@ export function FilterableGrid<T extends FilterableItem>({
   keyExtractor,
   columns = { sm: 1, md: 2, lg: 3 },
   animationDelay = 100,
-  className = ''
+  className = '',
 }: FilterableGridProps<T>) {
   const gridClasses = [
     'grid',
@@ -58,12 +58,14 @@ export function FilterableGrid<T extends FilterableItem>({
     columns.md ? (MD_COLS[columns.md] ?? '') : '',
     columns.lg ? (LG_COLS[columns.lg] ?? '') : '',
     columns.xl ? (XL_COLS[columns.xl] ?? '') : '',
-  ].filter(Boolean).join(' ')
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <div className={`${gridClasses} ${className}`}>
       {items.map((item, index) => (
-        <div 
+        <div
           key={keyExtractor(item, index)}
           className="animate-fadeIn"
           style={{ animationDelay: `${index * animationDelay}ms` }}
@@ -72,5 +74,5 @@ export function FilterableGrid<T extends FilterableItem>({
         </div>
       ))}
     </div>
-  )
+  );
 }

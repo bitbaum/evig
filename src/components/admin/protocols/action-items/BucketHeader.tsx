@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
 interface BucketHeaderProps {
-  icon: React.ReactNode
-  label: string
-  count: number
-  accent: string
+  icon: React.ReactNode;
+  label: string;
+  count: number;
+  accent: string;
 }
 
 export function BucketHeader({ icon, label, count, accent }: BucketHeaderProps) {
@@ -14,5 +14,5 @@ export function BucketHeader({ icon, label, count, accent }: BucketHeaderProps) 
       <span className="text-sm font-semibold">{label}</span>
       <span className="ml-auto text-xs text-text-tertiary tabular-nums">{count}</span>
     </div>
-  )
+  );
 }

@@ -31,21 +31,21 @@
  * Protected by CRON_SECRET (Authorization: Bearer ...).
  */
 
-import { NextRequest } from 'next/server'
-import { CronExpressionParser } from 'cron-parser'
-import { db } from '@/db'
-import { tasks } from '@/db/schema'
-import { eq, and, isNotNull, sql } from 'drizzle-orm'
-import { TASK_STATUSES, TASK_TYPES } from '@/config/tasks'
-import { ORG } from '@/config/org'
-import { notifyUsers, notifyAllStaff } from '@/lib/services/notifications'
-import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
-import { logger } from '@/lib/logger'
-import { requireCronAuth } from '@/lib/api/cron-auth'
+import { NextRequest } from 'next/server';
+import { CronExpressionParser } from 'cron-parser';
+import { db } from '@/db';
+import { tasks } from '@/db/schema';
+import { eq, and, isNotNull, sql } from 'drizzle-orm';
+import { TASK_STATUSES, TASK_TYPES } from '@/config/tasks';
+import { ORG } from '@/config/org';
+import { notifyUsers, notifyAllStaff } from '@/lib/services/notifications';
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications';
+import { logger } from '@/lib/logger';
+import { requireCronAuth } from '@/lib/api/cron-auth';
 
 export async function GET(request: NextRequest) {
-  const auth = requireCronAuth(request)
-  if (!auth.ok) return auth.response
+  const auth = requireCronAuth(request);
+  if (!auth.ok) return auth.response;
 
   try {
     const candidates = await db
@@ -64,17 +64,17 @@ export async function GET(request: NextRequest) {
           isNotNull(tasks.scheduleCron),
           eq(tasks.isArchived, false),
         ),
-      )
+      );
 
-    const woken: string[] = []
-    const skipped: { id: string; reason: string }[] = []
-    const errors: { id: string; error: string }[] = []
+    const woken: string[] = [];
+    const skipped: { id: string; reason: string }[] = [];
+    const errors: { id: string; error: string }[] = [];
 
     for (const task of candidates) {
-      if (!task.scheduleCron) continue
+      if (!task.scheduleCron) continue;
       try {
-        const expr = CronExpressionParser.parse(task.scheduleCron, { tz: ORG.timezone })
-        const prevFire = expr.prev().toDate()
+        const expr = CronExpressionParser.parse(task.scheduleCron, { tz: ORG.timezone });
+        const prevFire = expr.prev().toDate();
 
         // Already pending — don't pile up.
         if (
@@ -82,14 +82,14 @@ export async function GET(request: NextRequest) {
           task.currentStatus === TASK_STATUSES.IN_PROGRESS ||
           task.currentStatus === TASK_STATUSES.REQUESTED
         ) {
-          skipped.push({ id: task.id, reason: 'already_active' })
-          continue
+          skipped.push({ id: task.id, reason: 'already_active' });
+          continue;
         }
 
         // Already done for this iteration — wait for the next fire.
         if (task.completedAt && new Date(task.completedAt) >= prevFire) {
-          skipped.push({ id: task.id, reason: 'already_completed_this_iteration' })
-          continue
+          skipped.push({ id: task.id, reason: 'already_completed_this_iteration' });
+          continue;
         }
 
         // Wake the task.
@@ -99,9 +99,9 @@ export async function GET(request: NextRequest) {
             currentStatus: TASK_STATUSES.NEEDS_ATTENTION,
             updatedAt: sql`NOW()`,
           })
-          .where(eq(tasks.id, task.id))
+          .where(eq(tasks.id, task.id));
 
-        woken.push(task.id)
+        woken.push(task.id);
 
         // Notify. Assigned tasks → the assignee; unassigned (broadcast
         // by design — recurring tasks like "clean kitchen" often have
@@ -112,23 +112,23 @@ export async function GET(request: NextRequest) {
           content: `Geplant für ${prevFire.toLocaleString('de-CH', { timeZone: ORG.timezone })}.`,
           related_type: RELATED_TYPES.TASK,
           related_id: task.id,
-        }
+        };
         const notifyPromise = task.assignedTo
           ? notifyUsers([task.assignedTo], notifyPayload)
-          : notifyAllStaff(notifyPayload)
+          : notifyAllStaff(notifyPayload);
         notifyPromise.catch((err) =>
           logger.warn('Failed to notify on recurring task wake', { error: err, taskId: task.id }),
-        )
+        );
       } catch (err) {
         errors.push({
           id: task.id,
           error: err instanceof Error ? err.message : String(err),
-        })
+        });
         logger.error('Failed to parse cron expression for recurring task', {
           taskId: task.id,
           scheduleCron: task.scheduleCron,
           error: err,
-        })
+        });
       }
     }
 
@@ -137,7 +137,7 @@ export async function GET(request: NextRequest) {
       woken: woken.length,
       skipped: skipped.length,
       errors: errors.length,
-    })
+    });
 
     return Response.json({
       candidates: candidates.length,
@@ -146,9 +146,9 @@ export async function GET(request: NextRequest) {
       errors: errors.length,
       // Detail only in non-prod for debugging; prod stays quiet.
       ...(process.env.NODE_ENV !== 'production' && { detail: { woken, skipped, errors } }),
-    })
+    });
   } catch (error) {
-    logger.error('wake-recurring-tasks cron failed', { error })
-    return Response.json({ error: 'Internal error' }, { status: 500 })
+    logger.error('wake-recurring-tasks cron failed', { error });
+    return Response.json({ error: 'Internal error' }, { status: 500 });
   }
 }

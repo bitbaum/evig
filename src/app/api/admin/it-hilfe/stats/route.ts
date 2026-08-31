@@ -1,12 +1,12 @@
-import { withAdmin } from '@/lib/api/middleware'
-import { db } from '@/db'
-import { itHilfeRequests, repairerProfiles } from '@/db/schema'
-import { sql } from 'drizzle-orm'
-import { apiError, apiSuccess } from '@/lib/api/helpers'
-import { TABLE_NAMES } from '@/config/database'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { REQUEST_STATUS, URGENCY } from '@/config/it-hilfe'
-import { REPAIRER_PROFILE_TIER, REPAIRER_STATUS } from '@/config/repairer-status'
+import { withAdmin } from '@/lib/api/middleware';
+import { db } from '@/db';
+import { itHilfeRequests, repairerProfiles } from '@/db/schema';
+import { sql } from 'drizzle-orm';
+import { apiError, apiSuccess } from '@/lib/api/helpers';
+import { TABLE_NAMES } from '@/config/database';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { REQUEST_STATUS, URGENCY } from '@/config/it-hilfe';
+import { REPAIRER_PROFILE_TIER, REPAIRER_STATUS } from '@/config/repairer-status';
 
 // GET /api/admin/it-hilfe/stats - Dashboard statistics
 export const GET = withAdmin('it-hilfe-admin', async () => {
@@ -26,10 +26,10 @@ export const GET = withAdmin('it-hilfe-admin', async () => {
         verifiedHelpers: sql<number>`(SELECT count(*) FROM ${sql.raw(TABLE_NAMES.IT_HILFE_TECHNICIAN_PROFILES)} tp JOIN ${sql.raw(TABLE_NAMES.USER_PROFILES)} up ON up.user_id = tp.user_id WHERE up.is_verified = true AND tp.profile_tier = ${REPAIRER_PROFILE_TIER.COMMUNITY})`,
         totalOffers: sql<number>`(SELECT count(*) FROM ${sql.raw(TABLE_NAMES.IT_HILFE_OFFERS)})`,
       })
-      .from(itHilfeRequests)
+      .from(itHilfeRequests);
 
-    const total = Number(row.total)
-    const completed = Number(row.completed)
+    const total = Number(row.total);
+    const completed = Number(row.completed);
 
     return apiSuccess({
       total,
@@ -49,8 +49,8 @@ export const GET = withAdmin('it-hilfe-admin', async () => {
       verifiedHelpers: Number(row.verifiedHelpers),
       totalOffers: Number(row.totalOffers),
       resolutionRate: total > 0 ? Math.round((completed / total) * 100) : 0,
-    })
+    });
   } catch (error) {
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
-})
+});

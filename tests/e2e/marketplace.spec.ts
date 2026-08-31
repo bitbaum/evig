@@ -112,8 +112,8 @@ test.describe('Marketplace Page', () => {
 
   test('should show loading skeletons', async ({ page }) => {
     // Set up route intercept BEFORE navigation to ensure we catch the request
-    await page.route('**/api/listings*', async route => {
-      await new Promise(r => setTimeout(r, 2000));
+    await page.route('**/api/listings*', async (route) => {
+      await new Promise((r) => setTimeout(r, 2000));
       await route.continue();
     });
 
@@ -126,9 +126,7 @@ test.describe('Marketplace Page', () => {
 
   test('should show error state on network failure', async ({ page }) => {
     // Intercept and fail the request
-    await page.route('**/api/listings*', route =>
-      route.abort('failed')
-    );
+    await page.route('**/api/listings*', (route) => route.abort('failed'));
 
     await page.reload();
 

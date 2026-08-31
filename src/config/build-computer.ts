@@ -10,36 +10,60 @@
 
 export interface BuildRecommendation {
   /** Component-tier guidance strings (what to look for), not specific products. */
-  cpu: string
-  gpu: string
-  ram: string
-  storage: string
+  cpu: string;
+  gpu: string;
+  ram: string;
+  storage: string;
   /** One-line rationale for this use case. */
-  note: string
+  note: string;
 }
 
 export const USE_CASE_OPTIONS = [
-  { id: 'office', name: 'Büro & Business', description: 'E-Mail, Dokumente, Web-Browsing, Videoanrufe' },
-  { id: 'creative', name: 'Kreativarbeit', description: 'Foto-/Videobearbeitung, Design, Content-Erstellung' },
-  { id: 'gaming', name: 'Gaming', description: 'Moderne Spiele, Streaming, Hochleistungs-Computing' },
-  { id: 'development', name: 'Softwareentwicklung', description: 'Programmierung, Tests, mehrere VMs, Kompilierung' },
-  { id: 'server', name: 'Server/NAS', description: 'Dateiserver, Medienserver, Heimautomatisierung' },
-  { id: 'ai', name: 'KI/Maschinelles Lernen', description: 'Modelltraining, Datenverarbeitung, CUDA-Workloads' },
-] as const
+  {
+    id: 'office',
+    name: 'Büro & Business',
+    description: 'E-Mail, Dokumente, Web-Browsing, Videoanrufe',
+  },
+  {
+    id: 'creative',
+    name: 'Kreativarbeit',
+    description: 'Foto-/Videobearbeitung, Design, Content-Erstellung',
+  },
+  {
+    id: 'gaming',
+    name: 'Gaming',
+    description: 'Moderne Spiele, Streaming, Hochleistungs-Computing',
+  },
+  {
+    id: 'development',
+    name: 'Softwareentwicklung',
+    description: 'Programmierung, Tests, mehrere VMs, Kompilierung',
+  },
+  {
+    id: 'server',
+    name: 'Server/NAS',
+    description: 'Dateiserver, Medienserver, Heimautomatisierung',
+  },
+  {
+    id: 'ai',
+    name: 'KI/Maschinelles Lernen',
+    description: 'Modelltraining, Datenverarbeitung, CUDA-Workloads',
+  },
+] as const;
 
 export const PERFORMANCE_OPTIONS = [
   { id: 'basic', name: 'Grundlegend', description: 'Leichte Aufgaben, ausreichende Leistung' },
   { id: 'moderate', name: 'Moderat', description: 'Ausgewogene Leistung für die meisten Aufgaben' },
   { id: 'high', name: 'Hoch', description: 'Starke Leistung für anspruchsvolle Aufgaben' },
   { id: 'extreme', name: 'Extrem', description: 'Spitzenleistung, keine Kompromisse' },
-] as const
+] as const;
 
 export const BUDGET_OPTIONS = [
   { value: '300-500', label: 'CHF 300-500' },
   { value: '500-800', label: 'CHF 500-800' },
   { value: '800-1200', label: 'CHF 800-1200' },
   { value: '1200+', label: 'CHF 1200+' },
-] as const
+] as const;
 
 /**
  * Honest component-tier recommendation per use case. No prices/stock/locations —
@@ -54,7 +78,7 @@ export function getBuildRecommendation(useCase: string): BuildRecommendation {
         ram: '16–32 GB',
         storage: 'NVMe-SSD, 500 GB+',
         note: 'Priorität auf Grafikkarte und schnelle SSD für flüssiges Spielen.',
-      }
+      };
     case 'creative':
       return {
         cpu: '8+ Kerne für schnelles Rendern',
@@ -62,7 +86,7 @@ export function getBuildRecommendation(useCase: string): BuildRecommendation {
         ram: '32 GB oder mehr',
         storage: 'NVMe-SSD, 1 TB+ für grosse Projektdateien',
         note: 'Viel RAM und schnelle Speicher beschleunigen Foto- und Videobearbeitung.',
-      }
+      };
     case 'development':
       return {
         cpu: '6–8 Kerne für parallele Builds',
@@ -70,7 +94,7 @@ export function getBuildRecommendation(useCase: string): BuildRecommendation {
         ram: '32 GB (mehrere VMs/Container)',
         storage: 'NVMe-SSD, 500 GB+',
         note: 'RAM und CPU-Kerne zählen mehr als die Grafikkarte.',
-      }
+      };
     case 'server':
       return {
         cpu: 'Energieeffizient, moderate Kernzahl',
@@ -78,7 +102,7 @@ export function getBuildRecommendation(useCase: string): BuildRecommendation {
         ram: '16–32 GB je nach Diensten',
         storage: 'Grosse HDDs für Kapazität + eine SSD fürs System',
         note: 'Zuverlässigkeit und Speicherkapazität vor Spitzenleistung.',
-      }
+      };
     case 'ai':
       return {
         cpu: '8+ Kerne',
@@ -86,7 +110,7 @@ export function getBuildRecommendation(useCase: string): BuildRecommendation {
         ram: '32–64 GB',
         storage: 'NVMe-SSD, 1 TB+ für Datensätze',
         note: 'Die Grafikkarte (VRAM) ist der wichtigste Faktor fürs Training.',
-      }
+      };
     case 'office':
     default:
       return {
@@ -95,6 +119,6 @@ export function getBuildRecommendation(useCase: string): BuildRecommendation {
         ram: '8–16 GB',
         storage: 'SSD, 250 GB+',
         note: 'Ein refurbished Business-Gerät deckt Büroarbeit problemlos ab.',
-      }
+      };
   }
 }

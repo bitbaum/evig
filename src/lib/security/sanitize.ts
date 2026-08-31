@@ -43,10 +43,13 @@ function escapeHtmlEntities(str: string): string {
     .replace(/data:/gi, '');
 }
 
-export function sanitizeInput(input: string, options?: {
-  allowHtml?: boolean;
-  maxLength?: number;
-}): string {
+export function sanitizeInput(
+  input: string,
+  options?: {
+    allowHtml?: boolean;
+    maxLength?: number;
+  },
+): string {
   const { allowHtml = false, maxLength = 10000 } = options || {};
 
   // Trim and enforce max length
@@ -69,13 +72,16 @@ export function sanitizeInput(input: string, options?: {
 export function sanitizeObject<T extends Record<string, any>>(
   obj: T,
   fields: Array<keyof T>,
-  options?: { allowHtml?: boolean; maxLength?: number }
+  options?: { allowHtml?: boolean; maxLength?: number },
 ): T {
   const result = { ...obj };
 
   for (const field of fields) {
     if (typeof result[field] === 'string') {
-      (result as Record<string, unknown>)[field as string] = sanitizeInput(result[field] as string, options);
+      (result as Record<string, unknown>)[field as string] = sanitizeInput(
+        result[field] as string,
+        options,
+      );
     }
   }
 

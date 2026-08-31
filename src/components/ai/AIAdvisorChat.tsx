@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * AIAdvisorChat — shared collapsed "ask the AI about this thing" card.
@@ -9,29 +9,29 @@
  * { analysis: string } (see /api/ai/protocol-advisor, /api/ai/task-advisor).
  */
 
-import { useState } from 'react'
-import { Sparkles, Loader2, AlertCircle, ChevronDown, ChevronUp, Send } from 'lucide-react'
-import { apiFetch } from '@/lib/api/client'
-import { Textarea } from '@/components/ui/textarea'
-import { Button } from '@/components/ui/button'
+import { useState } from 'react';
+import { Sparkles, Loader2, AlertCircle, ChevronDown, ChevronUp, Send } from 'lucide-react';
+import { apiFetch } from '@/lib/api/client';
+import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
 
 export interface AIQuickQuestion {
-  label: string
-  question: string
+  label: string;
+  question: string;
 }
 
 interface AIAdvisorChatProps {
   /** Header line, e.g. "KI-Assistent — Frag die KI zu diesem Protokoll". */
-  heading: string
+  heading: string;
   /** POST endpoint returning { analysis: string }. */
-  endpoint: string
+  endpoint: string;
   /** Context fields merged into the request body alongside { question }. */
-  buildBody: (question: string) => Record<string, unknown>
-  quickQuestions: AIQuickQuestion[]
-  placeholder: string
+  buildBody: (question: string) => Record<string, unknown>;
+  quickQuestions: AIQuickQuestion[];
+  placeholder: string;
   /** Small-print reminder under the answer area. */
-  hint: string
-  defaultExpanded?: boolean
+  hint: string;
+  defaultExpanded?: boolean;
 }
 
 export function AIAdvisorChat({
@@ -43,36 +43,36 @@ export function AIAdvisorChat({
   hint,
   defaultExpanded = false,
 }: AIAdvisorChatProps) {
-  const [expanded, setExpanded] = useState(defaultExpanded)
-  const [question, setQuestion] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [analysis, setAnalysis] = useState('')
+  const [expanded, setExpanded] = useState(defaultExpanded);
+  const [question, setQuestion] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [analysis, setAnalysis] = useState('');
 
   async function ask(q: string) {
-    if (!q.trim() || loading) return
-    setLoading(true)
-    setError('')
-    setAnalysis('')
+    if (!q.trim() || loading) return;
+    setLoading(true);
+    setError('');
+    setAnalysis('');
 
     const result = await apiFetch<{ analysis: string }>(endpoint, {
       method: 'POST',
       body: buildBody(q.trim()),
-    })
+    });
 
     if (!result.success || !result.data) {
-      setError(result.error || 'Fehler bei der KI-Analyse')
+      setError(result.error || 'Fehler bei der KI-Analyse');
     } else {
-      setAnalysis(result.data.analysis)
-      setQuestion('')
+      setAnalysis(result.data.analysis);
+      setQuestion('');
     }
-    setLoading(false)
+    setLoading(false);
   }
 
   function handleKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      ask(question)
+      e.preventDefault();
+      ask(question);
     }
   }
 
@@ -89,10 +89,11 @@ export function AIAdvisorChat({
           <Sparkles className="w-4 h-4 text-info-600 dark:text-info-400 shrink-0" />
           {heading}
         </span>
-        {expanded
-          ? <ChevronUp className="w-4 h-4 text-info-500 shrink-0" />
-          : <ChevronDown className="w-4 h-4 text-info-500 shrink-0" />
-        }
+        {expanded ? (
+          <ChevronUp className="w-4 h-4 text-info-500 shrink-0" />
+        ) : (
+          <ChevronDown className="w-4 h-4 text-info-500 shrink-0" />
+        )}
       </Button>
 
       {expanded && (
@@ -131,10 +132,11 @@ export function AIAdvisorChat({
               className="px-3 py-2 bg-info-600 hover:bg-info-700 disabled:bg-info-300 dark:disabled:bg-info-500/30 text-white rounded-lg transition-colors self-end touch-manipulation"
               aria-label="Frage stellen"
             >
-              {loading
-                ? <Loader2 className="w-4 h-4 animate-spin" />
-                : <Send className="w-4 h-4" />
-              }
+              {loading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Send className="w-4 h-4" />
+              )}
             </Button>
           </div>
 
@@ -155,11 +157,9 @@ export function AIAdvisorChat({
             </div>
           )}
 
-          <p className="text-xs text-info-500 dark:text-info-400/70">
-            {hint}
-          </p>
+          <p className="text-xs text-info-500 dark:text-info-400/70">{hint}</p>
         </div>
       )}
     </div>
-  )
+  );
 }

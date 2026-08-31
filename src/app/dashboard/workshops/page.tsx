@@ -1,39 +1,39 @@
-'use client'
+'use client';
 
-import { Calendar, CheckCircle, XCircle, AlertCircle, ArrowLeft } from 'lucide-react'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
-import Link from 'next/link'
-import { formatDate } from '@/lib/date-formats'
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
-import { Modal } from '@/components/ui/Modal'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { FormField } from '@/components/ui/form-field'
-import { EmptyState } from '@/components/ui/EmptyState'
-import Heading from '@/components/ui/Heading'
-import { useTranslations } from 'next-intl'
-import { useWorkshopRegistrations } from '@/hooks/useWorkshopRegistrations'
-import type { WorkshopRegistration } from '@/hooks/useWorkshopRegistrations'
-import { ROUTES } from '@/config/routes'
+import { Calendar, CheckCircle, XCircle, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status';
+import Link from 'next/link';
+import { formatDate } from '@/lib/date-formats';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { Modal } from '@/components/ui/Modal';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { FormField } from '@/components/ui/form-field';
+import { EmptyState } from '@/components/ui/EmptyState';
+import Heading from '@/components/ui/Heading';
+import { useTranslations } from 'next-intl';
+import { useWorkshopRegistrations } from '@/hooks/useWorkshopRegistrations';
+import type { WorkshopRegistration } from '@/hooks/useWorkshopRegistrations';
+import { ROUTES } from '@/config/routes';
 
 function getStatusIcon(status: string) {
   switch (status) {
     case WORKSHOP_REGISTRATION_STATUS.CONFIRMED:
-      return <CheckCircle className="w-5 h-5 text-success-500" />
+      return <CheckCircle className="w-5 h-5 text-success-500" />;
     case WORKSHOP_REGISTRATION_STATUS.PENDING:
-      return <AlertCircle className="w-5 h-5 text-warning-500" />
+      return <AlertCircle className="w-5 h-5 text-warning-500" />;
     case WORKSHOP_REGISTRATION_STATUS.CANCELLED:
-      return <XCircle className="w-5 h-5 text-error-500" />
+      return <XCircle className="w-5 h-5 text-error-500" />;
     default:
-      return <AlertCircle className="w-5 h-5 text-text-tertiary" />
+      return <AlertCircle className="w-5 h-5 text-text-tertiary" />;
   }
 }
 
 export default function WorkshopsDashboard() {
-  const t = useTranslations('dashboard.workshops')
-  const tDates = useTranslations('dashboard.dates')
+  const t = useTranslations('dashboard.workshops');
+  const tDates = useTranslations('dashboard.dates');
 
   const {
     session,
@@ -59,14 +59,18 @@ export default function WorkshopsDashboard() {
     loadError: t('loadError'),
     saveFailed: t('saveFailed'),
     cancelFailed: t('cancelFailed'),
-  })
+  });
 
   function getStatusText(status: string) {
     switch (status) {
-      case WORKSHOP_REGISTRATION_STATUS.CONFIRMED: return t('statusConfirmed')
-      case WORKSHOP_REGISTRATION_STATUS.PENDING: return t('statusPending')
-      case WORKSHOP_REGISTRATION_STATUS.CANCELLED: return t('statusCancelled')
-      default: return status
+      case WORKSHOP_REGISTRATION_STATUS.CONFIRMED:
+        return t('statusConfirmed');
+      case WORKSHOP_REGISTRATION_STATUS.PENDING:
+        return t('statusPending');
+      case WORKSHOP_REGISTRATION_STATUS.CANCELLED:
+        return t('statusCancelled');
+      default:
+        return status;
     }
   }
 
@@ -86,7 +90,7 @@ export default function WorkshopsDashboard() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   if (!session?.user) {
@@ -94,7 +98,9 @@ export default function WorkshopsDashboard() {
       <div className="min-h-screen bg-surface-raised py-8">
         <div className="max-w-4xl mx-auto px-4">
           <div className="card-shell p-8 text-center">
-            <Heading level={1} className="text-2xl font-bold mb-4 text-text-primary">{t('loginRequired')}</Heading>
+            <Heading level={1} className="text-2xl font-bold mb-4 text-text-primary">
+              {t('loginRequired')}
+            </Heading>
             <p className="mb-6 text-text-secondary">{t('loginDesc')}</p>
             <Button as={Link} href={ROUTES.public.login} variant="primary">
               {t('login')}
@@ -102,7 +108,7 @@ export default function WorkshopsDashboard() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -116,9 +122,7 @@ export default function WorkshopsDashboard() {
             <ArrowLeft className="mr-1.5 h-3 w-3" />
             {t('backToDashboard')}
           </Link>
-          <Eyebrow>
-            {t('pageSubtitle')}
-          </Eyebrow>
+          <Eyebrow>{t('pageSubtitle')}</Eyebrow>
           <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
             {t('pageTitle')}
           </Heading>
@@ -164,7 +168,9 @@ export default function WorkshopsDashboard() {
                       </div>
                       <div className="flex items-center">
                         <Calendar className="w-4 h-4 mr-1" />
-                        <span>{tDates('registeredOn', { date: formatDate(registration.created_at) })}</span>
+                        <span>
+                          {tDates('registeredOn', { date: formatDate(registration.created_at) })}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -186,7 +192,9 @@ export default function WorkshopsDashboard() {
                       <AlertCircle className="w-5 h-5 mr-2" />
                       <span className="font-medium">{t('pendingTitle')}</span>
                     </div>
-                    <p className="text-warning-700 dark:text-warning-400 text-sm mt-1">{t('pendingDesc')}</p>
+                    <p className="text-warning-700 dark:text-warning-400 text-sm mt-1">
+                      {t('pendingDesc')}
+                    </p>
                   </div>
                 )}
 
@@ -213,12 +221,10 @@ export default function WorkshopsDashboard() {
                     >
                       {t('cancelButton')}
                     </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => openEdit(registration)}
-                    >
-                      {registration.feedback || registration.rating ? t('feedbackEdit') : t('feedbackAdd')}
+                    <Button variant="outline" size="sm" onClick={() => openEdit(registration)}>
+                      {registration.feedback || registration.rating
+                        ? t('feedbackEdit')
+                        : t('feedbackAdd')}
                     </Button>
                   </div>
                 )}
@@ -245,7 +251,7 @@ export default function WorkshopsDashboard() {
         isOpen={!!pendingCancelId}
         title={t('cancelButton')}
         message={t('confirmCancel')}
-        itemName={registrations.find(r => r.id === pendingCancelId)?.workshop_title}
+        itemName={registrations.find((r) => r.id === pendingCancelId)?.workshop_title}
         onConfirm={doCancel}
         onClose={() => setPendingCancelId(null)}
       />
@@ -281,5 +287,5 @@ export default function WorkshopsDashboard() {
         </div>
       </Modal>
     </main>
-  )
+  );
 }

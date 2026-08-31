@@ -18,37 +18,37 @@
 // =============================================================================
 
 export const NEED_TYPES = {
-  EXPERTISE:       'expertise',
-  HARDWARE:        'hardware',
-  PARTNER_INTRO:   'partner_intro',
-  FUNDING:         'funding',
-  VOLUNTEER_TIME:  'volunteer_time',
-} as const
+  EXPERTISE: 'expertise',
+  HARDWARE: 'hardware',
+  PARTNER_INTRO: 'partner_intro',
+  FUNDING: 'funding',
+  VOLUNTEER_TIME: 'volunteer_time',
+} as const;
 
-export type NeedType = (typeof NEED_TYPES)[keyof typeof NEED_TYPES]
+export type NeedType = (typeof NEED_TYPES)[keyof typeof NEED_TYPES];
 
 // =============================================================================
 // NEED STATUSES — lifecycle of a single need
 // =============================================================================
 
 export const NEED_STATUSES = {
-  OPEN:       'open',
-  MATCHED:    'matched',
-  FULFILLED:  'fulfilled',
-  ARCHIVED:   'archived',
-} as const
+  OPEN: 'open',
+  MATCHED: 'matched',
+  FULFILLED: 'fulfilled',
+  ARCHIVED: 'archived',
+} as const;
 
-export type NeedStatus = (typeof NEED_STATUSES)[keyof typeof NEED_STATUSES]
+export type NeedStatus = (typeof NEED_STATUSES)[keyof typeof NEED_STATUSES];
 
 // =============================================================================
 // CONTRIBUTION STATUSES — triage states for visitor offers
 // =============================================================================
 
 export const CONTRIBUTION_STATUSES = {
-  NEW:        'new',
-  CONTACTED:  'contacted',
-  ACCEPTED:   'accepted',
-  DECLINED:   'declined',
-} as const
+  NEW: 'new',
+  CONTACTED: 'contacted',
+  ACCEPTED: 'accepted',
+  DECLINED: 'declined',
+} as const;
 
-export type ContributionStatus = (typeof CONTRIBUTION_STATUSES)[keyof typeof CONTRIBUTION_STATUSES]
+export type ContributionStatus = (typeof CONTRIBUTION_STATUSES)[keyof typeof CONTRIBUTION_STATUSES];

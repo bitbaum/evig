@@ -1,7 +1,7 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import Link from 'next/link'
+import Link from 'next/link';
 import { ROUTES } from '@/config/routes';
 import { Button } from '@/components/ui/button';
 import {
@@ -32,7 +32,7 @@ export default function WorkshopProposalDetailPage() {
   const proposalId = params.id as string;
 
   const { proposal, isLoading, error, showEditModal, setShowEditModal, handleEditSaved } =
-    useWorkshopProposalDetail(proposalId)
+    useWorkshopProposalDetail(proposalId);
 
   if (isLoading) {
     return (
@@ -55,7 +55,9 @@ export default function WorkshopProposalDetailPage() {
       <div className="min-h-screen bg-surface-raised py-8">
         <div className="max-w-7xl mx-auto px-4">
           <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 rounded-lg p-6">
-            <p className="text-error-800 dark:text-error-400">{error || 'Vorschlag nicht gefunden'}</p>
+            <p className="text-error-800 dark:text-error-400">
+              {error || 'Vorschlag nicht gefunden'}
+            </p>
             <Link
               href={ROUTES.admin.workshops}
               className="inline-flex items-center mt-4 text-action hover:text-action"
@@ -85,7 +87,9 @@ export default function WorkshopProposalDetailPage() {
           </Link>
           <div className="flex items-center justify-between">
             <div>
-              <Heading level={1} className="text-3xl font-bold text-text-primary">{proposal.title}</Heading>
+              <Heading level={1} className="text-3xl font-bold text-text-primary">
+                {proposal.title}
+              </Heading>
               <p className="mt-2 text-sm text-text-secondary">
                 Vorgeschlagen von {proposal.proposer_name} ({proposal.proposer_email}) •{' '}
                 {formatDateShort(proposal.created_at)}
@@ -119,23 +123,31 @@ export default function WorkshopProposalDetailPage() {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             <section className="bg-surface-base rounded-lg shadow-xs border p-6">
-              <Heading level={2} className="text-xl font-semibold mb-4">Beschreibung</Heading>
+              <Heading level={2} className="text-xl font-semibold mb-4">
+                Beschreibung
+              </Heading>
               <p className="text-text-secondary whitespace-pre-wrap">{proposal.description}</p>
             </section>
 
             {proposal.short_description && (
               <section className="bg-surface-base rounded-lg shadow-xs border p-6">
-                <Heading level={2} className="text-xl font-semibold mb-4">Kurzbeschreibung</Heading>
+                <Heading level={2} className="text-xl font-semibold mb-4">
+                  Kurzbeschreibung
+                </Heading>
                 <p className="text-text-secondary">{proposal.short_description}</p>
               </section>
             )}
 
             {proposal.learning_objectives && proposal.learning_objectives.length > 0 && (
               <section className="bg-surface-base rounded-lg shadow-xs border p-6">
-                <Heading level={2} className="text-xl font-semibold mb-4">Lernziele</Heading>
+                <Heading level={2} className="text-xl font-semibold mb-4">
+                  Lernziele
+                </Heading>
                 <ul className="list-disc list-inside space-y-2">
                   {proposal.learning_objectives.map((obj: string, idx: number) => (
-                    <li key={idx} className="text-text-secondary">{obj}</li>
+                    <li key={idx} className="text-text-secondary">
+                      {obj}
+                    </li>
                   ))}
                 </ul>
               </section>
@@ -143,14 +155,18 @@ export default function WorkshopProposalDetailPage() {
 
             {proposal.prerequisites && (
               <section className="bg-surface-base rounded-lg shadow-xs border p-6">
-                <Heading level={2} className="text-xl font-semibold mb-4">Voraussetzungen</Heading>
+                <Heading level={2} className="text-xl font-semibold mb-4">
+                  Voraussetzungen
+                </Heading>
                 <p className="text-text-secondary">{proposal.prerequisites}</p>
               </section>
             )}
 
             {(proposal.materials_provided || proposal.materials_required) && (
               <section className="bg-surface-base rounded-lg shadow-xs border p-6">
-                <Heading level={2} className="text-xl font-semibold mb-4">Materialien</Heading>
+                <Heading level={2} className="text-xl font-semibold mb-4">
+                  Materialien
+                </Heading>
                 {proposal.materials_provided && (
                   <div className="mb-4">
                     <Heading level={3} className="text-sm font-semibold text-text-secondary mb-2">
@@ -172,7 +188,9 @@ export default function WorkshopProposalDetailPage() {
 
             {proposal.edit_history && proposal.edit_history.length > 0 && (
               <section className="bg-surface-base rounded-lg shadow-xs border p-6">
-                <Heading level={2} className="text-xl font-semibold mb-4">Bearbeitungsverlauf</Heading>
+                <Heading level={2} className="text-xl font-semibold mb-4">
+                  Bearbeitungsverlauf
+                </Heading>
                 <EditHistoryView history={proposal.edit_history} fieldLabels={fieldLabels} />
               </section>
             )}
@@ -181,13 +199,19 @@ export default function WorkshopProposalDetailPage() {
           {/* Sidebar */}
           <div className="space-y-6">
             <section className="bg-surface-base rounded-lg shadow-xs border p-6">
-              <Heading level={3} className="font-semibold mb-4">Status</Heading>
+              <Heading level={3} className="font-semibold mb-4">
+                Status
+              </Heading>
               <div className="flex items-center gap-2">
                 {proposal.status === APPROVAL_STATUS.APPROVED && (
                   <Check className="w-5 h-5 text-action" />
                 )}
-                {proposal.status === APPROVAL_STATUS.PENDING && <Clock className="w-5 h-5 text-warning-600" />}
-                {proposal.status === APPROVAL_STATUS.REJECTED && <X className="w-5 h-5 text-error-600" />}
+                {proposal.status === APPROVAL_STATUS.PENDING && (
+                  <Clock className="w-5 h-5 text-warning-600" />
+                )}
+                {proposal.status === APPROVAL_STATUS.REJECTED && (
+                  <X className="w-5 h-5 text-error-600" />
+                )}
                 {proposal.status === APPROVAL_STATUS.REQUIRES_CHANGES && (
                   <AlertCircle className="w-5 h-5 text-secondary-600" />
                 )}
@@ -196,7 +220,9 @@ export default function WorkshopProposalDetailPage() {
             </section>
 
             <section className="bg-surface-base rounded-lg shadow-xs border p-6">
-              <Heading level={3} className="font-semibold mb-4">Details</Heading>
+              <Heading level={3} className="font-semibold mb-4">
+                Details
+              </Heading>
               <dl className="space-y-3 text-sm">
                 <div>
                   <dt className="text-text-secondary flex items-center gap-2">
@@ -250,14 +276,18 @@ export default function WorkshopProposalDetailPage() {
                 {proposal.location_type === 'online'
                   ? 'Online'
                   : proposal.location_type === 'home'
-                  ? 'Zu Hause'
-                  : proposal.selected_location_name || proposal.proposed_location || 'Veranstaltungsort'}
+                    ? 'Zu Hause'
+                    : proposal.selected_location_name ||
+                      proposal.proposed_location ||
+                      'Veranstaltungsort'}
               </p>
             </section>
 
             {proposal.created_workshop && (
               <section className="bg-surface-base rounded-lg shadow-xs border p-6">
-                <Heading level={3} className="font-semibold mb-3">Erstellter Workshop</Heading>
+                <Heading level={3} className="font-semibold mb-3">
+                  Erstellter Workshop
+                </Heading>
                 <Link
                   href={ROUTES.admin.workshops}
                   className="flex items-center gap-2 text-sm text-action hover:text-action font-medium"
@@ -270,7 +300,9 @@ export default function WorkshopProposalDetailPage() {
 
             {proposal.reviewed_by && (
               <section className="bg-surface-base rounded-lg shadow-xs border p-6">
-                <Heading level={3} className="font-semibold mb-4">Reviewer</Heading>
+                <Heading level={3} className="font-semibold mb-4">
+                  Reviewer
+                </Heading>
                 <p className="text-sm text-text-secondary">
                   {proposal.reviewer_name || 'Admin'}
                   <br />

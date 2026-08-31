@@ -14,8 +14,8 @@
  * accounts are neither enumerable nor exposed.
  */
 
-import { and, eq, or, sql } from 'drizzle-orm'
-import { db } from '@/db'
+import { and, eq, or, sql } from 'drizzle-orm';
+import { db } from '@/db';
 import {
   users,
   userProfiles,
@@ -25,91 +25,91 @@ import {
   repairerProfiles,
   repairerServices,
   workshops,
-} from '@/db/schema'
-import { REVIEW_TARGET_TYPES } from '@/config/database'
-import { REVIEW_STATUS } from '@/config/review-status'
-import { LISTING_STATUS } from '@/config/marketplace'
-import { listingThumbnailSubquery } from '@/lib/marketplace/listing-helpers'
-import { getMergedPosts } from '@/lib/blog-merge'
-import { getBlogAuthorRecord } from '@/config/blog-authors'
+} from '@/db/schema';
+import { REVIEW_TARGET_TYPES } from '@/config/database';
+import { REVIEW_STATUS } from '@/config/review-status';
+import { LISTING_STATUS } from '@/config/marketplace';
+import { listingThumbnailSubquery } from '@/lib/marketplace/listing-helpers';
+import { getMergedPosts } from '@/lib/blog-merge';
+import { getBlogAuthorRecord } from '@/config/blog-authors';
 
 export interface ProfileListing {
-  id: string
-  title: string
-  price_chf: number
-  category: string
-  condition: string
-  is_revampit: boolean
-  pickup_location: string | null
-  verified_at: string | null
-  thumbnail: string | null
+  id: string;
+  title: string;
+  price_chf: number;
+  category: string;
+  condition: string;
+  is_revampit: boolean;
+  pickup_location: string | null;
+  verified_at: string | null;
+  thumbnail: string | null;
 }
 
 export interface ProfileService {
-  id: string
-  name: string
-  category: string
-  description: string | null
-  base_price_cents: number | null
-  hourly_rate_cents: number | null
+  id: string;
+  name: string;
+  category: string;
+  description: string | null;
+  base_price_cents: number | null;
+  hourly_rate_cents: number | null;
 }
 
 export interface ProfileWorkshop {
-  slug: string
-  title: string
-  description: string | null
-  category: string | null
-  level: string | null
-  featured_image: string | null
+  slug: string;
+  title: string;
+  description: string | null;
+  category: string | null;
+  level: string | null;
+  featured_image: string | null;
 }
 
 export interface ProfileContent {
-  slug: string
-  title: string
-  excerpt: string | null
-  category: string | null
-  published_at: string | null
-  featured_image: string | null
+  slug: string;
+  title: string;
+  excerpt: string | null;
+  category: string | null;
+  published_at: string | null;
+  featured_image: string | null;
 }
 
 export interface ProfileReview {
-  id: string
-  target_id: string
-  listing_title: string | null
-  overall_rating: number
-  title: string | null
-  content: string
-  created_at: string
+  id: string;
+  target_id: string;
+  listing_title: string | null;
+  overall_rating: number;
+  title: string | null;
+  content: string;
+  created_at: string;
 }
 
 export interface PublicProfile {
-  user_id: string
-  name: string
-  avatar_url: string | null
-  bio: string | null
-  city: string | null
-  canton: string | null
-  is_verified: boolean
-  is_staff: boolean
-  is_technician: boolean
-  technician_id: string | null
-  member_since: string
+  user_id: string;
+  name: string;
+  avatar_url: string | null;
+  bio: string | null;
+  city: string | null;
+  canton: string | null;
+  is_verified: boolean;
+  is_staff: boolean;
+  is_technician: boolean;
+  technician_id: string | null;
+  member_since: string;
   stats: {
-    listings: number
-    sold: number
-    workshops: number
-    posts: number
-    services: number
-    rating: number | null
-    reviews_received: number
-    reviews_written: number
-  }
-  listings: ProfileListing[]
-  services: ProfileService[]
-  workshops: ProfileWorkshop[]
-  content: ProfileContent[]
-  reviews_received: ProfileReview[]
-  reviews_written: ProfileReview[]
+    listings: number;
+    sold: number;
+    workshops: number;
+    posts: number;
+    services: number;
+    rating: number | null;
+    reviews_received: number;
+    reviews_written: number;
+  };
+  listings: ProfileListing[];
+  services: ProfileService[];
+  workshops: ProfileWorkshop[];
+  content: ProfileContent[];
+  reviews_received: ProfileReview[];
+  reviews_written: ProfileReview[];
 }
 
 export async function getPublicProfile(userId: string): Promise<PublicProfile | null> {
@@ -131,9 +131,9 @@ export async function getPublicProfile(userId: string): Promise<PublicProfile | 
     })
     .from(users)
     .leftJoin(userProfiles, eq(userProfiles.userId, users.id))
-    .where(eq(users.id, userId))
+    .where(eq(users.id, userId));
 
-  if (!identity) return null
+  if (!identity) return null;
 
   // Seller facet — city/canton + aggregate totals for the stat row.
   const [seller] = await db
@@ -145,7 +145,7 @@ export async function getPublicProfile(userId: string): Promise<PublicProfile | 
       total_reviews: sellerProfiles.totalReviews,
     })
     .from(sellerProfiles)
-    .where(eq(sellerProfiles.userId, userId))
+    .where(eq(sellerProfiles.userId, userId));
 
   // Active marketplace listings (same shape the storefront uses).
   const listingRows = await db
@@ -162,15 +162,20 @@ export async function getPublicProfile(userId: string): Promise<PublicProfile | 
     })
     .from(listings)
     .where(and(eq(listings.sellerId, userId), eq(listings.status, LISTING_STATUS.ACTIVE)))
-    .orderBy(sql`${listings.createdAt} DESC`)
+    .orderBy(sql`${listings.createdAt} DESC`);
 
   // Technician facet — a public technician profile means "offers services".
   const [technician] = await db
-    .select({ id: repairerProfiles.id, is_active: repairerProfiles.isActive, status: repairerProfiles.status })
+    .select({
+      id: repairerProfiles.id,
+      is_active: repairerProfiles.isActive,
+      status: repairerProfiles.status,
+    })
     .from(repairerProfiles)
-    .where(eq(repairerProfiles.userId, userId))
+    .where(eq(repairerProfiles.userId, userId));
 
-  const technicianPublic = !!technician && technician.is_active !== false && technician.status !== 'suspended'
+  const technicianPublic =
+    !!technician && technician.is_active !== false && technician.status !== 'suspended';
   const serviceRows = technicianPublic
     ? await db
         .select({
@@ -182,8 +187,10 @@ export async function getPublicProfile(userId: string): Promise<PublicProfile | 
           hourly_rate_cents: repairerServices.hourlyRateCents,
         })
         .from(repairerServices)
-        .where(and(eq(repairerServices.repairerId, technician.id), eq(repairerServices.isActive, true)))
-    : []
+        .where(
+          and(eq(repairerServices.repairerId, technician.id), eq(repairerServices.isActive, true)),
+        )
+    : [];
 
   // Workshops this person instructs or created.
   const workshopRows = await db
@@ -196,21 +203,26 @@ export async function getPublicProfile(userId: string): Promise<PublicProfile | 
       featured_image: workshops.featuredImage,
     })
     .from(workshops)
-    .where(and(or(eq(workshops.instructorId, userId), eq(workshops.createdBy, userId)), eq(workshops.isActive, true)))
-    .orderBy(sql`${workshops.createdAt} DESC`)
+    .where(
+      and(
+        or(eq(workshops.instructorId, userId), eq(workshops.createdBy, userId)),
+        eq(workshops.isActive, true),
+      ),
+    )
+    .orderBy(sql`${workshops.createdAt} DESC`);
 
   // Content authored by this person: DB posts (created_by) + file posts whose
   // configured author email matches this account. Deduped by slug in the merge.
-  const merged = await getMergedPosts('de')
+  const merged = await getMergedPosts('de');
   const contentRows: ProfileContent[] = merged
     .filter((p) => {
       // Only genuinely public posts on a public profile — never a team/author
       // -restricted post (upstream audience axis) nor an unlisted/link post.
-      if (p.visibility !== 'public') return false
-      if (p.audience !== 'public') return false
-      if (p.authorId && p.authorId === userId) return true
-      const rec = getBlogAuthorRecord(p.author)
-      return !!rec && !!identity.email && rec.email.toLowerCase() === identity.email.toLowerCase()
+      if (p.visibility !== 'public') return false;
+      if (p.audience !== 'public') return false;
+      if (p.authorId && p.authorId === userId) return true;
+      const rec = getBlogAuthorRecord(p.author);
+      return !!rec && !!identity.email && rec.email.toLowerCase() === identity.email.toLowerCase();
     })
     .map((p) => ({
       slug: p.slug,
@@ -219,7 +231,7 @@ export async function getPublicProfile(userId: string): Promise<PublicProfile | 
       category: p.category ?? null,
       published_at: p.publishedAt ?? null,
       featured_image: p.featuredImage ?? null,
-    }))
+    }));
 
   // Reputation — reviews received on this seller's listings.
   const reviewsReceived = await db
@@ -242,7 +254,7 @@ export async function getPublicProfile(userId: string): Promise<PublicProfile | 
       ),
     )
     .orderBy(sql`${reviews.createdAt} DESC`)
-    .limit(10)
+    .limit(10);
 
   // Reputation — reviews this person wrote.
   const reviewsWritten = await db
@@ -262,24 +274,24 @@ export async function getPublicProfile(userId: string): Promise<PublicProfile | 
     )
     .where(and(eq(reviews.reviewerId, userId), eq(reviews.status, REVIEW_STATUS.PUBLISHED)))
     .orderBy(sql`${reviews.createdAt} DESC`)
-    .limit(10)
+    .limit(10);
 
   const [writtenAgg] = await db
     .select({ count: sql<number>`COUNT(*)::int` })
     .from(reviews)
-    .where(and(eq(reviews.reviewerId, userId), eq(reviews.status, REVIEW_STATUS.PUBLISHED)))
+    .where(and(eq(reviews.reviewerId, userId), eq(reviews.status, REVIEW_STATUS.PUBLISHED)));
 
-  const reviewsWrittenCount = writtenAgg?.count ?? 0
+  const reviewsWrittenCount = writtenAgg?.count ?? 0;
   const hasFootprint =
     !!seller ||
     technicianPublic ||
     listingRows.length > 0 ||
     workshopRows.length > 0 ||
     contentRows.length > 0 ||
-    reviewsWrittenCount > 0
+    reviewsWrittenCount > 0;
 
   // Privacy gate: no public footprint → no public profile.
-  if (!hasFootprint) return null
+  if (!hasFootprint) return null;
 
   return {
     user_id: identity.user_id,
@@ -310,7 +322,13 @@ export async function getPublicProfile(userId: string): Promise<PublicProfile | 
     services: serviceRows,
     workshops: workshopRows,
     content: contentRows,
-    reviews_received: reviewsReceived.map((r) => ({ ...r, created_at: r.created_at as unknown as string })),
-    reviews_written: reviewsWritten.map((r) => ({ ...r, created_at: r.created_at as unknown as string })),
-  }
+    reviews_received: reviewsReceived.map((r) => ({
+      ...r,
+      created_at: r.created_at as unknown as string,
+    })),
+    reviews_written: reviewsWritten.map((r) => ({
+      ...r,
+      created_at: r.created_at as unknown as string,
+    })),
+  };
 }

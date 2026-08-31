@@ -1,12 +1,12 @@
-import Link from 'next/link'
-import { FileText, ArrowRight } from 'lucide-react'
-import { Eyebrow } from '@/components/ui/Eyebrow'
+import Link from 'next/link';
+import { FileText, ArrowRight } from 'lucide-react';
+import { Eyebrow } from '@/components/ui/Eyebrow';
 
 interface Props {
   /** Where to send the "back to blog" link. */
-  blogHref?: string
+  blogHref?: string;
   /** Login link, shown so staff can sign in to preview a draft. */
-  loginHref?: string
+  loginHref?: string;
 }
 
 /**
@@ -22,11 +22,14 @@ export default function BlogUnavailable({ blogHref = '/blog', loginHref }: Props
         <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-subtle bg-surface-raised text-text-secondary">
           <FileText className="h-5 w-5" aria-hidden="true" />
         </span>
-        <Eyebrow as="div" className="mt-6">Noch nicht veröffentlicht</Eyebrow>
+        <Eyebrow as="div" className="mt-6">
+          Noch nicht veröffentlicht
+        </Eyebrow>
         <h1 className="ui-public-display-md mt-2">Dieser Beitrag ist noch ein Entwurf</h1>
         <p className="mx-auto mt-3 max-w-sm text-sm text-text-secondary">
-          Der Beitrag existiert, ist aber noch nicht öffentlich. Sobald er veröffentlicht ist, funktioniert
-          dieser Link für alle. Falls du zum Team gehörst, melde dich an, um die Vorschau zu sehen.
+          Der Beitrag existiert, ist aber noch nicht öffentlich. Sobald er veröffentlicht ist,
+          funktioniert dieser Link für alle. Falls du zum Team gehörst, melde dich an, um die
+          Vorschau zu sehen.
         </p>
         <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
           <Link
@@ -46,5 +49,5 @@ export default function BlogUnavailable({ blogHref = '/blog', loginHref }: Props
         </div>
       </div>
     </div>
-  )
+  );
 }

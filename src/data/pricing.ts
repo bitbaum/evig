@@ -7,15 +7,15 @@
  * Values are synced with org_numbers table (economic category).
  */
 
-import { getDefaultNumeric } from '@/lib/org-numbers.defaults'
+import { getDefaultNumeric } from '@/lib/org-numbers.defaults';
 
 // Core pricing constants (from org-numbers defaults)
-export const HOURLY_RATE = getDefaultNumeric('hourly_rate_chf')
-export const ASSESSMENT_FEE = getDefaultNumeric('assessment_fee_chf')
+export const HOURLY_RATE = getDefaultNumeric('hourly_rate_chf');
+export const ASSESSMENT_FEE = getDefaultNumeric('assessment_fee_chf');
 
 // Formatted strings for display (German)
-export const HOURLY_RATE_DISPLAY = `CHF ${HOURLY_RATE}/Stunde`
-export const ASSESSMENT_FEE_DISPLAY = `CHF ${ASSESSMENT_FEE} Bewertungsgebühr`
+export const HOURLY_RATE_DISPLAY = `CHF ${HOURLY_RATE}/Stunde`;
+export const ASSESSMENT_FEE_DISPLAY = `CHF ${ASSESSMENT_FEE} Bewertungsgebühr`;
 
 /**
  * Data recovery media pricing (German)
@@ -27,4 +27,4 @@ export const MEDIA_PRICES = [
   'Festplatten: CHF 40 pro Festplatte',
   'Bandlaufwerke: CHF 50 pro Band',
   'VHS/Schallplatten: Preis auf Anfrage',
-] as const
+] as const;

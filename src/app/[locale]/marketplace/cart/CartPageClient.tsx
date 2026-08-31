@@ -1,31 +1,41 @@
-'use client'
+'use client';
 
-import { useEffect, useRef, useState } from 'react'
-import { useSession } from 'next-auth/react'
-import { useTranslations } from 'next-intl'
-import { Trash2, ShoppingCart, Loader2, MapPin, ArrowLeft, ShieldCheck, LockKeyhole, Store, Truck } from 'lucide-react'
-import { toast } from 'sonner'
-import { Button } from '@/components/ui/button'
-import { Link, useRouter } from '@/i18n/navigation'
-import Heading from '@/components/ui/Heading'
-import { ListingImage } from '@/components/marketplace/ListingImage'
-import { PaymentReturnBanner } from '@/components/payments/PaymentReturnBanner'
-import { ShippingAddressFields } from '@/components/marketplace/checkout/ShippingAddressFields'
-import { useCart } from '@/components/marketplace/cart/CartProvider'
-import { useShippingAddress } from '@/hooks/useShippingAddress'
-import { apiFetch } from '@/lib/api/client'
-import { formatCHF, REVAMPIT_LISTING_DELIVERY } from '@/config/marketplace'
-import { BASE_REGION } from '@/config/org'
+import { useEffect, useRef, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
+import {
+  Trash2,
+  ShoppingCart,
+  Loader2,
+  MapPin,
+  ArrowLeft,
+  ShieldCheck,
+  LockKeyhole,
+  Store,
+  Truck,
+} from 'lucide-react';
+import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
+import { Link, useRouter } from '@/i18n/navigation';
+import Heading from '@/components/ui/Heading';
+import { ListingImage } from '@/components/marketplace/ListingImage';
+import { PaymentReturnBanner } from '@/components/payments/PaymentReturnBanner';
+import { ShippingAddressFields } from '@/components/marketplace/checkout/ShippingAddressFields';
+import { useCart } from '@/components/marketplace/cart/CartProvider';
+import { useShippingAddress } from '@/hooks/useShippingAddress';
+import { apiFetch } from '@/lib/api/client';
+import { formatCHF, REVAMPIT_LISTING_DELIVERY } from '@/config/marketplace';
+import { BASE_REGION } from '@/config/org';
 
 export function CartPageClient() {
-  const t = useTranslations('marketplace.cart')
-  const tCheckout = useTranslations('marketplace.checkout')
-  const { items, remove, total, clear, hydrated } = useCart()
-  const { status } = useSession()
-  const router = useRouter()
-  const [checkingOut, setCheckingOut] = useState(false)
-  const [reviewing, setReviewing] = useState(false)
-  const [deliveryMethod, setDeliveryMethod] = useState<'pickup' | 'shipping'>('pickup')
+  const t = useTranslations('marketplace.cart');
+  const tCheckout = useTranslations('marketplace.checkout');
+  const { items, remove, total, clear, hydrated } = useCart();
+  const { status } = useSession();
+  const router = useRouter();
+  const [checkingOut, setCheckingOut] = useState(false);
+  const [reviewing, setReviewing] = useState(false);
+  const [deliveryMethod, setDeliveryMethod] = useState<'pickup' | 'shipping'>('pickup');
   // Shared address state — prefilled from the buyer's saved profile address
   // and optionally written back on order creation (see useShippingAddress).
   const {
@@ -38,83 +48,90 @@ export function CartPageClient() {
     saveToProfile,
     setSaveToProfile,
     persistAddressIfRequested,
-  } = useShippingAddress()
+  } = useShippingAddress();
 
-  const shippingCost = deliveryMethod === 'shipping' && REVAMPIT_LISTING_DELIVERY.shippingCostChf
-    ? Number(REVAMPIT_LISTING_DELIVERY.shippingCostChf)
-    : 0
-  const orderTotal = total + shippingCost
-  const shippingFormValid = deliveryMethod !== 'shipping' || addressComplete
+  const shippingCost =
+    deliveryMethod === 'shipping' && REVAMPIT_LISTING_DELIVERY.shippingCostChf
+      ? Number(REVAMPIT_LISTING_DELIVERY.shippingCostChf)
+      : 0;
+  const orderTotal = total + shippingCost;
+  const shippingFormValid = deliveryMethod !== 'shipping' || addressComplete;
 
   // The cart lives in localStorage, so it can reference listings that sold
   // or got reserved in the meantime. Validate once after hydration and drop
   // stale items here instead of letting checkout fail on the locked row.
-  const validatedRef = useRef(false)
+  const validatedRef = useRef(false);
   useEffect(() => {
-    if (!hydrated || validatedRef.current || items.length === 0) return
-    validatedRef.current = true
+    if (!hydrated || validatedRef.current || items.length === 0) return;
+    validatedRef.current = true;
     const validate = async () => {
       const res = await apiFetch<{ unavailable_ids: string[] }>('/api/marketplace/cart/validate', {
         method: 'POST',
         body: { listing_ids: items.map((i) => i.id) },
-      })
+      });
       // Fail open: if the check itself errors, keep the cart — checkout
       // still guards availability under a row lock.
-      if (!res.success || !res.data) return
-      const stale = items.filter((i) => res.data!.unavailable_ids.includes(i.id))
-      if (stale.length === 0) return
-      stale.forEach((i) => remove(i.id))
+      if (!res.success || !res.data) return;
+      const stale = items.filter((i) => res.data!.unavailable_ids.includes(i.id));
+      if (stale.length === 0) return;
+      stale.forEach((i) => remove(i.id));
       toast.info(
         stale.length === 1
           ? t('unavailableRemoved', { title: stale[0].title })
           : t('unavailableRemovedMany', { count: stale.length }),
-      )
-    }
-    validate()
-  }, [hydrated, items, remove, t])
+      );
+    };
+    validate();
+  }, [hydrated, items, remove, t]);
 
   if (!hydrated) {
     return (
       <div className="flex justify-center py-16">
         <Loader2 className="h-8 w-8 animate-spin text-action" aria-hidden="true" />
       </div>
-    )
+    );
   }
 
   const handleCheckout = async () => {
     if (!reviewing) {
-      setReviewing(true)
-      window.scrollTo({ top: 0, behavior: 'smooth' })
-      return
+      setReviewing(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
     }
     if (status !== 'authenticated') {
-      router.push('/auth/login?callbackUrl=/marketplace/cart')
-      return
+      router.push('/auth/login?callbackUrl=/marketplace/cart');
+      return;
     }
-    setCheckingOut(true)
+    setCheckingOut(true);
     if (deliveryMethod === 'shipping') {
-      await persistAddressIfRequested()
+      await persistAddressIfRequested();
     }
-    const res = await apiFetch<{ orderId: string; paymentUrl: string }>('/api/marketplace/cart/checkout', {
-      method: 'POST',
-      body: {
-        listing_ids: items.map((i) => i.id),
-        delivery_method: deliveryMethod,
-        shipping_address: deliveryMethod === 'shipping' ? shippingAddress : null,
+    const res = await apiFetch<{ orderId: string; paymentUrl: string }>(
+      '/api/marketplace/cart/checkout',
+      {
+        method: 'POST',
+        body: {
+          listing_ids: items.map((i) => i.id),
+          delivery_method: deliveryMethod,
+          shipping_address: deliveryMethod === 'shipping' ? shippingAddress : null,
+        },
       },
-    })
+    );
     if (res.success && res.data?.paymentUrl) {
-      clear()
-      window.location.href = res.data.paymentUrl
+      clear();
+      window.location.href = res.data.paymentUrl;
     } else {
-      toast.error(res.error || 'Fehler bei der Bestellung')
-      setCheckingOut(false)
+      toast.error(res.error || 'Fehler bei der Bestellung');
+      setCheckingOut(false);
     }
-  }
+  };
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 lg:px-8">
-      <nav aria-label={tCheckout('title')} className="mb-6 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-text-tertiary">
+      <nav
+        aria-label={tCheckout('title')}
+        className="mb-6 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-text-tertiary"
+      >
         <span className={reviewing ? 'text-text-tertiary' : 'text-action'}>1 {t('title')}</span>
         <span aria-hidden="true">/</span>
         <span className={reviewing ? 'text-action' : ''}>2 {tCheckout('summary.title')}</span>
@@ -126,7 +143,10 @@ export function CartPageClient() {
 
       <div className="mb-6 flex items-start justify-between gap-4">
         <div>
-          <Heading level={1} className="text-2xl font-semibold text-text-primary sm:text-3xl md:text-3xl">
+          <Heading
+            level={1}
+            className="text-2xl font-semibold text-text-primary sm:text-3xl md:text-3xl"
+          >
             {reviewing ? tCheckout('summary.title') : t('title')}
           </Heading>
           <p className="mt-1 text-sm text-text-secondary">
@@ -156,7 +176,11 @@ export function CartPageClient() {
               {items.map((item) => (
                 <li key={item.id} className="flex items-center gap-4 p-4">
                   <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-subtle">
-                    <ListingImage src={item.thumbnail} alt={item.title} fallbackIconSize="w-6 h-6" />
+                    <ListingImage
+                      src={item.thumbnail}
+                      alt={item.title}
+                      fallbackIconSize="w-6 h-6"
+                    />
                   </div>
                   <div className="min-w-0 flex-1">
                     <Link
@@ -166,7 +190,9 @@ export function CartPageClient() {
                       {item.title}
                     </Link>
                   </div>
-                  <span className="whitespace-nowrap font-semibold text-text-primary">{formatCHF(item.priceChf)}</span>
+                  <span className="whitespace-nowrap font-semibold text-text-primary">
+                    {formatCHF(item.priceChf)}
+                  </span>
                   {!reviewing && (
                     <Button
                       variant="ghost"
@@ -182,15 +208,26 @@ export function CartPageClient() {
               ))}
             </ul>
 
-          {reviewing && (
-              <section className="rounded-xl border border-subtle bg-surface-base p-5" aria-labelledby="delivery-heading">
-                <Heading id="delivery-heading" level={2} className="mb-4 text-base text-text-primary">
+            {reviewing && (
+              <section
+                className="rounded-xl border border-subtle bg-surface-base p-5"
+                aria-labelledby="delivery-heading"
+              >
+                <Heading
+                  id="delivery-heading"
+                  level={2}
+                  className="mb-4 text-base text-text-primary"
+                >
                   {tCheckout('delivery.title')}
                 </Heading>
                 <div className="space-y-3">
-                  <label className={`flex cursor-pointer gap-3 rounded-lg border p-4 transition-colors ${
-                    deliveryMethod === 'pickup' ? 'border-action bg-action-muted' : 'border-subtle hover:border-strong'
-                  }`}>
+                  <label
+                    className={`flex cursor-pointer gap-3 rounded-lg border p-4 transition-colors ${
+                      deliveryMethod === 'pickup'
+                        ? 'border-action bg-action-muted'
+                        : 'border-subtle hover:border-strong'
+                    }`}
+                  >
                     <input
                       type="radio"
                       name="cartDelivery"
@@ -201,15 +238,25 @@ export function CartPageClient() {
                     />
                     <Store className="mt-0.5 h-4 w-4 shrink-0 text-action" aria-hidden="true" />
                     <span className="min-w-0 flex-1">
-                      <span className="block text-sm font-medium text-text-primary">{tCheckout('delivery.pickup')}</span>
-                      <span className="mt-1 block text-sm text-text-secondary">{BASE_REGION.full}</span>
+                      <span className="block text-sm font-medium text-text-primary">
+                        {tCheckout('delivery.pickup')}
+                      </span>
+                      <span className="mt-1 block text-sm text-text-secondary">
+                        {BASE_REGION.full}
+                      </span>
                     </span>
-                    <span className="text-sm font-medium text-action">{tCheckout('delivery.free')}</span>
+                    <span className="text-sm font-medium text-action">
+                      {tCheckout('delivery.free')}
+                    </span>
                   </label>
 
-                  <label className={`flex cursor-pointer gap-3 rounded-lg border p-4 transition-colors ${
-                    deliveryMethod === 'shipping' ? 'border-action bg-action-muted' : 'border-subtle hover:border-strong'
-                  }`}>
+                  <label
+                    className={`flex cursor-pointer gap-3 rounded-lg border p-4 transition-colors ${
+                      deliveryMethod === 'shipping'
+                        ? 'border-action bg-action-muted'
+                        : 'border-subtle hover:border-strong'
+                    }`}
+                  >
                     <input
                       type="radio"
                       name="cartDelivery"
@@ -220,10 +267,16 @@ export function CartPageClient() {
                     />
                     <Truck className="mt-0.5 h-4 w-4 shrink-0 text-action" aria-hidden="true" />
                     <span className="min-w-0 flex-1">
-                      <span className="block text-sm font-medium text-text-primary">{tCheckout('delivery.shipping')}</span>
-                      <span className="mt-1 block text-sm text-text-secondary">{tCheckout('delivery.shippingNationwide')}</span>
+                      <span className="block text-sm font-medium text-text-primary">
+                        {tCheckout('delivery.shipping')}
+                      </span>
+                      <span className="mt-1 block text-sm text-text-secondary">
+                        {tCheckout('delivery.shippingNationwide')}
+                      </span>
                     </span>
-                    <span className="text-sm font-medium text-text-primary">{formatCHF(shippingCost || Number(REVAMPIT_LISTING_DELIVERY.shippingCostChf))}</span>
+                    <span className="text-sm font-medium text-text-primary">
+                      {formatCHF(shippingCost || Number(REVAMPIT_LISTING_DELIVERY.shippingCostChf))}
+                    </span>
                   </label>
                 </div>
 
@@ -252,21 +305,40 @@ export function CartPageClient() {
             </div>
             <div className="flex items-center justify-between gap-2 text-sm">
               <span className="flex items-center gap-2 text-text-tertiary">
-                {deliveryMethod === 'shipping' ? <Truck className="h-4 w-4 shrink-0" aria-hidden="true" /> : <MapPin className="h-4 w-4 shrink-0" aria-hidden="true" />}
-                {deliveryMethod === 'shipping' ? tCheckout('delivery.shipping') : tCheckout('delivery.pickup')}
+                {deliveryMethod === 'shipping' ? (
+                  <Truck className="h-4 w-4 shrink-0" aria-hidden="true" />
+                ) : (
+                  <MapPin className="h-4 w-4 shrink-0" aria-hidden="true" />
+                )}
+                {deliveryMethod === 'shipping'
+                  ? tCheckout('delivery.shipping')
+                  : tCheckout('delivery.pickup')}
               </span>
-              <span className="font-medium text-text-primary">{shippingCost > 0 ? formatCHF(shippingCost) : tCheckout('delivery.free')}</span>
+              <span className="font-medium text-text-primary">
+                {shippingCost > 0 ? formatCHF(shippingCost) : tCheckout('delivery.free')}
+              </span>
             </div>
             <div className="flex justify-between border-t border-subtle pt-3 text-base font-semibold text-text-primary">
               <span>{t('total')}</span>
               <span>{formatCHF(orderTotal)}</span>
             </div>
-            <Button variant="primary" size="lg" className="w-full" onClick={handleCheckout} disabled={checkingOut || (reviewing && !shippingFormValid)}>
+            <Button
+              variant="primary"
+              size="lg"
+              className="w-full"
+              onClick={handleCheckout}
+              disabled={checkingOut || (reviewing && !shippingFormValid)}
+            >
               {checkingOut ? (
                 <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
               ) : reviewing ? (
-                <><LockKeyhole className="h-4 w-4" aria-hidden="true" /> {tCheckout('payment.proceed')}</>
-              ) : t('checkout')}
+                <>
+                  <LockKeyhole className="h-4 w-4" aria-hidden="true" />{' '}
+                  {tCheckout('payment.proceed')}
+                </>
+              ) : (
+                t('checkout')
+              )}
             </Button>
             {reviewing ? (
               <div className="space-y-2 border-t border-subtle pt-4 text-xs text-text-tertiary">
@@ -288,5 +360,5 @@ export function CartPageClient() {
         </div>
       )}
     </div>
-  )
+  );
 }

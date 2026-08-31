@@ -11,9 +11,9 @@ export const REFUND_STATUS = {
   PROCESSING: 'processing',
   COMPLETED: 'completed',
   REJECTED: 'rejected',
-} as const
+} as const;
 
-export type RefundStatus = typeof REFUND_STATUS[keyof typeof REFUND_STATUS]
+export type RefundStatus = (typeof REFUND_STATUS)[keyof typeof REFUND_STATUS];
 
 export const REFUND_STATUS_LABELS: Record<string, string> = {
   [REFUND_STATUS.REQUESTED]: 'Angefragt',
@@ -21,7 +21,7 @@ export const REFUND_STATUS_LABELS: Record<string, string> = {
   [REFUND_STATUS.PROCESSING]: 'In Bearbeitung',
   [REFUND_STATUS.COMPLETED]: 'Abgeschlossen',
   [REFUND_STATUS.REJECTED]: 'Abgelehnt',
-}
+};
 
 export const REFUND_REASON = {
   CUSTOMER_REQUEST: 'customer_request',
@@ -30,9 +30,9 @@ export const REFUND_REASON = {
   DUPLICATE_CHARGE: 'duplicate_charge',
   FRAUD: 'fraud',
   OTHER: 'other',
-} as const
+} as const;
 
-export type RefundReason = typeof REFUND_REASON[keyof typeof REFUND_REASON]
+export type RefundReason = (typeof REFUND_REASON)[keyof typeof REFUND_REASON];
 
 export const REFUND_REASON_LABELS: Record<string, string> = {
   [REFUND_REASON.CUSTOMER_REQUEST]: 'Kundenwunsch',
@@ -41,12 +41,12 @@ export const REFUND_REASON_LABELS: Record<string, string> = {
   [REFUND_REASON.DUPLICATE_CHARGE]: 'Doppelte Belastung',
   [REFUND_REASON.FRAUD]: 'Betrug',
   [REFUND_REASON.OTHER]: 'Sonstiges',
-}
+};
 
 export function getRefundStatusLabel(status: string): string {
-  return REFUND_STATUS_LABELS[status] ?? status
+  return REFUND_STATUS_LABELS[status] ?? status;
 }
 
 export function getRefundReasonLabel(reason: string): string {
-  return REFUND_REASON_LABELS[reason] ?? reason
+  return REFUND_REASON_LABELS[reason] ?? reason;
 }

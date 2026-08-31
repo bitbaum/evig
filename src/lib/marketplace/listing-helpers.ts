@@ -40,7 +40,7 @@ export const listingThumbnailSubquery = sql<string | null>`(
  * from a list of spec inputs, using the SPEC_MEILI_FIELD_MAP config.
  */
 export function buildMeiliSpecs(
-  specs: ListingSpecInput[] | undefined
+  specs: ListingSpecInput[] | undefined,
 ): Record<string, number | null> {
   const meiliSpecs: Record<string, number | null> = {};
   if (!specs) return meiliSpecs;
@@ -59,19 +59,16 @@ export function buildMeiliSpecs(
  * Builds denormalized spec fields and merges them into the document.
  * Errors are logged but never thrown — callers should not await this.
  */
-export function indexListingInSearch(
-  doc: MeilisearchDocument,
-  specs?: ListingSpecInput[]
-): void {
+export function indexListingInSearch(doc: MeilisearchDocument, specs?: ListingSpecInput[]): void {
   const meiliSpecs = buildMeiliSpecs(specs);
 
   indexListing({
     ...doc,
     ...meiliSpecs,
-  }).catch(err =>
+  }).catch((err) =>
     logger.error('Failed to index listing in Meilisearch', {
       error: err,
       listingId: doc.id,
-    })
+    }),
   );
 }

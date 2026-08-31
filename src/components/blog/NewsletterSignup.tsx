@@ -1,26 +1,26 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Link } from '@/i18n/navigation'
-import { Mail, Heart, Check } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { IconBadge } from '@/components/ui/IconBadge'
-import { ROUTES } from '@/config/routes'
+import { useState } from 'react';
+import { Link } from '@/i18n/navigation';
+import { Mail, Heart, Check } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useNewsletterSubscribe } from '@/hooks/useNewsletterSubscribe';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { IconBadge } from '@/components/ui/IconBadge';
+import { ROUTES } from '@/config/routes';
 
 export default function NewsletterSignup() {
-  const t = useTranslations('components.newsletterSignup')
-  const [email, setEmail] = useState('')
-  const { status, errorMsg, subscribe } = useNewsletterSubscribe(t('networkError'))
+  const t = useTranslations('components.newsletterSignup');
+  const [email, setEmail] = useState('');
+  const { status, errorMsg, subscribe } = useNewsletterSubscribe(t('networkError'));
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    const ok = await subscribe({ email })
-    if (ok) setEmail('')
-  }
+    e.preventDefault();
+    const ok = await subscribe({ email });
+    if (ok) setEmail('');
+  };
 
   return (
     <div className="max-w-[680px] mx-auto px-6 py-12">
@@ -31,9 +31,7 @@ export default function NewsletterSignup() {
           <Heading level={3} className="text-2xl font-bold text-text-primary mb-3">
             {t('title')}
           </Heading>
-          <p className="text-lg text-text-secondary leading-relaxed">
-            {t('subtitle')}
-          </p>
+          <p className="text-lg text-text-secondary leading-relaxed">{t('subtitle')}</p>
         </div>
 
         {/* Newsletter Promise */}
@@ -66,9 +64,7 @@ export default function NewsletterSignup() {
           <div className="bg-action-muted border border-strong rounded-lg p-6 text-center">
             <IconBadge icon={Check} shape="circle" size="md" className="mb-3" />
             <p className="text-action font-semibold mb-1">{t('successMessage')}</p>
-            <p className="text-action text-sm">
-              {t('confirmEmail')}
-            </p>
+            <p className="text-action text-sm">{t('confirmEmail')}</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -96,12 +92,12 @@ export default function NewsletterSignup() {
             </div>
 
             {status === 'error' && (
-              <p id="newsletter-error" className="text-error-600 text-sm">{errorMsg}</p>
+              <p id="newsletter-error" className="text-error-600 text-sm">
+                {errorMsg}
+              </p>
             )}
 
-            <p className="text-xs text-text-tertiary text-center">
-              {t('privacy')}
-            </p>
+            <p className="text-xs text-text-tertiary text-center">{t('privacy')}</p>
           </form>
         )}
 
@@ -111,9 +107,7 @@ export default function NewsletterSignup() {
             <Heart className="w-5 h-5 text-error-500" />
             <p className="text-sm">{t('communityTitle')}</p>
           </div>
-          <p className="text-sm text-text-secondary mb-4">
-            {t('communityDesc')}
-          </p>
+          <p className="text-sm text-text-secondary mb-4">{t('communityDesc')}</p>
           <Link
             href={ROUTES.public.donate}
             className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-text-secondary border border-default rounded-lg hover:bg-surface-raised transition-colors"
@@ -124,5 +118,5 @@ export default function NewsletterSignup() {
         </div>
       </div>
     </div>
-  )
+  );
 }

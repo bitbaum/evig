@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * DropoffForm — public form on /get-involved/donate that lets a donor
@@ -10,56 +10,60 @@
  * the two in sync if the schema's required/optional set changes.
  */
 
-import { useState } from 'react'
-import { useTranslations } from 'next-intl'
-import { apiFetch } from '@/lib/api/client'
-import { logger } from '@/lib/logger'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { CheckCircle2 } from 'lucide-react'
-import { DROPOFF_DEVICES_MIN_CHARS, DROPOFF_DEVICES_MAX_CHARS, DONATION_NOTES_MAX_CHARS } from '@/config/donations'
+import { useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { apiFetch } from '@/lib/api/client';
+import { logger } from '@/lib/logger';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { CheckCircle2 } from 'lucide-react';
+import {
+  DROPOFF_DEVICES_MIN_CHARS,
+  DROPOFF_DEVICES_MAX_CHARS,
+  DONATION_NOTES_MAX_CHARS,
+} from '@/config/donations';
 
-type Status = 'idle' | 'loading' | 'success' | 'error'
+type Status = 'idle' | 'loading' | 'success' | 'error';
 
 export function DropoffForm() {
-  const t = useTranslations('donate.dropoff')
+  const t = useTranslations('donate.dropoff');
 
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
-  const [preferredDate, setPreferredDate] = useState('')
-  const [devices, setDevices] = useState('')
-  const [notes, setNotes] = useState('')
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [preferredDate, setPreferredDate] = useState('');
+  const [devices, setDevices] = useState('');
+  const [notes, setNotes] = useState('');
 
-  const [status, setStatus] = useState<Status>('idle')
-  const [errorMsg, setErrorMsg] = useState('')
+  const [status, setStatus] = useState<Status>('idle');
+  const [errorMsg, setErrorMsg] = useState('');
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setStatus('loading')
-    setErrorMsg('')
+    e.preventDefault();
+    setStatus('loading');
+    setErrorMsg('');
 
-    const payload: Record<string, string> = { name, email, devices }
-    if (phone) payload.phone = phone
-    if (preferredDate) payload.preferredDate = preferredDate
-    if (notes) payload.notes = notes
+    const payload: Record<string, string> = { name, email, devices };
+    if (phone) payload.phone = phone;
+    if (preferredDate) payload.preferredDate = preferredDate;
+    if (notes) payload.notes = notes;
 
     try {
       const { error: apiError } = await apiFetch('/api/donations/dropoff', {
         method: 'POST',
         body: payload,
-      })
+      });
       if (apiError) {
-        setErrorMsg(apiError)
-        setStatus('error')
+        setErrorMsg(apiError);
+        setStatus('error');
       } else {
-        setStatus('success')
+        setStatus('success');
       }
     } catch (err) {
-      logger.warn('Donation dropoff submission failed', { error: err })
-      setErrorMsg(t('errorGeneric'))
-      setStatus('error')
+      logger.warn('Donation dropoff submission failed', { error: err });
+      setErrorMsg(t('errorGeneric'));
+      setStatus('error');
     }
   }
 
@@ -69,29 +73,27 @@ export function DropoffForm() {
         <div className="flex items-start gap-3">
           <CheckCircle2 className="w-6 h-6 text-action shrink-0 mt-0.5" aria-hidden="true" />
           <div>
-            <p className="text-sm font-semibold text-action mb-1">
-              {t('successTitle')}
-            </p>
-            <p className="text-sm text-action">
-              {t('successBody')}
-            </p>
+            <p className="text-sm font-semibold text-action mb-1">{t('successTitle')}</p>
+            <p className="text-sm text-action">{t('successBody')}</p>
           </div>
         </div>
       </div>
-    )
+    );
   }
 
-  const inputClass = 'border-default dark:border-white/10 dark:placeholder:text-text-tertiary'
+  const inputClass = 'border-default dark:border-white/10 dark:placeholder:text-text-tertiary';
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <label className="block">
-          <span className="block text-sm font-medium text-text-secondary mb-1">{t('nameLabel')}</span>
+          <span className="block text-sm font-medium text-text-secondary mb-1">
+            {t('nameLabel')}
+          </span>
           <Input
             type="text"
             value={name}
-            onChange={e => setName(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
             required
             minLength={2}
             maxLength={200}
@@ -99,41 +101,49 @@ export function DropoffForm() {
           />
         </label>
         <label className="block">
-          <span className="block text-sm font-medium text-text-secondary mb-1">{t('emailLabel')}</span>
+          <span className="block text-sm font-medium text-text-secondary mb-1">
+            {t('emailLabel')}
+          </span>
           <Input
             type="email"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             required
             className={inputClass}
           />
         </label>
         <label className="block">
-          <span className="block text-sm font-medium text-text-secondary mb-1">{t('phoneLabel')}</span>
+          <span className="block text-sm font-medium text-text-secondary mb-1">
+            {t('phoneLabel')}
+          </span>
           <Input
             type="tel"
             value={phone}
-            onChange={e => setPhone(e.target.value)}
+            onChange={(e) => setPhone(e.target.value)}
             maxLength={30}
             className={inputClass}
           />
         </label>
         <label className="block">
-          <span className="block text-sm font-medium text-text-secondary mb-1">{t('preferredDateLabel')}</span>
+          <span className="block text-sm font-medium text-text-secondary mb-1">
+            {t('preferredDateLabel')}
+          </span>
           <Input
             type="date"
             value={preferredDate}
-            onChange={e => setPreferredDate(e.target.value)}
+            onChange={(e) => setPreferredDate(e.target.value)}
             className={inputClass}
           />
         </label>
       </div>
 
       <label className="block">
-        <span className="block text-sm font-medium text-text-secondary mb-1">{t('devicesLabel')}</span>
+        <span className="block text-sm font-medium text-text-secondary mb-1">
+          {t('devicesLabel')}
+        </span>
         <Textarea
           value={devices}
-          onChange={e => setDevices(e.target.value)}
+          onChange={(e) => setDevices(e.target.value)}
           required
           minLength={DROPOFF_DEVICES_MIN_CHARS}
           maxLength={DROPOFF_DEVICES_MAX_CHARS}
@@ -144,10 +154,12 @@ export function DropoffForm() {
       </label>
 
       <label className="block">
-        <span className="block text-sm font-medium text-text-secondary mb-1">{t('notesLabel')}</span>
+        <span className="block text-sm font-medium text-text-secondary mb-1">
+          {t('notesLabel')}
+        </span>
         <Textarea
           value={notes}
-          onChange={e => setNotes(e.target.value)}
+          onChange={(e) => setNotes(e.target.value)}
           maxLength={DONATION_NOTES_MAX_CHARS}
           rows={2}
           placeholder={t('notesPlaceholder')}
@@ -161,14 +173,10 @@ export function DropoffForm() {
         ) : (
           <span />
         )}
-        <Button
-          type="submit"
-          disabled={status === 'loading'}
-          variant="primary"
-        >
+        <Button type="submit" disabled={status === 'loading'} variant="primary">
           {status === 'loading' ? t('submitting') : t('submit')}
         </Button>
       </div>
     </form>
-  )
+  );
 }

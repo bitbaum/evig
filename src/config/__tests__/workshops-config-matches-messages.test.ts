@@ -20,36 +20,36 @@
  * legacy normalisation no longer needs them. Until then, this is the seam.
  */
 
-import { WORKSHOP_CATEGORIES } from '@/config/workshops'
-import de from '../../../messages/de.json'
+import { WORKSHOP_CATEGORIES } from '@/config/workshops';
+import de from '../../../messages/de.json';
 
 describe('workshop category labels match the message files', () => {
-  const categories = de.workshops.categories as Record<string, string>
-  const descriptions = de.workshops.categoryDescriptions as Record<string, string>
+  const categories = de.workshops.categories as Record<string, string>;
+  const descriptions = de.workshops.categoryDescriptions as Record<string, string>;
 
   it('sweeps a non-empty category list', () => {
     // A sweep over zero categories would pass every assertion below.
-    expect(WORKSHOP_CATEGORIES.length).toBeGreaterThan(5)
-  })
+    expect(WORKSHOP_CATEGORIES.length).toBeGreaterThan(5);
+  });
 
   it('every config category has a message entry', () => {
     const missing = WORKSHOP_CATEGORIES.filter((c) => !categories[c.id]).map(
       (c) => `workshops.categories.${c.id} is missing`,
-    )
-    expect(missing).toEqual([])
-  })
+    );
+    expect(missing).toEqual([]);
+  });
 
   it('config name and message label are identical', () => {
     const drifted = WORKSHOP_CATEGORIES.filter((c) => categories[c.id] !== c.name).map(
       (c) => `${c.id}: config "${c.name}" vs message "${categories[c.id]}"`,
-    )
-    expect(drifted).toEqual([])
-  })
+    );
+    expect(drifted).toEqual([]);
+  });
 
   it('config description and message description are identical', () => {
-    const drifted = WORKSHOP_CATEGORIES.filter(
-      (c) => descriptions[c.id] !== c.description,
-    ).map((c) => `${c.id}: config "${c.description}" vs message "${descriptions[c.id]}"`)
-    expect(drifted).toEqual([])
-  })
-})
+    const drifted = WORKSHOP_CATEGORIES.filter((c) => descriptions[c.id] !== c.description).map(
+      (c) => `${c.id}: config "${c.description}" vs message "${descriptions[c.id]}"`,
+    );
+    expect(drifted).toEqual([]);
+  });
+});

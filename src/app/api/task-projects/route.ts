@@ -62,12 +62,12 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
           WHEN ${PROJECT_STATUSES.COMPLETED} THEN 3
           WHEN ${PROJECT_STATUSES.CANCELLED} THEN 4
         END`,
-        sql`${taskProjects.createdAt} DESC`
-      )
+        sql`${taskProjects.createdAt} DESC`,
+      );
 
     logger.info('Task projects fetched', {
       userId: session.user.id,
-      count: projectRows.length
+      count: projectRows.length,
     });
 
     return apiSuccess(projectRows);
@@ -104,12 +104,12 @@ export const POST = withAdmin(async (request: NextRequest, session: ValidSession
         targetDate: data.target_date || undefined,
         createdBy: userLookup.dbUserId,
       })
-      .returning()
+      .returning();
 
     logger.info('Project created', {
       projectId: project.id,
       userId: session.user.id,
-      title: data.title
+      title: data.title,
     });
 
     return apiSuccess(project, 201);

@@ -20,10 +20,7 @@ import {
  * Current focus update schema
  */
 export const updateCurrentFocusSchema = z.object({
-  current_focus: z
-    .string()
-    .max(200, 'Fokus zu lang (max 200 Zeichen)')
-    .nullable(),
+  current_focus: z.string().max(200, 'Fokus zu lang (max 200 Zeichen)').nullable(),
 });
 
 /**
@@ -31,15 +28,8 @@ export const updateCurrentFocusSchema = z.object({
  */
 export const createActivityUpdateSchema = z.object({
   update_type: z.enum(ACTIVITY_UPDATE_TYPE_OPTIONS).default('accomplishment'),
-  title: z
-    .string()
-    .min(1, 'Titel erforderlich')
-    .max(200, 'Titel zu lang (max 200 Zeichen)'),
-  description: z
-    .string()
-    .max(2000, 'Beschreibung zu lang')
-    .optional()
-    .nullable(),
+  title: z.string().min(1, 'Titel erforderlich').max(200, 'Titel zu lang (max 200 Zeichen)'),
+  description: z.string().max(2000, 'Beschreibung zu lang').optional().nullable(),
   category: z.enum(ACTIVITY_CATEGORY_OPTIONS).optional().nullable(),
   visibility: z.enum(VISIBILITY_OPTIONS).default('team'),
   occurred_at: z.string().datetime().optional(),
@@ -54,15 +44,8 @@ export const updateActivityUpdateSchema = createActivityUpdateSchema.partial();
  * Help request creation schema
  */
 export const createHelpRequestSchema = z.object({
-  title: z
-    .string()
-    .min(1, 'Titel erforderlich')
-    .max(200, 'Titel zu lang (max 200 Zeichen)'),
-  description: z
-    .string()
-    .max(2000, 'Beschreibung zu lang')
-    .optional()
-    .nullable(),
+  title: z.string().min(1, 'Titel erforderlich').max(200, 'Titel zu lang (max 200 Zeichen)'),
+  description: z.string().max(2000, 'Beschreibung zu lang').optional().nullable(),
   category: z.enum(ACTIVITY_CATEGORY_OPTIONS).optional().nullable(),
   urgency: z.enum(HELP_REQUEST_URGENCY_OPTIONS).default('normal'),
   requested_user_id: z.string().uuid().optional().nullable(), // null = broadcast
@@ -83,11 +66,7 @@ export const updateHelpRequestSchema = z.object({
  * Help request resolution schema
  */
 export const resolveHelpRequestSchema = z.object({
-  resolution_notes: z
-    .string()
-    .max(1000, 'Notizen zu lang')
-    .optional()
-    .nullable(),
+  resolution_notes: z.string().max(1000, 'Notizen zu lang').optional().nullable(),
 });
 
 /**

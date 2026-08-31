@@ -7,23 +7,23 @@
  * and transitions them to 'closed'. Protected by CRON_SECRET.
  */
 
-import { NextRequest } from 'next/server'
-import { db } from '@/db'
-import { decisions } from '@/db/schema'
-import { and, eq, lt, isNotNull, sql } from 'drizzle-orm'
-import { transitionDecision } from '@/lib/services/decisions'
-import { notifyAllStaff, notifyUsers } from '@/lib/services/notifications'
-import { resolveEligibleUserIds } from '@/lib/services/decisions-voting'
-import { asArray } from '@/lib/services/decisions-crud'
-import { logger } from '@/lib/logger'
-import { DECISION_STATUS, PARTICIPANT_SCOPE_DEFAULT } from '@/config/decisions'
-import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
-import { TABLE_NAMES } from '@/config/database'
-import { requireCronAuth } from '@/lib/api/cron-auth'
+import { NextRequest } from 'next/server';
+import { db } from '@/db';
+import { decisions } from '@/db/schema';
+import { and, eq, lt, isNotNull, sql } from 'drizzle-orm';
+import { transitionDecision } from '@/lib/services/decisions';
+import { notifyAllStaff, notifyUsers } from '@/lib/services/notifications';
+import { resolveEligibleUserIds } from '@/lib/services/decisions-voting';
+import { asArray } from '@/lib/services/decisions-crud';
+import { logger } from '@/lib/logger';
+import { DECISION_STATUS, PARTICIPANT_SCOPE_DEFAULT } from '@/config/decisions';
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications';
+import { TABLE_NAMES } from '@/config/database';
+import { requireCronAuth } from '@/lib/api/cron-auth';
 
 export async function GET(request: NextRequest) {
-  const auth = requireCronAuth(request)
-  if (!auth.ok) return auth.response
+  const auth = requireCronAuth(request);
+  if (!auth.ok) return auth.response;
 
   try {
     // Send 24h deadline reminders to non-voters for decisions expiring tomorrow
@@ -42,24 +42,24 @@ export async function GET(request: NextRequest) {
             eq(decisions.status, DECISION_STATUS.VOTING),
             isNotNull(decisions.votingDeadline),
             // Deadline is between 23h and 25h from now (window for daily cron)
-            sql`voting_deadline BETWEEN NOW() + INTERVAL '23 hours' AND NOW() + INTERVAL '25 hours'`
-          )
-        )
+            sql`voting_deadline BETWEEN NOW() + INTERVAL '23 hours' AND NOW() + INTERVAL '25 hours'`,
+          ),
+        );
 
       for (const decision of upcomingDecisions) {
         try {
-          const scope = decision.participantScope ?? PARTICIPANT_SCOPE_DEFAULT
-          const invited = asArray<string>(decision.invitedParticipants, [])
-          const eligibleIds = await resolveEligibleUserIds(scope, invited)
+          const scope = decision.participantScope ?? PARTICIPANT_SCOPE_DEFAULT;
+          const invited = asArray<string>(decision.invitedParticipants, []);
+          const eligibleIds = await resolveEligibleUserIds(scope, invited);
 
           // Find who hasn't voted yet
           const votedResult = await db.execute(
-            sql`SELECT user_id FROM ${sql.raw(TABLE_NAMES.DECISION_VOTES)} WHERE decision_id = ${decision.id}`
-          )
+            sql`SELECT user_id FROM ${sql.raw(TABLE_NAMES.DECISION_VOTES)} WHERE decision_id = ${decision.id}`,
+          );
           const votedIds = new Set(
-            (votedResult.rows as Array<{ user_id: string }>).map(r => r.user_id)
-          )
-          const nonVoterIds = eligibleIds.filter(id => !votedIds.has(id))
+            (votedResult.rows as Array<{ user_id: string }>).map((r) => r.user_id),
+          );
+          const nonVoterIds = eligibleIds.filter((id) => !votedIds.has(id));
 
           if (nonVoterIds.length > 0) {
             await notifyUsers(nonVoterIds, {
@@ -72,18 +72,18 @@ export async function GET(request: NextRequest) {
                 decisionId: decision.id,
                 votingDeadline: decision.votingDeadline ?? '',
               },
-            })
+            });
           }
         } catch (err) {
-          logger.error('Failed to send deadline reminder', { decisionId: decision.id, error: err })
+          logger.error('Failed to send deadline reminder', { decisionId: decision.id, error: err });
         }
       }
 
       if (upcomingDecisions.length > 0) {
-        logger.info('Cron: deadline reminders sent', { count: upcomingDecisions.length })
+        logger.info('Cron: deadline reminders sent', { count: upcomingDecisions.length });
       }
     } catch (err) {
-      logger.error('Cron: deadline reminder check failed', { error: err })
+      logger.error('Cron: deadline reminder check failed', { error: err });
     }
 
     // Find decisions past their voting deadline
@@ -98,12 +98,12 @@ export async function GET(request: NextRequest) {
         and(
           eq(decisions.status, DECISION_STATUS.VOTING),
           isNotNull(decisions.votingDeadline),
-          lt(decisions.votingDeadline, sql`NOW()`)
-        )
-      )
+          lt(decisions.votingDeadline, sql`NOW()`),
+        ),
+      );
 
-    let closed = 0
-    const errors: string[] = []
+    let closed = 0;
+    const errors: string[] = [];
 
     for (const decision of expiredDecisions) {
       try {
@@ -111,27 +111,28 @@ export async function GET(request: NextRequest) {
           decision.id,
           DECISION_STATUS.CLOSED,
           decision.createdBy,
-          { outcomeSummary: 'Automatisch geschlossen (Frist abgelaufen)' }
-        )
+          { outcomeSummary: 'Automatisch geschlossen (Frist abgelaufen)' },
+        );
 
         if (!('error' in result)) {
-          closed++
+          closed++;
 
           await notifyAllStaff({
             type: NOTIFICATION_TYPES.DECISION_CLOSED,
             title: `Abstimmung abgelaufen: ${decision.title}`,
-            content: 'Die Abstimmungsfrist ist abgelaufen. Die Entscheidung wurde automatisch geschlossen.',
+            content:
+              'Die Abstimmungsfrist ist abgelaufen. Die Entscheidung wurde automatisch geschlossen.',
             related_type: RELATED_TYPES.DECISION,
             related_id: decision.id,
             metadata: { decisionId: decision.id },
-          })
+          });
         } else {
-          errors.push(`${decision.id}: ${result.error}`)
+          errors.push(`${decision.id}: ${result.error}`);
         }
       } catch (err) {
-        const msg = err instanceof Error ? err.message : 'Unknown error'
-        errors.push(`${decision.id}: ${msg}`)
-        logger.error('Failed to auto-close decision', { decisionId: decision.id, error: err })
+        const msg = err instanceof Error ? err.message : 'Unknown error';
+        errors.push(`${decision.id}: ${msg}`);
+        logger.error('Failed to auto-close decision', { decisionId: decision.id, error: err });
       }
     }
 
@@ -139,16 +140,16 @@ export async function GET(request: NextRequest) {
       found: expiredDecisions.length,
       closed,
       errors: errors.length,
-    })
+    });
 
     return Response.json({
       success: true,
       found: expiredDecisions.length,
       closed,
       errors: errors.length > 0 ? errors : undefined,
-    })
+    });
   } catch (error) {
-    logger.error('Cron: close-decisions failed', { error })
-    return Response.json({ error: 'Internal error' }, { status: 500 })
+    logger.error('Cron: close-decisions failed', { error });
+    return Response.json({ error: 'Internal error' }, { status: 500 });
   }
 }

@@ -1,76 +1,84 @@
-'use client'
+'use client';
 
-import { useLocale } from 'next-intl'
-import { usePathname, useRouter } from '@/i18n/navigation'
-import { locales, localeLabels, type Locale } from '@/i18n/routing'
-import { useTransition, useState, useRef, useEffect } from 'react'
-import { ChevronDown } from 'lucide-react'
-import { navLinkClass } from '@/lib/design/nav'
-import { cn } from '@/lib/utils'
+import { useLocale } from 'next-intl';
+import { usePathname, useRouter } from '@/i18n/navigation';
+import { locales, localeLabels, type Locale } from '@/i18n/routing';
+import { useTransition, useState, useRef, useEffect } from 'react';
+import { ChevronDown } from 'lucide-react';
+import { navLinkClass } from '@/lib/design/nav';
+import { cn } from '@/lib/utils';
 
 type Props = {
-  className?: string
+  className?: string;
   /** When the switcher sits at the bottom of a container (e.g. mobile menu
    * footer), force the dropdown to open upward so options aren't clipped
    * by the viewport edge. */
-  openUpward?: boolean
+  openUpward?: boolean;
   /** Render every locale as a row of tappable pills (one tap, large touch
    * targets, no nested dropdown) instead of the chip+dropdown. For mobile. */
-  inline?: boolean
+  inline?: boolean;
   /** For BYPASS_INTL routes (/admin, /dashboard, /auth) that have no URL
    * locale: skip the locale-prefixed navigation (which would 404/redirect)
    * and instead write the NEXT_LOCALE cookie + refresh the current route so
    * server components re-render in the new language. */
-  cookieOnly?: boolean
-}
+  cookieOnly?: boolean;
+};
 
-export function LocaleSwitcher({ className, openUpward = false, inline = false, cookieOnly = false }: Props) {
-  const locale = useLocale() as Locale
-  const pathname = usePathname()
-  const router = useRouter()
-  const [isPending, startTransition] = useTransition()
-  const [open, setOpen] = useState(false)
-  const ref = useRef<HTMLDivElement>(null)
+export function LocaleSwitcher({
+  className,
+  openUpward = false,
+  inline = false,
+  cookieOnly = false,
+}: Props) {
+  const locale = useLocale() as Locale;
+  const pathname = usePathname();
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
 
   // Close on outside click
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false)
+        setOpen(false);
       }
     }
-    document.addEventListener('mousedown', handleClick)
-    return () => document.removeEventListener('mousedown', handleClick)
-  }, [])
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
 
   function switchLocale(next: Locale) {
-    if (next === locale) { setOpen(false); return }
+    if (next === locale) {
+      setOpen(false);
+      return;
+    }
     // Persist the choice explicitly, BEFORE navigating. Bypass-intl routes
     // (/admin, /dashboard, /auth) read locale from the NEXT_LOCALE cookie, and
     // switching TO the default locale navigates to an unprefixed URL where the
     // middleware may not rewrite the cookie — leaving a stale value that keeps
     // those routes in the old language. Setting it here makes the switcher the
     // single source of truth for the cookie.
-    document.cookie = `NEXT_LOCALE=${next}; path=/; max-age=31536000; samesite=lax`
+    document.cookie = `NEXT_LOCALE=${next}; path=/; max-age=31536000; samesite=lax`;
     if (cookieOnly) {
       // No URL locale on this route — the cookie IS the locale. Refresh so
       // both server and client components pick up the new language in place.
       startTransition(() => {
-        router.refresh()
-        setOpen(false)
-      })
-      return
+        router.refresh();
+        setOpen(false);
+      });
+      return;
     }
     // Preserve query string + hash so switching language on a filtered/paginated
     // listing (e.g. /marketplace?category=10&page=3) or an auth page with a
     // ?callbackUrl doesn't throw the user back to the unfiltered page.
-    const search = typeof window !== 'undefined' ? window.location.search : ''
-    const hash = typeof window !== 'undefined' ? window.location.hash : ''
-    const href = `${pathname}${search}${hash}`
+    const search = typeof window !== 'undefined' ? window.location.search : '';
+    const hash = typeof window !== 'undefined' ? window.location.hash : '';
+    const href = `${pathname}${search}${hash}`;
     startTransition(() => {
-      router.replace(href, { locale: next })
-      setOpen(false)
-    })
+      router.replace(href, { locale: next });
+      setOpen(false);
+    });
   }
 
   // Mobile: a wrapping row of language pills. One tap switches, targets meet the
@@ -79,7 +87,7 @@ export function LocaleSwitcher({ className, openUpward = false, inline = false, 
     return (
       <div className={cn('flex flex-wrap gap-2', className)}>
         {locales.map((loc) => {
-          const active = loc === locale
+          const active = loc === locale;
           return (
             <button
               key={loc}
@@ -95,10 +103,10 @@ export function LocaleSwitcher({ className, openUpward = false, inline = false, 
               <span className="uppercase font-mono text-xs opacity-70">{loc}</span>
               {localeLabels[loc]}
             </button>
-          )
+          );
         })}
       </div>
-    )
+    );
   }
 
   return (
@@ -116,11 +124,13 @@ export function LocaleSwitcher({ className, openUpward = false, inline = false, 
           'flex items-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium uppercase tracking-wide',
           'text-text-tertiary hover:text-text-primary hover:bg-surface-raised transition-colors',
           'focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action',
-          isPending && 'opacity-50 cursor-wait'
+          isPending && 'opacity-50 cursor-wait',
         )}
       >
         {locale}
-        <ChevronDown className={cn('h-3 w-3 transition-transform duration-150', open && 'rotate-180')} />
+        <ChevronDown
+          className={cn('h-3 w-3 transition-transform duration-150', open && 'rotate-180')}
+        />
       </button>
 
       {open && (
@@ -146,7 +156,7 @@ export function LocaleSwitcher({ className, openUpward = false, inline = false, 
                 'hover:bg-surface-raised transition-colors',
                 loc === locale
                   ? 'text-action font-semibold bg-action-muted'
-                  : 'text-text-secondary'
+                  : 'text-text-secondary',
               )}
             >
               <span className="uppercase text-xs font-mono w-5">{loc}</span>
@@ -156,5 +166,5 @@ export function LocaleSwitcher({ className, openUpward = false, inline = false, 
         </div>
       )}
     </div>
-  )
+  );
 }

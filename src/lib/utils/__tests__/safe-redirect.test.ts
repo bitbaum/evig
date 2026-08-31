@@ -1,6 +1,6 @@
-import { sanitizeReturnTo } from '../safe-redirect'
+import { sanitizeReturnTo } from '../safe-redirect';
 
-const FALLBACK = '/dashboard'
+const FALLBACK = '/dashboard';
 
 describe('sanitizeReturnTo', () => {
   describe('rejects unsafe inputs', () => {
@@ -23,9 +23,9 @@ describe('sanitizeReturnTo', () => {
       ['TAB injection', '/\tdashboard'],
       ['NUL byte', '/\x00//evil.com'],
     ])('returns fallback for %s', (_label, input) => {
-      expect(sanitizeReturnTo(input as string | null | undefined, FALLBACK)).toBe(FALLBACK)
-    })
-  })
+      expect(sanitizeReturnTo(input as string | null | undefined, FALLBACK)).toBe(FALLBACK);
+    });
+  });
 
   describe('passes safe inputs through', () => {
     test.each([
@@ -36,7 +36,7 @@ describe('sanitizeReturnTo', () => {
       ['path with hash', '/profile#settings'],
       ['locale-prefixed', '/de/about'],
     ])('keeps %s', (_label, input) => {
-      expect(sanitizeReturnTo(input, FALLBACK)).toBe(input)
-    })
-  })
-})
+      expect(sanitizeReturnTo(input, FALLBACK)).toBe(input);
+    });
+  });
+});

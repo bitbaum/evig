@@ -1,23 +1,23 @@
-'use client'
+'use client';
 
-import { useEffect, useState, useCallback } from 'react'
-import { X, Brain, Maximize2 } from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import { Button } from '@/components/ui/button'
-import { Link } from '@/i18n/navigation'
-import { useTranslations } from 'next-intl'
-import { useFocusTrap } from '@/hooks/useFocusTrap'
-import { HirnChat } from './HirnChat'
-import { ORG } from '@/config/org'
-import { ROUTES } from '@/config/routes'
+import { useEffect, useState, useCallback } from 'react';
+import { X, Brain, Maximize2 } from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import { Button } from '@/components/ui/button';
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
+import { HirnChat } from './HirnChat';
+import { ORG } from '@/config/org';
+import { ROUTES } from '@/config/routes';
 
 interface HirnSlideOverProps {
-  isOpen: boolean
-  onClose: () => void
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 function generateSessionId(): string {
-  return crypto.randomUUID()
+  return crypto.randomUUID();
 }
 
 /**
@@ -25,30 +25,30 @@ function generateSessionId(): string {
  * Opens from the right side like ChatGPT/Claude interfaces
  */
 export function HirnSlideOver({ isOpen, onClose }: HirnSlideOverProps) {
-  const [sessionId, setSessionId] = useState<string>(() => generateSessionId())
-  const t = useTranslations('admin.hirn')
-  const tCommon = useTranslations('common')
+  const [sessionId, setSessionId] = useState<string>(() => generateSessionId());
+  const t = useTranslations('admin.hirn');
+  const tCommon = useTranslations('common');
 
   // Escape-to-close, initial focus, focus restore and the Tab trap all live in
   // the shared hook; attach its ref to the panel below.
-  const panelRef = useFocusTrap<HTMLDivElement>(isOpen, onClose)
+  const panelRef = useFocusTrap<HTMLDivElement>(isOpen, onClose);
 
   // Lock body scroll while the panel is open.
   useEffect(() => {
-    if (!isOpen) return
-    const prevOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
+    if (!isOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
     return () => {
-      document.body.style.overflow = prevOverflow
-    }
-  }, [isOpen])
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [isOpen]);
 
   const handleNewSession = useCallback(() => {
-    setSessionId(generateSessionId())
-  }, [])
+    setSessionId(generateSessionId());
+  }, []);
 
   if (!isOpen) {
-    return null
+    return null;
   }
 
   return (
@@ -76,8 +76,12 @@ export function HirnSlideOver({ isOpen, onClose }: HirnSlideOverProps) {
               <Brain className="w-4 h-4 text-white" />
             </div>
             <div>
-              <Heading level={2} className="font-semibold text-white">Hirn AI</Heading>
-              <p className="text-xs text-white/70">{ORG.name} {t('assistantSubtitle')}</p>
+              <Heading level={2} className="font-semibold text-white">
+                Hirn AI
+              </Heading>
+              <p className="text-xs text-white/70">
+                {ORG.name} {t('assistantSubtitle')}
+              </p>
             </div>
           </div>
 
@@ -108,11 +112,7 @@ export function HirnSlideOver({ isOpen, onClose }: HirnSlideOverProps) {
         {/* Chat Area */}
         <div className="flex-1 overflow-hidden">
           {sessionId && (
-            <HirnChat
-              sessionId={sessionId}
-              onSessionChange={handleNewSession}
-              compact
-            />
+            <HirnChat sessionId={sessionId} onSessionChange={handleNewSession} compact />
           )}
         </div>
       </div>
@@ -132,5 +132,5 @@ export function HirnSlideOver({ isOpen, onClose }: HirnSlideOverProps) {
         }
       `}</style>
     </>
-  )
+  );
 }

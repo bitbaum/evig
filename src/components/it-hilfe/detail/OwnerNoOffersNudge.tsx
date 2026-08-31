@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import { Link } from '@/i18n/navigation'
-import { Sparkles } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { IconBadge } from '@/components/ui/IconBadge'
+import { Link } from '@/i18n/navigation';
+import { Sparkles } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { IconBadge } from '@/components/ui/IconBadge';
 
 /**
  * Shown to the request owner when the request is open but has zero offers — a
@@ -22,11 +22,11 @@ export function OwnerNoOffersNudge({
   requestId,
   budgetType,
 }: {
-  requestId: string
-  budgetType: string
+  requestId: string;
+  budgetType: string;
 }) {
-  const t = useTranslations('itHelp.detail.noOffersNudge')
-  const isFree = budgetType === 'free'
+  const t = useTranslations('itHelp.detail.noOffersNudge');
+  const isFree = budgetType === 'free';
 
   return (
     <div className="card-shell p-6">
@@ -47,5 +47,5 @@ export function OwnerNoOffersNudge({
         </div>
       </div>
     </div>
-  )
+  );
 }

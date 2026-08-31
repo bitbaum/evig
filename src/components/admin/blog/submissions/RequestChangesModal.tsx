@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import { Loader2 } from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import { Textarea } from '@/components/ui/textarea'
-import { FormField } from '@/components/ui/form-field'
-import { Button } from '@/components/ui/button'
-import { useFocusTrap } from '@/hooks/useFocusTrap'
+import { Loader2 } from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import { Textarea } from '@/components/ui/textarea';
+import { FormField } from '@/components/ui/form-field';
+import { Button } from '@/components/ui/button';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
 
 interface RequestChangesModalProps {
-  reviewNotes: string
-  actionLoading: string | null
-  onNotesChange: (notes: string) => void
-  onConfirm: () => void
-  onClose: () => void
+  reviewNotes: string;
+  actionLoading: string | null;
+  onNotesChange: (notes: string) => void;
+  onConfirm: () => void;
+  onClose: () => void;
 }
 
 export function RequestChangesModal({
@@ -22,10 +22,13 @@ export function RequestChangesModal({
   onConfirm,
   onClose,
 }: RequestChangesModalProps) {
-  const dialogRef = useFocusTrap<HTMLDivElement>(true, onClose)
+  const dialogRef = useFocusTrap<HTMLDivElement>(true, onClose);
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
+    <div
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+      onClick={onClose}
+    >
       <div
         ref={dialogRef}
         role="dialog"
@@ -34,7 +37,11 @@ export function RequestChangesModal({
         className="bg-surface-base rounded-xl p-6 max-w-md w-full"
         onClick={(e) => e.stopPropagation()}
       >
-        <Heading level={3} id="request-changes-modal-title" className="text-lg text-text-primary mb-4">
+        <Heading
+          level={3}
+          id="request-changes-modal-title"
+          className="text-lg text-text-primary mb-4"
+        >
           Änderungen anfragen
         </Heading>
         <FormField label="Welche Änderungen werden benötigt?" required className="mb-4">
@@ -64,5 +71,5 @@ export function RequestChangesModal({
         </div>
       </div>
     </div>
-  )
+  );
 }

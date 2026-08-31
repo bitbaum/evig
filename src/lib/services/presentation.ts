@@ -9,19 +9,10 @@
  * belong in a database (icons, detailed feature lists, process steps).
  */
 
-import { formatPriceCents } from '@/config/marketplace'
+import { formatPriceCents } from '@/config/marketplace';
 
-import {
-  HardDrive,
-  Server,
-  Database,
-  Clock,
-  Zap,
-  FolderInput,
-  Disc,
-  Wrench,
-} from 'lucide-react'
-import type { ServicePresentation, ServicePricing } from './types'
+import { HardDrive, Server, Database, Clock, Zap, FolderInput, Disc, Wrench } from 'lucide-react';
+import type { ServicePresentation, ServicePricing } from './types';
 
 /**
  * Presentation config for each service
@@ -189,7 +180,8 @@ export const servicePresentation: Record<string, ServicePresentation> = {
     features: [
       {
         title: 'Individuelle Konfiguration',
-        description: 'Wir beraten dich bei der Auswahl der besten Komponenten für deine Bedürfnisse.',
+        description:
+          'Wir beraten dich bei der Auswahl der besten Komponenten für deine Bedürfnisse.',
         icon: Wrench,
       },
       {
@@ -199,7 +191,7 @@ export const servicePresentation: Record<string, ServicePresentation> = {
       },
     ],
   },
-}
+};
 
 /**
  * Default presentation for services without custom config
@@ -212,14 +204,14 @@ export const defaultPresentation: ServicePresentation = {
     description: 'Professionelle IT-Dienstleistungen von evig.',
   },
   features: [],
-}
+};
 
 /**
  * Get presentation config for a service
  * Falls back to default if not found
  */
 export function getServicePresentation(slug: string): ServicePresentation {
-  return servicePresentation[slug] || defaultPresentation
+  return servicePresentation[slug] || defaultPresentation;
 }
 
 /**
@@ -227,20 +219,17 @@ export function getServicePresentation(slug: string): ServicePresentation {
  * Uses override from presentation config if available,
  * otherwise generates from database price
  */
-export function getServicePricing(
-  slug: string,
-  priceCents: number | null
-): ServicePricing {
-  const presentation = getServicePresentation(slug)
+export function getServicePricing(slug: string, priceCents: number | null): ServicePricing {
+  const presentation = getServicePresentation(slug);
 
   // Use override if available
   if (presentation.pricingOverride) {
-    return presentation.pricingOverride
+    return presentation.pricingOverride;
   }
 
   // Generate from price
   return {
     base: formatPriceCents(priceCents),
     details: [],
-  }
+  };
 }

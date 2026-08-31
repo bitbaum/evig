@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
 /** Tab-strip chrome for DataEntryTabs — one button per entry mode, active state highlighted. */
 
-import { Button } from '@/components/ui/button'
-import type { EntryMode, TabConfig } from './tabs-config'
+import { Button } from '@/components/ui/button';
+import type { EntryMode, TabConfig } from './tabs-config';
 
 interface TabHeadersProps {
-  tabs: TabConfig[]
-  activeMode: EntryMode
-  onSelectMode: (mode: EntryMode) => void
+  tabs: TabConfig[];
+  activeMode: EntryMode;
+  onSelectMode: (mode: EntryMode) => void;
 }
 
 export function TabHeaders({ tabs, activeMode, onSelectMode }: TabHeadersProps) {
@@ -31,5 +31,5 @@ export function TabHeaders({ tabs, activeMode, onSelectMode }: TabHeadersProps) 
         </Button>
       ))}
     </div>
-  )
+  );
 }

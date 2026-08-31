@@ -6,7 +6,7 @@
  * Run: npm run test:e2e:tasks:journey
  */
 
-import { test, expect } from '@playwright/test'
+import { test, expect } from '@playwright/test';
 import {
   ADMIN_TEST_EMAIL,
   ADMIN_TEST_PASSWORD,
@@ -14,65 +14,63 @@ import {
   USER_TEST_PASSWORD,
   hasDualPersonaCredentials,
   loginWithCredentials,
-} from './helpers/auth'
-import { expectAdminRouteBlocked } from './helpers/route-smoke'
+} from './helpers/auth';
+import { expectAdminRouteBlocked } from './helpers/route-smoke';
 import {
   buildE2ETaskTitle,
   completeAdminTask,
   createAdminTask,
   fetchAdminTaskDetail,
-} from './helpers/tasks'
+} from './helpers/tasks';
 
 test.describe('Admin tasks staff journey', () => {
-  test.setTimeout(120000)
+  test.setTimeout(120000);
 
-  test.skip(!ADMIN_TEST_PASSWORD, 'Set AUTH_TEST_ADMIN_PASSWORD')
+  test.skip(!ADMIN_TEST_PASSWORD, 'Set AUTH_TEST_ADMIN_PASSWORD');
 
-  test('admin creates one-time task → completes → history visible (API + UI)', async ({
-    page,
-  }) => {
-    const title = buildE2ETaskTitle()
+  test('admin creates one-time task → completes → history visible (API + UI)', async ({ page }) => {
+    const title = buildE2ETaskTitle();
 
-    await loginWithCredentials(page, '/admin/tasks', ADMIN_TEST_EMAIL, ADMIN_TEST_PASSWORD)
+    await loginWithCredentials(page, '/admin/tasks', ADMIN_TEST_EMAIL, ADMIN_TEST_PASSWORD);
     await expect(page.getByRole('heading', { name: 'Aufgaben', level: 1 })).toBeVisible({
       timeout: 15000,
-    })
+    });
 
-    const created = await createAdminTask(page.request, { title })
+    const created = await createAdminTask(page.request, { title });
 
-    let detail = await fetchAdminTaskDetail(page.request, created.id)
-    expect(detail.task.is_completed).toBe(false)
-    expect(detail.completions).toHaveLength(0)
+    let detail = await fetchAdminTaskDetail(page.request, created.id);
+    expect(detail.task.is_completed).toBe(false);
+    expect(detail.completions).toHaveLength(0);
 
-    await page.goto(`/admin/tasks/${created.id}`)
+    await page.goto(`/admin/tasks/${created.id}`);
     await expect(page.getByRole('heading', { name: title, level: 1 })).toBeVisible({
       timeout: 15000,
-    })
+    });
     await expect(page.getByRole('button', { name: 'Als erledigt markieren' })).toBeVisible({
       timeout: 15000,
-    })
+    });
     // .first(): the empty state can render in two panes (list + detail).
-    await expect(page.getByText('Noch keine Erledigungen').first()).toBeVisible()
+    await expect(page.getByText('Noch keine Erledigungen').first()).toBeVisible();
 
-    await completeAdminTask(page.request, created.id)
+    await completeAdminTask(page.request, created.id);
 
-    detail = await fetchAdminTaskDetail(page.request, created.id)
-    expect(detail.completions.length).toBeGreaterThan(0)
-    expect(detail.completions[0]?.notes).toBe('E2E erledigt')
-    expect(detail.task.is_completed).toBe(true)
+    detail = await fetchAdminTaskDetail(page.request, created.id);
+    expect(detail.completions.length).toBeGreaterThan(0);
+    expect(detail.completions[0]?.notes).toBe('E2E erledigt');
+    expect(detail.task.is_completed).toBe(true);
 
-    await page.goto(`/admin/tasks/${created.id}`)
+    await page.goto(`/admin/tasks/${created.id}`);
     await expect(page.getByRole('heading', { name: 'Erledigungen (1)' })).toBeVisible({
       timeout: 15000,
-    })
+    });
     // .first(): like the empty state above, the completion note renders in two
     // panes (list + detail), so a bare getByText matches 2 elements once both
     // panes have hydrated — which flaked under strict mode.
-    await expect(page.getByText('E2E erledigt').first()).toBeVisible()
+    await expect(page.getByText('E2E erledigt').first()).toBeVisible();
 
     if (hasDualPersonaCredentials()) {
-      await loginWithCredentials(page, '/dashboard', USER_TEST_EMAIL, USER_TEST_PASSWORD)
-      await expectAdminRouteBlocked(page, '/admin/tasks')
+      await loginWithCredentials(page, '/dashboard', USER_TEST_EMAIL, USER_TEST_PASSWORD);
+      await expectAdminRouteBlocked(page, '/admin/tasks');
     }
-  })
-})
+  });
+});

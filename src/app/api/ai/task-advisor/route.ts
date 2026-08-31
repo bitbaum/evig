@@ -10,13 +10,13 @@
  * Auth required — staff only.
  */
 
-import { NextRequest, NextResponse } from 'next/server'
-import { z } from 'zod'
-import { auth } from '@/auth'
-import { logger } from '@/lib/logger'
-import { callWithFallback } from '@/lib/ai/providers'
-import { apiSuccess, apiError, apiBadRequest, apiUnauthorized } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
+import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+import { auth } from '@/auth';
+import { logger } from '@/lib/logger';
+import { callWithFallback } from '@/lib/ai/providers';
+import { apiSuccess, apiError, apiBadRequest, apiUnauthorized } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
 
 const requestSchema = z.object({
   title: z.string().min(1).max(300),
@@ -27,7 +27,7 @@ const requestSchema = z.object({
   dueDate: z.string().max(50).nullable().optional(),
   protocolTitle: z.string().max(300).nullable().optional(),
   question: z.string().min(1).max(500),
-})
+});
 
 const SYSTEM_PROMPT = `Du bist ein praktischer Assistent für Aufgaben bei evig
 (Schweizer Non-Profit: gebrauchte Computer reparieren und weitergeben).
@@ -37,26 +37,27 @@ Regeln:
 - Antworte praktisch und konkret auf Deutsch (Schweizer Schreibweise, ss statt ß)
 - Gib umsetzbare Schritte, keine Allgemeinplätze
 - Wenn dir Kontext fehlt, sage was du wissen müsstest — erfinde nichts
-- Halte Antworten unter 250 Wörtern — knapp und klar`
+- Halte Antworten unter 250 Wörtern — knapp und klar`;
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth()
-    if (!session?.user?.email) return apiUnauthorized()
+    const session = await auth();
+    if (!session?.user?.email) return apiUnauthorized();
 
-    let body: unknown
+    let body: unknown;
     try {
-      body = await request.json()
+      body = await request.json();
     } catch {
-      return apiBadRequest('Ungültiger JSON-Body')
+      return apiBadRequest('Ungültiger JSON-Body');
     }
 
-    const parsed = requestSchema.safeParse(body)
+    const parsed = requestSchema.safeParse(body);
     if (!parsed.success) {
-      return apiBadRequest(ERROR_MESSAGES.INVALID_REQUEST, parsed.error.flatten().fieldErrors)
+      return apiBadRequest(ERROR_MESSAGES.INVALID_REQUEST, parsed.error.flatten().fieldErrors);
     }
 
-    const { title, description, instructions, status, priority, dueDate, protocolTitle, question } = parsed.data
+    const { title, description, instructions, status, priority, dueDate, protocolTitle, question } =
+      parsed.data;
 
     const userPrompt = `AUFGABE: ${title}
 
@@ -68,9 +69,9 @@ STATUS: ${status || 'unbekannt'} · PRIORITÄT: ${priority || 'normal'}${dueDate
 FRAGE:
 ${question}
 
-Hilf konkret weiter. Knapp und klar, unter 250 Wörtern.`
+Hilf konkret weiter. Knapp und klar, unter 250 Wörtern.`;
 
-    logger.info('Task advisor requested', { questionLength: question.length })
+    logger.info('Task advisor requested', { questionLength: question.length });
 
     const result = await callWithFallback({
       systemPrompt: SYSTEM_PROMPT,
@@ -78,17 +79,20 @@ Hilf konkret weiter. Knapp und klar, unter 250 Wörtern.`
       maxTokens: 500,
       temperature: 0.3,
       timeoutMs: 10_000,
-    })
+    });
 
     if (!result) {
       return NextResponse.json(
-        { success: false, error: 'KI-Dienst vorübergehend nicht verfügbar. Bitte versuche es später erneut.' },
-        { status: 503 }
-      )
+        {
+          success: false,
+          error: 'KI-Dienst vorübergehend nicht verfügbar. Bitte versuche es später erneut.',
+        },
+        { status: 503 },
+      );
     }
 
-    return apiSuccess({ analysis: result.text })
+    return apiSuccess({ analysis: result.text });
   } catch (error) {
-    return apiError(error, 'Fehler beim Erstellen der Analyse')
+    return apiError(error, 'Fehler beim Erstellen der Analyse');
   }
 }

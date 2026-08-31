@@ -5,16 +5,16 @@
  * POST /api/admin/blog - Create new post
  */
 
-import { NextRequest } from 'next/server'
-import { db } from '@/db'
-import { blogPosts, blogCategories } from '@/db/schema'
-import { eq, desc } from 'drizzle-orm'
-import { withAdmin } from '@/lib/api/middleware'
-import { logger } from '@/lib/logger'
-import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
-import { syncPostTranslations } from '@/lib/services/blog-translations'
-import { fillMissingTranslations } from '@/lib/services/blog-translate'
-import { parseBlogAudience } from '@/config/blog'
+import { NextRequest } from 'next/server';
+import { db } from '@/db';
+import { blogPosts, blogCategories } from '@/db/schema';
+import { eq, desc } from 'drizzle-orm';
+import { withAdmin } from '@/lib/api/middleware';
+import { logger } from '@/lib/logger';
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
+import { syncPostTranslations } from '@/lib/services/blog-translations';
+import { fillMissingTranslations } from '@/lib/services/blog-translate';
+import { parseBlogAudience } from '@/config/blog';
 
 export const GET = withAdmin('content', async (request, session) => {
   try {
@@ -37,43 +37,69 @@ export const GET = withAdmin('content', async (request, session) => {
       })
       .from(blogPosts)
       .leftJoin(blogCategories, eq(blogPosts.categoryId, blogCategories.id))
-      .orderBy(desc(blogPosts.createdAt))
+      .orderBy(desc(blogPosts.createdAt));
 
-    return apiSuccess(posts)
+    return apiSuccess(posts);
   } catch (error) {
-    logger.error('Failed to list blog posts', { error })
-    return apiError(error, 'Blog-Artikel konnten nicht geladen werden')
+    logger.error('Failed to list blog posts', { error });
+    return apiError(error, 'Blog-Artikel konnten nicht geladen werden');
   }
-})
+});
 
 export const POST = withAdmin('content', async (request, session) => {
   try {
-    const body = await request.json()
-    const { title, slug, excerpt, content, featuredImage, categoryId, tags, isPublished, seoTitle, seoDescription, translations, autoTranslate, visibility, audience } = body
-    const cleanVisibility = ['public', 'unlisted', 'link'].includes(visibility) ? visibility : 'public'
+    const body = await request.json();
+    const {
+      title,
+      slug,
+      excerpt,
+      content,
+      featuredImage,
+      categoryId,
+      tags,
+      isPublished,
+      seoTitle,
+      seoDescription,
+      translations,
+      autoTranslate,
+      visibility,
+      audience,
+    } = body;
+    const cleanVisibility = ['public', 'unlisted', 'link'].includes(visibility)
+      ? visibility
+      : 'public';
 
     if (!title || !content) {
-      return apiBadRequest('Titel und Inhalt sind erforderlich')
+      return apiBadRequest('Titel und Inhalt sind erforderlich');
     }
 
     // Generate slug if not provided
-    const postSlug = slug || title
-      .toLowerCase()
-      .replace(/[äöüÄÖÜ]/g, (match: string) => {
-        const map: Record<string, string> = { 'ä': 'ae', 'ö': 'oe', 'ü': 'ue', 'Ä': 'ae', 'Ö': 'oe', 'Ü': 'ue' }
-        return map[match] || match
-      })
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-|-$/g, '')
+    const postSlug =
+      slug ||
+      title
+        .toLowerCase()
+        .replace(/[äöüÄÖÜ]/g, (match: string) => {
+          const map: Record<string, string> = {
+            ä: 'ae',
+            ö: 'oe',
+            ü: 'ue',
+            Ä: 'ae',
+            Ö: 'oe',
+            Ü: 'ue',
+          };
+          return map[match] || match;
+        })
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '');
 
     // Check slug uniqueness
     const [existing] = await db
       .select({ id: blogPosts.id })
       .from(blogPosts)
-      .where(eq(blogPosts.slug, postSlug))
+      .where(eq(blogPosts.slug, postSlug));
 
     if (existing) {
-      return apiBadRequest('Ein Artikel mit diesem Slug existiert bereits')
+      return apiBadRequest('Ein Artikel mit diesem Slug existiert bereits');
     }
 
     const [post] = await db
@@ -96,26 +122,26 @@ export const POST = withAdmin('content', async (request, session) => {
         createdBy: session.user.id,
         updatedBy: session.user.id,
       })
-      .returning({ id: blogPosts.id })
+      .returning({ id: blogPosts.id });
 
     if (translations !== undefined) {
-      const result = await syncPostTranslations(post.id, translations)
-      if (!result.success) return apiBadRequest(result.error!)
+      const result = await syncPostTranslations(post.id, translations);
+      if (!result.success) return apiBadRequest(result.error!);
     }
 
-    logger.info('Blog post created', { postId: post.id, userId: session.user.id })
+    logger.info('Blog post created', { postId: post.id, userId: session.user.id });
 
     // Publishing with auto-translate on → fill missing locales in the background
     // (fire-and-forget; the create response returns immediately).
     if (isPublished && autoTranslate !== false) {
       void fillMissingTranslations(post.id).catch((err) =>
         logger.error('Auto-translate on create failed', { postId: post.id, err }),
-      )
+      );
     }
 
-    return apiSuccess({ id: post.id, slug: postSlug }, 201)
+    return apiSuccess({ id: post.id, slug: postSlug }, 201);
   } catch (error) {
-    logger.error('Failed to create blog post', { error })
-    return apiError(error, 'Blog-Artikel konnte nicht erstellt werden')
+    logger.error('Failed to create blog post', { error });
+    return apiError(error, 'Blog-Artikel konnte nicht erstellt werden');
   }
-})
+});

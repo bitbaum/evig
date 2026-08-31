@@ -1,60 +1,60 @@
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
-import { Shield, Send, X, Check } from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import { useFormHandler } from '@/hooks/useFormHandler'
-import { Textarea } from '@/components/ui/textarea'
-import { FormField } from '@/components/ui/form-field'
-import { Button } from '@/components/ui/button'
-import { IconBadge } from '@/components/ui/IconBadge'
+import { useTranslations } from 'next-intl';
+import { Shield, Send, X, Check } from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import { useFormHandler } from '@/hooks/useFormHandler';
+import { Textarea } from '@/components/ui/textarea';
+import { FormField } from '@/components/ui/form-field';
+import { Button } from '@/components/ui/button';
+import { IconBadge } from '@/components/ui/IconBadge';
 
 interface Section {
-  id: string
-  label: string
-  description: string
+  id: string;
+  label: string;
+  description: string;
 }
 
 interface PermissionRequestFormProps {
-  availableSections: Section[]
-  onClose?: () => void
+  availableSections: Section[];
+  onClose?: () => void;
 }
 
 interface PermissionRequestData {
-  sections: string[]
-  reason: string
+  sections: string[];
+  reason: string;
 }
 
 export function PermissionRequestForm({ availableSections, onClose }: PermissionRequestFormProps) {
-  const t = useTranslations('admin.permissions.request')
-  const tForms = useTranslations('admin.forms')
+  const t = useTranslations('admin.permissions.request');
+  const tForms = useTranslations('admin.forms');
   const form = useFormHandler<PermissionRequestData>({
     initialData: { sections: [], reason: '' },
     apiEndpoint: '/api/admin/permissions/request',
     createSuccessMessage: t('successTitle'),
     validate: (data) => {
       if (data.sections.length === 0) {
-        return t('validationNoSections')
+        return t('validationNoSections');
       }
       if (data.reason.trim().length < 10) {
-        return t('validationReasonTooShort')
+        return t('validationReasonTooShort');
       }
-      return null
+      return null;
     },
     transformBeforeSubmit: (data) => ({
       sections: data.sections,
       reason: data.reason.trim(),
     }),
-  })
+  });
 
   const toggleSection = (sectionId: string) => {
-    form.setData(prev => ({
+    form.setData((prev) => ({
       ...prev,
       sections: prev.sections.includes(sectionId)
-        ? prev.sections.filter(s => s !== sectionId)
+        ? prev.sections.filter((s) => s !== sectionId)
         : [...prev.sections, sectionId],
-    }))
-  }
+    }));
+  };
 
   if (form.success) {
     return (
@@ -65,9 +65,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
             <Heading level={3} className="font-semibold text-action-text">
               {t('successTitle')}
             </Heading>
-            <p className="text-sm text-action">
-              {t('successBody')}
-            </p>
+            <p className="text-sm text-action">{t('successBody')}</p>
           </div>
         </div>
         {onClose && (
@@ -82,7 +80,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
           </Button>
         )}
       </div>
-    )
+    );
   }
 
   return (
@@ -93,9 +91,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
           <Heading level={3} className="font-semibold text-text-primary">
             {t('title')}
           </Heading>
-          <p className="text-sm text-text-secondary">
-            {t('subtitle')}
-          </p>
+          <p className="text-sm text-text-secondary">{t('subtitle')}</p>
         </div>
         {onClose && (
           <Button
@@ -116,7 +112,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
           {t('sectionsLabel')}
         </label>
         <div className="grid grid-cols-2 gap-2">
-          {availableSections.map(section => (
+          {availableSections.map((section) => (
             <Button
               key={section.id}
               type="button"
@@ -128,12 +124,8 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
                   : 'border hover:border-strong'
               }`}
             >
-              <span className="font-medium text-text-primary">
-                {section.label}
-              </span>
-              <span className="block text-xs text-text-tertiary mt-1">
-                {section.description}
-              </span>
+              <span className="font-medium text-text-primary">{section.label}</span>
+              <span className="block text-xs text-text-tertiary mt-1">{section.description}</span>
             </Button>
           ))}
         </div>
@@ -143,7 +135,7 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
       <FormField label={t('reasonLabel')}>
         <Textarea
           value={form.data.reason}
-          onChange={e => form.updateField('reason', e.target.value)}
+          onChange={(e) => form.updateField('reason', e.target.value)}
           placeholder={t('reasonPlaceholder')}
           rows={3}
           aria-required="true"
@@ -154,7 +146,10 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
 
       {/* Error */}
       {form.error && (
-        <div id="permission-form-error" className="p-3 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg">
+        <div
+          id="permission-form-error"
+          className="p-3 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg"
+        >
           <p className="text-sm text-error-700 dark:text-error-300">{form.error}</p>
         </div>
       )}
@@ -179,5 +174,5 @@ export function PermissionRequestForm({ availableSections, onClose }: Permission
         )}
       </Button>
     </form>
-  )
+  );
 }

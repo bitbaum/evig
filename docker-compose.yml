@@ -11,16 +11,16 @@ services:
       POSTGRES_USER: ${DB_USER:-postgres}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
       POSTGRES_DB: ${DB_NAME:-revampit_cms}
-      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+      POSTGRES_INITDB_ARGS: '--encoding=UTF-8'
     volumes:
       - revampit_db_data:/var/lib/postgresql/data
       - ./postgres-init:/docker-entrypoint-initdb.d
     ports:
-      - "${DB_PORT:-5433}:5432"
+      - '${DB_PORT:-5433}:5432'
     networks:
       - revampit_network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USER:-postgres}']
       interval: 10s
       timeout: 5s
       retries: 5
@@ -33,15 +33,15 @@ services:
     environment:
       MEILI_MASTER_KEY: ${MEILI_MASTER_KEY:-masterKey_change_in_production}
       MEILI_ENV: development
-      MEILI_NO_ANALYTICS: "true"
+      MEILI_NO_ANALYTICS: 'true'
     volumes:
       - meilisearch_data:/meili_data
     ports:
-      - "${MEILI_PORT:-7700}:7700"
+      - '${MEILI_PORT:-7700}:7700'
     networks:
       - revampit_network
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:7700/health"]
+      test: ['CMD', 'wget', '--spider', '-q', 'http://127.0.0.1:7700/health']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -58,11 +58,17 @@ services:
       WHISPER_MODEL: ${WHISPER_MODEL:-base}
       PORT: 5111
     ports:
-      - "${TRANSCRIPTION_PORT:-5111}:5111"
+      - '${TRANSCRIPTION_PORT:-5111}:5111'
     networks:
       - revampit_network
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5111/health')"]
+      test:
+        [
+          'CMD',
+          'python',
+          '-c',
+          "import urllib.request; urllib.request.urlopen('http://localhost:5111/health')",
+        ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -75,8 +81,8 @@ services:
     image: axllent/mailpit:latest
     restart: unless-stopped
     ports:
-      - "8025:8025"   # Web UI
-      - "1025:1025"   # SMTP
+      - '8025:8025' # Web UI
+      - '1025:1025' # SMTP
     networks:
       - revampit_network
     environment:
@@ -89,7 +95,7 @@ services:
     image: listmonk/listmonk:latest
     restart: unless-stopped
     ports:
-      - "${LISTMONK_PORT:-9090}:9000"
+      - '${LISTMONK_PORT:-9090}:9000'
     environment:
       - TZ=Europe/Zurich
     volumes:
@@ -100,9 +106,9 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    command: ["./listmonk", "--config", "/listmonk/config.toml"]
+    command: ['./listmonk', '--config', '/listmonk/config.toml']
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:9000/health"]
+      test: ['CMD', 'wget', '--spider', '-q', 'http://127.0.0.1:9000/health']
       interval: 30s
       timeout: 10s
       retries: 5

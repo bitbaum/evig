@@ -91,11 +91,7 @@ export {
 } from './marketplace';
 
 // Decision templates
-export {
-  decisionVotingOpened,
-  decisionDeadlineReminder,
-  decisionClosed,
-} from './decisions';
+export { decisionVotingOpened, decisionDeadlineReminder, decisionClosed } from './decisions';
 
 // Notification template (generic, used by notification service)
 export { notificationEmail } from './notification';
@@ -116,4 +112,10 @@ export { referralInvitation, referralCouponReceived } from './referral';
 export { teamClaimInvite, teamMemberAdded } from './teams';
 
 // Base styles (for custom templates)
-export { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createEmailLayout, createTextFooter } from './base-styles';
+export {
+  BASE_STYLES,
+  COPYRIGHT_TEXT,
+  AUTO_GENERATED_TEXT,
+  createEmailLayout,
+  createTextFooter,
+} from './base-styles';

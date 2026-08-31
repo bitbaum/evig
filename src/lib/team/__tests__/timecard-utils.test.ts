@@ -1,12 +1,12 @@
-import { normalizeEntry, normalizeTimeToHHMM } from '@/lib/team/timecard-utils'
+import { normalizeEntry, normalizeTimeToHHMM } from '@/lib/team/timecard-utils';
 
 describe('normalizeTimeToHHMM', () => {
   it('strips seconds from Postgres TIME values', () => {
-    expect(normalizeTimeToHHMM('13:25:00')).toBe('13:25')
-    expect(normalizeTimeToHHMM('09:00')).toBe('09:00')
-    expect(normalizeTimeToHHMM(null)).toBeNull()
-  })
-})
+    expect(normalizeTimeToHHMM('13:25:00')).toBe('13:25');
+    expect(normalizeTimeToHHMM('09:00')).toBe('09:00');
+    expect(normalizeTimeToHHMM(null)).toBeNull();
+  });
+});
 
 describe('normalizeEntry', () => {
   it('normalizes start/end times on entries', () => {
@@ -18,8 +18,8 @@ describe('normalizeEntry', () => {
       duration_minutes: 1,
       category: 'other',
       source: 'manual',
-    })
-    expect(entry.start_time).toBe('13:25')
-    expect(entry.end_time).toBe('13:25')
-  })
-})
+    });
+    expect(entry.start_time).toBe('13:25');
+    expect(entry.end_time).toBe('13:25');
+  });
+});

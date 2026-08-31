@@ -3,8 +3,8 @@
  * Business logic for IT help requests — no HTTP, no UI.
  */
 
-import { itHilfeRequestSchema } from '@/lib/schemas/it-hilfe'
-import type { ITHilfeCreateFormData } from '@/types/it-hilfe-form'
+import { itHilfeRequestSchema } from '@/lib/schemas/it-hilfe';
+import type { ITHilfeCreateFormData } from '@/types/it-hilfe-form';
 
 /**
  * Transform client form data to API payload shape.
@@ -30,7 +30,7 @@ export function transformITHilfeFormToPayload(formData: ITHilfeCreateFormData) {
     // Only include when non-empty so the schema's .optional() field is
     // truly absent for authenticated submissions.
     ...(formData.submitterEmail ? { submitterEmail: formData.submitterEmail } : {}),
-  }
+  };
 }
 
 /**
@@ -38,9 +38,9 @@ export function transformITHilfeFormToPayload(formData: ITHilfeCreateFormData) {
  * Returns the first error message, or null if valid.
  */
 export function validateITHilfeForm(formData: ITHilfeCreateFormData): string | null {
-  const payload = transformITHilfeFormToPayload(formData)
-  const result = itHilfeRequestSchema.safeParse(payload)
-  if (result.success) return null
-  const firstIssue = result.error.issues[0]
-  return firstIssue?.message ?? 'Ungültige Eingabe'
+  const payload = transformITHilfeFormToPayload(formData);
+  const result = itHilfeRequestSchema.safeParse(payload);
+  if (result.success) return null;
+  const firstIssue = result.error.issues[0];
+  return firstIssue?.message ?? 'Ungültige Eingabe';
 }

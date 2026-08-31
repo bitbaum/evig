@@ -1,22 +1,28 @@
-import { NextRequest } from 'next/server'
-import { withAuth } from '@/lib/api/middleware'
-import { db } from '@/db'
-import { invoices, users } from '@/db/schema'
-import { eq, sql } from 'drizzle-orm'
-import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
-import { logger } from '@/lib/logger'
-import { canAccessFinance } from '@/lib/permissions'
-import { validateBody, UpdateInvoiceSchema } from '@/lib/schemas'
-import { INVOICE_STATUS } from '@/config/invoice-status'
-import { ERROR_MESSAGES } from '@/config/error-messages'
+import { NextRequest } from 'next/server';
+import { withAuth } from '@/lib/api/middleware';
+import { db } from '@/db';
+import { invoices, users } from '@/db/schema';
+import { eq, sql } from 'drizzle-orm';
+import {
+  apiError,
+  apiSuccess,
+  apiUnauthorized,
+  apiNotFound,
+  apiBadRequest,
+} from '@/lib/api/helpers';
+import { logger } from '@/lib/logger';
+import { canAccessFinance } from '@/lib/permissions';
+import { validateBody, UpdateInvoiceSchema } from '@/lib/schemas';
+import { INVOICE_STATUS } from '@/config/invoice-status';
+import { ERROR_MESSAGES } from '@/config/error-messages';
 
 // GET /api/invoices/[id] - Get invoice details
 export const GET = withAuth<{ id: string }>(async (request, session, context) => {
   try {
-    const { id: invoiceId } = context!.params!
+    const { id: invoiceId } = context!.params!;
 
     // Check if user is admin
-    const isAdmin = canAccessFinance(session.user)
+    const isAdmin = canAccessFinance(session.user);
 
     // Get invoice details
     const [invoice] = await db
@@ -48,36 +54,35 @@ export const GET = withAuth<{ id: string }>(async (request, session, context) =>
       })
       .from(invoices)
       .innerJoin(users, eq(invoices.userId, users.id))
-      .where(eq(invoices.id, invoiceId))
+      .where(eq(invoices.id, invoiceId));
 
     if (!invoice) {
-      return apiNotFound('Rechnung')
+      return apiNotFound('Rechnung');
     }
 
     // Check permissions
     if (invoice.user_id !== session.user.id && !isAdmin) {
-      return apiUnauthorized('Sie haben keine Berechtigung, diese Rechnung anzuzeigen')
+      return apiUnauthorized('Sie haben keine Berechtigung, diese Rechnung anzuzeigen');
     }
 
-    return apiSuccess({ invoice })
-
+    return apiSuccess({ invoice });
   } catch (error) {
-    logger.error('Get invoice error', { error })
-    return apiError(error, 'Rechnung konnte nicht geladen werden')
+    logger.error('Get invoice error', { error });
+    return apiError(error, 'Rechnung konnte nicht geladen werden');
   }
-})
+});
 
 // PUT /api/invoices/[id] - Update invoice
 export const PUT = withAuth<{ id: string }>(async (request: NextRequest, session, context) => {
   try {
-    const { id: invoiceId } = context!.params!
-    const body = await request.json()
-    const validation = validateBody(UpdateInvoiceSchema, body)
-    if (!validation.success) return validation.error
-    const updates = validation.data
+    const { id: invoiceId } = context!.params!;
+    const body = await request.json();
+    const validation = validateBody(UpdateInvoiceSchema, body);
+    if (!validation.success) return validation.error;
+    const updates = validation.data;
 
     // Check if user is admin
-    const isAdmin = canAccessFinance(session.user)
+    const isAdmin = canAccessFinance(session.user);
 
     // Get current invoice
     const [invoice] = await db
@@ -87,15 +92,15 @@ export const PUT = withAuth<{ id: string }>(async (request: NextRequest, session
         status: invoices.status,
       })
       .from(invoices)
-      .where(eq(invoices.id, invoiceId))
+      .where(eq(invoices.id, invoiceId));
 
     if (!invoice) {
-      return apiNotFound('Rechnung')
+      return apiNotFound('Rechnung');
     }
 
     // Check permissions - only admin can update others' invoices
     if (invoice.userId !== session.user.id && !isAdmin) {
-      return apiUnauthorized('Sie haben keine Berechtigung, diese Rechnung zu aktualisieren')
+      return apiUnauthorized('Sie haben keine Berechtigung, diese Rechnung zu aktualisieren');
     }
 
     // Build update set. Field allowlist splits by role:
@@ -122,40 +127,36 @@ export const PUT = withAuth<{ id: string }>(async (request: NextRequest, session
       notes: 'notes',
       billing_address: 'billingAddress',
       shipping_address: 'shippingAddress',
-    }
+    };
     const adminOnlyFields: Record<string, string> = {
       status: 'status',
       due_date: 'dueDate',
       payment_terms: 'paymentTerms',
       line_items: 'lineItems',
-    }
+    };
     const allowedFields: Record<string, string> = isAdmin
       ? { ...ownerAllowedFields, ...adminOnlyFields }
-      : ownerAllowedFields
+      : ownerAllowedFields;
 
-    const updateSet: Record<string, unknown> = { updatedAt: sql`CURRENT_TIMESTAMP` }
+    const updateSet: Record<string, unknown> = { updatedAt: sql`CURRENT_TIMESTAMP` };
 
-    let hasUpdates = false
+    let hasUpdates = false;
     for (const [key, value] of Object.entries(updates)) {
-      const drizzleField = allowedFields[key]
+      const drizzleField = allowedFields[key];
       if (drizzleField) {
-        const processedValue = (key === 'line_items' || key.includes('address'))
-          ? JSON.stringify(value)
-          : value
-        updateSet[drizzleField] = processedValue
-        hasUpdates = true
+        const processedValue =
+          key === 'line_items' || key.includes('address') ? JSON.stringify(value) : value;
+        updateSet[drizzleField] = processedValue;
+        hasUpdates = true;
       }
     }
 
     if (!hasUpdates) {
-      return apiBadRequest(ERROR_MESSAGES.NO_VALID_FIELDS)
+      return apiBadRequest(ERROR_MESSAGES.NO_VALID_FIELDS);
     }
 
     // Execute update
-    await db
-      .update(invoices)
-      .set(updateSet)
-      .where(eq(invoices.id, invoiceId))
+    await db.update(invoices).set(updateSet).where(eq(invoices.id, invoiceId));
 
     // Get updated invoice
     const [updated] = await db
@@ -182,26 +183,25 @@ export const PUT = withAuth<{ id: string }>(async (request: NextRequest, session
       })
       .from(invoices)
       .innerJoin(users, eq(invoices.userId, users.id))
-      .where(eq(invoices.id, invoiceId))
+      .where(eq(invoices.id, invoiceId));
 
     return apiSuccess({
       invoice: updated,
-      message: 'Rechnung erfolgreich aktualisiert'
-    })
-
+      message: 'Rechnung erfolgreich aktualisiert',
+    });
   } catch (error) {
-    logger.error('Update invoice error', { error })
-    return apiError(error, 'Rechnung konnte nicht aktualisiert werden')
+    logger.error('Update invoice error', { error });
+    return apiError(error, 'Rechnung konnte nicht aktualisiert werden');
   }
-})
+});
 
 // DELETE /api/invoices/[id] - Delete invoice (only draft invoices)
 export const DELETE = withAuth<{ id: string }>(async (request, session, context) => {
   try {
-    const { id: invoiceId } = context!.params!
+    const { id: invoiceId } = context!.params!;
 
     // Check if user is admin
-    const isAdmin = canAccessFinance(session.user)
+    const isAdmin = canAccessFinance(session.user);
 
     // Get invoice
     const [invoice] = await db
@@ -211,33 +211,30 @@ export const DELETE = withAuth<{ id: string }>(async (request, session, context)
         status: invoices.status,
       })
       .from(invoices)
-      .where(eq(invoices.id, invoiceId))
+      .where(eq(invoices.id, invoiceId));
 
     if (!invoice) {
-      return apiNotFound('Rechnung')
+      return apiNotFound('Rechnung');
     }
 
     // Check permissions
     if (invoice.userId !== session.user.id && !isAdmin) {
-      return apiUnauthorized('Sie haben keine Berechtigung, diese Rechnung zu löschen')
+      return apiUnauthorized('Sie haben keine Berechtigung, diese Rechnung zu löschen');
     }
 
     // Only allow deletion of draft invoices
     if (invoice.status !== INVOICE_STATUS.DRAFT) {
-      return apiBadRequest('Nur Rechnungsentwürfe können gelöscht werden')
+      return apiBadRequest('Nur Rechnungsentwürfe können gelöscht werden');
     }
 
     // Delete invoice
-    await db
-      .delete(invoices)
-      .where(eq(invoices.id, invoiceId))
+    await db.delete(invoices).where(eq(invoices.id, invoiceId));
 
     return apiSuccess({
-      message: 'Rechnung erfolgreich gelöscht'
-    })
-
+      message: 'Rechnung erfolgreich gelöscht',
+    });
   } catch (error) {
-    logger.error('Delete invoice error', { error })
-    return apiError(error, 'Rechnung konnte nicht gelöscht werden')
+    logger.error('Delete invoice error', { error });
+    return apiError(error, 'Rechnung konnte nicht gelöscht werden');
   }
-})
+});

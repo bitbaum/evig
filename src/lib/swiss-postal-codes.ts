@@ -86,7 +86,7 @@ export function lookupSwissPostalCode(postalCode: string): PostalCodeData | null
     return null;
   }
 
-  return SWISS_POSTAL_CODES.find(pc => pc.postal_code === cleanCode) || null;
+  return SWISS_POSTAL_CODES.find((pc) => pc.postal_code === cleanCode) || null;
 }
 
 /**
@@ -101,9 +101,8 @@ export function getAllSwissPostalCodes(): PostalCodeData[] {
  */
 export function searchSwissCities(searchTerm: string): PostalCodeData[] {
   const term = searchTerm.toLowerCase();
-  return SWISS_POSTAL_CODES.filter(pc =>
-    pc.city.toLowerCase().includes(term) ||
-    pc.canton.toLowerCase().includes(term)
+  return SWISS_POSTAL_CODES.filter(
+    (pc) => pc.city.toLowerCase().includes(term) || pc.canton.toLowerCase().includes(term),
   );
 }
 
@@ -114,6 +113,3 @@ export function isValidSwissPostalCode(postalCode: string): boolean {
   const cleanCode = postalCode.replace(/\D/g, '');
   return cleanCode.length === 4 && cleanCode >= '1000' && cleanCode <= '9999';
 }
-
-
-

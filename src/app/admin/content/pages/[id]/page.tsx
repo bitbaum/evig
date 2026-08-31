@@ -1,29 +1,21 @@
-'use client'
+'use client';
 
-import { useParams } from 'next/navigation'
-import { adminInteractive } from '@/lib/admin-ui'
-import Link from 'next/link'
-import {
-  ArrowLeft,
-  Save,
-  Loader2,
-  AlertCircle,
-  CheckCircle,
-  Eye,
-  FileText,
-} from 'lucide-react'
-import { generateSlug } from '@/lib/utils/slug'
-import Heading from '@/components/admin/AdminHeading'
-import { ROUTES } from '@/config/routes'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { FormField } from '@/components/ui/form-field'
-import { Button } from '@/components/ui/button'
-import { useEditStaticPage } from '@/hooks/useEditStaticPage'
+import { useParams } from 'next/navigation';
+import { adminInteractive } from '@/lib/admin-ui';
+import Link from 'next/link';
+import { ArrowLeft, Save, Loader2, AlertCircle, CheckCircle, Eye, FileText } from 'lucide-react';
+import { generateSlug } from '@/lib/utils/slug';
+import Heading from '@/components/admin/AdminHeading';
+import { ROUTES } from '@/config/routes';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { FormField } from '@/components/ui/form-field';
+import { Button } from '@/components/ui/button';
+import { useEditStaticPage } from '@/hooks/useEditStaticPage';
 
 export default function EditStaticPagePage() {
-  const params = useParams()
-  const pageId = params.id as string
+  const params = useParams();
+  const pageId = params.id as string;
 
   const {
     session,
@@ -36,7 +28,7 @@ export default function EditStaticPagePage() {
     formData,
     setFormData,
     handleSubmit,
-  } = useEditStaticPage(pageId)
+  } = useEditStaticPage(pageId);
 
   if (sessionStatus === 'loading' || loading) {
     return (
@@ -53,12 +45,12 @@ export default function EditStaticPagePage() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   if (!session?.user) {
-    router.push('/auth/login')
-    return null
+    router.push('/auth/login');
+    return null;
   }
 
   if (error && !formData.title) {
@@ -71,11 +63,15 @@ export default function EditStaticPagePage() {
           >
             <ArrowLeft className="w-5 h-5 text-text-secondary" />
           </Link>
-          <Heading level={1} className="text-2xl font-bold text-text-primary">Seite bearbeiten</Heading>
+          <Heading level={1} className="text-2xl font-bold text-text-primary">
+            Seite bearbeiten
+          </Heading>
         </div>
         <div className="bg-surface-base rounded-xl shadow-xs border p-8 text-center">
           <AlertCircle className="w-12 h-12 text-error-400 mx-auto mb-4" />
-          <Heading level={2} className="text-lg font-medium text-text-primary mb-2">{error}</Heading>
+          <Heading level={2} className="text-lg font-medium text-text-primary mb-2">
+            {error}
+          </Heading>
           <Link
             href={ROUTES.admin.contentPages}
             className="inline-flex items-center text-action hover:text-action mt-4"
@@ -85,7 +81,7 @@ export default function EditStaticPagePage() {
           </Link>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -103,9 +99,7 @@ export default function EditStaticPagePage() {
             <Heading level={1} className="text-2xl font-bold text-text-primary">
               Seite bearbeiten
             </Heading>
-            <p className="text-text-secondary mt-1">
-              {formData.title || 'Unbenannt'}
-            </p>
+            <p className="text-text-secondary mt-1">{formData.title || 'Unbenannt'}</p>
           </div>
         </div>
         {formData.slug && (
@@ -142,7 +136,7 @@ export default function EditStaticPagePage() {
               id="page-title"
               type="text"
               value={formData.title}
-              onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+              onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
               required
             />
           </FormField>
@@ -155,7 +149,7 @@ export default function EditStaticPagePage() {
               <Input
                 type="text"
                 value={formData.slug}
-                onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, slug: e.target.value }))}
                 className="flex-1 rounded-l-none"
                 required
               />
@@ -163,7 +157,7 @@ export default function EditStaticPagePage() {
                 type="button"
                 variant="outline"
                 size="sm"
-                onClick={() => setFormData(prev => ({ ...prev, slug: generateSlug(prev.title) }))}
+                onClick={() => setFormData((prev) => ({ ...prev, slug: generateSlug(prev.title) }))}
                 className={`px-3 py-2 text-sm border border-default rounded-lg ${adminInteractive.rowHover} text-text-secondary`}
               >
                 Generieren
@@ -174,7 +168,7 @@ export default function EditStaticPagePage() {
           <FormField label="Inhalt">
             <Textarea
               value={formData.content}
-              onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
+              onChange={(e) => setFormData((prev) => ({ ...prev, content: e.target.value }))}
               rows={15}
               className="font-mono text-sm"
               placeholder="HTML oder Markdown Inhalt..."
@@ -186,7 +180,7 @@ export default function EditStaticPagePage() {
               type="checkbox"
               id="is_published"
               checked={formData.is_published}
-              onChange={(e) => setFormData(prev => ({ ...prev, is_published: e.target.checked }))}
+              onChange={(e) => setFormData((prev) => ({ ...prev, is_published: e.target.checked }))}
               className="w-4 h-4 text-action border-default rounded-sm focus:ring-action"
             />
             <label htmlFor="is_published" className="text-sm font-medium text-text-secondary">
@@ -197,14 +191,16 @@ export default function EditStaticPagePage() {
 
         {/* SEO Section */}
         <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6 space-y-6">
-          <Heading level={2} className="text-lg font-semibold text-text-primary">SEO</Heading>
+          <Heading level={2} className="text-lg font-semibold text-text-primary">
+            SEO
+          </Heading>
 
           <FormField label="SEO Titel" htmlFor="seo-title">
             <Input
               id="seo-title"
               type="text"
               value={formData.seo_title}
-              onChange={(e) => setFormData(prev => ({ ...prev, seo_title: e.target.value }))}
+              onChange={(e) => setFormData((prev) => ({ ...prev, seo_title: e.target.value }))}
               placeholder={formData.title}
             />
           </FormField>
@@ -212,7 +208,9 @@ export default function EditStaticPagePage() {
           <FormField label="SEO Beschreibung">
             <Textarea
               value={formData.seo_description}
-              onChange={(e) => setFormData(prev => ({ ...prev, seo_description: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, seo_description: e.target.value }))
+              }
               rows={3}
               placeholder="Kurze Beschreibung für Suchmaschinen..."
             />
@@ -233,5 +231,5 @@ export default function EditStaticPagePage() {
         </div>
       </form>
     </div>
-  )
+  );
 }

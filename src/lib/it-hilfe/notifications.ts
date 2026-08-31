@@ -10,39 +10,39 @@
  * Closes ARCHITECTURE_DEBT.md #2.
  */
 
-import { db } from '@/db'
-import { userSkills } from '@/db/schema/itHilfe'
-import { users } from '@/db/schema/auth'
-import { repairerProfiles } from '@/db/schema/services'
-import { eq, and, ne, sql, inArray } from 'drizzle-orm'
-import { logger } from '@/lib/logger'
-import { sendCustomEmail } from '@/lib/email'
-import { notifyUsers } from '@/lib/services/notifications'
-import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
-import { adminNewITHilfeRequest } from '@/lib/email/templates/it-hilfe'
+import { db } from '@/db';
+import { userSkills } from '@/db/schema/itHilfe';
+import { users } from '@/db/schema/auth';
+import { repairerProfiles } from '@/db/schema/services';
+import { eq, and, ne, sql, inArray } from 'drizzle-orm';
+import { logger } from '@/lib/logger';
+import { sendCustomEmail } from '@/lib/email';
+import { notifyUsers } from '@/lib/services/notifications';
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications';
+import { adminNewITHilfeRequest } from '@/lib/email/templates/it-hilfe';
 import {
   getCategoryById,
   getUrgencyById,
   getServiceTypeById,
   getSkillById,
   REVAMPIT_NOTIFICATION_EMAIL,
-} from '@/config/it-hilfe'
-import { APP_URL } from '@/config/urls'
+} from '@/config/it-hilfe';
+import { APP_URL } from '@/config/urls';
 
 interface NotifyParams {
-  requestId: string
-  requesterId: string
-  requesterName: string
-  requesterEmail: string
-  title: string
-  categoryId: string
-  urgency: string
-  canton: string
-  serviceType: string
-  skillsNeeded: string[]
-  aiDiagnosis: string | null
+  requestId: string;
+  requesterId: string;
+  requesterName: string;
+  requesterEmail: string;
+  title: string;
+  categoryId: string;
+  urgency: string;
+  canton: string;
+  serviceType: string;
+  skillsNeeded: string[];
+  aiDiagnosis: string | null;
   /** User id behind the technician profile explicitly chosen by requester. */
-  preferredTechnicianUserId?: string | null
+  preferredTechnicianUserId?: string | null;
   /**
    * When true (default), sends the standard request-confirmation
    * notification to the requester. Set to false when the caller is
@@ -53,7 +53,7 @@ interface NotifyParams {
    * they claim their account. Admin notification + matching-helper
    * notifications still fire.
    */
-  includeRequesterConfirmation?: boolean
+  includeRequesterConfirmation?: boolean;
 }
 
 /**
@@ -66,10 +66,10 @@ interface NotifyParams {
  * - Helper fan-out → notifyUsers (in-app + email via IT_HILFE_MATCHING_REQUEST)
  */
 export function sendRequestCreatedNotifications(params: NotifyParams): void {
-  const requestUrl = `${APP_URL}/it-hilfe/${params.requestId}`
-  const categoryName = getCategoryById(params.categoryId)?.name || params.categoryId
-  const urgencyName = getUrgencyById(params.urgency)?.name || params.urgency
-  const serviceTypeName = getServiceTypeById(params.serviceType)?.name || params.serviceType
+  const requestUrl = `${APP_URL}/it-hilfe/${params.requestId}`;
+  const categoryName = getCategoryById(params.categoryId)?.name || params.categoryId;
+  const urgencyName = getUrgencyById(params.urgency)?.name || params.urgency;
+  const serviceTypeName = getServiceTypeById(params.serviceType)?.name || params.serviceType;
 
   // 1. Confirmation to requester (suppressed for new-anonymous accounts
   //    where the dedicated claim email replaces it).
@@ -88,12 +88,12 @@ export function sendRequestCreatedNotifications(params: NotifyParams): void {
         ...(params.aiDiagnosis ? { aiDiagnosis: params.aiDiagnosis } : {}),
         requestUrl,
       },
-    }).catch(err => {
+    }).catch((err) => {
       logger.warn('Failed to send IT-Hilfe confirmation notification', {
         error: err,
         requestId: params.requestId,
-      })
-    })
+      });
+    });
   }
 
   // 2. Admin notification — shared inbox, not a per-user notification, so
@@ -106,22 +106,22 @@ export function sendRequestCreatedNotifications(params: NotifyParams): void {
     categoryName,
     urgencyName,
     requestUrl,
-  )
+  );
   sendCustomEmail(REVAMPIT_NOTIFICATION_EMAIL, adminContent)
-    .then(result => {
+    .then((result) => {
       if (!result.success) {
         logger.warn('Failed to send IT-Hilfe admin alert (resolved)', {
           error: result.error,
           requestId: params.requestId,
-        })
+        });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       logger.warn('Failed to send IT-Hilfe admin alert (rejected)', {
         error: err,
         requestId: params.requestId,
-      })
-    })
+      });
+    });
 
   // 3. Explicitly selected technician — notify regardless of tier or skill
   // overlap. This is the contract behind "Anfrage stellen" on a profile.
@@ -139,16 +139,19 @@ export function sendRequestCreatedNotifications(params: NotifyParams): void {
         urgencyName,
         canton: params.canton,
         serviceTypeName,
-        matchingSkills: params.skillsNeeded.map(sid => getSkillById(sid)?.name || sid).join('|'),
+        matchingSkills: params.skillsNeeded.map((sid) => getSkillById(sid)?.name || sid).join('|'),
         requestUrl,
       },
-    }).catch(err => {
-      logger.warn('Failed to notify preferred technician', { error: err, requestId: params.requestId })
-    })
+    }).catch((err) => {
+      logger.warn('Failed to notify preferred technician', {
+        error: err,
+        requestId: params.requestId,
+      });
+    });
   }
 
   // 4. Other matching technicians — fan-out via single notifyUsers call.
-  if (params.skillsNeeded.length === 0) return
+  if (params.skillsNeeded.length === 0) return;
 
   // Notify every ACTIVE skill-matched technician — community AND verified.
   // `isVerified` is a trust badge shown on profiles, NOT a notification gate:
@@ -159,26 +162,23 @@ export function sendRequestCreatedNotifications(params: NotifyParams): void {
     eq(repairerProfiles.isActive, true),
     ne(repairerProfiles.userId, params.requesterId),
     inArray(userSkills.skillId, params.skillsNeeded),
-  ]
+  ];
   if (params.preferredTechnicianUserId) {
-    matchingConditions.push(ne(repairerProfiles.userId, params.preferredTechnicianUserId))
+    matchingConditions.push(ne(repairerProfiles.userId, params.preferredTechnicianUserId));
   }
 
-  db
-    .select({
-      userId: repairerProfiles.userId,
-      name: users.name,
-      matchingSkills: sql<string[]>`ARRAY_AGG(${userSkills.skillId})`,
-    })
+  db.select({
+    userId: repairerProfiles.userId,
+    name: users.name,
+    matchingSkills: sql<string[]>`ARRAY_AGG(${userSkills.skillId})`,
+  })
     .from(repairerProfiles)
     .innerJoin(users, eq(repairerProfiles.userId, users.id))
     .innerJoin(userSkills, eq(repairerProfiles.userId, userSkills.userId))
-    .where(
-      and(...matchingConditions),
-    )
+    .where(and(...matchingConditions))
     .groupBy(repairerProfiles.userId, users.name)
-    .then(helpersResult => {
-      if (helpersResult.length === 0) return
+    .then((helpersResult) => {
+      if (helpersResult.length === 0) return;
 
       // Each helper has different "matching skills" — but notifyUsers
       // sends ONE email content to all recipients. Compromise: send the
@@ -187,10 +187,14 @@ export function sendRequestCreatedNotifications(params: NotifyParams): void {
       // pool. Acceptable — helpers see "you match because of [X, Y]"
       // even if only X matched their own profile. Net: simpler, single
       // fan-out, vs N individual sends with per-helper skill lists.
-      const allMatchedSkills = Array.from(new Set(
-        helpersResult.flatMap(h => h.matchingSkills || []).map(sid => getSkillById(sid)?.name || sid),
-      ))
-      const helperIds = helpersResult.map(h => h.userId)
+      const allMatchedSkills = Array.from(
+        new Set(
+          helpersResult
+            .flatMap((h) => h.matchingSkills || [])
+            .map((sid) => getSkillById(sid)?.name || sid),
+        ),
+      );
+      const helperIds = helpersResult.map((h) => h.userId);
 
       return notifyUsers(helperIds, {
         type: NOTIFICATION_TYPES.IT_HILFE_MATCHING_REQUEST,
@@ -199,7 +203,7 @@ export function sendRequestCreatedNotifications(params: NotifyParams): void {
         related_type: RELATED_TYPES.IT_HILFE,
         related_id: params.requestId,
         metadata: {
-          helperName: 'Techniker',  // per-user resolution would need a different fan-out shape
+          helperName: 'Techniker', // per-user resolution would need a different fan-out shape
           requestTitle: params.title,
           categoryName,
           urgencyName,
@@ -209,12 +213,18 @@ export function sendRequestCreatedNotifications(params: NotifyParams): void {
           requestUrl,
         },
       }).then(() => {
-        logger.info('Sent IT-Hilfe helper notifications', { requestId: params.requestId, helperCount: helperIds.length })
-      })
+        logger.info('Sent IT-Hilfe helper notifications', {
+          requestId: params.requestId,
+          helperCount: helperIds.length,
+        });
+      });
     })
-    .catch(err => {
-      logger.warn('Failed to fan-out IT-Hilfe helper notifications', { error: err, requestId: params.requestId })
-    })
+    .catch((err) => {
+      logger.warn('Failed to fan-out IT-Hilfe helper notifications', {
+        error: err,
+        requestId: params.requestId,
+      });
+    });
 }
 
 /**
@@ -222,10 +232,10 @@ export function sendRequestCreatedNotifications(params: NotifyParams): void {
  * Prefer typed helpers below when a rich email template exists.
  */
 export function sendItHilfeNotification(params: {
-  recipientIds: string[]
-  title: string
-  content: string
-  requestId: string
+  recipientIds: string[];
+  title: string;
+  content: string;
+  requestId: string;
 }): void {
   notifyUsers(params.recipientIds, {
     type: NOTIFICATION_TYPES.SYSTEM,
@@ -233,23 +243,27 @@ export function sendItHilfeNotification(params: {
     content: params.content,
     related_type: RELATED_TYPES.IT_HILFE,
     related_id: params.requestId,
-  }).catch(err => {
-    logger.warn('Failed to send IT-Hilfe lifecycle notification', { error: err, requestId: params.requestId })
-  })
+  }).catch((err) => {
+    logger.warn('Failed to send IT-Hilfe lifecycle notification', {
+      error: err,
+      requestId: params.requestId,
+    });
+  });
 }
 
 /** Requester: helper marked request complete — confirm + review (single email). */
 export function notifyRequestCompleted(params: {
-  recipientIds: string[]
-  requestId: string
-  requesterName: string
-  requestTitle: string
+  recipientIds: string[];
+  requestId: string;
+  requesterName: string;
+  requestTitle: string;
 }): void {
-  const requestUrl = `${APP_URL}/it-hilfe/${params.requestId}`
+  const requestUrl = `${APP_URL}/it-hilfe/${params.requestId}`;
   notifyUsers(params.recipientIds, {
     type: NOTIFICATION_TYPES.IT_HILFE_REQUEST_COMPLETED,
     title: 'Hilfe abgeschlossen - bitte bestätigen',
-    content: 'Die Hilfe wurde als abgeschlossen markiert. Bitte bestätige und gib eine Bewertung ab.',
+    content:
+      'Die Hilfe wurde als abgeschlossen markiert. Bitte bestätige und gib eine Bewertung ab.',
     related_type: RELATED_TYPES.IT_HILFE,
     related_id: params.requestId,
     metadata: {
@@ -257,19 +271,22 @@ export function notifyRequestCompleted(params: {
       requestTitle: params.requestTitle,
       requestUrl,
     },
-  }).catch(err => {
-    logger.warn('Failed to send IT-Hilfe request completed notification', { error: err, requestId: params.requestId })
-  })
+  }).catch((err) => {
+    logger.warn('Failed to send IT-Hilfe request completed notification', {
+      error: err,
+      requestId: params.requestId,
+    });
+  });
 }
 
 /** Helper: requester declined their offer (single email). */
 export function notifyOfferDeclined(params: {
-  recipientIds: string[]
-  requestId: string
-  helperName: string
-  requestTitle: string
+  recipientIds: string[];
+  requestId: string;
+  helperName: string;
+  requestTitle: string;
 }): void {
-  const requestUrl = `${APP_URL}/it-hilfe/${params.requestId}`
+  const requestUrl = `${APP_URL}/it-hilfe/${params.requestId}`;
   notifyUsers(params.recipientIds, {
     type: NOTIFICATION_TYPES.IT_HILFE_OFFER_REJECTED,
     title: 'Angebot abgelehnt',
@@ -281,21 +298,24 @@ export function notifyOfferDeclined(params: {
       requestTitle: params.requestTitle,
       requestUrl,
     },
-  }).catch(err => {
-    logger.warn('Failed to send IT-Hilfe offer declined notification', { error: err, requestId: params.requestId })
-  })
+  }).catch((err) => {
+    logger.warn('Failed to send IT-Hilfe offer declined notification', {
+      error: err,
+      requestId: params.requestId,
+    });
+  });
 }
 
 /** Helper: requester left a review (single email). */
 export function notifyReviewReceived(params: {
-  recipientIds: string[]
-  requestId: string
-  helperName: string
-  requestTitle: string
-  rating: number
-  reviewText: string
+  recipientIds: string[];
+  requestId: string;
+  helperName: string;
+  requestTitle: string;
+  rating: number;
+  reviewText: string;
 }): void {
-  const requestUrl = `${APP_URL}/it-hilfe/${params.requestId}`
+  const requestUrl = `${APP_URL}/it-hilfe/${params.requestId}`;
   notifyUsers(params.recipientIds, {
     type: NOTIFICATION_TYPES.IT_HILFE_REVIEW_RECEIVED,
     title: 'Du hast eine Bewertung erhalten',
@@ -309,7 +329,10 @@ export function notifyReviewReceived(params: {
       rating: String(params.rating),
       reviewText: params.reviewText,
     },
-  }).catch(err => {
-    logger.warn('Failed to send IT-Hilfe review received notification', { error: err, requestId: params.requestId })
-  })
+  }).catch((err) => {
+    logger.warn('Failed to send IT-Hilfe review received notification', {
+      error: err,
+      requestId: params.requestId,
+    });
+  });
 }

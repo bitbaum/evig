@@ -24,27 +24,17 @@
  */
 
 // Re-export main functions
-export { chat, getChatHistory, getUserSessions, deleteSession, clearUserHistory } from './chat'
-export type { ChatOptions, ChatResponse } from './chat'
+export { chat, getChatHistory, getUserSessions, deleteSession, clearUserHistory } from './chat';
+export type { ChatOptions, ChatResponse } from './chat';
 
-export {
-  ingestDocument,
-  ingestFile,
-  ingestDirectory,
-  getIngestionStats,
-} from './ingestion'
-export type { DocumentInput, IngestResult } from './ingestion'
+export { ingestDocument, ingestFile, ingestDirectory, getIngestionStats } from './ingestion';
+export type { DocumentInput, IngestResult } from './ingestion';
 
-export {
-  searchSimilar,
-  formatContext,
-  listDocuments,
-  deleteDocument,
-} from './retrieval'
-export type { RetrievalResult, RetrievalOptions } from './retrieval'
+export { searchSimilar, formatContext, listDocuments, deleteDocument } from './retrieval';
+export type { RetrievalResult, RetrievalOptions } from './retrieval';
 
-export { chunkText, chunkMarkdown, chunkCode, estimateTokens } from './chunking'
-export type { Chunk, ChunkOptions } from './chunking'
+export { chunkText, chunkMarkdown, chunkCode, estimateTokens } from './chunking';
+export type { Chunk, ChunkOptions } from './chunking';
 
 export {
   createProvider,
@@ -55,7 +45,7 @@ export {
   updateProviderSettings,
   setDefaultProvider,
   addUserProvider,
-} from './providers'
+} from './providers';
 export type {
   AIProvider,
   ProviderName,
@@ -65,4 +55,4 @@ export type {
   ChatCompletionResponse,
   EmbeddingOptions,
   EmbeddingResponse,
-} from './providers'
+} from './providers';

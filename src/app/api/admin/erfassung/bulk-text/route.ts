@@ -5,38 +5,38 @@
  * Accepts text with multiple products and returns structured product data array.
  */
 
-import { NextRequest } from 'next/server'
-import { withAdmin } from '@/lib/api/middleware'
-import { logger } from '@/lib/logger'
-import { apiSuccess, apiError } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { validateBody, BulkTextSchema } from '@/lib/schemas'
-import { extractMultipleProducts } from '@/lib/erfassung/bulk-extraction'
+import { NextRequest } from 'next/server';
+import { withAdmin } from '@/lib/api/middleware';
+import { logger } from '@/lib/logger';
+import { apiSuccess, apiError } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { validateBody, BulkTextSchema } from '@/lib/schemas';
+import { extractMultipleProducts } from '@/lib/erfassung/bulk-extraction';
 
 export const POST = withAdmin('products', async (request: NextRequest, session) => {
   try {
-    const raw = await request.json()
-    const validation = validateBody(BulkTextSchema, raw)
-    if (!validation.success) return validation.error
-    const { text } = validation.data
+    const raw = await request.json();
+    const validation = validateBody(BulkTextSchema, raw);
+    if (!validation.success) return validation.error;
+    const { text } = validation.data;
 
     logger.info('Bulk text erfassung started', {
       userId: session.user.id,
       textLength: text.length,
-    })
+    });
 
-    const products = await extractMultipleProducts(text, 'text')
+    const products = await extractMultipleProducts(text, 'text');
 
     logger.info('Bulk text erfassung complete', {
       userId: session.user.id,
       productCount: products.length,
-    })
+    });
 
     return apiSuccess({
       productCount: products.length,
       products,
-    })
+    });
   } catch (error) {
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
-})
+});

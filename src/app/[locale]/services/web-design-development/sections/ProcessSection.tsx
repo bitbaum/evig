@@ -1,27 +1,27 @@
-import Heading from '@/components/ui/Heading'
-import { getTranslations } from 'next-intl/server'
-import { Section } from '@/components/layout/Section'
+import Heading from '@/components/ui/Heading';
+import { getTranslations } from 'next-intl/server';
+import { Section } from '@/components/layout/Section';
 
-const STEP_NUMBERS = ['01', '02', '03', '04']
-const STEP_KEYS = ['discovery', 'planning', 'development', 'launch'] as const
+const STEP_NUMBERS = ['01', '02', '03', '04'];
+const STEP_KEYS = ['discovery', 'planning', 'development', 'launch'] as const;
 
 export async function ProcessSection() {
-  const t = await getTranslations('services.webDesign.process')
+  const t = await getTranslations('services.webDesign.process');
 
   const processSteps = STEP_KEYS.map((key, i) => ({
     step: STEP_NUMBERS[i],
     title: t(`steps.${key}.title`),
     description: t(`steps.${key}.description`),
-  }))
+  }));
 
   return (
     <Section density="default" tone="surface" contained={false}>
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-16">
-          <Heading level={2} className="mb-6">{t('title')}</Heading>
-          <p className="text-lg text-text-secondary">
-            {t('subtitle')}
-          </p>
+          <Heading level={2} className="mb-6">
+            {t('title')}
+          </Heading>
+          <p className="text-lg text-text-secondary">{t('subtitle')}</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {processSteps.map((phase, index) => (
@@ -29,12 +29,14 @@ export async function ProcessSection() {
               <div className="w-16 h-16 bg-action text-action-text rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4">
                 {phase.step}
               </div>
-              <Heading level={3} className="mb-3">{phase.title}</Heading>
+              <Heading level={3} className="mb-3">
+                {phase.title}
+              </Heading>
               <p className="text-text-secondary">{phase.description}</p>
             </div>
           ))}
         </div>
       </div>
     </Section>
-  )
+  );
 }

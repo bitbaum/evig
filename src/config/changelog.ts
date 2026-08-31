@@ -7,18 +7,18 @@
  */
 
 export interface LocalizedCopy {
-  de: string
-  en: string
+  de: string;
+  en: string;
 }
 
 export interface ChangelogRelease {
   /** Anchor id, e.g. "v0-1-0" */
-  id: string
-  version: string
+  id: string;
+  version: string;
   /** ISO date (YYYY-MM-DD) */
-  date: string
-  title: LocalizedCopy
-  changes: LocalizedCopy[]
+  date: string;
+  title: LocalizedCopy;
+  changes: LocalizedCopy[];
 }
 
 export const CHANGELOG_RELEASES: ChangelogRelease[] = [
@@ -269,4 +269,4 @@ export const CHANGELOG_RELEASES: ChangelogRelease[] = [
       },
     ],
   },
-]
+];

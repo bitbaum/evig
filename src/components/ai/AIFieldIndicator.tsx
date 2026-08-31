@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * AIFieldIndicator Component
@@ -9,16 +9,16 @@
  * - Click to show source input text
  */
 
-import { useState } from 'react'
-import { Mic, Type, Image, Sparkles, X, ExternalLink } from 'lucide-react'
-import type { AIFieldSource } from '@/types/erfassung'
-import { Button } from '@/components/ui/button'
-import { formatTime } from '@/lib/date-formats'
+import { useState } from 'react';
+import { Mic, Type, Image, Sparkles, X, ExternalLink } from 'lucide-react';
+import type { AIFieldSource } from '@/types/erfassung';
+import { Button } from '@/components/ui/button';
+import { formatTime } from '@/lib/date-formats';
 
 interface AIFieldIndicatorProps {
-  source: AIFieldSource
-  fieldName: string
-  className?: string
+  source: AIFieldSource;
+  fieldName: string;
+  className?: string;
 }
 
 const SOURCE_ICONS = {
@@ -26,47 +26,45 @@ const SOURCE_ICONS = {
   text: Type,
   image: Image,
   database: ExternalLink,
-}
+};
 
 const SOURCE_LABELS = {
   voice: 'Spracheingabe',
   text: 'Texteingabe',
   image: 'Bildanalyse',
   database: 'Datenbank',
-}
+};
 
 function getConfidenceColor(confidence: number): string {
-  if (confidence >= 0.85) return 'bg-action-muted text-action border-strong-muted'
-  if (confidence >= 0.7) return 'bg-warning-100 text-warning-700 border-warning-300 dark:bg-warning-900/30 dark:text-warning-200 dark:border-warning-700'
-  if (confidence >= 0.5) return 'bg-secondary-100 text-secondary-700 border-secondary-300 dark:bg-secondary-900/30 dark:text-secondary-300 dark:border-secondary-700'
-  return 'bg-error-100 text-error-700 border-error-300 dark:bg-error-900/30 dark:text-error-300 dark:border-error-700'
+  if (confidence >= 0.85) return 'bg-action-muted text-action border-strong-muted';
+  if (confidence >= 0.7)
+    return 'bg-warning-100 text-warning-700 border-warning-300 dark:bg-warning-900/30 dark:text-warning-200 dark:border-warning-700';
+  if (confidence >= 0.5)
+    return 'bg-secondary-100 text-secondary-700 border-secondary-300 dark:bg-secondary-900/30 dark:text-secondary-300 dark:border-secondary-700';
+  return 'bg-error-100 text-error-700 border-error-300 dark:bg-error-900/30 dark:text-error-300 dark:border-error-700';
 }
 
 function getConfidenceLabel(confidence: number): string {
-  if (confidence >= 0.85) return 'Hoch'
-  if (confidence >= 0.7) return 'Mittel'
-  if (confidence >= 0.5) return 'Niedrig'
-  return 'Unsicher'
+  if (confidence >= 0.85) return 'Hoch';
+  if (confidence >= 0.7) return 'Mittel';
+  if (confidence >= 0.5) return 'Niedrig';
+  return 'Unsicher';
 }
 
-export function AIFieldIndicator({
-  source,
-  fieldName,
-  className = '',
-}: AIFieldIndicatorProps) {
-  const [showDetails, setShowDetails] = useState(false)
+export function AIFieldIndicator({ source, fieldName, className = '' }: AIFieldIndicatorProps) {
+  const [showDetails, setShowDetails] = useState(false);
 
   // Only flag fields the AI genuinely GUESSED (low confidence). Confident
   // extractions get no chip — the filled value plus the highlighted border
   // already say "KI hat das ausgefüllt". This keeps the review screen pointing
   // at the one or two fields that actually need a human check (e.g. a condition
   // the text never stated) instead of tagging every field with a percentage.
-  if (source.confidence >= 0.7) return null
+  if (source.confidence >= 0.7) return null;
 
-  const Icon = SOURCE_ICONS[source.type]
-  const confidencePercent = Math.round(source.confidence * 100)
-  const colorClass = getConfidenceColor(source.confidence)
-  const confidenceLabel = getConfidenceLabel(source.confidence)
+  const Icon = SOURCE_ICONS[source.type];
+  const confidencePercent = Math.round(source.confidence * 100);
+  const colorClass = getConfidenceColor(source.confidence);
+  const confidenceLabel = getConfidenceLabel(source.confidence);
 
   return (
     <div className={`relative inline-flex items-center ${className}`}>
@@ -87,10 +85,7 @@ export function AIFieldIndicator({
       {showDetails && (
         <>
           {/* Backdrop */}
-          <div
-            className="fixed inset-0 z-40"
-            onClick={() => setShowDetails(false)}
-          />
+          <div className="fixed inset-0 z-40" onClick={() => setShowDetails(false)} />
 
           {/* Popover */}
           <div className="absolute left-0 top-full mt-1 z-50 w-72 bg-surface-base rounded-lg shadow-xs border p-3">
@@ -98,9 +93,7 @@ export function AIFieldIndicator({
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-action" />
-                <span className="font-medium text-text-primary text-sm">
-                  KI-Extraktion
-                </span>
+                <span className="font-medium text-text-primary text-sm">KI-Extraktion</span>
               </div>
               <Button
                 type="button"
@@ -145,9 +138,7 @@ export function AIFieldIndicator({
               {/* Source input */}
               {source.inputText && (
                 <div className="mt-2 pt-2 border-t border">
-                  <span className="text-text-secondary block mb-1">
-                    Eingabe:
-                  </span>
+                  <span className="text-text-secondary block mb-1">Eingabe:</span>
                   <div className="bg-surface-raised rounded-sm p-2 text-xs text-text-secondary max-h-20 overflow-y-auto">
                     &ldquo;{source.inputText}&rdquo;
                   </div>
@@ -191,7 +182,7 @@ export function AIFieldIndicator({
         </>
       )}
     </div>
-  )
+  );
 }
 
 /**
@@ -201,12 +192,12 @@ export function AIFieldBadge({
   source,
   className = '',
 }: {
-  source: AIFieldSource
-  className?: string
+  source: AIFieldSource;
+  className?: string;
 }) {
-  const Icon = SOURCE_ICONS[source.type]
-  const confidencePercent = Math.round(source.confidence * 100)
-  const colorClass = getConfidenceColor(source.confidence)
+  const Icon = SOURCE_ICONS[source.type];
+  const confidencePercent = Math.round(source.confidence * 100);
+  const colorClass = getConfidenceColor(source.confidence);
 
   return (
     <span
@@ -216,5 +207,5 @@ export function AIFieldBadge({
       <Sparkles className="w-2.5 h-2.5" />
       {confidencePercent}%
     </span>
-  )
+  );
 }

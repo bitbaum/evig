@@ -1,29 +1,18 @@
-'use client'
+'use client';
 
-import { Link } from '@/i18n/navigation'
-import {
-  Archive,
-  Loader2,
-  Recycle,
-  Save,
-  ShieldCheck,
-  Store,
-  Wrench,
-} from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
-import { ROUTES } from '@/config/routes'
-import {
-  CAPTURE_DESTINATIONS,
-  type CaptureDestination,
-} from '@/config/intake-workflow'
+import { Link } from '@/i18n/navigation';
+import { Archive, Loader2, Recycle, Save, ShieldCheck, Store, Wrench } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
+import { ROUTES } from '@/config/routes';
+import { CAPTURE_DESTINATIONS, type CaptureDestination } from '@/config/intake-workflow';
 
 interface Props {
-  isEditMode: boolean
-  isLoading: boolean
-  destination: CaptureDestination
-  canSubmit: boolean
-  onSubmit: (event: React.SyntheticEvent, action: 'draft' | 'erfassen' | 'publish') => void
+  isEditMode: boolean;
+  isLoading: boolean;
+  destination: CaptureDestination;
+  canSubmit: boolean;
+  onSubmit: (event: React.SyntheticEvent, action: 'draft' | 'erfassen' | 'publish') => void;
 }
 
 const DESTINATION_ICONS = {
@@ -32,7 +21,7 @@ const DESTINATION_ICONS = {
   [CAPTURE_DESTINATIONS.SHOP_UNTESTED]: Store,
   [CAPTURE_DESTINATIONS.PARTS]: Wrench,
   [CAPTURE_DESTINATIONS.RECYCLE]: Recycle,
-} as const
+} as const;
 
 /** One destination, one primary action. */
 export function ErfassungSubmitBar({
@@ -42,11 +31,11 @@ export function ErfassungSubmitBar({
   canSubmit,
   onSubmit,
 }: Props) {
-  const t = useTranslations('components.erfassung.submitBar')
-  const DestinationIcon = DESTINATION_ICONS[destination]
+  const t = useTranslations('components.erfassung.submitBar');
+  const DestinationIcon = DESTINATION_ICONS[destination];
 
   const submit = (event: React.SyntheticEvent) =>
-    onSubmit(event, destination === CAPTURE_DESTINATIONS.SHOP_UNTESTED ? 'publish' : 'erfassen')
+    onSubmit(event, destination === CAPTURE_DESTINATIONS.SHOP_UNTESTED ? 'publish' : 'erfassen');
 
   const content = isLoading ? (
     <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
@@ -54,11 +43,13 @@ export function ErfassungSubmitBar({
     <Save className="h-5 w-5" aria-hidden="true" />
   ) : (
     <DestinationIcon className="h-5 w-5" aria-hidden="true" />
-  )
+  );
 
   const label = isEditMode
-    ? isLoading ? t('saving') : t('saveChanges')
-    : t(`destinationActions.${destination}`)
+    ? isLoading
+      ? t('saving')
+      : t('saveChanges')
+    : t(`destinationActions.${destination}`);
 
   return (
     <>
@@ -86,11 +77,11 @@ export function ErfassungSubmitBar({
           type="button"
           onClick={(event) => {
             if (isEditMode) {
-              event.preventDefault()
-              document.querySelector<HTMLFormElement>('form[data-product-form]')?.requestSubmit()
-              return
+              event.preventDefault();
+              document.querySelector<HTMLFormElement>('form[data-product-form]')?.requestSubmit();
+              return;
             }
-            submit(event)
+            submit(event);
           }}
           disabled={isLoading || !canSubmit}
           variant="primary"
@@ -101,5 +92,5 @@ export function ErfassungSubmitBar({
         </Button>
       </div>
     </>
-  )
+  );
 }

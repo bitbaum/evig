@@ -1,14 +1,14 @@
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { Section } from '@/components/layout/Section'
-import { Link } from '@/i18n/navigation'
-import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
-import { ORG } from '@/config/org'
-import { safeJsonLd } from '@/lib/seo/json-ld'
-import { ROUTES } from '@/config/routes'
-import { JOURNEY_ENTRYPOINTS } from '@/config/customer-journeys'
-import { EVIG_DIVISIONS } from '@/config/divisions'
-import { EVIG_PILLARS } from '@/config/pillars'
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { Section } from '@/components/layout/Section';
+import { Link } from '@/i18n/navigation';
+import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
+import { ORG } from '@/config/org';
+import { safeJsonLd } from '@/lib/seo/json-ld';
+import { ROUTES } from '@/config/routes';
+import { JOURNEY_ENTRYPOINTS } from '@/config/customer-journeys';
+import { EVIG_DIVISIONS } from '@/config/divisions';
+import { EVIG_PILLARS } from '@/config/pillars';
 
 const OG_LOCALE_MAP: Record<string, string> = {
   de: 'de_CH',
@@ -18,11 +18,15 @@ const OG_LOCALE_MAP: Record<string, string> = {
   es: 'es_ES',
   ja: 'ja_JP',
   ko: 'ko_KR',
-}
+};
 
-export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'home' })
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'home' });
 
   return {
     // The layout already appends "| evig" via its title template, and
@@ -37,7 +41,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     // keywords. One comma-separated string per locale, split here: the same
     // shape `jsonld.areaServed` already uses, and it avoids the array-in-
     // messages fragility (the DE fallback replaces arrays wholesale).
-    keywords: t('meta.keywords').split(',').map((s: string) => s.trim()),
+    keywords: t('meta.keywords')
+      .split(',')
+      .map((s: string) => s.trim()),
     openGraph: {
       title: `${ORG.name} – ${t('hero.title')}`,
       description: t('meta.description'),
@@ -51,20 +57,40 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
       title: `${ORG.name} – ${t('hero.title')}`,
       description: t('meta.description'),
     },
-  }
+  };
 }
 
 export default async function Home() {
-  const t = await getTranslations('home')
-  const tDivisions = await getTranslations('divisions')
-  const tPillars = await getTranslations('pillars')
+  const t = await getTranslations('home');
+  const tDivisions = await getTranslations('divisions');
+  const tPillars = await getTranslations('pillars');
 
   const communityCards = [
-    { title: t('community.use.title'),        body: t('community.use.desc'),        href: ROUTES.public.shop,           ctaLabel: t('community.use.cta') },
-    { title: t('community.volunteer.title'),  body: t('community.volunteer.desc'),  href: '/get-involved/volunteer',    ctaLabel: t('community.volunteer.cta') },
-    { title: t('community.donate.title'),     body: t('community.donate.desc'),     href: ROUTES.public.donate,         ctaLabel: t('community.donate.cta') },
-    { title: t('community.membership.title'), body: t('community.membership.desc'), href: ROUTES.public.mitgliedWerden, ctaLabel: t('community.membership.cta') },
-  ]
+    {
+      title: t('community.use.title'),
+      body: t('community.use.desc'),
+      href: ROUTES.public.shop,
+      ctaLabel: t('community.use.cta'),
+    },
+    {
+      title: t('community.volunteer.title'),
+      body: t('community.volunteer.desc'),
+      href: '/get-involved/volunteer',
+      ctaLabel: t('community.volunteer.cta'),
+    },
+    {
+      title: t('community.donate.title'),
+      body: t('community.donate.desc'),
+      href: ROUTES.public.donate,
+      ctaLabel: t('community.donate.cta'),
+    },
+    {
+      title: t('community.membership.title'),
+      body: t('community.membership.desc'),
+      href: ROUTES.public.mitgliedWerden,
+      ctaLabel: t('community.membership.cta'),
+    },
+  ];
 
   return (
     <div className="bg-canvas">
@@ -72,22 +98,45 @@ export default async function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: safeJsonLd({
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "name": ORG.name,
-            "description": t('jsonld.description'),
-            "url": ORG.website,
-            "areaServed": t('jsonld.areaServed').split(',').map((s: string) => s.trim()),
-            "hasOfferCatalog": {
-              "@type": "OfferCatalog",
-              "name": "IT Services",
-              "itemListElement": [
-                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": t('jsonld.service1Name'), "description": t('jsonld.service1Desc') } },
-                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": t('jsonld.service2Name'), "description": t('jsonld.service2Desc') } },
-                { "@type": "Offer", "itemOffered": { "@type": "Service", "name": t('jsonld.service3Name'), "description": t('jsonld.service3Desc') } }
-              ]
-            }
-          })
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            name: ORG.name,
+            description: t('jsonld.description'),
+            url: ORG.website,
+            areaServed: t('jsonld.areaServed')
+              .split(',')
+              .map((s: string) => s.trim()),
+            hasOfferCatalog: {
+              '@type': 'OfferCatalog',
+              name: 'IT Services',
+              itemListElement: [
+                {
+                  '@type': 'Offer',
+                  itemOffered: {
+                    '@type': 'Service',
+                    name: t('jsonld.service1Name'),
+                    description: t('jsonld.service1Desc'),
+                  },
+                },
+                {
+                  '@type': 'Offer',
+                  itemOffered: {
+                    '@type': 'Service',
+                    name: t('jsonld.service2Name'),
+                    description: t('jsonld.service2Desc'),
+                  },
+                },
+                {
+                  '@type': 'Offer',
+                  itemOffered: {
+                    '@type': 'Service',
+                    name: t('jsonld.service3Name'),
+                    description: t('jsonld.service3Desc'),
+                  },
+                },
+              ],
+            },
+          }),
         }}
       />
 
@@ -97,8 +146,11 @@ export default async function Home() {
           <div className="ui-public-hero-badge">{t('hero.positioning')}</div>
 
           <h1 className="ui-public-hero-title">
-            {t('hero.titlePrimary')}<br />
-            <span className="ui-public-hero-title-fade text-text-tertiary">{t('hero.titleSecondary')}</span>
+            {t('hero.titlePrimary')}
+            <br />
+            <span className="ui-public-hero-title-fade text-text-tertiary">
+              {t('hero.titleSecondary')}
+            </span>
           </h1>
 
           <p className="ui-public-hero-lede">{t('hero.lede')}</p>
@@ -154,7 +206,12 @@ export default async function Home() {
           is the consequence, not the reason — and it answered a question
           nobody arriving here is asking. These five say what evig can do for
           the person reading, and each one links to where they do it. */}
-      <Section density="spacious" tone="tinted" contained={false} className="border-y border-subtle">
+      <Section
+        density="spacious"
+        tone="tinted"
+        contained={false}
+        className="border-y border-subtle"
+      >
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl">
             <Eyebrow as="div">{tPillars('eyebrow')}</Eyebrow>
@@ -167,7 +224,7 @@ export default async function Home() {
 
           <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {EVIG_PILLARS.map((pillar) => {
-              const Icon = pillar.icon
+              const Icon = pillar.icon;
               return (
                 <Link key={pillar.id} href={pillar.href} className="ui-public-card group">
                   <Icon className="h-6 w-6 text-action" aria-hidden />
@@ -181,12 +238,11 @@ export default async function Home() {
                     {tPillars(`items.${pillar.id}.cta` as never)} →
                   </span>
                 </Link>
-              )
+              );
             })}
           </div>
         </div>
       </Section>
-
 
       {/* ── Community entry points ─────────────────────────────────── */}
       <Section density="spacious" contained={false}>
@@ -226,5 +282,5 @@ export default async function Home() {
         </div>
       </Section>
     </div>
-  )
+  );
 }

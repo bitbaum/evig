@@ -1,22 +1,18 @@
-import { NextRequest } from 'next/server'
-import { withAuth, ValidSession } from '@/lib/api/middleware'
-import { db } from '@/db'
-import {
-  donations,
-  inventoryItems,
-  aiExtractedProducts,
-} from '@/db/schema'
-import { eq, desc, inArray } from 'drizzle-orm'
-import { apiError, apiSuccess } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
+import { NextRequest } from 'next/server';
+import { withAuth, ValidSession } from '@/lib/api/middleware';
+import { db } from '@/db';
+import { donations, inventoryItems, aiExtractedProducts } from '@/db/schema';
+import { eq, desc, inArray } from 'drizzle-orm';
+import { apiError, apiSuccess } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
 import {
   DONATION_TYPES,
   DONATION_JOURNEY_STAGES,
   DONATION_JOURNEY_STAGE_ORDER,
   type DonationJourneyStage,
-} from '@/config/donations'
-import { INTAKE_TIERS } from '@/config/intake-checklist'
-import { MARKETPLACE_STATUS, INVENTORY_ITEM_STATUS } from '@/config/marketplace-status'
+} from '@/config/donations';
+import { INTAKE_TIERS } from '@/config/intake-checklist';
+import { MARKETPLACE_STATUS, INVENTORY_ITEM_STATUS } from '@/config/marketplace-status';
 
 /**
  * GET /api/user/donations
@@ -27,37 +23,37 @@ import { MARKETPLACE_STATUS, INVENTORY_ITEM_STATUS } from '@/config/marketplace-
  */
 
 interface JourneyItem {
-  stage: DonationJourneyStage
-  listing_url: string | null
-  sold_at: string | null
+  stage: DonationJourneyStage;
+  listing_url: string | null;
+  sold_at: string | null;
 }
 
 interface Journey {
-  total_items: number
-  items: JourneyItem[]
+  total_items: number;
+  items: JourneyItem[];
 }
 
 function deriveStage(row: {
-  intakeTier: string | null
-  checklistComplete: boolean | null
-  inventoryStatus: string | null
-  listingStatus: string | null
+  intakeTier: string | null;
+  checklistComplete: boolean | null;
+  inventoryStatus: string | null;
+  listingStatus: string | null;
 }): DonationJourneyStage {
   // Rehomed wins over everything — actual hardware reached someone.
   // inventory_items.status flips to 'sold' when checkout completes — that's the
   // canonical signal. The "listed" signal is the item's own marketplace_status.
   if (row.inventoryStatus === INVENTORY_ITEM_STATUS.SOLD) {
-    return DONATION_JOURNEY_STAGES.REHOMED
+    return DONATION_JOURNEY_STAGES.REHOMED;
   }
   if (row.listingStatus === MARKETPLACE_STATUS.PUBLISHED) {
-    return DONATION_JOURNEY_STAGES.LISTED
+    return DONATION_JOURNEY_STAGES.LISTED;
   }
   if (row.checklistComplete) {
-    if (row.intakeTier === INTAKE_TIERS.PARTS) return DONATION_JOURNEY_STAGES.PARTS
-    if (row.intakeTier === INTAKE_TIERS.RECYCLE) return DONATION_JOURNEY_STAGES.RECYCLED
-    return DONATION_JOURNEY_STAGES.REFURBISHED
+    if (row.intakeTier === INTAKE_TIERS.PARTS) return DONATION_JOURNEY_STAGES.PARTS;
+    if (row.intakeTier === INTAKE_TIERS.RECYCLE) return DONATION_JOURNEY_STAGES.RECYCLED;
+    return DONATION_JOURNEY_STAGES.REFURBISHED;
   }
-  return DONATION_JOURNEY_STAGES.RECEIVED
+  return DONATION_JOURNEY_STAGES.RECEIVED;
 }
 
 export const GET = withAuth(async (_request: NextRequest, session: ValidSession) => {
@@ -82,13 +78,13 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
       })
       .from(donations)
       .where(eq(donations.userId, session.user.id))
-      .orderBy(desc(donations.createdAt))
+      .orderBy(desc(donations.createdAt));
 
     const deviceDonationIds = rows
-      .filter(r => r.donation_type === DONATION_TYPES.DEVICE)
-      .map(r => r.id)
+      .filter((r) => r.donation_type === DONATION_TYPES.DEVICE)
+      .map((r) => r.id);
 
-    const journeysByDonation = new Map<string, Journey>()
+    const journeysByDonation = new Map<string, Journey>();
 
     if (deviceDonationIds.length > 0) {
       // One row per inventory item linked to these donations. The marketplace
@@ -108,23 +104,21 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
         })
         .from(inventoryItems)
         .leftJoin(aiExtractedProducts, eq(aiExtractedProducts.id, inventoryItems.aiProductId))
-        .where(inArray(inventoryItems.sourceDonationId, deviceDonationIds))
+        .where(inArray(inventoryItems.sourceDonationId, deviceDonationIds));
 
       // Collapse to one record per inventory item, taking the highest-stage listing.
-      const byInventory = new Map<string, JourneyItem & { donationId: string }>()
+      const byInventory = new Map<string, JourneyItem & { donationId: string }>();
       for (const r of linked) {
-        if (!r.donationId || !r.inventoryId) continue
+        if (!r.donationId || !r.inventoryId) continue;
         const stage = deriveStage({
           intakeTier: r.intakeTier,
           checklistComplete: r.checklistComplete,
           inventoryStatus: r.inventoryStatus,
           listingStatus: r.listingStatus,
-        })
+        });
         const listingUrl =
-          r.listingStatus === MARKETPLACE_STATUS.PUBLISHED && r.itemUuid
-            ? '/marketplace'
-            : null
-        const existing = byInventory.get(r.inventoryId)
+          r.listingStatus === MARKETPLACE_STATUS.PUBLISHED && r.itemUuid ? '/marketplace' : null;
+        const existing = byInventory.get(r.inventoryId);
         if (
           !existing ||
           DONATION_JOURNEY_STAGE_ORDER[stage] > DONATION_JOURNEY_STAGE_ORDER[existing.stage]
@@ -134,34 +128,34 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
             stage,
             listing_url: listingUrl,
             sold_at: stage === DONATION_JOURNEY_STAGES.REHOMED ? r.inventoryUpdatedAt : null,
-          })
+          });
         }
       }
 
       for (const item of byInventory.values()) {
-        const existing = journeysByDonation.get(item.donationId)
+        const existing = journeysByDonation.get(item.donationId);
         const journeyItem: JourneyItem = {
           stage: item.stage,
           listing_url: item.listing_url,
           sold_at: item.sold_at,
-        }
+        };
         if (existing) {
-          existing.items.push(journeyItem)
-          existing.total_items += 1
+          existing.items.push(journeyItem);
+          existing.total_items += 1;
         } else {
-          journeysByDonation.set(item.donationId, { total_items: 1, items: [journeyItem] })
+          journeysByDonation.set(item.donationId, { total_items: 1, items: [journeyItem] });
         }
       }
     }
 
-    const enriched = rows.map(r => {
-      if (r.donation_type !== DONATION_TYPES.DEVICE) return r
-      const journey = journeysByDonation.get(r.id) ?? { total_items: 0, items: [] }
-      return { ...r, journey }
-    })
+    const enriched = rows.map((r) => {
+      if (r.donation_type !== DONATION_TYPES.DEVICE) return r;
+      const journey = journeysByDonation.get(r.id) ?? { total_items: 0, items: [] };
+      return { ...r, journey };
+    });
 
-    return apiSuccess(enriched)
+    return apiSuccess(enriched);
   } catch (error) {
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
-})
+});

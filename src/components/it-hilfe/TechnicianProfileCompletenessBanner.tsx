@@ -1,33 +1,36 @@
-'use client'
+'use client';
 
-import { Link } from '@/i18n/navigation'
-import { AlertCircle } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import type { TechnicianProfileGap } from '@/lib/domain/technician-profile'
-import { IT_HILFE } from '@/config/it-hilfe'
+import { Link } from '@/i18n/navigation';
+import { AlertCircle } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import type { TechnicianProfileGap } from '@/lib/domain/technician-profile';
+import { IT_HILFE } from '@/config/it-hilfe';
 
 interface Props {
-  gaps: TechnicianProfileGap[]
+  gaps: TechnicianProfileGap[];
   /** When set, gap labels link to anchors on the profile edit page. */
-  linkToProfileSections?: boolean
+  linkToProfileSections?: boolean;
 }
 
-export function TechnicianProfileCompletenessBanner({ gaps, linkToProfileSections = false }: Props) {
-  const t = useTranslations('profil.techniker.completeness')
+export function TechnicianProfileCompletenessBanner({
+  gaps,
+  linkToProfileSections = false,
+}: Props) {
+  const t = useTranslations('profil.techniker.completeness');
 
-  if (gaps.length === 0) return null
+  if (gaps.length === 0) return null;
 
   const gapLabels: Record<TechnicianProfileGap, string> = {
     skills: t('gapSkills'),
     canton: t('gapCanton'),
     location: t('gapLocation'),
-  }
+  };
 
   const gapHref: Record<TechnicianProfileGap, string> = {
     skills: `${IT_HILFE.routes.register}#skills`,
     canton: `${IT_HILFE.routes.register}#location`,
     location: `${IT_HILFE.routes.register}#location`,
-  }
+  };
 
   return (
     <div
@@ -35,7 +38,10 @@ export function TechnicianProfileCompletenessBanner({ gaps, linkToProfileSection
       role="status"
     >
       <div className="flex gap-3">
-        <AlertCircle className="h-5 w-5 shrink-0 text-warning-600 dark:text-warning-400" aria-hidden="true" />
+        <AlertCircle
+          className="h-5 w-5 shrink-0 text-warning-600 dark:text-warning-400"
+          aria-hidden="true"
+        />
         <div>
           <p className="font-medium text-text-primary">{t('title')}</p>
           <p className="mt-1 text-sm text-text-secondary">{t('description')}</p>
@@ -57,5 +63,5 @@ export function TechnicianProfileCompletenessBanner({ gaps, linkToProfileSection
         </div>
       </div>
     </div>
-  )
+  );
 }

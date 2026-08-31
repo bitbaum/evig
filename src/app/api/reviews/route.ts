@@ -1,28 +1,38 @@
-import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
-import { withAuth, ValidSession } from '@/lib/api/middleware'
-import { db } from '@/db'
-import { reviews, reviewResponses, reviewVotes, reviewAttachments } from '@/db/schema/reviews'
-import { users } from '@/db/schema/auth'
-import { repairerProfiles } from '@/db/schema/services'
-import { listings } from '@/db/schema/marketplace'
-import { eq, and, sql, asc, desc } from 'drizzle-orm'
-import { apiError, apiSuccess, apiUnauthorized, apiBadRequest, apiNotFound, apiForbidden , hasMoreItems} from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { REVIEW_TARGET_TYPES } from '@/config/database'
-import { REVIEW_STATUS } from '@/config/review-status'
-import { logger } from '@/lib/logger'
-import { validateBody, validateQuery, CreateReviewSchema, GetReviewsQuerySchema } from '@/lib/schemas'
+import { NextRequest } from 'next/server';
+import { auth } from '@/auth';
+import { withAuth, ValidSession } from '@/lib/api/middleware';
+import { db } from '@/db';
+import { reviews, reviewResponses, reviewVotes, reviewAttachments } from '@/db/schema/reviews';
+import { users } from '@/db/schema/auth';
+import { repairerProfiles } from '@/db/schema/services';
+import { listings } from '@/db/schema/marketplace';
+import { eq, and, sql, asc, desc } from 'drizzle-orm';
 import {
-  validateReviewTarget,
-  notifyRepairerOfReview,
-} from '@/lib/reviews/review-service'
-import { createReview, findDuplicateReview } from '@/lib/reviews/create-review'
-import { rateLimiters } from '@/lib/security/rate-limit'
+  apiError,
+  apiSuccess,
+  apiUnauthorized,
+  apiBadRequest,
+  apiNotFound,
+  apiForbidden,
+  hasMoreItems,
+} from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { REVIEW_TARGET_TYPES } from '@/config/database';
+import { REVIEW_STATUS } from '@/config/review-status';
+import { logger } from '@/lib/logger';
+import {
+  validateBody,
+  validateQuery,
+  CreateReviewSchema,
+  GetReviewsQuerySchema,
+} from '@/lib/schemas';
+import { validateReviewTarget, notifyRepairerOfReview } from '@/lib/reviews/review-service';
+import { createReview, findDuplicateReview } from '@/lib/reviews/create-review';
+import { rateLimiters } from '@/lib/security/rate-limit';
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url)
+    const { searchParams } = new URL(request.url);
     const queryValidation = validateQuery(GetReviewsQuerySchema, {
       targetType: searchParams.get('targetType'),
       targetId: searchParams.get('targetId'),
@@ -31,37 +41,39 @@ export async function GET(request: NextRequest) {
       offset: searchParams.get('offset'),
       sortBy: searchParams.get('sortBy'),
       sortOrder: searchParams.get('sortOrder'),
-    })
-    if (!queryValidation.success) return queryValidation.error
-    const { targetType, targetId, status, limit, offset, sortBy, sortOrder } = queryValidation.data
+    });
+    if (!queryValidation.success) return queryValidation.error;
+    const { targetType, targetId, status, limit, offset, sortBy, sortOrder } = queryValidation.data;
 
     // Fetch session (optional — needed for voter_id and admin checks)
-    const session = await auth()
-    const voterId = session?.user?.id ?? null
+    const session = await auth();
+    const voterId = session?.user?.id ?? null;
 
     // Non-published reviews require admin
     if (status !== REVIEW_STATUS.PUBLISHED) {
-      if (!session?.user?.id) return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED)
-      if (!session.user.isStaff) return apiForbidden(ERROR_MESSAGES.ADMIN_REQUIRED)
+      if (!session?.user?.id) return apiUnauthorized(ERROR_MESSAGES.UNAUTHORIZED);
+      if (!session.user.isStaff) return apiForbidden(ERROR_MESSAGES.ADMIN_REQUIRED);
     }
 
     // Build sort clause
-    const validSortFields = ['created_at', 'overall_rating', 'helpful_votes'] as const
-    const sortField = validSortFields.includes(sortBy as typeof validSortFields[number]) ? sortBy : 'created_at'
+    const validSortFields = ['created_at', 'overall_rating', 'helpful_votes'] as const;
+    const sortField = validSortFields.includes(sortBy as (typeof validSortFields)[number])
+      ? sortBy
+      : 'created_at';
 
-    const sortColumnMap: Record<string, typeof reviews.createdAt | typeof reviews.overallRating | typeof reviews.helpfulVotes> = {
+    const sortColumnMap: Record<
+      string,
+      typeof reviews.createdAt | typeof reviews.overallRating | typeof reviews.helpfulVotes
+    > = {
       created_at: reviews.createdAt,
       overall_rating: reviews.overallRating,
       helpful_votes: reviews.helpfulVotes,
-    }
-    const sortColumn = sortColumnMap[sortField] ?? reviews.createdAt
-    const orderByClause = sortOrder === 'asc' ? asc(sortColumn) : desc(sortColumn)
+    };
+    const sortColumn = sortColumnMap[sortField] ?? reviews.createdAt;
+    const orderByClause = sortOrder === 'asc' ? asc(sortColumn) : desc(sortColumn);
 
     // Aliased users table for responder name
-    const responder = db
-      .select({ id: users.id, name: users.name })
-      .from(users)
-      .as('responder')
+    const responder = db.select({ id: users.id, name: users.name }).from(users).as('responder');
 
     // Subquery for published response
     const publishedResponses = db
@@ -74,7 +86,7 @@ export async function GET(request: NextRequest) {
       })
       .from(reviewResponses)
       .where(eq(reviewResponses.status, REVIEW_STATUS.PUBLISHED))
-      .as('rr')
+      .as('rr');
 
     const rows = await db
       .select({
@@ -113,7 +125,15 @@ export async function GET(request: NextRequest) {
         responseCreatedAt: publishedResponses.createdAt,
         responderName: responder.name,
         // Attachments subquery
-        attachments: sql<{ id: string; original_filename: string; file_path: string; mime_type: string; attachment_type: string }[]>`(
+        attachments: sql<
+          {
+            id: string;
+            original_filename: string;
+            file_path: string;
+            mime_type: string;
+            attachment_type: string;
+          }[]
+        >`(
           SELECT COALESCE(json_agg(
             json_build_object(
               'id', ra.id,
@@ -133,15 +153,15 @@ export async function GET(request: NextRequest) {
         repairerProfiles,
         and(
           eq(reviews.targetType, REVIEW_TARGET_TYPES.REPAIRER),
-          eq(reviews.targetId, repairerProfiles.id)
-        )
+          eq(reviews.targetId, repairerProfiles.id),
+        ),
       )
       .leftJoin(
         listings,
         and(
           sql`${reviews.targetType} = 'listing'`,
-          sql`${reviews.targetId}::text = ${listings.id}::text`
-        )
+          sql`${reviews.targetId}::text = ${listings.id}::text`,
+        ),
       )
       .leftJoin(publishedResponses, eq(reviews.id, publishedResponses.reviewId))
       .leftJoin(responder, eq(publishedResponses.responderId, responder.id))
@@ -149,28 +169,28 @@ export async function GET(request: NextRequest) {
         reviewVotes,
         and(
           eq(reviews.id, reviewVotes.reviewId),
-          voterId ? eq(reviewVotes.voterId, voterId) : sql`false`
-        )
+          voterId ? eq(reviewVotes.voterId, voterId) : sql`false`,
+        ),
       )
       .where(
         and(
           eq(reviews.targetType, targetType),
           eq(reviews.targetId, targetId),
-          eq(reviews.status, status)
-        )
+          eq(reviews.status, status),
+        ),
       )
       .orderBy(orderByClause)
       .limit(limit)
-      .offset(offset)
+      .offset(offset);
 
-    const total = rows[0]?._total ?? 0
+    const total = rows[0]?._total ?? 0;
     // pg returns numeric avg as a string; null when there are no rows.
     const averageRating =
-      total > 0 && rows[0]?._avgRating != null ? Number(rows[0]._avgRating) : null
+      total > 0 && rows[0]?._avgRating != null ? Number(rows[0]._avgRating) : null;
 
-    const isAdmin = !!session?.user?.isStaff
+    const isAdmin = !!session?.user?.isStaff;
 
-    const reviewList = rows.map(row => ({
+    const reviewList = rows.map((row) => ({
       id: row.id,
       reviewerId: row.reviewerId,
       reviewerName: row.reviewerName,
@@ -194,53 +214,81 @@ export async function GET(request: NextRequest) {
       userHasVoted: row.userHasVoted,
       userVote: row.userVote,
       status: row.status,
-      attachments: ((row.attachments || []) as { id: string; original_filename: string; file_path: string; mime_type: string; attachment_type: string }[]).map(att => ({
+      attachments: (
+        (row.attachments || []) as {
+          id: string;
+          original_filename: string;
+          file_path: string;
+          mime_type: string;
+          attachment_type: string;
+        }[]
+      ).map((att) => ({
         id: att.id,
         filename: att.original_filename,
         filePath: att.file_path,
         mimeType: att.mime_type,
         attachmentType: att.attachment_type,
       })),
-      response: row.responseId ? {
-        id: row.responseId,
-        content: row.responseContent,
-        createdAt: row.responseCreatedAt,
-        responderName: row.responderName,
-      } : null,
+      response: row.responseId
+        ? {
+            id: row.responseId,
+            content: row.responseContent,
+            createdAt: row.responseCreatedAt,
+            responderName: row.responderName,
+          }
+        : null,
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
-    }))
+    }));
 
-    logger.info('Fetched reviews', { targetType, targetId, status, count: reviewList.length })
+    logger.info('Fetched reviews', { targetType, targetId, status, count: reviewList.length });
 
     return apiSuccess({
       reviews: reviewList,
       total,
       stats: { average_rating: averageRating, review_count: total },
       pagination: { limit, offset, hasMore: hasMoreItems(offset, limit, total) },
-      filters: { targetType, targetId, status, sortBy: sortField, sortOrder: sortOrder === 'asc' ? 'ASC' : 'DESC' },
-    })
+      filters: {
+        targetType,
+        targetId,
+        status,
+        sortBy: sortField,
+        sortOrder: sortOrder === 'asc' ? 'ASC' : 'DESC',
+      },
+    });
   } catch (error) {
-    logger.error('Error fetching reviews', { error })
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    logger.error('Error fetching reviews', { error });
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
 }
 
 export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
     if (!rateLimiters.reviewCreate(session.user.id + ':review')) {
-      return apiError(new Error('Rate limit'), 'Zu viele Bewertungen. Bitte versuche es später erneut.', 429)
+      return apiError(
+        new Error('Rate limit'),
+        'Zu viele Bewertungen. Bitte versuche es später erneut.',
+        429,
+      );
     }
 
-    const body = await request.json()
-    const validation = validateBody(CreateReviewSchema, body)
-    if (!validation.success) return validation.error
+    const body = await request.json();
+    const validation = validateBody(CreateReviewSchema, body);
+    if (!validation.success) return validation.error;
 
     const {
-      targetType, targetId, bookingId, overallRating,
-      communicationRating, professionalismRating, qualityRating,
-      timelinessRating, valueRating, title, content,
-    } = validation.data
+      targetType,
+      targetId,
+      bookingId,
+      overallRating,
+      communicationRating,
+      professionalismRating,
+      qualityRating,
+      timelinessRating,
+      valueRating,
+      title,
+      content,
+    } = validation.data;
 
     // IT-Hilfe reviews go exclusively through the request's confirm-review
     // endpoint, which verifies the reviewer IS the requester and the request is
@@ -248,19 +296,19 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
     // (rating-integrity hole — reviews feed the public aggregate).
     if (targetType === REVIEW_TARGET_TYPES.IT_HILFE) {
       return apiBadRequest(
-        'IT-Hilfe-Bewertungen erfolgen über die Abschluss-Bestätigung der Anfrage.'
-      )
+        'IT-Hilfe-Bewertungen erfolgen über die Abschluss-Bestätigung der Anfrage.',
+      );
     }
 
     // Duplicate check
-    const existingId = await findDuplicateReview(session.user.id, targetType, targetId, bookingId)
+    const existingId = await findDuplicateReview(session.user.id, targetType, targetId, bookingId);
     if (existingId) {
-      return apiBadRequest('Du hast bereits eine Bewertung für dieses Ziel abgegeben')
+      return apiBadRequest('Du hast bereits eine Bewertung für dieses Ziel abgegeben');
     }
 
     // Verify target exists
-    if (!await validateReviewTarget(targetType, targetId)) {
-      return apiNotFound('Das Bewertungsziel wurde nicht gefunden')
+    if (!(await validateReviewTarget(targetType, targetId))) {
+      return apiNotFound('Das Bewertungsziel wurde nicht gefunden');
     }
 
     // Insert review + update target rating
@@ -278,7 +326,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       title: title || null,
       content,
       isVerifiedPurchase: !!bookingId,
-    })
+    });
 
     // Repairer-specific notification
     if (targetType === REVIEW_TARGET_TYPES.REPAIRER) {
@@ -287,17 +335,21 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         reviewId,
         session.user.name || 'Kunde',
         overallRating,
-        content
-      )
+        content,
+      );
     }
 
     logger.info('Review created', {
-      reviewId, reviewerId: session.user.id, targetType, targetId, overallRating,
-    })
+      reviewId,
+      reviewerId: session.user.id,
+      targetType,
+      targetId,
+      overallRating,
+    });
 
-    return apiSuccess({ message: 'Bewertung erfolgreich erstellt', reviewId }, 201)
+    return apiSuccess({ message: 'Bewertung erfolgreich erstellt', reviewId }, 201);
   } catch (error) {
-    logger.error('Error creating review', { error })
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    logger.error('Error creating review', { error });
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
-})
+});

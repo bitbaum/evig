@@ -1,6 +1,6 @@
-import { formatRelativeTime } from '@/lib/utils'
-import type { ActivityAction } from '@/lib/activity'
-import { getTeamActivity } from '@/lib/dashboard/team-activity'
+import { formatRelativeTime } from '@/lib/utils';
+import type { ActivityAction } from '@/lib/activity';
+import { getTeamActivity } from '@/lib/dashboard/team-activity';
 
 // Human-readable labels for each action type. Typed as
 // Record<ActivityAction, string> so adding a new variant to the
@@ -24,12 +24,12 @@ const ACTION_LABELS: Record<ActivityAction, string> = {
   updated_zeit_pensum: 'passte Pensum/Ferienanspruch an',
   reopened_timecard: 'öffnete Zeitkarte wieder',
   recorded_membership_payment: 'erfasste Mitgliederbeitrag',
-}
+};
 
 export async function TeamActivityFeed() {
-  const rows = await getTeamActivity()
+  const rows = await getTeamActivity();
 
-  if (rows.length === 0) return null
+  if (rows.length === 0) return null;
 
   return (
     <div>
@@ -38,30 +38,29 @@ export async function TeamActivityFeed() {
       </p>
       <ul className="space-y-2" role="list">
         {rows.map((row, i) => {
-          const actorName = row.actor_name?.split(' ')[0] ?? 'Jemand'
+          const actorName = row.actor_name?.split(' ')[0] ?? 'Jemand';
           // row.action comes from the DB column (typed as string) and
           // may be a legacy / unknown action code; fall back to the raw
           // value when the labels map has no entry. The cast is safe
           // because the lookup uses ?? to handle the undefined case.
-          const actionLabel = ACTION_LABELS[row.action as ActivityAction] ?? row.action
+          const actionLabel = ACTION_LABELS[row.action as ActivityAction] ?? row.action;
           return (
             <li key={i} className="flex items-start gap-2 text-sm text-text-secondary">
-              <span className="w-1.5 h-1.5 rounded-full bg-surface-overlay mt-2 shrink-0" aria-hidden="true" />
+              <span
+                className="w-1.5 h-1.5 rounded-full bg-surface-overlay mt-2 shrink-0"
+                aria-hidden="true"
+              />
               <span className="leading-snug">
-                <strong className="text-text-primary font-medium">{actorName}</strong>
-                {' '}{actionLabel}
-                {row.subject_label && (
-                  <> &ldquo;{row.subject_label}&rdquo;</>
-                )}
-                {' '}
+                <strong className="text-text-primary font-medium">{actorName}</strong> {actionLabel}
+                {row.subject_label && <> &ldquo;{row.subject_label}&rdquo;</>}{' '}
                 <span className="text-text-muted text-xs">
                   {formatRelativeTime(row.created_at)}
                 </span>
               </span>
             </li>
-          )
+          );
         })}
       </ul>
     </div>
-  )
+  );
 }

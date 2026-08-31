@@ -15,7 +15,13 @@
 
 import { NextRequest } from 'next/server';
 import { logger } from '@/lib/logger';
-import { apiSuccess, apiError, apiBadRequest, apiUnauthorized, apiNotFound } from '@/lib/api/helpers';
+import {
+  apiSuccess,
+  apiError,
+  apiBadRequest,
+  apiUnauthorized,
+  apiNotFound,
+} from '@/lib/api/helpers';
 import {
   lookupPaymentByReferenceId,
   handleMarketplacePayment,
@@ -32,7 +38,9 @@ const PAYREXX_WEBHOOK_SECRET = process.env[PAYREXX_ENV.WEBHOOK_SECRET];
 async function verifyPayrexxSignature(rawBody: string, signature: string | null): Promise<boolean> {
   // Dev mock mode: only skip in local development when Payrexx is explicitly not configured
   if (process.env.NODE_ENV === 'development' && !isPayrexxConfigured()) {
-    logger.warn('Payrexx webhook: dev mode — skipping signature verification (no Payrexx instance configured)');
+    logger.warn(
+      'Payrexx webhook: dev mode — skipping signature verification (no Payrexx instance configured)',
+    );
     return true;
   }
 
@@ -48,10 +56,10 @@ async function verifyPayrexxSignature(rawBody: string, signature: string | null)
     encoder.encode(PAYREXX_WEBHOOK_SECRET),
     { name: 'HMAC', hash: 'SHA-256' },
     false,
-    ['sign']
+    ['sign'],
   );
   const mac = await crypto.subtle.sign('HMAC', key, encoder.encode(rawBody));
-  const computed = Array.from(new Uint8Array(mac), b => b.toString(16).padStart(2, '0')).join('');
+  const computed = Array.from(new Uint8Array(mac), (b) => b.toString(16).padStart(2, '0')).join('');
 
   // Constant-time comparison
   if (computed.length !== signature.length) return false;
@@ -78,14 +86,20 @@ export async function POST(request: NextRequest) {
     // `X-Webhook-Signature` header. Header lookup is case-insensitive.
     const signature = request.headers.get('x-webhook-signature');
 
-    if (!await verifyPayrexxSignature(rawBody, signature)) {
+    if (!(await verifyPayrexxSignature(rawBody, signature))) {
       // Log presence/length only — never the raw signature bytes
       // (defense-in-depth: rejected payloads can include attacker-supplied data).
       logger.warn('Payrexx webhook: invalid signature', { signaturePresent: signature !== null });
       return apiUnauthorized('Invalid signature');
     }
 
-    const body = (() => { try { return JSON.parse(rawBody); } catch { return null; } })();
+    const body = (() => {
+      try {
+        return JSON.parse(rawBody);
+      } catch {
+        return null;
+      }
+    })();
     if (!body) {
       return apiBadRequest('Invalid body');
     }
@@ -98,7 +112,10 @@ export async function POST(request: NextRequest) {
 
     if (!referenceId || !status) {
       // Log known fields only — rawBody can include partial transaction data.
-      logger.warn('Payrexx webhook: missing referenceId or status', { status, hasReferenceId: !!referenceId });
+      logger.warn('Payrexx webhook: missing referenceId or status', {
+        status,
+        hasReferenceId: !!referenceId,
+      });
       return apiBadRequest('Missing referenceId or status');
     }
 

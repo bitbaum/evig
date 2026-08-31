@@ -1,34 +1,34 @@
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
+import { useTranslations } from 'next-intl';
 import {
   DELIVERY_OPTIONS,
   PAYMENT_MODES,
   MARKETPLACE_LIMITS,
   SPEC_FILTER_STATE_MAP,
   getSpecFiltersForCategory,
-} from '@/config/marketplace'
-import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions'
-import { useMarketplaceListings } from '@/hooks/useMarketplaceListings'
-import { Button } from '@/components/ui/button'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { Input } from '@/components/ui/input'
-import { FilterPill } from '@/components/marketplace/FilterPill'
-import { MarketplaceBrowseFacets } from '@/components/marketplace/MarketplaceBrowseFacets'
+} from '@/config/marketplace';
+import { ZUSTAND_OPTIONS } from '@/config/erfassung/conditions';
+import { useMarketplaceListings } from '@/hooks/useMarketplaceListings';
+import { Button } from '@/components/ui/button';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { Input } from '@/components/ui/input';
+import { FilterPill } from '@/components/marketplace/FilterPill';
+import { MarketplaceBrowseFacets } from '@/components/marketplace/MarketplaceBrowseFacets';
 
-export type FiltersObj = ReturnType<typeof useMarketplaceListings>['filters']
+export type FiltersObj = ReturnType<typeof useMarketplaceListings>['filters'];
 
 interface FilterSidebarProps {
-  filters: FiltersObj
-  resetOffset: () => void
-  clearFilters: () => void
-  hasActiveFilters: boolean
+  filters: FiltersObj;
+  resetOffset: () => void;
+  clearFilters: () => void;
+  hasActiveFilters: boolean;
   /**
    * Include the primary browse facets (source + category) at the top. True for
    * the desktop rail (the single filter surface); false in the mobile drawer,
    * where the top strip already carries them.
    */
-  showBrowse?: boolean
+  showBrowse?: boolean;
 }
 
 /**
@@ -42,7 +42,7 @@ function FilterGroup({ label, children }: { label: string; children: React.React
       <Eyebrow className="mb-3 text-text-muted">{label}</Eyebrow>
       {children}
     </div>
-  )
+  );
 }
 
 /**
@@ -56,11 +56,11 @@ function PillGroup({
   onSelect,
   ariaLabel,
 }: {
-  label: string
-  options: readonly { value: string; label: string }[]
-  value: string
-  onSelect: (v: string) => void
-  ariaLabel: string
+  label: string;
+  options: readonly { value: string; label: string }[];
+  value: string;
+  onSelect: (v: string) => void;
+  ariaLabel: string;
 }) {
   return (
     <FilterGroup label={label}>
@@ -76,7 +76,7 @@ function PillGroup({
         ))}
       </div>
     </FilterGroup>
-  )
+  );
 }
 
 export function MarketplaceFilterSidebar({
@@ -86,33 +86,36 @@ export function MarketplaceFilterSidebar({
   hasActiveFilters,
   showBrowse = false,
 }: FilterSidebarProps) {
-  const t = useTranslations('marketplace')
-  const specFilters = getSpecFiltersForCategory(filters.category)
+  const t = useTranslations('marketplace');
+  const specFilters = getSpecFiltersForCategory(filters.category);
 
   // Filter state → spec render maps, driven by SPEC_FILTER_STATE_MAP (SSOT)
   const specValues: Record<string, string> = {
-    specRamMin:     filters.specRamMin,
+    specRamMin: filters.specRamMin,
     specStorageMin: filters.specStorageMin,
     specDisplayMin: filters.specDisplayMin,
-  }
+  };
   const specSetters: Record<string, (v: string) => void> = {
-    specRamMin:     filters.setSpecRamMin,
+    specRamMin: filters.setSpecRamMin,
     specStorageMin: filters.setSpecStorageMin,
     specDisplayMin: filters.setSpecDisplayMin,
-  }
+  };
 
   const conditionOptions = [
     { value: '', label: t('filters.allConditions') },
-    ...ZUSTAND_OPTIONS.map((opt) => ({ value: opt.value, label: t(`conditions.${opt.value}` as never) })),
-  ]
+    ...ZUSTAND_OPTIONS.map((opt) => ({
+      value: opt.value,
+      label: t(`conditions.${opt.value}` as never),
+    })),
+  ];
   const deliveryOptions = [
     { value: '', label: t('filters.allDelivery') },
     ...DELIVERY_OPTIONS.map((opt) => ({ value: opt, label: t(`delivery.${opt}` as never) })),
-  ]
+  ];
   const paymentOptions = [
     { value: '', label: t('filters.allPayment') },
     ...PAYMENT_MODES.map((opt) => ({ value: opt, label: t(`payment.${opt}` as never) })),
-  ]
+  ];
 
   return (
     <div>
@@ -147,7 +150,10 @@ export function MarketplaceFilterSidebar({
           label={t('filters.condition')}
           options={conditionOptions}
           value={filters.condition}
-          onSelect={(v) => { filters.setCondition(v); resetOffset() }}
+          onSelect={(v) => {
+            filters.setCondition(v);
+            resetOffset();
+          }}
           ariaLabel={t('filters.condition')}
         />
 
@@ -155,7 +161,10 @@ export function MarketplaceFilterSidebar({
         <FilterGroup label={t('filters.priceRange')}>
           <FilterPill
             active={filters.gratisOnly}
-            onClick={() => { filters.setGratisOnly(!filters.gratisOnly); resetOffset() }}
+            onClick={() => {
+              filters.setGratisOnly(!filters.gratisOnly);
+              resetOffset();
+            }}
           >
             {t('filters.gratisOnly')}
           </FilterPill>
@@ -167,13 +176,17 @@ export function MarketplaceFilterSidebar({
               step="1"
               placeholder={t('filters.priceMin')}
               value={filters.priceMin}
-              onChange={(e) => { filters.setPriceMin(e.target.value) }}
+              onChange={(e) => {
+                filters.setPriceMin(e.target.value);
+              }}
               onBlur={resetOffset}
               aria-label={t('filters.priceMinAriaLabel')}
               aria-invalid={!!filters.priceError}
               className={`w-full ${filters.priceError ? 'border-error-400' : ''}`}
             />
-            <span className="text-text-muted" aria-hidden="true">–</span>
+            <span className="text-text-muted" aria-hidden="true">
+              –
+            </span>
             <Input
               type="number"
               min="0"
@@ -181,7 +194,9 @@ export function MarketplaceFilterSidebar({
               step="1"
               placeholder={t('filters.priceMax')}
               value={filters.priceMax}
-              onChange={(e) => { filters.setPriceMax(e.target.value) }}
+              onChange={(e) => {
+                filters.setPriceMax(e.target.value);
+              }}
               onBlur={resetOffset}
               aria-label={t('filters.priceMaxAriaLabel')}
               aria-invalid={!!filters.priceError}
@@ -198,7 +213,10 @@ export function MarketplaceFilterSidebar({
           label={t('filters.delivery')}
           options={deliveryOptions}
           value={filters.delivery}
-          onSelect={(v) => { filters.setDelivery(v); resetOffset() }}
+          onSelect={(v) => {
+            filters.setDelivery(v);
+            resetOffset();
+          }}
           ariaLabel={t('filters.delivery')}
         />
 
@@ -207,7 +225,10 @@ export function MarketplaceFilterSidebar({
           label={t('filters.payment')}
           options={paymentOptions}
           value={filters.payment}
-          onSelect={(v) => { filters.setPayment(v); resetOffset() }}
+          onSelect={(v) => {
+            filters.setPayment(v);
+            resetOffset();
+          }}
           ariaLabel={t('filters.payment')}
         />
 
@@ -215,34 +236,41 @@ export function MarketplaceFilterSidebar({
         <FilterGroup label={t('filters.qualityTitle')}>
           <FilterPill
             active={filters.verifiedOnly}
-            onClick={() => { filters.setVerifiedOnly(!filters.verifiedOnly); resetOffset() }}
+            onClick={() => {
+              filters.setVerifiedOnly(!filters.verifiedOnly);
+              resetOffset();
+            }}
           >
             {t('filters.verifiedOnly')}
           </FilterPill>
         </FilterGroup>
 
         {/* Technical (spec) filters — only when the category exposes specs */}
-        {specFilters.length > 0 && specFilters.map((spec) => {
-          const filterKey = SPEC_FILTER_STATE_MAP[spec.meiliField]
-          if (!filterKey) return null
-          const filterValue = specValues[filterKey] ?? ''
-          const setFilter = specSetters[filterKey]
-          if (!setFilter) return null
-          return (
-            <PillGroup
-              key={spec.key}
-              label={spec.label}
-              options={[
-                { value: '', label: t('filters.all') },
-                ...spec.options.map((opt) => ({ value: String(opt.value), label: opt.label })),
-              ]}
-              value={filterValue}
-              onSelect={(v) => { setFilter(v); resetOffset() }}
-              ariaLabel={spec.label}
-            />
-          )
-        })}
+        {specFilters.length > 0 &&
+          specFilters.map((spec) => {
+            const filterKey = SPEC_FILTER_STATE_MAP[spec.meiliField];
+            if (!filterKey) return null;
+            const filterValue = specValues[filterKey] ?? '';
+            const setFilter = specSetters[filterKey];
+            if (!setFilter) return null;
+            return (
+              <PillGroup
+                key={spec.key}
+                label={spec.label}
+                options={[
+                  { value: '', label: t('filters.all') },
+                  ...spec.options.map((opt) => ({ value: String(opt.value), label: opt.label })),
+                ]}
+                value={filterValue}
+                onSelect={(v) => {
+                  setFilter(v);
+                  resetOffset();
+                }}
+                ariaLabel={spec.label}
+              />
+            );
+          })}
       </div>
     </div>
-  )
+  );
 }

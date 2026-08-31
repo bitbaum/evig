@@ -1,9 +1,14 @@
 import { z } from 'zod';
 import { REVIEW_TARGET_TYPES } from '@/config/database';
-import { REVIEW_STATUS, REVIEW_STATUS_VALUES, REVIEW_MODERATION_VALUES } from '@/config/review-status';
+import {
+  REVIEW_STATUS,
+  REVIEW_STATUS_VALUES,
+  REVIEW_MODERATION_VALUES,
+} from '@/config/review-status';
 
 // Rating validation (1-5 stars)
-const ratingSchema = z.number()
+const ratingSchema = z
+  .number()
   .int('Bewertung muss eine ganze Zahl sein')
   .min(1, 'Bewertung muss mindestens 1 sein')
   .max(5, 'Bewertung darf maximal 5 sein');
@@ -24,11 +29,9 @@ export const CreateReviewSchema = z.object({
   qualityRating: optionalRatingSchema,
   timelinessRating: optionalRatingSchema,
   valueRating: optionalRatingSchema,
-  title: z.string()
-    .max(200, 'Titel darf maximal 200 Zeichen lang sein')
-    .optional()
-    .nullable(),
-  content: z.string()
+  title: z.string().max(200, 'Titel darf maximal 200 Zeichen lang sein').optional().nullable(),
+  content: z
+    .string()
     .min(10, 'Bewertungstext muss mindestens 10 Zeichen lang sein')
     .max(5000, 'Bewertungstext darf maximal 5000 Zeichen lang sein'),
 });
@@ -39,12 +42,11 @@ export type CreateReviewInput = z.infer<typeof CreateReviewSchema>;
 export const GetReviewsQuerySchema = z.object({
   targetType: z.enum(validTargetTypes),
   targetId: z.string().uuid('Ungültige targetId'),
-  status: z.enum(REVIEW_STATUS_VALUES)
-    .optional()
-    .default(REVIEW_STATUS.PUBLISHED),
+  status: z.enum(REVIEW_STATUS_VALUES).optional().default(REVIEW_STATUS.PUBLISHED),
   limit: z.coerce.number().int().min(1).max(100).optional().default(10),
   offset: z.coerce.number().int().min(0).optional().default(0),
-  sortBy: z.enum(['created_at', 'overall_rating', 'helpful_votes'])
+  sortBy: z
+    .enum(['created_at', 'overall_rating', 'helpful_votes'])
     .optional()
     .default('created_at'),
   sortOrder: z.enum(['asc', 'desc']).optional().default('desc'),
@@ -60,11 +62,9 @@ export const UpdateReviewSchema = z.object({
   qualityRating: optionalRatingSchema,
   timelinessRating: optionalRatingSchema,
   valueRating: optionalRatingSchema,
-  title: z.string()
-    .max(200, 'Titel darf maximal 200 Zeichen lang sein')
-    .optional()
-    .nullable(),
-  content: z.string()
+  title: z.string().max(200, 'Titel darf maximal 200 Zeichen lang sein').optional().nullable(),
+  content: z
+    .string()
     .min(10, 'Bewertungstext muss mindestens 10 Zeichen lang sein')
     .max(5000, 'Bewertungstext darf maximal 5000 Zeichen lang sein')
     .optional(),
@@ -81,7 +81,8 @@ export type ReviewVoteInput = z.infer<typeof ReviewVoteSchema>;
 
 // Review response schema
 export const ReviewResponseSchema = z.object({
-  content: z.string()
+  content: z
+    .string()
     .min(1, 'Antwort-Text ist erforderlich')
     .max(2000, 'Antwort darf maximal 2000 Zeichen lang sein'),
 });
@@ -91,7 +92,8 @@ export type ReviewResponseInput = z.infer<typeof ReviewResponseSchema>;
 // Moderate review schema
 export const ModerateReviewSchema = z.object({
   status: z.enum(REVIEW_MODERATION_VALUES),
-  moderationNote: z.string()
+  moderationNote: z
+    .string()
     .max(500, 'Moderationsnotiz darf maximal 500 Zeichen lang sein')
     .optional(),
 });

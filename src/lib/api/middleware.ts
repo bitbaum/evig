@@ -9,7 +9,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@/auth';
 import { apiUnauthorized, apiForbidden } from './helpers';
-import { canAccessSection, toStaffUser, ADMIN_SECTIONS, type AdminSection } from '@/lib/permissions';
+import {
+  canAccessSection,
+  toStaffUser,
+  ADMIN_SECTIONS,
+  type AdminSection,
+} from '@/lib/permissions';
 import { ERROR_MESSAGES } from '@/config/error-messages';
 
 export type AuthSession = Awaited<ReturnType<typeof auth>>;
@@ -17,16 +22,16 @@ export type AuthSession = Awaited<ReturnType<typeof auth>>;
 // Explicit ValidSession type with guaranteed user property
 export interface ValidSession {
   user: {
-    id: string
-    email: string
-    name?: string | null
-    image?: string | null
-    role?: string
-    isStaff: boolean
-    staffPermissions: string[]
-    isSuperAdmin: boolean
-  }
-  expires: string
+    id: string;
+    email: string;
+    name?: string | null;
+    image?: string | null;
+    role?: string;
+    isStaff: boolean;
+    staffPermissions: string[];
+    isSuperAdmin: boolean;
+  };
+  expires: string;
 }
 
 /**
@@ -49,12 +54,12 @@ export function withAuth<TParams = Record<string, never>>(
   handler: (
     request: NextRequest,
     session: ValidSession,
-    context?: { params?: TParams }
-  ) => Promise<NextResponse>
+    context?: { params?: TParams },
+  ) => Promise<NextResponse>,
 ): RouteHandler<TParams> {
   const routeHandler = async (
     request: NextRequest,
-    context?: { params?: Promise<TParams> }
+    context?: { params?: Promise<TParams> },
   ): Promise<NextResponse> => {
     const session = await auth();
 
@@ -64,9 +69,7 @@ export function withAuth<TParams = Record<string, never>>(
 
     const validSession = session as unknown as ValidSession;
 
-    const resolvedContext = context?.params
-      ? { params: await context.params }
-      : undefined;
+    const resolvedContext = context?.params ? { params: await context.params } : undefined;
 
     return handler(request, validSession, resolvedContext);
   };
@@ -88,31 +91,31 @@ export function withAuth<TParams = Record<string, never>>(
 type AdminHandler<TParams> = (
   request: NextRequest,
   session: ValidSession,
-  context?: { params?: TParams }
+  context?: { params?: TParams },
 ) => Promise<NextResponse>;
 
 // Overload: withAdmin(handler)
 export function withAdmin<TParams = Record<string, never>>(
-  handler: AdminHandler<TParams>
+  handler: AdminHandler<TParams>,
 ): RouteHandler<TParams>;
 
 // Overload: withAdmin(section, handler)
 export function withAdmin<TParams = Record<string, never>>(
   section: AdminSection,
-  handler: AdminHandler<TParams>
+  handler: AdminHandler<TParams>,
 ): RouteHandler<TParams>;
 
 // Implementation
 export function withAdmin<TParams = Record<string, never>>(
   sectionOrHandler: AdminSection | AdminHandler<TParams>,
-  maybeHandler?: AdminHandler<TParams>
+  maybeHandler?: AdminHandler<TParams>,
 ): RouteHandler<TParams> {
   const section = typeof sectionOrHandler === 'string' ? sectionOrHandler : undefined;
   const handler = typeof sectionOrHandler === 'function' ? sectionOrHandler : maybeHandler!;
 
   const routeHandler = async (
     request: NextRequest,
-    context?: { params?: Promise<TParams> }
+    context?: { params?: Promise<TParams> },
   ): Promise<NextResponse> => {
     const session = await auth();
 
@@ -134,9 +137,7 @@ export function withAdmin<TParams = Record<string, never>>(
       }
     }
 
-    const resolvedContext = context?.params
-      ? { params: await context.params }
-      : undefined;
+    const resolvedContext = context?.params ? { params: await context.params } : undefined;
 
     return handler(request, validSession, resolvedContext);
   };

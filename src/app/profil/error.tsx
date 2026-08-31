@@ -1,22 +1,22 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
-import Link from 'next/link'
-import { AlertCircle, ArrowLeft } from 'lucide-react'
-import { logger } from '@/lib/logger'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
+import { useEffect } from 'react';
+import Link from 'next/link';
+import { AlertCircle, ArrowLeft } from 'lucide-react';
+import { logger } from '@/lib/logger';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
 
 export default function ProfilError({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
   useEffect(() => {
-    logger.error('Profil error', { error, digest: error.digest })
-  }, [error])
+    logger.error('Profil error', { error, digest: error.digest });
+  }, [error]);
 
   return (
     <div className="min-h-screen bg-surface-raised flex items-center justify-center">
@@ -42,5 +42,5 @@ export default function ProfilError({
         </div>
       </div>
     </div>
-  )
+  );
 }

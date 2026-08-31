@@ -1,10 +1,10 @@
-import type { EmailContent } from '../types'
-import { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createTextFooter } from './base-styles'
-import { ORG } from '@/config/org'
-import { escapeHtml } from '@/lib/utils/escape-html'
+import type { EmailContent } from '../types';
+import { BASE_STYLES, COPYRIGHT_TEXT, AUTO_GENERATED_TEXT, createTextFooter } from './base-styles';
+import { ORG } from '@/config/org';
+import { escapeHtml } from '@/lib/utils/escape-html';
 
 export const referralInvitation = (inviterName: string, referralUrl: string): EmailContent => {
-  const name = escapeHtml(inviterName)
+  const name = escapeHtml(inviterName);
   return {
     subject: `${name} denkt, du passt zu ${ORG.name}`,
     html: `
@@ -62,8 +62,8 @@ ${referralUrl}
 Dieser Rabatt ist 6 Monate gültig.
 ${createTextFooter()}
     `.trim(),
-  }
-}
+  };
+};
 
 export const referralCouponReceived = (
   recipientName: string,
@@ -71,8 +71,8 @@ export const referralCouponReceived = (
   amountChf: number,
   type: 'welcome' | 'reward',
 ): EmailContent => {
-  const name = escapeHtml(recipientName)
-  const isWelcome = type === 'welcome'
+  const name = escapeHtml(recipientName);
+  const isWelcome = type === 'welcome';
 
   return {
     subject: isWelcome
@@ -99,9 +99,10 @@ export const referralCouponReceived = (
           </div>
           <div class="content">
             <h2>Hallo ${name},</h2>
-            <p>${isWelcome
-              ? `Schön, dass du da bist! Als Dankeschön für deine Registrierung über eine persönliche Einladung erhältst du:`
-              : `Deine Einladung hat funktioniert — jemand hat sich registriert. Als Dankeschön:`
+            <p>${
+              isWelcome
+                ? `Schön, dass du da bist! Als Dankeschön für deine Registrierung über eine persönliche Einladung erhältst du:`
+                : `Deine Einladung hat funktioniert — jemand hat sich registriert. Als Dankeschön:`
             }</p>
 
             <div class="coupon">
@@ -133,5 +134,5 @@ Gültig: 6 Monate
 Gib den Code beim Checkout im Shop ein.
 ${createTextFooter()}
     `.trim(),
-  }
-}
+  };
+};

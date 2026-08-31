@@ -1,15 +1,13 @@
-import { db } from '@/db'
-import { listings, listingImages, users, sellerProfiles, userProfiles } from '@/db/schema'
-import { eq, and } from 'drizzle-orm'
-import { LISTING_STATUS } from '@/config/marketplace'
-import type { ListingForCheckout } from '@/hooks/useCheckout'
+import { db } from '@/db';
+import { listings, listingImages, users, sellerProfiles, userProfiles } from '@/db/schema';
+import { eq, and } from 'drizzle-orm';
+import { LISTING_STATUS } from '@/config/marketplace';
+import type { ListingForCheckout } from '@/hooks/useCheckout';
 
 /**
  * Server-side listing fetch for checkout — one round trip, no client waterfall.
  */
-export async function getListingForCheckout(
-  listingId: string,
-): Promise<ListingForCheckout | null> {
+export async function getListingForCheckout(listingId: string): Promise<ListingForCheckout | null> {
   const [row] = await db
     .select({
       id: listings.id,
@@ -30,17 +28,15 @@ export async function getListingForCheckout(
     .leftJoin(sellerProfiles, eq(listings.sellerId, sellerProfiles.userId))
     .leftJoin(userProfiles, eq(listings.sellerId, userProfiles.userId))
     .where(and(eq(listings.id, listingId), eq(listings.status, LISTING_STATUS.ACTIVE)))
-    .limit(1)
+    .limit(1);
 
-  if (!row) return null
+  if (!row) return null;
 
   const [primaryImage] = await db
     .select({ url: listingImages.url })
     .from(listingImages)
-    .where(
-      and(eq(listingImages.listingId, listingId), eq(listingImages.isPrimary, true)),
-    )
-    .limit(1)
+    .where(and(eq(listingImages.listingId, listingId), eq(listingImages.isPrimary, true)))
+    .limit(1);
 
   return {
     id: row.id,
@@ -54,5 +50,5 @@ export async function getListingForCheckout(
     seller_name: row.seller_display_name || row.seller_name || 'Verkäufer',
     seller_id: row.seller_id,
     is_revampit: Boolean(row.is_revampit),
-  }
+  };
 }

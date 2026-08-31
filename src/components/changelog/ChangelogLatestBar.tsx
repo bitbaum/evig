@@ -1,10 +1,10 @@
 interface ChangelogLatestBarProps {
-  latestLabel: string
-  version: string
-  dateIso: string
-  dateShort: string
-  commandLabel: string
-  command: string
+  latestLabel: string;
+  version: string;
+  dateIso: string;
+  dateShort: string;
+  commandLabel: string;
+  command: string;
 }
 
 export function ChangelogLatestBar({
@@ -34,5 +34,5 @@ export function ChangelogLatestBar({
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useSwrFetch } from '@/lib/api/swr';
-import { adminInteractive } from '@/lib/admin-ui'
+import { adminInteractive } from '@/lib/admin-ui';
 import { Pencil, Trash2, Check, X } from 'lucide-react';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import Heading from '@/components/admin/AdminHeading';
@@ -136,12 +136,14 @@ export default function DiscussionThread({
       acc[pos] = comments.filter((c) => c.position === pos);
       return acc;
     },
-    {} as Record<CommentPosition, Comment[]>
+    {} as Record<CommentPosition, Comment[]>,
   );
 
   return (
     <div className="rounded-lg bg-surface-base p-6 shadow-xs">
-      <Heading level={2} className="mb-4 text-lg font-semibold text-text-primary">Diskussion</Heading>
+      <Heading level={2} className="mb-4 text-lg font-semibold text-text-primary">
+        Diskussion
+      </Heading>
 
       {loading ? (
         <p className="text-sm text-text-tertiary">Laden...</p>
@@ -176,12 +178,8 @@ export default function DiscussionThread({
                           <div className="flex items-center gap-2 text-xs text-text-tertiary">
                             <span>{c.user.email}</span>
                             <span>&middot;</span>
-                            <span>
-                              {new Date(c.created_at).toLocaleString('de-CH')}
-                            </span>
-                            {c.is_edited && (
-                              <span className="italic">(bearbeitet)</span>
-                            )}
+                            <span>{new Date(c.created_at).toLocaleString('de-CH')}</span>
+                            {c.is_edited && <span className="italic">(bearbeitet)</span>}
                           </div>
                           {isOwn && !readOnly && !isEditing && (
                             <div className="flex items-center gap-1">
@@ -250,9 +248,7 @@ export default function DiscussionThread({
       {/* New Comment Form */}
       {!readOnly && (
         <form onSubmit={handleSubmit} className="mt-4 border-t pt-4">
-          {error && (
-            <div className="mb-2 text-sm text-error-600">{error}</div>
-          )}
+          {error && <div className="mb-2 text-sm text-error-600">{error}</div>}
           <div className="mb-2 flex gap-2">
             {COMMENT_POSITIONS.map((pos) => {
               const conf = COMMENT_POSITION_CONFIG[pos];

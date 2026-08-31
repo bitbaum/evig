@@ -5,29 +5,29 @@
  * Non-editable by admins to maintain visual consistency.
  */
 
-import type { ServiceCategory } from '@/config/database'
+import type { ServiceCategory } from '@/config/database';
 
 /**
  * Category style configuration
  */
 export interface CategoryStyle {
   /** Primary color for accents and buttons */
-  primary: string
+  primary: string;
   /** Light background color */
-  bgLight: string
+  bgLight: string;
   /** Dark background for dark mode */
-  bgDark: string
+  bgDark: string;
   /** Text color on primary background */
-  textOnPrimary: string
+  textOnPrimary: string;
   /** Gradient for hero sections */
-  gradient: string
+  gradient: string;
   /** Badge/tag colors */
   badge: {
-    bg: string
-    text: string
-    bgDark: string
-    textDark: string
-  }
+    bg: string;
+    text: string;
+    bgDark: string;
+    textDark: string;
+  };
 }
 
 /**
@@ -113,23 +113,23 @@ export const CATEGORY_STYLES: Record<ServiceCategory, CategoryStyle> = {
       textDark: 'dark:text-neutral-300',
     },
   },
-}
+};
 
 /**
  * Get category style
  * Returns general style as fallback
  */
 export function getCategoryStyle(category: string | null): CategoryStyle {
-  if (!category) return CATEGORY_STYLES.general
-  return CATEGORY_STYLES[category as ServiceCategory] ?? CATEGORY_STYLES.general
+  if (!category) return CATEGORY_STYLES.general;
+  return CATEGORY_STYLES[category as ServiceCategory] ?? CATEGORY_STYLES.general;
 }
 
 /**
  * Get badge class names for a category
  */
 export function getCategoryBadgeClasses(category: string | null): string {
-  const style = getCategoryStyle(category)
-  return `${style.badge.bg} ${style.badge.text} ${style.badge.bgDark} ${style.badge.textDark}`
+  const style = getCategoryStyle(category);
+  return `${style.badge.bg} ${style.badge.text} ${style.badge.bgDark} ${style.badge.textDark}`;
 }
 
 /**
@@ -142,12 +142,12 @@ export const SERVICE_CATEGORY_LABELS: Record<ServiceCategory, string> = {
   software: 'Software',
   web: 'Web',
   general: 'Allgemein',
-}
+};
 
 /**
  * Get category label
  */
 export function getCategoryLabel(category: string | null): string {
-  if (!category) return 'Allgemein'
-  return SERVICE_CATEGORY_LABELS[category as ServiceCategory] ?? category
+  if (!category) return 'Allgemein';
+  return SERVICE_CATEGORY_LABELS[category as ServiceCategory] ?? category;
 }

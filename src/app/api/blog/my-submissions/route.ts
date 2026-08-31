@@ -6,57 +6,54 @@
  * so submitters can track status, feedback, and next steps.
  */
 
-import { NextRequest } from 'next/server'
-import { withAuth, ValidSession } from '@/lib/api/middleware'
-import { db } from '@/db'
-import { blogSubmissions, blogPosts } from '@/db/schema'
-import { eq, desc } from 'drizzle-orm'
-import { apiSuccess, apiError } from '@/lib/api/helpers'
-import { logger } from '@/lib/logger'
-import {
-  APPROVAL_STATUS,
-  getApprovalStatusLabel,
-} from '@/config/approval-status'
+import { NextRequest } from 'next/server';
+import { withAuth, ValidSession } from '@/lib/api/middleware';
+import { db } from '@/db';
+import { blogSubmissions, blogPosts } from '@/db/schema';
+import { eq, desc } from 'drizzle-orm';
+import { apiSuccess, apiError } from '@/lib/api/helpers';
+import { logger } from '@/lib/logger';
+import { APPROVAL_STATUS, getApprovalStatusLabel } from '@/config/approval-status';
 
 interface MySubmissionRow {
-  id: string
-  title: string
-  slug: string | null
-  status: string
-  statusLabel: string
-  submissionType: string
-  reviewNotes: string | null
-  rejectionReason: string | null
-  adminFeedback: string | null
-  nextAction: string | null
-  publishedPostId: string | null
-  publishedPostSlug: string | null
-  publishedAt: string | null
-  submittedAt: string | null
-  createdAt: string | null
-  updatedAt: string | null
+  id: string;
+  title: string;
+  slug: string | null;
+  status: string;
+  statusLabel: string;
+  submissionType: string;
+  reviewNotes: string | null;
+  rejectionReason: string | null;
+  adminFeedback: string | null;
+  nextAction: string | null;
+  publishedPostId: string | null;
+  publishedPostSlug: string | null;
+  publishedAt: string | null;
+  submittedAt: string | null;
+  createdAt: string | null;
+  updatedAt: string | null;
 }
 
 function getNextAction(status: string): string | null {
   switch (status) {
     case APPROVAL_STATUS.PENDING:
-      return 'Wir prüfen deinen Beitrag. Du wirst informiert, sobald eine Entscheidung vorliegt.'
+      return 'Wir prüfen deinen Beitrag. Du wirst informiert, sobald eine Entscheidung vorliegt.';
     case APPROVAL_STATUS.APPROVED:
-      return 'Dein Beitrag wurde genehmigt und wird in Kürze veröffentlicht.'
+      return 'Dein Beitrag wurde genehmigt und wird in Kürze veröffentlicht.';
     case APPROVAL_STATUS.PUBLISHED:
-      return 'Dein Beitrag ist live.'
+      return 'Dein Beitrag ist live.';
     case APPROVAL_STATUS.REJECTED:
-      return 'Dieser Beitrag wurde abgelehnt. Du kannst jederzeit einen neuen Beitrag einreichen.'
+      return 'Dieser Beitrag wurde abgelehnt. Du kannst jederzeit einen neuen Beitrag einreichen.';
     case APPROVAL_STATUS.REQUIRES_CHANGES:
-      return 'Bitte überarbeite den Beitrag basierend auf dem Feedback und reiche ihn erneut ein.'
+      return 'Bitte überarbeite den Beitrag basierend auf dem Feedback und reiche ihn erneut ein.';
     default:
-      return null
+      return null;
   }
 }
 
 export const GET = withAuth(async (_request: NextRequest, session: ValidSession) => {
   try {
-    const userId = session.user.id
+    const userId = session.user.id;
 
     const rows = await db
       .select({
@@ -77,7 +74,7 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
       .from(blogSubmissions)
       .leftJoin(blogPosts, eq(blogSubmissions.publishedPostId, blogPosts.id))
       .where(eq(blogSubmissions.userId, userId))
-      .orderBy(desc(blogSubmissions.createdAt))
+      .orderBy(desc(blogSubmissions.createdAt));
 
     const submissions: MySubmissionRow[] = rows.map((r) => ({
       id: r.id,
@@ -96,11 +93,11 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
       submittedAt: r.submittedAt,
       createdAt: r.createdAt,
       updatedAt: r.updatedAt,
-    }))
+    }));
 
-    return apiSuccess({ submissions })
+    return apiSuccess({ submissions });
   } catch (error) {
-    logger.error('Failed to fetch my blog submissions', { error })
-    return apiError(error, 'Fehler beim Laden Ihrer Einreichungen')
+    logger.error('Failed to fetch my blog submissions', { error });
+    return apiError(error, 'Fehler beim Laden Ihrer Einreichungen');
   }
-})
+});

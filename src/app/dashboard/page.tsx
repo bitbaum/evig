@@ -13,29 +13,29 @@
  * distinct from /admin while sharing the same typographic discipline.
  */
 
-import { Link } from '@/i18n/navigation'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { ArrowRight } from 'lucide-react'
-import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
-import { getTranslations } from 'next-intl/server'
-import { ROLES, type UserRole } from '@/lib/constants'
-import { isSuperAdmin } from '@/lib/permissions'
-import { getActiveTechnicianProfileId } from '@/lib/it-hilfe/technician'
+import { Link } from '@/i18n/navigation';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { ArrowRight } from 'lucide-react';
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
+import { ROLES, type UserRole } from '@/lib/constants';
+import { isSuperAdmin } from '@/lib/permissions';
+import { getActiveTechnicianProfileId } from '@/lib/it-hilfe/technician';
 import {
   getAllDashboardCards,
   DASHBOARD_CATEGORIES,
   type DashboardCategory,
   type DashboardCard,
-} from '@/config/dashboard'
-import { EmailVerificationBanner } from '@/components/dashboard/EmailVerificationBanner'
-import { OnboardingChecklist } from '@/components/dashboard/OnboardingChecklist'
-import { getOnboardingChecklistState } from '@/lib/services/onboarding-state'
-import type { Metadata } from 'next'
+} from '@/config/dashboard';
+import { EmailVerificationBanner } from '@/components/dashboard/EmailVerificationBanner';
+import { OnboardingChecklist } from '@/components/dashboard/OnboardingChecklist';
+import { getOnboardingChecklistState } from '@/lib/services/onboarding-state';
+import type { Metadata } from 'next';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('dashboard.meta')
-  return { title: t('dashboardTitle'), description: t('dashboardDesc') }
+  const t = await getTranslations('dashboard.meta');
+  return { title: t('dashboardTitle'), description: t('dashboardDesc') };
 }
 
 // Category render order — accounts first (most-clicked: profile/settings),
@@ -47,7 +47,7 @@ const CATEGORY_ORDER: DashboardCategory[] = [
   'services',
   'content',
   'admin',
-]
+];
 
 // Stable de-CH date for the header kicker. Server-rendered per request.
 function todayLongLabel(): string {
@@ -55,46 +55,46 @@ function todayLongLabel(): string {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
-  }).format(new Date())
+  }).format(new Date());
 }
 
 export default async function DashboardPage() {
-  const session = await auth()
+  const session = await auth();
   if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/dashboard')
+    redirect('/auth/login?callbackUrl=/dashboard');
   }
 
-  const t = await getTranslations('dashboard.home')
+  const t = await getTranslations('dashboard.home');
 
   // "Is a technician" SSOT = an active repairer profile (same source the offer
   // boundary uses), NOT users.role — self-serve technicians never get that role,
   // which is why the Techniker-Dashboard card was missing and the onboarding
   // nag never hid. Derive the community role from the profile instead.
-  const isTechnician = !!(await getActiveTechnicianProfileId(session.user.id))
+  const isTechnician = !!(await getActiveTechnicianProfileId(session.user.id));
 
   const cards = getAllDashboardCards({
     role: session.user.role,
     isStaff: session.user.isStaff,
     isSuperAdmin: isSuperAdmin(session.user.email || ''),
     communityRoles: isTechnician ? ['repairer'] : [],
-  })
+  });
 
-  const cardsByCategory = new Map<DashboardCategory, DashboardCard[]>()
+  const cardsByCategory = new Map<DashboardCategory, DashboardCard[]>();
   for (const card of cards) {
-    const bucket = cardsByCategory.get(card.category) ?? []
-    bucket.push(card)
-    cardsByCategory.set(card.category, bucket)
+    const bucket = cardsByCategory.get(card.category) ?? [];
+    bucket.push(card);
+    cardsByCategory.set(card.category, bucket);
   }
 
-  const visibleCategories = CATEGORY_ORDER.filter(c => (cardsByCategory.get(c)?.length ?? 0) > 0)
-  const firstName = session.user.name?.split(' ')[0] || session.user.email?.split('@')[0] || 'Du'
-  const userRole = (session.user.role as UserRole) || ROLES.CUSTOMER
+  const visibleCategories = CATEGORY_ORDER.filter((c) => (cardsByCategory.get(c)?.length ?? 0) > 0);
+  const firstName = session.user.name?.split(' ')[0] || session.user.email?.split('@')[0] || 'Du';
+  const userRole = (session.user.role as UserRole) || ROLES.CUSTOMER;
   const onboardingState = await getOnboardingChecklistState(
     session.user.id,
     userRole,
     session.user.emailVerified ?? false,
     session.user.isStaff ?? false,
-  )
+  );
 
   return (
     <main className="min-h-screen bg-canvas">
@@ -121,9 +121,9 @@ export default async function DashboardPage() {
 
         {/* Category sections — each is an eyebrow + divide-y list of links.
             No outer wrapper card; the list itself has the only border. */}
-        {visibleCategories.map(categoryKey => {
-          const config = DASHBOARD_CATEGORIES[categoryKey]
-          const categoryCards = cardsByCategory.get(categoryKey) ?? []
+        {visibleCategories.map((categoryKey) => {
+          const config = DASHBOARD_CATEGORIES[categoryKey];
+          const categoryCards = cardsByCategory.get(categoryKey) ?? [];
           return (
             <section key={categoryKey} aria-labelledby={`cat-${categoryKey}`}>
               <h2
@@ -133,8 +133,8 @@ export default async function DashboardPage() {
                 {config.title}
               </h2>
               <ul className="mt-3 divide-y divide-subtle rounded-lg border border-subtle bg-surface-base">
-                {categoryCards.map(card => {
-                  const Icon = card.icon
+                {categoryCards.map((card) => {
+                  const Icon = card.icon;
                   return (
                     <li key={card.id}>
                       <Link
@@ -150,9 +150,7 @@ export default async function DashboardPage() {
                         />
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
-                            <p className="text-sm font-medium text-text-primary">
-                              {card.title}
-                            </p>
+                            <p className="text-sm font-medium text-text-primary">{card.title}</p>
                             {card.badge && (
                               <span className="rounded-sm bg-action-muted px-1.5 py-0.5 text-xs font-medium text-action">
                                 {card.badge}
@@ -169,13 +167,13 @@ export default async function DashboardPage() {
                         />
                       </Link>
                     </li>
-                  )
+                  );
                 })}
               </ul>
             </section>
-          )
+          );
         })}
       </article>
     </main>
-  )
+  );
 }

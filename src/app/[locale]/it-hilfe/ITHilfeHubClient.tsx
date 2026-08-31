@@ -1,21 +1,21 @@
-'use client'
+'use client';
 
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { useSession } from 'next-auth/react'
-import { Link } from '@/i18n/navigation'
-import { useTranslations } from 'next-intl'
-import { ClipboardList, Search, Users, Wrench } from 'lucide-react'
-import { JOURNEY_ENTRYPOINTS } from '@/config/customer-journeys'
-import { IT_HILFE } from '@/config/it-hilfe'
-import { ROUTES } from '@/config/routes'
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { useSession } from 'next-auth/react';
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
+import { ClipboardList, Search, Users, Wrench } from 'lucide-react';
+import { JOURNEY_ENTRYPOINTS } from '@/config/customer-journeys';
+import { IT_HILFE } from '@/config/it-hilfe';
+import { ROUTES } from '@/config/routes';
 
 /**
  * IT-Hilfe hub — single entry for "fix my computer / reinstall OS / get IT help".
  * Three paths, one product (no duplicate Techniker nav entry).
  */
 export default function ITHilfeHubClient() {
-  const { data: session } = useSession()
-  const t = useTranslations('itHelp.hub')
+  const { data: session } = useSession();
+  const t = useTranslations('itHelp.hub');
 
   const primaryPath = {
     icon: ClipboardList,
@@ -23,7 +23,7 @@ export default function ITHilfeHubClient() {
     description: t('paths.request.description'),
     href: IT_HILFE.routes.create,
     cta: t('paths.request.cta'),
-  } as const
+  } as const;
 
   const secondaryPaths = [
     {
@@ -40,9 +40,9 @@ export default function ITHilfeHubClient() {
       href: ROUTES.public.itHilfeBrowseRequests,
       cta: t('paths.browse.cta'),
     },
-  ] as const
+  ] as const;
 
-  const PrimaryIcon = primaryPath.icon
+  const PrimaryIcon = primaryPath.icon;
 
   return (
     <div className="min-h-screen bg-canvas">
@@ -75,18 +75,16 @@ export default function ITHilfeHubClient() {
                 </p>
               </div>
             </div>
-            <span className="ui-public-cta justify-self-start lg:justify-self-end">{primaryPath.cta}</span>
+            <span className="ui-public-cta justify-self-start lg:justify-self-end">
+              {primaryPath.cta}
+            </span>
           </Link>
 
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             {secondaryPaths.map((path) => {
-              const Icon = path.icon
+              const Icon = path.icon;
               return (
-                <Link
-                  key={path.href}
-                  href={path.href}
-                  className="ui-public-start-card group"
-                >
+                <Link key={path.href} href={path.href} className="ui-public-start-card group">
                   <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-action-muted">
                     <Icon className="h-5 w-5 text-action" aria-hidden="true" />
                   </div>
@@ -96,16 +94,22 @@ export default function ITHilfeHubClient() {
                   <p className="ui-public-start-card-body">{path.description}</p>
                   <span className="ui-public-start-card-link mt-4">{path.cta}</span>
                 </Link>
-              )
+              );
             })}
           </div>
 
           {session?.user && (
             <div className="mt-10 flex flex-wrap gap-3 border-t border-subtle pt-8">
-              <Link href={IT_HILFE.routes.my} className="ui-public-cta-ghost inline-flex items-center gap-2">
+              <Link
+                href={IT_HILFE.routes.my}
+                className="ui-public-cta-ghost inline-flex items-center gap-2"
+              >
                 {t('account.myRequests')}
               </Link>
-              <Link href={IT_HILFE.routes.myOffers} className="ui-public-cta-ghost inline-flex items-center gap-2">
+              <Link
+                href={IT_HILFE.routes.myOffers}
+                className="ui-public-cta-ghost inline-flex items-center gap-2"
+              >
                 {t('account.myOffers')}
               </Link>
             </div>
@@ -116,9 +120,13 @@ export default function ITHilfeHubClient() {
               <div>
                 <div className="flex items-center gap-2">
                   <Wrench className="h-4 w-4 text-action" aria-hidden="true" />
-                  <h2 className="text-lg font-semibold text-text-primary">{t('offerHelp.title')}</h2>
+                  <h2 className="text-lg font-semibold text-text-primary">
+                    {t('offerHelp.title')}
+                  </h2>
                 </div>
-                <p className="mt-2 text-sm leading-relaxed text-text-secondary">{t('offerHelp.description')}</p>
+                <p className="mt-2 text-sm leading-relaxed text-text-secondary">
+                  {t('offerHelp.description')}
+                </p>
               </div>
               <Link
                 href={
@@ -135,5 +143,5 @@ export default function ITHilfeHubClient() {
         </div>
       </section>
     </div>
-  )
+  );
 }

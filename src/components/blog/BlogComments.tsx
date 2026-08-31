@@ -1,80 +1,85 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import { useSession } from 'next-auth/react'
-import { Link } from '@/i18n/navigation'
-import { useLocale, useTranslations } from 'next-intl'
-import { MessageSquare, Trash2, Loader2 } from 'lucide-react'
-import { apiFetch } from '@/lib/api/client'
-import { formatDate } from '@/lib/date-formats'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import { ROUTES } from '@/config/routes'
-import { COMMENT_BODY_MAX } from '@/config/blog-comments'
+import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { Link } from '@/i18n/navigation';
+import { useLocale, useTranslations } from 'next-intl';
+import { MessageSquare, Trash2, Loader2 } from 'lucide-react';
+import { apiFetch } from '@/lib/api/client';
+import { formatDate } from '@/lib/date-formats';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { ROUTES } from '@/config/routes';
+import { COMMENT_BODY_MAX } from '@/config/blog-comments';
 
 interface Comment {
-  id: string
-  body: string
-  createdAt: string | null
-  userId: string
-  authorName: string | null
-  authorImage: string | null
+  id: string;
+  body: string;
+  createdAt: string | null;
+  userId: string;
+  authorName: string | null;
+  authorImage: string | null;
 }
 
 function initials(name: string | null): string {
-  if (!name) return 'U'
-  return name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2)
+  if (!name) return 'U';
+  return name
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
 }
 
 export default function BlogComments({ slug }: { slug: string }) {
-  const t = useTranslations('blog.comments')
-  const locale = useLocale()
-  const { data: session } = useSession()
-  const [comments, setComments] = useState<Comment[]>([])
-  const [loading, setLoading] = useState(true)
-  const [body, setBody] = useState('')
-  const [posting, setPosting] = useState(false)
-  const [error, setError] = useState('')
+  const t = useTranslations('blog.comments');
+  const locale = useLocale();
+  const { data: session } = useSession();
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [body, setBody] = useState('');
+  const [posting, setPosting] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    let active = true
+    let active = true;
     apiFetch<{ comments: Comment[] }>(`/api/blog/${slug}/comments`).then((res) => {
-      if (active && res.data) setComments(res.data.comments)
-      if (active) setLoading(false)
-    })
+      if (active && res.data) setComments(res.data.comments);
+      if (active) setLoading(false);
+    });
     return () => {
-      active = false
-    }
-  }, [slug])
+      active = false;
+    };
+  }, [slug]);
 
   const submit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    const trimmed = body.trim()
-    if (!trimmed) return
-    setPosting(true)
-    setError('')
+    e.preventDefault();
+    const trimmed = body.trim();
+    if (!trimmed) return;
+    setPosting(true);
+    setError('');
     const res = await apiFetch<{ comment: Comment }>(`/api/blog/${slug}/comments`, {
       method: 'POST',
       body: { body: trimmed },
-    })
+    });
     if (res.data?.comment) {
-      setComments((prev) => [...prev, res.data!.comment])
-      setBody('')
+      setComments((prev) => [...prev, res.data!.comment]);
+      setBody('');
     } else {
-      setError(res.error || t('error'))
+      setError(res.error || t('error'));
     }
-    setPosting(false)
-  }
+    setPosting(false);
+  };
 
   const remove = async (id: string) => {
-    const prev = comments
-    setComments((c) => c.filter((x) => x.id !== id))
-    const res = await apiFetch(`/api/blog/comments/${id}`, { method: 'DELETE' })
-    if (res.error) setComments(prev) // rollback on failure
-  }
+    const prev = comments;
+    setComments((c) => c.filter((x) => x.id !== id));
+    const res = await apiFetch(`/api/blog/comments/${id}`, { method: 'DELETE' });
+    if (res.error) setComments(prev); // rollback on failure
+  };
 
   const canModerate = (c: Comment) =>
-    session?.user?.id === c.userId || Boolean(session?.user?.isStaff)
+    session?.user?.id === c.userId || Boolean(session?.user?.isStaff);
 
   return (
     <section className="mx-auto max-w-[720px] px-4 pb-20 sm:px-6">
@@ -100,7 +105,12 @@ export default function BlogComments({ slug }: { slug: string }) {
             />
             {error && <p className="mt-2 text-sm text-error-600">{error}</p>}
             <div className="mt-3 flex justify-end">
-              <Button type="submit" variant="primary" disabled={posting || !body.trim()} className="gap-2">
+              <Button
+                type="submit"
+                variant="primary"
+                disabled={posting || !body.trim()}
+                className="gap-2"
+              >
                 {posting && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}
                 {posting ? t('posting') : t('submit')}
               </Button>
@@ -133,9 +143,13 @@ export default function BlogComments({ slug }: { slug: string }) {
                 )}
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 text-sm">
-                    <span className="font-semibold text-text-primary">{c.authorName || t('anon')}</span>
+                    <span className="font-semibold text-text-primary">
+                      {c.authorName || t('anon')}
+                    </span>
                     {c.createdAt && (
-                      <time className="font-mono text-xs text-text-tertiary">{formatDate(c.createdAt, locale)}</time>
+                      <time className="font-mono text-xs text-text-tertiary">
+                        {formatDate(c.createdAt, locale)}
+                      </time>
                     )}
                     {canModerate(c) && (
                       <Button
@@ -161,5 +175,5 @@ export default function BlogComments({ slug }: { slug: string }) {
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -14,7 +14,7 @@ export const APP_URL =
   process.env.NEXT_PUBLIC_BASE_URL ||
   process.env.NEXT_PUBLIC_APP_URL ||
   process.env.NEXT_PUBLIC_SITE_URL ||
-  'http://localhost:3000'
+  'http://localhost:3000';
 
 /**
  * Public, canonical origin — where the app is reachable from the internet.
@@ -24,25 +24,20 @@ export const APP_URL =
  * can fetch — not localhost. Override with NEXT_PUBLIC_SITE_URL; prod sets it to
  * the live host. `revampit.orangecat.ch` remains a working alias.
  */
-export const PUBLIC_SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL || 'https://evig.orangecat.ch'
+export const PUBLIC_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://evig.orangecat.ch';
 
 /**
  * Meilisearch URL
  * Used for full-text search on listings
  */
-export const MEILISEARCH_URL =
-  process.env.MEILISEARCH_HOST ||
-  'http://localhost:7700'
+export const MEILISEARCH_URL = process.env.MEILISEARCH_HOST || 'http://localhost:7700';
 
 /**
  * Ollama URL
  * Used for local AI inference (chat + embeddings)
  */
 export const OLLAMA_URL =
-  process.env.OLLAMA_URL ||
-  process.env.OLLAMA_BASE_URL ||
-  'http://localhost:11434'
+  process.env.OLLAMA_URL || process.env.OLLAMA_BASE_URL || 'http://localhost:11434';
 
 /**
  * URL Configuration Object
@@ -52,18 +47,18 @@ export const URLS = {
   APP: APP_URL,
   MEILISEARCH: MEILISEARCH_URL,
   OLLAMA: OLLAMA_URL,
-} as const
+} as const;
 
 /**
  * Helper function to build verification URLs
  */
 export function getVerificationUrl(token: string): string {
-  return `${APP_URL}/auth/verify-email?token=${token}`
+  return `${APP_URL}/auth/verify-email?token=${token}`;
 }
 
 /**
  * Helper function to build password reset URLs
  */
 export function getPasswordResetUrl(token: string): string {
-  return `${APP_URL}/auth/reset-password?token=${token}`
+  return `${APP_URL}/auth/reset-password?token=${token}`;
 }

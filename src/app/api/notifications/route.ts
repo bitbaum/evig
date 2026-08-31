@@ -5,14 +5,14 @@
  * PATCH /api/notifications       - Mark all notifications as read
  */
 
-import { NextRequest } from 'next/server'
-import { withAuth, ValidSession } from '@/lib/api/middleware'
-import { db } from '@/db'
-import { notifications } from '@/db/schema'
-import { eq, and, asc, desc, sql } from 'drizzle-orm'
-import { logger } from '@/lib/logger'
-import { apiSuccess, apiError } from '@/lib/api/helpers'
-import { API_DEFAULTS } from '@/config/api-defaults'
+import { NextRequest } from 'next/server';
+import { withAuth, ValidSession } from '@/lib/api/middleware';
+import { db } from '@/db';
+import { notifications } from '@/db/schema';
+import { eq, and, asc, desc, sql } from 'drizzle-orm';
+import { logger } from '@/lib/logger';
+import { apiSuccess, apiError } from '@/lib/api/helpers';
+import { API_DEFAULTS } from '@/config/api-defaults';
 
 export const GET = withAuth(async (_request: NextRequest, session: ValidSession) => {
   try {
@@ -31,30 +31,30 @@ export const GET = withAuth(async (_request: NextRequest, session: ValidSession)
       .from(notifications)
       .where(eq(notifications.userId, session.user.id))
       .orderBy(asc(notifications.isRead), desc(notifications.createdAt))
-      .limit(API_DEFAULTS.NOTIFICATION_FETCH_LIMIT)
+      .limit(API_DEFAULTS.NOTIFICATION_FETCH_LIMIT);
 
-    const unreadCount = rows.filter(n => !n.is_read).length
+    const unreadCount = rows.filter((n) => !n.is_read).length;
 
     return apiSuccess({
       notifications: rows,
       unreadCount,
-    })
+    });
   } catch (error) {
-    logger.error('Failed to fetch notifications', { error })
-    return apiError(error, 'Benachrichtigungen konnten nicht geladen werden')
+    logger.error('Failed to fetch notifications', { error });
+    return apiError(error, 'Benachrichtigungen konnten nicht geladen werden');
   }
-})
+});
 
 export const PATCH = withAuth(async (_request: NextRequest, session: ValidSession) => {
   try {
     await db
       .update(notifications)
       .set({ isRead: true, readAt: sql`NOW()` })
-      .where(and(eq(notifications.userId, session.user.id), eq(notifications.isRead, false)))
+      .where(and(eq(notifications.userId, session.user.id), eq(notifications.isRead, false)));
 
-    return apiSuccess({ message: 'Alle Benachrichtigungen als gelesen markiert' })
+    return apiSuccess({ message: 'Alle Benachrichtigungen als gelesen markiert' });
   } catch (error) {
-    logger.error('Failed to mark notifications as read', { error })
-    return apiError(error, 'Benachrichtigungen konnten nicht aktualisiert werden')
+    logger.error('Failed to mark notifications as read', { error });
+    return apiError(error, 'Benachrichtigungen konnten nicht aktualisiert werden');
   }
-})
+});

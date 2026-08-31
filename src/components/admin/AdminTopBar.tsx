@@ -1,28 +1,28 @@
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
-import Link from 'next/link'
-import { Link as PublicLink } from '@/i18n/navigation'
-import { Menu, Globe } from 'lucide-react'
-import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
-import { NotificationBell } from '@/components/admin/NotificationBell'
-import { CommandBar } from '@/components/admin/CommandBar'
-import { UserMenuDropdown } from '@/app/admin/UserMenuDropdown'
-import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher'
-import { ThemeToggle } from '@/components/ui/ThemeToggle'
-import { Button } from '@/components/ui/button'
-import { adminChrome, adminInteractive } from '@/lib/admin-ui'
-import { ROUTES } from '@/config/routes'
-import { AdminPageGuide } from '@/components/admin/AdminPageGuide'
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { Link as PublicLink } from '@/i18n/navigation';
+import { Menu, Globe } from 'lucide-react';
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
+import { NotificationBell } from '@/components/admin/NotificationBell';
+import { CommandBar } from '@/components/admin/CommandBar';
+import { UserMenuDropdown } from '@/app/admin/UserMenuDropdown';
+import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher';
+import { ThemeToggle } from '@/components/ui/ThemeToggle';
+import { Button } from '@/components/ui/button';
+import { adminChrome, adminInteractive } from '@/lib/admin-ui';
+import { ROUTES } from '@/config/routes';
+import { AdminPageGuide } from '@/components/admin/AdminPageGuide';
 
 interface AdminTopBarProps {
-  sidebarCollapsed: boolean
-  onMobileMenuOpen: () => void
-  onToggleSidebar: () => void
+  sidebarCollapsed: boolean;
+  onMobileMenuOpen: () => void;
+  onToggleSidebar: () => void;
   user: {
-    name: string | null
-    email: string
-  } | null
+    name: string | null;
+    email: string;
+  } | null;
 }
 
 /**
@@ -34,8 +34,8 @@ export function AdminTopBar({
   onToggleSidebar,
   user,
 }: AdminTopBarProps) {
-  const t = useTranslations('admin.sidebar')
-  const tUser = useTranslations('admin.userMenu')
+  const t = useTranslations('admin.sidebar');
+  const tUser = useTranslations('admin.userMenu');
 
   return (
     <div className={adminChrome.topBar}>
@@ -104,5 +104,5 @@ export function AdminTopBar({
         </div>
       </div>
     </div>
-  )
+  );
 }

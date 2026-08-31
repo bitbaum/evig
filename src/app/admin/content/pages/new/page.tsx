@@ -1,33 +1,27 @@
-'use client'
+'use client';
 
-import { useState, Suspense } from 'react'
-import { adminInteractive } from '@/lib/admin-ui'
-import { useSession } from 'next-auth/react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import Link from 'next/link'
-import {
-  ArrowLeft,
-  Save,
-  Loader2,
-  AlertCircle,
-  CheckCircle,
-} from 'lucide-react'
-import { generateSlug } from '@/lib/utils/slug'
-import { apiFetch } from '@/lib/api/client'
-import Heading from '@/components/admin/AdminHeading'
-import { ROUTES } from '@/config/routes'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { FormField } from '@/components/ui/form-field'
-import { Button } from '@/components/ui/button'
+import { useState, Suspense } from 'react';
+import { adminInteractive } from '@/lib/admin-ui';
+import { useSession } from 'next-auth/react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import { ArrowLeft, Save, Loader2, AlertCircle, CheckCircle } from 'lucide-react';
+import { generateSlug } from '@/lib/utils/slug';
+import { apiFetch } from '@/lib/api/client';
+import Heading from '@/components/admin/AdminHeading';
+import { ROUTES } from '@/config/routes';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { FormField } from '@/components/ui/form-field';
+import { Button } from '@/components/ui/button';
 
 function NewStaticPageContent() {
-  const { data: session, status: sessionStatus } = useSession()
-  const router = useRouter()
-  const searchParams = useSearchParams()
+  const { data: session, status: sessionStatus } = useSession();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState('')
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
 
   const [formData, setFormData] = useState({
     title: searchParams.get('title') || '',
@@ -36,28 +30,28 @@ function NewStaticPageContent() {
     is_published: false,
     seo_title: '',
     seo_description: '',
-  })
+  });
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setError('')
+    e.preventDefault();
+    setError('');
 
     if (!formData.title.trim() || !formData.slug.trim()) {
-      setError('Titel und URL-Slug sind erforderlich')
-      return
+      setError('Titel und URL-Slug sind erforderlich');
+      return;
     }
 
-    setSaving(true)
+    setSaving(true);
     const result = await apiFetch<void>('/api/admin/pages', {
       method: 'POST',
       body: formData,
-    })
-    setSaving(false)
+    });
+    setSaving(false);
 
     if (result.success) {
-      router.push('/admin/content/pages')
+      router.push('/admin/content/pages');
     } else {
-      setError(result.error || 'Fehler beim Erstellen der Seite')
+      setError(result.error || 'Fehler beim Erstellen der Seite');
     }
   }
 
@@ -73,12 +67,12 @@ function NewStaticPageContent() {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   if (!session?.user) {
-    router.push('/auth/login')
-    return null
+    router.push('/auth/login');
+    return null;
   }
 
   return (
@@ -95,9 +89,7 @@ function NewStaticPageContent() {
           <Heading level={1} className="text-2xl font-bold text-text-primary">
             Neue Seite erstellen
           </Heading>
-          <p className="text-text-secondary mt-1">
-            Erstelle eine neue statische Seite
-          </p>
+          <p className="text-text-secondary mt-1">Erstelle eine neue statische Seite</p>
         </div>
       </div>
 
@@ -119,12 +111,12 @@ function NewStaticPageContent() {
               type="text"
               value={formData.title}
               onChange={(e) => {
-                const title = e.target.value
-                setFormData(prev => ({
+                const title = e.target.value;
+                setFormData((prev) => ({
                   ...prev,
                   title,
                   slug: prev.slug || generateSlug(title),
-                }))
+                }));
               }}
               placeholder="z.B. Über uns"
               required
@@ -141,7 +133,7 @@ function NewStaticPageContent() {
               <Input
                 type="text"
                 value={formData.slug}
-                onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
+                onChange={(e) => setFormData((prev) => ({ ...prev, slug: e.target.value }))}
                 className="flex-1 rounded-l-none"
                 placeholder="ueber-uns"
                 required
@@ -150,7 +142,7 @@ function NewStaticPageContent() {
                 type="button"
                 variant="outline"
                 size="sm"
-                onClick={() => setFormData(prev => ({ ...prev, slug: generateSlug(prev.title) }))}
+                onClick={() => setFormData((prev) => ({ ...prev, slug: generateSlug(prev.title) }))}
                 className={`px-3 py-2 text-sm border border-default rounded-lg ${adminInteractive.rowHover} text-text-secondary`}
               >
                 Generieren
@@ -162,7 +154,7 @@ function NewStaticPageContent() {
           <FormField label="Inhalt">
             <Textarea
               value={formData.content}
-              onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
+              onChange={(e) => setFormData((prev) => ({ ...prev, content: e.target.value }))}
               rows={15}
               className="font-mono text-sm"
               placeholder="HTML oder Markdown Inhalt..."
@@ -175,7 +167,7 @@ function NewStaticPageContent() {
               type="checkbox"
               id="is_published"
               checked={formData.is_published}
-              onChange={(e) => setFormData(prev => ({ ...prev, is_published: e.target.checked }))}
+              onChange={(e) => setFormData((prev) => ({ ...prev, is_published: e.target.checked }))}
               className="w-4 h-4 text-action border-default rounded-sm focus:ring-action"
             />
             <label htmlFor="is_published" className="text-sm font-medium text-text-secondary">
@@ -186,14 +178,16 @@ function NewStaticPageContent() {
 
         {/* SEO Section */}
         <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-6 space-y-6">
-          <Heading level={2} className="text-lg font-semibold text-text-primary">SEO</Heading>
+          <Heading level={2} className="text-lg font-semibold text-text-primary">
+            SEO
+          </Heading>
 
           <FormField label="SEO Titel" htmlFor="seo-title">
             <Input
               id="seo-title"
               type="text"
               value={formData.seo_title}
-              onChange={(e) => setFormData(prev => ({ ...prev, seo_title: e.target.value }))}
+              onChange={(e) => setFormData((prev) => ({ ...prev, seo_title: e.target.value }))}
               placeholder={formData.title || 'Wird vom Titel übernommen'}
             />
           </FormField>
@@ -201,7 +195,9 @@ function NewStaticPageContent() {
           <FormField label="SEO Beschreibung">
             <Textarea
               value={formData.seo_description}
-              onChange={(e) => setFormData(prev => ({ ...prev, seo_description: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, seo_description: e.target.value }))
+              }
               rows={3}
               placeholder="Kurze Beschreibung für Suchmaschinen..."
             />
@@ -223,7 +219,7 @@ function NewStaticPageContent() {
         </div>
       </form>
     </div>
-  )
+  );
 }
 
 function NewStaticPageFallback() {
@@ -238,7 +234,7 @@ function NewStaticPageFallback() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default function NewStaticPagePage() {
@@ -246,5 +242,5 @@ export default function NewStaticPagePage() {
     <Suspense fallback={<NewStaticPageFallback />}>
       <NewStaticPageContent />
     </Suspense>
-  )
+  );
 }

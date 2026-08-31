@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import { ShoppingCart } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
-import { useCart } from './CartProvider'
+import { ShoppingCart } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
+import { useCart } from './CartProvider';
 
 /** Cart trigger with item-count badge — opens the slide-in drawer. */
 export function CartIcon({ className }: { className?: string }) {
-  const t = useTranslations('marketplace.cart')
-  const { count, hydrated, openDrawer } = useCart()
-  const shown = hydrated ? count : 0
+  const t = useTranslations('marketplace.cart');
+  const { count, hydrated, openDrawer } = useCart();
+  const shown = hydrated ? count : 0;
 
   return (
     <Button
@@ -26,5 +26,5 @@ export function CartIcon({ className }: { className?: string }) {
         </span>
       )}
     </Button>
-  )
+  );
 }

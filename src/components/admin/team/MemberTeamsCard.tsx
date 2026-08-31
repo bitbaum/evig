@@ -1,47 +1,56 @@
-'use client'
+'use client';
 
-import { useMemo, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { Users, Plus, X, Loader2, ArrowRightLeft } from 'lucide-react'
-import { Select } from '@/components/ui/select'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import MoveMemberModal, { type MoveTeamRef } from '@/components/admin/teams/MoveMemberModal'
-import { apiFetch } from '@/lib/api/client'
-import { ROUTES } from '@/config/routes'
-import { TEAM_ROLES, TEAM_ROLE_LABELS, getTeamRoleColor, getAccentClasses, type TeamRole } from '@/config/teams'
-import type { MembershipForUser } from '@/lib/schemas/teams'
+import { useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Users, Plus, X, Loader2, ArrowRightLeft } from 'lucide-react';
+import { Select } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import MoveMemberModal, { type MoveTeamRef } from '@/components/admin/teams/MoveMemberModal';
+import { apiFetch } from '@/lib/api/client';
+import { ROUTES } from '@/config/routes';
+import {
+  TEAM_ROLES,
+  TEAM_ROLE_LABELS,
+  getTeamRoleColor,
+  getAccentClasses,
+  type TeamRole,
+} from '@/config/teams';
+import type { MembershipForUser } from '@/lib/schemas/teams';
 
 interface Props {
-  person: { userId: string; name: string | null; avatarUrl?: string | null }
-  memberships: MembershipForUser[]
+  person: { userId: string; name: string | null; avatarUrl?: string | null };
+  memberships: MembershipForUser[];
   /** All active teams (with accent) for join + move. */
-  allTeams: (MoveTeamRef & { slug: string })[]
+  allTeams: (MoveTeamRef & { slug: string })[];
 }
 
 /** A person's team memberships, shown on their profile — the teammate view. */
 export default function MemberTeamsCard({ person, memberships, allTeams }: Props) {
-  const router = useRouter()
-  const [busy, setBusy] = useState<string | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [addTeam, setAddTeam] = useState('')
-  const [moving, setMoving] = useState<MembershipForUser | null>(null)
+  const router = useRouter();
+  const [busy, setBusy] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [addTeam, setAddTeam] = useState('');
+  const [moving, setMoving] = useState<MembershipForUser | null>(null);
 
-  const memberTeamIds = useMemo(() => new Set(memberships.map((m) => m.team_id)), [memberships])
-  const joinable = useMemo(() => allTeams.filter((t) => !memberTeamIds.has(t.id)), [allTeams, memberTeamIds])
-  const canMove = allTeams.length > 1
+  const memberTeamIds = useMemo(() => new Set(memberships.map((m) => m.team_id)), [memberships]);
+  const joinable = useMemo(
+    () => allTeams.filter((t) => !memberTeamIds.has(t.id)),
+    [allTeams, memberTeamIds],
+  );
+  const canMove = allTeams.length > 1;
 
   async function run(key: string, fn: () => Promise<{ success: boolean; error?: string }>) {
-    setBusy(key)
-    setError(null)
-    const res = await fn()
-    setBusy(null)
+    setBusy(key);
+    setError(null);
+    const res = await fn();
+    setBusy(null);
     if (!res.success) {
-      setError(res.error || 'Aktion fehlgeschlagen')
-      return
+      setError(res.error || 'Aktion fehlgeschlagen');
+      return;
     }
-    router.refresh()
+    router.refresh();
   }
 
   const join = () =>
@@ -50,15 +59,15 @@ export default function MemberTeamsCard({ person, memberships, allTeams }: Props
         method: 'POST',
         body: { user_id: person.userId, role: TEAM_ROLES.MEMBER },
       }).then((r) => {
-        if (r.success) setAddTeam('')
-        return r
+        if (r.success) setAddTeam('');
+        return r;
       }),
-    )
+    );
 
   const leave = (teamId: string, membershipId: string) =>
     run(`leave-${membershipId}`, () =>
       apiFetch(`/api/admin/teams/${teamId}/members/${membershipId}`, { method: 'DELETE' }),
-    )
+    );
 
   return (
     <Card className="p-5">
@@ -79,11 +88,19 @@ export default function MemberTeamsCard({ person, memberships, allTeams }: Props
         <ul className="space-y-2 mb-4">
           {memberships.map((m) => (
             <li key={m.membership_id} className="flex items-center gap-2 flex-wrap">
-              <span className={`w-2 h-2 rounded-full shrink-0 ${getAccentClasses(m.accent)}`} aria-hidden />
-              <Link href={ROUTES.admin.teamBySlug(m.slug)} className="text-sm text-text-primary hover:text-action truncate">
+              <span
+                className={`w-2 h-2 rounded-full shrink-0 ${getAccentClasses(m.accent)}`}
+                aria-hidden
+              />
+              <Link
+                href={ROUTES.admin.teamBySlug(m.slug)}
+                className="text-sm text-text-primary hover:text-action truncate"
+              >
                 {m.team_name}
               </Link>
-              <span className={`px-1.5 py-0.5 rounded-full text-[11px] font-medium ${getTeamRoleColor(m.role)}`}>
+              <span
+                className={`px-1.5 py-0.5 rounded-full text-[11px] font-medium ${getTeamRoleColor(m.role)}`}
+              >
                 {TEAM_ROLE_LABELS[m.role as TeamRole] ?? m.role}
               </span>
               <div className="ml-auto flex items-center gap-1">
@@ -107,7 +124,11 @@ export default function MemberTeamsCard({ person, memberships, allTeams }: Props
                   disabled={busy === `leave-${m.membership_id}`}
                   aria-label={`Aus ${m.team_name} entfernen`}
                 >
-                  {busy === `leave-${m.membership_id}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <X className="w-3.5 h-3.5" />}
+                  {busy === `leave-${m.membership_id}` ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  ) : (
+                    <X className="w-3.5 h-3.5" />
+                  )}
                 </Button>
               </div>
             </li>
@@ -118,7 +139,11 @@ export default function MemberTeamsCard({ person, memberships, allTeams }: Props
       {joinable.length > 0 && (
         <div className="flex items-end gap-2">
           <div className="flex-1 min-w-0">
-            <Select aria-label="Team hinzufügen" value={addTeam} onChange={(e) => setAddTeam(e.target.value)}>
+            <Select
+              aria-label="Team hinzufügen"
+              value={addTeam}
+              onChange={(e) => setAddTeam(e.target.value)}
+            >
               <option value="">Zu Team hinzufügen…</option>
               {joinable.map((t) => (
                 <option key={t.id} value={t.id}>
@@ -128,7 +153,11 @@ export default function MemberTeamsCard({ person, memberships, allTeams }: Props
             </Select>
           </div>
           <Button size="sm" onClick={join} disabled={!addTeam || busy === 'join'}>
-            {busy === 'join' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+            {busy === 'join' ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Plus className="w-4 h-4" />
+            )}
           </Button>
         </div>
       )}
@@ -146,5 +175,5 @@ export default function MemberTeamsCard({ person, memberships, allTeams }: Props
         />
       )}
     </Card>
-  )
+  );
 }

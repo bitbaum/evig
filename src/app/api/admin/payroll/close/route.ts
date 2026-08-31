@@ -17,39 +17,41 @@
  * Only super admins can close batches (the operation is financial).
  */
 
-import { NextRequest } from 'next/server'
-import { withAdmin, type ValidSession } from '@/lib/api/middleware'
-import { apiBadRequest, apiError, apiForbidden, apiSuccess } from '@/lib/api/helpers'
-import { logger } from '@/lib/logger'
-import { isSuperAdmin } from '@/lib/permissions'
-import { z } from 'zod'
-import { db } from '@/db'
-import { payrollBatches, timecards, teamProfiles } from '@/db/schema'
-import { eq, and, gte, lte, isNull, sql } from 'drizzle-orm'
-import { TIMECARD_STATUSES } from '@/config/timecards'
+import { NextRequest } from 'next/server';
+import { withAdmin, type ValidSession } from '@/lib/api/middleware';
+import { apiBadRequest, apiError, apiForbidden, apiSuccess } from '@/lib/api/helpers';
+import { logger } from '@/lib/logger';
+import { isSuperAdmin } from '@/lib/permissions';
+import { z } from 'zod';
+import { db } from '@/db';
+import { payrollBatches, timecards, teamProfiles } from '@/db/schema';
+import { eq, and, gte, lte, isNull, sql } from 'drizzle-orm';
+import { TIMECARD_STATUSES } from '@/config/timecards';
 
-const closeSchema = z.object({
-  period_start: z.string().min(1, 'Startdatum erforderlich'),
-  period_end: z.string().min(1, 'Enddatum erforderlich'),
-  notes: z.string().max(1000).optional().nullable(),
-}).refine(d => d.period_end >= d.period_start, {
-  message: 'Endperiode darf nicht vor dem Start liegen',
-  path: ['period_end'],
-})
+const closeSchema = z
+  .object({
+    period_start: z.string().min(1, 'Startdatum erforderlich'),
+    period_end: z.string().min(1, 'Enddatum erforderlich'),
+    notes: z.string().max(1000).optional().nullable(),
+  })
+  .refine((d) => d.period_end >= d.period_start, {
+    message: 'Endperiode darf nicht vor dem Start liegen',
+    path: ['period_end'],
+  });
 
 export const POST = withAdmin('payroll', async (request: NextRequest, session: ValidSession) => {
   try {
     if (!isSuperAdmin(session.user.email, session.user.isSuperAdmin)) {
-      return apiForbidden('Nur Super-Admins können einen Lohnlauf abschliessen.')
+      return apiForbidden('Nur Super-Admins können einen Lohnlauf abschliessen.');
     }
 
-    const body = await request.json()
-    const parsed = closeSchema.safeParse(body)
+    const body = await request.json();
+    const parsed = closeSchema.safeParse(body);
     if (!parsed.success) {
-      return apiBadRequest('Ungültige Eingabedaten', parsed.error.flatten().fieldErrors)
+      return apiBadRequest('Ungültige Eingabedaten', parsed.error.flatten().fieldErrors);
     }
 
-    const { period_start, period_end, notes } = parsed.data
+    const { period_start, period_end, notes } = parsed.data;
 
     const result = await db.transaction(async (tx) => {
       // 1. Create the batch shell.
@@ -62,7 +64,7 @@ export const POST = withAdmin('payroll', async (request: NextRequest, session: V
           closedBy: session.user.id,
           notes: notes ?? null,
         })
-        .returning({ id: payrollBatches.id })
+        .returning({ id: payrollBatches.id });
 
       // 2. Stamp every eligible approved timecard with batch id + rate snapshot.
       //    Drizzle doesn't compose UPDATE ... FROM cleanly across versions,
@@ -81,37 +83,37 @@ export const POST = withAdmin('payroll', async (request: NextRequest, session: V
           AND t.period_start >= ${period_start}
           AND t.period_end <= ${period_end}
         RETURNING t.id
-      `)
+      `);
 
-      const linkedCount = updated.rows.length
-      return { batchId: batch.id, linkedCount }
-    })
+      const linkedCount = updated.rows.length;
+      return { batchId: batch.id, linkedCount };
+    });
 
     logger.info('Payroll batch closed', {
       batchId: result.batchId,
       linkedTimecards: result.linkedCount,
       period: `${period_start}..${period_end}`,
       closedBy: session.user.id,
-    })
+    });
 
-    return apiSuccess(result, 201)
+    return apiSuccess(result, 201);
   } catch (error) {
-    logger.error('Failed to close payroll batch', { error })
-    return apiError(error, 'Lohnlauf konnte nicht abgeschlossen werden')
+    logger.error('Failed to close payroll batch', { error });
+    return apiError(error, 'Lohnlauf konnte nicht abgeschlossen werden');
   }
-})
+});
 
 export const GET = withAdmin('payroll', async (_request: NextRequest, _session: ValidSession) => {
   // Helper for the UI: "what's eligible to be closed?" — sums hours of
   // approved timecards still waiting on a batch. Two args via query:
   // ?period_start=YYYY-MM-DD&period_end=YYYY-MM-DD. Returns counts + minutes.
   try {
-    const url = new URL(_request.url)
-    const period_start = url.searchParams.get('period_start') || ''
-    const period_end = url.searchParams.get('period_end') || ''
+    const url = new URL(_request.url);
+    const period_start = url.searchParams.get('period_start') || '';
+    const period_end = url.searchParams.get('period_end') || '';
 
     if (!period_start || !period_end) {
-      return apiBadRequest('period_start und period_end sind erforderlich')
+      return apiBadRequest('period_start und period_end sind erforderlich');
     }
 
     const [agg] = await db
@@ -135,14 +137,14 @@ export const GET = withAdmin('payroll', async (_request: NextRequest, _session: 
           gte(timecards.periodStart, period_start),
           lte(timecards.periodEnd, period_end),
         ),
-      )
+      );
 
     return apiSuccess({
       pending_count: Number(agg?.count ?? 0),
       pending_minutes: Number(agg?.minutes ?? 0),
-    })
+    });
   } catch (error) {
-    logger.error('Failed to preview payroll batch', { error })
-    return apiError(error, 'Vorschau konnte nicht erstellt werden')
+    logger.error('Failed to preview payroll batch', { error });
+    return apiError(error, 'Vorschau konnte nicht erstellt werden');
   }
-})
+});

@@ -1,16 +1,16 @@
 /** Counterparty card — the other party (seller or buyer) with profile link. */
 
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { User } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
-import { CARD_CLASS, SECTION_TITLE_CLASS } from './shared'
-import type { NonNullOrder } from './shared'
+import Link from 'next/link';
+import { User } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/ui/Heading';
+import { CARD_CLASS, SECTION_TITLE_CLASS } from './shared';
+import type { NonNullOrder } from './shared';
 
 export function CounterpartyCard({ order }: { order: NonNullOrder }) {
-  const t = useTranslations('dashboard.orders')
+  const t = useTranslations('dashboard.orders');
   return (
     <div className={CARD_CLASS}>
       <Heading level={2} className={SECTION_TITLE_CLASS}>
@@ -33,5 +33,5 @@ export function CounterpartyCard({ order }: { order: NonNullOrder }) {
         </div>
       </div>
     </div>
-  )
+  );
 }

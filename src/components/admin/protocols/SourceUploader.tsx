@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * SourceUploader — drop-zone for protocol input sources.
@@ -25,42 +25,42 @@
  * presentation + event glue.
  */
 
-import { useRef, useState, type DragEvent } from 'react'
-import { Upload, FileText, Mic, X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { useRef, useState, type DragEvent } from 'react';
+import { Upload, FileText, Mic, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   classifyFile,
   getAcceptString,
   validateUpload,
   PROTOCOL_UPLOAD_KIND,
   PROTOCOL_UPLOAD_LIMITS,
-} from '@/lib/protocols/upload'
+} from '@/lib/protocols/upload';
 
 export interface SourceValue {
-  audio: File | null
-  textFiles: File[]
+  audio: File | null;
+  textFiles: File[];
 }
 
 interface SourceUploaderProps {
-  value: SourceValue
-  onChange: (next: SourceValue) => void
+  value: SourceValue;
+  onChange: (next: SourceValue) => void;
   /** Surface validation errors back to the parent form. */
-  onError?: (message: string) => void
-  disabled?: boolean
+  onError?: (message: string) => void;
+  disabled?: boolean;
 }
 
 const formatBytes = (n: number): string => {
-  if (n < 1024) return `${n} B`
-  if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`
-  return `${(n / 1024 / 1024).toFixed(1)} MB`
-}
+  if (n < 1024) return `${n} B`;
+  if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
+  return `${(n / 1024 / 1024).toFixed(1)} MB`;
+};
 
 export function SourceUploader({ value, onChange, onError, disabled }: SourceUploaderProps) {
-  const [isDraggingOver, setIsDraggingOver] = useState(false)
-  const inputRef = useRef<HTMLInputElement>(null)
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const audioMaxMb = Math.round(PROTOCOL_UPLOAD_LIMITS.audioMaxBytes / (1024 * 1024))
-  const textMaxMb = Math.round(PROTOCOL_UPLOAD_LIMITS.textMaxBytes / (1024 * 1024))
+  const audioMaxMb = Math.round(PROTOCOL_UPLOAD_LIMITS.audioMaxBytes / (1024 * 1024));
+  const textMaxMb = Math.round(PROTOCOL_UPLOAD_LIMITS.textMaxBytes / (1024 * 1024));
 
   /**
    * Accept an array of dropped/picked files, classify each, validate
@@ -68,67 +68,67 @@ export function SourceUploader({ value, onChange, onError, disabled }: SourceUpl
    * previous one (single-audio v1 invariant); text files accumulate.
    */
   const accept = (files: File[]) => {
-    if (disabled) return
+    if (disabled) return;
 
-    let nextAudio = value.audio
-    const nextTextFiles = [...value.textFiles]
-    let firstError: string | null = null
+    let nextAudio = value.audio;
+    const nextTextFiles = [...value.textFiles];
+    let firstError: string | null = null;
 
     for (const file of files) {
-      const kind = classifyFile(file)
+      const kind = classifyFile(file);
       if (!kind) {
-        firstError ??= `Dateiformat nicht unterstützt: ${file.name}`
-        continue
+        firstError ??= `Dateiformat nicht unterstützt: ${file.name}`;
+        continue;
       }
-      const validationError = validateUpload(kind, file)
+      const validationError = validateUpload(kind, file);
       if (validationError) {
-        firstError ??= validationError
-        continue
+        firstError ??= validationError;
+        continue;
       }
 
       if (kind === PROTOCOL_UPLOAD_KIND.AUDIO) {
-        nextAudio = file
+        nextAudio = file;
       } else {
         // Dedupe text files by name — a re-drop of the same file
         // shouldn't accumulate duplicates.
         if (!nextTextFiles.some((f) => f.name === file.name && f.size === file.size)) {
-          nextTextFiles.push(file)
+          nextTextFiles.push(file);
         }
       }
     }
 
-    if (firstError) onError?.(firstError)
-    onChange({ audio: nextAudio, textFiles: nextTextFiles })
-  }
+    if (firstError) onError?.(firstError);
+    onChange({ audio: nextAudio, textFiles: nextTextFiles });
+  };
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    setIsDraggingOver(false)
-    if (disabled) return
-    const dropped = Array.from(e.dataTransfer.files)
-    if (dropped.length > 0) accept(dropped)
-  }
+    e.preventDefault();
+    setIsDraggingOver(false);
+    if (disabled) return;
+    const dropped = Array.from(e.dataTransfer.files);
+    if (dropped.length > 0) accept(dropped);
+  };
 
   const handleClickToBrowse = () => {
-    if (disabled) return
-    inputRef.current?.click()
-  }
+    if (disabled) return;
+    inputRef.current?.click();
+  };
 
   const handlePicked = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const picked = Array.from(e.target.files ?? [])
-    if (picked.length > 0) accept(picked)
+    const picked = Array.from(e.target.files ?? []);
+    if (picked.length > 0) accept(picked);
     // Reset so picking the same file twice still fires onChange
-    e.target.value = ''
-  }
+    e.target.value = '';
+  };
 
-  const removeAudio = () => onChange({ ...value, audio: null })
+  const removeAudio = () => onChange({ ...value, audio: null });
   const removeTextFile = (name: string, size: number) =>
     onChange({
       ...value,
       textFiles: value.textFiles.filter((f) => !(f.name === name && f.size === size)),
-    })
+    });
 
-  const hasAny = value.audio !== null || value.textFiles.length > 0
+  const hasAny = value.audio !== null || value.textFiles.length > 0;
 
   return (
     <div>
@@ -139,13 +139,13 @@ export function SourceUploader({ value, onChange, onError, disabled }: SourceUpl
         onClick={handleClickToBrowse}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault()
-            handleClickToBrowse()
+            e.preventDefault();
+            handleClickToBrowse();
           }
         }}
         onDragOver={(e) => {
-          e.preventDefault()
-          if (!disabled) setIsDraggingOver(true)
+          e.preventDefault();
+          if (!disabled) setIsDraggingOver(true);
         }}
         onDragLeave={() => setIsDraggingOver(false)}
         onDrop={handleDrop}
@@ -231,5 +231,5 @@ export function SourceUploader({ value, onChange, onError, disabled }: SourceUpl
         </ul>
       )}
     </div>
-  )
+  );
 }

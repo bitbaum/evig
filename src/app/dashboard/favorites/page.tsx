@@ -1,106 +1,104 @@
-'use client'
+'use client';
 
-import { useState, useEffect, useCallback } from 'react'
-import { useSwrFetch } from '@/lib/api/swr'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import {
-  Heart,
-  Loader2,
-  AlertCircle,
-  RefreshCw,
-  MapPin,
-} from 'lucide-react'
-import { ListingImage } from '@/components/marketplace/ListingImage'
-import { useTranslations } from 'next-intl'
-import { apiFetch } from '@/lib/api/client'
-import Heading from '@/components/ui/Heading'
-import { EmptyState } from '@/components/ui/EmptyState'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { getConditionBadge } from '@/config/erfassung/conditions'
-import { formatCHF, LISTING_STATUS } from '@/config/marketplace'
-import { ROUTES } from '@/config/routes'
+import { useState, useEffect, useCallback } from 'react';
+import { useSwrFetch } from '@/lib/api/swr';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Heart, Loader2, AlertCircle, RefreshCw, MapPin } from 'lucide-react';
+import { ListingImage } from '@/components/marketplace/ListingImage';
+import { useTranslations } from 'next-intl';
+import { apiFetch } from '@/lib/api/client';
+import Heading from '@/components/ui/Heading';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { getConditionBadge } from '@/config/erfassung/conditions';
+import { formatCHF, LISTING_STATUS } from '@/config/marketplace';
+import { ROUTES } from '@/config/routes';
 
 interface FavoriteListing {
-  id: string
-  title: string
-  price_chf: number
-  category: string
-  condition: string
-  status: string
-  is_revampit: boolean
-  pickup_location: string | null
-  view_count: number
-  favorite_count: number
-  created_at: string
-  seller_name: string
-  seller_display_name: string | null
-  seller_city: string | null
-  thumbnail: string | null
-  favorited_at: string
+  id: string;
+  title: string;
+  price_chf: number;
+  category: string;
+  condition: string;
+  status: string;
+  is_revampit: boolean;
+  pickup_location: string | null;
+  view_count: number;
+  favorite_count: number;
+  created_at: string;
+  seller_name: string;
+  seller_display_name: string | null;
+  seller_city: string | null;
+  thumbnail: string | null;
+  favorited_at: string;
 }
 
 export default function FavoritesPage() {
-  const t = useTranslations('dashboard.favorites')
-  const { data: session, status: sessionStatus } = useSession()
-  const router = useRouter()
-  const [removingId, setRemovingId] = useState<string | null>(null)
+  const t = useTranslations('dashboard.favorites');
+  const { data: session, status: sessionStatus } = useSession();
+  const router = useRouter();
+  const [removingId, setRemovingId] = useState<string | null>(null);
 
   // Fetch is gated on an authenticated session via the null SWR key.
-  const { data, error: loadError, isLoading, mutate } = useSwrFetch<{
-    items: FavoriteListing[]
-  }>(session?.user ? '/api/listings/favorites' : null)
-  const favorites = data?.items ?? []
+  const {
+    data,
+    error: loadError,
+    isLoading,
+    mutate,
+  } = useSwrFetch<{
+    items: FavoriteListing[];
+  }>(session?.user ? '/api/listings/favorites' : null);
+  const favorites = data?.items ?? [];
   const error = loadError
     ? loadError instanceof Error && loadError.message
       ? loadError.message
       : t('loadError')
-    : null
+    : null;
 
   const fetchFavorites = useCallback(async () => {
-    await mutate()
-  }, [mutate])
+    await mutate();
+  }, [mutate]);
 
   useEffect(() => {
-    if (sessionStatus === 'loading') return
+    if (sessionStatus === 'loading') return;
     if (!session?.user) {
-      router.push('/auth/login')
+      router.push('/auth/login');
     }
-  }, [session, sessionStatus, router])
+  }, [session, sessionStatus, router]);
 
   const removeFavorite = async (listingId: string) => {
-    setRemovingId(listingId)
+    setRemovingId(listingId);
     try {
-      const result = await apiFetch<unknown>(`/api/listings/${listingId}/favorite`, { method: 'POST' })
+      const result = await apiFetch<unknown>(`/api/listings/${listingId}/favorite`, {
+        method: 'POST',
+      });
       if (result.success) {
         // The server already removed it — drop it from the cached list locally.
-        mutate(
-          current => current && { items: current.items.filter(f => f.id !== listingId) },
-          { revalidate: false },
-        )
+        mutate((current) => current && { items: current.items.filter((f) => f.id !== listingId) }, {
+          revalidate: false,
+        });
       }
     } finally {
-      setRemovingId(null)
+      setRemovingId(null);
     }
-  }
+  };
 
   if (sessionStatus === 'loading') {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader2 className="w-8 h-8 text-action animate-spin" />
       </div>
-    )
+    );
   }
 
   return (
     <article className="mx-auto max-w-6xl space-y-6 px-4 py-12 sm:px-6 lg:px-8">
       <header className="border-b border-subtle pb-8">
-        <Eyebrow>
-          {t('pageSubtitle')}
-        </Eyebrow>
+        <Eyebrow>{t('pageSubtitle')}</Eyebrow>
         <Heading
           level={1}
           className="mt-2 flex items-center gap-2 text-3xl font-semibold text-text-primary sm:text-4xl"
@@ -146,31 +144,39 @@ export default function FavoritesPage() {
       {!isLoading && !error && favorites.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {favorites.map((listing) => {
-            const conditionInfo = getConditionBadge(listing.condition)
-            const sellerName = listing.seller_display_name || listing.seller_name
+            const conditionInfo = getConditionBadge(listing.condition);
+            const sellerName = listing.seller_display_name || listing.seller_name;
             return (
-              <Card
-                key={listing.id}
-                className="group overflow-hidden"
-              >
+              <Card key={listing.id} className="group overflow-hidden">
                 <Link href={`/marketplace/${listing.id}`}>
                   <div className="relative aspect-4/3">
-                    <ListingImage src={listing.thumbnail} alt={listing.title} fallbackIconSize="w-12 h-12" />
+                    <ListingImage
+                      src={listing.thumbnail}
+                      alt={listing.title}
+                      fallbackIconSize="w-12 h-12"
+                    />
                     <div className="absolute top-2 left-2">
-                      <span className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${conditionInfo.color}`}>
+                      <span
+                        className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${conditionInfo.color}`}
+                      >
                         {conditionInfo.label}
                       </span>
                     </div>
                     {listing.status !== LISTING_STATUS.ACTIVE && (
                       <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                         <span className="text-white font-semibold text-sm">
-                          {listing.status === LISTING_STATUS.SOLD ? t('statusSold') : t('statusUnavailable')}
+                          {listing.status === LISTING_STATUS.SOLD
+                            ? t('statusSold')
+                            : t('statusUnavailable')}
                         </span>
                       </div>
                     )}
                   </div>
                   <div className="p-3">
-                    <Heading level={3} className="font-semibold text-text-primary mb-1 line-clamp-2 text-sm group-hover:text-action transition-colors">
+                    <Heading
+                      level={3}
+                      className="font-semibold text-text-primary mb-1 line-clamp-2 text-sm group-hover:text-action transition-colors"
+                    >
                       {listing.title}
                     </Heading>
                     <p className="text-lg font-bold text-text-primary mb-1">
@@ -204,10 +210,10 @@ export default function FavoritesPage() {
                   </Button>
                 </div>
               </Card>
-            )
+            );
           })}
         </div>
       )}
     </article>
-  )
+  );
 }

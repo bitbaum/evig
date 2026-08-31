@@ -1,18 +1,16 @@
-'use client'
+'use client';
 
-import { useEffect, useRef, useState } from 'react'
-import { Check } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import {
-  isAbsenceCategory,
-} from '@/config/timecards'
-import type { TimecardEntryInput } from '@/lib/schemas/timecards'
-import { WEEKDAY_IDS } from '@/lib/team/schedule'
-import { useTimecardIntl } from '@/hooks/useTimecardIntl'
-import { getEntryForDate } from '@/lib/team/timecard-utils'
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
-import { useGridPointerInput } from './useGridPointerInput'
+import { useEffect, useRef, useState } from 'react';
+import { Check } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { isAbsenceCategory } from '@/config/timecards';
+import type { TimecardEntryInput } from '@/lib/schemas/timecards';
+import { WEEKDAY_IDS } from '@/lib/team/schedule';
+import { useTimecardIntl } from '@/hooks/useTimecardIntl';
+import { getEntryForDate } from '@/lib/team/timecard-utils';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { useGridPointerInput } from './useGridPointerInput';
 
 /**
  * Month grid for the timecard editor.
@@ -40,108 +38,113 @@ export function TimecardMonthGrid({
   onDayContextMenu,
   onEditDay,
 }: {
-  visibleDates: string[]
-  entries: TimecardEntryInput[]
-  focusedDate: string
-  selectedDates: string[]
-  onDaySelect: (date: string, mode: 'single' | 'toggle' | 'range' | 'add' | 'remove') => void
-  onWeekdaySelect?: (weekday: number, additive: boolean) => void
-  onClearSelected: () => void
-  onDayContextMenu?: (date: string, pos: { x: number; y: number }) => void
+  visibleDates: string[];
+  entries: TimecardEntryInput[];
+  focusedDate: string;
+  selectedDates: string[];
+  onDaySelect: (date: string, mode: 'single' | 'toggle' | 'range' | 'add' | 'remove') => void;
+  onWeekdaySelect?: (weekday: number, additive: boolean) => void;
+  onClearSelected: () => void;
+  onDayContextMenu?: (date: string, pos: { x: number; y: number }) => void;
   /** Open the day editor for this date (double-click / "Tag bearbeiten"). */
-  onEditDay?: (date: string) => void
+  onEditDay?: (date: string) => void;
 }) {
-  const t = useTranslations('admin.timecards')
-  const { categoryLabel, duration, durationCompact, weekdayLabel } = useTimecardIntl()
-  const selected = new Set(selectedDates)
+  const t = useTranslations('admin.timecards');
+  const { categoryLabel, duration, durationCompact, weekdayLabel } = useTimecardIntl();
+  const selected = new Set(selectedDates);
 
   // Whether the running paint gesture adds or removes days — decided by the
   // state of the day the gesture started on (touch); mouse always paints.
-  const paintModeRef = useRef<'add' | 'remove'>('add')
+  const paintModeRef = useRef<'add' | 'remove'>('add');
 
   const input = useGridPointerInput({
     onDragStart: (date, pointerType) => {
       if (pointerType === 'touch' || pointerType === 'pen') {
-        paintModeRef.current = selected.has(date) ? 'remove' : 'add'
-        onDaySelect(date, paintModeRef.current)
+        paintModeRef.current = selected.has(date) ? 'remove' : 'add';
+        onDaySelect(date, paintModeRef.current);
       } else {
         // Mouse press = the plain click semantic (the trailing click is
         // swallowed by the engine); a following drag then paints additively.
-        paintModeRef.current = 'add'
-        onDaySelect(date, 'single')
+        paintModeRef.current = 'add';
+        onDaySelect(date, 'single');
       }
     },
-    onDragOver: date => onDaySelect(date, paintModeRef.current),
+    onDragOver: (date) => onDaySelect(date, paintModeRef.current),
     onTap: (date, info) => {
       if (info.pointerType === 'touch' || info.pointerType === 'pen') {
         // Tap OPENS the day editor — "I tapped the 10th, let me enter my
         // hours" is the mobile intent. Long-press starts a selection; while
         // one exists, taps toggle days in/out of it (Google-Photos model).
         if (selected.size === 0 && onEditDay) {
-          onEditDay(date)
-          return
+          onEditDay(date);
+          return;
         }
-        onDaySelect(date, 'toggle')
-        return
+        onDaySelect(date, 'toggle');
+        return;
       }
-      onDaySelect(date, info.shiftKey ? 'range' : info.ctrlKey || info.metaKey ? 'toggle' : 'single')
+      onDaySelect(
+        date,
+        info.shiftKey ? 'range' : info.ctrlKey || info.metaKey ? 'toggle' : 'single',
+      );
     },
-  })
+  });
 
   // Weekday-header drag (mouse): press selects the column, sweeping across
   // headers adds columns. On touch the synthetic mousedown from a tap selects
   // the column — good enough (columns are also paintable via long-press).
-  const [headerDragging, setHeaderDragging] = useState(false)
+  const [headerDragging, setHeaderDragging] = useState(false);
   useEffect(() => {
-    if (!headerDragging) return
-    const stop = () => setHeaderDragging(false)
-    window.addEventListener('mouseup', stop)
-    return () => window.removeEventListener('mouseup', stop)
-  }, [headerDragging])
+    if (!headerDragging) return;
+    const stop = () => setHeaderDragging(false);
+    window.addEventListener('mouseup', stop);
+    return () => window.removeEventListener('mouseup', stop);
+  }, [headerDragging]);
 
   // Weekday-aligned calendar: blanks pad the first row so the 1st lands under
   // its weekday (Mon-first). A real month reads in ~6 rows — no endless scroll.
   const firstDow = (() => {
-    const d = new Date(`${visibleDates[0]}T00:00:00.000Z`).getUTCDay()
-    return d === 0 ? 6 : d - 1
-  })()
+    const d = new Date(`${visibleDates[0]}T00:00:00.000Z`).getUTCDay();
+    return d === 0 ? 6 : d - 1;
+  })();
 
   // "Today" in Europe/Zurich (server saldo uses the same tz) — so the grid
   // marks the real current day, not a UTC-shifted one near midnight.
-  const todayIso = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Zurich' }).format(new Date())
+  const todayIso = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Zurich' }).format(
+    new Date(),
+  );
 
   return (
     <div
       {...input.containerProps}
       role="grid"
       tabIndex={0}
-      onKeyDown={e => {
+      onKeyDown={(e) => {
         if (e.key === 'Delete' || e.key === 'Backspace') {
-          e.preventDefault()
-          onClearSelected()
+          e.preventDefault();
+          onClearSelected();
         }
       }}
       className="touch-pan-y select-none rounded-lg focus:outline-hidden focus-visible:ring-2 focus-visible:ring-action/40"
     >
       <div className="mb-1 grid grid-cols-7 gap-1 sm:gap-1.5">
         {WEEKDAY_IDS.map((id, i) => {
-          const w = weekdayLabel(id)
+          const w = weekdayLabel(id);
           // WEEKDAY_IDS is Mon-first; map to JS getUTCDay (Sun=0…Sat=6).
-          const weekday = i === 6 ? 0 : i + 1
+          const weekday = i === 6 ? 0 : i + 1;
           return (
             <Button
               key={id}
               type="button"
               variant="ghost"
               title={t('headerSelectColumn', { day: w })}
-              onMouseDown={e => {
-                if (e.button !== 0 || !onWeekdaySelect) return
-                e.preventDefault()
-                setHeaderDragging(true)
-                onWeekdaySelect(weekday, false)
+              onMouseDown={(e) => {
+                if (e.button !== 0 || !onWeekdaySelect) return;
+                e.preventDefault();
+                setHeaderDragging(true);
+                onWeekdaySelect(weekday, false);
               }}
               onMouseEnter={() => {
-                if (headerDragging && onWeekdaySelect) onWeekdaySelect(weekday, true)
+                if (headerDragging && onWeekdaySelect) onWeekdaySelect(weekday, true);
               }}
               className={cn(
                 // Taller tap target on touch layouts (the header is the only
@@ -153,7 +156,7 @@ export function TimecardMonthGrid({
             >
               {w}
             </Button>
-          )
+          );
         })}
       </div>
 
@@ -161,18 +164,16 @@ export function TimecardMonthGrid({
         {Array.from({ length: firstDow }).map((_, i) => (
           <div key={`pad-${i}`} aria-hidden="true" />
         ))}
-        {visibleDates.map(date => {
-          const entry = getEntryForDate(entries, date)
-          const isFocused = focusedDate === date
-          const isSelected = selected.has(date)
-          const isToday = date === todayIso
-          const d = new Date(`${date}T00:00:00.000Z`)
-          const dayNum = d.getUTCDate()
-          const isWeekend = d.getUTCDay() === 0 || d.getUTCDay() === 6
-          const absence = entry ? isAbsenceCategory(entry.category) : false
-          const entryCategoryLabel = entry
-            ? categoryLabel(entry.category)
-            : undefined
+        {visibleDates.map((date) => {
+          const entry = getEntryForDate(entries, date);
+          const isFocused = focusedDate === date;
+          const isSelected = selected.has(date);
+          const isToday = date === todayIso;
+          const d = new Date(`${date}T00:00:00.000Z`);
+          const dayNum = d.getUTCDate();
+          const isWeekend = d.getUTCDay() === 0 || d.getUTCDay() === 6;
+          const absence = entry ? isAbsenceCategory(entry.category) : false;
+          const entryCategoryLabel = entry ? categoryLabel(entry.category) : undefined;
 
           return (
             <Button
@@ -181,16 +182,17 @@ export function TimecardMonthGrid({
               variant="ghost"
               {...input.getCellProps(date)}
               onDoubleClick={() => onEditDay?.(date)}
-              onContextMenu={e => {
-                if (!onDayContextMenu) return
-                e.preventDefault()
+              onContextMenu={(e) => {
+                if (!onDayContextMenu) return;
+                e.preventDefault();
                 // A touch long-press is a paint gesture here, not a context
                 // menu (the bulk bar carries the same actions on touch).
-                if (input.dragActiveRef.current || input.lastPointerTypeRef.current === 'touch') return
+                if (input.dragActiveRef.current || input.lastPointerTypeRef.current === 'touch')
+                  return;
                 // Right-clicking a day outside the current selection selects just
                 // it; right-clicking inside the selection keeps the whole batch.
-                if (!selected.has(date)) onDaySelect(date, 'single')
-                onDayContextMenu(date, { x: e.clientX, y: e.clientY })
+                if (!selected.has(date)) onDaySelect(date, 'single');
+                onDayContextMenu(date, { x: e.clientX, y: e.clientY });
               }}
               title={isToday ? t('today') : entryCategoryLabel}
               aria-pressed={isSelected}
@@ -217,7 +219,9 @@ export function TimecardMonthGrid({
                   <span className="inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-action px-1 font-mono text-[0.6rem] font-semibold tabular-nums leading-none text-action-text">
                     {String(dayNum).padStart(2, '0')}
                   </span>
-                  <span className="hidden text-[0.55rem] font-medium uppercase tracking-wide text-action sm:inline">{t('today')}</span>
+                  <span className="hidden text-[0.55rem] font-medium uppercase tracking-wide text-action sm:inline">
+                    {t('today')}
+                  </span>
                 </span>
               ) : (
                 <span
@@ -241,14 +245,18 @@ export function TimecardMonthGrid({
                   )}
                 >
                   {/* Compact "7h" in narrow phone cells; full "7 Std." from sm up. */}
-                  <span className="sm:hidden">{entry ? durationCompact(entry.duration_minutes) : '·'}</span>
-                  <span className="hidden sm:inline">{entry ? duration(entry.duration_minutes) : '·'}</span>
+                  <span className="sm:hidden">
+                    {entry ? durationCompact(entry.duration_minutes) : '·'}
+                  </span>
+                  <span className="hidden sm:inline">
+                    {entry ? duration(entry.duration_minutes) : '·'}
+                  </span>
                 </span>
               )}
             </Button>
-          )
+          );
         })}
       </div>
     </div>
-  )
+  );
 }

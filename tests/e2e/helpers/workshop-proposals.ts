@@ -1,29 +1,29 @@
-import type { APIRequestContext } from '@playwright/test'
-import { csrfPost } from './api-csrf'
+import type { APIRequestContext } from '@playwright/test';
+import { csrfPost } from './api-csrf';
 
 interface ApiEnvelope<T> {
-  success: boolean
-  data?: T
-  error?: string
+  success: boolean;
+  data?: T;
+  error?: string;
 }
 
 async function parseApi<T>(response: {
-  ok: () => boolean
-  json: () => Promise<unknown>
-  status: () => number
-  url: () => string
+  ok: () => boolean;
+  json: () => Promise<unknown>;
+  status: () => number;
+  url: () => string;
 }): Promise<T> {
-  const body = (await response.json()) as ApiEnvelope<T>
+  const body = (await response.json()) as ApiEnvelope<T>;
   if (!response.ok() || !body.success) {
-    throw new Error(body.error || `API ${response.status()} ${response.url()}`)
+    throw new Error(body.error || `API ${response.status()} ${response.url()}`);
   }
-  return body.data as T
+  return body.data as T;
 }
 
 export function buildTestWorkshopProposalPayload(
   overrides: Record<string, unknown> = {},
 ): Record<string, unknown> {
-  const stamp = Date.now()
+  const stamp = Date.now();
   return {
     title: `E2E Workshop-Vorschlag ${stamp}`,
     description: 'Automatisierter Playwright-Test — kann abgelehnt oder gelöscht werden.',
@@ -38,18 +38,18 @@ export function buildTestWorkshopProposalPayload(
     locationType: 'online',
     termsAccepted: true,
     ...overrides,
-  }
+  };
 }
 
 export async function submitWorkshopProposal(
   request: APIRequestContext,
   overrides: Record<string, unknown> = {},
 ): Promise<{ proposalId: string; title: string }> {
-  const payload = buildTestWorkshopProposalPayload(overrides)
-  const response = await csrfPost(request, '/api/workshops/propose', payload)
-  const data = await parseApi<{ proposalId: string }>(response)
-  if (!data.proposalId) throw new Error('submitWorkshopProposal: missing proposalId')
-  return { proposalId: data.proposalId, title: String(payload.title) }
+  const payload = buildTestWorkshopProposalPayload(overrides);
+  const response = await csrfPost(request, '/api/workshops/propose', payload);
+  const data = await parseApi<{ proposalId: string }>(response);
+  if (!data.proposalId) throw new Error('submitWorkshopProposal: missing proposalId');
+  return { proposalId: data.proposalId, title: String(payload.title) };
 }
 
 export async function reviewWorkshopProposal(
@@ -58,30 +58,29 @@ export async function reviewWorkshopProposal(
   action: 'approve' | 'reject' | 'require_changes',
   reviewNotes = '',
 ): Promise<void> {
-  const response = await csrfPost(
-    request,
-    `/api/admin/workshops/proposals/${proposalId}/approve`,
-    { action, review_notes: reviewNotes },
-  )
-  await parseApi(response)
+  const response = await csrfPost(request, `/api/admin/workshops/proposals/${proposalId}/approve`, {
+    action,
+    review_notes: reviewNotes,
+  });
+  await parseApi(response);
 }
 
 export async function fetchWorkshopProposalAdmin(
   request: APIRequestContext,
   proposalId: string,
 ): Promise<{ status: string; title: string }> {
-  const response = await request.get(`/api/admin/workshops/proposals/${proposalId}`)
-  const data = await parseApi<{ proposal: { status: string; title: string } }>(response)
-  return data.proposal
+  const response = await request.get(`/api/admin/workshops/proposals/${proposalId}`);
+  const data = await parseApi<{ proposal: { status: string; title: string } }>(response);
+  return data.proposal;
 }
 
-const E2E_PROPOSAL_TITLE_PREFIX = 'E2E Workshop-Vorschlag'
+const E2E_PROPOSAL_TITLE_PREFIX = 'E2E Workshop-Vorschlag';
 
 interface AdminProposalListItem {
-  id: string
-  status: string
-  proposerEmail: string | null
-  title: string
+  id: string;
+  status: string;
+  proposerEmail: string | null;
+  title: string;
 }
 
 /** Reject stale E2E proposals so the 3 pending/approved quota does not block reruns. */
@@ -91,13 +90,13 @@ export async function clearE2EWorkshopProposalQuota(
 ): Promise<void> {
   const response = await request.get(
     `/api/admin/workshops/proposals?status=all&q=${encodeURIComponent(E2E_PROPOSAL_TITLE_PREFIX)}&limit=50`,
-  )
-  const data = await parseApi<{ items: AdminProposalListItem[] }>(response)
-  const email = proposerEmail.toLowerCase()
+  );
+  const data = await parseApi<{ items: AdminProposalListItem[] }>(response);
+  const email = proposerEmail.toLowerCase();
 
   for (const item of data.items) {
-    if ((item.proposerEmail ?? '').toLowerCase() !== email) continue
-    if (item.status !== 'pending' && item.status !== 'approved') continue
-    await reviewWorkshopProposal(request, item.id, 'reject', 'E2E cleanup — quota reset')
+    if ((item.proposerEmail ?? '').toLowerCase() !== email) continue;
+    if (item.status !== 'pending' && item.status !== 'approved') continue;
+    await reviewWorkshopProposal(request, item.id, 'reject', 'E2E cleanup — quota reset');
   }
 }

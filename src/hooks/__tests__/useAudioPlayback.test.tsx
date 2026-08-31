@@ -19,14 +19,14 @@
  */
 
 type MockAudioInstance = {
-  play: jest.Mock
-  pause: jest.Mock
-  currentTime: number
-  ontimeupdate: (() => void) | null
-  onended: (() => void) | null
-}
+  play: jest.Mock;
+  pause: jest.Mock;
+  currentTime: number;
+  ontimeupdate: (() => void) | null;
+  onended: (() => void) | null;
+};
 
-let mockAudioInstance: MockAudioInstance
+let mockAudioInstance: MockAudioInstance;
 
 // Set up the Audio constructor mock at module level so it's in place before
 // any renderHook call creates a hook (the useEffect runs synchronously in JSDOM).
@@ -40,21 +40,21 @@ Object.defineProperty(global, 'Audio', {
       currentTime: 0,
       ontimeupdate: null,
       onended: null,
-    }
-    return mockAudioInstance
+    };
+    return mockAudioInstance;
   }),
-})
+});
 
-import { renderHook, act } from '@testing-library/react'
-import { useAudioPlayback } from '../useAudioPlayback'
+import { renderHook, act } from '@testing-library/react';
+import { useAudioPlayback } from '../useAudioPlayback';
 
-const MockAudio = global.Audio as jest.MockedClass<typeof Audio>
+const MockAudio = global.Audio as jest.MockedClass<typeof Audio>;
 
 beforeEach(() => {
-  MockAudio.mockClear()
+  MockAudio.mockClear();
   // Reset the instance so each test gets a fresh one via its own renderHook
-  mockAudioInstance = undefined as unknown as MockAudioInstance
-})
+  mockAudioInstance = undefined as unknown as MockAudioInstance;
+});
 
 // ============================================================================
 // Initial state
@@ -62,11 +62,11 @@ beforeEach(() => {
 
 describe('useAudioPlayback — initial state', () => {
   it('starts with isPlaying=false and playbackTime=0', () => {
-    const { result } = renderHook(() => useAudioPlayback(null))
-    expect(result.current.isPlaying).toBe(false)
-    expect(result.current.playbackTime).toBe(0)
-  })
-})
+    const { result } = renderHook(() => useAudioPlayback(null));
+    expect(result.current.isPlaying).toBe(false);
+    expect(result.current.playbackTime).toBe(0);
+  });
+});
 
 // ============================================================================
 // togglePlayback
@@ -74,60 +74,60 @@ describe('useAudioPlayback — initial state', () => {
 
 describe('togglePlayback', () => {
   it('is a no-op when audioUrl is null (play is not called, isPlaying stays false)', () => {
-    const { result } = renderHook(() => useAudioPlayback(null))
+    const { result } = renderHook(() => useAudioPlayback(null));
     act(() => {
-      result.current.togglePlayback()
-    })
+      result.current.togglePlayback();
+    });
     // No Audio instance created, no play call
-    expect(result.current.isPlaying).toBe(false)
-  })
+    expect(result.current.isPlaying).toBe(false);
+  });
 
   it('calls audio.play() when not already playing', async () => {
-    const { result } = renderHook(() => useAudioPlayback('blob:mock-url'))
+    const { result } = renderHook(() => useAudioPlayback('blob:mock-url'));
     await act(async () => {
-      result.current.togglePlayback()
-    })
-    expect(mockAudioInstance.play).toHaveBeenCalledTimes(1)
-  })
+      result.current.togglePlayback();
+    });
+    expect(mockAudioInstance.play).toHaveBeenCalledTimes(1);
+  });
 
   it('sets isPlaying=true after play', async () => {
-    const { result } = renderHook(() => useAudioPlayback('blob:mock-url'))
+    const { result } = renderHook(() => useAudioPlayback('blob:mock-url'));
     await act(async () => {
-      result.current.togglePlayback()
-    })
-    expect(result.current.isPlaying).toBe(true)
-  })
+      result.current.togglePlayback();
+    });
+    expect(result.current.isPlaying).toBe(true);
+  });
 
   it('calls audio.pause() when already playing', async () => {
-    const { result } = renderHook(() => useAudioPlayback('blob:mock-url'))
+    const { result } = renderHook(() => useAudioPlayback('blob:mock-url'));
 
     // First toggle: start playing
     await act(async () => {
-      result.current.togglePlayback()
-    })
-    expect(result.current.isPlaying).toBe(true)
+      result.current.togglePlayback();
+    });
+    expect(result.current.isPlaying).toBe(true);
 
     // Second toggle: pause
     act(() => {
-      result.current.togglePlayback()
-    })
-    expect(mockAudioInstance.pause).toHaveBeenCalledTimes(1)
-  })
+      result.current.togglePlayback();
+    });
+    expect(mockAudioInstance.pause).toHaveBeenCalledTimes(1);
+  });
 
   it('sets isPlaying=false after pause', async () => {
-    const { result } = renderHook(() => useAudioPlayback('blob:mock-url'))
+    const { result } = renderHook(() => useAudioPlayback('blob:mock-url'));
 
     await act(async () => {
-      result.current.togglePlayback()
-    })
+      result.current.togglePlayback();
+    });
 
     act(() => {
-      result.current.togglePlayback()
-    })
+      result.current.togglePlayback();
+    });
 
-    expect(result.current.isPlaying).toBe(false)
-  })
-})
+    expect(result.current.isPlaying).toBe(false);
+  });
+});
 
 // ============================================================================
 // resetPlayback
@@ -135,64 +135,64 @@ describe('togglePlayback', () => {
 
 describe('resetPlayback', () => {
   it('calls audio.pause()', async () => {
-    const { result } = renderHook(() => useAudioPlayback('blob:mock-url'))
+    const { result } = renderHook(() => useAudioPlayback('blob:mock-url'));
 
     // Start playing so there is an active audio instance
     await act(async () => {
-      result.current.togglePlayback()
-    })
+      result.current.togglePlayback();
+    });
 
     act(() => {
-      result.current.resetPlayback()
-    })
+      result.current.resetPlayback();
+    });
 
-    expect(mockAudioInstance.pause).toHaveBeenCalled()
-  })
+    expect(mockAudioInstance.pause).toHaveBeenCalled();
+  });
 
   it('sets isPlaying=false', async () => {
-    const { result } = renderHook(() => useAudioPlayback('blob:mock-url'))
+    const { result } = renderHook(() => useAudioPlayback('blob:mock-url'));
 
     await act(async () => {
-      result.current.togglePlayback()
-    })
+      result.current.togglePlayback();
+    });
 
     act(() => {
-      result.current.resetPlayback()
-    })
+      result.current.resetPlayback();
+    });
 
-    expect(result.current.isPlaying).toBe(false)
-  })
+    expect(result.current.isPlaying).toBe(false);
+  });
 
   it('sets playbackTime=0', async () => {
-    const { result } = renderHook(() => useAudioPlayback('blob:mock-url'))
+    const { result } = renderHook(() => useAudioPlayback('blob:mock-url'));
 
     await act(async () => {
-      result.current.togglePlayback()
-    })
+      result.current.togglePlayback();
+    });
 
     // Simulate timer advancing
     act(() => {
-      mockAudioInstance.currentTime = 5
-      mockAudioInstance.ontimeupdate?.()
-    })
-    expect(result.current.playbackTime).toBe(5)
+      mockAudioInstance.currentTime = 5;
+      mockAudioInstance.ontimeupdate?.();
+    });
+    expect(result.current.playbackTime).toBe(5);
 
     act(() => {
-      result.current.resetPlayback()
-    })
+      result.current.resetPlayback();
+    });
 
-    expect(result.current.playbackTime).toBe(0)
-  })
+    expect(result.current.playbackTime).toBe(0);
+  });
 
   it('is safe to call when audioUrl is null (no crash)', () => {
-    const { result } = renderHook(() => useAudioPlayback(null))
+    const { result } = renderHook(() => useAudioPlayback(null));
     expect(() => {
       act(() => {
-        result.current.resetPlayback()
-      })
-    }).not.toThrow()
-  })
-})
+        result.current.resetPlayback();
+      });
+    }).not.toThrow();
+  });
+});
 
 // ============================================================================
 // Event handlers set on the Audio element
@@ -200,51 +200,51 @@ describe('resetPlayback', () => {
 
 describe('Audio event handlers', () => {
   it('ontimeupdate handler updates playbackTime from audio.currentTime', () => {
-    const { result } = renderHook(() => useAudioPlayback('blob:mock-url'))
+    const { result } = renderHook(() => useAudioPlayback('blob:mock-url'));
 
     act(() => {
-      mockAudioInstance.currentTime = 3.7
-      mockAudioInstance.ontimeupdate?.()
-    })
+      mockAudioInstance.currentTime = 3.7;
+      mockAudioInstance.ontimeupdate?.();
+    });
 
-    expect(result.current.playbackTime).toBe(3.7)
-  })
+    expect(result.current.playbackTime).toBe(3.7);
+  });
 
   it('onended handler sets isPlaying=false', async () => {
-    const { result } = renderHook(() => useAudioPlayback('blob:mock-url'))
+    const { result } = renderHook(() => useAudioPlayback('blob:mock-url'));
 
     await act(async () => {
-      result.current.togglePlayback()
-    })
-    expect(result.current.isPlaying).toBe(true)
+      result.current.togglePlayback();
+    });
+    expect(result.current.isPlaying).toBe(true);
 
     act(() => {
-      mockAudioInstance.onended?.()
-    })
+      mockAudioInstance.onended?.();
+    });
 
-    expect(result.current.isPlaying).toBe(false)
-  })
+    expect(result.current.isPlaying).toBe(false);
+  });
 
   it('onended handler sets playbackTime=0', async () => {
-    const { result } = renderHook(() => useAudioPlayback('blob:mock-url'))
+    const { result } = renderHook(() => useAudioPlayback('blob:mock-url'));
 
     await act(async () => {
-      result.current.togglePlayback()
-    })
+      result.current.togglePlayback();
+    });
 
     act(() => {
-      mockAudioInstance.currentTime = 10
-      mockAudioInstance.ontimeupdate?.()
-    })
-    expect(result.current.playbackTime).toBe(10)
+      mockAudioInstance.currentTime = 10;
+      mockAudioInstance.ontimeupdate?.();
+    });
+    expect(result.current.playbackTime).toBe(10);
 
     act(() => {
-      mockAudioInstance.onended?.()
-    })
+      mockAudioInstance.onended?.();
+    });
 
-    expect(result.current.playbackTime).toBe(0)
-  })
-})
+    expect(result.current.playbackTime).toBe(0);
+  });
+});
 
 // ============================================================================
 // Audio constructor
@@ -252,10 +252,10 @@ describe('Audio event handlers', () => {
 
 describe('Audio constructor', () => {
   it('constructs Audio with the provided url when effect runs', () => {
-    renderHook(() => useAudioPlayback('blob:test-url'))
-    expect(MockAudio).toHaveBeenCalledWith('blob:test-url')
-  })
-})
+    renderHook(() => useAudioPlayback('blob:test-url'));
+    expect(MockAudio).toHaveBeenCalledWith('blob:test-url');
+  });
+});
 
 // ============================================================================
 // Cleanup on unmount
@@ -263,16 +263,16 @@ describe('Audio constructor', () => {
 
 describe('cleanup on unmount', () => {
   it('calls audio.pause() when the hook unmounts', async () => {
-    const { result, unmount } = renderHook(() => useAudioPlayback('blob:mock-url'))
+    const { result, unmount } = renderHook(() => useAudioPlayback('blob:mock-url'));
 
     // Ensure audio instance is created by triggering a play
     await act(async () => {
-      result.current.togglePlayback()
-    })
+      result.current.togglePlayback();
+    });
 
-    const instance = mockAudioInstance
-    unmount()
+    const instance = mockAudioInstance;
+    unmount();
 
-    expect(instance.pause).toHaveBeenCalled()
-  })
-})
+    expect(instance.pause).toHaveBeenCalled();
+  });
+});

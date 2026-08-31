@@ -5,7 +5,7 @@
  * Used by: blog admin editor, blog submission form, IT-Hilfe inquiry form.
  */
 
-import { BRAND_CONTEXT } from './shared'
+import { BRAND_CONTEXT } from './shared';
 
 // =============================================================================
 // BLOG PROMPTS
@@ -88,13 +88,33 @@ Wichtig:
    * Quick action prompts for common refinements
    */
   quickActions: {
-    shorter: { label: 'Kürzen', prompt: 'Kürze den Artikel auf etwa die Hälfte der Länge. Behalte die wichtigsten Punkte bei.' },
-    longer: { label: 'Erweitern', prompt: 'Erweitere den Artikel mit mehr Details, Beispielen und praktischen Tipps. Verdopple etwa die Länge.' },
-    seoOptimize: { label: 'SEO optimieren', prompt: 'Optimiere den Artikel für Suchmaschinen: Verbessere Titel, füge relevante Keywords ein, strukturiere mit besseren Überschriften.' },
-    addExamples: { label: 'Beispiele hinzufügen', prompt: 'Füge 2-3 konkrete Beispiele oder Fallstudien hinzu, die die Punkte im Artikel illustrieren.' },
-    simplify: { label: 'Vereinfachen', prompt: 'Vereinfache den Text für ein breiteres Publikum. Erkläre Fachbegriffe und verwende einfachere Sprache.' },
+    shorter: {
+      label: 'Kürzen',
+      prompt:
+        'Kürze den Artikel auf etwa die Hälfte der Länge. Behalte die wichtigsten Punkte bei.',
+    },
+    longer: {
+      label: 'Erweitern',
+      prompt:
+        'Erweitere den Artikel mit mehr Details, Beispielen und praktischen Tipps. Verdopple etwa die Länge.',
+    },
+    seoOptimize: {
+      label: 'SEO optimieren',
+      prompt:
+        'Optimiere den Artikel für Suchmaschinen: Verbessere Titel, füge relevante Keywords ein, strukturiere mit besseren Überschriften.',
+    },
+    addExamples: {
+      label: 'Beispiele hinzufügen',
+      prompt:
+        'Füge 2-3 konkrete Beispiele oder Fallstudien hinzu, die die Punkte im Artikel illustrieren.',
+    },
+    simplify: {
+      label: 'Vereinfachen',
+      prompt:
+        'Vereinfache den Text für ein breiteres Publikum. Erkläre Fachbegriffe und verwende einfachere Sprache.',
+    },
   },
-} as const
+} as const;
 
 // =============================================================================
 // IT-HILFE PROMPTS
@@ -154,17 +174,17 @@ Wichtige Regeln:
 - Diagnosis: Schreibe eine freundliche, verständliche Ersteinschätzung (2-4 Sätze). Erkläre was wahrscheinlich kaputt ist, ob es reparierbar ist und wie aufwändig. Schweizer Deutsch verwenden (ss statt ß).
 
 Antworte NUR mit dem ausgefüllten JSON, keine Erklärungen.`,
-} as const
+} as const;
 
 // =============================================================================
 // HELPER TYPES & FUNCTIONS
 // =============================================================================
 
-export type BlogQuickAction = keyof typeof BLOG_PROMPTS.quickActions
+export type BlogQuickAction = keyof typeof BLOG_PROMPTS.quickActions;
 
 /**
  * Get a blog quick action prompt by key
  */
 export function getBlogQuickActionPrompt(action: BlogQuickAction): string {
-  return BLOG_PROMPTS.quickActions[action].prompt
+  return BLOG_PROMPTS.quickActions[action].prompt;
 }

@@ -1,35 +1,40 @@
-import type { APIRequestContext } from '@playwright/test'
-import { csrfDelete, csrfPatch, csrfPost } from './api-csrf'
+import type { APIRequestContext } from '@playwright/test';
+import { csrfDelete, csrfPatch, csrfPost } from './api-csrf';
 import {
   PAYREXX_WEBHOOK_PATH,
   isPayrexxHostedUrl,
   isPayrexxMockRedirectUrl,
-} from '@/config/payrexx'
+} from '@/config/payrexx';
 
 interface ApiEnvelope<T> {
-  success: boolean
-  data?: T
-  error?: string
+  success: boolean;
+  data?: T;
+  error?: string;
 }
 
-async function parseApi<T>(response: { ok: () => boolean; json: () => Promise<unknown>; status: () => number; url: () => string }): Promise<T> {
-  const body = (await response.json()) as ApiEnvelope<T>
+async function parseApi<T>(response: {
+  ok: () => boolean;
+  json: () => Promise<unknown>;
+  status: () => number;
+  url: () => string;
+}): Promise<T> {
+  const body = (await response.json()) as ApiEnvelope<T>;
   if (!response.ok() || !body.success) {
-    throw new Error(body.error || `API ${response.status()} ${response.url()}`)
+    throw new Error(body.error || `API ${response.status()} ${response.url()}`);
   }
-  return body.data as T
+  return body.data as T;
 }
 
 export interface TestListingPayload {
-  title: string
-  description: string
-  price_chf: number
-  category: string
-  condition: string
-  delivery_options: 'pickup' | 'shipping' | 'both'
-  payment_mode: 'secure' | 'direct' | 'both'
-  pickup_location?: string
-  status: 'active' | 'draft'
+  title: string;
+  description: string;
+  price_chf: number;
+  category: string;
+  condition: string;
+  delivery_options: 'pickup' | 'shipping' | 'both';
+  payment_mode: 'secure' | 'direct' | 'both';
+  pickup_location?: string;
+  status: 'active' | 'draft';
 }
 
 export function buildTestListingPayload(
@@ -46,26 +51,26 @@ export function buildTestListingPayload(
     pickup_location: 'Zürich',
     status: 'active',
     ...overrides,
-  }
+  };
 }
 
 export async function createMarketplaceListing(
   request: APIRequestContext,
   overrides: Partial<TestListingPayload> = {},
 ): Promise<{ listingId: string }> {
-  const payload = buildTestListingPayload(overrides)
-  const response = await csrfPost(request, '/api/listings', payload)
-  const data = await parseApi<{ id: string }>(response)
-  if (!data.id) throw new Error('createMarketplaceListing: missing id')
-  return { listingId: data.id }
+  const payload = buildTestListingPayload(overrides);
+  const response = await csrfPost(request, '/api/listings', payload);
+  const data = await parseApi<{ id: string }>(response);
+  if (!data.id) throw new Error('createMarketplaceListing: missing id');
+  return { listingId: data.id };
 }
 
 export async function deleteMarketplaceListing(
   request: APIRequestContext,
   listingId: string,
 ): Promise<void> {
-  const response = await csrfDelete(request, `/api/listings/${listingId}`)
-  await parseApi(response)
+  const response = await csrfDelete(request, `/api/listings/${listingId}`);
+  await parseApi(response);
 }
 
 export async function createMarketplaceOrder(
@@ -77,21 +82,21 @@ export async function createMarketplaceOrder(
     listing_id: listingId,
     delivery_method: deliveryMethod,
     shipping_address: null,
-  })
-  const data = await parseApi<{ orderId: string; paymentUrl: string }>(response)
+  });
+  const data = await parseApi<{ orderId: string; paymentUrl: string }>(response);
   if (!data.orderId || !data.paymentUrl) {
-    throw new Error('createMarketplaceOrder: missing orderId or paymentUrl')
+    throw new Error('createMarketplaceOrder: missing orderId or paymentUrl');
   }
-  return data
+  return data;
 }
 
 export async function fetchMarketplaceOrder(
   request: APIRequestContext,
   orderId: string,
 ): Promise<{ status: string; listingId: string | null }> {
-  const response = await request.get(`/api/marketplace/orders/${orderId}`)
-  const data = await parseApi<{ status: string; listingId?: string | null }>(response)
-  return { status: data.status, listingId: data.listingId ?? null }
+  const response = await request.get(`/api/marketplace/orders/${orderId}`);
+  const data = await parseApi<{ status: string; listingId?: string | null }>(response);
+  return { status: data.status, listingId: data.listingId ?? null };
 }
 
 export async function cancelMarketplaceOrder(
@@ -100,8 +105,8 @@ export async function cancelMarketplaceOrder(
 ): Promise<void> {
   const response = await csrfPatch(request, `/api/marketplace/orders/${orderId}`, {
     status: 'cancelled',
-  })
-  await parseApi(response)
+  });
+  await parseApi(response);
 }
 
 export async function askListingQuestion(
@@ -109,10 +114,10 @@ export async function askListingQuestion(
   listingId: string,
   question: string,
 ): Promise<{ id: string }> {
-  const response = await csrfPost(request, `/api/listings/${listingId}/questions`, { question })
-  const data = await parseApi<{ id: string }>(response)
-  if (!data.id) throw new Error('askListingQuestion: missing id')
-  return { id: data.id }
+  const response = await csrfPost(request, `/api/listings/${listingId}/questions`, { question });
+  const data = await parseApi<{ id: string }>(response);
+  if (!data.id) throw new Error('askListingQuestion: missing id');
+  return { id: data.id };
 }
 
 export async function answerListingQuestion(
@@ -125,17 +130,19 @@ export async function answerListingQuestion(
     request,
     `/api/listings/${listingId}/questions/${questionId}/answer`,
     { answer },
-  )
-  await parseApi(response)
+  );
+  await parseApi(response);
 }
 
 export async function fetchListingQuestions(
   request: APIRequestContext,
   listingId: string,
 ): Promise<Array<{ id: string; question: string; answer: string | null; status: string }>> {
-  const response = await request.get(`/api/listings/${listingId}/questions`)
-  const data = await parseApi<{ questions: Array<{ id: string; question: string; answer: string | null; status: string }> }>(response)
-  return data.questions
+  const response = await request.get(`/api/listings/${listingId}/questions`);
+  const data = await parseApi<{
+    questions: Array<{ id: string; question: string; answer: string | null; status: string }>;
+  }>(response);
+  return data.questions;
 }
 
 export async function simulatePayrexxReservedWebhook(
@@ -144,9 +151,9 @@ export async function simulatePayrexxReservedWebhook(
   amountCents: number,
   transactionId = Math.floor(Math.random() * 900000) + 100000,
 ): Promise<void> {
-  const secret = process.env.PAYREXX_WEBHOOK_SECRET
+  const secret = process.env.PAYREXX_WEBHOOK_SECRET;
   if (!secret) {
-    throw new Error('PAYREXX_WEBHOOK_SECRET not set — cannot simulate prod Payrexx payment')
+    throw new Error('PAYREXX_WEBHOOK_SECRET not set — cannot simulate prod Payrexx payment');
   }
 
   const body = JSON.stringify({
@@ -157,10 +164,10 @@ export async function simulatePayrexxReservedWebhook(
       amount: amountCents,
       currency: 'CHF',
     },
-  })
+  });
 
-  const { createHmac } = await import('node:crypto')
-  const signature = createHmac('sha256', secret).update(body).digest('hex')
+  const { createHmac } = await import('node:crypto');
+  const signature = createHmac('sha256', secret).update(body).digest('hex');
 
   const response = await request.fetch(PAYREXX_WEBHOOK_PATH, {
     method: 'POST',
@@ -169,18 +176,18 @@ export async function simulatePayrexxReservedWebhook(
       'payrexx-signature': signature,
     },
     data: body,
-  })
+  });
 
   if (!response.ok()) {
-    const text = await response.text()
-    throw new Error(`Payrexx webhook simulation failed: ${response.status()} ${text}`)
+    const text = await response.text();
+    throw new Error(`Payrexx webhook simulation failed: ${response.status()} ${text}`);
   }
 }
 
 export function isMockPayrexxUrl(paymentUrl: string): boolean {
-  return isPayrexxMockRedirectUrl(paymentUrl)
+  return isPayrexxMockRedirectUrl(paymentUrl);
 }
 
 export function isHostedPayrexxUrl(paymentUrl: string): boolean {
-  return isPayrexxHostedUrl(paymentUrl)
+  return isPayrexxHostedUrl(paymentUrl);
 }

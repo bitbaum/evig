@@ -39,10 +39,7 @@ async function getListingOr404(listingId: string) {
   return listing ?? null;
 }
 
-export async function GET(
-  _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id: listingId } = await params;
     if (!listingId) return apiNotFound('Inserat');
@@ -87,96 +84,98 @@ export async function GET(
         asker_name: q.askerName || 'Nutzer',
         can_answer: isOwner && q.status === LISTING_QUESTION_STATUS.OPEN,
       })),
-      can_ask:
-        !!userId &&
-        userId !== listing.sellerId &&
-        listing.status === LISTING_STATUS.ACTIVE,
+      can_ask: !!userId && userId !== listing.sellerId && listing.status === LISTING_STATUS.ACTIVE,
     });
   } catch (error) {
     return apiError(error, 'Fehler beim Laden der Fragen');
   }
 }
 
-export const POST = withAuth<{ id: string }>(async (
-  request: NextRequest,
-  session: ValidSession,
-  context?: { params?: { id: string } },
-) => {
-  try {
-    const listingId = context?.params?.id;
-    if (!listingId) return apiNotFound('Inserat');
+export const POST = withAuth<{ id: string }>(
+  async (request: NextRequest, session: ValidSession, context?: { params?: { id: string } }) => {
+    try {
+      const listingId = context?.params?.id;
+      if (!listingId) return apiNotFound('Inserat');
 
-    if (!rateLimiters.listingQuestion(`${session.user.id}:listing-question`)) {
-      return apiBadRequest('Zu viele Fragen gesendet. Bitte warte 1 Stunde.');
-    }
+      if (!rateLimiters.listingQuestion(`${session.user.id}:listing-question`)) {
+        return apiBadRequest('Zu viele Fragen gesendet. Bitte warte 1 Stunde.');
+      }
 
-    const body = await request.json();
-    const validation = validateBody(AskListingQuestionSchema, body);
-    if (!validation.success) return validation.error;
-    const { question } = validation.data;
+      const body = await request.json();
+      const validation = validateBody(AskListingQuestionSchema, body);
+      if (!validation.success) return validation.error;
+      const { question } = validation.data;
 
-    const listing = await getListingOr404(listingId);
-    if (!listing) return apiNotFound('Inserat');
+      const listing = await getListingOr404(listingId);
+      if (!listing) return apiNotFound('Inserat');
 
-    if (listing.status !== LISTING_STATUS.ACTIVE) {
-      return apiBadRequest('Dieses Inserat ist nicht mehr verfügbar');
-    }
+      if (listing.status !== LISTING_STATUS.ACTIVE) {
+        return apiBadRequest('Dieses Inserat ist nicht mehr verfügbar');
+      }
 
-    if (listing.sellerId === session.user.id) {
-      return apiForbidden('Du kannst auf deinem eigenen Inserat keine Frage stellen');
-    }
+      if (listing.sellerId === session.user.id) {
+        return apiForbidden('Du kannst auf deinem eigenen Inserat keine Frage stellen');
+      }
 
-    const [created] = await db
-      .insert(listingQuestions)
-      .values({
-        listingId,
-        askerId: session.user.id,
-        question: question.trim(),
-        status: LISTING_QUESTION_STATUS.OPEN,
-      })
-      .returning({
-        id: listingQuestions.id,
-        createdAt: listingQuestions.createdAt,
-      });
-
-    const listingUrl = `${APP_URL}${ROUTES.public.marketplaceListing(listingId)}`;
-
-    // In-app bell only; the styled newListingQuestion email below is the single
-    // email for this event (skipEmail avoids a 2nd generic one).
-    createNotification(listing.sellerId, {
-      type: NOTIFICATION_TYPES.MARKETPLACE,
-      title: 'Neue Frage zu deinem Inserat',
-      content: `"${listing.title}": ${question.trim().substring(0, 120)}`,
-    }, { skipEmail: true }).catch((err) =>
-      logger.warn('Failed to notify seller of listing question', { error: err, listingId }),
-    );
-
-    if (listing.sellerEmail) {
-      sendCustomEmail(
-        listing.sellerEmail,
-        newListingQuestion({
-          recipientName: listing.sellerName || 'Verkäufer',
-          askerName: session.user.name || 'Nutzer',
-          listingTitle: listing.title,
-          questionPreview: question.trim().substring(0, 200),
-          listingUrl,
-        }),
-      )
-        .then((r) => {
-          if (!r.success) {
-            logger.warn('Listing question email failed (resolved)', { error: r.error, listingId });
-          }
+      const [created] = await db
+        .insert(listingQuestions)
+        .values({
+          listingId,
+          askerId: session.user.id,
+          question: question.trim(),
+          status: LISTING_QUESTION_STATUS.OPEN,
         })
-        .catch((err) =>
-          logger.warn('Listing question email failed (rejected)', { error: err, listingId }),
-        );
-    }
+        .returning({
+          id: listingQuestions.id,
+          createdAt: listingQuestions.createdAt,
+        });
 
-    return apiSuccess({
-      id: created.id,
-      created_at: created.createdAt,
-    });
-  } catch (error) {
-    return apiError(error, 'Fehler beim Stellen der Frage');
-  }
-});
+      const listingUrl = `${APP_URL}${ROUTES.public.marketplaceListing(listingId)}`;
+
+      // In-app bell only; the styled newListingQuestion email below is the single
+      // email for this event (skipEmail avoids a 2nd generic one).
+      createNotification(
+        listing.sellerId,
+        {
+          type: NOTIFICATION_TYPES.MARKETPLACE,
+          title: 'Neue Frage zu deinem Inserat',
+          content: `"${listing.title}": ${question.trim().substring(0, 120)}`,
+        },
+        { skipEmail: true },
+      ).catch((err) =>
+        logger.warn('Failed to notify seller of listing question', { error: err, listingId }),
+      );
+
+      if (listing.sellerEmail) {
+        sendCustomEmail(
+          listing.sellerEmail,
+          newListingQuestion({
+            recipientName: listing.sellerName || 'Verkäufer',
+            askerName: session.user.name || 'Nutzer',
+            listingTitle: listing.title,
+            questionPreview: question.trim().substring(0, 200),
+            listingUrl,
+          }),
+        )
+          .then((r) => {
+            if (!r.success) {
+              logger.warn('Listing question email failed (resolved)', {
+                error: r.error,
+                listingId,
+              });
+            }
+          })
+          .catch((err) =>
+            logger.warn('Listing question email failed (rejected)', { error: err, listingId }),
+          );
+      }
+
+      return apiSuccess({
+        id: created.id,
+        created_at: created.createdAt,
+      });
+    } catch (error) {
+      return apiError(error, 'Fehler beim Stellen der Frage');
+    }
+  },
+);

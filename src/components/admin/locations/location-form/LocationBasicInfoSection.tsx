@@ -1,21 +1,21 @@
-'use client'
+'use client';
 
-import { MapPin } from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { FormField } from '@/components/ui/form-field'
-import type { LocationFormData, SubmitResult } from './types'
-import { LOCATION_TYPES } from './types'
+import { MapPin } from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { FormField } from '@/components/ui/form-field';
+import type { LocationFormData, SubmitResult } from './types';
+import { LOCATION_TYPES } from './types';
 
 interface Props {
-  formData: LocationFormData
-  submitResult: SubmitResult | null
-  onFieldChange: <K extends keyof LocationFormData>(field: K, value: LocationFormData[K]) => void
+  formData: LocationFormData;
+  submitResult: SubmitResult | null;
+  onFieldChange: <K extends keyof LocationFormData>(field: K, value: LocationFormData[K]) => void;
 }
 
 export function LocationBasicInfoSection({ formData, submitResult, onFieldChange }: Props) {
-  const hasError = submitResult !== null && !submitResult.success
+  const hasError = submitResult !== null && !submitResult.success;
 
   return (
     <div className="mb-8">
@@ -39,9 +39,7 @@ export function LocationBasicInfoSection({ formData, submitResult, onFieldChange
         </FormField>
 
         <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-text-secondary mb-3">
-            Ortstyp *
-          </label>
+          <label className="block text-sm font-medium text-text-secondary mb-3">Ortstyp *</label>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {LOCATION_TYPES.map((type) => (
               <label key={type.id} className="relative">
@@ -49,17 +47,23 @@ export function LocationBasicInfoSection({ formData, submitResult, onFieldChange
                   type="radio"
                   value={type.id}
                   checked={formData.type === type.id}
-                  onChange={(e) => onFieldChange('type', e.target.value as LocationFormData['type'])}
+                  onChange={(e) =>
+                    onFieldChange('type', e.target.value as LocationFormData['type'])
+                  }
                   className="sr-only peer"
                 />
-                <div className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
-                  formData.type === type.id
-                    ? 'border-action bg-action-muted'
-                    : 'border hover:border-strong'
-                }`}>
-                  <type.icon className={`w-6 h-6 mb-2 ${
-                    formData.type === type.id ? 'text-action' : 'text-text-muted'
-                  }`} />
+                <div
+                  className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                    formData.type === type.id
+                      ? 'border-action bg-action-muted'
+                      : 'border hover:border-strong'
+                  }`}
+                >
+                  <type.icon
+                    className={`w-6 h-6 mb-2 ${
+                      formData.type === type.id ? 'text-action' : 'text-text-muted'
+                    }`}
+                  />
                   <div className="font-medium text-text-primary">{type.label}</div>
                   <div className="text-sm text-text-secondary">{type.description}</div>
                 </div>
@@ -78,5 +82,5 @@ export function LocationBasicInfoSection({ formData, submitResult, onFieldChange
         </FormField>
       </div>
     </div>
-  )
+  );
 }

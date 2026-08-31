@@ -31,27 +31,27 @@
  *     secondary sort.
  */
 
-import { z } from 'zod'
+import { z } from 'zod';
 
 export interface KeysetPaginationParams {
   /** Row id from a previous response's `nextCursor`. Null on first page. */
-  after: string | null
+  after: string | null;
   /** Page size. Bounded by maxLimit. */
-  limit: number
+  limit: number;
 }
 
 export interface KeysetResponse<T> {
-  items: T[]
+  items: T[];
   /** Pass back as `?after=` for the next page. Null when there's no next page. */
-  nextCursor: string | null
+  nextCursor: string | null;
   /** Optional total — only set when the endpoint computed it. */
-  total?: number
+  total?: number;
 }
 
-export const KEYSET_LIMIT_DEFAULT = 20
-export const KEYSET_LIMIT_MAX = 100
+export const KEYSET_LIMIT_DEFAULT = 20;
+export const KEYSET_LIMIT_MAX = 100;
 
-const cursorIdSchema = z.string().uuid().optional()
+const cursorIdSchema = z.string().uuid().optional();
 
 /**
  * Parse `?after=<uuid>&limit=<n>` off a URL.
@@ -64,20 +64,21 @@ export function parseKeysetParams(
   request: Request,
   opts: { defaultLimit?: number; maxLimit?: number } = {},
 ): KeysetPaginationParams {
-  const defaultLimit = opts.defaultLimit ?? KEYSET_LIMIT_DEFAULT
-  const maxLimit = opts.maxLimit ?? KEYSET_LIMIT_MAX
-  const url = new URL(request.url)
+  const defaultLimit = opts.defaultLimit ?? KEYSET_LIMIT_DEFAULT;
+  const maxLimit = opts.maxLimit ?? KEYSET_LIMIT_MAX;
+  const url = new URL(request.url);
 
-  const rawAfter = url.searchParams.get('after')
-  const afterParse = cursorIdSchema.safeParse(rawAfter || undefined)
-  const after = afterParse.success ? (afterParse.data ?? null) : null
+  const rawAfter = url.searchParams.get('after');
+  const afterParse = cursorIdSchema.safeParse(rawAfter || undefined);
+  const after = afterParse.success ? (afterParse.data ?? null) : null;
 
-  const rawLimit = Number(url.searchParams.get('limit'))
-  const limit = Number.isFinite(rawLimit) && rawLimit > 0
-    ? Math.min(Math.floor(rawLimit), maxLimit)
-    : defaultLimit
+  const rawLimit = Number(url.searchParams.get('limit'));
+  const limit =
+    Number.isFinite(rawLimit) && rawLimit > 0
+      ? Math.min(Math.floor(rawLimit), maxLimit)
+      : defaultLimit;
 
-  return { after, limit }
+  return { after, limit };
 }
 
 /**
@@ -97,7 +98,7 @@ export function buildNextCursor<T extends { id: string }>(
   items: T[],
   limit: number,
 ): string | null {
-  if (items.length < limit) return null
-  const last = items[items.length - 1]
-  return last?.id ?? null
+  if (items.length < limit) return null;
+  const last = items[items.length - 1];
+  return last?.id ?? null;
 }

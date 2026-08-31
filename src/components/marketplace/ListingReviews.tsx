@@ -1,66 +1,69 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useSession } from 'next-auth/react'
-import { useTranslations } from 'next-intl'
-import { Star, MessageSquare } from 'lucide-react'
-import ReviewForm from './ReviewForm'
-import { Link } from '@/i18n/navigation'
-import { ROUTES } from '@/config/routes'
-import { Button } from '@/components/ui/button'
-import Heading from '@/components/ui/Heading'
-import { formatDateShort } from '@/lib/date-formats'
-import { useSwrFetch } from '@/lib/api/swr'
-import { REVIEW_TARGET_TYPES } from '@/config/database'
+import { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
+import { Star, MessageSquare } from 'lucide-react';
+import ReviewForm from './ReviewForm';
+import { Link } from '@/i18n/navigation';
+import { ROUTES } from '@/config/routes';
+import { Button } from '@/components/ui/button';
+import Heading from '@/components/ui/Heading';
+import { formatDateShort } from '@/lib/date-formats';
+import { useSwrFetch } from '@/lib/api/swr';
+import { REVIEW_TARGET_TYPES } from '@/config/database';
 
 interface Review {
-  id: string
-  reviewerId: string
-  reviewerName: string
-  overallRating: number
-  title: string | null
-  content: string
-  createdAt: string
+  id: string;
+  reviewerId: string;
+  reviewerName: string;
+  overallRating: number;
+  title: string | null;
+  content: string;
+  createdAt: string;
 }
 
 interface ReviewStats {
-  average_rating: number | null
-  review_count: number
+  average_rating: number | null;
+  review_count: number;
 }
 
 interface ListingReviewsProps {
-  listingId: string
-  sellerId: string
+  listingId: string;
+  sellerId: string;
 }
 
 export default function ListingReviews({ listingId, sellerId }: ListingReviewsProps) {
-  const t = useTranslations('components.listingReviews')
-  const { data: session } = useSession()
-  const [showForm, setShowForm] = useState(false)
+  const t = useTranslations('components.listingReviews');
+  const { data: session } = useSession();
+  const [showForm, setShowForm] = useState(false);
 
   // Load errors intentionally render as an empty section — reviews are
   // non-critical. The API returns aggregate stats over ALL reviews (not just
   // this page), so consume them directly instead of averaging the current page.
   const { data, isLoading, mutate } = useSwrFetch<{ reviews: Review[]; stats?: ReviewStats }>(
     `/api/reviews?targetType=${REVIEW_TARGET_TYPES.LISTING}&targetId=${listingId}`,
-  )
-  const reviews = data?.reviews ?? []
-  const stats = data?.stats ?? { average_rating: null, review_count: 0 }
+  );
+  const reviews = data?.reviews ?? [];
+  const stats = data?.stats ?? { average_rating: null, review_count: 0 };
 
-  const canReview = session?.user?.id && session.user.id !== sellerId
-  const hasReviewed = reviews.some(r => r.reviewerId === session?.user?.id)
+  const canReview = session?.user?.id && session.user.id !== sellerId;
+  const hasReviewed = reviews.some((r) => r.reviewerId === session?.user?.id);
 
   const handleReviewSubmitted = () => {
-    setShowForm(false)
-    mutate()
-  }
+    setShowForm(false);
+    mutate();
+  };
 
   if (isLoading) {
     // Keep the section shell + header stable and show a quiet skeleton instead
     // of a bare spinner, so an empty (usual) section never flashes as "broken".
     return (
       <div className="card-shell p-6">
-        <Heading level={2} className="text-lg font-bold text-text-primary flex items-center gap-2 mb-4">
+        <Heading
+          level={2}
+          className="text-lg font-bold text-text-primary flex items-center gap-2 mb-4"
+        >
           <MessageSquare className="w-5 h-5" />
           {t('title')}
         </Heading>
@@ -69,7 +72,7 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
           <div className="h-3 w-full rounded bg-surface-raised animate-pulse" />
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -95,16 +98,11 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
 
       {/* Review List */}
       {reviews.length === 0 ? (
-        <p className="text-text-tertiary text-sm py-4">
-          {t('empty')}
-        </p>
+        <p className="text-text-tertiary text-sm py-4">{t('empty')}</p>
       ) : (
         <div className="space-y-4 mb-4">
           {reviews.map((review) => (
-            <div
-              key={review.id}
-              className="border-b border-subtle pb-4 last:border-0 last:pb-0"
-            >
+            <div key={review.id} className="border-b border-subtle pb-4 last:border-0 last:pb-0">
               <div className="flex items-center justify-between mb-1">
                 <div className="flex items-center gap-2">
                   <Link
@@ -161,5 +159,5 @@ export default function ListingReviews({ listingId, sellerId }: ListingReviewsPr
         />
       )}
     </div>
-  )
+  );
 }

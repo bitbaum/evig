@@ -6,34 +6,34 @@
  * Comments post live with no pre-publish queue, so this is the moderation surface.
  */
 
-import { Metadata } from 'next'
-import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
-import { logger } from '@/lib/logger'
-import { MessageSquare, AlertTriangle } from 'lucide-react'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminStatsStrip, type StatItem } from '@/components/admin/AdminStatsStrip'
-import { EyeOff, Eye } from 'lucide-react'
-import { ROUTES } from '@/config/routes'
-import { canAccessSection, toStaffUser } from '@/lib/permissions'
-import { COMMENT_STATUS } from '@/config/blog-comments'
-import { CommentModerationClient, type ModComment } from './CommentModerationClient'
+import { Metadata } from 'next';
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
+import { query } from '@/lib/auth/db';
+import { TABLE_NAMES } from '@/config/database';
+import { logger } from '@/lib/logger';
+import { MessageSquare, AlertTriangle } from 'lucide-react';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import { AdminStatsStrip, type StatItem } from '@/components/admin/AdminStatsStrip';
+import { EyeOff, Eye } from 'lucide-react';
+import { ROUTES } from '@/config/routes';
+import { canAccessSection, toStaffUser } from '@/lib/permissions';
+import { COMMENT_STATUS } from '@/config/blog-comments';
+import { CommentModerationClient, type ModComment } from './CommentModerationClient';
 
 export const metadata: Metadata = {
   title: 'Kommentare moderieren',
   description: 'Blog-Kommentare moderieren.',
-}
+};
 
 interface CommentRow {
-  id: string
-  post_slug: string
-  body: string
-  status: string
-  created_at: string
-  author_name: string | null
-  author_email: string | null
+  id: string;
+  post_slug: string;
+  body: string;
+  status: string;
+  created_at: string;
+  author_name: string | null;
+  author_email: string | null;
 }
 
 async function getComments(): Promise<{ comments: ModComment[]; dbError: boolean }> {
@@ -50,8 +50,8 @@ async function getComments(): Promise<{ comments: ModComment[]; dbError: boolean
        FROM ${TABLE_NAMES.BLOG_COMMENTS} c
        JOIN ${TABLE_NAMES.USERS} u ON u.id = c.user_id
        ORDER BY c.created_at DESC
-       LIMIT 200`
-    )
+       LIMIT 200`,
+    );
     return {
       comments: result.rows.map((r): ModComment => ({
         id: r.id,
@@ -63,32 +63,32 @@ async function getComments(): Promise<{ comments: ModComment[]; dbError: boolean
         authorEmail: r.author_email,
       })),
       dbError: false,
-    }
+    };
   } catch (error) {
-    logger.error('Admin comment moderation: DB query failed', { error })
-    return { comments: [], dbError: true }
+    logger.error('Admin comment moderation: DB query failed', { error });
+    return { comments: [], dbError: true };
   }
 }
 
 export default async function AdminBlogCommentsPage() {
-  const session = await auth()
+  const session = await auth();
 
   if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/content/blog/comments')
+    redirect('/auth/login?callbackUrl=/admin/content/blog/comments');
   }
   if (!canAccessSection(toStaffUser(session.user), 'content')) {
-    redirect('/?error=no_admin_access')
+    redirect('/?error=no_admin_access');
   }
 
-  const { comments, dbError } = await getComments()
-  const visibleCount = comments.filter((c) => c.status === 'visible').length
-  const hiddenCount = comments.length - visibleCount
+  const { comments, dbError } = await getComments();
+  const visibleCount = comments.filter((c) => c.status === 'visible').length;
+  const hiddenCount = comments.length - visibleCount;
 
   const statCards: StatItem[] = [
     { icon: MessageSquare, color: 'gray', label: 'Kommentare', value: comments.length },
     { icon: Eye, color: 'green', label: 'Sichtbar', value: visibleCount },
     { icon: EyeOff, color: 'gray', label: 'Ausgeblendet', value: hiddenCount },
-  ]
+  ];
 
   return (
     <AdminPageWrapper
@@ -101,11 +101,13 @@ export default async function AdminBlogCommentsPage() {
       {dbError && (
         <div className="mb-6 flex items-start gap-3 rounded-lg border border-warning-300 bg-warning-50 p-4 text-warning-800 dark:border-warning-800 dark:bg-warning-950 dark:text-warning-200">
           <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" />
-          <p className="text-sm">Kommentare konnten nicht geladen werden — Datenbank nicht erreichbar.</p>
+          <p className="text-sm">
+            Kommentare konnten nicht geladen werden — Datenbank nicht erreichbar.
+          </p>
         </div>
       )}
       <AdminStatsStrip items={statCards} />
       <CommentModerationClient comments={comments} />
     </AdminPageWrapper>
-  )
+  );
 }

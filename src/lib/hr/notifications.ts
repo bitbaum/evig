@@ -1,7 +1,7 @@
-import { createNotification, notifyAllStaff } from '@/lib/services/notifications'
-import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
-import { sendCustomEmail } from '@/lib/email'
-import { ORG } from '@/config/org'
+import { createNotification, notifyAllStaff } from '@/lib/services/notifications';
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications';
+import { sendCustomEmail } from '@/lib/email';
+import { ORG } from '@/config/org';
 
 export async function notifyStaffNewApplication(
   applicationId: string,
@@ -18,7 +18,7 @@ export async function notifyStaffNewApplication(
       related_id: applicationId,
     },
     excludeUserId,
-  )
+  );
 }
 
 export async function notifyApplicantConfirmation(
@@ -30,7 +30,7 @@ export async function notifyApplicantConfirmation(
     subject: `Bewerbung erhalten — ${postingTitle}`,
     html: `<p>Hallo ${name},</p><p>Danke für deine Bewerbung als «${postingTitle}» bei ${ORG.name}. Wir melden uns bei dir.</p><p>${ORG.name}</p>`,
     text: `Hallo ${name},\n\nDanke für deine Bewerbung als «${postingTitle}» bei ${ORG.name}.\n\n${ORG.name}`,
-  })
+  });
 }
 
 export async function notifyApplicantStatusChange(
@@ -47,12 +47,12 @@ export async function notifyApplicantStatusChange(
       content: `Deine Bewerbung für «${postingTitle}» — Status: ${statusLabel}.`,
       related_type: RELATED_TYPES.JOB_APPLICATION,
       related_id: applicationId,
-    })
+    });
   } else {
     await sendCustomEmail(email, {
       subject: `Bewerbungsupdate — ${postingTitle}`,
       html: `<p>Status deiner Bewerbung für «${postingTitle}»: <strong>${statusLabel}</strong>.</p>`,
       text: `Status deiner Bewerbung für «${postingTitle}»: ${statusLabel}.`,
-    })
+    });
   }
 }

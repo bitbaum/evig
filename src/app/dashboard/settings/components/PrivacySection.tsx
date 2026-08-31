@@ -1,52 +1,51 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import Heading from '@/components/ui/Heading'
-import { Globe, Lock, Eye, EyeOff, Download, Loader2 } from 'lucide-react'
-import { SETTINGS_CONFIG } from '@/config/profile'
-import { useTranslations } from 'next-intl'
-import type { ProfileData } from '../../profile/hooks/useProfileData'
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import Heading from '@/components/ui/Heading';
+import { Globe, Lock, Eye, EyeOff, Download, Loader2 } from 'lucide-react';
+import { SETTINGS_CONFIG } from '@/config/profile';
+import { useTranslations } from 'next-intl';
+import type { ProfileData } from '../../profile/hooks/useProfileData';
 
 interface PrivacySectionProps {
-  profile: ProfileData
-  handleChange: (field: keyof ProfileData, value: string | boolean) => void
+  profile: ProfileData;
+  handleChange: (field: keyof ProfileData, value: string | boolean) => void;
 }
 
 export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
-  const labels = SETTINGS_CONFIG.labels.privacy
-  const t = useTranslations('dashboard.settings.privacy')
-  const [isExporting, setIsExporting] = useState(false)
-  const [exportError, setExportError] = useState<string | null>(null)
+  const labels = SETTINGS_CONFIG.labels.privacy;
+  const t = useTranslations('dashboard.settings.privacy');
+  const [isExporting, setIsExporting] = useState(false);
+  const [exportError, setExportError] = useState<string | null>(null);
 
   const handleExportData = async () => {
-    setIsExporting(true)
-    setExportError(null)
+    setIsExporting(true);
+    setExportError(null);
     try {
-      const response = await fetch('/api/user/export-data')
+      const response = await fetch('/api/user/export-data');
       if (!response.ok) {
-        const data = await response.json().catch(() => ({}))
-        throw new Error(data.error || t('exportFailed'))
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.error || t('exportFailed'));
       }
-      const blob = await response.blob()
-      const url = URL.createObjectURL(blob)
-      const link = document.createElement('a')
-      link.href = url
-      const disposition = response.headers.get('Content-Disposition') || ''
-      const match = disposition.match(/filename="?([^"]+)"?/)
-      link.download = match?.[1] || `revampit-data-export-${new Date().toISOString().slice(0, 10)}.json`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      URL.revokeObjectURL(url)
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      const disposition = response.headers.get('Content-Disposition') || '';
+      const match = disposition.match(/filename="?([^"]+)"?/);
+      link.download =
+        match?.[1] || `revampit-data-export-${new Date().toISOString().slice(0, 10)}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
     } catch (error) {
-      setExportError(
-        error instanceof Error ? error.message : t('exportFailedRetry'),
-      )
+      setExportError(error instanceof Error ? error.message : t('exportFailedRetry'));
     } finally {
-      setIsExporting(false)
+      setIsExporting(false);
     }
-  }
+  };
 
   return (
     <div className="space-y-8">
@@ -55,9 +54,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
         <Heading level={3} className="text-lg font-semibold text-text-primary mb-2">
           {labels.title}
         </Heading>
-        <p className="text-sm text-text-secondary mb-6">
-          {labels.description}
-        </p>
+        <p className="text-sm text-text-secondary mb-6">{labels.description}</p>
 
         <div className="space-y-4">
           <div>
@@ -106,9 +103,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
         <Heading level={4} className="text-base font-semibold text-text-primary mb-2">
           {labels.contactVisibility}
         </Heading>
-        <p className="text-sm text-text-secondary mb-6">
-          {labels.contactVisibilityDescription}
-        </p>
+        <p className="text-sm text-text-secondary mb-6">{labels.contactVisibilityDescription}</p>
 
         <div className="space-y-4">
           {/* Show Email */}
@@ -125,9 +120,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between mb-1">
-                <h5 className="text-sm font-medium text-text-primary">
-                  {labels.showEmail}
-                </h5>
+                <h5 className="text-sm font-medium text-text-primary">{labels.showEmail}</h5>
                 <Button
                   type="button"
                   onClick={() => handleChange('show_email', !profile.show_email)}
@@ -145,9 +138,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
                   />
                 </Button>
               </div>
-              <p className="text-sm text-text-secondary">
-                {labels.showEmailDescription}
-              </p>
+              <p className="text-sm text-text-secondary">{labels.showEmailDescription}</p>
             </div>
           </div>
 
@@ -165,9 +156,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between mb-1">
-                <h5 className="text-sm font-medium text-text-primary">
-                  {labels.showPhone}
-                </h5>
+                <h5 className="text-sm font-medium text-text-primary">{labels.showPhone}</h5>
                 <Button
                   type="button"
                   onClick={() => handleChange('show_phone', !profile.show_phone)}
@@ -185,9 +174,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
                   />
                 </Button>
               </div>
-              <p className="text-sm text-text-secondary">
-                {labels.showPhoneDescription}
-              </p>
+              <p className="text-sm text-text-secondary">{labels.showPhoneDescription}</p>
             </div>
           </div>
         </div>
@@ -198,9 +185,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
         <Heading level={4} className="text-base font-semibold text-text-primary mb-2">
           {t('dataExportTitle')}
         </Heading>
-        <p className="text-sm text-text-secondary mb-4">
-          {t('dataExportDescription')}
-        </p>
+        <p className="text-sm text-text-secondary mb-4">{t('dataExportDescription')}</p>
 
         {exportError && (
           <div className="mb-4 rounded-lg border-2 border-error-200 bg-error-50 p-3 dark:border-error-800 dark:bg-error-900/20">
@@ -208,12 +193,7 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
           </div>
         )}
 
-        <Button
-          type="button"
-          onClick={handleExportData}
-          disabled={isExporting}
-          variant="outline"
-        >
+        <Button type="button" onClick={handleExportData} disabled={isExporting} variant="outline">
           {isExporting ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -228,5 +208,5 @@ export function PrivacySection({ profile, handleChange }: PrivacySectionProps) {
         </Button>
       </div>
     </div>
-  )
+  );
 }

@@ -1519,93 +1519,53 @@
         "items": [
           {
             "description": "Benutzerfreundliche Distribution, perfekt für Anfänger und Profis gleichermassen. Bietet eine polierte Desktop-Umgebung und ein umfangreiches Software-Repository.",
-            "useCases": [
-              "Desktop-Computing",
-              "Entwicklung",
-              "Server-Bereitstellung"
-            ],
+            "useCases": ["Desktop-Computing", "Entwicklung", "Server-Bereitstellung"],
             "pros": [
               "Einfach zu verwenden",
               "Grosse Community",
               "Regelmässige Updates",
               "Umfangreiche Dokumentation"
             ],
-            "cons": [
-              "Etwas proprietäre Software",
-              "Schwerer als einige Alternativen"
-            ]
+            "cons": ["Etwas proprietäre Software", "Schwerer als einige Alternativen"]
           },
           {
             "description": "Basiert auf Ubuntu, bietet aber eine traditionellere Desktop-Erfahrung. Bekannt für seine Stabilität und Benutzerfreundlichkeit.",
-            "useCases": [
-              "Desktop-Computing",
-              "Büroarbeit",
-              "Multimedia"
-            ],
+            "useCases": ["Desktop-Computing", "Büroarbeit", "Multimedia"],
             "pros": [
               "Windows-ähnliche Oberfläche",
               "Exzellente Hardware-Unterstützung",
               "Stabil und zuverlässig",
               "Grossartig für Anfänger"
             ],
-            "cons": [
-              "Seltener Updates",
-              "Begrenzte Enterprise-Funktionen"
-            ]
+            "cons": ["Seltener Updates", "Begrenzte Enterprise-Funktionen"]
           },
           {
             "description": "Hochmoderne Distribution, die die neuesten Open-Source-Technologien präsentiert. Unterstützt von Red Hat.",
-            "useCases": [
-              "Entwicklung",
-              "Enterprise",
-              "Innovation"
-            ],
+            "useCases": ["Entwicklung", "Enterprise", "Innovation"],
             "pros": [
               "Neueste Software",
               "Starke Sicherheit",
               "Enterprise-bereit",
               "Exzellente Entwicklungstools"
             ],
-            "cons": [
-              "Häufige Updates",
-              "Kürzere Support-Zyklen"
-            ]
+            "cons": ["Häufige Updates", "Kürzere Support-Zyklen"]
           },
           {
             "description": "Eine der stabilsten und zuverlässigsten Distributionen, die als Grundlage für viele andere Linux-Systeme dient.",
-            "useCases": [
-              "Server",
-              "Enterprise",
-              "Stabile Systeme"
-            ],
+            "useCases": ["Server", "Enterprise", "Stabile Systeme"],
             "pros": [
               "Extrem stabil",
               "Grosses Paket-Repository",
               "Lange Support-Zyklen",
               "Starke Sicherheit"
             ],
-            "cons": [
-              "Ältere Software-Versionen",
-              "Weniger benutzerfreundlich"
-            ]
+            "cons": ["Ältere Software-Versionen", "Weniger benutzerfreundlich"]
           },
           {
             "description": "Leichtgewichtige Distribution basierend auf Debian, bekannt für ihre exzellente Leistung und benutzerfreundliche Oberfläche.",
-            "useCases": [
-              "Ältere Hardware",
-              "Desktop-Computing",
-              "Ressourceneffizienz"
-            ],
-            "pros": [
-              "Leichtgewichtig",
-              "Schnelle Leistung",
-              "Benutzerfreundlich",
-              "Stabile Basis"
-            ],
-            "cons": [
-              "Kleinere Community",
-              "Begrenzte Enterprise-Funktionen"
-            ]
+            "useCases": ["Ältere Hardware", "Desktop-Computing", "Ressourceneffizienz"],
+            "pros": ["Leichtgewichtig", "Schnelle Leistung", "Benutzerfreundlich", "Stabile Basis"],
+            "cons": ["Kleinere Community", "Begrenzte Enterprise-Funktionen"]
           }
         ]
       },
@@ -4669,12 +4629,7 @@
       "eyebrow": "GERÄT SPENDEN",
       "heading": "Geräte spenden",
       "intro": "Hardware, die du nicht mehr brauchst, kann einem anderen Menschen eine echte Chance geben. Wir nehmen funktionierende oder reparierbare Geräte entgegen, bereiten sie auf und geben sie weiter.",
-      "items": [
-        "Laptops",
-        "Desktop-PCs",
-        "Monitore",
-        "Peripherie"
-      ],
+      "items": ["Laptops", "Desktop-PCs", "Monitore", "Peripherie"],
       "acceptLabel": "Was wir annehmen:",
       "acceptText": "Laptops, Desktop-PCs, GPUs, Monitore, Tastaturen, Mäuse — funktionierend oder reparierbar.",
       "notAcceptLabel": "Was wir nicht annehmen:",

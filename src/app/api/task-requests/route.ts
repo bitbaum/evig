@@ -31,9 +31,7 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
     const includeBroadcasts = searchParams.get('include_broadcasts') !== 'false';
 
     // Build conditions
-    const conditions: SQL[] = [
-      ne(taskRequests.requestedBy, session.user.id),
-    ];
+    const conditions: SQL[] = [ne(taskRequests.requestedBy, session.user.id)];
 
     if (status !== 'all') {
       conditions.push(eq(taskRequests.status, status));
@@ -41,10 +39,12 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
 
     // Filter to show requests for this user OR broadcasts
     if (includeBroadcasts) {
-      conditions.push(or(
-        eq(taskRequests.requestedUserId, session.user.id),
-        isNull(taskRequests.requestedUserId)
-      )!);
+      conditions.push(
+        or(
+          eq(taskRequests.requestedUserId, session.user.id),
+          isNull(taskRequests.requestedUserId),
+        )!,
+      );
     } else {
       conditions.push(eq(taskRequests.requestedUserId, session.user.id));
     }
@@ -75,13 +75,13 @@ export const GET = withAdmin(async (request: NextRequest, session: ValidSession)
       .leftJoin(requestedByUser, eq(taskRequests.requestedBy, requestedByUser.id))
       .leftJoin(tasks, eq(taskRequests.taskId, tasks.id))
       .where(and(...conditions))
-      .orderBy(desc(taskRequests.createdAt))
+      .orderBy(desc(taskRequests.createdAt));
 
     logger.info('Task requests fetched', {
       userId: session.user.id,
       count: rows.length,
       status,
-      includeBroadcasts
+      includeBroadcasts,
     });
 
     return apiSuccess(rows);

@@ -1,22 +1,22 @@
-'use client'
+'use client';
 
-import { Plus, Trash2 } from 'lucide-react'
-import { CollapsibleSection } from './CollapsibleSection'
-import { Input } from '@/components/ui/input'
-import { FormField } from '@/components/ui/form-field'
-import { Button } from '@/components/ui/button'
+import { Plus, Trash2 } from 'lucide-react';
+import { CollapsibleSection } from './CollapsibleSection';
+import { Input } from '@/components/ui/input';
+import { FormField } from '@/components/ui/form-field';
+import { Button } from '@/components/ui/button';
 
 interface PricingSectionProps {
-  pricingBase: string
-  pricingDetails: string[]
-  pricingMediaPrices: string[] | null
-  onBaseChange: (value: string) => void
-  onDetailAdd: () => void
-  onDetailUpdate: (index: number, value: string) => void
-  onDetailRemove: (index: number) => void
-  onMediaPriceAdd: () => void
-  onMediaPriceUpdate: (index: number, value: string) => void
-  onMediaPriceRemove: (index: number) => void
+  pricingBase: string;
+  pricingDetails: string[];
+  pricingMediaPrices: string[] | null;
+  onBaseChange: (value: string) => void;
+  onDetailAdd: () => void;
+  onDetailUpdate: (index: number, value: string) => void;
+  onDetailRemove: (index: number) => void;
+  onMediaPriceAdd: () => void;
+  onMediaPriceUpdate: (index: number, value: string) => void;
+  onMediaPriceRemove: (index: number) => void;
 }
 
 export function PricingSection({
@@ -44,9 +44,7 @@ export function PricingSection({
       </FormField>
 
       <div>
-        <span className="block text-sm font-medium text-text-secondary mb-2">
-          Preisdetails
-        </span>
+        <span className="block text-sm font-medium text-text-secondary mb-2">Preisdetails</span>
         <div className="space-y-2">
           {pricingDetails.map((detail, index) => (
             <div key={index} className="flex gap-2">
@@ -119,5 +117,5 @@ export function PricingSection({
         </div>
       </div>
     </CollapsibleSection>
-  )
+  );
 }

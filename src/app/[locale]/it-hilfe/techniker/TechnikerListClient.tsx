@@ -1,34 +1,28 @@
-'use client'
+'use client';
 
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { useSession } from 'next-auth/react'
-import { Link } from '@/i18n/navigation'
-import { Button } from '@/components/ui/button'
-import {
-  Search,
-  Users,
-  ChevronLeft,
-  ChevronRight,
-  Wrench,
-} from 'lucide-react'
-import { SERVICE_CATEGORIES, IT_SKILLS } from '@/config/it-hilfe'
-import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
-import { EmptyState } from '@/components/common/EmptyState'
-import { LoadingSkeleton } from '@/components/common/LoadingState'
-import { ErrorAlert } from '@/components/common/ErrorAlert'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
-import type { ITSkill } from '@/config/it-hilfe'
-import { useTranslations } from 'next-intl'
-import { useTechnicianList } from '@/hooks/useTechnicianList'
-import { IT_HILFE } from '@/config/it-hilfe'
-import { ROUTES } from '@/config/routes'
-import { TechnicianCard } from './TechnicianCard'
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { useSession } from 'next-auth/react';
+import { Link } from '@/i18n/navigation';
+import { Button } from '@/components/ui/button';
+import { Search, Users, ChevronLeft, ChevronRight, Wrench } from 'lucide-react';
+import { SERVICE_CATEGORIES, IT_SKILLS } from '@/config/it-hilfe';
+import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status';
+import { EmptyState } from '@/components/common/EmptyState';
+import { LoadingSkeleton } from '@/components/common/LoadingState';
+import { ErrorAlert } from '@/components/common/ErrorAlert';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import type { ITSkill } from '@/config/it-hilfe';
+import { useTranslations } from 'next-intl';
+import { useTechnicianList } from '@/hooks/useTechnicianList';
+import { IT_HILFE } from '@/config/it-hilfe';
+import { ROUTES } from '@/config/routes';
+import { TechnicianCard } from './TechnicianCard';
 
 export default function TechnikerListClient() {
-  const t = useTranslations('techniker')
-  const tEye = useTranslations('common.eyebrows')
-  const { data: session } = useSession()
+  const t = useTranslations('techniker');
+  const tEye = useTranslations('common.eyebrows');
+  const { data: session } = useSession();
 
   const {
     technicians,
@@ -49,13 +43,13 @@ export default function TechnikerListClient() {
     clearFilters,
     goToPage,
     retry,
-  } = useTechnicianList(t('list.loadingError'))
+  } = useTechnicianList(t('list.loadingError'));
 
   const tierTabs = [
-    { value: '',                                        label: t('list.tierAll') },
-    { value: REPAIRER_PROFILE_TIER.COMMUNITY,           label: t('list.tierCommunity') },
-    { value: REPAIRER_PROFILE_TIER.PROFESSIONAL,        label: t('list.tierProfessional') },
-  ]
+    { value: '', label: t('list.tierAll') },
+    { value: REPAIRER_PROFILE_TIER.COMMUNITY, label: t('list.tierCommunity') },
+    { value: REPAIRER_PROFILE_TIER.PROFESSIONAL, label: t('list.tierProfessional') },
+  ];
 
   return (
     <div className="bg-canvas min-h-screen">
@@ -88,7 +82,11 @@ export default function TechnikerListClient() {
                 {t('list.requestHelp')}
               </Link>
               <Link
-                href={session?.user ? ROUTES.public.profilTechniker : `/auth/login?callbackUrl=${encodeURIComponent(ROUTES.public.profilTechniker)}`}
+                href={
+                  session?.user
+                    ? ROUTES.public.profilTechniker
+                    : `/auth/login?callbackUrl=${encodeURIComponent(ROUTES.public.profilTechniker)}`
+                }
                 className="inline-flex items-center gap-2 text-sm text-text-secondary transition-colors hover:text-action"
               >
                 <Wrench className="w-4 h-4" />
@@ -108,7 +106,12 @@ export default function TechnikerListClient() {
                 aria-label={t('list.searchAriaLabel')}
                 className="pl-10 pr-28 text-sm"
               />
-              <Button type="submit" variant="primary" size="sm" className="absolute right-1.5 top-1/2 -translate-y-1/2">
+              <Button
+                type="submit"
+                variant="primary"
+                size="sm"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2"
+              >
                 {t('list.searchButton')}
               </Button>
             </div>
@@ -119,7 +122,11 @@ export default function TechnikerListClient() {
       {/* ── Main content ───────────────────────────────────────────── */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         {/* Tier filter — text-only tab pills (no bg-action white) */}
-        <div className="mb-5 flex flex-wrap gap-2 font-mono text-xs uppercase tracking-[0.14em]" role="group" aria-label={t('list.tierFilterLabel')}>
+        <div
+          className="mb-5 flex flex-wrap gap-2 font-mono text-xs uppercase tracking-[0.14em]"
+          role="group"
+          aria-label={t('list.tierFilterLabel')}
+        >
           {tierTabs.map((tab) => (
             <Button
               key={tab.value}
@@ -150,7 +157,9 @@ export default function TechnikerListClient() {
             {SERVICE_CATEGORIES.map((cat) => (
               <optgroup key={cat.id} label={cat.name}>
                 {(IT_SKILLS[cat.id] || []).map((skill: ITSkill) => (
-                  <option key={skill.id} value={skill.id}>{skill.name}</option>
+                  <option key={skill.id} value={skill.id}>
+                    {skill.name}
+                  </option>
                 ))}
               </optgroup>
             ))}
@@ -166,7 +175,12 @@ export default function TechnikerListClient() {
         {loading && <LoadingSkeleton count={limit} />}
 
         {error && !loading && (
-          <ErrorAlert message={error} variant="card" onRetry={retry} retryLabel={t('list.retryButton')} />
+          <ErrorAlert
+            message={error}
+            variant="card"
+            onRetry={retry}
+            retryLabel={t('list.retryButton')}
+          />
         )}
 
         {!loading && !error && technicians.length === 0 && (
@@ -174,7 +188,9 @@ export default function TechnikerListClient() {
             <EmptyState
               icon={Users}
               title={t('list.emptyTitle')}
-              message={hasActiveFilters ? t('list.emptyMessageFiltered') : t('list.emptyMessageEmpty')}
+              message={
+                hasActiveFilters ? t('list.emptyMessageFiltered') : t('list.emptyMessageEmpty')
+              }
               action={
                 hasActiveFilters
                   ? { label: t('list.emptyActionFiltered'), onClick: clearFilters }
@@ -183,7 +199,10 @@ export default function TechnikerListClient() {
             />
             {!hasActiveFilters && (
               <p className="mt-4 text-center text-sm text-text-secondary">
-                <Link href={IT_HILFE.routes.create} className="font-medium text-action hover:underline">
+                <Link
+                  href={IT_HILFE.routes.create}
+                  className="font-medium text-action hover:underline"
+                >
                   {t('list.emptyActionSecondary')}
                 </Link>
               </p>
@@ -200,14 +219,29 @@ export default function TechnikerListClient() {
         )}
 
         {totalPages > 1 && (
-          <nav className="flex items-center justify-center gap-2 pt-10" aria-label={t('list.pagination')}>
-            <Button variant="outline" size="icon" onClick={() => goToPage(currentPage - 1)} disabled={currentPage <= 1} aria-label={t('list.prevPage')}>
+          <nav
+            className="flex items-center justify-center gap-2 pt-10"
+            aria-label={t('list.pagination')}
+          >
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => goToPage(currentPage - 1)}
+              disabled={currentPage <= 1}
+              aria-label={t('list.prevPage')}
+            >
               <ChevronLeft className="w-4 h-4" />
             </Button>
             <span className="ui-public-meta font-mono tabular-nums px-4" aria-current="page">
               {t('list.pageOf', { current: currentPage, total: totalPages })}
             </span>
-            <Button variant="outline" size="icon" onClick={() => goToPage(currentPage + 1)} disabled={currentPage >= totalPages} aria-label={t('list.nextPage')}>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => goToPage(currentPage + 1)}
+              disabled={currentPage >= totalPages}
+              aria-label={t('list.nextPage')}
+            >
               <ChevronRight className="w-4 h-4" />
             </Button>
           </nav>
@@ -219,10 +253,17 @@ export default function TechnikerListClient() {
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <Eyebrow as="div">{tEye('getInvolved')}</Eyebrow>
-                <h2 className="mt-2 text-lg font-semibold text-text-primary">{t('list.ctaTitle')}</h2>
-                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-text-secondary">{t('list.ctaDescription')}</p>
+                <h2 className="mt-2 text-lg font-semibold text-text-primary">
+                  {t('list.ctaTitle')}
+                </h2>
+                <p className="mt-2 max-w-2xl text-sm leading-relaxed text-text-secondary">
+                  {t('list.ctaDescription')}
+                </p>
               </div>
-              <Link href={`/auth/login?callbackUrl=${encodeURIComponent(ROUTES.public.profilTechniker)}`} className="ui-public-cta">
+              <Link
+                href={`/auth/login?callbackUrl=${encodeURIComponent(ROUTES.public.profilTechniker)}`}
+                className="ui-public-cta"
+              >
                 {t('list.ctaCreateProfile')}
               </Link>
             </div>
@@ -230,5 +271,5 @@ export default function TechnikerListClient() {
         )}
       </div>
     </div>
-  )
+  );
 }

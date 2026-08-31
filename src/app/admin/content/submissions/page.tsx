@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Admin Blog Submissions Page
@@ -7,12 +7,12 @@
  * Actions: Approve, Reject, Publish, Request Changes
  */
 
-import Link from 'next/link'
-import { ArrowLeft, Loader2, FileText } from 'lucide-react'
-import { adminInteractive } from '@/lib/admin-ui'
-import Heading from '@/components/admin/AdminHeading'
-import { ROUTES } from '@/config/routes'
-import { EditSubmissionModal } from '@/components/admin/blog/EditSubmissionModal'
+import Link from 'next/link';
+import { ArrowLeft, Loader2, FileText } from 'lucide-react';
+import { adminInteractive } from '@/lib/admin-ui';
+import Heading from '@/components/admin/AdminHeading';
+import { ROUTES } from '@/config/routes';
+import { EditSubmissionModal } from '@/components/admin/blog/EditSubmissionModal';
 import {
   useSubmissions,
   SubmissionFilters,
@@ -20,10 +20,10 @@ import {
   SubmissionDetail,
   RejectModal,
   RequestChangesModal,
-} from '@/components/admin/blog/submissions'
+} from '@/components/admin/blog/submissions';
 
 export default function SubmissionsAdminPage() {
-  const s = useSubmissions()
+  const s = useSubmissions();
 
   return (
     <div className="space-y-6">
@@ -80,9 +80,7 @@ export default function SubmissionsAdminPage() {
       ) : s.filteredSubmissions.length === 0 ? (
         <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-12 text-center">
           <FileText className="w-12 h-12 text-text-muted mx-auto mb-4" />
-          <p className="text-text-secondary">
-            Keine Einreichungen gefunden.
-          </p>
+          <p className="text-text-secondary">Keine Einreichungen gefunden.</p>
         </div>
       ) : (
         <div className="grid lg:grid-cols-2 gap-6">
@@ -138,11 +136,11 @@ export default function SubmissionsAdminPage() {
           submission={s.selectedSubmission}
           onClose={() => s.setShowEditModal(false)}
           onSaved={() => {
-            s.setShowEditModal(false)
-            s.fetchSubmissions()
+            s.setShowEditModal(false);
+            s.fetchSubmissions();
           }}
         />
       )}
     </div>
-  )
+  );
 }

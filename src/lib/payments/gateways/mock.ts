@@ -10,18 +10,18 @@
  * testable end-to-end with zero external services.
  */
 
-import type { ParsedWebhook } from './types'
-import { APP_URL } from '@/config/urls'
+import type { ParsedWebhook } from './types';
+import { APP_URL } from '@/config/urls';
 
-export const MOCK_REDIRECT_PATH = '/api/payments/mock-redirect'
+export const MOCK_REDIRECT_PATH = '/api/payments/mock-redirect';
 
 export interface MockRedirectParams {
-  referenceId: string
-  amount: number
-  currency: string
-  successRedirectUrl: string
-  failedRedirectUrl: string
-  cancelRedirectUrl: string
+  referenceId: string;
+  amount: number;
+  currency: string;
+  successRedirectUrl: string;
+  failedRedirectUrl: string;
+  cancelRedirectUrl: string;
 }
 
 /** Build the dev mock-checkout URL for a given provider. */
@@ -34,8 +34,8 @@ export function mockRedirectLink(providerSlug: string, params: MockRedirectParam
     successUrl: params.successRedirectUrl,
     failedUrl: params.failedRedirectUrl,
     cancelUrl: params.cancelRedirectUrl,
-  })
-  return `${APP_URL}${MOCK_REDIRECT_PATH}?${q.toString()}`
+  });
+  return `${APP_URL}${MOCK_REDIRECT_PATH}?${q.toString()}`;
 }
 
 /**
@@ -45,11 +45,11 @@ export function mockRedirectLink(providerSlug: string, params: MockRedirectParam
  * re-query path is unavailable.
  */
 export function parseMockWebhook(rawBody: string): ParsedWebhook {
-  let body: Record<string, unknown> = {}
+  let body: Record<string, unknown> = {};
   try {
-    body = JSON.parse(rawBody) as Record<string, unknown>
+    body = JSON.parse(rawBody) as Record<string, unknown>;
   } catch {
-    body = {}
+    body = {};
   }
   return {
     referenceId: typeof body.referenceId === 'string' ? body.referenceId : null,
@@ -59,5 +59,5 @@ export function parseMockWebhook(rawBody: string): ParsedWebhook {
       amount: typeof body.amount === 'number' ? body.amount : null,
       currency: typeof body.currency === 'string' ? body.currency : null,
     },
-  }
+  };
 }

@@ -35,11 +35,7 @@ interface EditSubmissionModalProps {
   onSaved: () => void;
 }
 
-export function EditSubmissionModal({
-  submission,
-  onClose,
-  onSaved,
-}: EditSubmissionModalProps) {
+export function EditSubmissionModal({ submission, onClose, onSaved }: EditSubmissionModalProps) {
   const dialogRef = useFocusTrap<HTMLDivElement>(true, onClose);
 
   // Initialize form data from submission
@@ -59,7 +55,9 @@ export function EditSubmissionModal({
   useEffect(() => {
     const loadCategories = async () => {
       try {
-        const result = await apiFetch<Array<{ id: string; name: string }>>('/api/admin/blog/categories');
+        const result = await apiFetch<Array<{ id: string; name: string }>>(
+          '/api/admin/blog/categories',
+        );
         if (result.success && result.data) {
           setCategories(result.data);
         }
@@ -182,7 +180,10 @@ export function EditSubmissionModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" onClick={onClose}>
+    <div
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+      onClick={onClose}
+    >
       <div
         ref={dialogRef}
         role="dialog"
@@ -193,7 +194,9 @@ export function EditSubmissionModal({
       >
         {/* Header */}
         <div className="sticky top-0 bg-surface-base border-b px-6 py-4 flex items-center justify-between">
-          <Heading level={2} id="edit-submission-modal-title" className="text-2xl">Einreichung bearbeiten</Heading>
+          <Heading level={2} id="edit-submission-modal-title" className="text-2xl">
+            Einreichung bearbeiten
+          </Heading>
           <Button
             variant="ghost"
             size="icon"

@@ -5,17 +5,17 @@
  * Created: 2026-02-05
  */
 
-import { Metadata } from 'next'
-import Link from 'next/link'
-import { ArrowLeft, ClipboardList } from 'lucide-react'
-import TaskFormClient from './TaskFormClient'
-import Heading from '@/components/admin/AdminHeading'
-import { ROUTES } from '@/config/routes'
+import { Metadata } from 'next';
+import Link from 'next/link';
+import { ArrowLeft, ClipboardList } from 'lucide-react';
+import TaskFormClient from './TaskFormClient';
+import Heading from '@/components/admin/AdminHeading';
+import { ROUTES } from '@/config/routes';
 
 export const metadata: Metadata = {
   title: 'Neue Aufgabe',
   description: 'Neue Aufgabe erstellen.',
-}
+};
 
 export default function NewTaskPage() {
   return (
@@ -35,7 +35,9 @@ export default function NewTaskPage() {
             <ClipboardList className="w-5 h-5 text-action" />
           </div>
           <div>
-            <Heading level={1} className="text-2xl font-bold text-text-primary">Neue Aufgabe</Heading>
+            <Heading level={1} className="text-2xl font-bold text-text-primary">
+              Neue Aufgabe
+            </Heading>
             <p className="text-text-secondary">Erstelle eine neue Teamaufgabe</p>
           </div>
         </div>
@@ -44,5 +46,5 @@ export default function NewTaskPage() {
       {/* Form */}
       <TaskFormClient />
     </div>
-  )
+  );
 }

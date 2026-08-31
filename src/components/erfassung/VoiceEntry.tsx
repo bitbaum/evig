@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * VoiceEntry — record a spoken product description, transcribe + extract it,
@@ -12,58 +12,58 @@
  * its inline MediaRecorder copy.
  */
 
-import { useCallback, useState } from 'react'
-import { Mic, Square, Loader2, AlertCircle } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
-import { useVoiceRecording } from '@/hooks/useVoiceRecording'
-import { useVoiceProduct } from '@/hooks/useVoiceProduct'
-import type { ErfassungFormData, AIFieldMetadata } from '@/types/erfassung'
+import { useCallback, useState } from 'react';
+import { Mic, Square, Loader2, AlertCircle } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
+import { useVoiceRecording } from '@/hooks/useVoiceRecording';
+import { useVoiceProduct } from '@/hooks/useVoiceProduct';
+import type { ErfassungFormData, AIFieldMetadata } from '@/types/erfassung';
 
 /** Max spoken description length — a product description is short; caps runaway recordings. */
-const MAX_RECORDING_SECONDS = 120
+const MAX_RECORDING_SECONDS = 120;
 
 function formatSeconds(total: number): string {
-  const m = Math.floor(total / 60)
-  const s = total % 60
-  return `${m}:${String(s).padStart(2, '0')}`
+  const m = Math.floor(total / 60);
+  const s = total % 60;
+  return `${m}:${String(s).padStart(2, '0')}`;
 }
 
 interface VoiceEntryProps {
-  onProductData: (data: Partial<ErfassungFormData>, metadata?: AIFieldMetadata) => void
-  onError?: (error: string) => void
-  onDataFilled?: () => void
+  onProductData: (data: Partial<ErfassungFormData>, metadata?: AIFieldMetadata) => void;
+  onError?: (error: string) => void;
+  onDataFilled?: () => void;
 }
 
 export function VoiceEntry({ onProductData, onError, onDataFilled }: VoiceEntryProps) {
-  const t = useTranslations('components.erfassung.voiceEntry')
-  const [transcription, setTranscription] = useState<string | null>(null)
+  const t = useTranslations('components.erfassung.voiceEntry');
+  const [transcription, setTranscription] = useState<string | null>(null);
 
-  const { isProcessing, processRecording } = useVoiceProduct()
+  const { isProcessing, processRecording } = useVoiceProduct();
 
   const handleRecordingComplete = useCallback(
     async (audioBlob: Blob) => {
-      setTranscription(null)
-      const result = await processRecording(audioBlob)
+      setTranscription(null);
+      const result = await processRecording(audioBlob);
       if (!result) {
-        onError?.(t('errorGeneric'))
-        return
+        onError?.(t('errorGeneric'));
+        return;
       }
-      setTranscription(result.transcription)
-      onProductData(result.data as Partial<ErfassungFormData>, result.metadata)
-      onDataFilled?.()
+      setTranscription(result.transcription);
+      onProductData(result.data as Partial<ErfassungFormData>, result.metadata);
+      onDataFilled?.();
     },
     [processRecording, onProductData, onError, onDataFilled, t],
-  )
+  );
 
   const { state, recordingTime, errorMessage, startRecording, stopRecording } = useVoiceRecording({
     maxDuration: MAX_RECORDING_SECONDS,
     onRecordingComplete: handleRecordingComplete,
-    onError: msg => onError?.(msg),
-  })
+    onError: (msg) => onError?.(msg),
+  });
 
-  const isRecording = state === 'recording'
-  const busy = isProcessing || state === 'processing'
+  const isRecording = state === 'recording';
+  const busy = isProcessing || state === 'processing';
 
   return (
     <div className="space-y-3">
@@ -94,9 +94,7 @@ export function VoiceEntry({ onProductData, onError, onDataFilled }: VoiceEntryP
         </Button>
       )}
 
-      {!isRecording && !busy && (
-        <p className="text-xs text-text-tertiary">{t('hint')}</p>
-      )}
+      {!isRecording && !busy && <p className="text-xs text-text-tertiary">{t('hint')}</p>}
 
       {transcription && !busy && (
         <p className="rounded-sm bg-surface-raised p-2 text-xs text-text-tertiary">
@@ -111,5 +109,5 @@ export function VoiceEntry({ onProductData, onError, onDataFilled }: VoiceEntryP
         </p>
       )}
     </div>
-  )
+  );
 }

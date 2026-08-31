@@ -1,29 +1,29 @@
-'use client'
+'use client';
 
-import { useSyncExternalStore, useCallback } from 'react'
-import { Link } from '@/i18n/navigation'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
+import { useSyncExternalStore, useCallback } from 'react';
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
 
-const CONSENT_KEY = 'cookie_consent'
-const CONSENT_VALUE = 'accepted'
+const CONSENT_KEY = 'cookie_consent';
+const CONSENT_VALUE = 'accepted';
 
 function subscribe(callback: () => void) {
-  window.addEventListener('storage', callback)
-  return () => window.removeEventListener('storage', callback)
+  window.addEventListener('storage', callback);
+  return () => window.removeEventListener('storage', callback);
 }
 
 function getSnapshot() {
   try {
-    return localStorage.getItem(CONSENT_KEY) !== CONSENT_VALUE
+    return localStorage.getItem(CONSENT_KEY) !== CONSENT_VALUE;
   } catch {
-    return true
+    return true;
   }
 }
 
 // SSR snapshot: hide banner until hydration to avoid flash
 function getServerSnapshot() {
-  return false
+  return false;
 }
 
 /**
@@ -33,20 +33,20 @@ function getServerSnapshot() {
  * Under Swiss DSG, a simple acknowledgment is sufficient; no granular consent needed.
  */
 export function CookieBanner() {
-  const t = useTranslations('cookies')
-  const visible = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot)
+  const t = useTranslations('cookies');
+  const visible = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   const handleAccept = useCallback(() => {
     try {
-      localStorage.setItem(CONSENT_KEY, CONSENT_VALUE)
+      localStorage.setItem(CONSENT_KEY, CONSENT_VALUE);
       // Dispatch storage event so useSyncExternalStore re-evaluates getSnapshot
-      window.dispatchEvent(new StorageEvent('storage'))
+      window.dispatchEvent(new StorageEvent('storage'));
     } catch {
       // Ignore storage errors — banner will disappear on next page load
     }
-  }, [])
+  }, []);
 
-  if (!visible) return null
+  if (!visible) return null;
 
   return (
     <div
@@ -60,9 +60,7 @@ export function CookieBanner() {
       className="fixed inset-x-0 bottom-[var(--bottom-nav-clearance,0px)] z-9998 border-t-2 border-subtle bg-surface-base"
     >
       <div className="mx-auto grid max-w-6xl gap-2 px-3 py-3 sm:flex sm:items-center sm:justify-between sm:gap-4 sm:px-6 sm:py-4">
-        <p className="text-xs leading-relaxed text-text-secondary sm:text-sm">
-          {t('description')}
-        </p>
+        <p className="text-xs leading-relaxed text-text-secondary sm:text-sm">{t('description')}</p>
         <div className="flex shrink-0 items-center justify-end gap-3">
           <Link
             href="/datenschutz"
@@ -70,16 +68,11 @@ export function CookieBanner() {
           >
             {t('learnMore')}
           </Link>
-          <Button
-            type="button"
-            onClick={handleAccept}
-            variant="primary"
-            size="sm"
-          >
+          <Button type="button" onClick={handleAccept} variant="primary" size="sm">
             {t('accept')}
           </Button>
         </div>
       </div>
     </div>
-  )
+  );
 }

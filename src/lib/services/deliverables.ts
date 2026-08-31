@@ -6,32 +6,32 @@
  * shapes never drift.
  */
 
-import { randomUUID } from 'node:crypto'
-import { db } from '@/db'
-import { deliverables, deliverableFeedback } from '@/db/schema/deliverables'
-import { users } from '@/db/schema/auth'
-import { tasks } from '@/db/schema/tasks'
-import { and, eq, desc, sql, type SQL } from 'drizzle-orm'
-import { TABLE_NAMES } from '@/config/database'
+import { randomUUID } from 'node:crypto';
+import { db } from '@/db';
+import { deliverables, deliverableFeedback } from '@/db/schema/deliverables';
+import { users } from '@/db/schema/auth';
+import { tasks } from '@/db/schema/tasks';
+import { and, eq, desc, sql, type SQL } from 'drizzle-orm';
+import { TABLE_NAMES } from '@/config/database';
 import {
   FEEDBACK_KINDS,
   FEEDBACK_STATUSES,
   FEEDBACK_KIND_LABELS,
   DELIVERABLE_STATUSES,
   type FeedbackKind,
-} from '@/config/deliverables'
-import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
-import { createNotification } from '@/lib/services/notifications'
-import { sendCustomEmail } from '@/lib/email'
-import { escapeHtml } from '@/lib/utils/escape-html'
-import { APP_URL } from '@/config/urls'
-import { logger } from '@/lib/logger'
-import { EMAIL_INLINE_COLORS } from '@/config/ui-colors'
+} from '@/config/deliverables';
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications';
+import { createNotification } from '@/lib/services/notifications';
+import { sendCustomEmail } from '@/lib/email';
+import { escapeHtml } from '@/lib/utils/escape-html';
+import { APP_URL } from '@/config/urls';
+import { logger } from '@/lib/logger';
+import { EMAIL_INLINE_COLORS } from '@/config/ui-colors';
 import type {
   DeliverableListItem,
   DeliverableDetail,
   FeedbackItem,
-} from '@/lib/schemas/deliverables'
+} from '@/lib/schemas/deliverables';
 
 /** Correlated count of OPEN change requests — the "needs your attention" badge. */
 const openChangeRequestCount = sql<number>`(
@@ -39,17 +39,19 @@ const openChangeRequestCount = sql<number>`(
   WHERE f.deliverable_id = ${deliverables.id}
     AND f.status = ${FEEDBACK_STATUSES.OPEN}
     AND f.kind = ${FEEDBACK_KINDS.CHANGE_REQUEST}
-)`
+)`;
 
-export async function listDeliverables(filters: {
-  type?: string
-  status?: string
-  ownerUserId?: string
-} = {}): Promise<DeliverableListItem[]> {
-  const conditions: SQL[] = []
-  if (filters.type) conditions.push(eq(deliverables.type, filters.type))
-  if (filters.status) conditions.push(eq(deliverables.status, filters.status))
-  if (filters.ownerUserId) conditions.push(eq(deliverables.ownerUserId, filters.ownerUserId))
+export async function listDeliverables(
+  filters: {
+    type?: string;
+    status?: string;
+    ownerUserId?: string;
+  } = {},
+): Promise<DeliverableListItem[]> {
+  const conditions: SQL[] = [];
+  if (filters.type) conditions.push(eq(deliverables.type, filters.type));
+  if (filters.status) conditions.push(eq(deliverables.status, filters.status));
+  if (filters.ownerUserId) conditions.push(eq(deliverables.ownerUserId, filters.ownerUserId));
 
   const rows = await db
     .select({
@@ -69,9 +71,9 @@ export async function listDeliverables(filters: {
     .from(deliverables)
     .leftJoin(users, eq(deliverables.ownerUserId, users.id))
     .where(conditions.length > 0 ? and(...conditions) : undefined)
-    .orderBy(desc(deliverables.updatedAt))
+    .orderBy(desc(deliverables.updatedAt));
 
-  return rows as DeliverableListItem[]
+  return rows as DeliverableListItem[];
 }
 
 async function selectDetail(where: SQL): Promise<DeliverableDetail | null> {
@@ -101,17 +103,17 @@ async function selectDetail(where: SQL): Promise<DeliverableDetail | null> {
     .leftJoin(users, eq(deliverables.ownerUserId, users.id))
     .leftJoin(tasks, eq(deliverables.taskId, tasks.id))
     .where(where)
-    .limit(1)
+    .limit(1);
 
-  return (rows[0] as DeliverableDetail) ?? null
+  return (rows[0] as DeliverableDetail) ?? null;
 }
 
 export function getDeliverable(id: string): Promise<DeliverableDetail | null> {
-  return selectDetail(eq(deliverables.id, id))
+  return selectDetail(eq(deliverables.id, id));
 }
 
 export function getDeliverableByToken(token: string): Promise<DeliverableDetail | null> {
-  return selectDetail(eq(deliverables.shareToken, token))
+  return selectDetail(eq(deliverables.shareToken, token));
 }
 
 export async function getFeedback(deliverableId: string): Promise<FeedbackItem[]> {
@@ -130,22 +132,22 @@ export async function getFeedback(deliverableId: string): Promise<FeedbackItem[]
     .from(deliverableFeedback)
     .leftJoin(users, eq(deliverableFeedback.authorUserId, users.id))
     .where(eq(deliverableFeedback.deliverableId, deliverableId))
-    .orderBy(desc(deliverableFeedback.createdAt))
+    .orderBy(desc(deliverableFeedback.createdAt));
 
-  return rows as FeedbackItem[]
+  return rows as FeedbackItem[];
 }
 
 export async function createDeliverable(
   ownerUserId: string,
   input: {
-    title: string
-    description?: string | null
-    type: string
-    url?: string | null
-    source_path?: string | null
-    task_id?: string | null
-    visibility: string
-    status: string
+    title: string;
+    description?: string | null;
+    type: string;
+    url?: string | null;
+    source_path?: string | null;
+    task_id?: string | null;
+    visibility: string;
+    status: string;
   },
 ) {
   const [row] = await db
@@ -161,15 +163,12 @@ export async function createDeliverable(
       visibility: input.visibility,
       status: input.status,
     })
-    .returning()
-  return row
+    .returning();
+  return row;
 }
 
 /** Map snake_case update input to columns; only touch provided keys. */
-export async function updateDeliverable(
-  id: string,
-  input: Record<string, unknown>,
-) {
+export async function updateDeliverable(id: string, input: Record<string, unknown>) {
   const fieldMap: Record<string, string> = {
     title: 'title',
     description: 'description',
@@ -180,44 +179,44 @@ export async function updateDeliverable(
     visibility: 'visibility',
     status: 'status',
     current_version: 'currentVersion',
-  }
+  };
 
-  const set: Record<string, unknown> = {}
+  const set: Record<string, unknown> = {};
   for (const [snake, camel] of Object.entries(fieldMap)) {
-    if (snake in input) set[camel] = input[snake] ?? null
+    if (snake in input) set[camel] = input[snake] ?? null;
   }
-  if (Object.keys(set).length === 0) return getDeliverable(id)
+  if (Object.keys(set).length === 0) return getDeliverable(id);
 
   // Reaching APPROVED stamps the delivery time once.
   if (set.status === DELIVERABLE_STATUSES.APPROVED) {
-    set.deliveredAt = sql`NOW()`
+    set.deliveredAt = sql`NOW()`;
   }
-  set.updatedAt = sql`NOW()`
+  set.updatedAt = sql`NOW()`;
 
-  await db.update(deliverables).set(set).where(eq(deliverables.id, id))
-  return getDeliverable(id)
+  await db.update(deliverables).set(set).where(eq(deliverables.id, id));
+  return getDeliverable(id);
 }
 
 export async function deleteDeliverable(id: string): Promise<boolean> {
   const [row] = await db
     .delete(deliverables)
     .where(eq(deliverables.id, id))
-    .returning({ id: deliverables.id })
-  return !!row
+    .returning({ id: deliverables.id });
+  return !!row;
 }
 
 /** Generate a share token if one doesn't exist yet; returns the token. */
 export async function ensureShareToken(id: string): Promise<string | null> {
-  const current = await getDeliverable(id)
-  if (!current) return null
-  if (current.share_token) return current.share_token
+  const current = await getDeliverable(id);
+  if (!current) return null;
+  if (current.share_token) return current.share_token;
 
-  const token = randomUUID().replace(/-/g, '')
+  const token = randomUUID().replace(/-/g, '');
   await db
     .update(deliverables)
     .set({ shareToken: token, updatedAt: sql`NOW()` })
-    .where(eq(deliverables.id, id))
-  return token
+    .where(eq(deliverables.id, id));
+  return token;
 }
 
 /**
@@ -228,11 +227,11 @@ export async function ensureShareToken(id: string): Promise<string | null> {
 export async function addFeedback(
   deliverableId: string,
   input: {
-    kind: string
-    body: string
-    target?: string | null
-    authorUserId?: string | null
-    authorName?: string | null
+    kind: string;
+    body: string;
+    target?: string | null;
+    authorUserId?: string | null;
+    authorName?: string | null;
   },
 ) {
   const [row] = await db
@@ -246,12 +245,12 @@ export async function addFeedback(
       authorName: input.authorName ?? null,
       status: FEEDBACK_STATUSES.OPEN,
     })
-    .returning()
+    .returning();
 
   // Notify the owner — unless they authored the feedback themselves.
-  const deliverable = await getDeliverable(deliverableId)
+  const deliverable = await getDeliverable(deliverableId);
   if (deliverable && deliverable.owner_user_id !== input.authorUserId) {
-    const who = input.authorName ?? deliverable.owner_name ?? 'Jemand'
+    const who = input.authorName ?? deliverable.owner_name ?? 'Jemand';
     // 1) In-app bell — the durable channel (never silently dropped).
     createNotification(
       deliverable.owner_user_id,
@@ -264,15 +263,17 @@ export async function addFeedback(
       },
       // Dedicated styled email is sent separately below → bell only here.
       { skipEmail: true },
-    ).catch((error) => logger.error('Deliverable feedback notification failed', { error, deliverableId }))
+    ).catch((error) =>
+      logger.error('Deliverable feedback notification failed', { error, deliverableId }),
+    );
 
     // 2) Dedicated email to the owner — best-effort, result checked.
     void sendFeedbackEmail(deliverable, who, input).catch((error) =>
       logger.warn('Deliverable feedback email error', { error, deliverableId }),
-    )
+    );
   }
 
-  return row
+  return row;
 }
 
 /** Email the deliverable owner about new feedback, with a link to the review hub. */
@@ -281,11 +282,13 @@ async function sendFeedbackEmail(
   who: string,
   input: { kind: string; body: string; target?: string | null },
 ): Promise<void> {
-  if (!deliverable.owner_email) return
+  if (!deliverable.owner_email) return;
 
-  const kindLabel = FEEDBACK_KIND_LABELS[input.kind as FeedbackKind] ?? input.kind
-  const link = `${APP_URL}/admin/deliverables/${deliverable.id}`
-  const targetLine = input.target ? `<p><strong>Betrifft:</strong> ${escapeHtml(input.target)}</p>` : ''
+  const kindLabel = FEEDBACK_KIND_LABELS[input.kind as FeedbackKind] ?? input.kind;
+  const link = `${APP_URL}/admin/deliverables/${deliverable.id}`;
+  const targetLine = input.target
+    ? `<p><strong>Betrifft:</strong> ${escapeHtml(input.target)}</p>`
+    : '';
 
   const res = await sendCustomEmail(deliverable.owner_email, {
     subject: `Neues Feedback (${kindLabel}): ${deliverable.title}`,
@@ -300,9 +303,9 @@ async function sendFeedbackEmail(
       </div>
     `,
     text: `Neues Feedback zu «${deliverable.title}»\n\nVon: ${who}\nArt: ${kindLabel}${input.target ? `\nBetrifft: ${input.target}` : ''}\n\n${input.body}\n\nÖffnen: ${link}`,
-  })
+  });
   if (!res?.success) {
-    logger.warn('Deliverable feedback email not delivered', { deliverableId: deliverable.id })
+    logger.warn('Deliverable feedback email not delivered', { deliverableId: deliverable.id });
   }
 }
 
@@ -314,9 +317,14 @@ export async function updateFeedbackStatus(
   const [row] = await db
     .update(deliverableFeedback)
     .set({ status })
-    .where(and(eq(deliverableFeedback.id, feedbackId), eq(deliverableFeedback.deliverableId, deliverableId)))
-    .returning({ id: deliverableFeedback.id })
-  return !!row
+    .where(
+      and(
+        eq(deliverableFeedback.id, feedbackId),
+        eq(deliverableFeedback.deliverableId, deliverableId),
+      ),
+    )
+    .returning({ id: deliverableFeedback.id });
+  return !!row;
 }
 
 /**
@@ -325,26 +333,24 @@ export async function updateFeedbackStatus(
  * Returns a ready-to-run prompt plus the structured pieces.
  */
 export async function buildAgentBrief(id: string) {
-  const deliverable = await getDeliverable(id)
-  if (!deliverable) return null
+  const deliverable = await getDeliverable(id);
+  if (!deliverable) return null;
 
-  const feedback = await getFeedback(id)
+  const feedback = await getFeedback(id);
   const openChangeRequests = feedback.filter(
     (f) => f.kind === FEEDBACK_KINDS.CHANGE_REQUEST && f.status === FEEDBACK_STATUSES.OPEN,
-  )
+  );
   const openComments = feedback.filter(
     (f) => f.kind === FEEDBACK_KINDS.COMMENT && f.status === FEEDBACK_STATUSES.OPEN,
-  )
+  );
 
   const changeLines = openChangeRequests.length
     ? openChangeRequests
         .map((f, i) => `${i + 1}. ${f.target ? `[${f.target}] ` : ''}${f.body}`)
         .join('\n')
-    : '(keine offenen Änderungswünsche)'
+    : '(keine offenen Änderungswünsche)';
 
-  const commentLines = openComments.length
-    ? openComments.map((f) => `- ${f.body}`).join('\n')
-    : ''
+  const commentLines = openComments.length ? openComments.map((f) => `- ${f.body}`).join('\n') : '';
 
   const prompt = [
     `Du überarbeitest das Deliverable „${deliverable.title}“ (${deliverable.type}).`,
@@ -356,7 +362,7 @@ export async function buildAgentBrief(id: string) {
     `\n\nUmzusetzende Änderungswünsche:\n${changeLines}`,
     commentLines ? `\n\nWeitere Kommentare:\n${commentLines}` : '',
     `\n\nBearbeite die Dateien in ${deliverable.source_path ?? '(source_path fehlt)'}, committe die neue Version und setze den Status danach zurück auf „In Prüfung“.`,
-  ].join('')
+  ].join('');
 
   return {
     prompt,
@@ -370,5 +376,5 @@ export async function buildAgentBrief(id: string) {
     },
     open_change_requests: openChangeRequests,
     open_comments: openComments,
-  }
+  };
 }

@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import { useState, useMemo } from 'react'
-import { adminInteractive } from '@/lib/admin-ui'
-import { navLinkProps } from '@/lib/design/nav'
-import { useTranslations } from 'next-intl'
-import Link from 'next/link'
-import { Link as PublicLink } from '@/i18n/navigation'
-import Image from 'next/image'
+import { useState, useMemo } from 'react';
+import { adminInteractive } from '@/lib/admin-ui';
+import { navLinkProps } from '@/lib/design/nav';
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { Link as PublicLink } from '@/i18n/navigation';
+import Image from 'next/image';
 import {
   ChevronLeft,
   ChevronRight,
@@ -17,27 +17,27 @@ import {
   Shield,
   User,
   Brain,
-} from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { ORG, ORG_IMAGES } from '@/config/org'
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { ORG, ORG_IMAGES } from '@/config/org';
 import {
   getSidebarGroupsWithSections,
   getHirnSection,
   isSensitiveSection,
   getSensitivityReason,
   type SidebarGroupId,
-} from '@/config/sections'
-import { ROUTES } from '@/config/routes'
-import { sectionLabel, groupLabel as localizedGroupLabel } from '@/lib/section-labels'
+} from '@/config/sections';
+import { ROUTES } from '@/config/routes';
+import { sectionLabel, groupLabel as localizedGroupLabel } from '@/lib/section-labels';
 
 interface AdminSidebarProps {
-  sidebarCollapsed: boolean
-  setSidebarCollapsed: (collapsed: boolean) => void
-  mobileMenuOpen: boolean
-  setMobileMenuOpen: (open: boolean) => void
-  accessibleSections: string[]
-  pathname: string
+  sidebarCollapsed: boolean;
+  setSidebarCollapsed: (collapsed: boolean) => void;
+  mobileMenuOpen: boolean;
+  setMobileMenuOpen: (open: boolean) => void;
+  accessibleSections: string[];
+  pathname: string;
 }
 
 export function AdminSidebar({
@@ -48,44 +48,45 @@ export function AdminSidebar({
   accessibleSections,
   pathname,
 }: AdminSidebarProps) {
-  const t = useTranslations('admin.sidebar')
+  const t = useTranslations('admin.sidebar');
   // Section + group labels resolve through `admin.sections` messages (all
   // locales; DE mirrors the config SSOT, guarded by the parity test) with the
   // config's German string as runtime fallback — see src/lib/section-labels.ts.
-  const tSections = useTranslations('admin.sections')
+  const tSections = useTranslations('admin.sections');
   // Static config — compute once, not every render.
-  const groupedSections = useMemo(() => getSidebarGroupsWithSections(), [])
-  const hirnSection = getHirnSection()
-  const hasHirnAccess = hirnSection && accessibleSections.includes(hirnSection.id)
+  const groupedSections = useMemo(() => getSidebarGroupsWithSections(), []);
+  const hirnSection = getHirnSection();
+  const hasHirnAccess = hirnSection && accessibleSections.includes(hirnSection.id);
 
   // Quick filter — the sidebar carries 30+ destinations across 8 groups;
   // typing beats scanning. Matches label + group label, case/diacritic-light.
-  const [filterQuery, setFilterQuery] = useState('')
-  const normalizedQuery = filterQuery.trim().toLowerCase()
+  const [filterQuery, setFilterQuery] = useState('');
+  const normalizedQuery = filterQuery.trim().toLowerCase();
   const filteredSections = useMemo(() => {
-    if (!normalizedQuery) return null
+    if (!normalizedQuery) return null;
     return groupedSections.flatMap(({ group, sections }) => {
-      const localizedGroup = localizedGroupLabel(tSections, group)
+      const localizedGroup = localizedGroupLabel(tSections, group);
       return sections
-        .filter(s => accessibleSections.includes(s.id))
-        .filter(s => (
-          sectionLabel(tSections, s).toLowerCase().includes(normalizedQuery) ||
-          localizedGroup.toLowerCase().includes(normalizedQuery)
-        ))
-        .map(s => ({ section: s, groupLabel: localizedGroup }))
-    })
-  }, [normalizedQuery, groupedSections, accessibleSections, tSections])
+        .filter((s) => accessibleSections.includes(s.id))
+        .filter(
+          (s) =>
+            sectionLabel(tSections, s).toLowerCase().includes(normalizedQuery) ||
+            localizedGroup.toLowerCase().includes(normalizedQuery),
+        )
+        .map((s) => ({ section: s, groupLabel: localizedGroup }));
+    });
+  }, [normalizedQuery, groupedSections, accessibleSections, tSections]);
 
   const isActive = (href: string) => {
-    if (href === '/admin') return pathname === '/admin'
-    return pathname.startsWith(href)
-  }
+    if (href === '/admin') return pathname === '/admin';
+    return pathname.startsWith(href);
+  };
 
   const groupHasActiveItem = (groupId: SidebarGroupId) => {
-    const group = groupedSections.find(g => g.group.id === groupId)
-    if (!group) return false
-    return group.sections.some(s => isActive(s.path) && accessibleSections.includes(s.id))
-  }
+    const group = groupedSections.find((g) => g.group.id === groupId);
+    if (!group) return false;
+    return group.sections.some((s) => isActive(s.path) && accessibleSections.includes(s.id));
+  };
 
   // User-controlled open groups (manual toggles). The group containing the
   // active route opens by DEFAULT (groupHasActiveItem below), but an explicit
@@ -96,31 +97,31 @@ export function AdminSidebar({
   // the user by re-expanding a group they collapsed.
   const [expandedGroups, setExpandedGroups] = useState<Set<SidebarGroupId>>(
     () => new Set<SidebarGroupId>(['uebersicht', 'angebot', 'inhalte']),
-  )
+  );
   const [collapsedGroups, setCollapsedGroups] = useState<Set<SidebarGroupId>>(
     () => new Set<SidebarGroupId>(),
-  )
+  );
 
   const isGroupOpen = (groupId: SidebarGroupId) =>
-    !collapsedGroups.has(groupId) && (expandedGroups.has(groupId) || groupHasActiveItem(groupId))
+    !collapsedGroups.has(groupId) && (expandedGroups.has(groupId) || groupHasActiveItem(groupId));
 
   const toggleGroup = (groupId: SidebarGroupId) => {
-    const open = isGroupOpen(groupId)
-    setExpandedGroups(prev => {
-      const next = new Set(prev)
-      if (open) next.delete(groupId)
-      else next.add(groupId)
-      return next
-    })
-    setCollapsedGroups(prev => {
-      const next = new Set(prev)
+    const open = isGroupOpen(groupId);
+    setExpandedGroups((prev) => {
+      const next = new Set(prev);
+      if (open) next.delete(groupId);
+      else next.add(groupId);
+      return next;
+    });
+    setCollapsedGroups((prev) => {
+      const next = new Set(prev);
       // Collapsing an active-by-default group needs an explicit override;
       // re-opening clears it.
-      if (open) next.add(groupId)
-      else next.delete(groupId)
-      return next
-    })
-  }
+      if (open) next.add(groupId);
+      else next.delete(groupId);
+      return next;
+    });
+  };
 
   return (
     <div
@@ -185,7 +186,10 @@ export function AdminSidebar({
       {!sidebarCollapsed && (
         <div className="px-3 pt-2">
           <div className="relative">
-            <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-text-muted z-10" aria-hidden="true" />
+            <Search
+              className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-text-muted z-10"
+              aria-hidden="true"
+            />
             <Input
               type="search"
               value={filterQuery}
@@ -199,7 +203,11 @@ export function AdminSidebar({
       )}
 
       {/* Navigation */}
-      <nav aria-label={t('navAria')} className="mt-1 px-2 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 220px)' }}>
+      <nav
+        aria-label={t('navAria')}
+        className="mt-1 px-2 overflow-y-auto"
+        style={{ maxHeight: 'calc(100vh - 220px)' }}
+      >
         {/* Filtered flat list — replaces the grouped tree while typing */}
         {filteredSections !== null && !sidebarCollapsed && (
           <div className="space-y-1 pb-2">
@@ -207,112 +215,142 @@ export function AdminSidebar({
               <p className="px-2 py-2 text-sm text-text-muted">{t('filterNoResults')}</p>
             )}
             {filteredSections.map(({ section, groupLabel }) => {
-              const Icon = section.ui.icon
+              const Icon = section.ui.icon;
               return (
                 <Link
                   key={section.path}
                   href={section.path}
-                  onClick={() => { setMobileMenuOpen(false); setFilterQuery('') }}
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    setFilterQuery('');
+                  }}
                   {...navLinkProps('sidebar', isActive(section.path))}
                 >
                   <Icon className="h-4 w-4 shrink-0 text-text-muted dark:text-text-secondary" />
                   <span className="flex-1 text-sm font-medium">
                     {sectionLabel(tSections, section)}
                   </span>
-                  <span className="text-[10px] uppercase tracking-wider text-text-muted">{groupLabel}</span>
+                  <span className="text-[10px] uppercase tracking-wider text-text-muted">
+                    {groupLabel}
+                  </span>
                 </Link>
-              )
+              );
             })}
           </div>
         )}
 
-        {(filteredSections === null || sidebarCollapsed) && groupedSections.map(({ group, sections }) => {
-          const accessibleGroupSections = sections.filter(s => accessibleSections.includes(s.id))
-          if (accessibleGroupSections.length === 0) return null
+        {(filteredSections === null || sidebarCollapsed) &&
+          groupedSections.map(({ group, sections }) => {
+            const accessibleGroupSections = sections.filter((s) =>
+              accessibleSections.includes(s.id),
+            );
+            if (accessibleGroupSections.length === 0) return null;
 
-          const hasActive = groupHasActiveItem(group.id)
-          const isExpanded = isGroupOpen(group.id)
+            const hasActive = groupHasActiveItem(group.id);
+            const isExpanded = isGroupOpen(group.id);
 
-          // A group with a single destination (e.g. Analyse, whose reports live
-          // one level down on the hub page) renders as a direct link, not a
-          // collapsible header with one lonely child — no pointless accordion,
-          // no doubled label. isActive() is prefix-based, so the entry stays
-          // highlighted on the hub's sub-pages too.
-          if (accessibleGroupSections.length === 1) {
-            const only = accessibleGroupSections[0]
-            const OnlyIcon = only.ui.icon
-            const onlyActive = isActive(only.path)
+            // A group with a single destination (e.g. Analyse, whose reports live
+            // one level down on the hub page) renders as a direct link, not a
+            // collapsible header with one lonely child — no pointless accordion,
+            // no doubled label. isActive() is prefix-based, so the entry stays
+            // highlighted on the hub's sub-pages too.
+            if (accessibleGroupSections.length === 1) {
+              const only = accessibleGroupSections[0];
+              const OnlyIcon = only.ui.icon;
+              const onlyActive = isActive(only.path);
+              return (
+                <div key={group.id} className="mb-2">
+                  <Link
+                    href={only.path}
+                    onClick={() => setMobileMenuOpen(false)}
+                    {...navLinkProps(
+                      'sidebar',
+                      onlyActive,
+                      sidebarCollapsed ? 'justify-center' : '',
+                    )}
+                    title={sidebarCollapsed ? sectionLabel(tSections, only) : undefined}
+                  >
+                    <OnlyIcon
+                      className={`shrink-0 ${sidebarCollapsed ? 'h-5 w-5' : 'h-4 w-4'} ${onlyActive ? 'text-action' : 'text-text-muted dark:text-text-secondary'}`}
+                    />
+                    {!sidebarCollapsed && (
+                      <span className="flex-1 text-sm font-medium">
+                        {sectionLabel(tSections, only)}
+                      </span>
+                    )}
+                  </Link>
+                </div>
+              );
+            }
+
             return (
               <div key={group.id} className="mb-2">
-                <Link
-                  href={only.path}
-                  onClick={() => setMobileMenuOpen(false)}
-                  {...navLinkProps('sidebar', onlyActive, sidebarCollapsed ? 'justify-center' : '')}
-                  title={sidebarCollapsed ? sectionLabel(tSections, only) : undefined}
-                >
-                  <OnlyIcon className={`shrink-0 ${sidebarCollapsed ? 'h-5 w-5' : 'h-4 w-4'} ${onlyActive ? 'text-action' : 'text-text-muted dark:text-text-secondary'}`} />
-                  {!sidebarCollapsed && <span className="flex-1 text-sm font-medium">{sectionLabel(tSections, only)}</span>}
-                </Link>
+                {!sidebarCollapsed && (
+                  <Button
+                    variant="ghost"
+                    onClick={() => toggleGroup(group.id)}
+                    aria-expanded={isExpanded}
+                    className={`flex w-full items-center justify-between rounded-lg px-2 py-3 lg:py-1.5 text-xs font-medium uppercase tracking-widest transition-colors ${
+                      hasActive
+                        ? 'text-action'
+                        : 'text-text-muted dark:text-text-secondary hover:text-text-secondary dark:hover:text-text-muted'
+                    }`}
+                  >
+                    <span>{localizedGroupLabel(tSections, group)}</span>
+                    <ChevronDown
+                      className={`w-3.5 h-3.5 transition-transform ${isExpanded ? '' : '-rotate-90'}`}
+                    />
+                  </Button>
+                )}
+
+                {(isExpanded || sidebarCollapsed) && (
+                  <div className={`space-y-1 ${sidebarCollapsed ? '' : 'mt-1'}`}>
+                    {accessibleGroupSections.map((section) => {
+                      const active = isActive(section.path);
+                      const sensitive = isSensitiveSection(section.id);
+                      const sensitivityReason = sensitive
+                        ? getSensitivityReason(section.id)
+                        : undefined;
+                      const Icon = section.ui.icon;
+
+                      return (
+                        <Link
+                          key={section.path}
+                          href={section.path}
+                          onClick={() => setMobileMenuOpen(false)}
+                          {...navLinkProps(
+                            'sidebar',
+                            active,
+                            sidebarCollapsed ? 'justify-center' : '',
+                          )}
+                          title={
+                            sidebarCollapsed
+                              ? `${sectionLabel(tSections, section)}${sensitive ? ` (${t('sensitiveLabel')})` : ''}`
+                              : sensitivityReason
+                          }
+                        >
+                          {/* Larger icon when collapsed so it's easier to tap and recognise at a glance */}
+                          <Icon
+                            className={`shrink-0 ${sidebarCollapsed ? 'h-5 w-5' : 'h-4 w-4'} ${active ? 'text-action' : 'text-text-muted dark:text-text-secondary'}`}
+                          />
+                          {!sidebarCollapsed && (
+                            <span className="flex-1 text-sm font-medium flex items-center gap-1.5">
+                              {sectionLabel(tSections, section)}
+                              {sensitive && (
+                                <span title={sensitivityReason}>
+                                  <Shield className="w-3 h-3 text-warning-400" />
+                                </span>
+                              )}
+                            </span>
+                          )}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
-            )
-          }
-
-          return (
-            <div key={group.id} className="mb-2">
-              {!sidebarCollapsed && (
-                <Button
-                  variant="ghost"
-                  onClick={() => toggleGroup(group.id)}
-                  aria-expanded={isExpanded}
-                  className={`flex w-full items-center justify-between rounded-lg px-2 py-3 lg:py-1.5 text-xs font-medium uppercase tracking-widest transition-colors ${
-                    hasActive
-                      ? 'text-action'
-                      : 'text-text-muted dark:text-text-secondary hover:text-text-secondary dark:hover:text-text-muted'
-                  }`}
-                >
-                  <span>{localizedGroupLabel(tSections, group)}</span>
-                  <ChevronDown
-                    className={`w-3.5 h-3.5 transition-transform ${isExpanded ? '' : '-rotate-90'}`}
-                  />
-                </Button>
-              )}
-
-              {(isExpanded || sidebarCollapsed) && (
-                <div className={`space-y-1 ${sidebarCollapsed ? '' : 'mt-1'}`}>
-                  {accessibleGroupSections.map(section => {
-                    const active = isActive(section.path)
-                    const sensitive = isSensitiveSection(section.id)
-                    const sensitivityReason = sensitive ? getSensitivityReason(section.id) : undefined
-                    const Icon = section.ui.icon
-
-                    return (
-                      <Link
-                        key={section.path}
-                        href={section.path}
-                        onClick={() => setMobileMenuOpen(false)}
-                        {...navLinkProps('sidebar', active, sidebarCollapsed ? 'justify-center' : '')}
-                        title={sidebarCollapsed ? `${sectionLabel(tSections, section)}${sensitive ? ` (${t('sensitiveLabel')})` : ''}` : sensitivityReason}
-                      >
-                        {/* Larger icon when collapsed so it's easier to tap and recognise at a glance */}
-                        <Icon className={`shrink-0 ${sidebarCollapsed ? 'h-5 w-5' : 'h-4 w-4'} ${active ? 'text-action' : 'text-text-muted dark:text-text-secondary'}`} />
-                        {!sidebarCollapsed && (
-                          <span className="flex-1 text-sm font-medium flex items-center gap-1.5">
-                            {sectionLabel(tSections, section)}
-                            {sensitive && (
-                              <span title={sensitivityReason}>
-                                <Shield className="w-3 h-3 text-warning-400" />
-                              </span>
-                            )}
-                          </span>
-                        )}
-                      </Link>
-                    )
-                  })}
-                </div>
-              )}
-            </div>
-          )
-        })}
+            );
+          })}
 
         {/* Hirn AI — flat accent, no gradients (matches the rest of the
             design system; gradients are reserved for hero overlays). */}
@@ -356,27 +394,33 @@ export function AdminSidebar({
               // these links must go through the i18n Link to keep the language.
               // /dashboard is a BYPASS_INTL route (cookie locale) — plain Link.
               { href: '/', icon: Home, label: t('linkHome'), localized: true },
-              { href: ROUTES.public.marketplace, icon: Store, label: t('linkShop'), localized: true },
+              {
+                href: ROUTES.public.marketplace,
+                icon: Store,
+                label: t('linkShop'),
+                localized: true,
+              },
               { href: '/dashboard', icon: User, label: t('linkDashboard'), localized: false },
             ].map(({ href, icon: Icon, label, localized }) => {
-              const LinkComp = localized ? PublicLink : Link
+              const LinkComp = localized ? PublicLink : Link;
               return (
-              <LinkComp
-                key={href}
-                href={href}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`flex items-center gap-2.5 rounded-lg px-2 py-3 lg:py-1.5 text-text-muted transition-colors ${adminInteractive.rowHoverSubtle} hover:text-text-primary dark:text-text-secondary ${
-                  sidebarCollapsed ? 'justify-center' : ''
-                }`}
-                title={sidebarCollapsed ? label : undefined}
-              >
-                <Icon className="w-4 h-4 shrink-0" />
-                {!sidebarCollapsed && <span className="text-sm">{label}</span>}
-              </LinkComp>
-            )})}
+                <LinkComp
+                  key={href}
+                  href={href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`flex items-center gap-2.5 rounded-lg px-2 py-3 lg:py-1.5 text-text-muted transition-colors ${adminInteractive.rowHoverSubtle} hover:text-text-primary dark:text-text-secondary ${
+                    sidebarCollapsed ? 'justify-center' : ''
+                  }`}
+                  title={sidebarCollapsed ? label : undefined}
+                >
+                  <Icon className="w-4 h-4 shrink-0" />
+                  {!sidebarCollapsed && <span className="text-sm">{label}</span>}
+                </LinkComp>
+              );
+            })}
           </div>
         </div>
       </nav>
     </div>
-  )
+  );
 }

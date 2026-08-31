@@ -13,7 +13,7 @@
  *     bugs (e.g. cancelled fetches when a user navigates away).
  */
 
-import * as Sentry from '@sentry/nextjs'
+import * as Sentry from '@sentry/nextjs';
 
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
@@ -25,4 +25,4 @@ Sentry.init({
     'AbortError',
     'The user aborted a request',
   ],
-})
+});

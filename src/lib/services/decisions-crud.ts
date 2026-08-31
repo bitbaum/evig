@@ -19,10 +19,7 @@ import {
   DEFAULT_QUORUM,
   type DecisionStatus,
 } from '@/config/decisions';
-import {
-  type DecisionOption,
-  type QuorumConfig,
-} from '@/lib/schemas/decisions';
+import { type DecisionOption, type QuorumConfig } from '@/lib/schemas/decisions';
 
 // Table name refs
 const dTable = getTableName(decisions);
@@ -147,7 +144,8 @@ export async function getDecisionStats(requestingUserId: string): Promise<Decisi
     FROM ${sql.raw(dTable)}
   `);
 
-  const row = result.rows[0] as unknown as { voting: string; discussion: string; closed: string; pending_votes: string } | undefined;
+  const row = result.rows[0] as unknown as
+    { voting: string; discussion: string; closed: string; pending_votes: string } | undefined;
   return {
     voting: parseInt(row?.voting || '0', 10),
     discussion: parseInt(row?.discussion || '0', 10),
@@ -156,10 +154,7 @@ export async function getDecisionStats(requestingUserId: string): Promise<Decisi
   };
 }
 
-export async function getDecisions(
-  filters: DecisionFilters,
-  requestingUserId: string
-) {
+export async function getDecisions(filters: DecisionFilters, requestingUserId: string) {
   const { status, decisionType, createdBy, page = 1, limit = 20 } = filters;
 
   // Build dynamic WHERE conditions
@@ -175,9 +170,10 @@ export async function getDecisions(
     conditions.push(sql`d.created_by = ${createdBy}`);
   }
 
-  const whereClause = conditions.length > 0
-    ? sql`WHERE ${conditions.reduce((acc, cond, i) => i === 0 ? cond : sql`${acc} AND ${cond}`, sql``)}`
-    : sql``;
+  const whereClause =
+    conditions.length > 0
+      ? sql`WHERE ${conditions.reduce((acc, cond, i) => (i === 0 ? cond : sql`${acc} AND ${cond}`), sql``)}`
+      : sql``;
 
   const offset = (page - 1) * limit;
 
@@ -195,21 +191,34 @@ export async function getDecisions(
     LIMIT ${limit} OFFSET ${offset}
   `);
 
-  const total = parseInt((decisionsResult.rows[0] as unknown as { _total_count: string })?._total_count || '0', 10);
+  const total = parseInt(
+    (decisionsResult.rows[0] as unknown as { _total_count: string })?._total_count || '0',
+    10,
+  );
 
   // Check which decisions the requesting user has voted on
-  const decisionIds = (decisionsResult.rows as unknown as DbDecisionRow[]).map(d => d.id);
+  const decisionIds = (decisionsResult.rows as unknown as DbDecisionRow[]).map((d) => d.id);
   let votedSet = new Set<string>();
   if (decisionIds.length > 0) {
     const votedResult = await db.execute(sql`
       SELECT decision_id FROM ${sql.raw(dvTable)}
-      WHERE user_id = ${requestingUserId} AND decision_id IN (${sql.join(decisionIds.map(id => sql`${id}`), sql`, `)})
+      WHERE user_id = ${requestingUserId} AND decision_id IN (${sql.join(
+        decisionIds.map((id) => sql`${id}`),
+        sql`, `,
+      )})
     `);
-    votedSet = new Set((votedResult.rows as unknown as Array<{ decision_id: string }>).map(v => v.decision_id));
+    votedSet = new Set(
+      (votedResult.rows as unknown as Array<{ decision_id: string }>).map((v) => v.decision_id),
+    );
   }
 
   return {
-    decisions: (decisionsResult.rows as unknown as (DbDecisionRow & { vote_count: string; comment_count: string })[]).map(d => ({
+    decisions: (
+      decisionsResult.rows as unknown as (DbDecisionRow & {
+        vote_count: string;
+        comment_count: string;
+      })[]
+    ).map((d) => ({
       ...mapDecisionBase(d),
       hasUserVoted: votedSet.has(d.id),
     })),
@@ -231,7 +240,10 @@ export async function getDecisionById(id: string, requestingUserId: string) {
   `);
 
   if (result.rows.length === 0) return null;
-  const d = result.rows[0] as unknown as DbDecisionRow & { vote_count: string; comment_count: string };
+  const d = result.rows[0] as unknown as DbDecisionRow & {
+    vote_count: string;
+    comment_count: string;
+  };
 
   // Check if user has voted
   const voteCheck = await db.execute(sql`
@@ -250,7 +262,9 @@ export async function getDecisionById(id: string, requestingUserId: string) {
         AND linked_task_id IS NOT NULL
       LIMIT 1
     `);
-    linkedTaskId = (linkedTask.rows[0] as unknown as { linked_task_id: string } | undefined)?.linked_task_id ?? null;
+    linkedTaskId =
+      (linkedTask.rows[0] as unknown as { linked_task_id: string } | undefined)?.linked_task_id ??
+      null;
   }
 
   return {
@@ -292,10 +306,7 @@ interface CreateDecisionData {
   actionItemId?: string | null;
 }
 
-export async function createDecision(
-  data: CreateDecisionData,
-  createdBy: string
-) {
+export async function createDecision(data: CreateDecisionData, createdBy: string) {
   // Generate IDs for options if not provided
   const options = (data.options || []).map((opt) => ({
     ...opt,
@@ -338,7 +349,16 @@ export async function createDecision(
     JOIN ${sql.raw(uTable)} u ON u.id = i.created_by
   `);
 
-  const row = result.rows[0] as unknown as { id: string; title: string; status: string; created_at: string; creator_email: string; creator_name: string | null } | undefined;
+  const row = result.rows[0] as unknown as
+    | {
+        id: string;
+        title: string;
+        status: string;
+        created_at: string;
+        creator_email: string;
+        creator_name: string | null;
+      }
+    | undefined;
   if (!row) {
     throw new Error('Decision insert returned no rows — check DB schema and migrations');
   }
@@ -444,18 +464,18 @@ interface UpdateDecisionData {
   outcomeSummary?: string | null;
 }
 
-export async function updateDecision(
-  id: string,
-  data: UpdateDecisionData,
-  userId: string
-) {
+export async function updateDecision(id: string, data: UpdateDecisionData, userId: string) {
   // Fetch current decision
   const existing = await db.execute(sql`
     SELECT id, status, created_by FROM ${sql.raw(dTable)} WHERE id = ${id}
   `);
   if (existing.rows.length === 0) return { error: 'not_found' as const };
 
-  const decision = existing.rows[0] as unknown as { id: string; status: string; created_by: string };
+  const decision = existing.rows[0] as unknown as {
+    id: string;
+    status: string;
+    created_by: string;
+  };
 
   // Only creator can edit
   if (decision.created_by !== userId) {
@@ -514,10 +534,14 @@ export async function updateDecision(
     setClauses.push(sql`participant_scope = ${data.participantScope}`);
   }
   if (data.discussionDeadline !== undefined) {
-    setClauses.push(sql`discussion_deadline = ${data.discussionDeadline ? new Date(data.discussionDeadline) : null}`);
+    setClauses.push(
+      sql`discussion_deadline = ${data.discussionDeadline ? new Date(data.discussionDeadline) : null}`,
+    );
   }
   if (data.votingDeadline !== undefined) {
-    setClauses.push(sql`voting_deadline = ${data.votingDeadline ? new Date(data.votingDeadline) : null}`);
+    setClauses.push(
+      sql`voting_deadline = ${data.votingDeadline ? new Date(data.votingDeadline) : null}`,
+    );
   }
 
   if (setClauses.length === 0) {

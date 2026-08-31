@@ -1,56 +1,53 @@
-'use client'
+'use client';
 
-import { useCallback, useEffect, useState } from 'react'
-import { useTranslations } from 'next-intl'
-import { Check, X, CalendarCheck } from 'lucide-react'
-import { apiFetch } from '@/lib/api/client'
-import { Button } from '@/components/ui/button'
-import { StatusBadge } from '@/components/ui/status-badge'
-import {
-  TIME_OFF_STATUSES,
-  type TimeOffStatus,
-} from '@/config/time-off'
-import { timeOffKindLabel, timeOffStatusLabel } from '@/lib/team/timecard-intl'
-import type { TimeOffRequest } from '@/lib/schemas/time-off'
-import { getDisplayDate } from '@/lib/team/timecard-utils'
-import { cn } from '@/lib/utils'
+import { useCallback, useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { Check, X, CalendarCheck } from 'lucide-react';
+import { apiFetch } from '@/lib/api/client';
+import { Button } from '@/components/ui/button';
+import { StatusBadge } from '@/components/ui/status-badge';
+import { TIME_OFF_STATUSES, type TimeOffStatus } from '@/config/time-off';
+import { timeOffKindLabel, timeOffStatusLabel } from '@/lib/team/timecard-intl';
+import type { TimeOffRequest } from '@/lib/schemas/time-off';
+import { getDisplayDate } from '@/lib/team/timecard-utils';
+import { cn } from '@/lib/utils';
 
 const STATUS_VARIANT: Record<TimeOffStatus, 'warning' | 'success' | 'error' | 'neutral'> = {
   pending: 'warning',
   approved: 'success',
   rejected: 'error',
   cancelled: 'neutral',
-}
+};
 
 /**
  * TimeOffApprovals — the approver queue (super admins + `timecards` permission).
  * Approve/reject pending requests; the requester is notified automatically.
  */
 export function TimeOffApprovals() {
-  const t = useTranslations('admin.timeOff')
-  const [filter, setFilter] = useState<'pending' | 'all'>('pending')
-  const [requests, setRequests] = useState<TimeOffRequest[]>([])
-  const [busyId, setBusyId] = useState<string | null>(null)
+  const t = useTranslations('admin.timeOff');
+  const [filter, setFilter] = useState<'pending' | 'all'>('pending');
+  const [requests, setRequests] = useState<TimeOffRequest[]>([]);
+  const [busyId, setBusyId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
-    const res = await apiFetch<TimeOffRequest[]>(`/api/admin/time-off?status=${filter}`)
-    if (res.success) setRequests(res.data ?? [])
-  }, [filter])
+    const res = await apiFetch<TimeOffRequest[]>(`/api/admin/time-off?status=${filter}`);
+    if (res.success) setRequests(res.data ?? []);
+  }, [filter]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- data load on filter change
-    void load()
-  }, [load])
+    void load();
+  }, [load]);
 
   const review = async (id: string, status: 'approved' | 'rejected') => {
-    setBusyId(id)
+    setBusyId(id);
     const res = await apiFetch<TimeOffRequest>(`/api/admin/time-off/${id}`, {
       method: 'PATCH',
       body: { status, review_notes: null },
-    })
-    setBusyId(null)
-    if (res.success) void load()
-  }
+    });
+    setBusyId(null);
+    if (res.success) void load();
+  };
 
   return (
     <section className="space-y-4">
@@ -60,7 +57,7 @@ export function TimeOffApprovals() {
           {t('approvalsTitle')}
         </h2>
         <div className="inline-flex rounded-lg border border-subtle p-0.5">
-          {(['pending', 'all'] as const).map(f => (
+          {(['pending', 'all'] as const).map((f) => (
             <Button
               key={f}
               type="button"
@@ -69,7 +66,9 @@ export function TimeOffApprovals() {
               onClick={() => setFilter(f)}
               className={cn(
                 'h-auto rounded-md px-3 py-1 text-sm',
-                filter === f ? 'bg-surface-raised text-text-primary' : 'text-text-tertiary hover:text-text-secondary',
+                filter === f
+                  ? 'bg-surface-raised text-text-primary'
+                  : 'text-text-tertiary hover:text-text-secondary',
               )}
             >
               {f === 'pending' ? t('filterPending') : t('filterAll')}
@@ -84,7 +83,7 @@ export function TimeOffApprovals() {
         </p>
       ) : (
         <ul className="divide-y divide-subtle rounded-lg border border-subtle">
-          {requests.map(r => (
+          {requests.map((r) => (
             <li key={r.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
               <div className="min-w-0">
                 <p className="text-sm font-medium text-text-primary">
@@ -99,10 +98,24 @@ export function TimeOffApprovals() {
               <div className="flex items-center gap-2">
                 {r.status === TIME_OFF_STATUSES.PENDING ? (
                   <>
-                    <Button type="button" variant="primary" size="sm" disabled={busyId === r.id} onClick={() => review(r.id, 'approved')} className="gap-1.5">
+                    <Button
+                      type="button"
+                      variant="primary"
+                      size="sm"
+                      disabled={busyId === r.id}
+                      onClick={() => review(r.id, 'approved')}
+                      className="gap-1.5"
+                    >
                       <Check className="h-3.5 w-3.5" aria-hidden="true" /> {t('approve')}
                     </Button>
-                    <Button type="button" variant="outline" size="sm" disabled={busyId === r.id} onClick={() => review(r.id, 'rejected')} className="gap-1.5 text-error-600 hover:bg-error-50">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      disabled={busyId === r.id}
+                      onClick={() => review(r.id, 'rejected')}
+                      className="gap-1.5 text-error-600 hover:bg-error-50"
+                    >
                       <X className="h-3.5 w-3.5" aria-hidden="true" /> {t('decline')}
                     </Button>
                   </>
@@ -117,5 +130,5 @@ export function TimeOffApprovals() {
         </ul>
       )}
     </section>
-  )
+  );
 }

@@ -9,16 +9,16 @@
  * confusing partial-render.
  */
 
-import { Metadata } from 'next'
-import { requireSection } from '@/lib/admin/guards'
-import HirnPageClient from './HirnPageClient'
+import { Metadata } from 'next';
+import { requireSection } from '@/lib/admin/guards';
+import HirnPageClient from './HirnPageClient';
 
 export const metadata: Metadata = {
   title: 'Hirn AI',
   description: 'AI-Assistent für evig.',
-}
+};
 
 export default async function AdminHirnPage() {
-  await requireSection('hirn')
-  return <HirnPageClient />
+  await requireSection('hirn');
+  return <HirnPageClient />;
 }

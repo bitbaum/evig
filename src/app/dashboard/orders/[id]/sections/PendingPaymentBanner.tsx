@@ -1,18 +1,18 @@
 /** Warning banner shown while an order is awaiting payment. */
 
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { Clock, Shield } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
-import Heading from '@/components/ui/Heading'
-import { ORDER_STATUS } from '@/config/marketplace'
-import type { NonNullOrder } from './shared'
+import Link from 'next/link';
+import { Clock, Shield } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
+import Heading from '@/components/ui/Heading';
+import { ORDER_STATUS } from '@/config/marketplace';
+import type { NonNullOrder } from './shared';
 
 export function PendingPaymentBanner({ order }: { order: NonNullOrder }) {
-  const t = useTranslations('dashboard.orders')
-  if (order.status !== ORDER_STATUS.PENDING_PAYMENT) return null
+  const t = useTranslations('dashboard.orders');
+  if (order.status !== ORDER_STATUS.PENDING_PAYMENT) return null;
   return (
     <div className="mb-6 bg-warning-50 dark:bg-warning-900/20 border border-warning-200 dark:border-warning-800 rounded-xl p-4 flex items-start gap-3">
       <Clock className="w-5 h-5 text-warning-600 shrink-0 mt-0.5" />
@@ -26,7 +26,9 @@ export function PendingPaymentBanner({ order }: { order: NonNullOrder }) {
         {order.role === 'buyer' && (
           <Button
             as={Link}
-            href={order.listingId ? `/marketplace/checkout/${order.listingId}` : '/marketplace/cart'}
+            href={
+              order.listingId ? `/marketplace/checkout/${order.listingId}` : '/marketplace/cart'
+            }
             variant="warning"
             size="sm"
             className="gap-2 mt-3"
@@ -37,5 +39,5 @@ export function PendingPaymentBanner({ order }: { order: NonNullOrder }) {
         )}
       </div>
     </div>
-  )
+  );
 }

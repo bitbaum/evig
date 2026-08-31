@@ -52,7 +52,7 @@ export default function DecisionListClient({
     retry,
     closeDeleteDialog,
     PAGE_SIZE,
-  } = useDecisionList()
+  } = useDecisionList();
 
   const columns: AdminTableColumn<DecisionListItem>[] = [
     {
@@ -65,9 +65,7 @@ export default function DecisionListClient({
           >
             {d.title}
           </Link>
-          {d.hasUserVoted && (
-            <span className="ml-2 text-xs text-action">✓ abgestimmt</span>
-          )}
+          {d.hasUserVoted && <span className="ml-2 text-xs text-action">✓ abgestimmt</span>}
         </>
       ),
     },
@@ -86,7 +84,12 @@ export default function DecisionListClient({
       cell: (d) => {
         const statusConf = DECISION_STATUS_CONFIG[d.status];
         return (
-          <span className={cn('inline-block rounded-full px-2 py-0.5 text-xs font-medium', statusConf?.color || '')}>
+          <span
+            className={cn(
+              'inline-block rounded-full px-2 py-0.5 text-xs font-medium',
+              statusConf?.color || '',
+            )}
+          >
             {statusConf?.label || d.status}
           </span>
         );
@@ -95,7 +98,10 @@ export default function DecisionListClient({
     {
       header: 'Frist',
       className: 'hidden sm:table-cell',
-      cell: (d) => formatDeadline(d.status === DECISION_STATUS.VOTING ? d.votingDeadline : d.discussionDeadline),
+      cell: (d) =>
+        formatDeadline(
+          d.status === DECISION_STATUS.VOTING ? d.votingDeadline : d.discussionDeadline,
+        ),
     },
     {
       header: 'Stimmen',
@@ -129,26 +135,62 @@ export default function DecisionListClient({
       {/* Stats — full DB counts, independent of active filters */}
       <AdminStatsStrip
         items={[
-          { icon: Vote,          color: 'amber', label: 'Aktive Abstimmungen',  value: stats.voting,       valueColor: 'text-warning-600 dark:text-warning-400' },
-          { icon: MessageSquare, color: 'blue',  label: 'Offene Diskussionen',  value: stats.discussion,   valueColor: 'text-action' },
-          { icon: CheckCircle,   color: 'green', label: 'Abgeschlossen',        value: stats.closed,       valueColor: 'text-action' },
-          { icon: AlertCircle,   color: 'red',   label: 'Ausstehende Stimmen',  value: stats.pendingVotes, valueColor: 'text-error-600 dark:text-error-400' },
+          {
+            icon: Vote,
+            color: 'amber',
+            label: 'Aktive Abstimmungen',
+            value: stats.voting,
+            valueColor: 'text-warning-600 dark:text-warning-400',
+          },
+          {
+            icon: MessageSquare,
+            color: 'blue',
+            label: 'Offene Diskussionen',
+            value: stats.discussion,
+            valueColor: 'text-action',
+          },
+          {
+            icon: CheckCircle,
+            color: 'green',
+            label: 'Abgeschlossen',
+            value: stats.closed,
+            valueColor: 'text-action',
+          },
+          {
+            icon: AlertCircle,
+            color: 'red',
+            label: 'Ausstehende Stimmen',
+            value: stats.pendingVotes,
+            valueColor: 'text-error-600 dark:text-error-400',
+          },
         ]}
       />
 
       <AdminListShell
         filters={
           <div className="flex flex-wrap gap-2">
-            <Select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="w-auto">
+            <Select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="w-auto"
+            >
               <option value="">Alle Status</option>
               {DECISION_STATUSES.map((s) => (
-                <option key={s} value={s}>{DECISION_STATUS_CONFIG[s].label}</option>
+                <option key={s} value={s}>
+                  {DECISION_STATUS_CONFIG[s].label}
+                </option>
               ))}
             </Select>
-            <Select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)} className="w-auto">
+            <Select
+              value={typeFilter}
+              onChange={(e) => setTypeFilter(e.target.value)}
+              className="w-auto"
+            >
               <option value="">Alle Typen</option>
               {DECISION_TYPES.map((t) => (
-                <option key={t} value={t}>{DECISION_TYPE_CONFIG[t].label}</option>
+                <option key={t} value={t}>
+                  {DECISION_TYPE_CONFIG[t].label}
+                </option>
               ))}
             </Select>
           </div>

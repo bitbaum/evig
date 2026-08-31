@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Navigation item with optional mega menu dropdown.
@@ -12,121 +12,127 @@
  * a11y bug — we keep mouse but add keyboard equivalents, not replace).
  */
 
-import { useState, useRef, useEffect, useCallback, type KeyboardEvent as ReactKeyboardEvent } from 'react'
-import { ChevronDown } from 'lucide-react'
-import { Link, usePathname } from '@/i18n/navigation'
-import { useTranslations } from 'next-intl'
-import { cn } from '@/lib/utils'
-import { designPrimitive } from '@/lib/design-system'
-import type { NavigationItem } from '@/config/navigation'
-import { groupItemsBySection } from './utils'
-import { MegaMenuContent } from './MegaMenuContent'
-import { navItemLabel, type NavTranslator } from './nav-i18n'
+import {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  type KeyboardEvent as ReactKeyboardEvent,
+} from 'react';
+import { ChevronDown } from 'lucide-react';
+import { Link, usePathname } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
+import { cn } from '@/lib/utils';
+import { designPrimitive } from '@/lib/design-system';
+import type { NavigationItem } from '@/config/navigation';
+import { groupItemsBySection } from './utils';
+import { MegaMenuContent } from './MegaMenuContent';
+import { navItemLabel, type NavTranslator } from './nav-i18n';
 
 interface NavItemProps {
-  item: NavigationItem
-  onAnyOpen: () => void
-  onAnyClose: () => void
+  item: NavigationItem;
+  onAnyOpen: () => void;
+  onAnyClose: () => void;
 }
 
 export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
-  const t = useTranslations('nav')
-  const pathname = usePathname()
-  const label = item.nameKey ? navItemLabel(t as NavTranslator, item.nameKey) : item.name
+  const t = useTranslations('nav');
+  const pathname = usePathname();
+  const label = item.nameKey ? navItemLabel(t as NavTranslator, item.nameKey) : item.name;
   // Active when this is the current page, or (for section parents) when the
   // current path is nested under it. Home ('/') only matches exactly.
   const isActive =
     item.href === '/'
       ? pathname === '/'
-      : pathname === item.href || pathname.startsWith(item.href + '/')
-  const [isOpen, setIsOpen] = useState(false)
-  const hasDropdown = item.subItems && item.subItems.length > 0
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
-  const triggerRef = useRef<HTMLAnchorElement>(null)
+      : pathname === item.href || pathname.startsWith(item.href + '/');
+  const [isOpen, setIsOpen] = useState(false);
+  const hasDropdown = item.subItems && item.subItems.length > 0;
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLAnchorElement>(null);
 
   const handleMouseEnter = () => {
-    if (timeoutRef.current) clearTimeout(timeoutRef.current)
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
     if (hasDropdown) {
-      setIsOpen(true)
-      onAnyOpen()
+      setIsOpen(true);
+      onAnyOpen();
     }
-  }
+  };
 
   const handleMouseLeave = () => {
     if (hasDropdown) {
       timeoutRef.current = setTimeout(() => {
-        setIsOpen(false)
-        onAnyClose()
-      }, 100)
+        setIsOpen(false);
+        onAnyClose();
+      }, 100);
     }
-  }
+  };
 
   const handleClose = useCallback(() => {
-    setIsOpen(false)
-    onAnyClose()
-  }, [onAnyClose])
+    setIsOpen(false);
+    onAnyClose();
+  }, [onAnyClose]);
 
   // Focus the first focusable element inside the open dropdown.
   // Used by ArrowDown on the trigger and by Tab-into-dropdown.
   const focusFirstInDropdown = useCallback(() => {
-    if (!containerRef.current) return
+    if (!containerRef.current) return;
     const first = containerRef.current.querySelector<HTMLElement>(
       'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
-    )
+    );
     if (first && first !== triggerRef.current) {
-      first.focus()
+      first.focus();
     } else {
       // Skip the trigger itself — go to the next one
       const all = containerRef.current.querySelectorAll<HTMLElement>(
         'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
-      )
-      const filtered = Array.from(all).filter(el => el !== triggerRef.current)
-      filtered[0]?.focus()
+      );
+      const filtered = Array.from(all).filter((el) => el !== triggerRef.current);
+      filtered[0]?.focus();
     }
-  }, [])
+  }, []);
 
   // Trigger keyboard handler — Enter/Space toggles, ArrowDown opens + focuses.
   const handleTriggerKeyDown = (e: ReactKeyboardEvent<HTMLAnchorElement>) => {
-    if (!hasDropdown) return
+    if (!hasDropdown) return;
     if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault()
-      const next = !isOpen
-      setIsOpen(next)
-      next ? onAnyOpen() : onAnyClose()
+      e.preventDefault();
+      const next = !isOpen;
+      setIsOpen(next);
+      next ? onAnyOpen() : onAnyClose();
     } else if (e.key === 'ArrowDown') {
-      e.preventDefault()
+      e.preventDefault();
       if (!isOpen) {
-        setIsOpen(true)
-        onAnyOpen()
+        setIsOpen(true);
+        onAnyOpen();
       }
       // Wait one tick so the dropdown DOM exists before focusing.
-      requestAnimationFrame(() => focusFirstInDropdown())
+      requestAnimationFrame(() => focusFirstInDropdown());
     } else if (e.key === 'Escape' && isOpen) {
-      e.preventDefault()
-      handleClose()
-      triggerRef.current?.focus()
+      e.preventDefault();
+      handleClose();
+      triggerRef.current?.focus();
     }
-  }
+  };
 
   // Global Escape handler — close the dropdown from anywhere inside it.
   useEffect(() => {
-    if (!isOpen) return
+    if (!isOpen) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        handleClose()
-        triggerRef.current?.focus()
+        handleClose();
+        triggerRef.current?.focus();
       }
-    }
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
-  }, [isOpen, handleClose])
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [isOpen, handleClose]);
 
   useEffect(() => {
     return () => {
-      if (timeoutRef.current) clearTimeout(timeoutRef.current)
-    }
-  }, [])
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   // Simple link without dropdown
   if (!hasDropdown) {
@@ -135,22 +141,22 @@ export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
         href={item.href}
         aria-current={pathname === item.href ? 'page' : undefined}
         className={cn(
-          "relative px-4 py-2 text-sm font-medium whitespace-nowrap rounded-lg",
-          "transition-colors duration-200",
+          'relative px-4 py-2 text-sm font-medium whitespace-nowrap rounded-lg',
+          'transition-colors duration-200',
           designPrimitive.focus,
           isActive
-            ? "text-text-primary after:absolute after:left-4 after:right-4 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-text-primary/50"
-            : "text-text-secondary hover:text-text-primary"
+            ? 'text-text-primary after:absolute after:left-4 after:right-4 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-text-primary/50'
+            : 'text-text-secondary hover:text-text-primary',
         )}
       >
         {label}
       </Link>
-    )
+    );
   }
 
   // Group items by sections for mega menu
-  const groups = groupItemsBySection(item.subItems!)
-  const hasMultipleGroups = groups.length > 1
+  const groups = groupItemsBySection(item.subItems!);
+  const hasMultipleGroups = groups.length > 1;
 
   return (
     <div
@@ -167,14 +173,15 @@ export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
         onKeyDown={handleTriggerKeyDown}
         aria-current={pathname === item.href ? 'page' : undefined}
         className={cn(
-          "group relative inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg whitespace-nowrap",
-          "transition-all duration-200",
+          'group relative inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium rounded-lg whitespace-nowrap',
+          'transition-all duration-200',
           isOpen
-            ? "text-text-primary bg-surface-raised dark:bg-surface-base/6"
-            : "text-text-secondary hover:text-text-primary dark:text-text-muted",
-          isActive && !isOpen &&
-            "text-text-primary after:absolute after:left-4 after:right-4 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-text-primary/50",
-          designPrimitive.focus
+            ? 'text-text-primary bg-surface-raised dark:bg-surface-base/6'
+            : 'text-text-secondary hover:text-text-primary dark:text-text-muted',
+          isActive &&
+            !isOpen &&
+            'text-text-primary after:absolute after:left-4 after:right-4 after:-bottom-0.5 after:h-0.5 after:rounded-full after:bg-text-primary/50',
+          designPrimitive.focus,
         )}
         aria-expanded={isOpen}
         aria-haspopup="true"
@@ -182,8 +189,8 @@ export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
         {label}
         <ChevronDown
           className={cn(
-            "w-3.5 h-3.5 text-text-tertiary transition-transform duration-200 motion-reduce:transition-none",
-            isOpen && "rotate-180 text-action"
+            'w-3.5 h-3.5 text-text-tertiary transition-transform duration-200 motion-reduce:transition-none',
+            isOpen && 'rotate-180 text-action',
           )}
         />
       </Link>
@@ -195,10 +202,7 @@ export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
           <div className="absolute left-0 right-0 h-4 top-full" />
 
           {/* Mega Menu Container - Positioned from header edge */}
-          <div
-            className="fixed left-0 right-0 top-16 z-50"
-            style={{ pointerEvents: 'auto' }}
-          >
+          <div className="fixed left-0 right-0 top-16 z-50" style={{ pointerEvents: 'auto' }}>
             <div className="max-w-7xl mx-auto px-6 lg:px-8">
               <MegaMenuContent
                 groups={groups}
@@ -211,5 +215,5 @@ export function NavItem({ item, onAnyOpen, onAnyClose }: NavItemProps) {
         </>
       )}
     </div>
-  )
+  );
 }

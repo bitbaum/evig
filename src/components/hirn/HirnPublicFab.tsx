@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * HirnPublicFab — floating entry point for the Hirn assistant on public pages.
@@ -8,47 +8,47 @@
  * per pathname per browser session. Clicking the FAB opens HirnChatPanel.
  */
 
-import { useEffect, useState } from 'react'
-import { useSession } from 'next-auth/react'
-import { useTranslations } from 'next-intl'
-import { Brain, X } from 'lucide-react'
-import { usePathname } from '@/i18n/navigation'
-import { Button } from '@/components/ui/button'
-import { resolveHirnContext } from '@/config/hirn/page-contexts'
-import { HirnChatPanel } from './HirnChatPanel'
+import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useTranslations } from 'next-intl';
+import { Brain, X } from 'lucide-react';
+import { usePathname } from '@/i18n/navigation';
+import { Button } from '@/components/ui/button';
+import { resolveHirnContext } from '@/config/hirn/page-contexts';
+import { HirnChatPanel } from './HirnChatPanel';
 
-const CHIP_STORAGE_PREFIX = 'hirn-chip:'
+const CHIP_STORAGE_PREFIX = 'hirn-chip:';
 
 export function HirnPublicFab() {
-  const t = useTranslations('hirn')
-  const pathname = usePathname() ?? '/'
-  const { status } = useSession()
-  const [isOpen, setIsOpen] = useState(false)
-  const [showChip, setShowChip] = useState(false)
+  const t = useTranslations('hirn');
+  const pathname = usePathname() ?? '/';
+  const { status } = useSession();
+  const [isOpen, setIsOpen] = useState(false);
+  const [showChip, setShowChip] = useState(false);
 
-  const context = resolveHirnContext(pathname, 'public')
+  const context = resolveHirnContext(pathname, 'public');
 
   // Proactive chip: first suggestion for this page, once per pathname per session.
   useEffect(() => {
     // sessionStorage (external store) decides once-per-path chip visibility.
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setShowChip(false)
-    if (isOpen || context.suggestions.length === 0) return
-    const key = `${CHIP_STORAGE_PREFIX}${pathname}`
+    setShowChip(false);
+    if (isOpen || context.suggestions.length === 0) return;
+    const key = `${CHIP_STORAGE_PREFIX}${pathname}`;
     try {
-      if (sessionStorage.getItem(key)) return
-      sessionStorage.setItem(key, '1')
-      setShowChip(true)
+      if (sessionStorage.getItem(key)) return;
+      sessionStorage.setItem(key, '1');
+      setShowChip(true);
     } catch {
       // sessionStorage unavailable (private mode) — skip the chip.
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname])
+  }, [pathname]);
 
   const openPanel = () => {
-    setShowChip(false)
-    setIsOpen(true)
-  }
+    setShowChip(false);
+    setIsOpen(true);
+  };
 
   return (
     <>
@@ -100,5 +100,5 @@ export function HirnPublicFab() {
         isAuthenticated={status === 'authenticated'}
       />
     </>
-  )
+  );
 }

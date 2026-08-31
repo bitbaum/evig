@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { AlertCircle, ArrowLeft, Loader2 } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
-import { ORDER_STATUS } from '@/config/marketplace'
-import { useOrderDetail } from '@/hooks/useOrderDetail'
+import Link from 'next/link';
+import { AlertCircle, ArrowLeft, Loader2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/ui/Heading';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { ORDER_STATUS } from '@/config/marketplace';
+import { useOrderDetail } from '@/hooks/useOrderDetail';
 import {
   OrderHeader,
   PendingPaymentBanner,
@@ -17,10 +17,10 @@ import {
   ShippingAddressCard,
   ActionsCard,
   ReviewCard,
-} from './sections'
+} from './sections';
 
 export default function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  const t = useTranslations('dashboard.orders')
+  const t = useTranslations('dashboard.orders');
 
   const {
     order,
@@ -39,29 +39,31 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
     notFound: t('errorNotFound'),
     confirmReceipt: t('errorConfirmReceipt'),
     updateStatus: t('errorUpdateStatus'),
-  })
+  });
 
   if (isLoading || sessionStatus === 'loading') {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader2 className="w-8 h-8 text-action animate-spin" />
       </div>
-    )
+    );
   }
 
   if (error && !order) {
     return (
       <div className="max-w-2xl mx-auto py-12 text-center">
         <AlertCircle className="w-16 h-16 text-text-muted mx-auto mb-4" />
-        <Heading level={2} className="text-xl font-bold text-text-primary mb-2">{error}</Heading>
+        <Heading level={2} className="text-xl font-bold text-text-primary mb-2">
+          {error}
+        </Heading>
         <Link href="/dashboard/orders" className="text-action hover:text-action font-medium">
           {t('backToOrders')}
         </Link>
       </div>
-    )
+    );
   }
 
-  if (!order) return null
+  if (!order) return null;
 
   return (
     <article className="mx-auto max-w-3xl space-y-6 px-4 py-12 sm:px-6 lg:px-8">
@@ -109,9 +111,12 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
         title={t('cancelButton')}
         message={t('confirmCancel')}
         itemName={order?.listingTitle}
-        onConfirm={() => { setConfirmCancel(false); updateStatus(ORDER_STATUS.CANCELLED) }}
+        onConfirm={() => {
+          setConfirmCancel(false);
+          updateStatus(ORDER_STATUS.CANCELLED);
+        }}
         onClose={() => setConfirmCancel(false)}
       />
     </article>
-  )
+  );
 }

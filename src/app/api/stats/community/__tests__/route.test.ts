@@ -20,11 +20,11 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockQuery = jest.fn()
+const mockQuery = jest.fn();
 
 jest.mock('@/lib/auth/db', () => ({
   query: (...args: unknown[]) => mockQuery.apply(null, args),
-}))
+}));
 
 jest.mock('@/config/database', () => ({
   TABLE_NAMES: {
@@ -33,51 +33,51 @@ jest.mock('@/config/database', () => ({
     IT_HILFE_REQUESTS: 'it_hilfe_requests',
     WORKSHOPS: 'workshops',
   },
-}))
+}));
 
 jest.mock('@/config/marketplace', () => ({
   LISTING_STATUS: { ACTIVE: 'active' },
-}))
+}));
 
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
-}))
+}));
 
 // apiSuccessCached / apiError need NextResponse — mock them with real NextResponse
 jest.mock('@/lib/api/helpers', () => ({
   apiSuccessCached: (data: unknown) => {
-    const { NextResponse } = jest.requireActual('next/server')
-    return NextResponse.json({ success: true, data })
+    const { NextResponse } = jest.requireActual('next/server');
+    return NextResponse.json({ success: true, data });
   },
   apiError: (err: unknown, msg: string) => {
-    const { NextResponse } = jest.requireActual('next/server')
-    return NextResponse.json({ success: false, error: msg }, { status: 500 })
+    const { NextResponse } = jest.requireActual('next/server');
+    return NextResponse.json({ success: false, error: msg }, { status: 500 });
   },
-}))
+}));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { GET } from '../route'
+import { GET } from '../route';
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
 function makeQueryResult(count: string | null) {
-  return { rows: [{ count }] }
+  return { rows: [{ count }] };
 }
 
 beforeEach(() => {
-  jest.clearAllMocks()
+  jest.clearAllMocks();
   // Default: all queries return meaningful counts
   mockQuery
-    .mockResolvedValueOnce(makeQueryResult('42'))   // users
-    .mockResolvedValueOnce(makeQueryResult('15'))   // listings
-    .mockResolvedValueOnce(makeQueryResult('8'))    // repairs
-    .mockResolvedValueOnce(makeQueryResult('3'))    // workshops
-})
+    .mockResolvedValueOnce(makeQueryResult('42')) // users
+    .mockResolvedValueOnce(makeQueryResult('15')) // listings
+    .mockResolvedValueOnce(makeQueryResult('8')) // repairs
+    .mockResolvedValueOnce(makeQueryResult('3')); // workshops
+});
 
 // ============================================================================
 // GET /api/stats/community
@@ -85,64 +85,64 @@ beforeEach(() => {
 
 describe('GET /api/stats/community', () => {
   it('returns 200 status', async () => {
-    const response = await GET()
-    expect(response.status).toBe(200)
-  })
+    const response = await GET();
+    expect(response.status).toBe(200);
+  });
 
   it('returns numeric user count from DB', async () => {
-    const response = await GET()
-    const body = await response.json()
-    expect(body.data.users).toBe(42)
-  })
+    const response = await GET();
+    const body = await response.json();
+    expect(body.data.users).toBe(42);
+  });
 
   it('returns numeric listings count from DB', async () => {
-    const response = await GET()
-    const body = await response.json()
-    expect(body.data.listings).toBe(15)
-  })
+    const response = await GET();
+    const body = await response.json();
+    expect(body.data.listings).toBe(15);
+  });
 
   it('returns numeric repairs count from DB', async () => {
-    const response = await GET()
-    const body = await response.json()
-    expect(body.data.repairs).toBe(8)
-  })
+    const response = await GET();
+    const body = await response.json();
+    expect(body.data.repairs).toBe(8);
+  });
 
   it('returns numeric workshops count from DB', async () => {
-    const response = await GET()
-    const body = await response.json()
-    expect(body.data.workshops).toBe(3)
-  })
+    const response = await GET();
+    const body = await response.json();
+    expect(body.data.workshops).toBe(3);
+  });
 
   it('returns 0 when DB count is null (no rows)', async () => {
-    mockQuery.mockReset()
+    mockQuery.mockReset();
     mockQuery
       .mockResolvedValueOnce({ rows: [{ count: null }] })
       .mockResolvedValueOnce({ rows: [{ count: null }] })
       .mockResolvedValueOnce({ rows: [{ count: null }] })
-      .mockResolvedValueOnce({ rows: [{ count: null }] })
+      .mockResolvedValueOnce({ rows: [{ count: null }] });
 
-    const response = await GET()
-    const body = await response.json()
-    expect(body.data.users).toBe(0)
-    expect(body.data.listings).toBe(0)
-  })
+    const response = await GET();
+    const body = await response.json();
+    expect(body.data.users).toBe(0);
+    expect(body.data.listings).toBe(0);
+  });
 
   it('returns 0 when DB returns empty rows array', async () => {
-    mockQuery.mockReset()
-    mockQuery.mockResolvedValue({ rows: [] })
+    mockQuery.mockReset();
+    mockQuery.mockResolvedValue({ rows: [] });
 
-    const response = await GET()
-    const body = await response.json()
-    expect(body.data.users).toBe(0)
-  })
+    const response = await GET();
+    const body = await response.json();
+    expect(body.data.users).toBe(0);
+  });
 
   it('returns error response when DB throws', async () => {
-    mockQuery.mockReset()
-    mockQuery.mockRejectedValue(new Error('Connection timeout'))
+    mockQuery.mockReset();
+    mockQuery.mockRejectedValue(new Error('Connection timeout'));
 
-    const response = await GET()
-    const body = await response.json()
-    expect(body.success).toBe(false)
-    expect(response.status).toBe(500)
-  })
-})
+    const response = await GET();
+    const body = await response.json();
+    expect(body.success).toBe(false);
+    expect(response.status).toBe(500);
+  });
+});

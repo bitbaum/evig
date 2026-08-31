@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react';
 
 /**
  * useGridPointerInput — ONE gesture engine for every selectable grid in the
@@ -32,35 +32,35 @@ import { useCallback, useEffect, useRef } from 'react'
  * modifier clicks, touch taps, and keyboard-activated clicks.
  */
 
-export const GRID_CELL_ATTR = 'data-grid-key'
+export const GRID_CELL_ATTR = 'data-grid-key';
 
 // Hold this long without moving to lock a touch paint (kept below Android's
 // ~500ms context-menu long-press so painting wins the race).
-const LONG_PRESS_MS = 350
+const LONG_PRESS_MS = 350;
 // Movement beyond this cancels a pending long-press (the finger is swiping)…
-const SLOP_PX = 10
+const SLOP_PX = 10;
 // …and a mostly-horizontal move beyond the slop starts painting immediately.
-const HORIZONTAL_RATIO = 1.2
+const HORIZONTAL_RATIO = 1.2;
 
 export interface GridTapInfo {
-  shiftKey: boolean
-  ctrlKey: boolean
-  metaKey: boolean
-  pointerType: string
+  shiftKey: boolean;
+  ctrlKey: boolean;
+  metaKey: boolean;
+  pointerType: string;
 }
 
 interface DragSession {
-  pointerType: string
-  startX: number
-  startY: number
-  startKey: string
-  active: boolean
-  lastKey: string | null
-  longPressTimer: ReturnType<typeof setTimeout> | null
+  pointerType: string;
+  startX: number;
+  startY: number;
+  startKey: string;
+  active: boolean;
+  lastKey: string | null;
+  longPressTimer: ReturnType<typeof setTimeout> | null;
 }
 
 function isTouchLike(pointerType: string): boolean {
-  return pointerType === 'touch' || pointerType === 'pen'
+  return pointerType === 'touch' || pointerType === 'pen';
 }
 
 export function useGridPointerInput({
@@ -68,93 +68,93 @@ export function useGridPointerInput({
   onDragOver,
   onTap,
 }: {
-  onDragStart: (key: string, pointerType: string) => void
-  onDragOver: (key: string, lastKey: string | null) => void
-  onTap: (key: string, info: GridTapInfo) => void
+  onDragStart: (key: string, pointerType: string) => void;
+  onDragOver: (key: string, lastKey: string | null) => void;
+  onTap: (key: string, info: GridTapInfo) => void;
 }) {
   // Latest callbacks in a ref so gesture handlers never see stale closures.
-  const cbRef = useRef({ onDragStart, onDragOver, onTap })
+  const cbRef = useRef({ onDragStart, onDragOver, onTap });
   useEffect(() => {
-    cbRef.current = { onDragStart, onDragOver, onTap }
-  })
+    cbRef.current = { onDragStart, onDragOver, onTap };
+  });
 
-  const sessionRef = useRef<DragSession | null>(null)
-  const dragActiveRef = useRef(false)
-  const suppressClickRef = useRef(false)
-  const lastPointerTypeRef = useRef<string>('mouse')
-  const containerRef = useRef<HTMLElement | null>(null)
+  const sessionRef = useRef<DragSession | null>(null);
+  const dragActiveRef = useRef(false);
+  const suppressClickRef = useRef(false);
+  const lastPointerTypeRef = useRef<string>('mouse');
+  const containerRef = useRef<HTMLElement | null>(null);
 
   const clearLongPress = () => {
-    const s = sessionRef.current
+    const s = sessionRef.current;
     if (s?.longPressTimer) {
-      clearTimeout(s.longPressTimer)
-      s.longPressTimer = null
+      clearTimeout(s.longPressTimer);
+      s.longPressTimer = null;
     }
-  }
+  };
 
   const activate = useCallback((fromTouchGesture: boolean) => {
-    const s = sessionRef.current
-    if (!s || s.active) return
-    clearLongPress()
-    s.active = true
-    dragActiveRef.current = true
+    const s = sessionRef.current;
+    if (!s || s.active) return;
+    clearLongPress();
+    s.active = true;
+    dragActiveRef.current = true;
     // A touch-initiated paint IS the gesture — always eat the trailing click.
     // For mouse, onDragStart already carries the plain-click semantic, so the
     // trailing click must be eaten too; both paths suppress.
-    if (fromTouchGesture || s.pointerType === 'mouse') suppressClickRef.current = true
-    s.lastKey = s.startKey
-    cbRef.current.onDragStart(s.startKey, s.pointerType)
-  }, [])
+    if (fromTouchGesture || s.pointerType === 'mouse') suppressClickRef.current = true;
+    s.lastKey = s.startKey;
+    cbRef.current.onDragStart(s.startKey, s.pointerType);
+  }, []);
 
   const paintOver = useCallback((key: string) => {
-    const s = sessionRef.current
-    if (!s?.active || key === s.lastKey) return
-    const last = s.lastKey
-    s.lastKey = key
-    cbRef.current.onDragOver(key, last)
-  }, [])
+    const s = sessionRef.current;
+    if (!s?.active || key === s.lastKey) return;
+    const last = s.lastKey;
+    s.lastKey = key;
+    cbRef.current.onDragOver(key, last);
+  }, []);
 
   const endSession = useCallback(() => {
-    clearLongPress()
-    sessionRef.current = null
-    dragActiveRef.current = false
-  }, [])
+    clearLongPress();
+    sessionRef.current = null;
+    dragActiveRef.current = false;
+  }, []);
 
   // End the session from anywhere (mouseup outside the grid, touch lift).
   useEffect(() => {
-    window.addEventListener('pointerup', endSession)
-    window.addEventListener('pointercancel', endSession)
+    window.addEventListener('pointerup', endSession);
+    window.addEventListener('pointercancel', endSession);
     return () => {
-      window.removeEventListener('pointerup', endSession)
-      window.removeEventListener('pointercancel', endSession)
-    }
-  }, [endSession])
+      window.removeEventListener('pointerup', endSession);
+      window.removeEventListener('pointercancel', endSession);
+    };
+  }, [endSession]);
 
   // While a touch paint is active, block the browser from scrolling. Must be
   // a non-passive native listener — React's synthetic handlers are passive
   // for touchmove and can't preventDefault. React calls the callback ref with
   // null on unmount, which detaches the listener.
   const blockScrollWhilePainting = useCallback((e: TouchEvent) => {
-    if (dragActiveRef.current) e.preventDefault()
-  }, [])
+    if (dragActiveRef.current) e.preventDefault();
+  }, []);
   const setContainer = useCallback(
     (el: HTMLElement | null) => {
-      containerRef.current?.removeEventListener('touchmove', blockScrollWhilePainting)
-      containerRef.current = el
-      el?.addEventListener('touchmove', blockScrollWhilePainting, { passive: false })
+      containerRef.current?.removeEventListener('touchmove', blockScrollWhilePainting);
+      containerRef.current = el;
+      el?.addEventListener('touchmove', blockScrollWhilePainting, { passive: false });
     },
     [blockScrollWhilePainting],
-  )
+  );
 
   const onPointerDown = useCallback(
     (key: string, e: React.PointerEvent) => {
-      suppressClickRef.current = false
-      const pointerType = e.pointerType || 'mouse'
-      lastPointerTypeRef.current = pointerType
+      suppressClickRef.current = false;
+      const pointerType = e.pointerType || 'mouse';
+      lastPointerTypeRef.current = pointerType;
       // Modifier clicks (range/toggle) and non-primary buttons are click
       // territory — no drag session. (`button` can be undefined on synthetic
       // pointer events — treat that as primary.)
-      if ((e.button ?? 0) !== 0 || e.shiftKey || e.ctrlKey || e.metaKey) return
+      if ((e.button ?? 0) !== 0 || e.shiftKey || e.ctrlKey || e.metaKey) return;
       sessionRef.current = {
         pointerType,
         startX: e.clientX,
@@ -163,68 +163,66 @@ export function useGridPointerInput({
         active: false,
         lastKey: null,
         longPressTimer: null,
-      }
+      };
       if (isTouchLike(pointerType)) {
         // Wait for intent: long-press or a horizontal move starts the paint;
         // a vertical move stays a scroll.
-        sessionRef.current.longPressTimer = setTimeout(() => activate(true), LONG_PRESS_MS)
+        sessionRef.current.longPressTimer = setTimeout(() => activate(true), LONG_PRESS_MS);
       } else {
         // Mouse paints immediately; prevent text-selection/native drag.
-        e.preventDefault()
-        activate(false)
+        e.preventDefault();
+        activate(false);
       }
     },
     [activate],
-  )
+  );
 
   // Mouse path: no implicit capture, so entering another cell fires here.
   const onPointerEnter = useCallback(
     (key: string, e: React.PointerEvent) => {
-      if (!isTouchLike(e.pointerType || 'mouse')) paintOver(key)
+      if (!isTouchLike(e.pointerType || 'mouse')) paintOver(key);
     },
     [paintOver],
-  )
+  );
 
   // Touch path: all moves fire on the origin element (implicit capture) and
   // bubble to the container — hit-test the actual finger position.
   const onContainerPointerMove = useCallback(
     (e: React.PointerEvent) => {
-      const s = sessionRef.current
-      if (!s || !isTouchLike(s.pointerType)) return
+      const s = sessionRef.current;
+      if (!s || !isTouchLike(s.pointerType)) return;
       if (!s.active) {
-        const dx = Math.abs(e.clientX - s.startX)
-        const dy = Math.abs(e.clientY - s.startY)
+        const dx = Math.abs(e.clientX - s.startX);
+        const dy = Math.abs(e.clientY - s.startY);
         if (dx > SLOP_PX && dx > dy * HORIZONTAL_RATIO) {
-          activate(true)
+          activate(true);
         } else if (dy > SLOP_PX) {
           // Vertical intent — let the page scroll; abort the pending paint.
-          endSession()
-          return
+          endSession();
+          return;
         } else {
-          return
+          return;
         }
       }
-      const hit = document
-        .elementFromPoint(e.clientX, e.clientY)
-        ?.closest?.(`[${GRID_CELL_ATTR}]`)
-      const key = hit?.getAttribute(GRID_CELL_ATTR)
-      if (key) paintOver(key)
+      const hit = document.elementFromPoint(e.clientX, e.clientY)?.closest?.(`[${GRID_CELL_ATTR}]`);
+      const key = hit?.getAttribute(GRID_CELL_ATTR);
+      if (key) paintOver(key);
     },
     [activate, endSession, paintOver],
-  )
+  );
 
   const onClick = useCallback((key: string, e: React.MouseEvent) => {
     if (suppressClickRef.current) {
-      suppressClickRef.current = false
-      return
+      suppressClickRef.current = false;
+      return;
     }
     cbRef.current.onTap(key, {
       shiftKey: e.shiftKey,
       ctrlKey: e.ctrlKey,
       metaKey: e.metaKey,
       pointerType: lastPointerTypeRef.current,
-    })
-  }, [])
+    });
+  }, []);
 
   const getCellProps = useCallback(
     (key: string) => ({
@@ -234,7 +232,7 @@ export function useGridPointerInput({
       onClick: (e: React.MouseEvent) => onClick(key, e),
     }),
     [onPointerDown, onPointerEnter, onClick],
-  )
+  );
 
   return {
     getCellProps,
@@ -243,5 +241,5 @@ export function useGridPointerInput({
     dragActiveRef,
     /** Pointer type of the most recent pointerdown ('mouse' | 'touch' | 'pen'). */
     lastPointerTypeRef,
-  }
+  };
 }

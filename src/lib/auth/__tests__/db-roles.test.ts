@@ -51,13 +51,13 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockDbExecute = jest.fn()
+const mockDbExecute = jest.fn();
 
 jest.mock('@/db', () => ({
   db: {
     execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
   },
-}))
+}));
 
 jest.mock('@/config/database', () => ({
   TABLE_NAMES: {
@@ -70,14 +70,13 @@ jest.mock('@/config/database', () => ({
     CUSTOMER_SEGMENTS: 'customer_segments',
     USER_SEGMENTS: 'user_segments',
   },
-}))
+}));
 
 jest.mock('drizzle-orm', () => ({
-  sql: Object.assign(
-    jest.fn().mockReturnValue({ __sql: 'mocked' }),
-    { raw: jest.fn().mockReturnValue({ __raw: true }) },
-  ),
-}))
+  sql: Object.assign(jest.fn().mockReturnValue({ __sql: 'mocked' }), {
+    raw: jest.fn().mockReturnValue({ __raw: true }),
+  }),
+}));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
@@ -95,7 +94,7 @@ import {
   addUserToSegment,
   updateUserLastActivity,
   getUserWithProfile,
-} from '../db-roles'
+} from '../db-roles';
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -112,7 +111,7 @@ function makeRole(overrides: Partial<Record<string, unknown>> = {}) {
     created_at: '2026-01-01T00:00:00Z',
     updated_at: '2026-01-01T00:00:00Z',
     ...overrides,
-  }
+  };
 }
 
 function makePermission(overrides: Partial<Record<string, unknown>> = {}) {
@@ -127,7 +126,7 @@ function makePermission(overrides: Partial<Record<string, unknown>> = {}) {
     created_at: '2026-01-01T00:00:00Z',
     updated_at: '2026-01-01T00:00:00Z',
     ...overrides,
-  }
+  };
 }
 
 function makePreference(overrides: Partial<Record<string, unknown>> = {}) {
@@ -139,7 +138,7 @@ function makePreference(overrides: Partial<Record<string, unknown>> = {}) {
     created_at: '2026-01-01T00:00:00Z',
     updated_at: '2026-01-01T00:00:00Z',
     ...overrides,
-  }
+  };
 }
 
 function makeSegment(overrides: Partial<Record<string, unknown>> = {}) {
@@ -153,7 +152,7 @@ function makeSegment(overrides: Partial<Record<string, unknown>> = {}) {
     slug: 'early-adopter',
     name: 'Early Adopter',
     ...overrides,
-  }
+  };
 }
 
 function makeUser(overrides: Partial<Record<string, unknown>> = {}) {
@@ -163,7 +162,7 @@ function makeUser(overrides: Partial<Record<string, unknown>> = {}) {
     name: 'Hans',
     role_id: null,
     ...overrides,
-  }
+  };
 }
 
 function makeProfile() {
@@ -171,13 +170,13 @@ function makeProfile() {
     user_id: 'user-1',
     first_name: 'Hans',
     last_name: 'Müller',
-  }
+  };
 }
 
 beforeEach(() => {
-  jest.clearAllMocks()
-  mockDbExecute.mockResolvedValue({ rows: [] })
-})
+  jest.clearAllMocks();
+  mockDbExecute.mockResolvedValue({ rows: [] });
+});
 
 // ============================================================================
 // getUserRoleById
@@ -185,23 +184,23 @@ beforeEach(() => {
 
 describe('getUserRoleById', () => {
   it('returns null when role not found', async () => {
-    mockDbExecute.mockResolvedValueOnce({ rows: [] })
+    mockDbExecute.mockResolvedValueOnce({ rows: [] });
 
-    const result = await getUserRoleById('missing-id')
+    const result = await getUserRoleById('missing-id');
 
-    expect(result).toBeNull()
-    expect(mockDbExecute).toHaveBeenCalledTimes(1)
-  })
+    expect(result).toBeNull();
+    expect(mockDbExecute).toHaveBeenCalledTimes(1);
+  });
 
   it('returns DbUserRole when found', async () => {
-    mockDbExecute.mockResolvedValueOnce({ rows: [makeRole()] })
+    mockDbExecute.mockResolvedValueOnce({ rows: [makeRole()] });
 
-    const result = await getUserRoleById('role-1')
+    const result = await getUserRoleById('role-1');
 
-    expect(result?.id).toBe('role-1')
-    expect(result?.slug).toBe('admin')
-  })
-})
+    expect(result?.id).toBe('role-1');
+    expect(result?.slug).toBe('admin');
+  });
+});
 
 // ============================================================================
 // getUserRoleBySlug
@@ -209,21 +208,21 @@ describe('getUserRoleById', () => {
 
 describe('getUserRoleBySlug', () => {
   it('returns null when slug not found', async () => {
-    mockDbExecute.mockResolvedValueOnce({ rows: [] })
+    mockDbExecute.mockResolvedValueOnce({ rows: [] });
 
-    const result = await getUserRoleBySlug('nonexistent')
+    const result = await getUserRoleBySlug('nonexistent');
 
-    expect(result).toBeNull()
-  })
+    expect(result).toBeNull();
+  });
 
   it('returns DbUserRole when slug found', async () => {
-    mockDbExecute.mockResolvedValueOnce({ rows: [makeRole()] })
+    mockDbExecute.mockResolvedValueOnce({ rows: [makeRole()] });
 
-    const result = await getUserRoleBySlug('admin')
+    const result = await getUserRoleBySlug('admin');
 
-    expect(result?.slug).toBe('admin')
-  })
-})
+    expect(result?.slug).toBe('admin');
+  });
+});
 
 // ============================================================================
 // getActiveUserRoles
@@ -231,24 +230,24 @@ describe('getUserRoleBySlug', () => {
 
 describe('getActiveUserRoles', () => {
   it('returns empty array when no active roles exist', async () => {
-    mockDbExecute.mockResolvedValueOnce({ rows: [] })
+    mockDbExecute.mockResolvedValueOnce({ rows: [] });
 
-    const result = await getActiveUserRoles()
+    const result = await getActiveUserRoles();
 
-    expect(result).toEqual([])
-  })
+    expect(result).toEqual([]);
+  });
 
   it('returns all active roles', async () => {
     mockDbExecute.mockResolvedValueOnce({
       rows: [makeRole(), makeRole({ id: 'role-2', slug: 'moderator' })],
-    })
+    });
 
-    const result = await getActiveUserRoles()
+    const result = await getActiveUserRoles();
 
-    expect(result).toHaveLength(2)
-    expect(result[1].slug).toBe('moderator')
-  })
-})
+    expect(result).toHaveLength(2);
+    expect(result[1].slug).toBe('moderator');
+  });
+});
 
 // ============================================================================
 // getRolePermissions
@@ -256,22 +255,22 @@ describe('getActiveUserRoles', () => {
 
 describe('getRolePermissions', () => {
   it('returns empty array when no permissions', async () => {
-    mockDbExecute.mockResolvedValueOnce({ rows: [] })
+    mockDbExecute.mockResolvedValueOnce({ rows: [] });
 
-    const result = await getRolePermissions('role-1')
+    const result = await getRolePermissions('role-1');
 
-    expect(result).toEqual([])
-  })
+    expect(result).toEqual([]);
+  });
 
   it('returns array of DbPermission rows', async () => {
-    mockDbExecute.mockResolvedValueOnce({ rows: [makePermission()] })
+    mockDbExecute.mockResolvedValueOnce({ rows: [makePermission()] });
 
-    const result = await getRolePermissions('role-1')
+    const result = await getRolePermissions('role-1');
 
-    expect(result[0].slug).toBe('products:read')
-    expect(result[0].resource).toBe('products')
-  })
-})
+    expect(result[0].slug).toBe('products:read');
+    expect(result[0].resource).toBe('products');
+  });
+});
 
 // ============================================================================
 // userHasPermission
@@ -279,21 +278,21 @@ describe('getRolePermissions', () => {
 
 describe('userHasPermission', () => {
   it('returns false when user lacks the permission', async () => {
-    mockDbExecute.mockResolvedValueOnce({ rows: [] })
+    mockDbExecute.mockResolvedValueOnce({ rows: [] });
 
-    const result = await userHasPermission('user-1', 'admin:write')
+    const result = await userHasPermission('user-1', 'admin:write');
 
-    expect(result).toBe(false)
-  })
+    expect(result).toBe(false);
+  });
 
   it('returns true when user has the permission', async () => {
-    mockDbExecute.mockResolvedValueOnce({ rows: [{ 1: 1 }] })
+    mockDbExecute.mockResolvedValueOnce({ rows: [{ 1: 1 }] });
 
-    const result = await userHasPermission('user-1', 'products:read')
+    const result = await userHasPermission('user-1', 'products:read');
 
-    expect(result).toBe(true)
-  })
-})
+    expect(result).toBe(true);
+  });
+});
 
 // ============================================================================
 // getUserPreferences
@@ -301,22 +300,22 @@ describe('userHasPermission', () => {
 
 describe('getUserPreferences', () => {
   it('returns empty array when no preferences set', async () => {
-    mockDbExecute.mockResolvedValueOnce({ rows: [] })
+    mockDbExecute.mockResolvedValueOnce({ rows: [] });
 
-    const result = await getUserPreferences('user-1')
+    const result = await getUserPreferences('user-1');
 
-    expect(result).toEqual([])
-  })
+    expect(result).toEqual([]);
+  });
 
   it('returns array of preference rows', async () => {
-    mockDbExecute.mockResolvedValueOnce({ rows: [makePreference()] })
+    mockDbExecute.mockResolvedValueOnce({ rows: [makePreference()] });
 
-    const result = await getUserPreferences('user-1')
+    const result = await getUserPreferences('user-1');
 
-    expect(result[0].preference_key).toBe('theme')
-    expect(result[0].preference_value).toBe('dark')
-  })
-})
+    expect(result[0].preference_key).toBe('theme');
+    expect(result[0].preference_value).toBe('dark');
+  });
+});
 
 // ============================================================================
 // setUserPreference
@@ -326,15 +325,15 @@ describe('setUserPreference', () => {
   it('calls db.execute once and returns the upserted preference', async () => {
     mockDbExecute.mockResolvedValueOnce({
       rows: [makePreference({ preference_value: 'light' })],
-    })
+    });
 
-    const result = await setUserPreference('user-1', 'theme', 'light')
+    const result = await setUserPreference('user-1', 'theme', 'light');
 
-    expect(mockDbExecute).toHaveBeenCalledTimes(1)
-    expect(result.preference_key).toBe('theme')
-    expect(result.preference_value).toBe('light')
-  })
-})
+    expect(mockDbExecute).toHaveBeenCalledTimes(1);
+    expect(result.preference_key).toBe('theme');
+    expect(result.preference_value).toBe('light');
+  });
+});
 
 // ============================================================================
 // getUserSegments
@@ -342,22 +341,22 @@ describe('setUserPreference', () => {
 
 describe('getUserSegments', () => {
   it('returns empty array when no segments assigned', async () => {
-    mockDbExecute.mockResolvedValueOnce({ rows: [] })
+    mockDbExecute.mockResolvedValueOnce({ rows: [] });
 
-    const result = await getUserSegments('user-1')
+    const result = await getUserSegments('user-1');
 
-    expect(result).toEqual([])
-  })
+    expect(result).toEqual([]);
+  });
 
   it('returns joined segment rows', async () => {
-    mockDbExecute.mockResolvedValueOnce({ rows: [makeSegment()] })
+    mockDbExecute.mockResolvedValueOnce({ rows: [makeSegment()] });
 
-    const result = await getUserSegments('user-1')
+    const result = await getUserSegments('user-1');
 
-    expect(result[0].user_id).toBe('user-1')
-    expect((result[0] as unknown as { slug: string }).slug).toBe('early-adopter')
-  })
-})
+    expect(result[0].user_id).toBe('user-1');
+    expect((result[0] as unknown as { slug: string }).slug).toBe('early-adopter');
+  });
+});
 
 // ============================================================================
 // addUserToSegment
@@ -366,27 +365,27 @@ describe('getUserSegments', () => {
 describe('addUserToSegment', () => {
   it('returns null when segment slug not found', async () => {
     // segment lookup returns empty
-    mockDbExecute.mockResolvedValueOnce({ rows: [] })
+    mockDbExecute.mockResolvedValueOnce({ rows: [] });
 
-    const result = await addUserToSegment('user-1', 'nonexistent-slug')
+    const result = await addUserToSegment('user-1', 'nonexistent-slug');
 
-    expect(result).toBeNull()
+    expect(result).toBeNull();
     // Only 1 execute: the segment lookup — no INSERT attempted
-    expect(mockDbExecute).toHaveBeenCalledTimes(1)
-  })
+    expect(mockDbExecute).toHaveBeenCalledTimes(1);
+  });
 
   it('returns null when INSERT hits a conflict and RETURNING is empty', async () => {
     mockDbExecute
       .mockResolvedValueOnce({ rows: [{ id: 'seg-1' }] }) // segment found
-      .mockResolvedValueOnce({ rows: [] })                 // INSERT conflict
+      .mockResolvedValueOnce({ rows: [] }); // INSERT conflict
 
-    const result = await addUserToSegment('user-1', 'early-adopter')
+    const result = await addUserToSegment('user-1', 'early-adopter');
 
-    expect(result).toBeNull()
-  })
+    expect(result).toBeNull();
+  });
 
   it('returns DbUserSegment on successful insert', async () => {
-    const segmentRow = { id: 'seg-1' }
+    const segmentRow = { id: 'seg-1' };
     const insertedRow = {
       id: 'us-1',
       user_id: 'user-1',
@@ -394,17 +393,17 @@ describe('addUserToSegment', () => {
       assigned_at: '2026-01-01T00:00:00Z',
       assigned_by: null,
       notes: null,
-    }
+    };
     mockDbExecute
       .mockResolvedValueOnce({ rows: [segmentRow] })
-      .mockResolvedValueOnce({ rows: [insertedRow] })
+      .mockResolvedValueOnce({ rows: [insertedRow] });
 
-    const result = await addUserToSegment('user-1', 'early-adopter', 'admin-user')
+    const result = await addUserToSegment('user-1', 'early-adopter', 'admin-user');
 
-    expect(result?.user_id).toBe('user-1')
-    expect(result?.segment_id).toBe('seg-1')
-  })
-})
+    expect(result?.user_id).toBe('user-1');
+    expect(result?.segment_id).toBe('seg-1');
+  });
+});
 
 // ============================================================================
 // updateUserLastActivity
@@ -412,13 +411,13 @@ describe('addUserToSegment', () => {
 
 describe('updateUserLastActivity', () => {
   it('calls db.execute exactly once', async () => {
-    mockDbExecute.mockResolvedValueOnce({ rows: [] })
+    mockDbExecute.mockResolvedValueOnce({ rows: [] });
 
-    await updateUserLastActivity('user-1')
+    await updateUserLastActivity('user-1');
 
-    expect(mockDbExecute).toHaveBeenCalledTimes(1)
-  })
-})
+    expect(mockDbExecute).toHaveBeenCalledTimes(1);
+  });
+});
 
 // ============================================================================
 // getUserWithProfile
@@ -426,28 +425,28 @@ describe('updateUserLastActivity', () => {
 
 describe('getUserWithProfile', () => {
   it('returns null when user not found', async () => {
-    mockDbExecute.mockResolvedValueOnce({ rows: [] })
+    mockDbExecute.mockResolvedValueOnce({ rows: [] });
 
-    const result = await getUserWithProfile('missing-id')
+    const result = await getUserWithProfile('missing-id');
 
-    expect(result).toBeNull()
-    expect(mockDbExecute).toHaveBeenCalledTimes(1)
-  })
+    expect(result).toBeNull();
+    expect(mockDbExecute).toHaveBeenCalledTimes(1);
+  });
 
   it('returns user with profile when no role_id set', async () => {
     // user (no role_id), profile
     mockDbExecute
       .mockResolvedValueOnce({ rows: [makeUser()] })
-      .mockResolvedValueOnce({ rows: [makeProfile()] })
+      .mockResolvedValueOnce({ rows: [makeProfile()] });
 
-    const result = await getUserWithProfile('user-1')
+    const result = await getUserWithProfile('user-1');
 
-    expect(result?.id).toBe('user-1')
-    expect(result?.profile).toBeDefined()
-    expect(result?.role_info).toBeUndefined()
-    expect(result?.permissions).toBeUndefined()
-    expect(mockDbExecute).toHaveBeenCalledTimes(2)
-  })
+    expect(result?.id).toBe('user-1');
+    expect(result?.profile).toBeDefined();
+    expect(result?.role_info).toBeUndefined();
+    expect(result?.permissions).toBeUndefined();
+    expect(mockDbExecute).toHaveBeenCalledTimes(2);
+  });
 
   it('returns user + role_info + permissions when role_id is set', async () => {
     // user (with role_id), profile, role, permissions
@@ -455,14 +454,14 @@ describe('getUserWithProfile', () => {
       .mockResolvedValueOnce({ rows: [makeUser({ role_id: 'role-1' })] })
       .mockResolvedValueOnce({ rows: [makeProfile()] })
       .mockResolvedValueOnce({ rows: [makeRole()] })
-      .mockResolvedValueOnce({ rows: [makePermission()] }) // getRolePermissions
+      .mockResolvedValueOnce({ rows: [makePermission()] }); // getRolePermissions
 
-    const result = await getUserWithProfile('user-1')
+    const result = await getUserWithProfile('user-1');
 
-    expect(result?.role_info?.slug).toBe('admin')
-    expect(result?.permissions).toHaveLength(1)
-    expect(result?.permissions?.[0].slug).toBe('products:read')
+    expect(result?.role_info?.slug).toBe('admin');
+    expect(result?.permissions).toHaveLength(1);
+    expect(result?.permissions?.[0].slug).toBe('products:read');
     // user + profile + role + permissions (via getRolePermissions)
-    expect(mockDbExecute).toHaveBeenCalledTimes(4)
-  })
-})
+    expect(mockDbExecute).toHaveBeenCalledTimes(4);
+  });
+});

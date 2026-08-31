@@ -1,16 +1,16 @@
-import { db } from '@/db'
-import { sql } from 'drizzle-orm'
-import { getAuthSecret } from '@/lib/auth/config'
-import { apiSuccess } from '@/lib/api/helpers'
+import { db } from '@/db';
+import { sql } from 'drizzle-orm';
+import { getAuthSecret } from '@/lib/auth/config';
+import { apiSuccess } from '@/lib/api/helpers';
 
 type AuthHealth = {
-  status: 'healthy' | 'unhealthy'
+  status: 'healthy' | 'unhealthy';
   checks: {
-    authSecret: 'ok' | 'missing'
-    database: 'ok' | 'failed'
-  }
-  timestamp: string
-}
+    authSecret: 'ok' | 'missing';
+    database: 'ok' | 'failed';
+  };
+  timestamp: string;
+};
 
 export async function GET() {
   const response: AuthHealth = {
@@ -20,25 +20,25 @@ export async function GET() {
       database: 'ok',
     },
     timestamp: new Date().toISOString(),
-  }
+  };
 
   try {
-    const secret = getAuthSecret()
+    const secret = getAuthSecret();
     if (!secret || secret.length < 16) {
-      response.status = 'unhealthy'
-      response.checks.authSecret = 'missing'
+      response.status = 'unhealthy';
+      response.checks.authSecret = 'missing';
     }
   } catch {
-    response.status = 'unhealthy'
-    response.checks.authSecret = 'missing'
+    response.status = 'unhealthy';
+    response.checks.authSecret = 'missing';
   }
 
   try {
-    await db.execute(sql`SELECT 1`)
+    await db.execute(sql`SELECT 1`);
   } catch {
-    response.status = 'unhealthy'
-    response.checks.database = 'failed'
+    response.status = 'unhealthy';
+    response.checks.database = 'failed';
   }
 
-  return apiSuccess(response, response.status === 'healthy' ? 200 : 503)
+  return apiSuccess(response, response.status === 'healthy' ? 200 : 503);
 }

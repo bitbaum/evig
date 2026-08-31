@@ -34,26 +34,26 @@
  * So comments are stripped before anything is matched. The test then sees only
  * code, which is the only thing that can call a vendor.
  */
-import { readFileSync, readdirSync, statSync } from 'node:fs'
-import { join } from 'node:path'
+import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { join } from 'node:path';
 
 /** Source with `//` and block comments removed. Not a parser; sufficient here. */
 function stripComments(source: string): string {
-  return source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/[^\n]*/g, '$1')
+  return source.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/[^\n]*/g, '$1');
 }
 
 function walk(dir: string): string[] {
-  const out: string[] = []
+  const out: string[] = [];
   for (const entry of readdirSync(dir)) {
-    const full = join(dir, entry)
+    const full = join(dir, entry);
     if (statSync(full).isDirectory()) {
-      if (entry === '__tests__' || entry === 'node_modules') continue
-      out.push(...walk(full))
+      if (entry === '__tests__' || entry === 'node_modules') continue;
+      out.push(...walk(full));
     } else if (/\.(ts|tsx)$/.test(entry)) {
-      out.push(full)
+      out.push(full);
     }
   }
-  return out
+  return out;
 }
 
 /**
@@ -65,39 +65,42 @@ function walk(dir: string): string[] {
  */
 const RETIRED = [
   { pattern: /\bllama-3\.\d[\w.-]*/i, why: 'Groq retired the entire llama-3.x family' },
-  { pattern: /\bllama-4-scout[\w.-]*/i, why: 'decommissioned; this repo was already repinned off it once' },
+  {
+    pattern: /\bllama-4-scout[\w.-]*/i,
+    why: 'decommissioned; this repo was already repinned off it once',
+  },
   { pattern: /\bopenai\/gpt-oss-20b:free\b/i, why: 'retired from OpenRouter’s catalogue' },
   { pattern: /\bgoogle\/gemini-2\.0-flash-001\b/i, why: 'retired from OpenRouter’s catalogue' },
-]
+];
 
-const AI_DIRS = ['src/lib/ai', 'src/lib/hirn']
+const AI_DIRS = ['src/lib/ai', 'src/lib/hirn'];
 
 describe('retired model ids', () => {
-  const files = AI_DIRS.flatMap((dir) => walk(join(process.cwd(), dir)))
+  const files = AI_DIRS.flatMap((dir) => walk(join(process.cwd(), dir)));
 
   it('finds AI source to check, so an empty sweep cannot pass vacuously', () => {
     // Without this, a moved directory turns the whole file below into a
     // guarantee about nothing — which reads identically to a clean result.
-    expect(files.length).toBeGreaterThan(5)
-  })
+    expect(files.length).toBeGreaterThan(5);
+  });
 
   it.each(RETIRED)('carries no id matching $pattern ($why)', ({ pattern }) => {
-    const offenders: string[] = []
+    const offenders: string[] = [];
 
     for (const file of files) {
-      const code = stripComments(readFileSync(file, 'utf8'))
+      const code = stripComments(readFileSync(file, 'utf8'));
       // Only quoted strings can be sent to a vendor. This also keeps a bare
       // word in an identifier or type name from tripping the check.
       for (const match of code.matchAll(/['"`]([^'"`\n]+)['"`]/g)) {
         if (pattern.test(match[1])) {
-          offenders.push(`${file.replace(process.cwd() + '/', '')}: ${match[1]}`)
+          offenders.push(`${file.replace(process.cwd() + '/', '')}: ${match[1]}`);
         }
       }
     }
 
     // Named, not counted: the failure should say which file and which id.
-    expect(offenders).toEqual([])
-  })
+    expect(offenders).toEqual([]);
+  });
 
   it('still catches an id that is genuinely present', () => {
     // Guards the stripper and the matcher together. If `stripComments` ever
@@ -106,11 +109,11 @@ describe('retired model ids', () => {
     const sample = `
       // a comment naming 'llama-3.3-70b-versatile' must NOT count
       const model = 'llama-3.1-8b-instant'
-    `
-    const code = stripComments(sample)
-    const found = [...code.matchAll(/['"`]([^'"`\n]+)['"`]/g)].map((m) => m[1])
+    `;
+    const code = stripComments(sample);
+    const found = [...code.matchAll(/['"`]([^'"`\n]+)['"`]/g)].map((m) => m[1]);
 
-    expect(found).toContain('llama-3.1-8b-instant')
-    expect(found).not.toContain('llama-3.3-70b-versatile')
-  })
-})
+    expect(found).toContain('llama-3.1-8b-instant');
+    expect(found).not.toContain('llama-3.3-70b-versatile');
+  });
+});

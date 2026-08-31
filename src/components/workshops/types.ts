@@ -12,17 +12,23 @@
 // WORKSHOP STATUS ENUMS
 // =============================================================================
 
-import type { WorkshopRegistrationStatus, WorkshopPaymentStatus } from '@/config/workshop-registration-status'
-import type { ProposalStatus as _ProposalStatus, WorkshopInstanceStatus as _WorkshopInstanceStatus } from '@/config/workshops'
-import type { LocationType as _LocationType } from '@/config/location-status'
+import type {
+  WorkshopRegistrationStatus,
+  WorkshopPaymentStatus,
+} from '@/config/workshop-registration-status';
+import type {
+  ProposalStatus as _ProposalStatus,
+  WorkshopInstanceStatus as _WorkshopInstanceStatus,
+} from '@/config/workshops';
+import type { LocationType as _LocationType } from '@/config/location-status';
 
-export type RegistrationStatus = WorkshopRegistrationStatus
-export type PaymentStatus = WorkshopPaymentStatus
-export type ProposalStatus = _ProposalStatus
-export type WorkshopInstanceStatus = _WorkshopInstanceStatus
-export type LocationType = _LocationType
+export type RegistrationStatus = WorkshopRegistrationStatus;
+export type PaymentStatus = WorkshopPaymentStatus;
+export type ProposalStatus = _ProposalStatus;
+export type WorkshopInstanceStatus = _WorkshopInstanceStatus;
+export type LocationType = _LocationType;
 
-export type WorkshopLevel = 'beginner' | 'intermediate' | 'advanced' | 'all'
+export type WorkshopLevel = 'beginner' | 'intermediate' | 'advanced' | 'all';
 
 // =============================================================================
 // UI STATE TYPES
@@ -36,7 +42,7 @@ export type RegistrationUIStatus =
   | 'payment'
   | 'processing'
   | 'success'
-  | 'error'
+  | 'error';
 
 // =============================================================================
 // CORE WORKSHOP TYPES (from DB schema)
@@ -47,20 +53,20 @@ export type RegistrationUIStatus =
  * Table: workshops
  */
 export interface Workshop {
-  id: string
-  slug: string
-  title: string
-  description: string | null
-  category: string | null
-  duration: string | null  // e.g., '2 Tage', '4 Sitzungen'
-  level: string | null     // 'Anfänger', 'Fortgeschrittene', 'Alle Stufen'
-  max_participants: number
-  price_cents: number
-  is_active: boolean
-  created_at: string
-  updated_at: string
+  id: string;
+  slug: string;
+  title: string;
+  description: string | null;
+  category: string | null;
+  duration: string | null; // e.g., '2 Tage', '4 Sitzungen'
+  level: string | null; // 'Anfänger', 'Fortgeschrittene', 'Alle Stufen'
+  max_participants: number;
+  price_cents: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
   // Optional fields not in DB but used in some views
-  outcomes?: string[]  // Learning outcomes (not in DB, for future use)
+  outcomes?: string[]; // Learning outcomes (not in DB, for future use)
 }
 
 /**
@@ -68,17 +74,17 @@ export interface Workshop {
  * Table: workshop_instances
  */
 export interface WorkshopInstance {
-  id: string
-  workshop_id: string
-  start_date: string
-  end_date: string | null
-  location: string | null
-  instructor: string | null
-  max_participants: number | null  // Override workshop default
-  notes: string | null
-  status: WorkshopInstanceStatus
-  created_at: string
-  updated_at: string
+  id: string;
+  workshop_id: string;
+  start_date: string;
+  end_date: string | null;
+  location: string | null;
+  instructor: string | null;
+  max_participants: number | null; // Override workshop default
+  notes: string | null;
+  status: WorkshopInstanceStatus;
+  created_at: string;
+  updated_at: string;
 }
 
 /**
@@ -86,7 +92,7 @@ export interface WorkshopInstance {
  * Used in list views
  */
 export interface WorkshopInstanceWithCount extends WorkshopInstance {
-  current_participants: number
+  current_participants: number;
 }
 
 /**
@@ -94,10 +100,10 @@ export interface WorkshopInstanceWithCount extends WorkshopInstance {
  * Used in admin views and detailed displays
  */
 export interface WorkshopInstanceWithDetails extends WorkshopInstanceWithCount {
-  workshop_title: string
-  workshop_slug: string
-  confirmed_count: number
-  pending_count: number
+  workshop_title: string;
+  workshop_slug: string;
+  confirmed_count: number;
+  pending_count: number;
 }
 
 // =============================================================================
@@ -109,21 +115,21 @@ export interface WorkshopInstanceWithDetails extends WorkshopInstanceWithCount {
  * Table: workshop_registrations
  */
 export interface WorkshopRegistration {
-  id: string
-  user_id: string
-  workshop_instance_id: string
-  status: RegistrationStatus
-  payment_status: PaymentStatus
-  payment_amount_cents: number | null
-  payment_reference: string | null
-  attended: boolean
-  rating: number | null
-  feedback: string | null
-  notes: string | null
-  confirmed_at: string | null
-  cancelled_at: string | null
-  created_at: string
-  updated_at: string
+  id: string;
+  user_id: string;
+  workshop_instance_id: string;
+  status: RegistrationStatus;
+  payment_status: PaymentStatus;
+  payment_amount_cents: number | null;
+  payment_reference: string | null;
+  attended: boolean;
+  rating: number | null;
+  feedback: string | null;
+  notes: string | null;
+  confirmed_at: string | null;
+  cancelled_at: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
 /**
@@ -131,10 +137,10 @@ export interface WorkshopRegistration {
  * Used in user dashboard
  */
 export interface WorkshopRegistrationWithDetails extends WorkshopRegistration {
-  workshop_title: string
-  workshop_slug: string
-  instance_start_date: string
-  instance_location: string | null
+  workshop_title: string;
+  workshop_slug: string;
+  instance_start_date: string;
+  instance_location: string | null;
 }
 
 // =============================================================================
@@ -146,50 +152,50 @@ export interface WorkshopRegistrationWithDetails extends WorkshopRegistration {
  * Table: workshop_proposals
  */
 export interface WorkshopProposal {
-  id: string
-  user_id: string
-  title: string
-  description: string
-  short_description: string | null
-  category: string | null
-  duration_minutes: number
-  level: WorkshopLevel
-  max_participants: number
-  min_participants: number
-  price_cents: number
-  prerequisites: string | null
-  learning_objectives: string[]
-  target_audience: string | null
-  materials_provided: string | null
-  materials_required: string | null
-  location_type: 'venue' | 'online' | 'home'
-  selected_location_id: string | null
-  proposed_location: string | null
-  proposed_date: string | null
-  proposed_time: string | null
-  special_requirements: string | null
-  terms_accepted: boolean
-  status: ProposalStatus
-  admin_notes: string | null
-  reviewed_by: string | null
-  reviewed_at: string | null
+  id: string;
+  user_id: string;
+  title: string;
+  description: string;
+  short_description: string | null;
+  category: string | null;
+  duration_minutes: number;
+  level: WorkshopLevel;
+  max_participants: number;
+  min_participants: number;
+  price_cents: number;
+  prerequisites: string | null;
+  learning_objectives: string[];
+  target_audience: string | null;
+  materials_provided: string | null;
+  materials_required: string | null;
+  location_type: 'venue' | 'online' | 'home';
+  selected_location_id: string | null;
+  proposed_location: string | null;
+  proposed_date: string | null;
+  proposed_time: string | null;
+  special_requirements: string | null;
+  terms_accepted: boolean;
+  status: ProposalStatus;
+  admin_notes: string | null;
+  reviewed_by: string | null;
+  reviewed_at: string | null;
   // Admin edit tracking (migration 034)
-  edit_history: EditHistoryEntry[] | null
-  last_edited_by: string | null
-  last_edited_at: string | null
-  created_at: string
-  updated_at: string
+  edit_history: EditHistoryEntry[] | null;
+  last_edited_by: string | null;
+  last_edited_at: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
 /**
  * Edit history entry for admin edits
  */
 export interface EditHistoryEntry {
-  timestamp: string
-  editor_id: string
-  editor_name: string
-  fields_changed: string[]
-  snapshot: Record<string, any>
+  timestamp: string;
+  editor_id: string;
+  editor_name: string;
+  fields_changed: string[];
+  snapshot: Record<string, any>;
 }
 
 /**
@@ -197,14 +203,14 @@ export interface EditHistoryEntry {
  * Used in admin list view
  */
 export interface WorkshopProposalWithProposer extends WorkshopProposal {
-  proposer_name: string
-  proposer_email: string
-  selected_location_name?: string
+  proposer_name: string;
+  proposer_email: string;
+  selected_location_name?: string;
   // Joined from users table for reviewer and editor
-  reviewer_name?: string | null
-  editor_name?: string | null
+  reviewer_name?: string | null;
+  editor_name?: string | null;
   // Set when proposal was approved and a workshop was created
-  created_workshop?: { id: string; title: string } | null
+  created_workshop?: { id: string; title: string } | null;
 }
 
 // =============================================================================
@@ -216,27 +222,27 @@ export interface WorkshopProposalWithProposer extends WorkshopProposal {
  * Table: locations
  */
 export interface Location {
-  id: string
-  name: string
-  type: LocationType
-  description: string | null
-  address_line1: string | null
-  address_line2: string | null
-  postal_code: string | null
-  city: string
-  canton: string | null
-  country: string
-  latitude: number | null
-  longitude: number | null
-  max_capacity: number | null
-  facilities: string[]
-  contact_name: string | null
-  contact_phone: string | null
-  contact_email: string | null
-  is_active: boolean
-  is_approved: boolean
-  created_at: string
-  updated_at: string
+  id: string;
+  name: string;
+  type: LocationType;
+  description: string | null;
+  address_line1: string | null;
+  address_line2: string | null;
+  postal_code: string | null;
+  city: string;
+  canton: string | null;
+  country: string;
+  latitude: number | null;
+  longitude: number | null;
+  max_capacity: number | null;
+  facilities: string[];
+  contact_name: string | null;
+  contact_phone: string | null;
+  contact_email: string | null;
+  is_active: boolean;
+  is_approved: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 // =============================================================================
@@ -247,10 +253,10 @@ export interface Location {
  * Payment data for Payrexx redirect integration
  */
 export interface PaymentData {
-  registrationId: string
-  paymentUrl: string
-  amount: string
-  invoiceNumber: string
+  registrationId: string;
+  paymentUrl: string;
+  amount: string;
+  invoiceNumber: string;
 }
 
 // =============================================================================
@@ -261,20 +267,20 @@ export interface PaymentData {
  * Workshop instance details for display components
  */
 export interface WorkshopInstanceDetails {
-  start_date: string
-  location: string | null
-  workshop_title: string
-  workshop_slug: string
+  start_date: string;
+  location: string | null;
+  workshop_title: string;
+  workshop_slug: string;
 }
 
 /**
  * Registration data returned after successful registration
  */
 export interface RegistrationData {
-  id: string
-  status: RegistrationStatus
-  registered_at: string
-  workshop_instance?: WorkshopInstanceDetails
+  id: string;
+  status: RegistrationStatus;
+  registered_at: string;
+  workshop_instance?: WorkshopInstanceDetails;
 }
 
 // =============================================================================
@@ -285,27 +291,27 @@ export interface RegistrationData {
  * Workshop with instances for list pages
  */
 export interface WorkshopWithInstances extends Workshop {
-  instances: WorkshopInstanceWithCount[]
-  user_registered?: boolean
+  instances: WorkshopInstanceWithCount[];
+  user_registered?: boolean;
 }
 
 /**
  * Minimal workshop type for dropdowns/selects
  */
 export interface WorkshopOption {
-  id: string
-  title: string
-  slug: string
+  id: string;
+  title: string;
+  slug: string;
 }
 
 /**
  * Minimal location type for dropdowns/selects
  */
 export interface LocationOption {
-  id: string
-  name: string
-  address?: string
-  city?: string
-  canton?: string
-  max_capacity?: number
+  id: string;
+  name: string;
+  address?: string;
+  city?: string;
+  canton?: string;
+  max_capacity?: number;
 }

@@ -1,39 +1,39 @@
-import { db } from '@/db'
-import { marketplaceOrders, marketplaceOrderItems, listings, users } from '@/db/schema'
-import { eq, desc, sql } from 'drizzle-orm'
-import type { SQL } from 'drizzle-orm'
-import { alias } from 'drizzle-orm/pg-core'
-import { withAdmin } from '@/lib/api/middleware'
-import { apiError, apiSuccess , hasMoreItems} from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { validateQuery, AdminOrdersQuerySchema } from '@/lib/schemas'
+import { db } from '@/db';
+import { marketplaceOrders, marketplaceOrderItems, listings, users } from '@/db/schema';
+import { eq, desc, sql } from 'drizzle-orm';
+import type { SQL } from 'drizzle-orm';
+import { alias } from 'drizzle-orm/pg-core';
+import { withAdmin } from '@/lib/api/middleware';
+import { apiError, apiSuccess, hasMoreItems } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { validateQuery, AdminOrdersQuerySchema } from '@/lib/schemas';
 
-const buyer = alias(users, 'buyer')
-const sellerUser = alias(users, 'seller')
+const buyer = alias(users, 'buyer');
+const sellerUser = alias(users, 'seller');
 
 // GET /api/admin/marketplace/orders - List all orders
 export const GET = withAdmin('marketplace', async (request) => {
   try {
-    const { searchParams } = new URL(request.url)
-    const validation = validateQuery(AdminOrdersQuerySchema, Object.fromEntries(searchParams))
-    if (!validation.success) return validation.error
+    const { searchParams } = new URL(request.url);
+    const validation = validateQuery(AdminOrdersQuerySchema, Object.fromEntries(searchParams));
+    if (!validation.success) return validation.error;
 
-    const { status, limit, offset } = validation.data
+    const { status, limit, offset } = validation.data;
 
-    const conditions: SQL[] = []
+    const conditions: SQL[] = [];
     if (status !== 'all') {
-      conditions.push(eq(marketplaceOrders.status, status))
+      conditions.push(eq(marketplaceOrders.status, status));
     }
 
-    const where = conditions.length > 0 ? conditions[0] : undefined
+    const where = conditions.length > 0 ? conditions[0] : undefined;
 
     // Count total
     const [countRow] = await db
       .select({ count: sql<number>`count(*)` })
       .from(marketplaceOrders)
-      .where(where)
+      .where(where);
 
-    const total = Number(countRow?.count ?? 0)
+    const total = Number(countRow?.count ?? 0);
 
     // Fetch orders with joins
     const rows = await db
@@ -67,7 +67,7 @@ export const GET = withAdmin('marketplace', async (request) => {
       .where(where)
       .orderBy(desc(marketplaceOrders.createdAt))
       .limit(limit)
-      .offset(offset)
+      .offset(offset);
 
     return apiSuccess({
       items: rows,
@@ -77,8 +77,8 @@ export const GET = withAdmin('marketplace', async (request) => {
         offset,
         hasMore: hasMoreItems(offset, limit, total),
       },
-    })
+    });
   } catch (error) {
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
-})
+});

@@ -1,21 +1,15 @@
-'use client'
+'use client';
 
-import { APPROVAL_STATUS_BADGES, BLOG_SUBMISSION_TYPE } from '@/config/approval-status'
-import Heading from '@/components/admin/AdminHeading'
-import { formatDateTime } from '@/lib/date-formats'
-import {
-  Lightbulb,
-  FileText,
-  User,
-  Calendar,
-  Folder,
-} from 'lucide-react'
-import type { Submission } from './types'
+import { APPROVAL_STATUS_BADGES, BLOG_SUBMISSION_TYPE } from '@/config/approval-status';
+import Heading from '@/components/admin/AdminHeading';
+import { formatDateTime } from '@/lib/date-formats';
+import { Lightbulb, FileText, User, Calendar, Folder } from 'lucide-react';
+import type { Submission } from './types';
 
 interface SubmissionListProps {
-  submissions: Submission[]
-  selectedId: string | null
-  onSelect: (submission: Submission) => void
+  submissions: Submission[];
+  selectedId: string | null;
+  onSelect: (submission: Submission) => void;
 }
 
 export function SubmissionList({ submissions, selectedId, onSelect }: SubmissionListProps) {
@@ -46,17 +40,14 @@ export function SubmissionList({ submissions, selectedId, onSelect }: Submission
                   ) : (
                     <FileText className="w-3 h-3" />
                   )}
-                  {submission.submission_type === BLOG_SUBMISSION_TYPE.IDEA
-                    ? 'Idee'
-                    : 'Entwurf'}
+                  {submission.submission_type === BLOG_SUBMISSION_TYPE.IDEA ? 'Idee' : 'Entwurf'}
                 </span>
                 <span
                   className={`px-2 py-1 text-xs rounded-full font-medium ${
                     APPROVAL_STATUS_BADGES[submission.status]?.bg || ''
                   } ${APPROVAL_STATUS_BADGES[submission.status]?.color || ''}`}
                 >
-                  {APPROVAL_STATUS_BADGES[submission.status]?.label ||
-                    submission.status}
+                  {APPROVAL_STATUS_BADGES[submission.status]?.label || submission.status}
                 </span>
                 {submission.last_edited_at && (
                   <span className="inline-flex items-center px-2 py-1 text-xs font-medium bg-surface-raised text-text-primary rounded-sm">
@@ -88,5 +79,5 @@ export function SubmissionList({ submissions, selectedId, onSelect }: Submission
         </div>
       ))}
     </div>
-  )
+  );
 }

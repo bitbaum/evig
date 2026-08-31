@@ -1,8 +1,8 @@
 /**
  * Open Source Solutions Page Data
- * 
+ *
  * Centralized data for the open-source-solutions page
- * 
+ *
  * Created: 2025-12-17
  * Last Modified: 2025-12-17
  * Last Modified Summary: Extracted data constants from page component
@@ -42,114 +42,126 @@ import {
   MessageSquare,
   Activity,
   Share2,
-  LucideIcon
-} from 'lucide-react'
+  LucideIcon,
+} from 'lucide-react';
 
 export interface Benefit {
-  title: string
-  description: string
-  icon: LucideIcon
+  title: string;
+  description: string;
+  icon: LucideIcon;
 }
 
 export interface PopularApp {
-  name: string
-  description: string
-  icon: LucideIcon
-  comparison: string
+  name: string;
+  description: string;
+  icon: LucideIcon;
+  comparison: string;
 }
 
 export interface Feature {
-  title: string
-  description: string
-  icon: LucideIcon
+  title: string;
+  description: string;
+  icon: LucideIcon;
 }
 
 export interface ComparisonItem {
-  name: string
-  icon: LucideIcon
-  cost: string
-  comparisons: string[]
-  examples?: string[]
+  name: string;
+  icon: LucideIcon;
+  cost: string;
+  comparisons: string[];
+  examples?: string[];
 }
 
 export interface Comparison {
-  category: string
-  openSource: ComparisonItem
-  proprietary: ComparisonItem
+  category: string;
+  openSource: ComparisonItem;
+  proprietary: ComparisonItem;
 }
 
 export const benefits: Benefit[] = [
   {
     title: 'Kosteneffektiv',
-    description: 'Keine Lizenzgebühren und niedrigere Gesamtbetriebskosten im Vergleich zu proprietären Lösungen.',
-    icon: DollarSign
+    description:
+      'Keine Lizenzgebühren und niedrigere Gesamtbetriebskosten im Vergleich zu proprietären Lösungen.',
+    icon: DollarSign,
   },
   {
     title: 'Erhöhte Sicherheit',
-    description: 'Transparenter Code, der von jedermann überprüft werden kann, was zu einer schnelleren Erkennung und Behebung von Schwachstellen führt.',
-    icon: Shield
+    description:
+      'Transparenter Code, der von jedermann überprüft werden kann, was zu einer schnelleren Erkennung und Behebung von Schwachstellen führt.',
+    icon: Shield,
   },
   {
     title: 'Freiheit & Flexibilität',
-    description: 'Kein Anbieter-Lock-in. Sie besitzen Ihre Daten und können die Software an Ihre Bedürfnisse anpassen.',
-    icon: Globe
+    description:
+      'Kein Anbieter-Lock-in. Sie besitzen Ihre Daten und können die Software an Ihre Bedürfnisse anpassen.',
+    icon: Globe,
   },
   {
     title: 'Community-Unterstützung',
-    description: 'Zugang zu einer globalen Gemeinschaft von Entwicklern und Benutzern für Unterstützung und Innovation.',
-    icon: Users
-  }
-]
+    description:
+      'Zugang zu einer globalen Gemeinschaft von Entwicklern und Benutzern für Unterstützung und Innovation.',
+    icon: Users,
+  },
+];
 
 export const popularApps: PopularApp[] = [
   {
     name: 'LibreOffice',
-    description: 'Professionelle Office-Suite, die mit Microsoft Office konkurriert, mit voller Kompatibilität und erweiterten Funktionen.',
+    description:
+      'Professionelle Office-Suite, die mit Microsoft Office konkurriert, mit voller Kompatibilität und erweiterten Funktionen.',
     icon: BookOpen,
-    comparison: 'Microsoft Office-Alternative'
+    comparison: 'Microsoft Office-Alternative',
   },
   {
     name: 'Nextcloud',
-    description: 'Sichere Filesharing- und Kollaborationsplattform, die mit Dropbox und Google Drive konkurriert.',
+    description:
+      'Sichere Filesharing- und Kollaborationsplattform, die mit Dropbox und Google Drive konkurriert.',
     icon: Server,
-    comparison: 'Dropbox/Google Drive-Alternative'
+    comparison: 'Dropbox/Google Drive-Alternative',
   },
   {
     name: 'GIMP',
-    description: 'Professionelle Bildbearbeitungssoftware mit Funktionen, die Adobe Photoshop entsprechen.',
+    description:
+      'Professionelle Bildbearbeitungssoftware mit Funktionen, die Adobe Photoshop entsprechen.',
     icon: Code,
-    comparison: 'Photoshop-Alternative'
+    comparison: 'Photoshop-Alternative',
   },
   {
     name: 'PostgreSQL',
-    description: 'Datenbanksystem der Enterprise-Klasse, das in Leistung und Funktionen mit Oracle und SQL Server konkurriert.',
+    description:
+      'Datenbanksystem der Enterprise-Klasse, das in Leistung und Funktionen mit Oracle und SQL Server konkurriert.',
     icon: Database,
-    comparison: 'Oracle/SQL Server-Alternative'
-  }
-]
+    comparison: 'Oracle/SQL Server-Alternative',
+  },
+];
 
 export const features: Feature[] = [
   {
     title: 'Open-Source-Beratung',
-    description: 'Strategische Anleitung zur Auswahl und Implementierung von Open-Source-Software für Ihre spezifischen Bedürfnisse.',
-    icon: Code
+    description:
+      'Strategische Anleitung zur Auswahl und Implementierung von Open-Source-Software für Ihre spezifischen Bedürfnisse.',
+    icon: Code,
   },
   {
     title: 'Kundenspezifische Entwicklung',
-    description: 'Massgeschneiderte Open-Source-Lösungen und -Anpassungen, um Ihre einzigartigen Anforderungen zu erfüllen.',
-    icon: Terminal
+    description:
+      'Massgeschneiderte Open-Source-Lösungen und -Anpassungen, um Ihre einzigartigen Anforderungen zu erfüllen.',
+    icon: Terminal,
   },
   {
     title: 'Community-Integration',
-    description: 'Hilft Ihnen, ein aktiver Teil der Open-Source-Community zu werden und deren Vorteile zu nutzen.',
-    icon: Users
+    description:
+      'Hilft Ihnen, ein aktiver Teil der Open-Source-Community zu werden und deren Vorteile zu nutzen.',
+    icon: Users,
   },
   {
     title: 'Sicherheit & Compliance',
-    description: 'Stellen Sie sicher, dass Ihre Open-Source-Lösungen die Sicherheitsstandards und Compliance-Anforderungen erfüllen.',
-    icon: Shield
-  }
-]
+    description:
+      'Stellen Sie sicher, dass Ihre Open-Source-Lösungen die Sicherheitsstandards und Compliance-Anforderungen erfüllen.',
+    icon: Shield,
+  },
+];
 
 export const consumerComparisons: Comparison[] = [
   {
@@ -164,8 +176,8 @@ export const consumerComparisons: Comparison[] = [
         'Keine erzwungenen Upgrades oder Telemetrie',
         'Community-gesteuerte Entwicklung',
         'Verfügbar in mehreren Sprachen',
-        'Vollständige Kontrolle über Ihre Dokumente'
-      ]
+        'Vollständige Kontrolle über Ihre Dokumente',
+      ],
     },
     proprietary: {
       name: 'Microsoft 365',
@@ -177,9 +189,9 @@ export const consumerComparisons: Comparison[] = [
         'Regelmässige Updates und neue Funktionen',
         'Unternehmensgesteuerte Entwicklung',
         'Verfügbar in mehreren Sprachen',
-        'Abonnement für volle Funktionalität erforderlich'
-      ]
-    }
+        'Abonnement für volle Funktionalität erforderlich',
+      ],
+    },
   },
   {
     category: 'Betriebssystem',
@@ -193,8 +205,8 @@ export const consumerComparisons: Comparison[] = [
         'Tausende von kostenlosen Anwendungen',
         'Community-gesteuerte Sicherheitsupdates',
         'Verfügbar in mehreren Distributionen',
-        'Vollständige Kontrolle über Ihr System'
-      ]
+        'Vollständige Kontrolle über Ihr System',
+      ],
     },
     proprietary: {
       name: 'Windows/macOS',
@@ -206,9 +218,9 @@ export const consumerComparisons: Comparison[] = [
         'Offizielle App-Stores und Support',
         'Unternehmensgesteuerte Updates',
         'Begrenzte Anpassungsmöglichkeiten',
-        'Regelmässige Lizenzerneuerungen erforderlich'
-      ]
-    }
+        'Regelmässige Lizenzerneuerungen erforderlich',
+      ],
+    },
   },
   {
     category: 'Datei-Synchronisierung & -Freigabe',
@@ -222,8 +234,8 @@ export const consumerComparisons: Comparison[] = [
         'DSGVO- und datenschutzkonform',
         'Community-gesteuerte Entwicklung',
         'Verfügbar in mehreren Sprachen',
-        'Keine Speicherbegrenzungen oder Gebühren'
-      ]
+        'Keine Speicherbegrenzungen oder Gebühren',
+      ],
     },
     proprietary: {
       name: 'Dropbox/Google Drive',
@@ -235,9 +247,9 @@ export const consumerComparisons: Comparison[] = [
         'Automatische Synchronisierung und Sicherung',
         'Unternehmensgesteuerte Entwicklung',
         'Verfügbar in mehreren Sprachen',
-        'Speicherbegrenzungen und Gebühren fallen an'
-      ]
-    }
+        'Speicherbegrenzungen und Gebühren fallen an',
+      ],
+    },
   },
   {
     category: 'Webbrowser',
@@ -251,8 +263,8 @@ export const consumerComparisons: Comparison[] = [
         'Regelmässige Sicherheitsupdates',
         'Community-gesteuerte Entwicklung',
         'Verfügbar in mehreren Sprachen',
-        'Keine Datenerfassung'
-      ]
+        'Keine Datenerfassung',
+      ],
     },
     proprietary: {
       name: 'Chrome/Edge',
@@ -264,9 +276,9 @@ export const consumerComparisons: Comparison[] = [
         'Regelmässige Sicherheitsupdates',
         'Unternehmensgesteuerte Entwicklung',
         'Verfügbar in mehreren Sprachen',
-        'Datenerfassung erforderlich'
-      ]
-    }
+        'Datenerfassung erforderlich',
+      ],
+    },
   },
   {
     category: 'Grafikbearbeitung',
@@ -280,8 +292,8 @@ export const consumerComparisons: Comparison[] = [
         'Regelmässige Sicherheitsupdates',
         'Community-gesteuerte Entwicklung',
         'Verfügbar in mehreren Sprachen',
-        'Keine Wasserzeichen oder Einschränkungen'
-      ]
+        'Keine Wasserzeichen oder Einschränkungen',
+      ],
     },
     proprietary: {
       name: 'Adobe Photoshop/Illustrator',
@@ -293,9 +305,9 @@ export const consumerComparisons: Comparison[] = [
         'Regelmässige Sicherheitsupdates',
         'Unternehmensgesteuerte Entwicklung',
         'Verfügbar in mehreren Sprachen',
-        'Abonnement erforderlich'
-      ]
-    }
+        'Abonnement erforderlich',
+      ],
+    },
   },
   {
     category: '3D & Video',
@@ -309,8 +321,8 @@ export const consumerComparisons: Comparison[] = [
         'Regelmässige Sicherheitsupdates',
         'Community-gesteuerte Entwicklung',
         'Verfügbar in mehreren Sprachen',
-        'Keine Wasserzeichen oder Einschränkungen'
-      ]
+        'Keine Wasserzeichen oder Einschränkungen',
+      ],
     },
     proprietary: {
       name: 'Autodesk Maya/3ds Max',
@@ -322,9 +334,9 @@ export const consumerComparisons: Comparison[] = [
         'Regelmässige Sicherheitsupdates',
         'Unternehmensgesteuerte Entwicklung',
         'Verfügbar in mehreren Sprachen',
-        'Lizenz und Support erforderlich'
-      ]
-    }
+        'Lizenz und Support erforderlich',
+      ],
+    },
   },
   {
     category: 'Soziale Medien',
@@ -338,8 +350,8 @@ export const consumerComparisons: Comparison[] = [
         'Keine Datenerfassung oder Werbung',
         'Community-gesteuerte Moderation',
         'Verfügbar in mehreren Sprachen',
-        'Exportieren Sie Ihre Daten jederzeit'
-      ]
+        'Exportieren Sie Ihre Daten jederzeit',
+      ],
     },
     proprietary: {
       name: 'X/Instagram',
@@ -351,11 +363,11 @@ export const consumerComparisons: Comparison[] = [
         'Umfangreiche Datenerfassung',
         'Unternehmensmoderation',
         'Verfügbar in mehreren Sprachen',
-        'Begrenzte Datenportabilität'
-      ]
-    }
-  }
-]
+        'Begrenzte Datenportabilität',
+      ],
+    },
+  },
+];
 
 export const businessComparisons: Comparison[] = [
   {
@@ -370,8 +382,8 @@ export const businessComparisons: Comparison[] = [
         'Starke ACID-Konformität',
         'Community-gesteuerte Sicherheit',
         'Verfügbar für alle Plattformen',
-        'Vollständige Kontrolle über die Daten'
-      ]
+        'Vollständige Kontrolle über die Daten',
+      ],
     },
     proprietary: {
       name: 'Oracle DB',
@@ -383,9 +395,9 @@ export const businessComparisons: Comparison[] = [
         'Starke Sicherheitsfunktionen',
         'Unternehmensgesteuerte Updates',
         'Verfügbar für alle Plattformen',
-        'Lizenz und Support erforderlich'
-      ]
-    }
+        'Lizenz und Support erforderlich',
+      ],
+    },
   },
   {
     category: 'Virtualisierung',
@@ -399,8 +411,8 @@ export const businessComparisons: Comparison[] = [
         'Funktionen auf Unternehmensebene',
         'Community-gesteuerte Sicherheit',
         'Verfügbar für alle Plattformen',
-        'Vollständige Kontrolle über VMs'
-      ]
+        'Vollständige Kontrolle über VMs',
+      ],
     },
     proprietary: {
       name: 'VMware vSphere',
@@ -412,9 +424,9 @@ export const businessComparisons: Comparison[] = [
         'Starke Sicherheitsfunktionen',
         'Unternehmensgesteuerte Updates',
         'Verfügbar für alle Plattformen',
-        'Lizenz und Support erforderlich'
-      ]
-    }
+        'Lizenz und Support erforderlich',
+      ],
+    },
   },
   {
     category: 'Container-Plattform',
@@ -428,8 +440,8 @@ export const businessComparisons: Comparison[] = [
         'Funktionen auf Unternehmensebene',
         'Community-gesteuerte Sicherheit',
         'Verfügbar für alle Plattformen',
-        'Vollständige Kontrolle über Container'
-      ]
+        'Vollständige Kontrolle über Container',
+      ],
     },
     proprietary: {
       name: 'AWS ECS/EKS',
@@ -441,9 +453,9 @@ export const businessComparisons: Comparison[] = [
         'Funktionen auf Unternehmensebene',
         'Unternehmensgesteuerte Updates',
         'Verfügbar auf der AWS-Plattform',
-        'Potenzial für Anbieter-Lock-in'
-      ]
-    }
+        'Potenzial für Anbieter-Lock-in',
+      ],
+    },
   },
   {
     category: 'CI/CD',
@@ -457,8 +469,8 @@ export const businessComparisons: Comparison[] = [
         'Funktionen auf Unternehmensebene',
         'Community-gesteuerte Sicherheit',
         'Verfügbar für alle Plattformen',
-        'Vollständige Kontrolle über die Pipeline'
-      ]
+        'Vollständige Kontrolle über die Pipeline',
+      ],
     },
     proprietary: {
       name: 'TeamCity/CircleCI',
@@ -470,9 +482,9 @@ export const businessComparisons: Comparison[] = [
         'Funktionen auf Unternehmensebene',
         'Unternehmensgesteuerte Updates',
         'Verfügbar für alle Plattformen',
-        'Nutzungsabhängige Preise'
-      ]
-    }
+        'Nutzungsabhängige Preise',
+      ],
+    },
   },
   {
     category: 'Überwachung',
@@ -486,8 +498,8 @@ export const businessComparisons: Comparison[] = [
         'Umfangreiches Plugin-Ökosystem',
         'Community-gesteuerte Sicherheit',
         'Verfügbar für alle Plattformen',
-        'Vollständige Kontrolle über die Überwachung'
-      ]
+        'Vollständige Kontrolle über die Überwachung',
+      ],
     },
     proprietary: {
       name: 'Datadog/New Relic',
@@ -499,9 +511,9 @@ export const businessComparisons: Comparison[] = [
         'Funktionen auf Unternehmensebene',
         'Unternehmensgesteuerte Updates',
         'Verfügbar für alle Plattformen',
-        'Nutzungsabhängige Preise'
-      ]
-    }
+        'Nutzungsabhängige Preise',
+      ],
+    },
   },
   {
     category: 'Zusammenarbeit',
@@ -515,8 +527,8 @@ export const businessComparisons: Comparison[] = [
         'Daten jederzeit exportieren',
         'Community-gesteuerte Sicherheit',
         'Verfügbar für alle Plattformen',
-        'Vollständige Kontrolle über die Daten'
-      ]
+        'Vollständige Kontrolle über die Daten',
+      ],
     },
     proprietary: {
       name: 'Slack/Teams',
@@ -528,11 +540,11 @@ export const businessComparisons: Comparison[] = [
         'Funktionen auf Unternehmensebene',
         'Unternehmensgesteuerte Updates',
         'Verfügbar für alle Plattformen',
-        'Es gelten Datenaufbewahrungsrichtlinien'
-      ]
-    }
-  }
-]
+        'Es gelten Datenaufbewahrungsrichtlinien',
+      ],
+    },
+  },
+];
 
 export const emergingTechComparisons: Comparison[] = [
   {
@@ -547,8 +559,8 @@ export const emergingTechComparisons: Comparison[] = [
         'Selbstverwahrung: volle Kontrolle über die Gelder',
         'Globales Netzwerk mit 24/7-Verfügbarkeit',
         'Genehmigungsfreie Transaktionen',
-        'Keine zentrale Behörde'
-      ]
+        'Keine zentrale Behörde',
+      ],
     },
     proprietary: {
       name: 'Traditionelles Bankwesen',
@@ -560,9 +572,9 @@ export const emergingTechComparisons: Comparison[] = [
         'Verwahrung: Banken kontrollieren die Gelder',
         'Begrenzt durch Banköffnungszeiten',
         'Genehmigungspflichtige Transaktionen',
-        'Zentrale Behörde erforderlich'
-      ]
-    }
+        'Zentrale Behörde erforderlich',
+      ],
+    },
   },
   {
     category: 'Künstliche Intelligenz',
@@ -575,7 +587,7 @@ export const emergingTechComparisons: Comparison[] = [
         'Stable Diffusion - Bilderzeugung',
         'Whisper - Spracherkennung',
         'BERT - Verarbeitung natürlicher Sprache',
-        'TensorFlow/PyTorch - ML-Frameworks'
+        'TensorFlow/PyTorch - ML-Frameworks',
       ],
       comparisons: [
         'Vollständig überprüfbarer Code und Modelle',
@@ -583,8 +595,8 @@ export const emergingTechComparisons: Comparison[] = [
         'Läuft auf jeder kompatiblen Hardware',
         'Community-gesteuerte Sicherheit',
         'Demokratisierte Entwicklung',
-        'Vollständige Anpassung möglich'
-      ]
+        'Vollständige Anpassung möglich',
+      ],
     },
     proprietary: {
       name: 'Proprietäre KI',
@@ -595,7 +607,7 @@ export const emergingTechComparisons: Comparison[] = [
         'DALL-E (OpenAI)',
         'Claude (Anthropic)',
         'Midjourney',
-        'Google Bard'
+        'Google Bard',
       ],
       comparisons: [
         'Closed-Source mit Einschränkungen',
@@ -603,11 +615,8 @@ export const emergingTechComparisons: Comparison[] = [
         'Nur Cloud-Bereitstellung',
         'Unternehmensgesteuerte Updates',
         'Roadmap eines einzelnen Unternehmens',
-        'Begrenzte Anpassungsmöglichkeiten'
-      ]
-    }
-  }
-]
-
-
-
+        'Begrenzte Anpassungsmöglichkeiten',
+      ],
+    },
+  },
+];

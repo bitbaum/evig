@@ -1,25 +1,25 @@
-import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
-import { db } from '@/db'
-import { workshopRegistrations, workshopInstances, workshops } from '@/db/schema'
-import { eq, and } from 'drizzle-orm'
-import { apiError, apiSuccess } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
+import { NextRequest } from 'next/server';
+import { auth } from '@/auth';
+import { db } from '@/db';
+import { workshopRegistrations, workshopInstances, workshops } from '@/db/schema';
+import { eq, and } from 'drizzle-orm';
+import { apiError, apiSuccess } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ instanceId: string }> }
+  { params }: { params: Promise<{ instanceId: string }> },
 ) {
   try {
-    const session = await auth()
+    const session = await auth();
     if (!session?.user?.id) {
       return apiSuccess({
         registered: false,
-        requiresAuth: true
-      })
+        requiresAuth: true,
+      });
     }
 
-    const { instanceId } = await params
+    const { instanceId } = await params;
 
     // Check if user is registered for this workshop instance
     const [reg] = await db
@@ -33,12 +33,17 @@ export async function GET(
         workshopSlug: workshops.slug,
       })
       .from(workshopRegistrations)
-      .innerJoin(workshopInstances, eq(workshopRegistrations.workshopInstanceId, workshopInstances.id))
+      .innerJoin(
+        workshopInstances,
+        eq(workshopRegistrations.workshopInstanceId, workshopInstances.id),
+      )
       .innerJoin(workshops, eq(workshopInstances.workshopId, workshops.id))
-      .where(and(
-        eq(workshopRegistrations.userId, session.user.id),
-        eq(workshopRegistrations.workshopInstanceId, instanceId)
-      ))
+      .where(
+        and(
+          eq(workshopRegistrations.userId, session.user.id),
+          eq(workshopRegistrations.workshopInstanceId, instanceId),
+        ),
+      );
 
     if (reg) {
       return apiSuccess({
@@ -51,18 +56,17 @@ export async function GET(
             start_date: reg.startDate,
             location: reg.location,
             workshop_title: reg.workshopTitle,
-            workshop_slug: reg.workshopSlug
-          }
-        }
-      })
+            workshop_slug: reg.workshopSlug,
+          },
+        },
+      });
     }
 
     return apiSuccess({
       registered: false,
-      canRegister: true
-    })
-
+      canRegister: true,
+    });
   } catch (error) {
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
 }

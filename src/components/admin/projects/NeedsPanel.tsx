@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * NeedsPanel — admin CRUD for project_needs.
@@ -7,83 +7,88 @@
  * label inline. No props-bag intermediate.
  */
 
-import { useState, useTransition, type FormEvent } from 'react'
-import { useTranslations } from 'next-intl'
-import { toast } from 'sonner'
-import { apiFetch } from '@/lib/api/client'
-import { Panel } from '@/components/ui/Panel'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
-import { NEED_TYPES, NEED_STATUSES, type NeedType, type NeedStatus } from '@/config/projects'
-import { Plus, Trash2, Save } from 'lucide-react'
+import { useState, useTransition, type FormEvent } from 'react';
+import { useTranslations } from 'next-intl';
+import { toast } from 'sonner';
+import { apiFetch } from '@/lib/api/client';
+import { Panel } from '@/components/ui/Panel';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { NEED_TYPES, NEED_STATUSES, type NeedType, type NeedStatus } from '@/config/projects';
+import { Plus, Trash2, Save } from 'lucide-react';
 
 interface Need {
-  id: string
-  projectId: string
-  type: string
-  title: string
-  description: string | null
-  targetQuantity: number | null
-  targetUnit: string | null
-  status: string
-  sortOrder: number
+  id: string;
+  projectId: string;
+  type: string;
+  title: string;
+  description: string | null;
+  targetQuantity: number | null;
+  targetUnit: string | null;
+  status: string;
+  sortOrder: number;
 }
 
 interface Props {
-  slug: string
-  initialNeeds: Need[]
+  slug: string;
+  initialNeeds: Need[];
 }
 
 export function NeedsPanel({ slug, initialNeeds }: Props) {
   // useTranslations does not type-check arbitrary nested keys past the first
   // segment cleanly — cast at the call boundary, keep static keys below.
-  const t = useTranslations('admin.projects' as never) as (k: string) => string
+  const t = useTranslations('admin.projects' as never) as (k: string) => string;
 
-  const [needs, setNeeds] = useState<Need[]>(initialNeeds)
-  const [adding, setAdding] = useState(false)
-  const [pending, startTransition] = useTransition()
+  const [needs, setNeeds] = useState<Need[]>(initialNeeds);
+  const [adding, setAdding] = useState(false);
+  const [pending, startTransition] = useTransition();
 
   function patch(id: string, changes: Partial<Need>) {
-    setNeeds(prev => prev.map(n => (n.id === id ? { ...n, ...changes } : n)))
+    setNeeds((prev) => prev.map((n) => (n.id === id ? { ...n, ...changes } : n)));
   }
 
   async function save(need: Need) {
     startTransition(async () => {
       // apiFetch attaches the CSRF header — bare fetch() gets 403'd by the
       // csrf middleware on state-changing /api/* requests.
-      const res = await apiFetch(`/api/admin/projects/${encodeURIComponent(slug)}/needs/${need.id}`, {
-        method: 'PATCH',
-        body: {
-          type: need.type,
-          title: need.title,
-          description: need.description,
-          targetQuantity: need.targetQuantity,
-          targetUnit: need.targetUnit,
-          status: need.status,
-          sortOrder: need.sortOrder,
+      const res = await apiFetch(
+        `/api/admin/projects/${encodeURIComponent(slug)}/needs/${need.id}`,
+        {
+          method: 'PATCH',
+          body: {
+            type: need.type,
+            title: need.title,
+            description: need.description,
+            targetQuantity: need.targetQuantity,
+            targetUnit: need.targetUnit,
+            status: need.status,
+            sortOrder: need.sortOrder,
+          },
         },
-      })
-      if (!res.success) toast.error(res.error || t('needs.errorSave'))
-    })
+      );
+      if (!res.success) toast.error(res.error || t('needs.errorSave'));
+    });
   }
 
   async function remove(id: string) {
-    if (!confirm(t('needs.confirmDelete'))) return
+    if (!confirm(t('needs.confirmDelete'))) return;
     startTransition(async () => {
-      const res = await apiFetch(`/api/admin/projects/${encodeURIComponent(slug)}/needs/${id}`, { method: 'DELETE' })
+      const res = await apiFetch(`/api/admin/projects/${encodeURIComponent(slug)}/needs/${id}`, {
+        method: 'DELETE',
+      });
       if (!res.success) {
-        toast.error(res.error || t('needs.errorDelete'))
-        return
+        toast.error(res.error || t('needs.errorDelete'));
+        return;
       }
-      setNeeds(prev => prev.filter(n => n.id !== id))
-    })
+      setNeeds((prev) => prev.filter((n) => n.id !== id));
+    });
   }
 
   async function handleAdd(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    const form = new FormData(e.currentTarget)
+    e.preventDefault();
+    const form = new FormData(e.currentTarget);
     const payload = {
       type: String(form.get('type') || NEED_TYPES.EXPERTISE) as NeedType,
       title: String(form.get('title') || '').trim(),
@@ -91,19 +96,19 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
       targetQuantity: form.get('targetQuantity') ? Number(form.get('targetQuantity')) : null,
       targetUnit: String(form.get('targetUnit') || '').trim(),
       sortOrder: needs.length * 10,
-    }
-    if (!payload.title) return
+    };
+    if (!payload.title) return;
 
     const res = await apiFetch<Need>(`/api/admin/projects/${encodeURIComponent(slug)}/needs`, {
       method: 'POST',
       body: payload,
-    })
+    });
     if (!res.success || !res.data) {
-      toast.error(res.error || t('needs.errorCreate'))
-      return
+      toast.error(res.error || t('needs.errorCreate'));
+      return;
     }
-    setNeeds(prev => [...prev, res.data as Need])
-    setAdding(false)
+    setNeeds((prev) => [...prev, res.data as Need]);
+    setAdding(false);
   }
 
   return (
@@ -115,7 +120,7 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
           type="button"
           variant="primary"
           size="sm"
-          onClick={() => setAdding(v => !v)}
+          onClick={() => setAdding((v) => !v)}
           className="gap-1.5 min-h-[40px]"
         >
           <Plus className="h-3.5 w-3.5" />
@@ -124,20 +129,38 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
       }
       className="mb-5"
     >
-
       {adding && (
         <form
           onSubmit={handleAdd}
           className="grid gap-3 grid-cols-1 sm:grid-cols-2 mb-5 p-3 rounded-lg border bg-surface-raised dark:bg-surface-base/3"
         >
           <Select name="type" variant="elevated">
-            {Object.values(NEED_TYPES).map(v => (
-              <option key={v} value={v}>{t(`typeLabels.${v}`)}</option>
+            {Object.values(NEED_TYPES).map((v) => (
+              <option key={v} value={v}>
+                {t(`typeLabels.${v}`)}
+              </option>
             ))}
           </Select>
-          <Input name="title" required placeholder={t('needs.placeholderTitle')} variant="elevated" />
-          <Textarea name="description" placeholder={t('needs.placeholderDescription')} rows={2} variant="elevated" className="sm:col-span-2" />
-          <Input name="targetQuantity" type="number" min="1" placeholder={t('needs.placeholderQuantity')} variant="elevated" />
+          <Input
+            name="title"
+            required
+            placeholder={t('needs.placeholderTitle')}
+            variant="elevated"
+          />
+          <Textarea
+            name="description"
+            placeholder={t('needs.placeholderDescription')}
+            rows={2}
+            variant="elevated"
+            className="sm:col-span-2"
+          />
+          <Input
+            name="targetQuantity"
+            type="number"
+            min="1"
+            placeholder={t('needs.placeholderQuantity')}
+            variant="elevated"
+          />
           <Input name="targetUnit" placeholder={t('needs.placeholderUnit')} variant="elevated" />
           <div className="sm:col-span-2 flex flex-col-reverse sm:flex-row justify-end gap-2">
             <Button
@@ -149,12 +172,7 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
             >
               {t('needs.addCancel')}
             </Button>
-            <Button
-              type="submit"
-              variant="primary"
-              size="sm"
-              className="min-h-[40px]"
-            >
+            <Button type="submit" variant="primary" size="sm" className="min-h-[40px]">
               {t('needs.addSubmit')}
             </Button>
           </div>
@@ -165,34 +183,37 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
         <p className="text-sm text-text-tertiary text-center py-6">{t('needs.empty')}</p>
       ) : (
         <div className="space-y-3">
-          {needs.map(need => (
-            <div
-              key={need.id}
-              className="rounded-lg border p-3 space-y-2"
-            >
+          {needs.map((need) => (
+            <div key={need.id} className="rounded-lg border p-3 space-y-2">
               {/* Row 1 — main editable line. Stacks on mobile, lays out responsively on larger screens */}
               <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">
                 <Select
                   value={need.type}
-                  onChange={e => patch(need.id, { type: e.target.value })}
+                  onChange={(e) => patch(need.id, { type: e.target.value })}
                   className="text-xs sm:col-span-3 lg:col-span-2"
                   aria-label={t('needs.fieldType')}
                 >
-                  {Object.values(NEED_TYPES).map(v => (
-                    <option key={v} value={v}>{t(`typeLabels.${v}`)}</option>
+                  {Object.values(NEED_TYPES).map((v) => (
+                    <option key={v} value={v}>
+                      {t(`typeLabels.${v}`)}
+                    </option>
                   ))}
                 </Select>
 
                 <Input
                   value={need.title}
-                  onChange={e => patch(need.id, { title: e.target.value })}
+                  onChange={(e) => patch(need.id, { title: e.target.value })}
                   className="text-sm sm:col-span-9 lg:col-span-4"
                   aria-label={t('needs.fieldTitle')}
                 />
 
                 <Input
                   value={need.targetQuantity ?? ''}
-                  onChange={e => patch(need.id, { targetQuantity: e.target.value ? Number(e.target.value) : null })}
+                  onChange={(e) =>
+                    patch(need.id, {
+                      targetQuantity: e.target.value ? Number(e.target.value) : null,
+                    })
+                  }
                   type="number"
                   placeholder={t('needs.placeholderQuantityShort')}
                   className="text-xs sm:col-span-3 lg:col-span-1"
@@ -200,19 +221,21 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
 
                 <Input
                   value={need.targetUnit ?? ''}
-                  onChange={e => patch(need.id, { targetUnit: e.target.value })}
+                  onChange={(e) => patch(need.id, { targetUnit: e.target.value })}
                   placeholder={t('needs.placeholderUnitShort')}
                   className="text-xs sm:col-span-3 lg:col-span-2"
                 />
 
                 <Select
                   value={need.status}
-                  onChange={e => patch(need.id, { status: e.target.value })}
+                  onChange={(e) => patch(need.id, { status: e.target.value })}
                   className="text-xs sm:col-span-4 lg:col-span-2"
                   aria-label={t('needs.fieldStatus')}
                 >
-                  {Object.values(NEED_STATUSES).map(v => (
-                    <option key={v} value={v}>{t(`needStatusLabels.${v}`)}</option>
+                  {Object.values(NEED_STATUSES).map((v) => (
+                    <option key={v} value={v}>
+                      {t(`needStatusLabels.${v}`)}
+                    </option>
                   ))}
                 </Select>
 
@@ -242,7 +265,7 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
 
               <Textarea
                 value={need.description ?? ''}
-                onChange={e => patch(need.id, { description: e.target.value })}
+                onChange={(e) => patch(need.id, { description: e.target.value })}
                 rows={2}
                 placeholder={t('needs.placeholderDescription')}
                 className="text-xs"
@@ -252,5 +275,5 @@ export function NeedsPanel({ slug, initialNeeds }: Props) {
         </div>
       )}
     </Panel>
-  )
+  );
 }

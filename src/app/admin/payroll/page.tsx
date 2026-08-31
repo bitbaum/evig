@@ -14,28 +14,28 @@
  * server.
  */
 
-import { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
-import { redirect } from 'next/navigation'
-import { Wallet } from 'lucide-react'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { isSuperAdmin } from '@/lib/permissions'
-import { requireSection } from '@/lib/admin/guards'
-import { PayrollClient } from '@/components/admin/payroll/PayrollClient'
+import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
+import { redirect } from 'next/navigation';
+import { Wallet } from 'lucide-react';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import { isSuperAdmin } from '@/lib/permissions';
+import { requireSection } from '@/lib/admin/guards';
+import { PayrollClient } from '@/components/admin/payroll/PayrollClient';
 
 export const metadata: Metadata = {
   title: 'Lohnlauf · Payroll',
   description: 'Monatliche Lohnläufe abschliessen und für die Buchhaltung exportieren.',
-}
+};
 
 export default async function PayrollPage() {
-  const t = await getTranslations('admin.payroll')
+  const t = await getTranslations('admin.payroll');
   // Payroll is even more sensitive than timecards: needs the timecards
   // permission AND super-admin. Section guard handles the first; the
   // explicit isSuperAdmin check handles the second.
-  const session = await requireSection('timecards')
+  const session = await requireSection('timecards');
   if (!isSuperAdmin(session.user.email, session.user.isSuperAdmin)) {
-    redirect('/admin?error=payroll_super_admin_only')
+    redirect('/admin?error=payroll_super_admin_only');
   }
 
   return (
@@ -48,5 +48,5 @@ export default async function PayrollPage() {
     >
       <PayrollClient />
     </AdminPageWrapper>
-  )
+  );
 }

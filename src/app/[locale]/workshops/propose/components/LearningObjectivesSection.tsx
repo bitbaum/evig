@@ -1,30 +1,33 @@
-'use client'
+'use client';
 
-import { Target } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { responsiveTypography } from '@/lib/responsive'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Target } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { responsiveTypography } from '@/lib/responsive';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 interface LearningObjectivesSectionProps {
-  objectives: string[]
-  onAdd: () => void
-  onUpdate: (index: number, value: string) => void
-  onRemove: (index: number) => void
+  objectives: string[];
+  onAdd: () => void;
+  onUpdate: (index: number, value: string) => void;
+  onRemove: (index: number) => void;
 }
 
 export function LearningObjectivesSection({
   objectives,
   onAdd,
   onUpdate,
-  onRemove
+  onRemove,
 }: LearningObjectivesSectionProps) {
-  const t = useTranslations('workshops.propose')
+  const t = useTranslations('workshops.propose');
 
   return (
     <div className="mb-8">
-      <Heading level={2} className={`${responsiveTypography.subsection} font-semibold text-text-primary mb-4 flex items-center`}>
+      <Heading
+        level={2}
+        className={`${responsiveTypography.subsection} font-semibold text-text-primary mb-4 flex items-center`}
+      >
         <Target className="w-5 h-5 mr-2" />
         {t('sections.learningObjectives.title')}
       </Heading>
@@ -60,5 +63,5 @@ export function LearningObjectivesSection({
         </Button>
       </div>
     </div>
-  )
+  );
 }

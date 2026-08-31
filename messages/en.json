@@ -1487,93 +1487,53 @@
         "items": [
           {
             "description": "User-friendly distribution, perfect for beginners and professionals alike. Offers a polished desktop environment and extensive software repository.",
-            "useCases": [
-              "Desktop computing",
-              "Development",
-              "Server deployment"
-            ],
+            "useCases": ["Desktop computing", "Development", "Server deployment"],
             "pros": [
               "Easy to use",
               "Large community",
               "Regular updates",
               "Extensive documentation"
             ],
-            "cons": [
-              "Some proprietary software",
-              "Heavier than some alternatives"
-            ]
+            "cons": ["Some proprietary software", "Heavier than some alternatives"]
           },
           {
             "description": "Based on Ubuntu but offers a more traditional desktop experience. Known for its stability and ease of use.",
-            "useCases": [
-              "Desktop computing",
-              "Office work",
-              "Multimedia"
-            ],
+            "useCases": ["Desktop computing", "Office work", "Multimedia"],
             "pros": [
               "Windows-like interface",
               "Excellent hardware support",
               "Stable and reliable",
               "Great for beginners"
             ],
-            "cons": [
-              "Less frequent updates",
-              "Limited enterprise features"
-            ]
+            "cons": ["Less frequent updates", "Limited enterprise features"]
           },
           {
             "description": "Cutting-edge distribution showcasing the latest open-source technologies. Backed by Red Hat.",
-            "useCases": [
-              "Development",
-              "Enterprise",
-              "Innovation"
-            ],
+            "useCases": ["Development", "Enterprise", "Innovation"],
             "pros": [
               "Latest software",
               "Strong security",
               "Enterprise-ready",
               "Excellent development tools"
             ],
-            "cons": [
-              "Frequent updates",
-              "Shorter support cycles"
-            ]
+            "cons": ["Frequent updates", "Shorter support cycles"]
           },
           {
             "description": "One of the most stable and reliable distributions, serving as the foundation for many other Linux systems.",
-            "useCases": [
-              "Servers",
-              "Enterprise",
-              "Stable systems"
-            ],
+            "useCases": ["Servers", "Enterprise", "Stable systems"],
             "pros": [
               "Extremely stable",
               "Large package repository",
               "Long support cycles",
               "Strong security"
             ],
-            "cons": [
-              "Older software versions",
-              "Less user-friendly"
-            ]
+            "cons": ["Older software versions", "Less user-friendly"]
           },
           {
             "description": "Lightweight distribution based on Debian, known for its excellent performance and user-friendly interface.",
-            "useCases": [
-              "Older hardware",
-              "Desktop computing",
-              "Resource efficiency"
-            ],
-            "pros": [
-              "Lightweight",
-              "Fast performance",
-              "User-friendly",
-              "Stable base"
-            ],
-            "cons": [
-              "Smaller community",
-              "Limited enterprise features"
-            ]
+            "useCases": ["Older hardware", "Desktop computing", "Resource efficiency"],
+            "pros": ["Lightweight", "Fast performance", "User-friendly", "Stable base"],
+            "cons": ["Smaller community", "Limited enterprise features"]
           }
         ],
         "chooser": {
@@ -4600,12 +4560,7 @@
     "devices": {
       "heading": "Donate devices",
       "intro": "Hardware you no longer need can give another person a real chance. We accept working or repairable devices, refurbish them and pass them on.",
-      "items": [
-        "Laptops",
-        "Desktop PCs",
-        "Monitors",
-        "Peripherals"
-      ],
+      "items": ["Laptops", "Desktop PCs", "Monitors", "Peripherals"],
       "acceptLabel": "What we accept:",
       "acceptText": "Laptops, desktop PCs, GPUs, monitors, keyboards, mice — working or repairable.",
       "notAcceptLabel": "What we don't accept:",

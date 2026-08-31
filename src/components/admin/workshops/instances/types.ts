@@ -1,16 +1,16 @@
-export type { Workshop, WorkshopInstanceWithDetails } from '@/components/workshops/types'
-import { ORG, BASE_REGION } from '@/config/org'
-import { WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
+export type { Workshop, WorkshopInstanceWithDetails } from '@/components/workshops/types';
+import { ORG, BASE_REGION } from '@/config/org';
+import { WORKSHOP_INSTANCE_STATUS } from '@/config/workshops';
 
 export interface InstanceFormData {
-  workshopId: string
-  startDate: string
-  endDate: string
-  location: string
-  instructor: string
-  maxParticipants: string
-  notes: string
-  status: string
+  workshopId: string;
+  startDate: string;
+  endDate: string;
+  location: string;
+  instructor: string;
+  maxParticipants: string;
+  notes: string;
+  status: string;
 }
 
 export const initialFormData: InstanceFormData = {
@@ -22,10 +22,10 @@ export const initialFormData: InstanceFormData = {
   maxParticipants: '',
   notes: '',
   status: WORKSHOP_INSTANCE_STATUS.SCHEDULED,
-}
+};
 
 export interface InstanceFiltersState {
-  workshopId: string
-  status: string
-  upcoming: boolean
+  workshopId: string;
+  status: string;
+  upcoming: boolean;
 }

@@ -35,26 +35,26 @@
 
 export interface SubKategorie {
   /** Unique identifier */
-  value: string
+  value: string;
   /** German display name */
-  label: string
+  label: string;
   /** Description explaining this subcategory */
-  description?: string
+  description?: string;
 }
 
 export interface Kategorie {
   /** Unique identifier (2-digit recommended) */
-  value: string
+  value: string;
   /** German display name */
-  label: string
+  label: string;
   /** Icon (emoji for UI) */
-  icon?: string
+  icon?: string;
   /** Description explaining what this category is for */
-  description: string
+  description: string;
   /** What products belong here */
-  examples?: string[]
+  examples?: string[];
   /** Subcategories */
-  subs: SubKategorie[]
+  subs: SubKategorie[];
 }
 
 /**
@@ -322,13 +322,13 @@ export const KATEGORIEN: Kategorie[] = [
       },
     ],
   },
-]
+];
 
 /**
  * Get category by value
  */
 export function getCategoryByValue(value: string): Kategorie | undefined {
-  return KATEGORIEN.find(k => k.value === value)
+  return KATEGORIEN.find((k) => k.value === value);
 }
 
 /**
@@ -336,10 +336,10 @@ export function getCategoryByValue(value: string): Kategorie | undefined {
  */
 export function getSubcategoryByValue(value: string): SubKategorie | undefined {
   for (const kategorie of KATEGORIEN) {
-    const sub = kategorie.subs.find(s => s.value === value)
-    if (sub) return sub
+    const sub = kategorie.subs.find((s) => s.value === value);
+    if (sub) return sub;
   }
-  return undefined
+  return undefined;
 }
 
 /**
@@ -351,21 +351,26 @@ export function getSubcategoryByValue(value: string): SubKategorie | undefined {
  * unique id and still find its parent.
  */
 export function getParentCategory(subValue: string): Kategorie | undefined {
-  return KATEGORIEN.find((k) => k.subs.some((s) => s.value === subValue))
+  return KATEGORIEN.find((k) => k.subs.some((s) => s.value === subValue));
 }
 
 /**
  * Get subcategories for a main category
  */
 export function getSubcategories(categoryValue: string): SubKategorie[] {
-  return getCategoryByValue(categoryValue)?.subs ?? []
+  return getCategoryByValue(categoryValue)?.subs ?? [];
 }
 
 /**
  * Flat list of all categories (main + sub) for search/filtering
  */
-export function getAllCategoriesFlat(): Array<{ value: string; label: string; isMain: boolean; description?: string }> {
-  const result: Array<{ value: string; label: string; isMain: boolean; description?: string }> = []
+export function getAllCategoriesFlat(): Array<{
+  value: string;
+  label: string;
+  isMain: boolean;
+  description?: string;
+}> {
+  const result: Array<{ value: string; label: string; isMain: boolean; description?: string }> = [];
 
   for (const kategorie of KATEGORIEN) {
     result.push({
@@ -373,44 +378,46 @@ export function getAllCategoriesFlat(): Array<{ value: string; label: string; is
       label: kategorie.label,
       isMain: true,
       description: kategorie.description,
-    })
+    });
     for (const sub of kategorie.subs) {
       result.push({
         value: sub.value,
         label: `${kategorie.label} > ${sub.label}`,
         isMain: false,
         description: sub.description,
-      })
+      });
     }
   }
 
-  return result
+  return result;
 }
 
 /**
  * Get category with full details including parent info
  */
-export function getCategoryDetails(value: string): {
-  category: Kategorie | SubKategorie
-  parent?: Kategorie
-  isMain: boolean
-  fullLabel: string
-  description?: string
-} | undefined {
+export function getCategoryDetails(value: string):
+  | {
+      category: Kategorie | SubKategorie;
+      parent?: Kategorie;
+      isMain: boolean;
+      fullLabel: string;
+      description?: string;
+    }
+  | undefined {
   // Check if it's a main category
-  const mainCat = getCategoryByValue(value)
+  const mainCat = getCategoryByValue(value);
   if (mainCat) {
     return {
       category: mainCat,
       isMain: true,
       fullLabel: mainCat.label,
       description: mainCat.description,
-    }
+    };
   }
 
   // Check if it's a subcategory
-  const subCat = getSubcategoryByValue(value)
-  const parent = getParentCategory(value)
+  const subCat = getSubcategoryByValue(value);
+  const parent = getParentCategory(value);
   if (subCat && parent) {
     return {
       category: subCat,
@@ -418,8 +425,8 @@ export function getCategoryDetails(value: string): {
       isMain: false,
       fullLabel: `${parent.label} > ${subCat.label}`,
       description: subCat.description,
-    }
+    };
   }
 
-  return undefined
+  return undefined;
 }

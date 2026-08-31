@@ -1,5 +1,5 @@
-import type { ElementType, ReactNode } from 'react'
-import { cn } from '@/lib/utils'
+import type { ElementType, ReactNode } from 'react';
+import { cn } from '@/lib/utils';
 
 /**
  * Eyebrow — the small mono, uppercase, wide-tracked kicker label that sits above
@@ -16,9 +16,9 @@ export function Eyebrow({
   className,
   as: Tag = 'p',
 }: {
-  children: ReactNode
-  className?: string
-  as?: ElementType
+  children: ReactNode;
+  className?: string;
+  as?: ElementType;
 }) {
-  return <Tag className={cn('ui-public-eyebrow', className)}>{children}</Tag>
+  return <Tag className={cn('ui-public-eyebrow', className)}>{children}</Tag>;
 }

@@ -1,19 +1,15 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Briefcase } from 'lucide-react'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { Button } from '@/components/ui/button'
-import { ROUTES } from '@/config/routes'
-import { apiFetch } from '@/lib/api/client'
-import {
-  VacancyFormFields,
-  VacancyCard,
-  useHrVacancies,
-} from '@/components/admin/hr'
-import type { VacancyFormData, VacancyListItem } from '@/components/admin/hr/types'
-import { ROLE_TRACKS } from '@/config/hr-vacancies'
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Briefcase } from 'lucide-react';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import { Button } from '@/components/ui/button';
+import { ROUTES } from '@/config/routes';
+import { apiFetch } from '@/lib/api/client';
+import { VacancyFormFields, VacancyCard, useHrVacancies } from '@/components/admin/hr';
+import type { VacancyFormData, VacancyListItem } from '@/components/admin/hr/types';
+import { ROLE_TRACKS } from '@/config/hr-vacancies';
 
 function toForm(v: VacancyListItem): VacancyFormData {
   return {
@@ -33,11 +29,11 @@ function toForm(v: VacancyListItem): VacancyFormData {
     show_on_get_involved: v.show_on_get_involved,
     seo_title: v.seo_title ?? '',
     seo_description: v.seo_description ?? '',
-  }
+  };
 }
 
 export default function VacancyDetailPageClient({ id }: { id: string }) {
-  const router = useRouter()
+  const router = useRouter();
   const {
     updateVacancy,
     transitionStatus,
@@ -46,69 +42,73 @@ export default function VacancyDetailPageClient({ id }: { id: string }) {
     shareVacancy,
     actionLoading,
     successMessage,
-  } = useHrVacancies()
+  } = useHrVacancies();
 
-  const [vacancy, setVacancy] = useState<VacancyListItem | null>(null)
-  const [form, setForm] = useState<VacancyFormData | null>(null)
-  const [showAdvanced, setShowAdvanced] = useState(true)
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [vacancy, setVacancy] = useState<VacancyListItem | null>(null);
+  const [form, setForm] = useState<VacancyFormData | null>(null);
+  const [showAdvanced, setShowAdvanced] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function load() {
       try {
-        const result = await apiFetch<VacancyListItem>(`/api/admin/hr/vacancies/${id}`)
-        if (!result.success || !result.data) throw new Error(result.error || 'Nicht gefunden')
-        setVacancy(result.data)
-        setForm(toForm(result.data))
+        const result = await apiFetch<VacancyListItem>(`/api/admin/hr/vacancies/${id}`);
+        if (!result.success || !result.data) throw new Error(result.error || 'Nicht gefunden');
+        setVacancy(result.data);
+        setForm(toForm(result.data));
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Laden fehlgeschlagen')
+        setError(err instanceof Error ? err.message : 'Laden fehlgeschlagen');
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
-    load()
-  }, [id])
+    load();
+  }, [id]);
 
   const handleChange = (field: string, value: string | boolean) => {
-    setForm((prev) => (prev ? { ...prev, [field]: value } : prev))
-  }
+    setForm((prev) => (prev ? { ...prev, [field]: value } : prev));
+  };
 
   const handleSave = async () => {
-    if (!form) return
-    setSaving(true)
-    setError(null)
+    if (!form) return;
+    setSaving(true);
+    setError(null);
     try {
-      const updated = await updateVacancy(id, form)
+      const updated = await updateVacancy(id, form);
       if (updated) {
-        setVacancy(updated)
-        setForm(toForm(updated))
+        setVacancy(updated);
+        setForm(toForm(updated));
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Speichern fehlgeschlagen')
+      setError(err instanceof Error ? err.message : 'Speichern fehlgeschlagen');
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
-  }
+  };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-96">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-action" />
       </div>
-    )
+    );
   }
 
   if (!vacancy || !form) {
     return (
       <AdminPageWrapper title="Stelle nicht gefunden" icon={Briefcase} iconColor="green">
         <p className="text-text-secondary">{error ?? 'Die Stelle existiert nicht.'}</p>
-        <Button variant="secondary" className="mt-4" onClick={() => router.push(ROUTES.admin.hrVacancies)}>
+        <Button
+          variant="secondary"
+          className="mt-4"
+          onClick={() => router.push(ROUTES.admin.hrVacancies)}
+        >
           Zur Liste
         </Button>
       </AdminPageWrapper>
-    )
+    );
   }
 
   return (
@@ -134,11 +134,11 @@ export default function VacancyDetailPageClient({ id }: { id: string }) {
         vacancy={vacancy}
         actionLoading={actionLoading}
         onTransition={async (vid, status) => {
-          await transitionStatus(vid, status)
-          const result = await apiFetch<VacancyListItem>(`/api/admin/hr/vacancies/${id}`)
+          await transitionStatus(vid, status);
+          const result = await apiFetch<VacancyListItem>(`/api/admin/hr/vacancies/${id}`);
           if (result.success && result.data) {
-            setVacancy(result.data)
-            setForm(toForm(result.data))
+            setVacancy(result.data);
+            setForm(toForm(result.data));
           }
         }}
         onDuplicate={duplicateVacancy}
@@ -163,5 +163,5 @@ export default function VacancyDetailPageClient({ id }: { id: string }) {
         </div>
       </div>
     </AdminPageWrapper>
-  )
+  );
 }

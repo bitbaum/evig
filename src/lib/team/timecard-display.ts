@@ -8,8 +8,8 @@
  * Rule of Three: third copy is the cutoff.
  */
 
-import { CheckCircle2, Clock, AlertCircle, Edit3, type LucideIcon } from 'lucide-react'
-import { formatTimecardPeriodLabel } from './timecard-period-label'
+import { CheckCircle2, Clock, AlertCircle, Edit3, type LucideIcon } from 'lucide-react';
+import { formatTimecardPeriodLabel } from './timecard-period-label';
 
 /**
  * Map timecard status → lucide icon.
@@ -23,7 +23,7 @@ export const TIMECARD_STATUS_ICONS: Record<string, LucideIcon> = {
   submitted: Clock,
   approved: CheckCircle2,
   rejected: AlertCircle,
-}
+};
 
 /**
  * Format a timecard period as a human-readable label.
@@ -34,6 +34,10 @@ export const TIMECARD_STATUS_ICONS: Record<string, LucideIcon> = {
  * calendar month. Implementation lives in timecard-period-label.ts so
  * server code (notifications, activity log) shares the same label.
  */
-export function formatTimecardPeriod(periodType: string, periodStart: string, periodEnd: string): string {
-  return formatTimecardPeriodLabel(periodType, periodStart, periodEnd)
+export function formatTimecardPeriod(
+  periodType: string,
+  periodStart: string,
+  periodEnd: string,
+): string {
+  return formatTimecardPeriodLabel(periodType, periodStart, periodEnd);
 }

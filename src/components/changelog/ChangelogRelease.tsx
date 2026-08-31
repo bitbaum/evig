@@ -1,15 +1,15 @@
-import type { ChangelogRelease as ChangelogReleaseType } from '@/config/changelog'
-import { formatChangelogDate, formatChangelogDateShort, pickLocalized } from '@/lib/changelog'
+import type { ChangelogRelease as ChangelogReleaseType } from '@/config/changelog';
+import { formatChangelogDate, formatChangelogDateShort, pickLocalized } from '@/lib/changelog';
 
 interface ChangelogReleaseProps {
-  release: ChangelogReleaseType
-  locale: string
+  release: ChangelogReleaseType;
+  locale: string;
 }
 
 export function ChangelogRelease({ release, locale }: ChangelogReleaseProps) {
-  const title = pickLocalized(locale, release.title)
-  const dateLong = formatChangelogDate(release.date, locale)
-  const dateShort = formatChangelogDateShort(release.date, locale)
+  const title = pickLocalized(locale, release.title);
+  const dateLong = formatChangelogDate(release.date, locale);
+  const dateShort = formatChangelogDateShort(release.date, locale);
 
   return (
     <section
@@ -34,7 +34,10 @@ export function ChangelogRelease({ release, locale }: ChangelogReleaseProps) {
           <ul className="mt-6 space-y-2.5 text-sm leading-relaxed text-text-secondary">
             {release.changes.map((change, index) => (
               <li key={index} className="flex gap-3">
-                <span aria-hidden="true" className="mt-2 h-1 w-1 shrink-0 rounded-full bg-text-tertiary" />
+                <span
+                  aria-hidden="true"
+                  className="mt-2 h-1 w-1 shrink-0 rounded-full bg-text-tertiary"
+                />
                 <span>{pickLocalized(locale, change)}</span>
               </li>
             ))}
@@ -42,5 +45,5 @@ export function ChangelogRelease({ release, locale }: ChangelogReleaseProps) {
         </div>
       </div>
     </section>
-  )
+  );
 }

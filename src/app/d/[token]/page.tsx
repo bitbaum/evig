@@ -5,50 +5,50 @@
  * to /api/public/share/[token] and notifies the owner's in-app bell.
  */
 
-import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
-import { ExternalLink } from 'lucide-react'
-import { getDeliverableByToken, getFeedback } from '@/lib/services/deliverables'
-import { formatDateTimeNumeric } from '@/lib/date-formats'
-import { ORG } from '@/config/org'
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { ExternalLink } from 'lucide-react';
+import { getDeliverableByToken, getFeedback } from '@/lib/services/deliverables';
+import { formatDateTimeNumeric } from '@/lib/date-formats';
+import { ORG } from '@/config/org';
 import {
   DELIVERABLE_TYPE_LABELS,
   FEEDBACK_KIND_LABELS,
   FEEDBACK_KIND_COLORS,
   type DeliverableType,
   type FeedbackKind,
-} from '@/config/deliverables'
-import { Card } from '@/components/ui/card'
-import DeliverableFiles from '@/components/deliverables/DeliverableFiles'
-import DeliverableChat from '@/components/deliverables/DeliverableChat'
-import Markdown from '@/components/deliverables/Markdown'
-import SharedFeedbackForm from './SharedFeedbackForm'
+} from '@/config/deliverables';
+import { Card } from '@/components/ui/card';
+import DeliverableFiles from '@/components/deliverables/DeliverableFiles';
+import DeliverableChat from '@/components/deliverables/DeliverableChat';
+import Markdown from '@/components/deliverables/Markdown';
+import SharedFeedbackForm from './SharedFeedbackForm';
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ token: string }>
+  params: Promise<{ token: string }>;
 }): Promise<Metadata> {
-  const { token } = await params
-  const deliverable = await getDeliverableByToken(token)
+  const { token } = await params;
+  const deliverable = await getDeliverableByToken(token);
   return {
     title: deliverable ? `${deliverable.title} — ${ORG.name}` : ORG.name,
     // Share links are unlisted — never index them.
     robots: { index: false, follow: false },
-  }
+  };
 }
 
 export default async function SharedDeliverablePage({
   params,
 }: {
-  params: Promise<{ token: string }>
+  params: Promise<{ token: string }>;
 }) {
-  const { token } = await params
-  const deliverable = await getDeliverableByToken(token)
-  if (!deliverable) notFound()
+  const { token } = await params;
+  const deliverable = await getDeliverableByToken(token);
+  if (!deliverable) notFound();
 
-  const feedback = await getFeedback(deliverable.id)
-  const isInternalPreview = deliverable.url?.startsWith('/')
+  const feedback = await getFeedback(deliverable.id);
+  const isInternalPreview = deliverable.url?.startsWith('/');
 
   return (
     <div className="min-h-screen bg-surface-raised">
@@ -80,7 +80,11 @@ export default async function SharedDeliverablePage({
               </a>
             </div>
             {isInternalPreview && (
-              <iframe src={deliverable.url} title={deliverable.title} className="w-full h-[560px] bg-surface-base" />
+              <iframe
+                src={deliverable.url}
+                title={deliverable.title}
+                className="w-full h-[560px] bg-surface-base"
+              />
             )}
           </Card>
         )}
@@ -106,14 +110,18 @@ export default async function SharedDeliverablePage({
               {feedback.map((f) => (
                 <li key={f.id} className="border-l-2 border-neutral-200 pl-4">
                   <div className="flex flex-wrap items-center gap-2 mb-1">
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${FEEDBACK_KIND_COLORS[f.kind as FeedbackKind] ?? ''}`}>
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-xs font-medium ${FEEDBACK_KIND_COLORS[f.kind as FeedbackKind] ?? ''}`}
+                    >
                       {FEEDBACK_KIND_LABELS[f.kind as FeedbackKind] ?? f.kind}
                     </span>
                     <span className="text-xs text-text-secondary">
                       {f.author_name ?? 'Extern'} · {formatDateTimeNumeric(f.created_at)}
                     </span>
                   </div>
-                  {f.target && <p className="text-xs text-text-secondary mb-0.5">Betrifft: {f.target}</p>}
+                  {f.target && (
+                    <p className="text-xs text-text-secondary mb-0.5">Betrifft: {f.target}</p>
+                  )}
                   <p className="text-sm text-text-primary whitespace-pre-wrap">{f.body}</p>
                 </li>
               ))}
@@ -122,5 +130,5 @@ export default async function SharedDeliverablePage({
         </section>
       </div>
     </div>
-  )
+  );
 }

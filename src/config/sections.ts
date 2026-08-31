@@ -11,7 +11,7 @@
  * Last Updated: 2026-06-19
  */
 
-import type { LucideIcon } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react';
 import {
   LayoutDashboard,
   Package,
@@ -51,9 +51,9 @@ import {
   Presentation,
   Ticket,
   Inbox,
-} from 'lucide-react'
-import { ORG } from '@/config/org'
-import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
+} from 'lucide-react';
+import { ORG } from '@/config/org';
+import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments';
 
 // =============================================================================
 // SECTION TYPES
@@ -62,101 +62,95 @@ import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
 /**
  * Where a section is visible
  */
-export type SectionContext = 'admin' | 'dashboard' | 'both'
+export type SectionContext = 'admin' | 'dashboard' | 'both';
 
 /**
  * Who can see a section
  */
 export interface SectionVisibility {
   /** Section appears in admin sidebar */
-  admin: boolean
+  admin: boolean;
   /** Section appears in user dashboard */
-  dashboard: boolean
+  dashboard: boolean;
   /** For admin: requires staff access */
-  requiresStaff?: boolean
+  requiresStaff?: boolean;
   /** For admin: sensitive section (requires super admin or explicit grant) */
-  sensitive?: boolean
+  sensitive?: boolean;
   /**
    * Personal staff tool (e.g. own Zeiterfassung): accessible to EVERY staff
    * member regardless of their stored staff_permissions array — permission
    * narrowing never removes access to one's own tools.
    */
-  alwaysForStaff?: boolean
+  alwaysForStaff?: boolean;
   /** For dashboard: show only for users with this community role */
-  communityRole?: 'seller' | 'repairer' | 'techniker'
+  communityRole?: 'seller' | 'repairer' | 'techniker';
   /** For dashboard: hide if user has this role (show onboarding instead) */
-  hideIfRole?: 'seller' | 'repairer' | 'techniker'
+  hideIfRole?: 'seller' | 'repairer' | 'techniker';
 }
 
 /**
  * UI configuration for a section
  */
 export interface SectionUI {
-  label: string
-  description: string
-  icon: LucideIcon
+  label: string;
+  description: string;
+  icon: LucideIcon;
   /** Emoji for dashboard cards (optional, fallback to icon) */
-  emoji?: string
+  emoji?: string;
   /** Color theme */
-  color: SectionColor
+  color: SectionColor;
   /** Short label for the admin mobile bottom nav (≤8 chars renders cleanly).
    *  When omitted, falls back to `label`. */
-  mobileBottomNavLabel?: string
+  mobileBottomNavLabel?: string;
 }
 
 export type SectionColor =
-  | 'primary'
-  | 'secondary'
-  | 'success'
-  | 'warning'
-  | 'error'
-  | 'info'
-  | 'neutral'
+  'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info' | 'neutral';
 
 /**
  * Complete section definition
  */
 export interface SectionConfig {
   /** Unique identifier (also used as admin permission key) */
-  id: string
+  id: string;
   /** URL path */
-  path: string
+  path: string;
   /** UI configuration */
-  ui: SectionUI
+  ui: SectionUI;
   /** Visibility rules */
-  visibility: SectionVisibility
+  visibility: SectionVisibility;
   /** Display priority (lower = higher priority) */
-  priority: number
+  priority: number;
   /** Category for grouping */
-  category: SectionCategory
+  category: SectionCategory;
   /** Sidebar group for admin navigation (optional, defaults to none) */
-  sidebarGroup?: SidebarGroupId
+  sidebarGroup?: SidebarGroupId;
   /**
    * Keep the section as a permission/route key but omit it from navigation.
    * Used for advanced sub-flows that belong to another operational home.
    */
-  navigationVisible?: boolean
+  navigationVisible?: boolean;
   /** Position in the admin mobile bottom nav (1-3). Sections without an
    *  order don't appear in the bottom nav; "Mehr" opens the full sidebar.
    *  Used by `getMobileBottomNavSections()`. */
-  mobileBottomNavOrder?: number
+  mobileBottomNavOrder?: number;
   /** Position in the USER dashboard mobile bottom nav (1-4). Sections without
    *  an order don't appear in the bar; "Mehr" opens the full dashboard menu.
    *  Used by `getDashboardBottomNavSections()`. Short label from
    *  `ui.mobileBottomNavLabel`. */
-  dashboardBottomNavOrder?: number
+  dashboardBottomNavOrder?: number;
 }
 
 export type SectionCategory =
-  | 'core'        // Main features (dashboard, profile)
-  | 'activities'  // User activities (workshops, appointments)
-  | 'commerce'    // Selling/marketplace
-  | 'services'    // Service provision (repairs)
-  | 'content'     // Content creation
-  | 'management'  // Admin management sections
-  | 'sensitive'   // Sensitive admin areas
-  | 'system'      // System configuration
-  | 'analyse'     // Analytics and reporting
+  | 'core' // Main features (dashboard, profile)
+  | 'activities' // User activities (workshops, appointments)
+  | 'commerce' // Selling/marketplace
+  | 'services' // Service provision (repairs)
+  | 'content' // Content creation
+  | 'management' // Admin management sections
+  | 'sensitive' // Sensitive admin areas
+  | 'system' // System configuration
+  | 'analyse'; // Analytics and reporting
 
 // =============================================================================
 // SIDEBAR GROUPS - For admin sidebar organization
@@ -166,21 +160,21 @@ export type SectionCategory =
  * Sidebar group IDs for admin navigation
  */
 export type SidebarGroupId =
-  | 'uebersicht'   // Today: Dashboard, approval queues
-  | 'angebot'      // Operations: intake, marketplace, IT-Hilfe, workshops
-  | 'inhalte'      // Content: blog, reviews, projects
-  | 'betrieb'      // Zusammenarbeit: teams, tasks, protocols, decisions
-  | 'analyse'      // Analytics hub + financial / impact reporting
-  | 'personen'     // Personen & HR: team profiles, members, users, HR pipeline
-  | 'system'       // System configuration
+  | 'uebersicht' // Today: Dashboard, approval queues
+  | 'angebot' // Operations: intake, marketplace, IT-Hilfe, workshops
+  | 'inhalte' // Content: blog, reviews, projects
+  | 'betrieb' // Zusammenarbeit: teams, tasks, protocols, decisions
+  | 'analyse' // Analytics hub + financial / impact reporting
+  | 'personen' // Personen & HR: team profiles, members, users, HR pipeline
+  | 'system'; // System configuration
 
 /**
  * Sidebar group configuration
  */
 export interface SidebarGroup {
-  id: SidebarGroupId
-  label: string
-  priority: number
+  id: SidebarGroupId;
+  label: string;
+  priority: number;
 }
 
 /**
@@ -240,7 +234,7 @@ export const SIDEBAR_GROUPS: Record<SidebarGroupId, SidebarGroup> = {
     label: 'System',
     priority: 7,
   },
-}
+};
 
 // =============================================================================
 // SECTION DEFINITIONS - SSOT
@@ -498,7 +492,6 @@ export const SECTIONS = {
     category: 'content',
   },
 
-
   // ---------------------------------------------------------------------------
   // DONATIONS - User donation history
   // ---------------------------------------------------------------------------
@@ -641,7 +634,6 @@ export const SECTIONS = {
     category: 'management',
     sidebarGroup: 'angebot',
   },
-
 
   'workshops-admin': {
     id: 'workshops-admin',
@@ -1243,16 +1235,16 @@ export const SECTIONS = {
     category: 'sensitive',
     sidebarGroup: 'system',
   },
-} satisfies Record<string, SectionConfig>
+} satisfies Record<string, SectionConfig>;
 
-export type SectionId = keyof typeof SECTIONS
+export type SectionId = keyof typeof SECTIONS;
 
 function sectionIds(): SectionId[] {
-  return Object.keys(SECTIONS) as Array<keyof typeof SECTIONS>
+  return Object.keys(SECTIONS) as Array<keyof typeof SECTIONS>;
 }
 
 export function isSectionId(id: string): id is SectionId {
-  return id in SECTIONS
+  return id in SECTIONS;
 }
 
 // =============================================================================
@@ -1262,34 +1254,35 @@ export function isSectionId(id: string): id is SectionId {
 /**
  * All section IDs
  */
-export const SECTION_IDS = sectionIds()
+export const SECTION_IDS = sectionIds();
 
-const SECTION_CONFIGS: SectionConfig[] = SECTION_IDS.map(id => SECTIONS[id])
+const SECTION_CONFIGS: SectionConfig[] = SECTION_IDS.map((id) => SECTIONS[id]);
 
 /**
  * Admin section IDs (for permission system)
  */
-export const ADMIN_SECTION_IDS = SECTION_IDS.filter(id => SECTIONS[id].visibility.admin)
+export const ADMIN_SECTION_IDS = SECTION_IDS.filter((id) => SECTIONS[id].visibility.admin);
 
 /**
  * Sensitive section IDs
  */
-export const SENSITIVE_SECTION_IDS = SECTION_IDS.filter(id =>
-  'sensitive' in SECTIONS[id].visibility && SECTIONS[id].visibility.sensitive === true
-)
+export const SENSITIVE_SECTION_IDS = SECTION_IDS.filter(
+  (id) => 'sensitive' in SECTIONS[id].visibility && SECTIONS[id].visibility.sensitive === true,
+);
 
 /**
  * Personal staff tools — accessible to every staff member regardless of
  * stored permissions (see SectionVisibility.alwaysForStaff).
  */
-export const STAFF_UNIVERSAL_SECTION_IDS = SECTION_IDS.filter(id =>
-  'alwaysForStaff' in SECTIONS[id].visibility && SECTIONS[id].visibility.alwaysForStaff === true
-)
+export const STAFF_UNIVERSAL_SECTION_IDS = SECTION_IDS.filter(
+  (id) =>
+    'alwaysForStaff' in SECTIONS[id].visibility && SECTIONS[id].visibility.alwaysForStaff === true,
+);
 
 /**
  * Dashboard section IDs
  */
-export const DASHBOARD_SECTION_IDS = SECTION_IDS.filter(id => SECTIONS[id].visibility.dashboard)
+export const DASHBOARD_SECTION_IDS = SECTION_IDS.filter((id) => SECTIONS[id].visibility.dashboard);
 
 // =============================================================================
 // HELPER FUNCTIONS
@@ -1299,32 +1292,30 @@ export const DASHBOARD_SECTION_IDS = SECTION_IDS.filter(id => SECTIONS[id].visib
  * Get sections for admin sidebar
  */
 export function getAdminSections(): SectionConfig[] {
-  return SECTION_CONFIGS
-    .filter(s => s.visibility.admin)
-    .sort((a, b) => a.priority - b.priority)
+  return SECTION_CONFIGS.filter((s) => s.visibility.admin).sort((a, b) => a.priority - b.priority);
 }
 
 /**
  * Get sections for user dashboard
  */
 export function getDashboardSections(): SectionConfig[] {
-  return SECTION_CONFIGS
-    .filter(s => s.visibility.dashboard)
-    .sort((a, b) => a.priority - b.priority)
+  return SECTION_CONFIGS.filter((s) => s.visibility.dashboard).sort(
+    (a, b) => a.priority - b.priority,
+  );
 }
 
 /**
  * Get section by ID
  */
 export function getSection(id: string): SectionConfig | undefined {
-  return isSectionId(id) ? SECTIONS[id] : undefined
+  return isSectionId(id) ? SECTIONS[id] : undefined;
 }
 
 /**
  * Check if section is sensitive
  */
 export function isSensitiveSection(id: string): boolean {
-  return isSectionId(id) && SENSITIVE_SECTION_IDS.includes(id)
+  return isSectionId(id) && SENSITIVE_SECTION_IDS.includes(id);
 }
 
 /**
@@ -1337,19 +1328,19 @@ export const SENSITIVITY_REASONS: Record<string, string> = {
   'analyse-hub': 'Enthält vertrauliche Kennzahlen und Finanzdaten',
   hirn: 'Enthält strategische Geschäftsinformationen',
   settings: 'Kann Systemkonfiguration ändern',
-}
+};
 
 export function getSensitivityReason(section: string): string | undefined {
-  return SENSITIVITY_REASONS[section]
+  return SENSITIVITY_REASONS[section];
 }
 
 /**
  * Get sections by category
  */
 export function getSectionsByCategory(category: SectionCategory): SectionConfig[] {
-  return SECTION_CONFIGS
-    .filter(s => s.category === category)
-    .sort((a, b) => a.priority - b.priority)
+  return SECTION_CONFIGS.filter((s) => s.category === category).sort(
+    (a, b) => a.priority - b.priority,
+  );
 }
 
 /**
@@ -1357,24 +1348,26 @@ export function getSectionsByCategory(category: SectionCategory): SectionConfig[
  * Returns groups sorted by priority, each with its sections
  */
 export function getSidebarGroupsWithSections(): Array<{
-  group: SidebarGroup
-  sections: SectionConfig[]
+  group: SidebarGroup;
+  sections: SectionConfig[];
 }> {
-  const groups = Object.values(SIDEBAR_GROUPS).sort((a, b) => a.priority - b.priority)
+  const groups = Object.values(SIDEBAR_GROUPS).sort((a, b) => a.priority - b.priority);
 
-  return groups.map(group => ({
-    group,
-    sections: SECTION_CONFIGS
-      .filter(s => s.visibility.admin && s.navigationVisible !== false && s.sidebarGroup === group.id)
-      .sort((a, b) => a.priority - b.priority),
-  })).filter(g => g.sections.length > 0) // Only return groups with sections
+  return groups
+    .map((group) => ({
+      group,
+      sections: SECTION_CONFIGS.filter(
+        (s) => s.visibility.admin && s.navigationVisible !== false && s.sidebarGroup === group.id,
+      ).sort((a, b) => a.priority - b.priority),
+    }))
+    .filter((g) => g.sections.length > 0); // Only return groups with sections
 }
 
 /**
  * Get Hirn section config (special case - not in a group)
  */
 export function getHirnSection(): SectionConfig | undefined {
-  return SECTIONS.hirn
+  return SECTIONS.hirn;
 }
 
 /**
@@ -1385,22 +1378,16 @@ export function getHirnSection(): SectionConfig | undefined {
  * `mobileBottomNavOrder: 1 | 2 | 3` and it shows up here automatically;
  * the rest stay one extra tap away via the "Mehr" button.
  */
-export function getMobileBottomNavSections(
-  accessibleSectionIds?: string[],
-): SectionConfig[] {
-  const allowed = accessibleSectionIds
-    ? new Set(accessibleSectionIds)
-    : null
+export function getMobileBottomNavSections(accessibleSectionIds?: string[]): SectionConfig[] {
+  const allowed = accessibleSectionIds ? new Set(accessibleSectionIds) : null;
 
-  return SECTION_CONFIGS
-    .filter(
-      (s): s is SectionConfig =>
-        typeof s.mobileBottomNavOrder === 'number' &&
-        s.visibility.admin &&
-        s.navigationVisible !== false &&
-        (allowed === null || allowed.has(s.id)),
-    )
-    .sort((a, b) => (a.mobileBottomNavOrder ?? 0) - (b.mobileBottomNavOrder ?? 0))
+  return SECTION_CONFIGS.filter(
+    (s): s is SectionConfig =>
+      typeof s.mobileBottomNavOrder === 'number' &&
+      s.visibility.admin &&
+      s.navigationVisible !== false &&
+      (allowed === null || allowed.has(s.id)),
+  ).sort((a, b) => (a.mobileBottomNavOrder ?? 0) - (b.mobileBottomNavOrder ?? 0));
 }
 
 // =============================================================================
@@ -1408,11 +1395,11 @@ export function getMobileBottomNavSections(
 // =============================================================================
 
 export interface CategoryConfig {
-  id: SectionCategory
-  label: string
-  description: string
-  emoji: string
-  priority: number
+  id: SectionCategory;
+  label: string;
+  description: string;
+  emoji: string;
+  priority: number;
 }
 
 export const CATEGORIES: Record<SectionCategory, CategoryConfig> = {
@@ -1479,13 +1466,13 @@ export const CATEGORIES: Record<SectionCategory, CategoryConfig> = {
     emoji: '📊',
     priority: 8,
   },
-}
+};
 
 /**
  * Get sorted categories
  */
 export function getSortedCategories(): CategoryConfig[] {
-  return Object.values(CATEGORIES).sort((a, b) => a.priority - b.priority)
+  return Object.values(CATEGORIES).sort((a, b) => a.priority - b.priority);
 }
 
 // =============================================================================

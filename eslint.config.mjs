@@ -1,6 +1,6 @@
-import nextConfig from "eslint-config-next";
-import reactHooks from "eslint-plugin-react-hooks";
-import * as espree from "espree";
+import nextConfig from 'eslint-config-next';
+import reactHooks from 'eslint-plugin-react-hooks';
+import * as espree from 'espree';
 
 // ─── Design system enforcement rules ────────────────────────────────────────
 // Why: the BB.6 bug ("white text on grey dropdown") happened because feature
@@ -15,13 +15,13 @@ const FORM_CONTROL_SYNTAX = [
   {
     selector: "JSXOpeningElement[name.name='select']",
     message:
-      "Use <Select> from @/components/ui/select instead of raw <select>. " +
+      'Use <Select> from @/components/ui/select instead of raw <select>. ' +
       "The primitive handles dark mode + tokens correctly; raw <select> doesn't.",
   },
   {
     selector: "JSXOpeningElement[name.name='textarea']",
     message:
-      "Use <Textarea> from @/components/ui/textarea instead of raw <textarea>. " +
+      'Use <Textarea> from @/components/ui/textarea instead of raw <textarea>. ' +
       "The primitive handles dark mode + tokens correctly; raw <textarea> doesn't.",
   },
   {
@@ -29,52 +29,45 @@ const FORM_CONTROL_SYNTAX = [
       "JSXOpeningElement[name.name='input']" +
       ":has(JSXAttribute[name.name='type'][value.value=/^(text|email|password|tel|url|search|number|date|time|datetime-local|month|week)$/])",
     message:
-      "Use <Input> from @/components/ui/input instead of raw text <input>. " +
+      'Use <Input> from @/components/ui/input instead of raw text <input>. ' +
       "The primitive handles dark mode + tokens correctly; raw <input> doesn't.",
   },
   {
     selector: "JSXOpeningElement[name.name='button']",
     message:
-      "Use <Button> from @/components/ui/button instead of raw <button>. " +
-      "Variants/sizes/tokens are baked in; raw <button> drifts.",
+      'Use <Button> from @/components/ui/button instead of raw <button>. ' +
+      'Variants/sizes/tokens are baked in; raw <button> drifts.',
   },
 ];
 
 const PALETTE_CLASS_SYNTAX = [
   {
-    selector:
-      "JSXAttribute[name.name='className'] > Literal[value=/\\bbg-white\\b/]",
+    selector: "JSXAttribute[name.name='className'] > Literal[value=/\\bbg-white\\b/]",
     message:
-      "Use bg-surface-base (semantic token) instead of bg-white. " +
-      "See docs/DESIGN_SYSTEM.md.",
+      'Use bg-surface-base (semantic token) instead of bg-white. ' + 'See docs/DESIGN_SYSTEM.md.',
   },
   {
-    selector:
-      "JSXAttribute[name.name='className'] > Literal[value=/\\btext-neutral-/]",
+    selector: "JSXAttribute[name.name='className'] > Literal[value=/\\btext-neutral-/]",
     message:
-      "Use text-text-primary|secondary|tertiary|muted instead of text-neutral-*. " +
-      "See docs/DESIGN_SYSTEM.md.",
+      'Use text-text-primary|secondary|tertiary|muted instead of text-neutral-*. ' +
+      'See docs/DESIGN_SYSTEM.md.',
   },
   {
-    selector:
-      "JSXAttribute[name.name='className'] > Literal[value=/\\bbg-neutral-/]",
+    selector: "JSXAttribute[name.name='className'] > Literal[value=/\\bbg-neutral-/]",
     message:
-      "Use bg-surface-base|raised|overlay instead of bg-neutral-*. " +
-      "See docs/DESIGN_SYSTEM.md.",
+      'Use bg-surface-base|raised|overlay instead of bg-neutral-*. ' + 'See docs/DESIGN_SYSTEM.md.',
   },
   {
-    selector:
-      "JSXAttribute[name.name='className'] > Literal[value=/\\bbg-primary-/]",
+    selector: "JSXAttribute[name.name='className'] > Literal[value=/\\bbg-primary-/]",
     message:
-      "Use bg-action / bg-action-muted for brand green surfaces. " +
-      "Palette bg-primary-* is for status badges only. See docs/DESIGN_SYSTEM.md.",
+      'Use bg-action / bg-action-muted for brand green surfaces. ' +
+      'Palette bg-primary-* is for status badges only. See docs/DESIGN_SYSTEM.md.',
   },
   {
-    selector:
-      "JSXAttribute[name.name='className'] > Literal[value=/\\bshadow-(lg|xl|2xl)\\b/]",
+    selector: "JSXAttribute[name.name='className'] > Literal[value=/\\bshadow-(lg|xl|2xl)\\b/]",
     message:
-      "Avoid shadow-lg/xl/2xl on static cards — use border + hover:border-strong. " +
-      "Shadows are OK on floating overlays (dropdowns, modals). See docs/DESIGN_SYSTEM.md.",
+      'Avoid shadow-lg/xl/2xl on static cards — use border + hover:border-strong. ' +
+      'Shadows are OK on floating overlays (dropdowns, modals). See docs/DESIGN_SYSTEM.md.',
   },
 ];
 
@@ -83,10 +76,10 @@ const DESIGN_SYSTEM_SYNTAX = [...FORM_CONTROL_SYNTAX, ...PALETTE_CLASS_SYNTAX];
 const eslintConfig = [
   {
     ignores: [
-      ".next/**",
-      "node_modules/**",
-      "examples/**",
-      "packages/**",
+      '.next/**',
+      'node_modules/**',
+      'examples/**',
+      'packages/**',
       // Per-session agent worktrees are complete checkouts of this repo living
       // inside it, so without this every file gets linted twice: once here and
       // once per worktree. Measured 2026-08-27 — `npx eslint .` reported 641
@@ -99,7 +92,7 @@ const eslintConfig = [
       // for --no-verify, and then the day it means something, nobody reads it.
       //
       // Ignored by FAMILY, not by instance, so a new worktree needs no new line.
-      ".claude/worktrees/**",
+      '.claude/worktrees/**',
     ],
   },
   ...nextConfig,
@@ -111,7 +104,7 @@ const eslintConfig = [
     // "detect" throws on every file linted under ESLint 10. Pin the version
     // from package.json instead: detection was only ever re-deriving this
     // same value at lint time, so nothing is lost by reading it directly.
-    settings: { react: { version: "18.2.0" } },
+    settings: { react: { version: '18.2.0' } },
   },
   {
     // Plain .js/.mjs files (config files, scripts/ — none use JSX or Babel-only
@@ -123,7 +116,7 @@ const eslintConfig = [
     // Next has not republished this bundle for ESLint 10 yet. .ts/.tsx already
     // escape it via the "next/typescript" override below; do the same for
     // plain JS with plain espree, since none of these files need Babel/JSX.
-    files: ["**/*.js", "**/*.mjs"],
+    files: ['**/*.js', '**/*.mjs'],
     languageOptions: { parser: espree },
   },
   {
@@ -132,40 +125,40 @@ const eslintConfig = [
     // files-scoped object, so a bare global rules object errors with
     // "could not find plugin react-hooks". Same module instance as next's, so
     // no "redefine" conflict.
-    plugins: { "react-hooks": reactHooks },
+    plugins: { 'react-hooks': reactHooks },
     rules: {
-      "@next/next/no-img-element": "off",
-      "react/no-unescaped-entities": "off",
-      "react-hooks/immutability": "off",
+      '@next/next/no-img-element': 'off',
+      'react/no-unescaped-entities': 'off',
+      'react-hooks/immutability': 'off',
       // Driven to zero 2026-08 (PRs #341–#345: fetch hooks → useSwrFetch,
       // derivable state derived). Error keeps the class closed; a genuinely
       // legitimate external-store sync (localStorage hydration, one-shot form
       // prefill) gets a targeted eslint-disable line stating why.
-      "react-hooks/set-state-in-effect": "error",
+      'react-hooks/set-state-in-effect': 'error',
     },
   },
   {
     rules: {
-      "no-restricted-syntax": ["error", ...DESIGN_SYSTEM_SYNTAX],
+      'no-restricted-syntax': ['error', ...DESIGN_SYSTEM_SYNTAX],
     },
   },
   // Public locale routes: same strict rules (kept explicit for clarity in reviews).
   {
-    files: ["src/app/[locale]/**/*.{ts,tsx}"],
+    files: ['src/app/[locale]/**/*.{ts,tsx}'],
     rules: {
-      "no-restricted-syntax": ["error", ...DESIGN_SYSTEM_SYNTAX],
+      'no-restricted-syntax': ['error', ...DESIGN_SYSTEM_SYNTAX],
     },
   },
   {
     files: [
-      "src/components/ui/**/*.{ts,tsx}",
-      "src/components/admin/AdminButton.tsx",
-      "src/**/__tests__/**/*.{ts,tsx}",
-      "src/**/*.test.{ts,tsx}",
-      "src/**/*.spec.{ts,tsx}",
+      'src/components/ui/**/*.{ts,tsx}',
+      'src/components/admin/AdminButton.tsx',
+      'src/**/__tests__/**/*.{ts,tsx}',
+      'src/**/*.test.{ts,tsx}',
+      'src/**/*.spec.{ts,tsx}',
     ],
     rules: {
-      "no-restricted-syntax": "off",
+      'no-restricted-syntax': 'off',
     },
   },
 ];

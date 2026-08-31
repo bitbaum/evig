@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
-import { CSRF_HEADER_NAME, getClientCsrfToken, methodNeedsCsrf } from '@/lib/api/csrf-client'
+import { useEffect } from 'react';
+import { CSRF_HEADER_NAME, getClientCsrfToken, methodNeedsCsrf } from '@/lib/api/csrf-client';
 
-let installed = false
+let installed = false;
 
 function isAuthEndpoint(input: RequestInfo | URL): boolean {
-  const url = input instanceof Request ? input.url : input.toString()
-  return new URL(url, window.location.origin).pathname.startsWith('/api/auth/')
+  const url = input instanceof Request ? input.url : input.toString();
+  return new URL(url, window.location.origin).pathname.startsWith('/api/auth/');
 }
 
 /**
@@ -17,39 +17,41 @@ function isAuthEndpoint(input: RequestInfo | URL): boolean {
  * x-csrf-token wasn't in the target's Access-Control-Allow-Headers).
  */
 function isSameOrigin(input: RequestInfo | URL): boolean {
-  const url = input instanceof Request ? input.url : input.toString()
-  return new URL(url, window.location.origin).origin === window.location.origin
+  const url = input instanceof Request ? input.url : input.toString();
+  return new URL(url, window.location.origin).origin === window.location.origin;
 }
 
 export function CsrfFetchProvider() {
   useEffect(() => {
-    if (installed || typeof window === 'undefined') return
-    installed = true
+    if (installed || typeof window === 'undefined') return;
+    installed = true;
 
-    const originalFetch = window.fetch.bind(window)
+    const originalFetch = window.fetch.bind(window);
     window.fetch = (input: RequestInfo | URL, init: RequestInit = {}) => {
       if (isAuthEndpoint(input) || !isSameOrigin(input)) {
-        return originalFetch(input, init)
+        return originalFetch(input, init);
       }
 
-      const method = init.method || (input instanceof Request ? input.method : 'GET')
+      const method = init.method || (input instanceof Request ? input.method : 'GET');
       if (!methodNeedsCsrf(method)) {
-        return originalFetch(input, init)
+        return originalFetch(input, init);
       }
 
-      const token = getClientCsrfToken()
+      const token = getClientCsrfToken();
       if (!token) {
-        return originalFetch(input, init)
+        return originalFetch(input, init);
       }
 
-      const headers = new Headers(init.headers || (input instanceof Request ? input.headers : undefined))
+      const headers = new Headers(
+        init.headers || (input instanceof Request ? input.headers : undefined),
+      );
       if (!headers.has(CSRF_HEADER_NAME)) {
-        headers.set(CSRF_HEADER_NAME, token)
+        headers.set(CSRF_HEADER_NAME, token);
       }
 
-      return originalFetch(input, { ...init, headers })
-    }
-  }, [])
+      return originalFetch(input, { ...init, headers });
+    };
+  }, []);
 
-  return null
+  return null;
 }

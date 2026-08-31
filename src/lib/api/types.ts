@@ -7,38 +7,38 @@
 
 /** Standard API response wrapper */
 export interface ApiResponse<T = unknown> {
-  success: boolean
-  data?: T
-  error?: string
+  success: boolean;
+  data?: T;
+  error?: string;
   /**
    * Stable machine-readable discriminator from ERROR_CODES, set only where the
    * UI must react to *which* failure it was. `error` stays the human sentence —
    * branching on that text breaks the moment it is reworded or translated.
    */
-  code?: string
+  code?: string;
 }
 
 /** Paginated API response (page-based) */
 export interface PaginatedResponse<T> {
-  items: T[]
+  items: T[];
   pagination: {
-    total: number
-    page: number
-    limit: number
-    totalPages: number
-  }
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+  };
 }
 
 /** Paginated API response (offset-based) */
 export interface OffsetPaginatedResponse<T> {
-  items: T[]
+  items: T[];
   pagination: {
-    total: number
-    limit: number
-    offset: number
-    hasMore: boolean
-  }
+    total: number;
+    limit: number;
+    offset: number;
+    hasMore: boolean;
+  };
 }
 
 /** Paginated API response wrapped in ApiResponse */
-export type PaginatedApiResponse<T> = ApiResponse<PaginatedResponse<T>>
+export type PaginatedApiResponse<T> = ApiResponse<PaginatedResponse<T>>;

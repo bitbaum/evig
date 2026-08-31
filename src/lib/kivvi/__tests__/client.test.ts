@@ -31,22 +31,26 @@
 // fetch mock — save/restore to prevent global leak into other test files
 // ---------------------------------------------------------------------------
 
-const originalFetch = global.fetch
-const mockFetch = jest.fn()
+const originalFetch = global.fetch;
+const mockFetch = jest.fn();
 
-beforeAll(() => { global.fetch = mockFetch })
-afterAll(() => { global.fetch = originalFetch })
+beforeAll(() => {
+  global.fetch = mockFetch;
+});
+afterAll(() => {
+  global.fetch = originalFetch;
+});
 
 function mockFetchResponse(data: unknown, ok = true, status = 200) {
   mockFetch.mockResolvedValueOnce({
     ok,
     status,
-    json: jest.fn().mockResolvedValue(
-      ok
-        ? { success: true, data }
-        : { success: false, error: `Mock error ${status}` }
-    ),
-  })
+    json: jest
+      .fn()
+      .mockResolvedValue(
+        ok ? { success: true, data } : { success: false, error: `Mock error ${status}` },
+      ),
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -69,28 +73,28 @@ function makeKivviItem(overrides: Partial<Record<string, unknown>> = {}) {
     location: null,
     createdAt: '2026-04-27T10:00:00Z',
     ...overrides,
-  }
+  };
 }
 
 // ---------------------------------------------------------------------------
 // Env setup
 // ---------------------------------------------------------------------------
 
-const ENV_URL = 'https://kivvi.example.com'
-const ENV_TOKEN = 'kv_test_token_12345'
+const ENV_URL = 'https://kivvi.example.com';
+const ENV_TOKEN = 'kv_test_token_12345';
 
 beforeEach(() => {
-  jest.clearAllMocks()
-  process.env.KIVVI_API_URL = ENV_URL
-  process.env.KIVVI_API_TOKEN = ENV_TOKEN
-  delete process.env.KIVVI_DEFAULT_WAREHOUSE_ID
-})
+  jest.clearAllMocks();
+  process.env.KIVVI_API_URL = ENV_URL;
+  process.env.KIVVI_API_TOKEN = ENV_TOKEN;
+  delete process.env.KIVVI_DEFAULT_WAREHOUSE_ID;
+});
 
 afterEach(() => {
-  delete process.env.KIVVI_API_URL
-  delete process.env.KIVVI_API_TOKEN
-  delete process.env.KIVVI_DEFAULT_WAREHOUSE_ID
-})
+  delete process.env.KIVVI_API_URL;
+  delete process.env.KIVVI_API_TOKEN;
+  delete process.env.KIVVI_DEFAULT_WAREHOUSE_ID;
+});
 
 // ---------------------------------------------------------------------------
 // Imports (after mock and env setup — must come after global.fetch assignment)
@@ -105,7 +109,7 @@ import {
   recordKivviAgencySale,
   recordKivviPayout,
   mapConditionToKivvi,
-} from '../client'
+} from '../client';
 
 // ============================================================================
 // kivviFetch — configuration
@@ -113,21 +117,21 @@ import {
 
 describe('kivviFetch — configuration errors', () => {
   it('throws when KIVVI_API_URL is not set', async () => {
-    delete process.env.KIVVI_API_URL
+    delete process.env.KIVVI_API_URL;
 
-    await expect(
-      createKivviInventoryItem({ description: 'Laptop' }),
-    ).rejects.toThrow('Kivvi integration not configured')
-  })
+    await expect(createKivviInventoryItem({ description: 'Laptop' })).rejects.toThrow(
+      'Kivvi integration not configured',
+    );
+  });
 
   it('throws when KIVVI_API_TOKEN is not set', async () => {
-    delete process.env.KIVVI_API_TOKEN
+    delete process.env.KIVVI_API_TOKEN;
 
-    await expect(
-      createKivviInventoryItem({ description: 'Laptop' }),
-    ).rejects.toThrow('Kivvi integration not configured')
-  })
-})
+    await expect(createKivviInventoryItem({ description: 'Laptop' })).rejects.toThrow(
+      'Kivvi integration not configured',
+    );
+  });
+});
 
 // ============================================================================
 // kivviFetch — HTTP behavior
@@ -135,45 +139,45 @@ describe('kivviFetch — configuration errors', () => {
 
 describe('kivviFetch — HTTP behavior', () => {
   it('includes Authorization Bearer header in every request', async () => {
-    mockFetchResponse(makeKivviItem())
+    mockFetchResponse(makeKivviItem());
 
-    await createKivviInventoryItem({ description: 'Laptop' })
+    await createKivviInventoryItem({ description: 'Laptop' });
 
-    const [, options] = mockFetch.mock.calls[0]
-    expect(options.headers.Authorization).toBe(`Bearer ${ENV_TOKEN}`)
-  })
+    const [, options] = mockFetch.mock.calls[0];
+    expect(options.headers.Authorization).toBe(`Bearer ${ENV_TOKEN}`);
+  });
 
   it('uses the configured base URL', async () => {
-    mockFetchResponse(makeKivviItem())
+    mockFetchResponse(makeKivviItem());
 
-    await createKivviInventoryItem({ description: 'Laptop' })
+    await createKivviInventoryItem({ description: 'Laptop' });
 
-    const [url] = mockFetch.mock.calls[0]
-    expect(url).toMatch(`${ENV_URL}/api/v1/`)
-  })
+    const [url] = mockFetch.mock.calls[0];
+    expect(url).toMatch(`${ENV_URL}/api/v1/`);
+  });
 
   it('throws with status + error when API returns { success: false }', async () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
       status: 200,
       json: jest.fn().mockResolvedValue({ success: false, error: 'Item not found' }),
-    })
+    });
 
     await expect(createKivviInventoryItem({ description: 'x' })).rejects.toThrow(
       'Kivvi API error (200): Item not found',
-    )
-  })
+    );
+  });
 
   it('throws with status + fallback message when HTTP is not ok', async () => {
     mockFetch.mockResolvedValueOnce({
       ok: false,
       status: 422,
       json: jest.fn().mockResolvedValue({ success: false }),
-    })
+    });
 
-    await expect(createKivviInventoryItem({ description: 'x' })).rejects.toThrow('422')
-  })
-})
+    await expect(createKivviInventoryItem({ description: 'x' })).rejects.toThrow('422');
+  });
+});
 
 // ============================================================================
 // createKivviInventoryItem
@@ -181,24 +185,24 @@ describe('kivviFetch — HTTP behavior', () => {
 
 describe('createKivviInventoryItem', () => {
   it('sends POST to /api/v1/inventory-items', async () => {
-    mockFetchResponse(makeKivviItem())
+    mockFetchResponse(makeKivviItem());
 
-    await createKivviInventoryItem({ description: 'ThinkPad T480', condition: 'good' })
+    await createKivviInventoryItem({ description: 'ThinkPad T480', condition: 'good' });
 
-    const [url, options] = mockFetch.mock.calls[0]
-    expect(url).toContain('/api/v1/inventory-items')
-    expect(options.method).toBe('POST')
-  })
+    const [url, options] = mockFetch.mock.calls[0];
+    expect(url).toContain('/api/v1/inventory-items');
+    expect(options.method).toBe('POST');
+  });
 
   it('returns the KivviInventoryItem from response data', async () => {
-    mockFetchResponse(makeKivviItem())
+    mockFetchResponse(makeKivviItem());
 
-    const result = await createKivviInventoryItem({ description: 'ThinkPad T480' })
+    const result = await createKivviInventoryItem({ description: 'ThinkPad T480' });
 
-    expect(result.id).toBe('kv-item-1')
-    expect(result.itemNumber).toBe('KV-2026-001')
-  })
-})
+    expect(result.id).toBe('kv-item-1');
+    expect(result.itemNumber).toBe('KV-2026-001');
+  });
+});
 
 // ============================================================================
 // updateKivviInventoryItem
@@ -206,15 +210,15 @@ describe('createKivviInventoryItem', () => {
 
 describe('updateKivviInventoryItem', () => {
   it('sends PATCH to /api/v1/inventory-items/:id', async () => {
-    mockFetchResponse(makeKivviItem({ status: 'ready_for_sale' }))
+    mockFetchResponse(makeKivviItem({ status: 'ready_for_sale' }));
 
-    await updateKivviInventoryItem('kv-item-1', { status: 'ready_for_sale' })
+    await updateKivviInventoryItem('kv-item-1', { status: 'ready_for_sale' });
 
-    const [url, options] = mockFetch.mock.calls[0]
-    expect(url).toContain('/inventory-items/kv-item-1')
-    expect(options.method).toBe('PATCH')
-  })
-})
+    const [url, options] = mockFetch.mock.calls[0];
+    expect(url).toContain('/inventory-items/kv-item-1');
+    expect(options.method).toBe('PATCH');
+  });
+});
 
 // ============================================================================
 // getKivviInventoryItem
@@ -222,15 +226,15 @@ describe('updateKivviInventoryItem', () => {
 
 describe('getKivviInventoryItem', () => {
   it('sends GET to /api/v1/inventory-items/:id', async () => {
-    mockFetchResponse(makeKivviItem())
+    mockFetchResponse(makeKivviItem());
 
-    await getKivviInventoryItem('kv-item-1')
+    await getKivviInventoryItem('kv-item-1');
 
-    const [url, options] = mockFetch.mock.calls[0]
-    expect(url).toContain('/inventory-items/kv-item-1')
-    expect(options.method).toBeUndefined() // GET is the default
-  })
-})
+    const [url, options] = mockFetch.mock.calls[0];
+    expect(url).toContain('/inventory-items/kv-item-1');
+    expect(options.method).toBeUndefined(); // GET is the default
+  });
+});
 
 // ============================================================================
 // createKivviInvoice
@@ -238,50 +242,78 @@ describe('getKivviInventoryItem', () => {
 
 describe('createKivviInvoice', () => {
   it('sends POST to /api/v1/documents with type: invoice injected', async () => {
-    const doc = { id: 'doc-1', number: 'RE-001', type: 'invoice', status: 'draft', total: '199.00', currency: 'CHF' }
-    mockFetchResponse(doc)
+    const doc = {
+      id: 'doc-1',
+      number: 'RE-001',
+      type: 'invoice',
+      status: 'draft',
+      total: '199.00',
+      currency: 'CHF',
+    };
+    mockFetchResponse(doc);
 
     await createKivviInvoice({
       contactName: 'Alice Müller',
       items: [{ description: 'ThinkPad', quantity: '1', unitPrice: '199.00' }],
-    })
+    });
 
-    const [url, options] = mockFetch.mock.calls[0]
-    expect(url).toContain('/api/v1/documents')
-    expect(options.method).toBe('POST')
-    const body = JSON.parse(options.body)
-    expect(body.type).toBe('invoice')
-    expect(body.contactName).toBe('Alice Müller')
-  })
+    const [url, options] = mockFetch.mock.calls[0];
+    expect(url).toContain('/api/v1/documents');
+    expect(options.method).toBe('POST');
+    const body = JSON.parse(options.body);
+    expect(body.type).toBe('invoice');
+    expect(body.contactName).toBe('Alice Müller');
+  });
 
   it('renames kivviInventoryItemId → inventoryItemId on line items (Kivvi schema)', async () => {
     // Regression: Kivvi's documentItemSchema field is `inventoryItemId`; sending
     // `kivviInventoryItemId` was silently stripped, so the invoice line never
     // linked to the inventory item.
-    mockFetchResponse({ id: 'doc-1', number: 'RE-001', type: 'invoice', status: 'draft', total: '10', currency: 'CHF' })
+    mockFetchResponse({
+      id: 'doc-1',
+      number: 'RE-001',
+      type: 'invoice',
+      status: 'draft',
+      total: '10',
+      currency: 'CHF',
+    });
 
     await createKivviInvoice({
       contactName: 'Alice',
-      items: [{ description: 'ThinkPad', quantity: '1', unitPrice: '199.00', kivviInventoryItemId: 'kiv-item-42' }],
-    })
+      items: [
+        {
+          description: 'ThinkPad',
+          quantity: '1',
+          unitPrice: '199.00',
+          kivviInventoryItemId: 'kiv-item-42',
+        },
+      ],
+    });
 
-    const body = JSON.parse(mockFetch.mock.calls[0][1].body)
-    expect(body.items[0].inventoryItemId).toBe('kiv-item-42')
-    expect(body.items[0].kivviInventoryItemId).toBeUndefined()
-  })
+    const body = JSON.parse(mockFetch.mock.calls[0][1].body);
+    expect(body.items[0].inventoryItemId).toBe('kiv-item-42');
+    expect(body.items[0].kivviInventoryItemId).toBeUndefined();
+  });
 
   it('omits inventoryItemId when no link is provided', async () => {
-    mockFetchResponse({ id: 'doc-1', number: 'RE-001', type: 'invoice', status: 'draft', total: '10', currency: 'CHF' })
+    mockFetchResponse({
+      id: 'doc-1',
+      number: 'RE-001',
+      type: 'invoice',
+      status: 'draft',
+      total: '10',
+      currency: 'CHF',
+    });
 
     await createKivviInvoice({
       contactName: 'Alice',
       items: [{ description: 'Cable', quantity: '1', unitPrice: '5.00' }],
-    })
+    });
 
-    const body = JSON.parse(mockFetch.mock.calls[0][1].body)
-    expect('inventoryItemId' in body.items[0]).toBe(false)
-  })
-})
+    const body = JSON.parse(mockFetch.mock.calls[0][1].body);
+    expect('inventoryItemId' in body.items[0]).toBe(false);
+  });
+});
 
 // ============================================================================
 // mapConditionToKivvi
@@ -291,33 +323,33 @@ describe('mapConditionToKivvi', () => {
   // Regression: RevampIT 'new'/'defect' are not in Kivvi's ITEM_CONDITION enum;
   // an unmapped value made Kivvi reject the item with HTTP 400 (never synced).
   it('maps brand-new and defective to valid Kivvi conditions', () => {
-    expect(mapConditionToKivvi('new')).toBe('like_new')
-    expect(mapConditionToKivvi('defect')).toBe('parts_only')
-  })
+    expect(mapConditionToKivvi('new')).toBe('like_new');
+    expect(mapConditionToKivvi('defect')).toBe('parts_only');
+  });
 
   it('passes through conditions shared by both vocabularies', () => {
-    expect(mapConditionToKivvi('good')).toBe('good')
-    expect(mapConditionToKivvi('fair')).toBe('fair')
-    expect(mapConditionToKivvi('poor')).toBe('poor')
-    expect(mapConditionToKivvi('like_new')).toBe('like_new')
-  })
+    expect(mapConditionToKivvi('good')).toBe('good');
+    expect(mapConditionToKivvi('fair')).toBe('fair');
+    expect(mapConditionToKivvi('poor')).toBe('poor');
+    expect(mapConditionToKivvi('like_new')).toBe('like_new');
+  });
 
   it('resolves RevampIT aliases', () => {
-    expect(mapConditionToKivvi('excellent')).toBe('like_new')
-    expect(mapConditionToKivvi('damaged')).toBe('parts_only')
-  })
+    expect(mapConditionToKivvi('excellent')).toBe('like_new');
+    expect(mapConditionToKivvi('damaged')).toBe('parts_only');
+  });
 
   it('is case-insensitive and trims', () => {
-    expect(mapConditionToKivvi('  NEW ')).toBe('like_new')
-  })
+    expect(mapConditionToKivvi('  NEW ')).toBe('like_new');
+  });
 
   it('falls back to untested for unknown / empty', () => {
-    expect(mapConditionToKivvi('mystery')).toBe('untested')
-    expect(mapConditionToKivvi('')).toBe('untested')
-    expect(mapConditionToKivvi(undefined)).toBe('untested')
-    expect(mapConditionToKivvi(null)).toBe('untested')
-  })
-})
+    expect(mapConditionToKivvi('mystery')).toBe('untested');
+    expect(mapConditionToKivvi('')).toBe('untested');
+    expect(mapConditionToKivvi(undefined)).toBe('untested');
+    expect(mapConditionToKivvi(null)).toBe('untested');
+  });
+});
 
 // ============================================================================
 // syncToKivvi
@@ -325,78 +357,78 @@ describe('mapConditionToKivvi', () => {
 
 describe('syncToKivvi', () => {
   it('returns { success: false } when KIVVI_API_URL is not configured', async () => {
-    delete process.env.KIVVI_API_URL
+    delete process.env.KIVVI_API_URL;
 
-    const result = await syncToKivvi({ description: 'Laptop' })
+    const result = await syncToKivvi({ description: 'Laptop' });
 
-    expect(result.success).toBe(false)
-    expect((result as { error: string }).error).toBe('Kivvi not configured')
-    expect(mockFetch).not.toHaveBeenCalled()
-  })
+    expect(result.success).toBe(false);
+    expect((result as { error: string }).error).toBe('Kivvi not configured');
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
 
   it('returns { success: false } when KIVVI_API_TOKEN is not configured', async () => {
-    delete process.env.KIVVI_API_TOKEN
+    delete process.env.KIVVI_API_TOKEN;
 
-    const result = await syncToKivvi({ description: 'Laptop' })
+    const result = await syncToKivvi({ description: 'Laptop' });
 
-    expect(result.success).toBe(false)
-    expect(mockFetch).not.toHaveBeenCalled()
-  })
+    expect(result.success).toBe(false);
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
 
   it('injects KIVVI_DEFAULT_WAREHOUSE_ID when set and input has no warehouseId', async () => {
-    process.env.KIVVI_DEFAULT_WAREHOUSE_ID = 'wh-default'
-    mockFetchResponse(makeKivviItem({ warehouseId: 'wh-default' }))
+    process.env.KIVVI_DEFAULT_WAREHOUSE_ID = 'wh-default';
+    mockFetchResponse(makeKivviItem({ warehouseId: 'wh-default' }));
 
-    await syncToKivvi({ description: 'Laptop' })
+    await syncToKivvi({ description: 'Laptop' });
 
-    const body = JSON.parse(mockFetch.mock.calls[0][1].body)
-    expect(body.warehouseId).toBe('wh-default')
-  })
+    const body = JSON.parse(mockFetch.mock.calls[0][1].body);
+    expect(body.warehouseId).toBe('wh-default');
+  });
 
   it('does NOT inject default warehouseId when input already provides one', async () => {
-    process.env.KIVVI_DEFAULT_WAREHOUSE_ID = 'wh-default'
-    mockFetchResponse(makeKivviItem({ warehouseId: 'wh-custom' }))
+    process.env.KIVVI_DEFAULT_WAREHOUSE_ID = 'wh-default';
+    mockFetchResponse(makeKivviItem({ warehouseId: 'wh-custom' }));
 
-    await syncToKivvi({ description: 'Laptop', warehouseId: 'wh-custom' })
+    await syncToKivvi({ description: 'Laptop', warehouseId: 'wh-custom' });
 
-    const body = JSON.parse(mockFetch.mock.calls[0][1].body)
-    expect(body.warehouseId).toBe('wh-custom')
-  })
+    const body = JSON.parse(mockFetch.mock.calls[0][1].body);
+    expect(body.warehouseId).toBe('wh-custom');
+  });
 
   it('returns { success: true, kivviInventoryItemId, itemNumber } on success', async () => {
-    mockFetchResponse(makeKivviItem())
+    mockFetchResponse(makeKivviItem());
 
-    const result = await syncToKivvi({ description: 'ThinkPad T480' })
+    const result = await syncToKivvi({ description: 'ThinkPad T480' });
 
-    expect(result.success).toBe(true)
+    expect(result.success).toBe(true);
     if (result.success) {
-      expect(result.kivviInventoryItemId).toBe('kv-item-1')
-      expect(result.itemNumber).toBe('KV-2026-001')
+      expect(result.kivviInventoryItemId).toBe('kv-item-1');
+      expect(result.itemNumber).toBe('KV-2026-001');
     }
-  })
+  });
 
   it('catches API error and returns { success: false, error } without throwing', async () => {
     mockFetch.mockResolvedValueOnce({
       ok: false,
       status: 500,
       json: jest.fn().mockResolvedValue({ success: false, error: 'Internal server error' }),
-    })
+    });
 
-    const result = await syncToKivvi({ description: 'Laptop' })
+    const result = await syncToKivvi({ description: 'Laptop' });
 
-    expect(result.success).toBe(false)
-    expect((result as { error: string }).error).toContain('500')
-  })
+    expect(result.success).toBe(false);
+    expect((result as { error: string }).error).toContain('500');
+  });
 
   it('catches network error and returns { success: false, error } without throwing', async () => {
-    mockFetch.mockRejectedValueOnce(new Error('network timeout'))
+    mockFetch.mockRejectedValueOnce(new Error('network timeout'));
 
-    const result = await syncToKivvi({ description: 'Laptop' })
+    const result = await syncToKivvi({ description: 'Laptop' });
 
-    expect(result.success).toBe(false)
-    expect((result as { error: string }).error).toBe('network timeout')
-  })
-})
+    expect(result.success).toBe(false);
+    expect((result as { error: string }).error).toBe('network timeout');
+  });
+});
 
 describe('recordKivviAgencySale', () => {
   it('POSTs to /marketplace/agency-sales with Idempotency-Key header', async () => {
@@ -411,7 +443,7 @@ describe('recordKivviAgencySale', () => {
           sourceType: 'marketplace_agency_sale',
         },
       }),
-    })
+    });
 
     await recordKivviAgencySale(
       {
@@ -424,17 +456,17 @@ describe('recordKivviAgencySale', () => {
         sourceId: 'abc',
       },
       'marketplace-order:abc:paid',
-    )
+    );
 
-    const [url, options] = mockFetch.mock.calls[0]
-    expect(url).toContain('/api/v1/marketplace/agency-sales')
-    expect(options.method).toBe('POST')
-    expect(options.headers['Idempotency-Key']).toBe('marketplace-order:abc:paid')
-    const body = JSON.parse(options.body)
-    expect(body.grossAmount).toBe('250.00')
-    expect(body.sellerPayout).toBe('250.00')
-  })
-})
+    const [url, options] = mockFetch.mock.calls[0];
+    expect(url).toContain('/api/v1/marketplace/agency-sales');
+    expect(options.method).toBe('POST');
+    expect(options.headers['Idempotency-Key']).toBe('marketplace-order:abc:paid');
+    const body = JSON.parse(options.body);
+    expect(body.grossAmount).toBe('250.00');
+    expect(body.sellerPayout).toBe('250.00');
+  });
+});
 
 describe('recordKivviPayout', () => {
   it('POSTs to /marketplace/payouts with Idempotency-Key header', async () => {
@@ -449,7 +481,7 @@ describe('recordKivviPayout', () => {
           sourceType: 'marketplace_payout',
         },
       }),
-    })
+    });
 
     await recordKivviPayout(
       {
@@ -459,14 +491,14 @@ describe('recordKivviPayout', () => {
         description: 'P2P seller payout',
       },
       'marketplace-order:abc:payout',
-    )
+    );
 
-    const [url, options] = mockFetch.mock.calls[0]
-    expect(url).toContain('/api/v1/marketplace/payouts')
-    expect(options.method).toBe('POST')
-    expect(options.headers['Idempotency-Key']).toBe('marketplace-order:abc:payout')
-    const body = JSON.parse(options.body)
-    expect(body.amount).toBe('230.00')
-    expect(body.reference).toBe('MO-abc')
-  })
-})
+    const [url, options] = mockFetch.mock.calls[0];
+    expect(url).toContain('/api/v1/marketplace/payouts');
+    expect(options.method).toBe('POST');
+    expect(options.headers['Idempotency-Key']).toBe('marketplace-order:abc:payout');
+    const body = JSON.parse(options.body);
+    expect(body.amount).toBe('230.00');
+    expect(body.reference).toBe('MO-abc');
+  });
+});

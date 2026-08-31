@@ -9,25 +9,42 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { FormField } from '@/components/ui/form-field';
 import { Button } from '@/components/ui/button';
-import { adminInteractive } from '@/lib/admin-ui'
+import { adminInteractive } from '@/lib/admin-ui';
 
 export default function DecisionEditFormClient({ decisionId }: { decisionId: string }) {
   const {
-    loading, submitting, error,
-    showAdvanced, setShowAdvanced,
-    decisionType, setDecisionType,
-    title, setTitle,
-    description, setDescription,
-    background, setBackground,
-    votingMethod, setVotingMethod,
-    options, showImageUrls, setShowImageUrls,
-    blindVoting, setBlindVoting,
-    allowPublicVoting, setAllowPublicVoting,
-    dotCount, setDotCount,
-    quorumType, setQuorumType,
-    quorumValue, setQuorumValue,
+    loading,
+    submitting,
+    error,
+    showAdvanced,
+    setShowAdvanced,
+    decisionType,
+    setDecisionType,
+    title,
+    setTitle,
+    description,
+    setDescription,
+    background,
+    setBackground,
+    votingMethod,
+    setVotingMethod,
+    options,
+    showImageUrls,
+    setShowImageUrls,
+    blindVoting,
+    setBlindVoting,
+    allowPublicVoting,
+    setAllowPublicVoting,
+    dotCount,
+    setDotCount,
+    quorumType,
+    setQuorumType,
+    quorumValue,
+    setQuorumValue,
     needsOptions,
-    addOption, removeOption, updateOption,
+    addOption,
+    removeOption,
+    updateOption,
     handleSubmit,
   } = useDecisionEditForm(decisionId);
 
@@ -38,7 +55,9 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {error && (
-        <div className="rounded-md bg-error-50 dark:bg-error-900/20 p-3 text-sm text-error-700 dark:text-error-400">{error}</div>
+        <div className="rounded-md bg-error-50 dark:bg-error-900/20 p-3 text-sm text-error-700 dark:text-error-400">
+          {error}
+        </div>
       )}
 
       <DecisionTypeSelector selected={decisionType} onChange={setDecisionType} />
@@ -66,7 +85,12 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
 
       <FormField
         htmlFor="edit-background"
-        label={<>Begründung &amp; Hintergrund<span className="ml-1.5 font-normal text-text-muted">(optional)</span></>}
+        label={
+          <>
+            Begründung &amp; Hintergrund
+            <span className="ml-1.5 font-normal text-text-muted">(optional)</span>
+          </>
+        }
       >
         <Textarea
           id="edit-background"
@@ -121,9 +145,12 @@ export default function DecisionEditFormClient({ decisionId }: { decisionId: str
                 className="mt-0.5 rounded-sm border-action text-action focus:ring-action"
               />
               <div>
-                <span className="text-sm font-medium text-action">Mit Link teilen — kein Konto nötig</span>
+                <span className="text-sm font-medium text-action">
+                  Mit Link teilen — kein Konto nötig
+                </span>
                 <p className="text-xs text-action mt-0.5">
-                  Abstimmungslink kann per E-Mail oder Messenger geteilt werden. Jede Person mit dem Link kann abstimmen.
+                  Abstimmungslink kann per E-Mail oder Messenger geteilt werden. Jede Person mit dem
+                  Link kann abstimmen.
                 </p>
               </div>
             </label>

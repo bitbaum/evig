@@ -5,8 +5,8 @@
  * Import from here instead of hardcoding values.
  */
 
-import { FILE_SIZE_LIMITS } from '@/config/limits'
-import { PAGINATION } from '@/config/pagination'
+import { FILE_SIZE_LIMITS } from '@/config/limits';
+import { PAGINATION } from '@/config/pagination';
 
 export const API_DEFAULTS = {
   /** Default pagination limit for list endpoints */
@@ -55,4 +55,4 @@ export const API_DEFAULTS = {
   RECENT_BOOKINGS_LIMIT: 10,
 } as const;
 
-export type ApiDefault = typeof API_DEFAULTS[keyof typeof API_DEFAULTS];
+export type ApiDefault = (typeof API_DEFAULTS)[keyof typeof API_DEFAULTS];

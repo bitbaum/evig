@@ -5,45 +5,42 @@
  * Assignment uses the same AssignRepairerSelect as the list view.
  */
 
-import { Metadata } from 'next'
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
-import { ArrowLeft, Calendar, MapPin, User, Wrench } from 'lucide-react'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { ROUTES } from '@/config/routes'
-import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
-import {
-  getBookingStatusBadge,
-  getUrgencyBadge,
-} from '@/config/booking-status'
-import { formatDateTime, formatDateShort } from '@/lib/date-formats'
-import { getAppointmentById, listActiveRepairers } from '@/lib/services/appointments'
-import { AssignRepairerSelect } from '../AssignRepairerSelect'
+import { Metadata } from 'next';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { ArrowLeft, Calendar, MapPin, User, Wrench } from 'lucide-react';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import { ROUTES } from '@/config/routes';
+import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments';
+import { getBookingStatusBadge, getUrgencyBadge } from '@/config/booking-status';
+import { formatDateTime, formatDateShort } from '@/lib/date-formats';
+import { getAppointmentById, listActiveRepairers } from '@/lib/services/appointments';
+import { AssignRepairerSelect } from '../AssignRepairerSelect';
 
 interface PageProps {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { id } = await params
-  const appointment = await getAppointmentById(id)
+  const { id } = await params;
+  const appointment = await getAppointmentById(id);
   return {
     title: appointment?.service_name ? `Termin — ${appointment.service_name}` : 'Termin',
     description: 'Service-Termin prüfen und Techniker zuweisen.',
-  }
+  };
 }
 
 export default async function AdminAppointmentDetailPage({ params }: PageProps) {
-  const { id } = await params
+  const { id } = await params;
   const [appointment, repairers] = await Promise.all([
     getAppointmentById(id),
     listActiveRepairers(),
-  ])
+  ]);
 
-  if (!appointment) notFound()
+  if (!appointment) notFound();
 
-  const statusBadge = getBookingStatusBadge(appointment.status ?? '')
-  const urgencyBadge = getUrgencyBadge(appointment.urgency ?? '')
+  const statusBadge = getBookingStatusBadge(appointment.status ?? '');
+  const urgencyBadge = getUrgencyBadge(appointment.urgency ?? '');
 
   return (
     <AdminPageWrapper
@@ -64,10 +61,14 @@ export default async function AdminAppointmentDetailPage({ params }: PageProps) 
         <section className="rounded-lg border bg-surface-base p-6 space-y-4">
           <h2 className="text-sm font-medium uppercase tracking-wide text-text-tertiary">Status</h2>
           <div className="flex flex-wrap gap-2">
-            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${statusBadge.color}`}>
+            <span
+              className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${statusBadge.color}`}
+            >
               {statusBadge.label}
             </span>
-            <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${urgencyBadge.color}`}>
+            <span
+              className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${urgencyBadge.color}`}
+            >
               {urgencyBadge.label}
             </span>
           </div>
@@ -123,7 +124,9 @@ export default async function AdminAppointmentDetailPage({ params }: PageProps) 
         </section>
 
         <section className="rounded-lg border bg-surface-base p-6 space-y-3">
-          <h2 className="text-sm font-medium uppercase tracking-wide text-text-tertiary">Termine</h2>
+          <h2 className="text-sm font-medium uppercase tracking-wide text-text-tertiary">
+            Termine
+          </h2>
           <dl className="space-y-2 text-sm">
             <div className="flex justify-between gap-4">
               <dt className="text-text-tertiary">Bevorzugt</dt>
@@ -153,28 +156,37 @@ export default async function AdminAppointmentDetailPage({ params }: PageProps) 
               Ort
             </h2>
             <p className="text-text-secondary">
-              {[appointment.visit_address, appointment.visit_city].filter(Boolean).join(', ') || 'Hausbesuch'}
+              {[appointment.visit_address, appointment.visit_city].filter(Boolean).join(', ') ||
+                'Hausbesuch'}
             </p>
           </section>
         )}
 
-        {(appointment.quoted_price_chf != null || appointment.diagnosis_notes || appointment.completion_notes) && (
+        {(appointment.quoted_price_chf != null ||
+          appointment.diagnosis_notes ||
+          appointment.completion_notes) && (
           <section className="rounded-lg border bg-surface-base p-6 space-y-3 lg:col-span-2">
-            <h2 className="text-sm font-medium uppercase tracking-wide text-text-tertiary">Angebot & Abschluss</h2>
+            <h2 className="text-sm font-medium uppercase tracking-wide text-text-tertiary">
+              Angebot & Abschluss
+            </h2>
             {appointment.quoted_price_chf != null && (
               <p className="text-text-secondary">
                 Angebot: <span className="font-medium">CHF {appointment.quoted_price_chf}</span>
               </p>
             )}
             {appointment.diagnosis_notes && (
-              <p className="text-sm text-text-secondary whitespace-pre-wrap">{appointment.diagnosis_notes}</p>
+              <p className="text-sm text-text-secondary whitespace-pre-wrap">
+                {appointment.diagnosis_notes}
+              </p>
             )}
             {appointment.completion_notes && (
-              <p className="text-sm text-text-tertiary whitespace-pre-wrap">{appointment.completion_notes}</p>
+              <p className="text-sm text-text-tertiary whitespace-pre-wrap">
+                {appointment.completion_notes}
+              </p>
             )}
           </section>
         )}
       </div>
     </AdminPageWrapper>
-  )
+  );
 }

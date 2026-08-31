@@ -55,12 +55,18 @@ export function useDecisionEditForm(decisionId: string) {
         setDescription(d.description);
         setBackground(d.background ?? '');
         setVotingMethod(d.votingMethod);
-        const loadedOptions: OptionItem[] = d.options.length > 0
-          ? d.options.map((o) => ({ id: o.id, label: o.label, description: o.description || '', imageUrl: o.imageUrl || '' }))
-          : [
-              { id: crypto.randomUUID(), label: '', description: '', imageUrl: '' },
-              { id: crypto.randomUUID(), label: '', description: '', imageUrl: '' },
-            ];
+        const loadedOptions: OptionItem[] =
+          d.options.length > 0
+            ? d.options.map((o) => ({
+                id: o.id,
+                label: o.label,
+                description: o.description || '',
+                imageUrl: o.imageUrl || '',
+              }))
+            : [
+                { id: crypto.randomUUID(), label: '', description: '', imageUrl: '' },
+                { id: crypto.randomUUID(), label: '', description: '', imageUrl: '' },
+              ];
         setOptions(loadedOptions);
         if (loadedOptions.some((o) => o.imageUrl)) setShowImageUrls(true);
         setBlindVoting(d.blindVoting);
@@ -74,7 +80,10 @@ export function useDecisionEditForm(decisionId: string) {
   }, [decisionId]);
 
   function addOption() {
-    setOptions((prev) => [...prev, { id: crypto.randomUUID(), label: '', description: '', imageUrl: '' }]);
+    setOptions((prev) => [
+      ...prev,
+      { id: crypto.randomUUID(), label: '', description: '', imageUrl: '' },
+    ]);
   }
   function removeOption(id: string) {
     if (options.length <= 2) return;
@@ -94,14 +103,19 @@ export function useDecisionEditForm(decisionId: string) {
     const result = await apiFetch<unknown>(`/api/decisions/${decisionId}`, {
       method: 'PATCH',
       body: {
-        title, description,
+        title,
+        description,
         background: background.trim() || null,
-        decisionType, votingMethod,
+        decisionType,
+        votingMethod,
         options: needsOptions
-          ? options.filter((o) => o.label.trim()).map((o) => ({ ...o, imageUrl: o.imageUrl.trim() || undefined }))
+          ? options
+              .filter((o) => o.label.trim())
+              .map((o) => ({ ...o, imageUrl: o.imageUrl.trim() || undefined }))
           : [],
         quorum: { type: quorumType, value: quorumValue },
-        blindVoting, allowPublicVoting,
+        blindVoting,
+        allowPublicVoting,
         dotCount: votingMethod === 'dot' ? dotCount : null,
       },
     });
@@ -116,21 +130,38 @@ export function useDecisionEditForm(decisionId: string) {
   }
 
   return {
-    loading, submitting, error,
-    showAdvanced, setShowAdvanced,
-    decisionType, setDecisionType,
-    title, setTitle,
-    description, setDescription,
-    background, setBackground,
-    votingMethod, setVotingMethod,
-    options, showImageUrls, setShowImageUrls,
-    blindVoting, setBlindVoting,
-    allowPublicVoting, setAllowPublicVoting,
-    dotCount, setDotCount,
-    quorumType, setQuorumType,
-    quorumValue, setQuorumValue,
+    loading,
+    submitting,
+    error,
+    showAdvanced,
+    setShowAdvanced,
+    decisionType,
+    setDecisionType,
+    title,
+    setTitle,
+    description,
+    setDescription,
+    background,
+    setBackground,
+    votingMethod,
+    setVotingMethod,
+    options,
+    showImageUrls,
+    setShowImageUrls,
+    blindVoting,
+    setBlindVoting,
+    allowPublicVoting,
+    setAllowPublicVoting,
+    dotCount,
+    setDotCount,
+    quorumType,
+    setQuorumType,
+    quorumValue,
+    setQuorumValue,
     needsOptions,
-    addOption, removeOption, updateOption,
+    addOption,
+    removeOption,
+    updateOption,
     handleSubmit,
   };
 }

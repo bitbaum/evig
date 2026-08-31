@@ -6,7 +6,7 @@
  * /api/seller/dashboard route — /dashboard/listings is the seller view.
  */
 
-import { sellerProfiles, userProfiles } from '@/db/schema'
+import { sellerProfiles, userProfiles } from '@/db/schema';
 
 /**
  * Core seller profile fields returned by both GET /sellers/me and

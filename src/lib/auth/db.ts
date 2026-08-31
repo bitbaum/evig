@@ -9,10 +9,17 @@
  */
 
 // Connection layer
-export { getPool, query, paginatedQuery, getClient, getUserColumns, transaction } from './db-connection'
+export {
+  getPool,
+  query,
+  paginatedQuery,
+  getClient,
+  getUserColumns,
+  transaction,
+} from './db-connection';
 
 // User & profile queries
-export type { DbUser, DbUserProfile, DbDonation } from './db-users'
+export type { DbUser, DbUserProfile, DbDonation } from './db-users';
 export {
   getUserByEmail,
   getUserById,
@@ -20,26 +27,23 @@ export {
   updateUser,
   getOrCreateProfile,
   updateProfile,
-} from './db-users'
+} from './db-users';
 
 // Workshop queries
-export type { DbWorkshop, DbWorkshopRegistration } from './db-workshops'
+export type { DbWorkshop, DbWorkshopRegistration } from './db-workshops';
 export {
   getWorkshopBySlug,
   getWorkshopsForUser,
   getUserWorkshopRegistrations,
   isUserRegisteredForWorkshop,
-} from './db-workshops'
+} from './db-workshops';
 
 // Service queries
-export type { DbServiceAppointment } from './db-services'
-export {
-  getUserServiceAppointments,
-  hasPendingAppointmentForService,
-} from './db-services'
+export type { DbServiceAppointment } from './db-services';
+export { getUserServiceAppointments, hasPendingAppointmentForService } from './db-services';
 
 // Verification & password reset
-export type { DbVerificationToken, DbPasswordResetToken } from './db-verification'
+export type { DbVerificationToken, DbPasswordResetToken } from './db-verification';
 export {
   createVerificationToken,
   verifyEmailWithToken,
@@ -50,7 +54,7 @@ export {
   verifyPasswordResetToken,
   updateUserPassword,
   getPasswordResetToken,
-} from './db-verification'
+} from './db-verification';
 
 // Roles, permissions, preferences, segments
 export type {
@@ -60,7 +64,7 @@ export type {
   DbCustomerPreference,
   DbCustomerSegment,
   DbUserSegment,
-} from './db-roles'
+} from './db-roles';
 export {
   getUserRoleById,
   getUserRoleBySlug,
@@ -73,4 +77,4 @@ export {
   addUserToSegment,
   updateUserLastActivity,
   getUserWithProfile,
-} from './db-roles'
+} from './db-roles';

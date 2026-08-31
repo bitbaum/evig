@@ -1,25 +1,25 @@
-"use client"
+'use client';
 
 /**
  * Individual product suggestion card
  */
 
-import { CheckCircle } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import Heading from '@/components/ui/Heading'
-import { CATEGORY_ICONS, DEFAULT_CATEGORY_ICON, getConditionLabel } from './config'
-import { resolveCategoryValue } from '@/config/marketplace'
-import type { ProductSuggestion } from './types'
+import { CheckCircle } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import Heading from '@/components/ui/Heading';
+import { CATEGORY_ICONS, DEFAULT_CATEGORY_ICON, getConditionLabel } from './config';
+import { resolveCategoryValue } from '@/config/marketplace';
+import type { ProductSuggestion } from './types';
 
 interface ProductSuggestionCardProps {
-  suggestion: ProductSuggestion
-  onSelect: (suggestion: ProductSuggestion) => void
+  suggestion: ProductSuggestion;
+  onSelect: (suggestion: ProductSuggestion) => void;
 }
 
 // Look up (don't create) the icon component to keep a stable reference.
 function CategoryIcon({ category, className }: { category: string; className: string }) {
-  const IconComponent = CATEGORY_ICONS[resolveCategoryValue(category)] || DEFAULT_CATEGORY_ICON
-  return <IconComponent className={className} />
+  const IconComponent = CATEGORY_ICONS[resolveCategoryValue(category)] || DEFAULT_CATEGORY_ICON;
+  return <IconComponent className={className} />;
 }
 
 export function ProductSuggestionCard({ suggestion, onSelect }: ProductSuggestionCardProps) {
@@ -32,41 +32,51 @@ export function ProductSuggestionCard({ suggestion, onSelect }: ProductSuggestio
         <CategoryIcon category={suggestion.category} className="w-8 h-8 text-action mt-1" />
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
-            <Heading level={4} className="font-medium text-text-primary">{suggestion.name}</Heading>
+            <Heading level={4} className="font-medium text-text-primary">
+              {suggestion.name}
+            </Heading>
             <ConfidenceBadge confidence={suggestion.confidence} />
           </div>
           <p className="text-sm text-text-secondary mb-2">
-            {suggestion.brand} • {getConditionLabel(suggestion.condition)} • CHF {suggestion.estimatedPrice}
+            {suggestion.brand} • {getConditionLabel(suggestion.condition)} • CHF{' '}
+            {suggestion.estimatedPrice}
           </p>
           <FeatureTags features={suggestion.features} />
         </div>
         <CheckCircle className="w-5 h-5 text-action opacity-0 group-hover:opacity-100 transition-opacity" />
       </div>
     </div>
-  )
+  );
 }
 
 function ConfidenceBadge({ confidence }: { confidence: number }) {
   return (
-    <span className={cn(
-      "px-2 py-1 text-xs rounded-full",
-      confidence > 0.8 ? "bg-action-muted text-action" :
-      confidence > 0.6 ? "bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-300" :
-      "bg-error-100 dark:bg-error-900/30 text-error-800 dark:text-error-400"
-    )}>
+    <span
+      className={cn(
+        'px-2 py-1 text-xs rounded-full',
+        confidence > 0.8
+          ? 'bg-action-muted text-action'
+          : confidence > 0.6
+            ? 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-300'
+            : 'bg-error-100 dark:bg-error-900/30 text-error-800 dark:text-error-400',
+      )}
+    >
       {Math.round(confidence * 100)}%
     </span>
-  )
+  );
 }
 
 function FeatureTags({ features }: { features: string[] }) {
   return (
     <div className="flex flex-wrap gap-1">
       {features.slice(0, 3).map((feature, index) => (
-        <span key={index} className="text-xs bg-surface-raised text-text-secondary px-2 py-1 rounded-sm">
+        <span
+          key={index}
+          className="text-xs bg-surface-raised text-text-secondary px-2 py-1 rounded-sm"
+        >
           {feature}
         </span>
       ))}
     </div>
-  )
+  );
 }

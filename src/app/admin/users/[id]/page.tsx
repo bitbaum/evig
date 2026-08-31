@@ -4,18 +4,18 @@
  * Shows detailed user information with link to team profile if exists.
  */
 
-import { Metadata } from 'next'
-import { redirect, notFound } from 'next/navigation'
-import Link from 'next/link'
-import { auth } from '@/auth'
-import { canAccessSection, isSuperAdmin, isStaffEmail } from '@/lib/permissions'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
-import { logger } from '@/lib/logger'
-import { formatDateShort } from '@/lib/date-formats'
-import { buttonClass } from '@/components/ui/button-class'
-import { Avatar } from '@/components/ui/Avatar'
-import { Card } from '@/components/ui/card'
+import { Metadata } from 'next';
+import { redirect, notFound } from 'next/navigation';
+import Link from 'next/link';
+import { auth } from '@/auth';
+import { canAccessSection, isSuperAdmin, isStaffEmail } from '@/lib/permissions';
+import { query } from '@/lib/auth/db';
+import { TABLE_NAMES } from '@/config/database';
+import { logger } from '@/lib/logger';
+import { formatDateShort } from '@/lib/date-formats';
+import { buttonClass } from '@/components/ui/button-class';
+import { Avatar } from '@/components/ui/Avatar';
+import { Card } from '@/components/ui/card';
 import {
   ArrowLeft,
   Mail,
@@ -27,38 +27,36 @@ import {
   UserCheck,
   User,
   ExternalLink,
-} from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import { ROUTES } from '@/config/routes'
+} from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import { ROUTES } from '@/config/routes';
 
 interface PageProps {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { id } = await params
-  const user = await getUser(id)
+  const { id } = await params;
+  const user = await getUser(id);
 
   return {
-    title: user
-      ? `${user.name || user.email} | Benutzer`
-      : 'Benutzer',
+    title: user ? `${user.name || user.email} | Benutzer` : 'Benutzer',
     description: 'Benutzerdetails',
-  }
+  };
 }
 
 interface UserData {
-  id: string
-  name: string | null
-  email: string
-  is_staff: boolean
-  is_super_admin: boolean
-  staff_permissions: string[] | null
-  created_at: string
-  email_verified: string | null
-  phone: string | null
-  address: string | null
-  team_profile_id: string | null
+  id: string;
+  name: string | null;
+  email: string;
+  is_staff: boolean;
+  is_super_admin: boolean;
+  staff_permissions: string[] | null;
+  created_at: string;
+  email_verified: string | null;
+  phone: string | null;
+  address: string | null;
+  team_profile_id: string | null;
 }
 
 async function getUser(id: string): Promise<UserData | null> {
@@ -80,44 +78,47 @@ async function getUser(id: string): Promise<UserData | null> {
        LEFT JOIN ${TABLE_NAMES.USER_PROFILES} up ON u.id = up.user_id
        LEFT JOIN ${TABLE_NAMES.TEAM_PROFILES} tp ON u.id = tp.user_id
        WHERE u.id = $1`,
-      [id]
-    )
+      [id],
+    );
 
-    return result.rows[0] || null
+    return result.rows[0] || null;
   } catch (error) {
-    logger.error('Failed to fetch user details', { error, userId: id })
-    return null
+    logger.error('Failed to fetch user details', { error, userId: id });
+    return null;
   }
 }
 
 export default async function UserDetailPage({ params }: PageProps) {
-  const session = await auth()
-  const { id } = await params
+  const session = await auth();
+  const { id } = await params;
 
   if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/users')
+    redirect('/auth/login?callbackUrl=/admin/users');
   }
 
-  const hasAccess = canAccessSection({
-    email: session.user.email,
-    is_staff: session.user.isStaff,
-    staff_permissions: session.user.staffPermissions,
-  }, 'users')
+  const hasAccess = canAccessSection(
+    {
+      email: session.user.email,
+      is_staff: session.user.isStaff,
+      staff_permissions: session.user.staffPermissions,
+    },
+    'users',
+  );
 
   if (!hasAccess) {
-    redirect('/admin?error=no_users_access')
+    redirect('/admin?error=no_users_access');
   }
 
-  const user = await getUser(id)
+  const user = await getUser(id);
 
   if (!user) {
-    notFound()
+    notFound();
   }
 
-  const userIsSuperAdmin = isSuperAdmin(user.email, user.is_super_admin)
-  const userIsStaff = user.is_staff || isStaffEmail(user.email)
-  const permissions = user.staff_permissions || []
-  const hasFullAccess = permissions.includes('*')
+  const userIsSuperAdmin = isSuperAdmin(user.email, user.is_super_admin);
+  const userIsStaff = user.is_staff || isStaffEmail(user.email);
+  const permissions = user.staff_permissions || [];
+  const hasFullAccess = permissions.includes('*');
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -139,7 +140,11 @@ export default async function UserDetailPage({ params }: PageProps) {
           <Avatar
             name={user.name || user.email}
             size="xl"
-            colorClassName={userIsSuperAdmin || userIsStaff ? 'bg-action text-action-text' : 'bg-surface-overlay text-text-primary'}
+            colorClassName={
+              userIsSuperAdmin || userIsStaff
+                ? 'bg-action text-action-text'
+                : 'bg-surface-overlay text-text-primary'
+            }
           />
 
           {/* Info */}
@@ -200,27 +205,32 @@ export default async function UserDetailPage({ params }: PageProps) {
       {/* Team Profile Link */}
       {userIsStaff && (
         <Card className="p-6">
-          <Heading level={2} className="font-semibold text-text-primary mb-4 flex items-center gap-2">
+          <Heading
+            level={2}
+            className="font-semibold text-text-primary mb-4 flex items-center gap-2"
+          >
             <User className="w-5 h-5" />
             Team-Profil
           </Heading>
 
           {user.team_profile_id ? (
             <div className="flex items-center justify-between">
-              <p className="text-text-secondary">
-                Dieses Mitglied hat ein Team-Profil.
-              </p>
-              <Link href={`/admin/team/${user.team_profile_id}`} className={buttonClass({ variant: 'primary', size: 'sm' })}>
+              <p className="text-text-secondary">Dieses Mitglied hat ein Team-Profil.</p>
+              <Link
+                href={`/admin/team/${user.team_profile_id}`}
+                className={buttonClass({ variant: 'primary', size: 'sm' })}
+              >
                 <ExternalLink className="w-4 h-4" />
                 Profil ansehen
               </Link>
             </div>
           ) : (
             <div className="flex items-center justify-between">
-              <p className="text-text-secondary">
-                Noch kein Team-Profil vorhanden.
-              </p>
-              <Link href={`/admin/team/new?user_id=${user.id}`} className={buttonClass({ variant: 'primary', size: 'sm' })}>
+              <p className="text-text-secondary">Noch kein Team-Profil vorhanden.</p>
+              <Link
+                href={`/admin/team/new?user_id=${user.id}`}
+                className={buttonClass({ variant: 'primary', size: 'sm' })}
+              >
                 <User className="w-4 h-4" />
                 Profil erstellen
               </Link>
@@ -232,7 +242,10 @@ export default async function UserDetailPage({ params }: PageProps) {
       {/* Permissions */}
       {userIsStaff && (
         <Card className="p-6">
-          <Heading level={2} className="font-semibold text-text-primary mb-4 flex items-center gap-2">
+          <Heading
+            level={2}
+            className="font-semibold text-text-primary mb-4 flex items-center gap-2"
+          >
             <Shield className="w-5 h-5" />
             Berechtigungen
           </Heading>
@@ -242,12 +255,10 @@ export default async function UserDetailPage({ params }: PageProps) {
               Super Admin - Voller Zugriff auf alle Bereiche
             </p>
           ) : hasFullAccess ? (
-            <p className="text-action font-medium">
-              Voller Zugriff auf alle Bereiche
-            </p>
+            <p className="text-action font-medium">Voller Zugriff auf alle Bereiche</p>
           ) : permissions.length > 0 ? (
             <div className="flex flex-wrap gap-2">
-              {permissions.map(p => (
+              {permissions.map((p) => (
                 <span
                   key={p}
                   className="px-3 py-1 bg-surface-raised text-text-secondary text-sm rounded-full"
@@ -257,9 +268,7 @@ export default async function UserDetailPage({ params }: PageProps) {
               ))}
             </div>
           ) : (
-            <p className="text-text-tertiary">
-              Keine speziellen Berechtigungen zugewiesen
-            </p>
+            <p className="text-text-tertiary">Keine speziellen Berechtigungen zugewiesen</p>
           )}
         </Card>
       )}
@@ -272,5 +281,5 @@ export default async function UserDetailPage({ params }: PageProps) {
         )}
       </div>
     </div>
-  )
+  );
 }

@@ -1,32 +1,35 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Shield, Plus } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { PermissionRequestForm } from '@/components/admin/PermissionRequestForm'
-import Heading from '@/components/admin/AdminHeading'
+import { useState } from 'react';
+import { Shield, Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { PermissionRequestForm } from '@/components/admin/PermissionRequestForm';
+import Heading from '@/components/admin/AdminHeading';
 
 interface Section {
-  id: string
-  label: string
-  description: string
+  id: string;
+  label: string;
+  description: string;
 }
 
 interface RequestAccessSectionProps {
-  inaccessibleSections: Section[]
+  inaccessibleSections: Section[];
 }
 
 export function RequestAccessSection({ inaccessibleSections }: RequestAccessSectionProps) {
-  const [showForm, setShowForm] = useState(false)
+  const [showForm, setShowForm] = useState(false);
 
   if (inaccessibleSections.length === 0) {
-    return null
+    return null;
   }
 
   return (
     <div className="bg-surface-base rounded-xl shadow-xs border border-subtle">
       <div className="p-6 border-b border-subtle">
-        <Heading level={2} className="text-lg font-semibold text-text-primary flex items-center gap-2">
+        <Heading
+          level={2}
+          className="text-lg font-semibold text-text-primary flex items-center gap-2"
+        >
           <Shield className="w-5 h-5 text-text-tertiary" />
           Weitere Bereiche verfügbar
         </Heading>
@@ -44,11 +47,11 @@ export function RequestAccessSection({ inaccessibleSections }: RequestAccessSect
         ) : (
           <div>
             <p className="text-sm text-text-secondary mb-4">
-              Es gibt {inaccessibleSections.length} Bereiche, auf die du keinen Zugriff hast.
-              Du kannst bei einem Super Admin Zugriff anfordern.
+              Es gibt {inaccessibleSections.length} Bereiche, auf die du keinen Zugriff hast. Du
+              kannst bei einem Super Admin Zugriff anfordern.
             </p>
             <div className="flex flex-wrap gap-2 mb-4">
-              {inaccessibleSections.slice(0, 6).map(section => (
+              {inaccessibleSections.slice(0, 6).map((section) => (
                 <span
                   key={section.id}
                   className="px-3 py-1 bg-surface-raised text-text-secondary text-sm rounded-lg"
@@ -70,5 +73,5 @@ export function RequestAccessSection({ inaccessibleSections }: RequestAccessSect
         )}
       </div>
     </div>
-  )
+  );
 }

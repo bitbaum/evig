@@ -9,11 +9,11 @@ import type { NumberFormat } from './types';
  */
 export function formatValue(value: number | string, format: NumberFormat): string {
   const numValue = typeof value === 'string' ? parseFloat(value) : value;
-  
+
   if (isNaN(numValue)) {
     return String(value);
   }
-  
+
   switch (format) {
     case 'CHF':
       return formatCHF(numValue);
@@ -52,4 +52,4 @@ export function formatNumber(value: number): string {
 }
 
 // Re-export numeric format from SSOT
-export { formatDateNumeric as formatDate } from '@/lib/date-formats'
+export { formatDateNumeric as formatDate } from '@/lib/date-formats';

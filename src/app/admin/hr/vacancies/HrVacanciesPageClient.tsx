@@ -1,31 +1,28 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { Plus, Briefcase, Users, FileText, CheckCircle2 } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminListShell } from '@/components/admin/AdminListShell'
-import { AdminStatsStrip } from '@/components/admin/AdminStatsStrip'
-import { AdminFilterBar } from '@/components/admin/AdminFilterBar'
-import { Button } from '@/components/ui/button'
-import { ROUTES } from '@/config/routes'
+import Link from 'next/link';
+import { Plus, Briefcase, Users, FileText, CheckCircle2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import { AdminListShell } from '@/components/admin/AdminListShell';
+import { AdminStatsStrip } from '@/components/admin/AdminStatsStrip';
+import { AdminFilterBar } from '@/components/admin/AdminFilterBar';
+import { Button } from '@/components/ui/button';
+import { ROUTES } from '@/config/routes';
 import {
   VACANCY_STATUS_OPTIONS,
   VACANCY_STATUS_LABELS,
   type VacancyStatus,
-} from '@/config/hr-vacancies'
-import type { HrFunnelStats } from '@/lib/types/hr'
-import {
-  VacancyCard,
-  useHrVacancies,
-} from '@/components/admin/hr'
+} from '@/config/hr-vacancies';
+import type { HrFunnelStats } from '@/lib/types/hr';
+import { VacancyCard, useHrVacancies } from '@/components/admin/hr';
 
 interface Props {
-  stats: HrFunnelStats
+  stats: HrFunnelStats;
 }
 
 export default function HrVacanciesPageClient({ stats }: Props) {
-  const t = useTranslations('admin.hr.vacancies')
+  const t = useTranslations('admin.hr.vacancies');
   const {
     postings,
     loading,
@@ -41,9 +38,9 @@ export default function HrVacanciesPageClient({ stats }: Props) {
     copyPublicLink,
     shareVacancy,
     fetchPostings,
-  } = useHrVacancies()
+  } = useHrVacancies();
 
-  const hasActiveFilters = Boolean(statusFilter || searchQuery)
+  const hasActiveFilters = Boolean(statusFilter || searchQuery);
 
   return (
     <AdminPageWrapper
@@ -118,8 +115,8 @@ export default function HrVacanciesPageClient({ stats }: Props) {
               ]}
               hasActiveFilters={hasActiveFilters}
               onClearFilters={() => {
-                setStatusFilter('')
-                setSearchQuery('')
+                setStatusFilter('');
+                setSearchQuery('');
               }}
             />
           }
@@ -154,5 +151,5 @@ export default function HrVacanciesPageClient({ stats }: Props) {
         </AdminListShell>
       </div>
     </AdminPageWrapper>
-  )
+  );
 }

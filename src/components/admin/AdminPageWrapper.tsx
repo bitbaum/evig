@@ -1,17 +1,17 @@
-import { Link } from '@/i18n/navigation'
-import { ArrowLeft } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
-import { adminIconBox, adminIconColor, adminType, type AdminIconColorKey } from '@/lib/admin-ui'
-import { cn } from '@/lib/utils'
+import { Link } from '@/i18n/navigation';
+import { ArrowLeft } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+import { adminIconBox, adminIconColor, adminType, type AdminIconColorKey } from '@/lib/admin-ui';
+import { cn } from '@/lib/utils';
 
 interface AdminPageWrapperProps {
-  title: string
-  description?: string
-  icon?: LucideIcon
-  iconColor?: AdminIconColorKey
-  backButton?: { href: string; label: string }
-  actions?: React.ReactNode
-  children: React.ReactNode
+  title: string;
+  description?: string;
+  icon?: LucideIcon;
+  iconColor?: AdminIconColorKey;
+  backButton?: { href: string; label: string };
+  actions?: React.ReactNode;
+  children: React.ReactNode;
 }
 
 /**
@@ -55,21 +55,15 @@ export default function AdminPageWrapper({
             {/* Page title — primary visual anchor */}
             <h1 className={adminType.pageTitle}>{title}</h1>
 
-            {description && (
-              <p className={cn(adminType.meta, 'mt-0.5')}>{description}</p>
-            )}
+            {description && <p className={cn(adminType.meta, 'mt-0.5')}>{description}</p>}
           </div>
         </div>
 
         {/* Actions slot */}
-        {actions && (
-          <div className="flex items-center gap-2 shrink-0 sm:mt-0.5">
-            {actions}
-          </div>
-        )}
+        {actions && <div className="flex items-center gap-2 shrink-0 sm:mt-0.5">{actions}</div>}
       </div>
 
       {children}
     </div>
-  )
+  );
 }

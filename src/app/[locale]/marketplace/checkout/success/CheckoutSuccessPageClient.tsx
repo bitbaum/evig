@@ -1,70 +1,70 @@
-'use client'
+'use client';
 
-import { useState, useEffect, Suspense } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { Link } from '@/i18n/navigation'
-import { Button } from '@/components/ui/button'
-import Image from 'next/image'
-import { CheckCircle, Package, ArrowRight, Loader2, Truck, MapPin } from 'lucide-react'
-import Heading from '@/components/ui/Heading'
-import { apiFetch } from '@/lib/api/client'
-import { logger } from '@/lib/logger'
-import { formatCHF, DELIVERY_LABELS } from '@/config/marketplace'
-import { ORDER_STATUS_CONFIG } from '@/config/marketplace'
-import type { OrderStatus, DeliveryOption, ShippingAddress } from '@/config/marketplace'
-import { useTranslations } from 'next-intl'
-import { ROUTES } from '@/config/routes'
+import { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { Link } from '@/i18n/navigation';
+import { Button } from '@/components/ui/button';
+import Image from 'next/image';
+import { CheckCircle, Package, ArrowRight, Loader2, Truck, MapPin } from 'lucide-react';
+import Heading from '@/components/ui/Heading';
+import { apiFetch } from '@/lib/api/client';
+import { logger } from '@/lib/logger';
+import { formatCHF, DELIVERY_LABELS } from '@/config/marketplace';
+import { ORDER_STATUS_CONFIG } from '@/config/marketplace';
+import type { OrderStatus, DeliveryOption, ShippingAddress } from '@/config/marketplace';
+import { useTranslations } from 'next-intl';
+import { ROUTES } from '@/config/routes';
 
 interface OrderLine {
-  id: string
-  title: string
-  unitPriceChf: number
-  thumbnail: string | null
+  id: string;
+  title: string;
+  unitPriceChf: number;
+  thumbnail: string | null;
 }
 
 interface OrderSummary {
-  id: string
-  listingTitle: string
-  thumbnail: string | null
-  amountChf: number
-  status: string
-  deliveryMethod: string
-  shippingAddress: ShippingAddress | null
-  counterpartyName: string | null
-  itemCount: number
-  items: OrderLine[]
+  id: string;
+  listingTitle: string;
+  thumbnail: string | null;
+  amountChf: number;
+  status: string;
+  deliveryMethod: string;
+  shippingAddress: ShippingAddress | null;
+  counterpartyName: string | null;
+  itemCount: number;
+  items: OrderLine[];
 }
 
 function CheckoutSuccessContent() {
-  const searchParams = useSearchParams()
-  const orderId = searchParams.get('orderId')
-  const t = useTranslations('marketplace.checkout.success')
-  const [order, setOrder] = useState<OrderSummary | null>(null)
-  const [isLoading, setIsLoading] = useState(!!orderId)
+  const searchParams = useSearchParams();
+  const orderId = searchParams.get('orderId');
+  const t = useTranslations('marketplace.checkout.success');
+  const [order, setOrder] = useState<OrderSummary | null>(null);
+  const [isLoading, setIsLoading] = useState(!!orderId);
 
   useEffect(() => {
-    if (!orderId) return
+    if (!orderId) return;
 
     apiFetch<OrderSummary>(`/api/marketplace/orders/${orderId}`)
-      .then(result => {
+      .then((result) => {
         if (result.success && result.data) {
-          setOrder(result.data)
+          setOrder(result.data);
         } else if (result.error) {
-          logger.warn('Failed to load order details', { error: result.error, orderId })
+          logger.warn('Failed to load order details', { error: result.error, orderId });
         }
       })
-      .finally(() => setIsLoading(false))
-  }, [orderId])
+      .finally(() => setIsLoading(false));
+  }, [orderId]);
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader2 className="w-8 h-8 text-action animate-spin" />
       </div>
-    )
+    );
   }
 
-  const statusConfig = order ? ORDER_STATUS_CONFIG[order.status as OrderStatus] : null
+  const statusConfig = order ? ORDER_STATUS_CONFIG[order.status as OrderStatus] : null;
 
   return (
     <div className="max-w-lg mx-auto py-12 text-center">
@@ -74,20 +74,24 @@ function CheckoutSuccessContent() {
         <Heading level={1} className="text-2xl text-text-primary mb-2">
           {t('heading')}
         </Heading>
-        <p className="text-text-secondary mb-6">
-          {t('description')}
-        </p>
+        <p className="text-text-secondary mb-6">{t('description')}</p>
 
         {order && (
           <div className="bg-surface-raised rounded-xl p-4 mb-6 text-left">
             {order.items.length > 0 ? (
               // Cart order — list every line item, total below.
               <div className="space-y-3">
-                {order.items.map(item => (
+                {order.items.map((item) => (
                   <div key={item.id} className="flex gap-3">
                     <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-surface-overlay">
                       {item.thumbnail ? (
-                        <Image src={item.thumbnail} alt={item.title || t('imageAlt')} width={48} height={48} className="w-full h-full object-cover" />
+                        <Image
+                          src={item.thumbnail}
+                          alt={item.title || t('imageAlt')}
+                          width={48}
+                          height={48}
+                          className="w-full h-full object-cover"
+                        />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
                           <Package className="w-5 h-5 text-text-muted" />
@@ -95,21 +99,33 @@ function CheckoutSuccessContent() {
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <Heading level={3} className="text-text-primary text-sm truncate">{item.title}</Heading>
-                      <p className="text-sm font-mono tabular-nums text-text-tertiary mt-0.5">{formatCHF(Number(item.unitPriceChf))}</p>
+                      <Heading level={3} className="text-text-primary text-sm truncate">
+                        {item.title}
+                      </Heading>
+                      <p className="text-sm font-mono tabular-nums text-text-tertiary mt-0.5">
+                        {formatCHF(Number(item.unitPriceChf))}
+                      </p>
                     </div>
                   </div>
                 ))}
                 <div className="flex justify-between pt-2 border-t border-subtle">
                   <span className="text-sm text-text-secondary">{t('totalLabel')}</span>
-                  <span className="text-lg font-bold text-action">{formatCHF(Number(order.amountChf))}</span>
+                  <span className="text-lg font-bold text-action">
+                    {formatCHF(Number(order.amountChf))}
+                  </span>
                 </div>
               </div>
             ) : (
               <div className="flex gap-3">
                 <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-surface-overlay">
                   {order.thumbnail ? (
-                    <Image src={order.thumbnail} alt={order.listingTitle || t('imageAlt')} width={48} height={48} className="w-full h-full object-cover" />
+                    <Image
+                      src={order.thumbnail}
+                      alt={order.listingTitle || t('imageAlt')}
+                      width={48}
+                      height={48}
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
                       <Package className="w-5 h-5 text-text-muted" />
@@ -117,15 +133,21 @@ function CheckoutSuccessContent() {
                   )}
                 </div>
                 <div>
-                  <Heading level={3} className="text-text-primary text-sm">{order.listingTitle}</Heading>
-                  <p className="text-lg font-bold text-action mt-0.5">{formatCHF(Number(order.amountChf))}</p>
+                  <Heading level={3} className="text-text-primary text-sm">
+                    {order.listingTitle}
+                  </Heading>
+                  <p className="text-lg font-bold text-action mt-0.5">
+                    {formatCHF(Number(order.amountChf))}
+                  </p>
                 </div>
               </div>
             )}
             {statusConfig && (
               <div className="mt-3 flex items-center gap-2">
                 <span className="text-xs text-text-tertiary">{t('statusLabel')}</span>
-                <span className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${statusConfig.color}`}>
+                <span
+                  className={`inline-flex px-2 py-0.5 text-xs font-medium rounded-full ${statusConfig.color}`}
+                >
                   {statusConfig.label}
                 </span>
               </div>
@@ -133,9 +155,11 @@ function CheckoutSuccessContent() {
 
             <div className="mt-3 pt-3 border-t border-subtle">
               <div className="flex items-center gap-2 text-sm text-text-secondary">
-                {order.deliveryMethod === 'shipping'
-                  ? <Truck className="w-4 h-4 text-text-tertiary shrink-0" />
-                  : <MapPin className="w-4 h-4 text-text-tertiary shrink-0" />}
+                {order.deliveryMethod === 'shipping' ? (
+                  <Truck className="w-4 h-4 text-text-tertiary shrink-0" />
+                ) : (
+                  <MapPin className="w-4 h-4 text-text-tertiary shrink-0" />
+                )}
                 {DELIVERY_LABELS[order.deliveryMethod as DeliveryOption] || order.deliveryMethod}
               </div>
               {order.deliveryMethod === 'shipping' && order.shippingAddress && (
@@ -144,7 +168,9 @@ function CheckoutSuccessContent() {
                   {order.shippingAddress.name && <p>{order.shippingAddress.name}</p>}
                   {order.shippingAddress.street && <p>{order.shippingAddress.street}</p>}
                   {(order.shippingAddress.postal_code || order.shippingAddress.city) && (
-                    <p>{order.shippingAddress.postal_code} {order.shippingAddress.city}</p>
+                    <p>
+                      {order.shippingAddress.postal_code} {order.shippingAddress.city}
+                    </p>
                   )}
                 </div>
               )}
@@ -165,17 +191,19 @@ function CheckoutSuccessContent() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default function CheckoutSuccessPage() {
   return (
-    <Suspense fallback={
-      <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 text-action animate-spin" />
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Loader2 className="w-8 h-8 text-action animate-spin" />
+        </div>
+      }
+    >
       <CheckoutSuccessContent />
     </Suspense>
-  )
+  );
 }

@@ -3,16 +3,16 @@
  * POST /api/pools — Create a new subscription pool (authenticated)
  */
 
-import { NextRequest } from 'next/server'
-import { withAuth } from '@/lib/api/middleware'
-import { apiSuccess, apiSuccessCached, apiError, apiBadRequest } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { db } from '@/db'
-import { subscriptionPools, poolMemberships, users } from '@/db/schema'
-import { eq, sql, desc } from 'drizzle-orm'
-import { logger } from '@/lib/logger'
-import { TABLE_NAMES, POOL_STATUS, POOL_MEMBERSHIP_STATUS } from '@/config/database'
-import { z } from 'zod'
+import { NextRequest } from 'next/server';
+import { withAuth } from '@/lib/api/middleware';
+import { apiSuccess, apiSuccessCached, apiError, apiBadRequest } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { db } from '@/db';
+import { subscriptionPools, poolMemberships, users } from '@/db/schema';
+import { eq, sql, desc } from 'drizzle-orm';
+import { logger } from '@/lib/logger';
+import { TABLE_NAMES, POOL_STATUS, POOL_MEMBERSHIP_STATUS } from '@/config/database';
+import { z } from 'zod';
 
 // ============================================================================
 // GET — Public browse
@@ -49,13 +49,13 @@ export async function GET() {
       .from(subscriptionPools)
       .leftJoin(users, eq(subscriptionPools.ownerId, users.id))
       .where(eq(subscriptionPools.status, POOL_STATUS.ACTIVE))
-      .orderBy(desc(subscriptionPools.createdAt))
+      .orderBy(desc(subscriptionPools.createdAt));
 
     // Pools are public; spotsLeft changes when members join/leave — cache 30s, stale 15s
-    return apiSuccessCached(pools, 30, 15)
+    return apiSuccessCached(pools, 30, 15);
   } catch (error) {
-    logger.error('GET /api/pools failed', { error })
-    return apiError(error, 'Fehler beim Laden der Abo-Pools')
+    logger.error('GET /api/pools failed', { error });
+    return apiError(error, 'Fehler beim Laden der Abo-Pools');
   }
 }
 
@@ -70,17 +70,18 @@ const CreatePoolSchema = z.object({
   monthlyCostChf: z.number().positive().max(1000),
   description: z.string().max(1000).optional(),
   rules: z.string().max(2000).optional(),
-})
+});
 
 export const POST = withAuth(async (request: NextRequest, session) => {
   try {
-    const body = await request.json()
-    const parsed = CreatePoolSchema.safeParse(body)
+    const body = await request.json();
+    const parsed = CreatePoolSchema.safeParse(body);
     if (!parsed.success) {
-      return apiBadRequest(parsed.error.issues[0]?.message ?? ERROR_MESSAGES.INVALID_INPUT)
+      return apiBadRequest(parsed.error.issues[0]?.message ?? ERROR_MESSAGES.INVALID_INPUT);
     }
 
-    const { serviceName, serviceCategory, maxMembers, monthlyCostChf, description, rules } = parsed.data
+    const { serviceName, serviceCategory, maxMembers, monthlyCostChf, description, rules } =
+      parsed.data;
 
     const [pool] = await db
       .insert(subscriptionPools)
@@ -94,7 +95,7 @@ export const POST = withAuth(async (request: NextRequest, session) => {
         rules: rules ?? null,
         status: POOL_STATUS.ACTIVE,
       })
-      .returning()
+      .returning();
 
     // Owner automatically becomes a member
     await db.insert(poolMemberships).values({
@@ -102,12 +103,12 @@ export const POST = withAuth(async (request: NextRequest, session) => {
       userId: session.user.id,
       role: 'owner',
       status: POOL_MEMBERSHIP_STATUS.ACTIVE,
-    })
+    });
 
-    logger.info('Pool created', { poolId: pool.id, userId: session.user.id })
-    return apiSuccess(pool, 201)
+    logger.info('Pool created', { poolId: pool.id, userId: session.user.id });
+    return apiSuccess(pool, 201);
   } catch (error) {
-    logger.error('POST /api/pools failed', { error })
-    return apiError(error, 'Fehler beim Erstellen des Pools')
+    logger.error('POST /api/pools failed', { error });
+    return apiError(error, 'Fehler beim Erstellen des Pools');
   }
-})
+});

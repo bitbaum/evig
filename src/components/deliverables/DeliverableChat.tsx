@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import { useState, useRef, useEffect } from 'react'
-import ReactMarkdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
-import { Sparkles, Send, Loader2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { apiFetch } from '@/lib/api/client'
+import { useState, useRef, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { Sparkles, Send, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { apiFetch } from '@/lib/api/client';
 
 interface Turn {
-  role: 'user' | 'assistant'
-  content: string
+  role: 'user' | 'assistant';
+  content: string;
 }
 
 /**
@@ -23,39 +23,42 @@ export default function DeliverableChat({
   endpoint,
   suggestions = [],
 }: {
-  endpoint: string
-  suggestions?: string[]
+  endpoint: string;
+  suggestions?: string[];
 }) {
-  const [turns, setTurns] = useState<Turn[]>([])
-  const [input, setInput] = useState('')
-  const [busy, setBusy] = useState(false)
-  const scrollRef = useRef<HTMLDivElement>(null)
+  const [turns, setTurns] = useState<Turn[]>([]);
+  const [input, setInput] = useState('');
+  const [busy, setBusy] = useState(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' })
-  }, [turns, busy])
+    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
+  }, [turns, busy]);
 
   async function ask(question: string) {
-    const q = question.trim()
-    if (!q || busy) return
-    const history = turns.slice(-8)
-    setTurns((t) => [...t, { role: 'user', content: q }])
-    setInput('')
-    setBusy(true)
+    const q = question.trim();
+    if (!q || busy) return;
+    const history = turns.slice(-8);
+    setTurns((t) => [...t, { role: 'user', content: q }]);
+    setInput('');
+    setBusy(true);
 
     const res = await apiFetch<{ reply: string }>(endpoint, {
       method: 'POST',
       body: { message: q, history },
-    })
+    });
 
     setTurns((t) => [
       ...t,
       {
         role: 'assistant',
-        content: res.success && res.data ? res.data.reply : (res.error || 'Hirn ist gerade nicht erreichbar.'),
+        content:
+          res.success && res.data
+            ? res.data.reply
+            : res.error || 'Hirn ist gerade nicht erreichbar.',
       },
-    ])
-    setBusy(false)
+    ]);
+    setBusy(false);
   }
 
   return (
@@ -87,14 +90,16 @@ export default function DeliverableChat({
                       remarkPlugins={[remarkGfm]}
                       components={{
                         code: ({ className, children }) => {
-                          const isBlock = (className ?? '').includes('language-')
+                          const isBlock = (className ?? '').includes('language-');
                           return isBlock ? (
                             <code className="block bg-surface-overlay text-text-primary rounded-md p-2.5 my-2 text-xs font-mono overflow-x-auto whitespace-pre">
                               {children}
                             </code>
                           ) : (
-                            <code className="bg-surface-overlay rounded px-1 py-0.5 text-xs font-mono">{children}</code>
-                          )
+                            <code className="bg-surface-overlay rounded px-1 py-0.5 text-xs font-mono">
+                              {children}
+                            </code>
+                          );
                         },
                         pre: ({ children }) => <pre className="my-0">{children}</pre>,
                       }}
@@ -135,8 +140,8 @@ export default function DeliverableChat({
 
       <form
         onSubmit={(e) => {
-          e.preventDefault()
-          ask(input)
+          e.preventDefault();
+          ask(input);
         }}
         className="flex items-center gap-2"
       >
@@ -158,5 +163,5 @@ export default function DeliverableChat({
         </Button>
       </form>
     </Card>
-  )
+  );
 }

@@ -10,7 +10,7 @@ export const REPORT_STATUS = {
   ARCHIVED: 'archived',
 } as const;
 
-export type ReportStatus = typeof REPORT_STATUS[keyof typeof REPORT_STATUS];
+export type ReportStatus = (typeof REPORT_STATUS)[keyof typeof REPORT_STATUS];
 
 export const REPORT_STATUS_LABELS: Record<string, string> = {
   [REPORT_STATUS.PENDING]: 'Ausstehend',

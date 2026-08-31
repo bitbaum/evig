@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Icon Picker Component
@@ -7,32 +7,32 @@
  * Uses curated list from service-icons.ts config.
  */
 
-import { useState } from 'react'
-import { useTranslations } from 'next-intl'
-import { SERVICE_ICONS } from '@/config/service-icons'
-import { Wrench } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { adminInteractive } from '@/lib/admin-ui'
+import { useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { SERVICE_ICONS } from '@/config/service-icons';
+import { Wrench } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { adminInteractive } from '@/lib/admin-ui';
 
 interface IconPickerProps {
-  value: string | null
-  onChange: (iconName: string) => void
-  className?: string
+  value: string | null;
+  onChange: (iconName: string) => void;
+  className?: string;
 }
 
 // Render icon outside of component to avoid "creating component during render"
 function RenderIcon({ iconName, className }: { iconName: string | null; className: string }) {
-  const iconConfig = iconName ? SERVICE_ICONS[iconName] : null
-  const IconComponent = iconConfig?.icon || Wrench
-  return <IconComponent className={className} />
+  const iconConfig = iconName ? SERVICE_ICONS[iconName] : null;
+  const IconComponent = iconConfig?.icon || Wrench;
+  return <IconComponent className={className} />;
 }
 
 export function IconPicker({ value, onChange, className = '' }: IconPickerProps) {
-  const t = useTranslations('admin.iconPicker')
-  const [isOpen, setIsOpen] = useState(false)
-  const iconNames = Object.keys(SERVICE_ICONS)
+  const t = useTranslations('admin.iconPicker');
+  const [isOpen, setIsOpen] = useState(false);
+  const iconNames = Object.keys(SERVICE_ICONS);
 
-  const currentLabel = value ? SERVICE_ICONS[value]?.label : t('choose')
+  const currentLabel = value ? SERVICE_ICONS[value]?.label : t('choose');
 
   return (
     <div className={`relative ${className}`}>
@@ -64,18 +64,15 @@ export function IconPicker({ value, onChange, className = '' }: IconPickerProps)
       {isOpen && (
         <>
           {/* Backdrop */}
-          <div
-            className="fixed inset-0 z-10"
-            onClick={() => setIsOpen(false)}
-          />
+          <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)} />
 
           {/* Icon grid */}
           <div className="absolute z-20 mt-2 w-full p-4 bg-surface-base border border rounded-xl shadow-xs max-h-80 overflow-y-auto">
             <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
               {iconNames.map((iconName) => {
-                const IconComponent = SERVICE_ICONS[iconName].icon
-                const label = SERVICE_ICONS[iconName].label
-                const isSelected = value === iconName
+                const IconComponent = SERVICE_ICONS[iconName].icon;
+                const label = SERVICE_ICONS[iconName].label;
+                const isSelected = value === iconName;
 
                 return (
                   <Button
@@ -83,13 +80,14 @@ export function IconPicker({ value, onChange, className = '' }: IconPickerProps)
                     type="button"
                     variant="ghost"
                     onClick={() => {
-                      onChange(iconName)
-                      setIsOpen(false)
+                      onChange(iconName);
+                      setIsOpen(false);
                     }}
                     title={label}
-                    className={`flex flex-col items-center justify-center p-2 rounded-lg h-auto ${isSelected
-                      ? 'bg-action-muted border-2 border-action'
-                      : `${adminInteractive.rowHover} border-2 border-transparent`
+                    className={`flex flex-col items-center justify-center p-2 rounded-lg h-auto ${
+                      isSelected
+                        ? 'bg-action-muted border-2 border-action'
+                        : `${adminInteractive.rowHover} border-2 border-transparent`
                     }`}
                   >
                     <IconComponent
@@ -99,12 +97,12 @@ export function IconPicker({ value, onChange, className = '' }: IconPickerProps)
                       {label.split('/')[0]}
                     </span>
                   </Button>
-                )
+                );
               })}
             </div>
           </div>
         </>
       )}
     </div>
-  )
+  );
 }

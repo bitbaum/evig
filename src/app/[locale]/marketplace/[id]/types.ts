@@ -11,4 +11,4 @@ export type {
   ListingPublic,
   SimilarListing,
   ListingReviewStats,
-} from '@/lib/marketplace/listing-detail'
+} from '@/lib/marketplace/listing-detail';

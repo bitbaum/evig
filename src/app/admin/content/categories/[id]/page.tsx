@@ -2,33 +2,33 @@
  * Admin - Edit Blog Category Page
  */
 
-import { Metadata } from 'next'
-import { auth } from '@/auth'
-import { redirect, notFound } from 'next/navigation'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
-import CategoryForm from '@/components/admin/CategoryForm'
-import { DEFAULT_CATEGORY_COLOR } from '@/config/ui-colors'
+import { Metadata } from 'next';
+import { auth } from '@/auth';
+import { redirect, notFound } from 'next/navigation';
+import { query } from '@/lib/auth/db';
+import { TABLE_NAMES } from '@/config/database';
+import CategoryForm from '@/components/admin/CategoryForm';
+import { DEFAULT_CATEGORY_COLOR } from '@/config/ui-colors';
 
 export const metadata: Metadata = {
   title: 'Kategorie bearbeiten',
   description: 'Blog-Kategorie bearbeiten.',
-}
+};
 
 interface EditCategoryPageProps {
   params: Promise<{
-    id: string
-  }>
+    id: string;
+  }>;
 }
 
 interface CategoryData {
-  id: string
-  name: string
-  slug: string
-  description: string | null
-  color: string | null
-  sort_order: number
-  is_active: boolean
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  color: string | null;
+  sort_order: number;
+  is_active: boolean;
 }
 
 async function getCategory(id: string): Promise<CategoryData | null> {
@@ -37,28 +37,26 @@ async function getCategory(id: string): Promise<CategoryData | null> {
       `SELECT id, name, slug, description, color, sort_order, is_active
        FROM ${TABLE_NAMES.BLOG_CATEGORIES}
        WHERE id = $1`,
-      [id]
-    )
-    return result.rows[0] || null
+      [id],
+    );
+    return result.rows[0] || null;
   } catch {
-    return null
+    return null;
   }
 }
 
-export default async function EditCategoryPage({
-  params,
-}: EditCategoryPageProps) {
-  const session = await auth()
+export default async function EditCategoryPage({ params }: EditCategoryPageProps) {
+  const session = await auth();
 
   if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/content/categories')
+    redirect('/auth/login?callbackUrl=/admin/content/categories');
   }
 
-  const { id } = await params
-  const category = await getCategory(id)
+  const { id } = await params;
+  const category = await getCategory(id);
 
   if (!category) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -74,5 +72,5 @@ export default async function EditCategoryPage({
       }}
       isEdit
     />
-  )
+  );
 }

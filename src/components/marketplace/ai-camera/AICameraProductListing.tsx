@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 /**
  * AI Camera Product Listing
@@ -10,22 +10,25 @@
  * - Auto-fill form with detected data
  */
 
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { X, Zap } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import Heading from '@/components/ui/Heading'
-import { useAICamera } from '@/hooks/useAICamera'
-import { ProductSuccessModal } from './ProductSuccessModal'
-import { CameraCapture } from './CameraCapture'
-import { AIAnalysisLoader } from './AIAnalysisLoader'
-import { AIProductResults } from './AIProductResults'
-import { getConditionLabel, generateProductDescription } from './config'
-import type { AICameraProductListingProps, ProductSuggestion, DetectedProductData } from './types'
-import { useFocusTrap } from '@/hooks/useFocusTrap'
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, Zap } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Heading from '@/components/ui/Heading';
+import { useAICamera } from '@/hooks/useAICamera';
+import { ProductSuccessModal } from './ProductSuccessModal';
+import { CameraCapture } from './CameraCapture';
+import { AIAnalysisLoader } from './AIAnalysisLoader';
+import { AIProductResults } from './AIProductResults';
+import { getConditionLabel, generateProductDescription } from './config';
+import type { AICameraProductListingProps, ProductSuggestion, DetectedProductData } from './types';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
 
-export function AICameraProductListing({ onProductDetected, onClose }: AICameraProductListingProps) {
-  const [selectedSuggestion, setSelectedSuggestion] = useState<ProductSuggestion | null>(null)
+export function AICameraProductListing({
+  onProductDetected,
+  onClose,
+}: AICameraProductListingProps) {
+  const [selectedSuggestion, setSelectedSuggestion] = useState<ProductSuggestion | null>(null);
 
   const {
     isCapturing,
@@ -40,32 +43,33 @@ export function AICameraProductListing({ onProductDetected, onClose }: AICameraP
     stopCamera,
     capturePhoto,
     handleFileUpload,
-    resetCapture
-  } = useAICamera()
+    resetCapture,
+  } = useAICamera();
 
   const selectProduct = (suggestion: ProductSuggestion) => {
-    setSelectedSuggestion(suggestion)
+    setSelectedSuggestion(suggestion);
 
     const detectedData: DetectedProductData = {
-      title: `${suggestion.brand || ''} ${suggestion.model || ''} - ${getConditionLabel(suggestion.condition)}`.trim(),
+      title:
+        `${suggestion.brand || ''} ${suggestion.model || ''} - ${getConditionLabel(suggestion.condition)}`.trim(),
       price: suggestion.estimatedPrice.toString(),
       category: suggestion.category,
       brand: suggestion.brand,
       condition: suggestion.condition,
       description: generateProductDescription(suggestion),
-      images: capturedImage ? [capturedImage] : []
-    }
+      images: capturedImage ? [capturedImage] : [],
+    };
 
-    onProductDetected(detectedData)
-  }
+    onProductDetected(detectedData);
+  };
 
   // Escape-to-close, initial focus, Tab cycle and focus restoration. Declared
   // before the early return below so the hook order stays stable.
-  const dialogRef = useFocusTrap<HTMLDivElement>(true, onClose)
+  const dialogRef = useFocusTrap<HTMLDivElement>(true, onClose);
 
   // Show success modal after product selection
   if (selectedSuggestion) {
-    return <ProductSuccessModal suggestion={selectedSuggestion} onClose={onClose} />
+    return <ProductSuccessModal suggestion={selectedSuggestion} onClose={onClose} />;
   }
 
   return (
@@ -134,7 +138,7 @@ export function AICameraProductListing({ onProductDetected, onClose }: AICameraP
         </motion.div>
       </motion.div>
     </AnimatePresence>
-  )
+  );
 }
 
 function ModalHeader({ onClose }: { onClose: () => void }) {
@@ -164,5 +168,5 @@ function ModalHeader({ onClose }: { onClose: () => void }) {
         </Button>
       </div>
     </div>
-  )
+  );
 }

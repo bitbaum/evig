@@ -1,31 +1,31 @@
-'use client'
+'use client';
 
-import { Link } from '@/i18n/navigation'
-import { useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { ChevronDown, X, Search, Rss } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import type { BlogCategory } from '@/lib/blog-db'
-import { blogCategoryKey } from '@/lib/blog-utils'
-import { UI_COLOR_PALETTE } from '@/config/ui-colors'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { useTranslations } from 'next-intl'
-import { ROUTES } from '@/config/routes'
+import { Link } from '@/i18n/navigation';
+import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { ChevronDown, X, Search, Rss } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import type { BlogCategory } from '@/lib/blog-db';
+import { blogCategoryKey } from '@/lib/blog-utils';
+import { UI_COLOR_PALETTE } from '@/config/ui-colors';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useTranslations } from 'next-intl';
+import { ROUTES } from '@/config/routes';
 
 interface BlogNavigationClientProps {
-  categories: BlogCategory[]
-  selectedCategorySlugs: string[]
-  searchQuery?: string
+  categories: BlogCategory[];
+  selectedCategorySlugs: string[];
+  searchQuery?: string;
 }
 
 // Default colors for categories without a custom color
-const DEFAULT_COLORS = UI_COLOR_PALETTE
+const DEFAULT_COLORS = UI_COLOR_PALETTE;
 
 function getCategoryColor(category: BlogCategory, index: number): string {
-  if (category.color) return category.color
-  return DEFAULT_COLORS[index % DEFAULT_COLORS.length]
+  if (category.color) return category.color;
+  return DEFAULT_COLORS[index % DEFAULT_COLORS.length];
 }
 
 export default function BlogNavigationClient({
@@ -33,68 +33,75 @@ export default function BlogNavigationClient({
   selectedCategorySlugs,
   searchQuery = '',
 }: BlogNavigationClientProps) {
-  const t = useTranslations('blog')
+  const t = useTranslations('blog');
   // Translated chip label; unknown categories keep their raw (German) name.
   const categoryLabel = (category: BlogCategory) => {
-    const key = blogCategoryKey(category.name)
-    return key ? t(`categoryLabels.${key}`) : category.name
-  }
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [searchInput, setSearchInput] = useState(searchQuery)
+    const key = blogCategoryKey(category.name);
+    return key ? t(`categoryLabels.${key}`) : category.name;
+  };
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchInput, setSearchInput] = useState(searchQuery);
 
   // Any filter change resets pagination — page N of the old result set is
   // meaningless for the new one.
   const pushParams = (params: URLSearchParams) => {
-    params.delete('page')
-    const qs = params.toString()
-    router.push(qs ? `/blog?${qs}` : '/blog')
-    setMobileMenuOpen(false)
-  }
+    params.delete('page');
+    const qs = params.toString();
+    router.push(qs ? `/blog?${qs}` : '/blog');
+    setMobileMenuOpen(false);
+  };
 
   const handleCategoryChange = (categorySlug: string) => {
-    const params = new URLSearchParams(searchParams.toString())
-    const currentSlugs = params.get('categories')?.split(',').filter(Boolean) || []
+    const params = new URLSearchParams(searchParams.toString());
+    const currentSlugs = params.get('categories')?.split(',').filter(Boolean) || [];
 
-    let newSlugs: string[]
+    let newSlugs: string[];
     if (currentSlugs.includes(categorySlug)) {
-      newSlugs = currentSlugs.filter((s) => s !== categorySlug)
+      newSlugs = currentSlugs.filter((s) => s !== categorySlug);
     } else {
-      newSlugs = [...currentSlugs, categorySlug]
+      newSlugs = [...currentSlugs, categorySlug];
     }
 
     if (newSlugs.length > 0) {
-      params.set('categories', newSlugs.join(','))
+      params.set('categories', newSlugs.join(','));
     } else {
-      params.delete('categories')
+      params.delete('categories');
     }
-    pushParams(params)
-  }
+    pushParams(params);
+  };
 
   const handleClearFilters = () => {
-    setSearchInput('')
-    router.push('/blog')
-    setMobileMenuOpen(false)
-  }
+    setSearchInput('');
+    router.push('/blog');
+    setMobileMenuOpen(false);
+  };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    const params = new URLSearchParams(searchParams.toString())
-    const q = searchInput.trim()
+    e.preventDefault();
+    const params = new URLSearchParams(searchParams.toString());
+    const q = searchInput.trim();
     if (q) {
-      params.set('q', q)
+      params.set('q', q);
     } else {
-      params.delete('q')
+      params.delete('q');
     }
-    pushParams(params)
-  }
+    pushParams(params);
+  };
 
-  const isSelected = (slug: string) => selectedCategorySlugs.includes(slug)
+  const isSelected = (slug: string) => selectedCategorySlugs.includes(slug);
 
   const searchField = (
-    <form onSubmit={handleSearchSubmit} role="search" className="relative min-w-0 flex-1 md:w-44 md:flex-none lg:w-56">
-      <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-tertiary" aria-hidden="true" />
+    <form
+      onSubmit={handleSearchSubmit}
+      role="search"
+      className="relative min-w-0 flex-1 md:w-44 md:flex-none lg:w-56"
+    >
+      <Search
+        className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-tertiary"
+        aria-hidden="true"
+      />
       <Input
         type="search"
         value={searchInput}
@@ -104,7 +111,7 @@ export default function BlogNavigationClient({
         className="h-10 w-full pl-9 pr-3 text-sm"
       />
     </form>
-  )
+  );
 
   return (
     <nav className="border-b border bg-surface-base sticky top-0 z-40">
@@ -112,7 +119,9 @@ export default function BlogNavigationClient({
         <div className="flex items-center justify-between gap-3 h-14 sm:h-16">
           {/* Logo/Title */}
           <Link href={ROUTES.public.blog} className="flex shrink-0 items-center">
-            <Heading level={1} className="text-xl sm:text-2xl font-bold text-text-primary">Blog</Heading>
+            <Heading level={1} className="text-xl sm:text-2xl font-bold text-text-primary">
+              Blog
+            </Heading>
           </Link>
 
           {/* Desktop Categories — scrolls horizontally instead of overflowing the bar */}
@@ -122,17 +131,17 @@ export default function BlogNavigationClient({
               size="sm"
               onClick={handleClearFilters}
               className={cn(
-                "shrink-0 px-3 py-1.5 rounded-full text-sm font-medium h-auto",
+                'shrink-0 px-3 py-1.5 rounded-full text-sm font-medium h-auto',
                 selectedCategorySlugs.length === 0
-                  ? "bg-surface-overlay text-text-inverted"
-                  : "bg-surface-raised text-text-secondary hover:bg-surface-overlay"
+                  ? 'bg-surface-overlay text-text-inverted'
+                  : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay',
               )}
             >
               {t('all')}
             </Button>
             {categories.map((category, index) => {
-              const color = getCategoryColor(category, index)
-              const selected = isSelected(category.slug)
+              const color = getCategoryColor(category, index);
+              const selected = isSelected(category.slug);
 
               return (
                 <div key={category.slug} className="relative group shrink-0">
@@ -141,17 +150,17 @@ export default function BlogNavigationClient({
                     size="sm"
                     onClick={() => handleCategoryChange(category.slug)}
                     className={cn(
-                      "px-3 py-1.5 rounded-full text-sm font-medium h-auto",
+                      'px-3 py-1.5 rounded-full text-sm font-medium h-auto',
                       selected
-                        ? "text-text-inverted"
-                        : "bg-surface-raised text-text-secondary hover:bg-surface-overlay"
+                        ? 'text-text-inverted'
+                        : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay',
                     )}
                     style={selected ? { backgroundColor: color } : undefined}
                   >
                     <span
                       className={cn(
-                        "inline-block w-2 h-2 rounded-full mr-1.5",
-                        selected ? "bg-surface-base/80" : ""
+                        'inline-block w-2 h-2 rounded-full mr-1.5',
+                        selected ? 'bg-surface-base/80' : '',
                       )}
                       style={!selected ? { backgroundColor: color } : undefined}
                     />
@@ -166,7 +175,7 @@ export default function BlogNavigationClient({
                     </div>
                   )}
                 </div>
-              )
+              );
             })}
           </div>
 
@@ -198,21 +207,29 @@ export default function BlogNavigationClient({
                   <X
                     className="w-4 h-4 ml-1"
                     onClick={(e) => {
-                      e.stopPropagation()
-                      handleClearFilters()
+                      e.stopPropagation();
+                      handleClearFilters();
                     }}
                   />
                 </>
               ) : (
                 <>
                   {t('categories')}
-                  <ChevronDown className={cn("w-4 h-4 transition-transform", mobileMenuOpen && "rotate-180")} />
+                  <ChevronDown
+                    className={cn('w-4 h-4 transition-transform', mobileMenuOpen && 'rotate-180')}
+                  />
                 </>
               )}
             </Button>
 
             {/* CTA */}
-            <Button as={Link} href={ROUTES.public.blogSubmit} variant="primary" size="sm" className="min-h-10">
+            <Button
+              as={Link}
+              href={ROUTES.public.blogSubmit}
+              variant="primary"
+              size="sm"
+              className="min-h-10"
+            >
               {t('navSubmitPost')}
             </Button>
           </div>
@@ -236,17 +253,17 @@ export default function BlogNavigationClient({
                 onClick={handleClearFilters}
                 className={cn(
                   // min-h-11 = 44px WCAG touch target on touch-first screens
-                  "px-4 min-h-11 rounded-full text-sm font-medium h-auto",
+                  'px-4 min-h-11 rounded-full text-sm font-medium h-auto',
                   selectedCategorySlugs.length === 0
-                    ? "bg-surface-overlay text-text-inverted"
-                    : "bg-surface-raised text-text-secondary"
+                    ? 'bg-surface-overlay text-text-inverted'
+                    : 'bg-surface-raised text-text-secondary',
                 )}
               >
                 {t('all')}
               </Button>
               {categories.map((category, index) => {
-                const color = getCategoryColor(category, index)
-                const selected = isSelected(category.slug)
+                const color = getCategoryColor(category, index);
+                const selected = isSelected(category.slug);
 
                 return (
                   <Button
@@ -255,28 +272,26 @@ export default function BlogNavigationClient({
                     size="sm"
                     onClick={() => handleCategoryChange(category.slug)}
                     className={cn(
-                      "px-4 min-h-11 rounded-full text-sm font-medium h-auto",
-                      selected
-                        ? "text-text-inverted"
-                        : "bg-surface-raised text-text-secondary"
+                      'px-4 min-h-11 rounded-full text-sm font-medium h-auto',
+                      selected ? 'text-text-inverted' : 'bg-surface-raised text-text-secondary',
                     )}
                     style={selected ? { backgroundColor: color } : undefined}
                   >
                     <span
                       className={cn(
-                        "inline-block w-2 h-2 rounded-full mr-1.5",
-                        selected ? "bg-surface-base/80" : ""
+                        'inline-block w-2 h-2 rounded-full mr-1.5',
+                        selected ? 'bg-surface-base/80' : '',
                       )}
                       style={!selected ? { backgroundColor: color } : undefined}
                     />
                     {categoryLabel(category)}
                   </Button>
-                )
+                );
               })}
             </div>
           </div>
         )}
       </div>
     </nav>
-  )
+  );
 }

@@ -1,15 +1,21 @@
-'use client'
+'use client';
 
-import { Button } from '@/components/ui/button'
-import { APPROVAL_STATUS, APPROVAL_STATUS_BADGES } from '@/config/approval-status'
-import type { FilterStatus, StatusCounts } from './types'
+import { Button } from '@/components/ui/button';
+import { APPROVAL_STATUS, APPROVAL_STATUS_BADGES } from '@/config/approval-status';
+import type { FilterStatus, StatusCounts } from './types';
 
-const FILTER_OPTIONS = ['all', APPROVAL_STATUS.PENDING, APPROVAL_STATUS.APPROVED, APPROVAL_STATUS.REJECTED, APPROVAL_STATUS.PUBLISHED] as const
+const FILTER_OPTIONS = [
+  'all',
+  APPROVAL_STATUS.PENDING,
+  APPROVAL_STATUS.APPROVED,
+  APPROVAL_STATUS.REJECTED,
+  APPROVAL_STATUS.PUBLISHED,
+] as const;
 
 interface SubmissionFiltersProps {
-  filter: FilterStatus
-  counts: StatusCounts
-  onFilterChange: (status: FilterStatus) => void
+  filter: FilterStatus;
+  counts: StatusCounts;
+  onFilterChange: (status: FilterStatus) => void;
 }
 
 export function SubmissionFilters({ filter, counts, onFilterChange }: SubmissionFiltersProps) {
@@ -27,13 +33,11 @@ export function SubmissionFilters({ filter, counts, onFilterChange }: Submission
                 : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
             }
           >
-            {status === 'all'
-              ? 'Alle'
-              : APPROVAL_STATUS_BADGES[status]?.label || status}{' '}
-            ({counts[status]})
+            {status === 'all' ? 'Alle' : APPROVAL_STATUS_BADGES[status]?.label || status} (
+            {counts[status]})
           </Button>
         ))}
       </div>
     </div>
-  )
+  );
 }

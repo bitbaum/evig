@@ -2,7 +2,11 @@
 
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { CONSENT_RESPONSE_CONFIG, CONSENT_RESPONSES, type ConsentResponse } from '@/config/decisions';
+import {
+  CONSENT_RESPONSE_CONFIG,
+  CONSENT_RESPONSES,
+  type ConsentResponse,
+} from '@/config/decisions';
 
 interface Props {
   response: ConsentResponse;
@@ -25,7 +29,9 @@ export function ConsentVote({ response, rationale, onResponseChange, onRationale
               onClick={() => onResponseChange(r)}
               className={`rounded-md border-2 px-4 py-3 text-sm font-medium transition min-h-touch touch-manipulation ${
                 response === r
-                  ? `border-current ${conf.color}` : 'border text-text-secondary hover:border-strong' }`}
+                  ? `border-current ${conf.color}`
+                  : 'border text-text-secondary hover:border-strong'
+              }`}
             >
               {conf.label}
             </Button>

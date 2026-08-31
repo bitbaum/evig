@@ -1,30 +1,30 @@
-import { NextRequest } from 'next/server'
-import { withAuth, ValidSession } from '@/lib/api/middleware'
-import { db } from '@/db'
-import { reviews, reviewResponses } from '@/db/schema/reviews'
-import { users } from '@/db/schema/auth'
-import { repairerProfiles } from '@/db/schema/services'
-import { workshops } from '@/db/schema/workshops'
-import { eq, and, sql, count, desc } from 'drizzle-orm'
-import { apiError, apiSuccess, parsePagination , hasMoreItems} from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { REVIEW_STATUS } from '@/config/review-status'
-import { REVIEW_TARGET_TYPES } from '@/config/database'
-import { logger } from '@/lib/logger'
+import { NextRequest } from 'next/server';
+import { withAuth, ValidSession } from '@/lib/api/middleware';
+import { db } from '@/db';
+import { reviews, reviewResponses } from '@/db/schema/reviews';
+import { users } from '@/db/schema/auth';
+import { repairerProfiles } from '@/db/schema/services';
+import { workshops } from '@/db/schema/workshops';
+import { eq, and, sql, count, desc } from 'drizzle-orm';
+import { apiError, apiSuccess, parsePagination, hasMoreItems } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { REVIEW_STATUS } from '@/config/review-status';
+import { REVIEW_TARGET_TYPES } from '@/config/database';
+import { logger } from '@/lib/logger';
 
 export const GET = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
-    const { searchParams } = new URL(request.url)
-    const status = searchParams.get('status') || 'all'
-    const { limit, offset } = parsePagination(request)
+    const { searchParams } = new URL(request.url);
+    const status = searchParams.get('status') || 'all';
+    const { limit, offset } = parsePagination(request);
 
     // Build where conditions
-    const conditions = [eq(reviews.reviewerId, session.user.id)]
+    const conditions = [eq(reviews.reviewerId, session.user.id)];
     if (status !== 'all') {
-      conditions.push(eq(reviews.status, status))
+      conditions.push(eq(reviews.status, status));
     }
 
-    const whereClause = and(...conditions)
+    const whereClause = and(...conditions);
 
     // Subquery for published responses
     const publishedResponses = db
@@ -37,12 +37,9 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
       })
       .from(reviewResponses)
       .where(eq(reviewResponses.status, REVIEW_STATUS.PUBLISHED))
-      .as('rr')
+      .as('rr');
 
-    const responder = db
-      .select({ id: users.id, name: users.name })
-      .from(users)
-      .as('responder')
+    const responder = db.select({ id: users.id, name: users.name }).from(users).as('responder');
 
     // Get user's reviews with responses
     const reviewRows = await db
@@ -75,32 +72,29 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
         repairerProfiles,
         and(
           eq(reviews.targetType, REVIEW_TARGET_TYPES.REPAIRER),
-          eq(reviews.targetId, repairerProfiles.id)
-        )
+          eq(reviews.targetId, repairerProfiles.id),
+        ),
       )
       .leftJoin(
         workshops,
         and(
           eq(reviews.targetType, REVIEW_TARGET_TYPES.WORKSHOP),
-          eq(reviews.targetId, workshops.id)
-        )
+          eq(reviews.targetId, workshops.id),
+        ),
       )
       .leftJoin(publishedResponses, eq(reviews.id, publishedResponses.reviewId))
       .leftJoin(responder, eq(publishedResponses.responderId, responder.id))
       .where(whereClause)
       .orderBy(desc(reviews.createdAt))
       .limit(limit)
-      .offset(offset)
+      .offset(offset);
 
     // Get total count
-    const [countRow] = await db
-      .select({ total: count() })
-      .from(reviews)
-      .where(whereClause)
+    const [countRow] = await db.select({ total: count() }).from(reviews).where(whereClause);
 
-    const total = countRow?.total ?? 0
+    const total = countRow?.total ?? 0;
 
-    const reviewList = reviewRows.map(review => ({
+    const reviewList = reviewRows.map((review) => ({
       id: review.id,
       targetType: review.targetType,
       targetId: review.targetId,
@@ -121,19 +115,21 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
       isVerifiedPurchase: review.isVerifiedPurchase,
       createdAt: review.createdAt,
       updatedAt: review.updatedAt,
-      response: review.responseId ? {
-        id: review.responseId,
-        content: review.responseContent,
-        responderName: review.responderName,
-        createdAt: review.responseCreatedAt,
-      } : null,
-    }))
+      response: review.responseId
+        ? {
+            id: review.responseId,
+            content: review.responseContent,
+            responderName: review.responderName,
+            createdAt: review.responseCreatedAt,
+          }
+        : null,
+    }));
 
     logger.info('Fetched user reviews', {
       userId: session.user.id,
       count: reviewList.length,
       status,
-    })
+    });
 
     return apiSuccess({
       reviews: reviewList,
@@ -143,10 +139,9 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
         offset,
         hasMore: hasMoreItems(offset, limit, total),
       },
-    })
-
+    });
   } catch (error) {
-    logger.error('Error fetching user reviews', { error })
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    logger.error('Error fetching user reviews', { error });
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
-})
+});

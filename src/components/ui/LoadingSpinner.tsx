@@ -1,7 +1,7 @@
-import { Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react';
 
 interface LoadingSpinnerProps {
-  text?: string
+  text?: string;
 }
 
 export default function LoadingSpinner({ text }: LoadingSpinnerProps) {
@@ -12,5 +12,5 @@ export default function LoadingSpinner({ text }: LoadingSpinnerProps) {
         {text && <p className="text-sm text-neutral-600">{text}</p>}
       </div>
     </div>
-  )
+  );
 }

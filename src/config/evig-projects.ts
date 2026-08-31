@@ -15,25 +15,25 @@
  * The index card, detail page, nav link, and sitemap entry all update on their own.
  */
 
-import { Boxes, type LucideIcon } from 'lucide-react'
+import { Boxes, type LucideIcon } from 'lucide-react';
 
-export type ProjectStatus = 'live' | 'beta' | 'building' | 'planned'
+export type ProjectStatus = 'live' | 'beta' | 'building' | 'planned';
 
 export interface EvigProject {
   /** URL slug AND the stable i18n key under `projects.items.<slug>`. */
-  slug: string
+  slug: string;
   /** Brand name — a proper noun, stays literal across all locales. */
-  name: string
+  name: string;
   /** Lifecycle stage → status badge (label from i18n, style from the map below). */
-  status: ProjectStatus
+  status: ProjectStatus;
   /** Section icon (lucide). */
-  icon: LucideIcon
+  icon: LucideIcon;
   /** Public source repository, if the project is open. */
-  repoUrl?: string
+  repoUrl?: string;
   /** Live product URL, if deployed. */
-  liveUrl?: string
+  liveUrl?: string;
   /** SPDX license id, for open-source projects. */
-  license?: string
+  license?: string;
 }
 
 export const EVIG_PROJECTS: EvigProject[] = [
@@ -45,7 +45,7 @@ export const EVIG_PROJECTS: EvigProject[] = [
     repoUrl: 'https://github.com/bitbaum/kivvi',
     license: 'MIT',
   },
-]
+];
 
 /**
  * Status-badge styling — semantic palette scales (never arbitrary hex), with
@@ -57,14 +57,14 @@ export const PROJECT_STATUS_STYLE: Record<ProjectStatus, string> = {
   beta: 'bg-info-50 text-info-700 dark:bg-info-900/30 dark:text-info-300',
   building: 'bg-warning-50 text-warning-700 dark:bg-warning-900/30 dark:text-warning-300',
   planned: 'bg-neutral-100 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-300',
-}
+};
 
 /** Look up a project by slug (detail page + validation). */
 export function getEvigProject(slug: string): EvigProject | undefined {
-  return EVIG_PROJECTS.find((p) => p.slug === slug)
+  return EVIG_PROJECTS.find((p) => p.slug === slug);
 }
 
 /** All slugs — for `generateStaticParams` and the sitemap. */
 export function getEvigProjectSlugs(): string[] {
-  return EVIG_PROJECTS.map((p) => p.slug)
+  return EVIG_PROJECTS.map((p) => p.slug);
 }

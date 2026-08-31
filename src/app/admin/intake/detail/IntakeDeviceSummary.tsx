@@ -1,24 +1,27 @@
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
-import { Image as ImageIcon } from 'lucide-react'
-import { KATEGORIEN, getConditionLabel } from '@/config/erfassung'
-import { formatDateShort } from '@/lib/date-formats'
-import type { DetailData } from '../types'
+import { useTranslations } from 'next-intl';
+import { Image as ImageIcon } from 'lucide-react';
+import { KATEGORIEN, getConditionLabel } from '@/config/erfassung';
+import { formatDateShort } from '@/lib/date-formats';
+import type { DetailData } from '../types';
 
 interface IntakeDeviceSummaryProps {
-  detail: DetailData
+  detail: DetailData;
 }
 
 export function IntakeDeviceSummary({ detail }: IntakeDeviceSummaryProps) {
-  const t = useTranslations('admin.intake.detail')
+  const t = useTranslations('admin.intake.detail');
   return (
     <div className="bg-surface-base border rounded-lg p-4">
       <div className="flex gap-4">
         <div className="h-24 w-24 shrink-0 overflow-hidden rounded-lg border border-subtle bg-surface-raised">
           {detail.image_url ? (
-
-            <img src={detail.image_url} alt={`${detail.brand} ${detail.product_name}`} className="h-full w-full object-cover" />
+            <img
+              src={detail.image_url}
+              alt={`${detail.brand} ${detail.product_name}`}
+              className="h-full w-full object-cover"
+            />
           ) : (
             <div className="flex h-full w-full items-center justify-center">
               <ImageIcon className="h-8 w-8 text-text-muted" aria-hidden="true" />
@@ -33,13 +36,15 @@ export function IntakeDeviceSummary({ detail }: IntakeDeviceSummaryProps) {
           <div>
             <dt className="text-xs text-text-tertiary">{t('device.category')}</dt>
             <dd className="font-medium text-text-primary">
-              {KATEGORIEN.find(k => k.value === detail.category)?.label || '—'}
+              {KATEGORIEN.find((k) => k.value === detail.category)?.label || '—'}
             </dd>
           </div>
           <div>
             <dt className="text-xs text-text-tertiary">{t('device.price')}</dt>
             <dd className="font-medium text-text-primary tabular-nums">
-              {detail.selling_price_chf != null ? `CHF ${Number(detail.selling_price_chf).toFixed(2)}` : '—'}
+              {detail.selling_price_chf != null
+                ? `CHF ${Number(detail.selling_price_chf).toFixed(2)}`
+                : '—'}
             </dd>
           </div>
           <div className="col-span-2 sm:col-span-3">
@@ -57,5 +62,5 @@ export function IntakeDeviceSummary({ detail }: IntakeDeviceSummaryProps) {
         </p>
       )}
     </div>
-  )
+  );
 }

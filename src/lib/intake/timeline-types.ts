@@ -17,19 +17,19 @@ export type IntakeEventType =
   | 'quality_skipped'
   | 'published'
   | 'unpublished'
-  | 'note_added'
+  | 'note_added';
 
 export interface IntakeEvent {
-  type: IntakeEventType
-  description: string
-  userId: string
-  userEmail: string
-  timestamp?: string
-  metadata?: Record<string, unknown>
+  type: IntakeEventType;
+  description: string;
+  userId: string;
+  userEmail: string;
+  timestamp?: string;
+  metadata?: Record<string, unknown>;
 }
 
 export interface StoredIntakeEvent extends IntakeEvent {
-  timestamp: string
+  timestamp: string;
 }
 
 // =============================================================================
@@ -45,7 +45,7 @@ export const EVENT_TYPE_LABELS: Record<IntakeEventType, string> = {
   published: 'Publiziert',
   unpublished: 'Aus dem Shop entfernt',
   note_added: 'Notiz',
-}
+};
 
 export const EVENT_TYPE_ICONS: Record<IntakeEventType, string> = {
   created: '📦',
@@ -56,4 +56,4 @@ export const EVENT_TYPE_ICONS: Record<IntakeEventType, string> = {
   published: '🚀',
   unpublished: '↩️',
   note_added: '📝',
-}
+};

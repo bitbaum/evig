@@ -5,13 +5,13 @@
  * Used for overview sections across all get-involved pages.
  */
 
-import { responsiveTypography, responsiveSpacing } from '@/lib/responsive'
-import Heading from '@/components/ui/Heading'
+import { responsiveTypography, responsiveSpacing } from '@/lib/responsive';
+import Heading from '@/components/ui/Heading';
 
 interface PageSectionProps {
-  title: string
-  content: string
-  className?: string
+  title: string;
+  content: string;
+  className?: string;
 }
 
 export function PageSection({ title, content, className = '' }: PageSectionProps) {
@@ -24,5 +24,5 @@ export function PageSection({ title, content, className = '' }: PageSectionProps
         {content}
       </p>
     </section>
-  )
+  );
 }

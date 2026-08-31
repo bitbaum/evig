@@ -17,21 +17,21 @@
  * what they're bringing. Mirrors what the donor sees in DropoffForm.tsx
  * AND what the Zod schema enforces — keep both in sync via this constant.
  */
-export const DROPOFF_DEVICES_MIN_CHARS = 10
-export const DROPOFF_DEVICES_MAX_CHARS = 1000
+export const DROPOFF_DEVICES_MIN_CHARS = 10;
+export const DROPOFF_DEVICES_MAX_CHARS = 1000;
 
 /**
  * Suggested one-time monetary donation amounts (CHF) shown as quick-pick tiers
  * on the public donate page. SSOT — the page must not hardcode these.
  */
-export const DONATION_TIER_AMOUNTS = [50, 100, 500] as const
+export const DONATION_TIER_AMOUNTS = [50, 100, 500] as const;
 
 /**
  * Optional notes field shared by every donation surface (drop-off form,
  * monetary donation admin notes, device donation admin notes). Single
  * limit keeps all four schemas honest.
  */
-export const DONATION_NOTES_MAX_CHARS = 2000
+export const DONATION_NOTES_MAX_CHARS = 2000;
 
 // =============================================================================
 // DONATION TYPES
@@ -40,14 +40,14 @@ export const DONATION_NOTES_MAX_CHARS = 2000
 export const DONATION_TYPES = {
   MONETARY: 'monetary',
   DEVICE: 'device',
-} as const
+} as const;
 
-export type DonationType = typeof DONATION_TYPES[keyof typeof DONATION_TYPES]
+export type DonationType = (typeof DONATION_TYPES)[keyof typeof DONATION_TYPES];
 
 export const DONATION_TYPE_LABELS: Record<DonationType, string> = {
   [DONATION_TYPES.MONETARY]: 'Geldspende',
   [DONATION_TYPES.DEVICE]: 'Sachspende',
-}
+};
 
 // =============================================================================
 // DEVICE CATEGORIES
@@ -63,9 +63,9 @@ export const DEVICE_CATEGORIES = {
   NETWORK: 'network',
   ACCESSORIES: 'accessories',
   OTHER: 'other',
-} as const
+} as const;
 
-export type DeviceCategory = typeof DEVICE_CATEGORIES[keyof typeof DEVICE_CATEGORIES]
+export type DeviceCategory = (typeof DEVICE_CATEGORIES)[keyof typeof DEVICE_CATEGORIES];
 
 export const DEVICE_CATEGORY_LABELS: Record<DeviceCategory, string> = {
   [DEVICE_CATEGORIES.LAPTOP]: 'Laptop',
@@ -77,7 +77,7 @@ export const DEVICE_CATEGORY_LABELS: Record<DeviceCategory, string> = {
   [DEVICE_CATEGORIES.NETWORK]: 'Netzwerkgerät',
   [DEVICE_CATEGORIES.ACCESSORIES]: 'Zubehör',
   [DEVICE_CATEGORIES.OTHER]: 'Sonstiges',
-}
+};
 
 // =============================================================================
 // DEVICE CONDITIONS
@@ -89,9 +89,9 @@ export const DEVICE_CONDITIONS = {
   FAIR: 'fair',
   POOR: 'poor',
   PARTS_ONLY: 'parts_only',
-} as const
+} as const;
 
-export type DeviceCondition = typeof DEVICE_CONDITIONS[keyof typeof DEVICE_CONDITIONS]
+export type DeviceCondition = (typeof DEVICE_CONDITIONS)[keyof typeof DEVICE_CONDITIONS];
 
 export const DEVICE_CONDITION_LABELS: Record<DeviceCondition, string> = {
   [DEVICE_CONDITIONS.EXCELLENT]: 'Ausgezeichnet',
@@ -99,7 +99,7 @@ export const DEVICE_CONDITION_LABELS: Record<DeviceCondition, string> = {
   [DEVICE_CONDITIONS.FAIR]: 'Akzeptabel',
   [DEVICE_CONDITIONS.POOR]: 'Schlecht',
   [DEVICE_CONDITIONS.PARTS_ONLY]: 'Nur für Ersatzteile',
-}
+};
 
 // =============================================================================
 // PAYMENT METHODS (for monetary donations)
@@ -111,9 +111,9 @@ export const PAYMENT_METHODS = {
   PAYPAL: 'paypal',
   CASH: 'cash',
   OTHER: 'other',
-} as const
+} as const;
 
-export type PaymentMethod = typeof PAYMENT_METHODS[keyof typeof PAYMENT_METHODS]
+export type PaymentMethod = (typeof PAYMENT_METHODS)[keyof typeof PAYMENT_METHODS];
 
 export const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
   [PAYMENT_METHODS.BANK_TRANSFER]: 'Banküberweisung',
@@ -121,7 +121,7 @@ export const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
   [PAYMENT_METHODS.PAYPAL]: 'PayPal',
   [PAYMENT_METHODS.CASH]: 'Bargeld',
   [PAYMENT_METHODS.OTHER]: 'Andere',
-}
+};
 
 // =============================================================================
 // DONATION STATUSES
@@ -133,16 +133,16 @@ export const DONATION_STATUSES = {
   RECEIPT_SENT: 'receipt_sent',
   ARCHIVED: 'archived',
   // Future phase 2: announced, pending_dropoff, received, processed
-} as const
+} as const;
 
-export type DonationStatus = typeof DONATION_STATUSES[keyof typeof DONATION_STATUSES]
+export type DonationStatus = (typeof DONATION_STATUSES)[keyof typeof DONATION_STATUSES];
 
 export const DONATION_STATUS_LABELS: Record<DonationStatus, string> = {
   [DONATION_STATUSES.RECORDED]: 'Erfasst',
   [DONATION_STATUSES.THANKED]: 'Bedankt',
   [DONATION_STATUSES.RECEIPT_SENT]: 'Quittung gesendet',
   [DONATION_STATUSES.ARCHIVED]: 'Archiviert',
-}
+};
 
 // =============================================================================
 // DEVICE JOURNEY STAGES
@@ -152,16 +152,17 @@ export const DONATION_STATUS_LABELS: Record<DonationStatus, string> = {
 // Ordered by progression so UI can rank "most advanced state achieved" per donation.
 
 export const DONATION_JOURNEY_STAGES = {
-  AWAITING: 'awaiting',       // no inventory_item yet
-  RECEIVED: 'received',       // inventory exists, checklist incomplete
+  AWAITING: 'awaiting', // no inventory_item yet
+  RECEIVED: 'received', // inventory exists, checklist incomplete
   REFURBISHED: 'refurbished', // refurbish tier + checklist complete, not yet listed
-  LISTED: 'listed',           // marketplace_listing published
-  REHOMED: 'rehomed',         // sold to a recipient
-  PARTS: 'parts',             // harvested for spare parts (parts tier, complete)
-  RECYCLED: 'recycled',       // SWICO-certified disposal (recycle tier, complete)
-} as const
+  LISTED: 'listed', // marketplace_listing published
+  REHOMED: 'rehomed', // sold to a recipient
+  PARTS: 'parts', // harvested for spare parts (parts tier, complete)
+  RECYCLED: 'recycled', // SWICO-certified disposal (recycle tier, complete)
+} as const;
 
-export type DonationJourneyStage = typeof DONATION_JOURNEY_STAGES[keyof typeof DONATION_JOURNEY_STAGES]
+export type DonationJourneyStage =
+  (typeof DONATION_JOURNEY_STAGES)[keyof typeof DONATION_JOURNEY_STAGES];
 
 // Progress order — higher = more advanced. parts/recycled are terminal-positive
 // (mission-aligned end states) and rank alongside rehomed.
@@ -173,7 +174,7 @@ export const DONATION_JOURNEY_STAGE_ORDER: Record<DonationJourneyStage, number> 
   [DONATION_JOURNEY_STAGES.PARTS]: 4,
   [DONATION_JOURNEY_STAGES.RECYCLED]: 4,
   [DONATION_JOURNEY_STAGES.REHOMED]: 4,
-}
+};
 
 export const DONATION_JOURNEY_STAGE_LABELS: Record<DonationJourneyStage, string> = {
   [DONATION_JOURNEY_STAGES.AWAITING]: 'Erwartet',
@@ -183,7 +184,7 @@ export const DONATION_JOURNEY_STAGE_LABELS: Record<DonationJourneyStage, string>
   [DONATION_JOURNEY_STAGES.REHOMED]: 'Weitergegeben',
   [DONATION_JOURNEY_STAGES.PARTS]: 'Ersatzteile',
   [DONATION_JOURNEY_STAGES.RECYCLED]: 'Recycelt',
-}
+};
 
 // =============================================================================
 // DEVICE VALUE ESTIMATES (in CHF cents)
@@ -194,16 +195,16 @@ export const DONATION_JOURNEY_STAGE_LABELS: Record<DonationJourneyStage, string>
  * Staff can override these when recording donations
  */
 export const DEVICE_VALUE_ESTIMATES: Record<DeviceCategory, number> = {
-  [DEVICE_CATEGORIES.LAPTOP]: 15000,      // CHF 150
-  [DEVICE_CATEGORIES.DESKTOP]: 10000,     // CHF 100
-  [DEVICE_CATEGORIES.MONITOR]: 4000,      // CHF 40
-  [DEVICE_CATEGORIES.SMARTPHONE]: 8000,   // CHF 80
-  [DEVICE_CATEGORIES.TABLET]: 6000,       // CHF 60
-  [DEVICE_CATEGORIES.PRINTER]: 3000,      // CHF 30
-  [DEVICE_CATEGORIES.NETWORK]: 2500,      // CHF 25
-  [DEVICE_CATEGORIES.ACCESSORIES]: 2000,  // CHF 20
-  [DEVICE_CATEGORIES.OTHER]: 5000,        // CHF 50
-}
+  [DEVICE_CATEGORIES.LAPTOP]: 15000, // CHF 150
+  [DEVICE_CATEGORIES.DESKTOP]: 10000, // CHF 100
+  [DEVICE_CATEGORIES.MONITOR]: 4000, // CHF 40
+  [DEVICE_CATEGORIES.SMARTPHONE]: 8000, // CHF 80
+  [DEVICE_CATEGORIES.TABLET]: 6000, // CHF 60
+  [DEVICE_CATEGORIES.PRINTER]: 3000, // CHF 30
+  [DEVICE_CATEGORIES.NETWORK]: 2500, // CHF 25
+  [DEVICE_CATEGORIES.ACCESSORIES]: 2000, // CHF 20
+  [DEVICE_CATEGORIES.OTHER]: 5000, // CHF 50
+};
 
 // =============================================================================
 // HELPER FUNCTIONS
@@ -213,35 +214,35 @@ export const DEVICE_VALUE_ESTIMATES: Record<DeviceCategory, number> = {
  * Get donation type label
  */
 export function getDonationTypeLabel(type: string): string {
-  return DONATION_TYPE_LABELS[type as DonationType] || type
+  return DONATION_TYPE_LABELS[type as DonationType] || type;
 }
 
 /**
  * Get device category label
  */
 export function getDeviceCategoryLabel(category: string): string {
-  return DEVICE_CATEGORY_LABELS[category as DeviceCategory] || category
+  return DEVICE_CATEGORY_LABELS[category as DeviceCategory] || category;
 }
 
 /**
  * Get device condition label
  */
 export function getDeviceConditionLabel(condition: string): string {
-  return DEVICE_CONDITION_LABELS[condition as DeviceCondition] || condition
+  return DEVICE_CONDITION_LABELS[condition as DeviceCondition] || condition;
 }
 
 /**
  * Get payment method label
  */
 export function getPaymentMethodLabel(method: string): string {
-  return PAYMENT_METHOD_LABELS[method as PaymentMethod] || method
+  return PAYMENT_METHOD_LABELS[method as PaymentMethod] || method;
 }
 
 /**
  * Get donation status label
  */
 export function getDonationStatusLabel(status: string): string {
-  return DONATION_STATUS_LABELS[status as DonationStatus] || status
+  return DONATION_STATUS_LABELS[status as DonationStatus] || status;
 }
 
 /**
@@ -249,70 +250,73 @@ export function getDonationStatusLabel(status: string): string {
  * @returns Value in cents
  */
 export function getEstimatedValue(category: string): number {
-  return DEVICE_VALUE_ESTIMATES[category as DeviceCategory] || DEVICE_VALUE_ESTIMATES[DEVICE_CATEGORIES.OTHER]
+  return (
+    DEVICE_VALUE_ESTIMATES[category as DeviceCategory] ||
+    DEVICE_VALUE_ESTIMATES[DEVICE_CATEGORIES.OTHER]
+  );
 }
 
 /**
  * Format amount from cents to CHF display string
  */
 export function formatAmountCHF(cents: number | null | undefined): string {
-  if (cents === null || cents === undefined) return '-'
-  return `CHF ${(cents / 100).toFixed(2)}`
+  if (cents === null || cents === undefined) return '-';
+  return `CHF ${(cents / 100).toFixed(2)}`;
 }
 
 /**
  * Get all donation types as options for select
  */
 export function getDonationTypeOptions(): Array<{ value: DonationType; label: string }> {
-  return Object.values(DONATION_TYPES).map(value => ({
+  return Object.values(DONATION_TYPES).map((value) => ({
     value,
     label: DONATION_TYPE_LABELS[value],
-  }))
+  }));
 }
 
 /**
  * Get all device categories as options for select
  */
 export function getDeviceCategoryOptions(): Array<{ value: DeviceCategory; label: string }> {
-  return Object.values(DEVICE_CATEGORIES).map(value => ({
+  return Object.values(DEVICE_CATEGORIES).map((value) => ({
     value,
     label: DEVICE_CATEGORY_LABELS[value],
-  }))
+  }));
 }
 
 /**
  * Get all device conditions as options for select
  */
 export function getDeviceConditionOptions(): Array<{ value: DeviceCondition; label: string }> {
-  return Object.values(DEVICE_CONDITIONS).map(value => ({
+  return Object.values(DEVICE_CONDITIONS).map((value) => ({
     value,
     label: DEVICE_CONDITION_LABELS[value],
-  }))
+  }));
 }
 
 /**
  * Get all payment methods as options for select
  */
 export function getPaymentMethodOptions(): Array<{ value: PaymentMethod; label: string }> {
-  return Object.values(PAYMENT_METHODS).map(value => ({
+  return Object.values(PAYMENT_METHODS).map((value) => ({
     value,
     label: PAYMENT_METHOD_LABELS[value],
-  }))
+  }));
 }
 
 /**
  * Get all donation statuses as options for select
  */
 export function getDonationStatusOptions(): Array<{ value: DonationStatus; label: string }> {
-  return Object.values(DONATION_STATUSES).map(value => ({
+  return Object.values(DONATION_STATUSES).map((value) => ({
     value,
     label: DONATION_STATUS_LABELS[value],
-  }))
+  }));
 }
 
 /**
  * Get journey-stage label
  */
 export function getDonationJourneyStageLabel(stage: string): string {
-  return DONATION_JOURNEY_STAGE_LABELS[stage as DonationJourneyStage] || stage
+  return DONATION_JOURNEY_STAGE_LABELS[stage as DonationJourneyStage] || stage;
 }

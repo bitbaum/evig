@@ -11,30 +11,30 @@
  * through to each person's profile.
  */
 
-import { Metadata } from 'next'
-import { redirect } from 'next/navigation'
-import { getTranslations } from 'next-intl/server'
-import { CheckSquare } from 'lucide-react'
-import { auth } from '@/auth'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { canAccessSection, isSuperAdmin } from '@/lib/permissions'
-import { TimecardApprovalsClient } from '@/components/admin/timecards/TimecardApprovalsClient'
-import { TimeOffApprovals } from '@/components/admin/timecards/TimeOffApprovals'
-import { ApprovalTabs } from '@/components/admin/approvals/ApprovalTabs'
+import { Metadata } from 'next';
+import { redirect } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
+import { CheckSquare } from 'lucide-react';
+import { auth } from '@/auth';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import { canAccessSection, isSuperAdmin } from '@/lib/permissions';
+import { TimecardApprovalsClient } from '@/components/admin/timecards/TimecardApprovalsClient';
+import { TimeOffApprovals } from '@/components/admin/timecards/TimeOffApprovals';
+import { ApprovalTabs } from '@/components/admin/approvals/ApprovalTabs';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations('admin.approvals')
+  const t = await getTranslations('admin.approvals');
   return {
     title: t('timecardsMetaTitle'),
     description: t('timecardsMetaDescription'),
-  }
+  };
 }
 
 export default async function TimecardApprovalsPage() {
-  const t = await getTranslations('admin.approvals')
-  const session = await auth()
+  const t = await getTranslations('admin.approvals');
+  const session = await auth();
   if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/team/approvals')
+    redirect('/auth/login?callbackUrl=/admin/team/approvals');
   }
 
   const user = {
@@ -42,10 +42,10 @@ export default async function TimecardApprovalsPage() {
     is_staff: session.user.isStaff,
     staff_permissions: session.user.staffPermissions,
     is_super_admin: session.user.isSuperAdmin,
-  }
+  };
 
   if (!canAccessSection(user, 'timecards')) {
-    redirect('/admin?error=no_timecards_access')
+    redirect('/admin?error=no_timecards_access');
   }
 
   return (
@@ -64,5 +64,5 @@ export default async function TimecardApprovalsPage() {
         <TimeOffApprovals />
       </div>
     </AdminPageWrapper>
-  )
+  );
 }

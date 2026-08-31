@@ -10,4 +10,4 @@ export const PROTOCOL_STATUS = {
   FINALIZED: 'finalized',
 } as const;
 
-export type ProtocolStatus = typeof PROTOCOL_STATUS[keyof typeof PROTOCOL_STATUS];
+export type ProtocolStatus = (typeof PROTOCOL_STATUS)[keyof typeof PROTOCOL_STATUS];

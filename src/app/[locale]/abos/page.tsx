@@ -1,11 +1,11 @@
 // Force runtime rendering — next-auth/react + lucide imports in AbosPageClient land in
 // SSR bundles where Next.js 16 + next-auth v5 leave the vendored React module
 // null during parallel static generation workers, causing hooks to throw.
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
-import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
-import AbosPageClient from './AbosPageClient'
+import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
+import AbosPageClient from './AbosPageClient';
 
 /**
  * This page had no metadata at all, so the browser tab fell through to the
@@ -17,17 +17,17 @@ import AbosPageClient from './AbosPageClient'
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'abos' })
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'abos' });
   return {
     title: t('title'),
     description: t('subtitle'),
     openGraph: { title: t('title'), description: t('subtitle'), type: 'website' },
-  }
+  };
 }
 
 export default function AbosPage() {
-  return <AbosPageClient />
+  return <AbosPageClient />;
 }

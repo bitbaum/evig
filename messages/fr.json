@@ -1416,93 +1416,53 @@
         "items": [
           {
             "description": "Distribution conviviale, parfaite pour les débutants et les professionnels. Offre un environnement de bureau soigné et un vaste référentiel de logiciels.",
-            "useCases": [
-              "Informatique de bureau",
-              "Développement",
-              "Déploiement serveur"
-            ],
+            "useCases": ["Informatique de bureau", "Développement", "Déploiement serveur"],
             "pros": [
               "Facile à utiliser",
               "Grande communauté",
               "Mises à jour régulières",
               "Documentation complète"
             ],
-            "cons": [
-              "Quelques logiciels propriétaires",
-              "Plus lourd que certaines alternatives"
-            ]
+            "cons": ["Quelques logiciels propriétaires", "Plus lourd que certaines alternatives"]
           },
           {
             "description": "Basé sur Ubuntu mais offre une expérience de bureau plus traditionnelle. Connu pour sa stabilité et sa facilité d'utilisation.",
-            "useCases": [
-              "Informatique de bureau",
-              "Travail de bureau",
-              "Multimédia"
-            ],
+            "useCases": ["Informatique de bureau", "Travail de bureau", "Multimédia"],
             "pros": [
               "Interface similaire à Windows",
               "Excellent support matériel",
               "Stable et fiable",
               "Idéal pour les débutants"
             ],
-            "cons": [
-              "Mises à jour moins fréquentes",
-              "Fonctionnalités entreprise limitées"
-            ]
+            "cons": ["Mises à jour moins fréquentes", "Fonctionnalités entreprise limitées"]
           },
           {
             "description": "Distribution de pointe présentant les dernières technologies open source. Soutenu par Red Hat.",
-            "useCases": [
-              "Développement",
-              "Entreprise",
-              "Innovation"
-            ],
+            "useCases": ["Développement", "Entreprise", "Innovation"],
             "pros": [
               "Derniers logiciels",
               "Sécurité renforcée",
               "Prêt pour l'entreprise",
               "Excellents outils de développement"
             ],
-            "cons": [
-              "Mises à jour fréquentes",
-              "Cycles de support plus courts"
-            ]
+            "cons": ["Mises à jour fréquentes", "Cycles de support plus courts"]
           },
           {
             "description": "L'une des distributions les plus stables et fiables, servant de base à de nombreux autres systèmes Linux.",
-            "useCases": [
-              "Serveurs",
-              "Entreprise",
-              "Systèmes stables"
-            ],
+            "useCases": ["Serveurs", "Entreprise", "Systèmes stables"],
             "pros": [
               "Extrêmement stable",
               "Grand référentiel de paquets",
               "Longs cycles de support",
               "Sécurité renforcée"
             ],
-            "cons": [
-              "Versions logicielles plus anciennes",
-              "Moins convivial"
-            ]
+            "cons": ["Versions logicielles plus anciennes", "Moins convivial"]
           },
           {
             "description": "Distribution légère basée sur Debian, connue pour ses excellentes performances et son interface conviviale.",
-            "useCases": [
-              "Matériel ancien",
-              "Informatique de bureau",
-              "Efficacité des ressources"
-            ],
-            "pros": [
-              "Léger",
-              "Performances rapides",
-              "Convivial",
-              "Base stable"
-            ],
-            "cons": [
-              "Communauté plus petite",
-              "Fonctionnalités entreprise limitées"
-            ]
+            "useCases": ["Matériel ancien", "Informatique de bureau", "Efficacité des ressources"],
+            "pros": ["Léger", "Performances rapides", "Convivial", "Base stable"],
+            "cons": ["Communauté plus petite", "Fonctionnalités entreprise limitées"]
           }
         ],
         "chooser": {
@@ -4600,12 +4560,7 @@
     "devices": {
       "heading": "Donner des appareils",
       "intro": "Le matériel dont vous n'avez plus besoin peut donner une vraie chance à une autre personne.",
-      "items": [
-        "Laptops",
-        "PC de bureau",
-        "Moniteurs",
-        "Périphériques"
-      ],
+      "items": ["Laptops", "PC de bureau", "Moniteurs", "Périphériques"],
       "acceptLabel": "Ce que nous acceptons:",
       "acceptText": "Laptops, PC de bureau, GPU, moniteurs, claviers, souris — fonctionnels ou réparables.",
       "notAcceptLabel": "Ce que nous n'acceptons pas:",

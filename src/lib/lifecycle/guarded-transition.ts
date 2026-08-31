@@ -23,11 +23,11 @@
  * the caller, gated on a `{ ok: true }` result.
  */
 
-import { db as defaultDb } from '@/db'
-import { sql } from 'drizzle-orm'
+import { db as defaultDb } from '@/db';
+import { sql } from 'drizzle-orm';
 
 /** The transaction handle Drizzle passes to a `db.transaction(tx => …)` callback. */
-export type Tx = Parameters<Parameters<typeof defaultDb.transaction>[0]>[0]
+export type Tx = Parameters<Parameters<typeof defaultDb.transaction>[0]>[0];
 
 /**
  * Either the module-level `db` (opens a fresh transaction) or an existing
@@ -35,7 +35,7 @@ export type Tx = Parameters<Parameters<typeof defaultDb.transaction>[0]>[0]
  * site nests; the option exists so a future caller already inside a
  * transaction can serialize within it rather than dead-locking on itself.
  */
-export type DbOrTx = typeof defaultDb | Tx
+export type DbOrTx = typeof defaultDb | Tx;
 
 export interface GuardedTransitionOptions<Row extends Record<string, unknown>, T> {
   /**
@@ -43,14 +43,14 @@ export interface GuardedTransitionOptions<Row extends Record<string, unknown>, T
    * `TABLE_NAMES.*` value. Interpolated via `sql.raw`, so it MUST be a
    * trusted code literal, never user input.
    */
-  lockTable: string
+  lockTable: string;
   /** Primary-key value of the row to lock. Bound as a parameter (safe). */
-  lockId: string
+  lockId: string;
   /**
    * Columns to read under the lock and hand to `check`. Trusted code
    * literals only (interpolated via `sql.raw`). Defaults to `['status']`.
    */
-  lockColumns?: readonly string[]
+  lockColumns?: readonly string[];
   /**
    * Re-check the precondition under the lock. Return `false` to abort (the
    * transaction commits as a no-op and the call returns `{ ok: false }`).
@@ -58,11 +58,11 @@ export interface GuardedTransitionOptions<Row extends Record<string, unknown>, T
    * transaction (e.g. IT-Hilfe accept re-reads the offer status). Returns
    * `false` if the locked row does not exist.
    */
-  check: (row: Row, tx: Tx) => boolean | Promise<boolean>
+  check: (row: Row, tx: Tx) => boolean | Promise<boolean>;
   /** All flow-specific writes + side-effects. Runs under the lock; its return value is surfaced as `result`. */
-  apply: (tx: Tx, row: Row) => Promise<T>
+  apply: (tx: Tx, row: Row) => Promise<T>;
   /** Connection to run on. Defaults to the module `db` (fresh transaction). Pass an existing `Tx` to reuse it. */
-  db?: DbOrTx
+  db?: DbOrTx;
 }
 
 /**
@@ -72,8 +72,7 @@ export interface GuardedTransitionOptions<Row extends Record<string, unknown>, T
  * untouched.
  */
 export type GuardedTransitionResult<T> =
-  | { ok: true; result: T }
-  | { ok: false; reason: 'not_found' | 'check_failed' }
+  { ok: true; result: T } | { ok: false; reason: 'not_found' | 'check_failed' };
 
 /**
  * Run `apply` against `lockTable`/`lockId` only if `check` passes under a
@@ -82,26 +81,26 @@ export type GuardedTransitionResult<T> =
 export async function guardedTransition<Row extends Record<string, unknown>, T>(
   opts: GuardedTransitionOptions<Row, T>,
 ): Promise<GuardedTransitionResult<T>> {
-  const { lockTable, lockId, lockColumns = ['status'], check, apply } = opts
-  const conn = opts.db ?? defaultDb
+  const { lockTable, lockId, lockColumns = ['status'], check, apply } = opts;
+  const conn = opts.db ?? defaultDb;
 
-  const columns = sql.raw(lockColumns.join(', '))
-  const table = sql.raw(lockTable)
+  const columns = sql.raw(lockColumns.join(', '));
+  const table = sql.raw(lockTable);
 
   const run = async (tx: Tx): Promise<GuardedTransitionResult<T>> => {
     const locked = await tx.execute(
       sql`SELECT ${columns} FROM ${table} WHERE id = ${lockId} FOR UPDATE`,
-    )
-    const row = locked.rows[0] as Row | undefined
-    if (!row) return { ok: false, reason: 'not_found' }
+    );
+    const row = locked.rows[0] as Row | undefined;
+    if (!row) return { ok: false, reason: 'not_found' };
 
-    if (!(await check(row, tx))) return { ok: false, reason: 'check_failed' }
+    if (!(await check(row, tx))) return { ok: false, reason: 'check_failed' };
 
-    const result = await apply(tx, row)
-    return { ok: true, result }
-  }
+    const result = await apply(tx, row);
+    return { ok: true, result };
+  };
 
   // `db.transaction` opens a fresh transaction; a passed-in `Tx` is reused in
   // place (it exposes the same `transaction` method, nesting via savepoint).
-  return conn.transaction(run)
+  return conn.transaction(run);
 }

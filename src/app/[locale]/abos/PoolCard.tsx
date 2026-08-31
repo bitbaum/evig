@@ -1,43 +1,44 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useTranslations } from 'next-intl'
-import { Users, ChevronRight, RefreshCw, X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import type { Pool } from './types'
-import { CATEGORY_EMOJIS } from './types'
+import { useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { Users, ChevronRight, RefreshCw, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import type { Pool } from './types';
+import { CATEGORY_EMOJIS } from './types';
 
 interface Props {
-  pool: Pool
-  userId?: string
-  onJoin: (id: string) => Promise<void>
-  onLeave: (id: string) => Promise<void>
-  myPoolIds: Set<string>
+  pool: Pool;
+  userId?: string;
+  onJoin: (id: string) => Promise<void>;
+  onLeave: (id: string) => Promise<void>;
+  myPoolIds: Set<string>;
 }
 
 export function PoolCard({ pool, userId, onJoin, onLeave, myPoolIds }: Props) {
-  const t = useTranslations('abos')
-  const [loading, setLoading] = useState(false)
-  const isMember = myPoolIds.has(pool.id)
-  const isFull = pool.spotsLeft <= 0
-  const emoji = CATEGORY_EMOJIS[pool.serviceCategory] ?? CATEGORY_EMOJIS.other
+  const t = useTranslations('abos');
+  const [loading, setLoading] = useState(false);
+  const isMember = myPoolIds.has(pool.id);
+  const isFull = pool.spotsLeft <= 0;
+  const emoji = CATEGORY_EMOJIS[pool.serviceCategory] ?? CATEGORY_EMOJIS.other;
   // @ts-expect-error — t() accepts string keys; categories keys are dynamic
-  const catLabel = t(`categories.${pool.serviceCategory}`) as string
+  const catLabel = t(`categories.${pool.serviceCategory}`) as string;
 
   const handleAction = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
-      if (isMember) await onLeave(pool.id)
-      else await onJoin(pool.id)
+      if (isMember) await onLeave(pool.id);
+      else await onJoin(pool.id);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  const spotsText = pool.spotsLeft === 1
-    ? t('spotsLeft', { count: pool.spotsLeft })
-    : t('spotsLeftPlural', { count: pool.spotsLeft })
+  const spotsText =
+    pool.spotsLeft === 1
+      ? t('spotsLeft', { count: pool.spotsLeft })
+      : t('spotsLeftPlural', { count: pool.spotsLeft });
 
   return (
     // `card-shell` already carries the shared radius; the old `rounded-2xl`
@@ -49,7 +50,9 @@ export function PoolCard({ pool, userId, onJoin, onLeave, myPoolIds }: Props) {
           <span className="text-3xl">{emoji}</span>
           <div>
             <h3 className="font-semibold text-text-primary">{pool.serviceName}</h3>
-            <span className="text-xs text-text-tertiary bg-surface-raised px-2 py-0.5 rounded-full">{catLabel}</span>
+            <span className="text-xs text-text-tertiary bg-surface-raised px-2 py-0.5 rounded-full">
+              {catLabel}
+            </span>
           </div>
         </div>
         <div className="text-right">
@@ -71,21 +74,27 @@ export function PoolCard({ pool, userId, onJoin, onLeave, myPoolIds }: Props) {
       <div className="flex items-center gap-4 text-sm text-text-tertiary">
         <div className="flex items-center gap-1.5">
           <Users className="w-4 h-4" />
-          <span>{pool.memberCount}/{pool.maxMembers} {t('members')}</span>
+          <span>
+            {pool.memberCount}/{pool.maxMembers} {t('members')}
+          </span>
         </div>
-        <div className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-          isFull
-            ? 'bg-error-50 dark:bg-error-900/20 text-error-600 dark:text-error-400'
-            : pool.spotsLeft <= 2
-            ? 'bg-warning-50 dark:bg-warning-900/20 text-warning-700 dark:text-warning-400'
-            : 'bg-action-muted text-action'
-        }`}>
+        <div
+          className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+            isFull
+              ? 'bg-error-50 dark:bg-error-900/20 text-error-600 dark:text-error-400'
+              : pool.spotsLeft <= 2
+                ? 'bg-warning-50 dark:bg-warning-900/20 text-warning-700 dark:text-warning-400'
+                : 'bg-action-muted text-action'
+          }`}
+        >
           {isFull ? t('full') : spotsText}
         </div>
       </div>
 
       <div className="flex items-center justify-between pt-2 border-t border-subtle">
-        <span className="text-xs text-text-muted">{t('by')} {pool.ownerName ?? t('anonymous')}</span>
+        <span className="text-xs text-text-muted">
+          {t('by')} {pool.ownerName ?? t('anonymous')}
+        </span>
         {userId ? (
           <Button
             variant={isMember ? 'destructive-ghost' : 'primary'}
@@ -100,9 +109,15 @@ export function PoolCard({ pool, userId, onJoin, onLeave, myPoolIds }: Props) {
             {loading ? (
               <RefreshCw className="w-3.5 h-3.5 animate-spin" />
             ) : isMember ? (
-              <><X className="w-3.5 h-3.5" />{t('leave')}</>
+              <>
+                <X className="w-3.5 h-3.5" />
+                {t('leave')}
+              </>
             ) : (
-              <><ChevronRight className="w-3.5 h-3.5" />{t('join')}</>
+              <>
+                <ChevronRight className="w-3.5 h-3.5" />
+                {t('join')}
+              </>
             )}
           </Button>
         ) : (
@@ -110,5 +125,5 @@ export function PoolCard({ pool, userId, onJoin, onLeave, myPoolIds }: Props) {
         )}
       </div>
     </Card>
-  )
+  );
 }

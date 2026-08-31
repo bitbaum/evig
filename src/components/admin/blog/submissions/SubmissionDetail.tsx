@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { adminInteractive } from '@/lib/admin-ui'
-import { APPROVAL_STATUS } from '@/config/approval-status'
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
-import { formatDateTime } from '@/lib/date-formats'
-import Heading from '@/components/admin/AdminHeading'
-import { Link } from '@/i18n/navigation'
+import { useState } from 'react';
+import { adminInteractive } from '@/lib/admin-ui';
+import { APPROVAL_STATUS } from '@/config/approval-status';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { formatDateTime } from '@/lib/date-formats';
+import Heading from '@/components/admin/AdminHeading';
+import { Link } from '@/i18n/navigation';
 import {
   Eye,
   Check,
@@ -22,17 +22,17 @@ import {
   ExternalLink,
   Trash2,
   Edit,
-} from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import type { Submission, SubmissionAction } from './types'
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import type { Submission, SubmissionAction } from './types';
 
 interface SubmissionDetailProps {
-  submission: Submission | null
-  actionLoading: string | null
-  onAction: (action: SubmissionAction, submissionId: string) => void
-  onShowRejectModal: () => void
-  onShowChangesModal: () => void
-  onShowEditModal: () => void
+  submission: Submission | null;
+  actionLoading: string | null;
+  onAction: (action: SubmissionAction, submissionId: string) => void;
+  onShowRejectModal: () => void;
+  onShowChangesModal: () => void;
+  onShowEditModal: () => void;
 }
 
 export function SubmissionDetail({
@@ -43,17 +43,15 @@ export function SubmissionDetail({
   onShowChangesModal,
   onShowEditModal,
 }: SubmissionDetailProps) {
-  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   if (!submission) {
     return (
       <div className="bg-surface-base rounded-xl shadow-xs border border-subtle p-12 text-center">
         <Eye className="w-12 h-12 text-text-muted mx-auto mb-4" />
-        <p className="text-text-secondary">
-          Wähle eine Einreichung aus, um Details anzuzeigen
-        </p>
+        <p className="text-text-secondary">Wähle eine Einreichung aus, um Details anzuzeigen</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -66,9 +64,7 @@ export function SubmissionDetail({
         <div className="space-y-2 text-sm">
           <div className="flex items-center gap-2 text-text-secondary">
             <User className="w-4 h-4" />
-            <span className="font-medium">
-              {submission.submitter_name}
-            </span>
+            <span className="font-medium">{submission.submitter_name}</span>
           </div>
           <div className="flex items-center gap-2 text-text-secondary">
             <Mail className="w-4 h-4" />
@@ -86,9 +82,7 @@ export function SubmissionDetail({
           {(submission.category_label || submission.category_name) && (
             <div className="flex items-center gap-2 text-text-secondary">
               <Folder className="w-4 h-4" />
-              <span>
-                {submission.category_label || submission.category_name}
-              </span>
+              <span>{submission.category_label || submission.category_name}</span>
             </div>
           )}
           {submission.tags?.length > 0 && (
@@ -115,13 +109,9 @@ export function SubmissionDetail({
           <div className="font-medium text-text-secondary mb-1">
             Geprüft von {submission.reviewer_name || 'Admin'}
           </div>
-          <div className="text-text-tertiary">
-            {formatDateTime(submission.reviewed_at)}
-          </div>
+          <div className="text-text-tertiary">{formatDateTime(submission.reviewed_at)}</div>
           {submission.review_notes && (
-            <div className="mt-2 text-text-secondary">
-              {submission.review_notes}
-            </div>
+            <div className="mt-2 text-text-secondary">{submission.review_notes}</div>
           )}
           {submission.rejection_reason && (
             <div className="mt-2 text-error-600 dark:text-error-400">
@@ -227,7 +217,13 @@ export function SubmissionDetail({
       {submission.status === APPROVAL_STATUS.PUBLISHED && (
         <div className="flex flex-col gap-2">
           {submission.slug && (
-            <Button as={Link} href={`/blog/${submission.slug}`} target="_blank" variant="primary" className="w-full">
+            <Button
+              as={Link}
+              href={`/blog/${submission.slug}`}
+              target="_blank"
+              variant="primary"
+              className="w-full"
+            >
               <ExternalLink className="w-4 h-4" />
               Beitrag ansehen
             </Button>
@@ -260,10 +256,13 @@ export function SubmissionDetail({
           title="Einreichung löschen"
           message="Einreichung wirklich löschen?"
           itemName={submission.title}
-          onConfirm={() => { setConfirmDelete(false); onAction('delete', submission.id) }}
+          onConfirm={() => {
+            setConfirmDelete(false);
+            onAction('delete', submission.id);
+          }}
           onClose={() => setConfirmDelete(false)}
         />
       </div>
     </div>
-  )
+  );
 }

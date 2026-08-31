@@ -4,11 +4,7 @@
 
 import { ROUTES } from '@/config/routes';
 import { ClipboardPlus, Loader2 } from 'lucide-react';
-import {
-  DECISION_STATUS,
-  EDITABLE_STATUSES,
-  type DecisionStatus,
-} from '@/config/decisions';
+import { DECISION_STATUS, EDITABLE_STATUSES, type DecisionStatus } from '@/config/decisions';
 import { Link2, Check, CheckCircle2, Mail } from 'lucide-react';
 import { AdminButton } from '@/components/admin/AdminButton';
 import { Button } from '@/components/ui/button';
@@ -29,7 +25,7 @@ interface Props {
   showCancelInput: boolean;
   onTransition: (
     status: DecisionStatus,
-    extra?: { cancelReason?: string; outcomeSummary?: string }
+    extra?: { cancelReason?: string; outcomeSummary?: string },
   ) => Promise<void>;
   handleCopyLink: () => Promise<void>;
   handleSendInvitations: () => Promise<void>;
@@ -73,13 +69,17 @@ export function HeaderActions({
           'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
           linkCopied
             ? 'bg-action-muted text-action-muted'
-            : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
+            : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay',
         )}
       >
         {linkCopied ? (
-          <><Check className="h-3.5 w-3.5" /> Link kopiert</>
+          <>
+            <Check className="h-3.5 w-3.5" /> Link kopiert
+          </>
         ) : (
-          <><Link2 className="h-3.5 w-3.5" /> Link teilen</>
+          <>
+            <Link2 className="h-3.5 w-3.5" /> Link teilen
+          </>
         )}
       </Button>
       {decision.status === DECISION_STATUS.VOTING && (
@@ -92,7 +92,7 @@ export function HeaderActions({
             'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
             invitationsResult
               ? 'bg-action-muted text-action-muted'
-              : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay disabled:opacity-50'
+              : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay disabled:opacity-50',
           )}
         >
           <Mail className="h-3.5 w-3.5" />
@@ -148,10 +148,11 @@ export function HeaderActions({
               onClick={handleCreateFollowUpTask}
               disabled={creatingFollowUpTask}
             >
-              {creatingFollowUpTask
-                ? <Loader2 className="w-4 h-4 animate-spin" />
-                : <ClipboardPlus className="w-4 h-4" />
-              }
+              {creatingFollowUpTask ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <ClipboardPlus className="w-4 h-4" />
+              )}
               Aufgabe erstellen
             </AdminButton>
           ) : (
@@ -162,7 +163,9 @@ export function HeaderActions({
                   decision.outcomeSummary,
                   decision.outcomeSummary ? '' : null,
                   `(Aus Entscheid: ${decision.title})`,
-                ].filter(Boolean).join('\n'),
+                ]
+                  .filter(Boolean)
+                  .join('\n'),
               }).toString()}`}
               variant="secondary"
             >

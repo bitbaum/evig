@@ -1,34 +1,34 @@
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
-import { Metadata } from 'next'
-import { Briefcase } from 'lucide-react'
-import { ORG } from '@/config/org'
-import { PageHero } from '@/components/layout/PageHero'
-import { Section } from '@/components/layout/Section'
-import { listPublicVacancies } from '@/lib/services/hr-vacancies'
-import type { RoleTrack } from '@/config/hr-vacancies'
-import CareersListClient from './CareersListClient'
+import { Metadata } from 'next';
+import { Briefcase } from 'lucide-react';
+import { ORG } from '@/config/org';
+import { PageHero } from '@/components/layout/PageHero';
+import { Section } from '@/components/layout/Section';
+import { listPublicVacancies } from '@/lib/services/hr-vacancies';
+import type { RoleTrack } from '@/config/hr-vacancies';
+import CareersListClient from './CareersListClient';
 
 interface PageProps {
-  params: Promise<{ locale: string }>
-  searchParams: Promise<{ track?: string }>
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ track?: string }>;
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const title = `Karriere | ${ORG.name}`
-  const description = 'Offene Stellen bei evig — Freiwilligenarbeit, Praktika und Anstellungen.'
+  const title = `Karriere | ${ORG.name}`;
+  const description = 'Offene Stellen bei evig — Freiwilligenarbeit, Praktika und Anstellungen.';
   return {
     title: { absolute: title },
     description,
     openGraph: { title, description, type: 'website' },
-  }
+  };
 }
 
 export default async function CareersPage({ searchParams }: PageProps) {
-  const { track } = await searchParams
+  const { track } = await searchParams;
   const postings = await listPublicVacancies({
     role_track: track as RoleTrack | undefined,
-  })
+  });
 
   return (
     <main className="min-h-screen">
@@ -41,12 +41,9 @@ export default async function CareersPage({ searchParams }: PageProps) {
 
       <Section density="default" contained={false}>
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <CareersListClient
-            postings={postings}
-            activeTrack={track ?? null}
-          />
+          <CareersListClient postings={postings} activeTrack={track ?? null} />
         </div>
       </Section>
     </main>
-  )
+  );
 }

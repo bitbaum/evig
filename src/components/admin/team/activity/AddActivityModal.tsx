@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Add Activity Modal
@@ -6,14 +6,14 @@
  * Modal for creating a new manual activity update
  */
 
-import { useState } from 'react'
-import { Loader2 } from 'lucide-react'
-import { Modal } from '@/components/ui/Modal'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Select } from '@/components/ui/select'
-import { FormField } from '@/components/ui/form-field'
+import { useState } from 'react';
+import { Loader2 } from 'lucide-react';
+import { Modal } from '@/components/ui/Modal';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select } from '@/components/ui/select';
+import { FormField } from '@/components/ui/form-field';
 import {
   ACTIVITY_UPDATE_TYPE_OPTIONS,
   VISIBILITY_OPTIONS,
@@ -24,27 +24,27 @@ import {
   type ActivityUpdateType,
   type VisibilityLevel,
   type ActivityCategory,
-} from '@/config/activity'
-import { useActivityUpdateMutations } from './useActivityStream'
+} from '@/config/activity';
+import { useActivityUpdateMutations } from './useActivityStream';
 
 interface AddActivityModalProps {
-  onClose: () => void
-  onSuccess: () => void
+  onClose: () => void;
+  onSuccess: () => void;
 }
 
 export function AddActivityModal({ onClose, onSuccess }: AddActivityModalProps) {
-  const [updateType, setUpdateType] = useState<string>('accomplishment')
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [category, setCategory] = useState<string>('')
-  const [visibility, setVisibility] = useState<string>('team')
+  const [updateType, setUpdateType] = useState<string>('accomplishment');
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [category, setCategory] = useState<string>('');
+  const [visibility, setVisibility] = useState<string>('team');
 
-  const { saving, error, createUpdate } = useActivityUpdateMutations()
+  const { saving, error, createUpdate } = useActivityUpdateMutations();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    if (!title.trim()) return
+    if (!title.trim()) return;
 
     const result = await createUpdate({
       update_type: updateType,
@@ -52,19 +52,22 @@ export function AddActivityModal({ onClose, onSuccess }: AddActivityModalProps) 
       description: description.trim() || null,
       category: category || null,
       visibility,
-    })
+    });
 
     if (result) {
-      onSuccess()
-      onClose()
+      onSuccess();
+      onClose();
     }
-  }
+  };
 
   return (
     <Modal isOpen onClose={onClose} title="Aktivität hinzufügen">
       {/* Error */}
       {error && (
-        <div id="activity-modal-error" className="mb-4 p-3 bg-error-50 dark:bg-error-900/30 border border-error-200 dark:border-error-800 rounded-lg text-error-700 dark:text-error-300 text-sm">
+        <div
+          id="activity-modal-error"
+          className="mb-4 p-3 bg-error-50 dark:bg-error-900/30 border border-error-200 dark:border-error-800 rounded-lg text-error-700 dark:text-error-300 text-sm"
+        >
           {error}
         </div>
       )}
@@ -164,5 +167,5 @@ export function AddActivityModal({ onClose, onSuccess }: AddActivityModalProps) 
         </div>
       </form>
     </Modal>
-  )
+  );
 }

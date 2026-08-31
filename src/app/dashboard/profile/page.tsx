@@ -1,34 +1,45 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import Heading from '@/components/ui/Heading'
-import { User, Save, Loader2, CheckCircle2, ArrowLeft, Shield, Settings as SettingsIcon } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
+import Link from 'next/link';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import Heading from '@/components/ui/Heading';
+import {
+  User,
+  Save,
+  Loader2,
+  CheckCircle2,
+  ArrowLeft,
+  Shield,
+  Settings as SettingsIcon,
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
 
 // Hooks
-import { useProfileData } from './hooks/useProfileData'
-import { useProfileForm } from './hooks/useProfileForm'
+import { useProfileData } from './hooks/useProfileData';
+import { useProfileForm } from './hooks/useProfileForm';
 
 // Components
-import { ProfileSkeleton } from '@/components/profile/ProfileSkeleton'
-import { AvatarUpload } from '@/components/profile/AvatarUpload'
-import { PersonalInfoSection } from './components/PersonalInfoSection'
-import { PublicProfileSection } from './components/PublicProfileSection'
-import { ServiceProviderSection } from './components/ServiceProviderSection'
+import { ProfileSkeleton } from '@/components/profile/ProfileSkeleton';
+import { AvatarUpload } from '@/components/profile/AvatarUpload';
+import { PersonalInfoSection } from './components/PersonalInfoSection';
+import { PublicProfileSection } from './components/PublicProfileSection';
+import { ServiceProviderSection } from './components/ServiceProviderSection';
 
 export default function ProfilePage() {
-  const t = useTranslations('dashboard.profile')
-  const { session, status, isLoading, profile, setProfile, isServiceProvider } = useProfileData()
-  const { isSaving, saveSuccess, error, handleSubmit, handleChange } = useProfileForm({ profile, setProfile })
+  const t = useTranslations('dashboard.profile');
+  const { session, status, isLoading, profile, setProfile, isServiceProvider } = useProfileData();
+  const { isSaving, saveSuccess, error, handleSubmit, handleChange } = useProfileForm({
+    profile,
+    setProfile,
+  });
 
   const handleAvatarUpload = (url: string) => {
-    handleChange('avatar_url', url)
-  }
+    handleChange('avatar_url', url);
+  };
 
   if (status === 'loading' || isLoading) {
-    return <ProfileSkeleton />
+    return <ProfileSkeleton />;
   }
 
   return (
@@ -44,10 +55,11 @@ export default function ProfilePage() {
               <ArrowLeft className="mr-1.5 h-3 w-3" />
               {t('backToDashboard')}
             </Link>
-            <Eyebrow>
-              {t('pageDescription')}
-            </Eyebrow>
-            <Heading level={1} className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl">
+            <Eyebrow>{t('pageDescription')}</Eyebrow>
+            <Heading
+              level={1}
+              className="mt-2 text-3xl font-semibold text-text-primary sm:text-4xl"
+            >
               {t('pageTitle')}
             </Heading>
           </div>
@@ -149,5 +161,5 @@ export default function ProfilePage() {
         </form>
       </article>
     </main>
-  )
+  );
 }

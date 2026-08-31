@@ -9,8 +9,8 @@
  * and grouping from here — not invent parallel labels/routes.
  */
 
-import { ROUTES } from '@/config/routes'
-import type { NavigationItem } from '@/config/navigation'
+import { ROUTES } from '@/config/routes';
+import type { NavigationItem } from '@/config/navigation';
 
 export const CUSTOMER_JOURNEYS = {
   hardware: {
@@ -91,34 +91,31 @@ export const CUSTOMER_JOURNEYS = {
       },
     ],
   },
-} as const
+} as const;
 
 /** Marktplatz mega-menu — the three things you can get from evig. */
 export function buildMarktplatzNavigationItems(): NavigationItem[] {
-  const { hardware, itHelp, ai } = CUSTOMER_JOURNEYS
+  const { hardware, itHelp, ai } = CUSTOMER_JOURNEYS;
 
-  const section = (
-    key: string,
-    href: string,
-  ): NavigationItem => ({
+  const section = (key: string, href: string): NavigationItem => ({
     name: key,
     nameKey: key,
     href,
     isSection: true,
-  })
+  });
 
   const link = (item: {
-    nameKey: string
-    href: string
-    descriptionKey: string
-    external?: boolean
+    nameKey: string;
+    href: string;
+    descriptionKey: string;
+    external?: boolean;
   }): NavigationItem => ({
     name: item.nameKey,
     nameKey: item.nameKey,
     href: item.href,
     descriptionKey: item.descriptionKey,
     external: item.external,
-  })
+  });
 
   return [
     section(hardware.sectionKey, hardware.hubHref),
@@ -127,7 +124,7 @@ export function buildMarktplatzNavigationItems(): NavigationItem[] {
     ...itHelp.items.map(link),
     section(ai.sectionKey, ai.hubHref),
     ...ai.items.map(link),
-  ]
+  ];
 }
 
 /** Primary homepage / marketing paths for each journey. */
@@ -139,4 +136,4 @@ export const JOURNEY_ENTRYPOINTS = {
   itHelpBrowseRequests: ROUTES.public.itHilfeBrowseRequests,
   becomeTechnician: ROUTES.public.profilTechniker,
   orgShop: `${ROUTES.public.marketplace}?seller_type=revampit`,
-} as const
+} as const;

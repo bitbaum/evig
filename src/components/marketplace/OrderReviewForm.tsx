@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * OrderReviewForm
@@ -10,75 +10,75 @@
  * - Submits to POST /api/marketplace/orders/[id]/review
  */
 
-import { useState } from 'react'
-import { Star, Loader2, ThumbsUp, ThumbsDown, CheckCircle } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import { apiFetch } from '@/lib/api/client'
+import { useState } from 'react';
+import { Star, Loader2, ThumbsUp, ThumbsDown, CheckCircle } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { apiFetch } from '@/lib/api/client';
 
 interface OrderReviewFormProps {
-  orderId: string
-  onSubmitted?: (review: { reviewId: string; rating: number }) => void
+  orderId: string;
+  onSubmitted?: (review: { reviewId: string; rating: number }) => void;
 }
 
 export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) {
-  const t = useTranslations('marketplace.review')
-  const [rating, setRating] = useState(0)
-  const [hoverRating, setHoverRating] = useState(0)
-  const [content, setContent] = useState('')
-  const [recommend, setRecommend] = useState(true)
-  const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState(false)
+  const t = useTranslations('marketplace.review');
+  const [rating, setRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
+  const [content, setContent] = useState('');
+  const [recommend, setRecommend] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError(null)
+    e.preventDefault();
+    setError(null);
 
     if (rating < 1 || rating > 5) {
-      setError(t('errorNoRatingOrder'))
-      return
+      setError(t('errorNoRatingOrder'));
+      return;
     }
 
-    const trimmed = content.trim()
+    const trimmed = content.trim();
     if (trimmed.length > 0 && trimmed.length < 10) {
-      setError(t('errorCommentTooShort'))
-      return
+      setError(t('errorCommentTooShort'));
+      return;
     }
 
-    setSubmitting(true)
+    setSubmitting(true);
     const result = await apiFetch<{ reviewId: string; rating: number; orderId: string }>(
       `/api/marketplace/orders/${orderId}/review`,
       {
         method: 'POST',
         body: { rating, content: trimmed, recommend },
       },
-    )
-    setSubmitting(false)
+    );
+    setSubmitting(false);
 
     if (!result.success) {
-      setError(result.error || t('errorSaveFailed'))
-      return
+      setError(result.error || t('errorSaveFailed'));
+      return;
     }
 
-    setSuccess(true)
+    setSuccess(true);
     if (result.data) {
-      onSubmitted?.({ reviewId: result.data.reviewId, rating: result.data.rating })
+      onSubmitted?.({ reviewId: result.data.reviewId, rating: result.data.rating });
     }
-  }
+  };
 
   if (success) {
     return (
       <div className="bg-action-muted border border-strong rounded-xl p-6 text-center">
         <CheckCircle className="w-10 h-10 text-action mx-auto mb-2" />
-        <Heading level={3} className="font-semibold text-action-text">{t('successHeading')}</Heading>
-        <p className="text-sm text-action mt-1">
-          {t('successDesc')}
-        </p>
+        <Heading level={3} className="font-semibold text-action-text">
+          {t('successHeading')}
+        </Heading>
+        <p className="text-sm text-action mt-1">{t('successDesc')}</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -89,7 +89,7 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
         </label>
         <div className="flex items-center gap-1">
           {[1, 2, 3, 4, 5].map((n) => {
-            const filled = n <= (hoverRating || rating)
+            const filled = n <= (hoverRating || rating);
             return (
               <Button
                 key={n}
@@ -110,7 +110,7 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
                   }`}
                 />
               </Button>
-            )
+            );
           })}
           {rating > 0 && (
             <span className="ml-2 text-sm text-text-secondary">
@@ -125,7 +125,8 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
           htmlFor="review-content"
           className="block text-sm font-medium text-text-secondary mb-2"
         >
-          {t('yourCommentLabel')} <span className="text-text-muted font-normal">{t('titleOptional')}</span>
+          {t('yourCommentLabel')}{' '}
+          <span className="text-text-muted font-normal">{t('titleOptional')}</span>
         </label>
         <Textarea
           id="review-content"
@@ -148,9 +149,7 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
             variant={recommend ? 'primary' : 'ghost'}
             onClick={() => setRecommend(true)}
             className={
-              recommend
-                ? ''
-                : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
+              recommend ? '' : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
             }
           >
             <ThumbsUp className="w-4 h-4" /> {t('recommendYes')}
@@ -160,9 +159,7 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
             variant={!recommend ? 'destructive' : 'ghost'}
             onClick={() => setRecommend(false)}
             className={
-              !recommend
-                ? ''
-                : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
+              !recommend ? '' : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
             }
           >
             <ThumbsDown className="w-4 h-4" /> {t('recommendNo')}
@@ -186,5 +183,5 @@ export function OrderReviewForm({ orderId, onSubmitted }: OrderReviewFormProps) 
         {t('submitButton')}
       </Button>
     </form>
-  )
+  );
 }

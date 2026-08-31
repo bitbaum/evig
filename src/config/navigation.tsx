@@ -1,11 +1,11 @@
-import React from 'react'
-import { ORG } from '@/config/org'
-import { buildMarktplatzNavigationItems } from '@/config/customer-journeys'
-import { ROUTES } from '@/config/routes'
+import React from 'react';
+import { ORG } from '@/config/org';
+import { buildMarktplatzNavigationItems } from '@/config/customer-journeys';
+import { ROUTES } from '@/config/routes';
 import {
   buildLearnServiceNavigationItems,
   buildServicesNavigationItems,
-} from '@/config/services-nav'
+} from '@/config/services-nav';
 
 /**
  * Navigation Configuration - SSOT for all navigation data
@@ -20,19 +20,19 @@ import {
  */
 
 export interface NavigationItem {
-  name: string
-  nameKey?: string
-  href: string
-  description?: string
-  descriptionKey?: string
-  external?: boolean
-  subItems?: NavigationItem[]
-  highlight?: boolean
-  isSection?: boolean
-  badge?: string
-  icon?: React.ReactNode
-  isMultiColumn?: boolean
-  dropdownAlignment?: 'left' | 'center' | 'right'
+  name: string;
+  nameKey?: string;
+  href: string;
+  description?: string;
+  descriptionKey?: string;
+  external?: boolean;
+  subItems?: NavigationItem[];
+  highlight?: boolean;
+  isSection?: boolean;
+  badge?: string;
+  icon?: React.ReactNode;
+  isMultiColumn?: boolean;
+  dropdownAlignment?: 'left' | 'center' | 'right';
 }
 
 /**
@@ -265,15 +265,15 @@ export const mainNavigation: NavigationItem[] = [
     descriptionKey: 'contactDesc',
     highlight: true,
   },
-]
+];
 
 /**
  * Social media link type
  */
 export interface SocialLink {
-  name: string
-  href: string
-  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
+  name: string;
+  href: string;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 }
 
 /**
@@ -281,4 +281,4 @@ export interface SocialLink {
  * were Revamp-IT's, and evig must not claim them or drive its traffic there.
  * Add evig's channels here when they exist; the footer + JSON-LD render from this.
  */
-export const socialLinks: SocialLink[] = []
+export const socialLinks: SocialLink[] = [];

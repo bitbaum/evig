@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { OptionCard, type VotingOption } from './OptionCard';
-import { adminInteractive } from '@/lib/admin-ui'
+import { adminInteractive } from '@/lib/admin-ui';
 
 interface Props {
   options: VotingOption[];
@@ -59,10 +59,7 @@ export function DotVote({ options, allocations, maxDots, usedDots, isGalleryMode
         </div>
       ) : (
         options.map((opt) => (
-          <div
-            key={opt.id}
-            className="flex items-center gap-3 rounded-md border border p-3"
-          >
+          <div key={opt.id} className="flex items-center gap-3 rounded-md border border p-3">
             <div className="flex-1">
               <span className="font-medium text-text-primary">{opt.label}</span>
             </div>
@@ -77,9 +74,7 @@ export function DotVote({ options, allocations, maxDots, usedDots, isGalleryMode
               >
                 -
               </Button>
-              <span className="w-8 text-center text-lg font-bold">
-                {allocations[opt.id] || 0}
-              </span>
+              <span className="w-8 text-center text-lg font-bold">{allocations[opt.id] || 0}</span>
               <Button
                 type="button"
                 variant="outline"

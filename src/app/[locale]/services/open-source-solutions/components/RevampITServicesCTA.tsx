@@ -1,20 +1,20 @@
-'use client'
+'use client';
 
-import { Link } from '@/i18n/navigation'
-import { Wrench, GraduationCap } from 'lucide-react'
-import { type OSSAlternative } from '@/config/open-source-registry'
-import Heading from '@/components/ui/Heading'
-import { useTranslations } from 'next-intl'
-import { ROUTES } from '@/config/routes'
+import { Link } from '@/i18n/navigation';
+import { Wrench, GraduationCap } from 'lucide-react';
+import { type OSSAlternative } from '@/config/open-source-registry';
+import Heading from '@/components/ui/Heading';
+import { useTranslations } from 'next-intl';
+import { ROUTES } from '@/config/routes';
 
 interface RevampITServicesCTAProps {
-  alternative: OSSAlternative
+  alternative: OSSAlternative;
 }
 
 export function RevampITServicesCTA({ alternative }: RevampITServicesCTAProps) {
-  const t = useTranslations('services.openSourceSolutions.cta')
-  const services = alternative.revampitServices
-  if (!services) return null
+  const t = useTranslations('services.openSourceSolutions.cta');
+  const services = alternative.revampitServices;
+  if (!services) return null;
 
   return (
     <div className="rounded-xl border-2 border bg-surface-raised p-5">
@@ -52,5 +52,5 @@ export function RevampITServicesCTA({ alternative }: RevampITServicesCTAProps) {
         </div>
       )}
     </div>
-  )
+  );
 }

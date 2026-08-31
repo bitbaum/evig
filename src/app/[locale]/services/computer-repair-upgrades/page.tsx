@@ -1,5 +1,5 @@
-import { redirect } from '@/i18n/navigation'
-import { getLocale } from 'next-intl/server'
+import { redirect } from '@/i18n/navigation';
+import { getLocale } from 'next-intl/server';
 
 /**
  * Retired service — repair happens through IT-Hilfe now.
@@ -13,6 +13,6 @@ import { getLocale } from 'next-intl/server'
  * intent is still served — just by a different surface.
  */
 export default async function RetiredRepairService() {
-  const locale = await getLocale()
-  redirect({ href: '/it-hilfe', locale })
+  const locale = await getLocale();
+  redirect({ href: '/it-hilfe', locale });
 }

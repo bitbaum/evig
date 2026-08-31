@@ -12,8 +12,8 @@
  * its result is cached for the lifetime of the process.
  */
 
-import 'server-only'
-import { z } from 'zod'
+import 'server-only';
+import { z } from 'zod';
 
 // =============================================================================
 // Empty-string handling
@@ -24,9 +24,9 @@ import { z } from 'zod'
 // empty strings to undefined before schema validation so optional fields behave
 // intuitively.
 
-const rawEnv: Record<string, unknown> = {}
+const rawEnv: Record<string, unknown> = {};
 for (const [k, v] of Object.entries(process.env)) {
-  rawEnv[k] = typeof v === 'string' && v.trim() === '' ? undefined : v
+  rawEnv[k] = typeof v === 'string' && v.trim() === '' ? undefined : v;
 }
 
 // =============================================================================
@@ -94,23 +94,23 @@ const serverEnvSchema = z.object({
 
   // --- Runtime ---------------------------------------------------------------
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-})
+});
 
 // =============================================================================
 // Runtime parse with friendly error formatting
 // =============================================================================
 
 function parseEnv(): z.infer<typeof serverEnvSchema> {
-  const parsed = serverEnvSchema.safeParse(rawEnv)
-  if (parsed.success) return parsed.data
+  const parsed = serverEnvSchema.safeParse(rawEnv);
+  if (parsed.success) return parsed.data;
 
   // Validation is presence-only and all fields are optional, so .safeParse
   // should never fail in practice. If it does (Zod internal error), log and
   // return raw env so the build doesn't die — point-of-use validators will
   // throw with actionable messages anyway.
-  console.warn('[env] schema parse failed — falling back to raw env:', parsed.error.flatten())
-  return rawEnv as z.infer<typeof serverEnvSchema>
+  console.warn('[env] schema parse failed — falling back to raw env:', parsed.error.flatten());
+  return rawEnv as z.infer<typeof serverEnvSchema>;
 }
 
-export const env = parseEnv()
-export type ServerEnv = typeof env
+export const env = parseEnv();
+export type ServerEnv = typeof env;

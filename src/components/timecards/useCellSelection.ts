@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { useGridPointerInput } from './useGridPointerInput'
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useGridPointerInput } from './useGridPointerInput';
 
 /**
  * useCellSelection — stateful multi-block selection for the day hour grid,
@@ -24,63 +24,63 @@ import { useGridPointerInput } from './useGridPointerInput'
  * re-seeds back to the parent.
  */
 export function useCellSelection(orderedKeys: string[], initial?: string[]) {
-  const [selected, setSelected] = useState<Set<string>>(() => new Set(initial ?? []))
-  const [version, setVersion] = useState(0)
-  const anchorRef = useRef<string | null>(null)
-  const paintModeRef = useRef<'paint' | 'erase'>('paint')
-  const selectedRef = useRef(selected)
+  const [selected, setSelected] = useState<Set<string>>(() => new Set(initial ?? []));
+  const [version, setVersion] = useState(0);
+  const anchorRef = useRef<string | null>(null);
+  const paintModeRef = useRef<'paint' | 'erase'>('paint');
+  const selectedRef = useRef(selected);
   useEffect(() => {
-    selectedRef.current = selected
-  })
+    selectedRef.current = selected;
+  });
 
   const applySpan = useCallback(
     (fromKey: string, toKey: string, mode: 'paint' | 'erase') => {
-      const a = orderedKeys.indexOf(fromKey)
-      const b = orderedKeys.indexOf(toKey)
-      if (a < 0 || b < 0) return
-      const [lo, hi] = a <= b ? [a, b] : [b, a]
-      setSelected(prev => {
-        const next = new Set(prev)
+      const a = orderedKeys.indexOf(fromKey);
+      const b = orderedKeys.indexOf(toKey);
+      if (a < 0 || b < 0) return;
+      const [lo, hi] = a <= b ? [a, b] : [b, a];
+      setSelected((prev) => {
+        const next = new Set(prev);
         for (let i = lo; i <= hi; i++) {
-          if (mode === 'paint') next.add(orderedKeys[i])
-          else next.delete(orderedKeys[i])
+          if (mode === 'paint') next.add(orderedKeys[i]);
+          else next.delete(orderedKeys[i]);
         }
-        return next
-      })
-      setVersion(v => v + 1)
+        return next;
+      });
+      setVersion((v) => v + 1);
     },
     [orderedKeys],
-  )
+  );
 
   const input = useGridPointerInput({
-    onDragStart: key => {
-      paintModeRef.current = selectedRef.current.has(key) ? 'erase' : 'paint'
-      anchorRef.current = key
-      applySpan(key, key, paintModeRef.current)
+    onDragStart: (key) => {
+      paintModeRef.current = selectedRef.current.has(key) ? 'erase' : 'paint';
+      anchorRef.current = key;
+      applySpan(key, key, paintModeRef.current);
     },
     onDragOver: (key, lastKey) => {
-      applySpan(lastKey ?? key, key, paintModeRef.current)
+      applySpan(lastKey ?? key, key, paintModeRef.current);
     },
     onTap: (key, info) => {
       if (info.shiftKey && anchorRef.current) {
-        applySpan(anchorRef.current, key, 'paint')
-        return
+        applySpan(anchorRef.current, key, 'paint');
+        return;
       }
-      anchorRef.current = key
-      applySpan(key, key, selectedRef.current.has(key) ? 'erase' : 'paint')
+      anchorRef.current = key;
+      applySpan(key, key, selectedRef.current.has(key) ? 'erase' : 'paint');
     },
-  })
+  });
 
   const clear = useCallback(() => {
-    setSelected(new Set())
-    anchorRef.current = null
-  }, [])
+    setSelected(new Set());
+    anchorRef.current = null;
+  }, []);
 
   /** Programmatic re-seed (external prop change) — does NOT bump `version`. */
   const setExact = useCallback((keys: string[]) => {
-    setSelected(new Set(keys))
-    anchorRef.current = keys[keys.length - 1] ?? null
-  }, [])
+    setSelected(new Set(keys));
+    anchorRef.current = keys[keys.length - 1] ?? null;
+  }, []);
 
   return {
     selected,
@@ -89,5 +89,5 @@ export function useCellSelection(orderedKeys: string[], initial?: string[]) {
     setExact,
     getCellProps: input.getCellProps,
     containerProps: input.containerProps,
-  }
+  };
 }

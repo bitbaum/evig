@@ -2,26 +2,26 @@
  * Admin Projects List — counts of open needs + new contributions per project.
  */
 
-import { Metadata } from 'next'
-import Link from 'next/link'
-import { getTranslations } from 'next-intl/server'
-import { db } from '@/db'
-import { projects, projectNeeds, projectContributions } from '@/db/schema'
-import { sql } from 'drizzle-orm'
-import { logger } from '@/lib/logger'
-import { ROUTES } from '@/config/routes'
-import { NEED_STATUSES, CONTRIBUTION_STATUSES } from '@/config/projects'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminStatsStrip } from '@/components/admin/AdminStatsStrip'
-import type { StatItem } from '@/components/admin/AdminStatsStrip'
-import { Lightbulb, Rocket, Handshake, AlertCircle, ArrowRight } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { designPrimitive } from '@/lib/design-system'
+import { Metadata } from 'next';
+import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
+import { db } from '@/db';
+import { projects, projectNeeds, projectContributions } from '@/db/schema';
+import { sql } from 'drizzle-orm';
+import { logger } from '@/lib/logger';
+import { ROUTES } from '@/config/routes';
+import { NEED_STATUSES, CONTRIBUTION_STATUSES } from '@/config/projects';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import { AdminStatsStrip } from '@/components/admin/AdminStatsStrip';
+import type { StatItem } from '@/components/admin/AdminStatsStrip';
+import { Lightbulb, Rocket, Handshake, AlertCircle, ArrowRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { designPrimitive } from '@/lib/design-system';
 
 export const metadata: Metadata = {
   title: 'Öffentliche Projekte',
   description: 'Bedarfe verwalten und eingehende Beiträge triagieren.',
-}
+};
 
 async function getProjectsOverview() {
   try {
@@ -40,26 +40,44 @@ async function getProjectsOverview() {
         )`,
       })
       .from(projects)
-      .orderBy(sql`${projects.isActive} DESC, ${projects.slug} ASC`)
+      .orderBy(sql`${projects.isActive} DESC, ${projects.slug} ASC`);
   } catch (error) {
-    logger.error('Error fetching projects overview', { error })
-    return []
+    logger.error('Error fetching projects overview', { error });
+    return [];
   }
 }
 
 export default async function AdminProjectsPage() {
-  const t = await getTranslations('admin.projects')
-  const list = await getProjectsOverview()
+  const t = await getTranslations('admin.projects');
+  const list = await getProjectsOverview();
 
-  const openNeedsTotal = list.reduce((sum, p) => sum + (p.openNeeds || 0), 0)
-  const newContribsTotal = list.reduce((sum, p) => sum + (p.newContributions || 0), 0)
+  const openNeedsTotal = list.reduce((sum, p) => sum + (p.openNeeds || 0), 0);
+  const newContribsTotal = list.reduce((sum, p) => sum + (p.newContributions || 0), 0);
 
   const stats: StatItem[] = [
-    { icon: Rocket,      color: 'blue',  label: t('stats.total'),            value: list.length },
-    { icon: Lightbulb,   color: 'green', label: t('stats.active'),           value: list.filter(p => p.isActive).length, valueColor: 'text-action' },
-    { icon: Handshake,   color: 'amber', label: t('stats.openNeeds'),        value: openNeedsTotal, valueColor: 'text-warning-600' },
-    { icon: AlertCircle, color: 'green', label: t('stats.newContributions'), value: newContribsTotal, valueColor: 'text-success-600' },
-  ]
+    { icon: Rocket, color: 'blue', label: t('stats.total'), value: list.length },
+    {
+      icon: Lightbulb,
+      color: 'green',
+      label: t('stats.active'),
+      value: list.filter((p) => p.isActive).length,
+      valueColor: 'text-action',
+    },
+    {
+      icon: Handshake,
+      color: 'amber',
+      label: t('stats.openNeeds'),
+      value: openNeedsTotal,
+      valueColor: 'text-warning-600',
+    },
+    {
+      icon: AlertCircle,
+      color: 'green',
+      label: t('stats.newContributions'),
+      value: newContribsTotal,
+      valueColor: 'text-success-600',
+    },
+  ];
 
   return (
     <AdminPageWrapper
@@ -78,7 +96,7 @@ export default async function AdminProjectsPage() {
         </div>
       ) : (
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {list.map(p => (
+          {list.map((p) => (
             <Link
               key={p.id}
               href={ROUTES.admin.project(p.slug)}
@@ -97,7 +115,12 @@ export default async function AdminProjectsPage() {
                   </h3>
                 </div>
                 {!p.isActive && (
-                  <span className={cn(designPrimitive.badgeBase, 'bg-surface-raised text-text-secondary dark:bg-surface-base/6 shrink-0')}>
+                  <span
+                    className={cn(
+                      designPrimitive.badgeBase,
+                      'bg-surface-raised text-text-secondary dark:bg-surface-base/6 shrink-0',
+                    )}
+                  >
                     {t('card.inactive')}
                   </span>
                 )}
@@ -110,10 +133,14 @@ export default async function AdminProjectsPage() {
                 </div>
                 <div>
                   <p className="text-text-tertiary">{t('card.newContributions')}</p>
-                  <p className={cn(
-                    'text-lg font-semibold',
-                    p.newContributions > 0 ? 'text-warning-600 dark:text-warning-400' : 'text-text-primary',
-                  )}>
+                  <p
+                    className={cn(
+                      'text-lg font-semibold',
+                      p.newContributions > 0
+                        ? 'text-warning-600 dark:text-warning-400'
+                        : 'text-text-primary',
+                    )}
+                  >
                     {p.newContributions}
                   </p>
                 </div>
@@ -127,5 +154,5 @@ export default async function AdminProjectsPage() {
         </div>
       )}
     </AdminPageWrapper>
-  )
+  );
 }

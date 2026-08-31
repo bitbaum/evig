@@ -64,5 +64,5 @@ export function ProfileSkeleton() {
         <div className="h-10 bg-surface-overlay rounded-sm w-24"></div>
       </div>
     </div>
-  )
+  );
 }

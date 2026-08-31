@@ -1,33 +1,33 @@
 // force-dynamic: this page reads a runtime ?token= query param + does a DB
 // lookup; static rendering doesn't make sense.
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
-import { db } from '@/db'
-import { sql, getTableName } from 'drizzle-orm'
-import { itHilfeOffers, itHilfeRequests } from '@/db/schema/itHilfe'
-import { users } from '@/db/schema/auth'
-import { verifyOfferAcceptToken } from '@/lib/it-hilfe/offer-accept-tokens'
-import { OFFER_STATUS, REQUEST_STATUS } from '@/config/it-hilfe'
-import { AcceptButton } from './AcceptButton'
-import { Link } from '@/i18n/navigation'
-import { PageShell } from '@/components/layout/PageShell'
-import { AlertCircle, CheckCircle, ArrowRight, Clock, Ban } from 'lucide-react'
-import { getTranslations } from 'next-intl/server'
+import { db } from '@/db';
+import { sql, getTableName } from 'drizzle-orm';
+import { itHilfeOffers, itHilfeRequests } from '@/db/schema/itHilfe';
+import { users } from '@/db/schema/auth';
+import { verifyOfferAcceptToken } from '@/lib/it-hilfe/offer-accept-tokens';
+import { OFFER_STATUS, REQUEST_STATUS } from '@/config/it-hilfe';
+import { AcceptButton } from './AcceptButton';
+import { Link } from '@/i18n/navigation';
+import { PageShell } from '@/components/layout/PageShell';
+import { AlertCircle, CheckCircle, ArrowRight, Clock, Ban } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 
 interface OfferDisplay {
-  offer_id: string
-  offer_status: string
-  offer_message: string
-  helper_name: string | null
-  request_id: string
-  request_title: string
-  request_status: string
+  offer_id: string;
+  offer_status: string;
+  offer_message: string;
+  helper_name: string | null;
+  request_id: string;
+  request_title: string;
+  request_status: string;
 }
 
 async function fetchOfferDisplay(offerId: string): Promise<OfferDisplay | null> {
-  const offTable = getTableName(itHilfeOffers)
-  const reqTable = getTableName(itHilfeRequests)
-  const uTable = getTableName(users)
+  const offTable = getTableName(itHilfeOffers);
+  const reqTable = getTableName(itHilfeRequests);
+  const uTable = getTableName(users);
 
   const result = await db.execute(sql`
     SELECT
@@ -42,21 +42,21 @@ async function fetchOfferDisplay(offerId: string): Promise<OfferDisplay | null> 
     JOIN ${sql.raw(reqTable)} r ON o.request_id = r.id
     JOIN ${sql.raw(uTable)} uh ON o.helper_id = uh.id
     WHERE o.id = ${offerId}
-  `)
-  if (result.rows.length === 0) return null
-  return result.rows[0] as unknown as OfferDisplay
+  `);
+  if (result.rows.length === 0) return null;
+  return result.rows[0] as unknown as OfferDisplay;
 }
 
 interface PageProps {
-  params: Promise<{ locale: string }>
-  searchParams: Promise<{ token?: string | string[] }>
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ token?: string | string[] }>;
 }
 
 export default async function AcceptOfferTokenPage({ params, searchParams }: PageProps) {
-  const { locale } = await params
-  const sp = await searchParams
-  const token = typeof sp.token === 'string' ? sp.token : ''
-  const t = await getTranslations({ locale, namespace: 'itHelp.accept' })
+  const { locale } = await params;
+  const sp = await searchParams;
+  const token = typeof sp.token === 'string' ? sp.token : '';
+  const t = await getTranslations({ locale, namespace: 'itHelp.accept' });
 
   if (!token) {
     return (
@@ -65,10 +65,10 @@ export default async function AcceptOfferTokenPage({ params, searchParams }: Pag
         title={t('linkIncomplete.title')}
         message={t('linkIncomplete.message')}
       />
-    )
+    );
   }
 
-  const verifyResult = verifyOfferAcceptToken(token)
+  const verifyResult = verifyOfferAcceptToken(token);
   if (!verifyResult.ok) {
     if (verifyResult.reason === 'expired') {
       return (
@@ -78,7 +78,7 @@ export default async function AcceptOfferTokenPage({ params, searchParams }: Pag
           message={t('linkExpired.message')}
           cta={{ href: '/it-hilfe/my', label: t('linkExpired.cta') }}
         />
-      )
+      );
     }
     return (
       <StateCard
@@ -87,10 +87,10 @@ export default async function AcceptOfferTokenPage({ params, searchParams }: Pag
         message={t('linkInvalid.message')}
         cta={{ href: '/it-hilfe/my', label: t('linkInvalid.cta') }}
       />
-    )
+    );
   }
 
-  const offerDisplay = await fetchOfferDisplay(verifyResult.offerId)
+  const offerDisplay = await fetchOfferDisplay(verifyResult.offerId);
   if (!offerDisplay) {
     return (
       <StateCard
@@ -98,7 +98,7 @@ export default async function AcceptOfferTokenPage({ params, searchParams }: Pag
         title={t('offerNotFound.title')}
         message={t('offerNotFound.message')}
       />
-    )
+    );
   }
 
   if (offerDisplay.offer_status !== OFFER_STATUS.PENDING) {
@@ -109,7 +109,7 @@ export default async function AcceptOfferTokenPage({ params, searchParams }: Pag
         message={t('alreadyHandled.message')}
         cta={{ href: `/it-hilfe/${offerDisplay.request_id}`, label: t('alreadyHandled.cta') }}
       />
-    )
+    );
   }
 
   if (offerDisplay.request_status !== REQUEST_STATUS.OPEN) {
@@ -120,7 +120,7 @@ export default async function AcceptOfferTokenPage({ params, searchParams }: Pag
         message={t('requestClosed.message')}
         cta={{ href: `/it-hilfe/${offerDisplay.request_id}`, label: t('requestClosed.cta') }}
       />
-    )
+    );
   }
 
   // Happy path: render confirmation card with the client-island button.
@@ -133,7 +133,8 @@ export default async function AcceptOfferTokenPage({ params, searchParams }: Pag
             <div>
               <h1 className="ui-public-display-md">Angebot annehmen?</h1>
               <p className="ui-public-meta mt-2">
-                Du bist im Begriff, das folgende Angebot anzunehmen. Alle anderen Angebote für diese Anfrage werden dabei automatisch abgelehnt.
+                Du bist im Begriff, das folgende Angebot anzunehmen. Alle anderen Angebote für diese
+                Anfrage werden dabei automatisch abgelehnt.
               </p>
             </div>
           </div>
@@ -145,7 +146,9 @@ export default async function AcceptOfferTokenPage({ params, searchParams }: Pag
             </div>
             <div>
               <dt className="ui-public-card-label mb-1">Techniker</dt>
-              <dd className="text-base text-text-primary">{offerDisplay.helper_name || 'Unbekannt'}</dd>
+              <dd className="text-base text-text-primary">
+                {offerDisplay.helper_name || 'Unbekannt'}
+              </dd>
             </div>
             <div>
               <dt className="ui-public-card-label mb-1">Nachricht</dt>
@@ -157,14 +160,17 @@ export default async function AcceptOfferTokenPage({ params, searchParams }: Pag
 
           <div className="flex flex-wrap items-center gap-3">
             <AcceptButton token={token} />
-            <Link href={`/it-hilfe/${offerDisplay.request_id}`} className="ui-public-cta-ghost inline-flex items-center">
+            <Link
+              href={`/it-hilfe/${offerDisplay.request_id}`}
+              className="ui-public-cta-ghost inline-flex items-center"
+            >
               Anfrage öffnen
             </Link>
           </div>
         </div>
       </PageShell>
     </div>
-  )
+  );
 }
 
 function StateCard({
@@ -173,10 +179,10 @@ function StateCard({
   message,
   cta,
 }: {
-  icon: React.ReactNode
-  title: string
-  message: string
-  cta?: { href: string; label: string }
+  icon: React.ReactNode;
+  title: string;
+  message: string;
+  cta?: { href: string; label: string };
 }) {
   return (
     <div className="bg-canvas min-h-screen">
@@ -194,5 +200,5 @@ function StateCard({
         </div>
       </PageShell>
     </div>
-  )
+  );
 }

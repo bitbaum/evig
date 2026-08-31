@@ -23,7 +23,7 @@ export {
   validateProfileSlugs,
   getProfilesByCategory,
   type CustomerProfile,
-} from './profiles'
+} from './profiles';
 
 // Categories
 export {
@@ -36,7 +36,7 @@ export {
   getCategoryDetails,
   type Kategorie,
   type SubKategorie,
-} from './categories'
+} from './categories';
 
 // Conditions
 export {
@@ -48,7 +48,7 @@ export {
   parseConditionFromText,
   type Condition,
   type ZustandValue,
-} from './conditions'
+} from './conditions';
 
 // Spec templates
 export {
@@ -58,12 +58,7 @@ export {
   mergeWithTemplate,
   templateToSpecFields,
   type SpecTemplate,
-} from './spec-templates'
+} from './spec-templates';
 
 // Bulk erfassung config
-export {
-  BULK_TABLE_COLUMNS,
-  BULK_LIMITS,
-  CSV_COLUMN_ALIASES,
-  type BulkTableColumn,
-} from './bulk'
+export { BULK_TABLE_COLUMNS, BULK_LIMITS, CSV_COLUMN_ALIASES, type BulkTableColumn } from './bulk';

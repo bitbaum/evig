@@ -2,10 +2,14 @@
  * Location Constants (SSOT)
  */
 
-export type LocationType = 'venue' | 'home' | 'online' | 'community_center' | 'business'
-export const LOCATION_TYPE_VALUES: LocationType[] = ['venue', 'home', 'online', 'community_center', 'business']
-
-
+export type LocationType = 'venue' | 'home' | 'online' | 'community_center' | 'business';
+export const LOCATION_TYPE_VALUES: LocationType[] = [
+  'venue',
+  'home',
+  'online',
+  'community_center',
+  'business',
+];
 
 export const LOCATION_STATUS = {
   PENDING: 'pending',
@@ -14,7 +18,7 @@ export const LOCATION_STATUS = {
   SUSPENDED: 'suspended',
 } as const;
 
-export type LocationStatus = typeof LOCATION_STATUS[keyof typeof LOCATION_STATUS];
+export type LocationStatus = (typeof LOCATION_STATUS)[keyof typeof LOCATION_STATUS];
 
 export const LOCATION_STATUS_LABELS: Record<string, string> = {
   [LOCATION_STATUS.PENDING]: 'Ausstehend',
@@ -28,13 +32,19 @@ export function getLocationStatusLabel(status: string): string {
 }
 
 export const LOCATION_STATUS_COLORS: Record<string, string> = {
-  [LOCATION_STATUS.APPROVED]: 'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
-  [LOCATION_STATUS.PENDING]: 'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
+  [LOCATION_STATUS.APPROVED]:
+    'bg-success-100 dark:bg-success-900/30 text-success-800 dark:text-success-300',
+  [LOCATION_STATUS.PENDING]:
+    'bg-warning-100 dark:bg-warning-900/30 text-warning-800 dark:text-warning-200',
   [LOCATION_STATUS.REJECTED]: 'bg-error-100 text-error-800',
   [LOCATION_STATUS.SUSPENDED]: 'bg-orange-100 text-orange-800',
 };
 
 /** Combined config for AdminStatusBadge — avoids rebuilding via Object.fromEntries in page files */
-export const LOCATION_STATUS_CONFIG: Record<string, { label: string; color: string }> = Object.fromEntries(
-  Object.values(LOCATION_STATUS).map(s => [s, { label: LOCATION_STATUS_LABELS[s], color: LOCATION_STATUS_COLORS[s] }])
-)
+export const LOCATION_STATUS_CONFIG: Record<string, { label: string; color: string }> =
+  Object.fromEntries(
+    Object.values(LOCATION_STATUS).map((s) => [
+      s,
+      { label: LOCATION_STATUS_LABELS[s], color: LOCATION_STATUS_COLORS[s] },
+    ]),
+  );

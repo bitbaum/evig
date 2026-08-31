@@ -12,19 +12,19 @@
  * Auth required — staff only, same as the other advisors.
  */
 
-import { createFormAssistHandler } from '@fleet/ai-forms/server'
-import { auth } from '@/auth'
-import { callWithFallback } from '@/lib/ai/providers'
-import { AI_FORMS } from '@/config/ai-forms'
+import { createFormAssistHandler } from '@fleet/ai-forms/server';
+import { auth } from '@/auth';
+import { callWithFallback } from '@/lib/ai/providers';
+import { AI_FORMS } from '@/config/ai-forms';
 
 export const POST = createFormAssistHandler({
   targets: AI_FORMS,
 
   authorize: async () => {
-    const session = await auth()
+    const session = await auth();
     return session?.user?.email
       ? { ok: true }
-      : { ok: false, status: 401, error: 'Nicht angemeldet.' }
+      : { ok: false, status: 401, error: 'Nicht angemeldet.' };
   },
 
   // Reuses the app's own provider chain, so form assistance inherits the
@@ -36,11 +36,11 @@ export const POST = createFormAssistHandler({
       userPrompt: prompt,
       maxTokens,
       temperature,
-    })
+    });
     if (!result) {
-      throw new Error('Kein KI-Anbieter verfügbar.')
+      throw new Error('Kein KI-Anbieter verfügbar.');
     }
-    return result.text
+    return result.text;
   },
 
   // Deliberately NOT wrapped in the house { success, data } envelope. This
@@ -48,4 +48,4 @@ export const POST = createFormAssistHandler({
   // AssistResult shape directly (`result.ok`, `result.values`). Wrapping it
   // typechecks fine and breaks at runtime, because the hook would see an
   // object with no `ok` and report every successful call as a failure.
-})
+});

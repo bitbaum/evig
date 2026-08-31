@@ -1,23 +1,23 @@
-import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
-import { db } from '@/db'
-import { sellerProfiles, users, userProfiles } from '@/db/schema'
-import { eq } from 'drizzle-orm'
-import { ORG } from '@/config/org'
-import { APP_URL } from '@/config/urls'
-import { safeJsonLd } from '@/lib/seo/json-ld'
-import { logger } from '@/lib/logger'
+import type { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
+import { db } from '@/db';
+import { sellerProfiles, users, userProfiles } from '@/db/schema';
+import { eq } from 'drizzle-orm';
+import { ORG } from '@/config/org';
+import { APP_URL } from '@/config/urls';
+import { safeJsonLd } from '@/lib/seo/json-ld';
+import { logger } from '@/lib/logger';
 
-const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 interface SellerMeta {
-  display_name: string | null
-  user_name: string | null
-  bio: string | null
-  city: string | null
-  canton: string | null
-  avatar_url: string | null
-  total_listings: number | null
+  display_name: string | null;
+  user_name: string | null;
+  bio: string | null;
+  city: string | null;
+  canton: string | null;
+  avatar_url: string | null;
+  total_listings: number | null;
 }
 
 async function getSellerMeta(id: string): Promise<SellerMeta | null> {
@@ -35,38 +35,38 @@ async function getSellerMeta(id: string): Promise<SellerMeta | null> {
       .from(sellerProfiles)
       .innerJoin(users, eq(sellerProfiles.userId, users.id))
       .leftJoin(userProfiles, eq(sellerProfiles.userId, userProfiles.userId))
-      .where(eq(sellerProfiles.userId, id))
-    return row ?? null
+      .where(eq(sellerProfiles.userId, id));
+    return row ?? null;
   } catch (err) {
-    logger.warn('Failed to load seller meta', { error: err })
-    return null
+    logger.warn('Failed to load seller meta', { error: err });
+    return null;
   }
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: string; id: string }>
+  params: Promise<{ locale: string; id: string }>;
 }): Promise<Metadata> {
-  const { locale, id } = await params
-  const t = await getTranslations({ locale, namespace: 'sellers' })
+  const { locale, id } = await params;
+  const t = await getTranslations({ locale, namespace: 'sellers' });
 
   if (!UUID_RE.test(id)) {
-    return { title: { absolute: `${t('meta.titleFallback')} | ${ORG.name}` } }
+    return { title: { absolute: `${t('meta.titleFallback')} | ${ORG.name}` } };
   }
 
-  const seller = await getSellerMeta(id)
+  const seller = await getSellerMeta(id);
   if (!seller) {
-    return { title: { absolute: `${t('meta.titleFallback')} | ${ORG.name}` } }
+    return { title: { absolute: `${t('meta.titleFallback')} | ${ORG.name}` } };
   }
 
-  const name = seller.display_name || seller.user_name || ORG.name
-  const count = seller.total_listings ?? 0
-  const title = t('meta.title', { name })
-  const description = t('meta.description', { name, count })
+  const name = seller.display_name || seller.user_name || ORG.name;
+  const count = seller.total_listings ?? 0;
+  const title = t('meta.title', { name });
+  const description = t('meta.description', { name, count });
   const location = seller.city
     ? `${seller.city}${seller.canton ? `, ${seller.canton}` : ''}`
-    : null
+    : null;
 
   return {
     title: { absolute: title },
@@ -83,24 +83,24 @@ export async function generateMetadata({
       canonical: `${APP_URL}/sellers/${id}`,
     },
     other: location ? { 'profile:location': location } : undefined,
-  }
+  };
 }
 
 export default async function SellerLayout({
   children,
   params,
 }: {
-  children: React.ReactNode
-  params: Promise<{ locale: string; id: string }>
+  children: React.ReactNode;
+  params: Promise<{ locale: string; id: string }>;
 }) {
-  const { id } = await params
+  const { id } = await params;
 
-  if (!UUID_RE.test(id)) return <>{children}</>
+  if (!UUID_RE.test(id)) return <>{children}</>;
 
-  const seller = await getSellerMeta(id)
-  if (!seller) return <>{children}</>
+  const seller = await getSellerMeta(id);
+  if (!seller) return <>{children}</>;
 
-  const name = seller.display_name || seller.user_name || ORG.name
+  const name = seller.display_name || seller.user_name || ORG.name;
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -122,15 +122,12 @@ export default async function SellerLayout({
       name: ORG.name,
       url: APP_URL,
     },
-  }
+  };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(jsonLd) }} />
       {children}
     </>
-  )
+  );
 }

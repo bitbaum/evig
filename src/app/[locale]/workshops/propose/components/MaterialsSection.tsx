@@ -1,27 +1,30 @@
-'use client'
+'use client';
 
-import { Users } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { responsiveTypography } from '@/lib/responsive'
-import Heading from '@/components/ui/Heading'
-import { Textarea } from '@/components/ui/textarea'
+import { Users } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { responsiveTypography } from '@/lib/responsive';
+import Heading from '@/components/ui/Heading';
+import { Textarea } from '@/components/ui/textarea';
 
 interface MaterialsSectionProps {
-  materialsProvided: string
-  materialsRequired: string
-  onChange: (field: string, value: string) => void
+  materialsProvided: string;
+  materialsRequired: string;
+  onChange: (field: string, value: string) => void;
 }
 
 export function MaterialsSection({
   materialsProvided,
   materialsRequired,
-  onChange
+  onChange,
 }: MaterialsSectionProps) {
-  const t = useTranslations('workshops.propose')
+  const t = useTranslations('workshops.propose');
 
   return (
     <div className="mb-8">
-      <Heading level={2} className={`${responsiveTypography.subsection} font-semibold text-text-primary mb-4 flex items-center`}>
+      <Heading
+        level={2}
+        className={`${responsiveTypography.subsection} font-semibold text-text-primary mb-4 flex items-center`}
+      >
         <Users className="w-5 h-5 mr-2" />
         {t('sections.materials.title')}
       </Heading>
@@ -52,5 +55,5 @@ export function MaterialsSection({
         </div>
       </div>
     </div>
-  )
+  );
 }

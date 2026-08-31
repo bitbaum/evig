@@ -29,33 +29,33 @@
  *     access the request they just submitted.
  */
 
-import { getUserByEmail, createUser } from '@/lib/auth/db'
+import { getUserByEmail, createUser } from '@/lib/auth/db';
 
 export interface FindOrCreateResult {
-  userId: string
-  wasCreated: boolean
+  userId: string;
+  wasCreated: boolean;
 }
 
 // Basic RFC-5322-ish check. Real validation happens at the schema layer
 // upstream; this is a defensive guard so we don't insert junk into the
 // users table.
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function normaliseEmail(raw: string): string {
-  return raw.trim().toLowerCase()
+  return raw.trim().toLowerCase();
 }
 
 export async function findOrCreateAnonymousUser(rawEmail: string): Promise<FindOrCreateResult> {
-  const email = normaliseEmail(rawEmail)
+  const email = normaliseEmail(rawEmail);
   if (!email || !EMAIL_REGEX.test(email)) {
-    throw new Error('Invalid email')
+    throw new Error('Invalid email');
   }
 
-  const existing = await getUserByEmail(email)
+  const existing = await getUserByEmail(email);
   if (existing) {
-    return { userId: existing.id, wasCreated: false }
+    return { userId: existing.id, wasCreated: false };
   }
 
-  const created = await createUser({ email })
-  return { userId: created.id, wasCreated: true }
+  const created = await createUser({ email });
+  return { userId: created.id, wasCreated: true };
 }

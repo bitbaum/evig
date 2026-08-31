@@ -1,30 +1,36 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Gauge, Plus, Pencil, Trash2, Check, X, Loader2, ArrowUp, ArrowDown } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { apiFetch } from '@/lib/api/client'
-import { useAsyncAction } from '@/hooks/useAsyncAction'
-import { metricProgress } from '@/lib/team/metric-progress'
-import type { TeamMetricRow } from '@/lib/schemas/teams'
+import { useState } from 'react';
+import { Gauge, Plus, Pencil, Trash2, Check, X, Loader2, ArrowUp, ArrowDown } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { apiFetch } from '@/lib/api/client';
+import { useAsyncAction } from '@/hooks/useAsyncAction';
+import { metricProgress } from '@/lib/team/metric-progress';
+import type { TeamMetricRow } from '@/lib/schemas/teams';
 
 interface Props {
-  teamId: string
-  metrics: TeamMetricRow[]
+  teamId: string;
+  metrics: TeamMetricRow[];
 }
 
 interface Draft {
-  label: string
-  current_value: string
-  target_value: string
-  unit: string
-  higher_is_better: boolean
+  label: string;
+  current_value: string;
+  target_value: string;
+  unit: string;
+  higher_is_better: boolean;
 }
 
-const emptyDraft: Draft = { label: '', current_value: '', target_value: '', unit: '', higher_is_better: true }
+const emptyDraft: Draft = {
+  label: '',
+  current_value: '',
+  target_value: '',
+  unit: '',
+  higher_is_better: true,
+};
 
 const toDraft = (m: TeamMetricRow): Draft => ({
   label: m.label,
@@ -32,10 +38,10 @@ const toDraft = (m: TeamMetricRow): Draft => ({
   target_value: m.target_value ?? '',
   unit: m.unit ?? '',
   higher_is_better: m.higher_is_better,
-})
+});
 
 // Empty numeric field → null (a metric may set only one side).
-const numOrNull = (v: string) => (v.trim() === '' ? null : Number(v))
+const numOrNull = (v: string) => (v.trim() === '' ? null : Number(v));
 
 const toBody = (d: Draft) => ({
   label: d.label.trim(),
@@ -43,27 +49,31 @@ const toBody = (d: Draft) => ({
   target_value: numOrNull(d.target_value),
   unit: d.unit.trim() || null,
   higher_is_better: d.higher_is_better,
-})
+});
 
 // Reached target? Progress 100 means on/over target in the "good" direction.
 const barColor = (pct: number | null) => {
-  if (pct == null) return 'bg-neutral-300 dark:bg-neutral-600'
-  if (pct >= 100) return 'bg-success-500'
-  if (pct >= 60) return 'bg-info-500'
-  return 'bg-warning-500'
-}
+  if (pct == null) return 'bg-neutral-300 dark:bg-neutral-600';
+  if (pct >= 100) return 'bg-success-500';
+  if (pct >= 60) return 'bg-info-500';
+  return 'bg-warning-500';
+};
 
-const fmt = (v: string | null) => (v == null ? '—' : String(Number(v)))
+const fmt = (v: string | null) => (v == null ? '—' : String(Number(v)));
 
 /** Add/edit form — hoisted (not created during render) so it never remounts. */
 function MetricDraftForm({
-  draft, setDraft, onSave, onCancel, saving,
+  draft,
+  setDraft,
+  onSave,
+  onCancel,
+  saving,
 }: {
-  draft: Draft
-  setDraft: (d: Draft) => void
-  onSave: () => void
-  onCancel: () => void
-  saving: boolean
+  draft: Draft;
+  setDraft: (d: Draft) => void;
+  onSave: () => void;
+  onCancel: () => void;
+  saving: boolean;
 }) {
   return (
     <div className="space-y-2 rounded-lg border border-dashed border-border p-3">
@@ -117,34 +127,42 @@ function MetricDraftForm({
         </Button>
       </div>
     </div>
-  )
+  );
 }
 
 /** Manual KPI cards for a team, with a progress bar toward target. */
 export default function TeamMetricsSection({ teamId, metrics }: Props) {
-  const { busy, error, run } = useAsyncAction()
-  const [editingId, setEditingId] = useState<string | null>(null)
-  const [adding, setAdding] = useState(false)
-  const [draft, setDraft] = useState<Draft>(emptyDraft)
+  const { busy, error, run } = useAsyncAction();
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [adding, setAdding] = useState(false);
+  const [draft, setDraft] = useState<Draft>(emptyDraft);
 
   async function create() {
-    if (!draft.label.trim()) return
+    if (!draft.label.trim()) return;
     const ok = await run('create', () =>
       apiFetch(`/api/admin/teams/${teamId}/metrics`, { method: 'POST', body: toBody(draft) }),
-    )
-    if (ok) { setAdding(false); setDraft(emptyDraft) }
+    );
+    if (ok) {
+      setAdding(false);
+      setDraft(emptyDraft);
+    }
   }
 
   async function saveEdit(id: string) {
-    if (!draft.label.trim()) return
+    if (!draft.label.trim()) return;
     const ok = await run(`edit-${id}`, () =>
-      apiFetch(`/api/admin/teams/${teamId}/metrics/${id}`, { method: 'PATCH', body: toBody(draft) }),
-    )
-    if (ok) setEditingId(null)
+      apiFetch(`/api/admin/teams/${teamId}/metrics/${id}`, {
+        method: 'PATCH',
+        body: toBody(draft),
+      }),
+    );
+    if (ok) setEditingId(null);
   }
 
   const remove = (id: string) =>
-    run(`del-${id}`, () => apiFetch(`/api/admin/teams/${teamId}/metrics/${id}`, { method: 'DELETE' }))
+    run(`del-${id}`, () =>
+      apiFetch(`/api/admin/teams/${teamId}/metrics/${id}`, { method: 'DELETE' }),
+    );
 
   return (
     <Card className="p-5">
@@ -154,7 +172,14 @@ export default function TeamMetricsSection({ teamId, metrics }: Props) {
           Kennzahlen <span className="text-text-tertiary font-normal">({metrics.length})</span>
         </h2>
         {!adding && (
-          <Button size="sm" variant="ghost" onClick={() => { setDraft(emptyDraft); setAdding(true) }}>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => {
+              setDraft(emptyDraft);
+              setAdding(true);
+            }}
+          >
             <Plus className="w-3.5 h-3.5" />
             Kennzahl
           </Button>
@@ -169,49 +194,97 @@ export default function TeamMetricsSection({ teamId, metrics }: Props) {
 
       <ul className="space-y-3">
         {metrics.map((m) => {
-          const pct = metricProgress(m.current_value, m.target_value, m.higher_is_better)
+          const pct = metricProgress(m.current_value, m.target_value, m.higher_is_better);
           if (editingId === m.id) {
             return (
               <li key={m.id}>
-                <MetricDraftForm draft={draft} setDraft={setDraft} onSave={() => saveEdit(m.id)} onCancel={() => setEditingId(null)} saving={busy === `edit-${m.id}`} />
+                <MetricDraftForm
+                  draft={draft}
+                  setDraft={setDraft}
+                  onSave={() => saveEdit(m.id)}
+                  onCancel={() => setEditingId(null)}
+                  saving={busy === `edit-${m.id}`}
+                />
               </li>
-            )
+            );
           }
           return (
             <li key={m.id}>
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-sm text-text-primary flex items-center gap-1 min-w-0 flex-1 truncate">
-                  {m.higher_is_better
-                    ? <ArrowUp className="w-3 h-3 text-text-tertiary shrink-0" aria-label="Höher = besser" />
-                    : <ArrowDown className="w-3 h-3 text-text-tertiary shrink-0" aria-label="Tiefer = besser" />}
+                  {m.higher_is_better ? (
+                    <ArrowUp
+                      className="w-3 h-3 text-text-tertiary shrink-0"
+                      aria-label="Höher = besser"
+                    />
+                  ) : (
+                    <ArrowDown
+                      className="w-3 h-3 text-text-tertiary shrink-0"
+                      aria-label="Tiefer = besser"
+                    />
+                  )}
                   {m.label}
                 </span>
                 <span className="text-sm font-semibold text-text-primary tabular-nums shrink-0">
                   {fmt(m.current_value)}
-                  <span className="text-text-tertiary font-normal"> / {fmt(m.target_value)}{m.unit ? ` ${m.unit}` : ''}</span>
+                  <span className="text-text-tertiary font-normal">
+                    {' '}
+                    / {fmt(m.target_value)}
+                    {m.unit ? ` ${m.unit}` : ''}
+                  </span>
                 </span>
                 <div className="flex items-center gap-0.5 shrink-0">
-                  <Button size="icon" variant="ghost" onClick={() => { setDraft(toDraft(m)); setEditingId(m.id) }} aria-label="Kennzahl bearbeiten">
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    onClick={() => {
+                      setDraft(toDraft(m));
+                      setEditingId(m.id);
+                    }}
+                    aria-label="Kennzahl bearbeiten"
+                  >
                     <Pencil className="w-3.5 h-3.5" />
                   </Button>
-                  <Button size="icon" variant="destructive-ghost" onClick={() => remove(m.id)} disabled={busy === `del-${m.id}`} aria-label="Kennzahl löschen">
-                    {busy === `del-${m.id}` ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Trash2 className="w-3.5 h-3.5" />}
+                  <Button
+                    size="icon"
+                    variant="destructive-ghost"
+                    onClick={() => remove(m.id)}
+                    disabled={busy === `del-${m.id}`}
+                    aria-label="Kennzahl löschen"
+                  >
+                    {busy === `del-${m.id}` ? (
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      <Trash2 className="w-3.5 h-3.5" />
+                    )}
                   </Button>
                 </div>
               </div>
               <div className="h-1.5 rounded-full bg-surface-raised overflow-hidden">
-                <div className={`h-full rounded-full ${barColor(pct)}`} style={{ width: `${pct ?? 0}%` }} />
+                <div
+                  className={`h-full rounded-full ${barColor(pct)}`}
+                  style={{ width: `${pct ?? 0}%` }}
+                />
               </div>
             </li>
-          )
+          );
         })}
       </ul>
 
       {adding && (
         <div className="mt-3">
-          <MetricDraftForm draft={draft} setDraft={setDraft} onSave={create} onCancel={() => { setAdding(false); setDraft(emptyDraft) }} saving={busy === 'create'} />
+          <MetricDraftForm
+            draft={draft}
+            setDraft={setDraft}
+            onSave={create}
+            onCancel={() => {
+              setAdding(false);
+              setDraft(emptyDraft);
+            }}
+            saving={busy === 'create'}
+          />
         </div>
       )}
     </Card>
-  )
+  );
 }

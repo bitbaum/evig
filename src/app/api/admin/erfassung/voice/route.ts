@@ -6,7 +6,7 @@
  * `@/lib/erfassung/voice-to-product` (shared with the intake voice route).
  */
 
-import { withAdmin } from '@/lib/api/middleware'
-import { voiceToProductResponse } from '@/lib/erfassung/voice-to-product'
+import { withAdmin } from '@/lib/api/middleware';
+import { voiceToProductResponse } from '@/lib/erfassung/voice-to-product';
 
-export const POST = withAdmin('products', voiceToProductResponse)
+export const POST = withAdmin('products', voiceToProductResponse);

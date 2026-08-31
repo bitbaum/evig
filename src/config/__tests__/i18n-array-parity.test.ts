@@ -18,29 +18,29 @@
  * i18n SSOT rule in .claude/CLAUDE.md. This guard is the enforcement half.
  */
 
-import { readdirSync, readFileSync } from 'node:fs'
-import { join } from 'node:path'
+import { readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
-const MESSAGES_DIR = join(__dirname, '../../../messages')
-const de = JSON.parse(readFileSync(join(MESSAGES_DIR, 'de.json'), 'utf8'))
+const MESSAGES_DIR = join(__dirname, '../../../messages');
+const de = JSON.parse(readFileSync(join(MESSAGES_DIR, 'de.json'), 'utf8'));
 
-type ArrayShape = { path: string; length: number; elementKeys: string[][] }
+type ArrayShape = { path: string; length: number; elementKeys: string[][] };
 
 function elementKeySet(el: unknown): string[] {
-  if (el === null || typeof el !== 'object' || Array.isArray(el)) return []
-  return Object.keys(el as Record<string, unknown>).sort()
+  if (el === null || typeof el !== 'object' || Array.isArray(el)) return [];
+  return Object.keys(el as Record<string, unknown>).sort();
 }
 
 /** Collect every array path in an object tree, with its length + per-element key sets. */
 function collectArrays(obj: unknown, path: string, out: ArrayShape[]): void {
-  if (obj === null || typeof obj !== 'object') return
+  if (obj === null || typeof obj !== 'object') return;
   if (Array.isArray(obj)) {
-    out.push({ path, length: obj.length, elementKeys: obj.map(elementKeySet) })
-    obj.forEach((el, i) => collectArrays(el, `${path}[${i}]`, out))
-    return
+    out.push({ path, length: obj.length, elementKeys: obj.map(elementKeySet) });
+    obj.forEach((el, i) => collectArrays(el, `${path}[${i}]`, out));
+    return;
   }
   for (const [key, val] of Object.entries(obj as Record<string, unknown>)) {
-    collectArrays(val, path ? `${path}.${key}` : key, out)
+    collectArrays(val, path ? `${path}.${key}` : key, out);
   }
 }
 
@@ -49,41 +49,47 @@ function resolve(tree: unknown, path: string): unknown {
   return path
     .replace(/\[(\d+)\]/g, '.$1')
     .split('.')
-    .reduce<unknown>((acc, seg) => (acc != null && typeof acc === 'object' ? (acc as Record<string, unknown>)[seg] : undefined), tree)
+    .reduce<unknown>(
+      (acc, seg) =>
+        acc != null && typeof acc === 'object' ? (acc as Record<string, unknown>)[seg] : undefined,
+      tree,
+    );
 }
 
 const deArrays = ((): ArrayShape[] => {
-  const out: ArrayShape[] = []
-  collectArrays(de, '', out)
+  const out: ArrayShape[] = [];
+  collectArrays(de, '', out);
   // only top-level array shapes (the per-element recursion is for nested arrays)
-  return out
-})()
+  return out;
+})();
 
-const localeFiles = readdirSync(MESSAGES_DIR).filter((f) => /^[a-z]{2}\.json$/.test(f) && f !== 'de.json')
+const localeFiles = readdirSync(MESSAGES_DIR).filter(
+  (f) => /^[a-z]{2}\.json$/.test(f) && f !== 'de.json',
+);
 
 describe('i18n array parity (vs canonical DE)', () => {
   it.each(localeFiles)('%s: arrays match DE length + per-element keys', (file) => {
-    const locale = JSON.parse(readFileSync(join(MESSAGES_DIR, file), 'utf8'))
-    const offenders: string[] = []
+    const locale = JSON.parse(readFileSync(join(MESSAGES_DIR, file), 'utf8'));
+    const offenders: string[] = [];
 
     for (const { path, length, elementKeys } of deArrays) {
-      const got = resolve(locale, path)
-      if (got === undefined) continue // omitted → falls back to DE, fine
+      const got = resolve(locale, path);
+      if (got === undefined) continue; // omitted → falls back to DE, fine
       if (!Array.isArray(got)) {
-        offenders.push(`${path}: expected array, got ${typeof got}`)
-        continue
+        offenders.push(`${path}: expected array, got ${typeof got}`);
+        continue;
       }
       if (got.length !== length) {
-        offenders.push(`${path}: length ${got.length} ≠ DE ${length}`)
-        continue
+        offenders.push(`${path}: length ${got.length} ≠ DE ${length}`);
+        continue;
       }
       got.forEach((el, i) => {
-        const want = elementKeys[i].join(',')
-        const have = elementKeySet(el).join(',')
-        if (want !== have) offenders.push(`${path}[${i}]: keys [${have}] ≠ DE [${want}]`)
-      })
+        const want = elementKeys[i].join(',');
+        const have = elementKeySet(el).join(',');
+        if (want !== have) offenders.push(`${path}[${i}]: keys [${have}] ≠ DE [${want}]`);
+      });
     }
 
-    expect(offenders).toEqual([])
-  })
-})
+    expect(offenders).toEqual([]);
+  });
+});

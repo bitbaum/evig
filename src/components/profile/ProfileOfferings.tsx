@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import type React from 'react'
-import { Link } from '@/i18n/navigation'
-import { useTranslations } from 'next-intl'
-import { ShoppingBag, Wrench, GraduationCap, FileText, ArrowUpRight } from 'lucide-react'
-import { formatDateShort } from '@/lib/date-formats'
-import { formatCHF } from '@/config/marketplace'
-import { ROUTES } from '@/config/routes'
-import Heading from '@/components/ui/Heading'
-import { EmptyState } from '@/components/ui/EmptyState'
-import { Tabs } from '@/components/ui/Tabs'
-import { ListingCard } from '@/components/marketplace/ListingCard'
-import { OfferingCard } from './profile-cards'
-import type { PublicProfile as PublicProfileData } from '@/lib/services/profile-service'
+import type React from 'react';
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
+import { ShoppingBag, Wrench, GraduationCap, FileText, ArrowUpRight } from 'lucide-react';
+import { formatDateShort } from '@/lib/date-formats';
+import { formatCHF } from '@/config/marketplace';
+import { ROUTES } from '@/config/routes';
+import Heading from '@/components/ui/Heading';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { Tabs } from '@/components/ui/Tabs';
+import { ListingCard } from '@/components/marketplace/ListingCard';
+import { OfferingCard } from './profile-cards';
+import type { PublicProfile as PublicProfileData } from '@/lib/services/profile-service';
 
 /**
  * The person's offerings, split into dynamic tabs — a tab appears only when the
@@ -20,14 +20,34 @@ import type { PublicProfile as PublicProfileData } from '@/lib/services/profile-
  * shows an empty fabricated tab. Single-offering profiles skip the tab chrome.
  */
 export function ProfileOfferings({ profile }: { profile: PublicProfileData }) {
-  const t = useTranslations('profile')
+  const t = useTranslations('profile');
 
   // Dynamic tabs — one per non-empty offering kind.
-  const tabs: Array<{ value: string; label: string; icon: React.ReactNode }> = []
-  if (profile.listings.length > 0) tabs.push({ value: 'listings', label: `${t('tabListings')} (${profile.listings.length})`, icon: <ShoppingBag className="h-4 w-4" /> })
-  if (profile.services.length > 0) tabs.push({ value: 'services', label: `${t('tabServices')} (${profile.services.length})`, icon: <Wrench className="h-4 w-4" /> })
-  if (profile.workshops.length > 0) tabs.push({ value: 'workshops', label: `${t('tabWorkshops')} (${profile.workshops.length})`, icon: <GraduationCap className="h-4 w-4" /> })
-  if (profile.content.length > 0) tabs.push({ value: 'content', label: `${t('tabContent')} (${profile.content.length})`, icon: <FileText className="h-4 w-4" /> })
+  const tabs: Array<{ value: string; label: string; icon: React.ReactNode }> = [];
+  if (profile.listings.length > 0)
+    tabs.push({
+      value: 'listings',
+      label: `${t('tabListings')} (${profile.listings.length})`,
+      icon: <ShoppingBag className="h-4 w-4" />,
+    });
+  if (profile.services.length > 0)
+    tabs.push({
+      value: 'services',
+      label: `${t('tabServices')} (${profile.services.length})`,
+      icon: <Wrench className="h-4 w-4" />,
+    });
+  if (profile.workshops.length > 0)
+    tabs.push({
+      value: 'workshops',
+      label: `${t('tabWorkshops')} (${profile.workshops.length})`,
+      icon: <GraduationCap className="h-4 w-4" />,
+    });
+  if (profile.content.length > 0)
+    tabs.push({
+      value: 'content',
+      label: `${t('tabContent')} (${profile.content.length})`,
+      icon: <FileText className="h-4 w-4" />,
+    });
 
   const renderSection = (key: string) => {
     switch (key) {
@@ -56,7 +76,7 @@ export function ProfileOfferings({ profile }: { profile: PublicProfileData }) {
               />
             ))}
           </div>
-        )
+        );
       case 'services':
         return (
           <div className="space-y-4">
@@ -67,17 +87,21 @@ export function ProfileOfferings({ profile }: { profile: PublicProfileData }) {
                     ? formatCHF(s.base_price_cents / 100)
                     : s.hourly_rate_cents != null
                       ? t('perHour', { price: formatCHF(s.hourly_rate_cents / 100) })
-                      : null
+                      : null;
                 return (
                   <OfferingCard
                     key={s.id}
-                    href={profile.technician_id ? ROUTES.public.technicianProfile(profile.technician_id) : ROUTES.public.techniker}
+                    href={
+                      profile.technician_id
+                        ? ROUTES.public.technicianProfile(profile.technician_id)
+                        : ROUTES.public.techniker
+                    }
                     eyebrow={s.category}
                     title={s.name}
                     description={s.description}
                     meta={price}
                   />
-                )
+                );
               })}
             </div>
             {profile.technician_id && (
@@ -89,7 +113,7 @@ export function ProfileOfferings({ profile }: { profile: PublicProfileData }) {
               </Link>
             )}
           </div>
-        )
+        );
       case 'workshops':
         return (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -105,7 +129,7 @@ export function ProfileOfferings({ profile }: { profile: PublicProfileData }) {
               />
             ))}
           </div>
-        )
+        );
       case 'content':
         return (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -121,14 +145,20 @@ export function ProfileOfferings({ profile }: { profile: PublicProfileData }) {
               />
             ))}
           </div>
-        )
+        );
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   if (tabs.length === 0) {
-    return <EmptyState icon={ShoppingBag} title={t('noOfferingsTitle')} description={t('noOfferingsDescription')} />
+    return (
+      <EmptyState
+        icon={ShoppingBag}
+        title={t('noOfferingsTitle')}
+        description={t('noOfferingsDescription')}
+      />
+    );
   }
 
   if (tabs.length === 1) {
@@ -140,12 +170,12 @@ export function ProfileOfferings({ profile }: { profile: PublicProfileData }) {
         </Heading>
         {renderSection(tabs[0]!.value)}
       </div>
-    )
+    );
   }
 
   return (
     <Tabs tabs={tabs} defaultValue={tabs[0]!.value}>
       {(active) => renderSection(active)}
     </Tabs>
-  )
+  );
 }

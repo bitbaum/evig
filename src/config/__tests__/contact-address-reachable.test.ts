@@ -1,9 +1,9 @@
 /**
  * @jest-environment node
  */
-import { readFileSync, readdirSync, statSync } from 'node:fs'
-import { join, relative } from 'node:path'
-import { CONTACT, ORG } from '@/config/org'
+import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { join, relative } from 'node:path';
+import { CONTACT, ORG } from '@/config/org';
 
 /**
  * The address we tell users to write to must reach a mailbox, and must come
@@ -24,10 +24,10 @@ import { CONTACT, ORG } from '@/config/org'
 
 // Domains evig does not (yet) receive mail on. Remove an entry the same day
 // the domain is registered AND its mail is authenticated — not before.
-const UNREACHABLE_DOMAINS = ['evig.ch']
+const UNREACHABLE_DOMAINS = ['evig.ch'];
 
-const SRC = join(process.cwd(), 'src')
-const MESSAGES = join(process.cwd(), 'messages')
+const SRC = join(process.cwd(), 'src');
+const MESSAGES = join(process.cwd(), 'messages');
 
 /**
  * Files that legitimately name a non-CONTACT address:
@@ -46,40 +46,40 @@ const ALLOW = [
   /src\/components\/admin\/teams\//,
   /src\/app\/einladung\//,
   /__tests__/,
-]
+];
 
 function files(dir: string, exts: RegExp): string[] {
-  if (!statSync(dir, { throwIfNoEntry: false })?.isDirectory()) return []
+  if (!statSync(dir, { throwIfNoEntry: false })?.isDirectory()) return [];
   return readdirSync(dir).flatMap((e) => {
-    const full = join(dir, e)
-    if (statSync(full).isDirectory()) return files(full, exts)
-    return exts.test(e) ? [full] : []
-  })
+    const full = join(dir, e);
+    if (statSync(full).isDirectory()) return files(full, exts);
+    return exts.test(e) ? [full] : [];
+  });
 }
 
 describe('the published contact address is reachable', () => {
   it('is not on a domain that receives no mail', () => {
-    const domain = CONTACT.email.split('@')[1]
-    expect(UNREACHABLE_DOMAINS).not.toContain(domain)
-  })
+    const domain = CONTACT.email.split('@')[1];
+    expect(UNREACHABLE_DOMAINS).not.toContain(domain);
+  });
 
   it('supportEmail falls back to the same reachable address', () => {
-    const domain = CONTACT.supportEmail.split('@')[1]
-    expect(UNREACHABLE_DOMAINS).not.toContain(domain)
-  })
+    const domain = CONTACT.supportEmail.split('@')[1];
+    expect(UNREACHABLE_DOMAINS).not.toContain(domain);
+  });
 
   it('ORG.emailDomain stays the brand domain (it is not the contact mailbox)', () => {
     // Deliberate: emailDomain drives staff-email detection and the default
     // sender. It is NOT where users write to — do not repoint it at gmail.
-    expect(ORG.emailDomain).toBe('evig.ch')
-  })
+    expect(ORG.emailDomain).toBe('evig.ch');
+  });
 
   it('no user-facing message hardcodes an org contact address', () => {
-    const offenders: string[] = []
+    const offenders: string[] = [];
     for (const file of [...files(SRC, /\.tsx?$/), ...files(MESSAGES, /\.json$/)]) {
-      const rel = relative(process.cwd(), file)
-      if (ALLOW.some((rx) => rx.test(rel))) continue
-      let src = readFileSync(file, 'utf8')
+      const rel = relative(process.cwd(), file);
+      if (ALLOW.some((rx) => rx.test(rel))) continue;
+      let src = readFileSync(file, 'utf8');
       // Strip comments in TS/TSX: prose EXPLAINING this rule legitimately names
       // the old address, and a gate that trips on its own documentation just
       // teaches people to delete the documentation. JSON has no comments.
@@ -88,17 +88,17 @@ describe('the published contact address is reachable', () => {
           .replace(/\/\*[\s\S]*?\*\//g, '')
           .split('\n')
           .filter((l) => !l.trim().startsWith('//') && !l.trim().startsWith('*'))
-          .join('\n')
+          .join('\n');
       }
       // An org address written as a literal, not interpolated from CONTACT.
-      const hits = src.match(/[a-z0-9._-]+@(evig\.ch|revamp-it\.ch|revampit\.ch)/gi)
-      if (hits) offenders.push(`${rel}: ${[...new Set(hits)].join(', ')}`)
+      const hits = src.match(/[a-z0-9._-]+@(evig\.ch|revamp-it\.ch|revampit\.ch)/gi);
+      if (hits) offenders.push(`${rel}: ${[...new Set(hits)].join(', ')}`);
     }
-    expect(offenders).toEqual([])
-  })
+    expect(offenders).toEqual([]);
+  });
 
   it('scans a meaningful number of files (guards an always-green sweep)', () => {
-    expect(files(SRC, /\.tsx?$/).length).toBeGreaterThan(500)
-    expect(files(MESSAGES, /\.json$/).length).toBeGreaterThan(3)
-  })
-})
+    expect(files(SRC, /\.tsx?$/).length).toBeGreaterThan(500);
+    expect(files(MESSAGES, /\.json$/).length).toBeGreaterThan(3);
+  });
+});

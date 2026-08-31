@@ -10,11 +10,11 @@
  * Org facts and routes come from their SSOTs so links are always real.
  */
 
-import { ORG, CONTACT } from '@/config/org'
-import { ROUTES } from '@/config/routes'
-import type { HirnPageContext } from '@/config/hirn/page-contexts'
+import { ORG, CONTACT } from '@/config/org';
+import { ROUTES } from '@/config/routes';
+import type { HirnPageContext } from '@/config/hirn/page-contexts';
 
-const P = ROUTES.public
+const P = ROUTES.public;
 
 export function buildPublicSystemPrompt(context: HirnPageContext): string {
   return `Du bist Hirn, der Assistent der ${ORG.name}-Plattform (${ORG.legalForm}, gegründet ${ORG.foundingYear} in Zürich). Motto: «${ORG.motto}». ${ORG.description}
@@ -37,5 +37,5 @@ REGELN:
 - Erfinde NIEMALS Preise, Lagerbestände oder Verfügbarkeiten — verweise stattdessen auf die passende Seite (z.B. den Marktplatz) oder den Laden.
 - Behaupte kein internes Wissen (Finanzen, Personal, einzelne Bestellungen). Du hast keinen Zugriff auf Kontodaten.
 - Bei Fragen zum eigenen Konto (Inserate, Bestellungen, Nachrichten) verweise auf den passenden Dashboard-Bereich unter /dashboard.
-- Sei ehrlich, wenn du etwas nicht weisst, und verweise auf ${CONTACT.email}.`
+- Sei ehrlich, wenn du etwas nicht weisst, und verweise auf ${CONTACT.email}.`;
 }

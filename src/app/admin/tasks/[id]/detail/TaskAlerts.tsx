@@ -5,20 +5,20 @@
  * Presentational server component for the admin task detail page.
  */
 
-import { formatDateTimeNumeric } from '@/lib/date-formats'
-import type { TaskAttentionFlag, TaskRequestRecord } from '@/lib/schemas/tasks'
-import { AlertTriangle, Send } from 'lucide-react'
-import { TaskRequestResponseButtons } from '../TaskRequestResponseButtons'
-import Heading from '@/components/admin/AdminHeading'
+import { formatDateTimeNumeric } from '@/lib/date-formats';
+import type { TaskAttentionFlag, TaskRequestRecord } from '@/lib/schemas/tasks';
+import { AlertTriangle, Send } from 'lucide-react';
+import { TaskRequestResponseButtons } from '../TaskRequestResponseButtons';
+import Heading from '@/components/admin/AdminHeading';
 
 export function TaskAlerts({
   activeFlags,
   pendingRequests,
   canViewerRespond,
 }: {
-  activeFlags: TaskAttentionFlag[]
-  pendingRequests: TaskRequestRecord[]
-  canViewerRespond: (req: TaskRequestRecord) => boolean
+  activeFlags: TaskAttentionFlag[];
+  pendingRequests: TaskRequestRecord[];
+  canViewerRespond: (req: TaskRequestRecord) => boolean;
 }) {
   return (
     <>
@@ -50,7 +50,9 @@ export function TaskAlerts({
           <div className="flex items-start gap-3 w-full">
             <Send className="w-5 h-5 text-warning-600 mt-0.5 shrink-0" />
             <div className="flex-1 space-y-3">
-              <Heading level={3} className="font-medium text-warning-800 dark:text-warning-200">Offene Anfragen</Heading>
+              <Heading level={3} className="font-medium text-warning-800 dark:text-warning-200">
+                Offene Anfragen
+              </Heading>
               {pendingRequests.map((req) => (
                 <div key={req.id} className="text-sm text-warning-700 dark:text-warning-300">
                   <p>
@@ -74,5 +76,5 @@ export function TaskAlerts({
         </div>
       )}
     </>
-  )
+  );
 }

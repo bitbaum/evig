@@ -1,7 +1,11 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { SIMPLE_MAJORITY_RESPONSE_CONFIG, SIMPLE_MAJORITY_RESPONSES, type SimpleMajorityResponse } from '@/config/decisions';
+import {
+  SIMPLE_MAJORITY_RESPONSE_CONFIG,
+  SIMPLE_MAJORITY_RESPONSES,
+  type SimpleMajorityResponse,
+} from '@/config/decisions';
 
 interface Props {
   response: SimpleMajorityResponse;

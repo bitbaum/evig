@@ -1,45 +1,48 @@
-'use client'
+'use client';
 
-import ReactMarkdown from 'react-markdown'
-import { Link } from '@/i18n/navigation'
-import { MapPin, Clock, ArrowLeft } from 'lucide-react'
-import { Card } from '@/components/ui/card'
+import ReactMarkdown from 'react-markdown';
+import { Link } from '@/i18n/navigation';
+import { MapPin, Clock, ArrowLeft } from 'lucide-react';
+import { Card } from '@/components/ui/card';
 import {
   getRoleTrackLabel,
   vacancyAcceptsApplications,
   VACANCY_STATUS,
   type RoleTrack,
   type VacancyStatus,
-} from '@/config/hr-vacancies'
-import { ROUTES } from '@/config/routes'
-import { CareerApplyForm } from '@/components/careers/CareerApplyForm'
+} from '@/config/hr-vacancies';
+import { ROUTES } from '@/config/routes';
+import { CareerApplyForm } from '@/components/careers/CareerApplyForm';
 
 export interface PublicVacancyDetail {
-  id: string
-  slug: string
-  title: string
-  summary: string | null
-  description: string
-  role_track: string
-  department: string | null
-  location: string | null
-  remote_ok: boolean
-  hours_per_week: number | null
-  start_date: string | null
-  application_deadline: string | null
-  compensation_public_text: string | null
-  status: string
+  id: string;
+  slug: string;
+  title: string;
+  summary: string | null;
+  description: string;
+  role_track: string;
+  department: string | null;
+  location: string | null;
+  remote_ok: boolean;
+  hours_per_week: number | null;
+  start_date: string | null;
+  application_deadline: string | null;
+  compensation_public_text: string | null;
+  status: string;
 }
 
 export default function CareerDetailClient({ posting }: { posting: PublicVacancyDetail }) {
-  const status = posting.status as VacancyStatus
-  const accepts = vacancyAcceptsApplications(status)
-  const paused = status === VACANCY_STATUS.FROZEN
-  const filled = status === VACANCY_STATUS.FILLED
+  const status = posting.status as VacancyStatus;
+  const accepts = vacancyAcceptsApplications(status);
+  const paused = status === VACANCY_STATUS.FROZEN;
+  const filled = status === VACANCY_STATUS.FILLED;
 
   return (
     <div className="space-y-10">
-      <Link href={ROUTES.public.careers} className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-text-primary">
+      <Link
+        href={ROUTES.public.careers}
+        className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-text-primary"
+      >
         <ArrowLeft className="w-4 h-4" />
         Alle Stellen
       </Link>
@@ -47,9 +50,7 @@ export default function CareerDetailClient({ posting }: { posting: PublicVacancy
       <div>
         <p className="text-sm font-medium text-action">{getRoleTrackLabel(posting.role_track)}</p>
         <h1 className="ui-public-display-lg mt-2">{posting.title}</h1>
-        {posting.summary && (
-          <p className="ui-public-section-lede mt-4">{posting.summary}</p>
-        )}
+        {posting.summary && <p className="ui-public-section-lede mt-4">{posting.summary}</p>}
 
         <div className="flex flex-wrap gap-4 mt-4 text-sm text-text-muted">
           {(posting.location || posting.remote_ok) && (
@@ -92,5 +93,5 @@ export default function CareerDetailClient({ posting }: { posting: PublicVacancy
         />
       </Card>
     </div>
-  )
+  );
 }

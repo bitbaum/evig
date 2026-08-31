@@ -1,35 +1,35 @@
-import { Metadata } from 'next'
-import Link from 'next/link'
-import { PackageCheck, Plus, MessageSquare } from 'lucide-react'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { buttonClass } from '@/components/ui/button-class'
-import { Card } from '@/components/ui/card'
-import { ROUTES } from '@/config/routes'
-import { listDeliverables } from '@/lib/services/deliverables'
-import type { DeliverableListItem } from '@/lib/schemas/deliverables'
+import { Metadata } from 'next';
+import Link from 'next/link';
+import { PackageCheck, Plus, MessageSquare } from 'lucide-react';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import { buttonClass } from '@/components/ui/button-class';
+import { Card } from '@/components/ui/card';
+import { ROUTES } from '@/config/routes';
+import { listDeliverables } from '@/lib/services/deliverables';
+import type { DeliverableListItem } from '@/lib/schemas/deliverables';
 import {
   DELIVERABLE_TYPE_LABELS,
   DELIVERABLE_STATUS_LABELS,
   DELIVERABLE_STATUS_COLORS,
   type DeliverableType,
   type DeliverableStatus,
-} from '@/config/deliverables'
-import { formatDateNumeric } from '@/lib/date-formats'
-import { logger } from '@/lib/logger'
+} from '@/config/deliverables';
+import { formatDateNumeric } from '@/lib/date-formats';
+import { logger } from '@/lib/logger';
 
 export const metadata: Metadata = {
   title: 'Liefergegenstände',
   description: 'Berichte, Präsentationen und Mockups teilen und Feedback sammeln.',
-}
+};
 
 export default async function DeliverablesAdminPage() {
-  let rows: DeliverableListItem[] = []
-  let listError = false
+  let rows: DeliverableListItem[] = [];
+  let listError = false;
   try {
-    rows = await listDeliverables()
+    rows = await listDeliverables();
   } catch (error) {
-    logger.error('Error loading deliverables list', { error })
-    listError = true
+    logger.error('Error loading deliverables list', { error });
+    listError = true;
   }
 
   return (
@@ -39,7 +39,10 @@ export default async function DeliverablesAdminPage() {
       icon={PackageCheck}
       iconColor="gray"
       actions={
-        <Link href={ROUTES.admin.deliverableNew} className={buttonClass({ variant: 'primary', size: 'sm' })}>
+        <Link
+          href={ROUTES.admin.deliverableNew}
+          className={buttonClass({ variant: 'primary', size: 'sm' })}
+        >
           <Plus className="w-4 h-4" />
           Neuer Liefergegenstand
         </Link>
@@ -81,7 +84,10 @@ export default async function DeliverablesAdminPage() {
                 {rows.map((d) => (
                   <tr key={d.id} className="hover:bg-surface-raised transition-colors">
                     <td className="px-4 py-3">
-                      <Link href={ROUTES.admin.deliverable(d.id)} className="font-medium text-text-primary hover:text-action">
+                      <Link
+                        href={ROUTES.admin.deliverable(d.id)}
+                        className="font-medium text-text-primary hover:text-action"
+                      >
                         {d.title}
                       </Link>
                       {d.open_feedback_count > 0 && (
@@ -95,12 +101,16 @@ export default async function DeliverablesAdminPage() {
                       {DELIVERABLE_TYPE_LABELS[d.type as DeliverableType] ?? d.type}
                     </td>
                     <td className="px-4 py-3">
-                      <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${DELIVERABLE_STATUS_COLORS[d.status as DeliverableStatus] ?? ''}`}>
+                      <span
+                        className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${DELIVERABLE_STATUS_COLORS[d.status as DeliverableStatus] ?? ''}`}
+                      >
                         {DELIVERABLE_STATUS_LABELS[d.status as DeliverableStatus] ?? d.status}
                       </span>
                     </td>
                     <td className="px-4 py-3 text-text-secondary">{d.owner_name ?? '—'}</td>
-                    <td className="px-4 py-3 text-text-secondary">{formatDateNumeric(d.updated_at)}</td>
+                    <td className="px-4 py-3 text-text-secondary">
+                      {formatDateNumeric(d.updated_at)}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -109,5 +119,5 @@ export default async function DeliverablesAdminPage() {
         </Card>
       )}
     </AdminPageWrapper>
-  )
+  );
 }

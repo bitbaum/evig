@@ -1,33 +1,33 @@
-import { NextRequest } from 'next/server'
-import { withAuth, ValidSession } from '@/lib/api/middleware'
-import { db } from '@/db'
-import { conversations, users } from '@/db/schema'
-import { eq, and, or, sql, desc } from 'drizzle-orm'
-import { apiError, apiSuccess, apiBadRequest, parsePagination } from '@/lib/api/helpers'
-import { TABLE_NAMES } from '@/config/database'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { validateBody, CreateConversationSchema } from '@/lib/schemas'
-import { sendMessageInConversation } from '@/lib/messaging/send-message'
+import { NextRequest } from 'next/server';
+import { withAuth, ValidSession } from '@/lib/api/middleware';
+import { db } from '@/db';
+import { conversations, users } from '@/db/schema';
+import { eq, and, or, sql, desc } from 'drizzle-orm';
+import { apiError, apiSuccess, apiBadRequest, parsePagination } from '@/lib/api/helpers';
+import { TABLE_NAMES } from '@/config/database';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { validateBody, CreateConversationSchema } from '@/lib/schemas';
+import { sendMessageInConversation } from '@/lib/messaging/send-message';
 
 export const GET = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
-    const { searchParams } = new URL(request.url)
-    const type = searchParams.get('type')
-    const { limit, offset } = parsePagination(request, { defaultLimit: 20 })
+    const { searchParams } = new URL(request.url);
+    const type = searchParams.get('type');
+    const { limit, offset } = parsePagination(request, { defaultLimit: 20 });
 
     const conditions = [
       or(
         eq(conversations.participant1, session.user.id),
-        eq(conversations.participant2, session.user.id)
+        eq(conversations.participant2, session.user.id),
       )!,
       eq(conversations.isActive, true),
-    ]
+    ];
 
     if (type) {
-      conditions.push(eq(conversations.type, type))
+      conditions.push(eq(conversations.type, type));
     }
 
-    const where = and(...conditions)
+    const where = and(...conditions);
 
     const rows = await db
       .select({
@@ -68,30 +68,29 @@ export const GET = withAuth(async (request: NextRequest, session: ValidSession) 
       .where(where)
       .orderBy(desc(conversations.lastMessageAt))
       .limit(limit)
-      .offset(offset)
+      .offset(offset);
 
     return apiSuccess({
       conversations: rows,
-    })
-
+    });
   } catch (error) {
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
-})
+});
 
 export const POST = withAuth(async (request: NextRequest, session: ValidSession) => {
   try {
-    const body = await request.json()
-    const validation = validateBody(CreateConversationSchema, body)
-    if (!validation.success) return validation.error
-    const { participantId, type, contextId, initialMessage } = validation.data
+    const body = await request.json();
+    const validation = validateBody(CreateConversationSchema, body);
+    if (!validation.success) return validation.error;
+    const { participantId, type, contextId, initialMessage } = validation.data;
 
     if (participantId === session.user.id) {
-      return apiBadRequest('Du kannst keine Unterhaltung mit dir selbst starten')
+      return apiBadRequest('Du kannst keine Unterhaltung mit dir selbst starten');
     }
 
     // Ensure consistent ordering of participants
-    const [participant1, participant2] = [session.user.id, participantId].sort()
+    const [participant1, participant2] = [session.user.id, participantId].sort();
 
     // If there's an initial message, use the shared service (transaction + metadata)
     if (initialMessage) {
@@ -102,12 +101,12 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         type,
         contextId: contextId || null,
         title: `Unterhaltung mit ${participantId}`,
-      })
+      });
 
       return apiSuccess({
         conversation: { id: result.conversationId },
         message_id: result.messageId,
-      })
+      });
     }
 
     // No initial message — just find or create conversation
@@ -115,21 +114,21 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
       eq(conversations.participant1, participant1),
       eq(conversations.participant2, participant2),
       eq(conversations.type, type),
-    ]
+    ];
     if (contextId) {
-      conditions.push(eq(conversations.contextId, contextId))
+      conditions.push(eq(conversations.contextId, contextId));
     }
 
     const [existingConv] = await db
       .select({ id: conversations.id })
       .from(conversations)
-      .where(and(...conditions))
+      .where(and(...conditions));
 
     if (existingConv) {
       return apiSuccess({
         conversation: { id: existingConv.id },
-        message: 'Unterhaltung existiert bereits'
-      })
+        message: 'Unterhaltung existiert bereits',
+      });
     }
 
     const [newConv] = await db
@@ -142,13 +141,12 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         title: `Unterhaltung mit ${participantId}`,
         lastMessagePreview: 'Neue Unterhaltung',
       })
-      .returning({ id: conversations.id })
+      .returning({ id: conversations.id });
 
     return apiSuccess({
-      conversation: { id: newConv.id }
-    })
-
+      conversation: { id: newConv.id },
+    });
   } catch (error) {
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
-})
+});

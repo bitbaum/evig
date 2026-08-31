@@ -17,6 +17,6 @@ export const PAGINATION = {
   FEED: 20,
   /** Intake / inventory pipeline */
   INTAKE: 20,
-} as const
+} as const;
 
-export type PaginationKey = keyof typeof PAGINATION
+export type PaginationKey = keyof typeof PAGINATION;

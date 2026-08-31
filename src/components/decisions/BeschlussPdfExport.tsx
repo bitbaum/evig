@@ -1,7 +1,7 @@
 'use client';
 
-import { Button } from '@/components/ui/button'
-import { ORG } from '@/config/org'
+import { Button } from '@/components/ui/button';
+import { ORG } from '@/config/org';
 
 export interface DecisionForExport {
   id: string;
@@ -82,14 +82,14 @@ function generateBeschlussText(decision: DecisionForExport): string {
         const isBorda = item.bordaPoints !== undefined;
         const isDot = item.dots !== undefined;
         const isScore = item.averageScore !== undefined;
-        const metric = isBorda ? item.bordaPoints
-          : isDot ? item.dots
-          : isScore ? item.averageScore
-          : (item.votes ?? 0);
-        const unit = isBorda ? 'Borda-Punkte'
-          : isDot ? 'Punkte'
-          : isScore ? 'Ø Sterne'
-          : 'Stimmen';
+        const metric = isBorda
+          ? item.bordaPoints
+          : isDot
+            ? item.dots
+            : isScore
+              ? item.averageScore
+              : (item.votes ?? 0);
+        const unit = isBorda ? 'Borda-Punkte' : isDot ? 'Punkte' : isScore ? 'Ø Sterne' : 'Stimmen';
         const pct = item.scorePercent !== undefined ? ` (${item.scorePercent}%)` : '';
         lines.push(`  ${i + 1}. ${item.label}: ${metric} ${unit}${pct}`);
       });
@@ -123,8 +123,18 @@ export default function BeschlussPdfExport({ decision }: { decision: DecisionFor
       onClick={handleExport}
       className="inline-flex items-center gap-1.5"
     >
-      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+      <svg
+        className="h-4 w-4"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth={1.5}
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
+        />
       </svg>
       Beschluss exportieren
     </Button>

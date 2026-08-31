@@ -18,7 +18,7 @@ import { tasks, taskAttentionFlags } from '@/db/schema/misc';
 import { TASK_STATUSES } from '@/config/tasks';
 import { attentionFlagSchema } from '@/lib/schemas/tasks';
 import { logger } from '@/lib/logger';
-import { RELATED_TYPES } from '@/config/notifications'
+import { RELATED_TYPES } from '@/config/notifications';
 
 type RouteParams = { id: string };
 
@@ -26,69 +26,78 @@ type RouteParams = { id: string };
  * POST /api/tasks/[id]/attention
  * Flag a task as needing attention
  */
-export const POST = withAdmin<RouteParams>(async (
-  request: NextRequest,
-  session: ValidSession,
-  context
-) => {
-  try {
-    const taskId = context?.params?.id;
+export const POST = withAdmin<RouteParams>(
+  async (request: NextRequest, session: ValidSession, context) => {
+    try {
+      const taskId = context?.params?.id;
 
-    if (!taskId) {
-      return apiBadRequest(ERROR_MESSAGES.TASK_ID_REQUIRED);
-    }
+      if (!taskId) {
+        return apiBadRequest(ERROR_MESSAGES.TASK_ID_REQUIRED);
+      }
 
-    // Parse and validate body
-    const body = await request.json().catch(() => ({}));
-    const result = attentionFlagSchema.safeParse(body);
+      // Parse and validate body
+      const body = await request.json().catch(() => ({}));
+      const result = attentionFlagSchema.safeParse(body);
 
-    if (!result.success) {
-      return apiBadRequest(ERROR_MESSAGES.VALIDATION_FAILED, result.error.flatten().fieldErrors);
-    }
+      if (!result.success) {
+        return apiBadRequest(ERROR_MESSAGES.VALIDATION_FAILED, result.error.flatten().fieldErrors);
+      }
 
-    const data = result.data;
+      const data = result.data;
 
-    const taskLookup = await getActiveTask(taskId);
-    if ('error' in taskLookup) return taskLookup.error;
-    const { task } = taskLookup;
+      const taskLookup = await getActiveTask(taskId);
+      if ('error' in taskLookup) return taskLookup.error;
+      const { task } = taskLookup;
 
-    const userLookup = await getDbUserId(session);
-    if ('error' in userLookup) return userLookup.error;
-    const { dbUserId } = userLookup;
+      const userLookup = await getDbUserId(session);
+      if ('error' in userLookup) return userLookup.error;
+      const { dbUserId } = userLookup;
 
-    // Create attention flag + update task status atomically
-    const flag = await db.transaction(async (tx) => {
-      const [flagRow] = await tx.insert(taskAttentionFlags).values({
+      // Create attention flag + update task status atomically
+      const flag = await db.transaction(async (tx) => {
+        const [flagRow] = await tx
+          .insert(taskAttentionFlags)
+          .values({
+            taskId,
+            flaggedBy: dbUserId,
+            message: data.message || null,
+          })
+          .returning();
+
+        await tx
+          .update(tasks)
+          .set({
+            currentStatus: TASK_STATUSES.NEEDS_ATTENTION,
+            updatedAt: new Date().toISOString(),
+          })
+          .where(eq(tasks.id, taskId));
+
+        return flagRow;
+      });
+
+      await notifyAllStaff(
+        {
+          type: 'task_attention',
+          title: `Aufgabe braucht Aufmerksamkeit: ${task.title}`,
+          content:
+            data.message?.trim() || 'Eine Aufgabe wurde als aufmerksamkeitsbedürftig markiert.',
+          related_type: RELATED_TYPES.TASK,
+          related_id: taskId,
+        },
+        dbUserId,
+      );
+
+      logger.info('Task flagged for attention', {
         taskId,
-        flaggedBy: dbUserId,
-        message: data.message || null,
-      }).returning();
+        flagId: flag.id,
+        userId: session.user.id,
+        taskTitle: task.title,
+      });
 
-      await tx.update(tasks)
-        .set({ currentStatus: TASK_STATUSES.NEEDS_ATTENTION, updatedAt: new Date().toISOString() })
-        .where(eq(tasks.id, taskId));
-
-      return flagRow;
-    });
-
-    await notifyAllStaff({
-      type: 'task_attention',
-      title: `Aufgabe braucht Aufmerksamkeit: ${task.title}`,
-      content: data.message?.trim() || 'Eine Aufgabe wurde als aufmerksamkeitsbedürftig markiert.',
-      related_type: RELATED_TYPES.TASK,
-      related_id: taskId,
-    }, dbUserId)
-
-    logger.info('Task flagged for attention', {
-      taskId,
-      flagId: flag.id,
-      userId: session.user.id,
-      taskTitle: task.title
-    });
-
-    return apiSuccess(flag, 201);
-  } catch (error) {
-    logger.error('Error flagging task', { error, userId: session.user.id });
-    return apiError(error, 'Fehler beim Markieren der Aufgabe');
-  }
-});
+      return apiSuccess(flag, 201);
+    } catch (error) {
+      logger.error('Error flagging task', { error, userId: session.user.id });
+      return apiError(error, 'Fehler beim Markieren der Aufgabe');
+    }
+  },
+);

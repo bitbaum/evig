@@ -1,22 +1,22 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { AlertCircle } from 'lucide-react'
-import { logger } from '@/lib/logger'
-import Heading from '@/components/ui/Heading'
+import { useEffect } from 'react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { AlertCircle } from 'lucide-react';
+import { logger } from '@/lib/logger';
+import Heading from '@/components/ui/Heading';
 
 export default function DashboardError({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
   useEffect(() => {
-    logger.error('Dashboard error', { error, digest: error.digest })
-  }, [error])
+    logger.error('Dashboard error', { error, digest: error.digest });
+  }, [error]);
 
   return (
     <div className="flex items-center justify-center min-h-[400px]">
@@ -41,5 +41,5 @@ export default function DashboardError({
         </div>
       </div>
     </div>
-  )
+  );
 }

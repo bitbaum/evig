@@ -11,34 +11,36 @@
  * Protected by CRON_SECRET (Authorization: Bearer ...).
  */
 
-import { NextRequest, NextResponse } from 'next/server'
-import { getReminderUserIdsForToday } from '@/lib/services/saldo'
-import { createNotification } from '@/lib/services/notifications'
-import { NOTIFICATION_TYPES } from '@/config/notifications'
-import { logger } from '@/lib/logger'
-import { requireCronAuth } from '@/lib/api/cron-auth'
+import { NextRequest, NextResponse } from 'next/server';
+import { getReminderUserIdsForToday } from '@/lib/services/saldo';
+import { createNotification } from '@/lib/services/notifications';
+import { NOTIFICATION_TYPES } from '@/config/notifications';
+import { logger } from '@/lib/logger';
+import { requireCronAuth } from '@/lib/api/cron-auth';
 
 export async function GET(request: NextRequest) {
-  const auth = requireCronAuth(request)
-  if (!auth.ok) return auth.response
+  const auth = requireCronAuth(request);
+  if (!auth.ok) return auth.response;
   try {
-    const userIds = await getReminderUserIdsForToday()
+    const userIds = await getReminderUserIdsForToday();
     const monthLabel = new Intl.DateTimeFormat('de-CH', {
-      month: 'long', year: 'numeric', timeZone: 'Europe/Zurich',
-    }).format(new Date())
+      month: 'long',
+      year: 'numeric',
+      timeZone: 'Europe/Zurich',
+    }).format(new Date());
 
     for (const userId of userIds) {
       await createNotification(userId, {
         type: NOTIFICATION_TYPES.TIMECARD_REMINDER,
         title: 'Zeiterfassung ausfüllen',
         content: `Deine Zeitkarte für ${monthLabel} ist noch nicht eingereicht. Mit «Monat aus Plan füllen & einreichen» ist es ein Klick: /admin/zeiterfassung`,
-      }).catch(err => logger.warn('Timecard reminder failed', { error: err, userId }))
+      }).catch((err) => logger.warn('Timecard reminder failed', { error: err, userId }));
     }
 
-    logger.info('Timecard reminders sent', { count: userIds.length })
-    return NextResponse.json({ success: true, reminded: userIds.length })
+    logger.info('Timecard reminders sent', { count: userIds.length });
+    return NextResponse.json({ success: true, reminded: userIds.length });
   } catch (error) {
-    logger.error('Timecard reminder cron failed', { error })
-    return NextResponse.json({ error: 'Cron failed' }, { status: 500 })
+    logger.error('Timecard reminder cron failed', { error });
+    return NextResponse.json({ error: 'Cron failed' }, { status: 500 });
   }
 }

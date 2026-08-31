@@ -1,8 +1,8 @@
-import { Link } from '@/i18n/navigation'
-import { Star, ArrowUpRight } from 'lucide-react'
-import { formatDateShort } from '@/lib/date-formats'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import Heading from '@/components/ui/Heading'
+import { Link } from '@/i18n/navigation';
+import { Star, ArrowUpRight } from 'lucide-react';
+import { formatDateShort } from '@/lib/date-formats';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import Heading from '@/components/ui/Heading';
 
 /**
  * Presentational cards shared by the public profile surfaces.
@@ -18,12 +18,12 @@ export function OfferingCard({
   image,
   meta,
 }: {
-  href: string
-  eyebrow?: string | null
-  title: string
-  description?: string | null
-  image?: string | null
-  meta?: string | null
+  href: string;
+  eyebrow?: string | null;
+  title: string;
+  description?: string | null;
+  image?: string | null;
+  meta?: string | null;
 }) {
   return (
     <Link
@@ -46,19 +46,17 @@ export function OfferingCard({
           {title}
         </Heading>
         {description && (
-          <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-text-secondary">{description}</p>
+          <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-text-secondary">
+            {description}
+          </p>
         )}
         <div className="mt-3 flex items-center justify-between pt-1">
-          {meta ? (
-            <span className="text-xs text-text-tertiary">{meta}</span>
-          ) : (
-            <span />
-          )}
+          {meta ? <span className="text-xs text-text-tertiary">{meta}</span> : <span />}
           <ArrowUpRight className="h-4 w-4 shrink-0 text-text-tertiary transition-colors group-hover:text-action" />
         </div>
       </div>
     </Link>
-  )
+  );
 }
 
 export function ReviewCard({
@@ -69,12 +67,12 @@ export function ReviewCard({
   href,
   hrefLabel,
 }: {
-  rating: number
-  title: string | null
-  content: string
-  date: string
-  href?: string | null
-  hrefLabel?: string | null
+  rating: number;
+  title: string | null;
+  content: string;
+  date: string;
+  href?: string | null;
+  hrefLabel?: string | null;
 }) {
   return (
     <div className="rounded-xl border border-subtle bg-surface-base p-4">
@@ -90,12 +88,15 @@ export function ReviewCard({
         <span className="text-xs text-text-tertiary">{formatDateShort(date)}</span>
       </div>
       {href && hrefLabel && (
-        <Link href={href} className="mt-2 inline-block text-xs font-medium text-action hover:underline">
+        <Link
+          href={href}
+          className="mt-2 inline-block text-xs font-medium text-action hover:underline"
+        >
           {hrefLabel}
         </Link>
       )}
       {title && <div className="mt-2 text-sm font-medium text-text-primary">{title}</div>}
       <p className="mt-1 text-sm leading-relaxed text-text-secondary">{content}</p>
     </div>
-  )
+  );
 }

@@ -25,14 +25,14 @@ export const SWISS_VAT_RATES = {
   reduced: 0.026,
   /** Accommodation. */
   accommodation: 0.038,
-} as const
+} as const;
 
 /**
  * The standard rate as the percentage STRING external systems expect
  * (Kivvi bookings, invoice line labels). Derived so it can never drift from
  * the number above.
  */
-export const SWISS_VAT_STANDARD_PERCENT = (SWISS_VAT_RATES.standard * 100).toFixed(1)
+export const SWISS_VAT_STANDARD_PERCENT = (SWISS_VAT_RATES.standard * 100).toFixed(1);
 
 /**
  * Fallback for non-CHF invoicing. The EU has no single rate; this is the
@@ -42,6 +42,6 @@ export const EU_VAT_RATES = {
   standard: 0.19,
   reduced: 0.07,
   superReduced: 0.05,
-} as const
+} as const;
 
-export type SwissVatKind = keyof typeof SWISS_VAT_RATES
+export type SwissVatKind = keyof typeof SWISS_VAT_RATES;

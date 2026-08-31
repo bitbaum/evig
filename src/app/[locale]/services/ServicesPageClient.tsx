@@ -1,40 +1,33 @@
-'use client'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import {
-  Wrench,
-  ArrowRight,
-  CheckCircle2,
-  Zap,
-} from 'lucide-react'
-import { ORG } from '@/config/org'
-import { safeJsonLd } from '@/lib/seo/json-ld'
-import { Link } from '@/i18n/navigation'
-import { FilterableSection } from '@/components/ui/FilterableSection'
-import { Card } from '@/components/ui/card'
-import Heading from '@/components/ui/Heading'
-import { PageHero } from '@/components/layout/PageHero'
+'use client';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { Wrench, ArrowRight, CheckCircle2, Zap } from 'lucide-react';
+import { ORG } from '@/config/org';
+import { safeJsonLd } from '@/lib/seo/json-ld';
+import { Link } from '@/i18n/navigation';
+import { FilterableSection } from '@/components/ui/FilterableSection';
+import { Card } from '@/components/ui/card';
+import Heading from '@/components/ui/Heading';
+import { PageHero } from '@/components/layout/PageHero';
 import {
   SERVICE_CONFIGS,
   SERVICE_CATEGORY_KEYS,
   buildServiceFilters,
   type Service,
   type ServiceCategoryKey,
-} from './data'
-import { useTranslations } from 'next-intl'
-import { ROUTES } from '@/config/routes'
-import { Section } from '@/components/layout/Section'
+} from './data';
+import { useTranslations } from 'next-intl';
+import { ROUTES } from '@/config/routes';
+import { Section } from '@/components/layout/Section';
 
 const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
-  const t = useTranslations('services.page')
+  const t = useTranslations('services.page');
 
   return (
     <Card className="group hover:border-strong transition-colors duration-300 overflow-hidden flex flex-col h-full">
       <div className="p-6 sm:p-8 flex flex-col h-full">
         <div className="mb-6">
           <div className="flex items-center justify-between gap-3 mb-3">
-            <Eyebrow as="span">
-              {service.category}
-            </Eyebrow>
+            <Eyebrow as="span">{service.category}</Eyebrow>
             {service.badge && (
               <Eyebrow as="span" className="text-action">
                 · {service.badge}
@@ -44,9 +37,11 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
           <Heading level={3} className="text-xl sm:text-2xl font-semibold text-text-primary">
             {service.title}
           </Heading>
-          <div className={`mt-3 flex items-center text-sm font-semibold ${
-            service.available ? 'text-action' : 'text-text-muted'
-          }`}>
+          <div
+            className={`mt-3 flex items-center text-sm font-semibold ${
+              service.available ? 'text-action' : 'text-text-muted'
+            }`}
+          >
             <Zap className="w-4 h-4 mr-2" />
             <span>{service.highlight}</span>
           </div>
@@ -55,9 +50,11 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
         <div className="space-y-3 mb-6">
           {service.features.map((feature, i) => (
             <div key={i} className="flex items-center text-text-secondary">
-              <CheckCircle2 className={`w-5 h-5 mr-3 shrink-0 ${
-                service.available ? 'text-action' : 'text-text-muted'
-              }`} />
+              <CheckCircle2
+                className={`w-5 h-5 mr-3 shrink-0 ${
+                  service.available ? 'text-action' : 'text-text-muted'
+                }`}
+              />
               <span>{feature}</span>
             </div>
           ))}
@@ -65,9 +62,11 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
         <div className="mt-auto pt-6 border-t border">
           <div className="flex items-center justify-between gap-4">
             {service.pricing ? (
-              <span className={`text-lg font-semibold ${
-                service.available ? 'text-action' : 'text-text-muted'
-              }`}>
+              <span
+                className={`text-lg font-semibold ${
+                  service.available ? 'text-action' : 'text-text-muted'
+                }`}
+              >
                 {service.pricing}
               </span>
             ) : (
@@ -88,24 +87,30 @@ const ServiceCard: React.FC<{ service: Service }> = ({ service }) => {
         </div>
       </div>
     </Card>
-  )
-}
+  );
+};
 
 export default function ServicesPage() {
-  const t = useTranslations('services.page')
-  const tCatalog = useTranslations('services.catalog')
+  const t = useTranslations('services.page');
+  const tCatalog = useTranslations('services.catalog');
 
   // Category labels live in services.page (t) to avoid dynamic-key type issues
   const categoryLabels: Record<ServiceCategoryKey, string> = {
     software: t('categoryLabels.software'),
     organisations: t('categoryLabels.organisations'),
-  }
+  };
 
   // Use .raw() with `as never` to access dynamic service entry keys
   // (next-intl's typed t() only accepts statically-known keys)
-  type CatalogEntry = { title: string; description: string; features: string[]; highlight: string; pricing: string }
-  const services: Service[] = SERVICE_CONFIGS.map(config => {
-    const entry = tCatalog.raw(config.key as never) as CatalogEntry
+  type CatalogEntry = {
+    title: string;
+    description: string;
+    features: string[];
+    highlight: string;
+    pricing: string;
+  };
+  const services: Service[] = SERVICE_CONFIGS.map((config) => {
+    const entry = tCatalog.raw(config.key as never) as CatalogEntry;
     return {
       ...config,
       title: entry.title,
@@ -116,10 +121,10 @@ export default function ServicesPage() {
       badge: config.badgeKey ? t(`badges.${config.badgeKey}` as never) : undefined,
       // Empty string means "no pricing" → shows pricingTbd in ServiceCard
       pricing: entry.pricing || undefined,
-    }
-  })
+    };
+  });
 
-  const serviceFilters = buildServiceFilters(t('filterByCategory'), categoryLabels)
+  const serviceFilters = buildServiceFilters(t('filterByCategory'), categoryLabels);
 
   return (
     <>
@@ -129,29 +134,24 @@ export default function ServicesPage() {
           __html: safeJsonLd({
             '@context': 'https://schema.org',
             '@type': 'Service',
-            'name': t('schemaName'),
-            'description': t('schemaDescription'),
-            'provider': {
+            name: t('schemaName'),
+            description: t('schemaDescription'),
+            provider: {
               '@type': 'Organization',
-              'name': ORG.name,
-              'url': ORG.website,
-              'logo': `${ORG.website}/logo.png`
+              name: ORG.name,
+              url: ORG.website,
+              logo: `${ORG.website}/logo.png`,
             },
-            'serviceType': services.filter(s => s.available).map(s => s.title),
-            'areaServed': {
+            serviceType: services.filter((s) => s.available).map((s) => s.title),
+            areaServed: {
               '@type': 'City',
-              'name': t('schemaCity')
-            }
-          })
+              name: t('schemaCity'),
+            },
+          }),
         }}
       />
       <main>
-        <PageHero
-          theme="services"
-          icon={Wrench}
-          title={t('title')}
-          subtitle={t('subtitle')}
-        />
+        <PageHero theme="services" icon={Wrench} title={t('title')} subtitle={t('subtitle')} />
 
         <FilterableSection
           title={t('servicesTitle')}
@@ -164,7 +164,11 @@ export default function ServicesPage() {
           showResultsCount={true}
         />
 
-        <Section density="spacious" contained={false} className="border-t border-subtle text-center">
+        <Section
+          density="spacious"
+          contained={false}
+          className="border-t border-subtle text-center"
+        >
           <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
             <Eyebrow as="div">{t('ctaEyebrow')}</Eyebrow>
             <h2 className="ui-public-display-lg mt-4">{t('ctaTitle')}</h2>
@@ -181,5 +185,5 @@ export default function ServicesPage() {
         </Section>
       </main>
     </>
-  )
+  );
 }

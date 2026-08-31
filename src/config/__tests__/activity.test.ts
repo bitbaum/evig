@@ -48,7 +48,7 @@ import {
   HELP_REQUEST_URGENCY,
   HELP_REQUEST_STATUSES,
   ACTIVITY_CATEGORIES,
-} from '../activity'
+} from '../activity';
 
 // ============================================================================
 // getActivityUpdateTypeLabel
@@ -56,21 +56,21 @@ import {
 
 describe('getActivityUpdateTypeLabel', () => {
   it('returns "Errungenschaft" for accomplishment', () => {
-    expect(getActivityUpdateTypeLabel(ACTIVITY_UPDATE_TYPES.ACCOMPLISHMENT)).toBe('Errungenschaft')
-  })
+    expect(getActivityUpdateTypeLabel(ACTIVITY_UPDATE_TYPES.ACCOMPLISHMENT)).toBe('Errungenschaft');
+  });
 
   it('returns "Meilenstein" for milestone', () => {
-    expect(getActivityUpdateTypeLabel(ACTIVITY_UPDATE_TYPES.MILESTONE)).toBe('Meilenstein')
-  })
+    expect(getActivityUpdateTypeLabel(ACTIVITY_UPDATE_TYPES.MILESTONE)).toBe('Meilenstein');
+  });
 
   it('returns "Unbekannt" for null', () => {
-    expect(getActivityUpdateTypeLabel(null)).toBe('Unbekannt')
-  })
+    expect(getActivityUpdateTypeLabel(null)).toBe('Unbekannt');
+  });
 
   it('falls back to raw value for unknown type', () => {
-    expect(getActivityUpdateTypeLabel('custom_type')).toBe('custom_type')
-  })
-})
+    expect(getActivityUpdateTypeLabel('custom_type')).toBe('custom_type');
+  });
+});
 
 // ============================================================================
 // getActivityUpdateTypeColor
@@ -78,17 +78,17 @@ describe('getActivityUpdateTypeLabel', () => {
 
 describe('getActivityUpdateTypeColor', () => {
   it('returns green class for accomplishment', () => {
-    expect(getActivityUpdateTypeColor(ACTIVITY_UPDATE_TYPES.ACCOMPLISHMENT)).toContain('success')
-  })
+    expect(getActivityUpdateTypeColor(ACTIVITY_UPDATE_TYPES.ACCOMPLISHMENT)).toContain('success');
+  });
 
   it('returns gray fallback for null', () => {
-    expect(getActivityUpdateTypeColor(null)).toContain('neutral')
-  })
+    expect(getActivityUpdateTypeColor(null)).toContain('neutral');
+  });
 
   it('returns gray fallback for unknown type', () => {
-    expect(getActivityUpdateTypeColor('unknown')).toContain('neutral')
-  })
-})
+    expect(getActivityUpdateTypeColor('unknown')).toContain('neutral');
+  });
+});
 
 // ============================================================================
 // getVisibilityLabel
@@ -96,21 +96,21 @@ describe('getActivityUpdateTypeColor', () => {
 
 describe('getVisibilityLabel', () => {
   it('returns "Team" for "team"', () => {
-    expect(getVisibilityLabel(VISIBILITY_LEVELS.TEAM)).toBe('Team')
-  })
+    expect(getVisibilityLabel(VISIBILITY_LEVELS.TEAM)).toBe('Team');
+  });
 
   it('returns "Öffentlich" for "public"', () => {
-    expect(getVisibilityLabel(VISIBILITY_LEVELS.PUBLIC)).toBe('Öffentlich')
-  })
+    expect(getVisibilityLabel(VISIBILITY_LEVELS.PUBLIC)).toBe('Öffentlich');
+  });
 
   it('returns "Team" for null', () => {
-    expect(getVisibilityLabel(null)).toBe('Team')
-  })
+    expect(getVisibilityLabel(null)).toBe('Team');
+  });
 
   it('falls back to raw value for unknown level', () => {
-    expect(getVisibilityLabel('secret')).toBe('secret')
-  })
-})
+    expect(getVisibilityLabel('secret')).toBe('secret');
+  });
+});
 
 // ============================================================================
 // getHelpRequestUrgencyLabel / getHelpRequestUrgencyColor
@@ -118,27 +118,27 @@ describe('getVisibilityLabel', () => {
 
 describe('getHelpRequestUrgencyLabel', () => {
   it('returns "Dringend" for urgent', () => {
-    expect(getHelpRequestUrgencyLabel(HELP_REQUEST_URGENCY.URGENT)).toBe('Dringend')
-  })
+    expect(getHelpRequestUrgencyLabel(HELP_REQUEST_URGENCY.URGENT)).toBe('Dringend');
+  });
 
   it('returns "Normal" for null', () => {
-    expect(getHelpRequestUrgencyLabel(null)).toBe('Normal')
-  })
+    expect(getHelpRequestUrgencyLabel(null)).toBe('Normal');
+  });
 
   it('falls back to raw value for unknown urgency', () => {
-    expect(getHelpRequestUrgencyLabel('super_urgent')).toBe('super_urgent')
-  })
-})
+    expect(getHelpRequestUrgencyLabel('super_urgent')).toBe('super_urgent');
+  });
+});
 
 describe('getHelpRequestUrgencyColor', () => {
   it('returns red class for urgent', () => {
-    expect(getHelpRequestUrgencyColor(HELP_REQUEST_URGENCY.URGENT)).toContain('error')
-  })
+    expect(getHelpRequestUrgencyColor(HELP_REQUEST_URGENCY.URGENT)).toContain('error');
+  });
 
   it('returns neutral class for null', () => {
-    expect(getHelpRequestUrgencyColor(null)).toContain('neutral')
-  })
-})
+    expect(getHelpRequestUrgencyColor(null)).toContain('neutral');
+  });
+});
 
 // ============================================================================
 // getHelpRequestStatusLabel / getHelpRequestStatusColor
@@ -146,31 +146,31 @@ describe('getHelpRequestUrgencyColor', () => {
 
 describe('getHelpRequestStatusLabel', () => {
   it('returns "Offen" for "open"', () => {
-    expect(getHelpRequestStatusLabel(HELP_REQUEST_STATUSES.OPEN)).toBe('Offen')
-  })
+    expect(getHelpRequestStatusLabel(HELP_REQUEST_STATUSES.OPEN)).toBe('Offen');
+  });
 
   it('returns "Gelöst" for "resolved"', () => {
-    expect(getHelpRequestStatusLabel(HELP_REQUEST_STATUSES.RESOLVED)).toBe('Gelöst')
-  })
+    expect(getHelpRequestStatusLabel(HELP_REQUEST_STATUSES.RESOLVED)).toBe('Gelöst');
+  });
 
   it('returns "Offen" for null', () => {
-    expect(getHelpRequestStatusLabel(null)).toBe('Offen')
-  })
+    expect(getHelpRequestStatusLabel(null)).toBe('Offen');
+  });
 
   it('falls back to raw value for unknown status', () => {
-    expect(getHelpRequestStatusLabel('archived')).toBe('archived')
-  })
-})
+    expect(getHelpRequestStatusLabel('archived')).toBe('archived');
+  });
+});
 
 describe('getHelpRequestStatusColor', () => {
   it('returns green class for resolved', () => {
-    expect(getHelpRequestStatusColor(HELP_REQUEST_STATUSES.RESOLVED)).toContain('success')
-  })
+    expect(getHelpRequestStatusColor(HELP_REQUEST_STATUSES.RESOLVED)).toContain('success');
+  });
 
   it('returns warning (open) for null', () => {
-    expect(getHelpRequestStatusColor(null)).toContain('warning')
-  })
-})
+    expect(getHelpRequestStatusColor(null)).toContain('warning');
+  });
+});
 
 // ============================================================================
 // getActivityCategoryLabel
@@ -178,18 +178,18 @@ describe('getHelpRequestStatusColor', () => {
 
 describe('getActivityCategoryLabel', () => {
   it('returns "IT" for "it"', () => {
-    expect(getActivityCategoryLabel(ACTIVITY_CATEGORIES.IT)).toBe('IT')
-  })
+    expect(getActivityCategoryLabel(ACTIVITY_CATEGORIES.IT)).toBe('IT');
+  });
 
   it('returns "Werkstatt" for "workshop"', () => {
-    expect(getActivityCategoryLabel(ACTIVITY_CATEGORIES.WORKSHOP)).toBe('Werkstatt')
-  })
+    expect(getActivityCategoryLabel(ACTIVITY_CATEGORIES.WORKSHOP)).toBe('Werkstatt');
+  });
 
   it('returns "Sonstiges" for null', () => {
-    expect(getActivityCategoryLabel(null)).toBe('Sonstiges')
-  })
+    expect(getActivityCategoryLabel(null)).toBe('Sonstiges');
+  });
 
   it('falls back to raw value for unknown category', () => {
-    expect(getActivityCategoryLabel('unknown_cat')).toBe('unknown_cat')
-  })
-})
+    expect(getActivityCategoryLabel('unknown_cat')).toBe('unknown_cat');
+  });
+});

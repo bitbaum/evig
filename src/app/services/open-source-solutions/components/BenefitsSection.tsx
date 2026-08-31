@@ -1,19 +1,19 @@
 /**
  * BenefitsSection Component
- * 
+ *
  * Reusable section for displaying benefits
- * 
+ *
  * Created: 2025-12-17
  * Last Modified: 2025-12-17
  * Last Modified Summary: Created reusable benefits section component
  */
 
-import { Benefit } from '../data'
-import { getTextColor } from '@/lib/design-system'
-import { cn } from '@/lib/utils'
+import { Benefit } from '../data';
+import { getTextColor } from '@/lib/design-system';
+import { cn } from '@/lib/utils';
 
 interface BenefitsSectionProps {
-  benefits: Benefit[]
+  benefits: Benefit[];
 }
 
 export function BenefitsSection({ benefits }: BenefitsSectionProps) {
@@ -25,14 +25,18 @@ export function BenefitsSection({ benefits }: BenefitsSectionProps) {
             Warum Open Source wählen?
           </h2>
           <p className={cn('text-lg', getTextColor('white', 'muted'))}>
-            Open-Source-Software bietet einen überlegenen Wert, Sicherheit und Flexibilität im Vergleich zu proprietären Alternativen.
+            Open-Source-Software bietet einen überlegenen Wert, Sicherheit und Flexibilität im
+            Vergleich zu proprietären Alternativen.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {benefits.map((benefit, index) => {
-            const Icon = benefit.icon
+            const Icon = benefit.icon;
             return (
-              <div key={index} className="bg-success-50 rounded-xl p-6 sm:p-8 border-2 border-success-200">
+              <div
+                key={index}
+                className="bg-success-50 rounded-xl p-6 sm:p-8 border-2 border-success-200"
+              >
                 <div className="flex items-center mb-4">
                   <Icon className="w-6 h-6 text-success-600 mr-3" />
                   <h3 className={cn('text-xl font-semibold', getTextColor('success', 'primary'))}>
@@ -43,13 +47,10 @@ export function BenefitsSection({ benefits }: BenefitsSectionProps) {
                   {benefit.description}
                 </p>
               </div>
-            )
+            );
           })}
         </div>
       </div>
     </section>
-  )
+  );
 }
-
-
-

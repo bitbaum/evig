@@ -77,9 +77,9 @@ export const NOTIFICATION_TYPES = {
   APPOINTMENT: 'appointment',
   MARKETPLACE: 'marketplace',
   SYSTEM: 'system',
-} as const
+} as const;
 
-export type NotificationType = typeof NOTIFICATION_TYPES[keyof typeof NOTIFICATION_TYPES]
+export type NotificationType = (typeof NOTIFICATION_TYPES)[keyof typeof NOTIFICATION_TYPES];
 
 export const RELATED_TYPES = {
   TASK: 'task',
@@ -102,11 +102,11 @@ export const RELATED_TYPES = {
   DELIVERABLE: 'deliverable',
   PRESENTATION: 'presentation',
   SUGGESTION: 'suggestion',
-} as const
+} as const;
 
-export type RelatedType = typeof RELATED_TYPES[keyof typeof RELATED_TYPES]
+export type RelatedType = (typeof RELATED_TYPES)[keyof typeof RELATED_TYPES];
 
-import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments'
+import { SERVICE_APPOINTMENT_ROUTES } from '@/config/service-appointments';
 
 /** Maps `related_type` to the base route for navigation in NotificationBell */
 export const RELATED_TYPE_HREFS: Record<string, string> = {
@@ -140,4 +140,4 @@ export const RELATED_TYPE_HREFS: Record<string, string> = {
   // pages ignore the appended id, so use a query-param base like the queues above.
   [RELATED_TYPES.PRESENTATION]: '/admin/presentations/feedback?slug=',
   [RELATED_TYPES.SUGGESTION]: '/admin/feedback?page=',
-}
+};

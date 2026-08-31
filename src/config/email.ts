@@ -7,7 +7,7 @@
  * Listmonk is the recommended FOSS solution for production.
  */
 
-import { ORG } from './org'
+import { ORG } from './org';
 
 /**
  * Email provider type

@@ -1,35 +1,35 @@
-'use client'
+'use client';
 
-import { useState, useTransition } from 'react'
-import { Button } from '@/components/ui/button'
-import { apiFetch } from '@/lib/api/client'
+import { useState, useTransition } from 'react';
+import { Button } from '@/components/ui/button';
+import { apiFetch } from '@/lib/api/client';
 
-type DashboardMode = 'coordinator' | 'lead' | 'volunteer'
+type DashboardMode = 'coordinator' | 'lead' | 'volunteer';
 
 interface DashboardModeToggleProps {
-  current: DashboardMode
+  current: DashboardMode;
 }
 
 const MODES: { id: DashboardMode; label: string }[] = [
   { id: 'coordinator', label: 'Koordination' },
   { id: 'lead', label: 'Leitung' },
   { id: 'volunteer', label: 'Ehrenamt' },
-]
+];
 
 export function DashboardModeToggle({ current }: DashboardModeToggleProps) {
-  const [active, setActive] = useState<DashboardMode>(current)
-  const [isPending, startTransition] = useTransition()
+  const [active, setActive] = useState<DashboardMode>(current);
+  const [isPending, startTransition] = useTransition();
 
   const select = (mode: DashboardMode) => {
-    if (mode === active || isPending) return
-    setActive(mode)
+    if (mode === active || isPending) return;
+    setActive(mode);
     startTransition(async () => {
       await apiFetch<unknown>('/api/me/preferences', {
         method: 'PATCH',
         body: { dashboardMode: mode },
-      })
-    })
-  }
+      });
+    });
+  };
 
   return (
     <div className="flex items-center gap-1 p-0.5 bg-surface-raised rounded-lg">
@@ -51,5 +51,5 @@ export function DashboardModeToggle({ current }: DashboardModeToggleProps) {
         </Button>
       ))}
     </div>
-  )
+  );
 }

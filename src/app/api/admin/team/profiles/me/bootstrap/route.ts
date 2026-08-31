@@ -26,18 +26,18 @@
  * as the primary action of the NoScheduleNotice block.
  */
 
-import { db } from '@/db'
-import { teamProfiles } from '@/db/schema'
-import { eq, sql } from 'drizzle-orm'
-import { withAdmin } from '@/lib/api/middleware'
-import { apiError, apiSuccess } from '@/lib/api/helpers'
-import { applyStandardSchedule } from '@/lib/team/schedule'
-import { logger } from '@/lib/logger'
+import { db } from '@/db';
+import { teamProfiles } from '@/db/schema';
+import { eq, sql } from 'drizzle-orm';
+import { withAdmin } from '@/lib/api/middleware';
+import { apiError, apiSuccess } from '@/lib/api/helpers';
+import { applyStandardSchedule } from '@/lib/team/schedule';
+import { logger } from '@/lib/logger';
 
 export const POST = withAdmin(async (_request, session) => {
   try {
-    const userId = session.user.id
-    const standardSchedule = applyStandardSchedule()
+    const userId = session.user.id;
+    const standardSchedule = applyStandardSchedule();
 
     // Single round-trip: insert if missing, otherwise update only when
     // workingHours is currently null/empty. The setWhere clause lets us
@@ -61,7 +61,7 @@ export const POST = withAdmin(async (_request, session) => {
       .returning({
         id: teamProfiles.id,
         workingHours: teamProfiles.workingHours,
-      })
+      });
 
     if (!row) {
       // setWhere blocked the update → the user already has a non-empty
@@ -70,24 +70,24 @@ export const POST = withAdmin(async (_request, session) => {
         .select({ id: teamProfiles.id, workingHours: teamProfiles.workingHours })
         .from(teamProfiles)
         .where(eq(teamProfiles.userId, userId))
-        .limit(1)
+        .limit(1);
       return apiSuccess({
         applied: false,
         profileId: existing?.id ?? null,
         workingHours: existing?.workingHours ?? null,
         message: 'Schedule existed; no changes',
-      })
+      });
     }
 
-    logger.info('Team profile bootstrap applied', { userId, profileId: row.id })
+    logger.info('Team profile bootstrap applied', { userId, profileId: row.id });
     return apiSuccess({
       applied: true,
       profileId: row.id,
       workingHours: row.workingHours,
       message: 'Standard-Schedule angewendet',
-    })
+    });
   } catch (error) {
-    logger.error('Failed to bootstrap team profile', { error, userId: session.user.id })
-    return apiError(error, 'Konnte den Standard-Schedule nicht anwenden.')
+    logger.error('Failed to bootstrap team profile', { error, userId: session.user.id });
+    return apiError(error, 'Konnte den Standard-Schedule nicht anwenden.');
   }
-})
+});

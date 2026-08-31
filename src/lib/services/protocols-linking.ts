@@ -2,18 +2,18 @@
  * Meeting Protocols — Action Item Linking (tasks & decisions)
  */
 
-import { db } from '@/db'
-import { sql, getTableName } from 'drizzle-orm'
-import { protocolActionLinks, tasks, decisions } from '@/db/schema/misc'
-import { logger } from '@/lib/logger'
-import { DECISION_STATUS } from '@/config/decisions'
-import { RELATED_TYPES } from '@/config/notifications'
-import type { ActionLinkRecord } from '@/lib/schemas/protocols'
+import { db } from '@/db';
+import { sql, getTableName } from 'drizzle-orm';
+import { protocolActionLinks, tasks, decisions } from '@/db/schema/misc';
+import { logger } from '@/lib/logger';
+import { DECISION_STATUS } from '@/config/decisions';
+import { RELATED_TYPES } from '@/config/notifications';
+import type { ActionLinkRecord } from '@/lib/schemas/protocols';
 
 // Table name refs
-const palTable = getTableName(protocolActionLinks)
-const tTable = getTableName(tasks)
-const dTable = getTableName(decisions)
+const palTable = getTableName(protocolActionLinks);
+const tTable = getTableName(tasks);
+const dTable = getTableName(decisions);
 
 // =============================================================================
 // ACTION ITEM LINKING
@@ -35,8 +35,8 @@ export async function getActionLinks(protocolId: string): Promise<ActionLinkReco
     LEFT JOIN ${sql.raw(dTable)} d ON pal.linked_decision_id = d.id
     WHERE pal.protocol_id = ${protocolId}
     ORDER BY pal.created_at
-  `)
-  return result.rows as unknown as ActionLinkRecord[]
+  `);
+  return result.rows as unknown as ActionLinkRecord[];
 }
 
 /**
@@ -46,12 +46,12 @@ export async function linkActionItemToTask(
   protocolId: string,
   actionItemId: string,
   taskData: {
-    title: string
-    description?: string | null
-    task_type?: string
-    category?: string
-    priority?: string
-    assigned_to?: string | null
+    title: string;
+    description?: string | null;
+    task_type?: string;
+    category?: string;
+    priority?: string;
+    assigned_to?: string | null;
   },
   createdBy: string,
 ): Promise<{ taskId: string; linkId: string }> {
@@ -70,9 +70,9 @@ export async function linkActionItemToTask(
         ${taskData.assigned_to || null}
       )
       RETURNING id
-    `)
+    `);
 
-    const taskId = (taskResult.rows[0] as unknown as { id: string }).id
+    const taskId = (taskResult.rows[0] as unknown as { id: string }).id;
 
     // Create the link
     const linkResult = await tx.execute(sql`
@@ -80,9 +80,9 @@ export async function linkActionItemToTask(
         protocol_id, action_item_id, link_type, linked_task_id
       ) VALUES (${protocolId}, ${actionItemId}, ${RELATED_TYPES.TASK}, ${taskId})
       RETURNING id
-    `)
+    `);
 
-    const linkId = (linkResult.rows[0] as unknown as { id: string }).id
+    const linkId = (linkResult.rows[0] as unknown as { id: string }).id;
 
     logger.info('Action item linked to task', {
       protocolId,
@@ -90,10 +90,10 @@ export async function linkActionItemToTask(
       taskId,
       linkId,
       assignedTo: taskData.assigned_to || null,
-    })
+    });
 
-    return { taskId, linkId }
-  })
+    return { taskId, linkId };
+  });
 }
 
 /**
@@ -103,11 +103,11 @@ export async function linkActionItemToDecision(
   protocolId: string,
   actionItemId: string,
   decisionData: {
-    title: string
-    description: string
-    decisionType?: string
-    votingMethod?: string
-    initialStatus?: string
+    title: string;
+    description: string;
+    decisionType?: string;
+    votingMethod?: string;
+    initialStatus?: string;
   },
   createdBy: string,
 ): Promise<{ decisionId: string; linkId: string }> {
@@ -125,9 +125,9 @@ export async function linkActionItemToDecision(
         ${createdBy}
       )
       RETURNING id
-    `)
+    `);
 
-    const decisionId = (decisionResult.rows[0] as unknown as { id: string }).id
+    const decisionId = (decisionResult.rows[0] as unknown as { id: string }).id;
 
     // Create the link
     const linkResult = await tx.execute(sql`
@@ -135,17 +135,17 @@ export async function linkActionItemToDecision(
         protocol_id, action_item_id, link_type, linked_decision_id
       ) VALUES (${protocolId}, ${actionItemId}, ${RELATED_TYPES.DECISION}, ${decisionId})
       RETURNING id
-    `)
+    `);
 
-    const linkId = (linkResult.rows[0] as unknown as { id: string }).id
+    const linkId = (linkResult.rows[0] as unknown as { id: string }).id;
 
     logger.info('Action item linked to decision', {
       protocolId,
       actionItemId,
       decisionId,
       linkId,
-    })
+    });
 
-    return { decisionId, linkId }
-  })
+    return { decisionId, linkId };
+  });
 }

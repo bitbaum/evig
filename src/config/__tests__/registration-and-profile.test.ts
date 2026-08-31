@@ -22,12 +22,9 @@ import {
   REGISTRATION_ROLES,
   REGISTRATION_ROLE_LABELS,
   REGISTRATION_ROLE_DESCRIPTIONS,
-} from '../registration'
+} from '../registration';
 
-import {
-  SWISS_CANTONS,
-  CANTON_NAMES,
-} from '../profile'
+import { SWISS_CANTONS, CANTON_NAMES } from '../profile';
 
 // ============================================================================
 // REGISTRATION_ROLE_LABELS
@@ -36,24 +33,24 @@ import {
 describe('REGISTRATION_ROLE_LABELS', () => {
   it('has German label for every registration role', () => {
     for (const role of REGISTRATION_ROLES) {
-      const label = REGISTRATION_ROLE_LABELS[role]
-      expect(typeof label).toBe('string')
-      expect(label.length).toBeGreaterThan(0)
+      const label = REGISTRATION_ROLE_LABELS[role];
+      expect(typeof label).toBe('string');
+      expect(label.length).toBeGreaterThan(0);
     }
-  })
+  });
 
   it('returns "Kunde" for customer', () => {
-    expect(REGISTRATION_ROLE_LABELS['customer']).toBe('Kunde')
-  })
+    expect(REGISTRATION_ROLE_LABELS['customer']).toBe('Kunde');
+  });
 
   it('returns "Verkäufer" for seller', () => {
-    expect(REGISTRATION_ROLE_LABELS['seller']).toBe('Verkäufer')
-  })
+    expect(REGISTRATION_ROLE_LABELS['seller']).toBe('Verkäufer');
+  });
 
   it('returns "Techniker" for repairer', () => {
-    expect(REGISTRATION_ROLE_LABELS['repairer']).toBe('Techniker')
-  })
-})
+    expect(REGISTRATION_ROLE_LABELS['repairer']).toBe('Techniker');
+  });
+});
 
 // ============================================================================
 // REGISTRATION_ROLE_DESCRIPTIONS
@@ -62,12 +59,12 @@ describe('REGISTRATION_ROLE_LABELS', () => {
 describe('REGISTRATION_ROLE_DESCRIPTIONS', () => {
   it('has non-empty description for every registration role', () => {
     for (const role of REGISTRATION_ROLES) {
-      const desc = REGISTRATION_ROLE_DESCRIPTIONS[role]
-      expect(typeof desc).toBe('string')
-      expect(desc.length).toBeGreaterThan(0)
+      const desc = REGISTRATION_ROLE_DESCRIPTIONS[role];
+      expect(typeof desc).toBe('string');
+      expect(desc.length).toBeGreaterThan(0);
     }
-  })
-})
+  });
+});
 
 // ============================================================================
 // SWISS_CANTONS
@@ -75,27 +72,27 @@ describe('REGISTRATION_ROLE_DESCRIPTIONS', () => {
 
 describe('SWISS_CANTONS', () => {
   it('contains exactly 26 cantons', () => {
-    expect(SWISS_CANTONS).toHaveLength(26)
-  })
+    expect(SWISS_CANTONS).toHaveLength(26);
+  });
 
   it('includes ZH (Zürich)', () => {
-    expect(SWISS_CANTONS).toContain('ZH')
-  })
+    expect(SWISS_CANTONS).toContain('ZH');
+  });
 
   it('includes BE (Bern)', () => {
-    expect(SWISS_CANTONS).toContain('BE')
-  })
+    expect(SWISS_CANTONS).toContain('BE');
+  });
 
   it('includes GE (Genf)', () => {
-    expect(SWISS_CANTONS).toContain('GE')
-  })
+    expect(SWISS_CANTONS).toContain('GE');
+  });
 
   it('all entries are 2-character uppercase strings', () => {
     for (const canton of SWISS_CANTONS) {
-      expect(canton).toMatch(/^[A-Z]{2}$/)
+      expect(canton).toMatch(/^[A-Z]{2}$/);
     }
-  })
-})
+  });
+});
 
 // ============================================================================
 // CANTON_NAMES
@@ -104,21 +101,21 @@ describe('SWISS_CANTONS', () => {
 describe('CANTON_NAMES', () => {
   it('has a name for every canton in SWISS_CANTONS', () => {
     for (const canton of SWISS_CANTONS) {
-      const name = CANTON_NAMES[canton]
-      expect(typeof name).toBe('string')
-      expect(name.length).toBeGreaterThan(0)
+      const name = CANTON_NAMES[canton];
+      expect(typeof name).toBe('string');
+      expect(name.length).toBeGreaterThan(0);
     }
-  })
+  });
 
   it('maps ZH to "Zürich"', () => {
-    expect(CANTON_NAMES['ZH']).toBe('Zürich')
-  })
+    expect(CANTON_NAMES['ZH']).toBe('Zürich');
+  });
 
   it('maps BE to "Bern"', () => {
-    expect(CANTON_NAMES['BE']).toBe('Bern')
-  })
+    expect(CANTON_NAMES['BE']).toBe('Bern');
+  });
 
   it('maps GE to "Genf"', () => {
-    expect(CANTON_NAMES['GE']).toBe('Genf')
-  })
-})
+    expect(CANTON_NAMES['GE']).toBe('Genf');
+  });
+});

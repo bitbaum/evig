@@ -1,19 +1,19 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Loader2, MailPlus } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
-import { Button } from '@/components/ui/button'
-import { apiFetch } from '@/lib/api/client'
-import { TEAM_ROLES, TEAM_ROLE_OPTIONS, TEAM_ROLE_LABELS, type TeamRole } from '@/config/teams'
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Loader2, MailPlus } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { apiFetch } from '@/lib/api/client';
+import { TEAM_ROLES, TEAM_ROLE_OPTIONS, TEAM_ROLE_LABELS, type TeamRole } from '@/config/teams';
 
 interface Props {
-  teamId: string
+  teamId: string;
 }
 
-type InviteResponse = { outcome: 'added_existing' | 'invited'; emailed?: boolean }
+type InviteResponse = { outcome: 'added_existing' | 'invited'; emailed?: boolean };
 
 /**
  * Super-admin: invite a person into the team by name + email. Registered staff
@@ -21,39 +21,41 @@ type InviteResponse = { outcome: 'added_existing' | 'invited'; emailed?: boolean
  * and appears as a placeholder member right away.
  */
 export default function InviteByEmailForm({ teamId }: Props) {
-  const router = useRouter()
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [role, setRole] = useState<TeamRole>(TEAM_ROLES.MEMBER)
-  const [busy, setBusy] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [notice, setNotice] = useState<string | null>(null)
+  const router = useRouter();
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [role, setRole] = useState<TeamRole>(TEAM_ROLES.MEMBER);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
 
   async function submit(e: React.FormEvent) {
-    e.preventDefault()
-    setBusy(true)
-    setError(null)
-    setNotice(null)
+    e.preventDefault();
+    setBusy(true);
+    setError(null);
+    setNotice(null);
     const res = await apiFetch<InviteResponse>(`/api/admin/teams/${teamId}/invitations`, {
       method: 'POST',
       body: { name, email, role },
-    })
-    setBusy(false)
+    });
+    setBusy(false);
     if (!res.success || !res.data) {
-      setError(res.error || 'Einladung fehlgeschlagen')
-      return
+      setError(res.error || 'Einladung fehlgeschlagen');
+      return;
     }
     if (res.data.outcome === 'added_existing') {
-      setNotice('Bereits registriert — direkt zum Team hinzugefügt und benachrichtigt.')
+      setNotice('Bereits registriert — direkt zum Team hinzugefügt und benachrichtigt.');
     } else if (res.data.emailed) {
-      setNotice(`Einladung an ${email} gesendet.`)
+      setNotice(`Einladung an ${email} gesendet.`);
     } else {
-      setNotice('Mitglied angelegt, aber der E-Mail-Versand schlug fehl — Einladungslink über «Einladen» beim Mitglied erneut senden.')
+      setNotice(
+        'Mitglied angelegt, aber der E-Mail-Versand schlug fehl — Einladungslink über «Einladen» beim Mitglied erneut senden.',
+      );
     }
-    setName('')
-    setEmail('')
-    setRole(TEAM_ROLES.MEMBER)
-    router.refresh()
+    setName('');
+    setEmail('');
+    setRole(TEAM_ROLES.MEMBER);
+    router.refresh();
   }
 
   return (
@@ -91,7 +93,11 @@ export default function InviteByEmailForm({ teamId }: Props) {
           <label htmlFor="invite-role" className="sr-only">
             Rolle
           </label>
-          <Select id="invite-role" value={role} onChange={(e) => setRole(e.target.value as TeamRole)}>
+          <Select
+            id="invite-role"
+            value={role}
+            onChange={(e) => setRole(e.target.value as TeamRole)}
+          >
             {TEAM_ROLE_OPTIONS.map((r) => (
               <option key={r} value={r}>
                 {TEAM_ROLE_LABELS[r]}
@@ -111,5 +117,5 @@ export default function InviteByEmailForm({ teamId }: Props) {
       {notice && <p className="text-xs text-success-600 dark:text-success-400 mt-1">{notice}</p>}
       {error && <p className="text-xs text-error-600 dark:text-error-400 mt-1">{error}</p>}
     </form>
-  )
+  );
 }

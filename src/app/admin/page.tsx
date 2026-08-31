@@ -16,20 +16,26 @@
  * before the data appears, so the page is legible even mid-skeleton.
  */
 
-import { Suspense } from 'react'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
-import { auth } from '@/auth'
-import { db } from '@/db'
-import { users } from '@/db/schema'
-import { eq } from 'drizzle-orm'
-import { ORG } from '@/config/org'
-import { getAccessibleSections, isSuperAdmin, canAccessSection, ADMIN_SECTION_IDS, type AdminSection } from '@/lib/permissions'
-import { ADMIN_SECTIONS } from '@/lib/permissions'
-import { sectionText } from '@/lib/section-labels'
-import { PermissionRequestsManager } from '@/components/admin/PermissionRequestsManager'
-import { RequestAccessSection } from './RequestAccessSection'
+import { Suspense } from 'react';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { Metadata } from 'next';
+import { getTranslations } from 'next-intl/server';
+import { auth } from '@/auth';
+import { db } from '@/db';
+import { users } from '@/db/schema';
+import { eq } from 'drizzle-orm';
+import { ORG } from '@/config/org';
+import {
+  getAccessibleSections,
+  isSuperAdmin,
+  canAccessSection,
+  ADMIN_SECTION_IDS,
+  type AdminSection,
+} from '@/lib/permissions';
+import { ADMIN_SECTIONS } from '@/lib/permissions';
+import { sectionText } from '@/lib/section-labels';
+import { PermissionRequestsManager } from '@/components/admin/PermissionRequestsManager';
+import { RequestAccessSection } from './RequestAccessSection';
 import {
   getDashboardStats,
   buildQuickActions,
@@ -43,22 +49,22 @@ import {
   PersonalSectionSkeleton,
   UnifiedQueueSkeleton,
   DashboardModeToggle,
-} from '@/components/admin/dashboard'
-import { TeamActivityFeed } from '@/components/admin/dashboard/TeamActivityFeed'
-import { TeamCurrentWidget } from '@/components/admin/dashboard/TeamCurrentWidget'
-import { SystemHealthBar } from '@/components/admin/dashboard/SystemHealthBar'
-import type { DashboardStats } from '@/components/admin/dashboard'
-import { getApprovalCounts, type ApprovalCounts } from '@/lib/approvals/counts'
-import { OnboardingChecklist } from '@/components/dashboard/OnboardingChecklist'
-import { getOnboardingChecklistState } from '@/lib/services/onboarding-state'
-import { ROLES, type UserRole } from '@/lib/constants'
+} from '@/components/admin/dashboard';
+import { TeamActivityFeed } from '@/components/admin/dashboard/TeamActivityFeed';
+import { TeamCurrentWidget } from '@/components/admin/dashboard/TeamCurrentWidget';
+import { SystemHealthBar } from '@/components/admin/dashboard/SystemHealthBar';
+import type { DashboardStats } from '@/components/admin/dashboard';
+import { getApprovalCounts, type ApprovalCounts } from '@/lib/approvals/counts';
+import { OnboardingChecklist } from '@/components/dashboard/OnboardingChecklist';
+import { getOnboardingChecklistState } from '@/lib/services/onboarding-state';
+import { ROLES, type UserRole } from '@/lib/constants';
 
-type DashboardMode = 'coordinator' | 'lead' | 'volunteer'
+type DashboardMode = 'coordinator' | 'lead' | 'volunteer';
 
 export const metadata: Metadata = {
   title: 'Admin',
   description: `Verwalte das ${ORG.name}-System.`,
-}
+};
 
 // Stable, server-safe date string — no Date.now/Math.random in the body.
 function todayLongLabel(): string {
@@ -66,7 +72,7 @@ function todayLongLabel(): string {
     weekday: 'long',
     day: 'numeric',
     month: 'long',
-  }).format(new Date())
+  }).format(new Date());
 }
 
 // ── Streaming wrappers ─────────────────────────────────────────────
@@ -77,43 +83,43 @@ async function UnifiedQueueSection({
   isSuper,
   canAccess,
 }: {
-  statsPromise: Promise<DashboardStats>
-  approvalCountsPromise: Promise<ApprovalCounts>
-  isSuper: boolean
-  canAccess: (section: AdminSection) => boolean
+  statsPromise: Promise<DashboardStats>;
+  approvalCountsPromise: Promise<ApprovalCounts>;
+  isSuper: boolean;
+  canAccess: (section: AdminSection) => boolean;
 }) {
-  const [stats, approvalCounts] = await Promise.all([statsPromise, approvalCountsPromise])
-  const items = buildUnifiedQueue(stats, approvalCounts, isSuper, canAccess)
-  return <UnifiedQueue items={items} />
+  const [stats, approvalCounts] = await Promise.all([statsPromise, approvalCountsPromise]);
+  const items = buildUnifiedQueue(stats, approvalCounts, isSuper, canAccess);
+  return <UnifiedQueue items={items} />;
 }
 
 async function MonatsueberblickSection({
   statsPromise,
   mode,
 }: {
-  statsPromise: Promise<DashboardStats>
-  mode: DashboardMode
+  statsPromise: Promise<DashboardStats>;
+  mode: DashboardMode;
 }) {
-  const stats = await statsPromise
+  const stats = await statsPromise;
   return (
     <Monatsueberblick stats={stats} defaultOpen={mode === 'lead'}>
       {mode === 'lead' && <TeamActivityFeed />}
       <SystemHealthBar />
     </Monatsueberblick>
-  )
+  );
 }
 
 async function PermissionRequestsSection({
   approvalCountsPromise,
   isSuper,
 }: {
-  approvalCountsPromise: Promise<ApprovalCounts>
-  isSuper: boolean
+  approvalCountsPromise: Promise<ApprovalCounts>;
+  isSuper: boolean;
 }) {
-  if (!isSuper) return null
-  const approvalCounts = await approvalCountsPromise
-  if ((approvalCounts.permission_request?.pending ?? 0) === 0) return null
-  const t = await getTranslations('admin.dashboard')
+  if (!isSuper) return null;
+  const approvalCounts = await approvalCountsPromise;
+  if ((approvalCounts.permission_request?.pending ?? 0) === 0) return null;
+  const t = await getTranslations('admin.dashboard');
   return (
     <section id="permission-requests" aria-labelledby="dashboard-perm-title">
       <h2
@@ -126,57 +132,62 @@ async function PermissionRequestsSection({
         <PermissionRequestsManager />
       </div>
     </section>
-  )
+  );
 }
 
 // ── Page ────────────────────────────────────────────────────────────
 
 export default async function AdminDashboard() {
-  const session = await auth()
-  if (!session?.user) return null
+  const session = await auth();
+  if (!session?.user) return null;
 
-  const isSuper = isSuperAdmin(session.user.email)
-  const statsPromise = getDashboardStats(isSuper)
+  const isSuper = isSuperAdmin(session.user.email);
+  const statsPromise = getDashboardStats(isSuper);
   // Approval-type counts come from the SSOT engine (same as the /admin/approvals
   // hub) — fetched once, shared by the queue and the permission-requests block.
-  const approvalCountsPromise = getApprovalCounts()
-  const t = await getTranslations('admin.dashboard')
-  const tSections = await getTranslations('admin.sections')
+  const approvalCountsPromise = getApprovalCounts();
+  const t = await getTranslations('admin.dashboard');
+  const tSections = await getTranslations('admin.sections');
 
   const userForPermissions = {
     email: session.user.email ?? '',
     is_staff: session.user.isStaff ?? false,
     staff_permissions: session.user.staffPermissions ?? [],
-  }
+  };
 
-  const accessibleSections = getAccessibleSections(userForPermissions)
-  const allSections = ADMIN_SECTION_IDS
-  const hasFullAccess = session.user.staffPermissions?.includes('*') || isSuper
+  const accessibleSections = getAccessibleSections(userForPermissions);
+  const allSections = ADMIN_SECTION_IDS;
+  const hasFullAccess = session.user.staffPermissions?.includes('*') || isSuper;
   const inaccessibleSections = hasFullAccess
     ? []
     : allSections
-        .filter(s => !accessibleSections.includes(s) && s !== 'dashboard')
-        .map(s => ({
+        .filter((s) => !accessibleSections.includes(s) && s !== 'dashboard')
+        .map((s) => ({
           id: s,
           label: sectionText(tSections, s, 'label', ADMIN_SECTIONS[s]?.label ?? s),
-          description: sectionText(tSections, s, 'description', ADMIN_SECTIONS[s]?.description ?? ''),
-        }))
+          description: sectionText(
+            tSections,
+            s,
+            'description',
+            ADMIN_SECTIONS[s]?.description ?? '',
+          ),
+        }));
 
-  const canAccess = (section: AdminSection) => canAccessSection(userForPermissions, section)
-  const quickActions = buildQuickActions(canAccess)
+  const canAccess = (section: AdminSection) => canAccessSection(userForPermissions, section);
+  const quickActions = buildQuickActions(canAccess);
 
-  const userId = session.user.id ?? ''
+  const userId = session.user.id ?? '';
   // isMember lives in the DB, not the JWT — the old session cast was never
   // populated, so member-scoped Abstimmungen never surfaced on the dashboard.
   const [memberRow] = await db
     .select({ isMember: users.isMember })
     .from(users)
     .where(eq(users.id, userId))
-    .limit(1)
-  const isMember = !!memberRow?.isMember
+    .limit(1);
+  const isMember = !!memberRow?.isMember;
   const dashboardMode: DashboardMode =
-    (session.user as { dashboardMode?: DashboardMode }).dashboardMode ?? 'coordinator'
-  const firstName = session.user.name?.split(' ')[0] || 'Admin'
+    (session.user as { dashboardMode?: DashboardMode }).dashboardMode ?? 'coordinator';
+  const firstName = session.user.name?.split(' ')[0] || 'Admin';
 
   // Staff onboarding — nudge new team members to set their schedule (drives
   // Zeiterfassung) + complete their team profile. Wired to real DB state; the
@@ -186,7 +197,7 @@ export default async function AdminDashboard() {
     (session.user.role as UserRole) || ROLES.CUSTOMER,
     session.user.emailVerified ?? false,
     session.user.isStaff ?? false,
-  )
+  );
 
   return (
     <article className="space-y-12 pb-12">
@@ -248,7 +259,10 @@ export default async function AdminDashboard() {
 
       {/* ZUGRIFFS-ANFRAGEN — super admin only, only when pending */}
       <Suspense fallback={null}>
-        <PermissionRequestsSection approvalCountsPromise={approvalCountsPromise} isSuper={isSuper} />
+        <PermissionRequestsSection
+          approvalCountsPromise={approvalCountsPromise}
+          isSuper={isSuper}
+        />
       </Suspense>
 
       {/* MONATSÜBERBLICK — collapsed by default except for 'lead' mode */}
@@ -261,5 +275,5 @@ export default async function AdminDashboard() {
         <RequestAccessSection inaccessibleSections={inaccessibleSections} />
       )}
     </article>
-  )
+  );
 }

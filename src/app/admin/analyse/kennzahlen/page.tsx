@@ -5,10 +5,10 @@
  * Protected by role-based access control.
  */
 
-import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
-import { canAccessSection } from '@/lib/permissions'
-import { loadAllYearsData } from '@/lib/hirn/data/financial-loader'
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
+import { canAccessSection } from '@/lib/permissions';
+import { loadAllYearsData } from '@/lib/hirn/data/financial-loader';
 import {
   METRICS,
   getMetricsByCategory,
@@ -16,61 +16,72 @@ import {
   CATEGORY_LABELS,
   CATEGORY_COLORS,
   type MetricCategory,
-} from '@/config/analyse/metrics'
-import Link from 'next/link'
-import { ROUTES } from '@/config/routes'
-import { ArrowLeft, TrendingUp, Leaf, Users, Monitor, PiggyBank } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { AnalyseTabs, KPIGrid, MissingDataBanner } from '@/components/analyse'
-import Heading from '@/components/admin/AdminHeading'
+} from '@/config/analyse/metrics';
+import Link from 'next/link';
+import { ROUTES } from '@/config/routes';
+import { ArrowLeft, TrendingUp, Leaf, Users, Monitor, PiggyBank } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { AnalyseTabs, KPIGrid, MissingDataBanner } from '@/components/analyse';
+import Heading from '@/components/admin/AdminHeading';
 
 const CATEGORY_ICONS = {
   financial: PiggyBank,
   environmental: Leaf,
   social: Users,
   digital: Monitor,
-}
+};
 
 export default async function KennzahlenPage() {
-  const session = await auth()
+  const session = await auth();
 
   if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/analyse/kennzahlen')
+    redirect('/auth/login?callbackUrl=/admin/analyse/kennzahlen');
   }
 
   // Check permission for kennzahlen section
-  const hasAccess = canAccessSection({
-    email: session.user.email,
-    is_staff: session.user.isStaff,
-    staff_permissions: session.user.staffPermissions,
-  }, 'kennzahlen') || canAccessSection({
-    email: session.user.email,
-    is_staff: session.user.isStaff,
-    staff_permissions: session.user.staffPermissions,
-  }, 'hirn')
+  const hasAccess =
+    canAccessSection(
+      {
+        email: session.user.email,
+        is_staff: session.user.isStaff,
+        staff_permissions: session.user.staffPermissions,
+      },
+      'kennzahlen',
+    ) ||
+    canAccessSection(
+      {
+        email: session.user.email,
+        is_staff: session.user.isStaff,
+        staff_permissions: session.user.staffPermissions,
+      },
+      'hirn',
+    );
 
   if (!hasAccess) {
-    redirect('/admin?error=no_kennzahlen_access')
+    redirect('/admin?error=no_kennzahlen_access');
   }
 
   // Load financial data for available metrics
-  let financialData: Map<number, Awaited<ReturnType<typeof loadAllYearsData>> extends Map<infer K, infer V> ? V : never> = new Map()
+  let financialData: Map<
+    number,
+    Awaited<ReturnType<typeof loadAllYearsData>> extends Map<infer K, infer V> ? V : never
+  > = new Map();
   try {
-    financialData = await loadAllYearsData()
+    financialData = await loadAllYearsData();
   } catch {
     // Financial data not available
   }
 
   // Get latest year data
-  const years = Array.from(financialData.keys()).sort((a, b) => b - a)
-  const latestYear = years[0]
-  const previousYear = years[1]
-  const latestData = latestYear ? financialData.get(latestYear) : null
-  const previousData = previousYear ? financialData.get(previousYear) : null
+  const years = Array.from(financialData.keys()).sort((a, b) => b - a);
+  const latestYear = years[0];
+  const previousYear = years[1];
+  const latestData = latestYear ? financialData.get(latestYear) : null;
+  const previousData = previousYear ? financialData.get(previousYear) : null;
 
   // Build KPI values from financial data
-  const kpiValues: Array<{ metricId: string; value?: number; previousValue?: number }> = []
+  const kpiValues: Array<{ metricId: string; value?: number; previousValue?: number }> = [];
 
   if (latestData) {
     kpiValues.push(
@@ -103,24 +114,27 @@ export default async function KennzahlenPage() {
         metricId: 'spenden',
         value: latestData.totals.spenden.value,
         previousValue: previousData?.totals.spenden.value,
-      }
-    )
+      },
+    );
 
     // Calculate YoY growth if we have previous year
     if (previousData) {
-      const yoyGrowth = ((latestData.totals.total.value - previousData.totals.total.value) / previousData.totals.total.value) * 100
+      const yoyGrowth =
+        ((latestData.totals.total.value - previousData.totals.total.value) /
+          previousData.totals.total.value) *
+        100;
       kpiValues.push({
         metricId: 'yoy_growth',
         value: yoyGrowth,
-      })
+      });
     }
   }
 
   // Get missing data metrics
-  const missingMetrics = getMissingDataMetrics()
+  const missingMetrics = getMissingDataMetrics();
 
   // Categories to display
-  const categories: MetricCategory[] = ['financial', 'environmental', 'social', 'digital']
+  const categories: MetricCategory[] = ['financial', 'environmental', 'social', 'digital'];
 
   return (
     <div className="space-y-6">
@@ -137,10 +151,10 @@ export default async function KennzahlenPage() {
             <TrendingUp className="w-6 h-6 text-action" />
           </div>
           <div>
-            <Heading level={1} className="text-3xl font-bold">Kennzahlen</Heading>
-            <p className="text-muted-foreground">
-              KPIs und Metriken auf einen Blick
-            </p>
+            <Heading level={1} className="text-3xl font-bold">
+              Kennzahlen
+            </Heading>
+            <p className="text-muted-foreground">KPIs und Metriken auf einen Blick</p>
           </div>
         </div>
       </div>
@@ -149,27 +163,23 @@ export default async function KennzahlenPage() {
       <AnalyseTabs />
 
       {/* Missing Data Summary */}
-      {missingMetrics.length > 0 && (
-        <MissingDataBanner metrics={missingMetrics} />
-      )}
+      {missingMetrics.length > 0 && <MissingDataBanner metrics={missingMetrics} />}
 
       {/* Year Context */}
       {latestYear && (
         <div className="p-3 bg-surface-raised border border rounded-lg text-sm text-text-secondary">
           Finanzielle Kennzahlen für <strong>{latestYear}</strong>
-          {previousYear && (
-            <span> (Vergleich mit {previousYear})</span>
-          )}
+          {previousYear && <span> (Vergleich mit {previousYear})</span>}
         </div>
       )}
 
       {/* KPI Categories */}
-      {categories.map(category => {
-        const metrics = getMetricsByCategory(category)
-        const Icon = CATEGORY_ICONS[category]
-        const colors = CATEGORY_COLORS[category]
-        const availableMetrics = metrics.filter(m => m.status === 'available')
-        const pendingMetrics = metrics.filter(m => m.status === 'needs_data')
+      {categories.map((category) => {
+        const metrics = getMetricsByCategory(category);
+        const Icon = CATEGORY_ICONS[category];
+        const colors = CATEGORY_COLORS[category];
+        const availableMetrics = metrics.filter((m) => m.status === 'available');
+        const pendingMetrics = metrics.filter((m) => m.status === 'needs_data');
 
         return (
           <Card key={category}>
@@ -186,20 +196,14 @@ export default async function KennzahlenPage() {
                 )}
               </CardTitle>
               {category === 'financial' && latestYear && (
-                <CardDescription>
-                  Daten aus Kivitendo für {latestYear}
-                </CardDescription>
+                <CardDescription>Daten aus Kivitendo für {latestYear}</CardDescription>
               )}
             </CardHeader>
             <CardContent>
               {/* Available Metrics */}
               {availableMetrics.length > 0 && (
                 <div className="mb-6">
-                  <KPIGrid
-                    metrics={availableMetrics}
-                    values={kpiValues}
-                    columns={3}
-                  />
+                  <KPIGrid metrics={availableMetrics} values={kpiValues} columns={3} />
                 </div>
               )}
 
@@ -211,36 +215,26 @@ export default async function KennzahlenPage() {
                       Daten benötigt
                     </Heading>
                   )}
-                  <KPIGrid
-                    metrics={pendingMetrics}
-                    values={[]}
-                    columns={3}
-                  />
+                  <KPIGrid metrics={pendingMetrics} values={[]} columns={3} />
                 </div>
               )}
             </CardContent>
           </Card>
-        )
+        );
       })}
 
       {/* Data Sources */}
       <Card>
         <CardHeader>
           <CardTitle>Datenquellen</CardTitle>
-          <CardDescription>
-            Woher die Kennzahlen stammen
-          </CardDescription>
+          <CardDescription>Woher die Kennzahlen stammen</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid md:grid-cols-3 gap-4">
             <div className="p-4 bg-surface-raised rounded-lg">
               <div className="font-medium text-action">Automatisch</div>
-              <div className="text-sm text-muted-foreground mt-1">
-                Kivitendo-Export (Finanzen)
-              </div>
-              <div className="text-xs text-muted-foreground mt-2">
-                Monatlich aktualisiert
-              </div>
+              <div className="text-sm text-muted-foreground mt-1">Kivitendo-Export (Finanzen)</div>
+              <div className="text-xs text-muted-foreground mt-2">Monatlich aktualisiert</div>
             </div>
             <div className="p-4 bg-surface-raised rounded-lg">
               <div className="font-medium text-text-secondary">Berechnet</div>
@@ -264,5 +258,5 @@ export default async function KennzahlenPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

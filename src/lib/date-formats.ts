@@ -38,13 +38,13 @@ const DATE_LOCALES: Record<string, string> = {
   ja: 'ja-JP',
   ko: 'ko-KR',
   ru: 'ru-RU',
-}
+};
 
-const LOCALE = DATE_LOCALES.de
+const LOCALE = DATE_LOCALES.de;
 
 /** Resolve an app locale ('en', 'fr', …) to a date locale; default de-CH. */
 function resolveDateLocale(locale?: string): string {
-  return (locale && DATE_LOCALES[locale]) || LOCALE
+  return (locale && DATE_LOCALES[locale]) || LOCALE;
 }
 
 /**
@@ -52,18 +52,18 @@ function resolveDateLocale(locale?: string): string {
  * timeZone every server-rendered timestamp is 1-2h off (a 15:00 workshop
  * displayed as 13:00, "today" flipping at 02:00 Swiss time).
  */
-const TIME_ZONE = 'Europe/Zurich'
+const TIME_ZONE = 'Europe/Zurich';
 
 /** Value returned for missing or invalid dates. */
-const EMPTY = ''
+const EMPTY = '';
 
-export type DateInput = Date | string | null | undefined
+export type DateInput = Date | string | null | undefined;
 
 /** Coerce input to a valid Date, or null for missing/invalid values. */
 function toValidDate(date: DateInput): Date | null {
-  if (date == null) return null
-  const d = typeof date === 'string' ? new Date(date) : date
-  return Number.isNaN(d.getTime()) ? null : d
+  if (date == null) return null;
+  const d = typeof date === 'string' ? new Date(date) : date;
+  return Number.isNaN(d.getTime()) ? null : d;
 }
 
 /** Null-safe core: format a valid date with the given options, else EMPTY. */
@@ -73,13 +73,13 @@ function formatWith(
   kind: 'date' | 'time' = 'date',
   locale?: string,
 ): string {
-  const d = toValidDate(date)
-  if (!d) return EMPTY
-  const opts = { timeZone: TIME_ZONE, ...options }
-  const dateLocale = resolveDateLocale(locale)
+  const d = toValidDate(date);
+  if (!d) return EMPTY;
+  const opts = { timeZone: TIME_ZONE, ...options };
+  const dateLocale = resolveDateLocale(locale);
   return kind === 'time'
     ? d.toLocaleTimeString(dateLocale, opts)
-    : d.toLocaleDateString(dateLocale, opts)
+    : d.toLocaleDateString(dateLocale, opts);
 }
 
 /**
@@ -88,7 +88,7 @@ function formatWith(
  * follow the page language; without it, dates render Swiss German.
  */
 export function formatDate(date: DateInput, locale?: string): string {
-  return formatWith(date, { year: 'numeric', month: 'long', day: 'numeric' }, 'date', locale)
+  return formatWith(date, { year: 'numeric', month: 'long', day: 'numeric' }, 'date', locale);
 }
 
 /**
@@ -96,12 +96,12 @@ export function formatDate(date: DateInput, locale?: string): string {
  * Use for inline/table display where space is limited.
  */
 export function formatDateShort(date: DateInput): string {
-  return formatWith(date, undefined)
+  return formatWith(date, undefined);
 }
 
 /** Format date as numeric: "01.01.2026" */
 export function formatDateNumeric(date: DateInput): string {
-  return formatWith(date, { day: '2-digit', month: '2-digit', year: 'numeric' })
+  return formatWith(date, { day: '2-digit', month: '2-digit', year: 'numeric' });
 }
 
 /** Format date with time (long month): "1. Januar 2026, 14:30" */
@@ -112,7 +112,7 @@ export function formatDateTime(date: DateInput): string {
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
-  })
+  });
 }
 
 /** Format date with time (numeric): "01.01.2026, 14:30" */
@@ -123,7 +123,7 @@ export function formatDateTimeNumeric(date: DateInput): string {
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
-  })
+  });
 }
 
 /** Format date with weekday: "Montag, 1. Januar 2026" */
@@ -133,7 +133,7 @@ export function formatDateWithWeekday(date: DateInput): string {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-  })
+  });
 }
 
 /** Format date with weekday and time: "Montag, 1. Januar 2026, 14:30" */
@@ -145,25 +145,25 @@ export function formatDateTimeWithWeekday(date: DateInput): string {
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
-  })
+  });
 }
 
 /** Format time only: "14:30" */
 export function formatTime(date: DateInput): string {
-  return formatWith(date, { hour: '2-digit', minute: '2-digit' }, 'time')
+  return formatWith(date, { hour: '2-digit', minute: '2-digit' }, 'time');
 }
 
 /** Format month and year: "Januar 2026" */
 export function formatDateMonth(date: DateInput): string {
-  return formatWith(date, { year: 'numeric', month: 'long' })
+  return formatWith(date, { year: 'numeric', month: 'long' });
 }
 
 /** Format short weekday: "Mo" */
 export function formatWeekdayShort(date: DateInput): string {
-  return formatWith(date, { weekday: 'short' })
+  return formatWith(date, { weekday: 'short' });
 }
 
 /** Format date with long weekday, day, and month (no year): "Montag, 1. Januar" */
 export function formatDateLong(date: DateInput): string {
-  return formatWith(date, { weekday: 'long', day: 'numeric', month: 'long' })
+  return formatWith(date, { weekday: 'long', day: 'numeric', month: 'long' });
 }

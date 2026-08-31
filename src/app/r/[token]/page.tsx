@@ -10,28 +10,24 @@
  * the next-intl router (Next 16 middleware→proxy).
  */
 
-import { notFound } from 'next/navigation'
-import { getMonthlyReport } from '@/lib/services/report'
-import { getReportShareByToken } from '@/lib/services/report-shares'
-import { MonthlyReportSheet } from '@/components/team/MonthlyReportSheet'
-import { ReportPrintButton } from '@/components/team/ReportPrintButton'
+import { notFound } from 'next/navigation';
+import { getMonthlyReport } from '@/lib/services/report';
+import { getReportShareByToken } from '@/lib/services/report-shares';
+import { MonthlyReportSheet } from '@/components/team/MonthlyReportSheet';
+import { ReportPrintButton } from '@/components/team/ReportPrintButton';
 
 export const metadata = {
   title: 'Monatsrapport',
   robots: { index: false, follow: false },
-}
+};
 
-export default async function PublicReportPage({
-  params,
-}: {
-  params: Promise<{ token: string }>
-}) {
-  const { token } = await params
-  const share = await getReportShareByToken(token)
-  if (!share) notFound()
+export default async function PublicReportPage({ params }: { params: Promise<{ token: string }> }) {
+  const { token } = await params;
+  const share = await getReportShareByToken(token);
+  if (!share) notFound();
 
-  const report = await getMonthlyReport(share.userId, share.month)
-  if (!report) notFound()
+  const report = await getMonthlyReport(share.userId, share.month);
+  if (!report) notFound();
 
   return (
     <div className="mx-auto max-w-3xl space-y-4 p-6 print:p-0">
@@ -40,5 +36,5 @@ export default async function PublicReportPage({
       </div>
       <MonthlyReportSheet report={report} />
     </div>
-  )
+  );
 }

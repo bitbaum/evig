@@ -1,22 +1,22 @@
-'use client'
+'use client';
 
-import { UserPlus, UserMinus, Loader2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { apiFetch } from '@/lib/api/client'
-import { useAsyncAction } from '@/hooks/useAsyncAction'
-import { TEAM_ROLES } from '@/config/teams'
+import { UserPlus, UserMinus, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { apiFetch } from '@/lib/api/client';
+import { useAsyncAction } from '@/hooks/useAsyncAction';
+import { TEAM_ROLES } from '@/config/teams';
 
 interface Props {
-  teamId: string
-  viewerUserId: string
+  teamId: string;
+  viewerUserId: string;
   /** The viewer's live membership id in THIS team, or null when not a member. */
-  viewerMembershipId: string | null
+  viewerMembershipId: string | null;
 }
 
 /** Self-service join / leave for the staff member viewing the team page. */
 export default function TeamJoinButton({ teamId, viewerUserId, viewerMembershipId }: Props) {
-  const { busy, error, run } = useAsyncAction()
-  const isMember = !!viewerMembershipId
+  const { busy, error, run } = useAsyncAction();
+  const isMember = !!viewerMembershipId;
 
   const toggle = () =>
     run('toggle', () =>
@@ -26,7 +26,7 @@ export default function TeamJoinButton({ teamId, viewerUserId, viewerMembershipI
             method: 'POST',
             body: { user_id: viewerUserId, role: TEAM_ROLES.MEMBER },
           }),
-    )
+    );
 
   return (
     <div className="flex flex-col items-end gap-1">
@@ -48,5 +48,5 @@ export default function TeamJoinButton({ teamId, viewerUserId, viewerMembershipI
       </Button>
       {error && <p className="text-xs text-error-600 dark:text-error-400">{error}</p>}
     </div>
-  )
+  );
 }

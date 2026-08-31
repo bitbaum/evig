@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import {
   FileText,
   Link as LinkIcon,
@@ -9,81 +9,83 @@ import {
   Download,
   ExternalLink,
   Lock,
-  Unlock
-} from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { logger } from '@/lib/logger'
-import { apiFetch } from '@/lib/api/client'
-import { WORKSHOP_MATERIAL_ACCESS_TYPE } from '@/config/workshop-registration-status'
+  Unlock,
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { logger } from '@/lib/logger';
+import { apiFetch } from '@/lib/api/client';
+import { WORKSHOP_MATERIAL_ACCESS_TYPE } from '@/config/workshop-registration-status';
 
 interface Material {
-  id: string
-  title: string
-  description: string | null
-  material_type: string
-  url: string
-  file_size_bytes: number | null
-  access_type: string
-  created_at: string
+  id: string;
+  title: string;
+  description: string | null;
+  material_type: string;
+  url: string;
+  file_size_bytes: number | null;
+  access_type: string;
+  created_at: string;
 }
 
 interface WorkshopMaterialsProps {
-  workshopSlug: string
+  workshopSlug: string;
 }
 
 export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsProps) {
-  const t = useTranslations('workshops.materials')
-  const [materials, setMaterials] = useState<Material[]>([])
-  const [accessLevel, setAccessLevel] = useState<string>(WORKSHOP_MATERIAL_ACCESS_TYPE.PUBLIC)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const t = useTranslations('workshops.materials');
+  const [materials, setMaterials] = useState<Material[]>([]);
+  const [accessLevel, setAccessLevel] = useState<string>(WORKSHOP_MATERIAL_ACCESS_TYPE.PUBLIC);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchMaterials = async () => {
       try {
-        const result = await apiFetch<{ materials: Material[]; accessLevel: string }>(`/api/workshops/${workshopSlug}/materials`)
+        const result = await apiFetch<{ materials: Material[]; accessLevel: string }>(
+          `/api/workshops/${workshopSlug}/materials`,
+        );
         if (result.success && result.data) {
-          setMaterials(result.data.materials)
-          setAccessLevel(result.data.accessLevel)
+          setMaterials(result.data.materials);
+          setAccessLevel(result.data.accessLevel);
         } else {
-          setError(result.error || t('error'))
+          setError(result.error || t('error'));
         }
       } catch (err) {
-        logger.error('Error fetching workshop materials', { error: err })
-        setError(t('networkError'))
+        logger.error('Error fetching workshop materials', { error: err });
+        setError(t('networkError'));
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    }
+    };
 
-    fetchMaterials()
-  }, [workshopSlug, t])
+    fetchMaterials();
+  }, [workshopSlug, t]);
 
   const getMaterialIcon = (type: string) => {
     switch (type) {
       case 'pdf':
       case 'document':
-        return <FileText className="w-5 h-5" />
+        return <FileText className="w-5 h-5" />;
       case 'video':
-        return <Video className="w-5 h-5" />
+        return <Video className="w-5 h-5" />;
       case 'archive':
-        return <Archive className="w-5 h-5" />
+        return <Archive className="w-5 h-5" />;
       case 'link':
       default:
-        return <LinkIcon className="w-5 h-5" />
+        return <LinkIcon className="w-5 h-5" />;
     }
-  }
+  };
 
   const formatFileSize = (bytes: number | null) => {
-    if (!bytes) return null
-    if (bytes < 1024) return `${bytes} B`
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
-  }
+    if (!bytes) return null;
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  };
 
   const isExternalLink = (url: string) => {
-    return url.startsWith('http://') || url.startsWith('https://')
-  }
+    return url.startsWith('http://') || url.startsWith('https://');
+  };
 
   if (loading) {
     return (
@@ -94,7 +96,7 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
           <div className="h-12 bg-surface-overlay rounded-sm"></div>
         </div>
       </div>
-    )
+    );
   }
 
   if (error) {
@@ -102,7 +104,7 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
       <div className="text-center py-4">
         <p className="text-error-500 text-sm">{error}</p>
       </div>
-    )
+    );
   }
 
   if (materials.length === 0) {
@@ -111,12 +113,10 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
         <FileText className="w-10 h-10 text-text-muted mx-auto mb-2" />
         <p className="text-text-tertiary text-sm">{t('emptyTitle')}</p>
         {accessLevel === WORKSHOP_MATERIAL_ACCESS_TYPE.PUBLIC && (
-          <p className="text-text-tertiary text-xs mt-1">
-            {t('loginHint')}
-          </p>
+          <p className="text-text-tertiary text-xs mt-1">{t('loginHint')}</p>
         )}
       </div>
-    )
+    );
   }
 
   return (
@@ -141,12 +141,17 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
           download={!isExternalLink(material.url)}
           className="flex items-start gap-3 p-3 bg-surface-raised rounded-lg hover:bg-surface-raised transition-colors group"
         >
-          <div className={`p-2 rounded-lg ${
-            material.material_type === 'pdf' ? 'bg-error-100 dark:bg-error-900/20 text-error-600' :
-            material.material_type === 'video' ? 'bg-action-muted text-action' :
-            material.material_type === 'archive' ? 'bg-warning-100 dark:bg-warning-900/30 text-warning-600' :
-            'bg-action-muted text-action'
-          }`}>
+          <div
+            className={`p-2 rounded-lg ${
+              material.material_type === 'pdf'
+                ? 'bg-error-100 dark:bg-error-900/20 text-error-600'
+                : material.material_type === 'video'
+                  ? 'bg-action-muted text-action'
+                  : material.material_type === 'archive'
+                    ? 'bg-warning-100 dark:bg-warning-900/30 text-warning-600'
+                    : 'bg-action-muted text-action'
+            }`}
+          >
             {getMaterialIcon(material.material_type)}
           </div>
 
@@ -156,12 +161,16 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
                 {material.title}
               </span>
               {material.access_type !== WORKSHOP_MATERIAL_ACCESS_TYPE.PUBLIC && (
-                <span className={`text-xs px-1.5 py-0.5 rounded ${
-                  material.access_type === WORKSHOP_MATERIAL_ACCESS_TYPE.ATTENDED
-                    ? 'bg-action-muted text-action'
-                    : 'bg-action-muted text-action'
-                }`}>
-                  {material.access_type === WORKSHOP_MATERIAL_ACCESS_TYPE.ATTENDED ? t('badgeAttended') : t('badgeRegistered')}
+                <span
+                  className={`text-xs px-1.5 py-0.5 rounded ${
+                    material.access_type === WORKSHOP_MATERIAL_ACCESS_TYPE.ATTENDED
+                      ? 'bg-action-muted text-action'
+                      : 'bg-action-muted text-action'
+                  }`}
+                >
+                  {material.access_type === WORKSHOP_MATERIAL_ACCESS_TYPE.ATTENDED
+                    ? t('badgeAttended')
+                    : t('badgeRegistered')}
                 </span>
               )}
             </div>
@@ -191,5 +200,5 @@ export default function WorkshopMaterials({ workshopSlug }: WorkshopMaterialsPro
         </a>
       ))}
     </div>
-  )
+  );
 }

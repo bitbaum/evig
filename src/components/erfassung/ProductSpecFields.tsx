@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * ProductSpecFields
@@ -7,20 +7,20 @@
  * Supports adding/removing spec rows.
  */
 
-import { Plus, Trash2, FileText } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { AIFieldIndicator } from '@/components/ai/AIFieldIndicator'
-import Heading from '@/components/ui/Heading'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import type { AIFieldMetadata, SpecField } from '@/types/erfassung'
+import { Plus, Trash2, FileText } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { AIFieldIndicator } from '@/components/ai/AIFieldIndicator';
+import Heading from '@/components/ui/Heading';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import type { AIFieldMetadata, SpecField } from '@/types/erfassung';
 
 interface ProductSpecFieldsProps {
-  specs: SpecField[]
-  aiMetadata: AIFieldMetadata
-  onSpecChange: (index: number, field: 'key' | 'value', value: string) => void
-  onSpecAdd: () => void
-  onSpecRemove: (index: number) => void
+  specs: SpecField[];
+  aiMetadata: AIFieldMetadata;
+  onSpecChange: (index: number, field: 'key' | 'value', value: string) => void;
+  onSpecAdd: () => void;
+  onSpecRemove: (index: number) => void;
 }
 
 export function ProductSpecFields({
@@ -30,17 +30,18 @@ export function ProductSpecFields({
   onSpecAdd,
   onSpecRemove,
 }: ProductSpecFieldsProps) {
-  const t = useTranslations('components.erfassung.specFields')
+  const t = useTranslations('components.erfassung.specFields');
 
   return (
     <div className="card-shell p-4 sm:p-6">
       <div className="flex items-center justify-between mb-4">
-        <Heading level={2} className="text-base sm:text-lg font-semibold text-text-primary flex items-center gap-2">
+        <Heading
+          level={2}
+          className="text-base sm:text-lg font-semibold text-text-primary flex items-center gap-2"
+        >
           <FileText className="w-5 h-5" />
           <span>{t('title')}</span>
-          {aiMetadata.specs && (
-            <AIFieldIndicator source={aiMetadata.specs} fieldName="specs" />
-          )}
+          {aiMetadata.specs && <AIFieldIndicator source={aiMetadata.specs} fieldName="specs" />}
         </Heading>
         <Button
           type="button"
@@ -84,5 +85,5 @@ export function ProductSpecFields({
         ))}
       </div>
     </div>
-  )
+  );
 }

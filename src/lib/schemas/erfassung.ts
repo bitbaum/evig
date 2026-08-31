@@ -134,21 +134,9 @@ export const erfassungPayloadSchema = z.object({
 // BULK SCHEMAS
 // =============================================================================
 
-const bulkProductStatusSchema = z.enum([
-  'valid',
-  'warning',
-  'error',
-  'processing',
-  'saved',
-]);
+const bulkProductStatusSchema = z.enum(['valid', 'warning', 'error', 'processing', 'saved']);
 
-const bulkProductSourceSchema = z.enum([
-  'text',
-  'csv',
-  'voice',
-  'image',
-  'manual',
-]);
+const bulkProductSourceSchema = z.enum(['text', 'csv', 'voice', 'image', 'manual']);
 
 export const bulkProductSchema = erfassungFormDataSchema.extend({
   _tempId: z.string(),
@@ -212,10 +200,9 @@ export type ErfassungAction = z.infer<typeof erfassungActionSchema>;
 // =============================================================================
 
 export const ErfassungRefineSchema = z.object({
-  currentProduct: z.record(z.string(), z.unknown()).refine(
-    (obj) => Object.keys(obj).length > 0,
-    'Produktdaten sind erforderlich'
-  ),
+  currentProduct: z
+    .record(z.string(), z.unknown())
+    .refine((obj) => Object.keys(obj).length > 0, 'Produktdaten sind erforderlich'),
   instruction: z.string().min(1, 'Anweisung ist erforderlich').max(2000),
 });
 

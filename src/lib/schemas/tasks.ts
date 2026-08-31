@@ -29,20 +29,9 @@ const requestStatuses = Object.values(REQUEST_STATUSES) as [string, ...string[]]
  * Task creation schema
  */
 export const createTaskSchema = z.object({
-  title: z
-    .string()
-    .min(1, 'Titel erforderlich')
-    .max(200, 'Titel zu lang (max 200 Zeichen)'),
-  description: z
-    .string()
-    .max(2000, 'Beschreibung zu lang')
-    .optional()
-    .nullable(),
-  instructions: z
-    .string()
-    .max(5000, 'Anleitung zu lang')
-    .optional()
-    .nullable(),
+  title: z.string().min(1, 'Titel erforderlich').max(200, 'Titel zu lang (max 200 Zeichen)'),
+  description: z.string().max(2000, 'Beschreibung zu lang').optional().nullable(),
+  instructions: z.string().max(5000, 'Anleitung zu lang').optional().nullable(),
   task_type: z.enum(taskTypes),
   schedule_cron: z.string().max(100).optional().nullable(),
   schedule_human: z.string().max(200).optional().nullable(),
@@ -100,10 +89,7 @@ export const requestResponseSchema = z.object({
  * Project schema
  */
 export const createProjectSchema = z.object({
-  title: z
-    .string()
-    .min(1, 'Titel erforderlich')
-    .max(200, 'Titel zu lang'),
+  title: z.string().min(1, 'Titel erforderlich').max(200, 'Titel zu lang'),
   description: z.string().max(2000).optional().nullable(),
   status: z.enum(projectStatuses).default('planning'),
   target_date: z.string().optional().nullable(),
@@ -125,12 +111,7 @@ export type UpdateProjectInput = z.infer<typeof updateProjectSchema>;
 // Database row types (SSOT for task data shapes across pages)
 // ============================================================
 
-import type {
-  TaskType,
-  TaskCategory,
-  TaskPriority,
-  TaskStatus,
-} from '@/config/tasks';
+import type { TaskType, TaskCategory, TaskPriority, TaskStatus } from '@/config/tasks';
 
 /** Task row for list pages (minimal fields for table display) */
 export interface TaskListItem {

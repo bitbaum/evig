@@ -1,22 +1,22 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
-import Link from 'next/link'
-import { AlertTriangle, RefreshCw, Home } from 'lucide-react'
-import { logger } from '@/lib/logger'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
+import { useEffect } from 'react';
+import Link from 'next/link';
+import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
+import { logger } from '@/lib/logger';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
 
 export default function Error({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
   useEffect(() => {
-    logger.error('Application error', { error, digest: error.digest })
-  }, [error])
+    logger.error('Application error', { error, digest: error.digest });
+  }, [error]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-surface-raised px-4">
@@ -28,7 +28,8 @@ export default function Error({
           Etwas ist schiefgelaufen
         </Heading>
         <p className="text-text-secondary mb-8">
-          Ein unerwarteter Fehler ist aufgetreten. Versuche die Seite neu zu laden — falls das Problem weiterhin besteht, kontaktiere uns.
+          Ein unerwarteter Fehler ist aufgetreten. Versuche die Seite neu zu laden — falls das
+          Problem weiterhin besteht, kontaktiere uns.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Button onClick={reset} variant="primary">
@@ -42,5 +43,5 @@ export default function Error({
         </div>
       </div>
     </div>
-  )
+  );
 }

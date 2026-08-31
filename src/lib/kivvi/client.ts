@@ -22,11 +22,11 @@ function getConfig(): { baseUrl: string; token: string } {
 
   if (!baseUrl || !token) {
     throw new Error(
-      "Kivvi integration not configured. Set KIVVI_API_URL and KIVVI_API_TOKEN in .env",
+      'Kivvi integration not configured. Set KIVVI_API_URL and KIVVI_API_TOKEN in .env',
     );
   }
 
-  return { baseUrl: baseUrl.replace(/\/$/, ""), token };
+  return { baseUrl: baseUrl.replace(/\/$/, ''), token };
 }
 
 function isConfigured(): boolean {
@@ -68,14 +68,7 @@ export interface KivviInventoryItem {
 
 export interface CreateKivviInventoryItemInput {
   description: string;
-  condition?:
-    | "untested"
-    | "like_new"
-    | "good"
-    | "fair"
-    | "poor"
-    | "parts_only"
-    | "scrap";
+  condition?: 'untested' | 'like_new' | 'good' | 'fair' | 'poor' | 'parts_only' | 'scrap';
   warehouseId?: string;
   estimatedValue?: string;
   askingPrice?: string;
@@ -112,7 +105,7 @@ export interface CreateKivviInvoiceInput {
 // CONDITION MAPPING — RevampIT zustand → Kivvi ITEM_CONDITION enum
 // ============================================================================
 
-type KivviCondition = NonNullable<CreateKivviInventoryItemInput["condition"]>;
+type KivviCondition = NonNullable<CreateKivviInventoryItemInput['condition']>;
 
 /**
  * RevampIT's condition vocabulary (ZUSTAND_OPTIONS: new/like_new/good/fair/poor/
@@ -123,25 +116,25 @@ type KivviCondition = NonNullable<CreateKivviInventoryItemInput["condition"]>;
  * to Kivvi's own default, 'untested'.
  */
 const CONDITION_TO_KIVVI: Readonly<Record<string, KivviCondition>> = {
-  new: "like_new",
-  like_new: "like_new",
-  excellent: "like_new",
-  very_good: "like_new",
-  good: "good",
-  fair: "fair",
-  acceptable: "fair",
-  poor: "poor",
-  defect: "parts_only",
-  defective: "parts_only",
-  damaged: "parts_only",
-  parts_only: "parts_only",
-  scrap: "scrap",
-  untested: "untested",
+  new: 'like_new',
+  like_new: 'like_new',
+  excellent: 'like_new',
+  very_good: 'like_new',
+  good: 'good',
+  fair: 'fair',
+  acceptable: 'fair',
+  poor: 'poor',
+  defect: 'parts_only',
+  defective: 'parts_only',
+  damaged: 'parts_only',
+  parts_only: 'parts_only',
+  scrap: 'scrap',
+  untested: 'untested',
 };
 
 export function mapConditionToKivvi(condition?: string | null): KivviCondition {
-  if (!condition) return "untested";
-  return CONDITION_TO_KIVVI[condition.toLowerCase().trim()] ?? "untested";
+  if (!condition) return 'untested';
+  return CONDITION_TO_KIVVI[condition.toLowerCase().trim()] ?? 'untested';
 }
 
 /**
@@ -153,34 +146,31 @@ export function mapConditionToKivvi(condition?: string | null): KivviCondition {
  * the neutral 'fair'. Symmetric with mapConditionToKivvi where it can be.
  */
 const CONDITION_FROM_KIVVI: Readonly<Record<KivviCondition, string>> = {
-  untested: "fair",
-  like_new: "like_new",
-  good: "good",
-  fair: "fair",
-  poor: "poor",
-  parts_only: "damaged",
-  scrap: "damaged",
+  untested: 'fair',
+  like_new: 'like_new',
+  good: 'good',
+  fair: 'fair',
+  poor: 'poor',
+  parts_only: 'damaged',
+  scrap: 'damaged',
 };
 
 export function mapConditionFromKivvi(condition?: string | null): string {
-  if (!condition) return "fair";
-  return CONDITION_FROM_KIVVI[condition.toLowerCase().trim() as KivviCondition] ?? "fair";
+  if (!condition) return 'fair';
+  return CONDITION_FROM_KIVVI[condition.toLowerCase().trim() as KivviCondition] ?? 'fair';
 }
 
 // ============================================================================
 // HTTP HELPER
 // ============================================================================
 
-async function kivviFetch<T>(
-  path: string,
-  options: RequestInit = {},
-): Promise<T> {
+async function kivviFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
   const { baseUrl, token } = getConfig();
 
   const response = await fetch(`${baseUrl}/api/v1${path}`, {
     ...options,
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
       ...options.headers,
     },
@@ -189,9 +179,7 @@ async function kivviFetch<T>(
   const json = (await response.json()) as { success: boolean; data?: T; error?: string };
 
   if (!json.success || !response.ok) {
-    throw new Error(
-      `Kivvi API error (${response.status}): ${json.error || "Unknown error"}`,
-    );
+    throw new Error(`Kivvi API error (${response.status}): ${json.error || 'Unknown error'}`);
   }
 
   return json.data as T;
@@ -208,8 +196,8 @@ async function kivviFetch<T>(
 export async function createKivviInventoryItem(
   input: CreateKivviInventoryItemInput,
 ): Promise<KivviInventoryItem> {
-  return kivviFetch<KivviInventoryItem>("/inventory-items", {
-    method: "POST",
+  return kivviFetch<KivviInventoryItem>('/inventory-items', {
+    method: 'POST',
     body: JSON.stringify(input),
   });
 }
@@ -227,18 +215,16 @@ export async function updateKivviInventoryItem(
   idempotencyKey?: string,
 ): Promise<KivviInventoryItem> {
   return kivviFetch<KivviInventoryItem>(`/inventory-items/${kivviId}`, {
-    method: "PATCH",
+    method: 'PATCH',
     body: JSON.stringify(input),
-    ...(idempotencyKey ? { headers: { "Idempotency-Key": idempotencyKey } } : {}),
+    ...(idempotencyKey ? { headers: { 'Idempotency-Key': idempotencyKey } } : {}),
   });
 }
 
 /**
  * Get a Kivvi inventory item by ID.
  */
-export async function getKivviInventoryItem(
-  kivviId: string,
-): Promise<KivviInventoryItem> {
+export async function getKivviInventoryItem(kivviId: string): Promise<KivviInventoryItem> {
   return kivviFetch<KivviInventoryItem>(`/inventory-items/${kivviId}`);
 }
 
@@ -250,13 +236,11 @@ export async function getKivviInventoryItem(
  * Create a sales invoice in Kivvi when a RevampIT order is confirmed.
  * Returns the Kivvi document with its RE- number for sending to the buyer.
  */
-export async function createKivviInvoice(
-  input: CreateKivviInvoiceInput,
-): Promise<KivviDocument> {
-  return kivviFetch<KivviDocument>("/documents", {
-    method: "POST",
+export async function createKivviInvoice(input: CreateKivviInvoiceInput): Promise<KivviDocument> {
+  return kivviFetch<KivviDocument>('/documents', {
+    method: 'POST',
     body: JSON.stringify({
-      type: "invoice",
+      type: 'invoice',
       contactName: input.contactName,
       contactEmail: input.contactEmail,
       notes: input.notes,
@@ -285,7 +269,7 @@ export async function updateKivviDocumentStatus(
   status: string,
 ): Promise<KivviDocument> {
   return kivviFetch<KivviDocument>(`/documents/${kivviDocumentId}`, {
-    method: "PUT",
+    method: 'PUT',
     body: JSON.stringify({ status }),
   });
 }
@@ -293,7 +277,7 @@ export async function updateKivviDocumentStatus(
 export interface RecordKivviPaymentInput {
   amount: string;
   date: string; // YYYY-MM-DD
-  method?: "bank_transfer" | "cash" | "card" | "other";
+  method?: 'bank_transfer' | 'cash' | 'card' | 'other';
   reference?: string;
 }
 
@@ -325,7 +309,7 @@ export async function recordKivviPayment(
   input: RecordKivviPaymentInput,
 ): Promise<{ id: string }> {
   return kivviFetch<{ id: string }>(`/documents/${kivviDocumentId}/payments`, {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify(input),
   });
 }
@@ -342,10 +326,10 @@ export async function recordKivviAgencySale(
   input: RecordKivviAgencySaleInput,
   idempotencyKey: string,
 ): Promise<KivviJournalEntryRef> {
-  return kivviFetch<KivviJournalEntryRef>("/marketplace/agency-sales", {
-    method: "POST",
+  return kivviFetch<KivviJournalEntryRef>('/marketplace/agency-sales', {
+    method: 'POST',
     body: JSON.stringify(input),
-    headers: { "Idempotency-Key": idempotencyKey },
+    headers: { 'Idempotency-Key': idempotencyKey },
   });
 }
 
@@ -364,10 +348,10 @@ export async function recordKivviPayout(
   input: RecordKivviPayoutInput,
   idempotencyKey: string,
 ): Promise<KivviJournalEntryRef> {
-  return kivviFetch<KivviJournalEntryRef>("/marketplace/payouts", {
-    method: "POST",
+  return kivviFetch<KivviJournalEntryRef>('/marketplace/payouts', {
+    method: 'POST',
     body: JSON.stringify(input),
-    headers: { "Idempotency-Key": idempotencyKey },
+    headers: { 'Idempotency-Key': idempotencyKey },
   });
 }
 
@@ -384,11 +368,9 @@ export type KivviSyncResult =
  * If Kivvi is not configured (KIVVI_API_URL/TOKEN not set), returns success: false
  * without logging an error (allows development without Kivvi configured).
  */
-export async function syncToKivvi(
-  input: CreateKivviInventoryItemInput,
-): Promise<KivviSyncResult> {
+export async function syncToKivvi(input: CreateKivviInventoryItemInput): Promise<KivviSyncResult> {
   if (!isConfigured()) {
-    return { success: false, error: "Kivvi not configured" };
+    return { success: false, error: 'Kivvi not configured' };
   }
 
   try {
@@ -400,7 +382,7 @@ export async function syncToKivvi(
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Kivvi sync failed",
+      error: error instanceof Error ? error.message : 'Kivvi sync failed',
     };
   }
 }

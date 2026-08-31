@@ -1,9 +1,9 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useTranslations } from 'next-intl'
-import { navLinkClass } from '@/lib/design/nav'
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { navLinkClass } from '@/lib/design/nav';
 
 /**
  * People & Teams are one area seen through three lenses — the individual
@@ -22,25 +22,25 @@ const TABS = [
   { href: '/admin/team', labelKey: 'people' },
   { href: '/admin/teams', labelKey: 'teams' },
   { href: '/admin/team/board', labelKey: 'board' },
-] as const
+] as const;
 
 function isTabActive(href: string, pathname: string): boolean {
-  const under = (base: string) => pathname === base || pathname.startsWith(base + '/')
-  const isTeams = under('/admin/teams')
-  const isBoard = under('/admin/team/board')
-  if (href === '/admin/teams') return isTeams
-  if (href === '/admin/team/board') return isBoard
+  const under = (base: string) => pathname === base || pathname.startsWith(base + '/');
+  const isTeams = under('/admin/teams');
+  const isBoard = under('/admin/team/board');
+  if (href === '/admin/teams') return isTeams;
+  if (href === '/admin/team/board') return isBoard;
   // People: any /admin/team* that isn't Teams or the Board.
-  return !isTeams && !isBoard && under('/admin/team')
+  return !isTeams && !isBoard && under('/admin/team');
 }
 
 export function PeopleTeamsTabs() {
-  const t = useTranslations('admin.team.orgTabs')
-  const pathname = usePathname()
+  const t = useTranslations('admin.team.orgTabs');
+  const pathname = usePathname();
   return (
     <nav className="mb-6 flex flex-wrap gap-1 border-b border-subtle" aria-label={t('aria')}>
-      {TABS.map(tab => {
-        const active = isTabActive(tab.href, pathname)
+      {TABS.map((tab) => {
+        const active = isTabActive(tab.href, pathname);
         return (
           <Link
             key={tab.href}
@@ -50,8 +50,8 @@ export function PeopleTeamsTabs() {
           >
             {t(tab.labelKey)}
           </Link>
-        )
+        );
       })}
     </nav>
-  )
+  );
 }

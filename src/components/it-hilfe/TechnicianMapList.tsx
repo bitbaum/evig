@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * TechnicianMapList - Google-like split layout with map + list
@@ -7,133 +7,136 @@
  * Desktop: list on left, map on right. Mobile: stacked.
  */
 
-import { useState, useEffect } from 'react'
-import dynamic from 'next/dynamic'
-import { Link } from '@/i18n/navigation'
-import { useTranslations } from 'next-intl'
-import { apiFetch } from '@/lib/api/client'
-import {
-  Sparkles,
-  TrendingUp,
-  Award,
-} from 'lucide-react'
-import { logger } from '@/lib/logger'
-import { getSkillById } from '@/config/it-hilfe'
-import { getCantonCoordinates } from '@/config/canton-coordinates'
-import type { MapMarker } from '@/components/map/LeafletMap'
-import { TechnicianMatchCard } from './TechnicianMatchCard'
-import Heading from '@/components/ui/Heading'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { ROUTES } from '@/config/routes'
+import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
+import { apiFetch } from '@/lib/api/client';
+import { Sparkles, TrendingUp, Award } from 'lucide-react';
+import { logger } from '@/lib/logger';
+import { getSkillById } from '@/config/it-hilfe';
+import { getCantonCoordinates } from '@/config/canton-coordinates';
+import type { MapMarker } from '@/components/map/LeafletMap';
+import { TechnicianMatchCard } from './TechnicianMatchCard';
+import Heading from '@/components/ui/Heading';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { ROUTES } from '@/config/routes';
 
 const LeafletMap = dynamic(() => import('@/components/map/LeafletMap'), {
   ssr: false,
-  loading: () => <div className="h-full min-h-[400px] animate-pulse rounded-lg bg-surface-raised" />,
-})
+  loading: () => (
+    <div className="h-full min-h-[400px] animate-pulse rounded-lg bg-surface-raised" />
+  ),
+});
 
 // =============================================================================
 // TYPES
 // =============================================================================
 
 interface MatchedHelper {
-  id: string
-  userId: string
-  name: string
-  bio: string | null
-  hourlyRateCents: number | null
-  acceptsGratis: boolean
-  acceptsKulturlegi: boolean
-  serviceTypes: string[]
-  canton: string | null
-  city: string | null
-  skills: string[]
-  matchScore: number
-  matchReasons: string[]
-  isPreferred?: boolean
+  id: string;
+  userId: string;
+  name: string;
+  bio: string | null;
+  hourlyRateCents: number | null;
+  acceptsGratis: boolean;
+  acceptsKulturlegi: boolean;
+  serviceTypes: string[];
+  canton: string | null;
+  city: string | null;
+  skills: string[];
+  matchScore: number;
+  matchReasons: string[];
+  isPreferred?: boolean;
 }
 
 interface TechnicianMapListProps {
-  requestId: string
-  requestTitle?: string
+  requestId: string;
+  requestTitle?: string;
   /** Requester's canton — used for map markers when a helper profile has no canton set. */
-  requestCanton?: string
+  requestCanton?: string;
 }
 
 // =============================================================================
 // COMPONENT
 // =============================================================================
 
-export function TechnicianMapList({ requestId, requestTitle, requestCanton }: TechnicianMapListProps) {
-  const t = useTranslations('itHelp.detail')
-  const [matches, setMatches] = useState<MatchedHelper[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [highlightedHelperId, setHighlightedHelperId] = useState<string | null>(null)
+export function TechnicianMapList({
+  requestId,
+  requestTitle,
+  requestCanton,
+}: TechnicianMapListProps) {
+  const t = useTranslations('itHelp.detail');
+  const [matches, setMatches] = useState<MatchedHelper[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [highlightedHelperId, setHighlightedHelperId] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchMatches() {
       try {
-        setLoading(true)
+        setLoading(true);
         const { data, error: apiError } = await apiFetch<{ matches: MatchedHelper[] }>(
-          `/api/it-hilfe/requests/${requestId}/matches`
-        )
+          `/api/it-hilfe/requests/${requestId}/matches`,
+        );
 
         if (apiError) {
-          throw new Error(apiError)
+          throw new Error(apiError);
         }
 
-        setMatches(data?.matches || [])
+        setMatches(data?.matches || []);
       } catch (err) {
-        logger.error('Error fetching matched helpers', { error: err, requestId })
-        setError(err instanceof Error ? err.message : t('error'))
+        logger.error('Error fetching matched helpers', { error: err, requestId });
+        setError(err instanceof Error ? err.message : t('error'));
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
     }
 
-    fetchMatches()
-  }, [requestId, t])
+    fetchMatches();
+  }, [requestId, t]);
 
   // Build map markers
-  const markers: MapMarker[] = []
+  const markers: MapMarker[] = [];
 
   // Add helper markers (use canton coordinates as approximation)
   // Deterministic offset from userId to avoid overlap without re-render jitter
   for (const helper of matches) {
-    const cantonForMap = helper.canton || requestCanton
+    const cantonForMap = helper.canton || requestCanton;
     if (cantonForMap) {
-      const coords = getCantonCoordinates(cantonForMap)
+      const coords = getCantonCoordinates(cantonForMap);
       if (coords) {
-        const hash = helper.userId.charCodeAt(0) + helper.userId.charCodeAt(helper.userId.length - 1)
-        const offsetLat = ((hash % 50) - 25) * 0.001
-        const offsetLng = ((hash % 37) - 18) * 0.001
+        const hash =
+          helper.userId.charCodeAt(0) + helper.userId.charCodeAt(helper.userId.length - 1);
+        const offsetLat = ((hash % 50) - 25) * 0.001;
+        const offsetLng = ((hash % 37) - 18) * 0.001;
         markers.push({
           id: helper.userId,
           lat: coords.lat + offsetLat,
           lng: coords.lng + offsetLng,
           label: helper.name,
-          description: helper.city
-            ? `${helper.city}, ${cantonForMap}`
-            : cantonForMap,
+          description: helper.city ? `${helper.city}, ${cantonForMap}` : cantonForMap,
           type: 'helper',
-        })
+        });
       }
     }
   }
 
-  const topMatches = matches.slice(0, 5)
-  const maxScore = matches[0]?.matchScore || 1
+  const topMatches = matches.slice(0, 5);
+  const maxScore = matches[0]?.matchScore || 1;
 
   if (loading) {
     return (
       <div className="space-y-4">
         <div className="flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-action" />
-          <Heading level={3} className="text-lg font-semibold text-text-primary">{t('searchingTechnicians')}</Heading>
+          <Heading level={3} className="text-lg font-semibold text-text-primary">
+            {t('searchingTechnicians')}
+          </Heading>
         </div>
         <div className="animate-pulse bg-surface-raised rounded-lg min-h-[300px]" />
       </div>
-    )
+    );
   }
 
   if (error) {
@@ -141,7 +144,7 @@ export function TechnicianMapList({ requestId, requestTitle, requestCanton }: Te
       <div className="bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30 rounded-xl p-6">
         <p className="text-error-800 dark:text-error-400">{error}</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -183,10 +186,11 @@ export function TechnicianMapList({ requestId, requestTitle, requestCanton }: Te
                   canton: helper.canton,
                   maxTravelKm: 10,
                   skills: helper.skills,
-                }
+                };
 
-                const matchPercentage = Math.round((helper.matchScore / maxScore) * 100)
-                const showTopMatchBadge = index === 0 && !helper.isPreferred && helper.matchScore > 0
+                const matchPercentage = Math.round((helper.matchScore / maxScore) * 100);
+                const showTopMatchBadge =
+                  index === 0 && !helper.isPreferred && helper.matchScore > 0;
 
                 return (
                   <div
@@ -211,7 +215,9 @@ export function TechnicianMapList({ requestId, requestTitle, requestCanton }: Te
                     {!helper.isPreferred && helper.matchScore > 0 && (
                       <div className="mb-2">
                         <div className="flex items-center justify-between text-xs text-text-secondary mb-1">
-                          <span className="font-medium">{t('matchPercent', { percent: matchPercentage })}</span>
+                          <span className="font-medium">
+                            {t('matchPercent', { percent: matchPercentage })}
+                          </span>
                         </div>
                         <div className="w-full bg-surface-overlay rounded-full h-1.5">
                           <div
@@ -241,7 +247,7 @@ export function TechnicianMapList({ requestId, requestTitle, requestCanton }: Te
                       requestTitle={requestTitle}
                     />
                   </div>
-                )
+                );
               })}
 
               {matches.length > 5 && (
@@ -258,9 +264,7 @@ export function TechnicianMapList({ requestId, requestTitle, requestCanton }: Te
             </>
           ) : (
             <div className="bg-action-muted border border-strong rounded-xl p-6 text-center">
-              <p className="text-sm text-text-secondary">
-                {t('noMatchesYet')}
-              </p>
+              <p className="text-sm text-text-secondary">{t('noMatchesYet')}</p>
             </div>
           )}
         </div>
@@ -275,5 +279,5 @@ export function TechnicianMapList({ requestId, requestTitle, requestCanton }: Te
         </div>
       </div>
     </div>
-  )
+  );
 }

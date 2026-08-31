@@ -12,24 +12,24 @@
  * place: `canAccessAudience` in `@/lib/content-access`.
  */
 
-export const CONTENT_AUDIENCE = { PUBLIC: 'public', TEAM: 'team', AUTHOR: 'author' } as const
-export type ContentAudience = (typeof CONTENT_AUDIENCE)[keyof typeof CONTENT_AUDIENCE]
-export const CONTENT_AUDIENCE_VALUES = Object.values(CONTENT_AUDIENCE) as ContentAudience[]
+export const CONTENT_AUDIENCE = { PUBLIC: 'public', TEAM: 'team', AUTHOR: 'author' } as const;
+export type ContentAudience = (typeof CONTENT_AUDIENCE)[keyof typeof CONTENT_AUDIENCE];
+export const CONTENT_AUDIENCE_VALUES = Object.values(CONTENT_AUDIENCE) as ContentAudience[];
 
 /** Long labels for admin selects. */
 export const CONTENT_AUDIENCE_LABELS: Record<ContentAudience, string> = {
   public: 'Öffentlich — für alle',
   team: 'Nur Team — angemeldete Mitarbeitende',
   author: 'Nur Autor — Autor und Super-Admins',
-}
+};
 
 /** Short labels for badges/chips. */
 export const CONTENT_AUDIENCE_SHORT: Record<ContentAudience, string> = {
   public: 'Öffentlich',
   team: 'Nur Team',
   author: 'Nur Autor',
-}
+};
 
 export function parseContentAudience(v: unknown): ContentAudience {
-  return CONTENT_AUDIENCE_VALUES.includes(v as ContentAudience) ? (v as ContentAudience) : 'public'
+  return CONTENT_AUDIENCE_VALUES.includes(v as ContentAudience) ? (v as ContentAudience) : 'public';
 }

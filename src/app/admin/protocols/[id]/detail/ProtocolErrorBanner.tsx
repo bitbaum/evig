@@ -1,10 +1,10 @@
 /** Error banner slice — processing error message plus retry hint when retryable. */
 
-import { AlertCircle } from 'lucide-react'
+import { AlertCircle } from 'lucide-react';
 
 interface ProtocolErrorBannerProps {
-  error: string
-  initialProcessingError?: { message: string; retryable: boolean } | null
+  error: string;
+  initialProcessingError?: { message: string; retryable: boolean } | null;
 }
 
 export function ProtocolErrorBanner({ error, initialProcessingError }: ProtocolErrorBannerProps) {
@@ -20,5 +20,5 @@ export function ProtocolErrorBanner({ error, initialProcessingError }: ProtocolE
         )}
       </div>
     </div>
-  )
+  );
 }

@@ -12,69 +12,69 @@
  * unavailable while recording a failed login.
  */
 
-import { AUTH_CONFIG } from './config'
-import { db } from '@/db'
-import { userLockouts } from '@/db/schema'
-import { eq, sql, getTableName } from 'drizzle-orm'
-import { logger } from '@/lib/logger'
-import { RATE_LIMIT_LOCKOUT_CAP_MS } from '@/config/security'
+import { AUTH_CONFIG } from './config';
+import { db } from '@/db';
+import { userLockouts } from '@/db/schema';
+import { eq, sql, getTableName } from 'drizzle-orm';
+import { logger } from '@/lib/logger';
+import { RATE_LIMIT_LOCKOUT_CAP_MS } from '@/config/security';
 
 // Table name ref for raw SQL in complex upsert
-const lockoutsTable = getTableName(userLockouts)
+const lockoutsTable = getTableName(userLockouts);
 
 // =============================================================================
 // Types
 // =============================================================================
 
 interface RateLimitEntry {
-  count: number
-  resetAt: number
-  blockedUntil?: number
+  count: number;
+  resetAt: number;
+  blockedUntil?: number;
 }
 
 interface LockoutEntry {
-  failedAttempts: number
-  lockedUntil?: number
-  lockoutCount: number  // For progressive lockout
-  lastAttempt: number
+  failedAttempts: number;
+  lockedUntil?: number;
+  lockoutCount: number; // For progressive lockout
+  lastAttempt: number;
 }
 
 // =============================================================================
 // In-Memory Storage (for single-instance deployments)
 // =============================================================================
 
-const rateLimitStore = new Map<string, RateLimitEntry>()
-const lockoutStore = new Map<string, LockoutEntry>()
+const rateLimitStore = new Map<string, RateLimitEntry>();
+const lockoutStore = new Map<string, LockoutEntry>();
 
 // Cleanup old entries periodically
 setInterval(() => {
-  const now = Date.now()
+  const now = Date.now();
 
   for (const [key, entry] of rateLimitStore.entries()) {
     if (entry.resetAt < now && (!entry.blockedUntil || entry.blockedUntil < now)) {
-      rateLimitStore.delete(key)
+      rateLimitStore.delete(key);
     }
   }
 
   for (const [key, entry] of lockoutStore.entries()) {
     // Keep lockout history for 24 hours
     if (entry.lastAttempt < now - RATE_LIMIT_LOCKOUT_CAP_MS) {
-      lockoutStore.delete(key)
+      lockoutStore.delete(key);
     }
   }
-}, 60 * 1000) // Run every minute
+}, 60 * 1000); // Run every minute
 
 // =============================================================================
 // Rate Limiting Functions
 // =============================================================================
 
-export type RateLimitType = 'login' | 'register' | 'passwordReset' | 'newsletter' | 'submission'
+export type RateLimitType = 'login' | 'register' | 'passwordReset' | 'newsletter' | 'submission';
 
 interface RateLimitResult {
-  allowed: boolean
-  remaining: number
-  resetAt: number
-  retryAfter?: number  // Seconds until retry allowed
+  allowed: boolean;
+  remaining: number;
+  resetAt: number;
+  retryAfter?: number; // Seconds until retry allowed
 }
 
 /**
@@ -83,11 +83,11 @@ interface RateLimitResult {
  * @param type - Type of rate limit to check
  */
 export function checkRateLimit(identifier: string, type: RateLimitType): RateLimitResult {
-  const config = AUTH_CONFIG.rateLimit[type]
-  const key = `${type}:${identifier}`
-  const now = Date.now()
+  const config = AUTH_CONFIG.rateLimit[type];
+  const key = `${type}:${identifier}`;
+  const now = Date.now();
 
-  let entry = rateLimitStore.get(key)
+  let entry = rateLimitStore.get(key);
 
   // Check if currently blocked
   if (entry?.blockedUntil && entry.blockedUntil > now) {
@@ -96,7 +96,7 @@ export function checkRateLimit(identifier: string, type: RateLimitType): RateLim
       remaining: 0,
       resetAt: entry.blockedUntil,
       retryAfter: Math.ceil((entry.blockedUntil - now) / 1000),
-    }
+    };
   }
 
   // Reset if window expired
@@ -104,22 +104,22 @@ export function checkRateLimit(identifier: string, type: RateLimitType): RateLim
     entry = {
       count: 0,
       resetAt: now + config.windowMs,
-    }
+    };
   }
 
   // Check if within limits
-  const remaining = Math.max(0, config.maxAttempts - entry.count - 1)
-  const allowed = entry.count < config.maxAttempts
+  const remaining = Math.max(0, config.maxAttempts - entry.count - 1);
+  const allowed = entry.count < config.maxAttempts;
 
   if (allowed) {
     // Increment counter
-    entry.count++
-    rateLimitStore.set(key, entry)
+    entry.count++;
+    rateLimitStore.set(key, entry);
   } else {
     // Block for additional time
     if ('blockDuration' in config && config.blockDuration) {
-      entry.blockedUntil = now + config.blockDuration
-      rateLimitStore.set(key, entry)
+      entry.blockedUntil = now + config.blockDuration;
+      rateLimitStore.set(key, entry);
     }
   }
 
@@ -128,15 +128,15 @@ export function checkRateLimit(identifier: string, type: RateLimitType): RateLim
     remaining,
     resetAt: entry.resetAt,
     retryAfter: allowed ? undefined : Math.ceil((entry.resetAt - now) / 1000),
-  }
+  };
 }
 
 /**
  * Reset rate limit for an identifier (e.g., after successful action)
  */
 export function resetRateLimit(identifier: string, type: RateLimitType): void {
-  const key = `${type}:${identifier}`
-  rateLimitStore.delete(key)
+  const key = `${type}:${identifier}`;
+  rateLimitStore.delete(key);
 }
 
 // =============================================================================
@@ -144,10 +144,10 @@ export function resetRateLimit(identifier: string, type: RateLimitType): void {
 // =============================================================================
 
 interface LockoutResult {
-  locked: boolean
-  remainingAttempts: number
-  lockedUntil?: number
-  retryAfter?: number
+  locked: boolean;
+  remainingAttempts: number;
+  lockedUntil?: number;
+  retryAfter?: number;
 }
 
 /**
@@ -157,15 +157,15 @@ interface LockoutResult {
  */
 export function recordFailedAttempt(identifier: string): LockoutResult {
   // In-memory fallback (single instance). For multi-instance, use DB or Redis versions below.
-  const config = AUTH_CONFIG.lockout
-  const now = Date.now()
-  const key = `lockout:${identifier}`
+  const config = AUTH_CONFIG.lockout;
+  const now = Date.now();
+  const key = `lockout:${identifier}`;
 
   let entry = lockoutStore.get(key) || {
     failedAttempts: 0,
     lockoutCount: 0,
     lastAttempt: now,
-  }
+  };
 
   // Check if currently locked
   if (entry.lockedUntil && entry.lockedUntil > now) {
@@ -174,64 +174,62 @@ export function recordFailedAttempt(identifier: string): LockoutResult {
       remainingAttempts: 0,
       lockedUntil: entry.lockedUntil,
       retryAfter: Math.ceil((entry.lockedUntil - now) / 1000),
-    }
+    };
   }
 
   // Clear lockout if expired
   if (entry.lockedUntil && entry.lockedUntil <= now) {
     // Keep lockout count for progressive lockout
-    entry.failedAttempts = 0
-    entry.lockedUntil = undefined
+    entry.failedAttempts = 0;
+    entry.lockedUntil = undefined;
   }
 
   // Increment failed attempts
-  entry.failedAttempts++
-  entry.lastAttempt = now
+  entry.failedAttempts++;
+  entry.lastAttempt = now;
 
   // Check if should lock
   if (entry.failedAttempts >= config.maxFailedAttempts) {
-    entry.lockoutCount++
+    entry.lockoutCount++;
 
     // Progressive lockout: double duration each time
-    const multiplier = config.progressiveLockout
-      ? Math.pow(2, entry.lockoutCount - 1)
-      : 1
-    const lockoutDuration = config.lockoutDuration * multiplier
+    const multiplier = config.progressiveLockout ? Math.pow(2, entry.lockoutCount - 1) : 1;
+    const lockoutDuration = config.lockoutDuration * multiplier;
 
     // Cap at 24 hours
-    entry.lockedUntil = now + Math.min(lockoutDuration, RATE_LIMIT_LOCKOUT_CAP_MS)
+    entry.lockedUntil = now + Math.min(lockoutDuration, RATE_LIMIT_LOCKOUT_CAP_MS);
 
-    lockoutStore.set(key, entry)
+    lockoutStore.set(key, entry);
 
     return {
       locked: true,
       remainingAttempts: 0,
       lockedUntil: entry.lockedUntil,
       retryAfter: Math.ceil((entry.lockedUntil - now) / 1000),
-    }
+    };
   }
 
-  lockoutStore.set(key, entry)
+  lockoutStore.set(key, entry);
 
   return {
     locked: false,
     remainingAttempts: config.maxFailedAttempts - entry.failedAttempts,
-  }
+  };
 }
 
 /**
  * Check if an account is locked
  */
 export function isAccountLocked(identifier: string): LockoutResult {
-  const now = Date.now()
-  const key = `lockout:${identifier}`
-  const entry = lockoutStore.get(key)
+  const now = Date.now();
+  const key = `lockout:${identifier}`;
+  const entry = lockoutStore.get(key);
 
   if (!entry) {
     return {
       locked: false,
       remainingAttempts: AUTH_CONFIG.lockout.maxFailedAttempts,
-    }
+    };
   }
 
   if (entry.lockedUntil && entry.lockedUntil > now) {
@@ -240,21 +238,21 @@ export function isAccountLocked(identifier: string): LockoutResult {
       remainingAttempts: 0,
       lockedUntil: entry.lockedUntil,
       retryAfter: Math.ceil((entry.lockedUntil - now) / 1000),
-    }
+    };
   }
 
   return {
     locked: false,
     remainingAttempts: Math.max(0, AUTH_CONFIG.lockout.maxFailedAttempts - entry.failedAttempts),
-  }
+  };
 }
 
 /**
  * Reset account lockout (e.g., after successful login)
  */
 export function resetLockout(identifier: string): void {
-  const key = `lockout:${identifier}`
-  lockoutStore.delete(key)
+  const key = `lockout:${identifier}`;
+  lockoutStore.delete(key);
 }
 
 /**
@@ -262,12 +260,12 @@ export function resetLockout(identifier: string): void {
  * Use after successful password reset
  */
 export function clearFailedAttempts(identifier: string): void {
-  const key = `lockout:${identifier}`
-  const entry = lockoutStore.get(key)
+  const key = `lockout:${identifier}`;
+  const entry = lockoutStore.get(key);
   if (entry) {
-    entry.failedAttempts = 0
-    entry.lockedUntil = undefined
-    lockoutStore.set(key, entry)
+    entry.failedAttempts = 0;
+    entry.lockedUntil = undefined;
+    lockoutStore.set(key, entry);
   }
 }
 
@@ -281,17 +279,17 @@ export function clearFailedAttempts(identifier: string): void {
  */
 export async function recordFailedAttemptDb(
   userId: string,
-  ipAddress: string
+  ipAddress: string,
 ): Promise<LockoutResult> {
-  const config = AUTH_CONFIG.lockout
-  const now = new Date()
+  const config = AUTH_CONFIG.lockout;
+  const now = new Date();
 
   try {
     // Get or create lockout record (complex upsert with CASE expressions)
     const result = await db.execute<{
-      failed_attempts: number
-      locked_until: string | null
-      lockout_count: number
+      failed_attempts: number;
+      locked_until: string | null;
+      lockout_count: number;
     }>(sql`
       INSERT INTO ${sql.raw(lockoutsTable)} (user_id, ip_address, failed_attempts, last_attempt)
       VALUES (${userId}, ${ipAddress}, 1, ${now.toISOString()})
@@ -307,15 +305,17 @@ export async function recordFailedAttemptDb(
           ELSE ${sql.raw(lockoutsTable)}.locked_until
         END
       RETURNING failed_attempts, locked_until, lockout_count
-    `)
+    `);
 
-    const record = result.rows[0]
+    const record = result.rows[0];
 
     // Check if should lock
     if (record.failed_attempts >= config.maxFailedAttempts) {
-      const newLockoutCount = (record.lockout_count || 0) + 1
-      const multiplier = config.progressiveLockout ? Math.pow(2, newLockoutCount - 1) : 1
-      const lockoutUntil = new Date(now.getTime() + Math.min(config.lockoutDuration * multiplier, RATE_LIMIT_LOCKOUT_CAP_MS))
+      const newLockoutCount = (record.lockout_count || 0) + 1;
+      const multiplier = config.progressiveLockout ? Math.pow(2, newLockoutCount - 1) : 1;
+      const lockoutUntil = new Date(
+        now.getTime() + Math.min(config.lockoutDuration * multiplier, RATE_LIMIT_LOCKOUT_CAP_MS),
+      );
 
       await db
         .update(userLockouts)
@@ -323,14 +323,14 @@ export async function recordFailedAttemptDb(
           lockedUntil: lockoutUntil.toISOString(),
           lockoutCount: newLockoutCount,
         })
-        .where(eq(userLockouts.userId, userId))
+        .where(eq(userLockouts.userId, userId));
 
       return {
         locked: true,
         remainingAttempts: 0,
         lockedUntil: lockoutUntil.getTime(),
         retryAfter: Math.ceil((lockoutUntil.getTime() - now.getTime()) / 1000),
-      }
+      };
     }
 
     // Check if currently locked
@@ -340,17 +340,17 @@ export async function recordFailedAttemptDb(
         remainingAttempts: 0,
         lockedUntil: new Date(record.locked_until).getTime(),
         retryAfter: Math.ceil((new Date(record.locked_until).getTime() - now.getTime()) / 1000),
-      }
+      };
     }
 
     return {
       locked: false,
       remainingAttempts: config.maxFailedAttempts - record.failed_attempts,
-    }
+    };
   } catch (error) {
     // If database fails, fall back to in-memory
-    logger.error('Database lockout error, falling back to in-memory', { error, userId, ipAddress })
-    return recordFailedAttempt(`${userId}:${ipAddress}`)
+    logger.error('Database lockout error, falling back to in-memory', { error, userId, ipAddress });
+    return recordFailedAttempt(`${userId}:${ipAddress}`);
   }
 }
 
@@ -358,8 +358,8 @@ export async function recordFailedAttemptDb(
  * Check persistent account lockout state before password validation.
  */
 export async function isAccountLockedDb(userId: string): Promise<LockoutResult> {
-  const config = AUTH_CONFIG.lockout
-  const now = new Date()
+  const config = AUTH_CONFIG.lockout;
+  const now = new Date();
 
   try {
     const rows = await db
@@ -369,30 +369,30 @@ export async function isAccountLockedDb(userId: string): Promise<LockoutResult> 
       })
       .from(userLockouts)
       .where(eq(userLockouts.userId, userId))
-      .limit(1)
+      .limit(1);
 
-    const record = rows[0]
+    const record = rows[0];
     if (!record) {
-      return { locked: false, remainingAttempts: config.maxFailedAttempts }
+      return { locked: false, remainingAttempts: config.maxFailedAttempts };
     }
 
     if (record.lockedUntil && new Date(record.lockedUntil) > now) {
-      const lockedUntil = new Date(record.lockedUntil).getTime()
+      const lockedUntil = new Date(record.lockedUntil).getTime();
       return {
         locked: true,
         remainingAttempts: 0,
         lockedUntil,
         retryAfter: Math.ceil((lockedUntil - now.getTime()) / 1000),
-      }
+      };
     }
 
     return {
       locked: false,
       remainingAttempts: Math.max(0, config.maxFailedAttempts - record.failedAttempts),
-    }
+    };
   } catch (error) {
-    logger.error('Database lockout read error, falling back to in-memory', { error, userId })
-    return isAccountLocked(`${userId}:login`)
+    logger.error('Database lockout read error, falling back to in-memory', { error, userId });
+    return isAccountLocked(`${userId}:login`);
   }
 }
 
@@ -407,9 +407,9 @@ export async function clearLockoutDb(userId: string): Promise<void> {
         failedAttempts: 0,
         lockedUntil: null,
       })
-      .where(eq(userLockouts.userId, userId))
+      .where(eq(userLockouts.userId, userId));
   } catch (error) {
-    logger.error('Error clearing lockout from database', { error, userId })
+    logger.error('Error clearing lockout from database', { error, userId });
   }
 }
 
@@ -423,23 +423,23 @@ export async function clearLockoutDb(userId: string): Promise<void> {
  */
 export function getClientIp(headers: Headers): string {
   // Check various headers in order of preference
-  const forwardedFor = headers.get('x-forwarded-for')
+  const forwardedFor = headers.get('x-forwarded-for');
   if (forwardedFor) {
     // Take first IP in chain (original client)
-    return forwardedFor.split(',')[0].trim()
+    return forwardedFor.split(',')[0].trim();
   }
 
-  const realIp = headers.get('x-real-ip')
+  const realIp = headers.get('x-real-ip');
   if (realIp) {
-    return realIp.trim()
+    return realIp.trim();
   }
 
-  const cfConnectingIp = headers.get('cf-connecting-ip')
+  const cfConnectingIp = headers.get('cf-connecting-ip');
   if (cfConnectingIp) {
-    return cfConnectingIp.trim()
+    return cfConnectingIp.trim();
   }
 
-  return 'unknown'
+  return 'unknown';
 }
 
 /**
@@ -449,10 +449,10 @@ export function getClientIp(headers: Headers): string {
 export function createRateLimitKey(
   ip: string,
   email?: string,
-  type: RateLimitType = 'login'
+  type: RateLimitType = 'login',
 ): string {
   if (email) {
-    return `${ip}:${email.toLowerCase()}`
+    return `${ip}:${email.toLowerCase()}`;
   }
-  return ip
+  return ip;
 }

@@ -10,9 +10,7 @@ import { sql, getTableName } from 'drizzle-orm';
 import { decisions, decisionVotes } from '@/db/schema/misc';
 import { DECISION_STATUS, PARTICIPANT_SCOPE, PARTICIPANT_SCOPE_DEFAULT } from '@/config/decisions';
 import { users } from '@/db/schema/auth';
-import {
-  type VotingMethod,
-} from '@/config/decisions';
+import { type VotingMethod } from '@/config/decisions';
 import {
   consentVoteSchema,
   approvalVoteSchema,
@@ -56,11 +54,18 @@ interface DbVoteRow {
 // ---- Helpers ----
 
 function parseSchema<T>(
-  schema: { safeParse(data: unknown): { success: true; data: T } | { success: false; error: { issues: Array<{ message: string }> } } },
-  data: unknown
+  schema: {
+    safeParse(
+      data: unknown,
+    ):
+      | { success: true; data: T }
+      | { success: false; error: { issues: Array<{ message: string }> } };
+  },
+  data: unknown,
 ): { success: true; data: T } | { success: false; error: string } {
   const result = schema.safeParse(data);
-  if (!result.success) return { success: false, error: result.error.issues[0]?.message || 'Ungültig' };
+  if (!result.success)
+    return { success: false, error: result.error.issues[0]?.message || 'Ungültig' };
   return { success: true, data: result.data };
 }
 
@@ -75,7 +80,7 @@ function parseSchema<T>(
  */
 async function resolveEligibleUserIds(
   participantScope: string,
-  invitedParticipants: string[]
+  invitedParticipants: string[],
 ): Promise<string[]> {
   switch (participantScope) {
     case PARTICIPANT_SCOPE.BOARD_ONLY: {
@@ -83,23 +88,23 @@ async function resolveEligibleUserIds(
         SELECT id FROM ${sql.raw(uTable)}
         WHERE is_staff = true AND staff_permissions @> ARRAY['vorstand']::text[]
       `);
-      return (result.rows as unknown as { id: string }[]).map(r => r.id);
+      return (result.rows as unknown as { id: string }[]).map((r) => r.id);
     }
     case PARTICIPANT_SCOPE.ALL_MEMBERS: {
       const result = await db.execute(sql`
         SELECT id FROM ${sql.raw(uTable)} WHERE is_member = true
       `);
-      return (result.rows as unknown as { id: string }[]).map(r => r.id);
+      return (result.rows as unknown as { id: string }[]).map((r) => r.id);
     }
     case PARTICIPANT_SCOPE.INVITED:
       return invitedParticipants;
-    default: // 'all_staff'
-      {
-        const result = await db.execute(sql`
+    default: {
+      // 'all_staff'
+      const result = await db.execute(sql`
           SELECT id FROM ${sql.raw(uTable)} WHERE is_staff = true
         `);
-        return (result.rows as unknown as { id: string }[]).map(r => r.id);
-      }
+      return (result.rows as unknown as { id: string }[]).map((r) => r.id);
+    }
   }
 }
 
@@ -108,7 +113,7 @@ async function resolveEligibleUserIds(
 export function validateVoteData(
   method: VotingMethod,
   data: unknown,
-  decision: { options: unknown; dot_count: number | null }
+  decision: { options: unknown; dot_count: number | null },
 ): { success: true; data: VoteData } | { success: false; error: string } {
   switch (method) {
     case 'consent':
@@ -128,7 +133,10 @@ export function validateVoteData(
       const totalDots = Object.values(parsed.data.allocations).reduce((sum, n) => sum + n, 0);
       const maxDots = decision.dot_count || 5;
       if (totalDots > maxDots)
-        return { success: false, error: `Maximal ${maxDots} Punkte erlaubt (${totalDots} vergeben)` };
+        return {
+          success: false,
+          error: `Maximal ${maxDots} Punkte erlaubt (${totalDots} vergeben)`,
+        };
       return parsed;
     }
     case 'score':
@@ -141,7 +149,8 @@ export function validateVoteData(
       const options = asArray<DecisionOption>(decision.options, []);
       const optionIds = new Set(options.map((o) => o.id));
       const invalid = parsed.data.ranking.filter((id) => !optionIds.has(id));
-      if (invalid.length > 0) return { success: false, error: 'Ungültige Kandidaten in der Rangfolge' };
+      if (invalid.length > 0)
+        return { success: false, error: 'Ungültige Kandidaten in der Rangfolge' };
       return parsed;
     }
     case 'thumbs_up_down':
@@ -154,7 +163,7 @@ export function validateVoteData(
 export async function submitVote(
   decisionId: string,
   voterIdentity: { userId: string; voterEmail?: never } | { userId?: never; voterEmail: string },
-  voteData: VoteData
+  voteData: VoteData,
 ) {
   const { userId, voterEmail } = voterIdentity as { userId?: string; voterEmail?: string };
 
@@ -165,8 +174,7 @@ export async function submitVote(
   if (existing.rows.length === 0) return { error: 'not_found' as const };
 
   const decision = existing.rows[0] as unknown as DbDecisionRow & { allow_public_voting: boolean };
-  if (decision.status !== DECISION_STATUS.VOTING)
-    return { error: 'not_voting_phase' as const };
+  if (decision.status !== DECISION_STATUS.VOTING) return { error: 'not_voting_phase' as const };
 
   if (userId) {
     // Registered voter: check participant eligibility via scope
@@ -184,11 +192,7 @@ export async function submitVote(
   }
 
   // Validate vote data
-  const validation = validateVoteData(
-    decision.voting_method as VotingMethod,
-    voteData,
-    decision
-  );
+  const validation = validateVoteData(decision.voting_method as VotingMethod, voteData, decision);
   if (!validation.success) return { error: 'invalid_data' as const, message: validation.error };
 
   const voteJson = JSON.stringify(validation.data);
@@ -204,8 +208,13 @@ export async function submitVote(
         (SELECT email FROM ${sql.raw(uTable)} WHERE id = ${userId}) AS user_email,
         (SELECT name FROM ${sql.raw(uTable)} WHERE id = ${userId}) AS user_name
     `);
-    const vote = voteResult.rows[0] as unknown as DbVoteRow & { user_email: string; user_name: string | null };
-    return { vote: { ...vote, user: { id: userId, email: vote.user_email, name: vote.user_name } } };
+    const vote = voteResult.rows[0] as unknown as DbVoteRow & {
+      user_email: string;
+      user_name: string | null;
+    };
+    return {
+      vote: { ...vote, user: { id: userId, email: vote.user_email, name: vote.user_name } },
+    };
   } else {
     const email = voterEmail!;
     voteResult = await db.execute(sql`
@@ -226,7 +235,11 @@ export async function getVotes(decisionId: string, requestingUserId: string) {
   `);
   if (existing.rows.length === 0) return { error: 'not_found' as const };
 
-  const decision = existing.rows[0] as unknown as { id: string; blind_voting: boolean; status: string };
+  const decision = existing.rows[0] as unknown as {
+    id: string;
+    blind_voting: boolean;
+    status: string;
+  };
 
   // Get user's own vote
   const userVoteResult = await db.execute(sql`
@@ -235,14 +248,18 @@ export async function getVotes(decisionId: string, requestingUserId: string) {
     JOIN ${sql.raw(uTable)} u ON u.id = dv.user_id
     WHERE dv.decision_id = ${decisionId} AND dv.user_id = ${requestingUserId}
   `);
-  const userVote = userVoteResult.rows.length > 0 ? userVoteResult.rows[0] as unknown as DbVoteRow : null;
+  const userVote =
+    userVoteResult.rows.length > 0 ? (userVoteResult.rows[0] as unknown as DbVoteRow) : null;
 
   // Blind voting: only show all votes if blind=false, user has voted, or decision is closed
-  const showAll = !decision.blind_voting || !!userVote || decision.status === DECISION_STATUS.CLOSED;
+  const showAll =
+    !decision.blind_voting || !!userVote || decision.status === DECISION_STATUS.CLOSED;
 
   if (!showAll) {
     return {
-      votes: [] as Array<DbVoteRow & { voteData: VoteData; user: { id: string; email: string; name: string | null } }>,
+      votes: [] as Array<
+        DbVoteRow & { voteData: VoteData; user: { id: string; email: string; name: string | null } }
+      >,
       blind: true,
     };
   }
@@ -256,7 +273,13 @@ export async function getVotes(decisionId: string, requestingUserId: string) {
   `);
 
   return {
-    votes: (allVotesResult.rows as unknown as (DbVoteRow & { user_email: string | null; user_name: string | null; voter_email?: string | null })[]).map(v => ({
+    votes: (
+      allVotesResult.rows as unknown as (DbVoteRow & {
+        user_email: string | null;
+        user_name: string | null;
+        voter_email?: string | null;
+      })[]
+    ).map((v) => ({
       ...v,
       voteData: v.vote_data,
       user: {
@@ -292,7 +315,10 @@ export async function getParticipationStatus(decisionId: string) {
   if (eligibleIds.length > 0) {
     const result = await db.execute(sql`
       SELECT id, email FROM ${sql.raw(uTable)}
-      WHERE id IN (${sql.join(eligibleIds.map(id => sql`${id}`), sql`, `)})
+      WHERE id IN (${sql.join(
+        eligibleIds.map((id) => sql`${id}`),
+        sql`, `,
+      )})
     `);
     eligibleUsers = result.rows as unknown as { id: string; email: string }[];
   }
@@ -301,10 +327,12 @@ export async function getParticipationStatus(decisionId: string) {
   const votedResult = await db.execute(sql`
     SELECT user_id FROM ${sql.raw(dvTable)} WHERE decision_id = ${decisionId}
   `);
-  const votedIds = new Set((votedResult.rows as unknown as Array<{ user_id: string }>).map(v => v.user_id));
+  const votedIds = new Set(
+    (votedResult.rows as unknown as Array<{ user_id: string }>).map((v) => v.user_id),
+  );
 
-  const voted = eligibleUsers.filter(u => votedIds.has(u.id));
-  const notVoted = eligibleUsers.filter(u => !votedIds.has(u.id));
+  const voted = eligibleUsers.filter((u) => votedIds.has(u.id));
+  const notVoted = eligibleUsers.filter((u) => !votedIds.has(u.id));
 
   const quorum = asObject<QuorumConfig>(decision.quorum, { type: 'percentage', value: 50 });
   const quorumTarget =
@@ -319,19 +347,13 @@ export async function getParticipationStatus(decisionId: string) {
     quorumTarget,
     quorumMet: voted.length >= quorumTarget,
     progressPercent:
-      eligibleUsers.length > 0
-        ? Math.round((voted.length / eligibleUsers.length) * 100)
-        : 0,
+      eligibleUsers.length > 0 ? Math.round((voted.length / eligibleUsers.length) * 100) : 0,
   };
 }
 
 // ---- Tally Computation ----
 
-export function computeTallies(
-  method: VotingMethod,
-  votes: VoteData[],
-  options: DecisionOption[]
-) {
+export function computeTallies(method: VotingMethod, votes: VoteData[], options: DecisionOption[]) {
   switch (method) {
     case 'consent': {
       const counts = { agree: 0, abstain: 0, disagree: 0, block: 0 };
@@ -447,12 +469,11 @@ export function computeTallies(
 
       const maxPossible = votes.length * (N - 1);
       const ranked = options
-        .map(o => ({
+        .map((o) => ({
           ...o,
           bordaPoints: bordaPoints[o.id!] ?? 0,
-          scorePercent: maxPossible > 0
-            ? Math.round(((bordaPoints[o.id!] ?? 0) / maxPossible) * 100)
-            : 0,
+          scorePercent:
+            maxPossible > 0 ? Math.round(((bordaPoints[o.id!] ?? 0) / maxPossible) * 100) : 0,
         }))
         .sort((a, b) => b.bordaPoints - a.bordaPoints);
 

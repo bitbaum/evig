@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useTranslations } from 'next-intl'
-import { Monitor, ArrowRight } from 'lucide-react'
-import { Link } from '@/i18n/navigation'
-import { Button } from '@/components/ui/button'
+import { useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { Monitor, ArrowRight } from 'lucide-react';
+import { Link } from '@/i18n/navigation';
+import { Button } from '@/components/ui/button';
 
 // listing.category holds the KATEGORIEN code (not a label). A Linux pre-install
 // is relevant for full computers only — 10 = Laptops, 20 = Desktop PCs
 // (src/config/erfassung/categories.ts). Not monitors/components/peripherals.
-const OS_INSTALLABLE_CATEGORIES = ['10', '20']
-const DISTROS = ['Linux Mint', 'Ubuntu', 'Fedora', 'Debian', 'MX Linux']
+const OS_INSTALLABLE_CATEGORIES = ['10', '20'];
+const DISTROS = ['Linux Mint', 'Ubuntu', 'Fedora', 'Debian', 'MX Linux'];
 
 /**
  * Shown on computer/laptop listings: offers a free Linux pre-install and lets
@@ -19,10 +19,10 @@ const DISTROS = ['Linux Mint', 'Ubuntu', 'Fedora', 'Debian', 'MX Linux']
  * capturing it on the order is a follow-up once checkout is live.
  */
 export function OsInstallHint({ category }: { category: string }) {
-  const t = useTranslations('marketplace.osInstall')
-  const [selected, setSelected] = useState<string | null>(null)
+  const t = useTranslations('marketplace.osInstall');
+  const [selected, setSelected] = useState<string | null>(null);
 
-  if (!OS_INSTALLABLE_CATEGORIES.includes(category)) return null
+  if (!OS_INSTALLABLE_CATEGORIES.includes(category)) return null;
 
   return (
     <div className="rounded-xl border border-subtle bg-surface-base p-5">
@@ -59,5 +59,5 @@ export function OsInstallHint({ category }: { category: string }) {
         <ArrowRight className="h-4 w-4" aria-hidden="true" />
       </Link>
     </div>
-  )
+  );
 }

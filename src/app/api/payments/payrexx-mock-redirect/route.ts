@@ -136,7 +136,10 @@ export async function GET(request: NextRequest) {
 </body>
 </html>`;
 
-  logger.info('Mock Payrexx payment page rendered', { referenceId: referenceIdRaw, amount: rawAmount });
+  logger.info('Mock Payrexx payment page rendered', {
+    referenceId: referenceIdRaw,
+    amount: rawAmount,
+  });
 
   return new NextResponse(html, {
     headers: { 'Content-Type': 'text/html; charset=utf-8' },

@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * ShippingAddressFields — the one shipping-address form used by both
@@ -7,19 +7,19 @@
  * "save to profile for next time" opt-in.
  */
 
-import { CheckCircle2 } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { Input } from '@/components/ui/input'
-import type { ShippingAddress } from '@/hooks/useShippingAddress'
+import { CheckCircle2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Input } from '@/components/ui/input';
+import type { ShippingAddress } from '@/hooks/useShippingAddress';
 
 interface ShippingAddressFieldsProps {
-  address: ShippingAddress
-  onChange: (updater: (prev: ShippingAddress) => ShippingAddress) => void
-  postalCodeValid: boolean
-  prefilled: boolean
-  canOfferSave: boolean
-  saveToProfile: boolean
-  onSaveToggle: (save: boolean) => void
+  address: ShippingAddress;
+  onChange: (updater: (prev: ShippingAddress) => ShippingAddress) => void;
+  postalCodeValid: boolean;
+  prefilled: boolean;
+  canOfferSave: boolean;
+  saveToProfile: boolean;
+  onSaveToggle: (save: boolean) => void;
 }
 
 export function ShippingAddressFields({
@@ -31,7 +31,7 @@ export function ShippingAddressFields({
   saveToProfile,
   onSaveToggle,
 }: ShippingAddressFieldsProps) {
-  const t = useTranslations('marketplace.checkout.address')
+  const t = useTranslations('marketplace.checkout.address');
 
   return (
     <div className="space-y-4">
@@ -42,37 +42,57 @@ export function ShippingAddressFields({
         </p>
       )}
       <div>
-        <label htmlFor="shipping-name" className="mb-1 block text-sm font-medium text-text-secondary">{t('name')}</label>
+        <label
+          htmlFor="shipping-name"
+          className="mb-1 block text-sm font-medium text-text-secondary"
+        >
+          {t('name')}
+        </label>
         <Input
           id="shipping-name"
           type="text"
           autoComplete="name"
           value={address.name}
-          onChange={(e) => onChange(prev => ({ ...prev, name: e.target.value }))}
+          onChange={(e) => onChange((prev) => ({ ...prev, name: e.target.value }))}
           placeholder={t('namePlaceholder')}
         />
       </div>
       <div>
-        <label htmlFor="shipping-street" className="mb-1 block text-sm font-medium text-text-secondary">{t('street')}</label>
+        <label
+          htmlFor="shipping-street"
+          className="mb-1 block text-sm font-medium text-text-secondary"
+        >
+          {t('street')}
+        </label>
         <Input
           id="shipping-street"
           type="text"
           autoComplete="street-address"
           value={address.street}
-          onChange={(e) => onChange(prev => ({ ...prev, street: e.target.value }))}
+          onChange={(e) => onChange((prev) => ({ ...prev, street: e.target.value }))}
           placeholder={t('streetPlaceholder')}
         />
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div>
-          <label htmlFor="shipping-plz" className="mb-1 block text-sm font-medium text-text-secondary">{t('postalCode')}</label>
+          <label
+            htmlFor="shipping-plz"
+            className="mb-1 block text-sm font-medium text-text-secondary"
+          >
+            {t('postalCode')}
+          </label>
           <Input
             id="shipping-plz"
             type="text"
             inputMode="numeric"
             autoComplete="postal-code"
             value={address.postal_code}
-            onChange={(e) => onChange(prev => ({ ...prev, postal_code: e.target.value.replace(/\D/g, '').slice(0, 4) }))}
+            onChange={(e) =>
+              onChange((prev) => ({
+                ...prev,
+                postal_code: e.target.value.replace(/\D/g, '').slice(0, 4),
+              }))
+            }
             maxLength={4}
             className={address.postal_code && !postalCodeValid ? 'border-error-500' : ''}
             placeholder="8000"
@@ -82,13 +102,18 @@ export function ShippingAddressFields({
           )}
         </div>
         <div className="sm:col-span-2">
-          <label htmlFor="shipping-city" className="mb-1 block text-sm font-medium text-text-secondary">{t('city')}</label>
+          <label
+            htmlFor="shipping-city"
+            className="mb-1 block text-sm font-medium text-text-secondary"
+          >
+            {t('city')}
+          </label>
           <Input
             id="shipping-city"
             type="text"
             autoComplete="address-level2"
             value={address.city}
-            onChange={(e) => onChange(prev => ({ ...prev, city: e.target.value }))}
+            onChange={(e) => onChange((prev) => ({ ...prev, city: e.target.value }))}
             placeholder={t('cityPlaceholder')}
           />
         </div>
@@ -105,5 +130,5 @@ export function ShippingAddressFields({
         </label>
       )}
     </div>
-  )
+  );
 }

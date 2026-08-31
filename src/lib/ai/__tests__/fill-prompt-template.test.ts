@@ -17,7 +17,7 @@
  *   - handles special regex characters in values without throwing
  */
 
-import { fillPromptTemplate } from '../config/prompts'
+import { fillPromptTemplate } from '../config/prompts';
 
 // ============================================================================
 // Basic substitution
@@ -25,61 +25,56 @@ import { fillPromptTemplate } from '../config/prompts'
 
 describe('fillPromptTemplate', () => {
   it('replaces a single placeholder', () => {
-    const result = fillPromptTemplate('Hallo {name}!', { name: 'Hans' })
-    expect(result).toBe('Hallo Hans!')
-  })
+    const result = fillPromptTemplate('Hallo {name}!', { name: 'Hans' });
+    expect(result).toBe('Hallo Hans!');
+  });
 
   it('replaces multiple distinct placeholders', () => {
-    const result = fillPromptTemplate(
-      'Produkt: {product}, Sprache: {language}',
-      { product: 'ThinkPad T14', language: 'Deutsch' },
-    )
-    expect(result).toBe('Produkt: ThinkPad T14, Sprache: Deutsch')
-  })
+    const result = fillPromptTemplate('Produkt: {product}, Sprache: {language}', {
+      product: 'ThinkPad T14',
+      language: 'Deutsch',
+    });
+    expect(result).toBe('Produkt: ThinkPad T14, Sprache: Deutsch');
+  });
 
   it('replaces all occurrences of a repeated placeholder', () => {
-    const result = fillPromptTemplate(
-      'Name: {name}. Hallo {name}.',
-      { name: 'Petra' },
-    )
-    expect(result).toBe('Name: Petra. Hallo Petra.')
-  })
+    const result = fillPromptTemplate('Name: {name}. Hallo {name}.', { name: 'Petra' });
+    expect(result).toBe('Name: Petra. Hallo Petra.');
+  });
 
   it('leaves placeholders untouched when no matching key exists', () => {
     const result = fillPromptTemplate(
       'Kontext: {context}',
       { language: 'Deutsch' }, // 'context' key not provided
-    )
-    expect(result).toBe('Kontext: {context}')
-  })
+    );
+    expect(result).toBe('Kontext: {context}');
+  });
 
   it('returns template unchanged when values map is empty', () => {
-    const template = 'Gib mir {data} zurück.'
-    const result = fillPromptTemplate(template, {})
-    expect(result).toBe(template)
-  })
+    const template = 'Gib mir {data} zurück.';
+    const result = fillPromptTemplate(template, {});
+    expect(result).toBe(template);
+  });
 
   it('returns template unchanged when no placeholders exist', () => {
-    const template = 'Kein Platzhalter hier.'
-    const result = fillPromptTemplate(template, { name: 'Hans' })
-    expect(result).toBe(template)
-  })
+    const template = 'Kein Platzhalter hier.';
+    const result = fillPromptTemplate(template, { name: 'Hans' });
+    expect(result).toBe(template);
+  });
 
   it('handles empty string value (replaces placeholder with empty string)', () => {
-    const result = fillPromptTemplate('Wert: {val}', { val: '' })
-    expect(result).toBe('Wert: ')
-  })
+    const result = fillPromptTemplate('Wert: {val}', { val: '' });
+    expect(result).toBe('Wert: ');
+  });
 
   it('handles value with special regex characters without throwing', () => {
     // Dollar sign, backslash, parentheses are regex-special
-    expect(() =>
-      fillPromptTemplate('{x}', { x: '$100 (approx.)' })
-    ).not.toThrow()
-  })
+    expect(() => fillPromptTemplate('{x}', { x: '$100 (approx.)' })).not.toThrow();
+  });
 
   it('handles multiline template', () => {
-    const template = 'Zeile 1: {a}\nZeile 2: {b}'
-    const result = fillPromptTemplate(template, { a: 'Alpha', b: 'Beta' })
-    expect(result).toBe('Zeile 1: Alpha\nZeile 2: Beta')
-  })
-})
+    const template = 'Zeile 1: {a}\nZeile 2: {b}';
+    const result = fillPromptTemplate(template, { a: 'Alpha', b: 'Beta' });
+    expect(result).toBe('Zeile 1: Alpha\nZeile 2: Beta');
+  });
+});

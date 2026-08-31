@@ -36,11 +36,11 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockQuery = jest.fn()
+const mockQuery = jest.fn();
 
 jest.mock('@/lib/auth/db', () => ({
   query: (...args: unknown[]) => mockQuery.apply(null, args),
-}))
+}));
 
 jest.mock('@/config/database', () => ({
   TABLE_NAMES: {
@@ -49,16 +49,16 @@ jest.mock('@/config/database', () => ({
     IT_HILFE_REQUESTS: 'it_hilfe_requests',
     USER_SKILLS: 'user_skills',
   },
-}))
+}));
 
 jest.mock('@/config/it-hilfe', () => ({
   REQUEST_STATUS: { OPEN: 'open', COMPLETED: 'completed' },
   OFFER_STATUS: { PENDING: 'pending', ACCEPTED: 'accepted' },
-}))
+}));
 
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
-}))
+}));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
@@ -69,13 +69,13 @@ import {
   getActiveOfferCount,
   getMatchingRequests,
   getMyOffers,
-} from '../techniker'
+} from '../techniker';
 
 // ---------------------------------------------------------------------------
 // Fixtures
 // ---------------------------------------------------------------------------
 
-const USER_ID = 'user-1'
+const USER_ID = 'user-1';
 
 function makeProfileRow(overrides: Partial<Record<string, unknown>> = {}) {
   return {
@@ -85,7 +85,7 @@ function makeProfileRow(overrides: Partial<Record<string, unknown>> = {}) {
     is_active: true,
     city: 'Bern',
     ...overrides,
-  }
+  };
 }
 
 function makeRequestRow(overrides: Partial<Record<string, unknown>> = {}) {
@@ -101,7 +101,7 @@ function makeRequestRow(overrides: Partial<Record<string, unknown>> = {}) {
     offer_count: 2,
     created_at: '2026-04-01T10:00:00Z',
     ...overrides,
-  }
+  };
 }
 
 function makeOfferRow(overrides: Partial<Record<string, unknown>> = {}) {
@@ -117,12 +117,12 @@ function makeOfferRow(overrides: Partial<Record<string, unknown>> = {}) {
     canton: 'ZH',
     request_status: 'open',
     ...overrides,
-  }
+  };
 }
 
 beforeEach(() => {
-  jest.clearAllMocks()
-})
+  jest.clearAllMocks();
+});
 
 // ============================================================================
 // getTechnicianProfile
@@ -130,17 +130,17 @@ beforeEach(() => {
 
 describe('getTechnicianProfile', () => {
   it('returns null when no profile exists', async () => {
-    mockQuery.mockResolvedValueOnce({ rows: [] })
+    mockQuery.mockResolvedValueOnce({ rows: [] });
 
-    const result = await getTechnicianProfile(USER_ID)
+    const result = await getTechnicianProfile(USER_ID);
 
-    expect(result).toBeNull()
-  })
+    expect(result).toBeNull();
+  });
 
   it('maps snake_case DB columns to camelCase interface', async () => {
-    mockQuery.mockResolvedValueOnce({ rows: [makeProfileRow()] })
+    mockQuery.mockResolvedValueOnce({ rows: [makeProfileRow()] });
 
-    const result = await getTechnicianProfile(USER_ID)
+    const result = await getTechnicianProfile(USER_ID);
 
     expect(result).toMatchObject({
       id: 'tech-1',
@@ -148,59 +148,59 @@ describe('getTechnicianProfile', () => {
       averageRating: '4.2',
       isActive: true,
       city: 'Bern',
-    })
-  })
+    });
+  });
 
   it('defaults totalJobsCompleted to 0 when null', async () => {
     mockQuery.mockResolvedValueOnce({
       rows: [makeProfileRow({ total_jobs_completed: null })],
-    })
+    });
 
-    const result = await getTechnicianProfile(USER_ID)
+    const result = await getTechnicianProfile(USER_ID);
 
-    expect(result?.totalJobsCompleted).toBe(0)
-  })
+    expect(result?.totalJobsCompleted).toBe(0);
+  });
 
   it('defaults averageRating to "0.0" when null', async () => {
     mockQuery.mockResolvedValueOnce({
       rows: [makeProfileRow({ average_rating: null })],
-    })
+    });
 
-    const result = await getTechnicianProfile(USER_ID)
+    const result = await getTechnicianProfile(USER_ID);
 
-    expect(result?.averageRating).toBe('0.0')
-  })
+    expect(result?.averageRating).toBe('0.0');
+  });
 
   it('defaults isActive to false when null', async () => {
     mockQuery.mockResolvedValueOnce({
       rows: [makeProfileRow({ is_active: null })],
-    })
+    });
 
-    const result = await getTechnicianProfile(USER_ID)
+    const result = await getTechnicianProfile(USER_ID);
 
-    expect(result?.isActive).toBe(false)
-  })
+    expect(result?.isActive).toBe(false);
+  });
 
   it('defaults city to empty string when null', async () => {
     mockQuery.mockResolvedValueOnce({
       rows: [makeProfileRow({ city: null })],
-    })
+    });
 
-    const result = await getTechnicianProfile(USER_ID)
+    const result = await getTechnicianProfile(USER_ID);
 
-    expect(result?.city).toBe('')
-  })
+    expect(result?.city).toBe('');
+  });
 
   it('returns null and logs on DB error', async () => {
-    mockQuery.mockRejectedValueOnce(new Error('relation does not exist'))
+    mockQuery.mockRejectedValueOnce(new Error('relation does not exist'));
 
-    const result = await getTechnicianProfile(USER_ID)
+    const result = await getTechnicianProfile(USER_ID);
 
-    expect(result).toBeNull()
-    const { logger } = jest.requireMock('@/lib/logger')
-    expect(logger.error).toHaveBeenCalledTimes(1)
-  })
-})
+    expect(result).toBeNull();
+    const { logger } = jest.requireMock('@/lib/logger');
+    expect(logger.error).toHaveBeenCalledTimes(1);
+  });
+});
 
 // ============================================================================
 // getActiveOfferCount
@@ -208,37 +208,37 @@ describe('getTechnicianProfile', () => {
 
 describe('getActiveOfferCount', () => {
   it('returns parsed integer count', async () => {
-    mockQuery.mockResolvedValueOnce({ rows: [{ count: '7' }] })
+    mockQuery.mockResolvedValueOnce({ rows: [{ count: '7' }] });
 
-    const result = await getActiveOfferCount(USER_ID)
+    const result = await getActiveOfferCount(USER_ID);
 
-    expect(result).toBe(7)
-  })
+    expect(result).toBe(7);
+  });
 
   it('returns 0 when count is null/undefined', async () => {
-    mockQuery.mockResolvedValueOnce({ rows: [{ count: null }] })
+    mockQuery.mockResolvedValueOnce({ rows: [{ count: null }] });
 
-    const result = await getActiveOfferCount(USER_ID)
+    const result = await getActiveOfferCount(USER_ID);
 
-    expect(result).toBe(0)
-  })
+    expect(result).toBe(0);
+  });
 
   it('returns 0 when rows are empty', async () => {
-    mockQuery.mockResolvedValueOnce({ rows: [] })
+    mockQuery.mockResolvedValueOnce({ rows: [] });
 
-    const result = await getActiveOfferCount(USER_ID)
+    const result = await getActiveOfferCount(USER_ID);
 
-    expect(result).toBe(0)
-  })
+    expect(result).toBe(0);
+  });
 
   it('returns 0 on DB error', async () => {
-    mockQuery.mockRejectedValueOnce(new Error('DB error'))
+    mockQuery.mockRejectedValueOnce(new Error('DB error'));
 
-    const result = await getActiveOfferCount(USER_ID)
+    const result = await getActiveOfferCount(USER_ID);
 
-    expect(result).toBe(0)
-  })
-})
+    expect(result).toBe(0);
+  });
+});
 
 // ============================================================================
 // getMatchingRequests
@@ -250,33 +250,33 @@ describe('getMatchingRequests', () => {
     // 2nd query: fallback open requests
     mockQuery
       .mockResolvedValueOnce({ rows: [] })
-      .mockResolvedValueOnce({ rows: [makeRequestRow()] })
+      .mockResolvedValueOnce({ rows: [makeRequestRow()] });
 
-    const result = await getMatchingRequests(USER_ID)
+    const result = await getMatchingRequests(USER_ID);
 
-    expect(result).toHaveLength(1)
-    expect(mockQuery).toHaveBeenCalledTimes(2)
-  })
+    expect(result).toHaveLength(1);
+    expect(mockQuery).toHaveBeenCalledTimes(2);
+  });
 
   it('runs skill-overlap query when skills are registered', async () => {
     // 1st query: returns skills
     // 2nd query: skill-overlap requests
     mockQuery
       .mockResolvedValueOnce({ rows: [{ skill_id: 'laptop' }, { skill_id: 'phone' }] })
-      .mockResolvedValueOnce({ rows: [makeRequestRow()] })
+      .mockResolvedValueOnce({ rows: [makeRequestRow()] });
 
-    const result = await getMatchingRequests(USER_ID)
+    const result = await getMatchingRequests(USER_ID);
 
-    expect(result).toHaveLength(1)
-    expect(mockQuery).toHaveBeenCalledTimes(2)
-  })
+    expect(result).toHaveLength(1);
+    expect(mockQuery).toHaveBeenCalledTimes(2);
+  });
 
   it('maps all request fields correctly', async () => {
     mockQuery
       .mockResolvedValueOnce({ rows: [] }) // no skills
-      .mockResolvedValueOnce({ rows: [makeRequestRow()] })
+      .mockResolvedValueOnce({ rows: [makeRequestRow()] });
 
-    const result = await getMatchingRequests(USER_ID)
+    const result = await getMatchingRequests(USER_ID);
 
     expect(result[0]).toMatchObject({
       id: 'req-1',
@@ -289,37 +289,37 @@ describe('getMatchingRequests', () => {
       canton: 'ZH',
       offerCount: 2,
       createdAt: '2026-04-01T10:00:00Z',
-    })
-  })
+    });
+  });
 
   it('defaults offerCount to 0 when offer_count is null', async () => {
     mockQuery
       .mockResolvedValueOnce({ rows: [] })
-      .mockResolvedValueOnce({ rows: [makeRequestRow({ offer_count: null })] })
+      .mockResolvedValueOnce({ rows: [makeRequestRow({ offer_count: null })] });
 
-    const result = await getMatchingRequests(USER_ID)
+    const result = await getMatchingRequests(USER_ID);
 
-    expect(result[0].offerCount).toBe(0)
-  })
+    expect(result[0].offerCount).toBe(0);
+  });
 
   it('returns [] on DB error', async () => {
-    mockQuery.mockRejectedValueOnce(new Error('timeout'))
+    mockQuery.mockRejectedValueOnce(new Error('timeout'));
 
-    const result = await getMatchingRequests(USER_ID)
+    const result = await getMatchingRequests(USER_ID);
 
-    expect(result).toEqual([])
-  })
+    expect(result).toEqual([]);
+  });
 
   it('returns empty array when no matching requests', async () => {
     mockQuery
       .mockResolvedValueOnce({ rows: [{ skill_id: 'laptop' }] })
-      .mockResolvedValueOnce({ rows: [] })
+      .mockResolvedValueOnce({ rows: [] });
 
-    const result = await getMatchingRequests(USER_ID)
+    const result = await getMatchingRequests(USER_ID);
 
-    expect(result).toEqual([])
-  })
-})
+    expect(result).toEqual([]);
+  });
+});
 
 // ============================================================================
 // getMyOffers
@@ -327,11 +327,11 @@ describe('getMatchingRequests', () => {
 
 describe('getMyOffers', () => {
   it('returns mapped offer rows', async () => {
-    mockQuery.mockResolvedValueOnce({ rows: [makeOfferRow()] })
+    mockQuery.mockResolvedValueOnce({ rows: [makeOfferRow()] });
 
-    const result = await getMyOffers(USER_ID)
+    const result = await getMyOffers(USER_ID);
 
-    expect(result).toHaveLength(1)
+    expect(result).toHaveLength(1);
     expect(result[0]).toMatchObject({
       offerId: 'offer-1',
       offerStatus: 'pending',
@@ -342,24 +342,24 @@ describe('getMyOffers', () => {
       city: 'Zürich',
       canton: 'ZH',
       requestStatus: 'open',
-    })
-  })
+    });
+  });
 
   it('returns empty array when no offers', async () => {
-    mockQuery.mockResolvedValueOnce({ rows: [] })
+    mockQuery.mockResolvedValueOnce({ rows: [] });
 
-    const result = await getMyOffers(USER_ID)
+    const result = await getMyOffers(USER_ID);
 
-    expect(result).toEqual([])
-  })
+    expect(result).toEqual([]);
+  });
 
   it('returns [] and logs on DB error', async () => {
-    mockQuery.mockRejectedValueOnce(new Error('connection lost'))
+    mockQuery.mockRejectedValueOnce(new Error('connection lost'));
 
-    const result = await getMyOffers(USER_ID)
+    const result = await getMyOffers(USER_ID);
 
-    expect(result).toEqual([])
-    const { logger } = jest.requireMock('@/lib/logger')
-    expect(logger.error).toHaveBeenCalledTimes(1)
-  })
-})
+    expect(result).toEqual([]);
+    const { logger } = jest.requireMock('@/lib/logger');
+    expect(logger.error).toHaveBeenCalledTimes(1);
+  });
+});

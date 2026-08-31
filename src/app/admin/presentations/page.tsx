@@ -7,34 +7,34 @@
  * see the rewrite + header rules in next.config.js.
  */
 
-import { Metadata } from 'next'
-import Link from 'next/link'
-import { Info, Presentation, MessageSquare } from 'lucide-react'
-import { eq, count } from 'drizzle-orm'
-import { db } from '@/db'
-import { presentationComments } from '@/db/schema'
-import { requireAnySection } from '@/lib/admin/guards'
-import { PRESENTATION_DECKS } from '@/config/presentations'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { PresentationsBrowser } from './PresentationsBrowser'
+import { Metadata } from 'next';
+import Link from 'next/link';
+import { Info, Presentation, MessageSquare } from 'lucide-react';
+import { eq, count } from 'drizzle-orm';
+import { db } from '@/db';
+import { presentationComments } from '@/db/schema';
+import { requireAnySection } from '@/lib/admin/guards';
+import { PRESENTATION_DECKS } from '@/config/presentations';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import { PresentationsBrowser } from './PresentationsBrowser';
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Präsentationen',
   description: 'Präsentationen ansehen und teilen',
-}
+};
 
 export default async function PresentationsPage() {
   // Accessible with either the dedicated 'presentations' permission (sidebar
   // key) or the broader 'content' permission (presentations are content).
-  await requireAnySection(['presentations', 'content'], 'presentations')
+  await requireAnySection(['presentations', 'content'], 'presentations');
 
   const [open] = await db
     .select({ n: count() })
     .from(presentationComments)
-    .where(eq(presentationComments.resolved, false))
-  const openFeedback = Number(open?.n ?? 0)
+    .where(eq(presentationComments.resolved, false));
+  const openFeedback = Number(open?.n ?? 0);
 
   return (
     <AdminPageWrapper
@@ -51,7 +51,8 @@ export default async function PresentationsPage() {
             Per Link teilbar, für Suchmaschinen unsichtbar (noindex). Der Zugriff je Deck:
             <b className="text-text-primary"> Öffentlich</b> (ohne Konto),
             <b className="text-text-primary"> Nur Team</b> (Anmeldung nötig) oder
-            <b className="text-text-primary"> Nur Autor</b>. Leser:innen können pro Folie kommentieren.
+            <b className="text-text-primary"> Nur Autor</b>. Leser:innen können pro Folie
+            kommentieren.
           </p>
         </div>
         <Link
@@ -70,5 +71,5 @@ export default async function PresentationsPage() {
 
       <PresentationsBrowser decks={PRESENTATION_DECKS} />
     </AdminPageWrapper>
-  )
+  );
 }

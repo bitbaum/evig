@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Loader2, Save } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Select } from '@/components/ui/select'
-import { FormField } from '@/components/ui/form-field'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { apiFetch } from '@/lib/api/client'
-import { ROUTES } from '@/config/routes'
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Loader2, Save } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select } from '@/components/ui/select';
+import { FormField } from '@/components/ui/form-field';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { apiFetch } from '@/lib/api/client';
+import { ROUTES } from '@/config/routes';
 import {
   DELIVERABLE_TYPES,
   DELIVERABLE_TYPE_LABELS,
@@ -18,12 +18,12 @@ import {
   DELIVERABLE_STATUS_LABELS,
   DELIVERABLE_VISIBILITY,
   DELIVERABLE_VISIBILITY_LABELS,
-} from '@/config/deliverables'
+} from '@/config/deliverables';
 
 export default function DeliverableFormClient() {
-  const router = useRouter()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({
     title: '',
     type: DELIVERABLE_TYPES.DOCUMENT as string,
@@ -32,15 +32,17 @@ export default function DeliverableFormClient() {
     source_path: '',
     visibility: DELIVERABLE_VISIBILITY.TEAM as string,
     status: DELIVERABLE_STATUSES.DRAFT as string,
-  })
+  });
 
-  const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
-    setForm((f) => ({ ...f, [k]: e.target.value }))
+  const set =
+    (k: keyof typeof form) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+      setForm((f) => ({ ...f, [k]: e.target.value }));
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setLoading(true)
-    setError(null)
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
 
     const res = await apiFetch<{ id: string }>('/api/deliverables', {
       method: 'POST',
@@ -53,15 +55,15 @@ export default function DeliverableFormClient() {
         visibility: form.visibility,
         status: form.status,
       },
-    })
+    });
 
     if (!res.success || !res.data) {
-      setError(res.error || 'Fehler beim Erstellen')
-      setLoading(false)
-      return
+      setError(res.error || 'Fehler beim Erstellen');
+      setLoading(false);
+      return;
     }
 
-    router.push(ROUTES.admin.deliverable(res.data.id))
+    router.push(ROUTES.admin.deliverable(res.data.id));
   }
 
   return (
@@ -139,7 +141,12 @@ export default function DeliverableFormClient() {
 
         <div className="grid sm:grid-cols-2 gap-6">
           <FormField label="Sichtbarkeit" htmlFor="visibility">
-            <Select id="visibility" name="visibility" value={form.visibility} onChange={set('visibility')}>
+            <Select
+              id="visibility"
+              name="visibility"
+              value={form.visibility}
+              onChange={set('visibility')}
+            >
               {Object.values(DELIVERABLE_VISIBILITY).map((value) => (
                 <option key={value} value={value}>
                   {DELIVERABLE_VISIBILITY_LABELS[value]}
@@ -167,5 +174,5 @@ export default function DeliverableFormClient() {
         </Button>
       </div>
     </form>
-  )
+  );
 }

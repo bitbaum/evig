@@ -12,15 +12,15 @@
  *   })
  */
 
-import type { ApiResponse } from './types'
-import { withClientCsrfHeader } from './csrf-client'
+import type { ApiResponse } from './types';
+import { withClientCsrfHeader } from './csrf-client';
 
 interface ApiFetchOptions {
-  method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
-  body?: unknown
-  headers?: Record<string, string>
+  method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+  body?: unknown;
+  headers?: Record<string, string>;
   /** Pass true when body is FormData (skips JSON.stringify and Content-Type header) */
-  formData?: boolean
+  formData?: boolean;
 }
 
 /**
@@ -29,48 +29,52 @@ interface ApiFetchOptions {
  */
 export async function apiFetch<T = unknown>(
   url: string,
-  options: ApiFetchOptions = {}
+  options: ApiFetchOptions = {},
 ): Promise<ApiResponse<T>> {
-  const { method = 'GET', body, headers = {}, formData = false } = options
+  const { method = 'GET', body, headers = {}, formData = false } = options;
 
   const fetchOptions: RequestInit = {
     method,
-    headers: withClientCsrfHeader({
-      ...(body !== undefined && !formData ? { 'Content-Type': 'application/json' } : {}),
-      ...headers,
-    }, method),
+    headers: withClientCsrfHeader(
+      {
+        ...(body !== undefined && !formData ? { 'Content-Type': 'application/json' } : {}),
+        ...headers,
+      },
+      method,
+    ),
     ...(body !== undefined ? { body: formData ? (body as BodyInit) : JSON.stringify(body) } : {}),
-  }
+  };
 
   try {
-    const response = await fetch(url, fetchOptions)
-    const data = await response.json().catch(() => ({}))
+    const response = await fetch(url, fetchOptions);
+    const data = await response.json().catch(() => ({}));
 
     if (!response.ok || !data.success) {
       // Validation failures (apiBadRequest) carry per-field messages in
       // `errors` — surface them, otherwise users only see the generic
       // "Ungültige Eingabedaten" with no clue which field is wrong.
-      const fieldMessages = data.errors && typeof data.errors === 'object'
-        ? Object.values(data.errors as Record<string, string[]>).flat().filter(Boolean)
-        : []
-      const baseError = data.error || `Anfrage fehlgeschlagen (${response.status})`
+      const fieldMessages =
+        data.errors && typeof data.errors === 'object'
+          ? Object.values(data.errors as Record<string, string[]>)
+              .flat()
+              .filter(Boolean)
+          : [];
+      const baseError = data.error || `Anfrage fehlgeschlagen (${response.status})`;
       return {
         success: false,
-        error: fieldMessages.length > 0
-          ? `${baseError}: ${fieldMessages.join(' · ')}`
-          : baseError,
+        error: fieldMessages.length > 0 ? `${baseError}: ${fieldMessages.join(' · ')}` : baseError,
         // Pass the code through untouched — callers that offer a way out of a
         // specific failure need it, and flattening it away is what forced
         // string-matching on German prose.
         ...(typeof data.code === 'string' && { code: data.code }),
-      }
+      };
     }
 
-    return { success: true, data: data.data as T }
+    return { success: true, data: data.data as T };
   } catch {
     return {
       success: false,
       error: 'Netzwerkfehler. Bitte versuche es erneut.',
-    }
+    };
   }
 }

@@ -10,10 +10,10 @@ import {
   index,
   varchar,
   check,
-} from 'drizzle-orm/pg-core'
-import { sql } from 'drizzle-orm'
-import { users } from './auth'
-import { teamProfiles } from './team'
+} from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
+import { users } from './auth';
+import { teamProfiles } from './team';
 
 export const jobPostings = pgTable(
   'job_postings',
@@ -43,8 +43,12 @@ export const jobPostings = pgTable(
     showOnGetInvolved: boolean('show_on_get_involved').notNull().default(true),
     seoTitle: varchar('seo_title', { length: 200 }),
     seoDescription: varchar('seo_description', { length: 500 }),
-    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
-    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' })
+      .notNull()
+      .defaultNow(),
   },
   (table) => [
     index('idx_job_postings_status').on(table.status),
@@ -58,7 +62,7 @@ export const jobPostings = pgTable(
       sql`${table.status} IN ('draft', 'published', 'frozen', 'filled', 'closed', 'archived')`,
     ),
   ],
-)
+);
 
 export const jobApplications = pgTable(
   'job_applications',
@@ -85,8 +89,12 @@ export const jobApplications = pgTable(
     hiredTeamProfileId: uuid('hired_team_profile_id').references(() => teamProfiles.id, {
       onDelete: 'set null',
     }),
-    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
-    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' })
+      .notNull()
+      .defaultNow(),
   },
   (table) => [
     index('idx_job_applications_posting').on(table.jobPostingId),
@@ -96,7 +104,7 @@ export const jobApplications = pgTable(
       sql`${table.status} IN ('new', 'screening', 'interview', 'offer', 'hired', 'rejected', 'withdrawn')`,
     ),
   ],
-)
+);
 
 export const jobApplicationEvents = pgTable(
   'job_application_events',
@@ -108,12 +116,14 @@ export const jobApplicationEvents = pgTable(
     eventType: varchar('event_type', { length: 50 }).notNull(),
     actorUserId: uuid('actor_user_id').references(() => users.id, { onDelete: 'set null' }),
     payload: jsonb('payload').default({}),
-    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).notNull().defaultNow(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
+      .notNull()
+      .defaultNow(),
   },
   (table) => [index('idx_job_application_events_app').on(table.applicationId, table.createdAt)],
-)
+);
 
-export type JobPosting = typeof jobPostings.$inferSelect
-export type NewJobPosting = typeof jobPostings.$inferInsert
-export type JobApplication = typeof jobApplications.$inferSelect
-export type NewJobApplication = typeof jobApplications.$inferInsert
+export type JobPosting = typeof jobPostings.$inferSelect;
+export type NewJobPosting = typeof jobPostings.$inferInsert;
+export type JobApplication = typeof jobApplications.$inferSelect;
+export type NewJobApplication = typeof jobApplications.$inferInsert;

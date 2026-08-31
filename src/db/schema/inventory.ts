@@ -1,5 +1,17 @@
-import { pgTable, uuid, text, boolean, timestamp, integer, decimal, jsonb, varchar, index, uniqueIndex } from 'drizzle-orm/pg-core'
-import { users } from './auth'
+import {
+  pgTable,
+  uuid,
+  text,
+  boolean,
+  timestamp,
+  integer,
+  decimal,
+  jsonb,
+  varchar,
+  index,
+  uniqueIndex,
+} from 'drizzle-orm/pg-core';
+import { users } from './auth';
 
 // =============================================================================
 // AI EXTRACTED PRODUCTS
@@ -8,99 +20,103 @@ import { users } from './auth'
 // Final state includes columns from 004 + 012 (short_description, item_uuid)
 // + 046 (source_type).
 
-export const aiExtractedProducts = pgTable('ai_extracted_products', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  originalImageUrl: text('original_image_url'),
-  extractedAt: timestamp('extracted_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+export const aiExtractedProducts = pgTable(
+  'ai_extracted_products',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    originalImageUrl: text('original_image_url'),
+    extractedAt: timestamp('extracted_at', { withTimezone: true, mode: 'string' }).defaultNow(),
 
-  // Basic product information
-  productName: text('product_name'),
-  // CHECK (product_name_confidence >= 0 AND product_name_confidence <= 1)
-  productNameConfidence: decimal('product_name_confidence', { precision: 3, scale: 2 }),
-  brand: text('brand'),
-  // CHECK (brand_confidence >= 0 AND brand_confidence <= 1)
-  brandConfidence: decimal('brand_confidence', { precision: 3, scale: 2 }),
-  model: text('model'),
-  // CHECK (model_confidence >= 0 AND model_confidence <= 1)
-  modelConfidence: decimal('model_confidence', { precision: 3, scale: 2 }),
+    // Basic product information
+    productName: text('product_name'),
+    // CHECK (product_name_confidence >= 0 AND product_name_confidence <= 1)
+    productNameConfidence: decimal('product_name_confidence', { precision: 3, scale: 2 }),
+    brand: text('brand'),
+    // CHECK (brand_confidence >= 0 AND brand_confidence <= 1)
+    brandConfidence: decimal('brand_confidence', { precision: 3, scale: 2 }),
+    model: text('model'),
+    // CHECK (model_confidence >= 0 AND model_confidence <= 1)
+    modelConfidence: decimal('model_confidence', { precision: 3, scale: 2 }),
 
-  // Categorization
-  category: text('category'),
-  // CHECK (category_confidence >= 0 AND category_confidence <= 1)
-  categoryConfidence: decimal('category_confidence', { precision: 3, scale: 2 }),
-  subcategory: text('subcategory'),
-  // CHECK (subcategory_confidence >= 0 AND subcategory_confidence <= 1)
-  subcategoryConfidence: decimal('subcategory_confidence', { precision: 3, scale: 2 }),
+    // Categorization
+    category: text('category'),
+    // CHECK (category_confidence >= 0 AND category_confidence <= 1)
+    categoryConfidence: decimal('category_confidence', { precision: 3, scale: 2 }),
+    subcategory: text('subcategory'),
+    // CHECK (subcategory_confidence >= 0 AND subcategory_confidence <= 1)
+    subcategoryConfidence: decimal('subcategory_confidence', { precision: 3, scale: 2 }),
 
-  // Pricing and condition
-  estimatedPriceChf: decimal('estimated_price_chf', { precision: 10, scale: 2 }),
-  // CHECK (price_confidence >= 0 AND price_confidence <= 1)
-  priceConfidence: decimal('price_confidence', { precision: 3, scale: 2 }),
-  // CHECK (condition IN ('new', 'like_new', 'good', 'fair', 'poor', 'damaged'))
-  condition: text('condition'),
-  // CHECK (condition_confidence >= 0 AND condition_confidence <= 1)
-  conditionConfidence: decimal('condition_confidence', { precision: 3, scale: 2 }),
+    // Pricing and condition
+    estimatedPriceChf: decimal('estimated_price_chf', { precision: 10, scale: 2 }),
+    // CHECK (price_confidence >= 0 AND price_confidence <= 1)
+    priceConfidence: decimal('price_confidence', { precision: 3, scale: 2 }),
+    // CHECK (condition IN ('new', 'like_new', 'good', 'fair', 'poor', 'damaged'))
+    condition: text('condition'),
+    // CHECK (condition_confidence >= 0 AND condition_confidence <= 1)
+    conditionConfidence: decimal('condition_confidence', { precision: 3, scale: 2 }),
 
-  // Technical specifications
-  specifications: jsonb('specifications').default({}),
-  // CHECK (specs_confidence >= 0 AND specs_confidence <= 1)
-  specsConfidence: decimal('specs_confidence', { precision: 3, scale: 2 }),
+    // Technical specifications
+    specifications: jsonb('specifications').default({}),
+    // CHECK (specs_confidence >= 0 AND specs_confidence <= 1)
+    specsConfidence: decimal('specs_confidence', { precision: 3, scale: 2 }),
 
-  // Additional metadata
-  color: text('color'),
-  // CHECK (color_confidence >= 0 AND color_confidence <= 1)
-  colorConfidence: decimal('color_confidence', { precision: 3, scale: 2 }),
-  material: text('material'),
-  // CHECK (material_confidence >= 0 AND material_confidence <= 1)
-  materialConfidence: decimal('material_confidence', { precision: 3, scale: 2 }),
-  dimensions: jsonb('dimensions').default({}),
-  weightGrams: integer('weight_grams'),
-  // CHECK (weight_confidence >= 0 AND weight_confidence <= 1)
-  weightConfidence: decimal('weight_confidence', { precision: 3, scale: 2 }),
+    // Additional metadata
+    color: text('color'),
+    // CHECK (color_confidence >= 0 AND color_confidence <= 1)
+    colorConfidence: decimal('color_confidence', { precision: 3, scale: 2 }),
+    material: text('material'),
+    // CHECK (material_confidence >= 0 AND material_confidence <= 1)
+    materialConfidence: decimal('material_confidence', { precision: 3, scale: 2 }),
+    dimensions: jsonb('dimensions').default({}),
+    weightGrams: integer('weight_grams'),
+    // CHECK (weight_confidence >= 0 AND weight_confidence <= 1)
+    weightConfidence: decimal('weight_confidence', { precision: 3, scale: 2 }),
 
-  // AI processing metadata
-  aiProvider: text('ai_provider').default('openai'),
-  aiModel: text('ai_model').default('gpt-4-vision-preview'),
-  processingTimeMs: integer('processing_time_ms'),
-  // CHECK (total_confidence >= 0 AND total_confidence <= 1)
-  totalConfidence: decimal('total_confidence', { precision: 3, scale: 2 }),
+    // AI processing metadata
+    aiProvider: text('ai_provider').default('openai'),
+    aiModel: text('ai_model').default('gpt-4-vision-preview'),
+    processingTimeMs: integer('processing_time_ms'),
+    // CHECK (total_confidence >= 0 AND total_confidence <= 1)
+    totalConfidence: decimal('total_confidence', { precision: 3, scale: 2 }),
 
-  // Raw AI response for debugging/analysis
-  rawAiResponse: jsonb('raw_ai_response').default({}),
+    // Raw AI response for debugging/analysis
+    rawAiResponse: jsonb('raw_ai_response').default({}),
 
-  // User and processing status
-  createdBy: uuid('created_by').references(() => users.id),
-  // CHECK (status IN ('pending_review', 'approved', 'rejected', 'processed'))
-  status: text('status').default('pending_review'),
-  reviewedBy: uuid('reviewed_by').references(() => users.id),
-  reviewedAt: timestamp('reviewed_at', { withTimezone: true, mode: 'string' }),
-  reviewNotes: text('review_notes'),
+    // User and processing status
+    createdBy: uuid('created_by').references(() => users.id),
+    // CHECK (status IN ('pending_review', 'approved', 'rejected', 'processed'))
+    status: text('status').default('pending_review'),
+    reviewedBy: uuid('reviewed_by').references(() => users.id),
+    reviewedAt: timestamp('reviewed_at', { withTimezone: true, mode: 'string' }),
+    reviewNotes: text('review_notes'),
 
-  // Integration fields
-  kivitendoArticleNumber: text('kivitendo_article_number'),
-  marketplaceListingId: text('marketplace_listing_id'),
+    // Integration fields
+    kivitendoArticleNumber: text('kivitendo_article_number'),
+    marketplaceListingId: text('marketplace_listing_id'),
 
-  // Added by 012: short description
-  shortDescription: text('short_description'),
-  // Added by 012: human-readable item UUID (format: I-YYMMDD-NNNN)
-  itemUuid: text('item_uuid').unique(),
+    // Added by 012: short description
+    shortDescription: text('short_description'),
+    // Added by 012: human-readable item UUID (format: I-YYMMDD-NNNN)
+    itemUuid: text('item_uuid').unique(),
 
-  // Added by 046: source tracking
-  // Values: 'erfassung', 'intake', 'bulk_import'
-  sourceType: varchar('source_type', { length: 20 }).default('erfassung'),
+    // Added by 046: source tracking
+    // Values: 'erfassung', 'intake', 'bulk_import'
+    sourceType: varchar('source_type', { length: 20 }).default('erfassung'),
 
-  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
-}, (table) => [
-  index('idx_ai_products_status').on(table.status),
-  index('idx_ai_products_brand').on(table.brand),
-  index('idx_ai_products_category').on(table.category),
-  index('idx_ai_products_created_by').on(table.createdBy),
-  index('idx_ai_products_kivitendo').on(table.kivitendoArticleNumber),
-])
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+  },
+  (table) => [
+    index('idx_ai_products_status').on(table.status),
+    index('idx_ai_products_brand').on(table.brand),
+    index('idx_ai_products_category').on(table.category),
+    index('idx_ai_products_created_by').on(table.createdBy),
+    index('idx_ai_products_kivitendo').on(table.kivitendoArticleNumber),
+  ],
+);
 
-export type AiExtractedProduct = typeof aiExtractedProducts.$inferSelect
-export type NewAiExtractedProduct = typeof aiExtractedProducts.$inferInsert
+export type AiExtractedProduct = typeof aiExtractedProducts.$inferSelect;
+export type NewAiExtractedProduct = typeof aiExtractedProducts.$inferInsert;
 
 // =============================================================================
 // INVENTORY ITEMS
@@ -109,85 +125,89 @@ export type NewAiExtractedProduct = typeof aiExtractedProducts.$inferInsert
 // Final state includes columns from 004 + 012 (box_id) + 046 (intake_tier,
 // intake_checklist, checklist_complete, source_donation_id) + 047 (intake_events).
 
-export const inventoryItems = pgTable('inventory_items', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  aiProductId: uuid('ai_product_id').references(() => aiExtractedProducts.id),
+export const inventoryItems = pgTable(
+  'inventory_items',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    aiProductId: uuid('ai_product_id').references(() => aiExtractedProducts.id),
 
-  // Legacy system integration
-  kivitendoArticleNumber: text('kivitendo_article_number').unique(),
-  legacyCsvData: jsonb('legacy_csv_data').default({}),
+    // Legacy system integration
+    kivitendoArticleNumber: text('kivitendo_article_number').unique(),
+    legacyCsvData: jsonb('legacy_csv_data').default({}),
 
-  // Kivvi ERP integration — canonical ERP record reference
-  // Set after successful push to Kivvi API on erfassung
-  kivviInventoryItemId: uuid('kivvi_inventory_item_id').unique(),
-  // 'pending' = not yet pushed | 'synced' = Kivvi has it | 'error' = last push failed
-  kivviSyncStatus: text('kivvi_sync_status').default('pending'),
-  kivviSyncedAt: timestamp('kivvi_synced_at', { withTimezone: true, mode: 'string' }),
+    // Kivvi ERP integration — canonical ERP record reference
+    // Set after successful push to Kivvi API on erfassung
+    kivviInventoryItemId: uuid('kivvi_inventory_item_id').unique(),
+    // 'pending' = not yet pushed | 'synced' = Kivvi has it | 'error' = last push failed
+    kivviSyncStatus: text('kivvi_sync_status').default('pending'),
+    kivviSyncedAt: timestamp('kivvi_synced_at', { withTimezone: true, mode: 'string' }),
 
-  // Physical inventory tracking
-  // Legacy free-text location (kept for backfill/compat); new entries use the
-  // structured storage_location_id FK below (added migration 117).
-  location: text('location'),
-  storageLocationId: uuid('storage_location_id'),
-  quantityAvailable: integer('quantity_available').default(0),
-  quantityReserved: integer('quantity_reserved').default(0),
-  quantitySold: integer('quantity_sold').default(0),
+    // Physical inventory tracking
+    // Legacy free-text location (kept for backfill/compat); new entries use the
+    // structured storage_location_id FK below (added migration 117).
+    location: text('location'),
+    storageLocationId: uuid('storage_location_id'),
+    quantityAvailable: integer('quantity_available').default(0),
+    quantityReserved: integer('quantity_reserved').default(0),
+    quantitySold: integer('quantity_sold').default(0),
 
-  // Status tracking
-  // CHECK (status IN ('available', 'reserved', 'sold', 'damaged', 'missing'))
-  status: text('status').default('available'),
-  // CHECK (condition_override IN ('new', 'like_new', 'good', 'fair', 'poor', 'damaged'))
-  conditionOverride: text('condition_override'),
-  conditionNotes: text('condition_notes'),
+    // Status tracking
+    // CHECK (status IN ('available', 'reserved', 'sold', 'damaged', 'missing'))
+    status: text('status').default('available'),
+    // CHECK (condition_override IN ('new', 'like_new', 'good', 'fair', 'poor', 'damaged'))
+    conditionOverride: text('condition_override'),
+    conditionNotes: text('condition_notes'),
 
-  // Pricing
-  acquisitionCostChf: decimal('acquisition_cost_chf', { precision: 10, scale: 2 }),
-  sellingPriceChf: decimal('selling_price_chf', { precision: 10, scale: 2 }),
-  minSellingPriceChf: decimal('min_selling_price_chf', { precision: 10, scale: 2 }),
+    // Pricing
+    acquisitionCostChf: decimal('acquisition_cost_chf', { precision: 10, scale: 2 }),
+    sellingPriceChf: decimal('selling_price_chf', { precision: 10, scale: 2 }),
+    minSellingPriceChf: decimal('min_selling_price_chf', { precision: 10, scale: 2 }),
 
-  // Marketplace integration
-  // CHECK (marketplace_status IN ('draft', 'published', 'sold', 'archived'))
-  marketplaceStatus: text('marketplace_status').default('draft'),
+    // Marketplace integration
+    // CHECK (marketplace_status IN ('draft', 'published', 'sold', 'archived'))
+    marketplaceStatus: text('marketplace_status').default('draft'),
 
-  // User assignments
-  assignedTo: uuid('assigned_to').references(() => users.id),
-  assignedAt: timestamp('assigned_at', { withTimezone: true, mode: 'string' }),
-  assignmentNotes: text('assignment_notes'),
+    // User assignments
+    assignedTo: uuid('assigned_to').references(() => users.id),
+    assignedAt: timestamp('assigned_at', { withTimezone: true, mode: 'string' }),
+    assignmentNotes: text('assignment_notes'),
 
-  // Added by 012: box ID for physical storage
-  boxId: text('box_id'),
+    // Added by 012: box ID for physical storage
+    boxId: text('box_id'),
 
-  // Added by 046: unified intake workflow
-  // Values: 'refurbish', 'parts', 'recycle'. NULL = legacy item
-  intakeTier: varchar('intake_tier', { length: 20 }),
-  // JSONB checklist state: { itemId: { result: 'pass'|'fail'|'na'|null, completedBy, completedAt, notes } }
-  intakeChecklist: jsonb('intake_checklist').default({}),
-  // Derived flag: true when all required checklist items are done (pass/na). Gates marketplace publishing.
-  checklistComplete: boolean('checklist_complete').default(false),
-  // Added by 135: derived flag — true when any required checklist item has a 'fail' verdict.
-  checklistFailed: boolean('checklist_failed').notNull().default(false),
-  // Link to donation record if this item came from a device donation
-  sourceDonationId: uuid('source_donation_id'),
+    // Added by 046: unified intake workflow
+    // Values: 'refurbish', 'parts', 'recycle'. NULL = legacy item
+    intakeTier: varchar('intake_tier', { length: 20 }),
+    // JSONB checklist state: { itemId: { result: 'pass'|'fail'|'na'|null, completedBy, completedAt, notes } }
+    intakeChecklist: jsonb('intake_checklist').default({}),
+    // Derived flag: true when all required checklist items are done (pass/na). Gates marketplace publishing.
+    checklistComplete: boolean('checklist_complete').default(false),
+    // Added by 135: derived flag — true when any required checklist item has a 'fail' verdict.
+    checklistFailed: boolean('checklist_failed').notNull().default(false),
+    // Link to donation record if this item came from a device donation
+    sourceDonationId: uuid('source_donation_id'),
 
-  // Added by 047: chronological audit trail of intake processing events
-  // Each event: { type, description, userId, userEmail, timestamp, metadata? }
-  intakeEvents: jsonb('intake_events').default([]),
+    // Added by 047: chronological audit trail of intake processing events
+    // Each event: { type, description, userId, userEmail, timestamp, metadata? }
+    intakeEvents: jsonb('intake_events').default([]),
 
-  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
-}, (table) => [
-  index('idx_inventory_status').on(table.status),
-  index('idx_inventory_location').on(table.location),
-  index('idx_inventory_kivitendo').on(table.kivitendoArticleNumber),
-  index('idx_inventory_assigned_to').on(table.assignedTo),
-  // 046 indexes
-  index('idx_inventory_intake_tier').on(table.intakeTier),
-  index('idx_inventory_donation').on(table.sourceDonationId),
-  index('idx_inventory_checklist_complete').on(table.checklistComplete),
-])
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+  },
+  (table) => [
+    index('idx_inventory_status').on(table.status),
+    index('idx_inventory_location').on(table.location),
+    index('idx_inventory_kivitendo').on(table.kivitendoArticleNumber),
+    index('idx_inventory_assigned_to').on(table.assignedTo),
+    // 046 indexes
+    index('idx_inventory_intake_tier').on(table.intakeTier),
+    index('idx_inventory_donation').on(table.sourceDonationId),
+    index('idx_inventory_checklist_complete').on(table.checklistComplete),
+  ],
+);
 
-export type InventoryItem = typeof inventoryItems.$inferSelect
-export type NewInventoryItem = typeof inventoryItems.$inferInsert
+export type InventoryItem = typeof inventoryItems.$inferSelect;
+export type NewInventoryItem = typeof inventoryItems.$inferInsert;
 
 // =============================================================================
 // PRODUCT IMAGES
@@ -227,10 +247,10 @@ export const productImages = pgTable('product_images', {
 
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
-})
+});
 
-export type ProductImage = typeof productImages.$inferSelect
-export type NewProductImage = typeof productImages.$inferInsert
+export type ProductImage = typeof productImages.$inferSelect;
+export type NewProductImage = typeof productImages.$inferInsert;
 
 // =============================================================================
 // SUSTAINABILITY SCORES
@@ -272,10 +292,10 @@ export const sustainabilityScores = pgTable('sustainability_scores', {
 
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
-})
+});
 
-export type SustainabilityScore = typeof sustainabilityScores.$inferSelect
-export type NewSustainabilityScore = typeof sustainabilityScores.$inferInsert
+export type SustainabilityScore = typeof sustainabilityScores.$inferSelect;
+export type NewSustainabilityScore = typeof sustainabilityScores.$inferInsert;
 
 // =============================================================================
 // AI PROCESSING LOGS
@@ -312,10 +332,10 @@ export const aiProcessingLogs = pgTable('ai_processing_logs', {
   userAgent: text('user_agent'),
 
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
-})
+});
 
-export type AiProcessingLog = typeof aiProcessingLogs.$inferSelect
-export type NewAiProcessingLog = typeof aiProcessingLogs.$inferInsert
+export type AiProcessingLog = typeof aiProcessingLogs.$inferSelect;
+export type NewAiProcessingLog = typeof aiProcessingLogs.$inferInsert;
 
 // NOTE: the legacy `marketplace_listings` table (RevampIT internal shop) was
 // removed (migration 103). RevampIT shop stock now lives in the unified
@@ -327,133 +347,154 @@ export type NewAiProcessingLog = typeof aiProcessingLogs.$inferInsert
 // =============================================================================
 // Hierarchical product categorization with AI detection keywords.
 
-export const productCategories = pgTable('product_categories', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  slug: varchar('slug', { length: 100 }).notNull().unique(),
-  name: varchar('name', { length: 150 }).notNull(),
-  description: text('description'),
-  parentId: uuid('parent_id'),
-  level: integer('level').default(1),
+export const productCategories = pgTable(
+  'product_categories',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    slug: varchar('slug', { length: 100 }).notNull().unique(),
+    name: varchar('name', { length: 150 }).notNull(),
+    description: text('description'),
+    parentId: uuid('parent_id'),
+    level: integer('level').default(1),
 
-  // Display and SEO
-  icon: text('icon'),
-  color: varchar('color', { length: 7 }),
-  seoTitle: text('seo_title'),
-  seoDescription: text('seo_description'),
+    // Display and SEO
+    icon: text('icon'),
+    color: varchar('color', { length: 7 }),
+    seoTitle: text('seo_title'),
+    seoDescription: text('seo_description'),
 
-  // Metadata
-  isActive: boolean('is_active').default(true),
-  sortOrder: integer('sort_order').default(0),
-  aiDetectionKeywords: text('ai_detection_keywords').array(),
+    // Metadata
+    isActive: boolean('is_active').default(true),
+    sortOrder: integer('sort_order').default(0),
+    aiDetectionKeywords: text('ai_detection_keywords').array(),
 
-  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
-}, (table) => [
-  index('idx_categories_parent').on(table.parentId),
-  index('idx_categories_level').on(table.level),
-  index('idx_categories_active').on(table.isActive),
-])
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+  },
+  (table) => [
+    index('idx_categories_parent').on(table.parentId),
+    index('idx_categories_level').on(table.level),
+    index('idx_categories_active').on(table.isActive),
+  ],
+);
 
-export type ProductCategory = typeof productCategories.$inferSelect
-export type NewProductCategory = typeof productCategories.$inferInsert
+export type ProductCategory = typeof productCategories.$inferSelect;
+export type NewProductCategory = typeof productCategories.$inferInsert;
 
 // =============================================================================
 // PRODUCT ATTRIBUTES
 // =============================================================================
 // Structured attributes per category for AI extraction and filtering.
 
-export const productAttributes = pgTable('product_attributes', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  categoryId: uuid('category_id').references(() => productCategories.id),
-  name: varchar('name', { length: 100 }).notNull(),
-  displayName: varchar('display_name', { length: 150 }),
-  // CHECK (data_type IN ('text', 'number', 'boolean', 'select', 'multiselect', 'date'))
-  dataType: varchar('data_type', { length: 20 }).default('text'),
-  unit: varchar('unit', { length: 20 }),
-  isRequired: boolean('is_required').default(false),
-  isFilterable: boolean('is_filterable').default(false),
-  options: text('options').array().default([]),
+export const productAttributes = pgTable(
+  'product_attributes',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    categoryId: uuid('category_id').references(() => productCategories.id),
+    name: varchar('name', { length: 100 }).notNull(),
+    displayName: varchar('display_name', { length: 150 }),
+    // CHECK (data_type IN ('text', 'number', 'boolean', 'select', 'multiselect', 'date'))
+    dataType: varchar('data_type', { length: 20 }).default('text'),
+    unit: varchar('unit', { length: 20 }),
+    isRequired: boolean('is_required').default(false),
+    isFilterable: boolean('is_filterable').default(false),
+    options: text('options').array().default([]),
 
-  // AI extraction
-  aiExtractionPrompt: text('ai_extraction_prompt'),
-  aiConfidenceThreshold: decimal('ai_confidence_threshold', { precision: 3, scale: 2 }).default('0.7'),
+    // AI extraction
+    aiExtractionPrompt: text('ai_extraction_prompt'),
+    aiConfidenceThreshold: decimal('ai_confidence_threshold', { precision: 3, scale: 2 }).default(
+      '0.7',
+    ),
 
-  // Display
-  sortOrder: integer('sort_order').default(0),
-  isActive: boolean('is_active').default(true),
+    // Display
+    sortOrder: integer('sort_order').default(0),
+    isActive: boolean('is_active').default(true),
 
-  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
-}, (table) => [
-  uniqueIndex('product_attributes_category_id_name_unique').on(table.categoryId, table.name),
-])
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+  },
+  (table) => [
+    uniqueIndex('product_attributes_category_id_name_unique').on(table.categoryId, table.name),
+  ],
+);
 
-export type ProductAttribute = typeof productAttributes.$inferSelect
-export type NewProductAttribute = typeof productAttributes.$inferInsert
+export type ProductAttribute = typeof productAttributes.$inferSelect;
+export type NewProductAttribute = typeof productAttributes.$inferInsert;
 
 // =============================================================================
 // CUSTOMER PROFILES
 // =============================================================================
 // Lookup table defining customer archetypes (e.g. "Oma", "Gamer", "Büro").
 
-export const customerProfiles = pgTable('customer_profiles', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  slug: varchar('slug', { length: 50 }).notNull().unique(),
-  name: varchar('name', { length: 100 }).notNull(),
-  nameDe: varchar('name_de', { length: 100 }).notNull(),
-  description: text('description'),
-  descriptionDe: text('description_de'),
+export const customerProfiles = pgTable(
+  'customer_profiles',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    slug: varchar('slug', { length: 50 }).notNull().unique(),
+    name: varchar('name', { length: 100 }).notNull(),
+    nameDe: varchar('name_de', { length: 100 }).notNull(),
+    description: text('description'),
+    descriptionDe: text('description_de'),
 
-  // Profile characteristics
-  icon: text('icon'),
-  color: varchar('color', { length: 7 }),
+    // Profile characteristics
+    icon: text('icon'),
+    color: varchar('color', { length: 7 }),
 
-  // Hardware requirements (1-5 scale)
-  // CHECK (hw_requirement_min >= 1 AND hw_requirement_min <= 5)
-  hwRequirementMin: integer('hw_requirement_min').default(1),
-  // CHECK (hw_requirement_max >= 1 AND hw_requirement_max <= 5)
-  hwRequirementMax: integer('hw_requirement_max').default(3),
+    // Hardware requirements (1-5 scale)
+    // CHECK (hw_requirement_min >= 1 AND hw_requirement_min <= 5)
+    hwRequirementMin: integer('hw_requirement_min').default(1),
+    // CHECK (hw_requirement_max >= 1 AND hw_requirement_max <= 5)
+    hwRequirementMax: integer('hw_requirement_max').default(3),
 
-  // Use case tags
-  useCases: text('use_cases').array().default([]),
-  recommendedOs: text('recommended_os').array().default([]),
+    // Use case tags
+    useCases: text('use_cases').array().default([]),
+    recommendedOs: text('recommended_os').array().default([]),
 
-  // Sorting and display
-  sortOrder: integer('sort_order').default(0),
-  isActive: boolean('is_active').default(true),
+    // Sorting and display
+    sortOrder: integer('sort_order').default(0),
+    isActive: boolean('is_active').default(true),
 
-  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
-  updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
-}, (table) => [
-  index('idx_customer_profiles_active').on(table.isActive),
-])
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+  },
+  (table) => [index('idx_customer_profiles_active').on(table.isActive)],
+);
 
-export type CustomerProfile = typeof customerProfiles.$inferSelect
-export type NewCustomerProfile = typeof customerProfiles.$inferInsert
+export type CustomerProfile = typeof customerProfiles.$inferSelect;
+export type NewCustomerProfile = typeof customerProfiles.$inferInsert;
 
 // =============================================================================
 // PRODUCT CUSTOMER PROFILES (many-to-many link)
 // =============================================================================
 // Links products to customer profiles with suitability scores.
 
-export const productCustomerProfiles = pgTable('product_customer_profiles', {
-  id: uuid('id').primaryKey().defaultRandom(),
-  productId: uuid('product_id').notNull(),
-  profileId: uuid('profile_id').notNull().references(() => customerProfiles.id, { onDelete: 'cascade' }),
+export const productCustomerProfiles = pgTable(
+  'product_customer_profiles',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    productId: uuid('product_id').notNull(),
+    profileId: uuid('profile_id')
+      .notNull()
+      .references(() => customerProfiles.id, { onDelete: 'cascade' }),
 
-  // Suitability score (0-100)
-  // CHECK (suitability_score >= 0 AND suitability_score <= 100)
-  suitabilityScore: integer('suitability_score').default(80),
+    // Suitability score (0-100)
+    // CHECK (suitability_score >= 0 AND suitability_score <= 100)
+    suitabilityScore: integer('suitability_score').default(80),
 
-  // How it was assigned
-  // CHECK (assigned_by IN ('manual', 'ai', 'rule'))
-  assignedBy: text('assigned_by').default('manual'),
-  assignedAt: timestamp('assigned_at', { withTimezone: true, mode: 'string' }).defaultNow(),
-}, (table) => [
-  uniqueIndex('product_customer_profiles_product_profile_unique').on(table.productId, table.profileId),
-  index('idx_product_profiles_product').on(table.productId),
-  index('idx_product_profiles_profile').on(table.profileId),
-])
+    // How it was assigned
+    // CHECK (assigned_by IN ('manual', 'ai', 'rule'))
+    assignedBy: text('assigned_by').default('manual'),
+    assignedAt: timestamp('assigned_at', { withTimezone: true, mode: 'string' }).defaultNow(),
+  },
+  (table) => [
+    uniqueIndex('product_customer_profiles_product_profile_unique').on(
+      table.productId,
+      table.profileId,
+    ),
+    index('idx_product_profiles_product').on(table.productId),
+    index('idx_product_profiles_profile').on(table.profileId),
+  ],
+);
 
-export type ProductCustomerProfile = typeof productCustomerProfiles.$inferSelect
-export type NewProductCustomerProfile = typeof productCustomerProfiles.$inferInsert
+export type ProductCustomerProfile = typeof productCustomerProfiles.$inferSelect;
+export type NewProductCustomerProfile = typeof productCustomerProfiles.$inferInsert;

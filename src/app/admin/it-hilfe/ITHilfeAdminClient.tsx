@@ -1,19 +1,24 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { useTranslations } from 'next-intl'
-import { HelpCircle, Loader2, AlertTriangle, UserPlus } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { AdminHeroStatus, type HeroTone, type HeroKpi, type HeroCta } from '@/components/admin/AdminHeroStatus'
-import { TABS } from './types'
-import type { Stats } from './types'
-import { useITHilfeAdmin } from './useITHilfeAdmin'
-import { RequestsTab } from './RequestsTab'
-import { HelpersTab } from './HelpersTab'
-import { EditRequestModal } from './EditRequestModal'
-import { HelperActionModal } from './HelperActionModal'
+import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { HelpCircle, Loader2, AlertTriangle, UserPlus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+  AdminHeroStatus,
+  type HeroTone,
+  type HeroKpi,
+  type HeroCta,
+} from '@/components/admin/AdminHeroStatus';
+import { TABS } from './types';
+import type { Stats } from './types';
+import { useITHilfeAdmin } from './useITHilfeAdmin';
+import { RequestsTab } from './RequestsTab';
+import { HelpersTab } from './HelpersTab';
+import { EditRequestModal } from './EditRequestModal';
+import { HelperActionModal } from './HelperActionModal';
 
-type ITHilfeTranslator = ReturnType<typeof useTranslations>
+type ITHilfeTranslator = ReturnType<typeof useTranslations>;
 
 /**
  * IT-Hilfe Admin landing — TT.1 redesign.
@@ -30,17 +35,38 @@ type ITHilfeTranslator = ReturnType<typeof useTranslations>
  *   - Each tab has a clear primary CTA in the top-right.
  */
 export default function ITHilfeAdminClient() {
-  const t = useTranslations('admin.itHilfe')
+  const t = useTranslations('admin.itHilfe');
   const {
-    tab, switchTab,
+    tab,
+    switchTab,
     stats,
-    requests, reqFilter, setReqFilter, reqOffset, setReqOffset,
-    helpers, helpFilter, setHelpFilter, helpOffset, setHelpOffset,
-    editId, editData, setEditData, editLoading, openEditModal, closeEditModal, handleEditSave,
-    actionHelperId, helperAction, helperNotes, setHelperNotes, actionLoading,
-    openHelperAction, closeHelperAction, handleHelperAction,
+    requests,
+    reqFilter,
+    setReqFilter,
+    reqOffset,
+    setReqOffset,
+    helpers,
+    helpFilter,
+    setHelpFilter,
+    helpOffset,
+    setHelpOffset,
+    editId,
+    editData,
+    setEditData,
+    editLoading,
+    openEditModal,
+    closeEditModal,
+    handleEditSave,
+    actionHelperId,
+    helperAction,
+    helperNotes,
+    setHelperNotes,
+    actionLoading,
+    openHelperAction,
+    closeHelperAction,
+    handleHelperAction,
     loading,
-  } = useITHilfeAdmin()
+  } = useITHilfeAdmin();
 
   return (
     <div className="space-y-6">
@@ -51,7 +77,7 @@ export default function ITHilfeAdminClient() {
           drops onto its own line instead of overlapping the tabs. */}
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border">
         <div className="flex gap-1">
-          {TABS.map(tabDef => (
+          {TABS.map((tabDef) => (
             <Button
               key={tabDef.id}
               variant="ghost"
@@ -69,7 +95,13 @@ export default function ITHilfeAdminClient() {
           ))}
         </div>
         {tab === 'requests' && (
-          <Button as={Link} href="/it-hilfe/create" variant="outline" size="sm" className="mb-2 inline-flex items-center gap-2">
+          <Button
+            as={Link}
+            href="/it-hilfe/create"
+            variant="outline"
+            size="sm"
+            className="mb-2 inline-flex items-center gap-2"
+          >
             <HelpCircle className="w-4 h-4" />
             {t('topActions.newRequest')}
           </Button>
@@ -131,7 +163,7 @@ export default function ITHilfeAdminClient() {
         />
       )}
     </div>
-  )
+  );
 }
 
 /**
@@ -142,30 +174,34 @@ export default function ITHilfeAdminClient() {
  * Takes a translator (admin.itHilfe namespace) so strings are localized
  * at the call site rather than hardcoded.
  */
-function deriveHeroState(stats: Stats, onJumpToRequests: () => void, t: ITHilfeTranslator): {
-  tone: HeroTone
-  icon: typeof HelpCircle
-  headline: string
-  sub: string
-  cta?: HeroCta
-  kpis: HeroKpi[]
+function deriveHeroState(
+  stats: Stats,
+  onJumpToRequests: () => void,
+  t: ITHilfeTranslator,
+): {
+  tone: HeroTone;
+  icon: typeof HelpCircle;
+  headline: string;
+  sub: string;
+  cta?: HeroCta;
+  kpis: HeroKpi[];
 } {
-  const openRequests = stats.byStatus.open ?? 0
-  const urgentRequests = stats.byUrgency.urgent ?? 0
-  const activeTechniker = stats.activeHelpers
-  const verifiedTechniker = stats.verifiedHelpers
-  const resolutionPct = stats.resolutionRate
+  const openRequests = stats.byStatus.open ?? 0;
+  const urgentRequests = stats.byUrgency.urgent ?? 0;
+  const activeTechniker = stats.activeHelpers;
+  const verifiedTechniker = stats.verifiedHelpers;
+  const resolutionPct = stats.resolutionRate;
   // Technicians self-register (community flow) — the admin's action for an empty
   // roster is to view/recruit via the technician directory, not review applications
   // (the pro-application flow was removed).
-  const TECHNIKER_HREF = '/it-hilfe/techniker'
+  const TECHNIKER_HREF = '/it-hilfe/techniker';
 
   const kpis: HeroKpi[] = [
     { label: t('hero.kpis.open'), value: openRequests },
     { label: t('hero.kpis.activeTechniker'), value: activeTechniker },
     { label: t('hero.kpis.verified'), value: verifiedTechniker },
     { label: t('hero.kpis.resolutionRate'), value: `${resolutionPct}%` },
-  ]
+  ];
 
   if (urgentRequests > 0) {
     return {
@@ -175,7 +211,7 @@ function deriveHeroState(stats: Stats, onJumpToRequests: () => void, t: ITHilfeT
       sub: t('hero.urgent.sub'),
       cta: { label: t('hero.urgent.cta'), onClick: onJumpToRequests },
       kpis,
-    }
+    };
   }
   if (openRequests > 0 && activeTechniker === 0) {
     return {
@@ -185,7 +221,7 @@ function deriveHeroState(stats: Stats, onJumpToRequests: () => void, t: ITHilfeT
       sub: t('hero.openNoTechniker.sub'),
       cta: { label: t('hero.openNoTechniker.cta'), href: TECHNIKER_HREF },
       kpis,
-    }
+    };
   }
   if (openRequests > 0) {
     return {
@@ -195,7 +231,7 @@ function deriveHeroState(stats: Stats, onJumpToRequests: () => void, t: ITHilfeT
       sub: t('hero.openWithTechniker.sub', { technikerCount: activeTechniker }),
       cta: { label: t('hero.openWithTechniker.cta'), onClick: onJumpToRequests },
       kpis,
-    }
+    };
   }
   if (activeTechniker === 0) {
     return {
@@ -205,7 +241,7 @@ function deriveHeroState(stats: Stats, onJumpToRequests: () => void, t: ITHilfeT
       sub: t('hero.noTechniker.sub'),
       cta: { label: t('hero.noTechniker.cta'), href: TECHNIKER_HREF },
       kpis,
-    }
+    };
   }
   return {
     tone: 'healthy',
@@ -213,11 +249,19 @@ function deriveHeroState(stats: Stats, onJumpToRequests: () => void, t: ITHilfeT
     headline: t('hero.healthy.headline'),
     sub: t('hero.healthy.sub', { total: stats.total, percent: resolutionPct }),
     kpis,
-  }
+  };
 }
 
-function HeroStatus({ stats, onJumpToRequests, t }: { stats: Stats; onJumpToRequests: () => void; t: ITHilfeTranslator }) {
-  const s = deriveHeroState(stats, onJumpToRequests, t)
+function HeroStatus({
+  stats,
+  onJumpToRequests,
+  t,
+}: {
+  stats: Stats;
+  onJumpToRequests: () => void;
+  t: ITHilfeTranslator;
+}) {
+  const s = deriveHeroState(stats, onJumpToRequests, t);
   return (
     <AdminHeroStatus
       tone={s.tone}
@@ -227,7 +271,7 @@ function HeroStatus({ stats, onJumpToRequests, t }: { stats: Stats; onJumpToRequ
       cta={s.cta}
       kpis={s.kpis}
     />
-  )
+  );
 }
 
-export { deriveHeroState as __test__deriveHeroState }
+export { deriveHeroState as __test__deriveHeroState };

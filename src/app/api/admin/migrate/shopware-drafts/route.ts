@@ -16,62 +16,69 @@
  *     kurzbeschreibung?, imageUrl?, productNumber? }] }
  */
 
-import { NextRequest, NextResponse } from 'next/server'
-import { sql } from 'drizzle-orm'
-import { db } from '@/db'
-import { logger } from '@/lib/logger'
-import { createErfassungProduct } from '@/lib/erfassung/create-product'
-import { detectCategory } from '@/lib/erfassung/ai-classification'
-import { publishRevampitListing, REVAMPIT_SELLER_NAME } from '@/lib/marketplace/publish-revampit-listing'
-import { indexListing } from '@/lib/search/meilisearch'
+import { NextRequest, NextResponse } from 'next/server';
+import { sql } from 'drizzle-orm';
+import { db } from '@/db';
+import { logger } from '@/lib/logger';
+import { createErfassungProduct } from '@/lib/erfassung/create-product';
+import { detectCategory } from '@/lib/erfassung/ai-classification';
+import {
+  publishRevampitListing,
+  REVAMPIT_SELLER_NAME,
+} from '@/lib/marketplace/publish-revampit-listing';
+import { indexListing } from '@/lib/search/meilisearch';
 
-export const runtime = 'nodejs'
-export const maxDuration = 300
+export const runtime = 'nodejs';
+export const maxDuration = 300;
 
 interface InProduct {
-  produktname?: string
-  hersteller?: string
-  verkaufspreis?: string
-  kurzbeschreibung?: string
-  imageUrl?: string
-  productNumber?: string
+  produktname?: string;
+  hersteller?: string;
+  verkaufspreis?: string;
+  kurzbeschreibung?: string;
+  imageUrl?: string;
+  productNumber?: string;
 }
 
 function authorized(request: NextRequest): boolean {
-  const secret = process.env.CRON_SECRET
-  return Boolean(secret) && request.headers.get('authorization') === `Bearer ${secret}`
+  const secret = process.env.CRON_SECRET;
+  return Boolean(secret) && request.headers.get('authorization') === `Bearer ${secret}`;
 }
 
 async function fetchImageAsDataUrl(url: string): Promise<string | null> {
   try {
-    const res = await fetch(url, { headers: { 'User-Agent': 'RevampIT-Migration/1.0' } })
-    if (!res.ok) return null
-    const buf = Buffer.from(await res.arrayBuffer())
-    if (buf.byteLength === 0 || buf.byteLength > 8 * 1024 * 1024) return null
-    const contentType = res.headers.get('content-type')?.split(';')[0] || 'image/jpeg'
-    return `data:${contentType};base64,${buf.toString('base64')}`
+    const res = await fetch(url, { headers: { 'User-Agent': 'RevampIT-Migration/1.0' } });
+    if (!res.ok) return null;
+    const buf = Buffer.from(await res.arrayBuffer());
+    if (buf.byteLength === 0 || buf.byteLength > 8 * 1024 * 1024) return null;
+    const contentType = res.headers.get('content-type')?.split(';')[0] || 'image/jpeg';
+    return `data:${contentType};base64,${buf.toString('base64')}`;
   } catch {
-    return null
+    return null;
   }
 }
 
 export async function POST(request: NextRequest) {
   if (!authorized(request)) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  const body = await request.json().catch(() => null) as
-    { mode?: string; userId?: string; products?: InProduct[]; limit?: number } | null
-  const userId = body?.userId
+  const body = (await request.json().catch(() => null)) as {
+    mode?: string;
+    userId?: string;
+    products?: InProduct[];
+    limit?: number;
+  } | null;
+  const userId = body?.userId;
   if (!userId) {
-    return NextResponse.json({ error: 'userId required' }, { status: 400 })
+    return NextResponse.json({ error: 'userId required' }, { status: 400 });
   }
 
   // Publish mode: turn the imported drafts into live is_revampit marketplace
   // listings (images already on R2 carry over to listing_images). Batched via
   // `limit`; call repeatedly until `remaining` is 0.
   if (body?.mode === 'publish') {
-    const limit = Math.min(Math.max(Number(body.limit) || 50, 1), 200)
+    const limit = Math.min(Math.max(Number(body.limit) || 50, 1), 200);
     const rows = await db.execute(sql`
       SELECT ii.id AS inv_id
       FROM inventory_items ii
@@ -79,16 +86,27 @@ export async function POST(request: NextRequest) {
       LEFT JOIN listings l ON l.inventory_item_id = ii.id
       WHERE p.specifications->>'Shopware-Nr.' IS NOT NULL AND l.id IS NULL
       LIMIT ${limit}
-    `)
-    const pubResults: Array<{ invId: string; status: string; listingId?: string | null; reason?: string }> = []
+    `);
+    const pubResults: Array<{
+      invId: string;
+      status: string;
+      listingId?: string | null;
+      reason?: string;
+    }> = [];
     for (const row of rows.rows as Array<{ inv_id: string }>) {
-      const invId = row.inv_id
+      const invId = row.inv_id;
       try {
-        const listingId = await db.transaction((tx) => publishRevampitListing(tx, invId, { verifiedBy: userId }))
-        pubResults.push({ invId, status: listingId ? 'published' : 'skipped', listingId })
+        const listingId = await db.transaction((tx) =>
+          publishRevampitListing(tx, invId, { verifiedBy: userId }),
+        );
+        pubResults.push({ invId, status: listingId ? 'published' : 'skipped', listingId });
       } catch (error) {
-        logger.error('Shopware migration publish failed', { error, invId })
-        pubResults.push({ invId, status: 'error', reason: error instanceof Error ? error.message : 'unknown' })
+        logger.error('Shopware migration publish failed', { error, invId });
+        pubResults.push({
+          invId,
+          status: 'error',
+          reason: error instanceof Error ? error.message : 'unknown',
+        });
       }
     }
     const remainingRes = await db.execute(sql`
@@ -97,14 +115,14 @@ export async function POST(request: NextRequest) {
       JOIN ai_extracted_products p ON ii.ai_product_id = p.id
       LEFT JOIN listings l ON l.inventory_item_id = ii.id
       WHERE p.specifications->>'Shopware-Nr.' IS NOT NULL AND l.id IS NULL
-    `)
-    const remaining = (remainingRes.rows[0] as { n: number } | undefined)?.n ?? 0
+    `);
+    const remaining = (remainingRes.rows[0] as { n: number } | undefined)?.n ?? 0;
     const summary = pubResults.reduce<Record<string, number>>((acc, r) => {
-      acc[r.status] = (acc[r.status] || 0) + 1
-      return acc
-    }, {})
-    logger.info('Shopware migration publish batch', { summary, remaining })
-    return NextResponse.json({ mode: 'publish', summary, remaining })
+      acc[r.status] = (acc[r.status] || 0) + 1;
+      return acc;
+    }, {});
+    logger.info('Shopware migration publish batch', { summary, remaining });
+    return NextResponse.json({ mode: 'publish', summary, remaining });
   }
 
   // Reindex mode: push the migrated listings' CURRENT db state (e.g. the fixed
@@ -121,9 +139,9 @@ export async function POST(request: NextRequest) {
       JOIN inventory_items ii ON l.inventory_item_id = ii.id
       JOIN ai_extracted_products p ON ii.ai_product_id = p.id
       WHERE p.specifications->>'Shopware-Nr.' IS NOT NULL
-    `)
-    let indexed = 0
-    let failed = 0
+    `);
+    let indexed = 0;
+    let failed = 0;
     for (const row of rows.rows as Array<Record<string, unknown>>) {
       try {
         await indexListing({
@@ -147,15 +165,15 @@ export async function POST(request: NextRequest) {
           favorite_count: Number(row.favorite_count) || 0,
           created_at: new Date(String(row.created_at)).toISOString(),
           thumbnail: (row.thumbnail as string) ?? null,
-        })
-        indexed++
+        });
+        indexed++;
       } catch (error) {
-        failed++
-        logger.error('Shopware migration reindex failed', { error, id: row.id })
+        failed++;
+        logger.error('Shopware migration reindex failed', { error, id: row.id });
       }
     }
-    logger.info('Shopware migration reindex complete', { indexed, failed })
-    return NextResponse.json({ mode: 'reindex', indexed, failed })
+    logger.info('Shopware migration reindex complete', { indexed, failed });
+    return NextResponse.json({ mode: 'reindex', indexed, failed });
   }
 
   // Recategorize mode: re-run detectCategory on migrated products that landed
@@ -168,56 +186,69 @@ export async function POST(request: NextRequest) {
       JOIN inventory_items ii ON ii.ai_product_id = p.id
       LEFT JOIN listings l ON l.inventory_item_id = ii.id
       WHERE p.specifications->>'Shopware-Nr.' IS NOT NULL AND (p.category IS NULL OR p.category = '')
-    `)
-    let updated = 0
-    let stillNone = 0
-    const byCat: Record<string, number> = {}
+    `);
+    let updated = 0;
+    let stillNone = 0;
+    const byCat: Record<string, number> = {};
     for (const row of rows.rows as Array<Record<string, unknown>>) {
-      const text = `${row.brand ?? ''} ${row.product_name ?? ''} ${row.short_description ?? ''}`
-      const cat = detectCategory(text)
-      if (!cat) { stillNone++; continue }
-      await db.execute(sql`UPDATE ai_extracted_products SET category = ${cat} WHERE id = ${String(row.product_id)}`)
-      if (row.listing_id) {
-        await db.execute(sql`UPDATE listings SET category = ${cat} WHERE id = ${String(row.listing_id)}`)
+      const text = `${row.brand ?? ''} ${row.product_name ?? ''} ${row.short_description ?? ''}`;
+      const cat = detectCategory(text);
+      if (!cat) {
+        stillNone++;
+        continue;
       }
-      updated++
-      byCat[cat] = (byCat[cat] || 0) + 1
+      await db.execute(
+        sql`UPDATE ai_extracted_products SET category = ${cat} WHERE id = ${String(row.product_id)}`,
+      );
+      if (row.listing_id) {
+        await db.execute(
+          sql`UPDATE listings SET category = ${cat} WHERE id = ${String(row.listing_id)}`,
+        );
+      }
+      updated++;
+      byCat[cat] = (byCat[cat] || 0) + 1;
     }
-    logger.info('Shopware migration recategorize complete', { updated, stillNone, byCat })
-    return NextResponse.json({ mode: 'recategorize', updated, stillNone, byCat })
+    logger.info('Shopware migration recategorize complete', { updated, stillNone, byCat });
+    return NextResponse.json({ mode: 'recategorize', updated, stillNone, byCat });
   }
 
-  const products = body?.products
+  const products = body?.products;
   if (!Array.isArray(products)) {
-    return NextResponse.json({ error: 'products[] required' }, { status: 400 })
+    return NextResponse.json({ error: 'products[] required' }, { status: 400 });
   }
 
-  const results: Array<{ nr?: string; status: string; itemUuid?: string; hasImage?: boolean; reason?: string }> = []
+  const results: Array<{
+    nr?: string;
+    status: string;
+    itemUuid?: string;
+    hasImage?: boolean;
+    reason?: string;
+  }> = [];
 
   for (const p of products) {
-    const nr = p.productNumber
+    const nr = p.productNumber;
     try {
       if (!p.hersteller || !p.produktname) {
-        results.push({ nr, status: 'skipped', reason: 'Hersteller/Produktname fehlt' })
-        continue
+        results.push({ nr, status: 'skipped', reason: 'Hersteller/Produktname fehlt' });
+        continue;
       }
 
       // Idempotency: skip if this Shopware number was already imported.
       if (nr) {
         const existing = await db.execute(
           sql`SELECT 1 FROM ai_extracted_products WHERE specifications->>'Shopware-Nr.' = ${nr} LIMIT 1`,
-        )
+        );
         if (existing.rows.length > 0) {
-          results.push({ nr, status: 'exists' })
-          continue
+          results.push({ nr, status: 'exists' });
+          continue;
         }
       }
 
-      const image = p.imageUrl ? await fetchImageAsDataUrl(p.imageUrl) : null
-      const price = Number.parseFloat(p.verkaufspreis || '') || 0
-      const specifications = { 'Shopware-Nr.': nr || '', Quelle: 'Shopware-Migration' }
+      const image = p.imageUrl ? await fetchImageAsDataUrl(p.imageUrl) : null;
+      const price = Number.parseFloat(p.verkaufspreis || '') || 0;
+      const specifications = { 'Shopware-Nr.': nr || '', Quelle: 'Shopware-Migration' };
       // og:description is truncated with an ellipsis — trim it for the draft.
-      const beschreibung = (p.kurzbeschreibung || '').replace(/[.…]+\s*$/, '').trim()
+      const beschreibung = (p.kurzbeschreibung || '').replace(/[.…]+\s*$/, '').trim();
 
       const created = await db.transaction((tx) =>
         createErfassungProduct(
@@ -236,19 +267,23 @@ export async function POST(request: NextRequest) {
           tx,
           { source: 'csv_import' },
         ),
-      )
+      );
 
-      results.push({ nr, status: 'created', itemUuid: created.itemUUID, hasImage: Boolean(image) })
+      results.push({ nr, status: 'created', itemUuid: created.itemUUID, hasImage: Boolean(image) });
     } catch (error) {
-      logger.error('Shopware migration item failed', { error, nr })
-      results.push({ nr, status: 'error', reason: error instanceof Error ? error.message : 'unknown' })
+      logger.error('Shopware migration item failed', { error, nr });
+      results.push({
+        nr,
+        status: 'error',
+        reason: error instanceof Error ? error.message : 'unknown',
+      });
     }
   }
 
   const summary = results.reduce<Record<string, number>>((acc, r) => {
-    acc[r.status] = (acc[r.status] || 0) + 1
-    return acc
-  }, {})
-  logger.info('Shopware migration batch complete', { summary, count: products.length })
-  return NextResponse.json({ summary, results })
+    acc[r.status] = (acc[r.status] || 0) + 1;
+    return acc;
+  }, {});
+  logger.info('Shopware migration batch complete', { summary, count: products.length });
+  return NextResponse.json({ summary, results });
 }

@@ -10,15 +10,15 @@
  * (their own work already sits in PersonalSection directly above this).
  */
 
-import Link from 'next/link'
-import { Users, ArrowRight, AlertTriangle } from 'lucide-react'
-import { Avatar } from '@/components/ui/Avatar'
-import { focusFreshness } from '@/lib/team/focus-freshness'
-import { getTeamCurrent } from '@/lib/dashboard/team-current'
+import Link from 'next/link';
+import { Users, ArrowRight, AlertTriangle } from 'lucide-react';
+import { Avatar } from '@/components/ui/Avatar';
+import { focusFreshness } from '@/lib/team/focus-freshness';
+import { getTeamCurrent } from '@/lib/dashboard/team-current';
 
 export async function TeamCurrentWidget({ userId }: { userId: string }) {
-  const members = await getTeamCurrent(userId)
-  if (members.length === 0) return null
+  const members = await getTeamCurrent(userId);
+  if (members.length === 0) return null;
 
   return (
     <section aria-labelledby="team-current-title">
@@ -40,10 +40,10 @@ export async function TeamCurrentWidget({ userId }: { userId: string }) {
 
       <ul role="list" className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
         {members.map((m) => {
-          const name = m.display_name || m.user_name || 'Team'
-          const fresh = focusFreshness(m.current_focus_updated_at)
-          const isStale = Boolean(m.current_focus) && Boolean(fresh?.isStale)
-          const line = m.current_focus || m.top_task_title || 'Aktiv'
+          const name = m.display_name || m.user_name || 'Team';
+          const fresh = focusFreshness(m.current_focus_updated_at);
+          const isStale = Boolean(m.current_focus) && Boolean(fresh?.isStale);
+          const line = m.current_focus || m.top_task_title || 'Aktiv';
           return (
             <li key={m.profile_id}>
               <Link
@@ -54,7 +54,12 @@ export async function TeamCurrentWidget({ userId }: { userId: string }) {
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium text-text-primary">{name}</p>
                   <p className="flex items-center gap-1 truncate text-xs text-text-tertiary">
-                    {isStale && <AlertTriangle className="h-3 w-3 shrink-0 text-warning-500" aria-hidden="true" />}
+                    {isStale && (
+                      <AlertTriangle
+                        className="h-3 w-3 shrink-0 text-warning-500"
+                        aria-hidden="true"
+                      />
+                    )}
                     <span className="truncate">{line}</span>
                   </p>
                 </div>
@@ -69,9 +74,9 @@ export async function TeamCurrentWidget({ userId }: { userId: string }) {
                 )}
               </Link>
             </li>
-          )
+          );
         })}
       </ul>
     </section>
-  )
+  );
 }

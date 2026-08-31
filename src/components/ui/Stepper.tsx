@@ -1,33 +1,33 @@
-'use client'
+'use client';
 
-import React from 'react'
-import { Check } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { cn } from '@/lib/utils'
+import React from 'react';
+import { Check } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { cn } from '@/lib/utils';
 
 export interface Step {
-  label: string
-  description?: string
+  label: string;
+  description?: string;
 }
 
 interface StepperProps {
-  steps: Step[]
-  currentStep: number
-  onStepClick?: (step: number) => void
-  className?: string
+  steps: Step[];
+  currentStep: number;
+  onStepClick?: (step: number) => void;
+  className?: string;
 }
 
 const StepperComponent: React.FC<StepperProps> = ({
   steps,
   currentStep,
   onStepClick,
-  className
+  className,
 }) => {
-  const t = useTranslations('components.stepper')
+  const t = useTranslations('components.stepper');
 
   // currentStep === steps.length means "flow finished": every step renders
   // as completed instead of the last one staying eternally "active".
-  const displayIndex = Math.min(currentStep, steps.length - 1)
+  const displayIndex = Math.min(currentStep, steps.length - 1);
 
   return (
     <nav aria-label={t('progressLabel')} className={cn('w-full', className)}>
@@ -36,13 +36,9 @@ const StepperComponent: React.FC<StepperProps> = ({
         <p className="text-sm font-medium text-text-tertiary">
           {t('stepOf', { current: displayIndex + 1, total: steps.length })}
         </p>
-        <p className="text-lg font-semibold text-text-primary mt-1">
-          {steps[displayIndex]?.label}
-        </p>
+        <p className="text-lg font-semibold text-text-primary mt-1">{steps[displayIndex]?.label}</p>
         {steps[displayIndex]?.description && (
-          <p className="text-sm text-text-tertiary mt-1">
-            {steps[displayIndex].description}
-          </p>
+          <p className="text-sm text-text-tertiary mt-1">{steps[displayIndex].description}</p>
         )}
         {/* Progress bar */}
         <div className="mt-4 h-2 bg-surface-overlay rounded-full overflow-hidden">
@@ -56,17 +52,14 @@ const StepperComponent: React.FC<StepperProps> = ({
       {/* Desktop view - full stepper */}
       <ol className="hidden sm:flex items-center w-full">
         {steps.map((step, index) => {
-          const isCompleted = index < currentStep
-          const isCurrent = index === currentStep
-          const isClickable = onStepClick && index < currentStep
+          const isCompleted = index < currentStep;
+          const isCurrent = index === currentStep;
+          const isClickable = onStepClick && index < currentStep;
 
           return (
             <li
               key={step.label}
-              className={cn(
-                'flex items-center',
-                index !== steps.length - 1 && 'flex-1'
-              )}
+              className={cn('flex items-center', index !== steps.length - 1 && 'flex-1')}
             >
               <button
                 type="button"
@@ -75,7 +68,7 @@ const StepperComponent: React.FC<StepperProps> = ({
                 className={cn(
                   'flex items-center gap-3 group',
                   isClickable && 'cursor-pointer',
-                  !isClickable && 'cursor-default'
+                  !isClickable && 'cursor-default',
                 )}
               >
                 {/* Step circle */}
@@ -85,7 +78,7 @@ const StepperComponent: React.FC<StepperProps> = ({
                     isCompleted && 'bg-action border-action',
                     isCurrent && 'border-action bg-surface-base',
                     !isCompleted && !isCurrent && 'border-default bg-surface-base',
-                    isClickable && 'group-hover:border-action group-hover:bg-action-muted'
+                    isClickable && 'group-hover:border-action group-hover:bg-action-muted',
                   )}
                 >
                   {isCompleted ? (
@@ -95,7 +88,7 @@ const StepperComponent: React.FC<StepperProps> = ({
                       className={cn(
                         'text-sm font-semibold',
                         isCurrent && 'text-action',
-                        !isCurrent && 'text-text-muted'
+                        !isCurrent && 'text-text-muted',
                       )}
                     >
                       {index + 1}
@@ -110,15 +103,13 @@ const StepperComponent: React.FC<StepperProps> = ({
                       'text-sm font-medium',
                       isCompleted && 'text-action',
                       isCurrent && 'text-action',
-                      !isCompleted && !isCurrent && 'text-text-muted'
+                      !isCompleted && !isCurrent && 'text-text-muted',
                     )}
                   >
                     {step.label}
                   </p>
                   {step.description && (
-                    <p className="text-xs text-text-tertiary mt-0.5">
-                      {step.description}
-                    </p>
+                    <p className="text-xs text-text-tertiary mt-0.5">{step.description}</p>
                   )}
                 </div>
               </button>
@@ -128,16 +119,16 @@ const StepperComponent: React.FC<StepperProps> = ({
                 <div
                   className={cn(
                     'flex-1 h-0.5 mx-4 transition-colors duration-200',
-                    isCompleted ? 'bg-action' : 'bg-surface-overlay'
+                    isCompleted ? 'bg-action' : 'bg-surface-overlay',
                   )}
                 />
               )}
             </li>
-          )
+          );
         })}
       </ol>
     </nav>
-  )
-}
+  );
+};
 
-export const Stepper = React.memo(StepperComponent)
+export const Stepper = React.memo(StepperComponent);

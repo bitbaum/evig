@@ -1,33 +1,33 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Loader2, Save } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Select } from '@/components/ui/select'
-import { FormField } from '@/components/ui/form-field'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { AIFormAssist } from '@/components/ai/AIFormAssist'
-import { apiFetch } from '@/lib/api/client'
-import { ROUTES } from '@/config/routes'
-import { TEAM_ACCENT_OPTIONS, TEAM_ACCENT_LABELS } from '@/config/teams'
-import type { TeamDetail } from '@/lib/schemas/teams'
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Loader2, Save } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select } from '@/components/ui/select';
+import { FormField } from '@/components/ui/form-field';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { AIFormAssist } from '@/components/ai/AIFormAssist';
+import { apiFetch } from '@/lib/api/client';
+import { ROUTES } from '@/config/routes';
+import { TEAM_ACCENT_OPTIONS, TEAM_ACCENT_LABELS } from '@/config/teams';
+import type { TeamDetail } from '@/lib/schemas/teams';
 
 /** Split a comma/newline list into a clean string[] (mail folders). */
 function parseFolders(raw: string): string[] {
   return raw
     .split(/[\n,]/)
     .map((s) => s.trim())
-    .filter(Boolean)
+    .filter(Boolean);
 }
 
 export default function TeamFormClient({ team }: { team?: TeamDetail }) {
-  const router = useRouter()
-  const isEdit = !!team
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const router = useRouter();
+  const isEdit = !!team;
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({
     name: team?.name ?? '',
     purpose: team?.purpose ?? '',
@@ -36,11 +36,12 @@ export default function TeamFormClient({ team }: { team?: TeamDetail }) {
     meeting_cadence: team?.meeting_cadence ?? '',
     sort_order: String(team?.sort_order ?? 0),
     is_active: team?.is_active ?? true,
-  })
+  });
 
-  const set = (k: keyof typeof form) => (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
-  ) => setForm((f) => ({ ...f, [k]: e.target.value }))
+  const set =
+    (k: keyof typeof form) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+      setForm((f) => ({ ...f, [k]: e.target.value }));
 
   // AI fills string fields directly; mail_folders arrives as an array (the
   // form holds it newline-joined) and accent must stay within the config enum.
@@ -50,7 +51,11 @@ export default function TeamFormClient({ team }: { team?: TeamDetail }) {
       ...(typeof data.name === 'string' && data.name ? { name: data.name } : {}),
       ...(typeof data.purpose === 'string' && data.purpose ? { purpose: data.purpose } : {}),
       ...(Array.isArray(data.mail_folders) && data.mail_folders.length
-        ? { mail_folders: data.mail_folders.filter((m): m is string => typeof m === 'string').join('\n') }
+        ? {
+            mail_folders: data.mail_folders
+              .filter((m): m is string => typeof m === 'string')
+              .join('\n'),
+          }
         : {}),
       ...(typeof data.meeting_cadence === 'string' && data.meeting_cadence
         ? { meeting_cadence: data.meeting_cadence }
@@ -58,13 +63,13 @@ export default function TeamFormClient({ team }: { team?: TeamDetail }) {
       ...(typeof data.accent === 'string' && (TEAM_ACCENT_OPTIONS as string[]).includes(data.accent)
         ? { accent: data.accent }
         : {}),
-    }))
+    }));
   }
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setLoading(true)
-    setError(null)
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
 
     const body = {
       name: form.name,
@@ -74,19 +79,19 @@ export default function TeamFormClient({ team }: { team?: TeamDetail }) {
       meeting_cadence: form.meeting_cadence || null,
       sort_order: Number(form.sort_order) || 0,
       is_active: form.is_active,
-    }
+    };
 
     const res = isEdit
       ? await apiFetch<TeamDetail>(`/api/admin/teams/${team!.id}`, { method: 'PUT', body })
-      : await apiFetch<TeamDetail>('/api/admin/teams', { method: 'POST', body })
+      : await apiFetch<TeamDetail>('/api/admin/teams', { method: 'POST', body });
 
     if (!res.success || !res.data) {
-      setError(res.error || 'Speichern fehlgeschlagen')
-      setLoading(false)
-      return
+      setError(res.error || 'Speichern fehlgeschlagen');
+      setLoading(false);
+      return;
     }
-    router.push(ROUTES.admin.teamBySlug(res.data.slug))
-    router.refresh()
+    router.push(ROUTES.admin.teamBySlug(res.data.slug));
+    router.refresh();
   }
 
   return (
@@ -154,11 +159,21 @@ export default function TeamFormClient({ team }: { team?: TeamDetail }) {
           </FormField>
 
           <FormField label="Reihenfolge" htmlFor="sort_order" hint="Kleiner = weiter oben">
-            <Input id="sort_order" type="number" min={0} value={form.sort_order} onChange={set('sort_order')} />
+            <Input
+              id="sort_order"
+              type="number"
+              min={0}
+              value={form.sort_order}
+              onChange={set('sort_order')}
+            />
           </FormField>
         </div>
 
-        <FormField label="Sitzungsrhythmus" htmlFor="meeting_cadence" hint="Optional, z.B. wöchentlich">
+        <FormField
+          label="Sitzungsrhythmus"
+          htmlFor="meeting_cadence"
+          hint="Optional, z.B. wöchentlich"
+        >
           <Input
             id="meeting_cadence"
             value={form.meeting_cadence}
@@ -188,5 +203,5 @@ export default function TeamFormClient({ team }: { team?: TeamDetail }) {
         </Button>
       </div>
     </form>
-  )
+  );
 }

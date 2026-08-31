@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
+import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 import {
   MessageSquare,
   Send,
@@ -10,290 +10,298 @@ import {
   User,
   Clock,
   Check,
-  CheckCheck
-} from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { apiFetch } from '@/lib/api/client'
-import { logger } from '@/lib/logger'
-import { formatDateShort, formatTime } from '@/lib/date-formats'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Drawer } from '@/components/ui/Drawer'
+  CheckCheck,
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { apiFetch } from '@/lib/api/client';
+import { logger } from '@/lib/logger';
+import { formatDateShort, formatTime } from '@/lib/date-formats';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Drawer } from '@/components/ui/Drawer';
 
 interface Conversation {
-  id: string
-  title: string
-  type: string
+  id: string;
+  title: string;
+  type: string;
   other_participant: {
-    id: string
-    name: string
-    email: string
-    role: string
-  }
-  last_message_preview: string
-  last_message_at: string
-  unread_count: number
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+  };
+  last_message_preview: string;
+  last_message_at: string;
+  unread_count: number;
 }
 
 interface Message {
-  id: string
-  content: string
-  sender_id: string
-  recipient_id: string
-  is_read: boolean
-  created_at: string
-  sender_name: string
+  id: string;
+  content: string;
+  sender_id: string;
+  recipient_id: string;
+  is_read: boolean;
+  created_at: string;
+  sender_name: string;
 }
 
 interface MessageSidebarProps {
-  isOpen: boolean
-  onClose: () => void
-  initialConversationId?: string | null
+  isOpen: boolean;
+  onClose: () => void;
+  initialConversationId?: string | null;
 }
 
 export function MessageSidebar({ isOpen, onClose, initialConversationId }: MessageSidebarProps) {
-  const t = useTranslations('components.messageSidebar')
-  const { data: session } = useSession()
-  const [conversations, setConversations] = useState<Conversation[]>([])
+  const t = useTranslations('components.messageSidebar');
+  const { data: session } = useSession();
+  const [conversations, setConversations] = useState<Conversation[]>([]);
   // undefined = user hasn't chosen yet → the deep-link prop decides;
   // null = user explicitly went back to the list.
-  const [userSelection, setSelectedConversation] = useState<string | null | undefined>(undefined)
+  const [userSelection, setSelectedConversation] = useState<string | null | undefined>(undefined);
   const selectedConversation =
-    userSelection !== undefined ? userSelection : (isOpen ? initialConversationId ?? null : null)
-  const [messages, setMessages] = useState<Message[]>([])
-  const [newMessage, setNewMessage] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
+    userSelection !== undefined ? userSelection : isOpen ? (initialConversationId ?? null) : null;
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [newMessage, setNewMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     if (isOpen && session?.user) {
-      fetchConversations()
+      fetchConversations();
     }
-  }, [isOpen, session])
+  }, [isOpen, session]);
 
   useEffect(() => {
     if (selectedConversation) {
-      fetchMessages(selectedConversation)
+      fetchMessages(selectedConversation);
     }
-  }, [selectedConversation])
+  }, [selectedConversation]);
 
   const fetchConversations = async () => {
     try {
-      const result = await apiFetch<{ conversations: Conversation[] }>('/api/messages/conversations')
+      const result = await apiFetch<{ conversations: Conversation[] }>(
+        '/api/messages/conversations',
+      );
       if (result.success && result.data?.conversations) {
-        setConversations(result.data.conversations)
+        setConversations(result.data.conversations);
       }
     } catch (error) {
-      logger.error('Error fetching conversations', { error })
+      logger.error('Error fetching conversations', { error });
     }
-  }
+  };
 
   const fetchMessages = async (conversationId: string) => {
     try {
-      setIsLoading(true)
-      const result = await apiFetch<{ messages: Message[] }>(`/api/messages/${conversationId}`)
+      setIsLoading(true);
+      const result = await apiFetch<{ messages: Message[] }>(`/api/messages/${conversationId}`);
       if (result.success && result.data?.messages) {
-        setMessages(result.data.messages)
+        setMessages(result.data.messages);
       }
     } catch (error) {
-      logger.error('Error fetching messages', { error, conversationId })
+      logger.error('Error fetching messages', { error, conversationId });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const sendMessage = async () => {
-    if (!selectedConversation || !newMessage.trim()) return
+    if (!selectedConversation || !newMessage.trim()) return;
 
     try {
       const result = await apiFetch<void>(`/api/messages/${selectedConversation}`, {
         method: 'POST',
-        body: { content: newMessage.trim() }
-      })
+        body: { content: newMessage.trim() },
+      });
 
       if (result.success) {
-        setNewMessage('')
+        setNewMessage('');
         // Refresh messages
-        fetchMessages(selectedConversation)
+        fetchMessages(selectedConversation);
         // Refresh conversations to update last message
-        fetchConversations()
+        fetchConversations();
       }
     } catch (error) {
-      logger.error('Error sending message', { error, conversationId: selectedConversation })
+      logger.error('Error sending message', { error, conversationId: selectedConversation });
     }
-  }
+  };
 
-  const filteredConversations = conversations.filter(conv =>
-    conv.other_participant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    conv.title?.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  const filteredConversations = conversations.filter(
+    (conv) =>
+      conv.other_participant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      conv.title?.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
 
   return (
     <Drawer isOpen={isOpen} onClose={onClose} side="right" ariaLabel={t('title')}>
-        {/* Header */}
-        <div className="p-4 border-b border-strong flex items-center justify-between">
-          <Heading level={2} className="text-lg font-semibold">{t('title')}</Heading>
-          <Button onClick={onClose} variant="ghost" size="icon" className="p-1">
-            ×
-          </Button>
-        </div>
+      {/* Header */}
+      <div className="p-4 border-b border-strong flex items-center justify-between">
+        <Heading level={2} className="text-lg font-semibold">
+          {t('title')}
+        </Heading>
+        <Button onClick={onClose} variant="ghost" size="icon" className="p-1">
+          ×
+        </Button>
+      </div>
 
-        <div className="flex-1 flex flex-col min-h-0">
-          {/* Conversations List */}
-          {!selectedConversation && (
-            <div className="flex-1 flex flex-col">
-              {/* Search */}
-              <div className="p-4 border-b border-strong">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
-                  <Input
-                    type="text"
-                    placeholder={t('searchPlaceholder')}
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
-              </div>
-
-              {/* Conversations */}
-              <div className="flex-1 overflow-y-auto">
-                {filteredConversations.length === 0 ? (
-                  <div className="p-8 text-center text-text-tertiary">
-                    <MessageSquare className="w-12 h-12 mx-auto mb-4 text-text-muted" />
-                    <p>{t('noConversations')}</p>
-                  </div>
-                ) : (
-                  filteredConversations.map((conversation) => (
-                    <Button
-                      key={conversation.id}
-                      variant="ghost"
-                      onClick={() => setSelectedConversation(conversation.id)}
-                      className="w-full p-4 border-b border-subtle hover:bg-surface-raised text-left flex items-start gap-3 h-auto rounded-none justify-start"
-                    >
-                      <div className="w-10 h-10 bg-surface-overlay rounded-full flex items-center justify-center shrink-0">
-                        <User className="w-5 h-5 text-text-secondary" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center justify-between mb-1">
-                          <p className="font-medium truncate">
-                            {conversation.other_participant.name}
-                          </p>
-                          <span className="text-xs text-text-tertiary shrink-0">
-                            {formatDateShort(conversation.last_message_at)}
-                          </span>
-                        </div>
-                        <p className="text-sm text-text-secondary truncate mb-1">
-                          {conversation.last_message_preview || t('newConversation')}
-                        </p>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs text-text-tertiary capitalize">
-                            {conversation.type}
-                          </span>
-                          {conversation.unread_count > 0 && (
-                            <span className="bg-action text-action-text text-xs px-2 py-1 rounded-full">
-                              {conversation.unread_count}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-                    </Button>
-                  ))
-                )}
+      <div className="flex-1 flex flex-col min-h-0">
+        {/* Conversations List */}
+        {!selectedConversation && (
+          <div className="flex-1 flex flex-col">
+            {/* Search */}
+            <div className="p-4 border-b border-strong">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-text-tertiary" />
+                <Input
+                  type="text"
+                  placeholder={t('searchPlaceholder')}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
               </div>
             </div>
-          )}
 
-          {/* Messages View */}
-          {selectedConversation && (
-            <div className="flex-1 flex flex-col">
-              {/* Message Header */}
-              <div className="p-4 border-b border-strong flex items-center justify-between">
-                <Button onClick={() => setSelectedConversation(null)} variant="ghost" size="icon" className="p-1">
-                  ←
-                </Button>
-                <div className="flex-1 text-center">
-                  <Heading level={3} className="text-sm font-medium">
-                    {conversations.find(c => c.id === selectedConversation)?.other_participant.name}
-                  </Heading>
+            {/* Conversations */}
+            <div className="flex-1 overflow-y-auto">
+              {filteredConversations.length === 0 ? (
+                <div className="p-8 text-center text-text-tertiary">
+                  <MessageSquare className="w-12 h-12 mx-auto mb-4 text-text-muted" />
+                  <p>{t('noConversations')}</p>
                 </div>
-                <Button variant="ghost" size="icon" className="p-1">
-                  <MoreVertical className="w-4 h-4" />
-                </Button>
-              </div>
+              ) : (
+                filteredConversations.map((conversation) => (
+                  <Button
+                    key={conversation.id}
+                    variant="ghost"
+                    onClick={() => setSelectedConversation(conversation.id)}
+                    className="w-full p-4 border-b border-subtle hover:bg-surface-raised text-left flex items-start gap-3 h-auto rounded-none justify-start"
+                  >
+                    <div className="w-10 h-10 bg-surface-overlay rounded-full flex items-center justify-center shrink-0">
+                      <User className="w-5 h-5 text-text-secondary" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between mb-1">
+                        <p className="font-medium truncate">
+                          {conversation.other_participant.name}
+                        </p>
+                        <span className="text-xs text-text-tertiary shrink-0">
+                          {formatDateShort(conversation.last_message_at)}
+                        </span>
+                      </div>
+                      <p className="text-sm text-text-secondary truncate mb-1">
+                        {conversation.last_message_preview || t('newConversation')}
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-text-tertiary capitalize">
+                          {conversation.type}
+                        </span>
+                        {conversation.unread_count > 0 && (
+                          <span className="bg-action text-action-text text-xs px-2 py-1 rounded-full">
+                            {conversation.unread_count}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </Button>
+                ))
+              )}
+            </div>
+          </div>
+        )}
 
-              {/* Messages */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                {isLoading ? (
-                  <div className="text-center text-text-tertiary">{t('loading')}</div>
-                ) : messages.length === 0 ? (
-                  <div className="text-center text-text-tertiary">
-                    <MessageSquare className="w-12 h-12 mx-auto mb-4 text-text-muted" />
-                    <p>{t('noMessages')}</p>
-                  </div>
-                ) : (
-                  messages.map((message) => {
-                    const isOwn = message.sender_id === session?.user?.id
-                    return (
+        {/* Messages View */}
+        {selectedConversation && (
+          <div className="flex-1 flex flex-col">
+            {/* Message Header */}
+            <div className="p-4 border-b border-strong flex items-center justify-between">
+              <Button
+                onClick={() => setSelectedConversation(null)}
+                variant="ghost"
+                size="icon"
+                className="p-1"
+              >
+                ←
+              </Button>
+              <div className="flex-1 text-center">
+                <Heading level={3} className="text-sm font-medium">
+                  {conversations.find((c) => c.id === selectedConversation)?.other_participant.name}
+                </Heading>
+              </div>
+              <Button variant="ghost" size="icon" className="p-1">
+                <MoreVertical className="w-4 h-4" />
+              </Button>
+            </div>
+
+            {/* Messages */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              {isLoading ? (
+                <div className="text-center text-text-tertiary">{t('loading')}</div>
+              ) : messages.length === 0 ? (
+                <div className="text-center text-text-tertiary">
+                  <MessageSquare className="w-12 h-12 mx-auto mb-4 text-text-muted" />
+                  <p>{t('noMessages')}</p>
+                </div>
+              ) : (
+                messages.map((message) => {
+                  const isOwn = message.sender_id === session?.user?.id;
+                  return (
+                    <div
+                      key={message.id}
+                      className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`}
+                    >
                       <div
-                        key={message.id}
-                        className={`flex ${isOwn ? 'justify-end' : 'justify-start'}`}
+                        className={`max-w-xs px-4 py-2 rounded-lg ${
+                          isOwn
+                            ? 'bg-action text-action-text'
+                            : 'bg-surface-raised text-text-primary'
+                        }`}
                       >
+                        <p className="text-sm">{message.content}</p>
                         <div
-                          className={`max-w-xs px-4 py-2 rounded-lg ${
-                            isOwn
-                              ? 'bg-action text-action-text'
-                              : 'bg-surface-raised text-text-primary'
+                          className={`flex items-center gap-1 mt-1 text-xs ${
+                            isOwn ? 'text-action-text' : 'text-text-tertiary'
                           }`}
                         >
-                          <p className="text-sm">{message.content}</p>
-                          <div className={`flex items-center gap-1 mt-1 text-xs ${
-                            isOwn ? 'text-action-text' : 'text-text-tertiary'
-                          }`}>
-                            <span>{formatTime(message.created_at)}</span>
-                            {isOwn && (
-                              message.is_read ? (
-                                <CheckCheck className="w-3 h-3" />
-                              ) : (
-                                <Check className="w-3 h-3" />
-                              )
-                            )}
-                          </div>
+                          <span>{formatTime(message.created_at)}</span>
+                          {isOwn &&
+                            (message.is_read ? (
+                              <CheckCheck className="w-3 h-3" />
+                            ) : (
+                              <Check className="w-3 h-3" />
+                            ))}
                         </div>
                       </div>
-                    )
-                  })
-                )}
-              </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
 
-              {/* Message Input */}
-              <div className="p-4 border-t border-strong">
-                <div className="flex gap-2">
-                  <Input
-                    type="text"
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-                    placeholder={t('messagePlaceholder')}
-                    className="flex-1"
-                  />
-                  <Button
-                    onClick={sendMessage}
-                    disabled={!newMessage.trim()}
-                    variant="primary"
-                    className="p-2"
-                  >
-                    <Send className="w-4 h-4" />
-                  </Button>
-                </div>
+            {/* Message Input */}
+            <div className="p-4 border-t border-strong">
+              <div className="flex gap-2">
+                <Input
+                  type="text"
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                  placeholder={t('messagePlaceholder')}
+                  className="flex-1"
+                />
+                <Button
+                  onClick={sendMessage}
+                  disabled={!newMessage.trim()}
+                  variant="primary"
+                  className="p-2"
+                >
+                  <Send className="w-4 h-4" />
+                </Button>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
+      </div>
     </Drawer>
-  )
+  );
 }
-
-
-

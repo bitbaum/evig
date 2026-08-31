@@ -1,64 +1,65 @@
-'use client'
+'use client';
 
-import { useState, useCallback } from 'react'
-import { apiFetch } from '@/lib/api/client'
-import { logger } from '@/lib/logger'
-import type { VoiceProductData, AIFieldMetadata } from '@/types/erfassung'
+import { useState, useCallback } from 'react';
+import { apiFetch } from '@/lib/api/client';
+import { logger } from '@/lib/logger';
+import type { VoiceProductData, AIFieldMetadata } from '@/types/erfassung';
 
 interface VoiceResult {
-  transcription: string
-  data: VoiceProductData
+  transcription: string;
+  data: VoiceProductData;
   /** Per-field AI confidence — drives the form's field-confidence highlighting. */
-  metadata?: AIFieldMetadata
+  metadata?: AIFieldMetadata;
 }
 
 interface UseVoiceProductResult {
-  isProcessing: boolean
-  error: string | null
-  processRecording: (audioBlob: Blob) => Promise<VoiceResult | null>
+  isProcessing: boolean;
+  error: string | null;
+  processRecording: (audioBlob: Blob) => Promise<VoiceResult | null>;
 }
 
 export function useVoiceProduct(): UseVoiceProductResult {
-  const [isProcessing, setIsProcessing] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const processRecording = useCallback(async (audioBlob: Blob): Promise<VoiceResult | null> => {
-    setIsProcessing(true)
-    setError(null)
+    setIsProcessing(true);
+    setError(null);
 
     try {
-      logger.info('Processing voice recording', { size: audioBlob.size })
+      logger.info('Processing voice recording', { size: audioBlob.size });
 
-      const formData = new FormData()
-      formData.append('audio', audioBlob, 'recording.webm')
+      const formData = new FormData();
+      formData.append('audio', audioBlob, 'recording.webm');
 
-      const result = await apiFetch<{ transcription: string; data: VoiceProductData; metadata?: AIFieldMetadata }>(
-        '/api/admin/erfassung/voice',
-        { method: 'POST', body: formData, formData: true },
-      )
+      const result = await apiFetch<{
+        transcription: string;
+        data: VoiceProductData;
+        metadata?: AIFieldMetadata;
+      }>('/api/admin/erfassung/voice', { method: 'POST', body: formData, formData: true });
 
       if (!result.success || !result.data) {
-        throw new Error(result.error || 'Unbekannter Fehler')
+        throw new Error(result.error || 'Unbekannter Fehler');
       }
 
       return {
         transcription: result.data.transcription,
         data: result.data.data,
         metadata: result.data.metadata,
-      }
+      };
     } catch (err) {
-      const message = err instanceof Error ? err.message : 'Verarbeitung fehlgeschlagen'
-      logger.error('Voice processing failed', { error: err })
-      setError(message)
-      return null
+      const message = err instanceof Error ? err.message : 'Verarbeitung fehlgeschlagen';
+      logger.error('Voice processing failed', { error: err });
+      setError(message);
+      return null;
     } finally {
-      setIsProcessing(false)
+      setIsProcessing(false);
     }
-  }, [])
+  }, []);
 
   return {
     isProcessing,
     error,
     processRecording,
-  }
+  };
 }

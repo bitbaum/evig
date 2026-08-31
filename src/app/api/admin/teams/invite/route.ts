@@ -1,9 +1,9 @@
-import { NextRequest } from 'next/server'
-import { withAdmin, type ValidSession } from '@/lib/api/middleware'
-import { apiSuccess, apiError, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers'
-import { claimInviteSchema } from '@/lib/schemas/teams'
-import { createClaimToken, emailClaimInvite } from '@/lib/services/team-invites'
-import { logger } from '@/lib/logger'
+import { NextRequest } from 'next/server';
+import { withAdmin, type ValidSession } from '@/lib/api/middleware';
+import { apiSuccess, apiError, apiBadRequest, apiNotFound, apiForbidden } from '@/lib/api/helpers';
+import { claimInviteSchema } from '@/lib/schemas/teams';
+import { createClaimToken, emailClaimInvite } from '@/lib/services/team-invites';
+import { logger } from '@/lib/logger';
 
 /**
  * Mint a claim link for a placeholder member. Structural onboarding → super
@@ -14,25 +14,25 @@ import { logger } from '@/lib/logger'
 export const POST = withAdmin('teams', async (request: NextRequest, session: ValidSession) => {
   try {
     if (!session.user.isSuperAdmin) {
-      return apiForbidden('Nur Super-Admins können einladen')
+      return apiForbidden('Nur Super-Admins können einladen');
     }
-    const result = claimInviteSchema.safeParse(await request.json())
+    const result = claimInviteSchema.safeParse(await request.json());
     if (!result.success) {
-      return apiBadRequest('Validierung fehlgeschlagen', result.error.flatten().fieldErrors)
+      return apiBadRequest('Validierung fehlgeschlagen', result.error.flatten().fieldErrors);
     }
-    const { user_id, email } = result.data
+    const { user_id, email } = result.data;
 
     if (email) {
-      const invite = await emailClaimInvite(user_id, email, session.user.name || 'evig')
-      if (!invite) return apiNotFound('Platzhalter-Konto (oder bereits übernommen)')
-      return apiSuccess(invite)
+      const invite = await emailClaimInvite(user_id, email, session.user.name || 'evig');
+      if (!invite) return apiNotFound('Platzhalter-Konto (oder bereits übernommen)');
+      return apiSuccess(invite);
     }
 
-    const token = await createClaimToken(user_id)
-    if (!token) return apiNotFound('Platzhalter-Konto (oder bereits übernommen)')
-    return apiSuccess({ token, emailed: false })
+    const token = await createClaimToken(user_id);
+    if (!token) return apiNotFound('Platzhalter-Konto (oder bereits übernommen)');
+    return apiSuccess({ token, emailed: false });
   } catch (error) {
-    logger.error('Error creating claim invite', { error })
-    return apiError(error, 'Einladung konnte nicht erstellt werden')
+    logger.error('Error creating claim invite', { error });
+    return apiError(error, 'Einladung konnte nicht erstellt werden');
   }
-})
+});

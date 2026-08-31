@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Client-side browser for the presentation decks: live text search, sort, a
@@ -6,54 +6,56 @@
  * Kept a client component so the server page stays a thin auth + data shell.
  */
 
-import { useMemo, useState } from 'react'
-import { ExternalLink, Search, Presentation } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
-import { Card } from '@/components/ui/card'
-import { EmptyState } from '@/components/ui/EmptyState'
-import { AudienceBadge } from '@/components/admin/AudienceBadge'
-import { formatDateMonth } from '@/lib/date-formats'
-import { presentationUrl, type PresentationDeck } from '@/config/presentations'
+import { useMemo, useState } from 'react';
+import { ExternalLink, Search, Presentation } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { Card } from '@/components/ui/card';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { AudienceBadge } from '@/components/admin/AudienceBadge';
+import { formatDateMonth } from '@/lib/date-formats';
+import { presentationUrl, type PresentationDeck } from '@/config/presentations';
 import {
   CONTENT_AUDIENCE_VALUES,
   CONTENT_AUDIENCE_SHORT,
   type ContentAudience,
-} from '@/config/content-audience'
-import { CopyLinkButton } from './CopyLinkButton'
+} from '@/config/content-audience';
+import { CopyLinkButton } from './CopyLinkButton';
 
-type SortKey = 'date' | 'title'
+type SortKey = 'date' | 'title';
 
 export function PresentationsBrowser({ decks }: { decks: PresentationDeck[] }) {
-  const [query, setQuery] = useState('')
-  const [sort, setSort] = useState<SortKey>('date')
-  const [targetGroup, setTargetGroup] = useState('all')
-  const [audience, setAudience] = useState<ContentAudience | 'all'>('all')
+  const [query, setQuery] = useState('');
+  const [sort, setSort] = useState<SortKey>('date');
+  const [targetGroup, setTargetGroup] = useState('all');
+  const [audience, setAudience] = useState<ContentAudience | 'all'>('all');
 
   // Recipient options derive from the data — no hardcoded list to drift.
   const targetGroups = useMemo(
-    () => Array.from(new Set(decks.map(d => d.targetGroup))).sort((a, b) => a.localeCompare(b, 'de')),
-    [decks]
-  )
+    () =>
+      Array.from(new Set(decks.map((d) => d.targetGroup))).sort((a, b) => a.localeCompare(b, 'de')),
+    [decks],
+  );
 
   const visible = useMemo(() => {
-    const q = query.trim().toLowerCase()
+    const q = query.trim().toLowerCase();
     return decks
-      .filter(d => targetGroup === 'all' || d.targetGroup === targetGroup)
-      .filter(d => audience === 'all' || d.audience === audience)
-      .filter(d =>
-        !q ||
-        d.title.toLowerCase().includes(q) ||
-        d.description.toLowerCase().includes(q) ||
-        d.targetGroup.toLowerCase().includes(q)
+      .filter((d) => targetGroup === 'all' || d.targetGroup === targetGroup)
+      .filter((d) => audience === 'all' || d.audience === audience)
+      .filter(
+        (d) =>
+          !q ||
+          d.title.toLowerCase().includes(q) ||
+          d.description.toLowerCase().includes(q) ||
+          d.targetGroup.toLowerCase().includes(q),
       )
       .sort((a, b) =>
         sort === 'title'
           ? a.title.localeCompare(b.title, 'de')
-          : b.createdMonth.localeCompare(a.createdMonth) || a.title.localeCompare(b.title, 'de')
-      )
-  }, [decks, query, sort, targetGroup, audience])
+          : b.createdMonth.localeCompare(a.createdMonth) || a.title.localeCompare(b.title, 'de'),
+      );
+  }, [decks, query, sort, targetGroup, audience]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -67,7 +69,7 @@ export function PresentationsBrowser({ decks }: { decks: PresentationDeck[] }) {
           <Input
             type="search"
             value={query}
-            onChange={e => setQuery(e.target.value)}
+            onChange={(e) => setQuery(e.target.value)}
             placeholder="Präsentation suchen …"
             aria-label="Präsentationen durchsuchen"
             className="pl-9"
@@ -75,7 +77,7 @@ export function PresentationsBrowser({ decks }: { decks: PresentationDeck[] }) {
         </div>
         <Select
           value={sort}
-          onChange={e => setSort(e.target.value as SortKey)}
+          onChange={(e) => setSort(e.target.value as SortKey)}
           aria-label="Sortieren"
           className="sm:w-40"
         >
@@ -84,12 +86,12 @@ export function PresentationsBrowser({ decks }: { decks: PresentationDeck[] }) {
         </Select>
         <Select
           value={targetGroup}
-          onChange={e => setTargetGroup(e.target.value)}
+          onChange={(e) => setTargetGroup(e.target.value)}
           aria-label="Nach Publikum filtern"
           className="sm:w-44"
         >
           <option value="all">Alle Publika</option>
-          {targetGroups.map(g => (
+          {targetGroups.map((g) => (
             <option key={g} value={g}>
               {g}
             </option>
@@ -97,12 +99,12 @@ export function PresentationsBrowser({ decks }: { decks: PresentationDeck[] }) {
         </Select>
         <Select
           value={audience}
-          onChange={e => setAudience(e.target.value as ContentAudience | 'all')}
+          onChange={(e) => setAudience(e.target.value as ContentAudience | 'all')}
           aria-label="Nach Zugriff filtern"
           className="sm:w-44"
         >
           <option value="all">Jeder Zugriff</option>
-          {CONTENT_AUDIENCE_VALUES.map(a => (
+          {CONTENT_AUDIENCE_VALUES.map((a) => (
             <option key={a} value={a}>
               {CONTENT_AUDIENCE_SHORT[a]}
             </option>
@@ -124,13 +126,15 @@ export function PresentationsBrowser({ decks }: { decks: PresentationDeck[] }) {
         />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {visible.map(deck => (
+          {visible.map((deck) => (
             <Card
               key={deck.slug}
               className="flex flex-col p-5 hover:border-strong transition-colors"
             >
               <div className="flex items-start justify-between gap-2 mb-1">
-                <h3 className="text-base font-semibold text-text-primary leading-snug">{deck.title}</h3>
+                <h3 className="text-base font-semibold text-text-primary leading-snug">
+                  {deck.title}
+                </h3>
                 <AudienceBadge audience={deck.audience} showPublic />
               </div>
               <p className="text-sm text-text-secondary mb-3">{deck.description}</p>
@@ -162,5 +166,5 @@ export function PresentationsBrowser({ decks }: { decks: PresentationDeck[] }) {
         </div>
       )}
     </div>
-  )
+  );
 }

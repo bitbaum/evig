@@ -32,17 +32,17 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockGetServiceTypeBySlug = jest.fn()
-const mockGetServiceTypeById = jest.fn()
-const mockGetAllServiceTypes = jest.fn()
-const mockGetFeaturedServiceTypes = jest.fn()
-const mockGetBookableServiceTypes = jest.fn()
-const mockGetServiceTypesByCategory = jest.fn()
-const mockGetAllServiceSlugsFromDb = jest.fn()
-const mockGetAllServiceTypesForAdmin = jest.fn()
-const mockUpdateServiceType = jest.fn()
-const mockCreateServiceType = jest.fn()
-const mockDeleteServiceType = jest.fn()
+const mockGetServiceTypeBySlug = jest.fn();
+const mockGetServiceTypeById = jest.fn();
+const mockGetAllServiceTypes = jest.fn();
+const mockGetFeaturedServiceTypes = jest.fn();
+const mockGetBookableServiceTypes = jest.fn();
+const mockGetServiceTypesByCategory = jest.fn();
+const mockGetAllServiceSlugsFromDb = jest.fn();
+const mockGetAllServiceTypesForAdmin = jest.fn();
+const mockUpdateServiceType = jest.fn();
+const mockCreateServiceType = jest.fn();
+const mockDeleteServiceType = jest.fn();
 
 jest.mock('../db', () => ({
   getServiceTypeBySlug: (...args: unknown[]) => mockGetServiceTypeBySlug.apply(null, args),
@@ -50,31 +50,35 @@ jest.mock('../db', () => ({
   getAllServiceTypes: (...args: unknown[]) => mockGetAllServiceTypes.apply(null, args),
   getFeaturedServiceTypes: (...args: unknown[]) => mockGetFeaturedServiceTypes.apply(null, args),
   getBookableServiceTypes: (...args: unknown[]) => mockGetBookableServiceTypes.apply(null, args),
-  getServiceTypesByCategory: (...args: unknown[]) => mockGetServiceTypesByCategory.apply(null, args),
+  getServiceTypesByCategory: (...args: unknown[]) =>
+    mockGetServiceTypesByCategory.apply(null, args),
   getAllServiceSlugs: (...args: unknown[]) => mockGetAllServiceSlugsFromDb.apply(null, args),
-  getAllServiceTypesForAdmin: (...args: unknown[]) => mockGetAllServiceTypesForAdmin.apply(null, args),
+  getAllServiceTypesForAdmin: (...args: unknown[]) =>
+    mockGetAllServiceTypesForAdmin.apply(null, args),
   updateServiceType: (...args: unknown[]) => mockUpdateServiceType.apply(null, args),
   createServiceType: (...args: unknown[]) => mockCreateServiceType.apply(null, args),
   deleteServiceType: (...args: unknown[]) => mockDeleteServiceType.apply(null, args),
-}))
+}));
 
-const mockGetServicePresentation = jest.fn()
-const mockGetServicePricing = jest.fn()
-const mockServicePresentation: Record<string, unknown> = {}
+const mockGetServicePresentation = jest.fn();
+const mockGetServicePricing = jest.fn();
+const mockServicePresentation: Record<string, unknown> = {};
 
 jest.mock('../presentation', () => ({
   getServicePresentation: (...args: unknown[]) => mockGetServicePresentation.apply(null, args),
   getServicePricing: (...args: unknown[]) => mockGetServicePricing.apply(null, args),
   // Getter defers access to mockServicePresentation until test execution
   // (direct value reference would hit TDZ during jest.mock hoisting)
-  get servicePresentation() { return mockServicePresentation },
-}))
+  get servicePresentation() {
+    return mockServicePresentation;
+  },
+}));
 
-const mockGetIconByName = jest.fn()
+const mockGetIconByName = jest.fn();
 
 jest.mock('@/config/service-icons', () => ({
   getIconByName: (...args: unknown[]) => mockGetIconByName.apply(null, args),
-}))
+}));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
@@ -89,7 +93,7 @@ import {
   getAllServiceSlugs,
   serviceExists,
   isServiceBookable,
-} from '../index'
+} from '../index';
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -121,7 +125,7 @@ function makeDbService(overrides: Partial<Record<string, unknown>> = {}) {
     created_at: new Date('2026-01-01'),
     updated_at: null,
     ...overrides,
-  }
+  };
 }
 
 const FALLBACK_PRESENTATION = {
@@ -133,20 +137,20 @@ const FALLBACK_PRESENTATION = {
   },
   features: [{ title: 'Feature A', description: 'Desc A', icon: null }],
   process: [{ step: 1, title: 'Step 1', description: 'D1' }],
-}
+};
 
 const FALLBACK_PRICING = {
   base: 'Ab CHF 89',
   details: ['CHF 89 für erste Stunde'],
   mediaPrices: undefined,
-}
+};
 
 beforeEach(() => {
-  jest.clearAllMocks()
-  mockGetServicePresentation.mockReturnValue(FALLBACK_PRESENTATION)
-  mockGetServicePricing.mockReturnValue(FALLBACK_PRICING)
-  mockGetIconByName.mockReturnValue('MockIcon')
-})
+  jest.clearAllMocks();
+  mockGetServicePresentation.mockReturnValue(FALLBACK_PRESENTATION);
+  mockGetServicePricing.mockReturnValue(FALLBACK_PRICING);
+  mockGetIconByName.mockReturnValue('MockIcon');
+});
 
 // ============================================================================
 // mergeServiceData — DB priority (tested via getService)
@@ -156,80 +160,74 @@ describe('mergeServiceData — DB priority', () => {
   it('uses DB hero_title over presentation fallback', async () => {
     mockGetServiceTypeBySlug.mockResolvedValueOnce(
       makeDbService({ hero_title: 'Custom DB Title' }),
-    )
+    );
 
-    const result = await getService('computer-repair')
+    const result = await getService('computer-repair');
 
-    expect(result?.name).toBe('Custom DB Title')
-  })
+    expect(result?.name).toBe('Custom DB Title');
+  });
 
   it('falls back to presentation hero title when DB hero_title is null', async () => {
-    mockGetServiceTypeBySlug.mockResolvedValueOnce(makeDbService({ hero_title: null }))
+    mockGetServiceTypeBySlug.mockResolvedValueOnce(makeDbService({ hero_title: null }));
 
-    const result = await getService('computer-repair')
+    const result = await getService('computer-repair');
 
-    expect(result?.name).toBe('Fallback Title')
-  })
+    expect(result?.name).toBe('Fallback Title');
+  });
 
   it('uses DB features_json when non-empty, ignoring presentation features', async () => {
-    const dbFeatures = [{ title: 'DB Feature', description: 'DB Desc', icon: 'Zap' }]
-    mockGetServiceTypeBySlug.mockResolvedValueOnce(
-      makeDbService({ features_json: dbFeatures }),
-    )
+    const dbFeatures = [{ title: 'DB Feature', description: 'DB Desc', icon: 'Zap' }];
+    mockGetServiceTypeBySlug.mockResolvedValueOnce(makeDbService({ features_json: dbFeatures }));
 
-    const result = await getService('computer-repair')
+    const result = await getService('computer-repair');
 
-    expect(result?.features).toHaveLength(1)
-    expect(result?.features[0].title).toBe('DB Feature')
-  })
+    expect(result?.features).toHaveLength(1);
+    expect(result?.features[0].title).toBe('DB Feature');
+  });
 
   it('falls back to presentation features when DB features_json is null', async () => {
-    mockGetServiceTypeBySlug.mockResolvedValueOnce(makeDbService({ features_json: null }))
+    mockGetServiceTypeBySlug.mockResolvedValueOnce(makeDbService({ features_json: null }));
 
-    const result = await getService('computer-repair')
+    const result = await getService('computer-repair');
 
-    expect(result?.features[0].title).toBe('Feature A')
-  })
+    expect(result?.features[0].title).toBe('Feature A');
+  });
 
   it('uses DB process_json when non-empty', async () => {
-    const dbProcess = [{ step: 1, title: 'DB Step', description: 'D' }]
-    mockGetServiceTypeBySlug.mockResolvedValueOnce(
-      makeDbService({ process_json: dbProcess }),
-    )
+    const dbProcess = [{ step: 1, title: 'DB Step', description: 'D' }];
+    mockGetServiceTypeBySlug.mockResolvedValueOnce(makeDbService({ process_json: dbProcess }));
 
-    const result = await getService('computer-repair')
+    const result = await getService('computer-repair');
 
-    expect(result?.process![0].title).toBe('DB Step')
-  })
+    expect(result?.process![0].title).toBe('DB Step');
+  });
 
   it('falls back to presentation process when DB process_json is null', async () => {
-    mockGetServiceTypeBySlug.mockResolvedValueOnce(makeDbService({ process_json: null }))
+    mockGetServiceTypeBySlug.mockResolvedValueOnce(makeDbService({ process_json: null }));
 
-    const result = await getService('computer-repair')
+    const result = await getService('computer-repair');
 
-    expect(result?.process![0].title).toBe('Step 1')
-  })
+    expect(result?.process![0].title).toBe('Step 1');
+  });
 
   it('resolves icon_name via getIconByName when set', async () => {
-    mockGetIconByName.mockReturnValueOnce('ResolvedIcon')
-    mockGetServiceTypeBySlug.mockResolvedValueOnce(
-      makeDbService({ icon_name: 'HardDrive' }),
-    )
+    mockGetIconByName.mockReturnValueOnce('ResolvedIcon');
+    mockGetServiceTypeBySlug.mockResolvedValueOnce(makeDbService({ icon_name: 'HardDrive' }));
 
-    const result = await getService('computer-repair')
+    const result = await getService('computer-repair');
 
-    expect(result?.icon).toBe('ResolvedIcon')
-    expect(mockGetIconByName).toHaveBeenCalledWith('HardDrive')
-  })
+    expect(result?.icon).toBe('ResolvedIcon');
+    expect(mockGetIconByName).toHaveBeenCalledWith('HardDrive');
+  });
 
   it('falls back to presentation icon when icon_name is null', async () => {
-    mockGetServiceTypeBySlug.mockResolvedValueOnce(makeDbService({ icon_name: null }))
+    mockGetServiceTypeBySlug.mockResolvedValueOnce(makeDbService({ icon_name: null }));
 
-    const result = await getService('computer-repair')
+    const result = await getService('computer-repair');
 
-    expect(result?.icon).toBe('HardDriveIcon')
-  })
-})
+    expect(result?.icon).toBe('HardDriveIcon');
+  });
+});
 
 // ============================================================================
 // getService — routing
@@ -237,17 +235,17 @@ describe('mergeServiceData — DB priority', () => {
 
 describe('getService', () => {
   it('returns merged service when DB record found', async () => {
-    mockGetServiceTypeBySlug.mockResolvedValueOnce(makeDbService())
+    mockGetServiceTypeBySlug.mockResolvedValueOnce(makeDbService());
 
-    const result = await getService('computer-repair')
+    const result = await getService('computer-repair');
 
-    expect(result).not.toBeNull()
-    expect(result?.id).toBe('svc-1')
-    expect(result?.slug).toBe('computer-repair')
-  })
+    expect(result).not.toBeNull();
+    expect(result?.id).toBe('svc-1');
+    expect(result?.slug).toBe('computer-repair');
+  });
 
   it('falls back to presentation-only when not in DB', async () => {
-    mockGetServiceTypeBySlug.mockResolvedValueOnce(null)
+    mockGetServiceTypeBySlug.mockResolvedValueOnce(null);
     // Set up presentation data for the slug
     Object.assign(mockServicePresentation, {
       'presentation-only': {
@@ -256,23 +254,23 @@ describe('getService', () => {
         features: [],
         process: [],
       },
-    })
+    });
 
-    const result = await getService('presentation-only')
+    const result = await getService('presentation-only');
 
-    expect(result).not.toBeNull()
-    expect(result?.id).toBe('presentation-presentation-only')
-  })
+    expect(result).not.toBeNull();
+    expect(result?.id).toBe('presentation-presentation-only');
+  });
 
   it('returns null when neither DB nor presentation found', async () => {
-    mockGetServiceTypeBySlug.mockResolvedValueOnce(null)
+    mockGetServiceTypeBySlug.mockResolvedValueOnce(null);
     // mockServicePresentation has no entry for 'unknown-slug'
 
-    const result = await getService('unknown-slug')
+    const result = await getService('unknown-slug');
 
-    expect(result).toBeNull()
-  })
-})
+    expect(result).toBeNull();
+  });
+});
 
 // ============================================================================
 // Delegating functions
@@ -280,51 +278,54 @@ describe('getService', () => {
 
 describe('getAllServices', () => {
   it('maps all DB services through mergeServiceData', async () => {
-    mockGetAllServiceTypes.mockResolvedValueOnce([makeDbService(), makeDbService({ id: 'svc-2', slug: 'data-recovery' })])
+    mockGetAllServiceTypes.mockResolvedValueOnce([
+      makeDbService(),
+      makeDbService({ id: 'svc-2', slug: 'data-recovery' }),
+    ]);
 
-    const result = await getAllServices()
+    const result = await getAllServices();
 
-    expect(result).toHaveLength(2)
-    expect(result[0].id).toBe('svc-1')
-  })
+    expect(result).toHaveLength(2);
+    expect(result[0].id).toBe('svc-1');
+  });
 
   it('returns empty array when no services exist', async () => {
-    mockGetAllServiceTypes.mockResolvedValueOnce([])
+    mockGetAllServiceTypes.mockResolvedValueOnce([]);
 
-    const result = await getAllServices()
+    const result = await getAllServices();
 
-    expect(result).toEqual([])
-  })
-})
+    expect(result).toEqual([]);
+  });
+});
 
 describe('getFeaturedServices', () => {
   it('returns only featured services', async () => {
-    mockGetFeaturedServiceTypes.mockResolvedValueOnce([makeDbService({ is_featured: true })])
+    mockGetFeaturedServiceTypes.mockResolvedValueOnce([makeDbService({ is_featured: true })]);
 
-    const result = await getFeaturedServices()
+    const result = await getFeaturedServices();
 
-    expect(result).toHaveLength(1)
-    expect(result[0].isFeatured).toBe(true)
-  })
-})
+    expect(result).toHaveLength(1);
+    expect(result[0].isFeatured).toBe(true);
+  });
+});
 
 describe('getAllServiceSlugs', () => {
   it('merges DB slugs and presentation slugs with deduplication', async () => {
-    mockGetAllServiceSlugsFromDb.mockResolvedValueOnce(['computer-repair', 'data-recovery'])
+    mockGetAllServiceSlugsFromDb.mockResolvedValueOnce(['computer-repair', 'data-recovery']);
     Object.assign(mockServicePresentation, {
-      'computer-repair': {},   // duplicate — should appear once
-      'web-design': {},         // presentation-only — should appear once
-    })
+      'computer-repair': {}, // duplicate — should appear once
+      'web-design': {}, // presentation-only — should appear once
+    });
 
-    const result = await getAllServiceSlugs()
+    const result = await getAllServiceSlugs();
 
-    const unique = new Set(result)
-    expect(unique.size).toBe(result.length) // no duplicates
-    expect(result).toContain('computer-repair')
-    expect(result).toContain('data-recovery')
-    expect(result).toContain('web-design')
-  })
-})
+    const unique = new Set(result);
+    expect(unique.size).toBe(result.length); // no duplicates
+    expect(result).toContain('computer-repair');
+    expect(result).toContain('data-recovery');
+    expect(result).toContain('web-design');
+  });
+});
 
 // ============================================================================
 // Utility functions
@@ -332,36 +333,38 @@ describe('getAllServiceSlugs', () => {
 
 describe('serviceExists', () => {
   it('returns true when service found', async () => {
-    mockGetServiceTypeBySlug.mockResolvedValueOnce(makeDbService({ is_active: true }))
+    mockGetServiceTypeBySlug.mockResolvedValueOnce(makeDbService({ is_active: true }));
 
-    const result = await serviceExists('computer-repair')
+    const result = await serviceExists('computer-repair');
 
-    expect(result).toBe(true)
-  })
+    expect(result).toBe(true);
+  });
 
   it('returns false when service not found', async () => {
-    mockGetServiceTypeBySlug.mockResolvedValueOnce(null)
+    mockGetServiceTypeBySlug.mockResolvedValueOnce(null);
 
-    const result = await serviceExists('missing')
+    const result = await serviceExists('missing');
 
-    expect(result).toBe(false)
-  })
-})
+    expect(result).toBe(false);
+  });
+});
 
 describe('isServiceBookable', () => {
   it('returns true when service is bookable and active', async () => {
-    mockGetServiceTypeBySlug.mockResolvedValueOnce(makeDbService({ is_bookable: true, is_active: true }))
+    mockGetServiceTypeBySlug.mockResolvedValueOnce(
+      makeDbService({ is_bookable: true, is_active: true }),
+    );
 
-    const result = await isServiceBookable('computer-repair')
+    const result = await isServiceBookable('computer-repair');
 
-    expect(result).toBe(true)
-  })
+    expect(result).toBe(true);
+  });
 
   it('returns false when service not found', async () => {
-    mockGetServiceTypeBySlug.mockResolvedValueOnce(null)
+    mockGetServiceTypeBySlug.mockResolvedValueOnce(null);
 
-    const result = await isServiceBookable('missing')
+    const result = await isServiceBookable('missing');
 
-    expect(result).toBe(false)
-  })
-})
+    expect(result).toBe(false);
+  });
+});

@@ -1,52 +1,47 @@
-'use client'
+'use client';
 
-import { useState, useRef, useEffect } from 'react'
-import { adminInteractive } from '@/lib/admin-ui'
-import { useTranslations } from 'next-intl'
-import Link from 'next/link'
-import { signOut } from 'next-auth/react'
-import {
-  ChevronDown,
-  ExternalLink,
-  Languages,
-  LogOut,
-} from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher'
-import { ROUTES } from '@/config/routes'
+import { useState, useRef, useEffect } from 'react';
+import { adminInteractive } from '@/lib/admin-ui';
+import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { signOut } from 'next-auth/react';
+import { ChevronDown, ExternalLink, Languages, LogOut } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { LocaleSwitcher } from '@/components/ui/LocaleSwitcher';
+import { ROUTES } from '@/config/routes';
 
 interface UserMenuDropdownProps {
   user: {
-    name: string | null
-    email: string
-  } | null
+    name: string | null;
+    email: string;
+  } | null;
 }
 
 export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
-  const t = useTranslations('admin.userMenu')
-  const [userMenuOpen, setUserMenuOpen] = useState(false)
-  const userMenuRef = useRef<HTMLDivElement>(null)
-  const displayName = user?.name || t('staffFallback')
+  const t = useTranslations('admin.userMenu');
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+  const displayName = user?.name || t('staffFallback');
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
-        setUserMenuOpen(false)
+        setUserMenuOpen(false);
       }
     }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     function handleEscape(event: KeyboardEvent) {
       if (event.key === 'Escape') {
-        setUserMenuOpen(false)
+        setUserMenuOpen(false);
       }
     }
-    document.addEventListener('keydown', handleEscape)
-    return () => document.removeEventListener('keydown', handleEscape)
-  }, [])
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, []);
 
   return (
     <div className="relative" ref={userMenuRef}>
@@ -65,14 +60,10 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
           </span>
         </div>
         <div className="hidden max-w-[16rem] text-right sm:block">
-          <p className="truncate text-sm font-medium text-text-primary">
-            {displayName}
-          </p>
+          <p className="truncate text-sm font-medium text-text-primary">{displayName}</p>
           {/* The email is the widest element in the bar; keep it for xl+ where
               there's room, hide it below to avoid crowding the breadcrumb. */}
-          <p className="hidden truncate text-xs text-text-secondary xl:block">
-            {user?.email}
-          </p>
+          <p className="hidden truncate text-xs text-text-secondary xl:block">{user?.email}</p>
         </div>
         <ChevronDown
           className={`hidden h-4 w-4 text-text-tertiary transition-transform duration-200 sm:block ${
@@ -90,12 +81,8 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
       >
         <div className="overflow-hidden rounded-xl border border bg-surface-base shadow-xs">
           <div className="border-b border bg-surface-raised px-4 py-3 dark:bg-surface-base/3">
-            <p className="truncate text-sm font-semibold text-text-primary">
-              {displayName}
-            </p>
-            <p className="truncate text-xs text-text-secondary">
-              {user?.email}
-            </p>
+            <p className="truncate text-sm font-semibold text-text-primary">{displayName}</p>
+            <p className="truncate text-xs text-text-secondary">{user?.email}</p>
           </div>
 
           <div className="py-2">
@@ -123,8 +110,8 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
             <Button
               variant="destructive-ghost"
               onClick={() => {
-                setUserMenuOpen(false)
-                signOut({ callbackUrl: '/' })
+                setUserMenuOpen(false);
+                signOut({ callbackUrl: '/' });
               }}
               className="flex w-full items-center gap-3 px-4 py-2.5 text-sm text-text-secondary transition-colors hover:bg-error-50 hover:text-error-600 dark:hover:bg-error-900/20 dark:hover:text-error-400"
             >
@@ -135,5 +122,5 @@ export function UserMenuDropdown({ user }: UserMenuDropdownProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

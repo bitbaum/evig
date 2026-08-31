@@ -1,17 +1,17 @@
-import { Metadata } from 'next'
-import { redirect } from 'next/navigation'
-import { Users } from 'lucide-react'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import TeamFormClient from '@/components/admin/teams/TeamFormClient'
-import { ROUTES } from '@/config/routes'
-import { requireSection } from '@/lib/admin/guards'
+import { Metadata } from 'next';
+import { redirect } from 'next/navigation';
+import { Users } from 'lucide-react';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import TeamFormClient from '@/components/admin/teams/TeamFormClient';
+import { ROUTES } from '@/config/routes';
+import { requireSection } from '@/lib/admin/guards';
 
-export const metadata: Metadata = { title: 'Neues Team' }
+export const metadata: Metadata = { title: 'Neues Team' };
 
 export default async function NewTeamPage() {
-  const session = await requireSection('teams')
+  const session = await requireSection('teams');
   // Creating a team is structural — super admins only (matches the API guard).
-  if (!session.user.isSuperAdmin) redirect(ROUTES.admin.teams)
+  if (!session.user.isSuperAdmin) redirect(ROUTES.admin.teams);
 
   return (
     <AdminPageWrapper
@@ -23,5 +23,5 @@ export default async function NewTeamPage() {
     >
       <TeamFormClient />
     </AdminPageWrapper>
-  )
+  );
 }

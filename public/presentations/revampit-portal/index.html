@@ -1,375 +1,926 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex, nofollow">
-<title>Revamp-IT — Die Plattform</title>
-<style>
-  :root{
-    --paper:#FBFAF7; --surface:#FFFFFF; --ink:#17181A; --muted:#5F5B54; --faint:#96938B;
-    --line:#E7E3DA; --line-strong:#D6D1C6; --accent:#1C7A44; --accent-ink:#155C34; --accent-soft:#E8F1EB;
-    --legacy:#9A8C7C; --legacy-soft:#F1ECE4;
-    --sans:'Helvetica Neue',Helvetica,Arial,'Segoe UI',system-ui,sans-serif;
-    --mono:ui-monospace,'SF Mono','JetBrains Mono',Menlo,Consolas,monospace;
-  }
-  *{box-sizing:border-box; margin:0; padding:0}
-  html,body{height:100%}
-  body{background:#0d0f0d; color:var(--ink); font-family:var(--sans); overflow:hidden; -webkit-font-smoothing:antialiased; letter-spacing:-.006em;}
-  .num{font-variant-numeric:tabular-nums} .mono{font-family:var(--mono)}
-  #stage{position:fixed; inset:0; display:flex; align-items:center; justify-content:center;}
-  .deck{position:relative; width:100vw; height:56.25vw; max-height:100vh; max-width:177.78vh; background:var(--paper); overflow:hidden;}
-  .slide{position:absolute; inset:0; padding:5.6% 6.6%; display:none; flex-direction:column; opacity:0; transition:opacity .45s ease;}
-  .slide.active{display:flex; opacity:1;}
-  @media (prefers-reduced-motion:reduce){ .slide{transition:none} }
-  #bar{position:fixed; top:0; left:0; height:3px; background:var(--accent); width:0; z-index:20; transition:width .3s ease;}
-  #counter{position:fixed; bottom:2.2vh; right:2.4vw; z-index:20; font-family:var(--mono); font-size:1.5vh; letter-spacing:.12em; color:var(--faint);}
-  #brand{position:fixed; bottom:2.2vh; left:2.4vw; z-index:20; font-family:var(--mono); font-size:1.5vh; letter-spacing:.14em; text-transform:uppercase; color:var(--faint);}
-  #brand b{color:var(--accent-ink); font-weight:600}
-  .eyebrow{font-family:var(--mono); font-size:1.9vh; letter-spacing:.22em; text-transform:uppercase; color:var(--accent-ink); display:flex; align-items:center; gap:1.2vh; margin-bottom:2.2vh;}
-  .eyebrow::before{content:""; width:3.4vh; height:2px; background:var(--accent)}
-  h1{font-size:8.4vh; line-height:.98; font-weight:800; letter-spacing:-.03em}
-  h2{font-size:5.2vh; line-height:1.03; font-weight:750; letter-spacing:-.022em; max-width:20ch}
-  h3{font-size:2.9vh; font-weight:700; letter-spacing:-.01em}
-  p{font-size:2.5vh; line-height:1.5; color:var(--ink); max-width:30ch}
-  .lead{font-size:3.3vh; line-height:1.42; color:var(--muted); max-width:26ch; font-weight:400}
-  .kicker{color:var(--accent)} .muted{color:var(--muted)} .fill{flex:1}
-  .cover{justify-content:center}
-  .cover .sub{font-size:3vh; color:var(--muted); margin-top:2.4vh; max-width:34ch; line-height:1.42}
-  .cover .foot{position:absolute; left:6.6%; bottom:5.6%; font-family:var(--mono); font-size:1.7vh; letter-spacing:.06em; color:var(--faint); display:flex; gap:2.6vh}
-  .cover .foot b{color:var(--ink)}
-  .domns{display:flex; gap:1vh; margin-top:4vh; flex-wrap:wrap}
-  .domns span{font-family:var(--mono); font-size:1.7vh; border:1px solid var(--line-strong); border-radius:2px; padding:.9vh 1.4vh; display:inline-flex; align-items:center; gap:1vh; color:var(--ink)}
-  .domns .dot{width:1vh; height:1vh; border-radius:50%; background:var(--accent)}
-  .section-break{justify-content:center; background:var(--ink)}
-  .section-break h2{color:#fff; font-size:6.4vh; max-width:24ch}
-  .section-break .eyebrow{color:#6ECB8C} .section-break .eyebrow::before{background:#6ECB8C}
-  .section-break p{color:#B9B6AE; margin-top:2.6vh; max-width:40ch}
-  .split{display:grid; grid-template-columns:1fr 1.2fr; gap:5vh; align-items:center; height:100%}
-  .split.rev{grid-template-columns:1.2fr 1fr}
-  .split .txt{display:flex; flex-direction:column; justify-content:center}
-  .shot{border:1px solid var(--line-strong); border-radius:1.4vh; overflow:hidden; box-shadow:0 2vh 5vh rgba(20,30,20,.14); background:var(--surface); max-height:84vh}
-  .shot img{display:block; width:100%; height:auto}
-  .browserbar{display:flex; align-items:center; gap:.9vh; padding:1.1vh 1.5vh; background:#f0ede7; border-bottom:1px solid var(--line)}
-  .browserbar i{width:1.3vh; height:1.3vh; border-radius:50%; background:#cfc9bf; display:block}
-  .browserbar .url{margin-left:1.4vh; font-family:var(--mono); font-size:1.4vh; color:var(--muted)}
-  ul.feat{list-style:none; margin-top:2vh; display:grid; gap:1.4vh}
-  ul.feat li{position:relative; padding-left:3.2vh; font-size:2.3vh; line-height:1.38; max-width:32ch}
-  ul.feat li::before{content:""; position:absolute; left:0; top:.5em; width:1.5vh; height:1.5vh; border:.28vh solid var(--accent); border-radius:.3vh; transform:rotate(45deg)}
-  ul.feat b{font-weight:650}
-  .shot-full{height:100%; display:flex; flex-direction:column}
-  .shot-full .cap{display:flex; align-items:flex-end; justify-content:space-between; gap:3vh; margin-bottom:2vh}
-  .shot-full .cap h3{font-size:3.1vh}
-  .shot-full .cap p{font-size:2vh; color:var(--muted); margin-top:.6vh; max-width:52ch}
-  .shot-full .frame{flex:1; min-height:0; border:1px solid var(--line-strong); border-radius:1.4vh; overflow:hidden; box-shadow:0 2vh 5vh rgba(20,30,20,.14); background:var(--surface); display:flex; flex-direction:column}
-  .shot-full .browserbar{flex:0 0 auto}
-  .shot-full .scroll{flex:1; min-height:0; overflow:hidden}
-  .shot-full .scroll img{display:block; width:100%; height:auto}
-  .stats{display:grid; grid-template-columns:repeat(3,1fr); gap:0; margin-top:auto; border:1px solid var(--line); border-radius:1.2vh; overflow:hidden}
-  .stats .c{padding:3.2vh 3vh; border-right:1px solid var(--line); background:var(--surface)}
-  .stats .c:last-child{border-right:0}
-  .stats .v{font-size:6.4vh; font-weight:800; letter-spacing:-.03em; line-height:1}
-  .stats .l{font-family:var(--mono); font-size:1.5vh; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); margin-top:1.5vh}
-  .ba{display:grid; grid-template-columns:1fr 1fr; gap:0; margin-top:auto; border:1px solid var(--line); border-radius:1.2vh; overflow:hidden}
-  .ba .col{padding:3vh; background:var(--surface)} .ba .col.old{background:var(--legacy-soft); border-right:1px solid var(--line)}
-  .ba .tag{font-family:var(--mono); font-size:1.5vh; letter-spacing:.14em; text-transform:uppercase; margin-bottom:1.6vh; display:inline-block}
-  .ba .old .tag{color:var(--legacy)} .ba .new .tag{color:var(--accent-ink)}
-  .ba .col .row{font-size:2.1vh; padding:1.1vh 0; border-top:1px solid var(--line); line-height:1.3}
-  .ba .col .row:first-of-type{border-top:0}
-  .ba .col.old .row{color:var(--muted)}
-  .tech{font-family:var(--mono); font-size:1.9vh; color:var(--muted); line-height:2; margin-top:auto; letter-spacing:.02em}
-  .tech b{color:var(--ink); font-weight:600}
-  #hint{position:fixed; bottom:2.2vh; left:50%; transform:translateX(-50%); z-index:20; font-family:var(--mono); font-size:1.4vh; letter-spacing:.1em; color:var(--faint); opacity:.8}
-</style>
-</head>
-<body>
-<div id="bar"></div>
-<div id="brand"><b>REVAMP-IT</b> · DIE PLATTFORM</div>
-<div id="counter"></div>
-<div id="hint">← → zum Blättern</div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Revamp-IT — Die Plattform</title>
+    <style>
+      :root {
+        --paper: #fbfaf7;
+        --surface: #ffffff;
+        --ink: #17181a;
+        --muted: #5f5b54;
+        --faint: #96938b;
+        --line: #e7e3da;
+        --line-strong: #d6d1c6;
+        --accent: #1c7a44;
+        --accent-ink: #155c34;
+        --accent-soft: #e8f1eb;
+        --legacy: #9a8c7c;
+        --legacy-soft: #f1ece4;
+        --sans: 'Helvetica Neue', Helvetica, Arial, 'Segoe UI', system-ui, sans-serif;
+        --mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        background: #0d0f0d;
+        color: var(--ink);
+        font-family: var(--sans);
+        overflow: hidden;
+        -webkit-font-smoothing: antialiased;
+        letter-spacing: -0.006em;
+      }
+      .num {
+        font-variant-numeric: tabular-nums;
+      }
+      .mono {
+        font-family: var(--mono);
+      }
+      #stage {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .deck {
+        position: relative;
+        width: 100vw;
+        height: 56.25vw;
+        max-height: 100vh;
+        max-width: 177.78vh;
+        background: var(--paper);
+        overflow: hidden;
+      }
+      .slide {
+        position: absolute;
+        inset: 0;
+        padding: 5.6% 6.6%;
+        display: none;
+        flex-direction: column;
+        opacity: 0;
+        transition: opacity 0.45s ease;
+      }
+      .slide.active {
+        display: flex;
+        opacity: 1;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .slide {
+          transition: none;
+        }
+      }
+      #bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        background: var(--accent);
+        width: 0;
+        z-index: 20;
+        transition: width 0.3s ease;
+      }
+      #counter {
+        position: fixed;
+        bottom: 2.2vh;
+        right: 2.4vw;
+        z-index: 20;
+        font-family: var(--mono);
+        font-size: 1.5vh;
+        letter-spacing: 0.12em;
+        color: var(--faint);
+      }
+      #brand {
+        position: fixed;
+        bottom: 2.2vh;
+        left: 2.4vw;
+        z-index: 20;
+        font-family: var(--mono);
+        font-size: 1.5vh;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--faint);
+      }
+      #brand b {
+        color: var(--accent-ink);
+        font-weight: 600;
+      }
+      .eyebrow {
+        font-family: var(--mono);
+        font-size: 1.9vh;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--accent-ink);
+        display: flex;
+        align-items: center;
+        gap: 1.2vh;
+        margin-bottom: 2.2vh;
+      }
+      .eyebrow::before {
+        content: '';
+        width: 3.4vh;
+        height: 2px;
+        background: var(--accent);
+      }
+      h1 {
+        font-size: 8.4vh;
+        line-height: 0.98;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+      }
+      h2 {
+        font-size: 5.2vh;
+        line-height: 1.03;
+        font-weight: 750;
+        letter-spacing: -0.022em;
+        max-width: 20ch;
+      }
+      h3 {
+        font-size: 2.9vh;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+      p {
+        font-size: 2.5vh;
+        line-height: 1.5;
+        color: var(--ink);
+        max-width: 30ch;
+      }
+      .lead {
+        font-size: 3.3vh;
+        line-height: 1.42;
+        color: var(--muted);
+        max-width: 26ch;
+        font-weight: 400;
+      }
+      .kicker {
+        color: var(--accent);
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .fill {
+        flex: 1;
+      }
+      .cover {
+        justify-content: center;
+      }
+      .cover .sub {
+        font-size: 3vh;
+        color: var(--muted);
+        margin-top: 2.4vh;
+        max-width: 34ch;
+        line-height: 1.42;
+      }
+      .cover .foot {
+        position: absolute;
+        left: 6.6%;
+        bottom: 5.6%;
+        font-family: var(--mono);
+        font-size: 1.7vh;
+        letter-spacing: 0.06em;
+        color: var(--faint);
+        display: flex;
+        gap: 2.6vh;
+      }
+      .cover .foot b {
+        color: var(--ink);
+      }
+      .domns {
+        display: flex;
+        gap: 1vh;
+        margin-top: 4vh;
+        flex-wrap: wrap;
+      }
+      .domns span {
+        font-family: var(--mono);
+        font-size: 1.7vh;
+        border: 1px solid var(--line-strong);
+        border-radius: 2px;
+        padding: 0.9vh 1.4vh;
+        display: inline-flex;
+        align-items: center;
+        gap: 1vh;
+        color: var(--ink);
+      }
+      .domns .dot {
+        width: 1vh;
+        height: 1vh;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+      .section-break {
+        justify-content: center;
+        background: var(--ink);
+      }
+      .section-break h2 {
+        color: #fff;
+        font-size: 6.4vh;
+        max-width: 24ch;
+      }
+      .section-break .eyebrow {
+        color: #6ecb8c;
+      }
+      .section-break .eyebrow::before {
+        background: #6ecb8c;
+      }
+      .section-break p {
+        color: #b9b6ae;
+        margin-top: 2.6vh;
+        max-width: 40ch;
+      }
+      .split {
+        display: grid;
+        grid-template-columns: 1fr 1.2fr;
+        gap: 5vh;
+        align-items: center;
+        height: 100%;
+      }
+      .split.rev {
+        grid-template-columns: 1.2fr 1fr;
+      }
+      .split .txt {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .shot {
+        border: 1px solid var(--line-strong);
+        border-radius: 1.4vh;
+        overflow: hidden;
+        box-shadow: 0 2vh 5vh rgba(20, 30, 20, 0.14);
+        background: var(--surface);
+        max-height: 84vh;
+      }
+      .shot img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      .browserbar {
+        display: flex;
+        align-items: center;
+        gap: 0.9vh;
+        padding: 1.1vh 1.5vh;
+        background: #f0ede7;
+        border-bottom: 1px solid var(--line);
+      }
+      .browserbar i {
+        width: 1.3vh;
+        height: 1.3vh;
+        border-radius: 50%;
+        background: #cfc9bf;
+        display: block;
+      }
+      .browserbar .url {
+        margin-left: 1.4vh;
+        font-family: var(--mono);
+        font-size: 1.4vh;
+        color: var(--muted);
+      }
+      ul.feat {
+        list-style: none;
+        margin-top: 2vh;
+        display: grid;
+        gap: 1.4vh;
+      }
+      ul.feat li {
+        position: relative;
+        padding-left: 3.2vh;
+        font-size: 2.3vh;
+        line-height: 1.38;
+        max-width: 32ch;
+      }
+      ul.feat li::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0.5em;
+        width: 1.5vh;
+        height: 1.5vh;
+        border: 0.28vh solid var(--accent);
+        border-radius: 0.3vh;
+        transform: rotate(45deg);
+      }
+      ul.feat b {
+        font-weight: 650;
+      }
+      .shot-full {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      .shot-full .cap {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 3vh;
+        margin-bottom: 2vh;
+      }
+      .shot-full .cap h3 {
+        font-size: 3.1vh;
+      }
+      .shot-full .cap p {
+        font-size: 2vh;
+        color: var(--muted);
+        margin-top: 0.6vh;
+        max-width: 52ch;
+      }
+      .shot-full .frame {
+        flex: 1;
+        min-height: 0;
+        border: 1px solid var(--line-strong);
+        border-radius: 1.4vh;
+        overflow: hidden;
+        box-shadow: 0 2vh 5vh rgba(20, 30, 20, 0.14);
+        background: var(--surface);
+        display: flex;
+        flex-direction: column;
+      }
+      .shot-full .browserbar {
+        flex: 0 0 auto;
+      }
+      .shot-full .scroll {
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+      }
+      .shot-full .scroll img {
+        display: block;
+        width: 100%;
+        height: auto;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0;
+        margin-top: auto;
+        border: 1px solid var(--line);
+        border-radius: 1.2vh;
+        overflow: hidden;
+      }
+      .stats .c {
+        padding: 3.2vh 3vh;
+        border-right: 1px solid var(--line);
+        background: var(--surface);
+      }
+      .stats .c:last-child {
+        border-right: 0;
+      }
+      .stats .v {
+        font-size: 6.4vh;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1;
+      }
+      .stats .l {
+        font-family: var(--mono);
+        font-size: 1.5vh;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-top: 1.5vh;
+      }
+      .ba {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+        margin-top: auto;
+        border: 1px solid var(--line);
+        border-radius: 1.2vh;
+        overflow: hidden;
+      }
+      .ba .col {
+        padding: 3vh;
+        background: var(--surface);
+      }
+      .ba .col.old {
+        background: var(--legacy-soft);
+        border-right: 1px solid var(--line);
+      }
+      .ba .tag {
+        font-family: var(--mono);
+        font-size: 1.5vh;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        margin-bottom: 1.6vh;
+        display: inline-block;
+      }
+      .ba .old .tag {
+        color: var(--legacy);
+      }
+      .ba .new .tag {
+        color: var(--accent-ink);
+      }
+      .ba .col .row {
+        font-size: 2.1vh;
+        padding: 1.1vh 0;
+        border-top: 1px solid var(--line);
+        line-height: 1.3;
+      }
+      .ba .col .row:first-of-type {
+        border-top: 0;
+      }
+      .ba .col.old .row {
+        color: var(--muted);
+      }
+      .tech {
+        font-family: var(--mono);
+        font-size: 1.9vh;
+        color: var(--muted);
+        line-height: 2;
+        margin-top: auto;
+        letter-spacing: 0.02em;
+      }
+      .tech b {
+        color: var(--ink);
+        font-weight: 600;
+      }
+      #hint {
+        position: fixed;
+        bottom: 2.2vh;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 20;
+        font-family: var(--mono);
+        font-size: 1.4vh;
+        letter-spacing: 0.1em;
+        color: var(--faint);
+        opacity: 0.8;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="bar"></div>
+    <div id="brand"><b>REVAMP-IT</b> · DIE PLATTFORM</div>
+    <div id="counter"></div>
+    <div id="hint">← → zum Blättern</div>
 
-<div id="stage"><div class="deck" id="deck">
+    <div id="stage">
+      <div class="deck" id="deck">
+        <section class="slide cover active">
+          <div class="eyebrow"><span>Schweizer Non-Profit · seit 2003</span></div>
+          <h1>Alte Hardware.<br />Neues Leben.<br /><span class="kicker">Eine Plattform.</span></h1>
+          <p class="sub">
+            Wie aus drei getrennten Alt-Systemen eine zusammenhängende, moderne Plattform wurde —
+            die Kaufen, Reparieren, Spenden und den ganzen internen Betrieb unter ein Dach bringt.
+          </p>
+          <div class="domns">
+            <span><span class="dot"></span>revampit.orangecat.ch</span>
+          </div>
+          <div class="foot">
+            <span>Vortrag · <b>Was gebaut wurde und warum</b></span
+            ><span>Stand · <b>Juli 2026</b></span>
+          </div>
+        </section>
 
-  <section class="slide cover active">
-    <div class="eyebrow"><span>Schweizer Non-Profit · seit 2003</span></div>
-    <h1>Alte Hardware.<br>Neues Leben.<br><span class="kicker">Eine Plattform.</span></h1>
-    <p class="sub">Wie aus drei getrennten Alt-Systemen eine zusammenhängende, moderne Plattform wurde —
-      die Kaufen, Reparieren, Spenden und den ganzen internen Betrieb unter ein Dach bringt.</p>
-    <div class="domns"><span><span class="dot"></span>revampit.orangecat.ch</span></div>
-    <div class="foot"><span>Vortrag · <b>Was gebaut wurde und warum</b></span><span>Stand · <b>Juli 2026</b></span></div>
-  </section>
+        <section class="slide">
+          <div class="eyebrow"><span>Ausgangslage</span></div>
+          <h2>Gute Arbeit, verteilt auf drei Systeme, die nicht miteinander reden.</h2>
+          <div class="ba">
+            <div class="col old">
+              <span class="tag">Vorher · Legacy</span>
+              <div class="row"><b>revamp-it.ch</b> — Joomla-Website aus den 2000ern</div>
+              <div class="row"><b>shop.revamp-it.ch</b> — separater Shopware-Shop</div>
+              <div class="row"><b>kivitendo.ch</b> — Perl-ERP, on-premise</div>
+            </div>
+            <div class="col new">
+              <span class="tag">Die Folge</span>
+              <div class="row">
+                Ein Gerät durchläuft drei Programme, die nichts voneinander wissen.
+              </div>
+              <div class="row">Daten werden von Hand übertragen.</div>
+              <div class="row">Für Besucher: drei Orte statt einem.</div>
+            </div>
+          </div>
+        </section>
 
-  <section class="slide">
-    <div class="eyebrow"><span>Ausgangslage</span></div>
-    <h2>Gute Arbeit, verteilt auf drei Systeme, die nicht miteinander reden.</h2>
-    <div class="ba">
-      <div class="col old"><span class="tag">Vorher · Legacy</span>
-        <div class="row"><b>revamp-it.ch</b> — Joomla-Website aus den 2000ern</div>
-        <div class="row"><b>shop.revamp-it.ch</b> — separater Shopware-Shop</div>
-        <div class="row"><b>kivitendo.ch</b> — Perl-ERP, on-premise</div>
+        <section class="slide">
+          <div class="split">
+            <div class="txt">
+              <div class="eyebrow"><span>Die Antwort</span></div>
+              <h2>Eine einzige Anwendung — öffentlich und intern.</h2>
+              <p class="muted" style="margin-top: 2.2vh">
+                Kaufen, Hilfe finden, spenden, mitmachen — und dahinter der gesamte Geräte- und
+                Personal-Workflow. In acht Sprachen.
+              </p>
+            </div>
+            <div class="shot">
+              <div class="browserbar">
+                <i></i><i></i><i></i><span class="url">revampit.orangecat.ch</span>
+              </div>
+              <img src="/blog/showcase-revampit-home.png" alt="Startseite" />
+            </div>
+          </div>
+        </section>
+
+        <section class="slide section-break">
+          <div class="eyebrow"><span>Teil 1</span></div>
+          <h2>Für die Öffentlichkeit</h2>
+          <p>Kaufen, reparieren lassen, mitmachen — barrierefrei und mehrsprachig.</p>
+        </section>
+
+        <section class="slide">
+          <div class="split rev">
+            <div class="shot">
+              <div class="browserbar">
+                <i></i><i></i><i></i><span class="url">revampit.orangecat.ch/marketplace</span>
+              </div>
+              <img src="/blog/showcase-revampit-marketplace.png" alt="Marktplatz" />
+            </div>
+            <div class="txt">
+              <div class="eyebrow"><span>Marktplatz</span></div>
+              <h3>Geprüfte refurbished IT — und ein Community-Marktplatz.</h3>
+              <ul class="feat">
+                <li>
+                  <b>Ein Store, zwei Quellen:</b> RevampIT-Bestand und private Inserate, sauber
+                  gefiltert.
+                </li>
+                <li><b>Warenkorb &amp; Checkout</b> mit Payrexx-Zahlung im Treuhand-Prinzip.</li>
+                <li><b>CO₂ pro Kauf</b> sichtbar — jeder Kauf hält ein Gerät aus dem Müll.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide">
+          <div class="shot-full">
+            <div class="cap">
+              <div class="t">
+                <h3>Filtern nach Anbieter, Kategorie, Zustand.</h3>
+                <p>Jedes Inserat zeigt Zustand und Prüfsiegel — Vertrauen ist Teil des Produkts.</p>
+              </div>
+            </div>
+            <div class="frame">
+              <div class="browserbar">
+                <i></i><i></i><i></i><span class="url">revampit.orangecat.ch/marketplace</span>
+              </div>
+              <div class="scroll">
+                <img src="/blog/showcase-revampit-marketplace-grid.png" alt="Marktplatz-Raster" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide">
+          <div class="split">
+            <div class="txt">
+              <div class="eyebrow"><span>Ein Inserat</span></div>
+              <h3>Alle Angaben, die für einen fairen Kauf zählen.</h3>
+              <ul class="feat">
+                <li>Zustand, Spezifikation, Preis — transparent und vergleichbar.</li>
+                <li>RevampIT-Geräte tragen ein Prüfsiegel aus der Qualitätskontrolle.</li>
+                <li>Direkt in den Warenkorb, ohne Umweg über ein zweites System.</li>
+              </ul>
+            </div>
+            <div class="shot">
+              <div class="browserbar">
+                <i></i><i></i><i></i><span class="url">revampit.orangecat.ch/marketplace/…</span>
+              </div>
+              <img src="/blog/showcase-revampit-listing.png" alt="Inserat-Detail" />
+            </div>
+          </div>
+        </section>
+
+        <section class="slide">
+          <div class="split rev">
+            <div class="shot">
+              <div class="browserbar">
+                <i></i><i></i><i></i><span class="url">revampit.orangecat.ch/marketplace/sell</span>
+              </div>
+              <img src="/blog/showcase-revampit-sell.png" alt="Inserat aufgeben" />
+            </div>
+            <div class="txt">
+              <div class="eyebrow"><span>Selbst verkaufen</span></div>
+              <h3>Auch Private geben ihrer Hardware ein zweites Leben.</h3>
+              <ul class="feat">
+                <li>In wenigen Schritten ein eigenes Inserat aufgeben.</li>
+                <li>Community-Verkäufe und RevampIT-Bestand teilen sich einen Ort.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide">
+          <div class="split">
+            <div class="txt">
+              <div class="eyebrow"><span>IT-Hilfe</span></div>
+              <h3>Reparatur-Netzwerk statt Wegwerfen.</h3>
+              <ul class="feat">
+                <li>
+                  <b>Hilfe suchen oder anbieten</b> — Anfragen treffen auf ein Techniker-Netzwerk.
+                </li>
+                <li><b>Zwei Seiten, ein Ort:</b> Hilfesuchende und Fachleute finden zusammen.</li>
+                <li>Repariert wird, was repariert werden kann — bevor es Schrott wird.</li>
+              </ul>
+            </div>
+            <div class="shot">
+              <div class="browserbar">
+                <i></i><i></i><i></i><span class="url">revampit.orangecat.ch/it-hilfe</span>
+              </div>
+              <img src="/blog/showcase-revampit-it-hilfe.png" alt="IT-Hilfe" />
+            </div>
+          </div>
+        </section>
+
+        <section class="slide">
+          <div class="split rev">
+            <div class="shot">
+              <div class="browserbar">
+                <i></i><i></i><i></i><span class="url">revampit.orangecat.ch/services</span>
+              </div>
+              <img src="/blog/showcase-revampit-service.png" alt="Dienstleistungen" />
+            </div>
+            <div class="txt">
+              <div class="eyebrow"><span>Dienstleistungen</span></div>
+              <h3>Wunsch-Computer, Linux-Umstieg, Recycling.</h3>
+              <ul class="feat">
+                <li><b>Bau-deinen-Computer</b> — geführte Konfiguration aus geprüften Teilen.</li>
+                <li><b>Linux &amp; Open Source</b> statt neuer Hardware für alten Zweck.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide">
+          <div class="shot-full">
+            <div class="cap">
+              <div class="t">
+                <h3>So funktioniert's — der Weg vom Gerät zum neuen Zuhause.</h3>
+                <p>Jeder Schritt erklärt, damit Spender und Käufer wissen, was passiert.</p>
+              </div>
+            </div>
+            <div class="frame">
+              <div class="browserbar">
+                <i></i><i></i><i></i><span class="url">revampit.orangecat.ch/so-funktionierts</span>
+              </div>
+              <div class="scroll">
+                <img src="/blog/showcase-revampit-sofunktioniert.png" alt="So funktioniert's" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide">
+          <div class="split">
+            <div class="txt">
+              <div class="eyebrow"><span>Wirkung, belegt</span></div>
+              <h3>Jede CO₂-Zahl mit zitierter Quelle.</h3>
+              <ul class="feat">
+                <li><b>Kein geschätztes Greenwashing:</b> Faktoren aus ADEME, Fraunhofer, ZHAW.</li>
+                <li>
+                  Pro Kategorie ein belegter Wert — «Wie berechnet?» ist einen Klick entfernt.
+                </li>
+                <li>Kategorien ohne saubere Quelle zeigen keine Behauptung.</li>
+              </ul>
+            </div>
+            <div class="shot">
+              <div class="browserbar">
+                <i></i><i></i><i></i><span class="url">revampit.orangecat.ch/transparenz/co2</span>
+              </div>
+              <img src="/blog/showcase-revampit-co2.png" alt="CO2-Methodik" />
+            </div>
+          </div>
+        </section>
+
+        <section class="slide">
+          <div class="split rev">
+            <div class="shot">
+              <div class="browserbar">
+                <i></i><i></i><i></i><span class="url">revampit.orangecat.ch/about/impact</span>
+              </div>
+              <img src="/blog/showcase-revampit-impact.png" alt="Wirkung" />
+            </div>
+            <div class="txt">
+              <div class="eyebrow"><span>Transparenz</span></div>
+              <h3>Wirkung und Finanzen — offen einsehbar.</h3>
+              <ul class="feat">
+                <li>Weitergegebene Geräte, vermiedenes CO₂, soziale Integration.</li>
+                <li>Zahlen mit Quelle statt Hochglanz-Behauptungen.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide">
+          <div class="split">
+            <div class="txt">
+              <div class="eyebrow"><span>Finanzen</span></div>
+              <h3>Als Non-Profit legen wir die Zahlen offen.</h3>
+              <ul class="feat">
+                <li>
+                  <b>98.3% Eigenfinanzierung</b> — selbst erwirtschaftet, nicht spendenabhängig.
+                </li>
+                <li>Einnahmen nach Quelle, direkt aus der Buchhaltung.</li>
+                <li>Jede Zahl belegt — Transparenz ist Teil des Vertrauens.</li>
+              </ul>
+            </div>
+            <div class="shot">
+              <div class="browserbar">
+                <i></i><i></i><i></i><span class="url">revampit.orangecat.ch/about/finances</span>
+              </div>
+              <img src="/blog/showcase-revampit-finances.png" alt="Finanzen und Transparenz" />
+            </div>
+          </div>
+        </section>
+
+        <section class="slide">
+          <div class="split rev">
+            <div class="shot">
+              <div class="browserbar">
+                <i></i><i></i><i></i
+                ><span class="url">revampit.orangecat.ch/get-involved/donate</span>
+              </div>
+              <img src="/blog/showcase-revampit-donate.png" alt="Spenden — direkt helfen" />
+            </div>
+            <div class="txt">
+              <div class="eyebrow"><span>Mitmachen</span></div>
+              <h3>Direkt helfen — Geld oder Gerät.</h3>
+              <ul class="feat">
+                <li><b>Jede Spende</b> rettet Geräte vor dem Elektroschrott.</li>
+                <li>Geld an unser Konto oder ein Gerät an die Werkstatt — beides hilft sofort.</li>
+                <li>Technologie für Menschen, die sich das sonst nicht leisten können.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide section-break">
+          <div class="eyebrow"><span>Teil 2</span></div>
+          <h2>Für den Betrieb</h2>
+          <p>
+            Dieselbe Plattform trägt den ganzen internen Ablauf — vom Geräte-Eingang bis zur
+            Lohnabrechnung.
+          </p>
+        </section>
+
+        <section class="slide">
+          <div class="eyebrow"><span>Geräte-Eingang</span></div>
+          <h2>Vom Foto zum erfassten, geprüften Gerät.</h2>
+          <ul
+            class="feat"
+            style="
+              grid-template-columns: 1fr 1fr;
+              display: grid;
+              gap: 1.5vh 6vh;
+              margin-top: 3vh;
+              max-width: none;
+            "
+          >
+            <li style="max-width: 38ch">
+              <b>KI-Erfassung:</b> Bild und Text werden automatisch zu Modell, Kategorie,
+              Spezifikation.
+            </li>
+            <li style="max-width: 38ch">
+              <b>Qualitätskontrolle:</b> Prüf-Checkliste mit Vier-Augen-Prinzip vor der
+              Veröffentlichung.
+            </li>
+            <li style="max-width: 38ch">
+              <b>Bulk-Erfassung:</b> ganze Spenden auf einmal, aus Text oder CSV.
+            </li>
+            <li style="max-width: 38ch">
+              <b>Direkt in den Marktplatz:</b> geprüfte Geräte werden mit einem Klick zum Inserat.
+            </li>
+          </ul>
+        </section>
+
+        <section class="slide">
+          <div class="eyebrow"><span>Betrieb &amp; Wissen</span></div>
+          <h2>Zeiterfassung, Teams, und ein KI-Assistent auf dem eigenen Wissen.</h2>
+          <ul
+            class="feat"
+            style="
+              grid-template-columns: 1fr 1fr;
+              display: grid;
+              gap: 1.5vh 6vh;
+              margin-top: 3vh;
+              max-width: none;
+            "
+          >
+            <li style="max-width: 38ch">
+              <b>Zeiterfassung:</b> Arbeitszeit, Saldi, Genehmigungen, Monatsrapport als PDF.
+            </li>
+            <li style="max-width: 38ch">
+              <b>Teams &amp; HR:</b> Aufgaben, Protokolle, Entscheide — die Zusammenarbeit, digital.
+            </li>
+            <li style="max-width: 38ch">
+              <b>Hirn:</b> ein KI-Assistent auf dem Wissen des Vereins (RAG), kein Fremd-Chatbot.
+            </li>
+            <li style="max-width: 38ch">
+              <b>Transparenz-Dashboards:</b> Finanzen, Wirkung, Kennzahlen an einem Ort.
+            </li>
+          </ul>
+        </section>
+
+        <section class="slide">
+          <div class="shot-full">
+            <div class="cap">
+              <div class="t">
+                <h3>Projekte &amp; Upcycling — die Mission, sichtbar gemacht.</h3>
+                <p>Von Freie-Computer bis Monitor-Upcycling, mit belegten Resultaten.</p>
+              </div>
+            </div>
+            <div class="frame">
+              <div class="browserbar">
+                <i></i><i></i><i></i><span class="url">revampit.orangecat.ch/projects</span>
+              </div>
+              <div class="scroll">
+                <img src="/blog/showcase-revampit-projects.png" alt="Projekte" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="slide">
+          <div class="eyebrow"><span>Grössenordnung</span></div>
+          <h2>Kein Prototyp — eine laufende Plattform.</h2>
+          <div class="stats">
+            <div class="c">
+              <div class="v num">319</div>
+              <div class="l">API-Endpunkte</div>
+            </div>
+            <div class="c">
+              <div class="v num">224</div>
+              <div class="l">Seiten</div>
+            </div>
+            <div class="c">
+              <div class="v num">33</div>
+              <div class="l">Admin-Module</div>
+            </div>
+            <div class="c">
+              <div class="v num">~130</div>
+              <div class="l">DB-Tabellen</div>
+            </div>
+            <div class="c">
+              <div class="v num">8</div>
+              <div class="l">Sprachen</div>
+            </div>
+            <div class="c">
+              <div class="v num">2'361</div>
+              <div class="l">Commits</div>
+            </div>
+          </div>
+          <div class="tech" style="margin-top: 3vh">
+            <b>Technik:</b> Next.js 16 · TypeScript · PostgreSQL / Drizzle · NextAuth v5 ·
+            Meilisearch · Payrexx · Cloudflare R2 · Sentry
+          </div>
+        </section>
+
+        <section class="slide cover">
+          <div class="eyebrow"><span>Kurz gesagt</span></div>
+          <h1>Ein Ort statt drei.<br /><span class="kicker">Live und überprüfbar.</span></h1>
+          <p class="sub">
+            Alles auf diesen Folien lässt sich jetzt im Browser öffnen — am besten selbst anschauen.
+          </p>
+          <div class="domns">
+            <span><span class="dot"></span>revampit.orangecat.ch</span>
+          </div>
+        </section>
       </div>
-      <div class="col new"><span class="tag">Die Folge</span>
-        <div class="row">Ein Gerät durchläuft drei Programme, die nichts voneinander wissen.</div>
-        <div class="row">Daten werden von Hand übertragen.</div>
-        <div class="row">Für Besucher: drei Orte statt einem.</div>
-      </div>
     </div>
-  </section>
-
-  <section class="slide">
-    <div class="split">
-      <div class="txt">
-        <div class="eyebrow"><span>Die Antwort</span></div>
-        <h2>Eine einzige Anwendung — öffentlich und intern.</h2>
-        <p class="muted" style="margin-top:2.2vh">Kaufen, Hilfe finden, spenden, mitmachen — und dahinter
-          der gesamte Geräte- und Personal-Workflow. In acht Sprachen.</p>
-      </div>
-      <div class="shot"><div class="browserbar"><i></i><i></i><i></i><span class="url">revampit.orangecat.ch</span></div>
-        <img src="/blog/showcase-revampit-home.png" alt="Startseite"></div>
-    </div>
-  </section>
-
-  <section class="slide section-break">
-    <div class="eyebrow"><span>Teil 1</span></div><h2>Für die Öffentlichkeit</h2>
-    <p>Kaufen, reparieren lassen, mitmachen — barrierefrei und mehrsprachig.</p>
-  </section>
-
-  <section class="slide">
-    <div class="split rev">
-      <div class="shot"><div class="browserbar"><i></i><i></i><i></i><span class="url">revampit.orangecat.ch/marketplace</span></div>
-        <img src="/blog/showcase-revampit-marketplace.png" alt="Marktplatz"></div>
-      <div class="txt">
-        <div class="eyebrow"><span>Marktplatz</span></div>
-        <h3>Geprüfte refurbished IT — und ein Community-Marktplatz.</h3>
-        <ul class="feat">
-          <li><b>Ein Store, zwei Quellen:</b> RevampIT-Bestand und private Inserate, sauber gefiltert.</li>
-          <li><b>Warenkorb &amp; Checkout</b> mit Payrexx-Zahlung im Treuhand-Prinzip.</li>
-          <li><b>CO₂ pro Kauf</b> sichtbar — jeder Kauf hält ein Gerät aus dem Müll.</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section class="slide">
-    <div class="shot-full">
-      <div class="cap"><div class="t"><h3>Filtern nach Anbieter, Kategorie, Zustand.</h3>
-        <p>Jedes Inserat zeigt Zustand und Prüfsiegel — Vertrauen ist Teil des Produkts.</p></div></div>
-      <div class="frame"><div class="browserbar"><i></i><i></i><i></i><span class="url">revampit.orangecat.ch/marketplace</span></div>
-        <div class="scroll"><img src="/blog/showcase-revampit-marketplace-grid.png" alt="Marktplatz-Raster"></div></div>
-    </div>
-  </section>
-
-  <section class="slide">
-    <div class="split">
-      <div class="txt">
-        <div class="eyebrow"><span>Ein Inserat</span></div>
-        <h3>Alle Angaben, die für einen fairen Kauf zählen.</h3>
-        <ul class="feat">
-          <li>Zustand, Spezifikation, Preis — transparent und vergleichbar.</li>
-          <li>RevampIT-Geräte tragen ein Prüfsiegel aus der Qualitätskontrolle.</li>
-          <li>Direkt in den Warenkorb, ohne Umweg über ein zweites System.</li>
-        </ul>
-      </div>
-      <div class="shot"><div class="browserbar"><i></i><i></i><i></i><span class="url">revampit.orangecat.ch/marketplace/…</span></div>
-        <img src="/blog/showcase-revampit-listing.png" alt="Inserat-Detail"></div>
-    </div>
-  </section>
-
-  <section class="slide">
-    <div class="split rev">
-      <div class="shot"><div class="browserbar"><i></i><i></i><i></i><span class="url">revampit.orangecat.ch/marketplace/sell</span></div>
-        <img src="/blog/showcase-revampit-sell.png" alt="Inserat aufgeben"></div>
-      <div class="txt">
-        <div class="eyebrow"><span>Selbst verkaufen</span></div>
-        <h3>Auch Private geben ihrer Hardware ein zweites Leben.</h3>
-        <ul class="feat">
-          <li>In wenigen Schritten ein eigenes Inserat aufgeben.</li>
-          <li>Community-Verkäufe und RevampIT-Bestand teilen sich einen Ort.</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section class="slide">
-    <div class="split">
-      <div class="txt">
-        <div class="eyebrow"><span>IT-Hilfe</span></div>
-        <h3>Reparatur-Netzwerk statt Wegwerfen.</h3>
-        <ul class="feat">
-          <li><b>Hilfe suchen oder anbieten</b> — Anfragen treffen auf ein Techniker-Netzwerk.</li>
-          <li><b>Zwei Seiten, ein Ort:</b> Hilfesuchende und Fachleute finden zusammen.</li>
-          <li>Repariert wird, was repariert werden kann — bevor es Schrott wird.</li>
-        </ul>
-      </div>
-      <div class="shot"><div class="browserbar"><i></i><i></i><i></i><span class="url">revampit.orangecat.ch/it-hilfe</span></div>
-        <img src="/blog/showcase-revampit-it-hilfe.png" alt="IT-Hilfe"></div>
-    </div>
-  </section>
-
-  <section class="slide">
-    <div class="split rev">
-      <div class="shot"><div class="browserbar"><i></i><i></i><i></i><span class="url">revampit.orangecat.ch/services</span></div>
-        <img src="/blog/showcase-revampit-service.png" alt="Dienstleistungen"></div>
-      <div class="txt">
-        <div class="eyebrow"><span>Dienstleistungen</span></div>
-        <h3>Wunsch-Computer, Linux-Umstieg, Recycling.</h3>
-        <ul class="feat">
-          <li><b>Bau-deinen-Computer</b> — geführte Konfiguration aus geprüften Teilen.</li>
-          <li><b>Linux &amp; Open Source</b> statt neuer Hardware für alten Zweck.</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section class="slide">
-    <div class="shot-full">
-      <div class="cap"><div class="t"><h3>So funktioniert's — der Weg vom Gerät zum neuen Zuhause.</h3>
-        <p>Jeder Schritt erklärt, damit Spender und Käufer wissen, was passiert.</p></div></div>
-      <div class="frame"><div class="browserbar"><i></i><i></i><i></i><span class="url">revampit.orangecat.ch/so-funktionierts</span></div>
-        <div class="scroll"><img src="/blog/showcase-revampit-sofunktioniert.png" alt="So funktioniert's"></div></div>
-    </div>
-  </section>
-
-  <section class="slide">
-    <div class="split">
-      <div class="txt">
-        <div class="eyebrow"><span>Wirkung, belegt</span></div>
-        <h3>Jede CO₂-Zahl mit zitierter Quelle.</h3>
-        <ul class="feat">
-          <li><b>Kein geschätztes Greenwashing:</b> Faktoren aus ADEME, Fraunhofer, ZHAW.</li>
-          <li>Pro Kategorie ein belegter Wert — «Wie berechnet?» ist einen Klick entfernt.</li>
-          <li>Kategorien ohne saubere Quelle zeigen keine Behauptung.</li>
-        </ul>
-      </div>
-      <div class="shot"><div class="browserbar"><i></i><i></i><i></i><span class="url">revampit.orangecat.ch/transparenz/co2</span></div>
-        <img src="/blog/showcase-revampit-co2.png" alt="CO2-Methodik"></div>
-    </div>
-  </section>
-
-  <section class="slide">
-    <div class="split rev">
-      <div class="shot"><div class="browserbar"><i></i><i></i><i></i><span class="url">revampit.orangecat.ch/about/impact</span></div>
-        <img src="/blog/showcase-revampit-impact.png" alt="Wirkung"></div>
-      <div class="txt">
-        <div class="eyebrow"><span>Transparenz</span></div>
-        <h3>Wirkung und Finanzen — offen einsehbar.</h3>
-        <ul class="feat">
-          <li>Weitergegebene Geräte, vermiedenes CO₂, soziale Integration.</li>
-          <li>Zahlen mit Quelle statt Hochglanz-Behauptungen.</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section class="slide">
-    <div class="split">
-      <div class="txt">
-        <div class="eyebrow"><span>Finanzen</span></div>
-        <h3>Als Non-Profit legen wir die Zahlen offen.</h3>
-        <ul class="feat">
-          <li><b>98.3% Eigenfinanzierung</b> — selbst erwirtschaftet, nicht spendenabhängig.</li>
-          <li>Einnahmen nach Quelle, direkt aus der Buchhaltung.</li>
-          <li>Jede Zahl belegt — Transparenz ist Teil des Vertrauens.</li>
-        </ul>
-      </div>
-      <div class="shot"><div class="browserbar"><i></i><i></i><i></i><span class="url">revampit.orangecat.ch/about/finances</span></div>
-        <img src="/blog/showcase-revampit-finances.png" alt="Finanzen und Transparenz"></div>
-    </div>
-  </section>
-
-  <section class="slide">
-    <div class="split rev">
-      <div class="shot"><div class="browserbar"><i></i><i></i><i></i><span class="url">revampit.orangecat.ch/get-involved/donate</span></div>
-        <img src="/blog/showcase-revampit-donate.png" alt="Spenden — direkt helfen"></div>
-      <div class="txt">
-        <div class="eyebrow"><span>Mitmachen</span></div>
-        <h3>Direkt helfen — Geld oder Gerät.</h3>
-        <ul class="feat">
-          <li><b>Jede Spende</b> rettet Geräte vor dem Elektroschrott.</li>
-          <li>Geld an unser Konto oder ein Gerät an die Werkstatt — beides hilft sofort.</li>
-          <li>Technologie für Menschen, die sich das sonst nicht leisten können.</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <section class="slide section-break">
-    <div class="eyebrow"><span>Teil 2</span></div><h2>Für den Betrieb</h2>
-    <p>Dieselbe Plattform trägt den ganzen internen Ablauf — vom Geräte-Eingang bis zur Lohnabrechnung.</p>
-  </section>
-
-  <section class="slide">
-    <div class="eyebrow"><span>Geräte-Eingang</span></div>
-    <h2>Vom Foto zum erfassten, geprüften Gerät.</h2>
-    <ul class="feat" style="grid-template-columns:1fr 1fr; display:grid; gap:1.5vh 6vh; margin-top:3vh; max-width:none">
-      <li style="max-width:38ch"><b>KI-Erfassung:</b> Bild und Text werden automatisch zu Modell, Kategorie, Spezifikation.</li>
-      <li style="max-width:38ch"><b>Qualitätskontrolle:</b> Prüf-Checkliste mit Vier-Augen-Prinzip vor der Veröffentlichung.</li>
-      <li style="max-width:38ch"><b>Bulk-Erfassung:</b> ganze Spenden auf einmal, aus Text oder CSV.</li>
-      <li style="max-width:38ch"><b>Direkt in den Marktplatz:</b> geprüfte Geräte werden mit einem Klick zum Inserat.</li>
-    </ul>
-  </section>
-
-  <section class="slide">
-    <div class="eyebrow"><span>Betrieb &amp; Wissen</span></div>
-    <h2>Zeiterfassung, Teams, und ein KI-Assistent auf dem eigenen Wissen.</h2>
-    <ul class="feat" style="grid-template-columns:1fr 1fr; display:grid; gap:1.5vh 6vh; margin-top:3vh; max-width:none">
-      <li style="max-width:38ch"><b>Zeiterfassung:</b> Arbeitszeit, Saldi, Genehmigungen, Monatsrapport als PDF.</li>
-      <li style="max-width:38ch"><b>Teams &amp; HR:</b> Aufgaben, Protokolle, Entscheide — die Zusammenarbeit, digital.</li>
-      <li style="max-width:38ch"><b>Hirn:</b> ein KI-Assistent auf dem Wissen des Vereins (RAG), kein Fremd-Chatbot.</li>
-      <li style="max-width:38ch"><b>Transparenz-Dashboards:</b> Finanzen, Wirkung, Kennzahlen an einem Ort.</li>
-    </ul>
-  </section>
-
-  <section class="slide">
-    <div class="shot-full">
-      <div class="cap"><div class="t"><h3>Projekte &amp; Upcycling — die Mission, sichtbar gemacht.</h3>
-        <p>Von Freie-Computer bis Monitor-Upcycling, mit belegten Resultaten.</p></div></div>
-      <div class="frame"><div class="browserbar"><i></i><i></i><i></i><span class="url">revampit.orangecat.ch/projects</span></div>
-        <div class="scroll"><img src="/blog/showcase-revampit-projects.png" alt="Projekte"></div></div>
-    </div>
-  </section>
-
-  <section class="slide">
-    <div class="eyebrow"><span>Grössenordnung</span></div>
-    <h2>Kein Prototyp — eine laufende Plattform.</h2>
-    <div class="stats">
-      <div class="c"><div class="v num">319</div><div class="l">API-Endpunkte</div></div>
-      <div class="c"><div class="v num">224</div><div class="l">Seiten</div></div>
-      <div class="c"><div class="v num">33</div><div class="l">Admin-Module</div></div>
-      <div class="c"><div class="v num">~130</div><div class="l">DB-Tabellen</div></div>
-      <div class="c"><div class="v num">8</div><div class="l">Sprachen</div></div>
-      <div class="c"><div class="v num">2'361</div><div class="l">Commits</div></div>
-    </div>
-    <div class="tech" style="margin-top:3vh"><b>Technik:</b> Next.js 16 · TypeScript · PostgreSQL / Drizzle · NextAuth v5 · Meilisearch · Payrexx · Cloudflare R2 · Sentry</div>
-  </section>
-
-  <section class="slide cover">
-    <div class="eyebrow"><span>Kurz gesagt</span></div>
-    <h1>Ein Ort statt drei.<br><span class="kicker">Live und überprüfbar.</span></h1>
-    <p class="sub">Alles auf diesen Folien lässt sich jetzt im Browser öffnen — am besten selbst anschauen.</p>
-    <div class="domns"><span><span class="dot"></span>revampit.orangecat.ch</span></div>
-  </section>
-
-</div></div>
-<script>
-  const slides = Array.from(document.querySelectorAll('.slide'));
-  const bar = document.getElementById('bar'), counter = document.getElementById('counter'), hint = document.getElementById('hint');
-  let i = 0;
-  function show(n){
-    i = Math.max(0, Math.min(slides.length - 1, n));
-    slides.forEach((s, k) => s.classList.toggle('active', k === i));
-    bar.style.width = (i / (slides.length - 1) * 100) + '%';
-    counter.textContent = String(i + 1).padStart(2,'0') + ' / ' + String(slides.length).padStart(2,'0');
-    if (i > 0) hint.style.display = 'none';
-  }
-  function next(){ show(i + 1) } function prev(){ show(i - 1) }
-  document.addEventListener('keydown', e => {
-    if (['ArrowRight','ArrowDown',' ','PageDown'].includes(e.key)) { e.preventDefault(); next(); }
-    else if (['ArrowLeft','ArrowUp','PageUp'].includes(e.key)) { e.preventDefault(); prev(); }
-    else if (e.key === 'Home') show(0); else if (e.key === 'End') show(slides.length - 1);
-  });
-  document.getElementById('stage').addEventListener('click', e => { (e.clientX / window.innerWidth) < 0.28 ? prev() : next(); });
-  show(0);
-</script>
-</body>
+    <script>
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const bar = document.getElementById('bar'),
+        counter = document.getElementById('counter'),
+        hint = document.getElementById('hint');
+      let i = 0;
+      function show(n) {
+        i = Math.max(0, Math.min(slides.length - 1, n));
+        slides.forEach((s, k) => s.classList.toggle('active', k === i));
+        bar.style.width = (i / (slides.length - 1)) * 100 + '%';
+        counter.textContent =
+          String(i + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+        if (i > 0) hint.style.display = 'none';
+      }
+      function next() {
+        show(i + 1);
+      }
+      function prev() {
+        show(i - 1);
+      }
+      document.addEventListener('keydown', (e) => {
+        if (['ArrowRight', 'ArrowDown', ' ', 'PageDown'].includes(e.key)) {
+          e.preventDefault();
+          next();
+        } else if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.key)) {
+          e.preventDefault();
+          prev();
+        } else if (e.key === 'Home') show(0);
+        else if (e.key === 'End') show(slides.length - 1);
+      });
+      document.getElementById('stage').addEventListener('click', (e) => {
+        e.clientX / window.innerWidth < 0.28 ? prev() : next();
+      });
+      show(0);
+    </script>
+  </body>
 </html>

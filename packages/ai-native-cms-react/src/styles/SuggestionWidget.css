@@ -42,7 +42,8 @@
 .ai-cms-form,
 .ai-cms-button {
   box-sizing: border-box;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 }
 
 /* Floating suggestion button */
@@ -67,7 +68,9 @@
 .ai-cms-suggestion-button:hover:not(.ai-cms-disabled) {
   background-color: var(--ai-cms-primary-hover);
   transform: translateY(-1px);
-  box-shadow: 0 12px 20px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    0 12px 20px -3px rgba(0, 0, 0, 0.15),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .ai-cms-suggestion-button:focus {
@@ -340,20 +343,20 @@
   .ai-cms-modal-overlay {
     padding: 0.5rem;
   }
-  
+
   .ai-cms-modal-content {
     max-width: none;
   }
-  
+
   .ai-cms-modal-header,
   .ai-cms-form {
     padding: 1rem;
   }
-  
+
   .ai-cms-form-actions {
     flex-direction: column-reverse;
   }
-  
+
   .ai-cms-button {
     width: 100%;
   }
@@ -364,12 +367,12 @@
   .ai-cms-suggestion-button {
     border: 2px solid currentColor;
   }
-  
+
   .ai-cms-input,
   .ai-cms-textarea {
     border-width: 2px;
   }
-  
+
   .ai-cms-button {
     border-width: 2px;
   }
@@ -384,7 +387,7 @@
   .ai-cms-close-button {
     transition: none;
   }
-  
+
   .ai-cms-modal-overlay,
   .ai-cms-modal-content {
     animation: none;

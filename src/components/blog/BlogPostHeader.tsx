@@ -1,26 +1,26 @@
-import { Link } from '@/i18n/navigation'
-import { ArrowLeft } from 'lucide-react'
-import { getLocale, getTranslations } from 'next-intl/server'
-import { BlogPost } from '@/lib/blog'
-import { formatDate } from '@/lib/date-formats'
-import { blogCategoryKey, getReadingTime } from '@/lib/blog-utils'
-import { ROUTES } from '@/config/routes'
-import UnlistedBadge from './UnlistedBadge'
-import BlogByline from './BlogByline'
-import { Eyebrow } from '@/components/ui/Eyebrow'
+import { Link } from '@/i18n/navigation';
+import { ArrowLeft } from 'lucide-react';
+import { getLocale, getTranslations } from 'next-intl/server';
+import { BlogPost } from '@/lib/blog';
+import { formatDate } from '@/lib/date-formats';
+import { blogCategoryKey, getReadingTime } from '@/lib/blog-utils';
+import { ROUTES } from '@/config/routes';
+import UnlistedBadge from './UnlistedBadge';
+import BlogByline from './BlogByline';
+import { Eyebrow } from '@/components/ui/Eyebrow';
 
 interface BlogPostHeaderProps {
-  post: BlogPost
+  post: BlogPost;
   /** Resolved category slug — makes the eyebrow link to the filtered index. */
-  categorySlug?: string
+  categorySlug?: string;
 }
 
 export default async function BlogPostHeader({ post, categorySlug }: BlogPostHeaderProps) {
-  const t = await getTranslations('blog')
-  const locale = await getLocale()
-  const readingTime = getReadingTime(post.body)
-  const categoryKey = post.category ? blogCategoryKey(post.category) : null
-  const categoryLabel = categoryKey ? t(`categoryLabels.${categoryKey}`) : post.category
+  const t = await getTranslations('blog');
+  const locale = await getLocale();
+  const readingTime = getReadingTime(post.body);
+  const categoryKey = post.category ? blogCategoryKey(post.category) : null;
+  const categoryLabel = categoryKey ? t(`categoryLabels.${categoryKey}`) : post.category;
 
   return (
     <header className="mx-auto max-w-[720px] px-4 pt-10 pb-8 sm:px-6 sm:pt-16">
@@ -35,8 +35,8 @@ export default async function BlogPostHeader({ post, categorySlug }: BlogPostHea
 
       {/* Eyebrow: category (links to the filtered index) + unlisted marker */}
       <div className="mt-10 flex flex-wrap items-center gap-3">
-        {post.category && (
-          categorySlug ? (
+        {post.category &&
+          (categorySlug ? (
             <Link
               href={`/blog?categories=${encodeURIComponent(categorySlug)}`}
               className="ui-public-eyebrow transition-colors hover:text-action"
@@ -45,8 +45,7 @@ export default async function BlogPostHeader({ post, categorySlug }: BlogPostHea
             </Link>
           ) : (
             <Eyebrow as="span">{categoryLabel}</Eyebrow>
-          )
-        )}
+          ))}
         {post.visibility === 'unlisted' && <UnlistedBadge />}
       </div>
 
@@ -75,5 +74,5 @@ export default async function BlogPostHeader({ post, categorySlug }: BlogPostHea
         </span>
       </div>
     </header>
-  )
+  );
 }

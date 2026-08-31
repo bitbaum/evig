@@ -5,11 +5,11 @@
  * This script should be run periodically to handle automatic refunds
  */
 
-const { Client } = require('pg')
-const Stripe = require('stripe')
+const { Client } = require('pg');
+const Stripe = require('stripe');
 
 // Initialize Stripe
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '')
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '');
 
 // Database configuration
 const dbConfig = {
@@ -18,7 +18,7 @@ const dbConfig = {
   database: process.env.DB_NAME || 'revampit_cms',
   user: process.env.DB_USER || 'postgres',
   password: process.env.DB_PASSWORD || 'postgres',
-}
+};
 
 // Auto-refund rules
 const AUTO_REFUND_RULES = [
@@ -36,7 +36,7 @@ const AUTO_REFUND_RULES = [
     `,
     refundType: 'service_cancelled',
     refundPercentage: 1.0, // 100% refund
-    reason: 'Service cancelled by customer within 24 hours'
+    reason: 'Service cancelled by customer within 24 hours',
   },
   {
     name: 'No Show Refund',
@@ -52,7 +52,7 @@ const AUTO_REFUND_RULES = [
     `,
     refundType: 'service_not_completed',
     refundPercentage: 0.5, // 50% refund for no-shows
-    reason: 'Customer did not show up for appointment'
+    reason: 'Customer did not show up for appointment',
   },
   {
     name: 'Workshop Cancellation',
@@ -68,21 +68,21 @@ const AUTO_REFUND_RULES = [
     `,
     refundType: 'service_cancelled',
     refundPercentage: 1.0, // 100% refund
-    reason: 'Workshop cancelled within 48 hours'
-  }
-]
+    reason: 'Workshop cancelled within 48 hours',
+  },
+];
 
 async function autoProcessRefunds() {
-  const client = new Client(dbConfig)
+  const client = new Client(dbConfig);
 
   try {
-    await client.connect()
-    console.log('Connected to database')
+    await client.connect();
+    console.log('Connected to database');
 
-    let totalProcessed = 0
+    let totalProcessed = 0;
 
     for (const rule of AUTO_REFUND_RULES) {
-      console.log(`\nProcessing rule: ${rule.name}`)
+      console.log(`\nProcessing rule: ${rule.name}`);
 
       // Find eligible transactions for auto-refund
       const eligibleTransactions = await client.query(`
@@ -101,30 +101,31 @@ async function autoProcessRefunds() {
         WHERE pt.type = 'payment'
           AND pt.status = 'succeeded'
           AND (${rule.condition})
-      `)
+      `);
 
-      console.log(`Found ${eligibleTransactions.rows.length} eligible transactions`)
+      console.log(`Found ${eligibleTransactions.rows.length} eligible transactions`);
 
       for (const transaction of eligibleTransactions.rows) {
         try {
-          console.log(`Processing auto-refund for transaction ${transaction.id}`)
+          console.log(`Processing auto-refund for transaction ${transaction.id}`);
 
           // Calculate refund amount
-          const refundAmount = Math.round(transaction.amount_cents * rule.refundPercentage)
+          const refundAmount = Math.round(transaction.amount_cents * rule.refundPercentage);
 
           // Check if refund already exists
           const existingRefund = await client.query(
-            'SELECT id FROM refunds WHERE original_transaction_id = $1 AND status IN (\'requested\', \'approved\', \'processing\', \'completed\')',
-            [transaction.id]
-          )
+            "SELECT id FROM refunds WHERE original_transaction_id = $1 AND status IN ('requested', 'approved', 'processing', 'completed')",
+            [transaction.id],
+          );
 
           if (existingRefund.rows.length > 0) {
-            console.log(`Refund already exists for transaction ${transaction.id}`)
-            continue
+            console.log(`Refund already exists for transaction ${transaction.id}`);
+            continue;
           }
 
           // Create auto-refund record
-          const refundResult = await client.query(`
+          const refundResult = await client.query(
+            `
             INSERT INTO refunds (
               refund_number,
               original_transaction_id,
@@ -147,18 +148,20 @@ async function autoProcessRefunds() {
               CURRENT_TIMESTAMP
             )
             RETURNING id, refund_number
-          `, [
-            transaction.id,
-            refundAmount,
-            transaction.currency,
-            rule.refundType,
-            rule.reason,
-            transaction.user_id,
-            'approved' // Auto-approve for system refunds
-          ])
+          `,
+            [
+              transaction.id,
+              refundAmount,
+              transaction.currency,
+              rule.refundType,
+              rule.reason,
+              transaction.user_id,
+              'approved', // Auto-approve for system refunds
+            ],
+          );
 
-          const refundId = refundResult.rows[0].id
-          const refundNumber = refundResult.rows[0].refund_number
+          const refundId = refundResult.rows[0].id;
+          const refundNumber = refundResult.rows[0].refund_number;
 
           // Process refund immediately with Stripe
           const stripeRefund = await stripe.refunds.create({
@@ -170,26 +173,26 @@ async function autoProcessRefunds() {
               refundNumber,
               originalTransactionId: transaction.id.toString(),
               autoProcessed: 'true',
-              ruleName: rule.name
-            }
-          })
+              ruleName: rule.name,
+            },
+          });
 
           // Update refund with Stripe refund ID
-          await client.query(`
+          await client.query(
+            `
             UPDATE refunds
             SET
               refund_transaction_id = $1,
               status = 'processing',
               internal_notes = $2
             WHERE id = $3
-          `, [
-            stripeRefund.id,
-            `Auto-processed by rule: ${rule.name}`,
-            refundId
-          ])
+          `,
+            [stripeRefund.id, `Auto-processed by rule: ${rule.name}`, refundId],
+          );
 
           // Create refund transaction record
-          await client.query(`
+          await client.query(
+            `
             INSERT INTO payment_transactions (
               user_id,
               provider_id,
@@ -204,27 +207,34 @@ async function autoProcessRefunds() {
             ) VALUES (
               $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
             )
-          `, [
-            transaction.user_id,
-            transaction.provider_id,
-            stripeRefund.id,
-            'refund',
-            'processing',
-            refundAmount,
-            transaction.currency,
-            `Auto-refund: ${rule.reason}`,
-            JSON.stringify(stripeRefund),
-            JSON.stringify({ autoProcessed: true, ruleName: rule.name })
-          ])
+          `,
+            [
+              transaction.user_id,
+              transaction.provider_id,
+              stripeRefund.id,
+              'refund',
+              'processing',
+              refundAmount,
+              transaction.currency,
+              `Auto-refund: ${rule.reason}`,
+              JSON.stringify(stripeRefund),
+              JSON.stringify({ autoProcessed: true, ruleName: rule.name }),
+            ],
+          );
 
-          console.log(`✓ Auto-refund processed: ${refundNumber} for ${refundAmount / 100} ${transaction.currency}`)
-          totalProcessed++
-
+          console.log(
+            `✓ Auto-refund processed: ${refundNumber} for ${refundAmount / 100} ${transaction.currency}`,
+          );
+          totalProcessed++;
         } catch (error) {
-          console.error(`✗ Failed to auto-process refund for transaction ${transaction.id}:`, error)
+          console.error(
+            `✗ Failed to auto-process refund for transaction ${transaction.id}:`,
+            error,
+          );
 
           // Log the error
-          await client.query(`
+          await client.query(
+            `
             INSERT INTO payment_analytics (
               date,
               provider_id,
@@ -240,19 +250,20 @@ async function autoProcessRefunds() {
                 '{auto_refund_error}',
                 (COALESCE(payment_analytics.type_breakdown->>'auto_refund_error', '0')::integer + 1)::text::jsonb
               )
-          `, [transaction.provider_id, JSON.stringify({ auto_refund_error: 1 })])
+          `,
+            [transaction.provider_id, JSON.stringify({ auto_refund_error: 1 })],
+          );
         }
       }
     }
 
-    console.log(`\nAuto-refund processing completed. Processed ${totalProcessed} refunds.`)
-
+    console.log(`\nAuto-refund processing completed. Processed ${totalProcessed} refunds.`);
   } catch (error) {
-    console.error('Auto-refund processing script error:', error)
-    process.exit(1)
+    console.error('Auto-refund processing script error:', error);
+    process.exit(1);
   } finally {
-    await client.end()
-    console.log('Database connection closed')
+    await client.end();
+    console.log('Database connection closed');
   }
 }
 
@@ -260,14 +271,14 @@ async function autoProcessRefunds() {
 function mapRefundReason(reason) {
   switch (reason) {
     case 'customer_request':
-      return 'requested_by_customer'
+      return 'requested_by_customer';
     case 'service_cancelled':
     case 'service_not_completed':
-      return 'duplicate'
+      return 'duplicate';
     case 'fraud':
-      return 'fraudulent'
+      return 'fraudulent';
     default:
-      return 'requested_by_customer'
+      return 'requested_by_customer';
   }
 }
 
@@ -275,13 +286,13 @@ function mapRefundReason(reason) {
 if (require.main === module) {
   autoProcessRefunds()
     .then(() => {
-      console.log('Auto-refund processing script completed successfully')
-      process.exit(0)
+      console.log('Auto-refund processing script completed successfully');
+      process.exit(0);
     })
     .catch((error) => {
-      console.error('Auto-refund processing script failed:', error)
-      process.exit(1)
-    })
+      console.error('Auto-refund processing script failed:', error);
+      process.exit(1);
+    });
 }
 
-module.exports = { autoProcessRefunds }
+module.exports = { autoProcessRefunds };

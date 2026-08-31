@@ -1,13 +1,13 @@
-import { z } from 'zod'
-import { uuidSchema } from './common'
+import { z } from 'zod';
+import { uuidSchema } from './common';
 
 export const WorkshopRegistrationSchema = z.object({
   workshopSlug: z.string().min(1, 'Workshop-Slug ist erforderlich'),
   // Optional: register for a specific Termin instead of the next upcoming one.
   instanceId: uuidSchema.optional(),
-})
+});
 
-export type WorkshopRegistrationInput = z.infer<typeof WorkshopRegistrationSchema>
+export type WorkshopRegistrationInput = z.infer<typeof WorkshopRegistrationSchema>;
 
 export const WorkshopProposalSchema = z.object({
   title: z.string().min(1, 'Titel ist erforderlich').max(200),
@@ -31,13 +31,13 @@ export const WorkshopProposalSchema = z.object({
   proposedTime: z.string().optional().nullable(),
   specialRequirements: z.string().optional().nullable(),
   termsAccepted: z.literal(true, { error: 'AGB müssen akzeptiert werden' }),
-})
+});
 
-export type WorkshopProposalInput = z.infer<typeof WorkshopProposalSchema>
+export type WorkshopProposalInput = z.infer<typeof WorkshopProposalSchema>;
 
 export const WorkshopRegisterWithPaymentSchema = z.object({
   instanceId: uuidSchema.optional().nullable(),
   useEscrow: z.boolean().default(false),
-})
+});
 
-export type WorkshopRegisterWithPaymentInput = z.infer<typeof WorkshopRegisterWithPaymentSchema>
+export type WorkshopRegisterWithPaymentInput = z.infer<typeof WorkshopRegisterWithPaymentSchema>;

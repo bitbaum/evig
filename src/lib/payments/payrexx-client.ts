@@ -27,17 +27,18 @@ export {
  * These are the status strings Payrexx sends in webhook payloads.
  */
 export const PAYREXX_TRANSACTION_STATUS = {
-  RESERVED: 'reserved',                    // authorized / funds held
-  CONFIRMED: 'confirmed',                  // captured / payment complete
-  REFUNDED: 'refunded',                    // fully refunded
-  PARTIALLY_REFUNDED: 'partially-refunded',// partially refunded
-  WAITING: 'waiting',                      // awaiting bank confirmation
-  CANCELLED: 'cancelled',                  // transaction cancelled
-  DECLINED: 'declined',                    // card declined
-  ERROR: 'error',                          // processing error
+  RESERVED: 'reserved', // authorized / funds held
+  CONFIRMED: 'confirmed', // captured / payment complete
+  REFUNDED: 'refunded', // fully refunded
+  PARTIALLY_REFUNDED: 'partially-refunded', // partially refunded
+  WAITING: 'waiting', // awaiting bank confirmation
+  CANCELLED: 'cancelled', // transaction cancelled
+  DECLINED: 'declined', // card declined
+  ERROR: 'error', // processing error
 } as const;
 
-export type PayrexxTransactionStatus = typeof PAYREXX_TRANSACTION_STATUS[keyof typeof PAYREXX_TRANSACTION_STATUS];
+export type PayrexxTransactionStatus =
+  (typeof PAYREXX_TRANSACTION_STATUS)[keyof typeof PAYREXX_TRANSACTION_STATUS];
 
 // ============================================================================
 // Types
@@ -71,10 +72,7 @@ export interface PayrexxTransactionResult {
 
 function sign(queryString: string): string {
   const secret = process.env[PAYREXX_ENV.API_SECRET]!;
-  return crypto
-    .createHmac('sha256', secret)
-    .update(queryString)
-    .digest('base64');
+  return crypto.createHmac('sha256', secret).update(queryString).digest('base64');
 }
 
 function buildSignedParams(params: Record<string, string>): string {
@@ -90,7 +88,7 @@ function buildSignedParams(params: Record<string, string>): string {
 async function apiRequest<T>(
   method: string,
   path: string,
-  params: Record<string, string> = {}
+  params: Record<string, string> = {},
 ): Promise<T> {
   const instance = process.env[PAYREXX_ENV.INSTANCE]!;
   const url = `${PAYREXX_API_BASE}/${path}?instance=${instance}`;
@@ -166,7 +164,10 @@ export async function createGateway(params: PayrexxGatewayParams): Promise<Payre
 /**
  * Capture a reserved transaction (releases held funds to merchant).
  */
-export async function captureTransaction(transactionId: string, amount: number): Promise<PayrexxTransactionResult> {
+export async function captureTransaction(
+  transactionId: string,
+  amount: number,
+): Promise<PayrexxTransactionResult> {
   if (!isPayrexxConfigured()) {
     logger.info('Mock: Payrexx capture', { transactionId, amount });
     return { id: Number(transactionId), status: PAYREXX_TRANSACTION_STATUS.CONFIRMED };
@@ -175,7 +176,7 @@ export async function captureTransaction(transactionId: string, amount: number):
   const result = await apiRequest<PayrexxTransactionResult>(
     'POST',
     `Transaction/${transactionId}/`,
-    { amount: String(amount) }
+    { amount: String(amount) },
   );
 
   logger.info('Payrexx transaction captured', { transactionId, amount, status: result.status });
@@ -193,7 +194,7 @@ export async function cancelTransaction(transactionId: string): Promise<PayrexxT
 
   const result = await apiRequest<PayrexxTransactionResult>(
     'DELETE',
-    `Transaction/${transactionId}/`
+    `Transaction/${transactionId}/`,
   );
 
   logger.info('Payrexx transaction cancelled', { transactionId, status: result.status });
@@ -203,7 +204,10 @@ export async function cancelTransaction(transactionId: string): Promise<PayrexxT
 /**
  * Refund a captured transaction.
  */
-export async function refundTransaction(transactionId: string, amount: number): Promise<PayrexxTransactionResult> {
+export async function refundTransaction(
+  transactionId: string,
+  amount: number,
+): Promise<PayrexxTransactionResult> {
   if (!isPayrexxConfigured()) {
     logger.info('Mock: Payrexx refund', { transactionId, amount });
     return { id: Number(transactionId), status: PAYMENT_STATUS.REFUNDED };
@@ -212,7 +216,7 @@ export async function refundTransaction(transactionId: string, amount: number): 
   const result = await apiRequest<PayrexxTransactionResult>(
     'POST',
     `Transaction/${transactionId}/refund`,
-    { amount: String(amount) }
+    { amount: String(amount) },
   );
 
   logger.info('Payrexx transaction refunded', { transactionId, amount, status: result.status });

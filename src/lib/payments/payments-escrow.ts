@@ -5,23 +5,23 @@
  * associated with payment transactions.
  */
 
-import { db } from '@/db'
-import { escrowAccounts } from '@/db/schema'
-import { sql } from 'drizzle-orm'
-import { logger } from '@/lib/logger'
-import type { SupportedCurrency } from '@/lib/payments/currency'
-import { ESCROW_STATUS } from '@/config/payment-status'
+import { db } from '@/db';
+import { escrowAccounts } from '@/db/schema';
+import { sql } from 'drizzle-orm';
+import { logger } from '@/lib/logger';
+import type { SupportedCurrency } from '@/lib/payments/currency';
+import { ESCROW_STATUS } from '@/config/payment-status';
 
 // ============================================================================
 // Types
 // ============================================================================
 
 export interface EscrowParams {
-  transactionId: string
-  totalAmountCents: number
-  currency: SupportedCurrency
-  autoReleaseDays: number
-  buyerId: string
+  transactionId: string;
+  totalAmountCents: number;
+  currency: SupportedCurrency;
+  autoReleaseDays: number;
+  buyerId: string;
 }
 
 // ============================================================================
@@ -32,21 +32,19 @@ export interface EscrowParams {
  * Create an escrow account for a transaction
  */
 export async function createEscrowAccount(params: EscrowParams): Promise<void> {
-  await db
-    .insert(escrowAccounts)
-    .values({
-      transactionId: params.transactionId,
-      totalAmountCents: params.totalAmountCents,
-      currency: params.currency,
-      autoReleaseDays: params.autoReleaseDays,
-      releaseDeadline: sql`CURRENT_TIMESTAMP + INTERVAL '1 day' * ${params.autoReleaseDays}`,
-      buyerId: params.buyerId,
-      status: ESCROW_STATUS.ACTIVE,
-    })
+  await db.insert(escrowAccounts).values({
+    transactionId: params.transactionId,
+    totalAmountCents: params.totalAmountCents,
+    currency: params.currency,
+    autoReleaseDays: params.autoReleaseDays,
+    releaseDeadline: sql`CURRENT_TIMESTAMP + INTERVAL '1 day' * ${params.autoReleaseDays}`,
+    buyerId: params.buyerId,
+    status: ESCROW_STATUS.ACTIVE,
+  });
 
   logger.info('Escrow account created', {
     transactionId: params.transactionId,
     amount: params.totalAmountCents,
-    autoReleaseDays: params.autoReleaseDays
-  })
+    autoReleaseDays: params.autoReleaseDays,
+  });
 }

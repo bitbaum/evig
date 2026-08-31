@@ -14,7 +14,7 @@ export const PAYMENT_STATUS = {
   DISPUTED: 'disputed',
 } as const;
 
-export type PaymentStatus = typeof PAYMENT_STATUS[keyof typeof PAYMENT_STATUS];
+export type PaymentStatus = (typeof PAYMENT_STATUS)[keyof typeof PAYMENT_STATUS];
 
 /**
  * Payment transaction types (payment_transactions.type column).
@@ -29,7 +29,8 @@ export const PAYMENT_TRANSACTION_TYPE = {
   TRANSFER: 'transfer',
 } as const;
 
-export type PaymentTransactionType = typeof PAYMENT_TRANSACTION_TYPE[keyof typeof PAYMENT_TRANSACTION_TYPE];
+export type PaymentTransactionType =
+  (typeof PAYMENT_TRANSACTION_TYPE)[keyof typeof PAYMENT_TRANSACTION_TYPE];
 
 /**
  * Payment dispute status (payment_disputes.status column).
@@ -43,11 +44,12 @@ export const PAYMENT_DISPUTE_STATUS = {
   CANCELLED: 'cancelled',
 } as const;
 
-export type PaymentDisputeStatus = typeof PAYMENT_DISPUTE_STATUS[keyof typeof PAYMENT_DISPUTE_STATUS];
+export type PaymentDisputeStatus =
+  (typeof PAYMENT_DISPUTE_STATUS)[keyof typeof PAYMENT_DISPUTE_STATUS];
 
 export const ESCROW_STATUS = {
   ACTIVE: 'active',
   RELEASED: 'released',
 } as const;
 
-export type EscrowStatus = typeof ESCROW_STATUS[keyof typeof ESCROW_STATUS];
+export type EscrowStatus = (typeof ESCROW_STATUS)[keyof typeof ESCROW_STATUS];

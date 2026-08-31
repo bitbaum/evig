@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * BulkActionBar Component
@@ -6,18 +6,18 @@
  * Fixed bottom bar during bulk mode with selection count and save actions.
  */
 
-import { Package, Loader2 } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
+import { Package, Loader2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
 
 interface BulkActionBarProps {
-  totalCount: number
-  selectedCount: number
-  isSaving: boolean
-  savedCount: number
-  onSave: (action: 'draft' | 'erfassen' | 'publish') => void
-  onSelectAll: () => void
-  allSelected: boolean
+  totalCount: number;
+  selectedCount: number;
+  isSaving: boolean;
+  savedCount: number;
+  onSave: (action: 'draft' | 'erfassen' | 'publish') => void;
+  onSelectAll: () => void;
+  allSelected: boolean;
 }
 
 export function BulkActionBar({
@@ -29,7 +29,7 @@ export function BulkActionBar({
   onSelectAll,
   allSelected,
 }: BulkActionBarProps) {
-  const t = useTranslations('components.erfassung.bulkActionBar')
+  const t = useTranslations('components.erfassung.bulkActionBar');
 
   // Below lg the admin bottom nav (h-14, fixed bottom-0) is visible —
   // offset above it so the bulk actions are never covered.
@@ -62,7 +62,9 @@ export function BulkActionBar({
                   style={{ width: `${totalCount > 0 ? (savedCount / totalCount) * 100 : 0}%` }}
                 />
               </div>
-              <span className="text-xs text-text-tertiary">{savedCount}/{totalCount}</span>
+              <span className="text-xs text-text-tertiary">
+                {savedCount}/{totalCount}
+              </span>
             </div>
           </div>
         )}
@@ -83,5 +85,5 @@ export function BulkActionBar({
         </Button>
       </div>
     </div>
-  )
+  );
 }

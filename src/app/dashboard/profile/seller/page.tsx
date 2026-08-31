@@ -1,26 +1,17 @@
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import Link from 'next/link'
-import {
-  ArrowLeft,
-  User,
-  Loader2,
-  AlertCircle,
-  CheckCircle,
-  Save,
-  Upload,
-  X,
-} from 'lucide-react'
-import { useSellerProfile } from '@/hooks/useSellerProfile'
+import { useTranslations } from 'next-intl';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import Link from 'next/link';
+import { ArrowLeft, User, Loader2, AlertCircle, CheckCircle, Save, Upload, X } from 'lucide-react';
+import { useSellerProfile } from '@/hooks/useSellerProfile';
 
 export default function SellerProfileEditPage() {
-  const t = useTranslations('dashboard.sellerProfile')
+  const t = useTranslations('dashboard.sellerProfile');
 
   const {
     sessionStatus,
@@ -48,14 +39,14 @@ export default function SellerProfileEditPage() {
     unexpectedError: t('unexpectedError'),
     uploadError: t('uploadError'),
     savedSuccess: t('savedSuccess'),
-  })
+  });
 
   if (sessionStatus === 'loading' || isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <Loader2 className="w-8 h-8 text-action animate-spin" />
       </div>
-    )
+    );
   }
 
   return (
@@ -70,9 +61,7 @@ export default function SellerProfileEditPage() {
 
       <div className="rounded-lg border border-subtle bg-surface-base">
         <div className="border-b border-subtle p-6">
-          <Eyebrow>
-            {noProfile ? t('noProfileDesc') : t('editProfileDesc')}
-          </Eyebrow>
+          <Eyebrow>{noProfile ? t('noProfileDesc') : t('editProfileDesc')}</Eyebrow>
           <Heading
             level={1}
             className="mt-2 flex items-center gap-2 text-2xl font-semibold text-text-primary"
@@ -199,20 +188,12 @@ export default function SellerProfileEditPage() {
               <p className="text-sm text-action-text">{success}</p>
             </div>
           )}
-          <Button
-            onClick={handleSave}
-            disabled={isSaving}
-            className="w-full gap-2 font-semibold"
-          >
-            {isSaving ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <Save className="w-4 h-4" />
-            )}
+          <Button onClick={handleSave} disabled={isSaving} className="w-full gap-2 font-semibold">
+            {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
             {isSaving ? t('saving') : t('saveProfile')}
           </Button>
         </div>
       </div>
     </div>
-  )
+  );
 }

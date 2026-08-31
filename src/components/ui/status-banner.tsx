@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import { HTMLAttributes, forwardRef } from 'react'
-import { cn } from '@/lib/utils'
-import { AlertCircle, CheckCircle2, AlertTriangle, Info, type LucideIcon } from 'lucide-react'
+import { HTMLAttributes, forwardRef } from 'react';
+import { cn } from '@/lib/utils';
+import { AlertCircle, CheckCircle2, AlertTriangle, Info, type LucideIcon } from 'lucide-react';
 
 /**
  * Block-level status callout. The companion to <StatusBadge> (inline pill):
@@ -16,21 +16,24 @@ import { AlertCircle, CheckCircle2, AlertTriangle, Info, type LucideIcon } from 
  * Each variant has a default icon; pass `icon` to override.
  */
 
-export type StatusBannerVariant = 'success' | 'error' | 'warning' | 'info'
+export type StatusBannerVariant = 'success' | 'error' | 'warning' | 'info';
 
 interface StatusBannerProps extends HTMLAttributes<HTMLDivElement> {
-  variant: StatusBannerVariant
+  variant: StatusBannerVariant;
   /** Override the default icon. */
-  icon?: LucideIcon
+  icon?: LucideIcon;
   /** When true, the banner announces itself via aria-live for screen readers. */
-  announce?: boolean
+  announce?: boolean;
 }
 
-const VARIANT_CLASSES: Record<StatusBannerVariant, {
-  surface: string
-  icon: string
-  text: string
-}> = {
+const VARIANT_CLASSES: Record<
+  StatusBannerVariant,
+  {
+    surface: string;
+    icon: string;
+    text: string;
+  }
+> = {
   success: {
     surface: 'bg-action-muted border-action/30',
     icon: 'text-action',
@@ -51,19 +54,19 @@ const VARIANT_CLASSES: Record<StatusBannerVariant, {
     icon: 'text-info-600 dark:text-info-400',
     text: 'text-info-800 dark:text-info-200',
   },
-}
+};
 
 const DEFAULT_ICON: Record<StatusBannerVariant, LucideIcon> = {
   success: CheckCircle2,
   error: AlertCircle,
   warning: AlertTriangle,
   info: Info,
-}
+};
 
 export const StatusBanner = forwardRef<HTMLDivElement, StatusBannerProps>(
   ({ variant, icon, announce, className, children, ...props }, ref) => {
-    const Icon = icon ?? DEFAULT_ICON[variant]
-    const v = VARIANT_CLASSES[variant]
+    const Icon = icon ?? DEFAULT_ICON[variant];
+    const v = VARIANT_CLASSES[variant];
 
     return (
       <div
@@ -71,17 +74,13 @@ export const StatusBanner = forwardRef<HTMLDivElement, StatusBannerProps>(
         role="alert"
         // Errors are urgent → assertive. Success/warning/info → polite.
         aria-live={announce !== false ? (variant === 'error' ? 'assertive' : 'polite') : undefined}
-        className={cn(
-          'p-4 rounded-lg flex items-start gap-3 border',
-          v.surface,
-          className,
-        )}
+        className={cn('p-4 rounded-lg flex items-start gap-3 border', v.surface, className)}
         {...props}
       >
         <Icon className={cn('w-5 h-5 shrink-0 mt-0.5', v.icon)} aria-hidden="true" />
         <div className={cn('text-sm', v.text)}>{children}</div>
       </div>
-    )
+    );
   },
-)
-StatusBanner.displayName = 'StatusBanner'
+);
+StatusBanner.displayName = 'StatusBanner';

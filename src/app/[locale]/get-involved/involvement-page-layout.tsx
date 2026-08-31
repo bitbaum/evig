@@ -1,17 +1,17 @@
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { ReactNode } from 'react'
-import { Link } from '@/i18n/navigation'
-import { getTranslations } from 'next-intl/server'
-import { PageHero } from '@/components/layout/PageHero'
-import { Section } from '@/components/layout/Section'
-import { Users } from 'lucide-react'
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { ReactNode } from 'react';
+import { Link } from '@/i18n/navigation';
+import { getTranslations } from 'next-intl/server';
+import { PageHero } from '@/components/layout/PageHero';
+import { Section } from '@/components/layout/Section';
+import { Users } from 'lucide-react';
 
 interface InvolvementPageLayoutProps {
-  title: string
-  description: string
-  children: ReactNode
-  ctaText: string
-  ctaHref: string
+  title: string;
+  description: string;
+  children: ReactNode;
+  ctaText: string;
+  ctaHref: string;
 }
 
 export async function InvolvementPageLayout({
@@ -19,19 +19,14 @@ export async function InvolvementPageLayout({
   description,
   children,
   ctaText,
-  ctaHref
+  ctaHref,
 }: InvolvementPageLayoutProps) {
-  const t = await getTranslations('getInvolved.cta')
-  const tEye = await getTranslations('common.eyebrows')
+  const t = await getTranslations('getInvolved.cta');
+  const tEye = await getTranslations('common.eyebrows');
 
   return (
     <main className="min-h-screen">
-      <PageHero
-        theme="getInvolved"
-        icon={Users}
-        title={title}
-        subtitle={description}
-      >
+      <PageHero theme="getInvolved" icon={Users} title={title} subtitle={description}>
         <div className="ui-public-cta-row mt-8">
           <a href={ctaHref} className="ui-public-cta">
             {ctaText}
@@ -40,9 +35,7 @@ export async function InvolvementPageLayout({
       </PageHero>
 
       <Section density="default" contained={false}>
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          {children}
-        </div>
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">{children}</div>
       </Section>
 
       <Section density="spacious" contained={false} className="border-t border-subtle text-center">
@@ -61,5 +54,5 @@ export async function InvolvementPageLayout({
         </div>
       </Section>
     </main>
-  )
+  );
 }

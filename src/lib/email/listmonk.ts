@@ -36,7 +36,7 @@ export function getListmonkConfig() {
  */
 function getAuthHeader(): string {
   const credentials = Buffer.from(
-    `${LISTMONK_CONFIG.USERNAME}:${LISTMONK_CONFIG.PASSWORD}`
+    `${LISTMONK_CONFIG.USERNAME}:${LISTMONK_CONFIG.PASSWORD}`,
   ).toString('base64');
   return `Basic ${credentials}`;
 }
@@ -51,7 +51,7 @@ function getAuthHeader(): string {
 export async function sendViaListmonk(
   to: string,
   content: EmailContent,
-  subscriberAttrs?: Record<string, unknown>
+  subscriberAttrs?: Record<string, unknown>,
 ): Promise<SendEmailResult> {
   if (!LISTMONK_CONFIG.ENABLED) {
     logger.warn('Listmonk is not enabled, skipping email', { to });
@@ -149,7 +149,7 @@ export async function testListmonkConnection(): Promise<{
 export async function subscribeToList(
   email: string,
   name: string,
-  listIds: number[]
+  listIds: number[],
 ): Promise<{ success: boolean; error?: string }> {
   if (!LISTMONK_CONFIG.ENABLED) {
     return { success: false, error: 'Listmonk is not enabled' };

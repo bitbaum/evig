@@ -8,10 +8,10 @@
  * source of truth for product categorization across the entire platform.
  */
 
-import { KATEGORIEN } from '@/config/erfassung/categories'
-import { UI_STATUS } from '@/config/ui/status'
-import type { TransitionTable } from '@/lib/lifecycle'
-import { PAGINATION } from '@/config/pagination'
+import { KATEGORIEN } from '@/config/erfassung/categories';
+import { UI_STATUS } from '@/config/ui/status';
+import type { TransitionTable } from '@/lib/lifecycle';
+import { PAGINATION } from '@/config/pagination';
 
 // ============================================================================
 // Categories — derived from KATEGORIEN SSOT
@@ -22,38 +22,38 @@ import { PAGINATION } from '@/config/pagination'
  * Includes a catch-all '99' for "Sonstiges" (not in KATEGORIEN).
  */
 export const MARKETPLACE_CATEGORY_VALUES = [
-  ...KATEGORIEN.map(k => k.value),
+  ...KATEGORIEN.map((k) => k.value),
   '99', // Sonstiges
-] as const
+] as const;
 
-export type MarketplaceCategoryValue = typeof MARKETPLACE_CATEGORY_VALUES[number]
+export type MarketplaceCategoryValue = (typeof MARKETPLACE_CATEGORY_VALUES)[number];
 
 /**
  * Category label lookup — derived from KATEGORIEN with Sonstiges fallback.
  */
 export const MARKETPLACE_CATEGORY_LABELS: Record<string, string> = Object.fromEntries([
-  ...KATEGORIEN.map(k => [k.value, k.label]),
+  ...KATEGORIEN.map((k) => [k.value, k.label]),
   ['99', 'Sonstiges'],
-])
+]);
 
 /**
  * Category icon lookup — derived from KATEGORIEN.
  */
 export const CATEGORY_ICONS: Record<string, string> = Object.fromEntries(
-  KATEGORIEN.filter(k => k.icon).map(k => [k.value, k.icon!])
-)
+  KATEGORIEN.filter((k) => k.icon).map((k) => [k.value, k.icon!]),
+);
 
 /**
  * Get category label by value. Falls back to the value itself if not found.
  */
 export function getCategoryLabel(value: string): string {
-  return MARKETPLACE_CATEGORY_LABELS[value] || value
+  return MARKETPLACE_CATEGORY_LABELS[value] || value;
 }
 
 /** Lowercased KATEGORIEN label → value (built once from the SSOT). */
 const CATEGORY_LABEL_TO_VALUE: Readonly<Record<string, string>> = Object.fromEntries(
-  KATEGORIEN.map(k => [k.label.toLowerCase(), k.value])
-)
+  KATEGORIEN.map((k) => [k.label.toLowerCase(), k.value]),
+);
 
 /**
  * Aliases for free-text / AI-produced category labels that are not exact
@@ -61,19 +61,57 @@ const CATEGORY_LABEL_TO_VALUE: Readonly<Record<string, string>> = Object.fromEnt
  * emits). Keys are lowercased. Values are KATEGORIEN values.
  */
 const CATEGORY_LABEL_ALIASES: Readonly<Record<string, MarketplaceCategoryValue>> = {
-  laptop: '10', laptops: '10', notebook: '10', notebooks: '10',
-  desktop: '20', 'desktop pc': '20', 'desktop pcs': '20', pc: '20', computer: '20',
-  monitor: '30', monitore: '30', display: '30', beamer: '30',
-  tablet: '40', tablets: '40', ipad: '40',
-  smartphone: '50', smartphones: '50', handy: '50', phone: '50', telefon: '50',
-  drucker: '60', printer: '60', scanner: '60',
-  komponenten: '70', components: '70', speicher: '70', storage: '70',
-  ram: '70', cpu: '70', ssd: '70', festplatte: '70', mainboard: '70',
-  peripherie: '80', peripherals: '80', 'zubehör': '80', zubehoer: '80',
-  accessories: '80', tastatur: '80', maus: '80', keyboard: '80', mouse: '80',
-  netzwerk: '90', network: '90', router: '90', switch: '90',
-  electronics: '99', elektronik: '99', sonstiges: '99', other: '99',
-}
+  laptop: '10',
+  laptops: '10',
+  notebook: '10',
+  notebooks: '10',
+  desktop: '20',
+  'desktop pc': '20',
+  'desktop pcs': '20',
+  pc: '20',
+  computer: '20',
+  monitor: '30',
+  monitore: '30',
+  display: '30',
+  beamer: '30',
+  tablet: '40',
+  tablets: '40',
+  ipad: '40',
+  smartphone: '50',
+  smartphones: '50',
+  handy: '50',
+  phone: '50',
+  telefon: '50',
+  drucker: '60',
+  printer: '60',
+  scanner: '60',
+  komponenten: '70',
+  components: '70',
+  speicher: '70',
+  storage: '70',
+  ram: '70',
+  cpu: '70',
+  ssd: '70',
+  festplatte: '70',
+  mainboard: '70',
+  peripherie: '80',
+  peripherals: '80',
+  zubehör: '80',
+  zubehoer: '80',
+  accessories: '80',
+  tastatur: '80',
+  maus: '80',
+  keyboard: '80',
+  mouse: '80',
+  netzwerk: '90',
+  network: '90',
+  router: '90',
+  switch: '90',
+  electronics: '99',
+  elektronik: '99',
+  sonstiges: '99',
+  other: '99',
+};
 
 /**
  * Resolve any category input — a KATEGORIEN value ('10'), a German label
@@ -84,17 +122,17 @@ const CATEGORY_LABEL_ALIASES: Readonly<Record<string, MarketplaceCategoryValue>>
  * non-KATEGORIEN values into listings.category.
  */
 export function resolveCategoryValue(input: string | null | undefined): MarketplaceCategoryValue {
-  if (!input) return '99'
-  const raw = input.trim()
+  if (!input) return '99';
+  const raw = input.trim();
   if ((MARKETPLACE_CATEGORY_VALUES as readonly string[]).includes(raw)) {
-    return raw as MarketplaceCategoryValue
+    return raw as MarketplaceCategoryValue;
   }
-  const key = raw.toLowerCase()
+  const key = raw.toLowerCase();
   return (
     (CATEGORY_LABEL_TO_VALUE[key] as MarketplaceCategoryValue | undefined) ??
     CATEGORY_LABEL_ALIASES[key] ??
     '99'
-  )
+  );
 }
 
 // ============================================================================
@@ -110,7 +148,7 @@ export const LISTING_STATUS = {
 } as const;
 
 export const LISTING_STATUSES = Object.values(LISTING_STATUS);
-export type ListingStatus = typeof LISTING_STATUS[keyof typeof LISTING_STATUS];
+export type ListingStatus = (typeof LISTING_STATUS)[keyof typeof LISTING_STATUS];
 
 /**
  * Seller type filter values — identifies whether a listing comes from
@@ -121,14 +159,15 @@ export const MARKETPLACE_SELLER_TYPE = {
   COMMUNITY: 'community',
 } as const;
 
-export type MarketplaceSellerType = typeof MARKETPLACE_SELLER_TYPE[keyof typeof MARKETPLACE_SELLER_TYPE];
+export type MarketplaceSellerType =
+  (typeof MARKETPLACE_SELLER_TYPE)[keyof typeof MARKETPLACE_SELLER_TYPE];
 
 export const LISTING_STATUS_CONFIG: Record<ListingStatus, { label: string; color: string }> = {
-  active:   { label: 'Aktiv',      color: UI_STATUS.success },
-  sold:     { label: 'Verkauft',   color: UI_STATUS.info },
+  active: { label: 'Aktiv', color: UI_STATUS.success },
+  sold: { label: 'Verkauft', color: UI_STATUS.info },
   reserved: { label: 'Reserviert', color: UI_STATUS.warning },
-  draft:    { label: 'Entwurf',    color: UI_STATUS.neutral },
-  removed:  { label: 'Entfernt',   color: UI_STATUS.danger },
+  draft: { label: 'Entwurf', color: UI_STATUS.neutral },
+  removed: { label: 'Entfernt', color: UI_STATUS.danger },
 };
 
 // ============================================================================
@@ -136,12 +175,12 @@ export const LISTING_STATUS_CONFIG: Record<ListingStatus, { label: string; color
 // ============================================================================
 
 export const DELIVERY_OPTIONS = ['pickup', 'shipping', 'both'] as const;
-export type DeliveryOption = typeof DELIVERY_OPTIONS[number];
+export type DeliveryOption = (typeof DELIVERY_OPTIONS)[number];
 
 export const DELIVERY_LABELS: Record<DeliveryOption, string> = {
-  pickup:   'Abholung',
+  pickup: 'Abholung',
   shipping: 'Versand',
-  both:     'Abholung & Versand',
+  both: 'Abholung & Versand',
 };
 
 /**
@@ -172,22 +211,22 @@ export const REVAMPIT_LISTING_DELIVERY = {
   shippingCostChf: '12.00',
   pickupLocation: 'evig Zürich',
 } as const satisfies {
-  options: DeliveryOption
-  shippingCostChf: string | null
-  pickupLocation: string
-}
+  options: DeliveryOption;
+  shippingCostChf: string | null;
+  pickupLocation: string;
+};
 
 // ============================================================================
 // Payment Modes
 // ============================================================================
 
 export const PAYMENT_MODES = ['secure', 'direct', 'both'] as const;
-export type PaymentMode = typeof PAYMENT_MODES[number];
+export type PaymentMode = (typeof PAYMENT_MODES)[number];
 
 export const PAYMENT_MODE_LABELS: Record<PaymentMode, string> = {
   secure: 'Sichere Zahlung (Payrexx)',
   direct: 'Direkt (TWINT, Bar, Überweisung)',
-  both:   'Beide Optionen',
+  both: 'Beide Optionen',
 };
 
 /** P2P listings that can use /marketplace/checkout/[id] (Payrexx escrow). */
@@ -205,20 +244,20 @@ export function supportsDirectContact(paymentMode: string): boolean {
 // ============================================================================
 
 export const SORT_OPTIONS = [
-  { value: 'newest',       label: 'Neueste zuerst' },
-  { value: 'price_asc',    label: 'Preis aufsteigend' },
-  { value: 'price_desc',   label: 'Preis absteigend' },
-  { value: 'popular',      label: 'Beliebteste' },
+  { value: 'newest', label: 'Neueste zuerst' },
+  { value: 'price_asc', label: 'Preis aufsteigend' },
+  { value: 'price_desc', label: 'Preis absteigend' },
+  { value: 'popular', label: 'Beliebteste' },
 ] as const;
 
-export type SortOption = typeof SORT_OPTIONS[number]['value'];
+export type SortOption = (typeof SORT_OPTIONS)[number]['value'];
 
 // ============================================================================
 // Conditions (re-export values from conditions config for convenience)
 // ============================================================================
 
 export const LISTING_CONDITIONS = ['new', 'like_new', 'good', 'fair', 'poor', 'defect'] as const;
-export type ListingCondition = typeof LISTING_CONDITIONS[number];
+export type ListingCondition = (typeof LISTING_CONDITIONS)[number];
 
 // ============================================================================
 // Limits & Commission
@@ -247,7 +286,8 @@ export const LISTING_QUESTION_STATUS = {
 } as const;
 
 export const LISTING_QUESTION_STATUSES = Object.values(LISTING_QUESTION_STATUS);
-export type ListingQuestionStatus = typeof LISTING_QUESTION_STATUS[keyof typeof LISTING_QUESTION_STATUS];
+export type ListingQuestionStatus =
+  (typeof LISTING_QUESTION_STATUS)[keyof typeof LISTING_QUESTION_STATUS];
 
 /**
  * Commission rate for marketplace transactions.
@@ -271,16 +311,16 @@ export const ORDER_STATUS = {
 } as const;
 
 export const ORDER_STATUSES = Object.values(ORDER_STATUS);
-export type OrderStatus = typeof ORDER_STATUS[keyof typeof ORDER_STATUS];
+export type OrderStatus = (typeof ORDER_STATUS)[keyof typeof ORDER_STATUS];
 
 export const ORDER_STATUS_CONFIG: Record<OrderStatus, { label: string; color: string }> = {
   pending_payment: { label: 'Zahlung ausstehend', color: UI_STATUS.warning },
-  paid:            { label: 'Bezahlt',            color: UI_STATUS.info },
-  shipped:         { label: 'Versendet',          color: UI_STATUS.purple },
-  delivered:       { label: 'Geliefert',          color: UI_STATUS.teal },
-  completed:       { label: 'Abgeschlossen',      color: UI_STATUS.success },
-  cancelled:       { label: 'Storniert',          color: UI_STATUS.neutral },
-  refunded:        { label: 'Erstattet',          color: UI_STATUS.danger },
+  paid: { label: 'Bezahlt', color: UI_STATUS.info },
+  shipped: { label: 'Versendet', color: UI_STATUS.purple },
+  delivered: { label: 'Geliefert', color: UI_STATUS.teal },
+  completed: { label: 'Abgeschlossen', color: UI_STATUS.success },
+  cancelled: { label: 'Storniert', color: UI_STATUS.neutral },
+  refunded: { label: 'Erstattet', color: UI_STATUS.danger },
 };
 
 // ============================================================================
@@ -300,12 +340,37 @@ export const ORDER_STATUS_CONFIG: Record<OrderStatus, { label: string; color: st
 export type OrderRole = 'buyer' | 'seller';
 
 export const ORDER_TRANSITIONS: TransitionTable<OrderStatus, OrderStatus, OrderRole> = [
-  { action: ORDER_STATUS.SHIPPED,   from: ORDER_STATUS.PAID,      role: 'seller',             to: ORDER_STATUS.SHIPPED },
-  { action: ORDER_STATUS.DELIVERED, from: ORDER_STATUS.SHIPPED,   role: 'seller',             to: ORDER_STATUS.DELIVERED },
-  { action: ORDER_STATUS.COMPLETED, from: ORDER_STATUS.DELIVERED, role: 'buyer',              to: ORDER_STATUS.COMPLETED },
-  { action: ORDER_STATUS.CANCELLED, from: ORDER_STATUS.PAID,      role: 'buyer',              to: ORDER_STATUS.CANCELLED },
+  {
+    action: ORDER_STATUS.SHIPPED,
+    from: ORDER_STATUS.PAID,
+    role: 'seller',
+    to: ORDER_STATUS.SHIPPED,
+  },
+  {
+    action: ORDER_STATUS.DELIVERED,
+    from: ORDER_STATUS.SHIPPED,
+    role: 'seller',
+    to: ORDER_STATUS.DELIVERED,
+  },
+  {
+    action: ORDER_STATUS.COMPLETED,
+    from: ORDER_STATUS.DELIVERED,
+    role: 'buyer',
+    to: ORDER_STATUS.COMPLETED,
+  },
+  {
+    action: ORDER_STATUS.CANCELLED,
+    from: ORDER_STATUS.PAID,
+    role: 'buyer',
+    to: ORDER_STATUS.CANCELLED,
+  },
   // Either party may walk away before payment is captured.
-  { action: ORDER_STATUS.CANCELLED, from: ORDER_STATUS.PENDING_PAYMENT, role: ['buyer', 'seller'], to: ORDER_STATUS.CANCELLED },
+  {
+    action: ORDER_STATUS.CANCELLED,
+    from: ORDER_STATUS.PENDING_PAYMENT,
+    role: ['buyer', 'seller'],
+    to: ORDER_STATUS.CANCELLED,
+  },
 ];
 
 // ============================================================================
@@ -354,17 +419,17 @@ export const REVAMPIT_GUARANTEE = {
 // ============================================================================
 
 export interface SpecFilterOption {
-  label: string
-  value: number
+  label: string;
+  value: number;
 }
 
 export interface SpecFilterDef {
-  key: string
-  label: string
-  unit: string
+  key: string;
+  label: string;
+  unit: string;
   /** Meilisearch field name for this spec (denormalized) */
-  meiliField: string
-  options: SpecFilterOption[]
+  meiliField: string;
+  options: SpecFilterOption[];
 }
 
 /**
@@ -495,13 +560,13 @@ export const SPEC_FILTER_CONFIG: Record<string, SpecFilterDef[]> = {
       ],
     },
   ],
-}
+};
 
 /**
  * Get spec filters for a category. Returns empty array if none defined.
  */
 export function getSpecFiltersForCategory(categoryValue: string): SpecFilterDef[] {
-  return SPEC_FILTER_CONFIG[categoryValue] || []
+  return SPEC_FILTER_CONFIG[categoryValue] || [];
 }
 
 // ============================================================================
@@ -514,9 +579,9 @@ export const REPORT_REASONS = [
   { value: 'wrong_category', label: 'Falsche Kategorie' },
   { value: 'counterfeit', label: 'Fälschung' },
   { value: 'other', label: 'Anderer Grund' },
-] as const
+] as const;
 
-export type ReportReason = typeof REPORT_REASONS[number]['value']
+export type ReportReason = (typeof REPORT_REASONS)[number]['value'];
 
 // ============================================================================
 // Formatting helpers
@@ -530,7 +595,7 @@ const chfFormatter = new Intl.NumberFormat('de-CH', {
 });
 
 export function formatCHF(amount: number): string {
-  if (amount === 0) return GRATIS_CONFIG.label
+  if (amount === 0) return GRATIS_CONFIG.label;
   return chfFormatter.format(amount);
 }
 
@@ -539,7 +604,7 @@ export function formatCHF(amount: number): string {
  * Use formatCHF() when you always want the numeric format.
  */
 export function formatPrice(amount: number): string {
-  return formatCHF(amount)
+  return formatCHF(amount);
 }
 
 /**
@@ -549,10 +614,10 @@ export function formatPrice(amount: number): string {
  * - else → "CHF X" (smart decimals: 0 if whole, 2 if fractional)
  */
 export function formatPriceCents(priceCents: number | null): string {
-  if (priceCents === null) return 'Auf Anfrage'
-  if (priceCents === 0) return 'Kostenlos'
-  const francs = priceCents / 100
-  return `CHF ${francs.toFixed(francs % 1 === 0 ? 0 : 2)}`
+  if (priceCents === null) return 'Auf Anfrage';
+  if (priceCents === 0) return 'Kostenlos';
+  const francs = priceCents / 100;
+  return `CHF ${francs.toFixed(francs % 1 === 0 ? 0 : 2)}`;
 }
 
 // ============================================================================
@@ -560,40 +625,47 @@ export function formatPriceCents(priceCents: number | null): string {
 // ============================================================================
 
 // Re-exported from canonical location (lib/marketplace/spec-utils.ts)
-export { normalizeSpecValue } from '@/lib/marketplace/spec-utils'
+export { normalizeSpecValue } from '@/lib/marketplace/spec-utils';
 
 /**
  * Map spec keys to Meilisearch denormalized field names.
  * Only specs listed here will be indexed as top-level filterable fields.
  */
 export const SPEC_MEILI_FIELD_MAP: Record<string, string> = {
-  'RAM': 'spec_ram_gb',
-  'Speicher': 'spec_storage_gb',
-  'Display': 'spec_display_inches',
-  'Grösse': 'spec_display_inches',
-}
+  RAM: 'spec_ram_gb',
+  Speicher: 'spec_storage_gb',
+  Display: 'spec_display_inches',
+  Grösse: 'spec_display_inches',
+};
 
 /**
  * Maps Meilisearch spec field names → filter state key in useMarketplaceListings.
  * Used by MarketplaceFilterSidebar to avoid ternary chains.
  */
 export const SPEC_FILTER_STATE_MAP: Readonly<Record<string, string>> = {
-  'spec_ram_gb':          'specRamMin',
-  'spec_storage_gb':      'specStorageMin',
-  'spec_display_inches':  'specDisplayMin',
-}
+  spec_ram_gb: 'specRamMin',
+  spec_storage_gb: 'specStorageMin',
+  spec_display_inches: 'specDisplayMin',
+};
 
 /**
  * Maps URL query param names → spec_key values stored in listing_specs.
  * Used by the API route to build SQL WHERE clauses without hardcoding key names.
  */
 export const SPEC_QUERY_PARAM_KEYS: Readonly<Record<string, string[]>> = {
-  'spec_ram_min':     ['RAM'],
-  'spec_storage_min': ['Speicher'],
-  'spec_display_min': ['Display', 'Grösse'],
-}
+  spec_ram_min: ['RAM'],
+  spec_storage_min: ['Speicher'],
+  spec_display_min: ['Display', 'Grösse'],
+};
 
 /**
  * Priority order for spec tags displayed on listing cards (most important first).
  */
-export const SPEC_DISPLAY_PRIORITY = ['RAM', 'Speicher', 'Display', 'Grösse', 'CPU', 'Prozessor'] as const
+export const SPEC_DISPLAY_PRIORITY = [
+  'RAM',
+  'Speicher',
+  'Display',
+  'Grösse',
+  'CPU',
+  'Prozessor',
+] as const;

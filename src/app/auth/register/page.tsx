@@ -1,22 +1,22 @@
-'use client'
+'use client';
 
-import { useEffect, Suspense } from 'react'
-import { useSession } from 'next-auth/react'
-import Link from 'next/link'
-import { ArrowLeft, Loader2 } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { ORG } from '@/config/org'
-import { Logo } from '@/components/ui/Logo'
-import { RegistrationWizard } from '@/components/auth/RegistrationWizard'
-import { AuthenticatedRedirect } from '@/components/auth/AuthenticatedRedirect'
+import { useEffect, Suspense } from 'react';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { ArrowLeft, Loader2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { ORG } from '@/config/org';
+import { Logo } from '@/components/ui/Logo';
+import { RegistrationWizard } from '@/components/auth/RegistrationWizard';
+import { AuthenticatedRedirect } from '@/components/auth/AuthenticatedRedirect';
 
 export default function RegisterPage() {
-  const t = useTranslations('auth.login')
-  const { status } = useSession()
+  const t = useTranslations('auth.login');
+  const { status } = useSession();
 
   useEffect(() => {
-    document.title = `Registrieren | ${ORG.name}`
-  }, [])
+    document.title = `Registrieren | ${ORG.name}`;
+  }, []);
 
   if (status === 'loading' || status === 'authenticated') {
     return (
@@ -26,7 +26,7 @@ export default function RegisterPage() {
         </Suspense>
         <Loader2 className="w-8 h-8 animate-spin text-action" />
       </div>
-    )
+    );
   }
 
   return (
@@ -50,5 +50,5 @@ export default function RegisterPage() {
         <RegistrationWizard />
       </div>
     </div>
-  )
+  );
 }

@@ -5,13 +5,13 @@
  * Data comes from the main database blog_posts table.
  */
 
-import { Metadata } from 'next'
-import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
-import { getAllPosts as getFilePosts } from '@/lib/blog'
-import { getHiddenSlugs } from '@/lib/blog-db'
+import { Metadata } from 'next';
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
+import { query } from '@/lib/auth/db';
+import { TABLE_NAMES } from '@/config/database';
+import { getAllPosts as getFilePosts } from '@/lib/blog';
+import { getHiddenSlugs } from '@/lib/blog-db';
 import {
   Plus,
   FileText,
@@ -20,59 +20,59 @@ import {
   Tag,
   MessageSquare,
   AlertTriangle,
-} from 'lucide-react'
-import { logger } from '@/lib/logger'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { AdminStatsStrip, type StatItem } from '@/components/admin/AdminStatsStrip'
-import { AdminButton } from '@/components/admin/AdminButton'
-import { Pagination } from '@/components/ui/Pagination'
-import { ADMIN_CONTENT } from '@/config/admin-content'
-import { ADMIN_BLOG_PAGE_SIZE } from '@/config/blog'
-import { BlogListClient } from './BlogListClient'
-import { ROUTES } from '@/config/routes'
-import { canAccessSection, toStaffUser } from '@/lib/permissions'
+} from 'lucide-react';
+import { logger } from '@/lib/logger';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import { AdminStatsStrip, type StatItem } from '@/components/admin/AdminStatsStrip';
+import { AdminButton } from '@/components/admin/AdminButton';
+import { Pagination } from '@/components/ui/Pagination';
+import { ADMIN_CONTENT } from '@/config/admin-content';
+import { ADMIN_BLOG_PAGE_SIZE } from '@/config/blog';
+import { BlogListClient } from './BlogListClient';
+import { ROUTES } from '@/config/routes';
+import { canAccessSection, toStaffUser } from '@/lib/permissions';
 
 export const metadata: Metadata = {
   title: 'Blog-Artikel',
   description: 'Blog-Artikel erstellen und verwalten.',
-}
+};
 
 interface BlogPost {
-  id: string
-  slug: string
-  title: string
-  excerpt: string | null
-  is_published: boolean
-  published_at: string | null
-  created_at: string
-  updated_at: string
-  category_name: string | null
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string | null;
+  is_published: boolean;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+  category_name: string | null;
   // `db` posts are authored in this UI (editable/deletable); `file` posts live
   // in content/posts/*.md and are managed in Git (read-only here).
-  source: 'db' | 'file'
-  visibility: 'public' | 'unlisted' | 'link'
-  audience: 'public' | 'team' | 'author'
+  source: 'db' | 'file';
+  visibility: 'public' | 'unlisted' | 'link';
+  audience: 'public' | 'team' | 'author';
 }
 
 interface BlogStats {
-  totalPosts: number
-  publishedPosts: number
-  draftPosts: number
-  categoriesCount: number
+  totalPosts: number;
+  publishedPosts: number;
+  draftPosts: number;
+  categoriesCount: number;
 }
 
 interface DbBlogRow {
-  id: string
-  slug: string
-  title: string
-  excerpt: string | null
-  is_published: boolean
-  visibility: string
-  audience: string
-  published_at: string | null
-  created_at: string
-  updated_at: string
-  category_name: string | null
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string | null;
+  is_published: boolean;
+  visibility: string;
+  audience: string;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+  category_name: string | null;
 }
 
 /**
@@ -85,44 +85,44 @@ interface DbBlogRow {
  * fetched page.
  */
 async function getBlogPosts(page: number): Promise<{
-  posts: BlogPost[]
-  stats: BlogStats
-  currentPage: number
-  totalPages: number
-  totalDbPosts: number
-  dbError: boolean
+  posts: BlogPost[];
+  stats: BlogStats;
+  currentPage: number;
+  totalPages: number;
+  totalDbPosts: number;
+  dbError: boolean;
 }> {
-  let dbPosts: BlogPost[] = []
-  let dbError = false
-  let totalDbPosts = 0
-  let publishedDb = 0
-  const usedCategoryNames = new Set<string>()
+  let dbPosts: BlogPost[] = [];
+  let dbError = false;
+  let totalDbPosts = 0;
+  let publishedDb = 0;
+  const usedCategoryNames = new Set<string>();
 
   try {
     const agg = await query<{ total: number; published: number }>(
       `SELECT
         COUNT(*)::int AS total,
         COUNT(*) FILTER (WHERE is_published)::int AS published
-       FROM ${TABLE_NAMES.BLOG_POSTS}`
-    )
-    totalDbPosts = agg.rows[0]?.total ?? 0
-    publishedDb = agg.rows[0]?.published ?? 0
+       FROM ${TABLE_NAMES.BLOG_POSTS}`,
+    );
+    totalDbPosts = agg.rows[0]?.total ?? 0;
+    publishedDb = agg.rows[0]?.published ?? 0;
 
     // Distinct category NAMES (not ids) so the union with file-post categories
     // doesn't double-count a name that exists in both sources.
     const cats = await query<{ name: string }>(
       `SELECT DISTINCT c.name
        FROM ${TABLE_NAMES.BLOG_POSTS} bp
-       JOIN ${TABLE_NAMES.BLOG_CATEGORIES} c ON bp.category_id = c.id`
-    )
-    for (const row of cats.rows) usedCategoryNames.add(row.name)
+       JOIN ${TABLE_NAMES.BLOG_CATEGORIES} c ON bp.category_id = c.id`,
+    );
+    for (const row of cats.rows) usedCategoryNames.add(row.name);
   } catch (error) {
-    dbError = true
-    logger.error('Admin blog list: DB aggregate query failed', { error })
+    dbError = true;
+    logger.error('Admin blog list: DB aggregate query failed', { error });
   }
 
-  const totalPages = Math.max(1, Math.ceil(totalDbPosts / ADMIN_BLOG_PAGE_SIZE))
-  const currentPage = Math.min(Math.max(1, page), totalPages)
+  const totalPages = Math.max(1, Math.ceil(totalDbPosts / ADMIN_BLOG_PAGE_SIZE));
+  const currentPage = Math.min(Math.max(1, page), totalPages);
 
   if (!dbError) {
     try {
@@ -143,85 +143,87 @@ async function getBlogPosts(page: number): Promise<{
          LEFT JOIN ${TABLE_NAMES.BLOG_CATEGORIES} c ON bp.category_id = c.id
          ORDER BY bp.created_at DESC
          LIMIT $1 OFFSET $2`,
-        [ADMIN_BLOG_PAGE_SIZE, (currentPage - 1) * ADMIN_BLOG_PAGE_SIZE]
-      )
+        [ADMIN_BLOG_PAGE_SIZE, (currentPage - 1) * ADMIN_BLOG_PAGE_SIZE],
+      );
       dbPosts = result.rows.map((r): BlogPost => ({
         ...r,
         source: 'db',
-        visibility: r.visibility === 'unlisted' ? 'unlisted' : r.visibility === 'link' ? 'link' : 'public',
+        visibility:
+          r.visibility === 'unlisted' ? 'unlisted' : r.visibility === 'link' ? 'link' : 'public',
         audience: r.audience === 'team' ? 'team' : r.audience === 'author' ? 'author' : 'public',
-      }))
+      }));
     } catch (error) {
       // DB unreachable or query failed — surface it rather than silently showing
       // a partial (file-only) list that looks like the real state.
-      dbError = true
-      logger.error('Admin blog list: DB query failed, showing file posts only', { error })
+      dbError = true;
+      logger.error('Admin blog list: DB query failed, showing file posts only', { error });
     }
   }
 
-  const dbSlugs = new Set(dbPosts.map((p) => p.slug))
-  const hidden = await getHiddenSlugs()
-  const allFilePosts = getFilePosts('de').filter((p) => !hidden.has(p.slug))
+  const dbSlugs = new Set(dbPosts.map((p) => p.slug));
+  const hidden = await getHiddenSlugs();
+  const allFilePosts = getFilePosts('de').filter((p) => !hidden.has(p.slug));
   // File posts appear on page 1 only — they're a handful of git-managed
   // articles, not a growing set; repeating them on every page would be noise.
-  const filePosts: BlogPost[] = currentPage === 1
-    ? allFilePosts
-        .filter((p) => !dbSlugs.has(p.slug))
-        .map((p) => ({
-          id: `file:${p.slug}`,
-          slug: p.slug,
-          title: p.title,
-          excerpt: p.excerpt ?? null,
-          is_published: p.published ?? true,
-          published_at: p.publishedAt ?? null,
-          created_at: p.createdAt,
-          updated_at: p.createdAt,
-          category_name: p.category ?? null,
-          source: 'file',
-          visibility: p.visibility ?? 'public',
-          audience: p.audience ?? 'public',
-        }))
-    : []
+  const filePosts: BlogPost[] =
+    currentPage === 1
+      ? allFilePosts
+          .filter((p) => !dbSlugs.has(p.slug))
+          .map((p) => ({
+            id: `file:${p.slug}`,
+            slug: p.slug,
+            title: p.title,
+            excerpt: p.excerpt ?? null,
+            is_published: p.published ?? true,
+            published_at: p.publishedAt ?? null,
+            created_at: p.createdAt,
+            updated_at: p.createdAt,
+            category_name: p.category ?? null,
+            source: 'file',
+            visibility: p.visibility ?? 'public',
+            audience: p.audience ?? 'public',
+          }))
+      : [];
 
   const posts = [...dbPosts, ...filePosts].sort((a, b) => {
-    const da = new Date(a.published_at || a.created_at).getTime()
-    const db = new Date(b.published_at || b.created_at).getTime()
-    return db - da
-  })
+    const da = new Date(a.published_at || a.created_at).getTime();
+    const db = new Date(b.published_at || b.created_at).getTime();
+    return db - da;
+  });
 
   // Stats span ALL posts (SQL aggregates + file posts), not just this page.
-  const filePublished = allFilePosts.filter((p) => p.published ?? true).length
+  const filePublished = allFilePosts.filter((p) => p.published ?? true).length;
   for (const p of allFilePosts) {
-    if (p.category) usedCategoryNames.add(p.category)
+    if (p.category) usedCategoryNames.add(p.category);
   }
   const stats: BlogStats = {
     totalPosts: totalDbPosts + allFilePosts.length,
     publishedPosts: publishedDb + filePublished,
     draftPosts: totalDbPosts + allFilePosts.length - publishedDb - filePublished,
     categoriesCount: usedCategoryNames.size,
-  }
+  };
 
-  return { posts, stats, currentPage, totalPages, totalDbPosts, dbError }
+  return { posts, stats, currentPage, totalPages, totalDbPosts, dbError };
 }
 
 export default async function AdminBlogPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string }>
+  searchParams: Promise<{ page?: string }>;
 }) {
-  const session = await auth()
+  const session = await auth();
 
   if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/content/blog')
+    redirect('/auth/login?callbackUrl=/admin/content/blog');
   }
   if (!canAccessSection(toStaffUser(session.user), 'content')) {
-    redirect('/?error=no_admin_access')
+    redirect('/?error=no_admin_access');
   }
 
-  const { page } = await searchParams
-  const requestedPage = Number.parseInt(page || '1', 10) || 1
+  const { page } = await searchParams;
+  const requestedPage = Number.parseInt(page || '1', 10) || 1;
   const { posts, stats, currentPage, totalPages, totalDbPosts, dbError } =
-    await getBlogPosts(requestedPage)
+    await getBlogPosts(requestedPage);
 
   const createAction = (
     <div className="flex flex-wrap items-center gap-2">
@@ -234,7 +236,7 @@ export default async function AdminBlogPage({
         Neuer Artikel
       </AdminButton>
     </div>
-  )
+  );
 
   const dbErrorBanner = dbError ? (
     <div className="mb-6 flex items-start gap-3 rounded-lg border border-warning-300 bg-warning-50 p-4 text-warning-800 dark:border-warning-800 dark:bg-warning-950 dark:text-warning-200">
@@ -242,12 +244,12 @@ export default async function AdminBlogPage({
       <div className="text-sm">
         <p className="font-medium">Datenbank nicht erreichbar</p>
         <p className="mt-0.5">
-          Nur Git-basierte Artikel werden angezeigt. In der Datenbank gespeicherte Artikel fehlen möglicherweise
-          in dieser Liste, bis die Verbindung wiederhergestellt ist.
+          Nur Git-basierte Artikel werden angezeigt. In der Datenbank gespeicherte Artikel fehlen
+          möglicherweise in dieser Liste, bis die Verbindung wiederhergestellt ist.
         </p>
       </div>
     </div>
-  ) : null
+  ) : null;
 
   // No posts yet → single empty state, no dead stats grid. (Only when the DB is
   // healthy — a DB error with zero posts must show the warning, not "no posts".)
@@ -268,7 +270,7 @@ export default async function AdminBlogPage({
           {createAction}
         </div>
       </AdminPageWrapper>
-    )
+    );
   }
 
   const statCards: StatItem[] = [
@@ -276,7 +278,7 @@ export default async function AdminBlogPage({
     { icon: CheckCircle, color: 'green', label: 'Veröffentlicht', value: stats.publishedPosts },
     { icon: Clock, color: 'gray', label: 'Entwürfe', value: stats.draftPosts },
     { icon: Tag, color: 'gray', label: 'Kategorien', value: stats.categoriesCount },
-  ]
+  ];
 
   return (
     <AdminPageWrapper
@@ -300,5 +302,5 @@ export default async function AdminBlogPage({
         />
       )}
     </AdminPageWrapper>
-  )
+  );
 }

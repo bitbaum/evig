@@ -18,32 +18,33 @@
  * exempt — a retired service keeps its URL alive on purpose.
  */
 
-import { PUBLIC_ROUTES } from '../../../tests/e2e/helpers/inventory-routes'
-import { SERVICE_CONFIGS } from '@/app/[locale]/services/data'
+import { PUBLIC_ROUTES } from '../../../tests/e2e/helpers/inventory-routes';
+import { SERVICE_CONFIGS } from '@/app/[locale]/services/data';
 
 describe('E2E inventory service routes match SERVICE_CONFIGS', () => {
   const liveServiceRoutes = PUBLIC_ROUTES.filter(
     (r) => r.path.startsWith('/services/') && !r.urlPattern,
-  )
+  );
 
   it('sweeps a non-empty set', () => {
     // A filter that matches nothing would pass the assertion below trivially.
-    expect(liveServiceRoutes.length).toBeGreaterThan(1)
-    expect(SERVICE_CONFIGS.length).toBeGreaterThan(1)
-  })
+    expect(liveServiceRoutes.length).toBeGreaterThan(1);
+    expect(SERVICE_CONFIGS.length).toBeGreaterThan(1);
+  });
 
   it('every smoke-tested service page is an available service', () => {
-    const live = new Set(SERVICE_CONFIGS.filter((s) => s.available).map((s) => s.href))
+    const live = new Set(SERVICE_CONFIGS.filter((s) => s.available).map((s) => s.href));
     const orphans = liveServiceRoutes
       .filter((r) => !live.has(r.path))
-      .map((r) => `${r.path} is smoke-tested for a non-404 but is not an available service`)
-    expect(orphans).toEqual([])
-  })
+      .map((r) => `${r.path} is smoke-tested for a non-404 but is not an available service`);
+    expect(orphans).toEqual([]);
+  });
 
   it('every available service page is smoke-tested', () => {
-    const smoked = new Set(liveServiceRoutes.map((r) => r.path))
-    const missing = SERVICE_CONFIGS.filter((s) => s.available && !smoked.has(s.href))
-      .map((s) => `${s.href} is an available service but nothing smoke-tests it`)
-    expect(missing).toEqual([])
-  })
-})
+    const smoked = new Set(liveServiceRoutes.map((r) => r.path));
+    const missing = SERVICE_CONFIGS.filter((s) => s.available && !smoked.has(s.href)).map(
+      (s) => `${s.href} is an available service but nothing smoke-tests it`,
+    );
+    expect(missing).toEqual([]);
+  });
+});

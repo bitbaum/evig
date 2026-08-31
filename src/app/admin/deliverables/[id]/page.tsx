@@ -1,26 +1,26 @@
-import { Metadata } from 'next'
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
-import { ArrowLeft, PackageCheck } from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import { ROUTES } from '@/config/routes'
-import { getDeliverable, getFeedback } from '@/lib/services/deliverables'
-import DeliverableReviewClient from './DeliverableReviewClient'
+import { Metadata } from 'next';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { ArrowLeft, PackageCheck } from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import { ROUTES } from '@/config/routes';
+import { getDeliverable, getFeedback } from '@/lib/services/deliverables';
+import DeliverableReviewClient from './DeliverableReviewClient';
 
 export const metadata: Metadata = {
   title: 'Liefergegenstand',
-}
+};
 
 export default async function DeliverableDetailPage({
   params,
 }: {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = await params
-  const deliverable = await getDeliverable(id)
-  if (!deliverable) notFound()
+  const { id } = await params;
+  const deliverable = await getDeliverable(id);
+  if (!deliverable) notFound();
 
-  const feedback = await getFeedback(id)
+  const feedback = await getFeedback(id);
 
   return (
     <div className="space-y-6">
@@ -38,7 +38,9 @@ export default async function DeliverableDetailPage({
             <PackageCheck className="w-5 h-5 text-action" />
           </div>
           <div className="min-w-0">
-            <Heading level={1} className="text-2xl font-bold text-text-primary truncate">{deliverable.title}</Heading>
+            <Heading level={1} className="text-2xl font-bold text-text-primary truncate">
+              {deliverable.title}
+            </Heading>
             <p className="text-text-secondary truncate">
               {deliverable.owner_name ? `von ${deliverable.owner_name}` : 'Liefergegenstand'}
             </p>
@@ -48,5 +50,5 @@ export default async function DeliverableDetailPage({
 
       <DeliverableReviewClient deliverable={deliverable} initialFeedback={feedback} />
     </div>
-  )
+  );
 }

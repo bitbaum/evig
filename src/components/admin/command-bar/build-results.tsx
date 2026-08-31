@@ -1,16 +1,10 @@
 // Command registry + result-list building for the admin command palette (pure logic, no state).
 
-import { useTranslations } from 'next-intl'
-import {
-  Monitor,
-  Vote,
-  FileText,
-  LayoutDashboard,
-  User,
-} from 'lucide-react'
-import { ROUTES } from '@/config/routes'
-import { sectionText, type SectionsT } from '@/lib/section-labels'
-import type { SearchIndex, ResultItem } from './types'
+import { useTranslations } from 'next-intl';
+import { Monitor, Vote, FileText, LayoutDashboard, User } from 'lucide-react';
+import { ROUTES } from '@/config/routes';
+import { sectionText, type SectionsT } from '@/lib/section-labels';
+import type { SearchIndex, ResultItem } from './types';
 
 // ---------------------------------------------------------------------------
 // Action commands (always available) — structure here, labels from messages
@@ -42,45 +36,45 @@ const ACTION_COMMANDS = [
     href: ROUTES.admin.dashboard,
     icon: <LayoutDashboard className="w-4 h-4" />,
   },
-] as const
+] as const;
 
 // ---------------------------------------------------------------------------
 // Simple substring search (no extra dependency)
 // ---------------------------------------------------------------------------
 
 function matches(haystack: string, query: string): boolean {
-  return haystack.toLowerCase().includes(query.toLowerCase())
+  return haystack.toLowerCase().includes(query.toLowerCase());
 }
 
-export type CommandBarT = ReturnType<typeof useTranslations<'admin.commandBar'>>
+export type CommandBarT = ReturnType<typeof useTranslations<'admin.commandBar'>>;
 
 export function buildResults(
   index: SearchIndex | null,
   query: string,
   t: CommandBarT,
-  tSections: SectionsT
+  tSections: SectionsT,
 ): ResultItem[] {
-  const q = query.trim()
+  const q = query.trim();
 
-  const actionItems: ResultItem[] = ACTION_COMMANDS.map(a => ({
+  const actionItems: ResultItem[] = ACTION_COMMANDS.map((a) => ({
     key: a.key,
     label: t(a.labelKey),
     href: a.href,
     icon: a.icon,
     group: t('groups.actions'),
-  }))
+  }));
 
   // No query → show only action commands
-  if (!q) return actionItems
+  if (!q) return actionItems;
 
-  const items: ResultItem[] = []
+  const items: ResultItem[] = [];
 
   if (index) {
     // Sections are static + small → filtered client-side. Labels resolve
     // through the locale (the API returns the canonical German strings).
     for (const s of index.sections) {
-      const label = sectionText(tSections, s.id, 'label', s.label)
-      const description = sectionText(tSections, s.id, 'description', s.description)
+      const label = sectionText(tSections, s.id, 'label', s.label);
+      const description = sectionText(tSections, s.id, 'description', s.description);
       if (matches(label, q) || matches(description, q)) {
         items.push({
           key: `section-${s.id}`,
@@ -89,7 +83,7 @@ export function buildResults(
           href: s.path,
           icon: <LayoutDashboard className="w-4 h-4" />,
           group: t('groups.sections'),
-        })
+        });
       }
     }
 
@@ -103,7 +97,7 @@ export function buildResults(
         href: ROUTES.admin.user(u.id),
         icon: <User className="w-4 h-4" />,
         group: t('groups.users'),
-      })
+      });
     }
 
     for (const d of index.recentDecisions) {
@@ -114,7 +108,7 @@ export function buildResults(
         href: ROUTES.admin.decision(d.id),
         icon: <Vote className="w-4 h-4" />,
         group: t('groups.decisions'),
-      })
+      });
     }
 
     for (const l of index.recentListings) {
@@ -125,12 +119,12 @@ export function buildResults(
         href: `${ROUTES.admin.marketplace}?listing=${l.id}`,
         icon: <Monitor className="w-4 h-4" />,
         group: t('groups.listings'),
-      })
+      });
     }
   }
 
   // Action commands are always client-filtered.
-  const matchedActions = actionItems.filter(a => matches(a.label, q))
+  const matchedActions = actionItems.filter((a) => matches(a.label, q));
 
-  return [...matchedActions, ...items]
+  return [...matchedActions, ...items];
 }

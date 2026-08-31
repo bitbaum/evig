@@ -57,29 +57,29 @@
 // ---------------------------------------------------------------------------
 
 function makeSelectChain(result: unknown[] = []) {
-  const resolved = Promise.resolve(result)
-  const chain: Record<string, unknown> = {}
-  chain.from = jest.fn().mockReturnValue(chain)
-  chain.where = jest.fn().mockReturnValue(chain)
-  chain.innerJoin = jest.fn().mockReturnValue(chain)
-  chain.limit = jest.fn().mockReturnValue(chain)
-  chain.then = resolved.then.bind(resolved)
-  chain.catch = resolved.catch.bind(resolved)
-  chain.finally = resolved.finally.bind(resolved)
-  return chain
+  const resolved = Promise.resolve(result);
+  const chain: Record<string, unknown> = {};
+  chain.from = jest.fn().mockReturnValue(chain);
+  chain.where = jest.fn().mockReturnValue(chain);
+  chain.innerJoin = jest.fn().mockReturnValue(chain);
+  chain.limit = jest.fn().mockReturnValue(chain);
+  chain.then = resolved.then.bind(resolved);
+  chain.catch = resolved.catch.bind(resolved);
+  chain.finally = resolved.finally.bind(resolved);
+  return chain;
 }
 
 // Update chain: db.update(table).set({}).where(cond)
-const mockUpdateWhere = jest.fn().mockResolvedValue([])
-const mockUpdateSet = jest.fn().mockReturnValue({ where: mockUpdateWhere })
-const mockDbUpdate = jest.fn().mockReturnValue({ set: mockUpdateSet })
+const mockUpdateWhere = jest.fn().mockResolvedValue([]);
+const mockUpdateSet = jest.fn().mockReturnValue({ where: mockUpdateWhere });
+const mockDbUpdate = jest.fn().mockReturnValue({ set: mockUpdateSet });
 
 // Select — configurable per call; default returns empty
-const mockDbSelect = jest.fn(() => makeSelectChain([]))
+const mockDbSelect = jest.fn(() => makeSelectChain([]));
 
 // db.execute — used for raw SQL (e.g. workshop_instances participant
 // decrement, which isn't modeled in the Drizzle schema)
-const mockDbExecute = jest.fn().mockResolvedValue({ rows: [] })
+const mockDbExecute = jest.fn().mockResolvedValue({ rows: [] });
 
 // db.transaction(callback) — payment webhooks now wrap multi-write
 // branches in a transaction. Default impl invokes the callback with a tx
@@ -87,13 +87,15 @@ const mockDbExecute = jest.fn().mockResolvedValue({ rows: [] })
 // outer mocks, so the same mock chain (mockDbUpdate / mockDbSelect /
 // mockDbExecute) drives both the per-statement test assertions AND the
 // transactional payment-webhook flow.
-const mockDbTransaction = jest.fn().mockImplementation(
-  async (fn: (tx: unknown) => Promise<unknown>) => fn({
-    select: (...args: unknown[]) => mockDbSelect.apply(null, args),
-    update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
-    execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
-  })
-)
+const mockDbTransaction = jest
+  .fn()
+  .mockImplementation(async (fn: (tx: unknown) => Promise<unknown>) =>
+    fn({
+      select: (...args: unknown[]) => mockDbSelect.apply(null, args),
+      update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
+      execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
+    }),
+  );
 
 jest.mock('@/db', () => ({
   db: {
@@ -102,11 +104,15 @@ jest.mock('@/db', () => ({
     execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
     transaction: (...args: unknown[]) => mockDbTransaction(...args),
   },
-}))
+}));
 
 jest.mock('@/db/schema', () => ({
   marketplaceOrders: { id: 'marketplaceOrders', deliveredAt: 'deliveredAt' },
-  marketplaceOrderItems: { id: 'marketplaceOrderItems', listingId: 'listingId', orderId: 'orderId' },
+  marketplaceOrderItems: {
+    id: 'marketplaceOrderItems',
+    listingId: 'listingId',
+    orderId: 'orderId',
+  },
   listings: { id: 'listings' },
   // Completion bumps the seller's counter (see lib/marketplace/complete-order).
   sellerProfiles: { userId: 'sellerProfiles.userId', totalSold: 'sellerProfiles.totalSold' },
@@ -114,11 +120,11 @@ jest.mock('@/db/schema', () => ({
   paymentTransactions: { id: 'paymentTransactions' },
   workshopRegistrations: { id: 'workshopRegistrations' },
   serviceAppointments: { id: 'serviceAppointments' },
-}))
+}));
 
 jest.mock('@/db/schema/inventory', () => ({
   inventoryItems: { id: 'inventoryItems' },
-}))
+}));
 
 jest.mock('drizzle-orm', () => ({
   ...jest.requireActual('drizzle-orm'),
@@ -128,20 +134,20 @@ jest.mock('drizzle-orm', () => ({
     raw: jest.fn().mockReturnValue({ __sql: 'raw' }),
     join: jest.fn().mockReturnValue({ __sql: 'joined' }),
   }),
-}))
+}));
 
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
-}))
+}));
 
 jest.mock('@/lib/email', () => ({
   sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
-}))
+}));
 
 jest.mock('@/lib/email/templates/marketplace', () => ({
   orderConfirmationBuyer: jest.fn().mockReturnValue({ subject: 'Order', html: '' }),
   newOrderNotificationSeller: jest.fn().mockReturnValue({ subject: 'New order', html: '' }),
-}))
+}));
 
 jest.mock('@/lib/kivvi/client', () => ({
   createKivviInvoice: jest.fn().mockResolvedValue({ id: 'kiv-1', number: 'RE-2026-001' }),
@@ -158,7 +164,7 @@ jest.mock('@/lib/kivvi/client', () => ({
     reference: 'MO-order-1',
     sourceType: 'marketplace_payout',
   }),
-}))
+}));
 
 jest.mock('@/config/marketplace', () => ({
   formatCHF: jest.fn((n: number) => `CHF ${n}`),
@@ -177,7 +183,7 @@ jest.mock('@/config/marketplace', () => ({
     RESERVED: 'reserved',
     SOLD: 'sold',
   },
-}))
+}));
 
 jest.mock('@/config/payment-status', () => ({
   PAYMENT_STATUS: {
@@ -190,7 +196,7 @@ jest.mock('@/config/payment-status', () => ({
     PROCESSING: 'processing',
     DISPUTED: 'disputed',
   },
-}))
+}));
 
 jest.mock('@/lib/payments/payrexx-client', () => ({
   PAYREXX_TRANSACTION_STATUS: {
@@ -203,7 +209,7 @@ jest.mock('@/lib/payments/payrexx-client', () => ({
     WAITING: 'waiting',
     ERROR: 'error',
   },
-}))
+}));
 
 // NOTE: service appointments follow the BOOKING_STATUS lifecycle
 // (requested → … → quote_approved → in_progress → completed), NOT the legacy
@@ -225,11 +231,11 @@ jest.mock('@/config/workshop-registration-status', () => ({
     PAID: 'paid',
     REFUNDED: 'refunded',
   },
-}))
+}));
 
 jest.mock('@/config/urls', () => ({
   APP_URL: 'https://app.revamp-it.ch',
-}))
+}));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
@@ -241,12 +247,15 @@ import {
   handleGenericPayment,
   grossToNetChf,
   KIVVI_MWST_RATE,
-} from '../payment-webhook'
-import { ORDER_STATUS, LISTING_STATUS } from '@/config/marketplace'
-import { PAYMENT_STATUS } from '@/config/payment-status'
-import { PAYREXX_TRANSACTION_STATUS } from '@/lib/payments/payrexx-client'
-import { WORKSHOP_REGISTRATION_STATUS, WORKSHOP_PAYMENT_STATUS } from '@/config/workshop-registration-status'
-import { BOOKING_STATUS } from '@/config/booking-status'
+} from '../payment-webhook';
+import { ORDER_STATUS, LISTING_STATUS } from '@/config/marketplace';
+import { PAYMENT_STATUS } from '@/config/payment-status';
+import { PAYREXX_TRANSACTION_STATUS } from '@/lib/payments/payrexx-client';
+import {
+  WORKSHOP_REGISTRATION_STATUS,
+  WORKSHOP_PAYMENT_STATUS,
+} from '@/config/workshop-registration-status';
+import { BOOKING_STATUS } from '@/config/booking-status';
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -264,7 +273,7 @@ function makeOrder(overrides: Partial<Record<string, unknown>> = {}) {
     status: ORDER_STATUS.PENDING_PAYMENT,
     deliveryMethod: 'pickup',
     ...overrides,
-  }
+  };
 }
 
 function makePaymentTx(overrides: Partial<Record<string, unknown>> = {}) {
@@ -275,16 +284,16 @@ function makePaymentTx(overrides: Partial<Record<string, unknown>> = {}) {
     serviceAppointmentId: null,
     amountCents: 5000,
     ...overrides,
-  }
+  };
 }
 
 beforeEach(() => {
-  jest.clearAllMocks()
-  mockUpdateWhere.mockResolvedValue([])
-  mockUpdateSet.mockReturnValue({ where: mockUpdateWhere })
-  mockDbUpdate.mockReturnValue({ set: mockUpdateSet })
-  mockDbSelect.mockImplementation(() => makeSelectChain([]))
-  mockDbExecute.mockResolvedValue({ rows: [] })
+  jest.clearAllMocks();
+  mockUpdateWhere.mockResolvedValue([]);
+  mockUpdateSet.mockReturnValue({ where: mockUpdateWhere });
+  mockDbUpdate.mockReturnValue({ set: mockUpdateSet });
+  mockDbSelect.mockImplementation(() => makeSelectChain([]));
+  mockDbExecute.mockResolvedValue({ rows: [] });
   // jest.clearAllMocks wipes mockDbTransaction's default impl too — restore
   // it so the transactional payment-webhook flow continues to work for
   // tests that don't customize it.
@@ -293,9 +302,9 @@ beforeEach(() => {
       select: (...args: unknown[]) => mockDbSelect.apply(null, args),
       update: (...args: unknown[]) => mockDbUpdate.apply(null, args),
       execute: (...args: unknown[]) => mockDbExecute.apply(null, args),
-    })
-  )
-})
+    }),
+  );
+});
 
 // ============================================================================
 // lookupPaymentByReferenceId
@@ -303,38 +312,37 @@ beforeEach(() => {
 
 describe('lookupPaymentByReferenceId', () => {
   it('returns { type: "marketplace", order } when marketplace order found', async () => {
-    const order = makeOrder()
-    mockDbSelect
-      .mockReturnValueOnce(makeSelectChain([order]))  // marketplace order found
+    const order = makeOrder();
+    mockDbSelect.mockReturnValueOnce(makeSelectChain([order])); // marketplace order found
 
-    const result = await lookupPaymentByReferenceId('order-1')
+    const result = await lookupPaymentByReferenceId('order-1');
 
-    expect(result.type).toBe('marketplace')
-    expect(result.order).toMatchObject({ id: 'order-1' })
-  })
+    expect(result.type).toBe('marketplace');
+    expect(result.order).toMatchObject({ id: 'order-1' });
+  });
 
   it('returns { type: "payment_transaction", paymentTx } when no order but TX found', async () => {
-    const tx = makePaymentTx()
+    const tx = makePaymentTx();
     mockDbSelect
-      .mockReturnValueOnce(makeSelectChain([]))   // no marketplace order
-      .mockReturnValueOnce(makeSelectChain([tx])) // payment transaction found
+      .mockReturnValueOnce(makeSelectChain([])) // no marketplace order
+      .mockReturnValueOnce(makeSelectChain([tx])); // payment transaction found
 
-    const result = await lookupPaymentByReferenceId('tx-1')
+    const result = await lookupPaymentByReferenceId('tx-1');
 
-    expect(result.type).toBe('payment_transaction')
-    expect(result.paymentTx).toMatchObject({ id: 'tx-1' })
-  })
+    expect(result.type).toBe('payment_transaction');
+    expect(result.paymentTx).toMatchObject({ id: 'tx-1' });
+  });
 
   it('returns { type: "not_found" } when neither record exists', async () => {
     mockDbSelect
-      .mockReturnValueOnce(makeSelectChain([]))  // no order
-      .mockReturnValueOnce(makeSelectChain([]))  // no tx
+      .mockReturnValueOnce(makeSelectChain([])) // no order
+      .mockReturnValueOnce(makeSelectChain([])); // no tx
 
-    const result = await lookupPaymentByReferenceId('unknown-ref')
+    const result = await lookupPaymentByReferenceId('unknown-ref');
 
-    expect(result.type).toBe('not_found')
-  })
-})
+    expect(result.type).toBe('not_found');
+  });
+});
 
 // ============================================================================
 // handleMarketplacePayment — RESERVED
@@ -342,71 +350,92 @@ describe('lookupPaymentByReferenceId', () => {
 
 describe('handleMarketplacePayment — RESERVED', () => {
   it('skips update when order status is not PENDING_PAYMENT', async () => {
-    const order = makeOrder({ status: ORDER_STATUS.PAID })
+    const order = makeOrder({ status: ORDER_STATUS.PAID });
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-abc', { amount: 25000, currency: 'CHF' })
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-abc', {
+      amount: 25000,
+      currency: 'CHF',
+    });
 
-    expect(mockDbUpdate).not.toHaveBeenCalled()
-  })
+    expect(mockDbUpdate).not.toHaveBeenCalled();
+  });
 
   it('updates order to PAID when status is PENDING_PAYMENT', async () => {
-    const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT })
+    const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT });
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-abc', { amount: 25000, currency: 'CHF' })
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-abc', {
+      amount: 25000,
+      currency: 'CHF',
+    });
 
-    expect(mockDbUpdate).toHaveBeenCalledTimes(1)
+    expect(mockDbUpdate).toHaveBeenCalledTimes(1);
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: ORDER_STATUS.PAID }),
-    )
-  })
+    );
+  });
 
   it('stores payrexxTransactionId on the order', async () => {
-    const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT })
+    const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT });
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-xyz', { amount: 25000, currency: 'CHF' })
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-xyz', {
+      amount: 25000,
+      currency: 'CHF',
+    });
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ payrexxTransactionId: 'tx-xyz' }),
-    )
-  })
+    );
+  });
 
   it('does not throw when fire-and-forget email fails', async () => {
-    const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT })
-    const { sendCustomEmail } = jest.requireMock('@/lib/email')
-    sendCustomEmail.mockRejectedValueOnce(new Error('SMTP down'))
+    const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT });
+    const { sendCustomEmail } = jest.requireMock('@/lib/email');
+    sendCustomEmail.mockRejectedValueOnce(new Error('SMTP down'));
 
     await expect(
-      handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, null, { amount: 25000, currency: 'CHF' }),
-    ).resolves.not.toThrow()
-  })
+      handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, null, {
+        amount: 25000,
+        currency: 'CHF',
+      }),
+    ).resolves.not.toThrow();
+  });
 
   // Amount-claim verification — a signed-but-replayed webhook from a smaller
   // transaction would otherwise be accepted. Each mismatched-claim case must
   // refuse to advance the order's state.
   it('refuses to mark paid when claimed amount does not match order amount', async () => {
-    const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT })
+    const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT });
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-abc', { amount: 100, currency: 'CHF' })
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-abc', {
+      amount: 100,
+      currency: 'CHF',
+    });
 
-    expect(mockDbUpdate).not.toHaveBeenCalled()
-  })
+    expect(mockDbUpdate).not.toHaveBeenCalled();
+  });
 
   it('refuses to mark paid when claimed currency is wrong', async () => {
-    const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT })
+    const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT });
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-abc', { amount: 25000, currency: 'EUR' })
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-abc', {
+      amount: 25000,
+      currency: 'EUR',
+    });
 
-    expect(mockDbUpdate).not.toHaveBeenCalled()
-  })
+    expect(mockDbUpdate).not.toHaveBeenCalled();
+  });
 
   it('refuses to mark paid when claim amount is missing', async () => {
-    const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT })
+    const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT });
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-abc', { amount: null, currency: 'CHF' })
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-abc', {
+      amount: null,
+      currency: 'CHF',
+    });
 
-    expect(mockDbUpdate).not.toHaveBeenCalled()
-  })
-})
+    expect(mockDbUpdate).not.toHaveBeenCalled();
+  });
+});
 
 // ============================================================================
 // handleMarketplacePayment — Kivvi accounting sync ownership guard
@@ -417,7 +446,7 @@ describe('handleMarketplacePayment — Kivvi sync ownership guard (RESERVED)', (
   // handler resolves before the async sync chain settles. Drain the microtask +
   // immediate queue so the (all-immediately-resolving) sync completes before we
   // assert on the mocked Kivvi client.
-  const flush = () => new Promise((res) => setTimeout(res, 0))
+  const flush = () => new Promise((res) => setTimeout(res, 0));
 
   it('books an OWNED-stock order to Kivvi (createKivviInvoice runs)', async () => {
     // Every db.select in the RESERVED fire-and-forget fan-out (email title,
@@ -426,46 +455,66 @@ describe('handleMarketplacePayment — Kivvi sync ownership guard (RESERVED)', (
     // concurrent fire-and-forget chains cannot flake the assertion.
     mockDbSelect.mockImplementation(() =>
       makeSelectChain([
-        { isRevampit: true, title: 'ThinkPad X270', inventoryItemId: null, name: 'Buyer', email: 'buyer@x.ch' },
+        {
+          isRevampit: true,
+          title: 'ThinkPad X270',
+          inventoryItemId: null,
+          name: 'Buyer',
+          email: 'buyer@x.ch',
+        },
       ]),
-    )
-    const { createKivviInvoice } = jest.requireMock('@/lib/kivvi/client')
-    const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT, listingId: 'listing-owned' })
+    );
+    const { createKivviInvoice } = jest.requireMock('@/lib/kivvi/client');
+    const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT, listingId: 'listing-owned' });
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-owned', { amount: 25000, currency: 'CHF' })
-    await flush()
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-owned', {
+      amount: 25000,
+      currency: 'CHF',
+    });
+    await flush();
 
-    expect(createKivviInvoice).toHaveBeenCalledTimes(1)
-  })
+    expect(createKivviInvoice).toHaveBeenCalledTimes(1);
+  });
 
   it('books a P2P order via agency sale (not invoice)', async () => {
     mockDbSelect.mockImplementation(() =>
       makeSelectChain([
-        { isRevampit: false, title: 'Community bike', inventoryItemId: null, name: 'Buyer', email: 'buyer@x.ch' },
+        {
+          isRevampit: false,
+          title: 'Community bike',
+          inventoryItemId: null,
+          name: 'Buyer',
+          email: 'buyer@x.ch',
+        },
       ]),
-    )
+    );
     const {
       createKivviInvoice,
       updateKivviDocumentStatus,
       recordKivviPayment,
       recordKivviAgencySale,
-    } = jest.requireMock('@/lib/kivvi/client')
+    } = jest.requireMock('@/lib/kivvi/client');
     const order = makeOrder({
       status: ORDER_STATUS.PENDING_PAYMENT,
       listingId: 'listing-p2p',
       amountChf: '250.00',
       commissionChf: '0',
       sellerPayoutChf: '250.00',
-    })
+    });
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-p2p', { amount: 25000, currency: 'CHF' })
-    await flush()
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.RESERVED, 'tx-p2p', {
+      amount: 25000,
+      currency: 'CHF',
+    });
+    await flush();
 
-    expect(mockUpdateSet).toHaveBeenCalledWith(expect.objectContaining({ status: ORDER_STATUS.PAID }))
-    expect(createKivviInvoice).not.toHaveBeenCalled()
-    expect(updateKivviDocumentStatus).not.toHaveBeenCalled()
-    expect(recordKivviPayment).not.toHaveBeenCalled()
-    expect(recordKivviAgencySale).toHaveBeenCalledTimes(1)
+    expect(mockUpdateSet).toHaveBeenCalledWith(
+      expect.objectContaining({ status: ORDER_STATUS.PAID }),
+    );
+    expect(createKivviInvoice).not.toHaveBeenCalled();
+    expect(updateKivviDocumentStatus).not.toHaveBeenCalled();
+    expect(recordKivviPayment).not.toHaveBeenCalled();
+    expect(recordKivviAgencySale).toHaveBeenCalledTimes(1);
     expect(recordKivviAgencySale).toHaveBeenCalledWith(
       expect.objectContaining({
         orderReference: `MO-${order.id}`,
@@ -476,57 +525,67 @@ describe('handleMarketplacePayment — Kivvi sync ownership guard (RESERVED)', (
         sourceId: order.id,
       }),
       `marketplace-order:${order.id}:paid`,
-    )
-  })
-})
+    );
+  });
+});
 
 // ============================================================================
 // handleMarketplacePayment — CONFIRMED
 // ============================================================================
 
 describe('handleMarketplacePayment — CONFIRMED', () => {
-  const flush = () => new Promise((res) => setTimeout(res, 0))
+  const flush = () => new Promise((res) => setTimeout(res, 0));
 
   it('skips update when order status is not PAID or DELIVERED', async () => {
-    const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT })
+    const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT });
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CONFIRMED, null, { amount: 25000, currency: 'CHF' })
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CONFIRMED, null, {
+      amount: 25000,
+      currency: 'CHF',
+    });
 
-    expect(mockDbUpdate).not.toHaveBeenCalled()
-  })
+    expect(mockDbUpdate).not.toHaveBeenCalled();
+  });
 
   it('updates order to COMPLETED when status is PAID', async () => {
-    const order = makeOrder({ status: ORDER_STATUS.PAID })
+    const order = makeOrder({ status: ORDER_STATUS.PAID });
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CONFIRMED, null, { amount: 25000, currency: 'CHF' })
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CONFIRMED, null, {
+      amount: 25000,
+      currency: 'CHF',
+    });
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: ORDER_STATUS.COMPLETED }),
-    )
-  })
+    );
+  });
 
   it('updates order to COMPLETED when status is DELIVERED', async () => {
-    const order = makeOrder({ status: ORDER_STATUS.DELIVERED })
+    const order = makeOrder({ status: ORDER_STATUS.DELIVERED });
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CONFIRMED, null, { amount: 25000, currency: 'CHF' })
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CONFIRMED, null, {
+      amount: 25000,
+      currency: 'CHF',
+    });
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: ORDER_STATUS.COMPLETED }),
-    )
-  })
+    );
+  });
 
   it('books P2P seller payout on CONFIRMED when escrow is released', async () => {
-    mockDbSelect.mockImplementation(() =>
-      makeSelectChain([{ isRevampit: false }]),
-    )
-    const { recordKivviPayout } = jest.requireMock('@/lib/kivvi/client')
+    mockDbSelect.mockImplementation(() => makeSelectChain([{ isRevampit: false }]));
+    const { recordKivviPayout } = jest.requireMock('@/lib/kivvi/client');
     const order = makeOrder({
       status: ORDER_STATUS.PAID,
       sellerPayoutChf: '230.00',
-    })
+    });
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CONFIRMED, null, { amount: 25000, currency: 'CHF' })
-    await flush()
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CONFIRMED, null, {
+      amount: 25000,
+      currency: 'CHF',
+    });
+    await flush();
 
     expect(recordKivviPayout).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -534,22 +593,23 @@ describe('handleMarketplacePayment — CONFIRMED', () => {
         reference: `MO-${order.id}`,
       }),
       `marketplace-order:${order.id}:payout`,
-    )
-  })
+    );
+  });
 
   it('skips payout sync for owned-stock orders on CONFIRMED', async () => {
-    mockDbSelect.mockImplementation(() =>
-      makeSelectChain([{ isRevampit: true }]),
-    )
-    const { recordKivviPayout } = jest.requireMock('@/lib/kivvi/client')
-    const order = makeOrder({ status: ORDER_STATUS.PAID })
+    mockDbSelect.mockImplementation(() => makeSelectChain([{ isRevampit: true }]));
+    const { recordKivviPayout } = jest.requireMock('@/lib/kivvi/client');
+    const order = makeOrder({ status: ORDER_STATUS.PAID });
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CONFIRMED, null, { amount: 25000, currency: 'CHF' })
-    await flush()
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CONFIRMED, null, {
+      amount: 25000,
+      currency: 'CHF',
+    });
+    await flush();
 
-    expect(recordKivviPayout).not.toHaveBeenCalled()
-  })
-})
+    expect(recordKivviPayout).not.toHaveBeenCalled();
+  });
+});
 
 // ============================================================================
 // handleMarketplacePayment — CANCELLED / DECLINED
@@ -557,54 +617,69 @@ describe('handleMarketplacePayment — CONFIRMED', () => {
 
 describe('handleMarketplacePayment — CANCELLED / DECLINED', () => {
   it('skips when order is already COMPLETED', async () => {
-    const order = makeOrder({ status: ORDER_STATUS.COMPLETED })
+    const order = makeOrder({ status: ORDER_STATUS.COMPLETED });
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, { amount: 25000, currency: 'CHF' })
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, {
+      amount: 25000,
+      currency: 'CHF',
+    });
 
-    expect(mockDbUpdate).not.toHaveBeenCalled()
-  })
+    expect(mockDbUpdate).not.toHaveBeenCalled();
+  });
 
   it('skips when order is already CANCELLED', async () => {
-    const order = makeOrder({ status: ORDER_STATUS.CANCELLED })
+    const order = makeOrder({ status: ORDER_STATUS.CANCELLED });
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.DECLINED, null, { amount: 25000, currency: 'CHF' })
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.DECLINED, null, {
+      amount: 25000,
+      currency: 'CHF',
+    });
 
-    expect(mockDbUpdate).not.toHaveBeenCalled()
-  })
+    expect(mockDbUpdate).not.toHaveBeenCalled();
+  });
 
   it('updates order to CANCELLED for CANCELLED status', async () => {
-    const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT })
+    const order = makeOrder({ status: ORDER_STATUS.PENDING_PAYMENT });
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, { amount: 25000, currency: 'CHF' })
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, {
+      amount: 25000,
+      currency: 'CHF',
+    });
 
-    expect(mockDbUpdate).toHaveBeenCalledWith(expect.anything()) // marketplaceOrders
+    expect(mockDbUpdate).toHaveBeenCalledWith(expect.anything()); // marketplaceOrders
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: ORDER_STATUS.CANCELLED }),
-    )
-  })
+    );
+  });
 
   it('also restores listing to ACTIVE on CANCELLED', async () => {
-    const order = makeOrder({ status: ORDER_STATUS.PAID, listingId: 'lst-1' })
+    const order = makeOrder({ status: ORDER_STATUS.PAID, listingId: 'lst-1' });
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, { amount: 25000, currency: 'CHF' })
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, {
+      amount: 25000,
+      currency: 'CHF',
+    });
 
     // Two db.update calls: order + listing
-    expect(mockDbUpdate).toHaveBeenCalledTimes(2)
+    expect(mockDbUpdate).toHaveBeenCalledTimes(2);
     // Second call updates the listing
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: LISTING_STATUS.ACTIVE }),
-    )
-  })
+    );
+  });
 
   it('updates order to CANCELLED for DECLINED status', async () => {
-    const order = makeOrder({ status: ORDER_STATUS.PAID })
+    const order = makeOrder({ status: ORDER_STATUS.PAID });
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.DECLINED, null, { amount: 25000, currency: 'CHF' })
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.DECLINED, null, {
+      amount: 25000,
+      currency: 'CHF',
+    });
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: ORDER_STATUS.CANCELLED }),
-    )
-  })
+    );
+  });
 
   it('wraps the order cancellation + listing restore in a single transaction', async () => {
     // Without the transaction, a failure on the listings restore after the
@@ -613,29 +688,35 @@ describe('handleMarketplacePayment — CANCELLED / DECLINED', () => {
     // re-listed). Regression: assert db.transaction is invoked and both
     // writes run through the tx wrapper, so postgres rolls back if either
     // half fails.
-    const order = makeOrder({ status: ORDER_STATUS.PAID, listingId: 'lst-1' })
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, { amount: 25000, currency: 'CHF' })
+    const order = makeOrder({ status: ORDER_STATUS.PAID, listingId: 'lst-1' });
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, {
+      amount: 25000,
+      currency: 'CHF',
+    });
 
-    expect(mockDbTransaction).toHaveBeenCalledTimes(1)
+    expect(mockDbTransaction).toHaveBeenCalledTimes(1);
     // Both updates happen inside the transaction callback (which routes
     // tx.update through mockDbUpdate via the default impl).
-    expect(mockDbUpdate).toHaveBeenCalledTimes(2)
-  })
+    expect(mockDbUpdate).toHaveBeenCalledTimes(2);
+  });
 
   it('surfaces a transaction failure rather than silently committing the partial state', async () => {
     // Simulate: order update inside the transaction commits OK, listings
     // restore throws. The transaction must reject — postgres rolls back
     // the order update — and the throw bubbles out of handleMarketplacePayment.
     mockDbTransaction.mockImplementationOnce(async () => {
-      throw new Error('FK contention on listings restore')
-    })
-    const order = makeOrder({ status: ORDER_STATUS.PAID, listingId: 'lst-1' })
+      throw new Error('FK contention on listings restore');
+    });
+    const order = makeOrder({ status: ORDER_STATUS.PAID, listingId: 'lst-1' });
 
     await expect(
-      handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, { amount: 25000, currency: 'CHF' }),
-    ).rejects.toThrow('FK contention')
-  })
-})
+      handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, {
+        amount: 25000,
+        currency: 'CHF',
+      }),
+    ).rejects.toThrow('FK contention');
+  });
+});
 
 // ============================================================================
 // handleMarketplacePayment — REFUNDED / PARTIALLY_REFUNDED
@@ -643,25 +724,31 @@ describe('handleMarketplacePayment — CANCELLED / DECLINED', () => {
 
 describe('handleMarketplacePayment — REFUNDED / PARTIALLY_REFUNDED', () => {
   it('updates order to REFUNDED on REFUNDED status', async () => {
-    const order = makeOrder({ status: ORDER_STATUS.PAID })
+    const order = makeOrder({ status: ORDER_STATUS.PAID });
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.REFUNDED, null, { amount: 25000, currency: 'CHF' })
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.REFUNDED, null, {
+      amount: 25000,
+      currency: 'CHF',
+    });
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: ORDER_STATUS.REFUNDED }),
-    )
-  })
+    );
+  });
 
   it('updates order to REFUNDED on PARTIALLY_REFUNDED status', async () => {
-    const order = makeOrder({ status: ORDER_STATUS.PAID })
+    const order = makeOrder({ status: ORDER_STATUS.PAID });
 
-    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.PARTIALLY_REFUNDED, null, { amount: 25000, currency: 'CHF' })
+    await handleMarketplacePayment(order, PAYREXX_TRANSACTION_STATUS.PARTIALLY_REFUNDED, null, {
+      amount: 25000,
+      currency: 'CHF',
+    });
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: ORDER_STATUS.REFUNDED }),
-    )
-  })
-})
+    );
+  });
+});
 
 // ============================================================================
 // handleGenericPayment — RESERVED
@@ -669,79 +756,104 @@ describe('handleMarketplacePayment — REFUNDED / PARTIALLY_REFUNDED', () => {
 
 describe('handleGenericPayment — RESERVED', () => {
   it('skips update when payment transaction is not PENDING', async () => {
-    const tx = makePaymentTx({ status: PAYMENT_STATUS.SUCCEEDED })
+    const tx = makePaymentTx({ status: PAYMENT_STATUS.SUCCEEDED });
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, 'payrexx-1', { amount: 5000, currency: 'CHF' })
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, 'payrexx-1', {
+      amount: 5000,
+      currency: 'CHF',
+    });
 
-    expect(mockDbUpdate).not.toHaveBeenCalled()
-  })
+    expect(mockDbUpdate).not.toHaveBeenCalled();
+  });
 
   it('updates payment transaction to SUCCEEDED', async () => {
-    const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING })
+    const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING });
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, 'payrexx-1', { amount: 5000, currency: 'CHF' })
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, 'payrexx-1', {
+      amount: 5000,
+      currency: 'CHF',
+    });
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: PAYMENT_STATUS.SUCCEEDED }),
-    )
-  })
+    );
+  });
 
   it('confirms workshop registration when workshopRegistrationId is set', async () => {
-    const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING, workshopRegistrationId: 'reg-1' })
+    const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING, workshopRegistrationId: 'reg-1' });
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, null, { amount: 5000, currency: 'CHF' })
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, null, {
+      amount: 5000,
+      currency: 'CHF',
+    });
 
     // Two updates: payment transaction + workshop registration
-    expect(mockDbUpdate).toHaveBeenCalledTimes(2)
+    expect(mockDbUpdate).toHaveBeenCalledTimes(2);
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({
         paymentStatus: WORKSHOP_PAYMENT_STATUS.PAID,
         status: WORKSHOP_REGISTRATION_STATUS.CONFIRMED,
       }),
-    )
-  })
+    );
+  });
 
   it('moves service appointment to IN_PROGRESS when serviceAppointmentId is set', async () => {
-    const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING, serviceAppointmentId: 'appt-1' })
+    const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING, serviceAppointmentId: 'appt-1' });
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, null, { amount: 5000, currency: 'CHF' })
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, null, {
+      amount: 5000,
+      currency: 'CHF',
+    });
 
-    expect(mockDbUpdate).toHaveBeenCalledTimes(2)
+    expect(mockDbUpdate).toHaveBeenCalledTimes(2);
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: BOOKING_STATUS.IN_PROGRESS }),
-    )
-  })
+    );
+  });
 
   it('does NOT update workshop/appointment when IDs are null', async () => {
-    const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING, workshopRegistrationId: null, serviceAppointmentId: null })
+    const tx = makePaymentTx({
+      status: PAYMENT_STATUS.PENDING,
+      workshopRegistrationId: null,
+      serviceAppointmentId: null,
+    });
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, null, { amount: 5000, currency: 'CHF' })
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, null, {
+      amount: 5000,
+      currency: 'CHF',
+    });
 
     // Only one update: the payment transaction itself
-    expect(mockDbUpdate).toHaveBeenCalledTimes(1)
-  })
+    expect(mockDbUpdate).toHaveBeenCalledTimes(1);
+  });
 
   // Amount-claim verification for payment transactions — same threat model
   // as marketplace: a signed-but-replayed webhook from a smaller transaction
   // would otherwise flip workshop registrations / appointments to confirmed
   // without the user actually paying that amount.
   it('refuses to mark succeeded when claimed amount does not match transaction amount', async () => {
-    const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING })
+    const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING });
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, 'payrexx-1', { amount: 100, currency: 'CHF' })
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, 'payrexx-1', {
+      amount: 100,
+      currency: 'CHF',
+    });
 
-    expect(mockDbUpdate).not.toHaveBeenCalled()
-    expect(mockDbTransaction).not.toHaveBeenCalled()
-  })
+    expect(mockDbUpdate).not.toHaveBeenCalled();
+    expect(mockDbTransaction).not.toHaveBeenCalled();
+  });
 
   it('refuses to mark succeeded when claimed currency is wrong', async () => {
-    const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING })
+    const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING });
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, 'payrexx-1', { amount: 5000, currency: 'EUR' })
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, 'payrexx-1', {
+      amount: 5000,
+      currency: 'EUR',
+    });
 
-    expect(mockDbUpdate).not.toHaveBeenCalled()
-    expect(mockDbTransaction).not.toHaveBeenCalled()
-  })
+    expect(mockDbUpdate).not.toHaveBeenCalled();
+    expect(mockDbTransaction).not.toHaveBeenCalled();
+  });
 
   it('wraps payment + workshop confirmation in a single transaction (highest-impact gap)', async () => {
     // Without the transaction, payment can be marked SUCCEEDED while the
@@ -751,26 +863,32 @@ describe('handleGenericPayment — RESERVED', () => {
     // doesn't recover because the early-return at
     // `paymentTx.status !== PENDING` skips the whole block. Regression:
     // assert both writes happen inside one db.transaction.
-    const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING, workshopRegistrationId: 'reg-1' })
+    const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING, workshopRegistrationId: 'reg-1' });
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, 'payrexx-1', { amount: 5000, currency: 'CHF' })
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, 'payrexx-1', {
+      amount: 5000,
+      currency: 'CHF',
+    });
 
-    expect(mockDbTransaction).toHaveBeenCalledTimes(1)
+    expect(mockDbTransaction).toHaveBeenCalledTimes(1);
     // Both updates happen via tx.update routed through mockDbUpdate.
-    expect(mockDbUpdate).toHaveBeenCalledTimes(2)
-  })
+    expect(mockDbUpdate).toHaveBeenCalledTimes(2);
+  });
 
   it('throws when the transaction rejects so a partial-state commit cannot happen', async () => {
     mockDbTransaction.mockImplementationOnce(async () => {
-      throw new Error('workshop registration update failed')
-    })
-    const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING, workshopRegistrationId: 'reg-1' })
+      throw new Error('workshop registration update failed');
+    });
+    const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING, workshopRegistrationId: 'reg-1' });
 
     await expect(
-      handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, 'payrexx-1', { amount: 5000, currency: 'CHF' }),
-    ).rejects.toThrow('workshop registration update failed')
-  })
-})
+      handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.RESERVED, 'payrexx-1', {
+        amount: 5000,
+        currency: 'CHF',
+      }),
+    ).rejects.toThrow('workshop registration update failed');
+  });
+});
 
 // ============================================================================
 // handleGenericPayment — CANCELLED / DECLINED
@@ -778,34 +896,43 @@ describe('handleGenericPayment — RESERVED', () => {
 
 describe('handleGenericPayment — CANCELLED / DECLINED', () => {
   it('updates payment transaction to FAILED on CANCELLED', async () => {
-    const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING })
+    const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING });
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, { amount: 5000, currency: 'CHF' })
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, {
+      amount: 5000,
+      currency: 'CHF',
+    });
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: PAYMENT_STATUS.FAILED }),
-    )
-  })
+    );
+  });
 
   it('updates payment transaction to FAILED on DECLINED', async () => {
-    const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING })
+    const tx = makePaymentTx({ status: PAYMENT_STATUS.PENDING });
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.DECLINED, null, { amount: 5000, currency: 'CHF' })
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.DECLINED, null, {
+      amount: 5000,
+      currency: 'CHF',
+    });
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: PAYMENT_STATUS.FAILED }),
-    )
-  })
+    );
+  });
 
   it('cancels workshop registration when workshopRegistrationId is set', async () => {
-    const tx = makePaymentTx({ workshopRegistrationId: 'reg-2' })
+    const tx = makePaymentTx({ workshopRegistrationId: 'reg-2' });
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, { amount: 5000, currency: 'CHF' })
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, {
+      amount: 5000,
+      currency: 'CHF',
+    });
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: WORKSHOP_REGISTRATION_STATUS.CANCELLED }),
-    )
-  })
+    );
+  });
 
   it('decrements workshop_instances.current_participants on payment failure so phantom count from register-with-payment is undone', async () => {
     // The register-with-payment route increments current_participants when
@@ -816,33 +943,42 @@ describe('handleGenericPayment — CANCELLED / DECLINED', () => {
     // {__sql:'mocked'} placeholder, so we can only assert that the raw-
     // SQL path was taken via db.execute — the inline GREATEST(...) clamp
     // is enforced by direct read of the route source.)
-    mockDbSelect.mockImplementationOnce(() => makeSelectChain([{ workshopInstanceId: 'inst-99' }]))
-    const tx = makePaymentTx({ workshopRegistrationId: 'reg-99' })
+    mockDbSelect.mockImplementationOnce(() => makeSelectChain([{ workshopInstanceId: 'inst-99' }]));
+    const tx = makePaymentTx({ workshopRegistrationId: 'reg-99' });
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.DECLINED, null, { amount: 5000, currency: 'CHF' })
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.DECLINED, null, {
+      amount: 5000,
+      currency: 'CHF',
+    });
 
-    expect(mockDbExecute).toHaveBeenCalledTimes(1)
-  })
+    expect(mockDbExecute).toHaveBeenCalledTimes(1);
+  });
 
   it('skips the participant decrement when the registration row is missing (idempotent on duplicate webhook)', async () => {
     // select returns empty (registration already gone / never existed)
-    mockDbSelect.mockImplementation(() => makeSelectChain([]))
-    const tx = makePaymentTx({ workshopRegistrationId: 'reg-missing' })
+    mockDbSelect.mockImplementation(() => makeSelectChain([]));
+    const tx = makePaymentTx({ workshopRegistrationId: 'reg-missing' });
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, { amount: 5000, currency: 'CHF' })
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, {
+      amount: 5000,
+      currency: 'CHF',
+    });
 
-    expect(mockDbExecute).not.toHaveBeenCalled()
-  })
+    expect(mockDbExecute).not.toHaveBeenCalled();
+  });
 
   it('reverts service appointment to QUOTE_APPROVED when serviceAppointmentId is set', async () => {
-    const tx = makePaymentTx({ serviceAppointmentId: 'appt-2' })
+    const tx = makePaymentTx({ serviceAppointmentId: 'appt-2' });
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.DECLINED, null, { amount: 5000, currency: 'CHF' })
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.DECLINED, null, {
+      amount: 5000,
+      currency: 'CHF',
+    });
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: BOOKING_STATUS.QUOTE_APPROVED }),
-    )
-  })
+    );
+  });
 
   it('wraps the FAILED + revert + participant-decrement in a single transaction', async () => {
     // Critical: without the transaction, a failure on the
@@ -851,18 +987,21 @@ describe('handleGenericPayment — CANCELLED / DECLINED', () => {
     // Over many failed payments the capacity check blocks legitimate
     // users from a workshop that's not actually full. Regression: assert
     // db.transaction is invoked and all three writes route through it.
-    mockDbSelect.mockImplementationOnce(() => makeSelectChain([{ workshopInstanceId: 'inst-99' }]))
-    const tx = makePaymentTx({ workshopRegistrationId: 'reg-99' })
+    mockDbSelect.mockImplementationOnce(() => makeSelectChain([{ workshopInstanceId: 'inst-99' }]));
+    const tx = makePaymentTx({ workshopRegistrationId: 'reg-99' });
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, { amount: 5000, currency: 'CHF' })
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.CANCELLED, null, {
+      amount: 5000,
+      currency: 'CHF',
+    });
 
-    expect(mockDbTransaction).toHaveBeenCalledTimes(1)
+    expect(mockDbTransaction).toHaveBeenCalledTimes(1);
     // Two updates (paymentTx FAILED + registration CANCELLED) routed
     // through tx.update; the participant-count UPDATE goes via tx.execute.
-    expect(mockDbUpdate).toHaveBeenCalledTimes(2)
-    expect(mockDbExecute).toHaveBeenCalledTimes(1)
-  })
-})
+    expect(mockDbUpdate).toHaveBeenCalledTimes(2);
+    expect(mockDbExecute).toHaveBeenCalledTimes(1);
+  });
+});
 
 // ============================================================================
 // handleGenericPayment — REFUNDED
@@ -870,54 +1009,60 @@ describe('handleGenericPayment — CANCELLED / DECLINED', () => {
 
 describe('handleGenericPayment — REFUNDED', () => {
   it('updates payment transaction to REFUNDED on REFUNDED', async () => {
-    const tx = makePaymentTx({ status: PAYMENT_STATUS.SUCCEEDED })
+    const tx = makePaymentTx({ status: PAYMENT_STATUS.SUCCEEDED });
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.REFUNDED, null, { amount: 5000, currency: 'CHF' })
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.REFUNDED, null, {
+      amount: 5000,
+      currency: 'CHF',
+    });
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: PAYMENT_STATUS.REFUNDED }),
-    )
-  })
+    );
+  });
 
   it('updates payment transaction to REFUNDED on PARTIALLY_REFUNDED', async () => {
-    const tx = makePaymentTx({ status: PAYMENT_STATUS.SUCCEEDED })
+    const tx = makePaymentTx({ status: PAYMENT_STATUS.SUCCEEDED });
 
-    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.PARTIALLY_REFUNDED, null, { amount: 5000, currency: 'CHF' })
+    await handleGenericPayment(tx, PAYREXX_TRANSACTION_STATUS.PARTIALLY_REFUNDED, null, {
+      amount: 5000,
+      currency: 'CHF',
+    });
 
     expect(mockUpdateSet).toHaveBeenCalledWith(
       expect.objectContaining({ status: PAYMENT_STATUS.REFUNDED }),
-    )
-  })
-})
+    );
+  });
+});
 
 describe('grossToNetChf (Kivvi invoice VAT)', () => {
   // Regression: marketplace prices are charged VAT-inclusive (gross); Kivvi adds
   // VAT on top of unitPrice. Sending gross as unitPrice inflated every invoice by
   // the VAT rate and left invoices partially_paid + overstated MWST. We must send
   // net so that Kivvi's net + VAT == the amount the customer actually paid.
-  const rate = parseFloat(KIVVI_MWST_RATE) / 100
+  const rate = parseFloat(KIVVI_MWST_RATE) / 100;
 
   it('uses the current Swiss standard rate (8.1%)', () => {
-    expect(KIVVI_MWST_RATE).toBe('8.1')
-  })
+    expect(KIVVI_MWST_RATE).toBe('8.1');
+  });
 
   it('net + VAT reconstructs the gross charged (within a Rappen)', () => {
     for (const gross of ['100.00', '50.00', '19.90', '12.35', '1234.55']) {
-      const net = parseFloat(grossToNetChf(gross))
-      const total = net + Math.round(net * rate * 100) / 100
-      expect(Math.abs(total - parseFloat(gross))).toBeLessThanOrEqual(0.01)
+      const net = parseFloat(grossToNetChf(gross));
+      const total = net + Math.round(net * rate * 100) / 100;
+      expect(Math.abs(total - parseFloat(gross))).toBeLessThanOrEqual(0.01);
     }
-  })
+  });
 
   it('net is strictly less than gross for a positive amount', () => {
-    expect(parseFloat(grossToNetChf('100.00'))).toBeLessThan(100)
-  })
+    expect(parseFloat(grossToNetChf('100.00'))).toBeLessThan(100);
+  });
 
   it('returns a 2-decimal string', () => {
-    expect(grossToNetChf('100.00')).toMatch(/^\d+\.\d{2}$/)
-  })
+    expect(grossToNetChf('100.00')).toMatch(/^\d+\.\d{2}$/);
+  });
 
   it('falls back to the input for unparseable amounts', () => {
-    expect(grossToNetChf('abc')).toBe('abc')
-  })
-})
+    expect(grossToNetChf('abc')).toBe('abc');
+  });
+});

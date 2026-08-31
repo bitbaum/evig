@@ -22,70 +22,70 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-const mockCheckRateLimit = jest.fn()
-const mockGetClientIp = jest.fn().mockReturnValue('10.0.0.1')
+const mockCheckRateLimit = jest.fn();
+const mockGetClientIp = jest.fn().mockReturnValue('10.0.0.1');
 
 jest.mock('@/lib/auth/rate-limiter', () => ({
   checkRateLimit: (...args: unknown[]) => mockCheckRateLimit.apply(null, args),
   getClientIp: (...args: unknown[]) => mockGetClientIp.apply(null, args),
-}))
+}));
 
-const mockGetUserByEmail = jest.fn()
-const mockCreatePasswordResetToken = jest.fn().mockResolvedValue('reset-token-abc')
+const mockGetUserByEmail = jest.fn();
+const mockCreatePasswordResetToken = jest.fn().mockResolvedValue('reset-token-abc');
 
 jest.mock('@/lib/auth/db', () => ({
   getUserByEmail: (...args: unknown[]) => mockGetUserByEmail.apply(null, args),
   createPasswordResetToken: (...args: unknown[]) => mockCreatePasswordResetToken.apply(null, args),
-}))
+}));
 
-const mockSendEmail = jest.fn().mockResolvedValue({ success: true, messageId: 'msg-1' })
+const mockSendEmail = jest.fn().mockResolvedValue({ success: true, messageId: 'msg-1' });
 
 jest.mock('@/lib/email', () => ({
   sendEmail: (...args: unknown[]) => mockSendEmail.apply(null, args),
-}))
+}));
 
 jest.mock('@/config/org', () => ({
   ORG: { name: 'RevampIT' },
   CONTACT: { email: 'kontakt@revamp-it.ch' },
-}))
+}));
 
 jest.mock('@/config/urls', () => ({
   getPasswordResetUrl: jest.fn((token: string) => `https://example.com/reset?token=${token}`),
-}))
+}));
 
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
-}))
+}));
 
 jest.mock('@/config/error-messages', () => ({
   ERROR_MESSAGES: { INTERNAL_SERVER_ERROR: 'Internal server error' },
-}))
+}));
 
 jest.mock('@/lib/api/helpers', () => ({
   apiSuccess: (data: unknown, status = 200) => {
-    const { NextResponse } = jest.requireActual('next/server')
-    return NextResponse.json({ success: true, data }, { status })
+    const { NextResponse } = jest.requireActual('next/server');
+    return NextResponse.json({ success: true, data }, { status });
   },
   apiBadRequest: (msg: string) => {
-    const { NextResponse } = jest.requireActual('next/server')
-    return NextResponse.json({ success: false, error: msg }, { status: 400 })
+    const { NextResponse } = jest.requireActual('next/server');
+    return NextResponse.json({ success: false, error: msg }, { status: 400 });
   },
   apiError: (err: unknown, msg: string, status = 500) => {
-    const { NextResponse } = jest.requireActual('next/server')
-    return NextResponse.json({ success: false, error: msg }, { status })
+    const { NextResponse } = jest.requireActual('next/server');
+    return NextResponse.json({ success: false, error: msg }, { status });
   },
   apiRateLimited: (msg: string) => {
-    const { NextResponse } = jest.requireActual('next/server')
-    return NextResponse.json({ success: false, error: msg }, { status: 429 })
+    const { NextResponse } = jest.requireActual('next/server');
+    return NextResponse.json({ success: false, error: msg }, { status: 429 });
   },
-}))
+}));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
 // ---------------------------------------------------------------------------
 
-import { NextRequest } from 'next/server'
-import { POST } from '../route'
+import { NextRequest } from 'next/server';
+import { POST } from '../route';
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -96,17 +96,17 @@ function makeRequest(body: unknown) {
     method: 'POST',
     body: JSON.stringify(body),
     headers: { 'content-type': 'application/json' },
-  })
+  });
 }
 
-const MOCK_USER = { id: 'user-1', name: 'Hans', email: 'hans@example.com' }
+const MOCK_USER = { id: 'user-1', name: 'Hans', email: 'hans@example.com' };
 
 beforeEach(() => {
-  jest.clearAllMocks()
-  mockCheckRateLimit.mockReturnValue({ allowed: true, retryAfter: 0, remaining: 9, resetAt: 0 })
-  mockGetUserByEmail.mockResolvedValue(MOCK_USER)
-  mockSendEmail.mockResolvedValue({ success: true, messageId: 'msg-1' })
-})
+  jest.clearAllMocks();
+  mockCheckRateLimit.mockReturnValue({ allowed: true, retryAfter: 0, remaining: 9, resetAt: 0 });
+  mockGetUserByEmail.mockResolvedValue(MOCK_USER);
+  mockSendEmail.mockResolvedValue({ success: true, messageId: 'msg-1' });
+});
 
 // ============================================================================
 // POST /api/auth/forgot-password
@@ -114,80 +114,80 @@ beforeEach(() => {
 
 describe('POST /api/auth/forgot-password — rate limiting', () => {
   it('returns 429 when rate limit exceeded', async () => {
-    mockCheckRateLimit.mockReturnValueOnce({ allowed: false, retryAfter: 60 })
-    const response = await POST(makeRequest({ email: 'hans@example.com' }))
-    expect(response.status).toBe(429)
-  })
+    mockCheckRateLimit.mockReturnValueOnce({ allowed: false, retryAfter: 60 });
+    const response = await POST(makeRequest({ email: 'hans@example.com' }));
+    expect(response.status).toBe(429);
+  });
 
   it('does not call getUserByEmail when rate limited', async () => {
-    mockCheckRateLimit.mockReturnValueOnce({ allowed: false, retryAfter: 60 })
-    await POST(makeRequest({ email: 'hans@example.com' }))
-    expect(mockGetUserByEmail).not.toHaveBeenCalled()
-  })
-})
+    mockCheckRateLimit.mockReturnValueOnce({ allowed: false, retryAfter: 60 });
+    await POST(makeRequest({ email: 'hans@example.com' }));
+    expect(mockGetUserByEmail).not.toHaveBeenCalled();
+  });
+});
 
 describe('POST /api/auth/forgot-password — user not found (enumeration protection)', () => {
   it('returns 200 even when email is not registered', async () => {
-    mockGetUserByEmail.mockResolvedValueOnce(null)
-    const response = await POST(makeRequest({ email: 'unknown@example.com' }))
-    expect(response.status).toBe(200)
-  })
+    mockGetUserByEmail.mockResolvedValueOnce(null);
+    const response = await POST(makeRequest({ email: 'unknown@example.com' }));
+    expect(response.status).toBe(200);
+  });
 
   it('does not call createPasswordResetToken when user is not found', async () => {
-    mockGetUserByEmail.mockResolvedValueOnce(null)
-    await POST(makeRequest({ email: 'unknown@example.com' }))
-    expect(mockCreatePasswordResetToken).not.toHaveBeenCalled()
-  })
+    mockGetUserByEmail.mockResolvedValueOnce(null);
+    await POST(makeRequest({ email: 'unknown@example.com' }));
+    expect(mockCreatePasswordResetToken).not.toHaveBeenCalled();
+  });
 
   it('response message is identical whether user exists or not', async () => {
-    mockGetUserByEmail.mockResolvedValueOnce(null)
-    const notFoundResponse = await POST(makeRequest({ email: 'nope@example.com' }))
-    const notFoundBody = await notFoundResponse.json()
+    mockGetUserByEmail.mockResolvedValueOnce(null);
+    const notFoundResponse = await POST(makeRequest({ email: 'nope@example.com' }));
+    const notFoundBody = await notFoundResponse.json();
 
-    mockGetUserByEmail.mockResolvedValueOnce(MOCK_USER)
-    const foundResponse = await POST(makeRequest({ email: 'hans@example.com' }))
-    const foundBody = await foundResponse.json()
+    mockGetUserByEmail.mockResolvedValueOnce(MOCK_USER);
+    const foundResponse = await POST(makeRequest({ email: 'hans@example.com' }));
+    const foundBody = await foundResponse.json();
 
-    expect(notFoundBody.data.message).toBe(foundBody.data.message)
-  })
-})
+    expect(notFoundBody.data.message).toBe(foundBody.data.message);
+  });
+});
 
 describe('POST /api/auth/forgot-password — user found', () => {
   it('returns 200 on success', async () => {
-    const response = await POST(makeRequest({ email: 'hans@example.com' }))
-    expect(response.status).toBe(200)
-  })
+    const response = await POST(makeRequest({ email: 'hans@example.com' }));
+    expect(response.status).toBe(200);
+  });
 
   it('calls createPasswordResetToken with the user email', async () => {
-    await POST(makeRequest({ email: 'hans@example.com' }))
-    expect(mockCreatePasswordResetToken).toHaveBeenCalledWith('hans@example.com')
-  })
+    await POST(makeRequest({ email: 'hans@example.com' }));
+    expect(mockCreatePasswordResetToken).toHaveBeenCalledWith('hans@example.com');
+  });
 
   it('calls sendEmail with the user email and reset token', async () => {
-    await POST(makeRequest({ email: 'hans@example.com' }))
+    await POST(makeRequest({ email: 'hans@example.com' }));
     expect(mockSendEmail).toHaveBeenCalledWith(
       'hans@example.com',
       'passwordReset',
       expect.any(String),
       expect.stringContaining('reset-token-abc'),
-    )
-  })
+    );
+  });
 
   it('returns 503 when sendEmail throws for a known user', async () => {
-    mockSendEmail.mockRejectedValueOnce(new Error('SMTP error'))
-    const response = await POST(makeRequest({ email: 'hans@example.com' }))
-    expect(response.status).toBe(503)
-  })
+    mockSendEmail.mockRejectedValueOnce(new Error('SMTP error'));
+    const response = await POST(makeRequest({ email: 'hans@example.com' }));
+    expect(response.status).toBe(503);
+  });
 
   it('returns 503 when sendEmail resolves { success: false } for a known user', async () => {
-    mockSendEmail.mockResolvedValueOnce({ success: false, error: 'SMTP timeout' })
+    mockSendEmail.mockResolvedValueOnce({ success: false, error: 'SMTP timeout' });
 
-    const response = await POST(makeRequest({ email: 'hans@example.com' }))
-    expect(response.status).toBe(503)
-    const body = await response.json()
-    expect(body.success).toBe(false)
-    expect(body.error).toMatch(/E-Mail konnte nicht gesendet werden/)
-  })
+    const response = await POST(makeRequest({ email: 'hans@example.com' }));
+    expect(response.status).toBe(503);
+    const body = await response.json();
+    expect(body.success).toBe(false);
+    expect(body.error).toMatch(/E-Mail konnte nicht gesendet werden/);
+  });
 
   it('logs an error when sendEmail resolves { success: false }', async () => {
     // sendEmail catches its own errors and resolves { success: false }
@@ -196,44 +196,42 @@ describe('POST /api/auth/forgot-password — user found', () => {
     // positive) and the user was locked out with no diagnostic trail.
     // Regression: check the resolved-failure case is logged as error.
     const logger = jest.requireMock('@/lib/logger').logger as {
-      info: jest.Mock; error: jest.Mock
-    }
-    mockSendEmail.mockResolvedValueOnce({ success: false, error: 'SMTP timeout' })
+      info: jest.Mock;
+      error: jest.Mock;
+    };
+    mockSendEmail.mockResolvedValueOnce({ success: false, error: 'SMTP timeout' });
 
-    const response = await POST(makeRequest({ email: 'hans@example.com' }))
-    expect(response.status).toBe(503)
+    const response = await POST(makeRequest({ email: 'hans@example.com' }));
+    expect(response.status).toBe(503);
 
     // The success-path info log must NOT fire on a resolved failure.
-    expect(logger.info).not.toHaveBeenCalledWith(
-      'Password reset email sent',
-      expect.anything(),
-    )
+    expect(logger.info).not.toHaveBeenCalledWith('Password reset email sent', expect.anything());
     // The (resolved) error path MUST fire so operators can investigate.
     expect(logger.error).toHaveBeenCalledWith(
       'Failed to send password reset email (resolved)',
       expect.objectContaining({ email: 'hans@example.com', error: 'SMTP timeout' }),
-    )
-  })
-})
+    );
+  });
+});
 
 describe('POST /api/auth/forgot-password — validation errors', () => {
   it('returns 400 for invalid email format', async () => {
-    const response = await POST(makeRequest({ email: 'not-an-email' }))
-    expect(response.status).toBe(400)
-  })
+    const response = await POST(makeRequest({ email: 'not-an-email' }));
+    expect(response.status).toBe(400);
+  });
 
   it('returns 400 when email is missing', async () => {
-    const response = await POST(makeRequest({}))
-    expect(response.status).toBe(400)
-  })
-})
+    const response = await POST(makeRequest({}));
+    expect(response.status).toBe(400);
+  });
+});
 
 describe('POST /api/auth/forgot-password — DB error', () => {
   it('returns 500 when getUserByEmail throws', async () => {
-    mockGetUserByEmail.mockRejectedValueOnce(new Error('DB timeout'))
-    const response = await POST(makeRequest({ email: 'hans@example.com' }))
-    expect(response.status).toBe(500)
-    const body = await response.json()
-    expect(body.success).toBe(false)
-  })
-})
+    mockGetUserByEmail.mockRejectedValueOnce(new Error('DB timeout'));
+    const response = await POST(makeRequest({ email: 'hans@example.com' }));
+    expect(response.status).toBe(500);
+    const body = await response.json();
+    expect(body.success).toBe(false);
+  });
+});

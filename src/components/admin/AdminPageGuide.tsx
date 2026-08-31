@@ -1,15 +1,15 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { usePathname } from 'next/navigation'
-import { useTranslations } from 'next-intl'
-import { CircleHelp, ExternalLink, Lightbulb, X } from 'lucide-react'
-import { Link } from '@/i18n/navigation'
-import { Button } from '@/components/ui/button'
-import Heading from '@/components/admin/AdminHeading'
-import { useFocusTrap } from '@/hooks/useFocusTrap'
-import { resolveHirnContext } from '@/config/hirn/page-contexts'
-import { adminChrome, adminInteractive } from '@/lib/admin-ui'
+import { useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { CircleHelp, ExternalLink, Lightbulb, X } from 'lucide-react';
+import { Link } from '@/i18n/navigation';
+import { Button } from '@/components/ui/button';
+import Heading from '@/components/admin/AdminHeading';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
+import { resolveHirnContext } from '@/config/hirn/page-contexts';
+import { adminChrome, adminInteractive } from '@/lib/admin-ui';
 
 /**
  * Page-local help for every admin route. It resolves the exact same context
@@ -17,29 +17,29 @@ import { adminChrome, adminInteractive } from '@/lib/admin-ui'
  * contract instead of another drifting block of page copy.
  */
 export function AdminPageGuide() {
-  const pathname = usePathname()
-  const context = resolveHirnContext(pathname ?? '/admin', 'admin')
-  const t = useTranslations('admin.pageGuide')
-  const tCtx = useTranslations('admin.hirnContexts')
-  const [open, setOpen] = useState(false)
-  const panelRef = useFocusTrap<HTMLDivElement>(open, () => setOpen(false))
+  const pathname = usePathname();
+  const context = resolveHirnContext(pathname ?? '/admin', 'admin');
+  const t = useTranslations('admin.pageGuide');
+  const tCtx = useTranslations('admin.hirnContexts');
+  const [open, setOpen] = useState(false);
+  const panelRef = useFocusTrap<HTMLDivElement>(open, () => setOpen(false));
 
   // Localized guide content: messages own the human-facing strings
   // (admin.hirnContexts.<area>.*); the German config text is only the
   // LLM context + last-resort fallback for a brand-new area.
   const L = (key: string, fallback: string) => {
-    const k = `${context.area}.${key}`
-    return tCtx.has(k as never) ? tCtx(k as never) : fallback
-  }
-  const guide = context.guide
-  const title = guide ? L('guideTitle', guide.title) : L('title', t('fallbackTitle'))
-  const purpose = guide ? L('guidePurpose', guide.purpose) : L('description', context.description)
+    const k = `${context.area}.${key}`;
+    return tCtx.has(k as never) ? tCtx(k as never) : fallback;
+  };
+  const guide = context.guide;
+  const title = guide ? L('guideTitle', guide.title) : L('title', t('fallbackTitle'));
+  const purpose = guide ? L('guidePurpose', guide.purpose) : L('description', context.description);
   const steps = guide?.steps.map((step, i) => ({
     title: L(`step${i}Title`, step.title),
     description: L(`step${i}Desc`, step.description),
-  }))
-  const note = guide?.note ? L('guideNote', guide.note) : undefined
-  const suggestions = context.suggestions.map((sug, i) => L(`s${i}`, sug))
+  }));
+  const note = guide?.note ? L('guideNote', guide.note) : undefined;
+  const suggestions = context.suggestions.map((sug, i) => L(`s${i}`, sug));
 
   return (
     <>
@@ -74,8 +74,14 @@ export function AdminPageGuide() {
           >
             <div className="sticky top-0 flex items-start justify-between gap-4 border-b border-subtle bg-surface-base px-4 py-3 sm:px-5">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-action">{t('panelLabel')}</p>
-                <Heading id="admin-page-guide-title" level={2} className="mt-0.5 text-lg font-semibold text-text-primary">
+                <p className="text-xs font-semibold uppercase tracking-wide text-action">
+                  {t('panelLabel')}
+                </p>
+                <Heading
+                  id="admin-page-guide-title"
+                  level={2}
+                  className="mt-0.5 text-lg font-semibold text-text-primary"
+                >
                   {title}
                 </Heading>
               </div>
@@ -92,9 +98,7 @@ export function AdminPageGuide() {
             </div>
 
             <div className="space-y-5 p-4 sm:p-5">
-              <p className="text-sm leading-6 text-text-secondary">
-                {purpose}
-              </p>
+              <p className="text-sm leading-6 text-text-secondary">{purpose}</p>
 
               {steps ? (
                 <ol className="space-y-3">
@@ -104,19 +108,27 @@ export function AdminPageGuide() {
                         {index + 1}
                       </span>
                       <span>
-                        <span className="block text-sm font-medium text-text-primary">{step.title}</span>
-                        <span className="mt-0.5 block text-sm leading-5 text-text-secondary">{step.description}</span>
+                        <span className="block text-sm font-medium text-text-primary">
+                          {step.title}
+                        </span>
+                        <span className="mt-0.5 block text-sm leading-5 text-text-secondary">
+                          {step.description}
+                        </span>
                       </span>
                     </li>
                   ))}
                 </ol>
               ) : (
                 <div>
-                  <p className="mb-2 text-sm font-medium text-text-primary">{t('typicalQuestions')}</p>
+                  <p className="mb-2 text-sm font-medium text-text-primary">
+                    {t('typicalQuestions')}
+                  </p>
                   <ul className="space-y-1.5 text-sm text-text-secondary">
-                    {suggestions.map(suggestion => (
+                    {suggestions.map((suggestion) => (
                       <li key={suggestion} className="flex gap-2">
-                        <span className="text-action" aria-hidden="true">•</span>
+                        <span className="text-action" aria-hidden="true">
+                          •
+                        </span>
                         {suggestion}
                       </li>
                     ))}
@@ -146,5 +158,5 @@ export function AdminPageGuide() {
         </>
       )}
     </>
-  )
+  );
 }

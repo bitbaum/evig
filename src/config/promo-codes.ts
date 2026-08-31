@@ -8,8 +8,8 @@ export const PROMO_CODE_TYPES = {
   PERCENT: 'percent',
   FIXED: 'fixed',
   GIFT_CARD: 'gift_card',
-} as const
-export type PromoCodeType = (typeof PROMO_CODE_TYPES)[keyof typeof PROMO_CODE_TYPES]
+} as const;
+export type PromoCodeType = (typeof PROMO_CODE_TYPES)[keyof typeof PROMO_CODE_TYPES];
 
 export const PROMO_CODE_SCOPES = {
   ALL: 'all',
@@ -17,23 +17,23 @@ export const PROMO_CODE_SCOPES = {
   MEMBERSHIP: 'membership',
   WORKSHOP: 'workshop',
   SERVICE: 'service',
-} as const
-export type PromoCodeScope = (typeof PROMO_CODE_SCOPES)[keyof typeof PROMO_CODE_SCOPES]
+} as const;
+export type PromoCodeScope = (typeof PROMO_CODE_SCOPES)[keyof typeof PROMO_CODE_SCOPES];
 
 /** The subset of a promo_codes row the pure math needs. */
 export interface PromoCodeLike {
-  type: string
-  percent: number | null
-  amountCents: number | null
-  balanceCents: number | null
-  scope: string
-  minOrderCents: number
-  maxRedemptions: number | null
-  perUserLimit: number | null
-  redeemedCount: number
-  validFrom: string | null
-  validUntil: string | null
-  isActive: boolean
+  type: string;
+  percent: number | null;
+  amountCents: number | null;
+  balanceCents: number | null;
+  scope: string;
+  minOrderCents: number;
+  maxRedemptions: number | null;
+  perUserLimit: number | null;
+  redeemedCount: number;
+  validFrom: string | null;
+  validUntil: string | null;
+  isActive: boolean;
 }
 
 export type PromoInvalidReason =
@@ -46,11 +46,10 @@ export type PromoInvalidReason =
   | 'usage_limit_reached'
   | 'per_user_limit_reached'
   | 'no_balance'
-  | 'zero_discount'
+  | 'zero_discount';
 
 export type DiscountResult =
-  | { ok: true; discountCents: number }
-  | { ok: false; reason: PromoInvalidReason }
+  { ok: true; discountCents: number } | { ok: false; reason: PromoInvalidReason };
 
 /**
  * Compute the discount (in cents) a code yields for an order — or why it can't
@@ -61,39 +60,42 @@ export function computeDiscount(
   code: PromoCodeLike,
   opts: { totalCents: number; scope: PromoCodeScope; nowMs: number; userRedemptions: number },
 ): DiscountResult {
-  const { totalCents, scope, nowMs, userRedemptions } = opts
+  const { totalCents, scope, nowMs, userRedemptions } = opts;
 
-  if (!code.isActive) return { ok: false, reason: 'inactive' }
-  if (code.validFrom && nowMs < Date.parse(code.validFrom)) return { ok: false, reason: 'not_yet_valid' }
-  if (code.validUntil && nowMs > Date.parse(code.validUntil)) return { ok: false, reason: 'expired' }
-  if (code.scope !== PROMO_CODE_SCOPES.ALL && code.scope !== scope) return { ok: false, reason: 'wrong_scope' }
-  if (totalCents < code.minOrderCents) return { ok: false, reason: 'below_min_order' }
+  if (!code.isActive) return { ok: false, reason: 'inactive' };
+  if (code.validFrom && nowMs < Date.parse(code.validFrom))
+    return { ok: false, reason: 'not_yet_valid' };
+  if (code.validUntil && nowMs > Date.parse(code.validUntil))
+    return { ok: false, reason: 'expired' };
+  if (code.scope !== PROMO_CODE_SCOPES.ALL && code.scope !== scope)
+    return { ok: false, reason: 'wrong_scope' };
+  if (totalCents < code.minOrderCents) return { ok: false, reason: 'below_min_order' };
   if (code.maxRedemptions != null && code.redeemedCount >= code.maxRedemptions) {
-    return { ok: false, reason: 'usage_limit_reached' }
+    return { ok: false, reason: 'usage_limit_reached' };
   }
   if (code.perUserLimit != null && userRedemptions >= code.perUserLimit) {
-    return { ok: false, reason: 'per_user_limit_reached' }
+    return { ok: false, reason: 'per_user_limit_reached' };
   }
 
-  let raw: number
+  let raw: number;
   switch (code.type) {
     case PROMO_CODE_TYPES.PERCENT:
-      raw = Math.floor((totalCents * (code.percent ?? 0)) / 100)
-      break
+      raw = Math.floor((totalCents * (code.percent ?? 0)) / 100);
+      break;
     case PROMO_CODE_TYPES.FIXED:
-      raw = code.amountCents ?? 0
-      break
+      raw = code.amountCents ?? 0;
+      break;
     case PROMO_CODE_TYPES.GIFT_CARD:
-      if ((code.balanceCents ?? 0) <= 0) return { ok: false, reason: 'no_balance' }
-      raw = code.balanceCents ?? 0
-      break
+      if ((code.balanceCents ?? 0) <= 0) return { ok: false, reason: 'no_balance' };
+      raw = code.balanceCents ?? 0;
+      break;
     default:
-      return { ok: false, reason: 'not_found' }
+      return { ok: false, reason: 'not_found' };
   }
 
-  const discountCents = Math.min(raw, totalCents) // never exceed the total
-  if (discountCents <= 0) return { ok: false, reason: 'zero_discount' }
-  return { ok: true, discountCents }
+  const discountCents = Math.min(raw, totalCents); // never exceed the total
+  if (discountCents <= 0) return { ok: false, reason: 'zero_discount' };
+  return { ok: true, discountCents };
 }
 
 /** User-facing German message for an invalid-code reason. */
@@ -108,4 +110,4 @@ export const PROMO_INVALID_MESSAGES: Record<PromoInvalidReason, string> = {
   per_user_limit_reached: 'Du hast diesen Code bereits eingelöst.',
   no_balance: 'Dieses Guthaben ist aufgebraucht.',
   zero_discount: 'Dieser Code ergibt keinen Rabatt für diesen Einkauf.',
-}
+};

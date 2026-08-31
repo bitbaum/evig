@@ -1,76 +1,76 @@
 version: 2
 updates:
   # JavaScript/TypeScript dependencies (npm)
-  - package-ecosystem: "npm"
-    directory: "/"
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: 'weekly'
+      day: 'monday'
     open-pull-requests-limit: 10
     # tiptap's packages share one version and break TypeScript's command
     # augmentation when bumped separately — they must move as one PR.
     groups:
       tiptap:
         patterns:
-          - "@tiptap/*"
+          - '@tiptap/*'
       # react-dom and the @types packages peer-pin react's major — a half-bump
       # (react without react-dom, or code types split) cannot even npm ci.
       react:
         patterns:
-          - "react"
-          - "react-dom"
-          - "@types/react"
-          - "@types/react-dom"
+          - 'react'
+          - 'react-dom'
+          - '@types/react'
+          - '@types/react-dom'
       # eslint-config-next is version-locked to next; a half-bump breaks lint.
       next:
         patterns:
-          - "next"
-          - "eslint-config-next"
+          - 'next'
+          - 'eslint-config-next'
       # @auth/pg-adapter peer-depends on next-auth — the pair that produced the
       # 2026-08 advisories must move together or neither installs.
       next-auth:
         patterns:
-          - "next-auth"
-          - "@auth/*"
+          - 'next-auth'
+          - '@auth/*'
       # Tailwind v4 splits the engine from the PostCSS plugin; they share a
       # version and a config format.
       tailwind:
         patterns:
-          - "tailwindcss"
-          - "@tailwindcss/*"
-          - "postcss"
+          - 'tailwindcss'
+          - '@tailwindcss/*'
+          - 'postcss'
       eslint:
         patterns:
-          - "eslint"
-          - "@eslint/*"
-          - "eslint-plugin-*"
+          - 'eslint'
+          - '@eslint/*'
+          - 'eslint-plugin-*'
       jest:
         patterns:
-          - "jest"
-          - "jest-environment-*"
-          - "@types/jest"
-          - "@testing-library/*"
+          - 'jest'
+          - 'jest-environment-*'
+          - '@types/jest'
+          - '@testing-library/*'
     ignore:
       # @types/node must track the RUNTIME major, not the newest release. CI
       # (ci.yml NODE_VERSION) and the self-host deploy both pin Node 20, so a
       # major bump types APIs production does not have — it also fails `verify`.
       # Raise this deliberately when the runtime moves. (PR #356 closed for this.)
-      - dependency-name: "@types/node"
-        update-types: ["version-update:semver-major"]
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
     commit-message:
-      prefix: "deps"
+      prefix: 'deps'
     labels:
-      - "dependencies"
-      - "security"
+      - 'dependencies'
+      - 'security'
 
   # GitHub Actions
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
-      interval: "weekly"
-      day: "monday"
+      interval: 'weekly'
+      day: 'monday'
     commit-message:
-      prefix: "ci"
+      prefix: 'ci'
     labels:
-      - "ci"
-      - "dependencies"
+      - 'ci'
+      - 'dependencies'

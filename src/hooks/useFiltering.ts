@@ -1,97 +1,98 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo } from 'react';
 
 export interface FilterConfig {
-  key: string
-  label: string
-  options: string[]
-  defaultValue?: string
+  key: string;
+  label: string;
+  options: string[];
+  defaultValue?: string;
   /** The sentinel value that means "show all" — set automatically by useFiltering */
-  allValue?: string
+  allValue?: string;
 }
 
 // Any object type can be filtered — we cast to Record internally when reading by key
-export type FilterableItem = object
+export type FilterableItem = object;
 
 export interface UseFilteringProps<T extends FilterableItem> {
-  items: T[]
-  filters: FilterConfig[]
-  allLabel?: string
+  items: T[];
+  filters: FilterConfig[];
+  allLabel?: string;
 }
 
 export interface FilterState {
-  [key: string]: string
+  [key: string]: string;
 }
 
 export function useFiltering<T extends FilterableItem>({
   items,
   filters,
-  allLabel = 'Alle'
+  allLabel = 'Alle',
 }: UseFilteringProps<T>) {
   const initialState: FilterState = filters.reduce((acc, filter) => {
-    acc[filter.key] = filter.defaultValue || allLabel
-    return acc
-  }, {} as FilterState)
+    acc[filter.key] = filter.defaultValue || allLabel;
+    return acc;
+  }, {} as FilterState);
 
-  const [filterState, setFilterState] = useState<FilterState>(initialState)
+  const [filterState, setFilterState] = useState<FilterState>(initialState);
 
   const filterOptions = useMemo(() => {
-    return filters.map(filter => {
-      const uniqueValues = Array.from(new Set(
-        items.map(item => (item as Record<string, unknown>)[filter.key])
-      ))
+    return filters.map((filter) => {
+      const uniqueValues = Array.from(
+        new Set(items.map((item) => (item as Record<string, unknown>)[filter.key])),
+      );
       return {
         ...filter,
         allValue: allLabel,
-        options: [allLabel, ...filter.options.filter(opt =>
-          opt === allLabel || uniqueValues.includes(opt)
-        )]
-      }
-    })
-  }, [items, filters, allLabel])
+        options: [
+          allLabel,
+          ...filter.options.filter((opt) => opt === allLabel || uniqueValues.includes(opt)),
+        ],
+      };
+    });
+  }, [items, filters, allLabel]);
 
   const filteredItems = useMemo(() => {
-    return items.filter(item => {
-      const row = item as Record<string, unknown>
-      return filters.every(filter => {
-        const selectedValue = filterState[filter.key]
-        return selectedValue === allLabel || row[filter.key] === selectedValue
-      })
-    })
-  }, [items, filters, filterState, allLabel])
+    return items.filter((item) => {
+      const row = item as Record<string, unknown>;
+      return filters.every((filter) => {
+        const selectedValue = filterState[filter.key];
+        return selectedValue === allLabel || row[filter.key] === selectedValue;
+      });
+    });
+  }, [items, filters, filterState, allLabel]);
 
   // Update a specific filter
   const updateFilter = (filterKey: string, value: string) => {
-    setFilterState(prev => ({
+    setFilterState((prev) => ({
       ...prev,
-      [filterKey]: value
-    }))
-  }
+      [filterKey]: value,
+    }));
+  };
 
   // Toggle a filter (if already selected, revert to "All")
   const toggleFilter = (filterKey: string, value: string) => {
-    setFilterState(prev => {
-      const currentValue = prev[filterKey]
-      const newValue = currentValue === value ? allLabel : value
+    setFilterState((prev) => {
+      const currentValue = prev[filterKey];
+      const newValue = currentValue === value ? allLabel : value;
       return {
         ...prev,
-        [filterKey]: newValue
-      }
-    })
-  }
+        [filterKey]: newValue,
+      };
+    });
+  };
 
   // Reset all filters
   const resetFilters = () => {
-    setFilterState(initialState)
-  }
+    setFilterState(initialState);
+  };
 
   // Get current filter summary for display
   const getFilterSummary = () => {
     const activeFilters = filters
-      .filter(filter => filterState[filter.key] !== allLabel)
-      .map(filter => `${filter.label}: "${filterState[filter.key]}"`)
-    
-    return activeFilters.length > 0 ? activeFilters.join(', ') : null
-  }
+      .filter((filter) => filterState[filter.key] !== allLabel)
+      .map((filter) => `${filter.label}: "${filterState[filter.key]}"`);
+
+    return activeFilters.length > 0 ? activeFilters.join(', ') : null;
+  };
 
   return {
     filterState,
@@ -101,6 +102,6 @@ export function useFiltering<T extends FilterableItem>({
     toggleFilter,
     resetFilters,
     getFilterSummary,
-    hasActiveFilters: Object.values(filterState).some(value => value !== allLabel)
-  }
+    hasActiveFilters: Object.values(filterState).some((value) => value !== allLabel),
+  };
 }

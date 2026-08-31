@@ -10,13 +10,13 @@
 /**
  * Database query parameter types
  */
-export type QueryParams = unknown[]
+export type QueryParams = unknown[];
 
 /**
  * Social links record type
  */
 export interface SocialLinks {
-  [platform: string]: string
+  [platform: string]: string;
 }
 
 /**
@@ -24,41 +24,42 @@ export interface SocialLinks {
  */
 export interface Availability {
   [day: string]: {
-    available: boolean
-    hours?: string
-  }
+    available: boolean;
+    hours?: string;
+  };
 }
 
 /**
  * Purchase history item type
  */
 export interface PurchaseHistoryItem {
-  id: string
-  order_id: string
-  product_id: string
-  product_name: string
-  quantity: number
-  price_cents: number
-  purchased_at: Date
+  id: string;
+  order_id: string;
+  product_id: string;
+  product_name: string;
+  quantity: number;
+  price_cents: number;
+  purchased_at: Date;
 }
 
 /**
  * Customer preference value type
  */
-export type PreferenceValue = string | number | boolean | null | Record<string, unknown> | unknown[]
+export type PreferenceValue =
+  string | number | boolean | null | Record<string, unknown> | unknown[];
 
 /**
  * Customer segment criteria type
  */
 export interface SegmentCriteria {
-  [key: string]: unknown
+  [key: string]: unknown;
 }
 
 /**
  * Payment result from payment provider (provider-agnostic)
  */
 export interface PaymentResult {
-  id: string
-  status: string
-  amount?: number
+  id: string;
+  status: string;
+  amount?: number;
 }

@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import { Link, useRouter } from '@/i18n/navigation'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
+import { Link, useRouter } from '@/i18n/navigation';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Heart,
   MessageSquare,
@@ -13,37 +13,41 @@ import {
   Check,
   Flag,
   ShoppingCart,
-} from 'lucide-react'
-import type { ListingDetail } from './types'
-import { useTranslations } from 'next-intl'
-import { LISTING_STATUS, supportsSecureCheckout, supportsDirectContact } from '@/config/marketplace'
-import { ROUTES } from '@/config/routes'
+} from 'lucide-react';
+import type { ListingDetail } from './types';
+import { useTranslations } from 'next-intl';
+import {
+  LISTING_STATUS,
+  supportsSecureCheckout,
+  supportsDirectContact,
+} from '@/config/marketplace';
+import { ROUTES } from '@/config/routes';
 
 interface ListingActionButtonsProps {
-  listing: ListingDetail
-  isOwner: boolean
-  sessionUserId: string | undefined
-  sellerName: string
+  listing: ListingDetail;
+  isOwner: boolean;
+  sessionUserId: string | undefined;
+  sellerName: string;
   // Favorite
-  isFavorited: boolean
-  favoriteCount: number
-  togglingFav: boolean
-  onToggleFavorite: () => void
+  isFavorited: boolean;
+  favoriteCount: number;
+  togglingFav: boolean;
+  onToggleFavorite: () => void;
   // Message
-  showMessageForm: boolean
-  onShowMessageForm: (v: boolean) => void
-  contactMessage: string
-  onContactMessageChange: (v: string) => void
-  sendingMessage: boolean
-  messageSent: boolean
-  onSendMessage: () => void
+  showMessageForm: boolean;
+  onShowMessageForm: (v: boolean) => void;
+  contactMessage: string;
+  onContactMessageChange: (v: string) => void;
+  sendingMessage: boolean;
+  messageSent: boolean;
+  onSendMessage: () => void;
   // Share
-  shareConfirm: boolean
-  onShare: () => void
+  shareConfirm: boolean;
+  onShare: () => void;
   // Report
-  onShowReportModal: () => void
+  onShowReportModal: () => void;
   // Error feedback (favorite / contact-seller failures)
-  actionError: string | null
+  actionError: string | null;
 }
 
 export function ListingActionButtons({
@@ -67,22 +71,30 @@ export function ListingActionButtons({
   onShowReportModal,
   actionError,
 }: ListingActionButtonsProps) {
-  const router = useRouter()
-  const t = useTranslations('marketplace.listing_actions')
+  const router = useRouter();
+  const t = useTranslations('marketplace.listing_actions');
 
-  const isRevampit = listing.is_revampit
-  const isAvailable = listing.status === LISTING_STATUS.ACTIVE
-  const isGratis = Number(listing.price_chf) === 0
+  const isRevampit = listing.is_revampit;
+  const isAvailable = listing.status === LISTING_STATUS.ACTIVE;
+  const isGratis = Number(listing.price_chf) === 0;
   const canBuySecure =
-    !isOwner && !isRevampit && isAvailable && !isGratis && supportsSecureCheckout(listing.payment_mode)
+    !isOwner &&
+    !isRevampit &&
+    isAvailable &&
+    !isGratis &&
+    supportsSecureCheckout(listing.payment_mode);
   const canContactDirect =
-    !isOwner && !isRevampit && isAvailable && supportsDirectContact(listing.payment_mode)
+    !isOwner && !isRevampit && isAvailable && supportsDirectContact(listing.payment_mode);
   const unavailableLabel =
-    listing.status === LISTING_STATUS.RESERVED ? t('unavailableReserved')
-    : listing.status === LISTING_STATUS.SOLD ? t('unavailableSold')
-    : listing.status === LISTING_STATUS.REMOVED ? t('unavailableRemoved')
-    : listing.status === LISTING_STATUS.DRAFT ? t('unavailableDraft')
-    : t('unavailableGeneric')
+    listing.status === LISTING_STATUS.RESERVED
+      ? t('unavailableReserved')
+      : listing.status === LISTING_STATUS.SOLD
+        ? t('unavailableSold')
+        : listing.status === LISTING_STATUS.REMOVED
+          ? t('unavailableRemoved')
+          : listing.status === LISTING_STATUS.DRAFT
+            ? t('unavailableDraft')
+            : t('unavailableGeneric');
 
   return (
     <div className="space-y-3">
@@ -115,9 +127,7 @@ export function ListingActionButtons({
             <Shield className="w-4 h-4" aria-hidden="true" />
             {t('revampitTrustTitle')}
           </div>
-          <p className="text-xs text-action">
-            {t('revampitTrustDesc')}
-          </p>
+          <p className="text-xs text-action">{t('revampitTrustDesc')}</p>
         </div>
       )}
 
@@ -128,9 +138,7 @@ export function ListingActionButtons({
             <Shield className="w-4 h-4" aria-hidden="true" />
             {t('securePaymentTitle')}
           </div>
-          <p className="text-xs text-action">
-            {t('securePaymentDesc')}
-          </p>
+          <p className="text-xs text-action">{t('securePaymentDesc')}</p>
         </div>
       )}
 
@@ -141,9 +149,7 @@ export function ListingActionButtons({
             <Shield className="w-4 h-4" aria-hidden="true" />
             {t('payment_info')}
           </div>
-          <p className="text-xs text-action">
-            {t('payment_methods')}
-          </p>
+          <p className="text-xs text-action">{t('payment_methods')}</p>
         </div>
       )}
 
@@ -154,10 +160,12 @@ export function ListingActionButtons({
           className="w-full"
           onClick={() => {
             if (!sessionUserId) {
-              router.push(`/auth/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`)
-              return
+              router.push(
+                `/auth/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`,
+              );
+              return;
             }
-            router.push(ROUTES.public.marketplaceCheckout(listing.id))
+            router.push(ROUTES.public.marketplaceCheckout(listing.id));
           }}
         >
           <ShoppingCart className="w-5 h-5" aria-hidden="true" />
@@ -170,9 +178,7 @@ export function ListingActionButtons({
         <>
           {messageSent ? (
             <div className="w-full bg-action-muted border border-strong rounded-lg p-4 text-center space-y-2">
-              <p className="text-action font-medium">
-                {t('messageSent')}
-              </p>
+              <p className="text-action font-medium">{t('messageSent')}</p>
               <Link
                 href="/dashboard/messages"
                 className="inline-flex items-center gap-1 text-sm text-action hover:text-action font-medium underline focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2 rounded-sm px-1"
@@ -205,8 +211,8 @@ export function ListingActionButtons({
                 </Button>
                 <Button
                   onClick={() => {
-                    onShowMessageForm(false)
-                    onContactMessageChange('')
+                    onShowMessageForm(false);
+                    onContactMessageChange('');
                   }}
                   variant="outline"
                 >
@@ -218,10 +224,12 @@ export function ListingActionButtons({
             <Button
               onClick={() => {
                 if (!sessionUserId) {
-                  router.push(`/auth/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`)
-                  return
+                  router.push(
+                    `/auth/login?callbackUrl=${encodeURIComponent(window.location.pathname)}`,
+                  );
+                  return;
                 }
-                onShowMessageForm(true)
+                onShowMessageForm(true);
               }}
               variant={canBuySecure ? 'outline' : 'primary'}
               className="w-full"
@@ -244,7 +252,10 @@ export function ListingActionButtons({
                 : 'border-default text-text-secondary hover:bg-surface-raised'
             }`}
           >
-            <Heart className={`w-4 h-4 ${isFavorited ? 'fill-error-500 text-error-500' : ''}`} aria-hidden="true" />
+            <Heart
+              className={`w-4 h-4 ${isFavorited ? 'fill-error-500 text-error-500' : ''}`}
+              aria-hidden="true"
+            />
             {favoriteCount > 0 ? favoriteCount : t('save')}
           </Button>
         )}
@@ -282,5 +293,5 @@ export function ListingActionButtons({
         )}
       </div>
     </div>
-  )
+  );
 }

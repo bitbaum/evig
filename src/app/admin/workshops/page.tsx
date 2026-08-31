@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
-import { adminInteractive } from '@/lib/admin-ui'
+import { useTranslations } from 'next-intl';
+import { adminInteractive } from '@/lib/admin-ui';
 
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { useRouter } from 'next/navigation';
 import {
   GraduationCap,
   CheckCircle,
@@ -20,23 +20,23 @@ import {
   DollarSign,
   BookOpen,
   Loader2,
-} from 'lucide-react'
-import { formatDateShort } from '@/lib/date-formats'
-import { formatPriceCents } from '@/config/marketplace'
+} from 'lucide-react';
+import { formatDateShort } from '@/lib/date-formats';
+import { formatPriceCents } from '@/config/marketplace';
 import {
   PROPOSAL_STATUS,
   PROPOSAL_STATUS_LABELS,
   WORKSHOP_CATEGORIES,
   type ProposalStatus,
-} from '@/config/workshops'
-import type { WorkshopProposalWithProposer } from '@/components/workshops/types'
-import Heading from '@/components/admin/AdminHeading'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
-import { ROUTES } from '@/config/routes'
-import { Pagination } from '@/components/ui/Pagination'
-import { AdminFilterBar } from '@/components/admin/AdminFilterBar'
-import { useAdminWorkshops } from '@/hooks/useAdminWorkshops'
+} from '@/config/workshops';
+import type { WorkshopProposalWithProposer } from '@/components/workshops/types';
+import Heading from '@/components/admin/AdminHeading';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { ROUTES } from '@/config/routes';
+import { Pagination } from '@/components/ui/Pagination';
+import { AdminFilterBar } from '@/components/admin/AdminFilterBar';
+import { useAdminWorkshops } from '@/hooks/useAdminWorkshops';
 
 // ─── Status config ─────────────────────────────────────────────────────────
 
@@ -44,40 +44,66 @@ const PROPOSAL_STATUS_CONFIG: Record<string, { icon: React.ReactNode }> = {
   [PROPOSAL_STATUS.APPROVED]: { icon: <CheckCircle className="w-5 h-5 text-action" /> },
   [PROPOSAL_STATUS.PENDING]: { icon: <Clock className="w-5 h-5 text-warning-600" /> },
   [PROPOSAL_STATUS.REJECTED]: { icon: <XCircle className="w-5 h-5 text-error-600" /> },
-  [PROPOSAL_STATUS.REQUIRES_CHANGES]: { icon: <AlertCircle className="w-5 h-5 text-secondary-600" /> },
-}
+  [PROPOSAL_STATUS.REQUIRES_CHANGES]: {
+    icon: <AlertCircle className="w-5 h-5 text-secondary-600" />,
+  },
+};
 
-const DEFAULT_STATUS_ICON = <AlertCircle className="w-5 h-5 text-text-muted" />
+const DEFAULT_STATUS_ICON = <AlertCircle className="w-5 h-5 text-text-muted" />;
 
 const STRINGS = {
   APPROVE_CONFIRM: 'Möchtest du diesen Workshop-Vorschlag wirklich genehmigen?',
   EMPTY_SEARCH: (term: string) => `Keine Vorschläge für "${term}" gefunden.`,
   EMPTY_PENDING: 'Keine ausstehenden Vorschläge vorhanden.',
   EMPTY_STATUS: (s: string) => `Keine Vorschläge mit Status "${s}" gefunden.`,
-} as const
+} as const;
 
 function getLocationText(proposal: WorkshopProposalWithProposer): string {
   switch (proposal.location_type) {
-    case 'venue': return proposal.selected_location_name || proposal.proposed_location || 'Veranstaltungsort'
-    case 'home': return proposal.proposed_location || 'Zu Hause'
-    case 'online': return 'Online'
-    default: return 'Unbekannt'
+    case 'venue':
+      return proposal.selected_location_name || proposal.proposed_location || 'Veranstaltungsort';
+    case 'home':
+      return proposal.proposed_location || 'Zu Hause';
+    case 'online':
+      return 'Online';
+    default:
+      return 'Unbekannt';
   }
 }
 
 // ─── Component ─────────────────────────────────────────────────────────────
 
 export default function AdminWorkshopsPage() {
-  const t = useTranslations('admin.workshops')
-  const router = useRouter()
+  const t = useTranslations('admin.workshops');
+  const router = useRouter();
   const {
-    proposals, totalItems, totalPages, loading, error,
-    filters, searchTerm, currentPage, pageSize,
-    rejectingId, rejectionReason, rejectError,
-    approveConfirmId, approveLoading, rejectLoading, sessionStatus,
-    setSearchTerm, setFilters, setCurrentPage, setRejectionReason,
-    handleApprove, doApprove, handleReject, openRejectForm, cancelReject, setApproveConfirmId,
-  } = useAdminWorkshops()
+    proposals,
+    totalItems,
+    totalPages,
+    loading,
+    error,
+    filters,
+    searchTerm,
+    currentPage,
+    pageSize,
+    rejectingId,
+    rejectionReason,
+    rejectError,
+    approveConfirmId,
+    approveLoading,
+    rejectLoading,
+    sessionStatus,
+    setSearchTerm,
+    setFilters,
+    setCurrentPage,
+    setRejectionReason,
+    handleApprove,
+    doApprove,
+    handleReject,
+    openRejectForm,
+    cancelReject,
+    setApproveConfirmId,
+  } = useAdminWorkshops();
 
   if (sessionStatus === 'loading' || loading) {
     return (
@@ -89,12 +115,12 @@ export default function AdminWorkshopsPage() {
           ))}
         </div>
       </div>
-    )
+    );
   }
 
   if (sessionStatus === 'unauthenticated') {
-    router.push('/auth/login')
-    return null
+    router.push('/auth/login');
+    return null;
   }
 
   return (
@@ -120,20 +146,33 @@ export default function AdminWorkshopsPage() {
             key: 'status',
             label: 'Status',
             value: filters.status,
-            onChange: (value) => setFilters(prev => ({ ...prev, status: value as ProposalStatus | 'all' })),
+            onChange: (value) =>
+              setFilters((prev) => ({ ...prev, status: value as ProposalStatus | 'all' })),
             options: [
-              { value: PROPOSAL_STATUS.PENDING, label: PROPOSAL_STATUS_LABELS[PROPOSAL_STATUS.PENDING] },
-              { value: PROPOSAL_STATUS.APPROVED, label: PROPOSAL_STATUS_LABELS[PROPOSAL_STATUS.APPROVED] },
-              { value: PROPOSAL_STATUS.REJECTED, label: PROPOSAL_STATUS_LABELS[PROPOSAL_STATUS.REJECTED] },
-              { value: PROPOSAL_STATUS.REQUIRES_CHANGES, label: PROPOSAL_STATUS_LABELS[PROPOSAL_STATUS.REQUIRES_CHANGES] },
+              {
+                value: PROPOSAL_STATUS.PENDING,
+                label: PROPOSAL_STATUS_LABELS[PROPOSAL_STATUS.PENDING],
+              },
+              {
+                value: PROPOSAL_STATUS.APPROVED,
+                label: PROPOSAL_STATUS_LABELS[PROPOSAL_STATUS.APPROVED],
+              },
+              {
+                value: PROPOSAL_STATUS.REJECTED,
+                label: PROPOSAL_STATUS_LABELS[PROPOSAL_STATUS.REJECTED],
+              },
+              {
+                value: PROPOSAL_STATUS.REQUIRES_CHANGES,
+                label: PROPOSAL_STATUS_LABELS[PROPOSAL_STATUS.REQUIRES_CHANGES],
+              },
             ],
           },
           {
             key: 'category',
             label: 'Kategorie',
             value: filters.category,
-            onChange: (value) => setFilters(prev => ({ ...prev, category: value })),
-            options: WORKSHOP_CATEGORIES.map(cat => ({ value: cat.name, label: cat.name })),
+            onChange: (value) => setFilters((prev) => ({ ...prev, category: value })),
+            options: WORKSHOP_CATEGORIES.map((cat) => ({ value: cat.name, label: cat.name })),
             allLabel: 'Alle Kategorien',
           },
         ]}
@@ -154,8 +193,9 @@ export default function AdminWorkshopsPage() {
 
         <div className="divide-y divide-neutral-200">
           {proposals.map((proposal) => {
-            const statusIcon = PROPOSAL_STATUS_CONFIG[proposal.status]?.icon ?? DEFAULT_STATUS_ICON
-            const statusLabel = PROPOSAL_STATUS_LABELS[proposal.status as ProposalStatus] ?? proposal.status
+            const statusIcon = PROPOSAL_STATUS_CONFIG[proposal.status]?.icon ?? DEFAULT_STATUS_ICON;
+            const statusLabel =
+              PROPOSAL_STATUS_LABELS[proposal.status as ProposalStatus] ?? proposal.status;
 
             return (
               <div key={proposal.id} className={`p-6 ${adminInteractive.rowHover}`}>
@@ -163,7 +203,10 @@ export default function AdminWorkshopsPage() {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-2">
                       <GraduationCap className="w-5 h-5 text-action" />
-                      <Heading level={3} className="text-lg font-semibold text-text-primary truncate">
+                      <Heading
+                        level={3}
+                        className="text-lg font-semibold text-text-primary truncate"
+                      >
                         {proposal.title}
                       </Heading>
                       {statusIcon}
@@ -184,7 +227,8 @@ export default function AdminWorkshopsPage() {
                       </div>
                       <div className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
-                        {Math.floor(proposal.duration_minutes / 60)}h {proposal.duration_minutes % 60}min
+                        {Math.floor(proposal.duration_minutes / 60)}h{' '}
+                        {proposal.duration_minutes % 60}min
                       </div>
                       <div className="flex items-center gap-1">
                         <DollarSign className="w-4 h-4" /> {formatPriceCents(proposal.price_cents)}
@@ -270,7 +314,7 @@ export default function AdminWorkshopsPage() {
                   </div>
                 )}
               </div>
-            )
+            );
           })}
 
           {proposals.length === 0 && (
@@ -285,8 +329,8 @@ export default function AdminWorkshopsPage() {
                 {searchTerm.trim()
                   ? STRINGS.EMPTY_SEARCH(searchTerm)
                   : filters.status === PROPOSAL_STATUS.PENDING
-                  ? STRINGS.EMPTY_PENDING
-                  : STRINGS.EMPTY_STATUS(filters.status)}
+                    ? STRINGS.EMPTY_PENDING
+                    : STRINGS.EMPTY_STATUS(filters.status)}
               </p>
               {/* Never a dead end: offer the two next actions that make
                   sense from here instead of a blank wall. */}
@@ -295,12 +339,17 @@ export default function AdminWorkshopsPage() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setFilters(prev => ({ ...prev, status: 'all' }))}
+                    onClick={() => setFilters((prev) => ({ ...prev, status: 'all' }))}
                   >
                     Alle Vorschläge anzeigen
                   </Button>
                 )}
-                <Button as={Link} href={ROUTES.admin.workshopsInstances} variant="primary" size="sm">
+                <Button
+                  as={Link}
+                  href={ROUTES.admin.workshopsInstances}
+                  variant="primary"
+                  size="sm"
+                >
                   <Calendar className="w-4 h-4 mr-2" />
                   Termine verwalten
                 </Button>
@@ -330,5 +379,5 @@ export default function AdminWorkshopsPage() {
         onClose={() => setApproveConfirmId(null)}
       />
     </AdminPageWrapper>
-  )
+  );
 }

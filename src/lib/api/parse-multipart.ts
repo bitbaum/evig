@@ -11,26 +11,26 @@
  * keep using request.formData().
  */
 
-import Busboy from 'busboy'
-import { Readable } from 'node:stream'
-import { FILE_SIZE_LIMITS } from '@/config/limits'
+import Busboy from 'busboy';
+import { Readable } from 'node:stream';
+import { FILE_SIZE_LIMITS } from '@/config/limits';
 
 export interface ParsedMultipartFile {
   /** Form field name the file was sent under (e.g. 'audio', 'textFile'). */
-  field: string
-  file: File
+  field: string;
+  file: File;
 }
 
 export interface ParsedMultipart {
   /** Text fields; repeated names accumulate in order. */
-  fields: Record<string, string[]>
-  files: ParsedMultipartFile[]
+  fields: Record<string, string[]>;
+  files: ParsedMultipartFile[];
 }
 
 export class MultipartLimitError extends Error {
   constructor(message: string) {
-    super(message)
-    this.name = 'MultipartLimitError'
+    super(message);
+    this.name = 'MultipartLimitError';
   }
 }
 
@@ -46,57 +46,59 @@ export async function parseMultipart(
   request: Request,
   opts?: { maxFileBytes?: number },
 ): Promise<ParsedMultipart> {
-  const contentType = request.headers.get('content-type') || ''
+  const contentType = request.headers.get('content-type') || '';
   if (!contentType.includes('multipart/form-data')) {
-    throw new Error(`Expected multipart/form-data, got: ${contentType || 'no content-type'}`)
+    throw new Error(`Expected multipart/form-data, got: ${contentType || 'no content-type'}`);
   }
   if (!request.body) {
-    throw new Error('Request has no body')
+    throw new Error('Request has no body');
   }
 
-  const maxFileBytes = opts?.maxFileBytes ?? FILE_SIZE_LIMITS.AUDIO_MAX
+  const maxFileBytes = opts?.maxFileBytes ?? FILE_SIZE_LIMITS.AUDIO_MAX;
 
-  const fields: Record<string, string[]> = {}
-  const files: ParsedMultipartFile[] = []
+  const fields: Record<string, string[]> = {};
+  const files: ParsedMultipartFile[] = [];
 
   const busboy = Busboy({
     headers: { 'content-type': contentType },
     limits: { fileSize: maxFileBytes },
-  })
+  });
 
   const done = new Promise<void>((resolve, reject) => {
     busboy.on('field', (name, value) => {
-      ;(fields[name] ??= []).push(value)
-    })
+      (fields[name] ??= []).push(value);
+    });
 
     busboy.on('file', (name, stream, info) => {
-      const chunks: Buffer[] = []
-      stream.on('data', (chunk: Buffer) => chunks.push(chunk))
+      const chunks: Buffer[] = [];
+      stream.on('data', (chunk: Buffer) => chunks.push(chunk));
       stream.on('limit', () => {
-        const maxMb = Math.round(maxFileBytes / (1024 * 1024))
-        reject(new MultipartLimitError(`Datei zu gross (maximal ${maxMb} MB): ${info.filename}`))
-        stream.resume()
-      })
+        const maxMb = Math.round(maxFileBytes / (1024 * 1024));
+        reject(new MultipartLimitError(`Datei zu gross (maximal ${maxMb} MB): ${info.filename}`));
+        stream.resume();
+      });
       stream.on('end', () => {
         files.push({
           field: name,
           file: new File([new Uint8Array(Buffer.concat(chunks))], info.filename || 'upload.bin', {
             type: info.mimeType || 'application/octet-stream',
           }),
-        })
-      })
-      stream.on('error', reject)
-    })
+        });
+      });
+      stream.on('error', reject);
+    });
 
-    busboy.on('error', reject)
-    busboy.on('finish', resolve)
-  })
+    busboy.on('error', reject);
+    busboy.on('finish', resolve);
+  });
 
   // Web ReadableStream → Node stream → busboy. The cast bridges the DOM vs
   // node:stream/web ReadableStream type mismatch; at runtime they're the same.
-  Readable.fromWeb(request.body as import('node:stream/web').ReadableStream<Uint8Array>).pipe(busboy)
+  Readable.fromWeb(request.body as import('node:stream/web').ReadableStream<Uint8Array>).pipe(
+    busboy,
+  );
 
-  await done
+  await done;
 
-  return { fields, files }
+  return { fields, files };
 }

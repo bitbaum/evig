@@ -2,9 +2,10 @@ import { z } from 'zod';
 import { AUTH_CONFIG } from '@/lib/auth/config';
 
 // Email validation (RFC 5322 compliant)
-const emailSchema = z.string()
+const emailSchema = z
+  .string()
   .email('Bitte gib eine gültige E-Mail-Adresse ein')
-  .transform(email => email.toLowerCase().trim());
+  .transform((email) => email.toLowerCase().trim());
 
 // ============================================================================
 // PASSWORD SCHEMA - Derived from AUTH_CONFIG (SSOT)
@@ -15,9 +16,18 @@ const emailSchema = z.string()
  * This ensures schema matches the config - no duplicate definitions
  */
 function createPasswordSchema() {
-  const { minLength, maxLength, requireUppercase, requireLowercase, requireNumbers, requireSpecialChars, specialChars } = AUTH_CONFIG.password;
+  const {
+    minLength,
+    maxLength,
+    requireUppercase,
+    requireLowercase,
+    requireNumbers,
+    requireSpecialChars,
+    specialChars,
+  } = AUTH_CONFIG.password;
 
-  let schema = z.string()
+  let schema = z
+    .string()
     .min(minLength, `Passwort muss mindestens ${minLength} Zeichen lang sein`)
     .max(maxLength, `Passwort darf maximal ${maxLength} Zeichen lang sein`);
 
@@ -33,7 +43,10 @@ function createPasswordSchema() {
   if (requireSpecialChars) {
     // Escape special regex characters in the specialChars string
     const escapedChars = specialChars.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    schema = schema.regex(new RegExp(`[${escapedChars}]`), 'Passwort muss mindestens ein Sonderzeichen enthalten');
+    schema = schema.regex(
+      new RegExp(`[${escapedChars}]`),
+      'Passwort muss mindestens ein Sonderzeichen enthalten',
+    );
   }
 
   return schema;
@@ -54,7 +67,8 @@ export type UserRole = z.infer<typeof UserRoleSchema>;
 export const RegisterSchema = z.object({
   email: emailSchema,
   password: passwordSchema,
-  name: z.string()
+  name: z
+    .string()
     .min(2, 'Name muss mindestens 2 Zeichen lang sein')
     .max(100, 'Name darf maximal 100 Zeichen lang sein')
     .optional(),
@@ -80,33 +94,38 @@ export const ForgotPasswordSchema = z.object({
 export type ForgotPasswordInput = z.infer<typeof ForgotPasswordSchema>;
 
 // Reset password schema
-export const ResetPasswordSchema = z.object({
-  token: z.string().min(1, 'Token ist erforderlich'),
-  password: passwordSchema,
-  confirmPassword: z.string(),
-}).refine(data => data.password === data.confirmPassword, {
-  message: 'Passwörter stimmen nicht überein',
-  path: ['confirmPassword'],
-});
+export const ResetPasswordSchema = z
+  .object({
+    token: z.string().min(1, 'Token ist erforderlich'),
+    password: passwordSchema,
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwörter stimmen nicht überein',
+    path: ['confirmPassword'],
+  });
 
 export type ResetPasswordInput = z.infer<typeof ResetPasswordSchema>;
 
 // Change password schema
-export const ChangePasswordSchema = z.object({
-  currentPassword: z.string().min(1, 'Aktuelles Passwort ist erforderlich'),
-  newPassword: passwordSchema,
-  confirmPassword: z.string(),
-}).refine(data => data.newPassword === data.confirmPassword, {
-  message: 'Passwörter stimmen nicht überein',
-  path: ['confirmPassword'],
-});
+export const ChangePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, 'Aktuelles Passwort ist erforderlich'),
+    newPassword: passwordSchema,
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: 'Passwörter stimmen nicht überein',
+    path: ['confirmPassword'],
+  });
 
 export type ChangePasswordInput = z.infer<typeof ChangePasswordSchema>;
 
 // Verify code schema
 export const VerifyCodeSchema = z.object({
   email: emailSchema,
-  code: z.string()
+  code: z
+    .string()
     .length(6, 'Code muss 6 Zeichen lang sein')
     .regex(/^\d+$/, 'Code darf nur Zahlen enthalten'),
 });

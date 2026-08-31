@@ -5,9 +5,9 @@
  */
 
 import { ORG } from '@\/config\/org';
-import type { EmailContent } from '../types'
-import { BASE_STYLES, COPYRIGHT_TEXT } from './base-styles'
-import { escapeHtml } from '@/lib/utils/escape-html'
+import type { EmailContent } from '../types';
+import { BASE_STYLES, COPYRIGHT_TEXT } from './base-styles';
+import { escapeHtml } from '@/lib/utils/escape-html';
 
 // Customer-supplied text (description, customer/repairer names, service
 // names) flows into the HTML bodies below — escape before interpolation.
@@ -21,7 +21,7 @@ export const appointmentNewBooking = (
   customerName: string,
   serviceName: string,
   description: string,
-  appointmentUrl: string
+  appointmentUrl: string,
 ): EmailContent => ({
   subject: `Neuer Reparaturauftrag - ${ORG.name}`,
   html: `
@@ -85,7 +85,7 @@ Auftrag ansehen: ${appointmentUrl}
 Mit freundlichen Grüssen,
 Das ${ORG.name} Team
   `.trim(),
-})
+});
 
 /**
  * Email to customer when repairer sends a quote
@@ -95,7 +95,7 @@ export const appointmentQuoteReceived = (
   repairerName: string,
   priceCHF: number,
   diagnosisNotes: string | null,
-  appointmentUrl: string
+  appointmentUrl: string,
 ): EmailContent => ({
   subject: `Neues Angebot für deine Reparatur - ${ORG.name}`,
   html: `
@@ -121,12 +121,16 @@ export const appointmentQuoteReceived = (
             <p style="font-size: 32px; font-weight: bold; color: #581c87; margin: 5px 0;">CHF ${priceCHF}</p>
           </div>
 
-          ${diagnosisNotes ? `
+          ${
+            diagnosisNotes
+              ? `
           <div class="highlight-box">
             <p><strong>Diagnose:</strong></p>
             <p>${escapeHtml(diagnosisNotes)}</p>
           </div>
-          ` : ''}
+          `
+              : ''
+          }
 
           <p>Bitte bestätige oder lehne das Angebot ab.</p>
 
@@ -154,7 +158,7 @@ Angebot ansehen: ${appointmentUrl}
 Mit freundlichen Grüssen,
 Das ${ORG.name} Team
   `.trim(),
-})
+});
 
 /**
  * Generic status update email to either customer or repairer
@@ -164,7 +168,7 @@ export const appointmentStatusUpdate = (
   otherPartyName: string,
   newStatusLabel: string,
   serviceName: string,
-  appointmentUrl: string
+  appointmentUrl: string,
 ): EmailContent => ({
   subject: `Reparaturstatus: ${newStatusLabel} - ${ORG.name}`,
   html: `
@@ -224,7 +228,7 @@ Details ansehen: ${appointmentUrl}
 Mit freundlichen Grüssen,
 Das ${ORG.name} Team
   `.trim(),
-})
+});
 
 /**
  * Admin alert when a booking has no assigned repairer
@@ -235,7 +239,7 @@ export const appointmentUnassignedAlert = (
   serviceName: string,
   description: string,
   urgency: string,
-  adminUrl: string
+  adminUrl: string,
 ): EmailContent => ({
   subject: `Unzugewiesener Reparaturauftrag - ${ORG.name}`,
   html: `
@@ -300,4 +304,4 @@ Auftrag zuweisen: ${adminUrl}
 Mit freundlichen Grüssen,
 ${ORG.name} System
   `.trim(),
-})
+});

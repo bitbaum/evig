@@ -15,147 +15,147 @@ import {
   calculatePaymentFees,
   calculateTotalWithFees,
   calculateServicePricing,
-} from '../index'
-import { SWISS_VAT_RATES, SWISS_VAT_STANDARD_PERCENT } from '@/config/tax'
+} from '../index';
+import { SWISS_VAT_RATES, SWISS_VAT_STANDARD_PERCENT } from '@/config/tax';
 
 describe('getVATRate', () => {
   it('returns the Swiss VAT rate for CHF', () => {
-    expect(getVATRate('CHF')).toBe(VAT_RATE_CHF)
-    expect(getVATRate('CHF')).toBeCloseTo(SWISS_VAT_RATES.standard)
-  })
+    expect(getVATRate('CHF')).toBe(VAT_RATE_CHF);
+    expect(getVATRate('CHF')).toBeCloseTo(SWISS_VAT_RATES.standard);
+  });
 
   it('returns default VAT rate (19%) for EUR', () => {
-    expect(getVATRate('EUR')).toBeCloseTo(0.19)
-  })
+    expect(getVATRate('EUR')).toBeCloseTo(0.19);
+  });
 
   it('returns default VAT rate for unknown currency', () => {
-    expect(getVATRate('USD')).toBeCloseTo(0.19)
-    expect(getVATRate('')).toBeCloseTo(0.19)
-  })
-})
+    expect(getVATRate('USD')).toBeCloseTo(0.19);
+    expect(getVATRate('')).toBeCloseTo(0.19);
+  });
+});
 
 describe('getVATRateLabel', () => {
   it('returns the Swiss rate as a label for CHF', () => {
-    expect(getVATRateLabel('CHF')).toBe(SWISS_VAT_STANDARD_PERCENT)
-  })
+    expect(getVATRateLabel('CHF')).toBe(SWISS_VAT_STANDARD_PERCENT);
+  });
 
   it('returns "19.0" for EUR', () => {
-    expect(getVATRateLabel('EUR')).toBe('19.0')
-  })
+    expect(getVATRateLabel('EUR')).toBe('19.0');
+  });
 
   it('returns "19.0" for unknown currency', () => {
-    expect(getVATRateLabel('USD')).toBe('19.0')
-  })
-})
+    expect(getVATRateLabel('USD')).toBe('19.0');
+  });
+});
 
 describe('calculateVAT', () => {
   it('calculates Swiss VAT on CHF amount', () => {
-    expect(calculateVAT(100, 'CHF')).toBeCloseTo(100 * SWISS_VAT_RATES.standard)
-  })
+    expect(calculateVAT(100, 'CHF')).toBeCloseTo(100 * SWISS_VAT_RATES.standard);
+  });
 
   it('calculates EUR VAT on EUR amount', () => {
     // 100 EUR subtotal → 19.00 EUR VAT
-    expect(calculateVAT(100, 'EUR')).toBeCloseTo(19.0)
-  })
+    expect(calculateVAT(100, 'EUR')).toBeCloseTo(19.0);
+  });
 
   it('defaults to CHF when currency omitted', () => {
-    expect(calculateVAT(100)).toBeCloseTo(100 * SWISS_VAT_RATES.standard)
-  })
+    expect(calculateVAT(100)).toBeCloseTo(100 * SWISS_VAT_RATES.standard);
+  });
 
   it('returns 0 VAT on 0 subtotal', () => {
-    expect(calculateVAT(0, 'CHF')).toBe(0)
-  })
+    expect(calculateVAT(0, 'CHF')).toBe(0);
+  });
 
   it('scales linearly', () => {
-    expect(calculateVAT(200, 'CHF')).toBeCloseTo(calculateVAT(100, 'CHF') * 2)
-  })
-})
+    expect(calculateVAT(200, 'CHF')).toBeCloseTo(calculateVAT(100, 'CHF') * 2);
+  });
+});
 
 describe('calculatePaymentFees', () => {
   it('applies percentage + fixed fee', () => {
     // 100 CHF: 2.9% + 0.30 = 2.90 + 0.30 = 3.20
-    expect(calculatePaymentFees(100)).toBeCloseTo(3.20)
-  })
+    expect(calculatePaymentFees(100)).toBeCloseTo(3.2);
+  });
 
   it('is correct for small amounts (fixed fee dominates)', () => {
     // 10 CHF: 2.9% + 0.30 = 0.29 + 0.30 = 0.59
-    expect(calculatePaymentFees(10)).toBeCloseTo(0.59)
-  })
+    expect(calculatePaymentFees(10)).toBeCloseTo(0.59);
+  });
 
   it('matches formula: amount * percentage + fixed', () => {
-    const amount = 250
-    const expected = amount * PAYMENT_FEE_PERCENTAGE + PAYMENT_FEE_FIXED
-    expect(calculatePaymentFees(amount)).toBeCloseTo(expected)
-  })
+    const amount = 250;
+    const expected = amount * PAYMENT_FEE_PERCENTAGE + PAYMENT_FEE_FIXED;
+    expect(calculatePaymentFees(amount)).toBeCloseTo(expected);
+  });
 
   it('returns fixed fee for zero amount', () => {
-    expect(calculatePaymentFees(0)).toBeCloseTo(PAYMENT_FEE_FIXED)
-  })
-})
+    expect(calculatePaymentFees(0)).toBeCloseTo(PAYMENT_FEE_FIXED);
+  });
+});
 
 describe('calculateTotalWithFees', () => {
   it('adds CHF VAT then payment fees to subtotal', () => {
     // Subtotal 100 CHF → + VAT at the Swiss rate → + 2.9% + 0.30 payment fee,
     // charged on the VAT-inclusive amount. Derived from the SSOT so the
     // assertion follows a rate change instead of blocking it.
-    const withVat = 100 * (1 + SWISS_VAT_RATES.standard)
-    const expected = withVat + (withVat * 0.029 + 0.30)
-    expect(calculateTotalWithFees(100, 'CHF')).toBeGreaterThan(100)
-    expect(calculateTotalWithFees(100, 'CHF')).toBeCloseTo(expected, 1)
-  })
+    const withVat = 100 * (1 + SWISS_VAT_RATES.standard);
+    const expected = withVat + (withVat * 0.029 + 0.3);
+    expect(calculateTotalWithFees(100, 'CHF')).toBeGreaterThan(100);
+    expect(calculateTotalWithFees(100, 'CHF')).toBeCloseTo(expected, 1);
+  });
 
   it('total is always greater than subtotal', () => {
-    expect(calculateTotalWithFees(50, 'CHF')).toBeGreaterThan(50)
-    expect(calculateTotalWithFees(200, 'EUR')).toBeGreaterThan(200)
-  })
+    expect(calculateTotalWithFees(50, 'CHF')).toBeGreaterThan(50);
+    expect(calculateTotalWithFees(200, 'EUR')).toBeGreaterThan(200);
+  });
 
   it('defaults to CHF', () => {
-    expect(calculateTotalWithFees(100)).toBeCloseTo(calculateTotalWithFees(100, 'CHF'))
-  })
+    expect(calculateTotalWithFees(100)).toBeCloseTo(calculateTotalWithFees(100, 'CHF'));
+  });
 
   it('EUR total includes higher VAT', () => {
-    const chfTotal = calculateTotalWithFees(100, 'CHF')
-    const eurTotal = calculateTotalWithFees(100, 'EUR')
-    expect(eurTotal).toBeGreaterThan(chfTotal)
-  })
-})
+    const chfTotal = calculateTotalWithFees(100, 'CHF');
+    const eurTotal = calculateTotalWithFees(100, 'EUR');
+    expect(eurTotal).toBeGreaterThan(chfTotal);
+  });
+});
 
 describe('calculateServicePricing', () => {
   it('converts cents to CHF subtotal correctly', () => {
     // 10000 cents = 100.00 CHF subtotal
-    const result = calculateServicePricing(10000, 'CHF')
-    expect(result.subtotal).toBeCloseTo(100)
-  })
+    const result = calculateServicePricing(10000, 'CHF');
+    expect(result.subtotal).toBeCloseTo(100);
+  });
 
   it('calculates VAT on subtotal (not on total)', () => {
-    const result = calculateServicePricing(10000, 'CHF')
-    expect(result.vat).toBeCloseTo(100 * SWISS_VAT_RATES.standard, 1)
-  })
+    const result = calculateServicePricing(10000, 'CHF');
+    expect(result.vat).toBeCloseTo(100 * SWISS_VAT_RATES.standard, 1);
+  });
 
   it('total is subtotal + VAT + fees', () => {
-    const result = calculateServicePricing(10000, 'CHF')
+    const result = calculateServicePricing(10000, 'CHF');
     // NOTE: calculateServicePricing applies fees to subtotal (not subtotal+VAT)
-    const expectedTotal = result.subtotal + result.vat + calculatePaymentFees(result.subtotal)
-    expect(result.total).toBeCloseTo(expectedTotal, 5)
-  })
+    const expectedTotal = result.subtotal + result.vat + calculatePaymentFees(result.subtotal);
+    expect(result.total).toBeCloseTo(expectedTotal, 5);
+  });
 
   it('returns object with subtotal, vat, total keys', () => {
-    const result = calculateServicePricing(5000, 'CHF')
-    expect(result).toHaveProperty('subtotal')
-    expect(result).toHaveProperty('vat')
-    expect(result).toHaveProperty('total')
-  })
+    const result = calculateServicePricing(5000, 'CHF');
+    expect(result).toHaveProperty('subtotal');
+    expect(result).toHaveProperty('vat');
+    expect(result).toHaveProperty('total');
+  });
 
   it('handles zero cents input', () => {
-    const result = calculateServicePricing(0, 'CHF')
-    expect(result.subtotal).toBe(0)
-    expect(result.vat).toBe(0)
-  })
+    const result = calculateServicePricing(0, 'CHF');
+    expect(result.subtotal).toBe(0);
+    expect(result.vat).toBe(0);
+  });
 
   it('defaults to CHF', () => {
-    const chf = calculateServicePricing(10000, 'CHF')
-    const def = calculateServicePricing(10000)
-    expect(def.subtotal).toBeCloseTo(chf.subtotal)
-    expect(def.vat).toBeCloseTo(chf.vat)
-  })
-})
+    const chf = calculateServicePricing(10000, 'CHF');
+    const def = calculateServicePricing(10000);
+    expect(def.subtotal).toBeCloseTo(chf.subtotal);
+    expect(def.vat).toBeCloseTo(chf.vat);
+  });
+});

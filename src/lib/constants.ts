@@ -45,21 +45,21 @@ export const ROLES = {
   // Customer Roles - DEPRECATED: Regular users don't need roles
   PREMIUM_CUSTOMER: 'premium_customer',
   VERIFIED_CUSTOMER: 'verified_customer',
-  CUSTOMER: 'customer'
-} as const
+  CUSTOMER: 'customer',
+} as const;
 
-export type UserRole = typeof ROLES[keyof typeof ROLES]
+export type UserRole = (typeof ROLES)[keyof typeof ROLES];
 
 // =============================================================================
 // CONTACT & SHOP CONSTANTS — re-exported from SSOT (@/config/org)
 // =============================================================================
 
-import { CONTACT, EXTERNAL_LINKS } from '@/config/org'
+import { CONTACT, EXTERNAL_LINKS } from '@/config/org';
 
-export const CONTACT_EMAIL = CONTACT.email
-export const SUPPORT_EMAIL = CONTACT.supportEmail
+export const CONTACT_EMAIL = CONTACT.email;
+export const SUPPORT_EMAIL = CONTACT.supportEmail;
 
-export const SHOPWARE_URL = EXTERNAL_LINKS.shopware
+export const SHOPWARE_URL = EXTERNAL_LINKS.shopware;
 
 // =============================================================================
 // NEW SIMPLIFIED PERMISSION SYSTEM (v2)
@@ -92,4 +92,4 @@ export {
   getSectionsByCategory,
   CATEGORIES,
   getSortedCategories,
-} from './permissions'
+} from './permissions';

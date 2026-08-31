@@ -9,13 +9,13 @@
  * - Suspicious activity detection
  */
 
-import { db } from '@/db'
-import { authAuditLog } from '@/db/schema'
-import { eq, and, inArray, gte, lte, desc, sql, getTableName } from 'drizzle-orm'
-import { logger } from '@/lib/logger'
+import { db } from '@/db';
+import { authAuditLog } from '@/db/schema';
+import { eq, and, inArray, gte, lte, desc, sql, getTableName } from 'drizzle-orm';
+import { logger } from '@/lib/logger';
 
 // Table name ref for raw SQL in interval queries
-const auditTable = getTableName(authAuditLog)
+const auditTable = getTableName(authAuditLog);
 
 // =============================================================================
 // Types
@@ -64,70 +64,70 @@ export type AuditEventType =
   // Compliance events (DSG / GDPR)
   | 'user_deleted'
   | 'data_exported'
-  | 'data_export'  // legacy alias used by /api/user/export-data raw INSERT — keep until that route is refactored to use logDataExport()
-  | 'content_moderated'
+  | 'data_export' // legacy alias used by /api/user/export-data raw INSERT — keep until that route is refactored to use logDataExport()
+  | 'content_moderated';
 
 export interface AuditLogEntry {
-  id?: string
-  event_type: AuditEventType
-  user_id: string | null
-  email?: string
-  ip_address: string
-  user_agent: string
-  details: Record<string, unknown>
-  severity: 'info' | 'warning' | 'critical'
-  created_at?: Date
+  id?: string;
+  event_type: AuditEventType;
+  user_id: string | null;
+  email?: string;
+  ip_address: string;
+  user_agent: string;
+  details: Record<string, unknown>;
+  severity: 'info' | 'warning' | 'critical';
+  created_at?: Date;
 }
 
 // =============================================================================
 // In-Memory Buffer for High-Performance Logging
 // =============================================================================
 
-const auditBuffer: AuditLogEntry[] = []
-const BUFFER_SIZE = 100
-const FLUSH_INTERVAL = 5000 // 5 seconds
+const auditBuffer: AuditLogEntry[] = [];
+const BUFFER_SIZE = 100;
+const FLUSH_INTERVAL = 5000; // 5 seconds
 
-let flushTimer: NodeJS.Timeout | null = null
+let flushTimer: NodeJS.Timeout | null = null;
 
 /**
  * Start the flush timer
  */
 function startFlushTimer(): void {
-  if (flushTimer) return
+  if (flushTimer) return;
 
   flushTimer = setInterval(async () => {
-    await flushAuditBuffer()
-  }, FLUSH_INTERVAL)
+    await flushAuditBuffer();
+  }, FLUSH_INTERVAL);
 }
 
 /**
  * Flush audit buffer to database
  */
 async function flushAuditBuffer(): Promise<void> {
-  if (auditBuffer.length === 0) return
+  if (auditBuffer.length === 0) return;
 
-  const entries = auditBuffer.splice(0, auditBuffer.length)
+  const entries = auditBuffer.splice(0, auditBuffer.length);
 
   try {
     // Batch insert using Drizzle
     await db.insert(authAuditLog).values(
-      entries.map(entry => ({
+      entries.map((entry) => ({
         eventType: entry.event_type,
         userId: entry.user_id,
         ipAddress: entry.ip_address,
         userAgent: entry.user_agent,
         details: entry.details,
         severity: entry.severity,
-      }))
-    )
+      })),
+    );
   } catch (error) {
     // On error, put entries back in buffer (at the front)
-    logger.error('Failed to flush audit log', { error, entryCount: entries.length })
-    auditBuffer.unshift(...entries)
+    logger.error('Failed to flush audit log', { error, entryCount: entries.length });
+    auditBuffer.unshift(...entries);
 
     // Log to logger as fallback
     for (const entry of entries) {
-      logger.warn('[AUDIT FALLBACK]', { entry })
+      logger.warn('[AUDIT FALLBACK]', { entry });
     }
   }
 }
@@ -141,19 +141,19 @@ async function flushAuditBuffer(): Promise<void> {
  * Non-blocking - events are buffered and written asynchronously
  */
 export function logAuditEvent(entry: Omit<AuditLogEntry, 'id' | 'created_at'>): void {
-  auditBuffer.push(entry)
+  auditBuffer.push(entry);
 
   // Start timer if not running
-  startFlushTimer()
+  startFlushTimer();
 
   // Flush if buffer is full
   if (auditBuffer.length >= BUFFER_SIZE) {
-    flushAuditBuffer().catch((error) => logger.error('Failed to flush audit buffer', { error }))
+    flushAuditBuffer().catch((error) => logger.error('Failed to flush audit buffer', { error }));
   }
 
   // Log critical events immediately
   if (entry.severity === 'critical') {
-    logger.warn('[AUDIT CRITICAL]', { entry })
+    logger.warn('[AUDIT CRITICAL]', { entry });
   }
 }
 
@@ -162,13 +162,13 @@ export function logAuditEvent(entry: Omit<AuditLogEntry, 'id' | 'created_at'>): 
  * Use for critical events that must be persisted before continuing
  */
 export async function logAuditEventSync(
-  entry: Omit<AuditLogEntry, 'id' | 'created_at'>
+  entry: Omit<AuditLogEntry, 'id' | 'created_at'>,
 ): Promise<void> {
   // Mirror critical events to the logger immediately — sync is used for
   // compliance-critical writes (super-admin grants, user deletions, data
   // exports). If the DB write fails we still want a log trail.
   if (entry.severity === 'critical') {
-    logger.warn('[AUDIT CRITICAL]', { entry })
+    logger.warn('[AUDIT CRITICAL]', { entry });
   }
 
   try {
@@ -179,11 +179,11 @@ export async function logAuditEventSync(
       userAgent: entry.user_agent,
       details: entry.details,
       severity: entry.severity,
-    })
+    });
   } catch (error) {
-    logger.error('Failed to write audit log', { error, entry })
+    logger.error('Failed to write audit log', { error, entry });
     // Log to logger as fallback
-    logger.warn('[AUDIT FALLBACK]', { entry })
+    logger.warn('[AUDIT FALLBACK]', { entry });
   }
 }
 
@@ -192,10 +192,10 @@ export async function logAuditEventSync(
 // =============================================================================
 
 export interface AuditContext {
-  userId?: string | null
-  email?: string
-  ipAddress: string
-  userAgent: string
+  userId?: string | null;
+  email?: string;
+  ipAddress: string;
+  userAgent: string;
 }
 
 /**
@@ -210,7 +210,7 @@ export function logLoginSuccess(ctx: AuditContext): void {
     user_agent: ctx.userAgent,
     details: { email: ctx.email },
     severity: 'info',
-  })
+  });
 }
 
 /**
@@ -225,7 +225,7 @@ export function logLoginFailure(ctx: AuditContext, reason: string): void {
     user_agent: ctx.userAgent,
     details: { email: ctx.email, reason },
     severity: 'warning',
-  })
+  });
 }
 
 /**
@@ -239,7 +239,7 @@ export function logLogout(ctx: AuditContext): void {
     user_agent: ctx.userAgent,
     details: {},
     severity: 'info',
-  })
+  });
 }
 
 /**
@@ -254,7 +254,7 @@ export function logRegistration(ctx: AuditContext): void {
     user_agent: ctx.userAgent,
     details: { email: ctx.email },
     severity: 'info',
-  })
+  });
 }
 
 /**
@@ -268,7 +268,7 @@ export function logPasswordChange(ctx: AuditContext, method: 'reset' | 'change')
     user_agent: ctx.userAgent,
     details: { method },
     severity: 'info',
-  })
+  });
 }
 
 /**
@@ -283,17 +283,13 @@ export function logAccountLocked(ctx: AuditContext, duration: number): void {
     user_agent: ctx.userAgent,
     details: { email: ctx.email, duration_ms: duration },
     severity: 'warning',
-  })
+  });
 }
 
 /**
  * Log rate limit exceeded
  */
-export function logRateLimitExceeded(
-  ctx: AuditContext,
-  limitType: string,
-  limit: number
-): void {
+export function logRateLimitExceeded(ctx: AuditContext, limitType: string, limit: number): void {
   logAuditEvent({
     event_type: 'rate_limit_exceeded',
     user_id: ctx.userId || null,
@@ -301,7 +297,7 @@ export function logRateLimitExceeded(
     user_agent: ctx.userAgent,
     details: { limitType, limit },
     severity: 'warning',
-  })
+  });
 }
 
 /**
@@ -310,7 +306,7 @@ export function logRateLimitExceeded(
 export function logSuspiciousActivity(
   ctx: AuditContext,
   description: string,
-  details?: Record<string, unknown>
+  details?: Record<string, unknown>,
 ): void {
   logAuditEvent({
     event_type: 'suspicious_activity',
@@ -319,7 +315,7 @@ export function logSuspiciousActivity(
     user_agent: ctx.userAgent,
     details: { description, ...details },
     severity: 'critical',
-  })
+  });
 }
 
 /**
@@ -329,7 +325,7 @@ export function logRoleChange(
   ctx: AuditContext,
   targetUserId: string,
   oldRole: string,
-  newRole: string
+  newRole: string,
 ): void {
   logAuditEvent({
     event_type: 'role_changed',
@@ -338,7 +334,7 @@ export function logRoleChange(
     user_agent: ctx.userAgent,
     details: { targetUserId, oldRole, newRole },
     severity: 'warning',
-  })
+  });
 }
 
 /**
@@ -347,7 +343,7 @@ export function logRoleChange(
 export function logAdminAction(
   ctx: AuditContext,
   action: string,
-  details?: Record<string, unknown>
+  details?: Record<string, unknown>,
 ): void {
   logAuditEvent({
     event_type: 'admin_action',
@@ -356,7 +352,7 @@ export function logAdminAction(
     user_agent: ctx.userAgent,
     details: { action, ...details },
     severity: 'info',
-  })
+  });
 }
 
 /**
@@ -373,7 +369,7 @@ export async function logPermissionsChange(
   targetUserId: string,
   targetEmail: string,
   oldPermissions: string[],
-  newPermissions: string[]
+  newPermissions: string[],
 ): Promise<void> {
   await logAuditEventSync({
     event_type: 'permissions_changed',
@@ -385,11 +381,11 @@ export async function logPermissionsChange(
       targetEmail,
       oldPermissions,
       newPermissions,
-      added: newPermissions.filter(p => !oldPermissions.includes(p)),
-      removed: oldPermissions.filter(p => !newPermissions.includes(p)),
+      added: newPermissions.filter((p) => !oldPermissions.includes(p)),
+      removed: oldPermissions.filter((p) => !newPermissions.includes(p)),
     },
     severity: 'warning',
-  })
+  });
 }
 
 /**
@@ -409,7 +405,7 @@ export async function logUserDeletion(
     user_agent: ctx.userAgent,
     details: { targetUserId, targetEmail, reason },
     severity: 'critical',
-  })
+  });
 }
 
 /**
@@ -429,7 +425,7 @@ export async function logDataExport(
     user_agent: ctx.userAgent,
     details: { targetUserId, exportType, bytesExported },
     severity: 'warning',
-  })
+  });
 }
 
 /**
@@ -451,7 +447,7 @@ export function logContentDecision(
     user_agent: ctx.userAgent,
     details: { contentType, contentId, decision, note },
     severity: 'info',
-  })
+  });
 }
 
 /**
@@ -462,7 +458,7 @@ export async function logSuperAdminChange(
   ctx: AuditContext,
   targetUserId: string,
   targetEmail: string,
-  newStatus: boolean
+  newStatus: boolean,
 ): Promise<void> {
   await logAuditEventSync({
     event_type: 'role_changed',
@@ -476,7 +472,7 @@ export async function logSuperAdminChange(
       newSuperAdminStatus: newStatus,
     },
     severity: 'critical', // Super admin changes are critical
-  })
+  });
 }
 
 // =============================================================================
@@ -484,54 +480,52 @@ export async function logSuperAdminChange(
 // =============================================================================
 
 interface AuditQueryOptions {
-  userId?: string
-  eventType?: AuditEventType | AuditEventType[]
-  severity?: 'info' | 'warning' | 'critical'
-  ipAddress?: string
-  startDate?: Date
-  endDate?: Date
-  limit?: number
-  offset?: number
+  userId?: string;
+  eventType?: AuditEventType | AuditEventType[];
+  severity?: 'info' | 'warning' | 'critical';
+  ipAddress?: string;
+  startDate?: Date;
+  endDate?: Date;
+  limit?: number;
+  offset?: number;
 }
 
 /**
  * Query audit logs
  */
-export async function queryAuditLogs(
-  options: AuditQueryOptions = {}
-): Promise<AuditLogEntry[]> {
-  const conditions = []
+export async function queryAuditLogs(options: AuditQueryOptions = {}): Promise<AuditLogEntry[]> {
+  const conditions = [];
 
   if (options.userId) {
-    conditions.push(eq(authAuditLog.userId, options.userId))
+    conditions.push(eq(authAuditLog.userId, options.userId));
   }
 
   if (options.eventType) {
     if (Array.isArray(options.eventType)) {
-      conditions.push(inArray(authAuditLog.eventType, options.eventType))
+      conditions.push(inArray(authAuditLog.eventType, options.eventType));
     } else {
-      conditions.push(eq(authAuditLog.eventType, options.eventType))
+      conditions.push(eq(authAuditLog.eventType, options.eventType));
     }
   }
 
   if (options.severity) {
-    conditions.push(eq(authAuditLog.severity, options.severity))
+    conditions.push(eq(authAuditLog.severity, options.severity));
   }
 
   if (options.ipAddress) {
-    conditions.push(eq(authAuditLog.ipAddress, options.ipAddress))
+    conditions.push(eq(authAuditLog.ipAddress, options.ipAddress));
   }
 
   if (options.startDate) {
-    conditions.push(gte(authAuditLog.createdAt, options.startDate.toISOString()))
+    conditions.push(gte(authAuditLog.createdAt, options.startDate.toISOString()));
   }
 
   if (options.endDate) {
-    conditions.push(lte(authAuditLog.createdAt, options.endDate.toISOString()))
+    conditions.push(lte(authAuditLog.createdAt, options.endDate.toISOString()));
   }
 
-  const limitVal = options.limit || 100
-  const offsetVal = options.offset || 0
+  const limitVal = options.limit || 100;
+  const offsetVal = options.offset || 0;
 
   const rows = await db
     .select()
@@ -539,9 +533,9 @@ export async function queryAuditLogs(
     .where(conditions.length > 0 ? and(...conditions) : undefined)
     .orderBy(desc(authAuditLog.createdAt))
     .limit(limitVal)
-    .offset(offsetVal)
+    .offset(offsetVal);
 
-  return rows.map(row => ({
+  return rows.map((row) => ({
     id: row.id,
     event_type: row.eventType as AuditEventType,
     user_id: row.userId,
@@ -550,7 +544,7 @@ export async function queryAuditLogs(
     details: (row.details ?? {}) as Record<string, unknown>,
     severity: row.severity as 'info' | 'warning' | 'critical',
     created_at: row.createdAt ? new Date(row.createdAt) : undefined,
-  }))
+  }));
 }
 
 /**
@@ -558,19 +552,19 @@ export async function queryAuditLogs(
  */
 export async function getRecentSuspiciousActivity(
   ipAddress: string,
-  hours: number = 24
+  hours: number = 24,
 ): Promise<AuditLogEntry[]> {
   // Validate hours to prevent abuse (1-168 hours = 1 week max)
-  const safeHours = Math.max(1, Math.min(168, Math.floor(hours)))
+  const safeHours = Math.max(1, Math.min(168, Math.floor(hours)));
   const result = await db.execute<{
-    id: string
-    event_type: string
-    user_id: string | null
-    ip_address: string
-    user_agent: string | null
-    details: Record<string, unknown>
-    severity: string
-    created_at: string
+    id: string;
+    event_type: string;
+    user_id: string | null;
+    ip_address: string;
+    user_agent: string | null;
+    details: Record<string, unknown>;
+    severity: string;
+    created_at: string;
   }>(sql`
     SELECT * FROM ${sql.raw(auditTable)}
     WHERE ip_address = ${ipAddress}
@@ -578,8 +572,8 @@ export async function getRecentSuspiciousActivity(
       AND created_at > NOW() - INTERVAL '1 hour' * ${safeHours}
     ORDER BY created_at DESC
     LIMIT 100
-  `)
-  return result.rows.map(row => ({
+  `);
+  return result.rows.map((row) => ({
     id: row.id,
     event_type: row.event_type as AuditEventType,
     user_id: row.user_id,
@@ -588,25 +582,22 @@ export async function getRecentSuspiciousActivity(
     details: (row.details ?? {}) as Record<string, unknown>,
     severity: row.severity as 'info' | 'warning' | 'critical',
     created_at: row.created_at ? new Date(row.created_at) : undefined,
-  }))
+  }));
 }
 
 /**
  * Get failed login attempts for a user
  */
-export async function getFailedLoginAttempts(
-  userId: string,
-  hours: number = 24
-): Promise<number> {
+export async function getFailedLoginAttempts(userId: string, hours: number = 24): Promise<number> {
   // Validate hours to prevent abuse (1-168 hours = 1 week max)
-  const safeHours = Math.max(1, Math.min(168, Math.floor(hours)))
+  const safeHours = Math.max(1, Math.min(168, Math.floor(hours)));
   const result = await db.execute<{ count: string }>(sql`
     SELECT COUNT(*) as count FROM ${sql.raw(auditTable)}
     WHERE user_id = ${userId}
       AND event_type = 'login_failure'
       AND created_at > NOW() - INTERVAL '1 hour' * ${safeHours}
-  `)
-  return parseInt(result.rows[0]?.count || '0', 10)
+  `);
+  return parseInt(result.rows[0]?.count || '0', 10);
 }
 
 // =============================================================================
@@ -615,7 +606,7 @@ export async function getFailedLoginAttempts(
 
 process.on('beforeExit', async () => {
   if (flushTimer) {
-    clearInterval(flushTimer)
+    clearInterval(flushTimer);
   }
-  await flushAuditBuffer()
-})
+  await flushAuditBuffer();
+});

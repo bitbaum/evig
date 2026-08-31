@@ -1,22 +1,22 @@
-import { Check, Sparkles, Languages, Loader2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { localeLabels, defaultLocale, type Locale } from '@/i18n/routing'
+import { Check, Sparkles, Languages, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { localeLabels, defaultLocale, type Locale } from '@/i18n/routing';
 
 interface Props {
-  activeLocale: string
-  translatableLocales: readonly string[]
-  onSelect: (locale: string) => void
+  activeLocale: string;
+  translatableLocales: readonly string[];
+  onSelect: (locale: string) => void;
   /** Whether a given translation locale already has a complete draft. */
-  hasContent: (locale: string) => boolean
+  hasContent: (locale: string) => boolean;
   /** Whether a locale's content is machine-made and not yet human-reviewed. */
-  isMachine: (locale: string) => boolean
+  isMachine: (locale: string) => boolean;
   /** Show the AI "translate all" button (only once the post exists). */
-  canTranslate?: boolean
-  translating?: boolean
-  onTranslateAll?: () => void
+  canTranslate?: boolean;
+  translating?: boolean;
+  onTranslateAll?: () => void;
   /** Auto-translate-on-publish toggle. */
-  autoTranslate?: boolean
-  onAutoTranslateChange?: (on: boolean) => void
+  autoTranslate?: boolean;
+  onAutoTranslateChange?: (on: boolean) => void;
 }
 
 /**
@@ -38,9 +38,9 @@ export function BlogTranslationTabs({
   onAutoTranslateChange,
 }: Props) {
   const tab = (locale: string, label: string, isReviewIcon: boolean) => {
-    const active = activeLocale === locale
-    const done = isReviewIcon && hasContent(locale)
-    const machine = done && isMachine(locale)
+    const active = activeLocale === locale;
+    const done = isReviewIcon && hasContent(locale);
+    const machine = done && isMachine(locale);
     return (
       <Button
         key={locale}
@@ -48,20 +48,30 @@ export function BlogTranslationTabs({
         variant={active ? 'primary' : 'ghost'}
         onClick={() => onSelect(locale)}
         aria-current={active ? 'true' : undefined}
-        className={active ? 'gap-1.5' : 'gap-1.5 bg-surface-raised text-text-secondary hover:bg-surface-overlay'}
+        className={
+          active
+            ? 'gap-1.5'
+            : 'gap-1.5 bg-surface-raised text-text-secondary hover:bg-surface-overlay'
+        }
         title={machine ? `${label} — automatisch übersetzt, bitte prüfen` : undefined}
       >
         {label}
-        {done && machine && <Sparkles className={`w-3.5 h-3.5 ${active ? 'text-white' : 'text-warning-500'}`} />}
-        {done && !machine && <Check className={`w-3.5 h-3.5 ${active ? 'text-white' : 'text-action'}`} />}
+        {done && machine && (
+          <Sparkles className={`w-3.5 h-3.5 ${active ? 'text-white' : 'text-warning-500'}`} />
+        )}
+        {done && !machine && (
+          <Check className={`w-3.5 h-3.5 ${active ? 'text-white' : 'text-action'}`} />
+        )}
       </Button>
-    )
-  }
+    );
+  };
 
   return (
     <div className="space-y-2">
       <div className="flex flex-wrap items-center gap-2 rounded-xl border border-subtle bg-surface-base p-3">
-        <span className="px-1 text-xs font-medium uppercase tracking-wide text-text-tertiary">Sprache</span>
+        <span className="px-1 text-xs font-medium uppercase tracking-wide text-text-tertiary">
+          Sprache
+        </span>
         {tab(defaultLocale, `${localeLabels[defaultLocale as Locale]} (Basis)`, false)}
         {translatableLocales.map((loc) => tab(loc, localeLabels[loc as Locale] || loc, true))}
         {canTranslate && (
@@ -73,7 +83,11 @@ export function BlogTranslationTabs({
             className="ml-auto gap-1.5"
             title="Fehlende Sprachen automatisch aus der deutschen Basis übersetzen (KI). Danach pro Sprache prüfen."
           >
-            {translating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Languages className="w-4 h-4" />}
+            {translating ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Languages className="w-4 h-4" />
+            )}
             {translating ? 'Übersetze…' : 'Fehlende übersetzen'}
           </Button>
         )}
@@ -91,5 +105,5 @@ export function BlogTranslationTabs({
         </label>
       )}
     </div>
-  )
+  );
 }

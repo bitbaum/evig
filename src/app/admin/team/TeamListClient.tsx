@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Team List Client Component
@@ -8,23 +8,16 @@
  * loading grid via loadingSlot.
  */
 
-import { useTranslations } from 'next-intl'
-import { Users } from 'lucide-react'
-import {
-  TeamFilters,
-  TeamMemberCard,
-  useTeamProfiles,
-} from '@/components/admin/team'
-import { AdminListShell } from '@/components/admin/AdminListShell'
+import { useTranslations } from 'next-intl';
+import { Users } from 'lucide-react';
+import { TeamFilters, TeamMemberCard, useTeamProfiles } from '@/components/admin/team';
+import { AdminListShell } from '@/components/admin/AdminListShell';
 
 function TeamGridSkeleton() {
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {[1, 2, 3, 4, 5, 6].map((i) => (
-        <div
-          key={i}
-          className="animate-pulse rounded-lg border border-subtle bg-surface-base p-5"
-        >
+        <div key={i} className="animate-pulse rounded-lg border border-subtle bg-surface-base p-5">
           <div className="flex items-start gap-4">
             <div className="h-12 w-12 rounded-full bg-surface-overlay" />
             <div className="flex-1 space-y-2">
@@ -42,16 +35,14 @@ function TeamGridSkeleton() {
         </div>
       ))}
     </div>
-  )
+  );
 }
 
 export function TeamListClient() {
-  const t = useTranslations('admin.team.list')
-  const { profiles, loading, error, filters, setFilters, refetch } = useTeamProfiles()
+  const t = useTranslations('admin.team.list');
+  const { profiles, loading, error, filters, setFilters, refetch } = useTeamProfiles();
 
-  const hasActiveFilters = Boolean(
-    filters.search || filters.department || filters.employmentType,
-  )
+  const hasActiveFilters = Boolean(filters.search || filters.department || filters.employmentType);
 
   return (
     <AdminListShell
@@ -101,5 +92,5 @@ export function TeamListClient() {
         ))}
       </div>
     </AdminListShell>
-  )
+  );
 }

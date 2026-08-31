@@ -1,49 +1,49 @@
 // SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
-import { Metadata } from 'next'
-import { InvolvementPageLayout } from '../involvement-page-layout'
-import { BenefitCard, BenefitCardGrid } from '@/components/community/BenefitCard'
-import { InfoSection, NumberedSteps, Callout } from '@/components/community/InfoSection'
-import { PageSection } from '@/components/community/PageSection'
-import { responsiveTypography } from '@/lib/responsive'
-import { ORG } from '@/config/org'
-import Heading from '@/components/ui/Heading'
-import { getTranslations } from 'next-intl/server'
-import { Target, Globe, Share2, Users } from 'lucide-react'
+import { Metadata } from 'next';
+import { InvolvementPageLayout } from '../involvement-page-layout';
+import { BenefitCard, BenefitCardGrid } from '@/components/community/BenefitCard';
+import { InfoSection, NumberedSteps, Callout } from '@/components/community/InfoSection';
+import { PageSection } from '@/components/community/PageSection';
+import { responsiveTypography } from '@/lib/responsive';
+import { ORG } from '@/config/org';
+import Heading from '@/components/ui/Heading';
+import { getTranslations } from 'next-intl/server';
+import { Target, Globe, Share2, Users } from 'lucide-react';
 
 interface PartnershipsPageProps {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: string }>;
 }
 
 // Benefit icons are positional — parallel to translations array
-const BENEFIT_ICONS = [Target, Globe, Share2, Users]
+const BENEFIT_ICONS = [Target, Globe, Share2, Users];
 
 export async function generateMetadata({ params }: PartnershipsPageProps): Promise<Metadata> {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'getInvolved' })
-  const title = `${t('partnerships.meta.title')} | ${ORG.name}`
-  const description = t('partnerships.meta.description')
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'getInvolved' });
+  const title = `${t('partnerships.meta.title')} | ${ORG.name}`;
+  const description = t('partnerships.meta.description');
   return {
     title: { absolute: title },
     description,
     openGraph: { title, description, type: 'website' },
-  }
+  };
 }
 
 export default async function PartnershipsPage({ params }: PartnershipsPageProps) {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'getInvolved' })
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'getInvolved' });
 
-  const benefits = t.raw('partnerships.benefits') as Array<{ title: string; description: string }>
+  const benefits = t.raw('partnerships.benefits') as Array<{ title: string; description: string }>;
   const sections = t.raw('partnerships.sections') as Array<{
-    title: string
-    items: string[]
-    description?: string
-  }>
-  const callouts = t.raw('partnerships.callouts') as Array<{ title: string; content: string }>
-  const partnershipProcessSteps = t.raw('partnerships.partnershipProcess.steps') as string[]
-  const howToStartSteps = t.raw('partnerships.howToStart.steps') as string[]
+    title: string;
+    items: string[];
+    description?: string;
+  }>;
+  const callouts = t.raw('partnerships.callouts') as Array<{ title: string; content: string }>;
+  const partnershipProcessSteps = t.raw('partnerships.partnershipProcess.steps') as string[];
+  const howToStartSteps = t.raw('partnerships.howToStart.steps') as string[];
 
   return (
     <InvolvementPageLayout
@@ -66,8 +66,8 @@ export default async function PartnershipsPage({ params }: PartnershipsPageProps
           </Heading>
           <BenefitCardGrid>
             {BENEFIT_ICONS.map((Icon, index) => {
-              const benefit = benefits[index]
-              if (!benefit) return null
+              const benefit = benefits[index];
+              if (!benefit) return null;
               return (
                 <BenefitCard
                   key={index}
@@ -75,7 +75,7 @@ export default async function PartnershipsPage({ params }: PartnershipsPageProps
                   title={benefit.title}
                   description={benefit.description}
                 />
-              )
+              );
             })}
           </BenefitCardGrid>
         </section>
@@ -92,11 +92,7 @@ export default async function PartnershipsPage({ params }: PartnershipsPageProps
 
         {/* Callouts */}
         {callouts.map((callout, index) => (
-          <Callout
-            key={index}
-            title={callout.title}
-            content={callout.content}
-          />
+          <Callout key={index} title={callout.title} content={callout.content} />
         ))}
 
         {/* Partnership Process */}
@@ -112,5 +108,5 @@ export default async function PartnershipsPage({ params }: PartnershipsPageProps
         />
       </div>
     </InvolvementPageLayout>
-  )
+  );
 }

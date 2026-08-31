@@ -3709,93 +3709,53 @@
         "items": [
           {
             "description": "Distribuzione facile da usare, perfetta per principianti e professionisti. Offre un ambiente desktop curato e un ampio repository software.",
-            "useCases": [
-              "Desktop computing",
-              "Sviluppo",
-              "Distribuzione server"
-            ],
+            "useCases": ["Desktop computing", "Sviluppo", "Distribuzione server"],
             "pros": [
               "Facile da usare",
               "Community ampia",
               "Aggiornamenti regolari",
               "Documentazione estesa"
             ],
-            "cons": [
-              "Alcuni software proprietari",
-              "Più pesante di alcune alternative"
-            ]
+            "cons": ["Alcuni software proprietari", "Più pesante di alcune alternative"]
           },
           {
             "description": "Basato su Ubuntu ma offre un'esperienza desktop più tradizionale. Noto per la sua stabilità e facilità d'uso.",
-            "useCases": [
-              "Desktop computing",
-              "Lavoro d'ufficio",
-              "Multimedia"
-            ],
+            "useCases": ["Desktop computing", "Lavoro d'ufficio", "Multimedia"],
             "pros": [
               "Interfaccia simile a Windows",
               "Eccellente supporto hardware",
               "Stabile e affidabile",
               "Ottimo per i principianti"
             ],
-            "cons": [
-              "Aggiornamenti meno frequenti",
-              "Funzionalità enterprise limitate"
-            ]
+            "cons": ["Aggiornamenti meno frequenti", "Funzionalità enterprise limitate"]
           },
           {
             "description": "Distribuzione all'avanguardia che mostra le ultime tecnologie open source. Supportato da Red Hat.",
-            "useCases": [
-              "Sviluppo",
-              "Enterprise",
-              "Innovazione"
-            ],
+            "useCases": ["Sviluppo", "Enterprise", "Innovazione"],
             "pros": [
               "Software più recente",
               "Sicurezza forte",
               "Pronto per l'enterprise",
               "Eccellenti strumenti di sviluppo"
             ],
-            "cons": [
-              "Aggiornamenti frequenti",
-              "Cicli di supporto più brevi"
-            ]
+            "cons": ["Aggiornamenti frequenti", "Cicli di supporto più brevi"]
           },
           {
             "description": "Una delle distribuzioni più stabili e affidabili, che funge da base per molti altri sistemi Linux.",
-            "useCases": [
-              "Server",
-              "Enterprise",
-              "Sistemi stabili"
-            ],
+            "useCases": ["Server", "Enterprise", "Sistemi stabili"],
             "pros": [
               "Estremamente stabile",
               "Grande repository di pacchetti",
               "Lunghi cicli di supporto",
               "Sicurezza forte"
             ],
-            "cons": [
-              "Versioni software più vecchie",
-              "Meno user-friendly"
-            ]
+            "cons": ["Versioni software più vecchie", "Meno user-friendly"]
           },
           {
             "description": "Distribuzione leggera basata su Debian, nota per le sue eccellenti prestazioni e l'interfaccia intuitiva.",
-            "useCases": [
-              "Hardware più vecchio",
-              "Desktop computing",
-              "Efficienza delle risorse"
-            ],
-            "pros": [
-              "Leggero",
-              "Prestazioni veloci",
-              "Facile da usare",
-              "Base stabile"
-            ],
-            "cons": [
-              "Community più piccola",
-              "Funzionalità enterprise limitate"
-            ]
+            "useCases": ["Hardware più vecchio", "Desktop computing", "Efficienza delle risorse"],
+            "pros": ["Leggero", "Prestazioni veloci", "Facile da usare", "Base stabile"],
+            "cons": ["Community più piccola", "Funzionalità enterprise limitate"]
           }
         ],
         "chooser": {
@@ -4600,12 +4560,7 @@
     "devices": {
       "heading": "Donare dispositivi",
       "intro": "L'hardware di cui non hai più bisogno può dare a un'altra persona una vera opportunità.",
-      "items": [
-        "Laptop",
-        "PC desktop",
-        "Monitor",
-        "Periferiche"
-      ],
+      "items": ["Laptop", "PC desktop", "Monitor", "Periferiche"],
       "acceptLabel": "Cosa accettiamo:",
       "acceptText": "Laptop, PC desktop, GPU, monitor, tastiere, mouse — funzionanti o riparabili.",
       "notAcceptLabel": "Cosa non accettiamo:",

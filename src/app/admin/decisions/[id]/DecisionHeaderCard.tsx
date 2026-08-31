@@ -1,11 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  DECISION_STATUS,
-  VALID_TRANSITIONS,
-  type DecisionStatus,
-} from '@/config/decisions';
+import { DECISION_STATUS, VALID_TRANSITIONS, type DecisionStatus } from '@/config/decisions';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { adminSurface, adminType } from '@/lib/admin-ui';
 import { cn } from '@/lib/utils';
@@ -25,7 +21,7 @@ interface Props {
   isSuperAdmin: boolean;
   onTransition: (
     status: DecisionStatus,
-    extra?: { cancelReason?: string; outcomeSummary?: string }
+    extra?: { cancelReason?: string; outcomeSummary?: string },
   ) => Promise<void>;
   onDeleteSuccess: () => void;
   onError: (msg: string) => void;
@@ -59,14 +55,15 @@ export default function DecisionHeaderCard({
     handleCopyLink,
     handleSendInvitations,
     handleDelete,
-  } = useDecisionHeaderCard(decision.id, onDeleteSuccess, onError)
+  } = useDecisionHeaderCard(decision.id, onDeleteSuccess, onError);
 
   const validTargets = VALID_TRANSITIONS[decision.status] || [];
   const canDelete = decision.creator.id === currentUserId || isSuperAdmin;
-  const canCreateFollowUpTask = decision.status === DECISION_STATUS.CLOSED
-    && !decision.linkedTaskId
-    && decision.outcomePassed !== false
-    && Boolean(decision.protocolId);
+  const canCreateFollowUpTask =
+    decision.status === DECISION_STATUS.CLOSED &&
+    !decision.linkedTaskId &&
+    decision.outcomePassed !== false &&
+    Boolean(decision.protocolId);
 
   async function handleCreateFollowUpTask() {
     setCreatingFollowUpTask(true);

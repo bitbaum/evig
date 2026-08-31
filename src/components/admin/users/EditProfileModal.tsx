@@ -1,26 +1,26 @@
-'use client'
+'use client';
 
 /**
  * Modal for editing user profile (name, email)
  */
 
-import { Loader2 } from 'lucide-react'
-import { Modal } from '@/components/ui/Modal'
-import { Input } from '@/components/ui/input'
-import { FormField } from '@/components/ui/form-field'
-import { Button } from '@/components/ui/button'
-import type { UserRow } from './types'
+import { Loader2 } from 'lucide-react';
+import { Modal } from '@/components/ui/Modal';
+import { Input } from '@/components/ui/input';
+import { FormField } from '@/components/ui/form-field';
+import { Button } from '@/components/ui/button';
+import type { UserRow } from './types';
 
 interface EditProfileModalProps {
-  user: UserRow
-  editName: string
-  editEmail: string
-  isSaving: boolean
-  error: string | null
-  onNameChange: (name: string) => void
-  onEmailChange: (email: string) => void
-  onSave: () => void
-  onClose: () => void
+  user: UserRow;
+  editName: string;
+  editEmail: string;
+  isSaving: boolean;
+  error: string | null;
+  onNameChange: (name: string) => void;
+  onEmailChange: (email: string) => void;
+  onSave: () => void;
+  onClose: () => void;
 }
 
 export function EditProfileModal({
@@ -80,5 +80,5 @@ export function EditProfileModal({
         </Button>
       </div>
     </Modal>
-  )
+  );
 }

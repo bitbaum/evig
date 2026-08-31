@@ -19,7 +19,7 @@ async function openSuggestionPanel(page: Page) {
 // These tests require the suggestion API backend (database).
 // Skip in local dev; run in CI with test fixtures.
 test.describe('SuggestionButton - User Experience Flows', () => {
-  test.skip(({ browserName }) => true, 'Requires suggestion API backend (database)')
+  test.skip(({ browserName }) => true, 'Requires suggestion API backend (database)');
   test.setTimeout(60000);
 
   test.beforeEach(async ({ page }) => {
@@ -177,7 +177,9 @@ test.describe('SuggestionButton - User Experience Flows', () => {
 
     // 2. Try to submit empty form
     await page.click('button:has-text("Senden")');
-    await expect(page.locator('text=Bitte geben Sie einen Verbesserungsvorschlag ein')).toBeVisible();
+    await expect(
+      page.locator('text=Bitte geben Sie einen Verbesserungsvorschlag ein'),
+    ).toBeVisible();
 
     // 3. Try element scope without selecting elements
     await page.locator('text=Spezifische Elemente').click();

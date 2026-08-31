@@ -1,83 +1,83 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { apiFetch } from '@/lib/api/client'
-import { logger } from '@/lib/logger'
-import { getCategoryById, URGENCY, REQUEST_STATUS } from '@/config/it-hilfe'
-import { lookupSwissPostalCode } from '@/lib/swiss-postal-codes'
-import { validateITHilfeForm, transformITHilfeFormToPayload } from '@/lib/domain/it-hilfe'
-import { type ITHilfeCreateFormData } from '@/components/it-hilfe-create/types'
-import { UI_FEEDBACK_MS } from '@/config/limits'
+import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { apiFetch } from '@/lib/api/client';
+import { logger } from '@/lib/logger';
+import { getCategoryById, URGENCY, REQUEST_STATUS } from '@/config/it-hilfe';
+import { lookupSwissPostalCode } from '@/lib/swiss-postal-codes';
+import { validateITHilfeForm, transformITHilfeFormToPayload } from '@/lib/domain/it-hilfe';
+import { type ITHilfeCreateFormData } from '@/components/it-hilfe-create/types';
+import { UI_FEEDBACK_MS } from '@/config/limits';
 
 interface RequestData {
-  isOwner: boolean
-  status: string
-  categoryId?: string
-  deviceBrand?: string
-  deviceModel?: string
-  title?: string
-  description?: string
-  urgency?: string
-  budgetTier?: string | null
-  budgetAmountCents?: number
-  postalCode?: string
-  city?: string
-  canton?: string
-  serviceType?: string
-  skillsNeeded?: string[]
-  imageUrls?: string[]
-  aiDiagnosis?: string
-  preferredTechnicianId?: string | null
+  isOwner: boolean;
+  status: string;
+  categoryId?: string;
+  deviceBrand?: string;
+  deviceModel?: string;
+  title?: string;
+  description?: string;
+  urgency?: string;
+  budgetTier?: string | null;
+  budgetAmountCents?: number;
+  postalCode?: string;
+  city?: string;
+  canton?: string;
+  serviceType?: string;
+  skillsNeeded?: string[];
+  imageUrls?: string[];
+  aiDiagnosis?: string;
+  preferredTechnicianId?: string | null;
 }
 
 interface UseEditITHilfeFormErrors {
-  errorNotFound: string
-  errorNotOwner: string
-  errorNotEditable: string
-  errorSaveFailed: string
-  errorGeneric: string
+  errorNotFound: string;
+  errorNotOwner: string;
+  errorNotEditable: string;
+  errorSaveFailed: string;
+  errorGeneric: string;
 }
 
 export function useEditITHilfeForm(id: string, errors: UseEditITHilfeFormErrors) {
-  const { data: session, status: authStatus } = useSession()
-  const router = useRouter()
+  const { data: session, status: authStatus } = useSession();
+  const router = useRouter();
 
-  const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState(false)
-  const [formData, setFormData] = useState<ITHilfeCreateFormData | null>(null)
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
+  const [formData, setFormData] = useState<ITHilfeCreateFormData | null>(null);
 
   useEffect(() => {
     if (authStatus === 'unauthenticated') {
-      router.push(`/auth/login?callbackUrl=/it-hilfe/${id}/edit`)
+      router.push(`/auth/login?callbackUrl=/it-hilfe/${id}/edit`);
     }
-  }, [authStatus, router, id])
+  }, [authStatus, router, id]);
 
   useEffect(() => {
-    if (authStatus !== 'authenticated') return
+    if (authStatus !== 'authenticated') return;
 
     apiFetch<{ request: RequestData }>(`/api/it-hilfe/requests/${id}`).then((result) => {
       if (!result.success || !result.data) {
-        setError(result.error || errors.errorNotFound)
-        setLoading(false)
-        return
+        setError(result.error || errors.errorNotFound);
+        setLoading(false);
+        return;
       }
 
-      const r = result.data.request
+      const r = result.data.request;
 
       if (!r.isOwner) {
-        setError(errors.errorNotOwner)
-        setLoading(false)
-        return
+        setError(errors.errorNotOwner);
+        setLoading(false);
+        return;
       }
 
       if (r.status !== REQUEST_STATUS.OPEN) {
-        setError(errors.errorNotEditable)
-        setLoading(false)
-        return
+        setError(errors.errorNotEditable);
+        setLoading(false);
+        return;
       }
 
       setFormData({
@@ -100,86 +100,86 @@ export function useEditITHilfeForm(id: string, errors: UseEditITHilfeFormErrors)
         // Edit flow is always authenticated; submitterEmail is for the
         // anonymous-create path only. Empty preserves the form-type shape.
         submitterEmail: '',
-      })
-      setLoading(false)
-    })
-  }, [id, authStatus, errors.errorNotFound, errors.errorNotOwner, errors.errorNotEditable])
+      });
+      setLoading(false);
+    });
+  }, [id, authStatus, errors.errorNotFound, errors.errorNotOwner, errors.errorNotEditable]);
 
   const updateField = <K extends keyof ITHilfeCreateFormData>(
     key: K,
     value: ITHilfeCreateFormData[K],
   ) =>
     setFormData((prev) => {
-      if (!prev) return prev
-      const updated = { ...prev, [key]: value }
+      if (!prev) return prev;
+      const updated = { ...prev, [key]: value };
       // A complete Swiss postal code fills city/canton right in the handler.
       if (key === 'postalCode' && typeof value === 'string' && value.length === 4) {
-        const data = lookupSwissPostalCode(value)
+        const data = lookupSwissPostalCode(value);
         if (data) {
-          updated.city = data.city
-          updated.canton = data.canton
+          updated.city = data.city;
+          updated.canton = data.canton;
         }
       }
-      return updated
-    })
+      return updated;
+    });
 
   const handleCategorySelect = (catId: string) => {
-    const category = getCategoryById(catId)
+    const category = getCategoryById(catId);
     setFormData((prev) => {
-      if (!prev) return prev
-      const updated = { ...prev, categoryId: catId }
+      if (!prev) return prev;
+      const updated = { ...prev, categoryId: catId };
       if (category) {
-        updated.skillsNeeded = category.suggestedSkills
+        updated.skillsNeeded = category.suggestedSkills;
       }
-      return updated
-    })
-  }
+      return updated;
+    });
+  };
 
   const handleSkillToggle = (skillId: string) => {
     setFormData((prev) => {
-      if (!prev) return prev
+      if (!prev) return prev;
       return {
         ...prev,
         skillsNeeded: prev.skillsNeeded.includes(skillId)
           ? prev.skillsNeeded.filter((s) => s !== skillId)
           : [...prev.skillsNeeded, skillId],
-      }
-    })
-  }
+      };
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!formData) return
-    setError('')
+    e.preventDefault();
+    if (!formData) return;
+    setError('');
 
-    const validationError = validateITHilfeForm(formData)
+    const validationError = validateITHilfeForm(formData);
     if (validationError) {
-      setError(validationError)
-      return
+      setError(validationError);
+      return;
     }
 
-    setSaving(true)
+    setSaving(true);
     try {
-      const payload = transformITHilfeFormToPayload(formData)
+      const payload = transformITHilfeFormToPayload(formData);
       const result = await apiFetch<unknown>(`/api/it-hilfe/requests/${id}`, {
         method: 'PUT',
         body: payload,
-      })
+      });
 
       if (!result.success) {
-        throw new Error(result.error || errors.errorSaveFailed)
+        throw new Error(result.error || errors.errorSaveFailed);
       }
 
-      setSuccess(true)
-      setTimeout(() => router.push(`/it-hilfe/${id}`), UI_FEEDBACK_MS.REDIRECT)
+      setSuccess(true);
+      setTimeout(() => router.push(`/it-hilfe/${id}`), UI_FEEDBACK_MS.REDIRECT);
     } catch (err) {
-      const message = err instanceof Error ? err.message : errors.errorGeneric
-      setError(message)
-      logger.error('Error updating request', { error: err })
+      const message = err instanceof Error ? err.message : errors.errorGeneric;
+      setError(message);
+      logger.error('Error updating request', { error: err });
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
-  }
+  };
 
   return {
     authStatus,
@@ -192,5 +192,5 @@ export function useEditITHilfeForm(id: string, errors: UseEditITHilfeFormErrors)
     handleCategorySelect,
     handleSkillToggle,
     handleSubmit,
-  }
+  };
 }

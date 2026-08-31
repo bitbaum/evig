@@ -14,16 +14,22 @@ export const DECISION_STATUS = {
 
 export const DECISION_STATUSES = Object.values(DECISION_STATUS);
 
-export type DecisionStatus = typeof DECISION_STATUS[keyof typeof DECISION_STATUS];
+export type DecisionStatus = (typeof DECISION_STATUS)[keyof typeof DECISION_STATUS];
 
-export const DECISION_STATUS_CONFIG: Record<
-  DecisionStatus,
-  { label: string; color: string }
-> = {
+export const DECISION_STATUS_CONFIG: Record<DecisionStatus, { label: string; color: string }> = {
   draft: { label: 'Entwurf', color: 'bg-neutral-100 text-neutral-700' },
-  discussion: { label: 'Diskussion', color: 'bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-300' },
-  voting: { label: 'Abstimmung', color: 'bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-200' },
-  closed: { label: 'Abgeschlossen', color: 'bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-300' },
+  discussion: {
+    label: 'Diskussion',
+    color: 'bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-300',
+  },
+  voting: {
+    label: 'Abstimmung',
+    color: 'bg-warning-100 dark:bg-warning-900/30 text-warning-700 dark:text-warning-200',
+  },
+  closed: {
+    label: 'Abgeschlossen',
+    color: 'bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-300',
+  },
   cancelled: { label: 'Abgebrochen', color: 'bg-error-100 text-error-700' },
 };
 
@@ -100,14 +106,10 @@ export const VOTING_METHODS = [
 
 export type VotingMethod = (typeof VOTING_METHODS)[number];
 
-export const VOTING_METHOD_CONFIG: Record<
-  VotingMethod,
-  { label: string; description: string }
-> = {
+export const VOTING_METHOD_CONFIG: Record<VotingMethod, { label: string; description: string }> = {
   consent: {
     label: 'Konsent',
-    description:
-      'Zustimmung, Enthaltung, Ablehnung oder Blockierung. Kein Block = angenommen.',
+    description: 'Zustimmung, Enthaltung, Ablehnung oder Blockierung. Kein Block = angenommen.',
   },
   approval: {
     label: 'Zustimmungswahl',
@@ -197,7 +199,10 @@ export const PARTICIPANT_SCOPE = {
 
 export const PARTICIPANT_SCOPE_DEFAULT = PARTICIPANT_SCOPE.ALL_STAFF;
 
-export const DEFAULT_QUORUM: { type: 'percentage' | 'absolute'; value: number } = { type: 'percentage', value: 50 };
+export const DEFAULT_QUORUM: { type: 'percentage' | 'absolute'; value: number } = {
+  type: 'percentage',
+  value: 50,
+};
 
 export const PARTICIPANT_SCOPES = [
   PARTICIPANT_SCOPE.ALL_STAFF,
@@ -347,20 +352,15 @@ export const DECISION_TEMPLATES: DecisionTemplate[] = [
 
 // ─── Consent Responses ────────────────────────────────────────────────────
 
-export const CONSENT_RESPONSES = [
-  'agree',
-  'abstain',
-  'disagree',
-  'block',
-] as const;
+export const CONSENT_RESPONSES = ['agree', 'abstain', 'disagree', 'block'] as const;
 
 export type ConsentResponse = (typeof CONSENT_RESPONSES)[number];
 
-export const CONSENT_RESPONSE_CONFIG: Record<
-  ConsentResponse,
-  { label: string; color: string }
-> = {
-  agree: { label: 'Zustimmen', color: 'bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-300' },
+export const CONSENT_RESPONSE_CONFIG: Record<ConsentResponse, { label: string; color: string }> = {
+  agree: {
+    label: 'Zustimmen',
+    color: 'bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-300',
+  },
   abstain: { label: 'Enthalten', color: 'bg-neutral-100 text-neutral-700' },
   disagree: { label: 'Ablehnen', color: 'bg-orange-100 text-orange-700' },
   block: { label: 'Blockieren', color: 'bg-error-100 text-error-700' },
@@ -370,13 +370,9 @@ export const CONSENT_RESPONSE_CONFIG: Record<
 
 export const SIMPLE_MAJORITY_RESPONSES = ['yes', 'no', 'abstain'] as const;
 
-export type SimpleMajorityResponse =
-  (typeof SIMPLE_MAJORITY_RESPONSES)[number];
+export type SimpleMajorityResponse = (typeof SIMPLE_MAJORITY_RESPONSES)[number];
 
-export const SIMPLE_MAJORITY_RESPONSE_CONFIG: Record<
-  SimpleMajorityResponse,
-  { label: string }
-> = {
+export const SIMPLE_MAJORITY_RESPONSE_CONFIG: Record<SimpleMajorityResponse, { label: string }> = {
   yes: { label: 'Ja' },
   no: { label: 'Nein' },
   abstain: { label: 'Enthaltung' },
@@ -389,30 +385,22 @@ export const THUMBS_UP_DOWN_CHOICES = ['up', 'down'] as const;
 
 export type ThumbsUpDownChoice = (typeof THUMBS_UP_DOWN_CHOICES)[number];
 
-export const THUMBS_UP_DOWN_CHOICE_CONFIG: Record<
-  ThumbsUpDownChoice,
-  { label: string }
-> = {
+export const THUMBS_UP_DOWN_CHOICE_CONFIG: Record<ThumbsUpDownChoice, { label: string }> = {
   up: { label: 'Dafür' },
   down: { label: 'Dagegen' },
 };
 
 // ─── Comment Positions ────────────────────────────────────────────────────
 
-export const COMMENT_POSITIONS = [
-  'for',
-  'against',
-  'question',
-  'info',
-] as const;
+export const COMMENT_POSITIONS = ['for', 'against', 'question', 'info'] as const;
 
 export type CommentPosition = (typeof COMMENT_POSITIONS)[number];
 
-export const COMMENT_POSITION_CONFIG: Record<
-  CommentPosition,
-  { label: string; color: string }
-> = {
-  for: { label: 'Dafür', color: 'bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-300' },
+export const COMMENT_POSITION_CONFIG: Record<CommentPosition, { label: string; color: string }> = {
+  for: {
+    label: 'Dafür',
+    color: 'bg-success-100 dark:bg-success-900/30 text-success-700 dark:text-success-300',
+  },
   against: { label: 'Dagegen', color: 'bg-error-100 text-error-700' },
   question: { label: 'Frage', color: 'bg-neutral-100 text-neutral-700' },
   info: { label: 'Information', color: 'bg-purple-100 text-purple-700' },
@@ -438,7 +426,11 @@ export const SCORE_RANGE = { min: 1, max: 5 } as const;
 
 export const EDITABLE_STATUSES: readonly DecisionStatus[] = ['draft', 'discussion'];
 export const COMMENTABLE_STATUSES: readonly DecisionStatus[] = ['discussion', 'voting', 'closed'];
-export const PARTICIPATABLE_STATUSES: readonly DecisionStatus[] = ['discussion', 'voting', 'closed'];
+export const PARTICIPATABLE_STATUSES: readonly DecisionStatus[] = [
+  'discussion',
+  'voting',
+  'closed',
+];
 export const READ_ONLY_STATUSES: readonly DecisionStatus[] = ['closed', 'cancelled'];
 
 export function isStatusEditable(status: DecisionStatus): boolean {
@@ -460,7 +452,7 @@ export const DECISION_CATEGORIES = {
   OPERATIV: 'operativ',
 } as const;
 
-export type DecisionCategory = typeof DECISION_CATEGORIES[keyof typeof DECISION_CATEGORIES];
+export type DecisionCategory = (typeof DECISION_CATEGORIES)[keyof typeof DECISION_CATEGORIES];
 
 export const DECISION_CATEGORY_LABELS: Record<DecisionCategory, string> = {
   vorstandsbeschluss: 'Vorstandsbeschluss',

@@ -1,32 +1,32 @@
-'use client'
+'use client';
 
-import { useEffect, useState } from 'react'
-import Link from 'next/link'
-import { LogOut, Loader2, AlertCircle } from 'lucide-react'
-import { logger } from '@/lib/logger'
-import { Button } from '@/components/ui/button'
-import Heading from '@/components/ui/Heading'
-import { useTranslations } from 'next-intl'
-import { Logo } from '@/components/ui/Logo'
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { LogOut, Loader2, AlertCircle } from 'lucide-react';
+import { logger } from '@/lib/logger';
+import { Button } from '@/components/ui/button';
+import Heading from '@/components/ui/Heading';
+import { useTranslations } from 'next-intl';
+import { Logo } from '@/components/ui/Logo';
 
-const LOGOUT_CALLBACK = '/auth/login?logout=1'
+const LOGOUT_CALLBACK = '/auth/login?logout=1';
 
 async function forceServerSignOut(callbackUrl: string): Promise<void> {
-  const csrfRes = await fetch('/api/auth/csrf', { credentials: 'same-origin' })
+  const csrfRes = await fetch('/api/auth/csrf', { credentials: 'same-origin' });
   if (!csrfRes.ok) {
-    throw new Error('Failed to get CSRF token')
+    throw new Error('Failed to get CSRF token');
   }
 
-  const csrfData = (await csrfRes.json()) as { csrfToken?: string }
+  const csrfData = (await csrfRes.json()) as { csrfToken?: string };
   if (!csrfData.csrfToken) {
-    throw new Error('Missing CSRF token')
+    throw new Error('Missing CSRF token');
   }
 
   const body = new URLSearchParams({
     csrfToken: csrfData.csrfToken,
     callbackUrl,
     json: 'true',
-  })
+  });
 
   const signOutRes = await fetch('/api/auth/signout', {
     method: 'POST',
@@ -35,31 +35,31 @@ async function forceServerSignOut(callbackUrl: string): Promise<void> {
     },
     credentials: 'same-origin',
     body,
-  })
+  });
 
   if (!signOutRes.ok) {
-    throw new Error('Signout request failed')
+    throw new Error('Signout request failed');
   }
 }
 
 export default function LogoutPage() {
-  const t = useTranslations('auth.logout')
-  const [error, setError] = useState<string | null>(null)
+  const t = useTranslations('auth.logout');
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    document.title = t('pageTitle')
+    document.title = t('pageTitle');
 
     const performSignOut = async () => {
       try {
-        await forceServerSignOut(LOGOUT_CALLBACK)
-        window.location.replace(LOGOUT_CALLBACK)
+        await forceServerSignOut(LOGOUT_CALLBACK);
+        window.location.replace(LOGOUT_CALLBACK);
       } catch {
-        setError(t('errorMessage'))
+        setError(t('errorMessage'));
       }
-    }
+    };
 
-    performSignOut()
-  }, [t])
+    performSignOut();
+  }, [t]);
 
   return (
     <main className="min-h-screen bg-surface-raised py-12 px-4 sm:px-6 lg:px-8">
@@ -94,15 +94,15 @@ export default function LogoutPage() {
                 <div className="space-y-3">
                   <Button
                     onClick={() => {
-                      setError(null)
+                      setError(null);
                       void forceServerSignOut(LOGOUT_CALLBACK)
                         .then(() => {
-                          window.location.replace(LOGOUT_CALLBACK)
+                          window.location.replace(LOGOUT_CALLBACK);
                         })
                         .catch((retryError) => {
-                          logger.error('Logout retry failed', { error: retryError })
-                          setError(t('errorMessage'))
-                        })
+                          logger.error('Logout retry failed', { error: retryError });
+                          setError(t('errorMessage'));
+                        });
                     }}
                     variant="destructive"
                     className="w-full gap-2"
@@ -120,5 +120,5 @@ export default function LogoutPage() {
         </div>
       </div>
     </main>
-  )
+  );
 }

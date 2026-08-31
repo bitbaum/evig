@@ -1,20 +1,20 @@
-import { Link } from '@/i18n/navigation'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
-import { getTranslations } from 'next-intl/server'
-import { BlogPost } from '@/lib/blog'
-import { Eyebrow } from '@/components/ui/Eyebrow'
+import { Link } from '@/i18n/navigation';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
+import { BlogPost } from '@/lib/blog';
+import { Eyebrow } from '@/components/ui/Eyebrow';
 
 interface BlogPrevNextProps {
   /** Chronologically newer post (published after the current one). */
-  newer: BlogPost | null
+  newer: BlogPost | null;
   /** Chronologically older post (published before the current one). */
-  older: BlogPost | null
+  older: BlogPost | null;
 }
 
 /** Sequential navigation between posts: newer on the left, older on the right. */
 export default async function BlogPrevNext({ newer, older }: BlogPrevNextProps) {
-  if (!newer && !older) return null
-  const t = await getTranslations('blog')
+  if (!newer && !older) return null;
+  const t = await getTranslations('blog');
 
   return (
     <nav aria-label={t('prevNext.label')} className="mx-auto max-w-[720px] px-4 pb-4 sm:px-6">
@@ -51,5 +51,5 @@ export default async function BlogPrevNext({ newer, older }: BlogPrevNextProps) 
         )}
       </div>
     </nav>
-  )
+  );
 }

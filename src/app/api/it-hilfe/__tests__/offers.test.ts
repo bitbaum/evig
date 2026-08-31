@@ -17,15 +17,15 @@ const mockSelectChain = {
   offset: jest.fn().mockReturnThis(),
   innerJoin: jest.fn().mockReturnThis(),
   leftJoin: jest.fn().mockReturnThis(),
-}
+};
 const mockInsertChain = {
   values: jest.fn().mockReturnThis(),
   returning: jest.fn().mockResolvedValue([]),
-}
+};
 const mockUpdateChain = {
   set: jest.fn().mockReturnThis(),
   where: jest.fn().mockResolvedValue([]),
-}
+};
 
 // db.transaction mock: the POST route inserts the offer AND bumps offerCount
 // inside one transaction, so tx must expose insert + update (and execute for
@@ -36,10 +36,10 @@ const mockUpdateChain = {
 const mockDbTransaction = jest.fn(async (fn: (tx: unknown) => unknown) => {
   const txUpdate = jest.fn(() => ({
     set: jest.fn(() => ({ where: jest.fn().mockResolvedValue(undefined) })),
-  }))
-  const txExecute = jest.fn().mockResolvedValue({ rows: [{ status: 'pending' }] })
-  return fn({ insert: jest.fn(() => mockInsertChain), update: txUpdate, execute: txExecute })
-})
+  }));
+  const txExecute = jest.fn().mockResolvedValue({ rows: [{ status: 'pending' }] });
+  return fn({ insert: jest.fn(() => mockInsertChain), update: txUpdate, execute: txExecute });
+});
 
 jest.mock('@/db', () => ({
   db: {
@@ -48,7 +48,7 @@ jest.mock('@/db', () => ({
     update: jest.fn(() => mockUpdateChain),
     transaction: (...args: unknown[]) => mockDbTransaction.apply(null, args as never),
   },
-}))
+}));
 
 // DELETE route also uses Drizzle now (no raw SQL mock needed)
 
@@ -58,176 +58,195 @@ jest.mock('@/lib/logger', () => ({
     warn: jest.fn(),
     error: jest.fn(),
   },
-}))
+}));
 
 jest.mock('@/auth', () => ({
   auth: jest.fn(),
-}))
+}));
 
 jest.mock('@/lib/email', () => ({
   sendCustomEmail: jest.fn().mockResolvedValue({ success: true }),
-}))
+}));
 
 jest.mock('@/lib/email/templates/it-hilfe', () => ({
   itHilfeNewOfferReceived: jest.fn().mockReturnValue({ subject: '', html: '' }),
-}))
+}));
 
 jest.mock('@/lib/security/rate-limit', () => ({
   rateLimiters: {
     offerCreate: jest.fn().mockReturnValue(true),
   },
-}))
+}));
 
 jest.mock('@/lib/it-hilfe/notifications', () => ({
   sendItHilfeNotification: jest.fn(),
-}))
+}));
 
-import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
-import { db } from '@/db'
+import { NextRequest } from 'next/server';
+import { auth } from '@/auth';
+import { db } from '@/db';
 
-const mockAuth = auth as jest.MockedFunction<typeof auth>
-const mockDb = db as jest.Mocked<typeof db>
+const mockAuth = auth as jest.MockedFunction<typeof auth>;
+const mockDb = db as jest.Mocked<typeof db>;
 
 function makeRequest(url: string, init?: RequestInit) {
-  return new NextRequest(new URL(url, 'http://localhost:3001'), init as never)
+  return new NextRequest(new URL(url, 'http://localhost:3001'), init as never);
 }
 
-const validRequestId = '11111111-1111-1111-1111-111111111111'
-const validOfferId = '22222222-2222-2222-2222-222222222222'
+const validRequestId = '11111111-1111-1111-1111-111111111111';
+const validOfferId = '22222222-2222-2222-2222-222222222222';
 
 // --- List offers (GET /api/it-hilfe/requests/[id]/offers) ---
 
 describe('GET /api/it-hilfe/requests/[id]/offers', () => {
-  let GET: (req: NextRequest, ctx: { params: Promise<{ id: string }> }) => Promise<Response>
+  let GET: (req: NextRequest, ctx: { params: Promise<{ id: string }> }) => Promise<Response>;
 
   beforeAll(async () => {
-    const mod = await import('../../it-hilfe/requests/[id]/offers/route')
-    GET = mod.GET
-  })
+    const mod = await import('../../it-hilfe/requests/[id]/offers/route');
+    GET = mod.GET;
+  });
 
   beforeEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
-  const makeCtx = (id: string) => ({ params: Promise.resolve({ id }) })
+  const makeCtx = (id: string) => ({ params: Promise.resolve({ id }) });
 
   it('requires authentication', async () => {
-    mockAuth.mockResolvedValue(null as never)
+    mockAuth.mockResolvedValue(null as never);
 
-    const res = await GET(makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`), makeCtx(validRequestId))
+    const res = await GET(
+      makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`),
+      makeCtx(validRequestId),
+    );
 
-    expect(res.status).toBe(401)
-  })
+    expect(res.status).toBe(401);
+  });
 
   it('returns offers for request owner', async () => {
     mockAuth.mockResolvedValue({
       user: { id: 'user-owner' },
       expires: '',
-    } as never)
+    } as never);
 
     // First select: check request ownership
-    mockSelectChain.where.mockResolvedValueOnce([{ requesterId: 'user-owner', status: 'open' }])
+    mockSelectChain.where.mockResolvedValueOnce([{ requesterId: 'user-owner', status: 'open' }]);
     // Second select: get offers
-    mockSelectChain.orderBy.mockResolvedValueOnce([{
-      id: validOfferId,
-      requestId: validRequestId,
-      helperId: 'user-helper',
-      helperName: 'Lisa Techniker',
-      helperEmail: 'lisa@example.com',
-      message: 'Ich kann dir mit dem Laptop helfen, habe viel Erfahrung damit.',
-      estimatedTime: '1-2 Stunden',
-      proposedCompensation: 'CHF 30',
-      relevantSkills: ['hardware_repair'],
-      status: 'pending',
-      createdAt: new Date().toISOString(),
-    }])
+    mockSelectChain.orderBy.mockResolvedValueOnce([
+      {
+        id: validOfferId,
+        requestId: validRequestId,
+        helperId: 'user-helper',
+        helperName: 'Lisa Techniker',
+        helperEmail: 'lisa@example.com',
+        message: 'Ich kann dir mit dem Laptop helfen, habe viel Erfahrung damit.',
+        estimatedTime: '1-2 Stunden',
+        proposedCompensation: 'CHF 30',
+        relevantSkills: ['hardware_repair'],
+        status: 'pending',
+        createdAt: new Date().toISOString(),
+      },
+    ]);
 
-    const res = await GET(makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`), makeCtx(validRequestId))
-    const body = await res.json()
+    const res = await GET(
+      makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`),
+      makeCtx(validRequestId),
+    );
+    const body = await res.json();
 
-    expect(body.success).toBe(true)
-    expect(body.data.offers).toHaveLength(1)
-    expect(body.data.offers[0].helperName).toBe('Lisa Techniker')
-    expect(body.data.offers[0].relevantSkills).toEqual(['hardware_repair'])
-  })
+    expect(body.success).toBe(true);
+    expect(body.data.offers).toHaveLength(1);
+    expect(body.data.offers[0].helperName).toBe('Lisa Techniker');
+    expect(body.data.offers[0].relevantSkills).toEqual(['hardware_repair']);
+  });
 
   it('forbids non-owners from viewing offers', async () => {
     mockAuth.mockResolvedValue({
       user: { id: 'user-other' },
       expires: '',
-    } as never)
-    mockSelectChain.where.mockResolvedValueOnce([{ requesterId: 'user-owner', status: 'open' }])
+    } as never);
+    mockSelectChain.where.mockResolvedValueOnce([{ requesterId: 'user-owner', status: 'open' }]);
 
-    const res = await GET(makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`), makeCtx(validRequestId))
+    const res = await GET(
+      makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`),
+      makeCtx(validRequestId),
+    );
 
-    expect(res.status).toBe(403)
-  })
+    expect(res.status).toBe(403);
+  });
 
   it('returns 404 for non-existent request', async () => {
     mockAuth.mockResolvedValue({
       user: { id: 'user-owner' },
       expires: '',
-    } as never)
-    mockSelectChain.where.mockResolvedValueOnce([])
+    } as never);
+    mockSelectChain.where.mockResolvedValueOnce([]);
 
-    const res = await GET(makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`), makeCtx(validRequestId))
+    const res = await GET(
+      makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`),
+      makeCtx(validRequestId),
+    );
 
-    expect(res.status).toBe(404)
-  })
+    expect(res.status).toBe(404);
+  });
 
   it('normalizes null skills to empty array', async () => {
     mockAuth.mockResolvedValue({
       user: { id: 'user-owner' },
       expires: '',
-    } as never)
-    mockSelectChain.where.mockResolvedValueOnce([{ requesterId: 'user-owner', status: 'open' }])
-    mockSelectChain.orderBy.mockResolvedValueOnce([{
-      id: validOfferId,
-      requestId: validRequestId,
-      helperId: 'user-helper',
-      helperName: 'Lisa Techniker',
-      helperEmail: 'lisa@example.com',
-      message: 'Hilfe anbieten',
-      estimatedTime: null,
-      proposedCompensation: null,
-      relevantSkills: null,
-      status: 'pending',
-      createdAt: new Date().toISOString(),
-    }])
+    } as never);
+    mockSelectChain.where.mockResolvedValueOnce([{ requesterId: 'user-owner', status: 'open' }]);
+    mockSelectChain.orderBy.mockResolvedValueOnce([
+      {
+        id: validOfferId,
+        requestId: validRequestId,
+        helperId: 'user-helper',
+        helperName: 'Lisa Techniker',
+        helperEmail: 'lisa@example.com',
+        message: 'Hilfe anbieten',
+        estimatedTime: null,
+        proposedCompensation: null,
+        relevantSkills: null,
+        status: 'pending',
+        createdAt: new Date().toISOString(),
+      },
+    ]);
 
-    const res = await GET(makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`), makeCtx(validRequestId))
-    const body = await res.json()
+    const res = await GET(
+      makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`),
+      makeCtx(validRequestId),
+    );
+    const body = await res.json();
 
-    expect(body.data.offers[0].relevantSkills).toEqual([])
-  })
-})
+    expect(body.data.offers[0].relevantSkills).toEqual([]);
+  });
+});
 
 // --- Submit offer (POST /api/it-hilfe/requests/[id]/offers) ---
 
 describe('POST /api/it-hilfe/requests/[id]/offers', () => {
-  let POST: (req: NextRequest, ctx: { params: Promise<{ id: string }> }) => Promise<Response>
+  let POST: (req: NextRequest, ctx: { params: Promise<{ id: string }> }) => Promise<Response>;
 
   beforeAll(async () => {
-    const mod = await import('../../it-hilfe/requests/[id]/offers/route')
-    POST = mod.POST
-  })
+    const mod = await import('../../it-hilfe/requests/[id]/offers/route');
+    POST = mod.POST;
+  });
 
   beforeEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
-  const makeCtx = (id: string) => ({ params: Promise.resolve({ id }) })
+  const makeCtx = (id: string) => ({ params: Promise.resolve({ id }) });
 
   const validOfferBody = {
     message: 'Ich kann dir helfen, habe viel Erfahrung mit Laptops.',
     estimatedTime: '1-2 Stunden',
     proposedCompensation: 'CHF 30',
     relevantSkills: [],
-  }
+  };
 
   it('requires authentication', async () => {
-    mockAuth.mockResolvedValue(null as never)
+    mockAuth.mockResolvedValue(null as never);
 
     const res = await POST(
       makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`, {
@@ -235,32 +254,37 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
         body: JSON.stringify(validOfferBody),
       }),
       makeCtx(validRequestId),
-    )
+    );
 
-    expect(res.status).toBe(401)
-  })
+    expect(res.status).toBe(401);
+  });
 
   it('creates an offer successfully', async () => {
     mockAuth.mockResolvedValue({
       user: { id: 'user-helper', name: 'Lisa', email: 'lisa@test.ch' },
       expires: '',
-    } as never)
+    } as never);
 
     // Request exists and is open (with innerJoin to users)
-    mockSelectChain.where.mockResolvedValueOnce([{
-      requesterId: 'user-owner', status: 'open', title: 'Laptop',
-      requester_name: 'Hans', requester_email: 'hans@test.ch',
-    }])
+    mockSelectChain.where.mockResolvedValueOnce([
+      {
+        requesterId: 'user-owner',
+        status: 'open',
+        title: 'Laptop',
+        requester_name: 'Hans',
+        requester_email: 'hans@test.ch',
+      },
+    ]);
     // Not expired
-    mockSelectChain.where.mockResolvedValueOnce([])
+    mockSelectChain.where.mockResolvedValueOnce([]);
     // No existing offer
-    mockSelectChain.where.mockResolvedValueOnce([])
+    mockSelectChain.where.mockResolvedValueOnce([]);
     // Active technician profile — required to offer (only technicians may respond)
-    mockSelectChain.where.mockResolvedValueOnce([{ id: 'rp-active' }])
+    mockSelectChain.where.mockResolvedValueOnce([{ id: 'rp-active' }]);
     // INSERT offer
-    mockInsertChain.returning.mockResolvedValueOnce([{ id: validOfferId }])
+    mockInsertChain.returning.mockResolvedValueOnce([{ id: validOfferId }]);
     // UPDATE offerCount increment
-    mockUpdateChain.where.mockResolvedValueOnce([])
+    mockUpdateChain.where.mockResolvedValueOnce([]);
 
     const res = await POST(
       makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`, {
@@ -268,23 +292,28 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
         body: JSON.stringify(validOfferBody),
       }),
       makeCtx(validRequestId),
-    )
-    const body = await res.json()
+    );
+    const body = await res.json();
 
-    expect(res.status).toBe(201)
-    expect(body.success).toBe(true)
-    expect(body.data.offerId).toBe(validOfferId)
-  })
+    expect(res.status).toBe(201);
+    expect(body.success).toBe(true);
+    expect(body.data.offerId).toBe(validOfferId);
+  });
 
   it('prevents offering on own request', async () => {
     mockAuth.mockResolvedValue({
       user: { id: 'user-owner', name: 'Hans', email: 'hans@test.ch' },
       expires: '',
-    } as never)
-    mockSelectChain.where.mockResolvedValueOnce([{
-      requesterId: 'user-owner', status: 'open', title: 'Laptop',
-      requester_name: 'Hans', requester_email: 'hans@test.ch',
-    }])
+    } as never);
+    mockSelectChain.where.mockResolvedValueOnce([
+      {
+        requesterId: 'user-owner',
+        status: 'open',
+        title: 'Laptop',
+        requester_name: 'Hans',
+        requester_email: 'hans@test.ch',
+      },
+    ]);
 
     const res = await POST(
       makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`, {
@@ -292,25 +321,30 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
         body: JSON.stringify(validOfferBody),
       }),
       makeCtx(validRequestId),
-    )
+    );
 
-    expect(res.status).toBe(400)
-    const body = await res.json()
-    expect(body.error).toContain('eigene Anfrage')
-  })
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.error).toContain('eigene Anfrage');
+  });
 
   it('prevents duplicate offers', async () => {
     mockAuth.mockResolvedValue({
       user: { id: 'user-helper', name: 'Lisa', email: 'lisa@test.ch' },
       expires: '',
-    } as never)
+    } as never);
     mockSelectChain.where
-      .mockResolvedValueOnce([{
-        requesterId: 'user-owner', status: 'open', title: 'Laptop',
-        requester_name: 'Hans', requester_email: 'hans@test.ch',
-      }])
+      .mockResolvedValueOnce([
+        {
+          requesterId: 'user-owner',
+          status: 'open',
+          title: 'Laptop',
+          requester_name: 'Hans',
+          requester_email: 'hans@test.ch',
+        },
+      ])
       .mockResolvedValueOnce([]) // not expired
-      .mockResolvedValueOnce([{ id: 'existing-offer' }]) // existing offer
+      .mockResolvedValueOnce([{ id: 'existing-offer' }]); // existing offer
 
     const res = await POST(
       makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`, {
@@ -318,22 +352,27 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
         body: JSON.stringify(validOfferBody),
       }),
       makeCtx(validRequestId),
-    )
+    );
 
-    expect(res.status).toBe(400)
-    const body = await res.json()
-    expect(body.error).toContain('bereits ein Angebot')
-  })
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.error).toContain('bereits ein Angebot');
+  });
 
   it('rejects offers on closed requests', async () => {
     mockAuth.mockResolvedValue({
       user: { id: 'user-helper', name: 'Lisa', email: 'lisa@test.ch' },
       expires: '',
-    } as never)
-    mockSelectChain.where.mockResolvedValueOnce([{
-      requesterId: 'user-owner', status: 'matched', title: 'Laptop',
-      requester_name: 'Hans', requester_email: 'hans@test.ch',
-    }])
+    } as never);
+    mockSelectChain.where.mockResolvedValueOnce([
+      {
+        requesterId: 'user-owner',
+        status: 'matched',
+        title: 'Laptop',
+        requester_name: 'Hans',
+        requester_email: 'hans@test.ch',
+      },
+    ]);
 
     const res = await POST(
       makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`, {
@@ -341,24 +380,29 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
         body: JSON.stringify(validOfferBody),
       }),
       makeCtx(validRequestId),
-    )
+    );
 
-    expect(res.status).toBe(400)
-    const body = await res.json()
-    expect(body.error).toContain('keine neuen Angebote')
-  })
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.error).toContain('keine neuen Angebote');
+  });
 
   it('rejects offers on expired requests', async () => {
     mockAuth.mockResolvedValue({
       user: { id: 'user-helper', name: 'Lisa', email: 'lisa@test.ch' },
       expires: '',
-    } as never)
+    } as never);
     mockSelectChain.where
-      .mockResolvedValueOnce([{
-        requesterId: 'user-owner', status: 'open', title: 'Laptop',
-        requester_name: 'Hans', requester_email: 'hans@test.ch',
-      }])
-      .mockResolvedValueOnce([{ id: validRequestId }]) // expired
+      .mockResolvedValueOnce([
+        {
+          requesterId: 'user-owner',
+          status: 'open',
+          title: 'Laptop',
+          requester_name: 'Hans',
+          requester_email: 'hans@test.ch',
+        },
+      ])
+      .mockResolvedValueOnce([{ id: validRequestId }]); // expired
 
     const res = await POST(
       makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`, {
@@ -366,25 +410,30 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
         body: JSON.stringify(validOfferBody),
       }),
       makeCtx(validRequestId),
-    )
+    );
 
-    expect(res.status).toBe(400)
-    const body = await res.json()
-    expect(body.error).toContain('abgelaufen')
-  })
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.error).toContain('abgelaufen');
+  });
 
   it('rejects message shorter than 20 characters', async () => {
     mockAuth.mockResolvedValue({
       user: { id: 'user-helper', name: 'Lisa', email: 'lisa@test.ch' },
       expires: '',
-    } as never)
+    } as never);
     mockSelectChain.where
-      .mockResolvedValueOnce([{
-        requesterId: 'user-owner', status: 'open', title: 'Laptop',
-        requester_name: 'Hans', requester_email: 'hans@test.ch',
-      }])
+      .mockResolvedValueOnce([
+        {
+          requesterId: 'user-owner',
+          status: 'open',
+          title: 'Laptop',
+          requester_name: 'Hans',
+          requester_email: 'hans@test.ch',
+        },
+      ])
       .mockResolvedValueOnce([])
-      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([]);
 
     const res = await POST(
       makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`, {
@@ -392,25 +441,30 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
         body: JSON.stringify({ ...validOfferBody, message: 'Too short' }),
       }),
       makeCtx(validRequestId),
-    )
+    );
 
-    expect(res.status).toBe(400)
-    const body = await res.json()
-    expect(JSON.stringify(body)).toContain('20')
-  })
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(JSON.stringify(body)).toContain('20');
+  });
 
   it('rejects empty message', async () => {
     mockAuth.mockResolvedValue({
       user: { id: 'user-helper', name: 'Lisa', email: 'lisa@test.ch' },
       expires: '',
-    } as never)
+    } as never);
     mockSelectChain.where
-      .mockResolvedValueOnce([{
-        requesterId: 'user-owner', status: 'open', title: 'Laptop',
-        requester_name: 'Hans', requester_email: 'hans@test.ch',
-      }])
+      .mockResolvedValueOnce([
+        {
+          requesterId: 'user-owner',
+          status: 'open',
+          title: 'Laptop',
+          requester_name: 'Hans',
+          requester_email: 'hans@test.ch',
+        },
+      ])
       .mockResolvedValueOnce([])
-      .mockResolvedValueOnce([])
+      .mockResolvedValueOnce([]);
 
     const res = await POST(
       makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers`, {
@@ -418,125 +472,136 @@ describe('POST /api/it-hilfe/requests/[id]/offers', () => {
         body: JSON.stringify({ ...validOfferBody, message: '' }),
       }),
       makeCtx(validRequestId),
-    )
+    );
 
-    expect(res.status).toBe(400)
-  })
-})
+    expect(res.status).toBe(400);
+  });
+});
 
 // --- Withdraw offer (DELETE /api/it-hilfe/requests/[id]/offers/[offerId]) ---
 // This route still uses raw SQL, so we test with mockQuery
 
 describe('DELETE /api/it-hilfe/requests/[id]/offers/[offerId]', () => {
-  let DELETE: (req: NextRequest, ctx: { params: Promise<{ id: string; offerId: string }> }) => Promise<Response>
+  let DELETE: (
+    req: NextRequest,
+    ctx: { params: Promise<{ id: string; offerId: string }> },
+  ) => Promise<Response>;
 
   beforeAll(async () => {
-    const mod = await import('../../it-hilfe/requests/[id]/offers/[offerId]/route')
-    DELETE = mod.DELETE
-  })
+    const mod = await import('../../it-hilfe/requests/[id]/offers/[offerId]/route');
+    DELETE = mod.DELETE;
+  });
 
   beforeEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
-  const makeCtx = (id: string, offerId: string) => ({ params: Promise.resolve({ id, offerId }) })
+  const makeCtx = (id: string, offerId: string) => ({ params: Promise.resolve({ id, offerId }) });
 
   it('requires authentication', async () => {
-    mockAuth.mockResolvedValue(null as never)
+    mockAuth.mockResolvedValue(null as never);
 
     const res = await DELETE(
-      makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers/${validOfferId}`, { method: 'DELETE' }),
+      makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers/${validOfferId}`, {
+        method: 'DELETE',
+      }),
       makeCtx(validRequestId, validOfferId),
-    )
+    );
 
-    expect(res.status).toBe(401)
-  })
+    expect(res.status).toBe(401);
+  });
 
   it('withdraws a pending offer', async () => {
     mockAuth.mockResolvedValue({
       user: { id: 'user-helper' },
       expires: '',
-    } as never)
+    } as never);
     // db.select().from().where() — returns offer
     mockSelectChain.where.mockResolvedValueOnce([
-      { helperId: 'user-helper', status: 'pending', requestId: validRequestId }
-    ])
+      { helperId: 'user-helper', status: 'pending', requestId: validRequestId },
+    ]);
     // db.update().set().where() — update offer status (2 calls: offer + request)
-    mockUpdateChain.where
-      .mockResolvedValueOnce([])
-      .mockResolvedValueOnce([])
+    mockUpdateChain.where.mockResolvedValueOnce([]).mockResolvedValueOnce([]);
 
     const res = await DELETE(
-      makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers/${validOfferId}`, { method: 'DELETE' }),
+      makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers/${validOfferId}`, {
+        method: 'DELETE',
+      }),
       makeCtx(validRequestId, validOfferId),
-    )
-    const body = await res.json()
+    );
+    const body = await res.json();
 
-    expect(body.success).toBe(true)
-  })
+    expect(body.success).toBe(true);
+  });
 
   it('forbids withdrawing another users offer', async () => {
     mockAuth.mockResolvedValue({
       user: { id: 'user-other' },
       expires: '',
-    } as never)
+    } as never);
     mockSelectChain.where.mockResolvedValueOnce([
-      { helperId: 'user-helper', status: 'pending', requestId: validRequestId }
-    ])
+      { helperId: 'user-helper', status: 'pending', requestId: validRequestId },
+    ]);
 
     const res = await DELETE(
-      makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers/${validOfferId}`, { method: 'DELETE' }),
+      makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers/${validOfferId}`, {
+        method: 'DELETE',
+      }),
       makeCtx(validRequestId, validOfferId),
-    )
+    );
 
-    expect(res.status).toBe(403)
-  })
+    expect(res.status).toBe(403);
+  });
 
   it('prevents withdrawing non-pending offers', async () => {
     mockAuth.mockResolvedValue({
       user: { id: 'user-helper' },
       expires: '',
-    } as never)
+    } as never);
     mockSelectChain.where.mockResolvedValueOnce([
-      { helperId: 'user-helper', status: 'accepted', requestId: validRequestId }
-    ])
+      { helperId: 'user-helper', status: 'accepted', requestId: validRequestId },
+    ]);
 
     const res = await DELETE(
-      makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers/${validOfferId}`, { method: 'DELETE' }),
+      makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers/${validOfferId}`, {
+        method: 'DELETE',
+      }),
       makeCtx(validRequestId, validOfferId),
-    )
+    );
 
-    expect(res.status).toBe(400)
-    const body = await res.json()
-    expect(body.error).toContain('ausstehende')
-  })
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.error).toContain('ausstehende');
+  });
 
   it('returns 404 for non-existent offer', async () => {
     mockAuth.mockResolvedValue({
       user: { id: 'user-helper' },
       expires: '',
-    } as never)
-    mockSelectChain.where.mockResolvedValueOnce([])
+    } as never);
+    mockSelectChain.where.mockResolvedValueOnce([]);
 
     const res = await DELETE(
-      makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers/${validOfferId}`, { method: 'DELETE' }),
+      makeRequest(`/api/it-hilfe/requests/${validRequestId}/offers/${validOfferId}`, {
+        method: 'DELETE',
+      }),
       makeCtx(validRequestId, validOfferId),
-    )
+    );
 
-    expect(res.status).toBe(404)
-  })
+    expect(res.status).toBe(404);
+  });
 
   it('rejects invalid UUID format', async () => {
     mockAuth.mockResolvedValue({
       user: { id: 'user-helper' },
       expires: '',
-    } as never)
+    } as never);
 
     const res = await DELETE(
       makeRequest('/api/it-hilfe/requests/bad-id/offers/bad-offer', { method: 'DELETE' }),
       makeCtx('bad-id', 'bad-offer'),
-    )
+    );
 
-    expect(res.status).toBe(400)
-  })
-})
+    expect(res.status).toBe(400);
+  });
+});

@@ -5,14 +5,14 @@
 import {
   canAcceptDirectItHilfeRequest,
   technicianListConditionsForTier,
-} from '@/lib/domain/technician-visibility'
-import { REPAIRER_PROFILE_TIER, REPAIRER_STATUS } from '@/config/repairer-status'
+} from '@/lib/domain/technician-visibility';
+import { REPAIRER_PROFILE_TIER, REPAIRER_STATUS } from '@/config/repairer-status';
 
 jest.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
   or: (...args: unknown[]) => ({ __or: args }),
-}))
+}));
 
 jest.mock('@/db/schema', () => ({
   repairerProfiles: {
@@ -26,26 +26,26 @@ jest.mock('@/db/schema', () => ({
     userId: 'up_userId',
     isVerified: 'up_isVerified',
   },
-}))
+}));
 
 describe('technicianListConditionsForTier', () => {
   it('returns OR condition when tier is empty (all public tiers)', () => {
-    const conditions = technicianListConditionsForTier('')
-    expect(conditions).toHaveLength(1)
-    expect(conditions[0]).toHaveProperty('__or')
-  })
+    const conditions = technicianListConditionsForTier('');
+    expect(conditions).toHaveLength(1);
+    expect(conditions[0]).toHaveProperty('__or');
+  });
 
   it('returns community active-only conditions', () => {
-    const conditions = technicianListConditionsForTier(REPAIRER_PROFILE_TIER.COMMUNITY)
-    expect(conditions).toHaveLength(2)
-    expect(conditions.every(c => '__eq' in (c as object))).toBe(true)
-  })
+    const conditions = technicianListConditionsForTier(REPAIRER_PROFILE_TIER.COMMUNITY);
+    expect(conditions).toHaveLength(2);
+    expect(conditions.every((c) => '__eq' in (c as object))).toBe(true);
+  });
 
   it('returns professional verified+active conditions', () => {
-    const conditions = technicianListConditionsForTier(REPAIRER_PROFILE_TIER.PROFESSIONAL)
-    expect(conditions).toHaveLength(4)
-  })
-})
+    const conditions = technicianListConditionsForTier(REPAIRER_PROFILE_TIER.PROFESSIONAL);
+    expect(conditions).toHaveLength(4);
+  });
+});
 
 describe('canAcceptDirectItHilfeRequest', () => {
   it('allows active community profiles without is_verified', () => {
@@ -56,8 +56,8 @@ describe('canAcceptDirectItHilfeRequest', () => {
         isVerified: false,
         status: REPAIRER_STATUS.PENDING,
       }),
-    ).toBe(true)
-  })
+    ).toBe(true);
+  });
 
   it('requires verified active professional profiles', () => {
     expect(
@@ -67,7 +67,7 @@ describe('canAcceptDirectItHilfeRequest', () => {
         isVerified: true,
         status: REPAIRER_STATUS.ACTIVE,
       }),
-    ).toBe(true)
+    ).toBe(true);
     expect(
       canAcceptDirectItHilfeRequest({
         isActive: true,
@@ -75,6 +75,6 @@ describe('canAcceptDirectItHilfeRequest', () => {
         isVerified: false,
         status: REPAIRER_STATUS.ACTIVE,
       }),
-    ).toBe(false)
-  })
-})
+    ).toBe(false);
+  });
+});

@@ -1,9 +1,9 @@
-import { NextRequest } from 'next/server'
-import { withAdmin } from '@/lib/api/middleware'
-import { apiSuccess, apiError } from '@/lib/api/helpers'
-import { db } from '@/db'
-import { users } from '@/db/schema'
-import { eq, asc } from 'drizzle-orm'
+import { NextRequest } from 'next/server';
+import { withAdmin } from '@/lib/api/middleware';
+import { apiSuccess, apiError } from '@/lib/api/helpers';
+import { db } from '@/db';
+import { users } from '@/db/schema';
+import { eq, asc } from 'drizzle-orm';
 
 /**
  * GET /api/admin/membership/members
@@ -20,10 +20,10 @@ export const GET = withAdmin('membership', async (_request: NextRequest) => {
       })
       .from(users)
       .where(eq(users.isMember, true))
-      .orderBy(asc(users.name))
+      .orderBy(asc(users.name));
 
-    return apiSuccess(members)
+    return apiSuccess(members);
   } catch (error) {
-    return apiError(error, 'Fehler beim Laden der Mitgliederliste')
+    return apiError(error, 'Fehler beim Laden der Mitgliederliste');
   }
-})
+});

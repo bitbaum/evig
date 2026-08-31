@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import { Link } from '@/i18n/navigation'
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/ui/Heading';
 
 interface TermsSectionProps {
-  termsAccepted: boolean
-  onChange: (accepted: boolean) => void
+  termsAccepted: boolean;
+  onChange: (accepted: boolean) => void;
 }
 
 export function TermsSection({ termsAccepted, onChange }: TermsSectionProps) {
-  const t = useTranslations('workshops.propose')
+  const t = useTranslations('workshops.propose');
 
   return (
     <div className="mb-8">
@@ -52,5 +52,5 @@ export function TermsSection({ termsAccepted, onChange }: TermsSectionProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

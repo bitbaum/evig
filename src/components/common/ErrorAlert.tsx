@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * ErrorAlert Component
@@ -7,19 +7,19 @@
  * Replaces inconsistent error patterns across pages.
  */
 
-import { AlertCircle, RefreshCw } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { TYPOGRAPHY, SPACING } from '@/config/ui'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
+import { AlertCircle, RefreshCw } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { TYPOGRAPHY, SPACING } from '@/config/ui';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
 
 interface ErrorAlertProps {
-  title?: string
-  message: string
-  onRetry?: () => void
-  retryLabel?: string
-  variant?: 'inline' | 'card'
-  className?: string
+  title?: string;
+  message: string;
+  onRetry?: () => void;
+  retryLabel?: string;
+  variant?: 'inline' | 'card';
+  className?: string;
 }
 
 export function ErrorAlert({
@@ -30,12 +30,14 @@ export function ErrorAlert({
   variant = 'card',
   className = '',
 }: ErrorAlertProps) {
-  const t = useTranslations('errors')
-  const effectiveTitle = title ?? t('genericTitle')
-  const effectiveRetryLabel = retryLabel ?? t('retry')
+  const t = useTranslations('errors');
+  const effectiveTitle = title ?? t('genericTitle');
+  const effectiveRetryLabel = retryLabel ?? t('retry');
   if (variant === 'inline') {
     return (
-      <div className={`flex items-start gap-3 p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg ${className}`}>
+      <div
+        className={`flex items-start gap-3 p-4 bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800 rounded-lg ${className}`}
+      >
         <AlertCircle className="w-5 h-5 text-error-600 dark:text-error-400 shrink-0 mt-0.5" />
         <div className="flex-1">
           <p className={`${TYPOGRAPHY.body} text-error-800 dark:text-error-200`}>{message}</p>
@@ -50,7 +52,7 @@ export function ErrorAlert({
           </Button>
         )}
       </div>
-    )
+    );
   }
 
   return (
@@ -61,18 +63,17 @@ export function ErrorAlert({
       <Heading level={3} className={`${TYPOGRAPHY.sectionTitleSmall} text-text-primary mb-2`}>
         {effectiveTitle}
       </Heading>
-      <p className={`${TYPOGRAPHY.body} text-text-secondary dark:text-text-muted mb-6 max-w-md mx-auto`}>
+      <p
+        className={`${TYPOGRAPHY.body} text-text-secondary dark:text-text-muted mb-6 max-w-md mx-auto`}
+      >
         {message}
       </p>
       {onRetry && (
-        <Button
-          onClick={onRetry}
-          variant="destructive"
-        >
+        <Button onClick={onRetry} variant="destructive">
           <RefreshCw className="w-4 h-4" />
           {effectiveRetryLabel}
         </Button>
       )}
     </div>
-  )
+  );
 }

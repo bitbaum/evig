@@ -6,32 +6,29 @@
  * For public submissions, use POST /api/public/blog/submit
  */
 
-import { NextRequest } from 'next/server'
-import {
-  apiSuccess,
-  apiError,
-} from '@/lib/api/helpers'
-import { logger } from '@/lib/logger'
-import { withAdmin, ValidSession } from '@/lib/api/middleware'
-import { db } from '@/db'
-import { blogSubmissions, blogCategories, users } from '@/db/schema'
-import { eq, desc } from 'drizzle-orm'
-import { alias } from 'drizzle-orm/pg-core'
+import { NextRequest } from 'next/server';
+import { apiSuccess, apiError } from '@/lib/api/helpers';
+import { logger } from '@/lib/logger';
+import { withAdmin, ValidSession } from '@/lib/api/middleware';
+import { db } from '@/db';
+import { blogSubmissions, blogCategories, users } from '@/db/schema';
+import { eq, desc } from 'drizzle-orm';
+import { alias } from 'drizzle-orm/pg-core';
 
 export const GET = withAdmin('content', async (request: NextRequest, session: ValidSession) => {
   try {
     // Get query params for filtering
-    const { searchParams } = new URL(request.url)
-    const status = searchParams.get('status')
+    const { searchParams } = new URL(request.url);
+    const status = searchParams.get('status');
 
-    const reviewer = alias(users, 'reviewer')
+    const reviewer = alias(users, 'reviewer');
 
-    const conditions = []
+    const conditions = [];
     if (status && status !== 'all') {
-      conditions.push(eq(blogSubmissions.status, status))
+      conditions.push(eq(blogSubmissions.status, status));
     }
 
-    const where = conditions.length > 0 ? conditions[0] : undefined
+    const where = conditions.length > 0 ? conditions[0] : undefined;
 
     const rows = await db
       .select({
@@ -62,11 +59,11 @@ export const GET = withAdmin('content', async (request: NextRequest, session: Va
       .leftJoin(blogCategories, eq(blogSubmissions.categoryId, blogCategories.id))
       .leftJoin(reviewer, eq(blogSubmissions.reviewedBy, reviewer.id))
       .where(where)
-      .orderBy(desc(blogSubmissions.submittedAt))
+      .orderBy(desc(blogSubmissions.submittedAt));
 
-    return apiSuccess({ submissions: rows })
+    return apiSuccess({ submissions: rows });
   } catch (error) {
-    logger.error('Failed to fetch blog submissions', { error })
-    return apiError(error, 'Fehler beim Laden der Einreichungen')
+    logger.error('Failed to fetch blog submissions', { error });
+    return apiError(error, 'Fehler beim Laden der Einreichungen');
   }
-})
+});

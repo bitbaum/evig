@@ -1,46 +1,56 @@
-import { Metadata } from 'next'
-import { Link } from '@/i18n/navigation'
-import { ORG, CONTACT, BASE_REGION } from '@/config/org'
-import Heading from '@/components/ui/Heading'
-import { getTranslations } from 'next-intl/server'
+import { Metadata } from 'next';
+import { Link } from '@/i18n/navigation';
+import { ORG, CONTACT, BASE_REGION } from '@/config/org';
+import Heading from '@/components/ui/Heading';
+import { getTranslations } from 'next-intl/server';
 
 interface ImpressumPageProps {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: string }>;
 }
 
 export async function generateMetadata({ params }: ImpressumPageProps): Promise<Metadata> {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'impressum' })
-  const title = `${t('meta.title')} | ${ORG.name}`
-  const description = t('meta.description')
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'impressum' });
+  const title = `${t('meta.title')} | ${ORG.name}`;
+  const description = t('meta.description');
   return {
     title: { absolute: title },
     description,
     openGraph: { title, description, type: 'website' },
-  }
+  };
 }
 
 export default async function ImpressumPage({ params }: ImpressumPageProps) {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'impressum' })
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'impressum' });
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-16 min-h-screen">
-      <Heading level={1} className="mb-8 text-3xl">{t('title')}</Heading>
+      <Heading level={1} className="mb-8 text-3xl">
+        {t('title')}
+      </Heading>
 
       <section className="prose prose-neutral dark:prose-invert max-w-none space-y-6">
         <Heading level={2}>{t('legalInfo')}</Heading>
 
         <Heading level={3}>{t('organisation')}</Heading>
         <p>
-          {ORG.legalName}<br />
+          {ORG.legalName}
+          <br />
           {BASE_REGION.full}
         </p>
 
         <Heading level={3}>{t('contact')}</Heading>
         <p>
-          {t('emailLabel')} <a href={`mailto:${CONTACT.email}`} className="text-action underline">{CONTACT.email}</a><br />
-          {t('phoneLabel')} <a href={CONTACT.phoneTel} className="text-action underline">{CONTACT.phone}</a>
+          {t('emailLabel')}{' '}
+          <a href={`mailto:${CONTACT.email}`} className="text-action underline">
+            {CONTACT.email}
+          </a>
+          <br />
+          {t('phoneLabel')}{' '}
+          <a href={CONTACT.phoneTel} className="text-action underline">
+            {CONTACT.phone}
+          </a>
         </p>
 
         <Heading level={3}>{t('authorised')}</Heading>
@@ -66,14 +76,19 @@ export default async function ImpressumPage({ params }: ImpressumPageProps) {
         <Heading level={2}>{t('furtherLegal')}</Heading>
         <p>
           {t('furtherLegalText')}{' '}
-          <Link href="/datenschutz" className="text-action underline">{t('privacyLinkLabel')}</Link>
-          {' '}{t('agbLinkLabel') && (
-            <Link href="/agb" className="text-action underline">{t('agbLinkLabel')}</Link>
-          )}.
+          <Link href="/datenschutz" className="text-action underline">
+            {t('privacyLinkLabel')}
+          </Link>{' '}
+          {t('agbLinkLabel') && (
+            <Link href="/agb" className="text-action underline">
+              {t('agbLinkLabel')}
+            </Link>
+          )}
+          .
         </p>
 
         <p className="mt-12 text-sm text-text-tertiary">{t('asOf')}</p>
       </section>
     </main>
-  )
+  );
 }

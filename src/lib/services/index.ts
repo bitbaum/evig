@@ -33,20 +33,16 @@ import {
   createServiceType,
   deleteServiceType,
   type UpdateServiceTypeData,
-} from './db'
-import {
-  getServicePresentation,
-  getServicePricing,
-  servicePresentation,
-} from './presentation'
-import { getIconByName } from '@/config/service-icons'
+} from './db';
+import { getServicePresentation, getServicePricing, servicePresentation } from './presentation';
+import { getIconByName } from '@/config/service-icons';
 import type {
   DbServiceType,
   UnifiedService,
   ServiceListItem,
   ServiceCategory,
   ServiceFeature,
-} from './types'
+} from './types';
 
 // Re-export types
 export type {
@@ -57,9 +53,9 @@ export type {
   ServiceProcess,
   ServicePricing,
   ServiceHero,
-} from './types'
+} from './types';
 
-export { SERVICE_CATEGORY_LABELS } from './types'
+export { SERVICE_CATEGORY_LABELS } from './types';
 
 // ============================================================================
 // Internal: Merge DB + Presentation
@@ -70,7 +66,7 @@ export { SERVICE_CATEGORY_LABELS } from './types'
  */
 function convertFeatures(
   dbFeatures: DbServiceType['features_json'],
-  fallbackFeatures: ServiceFeature[]
+  fallbackFeatures: ServiceFeature[],
 ): ServiceFeature[] {
   // If DB has features, use them
   if (dbFeatures && dbFeatures.length > 0) {
@@ -78,10 +74,10 @@ function convertFeatures(
       title: f.title,
       description: f.description,
       icon: getIconByName(f.icon),
-    }))
+    }));
   }
   // Fall back to presentation.ts
-  return fallbackFeatures
+  return fallbackFeatures;
 }
 
 /**
@@ -90,37 +86,37 @@ function convertFeatures(
  */
 function mergeServiceData(dbService: DbServiceType): UnifiedService {
   // Get fallback presentation from config
-  const fallbackPresentation = getServicePresentation(dbService.slug)
-  const fallbackPricing = getServicePricing(dbService.slug, dbService.price_cents)
+  const fallbackPresentation = getServicePresentation(dbService.slug);
+  const fallbackPricing = getServicePricing(dbService.slug, dbService.price_cents);
 
   // Build hero section - prefer DB, fall back to presentation.ts
   const hero = {
     title: dbService.hero_title || fallbackPresentation.hero.title,
     subtitle: dbService.hero_subtitle || fallbackPresentation.hero.subtitle,
     description: dbService.hero_description || fallbackPresentation.hero.description,
-  }
+  };
 
   // Resolve icon from DB string name, fall back to presentation.ts
-  const icon = dbService.icon_name
-    ? getIconByName(dbService.icon_name)
-    : fallbackPresentation.icon
+  const icon = dbService.icon_name ? getIconByName(dbService.icon_name) : fallbackPresentation.icon;
 
   // Features - prefer DB, fall back to presentation.ts
-  const features = convertFeatures(dbService.features_json, fallbackPresentation.features)
+  const features = convertFeatures(dbService.features_json, fallbackPresentation.features);
 
   // Process - prefer DB, fall back to presentation.ts
-  const process = (dbService.process_json && dbService.process_json.length > 0)
-    ? dbService.process_json
-    : fallbackPresentation.process
+  const process =
+    dbService.process_json && dbService.process_json.length > 0
+      ? dbService.process_json
+      : fallbackPresentation.process;
 
   // Pricing - prefer DB, fall back to computed/override
   const pricing = {
     base: dbService.pricing_base || fallbackPricing.base,
-    details: (dbService.pricing_details && dbService.pricing_details.length > 0)
-      ? dbService.pricing_details
-      : fallbackPricing.details,
+    details:
+      dbService.pricing_details && dbService.pricing_details.length > 0
+        ? dbService.pricing_details
+        : fallbackPricing.details,
     mediaPrices: dbService.pricing_media_prices || fallbackPricing.mediaPrices,
-  }
+  };
 
   return {
     // Identifiers
@@ -153,7 +149,7 @@ function mergeServiceData(dbService: DbServiceType): UnifiedService {
     // Timestamps
     createdAt: dbService.created_at,
     updatedAt: dbService.updated_at,
-  }
+  };
 }
 
 /**
@@ -172,7 +168,7 @@ function toListItem(service: UnifiedService): ServiceListItem {
     isBookable: service.isBookable,
     isFeatured: service.isFeatured,
     displayOrder: service.displayOrder,
-  }
+  };
 }
 
 // ============================================================================
@@ -184,10 +180,10 @@ function toListItem(service: UnifiedService): ServiceListItem {
  * Used as fallback when a service has presentation config but no DB record yet.
  */
 function createPresentationOnlyService(slug: string): UnifiedService | null {
-  const presentation = servicePresentation[slug]
-  if (!presentation) return null
+  const presentation = servicePresentation[slug];
+  if (!presentation) return null;
 
-  const pricing = presentation.pricingOverride || { base: 'Auf Anfrage', details: [] }
+  const pricing = presentation.pricingOverride || { base: 'Auf Anfrage', details: [] };
 
   return {
     id: `presentation-${slug}`,
@@ -209,7 +205,7 @@ function createPresentationOnlyService(slug: string): UnifiedService | null {
     pricing,
     createdAt: new Date(),
     updatedAt: null,
-  }
+  };
 }
 
 // ============================================================================
@@ -222,10 +218,10 @@ function createPresentationOnlyService(slug: string): UnifiedService | null {
  * Falls back to presentation-only data if not in database
  */
 export async function getService(slug: string): Promise<UnifiedService | null> {
-  const dbService = await getServiceTypeBySlug(slug)
-  if (dbService) return mergeServiceData(dbService)
+  const dbService = await getServiceTypeBySlug(slug);
+  if (dbService) return mergeServiceData(dbService);
   // Fallback: create from presentation config if available
-  return createPresentationOnlyService(slug)
+  return createPresentationOnlyService(slug);
 }
 
 /**
@@ -233,9 +229,9 @@ export async function getService(slug: string): Promise<UnifiedService | null> {
  * Returns full unified service with all presentation data
  */
 export async function getServiceById(id: string): Promise<UnifiedService | null> {
-  const dbService = await getServiceTypeById(id)
-  if (!dbService) return null
-  return mergeServiceData(dbService)
+  const dbService = await getServiceTypeById(id);
+  if (!dbService) return null;
+  return mergeServiceData(dbService);
 }
 
 /**
@@ -243,8 +239,8 @@ export async function getServiceById(id: string): Promise<UnifiedService | null>
  * Returns full unified services
  */
 export async function getAllServices(): Promise<UnifiedService[]> {
-  const dbServices = await getAllServiceTypes()
-  return dbServices.map(mergeServiceData)
+  const dbServices = await getAllServiceTypes();
+  return dbServices.map(mergeServiceData);
 }
 
 /**
@@ -252,8 +248,8 @@ export async function getAllServices(): Promise<UnifiedService[]> {
  * Returns full unified services
  */
 export async function getFeaturedServices(): Promise<UnifiedService[]> {
-  const dbServices = await getFeaturedServiceTypes()
-  return dbServices.map(mergeServiceData)
+  const dbServices = await getFeaturedServiceTypes();
+  return dbServices.map(mergeServiceData);
 }
 
 /**
@@ -261,19 +257,17 @@ export async function getFeaturedServices(): Promise<UnifiedService[]> {
  * Returns full unified services
  */
 export async function getBookableServices(): Promise<UnifiedService[]> {
-  const dbServices = await getBookableServiceTypes()
-  return dbServices.map(mergeServiceData)
+  const dbServices = await getBookableServiceTypes();
+  return dbServices.map(mergeServiceData);
 }
 
 /**
  * Get services by category
  * Returns full unified services
  */
-export async function getServicesByCategory(
-  category: ServiceCategory
-): Promise<UnifiedService[]> {
-  const dbServices = await getServiceTypesByCategory(category)
-  return dbServices.map(mergeServiceData)
+export async function getServicesByCategory(category: ServiceCategory): Promise<UnifiedService[]> {
+  const dbServices = await getServiceTypesByCategory(category);
+  return dbServices.map(mergeServiceData);
 }
 
 /**
@@ -281,16 +275,16 @@ export async function getServicesByCategory(
  * Use this for service cards/grids where full data isn't needed
  */
 export async function getFeaturedServiceList(): Promise<ServiceListItem[]> {
-  const services = await getFeaturedServices()
-  return services.map(toListItem)
+  const services = await getFeaturedServices();
+  return services.map(toListItem);
 }
 
 /**
  * Get all bookable services as list items (minimal data)
  */
 export async function getBookableServiceList(): Promise<ServiceListItem[]> {
-  const services = await getBookableServices()
-  return services.map(toListItem)
+  const services = await getBookableServices();
+  return services.map(toListItem);
 }
 
 /**
@@ -298,11 +292,11 @@ export async function getBookableServiceList(): Promise<ServiceListItem[]> {
  * Merges DB slugs with presentation config slugs to ensure all nav-linked services are covered
  */
 export async function getAllServiceSlugs(): Promise<string[]> {
-  const dbSlugs = await getAllServiceSlugsFromDb()
+  const dbSlugs = await getAllServiceSlugsFromDb();
   // Add any presentation-only slugs not already in DB results
-  const presentationSlugs = Object.keys(servicePresentation)
-  const allSlugs = new Set([...dbSlugs, ...presentationSlugs])
-  return Array.from(allSlugs)
+  const presentationSlugs = Object.keys(servicePresentation);
+  const allSlugs = new Set([...dbSlugs, ...presentationSlugs]);
+  return Array.from(allSlugs);
 }
 
 // ============================================================================
@@ -313,28 +307,26 @@ export async function getAllServiceSlugs(): Promise<string[]> {
  * Check if a service exists and is active
  */
 export async function serviceExists(slug: string): Promise<boolean> {
-  const service = await getServiceTypeBySlug(slug)
-  return service !== null
+  const service = await getServiceTypeBySlug(slug);
+  return service !== null;
 }
 
 /**
  * Check if a service is bookable
  */
 export async function isServiceBookable(slug: string): Promise<boolean> {
-  const service = await getServiceTypeBySlug(slug)
-  return service?.is_bookable ?? false
+  const service = await getServiceTypeBySlug(slug);
+  return service?.is_bookable ?? false;
 }
 
 /**
  * Get service for booking (ensures it's bookable)
  * Returns null if service doesn't exist or isn't bookable
  */
-export async function getServiceForBooking(
-  slug: string
-): Promise<UnifiedService | null> {
-  const service = await getService(slug)
-  if (!service || !service.isBookable) return null
-  return service
+export async function getServiceForBooking(slug: string): Promise<UnifiedService | null> {
+  const service = await getService(slug);
+  if (!service || !service.isBookable) return null;
+  return service;
 }
 
 // ============================================================================
@@ -346,7 +338,7 @@ export async function getServiceForBooking(
  * Returns raw DB services with all fields
  */
 export async function getAdminServices(): Promise<DbServiceType[]> {
-  return getAllServiceTypesForAdmin()
+  return getAllServiceTypesForAdmin();
 }
 
 /**
@@ -354,14 +346,14 @@ export async function getAdminServices(): Promise<DbServiceType[]> {
  * Returns raw DB service (not unified, to preserve DB field names)
  */
 export async function getAdminServiceById(id: string): Promise<DbServiceType | null> {
-  return getServiceTypeById(id)
+  return getServiceTypeById(id);
 }
 
 /**
  * Update a service type
  */
-export { updateServiceType, createServiceType, deleteServiceType }
-export type { UpdateServiceTypeData }
+export { updateServiceType, createServiceType, deleteServiceType };
+export type { UpdateServiceTypeData };
 
 // Re-export DbServiceType for admin components
-export type { DbServiceType, DbFeatureJson, DbProcessJson } from './types'
+export type { DbServiceType, DbFeatureJson, DbProcessJson } from './types';

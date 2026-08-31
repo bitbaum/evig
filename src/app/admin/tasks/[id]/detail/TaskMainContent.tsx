@@ -4,27 +4,27 @@
  * Presentational server component for the admin task detail page.
  */
 
-import { formatDateShort, formatDateTimeNumeric } from '@/lib/date-formats'
-import { TASK_STATUS_LABELS, TASK_PRIORITY_LABELS } from '@/config/tasks'
-import type { TaskDetail, TaskCompletion } from '@/lib/schemas/tasks'
-import { CheckCircle2 } from 'lucide-react'
-import TaskActionsClient from '../TaskActionsClient'
-import { IconBadge } from '@/components/ui/IconBadge'
-import { Card } from '@/components/ui/card'
-import { TaskAIChat } from '../TaskAIChat'
-import Heading from '@/components/admin/AdminHeading'
-import type { getTaskProtocolSource } from '@/lib/services/protocol-decision-tasks'
+import { formatDateShort, formatDateTimeNumeric } from '@/lib/date-formats';
+import { TASK_STATUS_LABELS, TASK_PRIORITY_LABELS } from '@/config/tasks';
+import type { TaskDetail, TaskCompletion } from '@/lib/schemas/tasks';
+import { CheckCircle2 } from 'lucide-react';
+import TaskActionsClient from '../TaskActionsClient';
+import { IconBadge } from '@/components/ui/IconBadge';
+import { Card } from '@/components/ui/card';
+import { TaskAIChat } from '../TaskAIChat';
+import Heading from '@/components/admin/AdminHeading';
+import type { getTaskProtocolSource } from '@/lib/services/protocol-decision-tasks';
 
-type ProtocolSource = Awaited<ReturnType<typeof getTaskProtocolSource>>
+type ProtocolSource = Awaited<ReturnType<typeof getTaskProtocolSource>>;
 
 export function TaskMainContent({
   task,
   completions,
   protocolSource,
 }: {
-  task: TaskDetail
-  completions: TaskCompletion[]
-  protocolSource: ProtocolSource
+  task: TaskDetail;
+  completions: TaskCompletion[];
+  protocolSource: ProtocolSource;
 }) {
   return (
     <div className="lg:col-span-2 space-y-6">
@@ -41,7 +41,9 @@ export function TaskMainContent({
       {/* Instructions */}
       {task.instructions && (
         <Card className="p-6">
-          <Heading level={2} className="text-lg font-semibold text-text-primary mb-3">Anleitung</Heading>
+          <Heading level={2} className="text-lg font-semibold text-text-primary mb-3">
+            Anleitung
+          </Heading>
           <div className="text-text-secondary whitespace-pre-wrap">{task.instructions}</div>
         </Card>
       )}
@@ -90,9 +92,7 @@ export function TaskMainContent({
                     </p>
                   )}
                   {completion.notes && (
-                    <p className="text-sm text-text-secondary mt-1">
-                      {completion.notes}
-                    </p>
+                    <p className="text-sm text-text-secondary mt-1">{completion.notes}</p>
                   )}
                 </div>
               </div>
@@ -101,5 +101,5 @@ export function TaskMainContent({
         )}
       </Card>
     </div>
-  )
+  );
 }

@@ -1,37 +1,28 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import {
-  Copy,
-  Share2,
-  Pause,
-  Play,
-  CheckCircle2,
-  Files,
-  Pencil,
-  Users,
-} from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { ROUTES } from '@/config/routes'
+import Link from 'next/link';
+import { Copy, Share2, Pause, Play, CheckCircle2, Files, Pencil, Users } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { ROUTES } from '@/config/routes';
 import {
   VACANCY_STATUS,
   VACANCY_STATUS_COLORS,
   getRoleTrackLabel,
   getVacancyStatusLabel,
   type VacancyStatus,
-} from '@/config/hr-vacancies'
-import { getDepartmentLabel } from '@/config/team'
-import { cn } from '@/lib/utils'
-import type { VacancyListItem } from './types'
+} from '@/config/hr-vacancies';
+import { getDepartmentLabel } from '@/config/team';
+import { cn } from '@/lib/utils';
+import type { VacancyListItem } from './types';
 
 interface Props {
-  vacancy: VacancyListItem
-  actionLoading: string | null
-  onTransition: (id: string, status: VacancyStatus) => void
-  onDuplicate: (id: string) => void
-  onCopyLink: (slug: string) => void
-  onShare: (title: string, slug: string) => void
+  vacancy: VacancyListItem;
+  actionLoading: string | null;
+  onTransition: (id: string, status: VacancyStatus) => void;
+  onDuplicate: (id: string) => void;
+  onCopyLink: (slug: string) => void;
+  onShare: (title: string, slug: string) => void;
 }
 
 export function VacancyCard({
@@ -42,9 +33,9 @@ export function VacancyCard({
   onCopyLink,
   onShare,
 }: Props) {
-  const busy = actionLoading === vacancy.id
-  const status = vacancy.status as VacancyStatus
-  const applicationCount = vacancy.application_count ?? 0
+  const busy = actionLoading === vacancy.id;
+  const status = vacancy.status as VacancyStatus;
+  const applicationCount = vacancy.application_count ?? 0;
 
   return (
     <Card className="p-4 sm:p-5 space-y-4">
@@ -61,7 +52,9 @@ export function VacancyCard({
             </span>
             <span className="text-xs text-text-muted">{getRoleTrackLabel(vacancy.role_track)}</span>
             {vacancy.department && (
-              <span className="text-xs text-text-muted">{getDepartmentLabel(vacancy.department)}</span>
+              <span className="text-xs text-text-muted">
+                {getDepartmentLabel(vacancy.department)}
+              </span>
             )}
           </div>
           <Link
@@ -84,8 +77,7 @@ export function VacancyCard({
           </Link>
         ) : (
           <div className="flex items-center gap-2 text-sm text-text-muted shrink-0">
-            <Users className="w-4 h-4" />
-            0 Bewerbungen
+            <Users className="w-4 h-4" />0 Bewerbungen
           </div>
         )}
       </div>
@@ -139,7 +131,12 @@ export function VacancyCard({
           <Copy className="w-4 h-4" />
           Link kopieren
         </Button>
-        <Button size="sm" variant="ghost" disabled={busy} onClick={() => onShare(vacancy.title, vacancy.slug)}>
+        <Button
+          size="sm"
+          variant="ghost"
+          disabled={busy}
+          onClick={() => onShare(vacancy.title, vacancy.slug)}
+        >
           <Share2 className="w-4 h-4" />
           Teilen
         </Button>
@@ -155,5 +152,5 @@ export function VacancyCard({
         </Link>
       </div>
     </Card>
-  )
+  );
 }

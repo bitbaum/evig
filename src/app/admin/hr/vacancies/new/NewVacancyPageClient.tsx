@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Briefcase } from 'lucide-react'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { Button } from '@/components/ui/button'
-import { ROUTES } from '@/config/routes'
-import { ROLE_TRACKS } from '@/config/hr-vacancies'
-import { VacancyFormFields, useHrVacancies } from '@/components/admin/hr'
-import type { VacancyFormData } from '@/components/admin/hr/types'
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Briefcase } from 'lucide-react';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import { Button } from '@/components/ui/button';
+import { ROUTES } from '@/config/routes';
+import { ROLE_TRACKS } from '@/config/hr-vacancies';
+import { VacancyFormFields, useHrVacancies } from '@/components/admin/hr';
+import type { VacancyFormData } from '@/components/admin/hr/types';
 
 const emptyForm: VacancyFormData = {
   title: '',
@@ -25,36 +25,36 @@ const emptyForm: VacancyFormData = {
   show_on_get_involved: true,
   seo_title: '',
   seo_description: '',
-}
+};
 
 export default function NewVacancyPageClient() {
-  const router = useRouter()
-  const { createVacancy } = useHrVacancies()
-  const [form, setForm] = useState<VacancyFormData>(emptyForm)
-  const [showAdvanced, setShowAdvanced] = useState(false)
-  const [saving, setSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const router = useRouter();
+  const { createVacancy } = useHrVacancies();
+  const [form, setForm] = useState<VacancyFormData>(emptyForm);
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (field: string, value: string | boolean) => {
-    setForm((prev) => ({ ...prev, [field]: value }))
-  }
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handleSubmit = async (publish: boolean) => {
-    setSaving(true)
-    setError(null)
+    setSaving(true);
+    setError(null);
     try {
-      const created = await createVacancy(form, publish)
+      const created = await createVacancy(form, publish);
       if (created?.id) {
-        router.push(ROUTES.admin.hrVacancy(created.id))
+        router.push(ROUTES.admin.hrVacancy(created.id));
       } else {
-        router.push(ROUTES.admin.hrVacancies)
+        router.push(ROUTES.admin.hrVacancies);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Speichern fehlgeschlagen')
+      setError(err instanceof Error ? err.message : 'Speichern fehlgeschlagen');
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
-  }
+  };
 
   return (
     <AdminPageWrapper
@@ -90,5 +90,5 @@ export default function NewVacancyPageClient() {
         </Button>
       </div>
     </AdminPageWrapper>
-  )
+  );
 }

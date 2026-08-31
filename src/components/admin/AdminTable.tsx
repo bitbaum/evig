@@ -1,6 +1,6 @@
-import type { ReactNode } from 'react'
-import { cn } from '@/lib/utils'
-import { adminTable, adminSurface, adminInteractive } from '@/lib/admin-ui'
+import type { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
+import { adminTable, adminSurface, adminInteractive } from '@/lib/admin-ui';
 
 /**
  * AdminTable — the SSOT for admin data tables.
@@ -21,30 +21,36 @@ import { adminTable, adminSurface, adminInteractive } from '@/lib/admin-ui'
  */
 export interface AdminTableColumn<T> {
   /** Column header content. */
-  header: ReactNode
+  header: ReactNode;
   /** Cell renderer for a row. */
-  cell: (row: T) => ReactNode
+  cell: (row: T) => ReactNode;
   /** Extra classes applied to BOTH the th and the td (width, wrapping, etc.). */
-  className?: string
+  className?: string;
   /** Text alignment for header + cells. */
-  align?: 'left' | 'right' | 'center'
+  align?: 'left' | 'right' | 'center';
 }
 
 interface AdminTableProps<T> {
-  columns: AdminTableColumn<T>[]
-  rows: T[]
+  columns: AdminTableColumn<T>[];
+  rows: T[];
   /** Stable unique key per row. */
-  rowKey: (row: T) => string
+  rowKey: (row: T) => string;
   /** Optional: highlight selected rows (bulk-action selection). */
-  isSelected?: (row: T) => boolean
-  className?: string
+  isSelected?: (row: T) => boolean;
+  className?: string;
 }
 
 const alignClass = (align?: 'left' | 'right' | 'center') =>
-  align === 'right' ? 'text-right' : align === 'center' ? 'text-center' : ''
+  align === 'right' ? 'text-right' : align === 'center' ? 'text-center' : '';
 
-export function AdminTable<T>({ columns, rows, rowKey, isSelected, className }: AdminTableProps<T>) {
-  const [identityColumn, ...detailColumns] = columns
+export function AdminTable<T>({
+  columns,
+  rows,
+  rowKey,
+  isSelected,
+  className,
+}: AdminTableProps<T>) {
+  const [identityColumn, ...detailColumns] = columns;
 
   return (
     <div className={cn(adminSurface.table, className)}>
@@ -55,9 +61,7 @@ export function AdminTable<T>({ columns, rows, rowKey, isSelected, className }: 
             key={rowKey(row)}
             className={cn('space-y-2 p-4', isSelected?.(row) && adminInteractive.rowSelected)}
           >
-            <div className="text-sm font-medium text-text-primary">
-              {identityColumn.cell(row)}
-            </div>
+            <div className="text-sm font-medium text-text-primary">{identityColumn.cell(row)}</div>
             <dl className="space-y-1.5">
               {detailColumns.map((col, i) => (
                 <div key={i} className="flex items-start justify-between gap-3 text-sm">
@@ -99,5 +103,5 @@ export function AdminTable<T>({ columns, rows, rowKey, isSelected, className }: 
         </table>
       </div>
     </div>
-  )
+  );
 }

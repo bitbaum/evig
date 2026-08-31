@@ -5,15 +5,37 @@
 
 import { NextRequest } from 'next/server';
 import { withAuth, ValidSession } from '@/lib/api/middleware';
-import { apiSuccess, apiSuccessCached, apiError, apiBadRequest, apiRateLimited } from '@/lib/api/helpers';
+import {
+  apiSuccess,
+  apiSuccessCached,
+  apiError,
+  apiBadRequest,
+  apiRateLimited,
+} from '@/lib/api/helpers';
 import { db } from '@/db';
-import { listings, listingImages, listingSpecs, users, sellerProfiles, userProfiles } from '@/db/schema';
+import {
+  listings,
+  listingImages,
+  listingSpecs,
+  users,
+  sellerProfiles,
+  userProfiles,
+} from '@/db/schema';
 import { eq, and, sql, gte, lte, desc, asc, inArray, type SQL } from 'drizzle-orm';
 import { logger } from '@/lib/logger';
-import { validateBody, validateQuery, ListingsQuerySchema, CreateListingSchema } from '@/lib/schemas';
+import {
+  validateBody,
+  validateQuery,
+  ListingsQuerySchema,
+  CreateListingSchema,
+} from '@/lib/schemas';
 import { normalizeSpecValue } from '@/config/marketplace';
 import { indexListingInSearch, listingThumbnailSubquery } from '@/lib/marketplace/listing-helpers';
-import { LISTING_STATUS, MARKETPLACE_SELLER_TYPE, SPEC_QUERY_PARAM_KEYS } from '@/config/marketplace';
+import {
+  LISTING_STATUS,
+  MARKETPLACE_SELLER_TYPE,
+  SPEC_QUERY_PARAM_KEYS,
+} from '@/config/marketplace';
 import { sendCustomEmail } from '@/lib/email';
 import { listingPublishedConfirmation } from '@/lib/email/templates/marketplace';
 import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit';
@@ -34,7 +56,9 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url);
     const rawParams: Record<string, string | null> = {};
-    searchParams.forEach((value, key) => { rawParams[key] = value; });
+    searchParams.forEach((value, key) => {
+      rawParams[key] = value;
+    });
 
     const validation = validateQuery(ListingsQuerySchema, rawParams);
     if (!validation.success) return validation.error;
@@ -57,12 +81,12 @@ export async function GET(request: NextRequest) {
     }
     if (filters.delivery) {
       conditions.push(
-        sql`(${listings.deliveryOptions} = ${filters.delivery} OR ${listings.deliveryOptions} = 'both')`
+        sql`(${listings.deliveryOptions} = ${filters.delivery} OR ${listings.deliveryOptions} = 'both')`,
       );
     }
     if (filters.payment) {
       conditions.push(
-        sql`(${listings.paymentMode} = ${filters.payment} OR ${listings.paymentMode} = 'both')`
+        sql`(${listings.paymentMode} = ${filters.payment} OR ${listings.paymentMode} = 'both')`,
       );
     }
     if (filters.price_min !== undefined) {
@@ -84,26 +108,27 @@ export async function GET(request: NextRequest) {
     }
     if (filters.search) {
       conditions.push(
-        sql`to_tsvector('german', coalesce(${listings.title}, '') || ' ' || coalesce(${listings.description}, '') || ' ' || coalesce(${listings.brand}, '') || ' ' || coalesce(${listings.model}, '')) @@ plainto_tsquery('german', ${filters.search})`
+        sql`to_tsvector('german', coalesce(${listings.title}, '') || ' ' || coalesce(${listings.description}, '') || ' ' || coalesce(${listings.brand}, '') || ' ' || coalesce(${listings.model}, '')) @@ plainto_tsquery('german', ${filters.search})`,
       );
     }
 
     // Spec filters via subquery on listing_specs — key names from SPEC_QUERY_PARAM_KEYS config
     const specParamValues: Record<string, number | undefined> = {
-      spec_ram_min:     filters.spec_ram_min,
+      spec_ram_min: filters.spec_ram_min,
       spec_storage_min: filters.spec_storage_min,
       spec_display_min: filters.spec_display_min,
-    }
+    };
     for (const [param, specKeys] of Object.entries(SPEC_QUERY_PARAM_KEYS)) {
-      const value = specParamValues[param]
-      if (value === undefined) continue
+      const value = specParamValues[param];
+      if (value === undefined) continue;
       // Build key condition — safe to use sql.raw because keys come from internal config, not user input
-      const keyClause = specKeys.length === 1
-        ? `s.spec_key = '${specKeys[0]}'`
-        : `(${specKeys.map(k => `s.spec_key = '${k}'`).join(' OR ')})`
+      const keyClause =
+        specKeys.length === 1
+          ? `s.spec_key = '${specKeys[0]}'`
+          : `(${specKeys.map((k) => `s.spec_key = '${k}'`).join(' OR ')})`;
       conditions.push(
-        sql`EXISTS (SELECT 1 FROM ${listingSpecs} s WHERE s.listing_id = ${listings.id} AND ${sql.raw(keyClause)} AND s.normalized_value >= ${value})`
-      )
+        sql`EXISTS (SELECT 1 FROM ${listingSpecs} s WHERE s.listing_id = ${listings.id} AND ${sql.raw(keyClause)} AND s.normalized_value >= ${value})`,
+      );
     }
 
     const whereCondition = and(...conditions);
@@ -111,10 +136,17 @@ export async function GET(request: NextRequest) {
     // Sort
     let orderByClause;
     switch (filters.sort) {
-      case 'price_asc':  orderByClause = asc(listings.priceChf); break;
-      case 'price_desc': orderByClause = desc(listings.priceChf); break;
-      case 'popular':    orderByClause = desc(listings.viewCount); break;
-      default:           orderByClause = desc(listings.createdAt);
+      case 'price_asc':
+        orderByClause = asc(listings.priceChf);
+        break;
+      case 'price_desc':
+        orderByClause = desc(listings.priceChf);
+        break;
+      case 'popular':
+        orderByClause = desc(listings.viewCount);
+        break;
+      default:
+        orderByClause = desc(listings.createdAt);
     }
 
     // Single query with COUNT(*) OVER() for pagination
@@ -174,35 +206,46 @@ export async function GET(request: NextRequest) {
         .orderBy(asc(listingSpecs.listingId));
 
       // Group specs by listing_id
-      const specsMap = new Map<string, Array<{ key: string; value: string; unit: string | null }>>();
+      const specsMap = new Map<
+        string,
+        Array<{ key: string; value: string; unit: string | null }>
+      >();
       for (const row of specsResult) {
         if (!specsMap.has(row.listing_id)) specsMap.set(row.listing_id, []);
         specsMap.get(row.listing_id)!.push({ key: row.key, value: row.value, unit: row.unit });
       }
 
       // Attach specs to items — public browse, cache 30s, stale 15s
-      return apiSuccessCached({
-        items: items.map(item => ({
-          ...item,
-          specs: specsMap.get(item.id) || [],
-        })),
+      return apiSuccessCached(
+        {
+          items: items.map((item) => ({
+            ...item,
+            specs: specsMap.get(item.id) || [],
+          })),
+          pagination: {
+            total,
+            limit: filters.limit,
+            offset: filters.offset,
+          },
+        },
+        30,
+        15,
+      );
+    }
+
+    // Public browse — cache 30s, stale 15s
+    return apiSuccessCached(
+      {
+        items,
         pagination: {
           total,
           limit: filters.limit,
           offset: filters.offset,
         },
-      }, 30, 15);
-    }
-
-    // Public browse — cache 30s, stale 15s
-    return apiSuccessCached({
-      items,
-      pagination: {
-        total,
-        limit: filters.limit,
-        offset: filters.offset,
       },
-    }, 30, 15);
+      30,
+      15,
+    );
   } catch (error) {
     return apiError(error, 'Fehler beim Laden der Inserate');
   }
@@ -264,23 +307,21 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
 
       // Batch insert images
       if (data.images.length > 0) {
-        await tx
-          .insert(listingImages)
-          .values(
-            data.images.map((url, position) => ({
-              listingId,
-              url,
-              position,
-              isPrimary: position === 0,
-            }))
-          );
+        await tx.insert(listingImages).values(
+          data.images.map((url, position) => ({
+            listingId,
+            url,
+            position,
+            isPrimary: position === 0,
+          })),
+        );
       }
 
       // Batch insert specs
       if (data.specs && data.specs.length > 0) {
         const specValues = data.specs
-          .filter(spec => spec.value.trim())
-          .map(spec => ({
+          .filter((spec) => spec.value.trim())
+          .map((spec) => ({
             listingId,
             specKey: spec.key,
             specValue: spec.value,
@@ -334,7 +375,7 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
         created_at: new Date().toISOString(),
         thumbnail: data.images?.[0] || null,
       },
-      data.specs
+      data.specs,
     );
 
     // Fire-and-forget: send confirmation email. sendCustomEmail RESOLVES
@@ -349,14 +390,22 @@ export const POST = withAuth(async (request: NextRequest, session: ValidSession)
           recipientName: session.user.name || 'Nutzer',
           listingTitle: sanitizedTitle,
           listingUrl: `${APP_URL}/marketplace/${result}`,
-        })
+        }),
       )
-        .then(r => {
+        .then((r) => {
           if (!r.success) {
-            logger.warn('Failed to send listing published email (resolved)', { error: r.error, listingId: result });
+            logger.warn('Failed to send listing published email (resolved)', {
+              error: r.error,
+              listingId: result,
+            });
           }
         })
-        .catch(err => logger.warn('Failed to send listing published email (rejected)', { error: err, listingId: result }));
+        .catch((err) =>
+          logger.warn('Failed to send listing published email (rejected)', {
+            error: err,
+            listingId: result,
+          }),
+        );
     }
 
     return apiSuccess({ id: result }, 201);

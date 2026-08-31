@@ -1,17 +1,17 @@
-import { Search, User, X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import type { UserResult } from './types'
-import { adminInteractive } from '@/lib/admin-ui'
+import { Search, User, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import type { UserResult } from './types';
+import { adminInteractive } from '@/lib/admin-ui';
 
 interface Props {
-  selectedUser: UserResult | null
-  userSearch: string
-  userResults: UserResult[]
-  searchingUsers: boolean
-  onSearchChange: (value: string) => void
-  onSelectUser: (user: UserResult) => void
-  onClearUser: () => void
+  selectedUser: UserResult | null;
+  userSearch: string;
+  userResults: UserResult[];
+  searchingUsers: boolean;
+  onSearchChange: (value: string) => void;
+  onSelectUser: (user: UserResult) => void;
+  onClearUser: () => void;
 }
 
 export function UserSearchField({
@@ -81,9 +81,7 @@ export function UserSearchField({
                     <div className="text-sm font-medium text-text-primary">
                       {user.name || user.email}
                     </div>
-                    {user.name && (
-                      <div className="text-xs text-text-tertiary">{user.email}</div>
-                    )}
+                    {user.name && <div className="text-xs text-text-tertiary">{user.email}</div>}
                   </div>
                 </Button>
               ))}
@@ -95,5 +93,5 @@ export function UserSearchField({
         Suche nach einem bestehenden Benutzer oder gib die Daten manuell ein.
       </p>
     </div>
-  )
+  );
 }

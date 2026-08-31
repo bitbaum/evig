@@ -17,66 +17,71 @@
  * If any are missing every test skips (safe under `npx playwright test tests/`).
  */
 
-import { test, expect, type Page } from '@playwright/test'
-import path from 'node:path'
-import fs from 'node:fs'
-import { loginWithCredentials, ADMIN_TEST_EMAIL, ADMIN_TEST_PASSWORD } from './helpers/auth'
+import { test, expect, type Page } from '@playwright/test';
+import path from 'node:path';
+import fs from 'node:fs';
+import { loginWithCredentials, ADMIN_TEST_EMAIL, ADMIN_TEST_PASSWORD } from './helpers/auth';
 
 const fixtures = (process.env.PROTOCOLS_SMOKE_AUDIO || '')
   .split(',')
   .map((p) => p.trim())
-  .filter(Boolean)
+  .filter(Boolean);
 
-const configured = fixtures.length > 0 && Boolean(ADMIN_TEST_PASSWORD)
+const configured = fixtures.length > 0 && Boolean(ADMIN_TEST_PASSWORD);
 
 // Upload + transcode + chunked transcription + AI structuring for a long
 // recording legitimately takes minutes.
-const PIPELINE_TIMEOUT_MS = 8 * 60 * 1000
+const PIPELINE_TIMEOUT_MS = 8 * 60 * 1000;
 
 async function deleteProtocolViaUi(page: Page) {
-  await page.getByRole('button', { name: 'Löschen' }).click()
-  await page.getByRole('dialog').getByRole('button', { name: 'Löschen' }).click()
-  await page.waitForURL(/\/admin\/protocols(\?|$)/, { timeout: 60_000 })
+  await page.getByRole('button', { name: 'Löschen' }).click();
+  await page.getByRole('dialog').getByRole('button', { name: 'Löschen' }).click();
+  await page.waitForURL(/\/admin\/protocols(\?|$)/, { timeout: 60_000 });
 }
 
 test.describe('prod protocols smoke — audio pipeline', () => {
-  test.skip(!configured, 'Set PROTOCOLS_SMOKE_AUDIO and AUTH_TEST_ADMIN_PASSWORD to run')
+  test.skip(!configured, 'Set PROTOCOLS_SMOKE_AUDIO and AUTH_TEST_ADMIN_PASSWORD to run');
 
   for (const fixture of fixtures) {
-    const label = path.basename(fixture)
+    const label = path.basename(fixture);
 
     test(`audio → transcript → review → delete (${label})`, async ({ page }) => {
-      test.setTimeout(PIPELINE_TIMEOUT_MS + 120_000)
-      const sizeMb = (fs.statSync(fixture).size / (1024 * 1024)).toFixed(1)
+      test.setTimeout(PIPELINE_TIMEOUT_MS + 120_000);
+      const sizeMb = (fs.statSync(fixture).size / (1024 * 1024)).toFixed(1);
 
-      await loginWithCredentials(page, '/admin/protocols/new', ADMIN_TEST_EMAIL, ADMIN_TEST_PASSWORD)
+      await loginWithCredentials(
+        page,
+        '/admin/protocols/new',
+        ADMIN_TEST_EMAIL,
+        ADMIN_TEST_PASSWORD,
+      );
 
       // Traceable title so any leftover row is clearly test data.
-      await page.getByRole('button', { name: /Sitzungsdetails/ }).click()
-      await page.locator('#title').fill(`E2E Smoke ${label} ${Date.now()}`)
+      await page.getByRole('button', { name: /Sitzungsdetails/ }).click();
+      await page.locator('#title').fill(`E2E Smoke ${label} ${Date.now()}`);
 
       // Drop the audio into the (hidden) SourceUploader input; chip appears.
-      await page.locator('input[type="file"][multiple]').setInputFiles(fixture)
-      await expect(page.getByText(label)).toBeVisible()
+      await page.locator('input[type="file"][multiple]').setInputFiles(fixture);
+      await expect(page.getByText(label)).toBeVisible();
 
-      await page.getByRole('button', { name: /Protokoll erstellen/ }).click()
+      await page.getByRole('button', { name: /Protokoll erstellen/ }).click();
 
       // The create page redirects to the detail page when processing finishes
       // (with ?processing=failed appended when it did not).
-      await page.waitForURL(/\/admin\/protocols\/[0-9a-f-]{36}/, { timeout: PIPELINE_TIMEOUT_MS })
+      await page.waitForURL(/\/admin\/protocols\/[0-9a-f-]{36}/, { timeout: PIPELINE_TIMEOUT_MS });
 
       if (page.url().includes('processing=failed')) {
         // Leave the row visible for diagnosis, but fail loudly with the reason.
-        const reason = new URL(page.url()).searchParams.get('error') || 'unbekannt'
-        throw new Error(`Processing failed for ${label} (${sizeMb} MB): ${reason}`)
+        const reason = new URL(page.url()).searchParams.get('error') || 'unbekannt';
+        throw new Error(`Processing failed for ${label} (${sizeMb} MB): ${reason}`);
       }
 
       // Review state with real structured output.
-      await expect(page.getByText('Zur Überprüfung').first()).toBeVisible({ timeout: 30_000 })
-      await expect(page.getByRole('heading', { name: 'Zusammenfassung' })).toBeVisible()
+      await expect(page.getByText('Zur Überprüfung').first()).toBeVisible({ timeout: 30_000 });
+      await expect(page.getByRole('heading', { name: 'Zusammenfassung' })).toBeVisible();
 
-      await deleteProtocolViaUi(page)
-    })
+      await deleteProtocolViaUi(page);
+    });
   }
 
   // Runs LAST (suite is serial): removes smoke rows left behind by failed
@@ -84,17 +89,21 @@ test.describe('prod protocols smoke — audio pipeline', () => {
   // test data. Failed rows keep their diagnostics in the uploaded Playwright
   // traces; the DB row itself has no lasting value.
   test('sweep leftover smoke protocols', async ({ page }) => {
-    test.setTimeout(180_000)
-    await loginWithCredentials(page, '/admin/protocols', ADMIN_TEST_EMAIL, ADMIN_TEST_PASSWORD)
+    test.setTimeout(180_000);
+    await loginWithCredentials(page, '/admin/protocols', ADMIN_TEST_EMAIL, ADMIN_TEST_PASSWORD);
 
     for (let i = 0; i < 20; i++) {
-      const leftover = page.locator('a[href*="/admin/protocols/"]', { hasText: 'E2E Smoke' }).first()
-      if (!(await leftover.isVisible().catch(() => false))) break
-      await leftover.click()
-      await page.waitForURL(/\/admin\/protocols\/[0-9a-f-]{36}/, { timeout: 30_000 })
-      await deleteProtocolViaUi(page)
+      const leftover = page
+        .locator('a[href*="/admin/protocols/"]', { hasText: 'E2E Smoke' })
+        .first();
+      if (!(await leftover.isVisible().catch(() => false))) break;
+      await leftover.click();
+      await page.waitForURL(/\/admin\/protocols\/[0-9a-f-]{36}/, { timeout: 30_000 });
+      await deleteProtocolViaUi(page);
     }
 
-    await expect(page.locator('a[href*="/admin/protocols/"]', { hasText: 'E2E Smoke' })).toHaveCount(0)
-  })
-})
+    await expect(
+      page.locator('a[href*="/admin/protocols/"]', { hasText: 'E2E Smoke' }),
+    ).toHaveCount(0);
+  });
+});

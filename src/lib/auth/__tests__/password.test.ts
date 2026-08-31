@@ -18,7 +18,7 @@ jest.mock('@/lib/auth/config', () => ({
       specialChars: '!@#$%^&*(),.?":{}|<>[]\\;\'`~_+-=',
     },
   },
-}))
+}));
 
 import {
   hashPassword,
@@ -26,7 +26,7 @@ import {
   constantTimeCompare,
   generateToken,
   validatePasswordStrength,
-} from '../password'
+} from '../password';
 
 // ============================================================================
 // hashPassword + verifyPassword
@@ -34,33 +34,33 @@ import {
 
 describe('hashPassword', () => {
   it('produces a bcrypt hash', async () => {
-    const hash = await hashPassword('TestPassword123')
-    expect(hash).toMatch(/^\$2[aby]\$\d{2}\$/)
-  })
+    const hash = await hashPassword('TestPassword123');
+    expect(hash).toMatch(/^\$2[aby]\$\d{2}\$/);
+  });
 
   it('produces different hashes for same password', async () => {
-    const hash1 = await hashPassword('SamePassword')
-    const hash2 = await hashPassword('SamePassword')
-    expect(hash1).not.toBe(hash2) // Different salts
-  })
-})
+    const hash1 = await hashPassword('SamePassword');
+    const hash2 = await hashPassword('SamePassword');
+    expect(hash1).not.toBe(hash2); // Different salts
+  });
+});
 
 describe('verifyPassword', () => {
   it('verifies correct password', async () => {
-    const hash = await hashPassword('CorrectPassword')
-    expect(await verifyPassword('CorrectPassword', hash)).toBe(true)
-  })
+    const hash = await hashPassword('CorrectPassword');
+    expect(await verifyPassword('CorrectPassword', hash)).toBe(true);
+  });
 
   it('rejects incorrect password', async () => {
-    const hash = await hashPassword('CorrectPassword')
-    expect(await verifyPassword('WrongPassword', hash)).toBe(false)
-  })
+    const hash = await hashPassword('CorrectPassword');
+    expect(await verifyPassword('WrongPassword', hash)).toBe(false);
+  });
 
   it('handles empty password', async () => {
-    const hash = await hashPassword('SomePassword')
-    expect(await verifyPassword('', hash)).toBe(false)
-  })
-})
+    const hash = await hashPassword('SomePassword');
+    expect(await verifyPassword('', hash)).toBe(false);
+  });
+});
 
 // ============================================================================
 // constantTimeCompare
@@ -68,19 +68,19 @@ describe('verifyPassword', () => {
 
 describe('constantTimeCompare', () => {
   it('returns true for identical strings', () => {
-    expect(constantTimeCompare('abc', 'abc')).toBe(true)
-    expect(constantTimeCompare('', '')).toBe(true)
-  })
+    expect(constantTimeCompare('abc', 'abc')).toBe(true);
+    expect(constantTimeCompare('', '')).toBe(true);
+  });
 
   it('returns false for different strings', () => {
-    expect(constantTimeCompare('abc', 'def')).toBe(false)
-    expect(constantTimeCompare('abc', 'abcd')).toBe(false)
-  })
+    expect(constantTimeCompare('abc', 'def')).toBe(false);
+    expect(constantTimeCompare('abc', 'abcd')).toBe(false);
+  });
 
   it('returns false for different lengths', () => {
-    expect(constantTimeCompare('short', 'longer-string')).toBe(false)
-  })
-})
+    expect(constantTimeCompare('short', 'longer-string')).toBe(false);
+  });
+});
 
 // ============================================================================
 // generateToken
@@ -88,25 +88,25 @@ describe('constantTimeCompare', () => {
 
 describe('generateToken', () => {
   it('generates a token of default length', () => {
-    const token = generateToken()
-    expect(token.length).toBe(32)
-  })
+    const token = generateToken();
+    expect(token.length).toBe(32);
+  });
 
   it('generates a token of custom length', () => {
-    const token = generateToken(64)
-    expect(token.length).toBe(64)
-  })
+    const token = generateToken(64);
+    expect(token.length).toBe(64);
+  });
 
   it('generates unique tokens', () => {
-    const tokens = new Set(Array.from({ length: 100 }, () => generateToken()))
-    expect(tokens.size).toBe(100)
-  })
+    const tokens = new Set(Array.from({ length: 100 }, () => generateToken()));
+    expect(tokens.size).toBe(100);
+  });
 
   it('only contains alphanumeric characters', () => {
-    const token = generateToken(100)
-    expect(token).toMatch(/^[A-Za-z0-9]+$/)
-  })
-})
+    const token = generateToken(100);
+    expect(token).toMatch(/^[A-Za-z0-9]+$/);
+  });
+});
 
 // ============================================================================
 // validatePasswordStrength
@@ -114,31 +114,31 @@ describe('generateToken', () => {
 
 describe('validatePasswordStrength', () => {
   it('accepts valid password (meets minimum length)', () => {
-    const result = validatePasswordStrength('abcdefgh') // 8 chars
-    expect(result.isValid).toBe(true)
-    expect(result.errors).toHaveLength(0)
-  })
+    const result = validatePasswordStrength('abcdefgh'); // 8 chars
+    expect(result.isValid).toBe(true);
+    expect(result.errors).toHaveLength(0);
+  });
 
   it('rejects password shorter than minLength', () => {
-    const result = validatePasswordStrength('short')
-    expect(result.isValid).toBe(false)
-    expect(result.errors.length).toBeGreaterThan(0)
-    expect(result.errors[0]).toContain('8')
-  })
+    const result = validatePasswordStrength('short');
+    expect(result.isValid).toBe(false);
+    expect(result.errors.length).toBeGreaterThan(0);
+    expect(result.errors[0]).toContain('8');
+  });
 
   it('rejects password exceeding maxLength', () => {
-    const longPassword = 'a'.repeat(129)
-    const result = validatePasswordStrength(longPassword)
-    expect(result.isValid).toBe(false)
-    expect(result.errors.length).toBeGreaterThan(0)
-    expect(result.errors[0]).toContain('128')
-  })
+    const longPassword = 'a'.repeat(129);
+    const result = validatePasswordStrength(longPassword);
+    expect(result.isValid).toBe(false);
+    expect(result.errors.length).toBeGreaterThan(0);
+    expect(result.errors[0]).toContain('128');
+  });
 
   it('accepts any character combination when no requirements', () => {
     // With all require* flags off, only length matters
-    expect(validatePasswordStrength('12345678').isValid).toBe(true)
-    expect(validatePasswordStrength('abcdefgh').isValid).toBe(true)
-    expect(validatePasswordStrength('ABCDEFGH').isValid).toBe(true)
-    expect(validatePasswordStrength('!@#$%^&*').isValid).toBe(true)
-  })
-})
+    expect(validatePasswordStrength('12345678').isValid).toBe(true);
+    expect(validatePasswordStrength('abcdefgh').isValid).toBe(true);
+    expect(validatePasswordStrength('ABCDEFGH').isValid).toBe(true);
+    expect(validatePasswordStrength('!@#$%^&*').isValid).toBe(true);
+  });
+});

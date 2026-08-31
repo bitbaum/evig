@@ -6,59 +6,59 @@
  * specs, descriptions, categories, and price estimates.
  */
 
-import { NextRequest } from 'next/server'
-import { withAdmin } from '@/lib/api/middleware'
-import { logger } from '@/lib/logger'
-import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
-import { validateBody, BulkEnrichSchema } from '@/lib/schemas'
-import { extractMultipleProducts } from '@/lib/erfassung/bulk-extraction'
-import { BULK_LIMITS } from '@/config/erfassung'
+import { NextRequest } from 'next/server';
+import { withAdmin } from '@/lib/api/middleware';
+import { logger } from '@/lib/logger';
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
+import { validateBody, BulkEnrichSchema } from '@/lib/schemas';
+import { extractMultipleProducts } from '@/lib/erfassung/bulk-extraction';
+import { BULK_LIMITS } from '@/config/erfassung';
 
 interface EnrichmentItem {
-  _tempId: string
-  hersteller: string
-  produktname: string
-  kurzbeschreibung?: string
-  hauptkategorie?: string
-  zustand?: string
-  verkaufspreis?: string
+  _tempId: string;
+  hersteller: string;
+  produktname: string;
+  kurzbeschreibung?: string;
+  hauptkategorie?: string;
+  zustand?: string;
+  verkaufspreis?: string;
 }
 
 export const POST = withAdmin('products', async (request: NextRequest, session) => {
   try {
-    const raw = await request.json()
-    const validation = validateBody(BulkEnrichSchema, raw)
-    if (!validation.success) return validation.error
-    const { items } = validation.data
+    const raw = await request.json();
+    const validation = validateBody(BulkEnrichSchema, raw);
+    if (!validation.success) return validation.error;
+    const { items } = validation.data;
 
     if (items.length > BULK_LIMITS.maxProducts) {
-      return apiBadRequest(`Maximal ${BULK_LIMITS.maxProducts} Produkte pro Vorgang`)
+      return apiBadRequest(`Maximal ${BULK_LIMITS.maxProducts} Produkte pro Vorgang`);
     }
 
     logger.info('Bulk enrichment started', {
       userId: session.user.id,
       itemCount: items.length,
-    })
+    });
 
     // Build text representation of each product for AI extraction
-    const textLines = items.map(item => {
-      const parts = [item.hersteller, item.produktname]
-      if (item.kurzbeschreibung) parts.push(item.kurzbeschreibung)
-      if (item.zustand) parts.push(item.zustand)
-      if (item.verkaufspreis) parts.push(`${item.verkaufspreis} CHF`)
-      return parts.join(' ')
-    })
+    const textLines = items.map((item) => {
+      const parts = [item.hersteller, item.produktname];
+      if (item.kurzbeschreibung) parts.push(item.kurzbeschreibung);
+      if (item.zustand) parts.push(item.zustand);
+      if (item.verkaufspreis) parts.push(`${item.verkaufspreis} CHF`);
+      return parts.join(' ');
+    });
 
-    const text = textLines.join('\n')
+    const text = textLines.join('\n');
 
     // Use the existing bulk extraction pipeline
-    const enrichedProducts = await extractMultipleProducts(text, 'text')
+    const enrichedProducts = await extractMultipleProducts(text, 'text');
 
     // Map enriched data back to original tempIds
     const enrichedItems = items.map((item, index) => {
-      const enriched = enrichedProducts[index]
+      const enriched = enrichedProducts[index];
       if (!enriched) {
-        return { _tempId: item._tempId, enriched: false }
+        return { _tempId: item._tempId, enriched: false };
       }
 
       return {
@@ -73,18 +73,18 @@ export const POST = withAdmin('products', async (request: NextRequest, session) 
           specs: enriched.specs,
           kundenprofile: enriched.kundenprofile,
         },
-      }
-    })
+      };
+    });
 
     logger.info('Bulk enrichment complete', {
       userId: session.user.id,
-      enrichedCount: enrichedItems.filter(i => i.enriched).length,
-    })
+      enrichedCount: enrichedItems.filter((i) => i.enriched).length,
+    });
 
     return apiSuccess({
       items: enrichedItems,
-    })
+    });
   } catch (error) {
-    return apiError(error, 'Fehler bei der KI-Anreicherung')
+    return apiError(error, 'Fehler bei der KI-Anreicherung');
   }
-})
+});

@@ -9,37 +9,37 @@
  *   Returns: { success: true, data: { hersteller: "Dell", produktname: "Latitude E7470", ... } }
  */
 
-import { NextRequest } from 'next/server'
-import { withAdmin } from '@/lib/api/middleware'
-import { logger } from '@/lib/logger'
-import { apiSuccess, apiError } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { validateBody, ErfassungTextSchema } from '@/lib/schemas'
-import { extractProductFromText } from '@/lib/erfassung/ai-extraction'
+import { NextRequest } from 'next/server';
+import { withAdmin } from '@/lib/api/middleware';
+import { logger } from '@/lib/logger';
+import { apiSuccess, apiError } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { validateBody, ErfassungTextSchema } from '@/lib/schemas';
+import { extractProductFromText } from '@/lib/erfassung/ai-extraction';
 
 export const POST = withAdmin('products', async (request, session) => {
   try {
-    const body = await request.json()
-    const validation = validateBody(ErfassungTextSchema, body)
-    if (!validation.success) return validation.error
-    const { text } = validation.data
+    const body = await request.json();
+    const validation = validateBody(ErfassungTextSchema, body);
+    if (!validation.success) return validation.error;
+    const { text } = validation.data;
 
     logger.info('Text erfassung started', {
       userId: session.user.id,
       textLength: text.length,
-    })
+    });
 
     // Extract product data using shared service
-    const result = await extractProductFromText(text, 'text')
+    const result = await extractProductFromText(text, 'text');
 
     if (!result.success) {
-      return apiError(result.error, result.error || ERROR_MESSAGES.EXTRACTION_FAILED)
+      return apiError(result.error, result.error || ERROR_MESSAGES.EXTRACTION_FAILED);
     }
 
     logger.info('Text erfassung complete', {
       userId: session.user.id,
       product: result.data.produktname,
-    })
+    });
 
     return apiSuccess({
       inputText: result.inputText,
@@ -48,8 +48,8 @@ export const POST = withAdmin('products', async (request, session) => {
       model: result.model,
       sourceType: result.sourceType,
       verificationSources: result.verificationSources,
-    })
+    });
   } catch (error) {
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
-})
+});

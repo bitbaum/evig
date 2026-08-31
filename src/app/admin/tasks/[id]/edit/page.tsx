@@ -5,21 +5,21 @@
  * Created: 2026-02-05
  */
 
-import { Metadata } from 'next'
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
-import { ArrowLeft, ClipboardList } from 'lucide-react'
-import { query } from '@/lib/auth/db'
-import { TABLE_NAMES } from '@/config/database'
-import { logger } from '@/lib/logger'
-import type { TaskEditItem } from '@/lib/schemas/tasks'
-import TaskEditFormClient from './TaskEditFormClient'
-import Heading from '@/components/admin/AdminHeading'
+import { Metadata } from 'next';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { ArrowLeft, ClipboardList } from 'lucide-react';
+import { query } from '@/lib/auth/db';
+import { TABLE_NAMES } from '@/config/database';
+import { logger } from '@/lib/logger';
+import type { TaskEditItem } from '@/lib/schemas/tasks';
+import TaskEditFormClient from './TaskEditFormClient';
+import Heading from '@/components/admin/AdminHeading';
 
 export const metadata: Metadata = {
   title: 'Aufgabe bearbeiten',
   description: 'Aufgabe bearbeiten.',
-}
+};
 
 async function getTask(id: string): Promise<TaskEditItem | null> {
   try {
@@ -27,25 +27,21 @@ async function getTask(id: string): Promise<TaskEditItem | null> {
       `SELECT id, title, description, instructions, task_type, category, priority, schedule_human, estimated_minutes, due_date, tags, assigned_to, team_id
        FROM ${TABLE_NAMES.TASKS}
        WHERE id = $1 AND is_archived = false`,
-      [id]
-    )
-    return result.rows[0] || null
+      [id],
+    );
+    return result.rows[0] || null;
   } catch (error) {
-    logger.error('Error fetching task for edit', { error, taskId: id })
-    return null
+    logger.error('Error fetching task for edit', { error, taskId: id });
+    return null;
   }
 }
 
-export default async function EditTaskPage({
-  params,
-}: {
-  params: Promise<{ id: string }>
-}) {
-  const { id } = await params
-  const task = await getTask(id)
+export default async function EditTaskPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const task = await getTask(id);
 
   if (!task) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -65,7 +61,9 @@ export default async function EditTaskPage({
             <ClipboardList className="w-5 h-5 text-action" />
           </div>
           <div>
-            <Heading level={1} className="text-2xl font-bold text-text-primary">Aufgabe bearbeiten</Heading>
+            <Heading level={1} className="text-2xl font-bold text-text-primary">
+              Aufgabe bearbeiten
+            </Heading>
             <p className="text-text-secondary">{task.title}</p>
           </div>
         </div>
@@ -74,5 +72,5 @@ export default async function EditTaskPage({
       {/* Form */}
       <TaskEditFormClient task={task} />
     </div>
-  )
+  );
 }

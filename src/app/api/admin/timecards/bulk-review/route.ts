@@ -17,52 +17,53 @@
  * other handlers.
  */
 
-import { NextRequest } from 'next/server'
-import { withAdmin, type ValidSession } from '@/lib/api/middleware'
-import { apiBadRequest, apiError, apiSuccess } from '@/lib/api/helpers'
-import { logger } from '@/lib/logger'
-import { timecardBulkReviewSchema } from '@/lib/schemas/timecards'
-import { reviewTimecard } from '@/lib/services/timecards'
-import { isSuperAdmin } from '@/lib/permissions'
+import { NextRequest } from 'next/server';
+import { withAdmin, type ValidSession } from '@/lib/api/middleware';
+import { apiBadRequest, apiError, apiSuccess } from '@/lib/api/helpers';
+import { logger } from '@/lib/logger';
+import { timecardBulkReviewSchema } from '@/lib/schemas/timecards';
+import { reviewTimecard } from '@/lib/services/timecards';
+import { isSuperAdmin } from '@/lib/permissions';
 
 interface BulkResultItem {
-  id: string
-  ok: boolean
-  error?: string
+  id: string;
+  ok: boolean;
+  error?: string;
 }
 
-export const POST = withAdmin('timecards', async (
-  request: NextRequest,
-  session: ValidSession,
-) => {
+export const POST = withAdmin('timecards', async (request: NextRequest, session: ValidSession) => {
   try {
-    const body = await request.json()
-    const parsed = timecardBulkReviewSchema.safeParse(body)
+    const body = await request.json();
+    const parsed = timecardBulkReviewSchema.safeParse(body);
     if (!parsed.success) {
-      return apiBadRequest('Ungültige Eingabedaten', parsed.error.flatten().fieldErrors)
+      return apiBadRequest('Ungültige Eingabedaten', parsed.error.flatten().fieldErrors);
     }
 
-    const { ids, status, review_notes } = parsed.data
+    const { ids, status, review_notes } = parsed.data;
 
     // Super-admins may approve their own cards in a bulk pass too.
-    const allowSelfReview = isSuperAdmin(session.user.email, session.user.isSuperAdmin)
+    const allowSelfReview = isSuperAdmin(session.user.email, session.user.isSuperAdmin);
 
-    const results: BulkResultItem[] = []
-    let approved = 0
-    let rejected = 0
-    let failed = 0
+    const results: BulkResultItem[] = [];
+    let approved = 0;
+    let rejected = 0;
+    let failed = 0;
 
     for (const id of ids) {
       try {
-        await reviewTimecard(session.user.id, id, { status, review_notes }, { allowSelfReview })
-        results.push({ id, ok: true })
-        if (status === 'approved') approved += 1
-        else rejected += 1
+        await reviewTimecard(session.user.id, id, { status, review_notes }, { allowSelfReview });
+        results.push({ id, ok: true });
+        if (status === 'approved') approved += 1;
+        else rejected += 1;
       } catch (error) {
-        const message = error instanceof Error ? error.message : 'unknown_error'
-        results.push({ id, ok: false, error: message })
-        failed += 1
-        logger.warn('Bulk-review skipped one timecard', { id, error: message, reviewerId: session.user.id })
+        const message = error instanceof Error ? error.message : 'unknown_error';
+        results.push({ id, ok: false, error: message });
+        failed += 1;
+        logger.warn('Bulk-review skipped one timecard', {
+          id,
+          error: message,
+          reviewerId: session.user.id,
+        });
       }
     }
 
@@ -72,9 +73,9 @@ export const POST = withAdmin('timecards', async (
       rejected,
       failed,
       results,
-    })
+    });
   } catch (error) {
-    logger.error('Error in bulk timecard review', { error, reviewerId: session.user.id })
-    return apiError(error, 'Mehrfach-Freigabe konnte nicht ausgeführt werden')
+    logger.error('Error in bulk timecard review', { error, reviewerId: session.user.id });
+    return apiError(error, 'Mehrfach-Freigabe konnte nicht ausgeführt werden');
   }
-})
+});

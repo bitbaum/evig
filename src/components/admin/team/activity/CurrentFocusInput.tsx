@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Current Focus Input Component
@@ -6,22 +6,22 @@
  * Quick input for updating "what I'm working on" status
  */
 
-import { useState, useMemo } from 'react'
-import { Target, Loader2, Check, X, AlertTriangle } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import Heading from '@/components/admin/AdminHeading'
-import { useCurrentFocus } from './useActivityStream'
-import { focusFreshness } from '@/lib/team/focus-freshness'
+import { useState, useMemo } from 'react';
+import { Target, Loader2, Check, X, AlertTriangle } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import Heading from '@/components/admin/AdminHeading';
+import { useCurrentFocus } from './useActivityStream';
+import { focusFreshness } from '@/lib/team/focus-freshness';
 
 interface CurrentFocusInputProps {
-  profileId: string
-  initialFocus: string | null
+  profileId: string;
+  initialFocus: string | null;
   /** When the focus was last saved — drives the freshness badge. */
-  initialUpdatedAt?: string | null
-  onUpdate?: (newFocus: string | null) => void
-  compact?: boolean
+  initialUpdatedAt?: string | null;
+  onUpdate?: (newFocus: string | null) => void;
+  compact?: boolean;
 }
 
 export function CurrentFocusInput({
@@ -32,45 +32,46 @@ export function CurrentFocusInput({
   compact = false,
 }: CurrentFocusInputProps) {
   // Track if user has made local edits (reset when initialFocus changes via key prop)
-  const [focus, setFocus] = useState(initialFocus || '')
-  const [isEditing, setIsEditing] = useState(false)
+  const [focus, setFocus] = useState(initialFocus || '');
+  const [isEditing, setIsEditing] = useState(false);
   // Track the save timestamp locally so the freshness badge updates the moment
   // the focus is saved, without waiting for a server round-trip/refresh.
-  const [updatedAt, setUpdatedAt] = useState<string | null>(initialUpdatedAt)
-  const { saving, error, updateFocus } = useCurrentFocus()
+  const [updatedAt, setUpdatedAt] = useState<string | null>(initialUpdatedAt);
+  const { saving, error, updateFocus } = useCurrentFocus();
 
   // Derive hasChanges from current state (no effect needed)
   const hasChanges = useMemo(() => {
-    return focus !== (initialFocus || '')
-  }, [focus, initialFocus])
+    return focus !== (initialFocus || '');
+  }, [focus, initialFocus]);
 
-  const fresh = focusFreshness(updatedAt)
-  const showFreshness = !compact && !isEditing && !hasChanges && focus.trim().length > 0 && fresh !== null
+  const fresh = focusFreshness(updatedAt);
+  const showFreshness =
+    !compact && !isEditing && !hasChanges && focus.trim().length > 0 && fresh !== null;
 
   const handleSave = async () => {
-    const newFocus = focus.trim() || null
-    const success = await updateFocus(profileId, newFocus)
+    const newFocus = focus.trim() || null;
+    const success = await updateFocus(profileId, newFocus);
     if (success) {
-      setIsEditing(false)
-      setUpdatedAt(newFocus ? new Date().toISOString() : null)
-      onUpdate?.(newFocus)
+      setIsEditing(false);
+      setUpdatedAt(newFocus ? new Date().toISOString() : null);
+      onUpdate?.(newFocus);
     }
-  }
+  };
 
   const handleCancel = () => {
-    setFocus(initialFocus || '')
-    setIsEditing(false)
-  }
+    setFocus(initialFocus || '');
+    setIsEditing(false);
+  };
 
   const handleClear = async () => {
-    const success = await updateFocus(profileId, null)
+    const success = await updateFocus(profileId, null);
     if (success) {
-      setFocus('')
-      setIsEditing(false)
-      setUpdatedAt(null)
-      onUpdate?.(null)
+      setFocus('');
+      setIsEditing(false);
+      setUpdatedAt(null);
+      onUpdate?.(null);
     }
-  }
+  };
 
   if (compact) {
     return (
@@ -87,8 +88,8 @@ export function CurrentFocusInput({
               className="flex-1"
               autoFocus
               onKeyDown={(e) => {
-                if (e.key === 'Enter') handleSave()
-                if (e.key === 'Escape') handleCancel()
+                if (e.key === 'Enter') handleSave();
+                if (e.key === 'Escape') handleCancel();
               }}
             />
             <Button
@@ -104,7 +105,12 @@ export function CurrentFocusInput({
                 <Check className="w-4 h-4" />
               )}
             </Button>
-            <Button onClick={handleCancel} variant="ghost" size="icon" className="p-1 text-text-tertiary">
+            <Button
+              onClick={handleCancel}
+              variant="ghost"
+              size="icon"
+              className="p-1 text-text-tertiary"
+            >
               <X className="w-4 h-4" />
             </Button>
           </div>
@@ -118,14 +124,16 @@ export function CurrentFocusInput({
           </Button>
         )}
       </div>
-    )
+    );
   }
 
   return (
     <Card className="p-4">
       <div className="flex items-center gap-2 mb-3">
         <Target className="w-5 h-5 text-text-tertiary" />
-        <Heading level={3} className="text-text-primary">Aktueller Fokus</Heading>
+        <Heading level={3} className="text-text-primary">
+          Aktueller Fokus
+        </Heading>
         {showFreshness && (
           <span
             className={
@@ -152,8 +160,8 @@ export function CurrentFocusInput({
             type="text"
             value={focus}
             onChange={(e) => {
-              setFocus(e.target.value)
-              setIsEditing(true)
+              setFocus(e.target.value);
+              setIsEditing(true);
             }}
             placeholder="Woran arbeitest du gerade?"
             maxLength={200}
@@ -165,9 +173,7 @@ export function CurrentFocusInput({
 
         {isEditing && (
           <div className="flex items-center justify-between">
-            <p className="text-xs text-text-tertiary">
-              Teile deinem Team mit, woran du arbeitest
-            </p>
+            <p className="text-xs text-text-tertiary">Teile deinem Team mit, woran du arbeitest</p>
             <div className="flex gap-2">
               {initialFocus && (
                 <Button
@@ -197,5 +203,5 @@ export function CurrentFocusInput({
         )}
       </div>
     </Card>
-  )
+  );
 }

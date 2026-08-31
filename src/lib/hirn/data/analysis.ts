@@ -65,9 +65,8 @@ export interface SeasonalityPattern {
 
 function calculateTrend(current: number, previous: number): TrendAnalysis {
   const absoluteChange = current - previous;
-  const percentChange = previous !== 0
-    ? ((current - previous) / previous) * 100
-    : current > 0 ? 100 : 0;
+  const percentChange =
+    previous !== 0 ? ((current - previous) / previous) * 100 : current > 0 ? 100 : 0;
 
   let direction: TrendDirection = 'stable';
   if (percentChange > 5) direction = 'up';
@@ -81,7 +80,6 @@ function calculateTrend(current: number, previous: number): TrendAnalysis {
   };
 }
 
-
 // ============================================================================
 // Analysis Functions
 // ============================================================================
@@ -91,33 +89,27 @@ function calculateTrend(current: number, previous: number): TrendAnalysis {
  */
 export function compareYears(
   current: YearlyAggregation,
-  previous: YearlyAggregation
+  previous: YearlyAggregation,
 ): YearComparison {
-  const totalChange = calculateTrend(
-    current.totals.total.value,
-    previous.totals.total.value
-  );
+  const totalChange = calculateTrend(current.totals.total.value, previous.totals.total.value);
 
   const categoryChanges = {
     warenverkauf: calculateTrend(
       current.totals.warenverkauf.value,
-      previous.totals.warenverkauf.value
+      previous.totals.warenverkauf.value,
     ),
     dienstleistungen: calculateTrend(
       current.totals.dienstleistungen.value,
-      previous.totals.dienstleistungen.value
+      previous.totals.dienstleistungen.value,
     ),
     integration: calculateTrend(
       current.totals.integration.value,
-      previous.totals.integration.value
+      previous.totals.integration.value,
     ),
-    spenden: calculateTrend(
-      current.totals.spenden.value,
-      previous.totals.spenden.value
-    ),
+    spenden: calculateTrend(current.totals.spenden.value, previous.totals.spenden.value),
     aufstockung: calculateTrend(
       current.totals.aufstockung.value,
-      previous.totals.aufstockung.value
+      previous.totals.aufstockung.value,
     ),
   };
 
@@ -174,7 +166,10 @@ export function compareYears(
       value: selfFinancingChange,
       valueFormatted: `${selfFinancingChange > 0 ? '+' : ''}${formatPercent(selfFinancingChange)}`,
       formula: `${formatPercent(currentSelfFinancing)} - ${formatPercent(previousSelfFinancing)} = ${formatPercent(selfFinancingChange)}`,
-      relatedNumbers: [`financial_self_financing_${current.year}`, `financial_self_financing_${previous.year}`],
+      relatedNumbers: [
+        `financial_self_financing_${current.year}`,
+        `financial_self_financing_${previous.year}`,
+      ],
       implication: isImproved
         ? 'Stärkere finanzielle Unabhängigkeit'
         : 'Erhöhte Abhängigkeit von Spenden',
@@ -186,7 +181,10 @@ export function compareYears(
   }
 
   // Category-specific insights
-  if (categoryChanges.dienstleistungen.direction === 'up' && categoryChanges.dienstleistungen.percentChange > 10) {
+  if (
+    categoryChanges.dienstleistungen.direction === 'up' &&
+    categoryChanges.dienstleistungen.percentChange > 10
+  ) {
     insights.push({
       id: 'services_growth',
       type: 'positive',
@@ -195,7 +193,10 @@ export function compareYears(
       value: categoryChanges.dienstleistungen.percentChange,
       valueFormatted: formatPercent(categoryChanges.dienstleistungen.percentChange),
       formula: categoryChanges.dienstleistungen.formula,
-      relatedNumbers: [`financial_dienstleistungen_${current.year}`, `financial_dienstleistungen_${previous.year}`],
+      relatedNumbers: [
+        `financial_dienstleistungen_${current.year}`,
+        `financial_dienstleistungen_${previous.year}`,
+      ],
       implication: 'Servicebereich gewinnt an Bedeutung; stärkt Eigenfinanzierung',
       recommendation: 'Kapazitäten für Dienstleistungen erweitern; Angebot diversifizieren',
       priority: 'low',
@@ -203,7 +204,10 @@ export function compareYears(
   }
 
   // Products declining warning
-  if (categoryChanges.warenverkauf.direction === 'down' && Math.abs(categoryChanges.warenverkauf.percentChange) > 15) {
+  if (
+    categoryChanges.warenverkauf.direction === 'down' &&
+    Math.abs(categoryChanges.warenverkauf.percentChange) > 15
+  ) {
     insights.push({
       id: 'products_decline',
       type: 'warning',
@@ -212,7 +216,10 @@ export function compareYears(
       value: categoryChanges.warenverkauf.percentChange,
       valueFormatted: formatPercent(Math.abs(categoryChanges.warenverkauf.percentChange)),
       formula: categoryChanges.warenverkauf.formula,
-      relatedNumbers: [`financial_warenverkauf_${current.year}`, `financial_warenverkauf_${previous.year}`],
+      relatedNumbers: [
+        `financial_warenverkauf_${current.year}`,
+        `financial_warenverkauf_${previous.year}`,
+      ],
       implication: 'Rückgang bei Haupteinnahmequelle; mögliche Nachfrageschwäche',
       recommendation: 'Sortiment prüfen; Marketing verstärken; neue Beschaffungskanäle',
       priority: 'high',
@@ -234,8 +241,9 @@ export function compareYears(
   }
 
   // Donations increasing significantly
-  const currentDonationsShare = current.totals.spenden.value / current.totals.total.value * 100;
-  const previousDonationsShare = previous.totals.spenden.value / previous.totals.total.value * 100;
+  const currentDonationsShare = (current.totals.spenden.value / current.totals.total.value) * 100;
+  const previousDonationsShare =
+    (previous.totals.spenden.value / previous.totals.total.value) * 100;
   if (currentDonationsShare > 40 && currentDonationsShare > previousDonationsShare + 5) {
     insights.push({
       id: 'donations_increasing',
@@ -264,17 +272,17 @@ export function compareYears(
  * Analyze seasonality patterns within a year
  */
 export function analyzeSeasonality(data: YearlyAggregation): SeasonalityPattern {
-  const monthlyValues = data.monthly.map(m => m.total.value);
+  const monthlyValues = data.monthly.map((m) => m.total.value);
   const avg = monthlyValues.reduce((a, b) => a + b, 0) / monthlyValues.length;
   const threshold = avg * 0.2; // 20% above/below average
 
   const strongMonths = data.monthly
-    .filter(m => m.total.value > avg + threshold)
-    .map(m => m.month);
+    .filter((m) => m.total.value > avg + threshold)
+    .map((m) => m.month);
 
   const weakMonths = data.monthly
-    .filter(m => m.total.value < avg - threshold)
-    .map(m => m.month);
+    .filter((m) => m.total.value < avg - threshold)
+    .map((m) => m.month);
 
   let pattern = 'Keine klare Saisonalität erkennbar';
   let confidence: 'high' | 'medium' | 'low' = 'low';
@@ -339,7 +347,8 @@ export function generateYearInsights(data: YearlyAggregation): Insight[] {
       formula: data.derived.eigenfinanzierungPct.source.accountName,
       relatedNumbers: [`financial_self_financing_${data.year}`],
       implication: 'Hohe Spendenabhängigkeit; Risiko bei Spendenrückgang',
-      recommendation: 'Dienstleistungen ausbauen oder Preise anpassen; alternative Einnahmequellen prüfen',
+      recommendation:
+        'Dienstleistungen ausbauen oder Preise anpassen; alternative Einnahmequellen prüfen',
       priority: 'high',
     });
   }
@@ -359,14 +368,14 @@ export function generateYearInsights(data: YearlyAggregation): Insight[] {
   });
 
   // Check for months with zero total
-  const zeroMonths = data.monthly.filter(m => m.total.value <= 0);
+  const zeroMonths = data.monthly.filter((m) => m.total.value <= 0);
   if (zeroMonths.length > 0) {
     insights.push({
       id: 'zero_months',
       type: 'warning',
       title: 'Monate ohne Einnahmen',
       description: `${zeroMonths.length} Monat(e) mit null oder negativen Einnahmen`,
-      relatedNumbers: zeroMonths.map(m => `financial_month_${m.month}_${data.year}`),
+      relatedNumbers: zeroMonths.map((m) => `financial_month_${m.month}_${data.year}`),
       implication: 'Inkonsistente Einnahmen; mögliche Datenlücken oder saisonale Effekte',
       recommendation: 'Datenqualität prüfen; bei echten Lücken Cashflow-Planung verbessern',
       priority: 'medium',

@@ -1,45 +1,51 @@
-'use client'
+'use client';
 
-import { useState, useMemo } from 'react'
-import { Search, X } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { useState, useMemo } from 'react';
+import { Search, X } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import {
   type OSSAlternative,
   type OSSCategory,
   searchAlternatives,
-} from '@/config/open-source-registry'
-import { AlternativeCard } from './AlternativeCard'
-import { EmptyState } from '@/components/common/EmptyState'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { useTranslations } from 'next-intl'
+} from '@/config/open-source-registry';
+import { AlternativeCard } from './AlternativeCard';
+import { EmptyState } from '@/components/common/EmptyState';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useTranslations } from 'next-intl';
 
 interface RegistrySearchProps {
-  alternatives: OSSAlternative[]
-  categories: OSSCategory[]
+  alternatives: OSSAlternative[];
+  categories: OSSCategory[];
 }
 
 export function RegistrySearch({ alternatives, categories }: RegistrySearchProps) {
-  const [query, setQuery] = useState('')
-  const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null)
-  const t = useTranslations('services.openSourceSolutions.search')
+  const [query, setQuery] = useState('');
+  const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
+  const t = useTranslations('services.openSourceSolutions.search');
 
   const filtered = useMemo(() => {
-    let results = query ? searchAlternatives(query) : alternatives
+    let results = query ? searchAlternatives(query) : alternatives;
     if (activeCategoryId) {
-      results = results.filter(a => a.categoryId === activeCategoryId)
+      results = results.filter((a) => a.categoryId === activeCategoryId);
     }
-    return results
-  }, [query, activeCategoryId, alternatives])
+    return results;
+  }, [query, activeCategoryId, alternatives]);
 
-  const activeCategory = categories.find(c => c.id === activeCategoryId)
+  const activeCategory = categories.find((c) => c.id === activeCategoryId);
 
   const resultCountLabel = (() => {
-    if (query && activeCategory) return t('resultCountForIn', { count: filtered.length, query, category: activeCategory.label })
-    if (query) return t('resultCountFor', { count: filtered.length, query })
-    if (activeCategory) return t('resultCountIn', { count: filtered.length, category: activeCategory.label })
-    return t('resultCount', { count: filtered.length })
-  })()
+    if (query && activeCategory)
+      return t('resultCountForIn', {
+        count: filtered.length,
+        query,
+        category: activeCategory.label,
+      });
+    if (query) return t('resultCountFor', { count: filtered.length, query });
+    if (activeCategory)
+      return t('resultCountIn', { count: filtered.length, category: activeCategory.label });
+    return t('resultCount', { count: filtered.length });
+  })();
 
   return (
     <div>
@@ -50,7 +56,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
           <Input
             type="text"
             value={query}
-            onChange={e => setQuery(e.target.value)}
+            onChange={(e) => setQuery(e.target.value)}
             placeholder={t('placeholder')}
             aria-label={t('ariaLabel')}
             className="pl-12 pr-10 py-3 sm:py-4 text-sm sm:text-base"
@@ -78,12 +84,12 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
             'shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors',
             !activeCategoryId
               ? 'bg-action text-action-text'
-              : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
+              : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay',
           )}
         >
           {t('allCategories')}
         </Button>
-        {categories.map(cat => (
+        {categories.map((cat) => (
           <Button
             key={cat.id}
             variant="ghost"
@@ -92,7 +98,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
               'shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap',
               activeCategoryId === cat.id
                 ? 'bg-action text-action-text'
-                : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay'
+                : 'bg-surface-raised text-text-secondary hover:bg-surface-overlay',
             )}
           >
             {cat.icon} {cat.label}
@@ -106,7 +112,7 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
       {/* Results grid or empty state */}
       {filtered.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {filtered.map(alt => (
+          {filtered.map((alt) => (
             <AlternativeCard key={alt.id} alternative={alt} />
           ))}
         </div>
@@ -117,10 +123,13 @@ export function RegistrySearch({ alternatives, categories }: RegistrySearchProps
           message={t('noResultsMessage', { query })}
           action={{
             label: t('clearSearch'),
-            onClick: () => { setQuery(''); setActiveCategoryId(null) },
+            onClick: () => {
+              setQuery('');
+              setActiveCategoryId(null);
+            },
           }}
         />
       )}
     </div>
-  )
+  );
 }

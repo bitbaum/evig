@@ -12,17 +12,17 @@
  * matches, the byline degrades gracefully to plain text.
  */
 
-import { DEFAULT_BLOG_AUTHOR } from '@/config/org'
+import { DEFAULT_BLOG_AUTHOR } from '@/config/org';
 
 export interface BlogAuthorRecord {
   /** Frontmatter key + stable identifier. */
-  slug: string
+  slug: string;
   /** Fallback display name (used when the account can't be resolved). */
-  name: string
+  name: string;
   /** Platform account email → resolves to the public profile. */
-  email: string
+  email: string;
   /** Optional one-line role shown under the name on the profile. */
-  role?: string
+  role?: string;
 }
 
 // Posts carry no `author:` line and inherit DEFAULT_BLOG_AUTHOR (org.ts). We key
@@ -34,7 +34,7 @@ export const BLOG_AUTHORS: Record<string, BlogAuthorRecord> = {
     name: DEFAULT_BLOG_AUTHOR,
     email: 'georgy.butaev@revamp-it.ch',
   },
-}
+};
 
 /**
  * Resolve a frontmatter `author` value to its record. Matches by slug first
@@ -43,9 +43,9 @@ export const BLOG_AUTHORS: Record<string, BlogAuthorRecord> = {
  * shows the raw string without a profile link.
  */
 export function getBlogAuthorRecord(author: string | undefined | null): BlogAuthorRecord | null {
-  if (!author) return null
-  const key = author.trim()
-  if (BLOG_AUTHORS[key]) return BLOG_AUTHORS[key]
-  const lower = key.toLowerCase()
-  return Object.values(BLOG_AUTHORS).find((a) => a.name.toLowerCase() === lower) ?? null
+  if (!author) return null;
+  const key = author.trim();
+  if (BLOG_AUTHORS[key]) return BLOG_AUTHORS[key];
+  const lower = key.toLowerCase();
+  return Object.values(BLOG_AUTHORS).find((a) => a.name.toLowerCase() === lower) ?? null;
 }

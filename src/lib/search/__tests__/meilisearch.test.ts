@@ -34,11 +34,15 @@
 // fetch mock — save/restore to prevent global leak
 // ---------------------------------------------------------------------------
 
-const originalFetch = global.fetch
-const mockFetch = jest.fn()
+const originalFetch = global.fetch;
+const mockFetch = jest.fn();
 
-beforeAll(() => { global.fetch = mockFetch })
-afterAll(() => { global.fetch = originalFetch })
+beforeAll(() => {
+  global.fetch = mockFetch;
+});
+afterAll(() => {
+  global.fetch = originalFetch;
+});
 
 // ---------------------------------------------------------------------------
 // Mocks
@@ -46,11 +50,11 @@ afterAll(() => { global.fetch = originalFetch })
 
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
-}))
+}));
 
 jest.mock('@/config/urls', () => ({
   MEILISEARCH_URL: 'http://meilisearch.test',
-}))
+}));
 
 jest.mock('@/config/marketplace', () => ({
   MARKETPLACE_SELLER_TYPE: {
@@ -60,7 +64,7 @@ jest.mock('@/config/marketplace', () => ({
   LISTING_STATUS: {
     ACTIVE: 'active',
   },
-}))
+}));
 
 // ---------------------------------------------------------------------------
 // Imports (after mocks)
@@ -72,7 +76,7 @@ import {
   removeListing,
   searchListings,
   type MeilisearchDocument,
-} from '../meilisearch'
+} from '../meilisearch';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -83,7 +87,7 @@ function okResponse(body: unknown = {}) {
     ok: true,
     status: 200,
     json: jest.fn().mockResolvedValue(body),
-  }
+  };
 }
 
 function errResponse(status: number) {
@@ -91,7 +95,7 @@ function errResponse(status: number) {
     ok: false,
     status,
     json: jest.fn().mockResolvedValue({}),
-  }
+  };
 }
 
 function makeListing(overrides: Partial<MeilisearchDocument> = {}): MeilisearchDocument {
@@ -117,12 +121,12 @@ function makeListing(overrides: Partial<MeilisearchDocument> = {}): MeilisearchD
     created_at: '2026-04-01T00:00:00Z',
     thumbnail: null,
     ...overrides,
-  }
+  };
 }
 
 beforeEach(() => {
-  jest.clearAllMocks()
-})
+  jest.clearAllMocks();
+});
 
 // ============================================================================
 // isMeilisearchAvailable
@@ -130,32 +134,32 @@ beforeEach(() => {
 
 describe('isMeilisearchAvailable', () => {
   it('returns true when /health responds ok', async () => {
-    mockFetch.mockResolvedValueOnce(okResponse())
+    mockFetch.mockResolvedValueOnce(okResponse());
 
-    const result = await isMeilisearchAvailable()
+    const result = await isMeilisearchAvailable();
 
-    expect(result).toBe(true)
-    expect(mockFetch).toHaveBeenCalledTimes(1)
-    const [url] = mockFetch.mock.calls[0]
-    expect(url).toContain('/health')
-  })
+    expect(result).toBe(true);
+    expect(mockFetch).toHaveBeenCalledTimes(1);
+    const [url] = mockFetch.mock.calls[0];
+    expect(url).toContain('/health');
+  });
 
   it('returns false when /health is not ok', async () => {
-    mockFetch.mockResolvedValueOnce(errResponse(503))
+    mockFetch.mockResolvedValueOnce(errResponse(503));
 
-    const result = await isMeilisearchAvailable()
+    const result = await isMeilisearchAvailable();
 
-    expect(result).toBe(false)
-  })
+    expect(result).toBe(false);
+  });
 
   it('returns false on network error', async () => {
-    mockFetch.mockRejectedValueOnce(new Error('connection refused'))
+    mockFetch.mockRejectedValueOnce(new Error('connection refused'));
 
-    const result = await isMeilisearchAvailable()
+    const result = await isMeilisearchAvailable();
 
-    expect(result).toBe(false)
-  })
-})
+    expect(result).toBe(false);
+  });
+});
 
 // ============================================================================
 // indexListing
@@ -163,43 +167,43 @@ describe('isMeilisearchAvailable', () => {
 
 describe('indexListing', () => {
   it('sends POST to /indexes/listings/documents with listing as array', async () => {
-    mockFetch.mockResolvedValueOnce(okResponse())
+    mockFetch.mockResolvedValueOnce(okResponse());
 
-    const listing = makeListing()
-    await indexListing(listing)
+    const listing = makeListing();
+    await indexListing(listing);
 
-    const [url, options] = mockFetch.mock.calls[0]
-    expect(url).toContain('/indexes/listings/documents')
-    expect(options.method).toBe('POST')
-    const body = JSON.parse(options.body)
-    expect(Array.isArray(body)).toBe(true)
-    expect(body[0].id).toBe('listing-1')
-  })
+    const [url, options] = mockFetch.mock.calls[0];
+    expect(url).toContain('/indexes/listings/documents');
+    expect(options.method).toBe('POST');
+    const body = JSON.parse(options.body);
+    expect(Array.isArray(body)).toBe(true);
+    expect(body[0].id).toBe('listing-1');
+  });
 
   it('sends to the configured Meilisearch host URL', async () => {
-    mockFetch.mockResolvedValueOnce(okResponse())
+    mockFetch.mockResolvedValueOnce(okResponse());
 
-    await indexListing(makeListing())
+    await indexListing(makeListing());
 
-    const [url] = mockFetch.mock.calls[0]
-    expect(url).toContain('meilisearch.test')
-  })
+    const [url] = mockFetch.mock.calls[0];
+    expect(url).toContain('meilisearch.test');
+  });
 
   it('does not throw when fetch fails (network error)', async () => {
-    mockFetch.mockRejectedValueOnce(new Error('network error'))
+    mockFetch.mockRejectedValueOnce(new Error('network error'));
 
     // Should not throw — error is swallowed
-    await expect(indexListing(makeListing())).resolves.toBeUndefined()
-  })
+    await expect(indexListing(makeListing())).resolves.toBeUndefined();
+  });
 
   it('does not throw when Meilisearch returns 4xx (no retry, still swallowed)', async () => {
     // 4xx doesn't retry (status < 500) but meiliWriteWithRetry returns the response;
     // indexListing doesn't inspect the response and returns void
-    mockFetch.mockResolvedValueOnce(errResponse(422))
+    mockFetch.mockResolvedValueOnce(errResponse(422));
 
-    await expect(indexListing(makeListing())).resolves.toBeUndefined()
-  })
-})
+    await expect(indexListing(makeListing())).resolves.toBeUndefined();
+  });
+});
 
 // ============================================================================
 // removeListing
@@ -207,21 +211,21 @@ describe('indexListing', () => {
 
 describe('removeListing', () => {
   it('sends DELETE to /indexes/listings/documents/:id', async () => {
-    mockFetch.mockResolvedValueOnce(okResponse())
+    mockFetch.mockResolvedValueOnce(okResponse());
 
-    await removeListing('listing-1')
+    await removeListing('listing-1');
 
-    const [url, options] = mockFetch.mock.calls[0]
-    expect(url).toContain('/indexes/listings/documents/listing-1')
-    expect(options.method).toBe('DELETE')
-  })
+    const [url, options] = mockFetch.mock.calls[0];
+    expect(url).toContain('/indexes/listings/documents/listing-1');
+    expect(options.method).toBe('DELETE');
+  });
 
   it('does not throw when fetch fails', async () => {
-    mockFetch.mockRejectedValueOnce(new Error('timeout'))
+    mockFetch.mockRejectedValueOnce(new Error('timeout'));
 
-    await expect(removeListing('listing-1')).resolves.toBeUndefined()
-  })
-})
+    await expect(removeListing('listing-1')).resolves.toBeUndefined();
+  });
+});
 
 // ============================================================================
 // searchListings — filter construction
@@ -229,65 +233,65 @@ describe('removeListing', () => {
 
 describe('searchListings — filter construction', () => {
   function captureBody() {
-    const [, options] = mockFetch.mock.calls[0]
-    return JSON.parse(options.body)
+    const [, options] = mockFetch.mock.calls[0];
+    return JSON.parse(options.body);
   }
 
   it('always includes status = "active" in filter', async () => {
-    mockFetch.mockResolvedValueOnce(okResponse({ hits: [], estimatedTotalHits: 0 }))
+    mockFetch.mockResolvedValueOnce(okResponse({ hits: [], estimatedTotalHits: 0 }));
 
-    await searchListings('', {}, 'newest', 1, 20)
+    await searchListings('', {}, 'newest', 1, 20);
 
-    const body = captureBody()
-    expect(body.filter).toContain('status = "active"')
-  })
+    const body = captureBody();
+    expect(body.filter).toContain('status = "active"');
+  });
 
   it('appends category filter when provided', async () => {
-    mockFetch.mockResolvedValueOnce(okResponse({ hits: [], estimatedTotalHits: 0 }))
+    mockFetch.mockResolvedValueOnce(okResponse({ hits: [], estimatedTotalHits: 0 }));
 
-    await searchListings('', { category: 'laptop' }, 'newest', 1, 20)
+    await searchListings('', { category: 'laptop' }, 'newest', 1, 20);
 
-    const body = captureBody()
-    expect(body.filter).toContain('category = "laptop"')
-  })
+    const body = captureBody();
+    expect(body.filter).toContain('category = "laptop"');
+  });
 
   it('appends price_min and price_max filters', async () => {
-    mockFetch.mockResolvedValueOnce(okResponse({ hits: [], estimatedTotalHits: 0 }))
+    mockFetch.mockResolvedValueOnce(okResponse({ hits: [], estimatedTotalHits: 0 }));
 
-    await searchListings('', { price_min: 50, price_max: 300 }, 'newest', 1, 20)
+    await searchListings('', { price_min: 50, price_max: 300 }, 'newest', 1, 20);
 
-    const body = captureBody()
-    expect(body.filter).toContain('price_chf >= 50')
-    expect(body.filter).toContain('price_chf <= 300')
-  })
+    const body = captureBody();
+    expect(body.filter).toContain('price_chf >= 50');
+    expect(body.filter).toContain('price_chf <= 300');
+  });
 
   it('appends is_revampit = true for revampit seller_type', async () => {
-    mockFetch.mockResolvedValueOnce(okResponse({ hits: [], estimatedTotalHits: 0 }))
+    mockFetch.mockResolvedValueOnce(okResponse({ hits: [], estimatedTotalHits: 0 }));
 
-    await searchListings('', { seller_type: 'revampit' }, 'newest', 1, 20)
+    await searchListings('', { seller_type: 'revampit' }, 'newest', 1, 20);
 
-    const body = captureBody()
-    expect(body.filter).toContain('is_revampit = true')
-  })
+    const body = captureBody();
+    expect(body.filter).toContain('is_revampit = true');
+  });
 
   it('appends is_revampit = false for community seller_type', async () => {
-    mockFetch.mockResolvedValueOnce(okResponse({ hits: [], estimatedTotalHits: 0 }))
+    mockFetch.mockResolvedValueOnce(okResponse({ hits: [], estimatedTotalHits: 0 }));
 
-    await searchListings('', { seller_type: 'community' }, 'newest', 1, 20)
+    await searchListings('', { seller_type: 'community' }, 'newest', 1, 20);
 
-    const body = captureBody()
-    expect(body.filter).toContain('is_revampit = false')
-  })
+    const body = captureBody();
+    expect(body.filter).toContain('is_revampit = false');
+  });
 
   it('appends is_verified = true for verified_only filter', async () => {
-    mockFetch.mockResolvedValueOnce(okResponse({ hits: [], estimatedTotalHits: 0 }))
+    mockFetch.mockResolvedValueOnce(okResponse({ hits: [], estimatedTotalHits: 0 }));
 
-    await searchListings('', { verified_only: true }, 'newest', 1, 20)
+    await searchListings('', { verified_only: true }, 'newest', 1, 20);
 
-    const body = captureBody()
-    expect(body.filter).toContain('is_verified = true')
-  })
-})
+    const body = captureBody();
+    expect(body.filter).toContain('is_verified = true');
+  });
+});
 
 // ============================================================================
 // searchListings — sort mapping
@@ -295,8 +299,8 @@ describe('searchListings — filter construction', () => {
 
 describe('searchListings — sort mapping', () => {
   function captureBody() {
-    const [, options] = mockFetch.mock.calls[0]
-    return JSON.parse(options.body)
+    const [, options] = mockFetch.mock.calls[0];
+    return JSON.parse(options.body);
   }
 
   it.each([
@@ -306,14 +310,14 @@ describe('searchListings — sort mapping', () => {
     ['newest', 'created_at:desc'],
     ['unknown', 'created_at:desc'],
   ])('maps sort "%s" to "%s"', async (sort, expected) => {
-    mockFetch.mockResolvedValueOnce(okResponse({ hits: [], estimatedTotalHits: 0 }))
+    mockFetch.mockResolvedValueOnce(okResponse({ hits: [], estimatedTotalHits: 0 }));
 
-    await searchListings('', {}, sort, 1, 20)
+    await searchListings('', {}, sort, 1, 20);
 
-    const body = captureBody()
-    expect(body.sort).toContain(expected)
-  })
-})
+    const body = captureBody();
+    expect(body.sort).toContain(expected);
+  });
+});
 
 // ============================================================================
 // searchListings — HTTP behavior
@@ -325,40 +329,40 @@ describe('searchListings — HTTP behavior', () => {
       hits: [makeListing()],
       estimatedTotalHits: 1,
       facetDistribution: {},
-    }
-    mockFetch.mockResolvedValueOnce(okResponse(searchResult))
+    };
+    mockFetch.mockResolvedValueOnce(okResponse(searchResult));
 
-    const result = await searchListings('ThinkPad', {}, 'newest', 1, 20)
+    const result = await searchListings('ThinkPad', {}, 'newest', 1, 20);
 
-    expect(result).not.toBeNull()
-    expect(result?.hits).toHaveLength(1)
-    expect(result?.estimatedTotalHits).toBe(1)
-  })
+    expect(result).not.toBeNull();
+    expect(result?.hits).toHaveLength(1);
+    expect(result?.estimatedTotalHits).toBe(1);
+  });
 
   it('returns null when HTTP response is not ok', async () => {
-    mockFetch.mockResolvedValueOnce(errResponse(503))
+    mockFetch.mockResolvedValueOnce(errResponse(503));
 
-    const result = await searchListings('', {}, 'newest', 1, 20)
+    const result = await searchListings('', {}, 'newest', 1, 20);
 
-    expect(result).toBeNull()
-  })
+    expect(result).toBeNull();
+  });
 
   it('returns null on network error (never throws)', async () => {
-    mockFetch.mockRejectedValueOnce(new Error('connection refused'))
+    mockFetch.mockRejectedValueOnce(new Error('connection refused'));
 
-    const result = await searchListings('', {}, 'newest', 1, 20)
+    const result = await searchListings('', {}, 'newest', 1, 20);
 
-    expect(result).toBeNull()
-  })
+    expect(result).toBeNull();
+  });
 
   it('sends pagination offset correctly', async () => {
-    mockFetch.mockResolvedValueOnce(okResponse({ hits: [], estimatedTotalHits: 0 }))
+    mockFetch.mockResolvedValueOnce(okResponse({ hits: [], estimatedTotalHits: 0 }));
 
-    await searchListings('', {}, 'newest', 3, 10) // page 3, limit 10 → offset 20
+    await searchListings('', {}, 'newest', 3, 10); // page 3, limit 10 → offset 20
 
-    const [, options] = mockFetch.mock.calls[0]
-    const body = JSON.parse(options.body)
-    expect(body.offset).toBe(20)
-    expect(body.limit).toBe(10)
-  })
-})
+    const [, options] = mockFetch.mock.calls[0];
+    const body = JSON.parse(options.body);
+    expect(body.offset).toBe(20);
+    expect(body.limit).toBe(10);
+  });
+});

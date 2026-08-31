@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import { CalendarCheck, Pencil, X } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import type { TimecardEntryCategory } from '@/config/timecards'
-import { TimecardActions } from './TimecardActions'
+import { CalendarCheck, Pencil, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import type { TimecardEntryCategory } from '@/config/timecards';
+import { TimecardActions } from './TimecardActions';
 
 /**
  * Contextual action bar for the month grid — appears only when one or more
@@ -24,16 +24,16 @@ export function TimecardBulkBar({
   onCancel,
   onEditDay,
 }: {
-  count: number
-  onFillFromSchedule: () => void
-  onSetAbsence: (category: TimecardEntryCategory) => void
-  onClearDays: () => void
-  onCancel: () => void
+  count: number;
+  onFillFromSchedule: () => void;
+  onSetAbsence: (category: TimecardEntryCategory) => void;
+  onClearDays: () => void;
+  onCancel: () => void;
   /** Open the day editor for the single selected day (only passed when count === 1). */
-  onEditDay?: () => void
+  onEditDay?: () => void;
 }) {
-  const t = useTranslations('admin.timecards')
-  if (count === 0) return null
+  const t = useTranslations('admin.timecards');
+  if (count === 0) return null;
 
   return (
     // bottom offset keeps the bar clear of the page's sticky save/submit
@@ -66,7 +66,11 @@ export function TimecardBulkBar({
         </Button>
       )}
 
-      <TimecardActions onFill={onFillFromSchedule} onSetAbsence={onSetAbsence} onClear={onClearDays} />
+      <TimecardActions
+        onFill={onFillFromSchedule}
+        onSetAbsence={onSetAbsence}
+        onClear={onClearDays}
+      />
     </div>
-  )
+  );
 }

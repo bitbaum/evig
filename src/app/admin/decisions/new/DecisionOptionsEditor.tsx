@@ -14,7 +14,12 @@ interface Props {
 }
 
 export function DecisionOptionsEditor({
-  options, showImageUrls, onShowImageUrlsChange, onAdd, onRemove, onUpdate,
+  options,
+  showImageUrls,
+  onShowImageUrlsChange,
+  onAdd,
+  onRemove,
+  onUpdate,
 }: Props) {
   return (
     <div>
@@ -73,7 +78,9 @@ export function DecisionOptionsEditor({
                     src={opt.imageUrl}
                     alt=""
                     className="h-8 w-8 rounded-sm object-contain border border"
-                    onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).style.display = 'none';
+                    }}
                   />
                 )}
               </div>

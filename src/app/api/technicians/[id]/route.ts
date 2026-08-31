@@ -6,14 +6,14 @@
  * (formerly repairer_profiles) technicians — both now live in repairer_profiles.
  */
 
-import { NextRequest } from 'next/server'
-import { apiError, apiSuccessCached, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { logger } from '@/lib/logger'
-import { getTechnicianById, TECHNICIAN_UUID_RE } from '@/lib/services/technician-service'
+import { NextRequest } from 'next/server';
+import { apiError, apiSuccessCached, apiNotFound, apiBadRequest } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { logger } from '@/lib/logger';
+import { getTechnicianById, TECHNICIAN_UUID_RE } from '@/lib/services/technician-service';
 
 interface RouteParams {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }
 
 /**
@@ -23,24 +23,24 @@ interface RouteParams {
  */
 export async function GET(_request: NextRequest, { params }: RouteParams) {
   try {
-    const { id } = await params
+    const { id } = await params;
 
     if (!TECHNICIAN_UUID_RE.test(id)) {
-      return apiBadRequest('Ungültige Techniker-ID')
+      return apiBadRequest('Ungültige Techniker-ID');
     }
 
-    const technician = await getTechnicianById(id)
+    const technician = await getTechnicianById(id);
 
     if (!technician) {
-      return apiNotFound('Techniker-Profil')
+      return apiNotFound('Techniker-Profil');
     }
 
-    logger.info('Served technician profile via API', { technicianId: id })
+    logger.info('Served technician profile via API', { technicianId: id });
 
     // Individual technician profiles are semi-static public data — cache 60s, stale 30s
-    return apiSuccessCached({ technician }, 60, 30)
+    return apiSuccessCached({ technician }, 60, 30);
   } catch (error) {
-    logger.error('Error fetching technician profile', { error })
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    logger.error('Error fetching technician profile', { error });
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
 }

@@ -7,28 +7,21 @@
  * Access: Staff with 'team' permission
  */
 
-import { NextRequest } from 'next/server'
-import { db } from '@/db'
-import { helpRequests, users } from '@/db/schema'
-import { eq, desc, sql } from 'drizzle-orm'
-import type { SQL } from 'drizzle-orm'
-import { alias } from 'drizzle-orm/pg-core'
-import { withAdmin } from '@/lib/api/middleware'
-import { logger } from '@/lib/logger'
-import {
-  apiSuccess,
-  apiError,
-  apiBadRequest,
-} from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import {
-  validateCreateHelpRequest,
-  validateHelpRequestFilter,
-} from '@/lib/schemas/activity'
-import { getDbUserId } from '@/lib/api/task-helpers'
+import { NextRequest } from 'next/server';
+import { db } from '@/db';
+import { helpRequests, users } from '@/db/schema';
+import { eq, desc, sql } from 'drizzle-orm';
+import type { SQL } from 'drizzle-orm';
+import { alias } from 'drizzle-orm/pg-core';
+import { withAdmin } from '@/lib/api/middleware';
+import { logger } from '@/lib/logger';
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { validateCreateHelpRequest, validateHelpRequestFilter } from '@/lib/schemas/activity';
+import { getDbUserId } from '@/lib/api/task-helpers';
 
-const targetUser = alias(users, 'target_user')
-const resolverUser = alias(users, 'resolver_user')
+const targetUser = alias(users, 'target_user');
+const resolverUser = alias(users, 'resolver_user');
 
 /**
  * GET /api/admin/team/help-requests
@@ -37,7 +30,7 @@ const resolverUser = alias(users, 'resolver_user')
 export const GET = withAdmin('team', async (request, session) => {
   try {
     // Parse filters from query params
-    const { searchParams } = new URL(request.url)
+    const { searchParams } = new URL(request.url);
     const filterResult = validateHelpRequestFilter({
       status: searchParams.get('status') || undefined,
       urgency: searchParams.get('urgency') || undefined,
@@ -47,23 +40,25 @@ export const GET = withAdmin('team', async (request, session) => {
       is_broadcast: searchParams.get('is_broadcast') || undefined,
       limit: searchParams.get('limit') || 50,
       offset: searchParams.get('offset') || 0,
-    })
+    });
 
     if (!filterResult.success) {
-      return apiBadRequest(ERROR_MESSAGES.INVALID_FILTER_PARAMS)
+      return apiBadRequest(ERROR_MESSAGES.INVALID_FILTER_PARAMS);
     }
 
-    const filters = filterResult.data
-    const conditions: SQL[] = []
+    const filters = filterResult.data;
+    const conditions: SQL[] = [];
 
-    if (filters.status) conditions.push(eq(helpRequests.status, filters.status))
-    if (filters.urgency) conditions.push(eq(helpRequests.urgency, filters.urgency))
-    if (filters.category) conditions.push(eq(helpRequests.category, filters.category))
-    if (filters.requester_id) conditions.push(eq(helpRequests.requesterId, filters.requester_id))
-    if (filters.requested_user_id) conditions.push(eq(helpRequests.requestedUserId, filters.requested_user_id))
-    if (filters.is_broadcast !== undefined) conditions.push(eq(helpRequests.isBroadcast, filters.is_broadcast))
+    if (filters.status) conditions.push(eq(helpRequests.status, filters.status));
+    if (filters.urgency) conditions.push(eq(helpRequests.urgency, filters.urgency));
+    if (filters.category) conditions.push(eq(helpRequests.category, filters.category));
+    if (filters.requester_id) conditions.push(eq(helpRequests.requesterId, filters.requester_id));
+    if (filters.requested_user_id)
+      conditions.push(eq(helpRequests.requestedUserId, filters.requested_user_id));
+    if (filters.is_broadcast !== undefined)
+      conditions.push(eq(helpRequests.isBroadcast, filters.is_broadcast));
 
-    const where = conditions.length > 0 ? sql`${sql.join(conditions, sql` AND `)}` : undefined
+    const where = conditions.length > 0 ? sql`${sql.join(conditions, sql` AND `)}` : undefined;
 
     const rows = await db
       .select({
@@ -103,7 +98,7 @@ export const GET = withAdmin('team', async (request, session) => {
         desc(helpRequests.createdAt),
       )
       .limit(filters.limit)
-      .offset(filters.offset)
+      .offset(filters.offset);
 
     const total = rows[0]?._total ?? 0;
     const items = rows.map(({ _total, ...rest }) => rest);
@@ -113,11 +108,11 @@ export const GET = withAdmin('team', async (request, session) => {
       total,
       limit: filters.limit,
       offset: filters.offset,
-    })
+    });
   } catch (error) {
-    return apiError(error, 'Hilfsanfragen konnten nicht geladen werden')
+    return apiError(error, 'Hilfsanfragen konnten nicht geladen werden');
   }
-})
+});
 
 /**
  * POST /api/admin/team/help-requests
@@ -125,31 +120,31 @@ export const GET = withAdmin('team', async (request, session) => {
  */
 export const POST = withAdmin('team', async (request, session) => {
   try {
-    const body = await request.json()
+    const body = await request.json();
 
     // Validate input
-    const validation = validateCreateHelpRequest(body)
+    const validation = validateCreateHelpRequest(body);
     if (!validation.success) {
       return apiBadRequest(
         ERROR_MESSAGES.VALIDATION_ERROR,
-        validation.error.flatten().fieldErrors as Record<string, string[]>
-      )
+        validation.error.flatten().fieldErrors as Record<string, string[]>,
+      );
     }
 
-    const data = validation.data
+    const data = validation.data;
 
-    const userLookup = await getDbUserId(session)
-    if ('error' in userLookup) return userLookup.error
+    const userLookup = await getDbUserId(session);
+    if ('error' in userLookup) return userLookup.error;
 
     // If targeted request, verify target user exists
     if (data.requested_user_id) {
       const [target] = await db
         .select({ id: users.id })
         .from(users)
-        .where(eq(users.id, data.requested_user_id))
+        .where(eq(users.id, data.requested_user_id));
 
       if (!target) {
-        return apiBadRequest('Zielbenutzer nicht gefunden')
+        return apiBadRequest('Zielbenutzer nicht gefunden');
       }
     }
 
@@ -164,7 +159,7 @@ export const POST = withAdmin('team', async (request, session) => {
         urgency: data.urgency,
         requestedUserId: data.requested_user_id || null,
       })
-      .returning({ id: helpRequests.id })
+      .returning({ id: helpRequests.id });
 
     logger.info('Help request created', {
       requestId: created.id,
@@ -172,10 +167,10 @@ export const POST = withAdmin('team', async (request, session) => {
       urgency: data.urgency,
       isBroadcast: !data.requested_user_id,
       title: data.title.substring(0, 50),
-    })
+    });
 
-    return apiSuccess({ id: created.id }, 201)
+    return apiSuccess({ id: created.id }, 201);
   } catch (error) {
-    return apiError(error, 'Hilfsanfrage konnte nicht erstellt werden')
+    return apiError(error, 'Hilfsanfrage konnte nicht erstellt werden');
   }
-})
+});

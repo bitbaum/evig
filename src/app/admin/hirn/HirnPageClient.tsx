@@ -6,35 +6,35 @@
  * Protected by role-based access control.
  */
 
-'use client'
+'use client';
 
-import { useState, useCallback } from 'react'
-import { Brain } from 'lucide-react'
-import { HirnChat } from '@/components/admin/HirnChat'
-import { HirnSidebar } from '@/components/admin/HirnSidebar'
-import { HirnProviderSelector } from '@/components/admin/HirnProviderSelector'
-import Heading from '@/components/admin/AdminHeading'
-import { ORG } from '@/config/org'
+import { useState, useCallback } from 'react';
+import { Brain } from 'lucide-react';
+import { HirnChat } from '@/components/admin/HirnChat';
+import { HirnSidebar } from '@/components/admin/HirnSidebar';
+import { HirnProviderSelector } from '@/components/admin/HirnProviderSelector';
+import Heading from '@/components/admin/AdminHeading';
+import { ORG } from '@/config/org';
 
 function generateSessionId(): string {
-  return crypto.randomUUID()
+  return crypto.randomUUID();
 }
 
 export default function HirnPageClient() {
-  const [currentSessionId, setCurrentSessionId] = useState<string>(generateSessionId())
-  const [refreshTrigger, setRefreshTrigger] = useState(0)
+  const [currentSessionId, setCurrentSessionId] = useState<string>(generateSessionId());
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   const handleNewSession = useCallback(() => {
-    setCurrentSessionId(generateSessionId())
-  }, [])
+    setCurrentSessionId(generateSessionId());
+  }, []);
 
   const handleSelectSession = useCallback((sessionId: string) => {
-    setCurrentSessionId(sessionId)
-  }, [])
+    setCurrentSessionId(sessionId);
+  }, []);
 
   const handleSessionChange = useCallback(() => {
-    setRefreshTrigger(prev => prev + 1)
-  }, [])
+    setRefreshTrigger((prev) => prev + 1);
+  }, []);
 
   return (
     <div className="h-[calc(100vh-4rem)]">
@@ -45,7 +45,9 @@ export default function HirnPageClient() {
             <Brain className="w-5 h-5 text-white" />
           </div>
           <div>
-            <Heading level={1} className="text-2xl font-bold text-text-primary">Hirn AI</Heading>
+            <Heading level={1} className="text-2xl font-bold text-text-primary">
+              Hirn AI
+            </Heading>
             <p className="text-sm text-text-secondary">
               KI-Assistent mit {ORG.name} Dokumentation und Code-Kontext
             </p>
@@ -68,12 +70,9 @@ export default function HirnPageClient() {
 
         {/* Chat Area */}
         <div className="flex-1 bg-surface-base">
-          <HirnChat
-            sessionId={currentSessionId}
-            onSessionChange={handleSessionChange}
-          />
+          <HirnChat sessionId={currentSessionId} onSessionChange={handleSessionChange} />
         </div>
       </div>
     </div>
-  )
+  );
 }

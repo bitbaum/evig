@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import { CheckCircle, Loader2 } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
+import { CheckCircle, Loader2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
 
 interface MarkCompletedCardProps {
-  onMarkCompleted: () => void
-  submitting: boolean
+  onMarkCompleted: () => void;
+  submitting: boolean;
 }
 
 /**
@@ -15,7 +15,7 @@ interface MarkCompletedCardProps {
  * inviting them to mark the repair as done.
  */
 export function MarkCompletedCard({ onMarkCompleted, submitting }: MarkCompletedCardProps) {
-  const t = useTranslations('itHelp.detail')
+  const t = useTranslations('itHelp.detail');
   return (
     <div className="rounded-xl border border-strong bg-surface-base p-6">
       <div className="flex items-start gap-3">
@@ -24,9 +24,7 @@ export function MarkCompletedCard({ onMarkCompleted, submitting }: MarkCompleted
           <Heading level={3} className="text-lg font-semibold text-text-primary mb-1">
             {t('markCompletedTitle')}
           </Heading>
-          <p className="text-sm text-text-secondary mb-4">
-            {t('markCompletedDesc')}
-          </p>
+          <p className="text-sm text-text-secondary mb-4">{t('markCompletedDesc')}</p>
           <Button type="button" onClick={onMarkCompleted} disabled={submitting} variant="primary">
             {submitting ? (
               <>
@@ -43,5 +41,5 @@ export function MarkCompletedCard({ onMarkCompleted, submitting }: MarkCompleted
         </div>
       </div>
     </div>
-  )
+  );
 }

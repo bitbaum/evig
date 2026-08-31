@@ -8,35 +8,35 @@
  *          200 (success anonymous), 200 (success logged in)
  */
 
-const mockAuth = jest.fn()
+const mockAuth = jest.fn();
 
 jest.mock('@/auth', () => ({
   auth: (...args: unknown[]) => mockAuth.apply(null, args),
-}))
+}));
 
-const mockCheckRateLimit = jest.fn()
-const mockGetClientIp = jest.fn()
+const mockCheckRateLimit = jest.fn();
+const mockGetClientIp = jest.fn();
 
 jest.mock('@/lib/auth/rate-limiter', () => ({
   checkRateLimit: (...args: unknown[]) => mockCheckRateLimit(...args),
   getClientIp: (...args: unknown[]) => mockGetClientIp(...args),
-}))
+}));
 
-const mockSendCustomEmail = jest.fn()
+const mockSendCustomEmail = jest.fn();
 
 jest.mock('@/lib/email', () => ({
   sendCustomEmail: (...args: unknown[]) => mockSendCustomEmail(...args),
-}))
+}));
 
 jest.mock('@/config/org', () => ({
   BANK: { iban: 'CH00 0000 0000 0000 0000 0', name: 'Test Bank', accountHolder: 'RevampIT' },
   MEMBERSHIP: { fees: { regular: 60, reduced: 30 } },
   ORG: { name: 'RevampIT', legalName: 'RevampIT' },
-}))
+}));
 
 jest.mock('@/config/membership-status', () => ({
   MEMBERSHIP_APPLICATION_STATUS: { APPROVED: 'approved', PENDING: 'pending', REJECTED: 'rejected' },
-}))
+}));
 
 // Route now wraps the whole membership-check + insert + activate flow in
 // `db.transaction(async tx => ...)`. The tx exposes the same select/insert/
@@ -44,26 +44,32 @@ jest.mock('@/config/membership-status', () => ({
 // for the SELECT FOR UPDATE row lock. The mocks below model the tx variants;
 // the original `db.*` stubs are kept (unused) so the wider import surface
 // doesn't change.
-const mockSelect = jest.fn()
-const mockFrom = jest.fn()
-const mockWhere = jest.fn()
-const mockFor = jest.fn()
-const mockLimit = jest.fn()
-const mockInsert = jest.fn()
-const mockValues = jest.fn()
-const mockReturning = jest.fn()
-const mockUpdate = jest.fn()
-const mockSet = jest.fn()
-const mockTransaction = jest.fn()
+const mockSelect = jest.fn();
+const mockFrom = jest.fn();
+const mockWhere = jest.fn();
+const mockFor = jest.fn();
+const mockLimit = jest.fn();
+const mockInsert = jest.fn();
+const mockValues = jest.fn();
+const mockReturning = jest.fn();
+const mockUpdate = jest.fn();
+const mockSet = jest.fn();
+const mockTransaction = jest.fn();
 
 jest.mock('@/db', () => ({
   db: {
     select: (...args: unknown[]) => mockSelect(...args),
-    insert: (...args: unknown[]) => { mockInsert(...args); return { values: mockValues } },
-    update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
+    insert: (...args: unknown[]) => {
+      mockInsert(...args);
+      return { values: mockValues };
+    },
+    update: (...args: unknown[]) => {
+      mockUpdate(...args);
+      return { set: mockSet };
+    },
     transaction: (cb: (tx: unknown) => unknown) => mockTransaction(cb),
   },
-}))
+}));
 
 jest.mock('@/db/schema', () => ({
   users: {
@@ -85,37 +91,40 @@ jest.mock('@/db/schema', () => ({
     status: 'ma_status',
     reviewedAt: 'ma_reviewedAt',
   },
-}))
+}));
 
 jest.mock('drizzle-orm', () => ({
   eq: (a: unknown, b: unknown) => ({ __eq: [a, b] }),
   and: (...args: unknown[]) => ({ __and: args }),
-  sql: Object.assign(
-    (_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }),
-    { raw: (s: string) => ({ __raw: s }) }
-  ),
-}))
+  sql: Object.assign((_strings: TemplateStringsArray, ..._values: unknown[]) => ({ __sql: true }), {
+    raw: (s: string) => ({ __raw: s }),
+  }),
+}));
 
 jest.mock('@/lib/utils/escape-html', () => ({
   escapeHtml: (s: string) => s,
-}))
+}));
 
 jest.mock('@/lib/api/helpers', () => {
-  const { NextResponse } = jest.requireActual('next/server')
+  const { NextResponse } = jest.requireActual('next/server');
   return {
-    apiSuccess: (data: unknown, status = 200) => NextResponse.json({ success: true, data }, { status }),
-    apiError: (_err: unknown, msg: string, status = 500) => NextResponse.json({ success: false, error: msg }, { status }),
-    apiBadRequest: (msg: string) => NextResponse.json({ success: false, error: msg }, { status: 400 }),
-    apiRateLimited: (msg: string) => NextResponse.json({ success: false, error: msg }, { status: 429 }),
-  }
-})
+    apiSuccess: (data: unknown, status = 200) =>
+      NextResponse.json({ success: true, data }, { status }),
+    apiError: (_err: unknown, msg: string, status = 500) =>
+      NextResponse.json({ success: false, error: msg }, { status }),
+    apiBadRequest: (msg: string) =>
+      NextResponse.json({ success: false, error: msg }, { status: 400 }),
+    apiRateLimited: (msg: string) =>
+      NextResponse.json({ success: false, error: msg }, { status: 429 }),
+  };
+});
 
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
-}))
+}));
 
-import { NextRequest } from 'next/server'
-import { POST } from '../route'
+import { NextRequest } from 'next/server';
+import { POST } from '../route';
 
 const VALID_BODY = {
   applicantName: 'Test Person',
@@ -124,32 +133,32 @@ const VALID_BODY = {
   addressPostalCode: '8000',
   addressCity: 'Zürich',
   memberType: 'regular',
-}
+};
 
 beforeEach(() => {
-  jest.resetAllMocks()
+  jest.resetAllMocks();
 
-  mockAuth.mockResolvedValue(null) // anonymous by default
-  mockGetClientIp.mockReturnValue('127.0.0.1')
-  mockCheckRateLimit.mockReturnValue({ allowed: true, retryAfter: 0, remaining: 10, resetAt: 0 })
+  mockAuth.mockResolvedValue(null); // anonymous by default
+  mockGetClientIp.mockReturnValue('127.0.0.1');
+  mockCheckRateLimit.mockReturnValue({ allowed: true, retryAfter: 0, remaining: 10, resetAt: 0 });
 
   // Fire-and-forget: must return a Promise so .catch() works
-  mockSendCustomEmail.mockResolvedValue(undefined)
+  mockSendCustomEmail.mockResolvedValue(undefined);
 
   // Default select chain: tx.select().from().where().for('update').limit(1)
-  mockLimit.mockResolvedValue([])
-  mockFor.mockReturnValue({ limit: mockLimit })
-  mockWhere.mockReturnValue({ for: mockFor, limit: mockLimit })
-  mockFrom.mockReturnValue({ where: mockWhere })
-  mockSelect.mockReturnValue({ from: mockFrom })
+  mockLimit.mockResolvedValue([]);
+  mockFor.mockReturnValue({ limit: mockLimit });
+  mockWhere.mockReturnValue({ for: mockFor, limit: mockLimit });
+  mockFrom.mockReturnValue({ where: mockWhere });
+  mockSelect.mockReturnValue({ from: mockFrom });
 
   // Default insert chain: returns application id
-  mockReturning.mockResolvedValue([{ id: 'app-1' }])
-  mockValues.mockReturnValue({ returning: mockReturning })
+  mockReturning.mockResolvedValue([{ id: 'app-1' }]);
+  mockValues.mockReturnValue({ returning: mockReturning });
 
   // Default update chain: tx.update().set().where()
-  const mockUpdateWhere = jest.fn().mockResolvedValue(undefined)
-  mockSet.mockReturnValue({ where: mockUpdateWhere })
+  const mockUpdateWhere = jest.fn().mockResolvedValue(undefined);
+  mockSet.mockReturnValue({ where: mockUpdateWhere });
 
   // Route runs everything inside db.transaction(cb). Invoke cb with a tx
   // that delegates to the existing select/insert/update mocks so each test's
@@ -157,12 +166,18 @@ beforeEach(() => {
   mockTransaction.mockImplementation(async (cb: (tx: unknown) => Promise<unknown>) => {
     const tx = {
       select: (...args: unknown[]) => mockSelect(...args),
-      insert: (...args: unknown[]) => { mockInsert(...args); return { values: mockValues } },
-      update: (...args: unknown[]) => { mockUpdate(...args); return { set: mockSet } },
-    }
-    return await cb(tx)
-  })
-})
+      insert: (...args: unknown[]) => {
+        mockInsert(...args);
+        return { values: mockValues };
+      },
+      update: (...args: unknown[]) => {
+        mockUpdate(...args);
+        return { set: mockSet };
+      },
+    };
+    return await cb(tx);
+  });
+});
 
 // ============================================================================
 // POST — rate limiting
@@ -170,16 +185,21 @@ beforeEach(() => {
 
 describe('POST /api/membership/apply — rate limiting', () => {
   it('returns 429 when rate limited', async () => {
-    mockCheckRateLimit.mockReturnValueOnce({ allowed: false, retryAfter: 60, remaining: 0, resetAt: 0 })
+    mockCheckRateLimit.mockReturnValueOnce({
+      allowed: false,
+      retryAfter: 60,
+      remaining: 0,
+      resetAt: 0,
+    });
     const req = new NextRequest('http://localhost/api/membership/apply', {
       method: 'POST',
       body: JSON.stringify(VALID_BODY),
       headers: { 'Content-Type': 'application/json' },
-    })
-    const response = await POST(req)
-    expect(response.status).toBe(429)
-  })
-})
+    });
+    const response = await POST(req);
+    expect(response.status).toBe(429);
+  });
+});
 
 // ============================================================================
 // POST — validation
@@ -191,21 +211,21 @@ describe('POST /api/membership/apply — validation', () => {
       method: 'POST',
       body: JSON.stringify({ applicantName: 'A' }), // too short, missing fields
       headers: { 'Content-Type': 'application/json' },
-    })
-    const response = await POST(req)
-    expect(response.status).toBe(400)
-  })
+    });
+    const response = await POST(req);
+    expect(response.status).toBe(400);
+  });
 
   it('returns 400 when postal code is invalid format', async () => {
     const req = new NextRequest('http://localhost/api/membership/apply', {
       method: 'POST',
       body: JSON.stringify({ ...VALID_BODY, addressPostalCode: 'ABCD' }),
       headers: { 'Content-Type': 'application/json' },
-    })
-    const response = await POST(req)
-    expect(response.status).toBe(400)
-  })
-})
+    });
+    const response = await POST(req);
+    expect(response.status).toBe(400);
+  });
+});
 
 // ============================================================================
 // POST — already a member
@@ -216,22 +236,22 @@ describe('POST /api/membership/apply — already member', () => {
     mockAuth.mockResolvedValueOnce({
       user: { id: 'user-1', email: 'member@example.com', isMember: true },
       expires: '2027-01-01',
-    })
+    });
 
     // First select: check membership → user IS a member
-    mockLimit.mockResolvedValueOnce([{ isMember: true }])
+    mockLimit.mockResolvedValueOnce([{ isMember: true }]);
 
     const req = new NextRequest('http://localhost/api/membership/apply', {
       method: 'POST',
       body: JSON.stringify(VALID_BODY),
       headers: { 'Content-Type': 'application/json' },
-    })
-    const response = await POST(req)
-    expect(response.status).toBe(400)
-    const body = await response.json()
-    expect(body.error).toMatch(/bereits Mitglied/i)
-  })
-})
+    });
+    const response = await POST(req);
+    expect(response.status).toBe(400);
+    const body = await response.json();
+    expect(body.error).toMatch(/bereits Mitglied/i);
+  });
+});
 
 // ============================================================================
 // POST — success (anonymous)
@@ -240,24 +260,24 @@ describe('POST /api/membership/apply — already member', () => {
 describe('POST /api/membership/apply — success anonymous', () => {
   it('returns 200 with application id when submitted anonymously', async () => {
     // anonymous — no session
-    mockAuth.mockResolvedValueOnce(null)
+    mockAuth.mockResolvedValueOnce(null);
 
     // select for user by email: no user found
-    mockLimit.mockResolvedValueOnce([])
+    mockLimit.mockResolvedValueOnce([]);
 
     const req = new NextRequest('http://localhost/api/membership/apply', {
       method: 'POST',
       body: JSON.stringify(VALID_BODY),
       headers: { 'Content-Type': 'application/json' },
-    })
-    const response = await POST(req)
-    expect(response.status).toBe(200)
-    const body = await response.json()
-    expect(body.success).toBe(true)
-    expect(body.data.id).toBe('app-1')
-    expect(mockInsert).toHaveBeenCalledTimes(1)
-  })
-})
+    });
+    const response = await POST(req);
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.success).toBe(true);
+    expect(body.data.id).toBe('app-1');
+    expect(mockInsert).toHaveBeenCalledTimes(1);
+  });
+});
 
 // ============================================================================
 // POST — success (logged in)
@@ -268,23 +288,23 @@ describe('POST /api/membership/apply — success logged in', () => {
     mockAuth.mockResolvedValueOnce({
       user: { id: 'user-2', email: 'logged@example.com' },
       expires: '2027-01-01',
-    })
+    });
 
     // select for membership check: user is NOT a member yet
-    mockLimit.mockResolvedValueOnce([{ isMember: false }])
+    mockLimit.mockResolvedValueOnce([{ isMember: false }]);
 
     const req = new NextRequest('http://localhost/api/membership/apply', {
       method: 'POST',
       body: JSON.stringify(VALID_BODY),
       headers: { 'Content-Type': 'application/json' },
-    })
-    const response = await POST(req)
-    expect(response.status).toBe(200)
-    const body = await response.json()
-    expect(body.success).toBe(true)
-    expect(body.data.memberType).toBe('regular')
+    });
+    const response = await POST(req);
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.success).toBe(true);
+    expect(body.data.memberType).toBe('regular');
     // insert for application + update for user membership
-    expect(mockInsert).toHaveBeenCalledTimes(1)
-    expect(mockUpdate).toHaveBeenCalledTimes(1)
-  })
-})
+    expect(mockInsert).toHaveBeenCalledTimes(1);
+    expect(mockUpdate).toHaveBeenCalledTimes(1);
+  });
+});

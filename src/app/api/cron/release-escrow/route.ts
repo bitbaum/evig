@@ -12,18 +12,18 @@
  * revampit-cron@release-escrow.timer.
  */
 
-import { NextRequest } from 'next/server'
-import { db } from '@/db'
-import { escrowAccounts, paymentTransactions } from '@/db/schema'
-import { and, eq, lt, isNotNull, sql } from 'drizzle-orm'
-import { captureTransaction } from '@/lib/payments/payrexx-client'
-import { ESCROW_STATUS } from '@/config/payment-status'
-import { logger } from '@/lib/logger'
-import { requireCronAuth } from '@/lib/api/cron-auth'
+import { NextRequest } from 'next/server';
+import { db } from '@/db';
+import { escrowAccounts, paymentTransactions } from '@/db/schema';
+import { and, eq, lt, isNotNull, sql } from 'drizzle-orm';
+import { captureTransaction } from '@/lib/payments/payrexx-client';
+import { ESCROW_STATUS } from '@/config/payment-status';
+import { logger } from '@/lib/logger';
+import { requireCronAuth } from '@/lib/api/cron-auth';
 
 export async function GET(request: NextRequest) {
-  const auth = requireCronAuth(request)
-  if (!auth.ok) return auth.response
+  const auth = requireCronAuth(request);
+  if (!auth.ok) return auth.response;
 
   try {
     // Active escrows past their deadline, with the gateway transaction to capture.
@@ -42,13 +42,13 @@ export async function GET(request: NextRequest) {
           isNotNull(escrowAccounts.releaseDeadline),
           lt(escrowAccounts.releaseDeadline, sql`NOW()`),
         ),
-      )
+      );
 
-    let released = 0
-    const errors: string[] = []
+    let released = 0;
+    const errors: string[] = [];
 
     for (const e of due) {
-      const remaining = e.totalAmountCents - e.releasedAmountCents
+      const remaining = e.totalAmountCents - e.releasedAmountCents;
 
       // Nothing left to capture (or no gateway txn) → just close the escrow so it
       // isn't reprocessed every run.
@@ -61,15 +61,15 @@ export async function GET(request: NextRequest) {
             releaseNotes: 'Automatisch freigegeben (Frist abgelaufen, keine Erfassung nötig)',
             updatedAt: sql`CURRENT_TIMESTAMP`,
           })
-          .where(eq(escrowAccounts.id, e.escrowId))
-        released++
-        continue
+          .where(eq(escrowAccounts.id, e.escrowId));
+        released++;
+        continue;
       }
 
       try {
         // Capture FIRST — only mark released if the money is actually collected,
         // so a Payrexx failure leaves the row 'active' for the next run to retry.
-        await captureTransaction(e.providerTransactionId, remaining)
+        await captureTransaction(e.providerTransactionId, remaining);
         await db
           .update(escrowAccounts)
           .set({
@@ -79,25 +79,32 @@ export async function GET(request: NextRequest) {
             releaseNotes: 'Automatisch freigegeben (Frist abgelaufen)',
             updatedAt: sql`CURRENT_TIMESTAMP`,
           })
-          .where(eq(escrowAccounts.id, e.escrowId))
-        released++
+          .where(eq(escrowAccounts.id, e.escrowId));
+        released++;
       } catch (err) {
-        const msg = err instanceof Error ? err.message : String(err)
-        errors.push(`${e.escrowId}: ${msg}`)
-        logger.error('Cron: escrow auto-release capture failed', { escrowId: e.escrowId, error: err })
+        const msg = err instanceof Error ? err.message : String(err);
+        errors.push(`${e.escrowId}: ${msg}`);
+        logger.error('Cron: escrow auto-release capture failed', {
+          escrowId: e.escrowId,
+          error: err,
+        });
       }
     }
 
-    logger.info('Cron: release-escrow completed', { found: due.length, released, errors: errors.length })
+    logger.info('Cron: release-escrow completed', {
+      found: due.length,
+      released,
+      errors: errors.length,
+    });
 
     return Response.json({
       success: true,
       found: due.length,
       released,
       errors: errors.length > 0 ? errors : undefined,
-    })
+    });
   } catch (error) {
-    logger.error('Cron: release-escrow failed', { error })
-    return Response.json({ error: 'Internal error' }, { status: 500 })
+    logger.error('Cron: release-escrow failed', { error });
+    return Response.json({ error: 'Internal error' }, { status: 500 });
   }
 }

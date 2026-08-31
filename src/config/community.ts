@@ -18,5 +18,5 @@
  */
 
 export interface ListItem {
-  text: string
+  text: string;
 }

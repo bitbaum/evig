@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Product Fact Sheet / Sales Label
@@ -7,12 +7,12 @@
  * Route: /admin/products/[id]/factsheet
  */
 
-import { useEffect, useState } from 'react'
-import Link from 'next/link'
-import { useParams } from 'next/navigation'
-import { ROUTES } from '@/config/routes'
-import { buildQrImageUrl } from '@/config/integrations'
-import { Button } from '@/components/ui/button'
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
+import { ROUTES } from '@/config/routes';
+import { buildQrImageUrl } from '@/config/integrations';
+import { Button } from '@/components/ui/button';
 import {
   Printer,
   Heart,
@@ -27,12 +27,16 @@ import {
   Leaf,
   ArrowLeft,
   Smartphone,
-} from 'lucide-react'
-import { CUSTOMER_PROFILES } from '@/config/erfassung/profiles'
-import { ORG, BASE_REGION } from '@/config/org'
-import { CONDITION_COLORS, PRINT_PREVIEW_SHADOW, PRODUCT_CONDITION_FALLBACK_COLORS } from '@/config/ui-colors'
-import { apiFetch } from '@/lib/api/client'
-import Heading from '@/components/admin/AdminHeading'
+} from 'lucide-react';
+import { CUSTOMER_PROFILES } from '@/config/erfassung/profiles';
+import { ORG, BASE_REGION } from '@/config/org';
+import {
+  CONDITION_COLORS,
+  PRINT_PREVIEW_SHADOW,
+  PRODUCT_CONDITION_FALLBACK_COLORS,
+} from '@/config/ui-colors';
+import { apiFetch } from '@/lib/api/client';
+import Heading from '@/components/admin/AdminHeading';
 
 // Profile icons mapped by slug
 const PROFILE_ICONS: Record<string, React.ReactNode> = {
@@ -43,73 +47,75 @@ const PROFILE_ICONS: Record<string, React.ReactNode> = {
   kreativ: <Palette className="w-5 h-5" />,
   dev: <Code className="w-5 h-5" />,
   student: <GraduationCap className="w-5 h-5" />,
-}
+};
 
 // Derive PROFILES from CUSTOMER_PROFILES SSOT
-const PROFILES: Record<string, { name: string; icon: React.ReactNode; color: string }> = Object.fromEntries(
-  CUSTOMER_PROFILES
-    .filter(p => PROFILE_ICONS[p.slug])
-    .map(p => [p.slug, { name: p.name_de, icon: PROFILE_ICONS[p.slug], color: p.color }])
-)
+const PROFILES: Record<string, { name: string; icon: React.ReactNode; color: string }> =
+  Object.fromEntries(
+    CUSTOMER_PROFILES.filter((p) => PROFILE_ICONS[p.slug]).map((p) => [
+      p.slug,
+      { name: p.name_de, icon: PROFILE_ICONS[p.slug], color: p.color },
+    ]),
+  );
 
-const CONDITION_CONFIG = CONDITION_COLORS
+const CONDITION_CONFIG = CONDITION_COLORS;
 
 interface ProductData {
-  id: string
-  item_uuid: string
-  product_name: string
-  brand: string
-  short_description: string | null
-  specifications: Record<string, string>
-  estimated_price_chf: number
-  condition: string
+  id: string;
+  item_uuid: string;
+  product_name: string;
+  brand: string;
+  short_description: string | null;
+  specifications: Record<string, string>;
+  estimated_price_chf: number;
+  condition: string;
   dimensions: {
-    laenge_mm: number | null
-    breite_mm: number | null
-    hoehe_mm: number | null
-  }
-  weight_grams: number | null
-  category: string | null
-  subcategory: string | null
-  location: string | null
-  box_id: string | null
-  quantity_available: number
-  customer_profiles: string[]
-  created_at: string
-  image_url: string | null
+    laenge_mm: number | null;
+    breite_mm: number | null;
+    hoehe_mm: number | null;
+  };
+  weight_grams: number | null;
+  category: string | null;
+  subcategory: string | null;
+  location: string | null;
+  box_id: string | null;
+  quantity_available: number;
+  customer_profiles: string[];
+  created_at: string;
+  image_url: string | null;
 }
 
 export default function FactSheetPage() {
-  const params = useParams()
-  const productId = params.id as string
-  const [product, setProduct] = useState<ProductData | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const params = useParams();
+  const productId = params.id as string;
+  const [product, setProduct] = useState<ProductData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchProduct() {
       const result = await apiFetch<{ product: Omit<ProductData, 'id'> }>(
         `/api/admin/inventory/${productId}`,
-      )
+      );
       if (result.success && result.data?.product) {
-        setProduct({ ...result.data.product, id: productId })
+        setProduct({ ...result.data.product, id: productId });
       } else {
-        setError(result.error || 'Produkt nicht gefunden')
+        setError(result.error || 'Produkt nicht gefunden');
       }
-      setLoading(false)
+      setLoading(false);
     }
 
     if (productId) {
-      fetchProduct()
+      fetchProduct();
     }
-  }, [productId])
+  }, [productId]);
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-surface-raised">
         <div className="animate-spin rounded-full h-12 w-12 border-4 border-action border-t-transparent"></div>
       </div>
-    )
+    );
   }
 
   if (error || !product) {
@@ -122,22 +128,22 @@ export default function FactSheetPage() {
           </Heading>
         </div>
       </div>
-    )
+    );
   }
 
   const condition = CONDITION_CONFIG[product.condition] || {
     label: product.condition,
     ...PRODUCT_CONDITION_FALLBACK_COLORS,
-  }
-  const specs = product.specifications || {}
-  const specEntries = Object.entries(specs).slice(0, 8) // Limit to 8 specs for layout
-  const shopUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/marketplace/${product.id}`
+  };
+  const specs = product.specifications || {};
+  const specEntries = Object.entries(specs).slice(0, 8); // Limit to 8 specs for layout
+  const shopUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/marketplace/${product.id}`;
   // QR-image generation. The third-party endpoint and the brand colour
   // both come from /config so a swap (self-hosted goqr instance, brand
   // re-theme) needs a one-line edit, not a hunt-and-replace. The
   // foreground colour mirrors --primitive-green-600 from globals.css,
   // hex-only because the QR service speaks the wire-format directly.
-  const qrCodeUrl = buildQrImageUrl(shopUrl)
+  const qrCodeUrl = buildQrImageUrl(shopUrl);
 
   return (
     <>
@@ -166,7 +172,6 @@ export default function FactSheetPage() {
       {/* A4 Fact Sheet */}
       <div className="bg-surface-raised min-h-screen pt-16 pb-8 print:pt-0 print:pb-0 print:bg-surface-base">
         <div className="factsheet-page w-[210mm] min-h-[297mm] mx-auto bg-surface-base shadow-xs print:shadow-none">
-
           {/* Green Header Bar */}
           <div className="bg-action text-action-text px-8 py-4">
             <div className="flex items-center justify-between">
@@ -175,8 +180,12 @@ export default function FactSheetPage() {
                   <span className="text-action font-bold text-2xl">R</span>
                 </div>
                 <div>
-                  <Heading level={1} className="text-2xl font-bold tracking-tight">{ORG.name}</Heading>
-                  <p className="text-action-text text-sm">Nachhaltige IT - Gut für dich, gut für die Umwelt</p>
+                  <Heading level={1} className="text-2xl font-bold tracking-tight">
+                    {ORG.name}
+                  </Heading>
+                  <p className="text-action-text text-sm">
+                    Nachhaltige IT - Gut für dich, gut für die Umwelt
+                  </p>
                 </div>
               </div>
               <div className="text-right">
@@ -188,7 +197,6 @@ export default function FactSheetPage() {
 
           {/* Main Content */}
           <div className="px-8 py-6">
-
             {/* Product Hero Section */}
             <div className="flex gap-6 mb-6">
               {/* Product Image */}
@@ -207,7 +215,10 @@ export default function FactSheetPage() {
               {/* Product Info */}
               <div className="flex-1">
                 <div className="text-text-tertiary text-sm font-medium mb-1">{product.brand}</div>
-                <Heading level={2} className="text-3xl font-bold text-text-primary mb-2 leading-tight">
+                <Heading
+                  level={2}
+                  className="text-3xl font-bold text-text-primary mb-2 leading-tight"
+                >
                   {product.product_name}
                 </Heading>
                 {product.short_description && (
@@ -221,7 +232,10 @@ export default function FactSheetPage() {
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold"
                   style={{ backgroundColor: condition.bgColor, color: condition.color }}
                 >
-                  <span className="w-2 h-2 rounded-full" style={{ backgroundColor: condition.color }}></span>
+                  <span
+                    className="w-2 h-2 rounded-full"
+                    style={{ backgroundColor: condition.color }}
+                  ></span>
                   Zustand: {condition.label}
                 </div>
               </div>
@@ -246,7 +260,10 @@ export default function FactSheetPage() {
             {/* Technical Specs */}
             {specEntries.length > 0 && (
               <div className="mb-6">
-                <Heading level={3} className="text-lg font-bold text-text-primary mb-3 pb-2 border-b-2 border">
+                <Heading
+                  level={3}
+                  className="text-lg font-bold text-text-primary mb-3 pb-2 border-b-2 border"
+                >
                   Technische Daten
                 </Heading>
                 <div className="grid grid-cols-2 gap-x-8 gap-y-2">
@@ -263,13 +280,16 @@ export default function FactSheetPage() {
             {/* Who is this for? */}
             {product.customer_profiles && product.customer_profiles.length > 0 && (
               <div className="mb-6">
-                <Heading level={3} className="text-lg font-bold text-text-primary mb-3 pb-2 border-b-2 border">
+                <Heading
+                  level={3}
+                  className="text-lg font-bold text-text-primary mb-3 pb-2 border-b-2 border"
+                >
                   Perfekt geeignet für
                 </Heading>
                 <div className="flex flex-wrap gap-3">
                   {product.customer_profiles.map((slug) => {
-                    const profile = PROFILES[slug]
-                    if (!profile) return null
+                    const profile = PROFILES[slug];
+                    if (!profile) return null;
                     return (
                       <div
                         key={slug}
@@ -279,7 +299,7 @@ export default function FactSheetPage() {
                         {profile.icon}
                         {profile.name}
                       </div>
-                    )
+                    );
                   })}
                 </div>
               </div>
@@ -289,7 +309,10 @@ export default function FactSheetPage() {
             <div className="flex gap-6 mt-auto">
               {/* Trust Badges */}
               <div className="flex-1">
-                <Heading level={3} className="text-lg font-bold text-text-primary mb-3 pb-2 border-b-2 border">
+                <Heading
+                  level={3}
+                  className="text-lg font-bold text-text-primary mb-3 pb-2 border-b-2 border"
+                >
                   Ihre Vorteile
                 </Heading>
                 <div className="grid grid-cols-2 gap-4">
@@ -329,7 +352,6 @@ export default function FactSheetPage() {
                 </div>
               </div>
             </div>
-
           </div>
 
           {/* Footer */}
@@ -343,7 +365,6 @@ export default function FactSheetPage() {
               </div>
             </div>
           </div>
-
         </div>
       </div>
 
@@ -355,7 +376,8 @@ export default function FactSheetPage() {
             margin: 0;
           }
 
-          html, body {
+          html,
+          body {
             margin: 0;
             padding: 0;
             -webkit-print-color-adjust: exact !important;
@@ -383,5 +405,5 @@ export default function FactSheetPage() {
         }
       `}</style>
     </>
-  )
+  );
 }

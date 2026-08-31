@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Accept / Decline buttons for an open task request.
@@ -14,43 +14,43 @@
  * the request disappears from the pending list.
  */
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Check, X, Loader2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import { apiFetch } from '@/lib/api/client'
-import { REQUEST_STATUSES } from '@/config/tasks'
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Check, X, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { apiFetch } from '@/lib/api/client';
+import { REQUEST_STATUSES } from '@/config/tasks';
 
 interface Props {
-  requestId: string
+  requestId: string;
   /** Whether the current viewer is allowed to respond (computed server-side). */
-  canRespond: boolean
+  canRespond: boolean;
 }
 
 export function TaskRequestResponseButtons({ requestId, canRespond }: Props) {
-  const router = useRouter()
-  const [busy, setBusy] = useState<'accept' | 'decline' | null>(null)
-  const [error, setError] = useState<string | null>(null)
-  const [showDeclineForm, setShowDeclineForm] = useState(false)
-  const [declineMessage, setDeclineMessage] = useState('')
+  const router = useRouter();
+  const [busy, setBusy] = useState<'accept' | 'decline' | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [showDeclineForm, setShowDeclineForm] = useState(false);
+  const [declineMessage, setDeclineMessage] = useState('');
 
-  if (!canRespond) return null
+  if (!canRespond) return null;
 
   const respond = async (status: 'accepted' | 'declined', message?: string) => {
-    setBusy(status === 'accepted' ? 'accept' : 'decline')
-    setError(null)
+    setBusy(status === 'accepted' ? 'accept' : 'decline');
+    setError(null);
     const result = await apiFetch(`/api/task-requests/${requestId}`, {
       method: 'PATCH',
       body: { status, response_message: message?.trim() || undefined },
-    })
-    setBusy(null)
+    });
+    setBusy(null);
     if (!result.success) {
-      setError(result.error || 'Antwort konnte nicht gespeichert werden.')
-      return
+      setError(result.error || 'Antwort konnte nicht gespeichert werden.');
+      return;
     }
-    router.refresh()
-  }
+    router.refresh();
+  };
 
   if (showDeclineForm) {
     return (
@@ -69,13 +69,20 @@ export function TaskRequestResponseButtons({ requestId, canRespond }: Props) {
             onClick={() => respond(REQUEST_STATUSES.DECLINED, declineMessage)}
             disabled={busy !== null}
           >
-            {busy === 'decline' ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <X className="w-3.5 h-3.5" />}
+            {busy === 'decline' ? (
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            ) : (
+              <X className="w-3.5 h-3.5" />
+            )}
             Ablehnen bestätigen
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => { setShowDeclineForm(false); setDeclineMessage('') }}
+            onClick={() => {
+              setShowDeclineForm(false);
+              setDeclineMessage('');
+            }}
             disabled={busy !== null}
           >
             Abbrechen
@@ -83,7 +90,7 @@ export function TaskRequestResponseButtons({ requestId, canRespond }: Props) {
         </div>
         {error && <p className="text-xs text-error-600">{error}</p>}
       </div>
-    )
+    );
   }
 
   return (
@@ -94,7 +101,11 @@ export function TaskRequestResponseButtons({ requestId, canRespond }: Props) {
         onClick={() => respond(REQUEST_STATUSES.ACCEPTED)}
         disabled={busy !== null}
       >
-        {busy === 'accept' ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Check className="w-3.5 h-3.5" />}
+        {busy === 'accept' ? (
+          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+        ) : (
+          <Check className="w-3.5 h-3.5" />
+        )}
         Annehmen
       </Button>
       <Button
@@ -108,5 +119,5 @@ export function TaskRequestResponseButtons({ requestId, canRespond }: Props) {
       </Button>
       {error && <p className="text-xs text-error-600 w-full">{error}</p>}
     </div>
-  )
+  );
 }

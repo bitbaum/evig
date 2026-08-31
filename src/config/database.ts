@@ -1,6 +1,6 @@
 /**
  * Database configuration constants
- * 
+ *
  * Single Source of Truth for all database table names
  * Following dev guide: docs/development/DEV_GUIDE.md
  */
@@ -12,23 +12,23 @@ export const TABLE_NAMES = {
   ACCOUNTS: 'accounts',
   VERIFICATION_TOKENS: 'verification_tokens',
   USER_PROFILES: 'user_profiles',
-  
+
   // Inventory & Products
   INVENTORY_ITEMS: 'inventory_items',
   AI_EXTRACTED_PRODUCTS: 'ai_extracted_products',
   PRODUCT_IMAGES: 'product_images',
   SUSTAINABILITY_SCORES: 'sustainability_scores',
   AI_PROCESSING_LOGS: 'ai_processing_logs',
-  
+
   // Messaging
   MESSAGES: 'messages',
   CONVERSATIONS: 'conversations',
   NOTIFICATIONS: 'notifications',
-  
+
   // Services & Appointments
   SERVICE_TYPES: 'service_types',
   SERVICE_APPOINTMENTS: 'service_appointments',
-  
+
   // Workshops
   WORKSHOPS: 'workshops',
   WORKSHOP_INSTANCES: 'workshop_instances',
@@ -40,7 +40,7 @@ export const TABLE_NAMES = {
   LOCATIONS: 'locations',
   LOCATION_APPROVALS: 'location_approvals',
   LOCATION_BOOKINGS: 'location_bookings',
-  
+
   // Applications & Profiles
   SELLER_APPLICATIONS: 'seller_applications',
   SELLER_PROFILES: 'seller_profiles',
@@ -197,7 +197,7 @@ export const TABLE_NAMES = {
 /**
  * Type for table name values
  */
-export type TableName = typeof TABLE_NAMES[keyof typeof TABLE_NAMES];
+export type TableName = (typeof TABLE_NAMES)[keyof typeof TABLE_NAMES];
 
 /**
  * Appointment role types for filtering
@@ -207,7 +207,7 @@ export const APPOINTMENT_ROLES = {
   REPAIRER: 'repairer',
 } as const;
 
-export type AppointmentRole = typeof APPOINTMENT_ROLES[keyof typeof APPOINTMENT_ROLES];
+export type AppointmentRole = (typeof APPOINTMENT_ROLES)[keyof typeof APPOINTMENT_ROLES];
 
 /**
  * Review target types
@@ -220,7 +220,7 @@ export const REVIEW_TARGET_TYPES = {
   LISTING: 'listing',
 } as const;
 
-export type ReviewTargetType = typeof REVIEW_TARGET_TYPES[keyof typeof REVIEW_TARGET_TYPES];
+export type ReviewTargetType = (typeof REVIEW_TARGET_TYPES)[keyof typeof REVIEW_TARGET_TYPES];
 
 /**
  * Conversation context types
@@ -232,21 +232,21 @@ export const CONVERSATION_TYPES = {
   MARKETPLACE: 'marketplace',
 } as const;
 
-export type ConversationType = typeof CONVERSATION_TYPES[keyof typeof CONVERSATION_TYPES];
+export type ConversationType = (typeof CONVERSATION_TYPES)[keyof typeof CONVERSATION_TYPES];
 
 /**
  * Service categories for service_types table
  */
 export const SERVICE_CATEGORIES = {
-  REPAIR: 'repair',       // Computer repair, hardware upgrades, custom builds
-  DATA: 'data',           // Data recovery, transfer, backup
+  REPAIR: 'repair', // Computer repair, hardware upgrades, custom builds
+  DATA: 'data', // Data recovery, transfer, backup
   RECYCLING: 'recycling', // Hardware recycling, e-waste
-  SOFTWARE: 'software',   // Linux, open source, installations
-  WEB: 'web',             // Web design, development
-  GENERAL: 'general',     // Consultation, general services
+  SOFTWARE: 'software', // Linux, open source, installations
+  WEB: 'web', // Web design, development
+  GENERAL: 'general', // Consultation, general services
 } as const;
 
-export type ServiceCategory = typeof SERVICE_CATEGORIES[keyof typeof SERVICE_CATEGORIES];
+export type ServiceCategory = (typeof SERVICE_CATEGORIES)[keyof typeof SERVICE_CATEGORIES];
 
 /**
  * Featured service slugs (shown on /services page)
@@ -260,7 +260,7 @@ export const FEATURED_SERVICE_SLUGS = [
   'web-design-development',
 ] as const;
 
-export type FeaturedServiceSlug = typeof FEATURED_SERVICE_SLUGS[number];
+export type FeaturedServiceSlug = (typeof FEATURED_SERVICE_SLUGS)[number];
 
 /**
  * Subscription pool status values
@@ -270,7 +270,7 @@ export const POOL_STATUS = {
   CLOSED: 'closed',
 } as const;
 
-export type PoolStatus = typeof POOL_STATUS[keyof typeof POOL_STATUS];
+export type PoolStatus = (typeof POOL_STATUS)[keyof typeof POOL_STATUS];
 
 /**
  * Pool membership status values
@@ -281,4 +281,5 @@ export const POOL_MEMBERSHIP_STATUS = {
   PENDING: 'pending',
 } as const;
 
-export type PoolMembershipStatus = typeof POOL_MEMBERSHIP_STATUS[keyof typeof POOL_MEMBERSHIP_STATUS];
+export type PoolMembershipStatus =
+  (typeof POOL_MEMBERSHIP_STATUS)[keyof typeof POOL_MEMBERSHIP_STATUS];

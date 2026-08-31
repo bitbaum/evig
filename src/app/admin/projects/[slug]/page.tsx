@@ -2,21 +2,21 @@
  * Admin Project Detail — needs + contributions for one public project.
  */
 
-import { notFound } from 'next/navigation'
-import Link from 'next/link'
-import { getTranslations } from 'next-intl/server'
-import { db } from '@/db'
-import { projects, projectNeeds, projectContributions, users, taskProjects } from '@/db/schema'
-import { eq, asc, desc } from 'drizzle-orm'
-import { ROUTES } from '@/config/routes'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { Lightbulb, ExternalLink, FolderKanban } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { designPrimitive } from '@/lib/design-system'
-import { NeedsPanel } from '@/components/admin/projects/NeedsPanel'
-import { ContributionsPanel } from '@/components/admin/projects/ContributionsPanel'
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
+import { db } from '@/db';
+import { projects, projectNeeds, projectContributions, users, taskProjects } from '@/db/schema';
+import { eq, asc, desc } from 'drizzle-orm';
+import { ROUTES } from '@/config/routes';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import { Lightbulb, ExternalLink, FolderKanban } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { designPrimitive } from '@/lib/design-system';
+import { NeedsPanel } from '@/components/admin/projects/NeedsPanel';
+import { ContributionsPanel } from '@/components/admin/projects/ContributionsPanel';
 
-type PageProps = { params: Promise<{ slug: string }> }
+type PageProps = { params: Promise<{ slug: string }> };
 
 async function loadProject(slug: string) {
   const [p] = await db
@@ -29,14 +29,14 @@ async function loadProject(slug: string) {
     })
     .from(projects)
     .leftJoin(taskProjects, eq(taskProjects.id, projects.taskProjectId))
-    .where(eq(projects.slug, slug))
-  if (!p) return null
+    .where(eq(projects.slug, slug));
+  if (!p) return null;
 
   const needs = await db
     .select()
     .from(projectNeeds)
     .where(eq(projectNeeds.projectId, p.id))
-    .orderBy(asc(projectNeeds.sortOrder))
+    .orderBy(asc(projectNeeds.sortOrder));
 
   const contributions = await db
     .select({
@@ -56,19 +56,16 @@ async function loadProject(slug: string) {
     .from(projectContributions)
     .leftJoin(users, eq(users.id, projectContributions.respondedBy))
     .where(eq(projectContributions.projectId, p.id))
-    .orderBy(desc(projectContributions.createdAt))
+    .orderBy(desc(projectContributions.createdAt));
 
-  return { project: p, needs, contributions }
+  return { project: p, needs, contributions };
 }
 
 export default async function AdminProjectDetail({ params }: PageProps) {
-  const { slug } = await params
-  const [data, t] = await Promise.all([
-    loadProject(slug),
-    getTranslations('admin.projects'),
-  ])
-  if (!data) notFound()
-  const { project, needs, contributions } = data
+  const { slug } = await params;
+  const [data, t] = await Promise.all([loadProject(slug), getTranslations('admin.projects')]);
+  if (!data) notFound();
+  const { project, needs, contributions } = data;
 
   return (
     <AdminPageWrapper
@@ -112,5 +109,5 @@ export default async function AdminProjectDetail({ params }: PageProps) {
       <NeedsPanel slug={project.slug} initialNeeds={needs} />
       <ContributionsPanel slug={project.slug} initialContributions={contributions} needs={needs} />
     </AdminPageWrapper>
-  )
+  );
 }

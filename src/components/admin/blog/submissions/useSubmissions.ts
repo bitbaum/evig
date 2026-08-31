@@ -1,93 +1,93 @@
-'use client'
+'use client';
 
-import { useState, useCallback } from 'react'
-import { apiFetch } from '@/lib/api/client'
-import { useSwrFetch } from '@/lib/api/swr'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { APPROVAL_STATUS } from '@/config/approval-status'
-import type { Submission, FilterStatus, SubmissionAction, StatusCounts } from './types'
+import { useState, useCallback } from 'react';
+import { apiFetch } from '@/lib/api/client';
+import { useSwrFetch } from '@/lib/api/swr';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { APPROVAL_STATUS } from '@/config/approval-status';
+import type { Submission, FilterStatus, SubmissionAction, StatusCounts } from './types';
 
 export function useSubmissions() {
-  const [filter, setFilter] = useState<FilterStatus>(APPROVAL_STATUS.PENDING)
-  const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null)
-  const [actionLoading, setActionLoading] = useState<string | null>(null)
-  const [showRejectModal, setShowRejectModal] = useState(false)
-  const [showChangesModal, setShowChangesModal] = useState(false)
-  const [showEditModal, setShowEditModal] = useState(false)
-  const [rejectionReason, setRejectionReason] = useState('')
-  const [reviewNotes, setReviewNotes] = useState('')
-  const [actionError, setActionError] = useState('')
-  const [success, setSuccess] = useState('')
+  const [filter, setFilter] = useState<FilterStatus>(APPROVAL_STATUS.PENDING);
+  const [selectedSubmission, setSelectedSubmission] = useState<Submission | null>(null);
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [showRejectModal, setShowRejectModal] = useState(false);
+  const [showChangesModal, setShowChangesModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [rejectionReason, setRejectionReason] = useState('');
+  const [reviewNotes, setReviewNotes] = useState('');
+  const [actionError, setActionError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const {
     data,
     error: loadError,
     isLoading,
     mutate,
-  } = useSwrFetch<{ submissions: Submission[] }>('/api/blog/submit')
-  const submissions = data?.submissions ?? []
+  } = useSwrFetch<{ submissions: Submission[] }>('/api/blog/submit');
+  const submissions = data?.submissions ?? [];
   // One error surface: action errors win (they're the fresher user feedback).
-  const error = actionError || (loadError ? 'Fehler beim Laden der Einreichungen' : '')
-  const setError = setActionError
+  const error = actionError || (loadError ? 'Fehler beim Laden der Einreichungen' : '');
+  const setError = setActionError;
 
   const fetchSubmissions = useCallback(async () => {
-    await mutate()
-  }, [mutate])
+    await mutate();
+  }, [mutate]);
 
   const handleAction = async (
     action: SubmissionAction,
     submissionId: string,
-    extraData?: { rejection_reason?: string; review_notes?: string }
+    extraData?: { rejection_reason?: string; review_notes?: string },
   ) => {
-    setActionLoading(action)
-    setError('')
-    setSuccess('')
+    setActionLoading(action);
+    setError('');
+    setSuccess('');
 
     try {
       if (action === 'delete') {
         const result = await apiFetch<void>(`/api/admin/blog/submissions/${submissionId}`, {
           method: 'DELETE',
-        })
+        });
         if (result.success) {
-          setSuccess('Einreichung gelöscht')
-          setSelectedSubmission(null)
-          fetchSubmissions()
+          setSuccess('Einreichung gelöscht');
+          setSelectedSubmission(null);
+          fetchSubmissions();
         } else {
-          setError(result.error || 'Fehler beim Löschen')
+          setError(result.error || 'Fehler beim Löschen');
         }
       } else {
         const result = await apiFetch<void>(`/api/admin/blog/submissions/${submissionId}`, {
           method: 'PATCH',
           body: { action, ...extraData },
-        })
+        });
         if (result.success) {
           const messages: Record<string, string> = {
             approve: 'Einreichung genehmigt',
             reject: 'Einreichung abgelehnt',
             publish: 'Beitrag veröffentlicht!',
             request_changes: 'Änderungen angefragt',
-          }
-          setSuccess(messages[action] || 'Aktion erfolgreich')
-          setSelectedSubmission(null)
-          setShowRejectModal(false)
-          setShowChangesModal(false)
-          setRejectionReason('')
-          setReviewNotes('')
-          fetchSubmissions()
+          };
+          setSuccess(messages[action] || 'Aktion erfolgreich');
+          setSelectedSubmission(null);
+          setShowRejectModal(false);
+          setShowChangesModal(false);
+          setRejectionReason('');
+          setReviewNotes('');
+          fetchSubmissions();
         } else {
-          setError(result.error || 'Fehler bei der Aktion')
+          setError(result.error || 'Fehler bei der Aktion');
         }
       }
     } catch {
-      setError(ERROR_MESSAGES.NETWORK_ERROR)
+      setError(ERROR_MESSAGES.NETWORK_ERROR);
     } finally {
-      setActionLoading(null)
+      setActionLoading(null);
     }
-  }
+  };
 
   const filteredSubmissions = submissions.filter(
-    (sub) => filter === 'all' || sub.status === filter
-  )
+    (sub) => filter === 'all' || sub.status === filter,
+  );
 
   const counts: StatusCounts = {
     all: submissions.length,
@@ -95,7 +95,7 @@ export function useSubmissions() {
     approved: submissions.filter((s) => s.status === APPROVAL_STATUS.APPROVED).length,
     rejected: submissions.filter((s) => s.status === APPROVAL_STATUS.REJECTED).length,
     published: submissions.filter((s) => s.status === APPROVAL_STATUS.PUBLISHED).length,
-  }
+  };
 
   return {
     // Data
@@ -127,5 +127,5 @@ export function useSubmissions() {
     // Actions
     handleAction,
     fetchSubmissions,
-  }
+  };
 }

@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import { Home } from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
-import { FormField } from '@/components/ui/form-field'
-import type { LocationFormData } from './types'
-import { SWISS_CANTONS } from './types'
+import { Home } from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { FormField } from '@/components/ui/form-field';
+import type { LocationFormData } from './types';
+import { SWISS_CANTONS } from './types';
 
 interface Props {
-  formData: LocationFormData
-  onFieldChange: <K extends keyof LocationFormData>(field: K, value: LocationFormData[K]) => void
+  formData: LocationFormData;
+  onFieldChange: <K extends keyof LocationFormData>(field: K, value: LocationFormData[K]) => void;
 }
 
 export function LocationAddressSection({ formData, onFieldChange }: Props) {
@@ -22,7 +22,12 @@ export function LocationAddressSection({ formData, onFieldChange }: Props) {
       </Heading>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <FormField label="Strasse und Hausnummer" required htmlFor="address-line1" className="md:col-span-2">
+        <FormField
+          label="Strasse und Hausnummer"
+          required
+          htmlFor="address-line1"
+          className="md:col-span-2"
+        >
           <Input
             id="address-line1"
             type="text"
@@ -34,7 +39,11 @@ export function LocationAddressSection({ formData, onFieldChange }: Props) {
           />
         </FormField>
 
-        <FormField label="Adresszusatz (optional)" htmlFor="address-line2" className="md:col-span-2">
+        <FormField
+          label="Adresszusatz (optional)"
+          htmlFor="address-line2"
+          className="md:col-span-2"
+        >
           <Input
             id="address-line2"
             type="text"
@@ -76,8 +85,10 @@ export function LocationAddressSection({ formData, onFieldChange }: Props) {
             onChange={(e) => onFieldChange('canton', e.target.value)}
           >
             <option value="">Kanton wählen</option>
-            {SWISS_CANTONS.map(canton => (
-              <option key={canton} value={canton}>{canton}</option>
+            {SWISS_CANTONS.map((canton) => (
+              <option key={canton} value={canton}>
+                {canton}
+              </option>
             ))}
           </Select>
         </FormField>
@@ -118,5 +129,5 @@ export function LocationAddressSection({ formData, onFieldChange }: Props) {
         </FormField>
       </div>
     </div>
-  )
+  );
 }

@@ -21,36 +21,36 @@ export const INTAKE_TIERS = {
   REFURBISH: 'refurbish',
   PARTS: 'parts',
   RECYCLE: 'recycle',
-} as const
+} as const;
 
-export type IntakeTier = typeof INTAKE_TIERS[keyof typeof INTAKE_TIERS]
+export type IntakeTier = (typeof INTAKE_TIERS)[keyof typeof INTAKE_TIERS];
 
 export const INTAKE_TIER_LABELS: Record<IntakeTier, string> = {
   [INTAKE_TIERS.REFURBISH]: 'Refurbishing',
   [INTAKE_TIERS.PARTS]: 'Ersatzteile',
   [INTAKE_TIERS.RECYCLE]: 'Recycling',
-}
+};
 
 export const INTAKE_TIER_DESCRIPTIONS: Record<IntakeTier, string> = {
   [INTAKE_TIERS.REFURBISH]: 'Aufbereitung für Verkauf im Shop',
   [INTAKE_TIERS.PARTS]: 'Ausschlachtung für Ersatzteile und Komponenten',
   [INTAKE_TIERS.RECYCLE]: 'SWICO-zertifizierte Entsorgung',
-}
+};
 
 export const INTAKE_TIER_ICONS: Record<IntakeTier, string> = {
   [INTAKE_TIERS.REFURBISH]: '🔧',
   [INTAKE_TIERS.PARTS]: '🔩',
   [INTAKE_TIERS.RECYCLE]: '♻️',
-}
+};
 
 /**
  * Pseudo-tier for records without a physical checklist (intake_tier NULL).
  * Used only as a filter/display value and never stored in the database.
  * The name describes state, not the input channel that happened to create it.
  */
-export const QUICK_CAPTURE_TIER = 'quick' as const
-export const QUICK_CAPTURE_LABEL = 'Ohne Prüfprozess'
-export const QUICK_CAPTURE_ICON = '○'
+export const QUICK_CAPTURE_TIER = 'quick' as const;
+export const QUICK_CAPTURE_LABEL = 'Ohne Prüfprozess';
+export const QUICK_CAPTURE_ICON = '○';
 
 // =============================================================================
 // CHECKLIST CATEGORIES
@@ -65,9 +65,9 @@ export const CHECKLIST_CATEGORIES = {
   LISTING: 'listing',
   PARTS: 'parts',
   RECYCLING: 'recycling',
-} as const
+} as const;
 
-export type ChecklistCategory = typeof CHECKLIST_CATEGORIES[keyof typeof CHECKLIST_CATEGORIES]
+export type ChecklistCategory = (typeof CHECKLIST_CATEGORIES)[keyof typeof CHECKLIST_CATEGORIES];
 
 export const CHECKLIST_CATEGORY_LABELS: Record<ChecklistCategory, string> = {
   [CHECKLIST_CATEGORIES.INTAKE]: 'Eingang',
@@ -78,7 +78,7 @@ export const CHECKLIST_CATEGORY_LABELS: Record<ChecklistCategory, string> = {
   [CHECKLIST_CATEGORIES.LISTING]: 'Inserat',
   [CHECKLIST_CATEGORIES.PARTS]: 'Ersatzteile',
   [CHECKLIST_CATEGORIES.RECYCLING]: 'Recycling',
-}
+};
 
 // =============================================================================
 // CHECKLIST ITEM DEFINITIONS
@@ -86,29 +86,29 @@ export const CHECKLIST_CATEGORY_LABELS: Record<ChecklistCategory, string> = {
 
 export interface ChecklistItemConfig {
   /** Unique identifier */
-  id: string
+  id: string;
   /** Display label (Swiss German) */
-  label: string
+  label: string;
   /** Explanation of what this step involves */
-  description: string
+  description: string;
   /** Grouping category */
-  category: ChecklistCategory
+  category: ChecklistCategory;
   /** Which tiers require this item */
-  tiers: IntakeTier[]
+  tiers: IntakeTier[];
   /** Must be completed before publishing (for refurbish tier) */
-  required: boolean
+  required: boolean;
   /**
    * Only show for these device categories (KATEGORIEN main values: '10'=Laptops, '20'=Desktop, etc.)
    * If undefined, show for ALL device categories.
    */
-  deviceCategories?: string[]
+  deviceCategories?: string[];
   /**
    * Vier-Augen-Prinzip: this item should be passed by someone OTHER than the
    * person who did all the other completed required work on the device. The
    * checklist API blocks a solo sign-off UNLESS an explicit override reason
    * is written in the notes (audit trail for single-staff shifts).
    */
-  requiresSecondPerson?: boolean
+  requiresSecondPerson?: boolean;
 }
 
 /**
@@ -124,7 +124,8 @@ export const CHECKLIST_ITEMS: ChecklistItemConfig[] = [
   {
     id: 'visual_inspection',
     label: 'Sichtprüfung durchgeführt',
-    description: 'Äusseren Zustand dokumentieren: Gehäuse, Display, Anschlüsse, Kratzer, Beschädigungen',
+    description:
+      'Äusseren Zustand dokumentieren: Gehäuse, Display, Anschlüsse, Kratzer, Beschädigungen',
     category: 'intake',
     tiers: ['refurbish', 'parts', 'recycle'],
     required: true,
@@ -152,7 +153,8 @@ export const CHECKLIST_ITEMS: ChecklistItemConfig[] = [
   {
     id: 'data_wipe',
     label: 'Datenlöschung (NIST 800-88)',
-    description: 'Sicheres Löschen aller Daten gemäss NIST 800-88 Standard. Bei SSDs: Secure Erase. Bei HDDs: Überschreiben.',
+    description:
+      'Sicheres Löschen aller Daten gemäss NIST 800-88 Standard. Bei SSDs: Secure Erase. Bei HDDs: Überschreiben.',
     category: 'security',
     tiers: ['refurbish', 'parts', 'recycle'],
     required: true,
@@ -294,7 +296,8 @@ export const CHECKLIST_ITEMS: ChecklistItemConfig[] = [
   {
     id: 'os_installed',
     label: 'Betriebssystem installiert',
-    description: 'Linux installiert (100% Open Source), alle Treiber konfiguriert, Updates eingespielt',
+    description:
+      'Linux installiert (100% Open Source), alle Treiber konfiguriert, Updates eingespielt',
     category: 'refurbishment',
     tiers: ['refurbish'],
     required: true,
@@ -307,7 +310,8 @@ export const CHECKLIST_ITEMS: ChecklistItemConfig[] = [
   {
     id: 'final_qa',
     label: 'Qualitätskontrolle bestanden',
-    description: 'Abschlusskontrolle durch eine ZWEITE Person (Vier-Augen-Prinzip): Gerät vollständig funktionsfähig, alle Tests bestanden, bereit für Verkauf',
+    description:
+      'Abschlusskontrolle durch eine ZWEITE Person (Vier-Augen-Prinzip): Gerät vollständig funktionsfähig, alle Tests bestanden, bereit für Verkauf',
     category: 'quality',
     tiers: ['refurbish'],
     required: true,
@@ -397,7 +401,7 @@ export const CHECKLIST_ITEMS: ChecklistItemConfig[] = [
     tiers: ['recycle'],
     required: true,
   },
-]
+];
 
 // =============================================================================
 // CHECKLIST STATE TYPE (stored in JSONB)
@@ -413,59 +417,61 @@ export const CHECKLIST_RESULTS = {
   FAIL: 'fail',
   /** Not applicable to this specific device (e.g. laptop without webcam). */
   NA: 'na',
-} as const
+} as const;
 
-export type ChecklistResult = typeof CHECKLIST_RESULTS[keyof typeof CHECKLIST_RESULTS]
+export type ChecklistResult = (typeof CHECKLIST_RESULTS)[keyof typeof CHECKLIST_RESULTS];
 
 export const CHECKLIST_RESULT_LABELS: Record<ChecklistResult, string> = {
   [CHECKLIST_RESULTS.PASS]: 'Bestanden',
   [CHECKLIST_RESULTS.FAIL]: 'Fehlgeschlagen',
   [CHECKLIST_RESULTS.NA]: 'Nicht zutreffend',
-}
+};
 
 export interface ChecklistItemState {
   /** Verdict; null = still open. */
-  result: ChecklistResult | null
+  result: ChecklistResult | null;
   /**
    * Legacy boolean from before verdicts existed (migration 135 rewrites
    * stored rows, this field only survives in un-migrated snapshots).
    * Read via getItemResult(), never written anymore.
    */
-  completed?: boolean
-  completedBy: string | null
-  completedAt: string | null
-  notes: string
+  completed?: boolean;
+  completedBy: string | null;
+  completedAt: string | null;
+  notes: string;
 }
 
-export type ChecklistState = Record<string, ChecklistItemState>
+export type ChecklistState = Record<string, ChecklistItemState>;
 
 /** Fresh, untouched item state. */
 export function emptyChecklistItemState(): ChecklistItemState {
-  return { result: null, completedBy: null, completedAt: null, notes: '' }
+  return { result: null, completedBy: null, completedAt: null, notes: '' };
 }
 
 /** Effective verdict of an item, tolerating the legacy `completed` boolean. */
 export function getItemResult(state: ChecklistItemState | undefined): ChecklistResult | null {
-  if (!state) return null
-  if (state.result) return state.result
-  return state.completed === true ? CHECKLIST_RESULTS.PASS : null
+  if (!state) return null;
+  if (state.result) return state.result;
+  return state.completed === true ? CHECKLIST_RESULTS.PASS : null;
 }
 
 /** An item counts as done (for the publish gate) when it passed or doesn't apply. */
 export function isItemDone(state: ChecklistItemState | undefined): boolean {
-  const result = getItemResult(state)
-  return result === CHECKLIST_RESULTS.PASS || result === CHECKLIST_RESULTS.NA
+  const result = getItemResult(state);
+  return result === CHECKLIST_RESULTS.PASS || result === CHECKLIST_RESULTS.NA;
 }
 
 /** Normalize a stored item state to the verdict shape (for API responses). */
-export function normalizeChecklistItemState(state: ChecklistItemState | undefined): ChecklistItemState {
-  if (!state) return emptyChecklistItemState()
+export function normalizeChecklistItemState(
+  state: ChecklistItemState | undefined,
+): ChecklistItemState {
+  if (!state) return emptyChecklistItemState();
   return {
     result: getItemResult(state),
     completedBy: state.completedBy ?? null,
     completedAt: state.completedAt ?? null,
     notes: state.notes ?? '',
-  }
+  };
 }
 
 // =============================================================================
@@ -483,17 +489,17 @@ export function getChecklistForDevice(
   tier: IntakeTier,
   deviceCategory?: string | null,
 ): ChecklistItemConfig[] {
-  return CHECKLIST_ITEMS.filter(item => {
+  return CHECKLIST_ITEMS.filter((item) => {
     // Must match tier
-    if (!item.tiers.includes(tier)) return false
+    if (!item.tiers.includes(tier)) return false;
     // If item has device category restriction, must match
     if (item.deviceCategories && deviceCategory) {
-      return item.deviceCategories.includes(deviceCategory)
+      return item.deviceCategories.includes(deviceCategory);
     }
     // If item has device category restriction but device has no category, skip it
-    if (item.deviceCategories && !deviceCategory) return false
-    return true
-  })
+    if (item.deviceCategories && !deviceCategory) return false;
+    return true;
+  });
 }
 
 /**
@@ -503,17 +509,17 @@ export function getChecklistGrouped(
   tier: IntakeTier,
   deviceCategory?: string | null,
 ): Record<ChecklistCategory, ChecklistItemConfig[]> {
-  const items = getChecklistForDevice(tier, deviceCategory)
-  const grouped: Partial<Record<ChecklistCategory, ChecklistItemConfig[]>> = {}
+  const items = getChecklistForDevice(tier, deviceCategory);
+  const grouped: Partial<Record<ChecklistCategory, ChecklistItemConfig[]>> = {};
 
   for (const item of items) {
     if (!grouped[item.category]) {
-      grouped[item.category] = []
+      grouped[item.category] = [];
     }
-    grouped[item.category]!.push(item)
+    grouped[item.category]!.push(item);
   }
 
-  return grouped as Record<ChecklistCategory, ChecklistItemConfig[]>
+  return grouped as Record<ChecklistCategory, ChecklistItemConfig[]>;
 }
 
 /**
@@ -529,10 +535,10 @@ export function isChecklistComplete(
   tier: IntakeTier,
   deviceCategory?: string | null,
 ): boolean {
-  const items = getChecklistForDevice(tier, deviceCategory)
-  const requiredItems = items.filter(i => i.required)
+  const items = getChecklistForDevice(tier, deviceCategory);
+  const requiredItems = items.filter((i) => i.required);
 
-  return requiredItems.every(item => isItemDone(state[item.id]))
+  return requiredItems.every((item) => isItemDone(state[item.id]));
 }
 
 /**
@@ -546,10 +552,10 @@ export function hasChecklistFailure(
   tier: IntakeTier,
   deviceCategory?: string | null,
 ): boolean {
-  const items = getChecklistForDevice(tier, deviceCategory)
+  const items = getChecklistForDevice(tier, deviceCategory);
   return items.some(
-    item => item.required && getItemResult(state[item.id]) === CHECKLIST_RESULTS.FAIL,
-  )
+    (item) => item.required && getItemResult(state[item.id]) === CHECKLIST_RESULTS.FAIL,
+  );
 }
 
 /**
@@ -557,13 +563,15 @@ export function hasChecklistFailure(
  * item and appended to the timeline; must satisfy the ≥10-character
  * override-reason rule in `ChecklistUpdateSchema`.
  */
-export const SECOND_PERSON_SOLO_OVERRIDE_NOTE = 'Allein im Dienst — Vier-Augen-Freigabe übersteuert'
+export const SECOND_PERSON_SOLO_OVERRIDE_NOTE =
+  'Allein im Dienst — Vier-Augen-Freigabe übersteuert';
 
 /**
  * Audit note for the one-click "publish without QC" action. The listing
  * publishes explicitly WITHOUT the Prüfsiegel; buyers see the untested state.
  */
-export const QC_SKIP_ONE_CLICK_NOTE = 'Ohne Prüfung publiziert — bewusster Entscheid, Inserat ohne Prüfsiegel'
+export const QC_SKIP_ONE_CLICK_NOTE =
+  'Ohne Prüfung publiziert — bewusster Entscheid, Inserat ohne Prüfsiegel';
 
 /**
  * Vier-Augen-Prinzip check. A `requiresSecondPerson` item (final QA) should
@@ -579,18 +587,19 @@ export function violatesSecondPersonRule(
   deviceCategory: string | null | undefined,
   actingUserId: string,
 ): boolean {
-  if (!item.requiresSecondPerson) return false
-  const otherDoneRequired = getChecklistForDevice(tier, deviceCategory)
-    .filter(i => i.required && i.id !== item.id && isItemDone(state[i.id]))
-  if (otherDoneRequired.length === 0) return true
+  if (!item.requiresSecondPerson) return false;
+  const otherDoneRequired = getChecklistForDevice(tier, deviceCategory).filter(
+    (i) => i.required && i.id !== item.id && isItemDone(state[i.id]),
+  );
+  if (otherDoneRequired.length === 0) return true;
   const completedByActor = otherDoneRequired.filter(
-    i => state[i.id]?.completedBy === actingUserId,
-  ).length
+    (i) => state[i.id]?.completedBy === actingUserId,
+  ).length;
 
   // A strict majority performed more than half of the completed required
   // work. In a tie there is already shared involvement, so either worker may
   // perform the independent final check.
-  return completedByActor > otherDoneRequired.length / 2
+  return completedByActor > otherDoneRequired.length / 2;
 }
 
 /**
@@ -604,7 +613,7 @@ export const BUYER_VISIBLE_CHECK_CATEGORIES: ChecklistCategory[] = [
   CHECKLIST_CATEGORIES.SECURITY,
   CHECKLIST_CATEGORIES.REFURBISHMENT,
   CHECKLIST_CATEGORIES.QUALITY,
-]
+];
 
 /**
  * The QC results a buyer should see for a published device: every PASSED
@@ -620,9 +629,9 @@ export function getBuyerVisibleChecks(
   deviceCategory?: string | null,
 ): Array<{ key: string; label: string; checked: boolean }> {
   return getChecklistForDevice(tier, deviceCategory)
-    .filter(item => BUYER_VISIBLE_CHECK_CATEGORIES.includes(item.category))
-    .filter(item => getItemResult(state[item.id]) === CHECKLIST_RESULTS.PASS)
-    .map(item => ({ key: item.id, label: item.label, checked: true }))
+    .filter((item) => BUYER_VISIBLE_CHECK_CATEGORIES.includes(item.category))
+    .filter((item) => getItemResult(state[item.id]) === CHECKLIST_RESULTS.PASS)
+    .map((item) => ({ key: item.id, label: item.label, checked: true }));
 }
 
 /**
@@ -634,13 +643,14 @@ export function getBuyerVisibleChecks(
  * capture UI still makes untested publication an explicit audited choice.
  */
 export function requiresQualityControl(deviceCategory: string | null | undefined): boolean {
-  if (!deviceCategory) return false
+  if (!deviceCategory) return false;
   return CHECKLIST_ITEMS.some(
-    item =>
+    (item) =>
       item.required &&
-      (item.category === CHECKLIST_CATEGORIES.TESTING || item.category === CHECKLIST_CATEGORIES.SECURITY) &&
+      (item.category === CHECKLIST_CATEGORIES.TESTING ||
+        item.category === CHECKLIST_CATEGORIES.SECURITY) &&
       item.deviceCategories?.includes(deviceCategory) === true,
-  )
+  );
 }
 
 /**
@@ -653,20 +663,20 @@ export function getChecklistProgress(
   tier: IntakeTier,
   deviceCategory?: string | null,
 ): {
-  completed: number
-  total: number
-  requiredCompleted: number
-  requiredTotal: number
+  completed: number;
+  total: number;
+  requiredCompleted: number;
+  requiredTotal: number;
   /** Items (required or optional) with a 'fail' verdict. */
-  failed: number
-  percentage: number
+  failed: number;
+  percentage: number;
 } {
-  const items = getChecklistForDevice(tier, deviceCategory)
-  const requiredItems = items.filter(i => i.required)
+  const items = getChecklistForDevice(tier, deviceCategory);
+  const requiredItems = items.filter((i) => i.required);
 
-  const completed = items.filter(i => isItemDone(state[i.id])).length
-  const requiredCompleted = requiredItems.filter(i => isItemDone(state[i.id])).length
-  const failed = items.filter(i => getItemResult(state[i.id]) === CHECKLIST_RESULTS.FAIL).length
+  const completed = items.filter((i) => isItemDone(state[i.id])).length;
+  const requiredCompleted = requiredItems.filter((i) => isItemDone(state[i.id])).length;
+  const failed = items.filter((i) => getItemResult(state[i.id]) === CHECKLIST_RESULTS.FAIL).length;
 
   return {
     completed,
@@ -674,20 +684,24 @@ export function getChecklistProgress(
     requiredCompleted,
     requiredTotal: requiredItems.length,
     failed,
-    percentage: requiredItems.length > 0
-      ? Math.round((requiredCompleted / requiredItems.length) * 100)
-      : 100,
-  }
+    percentage:
+      requiredItems.length > 0 ? Math.round((requiredCompleted / requiredItems.length) * 100) : 100,
+  };
 }
 
 /**
  * Get intake tier options for select dropdowns
  */
-export function getIntakeTierOptions(): Array<{ value: IntakeTier; label: string; description: string; icon: string }> {
-  return Object.values(INTAKE_TIERS).map(value => ({
+export function getIntakeTierOptions(): Array<{
+  value: IntakeTier;
+  label: string;
+  description: string;
+  icon: string;
+}> {
+  return Object.values(INTAKE_TIERS).map((value) => ({
     value,
     label: INTAKE_TIER_LABELS[value],
     description: INTAKE_TIER_DESCRIPTIONS[value],
     icon: INTAKE_TIER_ICONS[value],
-  }))
+  }));
 }

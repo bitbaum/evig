@@ -91,7 +91,13 @@ export async function POST(request: NextRequest) {
       return apiUnauthorized('Invalid signature');
     }
 
-    const body = (() => { try { return JSON.parse(rawBody); } catch { return null; } })();
+    const body = (() => {
+      try {
+        return JSON.parse(rawBody);
+      } catch {
+        return null;
+      }
+    })();
     if (!body || typeof body !== 'object') {
       return apiBadRequest('Invalid body');
     }
@@ -114,7 +120,10 @@ export async function POST(request: NextRequest) {
       .limit(1);
 
     if (!item) {
-      logger.info('Kivvi webhook: no local inventory item for Kivvi id, ignoring', { event, kivviItemId });
+      logger.info('Kivvi webhook: no local inventory item for Kivvi id, ignoring', {
+        event,
+        kivviItemId,
+      });
       return apiSuccess({ ignored: true });
     }
 
@@ -127,7 +136,11 @@ export async function POST(request: NextRequest) {
       // LOOP SUPPRESSION: direct db writes only — no Kivvi push from here.
       await db
         .update(inventoryItems)
-        .set({ status: terminalStatus, kivviSyncedAt: new Date().toISOString(), updatedAt: new Date().toISOString() })
+        .set({
+          status: terminalStatus,
+          kivviSyncedAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        })
         .where(eq(inventoryItems.id, item.id));
 
       await db
@@ -135,7 +148,13 @@ export async function POST(request: NextRequest) {
         .set({ status: LISTING_STATUS.SOLD })
         .where(eq(listings.inventoryItemId, item.id));
 
-      logger.info('Kivvi webhook: applied terminal status', { event, kivviItemId, localItemId: item.id, kivviStatus, localStatus: terminalStatus });
+      logger.info('Kivvi webhook: applied terminal status', {
+        event,
+        kivviItemId,
+        localItemId: item.id,
+        kivviStatus,
+        localStatus: terminalStatus,
+      });
       return apiSuccess({ updated: true });
     }
 
@@ -159,7 +178,11 @@ export async function POST(request: NextRequest) {
 
     await db.update(inventoryItems).set(update).where(eq(inventoryItems.id, item.id));
 
-    logger.info('Kivvi webhook: mirrored item fields', { event, kivviItemId, localItemId: item.id });
+    logger.info('Kivvi webhook: mirrored item fields', {
+      event,
+      kivviItemId,
+      localItemId: item.id,
+    });
     return apiSuccess({ updated: true });
   } catch (error) {
     return apiError(error, 'Internal error');

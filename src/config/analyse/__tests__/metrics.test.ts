@@ -30,7 +30,7 @@ import {
   getMetricsByResponsibleTeam,
   METRICS,
   CATEGORY_LABELS,
-} from '../metrics'
+} from '../metrics';
 
 // ============================================================================
 // getMetricsByCategory
@@ -38,27 +38,27 @@ import {
 
 describe('getMetricsByCategory', () => {
   it('returns non-empty array for "financial" category', () => {
-    const metrics = getMetricsByCategory('financial')
-    expect(metrics.length).toBeGreaterThan(0)
-  })
+    const metrics = getMetricsByCategory('financial');
+    expect(metrics.length).toBeGreaterThan(0);
+  });
 
   it('returns non-empty array for "environmental" category', () => {
-    const metrics = getMetricsByCategory('environmental')
-    expect(metrics.length).toBeGreaterThan(0)
-  })
+    const metrics = getMetricsByCategory('environmental');
+    expect(metrics.length).toBeGreaterThan(0);
+  });
 
   it('all returned metrics belong to the requested category', () => {
-    const metrics = getMetricsByCategory('financial')
+    const metrics = getMetricsByCategory('financial');
     for (const m of metrics) {
-      expect(m.category).toBe('financial')
+      expect(m.category).toBe('financial');
     }
-  })
+  });
 
   it('returns empty array for unknown category', () => {
     // @ts-expect-error testing unknown category
-    expect(getMetricsByCategory('unknown_cat')).toEqual([])
-  })
-})
+    expect(getMetricsByCategory('unknown_cat')).toEqual([]);
+  });
+});
 
 // ============================================================================
 // getMetricsByStatus
@@ -66,22 +66,22 @@ describe('getMetricsByCategory', () => {
 
 describe('getMetricsByStatus', () => {
   it('returns non-empty array for "available" status', () => {
-    const metrics = getMetricsByStatus('available')
-    expect(metrics.length).toBeGreaterThan(0)
-  })
+    const metrics = getMetricsByStatus('available');
+    expect(metrics.length).toBeGreaterThan(0);
+  });
 
   it('all returned metrics have the requested status', () => {
-    const metrics = getMetricsByStatus('available')
+    const metrics = getMetricsByStatus('available');
     for (const m of metrics) {
-      expect(m.status).toBe('available')
+      expect(m.status).toBe('available');
     }
-  })
+  });
 
   it('returns empty array for unknown status', () => {
     // @ts-expect-error testing unknown status
-    expect(getMetricsByStatus('unknown_status')).toEqual([])
-  })
-})
+    expect(getMetricsByStatus('unknown_status')).toEqual([]);
+  });
+});
 
 // ============================================================================
 // getMissingDataMetrics
@@ -89,16 +89,16 @@ describe('getMetricsByStatus', () => {
 
 describe('getMissingDataMetrics', () => {
   it('all returned metrics have status "needs_data"', () => {
-    const missing = getMissingDataMetrics()
+    const missing = getMissingDataMetrics();
     for (const m of missing) {
-      expect(m.status).toBe('needs_data')
+      expect(m.status).toBe('needs_data');
     }
-  })
+  });
 
   it('is consistent with getMetricsByStatus("needs_data")', () => {
-    expect(getMissingDataMetrics()).toEqual(getMetricsByStatus('needs_data'))
-  })
-})
+    expect(getMissingDataMetrics()).toEqual(getMetricsByStatus('needs_data'));
+  });
+});
 
 // ============================================================================
 // getMetricsByResponsibleTeam
@@ -106,18 +106,18 @@ describe('getMissingDataMetrics', () => {
 
 describe('getMetricsByResponsibleTeam', () => {
   it('returns an object', () => {
-    expect(typeof getMetricsByResponsibleTeam()).toBe('object')
-  })
+    expect(typeof getMetricsByResponsibleTeam()).toBe('object');
+  });
 
   it('each group contains only needs_data metrics', () => {
-    const grouped = getMetricsByResponsibleTeam()
+    const grouped = getMetricsByResponsibleTeam();
     for (const metrics of Object.values(grouped)) {
       for (const m of metrics) {
-        expect(m.status).toBe('needs_data')
+        expect(m.status).toBe('needs_data');
       }
     }
-  })
-})
+  });
+});
 
 // ============================================================================
 // CATEGORY_LABELS
@@ -125,14 +125,14 @@ describe('getMetricsByResponsibleTeam', () => {
 
 describe('CATEGORY_LABELS', () => {
   it('has label for financial', () => {
-    expect(CATEGORY_LABELS.financial).toBe('Finanzen')
-  })
+    expect(CATEGORY_LABELS.financial).toBe('Finanzen');
+  });
 
   it('has label for environmental', () => {
-    expect(CATEGORY_LABELS.environmental).toBe('Umwelt')
-  })
+    expect(CATEGORY_LABELS.environmental).toBe('Umwelt');
+  });
 
   it('has label for social', () => {
-    expect(CATEGORY_LABELS.social).toBe('Soziales')
-  })
-})
+    expect(CATEGORY_LABELS.social).toBe('Soziales');
+  });
+});

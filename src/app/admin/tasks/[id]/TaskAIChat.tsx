@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { AIAdvisorChat } from '@/components/ai/AIAdvisorChat'
+import { AIAdvisorChat } from '@/components/ai/AIAdvisorChat';
 
 /**
  * TaskAIChat — "ask the AI for help" on a task, complementing the human
@@ -8,21 +8,35 @@ import { AIAdvisorChat } from '@/components/ai/AIAdvisorChat'
  * proceed, break the work down, spot blockers, draft a message.
  */
 interface TaskAIChatProps {
-  title: string
-  description: string | null
-  instructions: string | null
-  status: string
-  priority: string
-  dueDate: string | null
-  protocolTitle: string | null
+  title: string;
+  description: string | null;
+  instructions: string | null;
+  status: string;
+  priority: string;
+  dueDate: string | null;
+  protocolTitle: string | null;
 }
 
 const QUICK_QUESTIONS = [
-  { label: 'Wie gehe ich vor?', question: 'Wie gehe ich bei dieser Aufgabe am besten vor? Gib mir konkrete Schritte.' },
-  { label: 'In Schritte zerlegen', question: 'Zerlege diese Aufgabe in kleine, abhakbare Teilschritte.' },
-  { label: 'Was könnte blockieren?', question: 'Welche Hindernisse oder offenen Fragen könnten diese Aufgabe blockieren, und wie räume ich sie aus?' },
-  { label: 'Nachricht entwerfen', question: 'Entwirf eine kurze Nachricht an das Team, mit der ich für diese Aufgabe um Unterstützung bitte.' },
-]
+  {
+    label: 'Wie gehe ich vor?',
+    question: 'Wie gehe ich bei dieser Aufgabe am besten vor? Gib mir konkrete Schritte.',
+  },
+  {
+    label: 'In Schritte zerlegen',
+    question: 'Zerlege diese Aufgabe in kleine, abhakbare Teilschritte.',
+  },
+  {
+    label: 'Was könnte blockieren?',
+    question:
+      'Welche Hindernisse oder offenen Fragen könnten diese Aufgabe blockieren, und wie räume ich sie aus?',
+  },
+  {
+    label: 'Nachricht entwerfen',
+    question:
+      'Entwirf eine kurze Nachricht an das Team, mit der ich für diese Aufgabe um Unterstützung bitte.',
+  },
+];
 
 export function TaskAIChat(props: TaskAIChatProps) {
   return (
@@ -43,5 +57,5 @@ export function TaskAIChat(props: TaskAIChatProps) {
         question,
       })}
     />
-  )
+  );
 }

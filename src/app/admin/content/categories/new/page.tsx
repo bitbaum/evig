@@ -2,22 +2,22 @@
  * Admin - New Blog Category Page
  */
 
-import { Metadata } from 'next'
-import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
-import CategoryForm from '@/components/admin/CategoryForm'
+import { Metadata } from 'next';
+import { auth } from '@/auth';
+import { redirect } from 'next/navigation';
+import CategoryForm from '@/components/admin/CategoryForm';
 
 export const metadata: Metadata = {
   title: 'Neue Kategorie',
   description: 'Neue Blog-Kategorie erstellen.',
-}
+};
 
 export default async function NewCategoryPage() {
-  const session = await auth()
+  const session = await auth();
 
   if (!session?.user) {
-    redirect('/auth/login?callbackUrl=/admin/content/categories/new')
+    redirect('/auth/login?callbackUrl=/admin/content/categories/new');
   }
 
-  return <CategoryForm />
+  return <CategoryForm />;
 }

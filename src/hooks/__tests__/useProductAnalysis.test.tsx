@@ -19,20 +19,21 @@
  *   - clears previous error on new attempt
  */
 
-const mockApiFetch = jest.fn()
+const mockApiFetch = jest.fn();
 
 jest.mock('@/lib/api/client', () => ({
   apiFetch: (...args: unknown[]) => mockApiFetch.apply(null, args),
-}))
+}));
 
 jest.mock('@/lib/logger', () => ({
   logger: { info: jest.fn(), warn: jest.fn(), error: jest.fn(), debug: jest.fn() },
-}))
+}));
 
-import { renderHook, act, waitFor } from '@testing-library/react'
-import { useProductAnalysis } from '../useProductAnalysis'
+import { renderHook, act, waitFor } from '@testing-library/react';
+import { useProductAnalysis } from '../useProductAnalysis';
 
-const TINY_PNG_BASE64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+const TINY_PNG_BASE64 =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
 
 /** A full VoiceProductData record as the vision route returns it. */
 function fullProduct() {
@@ -46,12 +47,12 @@ function fullProduct() {
     hauptkategorie: '99',
     unterkategorie: '',
     kundenprofile: ['buero'],
-  }
+  };
 }
 
 beforeEach(() => {
-  mockApiFetch.mockReset()
-})
+  mockApiFetch.mockReset();
+});
 
 // ============================================================================
 // Initial state
@@ -59,11 +60,11 @@ beforeEach(() => {
 
 describe('useProductAnalysis — initial state', () => {
   it('starts not analyzing with no error', () => {
-    const { result } = renderHook(() => useProductAnalysis())
-    expect(result.current.isAnalyzing).toBe(false)
-    expect(result.current.error).toBeNull()
-  })
-})
+    const { result } = renderHook(() => useProductAnalysis());
+    expect(result.current.isAnalyzing).toBe(false);
+    expect(result.current.error).toBeNull();
+  });
+});
 
 // ============================================================================
 // analyzeProduct — happy path
@@ -74,33 +75,33 @@ describe('analyzeProduct — happy path', () => {
     mockApiFetch.mockResolvedValueOnce({
       success: true,
       data: { data: fullProduct(), metadata: {} },
-    })
+    });
 
-    const { result } = renderHook(() => useProductAnalysis())
+    const { result } = renderHook(() => useProductAnalysis());
 
     await act(async () => {
-      await result.current.analyzeProduct(TINY_PNG_BASE64)
-    })
+      await result.current.analyzeProduct(TINY_PNG_BASE64);
+    });
 
     expect(mockApiFetch).toHaveBeenCalledWith('/api/admin/erfassung/image', {
       method: 'POST',
       body: { image: TINY_PNG_BASE64 },
-    })
-  })
+    });
+  });
 
   it('returns the whole product record (not a 4-field subset) plus metadata', async () => {
-    const metadata = { hersteller: { type: 'image', confidence: 0.9, timestamp: 1 } }
+    const metadata = { hersteller: { type: 'image', confidence: 0.9, timestamp: 1 } };
     mockApiFetch.mockResolvedValueOnce({
       success: true,
       data: { data: fullProduct(), metadata },
-    })
+    });
 
-    const { result } = renderHook(() => useProductAnalysis())
+    const { result } = renderHook(() => useProductAnalysis());
 
-    let analysisResult: Awaited<ReturnType<typeof result.current.analyzeProduct>> = null
+    let analysisResult: Awaited<ReturnType<typeof result.current.analyzeProduct>> = null;
     await act(async () => {
-      analysisResult = await result.current.analyzeProduct(TINY_PNG_BASE64)
-    })
+      analysisResult = await result.current.analyzeProduct(TINY_PNG_BASE64);
+    });
 
     expect(analysisResult).toEqual({
       formData: {
@@ -115,40 +116,40 @@ describe('analyzeProduct — happy path', () => {
         kundenprofile: ['buero'],
       },
       metadata,
-    })
-  })
+    });
+  });
 
   it('tolerates a missing metadata object (defaults to {})', async () => {
     mockApiFetch.mockResolvedValueOnce({
       success: true,
       data: { data: fullProduct() },
-    })
+    });
 
-    const { result } = renderHook(() => useProductAnalysis())
+    const { result } = renderHook(() => useProductAnalysis());
 
-    let analysisResult: Awaited<ReturnType<typeof result.current.analyzeProduct>> = null
+    let analysisResult: Awaited<ReturnType<typeof result.current.analyzeProduct>> = null;
     await act(async () => {
-      analysisResult = await result.current.analyzeProduct(TINY_PNG_BASE64)
-    })
+      analysisResult = await result.current.analyzeProduct(TINY_PNG_BASE64);
+    });
 
-    expect(analysisResult!.metadata).toEqual({})
-  })
+    expect(analysisResult!.metadata).toEqual({});
+  });
 
   it('error is null after success', async () => {
     mockApiFetch.mockResolvedValueOnce({
       success: true,
       data: { data: fullProduct(), metadata: {} },
-    })
+    });
 
-    const { result } = renderHook(() => useProductAnalysis())
+    const { result } = renderHook(() => useProductAnalysis());
 
     await act(async () => {
-      await result.current.analyzeProduct(TINY_PNG_BASE64)
-    })
+      await result.current.analyzeProduct(TINY_PNG_BASE64);
+    });
 
-    expect(result.current.error).toBeNull()
-  })
-})
+    expect(result.current.error).toBeNull();
+  });
+});
 
 // ============================================================================
 // analyzeProduct — failure paths
@@ -156,70 +157,72 @@ describe('analyzeProduct — happy path', () => {
 
 describe('analyzeProduct — failure paths', () => {
   it('success=false → returns null and sets error from result.error', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: false, error: 'Image too dark' })
+    mockApiFetch.mockResolvedValueOnce({ success: false, error: 'Image too dark' });
 
-    const { result } = renderHook(() => useProductAnalysis())
+    const { result } = renderHook(() => useProductAnalysis());
 
-    let analysisResult: Awaited<ReturnType<typeof result.current.analyzeProduct>> = undefined as never
+    let analysisResult: Awaited<ReturnType<typeof result.current.analyzeProduct>> =
+      undefined as never;
     await act(async () => {
-      analysisResult = await result.current.analyzeProduct(TINY_PNG_BASE64)
-    })
+      analysisResult = await result.current.analyzeProduct(TINY_PNG_BASE64);
+    });
 
-    expect(analysisResult).toBeNull()
-    expect(result.current.error).toBe('Image too dark')
-  })
+    expect(analysisResult).toBeNull();
+    expect(result.current.error).toBe('Image too dark');
+  });
 
   it('success=false without error message → "Analyse fehlgeschlagen" Swiss-German fallback', async () => {
-    mockApiFetch.mockResolvedValueOnce({ success: false })
+    mockApiFetch.mockResolvedValueOnce({ success: false });
 
-    const { result } = renderHook(() => useProductAnalysis())
+    const { result } = renderHook(() => useProductAnalysis());
 
     await act(async () => {
-      await result.current.analyzeProduct(TINY_PNG_BASE64)
-    })
+      await result.current.analyzeProduct(TINY_PNG_BASE64);
+    });
 
-    expect(result.current.error).toBe('Analyse fehlgeschlagen')
-  })
+    expect(result.current.error).toBe('Analyse fehlgeschlagen');
+  });
 
   it('success=true but nested data missing → "Keine Analysedaten erhalten"', async () => {
     // Defensive: API returned ok but no product payload (model timed out, etc.)
-    mockApiFetch.mockResolvedValueOnce({ success: true, data: { metadata: {} } })
+    mockApiFetch.mockResolvedValueOnce({ success: true, data: { metadata: {} } });
 
-    const { result } = renderHook(() => useProductAnalysis())
+    const { result } = renderHook(() => useProductAnalysis());
 
-    let analysisResult: Awaited<ReturnType<typeof result.current.analyzeProduct>> = undefined as never
+    let analysisResult: Awaited<ReturnType<typeof result.current.analyzeProduct>> =
+      undefined as never;
     await act(async () => {
-      analysisResult = await result.current.analyzeProduct(TINY_PNG_BASE64)
-    })
+      analysisResult = await result.current.analyzeProduct(TINY_PNG_BASE64);
+    });
 
-    expect(analysisResult).toBeNull()
-    expect(result.current.error).toBe('Keine Analysedaten erhalten')
-  })
+    expect(analysisResult).toBeNull();
+    expect(result.current.error).toBe('Keine Analysedaten erhalten');
+  });
 
   it('thrown Error → preserves message in error state', async () => {
-    mockApiFetch.mockRejectedValueOnce(new Error('Network unreachable'))
+    mockApiFetch.mockRejectedValueOnce(new Error('Network unreachable'));
 
-    const { result } = renderHook(() => useProductAnalysis())
+    const { result } = renderHook(() => useProductAnalysis());
 
     await act(async () => {
-      await result.current.analyzeProduct(TINY_PNG_BASE64)
-    })
+      await result.current.analyzeProduct(TINY_PNG_BASE64);
+    });
 
-    expect(result.current.error).toBe('Network unreachable')
-  })
+    expect(result.current.error).toBe('Network unreachable');
+  });
 
   it('non-Error throw falls back to "Analyse fehlgeschlagen"', async () => {
-    mockApiFetch.mockRejectedValueOnce('weird string throw')
+    mockApiFetch.mockRejectedValueOnce('weird string throw');
 
-    const { result } = renderHook(() => useProductAnalysis())
+    const { result } = renderHook(() => useProductAnalysis());
 
     await act(async () => {
-      await result.current.analyzeProduct(TINY_PNG_BASE64)
-    })
+      await result.current.analyzeProduct(TINY_PNG_BASE64);
+    });
 
-    expect(result.current.error).toBe('Analyse fehlgeschlagen')
-  })
-})
+    expect(result.current.error).toBe('Analyse fehlgeschlagen');
+  });
+});
 
 // ============================================================================
 // State management
@@ -232,54 +235,58 @@ describe('analyzeProduct — state management', () => {
       .mockResolvedValueOnce({
         success: true,
         data: { data: fullProduct(), metadata: {} },
-      })
+      });
 
-    const { result } = renderHook(() => useProductAnalysis())
-
-    await act(async () => {
-      await result.current.analyzeProduct(TINY_PNG_BASE64)
-    })
-    expect(result.current.error).toBe('first error')
+    const { result } = renderHook(() => useProductAnalysis());
 
     await act(async () => {
-      await result.current.analyzeProduct(TINY_PNG_BASE64)
-    })
-    expect(result.current.error).toBeNull()
-  })
+      await result.current.analyzeProduct(TINY_PNG_BASE64);
+    });
+    expect(result.current.error).toBe('first error');
+
+    await act(async () => {
+      await result.current.analyzeProduct(TINY_PNG_BASE64);
+    });
+    expect(result.current.error).toBeNull();
+  });
 
   it('isAnalyzing flips to true mid-flight, false after success', async () => {
-    let resolveRequest!: (val: unknown) => void
-    mockApiFetch.mockReturnValueOnce(new Promise(r => { resolveRequest = r }))
+    let resolveRequest!: (val: unknown) => void;
+    mockApiFetch.mockReturnValueOnce(
+      new Promise((r) => {
+        resolveRequest = r;
+      }),
+    );
 
-    const { result } = renderHook(() => useProductAnalysis())
+    const { result } = renderHook(() => useProductAnalysis());
 
-    let analyzePromise!: Promise<unknown>
+    let analyzePromise!: Promise<unknown>;
     act(() => {
-      analyzePromise = result.current.analyzeProduct(TINY_PNG_BASE64)
-    })
+      analyzePromise = result.current.analyzeProduct(TINY_PNG_BASE64);
+    });
 
-    await waitFor(() => expect(result.current.isAnalyzing).toBe(true))
+    await waitFor(() => expect(result.current.isAnalyzing).toBe(true));
 
     await act(async () => {
       resolveRequest({
         success: true,
         data: { data: fullProduct(), metadata: {} },
-      })
-      await analyzePromise
-    })
+      });
+      await analyzePromise;
+    });
 
-    expect(result.current.isAnalyzing).toBe(false)
-  })
+    expect(result.current.isAnalyzing).toBe(false);
+  });
 
   it('isAnalyzing flips back to false even after error (finally block)', async () => {
-    mockApiFetch.mockRejectedValueOnce(new Error('boom'))
+    mockApiFetch.mockRejectedValueOnce(new Error('boom'));
 
-    const { result } = renderHook(() => useProductAnalysis())
+    const { result } = renderHook(() => useProductAnalysis());
 
     await act(async () => {
-      await result.current.analyzeProduct(TINY_PNG_BASE64)
-    })
+      await result.current.analyzeProduct(TINY_PNG_BASE64);
+    });
 
-    expect(result.current.isAnalyzing).toBe(false)
-  })
-})
+    expect(result.current.isAnalyzing).toBe(false);
+  });
+});

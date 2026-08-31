@@ -1,23 +1,23 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
-import { useTranslations } from 'next-intl'
-import { AlertCircle } from 'lucide-react'
-import { logger } from '@/lib/logger'
-import Heading from '@/components/admin/AdminHeading'
-import { Button } from '@/components/ui/button'
+import { useEffect } from 'react';
+import { useTranslations } from 'next-intl';
+import { AlertCircle } from 'lucide-react';
+import { logger } from '@/lib/logger';
+import Heading from '@/components/admin/AdminHeading';
+import { Button } from '@/components/ui/button';
 
 export default function AdminError({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
-  const t = useTranslations('admin.errorPage')
+  const t = useTranslations('admin.errorPage');
   useEffect(() => {
-    logger.error('Admin error', { error, digest: error.digest })
-  }, [error])
+    logger.error('Admin error', { error, digest: error.digest });
+  }, [error]);
 
   return (
     <div className="flex items-center justify-center min-h-[400px]">
@@ -26,13 +26,11 @@ export default function AdminError({
         <Heading level={1} className="text-lg font-medium text-text-primary" role="alert">
           {t('title')}
         </Heading>
-        <p className="mt-2 text-sm text-text-secondary">
-          {t('description')}
-        </p>
+        <p className="mt-2 text-sm text-text-secondary">{t('description')}</p>
         <Button onClick={reset} variant="primary" className="mt-6 w-full min-h-touch">
           {t('retry')}
         </Button>
       </div>
     </div>
-  )
+  );
 }

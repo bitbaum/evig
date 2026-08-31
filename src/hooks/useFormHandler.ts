@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Generic form state management hook — SINGLE SOURCE OF TRUTH
@@ -25,57 +25,57 @@
  *   </form>
  */
 
-import { useState, useCallback } from 'react'
-import { useRouter } from 'next/navigation'
-import { apiFetch } from '@/lib/api/client'
-import { ERROR_MESSAGES } from '@/config/error-messages'
+import { useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
+import { apiFetch } from '@/lib/api/client';
+import { ERROR_MESSAGES } from '@/config/error-messages';
 
 export interface UseFormHandlerOptions<T> {
   /** Initial form data */
-  initialData: T
+  initialData: T;
   /** API endpoint for submit (base URL without ID) */
-  apiEndpoint: string
+  apiEndpoint: string;
   /** Whether editing existing resource */
-  isEdit?: boolean
+  isEdit?: boolean;
   /** Resource ID for edit mode */
-  editId?: string
+  editId?: string;
   /** HTTP method for create (default: POST) */
-  createMethod?: 'POST' | 'PUT' | 'PATCH'
+  createMethod?: 'POST' | 'PUT' | 'PATCH';
   /** HTTP method for edit (default: PUT) */
-  editMethod?: 'PUT' | 'PATCH'
+  editMethod?: 'PUT' | 'PATCH';
   /** Redirect path after success (optional) */
-  redirectTo?: string
+  redirectTo?: string;
   /** Redirect delay in ms (default: 1000) */
-  redirectDelay?: number
+  redirectDelay?: number;
   /** Success message for create */
-  createSuccessMessage?: string
+  createSuccessMessage?: string;
   /** Success message for edit */
-  editSuccessMessage?: string
+  editSuccessMessage?: string;
   /** Transform data before submit (optional) */
-  transformBeforeSubmit?: (data: T) => unknown
+  transformBeforeSubmit?: (data: T) => unknown;
   /** Validation before submit (optional). Return error message or null */
-  validate?: (data: T) => string | null
+  validate?: (data: T) => string | null;
   /** Callback on success (optional) */
-  onSuccess?: (responseData: unknown) => void
+  onSuccess?: (responseData: unknown) => void;
 }
 
 export interface FormHandlerReturn<T> {
-  data: T
-  setData: React.Dispatch<React.SetStateAction<T>>
-  updateField: <K extends keyof T>(field: K, value: T[K]) => void
-  isSubmitting: boolean
-  error: string
-  success: string
-  setError: (error: string) => void
-  setSuccess: (success: string) => void
-  handleSubmit: (e?: React.FormEvent) => Promise<void>
+  data: T;
+  setData: React.Dispatch<React.SetStateAction<T>>;
+  updateField: <K extends keyof T>(field: K, value: T[K]) => void;
+  isSubmitting: boolean;
+  error: string;
+  success: string;
+  setError: (error: string) => void;
+  setSuccess: (success: string) => void;
+  handleSubmit: (e?: React.FormEvent) => Promise<void>;
   /** Submit with custom payload (bypasses transformBeforeSubmit) */
-  submitCustom: (payload: unknown) => Promise<boolean>
-  reset: () => void
+  submitCustom: (payload: unknown) => Promise<boolean>;
+  reset: () => void;
 }
 
 export function useFormHandler<T extends object>(
-  options: UseFormHandlerOptions<T>
+  options: UseFormHandlerOptions<T>,
 ): FormHandlerReturn<T> {
   const {
     initialData,
@@ -91,79 +91,100 @@ export function useFormHandler<T extends object>(
     transformBeforeSubmit,
     validate,
     onSuccess,
-  } = options
+  } = options;
 
-  const router = useRouter()
-  const [data, setData] = useState<T>(initialData)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
+  const router = useRouter();
+  const [data, setData] = useState<T>(initialData);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   const updateField = useCallback(<K extends keyof T>(field: K, value: T[K]) => {
-    setData(prev => ({ ...prev, [field]: value }))
-  }, [])
+    setData((prev) => ({ ...prev, [field]: value }));
+  }, []);
 
-  const doSubmit = useCallback(async (payload: unknown): Promise<boolean> => {
-    setError('')
-    setSuccess('')
-    setIsSubmitting(true)
+  const doSubmit = useCallback(
+    async (payload: unknown): Promise<boolean> => {
+      setError('');
+      setSuccess('');
+      setIsSubmitting(true);
 
-    try {
-      const url = isEdit && editId ? `${apiEndpoint}/${editId}` : apiEndpoint
-      const method = isEdit ? editMethod : createMethod
+      try {
+        const url = isEdit && editId ? `${apiEndpoint}/${editId}` : apiEndpoint;
+        const method = isEdit ? editMethod : createMethod;
 
-      const result = await apiFetch(url, { method, body: payload })
+        const result = await apiFetch(url, { method, body: payload });
 
-      if (!result.success) {
-        setError(result.error || 'Speichern fehlgeschlagen')
-        return false
+        if (!result.success) {
+          setError(result.error || 'Speichern fehlgeschlagen');
+          return false;
+        }
+
+        const msg = isEdit ? editSuccessMessage : createSuccessMessage;
+        setSuccess(msg);
+
+        if (onSuccess) onSuccess(result.data);
+
+        if (redirectTo) {
+          setTimeout(() => {
+            router.push(redirectTo);
+            router.refresh();
+          }, redirectDelay);
+        }
+
+        return true;
+      } catch {
+        setError(ERROR_MESSAGES.UNEXPECTED_ERROR);
+        return false;
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [
+      isEdit,
+      editId,
+      apiEndpoint,
+      editMethod,
+      createMethod,
+      editSuccessMessage,
+      createSuccessMessage,
+      onSuccess,
+      redirectTo,
+      redirectDelay,
+      router,
+    ],
+  );
+
+  const handleSubmit = useCallback(
+    async (e?: React.FormEvent) => {
+      if (e) e.preventDefault();
+
+      if (validate) {
+        const validationError = validate(data);
+        if (validationError) {
+          setError(validationError);
+          return;
+        }
       }
 
-      const msg = isEdit ? editSuccessMessage : createSuccessMessage
-      setSuccess(msg)
+      const payload = transformBeforeSubmit ? transformBeforeSubmit(data) : data;
+      await doSubmit(payload);
+    },
+    [data, validate, transformBeforeSubmit, doSubmit],
+  );
 
-      if (onSuccess) onSuccess(result.data)
-
-      if (redirectTo) {
-        setTimeout(() => {
-          router.push(redirectTo)
-          router.refresh()
-        }, redirectDelay)
-      }
-
-      return true
-    } catch {
-      setError(ERROR_MESSAGES.UNEXPECTED_ERROR)
-      return false
-    } finally {
-      setIsSubmitting(false)
-    }
-  }, [isEdit, editId, apiEndpoint, editMethod, createMethod, editSuccessMessage, createSuccessMessage, onSuccess, redirectTo, redirectDelay, router])
-
-  const handleSubmit = useCallback(async (e?: React.FormEvent) => {
-    if (e) e.preventDefault()
-
-    if (validate) {
-      const validationError = validate(data)
-      if (validationError) {
-        setError(validationError)
-        return
-      }
-    }
-
-    const payload = transformBeforeSubmit ? transformBeforeSubmit(data) : data
-    await doSubmit(payload)
-  }, [data, validate, transformBeforeSubmit, doSubmit])
-
-  const submitCustom = useCallback(async (payload: unknown): Promise<boolean> => {
-    return doSubmit(payload)
-  }, [doSubmit])
+  const submitCustom = useCallback(
+    async (payload: unknown): Promise<boolean> => {
+      return doSubmit(payload);
+    },
+    [doSubmit],
+  );
 
   const reset = useCallback(() => {
-    setData(initialData)
-    setError('')
-    setSuccess('')
-  }, [initialData])
+    setData(initialData);
+    setError('');
+    setSuccess('');
+  }, [initialData]);
 
   return {
     data,
@@ -177,5 +198,5 @@ export function useFormHandler<T extends object>(
     handleSubmit,
     submitCustom,
     reset,
-  }
+  };
 }

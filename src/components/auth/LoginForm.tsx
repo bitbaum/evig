@@ -1,25 +1,33 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { signIn } from 'next-auth/react'
-import { useSearchParams } from 'next/navigation'
-import { Link } from '@/i18n/navigation'
-import { useTranslations } from 'next-intl'
-import { Mail, Lock, Loader2, ArrowRight, Eye, EyeOff } from 'lucide-react'
-import { sanitizeReturnTo } from '@/lib/utils/safe-redirect'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { StatusBanner } from '@/components/ui/status-banner'
-import { ORG } from '@/config/org'
-import { ROUTES } from '@/config/routes'
+import { useState } from 'react';
+import { signIn } from 'next-auth/react';
+import { useSearchParams } from 'next/navigation';
+import { Link } from '@/i18n/navigation';
+import { useTranslations } from 'next-intl';
+import { Mail, Lock, Loader2, ArrowRight, Eye, EyeOff } from 'lucide-react';
+import { sanitizeReturnTo } from '@/lib/utils/safe-redirect';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { StatusBanner } from '@/components/ui/status-banner';
+import { ORG } from '@/config/org';
+import { ROUTES } from '@/config/routes';
 
 /**
  * NextAuth error codes that map to translation keys for the user.
  * Anything not in this map shows the raw error string (server-formatted).
  * Connection-style errors are detected by substring (server may localize).
  */
-const AUTH_ERROR_I18N_KEY: Record<string, 'errorCredentials' | 'errorAccessDenied' | 'errorOAuthLinked' | 'errorInvalidToken' | 'errorVerificationFailed' | 'errorVerificationError'> = {
+const AUTH_ERROR_I18N_KEY: Record<
+  string,
+  | 'errorCredentials'
+  | 'errorAccessDenied'
+  | 'errorOAuthLinked'
+  | 'errorInvalidToken'
+  | 'errorVerificationFailed'
+  | 'errorVerificationError'
+> = {
   CredentialsSignin: 'errorCredentials',
   Configuration: 'errorCredentials',
   AccessDenied: 'errorAccessDenied',
@@ -27,41 +35,44 @@ const AUTH_ERROR_I18N_KEY: Record<string, 'errorCredentials' | 'errorAccessDenie
   invalid_token: 'errorInvalidToken',
   verification_failed: 'errorVerificationFailed',
   verification_error: 'errorVerificationError',
-}
+};
 
 /**
  * Machine-readable codes from the typed LoginError in src/auth.ts — these give
  * the user a SPECIFIC message (unverified email, lockout, no password) instead
  * of collapsing everything into "wrong credentials".
  */
-const LOGIN_CODE_I18N_KEY: Record<string, 'errorCredentials' | 'errorLocked' | 'errorNoPassword' | 'errorUnverified' | 'errorConnection'> = {
+const LOGIN_CODE_I18N_KEY: Record<
+  string,
+  'errorCredentials' | 'errorLocked' | 'errorNoPassword' | 'errorUnverified' | 'errorConnection'
+> = {
   invalid_credentials: 'errorCredentials',
   missing_fields: 'errorCredentials',
   account_locked: 'errorLocked',
   no_password: 'errorNoPassword',
   email_unverified: 'errorUnverified',
   db_unavailable: 'errorConnection',
-}
+};
 
 export function LoginForm() {
-  const t = useTranslations('auth.login')
-  const searchParams = useSearchParams()
+  const t = useTranslations('auth.login');
+  const searchParams = useSearchParams();
   // Open-redirect guard: only same-origin paths pass through.
-  const callbackUrl = sanitizeReturnTo(searchParams.get('callbackUrl'), '/dashboard')
-  const queryError = searchParams.get('error')
-  const verified = searchParams.get('verified')
-  const reset = searchParams.get('reset')
+  const callbackUrl = sanitizeReturnTo(searchParams.get('callbackUrl'), '/dashboard');
+  const queryError = searchParams.get('error');
+  const verified = searchParams.get('verified');
+  const reset = searchParams.get('reset');
 
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const [formError, setFormError] = useState<string | null>(null)
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setFormError(null)
+    e.preventDefault();
+    setIsLoading(true);
+    setFormError(null);
 
     try {
       const result = await signIn('credentials', {
@@ -69,52 +80,58 @@ export function LoginForm() {
         password,
         callbackUrl,
         redirect: false,
-      })
+      });
 
       if (result?.error) {
         // Auth.js v5: CredentialsSignin subclasses surface their code here.
-        const code = (result as { code?: string | null }).code
-        setFormError(code && LOGIN_CODE_I18N_KEY[code] ? code : result.error)
-        return
+        const code = (result as { code?: string | null }).code;
+        setFormError(code && LOGIN_CODE_I18N_KEY[code] ? code : result.error);
+        return;
       }
 
       if (result?.url) {
-        const url = new URL(result.url, window.location.origin)
-        window.location.assign(`${url.pathname}${url.search}${url.hash}`)
-        return
+        const url = new URL(result.url, window.location.origin);
+        window.location.assign(`${url.pathname}${url.search}${url.hash}`);
+        return;
       }
 
-      window.location.assign(callbackUrl)
+      window.location.assign(callbackUrl);
     } catch {
-      setFormError(t('errorUnexpected'))
+      setFormError(t('errorUnexpected'));
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const errorMessage = (() => {
-    const error = formError || queryError
-    if (!error) return null
-    const codeKey = LOGIN_CODE_I18N_KEY[error]
-    if (codeKey) return t(codeKey)
-    const i18nKey = AUTH_ERROR_I18N_KEY[error]
-    if (i18nKey) return t(i18nKey)
-    if (error.includes('Datenbankverbindung') || error.includes('connect') || error.includes('timeout')) {
-      return t('errorConnection')
+    const error = formError || queryError;
+    if (!error) return null;
+    const codeKey = LOGIN_CODE_I18N_KEY[error];
+    if (codeKey) return t(codeKey);
+    const i18nKey = AUTH_ERROR_I18N_KEY[error];
+    if (i18nKey) return t(i18nKey);
+    if (
+      error.includes('Datenbankverbindung') ||
+      error.includes('connect') ||
+      error.includes('timeout')
+    ) {
+      return t('errorConnection');
     }
-    return error
-  })()
+    return error;
+  })();
 
   return (
     <div className="w-full max-w-md mx-auto">
       <div className="card-shell rounded-2xl p-6 sm:p-8">
         <div className="text-center mb-8">
-          <Heading level={1} variant="admin" className="mb-2 text-center text-[2rem] font-semibold leading-tight text-text-primary sm:text-[2.25rem]">
+          <Heading
+            level={1}
+            variant="admin"
+            className="mb-2 text-center text-[2rem] font-semibold leading-tight text-text-primary sm:text-[2.25rem]"
+          >
             {t('heading')}
           </Heading>
-          <p className="text-sm sm:text-base text-text-muted">
-            {t('subtitle')}
-          </p>
+          <p className="text-sm sm:text-base text-text-muted">{t('subtitle')}</p>
         </div>
 
         {verified && (
@@ -251,9 +268,7 @@ export function LoginForm() {
       </div>
 
       <div className="mt-8 text-center">
-        <p className="text-sm text-text-secondary dark:text-text-muted mb-3">
-          {t('benefits')}
-        </p>
+        <p className="text-sm text-text-secondary dark:text-text-muted mb-3">{t('benefits')}</p>
         <ul className="text-sm text-text-secondary dark:text-text-tertiary space-y-1">
           <li>✓ {t('benefit1')}</li>
           <li>✓ {t('benefit2')}</li>
@@ -262,5 +277,5 @@ export function LoginForm() {
         </ul>
       </div>
     </div>
-  )
+  );
 }

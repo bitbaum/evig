@@ -25,7 +25,8 @@ const samplePages = [
       <p>Every year, we save hundreds of devices from landfill and provide affordable technology solutions to those who need them most.</p>
     `,
     seo_title: 'About Us - RevampIT',
-    seo_description: 'Learn about RevampIT\'s mission to extend the life of IT devices and promote sustainable computing practices.',
+    seo_description:
+      "Learn about RevampIT's mission to extend the life of IT devices and promote sustainable computing practices.",
     is_published: true,
   },
   {
@@ -50,7 +51,8 @@ const samplePages = [
       Phone: +41 XX XXX XX XX</p>
     `,
     seo_title: 'Contact RevampIT',
-    seo_description: 'Get in touch with RevampIT for computer repair, Linux support, and sustainable IT solutions.',
+    seo_description:
+      'Get in touch with RevampIT for computer repair, Linux support, and sustainable IT solutions.',
     is_published: true,
   },
   {
@@ -73,13 +75,14 @@ const samplePages = [
       <p>Expert advice on sustainable IT practices and open-source solutions.</p>
     `,
     seo_title: 'IT Services - RevampIT',
-    seo_description: 'Professional computer repair, Linux support, and IT consulting services in Zurich.',
+    seo_description:
+      'Professional computer repair, Linux support, and IT consulting services in Zurich.',
     is_published: true,
   },
-]
+];
 
 async function populateSampleData() {
-  console.log('🚀 Populating sample pages for Reboot Content admin interface...')
+  console.log('🚀 Populating sample pages for Reboot Content admin interface...');
 
   for (const page of samplePages) {
     try {
@@ -89,27 +92,27 @@ async function populateSampleData() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(page),
-      })
+      });
 
       if (response.ok) {
-        const result = await response.json()
-        console.log(`✅ Created page: ${page.title} (ID: ${result.data?.id})`)
+        const result = await response.json();
+        console.log(`✅ Created page: ${page.title} (ID: ${result.data?.id})`);
       } else {
-        const error = await response.json()
-        console.log(`❌ Failed to create ${page.title}:`, error.message)
+        const error = await response.json();
+        console.log(`❌ Failed to create ${page.title}:`, error.message);
       }
     } catch (error) {
-      console.log(`❌ Error creating ${page.title}:`, error.message)
+      console.log(`❌ Error creating ${page.title}:`, error.message);
     }
   }
 
-  console.log('✨ Sample data population complete!')
-  console.log('📝 You can now visit /admin to manage these pages')
+  console.log('✨ Sample data population complete!');
+  console.log('📝 You can now visit /admin to manage these pages');
 }
 
 // Only run if called directly
 if (import.meta.url === `file://${process.argv[1]}`) {
-  populateSampleData().catch(console.error)
+  populateSampleData().catch(console.error);
 }
 
-export { populateSampleData, samplePages }
+export { populateSampleData, samplePages };

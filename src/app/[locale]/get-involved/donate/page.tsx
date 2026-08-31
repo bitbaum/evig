@@ -1,61 +1,65 @@
 // SSR only — lucide-react in server component scope causes React-null in certain Turbopack SSG bundles
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import React from 'react'
-import { Metadata } from 'next'
-import { ArrowDown } from 'lucide-react'
-import { Link } from '@/i18n/navigation'
-import { NewsletterSignup } from '@/components/community/NewsletterSignup'
-import { DropoffForm } from '@/components/donate/DropoffForm'
-import { CopyButton } from '@/components/community/CopyButton'
-import { Section } from '@/components/layout/Section'
-import { BANK, CONTACT, BASE_REGION, ORG, EXTERNAL_LINKS } from '@/config/org'
-import { DONATION_TIER_AMOUNTS } from '@/config/donations'
-import { ROUTES } from '@/config/routes'
-import { getTranslations } from 'next-intl/server'
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import React from 'react';
+import { Metadata } from 'next';
+import { ArrowDown } from 'lucide-react';
+import { Link } from '@/i18n/navigation';
+import { NewsletterSignup } from '@/components/community/NewsletterSignup';
+import { DropoffForm } from '@/components/donate/DropoffForm';
+import { CopyButton } from '@/components/community/CopyButton';
+import { Section } from '@/components/layout/Section';
+import { BANK, CONTACT, BASE_REGION, ORG, EXTERNAL_LINKS } from '@/config/org';
+import { DONATION_TIER_AMOUNTS } from '@/config/donations';
+import { ROUTES } from '@/config/routes';
+import { getTranslations } from 'next-intl/server';
 
 interface DonatePageProps {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: string }>;
 }
 
 // Bypass page cache so payment reference always shows the current month
-export const revalidate = 0
+export const revalidate = 0;
 
 export async function generateMetadata({ params }: DonatePageProps): Promise<Metadata> {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'donate' })
-  const title = `${t('meta.title')} | ${ORG.name}`
-  const description = t('meta.description')
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'donate' });
+  const title = `${t('meta.title')} | ${ORG.name}`;
+  const description = t('meta.description');
   return {
     title: { absolute: title },
     description,
     openGraph: { title, description, type: 'website' },
-  }
+  };
 }
 
-const TIER_AMOUNTS = DONATION_TIER_AMOUNTS
+const TIER_AMOUNTS = DONATION_TIER_AMOUNTS;
 
 export default async function DonatePage({ params }: DonatePageProps) {
-  const { locale } = await params
-  const t = await getTranslations({ locale, namespace: 'donate' })
-  const tSupport = await getTranslations({ locale, namespace: 'support' })
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: 'donate' });
+  const tSupport = await getTranslations({ locale, namespace: 'support' });
 
-  const now = new Date()
-  const monthName = new Intl.DateTimeFormat(locale, { month: 'long' }).format(now)
-  const verwendungszweck = t('purposeTemplate', { orgName: ORG.name, month: monthName, year: now.getFullYear() })
+  const now = new Date();
+  const monthName = new Intl.DateTimeFormat(locale, { month: 'long' }).format(now);
+  const verwendungszweck = t('purposeTemplate', {
+    orgName: ORG.name,
+    month: monthName,
+    year: now.getFullYear(),
+  });
 
-  const tierItems = t.raw('tiers.items') as Array<{ title: string; description: string }>
+  const tierItems = t.raw('tiers.items') as Array<{ title: string; description: string }>;
 
   return (
     <div className="bg-canvas">
-
       {/* ── Hero — brand promise, no fabricated stats ─────────────── */}
       <section className="ui-public-hero-fold">
         <div className="max-w-5xl">
           <div className="ui-public-hero-badge">{t('hero.positioning')}</div>
           <h1 className="ui-public-hero-title">
-            {t('hero.title')}<br />
+            {t('hero.title')}
+            <br />
             <span className="text-text-tertiary">{t('hero.titleSecondary')}</span>
           </h1>
           <p className="ui-public-hero-lede">{t('hero.lede')}</p>
@@ -73,7 +77,12 @@ export default async function DonatePage({ params }: DonatePageProps) {
       </section>
 
       {/* ── Two paths ribbon ──────────────────────────────────────── */}
-      <Section density="spacious" tone="tinted" contained={false} className="border-y border-subtle">
+      <Section
+        density="spacious"
+        tone="tinted"
+        contained={false}
+        className="border-y border-subtle"
+      >
         <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-x-16 gap-y-20 md:grid-cols-2">
             <div>
@@ -106,7 +115,10 @@ export default async function DonatePage({ params }: DonatePageProps) {
                 </div>
                 <h3 className="ui-public-card-title">{tier.title}</h3>
                 <p className="ui-public-card-body">{tier.description}</p>
-                <a href="#bankueberweisung" className="ui-public-card-meta inline-flex items-center gap-1 hover:text-text-primary transition-colors">
+                <a
+                  href="#bankueberweisung"
+                  className="ui-public-card-meta inline-flex items-center gap-1 hover:text-text-primary transition-colors"
+                >
                   {t('tiers.cta')} →
                 </a>
               </article>
@@ -116,25 +128,51 @@ export default async function DonatePage({ params }: DonatePageProps) {
       </Section>
 
       {/* ── Bank transfer — clean utility block ────────────────────── */}
-      <Section id="bankueberweisung" density="spacious" tone="tinted" contained={false} className="border-y border-subtle scroll-mt-8">
+      <Section
+        id="bankueberweisung"
+        density="spacious"
+        tone="tinted"
+        contained={false}
+        className="border-y border-subtle scroll-mt-8"
+      >
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <Eyebrow as="div">{t('transfer.eyebrow')}</Eyebrow>
           <h2 className="ui-public-display-md mt-3">{t('transfer.heading')}</h2>
           <p className="ui-public-section-lede mt-4">{t('transfer.intro')}</p>
 
           <div className="mt-10 rounded-lg border bg-surface-base p-6 sm:p-8 space-y-5">
-            {([
-              { label: t('transfer.recipientLabel'), value: BANK.accountHolder, mono: false, extra: undefined as string | undefined },
-              { label: t('transfer.ibanLabel'),      value: BANK.iban,          mono: true,  extra: undefined as string | undefined },
-              { label: t('transfer.bankLabel'),      value: BANK.name,          mono: false, extra: BANK.bic as string | undefined },
-              { label: t('transfer.purposeLabel'),   value: verwendungszweck,   mono: false, extra: undefined as string | undefined },
-            ]).map((row) => (
+            {[
+              {
+                label: t('transfer.recipientLabel'),
+                value: BANK.accountHolder,
+                mono: false,
+                extra: undefined as string | undefined,
+              },
+              {
+                label: t('transfer.ibanLabel'),
+                value: BANK.iban,
+                mono: true,
+                extra: undefined as string | undefined,
+              },
+              {
+                label: t('transfer.bankLabel'),
+                value: BANK.name,
+                mono: false,
+                extra: BANK.bic as string | undefined,
+              },
+              {
+                label: t('transfer.purposeLabel'),
+                value: verwendungszweck,
+                mono: false,
+                extra: undefined as string | undefined,
+              },
+            ].map((row) => (
               <div key={row.label} className="flex items-start justify-between gap-4">
                 <div className="min-w-0 flex-1">
-                  <Eyebrow className="mb-1">
-                    {row.label}
-                  </Eyebrow>
-                  <p className={`text-sm font-semibold text-text-primary break-all ${row.mono ? 'font-mono' : ''}`}>
+                  <Eyebrow className="mb-1">{row.label}</Eyebrow>
+                  <p
+                    className={`text-sm font-semibold text-text-primary break-all ${row.mono ? 'font-mono' : ''}`}
+                  >
                     {row.value}
                   </p>
                   {row.extra && (
@@ -184,7 +222,13 @@ export default async function DonatePage({ params }: DonatePageProps) {
       </Section>
 
       {/* ── Drop-off form ──────────────────────────────────────────── */}
-      <Section id="anmeldung" density="spacious" tone="tinted" contained={false} className="border-y border-subtle scroll-mt-8">
+      <Section
+        id="anmeldung"
+        density="spacious"
+        tone="tinted"
+        contained={false}
+        className="border-y border-subtle scroll-mt-8"
+      >
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <Eyebrow as="div">{t('dropoff.eyebrow')}</Eyebrow>
           <h2 className="ui-public-display-md mt-3">{t('dropoff.heading')}</h2>
@@ -239,5 +283,5 @@ export default async function DonatePage({ params }: DonatePageProps) {
         </div>
       </Section>
     </div>
-  )
+  );
 }

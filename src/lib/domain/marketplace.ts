@@ -5,21 +5,21 @@
  * Handles form-to-API transformation and validation.
  */
 
-import { CreateListingSchema } from '@/lib/schemas/marketplace'
-import type { ListingFormData } from '@/types/listing-form'
-import { LISTING_STATUS } from '@/config/marketplace'
+import { CreateListingSchema } from '@/lib/schemas/marketplace';
+import type { ListingFormData } from '@/types/listing-form';
+import { LISTING_STATUS } from '@/config/marketplace';
 
 /**
  * Validate listing form data against the Zod schema (SSOT).
  * Returns the first error message, or null if valid.
  */
 export function validateListingForm(formData: ListingFormData): string | null {
-  const payload = transformListingFormToPayload(formData)
-  const result = CreateListingSchema.safeParse(payload)
-  if (result.success) return null
+  const payload = transformListingFormToPayload(formData);
+  const result = CreateListingSchema.safeParse(payload);
+  if (result.success) return null;
 
-  const firstIssue = result.error.issues[0]
-  return firstIssue?.message ?? 'Ungültige Eingabe'
+  const firstIssue = result.error.issues[0];
+  return firstIssue?.message ?? 'Ungültige Eingabe';
 }
 
 /**
@@ -31,7 +31,7 @@ export function validateListingForm(formData: ListingFormData): string | null {
  */
 export function transformListingFormToPayload(
   formData: ListingFormData,
-  { includeStatus = true }: { includeStatus?: boolean } = {}
+  { includeStatus = true }: { includeStatus?: boolean } = {},
 ) {
   return {
     title: formData.title.trim(),
@@ -46,14 +46,17 @@ export function transformListingFormToPayload(
     shipping_cost_chf: formData.shippingCost ? parseFloat(formData.shippingCost) : null,
     pickup_location: formData.pickupLocation.trim() || null,
     payment_mode: formData.paymentMode,
-    specs: formData.specs.filter(s => s.value.trim()).map(s => ({
-      key: s.key,
-      value: s.value.trim(),
-      unit: s.unit || null,
-    })),
+    specs: formData.specs
+      .filter((s) => s.value.trim())
+      .map((s) => ({
+        key: s.key,
+        value: s.value.trim(),
+        unit: s.unit || null,
+      })),
     ...(includeStatus ? { status: LISTING_STATUS.ACTIVE } : {}),
-    condition_checks: formData.conditionChecks.length > 0
-      ? formData.conditionChecks.map(c => ({ key: c.key, checked: c.checked }))
-      : undefined,
-  }
+    condition_checks:
+      formData.conditionChecks.length > 0
+        ? formData.conditionChecks.map((c) => ({ key: c.key, checked: c.checked }))
+        : undefined,
+  };
 }

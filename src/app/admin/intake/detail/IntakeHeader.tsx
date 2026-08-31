@@ -1,34 +1,40 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { useTranslations } from 'next-intl'
-import { adminInteractive } from '@/lib/admin-ui'
-import { Button } from '@/components/ui/button'
-import { Check, RefreshCw, AlertCircle, ArrowDownUp, QrCode } from 'lucide-react'
-import { ROUTES } from '@/config/routes'
+import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { adminInteractive } from '@/lib/admin-ui';
+import { Button } from '@/components/ui/button';
+import { Check, RefreshCw, AlertCircle, ArrowDownUp, QrCode } from 'lucide-react';
+import { ROUTES } from '@/config/routes';
 import {
   INTAKE_TIERS,
   INTAKE_TIER_LABELS,
   INTAKE_TIER_ICONS,
   QUICK_CAPTURE_LABEL,
   QUICK_CAPTURE_ICON,
-} from '@/config/intake-checklist'
-import type { IntakeTier } from '@/config/intake-checklist'
-import { INTAKE_STATUS } from '@/config/intake-status'
-import { LISTING_STATUS } from '@/config/marketplace'
-import Heading from '@/components/admin/AdminHeading'
-import type { DetailData } from '../types'
+} from '@/config/intake-checklist';
+import type { IntakeTier } from '@/config/intake-checklist';
+import { INTAKE_STATUS } from '@/config/intake-status';
+import { LISTING_STATUS } from '@/config/marketplace';
+import Heading from '@/components/admin/AdminHeading';
+import type { DetailData } from '../types';
 
 interface IntakeHeaderProps {
-  detail: DetailData
-  onBack: () => void
-  onRefresh: () => void
-  setNewTier: (tier: IntakeTier) => void
-  setShowTierChange: (show: boolean) => void
+  detail: DetailData;
+  onBack: () => void;
+  onRefresh: () => void;
+  setNewTier: (tier: IntakeTier) => void;
+  setShowTierChange: (show: boolean) => void;
 }
 
-export function IntakeHeader({ detail, onBack, onRefresh, setNewTier, setShowTierChange }: IntakeHeaderProps) {
-  const t = useTranslations('admin.intake.detail')
+export function IntakeHeader({
+  detail,
+  onBack,
+  onRefresh,
+  setNewTier,
+  setShowTierChange,
+}: IntakeHeaderProps) {
+  const t = useTranslations('admin.intake.detail');
   return (
     <div className="flex items-start justify-between">
       <div>
@@ -40,16 +46,28 @@ export function IntakeHeader({ detail, onBack, onRefresh, setNewTier, setShowTie
         >
           {t('backToPipeline')}
         </Button>
-        <Heading level={2} className="text-lg font-semibold">{detail.brand} {detail.product_name}</Heading>
+        <Heading level={2} className="text-lg font-semibold">
+          {detail.brand} {detail.product_name}
+        </Heading>
         <div className="flex items-center gap-3 text-sm text-text-tertiary mt-1">
           <span className="font-mono">{detail.item_uuid}</span>
           <span>
-            {detail.intake_tier
-              ? <>{INTAKE_TIER_ICONS[detail.intake_tier]} {INTAKE_TIER_LABELS[detail.intake_tier]}</>
-              : <>{QUICK_CAPTURE_ICON} {QUICK_CAPTURE_LABEL}</>}
+            {detail.intake_tier ? (
+              <>
+                {INTAKE_TIER_ICONS[detail.intake_tier]} {INTAKE_TIER_LABELS[detail.intake_tier]}
+              </>
+            ) : (
+              <>
+                {QUICK_CAPTURE_ICON} {QUICK_CAPTURE_LABEL}
+              </>
+            )}
           </span>
           {detail.source_donation_id && (
-            <span className="text-action">{detail.donor_name ? t('donationWithName', { name: detail.donor_name }) : t('donation')}</span>
+            <span className="text-action">
+              {detail.donor_name
+                ? t('donationWithName', { name: detail.donor_name })
+                : t('donation')}
+            </span>
           )}
         </div>
       </div>
@@ -87,7 +105,14 @@ export function IntakeHeader({ detail, onBack, onRefresh, setNewTier, setShowTie
                 type="button"
                 variant="outline"
                 size="sm"
-                onClick={() => { setNewTier(detail.intake_tier === INTAKE_TIERS.REFURBISH ? INTAKE_TIERS.PARTS : INTAKE_TIERS.REFURBISH); setShowTierChange(true) }}
+                onClick={() => {
+                  setNewTier(
+                    detail.intake_tier === INTAKE_TIERS.REFURBISH
+                      ? INTAKE_TIERS.PARTS
+                      : INTAKE_TIERS.REFURBISH,
+                  );
+                  setShowTierChange(true);
+                }}
                 className={`flex items-center gap-1 px-2 py-1.5 text-xs border rounded-lg ${adminInteractive.rowHover}`}
                 title={t('changeTier')}
               >
@@ -101,5 +126,5 @@ export function IntakeHeader({ detail, onBack, onRefresh, setNewTier, setShowTie
         )}
       </div>
     </div>
-  )
+  );
 }

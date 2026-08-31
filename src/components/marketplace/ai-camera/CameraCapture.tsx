@@ -1,24 +1,24 @@
-"use client"
+'use client';
 
 /**
  * Camera capture UI - live view and capture controls
  */
 
-import { Camera, Upload } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { IconBadge } from '@/components/ui/IconBadge'
+import { Camera, Upload } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { IconBadge } from '@/components/ui/IconBadge';
 
 interface CameraCaptureProps {
-  isCapturing: boolean
-  videoRef: React.MutableRefObject<HTMLVideoElement | null>
-  canvasRef: React.MutableRefObject<HTMLCanvasElement | null>
-  fileInputRef: React.MutableRefObject<HTMLInputElement | null>
-  onStartCamera: () => void
-  onStopCamera: () => void
-  onCapturePhoto: () => void
-  onFileUpload: (event: React.ChangeEvent<HTMLInputElement>) => void
+  isCapturing: boolean;
+  videoRef: React.MutableRefObject<HTMLVideoElement | null>;
+  canvasRef: React.MutableRefObject<HTMLCanvasElement | null>;
+  fileInputRef: React.MutableRefObject<HTMLInputElement | null>;
+  onStartCamera: () => void;
+  onStopCamera: () => void;
+  onCapturePhoto: () => void;
+  onFileUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export function CameraCapture({
@@ -29,9 +29,9 @@ export function CameraCapture({
   onStartCamera,
   onStopCamera,
   onCapturePhoto,
-  onFileUpload
+  onFileUpload,
 }: CameraCaptureProps) {
-  const t = useTranslations('components.cameraCapture')
+  const t = useTranslations('components.cameraCapture');
   return (
     <div className="space-y-6">
       <div className="text-center">
@@ -39,9 +39,7 @@ export function CameraCapture({
         <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
           {t('title')}
         </Heading>
-        <p className="text-text-secondary">
-          {t('subtitle')}
-        </p>
+        <p className="text-text-secondary">{t('subtitle')}</p>
       </div>
 
       {isCapturing ? (
@@ -65,28 +63,30 @@ export function CameraCapture({
         />
       )}
     </div>
-  )
+  );
 }
 
 interface CameraLiveViewProps {
-  videoRef: React.MutableRefObject<HTMLVideoElement | null>
-  canvasRef: React.MutableRefObject<HTMLCanvasElement | null>
-  onCapture: () => void
-  onCancel: () => void
-  labelTakePhoto: string
-  labelCancel: string
+  videoRef: React.MutableRefObject<HTMLVideoElement | null>;
+  canvasRef: React.MutableRefObject<HTMLCanvasElement | null>;
+  onCapture: () => void;
+  onCancel: () => void;
+  labelTakePhoto: string;
+  labelCancel: string;
 }
 
-function CameraLiveView({ videoRef, canvasRef, onCapture, onCancel, labelTakePhoto, labelCancel }: CameraLiveViewProps) {
+function CameraLiveView({
+  videoRef,
+  canvasRef,
+  onCapture,
+  onCancel,
+  labelTakePhoto,
+  labelCancel,
+}: CameraLiveViewProps) {
   return (
     <div className="space-y-4">
       <div className="relative rounded-lg overflow-hidden bg-surface-raised">
-        <video
-          ref={videoRef}
-          autoPlay
-          playsInline
-          className="w-full h-64 object-cover"
-        />
+        <video ref={videoRef} autoPlay playsInline className="w-full h-64 object-cover" />
         <canvas ref={canvasRef} className="hidden" />
       </div>
       <div className="flex gap-3">
@@ -99,20 +99,28 @@ function CameraLiveView({ videoRef, canvasRef, onCapture, onCancel, labelTakePho
         </Button>
       </div>
     </div>
-  )
+  );
 }
 
 interface CameraOptionsProps {
-  fileInputRef: React.MutableRefObject<HTMLInputElement | null>
-  onStartCamera: () => void
-  onFileUpload: (event: React.ChangeEvent<HTMLInputElement>) => void
-  labelOpenCamera: string
-  labelLivePhoto: string
-  labelUploadFile: string
-  labelUseExisting: string
+  fileInputRef: React.MutableRefObject<HTMLInputElement | null>;
+  onStartCamera: () => void;
+  onFileUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  labelOpenCamera: string;
+  labelLivePhoto: string;
+  labelUploadFile: string;
+  labelUseExisting: string;
 }
 
-function CameraOptions({ fileInputRef, onStartCamera, onFileUpload, labelOpenCamera, labelLivePhoto, labelUploadFile, labelUseExisting }: CameraOptionsProps) {
+function CameraOptions({
+  fileInputRef,
+  onStartCamera,
+  onFileUpload,
+  labelOpenCamera,
+  labelLivePhoto,
+  labelUploadFile,
+  labelUseExisting,
+}: CameraOptionsProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <Button
@@ -144,5 +152,5 @@ function CameraOptions({ fileInputRef, onStartCamera, onFileUpload, labelOpenCam
         />
       </Button>
     </div>
-  )
+  );
 }

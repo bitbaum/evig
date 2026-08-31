@@ -1,27 +1,27 @@
-'use client'
+'use client';
 
-import Image from 'next/image'
-import { Wrench } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
+import Image from 'next/image';
+import { Wrench } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/ui/Heading';
 import {
   getCategoryById,
   getUrgencyById,
   getRequestStatusById,
   getSkillById,
-} from '@/config/it-hilfe'
-import type { ITHilfeRequest } from './types'
+} from '@/config/it-hilfe';
+import type { ITHilfeRequest } from './types';
 
 interface RequestHeaderProps {
-  request: ITHilfeRequest
+  request: ITHilfeRequest;
 }
 
 export function RequestHeader({ request }: RequestHeaderProps) {
-  const t = useTranslations('itHelp.detail')
-  const categoryConfig = getCategoryById(request.categoryId)
-  const urgencyConfig = getUrgencyById(request.urgency)
-  const statusConfig = getRequestStatusById(request.status)
-  const CategoryIcon = categoryConfig?.icon || Wrench
+  const t = useTranslations('itHelp.detail');
+  const categoryConfig = getCategoryById(request.categoryId);
+  const urgencyConfig = getUrgencyById(request.urgency);
+  const statusConfig = getRequestStatusById(request.status);
+  const CategoryIcon = categoryConfig?.icon || Wrench;
 
   return (
     <div className="card-shell p-6">
@@ -31,14 +31,20 @@ export function RequestHeader({ request }: RequestHeaderProps) {
         </div>
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-1">
-            <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusConfig?.badgeClass || 'bg-surface-raised text-text-secondary'}`}>
+            <span
+              className={`px-2.5 py-1 rounded-full text-xs font-medium ${statusConfig?.badgeClass || 'bg-surface-raised text-text-secondary'}`}
+            >
               {statusConfig?.name || request.status}
             </span>
-            <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${urgencyConfig?.badgeClass || 'bg-surface-raised text-text-secondary'}`}>
+            <span
+              className={`px-2.5 py-1 rounded-full text-xs font-medium ${urgencyConfig?.badgeClass || 'bg-surface-raised text-text-secondary'}`}
+            >
               {urgencyConfig?.name || request.urgency}
             </span>
           </div>
-          <Heading level={1} className="text-2xl font-bold text-text-primary">{request.title}</Heading>
+          <Heading level={1} className="text-2xl font-bold text-text-primary">
+            {request.title}
+          </Heading>
         </div>
       </div>
 
@@ -46,7 +52,9 @@ export function RequestHeader({ request }: RequestHeaderProps) {
       {(request.deviceBrand || request.deviceModel) && (
         <p className="text-text-secondary mb-4">
           <span className="font-medium">{t('deviceLabel')}</span>{' '}
-          {[categoryConfig?.name, request.deviceBrand, request.deviceModel].filter(Boolean).join(' - ')}
+          {[categoryConfig?.name, request.deviceBrand, request.deviceModel]
+            .filter(Boolean)
+            .join(' - ')}
         </p>
       )}
 
@@ -60,13 +68,7 @@ export function RequestHeader({ request }: RequestHeaderProps) {
         <div className="mt-6 pt-6 border-t border-subtle">
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {request.imageUrls.map((url, index) => (
-              <a
-                key={url}
-                href={url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block"
-              >
+              <a key={url} href={url} target="_blank" rel="noopener noreferrer" className="block">
                 <Image
                   src={url}
                   alt={t('imageAlt', { index: index + 1 })}
@@ -83,10 +85,12 @@ export function RequestHeader({ request }: RequestHeaderProps) {
       {/* Skills needed */}
       {request.skillsNeeded.length > 0 && (
         <div className="mt-6 pt-6 border-t border-subtle">
-          <Heading level={3} className="text-sm font-medium text-text-secondary mb-2">{t('requiredSkills')}</Heading>
+          <Heading level={3} className="text-sm font-medium text-text-secondary mb-2">
+            {t('requiredSkills')}
+          </Heading>
           <div className="flex flex-wrap gap-2">
             {request.skillsNeeded.map((skillId) => {
-              const skill = getSkillById(skillId)
+              const skill = getSkillById(skillId);
               return (
                 <span
                   key={skillId}
@@ -94,11 +98,11 @@ export function RequestHeader({ request }: RequestHeaderProps) {
                 >
                   {skill?.name || skillId}
                 </span>
-              )
+              );
             })}
           </div>
         </div>
       )}
     </div>
-  )
+  );
 }

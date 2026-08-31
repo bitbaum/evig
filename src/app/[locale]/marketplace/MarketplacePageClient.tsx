@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { useState } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { useSession } from 'next-auth/react'
-import { Link } from '@/i18n/navigation'
-import { Button } from '@/components/ui/button'
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
+import { Link } from '@/i18n/navigation';
+import { Button } from '@/components/ui/button';
 import {
   Search,
   Package,
@@ -14,31 +14,31 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
-} from 'lucide-react'
-import { SORT_OPTIONS } from '@/config/marketplace'
-import { ListingCard, ListingCardGrid } from '@/components/marketplace/ListingCard'
-import { CartIcon } from '@/components/marketplace/cart/CartIcon'
-import { EmptyState } from '@/components/common/EmptyState'
-import { LoadingSkeleton } from '@/components/common/LoadingState'
-import { ErrorAlert } from '@/components/common/ErrorAlert'
-import { MarketplaceFilterSidebar } from '@/components/marketplace/MarketplaceFilterSidebar'
-import { MarketplaceFilterBar } from '@/components/marketplace/MarketplaceFilterBar'
-import { ActiveFilterChips } from '@/components/marketplace/ActiveFilterChips'
-import { useMarketplaceListings } from '@/hooks/useMarketplaceListings'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
-import { useTranslations } from 'next-intl'
-import { ROUTES } from '@/config/routes'
-import { useFocusTrap } from '@/hooks/useFocusTrap'
+} from 'lucide-react';
+import { SORT_OPTIONS } from '@/config/marketplace';
+import { ListingCard, ListingCardGrid } from '@/components/marketplace/ListingCard';
+import { CartIcon } from '@/components/marketplace/cart/CartIcon';
+import { EmptyState } from '@/components/common/EmptyState';
+import { LoadingSkeleton } from '@/components/common/LoadingState';
+import { ErrorAlert } from '@/components/common/ErrorAlert';
+import { MarketplaceFilterSidebar } from '@/components/marketplace/MarketplaceFilterSidebar';
+import { MarketplaceFilterBar } from '@/components/marketplace/MarketplaceFilterBar';
+import { ActiveFilterChips } from '@/components/marketplace/ActiveFilterChips';
+import { useMarketplaceListings } from '@/hooks/useMarketplaceListings';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { useTranslations } from 'next-intl';
+import { ROUTES } from '@/config/routes';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
 
 export default function MarketplacePage() {
-  const { data: session, status } = useSession()
-  const searchParams = useSearchParams()
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
-  const t = useTranslations('marketplace')
+  const { data: session, status } = useSession();
+  const searchParams = useSearchParams();
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const t = useTranslations('marketplace');
 
   // Esc-to-close + focus trap for the mobile filter drawer (overlay SSOT).
-  const drawerRef = useFocusTrap<HTMLElement>(mobileFiltersOpen, () => setMobileFiltersOpen(false))
+  const drawerRef = useFocusTrap<HTMLElement>(mobileFiltersOpen, () => setMobileFiltersOpen(false));
 
   const {
     listings,
@@ -58,7 +58,7 @@ export default function MarketplacePage() {
     category: searchParams.get('category') ?? undefined,
     sellerType: searchParams.get('seller_type') ?? undefined,
     search: searchParams.get('search') ?? searchParams.get('q') ?? undefined,
-  })
+  });
 
   const activeFilterCount = [
     filters.category,
@@ -73,7 +73,7 @@ export default function MarketplacePage() {
     filters.specRamMin,
     filters.specStorageMin,
     filters.specDisplayMin,
-  ].filter(Boolean).length
+  ].filter(Boolean).length;
 
   const advancedFilterCount = [
     filters.condition,
@@ -86,19 +86,19 @@ export default function MarketplacePage() {
     filters.specRamMin,
     filters.specStorageMin,
     filters.specDisplayMin,
-  ].filter(Boolean).length
-  const skeletonCount = Math.min(pagination.limit, 6)
+  ].filter(Boolean).length;
+  const skeletonCount = Math.min(pagination.limit, 6);
 
   const sharedSidebarProps = {
     filters,
     resetOffset,
     clearFilters,
     hasActiveFilters,
-  }
+  };
 
   const sellHref = session?.user
     ? '/marketplace/sell'
-    : '/auth/login?callbackUrl=/marketplace/sell'
+    : '/auth/login?callbackUrl=/marketplace/sell';
 
   return (
     <div className="bg-canvas min-h-screen">
@@ -115,10 +115,7 @@ export default function MarketplacePage() {
             </div>
             <div className="flex items-center gap-3 md:justify-self-end">
               <CartIcon />
-              <Link
-                href={sellHref}
-                className="ui-public-cta inline-flex items-center gap-2"
-              >
+              <Link href={sellHref} className="ui-public-cta inline-flex items-center gap-2">
                 <Plus className="w-4 h-4" />
                 {t('sell.label')}
               </Link>
@@ -170,12 +167,17 @@ export default function MarketplacePage() {
           </Button>
           <Select
             value={filters.sort}
-            onChange={(e) => { filters.setSort(e.target.value); resetOffset() }}
+            onChange={(e) => {
+              filters.setSort(e.target.value);
+              resetOffset();
+            }}
             className="w-auto"
             aria-label={t('filters.sort')}
           >
             {SORT_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>{t(`sort.${opt.value}` as never)}</option>
+              <option key={opt.value} value={opt.value}>
+                {t(`sort.${opt.value}` as never)}
+              </option>
             ))}
           </Select>
         </div>
@@ -204,13 +206,13 @@ export default function MarketplacePage() {
 
           {/* Results column */}
           <div className="min-w-0">
-        {/* Secondary chips — condition, price, etc. (not duplicating source/category pills) */}
-        <ActiveFilterChips
-          filters={filters}
-          resetOffset={resetOffset}
-          clearFilters={clearFilters}
-          hidePrimary
-        />
+            {/* Secondary chips — condition, price, etc. (not duplicating source/category pills) */}
+            <ActiveFilterChips
+              filters={filters}
+              resetOffset={resetOffset}
+              clearFilters={clearFilters}
+              hidePrimary
+            />
             {/* Results header */}
             <div className="hidden lg:flex items-center justify-between mb-6 pb-4 border-b border-subtle">
               <p className="ui-public-meta font-mono tabular-nums">
@@ -218,12 +220,17 @@ export default function MarketplacePage() {
               </p>
               <Select
                 value={filters.sort}
-                onChange={(e) => { filters.setSort(e.target.value); resetOffset() }}
+                onChange={(e) => {
+                  filters.setSort(e.target.value);
+                  resetOffset();
+                }}
                 className="w-auto"
                 aria-label={t('filters.sort')}
               >
                 {SORT_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>{t(`sort.${opt.value}` as never)}</option>
+                  <option key={opt.value} value={opt.value}>
+                    {t(`sort.${opt.value}` as never)}
+                  </option>
                 ))}
               </Select>
             </div>
@@ -318,13 +325,22 @@ export default function MarketplacePage() {
 
       {/* Advanced filters sheet — all breakpoints */}
       {mobileFiltersOpen && (
-        <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label={t('filters.advanced')}>
+        <div
+          className="fixed inset-0 z-50"
+          role="dialog"
+          aria-modal="true"
+          aria-label={t('filters.advanced')}
+        >
           <div
             className="absolute inset-0 bg-black/40"
             onClick={() => setMobileFiltersOpen(false)}
             aria-hidden="true"
           />
-          <aside ref={drawerRef} tabIndex={-1} className="absolute right-0 top-0 h-full w-full max-w-md bg-surface-base flex flex-col border-l border-strong focus:outline-none">
+          <aside
+            ref={drawerRef}
+            tabIndex={-1}
+            className="absolute right-0 top-0 h-full w-full max-w-md bg-surface-base flex flex-col border-l border-strong focus:outline-none"
+          >
             <div className="flex items-center justify-between p-4 border-b border-subtle shrink-0">
               <Eyebrow as="span">{t('filters.advanced')}</Eyebrow>
               <Button
@@ -340,7 +356,10 @@ export default function MarketplacePage() {
             <div className="flex-1 overflow-y-auto p-4">
               <MarketplaceFilterSidebar
                 {...sharedSidebarProps}
-                clearFilters={() => { clearFilters(); setMobileFiltersOpen(false) }}
+                clearFilters={() => {
+                  clearFilters();
+                  setMobileFiltersOpen(false);
+                }}
               />
             </div>
             <div className="p-4 border-t border-subtle shrink-0">
@@ -358,5 +377,5 @@ export default function MarketplacePage() {
         </div>
       )}
     </div>
-  )
+  );
 }

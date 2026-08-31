@@ -1,6 +1,6 @@
-import { ORG } from '@/config/org'
-import { OG_IMAGE_COLORS } from '@/config/ui-colors'
-import { EVIG_MARK } from '@/config/brand'
+import { ORG } from '@/config/org';
+import { OG_IMAGE_COLORS } from '@/config/ui-colors';
+import { EVIG_MARK } from '@/config/brand';
 
 /**
  * evig Open Graph share card — the SINGLE source for every og:image
@@ -10,8 +10,8 @@ import { EVIG_MARK } from '@/config/brand'
  * preview can never drift from the brand. The "eternal loop" mark is drawn
  * inline (same geometry as the favicon/logo) in the brand-green accent.
  */
-export const OG_SIZE = { width: 1200, height: 630 } as const
-export const OG_ALT = `${ORG.name} — ${ORG.motto}`
+export const OG_SIZE = { width: 1200, height: 630 } as const;
+export const OG_ALT = `${ORG.name} — ${ORG.motto}`;
 
 /**
  * The mark as a self-contained SVG data URI. Rendered via <img> (not inline
@@ -19,8 +19,8 @@ export const OG_ALT = `${ORG.name} — ${ORG.motto}`
  * Satori's partial inline-SVG handling. Green comes from the OG accent token.
  */
 const MARK_DATA_URI = `data:image/svg+xml;base64,${btoa(
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${EVIG_MARK.viewBox}" fill="none"><g transform="${EVIG_MARK.loopTransform}"><path d="${EVIG_MARK.loopPath}" stroke="${OG_IMAGE_COLORS.accent}" stroke-width="${EVIG_MARK.strokeWidth}" stroke-linecap="round" stroke-linejoin="round"/></g><path d="${EVIG_MARK.sparkPath}" fill="${OG_IMAGE_COLORS.accent}"/></svg>`
-)}`
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${EVIG_MARK.viewBox}" fill="none"><g transform="${EVIG_MARK.loopTransform}"><path d="${EVIG_MARK.loopPath}" stroke="${OG_IMAGE_COLORS.accent}" stroke-width="${EVIG_MARK.strokeWidth}" stroke-linecap="round" stroke-linejoin="round"/></g><path d="${EVIG_MARK.sparkPath}" fill="${OG_IMAGE_COLORS.accent}"/></svg>`,
+)}`;
 
 export function BrandOgCard() {
   return (
@@ -75,5 +75,5 @@ export function BrandOgCard() {
         {ORG.description}
       </div>
     </div>
-  )
+  );
 }

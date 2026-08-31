@@ -1,31 +1,31 @@
-'use client'
+'use client';
 
-import { useCallback, useEffect, useState } from 'react'
-import { useTranslations } from 'next-intl'
-import { CalendarPlus, X } from 'lucide-react'
-import { apiFetch } from '@/lib/api/client'
-import { Button } from '@/components/ui/button'
-import { Select } from '@/components/ui/select'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { StatusBadge } from '@/components/ui/status-badge'
-import { Eyebrow } from '@/components/ui/Eyebrow'
+import { useCallback, useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { CalendarPlus, X } from 'lucide-react';
+import { apiFetch } from '@/lib/api/client';
+import { Button } from '@/components/ui/button';
+import { Select } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { StatusBadge } from '@/components/ui/status-badge';
+import { Eyebrow } from '@/components/ui/Eyebrow';
 import {
   TIME_OFF_KIND_OPTIONS,
   TIME_OFF_KINDS,
   TIME_OFF_STATUSES,
   type TimeOffStatus,
-} from '@/config/time-off'
-import { timeOffKindLabel, timeOffStatusLabel } from '@/lib/team/timecard-intl'
-import type { TimeOffRequest } from '@/lib/schemas/time-off'
-import { getDisplayDate } from '@/lib/team/timecard-utils'
+} from '@/config/time-off';
+import { timeOffKindLabel, timeOffStatusLabel } from '@/lib/team/timecard-intl';
+import type { TimeOffRequest } from '@/lib/schemas/time-off';
+import { getDisplayDate } from '@/lib/team/timecard-utils';
 
 const STATUS_VARIANT: Record<TimeOffStatus, 'warning' | 'success' | 'error' | 'neutral'> = {
   pending: 'warning',
   approved: 'success',
   rejected: 'error',
   cancelled: 'neutral',
-}
+};
 
 /**
  * TimeOffPanel — staff request future leave (vacation, unpaid, …) and track
@@ -33,64 +33,68 @@ const STATUS_VARIANT: Record<TimeOffStatus, 'warning' | 'success' | 'error' | 'n
  * doesn't compete with the calendar for attention.
  */
 export function TimeOffPanel() {
-  const t = useTranslations('admin.timeOff')
-  const [open, setOpen] = useState(false)
-  const [requests, setRequests] = useState<TimeOffRequest[]>([])
-  const [kind, setKind] = useState<string>(TIME_OFF_KINDS.FERIEN)
-  const [startsOn, setStartsOn] = useState('')
-  const [endsOn, setEndsOn] = useState('')
-  const [note, setNote] = useState('')
-  const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [success, setSuccess] = useState<string | null>(null)
+  const t = useTranslations('admin.timeOff');
+  const [open, setOpen] = useState(false);
+  const [requests, setRequests] = useState<TimeOffRequest[]>([]);
+  const [kind, setKind] = useState<string>(TIME_OFF_KINDS.FERIEN);
+  const [startsOn, setStartsOn] = useState('');
+  const [endsOn, setEndsOn] = useState('');
+  const [note, setNote] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   const load = useCallback(async () => {
-    const res = await apiFetch<TimeOffRequest[]>('/api/time-off')
-    if (res.success) setRequests(res.data ?? [])
-  }, [])
+    const res = await apiFetch<TimeOffRequest[]>('/api/time-off');
+    if (res.success) setRequests(res.data ?? []);
+  }, []);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- data load on open
-    if (open) void load()
-  }, [open, load])
+    if (open) void load();
+  }, [open, load]);
 
   const submit = async () => {
-    setError(null); setSuccess(null)
+    setError(null);
+    setSuccess(null);
     if (!startsOn || !endsOn) {
-      setError(t('missingDates'))
-      return
+      setError(t('missingDates'));
+      return;
     }
-    setSubmitting(true)
+    setSubmitting(true);
     const res = await apiFetch<TimeOffRequest>('/api/time-off', {
       method: 'POST',
       body: { kind, starts_on: startsOn, ends_on: endsOn, half_day: false, note: note || null },
-    })
-    setSubmitting(false)
+    });
+    setSubmitting(false);
     if (!res.success) {
-      setError(res.error ?? t('submitError'))
-      return
+      setError(res.error ?? t('submitError'));
+      return;
     }
-    setStartsOn('')
-    setEndsOn('')
-    setNote('')
-    setSuccess(t('requestSubmitted'))
-    void load()
-  }
+    setStartsOn('');
+    setEndsOn('');
+    setNote('');
+    setSuccess(t('requestSubmitted'));
+    void load();
+  };
 
   const cancel = async (id: string) => {
-    const res = await apiFetch<TimeOffRequest>(`/api/time-off/${id}`, { method: 'PATCH' })
-    if (res.success) void load()
-  }
+    const res = await apiFetch<TimeOffRequest>(`/api/time-off/${id}`, { method: 'PATCH' });
+    if (res.success) void load();
+  };
 
   return (
     <section id="abwesenheit" className="scroll-mt-24 border-t border-subtle pt-6">
       <Button
         type="button"
         variant="ghost"
-        onClick={() => setOpen(o => !o)}
+        onClick={() => setOpen((o) => !o)}
         className="inline-flex h-auto items-center gap-2 px-0 font-mono text-xs uppercase tracking-[0.18em] text-text-tertiary hover:text-text-secondary"
       >
-        <CalendarPlus className={`h-3.5 w-3.5 transition-transform ${open ? 'rotate-45' : ''}`} aria-hidden="true" />
+        <CalendarPlus
+          className={`h-3.5 w-3.5 transition-transform ${open ? 'rotate-45' : ''}`}
+          aria-hidden="true"
+        />
         {t('requestToggle')}
       </Button>
 
@@ -111,25 +115,48 @@ export function TimeOffPanel() {
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="block">
               <Eyebrow as="span">{t('kindLabel')}</Eyebrow>
-              <Select value={kind} onChange={e => setKind(e.target.value)} className="mt-1 min-h-touch">
-                {TIME_OFF_KIND_OPTIONS.map(k => (
-                  <option key={k} value={k}>{timeOffKindLabel(t, k)}</option>
+              <Select
+                value={kind}
+                onChange={(e) => setKind(e.target.value)}
+                className="mt-1 min-h-touch"
+              >
+                {TIME_OFF_KIND_OPTIONS.map((k) => (
+                  <option key={k} value={k}>
+                    {timeOffKindLabel(t, k)}
+                  </option>
                 ))}
               </Select>
             </label>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               <label className="block">
                 <Eyebrow as="span">{t('from')}</Eyebrow>
-                <Input type="date" value={startsOn} onChange={e => setStartsOn(e.target.value)} className="mt-1 min-h-touch" />
+                <Input
+                  type="date"
+                  value={startsOn}
+                  onChange={(e) => setStartsOn(e.target.value)}
+                  className="mt-1 min-h-touch"
+                />
               </label>
               <label className="block">
                 <Eyebrow as="span">{t('to')}</Eyebrow>
-                <Input type="date" value={endsOn} min={startsOn || undefined} onChange={e => setEndsOn(e.target.value)} className="mt-1 min-h-touch" />
+                <Input
+                  type="date"
+                  value={endsOn}
+                  min={startsOn || undefined}
+                  onChange={(e) => setEndsOn(e.target.value)}
+                  className="mt-1 min-h-touch"
+                />
               </label>
             </div>
             <label className="block sm:col-span-2">
               <Eyebrow as="span">{t('noteLabel')}</Eyebrow>
-              <Textarea rows={2} value={note} onChange={e => setNote(e.target.value)} placeholder={t('notePlaceholder')} className="mt-1 resize-none" />
+              <Textarea
+                rows={2}
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                placeholder={t('notePlaceholder')}
+                className="mt-1 resize-none"
+              />
             </label>
             <div className="sm:col-span-2">
               <Button type="button" variant="primary" onClick={submit} disabled={submitting}>
@@ -141,8 +168,11 @@ export function TimeOffPanel() {
           {/* My requests */}
           {requests.length > 0 && (
             <ul className="divide-y divide-subtle rounded-lg border border-subtle">
-              {requests.map(r => (
-                <li key={r.id} className="flex flex-wrap items-center justify-between gap-2 px-3 py-2.5">
+              {requests.map((r) => (
+                <li
+                  key={r.id}
+                  className="flex flex-wrap items-center justify-between gap-2 px-3 py-2.5"
+                >
                   <div className="min-w-0">
                     <p className="text-sm font-medium text-text-primary">
                       {timeOffKindLabel(t, r.kind)}
@@ -177,5 +207,5 @@ export function TimeOffPanel() {
         </div>
       )}
     </section>
-  )
+  );
 }

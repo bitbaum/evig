@@ -22,4 +22,4 @@ export {
   productCustomerProfiles,
   type ProductCustomerProfile,
   type NewProductCustomerProfile,
-} from './inventory'
+} from './inventory';

@@ -1,34 +1,37 @@
-'use client'
+'use client';
 
-import { Link } from '@/i18n/navigation'
-import Image from 'next/image'
-import {
-  MapPin,
-  Star,
-  User,
-  Shield,
-} from 'lucide-react'
-import Heading from '@/components/ui/Heading'
-import { useTranslations } from 'next-intl'
-import type { ListingDetail } from './types'
+import { Link } from '@/i18n/navigation';
+import Image from 'next/image';
+import { MapPin, Star, User, Shield } from 'lucide-react';
+import Heading from '@/components/ui/Heading';
+import { useTranslations } from 'next-intl';
+import type { ListingDetail } from './types';
 
 interface ListingSellerCardProps {
-  listing: ListingDetail
-  sellerName: string
+  listing: ListingDetail;
+  sellerName: string;
 }
 
 export function ListingSellerCard({ listing, sellerName }: ListingSellerCardProps) {
-  const t = useTranslations('marketplace.listing')
+  const t = useTranslations('marketplace.listing');
   return (
     <Link
       href={`/sellers/${listing.seller_id}`}
       className="block card-shell p-4 hover:border-strong transition-colors focus:outline-hidden focus:ring-2 focus:ring-action focus:ring-offset-2"
     >
-      <Heading level={3} className="text-sm text-text-primary mb-3">{t('seller')}</Heading>
+      <Heading level={3} className="text-sm text-text-primary mb-3">
+        {t('seller')}
+      </Heading>
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 bg-action-muted rounded-full flex items-center justify-center">
           {listing.seller_avatar_url ? (
-            <Image src={listing.seller_avatar_url} alt={t('seller')} width={40} height={40} className="w-10 h-10 rounded-full object-cover" />
+            <Image
+              src={listing.seller_avatar_url}
+              alt={t('seller')}
+              width={40}
+              height={40}
+              className="w-10 h-10 rounded-full object-cover"
+            />
           ) : (
             <User className="w-5 h-5 text-action" aria-hidden="true" />
           )}
@@ -58,5 +61,5 @@ export function ListingSellerCard({ listing, sellerName }: ListingSellerCardProp
         </div>
       </div>
     </Link>
-  )
+  );
 }

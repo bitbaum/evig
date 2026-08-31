@@ -1,30 +1,30 @@
-'use client'
+'use client';
 
-import React, { useState, useRef, useEffect } from 'react'
-import { useTranslations } from 'next-intl'
-import { Mail, ArrowRight, ArrowLeft, RefreshCw, Loader2, CheckCircle2 } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { IconBadge } from '@/components/ui/IconBadge'
-import { RESEND_CODE_COOLDOWN_SECONDS, VERIFICATION_CODE_LENGTH } from '@/config/auth-ui'
+import React, { useState, useRef, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
+import { Mail, ArrowRight, ArrowLeft, RefreshCw, Loader2, CheckCircle2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { IconBadge } from '@/components/ui/IconBadge';
+import { RESEND_CODE_COOLDOWN_SECONDS, VERIFICATION_CODE_LENGTH } from '@/config/auth-ui';
 
 export interface VerifyStepProps {
-  email: string
-  onVerify: (code: string) => Promise<boolean>
-  onResend: () => Promise<boolean>
-  onSkip: () => void
+  email: string;
+  onVerify: (code: string) => Promise<boolean>;
+  onResend: () => Promise<boolean>;
+  onSkip: () => void;
   /**
    * Optional "wrong email?" affordance. When provided, VerifyStep shows
    * a small "E-Mail ändern" button under the email line that returns
    * to the account step. Wizard owns the back-navigation; this component
    * just signals user intent.
    */
-  onEditEmail?: () => void
-  isLoading?: boolean
-  error?: string
-  emailSendFailed?: boolean
+  onEditEmail?: () => void;
+  isLoading?: boolean;
+  error?: string;
+  emailSendFailed?: boolean;
 }
 
 /**
@@ -48,58 +48,58 @@ export function VerifyStep({
   error,
   emailSendFailed = false,
 }: VerifyStepProps) {
-  const t = useTranslations('auth.verify')
-  const [code, setCode] = useState('')
-  const [resendCooldown, setResendCooldown] = useState(0)
-  const [isResending, setIsResending] = useState(false)
-  const [isVerifying, setIsVerifying] = useState(false)
-  const [verified, setVerified] = useState(false)
-  const inputRef = useRef<HTMLInputElement>(null)
+  const t = useTranslations('auth.verify');
+  const [code, setCode] = useState('');
+  const [resendCooldown, setResendCooldown] = useState(0);
+  const [isResending, setIsResending] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [verified, setVerified] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    inputRef.current?.focus()
-  }, [])
+    inputRef.current?.focus();
+  }, []);
 
   useEffect(() => {
     if (resendCooldown > 0) {
-      const timer = setTimeout(() => setResendCooldown(resendCooldown - 1), 1000)
-      return () => clearTimeout(timer)
+      const timer = setTimeout(() => setResendCooldown(resendCooldown - 1), 1000);
+      return () => clearTimeout(timer);
     }
-  }, [resendCooldown])
+  }, [resendCooldown]);
 
   const handleChange = (raw: string) => {
-    const digits = raw.replace(/\D/g, '').slice(0, VERIFICATION_CODE_LENGTH)
-    setCode(digits)
+    const digits = raw.replace(/\D/g, '').slice(0, VERIFICATION_CODE_LENGTH);
+    setCode(digits);
 
     if (digits.length === VERIFICATION_CODE_LENGTH) {
-      void handleVerify(digits)
+      void handleVerify(digits);
     }
-  }
+  };
 
   const handleVerify = async (fullCode: string) => {
-    if (isVerifying || fullCode.length !== VERIFICATION_CODE_LENGTH) return
+    if (isVerifying || fullCode.length !== VERIFICATION_CODE_LENGTH) return;
 
-    setIsVerifying(true)
-    const success = await onVerify(fullCode)
+    setIsVerifying(true);
+    const success = await onVerify(fullCode);
     if (success) {
-      setVerified(true)
+      setVerified(true);
     } else {
-      setCode('')
-      inputRef.current?.focus()
+      setCode('');
+      inputRef.current?.focus();
     }
-    setIsVerifying(false)
-  }
+    setIsVerifying(false);
+  };
 
   const handleResend = async () => {
-    if (resendCooldown > 0 || isResending) return
+    if (resendCooldown > 0 || isResending) return;
 
-    setIsResending(true)
-    const success = await onResend()
+    setIsResending(true);
+    const success = await onResend();
     if (success) {
-      setResendCooldown(RESEND_CODE_COOLDOWN_SECONDS)
+      setResendCooldown(RESEND_CODE_COOLDOWN_SECONDS);
     }
-    setIsResending(false)
-  }
+    setIsResending(false);
+  };
 
   if (verified) {
     return (
@@ -108,11 +108,9 @@ export function VerifyStep({
         <Heading level={2} className="text-xl font-bold text-text-primary mb-2">
           {t('successHeading')}
         </Heading>
-        <p className="text-text-secondary mb-6">
-          {t('successDesc')}
-        </p>
+        <p className="text-text-secondary mb-6">{t('successDesc')}</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -122,9 +120,7 @@ export function VerifyStep({
         <Heading level={2} className="text-xl font-bold text-text-primary mb-2">
           {t('heading')}
         </Heading>
-        <p className="text-text-secondary dark:text-text-muted">
-          {t('description', { email })}
-        </p>
+        <p className="text-text-secondary dark:text-text-muted">{t('description', { email })}</p>
         {onEditEmail && (
           <Button
             type="button"
@@ -141,17 +137,17 @@ export function VerifyStep({
 
       {emailSendFailed && (
         <div className="p-4 rounded-lg bg-warning-50 border border-warning-200" role="alert">
-          <p className="text-sm text-warning-800 font-medium">
-            {t('emailSendFailed')}
-          </p>
-          <p className="text-sm text-warning-700 mt-1">
-            {t('emailSendFailedAction')}
-          </p>
+          <p className="text-sm text-warning-800 font-medium">{t('emailSendFailed')}</p>
+          <p className="text-sm text-warning-700 mt-1">{t('emailSendFailedAction')}</p>
         </div>
       )}
 
       {error && (
-        <div id="verify-error" className="p-4 rounded-lg bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30" role="alert">
+        <div
+          id="verify-error"
+          className="p-4 rounded-lg bg-error-50 dark:bg-error-900/20 border border-error-200 dark:border-error-800/30"
+          role="alert"
+        >
           <p className="text-sm text-error-700 dark:text-error-400">{error}</p>
         </div>
       )}
@@ -207,9 +203,7 @@ export function VerifyStep({
       </Button>
 
       <div className="text-center">
-        <p className="text-sm text-text-secondary dark:text-text-muted mb-2">
-          {t('noCode')}
-        </p>
+        <p className="text-sm text-text-secondary dark:text-text-muted mb-2">{t('noCode')}</p>
         <Button
           type="button"
           onClick={handleResend}
@@ -241,10 +235,8 @@ export function VerifyStep({
         >
           {t('skipVerify')}
         </Button>
-        <p className="text-xs text-text-tertiary text-center mt-2">
-          {t('skipDescription')}
-        </p>
+        <p className="text-xs text-text-tertiary text-center mt-2">{t('skipDescription')}</p>
       </div>
     </div>
-  )
+  );
 }

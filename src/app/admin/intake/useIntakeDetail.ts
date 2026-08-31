@@ -1,181 +1,200 @@
-'use client'
+'use client';
 
-import { useState, useCallback } from 'react'
-import { apiFetch } from '@/lib/api/client'
-import { INTAKE_TIERS, CHECKLIST_RESULTS, QC_SKIP_ONE_CLICK_NOTE, type IntakeTier, type ChecklistResult } from '@/config/intake-checklist'
-import type { DetailData } from './types'
+import { useState, useCallback } from 'react';
+import { apiFetch } from '@/lib/api/client';
+import {
+  INTAKE_TIERS,
+  CHECKLIST_RESULTS,
+  QC_SKIP_ONE_CLICK_NOTE,
+  type IntakeTier,
+  type ChecklistResult,
+} from '@/config/intake-checklist';
+import type { DetailData } from './types';
 
 export function useIntakeDetail() {
-  const [selectedId, setSelectedId] = useState<string | null>(null)
-  const [detail, setDetail] = useState<DetailData | null>(null)
-  const [detailLoading, setDetailLoading] = useState(false)
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [detail, setDetail] = useState<DetailData | null>(null);
+  const [detailLoading, setDetailLoading] = useState(false);
 
   // Publish
-  const [publishPrice, setPublishPrice] = useState(0)
-  const [publishing, setPublishing] = useState(false)
+  const [publishPrice, setPublishPrice] = useState(0);
+  const [publishing, setPublishing] = useState(false);
 
   // Tier change
-  const [showTierChange, setShowTierChange] = useState(false)
-  const [newTier, setNewTier] = useState<IntakeTier>(INTAKE_TIERS.REFURBISH)
-  const [tierChangeReason, setTierChangeReason] = useState('')
-  const [tierChanging, setTierChanging] = useState(false)
+  const [showTierChange, setShowTierChange] = useState(false);
+  const [newTier, setNewTier] = useState<IntakeTier>(INTAKE_TIERS.REFURBISH);
+  const [tierChangeReason, setTierChangeReason] = useState('');
+  const [tierChanging, setTierChanging] = useState(false);
 
   const fetchDetail = useCallback(async (id: string) => {
-    setDetailLoading(true)
+    setDetailLoading(true);
     try {
-      const result = await apiFetch<DetailData>(`/api/admin/intake/${id}`)
+      const result = await apiFetch<DetailData>(`/api/admin/intake/${id}`);
       if (result.success && result.data) {
-        setDetail(result.data)
-        setPublishPrice(Number(result.data.selling_price_chf) || 0)
+        setDetail(result.data);
+        setPublishPrice(Number(result.data.selling_price_chf) || 0);
       }
     } finally {
-      setDetailLoading(false)
+      setDetailLoading(false);
     }
-  }, [])
+  }, []);
 
-  const openDetail = useCallback((id: string) => {
-    setSelectedId(id)
-    fetchDetail(id)
-  }, [fetchDetail])
+  const openDetail = useCallback(
+    (id: string) => {
+      setSelectedId(id);
+      fetchDetail(id);
+    },
+    [fetchDetail],
+  );
 
   const clearDetail = useCallback(() => {
-    setDetail(null)
-    setSelectedId(null)
-    setShowTierChange(false)
-    setTierChangeReason('')
-  }, [])
+    setDetail(null);
+    setSelectedId(null);
+    setShowTierChange(false);
+    setTierChangeReason('');
+  }, []);
 
   // Rejections (e.g. Vier-Augen-Prinzip) must be visible, not silent.
-  const [checklistError, setChecklistError] = useState<string | null>(null)
+  const [checklistError, setChecklistError] = useState<string | null>(null);
 
   // Repeat taps while a verdict is saving must not fire duplicate PATCHes
   // (they used to pile duplicate events onto the audit timeline).
-  const [pendingItems, setPendingItems] = useState<ReadonlySet<string>>(new Set())
+  const [pendingItems, setPendingItems] = useState<ReadonlySet<string>>(new Set());
 
-  const setChecklistResult = useCallback(async (
-    itemId: string,
-    result: ChecklistResult | null,
-    notes?: string,
-    options?: { secondPersonOverride?: boolean },
-  ) => {
-    if (!selectedId || pendingItems.has(itemId)) return
-    setChecklistError(null)
-    setPendingItems(prev => new Set(prev).add(itemId))
-    try {
-      const body: Record<string, unknown> = { item_id: itemId, result }
-      if (notes !== undefined) body.notes = notes
-      if (options?.secondPersonOverride) body.second_person_override = true
-      const response = await apiFetch<void>(`/api/admin/intake/${selectedId}/checklist`, {
-        method: 'PATCH',
-        body,
-      })
-      if (response.success) {
-        await fetchDetail(selectedId)
-      } else {
-        setChecklistError(response.error || null)
+  const setChecklistResult = useCallback(
+    async (
+      itemId: string,
+      result: ChecklistResult | null,
+      notes?: string,
+      options?: { secondPersonOverride?: boolean },
+    ) => {
+      if (!selectedId || pendingItems.has(itemId)) return;
+      setChecklistError(null);
+      setPendingItems((prev) => new Set(prev).add(itemId));
+      try {
+        const body: Record<string, unknown> = { item_id: itemId, result };
+        if (notes !== undefined) body.notes = notes;
+        if (options?.secondPersonOverride) body.second_person_override = true;
+        const response = await apiFetch<void>(`/api/admin/intake/${selectedId}/checklist`, {
+          method: 'PATCH',
+          body,
+        });
+        if (response.success) {
+          await fetchDetail(selectedId);
+        } else {
+          setChecklistError(response.error || null);
+        }
+      } finally {
+        setPendingItems((prev) => {
+          const next = new Set(prev);
+          next.delete(itemId);
+          return next;
+        });
       }
-    } finally {
-      setPendingItems(prev => {
-        const next = new Set(prev)
-        next.delete(itemId)
-        return next
-      })
-    }
-  }, [selectedId, fetchDetail, pendingItems])
+    },
+    [selectedId, fetchDetail, pendingItems],
+  );
 
-  const [markingAll, setMarkingAll] = useState(false)
+  const [markingAll, setMarkingAll] = useState(false);
   const markAllRequired = useCallback(async () => {
-    if (!selectedId || !detail || markingAll) return
-    setChecklistError(null)
+    if (!selectedId || !detail || markingAll) return;
+    setChecklistError(null);
     // Only OPEN items — never overrides a recorded fail/n.a. verdict, and
     // never auto-signs items that need a deliberate second person (final QA).
     const open = detail.checklist_grouped
-      .flatMap(g => g.items)
-      .filter(i => i.required && i.state.result === null && !i.requiresSecondPerson)
-    if (open.length === 0) return
-    setMarkingAll(true)
+      .flatMap((g) => g.items)
+      .filter((i) => i.required && i.state.result === null && !i.requiresSecondPerson);
+    if (open.length === 0) return;
+    setMarkingAll(true);
     try {
       // ONE bulk request: parallel per-item PATCHes raced each other on the
       // shared JSONB column and silently dropped most of the verdicts.
       const result = await apiFetch<void>(`/api/admin/intake/${selectedId}/checklist`, {
         method: 'PATCH',
-        body: { item_ids: open.map(item => item.id), result: CHECKLIST_RESULTS.PASS },
-      })
-      if (!result.success) setChecklistError(result.error || null)
-      await fetchDetail(selectedId)
+        body: { item_ids: open.map((item) => item.id), result: CHECKLIST_RESULTS.PASS },
+      });
+      if (!result.success) setChecklistError(result.error || null);
+      await fetchDetail(selectedId);
     } finally {
-      setMarkingAll(false)
+      setMarkingAll(false);
     }
-  }, [selectedId, detail, fetchDetail, markingAll])
+  }, [selectedId, detail, fetchDetail, markingAll]);
 
   // Quick-captured device of a QC-required category: assign the refurbish
   // tier so the checklist workflow (and the publish gate) kicks in.
-  const [startingQc, setStartingQc] = useState(false)
+  const [startingQc, setStartingQc] = useState(false);
   const startQc = useCallback(async () => {
-    if (!selectedId) return
-    setStartingQc(true)
+    if (!selectedId) return;
+    setStartingQc(true);
     try {
       const result = await apiFetch<void>(`/api/admin/intake/${selectedId}`, {
         method: 'PATCH',
         body: { intake_tier: INTAKE_TIERS.REFURBISH },
-      })
+      });
       if (result.success) {
-        fetchDetail(selectedId)
+        fetchDetail(selectedId);
       }
     } finally {
-      setStartingQc(false)
+      setStartingQc(false);
     }
-  }, [selectedId, fetchDetail])
+  }, [selectedId, fetchDetail]);
 
-  const handlePublish = useCallback(async (options?: { skipQc?: boolean }) => {
-    if (!selectedId) return
-    setPublishing(true)
-    try {
-      const result = await apiFetch<void>(`/api/admin/intake/${selectedId}/publish`, {
-        method: 'POST',
-        body: options?.skipQc
-          // One-click untested publish: audited standard reason, listing
-          // carries no Prüfsiegel (buyers see the untested state).
-          ? { price_chf: publishPrice, qc_skip: true, qc_skip_reason: QC_SKIP_ONE_CLICK_NOTE }
-          : { price_chf: publishPrice },
-      })
-      if (result.success) {
-        fetchDetail(selectedId)
-      } else {
-        setChecklistError(result.error || null)
+  const handlePublish = useCallback(
+    async (options?: { skipQc?: boolean }) => {
+      if (!selectedId) return;
+      setPublishing(true);
+      try {
+        const result = await apiFetch<void>(`/api/admin/intake/${selectedId}/publish`, {
+          method: 'POST',
+          body: options?.skipQc
+            ? // One-click untested publish: audited standard reason, listing
+              // carries no Prüfsiegel (buyers see the untested state).
+              { price_chf: publishPrice, qc_skip: true, qc_skip_reason: QC_SKIP_ONE_CLICK_NOTE }
+            : { price_chf: publishPrice },
+        });
+        if (result.success) {
+          fetchDetail(selectedId);
+        } else {
+          setChecklistError(result.error || null);
+        }
+      } finally {
+        setPublishing(false);
       }
-    } finally {
-      setPublishing(false)
-    }
-  }, [selectedId, publishPrice, fetchDetail])
+    },
+    [selectedId, publishPrice, fetchDetail],
+  );
 
   const handleTierChange = useCallback(async () => {
-    if (!selectedId || !tierChangeReason.trim()) return
-    setTierChanging(true)
+    if (!selectedId || !tierChangeReason.trim()) return;
+    setTierChanging(true);
     try {
       const result = await apiFetch<void>(`/api/admin/intake/${selectedId}/change-tier`, {
         method: 'POST',
         body: { new_tier: newTier, reason: tierChangeReason },
-      })
+      });
       if (result.success) {
-        setShowTierChange(false)
-        setTierChangeReason('')
-        fetchDetail(selectedId)
+        setShowTierChange(false);
+        setTierChangeReason('');
+        fetchDetail(selectedId);
       }
     } finally {
-      setTierChanging(false)
+      setTierChanging(false);
     }
-  }, [selectedId, newTier, tierChangeReason, fetchDetail])
+  }, [selectedId, newTier, tierChangeReason, fetchDetail]);
 
   return {
     selectedId,
     detail,
     detailLoading,
-    publishPrice, setPublishPrice,
+    publishPrice,
+    setPublishPrice,
     publishing,
-    showTierChange, setShowTierChange,
-    newTier, setNewTier,
-    tierChangeReason, setTierChangeReason,
+    showTierChange,
+    setShowTierChange,
+    newTier,
+    setNewTier,
+    tierChangeReason,
+    setTierChangeReason,
     tierChanging,
     openDetail,
     fetchDetail,
@@ -189,5 +208,5 @@ export function useIntakeDetail() {
     startingQc,
     handlePublish,
     handleTierChange,
-  }
+  };
 }

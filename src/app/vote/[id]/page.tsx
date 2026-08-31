@@ -6,62 +6,61 @@
  * can vote from any device without needing an admin account.
  */
 
-import { Metadata } from 'next'
-import Link from 'next/link'
-import Image from 'next/image'
-import { ExternalLink } from 'lucide-react'
-import { DECISION_STATUS } from '@/config/decisions'
-import { getTranslations } from 'next-intl/server'
-import PublicVoteClient from './PublicVoteClient'
-import { ORG } from '@/config/org'
-import { getPublicDecision } from '@/lib/services/decisions'
+import { Metadata } from 'next';
+import Link from 'next/link';
+import Image from 'next/image';
+import { ExternalLink } from 'lucide-react';
+import { DECISION_STATUS } from '@/config/decisions';
+import { getTranslations } from 'next-intl/server';
+import PublicVoteClient from './PublicVoteClient';
+import { ORG } from '@/config/org';
+import { getPublicDecision } from '@/lib/services/decisions';
 
-export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
-  const { id } = await params
-  const [decision, t] = await Promise.all([
-    getPublicDecision(id),
-    getTranslations('vote'),
-  ])
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const [decision, t] = await Promise.all([getPublicDecision(id), getTranslations('vote')]);
   return {
     title: decision ? t('metaTitle', { title: decision.title }) : t('metaTitleFallback'),
     description: decision?.description?.slice(0, 160) ?? t('metaDesc'),
-  }
+  };
 }
 
 export default async function PublicVotePage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params
-  const [decision, t] = await Promise.all([
-    getPublicDecision(id),
-    getTranslations('vote'),
-  ])
+  const { id } = await params;
+  const [decision, t] = await Promise.all([getPublicDecision(id), getTranslations('vote')]);
 
   if (!decision) {
     return (
       <div className="min-h-screen bg-surface-raised flex items-center justify-center px-4">
         <div className="max-w-md w-full text-center">
           <p className="text-2xl font-bold text-text-primary mb-2">{t('notFound')}</p>
-          <p className="text-text-tertiary dark:text-text-muted mb-6">
-            {t('notFoundDesc')}
-          </p>
+          <p className="text-text-tertiary dark:text-text-muted mb-6">{t('notFoundDesc')}</p>
           <Link href="/" className="text-action hover:underline text-sm">
             {t('backHome')}
           </Link>
         </div>
       </div>
-    )
+    );
   }
 
-  const isVotingPhase = decision.status === DECISION_STATUS.VOTING
-  const voteCallbackUrl = `/vote/${decision.id}`
-  const registerUrl = `/auth/register?callbackUrl=${encodeURIComponent(voteCallbackUrl)}`
-  const loginUrl = `/auth/login?callbackUrl=${encodeURIComponent(voteCallbackUrl)}`
+  const isVotingPhase = decision.status === DECISION_STATUS.VOTING;
+  const voteCallbackUrl = `/vote/${decision.id}`;
+  const registerUrl = `/auth/register?callbackUrl=${encodeURIComponent(voteCallbackUrl)}`;
+  const loginUrl = `/auth/login?callbackUrl=${encodeURIComponent(voteCallbackUrl)}`;
 
   return (
     <div className="min-h-screen bg-surface-raised py-12 px-4">
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="mb-8 text-center">
-          <Link href="/" className="inline-flex items-center gap-1.5 text-sm text-text-tertiary hover:text-text-secondary dark:text-text-muted mb-6">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-1.5 text-sm text-text-tertiary hover:text-text-secondary dark:text-text-muted mb-6"
+          >
             <span>{ORG.name}</span>
             <ExternalLink className="h-3.5 w-3.5" />
           </Link>
@@ -95,49 +94,57 @@ export default async function PublicVotePage({ params }: { params: Promise<{ id:
             </details>
           )}
 
-          {decision.options.length > 0 && (() => {
-            const hasImages = decision.options.some((o) => o.imageUrl)
-            return (
-              <div className="mt-5">
-                <p className="text-sm font-semibold text-text-tertiary dark:text-text-muted mb-2">
-                  {t('optionsCount', { count: decision.options.length })}
-                </p>
-                {hasImages ? (
-                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                    {decision.options.map((opt) => (
-                      <div key={opt.id} className="rounded-lg border border-strong dark:border-white/6 bg-surface-raised overflow-hidden">
-                        {opt.imageUrl && (
-                          <div className="relative aspect-square bg-surface-base">
-                            <Image
-                              src={opt.imageUrl}
-                              alt={opt.label}
-                              fill
-                              className="object-contain p-2"
-                            />
-                          </div>
-                        )}
-                        <p className="px-2 py-1.5 text-xs font-medium text-text-secondary truncate">{opt.label}</p>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="space-y-1.5">
-                    {decision.options.map((opt) => (
-                      <div
-                        key={opt.id}
-                        className="rounded-md border border-strong dark:border-white/6 bg-surface-raised px-3 py-2 text-sm"
-                      >
-                        <span className="font-medium text-text-primary">{opt.label}</span>
-                        {opt.description && (
-                          <span className="ml-2 text-text-tertiary dark:text-text-muted">— {opt.description}</span>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )
-          })()}
+          {decision.options.length > 0 &&
+            (() => {
+              const hasImages = decision.options.some((o) => o.imageUrl);
+              return (
+                <div className="mt-5">
+                  <p className="text-sm font-semibold text-text-tertiary dark:text-text-muted mb-2">
+                    {t('optionsCount', { count: decision.options.length })}
+                  </p>
+                  {hasImages ? (
+                    <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                      {decision.options.map((opt) => (
+                        <div
+                          key={opt.id}
+                          className="rounded-lg border border-strong dark:border-white/6 bg-surface-raised overflow-hidden"
+                        >
+                          {opt.imageUrl && (
+                            <div className="relative aspect-square bg-surface-base">
+                              <Image
+                                src={opt.imageUrl}
+                                alt={opt.label}
+                                fill
+                                className="object-contain p-2"
+                              />
+                            </div>
+                          )}
+                          <p className="px-2 py-1.5 text-xs font-medium text-text-secondary truncate">
+                            {opt.label}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="space-y-1.5">
+                      {decision.options.map((opt) => (
+                        <div
+                          key={opt.id}
+                          className="rounded-md border border-strong dark:border-white/6 bg-surface-raised px-3 py-2 text-sm"
+                        >
+                          <span className="font-medium text-text-primary">{opt.label}</span>
+                          {opt.description && (
+                            <span className="ml-2 text-text-tertiary dark:text-text-muted">
+                              — {opt.description}
+                            </span>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
         </div>
 
         {/* Voting form (client component) */}
@@ -156,10 +163,8 @@ export default async function PublicVotePage({ params }: { params: Promise<{ id:
           loginUrl={loginUrl}
         />
 
-        <p className="mt-6 text-center text-xs text-text-muted">
-          {t('footer', { org: ORG.name })}
-        </p>
+        <p className="mt-6 text-center text-xs text-text-muted">{t('footer', { org: ORG.name })}</p>
       </div>
     </div>
-  )
+  );
 }

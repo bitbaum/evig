@@ -16,4 +16,4 @@ export const SERVICE_APPOINTMENT_ROUTES = {
   notificationBase: '/dashboard/appointments/',
   adminList: '/admin/appointments',
   adminDetail: (id: string) => `/admin/appointments/${id}`,
-} as const
+} as const;

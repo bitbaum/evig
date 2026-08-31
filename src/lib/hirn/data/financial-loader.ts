@@ -99,16 +99,21 @@ export interface YearlyAggregation {
 // ============================================================================
 
 // Data path - JSON files are stored in public/data/hirn/
-const DATA_BASE_PATH = path.join(
-  process.cwd(),
-  'public',
-  'data',
-  'hirn'
-);
+const DATA_BASE_PATH = path.join(process.cwd(), 'public', 'data', 'hirn');
 
 const MONTH_NAMES = [
-  'Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun',
-  'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'
+  'Jan',
+  'Feb',
+  'Mär',
+  'Apr',
+  'Mai',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Okt',
+  'Nov',
+  'Dez',
 ];
 
 const SUBCATEGORY_MAP = {
@@ -130,7 +135,7 @@ function createTracedValue<T>(
   accountCode: string,
   accountName: string,
   importedAt: string,
-  sourceFile: string
+  sourceFile: string,
 ): TracedValue<T> {
   return {
     value,
@@ -199,7 +204,7 @@ export async function loadFinancialData(year: number): Promise<YearlyAggregation
   const filePath = `01_Management/B_Finanzen/data/export/income_${year}.json`;
 
   // Check if this is yearly aggregate data (month=0) or monthly data
-  const isYearlyAggregate = rawData.data.every(r => r.month === 0);
+  const isYearlyAggregate = rawData.data.every((r) => r.month === 0);
 
   // Group data by month
   const byMonth = new Map<number, Map<string, RawIncomeRecord>>();
@@ -223,7 +228,14 @@ export async function loadFinancialData(year: number): Promise<YearlyAggregation
     const getTracedValue = (subcategory: string): TracedValue<number> => {
       const record = records.get(subcategory);
       if (!record) {
-        return createTracedValue(0, filePath, 'N/A', 'Keine Daten', rawData.imported_at, rawData.source);
+        return createTracedValue(
+          0,
+          filePath,
+          'N/A',
+          'Keine Daten',
+          rawData.imported_at,
+          rawData.source,
+        );
       }
       return createTracedValue(
         record.value,
@@ -231,7 +243,7 @@ export async function loadFinancialData(year: number): Promise<YearlyAggregation
         record.account_code,
         record.account_name,
         rawData.imported_at,
-        rawData.source
+        rawData.source,
       );
     };
 
@@ -254,7 +266,14 @@ export async function loadFinancialData(year: number): Promise<YearlyAggregation
       const getTracedValue = (subcategory: string): TracedValue<number> => {
         const record = records.get(subcategory);
         if (!record) {
-          return createTracedValue(0, filePath, 'N/A', 'Keine Daten', rawData.imported_at, rawData.source);
+          return createTracedValue(
+            0,
+            filePath,
+            'N/A',
+            'Keine Daten',
+            rawData.imported_at,
+            rawData.source,
+          );
         }
         return createTracedValue(
           record.value,
@@ -262,7 +281,7 @@ export async function loadFinancialData(year: number): Promise<YearlyAggregation
           record.account_code,
           record.account_name,
           rawData.imported_at,
-          rawData.source
+          rawData.source,
         );
       };
 
@@ -280,22 +299,36 @@ export async function loadFinancialData(year: number): Promise<YearlyAggregation
   }
 
   // Calculate yearly totals
-  const totalSum = sumTracedValues(monthly.map(m => m.total), 'Summe Nettoerlöse Total');
-  const warenverkaufSum = sumTracedValues(monthly.map(m => m.warenverkauf), 'Summe Warenverkauf');
-  const dienstleistungenSum = sumTracedValues(monthly.map(m => m.dienstleistungen), 'Summe Dienstleistungen');
-  const integrationSum = sumTracedValues(monthly.map(m => m.integration), 'Summe Integration');
-  const spendenSum = sumTracedValues(monthly.map(m => m.spenden), 'Summe Spenden');
-  const aufstockungSum = sumTracedValues(monthly.map(m => m.aufstockung), 'Summe Aufstockung');
+  const totalSum = sumTracedValues(
+    monthly.map((m) => m.total),
+    'Summe Nettoerlöse Total',
+  );
+  const warenverkaufSum = sumTracedValues(
+    monthly.map((m) => m.warenverkauf),
+    'Summe Warenverkauf',
+  );
+  const dienstleistungenSum = sumTracedValues(
+    monthly.map((m) => m.dienstleistungen),
+    'Summe Dienstleistungen',
+  );
+  const integrationSum = sumTracedValues(
+    monthly.map((m) => m.integration),
+    'Summe Integration',
+  );
+  const spendenSum = sumTracedValues(
+    monthly.map((m) => m.spenden),
+    'Summe Spenden',
+  );
+  const aufstockungSum = sumTracedValues(
+    monthly.map((m) => m.aufstockung),
+    'Summe Aufstockung',
+  );
 
   // Calculate derived metrics
   const earnedTotal = warenverkaufSum.value + dienstleistungenSum.value + integrationSum.value;
   const donationsTotal = spendenSum.value + aufstockungSum.value;
-  const eigenfinanzierungPct = totalSum.value > 0
-    ? (earnedTotal / totalSum.value) * 100
-    : 0;
-  const monthlyAvg = monthsAvailable > 0
-    ? totalSum.value / monthsAvailable
-    : 0;
+  const eigenfinanzierungPct = totalSum.value > 0 ? (earnedTotal / totalSum.value) * 100 : 0;
+  const monthlyAvg = monthsAvailable > 0 ? totalSum.value / monthsAvailable : 0;
 
   return {
     year,
@@ -321,7 +354,7 @@ export async function loadFinancialData(year: number): Promise<YearlyAggregation
         'derived',
         'Eigenfinanzierungsquote = (Warenverkauf + Dienstleistungen + Integration) / Total × 100',
         rawData.imported_at,
-        rawData.source
+        rawData.source,
       ),
       monthlyAvg: createTracedValue(
         monthlyAvg,
@@ -329,7 +362,7 @@ export async function loadFinancialData(year: number): Promise<YearlyAggregation
         'derived',
         `Monatsdurchschnitt = Total / ${monthsAvailable} Monate`,
         rawData.imported_at,
-        rawData.source
+        rawData.source,
       ),
       earnedTotal: createTracedValue(
         earnedTotal,
@@ -337,7 +370,7 @@ export async function loadFinancialData(year: number): Promise<YearlyAggregation
         'derived',
         'Eigenerwirtschaftet = Warenverkauf + Dienstleistungen + Integration',
         rawData.imported_at,
-        rawData.source
+        rawData.source,
       ),
       donationsTotal: createTracedValue(
         donationsTotal,
@@ -345,7 +378,7 @@ export async function loadFinancialData(year: number): Promise<YearlyAggregation
         'derived',
         'Spenden & Förderung = Spenden + Aufstockung Richtpreis',
         rawData.imported_at,
-        rawData.source
+        rawData.source,
       ),
     },
   };

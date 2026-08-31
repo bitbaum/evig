@@ -10,21 +10,21 @@ import {
   computeTimeSaldo as engineComputeTimeSaldo,
   categoryConfigFromAbsences,
   type SaldoInput,
-} from 'saldo-engine'
-import { TIMECARD_ABSENCE_TYPES, TIMECARD_ENTRY_CATEGORIES } from '@/config/timecards'
+} from 'saldo-engine';
+import { TIMECARD_ABSENCE_TYPES, TIMECARD_ENTRY_CATEGORIES } from '@/config/timecards';
 
 // App categories drive the engine — one SSOT for what counts as a paid absence.
 const CATEGORY_CONFIG = categoryConfigFromAbsences(
-  TIMECARD_ABSENCE_TYPES.map(a => ({ value: a.value, paid: a.paid })),
+  TIMECARD_ABSENCE_TYPES.map((a) => ({ value: a.value, paid: a.paid })),
   TIMECARD_ENTRY_CATEGORIES.FEIERTAG,
-)
+);
 
 /** Running Zeitsaldo for one person. Null when there's no Pensum on file. */
 export function computeTimeSaldo(input: SaldoInput) {
-  return engineComputeTimeSaldo(input, { categories: CATEGORY_CONFIG })
+  return engineComputeTimeSaldo(input, { categories: CATEGORY_CONFIG });
 }
 
-export { computeVacationBalance } from 'saldo-engine'
+export { computeVacationBalance } from 'saldo-engine';
 export type {
   SaldoInput,
   SaldoResult,
@@ -32,4 +32,4 @@ export type {
   VacationResult,
   EmploymentPeriod as SaldoEmploymentPeriod,
   TimeEntry as SaldoEntry,
-} from 'saldo-engine'
+} from 'saldo-engine';

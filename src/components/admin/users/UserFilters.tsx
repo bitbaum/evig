@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * User Filters Component
@@ -6,17 +6,17 @@
  * Search and filter controls for the users list.
  */
 
-import { Search } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
+import { Search } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
 
 interface UserFiltersProps {
-  search: string
-  type: string
-  verified: string
-  onSearchChange: (value: string) => void
-  onTypeChange: (value: string) => void
-  onVerifiedChange: (value: string) => void
+  search: string;
+  type: string;
+  verified: string;
+  onSearchChange: (value: string) => void;
+  onTypeChange: (value: string) => void;
+  onVerifiedChange: (value: string) => void;
 }
 
 export function UserFilters({
@@ -63,5 +63,5 @@ export function UserFilters({
         </div>
       </div>
     </div>
-  )
+  );
 }

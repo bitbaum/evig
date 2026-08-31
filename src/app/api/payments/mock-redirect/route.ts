@@ -8,52 +8,54 @@
  * `parseMockWebhook`. Blocked in production.
  */
 
-import { NextRequest, NextResponse } from 'next/server'
-import { logger } from '@/lib/logger'
-import { apiForbidden, apiBadRequest } from '@/lib/api/helpers'
-import { APP_URL } from '@/config/urls'
-import { GATEWAY_STATUS } from '@/config/gateway-status'
-import { hasGateway } from '@/lib/payments/gateways'
-import { sanitizeReturnTo } from '@/lib/utils/safe-redirect'
-import { escapeHtml } from '@/lib/utils/escape-html'
+import { NextRequest, NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
+import { apiForbidden, apiBadRequest } from '@/lib/api/helpers';
+import { APP_URL } from '@/config/urls';
+import { GATEWAY_STATUS } from '@/config/gateway-status';
+import { hasGateway } from '@/lib/payments/gateways';
+import { sanitizeReturnTo } from '@/lib/utils/safe-redirect';
+import { escapeHtml } from '@/lib/utils/escape-html';
 
-const SUPPORTED_CURRENCIES = new Set(['CHF', 'EUR'])
+const SUPPORTED_CURRENCIES = new Set(['CHF', 'EUR']);
 
 export async function GET(request: NextRequest) {
   // Dev only — never render a payment-bypassing page in production.
   if (process.env.NODE_ENV === 'production') {
-    return apiForbidden('Mock not available in production')
+    return apiForbidden('Mock not available in production');
   }
 
-  const { searchParams } = new URL(request.url)
-  const provider = (searchParams.get('provider') || '').slice(0, 32)
+  const { searchParams } = new URL(request.url);
+  const provider = (searchParams.get('provider') || '').slice(0, 32);
   if (!hasGateway(provider)) {
-    return apiBadRequest('Unknown payment provider')
+    return apiBadRequest('Unknown payment provider');
   }
 
-  const rawReferenceId = searchParams.get('referenceId') || ''
-  const rawAmount = searchParams.get('amount') || '0'
-  const rawCurrency = searchParams.get('currency') || 'CHF'
+  const rawReferenceId = searchParams.get('referenceId') || '';
+  const rawAmount = searchParams.get('amount') || '0';
+  const rawCurrency = searchParams.get('currency') || 'CHF';
 
-  const referenceId = escapeHtml(rawReferenceId.slice(0, 64))
-  const referenceIdRaw = rawReferenceId.slice(0, 64)
-  const providerLabel = escapeHtml(provider)
-  const currency = SUPPORTED_CURRENCIES.has(rawCurrency.toUpperCase()) ? rawCurrency.toUpperCase() : 'CHF'
-  const amountFormatted = (Number(rawAmount) / 100).toFixed(2)
+  const referenceId = escapeHtml(rawReferenceId.slice(0, 64));
+  const referenceIdRaw = rawReferenceId.slice(0, 64);
+  const providerLabel = escapeHtml(provider);
+  const currency = SUPPORTED_CURRENCIES.has(rawCurrency.toUpperCase())
+    ? rawCurrency.toUpperCase()
+    : 'CHF';
+  const amountFormatted = (Number(rawAmount) / 100).toFixed(2);
 
   const toSameOriginPath = (raw: string | null): string | null => {
-    if (!raw) return null
+    if (!raw) return null;
     try {
-      const u = new URL(raw, APP_URL)
-      return u.origin === new URL(APP_URL).origin ? u.pathname + u.search : null
+      const u = new URL(raw, APP_URL);
+      return u.origin === new URL(APP_URL).origin ? u.pathname + u.search : null;
     } catch {
-      return null
+      return null;
     }
-  }
-  const successUrl = sanitizeReturnTo(toSameOriginPath(searchParams.get('successUrl')), '/')
-  const cancelUrl = sanitizeReturnTo(toSameOriginPath(searchParams.get('cancelUrl')), '/')
+  };
+  const successUrl = sanitizeReturnTo(toSameOriginPath(searchParams.get('successUrl')), '/');
+  const cancelUrl = sanitizeReturnTo(toSameOriginPath(searchParams.get('cancelUrl')), '/');
 
-  const webhookUrl = `${APP_URL}/api/payments/webhook/${provider}`
+  const webhookUrl = `${APP_URL}/api/payments/webhook/${provider}`;
 
   const html = `<!DOCTYPE html>
 <html lang="de">
@@ -135,11 +137,15 @@ export async function GET(request: NextRequest) {
     }
   </script>
 </body>
-</html>`
+</html>`;
 
-  logger.info('Mock payment page rendered', { provider, referenceId: referenceIdRaw, amount: rawAmount })
+  logger.info('Mock payment page rendered', {
+    provider,
+    referenceId: referenceIdRaw,
+    amount: rawAmount,
+  });
 
   return new NextResponse(html, {
     headers: { 'Content-Type': 'text/html; charset=utf-8' },
-  })
+  });
 }

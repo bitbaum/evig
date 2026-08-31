@@ -1,21 +1,21 @@
-'use client'
+'use client';
 
-import { cn } from '@/lib/utils'
-import { ROLES, type UserRole } from '@/lib/constants'
-import type { OnboardingChecklistState } from '@/lib/domain/onboarding'
-import { CheckCircle, Circle } from 'lucide-react'
+import { cn } from '@/lib/utils';
+import { ROLES, type UserRole } from '@/lib/constants';
+import type { OnboardingChecklistState } from '@/lib/domain/onboarding';
+import { CheckCircle, Circle } from 'lucide-react';
 
 interface Step {
-  label: string
-  done: boolean
-  href?: string
+  label: string;
+  done: boolean;
+  href?: string;
 }
 
 interface OnboardingChecklistProps extends OnboardingChecklistState {
-  role: UserRole
+  role: UserRole;
   /** Where the "complete your team profile" staff step links to. */
-  teamProfileHref?: string
-  className?: string
+  teamProfileHref?: string;
+  className?: string;
 }
 
 /** Shared card — renders the remaining steps, or nothing when all are done. */
@@ -24,13 +24,13 @@ function ChecklistCard({
   title = 'Erste Schritte',
   className,
 }: {
-  steps: Step[]
-  title?: string
-  className?: string
+  steps: Step[];
+  title?: string;
+  className?: string;
 }) {
-  const allDone = steps.every((s) => s.done)
-  if (allDone) return null
-  const remaining = steps.filter((s) => !s.done).length
+  const allDone = steps.every((s) => s.done);
+  if (allDone) return null;
+  const remaining = steps.filter((s) => !s.done).length;
 
   return (
     <div className={cn('card-shell p-4', className)}>
@@ -61,7 +61,7 @@ function ChecklistCard({
         ))}
       </ul>
     </div>
-  )
+  );
 }
 
 export function OnboardingChecklist({
@@ -83,40 +83,48 @@ export function OnboardingChecklist({
   if (isStaff) {
     const staffSteps: Step[] = [
       { label: 'E-Mail-Adresse bestätigen', done: emailVerified, href: '/dashboard/profile' },
-      { label: 'Arbeitsplan hinterlegen (für Zeiterfassung)', done: scheduleSet, href: '/admin/zeiterfassung' },
-      { label: 'Team-Profil ausfüllen (Skills, Ziele)', done: teamProfileComplete, href: teamProfileHref },
-    ]
-    return <ChecklistCard steps={staffSteps} className={className} title="Willkommen im Team" />
+      {
+        label: 'Arbeitsplan hinterlegen (für Zeiterfassung)',
+        done: scheduleSet,
+        href: '/admin/zeiterfassung',
+      },
+      {
+        label: 'Team-Profil ausfüllen (Skills, Ziele)',
+        done: teamProfileComplete,
+        href: teamProfileHref,
+      },
+    ];
+    return <ChecklistCard steps={staffSteps} className={className} title="Willkommen im Team" />;
   }
 
   const steps: Step[] = [
     { label: 'E-Mail-Adresse bestätigen', done: emailVerified, href: '/dashboard/profile' },
     { label: 'Profil vervollständigen', done: profileComplete, href: '/dashboard/profile' },
-  ]
+  ];
 
   if (role === ROLES.SELLER) {
     steps.push({
       label: 'Seller-Profil eingerichtet',
       done: sellerProfileSetup,
       href: '/dashboard/seller',
-    })
+    });
     steps.push({
       label: 'Erstes Produkt inserieren',
       done: hasListing,
       href: '/dashboard/seller',
-    })
+    });
   } else if (role === ROLES.REPAIRER) {
     steps.push({
       label: 'Techniker-Profil eingerichtet',
       done: repairerProfileSetup,
       href: '/dashboard/techniker',
-    })
+    });
     steps.push({
       label: 'Erste Dienstleistung publizieren',
       done: hasPublishedService,
       href: '/dashboard/techniker',
-    })
+    });
   }
 
-  return <ChecklistCard steps={steps} className={className} />
+  return <ChecklistCard steps={steps} className={className} />;
 }

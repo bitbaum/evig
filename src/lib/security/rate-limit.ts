@@ -9,8 +9,8 @@ import { logger } from '@/lib/logger';
  * default protection — and stops the file from reading like a wall of
  * unrelated `60 * 60 * 1000` literals.
  */
-const ONE_HOUR_MS = 60 * 60 * 1000
-const FIFTEEN_MINUTES_MS = 15 * 60 * 1000
+const ONE_HOUR_MS = 60 * 60 * 1000;
+const FIFTEEN_MINUTES_MS = 15 * 60 * 1000;
 
 /**
  * Creates a rate limiter using LRU cache
@@ -22,7 +22,7 @@ const FIFTEEN_MINUTES_MS = 15 * 60 * 1000
 export function createRateLimiter(interval: number, maxRequests: number) {
   const cache = new LRUCache<string, number>({
     max: 500, // Max number of unique identifiers to track
-    ttl: interval // Time-to-live matches the interval
+    ttl: interval, // Time-to-live matches the interval
   });
 
   return (identifier: string): boolean => {
@@ -33,7 +33,7 @@ export function createRateLimiter(interval: number, maxRequests: number) {
         identifier,
         count,
         maxRequests,
-        interval
+        interval,
       });
       return false;
     }
@@ -127,7 +127,7 @@ export const rateLimiters = {
   hirnChatStaff: createRateLimiter(ONE_HOUR_MS, 60),
 
   // General API: 100 requests per 15 minutes per IP
-  apiGeneral: createRateLimiter(FIFTEEN_MINUTES_MS, 100)
+  apiGeneral: createRateLimiter(FIFTEEN_MINUTES_MS, 100),
 };
 
 /**

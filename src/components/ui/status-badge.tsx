@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import { HTMLAttributes, forwardRef } from 'react'
-import { cn } from '@/lib/utils'
+import { HTMLAttributes, forwardRef } from 'react';
+import { cn } from '@/lib/utils';
 
-export type StatusVariant = 'warning' | 'error' | 'success' | 'info' | 'neutral'
-export type StatusTone = 'subtle' | 'solid'
-export type StatusSize = 'sm' | 'md'
+export type StatusVariant = 'warning' | 'error' | 'success' | 'info' | 'neutral';
+export type StatusTone = 'subtle' | 'solid';
+export type StatusSize = 'sm' | 'md';
 
 interface StatusBadgeProps extends HTMLAttributes<HTMLSpanElement> {
-  variant: StatusVariant
-  tone?: StatusTone
-  size?: StatusSize
+  variant: StatusVariant;
+  tone?: StatusTone;
+  size?: StatusSize;
 }
 
 const TONE_CLASSES: Record<StatusVariant, Record<StatusTone, string>> = {
@@ -34,12 +34,12 @@ const TONE_CLASSES: Record<StatusVariant, Record<StatusTone, string>> = {
     subtle: 'bg-surface-raised text-text-secondary',
     solid: 'bg-surface-overlay text-text-primary',
   },
-}
+};
 
 const SIZE_CLASSES: Record<StatusSize, string> = {
   sm: 'px-2 py-0.5 text-xs',
   md: 'px-2.5 py-1 text-sm',
-}
+};
 
 export const StatusBadge = forwardRef<HTMLSpanElement, StatusBadgeProps>(
   ({ variant, tone = 'solid', size = 'sm', className, ...props }, ref) => (
@@ -54,5 +54,5 @@ export const StatusBadge = forwardRef<HTMLSpanElement, StatusBadgeProps>(
       {...props}
     />
   ),
-)
-StatusBadge.displayName = 'StatusBadge'
+);
+StatusBadge.displayName = 'StatusBadge';

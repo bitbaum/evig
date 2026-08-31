@@ -5,9 +5,9 @@
  * Professional (vetted application): visible when active + verified + status active.
  */
 
-import { and, eq, or, type SQL } from 'drizzle-orm'
-import { repairerProfiles, userProfiles } from '@/db/schema'
-import { REPAIRER_PROFILE_TIER, REPAIRER_STATUS } from '@/config/repairer-status'
+import { and, eq, or, type SQL } from 'drizzle-orm';
+import { repairerProfiles, userProfiles } from '@/db/schema';
+import { REPAIRER_PROFILE_TIER, REPAIRER_STATUS } from '@/config/repairer-status';
 
 // NOTE — `is_verified` is per-PERSON identity, owned by user_profiles (Profiles
 // SSOT). Every query using these conditions MUST
@@ -27,7 +27,7 @@ export function publicTechnicianListCondition(): SQL {
       eq(repairerProfiles.profileTier, REPAIRER_PROFILE_TIER.PROFESSIONAL),
       eq(repairerProfiles.status, REPAIRER_STATUS.ACTIVE),
     ),
-  )!
+  )!;
 }
 
 export function technicianListConditionsForTier(tier: string): SQL[] {
@@ -35,7 +35,7 @@ export function technicianListConditionsForTier(tier: string): SQL[] {
     return [
       eq(repairerProfiles.isActive, true),
       eq(repairerProfiles.profileTier, REPAIRER_PROFILE_TIER.COMMUNITY),
-    ]
+    ];
   }
   if (tier === REPAIRER_PROFILE_TIER.PROFESSIONAL) {
     return [
@@ -43,23 +43,23 @@ export function technicianListConditionsForTier(tier: string): SQL[] {
       eq(repairerProfiles.profileTier, REPAIRER_PROFILE_TIER.PROFESSIONAL),
       eq(userProfiles.isVerified, true),
       eq(repairerProfiles.status, REPAIRER_STATUS.ACTIVE),
-    ]
+    ];
   }
-  return [publicTechnicianListCondition()]
+  return [publicTechnicianListCondition()];
 }
 
 /** Direct request from /it-hilfe/techniker/[id] or ?technician= — same rules as public list. */
 export function canAcceptDirectItHilfeRequest(profile: {
-  isActive: boolean | null
-  profileTier: string | null
-  isVerified: boolean | null
-  status: string | null
+  isActive: boolean | null;
+  profileTier: string | null;
+  isVerified: boolean | null;
+  status: string | null;
 }): boolean {
-  if (!profile.isActive) return false
-  if (profile.profileTier === REPAIRER_PROFILE_TIER.COMMUNITY) return true
+  if (!profile.isActive) return false;
+  if (profile.profileTier === REPAIRER_PROFILE_TIER.COMMUNITY) return true;
   return (
     profile.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL &&
     profile.isVerified === true &&
     profile.status === REPAIRER_STATUS.ACTIVE
-  )
+  );
 }

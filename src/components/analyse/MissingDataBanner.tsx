@@ -1,11 +1,11 @@
-'use client'
+'use client';
 
-import { AlertCircle, Database } from 'lucide-react'
-import type { MetricDefinition } from '@/config/analyse/metrics'
+import { AlertCircle, Database } from 'lucide-react';
+import type { MetricDefinition } from '@/config/analyse/metrics';
 
 interface MissingDataBannerProps {
-  metrics: MetricDefinition[]
-  compact?: boolean
+  metrics: MetricDefinition[];
+  compact?: boolean;
 }
 
 /**
@@ -13,16 +13,16 @@ interface MissingDataBannerProps {
  * Groups missing metrics by responsible team.
  */
 export function MissingDataBanner({ metrics, compact = false }: MissingDataBannerProps) {
-  if (metrics.length === 0) return null
+  if (metrics.length === 0) return null;
 
   // Group by responsible team
-  const byTeam: Record<string, MetricDefinition[]> = {}
+  const byTeam: Record<string, MetricDefinition[]> = {};
   for (const metric of metrics) {
-    const team = metric.responsibleTeam || 'Unbekannt'
+    const team = metric.responsibleTeam || 'Unbekannt';
     if (!byTeam[team]) {
-      byTeam[team] = []
+      byTeam[team] = [];
     }
-    byTeam[team].push(metric)
+    byTeam[team].push(metric);
   }
 
   if (compact) {
@@ -35,7 +35,7 @@ export function MissingDataBanner({ metrics, compact = false }: MissingDataBanne
           </span>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -52,7 +52,7 @@ export function MissingDataBanner({ metrics, compact = false }: MissingDataBanne
               {team}
             </div>
             <ul className="space-y-2">
-              {teamMetrics.map(metric => (
+              {teamMetrics.map((metric) => (
                 <li
                   key={metric.id}
                   className="flex items-start gap-2 text-sm text-warning-700 dark:text-warning-300"
@@ -62,7 +62,8 @@ export function MissingDataBanner({ metrics, compact = false }: MissingDataBanne
                     <span className="font-medium">{metric.name}</span>
                     {metric.dataNeeded && (
                       <span className="text-warning-600 dark:text-warning-400">
-                        {' '}— {metric.dataNeeded}
+                        {' '}
+                        — {metric.dataNeeded}
                       </span>
                     )}
                   </div>
@@ -73,11 +74,11 @@ export function MissingDataBanner({ metrics, compact = false }: MissingDataBanne
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 interface SingleMissingDataProps {
-  metric: MetricDefinition
+  metric: MetricDefinition;
 }
 
 /**
@@ -90,9 +91,7 @@ export function MissingDataIndicator({ metric }: SingleMissingDataProps) {
       <div className="text-sm">
         <span className="font-medium">Daten benötigt</span>
         {metric.dataNeeded && (
-          <span className="block text-xs text-warning-500">
-            {metric.dataNeeded}
-          </span>
+          <span className="block text-xs text-warning-500">{metric.dataNeeded}</span>
         )}
         {metric.responsibleTeam && (
           <span className="block text-xs text-warning-500">
@@ -101,5 +100,5 @@ export function MissingDataIndicator({ metric }: SingleMissingDataProps) {
         )}
       </div>
     </div>
-  )
+  );
 }

@@ -1,27 +1,27 @@
-import { NextRequest } from 'next/server'
-import { withAdmin } from '@/lib/api/middleware'
-import { db } from '@/db'
-import { refunds, paymentTransactions, users } from '@/db/schema'
-import { eq, sql, desc } from 'drizzle-orm'
-import { alias } from 'drizzle-orm/pg-core'
-import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers'
-import { logger } from '@/lib/logger'
+import { NextRequest } from 'next/server';
+import { withAdmin } from '@/lib/api/middleware';
+import { db } from '@/db';
+import { refunds, paymentTransactions, users } from '@/db/schema';
+import { eq, sql, desc } from 'drizzle-orm';
+import { alias } from 'drizzle-orm/pg-core';
+import { apiError, apiSuccess, parsePagination } from '@/lib/api/helpers';
+import { logger } from '@/lib/logger';
 
-const approvedByUser = alias(users, 'approved_by_user')
-const requestedByUser = alias(users, 'requested_by_user')
+const approvedByUser = alias(users, 'approved_by_user');
+const requestedByUser = alias(users, 'requested_by_user');
 
 // GET /api/admin/refunds - List all refunds for admin review
 export const GET = withAdmin('finanzen', async (request: NextRequest) => {
   try {
-    const { searchParams } = new URL(request.url)
-    const status = searchParams.get('status')
-    const { limit, offset } = parsePagination(request, { defaultLimit: 20 })
+    const { searchParams } = new URL(request.url);
+    const status = searchParams.get('status');
+    const { limit, offset } = parsePagination(request, { defaultLimit: 20 });
 
-    const conditions = []
+    const conditions = [];
     if (status) {
-      conditions.push(eq(refunds.status, status))
+      conditions.push(eq(refunds.status, status));
     }
-    const where = conditions.length > 0 ? conditions[0] : undefined
+    const where = conditions.length > 0 ? conditions[0] : undefined;
 
     // Get refunds with related data + total count (parallel — independent queries)
     const [refundRows, [countRow]] = await Promise.all([
@@ -64,17 +64,16 @@ export const GET = withAdmin('finanzen', async (request: NextRequest) => {
         .select({ total: sql<number>`count(*)::int` })
         .from(refunds)
         .where(where),
-    ])
+    ]);
 
     return apiSuccess({
       refunds: refundRows,
       total: countRow?.total ?? 0,
       limit,
-      offset
-    })
-
+      offset,
+    });
   } catch (error) {
-    logger.error('List admin refunds error', { error })
-    return apiError(error, 'Failed to retrieve refunds')
+    logger.error('List admin refunds error', { error });
+    return apiError(error, 'Failed to retrieve refunds');
   }
-})
+});

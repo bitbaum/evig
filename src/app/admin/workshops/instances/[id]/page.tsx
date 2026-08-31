@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import { use } from 'react'
-import { adminTable } from '@/lib/admin-ui'
-import Link from 'next/link'
+import { use } from 'react';
+import { adminTable } from '@/lib/admin-ui';
+import Link from 'next/link';
 import {
   Calendar,
   ArrowLeft,
@@ -17,9 +17,9 @@ import {
   User,
   DollarSign,
   Star,
-  MessageSquare
-} from 'lucide-react'
-import { formatDateShort, formatDateTimeWithWeekday } from '@/lib/date-formats'
+  MessageSquare,
+} from 'lucide-react';
+import { formatDateShort, formatDateTimeWithWeekday } from '@/lib/date-formats';
 import {
   WORKSHOP_REGISTRATION_STATUS,
   WORKSHOP_REGISTRATION_STATUS_LABELS,
@@ -27,48 +27,56 @@ import {
   WORKSHOP_PAYMENT_STATUS,
   WORKSHOP_PAYMENT_STATUS_LABELS,
   WORKSHOP_PAYMENT_STATUS_COLORS,
-} from '@/config/workshop-registration-status'
-import { WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
-import Heading from '@/components/admin/AdminHeading'
-import { Button } from '@/components/ui/button'
-import { useAdminWorkshopInstance } from '@/hooks/useAdminWorkshopInstance'
-import { ROUTES } from '@/config/routes'
+} from '@/config/workshop-registration-status';
+import { WORKSHOP_INSTANCE_STATUS } from '@/config/workshops';
+import Heading from '@/components/admin/AdminHeading';
+import { Button } from '@/components/ui/button';
+import { useAdminWorkshopInstance } from '@/hooks/useAdminWorkshopInstance';
+import { ROUTES } from '@/config/routes';
 
 function getStatusBadge(status: string) {
   return (
-    <span className={`px-2 py-1 text-xs font-medium rounded-full ${WORKSHOP_REGISTRATION_STATUS_COLORS[status] ?? 'bg-surface-raised text-text-primary'}`}>
+    <span
+      className={`px-2 py-1 text-xs font-medium rounded-full ${WORKSHOP_REGISTRATION_STATUS_COLORS[status] ?? 'bg-surface-raised text-text-primary'}`}
+    >
       {WORKSHOP_REGISTRATION_STATUS_LABELS[status] ?? status}
     </span>
-  )
+  );
 }
 
 function getPaymentBadge(paymentStatus: string) {
   return (
-    <span className={`px-2 py-1 text-xs font-medium rounded-full ${WORKSHOP_PAYMENT_STATUS_COLORS[paymentStatus] ?? 'bg-surface-raised text-text-primary'}`}>
+    <span
+      className={`px-2 py-1 text-xs font-medium rounded-full ${WORKSHOP_PAYMENT_STATUS_COLORS[paymentStatus] ?? 'bg-surface-raised text-text-primary'}`}
+    >
       {WORKSHOP_PAYMENT_STATUS_LABELS[paymentStatus] ?? paymentStatus}
     </span>
-  )
+  );
 }
 
 export default function AdminWorkshopInstanceDetailPage({
-  params
+  params,
 }: {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = use(params)
+  const { id } = use(params);
 
   const {
-    sessionStatus, instance, registrations,
-    loading, error, isPast,
+    sessionStatus,
+    instance,
+    registrations,
+    loading,
+    error,
+    isPast,
     updateRegistrationStatus,
-  } = useAdminWorkshopInstance(id)
+  } = useAdminWorkshopInstance(id);
 
   if (sessionStatus === 'loading' || loading) {
     return (
       <div className="min-h-screen bg-surface-raised flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-action" />
       </div>
-    )
+    );
   }
 
   if (error || !instance) {
@@ -87,23 +95,32 @@ export default function AdminWorkshopInstanceDetailPage({
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   const confirmedCount = registrations.filter(
-    r => r.status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED || r.status === WORKSHOP_REGISTRATION_STATUS.ATTENDED
-  ).length
-  const pendingCount = registrations.filter(r => r.status === WORKSHOP_REGISTRATION_STATUS.PENDING).length
-  const cancelledCount = registrations.filter(r => r.status === WORKSHOP_REGISTRATION_STATUS.CANCELLED).length
+    (r) =>
+      r.status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED ||
+      r.status === WORKSHOP_REGISTRATION_STATUS.ATTENDED,
+  ).length;
+  const pendingCount = registrations.filter(
+    (r) => r.status === WORKSHOP_REGISTRATION_STATUS.PENDING,
+  ).length;
+  const cancelledCount = registrations.filter(
+    (r) => r.status === WORKSHOP_REGISTRATION_STATUS.CANCELLED,
+  ).length;
   const revenueChf = (
     registrations
-      .filter(r => r.payment_status === WORKSHOP_PAYMENT_STATUS.PAID && r.payment_amount_cents)
+      .filter((r) => r.payment_status === WORKSHOP_PAYMENT_STATUS.PAID && r.payment_amount_cents)
       .reduce((sum, r) => sum + (r.payment_amount_cents || 0), 0) / 100
-  ).toFixed(0)
+  ).toFixed(0);
 
-  const displayStatus = instance.status === WORKSHOP_INSTANCE_STATUS.SCHEDULED
-    ? (isPast ? WORKSHOP_INSTANCE_STATUS.COMPLETED : WORKSHOP_INSTANCE_STATUS.SCHEDULED)
-    : instance.status
+  const displayStatus =
+    instance.status === WORKSHOP_INSTANCE_STATUS.SCHEDULED
+      ? isPast
+        ? WORKSHOP_INSTANCE_STATUS.COMPLETED
+        : WORKSHOP_INSTANCE_STATUS.SCHEDULED
+      : instance.status;
 
   return (
     <div className="min-h-screen bg-surface-raised">
@@ -121,7 +138,9 @@ export default function AdminWorkshopInstanceDetailPage({
             <div>
               <div className="flex items-center gap-3">
                 <GraduationCap className="w-8 h-8 text-action" />
-                <Heading level={1} className="text-2xl font-bold text-text-primary">{instance.workshop_title}</Heading>
+                <Heading level={1} className="text-2xl font-bold text-text-primary">
+                  {instance.workshop_title}
+                </Heading>
               </div>
               <div className="mt-2 flex flex-wrap items-center gap-4 text-sm text-text-secondary">
                 <div className="flex items-center gap-1">
@@ -217,20 +236,36 @@ export default function AdminWorkshopInstanceDetailPage({
           {registrations.length === 0 ? (
             <div className="px-6 py-12 text-center">
               <Users className="w-12 h-12 text-text-muted mx-auto mb-4" />
-              <Heading level={3} className="text-lg font-medium text-text-primary mb-2">Noch keine Anmeldungen</Heading>
-              <p className="text-text-secondary">Sobald sich jemand anmeldet, erscheinen die Daten hier.</p>
+              <Heading level={3} className="text-lg font-medium text-text-primary mb-2">
+                Noch keine Anmeldungen
+              </Heading>
+              <p className="text-text-secondary">
+                Sobald sich jemand anmeldet, erscheinen die Daten hier.
+              </p>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead className="bg-surface-raised">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase">Teilnehmer</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase">Zahlung</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase">Angemeldet</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase">Feedback</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase">Aktionen</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase">
+                      Teilnehmer
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase">
+                      Status
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase">
+                      Zahlung
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase">
+                      Angemeldet
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase">
+                      Feedback
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-text-tertiary uppercase">
+                      Aktionen
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-neutral-200">
@@ -242,7 +277,12 @@ export default function AdminWorkshopInstanceDetailPage({
                             <User className="w-5 h-5 text-text-secondary" />
                           </div>
                           <div className="ml-4">
-                            <Link href={ROUTES.admin.user(reg.user_id)} className="text-sm font-medium text-action hover:underline">{reg.user_name}</Link>
+                            <Link
+                              href={ROUTES.admin.user(reg.user_id)}
+                              className="text-sm font-medium text-action hover:underline"
+                            >
+                              {reg.user_name}
+                            </Link>
                             <div className="text-sm text-text-tertiary flex items-center gap-1">
                               <Mail className="w-3 h-3" />
                               {reg.user_email}
@@ -285,7 +325,12 @@ export default function AdminWorkshopInstanceDetailPage({
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => updateRegistrationStatus(reg.id, WORKSHOP_REGISTRATION_STATUS.CONFIRMED)}
+                                onClick={() =>
+                                  updateRegistrationStatus(
+                                    reg.id,
+                                    WORKSHOP_REGISTRATION_STATUS.CONFIRMED,
+                                  )
+                                }
                                 className="text-action hover:text-action text-sm"
                               >
                                 Bestätigen
@@ -293,7 +338,12 @@ export default function AdminWorkshopInstanceDetailPage({
                               <Button
                                 variant="destructive-ghost"
                                 size="sm"
-                                onClick={() => updateRegistrationStatus(reg.id, WORKSHOP_REGISTRATION_STATUS.CANCELLED)}
+                                onClick={() =>
+                                  updateRegistrationStatus(
+                                    reg.id,
+                                    WORKSHOP_REGISTRATION_STATUS.CANCELLED,
+                                  )
+                                }
                                 className="text-error-600 hover:text-error-800 text-sm"
                               >
                                 Absagen
@@ -305,7 +355,12 @@ export default function AdminWorkshopInstanceDetailPage({
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => updateRegistrationStatus(reg.id, WORKSHOP_REGISTRATION_STATUS.ATTENDED)}
+                                onClick={() =>
+                                  updateRegistrationStatus(
+                                    reg.id,
+                                    WORKSHOP_REGISTRATION_STATUS.ATTENDED,
+                                  )
+                                }
                                 className="text-action hover:text-action text-sm"
                               >
                                 Teilgenommen
@@ -313,7 +368,12 @@ export default function AdminWorkshopInstanceDetailPage({
                               <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => updateRegistrationStatus(reg.id, WORKSHOP_REGISTRATION_STATUS.NO_SHOW)}
+                                onClick={() =>
+                                  updateRegistrationStatus(
+                                    reg.id,
+                                    WORKSHOP_REGISTRATION_STATUS.NO_SHOW,
+                                  )
+                                }
                                 className="text-text-secondary hover:text-text-primary text-sm"
                               >
                                 Nicht erschienen
@@ -332,11 +392,13 @@ export default function AdminWorkshopInstanceDetailPage({
 
         {instance.notes && (
           <div className="mt-8 bg-surface-base rounded-xl shadow-xs border p-6">
-            <Heading level={3} className="text-lg font-semibold text-text-primary mb-2">Interne Notizen</Heading>
+            <Heading level={3} className="text-lg font-semibold text-text-primary mb-2">
+              Interne Notizen
+            </Heading>
             <p className="text-text-secondary">{instance.notes}</p>
           </div>
         )}
       </div>
     </div>
-  )
+  );
 }

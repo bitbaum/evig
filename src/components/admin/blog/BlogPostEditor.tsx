@@ -1,24 +1,32 @@
-import { Card } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { RichTextEditor } from './RichTextEditor'
-import type { EditorDoc } from './types'
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { RichTextEditor } from './RichTextEditor';
+import type { EditorDoc } from './types';
 
 interface Props {
   /** True when editing the German base; false when editing a translation. */
-  isBase: boolean
+  isBase: boolean;
   /** Active locale being edited (for translation hints). */
-  locale: string
+  locale: string;
   /** The document currently under edit — base fields or a translation draft. */
-  doc: EditorDoc
+  doc: EditorDoc;
   /** Locale-independent slug (only editable on the base). */
-  slug: string
-  onDocChange: (patch: Partial<EditorDoc>) => void
-  onTitleChange: (title: string) => void
-  onSlugChange: (slug: string) => void
+  slug: string;
+  onDocChange: (patch: Partial<EditorDoc>) => void;
+  onTitleChange: (title: string) => void;
+  onSlugChange: (slug: string) => void;
 }
 
-export function BlogPostEditor({ isBase, locale, doc, slug, onDocChange, onTitleChange, onSlugChange }: Props) {
+export function BlogPostEditor({
+  isBase,
+  locale,
+  doc,
+  slug,
+  onDocChange,
+  onTitleChange,
+  onSlugChange,
+}: Props) {
   return (
     <div className="lg:col-span-2 space-y-6">
       {!isBase && (
@@ -32,9 +40,7 @@ export function BlogPostEditor({ isBase, locale, doc, slug, onDocChange, onTitle
       <Card className="p-6">
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-text-secondary mb-2">
-              Titel *
-            </label>
+            <label className="block text-sm font-medium text-text-secondary mb-2">Titel *</label>
             <Input
               type="text"
               value={doc.title}
@@ -47,9 +53,7 @@ export function BlogPostEditor({ isBase, locale, doc, slug, onDocChange, onTitle
           {/* Slug is locale-independent — only edited on the base document. */}
           {isBase && (
             <div>
-              <label className="block text-sm font-medium text-text-secondary mb-2">
-                URL-Slug
-              </label>
+              <label className="block text-sm font-medium text-text-secondary mb-2">URL-Slug</label>
               <div className="flex items-center">
                 <span className="text-text-tertiary text-sm mr-2">/blog/</span>
                 <Input
@@ -82,9 +86,7 @@ export function BlogPostEditor({ isBase, locale, doc, slug, onDocChange, onTitle
 
       {/* Content — WYSIWYG (author sees real formatting; stored as Markdown) */}
       <Card className="p-6">
-        <label className="block text-sm font-medium text-text-secondary mb-2">
-          Inhalt *
-        </label>
+        <label className="block text-sm font-medium text-text-secondary mb-2">Inhalt *</label>
         <RichTextEditor
           value={doc.content}
           onChange={(content) => onDocChange({ content })}
@@ -92,5 +94,5 @@ export function BlogPostEditor({ isBase, locale, doc, slug, onDocChange, onTitle
         />
       </Card>
     </div>
-  )
+  );
 }

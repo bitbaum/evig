@@ -1,19 +1,19 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Camera, X, Loader2 } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { FILE_SIZE_LIMITS } from '@/config/limits'
-import { logger } from '@/lib/logger'
-import { apiFetch } from '@/lib/api/client'
-import { Button } from '@/components/ui/button'
-import Heading from '@/components/ui/Heading'
+import { useState } from 'react';
+import { Camera, X, Loader2 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { FILE_SIZE_LIMITS } from '@/config/limits';
+import { logger } from '@/lib/logger';
+import { apiFetch } from '@/lib/api/client';
+import { Button } from '@/components/ui/button';
+import Heading from '@/components/ui/Heading';
 
 interface ITHilfeImageUploadProps {
-  imageUrls: string[]
-  onImagesChange: (urls: string[]) => void
-  maxImages?: number
-  onError?: (message: string) => void
+  imageUrls: string[];
+  onImagesChange: (urls: string[]) => void;
+  maxImages?: number;
+  onError?: (message: string) => void;
 }
 
 export function ITHilfeImageUpload({
@@ -22,73 +22,73 @@ export function ITHilfeImageUpload({
   maxImages = 5,
   onError,
 }: ITHilfeImageUploadProps) {
-  const t = useTranslations('itHelp.imageUpload')
-  const [uploading, setUploading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const t = useTranslations('itHelp.imageUpload');
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const reportError = (message: string) => {
-    setError(message)
-    onError?.(message)
-  }
+    setError(message);
+    onError?.(message);
+  };
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files
-    if (!files || files.length === 0) return
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
 
     // Validate before upload
-    const remaining = maxImages - imageUrls.length
-    if (remaining <= 0) return
+    const remaining = maxImages - imageUrls.length;
+    if (remaining <= 0) return;
 
-    const filesToUpload = Array.from(files).slice(0, remaining)
+    const filesToUpload = Array.from(files).slice(0, remaining);
     for (const file of filesToUpload) {
       if (!file.type.startsWith('image/')) {
-        reportError(t('errorImageOnly'))
-        return
+        reportError(t('errorImageOnly'));
+        return;
       }
       if (file.size > FILE_SIZE_LIMITS.UPLOAD_MAX) {
-        reportError(t('errorTooLarge'))
-        return
+        reportError(t('errorTooLarge'));
+        return;
       }
     }
 
-    setUploading(true)
+    setUploading(true);
     try {
-      const formData = new FormData()
-      filesToUpload.forEach((file) => formData.append('files', file))
+      const formData = new FormData();
+      filesToUpload.forEach((file) => formData.append('files', file));
 
       const { data, error: apiError } = await apiFetch<{ urls: string[] }>('/api/uploads', {
         method: 'POST',
         body: formData,
         formData: true,
-      })
+      });
 
       if (apiError) {
-        throw new Error(apiError)
+        throw new Error(apiError);
       }
 
-      const newUrls = data?.urls || []
-      onImagesChange([...imageUrls, ...newUrls])
+      const newUrls = data?.urls || [];
+      onImagesChange([...imageUrls, ...newUrls]);
     } catch (err) {
-      logger.error('Image upload failed', { error: err })
-      reportError(t('errorUploadFailed'))
+      logger.error('Image upload failed', { error: err });
+      reportError(t('errorUploadFailed'));
     } finally {
-      setUploading(false)
+      setUploading(false);
       // Reset input so same file can be re-selected
-      e.target.value = ''
+      e.target.value = '';
     }
-  }
+  };
 
   const handleRemove = (index: number) => {
-    onImagesChange(imageUrls.filter((_, i) => i !== index))
-  }
+    onImagesChange(imageUrls.filter((_, i) => i !== index));
+  };
 
   return (
     <div className="card-shell p-6">
-      <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">{t('heading')}</Heading>
+      <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">
+        {t('heading')}
+      </Heading>
 
-      {error && (
-        <p className="text-sm text-error-600 mb-3">{error}</p>
-      )}
+      {error && <p className="text-sm text-error-600 mb-3">{error}</p>}
 
       {imageUrls.length < maxImages && (
         <div className="border-2 border-dashed border-default rounded-lg p-6 text-center mb-4">
@@ -141,5 +141,5 @@ export function ITHilfeImageUpload({
         </div>
       )}
     </div>
-  )
+  );
 }

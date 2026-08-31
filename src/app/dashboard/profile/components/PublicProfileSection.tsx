@@ -1,21 +1,21 @@
-'use client'
+'use client';
 
-import { Globe, Lock } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import Heading from '@/components/ui/Heading'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { useTranslations } from 'next-intl'
-import type { ProfileData } from '../hooks/useProfileData'
+import { Globe, Lock } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import Heading from '@/components/ui/Heading';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { useTranslations } from 'next-intl';
+import type { ProfileData } from '../hooks/useProfileData';
 
 interface PublicProfileSectionProps {
-  profile: ProfileData
-  handleChange: (field: keyof ProfileData, value: string | boolean) => void
+  profile: ProfileData;
+  handleChange: (field: keyof ProfileData, value: string | boolean) => void;
 }
 
 export function PublicProfileSection({ profile, handleChange }: PublicProfileSectionProps) {
-  const t = useTranslations('dashboard.profile.publicProfile')
+  const t = useTranslations('dashboard.profile.publicProfile');
 
   return (
     <Card className="p-6">
@@ -26,7 +26,10 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
       <div className="space-y-6">
         {/* Display Name */}
         <div>
-          <label htmlFor="display_name" className="block text-sm font-medium text-text-secondary mb-2">
+          <label
+            htmlFor="display_name"
+            className="block text-sm font-medium text-text-secondary mb-2"
+          >
             {t('displayName')}
           </label>
           <Input
@@ -38,9 +41,7 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
             minLength={2}
             maxLength={50}
           />
-          <p className="mt-1 text-sm text-text-tertiary">
-            {t('displayNameDescription')}
-          </p>
+          <p className="mt-1 text-sm text-text-tertiary">{t('displayNameDescription')}</p>
         </div>
 
         {/* Bio */}
@@ -57,12 +58,8 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
             rows={4}
             className="resize-none"
           />
-          <p className="mt-1 text-sm text-text-tertiary">
-            {t('bioDescription')}
-          </p>
-          <p className="mt-1 text-xs text-text-muted">
-            {profile.bio?.length || 0} / 500
-          </p>
+          <p className="mt-1 text-sm text-text-tertiary">{t('bioDescription')}</p>
+          <p className="mt-1 text-xs text-text-muted">{profile.bio?.length || 0} / 500</p>
         </div>
 
         {/* Profile Visibility */}
@@ -99,11 +96,9 @@ export function PublicProfileSection({ profile, handleChange }: PublicProfileSec
               <span className="font-medium">{t('visibilityPrivate')}</span>
             </Button>
           </div>
-          <p className="mt-2 text-sm text-text-tertiary">
-            {t('visibilityDescription')}
-          </p>
+          <p className="mt-2 text-sm text-text-tertiary">{t('visibilityDescription')}</p>
         </div>
       </div>
     </Card>
-  )
+  );
 }

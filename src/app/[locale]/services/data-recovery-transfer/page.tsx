@@ -1,5 +1,5 @@
-import { redirect } from '@/i18n/navigation'
-import { getLocale } from 'next-intl/server'
+import { redirect } from '@/i18n/navigation';
+import { getLocale } from 'next-intl/server';
 
 /**
  * Retired service — data recovery is technician work, and technicians are
@@ -7,6 +7,6 @@ import { getLocale } from 'next-intl/server'
  * the visitor still wants the same thing.
  */
 export default async function RetiredDataRecoveryService() {
-  const locale = await getLocale()
-  redirect({ href: '/it-hilfe', locale })
+  const locale = await getLocale();
+  redirect({ href: '/it-hilfe', locale });
 }

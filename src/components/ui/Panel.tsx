@@ -1,7 +1,7 @@
-import type { LucideIcon } from 'lucide-react'
-import type { ReactNode } from 'react'
-import { cn } from '@/lib/utils'
-import { designPrimitive } from '@/lib/design-system'
+import type { LucideIcon } from 'lucide-react';
+import type { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
+import { designPrimitive } from '@/lib/design-system';
 
 /**
  * Panel — a titled content surface. The SSOT for "a bordered card with a
@@ -21,21 +21,21 @@ import { designPrimitive } from '@/lib/design-system'
  */
 interface PanelProps {
   /** Panel heading. Omit for a body-only surface (prefer <Card> then). */
-  title?: ReactNode
+  title?: ReactNode;
   /** Secondary line under the title. */
-  subtitle?: ReactNode
+  subtitle?: ReactNode;
   /** Small icon rendered inline before the title. */
-  icon?: LucideIcon
+  icon?: LucideIcon;
   /** Right-aligned header slot — buttons, selects, badges. */
-  action?: ReactNode
+  action?: ReactNode;
   /** Extra classes on the panel surface (padding override, margins, etc.). */
-  className?: string
+  className?: string;
   /** Extra classes on the header row. */
-  headerClassName?: string
+  headerClassName?: string;
   /** Semantic element. Defaults to <section>. */
-  as?: 'section' | 'div'
-  id?: string
-  children?: ReactNode
+  as?: 'section' | 'div';
+  id?: string;
+  children?: ReactNode;
 }
 
 export function Panel({
@@ -49,17 +49,27 @@ export function Panel({
   id,
   children,
 }: PanelProps) {
-  const hasHeader = title != null || action != null
+  const hasHeader = title != null || action != null;
   return (
     <Tag id={id} className={cn('card-shell p-4 sm:p-5', className)}>
       {hasHeader && (
-        <div className={cn('flex items-start justify-between gap-3', children != null && 'mb-4', headerClassName)}>
+        <div
+          className={cn(
+            'flex items-start justify-between gap-3',
+            children != null && 'mb-4',
+            headerClassName,
+          )}
+        >
           <div className="flex items-start gap-2 min-w-0">
-            {Icon && <Icon className="mt-0.5 h-4 w-4 shrink-0 text-text-tertiary" aria-hidden="true" />}
+            {Icon && (
+              <Icon className="mt-0.5 h-4 w-4 shrink-0 text-text-tertiary" aria-hidden="true" />
+            )}
             {title != null && (
               <div className="min-w-0">
                 <h2 className={designPrimitive.type.panelTitle}>{title}</h2>
-                {subtitle != null && <p className="mt-0.5 text-xs text-text-tertiary">{subtitle}</p>}
+                {subtitle != null && (
+                  <p className="mt-0.5 text-xs text-text-tertiary">{subtitle}</p>
+                )}
               </div>
             )}
           </div>
@@ -68,5 +78,5 @@ export function Panel({
       )}
       {children}
     </Tag>
-  )
+  );
 }

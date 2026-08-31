@@ -24,22 +24,22 @@
  * after you've fixed everything you intend to fix in a PR.
  */
 
-import fs from 'node:fs'
-import path from 'node:path'
-import process from 'node:process'
+import fs from 'node:fs';
+import path from 'node:path';
+import process from 'node:process';
 
-const repoRoot = process.cwd()
-const updateBaseline = process.argv.includes('--update-baseline')
-const verbose = process.argv.includes('--verbose')
+const repoRoot = process.cwd();
+const updateBaseline = process.argv.includes('--update-baseline');
+const verbose = process.argv.includes('--verbose');
 
-const baselinePath = path.join(repoRoot, 'scripts', 'baselines', 'i18n-hardcoded.json')
+const baselinePath = path.join(repoRoot, 'scripts', 'baselines', 'i18n-hardcoded.json');
 
 // ============================================================================
 // Source-tree scan: German UI strings in non-message files
 // ============================================================================
 
-const SCAN_ROOTS = ['src']
-const SCAN_EXT = new Set(['.ts', '.tsx'])
+const SCAN_ROOTS = ['src'];
+const SCAN_EXT = new Set(['.ts', '.tsx']);
 const SCAN_EXCLUDE = [
   /node_modules/,
   /\.next\//,
@@ -49,7 +49,7 @@ const SCAN_EXCLUDE = [
   /\.spec\.[jt]sx?$/,
   /\/messages\//,
   /\bmessages\.[a-z]+\.json$/,
-]
+];
 
 // KNOWN BLIND SPOT (found by mutation-testing this gate, 2026-08):
 // only QUOTED string literals are scanned. A German sentence written as JSX
@@ -63,72 +63,72 @@ const SCAN_EXCLUDE = [
 //   - logger / console calls (the next-intl runtime allows German error logs)
 //   - import paths, route paths, regex patterns, comments
 // We detect these via context heuristics in the regex below.
-const GERMAN_CHAR = /[äöüÄÖÜß]/
-const COMMENT_LINE = /^\s*(\/\/|\*|\/\*)/
-const EXEMPT_MARKER = /\bi18n-ok\b/
-const STRING_LITERAL = /(['"`])((?:\\.|(?!\1)[\s\S])*?)\1/g
-const LOGGER_CALL_PREFIX = /\b(logger|console)\.\w+\s*\(\s*$/
+const GERMAN_CHAR = /[äöüÄÖÜß]/;
+const COMMENT_LINE = /^\s*(\/\/|\*|\/\*)/;
+const EXEMPT_MARKER = /\bi18n-ok\b/;
+const STRING_LITERAL = /(['"`])((?:\\.|(?!\1)[\s\S])*?)\1/g;
+const LOGGER_CALL_PREFIX = /\b(logger|console)\.\w+\s*\(\s*$/;
 
 function walk(dir, files = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    const full = path.join(dir, entry.name)
-    if (SCAN_EXCLUDE.some((rx) => rx.test(full))) continue
+    const full = path.join(dir, entry.name);
+    if (SCAN_EXCLUDE.some((rx) => rx.test(full))) continue;
     if (entry.isDirectory()) {
-      walk(full, files)
+      walk(full, files);
     } else if (entry.isFile() && SCAN_EXT.has(path.extname(entry.name))) {
-      files.push(full)
+      files.push(full);
     }
   }
-  return files
+  return files;
 }
 
 function looksLikeUiString(value) {
-  if (!value || value.length < 2) return false
-  if (!GERMAN_CHAR.test(value)) return false
+  if (!value || value.length < 2) return false;
+  if (!GERMAN_CHAR.test(value)) return false;
   // Skip path-y / identifier-y strings
-  if (/^[a-z0-9_\-./@]+$/i.test(value)) return false
-  if (/^https?:\/\//.test(value)) return false
+  if (/^[a-z0-9_\-./@]+$/i.test(value)) return false;
+  if (/^https?:\/\//.test(value)) return false;
   // Skip what's clearly an i18n key (dotted, no spaces)
-  if (/^[a-zA-Z0-9_.-]+$/.test(value) && !/\s/.test(value)) return false
-  return true
+  if (/^[a-zA-Z0-9_.-]+$/.test(value) && !/\s/.test(value)) return false;
+  return true;
 }
 
 function scanSourceFile(filePath) {
-  const src = fs.readFileSync(filePath, 'utf8')
-  const lines = src.split(/\r?\n/)
-  const findings = []
+  const src = fs.readFileSync(filePath, 'utf8');
+  const lines = src.split(/\r?\n/);
+  const findings = [];
 
   for (let i = 0; i < lines.length; i++) {
-    const line = lines[i]
-    if (COMMENT_LINE.test(line)) continue
-    if (EXEMPT_MARKER.test(line)) continue
+    const line = lines[i];
+    if (COMMENT_LINE.test(line)) continue;
+    if (EXEMPT_MARKER.test(line)) continue;
 
     // Quick-reject: skip lines that don't contain a German char at all.
-    if (!GERMAN_CHAR.test(line)) continue
+    if (!GERMAN_CHAR.test(line)) continue;
 
     // Drop logger / console call context so error messages don't trip the audit.
-    const stripped = line.replace(LOGGER_CALL_PREFIX, '/*logger*/')
-    let match
-    STRING_LITERAL.lastIndex = 0
+    const stripped = line.replace(LOGGER_CALL_PREFIX, '/*logger*/');
+    let match;
+    STRING_LITERAL.lastIndex = 0;
     while ((match = STRING_LITERAL.exec(stripped)) !== null) {
-      const value = match[2]
-      if (!looksLikeUiString(value)) continue
+      const value = match[2];
+      if (!looksLikeUiString(value)) continue;
       findings.push({
         file: path.relative(repoRoot, filePath),
         line: i + 1,
         snippet: value.length > 80 ? value.slice(0, 80) + '…' : value,
-      })
+      });
     }
   }
-  return findings
+  return findings;
 }
 
 // ============================================================================
 // Message-file scan: wrong-language values
 // ============================================================================
 
-const MESSAGES_DIR = path.join(repoRoot, 'messages')
-const LOCALES_TO_CHECK = ['it', 'fr', 'es', 'ja', 'ko', 'ru']
+const MESSAGES_DIR = path.join(repoRoot, 'messages');
+const LOCALES_TO_CHECK = ['it', 'fr', 'es', 'ja', 'ko', 'ru'];
 
 // Stop-word sets per language. If a string contains stop-words from a DIFFERENT
 // language than its locale at a higher ratio than from its own, flag it.
@@ -142,17 +142,207 @@ const LOCALES_TO_CHECK = ['it', 'fr', 'es', 'ja', 'ko', 'ru']
 // had `lo`. Every entry below is a function word; if you add one to a list,
 // check whether its siblings need it too.
 const STOP_WORDS = {
-  en: ['the', 'and', 'is', 'are', 'of', 'with', 'for', 'to', 'our', 'we', 'their', 'they', 'this', 'that', 'have', 'has', 'on', 'in', 'an', 'by',
-       'a', 'or', 'but', 'if', 'as', 'at', 'from', 'it', 'its', 'be', 'you', 'your', 'not', 'can', 'what', 'who'],
-  de: ['der', 'die', 'das', 'und', 'ist', 'sind', 'mit', 'für', 'wir', 'unser', 'unsere', 'eine', 'einen', 'durch', 'als', 'auf', 'von', 'auch', 'nicht', 'werden',
-       'in', 'zu', 'den', 'dem', 'ein', 'sich', 'oder', 'aber', 'wenn', 'wie', 'mehr', 'hat', 'haben', 'sein', 'was', 'wer', 'man', 'nur'],
-  it: ['il', 'la', 'lo', 'gli', 'le', 'di', 'che', 'è', 'sono', 'con', 'per', 'noi', 'nostro', 'nostra', 'una', 'uno', 'del', 'della', 'nel', 'nella',
-       'un', 'in', 'e', 'a', 'da', 'non', 'si', 'come', 'più', 'anche', 'ma', 'se', 'ha', 'hanno', 'essere', 'questo', 'questa', 'chi', 'o', 'ai'],
-  fr: ['le', 'la', 'les', 'de', 'des', 'et', 'est', 'sont', 'avec', 'pour', 'nous', 'notre', 'nos', 'une', 'un', 'du', 'au', 'aux', 'dans', 'sur',
-       'à', 'en', 'que', 'qui', 'ne', 'pas', 'ce', 'cette', 'ou', 'si', 'plus', 'comme', 'a', 'ont', 'être', 'par', 'son', 'se'],
-  es: ['el', 'la', 'los', 'las', 'de', 'y', 'es', 'son', 'con', 'para', 'nosotros', 'nuestro', 'nuestra', 'una', 'uno', 'del', 'al', 'en', 'por', 'sus',
-       'lo', 'a', 'que', 'quien', 'se', 'un', 'no', 'su', 'como', 'más', 'pero', 'ha', 'han', 'ser', 'este', 'esta', 'o', 'si'],
-}
+  en: [
+    'the',
+    'and',
+    'is',
+    'are',
+    'of',
+    'with',
+    'for',
+    'to',
+    'our',
+    'we',
+    'their',
+    'they',
+    'this',
+    'that',
+    'have',
+    'has',
+    'on',
+    'in',
+    'an',
+    'by',
+    'a',
+    'or',
+    'but',
+    'if',
+    'as',
+    'at',
+    'from',
+    'it',
+    'its',
+    'be',
+    'you',
+    'your',
+    'not',
+    'can',
+    'what',
+    'who',
+  ],
+  de: [
+    'der',
+    'die',
+    'das',
+    'und',
+    'ist',
+    'sind',
+    'mit',
+    'für',
+    'wir',
+    'unser',
+    'unsere',
+    'eine',
+    'einen',
+    'durch',
+    'als',
+    'auf',
+    'von',
+    'auch',
+    'nicht',
+    'werden',
+    'in',
+    'zu',
+    'den',
+    'dem',
+    'ein',
+    'sich',
+    'oder',
+    'aber',
+    'wenn',
+    'wie',
+    'mehr',
+    'hat',
+    'haben',
+    'sein',
+    'was',
+    'wer',
+    'man',
+    'nur',
+  ],
+  it: [
+    'il',
+    'la',
+    'lo',
+    'gli',
+    'le',
+    'di',
+    'che',
+    'è',
+    'sono',
+    'con',
+    'per',
+    'noi',
+    'nostro',
+    'nostra',
+    'una',
+    'uno',
+    'del',
+    'della',
+    'nel',
+    'nella',
+    'un',
+    'in',
+    'e',
+    'a',
+    'da',
+    'non',
+    'si',
+    'come',
+    'più',
+    'anche',
+    'ma',
+    'se',
+    'ha',
+    'hanno',
+    'essere',
+    'questo',
+    'questa',
+    'chi',
+    'o',
+    'ai',
+  ],
+  fr: [
+    'le',
+    'la',
+    'les',
+    'de',
+    'des',
+    'et',
+    'est',
+    'sont',
+    'avec',
+    'pour',
+    'nous',
+    'notre',
+    'nos',
+    'une',
+    'un',
+    'du',
+    'au',
+    'aux',
+    'dans',
+    'sur',
+    'à',
+    'en',
+    'que',
+    'qui',
+    'ne',
+    'pas',
+    'ce',
+    'cette',
+    'ou',
+    'si',
+    'plus',
+    'comme',
+    'a',
+    'ont',
+    'être',
+    'par',
+    'son',
+    'se',
+  ],
+  es: [
+    'el',
+    'la',
+    'los',
+    'las',
+    'de',
+    'y',
+    'es',
+    'son',
+    'con',
+    'para',
+    'nosotros',
+    'nuestro',
+    'nuestra',
+    'una',
+    'uno',
+    'del',
+    'al',
+    'en',
+    'por',
+    'sus',
+    'lo',
+    'a',
+    'que',
+    'quien',
+    'se',
+    'un',
+    'no',
+    'su',
+    'como',
+    'más',
+    'pero',
+    'ha',
+    'han',
+    'ser',
+    'este',
+    'esta',
+    'o',
+    'si',
+  ],
+};
 
 /**
  * Below this many tokens the verdict is noise, not signal.
@@ -162,7 +352,7 @@ const STOP_WORDS = {
  * Guessing a language from three words is not something this check can do, so
  * it declines to instead of guessing wrong.
  */
-const MIN_TOKENS_FOR_LANGUAGE_GUESS = 6
+const MIN_TOKENS_FOR_LANGUAGE_GUESS = 6;
 
 /**
  * The only languages this check claims to detect.
@@ -186,22 +376,22 @@ const MIN_TOKENS_FOR_LANGUAGE_GUESS = 6
  * changes, the fix is a real language-identification library, not more
  * stop-words.
  */
-const LEAK_SOURCES = ['en', 'de']
+const LEAK_SOURCES = ['en', 'de'];
 
 function wordRatio(text, words) {
-  const tokens = text.toLowerCase().match(/[a-zàâäçéèêëîïôöùûüÿœñáíóúü]+/gi) || []
-  if (tokens.length === 0) return 0
-  let hits = 0
-  for (const t of tokens) if (words.includes(t)) hits++
-  return hits / tokens.length
+  const tokens = text.toLowerCase().match(/[a-zàâäçéèêëîïôöùûüÿœñáíóúü]+/gi) || [];
+  if (tokens.length === 0) return 0;
+  let hits = 0;
+  for (const t of tokens) if (words.includes(t)) hits++;
+  return hits / tokens.length;
 }
 
 function looksLikeWrongLanguage(text, locale) {
-  if (typeof text !== 'string' || text.trim().length < 12) return null
+  if (typeof text !== 'string' || text.trim().length < 12) return null;
   // Strip ICU placeholders to avoid skewing token counts
-  const cleaned = text.replace(/\{[^}]+\}/g, '')
-  const tokenCount = (cleaned.toLowerCase().match(/[a-zàâäçéèêëîïôöùûüÿœñáíóúü]+/gi) || []).length
-  if (tokenCount < MIN_TOKENS_FOR_LANGUAGE_GUESS) return null
+  const cleaned = text.replace(/\{[^}]+\}/g, '');
+  const tokenCount = (cleaned.toLowerCase().match(/[a-zàâäçéèêëîïôöùûüÿœñáíóúü]+/gi) || []).length;
+  if (tokenCount < MIN_TOKENS_FOR_LANGUAGE_GUESS) return null;
 
   // For ja/ko/ru the tokenizer only ever sees the LATIN fragments — brand
   // names, product names, a stray article. A Korean sentence containing
@@ -211,76 +401,83 @@ function looksLikeWrongLanguage(text, locale) {
   // \p{L} is required here: JavaScript's \w (and therefore [^\W\d_]) is
   // ASCII-only even under the /u flag, so Hangul, kana and Cyrillic all
   // counted as ZERO letters and this guard silently did nothing.
-  const latin = (cleaned.match(/[a-zàâäçéèêëîïôöùûüÿœñáíóúü]/gi) || []).length
-  const nonLatin = (cleaned.match(/\p{L}/gu) || []).length - latin
-  if (nonLatin > latin * 0.25) return null
-  const ownWords = STOP_WORDS[locale] || []
-  const ownRatio = wordRatio(cleaned, ownWords)
-  let bestOther = null
-  let bestRatio = 0
+  const latin = (cleaned.match(/[a-zàâäçéèêëîïôöùûüÿœñáíóúü]/gi) || []).length;
+  const nonLatin = (cleaned.match(/\p{L}/gu) || []).length - latin;
+  if (nonLatin > latin * 0.25) return null;
+  const ownWords = STOP_WORDS[locale] || [];
+  const ownRatio = wordRatio(cleaned, ownWords);
+  let bestOther = null;
+  let bestRatio = 0;
   for (const other of LEAK_SOURCES) {
-    if (other === locale) continue
-    const r = wordRatio(cleaned, STOP_WORDS[other])
+    if (other === locale) continue;
+    const r = wordRatio(cleaned, STOP_WORDS[other]);
     if (r > bestRatio) {
-      bestRatio = r
-      bestOther = other
+      bestRatio = r;
+      bestOther = other;
     }
   }
   // Flag if some other language scores noticeably higher than the target.
   if (bestRatio >= 0.15 && bestRatio > ownRatio + 0.1) {
-    return { suspectedLanguage: bestOther, ownRatio: +ownRatio.toFixed(2), otherRatio: +bestRatio.toFixed(2) }
+    return {
+      suspectedLanguage: bestOther,
+      ownRatio: +ownRatio.toFixed(2),
+      otherRatio: +bestRatio.toFixed(2),
+    };
   }
-  return null
+  return null;
 }
 
 function* walkJson(obj, trail = []) {
-  if (obj == null) return
+  if (obj == null) return;
   if (typeof obj === 'string') {
-    yield { keyPath: trail.join('.'), value: obj }
-    return
+    yield { keyPath: trail.join('.'), value: obj };
+    return;
   }
   if (Array.isArray(obj)) {
-    for (let i = 0; i < obj.length; i++) yield* walkJson(obj[i], [...trail, String(i)])
-    return
+    for (let i = 0; i < obj.length; i++) yield* walkJson(obj[i], [...trail, String(i)]);
+    return;
   }
   if (typeof obj === 'object') {
-    for (const [k, v] of Object.entries(obj)) yield* walkJson(v, [...trail, k])
+    for (const [k, v] of Object.entries(obj)) yield* walkJson(v, [...trail, k]);
   }
 }
 
 // Load DE values once for citation-detection (string identical across locales = citation).
-let _deFlatCache = null
+let _deFlatCache = null;
 function getDeFlat() {
-  if (_deFlatCache) return _deFlatCache
-  const deFile = path.join(MESSAGES_DIR, 'de.json')
-  if (!fs.existsSync(deFile)) { _deFlatCache = {}; return _deFlatCache }
-  const data = JSON.parse(fs.readFileSync(deFile, 'utf8'))
-  const out = {}
-  for (const { keyPath, value } of walkJson(data)) out[keyPath] = value
-  _deFlatCache = out
-  return out
+  if (_deFlatCache) return _deFlatCache;
+  const deFile = path.join(MESSAGES_DIR, 'de.json');
+  if (!fs.existsSync(deFile)) {
+    _deFlatCache = {};
+    return _deFlatCache;
+  }
+  const data = JSON.parse(fs.readFileSync(deFile, 'utf8'));
+  const out = {};
+  for (const { keyPath, value } of walkJson(data)) out[keyPath] = value;
+  _deFlatCache = out;
+  return out;
 }
 
 // Key-suffix conventions for fields that legitimately stay identical across locales
 // (citations, attributions, brand/product names).
-const KEY_EXEMPT_SUFFIXES = ['.source', '.citation', '.brand', '.attribution']
+const KEY_EXEMPT_SUFFIXES = ['.source', '.citation', '.brand', '.attribution'];
 
 function isExemptKey(keyPath) {
-  return KEY_EXEMPT_SUFFIXES.some((s) => keyPath.endsWith(s))
+  return KEY_EXEMPT_SUFFIXES.some((s) => keyPath.endsWith(s));
 }
 
 function scanMessageFile(locale) {
-  const file = path.join(MESSAGES_DIR, `${locale}.json`)
-  if (!fs.existsSync(file)) return []
-  const data = JSON.parse(fs.readFileSync(file, 'utf8'))
-  const deFlat = getDeFlat()
-  const findings = []
+  const file = path.join(MESSAGES_DIR, `${locale}.json`);
+  if (!fs.existsSync(file)) return [];
+  const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+  const deFlat = getDeFlat();
+  const findings = [];
   for (const { keyPath, value } of walkJson(data)) {
     // Skip citation-style keys by convention.
-    if (isExemptKey(keyPath)) continue
+    if (isExemptKey(keyPath)) continue;
     // Skip strings identical to DE — proper nouns, brand names, citations.
-    if (typeof value === 'string' && deFlat[keyPath] === value) continue
-    const verdict = looksLikeWrongLanguage(value, locale)
+    if (typeof value === 'string' && deFlat[keyPath] === value) continue;
+    const verdict = looksLikeWrongLanguage(value, locale);
     if (verdict) {
       findings.push({
         file: `messages/${locale}.json`,
@@ -289,10 +486,10 @@ function scanMessageFile(locale) {
         ownRatio: verdict.ownRatio,
         otherRatio: verdict.otherRatio,
         snippet: value.length > 80 ? value.slice(0, 80) + '…' : value,
-      })
+      });
     }
   }
-  return findings
+  return findings;
 }
 
 // ============================================================================
@@ -305,84 +502,103 @@ function scanMessageFile(locale) {
 // red and the only cheap answer was to re-snapshot the baseline. A gate that
 // cries wolf on every refactor is a gate that gets removed. file + snippet
 // identifies the violation; the line is display only.
-function fingerprintSrc(f)     { return `src::${f.file}::${f.snippet}` }
-function fingerprintMsg(f)     { return `msg::${f.file}::${f.keyPath}` }
-
-const allSrcFindings = []
-for (const root of SCAN_ROOTS) {
-  const absRoot = path.join(repoRoot, root)
-  if (!fs.existsSync(absRoot)) continue
-  const files = walk(absRoot)
-  for (const f of files) allSrcFindings.push(...scanSourceFile(f))
+function fingerprintSrc(f) {
+  return `src::${f.file}::${f.snippet}`;
+}
+function fingerprintMsg(f) {
+  return `msg::${f.file}::${f.keyPath}`;
 }
 
-const allMsgFindings = []
+const allSrcFindings = [];
+for (const root of SCAN_ROOTS) {
+  const absRoot = path.join(repoRoot, root);
+  if (!fs.existsSync(absRoot)) continue;
+  const files = walk(absRoot);
+  for (const f of files) allSrcFindings.push(...scanSourceFile(f));
+}
+
+const allMsgFindings = [];
 for (const locale of LOCALES_TO_CHECK) {
-  allMsgFindings.push(...scanMessageFile(locale))
+  allMsgFindings.push(...scanMessageFile(locale));
 }
 
 const currentSet = new Set([
   ...allSrcFindings.map(fingerprintSrc),
   ...allMsgFindings.map(fingerprintMsg),
-])
+]);
 
 if (updateBaseline) {
-  fs.mkdirSync(path.dirname(baselinePath), { recursive: true })
+  fs.mkdirSync(path.dirname(baselinePath), { recursive: true });
   fs.writeFileSync(
     baselinePath,
-    JSON.stringify({
-      description: 'Known i18n hardcoded-string violations. Audit fails on regressions only. Run scripts/i18n-hardcoded-audit.mjs --update-baseline to refresh after intentional fixes.',
-      generatedAt: new Date().toISOString().slice(0, 10),
-      source: allSrcFindings,
-      messages: allMsgFindings,
-    }, null, 2) + '\n'
-  )
-  console.log(`Wrote baseline (${allSrcFindings.length} src, ${allMsgFindings.length} msg findings) → ${path.relative(repoRoot, baselinePath)}`)
-  process.exit(0)
+    JSON.stringify(
+      {
+        description:
+          'Known i18n hardcoded-string violations. Audit fails on regressions only. Run scripts/i18n-hardcoded-audit.mjs --update-baseline to refresh after intentional fixes.',
+        generatedAt: new Date().toISOString().slice(0, 10),
+        source: allSrcFindings,
+        messages: allMsgFindings,
+      },
+      null,
+      2,
+    ) + '\n',
+  );
+  console.log(
+    `Wrote baseline (${allSrcFindings.length} src, ${allMsgFindings.length} msg findings) → ${path.relative(repoRoot, baselinePath)}`,
+  );
+  process.exit(0);
 }
 
 const baseline = fs.existsSync(baselinePath)
   ? JSON.parse(fs.readFileSync(baselinePath, 'utf8'))
-  : { source: [], messages: [] }
+  : { source: [], messages: [] };
 
 const baselineSet = new Set([
   ...(baseline.source || []).map(fingerprintSrc),
   ...(baseline.messages || []).map(fingerprintMsg),
-])
+]);
 
-const newSrc = allSrcFindings.filter((f) => !baselineSet.has(fingerprintSrc(f)))
-const newMsg = allMsgFindings.filter((f) => !baselineSet.has(fingerprintMsg(f)))
-const fixedFingerprints = [...baselineSet].filter((fp) => !currentSet.has(fp))
+const newSrc = allSrcFindings.filter((f) => !baselineSet.has(fingerprintSrc(f)));
+const newMsg = allMsgFindings.filter((f) => !baselineSet.has(fingerprintMsg(f)));
+const fixedFingerprints = [...baselineSet].filter((fp) => !currentSet.has(fp));
 
-console.log(`i18n hardcoded-string audit`)
-console.log(`  source files: ${allSrcFindings.length} total, ${newSrc.length} new`)
-console.log(`  message files: ${allMsgFindings.length} total, ${newMsg.length} new`)
-console.log(`  fixed since baseline: ${fixedFingerprints.length}`)
+console.log(`i18n hardcoded-string audit`);
+console.log(`  source files: ${allSrcFindings.length} total, ${newSrc.length} new`);
+console.log(`  message files: ${allMsgFindings.length} total, ${newMsg.length} new`);
+console.log(`  fixed since baseline: ${fixedFingerprints.length}`);
 
 if (verbose || newSrc.length || newMsg.length) {
   if (newSrc.length) {
-    console.log('\nNew German-string findings in src/:')
+    console.log('\nNew German-string findings in src/:');
     for (const f of newSrc.slice(0, 40)) {
-      console.log(`  ${f.file}:${f.line}  "${f.snippet}"`)
+      console.log(`  ${f.file}:${f.line}  "${f.snippet}"`);
     }
-    if (newSrc.length > 40) console.log(`  ...and ${newSrc.length - 40} more`)
+    if (newSrc.length > 40) console.log(`  ...and ${newSrc.length - 40} more`);
   }
   if (newMsg.length) {
-    console.log('\nNew wrong-language findings in messages/:')
+    console.log('\nNew wrong-language findings in messages/:');
     for (const f of newMsg.slice(0, 40)) {
-      console.log(`  ${f.file}  ${f.keyPath}  (looks like ${f.suspectedLanguage}, own ${f.ownRatio} vs other ${f.otherRatio})`)
-      console.log(`     "${f.snippet}"`)
+      console.log(
+        `  ${f.file}  ${f.keyPath}  (looks like ${f.suspectedLanguage}, own ${f.ownRatio} vs other ${f.otherRatio})`,
+      );
+      console.log(`     "${f.snippet}"`);
     }
-    if (newMsg.length > 40) console.log(`  ...and ${newMsg.length - 40} more`)
+    if (newMsg.length > 40) console.log(`  ...and ${newMsg.length - 40} more`);
   }
 }
 
 if (newSrc.length || newMsg.length) {
-  console.log(`\n✗ ${newSrc.length + newMsg.length} new i18n violation(s).`)
-  console.log('  Fix the code to use t()/getTranslations(), or move strings to messages/<locale>.json.')
-  console.log('  If a string is intentionally non-UI (path, regex, log message), append "// i18n-ok" to the line.')
-  console.log('  To accept current state as the baseline: npm run compliance:i18n-hardcoded -- --update-baseline')
-  process.exit(1)
+  console.log(`\n✗ ${newSrc.length + newMsg.length} new i18n violation(s).`);
+  console.log(
+    '  Fix the code to use t()/getTranslations(), or move strings to messages/<locale>.json.',
+  );
+  console.log(
+    '  If a string is intentionally non-UI (path, regex, log message), append "// i18n-ok" to the line.',
+  );
+  console.log(
+    '  To accept current state as the baseline: npm run compliance:i18n-hardcoded -- --update-baseline',
+  );
+  process.exit(1);
 }
 
-console.log('\n✓ No new i18n hardcoded-string violations.')
+console.log('\n✓ No new i18n hardcoded-string violations.');

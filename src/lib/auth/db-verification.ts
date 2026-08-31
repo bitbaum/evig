@@ -2,20 +2,20 @@
  * Email verification and password reset database queries
  */
 
-import { randomBytes, randomInt } from 'crypto'
-import { eq, and, gt, sql, desc } from 'drizzle-orm'
-import { db } from '@/db'
-import { users, verificationTokens } from '@/db/schema/auth'
-import { logger } from '@/lib/logger'
+import { randomBytes, randomInt } from 'crypto';
+import { eq, and, gt, sql, desc } from 'drizzle-orm';
+import { db } from '@/db';
+import { users, verificationTokens } from '@/db/schema/auth';
+import { logger } from '@/lib/logger';
 
 // ============================================================================
 // Email verification functions
 // ============================================================================
 
 export interface DbVerificationToken {
-  identifier: string
-  token: string
-  expires: Date
+  identifier: string;
+  token: string;
+  expires: Date;
 }
 
 /**
@@ -23,10 +23,10 @@ export interface DbVerificationToken {
  */
 export async function createVerificationToken(email: string): Promise<string> {
   // Generate a secure random token
-  const token = randomBytes(32).toString('hex')
+  const token = randomBytes(32).toString('hex');
 
   // Set expiration to 24 hours from now
-  const expires = new Date(Date.now() + 24 * 60 * 60 * 1000)
+  const expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
 
   await db
     .insert(verificationTokens)
@@ -38,48 +38,43 @@ export async function createVerificationToken(email: string): Promise<string> {
     .onConflictDoUpdate({
       target: [verificationTokens.identifier, verificationTokens.token],
       set: { expires: expires.toISOString() },
-    })
+    });
 
-  return token
+  return token;
 }
 
 /**
  * Verify email with token
  */
-export async function verifyEmailWithToken(token: string): Promise<{ success: boolean, email?: string, error?: string }> {
+export async function verifyEmailWithToken(
+  token: string,
+): Promise<{ success: boolean; email?: string; error?: string }> {
   try {
     const rows = await db
       .select()
       .from(verificationTokens)
-      .where(
-        and(
-          eq(verificationTokens.token, token),
-          gt(verificationTokens.expires, sql`NOW()`)
-        )
-      )
+      .where(and(eq(verificationTokens.token, token), gt(verificationTokens.expires, sql`NOW()`)));
 
     if (rows.length === 0) {
-      return { success: false, error: 'Ungültiger oder abgelaufener Token' }
+      return { success: false, error: 'Ungültiger oder abgelaufener Token' };
     }
 
-    const verificationToken = rows[0]
-    const email = verificationToken.identifier
+    const verificationToken = rows[0];
+    const email = verificationToken.identifier;
 
     // Update user email verification status
     await db
       .update(users)
       .set({ emailVerified: sql`NOW()`.mapWith(String) })
-      .where(eq(users.email, email))
+      .where(eq(users.email, email));
 
     // Delete the used token
-    await db
-      .delete(verificationTokens)
-      .where(eq(verificationTokens.token, token))
+    await db.delete(verificationTokens).where(eq(verificationTokens.token, token));
 
-    return { success: true, email }
+    return { success: true, email };
   } catch (error) {
-    logger.error('Email verification error', { error })
-    return { success: false, error: 'Verifizierung fehlgeschlagen' }
+    logger.error('Email verification error', { error });
+    return { success: false, error: 'Verifizierung fehlgeschlagen' };
   }
 }
 
@@ -91,18 +86,15 @@ export async function getVerificationToken(email: string): Promise<DbVerificatio
     .select()
     .from(verificationTokens)
     .where(
-      and(
-        eq(verificationTokens.identifier, email),
-        gt(verificationTokens.expires, sql`NOW()`)
-      )
+      and(eq(verificationTokens.identifier, email), gt(verificationTokens.expires, sql`NOW()`)),
     )
     .orderBy(desc(verificationTokens.expires))
-    .limit(1)
+    .limit(1);
 
-  if (rows.length === 0) return null
+  if (rows.length === 0) return null;
 
-  const row = rows[0]
-  return { identifier: row.identifier, token: row.token, expires: new Date(row.expires) }
+  const row = rows[0];
+  return { identifier: row.identifier, token: row.token, expires: new Date(row.expires) };
 }
 
 /**
@@ -111,30 +103,29 @@ export async function getVerificationToken(email: string): Promise<DbVerificatio
  * @param expiresInMinutes - Code expiration time in minutes (default: 15)
  * @returns The generated 6-digit code
  */
-export async function createVerificationCode(email: string, expiresInMinutes = 15): Promise<string> {
+export async function createVerificationCode(
+  email: string,
+  expiresInMinutes = 15,
+): Promise<string> {
   // Generate a cryptographically secure 6-digit code
-  const code = String(randomInt(100000, 999999))
+  const code = String(randomInt(100000, 999999));
 
   // Set expiration
-  const expires = new Date(Date.now() + expiresInMinutes * 60 * 1000)
+  const expires = new Date(Date.now() + expiresInMinutes * 60 * 1000);
 
-  const lowerEmail = email.toLowerCase()
+  const lowerEmail = email.toLowerCase();
 
   // Delete any existing codes for this email
-  await db
-    .delete(verificationTokens)
-    .where(eq(verificationTokens.identifier, lowerEmail))
+  await db.delete(verificationTokens).where(eq(verificationTokens.identifier, lowerEmail));
 
   // Insert new code
-  await db
-    .insert(verificationTokens)
-    .values({
-      identifier: lowerEmail,
-      token: code,
-      expires: expires.toISOString(),
-    })
+  await db.insert(verificationTokens).values({
+    identifier: lowerEmail,
+    token: code,
+    expires: expires.toISOString(),
+  });
 
-  return code
+  return code;
 }
 
 /**
@@ -143,9 +134,12 @@ export async function createVerificationCode(email: string, expiresInMinutes = 1
  * @param code - The 6-digit verification code
  * @returns Success status and email if verified
  */
-export async function verifyEmailCode(email: string, code: string): Promise<{ success: boolean, error?: string }> {
+export async function verifyEmailCode(
+  email: string,
+  code: string,
+): Promise<{ success: boolean; error?: string }> {
   try {
-    const lowerEmail = email.toLowerCase()
+    const lowerEmail = email.toLowerCase();
 
     const rows = await db
       .select()
@@ -154,29 +148,27 @@ export async function verifyEmailCode(email: string, code: string): Promise<{ su
         and(
           eq(verificationTokens.identifier, lowerEmail),
           eq(verificationTokens.token, code),
-          gt(verificationTokens.expires, sql`NOW()`)
-        )
-      )
+          gt(verificationTokens.expires, sql`NOW()`),
+        ),
+      );
 
     if (rows.length === 0) {
-      return { success: false, error: 'Ungültiger oder abgelaufener Code' }
+      return { success: false, error: 'Ungültiger oder abgelaufener Code' };
     }
 
     // Update user email verification status
     await db
       .update(users)
       .set({ emailVerified: sql`NOW()`.mapWith(String) })
-      .where(eq(users.email, lowerEmail))
+      .where(eq(users.email, lowerEmail));
 
     // Delete the used code
-    await db
-      .delete(verificationTokens)
-      .where(eq(verificationTokens.identifier, lowerEmail))
+    await db.delete(verificationTokens).where(eq(verificationTokens.identifier, lowerEmail));
 
-    return { success: true }
+    return { success: true };
   } catch (error) {
-    logger.error('Email code verification error', { error })
-    return { success: false, error: 'Verifizierung fehlgeschlagen' }
+    logger.error('Email code verification error', { error });
+    return { success: false, error: 'Verifizierung fehlgeschlagen' };
   }
 }
 
@@ -185,13 +177,13 @@ export async function verifyEmailCode(email: string, code: string): Promise<{ su
 // ============================================================================
 
 export interface DbPasswordResetToken {
-  identifier: string
-  token: string
-  expires: Date
+  identifier: string;
+  token: string;
+  expires: Date;
 }
 
 /** Default TTL for password-reset tokens: 1 hour. */
-export const PASSWORD_RESET_TOKEN_DEFAULT_TTL_MS = 60 * 60 * 1000
+export const PASSWORD_RESET_TOKEN_DEFAULT_TTL_MS = 60 * 60 * 1000;
 
 /**
  * Create a password reset token.
@@ -206,64 +198,60 @@ export async function createPasswordResetToken(
   email: string,
   expiresInMs: number = PASSWORD_RESET_TOKEN_DEFAULT_TTL_MS,
 ): Promise<string> {
-  const token = randomBytes(32).toString('hex')
-  const expires = new Date(Date.now() + expiresInMs)
-  const lowerEmail = email.toLowerCase()
+  const token = randomBytes(32).toString('hex');
+  const expires = new Date(Date.now() + expiresInMs);
+  const lowerEmail = email.toLowerCase();
 
   // One active reset flow per email — stale tokens (including expired
   // verification codes sharing this table) must not leave the user clicking
   // an old link while a fresh reset was requested.
-  await db
-    .delete(verificationTokens)
-    .where(eq(verificationTokens.identifier, lowerEmail))
+  await db.delete(verificationTokens).where(eq(verificationTokens.identifier, lowerEmail));
 
   await db.insert(verificationTokens).values({
     identifier: lowerEmail,
     token,
     expires: expires.toISOString(),
-  })
+  });
 
-  return token
+  return token;
 }
 
 /**
  * Verify password reset token
  */
-export async function verifyPasswordResetToken(token: string): Promise<{ success: boolean, email?: string, error?: string }> {
+export async function verifyPasswordResetToken(
+  token: string,
+): Promise<{ success: boolean; email?: string; error?: string }> {
   try {
     const rows = await db
       .select()
       .from(verificationTokens)
-      .where(
-        and(
-          eq(verificationTokens.token, token),
-          gt(verificationTokens.expires, sql`NOW()`)
-        )
-      )
+      .where(and(eq(verificationTokens.token, token), gt(verificationTokens.expires, sql`NOW()`)));
 
     if (rows.length === 0) {
-      return { success: false, error: 'Ungültiger oder abgelaufener Token' }
+      return { success: false, error: 'Ungültiger oder abgelaufener Token' };
     }
 
-    const resetToken = rows[0]
-    const email = resetToken.identifier
+    const resetToken = rows[0];
+    const email = resetToken.identifier;
 
     // Delete the used token for security
-    await db
-      .delete(verificationTokens)
-      .where(eq(verificationTokens.token, token))
+    await db.delete(verificationTokens).where(eq(verificationTokens.token, token));
 
-    return { success: true, email }
+    return { success: true, email };
   } catch (error) {
-    logger.error('Password reset token verification error', { error })
-    return { success: false, error: 'Token-Verifizierung fehlgeschlagen' }
+    logger.error('Password reset token verification error', { error });
+    return { success: false, error: 'Token-Verifizierung fehlgeschlagen' };
   }
 }
 
 /**
  * Update user password
  */
-export async function updateUserPassword(email: string, passwordHash: string): Promise<{ success: boolean, error?: string }> {
+export async function updateUserPassword(
+  email: string,
+  passwordHash: string,
+): Promise<{ success: boolean; error?: string }> {
   try {
     const result = await db
       .update(users)
@@ -276,16 +264,16 @@ export async function updateUserPassword(email: string, passwordHash: string): P
         updatedAt: sql`NOW()`.mapWith(String),
       })
       .where(eq(users.email, email.toLowerCase()))
-      .returning({ id: users.id })
+      .returning({ id: users.id });
 
     if (result.length === 0) {
-      return { success: false, error: 'Benutzer nicht gefunden' }
+      return { success: false, error: 'Benutzer nicht gefunden' };
     }
 
-    return { success: true }
+    return { success: true };
   } catch (error) {
-    logger.error('Update password error', { error })
-    return { success: false, error: 'Passwort konnte nicht aktualisiert werden' }
+    logger.error('Update password error', { error });
+    return { success: false, error: 'Passwort konnte nicht aktualisiert werden' };
   }
 }
 
@@ -299,14 +287,14 @@ export async function getPasswordResetToken(email: string): Promise<DbPasswordRe
     .where(
       and(
         eq(verificationTokens.identifier, email.toLowerCase()),
-        gt(verificationTokens.expires, sql`NOW()`)
-      )
+        gt(verificationTokens.expires, sql`NOW()`),
+      ),
     )
     .orderBy(desc(verificationTokens.expires))
-    .limit(1)
+    .limit(1);
 
-  if (rows.length === 0) return null
+  if (rows.length === 0) return null;
 
-  const row = rows[0]
-  return { identifier: row.identifier, token: row.token, expires: new Date(row.expires) }
+  const row = rows[0];
+  return { identifier: row.identifier, token: row.token, expires: new Date(row.expires) };
 }

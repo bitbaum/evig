@@ -28,7 +28,7 @@ import {
   getCategoryBadgeClasses,
   getCategoryLabel,
   CATEGORY_STYLES,
-} from '../service-categories'
+} from '../service-categories';
 
 // ============================================================================
 // getCategoryStyle
@@ -36,39 +36,39 @@ import {
 
 describe('getCategoryStyle', () => {
   it('returns general style for null', () => {
-    const style = getCategoryStyle(null)
-    expect(style).toBe(CATEGORY_STYLES.general)
-  })
+    const style = getCategoryStyle(null);
+    expect(style).toBe(CATEGORY_STYLES.general);
+  });
 
   it('returns repair style for "repair"', () => {
-    const style = getCategoryStyle('repair')
-    expect(style).toBe(CATEGORY_STYLES.repair)
-    expect(style.primary).toContain('success')
-  })
+    const style = getCategoryStyle('repair');
+    expect(style).toBe(CATEGORY_STYLES.repair);
+    expect(style.primary).toContain('success');
+  });
 
   it('returns data style for "data"', () => {
-    const style = getCategoryStyle('data')
-    expect(style.primary).toContain('success')
-  })
+    const style = getCategoryStyle('data');
+    expect(style.primary).toContain('success');
+  });
 
   it('returns recycling style for "recycling"', () => {
-    const style = getCategoryStyle('recycling')
-    expect(style.primary).toContain('success')
-  })
+    const style = getCategoryStyle('recycling');
+    expect(style.primary).toContain('success');
+  });
 
   it('returns general fallback for unknown category', () => {
-    const style = getCategoryStyle('unknown_category')
-    expect(style).toBe(CATEGORY_STYLES.general)
-  })
+    const style = getCategoryStyle('unknown_category');
+    expect(style).toBe(CATEGORY_STYLES.general);
+  });
 
   it('returns an object with expected shape', () => {
-    const style = getCategoryStyle('repair')
-    expect(style.primary).toBeTruthy()
-    expect(style.badge).toBeDefined()
-    expect(style.badge.bg).toBeTruthy()
-    expect(style.gradient).toBeTruthy()
-  })
-})
+    const style = getCategoryStyle('repair');
+    expect(style.primary).toBeTruthy();
+    expect(style.badge).toBeDefined();
+    expect(style.badge.bg).toBeTruthy();
+    expect(style.gradient).toBeTruthy();
+  });
+});
 
 // ============================================================================
 // getCategoryBadgeClasses
@@ -76,23 +76,23 @@ describe('getCategoryStyle', () => {
 
 describe('getCategoryBadgeClasses', () => {
   it('returns a non-empty string for "repair"', () => {
-    const classes = getCategoryBadgeClasses('repair')
-    expect(typeof classes).toBe('string')
-    expect(classes.length).toBeGreaterThan(0)
-  })
+    const classes = getCategoryBadgeClasses('repair');
+    expect(typeof classes).toBe('string');
+    expect(classes.length).toBeGreaterThan(0);
+  });
 
   it('includes bg and text classes', () => {
-    const classes = getCategoryBadgeClasses('data')
-    expect(classes).toContain('bg-')
-    expect(classes).toContain('text-')
-  })
+    const classes = getCategoryBadgeClasses('data');
+    expect(classes).toContain('bg-');
+    expect(classes).toContain('text-');
+  });
 
   it('returns classes for null (uses general fallback)', () => {
-    const classes = getCategoryBadgeClasses(null)
-    const generalClasses = getCategoryBadgeClasses('general')
-    expect(classes).toBe(generalClasses)
-  })
-})
+    const classes = getCategoryBadgeClasses(null);
+    const generalClasses = getCategoryBadgeClasses('general');
+    expect(classes).toBe(generalClasses);
+  });
+});
 
 // ============================================================================
 // getCategoryLabel
@@ -100,30 +100,30 @@ describe('getCategoryBadgeClasses', () => {
 
 describe('getCategoryLabel', () => {
   it('returns "Allgemein" for null', () => {
-    expect(getCategoryLabel(null)).toBe('Allgemein')
-  })
+    expect(getCategoryLabel(null)).toBe('Allgemein');
+  });
 
   it('returns "Reparatur" for "repair"', () => {
-    expect(getCategoryLabel('repair')).toBe('Reparatur')
-  })
+    expect(getCategoryLabel('repair')).toBe('Reparatur');
+  });
 
   it('returns "Daten" for "data"', () => {
-    expect(getCategoryLabel('data')).toBe('Daten')
-  })
+    expect(getCategoryLabel('data')).toBe('Daten');
+  });
 
   it('returns "Recycling" for "recycling"', () => {
-    expect(getCategoryLabel('recycling')).toBe('Recycling')
-  })
+    expect(getCategoryLabel('recycling')).toBe('Recycling');
+  });
 
   it('returns "Software" for "software"', () => {
-    expect(getCategoryLabel('software')).toBe('Software')
-  })
+    expect(getCategoryLabel('software')).toBe('Software');
+  });
 
   it('returns "Web" for "web"', () => {
-    expect(getCategoryLabel('web')).toBe('Web')
-  })
+    expect(getCategoryLabel('web')).toBe('Web');
+  });
 
   it('falls back to raw value for unknown category', () => {
-    expect(getCategoryLabel('unknown_cat')).toBe('unknown_cat')
-  })
-})
+    expect(getCategoryLabel('unknown_cat')).toBe('unknown_cat');
+  });
+});

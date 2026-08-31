@@ -1,10 +1,10 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Button } from '@/components/ui/button'
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 
 export default function BackgroundSection({ background }: { background: string }) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
   return (
     <div className="mb-4 rounded-lg border border-warning-200 dark:border-warning-700/50 bg-warning-50 dark:bg-warning-900/20">
@@ -18,7 +18,9 @@ export default function BackgroundSection({ background }: { background: string }
           <span>📄</span>
           Begründung & Hintergrund lesen
         </span>
-        <span className="text-warning-500 dark:text-warning-400 text-xs">{open ? '▲ Einklappen' : '▼ Aufklappen'}</span>
+        <span className="text-warning-500 dark:text-warning-400 text-xs">
+          {open ? '▲ Einklappen' : '▼ Aufklappen'}
+        </span>
       </Button>
       {open && (
         <div className="border-t border-warning-200 dark:border-warning-700/50 px-4 py-3">
@@ -28,5 +30,5 @@ export default function BackgroundSection({ background }: { background: string }
         </div>
       )}
     </div>
-  )
+  );
 }

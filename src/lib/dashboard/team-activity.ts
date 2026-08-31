@@ -1,16 +1,16 @@
-import { db } from '@/db'
-import { sql, getTableName } from 'drizzle-orm'
-import { activityFeed, users } from '@/db/schema'
-import { logger } from '@/lib/logger'
+import { db } from '@/db';
+import { sql, getTableName } from 'drizzle-orm';
+import { activityFeed, users } from '@/db/schema';
+import { logger } from '@/lib/logger';
 
-const feedTable = getTableName(activityFeed)
-const usersTable = getTableName(users)
+const feedTable = getTableName(activityFeed);
+const usersTable = getTableName(users);
 
 export interface FeedRow {
-  actor_name: string | null
-  action: string
-  subject_label: string | null
-  created_at: string
+  actor_name: string | null;
+  action: string;
+  subject_label: string | null;
+  created_at: string;
 }
 
 export async function getTeamActivity(): Promise<FeedRow[]> {
@@ -25,10 +25,10 @@ export async function getTeamActivity(): Promise<FeedRow[]> {
       LEFT JOIN ${sql.raw(usersTable)} u ON u.id = f.actor_id
       ORDER BY f.created_at DESC
       LIMIT 10
-    `)
-    return result.rows as unknown as FeedRow[]
+    `);
+    return result.rows as unknown as FeedRow[];
   } catch (error) {
-    logger.warn('TeamActivityFeed query failed', { error })
-    return []
+    logger.warn('TeamActivityFeed query failed', { error });
+    return [];
   }
 }

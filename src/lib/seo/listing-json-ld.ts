@@ -5,22 +5,22 @@
  * and free of framework/config coupling. Serialize with `safeJsonLd`.
  */
 
-import type { ListingPublic, ListingReviewStats } from '@/lib/marketplace/listing-detail'
-import { REVAMPIT_GUARANTEE } from '@/config/marketplace'
+import type { ListingPublic, ListingReviewStats } from '@/lib/marketplace/listing-detail';
+import { REVAMPIT_GUARANTEE } from '@/config/marketplace';
 
 export interface ListingJsonLdContext {
   /** Absolute canonical URL of this listing. */
-  listingUrl: string
+  listingUrl: string;
   /** Absolute URL of the marketplace browse page. */
-  marketplaceUrl: string
+  marketplaceUrl: string;
   /** Absolute URL of the category-filtered browse page. */
-  categoryUrl: string
+  categoryUrl: string;
   /** Absolute site home URL. */
-  homeUrl: string
-  homeLabel: string
-  marketplaceLabel: string
-  categoryLabel: string
-  orgName: string
+  homeUrl: string;
+  homeLabel: string;
+  marketplaceLabel: string;
+  categoryLabel: string;
+  orgName: string;
 }
 
 // Our condition keys → schema.org condition enums.
@@ -31,7 +31,7 @@ const SCHEMA_CONDITION: Record<string, string> = {
   fair: 'https://schema.org/UsedCondition',
   poor: 'https://schema.org/UsedCondition',
   defect: 'https://schema.org/DamagedCondition',
-}
+};
 
 // Listing status → schema.org availability.
 const SCHEMA_AVAILABILITY: Record<string, string> = {
@@ -39,15 +39,15 @@ const SCHEMA_AVAILABILITY: Record<string, string> = {
   reserved: 'https://schema.org/OutOfStock',
   sold: 'https://schema.org/SoldOut',
   draft: 'https://schema.org/OutOfStock',
-}
+};
 
 export function buildListingJsonLd(
   listing: ListingPublic,
   reviewStats: ListingReviewStats,
   ctx: ListingJsonLdContext,
 ): object[] {
-  const images = listing.images.map((i) => i.url).filter(Boolean)
-  const sellerName = listing.seller_display_name || listing.seller_name || ctx.orgName
+  const images = listing.images.map((i) => i.url).filter(Boolean);
+  const sellerName = listing.seller_display_name || listing.seller_name || ctx.orgName;
 
   const offer: Record<string, unknown> = {
     '@type': 'Offer',
@@ -82,7 +82,7 @@ export function buildListingJsonLd(
           },
         }
       : {}),
-  }
+  };
 
   const product: Record<string, unknown> = {
     '@context': 'https://schema.org',
@@ -106,7 +106,7 @@ export function buildListingJsonLd(
           },
         }
       : {}),
-  }
+  };
 
   const breadcrumb = {
     '@context': 'https://schema.org',
@@ -117,7 +117,7 @@ export function buildListingJsonLd(
       { '@type': 'ListItem', position: 3, name: ctx.categoryLabel, item: ctx.categoryUrl },
       { '@type': 'ListItem', position: 4, name: listing.title, item: ctx.listingUrl },
     ],
-  }
+  };
 
-  return [product, breadcrumb]
+  return [product, breadcrumb];
 }

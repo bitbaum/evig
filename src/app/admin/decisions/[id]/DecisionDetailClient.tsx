@@ -1,11 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  DECISION_STATUS,
-  PARTICIPATABLE_STATUSES,
-  READ_ONLY_STATUSES,
-} from '@/config/decisions';
+import { DECISION_STATUS, PARTICIPATABLE_STATUSES, READ_ONLY_STATUSES } from '@/config/decisions';
 import { adminType } from '@/lib/admin-ui';
 import { cn } from '@/lib/utils';
 import VotingPanel from '@/components/decisions/VotingPanel';
@@ -37,7 +33,7 @@ export default function DecisionDetailClient({
   } = useDecisionDetailClient(decisionId);
 
   function handleVoted() {
-    setParticipationRefreshKey(k => k + 1);
+    setParticipationRefreshKey((k) => k + 1);
     void fetchDecision();
   }
 
@@ -47,9 +43,7 @@ export default function DecisionDetailClient({
 
   if (!decision) {
     return (
-      <div className="py-12 text-center text-error-500 text-sm">
-        Entscheidung nicht gefunden
-      </div>
+      <div className="py-12 text-center text-error-500 text-sm">Entscheidung nicht gefunden</div>
     );
   }
 

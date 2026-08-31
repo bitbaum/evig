@@ -31,6 +31,6 @@ export const GATEWAY_STATUS = {
   DECLINED: 'declined',
   /** Processing error. */
   ERROR: 'error',
-} as const
+} as const;
 
-export type GatewayStatus = typeof GATEWAY_STATUS[keyof typeof GATEWAY_STATUS]
+export type GatewayStatus = (typeof GATEWAY_STATUS)[keyof typeof GATEWAY_STATUS];

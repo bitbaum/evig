@@ -1,23 +1,28 @@
-'use client'
+'use client';
 
 // Page header: back link, mode-aware title/subtitle, bulk-mode reset button (extracted verbatim from page.tsx).
-import Link from 'next/link'
-import { ArrowLeft } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import Heading from '@/components/admin/AdminHeading'
-import { ROUTES } from '@/config/routes'
-import { adminInteractive } from '@/lib/admin-ui'
-import type { useErfassungForm } from '@/components/erfassung/useErfassungForm'
-import type { BulkProduct } from '@/types/erfassung'
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import Heading from '@/components/admin/AdminHeading';
+import { ROUTES } from '@/config/routes';
+import { adminInteractive } from '@/lib/admin-ui';
+import type { useErfassungForm } from '@/components/erfassung/useErfassungForm';
+import type { BulkProduct } from '@/types/erfassung';
 
 interface ErfassungHeaderProps {
-  form: ReturnType<typeof useErfassungForm>
-  viewMode: 'single' | 'bulk'
-  bulkProducts: BulkProduct[]
-  handleBulkReset: () => void
+  form: ReturnType<typeof useErfassungForm>;
+  viewMode: 'single' | 'bulk';
+  bulkProducts: BulkProduct[];
+  handleBulkReset: () => void;
 }
 
-export function ErfassungHeader({ form, viewMode, bulkProducts, handleBulkReset }: ErfassungHeaderProps) {
+export function ErfassungHeader({
+  form,
+  viewMode,
+  bulkProducts,
+  handleBulkReset,
+}: ErfassungHeaderProps) {
   return (
     <div className="flex items-center gap-3 sm:gap-4">
       <Link
@@ -28,10 +33,18 @@ export function ErfassungHeader({ form, viewMode, bulkProducts, handleBulkReset 
       </Link>
       <div className="flex-1 min-w-0">
         <Heading level={1} className="text-xl sm:text-2xl font-bold text-text-primary truncate">
-          {form.isEditMode ? 'Produkt bearbeiten' : viewMode === 'bulk' ? `Import prüfen (${bulkProducts.length} Produkte)` : 'Produkt aufnehmen'}
+          {form.isEditMode
+            ? 'Produkt bearbeiten'
+            : viewMode === 'bulk'
+              ? `Import prüfen (${bulkProducts.length} Produkte)`
+              : 'Produkt aufnehmen'}
         </Heading>
         <p className="text-sm sm:text-base text-text-secondary hidden sm:block">
-          {form.isEditMode ? 'Produktdaten aktualisieren' : viewMode === 'bulk' ? 'KI-Ergebnis prüfen und ausgewählte Produkte ins Inventar übernehmen' : 'Daten eingeben, KI-Vorschlag prüfen und den nächsten realen Arbeitsschritt wählen'}
+          {form.isEditMode
+            ? 'Produktdaten aktualisieren'
+            : viewMode === 'bulk'
+              ? 'KI-Ergebnis prüfen und ausgewählte Produkte ins Inventar übernehmen'
+              : 'Daten eingeben, KI-Vorschlag prüfen und den nächsten realen Arbeitsschritt wählen'}
         </p>
       </div>
       {viewMode === 'bulk' && (
@@ -46,5 +59,5 @@ export function ErfassungHeader({ form, viewMode, bulkProducts, handleBulkReset 
         </Button>
       )}
     </div>
-  )
+  );
 }

@@ -1,26 +1,26 @@
-'use client'
+'use client';
 
-import { useEffect } from 'react'
-import { Link } from '@/i18n/navigation'
-import { AlertCircle } from 'lucide-react'
-import { logger } from '@/lib/logger'
-import Heading from '@/components/ui/Heading'
-import { Button } from '@/components/ui/button'
-import { useTranslations } from 'next-intl'
-import { ROUTES } from '@/config/routes'
+import { useEffect } from 'react';
+import { Link } from '@/i18n/navigation';
+import { AlertCircle } from 'lucide-react';
+import { logger } from '@/lib/logger';
+import Heading from '@/components/ui/Heading';
+import { Button } from '@/components/ui/button';
+import { useTranslations } from 'next-intl';
+import { ROUTES } from '@/config/routes';
 
 export default function ListingDetailError({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
-  const t = useTranslations('errors')
+  const t = useTranslations('errors');
 
   useEffect(() => {
-    logger.error('Listing detail error', { error, digest: error.digest })
-  }, [error])
+    logger.error('Listing detail error', { error, digest: error.digest });
+  }, [error]);
 
   return (
     <div className="flex items-center justify-center py-24">
@@ -29,9 +29,7 @@ export default function ListingDetailError({
         <Heading level={1} className="text-lg font-medium text-text-primary">
           {t('listingDetail.title')}
         </Heading>
-        <p className="mt-2 text-sm text-text-secondary">
-          {t('listingDetail.description')}
-        </p>
+        <p className="mt-2 text-sm text-text-secondary">{t('listingDetail.description')}</p>
         <div className="mt-6 flex flex-col gap-3">
           <Button onClick={reset} variant="primary" className="w-full">
             {t('retry')}
@@ -45,5 +43,5 @@ export default function ListingDetailError({
         </div>
       </div>
     </div>
-  )
+  );
 }

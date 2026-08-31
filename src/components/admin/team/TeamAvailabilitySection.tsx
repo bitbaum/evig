@@ -1,15 +1,11 @@
-'use client'
+'use client';
 
-import {
-  CONTACT_METHOD_OPTIONS,
-  CONTACT_METHOD_LABELS,
-  type ContactMethod,
-} from '@/config/team'
+import { CONTACT_METHOD_OPTIONS, CONTACT_METHOD_LABELS, type ContactMethod } from '@/config/team';
 import {
   TIMECARD_ENTRY_CATEGORY_LABELS,
   TIMECARD_ENTRY_CATEGORY_OPTIONS,
   type TimecardEntryCategory,
-} from '@/config/timecards'
+} from '@/config/timecards';
 import {
   WEEKDAY_IDS,
   WEEKDAY_LABELS,
@@ -19,45 +15,47 @@ import {
   serializeWeeklySchedule,
   summarizeWeeklySchedule,
   type WeekdayId,
-} from '@/lib/team/schedule'
-import { CONTACT } from '@/config/org'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Select } from '@/components/ui/select'
-import { FormField } from '@/components/ui/form-field'
-import type { TeamProfileFormState } from './useTeamProfileForm'
+} from '@/lib/team/schedule';
+import { CONTACT } from '@/config/org';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select } from '@/components/ui/select';
+import { FormField } from '@/components/ui/form-field';
+import type { TeamProfileFormState } from './useTeamProfileForm';
 
 interface Props {
-  form: TeamProfileFormState
-  onChange: (field: string, value: string) => void
+  form: TeamProfileFormState;
+  onChange: (field: string, value: string) => void;
 }
 
 export function TeamAvailabilitySection({ form, onChange }: Props) {
-  const schedule = parseWeeklySchedule(form.working_hours)
-  const weeklyMinutes = getScheduleWeeklyMinutes(schedule)
-  const weeklyHours = Math.floor(weeklyMinutes / 60)
-  const remainingMinutes = weeklyMinutes % 60
-  const weeklyDuration = remainingMinutes === 0
-    ? `${weeklyHours} Std.`
-    : `${weeklyHours} Std. ${remainingMinutes} Min.`
+  const schedule = parseWeeklySchedule(form.working_hours);
+  const weeklyMinutes = getScheduleWeeklyMinutes(schedule);
+  const weeklyHours = Math.floor(weeklyMinutes / 60);
+  const remainingMinutes = weeklyMinutes % 60;
+  const weeklyDuration =
+    remainingMinutes === 0 ? `${weeklyHours} Std.` : `${weeklyHours} Std. ${remainingMinutes} Min.`;
 
   const updateScheduleDay = (
     day: WeekdayId,
     field: 'enabled' | 'start' | 'end' | 'break_minutes' | 'category',
-    value: string | boolean | number
+    value: string | boolean | number,
   ) => {
-    onChange('working_hours', serializeWeeklySchedule({
-      ...schedule,
-      days: {
-        ...schedule.days,
-        [day]: {
-          ...schedule.days[day],
-          [field]: value,
+    onChange(
+      'working_hours',
+      serializeWeeklySchedule({
+        ...schedule,
+        days: {
+          ...schedule.days,
+          [day]: {
+            ...schedule.days[day],
+            [field]: value,
+          },
         },
-      },
-    }))
-  }
+      }),
+    );
+  };
 
   return (
     <div className="space-y-5">
@@ -67,9 +65,7 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
             <h3 className="text-sm font-semibold text-text-primary">
               Offizieller Standardschedule
             </h3>
-            <p className="mt-1 text-sm text-text-tertiary">
-              {summarizeWeeklySchedule(schedule)}
-            </p>
+            <p className="mt-1 text-sm text-text-tertiary">{summarizeWeeklySchedule(schedule)}</p>
           </div>
           <Button
             type="button"
@@ -82,8 +78,8 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
         </div>
 
         <div className="mt-4 space-y-2">
-          {WEEKDAY_IDS.map(day => {
-            const daySchedule = schedule.days[day]
+          {WEEKDAY_IDS.map((day) => {
+            const daySchedule = schedule.days[day];
             return (
               <div
                 key={day}
@@ -131,19 +127,20 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
                   aria-label={`${WEEKDAY_LABELS[day]} Kategorie`}
                   className="min-w-0"
                 >
-                  {TIMECARD_ENTRY_CATEGORY_OPTIONS.map(category => (
+                  {TIMECARD_ENTRY_CATEGORY_OPTIONS.map((category) => (
                     <option key={category} value={category}>
                       {TIMECARD_ENTRY_CATEGORY_LABELS[category as TimecardEntryCategory]}
                     </option>
                   ))}
                 </Select>
               </div>
-            )
+            );
           })}
         </div>
 
         <p className="mt-3 text-xs font-medium text-text-tertiary">
-          Standard: {weeklyDuration}/Woche. Zeitkarten werden daraus vorausgefüllt und müssen nur geprüft werden.
+          Standard: {weeklyDuration}/Woche. Zeitkarten werden daraus vorausgefüllt und müssen nur
+          geprüft werden.
         </p>
       </div>
 
@@ -154,7 +151,7 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
             value={form.preferred_contact}
             onChange={(e) => onChange('preferred_contact', e.target.value)}
           >
-            {CONTACT_METHOD_OPTIONS.map(method => (
+            {CONTACT_METHOD_OPTIONS.map((method) => (
               <option key={method} value={method}>
                 {CONTACT_METHOD_LABELS[method as ContactMethod]}
               </option>
@@ -182,5 +179,5 @@ export function TeamAvailabilitySection({ form, onChange }: Props) {
         </FormField>
       </div>
     </div>
-  )
+  );
 }

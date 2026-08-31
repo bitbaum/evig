@@ -1,38 +1,34 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { useSession } from 'next-auth/react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { FormField } from '@/components/ui/form-field'
-import {
-  HR_APPLY_FOOTER,
-  HR_TRACK_DISCLAIMERS,
-  type RoleTrack,
-} from '@/config/hr-vacancies'
-import { ROUTES } from '@/config/routes'
-import { Link } from '@/i18n/navigation'
+import { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { FormField } from '@/components/ui/form-field';
+import { HR_APPLY_FOOTER, HR_TRACK_DISCLAIMERS, type RoleTrack } from '@/config/hr-vacancies';
+import { ROUTES } from '@/config/routes';
+import { Link } from '@/i18n/navigation';
 
 interface Props {
-  slug: string
-  roleTrack: RoleTrack
-  acceptsApplications: boolean
+  slug: string;
+  roleTrack: RoleTrack;
+  acceptsApplications: boolean;
 }
 
 export function CareerApplyForm({ slug, roleTrack, acceptsApplications }: Props) {
-  const { data: session } = useSession()
-  const [submitting, setSubmitting] = useState(false)
-  const [success, setSuccess] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [cvStorageKey, setCvStorageKey] = useState<string | null>(null)
-  const [cvUploading, setCvUploading] = useState(false)
+  const { data: session } = useSession();
+  const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [cvStorageKey, setCvStorageKey] = useState<string | null>(null);
+  const [cvUploading, setCvUploading] = useState(false);
 
   const [applicant, setApplicant] = useState({
     name: session?.user?.name ?? '',
     email: session?.user?.email ?? '',
     phone: '',
-  })
+  });
 
   const [track, setTrack] = useState<Record<string, string | boolean>>({
     motivation: '',
@@ -54,55 +50,60 @@ export function CareerApplyForm({ slug, roleTrack, acceptsApplications }: Props)
     portfolio_url: '',
     rate_range: '',
     project_interest: '',
-  })
+  });
 
   const setField = (key: string, value: string | boolean) => {
-    setTrack((prev) => ({ ...prev, [key]: value }))
-  }
+    setTrack((prev) => ({ ...prev, [key]: value }));
+  };
 
   const handleCvUpload = async (file: File | null) => {
-    if (!file) return
-    setCvUploading(true)
-    setError(null)
+    if (!file) return;
+    setCvUploading(true);
+    setError(null);
     try {
-      const fd = new FormData()
-      fd.append('file', file)
-      const res = await fetch('/api/careers/upload-cv', { method: 'POST', body: fd })
-      const body = await res.json()
-      if (!res.ok || !body.success) throw new Error(body.error || 'Upload fehlgeschlagen')
-      setCvStorageKey(body.data.storage_key)
+      const fd = new FormData();
+      fd.append('file', file);
+      const res = await fetch('/api/careers/upload-cv', { method: 'POST', body: fd });
+      const body = await res.json();
+      if (!res.ok || !body.success) throw new Error(body.error || 'Upload fehlgeschlagen');
+      setCvStorageKey(body.data.storage_key);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Upload fehlgeschlagen')
+      setError(err instanceof Error ? err.message : 'Upload fehlgeschlagen');
     } finally {
-      setCvUploading(false)
+      setCvUploading(false);
     }
-  }
+  };
 
   const buildTrackResponses = (): Record<string, unknown> => {
     const skills = track.skills
-      ? String(track.skills).split(',').map((s) => s.trim()).filter(Boolean)
-      : []
+      ? String(track.skills)
+          .split(',')
+          .map((s) => s.trim())
+          .filter(Boolean)
+      : [];
 
     const base = {
       motivation: track.motivation,
       availability: track.availability || undefined,
       skills,
       start_date_preference: track.start_date_preference || undefined,
-    }
+    };
 
     switch (roleTrack) {
       case 'volunteer':
         return {
           ...base,
-          hours_per_week: track.hours_per_week ? parseInt(String(track.hours_per_week), 10) : undefined,
-        }
+          hours_per_week: track.hours_per_week
+            ? parseInt(String(track.hours_per_week), 10)
+            : undefined,
+        };
       case 'intern':
         return {
           ...base,
           school_program: track.school_program,
           duration: track.duration,
           learning_goals: track.learning_goals,
-        }
+        };
       case 'employee':
         return {
           ...base,
@@ -112,31 +113,31 @@ export function CareerApplyForm({ slug, roleTrack, acceptsApplications }: Props)
           work_permit_detail: track.work_permit_detail || undefined,
           salary_expectation: track.salary_expectation || undefined,
           cv_url: track.cv_url || undefined,
-        }
+        };
       case 'reintegration':
         return {
           ...base,
           situation: track.situation,
           support_needs: track.support_needs || undefined,
-        }
+        };
       case 'contractor':
         return {
           ...base,
           portfolio_url: track.portfolio_url || undefined,
           rate_range: track.rate_range || undefined,
           project_interest: track.project_interest,
-        }
+        };
       default:
-        return base
+        return base;
     }
-  }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!acceptsApplications) return
+    e.preventDefault();
+    if (!acceptsApplications) return;
 
-    setSubmitting(true)
-    setError(null)
+    setSubmitting(true);
+    setError(null);
     try {
       const res = await fetch(`/api/careers/${slug}/apply`, {
         method: 'POST',
@@ -149,24 +150,27 @@ export function CareerApplyForm({ slug, roleTrack, acceptsApplications }: Props)
           track_responses: buildTrackResponses(),
           cv_storage_key: cvStorageKey ?? undefined,
         }),
-      })
-      const body = await res.json()
-      if (!res.ok || !body.success) throw new Error(body.error || 'Bewerbung fehlgeschlagen')
-      setSuccess(true)
+      });
+      const body = await res.json();
+      if (!res.ok || !body.success) throw new Error(body.error || 'Bewerbung fehlgeschlagen');
+      setSuccess(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Bewerbung fehlgeschlagen')
+      setError(err instanceof Error ? err.message : 'Bewerbung fehlgeschlagen');
     } finally {
-      setSubmitting(false)
+      setSubmitting(false);
     }
-  }
+  };
 
   if (!acceptsApplications) {
     return (
       <div className="rounded-lg border border-warning-200 bg-warning-50 p-4 text-sm text-warning-900">
         Bewerbungen sind derzeit pausiert. Schau später wieder vorbei oder{' '}
-        <Link href="/get-involved/kontakt" className="underline">kontaktiere uns</Link>.
+        <Link href="/get-involved/kontakt" className="underline">
+          kontaktiere uns
+        </Link>
+        .
       </div>
-    )
+    );
   }
 
   if (success) {
@@ -174,14 +178,17 @@ export function CareerApplyForm({ slug, roleTrack, acceptsApplications }: Props)
       <div className="rounded-lg border border-strong bg-action-muted p-6 text-center">
         <p className="font-semibold text-action">Danke für deine Bewerbung!</p>
         <p className="text-sm text-text-secondary mt-2">Wir melden uns bei dir per E-Mail.</p>
-        <Link href={ROUTES.public.careers} className="inline-block mt-4 text-sm text-action underline">
+        <Link
+          href={ROUTES.public.careers}
+          className="inline-block mt-4 text-sm text-action underline"
+        >
           Weitere Stellen ansehen
         </Link>
       </div>
-    )
+    );
   }
 
-  const disclaimer = HR_TRACK_DISCLAIMERS[roleTrack]
+  const disclaimer = HR_TRACK_DISCLAIMERS[roleTrack];
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -375,5 +382,5 @@ export function CareerApplyForm({ slug, roleTrack, acceptsApplications }: Props)
         {submitting ? 'Wird gesendet…' : 'Bewerbung absenden'}
       </Button>
     </form>
-  )
+  );
 }

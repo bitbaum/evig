@@ -7,16 +7,16 @@
  * staff member lacks the specific section permission.
  */
 
-import { Metadata } from 'next'
-import { requireSection } from '@/lib/admin/guards'
-import DonationsPageClient from './DonationsPageClient'
+import { Metadata } from 'next';
+import { requireSection } from '@/lib/admin/guards';
+import DonationsPageClient from './DonationsPageClient';
 
 export const metadata: Metadata = {
   title: 'Spenden',
   description: 'Geld- und Sachspenden verwalten.',
-}
+};
 
 export default async function AdminDonationsPage() {
-  await requireSection('donations')
-  return <DonationsPageClient />
+  await requireSection('donations');
+  return <DonationsPageClient />;
 }

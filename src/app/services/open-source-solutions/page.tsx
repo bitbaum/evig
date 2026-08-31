@@ -1,24 +1,25 @@
-import { Metadata } from 'next'
-import { PageHero } from '@/components/layout/PageHero'
-import { BenefitsSection } from './components/BenefitsSection'
-import { ServicesSection } from './components/ServicesSection'
-import { ComparisonSection } from './components/ComparisonSection'
-import { CTASection } from './components/CTASection'
-import { getTextColor } from '@/lib/design-system'
-import { cn } from '@/lib/utils'
+import { Metadata } from 'next';
+import { PageHero } from '@/components/layout/PageHero';
+import { BenefitsSection } from './components/BenefitsSection';
+import { ServicesSection } from './components/ServicesSection';
+import { ComparisonSection } from './components/ComparisonSection';
+import { CTASection } from './components/CTASection';
+import { getTextColor } from '@/lib/design-system';
+import { cn } from '@/lib/utils';
 import {
   benefits,
   popularApps,
   features,
   consumerComparisons,
   businessComparisons,
-  emergingTechComparisons
-} from './data'
+  emergingTechComparisons,
+} from './data';
 
 export const metadata: Metadata = {
   title: 'Open-Source-Lösungen',
-  description: 'Professionelle Implementierung, Unterstützung und Schulung für Open-Source-Software für Unternehmen und Privatpersonen.',
-}
+  description:
+    'Professionelle Implementierung, Unterstützung und Schulung für Open-Source-Software für Unternehmen und Privatpersonen.',
+};
 
 export default function OpenSourceSolutionsPage() {
   return (
@@ -43,8 +44,10 @@ export default function OpenSourceSolutionsPage() {
       <div className="bg-surface-raised py-6 sm:py-8">
         <div className="container mx-auto px-4 sm:px-6 text-center">
           <p className={cn('text-sm', getTextColor('neutral', 'muted'))}>
-            Alle bereitgestellten Informationen sind zum {new Date().toLocaleDateString('de-CH', { year: 'numeric', month: 'long' })} korrekt.
-            Wir aktualisieren unsere Inhalte regelmässig, um die neuesten Entwicklungen in der Open-Source-Software widerzuspiegeln.
+            Alle bereitgestellten Informationen sind zum{' '}
+            {new Date().toLocaleDateString('de-CH', { year: 'numeric', month: 'long' })} korrekt.
+            Wir aktualisieren unsere Inhalte regelmässig, um die neuesten Entwicklungen in der
+            Open-Source-Software widerzuspiegeln.
           </p>
         </div>
       </div>
@@ -57,8 +60,9 @@ export default function OpenSourceSolutionsPage() {
               Open-Source-Lösungen
             </h2>
             <p className={cn('text-lg', getTextColor('white', 'muted'))}>
-              Entdecken Sie leistungsstarke Open-Source-Alternativen zu teurer proprietärer Software.
-              Alle diese Lösungen sind kostenlos, werden regelmässig aktualisiert und von der Community vorangetrieben.
+              Entdecken Sie leistungsstarke Open-Source-Alternativen zu teurer proprietärer
+              Software. Alle diese Lösungen sind kostenlos, werden regelmässig aktualisiert und von
+              der Community vorangetrieben.
             </p>
           </div>
 
@@ -69,9 +73,12 @@ export default function OpenSourceSolutionsPage() {
           <ComparisonSection title="Lösungen für Unternehmen" comparisons={businessComparisons} />
 
           {/* Emerging Technologies */}
-          <ComparisonSection title="Aufstrebende Technologien" comparisons={emergingTechComparisons} />
+          <ComparisonSection
+            title="Aufstrebende Technologien"
+            comparisons={emergingTechComparisons}
+          />
         </div>
       </section>
     </main>
-  )
+  );
 }

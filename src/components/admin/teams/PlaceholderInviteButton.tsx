@@ -1,13 +1,13 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Mail, Loader2, Copy, Check } from 'lucide-react'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { apiFetch } from '@/lib/api/client'
+import { useState } from 'react';
+import { Mail, Loader2, Copy, Check } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { apiFetch } from '@/lib/api/client';
 
 interface Props {
-  userId: string
+  userId: string;
 }
 
 /**
@@ -16,47 +16,47 @@ interface Props {
  * emailed directly; either way it is shown and copied for manual delivery.
  */
 export default function PlaceholderInviteButton({ userId }: Props) {
-  const [busy, setBusy] = useState(false)
-  const [email, setEmail] = useState('')
-  const [link, setLink] = useState<string | null>(null)
-  const [sentTo, setSentTo] = useState<string | null>(null)
-  const [copied, setCopied] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [busy, setBusy] = useState(false);
+  const [email, setEmail] = useState('');
+  const [link, setLink] = useState<string | null>(null);
+  const [sentTo, setSentTo] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function invite() {
-    setBusy(true)
-    setError(null)
+    setBusy(true);
+    setError(null);
     const res = await apiFetch<{ token: string; emailed: boolean }>('/api/admin/teams/invite', {
       method: 'POST',
       body: { user_id: userId, email: email.trim() || undefined },
-    })
-    setBusy(false)
+    });
+    setBusy(false);
     if (!res.success || !res.data?.token) {
-      setError(res.error || 'Einladung fehlgeschlagen')
-      return
+      setError(res.error || 'Einladung fehlgeschlagen');
+      return;
     }
-    const url = `${window.location.origin}/einladung/${res.data.token}`
-    setLink(url)
+    const url = `${window.location.origin}/einladung/${res.data.token}`;
+    setLink(url);
     if (res.data.emailed) {
-      setSentTo(email.trim())
+      setSentTo(email.trim());
     } else if (email.trim()) {
-      setError('E-Mail-Versand fehlgeschlagen — Link manuell weitergeben.')
+      setError('E-Mail-Versand fehlgeschlagen — Link manuell weitergeben.');
     }
     try {
-      await navigator.clipboard.writeText(url)
-      setCopied(true)
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
     } catch {
       // Clipboard blocked — the link is shown for manual copy.
     }
   }
 
   async function copy() {
-    if (!link) return
+    if (!link) return;
     try {
-      await navigator.clipboard.writeText(link)
-      setCopied(true)
+      await navigator.clipboard.writeText(link);
+      setCopied(true);
     } catch {
-      setError('Kopieren nicht möglich — Link manuell markieren.')
+      setError('Kopieren nicht möglich — Link manuell markieren.');
     }
   }
 
@@ -72,7 +72,11 @@ export default function PlaceholderInviteButton({ userId }: Props) {
             aria-label="Einladungslink"
           />
           <Button type="button" variant="secondary" size="sm" onClick={copy}>
-            {copied ? <Check className="w-3.5 h-3.5 text-success-500" /> : <Copy className="w-3.5 h-3.5" />}
+            {copied ? (
+              <Check className="w-3.5 h-3.5 text-success-500" />
+            ) : (
+              <Copy className="w-3.5 h-3.5" />
+            )}
             {copied ? 'Kopiert' : 'Kopieren'}
           </Button>
         </div>
@@ -83,7 +87,7 @@ export default function PlaceholderInviteButton({ userId }: Props) {
         )}
         {error && <span className="text-xs text-error-600 dark:text-error-400">{error}</span>}
       </div>
-    )
+    );
   }
 
   return (
@@ -105,5 +109,5 @@ export default function PlaceholderInviteButton({ userId }: Props) {
       </div>
       {error && <span className="text-xs text-error-600 dark:text-error-400">{error}</span>}
     </div>
-  )
+  );
 }

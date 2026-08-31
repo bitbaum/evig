@@ -1,73 +1,72 @@
-import { NextRequest } from 'next/server'
-import { auth } from '@/auth'
-import { db } from '@/db'
-import { sql, eq, and, getTableName } from 'drizzle-orm'
-import { workshops, workshopInstances, workshopRegistrations } from '@/db/schema/workshops'
-import { apiError, apiSuccess, apiUnauthorized, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { logger } from '@/lib/logger'
-import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status'
-import { WORKSHOP_INSTANCE_STATUS } from '@/config/workshops'
-import { PAYMENT_STATUS } from '@/config/payment-status'
+import { NextRequest } from 'next/server';
+import { auth } from '@/auth';
+import { db } from '@/db';
+import { sql, eq, and, getTableName } from 'drizzle-orm';
+import { workshops, workshopInstances, workshopRegistrations } from '@/db/schema/workshops';
 import {
-  processPayment,
-  buildInvoiceLineItem,
-  centsToDisplay
-} from '@/lib/payments/payment-flow'
-import { validateBody, WorkshopRegisterWithPaymentSchema } from '@/lib/schemas'
-import { APP_URL } from '@/config/urls'
-import { PAYREXX_SETUP_MESSAGE, isPayrexxCheckoutUnavailable } from '@/lib/payments/payrexx-client'
+  apiError,
+  apiSuccess,
+  apiUnauthorized,
+  apiNotFound,
+  apiBadRequest,
+} from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { logger } from '@/lib/logger';
+import { WORKSHOP_REGISTRATION_STATUS } from '@/config/workshop-registration-status';
+import { WORKSHOP_INSTANCE_STATUS } from '@/config/workshops';
+import { PAYMENT_STATUS } from '@/config/payment-status';
+import { processPayment, buildInvoiceLineItem, centsToDisplay } from '@/lib/payments/payment-flow';
+import { validateBody, WorkshopRegisterWithPaymentSchema } from '@/lib/schemas';
+import { APP_URL } from '@/config/urls';
+import { PAYREXX_SETUP_MESSAGE, isPayrexxCheckoutUnavailable } from '@/lib/payments/payrexx-client';
 
 interface WorkshopRow {
-  id: string
-  title: string
-  price_cents: number
-  slug: string
-  is_active: boolean
+  id: string;
+  title: string;
+  price_cents: number;
+  slug: string;
+  is_active: boolean;
 }
 
 interface InstanceRow {
-  id: string
-  title: string
-  workshop_price: number
-  current_participants: number
-  max_participants: number
-  status: string
+  id: string;
+  title: string;
+  workshop_price: number;
+  current_participants: number;
+  max_participants: number;
+  status: string;
 }
 
 // Table name refs
-const wTable = getTableName(workshops)
-const wiTable = getTableName(workshopInstances)
+const wTable = getTableName(workshops);
+const wiTable = getTableName(workshopInstances);
 
 // Thrown from inside the transaction to surface a 400 ("ausgebucht") outside.
 // Caught and translated by the handler — never bubbles to the user.
 class CapacityExceededError extends Error {
   constructor() {
-    super('Workshop instance capacity exceeded')
-    this.name = 'CapacityExceededError'
+    super('Workshop instance capacity exceeded');
+    this.name = 'CapacityExceededError';
   }
 }
 
 // POST /api/workshops/[slug]/register-with-payment - Register for workshop with payment
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth()
+    const session = await auth();
     if (!session?.user?.id) {
-      return apiUnauthorized(ERROR_MESSAGES.AUTHENTICATION_REQUIRED)
+      return apiUnauthorized(ERROR_MESSAGES.AUTHENTICATION_REQUIRED);
     }
 
     if (isPayrexxCheckoutUnavailable()) {
-      return apiBadRequest(PAYREXX_SETUP_MESSAGE)
+      return apiBadRequest(PAYREXX_SETUP_MESSAGE);
     }
 
-    const workshopSlug = request.nextUrl.pathname.split('/')[3] // Extract slug from URL
-    const body = await request.json()
-    const validation = validateBody(WorkshopRegisterWithPaymentSchema, body)
-    if (!validation.success) return validation.error
-    const {
-      instanceId,
-      useEscrow,
-    } = validation.data
+    const workshopSlug = request.nextUrl.pathname.split('/')[3]; // Extract slug from URL
+    const body = await request.json();
+    const validation = validateBody(WorkshopRegisterWithPaymentSchema, body);
+    if (!validation.success) return validation.error;
+    const { instanceId, useEscrow } = validation.data;
 
     // Get workshop details
     const workshopResult = await db.execute(sql`
@@ -76,22 +75,24 @@ export async function POST(request: NextRequest) {
         COALESCE(w.price_cents, 0) as price_cents
       FROM ${sql.raw(wTable)} w
       WHERE w.slug = ${workshopSlug} AND w.is_active = true
-    `)
+    `);
 
     if (workshopResult.rows.length === 0) {
-      return apiNotFound(ERROR_MESSAGES.WORKSHOP_NOT_FOUND)
+      return apiNotFound(ERROR_MESSAGES.WORKSHOP_NOT_FOUND);
     }
 
-    const workshop = workshopResult.rows[0] as unknown as WorkshopRow
+    const workshop = workshopResult.rows[0] as unknown as WorkshopRow;
 
     if (!workshop.price_cents || workshop.price_cents <= 0) {
-      return apiBadRequest('Dieser Workshop ist nicht für die Online-Anmeldung mit Zahlung verfügbar')
+      return apiBadRequest(
+        'Dieser Workshop ist nicht für die Online-Anmeldung mit Zahlung verfügbar',
+      );
     }
 
     // Get workshop instance if specified, otherwise use general workshop
-    let instanceDetails: InstanceRow | null = null
-    let registrationTarget: string = workshop.id
-    let registrationType = 'workshop'
+    let instanceDetails: InstanceRow | null = null;
+    let registrationTarget: string = workshop.id;
+    let registrationType = 'workshop';
 
     if (instanceId) {
       const instanceResult = await db.execute(sql`
@@ -102,34 +103,35 @@ export async function POST(request: NextRequest) {
         FROM ${sql.raw(wiTable)} wi
         JOIN ${sql.raw(wTable)} w ON wi.workshop_id = w.id
         WHERE wi.id = ${instanceId} AND wi.status = ${WORKSHOP_INSTANCE_STATUS.SCHEDULED}
-      `)
+      `);
 
       if (instanceResult.rows.length === 0) {
-        return apiNotFound('Workshop-Termin nicht gefunden oder nicht verfügbar')
+        return apiNotFound('Workshop-Termin nicht gefunden oder nicht verfügbar');
       }
 
-      instanceDetails = instanceResult.rows[0] as unknown as InstanceRow
-      registrationTarget = instanceId
-      registrationType = 'instance'
+      instanceDetails = instanceResult.rows[0] as unknown as InstanceRow;
+      registrationTarget = instanceId;
+      registrationType = 'instance';
 
       // Check capacity
       if (instanceDetails.current_participants >= instanceDetails.max_participants) {
-        return apiBadRequest('Workshop-Termin ist ausgebucht')
+        return apiBadRequest('Workshop-Termin ist ausgebucht');
       }
     }
 
     // Check if user is already registered
-    const existingRegistration = await db.select({
-      id: workshopRegistrations.id,
-      status: workshopRegistrations.status,
-    })
+    const existingRegistration = await db
+      .select({
+        id: workshopRegistrations.id,
+        status: workshopRegistrations.status,
+      })
       .from(workshopRegistrations)
       .where(
         and(
           eq(workshopRegistrations.userId, session.user.id),
-          eq(workshopRegistrations.workshopInstanceId, registrationTarget)
-        )
-      )
+          eq(workshopRegistrations.workshopInstanceId, registrationTarget),
+        ),
+      );
 
     // UNIQUE(user_id, workshop_instance_id) means a stale row from a prior
     // cancellation or in-flight payment attempt blocks a fresh INSERT. Branch
@@ -137,23 +139,28 @@ export async function POST(request: NextRequest) {
     // from the unique-constraint violation, and so CANCELLED rows can be
     // resurrected (matches the register/route.ts fix at 501ff9fa for the
     // non-payment variant).
-    let cancelledRegistrationId: string | null = null
+    let cancelledRegistrationId: string | null = null;
     if (existingRegistration.length > 0) {
-      const reg = existingRegistration[0]
-      if (reg.status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED || reg.status === WORKSHOP_REGISTRATION_STATUS.ATTENDED) {
-        return apiBadRequest('Sie sind bereits für diesen Workshop angemeldet')
+      const reg = existingRegistration[0];
+      if (
+        reg.status === WORKSHOP_REGISTRATION_STATUS.CONFIRMED ||
+        reg.status === WORKSHOP_REGISTRATION_STATUS.ATTENDED
+      ) {
+        return apiBadRequest('Sie sind bereits für diesen Workshop angemeldet');
       }
       if (reg.status === WORKSHOP_REGISTRATION_STATUS.PENDING) {
-        return apiBadRequest('Es läuft bereits eine Anmeldung für diesen Workshop. Bitte schliesse die Zahlung ab oder storniere zuerst.')
+        return apiBadRequest(
+          'Es läuft bereits eine Anmeldung für diesen Workshop. Bitte schliesse die Zahlung ab oder storniere zuerst.',
+        );
       }
       if (reg.status === WORKSHOP_REGISTRATION_STATUS.CANCELLED) {
-        cancelledRegistrationId = reg.id
+        cancelledRegistrationId = reg.id;
       }
       // Other statuses (WAITLIST, NO_SHOW): fall through to INSERT which will
       // 500 on UNIQUE — these states are rare and not the primary fix scope.
     }
 
-    const baseAmount = workshop.price_cents
+    const baseAmount = workshop.price_cents;
 
     // Wrap registration + participant count update in transaction. INSERT a
     // fresh row when there's no prior registration; UPDATE the existing
@@ -169,11 +176,12 @@ export async function POST(request: NextRequest) {
     // same instance. Resurrection of a CANCELLED row skips the lock + check
     // because that path doesn't touch current_participants (the row's seat
     // was never decremented at cancel time, so it still counts).
-    let registrationId: string
+    let registrationId: string;
     try {
       registrationId = await db.transaction(async (tx) => {
         if (cancelledRegistrationId) {
-          const [resurrected] = await tx.update(workshopRegistrations)
+          const [resurrected] = await tx
+            .update(workshopRegistrations)
             .set({
               status: WORKSHOP_REGISTRATION_STATUS.PENDING,
               paymentStatus: PAYMENT_STATUS.PENDING,
@@ -181,8 +189,8 @@ export async function POST(request: NextRequest) {
               cancelledAt: null,
             })
             .where(eq(workshopRegistrations.id, cancelledRegistrationId))
-            .returning({ id: workshopRegistrations.id })
-          return resurrected.id
+            .returning({ id: workshopRegistrations.id });
+          return resurrected.id;
         }
 
         // Lock the instance row + re-verify capacity for a fresh registration.
@@ -192,22 +200,24 @@ export async function POST(request: NextRequest) {
             FROM ${sql.raw(wiTable)}
             WHERE id = ${instanceId}
             FOR UPDATE
-          `)
+          `);
           const locked = lockedResult.rows[0] as
-            | { current_participants: number; max_participants: number }
-            | undefined
+            { current_participants: number; max_participants: number } | undefined;
           if (locked && locked.current_participants >= locked.max_participants) {
-            throw new CapacityExceededError()
+            throw new CapacityExceededError();
           }
         }
 
-        const [createdReg] = await tx.insert(workshopRegistrations).values({
-          userId: session.user.id,
-          workshopInstanceId: registrationTarget,
-          status: WORKSHOP_REGISTRATION_STATUS.PENDING,
-          paymentStatus: PAYMENT_STATUS.PENDING,
-          paymentAmountCents: baseAmount,
-        }).returning({ id: workshopRegistrations.id })
+        const [createdReg] = await tx
+          .insert(workshopRegistrations)
+          .values({
+            userId: session.user.id,
+            workshopInstanceId: registrationTarget,
+            status: WORKSHOP_REGISTRATION_STATUS.PENDING,
+            paymentStatus: PAYMENT_STATUS.PENDING,
+            paymentAmountCents: baseAmount,
+          })
+          .returning({ id: workshopRegistrations.id });
 
         // Update instance participant count if registering for specific instance
         if (instanceId) {
@@ -215,20 +225,20 @@ export async function POST(request: NextRequest) {
             UPDATE ${sql.raw(wiTable)}
             SET current_participants = current_participants + 1
             WHERE id = ${instanceId}
-          `)
+          `);
         }
 
-        return createdReg.id
-      })
+        return createdReg.id;
+      });
     } catch (err) {
       if (err instanceof CapacityExceededError) {
-        return apiBadRequest('Workshop-Termin ist ausgebucht')
+        return apiBadRequest('Workshop-Termin ist ausgebucht');
       }
-      throw err
+      throw err;
     }
 
     // Process payment using shared utility
-    const autoReleaseDays = 1
+    const autoReleaseDays = 1;
     const paymentResult = await processPayment({
       userId: session.user.id,
       baseAmountCents: baseAmount,
@@ -241,22 +251,17 @@ export async function POST(request: NextRequest) {
         workshopSlug,
         instanceId: instanceId || '',
         useEscrow: useEscrow.toString(),
-        registrationType
+        registrationType,
       },
       workshopRegistrationId: registrationId,
       successRedirectUrl: `${APP_URL}/dashboard/workshops?payment=success`,
       failedRedirectUrl: `${APP_URL}/workshops/${workshopSlug}?payment=failed`,
       cancelRedirectUrl: `${APP_URL}/workshops/${workshopSlug}?payment=cancelled`,
       purpose: `Workshop: ${workshop.title}`,
-      invoiceLineItems: [
-        buildInvoiceLineItem(
-          `Workshop: ${workshop.title}`,
-          baseAmount
-        )
-      ],
+      invoiceLineItems: [buildInvoiceLineItem(`Workshop: ${workshop.title}`, baseAmount)],
       invoiceNotes: `Workshop registration - ${workshop.title}`,
-      invoicePaymentTerms: 'Payment due before workshop date'
-    })
+      invoicePaymentTerms: 'Payment due before workshop date',
+    });
 
     return apiSuccess({
       registrationId,
@@ -269,10 +274,11 @@ export async function POST(request: NextRequest) {
       workshopTitle: workshop.title,
       registrationType,
       escrowEnabled: useEscrow,
-      message: 'Workshop-Anmeldung erstellt. Schliesse die Zahlung ab, um deinen Platz zu bestätigen.'
-    })
+      message:
+        'Workshop-Anmeldung erstellt. Schliesse die Zahlung ab, um deinen Platz zu bestätigen.',
+    });
   } catch (error) {
-    logger.error('Workshop registration with payment error', { error })
-    return apiError(error, 'Workshop-Anmeldung mit Zahlung fehlgeschlagen')
+    logger.error('Workshop registration with payment error', { error });
+    return apiError(error, 'Workshop-Anmeldung mit Zahlung fehlgeschlagen');
   }
 }

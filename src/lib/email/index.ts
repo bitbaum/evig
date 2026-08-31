@@ -154,7 +154,8 @@ export async function sendEmail(
       } catch (listmonkError) {
         logger.warn('Listmonk failed, falling back to SMTP', {
           error: listmonkError instanceof Error ? listmonkError.message : 'unknown',
-          to, template,
+          to,
+          template,
         });
       }
     }
@@ -189,10 +190,7 @@ export async function sendEmail(
  * @param to - Recipient email address
  * @param content - Email content with subject, html, and text
  */
-export async function sendCustomEmail(
-  to: string,
-  content: EmailContent
-): Promise<SendEmailResult> {
+export async function sendCustomEmail(to: string, content: EmailContent): Promise<SendEmailResult> {
   try {
     const provider = getEmailProvider();
 

@@ -1,187 +1,545 @@
 <style>
-  :root{
-    --bg:#eceeed; --surface:#ffffff; --surface-2:#f6f8f7;
-    --ink:#16201e; --ink-soft:#55635f; --ink-faint:#8a9691;
-    --line:#dde1e0; --line-soft:#e9eceb;
-    --accent:#0b6b5f; --accent-ink:#ffffff; --accent-soft:#e5f0ed; --accent-line:#bfdcd5;
-    --warn:#8a5a00; --warn-bg:#fbf3e2; --warn-line:#ecdcb2;
-    --code-bg:#122019; --code-ink:#d7e4de; --code-dim:#7f9a8f; --code-key:#8fd6bf;
-    --radius:12px; --radius-s:8px;
-    --maxw:940px;
-    --font: system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    --mono: ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+  :root {
+    --bg: #eceeed;
+    --surface: #ffffff;
+    --surface-2: #f6f8f7;
+    --ink: #16201e;
+    --ink-soft: #55635f;
+    --ink-faint: #8a9691;
+    --line: #dde1e0;
+    --line-soft: #e9eceb;
+    --accent: #0b6b5f;
+    --accent-ink: #ffffff;
+    --accent-soft: #e5f0ed;
+    --accent-line: #bfdcd5;
+    --warn: #8a5a00;
+    --warn-bg: #fbf3e2;
+    --warn-line: #ecdcb2;
+    --code-bg: #122019;
+    --code-ink: #d7e4de;
+    --code-dim: #7f9a8f;
+    --code-key: #8fd6bf;
+    --radius: 12px;
+    --radius-s: 8px;
+    --maxw: 940px;
+    --font: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
   }
-  *{box-sizing:border-box}
-  html{-webkit-text-size-adjust:100%}
-  body{
-    margin:0; background:var(--bg); color:var(--ink);
-    font-family:var(--font); font-size:16px; line-height:1.6;
-    -webkit-font-smoothing:antialiased;
+  * {
+    box-sizing: border-box;
   }
-  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 20px}
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 20px;
+  }
 
   /* ---- Header ---- */
-  header.masthead{padding:56px 0 8px}
-  .eyebrow{
-    font-size:12px; font-weight:700; letter-spacing:.11em; text-transform:uppercase;
-    color:var(--accent); display:inline-flex; align-items:center; gap:9px; margin:0 0 18px;
+  header.masthead {
+    padding: 56px 0 8px;
   }
-  .eyebrow::before{content:""; width:22px; height:2px; background:var(--accent); border-radius:2px}
-  h1{
-    font-size:clamp(30px,5vw,42px); line-height:1.08; font-weight:800;
-    letter-spacing:-.02em; margin:0 0 14px; text-wrap:balance; max-width:20ch;
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0 0 18px;
   }
-  .lede{font-size:19px; color:var(--ink-soft); margin:0 0 26px; max-width:60ch}
-  .tags{display:flex; flex-wrap:wrap; gap:8px; margin:0 0 4px}
-  .tag{
-    font-size:13px; font-weight:600; color:var(--ink-soft);
-    background:var(--surface); border:1px solid var(--line); border-radius:999px;
-    padding:6px 13px;
+  .eyebrow::before {
+    content: '';
+    width: 22px;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
   }
-  .tag.strong{background:var(--accent); color:var(--accent-ink); border-color:var(--accent)}
+  h1 {
+    font-size: clamp(30px, 5vw, 42px);
+    line-height: 1.08;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0 0 14px;
+    text-wrap: balance;
+    max-width: 20ch;
+  }
+  .lede {
+    font-size: 19px;
+    color: var(--ink-soft);
+    margin: 0 0 26px;
+    max-width: 60ch;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 4px;
+  }
+  .tag {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 6px 13px;
+  }
+  .tag.strong {
+    background: var(--accent);
+    color: var(--accent-ink);
+    border-color: var(--accent);
+  }
 
   /* ---- Section scaffolding ---- */
-  section{padding:34px 0}
-  .sec-head{display:flex; align-items:baseline; gap:14px; margin:0 0 20px}
-  .sec-num{
-    font-family:var(--mono); font-size:13px; font-weight:600; color:var(--accent);
-    font-variant-numeric:tabular-nums; padding-top:4px;
+  section {
+    padding: 34px 0;
   }
-  h2{font-size:24px; font-weight:750; letter-spacing:-.01em; margin:0; line-height:1.2}
-  .sec-head p{margin:4px 0 0; color:var(--ink-soft); font-size:15px}
+  .sec-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin: 0 0 20px;
+  }
+  .sec-num {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    padding-top: 4px;
+  }
+  h2 {
+    font-size: 24px;
+    font-weight: 750;
+    letter-spacing: -0.01em;
+    margin: 0;
+    line-height: 1.2;
+  }
+  .sec-head p {
+    margin: 4px 0 0;
+    color: var(--ink-soft);
+    font-size: 15px;
+  }
 
   /* ---- What you get: cards ---- */
-  .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
-  .card{
-    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
-    padding:20px 20px 22px;
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
   }
-  .card .k{
-    font-family:var(--mono); font-size:12px; font-weight:600; color:var(--accent);
-    letter-spacing:.04em; margin:0 0 12px;
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px 20px 22px;
   }
-  .card h3{font-size:16px; font-weight:700; margin:0 0 6px}
-  .card p{margin:0; font-size:14.5px; color:var(--ink-soft); line-height:1.55}
-  .card code{font-family:var(--mono); font-size:12.5px; background:var(--surface-2);
-    border:1px solid var(--line-soft); border-radius:5px; padding:1px 5px}
+  .card .k {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    margin: 0 0 12px;
+  }
+  .card h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 6px;
+  }
+  .card p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .card code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface-2);
+    border: 1px solid var(--line-soft);
+    border-radius: 5px;
+    padding: 1px 5px;
+  }
 
   /* ---- Live preview ---- */
-  .browser{
-    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
-    overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,.05);
+  .browser {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   }
-  .chrome{
-    display:flex; align-items:center; gap:12px; padding:11px 15px;
-    background:var(--surface-2); border-bottom:1px solid var(--line);
+  .chrome {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 15px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--line);
   }
-  .dots{display:flex; gap:6px; flex:0 0 auto}
-  .dots i{width:11px; height:11px; border-radius:50%; background:#d3d8d6; display:block}
-  .urlbar{
-    flex:1 1 auto; min-width:0; font-family:var(--mono); font-size:12.5px; color:var(--ink-faint);
-    background:var(--surface); border:1px solid var(--line); border-radius:999px;
-    padding:5px 14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  .dots {
+    display: flex;
+    gap: 6px;
+    flex: 0 0 auto;
   }
-  .seg{display:inline-flex; background:var(--surface); border:1px solid var(--line);
-    border-radius:999px; padding:3px; gap:2px; flex:0 0 auto}
-  .seg button{
-    font-family:var(--font); font-size:12.5px; font-weight:600; color:var(--ink-soft);
-    border:0; background:transparent; padding:5px 13px; border-radius:999px; cursor:pointer;
-    display:inline-flex; align-items:center; gap:6px;
+  .dots i {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #d3d8d6;
+    display: block;
   }
-  .seg button[aria-pressed="true"]{background:var(--accent); color:var(--accent-ink)}
-  .stage{background:#e9edf0; padding:20px; display:flex; justify-content:center}
-  .frame{width:100%; max-width:100%; transition:max-width .35s ease}
-  .frame.tablet{max-width:768px}
-  iframe.preview{
-    width:100%; height:660px; border:0; border-radius:var(--radius-s);
-    background:#e9edf0; box-shadow:0 2px 10px rgba(0,0,0,.08);
+  .urlbar {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--ink-faint);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
-  .frame.tablet iframe.preview{box-shadow:0 4px 22px rgba(0,0,0,.14)}
-  .stagenote{font-size:13px; color:var(--ink-faint); text-align:center; margin:12px 0 0}
+  .seg {
+    display: inline-flex;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 3px;
+    gap: 2px;
+    flex: 0 0 auto;
+  }
+  .seg button {
+    font-family: var(--font);
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    border: 0;
+    background: transparent;
+    padding: 5px 13px;
+    border-radius: 999px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .seg button[aria-pressed='true'] {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  .stage {
+    background: #e9edf0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  .frame {
+    width: 100%;
+    max-width: 100%;
+    transition: max-width 0.35s ease;
+  }
+  .frame.tablet {
+    max-width: 768px;
+  }
+  iframe.preview {
+    width: 100%;
+    height: 660px;
+    border: 0;
+    border-radius: var(--radius-s);
+    background: #e9edf0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  }
+  .frame.tablet iframe.preview {
+    box-shadow: 0 4px 22px rgba(0, 0, 0, 0.14);
+  }
+  .stagenote {
+    font-size: 13px;
+    color: var(--ink-faint);
+    text-align: center;
+    margin: 12px 0 0;
+  }
 
   /* ---- Prose ---- */
-  .prose p{margin:0 0 14px; max-width:66ch}
-  .prose strong{color:var(--ink); font-weight:700}
-  .prose code{font-family:var(--mono); font-size:13px; background:var(--surface);
-    border:1px solid var(--line); border-radius:5px; padding:1px 6px}
-  .steps{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:14px}
-  .steps li{
-    display:grid; grid-template-columns:30px 1fr; gap:14px; align-items:start;
-    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
-    padding:16px 18px;
+  .prose p {
+    margin: 0 0 14px;
+    max-width: 66ch;
   }
-  .steps .n{
-    font-family:var(--mono); font-size:13px; font-weight:700; color:var(--accent-ink);
-    background:var(--accent); width:26px; height:26px; border-radius:7px;
-    display:flex; align-items:center; justify-content:center; font-variant-numeric:tabular-nums;
+  .prose strong {
+    color: var(--ink);
+    font-weight: 700;
   }
-  .steps h3{margin:2px 0 4px; font-size:15.5px; font-weight:700}
-  .steps p{margin:0; font-size:14.5px; color:var(--ink-soft)}
-  .steps code{font-family:var(--mono); font-size:12.5px; background:var(--surface-2);
-    border:1px solid var(--line-soft); border-radius:5px; padding:1px 5px}
+  .prose code {
+    font-family: var(--mono);
+    font-size: 13px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 1px 6px;
+  }
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .steps li {
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    gap: 14px;
+    align-items: start;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+  }
+  .steps .n {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent-ink);
+    background: var(--accent);
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .steps h3 {
+    margin: 2px 0 4px;
+    font-size: 15.5px;
+    font-weight: 700;
+  }
+  .steps p {
+    margin: 0;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+  }
+  .steps code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    background: var(--surface-2);
+    border: 1px solid var(--line-soft);
+    border-radius: 5px;
+    padding: 1px 5px;
+  }
 
-  .callout{
-    display:grid; grid-template-columns:auto 1fr; gap:14px; align-items:start;
-    background:var(--warn-bg); border:1px solid var(--warn-line); border-radius:var(--radius);
-    padding:16px 18px; margin:22px 0 0;
+  .callout {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 14px;
+    align-items: start;
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-line);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    margin: 22px 0 0;
   }
-  .callout .icon{font-family:var(--mono); font-weight:700; color:var(--warn); font-size:16px; line-height:1.5}
-  .callout p{margin:0; color:#6f4a05; font-size:14.5px; line-height:1.55}
-  .callout strong{color:var(--warn)}
+  .callout .icon {
+    font-family: var(--mono);
+    font-weight: 700;
+    color: var(--warn);
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  .callout p {
+    margin: 0;
+    color: #6f4a05;
+    font-size: 14.5px;
+    line-height: 1.55;
+  }
+  .callout strong {
+    color: var(--warn);
+  }
 
   /* ---- Code block ---- */
-  .codewrap{background:var(--code-bg); border-radius:var(--radius); overflow:hidden}
-  .codebar{
-    display:flex; align-items:center; justify-content:space-between; gap:12px;
-    padding:12px 16px; border-bottom:1px solid rgba(255,255,255,.08);
+  .codewrap {
+    background: var(--code-bg);
+    border-radius: var(--radius);
+    overflow: hidden;
   }
-  .codebar .fname{font-family:var(--mono); font-size:13px; color:var(--code-ink); display:flex; align-items:center; gap:9px}
-  .codebar .fname::before{content:""; width:9px; height:9px; border-radius:2px; background:var(--code-key)}
-  .copybtn{
-    font-family:var(--font); font-size:13px; font-weight:600; color:var(--code-bg);
-    background:var(--code-key); border:0; border-radius:7px; padding:7px 15px; cursor:pointer;
-    display:inline-flex; align-items:center; gap:7px; transition:background .15s,transform .05s;
+  .codebar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
-  .copybtn:hover{background:#a6e6d1}
-  .copybtn:active{transform:translateY(1px)}
-  .copybtn.done{background:#cdeee0}
-  pre.code{
-    margin:0; padding:18px 16px; overflow-x:auto; max-height:440px;
-    font-family:var(--mono); font-size:12.5px; line-height:1.62; color:var(--code-ink);
-    font-variant-numeric:tabular-nums; -webkit-overflow-scrolling:touch;
+  .codebar .fname {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--code-ink);
+    display: flex;
+    align-items: center;
+    gap: 9px;
   }
-  pre.code::-webkit-scrollbar{height:9px; width:9px}
-  pre.code::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16); border-radius:9px}
+  .codebar .fname::before {
+    content: '';
+    width: 9px;
+    height: 9px;
+    border-radius: 2px;
+    background: var(--code-key);
+  }
+  .copybtn {
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--code-bg);
+    background: var(--code-key);
+    border: 0;
+    border-radius: 7px;
+    padding: 7px 15px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition:
+      background 0.15s,
+      transform 0.05s;
+  }
+  .copybtn:hover {
+    background: #a6e6d1;
+  }
+  .copybtn:active {
+    transform: translateY(1px);
+  }
+  .copybtn.done {
+    background: #cdeee0;
+  }
+  pre.code {
+    margin: 0;
+    padding: 18px 16px;
+    overflow-x: auto;
+    max-height: 440px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 1.62;
+    color: var(--code-ink);
+    font-variant-numeric: tabular-nums;
+    -webkit-overflow-scrolling: touch;
+  }
+  pre.code::-webkit-scrollbar {
+    height: 9px;
+    width: 9px;
+  }
+  pre.code::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.16);
+    border-radius: 9px;
+  }
 
-  .knobs{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:18px 0 0}
-  .knob{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-s);
-    padding:13px 15px}
-  .knob code{font-family:var(--mono); font-size:12.5px; color:var(--accent); font-weight:600}
-  .knob span{display:block; font-size:13.5px; color:var(--ink-soft); margin-top:3px}
+  .knobs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin: 18px 0 0;
+  }
+  .knob {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-s);
+    padding: 13px 15px;
+  }
+  .knob code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .knob span {
+    display: block;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    margin-top: 3px;
+  }
 
   /* ---- Footer ---- */
-  footer{border-top:1px solid var(--line); margin-top:26px; padding:30px 0 60px}
-  .sig{display:flex; align-items:center; gap:14px}
-  .sig .av{
-    width:44px; height:44px; border-radius:50%; background:var(--accent); color:#fff;
-    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:16px;
-    flex:0 0 auto; letter-spacing:.02em;
+  footer {
+    border-top: 1px solid var(--line);
+    margin-top: 26px;
+    padding: 30px 0 60px;
   }
-  .sig .who{font-weight:700; font-size:15px}
-  .sig .who span{display:block; font-weight:400; color:var(--ink-soft); font-size:13.5px; margin-top:2px}
-
-  a{color:var(--accent)}
-  :focus-visible{outline:3px solid var(--accent); outline-offset:2px; border-radius:4px}
-
-  @media (max-width:720px){
-    header.masthead{padding:40px 0 4px}
-    .cards{grid-template-columns:1fr}
-    .knobs{grid-template-columns:1fr}
-    iframe.preview{height:560px}
-    .urlbar{display:none}
+  .sig {
+    display: flex;
+    align-items: center;
+    gap: 14px;
   }
-  @media (prefers-reduced-motion:reduce){
-    *{transition:none !important}
+  .sig .av {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 16px;
+    flex: 0 0 auto;
+    letter-spacing: 0.02em;
+  }
+  .sig .who {
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .sig .who span {
+    display: block;
+    font-weight: 400;
+    color: var(--ink-soft);
+    font-size: 13.5px;
+    margin-top: 2px;
+  }
+
+  a {
+    color: var(--accent);
+  }
+  :focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (max-width: 720px) {
+    header.masthead {
+      padding: 40px 0 4px;
+    }
+    .cards {
+      grid-template-columns: 1fr;
+    }
+    .knobs {
+      grid-template-columns: 1fr;
+    }
+    iframe.preview {
+      height: 560px;
+    }
+    .urlbar {
+      display: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      transition: none !important;
+    }
   }
 </style>
 
@@ -189,9 +547,11 @@
   <header class="masthead">
     <p class="eyebrow">Übergabe · Revamp-IT</p>
     <h1>Kivitendo Auftragserfassung, tablet-tauglich</h1>
-    <p class="lede">Ein reines Aussehen-Update für die Verkaufsauftrags-Maske: grössere Schrift,
-      ruhigere Kontraste, Touch-Ziele ab 44&nbsp;px und eine Positions-Tabelle, die auf dem Tablet
-      scrollt statt abzuschneiden. Die Kivitendo-Struktur bleibt unangetastet.</p>
+    <p class="lede">
+      Ein reines Aussehen-Update für die Verkaufsauftrags-Maske: grössere Schrift, ruhigere
+      Kontraste, Touch-Ziele ab 44&nbsp;px und eine Positions-Tabelle, die auf dem Tablet scrollt
+      statt abzuschneiden. Die Kivitendo-Struktur bleibt unangetastet.
+    </p>
     <div class="tags">
       <span class="tag strong">CSS-only</span>
       <span class="tag">Update-sicher</span>
@@ -210,17 +570,26 @@
       <div class="card">
         <p class="k">ANSEHEN</p>
         <h3>Die Live-Vorschau</h3>
-        <p>Direkt hier unten — das Ziel-Aussehen, umschaltbar zwischen Desktop und Tablet. Nichts installieren.</p>
+        <p>
+          Direkt hier unten — das Ziel-Aussehen, umschaltbar zwischen Desktop und Tablet. Nichts
+          installieren.
+        </p>
       </div>
       <div class="card">
         <p class="k">EINBINDEN</p>
         <h3>Ein Stylesheet</h3>
-        <p>Eine eigene <code>.css</code> nach der <code>main.css</code> laden. Kein Eingriff in Kivitendo, überlebt Updates.</p>
+        <p>
+          Eine eigene <code>.css</code> nach der <code>main.css</code> laden. Kein Eingriff in
+          Kivitendo, überlebt Updates.
+        </p>
       </div>
       <div class="card">
         <p class="k">PRÜFEN</p>
         <h3>2 Minuten mit F12</h3>
-        <p>Ich sehe eure Live-DOM nicht. Alle unsicheren Selektoren sind mit <code>⚠ PRÜFEN</code> markiert.</p>
+        <p>
+          Ich sehe eure Live-DOM nicht. Alle unsicheren Selektoren sind mit
+          <code>⚠ PRÜFEN</code> markiert.
+        </p>
       </div>
     </div>
   </section>
@@ -230,7 +599,10 @@
       <span class="sec-num">02</span>
       <div>
         <h2 id="s2">Live-Vorschau</h2>
-        <p>Das exakte Ziel-Aussehen. Schalte auf Tablet um — die Kopffelder stapeln, die Positions-Tabelle scrollt waagrecht.</p>
+        <p>
+          Das exakte Ziel-Aussehen. Schalte auf Tablet um — die Kopffelder stapeln, die
+          Positions-Tabelle scrollt waagrecht.
+        </p>
       </div>
     </div>
     <div class="browser">
@@ -244,7 +616,12 @@
       </div>
       <div class="stage">
         <div class="frame" id="frame">
-          <iframe class="preview" id="preview" title="Mockup der Auftragserfassung" loading="lazy"></iframe>
+          <iframe
+            class="preview"
+            id="preview"
+            title="Mockup der Auftragserfassung"
+            loading="lazy"
+          ></iframe>
         </div>
       </div>
     </div>
@@ -256,7 +633,10 @@
       <span class="sec-num">03</span>
       <div>
         <h2 id="s3">Einbinden — update-sicher</h2>
-        <p>Nicht in <code>main.css</code> schreiben (wird bei Updates überschrieben). Als eigene Datei laden.</p>
+        <p>
+          Nicht in <code>main.css</code> schreiben (wird bei Updates überschrieben). Als eigene
+          Datei laden.
+        </p>
       </div>
     </div>
     <ol class="steps">
@@ -264,30 +644,43 @@
         <span class="n">1</span>
         <div>
           <h3>Datei ablegen</h3>
-          <p>Speichere <code>kivitendo-intake.css</code> unter <code>css/kivitendo/revamp-intake.css</code> (oder einem eigenen Ordner deiner Wahl).</p>
+          <p>
+            Speichere <code>kivitendo-intake.css</code> unter
+            <code>css/kivitendo/revamp-intake.css</code> (oder einem eigenen Ordner deiner Wahl).
+          </p>
         </div>
       </li>
       <li>
         <span class="n">2</span>
         <div>
           <h3>Nach der main.css laden</h3>
-          <p>Im Layout-Template referenzieren — <strong>nach</strong> der <code>main.css</code>, damit dein Stil gewinnt. So bleibt ein Kivitendo-Update unberührt.</p>
+          <p>
+            Im Layout-Template referenzieren — <strong>nach</strong> der <code>main.css</code>,
+            damit dein Stil gewinnt. So bleibt ein Kivitendo-Update unberührt.
+          </p>
         </div>
       </li>
       <li>
         <span class="n">3</span>
         <div>
           <h3>Öffnen &amp; kurz prüfen</h3>
-          <p>Auftragsmaske öffnen. Passt alles, bist du fertig. Greift ein Block nicht: F12 → echten Klassen-/ID-Namen ablesen → im CSS ersetzen.</p>
+          <p>
+            Auftragsmaske öffnen. Passt alles, bist du fertig. Greift ein Block nicht: F12 → echten
+            Klassen-/ID-Namen ablesen → im CSS ersetzen.
+          </p>
         </div>
       </li>
     </ol>
     <div class="callout">
       <span class="icon" aria-hidden="true">⚠</span>
-      <p><strong>Die Positions-Tabelle <code>#row_table_id</code></strong> füllt Kivitendo — an der Struktur ändern wir nichts.
-        Das CSS stylt sie nur um: grössere Zellen, fixierte Kopfzeile beim Scrollen, Zeilenstreifen, rechtsbündige Zahlen,
-        waagrechtes Scrollen auf dem Tablet. Diese ID ist bestätigt; die übrigen mit <strong>⚠ PRÜFEN</strong> markierten
-        Selektoren (Kopf-Wrapper, Summen-Container, Zahlen-Klasse) sind sichere Annahmen für 3.9.x — bei Bedarf mit F12 gegenprüfen.</p>
+      <p>
+        <strong>Die Positions-Tabelle <code>#row_table_id</code></strong> füllt Kivitendo — an der
+        Struktur ändern wir nichts. Das CSS stylt sie nur um: grössere Zellen, fixierte Kopfzeile
+        beim Scrollen, Zeilenstreifen, rechtsbündige Zahlen, waagrechtes Scrollen auf dem Tablet.
+        Diese ID ist bestätigt; die übrigen mit <strong>⚠ PRÜFEN</strong> markierten Selektoren
+        (Kopf-Wrapper, Summen-Container, Zahlen-Klasse) sind sichere Annahmen für 3.9.x — bei Bedarf
+        mit F12 gegenprüfen.
+      </p>
     </div>
   </section>
 
@@ -315,23 +708,41 @@
       <span class="sec-num">05</span>
       <div>
         <h2 id="s5">Feintuning</h2>
-        <p>Ganz oben im CSS gibt es einen <code style="font-family:var(--mono)">:root</code>-Block mit Stellschrauben.</p>
+        <p>
+          Ganz oben im CSS gibt es einen <code style="font-family: var(--mono)">:root</code>-Block
+          mit Stellschrauben.
+        </p>
       </div>
     </div>
     <div class="knobs">
-      <div class="knob"><code>--ri-text: 17px</code><span>Basis-Schriftgrösse. Älteren Augen zuliebe hochsetzen.</span></div>
-      <div class="knob"><code>--ri-text-lg: 19px</code><span>Beschriftungen &amp; wichtige Felder.</span></div>
-      <div class="knob"><code>--ri-accent: #0b6b5f</code><span>Revamp-Grün für Fokus &amp; Primäraktion.</span></div>
-      <div class="knob"><code>--ri-touch: 44px</code><span>Mindest-Touchfläche fürs Tablet.</span></div>
-      <div class="knob"><code>body.ri-xl</code><span>Klasse am <code>&lt;body&gt;</code> setzen → +2px überall.</span></div>
-      <div class="knob"><code>--ri-radius: 8px</code><span>Ecken-Rundung von Feldern &amp; Buttons.</span></div>
+      <div class="knob">
+        <code>--ri-text: 17px</code
+        ><span>Basis-Schriftgrösse. Älteren Augen zuliebe hochsetzen.</span>
+      </div>
+      <div class="knob">
+        <code>--ri-text-lg: 19px</code><span>Beschriftungen &amp; wichtige Felder.</span>
+      </div>
+      <div class="knob">
+        <code>--ri-accent: #0b6b5f</code><span>Revamp-Grün für Fokus &amp; Primäraktion.</span>
+      </div>
+      <div class="knob">
+        <code>--ri-touch: 44px</code><span>Mindest-Touchfläche fürs Tablet.</span>
+      </div>
+      <div class="knob">
+        <code>body.ri-xl</code
+        ><span>Klasse am <code>&lt;body&gt;</code> setzen → +2px überall.</span>
+      </div>
+      <div class="knob">
+        <code>--ri-radius: 8px</code><span>Ecken-Rundung von Feldern &amp; Buttons.</span>
+      </div>
     </div>
   </section>
 
   <footer>
     <div class="sig">
       <span class="av" aria-hidden="true">G</span>
-      <div class="who">Gruss George
+      <div class="who">
+        Gruss George
         <span>Revamp-IT · frag jederzeit nach, wenn ein Selektor nicht greift.</span>
       </div>
     </div>
@@ -412,11 +823,13 @@
   const note = document.getElementById('stagenote');
   const bD = document.getElementById('btnDesktop');
   const bT = document.getElementById('btnTablet');
-  function setView(tablet){
+  function setView(tablet) {
     frame.classList.toggle('tablet', tablet);
     bD.setAttribute('aria-pressed', String(!tablet));
     bT.setAttribute('aria-pressed', String(tablet));
-    note.textContent = tablet ? 'Ansicht: Tablet — 768 px, Kopffelder stapeln, Tabelle scrollt' : 'Ansicht: Desktop — volle Breite';
+    note.textContent = tablet
+      ? 'Ansicht: Tablet — 768 px, Kopffelder stapeln, Tabelle scrollt'
+      : 'Ansicht: Desktop — volle Breite';
   }
   bD.addEventListener('click', () => setView(false));
   bT.addEventListener('click', () => setView(true));
@@ -721,12 +1134,18 @@ body.ri-xl { --ri-text: 20px; --ri-text-lg: 22px; }`;
       const r = document.createRange();
       r.selectNode(document.getElementById('cssCode'));
       const sel = window.getSelection();
-      sel.removeAllRanges(); sel.addRange(r);
-      try { document.execCommand('copy'); } catch (_) {}
+      sel.removeAllRanges();
+      sel.addRange(r);
+      try {
+        document.execCommand('copy');
+      } catch (_) {}
       sel.removeAllRanges();
     }
     copyBtn.classList.add('done');
     copyLabel.textContent = 'Kopiert ✓';
-    setTimeout(() => { copyBtn.classList.remove('done'); copyLabel.textContent = 'Kopieren'; }, 1900);
+    setTimeout(() => {
+      copyBtn.classList.remove('done');
+      copyLabel.textContent = 'Kopieren';
+    }, 1900);
   });
 </script>

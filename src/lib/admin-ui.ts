@@ -1,6 +1,6 @@
-import { UI_STATUS } from '@/config/ui/status'
-import { designPrimitive } from '@/lib/design-system'
-import { NAV_STATE } from '@/lib/design/nav'
+import { UI_STATUS } from '@/config/ui/status';
+import { designPrimitive } from '@/lib/design-system';
+import { NAV_STATE } from '@/lib/design/nav';
 
 /**
  * Admin UI Design Tokens — SSOT
@@ -20,73 +20,73 @@ import { NAV_STATE } from '@/lib/design/nav'
 
 export const adminType = {
   /** h1: page title in AdminPageWrapper — 24px, bold, strong hierarchy anchor */
-  pageTitle:    designPrimitive.type.pageTitle,
+  pageTitle: designPrimitive.type.pageTitle,
   /** h2: card/section header */
   sectionTitle: designPrimitive.type.sectionTitle,
   /** h3: sub-heading inside a card */
-  subTitle:     designPrimitive.type.subTitle,
+  subTitle: designPrimitive.type.subTitle,
   /** Table column headers, filter labels */
-  tableHeader:  designPrimitive.type.tableHeader,
+  tableHeader: designPrimitive.type.tableHeader,
   /** Standard body text */
-  body:         designPrimitive.type.body,
+  body: designPrimitive.type.body,
   /** Secondary / meta text — 14px minimum for readability (WCAG) */
-  meta:         designPrimitive.type.meta,
+  meta: designPrimitive.type.meta,
   /** Compact metric value in the stats strip — tabular-nums keeps digits aligned */
-  stat:         'text-sm font-semibold tabular-nums text-text-primary',
+  stat: 'text-sm font-semibold tabular-nums text-text-primary',
   /** Label next to a compact stat value in the stats strip */
-  statLabel:    designPrimitive.type.smallMeta,
-} as const
+  statLabel: designPrimitive.type.smallMeta,
+} as const;
 
 // ─── Surfaces ────────────────────────────────────────────────────────────────
 // Card and panel background patterns.
 
 export const adminSurface = {
   /** Standard white card */
-  card:    designPrimitive.surface.card,
+  card: designPrimitive.surface.card,
   /** Card with subtle shadow (for detail/focus pages) */
   cardElevated: designPrimitive.surface.cardElevated,
   /** Inset / secondary panel */
-  inset:   designPrimitive.surface.inset,
+  inset: designPrimitive.surface.inset,
   /** Table wrapper — card with overflow-hidden for crisp border on table edges */
-  table:   designPrimitive.surface.table,
-} as const
+  table: designPrimitive.surface.table,
+} as const;
 
 // ─── Spacing ─────────────────────────────────────────────────────────────────
 
 export const adminSpace = {
   /** Outer page padding (matches AdminLayoutClient main) */
-  page:     'p-4 lg:p-6',
+  page: 'p-4 lg:p-6',
   /** Inner card padding — standard */
-  card:     'p-4',
+  card: 'p-4',
   /** Inner card padding — form sections with more breathing room */
   cardForm: 'p-5',
   /** Vertical rhythm between major page sections */
   sections: 'space-y-5',
   /** Gap inside a stats grid or card grid */
-  grid:     'gap-4',
+  grid: 'gap-4',
   /** Gap between chips/badges in a row */
-  chips:    'gap-1.5',
+  chips: 'gap-1.5',
   /** Gap between form field groups */
-  form:     'gap-5',
-} as const
+  form: 'gap-5',
+} as const;
 
 // ─── Icon Box ─────────────────────────────────────────────────────────────────
 // The colored-square-with-icon pattern used in stat cards and page headers.
 
 export const adminIconBox = {
   /** Extra-small box: 24×24, inside the compact stats strip */
-  xs:   'w-6 h-6 rounded-md flex items-center justify-center shrink-0',
+  xs: 'w-6 h-6 rounded-md flex items-center justify-center shrink-0',
   /** Small box: 36×36, inside stat cards */
-  sm:   'w-9 h-9 rounded-lg flex items-center justify-center shrink-0',
+  sm: 'w-9 h-9 rounded-lg flex items-center justify-center shrink-0',
   /** Medium box: 40×40, inside page header */
-  md:   'w-10 h-10 rounded-lg flex items-center justify-center shrink-0',
+  md: 'w-10 h-10 rounded-lg flex items-center justify-center shrink-0',
   /** Icon size inside xs box */
   iconXs: 'w-3.5 h-3.5',
   /** Icon size inside sm box */
   icon: 'w-4 h-4',
   /** Icon size inside md box */
   iconMd: 'w-5 h-5',
-} as const
+} as const;
 
 // ─── Icon Box Colors ──────────────────────────────────────────────────────────
 
@@ -94,28 +94,28 @@ export const adminIconBox = {
 // (green = success/create, amber = warning, red = danger). Every other key is
 // neutral — the decorative rainbow (blue/purple/indigo/teal/orange) is retired.
 // Keys are kept for API stability; the non-semantic ones now render neutral.
-const NEUTRAL_ICON = 'bg-neutral-100 text-neutral-600 dark:bg-neutral-500/12 dark:text-neutral-400'
+const NEUTRAL_ICON = 'bg-neutral-100 text-neutral-600 dark:bg-neutral-500/12 dark:text-neutral-400';
 export const adminIconColor = {
-  green:  'bg-success-100 text-success-600 dark:bg-success-500/12 dark:text-success-400',
-  amber:  'bg-warning-100 text-warning-600 dark:bg-warning-500/12 dark:text-warning-400',
-  red:    'bg-error-100 text-error-600 dark:bg-error-500/12 dark:text-error-400',
-  blue:   NEUTRAL_ICON,
+  green: 'bg-success-100 text-success-600 dark:bg-success-500/12 dark:text-success-400',
+  amber: 'bg-warning-100 text-warning-600 dark:bg-warning-500/12 dark:text-warning-400',
+  red: 'bg-error-100 text-error-600 dark:bg-error-500/12 dark:text-error-400',
+  blue: NEUTRAL_ICON,
   purple: NEUTRAL_ICON,
   indigo: NEUTRAL_ICON,
-  teal:   NEUTRAL_ICON,
+  teal: NEUTRAL_ICON,
   orange: NEUTRAL_ICON,
-  gray:   'bg-neutral-100 text-neutral-600 dark:bg-white/6 dark:text-neutral-400',
-} as const
+  gray: 'bg-neutral-100 text-neutral-600 dark:bg-white/6 dark:text-neutral-400',
+} as const;
 
-export type AdminIconColorKey = keyof typeof adminIconColor
+export type AdminIconColorKey = keyof typeof adminIconColor;
 
 // ─── Status Badge Colors ──────────────────────────────────────────────────────
 // Semantic color tokens for status badges across all admin pages.
 // Import these in config files instead of hardcoding class strings.
 
-export const adminStatus = UI_STATUS
+export const adminStatus = UI_STATUS;
 
-export type AdminStatusKey = keyof typeof adminStatus
+export type AdminStatusKey = keyof typeof adminStatus;
 
 // ─── Buttons ──────────────────────────────────────────────────────────────────
 // Every admin button style. Use these instead of inline Tailwind class strings.
@@ -127,32 +127,24 @@ export type AdminStatusKey = keyof typeof adminStatus
 
 export const adminBtn = {
   /** Primary CTA: create, submit, save */
-  primary:
-    `${designPrimitive.buttonBase} ${designPrimitive.focus} ${designPrimitive.buttonSize.sm} ${designPrimitive.button.default} disabled:cursor-not-allowed`,
+  primary: `${designPrimitive.buttonBase} ${designPrimitive.focus} ${designPrimitive.buttonSize.sm} ${designPrimitive.button.default} disabled:cursor-not-allowed`,
   /** Standard secondary: edit, configure */
-  secondary:
-    `${designPrimitive.buttonBase} ${designPrimitive.focus} ${designPrimitive.buttonSize.sm} ${designPrimitive.button.outline} disabled:cursor-not-allowed`,
+  secondary: `${designPrimitive.buttonBase} ${designPrimitive.focus} ${designPrimitive.buttonSize.sm} ${designPrimitive.button.outline} disabled:cursor-not-allowed`,
   /** Status transition: approve, publish, activate */
-  action:
-    `${designPrimitive.buttonBase} ${designPrimitive.focus} ${designPrimitive.buttonSize.sm} ${designPrimitive.button.primary} disabled:cursor-not-allowed`,
+  action: `${designPrimitive.buttonBase} ${designPrimitive.focus} ${designPrimitive.buttonSize.sm} ${designPrimitive.button.primary} disabled:cursor-not-allowed`,
   /** Warning state: suspend, pause */
-  warning:
-    `${designPrimitive.buttonBase} ${designPrimitive.focus} ${designPrimitive.buttonSize.sm} ${designPrimitive.button.warning} disabled:cursor-not-allowed`,
+  warning: `${designPrimitive.buttonBase} ${designPrimitive.focus} ${designPrimitive.buttonSize.sm} ${designPrimitive.button.warning} disabled:cursor-not-allowed`,
   /** Destructive confirm (inside modals only): permanently delete */
-  danger:
-    `${designPrimitive.buttonBase} ${designPrimitive.focus} ${designPrimitive.buttonSize.sm} ${designPrimitive.button.destructive} disabled:cursor-not-allowed`,
+  danger: `${designPrimitive.buttonBase} ${designPrimitive.focus} ${designPrimitive.buttonSize.sm} ${designPrimitive.button.destructive} disabled:cursor-not-allowed`,
   /** Destructive inline (table rows): delete, remove — outline not filled */
-  dangerOutline:
-    `${designPrimitive.buttonBase} ${designPrimitive.focus} ${designPrimitive.buttonSize.sm} border border-error-300 text-error-600 hover:bg-error-50 disabled:cursor-not-allowed dark:border-error-800 dark:text-error-400 dark:hover:bg-error-900/20`,
+  dangerOutline: `${designPrimitive.buttonBase} ${designPrimitive.focus} ${designPrimitive.buttonSize.sm} border border-error-300 text-error-600 hover:bg-error-50 disabled:cursor-not-allowed dark:border-error-800 dark:text-error-400 dark:hover:bg-error-900/20`,
   /** Ghost: low-emphasis, tertiary actions */
-  ghost:
-    `${designPrimitive.buttonBase} ${designPrimitive.focus} ${designPrimitive.buttonSize.sm} ${designPrimitive.button.ghost} disabled:cursor-not-allowed`,
+  ghost: `${designPrimitive.buttonBase} ${designPrimitive.focus} ${designPrimitive.buttonSize.sm} ${designPrimitive.button.ghost} disabled:cursor-not-allowed`,
   /** Icon-only button — 44×44px touch target (WCAG 2.5.5) */
-  icon:
-    `${designPrimitive.buttonBase} ${designPrimitive.focus} ${designPrimitive.buttonSize.icon} ${designPrimitive.button.ghost}`,
-} as const
+  icon: `${designPrimitive.buttonBase} ${designPrimitive.focus} ${designPrimitive.buttonSize.icon} ${designPrimitive.button.ghost}`,
+} as const;
 
-export type AdminBtnVariant = keyof typeof adminBtn
+export type AdminBtnVariant = keyof typeof adminBtn;
 
 // ─── Table ────────────────────────────────────────────────────────────────────
 
@@ -160,14 +152,14 @@ export const adminTable = {
   /** thead row */
   thead: designPrimitive.table.thead,
   /** th cell */
-  th:    designPrimitive.table.th,
+  th: designPrimitive.table.th,
   /** tbody tr — admin-surface hover; use on `<tr>` inside admin tables */
-  tr:    'border-b border-neutral-100 transition-colors hover:bg-surface-raised dark:border-white/4 dark:hover:bg-surface-base/6',
+  tr: 'border-b border-neutral-100 transition-colors hover:bg-surface-raised dark:border-white/4 dark:hover:bg-surface-base/6',
   /** td cell */
-  td:    designPrimitive.table.td,
+  td: designPrimitive.table.td,
   /** Empty state container */
   empty: designPrimitive.table.empty,
-} as const
+} as const;
 
 // ─── Interactive states ───────────────────────────────────────────────────────
 // Hover, selected, and active patterns for dense admin surfaces (tables, lists,
@@ -175,31 +167,30 @@ export const adminTable = {
 
 export const adminInteractive = {
   /** Table rows, queue links, card rows — standard pointer hover */
-  rowHover:        'hover:bg-surface-raised dark:hover:bg-surface-base/6',
+  rowHover: 'hover:bg-surface-raised dark:hover:bg-surface-base/6',
   /** Sidebar items, icon buttons — lighter hover */
-  rowHoverSubtle:  'hover:bg-surface-raised dark:hover:bg-surface-base/4',
+  rowHoverSubtle: 'hover:bg-surface-raised dark:hover:bg-surface-base/4',
   /** Compact list rows (timecards, payroll batches) */
-  rowHoverFaint:   'hover:bg-surface-raised dark:hover:bg-surface-base/2',
+  rowHoverFaint: 'hover:bg-surface-raised dark:hover:bg-surface-base/2',
   /** Checkbox-selected or active leave-period row */
-  rowSelected:     'bg-action-muted/40',
+  rowSelected: 'bg-action-muted/40',
   /** Sidebar nav item — current route. Value lives in the nav-state SSOT. */
-  navActive:       NAV_STATE.sidebar.active,
+  navActive: NAV_STATE.sidebar.active,
   /** Command palette / typeahead keyboard highlight */
-  pickerActive:    'bg-action-muted text-action',
+  pickerActive: 'bg-action-muted text-action',
   /** Unread notification row tint */
-  unreadTint:      'bg-action-muted/50',
+  unreadTint: 'bg-action-muted/50',
   /** Active team member avatar */
-  avatarActive:    'bg-action text-action-text',
+  avatarActive: 'bg-action text-action-text',
   /** Inactive team member avatar — readable initials on dark admin chrome */
-  avatarInactive:  'bg-surface-overlay text-text-secondary',
-} as const
+  avatarInactive: 'bg-surface-overlay text-text-secondary',
+} as const;
 
 // ─── Chrome (layout shell) ────────────────────────────────────────────────────
 
 export const adminChrome = {
   /** Sticky admin top bar — matches public header pattern */
-  topBar:
-    'sticky top-0 z-40 border-b border bg-surface-base/90 backdrop-blur-xs',
+  topBar: 'sticky top-0 z-40 border-b border bg-surface-base/90 backdrop-blur-xs',
   /** Primary action link in the top bar (e.g. Zur Website) */
   websiteLink:
     'hidden items-center gap-1.5 rounded-md border border-action/40 px-3 py-1.5 text-xs font-medium text-action transition-colors hover:border-action hover:bg-action/10 dark:border-action/30 sm:flex',
@@ -210,7 +201,7 @@ export const adminChrome = {
   /** Floating page-help panel. Elevation is reserved for this overlay layer. */
   modalPanel:
     'fixed inset-x-3 top-16 z-50 mx-auto max-h-[calc(100dvh-5rem)] max-w-xl overflow-y-auto rounded-xl border border-default bg-surface-base shadow-xl focus:outline-none sm:inset-x-auto sm:right-5 sm:mx-0 sm:w-[32rem]',
-} as const
+} as const;
 
 // ─── Form ─────────────────────────────────────────────────────────────────────
 
@@ -227,4 +218,4 @@ export const adminForm = {
   hint: designPrimitive.form.hint,
   /** Error message below a field */
   error: designPrimitive.form.error,
-} as const
+} as const;

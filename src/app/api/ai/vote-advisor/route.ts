@@ -18,64 +18,71 @@
  * could drain the AI budget in minutes.
  */
 
-import { NextRequest, NextResponse } from 'next/server'
-import { z } from 'zod'
-import { logger } from '@/lib/logger'
-import { callWithFallback } from '@/lib/ai/providers'
-import { apiSuccess, apiError, apiBadRequest, apiRateLimited } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit'
+import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
+import { logger } from '@/lib/logger';
+import { callWithFallback } from '@/lib/ai/providers';
+import { apiSuccess, apiError, apiBadRequest, apiRateLimited } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { rateLimiters, getClientIdentifier } from '@/lib/security/rate-limit';
 import {
   VOTING_ADVISOR_PROMPTS,
   VOTING_METHOD_LABELS,
   VOTING_METHOD_EXPLANATIONS,
-} from '@/lib/ai/config/prompts'
+} from '@/lib/ai/config/prompts';
 
 const requestSchema = z.object({
   title: z.string().min(1).max(300),
   description: z.string().min(1).max(3000),
   background: z.string().max(3000).optional(),
   votingMethod: z.string(),
-  options: z.array(z.object({
-    label: z.string(),
-    description: z.string().optional(),
-  })).optional(),
+  options: z
+    .array(
+      z.object({
+        label: z.string(),
+        description: z.string().optional(),
+      }),
+    )
+    .optional(),
   question: z.string().min(1).max(500),
-})
+});
 
 export async function POST(request: NextRequest) {
   try {
     // Rate-limit BEFORE validating the body so a flood of bad-body requests
     // can't bypass the check. Per-IP first, then the global cap.
-    const clientId = getClientIdentifier(request)
+    const clientId = getClientIdentifier(request);
     if (!rateLimiters.voteAdvisorIp(clientId)) {
-      return apiRateLimited()
+      return apiRateLimited();
     }
     if (!rateLimiters.voteAdvisorGlobal('global')) {
       logger.warn('Vote advisor global rate limit reached — refusing call', {
         identifier: clientId,
-      })
-      return apiRateLimited()
+      });
+      return apiRateLimited();
     }
 
-    let body: unknown
+    let body: unknown;
     try {
-      body = await request.json()
+      body = await request.json();
     } catch {
-      return apiBadRequest('Ungültiger JSON-Body')
+      return apiBadRequest('Ungültiger JSON-Body');
     }
 
-    const parsed = requestSchema.safeParse(body)
+    const parsed = requestSchema.safeParse(body);
     if (!parsed.success) {
-      return apiBadRequest(ERROR_MESSAGES.INVALID_REQUEST, parsed.error.flatten().fieldErrors)
+      return apiBadRequest(ERROR_MESSAGES.INVALID_REQUEST, parsed.error.flatten().fieldErrors);
     }
 
-    const { title, description, background, votingMethod, options, question } = parsed.data
+    const { title, description, background, votingMethod, options, question } = parsed.data;
 
     // Build options string for prompt
-    const optionsText = options && options.length > 0
-      ? options.map((o, i) => `${i + 1}. ${o.label}${o.description ? ': ' + o.description : ''}`).join('\n')
-      : '(Keine vordefinierten Optionen — Ja/Nein oder offene Abstimmung)'
+    const optionsText =
+      options && options.length > 0
+        ? options
+            .map((o, i) => `${i + 1}. ${o.label}${o.description ? ': ' + o.description : ''}`)
+            .join('\n')
+        : '(Keine vordefinierten Optionen — Ja/Nein oder offene Abstimmung)';
 
     // Fill the prompt template
     const userPrompt = VOTING_ADVISOR_PROMPTS.advise
@@ -83,15 +90,18 @@ export async function POST(request: NextRequest) {
       .replace('{description}', description)
       .replace('{background}', background || '(Kein weiterer Hintergrund angegeben)')
       .replace('{votingMethod}', VOTING_METHOD_LABELS[votingMethod] || votingMethod)
-      .replace('{votingMethodExplanation}', VOTING_METHOD_EXPLANATIONS[votingMethod] || votingMethod)
+      .replace(
+        '{votingMethodExplanation}',
+        VOTING_METHOD_EXPLANATIONS[votingMethod] || votingMethod,
+      )
       .replace('{options}', optionsText)
-      .replace('{question}', question)
+      .replace('{question}', question);
 
     logger.info('Vote advisor requested', {
       votingMethod,
       optionCount: options?.length ?? 0,
       questionLength: question.length,
-    })
+    });
 
     // Per-provider timeout. callWithFallback cascades Groq → OpenRouter →
     // Ollama; with 10s each the chain caps at ~30s total. Prior code wrapped
@@ -104,18 +114,21 @@ export async function POST(request: NextRequest) {
       maxTokens: 512,
       temperature: 0.3,
       timeoutMs: 10_000,
-    })
+    });
 
     if (!result) {
       // Custom 503 — AI fallback chain exhausted
       return NextResponse.json(
-        { success: false, error: 'KI-Dienst vorübergehend nicht verfügbar. Bitte versuche es später erneut.' },
-        { status: 503 }
-      )
+        {
+          success: false,
+          error: 'KI-Dienst vorübergehend nicht verfügbar. Bitte versuche es später erneut.',
+        },
+        { status: 503 },
+      );
     }
 
-    return apiSuccess({ analysis: result.text, model: result.model })
+    return apiSuccess({ analysis: result.text, model: result.model });
   } catch (error) {
-    return apiError(error, 'Fehler beim Erstellen der Analyse')
+    return apiError(error, 'Fehler beim Erstellen der Analyse');
   }
 }

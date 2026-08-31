@@ -6,16 +6,16 @@
  * create always 404'd. Section-gated on 'content' like the sibling blog CRUD.
  */
 
-import { NextRequest } from 'next/server'
-import { withAdmin } from '@/lib/api/middleware'
-import { db } from '@/db'
-import { staticPages } from '@/db/schema'
-import { desc, eq } from 'drizzle-orm'
-import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers'
-import { validateBody } from '@/lib/schemas'
-import { StaticPageSchema } from '@/lib/schemas/static-pages'
-import { logger } from '@/lib/logger'
-import { sql } from 'drizzle-orm'
+import { NextRequest } from 'next/server';
+import { withAdmin } from '@/lib/api/middleware';
+import { db } from '@/db';
+import { staticPages } from '@/db/schema';
+import { desc, eq } from 'drizzle-orm';
+import { apiSuccess, apiError, apiBadRequest } from '@/lib/api/helpers';
+import { validateBody } from '@/lib/schemas';
+import { StaticPageSchema } from '@/lib/schemas/static-pages';
+import { logger } from '@/lib/logger';
+import { sql } from 'drizzle-orm';
 
 export const GET = withAdmin('content', async () => {
   try {
@@ -31,28 +31,28 @@ export const GET = withAdmin('content', async () => {
       })
       .from(staticPages)
       .orderBy(desc(staticPages.updatedAt))
-      .limit(200)
+      .limit(200);
 
-    return apiSuccess({ items: rows })
+    return apiSuccess({ items: rows });
   } catch (error) {
-    return apiError(error, 'Seiten konnten nicht geladen werden')
+    return apiError(error, 'Seiten konnten nicht geladen werden');
   }
-})
+});
 
 export const POST = withAdmin('content', async (request: NextRequest, session) => {
   try {
-    const body = await request.json()
-    const validation = validateBody(StaticPageSchema, body)
-    if (!validation.success) return validation.error
-    const data = validation.data
+    const body = await request.json();
+    const validation = validateBody(StaticPageSchema, body);
+    if (!validation.success) return validation.error;
+    const data = validation.data;
 
     const [existing] = await db
       .select({ id: staticPages.id })
       .from(staticPages)
       .where(eq(staticPages.slug, data.slug))
-      .limit(1)
+      .limit(1);
     if (existing) {
-      return apiBadRequest('Eine Seite mit diesem Slug existiert bereits')
+      return apiBadRequest('Eine Seite mit diesem Slug existiert bereits');
     }
 
     const [created] = await db
@@ -68,11 +68,15 @@ export const POST = withAdmin('content', async (request: NextRequest, session) =
         createdBy: session.user.id,
         updatedBy: session.user.id,
       })
-      .returning({ id: staticPages.id })
+      .returning({ id: staticPages.id });
 
-    logger.info('Static page created', { pageId: created.id, slug: data.slug, userId: session.user.id })
-    return apiSuccess({ id: created.id }, 201)
+    logger.info('Static page created', {
+      pageId: created.id,
+      slug: data.slug,
+      userId: session.user.id,
+    });
+    return apiSuccess({ id: created.id }, 201);
   } catch (error) {
-    return apiError(error, 'Seite konnte nicht erstellt werden')
+    return apiError(error, 'Seite konnte nicht erstellt werden');
   }
-})
+});

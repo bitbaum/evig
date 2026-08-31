@@ -1,14 +1,14 @@
-import { TrendingUp } from 'lucide-react'
-import type { DashboardStats } from './types'
-import Heading from '@/components/admin/AdminHeading'
+import { TrendingUp } from 'lucide-react';
+import type { DashboardStats } from './types';
+import Heading from '@/components/admin/AdminHeading';
 
 interface WeeklyActivitySectionProps {
-  stats: DashboardStats
+  stats: DashboardStats;
 }
 
 export function WeeklyActivitySection({ stats }: WeeklyActivitySectionProps) {
   // Nothing meaningful to show when both are zero — hide instead of showing dead numbers
-  if (stats.newUsersThisWeek === 0 && stats.postsPublishedThisWeek === 0) return null
+  if (stats.newUsersThisWeek === 0 && stats.postsPublishedThisWeek === 0) return null;
 
   return (
     <div className="bg-surface-base rounded-xl shadow-xs border border-subtle">
@@ -23,12 +23,14 @@ export function WeeklyActivitySection({ stats }: WeeklyActivitySectionProps) {
         <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
           {stats.newUsersThisWeek > 0 && (
             <span className="text-text-secondary">
-              <span className="font-semibold text-action">+{stats.newUsersThisWeek}</span>{' '}
-              neue Benutzer
+              <span className="font-semibold text-action">+{stats.newUsersThisWeek}</span> neue
+              Benutzer
             </span>
           )}
           {stats.newUsersThisWeek > 0 && stats.postsPublishedThisWeek > 0 && (
-            <span className="text-text-muted" aria-hidden="true">&bull;</span>
+            <span className="text-text-muted" aria-hidden="true">
+              &bull;
+            </span>
           )}
           {stats.postsPublishedThisWeek > 0 && (
             <span className="text-text-secondary">
@@ -39,5 +41,5 @@ export function WeeklyActivitySection({ stats }: WeeklyActivitySectionProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }

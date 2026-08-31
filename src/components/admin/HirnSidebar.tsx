@@ -1,27 +1,27 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { useTranslations } from 'next-intl'
-import { Plus, MessageSquare, Loader2, ChevronRight, FileText, BarChart3 } from 'lucide-react'
-import Heading from '@/components/admin/AdminHeading'
-import { Button } from '@/components/ui/button'
-import { formatRelativeTime } from '@/lib/utils'
-import { logger } from '@/lib/logger'
-import { apiFetch } from '@/lib/api/client'
-import { adminInteractive } from '@/lib/admin-ui'
+import { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
+import { Plus, MessageSquare, Loader2, ChevronRight, FileText, BarChart3 } from 'lucide-react';
+import Heading from '@/components/admin/AdminHeading';
+import { Button } from '@/components/ui/button';
+import { formatRelativeTime } from '@/lib/utils';
+import { logger } from '@/lib/logger';
+import { apiFetch } from '@/lib/api/client';
+import { adminInteractive } from '@/lib/admin-ui';
 
 interface Session {
-  sessionId: string
-  firstMessage: string
-  lastActivity: Date
-  messageCount: number
+  sessionId: string;
+  firstMessage: string;
+  lastActivity: Date;
+  messageCount: number;
 }
 
 interface HirnSidebarProps {
-  currentSessionId: string | null
-  onSelectSession: (sessionId: string) => void
-  onNewSession: () => void
-  refreshTrigger?: number
+  currentSessionId: string | null;
+  onSelectSession: (sessionId: string) => void;
+  onNewSession: () => void;
+  refreshTrigger?: number;
 }
 
 export function HirnSidebar({
@@ -30,45 +30,52 @@ export function HirnSidebar({
   onNewSession,
   refreshTrigger,
 }: HirnSidebarProps) {
-  const t = useTranslations('admin.hirn.sidebar')
-  const [sessions, setSessions] = useState<Session[]>([])
-  const [loading, setLoading] = useState(true)
+  const t = useTranslations('admin.hirn.sidebar');
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<{
-    totalDocuments: number
-    totalChunks: number
-  } | null>(null)
+    totalDocuments: number;
+    totalChunks: number;
+  } | null>(null);
 
   useEffect(() => {
-    loadSessions()
-    loadStats()
-  }, [refreshTrigger])
+    loadSessions();
+    loadStats();
+  }, [refreshTrigger]);
 
   const loadSessions = async () => {
     try {
-      const result = await apiFetch<Array<Omit<Session, 'lastActivity'> & { lastActivity: string }>>('/api/admin/hirn/history')
+      const result =
+        await apiFetch<Array<Omit<Session, 'lastActivity'> & { lastActivity: string }>>(
+          '/api/admin/hirn/history',
+        );
       if (result.success && result.data) {
-        setSessions(result.data.map((s) => ({
-          ...s,
-          lastActivity: new Date(s.lastActivity),
-        })))
+        setSessions(
+          result.data.map((s) => ({
+            ...s,
+            lastActivity: new Date(s.lastActivity),
+          })),
+        );
       }
     } catch (err) {
-      logger.error('Failed to load Hirn sessions', { error: err })
+      logger.error('Failed to load Hirn sessions', { error: err });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const loadStats = async () => {
     try {
-      const result = await apiFetch<{ totalDocuments: number; totalChunks: number }>('/api/admin/hirn/documents?stats=true')
+      const result = await apiFetch<{ totalDocuments: number; totalChunks: number }>(
+        '/api/admin/hirn/documents?stats=true',
+      );
       if (result.success && result.data) {
-        setStats(result.data)
+        setStats(result.data);
       }
     } catch (err) {
-      logger.error('Failed to load Hirn stats', { error: err })
+      logger.error('Failed to load Hirn stats', { error: err });
     }
-  }
+  };
 
   return (
     <div className="flex flex-col h-full">
@@ -118,7 +125,7 @@ export function HirnSidebar({
           </p>
         ) : (
           <div className="space-y-1">
-            {sessions.map(session => (
+            {sessions.map((session) => (
               <Button
                 key={session.sessionId}
                 variant="ghost"
@@ -136,7 +143,8 @@ export function HirnSidebar({
                     {session.firstMessage.length > 40 ? '...' : ''}
                   </p>
                   <p className="text-xs text-text-tertiary">
-                    {formatRelativeTime(session.lastActivity.toISOString())} · {t('messageCount', { count: session.messageCount })}
+                    {formatRelativeTime(session.lastActivity.toISOString())} ·{' '}
+                    {t('messageCount', { count: session.messageCount })}
                   </p>
                 </div>
                 <ChevronRight className="w-4 h-4 shrink-0 opacity-50" />
@@ -146,5 +154,5 @@ export function HirnSidebar({
         )}
       </div>
     </div>
-  )
+  );
 }

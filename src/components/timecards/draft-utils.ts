@@ -5,10 +5,10 @@
  * No React dependency — these are testable in isolation.
  */
 
-import { TIMECARD_STATUSES } from '@/config/timecards'
-import type { Timecard, TimecardEntryInput } from '@/lib/schemas/timecards'
-import { normalizeEntry } from '@/lib/team/timecard-utils'
-import type { DraftState } from './types'
+import { TIMECARD_STATUSES } from '@/config/timecards';
+import type { Timecard, TimecardEntryInput } from '@/lib/schemas/timecards';
+import { normalizeEntry } from '@/lib/team/timecard-utils';
+import type { DraftState } from './types';
 
 export function createDraft(entries: TimecardEntryInput[], selectedDate: string): DraftState {
   return {
@@ -17,18 +17,18 @@ export function createDraft(entries: TimecardEntryInput[], selectedDate: string)
     notes: '',
     status: TIMECARD_STATUSES.DRAFT,
     selectedDate,
-  }
+  };
 }
 
 export function toDraftState(timecard: Timecard, fallbackSelectedDate: string): DraftState {
   return {
     id: timecard.id ?? null,
-    entries: timecard.entries.map(entry => normalizeEntry(entry)),
+    entries: timecard.entries.map((entry) => normalizeEntry(entry)),
     notes: timecard.notes ?? '',
     status: timecard.status as DraftState['status'],
     selectedDate:
-      timecard.entries.find(entry => entry.work_date === fallbackSelectedDate)?.work_date ||
+      timecard.entries.find((entry) => entry.work_date === fallbackSelectedDate)?.work_date ||
       timecard.entries[0]?.work_date ||
       fallbackSelectedDate,
-  }
+  };
 }

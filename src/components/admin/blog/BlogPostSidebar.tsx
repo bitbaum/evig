@@ -1,27 +1,27 @@
-'use client'
+'use client';
 
-import { useRef, useState } from 'react'
-import { Image as ImageIcon, Tag, Upload, Loader2 } from 'lucide-react'
-import { toast } from 'sonner'
-import { publishStatusLabel } from '@/config/content-status'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
-import Heading from '@/components/admin/AdminHeading'
-import { apiFetch } from '@/lib/api/client'
-import { BLOG_AUDIENCE_LABELS, type BlogAudience } from '@/config/blog'
-import type { BlogPostData, Category } from './types'
+import { useRef, useState } from 'react';
+import { Image as ImageIcon, Tag, Upload, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
+import { publishStatusLabel } from '@/config/content-status';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import Heading from '@/components/admin/AdminHeading';
+import { apiFetch } from '@/lib/api/client';
+import { BLOG_AUDIENCE_LABELS, type BlogAudience } from '@/config/blog';
+import type { BlogPostData, Category } from './types';
 
 interface Props {
-  formData: BlogPostData
-  categories: Category[]
-  tagInput: string
-  onFormDataChange: (data: BlogPostData) => void
-  onTagInputChange: (value: string) => void
-  onAddTag: () => void
-  onRemoveTag: (tag: string) => void
+  formData: BlogPostData;
+  categories: Category[];
+  tagInput: string;
+  onFormDataChange: (data: BlogPostData) => void;
+  onTagInputChange: (value: string) => void;
+  onAddTag: () => void;
+  onRemoveTag: (tag: string) => void;
 }
 
 export function BlogPostSidebar({
@@ -33,31 +33,33 @@ export function BlogPostSidebar({
   onAddTag,
   onRemoveTag,
 }: Props) {
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const [uploading, setUploading] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
 
   const handleImageUpload = async (file: File) => {
-    setUploading(true)
-    const fd = new FormData()
-    fd.append('files', file)
+    setUploading(true);
+    const fd = new FormData();
+    fd.append('files', file);
     const res = await apiFetch<{ urls: string[] }>('/api/uploads', {
       method: 'POST',
       body: fd,
       formData: true,
-    })
+    });
     if (res.success && res.data?.urls?.[0]) {
-      onFormDataChange({ ...formData, featuredImage: res.data.urls[0] })
+      onFormDataChange({ ...formData, featuredImage: res.data.urls[0] });
     } else {
-      toast.error(res.error || 'Bild konnte nicht hochgeladen werden')
+      toast.error(res.error || 'Bild konnte nicht hochgeladen werden');
     }
-    setUploading(false)
-  }
+    setUploading(false);
+  };
 
   return (
     <div className="space-y-6">
       {/* Status */}
       <Card className="p-6">
-        <Heading level={3} className="font-medium text-text-primary mb-4">Status</Heading>
+        <Heading level={3} className="font-medium text-text-primary mb-4">
+          Status
+        </Heading>
         <div className="flex items-center gap-3">
           <label className="relative inline-flex items-center cursor-pointer">
             <input
@@ -76,11 +78,16 @@ export function BlogPostSidebar({
 
       {/* Sichtbarkeit */}
       <Card className="p-6">
-        <Heading level={3} className="font-medium text-text-primary mb-4">Sichtbarkeit</Heading>
+        <Heading level={3} className="font-medium text-text-primary mb-4">
+          Sichtbarkeit
+        </Heading>
         <Select
           value={formData.visibility}
           onChange={(e) =>
-            onFormDataChange({ ...formData, visibility: e.target.value as BlogPostData['visibility'] })
+            onFormDataChange({
+              ...formData,
+              visibility: e.target.value as BlogPostData['visibility'],
+            })
           }
         >
           <option value="public">Öffentlich — im Blog gelistet</option>
@@ -88,14 +95,16 @@ export function BlogPostSidebar({
           <option value="unlisted">Passwortgeschützt</option>
         </Select>
         <p className="text-xs text-text-tertiary mt-2">
-          „Über Link teilbar" ist für jeden mit dem Link sichtbar (ohne Login), erscheint aber nicht in der
-          Blog-Übersicht und nicht in Suchmaschinen.
+          „Über Link teilbar" ist für jeden mit dem Link sichtbar (ohne Login), erscheint aber nicht
+          in der Blog-Übersicht und nicht in Suchmaschinen.
         </p>
       </Card>
 
       {/* Zugriff (Zugriffssteuerung, orthogonal zur Sichtbarkeit) */}
       <Card className="p-6">
-        <Heading level={3} className="font-medium text-text-primary mb-4">Zugriff</Heading>
+        <Heading level={3} className="font-medium text-text-primary mb-4">
+          Zugriff
+        </Heading>
         <Select
           value={formData.audience}
           onChange={(e) =>
@@ -103,25 +112,31 @@ export function BlogPostSidebar({
           }
         >
           {Object.entries(BLOG_AUDIENCE_LABELS).map(([value, label]) => (
-            <option key={value} value={value}>{label}</option>
+            <option key={value} value={value}>
+              {label}
+            </option>
           ))}
         </Select>
         <p className="text-xs text-text-tertiary mt-2">
-          Steuert, wer den Beitrag überhaupt öffnen darf — unabhängig von der Sichtbarkeit.
-          „Nur Team" ist ausschliesslich für angemeldete Mitarbeitende sichtbar.
+          Steuert, wer den Beitrag überhaupt öffnen darf — unabhängig von der Sichtbarkeit. „Nur
+          Team" ist ausschliesslich für angemeldete Mitarbeitende sichtbar.
         </p>
       </Card>
 
       {/* Category */}
       <Card className="p-6">
-        <Heading level={3} className="font-medium text-text-primary mb-4">Kategorie</Heading>
+        <Heading level={3} className="font-medium text-text-primary mb-4">
+          Kategorie
+        </Heading>
         <Select
           value={formData.categoryId}
           onChange={(e) => onFormDataChange({ ...formData, categoryId: e.target.value })}
         >
           <option value="">Keine Kategorie</option>
           {categories.map((cat) => (
-            <option key={cat.id} value={cat.id}>{cat.name}</option>
+            <option key={cat.id} value={cat.id}>
+              {cat.name}
+            </option>
           ))}
         </Select>
       </Card>
@@ -144,9 +159,9 @@ export function BlogPostSidebar({
           accept="image/jpeg,image/png,image/webp,image/gif"
           className="hidden"
           onChange={(e) => {
-            const file = e.target.files?.[0]
-            if (file) handleImageUpload(file)
-            e.target.value = ''
+            const file = e.target.files?.[0];
+            if (file) handleImageUpload(file);
+            e.target.value = '';
           }}
         />
         <Button
@@ -157,7 +172,11 @@ export function BlogPostSidebar({
           disabled={uploading}
           onClick={() => fileInputRef.current?.click()}
         >
-          {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+          {uploading ? (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          ) : (
+            <Upload className="w-4 h-4" />
+          )}
           {uploading ? 'Wird hochgeladen…' : 'Bild hochladen'}
         </Button>
         {formData.featuredImage && (
@@ -210,7 +229,9 @@ export function BlogPostSidebar({
 
       {/* SEO */}
       <Card className="p-6">
-        <Heading level={3} className="font-medium text-text-primary mb-4">SEO</Heading>
+        <Heading level={3} className="font-medium text-text-primary mb-4">
+          SEO
+        </Heading>
         <div className="space-y-4">
           <div>
             <label className="block text-sm text-text-secondary mb-1">Meta-Titel</label>
@@ -233,5 +254,5 @@ export function BlogPostSidebar({
         </div>
       </Card>
     </div>
-  )
+  );
 }

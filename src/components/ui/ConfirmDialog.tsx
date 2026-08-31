@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * ConfirmDialog - Reusable confirmation dialog
@@ -7,30 +7,30 @@
  * message, and button labels. Built on the shared Modal wrapper.
  */
 
-import { Loader2, AlertTriangle, CheckCircle } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
-import { Modal } from '@/components/ui/Modal'
+import { Loader2, AlertTriangle, CheckCircle } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
+import { Modal } from '@/components/ui/Modal';
 
 interface ConfirmDialogProps {
-  isOpen: boolean
-  title: string
-  message: string
-  itemName?: string
+  isOpen: boolean;
+  title: string;
+  message: string;
+  itemName?: string;
   /**
    * Optional rich content rendered below the message. Use this when the
    * confirm needs a list of consequences, a checklist of prerequisites,
    * or any other non-string detail (e.g. "12 action items will become
    * uneditable; 3 attendees still unmapped").
    */
-  details?: React.ReactNode
-  confirmLabel?: string
-  cancelLabel?: string
-  isLoading?: boolean
-  error?: string | null
-  variant?: 'danger' | 'warning' | 'success' | 'default'
-  onConfirm: () => void
-  onClose: () => void
+  details?: React.ReactNode;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  isLoading?: boolean;
+  error?: string | null;
+  variant?: 'danger' | 'warning' | 'success' | 'default';
+  onConfirm: () => void;
+  onClose: () => void;
 }
 
 const VARIANT_STYLES = {
@@ -54,7 +54,7 @@ const VARIANT_STYLES = {
     button: 'bg-action hover:bg-action-hover text-action-text',
     icon: 'text-text-secondary',
   },
-}
+};
 
 export function ConfirmDialog({
   isOpen,
@@ -70,11 +70,11 @@ export function ConfirmDialog({
   onConfirm,
   onClose,
 }: ConfirmDialogProps) {
-  const tCommon = useTranslations('common')
-  const tErrors = useTranslations('errors')
-  const effectiveConfirmLabel = confirmLabel ?? tCommon('confirm')
-  const effectiveCancelLabel = cancelLabel ?? tCommon('cancel')
-  const styles = VARIANT_STYLES[variant]
+  const tCommon = useTranslations('common');
+  const tErrors = useTranslations('errors');
+  const effectiveConfirmLabel = confirmLabel ?? tCommon('confirm');
+  const effectiveCancelLabel = cancelLabel ?? tCommon('cancel');
+  const styles = VARIANT_STYLES[variant];
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title} size="sm">
@@ -85,9 +85,7 @@ export function ConfirmDialog({
         ) : (
           <AlertTriangle className={`w-5 h-5 ${styles.icon}`} />
         )}
-        <span className={`text-lg font-semibold ${styles.title}`}>
-          {title}
-        </span>
+        <span className={`text-lg font-semibold ${styles.title}`}>{title}</span>
       </div>
 
       {/* Error */}
@@ -99,21 +97,13 @@ export function ConfirmDialog({
 
       {/* Content */}
       <div className="mb-6">
-        <p className="text-text-secondary mb-2">
-          {message}
-        </p>
+        <p className="text-text-secondary mb-2">{message}</p>
         {itemName && (
           <div className="p-3 bg-surface-raised rounded-lg">
-            <p className="font-medium text-text-primary">
-              {itemName}
-            </p>
+            <p className="font-medium text-text-primary">{itemName}</p>
           </div>
         )}
-        {details && (
-          <div className="mt-3">
-            {details}
-          </div>
-        )}
+        {details && <div className="mt-3">{details}</div>}
         {variant === 'danger' && (
           <p className="mt-3 text-sm text-error-600 dark:text-error-400">
             {tErrors('irreversible')}
@@ -137,5 +127,5 @@ export function ConfirmDialog({
         </Button>
       </div>
     </Modal>
-  )
+  );
 }

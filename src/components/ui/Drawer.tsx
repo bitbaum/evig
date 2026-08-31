@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Drawer — the edge-anchored overlay primitive (the sibling of <Modal>, which
@@ -19,25 +19,25 @@
  * `rootClassName` for viewport gating (e.g. `xl:hidden`, `lg:hidden`).
  */
 
-import { useEffect, useState, type ReactNode } from 'react'
-import { createPortal } from 'react-dom'
-import { useFocusTrap } from '@/hooks/useFocusTrap'
-import { cn } from '@/lib/utils'
+import { useEffect, useState, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
+import { useFocusTrap } from '@/hooks/useFocusTrap';
+import { cn } from '@/lib/utils';
 
-type DrawerSide = 'right' | 'bottom'
+type DrawerSide = 'right' | 'bottom';
 
 interface DrawerProps {
-  isOpen: boolean
-  onClose: () => void
+  isOpen: boolean;
+  onClose: () => void;
   /** Which edge the panel is anchored to. Default 'right'. */
-  side?: DrawerSide
+  side?: DrawerSide;
   /** Accessible name for the dialog (required — it's `aria-label`). */
-  ariaLabel: string
+  ariaLabel: string;
   /** Classes for the sliding panel (width / max-height / padding overrides). */
-  className?: string
+  className?: string;
   /** Classes for the root portal layer — e.g. `xl:hidden` / `lg:hidden`. */
-  rootClassName?: string
-  children: ReactNode
+  rootClassName?: string;
+  children: ReactNode;
 }
 
 // Panel shape per side. `bg-surface-base` + border matches the design system
@@ -45,7 +45,7 @@ interface DrawerProps {
 const SIDE_PANEL: Record<DrawerSide, string> = {
   right: 'inset-y-0 right-0 w-full sm:max-w-md border-l border',
   bottom: 'inset-x-0 bottom-0 max-h-[85vh] rounded-t-2xl border-t border-subtle',
-}
+};
 
 export function Drawer({
   isOpen,
@@ -58,25 +58,25 @@ export function Drawer({
 }: DrawerProps) {
   // Escape-to-close, initial focus, Tab trap and focus restore all live in the
   // shared hook; attach its ref to the panel.
-  const panelRef = useFocusTrap<HTMLDivElement>(isOpen, onClose)
+  const panelRef = useFocusTrap<HTMLDivElement>(isOpen, onClose);
   // Portals need the document — mount after first client render.
-  const [mounted, setMounted] = useState(false)
+  const [mounted, setMounted] = useState(false);
   useEffect(() => {
-    const frame = requestAnimationFrame(() => setMounted(true))
-    return () => cancelAnimationFrame(frame)
-  }, [])
+    const frame = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
   // Lock body scroll while open.
   useEffect(() => {
-    if (!isOpen) return
-    const prev = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
+    if (!isOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
     return () => {
-      document.body.style.overflow = prev
-    }
-  }, [isOpen])
+      document.body.style.overflow = prev;
+    };
+  }, [isOpen]);
 
-  if (!mounted || !isOpen) return null
+  if (!mounted || !isOpen) return null;
 
   return createPortal(
     <div
@@ -103,5 +103,5 @@ export function Drawer({
       </div>
     </div>,
     document.body,
-  )
+  );
 }

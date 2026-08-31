@@ -1,20 +1,20 @@
-'use client'
+'use client';
 
 /** Quick-text entry panel for DataEntryTabs — textarea, AI fill button, manual-entry link, status feedback. */
 
-import { Zap, Loader2, CheckCircle2, AlertCircle, PencilLine, Layers } from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import type { QuickEntryState } from './tabs-config'
+import { Zap, Loader2, CheckCircle2, AlertCircle, PencilLine, Layers } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import type { QuickEntryState } from './tabs-config';
 
 interface QuickTextPanelProps {
-  quickText: string
-  onQuickTextChange: (value: string) => void
-  quickEntryState: QuickEntryState
-  quickEntryError: string | null
-  onSubmit: () => void
-  onManualEntry?: () => void
+  quickText: string;
+  onQuickTextChange: (value: string) => void;
+  quickEntryState: QuickEntryState;
+  quickEntryError: string | null;
+  onSubmit: () => void;
+  onManualEntry?: () => void;
 }
 
 export function QuickTextPanel({
@@ -25,7 +25,7 @@ export function QuickTextPanel({
   onSubmit,
   onManualEntry,
 }: QuickTextPanelProps) {
-  const t = useTranslations('components.erfassung.dataEntryTabs')
+  const t = useTranslations('components.erfassung.dataEntryTabs');
 
   return (
     <div className="space-y-4">
@@ -35,8 +35,8 @@ export function QuickTextPanel({
           onChange={(e) => onQuickTextChange(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey && quickText.trim()) {
-              e.preventDefault()
-              onSubmit()
+              e.preventDefault();
+              onSubmit();
             }
           }}
           placeholder={t('exampleInput')}
@@ -96,5 +96,5 @@ export function QuickTextPanel({
         </div>
       )}
     </div>
-  )
+  );
 }

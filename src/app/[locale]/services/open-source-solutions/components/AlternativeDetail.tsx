@@ -1,31 +1,38 @@
-'use client'
+'use client';
 
-import { Link } from '@/i18n/navigation'
-import { ArrowLeft, ExternalLink, Code2, CheckCircle2, AlertTriangle, ArrowRight } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import Heading from '@/components/ui/Heading'
-import { Card } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { Link } from '@/i18n/navigation';
+import {
+  ArrowLeft,
+  ExternalLink,
+  Code2,
+  CheckCircle2,
+  AlertTriangle,
+  ArrowRight,
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
+import Heading from '@/components/ui/Heading';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import {
   type OSSAlternative,
   getCategoryById,
   getProprietaryAppById,
   PRICING_MODEL_LABELS,
-} from '@/config/open-source-registry'
-import { MaturityBadge } from './MaturityBadge'
-import { MigrationDifficultyBadge } from './MigrationDifficultyBadge'
-import { PlatformIcons } from './PlatformIcons'
-import { RevampITServicesCTA } from './RevampITServicesCTA'
-import { RelatedAlternatives } from './RelatedAlternatives'
-import { useTranslations } from 'next-intl'
+} from '@/config/open-source-registry';
+import { MaturityBadge } from './MaturityBadge';
+import { MigrationDifficultyBadge } from './MigrationDifficultyBadge';
+import { PlatformIcons } from './PlatformIcons';
+import { RevampITServicesCTA } from './RevampITServicesCTA';
+import { RelatedAlternatives } from './RelatedAlternatives';
+import { useTranslations } from 'next-intl';
 
 interface AlternativeDetailProps {
-  alternative: OSSAlternative
+  alternative: OSSAlternative;
 }
 
 export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
-  const t = useTranslations('services.openSourceSolutions')
-  const category = getCategoryById(alternative.categoryId)
+  const t = useTranslations('services.openSourceSolutions');
+  const category = getCategoryById(alternative.categoryId);
 
   return (
     <main className="bg-surface-raised min-h-screen">
@@ -55,9 +62,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
               <Heading level={1} className="text-3xl sm:text-4xl font-bold text-text-primary mb-2">
                 {alternative.name}
               </Heading>
-              <p className="text-lg text-text-secondary max-w-2xl">
-                {alternative.tagline}
-              </p>
+              <p className="text-lg text-text-secondary max-w-2xl">{alternative.tagline}</p>
             </div>
             <div className="flex items-center gap-3 shrink-0">
               <MaturityBadge maturity={alternative.maturity} />
@@ -74,18 +79,22 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
           <div className="lg:col-span-2 space-y-8">
             {/* Description */}
             <Card className="p-6">
-              <Heading level={2} className="text-xl font-bold text-text-primary mb-4">{t('detail.description')}</Heading>
+              <Heading level={2} className="text-xl font-bold text-text-primary mb-4">
+                {t('detail.description')}
+              </Heading>
               <p className="text-text-secondary leading-relaxed">{alternative.description}</p>
             </Card>
 
             {/* What it replaces */}
             {alternative.replaces.length > 0 && (
               <Card className="p-6">
-                <Heading level={2} className="text-xl font-bold text-text-primary mb-4">{t('detail.replaces')}</Heading>
+                <Heading level={2} className="text-xl font-bold text-text-primary mb-4">
+                  {t('detail.replaces')}
+                </Heading>
                 <div className="space-y-4">
-                  {alternative.replaces.map(r => {
-                    const app = getProprietaryAppById(r.appId)
-                    if (!app) return null
+                  {alternative.replaces.map((r) => {
+                    const app = getProprietaryAppById(r.appId);
+                    if (!app) return null;
                     return (
                       <div key={r.appId} className="rounded-lg border p-4">
                         <div className="flex flex-wrap items-center gap-3 mb-2">
@@ -111,7 +120,10 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
                             </p>
                             <ul className="space-y-1">
                               {r.migrationTips.map((tip, i) => (
-                                <li key={i} className="flex items-start gap-2 text-sm text-text-secondary">
+                                <li
+                                  key={i}
+                                  className="flex items-start gap-2 text-sm text-text-secondary"
+                                >
                                   <span className="text-action mt-0.5">•</span>
                                   {tip}
                                 </li>
@@ -120,7 +132,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
                           </div>
                         )}
                       </div>
-                    )
+                    );
                   })}
                 </div>
               </Card>
@@ -128,7 +140,9 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
 
             {/* Highlights */}
             <Card className="p-6">
-              <Heading level={2} className="text-xl font-bold text-text-primary mb-4">{t('detail.highlights')}</Heading>
+              <Heading level={2} className="text-xl font-bold text-text-primary mb-4">
+                {t('detail.highlights')}
+              </Heading>
               <ul className="space-y-2">
                 {alternative.highlights.map((h, i) => (
                   <li key={i} className="flex items-start gap-3">
@@ -141,7 +155,9 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
 
             {/* Limitations */}
             <Card className="p-6">
-              <Heading level={2} className="text-xl font-bold text-text-primary mb-4">{t('detail.limitations')}</Heading>
+              <Heading level={2} className="text-xl font-bold text-text-primary mb-4">
+                {t('detail.limitations')}
+              </Heading>
               <ul className="space-y-2">
                 {alternative.limitations.map((l, i) => (
                   <li key={i} className="flex items-start gap-3">
@@ -160,14 +176,30 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
           <div className="space-y-6">
             {/* Quick links */}
             <Card className="p-5">
-              <Heading level={3} className="text-base font-bold text-text-primary mb-4">{t('detail.links')}</Heading>
+              <Heading level={3} className="text-base font-bold text-text-primary mb-4">
+                {t('detail.links')}
+              </Heading>
               <div className="space-y-3">
-                <Button as="a" href={alternative.website} target="_blank" rel="noopener noreferrer" variant="primary" size="sm">
+                <Button
+                  as="a"
+                  href={alternative.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="primary"
+                  size="sm"
+                >
                   <ExternalLink className="w-4 h-4" />
                   {t('detail.visitWebsite')}
                 </Button>
                 {alternative.sourceCode && (
-                  <Button as="a" href={alternative.sourceCode} target="_blank" rel="noopener noreferrer" variant="outline" size="sm">
+                  <Button
+                    as="a"
+                    href={alternative.sourceCode}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variant="outline"
+                    size="sm"
+                  >
                     <Code2 className="w-4 h-4" />
                     {t('detail.viewSourceCode')}
                   </Button>
@@ -177,7 +209,9 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
 
             {/* Info */}
             <Card className="p-5">
-              <Heading level={3} className="text-base font-bold text-text-primary mb-4">{t('detail.details')}</Heading>
+              <Heading level={3} className="text-base font-bold text-text-primary mb-4">
+                {t('detail.details')}
+              </Heading>
               <dl className="space-y-3 text-sm">
                 <div>
                   <dt className="text-text-tertiary">{t('detail.license')}</dt>
@@ -186,15 +220,26 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
                 <div>
                   <dt className="text-text-tertiary">{t('detail.platforms')}</dt>
                   <dd className="font-medium text-text-primary">
-                    {alternative.platforms.map(p => {
-                      const labels: Record<string, string> = { windows: 'Windows', macos: 'macOS', linux: 'Linux', web: 'Web', android: 'Android', ios: 'iOS' }
-                      return labels[p] || p
-                    }).join(', ')}
+                    {alternative.platforms
+                      .map((p) => {
+                        const labels: Record<string, string> = {
+                          windows: 'Windows',
+                          macos: 'macOS',
+                          linux: 'Linux',
+                          web: 'Web',
+                          android: 'Android',
+                          ios: 'iOS',
+                        };
+                        return labels[p] || p;
+                      })
+                      .join(', ')}
                   </dd>
                 </div>
                 <div>
                   <dt className="text-text-tertiary">{t('detail.maturity')}</dt>
-                  <dd><MaturityBadge maturity={alternative.maturity} /></dd>
+                  <dd>
+                    <MaturityBadge maturity={alternative.maturity} />
+                  </dd>
                 </div>
               </dl>
             </Card>
@@ -207,9 +252,7 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
               <Heading level={3} className="text-base font-bold text-action mb-2">
                 {t('detail.helpWithMigration')}
               </Heading>
-              <p className="text-sm text-action mb-3">
-                {t('detail.helpDescription')}
-              </p>
+              <p className="text-sm text-action mb-3">{t('detail.helpDescription')}</p>
               <Button as={Link} href="/contact" variant="primary" size="sm">
                 {t('detail.contactUs')}
               </Button>
@@ -218,5 +261,5 @@ export function AlternativeDetail({ alternative }: AlternativeDetailProps) {
         </div>
       </div>
     </main>
-  )
+  );
 }

@@ -32,7 +32,8 @@ export const SCIENTIFIC_REFERENCES: Record<string, ScientificReference> = {
     year: 2023,
     source: 'Bundesamt für Umwelt (Schweiz)',
     url: 'https://www.bafu.admin.ch/',
-    description: 'Schweizer Referenz für Ökobilanzen elektronischer Geräte, inkl. CO₂-Äquivalente für Produktion und Entsorgung',
+    description:
+      'Schweizer Referenz für Ökobilanzen elektronischer Geräte, inkl. CO₂-Äquivalente für Produktion und Entsorgung',
   },
 
   EU_JRC_CIRCULAR_2020: {
@@ -174,7 +175,8 @@ export const METHODOLOGIES: Record<MethodologyId, Methodology> = {
     category: 'financial',
     pillar: null,
     confidence: 'high',
-    description: 'Daten werden direkt aus dem Kivitendo-Buchhaltungssystem exportiert. Höchste Zuverlässigkeit durch revisionssichere Buchhaltung.',
+    description:
+      'Daten werden direkt aus dem Kivitendo-Buchhaltungssystem exportiert. Höchste Zuverlässigkeit durch revisionssichere Buchhaltung.',
     references: [],
     assumptions: [
       'Buchhaltung wird korrekt geführt',
@@ -197,14 +199,31 @@ export const METHODOLOGIES: Record<MethodologyId, Methodology> = {
     category: 'environmental',
     pillar: 'Umwelt',
     confidence: 'medium',
-    description: 'Berechnung der vermiedenen CO₂-Emissionen durch Wiederverwendung statt Neuproduktion.',
+    description:
+      'Berechnung der vermiedenen CO₂-Emissionen durch Wiederverwendung statt Neuproduktion.',
     formula: {
       expression: 'CO₂_avoided = N_devices × (CO₂_new - CO₂_refurb)',
-      humanReadable: 'Vermiedene Emissionen = Anzahl Geräte × (CO₂ Neuproduktion − CO₂ Aufbereitung)',
+      humanReadable:
+        'Vermiedene Emissionen = Anzahl Geräte × (CO₂ Neuproduktion − CO₂ Aufbereitung)',
       variables: [
-        { symbol: 'N_devices', name: 'Anzahl aufbereitete Geräte', unit: 'Stück', source: 'Device Outcome Tracking' },
-        { symbol: 'CO₂_new', name: 'Produktion+Distribution Neugerät (Kategorie-Durchschnitt)', unit: 'kg CO₂e', source: 'ADEME / ARCEP 2025 (offene Daten, impactco2.fr)' },
-        { symbol: 'CO₂_refurb', name: 'Aufbereitungsaufwand (15% pauschal)', unit: 'kg CO₂e', source: 'Circular Computing 2021 (~14% gemessen), konservativ 15%' },
+        {
+          symbol: 'N_devices',
+          name: 'Anzahl aufbereitete Geräte',
+          unit: 'Stück',
+          source: 'Device Outcome Tracking',
+        },
+        {
+          symbol: 'CO₂_new',
+          name: 'Produktion+Distribution Neugerät (Kategorie-Durchschnitt)',
+          unit: 'kg CO₂e',
+          source: 'ADEME / ARCEP 2025 (offene Daten, impactco2.fr)',
+        },
+        {
+          symbol: 'CO₂_refurb',
+          name: 'Aufbereitungsaufwand (15% pauschal)',
+          unit: 'kg CO₂e',
+          source: 'Circular Computing 2021 (~14% gemessen), konservativ 15%',
+        },
       ],
       example: {
         inputs: { N_devices: 100, CO2_new: 182, CO2_refurb: 27 },
@@ -238,8 +257,18 @@ export const METHODOLOGIES: Record<MethodologyId, Methodology> = {
       expression: 'Years_extended = N_devices × avg_extension',
       humanReadable: 'Verlängerte Nutzungsjahre = Anzahl Geräte × durchschnittliche Verlängerung',
       variables: [
-        { symbol: 'N_devices', name: 'Anzahl aufbereitete Geräte', unit: 'Stück', source: 'Device Outcome Tracking' },
-        { symbol: 'avg_extension', name: 'Durchschnittliche Verlängerung', unit: 'Jahre', source: 'Annahme: 3-5 Jahre' },
+        {
+          symbol: 'N_devices',
+          name: 'Anzahl aufbereitete Geräte',
+          unit: 'Stück',
+          source: 'Device Outcome Tracking',
+        },
+        {
+          symbol: 'avg_extension',
+          name: 'Durchschnittliche Verlängerung',
+          unit: 'Jahre',
+          source: 'Annahme: 3-5 Jahre',
+        },
       ],
       example: {
         inputs: { N_devices: 100, avg_extension: 4 },
@@ -271,11 +300,27 @@ export const METHODOLOGIES: Record<MethodologyId, Methodology> = {
     description: 'Geschätzte Menge an Rohstoffen, die durch Wiederverwendung eingespart werden.',
     formula: {
       expression: 'Materials_kg = N_devices × avg_weight × material_factor',
-      humanReadable: 'Eingesparte Materialien = Anzahl Geräte × Durchschnittsgewicht × Materialfaktor',
+      humanReadable:
+        'Eingesparte Materialien = Anzahl Geräte × Durchschnittsgewicht × Materialfaktor',
       variables: [
-        { symbol: 'N_devices', name: 'Anzahl Geräte', unit: 'Stück', source: 'Device Outcome Tracking' },
-        { symbol: 'avg_weight', name: 'Durchschnittsgewicht', unit: 'kg', source: 'SENS eRecycling' },
-        { symbol: 'material_factor', name: 'Wiederverwendungsfaktor', unit: '%', source: 'Annahme: 85%' },
+        {
+          symbol: 'N_devices',
+          name: 'Anzahl Geräte',
+          unit: 'Stück',
+          source: 'Device Outcome Tracking',
+        },
+        {
+          symbol: 'avg_weight',
+          name: 'Durchschnittsgewicht',
+          unit: 'kg',
+          source: 'SENS eRecycling',
+        },
+        {
+          symbol: 'material_factor',
+          name: 'Wiederverwendungsfaktor',
+          unit: '%',
+          source: 'Annahme: 85%',
+        },
       ],
     },
     references: ['SENS_ERECYCLING_2024', 'BAFU_LIFECYCLE_2023'],
@@ -304,8 +349,18 @@ export const METHODOLOGIES: Record<MethodologyId, Methodology> = {
       expression: 'E_waste_kg = N_devices × avg_weight',
       humanReadable: 'Vermiedener E-Waste = Anzahl wiederverwendete Geräte × Durchschnittsgewicht',
       variables: [
-        { symbol: 'N_devices', name: 'Wiederverwendete Geräte', unit: 'Stück', source: 'Device Outcome: sold + donated' },
-        { symbol: 'avg_weight', name: 'Durchschnittsgewicht', unit: 'kg', source: 'SENS eRecycling' },
+        {
+          symbol: 'N_devices',
+          name: 'Wiederverwendete Geräte',
+          unit: 'Stück',
+          source: 'Device Outcome: sold + donated',
+        },
+        {
+          symbol: 'avg_weight',
+          name: 'Durchschnittsgewicht',
+          unit: 'kg',
+          source: 'SENS eRecycling',
+        },
       ],
     },
     references: ['SENS_ERECYCLING_2024', 'KANTON_ZH_KREISLAUF_2023'],
@@ -333,8 +388,18 @@ export const METHODOLOGIES: Record<MethodologyId, Methodology> = {
       expression: 'Participation = N_affordable × accessibility_factor',
       humanReadable: 'Digitale Teilhabe = Anzahl günstige Geräte × Zugänglichkeitsfaktor',
       variables: [
-        { symbol: 'N_affordable', name: 'Günstig verkaufte Geräte', unit: 'Stück', source: 'Device Outcome: sold below market' },
-        { symbol: 'accessibility_factor', name: 'Zugänglichkeitsfaktor', unit: 'Personen/Gerät', source: 'Annahme: 1.5' },
+        {
+          symbol: 'N_affordable',
+          name: 'Günstig verkaufte Geräte',
+          unit: 'Stück',
+          source: 'Device Outcome: sold below market',
+        },
+        {
+          symbol: 'accessibility_factor',
+          name: 'Zugänglichkeitsfaktor',
+          unit: 'Personen/Gerät',
+          source: 'Annahme: 1.5',
+        },
       ],
     },
     references: ['BSV_TEILHABE_2022', 'DIGITALE_GESELLSCHAFT_2024'],
@@ -386,9 +451,24 @@ export const METHODOLOGIES: Record<MethodologyId, Methodology> = {
       expression: 'Knowledge_hours = N_participants × hours_per_week × weeks',
       humanReadable: 'Wissensstunden = Teilnehmende × Stunden/Woche × Wochen',
       variables: [
-        { symbol: 'N_participants', name: 'Anzahl Teilnehmende', unit: 'Personen', source: 'Teilhabe-Tracking' },
-        { symbol: 'hours_per_week', name: 'Lernstunden pro Woche', unit: 'h', source: 'Annahme: ~20% der Arbeitszeit' },
-        { symbol: 'weeks', name: 'Dauer der Massnahme', unit: 'Wochen', source: 'Teilhabe-Tracking' },
+        {
+          symbol: 'N_participants',
+          name: 'Anzahl Teilnehmende',
+          unit: 'Personen',
+          source: 'Teilhabe-Tracking',
+        },
+        {
+          symbol: 'hours_per_week',
+          name: 'Lernstunden pro Woche',
+          unit: 'h',
+          source: 'Annahme: ~20% der Arbeitszeit',
+        },
+        {
+          symbol: 'weeks',
+          name: 'Dauer der Massnahme',
+          unit: 'Wochen',
+          source: 'Teilhabe-Tracking',
+        },
       ],
     },
     references: ['LPI_LINUX_2023', 'DIGITALE_GESELLSCHAFT_2024'],
@@ -417,9 +497,24 @@ export const METHODOLOGIES: Record<MethodologyId, Methodology> = {
       expression: 'Impact = N_workshops × avg_participants × satisfaction_rate',
       humanReadable: 'Wirkung = Workshops × Durchschnittliche Teilnehmende × Zufriedenheitsrate',
       variables: [
-        { symbol: 'N_workshops', name: 'Anzahl Workshops', unit: 'Events', source: 'Workshop-Tracking' },
-        { symbol: 'avg_participants', name: 'Durchschnittliche Teilnehmende', unit: 'Personen', source: 'Workshop-Tracking' },
-        { symbol: 'satisfaction_rate', name: 'Zufriedenheitsrate', unit: '%', source: 'Feedback-Umfragen' },
+        {
+          symbol: 'N_workshops',
+          name: 'Anzahl Workshops',
+          unit: 'Events',
+          source: 'Workshop-Tracking',
+        },
+        {
+          symbol: 'avg_participants',
+          name: 'Durchschnittliche Teilnehmende',
+          unit: 'Personen',
+          source: 'Workshop-Tracking',
+        },
+        {
+          symbol: 'satisfaction_rate',
+          name: 'Zufriedenheitsrate',
+          unit: '%',
+          source: 'Feedback-Umfragen',
+        },
       ],
     },
     references: ['LPI_LINUX_2023', 'DIGITALE_GESELLSCHAFT_2024'],
@@ -448,8 +543,18 @@ export const METHODOLOGIES: Record<MethodologyId, Methodology> = {
       expression: 'Linux_devices = N_sold × linux_rate',
       humanReadable: 'Linux-Geräte = Verkaufte Geräte × Linux-Installationsrate',
       variables: [
-        { symbol: 'N_sold', name: 'Verkaufte Geräte', unit: 'Stück', source: 'Device Outcome: sold' },
-        { symbol: 'linux_rate', name: 'Linux-Installationsrate', unit: '%', source: 'Device Outcome Tracking' },
+        {
+          symbol: 'N_sold',
+          name: 'Verkaufte Geräte',
+          unit: 'Stück',
+          source: 'Device Outcome: sold',
+        },
+        {
+          symbol: 'linux_rate',
+          name: 'Linux-Installationsrate',
+          unit: '%',
+          source: 'Device Outcome Tracking',
+        },
       ],
     },
     references: ['LPI_LINUX_2023'],
@@ -496,9 +601,15 @@ export const THREE_PILLARS: Record<PillarId, Pillar> = {
     color: 'text-success-800 dark:text-success-300',
     bgColor: 'bg-success-50 dark:bg-success-900/20',
     borderColor: 'border-success-200',
-    description: 'Durch die Wiederverwendung von IT-Geräten vermeiden wir E-Waste und reduzieren den Ressourcenverbrauch.',
+    description:
+      'Durch die Wiederverwendung von IT-Geräten vermeiden wir E-Waste und reduzieren den Ressourcenverbrauch.',
     dimensions: ['Umweltwirkung'],
-    methodologies: ['device_co2_avoided', 'device_lifetime_extension', 'material_recovery', 'ewaste_prevention'],
+    methodologies: [
+      'device_co2_avoided',
+      'device_lifetime_extension',
+      'material_recovery',
+      'ewaste_prevention',
+    ],
   },
   society: {
     id: 'society',
@@ -520,7 +631,8 @@ export const THREE_PILLARS: Record<PillarId, Pillar> = {
     color: 'text-success-800 dark:text-success-300',
     bgColor: 'bg-success-50 dark:bg-success-900/20',
     borderColor: 'border-success-200',
-    description: '"Knowhow" ist Teil unseres Mottos. Wir vermitteln IT-Kompetenzen durch praktische Arbeit, Workshops und Linux-Schulungen.',
+    description:
+      '"Knowhow" ist Teil unseres Mottos. Wir vermitteln IT-Kompetenzen durch praktische Arbeit, Workshops und Linux-Schulungen.',
     dimensions: ['Bildungswirkung'],
     methodologies: ['education_transfer', 'workshop_impact', 'linux_adoption'],
   },
@@ -684,7 +796,7 @@ export function getReference(id: string): ScientificReference | undefined {
 export function getReferencesByMethodology(methodologyId: MethodologyId): ScientificReference[] {
   const methodology = METHODOLOGIES[methodologyId];
   return methodology.references
-    .map(refId => SCIENTIFIC_REFERENCES[refId])
+    .map((refId) => SCIENTIFIC_REFERENCES[refId])
     .filter((ref): ref is ScientificReference => ref !== undefined);
 }
 
@@ -693,16 +805,14 @@ export function getPillarByMethodology(methodologyId: MethodologyId): Pillar | n
   if (!methodology.pillar) return null;
 
   const pillarKeys: PillarId[] = ['environment', 'society', 'education'];
-  const pillarKey = pillarKeys.find(
-    key => THREE_PILLARS[key].name === methodology.pillar
-  );
+  const pillarKey = pillarKeys.find((key) => THREE_PILLARS[key].name === methodology.pillar);
 
   return pillarKey ? THREE_PILLARS[pillarKey] : null;
 }
 
 export function getMethodologiesByPillar(pillarId: PillarId): Methodology[] {
   const pillar = THREE_PILLARS[pillarId];
-  return pillar.methodologies.map(id => METHODOLOGIES[id]);
+  return pillar.methodologies.map((id) => METHODOLOGIES[id]);
 }
 
 export function getCO2Savings(deviceType: string, count: number): number {

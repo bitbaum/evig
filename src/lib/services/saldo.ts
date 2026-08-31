@@ -5,46 +5,49 @@
  * the monthly reminder cron.
  */
 
-import { and, eq, gte, inArray, lte, ne, sql } from 'drizzle-orm'
-import { db } from '@/db'
+import { and, eq, gte, inArray, lte, ne, sql } from 'drizzle-orm';
+import { db } from '@/db';
 import {
   employmentPeriods,
   teamProfiles,
   timecardEntries,
   timecards,
   vacationEntitlements,
-} from '@/db/schema'
-import { TIMECARD_ENTRY_CATEGORIES, TIMECARD_STATUSES } from '@/config/timecards'
-import { getHolidayDateSet } from '@/config/holidays'
-import { parseWeeklySchedule, getScheduleWeeklyMinutes } from '@/lib/team/schedule'
+} from '@/db/schema';
+import { TIMECARD_ENTRY_CATEGORIES, TIMECARD_STATUSES } from '@/config/timecards';
+import { getHolidayDateSet } from '@/config/holidays';
+import { parseWeeklySchedule, getScheduleWeeklyMinutes } from '@/lib/team/schedule';
 import {
   computeTimeSaldo,
   computeVacationBalance,
   type SaldoResult,
   type VacationResult,
-} from '@/lib/team/saldo'
+} from '@/lib/team/saldo';
 
 export interface PersonSaldo {
-  time: SaldoResult
-  vacation: VacationResult
+  time: SaldoResult;
+  vacation: VacationResult;
   /** Current Pensum in weekly minutes (0 = none on file). */
-  weeklyMinutes: number
+  weeklyMinutes: number;
   /** Weekly minutes the personal schedule template sums to. */
-  scheduleWeeklyMinutes: number
+  scheduleWeeklyMinutes: number;
   /** Schedule template and Pensum disagree — worth a hint in the UI. */
-  scheduleMismatch: boolean
+  scheduleMismatch: boolean;
 }
 
 function todayIsoZurich(): string {
   // en-CA gives YYYY-MM-DD directly.
-  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Zurich' }).format(new Date())
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Zurich' }).format(new Date());
 }
 
 /**
  * Returns null when the user has no team profile or no employment period —
  * a saldo for volunteers without Pensum would be noise, so callers hide it.
  */
-export async function getPersonSaldo(userId: string, today = todayIsoZurich()): Promise<PersonSaldo | null> {
+export async function getPersonSaldo(
+  userId: string,
+  today = todayIsoZurich(),
+): Promise<PersonSaldo | null> {
   const [profile] = await db
     .select({
       id: teamProfiles.id,
@@ -54,21 +57,26 @@ export async function getPersonSaldo(userId: string, today = todayIsoZurich()): 
     })
     .from(teamProfiles)
     .where(eq(teamProfiles.userId, userId))
-    .limit(1)
-  if (!profile) return null
+    .limit(1);
+  if (!profile) return null;
 
   const periods = await db
-    .select({ validFrom: employmentPeriods.validFrom, weeklyMinutes: employmentPeriods.weeklyMinutes })
+    .select({
+      validFrom: employmentPeriods.validFrom,
+      weeklyMinutes: employmentPeriods.weeklyMinutes,
+    })
     .from(employmentPeriods)
-    .where(eq(employmentPeriods.teamProfileId, profile.id))
-  if (periods.length === 0) return null
+    .where(eq(employmentPeriods.teamProfileId, profile.id));
+  if (periods.length === 0) return null;
 
-  const start = profile.timeOpeningDate ?? [...periods].sort((a, b) => a.validFrom.localeCompare(b.validFrom))[0].validFrom
-  const year = Number(today.slice(0, 4))
+  const start =
+    profile.timeOpeningDate ??
+    [...periods].sort((a, b) => a.validFrom.localeCompare(b.validFrom))[0].validFrom;
+  const year = Number(today.slice(0, 4));
   // A report can target a month before the opening date — load entries (and
   // holidays) back to the earlier of the two so that month's Ist/Soll are real.
-  const monthStart = `${today.slice(0, 7)}-01`
-  const dataFrom = start < monthStart ? start : monthStart
+  const monthStart = `${today.slice(0, 7)}-01`;
+  const dataFrom = start < monthStart ? start : monthStart;
 
   const [entries, [entitlement], [ferienTaken]] = await Promise.all([
     db
@@ -79,38 +87,44 @@ export async function getPersonSaldo(userId: string, today = todayIsoZurich()): 
       })
       .from(timecardEntries)
       .innerJoin(timecards, eq(timecardEntries.timecardId, timecards.id))
-      .where(and(
-        eq(timecards.userId, userId),
-        ne(timecards.status, TIMECARD_STATUSES.REJECTED),
-        gte(timecardEntries.workDate, dataFrom),
-        lte(timecardEntries.workDate, today),
-      )),
+      .where(
+        and(
+          eq(timecards.userId, userId),
+          ne(timecards.status, TIMECARD_STATUSES.REJECTED),
+          gte(timecardEntries.workDate, dataFrom),
+          lte(timecardEntries.workDate, today),
+        ),
+      ),
     db
       .select({
         days: vacationEntitlements.days,
         carryoverDays: vacationEntitlements.carryoverDays,
       })
       .from(vacationEntitlements)
-      .where(and(
-        eq(vacationEntitlements.teamProfileId, profile.id),
-        eq(vacationEntitlements.year, year),
-      ))
+      .where(
+        and(
+          eq(vacationEntitlements.teamProfileId, profile.id),
+          eq(vacationEntitlements.year, year),
+        ),
+      )
       .limit(1),
     db
       .select({ days: sql<number>`COUNT(DISTINCT ${timecardEntries.workDate})` })
       .from(timecardEntries)
       .innerJoin(timecards, eq(timecardEntries.timecardId, timecards.id))
-      .where(and(
-        eq(timecards.userId, userId),
-        ne(timecards.status, TIMECARD_STATUSES.REJECTED),
-        eq(timecardEntries.category, TIMECARD_ENTRY_CATEGORIES.FERIEN),
-        gte(timecardEntries.workDate, `${year}-01-01`),
-        lte(timecardEntries.workDate, `${year}-12-31`),
-      )),
-  ])
+      .where(
+        and(
+          eq(timecards.userId, userId),
+          ne(timecards.status, TIMECARD_STATUSES.REJECTED),
+          eq(timecardEntries.category, TIMECARD_ENTRY_CATEGORIES.FERIEN),
+          gte(timecardEntries.workDate, `${year}-01-01`),
+          lte(timecardEntries.workDate, `${year}-12-31`),
+        ),
+      ),
+  ]);
 
-  const schedule = parseWeeklySchedule(profile.workingHours)
-  const holidays = getHolidayDateSet(Number(dataFrom.slice(0, 4)), year)
+  const schedule = parseWeeklySchedule(profile.workingHours);
+  const holidays = getHolidayDateSet(Number(dataFrom.slice(0, 4)), year);
 
   const time = computeTimeSaldo({
     openingMinutes: profile.timeOpeningMinutes ?? 0,
@@ -120,29 +134,30 @@ export async function getPersonSaldo(userId: string, today = todayIsoZurich()): 
     entries,
     holidays,
     today,
-  })
-  if (!time) return null
+  });
+  if (!time) return null;
 
   // Current Pensum = latest period that has started.
-  const sortedPeriods = [...periods].sort((a, b) => a.validFrom.localeCompare(b.validFrom))
-  let currentWeekly = 0
-  for (const p of sortedPeriods) if (p.validFrom <= today) currentWeekly = p.weeklyMinutes
+  const sortedPeriods = [...periods].sort((a, b) => a.validFrom.localeCompare(b.validFrom));
+  let currentWeekly = 0;
+  for (const p of sortedPeriods) if (p.validFrom <= today) currentWeekly = p.weeklyMinutes;
 
   const vacation = computeVacationBalance({
     entitlementDays: entitlement ? Number(entitlement.days) : null,
     carryoverDays: entitlement ? Number(entitlement.carryoverDays) : 0,
     weeklyMinutes: currentWeekly,
     takenDays: Number(ferienTaken?.days ?? 0),
-  })
+  });
 
-  const scheduleWeeklyMinutes = getScheduleWeeklyMinutes(schedule)
+  const scheduleWeeklyMinutes = getScheduleWeeklyMinutes(schedule);
   return {
     time,
     vacation,
     weeklyMinutes: currentWeekly,
     scheduleWeeklyMinutes,
-    scheduleMismatch: scheduleWeeklyMinutes > 0 && Math.abs(scheduleWeeklyMinutes - currentWeekly) > 30,
-  }
+    scheduleMismatch:
+      scheduleWeeklyMinutes > 0 && Math.abs(scheduleWeeklyMinutes - currentWeekly) > 30,
+  };
 }
 
 /**
@@ -151,29 +166,33 @@ export async function getPersonSaldo(userId: string, today = todayIsoZurich()): 
  * Returns the user ids to notify.
  */
 export async function getReminderUserIdsForToday(today = todayIsoZurich()): Promise<string[]> {
-  const dayOfMonth = Number(today.slice(8, 10))
-  const monthStart = `${today.slice(0, 7)}-01`
+  const dayOfMonth = Number(today.slice(8, 10));
+  const monthStart = `${today.slice(0, 7)}-01`;
 
   const candidates = await db
     .select({ userId: teamProfiles.userId, reminderDay: teamProfiles.zeiterfassungReminderDay })
     .from(teamProfiles)
-    .where(and(
-      sql`${teamProfiles.zeiterfassungReminderDay} IS NOT NULL`,
-      eq(teamProfiles.isActive, true),
-    ))
+    .where(
+      and(
+        sql`${teamProfiles.zeiterfassungReminderDay} IS NOT NULL`,
+        eq(teamProfiles.isActive, true),
+      ),
+    );
 
-  const due = candidates.filter(c => c.reminderDay === dayOfMonth)
-  if (due.length === 0) return []
+  const due = candidates.filter((c) => c.reminderDay === dayOfMonth);
+  if (due.length === 0) return [];
 
-  const dueIds = due.map(c => c.userId)
+  const dueIds = due.map((c) => c.userId);
   const submitted = await db
     .select({ userId: timecards.userId })
     .from(timecards)
-    .where(and(
-      inArray(timecards.userId, dueIds),
-      eq(timecards.periodStart, monthStart),
-      inArray(timecards.status, [TIMECARD_STATUSES.SUBMITTED, TIMECARD_STATUSES.APPROVED]),
-    ))
-  const done = new Set(submitted.map(r => r.userId))
-  return dueIds.filter(id => !done.has(id))
+    .where(
+      and(
+        inArray(timecards.userId, dueIds),
+        eq(timecards.periodStart, monthStart),
+        inArray(timecards.status, [TIMECARD_STATUSES.SUBMITTED, TIMECARD_STATUSES.APPROVED]),
+      ),
+    );
+  const done = new Set(submitted.map((r) => r.userId));
+  return dueIds.filter((id) => !done.has(id));
 }

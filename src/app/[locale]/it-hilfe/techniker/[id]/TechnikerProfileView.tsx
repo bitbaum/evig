@@ -1,60 +1,60 @@
-import { Eyebrow } from '@/components/ui/Eyebrow'
-import { Link } from '@/i18n/navigation'
-import { ArrowLeft, ArrowRight, BadgeCheck, MapPin, Star, Wrench } from 'lucide-react'
-import { getServiceTypeById, getSkillById, IT_HILFE } from '@/config/it-hilfe'
-import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status'
-import { ROUTES } from '@/config/routes'
-import { formatCentsToChf } from '@/lib/pricing'
-import { Avatar } from '@/components/ui/Avatar'
-import type { TechnicianDetail } from '@/lib/services/technician-service'
+import { Eyebrow } from '@/components/ui/Eyebrow';
+import { Link } from '@/i18n/navigation';
+import { ArrowLeft, ArrowRight, BadgeCheck, MapPin, Star, Wrench } from 'lucide-react';
+import { getServiceTypeById, getSkillById, IT_HILFE } from '@/config/it-hilfe';
+import { REPAIRER_PROFILE_TIER } from '@/config/repairer-status';
+import { ROUTES } from '@/config/routes';
+import { formatCentsToChf } from '@/lib/pricing';
+import { Avatar } from '@/components/ui/Avatar';
+import type { TechnicianDetail } from '@/lib/services/technician-service';
 
 export type TechnikerProfileCopy = {
-  backToList: string
-  verified: string
-  professional: string
-  community: string
-  aboutMe: string
-  skills: string
-  offeredServices: string
-  requestBooking: string
-  estimatedDuration: string
-  priceFrom: string
-  hourlyRate: string
-  deliveryTypes: string
-  submitRequest: string
-  contact: string
-  ctaHint: string
-  gratisHelp: string
-  kulturlegiRate: string
-}
+  backToList: string;
+  verified: string;
+  professional: string;
+  community: string;
+  aboutMe: string;
+  skills: string;
+  offeredServices: string;
+  requestBooking: string;
+  estimatedDuration: string;
+  priceFrom: string;
+  hourlyRate: string;
+  deliveryTypes: string;
+  submitRequest: string;
+  contact: string;
+  ctaHint: string;
+  gratisHelp: string;
+  kulturlegiRate: string;
+};
 
 export type TechnikerProfileMeta = {
-  eyebrow: string
-  statsLine?: string
-  locationLine?: string
-  pricingLine?: string
-  ctaLabel: string
-}
+  eyebrow: string;
+  statsLine?: string;
+  locationLine?: string;
+  pricingLine?: string;
+  ctaLabel: string;
+};
 
 interface TechnikerProfileViewProps {
-  technician: TechnicianDetail
-  copy: TechnikerProfileCopy
-  meta: TechnikerProfileMeta
+  technician: TechnicianDetail;
+  copy: TechnikerProfileCopy;
+  meta: TechnikerProfileMeta;
 }
 
 /** Public technician profile — same fleetcrown rhythm as the list cards. */
 export function TechnikerProfileView({ technician, copy, meta }: TechnikerProfileViewProps) {
-  const isPro = technician.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL
-  const ctaHref = IT_HILFE.routes.createForTechnician(technician.id)
-  const displayName = technician.name ?? copy.community
+  const isPro = technician.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL;
+  const ctaHref = IT_HILFE.routes.createForTechnician(technician.id);
+  const displayName = technician.name ?? copy.community;
 
   const skillLabels = technician.skills
     .map((id) => getSkillById(id)?.name)
-    .filter(Boolean) as string[]
+    .filter(Boolean) as string[];
 
   const deliveryLabels = (technician.serviceDeliveryTypes ?? [])
     .map((type) => getServiceTypeById(type)?.name ?? type)
-    .filter(Boolean)
+    .filter(Boolean);
 
   return (
     <article className="bg-canvas min-h-screen">
@@ -69,11 +69,16 @@ export function TechnikerProfileView({ technician, copy, meta }: TechnikerProfil
 
         <header className="mt-8 border-b border-subtle pb-8">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
-            <Avatar src={technician.avatarUrl} name={displayName} size="xl" shape="rounded" bordered className="font-mono" />
+            <Avatar
+              src={technician.avatarUrl}
+              name={displayName}
+              size="xl"
+              shape="rounded"
+              bordered
+              className="font-mono"
+            />
             <div className="min-w-0 flex-1">
-              <Eyebrow as="div">
-                {meta.eyebrow}
-              </Eyebrow>
+              <Eyebrow as="div">{meta.eyebrow}</Eyebrow>
               <h1 className="ui-public-display-md mt-3">{displayName}</h1>
 
               {meta.locationLine && (
@@ -98,7 +103,9 @@ export function TechnikerProfileView({ technician, copy, meta }: TechnikerProfil
                   <BadgeCheck className="h-4 w-4 text-action" aria-hidden="true" />
                   <div>
                     <dt className="text-xs text-text-tertiary">{copy.verified}</dt>
-                    <dd className="text-sm font-medium text-text-primary">{isPro ? copy.professional : copy.community}</dd>
+                    <dd className="text-sm font-medium text-text-primary">
+                      {isPro ? copy.professional : copy.community}
+                    </dd>
                   </div>
                 </div>
               )}
@@ -107,7 +114,9 @@ export function TechnikerProfileView({ technician, copy, meta }: TechnikerProfil
                   <Star className="h-4 w-4 text-text-tertiary" aria-hidden="true" />
                   <div>
                     <dt className="text-xs text-text-tertiary">{copy.contact}</dt>
-                    <dd className="font-mono text-xs uppercase tracking-[0.12em] text-text-primary">{meta.statsLine}</dd>
+                    <dd className="font-mono text-xs uppercase tracking-[0.12em] text-text-primary">
+                      {meta.statsLine}
+                    </dd>
                   </div>
                 </div>
               )}
@@ -116,7 +125,9 @@ export function TechnikerProfileView({ technician, copy, meta }: TechnikerProfil
                   <Wrench className="h-4 w-4 text-text-tertiary" aria-hidden="true" />
                   <div>
                     <dt className="text-xs text-text-tertiary">{copy.skills}</dt>
-                    <dd className="line-clamp-1 text-sm font-medium text-text-primary">{skillLabels.slice(0, 3).join(' · ')}</dd>
+                    <dd className="line-clamp-1 text-sm font-medium text-text-primary">
+                      {skillLabels.slice(0, 3).join(' · ')}
+                    </dd>
                   </div>
                 </div>
               )}
@@ -178,12 +189,18 @@ export function TechnikerProfileView({ technician, copy, meta }: TechnikerProfil
                   <div className="font-mono text-sm tabular-nums text-text-primary sm:text-right">
                     {service.basePriceCents != null && (
                       <div>
-                        {copy.priceFrom.replace('{price}', String(Math.round(service.basePriceCents / 100)))}
+                        {copy.priceFrom.replace(
+                          '{price}',
+                          String(Math.round(service.basePriceCents / 100)),
+                        )}
                       </div>
                     )}
                     {service.hourlyRateCents != null && (
                       <div className="text-text-secondary">
-                        {copy.hourlyRate.replace('{rate}', String(Math.round(service.hourlyRateCents / 100)))}
+                        {copy.hourlyRate.replace(
+                          '{rate}',
+                          String(Math.round(service.hourlyRateCents / 100)),
+                        )}
                       </div>
                     )}
                   </div>
@@ -200,31 +217,33 @@ export function TechnikerProfileView({ technician, copy, meta }: TechnikerProfil
         )}
       </div>
     </article>
-  )
+  );
 }
 
 export function buildTechnikerProfileMeta(
   technician: TechnicianDetail,
   copy: TechnikerProfileCopy,
   detail: {
-    reviews: (values: { count: number }) => string
-    jobsCompleted: (values: { count: number }) => string
-    responseTime: (values: { hours: number }) => string
-    travelRange: (values: { km: number }) => string
+    reviews: (values: { count: number }) => string;
+    jobsCompleted: (values: { count: number }) => string;
+    responseTime: (values: { hours: number }) => string;
+    travelRange: (values: { km: number }) => string;
   },
 ): TechnikerProfileMeta {
-  const isPro = technician.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL
+  const isPro = technician.profileTier === REPAIRER_PROFILE_TIER.PROFESSIONAL;
 
   const eyebrowParts = [
     isPro ? copy.professional.toUpperCase() : copy.community.toUpperCase(),
     technician.postalCode ?? technician.city?.toUpperCase() ?? null,
     technician.isVerified ? copy.verified.toUpperCase() : null,
-  ].filter(Boolean)
+  ].filter(Boolean);
 
   const statsParts = [
     technician.averageRating != null && technician.averageRating > 0
       ? `★ ${technician.averageRating.toFixed(1)}${
-          technician.totalReviews > 0 ? ` ${detail.reviews({ count: technician.totalReviews })}` : ''
+          technician.totalReviews > 0
+            ? ` ${detail.reviews({ count: technician.totalReviews })}`
+            : ''
         }`
       : null,
     technician.totalJobsCompleted > 0
@@ -233,18 +252,18 @@ export function buildTechnikerProfileMeta(
     technician.responseTimeHours
       ? detail.responseTime({ hours: technician.responseTimeHours })
       : null,
-  ].filter(Boolean)
+  ].filter(Boolean);
 
   const locationParts = [
     [technician.postalCode, technician.city].filter(Boolean).join(' '),
     technician.maxTravelKm ? detail.travelRange({ km: technician.maxTravelKm }) : null,
-  ].filter(Boolean)
+  ].filter(Boolean);
 
   const pricingParts = [
     technician.hourlyRateCents ? `${formatCentsToChf(technician.hourlyRateCents)}/h` : null,
     technician.acceptsGratis ? copy.gratisHelp.toUpperCase() : null,
     technician.acceptsKulturlegi ? copy.kulturlegiRate.toUpperCase() : null,
-  ].filter(Boolean)
+  ].filter(Boolean);
 
   return {
     eyebrow: eyebrowParts.join(' · '),
@@ -252,5 +271,5 @@ export function buildTechnikerProfileMeta(
     locationLine: locationParts.length > 0 ? locationParts.join(' · ') : undefined,
     pricingLine: pricingParts.length > 0 ? pricingParts.join(' · ') : undefined,
     ctaLabel: isPro ? copy.submitRequest : copy.contact,
-  }
+  };
 }

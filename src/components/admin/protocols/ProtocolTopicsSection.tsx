@@ -1,17 +1,17 @@
-import { ChevronDown, ChevronRight, CheckCircle2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import Heading from '@/components/admin/AdminHeading'
-import type { StructuredNotes } from '@/lib/schemas/protocols'
+import { ChevronDown, ChevronRight, CheckCircle2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import Heading from '@/components/admin/AdminHeading';
+import type { StructuredNotes } from '@/lib/schemas/protocols';
 
 interface Props {
-  topics: StructuredNotes['topics']
-  expandedTopics: Set<string>
-  onToggleTopic: (id: string) => void
+  topics: StructuredNotes['topics'];
+  expandedTopics: Set<string>;
+  onToggleTopic: (id: string) => void;
 }
 
 export function ProtocolTopicsSection({ topics, expandedTopics, onToggleTopic }: Props) {
-  if (!topics || topics.length === 0) return null
+  if (!topics || topics.length === 0) return null;
 
   return (
     <Card className="overflow-hidden">
@@ -52,5 +52,5 @@ export function ProtocolTopicsSection({ topics, expandedTopics, onToggleTopic }:
         ))}
       </div>
     </Card>
-  )
+  );
 }

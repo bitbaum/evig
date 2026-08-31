@@ -10,31 +10,31 @@
  * 4-table join across two routes — means a schema change touches one file.
  */
 
-import { db } from '@/db'
+import { db } from '@/db';
 import {
   serviceAppointments,
   serviceTypes,
   users,
   userProfiles,
   repairerProfiles,
-} from '@/db/schema'
-import { eq, and, asc, desc, sql, type SQL } from 'drizzle-orm'
-import { alias } from 'drizzle-orm/pg-core'
-import { notifyUsers } from '@/lib/services/notifications'
-import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
+} from '@/db/schema';
+import { eq, and, asc, desc, sql, type SQL } from 'drizzle-orm';
+import { alias } from 'drizzle-orm/pg-core';
+import { notifyUsers } from '@/lib/services/notifications';
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications';
 
-const customer = alias(users, 'customer')
-const repairer = alias(users, 'repairer')
+const customer = alias(users, 'customer');
+const repairer = alias(users, 'repairer');
 
 export interface AppointmentListFilter {
   /** Filter to appointments where the given userId is the customer. */
-  customerId?: string
+  customerId?: string;
   /** Filter to appointments where the given userId is the assigned repairer. */
-  repairerId?: string
+  repairerId?: string;
   /** Filter to a specific status from BOOKING_STATUS. */
-  status?: string
-  limit?: number
-  offset?: number
+  status?: string;
+  limit?: number;
+  offset?: number;
 }
 
 /**
@@ -68,20 +68,20 @@ const APPOINTMENT_SELECT_COLS = {
   business_name: repairerProfiles.businessName,
   service_name: serviceTypes.name,
   service_slug: serviceTypes.slug,
-} as const
+} as const;
 
 function buildWhere(filter: AppointmentListFilter): SQL | undefined {
-  const conds: SQL[] = []
-  if (filter.customerId) conds.push(eq(serviceAppointments.userId, filter.customerId))
-  if (filter.repairerId) conds.push(eq(serviceAppointments.repairerId, filter.repairerId))
-  if (filter.status) conds.push(eq(serviceAppointments.status, filter.status))
-  return conds.length ? and(...conds) : undefined
+  const conds: SQL[] = [];
+  if (filter.customerId) conds.push(eq(serviceAppointments.userId, filter.customerId));
+  if (filter.repairerId) conds.push(eq(serviceAppointments.repairerId, filter.repairerId));
+  if (filter.status) conds.push(eq(serviceAppointments.status, filter.status));
+  return conds.length ? and(...conds) : undefined;
 }
 
 export async function listAppointments(filter: AppointmentListFilter) {
-  const where = buildWhere(filter)
-  const limit = filter.limit ?? 50
-  const offset = filter.offset ?? 0
+  const where = buildWhere(filter);
+  const limit = filter.limit ?? 50;
+  const offset = filter.offset ?? 0;
 
   const rows = await db
     .select(APPOINTMENT_SELECT_COLS)
@@ -93,12 +93,12 @@ export async function listAppointments(filter: AppointmentListFilter) {
     .where(where)
     .orderBy(desc(serviceAppointments.createdAt))
     .limit(limit)
-    .offset(offset)
+    .offset(offset);
 
   const [countRow] = await db
     .select({ total: sql<number>`count(*)::int` })
     .from(serviceAppointments)
-    .where(where)
+    .where(where);
 
   return {
     appointments: rows,
@@ -108,10 +108,10 @@ export async function listAppointments(filter: AppointmentListFilter) {
       offset,
       hasMore: offset + rows.length < Number(countRow?.total ?? 0),
     },
-  }
+  };
 }
 
-export type AppointmentRow = Awaited<ReturnType<typeof listAppointments>>['appointments'][number]
+export type AppointmentRow = Awaited<ReturnType<typeof listAppointments>>['appointments'][number];
 
 /** Single appointment by id — same column shape as listAppointments. */
 export async function getAppointmentById(id: string): Promise<AppointmentRow | null> {
@@ -123,23 +123,23 @@ export async function getAppointmentById(id: string): Promise<AppointmentRow | n
     .leftJoin(repairerProfiles, eq(serviceAppointments.repairerProfileId, repairerProfiles.id))
     .leftJoin(serviceTypes, eq(serviceAppointments.serviceTypeId, serviceTypes.id))
     .where(eq(serviceAppointments.id, id))
-    .limit(1)
-  return row ?? null
+    .limit(1);
+  return row ?? null;
 }
 
 export interface AppointmentStats {
-  total: number
-  requested: number
-  in_progress: number
-  completed_today: number
+  total: number;
+  requested: number;
+  in_progress: number;
+  completed_today: number;
 }
 
 export interface AssignableRepairer {
-  user_id: string
-  name: string | null
-  email: string
-  city: string | null
-  canton: string | null
+  user_id: string;
+  name: string | null;
+  email: string;
+  city: string | null;
+  canton: string | null;
 }
 
 /**
@@ -166,7 +166,7 @@ export function notifyRepairerOfAssignment(
     content: `Dir wurde ein neuer Reparaturtermin zugewiesen: ${description?.slice(0, 100) ?? ''}`,
     related_type: RELATED_TYPES.APPOINTMENT,
     related_id: appointmentId,
-  })
+  });
 }
 
 /**
@@ -185,13 +185,8 @@ export async function listActiveRepairers(): Promise<AssignableRepairer[]> {
     .from(repairerProfiles)
     .innerJoin(users, eq(repairerProfiles.userId, users.id))
     .leftJoin(userProfiles, eq(userProfiles.userId, repairerProfiles.userId))
-    .where(
-      and(
-        eq(repairerProfiles.isActive, true),
-        eq(userProfiles.isVerified, true),
-      ),
-    )
-    .orderBy(asc(users.name))
+    .where(and(eq(repairerProfiles.isActive, true), eq(userProfiles.isVerified, true)))
+    .orderBy(asc(users.name));
 }
 
 /**
@@ -206,11 +201,11 @@ export async function getAppointmentStats(): Promise<AppointmentStats> {
       in_progress: sql<number>`count(*) FILTER (WHERE ${serviceAppointments.status} IN ('accepted','quoted','quote_approved','in_progress'))::int`,
       completed_today: sql<number>`count(*) FILTER (WHERE ${serviceAppointments.status} = 'completed' AND ${serviceAppointments.updatedAt} >= CURRENT_DATE)::int`,
     })
-    .from(serviceAppointments)
+    .from(serviceAppointments);
   return {
     total: Number(row?.total ?? 0),
     requested: Number(row?.requested ?? 0),
     in_progress: Number(row?.in_progress ?? 0),
     completed_today: Number(row?.completed_today ?? 0),
-  }
+  };
 }

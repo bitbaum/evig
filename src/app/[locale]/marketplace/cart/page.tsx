@@ -1,5 +1,5 @@
-import { CartPageClient } from './CartPageClient'
+import { CartPageClient } from './CartPageClient';
 
 export default function CartPage() {
-  return <CartPageClient />
+  return <CartPageClient />;
 }

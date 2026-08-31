@@ -1,11 +1,11 @@
-import { notFound } from 'next/navigation'
-import Link from 'next/link'
-import { db } from '@/db'
-import { taskProjects, tasks, users } from '@/db/schema'
-import { eq, sql } from 'drizzle-orm'
-import { TABLE_NAMES } from '@/config/database'
-import { logger } from '@/lib/logger'
-import { formatDateShort } from '@/lib/date-formats'
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import { db } from '@/db';
+import { taskProjects, tasks, users } from '@/db/schema';
+import { eq, sql } from 'drizzle-orm';
+import { TABLE_NAMES } from '@/config/database';
+import { logger } from '@/lib/logger';
+import { formatDateShort } from '@/lib/date-formats';
 import {
   PROJECT_STATUS_LABELS,
   PROJECT_STATUS_COLORS,
@@ -13,13 +13,13 @@ import {
   TASK_PRIORITY_LABELS,
   TASK_STATUS_COLORS,
   TASK_PRIORITY_COLORS,
-} from '@/config/tasks'
-import type { ProjectStatus } from '@/config/tasks'
-import { ROUTES } from '@/config/routes'
-import AdminPageWrapper from '@/components/admin/AdminPageWrapper'
-import { cn } from '@/lib/utils'
-import { designPrimitive } from '@/lib/design-system'
-import { FolderKanban, Plus, Clock, Calendar } from 'lucide-react'
+} from '@/config/tasks';
+import type { ProjectStatus } from '@/config/tasks';
+import { ROUTES } from '@/config/routes';
+import AdminPageWrapper from '@/components/admin/AdminPageWrapper';
+import { cn } from '@/lib/utils';
+import { designPrimitive } from '@/lib/design-system';
+import { FolderKanban, Plus, Clock, Calendar } from 'lucide-react';
 
 async function getProject(id: string) {
   try {
@@ -35,11 +35,11 @@ async function getProject(id: string) {
       })
       .from(taskProjects)
       .leftJoin(users, eq(taskProjects.createdBy, users.id))
-      .where(eq(taskProjects.id, id))
-    return row ?? null
+      .where(eq(taskProjects.id, id));
+    return row ?? null;
   } catch (error) {
-    logger.error('Error fetching project detail', { error, id })
-    return null
+    logger.error('Error fetching project detail', { error, id });
+    return null;
   }
 }
 
@@ -63,30 +63,26 @@ async function getProjectTasks(id: string) {
       .from(tasks)
       .leftJoin(users, eq(tasks.assignedTo, users.id))
       .where(sql`${tasks.projectId} = ${id} AND NOT ${tasks.isArchived}`)
-      .orderBy(sql`${tasks.createdAt} DESC`)
+      .orderBy(sql`${tasks.createdAt} DESC`);
   } catch (error) {
-    logger.error('Error fetching project tasks', { error, id })
-    return []
+    logger.error('Error fetching project tasks', { error, id });
+    return [];
   }
 }
 
 export default async function TaskProjectDetailPage({
   params,
 }: {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = await params
-  const [project, projectTasks] = await Promise.all([
-    getProject(id),
-    getProjectTasks(id),
-  ])
+  const { id } = await params;
+  const [project, projectTasks] = await Promise.all([getProject(id), getProjectTasks(id)]);
 
-  if (!project) notFound()
+  if (!project) notFound();
 
-  const completedCount = projectTasks.filter(t => t.isCompleted).length
-  const progress = projectTasks.length > 0
-    ? Math.round((completedCount / projectTasks.length) * 100)
-    : 0
+  const completedCount = projectTasks.filter((t) => t.isCompleted).length;
+  const progress =
+    projectTasks.length > 0 ? Math.round((completedCount / projectTasks.length) * 100) : 0;
 
   return (
     <AdminPageWrapper
@@ -102,7 +98,7 @@ export default async function TaskProjectDetailPage({
             designPrimitive.buttonBase,
             designPrimitive.buttonSize.default,
             designPrimitive.button.primary,
-            'gap-1.5'
+            'gap-1.5',
           )}
         >
           <Plus className="h-4 w-4" />
@@ -113,10 +109,13 @@ export default async function TaskProjectDetailPage({
       {/* Project meta card */}
       <div className={cn(designPrimitive.surface.card, 'p-5')}>
         <div className="flex flex-wrap items-center gap-4">
-          <span className={cn(
-            designPrimitive.badgeBase,
-            PROJECT_STATUS_COLORS[project.status as ProjectStatus] ?? 'bg-surface-raised text-text-secondary'
-          )}>
+          <span
+            className={cn(
+              designPrimitive.badgeBase,
+              PROJECT_STATUS_COLORS[project.status as ProjectStatus] ??
+                'bg-surface-raised text-text-secondary',
+            )}
+          >
             {PROJECT_STATUS_LABELS[project.status as ProjectStatus] ?? project.status}
           </span>
           {project.targetDate && (
@@ -141,9 +140,7 @@ export default async function TaskProjectDetailPage({
               <span className="text-xs text-text-tertiary">
                 {completedCount}/{projectTasks.length} Aufgaben erledigt
               </span>
-              <span className="text-xs font-semibold text-text-secondary">
-                {progress}%
-              </span>
+              <span className="text-xs font-semibold text-text-secondary">{progress}%</span>
             </div>
             <div className="h-2 w-full rounded-full bg-surface-raised dark:bg-surface-base/6">
               <div
@@ -160,15 +157,13 @@ export default async function TaskProjectDetailPage({
         <div className={cn(designPrimitive.surface.card, 'p-10 text-center')}>
           <FolderKanban className="mx-auto h-10 w-10 text-text-muted dark:text-text-secondary mb-3" />
           <p className="text-sm font-semibold text-text-primary mb-1">Noch keine Aufgaben</p>
-          <p className="text-sm text-text-tertiary mb-4">
-            Füge Aufgaben zu diesem Projekt hinzu.
-          </p>
+          <p className="text-sm text-text-tertiary mb-4">Füge Aufgaben zu diesem Projekt hinzu.</p>
           <Link
             href={`${ROUTES.admin.taskNew}?project=${id}`}
             className={cn(
               designPrimitive.buttonBase,
               designPrimitive.buttonSize.default,
-              designPrimitive.button.primary
+              designPrimitive.button.primary,
             )}
           >
             <Plus className="h-4 w-4" />
@@ -184,11 +179,13 @@ export default async function TaskProjectDetailPage({
                 <th className={cn(designPrimitive.table.th, 'hidden sm:table-cell')}>Status</th>
                 <th className={cn(designPrimitive.table.th, 'hidden sm:table-cell')}>Priorität</th>
                 <th className={cn(designPrimitive.table.th, 'hidden md:table-cell')}>Zugewiesen</th>
-                <th className={cn(designPrimitive.table.th, 'hidden md:table-cell text-right')}>Erledigungen</th>
+                <th className={cn(designPrimitive.table.th, 'hidden md:table-cell text-right')}>
+                  Erledigungen
+                </th>
               </tr>
             </thead>
             <tbody>
-              {projectTasks.map(task => (
+              {projectTasks.map((task) => (
                 <tr key={task.id} className={designPrimitive.table.tr}>
                   <td className={cn(designPrimitive.table.td, 'max-w-xs')}>
                     <Link
@@ -198,35 +195,61 @@ export default async function TaskProjectDetailPage({
                       {task.title}
                     </Link>
                     {task.description && (
-                      <p className="text-xs text-text-muted truncate">
-                        {task.description}
-                      </p>
+                      <p className="text-xs text-text-muted truncate">{task.description}</p>
                     )}
                   </td>
-                  <td className={cn(designPrimitive.table.td, 'hidden sm:table-cell whitespace-nowrap')}>
-                    <span className={cn(
-                      designPrimitive.badgeBase,
-                      TASK_STATUS_COLORS[task.currentStatus as keyof typeof TASK_STATUS_COLORS] ?? 'bg-surface-raised text-text-secondary'
-                    )}>
-                      {TASK_STATUS_LABELS[task.currentStatus as keyof typeof TASK_STATUS_LABELS] ?? task.currentStatus}
+                  <td
+                    className={cn(
+                      designPrimitive.table.td,
+                      'hidden sm:table-cell whitespace-nowrap',
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        designPrimitive.badgeBase,
+                        TASK_STATUS_COLORS[task.currentStatus as keyof typeof TASK_STATUS_COLORS] ??
+                          'bg-surface-raised text-text-secondary',
+                      )}
+                    >
+                      {TASK_STATUS_LABELS[task.currentStatus as keyof typeof TASK_STATUS_LABELS] ??
+                        task.currentStatus}
                     </span>
                   </td>
-                  <td className={cn(designPrimitive.table.td, 'hidden sm:table-cell whitespace-nowrap')}>
-                    <span className={cn(
-                      designPrimitive.badgeBase,
-                      TASK_PRIORITY_COLORS[task.priority as keyof typeof TASK_PRIORITY_COLORS] ?? 'bg-surface-raised text-text-secondary'
-                    )}>
-                      {TASK_PRIORITY_LABELS[task.priority as keyof typeof TASK_PRIORITY_LABELS] ?? task.priority}
+                  <td
+                    className={cn(
+                      designPrimitive.table.td,
+                      'hidden sm:table-cell whitespace-nowrap',
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        designPrimitive.badgeBase,
+                        TASK_PRIORITY_COLORS[task.priority as keyof typeof TASK_PRIORITY_COLORS] ??
+                          'bg-surface-raised text-text-secondary',
+                      )}
+                    >
+                      {TASK_PRIORITY_LABELS[task.priority as keyof typeof TASK_PRIORITY_LABELS] ??
+                        task.priority}
                     </span>
                   </td>
-                  <td className={cn(designPrimitive.table.td, 'hidden md:table-cell whitespace-nowrap')}>
+                  <td
+                    className={cn(
+                      designPrimitive.table.td,
+                      'hidden md:table-cell whitespace-nowrap',
+                    )}
+                  >
                     {task.assignedToName ? (
                       <span>{task.assignedToName}</span>
                     ) : (
                       <span className="text-text-muted dark:text-text-secondary">&mdash;</span>
                     )}
                   </td>
-                  <td className={cn(designPrimitive.table.td, 'hidden md:table-cell text-right whitespace-nowrap')}>
+                  <td
+                    className={cn(
+                      designPrimitive.table.td,
+                      'hidden md:table-cell text-right whitespace-nowrap',
+                    )}
+                  >
                     {task.completionCount}
                   </td>
                 </tr>
@@ -236,5 +259,5 @@ export default async function TaskProjectDetailPage({
         </div>
       )}
     </AdminPageWrapper>
-  )
+  );
 }

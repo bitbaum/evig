@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 /**
  * Create Help Request Modal
@@ -6,14 +6,14 @@
  * Modal for creating a new help request (broadcast or targeted)
  */
 
-import { useState } from 'react'
-import { Loader2, Users, User } from 'lucide-react'
-import { Modal } from '@/components/ui/Modal'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Select } from '@/components/ui/select'
-import { FormField } from '@/components/ui/form-field'
+import { useState } from 'react';
+import { Loader2, Users, User } from 'lucide-react';
+import { Modal } from '@/components/ui/Modal';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select } from '@/components/ui/select';
+import { FormField } from '@/components/ui/form-field';
 import {
   HELP_REQUEST_URGENCY_OPTIONS,
   ACTIVITY_CATEGORY_OPTIONS,
@@ -21,21 +21,21 @@ import {
   ACTIVITY_CATEGORY_LABELS,
   type HelpRequestUrgency,
   type ActivityCategory,
-} from '@/config/activity'
-import { useHelpRequestMutations } from './useActivityStream'
-import { URGENCY_DEFAULT } from '@/config/it-hilfe'
+} from '@/config/activity';
+import { useHelpRequestMutations } from './useActivityStream';
+import { URGENCY_DEFAULT } from '@/config/it-hilfe';
 
 interface TeamMemberOption {
-  id: string
-  user_id: string
-  user_name: string | null
-  user_email: string
+  id: string;
+  user_id: string;
+  user_name: string | null;
+  user_email: string;
 }
 
 interface CreateHelpRequestModalProps {
-  onClose: () => void
-  onSuccess: () => void
-  teamMembers?: TeamMemberOption[]
+  onClose: () => void;
+  onSuccess: () => void;
+  teamMembers?: TeamMemberOption[];
 }
 
 export function CreateHelpRequestModal({
@@ -43,19 +43,19 @@ export function CreateHelpRequestModal({
   onSuccess,
   teamMembers = [],
 }: CreateHelpRequestModalProps) {
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [category, setCategory] = useState<string>('')
-  const [urgency, setUrgency] = useState<string>(URGENCY_DEFAULT)
-  const [isBroadcast, setIsBroadcast] = useState(true)
-  const [targetUserId, setTargetUserId] = useState<string>('')
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [category, setCategory] = useState<string>('');
+  const [urgency, setUrgency] = useState<string>(URGENCY_DEFAULT);
+  const [isBroadcast, setIsBroadcast] = useState(true);
+  const [targetUserId, setTargetUserId] = useState<string>('');
 
-  const { saving, error, createRequest } = useHelpRequestMutations()
+  const { saving, error, createRequest } = useHelpRequestMutations();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    if (!title.trim()) return
+    if (!title.trim()) return;
 
     const result = await createRequest({
       title: title.trim(),
@@ -63,19 +63,22 @@ export function CreateHelpRequestModal({
       category: category || null,
       urgency,
       requested_user_id: isBroadcast ? null : targetUserId || null,
-    })
+    });
 
     if (result) {
-      onSuccess()
-      onClose()
+      onSuccess();
+      onClose();
     }
-  }
+  };
 
   return (
     <Modal isOpen onClose={onClose} title="Hilfe anfordern">
       {/* Error */}
       {error && (
-        <div id="help-request-error" className="mb-4 p-3 bg-error-50 dark:bg-error-900/30 border border-error-200 dark:border-error-800 rounded-lg text-error-700 dark:text-error-300 text-sm">
+        <div
+          id="help-request-error"
+          className="mb-4 p-3 bg-error-50 dark:bg-error-900/30 border border-error-200 dark:border-error-800 rounded-lg text-error-700 dark:text-error-300 text-sm"
+        >
           {error}
         </div>
       )}
@@ -212,5 +215,5 @@ export function CreateHelpRequestModal({
         </div>
       </form>
     </Modal>
-  )
+  );
 }

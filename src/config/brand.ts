@@ -21,4 +21,4 @@ export const EVIG_MARK = {
   loopPath: 'M32 32 C24 19 12 19 12 32 C12 45 24 45 32 32 C40 19 52 19 52 32 C52 45 40 45 32 32',
   /** AI spark — a filled four-point sparkle, upright, at the top-right. */
   sparkPath: 'M50 5 Q50 12 57 12 Q50 12 50 19 Q50 12 43 12 Q50 12 50 5 Z',
-} as const
+} as const;

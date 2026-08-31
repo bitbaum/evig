@@ -13,18 +13,18 @@
  * shape keeps both paths reviewable as one pattern.
  */
 
-import type { EmailContent } from '../types'
-import { createEmailLayout, createTextFooter } from './base-styles'
-import { ORG } from '@/config/org'
-import { escapeHtml } from '@/lib/utils/escape-html'
+import type { EmailContent } from '../types';
+import { createEmailLayout, createTextFooter } from './base-styles';
+import { ORG } from '@/config/org';
+import { escapeHtml } from '@/lib/utils/escape-html';
 
 interface DropoffFields {
-  name: string
-  email: string
-  phone?: string
-  preferredDate?: string
-  devices: string
-  notes?: string
+  name: string;
+  email: string;
+  phone?: string;
+  preferredDate?: string;
+  devices: string;
+  notes?: string;
 }
 
 /**
@@ -32,17 +32,17 @@ interface DropoffFields {
  */
 export const donationDropoffNotification = (fields: DropoffFields): EmailContent => {
   // Every interpolated field is attacker-controlled — escape before HTML.
-  const eName = escapeHtml(fields.name)
-  const eEmail = escapeHtml(fields.email)
-  const ePhone = fields.phone ? escapeHtml(fields.phone) : ''
-  const eDate = fields.preferredDate ? escapeHtml(fields.preferredDate) : ''
-  const eDevicesHtml = escapeHtml(fields.devices).replace(/\n/g, '<br>')
-  const eNotesHtml = fields.notes ? escapeHtml(fields.notes).replace(/\n/g, '<br>') : ''
+  const eName = escapeHtml(fields.name);
+  const eEmail = escapeHtml(fields.email);
+  const ePhone = fields.phone ? escapeHtml(fields.phone) : '';
+  const eDate = fields.preferredDate ? escapeHtml(fields.preferredDate) : '';
+  const eDevicesHtml = escapeHtml(fields.devices).replace(/\n/g, '<br>');
+  const eNotesHtml = fields.notes ? escapeHtml(fields.notes).replace(/\n/g, '<br>') : '';
 
   const optionalRow = (label: string, value: string) =>
     value
       ? `<tr><td style="padding:8px; font-weight:bold; width:140px;">${label}</td><td style="padding:8px;">${value}</td></tr>`
-      : ''
+      : '';
 
   return {
     subject: `Geräte-Abgabe angemeldet — ${fields.name}`,
@@ -68,18 +68,18 @@ export const donationDropoffNotification = (fields: DropoffFields): EmailContent
     `,
     ),
     text: `Neue Geräte-Abgabe\n\nName: ${fields.name}\nE-Mail: ${fields.email}\n${fields.phone ? `Telefon: ${fields.phone}\n` : ''}${fields.preferredDate ? `Bevorzugter Termin: ${fields.preferredDate}\n` : ''}\nGeräte:\n${fields.devices}\n${fields.notes ? `\nAnmerkungen:\n${fields.notes}\n` : ''}\n${createTextFooter()}`,
-  }
-}
+  };
+};
 
 /**
  * Confirmation to the donor — we received their announcement.
  */
 export const donationDropoffConfirmation = (fields: DropoffFields): EmailContent => {
-  const eName = escapeHtml(fields.name)
-  const eDevicesHtml = escapeHtml(fields.devices).replace(/\n/g, '<br>')
+  const eName = escapeHtml(fields.name);
+  const eDevicesHtml = escapeHtml(fields.devices).replace(/\n/g, '<br>');
   const dateLine = fields.preferredDate
     ? `<p>Bevorzugter Termin: <strong>${escapeHtml(fields.preferredDate)}</strong>.</p>`
-    : ''
+    : '';
 
   return {
     subject: `Vielen Dank für deine Geräte-Spende-Anmeldung bei ${ORG.name}`,
@@ -106,5 +106,5 @@ export const donationDropoffConfirmation = (fields: DropoffFields): EmailContent
     `,
     ),
     text: `Hallo ${fields.name},\n\nvielen Dank für deine Geräte-Spende-Anmeldung bei ${ORG.name}!\n\n${fields.preferredDate ? `Bevorzugter Termin: ${fields.preferredDate}\n\n` : ''}Du hast angegeben:\n${fields.devices}\n\nWir melden uns in Kürze bei dir und koordinieren die Übergabe.\n\n${createTextFooter()}`,
-  }
-}
+  };
+};

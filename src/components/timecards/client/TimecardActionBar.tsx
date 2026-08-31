@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
-import { AlertCircle, Check } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { apiFetch } from '@/lib/api/client'
-import { useTimecardIntl } from '@/hooks/useTimecardIntl'
-import type { TimecardStatus } from '@/config/timecards'
-import type { UseTimecardDraftResult } from '../useTimecardDraft'
+import { useTranslations } from 'next-intl';
+import { AlertCircle, Check } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { apiFetch } from '@/lib/api/client';
+import { useTimecardIntl } from '@/hooks/useTimecardIntl';
+import type { TimecardStatus } from '@/config/timecards';
+import type { UseTimecardDraftResult } from '../useTimecardDraft';
 
 /** Owns the sticky bottom action bar: inline feedback line plus the reopen / save / submit button cluster. */
 export function TimecardActionBar({
@@ -16,14 +16,14 @@ export function TimecardActionBar({
   isSubmittedUnchanged,
   canApprove,
 }: {
-  tc: UseTimecardDraftResult
-  serverStatus: TimecardStatus
-  isApproved: boolean
-  isSubmittedUnchanged: boolean
-  canApprove: boolean
+  tc: UseTimecardDraftResult;
+  serverStatus: TimecardStatus;
+  isApproved: boolean;
+  isSubmittedUnchanged: boolean;
+  canApprove: boolean;
 }) {
-  const t = useTranslations('admin.timecards')
-  const { duration } = useTimecardIntl()
+  const t = useTranslations('admin.timecards');
+  const { duration } = useTimecardIntl();
 
   return (
     <div className="sticky bottom-[var(--bottom-nav-clearance,0px)] z-20 -mx-1 flex flex-col gap-2 border-t border-subtle bg-surface-base/95 py-3 pl-1 pr-20 backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:pr-1">
@@ -57,8 +57,10 @@ export function TimecardActionBar({
             variant="outline"
             size="sm"
             onClick={async () => {
-              const r = await apiFetch(`/api/admin/timecards/${tc.draft.id}/reopen`, { method: 'POST' })
-              if (r.success) window.location.reload()
+              const r = await apiFetch(`/api/admin/timecards/${tc.draft.id}/reopen`, {
+                method: 'POST',
+              });
+              if (r.success) window.location.reload();
             }}
             className="flex-1 sm:flex-none"
           >
@@ -80,12 +82,22 @@ export function TimecardActionBar({
           variant="primary"
           size="sm"
           onClick={tc.submitDraft}
-          disabled={tc.isSubmitting || tc.periodEntries.length === 0 || tc.isLoadingDraft || isApproved || isSubmittedUnchanged}
+          disabled={
+            tc.isSubmitting ||
+            tc.periodEntries.length === 0 ||
+            tc.isLoadingDraft ||
+            isApproved ||
+            isSubmittedUnchanged
+          }
           className="flex-1 sm:flex-none"
         >
-          {tc.isSubmitting ? t('submitting') : serverStatus === 'submitted' ? t('resubmit') : t('submit')}
+          {tc.isSubmitting
+            ? t('submitting')
+            : serverStatus === 'submitted'
+              ? t('resubmit')
+              : t('submit')}
         </Button>
       </div>
     </div>
-  )
+  );
 }

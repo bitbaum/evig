@@ -11,14 +11,14 @@
  * fetch — callers overlay it via `isListingFavorited`.
  */
 
-import { cache as reactCache } from 'react'
-import { db } from '@/db'
+import { cache as reactCache } from 'react';
+import { db } from '@/db';
 
 // `React.cache` only exists in the RSC runtime; fall back to identity in plain
 // Node contexts (jest) so importing this module doesn't throw. Dedup is a
 // server-render optimisation, not a correctness requirement.
 const cache: typeof reactCache =
-  typeof reactCache === 'function' ? reactCache : (<T,>(fn: T): T => fn) as typeof reactCache
+  typeof reactCache === 'function' ? reactCache : ((<T>(fn: T): T => fn) as typeof reactCache);
 import {
   listings,
   listingImages,
@@ -28,71 +28,71 @@ import {
   users,
   sellerProfiles,
   userProfiles,
-} from '@/db/schema'
-import { eq, and, ne, asc, sql } from 'drizzle-orm'
-import { LISTING_STATUS } from '@/config/marketplace'
-import { REVIEW_TARGET_TYPES } from '@/config/database'
-import { REVIEW_STATUS } from '@/config/review-status'
-import { logger } from '@/lib/logger'
+} from '@/db/schema';
+import { eq, and, ne, asc, sql } from 'drizzle-orm';
+import { LISTING_STATUS } from '@/config/marketplace';
+import { REVIEW_TARGET_TYPES } from '@/config/database';
+import { REVIEW_STATUS } from '@/config/review-status';
+import { logger } from '@/lib/logger';
 
 export interface ListingImageData {
-  id: string
-  url: string
-  position: number
-  is_primary: boolean
+  id: string;
+  url: string;
+  position: number;
+  is_primary: boolean;
 }
 
 export interface ListingDetail {
-  id: string
-  seller_id: string
-  title: string
-  description: string
-  price_chf: number
-  category: string
-  condition: string
-  brand: string | null
-  model: string | null
-  delivery_options: string
-  shipping_cost_chf: number | null
-  pickup_location: string | null
-  payment_mode: string
-  status: string
-  is_revampit: boolean
-  view_count: number
-  favorite_count: number
-  created_at: string
-  seller_name: string | null
-  seller_display_name: string | null
-  seller_bio: string | null
-  seller_avatar_url: string | null
-  seller_city: string | null
-  seller_canton: string | null
-  seller_rating: number | null
-  seller_total_sold: number | null
-  seller_total_reviews: number | null
-  images: ListingImageData[]
-  is_favorited: boolean
-  verified_at: string | null
-  verified_by: string | null
-  verification_notes: string | null
-  condition_checks: Array<{ key: string; label: string; checked: boolean }> | null
-  specs: Array<{ key: string; value: string; unit: string | null }> | null
+  id: string;
+  seller_id: string;
+  title: string;
+  description: string;
+  price_chf: number;
+  category: string;
+  condition: string;
+  brand: string | null;
+  model: string | null;
+  delivery_options: string;
+  shipping_cost_chf: number | null;
+  pickup_location: string | null;
+  payment_mode: string;
+  status: string;
+  is_revampit: boolean;
+  view_count: number;
+  favorite_count: number;
+  created_at: string;
+  seller_name: string | null;
+  seller_display_name: string | null;
+  seller_bio: string | null;
+  seller_avatar_url: string | null;
+  seller_city: string | null;
+  seller_canton: string | null;
+  seller_rating: number | null;
+  seller_total_sold: number | null;
+  seller_total_reviews: number | null;
+  images: ListingImageData[];
+  is_favorited: boolean;
+  verified_at: string | null;
+  verified_by: string | null;
+  verification_notes: string | null;
+  condition_checks: Array<{ key: string; label: string; checked: boolean }> | null;
+  specs: Array<{ key: string; value: string; unit: string | null }> | null;
 }
 
 /** The publicly-cacheable shape — everything except the viewer-specific favourite flag. */
-export type ListingPublic = Omit<ListingDetail, 'is_favorited'>
+export type ListingPublic = Omit<ListingDetail, 'is_favorited'>;
 
 export interface SimilarListing {
-  id: string
-  title: string
-  price_chf: number
-  condition: string
-  thumbnail: string | null
+  id: string;
+  title: string;
+  price_chf: number;
+  condition: string;
+  thumbnail: string | null;
 }
 
 export interface ListingReviewStats {
-  average: number
-  count: number
+  average: number;
+  count: number;
 }
 
 /**
@@ -142,9 +142,9 @@ export const getListingDetail = cache(async (id: string): Promise<ListingPublic 
     .innerJoin(users, eq(listings.sellerId, users.id))
     .leftJoin(sellerProfiles, eq(listings.sellerId, sellerProfiles.userId))
     .leftJoin(userProfiles, eq(listings.sellerId, userProfiles.userId))
-    .where(and(eq(listings.id, id), ne(listings.status, LISTING_STATUS.REMOVED)))
+    .where(and(eq(listings.id, id), ne(listings.status, LISTING_STATUS.REMOVED)));
 
-  if (!listing) return null
+  if (!listing) return null;
 
   const [images, specs] = await Promise.all([
     db
@@ -167,7 +167,7 @@ export const getListingDetail = cache(async (id: string): Promise<ListingPublic 
       .from(listingSpecs)
       .where(eq(listingSpecs.listingId, id))
       .orderBy(asc(listingSpecs.specKey)),
-  ])
+  ]);
 
   // Drizzle returns decimal columns as strings; the ListingPublic contract is
   // numeric (consumers already Number()-wrap defensively). Coerce here so the
@@ -182,16 +182,16 @@ export const getListingDetail = cache(async (id: string): Promise<ListingPublic 
     condition_checks: listing.condition_checks as ListingPublic['condition_checks'],
     images,
     specs: specs.map((s) => ({ key: s.spec_key, value: s.spec_value, unit: s.spec_unit })),
-  }
-})
+  };
+});
 
 /** Whether a given viewer has favourited this listing. */
 export async function isListingFavorited(viewerId: string, id: string): Promise<boolean> {
   const rows = await db
     .select({ id: listingFavorites.id })
     .from(listingFavorites)
-    .where(and(eq(listingFavorites.userId, viewerId), eq(listingFavorites.listingId, id)))
-  return rows.length > 0
+    .where(and(eq(listingFavorites.userId, viewerId), eq(listingFavorites.listingId, id)));
+  return rows.length > 0;
 }
 
 /** Fire-and-forget view-count bump — only counts ACTIVE listings, like the API. */
@@ -199,7 +199,7 @@ export function incrementListingView(id: string): void {
   db.update(listings)
     .set({ viewCount: sql`${listings.viewCount} + 1` })
     .where(and(eq(listings.id, id), eq(listings.status, LISTING_STATUS.ACTIVE)))
-    .catch((err) => logger.error('Failed to increment view count', { error: err, listingId: id }))
+    .catch((err) => logger.error('Failed to increment view count', { error: err, listingId: id }));
 }
 
 /**
@@ -219,9 +219,9 @@ export async function getListingReviewStats(id: string): Promise<ListingReviewSt
         eq(reviews.targetId, id),
         eq(reviews.status, REVIEW_STATUS.PUBLISHED),
       ),
-    )
+    );
   return {
     average: row?.avg ? Number(row.avg) : 0,
     count: row?.count ? Number(row.count) : 0,
-  }
+  };
 }

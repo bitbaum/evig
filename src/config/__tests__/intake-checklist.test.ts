@@ -26,30 +26,35 @@ import {
   INTAKE_TIERS,
   CHECKLIST_ITEMS,
   CHECKLIST_RESULTS,
-} from '@/config/intake-checklist'
-import type { ChecklistState, ChecklistResult } from '@/config/intake-checklist'
+} from '@/config/intake-checklist';
+import type { ChecklistState, ChecklistResult } from '@/config/intake-checklist';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 /** Build a ChecklistState where every given item ID has the given verdict. */
 function itemsWithResult(result: ChecklistResult, ...ids: string[]): ChecklistState {
-  const state: ChecklistState = {}
+  const state: ChecklistState = {};
   for (const id of ids) {
-    state[id] = { result, completedBy: 'test-user', completedAt: '2026-01-01T00:00:00Z', notes: '' }
+    state[id] = {
+      result,
+      completedBy: 'test-user',
+      completedAt: '2026-01-01T00:00:00Z',
+      notes: '',
+    };
   }
-  return state
+  return state;
 }
 
 /** Build a ChecklistState where every given item ID passed. */
 function completeItems(...ids: string[]): ChecklistState {
-  return itemsWithResult(CHECKLIST_RESULTS.PASS, ...ids)
+  return itemsWithResult(CHECKLIST_RESULTS.PASS, ...ids);
 }
 
 /** Returns all required item IDs for a given tier + device category. */
 function requiredIdsFor(tier: string, deviceCategory?: string | null): string[] {
   return getChecklistForDevice(tier as never, deviceCategory)
-    .filter(i => i.required)
-    .map(i => i.id)
+    .filter((i) => i.required)
+    .map((i) => i.id);
 }
 
 // ─── getChecklistForDevice ────────────────────────────────────────────────────
@@ -57,494 +62,550 @@ function requiredIdsFor(tier: string, deviceCategory?: string | null): string[] 
 describe('getChecklistForDevice', () => {
   describe('tier filtering', () => {
     it('includes items that match the given tier', () => {
-      const items = getChecklistForDevice(INTAKE_TIERS.RECYCLE)
-      const ids = items.map(i => i.id)
+      const items = getChecklistForDevice(INTAKE_TIERS.RECYCLE);
+      const ids = items.map((i) => i.id);
       // recycle-specific items
-      expect(ids).toContain('swico_documented')
-      expect(ids).toContain('handed_to_recycler')
-    })
+      expect(ids).toContain('swico_documented');
+      expect(ids).toContain('handed_to_recycler');
+    });
 
     it('excludes items that belong to other tiers', () => {
-      const items = getChecklistForDevice(INTAKE_TIERS.RECYCLE)
-      const ids = items.map(i => i.id)
+      const items = getChecklistForDevice(INTAKE_TIERS.RECYCLE);
+      const ids = items.map((i) => i.id);
       // refurbish-only items must not appear in recycle list
-      expect(ids).not.toContain('cpu_test')
-      expect(ids).not.toContain('os_installed')
-      expect(ids).not.toContain('final_qa')
-    })
+      expect(ids).not.toContain('cpu_test');
+      expect(ids).not.toContain('os_installed');
+      expect(ids).not.toContain('final_qa');
+    });
 
     it('includes universal items (all tiers) regardless of tier', () => {
       for (const tier of Object.values(INTAKE_TIERS)) {
-        const ids = getChecklistForDevice(tier).map(i => i.id)
-        expect(ids).toContain('visual_inspection')
-        expect(ids).toContain('condition_graded')
+        const ids = getChecklistForDevice(tier).map((i) => i.id);
+        expect(ids).toContain('visual_inspection');
+        expect(ids).toContain('condition_graded');
       }
-    })
+    });
 
     it('includes parts-specific items only for parts tier', () => {
-      const partsIds = getChecklistForDevice(INTAKE_TIERS.PARTS).map(i => i.id)
-      const refurbishIds = getChecklistForDevice(INTAKE_TIERS.REFURBISH).map(i => i.id)
-      const recycleIds = getChecklistForDevice(INTAKE_TIERS.RECYCLE).map(i => i.id)
+      const partsIds = getChecklistForDevice(INTAKE_TIERS.PARTS).map((i) => i.id);
+      const refurbishIds = getChecklistForDevice(INTAKE_TIERS.REFURBISH).map((i) => i.id);
+      const recycleIds = getChecklistForDevice(INTAKE_TIERS.RECYCLE).map((i) => i.id);
 
-      expect(partsIds).toContain('disassembly')
-      expect(partsIds).toContain('components_tested')
-      expect(refurbishIds).not.toContain('disassembly')
-      expect(recycleIds).not.toContain('disassembly')
-    })
-  })
+      expect(partsIds).toContain('disassembly');
+      expect(partsIds).toContain('components_tested');
+      expect(refurbishIds).not.toContain('disassembly');
+      expect(recycleIds).not.toContain('disassembly');
+    });
+  });
 
   describe('device category filtering', () => {
     it('includes items with no deviceCategory restriction for any device', () => {
       // visual_inspection has no deviceCategories restriction
-      const laptopItems = getChecklistForDevice(INTAKE_TIERS.REFURBISH, '10')
-      const printerItems = getChecklistForDevice(INTAKE_TIERS.REFURBISH, '60')
-      expect(laptopItems.map(i => i.id)).toContain('visual_inspection')
-      expect(printerItems.map(i => i.id)).toContain('visual_inspection')
-    })
+      const laptopItems = getChecklistForDevice(INTAKE_TIERS.REFURBISH, '10');
+      const printerItems = getChecklistForDevice(INTAKE_TIERS.REFURBISH, '60');
+      expect(laptopItems.map((i) => i.id)).toContain('visual_inspection');
+      expect(printerItems.map((i) => i.id)).toContain('visual_inspection');
+    });
 
     it('includes device-restricted items when the device matches', () => {
       // cpu_test is restricted to ['10', '20'] (Laptops, Desktops)
-      const laptopItems = getChecklistForDevice(INTAKE_TIERS.REFURBISH, '10')
-      expect(laptopItems.map(i => i.id)).toContain('cpu_test')
-    })
+      const laptopItems = getChecklistForDevice(INTAKE_TIERS.REFURBISH, '10');
+      expect(laptopItems.map((i) => i.id)).toContain('cpu_test');
+    });
 
     it('excludes device-restricted items when the device does not match', () => {
       // cpu_test is restricted to ['10', '20'] — smartphones ('50') should not see it
-      const smartphoneItems = getChecklistForDevice(INTAKE_TIERS.REFURBISH, '50')
-      expect(smartphoneItems.map(i => i.id)).not.toContain('cpu_test')
-    })
+      const smartphoneItems = getChecklistForDevice(INTAKE_TIERS.REFURBISH, '50');
+      expect(smartphoneItems.map((i) => i.id)).not.toContain('cpu_test');
+    });
 
     it('excludes device-restricted items when no device category is provided', () => {
       // data_wipe has deviceCategories ['10','20','40','50'] — no-category device should skip it
-      const noCategoryItems = getChecklistForDevice(INTAKE_TIERS.REFURBISH, null)
-      expect(noCategoryItems.map(i => i.id)).not.toContain('data_wipe')
-    })
+      const noCategoryItems = getChecklistForDevice(INTAKE_TIERS.REFURBISH, null);
+      expect(noCategoryItems.map((i) => i.id)).not.toContain('data_wipe');
+    });
 
     it('shows keyboard_test only for laptops (category 10)', () => {
-      const laptopItems = getChecklistForDevice(INTAKE_TIERS.REFURBISH, '10')
-      const desktopItems = getChecklistForDevice(INTAKE_TIERS.REFURBISH, '20')
-      expect(laptopItems.map(i => i.id)).toContain('keyboard_test')
-      expect(desktopItems.map(i => i.id)).not.toContain('keyboard_test')
-    })
+      const laptopItems = getChecklistForDevice(INTAKE_TIERS.REFURBISH, '10');
+      const desktopItems = getChecklistForDevice(INTAKE_TIERS.REFURBISH, '20');
+      expect(laptopItems.map((i) => i.id)).toContain('keyboard_test');
+      expect(desktopItems.map((i) => i.id)).not.toContain('keyboard_test');
+    });
 
     it('returns all refurbish items with no category exclusions for unrestricted items', () => {
       // cleaning has no deviceCategories restriction → appears for all
-      const items60 = getChecklistForDevice(INTAKE_TIERS.REFURBISH, '60') // printers
-      expect(items60.map(i => i.id)).toContain('cleaning')
-    })
-  })
+      const items60 = getChecklistForDevice(INTAKE_TIERS.REFURBISH, '60'); // printers
+      expect(items60.map((i) => i.id)).toContain('cleaning');
+    });
+  });
 
   it('returns a subset of CHECKLIST_ITEMS (never more)', () => {
     for (const tier of Object.values(INTAKE_TIERS)) {
-      const filtered = getChecklistForDevice(tier, '10')
-      expect(filtered.length).toBeLessThanOrEqual(CHECKLIST_ITEMS.length)
+      const filtered = getChecklistForDevice(tier, '10');
+      expect(filtered.length).toBeLessThanOrEqual(CHECKLIST_ITEMS.length);
     }
-  })
-})
+  });
+});
 
 // ─── getChecklistGrouped ─────────────────────────────────────────────────────
 
 describe('getChecklistGrouped', () => {
   it('groups items by their category field', () => {
-    const grouped = getChecklistGrouped(INTAKE_TIERS.REFURBISH, '10')
+    const grouped = getChecklistGrouped(INTAKE_TIERS.REFURBISH, '10');
     // refurbish + laptop should have testing, refurbishment, quality, listing groups
-    expect(grouped).toHaveProperty('testing')
-    expect(grouped).toHaveProperty('refurbishment')
-    expect(grouped).toHaveProperty('quality')
-    expect(grouped).toHaveProperty('listing')
-    expect(grouped).toHaveProperty('intake')
-    expect(grouped).toHaveProperty('security')
-  })
+    expect(grouped).toHaveProperty('testing');
+    expect(grouped).toHaveProperty('refurbishment');
+    expect(grouped).toHaveProperty('quality');
+    expect(grouped).toHaveProperty('listing');
+    expect(grouped).toHaveProperty('intake');
+    expect(grouped).toHaveProperty('security');
+  });
 
   it('every item in a group has that category', () => {
-    const grouped = getChecklistGrouped(INTAKE_TIERS.REFURBISH, '10')
+    const grouped = getChecklistGrouped(INTAKE_TIERS.REFURBISH, '10');
     for (const [category, items] of Object.entries(grouped)) {
       for (const item of items) {
-        expect(item.category).toBe(category)
+        expect(item.category).toBe(category);
       }
     }
-  })
+  });
 
   it('parts tier has parts category group', () => {
-    const grouped = getChecklistGrouped(INTAKE_TIERS.PARTS)
-    expect(grouped).toHaveProperty('parts')
-    expect(grouped.parts.map(i => i.id)).toContain('disassembly')
-  })
+    const grouped = getChecklistGrouped(INTAKE_TIERS.PARTS);
+    expect(grouped).toHaveProperty('parts');
+    expect(grouped.parts.map((i) => i.id)).toContain('disassembly');
+  });
 
   it('recycle tier has recycling category group but not testing', () => {
-    const grouped = getChecklistGrouped(INTAKE_TIERS.RECYCLE, '10')
-    expect(grouped).toHaveProperty('recycling')
-    expect(grouped).not.toHaveProperty('testing')
-  })
-})
+    const grouped = getChecklistGrouped(INTAKE_TIERS.RECYCLE, '10');
+    expect(grouped).toHaveProperty('recycling');
+    expect(grouped).not.toHaveProperty('testing');
+  });
+});
 
 // ─── isChecklistComplete ──────────────────────────────────────────────────────
 
 describe('isChecklistComplete', () => {
   describe('refurbish tier — laptop (category 10)', () => {
-    const tier = INTAKE_TIERS.REFURBISH
-    const cat = '10'
+    const tier = INTAKE_TIERS.REFURBISH;
+    const cat = '10';
 
     it('returns false for empty checklist state', () => {
-      expect(isChecklistComplete({}, tier, cat)).toBe(false)
-    })
+      expect(isChecklistComplete({}, tier, cat)).toBe(false);
+    });
 
     it('returns false when only some required items are completed', () => {
-      const partial = completeItems('visual_inspection', 'condition_graded')
-      expect(isChecklistComplete(partial, tier, cat)).toBe(false)
-    })
+      const partial = completeItems('visual_inspection', 'condition_graded');
+      expect(isChecklistComplete(partial, tier, cat)).toBe(false);
+    });
 
     it('returns true when all required items are completed', () => {
-      const ids = requiredIdsFor(tier, cat)
-      expect(ids.length).toBeGreaterThan(0)
-      const state = completeItems(...ids)
-      expect(isChecklistComplete(state, tier, cat)).toBe(true)
-    })
+      const ids = requiredIdsFor(tier, cat);
+      expect(ids.length).toBeGreaterThan(0);
+      const state = completeItems(...ids);
+      expect(isChecklistComplete(state, tier, cat)).toBe(true);
+    });
 
     it('returns true when required items done even if optional items are not', () => {
-      const requiredIds = requiredIdsFor(tier, cat)
+      const requiredIds = requiredIdsFor(tier, cat);
       // Deliberately omit optional items (wifi_test, serial_noted, etc.)
-      const state = completeItems(...requiredIds)
-      expect(isChecklistComplete(state, tier, cat)).toBe(true)
-    })
+      const state = completeItems(...requiredIds);
+      expect(isChecklistComplete(state, tier, cat)).toBe(true);
+    });
 
     it('returns false when a single required item is missing', () => {
-      const requiredIds = requiredIdsFor(tier, cat)
+      const requiredIds = requiredIdsFor(tier, cat);
       // Complete all but the last required item
-      const mostDone = completeItems(...requiredIds.slice(0, -1))
-      expect(isChecklistComplete(mostDone, tier, cat)).toBe(false)
-    })
+      const mostDone = completeItems(...requiredIds.slice(0, -1));
+      expect(isChecklistComplete(mostDone, tier, cat)).toBe(false);
+    });
 
     it('does not count optional items as required', () => {
-      const allItems = getChecklistForDevice(tier, cat)
-      const optionalIds = allItems.filter(i => !i.required).map(i => i.id)
-      expect(optionalIds.length).toBeGreaterThan(0)
+      const allItems = getChecklistForDevice(tier, cat);
+      const optionalIds = allItems.filter((i) => !i.required).map((i) => i.id);
+      expect(optionalIds.length).toBeGreaterThan(0);
 
       // Complete only optional items — must still fail
-      const onlyOptional = completeItems(...optionalIds)
-      expect(isChecklistComplete(onlyOptional, tier, cat)).toBe(false)
-    })
-  })
+      const onlyOptional = completeItems(...optionalIds);
+      expect(isChecklistComplete(onlyOptional, tier, cat)).toBe(false);
+    });
+  });
 
   describe('recycle tier', () => {
-    const tier = INTAKE_TIERS.RECYCLE
+    const tier = INTAKE_TIERS.RECYCLE;
 
     it('returns false for empty state', () => {
-      expect(isChecklistComplete({}, tier, '10')).toBe(false)
-    })
+      expect(isChecklistComplete({}, tier, '10')).toBe(false);
+    });
 
     it('returns true when recycle required items are done (laptop)', () => {
-      const ids = requiredIdsFor(tier, '10')
+      const ids = requiredIdsFor(tier, '10');
       // recycle+laptop: visual_inspection, condition_graded, data_wipe, swico_documented, handed_to_recycler
-      expect(ids).toContain('swico_documented')
-      expect(ids).toContain('handed_to_recycler')
-      expect(ids).toContain('data_wipe')
-      expect(isChecklistComplete(completeItems(...ids), tier, '10')).toBe(true)
-    })
+      expect(ids).toContain('swico_documented');
+      expect(ids).toContain('handed_to_recycler');
+      expect(ids).toContain('data_wipe');
+      expect(isChecklistComplete(completeItems(...ids), tier, '10')).toBe(true);
+    });
 
     it('does not require data_wipe for device categories without storage (printers = cat 60)', () => {
-      const ids = requiredIdsFor(tier, '60')
+      const ids = requiredIdsFor(tier, '60');
       // data_wipe is restricted to ['10','20','40','50'] — category 60 (printers) excluded
-      expect(ids).not.toContain('data_wipe')
+      expect(ids).not.toContain('data_wipe');
       // Should complete with fewer items
-      expect(isChecklistComplete(completeItems(...ids), tier, '60')).toBe(true)
-    })
-  })
+      expect(isChecklistComplete(completeItems(...ids), tier, '60')).toBe(true);
+    });
+  });
 
   describe('parts tier', () => {
-    const tier = INTAKE_TIERS.PARTS
+    const tier = INTAKE_TIERS.PARTS;
 
     it('returns false for empty state', () => {
-      expect(isChecklistComplete({}, tier)).toBe(false)
-    })
+      expect(isChecklistComplete({}, tier)).toBe(false);
+    });
 
     it('returns true when parts required items are done', () => {
-      const ids = requiredIdsFor(tier)
-      expect(ids).toContain('disassembly')
-      expect(ids).toContain('components_tested')
-      expect(ids).toContain('components_cataloged')
-      expect(isChecklistComplete(completeItems(...ids), tier)).toBe(true)
-    })
+      const ids = requiredIdsFor(tier);
+      expect(ids).toContain('disassembly');
+      expect(ids).toContain('components_tested');
+      expect(ids).toContain('components_cataloged');
+      expect(isChecklistComplete(completeItems(...ids), tier)).toBe(true);
+    });
 
     it('does not require refurbish-only items', () => {
-      const ids = requiredIdsFor(tier)
-      expect(ids).not.toContain('os_installed')
-      expect(ids).not.toContain('final_qa')
-    })
-  })
+      const ids = requiredIdsFor(tier);
+      expect(ids).not.toContain('os_installed');
+      expect(ids).not.toContain('final_qa');
+    });
+  });
 
   it('an open (result: null) item does not count', () => {
-    const ids = requiredIdsFor(INTAKE_TIERS.REFURBISH, '10')
-    const state = completeItems(...ids)
+    const ids = requiredIdsFor(INTAKE_TIERS.REFURBISH, '10');
+    const state = completeItems(...ids);
     // Overwrite the last item as still open
-    const lastId = ids[ids.length - 1]
-    state[lastId] = { result: null, completedBy: null, completedAt: null, notes: '' }
-    expect(isChecklistComplete(state, INTAKE_TIERS.REFURBISH, '10')).toBe(false)
-  })
+    const lastId = ids[ids.length - 1];
+    state[lastId] = { result: null, completedBy: null, completedAt: null, notes: '' };
+    expect(isChecklistComplete(state, INTAKE_TIERS.REFURBISH, '10')).toBe(false);
+  });
 
   it('a failed required item blocks completion', () => {
-    const ids = requiredIdsFor(INTAKE_TIERS.REFURBISH, '10')
-    const state = completeItems(...ids)
-    state[ids[0]] = { result: CHECKLIST_RESULTS.FAIL, completedBy: 'u', completedAt: '2026-01-01T00:00:00Z', notes: 'Akku defekt' }
-    expect(isChecklistComplete(state, INTAKE_TIERS.REFURBISH, '10')).toBe(false)
-  })
+    const ids = requiredIdsFor(INTAKE_TIERS.REFURBISH, '10');
+    const state = completeItems(...ids);
+    state[ids[0]] = {
+      result: CHECKLIST_RESULTS.FAIL,
+      completedBy: 'u',
+      completedAt: '2026-01-01T00:00:00Z',
+      notes: 'Akku defekt',
+    };
+    expect(isChecklistComplete(state, INTAKE_TIERS.REFURBISH, '10')).toBe(false);
+  });
 
   it("an 'n.a.' verdict satisfies a required item", () => {
-    const ids = requiredIdsFor(INTAKE_TIERS.REFURBISH, '10')
-    const state = completeItems(...ids.slice(1))
-    state[ids[0]] = { result: CHECKLIST_RESULTS.NA, completedBy: 'u', completedAt: '2026-01-01T00:00:00Z', notes: '' }
-    expect(isChecklistComplete(state, INTAKE_TIERS.REFURBISH, '10')).toBe(true)
-  })
+    const ids = requiredIdsFor(INTAKE_TIERS.REFURBISH, '10');
+    const state = completeItems(...ids.slice(1));
+    state[ids[0]] = {
+      result: CHECKLIST_RESULTS.NA,
+      completedBy: 'u',
+      completedAt: '2026-01-01T00:00:00Z',
+      notes: '',
+    };
+    expect(isChecklistComplete(state, INTAKE_TIERS.REFURBISH, '10')).toBe(true);
+  });
 
   it('legacy completed:true states (pre-migration snapshots) still count', () => {
-    const ids = requiredIdsFor(INTAKE_TIERS.PARTS)
-    const state: ChecklistState = {}
+    const ids = requiredIdsFor(INTAKE_TIERS.PARTS);
+    const state: ChecklistState = {};
     for (const id of ids) {
-      state[id] = { result: null, completed: true, completedBy: 'u', completedAt: '2026-01-01T00:00:00Z', notes: '' } as never
+      state[id] = {
+        result: null,
+        completed: true,
+        completedBy: 'u',
+        completedAt: '2026-01-01T00:00:00Z',
+        notes: '',
+      } as never;
     }
-    expect(isChecklistComplete(state, INTAKE_TIERS.PARTS)).toBe(true)
-  })
-})
+    expect(isChecklistComplete(state, INTAKE_TIERS.PARTS)).toBe(true);
+  });
+});
 
 // ─── hasChecklistFailure ─────────────────────────────────────────────────────
 
 describe('hasChecklistFailure', () => {
-  const tier = INTAKE_TIERS.REFURBISH
-  const cat = '10'
+  const tier = INTAKE_TIERS.REFURBISH;
+  const cat = '10';
 
   it('returns false for empty state', () => {
-    expect(hasChecklistFailure({}, tier, cat)).toBe(false)
-  })
+    expect(hasChecklistFailure({}, tier, cat)).toBe(false);
+  });
 
   it('returns true when a required item failed', () => {
-    const state = itemsWithResult(CHECKLIST_RESULTS.FAIL, 'power_test')
-    expect(hasChecklistFailure(state, tier, cat)).toBe(true)
-  })
+    const state = itemsWithResult(CHECKLIST_RESULTS.FAIL, 'power_test');
+    expect(hasChecklistFailure(state, tier, cat)).toBe(true);
+  });
 
   it('ignores failures on optional items', () => {
     // wifi_test is optional for laptops
-    const state = itemsWithResult(CHECKLIST_RESULTS.FAIL, 'wifi_test')
-    expect(hasChecklistFailure(state, tier, cat)).toBe(false)
-  })
+    const state = itemsWithResult(CHECKLIST_RESULTS.FAIL, 'wifi_test');
+    expect(hasChecklistFailure(state, tier, cat)).toBe(false);
+  });
 
   it('ignores failures on items not applicable to the device', () => {
     // battery_test does not apply to desktops ('20')
-    const state = itemsWithResult(CHECKLIST_RESULTS.FAIL, 'battery_test')
-    expect(hasChecklistFailure(state, tier, '20')).toBe(false)
-  })
-})
+    const state = itemsWithResult(CHECKLIST_RESULTS.FAIL, 'battery_test');
+    expect(hasChecklistFailure(state, tier, '20')).toBe(false);
+  });
+});
 
 // ─── requiresQualityControl ──────────────────────────────────────────────────
 
 describe('requiresQualityControl', () => {
   it('is true for device categories with required testing/security items', () => {
     for (const cat of ['10', '20', '30', '40', '50', '60']) {
-      expect(requiresQualityControl(cat)).toBe(true)
+      expect(requiresQualityControl(cat)).toBe(true);
     }
-  })
+  });
 
   it('is false for accessory categories (components, peripherals, networking)', () => {
     for (const cat of ['70', '80', '90']) {
-      expect(requiresQualityControl(cat)).toBe(false)
+      expect(requiresQualityControl(cat)).toBe(false);
     }
-  })
+  });
 
   it('is false for missing category', () => {
-    expect(requiresQualityControl(null)).toBe(false)
-    expect(requiresQualityControl(undefined)).toBe(false)
-  })
-})
+    expect(requiresQualityControl(null)).toBe(false);
+    expect(requiresQualityControl(undefined)).toBe(false);
+  });
+});
 
 // ─── violatesSecondPersonRule ────────────────────────────────────────────────
 
 describe('violatesSecondPersonRule (Vier-Augen-Prinzip)', () => {
-  const tier = INTAKE_TIERS.REFURBISH
-  const cat = '10'
-  const finalQa = CHECKLIST_ITEMS.find(i => i.id === 'final_qa')!
-  const powerTest = CHECKLIST_ITEMS.find(i => i.id === 'power_test')!
+  const tier = INTAKE_TIERS.REFURBISH;
+  const cat = '10';
+  const finalQa = CHECKLIST_ITEMS.find((i) => i.id === 'final_qa')!;
+  const powerTest = CHECKLIST_ITEMS.find((i) => i.id === 'power_test')!;
 
   /** State where all required items except final_qa passed, by the given user. */
   function workDoneBy(userId: string): ChecklistState {
-    const state: ChecklistState = {}
-    for (const id of requiredIdsFor(tier, cat).filter(i => i !== 'final_qa')) {
-      state[id] = { result: CHECKLIST_RESULTS.PASS, completedBy: userId, completedAt: '2026-01-01T00:00:00Z', notes: '' }
+    const state: ChecklistState = {};
+    for (const id of requiredIdsFor(tier, cat).filter((i) => i !== 'final_qa')) {
+      state[id] = {
+        result: CHECKLIST_RESULTS.PASS,
+        completedBy: userId,
+        completedAt: '2026-01-01T00:00:00Z',
+        notes: '',
+      };
     }
-    return state
+    return state;
   }
 
   it('never applies to items without the flag', () => {
-    expect(violatesSecondPersonRule(powerTest, workDoneBy('tech-1'), tier, cat, 'tech-1')).toBe(false)
-  })
+    expect(violatesSecondPersonRule(powerTest, workDoneBy('tech-1'), tier, cat, 'tech-1')).toBe(
+      false,
+    );
+  });
 
   it('blocks the sole worker from signing off final QA', () => {
-    expect(violatesSecondPersonRule(finalQa, workDoneBy('tech-1'), tier, cat, 'tech-1')).toBe(true)
-  })
+    expect(violatesSecondPersonRule(finalQa, workDoneBy('tech-1'), tier, cat, 'tech-1')).toBe(true);
+  });
 
   it('allows a second person to sign off final QA', () => {
-    expect(violatesSecondPersonRule(finalQa, workDoneBy('tech-1'), tier, cat, 'tech-2')).toBe(false)
-  })
+    expect(violatesSecondPersonRule(finalQa, workDoneBy('tech-1'), tier, cat, 'tech-2')).toBe(
+      false,
+    );
+  });
 
   it('still blocks the primary tech when another person only did one item', () => {
-    const state = workDoneBy('tech-1')
-    state['data_wipe'] = { result: CHECKLIST_RESULTS.PASS, completedBy: 'tech-2', completedAt: '2026-01-01T00:00:00Z', notes: '' }
-    expect(violatesSecondPersonRule(finalQa, state, tier, cat, 'tech-1')).toBe(true)
-  })
+    const state = workDoneBy('tech-1');
+    state['data_wipe'] = {
+      result: CHECKLIST_RESULTS.PASS,
+      completedBy: 'tech-2',
+      completedAt: '2026-01-01T00:00:00Z',
+      notes: '',
+    };
+    expect(violatesSecondPersonRule(finalQa, state, tier, cat, 'tech-1')).toBe(true);
+  });
 
   it('allows either worker when completed work is evenly shared', () => {
-    const ids = requiredIdsFor(tier, cat).filter(i => i !== 'final_qa').slice(0, 2)
+    const ids = requiredIdsFor(tier, cat)
+      .filter((i) => i !== 'final_qa')
+      .slice(0, 2);
     const state: ChecklistState = {
-      [ids[0]]: { result: CHECKLIST_RESULTS.PASS, completedBy: 'tech-1', completedAt: '2026-01-01T00:00:00Z', notes: '' },
-      [ids[1]]: { result: CHECKLIST_RESULTS.PASS, completedBy: 'tech-2', completedAt: '2026-01-01T00:00:00Z', notes: '' },
-    }
-    expect(violatesSecondPersonRule(finalQa, state, tier, cat, 'tech-1')).toBe(false)
-    expect(violatesSecondPersonRule(finalQa, state, tier, cat, 'tech-2')).toBe(false)
-  })
+      [ids[0]]: {
+        result: CHECKLIST_RESULTS.PASS,
+        completedBy: 'tech-1',
+        completedAt: '2026-01-01T00:00:00Z',
+        notes: '',
+      },
+      [ids[1]]: {
+        result: CHECKLIST_RESULTS.PASS,
+        completedBy: 'tech-2',
+        completedAt: '2026-01-01T00:00:00Z',
+        notes: '',
+      },
+    };
+    expect(violatesSecondPersonRule(finalQa, state, tier, cat, 'tech-1')).toBe(false);
+    expect(violatesSecondPersonRule(finalQa, state, tier, cat, 'tech-2')).toBe(false);
+  });
 
   it('blocks final QA when nothing else is done yet', () => {
-    expect(violatesSecondPersonRule(finalQa, {}, tier, cat, 'tech-1')).toBe(true)
-  })
-})
+    expect(violatesSecondPersonRule(finalQa, {}, tier, cat, 'tech-1')).toBe(true);
+  });
+});
 
 // ─── getBuyerVisibleChecks ───────────────────────────────────────────────────
 
 describe('getBuyerVisibleChecks', () => {
-  const tier = INTAKE_TIERS.REFURBISH
-  const cat = '10'
+  const tier = INTAKE_TIERS.REFURBISH;
+  const cat = '10';
 
   it('returns passed testing/security/refurbishment/quality items in {key,label,checked} shape', () => {
-    const state = completeItems('power_test', 'data_wipe', 'cleaning', 'final_qa')
-    const checks = getBuyerVisibleChecks(state, tier, cat)
-    const keys = checks.map(c => c.key)
-    expect(keys).toEqual(expect.arrayContaining(['power_test', 'data_wipe', 'cleaning', 'final_qa']))
+    const state = completeItems('power_test', 'data_wipe', 'cleaning', 'final_qa');
+    const checks = getBuyerVisibleChecks(state, tier, cat);
+    const keys = checks.map((c) => c.key);
+    expect(keys).toEqual(
+      expect.arrayContaining(['power_test', 'data_wipe', 'cleaning', 'final_qa']),
+    );
     for (const c of checks) {
-      expect(c.checked).toBe(true)
-      expect(typeof c.label).toBe('string')
-      expect(c.label.length).toBeGreaterThan(0)
+      expect(c.checked).toBe(true);
+      expect(typeof c.label).toBe('string');
+      expect(c.label.length).toBeGreaterThan(0);
     }
-  })
+  });
 
   it('excludes intake bookkeeping and listing-prep items even when passed', () => {
-    const state = completeItems('visual_inspection', 'condition_graded', 'photos_taken', 'price_set')
-    expect(getBuyerVisibleChecks(state, tier, cat)).toEqual([])
-  })
+    const state = completeItems(
+      'visual_inspection',
+      'condition_graded',
+      'photos_taken',
+      'price_set',
+    );
+    expect(getBuyerVisibleChecks(state, tier, cat)).toEqual([]);
+  });
 
   it("excludes open, failed and 'n.a.' items", () => {
     const state = {
       ...itemsWithResult(CHECKLIST_RESULTS.FAIL, 'power_test'),
       ...itemsWithResult(CHECKLIST_RESULTS.NA, 'battery_test'),
       // ram_test left open
-    }
-    expect(getBuyerVisibleChecks(state, tier, cat)).toEqual([])
-  })
+    };
+    expect(getBuyerVisibleChecks(state, tier, cat)).toEqual([]);
+  });
 
   it('returns empty for empty state', () => {
-    expect(getBuyerVisibleChecks({}, tier, cat)).toEqual([])
-  })
-})
+    expect(getBuyerVisibleChecks({}, tier, cat)).toEqual([]);
+  });
+});
 
 // ─── item-state helpers ──────────────────────────────────────────────────────
 
 describe('getItemResult / isItemDone / normalizeChecklistItemState', () => {
   it('reads the stored verdict', () => {
-    expect(getItemResult({ result: 'fail', completedBy: 'u', completedAt: 'x', notes: 'n' })).toBe('fail')
-  })
+    expect(getItemResult({ result: 'fail', completedBy: 'u', completedAt: 'x', notes: 'n' })).toBe(
+      'fail',
+    );
+  });
 
   it('maps legacy completed:true to pass', () => {
-    const legacy = { completed: true, completedBy: 'u', completedAt: 'x', notes: '' } as never
-    expect(getItemResult(legacy)).toBe(CHECKLIST_RESULTS.PASS)
-    expect(normalizeChecklistItemState(legacy).result).toBe(CHECKLIST_RESULTS.PASS)
-  })
+    const legacy = { completed: true, completedBy: 'u', completedAt: 'x', notes: '' } as never;
+    expect(getItemResult(legacy)).toBe(CHECKLIST_RESULTS.PASS);
+    expect(normalizeChecklistItemState(legacy).result).toBe(CHECKLIST_RESULTS.PASS);
+  });
 
   it('undefined state is open and not done', () => {
-    expect(getItemResult(undefined)).toBeNull()
-    expect(isItemDone(undefined)).toBe(false)
-    expect(normalizeChecklistItemState(undefined)).toEqual({ result: null, completedBy: null, completedAt: null, notes: '' })
-  })
+    expect(getItemResult(undefined)).toBeNull();
+    expect(isItemDone(undefined)).toBe(false);
+    expect(normalizeChecklistItemState(undefined)).toEqual({
+      result: null,
+      completedBy: null,
+      completedAt: null,
+      notes: '',
+    });
+  });
 
   it('pass and na are done; fail is not', () => {
-    const base = { completedBy: 'u', completedAt: 'x', notes: '' }
-    expect(isItemDone({ ...base, result: 'pass' })).toBe(true)
-    expect(isItemDone({ ...base, result: 'na' })).toBe(true)
-    expect(isItemDone({ ...base, result: 'fail' })).toBe(false)
-  })
-})
+    const base = { completedBy: 'u', completedAt: 'x', notes: '' };
+    expect(isItemDone({ ...base, result: 'pass' })).toBe(true);
+    expect(isItemDone({ ...base, result: 'na' })).toBe(true);
+    expect(isItemDone({ ...base, result: 'fail' })).toBe(false);
+  });
+});
 
 // ─── getChecklistProgress ────────────────────────────────────────────────────
 
 describe('getChecklistProgress', () => {
-  const tier = INTAKE_TIERS.REFURBISH
-  const cat = '10'
+  const tier = INTAKE_TIERS.REFURBISH;
+  const cat = '10';
 
   it('returns zeros and 100% when state is empty and no required items apply', () => {
     // Manufacture a scenario with no required items: use a category that has none
     // Actually all tiers have at least visual_inspection as required — so test the math
     // directly via a known tier+category that has some items
-    const progress = getChecklistProgress({}, tier, cat)
-    expect(progress.completed).toBe(0)
-    expect(progress.requiredCompleted).toBe(0)
-    expect(progress.total).toBeGreaterThan(0)
-    expect(progress.requiredTotal).toBeGreaterThan(0)
-    expect(progress.percentage).toBe(0)
-  })
+    const progress = getChecklistProgress({}, tier, cat);
+    expect(progress.completed).toBe(0);
+    expect(progress.requiredCompleted).toBe(0);
+    expect(progress.total).toBeGreaterThan(0);
+    expect(progress.requiredTotal).toBeGreaterThan(0);
+    expect(progress.percentage).toBe(0);
+  });
 
   it('counts completed items correctly', () => {
-    const state = completeItems('visual_inspection', 'condition_graded', 'data_wipe')
-    const progress = getChecklistProgress(state, tier, cat)
-    expect(progress.completed).toBe(3)
-  })
+    const state = completeItems('visual_inspection', 'condition_graded', 'data_wipe');
+    const progress = getChecklistProgress(state, tier, cat);
+    expect(progress.completed).toBe(3);
+  });
 
   it('counts requiredCompleted separately from optional completions', () => {
     // serial_noted is optional; visual_inspection is required
-    const state = completeItems('serial_noted') // only optional
-    const progress = getChecklistProgress(state, tier, cat)
-    expect(progress.requiredCompleted).toBe(0)
-    expect(progress.completed).toBe(1) // optional counted in total completed
-  })
+    const state = completeItems('serial_noted'); // only optional
+    const progress = getChecklistProgress(state, tier, cat);
+    expect(progress.requiredCompleted).toBe(0);
+    expect(progress.completed).toBe(1); // optional counted in total completed
+  });
 
   it('returns 100% percentage when all required items are done', () => {
-    const ids = requiredIdsFor(tier, cat)
-    const state = completeItems(...ids)
-    const progress = getChecklistProgress(state, tier, cat)
-    expect(progress.percentage).toBe(100)
-    expect(progress.requiredCompleted).toBe(progress.requiredTotal)
-  })
+    const ids = requiredIdsFor(tier, cat);
+    const state = completeItems(...ids);
+    const progress = getChecklistProgress(state, tier, cat);
+    expect(progress.percentage).toBe(100);
+    expect(progress.requiredCompleted).toBe(progress.requiredTotal);
+  });
 
   it('returns correct partial percentage', () => {
-    const ids = requiredIdsFor(tier, cat)
+    const ids = requiredIdsFor(tier, cat);
     // Complete exactly half the required items (floor)
-    const half = ids.slice(0, Math.floor(ids.length / 2))
-    const state = completeItems(...half)
-    const progress = getChecklistProgress(state, tier, cat)
-    const expectedPct = Math.round((half.length / ids.length) * 100)
-    expect(progress.percentage).toBe(expectedPct)
-  })
+    const half = ids.slice(0, Math.floor(ids.length / 2));
+    const state = completeItems(...half);
+    const progress = getChecklistProgress(state, tier, cat);
+    const expectedPct = Math.round((half.length / ids.length) * 100);
+    expect(progress.percentage).toBe(expectedPct);
+  });
 
   it('returns 100% percentage when requiredTotal is 0 (no required items for this configuration)', () => {
     // We can't easily get a tier+category with 0 required items from real config,
     // so we test the return-value shape directly by checking an impossible case would
     // mathematically return 100% — i.e. the guard `requiredItems.length > 0` path.
     // Instead, verify total and required counts are both non-negative integers.
-    const progress = getChecklistProgress({}, INTAKE_TIERS.PARTS, null)
-    expect(progress.total).toBeGreaterThanOrEqual(0)
-    expect(progress.requiredTotal).toBeGreaterThanOrEqual(0)
-    expect(progress.percentage).toBeGreaterThanOrEqual(0)
-    expect(progress.percentage).toBeLessThanOrEqual(100)
-  })
+    const progress = getChecklistProgress({}, INTAKE_TIERS.PARTS, null);
+    expect(progress.total).toBeGreaterThanOrEqual(0);
+    expect(progress.requiredTotal).toBeGreaterThanOrEqual(0);
+    expect(progress.percentage).toBeGreaterThanOrEqual(0);
+    expect(progress.percentage).toBeLessThanOrEqual(100);
+  });
 
   it('counts failed verdicts', () => {
     const state = {
       ...completeItems('visual_inspection'),
       ...itemsWithResult(CHECKLIST_RESULTS.FAIL, 'power_test', 'wifi_test'),
-    }
-    const progress = getChecklistProgress(state, tier, cat)
-    expect(progress.failed).toBe(2)
-    expect(progress.completed).toBe(1) // fails are not "done"
-  })
+    };
+    const progress = getChecklistProgress(state, tier, cat);
+    expect(progress.failed).toBe(2);
+    expect(progress.completed).toBe(1); // fails are not "done"
+  });
 
   it('total includes both required and optional items', () => {
-    const allItems = getChecklistForDevice(tier, cat)
-    const progress = getChecklistProgress({}, tier, cat)
-    expect(progress.total).toBe(allItems.length)
-    expect(progress.requiredTotal).toBeLessThanOrEqual(progress.total)
-  })
-})
+    const allItems = getChecklistForDevice(tier, cat);
+    const progress = getChecklistProgress({}, tier, cat);
+    expect(progress.total).toBe(allItems.length);
+    expect(progress.requiredTotal).toBeLessThanOrEqual(progress.total);
+  });
+});

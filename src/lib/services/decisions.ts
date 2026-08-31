@@ -6,7 +6,7 @@
  */
 
 // Core CRUD, transitions, tally computation
-export type { DecisionStats, PublicDecision, PublicDecisionOption } from './decisions-core'
+export type { DecisionStats, PublicDecision, PublicDecisionOption } from './decisions-core';
 export {
   getDecisionStats,
   getDecisions,
@@ -17,20 +17,10 @@ export {
   deleteDecision,
   transitionDecision,
   computeTallies,
-} from './decisions-core'
+} from './decisions-core';
 
 // Voting submission, retrieval, participation
-export {
-  validateVoteData,
-  submitVote,
-  getVotes,
-  getParticipationStatus,
-} from './decisions-voting'
+export { validateVoteData, submitVote, getVotes, getParticipationStatus } from './decisions-voting';
 
 // Comments CRUD
-export {
-  getComments,
-  createComment,
-  updateComment,
-  deleteComment,
-} from './decisions-comments'
+export { getComments, createComment, updateComment, deleteComment } from './decisions-comments';

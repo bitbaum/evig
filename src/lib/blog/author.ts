@@ -11,19 +11,19 @@
  * same author hits the database at most once per request.
  */
 
-import { cache } from 'react'
-import { eq } from 'drizzle-orm'
-import { db } from '@/db'
-import { users } from '@/db/schema'
-import { getBlogAuthorRecord } from '@/config/blog-authors'
+import { cache } from 'react';
+import { eq } from 'drizzle-orm';
+import { db } from '@/db';
+import { users } from '@/db/schema';
+import { getBlogAuthorRecord } from '@/config/blog-authors';
 
 export interface ResolvedAuthor {
   /** Display name shown in the byline. */
-  name: string
+  name: string;
   /** Public profile account id, or null when the author has no linkable account. */
-  profileId: string | null
+  profileId: string | null;
   /** Optional role/title under the name. */
-  role?: string
+  role?: string;
 }
 
 const accountIdByEmail = cache(async (email: string): Promise<string | null> => {
@@ -31,19 +31,19 @@ const accountIdByEmail = cache(async (email: string): Promise<string | null> => 
     .select({ id: users.id })
     .from(users)
     .where(eq(users.email, email))
-    .limit(1)
-  return row?.id ?? null
-})
+    .limit(1);
+  return row?.id ?? null;
+});
 
 export async function resolveAuthorProfile(
   authorRaw: string | undefined,
   dbAuthorId?: string | null,
 ): Promise<ResolvedAuthor> {
-  const record = getBlogAuthorRecord(authorRaw)
+  const record = getBlogAuthorRecord(authorRaw);
   if (record) {
-    const profileId = dbAuthorId ?? (await accountIdByEmail(record.email))
-    return { name: record.name, profileId, role: record.role }
+    const profileId = dbAuthorId ?? (await accountIdByEmail(record.email));
+    return { name: record.name, profileId, role: record.role };
   }
   // Unknown author: keep the raw label; still link to the DB account if present.
-  return { name: authorRaw?.trim() || 'evig', profileId: dbAuthorId ?? null }
+  return { name: authorRaw?.trim() || 'evig', profileId: dbAuthorId ?? null };
 }

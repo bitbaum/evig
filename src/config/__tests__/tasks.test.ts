@@ -31,7 +31,7 @@ import {
   PROJECT_STATUS_LABELS,
   REQUEST_STATUSES,
   REQUEST_STATUS_LABELS,
-} from '../tasks'
+} from '../tasks';
 
 // ============================================================================
 // TASK_TYPE_LABELS
@@ -40,16 +40,16 @@ import {
 describe('TASK_TYPE_LABELS', () => {
   it('has non-empty German label for every task type', () => {
     for (const type of Object.values(TASK_TYPES)) {
-      const label = TASK_TYPE_LABELS[type]
-      expect(typeof label).toBe('string')
-      expect(label.length).toBeGreaterThan(0)
+      const label = TASK_TYPE_LABELS[type];
+      expect(typeof label).toBe('string');
+      expect(label.length).toBeGreaterThan(0);
     }
-  })
+  });
 
   it('returns "Einmalig" for one_time', () => {
-    expect(TASK_TYPE_LABELS[TASK_TYPES.ONE_TIME]).toBe('Einmalig')
-  })
-})
+    expect(TASK_TYPE_LABELS[TASK_TYPES.ONE_TIME]).toBe('Einmalig');
+  });
+});
 
 // ============================================================================
 // TASK_STATUS_LABELS / TASK_STATUS_COLORS
@@ -58,26 +58,26 @@ describe('TASK_TYPE_LABELS', () => {
 describe('TASK_STATUS_LABELS', () => {
   it('has non-empty label for every task status', () => {
     for (const status of Object.values(TASK_STATUSES)) {
-      const label = TASK_STATUS_LABELS[status]
-      expect(typeof label).toBe('string')
-      expect(label.length).toBeGreaterThan(0)
+      const label = TASK_STATUS_LABELS[status];
+      expect(typeof label).toBe('string');
+      expect(label.length).toBeGreaterThan(0);
     }
-  })
+  });
 
   it('returns "In Bearbeitung" for in_progress', () => {
-    expect(TASK_STATUS_LABELS[TASK_STATUSES.IN_PROGRESS]).toBe('In Bearbeitung')
-  })
-})
+    expect(TASK_STATUS_LABELS[TASK_STATUSES.IN_PROGRESS]).toBe('In Bearbeitung');
+  });
+});
 
 describe('TASK_STATUS_COLORS', () => {
   it('has color class for every task status', () => {
     for (const status of Object.values(TASK_STATUSES)) {
-      const color = TASK_STATUS_COLORS[status]
-      expect(typeof color).toBe('string')
-      expect(color.length).toBeGreaterThan(0)
+      const color = TASK_STATUS_COLORS[status];
+      expect(typeof color).toBe('string');
+      expect(color.length).toBeGreaterThan(0);
     }
-  })
-})
+  });
+});
 
 // ============================================================================
 // TASK_CATEGORY_LABELS
@@ -86,12 +86,12 @@ describe('TASK_STATUS_COLORS', () => {
 describe('TASK_CATEGORY_LABELS', () => {
   it('has non-empty German label for every task category', () => {
     for (const category of Object.values(TASK_CATEGORIES)) {
-      const label = TASK_CATEGORY_LABELS[category]
-      expect(typeof label).toBe('string')
-      expect(label.length).toBeGreaterThan(0)
+      const label = TASK_CATEGORY_LABELS[category];
+      expect(typeof label).toBe('string');
+      expect(label.length).toBeGreaterThan(0);
     }
-  })
-})
+  });
+});
 
 // ============================================================================
 // TASK_PRIORITY_LABELS / TASK_PRIORITY_COLORS
@@ -100,22 +100,22 @@ describe('TASK_CATEGORY_LABELS', () => {
 describe('TASK_PRIORITY_LABELS', () => {
   it('has non-empty German label for every priority', () => {
     for (const priority of Object.values(TASK_PRIORITIES)) {
-      const label = TASK_PRIORITY_LABELS[priority]
-      expect(typeof label).toBe('string')
-      expect(label.length).toBeGreaterThan(0)
+      const label = TASK_PRIORITY_LABELS[priority];
+      expect(typeof label).toBe('string');
+      expect(label.length).toBeGreaterThan(0);
     }
-  })
-})
+  });
+});
 
 describe('TASK_PRIORITY_COLORS', () => {
   it('has color class for every priority', () => {
     for (const priority of Object.values(TASK_PRIORITIES)) {
-      const color = TASK_PRIORITY_COLORS[priority]
-      expect(typeof color).toBe('string')
-      expect(color.length).toBeGreaterThan(0)
+      const color = TASK_PRIORITY_COLORS[priority];
+      expect(typeof color).toBe('string');
+      expect(color.length).toBeGreaterThan(0);
     }
-  })
-})
+  });
+});
 
 // ============================================================================
 // PROJECT_STATUS_LABELS
@@ -124,12 +124,12 @@ describe('TASK_PRIORITY_COLORS', () => {
 describe('PROJECT_STATUS_LABELS', () => {
   it('has non-empty German label for every project status', () => {
     for (const status of Object.values(PROJECT_STATUSES)) {
-      const label = PROJECT_STATUS_LABELS[status]
-      expect(typeof label).toBe('string')
-      expect(label.length).toBeGreaterThan(0)
+      const label = PROJECT_STATUS_LABELS[status];
+      expect(typeof label).toBe('string');
+      expect(label.length).toBeGreaterThan(0);
     }
-  })
-})
+  });
+});
 
 // ============================================================================
 // REQUEST_STATUS_LABELS
@@ -138,9 +138,9 @@ describe('PROJECT_STATUS_LABELS', () => {
 describe('REQUEST_STATUS_LABELS', () => {
   it('has non-empty German label for every request status', () => {
     for (const status of Object.values(REQUEST_STATUSES)) {
-      const label = REQUEST_STATUS_LABELS[status]
-      expect(typeof label).toBe('string')
-      expect(label.length).toBeGreaterThan(0)
+      const label = REQUEST_STATUS_LABELS[status];
+      expect(typeof label).toBe('string');
+      expect(label.length).toBeGreaterThan(0);
     }
-  })
-})
+  });
+});

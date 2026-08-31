@@ -9,4 +9,5 @@ export const PERMISSION_REQUEST_STATUS = {
   REJECTED: 'rejected',
 } as const;
 
-export type PermissionRequestStatus = typeof PERMISSION_REQUEST_STATUS[keyof typeof PERMISSION_REQUEST_STATUS];
+export type PermissionRequestStatus =
+  (typeof PERMISSION_REQUEST_STATUS)[keyof typeof PERMISSION_REQUEST_STATUS];

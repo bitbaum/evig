@@ -1,26 +1,26 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { navLinkClass } from '@/lib/design/nav'
-import { cn } from '@/lib/utils'
+import { useState } from 'react';
+import { navLinkClass } from '@/lib/design/nav';
+import { cn } from '@/lib/utils';
 
 interface Tab {
-  value: string
-  label: string
-  icon?: React.ReactNode
+  value: string;
+  label: string;
+  icon?: React.ReactNode;
 }
 
 interface TabsProps {
-  tabs: Tab[]
-  defaultValue: string
-  children: (activeTab: string) => React.ReactNode
-  className?: string
+  tabs: Tab[];
+  defaultValue: string;
+  children: (activeTab: string) => React.ReactNode;
+  className?: string;
 }
 
 /** Raised-track segmented tab switcher. Active-segment styling comes from
  *  `NAV_STATE.segmented` — don't hand-roll a variant. */
 export function Tabs({ tabs, defaultValue, children, className }: TabsProps) {
-  const [activeTab, setActiveTab] = useState(defaultValue)
+  const [activeTab, setActiveTab] = useState(defaultValue);
 
   return (
     <div className={cn('w-full', className)}>
@@ -41,5 +41,5 @@ export function Tabs({ tabs, defaultValue, children, className }: TabsProps) {
       </div>
       <div role="tabpanel">{children(activeTab)}</div>
     </div>
-  )
+  );
 }

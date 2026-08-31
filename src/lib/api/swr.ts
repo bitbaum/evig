@@ -21,23 +21,23 @@
  * and the error/loading branches mirror the current shape exactly.
  */
 
-import useSWR, { type SWRConfiguration, type SWRResponse } from 'swr'
-import { apiFetch } from './client'
+import useSWR, { type SWRConfiguration, type SWRResponse } from 'swr';
+import { apiFetch } from './client';
 
 /**
  * SWR fetcher that wraps apiFetch. Throws on { success: false } so SWR
  * surfaces the error via response.error.
  */
 async function apiFetchSwrFetcher<T>(url: string): Promise<T> {
-  const result = await apiFetch<T>(url)
+  const result = await apiFetch<T>(url);
   if (!result.success) {
     // German fallback: hooks surface error.message directly in the UI.
-    throw new Error(result.error || 'Anfrage fehlgeschlagen')
+    throw new Error(result.error || 'Anfrage fehlgeschlagen');
   }
   // result.data may legitimately be undefined when the endpoint returns
   // a success envelope without a body — cast through unknown to satisfy
   // strict TS when callers know what shape they expect.
-  return result.data as T
+  return result.data as T;
 }
 
 /**
@@ -48,9 +48,6 @@ async function apiFetchSwrFetcher<T>(url: string): Promise<T> {
  * - The fetcher uses the same apiFetch pipeline as the rest of the app
  *   (auth cookies, base URL, error handling).
  */
-export function useSwrFetch<T>(
-  key: string | null,
-  config?: SWRConfiguration<T>,
-): SWRResponse<T> {
-  return useSWR<T>(key, apiFetchSwrFetcher, config)
+export function useSwrFetch<T>(key: string | null, config?: SWRConfiguration<T>): SWRResponse<T> {
+  return useSWR<T>(key, apiFetchSwrFetcher, config);
 }

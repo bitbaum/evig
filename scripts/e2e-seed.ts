@@ -1,22 +1,29 @@
-import { Client } from 'pg'
-import bcrypt from 'bcryptjs'
+import { Client } from 'pg';
+import bcrypt from 'bcryptjs';
 
 type DbConfig =
   | { connectionString: string }
-  | { host: string; port: number; database: string; user: string; password: string; ssl: false | { rejectUnauthorized: boolean } }
+  | {
+      host: string;
+      port: number;
+      database: string;
+      user: string;
+      password: string;
+      ssl: false | { rejectUnauthorized: boolean };
+    };
 
-const ADMIN_EMAIL = process.env.AUTH_TEST_ADMIN_EMAIL || 'e2e-admin@revampit.test'
-const ADMIN_PASSWORD = process.env.AUTH_TEST_ADMIN_PASSWORD || 'E2EAdmin123!'
+const ADMIN_EMAIL = process.env.AUTH_TEST_ADMIN_EMAIL || 'e2e-admin@revampit.test';
+const ADMIN_PASSWORD = process.env.AUTH_TEST_ADMIN_PASSWORD || 'E2EAdmin123!';
 // Second staff account — the intake journey needs it because the
 // Vier-Augen-Prinzip forbids the sole worker from signing off final QA.
-const SECOND_ADMIN_EMAIL = process.env.AUTH_TEST_SECOND_ADMIN_EMAIL || 'e2e-admin2@revampit.test'
-const SECOND_ADMIN_PASSWORD = process.env.AUTH_TEST_SECOND_ADMIN_PASSWORD || 'E2EAdmin123!'
-const USER_EMAIL = process.env.AUTH_TEST_USER_EMAIL || 'e2e-user@revampit.test'
-const USER_PASSWORD = process.env.AUTH_TEST_USER_PASSWORD || 'E2EUser123!'
+const SECOND_ADMIN_EMAIL = process.env.AUTH_TEST_SECOND_ADMIN_EMAIL || 'e2e-admin2@revampit.test';
+const SECOND_ADMIN_PASSWORD = process.env.AUTH_TEST_SECOND_ADMIN_PASSWORD || 'E2EAdmin123!';
+const USER_EMAIL = process.env.AUTH_TEST_USER_EMAIL || 'e2e-user@revampit.test';
+const USER_PASSWORD = process.env.AUTH_TEST_USER_PASSWORD || 'E2EUser123!';
 
 function getDbConfig(): DbConfig {
   if (process.env.DATABASE_URL) {
-    return { connectionString: process.env.DATABASE_URL }
+    return { connectionString: process.env.DATABASE_URL };
   }
   return {
     host: process.env.DB_HOST || process.env.PGHOST || 'localhost',
@@ -25,14 +32,21 @@ function getDbConfig(): DbConfig {
     user: process.env.DB_USER || process.env.PGUSER || 'postgres',
     password: process.env.DB_PASSWORD || process.env.PGPASSWORD || 'postgres',
     ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false,
-  }
+  };
 }
 
 async function upsertUser(
   client: Client,
-  input: { email: string; password: string; name: string; isStaff: boolean; isSuperAdmin: boolean; permissions: string[] },
+  input: {
+    email: string;
+    password: string;
+    name: string;
+    isStaff: boolean;
+    isSuperAdmin: boolean;
+    permissions: string[];
+  },
 ): Promise<string> {
-  const passwordHash = await bcrypt.hash(input.password, 12)
+  const passwordHash = await bcrypt.hash(input.password, 12);
   const result = await client.query<{ id: string }>(
     `
       INSERT INTO users (
@@ -71,9 +85,9 @@ async function upsertUser(
       input.isSuperAdmin,
       input.isStaff ? 'lead' : 'volunteer',
     ],
-  )
+  );
 
-  const userId = result.rows[0].id
+  const userId = result.rows[0].id;
   await client.query(
     `
       INSERT INTO user_profiles (user_id, display_name, preferred_language, created_at, updated_at)
@@ -84,17 +98,17 @@ async function upsertUser(
         updated_at = NOW()
     `,
     [userId, input.name],
-  )
+  );
 
-  return userId
+  return userId;
 }
 
 async function seed() {
-  const client = new Client(getDbConfig())
-  await client.connect()
+  const client = new Client(getDbConfig());
+  await client.connect();
 
   try {
-    await client.query('BEGIN')
+    await client.query('BEGIN');
 
     const adminId = await upsertUser(client, {
       email: ADMIN_EMAIL,
@@ -103,7 +117,7 @@ async function seed() {
       isStaff: true,
       isSuperAdmin: true,
       permissions: ['*'],
-    })
+    });
 
     await upsertUser(client, {
       email: SECOND_ADMIN_EMAIL,
@@ -112,7 +126,7 @@ async function seed() {
       isStaff: true,
       isSuperAdmin: false,
       permissions: ['*'],
-    })
+    });
 
     const userId = await upsertUser(client, {
       email: USER_EMAIL,
@@ -121,9 +135,9 @@ async function seed() {
       isStaff: false,
       isSuperAdmin: false,
       permissions: [],
-    })
+    });
 
-    await client.query(`DELETE FROM locations WHERE name = 'E2E Workshop Room'`)
+    await client.query(`DELETE FROM locations WHERE name = 'E2E Workshop Room'`);
     await client.query(
       `
         INSERT INTO technician_profiles (
@@ -181,7 +195,7 @@ async function seed() {
           updated_at = NOW()
       `,
       [userId],
-    )
+    );
 
     // Verification lives on user_profiles (identity SSOT since migration 121/122).
     await client.query(
@@ -193,9 +207,9 @@ async function seed() {
         WHERE user_id = $1
       `,
       [userId],
-    )
+    );
 
-    await client.query(`DELETE FROM user_skills WHERE user_id = $1`, [userId])
+    await client.query(`DELETE FROM user_skills WHERE user_id = $1`, [userId]);
     await client.query(
       `
         INSERT INTO user_skills (user_id, skill_id, category_id, verified, verified_at, verified_by, updated_at)
@@ -204,12 +218,11 @@ async function seed() {
           ($1, 'linux_support', 'software', true, NOW(), $2, NOW())
       `,
       [userId, adminId],
-    )
+    );
 
-    await client.query(
-      `DELETE FROM listings WHERE seller_id = $1 AND title = 'E2E Seed Listing'`,
-      [userId],
-    )
+    await client.query(`DELETE FROM listings WHERE seller_id = $1 AND title = 'E2E Seed Listing'`, [
+      userId,
+    ]);
     await client.query(
       `
         INSERT INTO service_types (
@@ -247,7 +260,7 @@ async function seed() {
           is_bookable = true,
           updated_at = NOW()
       `,
-    )
+    );
 
     await client.query(
       `
@@ -292,7 +305,7 @@ async function seed() {
         ON CONFLICT DO NOTHING
       `,
       [adminId],
-    )
+    );
 
     const workshop = await client.query<{ id: string }>(
       `
@@ -341,12 +354,12 @@ async function seed() {
         RETURNING id
       `,
       [adminId],
-    )
+    );
 
     await client.query(
       `DELETE FROM workshop_instances WHERE workshop_id = $1 AND notes = 'Seeded Playwright workshop instance.'`,
       [workshop.rows[0].id],
-    )
+    );
     await client.query(
       `
         INSERT INTO workshop_instances (
@@ -376,7 +389,7 @@ async function seed() {
         ON CONFLICT DO NOTHING
       `,
       [workshop.rows[0].id, adminId],
-    )
+    );
 
     await client.query(
       `
@@ -411,23 +424,23 @@ async function seed() {
         ON CONFLICT DO NOTHING
       `,
       [userId],
-    )
+    );
 
-    await client.query('COMMIT')
+    await client.query('COMMIT');
 
-    console.log('E2E seed ready.')
-    console.log(`Admin: ${ADMIN_EMAIL}`)
-    console.log(`Second admin: ${SECOND_ADMIN_EMAIL}`)
-    console.log(`User: ${USER_EMAIL}`)
+    console.log('E2E seed ready.');
+    console.log(`Admin: ${ADMIN_EMAIL}`);
+    console.log(`Second admin: ${SECOND_ADMIN_EMAIL}`);
+    console.log(`User: ${USER_EMAIL}`);
   } catch (error) {
-    await client.query('ROLLBACK')
-    throw error
+    await client.query('ROLLBACK');
+    throw error;
   } finally {
-    await client.end()
+    await client.end();
   }
 }
 
 seed().catch((error) => {
-  console.error('Failed to seed E2E data:', error)
-  process.exit(1)
-})
+  console.error('Failed to seed E2E data:', error);
+  process.exit(1);
+});

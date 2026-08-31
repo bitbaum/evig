@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation'
+import { redirect } from 'next/navigation';
 
 /**
  * /admin/workshops/proposals has no own list page — proposals are triaged on
@@ -7,5 +7,5 @@ import { redirect } from 'next/navigation'
  * /admin/workshops/new, and proposal-notification EMAILS already in inboxes.
  */
 export default function WorkshopProposalsIndexRedirect() {
-  redirect('/admin/workshops')
+  redirect('/admin/workshops');
 }

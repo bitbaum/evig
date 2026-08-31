@@ -1,8 +1,8 @@
 /**
  * @jest-environment node
  */
-import { readFileSync, readdirSync, statSync } from 'node:fs'
-import { join } from 'node:path'
+import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { join } from 'node:path';
 
 /**
  * Money routes authorize with the `finanzen` permission, never with bare staff.
@@ -26,43 +26,43 @@ import { join } from 'node:path'
 const MONEY_DIRS = [
   join(process.cwd(), 'src', 'app', 'api', 'invoices'),
   join(process.cwd(), 'src', 'app', 'api', 'payments'),
-]
+];
 
 function routeFiles(dir: string): string[] {
   return readdirSync(dir).flatMap((entry) => {
-    const full = join(dir, entry)
+    const full = join(dir, entry);
     if (statSync(full).isDirectory()) {
-      return entry === '__tests__' ? [] : routeFiles(full)
+      return entry === '__tests__' ? [] : routeFiles(full);
     }
-    return entry === 'route.ts' ? [full] : []
-  })
+    return entry === 'route.ts' ? [full] : [];
+  });
 }
 
-const routes = MONEY_DIRS.flatMap(routeFiles)
+const routes = MONEY_DIRS.flatMap(routeFiles);
 
 describe('money routes never authorize on bare staff status', () => {
   it('finds the money routes (guards against an empty, always-green sweep)', () => {
-    expect(routes.length).toBeGreaterThan(5)
-  })
+    expect(routes.length).toBeGreaterThan(5);
+  });
 
   it.each(routes)('%s does not read session.user.isStaff', (file) => {
-    const source = readFileSync(file, 'utf8')
+    const source = readFileSync(file, 'utf8');
     // Strip comments so prose explaining the rule doesn't trip it.
     const code = source
       .replace(/\/\*[\s\S]*?\*\//g, '')
       .split('\n')
       .filter((line) => !line.trim().startsWith('*') && !line.trim().startsWith('//'))
-      .join('\n')
+      .join('\n');
 
-    expect(code).not.toMatch(/session\.user\.isStaff/)
-  })
+    expect(code).not.toMatch(/session\.user\.isStaff/);
+  });
 
   it.each(routes)('%s imports canAccessFinance when it makes a staff decision', (file) => {
-    const source = readFileSync(file, 'utf8')
+    const source = readFileSync(file, 'utf8');
     // Routes that never branch on staff status need no import; routes that do
     // must use the finance helper.
-    const usesFinanceDecision = /isAdmin|canAccessFinance/.test(source)
-    if (!usesFinanceDecision) return
-    expect(source).toMatch(/canAccessFinance/)
-  })
-})
+    const usesFinanceDecision = /isAdmin|canAccessFinance/.test(source);
+    if (!usesFinanceDecision) return;
+    expect(source).toMatch(/canAccessFinance/);
+  });
+});

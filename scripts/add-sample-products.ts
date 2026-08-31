@@ -3,7 +3,7 @@
  * Adds a few sample products to the store for testing
  */
 
-import { createClient } from 'pg'
+import { createClient } from 'pg';
 
 const client = new createClient({
   host: process.env.DB_HOST || 'localhost',
@@ -11,11 +11,11 @@ const client = new createClient({
   database: process.env.DB_NAME || 'revampit_cms',
   user: process.env.DB_USER || 'postgres',
   password: process.env.DB_PASSWORD || 'postgres',
-})
+});
 
 async function addSampleProducts() {
   try {
-    await client.connect()
+    await client.connect();
 
     // Sample products data
     const products = [
@@ -40,22 +40,22 @@ Bei RevampIT legen wir grossen Wert auf Nachhaltigkeit - durch den Kauf eines re
         thumbnail: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400',
         images: JSON.stringify([
           { url: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=800' },
-          { url: 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=800' }
+          { url: 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=800' },
         ]),
         tags: JSON.stringify([
           { value: 'laptop' },
           { value: 'apple' },
           { value: 'macbook' },
-          { value: 'refurbished' }
+          { value: 'refurbished' },
         ]),
         variants: JSON.stringify([
           {
             title: 'Standard',
             sku: 'mbp16-m3-001',
             inventory_quantity: 5,
-            prices: [{ amount: 280000, currency_code: 'chf' }] // 2800 CHF in cents
-          }
-        ])
+            prices: [{ amount: 280000, currency_code: 'chf' }], // 2800 CHF in cents
+          },
+        ]),
       },
       {
         title: 'Dell XPS 13 Laptop - Refurbished',
@@ -74,22 +74,22 @@ Perfekt für Business, Studium oder den täglichen Gebrauch. Voll funktionsfähi
         status: 'published',
         thumbnail: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=400',
         images: JSON.stringify([
-          { url: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800' }
+          { url: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800' },
         ]),
         tags: JSON.stringify([
           { value: 'laptop' },
           { value: 'dell' },
           { value: 'business' },
-          { value: 'ultrabook' }
+          { value: 'ultrabook' },
         ]),
         variants: JSON.stringify([
           {
             title: 'Standard',
             sku: 'dell-xps13-001',
             inventory_quantity: 3,
-            prices: [{ amount: 89900, currency_code: 'chf' }] // 899 CHF in cents
-          }
-        ])
+            prices: [{ amount: 89900, currency_code: 'chf' }], // 899 CHF in cents
+          },
+        ]),
       },
       {
         title: '27" 4K Monitor LG - Wie neu',
@@ -108,30 +108,31 @@ Ideal für Content Creation, Gaming oder professionelle Anwendungen. Mit origina
         status: 'published',
         thumbnail: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=400',
         images: JSON.stringify([
-          { url: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=800' }
+          { url: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=800' },
         ]),
         tags: JSON.stringify([
           { value: 'monitor' },
           { value: '4k' },
           { value: 'lg' },
-          { value: 'display' }
+          { value: 'display' },
         ]),
         variants: JSON.stringify([
           {
             title: 'Standard',
             sku: 'lg-27uk650-001',
             inventory_quantity: 2,
-            prices: [{ amount: 34900, currency_code: 'chf' }] // 349 CHF in cents
-          }
-        ])
-      }
-    ]
+            prices: [{ amount: 34900, currency_code: 'chf' }], // 349 CHF in cents
+          },
+        ]),
+      },
+    ];
 
-    console.log('Adding sample products to store...')
+    console.log('Adding sample products to store...');
 
     for (const product of products) {
       // Insert product
-      const productResult = await client.query(`
+      const productResult = await client.query(
+        `
         INSERT INTO product (
           id, title, handle, description, status, thumbnail, images, tags, variants,
           created_at, updated_at
@@ -141,28 +142,29 @@ Ideal für Content Creation, Gaming oder professionelle Anwendungen. Mit origina
           NOW(), NOW()
         )
         RETURNING id
-      `, [
-        product.title,
-        product.handle,
-        product.description,
-        product.status,
-        product.thumbnail,
-        product.images,
-        product.tags,
-        product.variants
-      ])
+      `,
+        [
+          product.title,
+          product.handle,
+          product.description,
+          product.status,
+          product.thumbnail,
+          product.images,
+          product.tags,
+          product.variants,
+        ],
+      );
 
-      console.log(`✅ Added product: ${product.title}`)
+      console.log(`✅ Added product: ${product.title}`);
     }
 
-    console.log('🎉 Sample products added successfully!')
-
+    console.log('🎉 Sample products added successfully!');
   } catch (error) {
-    console.error('Error adding sample products:', error)
+    console.error('Error adding sample products:', error);
   } finally {
-    await client.end()
+    await client.end();
   }
 }
 
 // Run the script
-addSampleProducts().catch(console.error)
+addSampleProducts().catch(console.error);

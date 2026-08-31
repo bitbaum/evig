@@ -1,18 +1,18 @@
-'use client'
+'use client';
 
-import { useTranslations } from 'next-intl'
-import Heading from '@/components/ui/Heading'
-import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
-import { SWISS_CANTONS } from '@/config/swiss-cantons'
+import { useTranslations } from 'next-intl';
+import Heading from '@/components/ui/Heading';
+import { Input } from '@/components/ui/input';
+import { Select } from '@/components/ui/select';
+import { SWISS_CANTONS } from '@/config/swiss-cantons';
 
 interface Props {
-  postalCode: string
-  city: string
-  canton: string
-  onPostalCodeChange: (value: string) => void
-  onCityChange: (value: string) => void
-  onCantonChange: (value: string) => void
+  postalCode: string;
+  city: string;
+  canton: string;
+  onPostalCodeChange: (value: string) => void;
+  onCityChange: (value: string) => void;
+  onCantonChange: (value: string) => void;
 }
 
 export function LocationSection({
@@ -23,11 +23,13 @@ export function LocationSection({
   onCityChange,
   onCantonChange,
 }: Props) {
-  const t = useTranslations('itHelp.create')
+  const t = useTranslations('itHelp.create');
 
   return (
     <div className="card-shell p-6">
-      <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">{t('locationHeading')}</Heading>
+      <Heading level={2} className="text-lg font-semibold text-text-primary mb-4">
+        {t('locationHeading')}
+      </Heading>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div>
           <label className="block text-sm font-medium text-text-secondary mb-1">
@@ -42,9 +44,7 @@ export function LocationSection({
           />
         </div>
         <div>
-          <label className="block text-sm font-medium text-text-secondary mb-1">
-            {t('city')}
-          </label>
+          <label className="block text-sm font-medium text-text-secondary mb-1">{t('city')}</label>
           <Input
             type="text"
             value={city}
@@ -57,10 +57,7 @@ export function LocationSection({
           <label className="block text-sm font-medium text-text-secondary mb-1">
             {t('canton')}
           </label>
-          <Select
-            value={canton}
-            onChange={(e) => onCantonChange(e.target.value)}
-          >
+          <Select value={canton} onChange={(e) => onCantonChange(e.target.value)}>
             <option value="">{t('cantonPlaceholder')}</option>
             {SWISS_CANTONS.map((c) => (
               <option key={c} value={c}>
@@ -71,5 +68,5 @@ export function LocationSection({
         </div>
       </div>
     </div>
-  )
+  );
 }

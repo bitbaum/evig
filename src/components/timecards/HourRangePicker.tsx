@@ -1,12 +1,12 @@
-'use client'
+'use client';
 
-import { useEffect, useMemo, useRef } from 'react'
-import { useTranslations } from 'next-intl'
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
-import { TIMECARD_DAY_GRID } from '@/config/timecards'
-import { useTimecardIntl } from '@/hooks/useTimecardIntl'
-import { useCellSelection } from './useCellSelection'
+import { useEffect, useMemo, useRef } from 'react';
+import { useTranslations } from 'next-intl';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { TIMECARD_DAY_GRID } from '@/config/timecards';
+import { useTimecardIntl } from '@/hooks/useTimecardIntl';
+import { useCellSelection } from './useCellSelection';
 
 /**
  * HourRangePicker — pick a day's worked hours by selecting half-hour slots,
@@ -27,19 +27,24 @@ import { useCellSelection } from './useCellSelection'
  * (see `version` in useCellSelection).
  */
 
-const { startHour: DAY_START_HOUR, endHour: DAY_END_HOUR, stepMinutes: STEP_MINUTES } = TIMECARD_DAY_GRID
-const SLOT_COUNT = ((DAY_END_HOUR - DAY_START_HOUR) * 60) / STEP_MINUTES
+const {
+  startHour: DAY_START_HOUR,
+  endHour: DAY_END_HOUR,
+  stepMinutes: STEP_MINUTES,
+} = TIMECARD_DAY_GRID;
+const SLOT_COUNT = ((DAY_END_HOUR - DAY_START_HOUR) * 60) / STEP_MINUTES;
 
 function slotToTime(slotIndex: number): string {
-  const mins = DAY_START_HOUR * 60 + slotIndex * STEP_MINUTES
-  return `${String(Math.floor(mins / 60)).padStart(2, '0')}:${String(mins % 60).padStart(2, '0')}`
+  const mins = DAY_START_HOUR * 60 + slotIndex * STEP_MINUTES;
+  return `${String(Math.floor(mins / 60)).padStart(2, '0')}:${String(mins % 60).padStart(2, '0')}`;
 }
 
 function timeToSlot(time: string | null | undefined): number | null {
-  if (!time || !/^\d{2}:\d{2}$/.test(time)) return null
-  const slot = (Number(time.slice(0, 2)) * 60 + Number(time.slice(3)) - DAY_START_HOUR * 60) / STEP_MINUTES
-  if (slot < 0 || slot > SLOT_COUNT) return null
-  return Math.round(slot)
+  if (!time || !/^\d{2}:\d{2}$/.test(time)) return null;
+  const slot =
+    (Number(time.slice(0, 2)) * 60 + Number(time.slice(3)) - DAY_START_HOUR * 60) / STEP_MINUTES;
+  if (slot < 0 || slot > SLOT_COUNT) return null;
+  return Math.round(slot);
 }
 
 /**
@@ -53,36 +58,36 @@ function reconstructWorkedSlots(
   end: string | null | undefined,
   durationMinutes: number,
 ): number[] {
-  const from = timeToSlot(start)
-  const toExcl = timeToSlot(end)
-  if (from === null || toExcl === null || toExcl <= from) return []
-  const span = toExcl - from
-  const worked = Math.max(0, Math.min(span, Math.round(durationMinutes / STEP_MINUTES)))
-  const slots = new Set<number>()
-  for (let i = from; i < toExcl; i++) slots.add(i)
-  let toRemove = span - worked
-  const middayFrom = timeToSlot(TIMECARD_DAY_GRID.middayBreakStart)
-  const middayTo = timeToSlot(TIMECARD_DAY_GRID.middayBreakEnd)
+  const from = timeToSlot(start);
+  const toExcl = timeToSlot(end);
+  if (from === null || toExcl === null || toExcl <= from) return [];
+  const span = toExcl - from;
+  const worked = Math.max(0, Math.min(span, Math.round(durationMinutes / STEP_MINUTES)));
+  const slots = new Set<number>();
+  for (let i = from; i < toExcl; i++) slots.add(i);
+  let toRemove = span - worked;
+  const middayFrom = timeToSlot(TIMECARD_DAY_GRID.middayBreakStart);
+  const middayTo = timeToSlot(TIMECARD_DAY_GRID.middayBreakEnd);
   if (toRemove > 0 && middayFrom !== null && middayTo !== null) {
     for (let i = middayFrom; i < middayTo && toRemove > 0; i++) {
-      if (slots.delete(i)) toRemove--
+      if (slots.delete(i)) toRemove--;
     }
   }
   for (let i = toExcl - 1; i > from && toRemove > 0; i--) {
-    if (slots.delete(i)) toRemove--
+    if (slots.delete(i)) toRemove--;
   }
-  return [...slots].sort((a, b) => a - b)
+  return [...slots].sort((a, b) => a - b);
 }
 
 /** Contiguous runs of selected slot indices → shift blocks for the summary. */
 function toBlocks(idxs: number[]): Array<{ from: number; toExcl: number }> {
-  const blocks: Array<{ from: number; toExcl: number }> = []
+  const blocks: Array<{ from: number; toExcl: number }> = [];
   for (const i of idxs) {
-    const last = blocks[blocks.length - 1]
-    if (last && last.toExcl === i) last.toExcl = i + 1
-    else blocks.push({ from: i, toExcl: i + 1 })
+    const last = blocks[blocks.length - 1];
+    if (last && last.toExcl === i) last.toExcl = i + 1;
+    else blocks.push({ from: i, toExcl: i + 1 });
   }
-  return blocks
+  return blocks;
 }
 
 export function HourRangePicker({
@@ -91,67 +96,82 @@ export function HourRangePicker({
   durationMinutes,
   onChange,
 }: {
-  start: string | null | undefined
-  end: string | null | undefined
-  durationMinutes: number
+  start: string | null | undefined;
+  end: string | null | undefined;
+  durationMinutes: number;
   /** start/end "HH:MM" (null when cleared), break + gross duration in minutes. */
-  onChange: (start: string | null, end: string | null, breakMinutes: number, durationMinutes: number) => void
+  onChange: (
+    start: string | null,
+    end: string | null,
+    breakMinutes: number,
+    durationMinutes: number,
+  ) => void;
 }) {
-  const t = useTranslations('admin.timecards')
-  const { duration } = useTimecardIntl()
-  const slotKeys = useMemo(() => Array.from({ length: SLOT_COUNT }, (_, i) => String(i)), [])
+  const t = useTranslations('admin.timecards');
+  const { duration } = useTimecardIntl();
+  const slotKeys = useMemo(() => Array.from({ length: SLOT_COUNT }, (_, i) => String(i)), []);
   const sel = useCellSelection(
     slotKeys,
     reconstructWorkedSlots(start, end, durationMinutes).map(String),
-  )
+  );
 
   // Keep the latest onChange in a ref so the report-effect can depend only on
   // the user-gesture version (an inline onChange from the parent would
   // otherwise re-fire it every render and loop).
-  const onChangeRef = useRef(onChange)
+  const onChangeRef = useRef(onChange);
   useEffect(() => {
-    onChangeRef.current = onChange
-  })
+    onChangeRef.current = onChange;
+  });
 
   // What we last told the parent — so an entry update that merely echoes our
   // own report doesn't re-seed the grid (which would lose the break position).
-  const lastReported = useRef<{ start: string | null; end: string | null; duration: number } | null>(null)
+  const lastReported = useRef<{
+    start: string | null;
+    end: string | null;
+    duration: number;
+  } | null>(null);
 
   // Report USER-driven changes upward. `version` only moves on gestures, so
   // programmatic re-seeds (setExact below, or the initial seed) never echo.
   useEffect(() => {
-    if (sel.version === 0) return
-    const idxs = [...sel.selected].map(Number).sort((a, b) => a - b)
+    if (sel.version === 0) return;
+    const idxs = [...sel.selected].map(Number).sort((a, b) => a - b);
     if (idxs.length === 0) {
-      lastReported.current = { start: null, end: null, duration: 0 }
-      onChangeRef.current(null, null, 0, 0)
-      return
+      lastReported.current = { start: null, end: null, duration: 0 };
+      onChangeRef.current(null, null, 0, 0);
+      return;
     }
-    const from = idxs[0]
-    const to = idxs[idxs.length - 1]
-    const worked = idxs.length * STEP_MINUTES
-    const span = (to - from + 1) * STEP_MINUTES
-    lastReported.current = { start: slotToTime(from), end: slotToTime(to + 1), duration: worked }
-    onChangeRef.current(slotToTime(from), slotToTime(to + 1), span - worked, worked)
+    const from = idxs[0];
+    const to = idxs[idxs.length - 1];
+    const worked = idxs.length * STEP_MINUTES;
+    const span = (to - from + 1) * STEP_MINUTES;
+    lastReported.current = { start: slotToTime(from), end: slotToTime(to + 1), duration: worked };
+    onChangeRef.current(slotToTime(from), slotToTime(to + 1), span - worked, worked);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sel.version])
+  }, [sel.version]);
 
   // Re-seed when the entry changed through ANOTHER surface (time fields, fill
   // action, absence→work switch) — recognised by not matching our last report.
-  const { setExact } = sel
+  const { setExact } = sel;
   useEffect(() => {
-    const r = lastReported.current
-    if (r && r.start === (start ?? null) && r.end === (end ?? null) && r.duration === durationMinutes) return
-    setExact(reconstructWorkedSlots(start, end, durationMinutes).map(String))
-  }, [start, end, durationMinutes, setExact])
+    const r = lastReported.current;
+    if (
+      r &&
+      r.start === (start ?? null) &&
+      r.end === (end ?? null) &&
+      r.duration === durationMinutes
+    )
+      return;
+    setExact(reconstructWorkedSlots(start, end, durationMinutes).map(String));
+  }, [start, end, durationMinutes, setExact]);
 
-  const idxs = [...sel.selected].map(Number).sort((a, b) => a - b)
-  const hasSelection = idxs.length > 0
-  const blocks = toBlocks(idxs)
-  const worked = idxs.length * STEP_MINUTES
+  const idxs = [...sel.selected].map(Number).sort((a, b) => a - b);
+  const hasSelection = idxs.length > 0;
+  const blocks = toBlocks(idxs);
+  const worked = idxs.length * STEP_MINUTES;
   const breakMinutes = hasSelection
     ? (idxs[idxs.length - 1] - idxs[0] + 1) * STEP_MINUTES - worked
-    : 0
+    : 0;
 
   return (
     <div>
@@ -162,8 +182,8 @@ export function HourRangePicker({
         className="grid touch-pan-y select-none grid-cols-4 gap-1 sm:grid-cols-6 md:grid-cols-8"
       >
         {slotKeys.map((key, i) => {
-          const inRange = sel.selected.has(key)
-          const isHourStart = (DAY_START_HOUR * 60 + i * STEP_MINUTES) % 60 === 0
+          const inRange = sel.selected.has(key);
+          const isHourStart = (DAY_START_HOUR * 60 + i * STEP_MINUTES) % 60 === 0;
           return (
             <Button
               key={key}
@@ -182,17 +202,22 @@ export function HourRangePicker({
             >
               {slotToTime(i)}
             </Button>
-          )
+          );
         })}
       </div>
       <p className="mt-2 text-sm text-text-secondary">
         {hasSelection ? (
           <>
             <span className="font-medium text-text-primary">
-              {blocks.map(b => `${slotToTime(b.from)}–${slotToTime(b.toExcl)}`).join(' · ')}
+              {blocks.map((b) => `${slotToTime(b.from)}–${slotToTime(b.toExcl)}`).join(' · ')}
             </span>{' '}
             · {duration(worked)}
-            {breakMinutes > 0 && <> · {duration(breakMinutes)} {t('hourBreakSuffix')}</>}
+            {breakMinutes > 0 && (
+              <>
+                {' '}
+                · {duration(breakMinutes)} {t('hourBreakSuffix')}
+              </>
+            )}
           </>
         ) : (
           <>
@@ -203,5 +228,5 @@ export function HourRangePicker({
         )}
       </p>
     </div>
-  )
+  );
 }

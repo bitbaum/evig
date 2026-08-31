@@ -1,22 +1,22 @@
-'use client'
+'use client';
 
 // Bulk review mode: table, detail panel, and action bar with their derived selection values (extracted verbatim from page.tsx).
-import type { Dispatch, SetStateAction } from 'react'
-import { BulkTable } from '@/components/erfassung/BulkTable'
-import { BulkDetailPanel } from '@/components/erfassung/BulkDetailPanel'
-import { BulkActionBar } from '@/components/erfassung/BulkActionBar'
-import type { BulkProduct } from '@/types/erfassung'
+import type { Dispatch, SetStateAction } from 'react';
+import { BulkTable } from '@/components/erfassung/BulkTable';
+import { BulkDetailPanel } from '@/components/erfassung/BulkDetailPanel';
+import { BulkActionBar } from '@/components/erfassung/BulkActionBar';
+import type { BulkProduct } from '@/types/erfassung';
 
 interface BulkSectionProps {
-  bulkProducts: BulkProduct[]
-  bulkPage: number
-  setBulkPage: Dispatch<SetStateAction<number>>
-  selectedProductId: string | null
-  setSelectedProductId: Dispatch<SetStateAction<string | null>>
-  handleBulkProductUpdate: (tempId: string, updates: Partial<BulkProduct>) => void
-  handleBulkProductSelect: (tempId: string) => void
-  handleBulkSelectAll: () => void
-  handleBulkSave: (action: 'draft' | 'erfassen' | 'publish') => Promise<void>
+  bulkProducts: BulkProduct[];
+  bulkPage: number;
+  setBulkPage: Dispatch<SetStateAction<number>>;
+  selectedProductId: string | null;
+  setSelectedProductId: Dispatch<SetStateAction<string | null>>;
+  handleBulkProductUpdate: (tempId: string, updates: Partial<BulkProduct>) => void;
+  handleBulkProductSelect: (tempId: string) => void;
+  handleBulkSelectAll: () => void;
+  handleBulkSave: (action: 'draft' | 'erfassen' | 'publish') => Promise<void>;
 }
 
 export function BulkSection({
@@ -30,9 +30,9 @@ export function BulkSection({
   handleBulkSelectAll,
   handleBulkSave,
 }: BulkSectionProps) {
-  const selectedBulkProduct = bulkProducts.find(p => p._tempId === selectedProductId) || null
-  const selectedCount = bulkProducts.filter(p => p._selected).length
-  const isBulkSaving = bulkProducts.some(p => p._status === 'processing')
+  const selectedBulkProduct = bulkProducts.find((p) => p._tempId === selectedProductId) || null;
+  const selectedCount = bulkProducts.filter((p) => p._selected).length;
+  const isBulkSaving = bulkProducts.some((p) => p._status === 'processing');
 
   return (
     <>
@@ -59,11 +59,11 @@ export function BulkSection({
         totalCount={bulkProducts.length}
         selectedCount={selectedCount}
         isSaving={isBulkSaving}
-        savedCount={bulkProducts.filter(p => p._status === 'saved').length}
+        savedCount={bulkProducts.filter((p) => p._status === 'saved').length}
         onSave={handleBulkSave}
         onSelectAll={handleBulkSelectAll}
-        allSelected={bulkProducts.every(p => p._selected)}
+        allSelected={bulkProducts.every((p) => p._selected)}
       />
     </>
-  )
+  );
 }

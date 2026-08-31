@@ -10,5 +10,5 @@
  * crawlers but stops the HTML parser from treating the byte as markup.
  */
 export function safeJsonLd(data: unknown): string {
-  return JSON.stringify(data).replace(/</g, '\\u003c')
+  return JSON.stringify(data).replace(/</g, '\\u003c');
 }

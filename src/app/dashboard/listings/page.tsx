@@ -1,7 +1,7 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { Eyebrow } from '@/components/ui/Eyebrow'
+import Link from 'next/link';
+import { Eyebrow } from '@/components/ui/Eyebrow';
 import {
   Package,
   Plus,
@@ -15,17 +15,22 @@ import {
   Copy,
   ChevronLeft,
   ChevronRight,
-} from 'lucide-react'
-import { useTranslations } from 'next-intl'
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog'
-import { EmptyState } from '@/components/ui/EmptyState'
-import { Button } from '@/components/ui/button'
-import { ListingImage } from '@/components/marketplace/ListingImage'
-import { LISTING_STATUS_CONFIG, LISTING_STATUS, formatCHF, getCategoryLabel } from '@/config/marketplace'
-import type { ListingStatus } from '@/config/marketplace'
-import { getConditionBadge } from '@/config/erfassung/conditions'
-import { useMyListings } from '@/hooks/useMyListings'
-import { ROUTES } from '@/config/routes'
+} from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { EmptyState } from '@/components/ui/EmptyState';
+import { Button } from '@/components/ui/button';
+import { ListingImage } from '@/components/marketplace/ListingImage';
+import {
+  LISTING_STATUS_CONFIG,
+  LISTING_STATUS,
+  formatCHF,
+  getCategoryLabel,
+} from '@/config/marketplace';
+import type { ListingStatus } from '@/config/marketplace';
+import { getConditionBadge } from '@/config/erfassung/conditions';
+import { useMyListings } from '@/hooks/useMyListings';
+import { ROUTES } from '@/config/routes';
 
 /**
  * /dashboard/listings — the user's own marketplace listings.
@@ -36,7 +41,7 @@ import { ROUTES } from '@/config/routes'
  * per listing). Empty state and error state use existing primitives.
  */
 export default function MyListingsPage() {
-  const t = useTranslations('dashboard.listings')
+  const t = useTranslations('dashboard.listings');
 
   const {
     sessionStatus,
@@ -58,7 +63,7 @@ export default function MyListingsPage() {
     doDelete,
     handleDuplicate,
     setPendingDeleteId,
-  } = useMyListings({ loadError: t('loadError') })
+  } = useMyListings({ loadError: t('loadError') });
 
   const STATUS_TABS = [
     { value: '', label: t('tabAll') },
@@ -66,7 +71,7 @@ export default function MyListingsPage() {
     { value: LISTING_STATUS.SOLD, label: t('tabSold') },
     { value: LISTING_STATUS.DRAFT, label: t('tabDraft') },
     { value: LISTING_STATUS.RESERVED, label: t('tabReserved') },
-  ]
+  ];
 
   if (sessionStatus === 'loading') {
     return (
@@ -77,7 +82,7 @@ export default function MyListingsPage() {
           </div>
         </div>
       </main>
-    )
+    );
   }
 
   return (
@@ -102,7 +107,7 @@ export default function MyListingsPage() {
 
         {/* Status tabs */}
         <div className="flex flex-wrap gap-1 rounded-lg bg-surface-raised p-1">
-          {STATUS_TABS.map(tab => (
+          {STATUS_TABS.map((tab) => (
             <Button
               key={tab.value}
               onClick={() => handleStatusFilterChange(tab.value)}
@@ -157,9 +162,9 @@ export default function MyListingsPage() {
         {/* Listings — divide-y, single border. No per-row card chrome. */}
         {!isLoading && !error && listings.length > 0 && (
           <ul className="divide-y divide-subtle overflow-hidden rounded-lg border border-subtle bg-surface-base">
-            {listings.map(listing => {
-              const statusConfig = LISTING_STATUS_CONFIG[listing.status as ListingStatus]
-              const conditionInfo = getConditionBadge(listing.condition)
+            {listings.map((listing) => {
+              const statusConfig = LISTING_STATUS_CONFIG[listing.status as ListingStatus];
+              const conditionInfo = getConditionBadge(listing.condition);
               return (
                 <li key={listing.id} className="flex items-center gap-4 p-4">
                   <Link
@@ -187,7 +192,9 @@ export default function MyListingsPage() {
                         {formatCHF(Number(listing.price_chf))}
                       </span>
                       <span>{getCategoryLabel(listing.category)}</span>
-                      <span className={`inline-flex rounded-sm px-1.5 py-0.5 ${conditionInfo.color}`}>
+                      <span
+                        className={`inline-flex rounded-sm px-1.5 py-0.5 ${conditionInfo.color}`}
+                      >
                         {conditionInfo.label}
                       </span>
                       <span className="inline-flex items-center gap-1">
@@ -247,7 +254,7 @@ export default function MyListingsPage() {
                     </Button>
                   </div>
                 </li>
-              )
+              );
             })}
           </ul>
         )}
@@ -255,9 +262,7 @@ export default function MyListingsPage() {
         {/* Pagination */}
         {!isLoading && !error && (hasNext || hasPrev) && (
           <div className="flex items-center justify-between pt-2">
-            <Eyebrow>
-              {t('paginationCurrentPage', { page })}
-            </Eyebrow>
+            <Eyebrow>{t('paginationCurrentPage', { page })}</Eyebrow>
             <div className="flex items-center gap-2">
               <Button onClick={goPrev} disabled={!hasPrev} variant="outline" size="sm">
                 <ChevronLeft className="h-4 w-4" />
@@ -275,11 +280,11 @@ export default function MyListingsPage() {
           isOpen={!!pendingDeleteId}
           title={t('actionDelete')}
           message={t('confirmDelete')}
-          itemName={listings.find(l => l.id === pendingDeleteId)?.title}
+          itemName={listings.find((l) => l.id === pendingDeleteId)?.title}
           onConfirm={doDelete}
           onClose={() => setPendingDeleteId(null)}
         />
       </article>
     </main>
-  )
+  );
 }

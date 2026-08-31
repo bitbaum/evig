@@ -17,7 +17,7 @@ export const REVENUE_CATEGORY_COLORS = {
   integration: '#8b5cf6',
   spenden: '#f59e0b',
   aufstockung: '#ec4899',
-} as const
+} as const;
 
 /** Revenue category labels (German) */
 export const REVENUE_CATEGORY_LABELS = {
@@ -26,7 +26,7 @@ export const REVENUE_CATEGORY_LABELS = {
   integration: 'Integration',
   spenden: 'Spenden',
   aufstockung: 'Aufstockung',
-} as const
+} as const;
 
 /** Product condition status colors (factsheet, product display) */
 export const CONDITION_COLORS: Record<string, { label: string; color: string; bgColor: string }> = {
@@ -36,7 +36,7 @@ export const CONDITION_COLORS: Record<string, { label: string; color: string; bg
   fair: { label: 'Akzeptabel', color: '#D97706', bgColor: '#FEF3C7' },
   poor: { label: 'Gebraucht', color: '#DC2626', bgColor: '#FEE2E2' },
   damaged: { label: 'Beschädigt', color: '#DC2626', bgColor: '#FEE2E2' },
-}
+};
 
 /** Trend chart colors for year-over-year comparison */
 export const TREND_CHART_COLORS = {
@@ -45,16 +45,24 @@ export const TREND_CHART_COLORS = {
   positive: '#22c55e',
   negative: '#ef4444',
   neutral: '#3b82f6',
-} as const
+} as const;
 
 /** Default color palette for pickers and category assignment */
 export const UI_COLOR_PALETTE = [
-  '#22c55e', '#3b82f6', '#06b6d4', '#8b5cf6', '#f97316',
-  '#6b7280', '#ec4899', '#f59e0b', '#14b8a6', '#ef4444',
-] as const
+  '#22c55e',
+  '#3b82f6',
+  '#06b6d4',
+  '#8b5cf6',
+  '#f97316',
+  '#6b7280',
+  '#ec4899',
+  '#f59e0b',
+  '#14b8a6',
+  '#ef4444',
+] as const;
 
 /** Default blog/content category color */
-export const DEFAULT_CATEGORY_COLOR = UI_COLOR_PALETTE[0]
+export const DEFAULT_CATEGORY_COLOR = UI_COLOR_PALETTE[0];
 
 /** Open Graph image colors — evig dark brand card (mark + wordmark on near-black) */
 export const OG_IMAGE_COLORS = {
@@ -63,13 +71,13 @@ export const OG_IMAGE_COLORS = {
   accent: '#B6F531',
   body: '#a3a3a3',
   meta: '#6b7280',
-} as const
+} as const;
 
 /** Fallback product condition colors */
 export const PRODUCT_CONDITION_FALLBACK_COLORS = {
   color: '#6B7280',
   bgColor: '#F3F4F6',
-} as const
+} as const;
 
 /** Element-selection overlay colors for the feedback UI */
 export const ELEMENT_SELECTION_COLORS = {
@@ -77,18 +85,18 @@ export const ELEMENT_SELECTION_COLORS = {
   overlay: 'rgba(59,130,246,0.06)',
   border: '#3b82f6',
   badge: '#3b82f6',
-} as const
+} as const;
 
 /** Feedback scope accent colors */
 export const FEEDBACK_SCOPE_COLORS = {
   site: '#7c3aed',
   page: '#4d7c0f',
   element: '#2563eb',
-} as const
+} as const;
 
 /** Shared decorative hero background pattern */
 export const HERO_PATTERN_BACKGROUND =
-  'linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)'
+  'linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px)';
 
 /** Global error page inline colors */
 export const GLOBAL_ERROR_COLORS = {
@@ -99,12 +107,12 @@ export const GLOBAL_ERROR_COLORS = {
   white: '#fff',
   secondaryText: '#374151',
   border: '#d1d5db',
-} as const
+} as const;
 
 /** Inline email block colors */
 export const EMAIL_INLINE_COLORS = {
   mutedBlockBg: '#f9f9f9',
-} as const
+} as const;
 
 /** Standalone newsletter-confirmation HTML cannot consume CSS variables. */
 export const NEWSLETTER_CONFIRMATION_COLORS = {
@@ -116,7 +124,7 @@ export const NEWSLETTER_CONFIRMATION_COLORS = {
   muted: '#666666',
   border: '#e5e5e5',
   shadow: 'rgba(0, 0, 0, 0.08)',
-} as const
+} as const;
 
 /** Decorative monitor-lamp SVG palette (non-UI illustration asset). */
 export const MONITOR_LAMP_PLACEHOLDER_COLORS = {
@@ -127,11 +135,11 @@ export const MONITOR_LAMP_PLACEHOLDER_COLORS = {
   bezel: '#0a0a0a',
   stand: '#1c1917',
   highlight: '#ffffff',
-} as const
+} as const;
 
 /** Screen preview shadow for printable A4 pages */
 export const PRINT_PREVIEW_SHADOW =
-  '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)'
+  '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)';
 
 /** Customer profile badge colors */
 export const CUSTOMER_PROFILE_COLORS = {
@@ -145,4 +153,4 @@ export const CUSTOMER_PROFILE_COLORS = {
   musik: '#7C3AED',
   grafiker: '#D946EF',
   video: '#DC2626',
-} as const
+} as const;

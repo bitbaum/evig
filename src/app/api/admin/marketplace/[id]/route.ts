@@ -1,42 +1,46 @@
-import { db } from '@/db'
-import { listings, listingImages, listingSpecs, listingReports, users, inventoryItems } from '@/db/schema'
-import { MARKETPLACE_STATUS } from '@/config/marketplace-status'
-import { appendIntakeEvent } from '@/lib/intake/timeline'
-import { eq, ne, sql } from 'drizzle-orm'
-import { withAdmin } from '@/lib/api/middleware'
-import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers'
-import { ERROR_MESSAGES } from '@/config/error-messages'
-import { validateBody } from '@/lib/schemas'
-import { AdminEditListingSchema } from '@/lib/schemas/marketplace'
-import { LISTING_STATUS } from '@/config/marketplace'
-import { removeListing } from '@/lib/search/meilisearch'
-import { logger } from '@/lib/logger'
-import { logAdminAction } from '@/lib/auth/audit'
-import { getClientIdentifier } from '@/lib/security/rate-limit'
-import { notifyAllStaff } from '@/lib/services/notifications'
-import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications'
+import { db } from '@/db';
+import {
+  listings,
+  listingImages,
+  listingSpecs,
+  listingReports,
+  users,
+  inventoryItems,
+} from '@/db/schema';
+import { MARKETPLACE_STATUS } from '@/config/marketplace-status';
+import { appendIntakeEvent } from '@/lib/intake/timeline';
+import { eq, ne, sql } from 'drizzle-orm';
+import { withAdmin } from '@/lib/api/middleware';
+import { apiError, apiSuccess, apiNotFound, apiBadRequest } from '@/lib/api/helpers';
+import { ERROR_MESSAGES } from '@/config/error-messages';
+import { validateBody } from '@/lib/schemas';
+import { AdminEditListingSchema } from '@/lib/schemas/marketplace';
+import { LISTING_STATUS } from '@/config/marketplace';
+import { removeListing } from '@/lib/search/meilisearch';
+import { logger } from '@/lib/logger';
+import { logAdminAction } from '@/lib/auth/audit';
+import { getClientIdentifier } from '@/lib/security/rate-limit';
+import { notifyAllStaff } from '@/lib/services/notifications';
+import { NOTIFICATION_TYPES, RELATED_TYPES } from '@/config/notifications';
 
 // GET /api/admin/marketplace/[id] - Full listing detail
 export const GET = withAdmin<{ id: string }>('marketplace', async (_request, _session, context) => {
   try {
-    const id = context?.params?.id
-    if (!id) return apiBadRequest(ERROR_MESSAGES.ID_REQUIRED)
+    const id = context?.params?.id;
+    if (!id) return apiBadRequest(ERROR_MESSAGES.ID_REQUIRED);
 
     // Fetch listing with seller info
-    const [listing] = await db
-      .select()
-      .from(listings)
-      .where(eq(listings.id, id))
+    const [listing] = await db.select().from(listings).where(eq(listings.id, id));
 
     if (!listing) {
-      return apiNotFound(ERROR_MESSAGES.LISTING_NOT_FOUND)
+      return apiNotFound(ERROR_MESSAGES.LISTING_NOT_FOUND);
     }
 
     // Fetch seller info
     const [seller] = await db
       .select({ name: users.name, email: users.email })
       .from(users)
-      .where(eq(users.id, listing.sellerId))
+      .where(eq(users.id, listing.sellerId));
 
     // Fetch images, specs, reports in parallel
     const [images, specs, reports] = await Promise.all([
@@ -45,7 +49,12 @@ export const GET = withAdmin<{ id: string }>('marketplace', async (_request, _se
         .from(listingImages)
         .where(eq(listingImages.listingId, id)),
       db
-        .select({ id: listingSpecs.id, key: listingSpecs.specKey, value: listingSpecs.specValue, unit: listingSpecs.specUnit })
+        .select({
+          id: listingSpecs.id,
+          key: listingSpecs.specKey,
+          value: listingSpecs.specValue,
+          unit: listingSpecs.specUnit,
+        })
         .from(listingSpecs)
         .where(eq(listingSpecs.listingId, id)),
       db
@@ -61,7 +70,7 @@ export const GET = withAdmin<{ id: string }>('marketplace', async (_request, _se
         .from(listingReports)
         .innerJoin(users, eq(listingReports.reporterId, users.id))
         .where(eq(listingReports.listingId, id)),
-    ])
+    ]);
 
     return apiSuccess({
       ...listing,
@@ -70,144 +79,154 @@ export const GET = withAdmin<{ id: string }>('marketplace', async (_request, _se
       images: images.length > 0 ? images : null,
       specs: specs.length > 0 ? specs : null,
       reports: reports.length > 0 ? reports : null,
-    })
+    });
   } catch (error) {
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
-})
+});
 
 // PATCH /api/admin/marketplace/[id] - Edit listing
 export const PATCH = withAdmin<{ id: string }>('marketplace', async (request, session, context) => {
   try {
-    const id = context?.params?.id
-    if (!id) return apiBadRequest(ERROR_MESSAGES.ID_REQUIRED)
+    const id = context?.params?.id;
+    if (!id) return apiBadRequest(ERROR_MESSAGES.ID_REQUIRED);
 
     // Fetch current listing to detect status transitions
     const [currentListing] = await db
       .select({ status: listings.status, title: listings.title })
       .from(listings)
-      .where(eq(listings.id, id))
+      .where(eq(listings.id, id));
 
-    if (!currentListing) return apiNotFound(ERROR_MESSAGES.LISTING_NOT_FOUND)
+    if (!currentListing) return apiNotFound(ERROR_MESSAGES.LISTING_NOT_FOUND);
 
-    const body = await request.json()
-    const validation = validateBody(AdminEditListingSchema, body)
-    if (!validation.success) return validation.error
+    const body = await request.json();
+    const validation = validateBody(AdminEditListingSchema, body);
+    if (!validation.success) return validation.error;
 
-    const data = validation.data
-    const update: Record<string, unknown> = {}
+    const data = validation.data;
+    const update: Record<string, unknown> = {};
 
-    if (data.title !== undefined) update.title = data.title
-    if (data.description !== undefined) update.description = data.description
-    if (data.price_chf !== undefined) update.priceChf = String(data.price_chf)
-    if (data.category !== undefined) update.category = data.category
-    if (data.condition !== undefined) update.condition = data.condition
-    if (data.status !== undefined) update.status = data.status
-    if (data.admin_notes !== undefined) update.adminNotes = data.admin_notes
+    if (data.title !== undefined) update.title = data.title;
+    if (data.description !== undefined) update.description = data.description;
+    if (data.price_chf !== undefined) update.priceChf = String(data.price_chf);
+    if (data.category !== undefined) update.category = data.category;
+    if (data.condition !== undefined) update.condition = data.condition;
+    if (data.status !== undefined) update.status = data.status;
+    if (data.admin_notes !== undefined) update.adminNotes = data.admin_notes;
 
     if (Object.keys(update).length === 0) {
-      return apiBadRequest(ERROR_MESSAGES.NO_CHANGES_SPECIFIED)
+      return apiBadRequest(ERROR_MESSAGES.NO_CHANGES_SPECIFIED);
     }
 
-    update.updatedAt = sql`NOW()`
+    update.updatedAt = sql`NOW()`;
 
-    const [updated] = await db
-      .update(listings)
-      .set(update)
-      .where(eq(listings.id, id))
-      .returning()
+    const [updated] = await db.update(listings).set(update).where(eq(listings.id, id)).returning();
 
     if (!updated) {
-      return apiNotFound(ERROR_MESSAGES.LISTING_NOT_FOUND)
+      return apiNotFound(ERROR_MESSAGES.LISTING_NOT_FOUND);
     }
 
     // Notify staff when a listing is marked sold for the first time
     if (data.status === LISTING_STATUS.SOLD && currentListing.status !== LISTING_STATUS.SOLD) {
-      notifyAllStaff({
-        type: NOTIFICATION_TYPES.LISTING_SOLD,
-        title: 'Inserat verkauft',
-        content: `«${updated.title}» wurde als verkauft markiert.`,
-        related_type: RELATED_TYPES.LISTING,
-        related_id: id,
-      }, session.user.id).catch(() => {})
+      notifyAllStaff(
+        {
+          type: NOTIFICATION_TYPES.LISTING_SOLD,
+          title: 'Inserat verkauft',
+          content: `«${updated.title}» wurde als verkauft markiert.`,
+          related_type: RELATED_TYPES.LISTING,
+          related_id: id,
+        },
+        session.user.id,
+      ).catch(() => {});
     }
 
     logger.info('Admin edited listing', {
       listingId: id,
       adminEmail: session.user.email,
       changes: Object.keys(data),
-    })
+    });
 
     // Audit trail
-    logAdminAction({
-      userId: session.user.id,
-      ipAddress: getClientIdentifier(request),
-      userAgent: request.headers.get('user-agent') || 'unknown',
-    }, 'marketplace_listing_edited', {
-      listingId: id,
-      changes: Object.keys(data),
-      newValues: data,
-    })
+    logAdminAction(
+      {
+        userId: session.user.id,
+        ipAddress: getClientIdentifier(request),
+        userAgent: request.headers.get('user-agent') || 'unknown',
+      },
+      'marketplace_listing_edited',
+      {
+        listingId: id,
+        changes: Object.keys(data),
+        newValues: data,
+      },
+    );
 
-    return apiSuccess(updated)
+    return apiSuccess(updated);
   } catch (error) {
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
+    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
   }
-})
+});
 
 // DELETE /api/admin/marketplace/[id] - Soft delete (set status='removed')
-export const DELETE = withAdmin<{ id: string }>('marketplace', async (request, session, context) => {
-  try {
-    const id = context?.params?.id
-    if (!id) return apiBadRequest(ERROR_MESSAGES.ID_REQUIRED)
+export const DELETE = withAdmin<{ id: string }>(
+  'marketplace',
+  async (request, session, context) => {
+    try {
+      const id = context?.params?.id;
+      if (!id) return apiBadRequest(ERROR_MESSAGES.ID_REQUIRED);
 
-    const [removed] = await db
-      .update(listings)
-      .set({ status: LISTING_STATUS.REMOVED, updatedAt: sql`NOW()` })
-      .where(eq(listings.id, id))
-      .returning({ id: listings.id, inventoryItemId: listings.inventoryItemId })
+      const [removed] = await db
+        .update(listings)
+        .set({ status: LISTING_STATUS.REMOVED, updatedAt: sql`NOW()` })
+        .where(eq(listings.id, id))
+        .returning({ id: listings.id, inventoryItemId: listings.inventoryItemId });
 
-    if (!removed) {
-      return apiNotFound(ERROR_MESSAGES.LISTING_NOT_FOUND)
+      if (!removed) {
+        return apiNotFound(ERROR_MESSAGES.LISTING_NOT_FOUND);
+      }
+
+      // SSOT: a RevampIT device whose listing is pulled is NOT "im Shop"
+      // anymore — send it back to the pipeline (checklist stays intact, it can
+      // be republished any time) instead of leaving a published-claim that
+      // points at a dead page.
+      if (removed.inventoryItemId) {
+        await db
+          .update(inventoryItems)
+          .set({ marketplaceStatus: MARKETPLACE_STATUS.DRAFT, updatedAt: sql`NOW()` })
+          .where(eq(inventoryItems.id, removed.inventoryItemId));
+        await appendIntakeEvent(removed.inventoryItemId, {
+          type: 'unpublished',
+          description: 'Inserat aus dem Shop entfernt — Gerät zurück in der Pipeline',
+          userId: session.user.id,
+          userEmail: session.user.email,
+          metadata: { listing_id: id },
+        });
+      }
+
+      // Remove from Meilisearch
+      await removeListing(id);
+
+      logger.info('Admin removed listing', {
+        listingId: id,
+        adminEmail: session.user.email,
+      });
+
+      // Audit trail
+      logAdminAction(
+        {
+          userId: session.user.id,
+          ipAddress: getClientIdentifier(request),
+          userAgent: request.headers.get('user-agent') || 'unknown',
+        },
+        'marketplace_listing_removed',
+        {
+          listingId: id,
+        },
+      );
+
+      return apiSuccess({ removed: true });
+    } catch (error) {
+      return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR);
     }
-
-    // SSOT: a RevampIT device whose listing is pulled is NOT "im Shop"
-    // anymore — send it back to the pipeline (checklist stays intact, it can
-    // be republished any time) instead of leaving a published-claim that
-    // points at a dead page.
-    if (removed.inventoryItemId) {
-      await db
-        .update(inventoryItems)
-        .set({ marketplaceStatus: MARKETPLACE_STATUS.DRAFT, updatedAt: sql`NOW()` })
-        .where(eq(inventoryItems.id, removed.inventoryItemId))
-      await appendIntakeEvent(removed.inventoryItemId, {
-        type: 'unpublished',
-        description: 'Inserat aus dem Shop entfernt — Gerät zurück in der Pipeline',
-        userId: session.user.id,
-        userEmail: session.user.email,
-        metadata: { listing_id: id },
-      })
-    }
-
-    // Remove from Meilisearch
-    await removeListing(id)
-
-    logger.info('Admin removed listing', {
-      listingId: id,
-      adminEmail: session.user.email,
-    })
-
-    // Audit trail
-    logAdminAction({
-      userId: session.user.id,
-      ipAddress: getClientIdentifier(request),
-      userAgent: request.headers.get('user-agent') || 'unknown',
-    }, 'marketplace_listing_removed', {
-      listingId: id,
-    })
-
-    return apiSuccess({ removed: true })
-  } catch (error) {
-    return apiError(error, ERROR_MESSAGES.INTERNAL_SERVER_ERROR)
-  }
-})
+  },
+);

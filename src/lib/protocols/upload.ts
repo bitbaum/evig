@@ -13,33 +13,33 @@
  * have ONE module to consume for both kinds.
  */
 
-import { FILE_SIZE_LIMITS } from '@/config/limits'
-import { validateAudioUpload, type AudioFileLike } from './audio-validation'
+import { FILE_SIZE_LIMITS } from '@/config/limits';
+import { validateAudioUpload, type AudioFileLike } from './audio-validation';
 
 // ─── Kinds ──────────────────────────────────────────────────────────────
 export const PROTOCOL_UPLOAD_KIND = {
   AUDIO: 'audio',
   TEXT: 'text',
-} as const
-export type ProtocolUploadKind = typeof PROTOCOL_UPLOAD_KIND[keyof typeof PROTOCOL_UPLOAD_KIND]
+} as const;
+export type ProtocolUploadKind = (typeof PROTOCOL_UPLOAD_KIND)[keyof typeof PROTOCOL_UPLOAD_KIND];
 
 // ─── Extension + MIME tables ───────────────────────────────────────────
 //
 // Audio extensions kept in sync with ALLOWED_AUDIO_MIME_TYPES in
 // audio-validation.ts. If you add a new audio format, update both.
-const AUDIO_EXTENSIONS = ['.mp3', '.m4a', '.wav', '.ogg', '.webm', '.flac', '.mp4'] as const
-const TEXT_EXTENSIONS = ['.txt', '.md', '.json'] as const
+const AUDIO_EXTENSIONS = ['.mp3', '.m4a', '.wav', '.ogg', '.webm', '.flac', '.mp4'] as const;
+const TEXT_EXTENSIONS = ['.txt', '.md', '.json'] as const;
 
-const TEXT_MIME_PREFIXES = ['text/', 'application/json'] as const
+const TEXT_MIME_PREFIXES = ['text/', 'application/json'] as const;
 
 // Tuned for the use case: an hour of meeting transcript runs ~80 KB
 // of text. 5 MB caps even chunked agendas + multiple inserts well
 // under the 100K-char schema cap on the AI side.
-const TEXT_MAX_SIZE_BYTES = 5 * 1024 * 1024
+const TEXT_MAX_SIZE_BYTES = 5 * 1024 * 1024;
 
 export const TEXT_UPLOAD_LIMITS = {
   maxSizeBytes: TEXT_MAX_SIZE_BYTES,
-}
+};
 
 // ─── classifyFile ──────────────────────────────────────────────────────
 /**
@@ -53,19 +53,19 @@ export const TEXT_UPLOAD_LIMITS = {
  * "format not supported" error.
  */
 export interface ClassifiableFile {
-  name: string
-  type: string
+  name: string;
+  type: string;
 }
 export function classifyFile(file: ClassifiableFile): ProtocolUploadKind | null {
-  const ext = '.' + (file.name.split('.').pop() ?? '').toLowerCase()
-  if ((AUDIO_EXTENSIONS as readonly string[]).includes(ext)) return PROTOCOL_UPLOAD_KIND.AUDIO
-  if ((TEXT_EXTENSIONS as readonly string[]).includes(ext)) return PROTOCOL_UPLOAD_KIND.TEXT
+  const ext = '.' + (file.name.split('.').pop() ?? '').toLowerCase();
+  if ((AUDIO_EXTENSIONS as readonly string[]).includes(ext)) return PROTOCOL_UPLOAD_KIND.AUDIO;
+  if ((TEXT_EXTENSIONS as readonly string[]).includes(ext)) return PROTOCOL_UPLOAD_KIND.TEXT;
 
   if (file.type) {
-    if (file.type.startsWith('audio/')) return PROTOCOL_UPLOAD_KIND.AUDIO
-    if (TEXT_MIME_PREFIXES.some((p) => file.type.startsWith(p))) return PROTOCOL_UPLOAD_KIND.TEXT
+    if (file.type.startsWith('audio/')) return PROTOCOL_UPLOAD_KIND.AUDIO;
+    if (TEXT_MIME_PREFIXES.some((p) => file.type.startsWith(p))) return PROTOCOL_UPLOAD_KIND.TEXT;
   }
-  return null
+  return null;
 }
 
 // ─── getAcceptString ───────────────────────────────────────────────────
@@ -75,7 +75,7 @@ export function classifyFile(file: ClassifiableFile): ProtocolUploadKind | null 
  * the picker updates automatically.
  */
 export function getAcceptString(): string {
-  return [...AUDIO_EXTENSIONS, ...TEXT_EXTENSIONS].join(',')
+  return [...AUDIO_EXTENSIONS, ...TEXT_EXTENSIONS].join(',');
 }
 
 // ─── Validators ────────────────────────────────────────────────────────
@@ -85,17 +85,17 @@ export function getAcceptString(): string {
  * Mirrors the shape of validateAudioUpload — both kinds, same contract.
  */
 export interface TextFileLike {
-  size: number
-  name: string
+  size: number;
+  name: string;
 }
 export function validateTextUpload(file: TextFileLike): string | null {
-  if (!file) return 'Bitte wähle eine Textdatei aus.'
-  if (file.size <= 0) return 'Die Textdatei ist leer.'
+  if (!file) return 'Bitte wähle eine Textdatei aus.';
+  if (file.size <= 0) return 'Die Textdatei ist leer.';
   if (file.size > TEXT_MAX_SIZE_BYTES) {
-    const maxMb = Math.round(TEXT_MAX_SIZE_BYTES / (1024 * 1024))
-    return `Die Textdatei ist zu gross (maximal ${maxMb} MB).`
+    const maxMb = Math.round(TEXT_MAX_SIZE_BYTES / (1024 * 1024));
+    return `Die Textdatei ist zu gross (maximal ${maxMb} MB).`;
   }
-  return null
+  return null;
 }
 
 /**
@@ -103,9 +103,12 @@ export function validateTextUpload(file: TextFileLike): string | null {
  * Audio re-uses the existing validateAudioUpload (its rules are richer
  * than text's, including MIME enforcement).
  */
-export function validateUpload(kind: ProtocolUploadKind, file: AudioFileLike | TextFileLike): string | null {
-  if (kind === PROTOCOL_UPLOAD_KIND.AUDIO) return validateAudioUpload(file as AudioFileLike)
-  return validateTextUpload(file as TextFileLike)
+export function validateUpload(
+  kind: ProtocolUploadKind,
+  file: AudioFileLike | TextFileLike,
+): string | null {
+  if (kind === PROTOCOL_UPLOAD_KIND.AUDIO) return validateAudioUpload(file as AudioFileLike);
+  return validateTextUpload(file as TextFileLike);
 }
 
 // ─── Public size limits surface for UI hints ───────────────────────────
@@ -116,4 +119,4 @@ export function validateUpload(kind: ProtocolUploadKind, file: AudioFileLike | T
 export const PROTOCOL_UPLOAD_LIMITS = {
   audioMaxBytes: FILE_SIZE_LIMITS.AUDIO_MAX,
   textMaxBytes: TEXT_MAX_SIZE_BYTES,
-}
+};

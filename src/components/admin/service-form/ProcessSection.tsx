@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import { Plus, Trash2 } from 'lucide-react'
-import { CollapsibleSection } from './CollapsibleSection'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import type { ProcessStep } from './types'
+import { Plus, Trash2 } from 'lucide-react';
+import { CollapsibleSection } from './CollapsibleSection';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import type { ProcessStep } from './types';
 
 interface ProcessSectionProps {
-  steps: ProcessStep[]
-  onAdd: () => void
-  onUpdate: (index: number, field: keyof ProcessStep, value: string | number) => void
-  onRemove: (index: number) => void
+  steps: ProcessStep[];
+  onAdd: () => void;
+  onUpdate: (index: number, field: keyof ProcessStep, value: string | number) => void;
+  onRemove: (index: number) => void;
 }
 
 export function ProcessSection({ steps, onAdd, onUpdate, onRemove }: ProcessSectionProps) {
@@ -19,18 +19,13 @@ export function ProcessSection({ steps, onAdd, onUpdate, onRemove }: ProcessSect
     <CollapsibleSection title="Prozess-Schritte" defaultOpen={false}>
       <div className="space-y-4">
         {steps.map((step, index) => (
-          <div
-            key={index}
-            className="p-4 bg-surface-raised rounded-lg space-y-3"
-          >
+          <div key={index} className="p-4 bg-surface-raised rounded-lg space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 bg-action text-action-text rounded-full flex items-center justify-center text-sm font-bold">
                   {step.step}
                 </div>
-                <span className="text-sm font-medium text-text-secondary">
-                  Schritt {step.step}
-                </span>
+                <span className="text-sm font-medium text-text-secondary">Schritt {step.step}</span>
               </div>
               <Button
                 type="button"
@@ -67,5 +62,5 @@ export function ProcessSection({ steps, onAdd, onUpdate, onRemove }: ProcessSect
         </Button>
       </div>
     </CollapsibleSection>
-  )
+  );
 }

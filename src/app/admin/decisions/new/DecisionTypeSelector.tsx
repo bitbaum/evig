@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { DECISION_TYPES, DECISION_TYPE_CONFIG, type DecisionType } from '@/config/decisions';
-import { adminInteractive } from '@/lib/admin-ui'
+import { adminInteractive } from '@/lib/admin-ui';
 
 interface Props {
   selected: DecisionType;
@@ -30,9 +30,13 @@ export function DecisionTypeSelector({ selected, onChange }: Props) {
               }`}
             >
               <div className="flex items-center gap-2">
-                <span className={`flex h-7 w-7 items-center justify-center rounded-md text-sm font-bold ${
-                  isSelected ? 'bg-action text-action-text' : 'bg-surface-raised text-text-tertiary'
-                }`}>
+                <span
+                  className={`flex h-7 w-7 items-center justify-center rounded-md text-sm font-bold ${
+                    isSelected
+                      ? 'bg-action text-action-text'
+                      : 'bg-surface-raised text-text-tertiary'
+                  }`}
+                >
                   {conf.icon}
                 </span>
                 <span className="font-medium text-text-primary">{conf.label}</span>

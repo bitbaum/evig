@@ -14,7 +14,7 @@ interface Props {
   setShowCloseInput: (show: boolean) => void;
   onTransition: (
     status: DecisionStatus,
-    extra?: { cancelReason?: string; outcomeSummary?: string }
+    extra?: { cancelReason?: string; outcomeSummary?: string },
   ) => Promise<void>;
 }
 
@@ -26,9 +26,7 @@ export function CloseConfirmPanel({
 }: Props) {
   return (
     <div className="mt-3 rounded-md border border-strong bg-action-muted p-3">
-      <label className={cn('mb-1 block', adminType.subTitle)}>
-        Zusammenfassung (optional)
-      </label>
+      <label className={cn('mb-1 block', adminType.subTitle)}>Zusammenfassung (optional)</label>
       <Textarea
         value={closeSummary}
         onChange={(e) => setCloseSummary(e.target.value)}
