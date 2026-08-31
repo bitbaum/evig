@@ -15,7 +15,7 @@
 
 import { NextRequest } from 'next/server'
 import { withAuth } from '@/lib/api/middleware'
-import { getDefaultChatProvider, type Message } from '@/lib/hirn/providers'
+import { getChatResponse, type Message } from '@/lib/hirn/providers'
 import { buildPublicSystemPrompt } from '@/lib/hirn/public-prompt'
 import { resolveHirnContext } from '@/config/hirn/page-contexts'
 import { apiSuccess, apiError, apiRateLimited } from '@/lib/api/helpers'
@@ -47,12 +47,7 @@ export const POST = withAuth(async (request: NextRequest, session) => {
 
     // Same provider layer as the admin route (system default — public users
     // have no per-user provider settings).
-    const provider = await getDefaultChatProvider()
-    const response = await provider.chat({
-      messages,
-      temperature: 0.7,
-      maxTokens: 1024,
-    })
+    const response = await getChatResponse({ messages, temperature: 0.7, maxTokens: 1024 })
 
     logger.info('Public Hirn chat response generated', {
       userId: session.user.id,

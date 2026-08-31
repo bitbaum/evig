@@ -13,7 +13,7 @@
 
 import path from 'node:path'
 import { readFile } from 'node:fs/promises'
-import { getDefaultChatProvider, type Message } from '@/lib/hirn/providers'
+import { getChatResponse, type Message } from '@/lib/hirn/providers'
 import { ingestDocument } from '@/lib/hirn/ingestion'
 import { searchSimilar, formatContext } from '@/lib/hirn/retrieval'
 import { isTextFile } from '@/config/deliverables'
@@ -173,8 +173,7 @@ REGELN:
     { role: 'user', content: message },
   ]
 
-  const provider = await getDefaultChatProvider()
-  const response = await provider.chat({ messages, temperature: 0.3, maxTokens: 900 })
+  const response = await getChatResponse({ messages, temperature: 0.3, maxTokens: 900 })
   // Enforce Swiss German deterministically — the model doesn't always honour the
   // «ss statt ß» rule from the prompt. Safe: ß→ss is always correct in de-CH.
   return response.content.replace(/ß/g, 'ss')

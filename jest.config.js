@@ -34,7 +34,12 @@ const customJestConfig = {
   ],
   moduleDirectories: ['node_modules', '<rootDir>/'],
   transformIgnorePatterns: [
-    '/node_modules/(?!(@auth|next-auth|next-intl|use-intl|cookie)/)',
+    // ai-kit is ESM-only ("type": "module", no require condition). Jest runs
+    // CJS, so an untransformed import dies with `Unexpected token 'export'`
+    // the moment anything reaches it — botsmann shipped exactly this bug
+    // once. Listed here AND injected into next/jest's own generated pattern
+    // below, for the same reason `cookie` needed both.
+    '/node_modules/(?!(@auth|next-auth|next-intl|use-intl|cookie|ai-kit)/)',
   ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
@@ -60,10 +65,12 @@ const buildConfig = createJestConfig(customJestConfig)
 // customJestConfig above cannot rescue an ESM-only package on its own; the
 // package must also be injected into next/jest's generated allowlist here.
 // cookie v2 is pure ESM ("type": "module") and is imported by src/lib/auth.
+// ai-kit is the same shape, imported by src/lib/hirn/health.ts and
+// src/lib/ai/health.ts.
 module.exports = async () => {
   const config = await buildConfig()
   config.transformIgnorePatterns = config.transformIgnorePatterns.map((pattern) =>
-    pattern.includes('(?!(next-auth|') ? pattern.replace('(?!(next-auth|', '(?!(cookie|next-auth|') : pattern
+    pattern.includes('(?!(next-auth|') ? pattern.replace('(?!(next-auth|', '(?!(ai-kit|cookie|next-auth|') : pattern
   )
   return config
 }
