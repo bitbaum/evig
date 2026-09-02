@@ -1,5 +1,5 @@
 [Unit]
-Description=RevampIT nightly DB + uploads backup to R2 (revampit-backups)
+Description=evig nightly DB + uploads backup to R2 (revampit-backups)
 After=network-online.target postgresql.service
 Wants=network-online.target
 

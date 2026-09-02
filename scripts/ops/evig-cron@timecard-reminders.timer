@@ -1,5 +1,5 @@
 [Unit]
-Description=Schedule RevampIT cron: timecard-reminders (daily 08:00 UTC)
+Description=Schedule evig cron: timecard-reminders (daily 08:00 UTC)
 
 [Timer]
 OnCalendar=*-*-* 08:00:00

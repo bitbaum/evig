@@ -4,7 +4,7 @@
 # the local uploads dir, then push both to the PRIVATE R2 bucket
 # `revampit-backups`. Retention is enforced in the uploader (RETENTION_DAYS).
 #
-# Installed at /opt/evig/ops/ and run by the revampit-backup.timer (root,
+# Installed at /opt/evig/ops/ and run by the evig-backup.timer (root,
 # so it can read the root-owned app/.env). Source of truth lives in the repo at
 # scripts/ops/ — re-run the install block in scripts/ops/README.md to update.
 set -euo pipefail

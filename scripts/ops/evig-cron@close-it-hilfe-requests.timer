@@ -1,5 +1,5 @@
 [Unit]
-Description=Schedule RevampIT cron: close-it-hilfe-requests (daily 01:00 UTC)
+Description=Schedule evig cron: close-it-hilfe-requests (daily 01:00 UTC)
 
 [Timer]
 OnCalendar=*-*-* 01:00:00

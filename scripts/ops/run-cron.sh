@@ -2,7 +2,7 @@
 # Trigger a self-hosted cron endpoint on the local app. Replaces the 4 cron jobs
 # that ran on Vercel before the self-host cutover (close-decisions,
 # close-it-hilfe-requests, prune-audit-log, wake-recurring-tasks). Scheduled by
-# the revampit-cron@<job>.timer units. Source of truth: scripts/ops/ in the repo.
+# the evig-cron@<job>.timer units. Source of truth: scripts/ops/ in the repo.
 #
 # Usage: run-cron.sh <endpoint>      e.g. run-cron.sh close-decisions
 set -euo pipefail

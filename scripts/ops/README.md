@@ -14,9 +14,10 @@ installed onto the box once with the block below; re-run it after editing.
 > box directory therefore means: rename it, update the deploy script, update the
 > files here, and re-run the install blocks below in the same change.
 >
-> The unit *names* are still `revampit-*`. That rename touches a live schedule
-> and is a separate, deliberate step — the paths inside them are what has to be
-> right.
+> The unit *names* are now `evig-*`, renamed 2026-09-02 to match — that rename
+> touched a live schedule (5 cron timers + the nightly backup), done as its own
+> deliberate cutover: install the new units, verify each timer's next-elapse
+> time is unchanged and a one-off run succeeds, then remove the old ones.
 
 ## Nightly backups → R2 (`backup-db-to-r2.sh`)
 
@@ -69,18 +70,18 @@ ssh "$BOX" '
 '
 # systemd units
 rsync -az -e ssh \
-  scripts/ops/revampit-backup.service scripts/ops/revampit-backup.timer \
+  scripts/ops/evig-backup.service scripts/ops/evig-backup.timer \
   "$BOX:/tmp/"
 ssh "$BOX" '
-  sudo mv /tmp/revampit-backup.service /tmp/revampit-backup.timer /etc/systemd/system/
+  sudo mv /tmp/evig-backup.service /tmp/evig-backup.timer /etc/systemd/system/
   sudo systemctl daemon-reload
-  sudo systemctl enable --now revampit-backup.timer
+  sudo systemctl enable --now evig-backup.timer
 '
 # verify with a one-off run
-ssh "$BOX" 'sudo systemctl start revampit-backup.service && journalctl -u revampit-backup.service -n 20 --no-pager'
+ssh "$BOX" 'sudo systemctl start evig-backup.service && journalctl -u evig-backup.service -n 20 --no-pager'
 ```
 
-## Self-hosted crons (`run-cron.sh` + `revampit-cron@<job>.timer`)
+## Self-hosted crons (`run-cron.sh` + `evig-cron@<job>.timer`)
 
 The 4 cron jobs that ran on Vercel before the cutover are now systemd timers on
 the box (Vercel no longer runs anything). `run-cron.sh <endpoint>` curls
@@ -90,12 +91,12 @@ non-200, so a failed run shows up in `systemctl`/journald.
 
 | Timer | Endpoint | Schedule (UTC) |
 |---|---|---|
-| `revampit-cron@close-decisions.timer`         | `/api/cron/close-decisions`         | 00:00 |
-| `revampit-cron@close-it-hilfe-requests.timer` | `/api/cron/close-it-hilfe-requests` | 01:00 |
-| `revampit-cron@prune-audit-log.timer`         | `/api/cron/prune-audit-log`         | 02:00 |
-| `revampit-cron@wake-recurring-tasks.timer`    | `/api/cron/wake-recurring-tasks`    | 07:00 |
-| `revampit-cron@timecard-reminders.timer`      | `/api/cron/timecard-reminders`      | 08:00 |
-| `revampit-cron@release-escrow.timer`          | `/api/cron/release-escrow`          | 04:00 † |
+| `evig-cron@close-decisions.timer`         | `/api/cron/close-decisions`         | 00:00 |
+| `evig-cron@close-it-hilfe-requests.timer` | `/api/cron/close-it-hilfe-requests` | 01:00 |
+| `evig-cron@prune-audit-log.timer`         | `/api/cron/prune-audit-log`         | 02:00 |
+| `evig-cron@wake-recurring-tasks.timer`    | `/api/cron/wake-recurring-tasks`    | 07:00 |
+| `evig-cron@timecard-reminders.timer`      | `/api/cron/timecard-reminders`      | 08:00 |
+| `evig-cron@release-escrow.timer`          | `/api/cron/release-escrow`          | 04:00 † |
 
 † `release-escrow` is the one timer in this directory that is **not** enabled
 on the box — enabling it starts releasing escrow on a schedule, so it is a
@@ -112,14 +113,14 @@ excludes `.env` from rsync and copies the existing one forward).
 BOX=ubuntu@167.233.22.31
 rsync -az -e ssh scripts/ops/run-cron.sh "$BOX:/tmp/" && \
   ssh "$BOX" 'sudo mv /tmp/run-cron.sh /opt/evig/ops/ && sudo chmod +x /opt/evig/ops/run-cron.sh'
-rsync -az -e ssh scripts/ops/revampit-cron@*.service scripts/ops/revampit-cron@*.timer "$BOX:/tmp/"
+rsync -az -e ssh scripts/ops/evig-cron@*.service scripts/ops/evig-cron@*.timer "$BOX:/tmp/"
 ssh "$BOX" '
-  sudo mv /tmp/revampit-cron@*.service /tmp/revampit-cron@*.timer /etc/systemd/system/
+  sudo mv /tmp/evig-cron@*.service /tmp/evig-cron@*.timer /etc/systemd/system/
   sudo systemctl daemon-reload
   # release-escrow is deliberately absent — see the † note above.
   for j in close-decisions close-it-hilfe-requests prune-audit-log wake-recurring-tasks timecard-reminders; do
-    sudo systemctl enable --now "revampit-cron@$j.timer"
+    sudo systemctl enable --now "evig-cron@$j.timer"
   done
 '
-# one-off test: sudo systemctl start revampit-cron@close-decisions.service && journalctl -u revampit-cron@close-decisions.service -n5
+# one-off test: sudo systemctl start evig-cron@close-decisions.service && journalctl -u evig-cron@close-decisions.service -n5
 ```

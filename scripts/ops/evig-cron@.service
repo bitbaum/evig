@@ -1,6 +1,6 @@
 [Unit]
-Description=RevampIT self-hosted cron: %i
-After=network-online.target revampit-app.service
+Description=evig self-hosted cron: %i
+After=network-online.target evig-app.service
 Wants=network-online.target
 
 [Service]

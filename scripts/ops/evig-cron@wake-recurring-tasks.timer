@@ -1,5 +1,5 @@
 [Unit]
-Description=Schedule RevampIT cron: wake-recurring-tasks (daily 07:00 UTC)
+Description=Schedule evig cron: wake-recurring-tasks (daily 07:00 UTC)
 
 [Timer]
 OnCalendar=*-*-* 07:00:00
